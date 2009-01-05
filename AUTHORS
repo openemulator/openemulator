@@ -1,0 +1,21 @@
+OpenEmulator
+http://www.openemulator.org/
+
+Lead Developer
+  Marc S. Ressl <mressl@gmail.com> (Backend, Mac OS X client, wxWidgets client)
+
+Previous Developers
+
+Project Contributors
+  Vladimir Ivanoff (accurate CPU emulation)
+  Dirk Thierbach (Cross-platform assistance)
+  Nick Westgate (Disk II emulation, emulation ideas)
+
+Mac OS X Translators, current release:
+
+GTK+ Translators:
+
+Third-Party Resources:
+  The SDL development team for SDL. <http://www.libsdl.org/>
+  The wxWidgets development team for wxWidgets. <http://www.wxwidgets.org/>
+  Lee Thomason, Yves Berquin, Andrew Ellerton for tinyxml <http://www.grinninglizard.com/tinyxml/>

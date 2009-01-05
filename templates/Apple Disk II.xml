@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE DeviceList PUBLIC "-//OPENEMULATOR//DTD DEVICELIST 1.0//EN" "http://www-personal.umich.edu/~mressl/DTDs/DeviceList-1.0.dtd">
+<DeviceList version="1.0">
+<Device type="Expansion" name="Apple Disk II" platform="Apple II" image="Apple Disk II.png" group="Disk Drive" isFirstDeviceCounted="1" isMountable="1" description="The Disk II was a 5.25&quot; floppy disk drive manufactured by Apple Computer. Introduced in 1978, the Disk II was designed specifically for use with the Apple II personal computer family to replace the slower cassette tape storage.">
+    <ComponentList>
+    <Component class="AppleDiskII">
+        <Connection port="Apple 5.25 inch Disk Drive Port" />
+    </Component>
+    </ComponentList>
+</Device>
+</DeviceList>

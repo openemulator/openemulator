@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE DeviceList PUBLIC "-//OPENEMULATOR//DTD DEVICELIST 1.0//EN" "http://www-personal.umich.edu/~mressl/DTDs/DeviceList-1.0.dtd">
+<DeviceList version="1.0">
+<Device type="Expansion" name="Apple Disk II Interface Card" platform="Apple II" group="Disk Drive" image="Apple Disk II Interface Card.png" description="">
+    <ComponentList>
+    <Component class="AppleDiskIIInterfaceCard">
+        <Connection port="Apple II Slot" />
+        <Parameter name="Port 1" port="Apple 5.25 inch Disk Drive Port" />
+        <Parameter name="Port 2" port="Apple 5.25 inch Disk Drive Port" />
+    </Component>
+    </ComponentList>
+</Device>
+</DeviceList>

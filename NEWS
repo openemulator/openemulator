@@ -1,0 +1,299 @@
+NEWS file for AppleIIGo <http://www-personal.umich.edu/~mressl/appleiigo/>
+
+2008-11-23
+ - libappleiigo
+   + Redesigned the AppleIIGo framework with components
+
+2008-09-10
+ - libappleiigo
+   + Implemented IIc plus MIG emulation (ROMBANK2 @ $CC00-CFFF)
+   + Fixed 3.5" disk Image Icon (the notch goes on the left)
+   + Implemented IIc plus Disk 3.5" SEL line
+   + Fixed 3.5" disk number of bits of each track
+   + Implemented Apple II memory expansion
+
+2008-08-22
+ - libappleiigo
+   + Implemented Apple 3.5 Disk Drive
+   + Implemented IWM
+   + Rewrote disk drive classes
+   + Implemented Apple 3.5 Floppy Disk Drive Interface Card
+   + Added CTRL-SPACE pause toggle
+   + Implemented SmartPort interface
+
+2008-08-10
+ - libappleiigo
+   + Improved FloppyDiskImage class data handling
+   + Implemented NIB disk image reader
+   + Improved NIB reader, scanning for sync bytes and skipping bytes
+     without bit 7 set
+   + Fixed IIe 80STORE MMU switch
+   + Implemented V2D disk image reader
+   + Implemented GCR62 disk image writer
+   + Implemented GCR53 disk image writer
+   + Implemented support for the Apple II Memory Expansion Card
+   + Added little endian and big endian integer conversion macros
+   + Implemented Motherboard disk handler: manages disk controllers,
+     assigns mount indices based on driveType indices
+   + Improved disk image classes, added track/head support
+   + Implemented GCR53 interleaving
+   + Calibrated GCR62 and GCR53 sync gaps
+   + Implemented FDI disk image reader
+   + Implemented FDI format autosave when a disk image can't be written
+     in original format. Adds " (Autosaved).fdi" suffix
+   + Implemented FDI disk image writer
+   + Implemented GCR62Disk35 disk image reader
+   + Add disk drive head stepper motor inertial simulation
+     (for Locksmith quarter tracks 0.25 and 0.75)
+ - Mac OS X
+   + Redesigned disk image icons
+
+2008-07-24
+ - libappleiigo
+   + Fixed Apple IIe internal ROM switch
+   + Fixed shadow switched (PAGE2 and 80STORE)
+   + Fixed LORES80 aux colors
+   + Implemented 7M LORES mode (LORES on, DHIRES on, 80COL off)
+   + Implemented 7HIRES mode (HIRES on, DHIRES on, 80COL off)
+   + Implemented TimingGenerator with 14 MHz clock and 65th long cycle
+   + Fixed VideoRenderer. It missed a scanline update
+   + Implemented correct NTSC frame rate: 59.922744
+   + Implemented PAL crystal @ 14.25045 MHz
+   + Implemented Speaker class with Blargg's band-limited
+     square-wave synthesis
+   + Implemented keyboard paste
+   + Implemented video copy
+   + Expanded Device base class, added onReconnected, onMemoryRequested,
+     onMemoryAllocated, onResetAsserted, onResetCleared call-backs
+   + Motherboard is now initialized with a profile path and a
+     resources path
+   + Added Resources loader class
+   + Added code for doing hot CPU swaps
+   + Fixed IIe SLOT3INT switch
+   + Fixed IIc internal slot mapping. 32kB IIc work now
+   + Fixed IIc GLU IOUEN and DHIRES switches. Passes IIc selftest
+   + Implemented abstract DiskController class
+   + Implemented abstract RamWorks class, RamWorksBasic and
+     RamWorksIII devices
+   + Implemented many slot devices
+   + Implemented Saturn RAM Board device
+   + Implemented Disk II Interface Card
+   + Implemented Videoterm An0 display control
+   + Implemented Videoterm shadow memory
+   + Added RESET handler to interrupt pasting
+   + Improved List and KeyList class, implemented devices and
+     disk controllers as lists
+   + Implemented FloppyDiskImage class, providing basic 5.25" & 3.5"
+     I/O, and selector for mount class
+   + Fixed issue when paste buffer char has bit 8 set
+   + Implemented highly accurate Disk II Interface Card emulation
+   + Fixed mouse movement after mouse capture
+   + Implemented GCR62 reader
+   + Implemented GCR53 reader
+ - SDL
+   + Implemented F7 shortcut to NMI
+
+2008-05-13
+ - libappleiigo
+   + Added pause function
+   + Implemented video mode updates within scanlines
+   + Implemented DHires monochrome mode
+   + Implemented temporary CPU slowdown for speaker and paddles
+   + Implemented character set loader, support for Apple II Rev. 7,
+     II j-plus and IIe character sets, with default and user
+     character sets
+   + Fixed CPU signaling
+   + Implemented VideoRenderer class
+   + Implemented BitRenderer
+   + Improved ROM error message
+   + Implemented hires left margin delayed line on Apple II and II plus
+   + Implemented 7hires mode (no-delay) when hires on, dhires on,
+     80col off
+   + Implemented Apple II lores
+   + Implemented intra-scanline display mode switches
+   + Fixed isVideoModifiedMap for left margin hires delayed bits
+   + Fixed keyboard reset/restart when the key was being repeated
+   + Implemented support for Apple II j-plus
+   + Implemented language lard and internal language card
+
+2008-04-30
+ - libappleiigo
+   + Disabled DHIRES on the original IIe
+ - SDL
+   + Implemented SDL mouse capture
+   + Improved SDL keyboard and mouse event handling
+   + Implemented IIc 80/40 switch with F4 key
+   + Implemented SDL audio volume and mute
+   + Implemented CPU pause
+   + Moved key modifier events to keyboard class
+   + Moved mouse events to mouse class
+
+2008-04-24
+ - libappleiigo
+   + Moved microprocessor timing to VideoController class
+   + Removed SpeedController
+   + Added timing synchronization to hardware, scanline by scanline
+   + Fixed clock overflow from one scanline to next scanline
+   + Moved getClock from SpeedController to getClockIndex in
+     VideoController, it is now acceleration independent
+   + Implemented 65C02 WAIT and STOP modes
+ - SDL
+   + Added CTRL-ALT-META-BACKSPACE shortcut for shutdown
+
+2008-04-09
+ - libappleiigo
+   + Renamed Video class to VideoController, Monitor to VideoRenderer,
+     Slot to SlotDevice, AuxSlot to AuxSlotDevice
+   + Added Device class which handles connections, reset, persistency
+     and audio
+   + Designed VideoRenderer interface
+   + Added Speed class
+   + Designed SpeedController interface
+   + Disabled AN3 graphics mode selection in non-enhanced IIe
+ - SDL
+   + Implemented SDL fullscreen update
+
+2008-03-15
+ - libappleiigo
+   + Implemented video class that controls video timing, interrupts,
+     blanking, registers and video scanner
+   + Implemented floating bus
+   + Improved interrupt handling with an Interrupt class
+   + Added updateIsScanlineModified() call to mark modified scanlines
+   + Implemented scanline rendering loop in Video class
+   + Implemented shadow memory isScanlineModified mapping
+   + Added device class for persistency, sounddevice class for sound
+     related operations
+   + Fixed RTC, Mouse and ADB interfaces
+ - SDL
+   + Implemented Shift key mapping to PB2
+   + Implemented SDLIO class with separate render thread
+   + Implemented motherboard and peripheral audio callbacks,
+     featuring a separate input and output buffer
+   + Implemented paddle buttons as counters, so multiple devices can
+     push them
+   + Emulated Option key with left Alt, Command key with left and
+     right Meta and right Alt
+
+2008-02-27
+ - libappleiigo
+   + Improved paddles' screen area
+   + Fixed ALT key paddle button mapping
+   + Fixed key repeat
+   + Fixed isAnyKeyDown
+   + Added types.h and bitMacros.h
+   + Completely rewrote the architecture
+   + Implemented Memory class that allocates and initializes RAM,
+     and allocates and loads ROM
+   + Added Keyboard UNICODE mapping to international Apple II character set
+   + Added uppercase-only for Apple II and II+
+   + Disabled shadowing when there is no auxiliary memory
+   + Added Speaker and DOC classes
+   + Implemented Motherboard class. Acts as a concentrator that connects
+     devices on connect()
+   + Implemented default configuration for various Apple II computers
+ - SDL
+   + Fixed SDL fullscreen mode
+
+2008-02-01
+ - libappleiigo
+   + Fixed and tested RamWorks
+   + Implemented isAnyKeyDown
+   + Implemented accurate Disk II blank simulation: random distribution
+     is now 95% 0s, 5% 1s
+   + Improved Disk II emulation when motor is off, and when first
+     accessing the controller
+   + Fixed Disk II sporadic bits. Maniac Mansion, Ultima V work now
+   + Implemented accurate II+, IIe, IIc memory initialization
+
+2008-01-28
+ - libappleiigo
+   + Optimized audio computations
+   + Added charset loader function
+   + Emulated Open and Closed Apple keys with ALT
+   + Added floating bus read/write support
+   + Rewrote memory management
+   + Added support for memory expansion slot cards (Saturn 128k)
+   + Implemented accurate RamWorks basic and RamWorks III emulation
+   + Implemented Saturn 128k emulation
+
+2007-12-27
+ - libappleiigo
+   + Rewrote the Disk II logic state sequencer
+   + Added emulation of Disk II spontaneous 1 bits after long runs
+     of 0 bits
+   + Implemented DSK disk image reader
+   + Implemented DII format disk image reader and writer
+   + Added audio downsampling filter and analog sound amplifier emulation
+
+2007-12-16
+ - libappleiigo
+   + Added support for variable track size
+ - Mac OS X
+   + Added donation button
+   + Fixed missing Localizable.strings
+   + Fixed driveIndex bug in Mac OS X Controller.m
+
+2007-12-08
+ - libappleiigo
+   + Fixed IIe self test
+   + Improved Disk II infrastructure
+   + Implemented .dsk to nibble converter
+   + Fixed keyboard key loss, increased refresh to 50 frames per second
+   + Implemented new CPU infrastructure
+   + Implemented new Disk II infrastructure
+   + Enabled $C800-$CFFF zone, enabled access to $CFFF
+   + Solved PR#3 problem. It was a missing break in a switch
+   + Fixed cursors and backspace
+   + Solved Applesoft problem: PRINT 1 was not printing 1... ROR was wrong
+   + Solved zero flag problem in PLP: DOS was not accepting commands
+   + Fixed overflow bit in 6502 ADC, SBC. An error happened when doing
+     PRINT -1 in INTEGER
+   + Fixed BCD in 6502 ADC, SBC. It works like a real 65C02 now
+   + Assignment A=8 was doing nothing or giving SYNTAX ERROR.
+     It was a keyboard error (ASCII 0)...
+   + Solved problem when more than two disks are mounted
+   + Added video with new NTSC technique
+   + Hires bit 7 now works like in a real Apple II
+     (it replaces the previous bit)
+   + Added bit overflow from last row when enabling hires bit 7
+     in first row
+   + Accelerated NTSC video+YIQ converter with 7*3 tap filter
+   + Improved reset. It now interrupts pasting
+   + Improved language card logic
+   + Fixed paste... realloc() in two threads was not a good idea
+   + Added VBL blanking simulation
+   + Improved ROM loader
+   + Optimized NTSC FIR filter with AND's instead of MUL's
+   + Added clock and floating bus to peripherals
+   + Added a physical to logical track structure to DiskIILoader,
+     so the loader defines what data a physical track maps to
+   + Added accurate Disk II stepper motor simulation
+   + Added accurate Disk II sequencer simulation
+   + Fixed pixel 280 in non-DHIRES modes
+   + Fixed DOS 3.2 speed problem. Disk II drive motion check was
+     being given a constant 0
+ - SDL
+   + Fixed bug in SDL_EnableUNICODE that made keys beep
+   + Updated SDL. Arrows work now in Mac OS X
+   + Added command line disk option
+   + Added audio callback() to peripherals
+   + Fixed Leopard+SDL black rectangle problem. Probably because
+     SDL_QUIT was not being called
+   + Implemented paddles with the mouse and joystick
+   + Added error message when a disk is replaced
+   + Added mountDisk error report, working now from the command line as
+     well (with onMountError)
+ - Mac OS X
+   + Added Copy/Paste
+   + Implemented start/stop speaking
+   + Fixed "Go to ROM folder". It doesn't work in Debug for some reason
+   + Implemented Menues
+   + Implemented opening disks from the dock
+   + Added Mac OS X Leopard icons
+   + Enabled services menu
+   + Enabled recents menu. Luckily this was easy
+   + Fixed memory loss sheet problem
+   + Implemented panels as sheets
+   + Fixed problems with sheets and dialogs
+   + Fixed localization

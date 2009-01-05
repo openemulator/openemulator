@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE DeviceList PUBLIC "-//OPENEMULATOR//DTD DEVICELIST 1.0//EN" "http://www-personal.umich.edu/~mressl/DTDs/DeviceList-1.0.dtd">
+<DeviceList version="1.0">
+<Device type="Expansion" class="Apple I Cassette Interface" platform="Apple I" group="Expansion" image="" description="">
+    <ComponentList>
+    <Component class="AppleICassetteInterface" />
+        <Connection port="Apple I Slot" />
+    </Component>
+    </ComponentList>
+</Device>
+</DeviceList>

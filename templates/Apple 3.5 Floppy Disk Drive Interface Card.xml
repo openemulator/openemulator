@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE DeviceList PUBLIC "-//OPENEMULATOR//DTD DEVICELIST 1.0//EN" "http://www-personal.umich.edu/~mressl/DTDs/DeviceList-1.0.dtd">
+<DeviceList version="1.0">
+<Device type="Expansion" name="Apple 3.5 inch Floppy Disk Drive Interface Card" platform="Apple II" group="Disk Drive" image="Apple 3.5 Floppy Disk Drive Interface Card.png" description="">
+    <ComponentList>
+    <Component class="Apple35FloppyDiskDriveInterfaceCard">
+        <Connection port="Apple II Slot" />
+        <Parameter name="Port 1" port="Apple SmartPort" />
+        <Parameter name="Port 2" port="Apple SmartPort" />
+        <Parameter name="Port 3" port="Apple SmartPort" />
+        <Parameter name="Port 4" port="Apple SmartPort" />
+    </Component>
+    </ComponentList>
+</Device>
+</DeviceList>

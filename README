@@ -1,0 +1,37 @@
+README for OpenEmulator
+=======================
+
+OpenEmulator is an accurate, portable Apple II emulator.
+
+It runs on Mac OS X (Cocoa interface),
+and any platform supporting wxWidgets (Windows, GTK+, X11, Motif and more).
+
+Visit http://www.openemulator.org/ for more information.
+
+
+Building OpenEmulator
+=====================
+
+OpenEmulator has an Xcode project file (OpenEmulator.xcodeproj)
+for building in Xcode.
+
+Building an OpenEmulator release from the command line:
+
+    $ tar xvfj openemulator-X.Y.tar.bz2
+    $ cd openemulator-X.Y
+    $ ./configure -q && make -s
+    $ su (if necessary for the next line)
+    $ make install
+
+Building OpenEmulator from SVN (First Time):
+
+    $ svn co http://openemulator.googlecode.com/svn/trunk/ openemulator-read-only
+    $ cd appleiigo
+    $ ./autogen.sh
+    $ ./configure -q && make -s
+
+Building OpenEmulator from SVN (Updating):
+
+    $ cd openemulator-X.Y
+    $ svn up
+    $ make -s

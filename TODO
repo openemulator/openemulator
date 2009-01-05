@@ -1,0 +1,117 @@
+Apple II:
+* Replace second thread with a user SDL call. When buffers are not filled, fill with zeroes.
+* Add support for SDL audio buffers that are not exactly a video frame in size
+* Audio base class should tell (as a float) when a given event happens in sample time
+* There should be some support for starting/stopping playback of audio streams. They should also be faded-in/out at start/end
+* Implement CPU state machine with clock cycle accuracy
+* MOS6502
+* W65C02S
+* Implement correct Apple II video mode changes
+* Do text flash update only on the text part
+* Debug "Apple II Split Screen Underline", so it works
+* Implement NTSC rendering
+* Implement resizing with SDL OpenGL
+* See if one can check the windowed screen mode, and reopen SDL fullscreen with the same size as the windowed screen
+* Implement Videx Videoterm
+* Add mouse interface implicit redirection to paddles (when there are joysticks, this shouldn't be enabled)
+* Fix edgyness of paddles when sketching in Blazing Paddles
+* Disable text encoding menu when on Apple II
+* Implement TransWarp (C074 switch)
+* Test Saturn 128k RAM Board
+* Trap not very often used soft switches (C000-C0FF) to check for unknown I/O access
+* There has to be some provision for loading certain devices only once
+
+GUI:
+* Replace artwork .xcf files with something that supports layers but isn't limited to GIMP
+* Use wxWidgets. For now, wxWidgets should generate its own interface window and SDL a separate video window. Later we get the wxWidgets window ID, and tell SDL to use that one
+* Persistency (when OpenEmulator is reopened, state should be preserved). When the computer is changed, the new computer should be reset (to avoid simultaneous usage of resources). Three kind of variables exist: initialized at program load, at machine restart, and at CPU reset
+* Command line disk images should be mounted on drive 1 first, on drive 2 second, and so on
+* Store profiles to ~/.openemulator/. On Windows, store to ~/Application Data/OpenEmulator
+* Set default resources path to [app-path]/Resources
+* Motherboard class should initialize slot and memory configuration. Each kind of Apple II should store its own slot and memory configuration.
+* When re-mounting a mounted disk image, show an error
+* Return error when a disk image can't be mounted because there's no appropriate drive
+* In the configuration, every Apple II and every peripheral should have a description. Like saying in which slots and computers it should go, and other interactions...
+* When starting a computer for the first time, there should be a dialogue requesting confirmation that you are allowed to use the ROM files
+* The user has to be notified about the CTRL-ALT binding for releasing the mouse when the mouse is captured for the first time
+* openFile should always open dialogs as sheets (there is a problem with the window id, try printing out to stdout)
+* Implement preferences menu
+* Implement print tape, A/V preferences, graphics tablet windows
+
+Apple IIe:
+* Test Apple 3.5" Floppy Disk Drive Interface Card against all evil SmartPort scenarios
+* Implement mouse card
+* Fix RamWorks Basic and RamWorks III piggy-back memories (they don't work)
+
+Apple IIc:
+* Implement mouse
+* Implement ACIA's
+* The external slots should not be configurable
+
+Disk:
+* Fix 3.5" Disk Drive
+* Add SmartPort isReady() call, to signal when a packet is finished processing
+* Add format emulation to UniDisk 3.5" (with isReady())
+* Disable eject on Apple 3.5" Disk Drive when isDriveEnabled is true 
+* Implement GCR62Disk35 disk image writer
+* Emulate 5.25" Disk Drive and 3.5" Disk Drive sounds
+* Check if this is true: While resetting, the drives are turned off, but the 1s timer should not be disabled. When reset is over, drive 1 should still spin for the rest of the second
+* Compare new disk emulation against AppleIIGo 153
+* Improve NIB sync detection (by looking for regularly spaced sync data)
+* Fix Wasteland, Alkemstone, Crusader in Europe, Decision in the Desert, Decisive Battles of the World, Earth Orbit Stations, Europe Ablaze, Hacker's Challenge, Halls of Montezuma, The Last Gladiator, LBSCharDisk, MacArthur's War
+* Fix Sherlock Forest
+
+Apple IIGS:
+* W65C816S
+* Implement RGB non-linear NTSC converter
+* Implement scanline interrupts
+* ADB
+* RTC
+* DOC
+* MMU: Fix IIGS language card emulation (ROM should also be mapped to banks E0 and E1).
+* Implement disk motor slot detectors that slow down CPU
+* Define an abstract SCC serial communications class. It should be common to all serial devices, being able to: list host serial devices, providing access, protecting against reopening a device
+* Implement Apple IIGS
+
+Apple IIc plus:
+* Implement IIc plus ZIP Chip
+
+Clones:
+* Implement MicroprofessorIII
+* Implement Laser128 and Laser128EX
+
+Optimization:
+* Optimize MMU mapping calls (they are being repeated uselessly now)
+* Try inlines (for speed)
+* Fix SDL leaks
+* Reduce code size: CPU emulator's (32k to 7k) and other speed sensitive  code segments
+* Test speed: one executeInstructions() call per frame vs. many calls. Is there a large overhead?
+* CPU: implement readMemory and writeMemory in CPU class. Does it bring any gains?
+* CPU: optimize readMemory8 and writeMemory8 zero-page access in CPU class
+
+iPhone:
+* Portrait view: (top) <= [Computer Name] (center) Monitor (bottom) Keyboard
+* Landscape view: (top) <= [Computer name] (center) Monitor
+* Swipes are the cursor keys
+* Diagonal swipes are: control, tab, esc, delete
+* OSD joystick control
+* Disk view: (top) [Settings] Disk Images (top right) To Computer (screen) Disk Images, sorted by title (bottom) Recents, Disk Images
+* When you tap on a disk image, you can choose the disk drive (it comes from below). If it is already mounted, you can eject it
+* Settings: Computer, Memory expansion, self-centering joystick, text encoding, reset, restart
+
+Future:
+* Slow down IIGS when IO is accessed
+* Speed up IIGS when ROM is accessed
+* Fix original Apple II HIRES left border issue, e.g. a write to $2027 should modify both pixel $2027 and pixel $2028
+* Turn off SDL screen updates while minimizing
+* Add a command line debugger
+* Disk drag and drop to window. Reprogram NSWindow instance?
+* Enable insert character from Edit menu
+* Do something like Apple DOS FS
+* NTSC color blurring between lines (like in Karateka) could be emulated
+
+Done:
+* Implemented FileDiskImage class (for direct disk image I/O)
+* Implemented Apple 3.5" Disk Drive eject on command signal falling edge
+* Improved disk drive selection logic
+* Fixed Apple 3.5" Disk Drive GCR

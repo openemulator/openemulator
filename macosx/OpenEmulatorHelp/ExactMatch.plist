@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>addingimages</key>
+	<string>altxted11044</string>
+	<key>creatingdocuments</key>
+	<string>altxted10971</string>
+	<key>editing</key>
+	<string>altxted11047</string>
+	<key>finding</key>
+	<string>altxted11046</string>
+	<key>formattingdocuments</key>
+	<string>altxted10976</string>
+	<key>formattingtext</key>
+	<string>altxted10185</string>
+	<key>html</key>
+	<string>altxted11040</string>
+	<key>openingdocuments</key>
+	<string>altxted10186</string>
+	<key>plaintext</key>
+	<string>altxted11042</string>
+	<key>preferences</key>
+	<string>altxted11045</string>
+	<key>printing</key>
+	<string>altxted11051</string>
+	<key>richtext</key>
+	<string>altxted11043</string>
+	<key>savingdocuments</key>
+	<string>altxted11246</string>
+	<key>shortcuts</key>
+	<string>altxted11049</string>
+	<key>tablesandlists</key>
+	<string>altxted10978</string>
+	<key>textedittopic</key>
+	<string>altxted10972</string>
+	<key>textencoding</key>
+	<string>altxted11050</string>
+</dict>
+</plist>

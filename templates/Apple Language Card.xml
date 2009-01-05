@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE DeviceList PUBLIC "-//OPENEMULATOR//DTD DEVICELIST 1.0//EN" "http://www-personal.umich.edu/~mressl/DTDs/DeviceList-1.0.dtd">
+<DeviceList version="1.0">
+<Device type="Expansion" name="Apple Language Card" platform="Apple II" group="Memory expansion" image="" description="The Apple Language Card is a 16 kiB expansion for the Apple II. It enables switching between Integer BASIC and Applesoft BASIC, and is required to run UCSD Pascal and ProDOS. This card should be installed in slot 0.">
+    <ComponentList>
+    <Component type="AppleLanguageCard">
+        <Connection port="Apple II Slot" />
+    </Component>
+    </ComponentList>
+</Device>
+</DeviceList>

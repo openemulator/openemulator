@@ -1,0 +1,26 @@
+ˇ˛/* Replace disk question */
+"Do you want to eject the disk image in drive %d and insert \\U201c%@\\U201d?" = "Do you want to eject the disk image in drive %1$d and insert  %2$@ ?";
+
+/* Replace disk informative string */
+"Your changes will be lost if you don't save them." = "Your changes will be lost if you don't save them.";
+
+/* OK */
+"OK" = "OK";
+
+/* Cancel */
+"Cancel" = "Cancel";
+
+/* Replace */
+"Replace" = "Replace";
+
+/* Generic disk image could not be mounted error. */
+"The disk image could not be opened." = "The disk image could not be opened.";
+
+/* No Disk II drive informative string. */
+"This emulated Apple II does not have a Disk II drive installed." = "This emulated Apple II does not have a Disk II drive installed.";
+
+/* Disk already mounted informative string */
+"It is already mounted in another disk drive." = "It is already mounted in another disk drive.";
+
+/* File not readable error informative string */
+"The disk image could not be read or is in an invalid format for this drive." = "The disk image could not be read or is in an invalid format for this drive.";
