@@ -43,10 +43,10 @@
 			<array>
 				<string>emulation</string>
 			</array>
-			<key>CFBundleTypeIconFile</key>
-			<string>Emulation.icns</string>
 			<key>CFBundleTypeName</key>
 			<string>OpenEmulator Emulation</string>
+			<key>CFBundleTypeIconFile</key>
+			<string>OpenEmulatorDeviceList.icns</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSTypeIsPackage</key>
@@ -64,10 +64,10 @@
 				<string>nib</string>
 				<string>v2d</string>
 			</array>
-			<key>CFBundleTypeIconFile</key>
-			<string>DiskImage525.icns</string>
 			<key>CFBundleTypeName</key>
 			<string>Apple II Disk Image</string>
+			<key>CFBundleTypeIconFile</key>
+			<string>DiskImage525.icns</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 		</dict>
@@ -76,10 +76,10 @@
 			<array>
 				<string>vdsk</string>
 			</array>
-			<key>CFBundleTypeIconFile</key>
-			<string>DiskImage35.icns</string>
 			<key>CFBundleTypeName</key>
 			<string>Apple II Disk Image</string>
+			<key>CFBundleTypeIconFile</key>
+			<string>DiskImage35.icns</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 		</dict>
@@ -90,10 +90,22 @@
 				<string>2mg</string>
 				<string>hdv</string>
 			</array>
-			<key>CFBundleTypeIconFile</key>
-			<string>DiskImageHDD.icns</string>
 			<key>CFBundleTypeName</key>
 			<string>Apple II Disk Image</string>
+			<key>CFBundleTypeIconFile</key>
+			<string>DiskImageHDD.icns</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>img</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string></string>
+			<key>CFBundleTypeIconFile</key>
+			<string>DiskImageHDD.icns</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 		</dict>

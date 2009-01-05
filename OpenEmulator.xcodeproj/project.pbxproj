@@ -12,6 +12,8 @@
 		00320DBB0EFDB69D0029D69D /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 00B33DAC0EFD917900C6F0A3 /* Sparkle.framework */; };
 		00320DDF0EFDB79C0029D69D /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B33DAC0EFD917900C6F0A3 /* Sparkle.framework */; };
 		00320EFE0EFDC45D0029D69D /* InfoWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00320EFC0EFDC45D0029D69D /* InfoWindow.xib */; };
+		004D84110F128BCF00E2335E /* OpenEmulatorDeviceList.icns in Resources */ = {isa = PBXBuildFile; fileRef = 004D84100F128BCF00E2335E /* OpenEmulatorDeviceList.icns */; };
+		004D84DF0F12990F00E2335E /* libportaudio.la in Frameworks */ = {isa = PBXBuildFile; fileRef = 004D84DC0F1298D500E2335E /* libportaudio.la */; };
 		0067E66C0F056A67006DF485 /* IBAudioSel.png in Resources */ = {isa = PBXBuildFile; fileRef = 0067E6650F056A67006DF485 /* IBAudioSel.png */; };
 		0067E66D0F056A67006DF485 /* IBExpansions.png in Resources */ = {isa = PBXBuildFile; fileRef = 0067E6660F056A67006DF485 /* IBExpansions.png */; };
 		0067E66E0F056A67006DF485 /* IBExpansionsSel.png in Resources */ = {isa = PBXBuildFile; fileRef = 0067E6670F056A67006DF485 /* IBExpansionsSel.png */; };
@@ -201,7 +203,6 @@
 		00B33D8B0EFD8FA400C6F0A3 /* ZIPCHIPGSX.h in Headers */ = {isa = PBXBuildFile; fileRef = 00A5F3F60EFD77E300C08B70 /* ZIPCHIPGSX.h */; };
 		00B33D8C0EFD8FA400C6F0A3 /* ZIPGSX.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A5F3F70EFD77E300C08B70 /* ZIPGSX.cpp */; };
 		00B33D8D0EFD8FA400C6F0A3 /* ZIPGSX.h in Headers */ = {isa = PBXBuildFile; fileRef = 00A5F3F80EFD77E300C08B70 /* ZIPGSX.h */; };
-		00B33DB50EFD924600C6F0A3 /* libportaudio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B33DB40EFD924600C6F0A3 /* libportaudio.a */; };
 		00B33DD70EFD943C00C6F0A3 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B33DD60EFD943C00C6F0A3 /* libxml2.dylib */; };
 		00E99A360F0D8FED00770E8D /* OpenEmulator.icns in Resources */ = {isa = PBXBuildFile; fileRef = 00E99A350F0D8FED00770E8D /* OpenEmulator.icns */; };
 /* End PBXBuildFile section */
@@ -233,6 +234,8 @@
 		0023636C0EFED88C000A3A39 /* IBAudio.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IBAudio.png; path = macosx/Images/IBAudio.png; sourceTree = "<group>"; };
 		0023636E0EFED88C000A3A39 /* IBVideo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IBVideo.png; path = macosx/Images/IBVideo.png; sourceTree = "<group>"; };
 		00320EFD0EFDC45D0029D69D /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/InfoWindow.xib; sourceTree = "<group>"; };
+		004D84100F128BCF00E2335E /* OpenEmulatorDeviceList.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = OpenEmulatorDeviceList.icns; path = macosx/Images/OpenEmulatorDeviceList.icns; sourceTree = "<group>"; };
+		004D84DC0F1298D500E2335E /* libportaudio.la */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = libportaudio.la; path = ../../local/lib/libportaudio.la; sourceTree = SOURCE_ROOT; };
 		0067E6650F056A67006DF485 /* IBAudioSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IBAudioSel.png; path = macosx/Images/IBAudioSel.png; sourceTree = "<group>"; };
 		0067E6660F056A67006DF485 /* IBExpansions.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IBExpansions.png; path = macosx/Images/IBExpansions.png; sourceTree = "<group>"; };
 		0067E6670F056A67006DF485 /* IBExpansionsSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IBExpansionsSel.png; path = macosx/Images/IBExpansionsSel.png; sourceTree = "<group>"; };
@@ -427,7 +430,6 @@
 		00AE78040EFF675200F909EA /* TBReset.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = TBReset.png; path = macosx/Images/TBReset.png; sourceTree = "<group>"; };
 		00B33CF10EFD8F8700C6F0A3 /* libemulator.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libemulator.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		00B33DAC0EFD917900C6F0A3 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = /Library/Frameworks/Sparkle.framework; sourceTree = "<absolute>"; };
-		00B33DB40EFD924600C6F0A3 /* libportaudio.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libportaudio.a; path = /usr/local/lib/libportaudio.a; sourceTree = "<absolute>"; };
 		00B33DD60EFD943C00C6F0A3 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = /usr/lib/libxml2.dylib; sourceTree = "<absolute>"; };
 		00C6E4DF0F0CA14E003F62CA /* OpenEmulator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenEmulator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		00C6E56D0F0CA3A4003F62CA /* OpenEmulator_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenEmulator_Prefix.pch; sourceTree = "<group>"; };
@@ -446,9 +448,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				004D84DF0F12990F00E2335E /* libportaudio.la in Frameworks */,
 				00A5F5BD0EFD7F4700C08B70 /* Cocoa.framework in Frameworks */,
 				00320DDF0EFDB79C0029D69D /* Sparkle.framework in Frameworks */,
-				00B33DB50EFD924600C6F0A3 /* libportaudio.a in Frameworks */,
 				00B33DD70EFD943C00C6F0A3 /* libxml2.dylib in Frameworks */,
 				00AE76C90EFF50A100F909EA /* Quartz.framework in Frameworks */,
 			);
@@ -483,6 +485,7 @@
 		0068F8FC0EFD7343003E0489 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				004D84100F128BCF00E2335E /* OpenEmulatorDeviceList.icns */,
 				00E99A350F0D8FED00770E8D /* OpenEmulator.icns */,
 				0080DFE60F0CDE4D0074A9CA /* OpenEmulatorHelp */,
 				0067E6650F056A67006DF485 /* IBAudioSel.png */,
@@ -705,8 +708,8 @@
 		00A5F4E70EFD7C5500C08B70 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				004D84DC0F1298D500E2335E /* libportaudio.la */,
 				00B33DD60EFD943C00C6F0A3 /* libxml2.dylib */,
-				00B33DB40EFD924600C6F0A3 /* libportaudio.a */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -910,6 +913,7 @@
 				0067E6720F056A67006DF485 /* IBVideoSel.png in Resources */,
 				0080E00B0F0CDE4D0074A9CA /* OpenEmulatorHelp in Resources */,
 				00E99A360F0D8FED00770E8D /* OpenEmulator.icns in Resources */,
+				004D84110F128BCF00E2335E /* OpenEmulatorDeviceList.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

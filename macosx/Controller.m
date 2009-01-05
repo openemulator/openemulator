@@ -98,7 +98,9 @@
 	NSArray *fileTypes = [NSArray arrayWithObjects:
 						  @"emulation",
 						  @"wav", @"aiff", @"aif",
-						  @"dsk", @"do", @"po", @"nib", @"2mg", @"2img", @"hdv",
+						  @"dsk", @"do", @"po", @"nib",
+						  @"vdsk",
+						  @"2mg", @"2img", @"hdv", @"img",
 						  @"fdi",
 						  nil];
 	
@@ -118,12 +120,14 @@
 
 - (NSArray *) toolbarAllowedItemIdentifiers:(NSToolbar *) toolbar
 {
-    return [NSMutableArray arrayWithObjects:TOOLBAR_INSPECTOR,
-			TOOLBAR_PAUSE, TOOLBAR_RESET, TOOLBAR_POWEROFF,
+    return [NSMutableArray arrayWithObjects:TOOLBAR_POWEROFF,
+			TOOLBAR_RESET,
+			TOOLBAR_PAUSE,
+			TOOLBAR_INSPECTOR,
 			NSToolbarSeparatorItemIdentifier,
 			NSToolbarSpaceItemIdentifier,
 			NSToolbarFlexibleSpaceItemIdentifier,
-			NSToolbarCustomizeToolbarItemIdentifier, nil];
+			nil];
 }
 
 - (NSArray *) toolbarDefaultItemIdentifiers:(NSToolbar *) toolbar
