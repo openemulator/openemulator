@@ -8,8 +8,8 @@
 		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
+			<integer value="657"/>
 			<integer value="57"/>
-			<integer value="658"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -786,7 +786,7 @@
 				<string key="NSClassName">Controller</string>
 			</object>
 			<object class="NSWindowTemplate" id="568477345">
-				<int key="NSWindowStyleMask">4103</int>
+				<int key="NSWindowStyleMask">4111</int>
 				<int key="NSWindowBacking">2</int>
 				<string key="NSWindowRect">{{94, 137}, {639, 496}}</string>
 				<int key="NSWTFlags">1680343040</int>
@@ -794,6 +794,7 @@
 				<string key="NSWindowClass">NSWindow</string>
 				<nil key="NSViewClass"/>
 				<string key="NSWindowContentMaxSize">{3.40282e+38, 3.40282e+38}</string>
+				<string key="NSWindowContentMinSize">{320, 256}</string>
 				<object class="NSView" key="NSWindowView" id="283871332">
 					<reference key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
@@ -801,7 +802,7 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSOpenGLView" id="795113551">
 							<reference key="NSNextResponder" ref="283871332"/>
-							<int key="NSvFlags">1292</int>
+							<int key="NSvFlags">1298</int>
 							<object class="NSPSMatrix" key="NSDrawMatrix"/>
 							<string key="NSFrame">{{0, 16}, {640, 480}}</string>
 							<reference key="NSSuperview" ref="283871332"/>
@@ -818,7 +819,7 @@
 								<bool key="EncodedWithXMLCoder">YES</bool>
 								<object class="NSTextField" id="553503702">
 									<reference key="NSNextResponder" ref="161035036"/>
-									<int key="NSvFlags">258</int>
+									<int key="NSvFlags">290</int>
 									<string key="NSFrame">{{10, -3}, {597, 17}}</string>
 									<reference key="NSSuperview" ref="161035036"/>
 									<bool key="NSEnabled">YES</bool>
@@ -855,7 +856,7 @@
 							</object>
 							<string key="NSFrameSize">{640, 16}</string>
 							<reference key="NSSuperview" ref="283871332"/>
-							<string key="NSClassName">BarBackground</string>
+							<string key="NSClassName">NSView</string>
 							<string key="NSExtension">NSView</string>
 						</object>
 					</object>
@@ -863,6 +864,7 @@
 					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1024, 746}}</string>
+				<string key="NSMinSize">{320, 278}</string>
 				<string key="NSMaxSize">{3.40282e+38, 3.40282e+38}</string>
 				<string key="NSFrameAutosaveName">OpenEmulatorWindow</string>
 			</object>
@@ -2162,6 +2164,8 @@
 					<string>657.IBEditorWindowLastContentRect</string>
 					<string>657.IBWindowTemplateEditedContentRect</string>
 					<string>657.NSWindowTemplate.visibleAtLaunch</string>
+					<string>657.windowTemplate.hasMinSize</string>
+					<string>657.windowTemplate.minSize</string>
 					<string>658.IBPluginDependency</string>
 					<string>659.IBPluginDependency</string>
 					<string>659.IBViewIntegration.shadowBlurRadius</string>
@@ -2373,9 +2377,11 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="5"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{54, 204}, {639, 496}}</string>
-					<string>{{54, 204}, {639, 496}}</string>
+					<string>{{60, 219}, {639, 496}}</string>
+					<string>{{60, 219}, {639, 496}}</string>
 					<boolean value="NO"/>
+					<reference ref="5"/>
+					<string>{320, 256}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<real value="0.000000e+00"/>
@@ -2490,14 +2496,6 @@
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
 				<bool key="EncodedWithXMLCoder">YES</bool>
-				<object class="IBPartialClassDescription">
-					<string key="className">BarBackground</string>
-					<string key="superclassName">NSView</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBUserSource</string>
-						<string key="minorKey"/>
-					</object>
-				</object>
 				<object class="IBPartialClassDescription">
 					<string key="className">Controller</string>
 					<string key="superclassName">NSObject</string>

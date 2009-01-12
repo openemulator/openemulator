@@ -1,5 +1,5 @@
 //
-// Prefix header for all source files of the 'AppleIIGo' target in the 'AppleIIGo' project
+// Prefix header for all source files of the 'OpenEmulator' target in the 'OpenEmulator' project
 //
 
 #ifdef __OBJC__

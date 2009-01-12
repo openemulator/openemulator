@@ -1,13 +1,13 @@
 
 /**
- * libappleiigo
+ * libemulator
  * Component Board
  * (C) 2008 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  */
 
-#ifndef BREADBOARD_H
-#define BREADBOARD_H
+#ifndef COMPONENTBOARD_H
+#define COMPONENTBOARD_H
 
 #include <string>
 

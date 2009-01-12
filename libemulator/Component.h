@@ -1,6 +1,6 @@
 
 /**
- * libappleiigo
+ * libemulator
  * Component interface
  * (C) 2008 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
@@ -26,11 +26,12 @@ struct dependencyType {
 
 class Component {
 public:
-	Component(map<string,string> &parameters);
+	Component();
 	virtual ~Component();
 	
 	string getName();
-	map<string, string> getState();
+	void setParameters(map<string, string> parameters);
+	map<string, string> getParameters();
 	
 	virtual struct dependencyType * getDependencies();
 	virtual void onDependenciesLinked();

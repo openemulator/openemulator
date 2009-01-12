@@ -1,7 +1,7 @@
 
 /**
- * AppleIIGo Mac OS X
- * InfoWindow Controller
+ * OpenEmulator
+ * Mac OS X InfoWindow Controller
  * (C) 2007-2008 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  */

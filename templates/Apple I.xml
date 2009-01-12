@@ -2,9 +2,6 @@
 <!DOCTYPE DeviceList PUBLIC "-//OPENEMULATOR//DTD DEVICELIST 1.0//EN" "http://www-personal.umich.edu/~mressl/DTDs/DeviceList-1.0.dtd">
 <DeviceList version="1.0">
 <Device type="Emulation" class="Apple I" platform="Apple I" group="Apple I" image="Apple I.png" description="The Apple I was Apple's first product. It was a fully assembled circuit board containing about 30 chips, but users still had to add a case, power supply, keyboard, and display. One major difference sets the Apple I apart — it was the first personal computer to use a keyboard.">
-    <DefaultsDeviceList>
-        <Device class=
-    </DefaultsDeviceList>
     <ComponentList>
     <Component class="AppleIEventController" />
     <Component class="MOS6502">
@@ -18,9 +15,9 @@
         <Parameter name="memoryImage" value="Apple I ROM.bin" />
     </Component>
     <Component class="AppleISlotController">
-        <Parameter name="Slot R" port="Apple I Slot" />
-        <Parameter name="Slot S" port="Apple I Slot" />
-        <Parameter name="Slot T" port="Apple I Slot" />
+        <Connection name="Slot R" port="Apple I Slot" />
+        <Connection name="Slot S" port="Apple I Slot" />
+        <Connection name="Slot T" port="Apple I Slot" />
     </Component>
     <Component class="AppleIVideoController">
         <Parameter name="memoryImage" value="Apple I Video Memory.bin" />

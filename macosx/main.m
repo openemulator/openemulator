@@ -1,7 +1,7 @@
 
 /**
- * AppleIIGo Mac OS X GUI
- * main
+ * OpenEmulator
+ * Mac OS X main
  * (C) 2007-2008 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  */
