@@ -8,9 +8,9 @@
 
 #include "Component.h"
 
-Component::Component(map<string,string> &parameters)
+Component::Component()
 {
-	componentName = parameters["id"];
+//	componentName = parameters["id"];
 }
 
 Component::~Component()
