@@ -63,7 +63,6 @@
 		00BBB3210F1BE6F3004EB1E8 /* AppleSuperSerialCard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00BBB2B40F1BE6F3004EB1E8 /* AppleSuperSerialCard.cpp */; };
 		00BBB3220F1BE6F3004EB1E8 /* AudioController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00BBB2B60F1BE6F3004EB1E8 /* AudioController.cpp */; };
 		00BBB3230F1BE6F3004EB1E8 /* Component.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00BBB2B80F1BE6F3004EB1E8 /* Component.cpp */; };
-		00BBB3240F1BE6F3004EB1E8 /* ComponentBoard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00BBB2BA0F1BE6F3004EB1E8 /* ComponentBoard.cpp */; };
 		00BBB3260F1BE6F3004EB1E8 /* DiskController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00BBB2BF0F1BE6F3004EB1E8 /* DiskController.cpp */; };
 		00BBB3270F1BE6F3004EB1E8 /* EthernetController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00BBB2C20F1BE6F3004EB1E8 /* EthernetController.cpp */; };
 		00BBB3280F1BE6F3004EB1E8 /* JoystickController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00BBB2C40F1BE6F3004EB1E8 /* JoystickController.cpp */; };
@@ -261,8 +260,6 @@
 		00BBB2B70F1BE6F3004EB1E8 /* AudioController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioController.h; sourceTree = "<group>"; };
 		00BBB2B80F1BE6F3004EB1E8 /* Component.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Component.cpp; sourceTree = "<group>"; };
 		00BBB2B90F1BE6F3004EB1E8 /* Component.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Component.h; sourceTree = "<group>"; };
-		00BBB2BA0F1BE6F3004EB1E8 /* ComponentBoard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ComponentBoard.cpp; sourceTree = "<group>"; };
-		00BBB2BB0F1BE6F3004EB1E8 /* ComponentBoard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComponentBoard.h; sourceTree = "<group>"; };
 		00BBB2BE0F1BE6F3004EB1E8 /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
 		00BBB2BF0F1BE6F3004EB1E8 /* DiskController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DiskController.cpp; sourceTree = "<group>"; };
 		00BBB2C00F1BE6F3004EB1E8 /* DiskController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiskController.h; sourceTree = "<group>"; };
@@ -568,8 +565,6 @@
 				00BBB2B70F1BE6F3004EB1E8 /* AudioController.h */,
 				00BBB2B80F1BE6F3004EB1E8 /* Component.cpp */,
 				00BBB2B90F1BE6F3004EB1E8 /* Component.h */,
-				00BBB2BA0F1BE6F3004EB1E8 /* ComponentBoard.cpp */,
-				00BBB2BB0F1BE6F3004EB1E8 /* ComponentBoard.h */,
 				00BBB2BE0F1BE6F3004EB1E8 /* config.h */,
 				00BBB2BF0F1BE6F3004EB1E8 /* DiskController.cpp */,
 				00BBB2C00F1BE6F3004EB1E8 /* DiskController.h */,
@@ -842,7 +837,6 @@
 				00BBB3210F1BE6F3004EB1E8 /* AppleSuperSerialCard.cpp in Sources */,
 				00BBB3220F1BE6F3004EB1E8 /* AudioController.cpp in Sources */,
 				00BBB3230F1BE6F3004EB1E8 /* Component.cpp in Sources */,
-				00BBB3240F1BE6F3004EB1E8 /* ComponentBoard.cpp in Sources */,
 				00BBB3260F1BE6F3004EB1E8 /* DiskController.cpp in Sources */,
 				00BBB3270F1BE6F3004EB1E8 /* EthernetController.cpp in Sources */,
 				00BBB3280F1BE6F3004EB1E8 /* JoystickController.cpp in Sources */,
