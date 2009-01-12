@@ -722,19 +722,11 @@
 			name = Libraries;
 			sourceTree = "<group>";
 		};
-		00B8FBD50F1BF21100D46BEB /* pococapsule */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = pococapsule;
-			sourceTree = "<group>";
-		};
 		29B97314FDCFA39411CA2CEA /* AppleIIGo */ = {
 			isa = PBXGroup;
 			children = (
 				0068F8EB0EFD7321003E0489 /* GUI */,
 				0068F9C70EFD74B1003E0489 /* libemulator */,
-				00B8FBD50F1BF21100D46BEB /* pococapsule */,
 				00A5F4E70EFD7C5500C08B70 /* Libraries */,
 				0068F9B30EFD73FD003E0489 /* Products */,
 			);
