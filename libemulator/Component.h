@@ -33,7 +33,6 @@ public:
 	void setParameters(map<string, string> parameters);
 	map<string, string> getParameters();
 	
-	virtual struct dependencyType * getDependencies();
 	virtual void onDependenciesLinked();
 	
 	virtual void sendMessage(void * messageData);
