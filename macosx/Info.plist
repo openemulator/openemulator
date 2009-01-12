@@ -9,14 +9,14 @@
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
-			<key>LSItemContentTypes</key>
-			<array>
-				<string>public.data</string>
-			</array>
 			<key>CFBundleTypeName</key>
 			<string>NSStringPboardType</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>public.data</string>
+			</array>
 		</dict>
 		<dict>
 			<key>CFBundleTypeExtensions</key>
@@ -43,14 +43,26 @@
 			<array>
 				<string>emulation</string>
 			</array>
-			<key>CFBundleTypeName</key>
-			<string>OpenEmulator Emulation</string>
 			<key>CFBundleTypeIconFile</key>
 			<string>OpenEmulatorDeviceList.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>OpenEmulator Emulation</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSTypeIsPackage</key>
 			<true/>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>rom</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>RomImage.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>ROM Image</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
 		</dict>
 		<dict>
 			<key>CFBundleTypeExtensions</key>
@@ -64,10 +76,10 @@
 				<string>nib</string>
 				<string>v2d</string>
 			</array>
-			<key>CFBundleTypeName</key>
-			<string>Apple II Disk Image</string>
 			<key>CFBundleTypeIconFile</key>
 			<string>DiskImage525.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>Apple II Disk Image</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 		</dict>
@@ -76,10 +88,10 @@
 			<array>
 				<string>vdsk</string>
 			</array>
-			<key>CFBundleTypeName</key>
-			<string>Apple II Disk Image</string>
 			<key>CFBundleTypeIconFile</key>
 			<string>DiskImage35.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>Apple II Disk Image</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 		</dict>
@@ -90,10 +102,10 @@
 				<string>2mg</string>
 				<string>hdv</string>
 			</array>
-			<key>CFBundleTypeName</key>
-			<string>Apple II Disk Image</string>
 			<key>CFBundleTypeIconFile</key>
 			<string>DiskImageHDD.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>Apple II Disk Image</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 		</dict>
@@ -102,10 +114,10 @@
 			<array>
 				<string>img</string>
 			</array>
-			<key>CFBundleTypeName</key>
-			<string></string>
 			<key>CFBundleTypeIconFile</key>
 			<string>DiskImageHDD.icns</string>
+			<key>CFBundleTypeName</key>
+			<string></string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 		</dict>
@@ -152,9 +164,9 @@
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
-	<key>SUPublicDSAKeyFile</key>
-	<string>sparkle_dsa_pub.pem</string>
 	<key>SUFeedURL</key>
 	<string>http://www.openemulator.org/appcast.xml</string>
+	<key>SUPublicDSAKeyFile</key>
+	<string>sparkle_dsa_pub.pem</string>
 </dict>
 </plist>
