@@ -1,0 +1,41 @@
+<!ELEMENT dml (device+)>
+<!ATTLIST dml version CDATA "1.0">
+
+<!ELEMENT device (connectors?,ports?,components)>
+<!ATTLIST device class CDATA #REQUIRED>
+<!ATTLIST device id CDATA #IMPLIED>
+<!-- type is "Core" for a computer or "Expansion" for an add-on -->
+<!ATTLIST device type (host|core|expansion) #REQUIRED>
+<!-- platform is a label for listing compatible expansions -->
+<!ATTLIST device platform CDATA #REQUIRED>
+<!-- group is a label for listing related resources -->
+<!ATTLIST device group CDATA #REQUIRED>
+<!ATTLIST device ismountable (0|1) "0">
+<!ATTLIST device description CDATA #IMPLIED>
+<!ATTLIST device image CDATA #IMPLIED>
+
+<!ELEMENT defaultdevices (default+)>
+<!ELEMENT defaultdevice EMPTY>
+<!ATTLIST defaultdevice class CDATA #REQUIRED>
+<!ATTLIST defaultdevice id ID #IMPLIED>
+
+<!ELEMENT connectors (connector+)>
+<!ELEMENT connector EMPTY>
+<!ATTLIST connector idref CDATA #REQUIRED>
+<!ATTLIST connector type CDATA #REQUIRED>
+
+<!ELEMENT ports (port+)>
+<!ELEMENT port EMPTY>
+<!ATTLIST port idref CDATA #REQUIRED>
+<!ATTLIST port property CDATA #REQUIRED>
+<!ATTLIST port type CDATA #REQUIRED>
+<!ATTLIST port title CDATA #REQUIRED>
+
+<!ELEMENT components (component+)>
+<!ELEMENT component (property*)>
+<!ATTLIST component class CDATA #REQUIRED>
+<!ATTLIST component id ID #IMPLIED>
+
+<!ELEMENT property EMPTY>
+<!ATTLIST property name CDATA #REQUIRED>
+<!ATTLIST property value CDATA #REQUIRED>
