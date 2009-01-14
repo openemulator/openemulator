@@ -1,0 +1,36 @@
+<!ELEMENT DeviceList (Device+)>
+<!ATTLIST DeviceList version CDATA "1.0">
+
+<!ELEMENT Device (ConnectorList?,PortList?,ComponentList)>
+<!ATTLIST Device class CDATA #REQUIRED>
+<!ATTLIST Device id CDATA #IMPLIED>
+<!-- type is "Core" for a computer or "Expansion" for an add-on -->
+<!ATTLIST Device type (Core|Expansion) #REQUIRED>
+<!-- platform is a label for listing compatible expansions -->
+<!ATTLIST Device platform CDATA #REQUIRED>
+<!-- group is a label for listing related resources -->
+<!ATTLIST Device group CDATA #REQUIRED>
+<!ATTLIST Device isMountable (0|1) "0">
+<!ATTLIST Device description CDATA #IMPLIED>
+<!ATTLIST Device image CDATA #IMPLIED>
+
+<!ELEMENT ConnectorList (Connector+)>
+<!ELEMENT Connector EMPTY>
+<!ATTLIST Connector idref CDATA #REQUIRED>
+<!ATTLIST Connector type CDATA #REQUIRED>
+
+<!ELEMENT PortList (Port+)>
+<!ELEMENT Port EMPTY>
+<!ATTLIST Port idref CDATA #REQUIRED>
+<!ATTLIST Port parameter CDATA #REQUIRED>
+<!ATTLIST Port type CDATA #REQUIRED>
+<!ATTLIST Port title CDATA #REQUIRED>
+
+<!ELEMENT ComponentList (Component+)>
+<!ELEMENT Component (Parameter*)>
+<!ATTLIST Component class CDATA #REQUIRED>
+<!ATTLIST Component id ID #IMPLIED>
+
+<!ELEMENT Parameter EMPTY>
+<!ATTLIST Parameter name CDATA #REQUIRED>
+<!ATTLIST Parameter value CDATA #REQUIRED>
