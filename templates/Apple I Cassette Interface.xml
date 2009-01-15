@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE DeviceList PUBLIC "-//OPENEMULATOR//DTD DEVICELIST 1.0//EN" "http://www-personal.umich.edu/~mressl/DTDs/DeviceList-1.0.dtd">
-<DeviceList version="1.0">
-<Device type="Expansion" class="Apple I Cassette Interface" platform="Apple I" group="Expansion" image="" description="">
-    <ComponentList>
-    <Component class="AppleICassetteInterface" />
-        <Connection port="Apple I Slot" />
-    </Component>
-    </ComponentList>
-</Device>
-</DeviceList>
+<!DOCTYPE dml PUBLIC "-//OPENEMULATOR//DTD DML 1.0//EN" "http://www.openemulator.org/DTDs/dml-1.0.dtd">
+<dml version="1.0">
+<device class="Apple I Cassette Interface" type="expansion" platform="Apple I" group="Expansion" description="" image="Apple I Cassette Interface.png">
+    <connectors>
+    <connector component="AppleICassetteInterface" type="Apple I Slot" name="Slot Connector" />
+    </connectors>
+    <components>
+    <component class="AppleICassetteInterface">
+        <property name="audioController" value="Host::AudioController" />
+    </component>
+    </components>
+</device>
+</dml>

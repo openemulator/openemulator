@@ -1,15 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE DeviceList PUBLIC "-//OPENEMULATOR//DTD DEVICELIST 1.0//EN" "http://www-personal.umich.edu/~mressl/DTDs/DeviceList-1.0.dtd">
-<DeviceList version="1.0">
-<Device type="Expansion" name="Apple 3.5 inch Floppy Disk Drive Interface Card" platform="Apple II" group="Disk Drive" image="Apple 3.5 Floppy Disk Drive Interface Card.png" description="">
-    <ComponentList>
-    <Component class="Apple35FloppyDiskDriveInterfaceCard">
-        <Connection port="Apple II Slot" />
-        <Parameter name="Port 1" port="Apple SmartPort" />
-        <Parameter name="Port 2" port="Apple SmartPort" />
-        <Parameter name="Port 3" port="Apple SmartPort" />
-        <Parameter name="Port 4" port="Apple SmartPort" />
-    </Component>
-    </ComponentList>
-</Device>
-</DeviceList>
+<!DOCTYPE dml PUBLIC "-//OPENEMULATOR//DTD DML 1.0//EN" "http://www.openemulator.org/DTDs/dml-1.0.dtd">
+<dml version="1.0">
+<device class="Apple 3.5 inch Floppy Disk Drive Interface Card" type="expansion" platform="Apple II" group="Disk Drive" description="" image="Apple 3.5 Floppy Disk Drive Interface Card.png">
+    <defaultdevices>
+    <defaultdevice class="Apple UniDisk Disk Drive">
+        <defaultconnection from="Drive Connector" to="Port 1" />
+    </defaultdevice>
+    </defaultdevices>
+    <connectors>
+    <connector component="Apple35FloppyDiskDriveInterfaceCard" type="Apple II Slot" name="Slot Connector" />
+    </connectors>
+    <ports>
+    <port property="Apple35FloppyDiskDriveInterfaceCard.port1" type="Apple SmartPort" name="Port 1" />
+    <port property="Apple35FloppyDiskDriveInterfaceCard.port2" type="Apple SmartPort" name="Port 2" />
+    <port property="Apple35FloppyDiskDriveInterfaceCard.port3" type="Apple SmartPort" name="Port 3" />
+    <port property="Apple35FloppyDiskDriveInterfaceCard.port4" type="Apple SmartPort" name="Port 4" />
+    </ports>
+    <components>
+    <component class="Apple35FloppyDiskDriveInterfaceCard">
+        <property name="port1" value="" />
+        <property name="port2" value="" />
+        <property name="port3" value="" />
+        <property name="port4" value="" />
+    </component>
+    </components>
+</device>
+</dml>

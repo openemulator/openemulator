@@ -1,30 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE DeviceList PUBLIC "-//OPENEMULATOR//DTD DEVICELIST 1.0//EN" "http://www-personal.umich.edu/~mressl/DTDs/DeviceList-1.0.dtd">
-<DeviceList version="1.0">
-<Device type="Emulation" class="Apple I" platform="Apple I" group="Apple I" image="Apple I.png" description="The Apple I was Apple's first product. It was a fully assembled circuit board containing about 30 chips, but users still had to add a case, power supply, keyboard, and display. One major difference sets the Apple I apart — it was the first personal computer to use a keyboard.">
-    <ComponentList>
-    <Component class="AppleIEventController" />
-    <Component class="MOS6502">
-        <Parameter name="mmu" value="AppleIMMU" />
-    </Component>
-    <Component class="AppleIMMU" />
-    <Component class="AppleIMemory">
-        <Parameter name="memoryImage" value="Apple I Memory.bin" />
-    </Component>
-    <Component class="AppleIROM">
-        <Parameter name="memoryImage" value="Apple I ROM.bin" />
-    </Component>
-    <Component class="AppleISlotController">
-        <Connection name="Slot R" port="Apple I Slot" />
-        <Connection name="Slot S" port="Apple I Slot" />
-        <Connection name="Slot T" port="Apple I Slot" />
-    </Component>
-    <Component class="AppleIVideoController">
-        <Parameter name="memoryImage" value="Apple I Video Memory.bin" />
-    </Component
-    <Component class="AppleICharacterSetController">
-        <Parameter name="memoryImage" value="Apple I Video ROM.bin" />
-    </Component>
-    </ComponentList>
-</Device>
-</DeviceList>
+<!DOCTYPE dml PUBLIC "-//OPENEMULATOR//DTD DML 1.0//EN" "http://www.openemulator.org/DTDs/dml-1.0.dtd">
+<dml version="1.0">
+<device class="Apple I" type="core" platform="Apple I" group="Apple I" description="The Apple I was Apple's first product. It was a fully assembled circuit board containing about 30 chips, but users still had to add a case, power supply, keyboard, and display. One major difference sets the Apple I apart — it was the first personal computer to use a keyboard." image="$RESOURCES/Apple I.png">
+    <defaultdevices>
+    <defaultdevice class="Host" />
+    <defaultdevice class="Apple I Cassette Interface Card">
+        <defaultconnection from="Slot Connector" to="Slot R" />
+    </default>
+    <defaultdevice class="Apple I BASIC Language Interface">
+        <defaultconnection idref="AppleISlotController" property="slotS" />
+    </default>
+    </defaults>
+    <ports>
+        <port property="AppleISlotController.slotR" type="Apple I Slot" name="Slot R" />
+        <port property="AppleISlotController.slotS" type="Apple I Slot" name="Slot S" />
+        <port property="AppleISlotController.slotT" type="Apple I Slot" name="Slot T" />
+    </ports>
+    <components>
+    <component class="AppleIFloatingBus" />
+    <component class="AppleIEventController">
+        <property name="eventController" value="Host::EventController" />
+    </component>
+    <component class="MOS6502">
+        <property name="mmu" value="AppleIMMU" />
+    </component>
+    <component class="AppleIMMU" />
+    <component class="AppleIMemory">
+        <property name="mmu" value="AppleIMMU" />
+        <property name="memoryImage" value="$PROFILE/Apple I RAM.bin" />
+        <property name="resourceController" value="Host::ResourceController" />
+    </component>
+    <component class="AppleIROM">
+        <property name="mmu" value="AppleIMMU" />
+        <property name="memoryImage" value="$RESOURCES/Apple I ROM.bin" />
+        <property name="resourceController" value="Host::ResourceController" />
+    </component>
+    <component class="AppleISlotController">
+        <property name="mmu" value="AppleIMMU" />
+        <property name="slotR" value="" />
+        <property name="slotS" value="" />
+        <property name="slotT" value="" />
+    </component>
+    <component class="AppleIVIA">
+        <property name="mmu" value="AppleIMMU" />
+        <property name="keyboardController" value="Host::KeyboardController" />
+    </component>
+    <component class="AppleIVideoController">
+        <property name="videoController" value="Host::VideoController" />
+        <property name="characterSet" value="$RESOURCES/Apple II Video ROM.bin" />
+    </component>
+    </components>
+</device>
+</dml>

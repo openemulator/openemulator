@@ -1,45 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE DeviceList PUBLIC "-//OPENEMULATOR//DTD DEVICELIST 1.0//EN" "http://www-personal.umich.edu/~mressl/DTDs/DeviceList-1.0.dtd">
-<DeviceList version="1.0">
-<Device type="Emulation" name="Apple II" platform="Apple II" image="Apple II.png" description="The Apple II was the first highly successful mass produced microprocessor product. The Apple II had color and high-resolution graphics modes, sound capabilities and one of two built-in BASIC programming languages.">
-    <Component class="AppleIIEventController">
-        <Parameter name="AcceleratorChip" port="Apple II Accelerator Chip Socket" />
-    </Component>
-    <Component class="MOS6502">
-        <Parameter name="mmu" value="AppleIIMMU" />
-    </Component>
-    <Component class="AppleIIMMU">
-    </Component
-    <Component class="AppleIIMemory">
-        <Parameter name="memorySize" value="49152" />
-        <Parameter name="memoryImage" value="Apple II Memory.bin" />
-    </Component>
-    <Component class="AppleIIROM">
-        <Parameter name="memoryImage" value="Apple II ROM.bin" />
-    </Component>
-    <Component class="AppleIIIOU" />
-    <Component class="AppleIIKeyboard" />
-    <Component class="AppleIICassetteOut" />
-    <Component class="AppleIISpeaker" />
-    <Component class="AppleIIVideoController" />
-    <Component class="AppleIIGameIO">
-        <Parameter name="Game I/O" port="Apple II Game I/O Port" />
-    </Component>
-    <Component class="AppleIICassetteIn" />
-    <Component class="AppleIISlotController">
-        <Parameter name="Slot 0" port="Apple II Slot" />
-        <Parameter name="Slot 1" port="Apple II Slot" />
-        <Parameter name="Slot 2" port="Apple II Slot" />
-        <Parameter name="Slot 3" port="Apple II Slot" />
-        <Parameter name="Slot 4" port="Apple II Slot" />
-        <Parameter name="Slot 5" port="Apple II Slot" />
-        <Parameter name="Slot 6" port="Apple II Slot" />
-        <Parameter name="Slot 7" port="Apple II Slot" />
-    </Component>
-    <Component class="AppleIICharacterSetController">
-        <Parameter name="memoryImage" value="Apple II Video ROM.bin" />
-        <Parameter name="CharacterSetChip" port="Apple II Character Set Chip Socket" />
-    </Component>
-    <Component class="AppleIITVRenderer" />
-</Device>
-</DeviceList>
+<!DOCTYPE dml PUBLIC "-//OPENEMULATOR//DTD DML 1.0//EN" "http://www.openemulator.org/DTDs/dml-1.0.dtd">
+<dml version="1.0">
+<device class="Apple II" type="core" platform="Apple II" group="Apple II" description="The Apple II was the first highly successful mass produced microprocessor product. The Apple II had color and high-resolution graphics modes, sound capabilities and one of two built-in BASIC programming languages." image="Apple II.png">
+    <defaultdevices>
+    <defaultdevice class="Apple Language Card">
+        <defaultconnection from="Slot Connector" to="Slot 0" />
+    </defaultdevice>
+    </defaultdevices>
+    <ports>
+    <port type="Apple II CPU Chip Socket" property="AppleIIEventController.acceleratorChip" name="CPU Chip Socket" />
+    <port type="Apple II Character Set Chip Socket" to="AppleIICharacterSetController.characterSetChip" name="Character Set Chip Socket" />
+    <port type="Apple II Clock Chip Socket" to="AppleIIEventController.clockChip" name="Clock Chip Socket" />
+    <port type="Apple II Clock Chip Socket" to="AppleIIGameIO.gameIo" name="Clock Chip Socket" />
+    <port type="Apple II Slot" to="AppleIISlotController.slot0" name="Slot 0" />
+    <port type="Apple II Slot" to="AppleIISlotController.slot1" name="Slot 1" />
+    <port type="Apple II Slot" to="AppleIISlotController.slot2" name="Slot 2" />
+    <port type="Apple II Slot" to="AppleIISlotController.slot3" name="Slot 3" />
+    <port type="Apple II Slot" to="AppleIISlotController.slot4" name="Slot 4" />
+    <port type="Apple II Slot" to="AppleIISlotController.slot5" name="Slot 5" />
+    <port type="Apple II Slot" to="AppleIISlotController.slot6" name="Slot 6" />
+    <port type="Apple II Slot" to="AppleIISlotController.slot7" name="Slot 7" />
+    </ports>
+    <components>
+    <component class="AppleIIEventController">
+        <property key="acceleratorChip" value="" />
+    </component>
+    <component class="MOS6502">
+        <property key="mmu" value="AppleIIMMU" />
+    </component>
+    <component class="AppleIIMMU">
+    </component>
+    <component class="AppleIIMemory">
+        <property key="memorySize" value="49152" />
+        <property key="memoryImage" value="Apple II Memory.bin" />
+    </component>
+    <component class="AppleIIROM">
+        <property key="romImage" value="Apple II.rom" />
+    </component>
+    <component class="AppleIIIOU" />
+    <component class="AppleIIKeyboard" />
+    <component class="AppleIICassetteOut" />
+    <component class="AppleIISpeaker" />
+    <component class="AppleIIVideoController" />
+    <component class="AppleIIGameIO">
+        <property key="gameIo" value="" />
+    </component>
+    <component class="AppleIICassetteIn" />
+    <component class="AppleIISlotController">
+        <property key="slot0" value="" />
+        <property key="slot1" value="" />
+        <property key="slot2" value="" />
+        <property key="slot3" value="" />
+        <property key="slot4" value="" />
+        <property key="slot5" value="" />
+        <property key="slot6" value="" />
+        <property key="slot7" value="" />
+    </component>
+    <component class="AppleIICharacterSetController">
+        <property key="characterSet" value="Apple II Video.rom" />
+        <property key="chip" value="" />
+    </component>
+    <component class="AppleIITVRenderer" />
+    </components>
+</device>
+</dml>

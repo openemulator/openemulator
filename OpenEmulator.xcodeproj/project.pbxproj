@@ -6,6 +6,22 @@
 	objectVersion = 45;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		00D272A60F1C415B00624FFF /* pxproxygen */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 00D272AE0F1C417A00624FFF /* Build configuration list for PBXAggregateTarget "pxproxygen" */;
+			buildPhases = (
+				00D272B70F1C45D500624FFF /* CopyFiles */,
+				00D272A50F1C415B00624FFF /* Prepare Jar */,
+				00E30AB90F1C5C610005B9B7 /* Prepare Proxy */,
+			);
+			dependencies = (
+			);
+			name = pxproxygen;
+			productName = pxgenproxy;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		00320DBB0EFDB69D0029D69D /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 00B33DAC0EFD917900C6F0A3 /* Sparkle.framework */; };
 		00320DDF0EFDB79C0029D69D /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B33DAC0EFD917900C6F0A3 /* Sparkle.framework */; };
@@ -56,6 +72,35 @@
 		00BBB5330F1BE7B4004EB1E8 /* OpenEmulatorHelp in Resources */ = {isa = PBXBuildFile; fileRef = 00BBB4A40F1BE7B4004EB1E8 /* OpenEmulatorHelp */; };
 		00BBB5980F1BE7BE004EB1E8 /* rom in Resources */ = {isa = PBXBuildFile; fileRef = 00BBB5340F1BE7BE004EB1E8 /* rom */; };
 		00BBB5990F1BE7BE004EB1E8 /* templates in Resources */ = {isa = PBXBuildFile; fileRef = 00BBB56F0F1BE7BE004EB1E8 /* templates */; };
+		00D270890F1C0E8200624FFF /* appctxtimp.C in Sources */ = {isa = PBXBuildFile; fileRef = 00D2706F0F1C0E8200624FFF /* appctxtimp.C */; };
+		00D2708A0F1C0E8200624FFF /* appctxtimp.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D270700F1C0E8200624FFF /* appctxtimp.h */; };
+		00D2708B0F1C0E8200624FFF /* convert.C in Sources */ = {isa = PBXBuildFile; fileRef = 00D270710F1C0E8200624FFF /* convert.C */; };
+		00D2708C0F1C0E8200624FFF /* convert.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D270720F1C0E8200624FFF /* convert.h */; };
+		00D2708D0F1C0E8200624FFF /* descs.C in Sources */ = {isa = PBXBuildFile; fileRef = 00D270730F1C0E8200624FFF /* descs.C */; };
+		00D2708E0F1C0E8200624FFF /* descs.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D270740F1C0E8200624FFF /* descs.h */; };
+		00D2708F0F1C0E8200624FFF /* domreader.C in Sources */ = {isa = PBXBuildFile; fileRef = 00D270750F1C0E8200624FFF /* domreader.C */; };
+		00D270900F1C0E8200624FFF /* domreader.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D270760F1C0E8200624FFF /* domreader.h */; };
+		00D270910F1C0E8200624FFF /* hashtable.C in Sources */ = {isa = PBXBuildFile; fileRef = 00D270770F1C0E8200624FFF /* hashtable.C */; };
+		00D270920F1C0E8200624FFF /* hashtable.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D270780F1C0E8200624FFF /* hashtable.h */; };
+		00D270930F1C0E8200624FFF /* libloader.C in Sources */ = {isa = PBXBuildFile; fileRef = 00D270790F1C0E8200624FFF /* libloader.C */; };
+		00D270940F1C0E8200624FFF /* libloader.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D2707A0F1C0E8200624FFF /* libloader.h */; };
+		00D270960F1C0E8200624FFF /* pocoapp.C in Sources */ = {isa = PBXBuildFile; fileRef = 00D2707C0F1C0E8200624FFF /* pocoapp.C */; };
+		00D270970F1C0E8200624FFF /* pocodom.C in Sources */ = {isa = PBXBuildFile; fileRef = 00D2707D0F1C0E8200624FFF /* pocodom.C */; };
+		00D270980F1C0E8200624FFF /* pocodom.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D2707E0F1C0E8200624FFF /* pocodom.h */; };
+		00D270990F1C0E8200624FFF /* pocoenv.C in Sources */ = {isa = PBXBuildFile; fileRef = 00D2707F0F1C0E8200624FFF /* pocoenv.C */; };
+		00D2709A0F1C0E8200624FFF /* pocoenv.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D270800F1C0E8200624FFF /* pocoenv.h */; };
+		00D2709B0F1C0E8200624FFF /* pocoreflx.C in Sources */ = {isa = PBXBuildFile; fileRef = 00D270810F1C0E8200624FFF /* pocoreflx.C */; };
+		00D2709C0F1C0E8200624FFF /* pocoreflx.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D270820F1C0E8200624FFF /* pocoreflx.h */; };
+		00D2709D0F1C0E8200624FFF /* pocostr.C in Sources */ = {isa = PBXBuildFile; fileRef = 00D270830F1C0E8200624FFF /* pocostr.C */; };
+		00D2709E0F1C0E8200624FFF /* pocostr.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D270840F1C0E8200624FFF /* pocostr.h */; };
+		00D2709F0F1C0E8200624FFF /* table.C in Sources */ = {isa = PBXBuildFile; fileRef = 00D270850F1C0E8200624FFF /* table.C */; };
+		00D270A00F1C0E8200624FFF /* table.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D270860F1C0E8200624FFF /* table.h */; };
+		00D270A10F1C0E8200624FFF /* util.C in Sources */ = {isa = PBXBuildFile; fileRef = 00D270870F1C0E8200624FFF /* util.C */; };
+		00D270A20F1C0E8200624FFF /* util.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D270880F1C0E8200624FFF /* util.h */; };
+		00D270A60F1C0E9700624FFF /* poco.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D270A30F1C0E9700624FFF /* poco.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		00D270A70F1C0E9700624FFF /* pocoapp.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D270A40F1C0E9700624FFF /* pocoapp.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		00D270A80F1C0E9700624FFF /* pocotypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D270A50F1C0E9700624FFF /* pocotypes.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		00D272B50F1C45CE00624FFF /* com in CopyFiles */ = {isa = PBXBuildFile; fileRef = 00D272010F1C3B1F00624FFF /* com */; };
 		00FA93060F1BF153001462B3 /* AEGSRAM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00BBB25C0F1BE6F3004EB1E8 /* AEGSRAM.cpp */; };
 		00FA93070F1BF153001462B3 /* AEGSRAM.h in Headers */ = {isa = PBXBuildFile; fileRef = 00BBB25D0F1BE6F3004EB1E8 /* AEGSRAM.h */; };
 		00FA93080F1BF153001462B3 /* AERamWorksBasic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00BBB25E0F1BE6F3004EB1E8 /* AERamWorksBasic.cpp */; };
@@ -153,7 +198,7 @@
 		00FA93640F1BF153001462B3 /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = 00BBB2BE0F1BE6F3004EB1E8 /* config.h */; };
 		00FA93650F1BF153001462B3 /* DiskController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00BBB2BF0F1BE6F3004EB1E8 /* DiskController.cpp */; };
 		00FA93660F1BF153001462B3 /* DiskController.h in Headers */ = {isa = PBXBuildFile; fileRef = 00BBB2C00F1BE6F3004EB1E8 /* DiskController.h */; };
-		00FA93670F1BF153001462B3 /* emulator.h in Headers */ = {isa = PBXBuildFile; fileRef = 00BBB2C10F1BE6F3004EB1E8 /* emulator.h */; };
+		00FA93670F1BF153001462B3 /* emulator.h in Headers */ = {isa = PBXBuildFile; fileRef = 00BBB2C10F1BE6F3004EB1E8 /* emulator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		00FA93680F1BF153001462B3 /* EthernetController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00BBB2C20F1BE6F3004EB1E8 /* EthernetController.cpp */; };
 		00FA93690F1BF153001462B3 /* EthernetController.h in Headers */ = {isa = PBXBuildFile; fileRef = 00BBB2C30F1BE6F3004EB1E8 /* EthernetController.h */; };
 		00FA936A0F1BF153001462B3 /* JoystickController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00BBB2C40F1BE6F3004EB1E8 /* JoystickController.cpp */; };
@@ -215,6 +260,13 @@
 			remoteGlobalIDString = 00B33CF00EFD8F8700C6F0A3;
 			remoteInfo = emulator;
 		};
+		00D26FF60F1BF87400624FFF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 00B8FC300F1BF24700D46BEB;
+			remoteInfo = pococapsule;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -228,9 +280,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		00D272B70F1C45D500624FFF /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 16;
+			files = (
+				00D272B50F1C45CE00624FFF /* com in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		00962DD70F1DADE100934B84 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00A5F5BC0EFD7F4700C08B70 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		00AE76C80EFF50A100F909EA /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = /System/Library/Frameworks/Quartz.framework; sourceTree = "<absolute>"; };
 		00AE779A0EFF629C00F909EA /* Controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Controller.h; sourceTree = "<group>"; };
@@ -241,7 +304,7 @@
 		00B33CF10EFD8F8700C6F0A3 /* libemulator.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libemulator.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		00B33DAC0EFD917900C6F0A3 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = /Library/Frameworks/Sparkle.framework; sourceTree = "<absolute>"; };
 		00B33DD60EFD943C00C6F0A3 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = /usr/lib/libxml2.dylib; sourceTree = "<absolute>"; };
-		00B8FC310F1BF24700D46BEB /* libpococapsule.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libpococapsule.a; path = build/Debug/libpococapsule.a; sourceTree = "<group>"; };
+		00B8FC310F1BF24700D46BEB /* libpococapsule.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libpococapsule.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		00B8FC3F0F1BF31800D46BEB /* libportaudio.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libportaudio.a; path = /usr/local/lib/libportaudio.a; sourceTree = "<absolute>"; };
 		00BBB25C0F1BE6F3004EB1E8 /* AEGSRAM.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AEGSRAM.cpp; sourceTree = "<group>"; };
 		00BBB25D0F1BE6F3004EB1E8 /* AEGSRAM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AEGSRAM.h; sourceTree = "<group>"; };
@@ -434,6 +497,35 @@
 		00BBB56F0F1BE7BE004EB1E8 /* templates */ = {isa = PBXFileReference; lastKnownFileType = folder; path = templates; sourceTree = SOURCE_ROOT; };
 		00C6E4DF0F0CA14E003F62CA /* OpenEmulator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenEmulator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		00C6E56D0F0CA3A4003F62CA /* OpenEmulator_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenEmulator_Prefix.pch; sourceTree = "<group>"; };
+		00D2706F0F1C0E8200624FFF /* appctxtimp.C */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = appctxtimp.C; path = pococapsule/src/capsule/appctxtimp.C; sourceTree = "<group>"; };
+		00D270700F1C0E8200624FFF /* appctxtimp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = appctxtimp.h; path = pococapsule/src/capsule/appctxtimp.h; sourceTree = "<group>"; };
+		00D270710F1C0E8200624FFF /* convert.C */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = convert.C; path = pococapsule/src/capsule/convert.C; sourceTree = "<group>"; };
+		00D270720F1C0E8200624FFF /* convert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = convert.h; path = pococapsule/src/capsule/convert.h; sourceTree = "<group>"; };
+		00D270730F1C0E8200624FFF /* descs.C */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = descs.C; path = pococapsule/src/capsule/descs.C; sourceTree = "<group>"; };
+		00D270740F1C0E8200624FFF /* descs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = descs.h; path = pococapsule/src/capsule/descs.h; sourceTree = "<group>"; };
+		00D270750F1C0E8200624FFF /* domreader.C */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = domreader.C; path = pococapsule/src/capsule/domreader.C; sourceTree = "<group>"; };
+		00D270760F1C0E8200624FFF /* domreader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = domreader.h; path = pococapsule/src/capsule/domreader.h; sourceTree = "<group>"; };
+		00D270770F1C0E8200624FFF /* hashtable.C */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = hashtable.C; path = pococapsule/src/capsule/hashtable.C; sourceTree = "<group>"; };
+		00D270780F1C0E8200624FFF /* hashtable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = hashtable.h; path = pococapsule/src/capsule/hashtable.h; sourceTree = "<group>"; };
+		00D270790F1C0E8200624FFF /* libloader.C */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = libloader.C; path = pococapsule/src/capsule/libloader.C; sourceTree = "<group>"; };
+		00D2707A0F1C0E8200624FFF /* libloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = libloader.h; path = pococapsule/src/capsule/libloader.h; sourceTree = "<group>"; };
+		00D2707C0F1C0E8200624FFF /* pocoapp.C */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = pocoapp.C; path = pococapsule/src/capsule/pocoapp.C; sourceTree = "<group>"; };
+		00D2707D0F1C0E8200624FFF /* pocodom.C */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = pocodom.C; path = pococapsule/src/capsule/pocodom.C; sourceTree = "<group>"; };
+		00D2707E0F1C0E8200624FFF /* pocodom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pocodom.h; path = pococapsule/src/capsule/pocodom.h; sourceTree = "<group>"; };
+		00D2707F0F1C0E8200624FFF /* pocoenv.C */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = pocoenv.C; path = pococapsule/src/capsule/pocoenv.C; sourceTree = "<group>"; };
+		00D270800F1C0E8200624FFF /* pocoenv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pocoenv.h; path = pococapsule/src/capsule/pocoenv.h; sourceTree = "<group>"; };
+		00D270810F1C0E8200624FFF /* pocoreflx.C */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = pocoreflx.C; path = pococapsule/src/capsule/pocoreflx.C; sourceTree = "<group>"; };
+		00D270820F1C0E8200624FFF /* pocoreflx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pocoreflx.h; path = pococapsule/src/capsule/pocoreflx.h; sourceTree = "<group>"; };
+		00D270830F1C0E8200624FFF /* pocostr.C */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = pocostr.C; path = pococapsule/src/capsule/pocostr.C; sourceTree = "<group>"; };
+		00D270840F1C0E8200624FFF /* pocostr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pocostr.h; path = pococapsule/src/capsule/pocostr.h; sourceTree = "<group>"; };
+		00D270850F1C0E8200624FFF /* table.C */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = table.C; path = pococapsule/src/capsule/table.C; sourceTree = "<group>"; };
+		00D270860F1C0E8200624FFF /* table.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = table.h; path = pococapsule/src/capsule/table.h; sourceTree = "<group>"; };
+		00D270870F1C0E8200624FFF /* util.C */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = util.C; path = pococapsule/src/capsule/util.C; sourceTree = "<group>"; };
+		00D270880F1C0E8200624FFF /* util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = util.h; path = pococapsule/src/capsule/util.h; sourceTree = "<group>"; };
+		00D270A30F1C0E9700624FFF /* poco.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = poco.h; path = pococapsule/include/poco.h; sourceTree = "<group>"; };
+		00D270A40F1C0E9700624FFF /* pocoapp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pocoapp.h; path = pococapsule/include/pocoapp.h; sourceTree = "<group>"; };
+		00D270A50F1C0E9700624FFF /* pocotypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pocotypes.h; path = pococapsule/include/pocotypes.h; sourceTree = "<group>"; };
+		00D272010F1C3B1F00624FFF /* com */ = {isa = PBXFileReference; lastKnownFileType = folder; name = com; path = pococapsule/src/tools/com; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -492,6 +584,7 @@
 		0068F8FC0EFD7343003E0489 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				00962DD70F1DADE100934B84 /* Info.plist */,
 				00BBB5340F1BE7BE004EB1E8 /* rom */,
 				00BBB56F0F1BE7BE004EB1E8 /* templates */,
 				00BBB4A40F1BE7B4004EB1E8 /* OpenEmulatorHelp */,
@@ -557,7 +650,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		0068F9C70EFD74B1003E0489 /* libemulator */ = {
+		0068F9C70EFD74B1003E0489 /* emulator */ = {
 			isa = PBXGroup;
 			children = (
 				00BBB25C0F1BE6F3004EB1E8 /* AEGSRAM.cpp */,
@@ -710,6 +803,7 @@
 				00BBB2F30F1BE6F3004EB1E8 /* ZIPGSX.cpp */,
 				00BBB2F40F1BE6F3004EB1E8 /* ZIPGSX.h */,
 			);
+			name = emulator;
 			path = libemulator;
 			sourceTree = "<group>";
 		};
@@ -722,11 +816,56 @@
 			name = Libraries;
 			sourceTree = "<group>";
 		};
+		00D26FC10F1BF7EB00624FFF /* pococapsule */ = {
+			isa = PBXGroup;
+			children = (
+				00D270A30F1C0E9700624FFF /* poco.h */,
+				00D270A40F1C0E9700624FFF /* pocoapp.h */,
+				00D270A50F1C0E9700624FFF /* pocotypes.h */,
+				00D2706F0F1C0E8200624FFF /* appctxtimp.C */,
+				00D270700F1C0E8200624FFF /* appctxtimp.h */,
+				00D270710F1C0E8200624FFF /* convert.C */,
+				00D270720F1C0E8200624FFF /* convert.h */,
+				00D270730F1C0E8200624FFF /* descs.C */,
+				00D270740F1C0E8200624FFF /* descs.h */,
+				00D270750F1C0E8200624FFF /* domreader.C */,
+				00D270760F1C0E8200624FFF /* domreader.h */,
+				00D270770F1C0E8200624FFF /* hashtable.C */,
+				00D270780F1C0E8200624FFF /* hashtable.h */,
+				00D270790F1C0E8200624FFF /* libloader.C */,
+				00D2707A0F1C0E8200624FFF /* libloader.h */,
+				00D2707C0F1C0E8200624FFF /* pocoapp.C */,
+				00D2707D0F1C0E8200624FFF /* pocodom.C */,
+				00D2707E0F1C0E8200624FFF /* pocodom.h */,
+				00D2707F0F1C0E8200624FFF /* pocoenv.C */,
+				00D270800F1C0E8200624FFF /* pocoenv.h */,
+				00D270810F1C0E8200624FFF /* pocoreflx.C */,
+				00D270820F1C0E8200624FFF /* pocoreflx.h */,
+				00D270830F1C0E8200624FFF /* pocostr.C */,
+				00D270840F1C0E8200624FFF /* pocostr.h */,
+				00D270850F1C0E8200624FFF /* table.C */,
+				00D270860F1C0E8200624FFF /* table.h */,
+				00D270870F1C0E8200624FFF /* util.C */,
+				00D270880F1C0E8200624FFF /* util.h */,
+			);
+			name = pococapsule;
+			sourceTree = "<group>";
+		};
+		00D271D30F1C363A00624FFF /* pocotools */ = {
+			isa = PBXGroup;
+			children = (
+				00D272010F1C3B1F00624FFF /* com */,
+			);
+			name = pocotools;
+			sourceTree = "<group>";
+		};
 		29B97314FDCFA39411CA2CEA /* AppleIIGo */ = {
 			isa = PBXGroup;
 			children = (
 				0068F8EB0EFD7321003E0489 /* GUI */,
-				0068F9C70EFD74B1003E0489 /* libemulator */,
+				0068F9C70EFD74B1003E0489 /* emulator */,
+				00D26FC10F1BF7EB00624FFF /* pococapsule */,
+				00D271D30F1C363A00624FFF /* pocotools */,
 				00A5F4E70EFD7C5500C08B70 /* Libraries */,
 				0068F9B30EFD73FD003E0489 /* Products */,
 			);
@@ -823,6 +962,21 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00D2708A0F1C0E8200624FFF /* appctxtimp.h in Headers */,
+				00D2708C0F1C0E8200624FFF /* convert.h in Headers */,
+				00D2708E0F1C0E8200624FFF /* descs.h in Headers */,
+				00D270900F1C0E8200624FFF /* domreader.h in Headers */,
+				00D270920F1C0E8200624FFF /* hashtable.h in Headers */,
+				00D270940F1C0E8200624FFF /* libloader.h in Headers */,
+				00D270980F1C0E8200624FFF /* pocodom.h in Headers */,
+				00D2709A0F1C0E8200624FFF /* pocoenv.h in Headers */,
+				00D2709C0F1C0E8200624FFF /* pocoreflx.h in Headers */,
+				00D2709E0F1C0E8200624FFF /* pocostr.h in Headers */,
+				00D270A00F1C0E8200624FFF /* table.h in Headers */,
+				00D270A20F1C0E8200624FFF /* util.h in Headers */,
+				00D270A60F1C0E9700624FFF /* poco.h in Headers */,
+				00D270A70F1C0E9700624FFF /* pocoapp.h in Headers */,
+				00D270A80F1C0E9700624FFF /* pocotypes.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -876,6 +1030,7 @@
 			);
 			dependencies = (
 				00B33CF50EFD8F8A00C6F0A3 /* PBXTargetDependency */,
+				00D26FF70F1BF87400624FFF /* PBXTargetDependency */,
 			);
 			name = OpenEmulator;
 			productInstallPath = "$(HOME)/Applications";
@@ -899,6 +1054,7 @@
 				8D1107260486CEB800E47090 /* OpenEmulator */,
 				00B33CF00EFD8F8700C6F0A3 /* emulator */,
 				00B8FC300F1BF24700D46BEB /* pococapsule */,
+				00D272A60F1C415B00624FFF /* pxproxygen */,
 			);
 		};
 /* End PBXProject section */
@@ -952,6 +1108,37 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		00D272A50F1C415B00624FFF /* Prepare Jar */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Prepare Jar";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd $BUILT_PRODUCTS_DIR\njavac -O -classpath . com/pocomatic/tools/*.java\n";
+		};
+		00E30AB90F1C5C610005B9B7 /* Prepare Proxy */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Prepare Proxy";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd $BUILT_PRODUCTS_DIR\njava -cp . com.pocomatic.tools/*.java\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		00B33CEE0EFD8F8700C6F0A3 /* Sources */ = {
@@ -1038,6 +1225,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00D270890F1C0E8200624FFF /* appctxtimp.C in Sources */,
+				00D2708B0F1C0E8200624FFF /* convert.C in Sources */,
+				00D2708D0F1C0E8200624FFF /* descs.C in Sources */,
+				00D2708F0F1C0E8200624FFF /* domreader.C in Sources */,
+				00D270910F1C0E8200624FFF /* hashtable.C in Sources */,
+				00D270930F1C0E8200624FFF /* libloader.C in Sources */,
+				00D270960F1C0E8200624FFF /* pocoapp.C in Sources */,
+				00D270970F1C0E8200624FFF /* pocodom.C in Sources */,
+				00D270990F1C0E8200624FFF /* pocoenv.C in Sources */,
+				00D2709B0F1C0E8200624FFF /* pocoreflx.C in Sources */,
+				00D2709D0F1C0E8200624FFF /* pocostr.C in Sources */,
+				00D2709F0F1C0E8200624FFF /* table.C in Sources */,
+				00D270A10F1C0E8200624FFF /* util.C in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1058,6 +1258,11 @@
 			isa = PBXTargetDependency;
 			target = 00B33CF00EFD8F8700C6F0A3 /* emulator */;
 			targetProxy = 00B33CF40EFD8F8A00C6F0A3 /* PBXContainerItemProxy */;
+		};
+		00D26FF70F1BF87400624FFF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 00B8FC300F1BF24700D46BEB /* pococapsule */;
+			targetProxy = 00D26FF60F1BF87400624FFF /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1170,6 +1375,27 @@
 			};
 			name = Release;
 		};
+		00D272A70F1C415C00624FFF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = pxgenproxy;
+			};
+			name = Debug;
+		};
+		00D272A80F1C415C00624FFF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = pxgenproxy;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
 		C01FCF4B08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1254,6 +1480,15 @@
 			buildConfigurations = (
 				00B8FC320F1BF24700D46BEB /* Debug */,
 				00B8FC330F1BF24700D46BEB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		00D272AE0F1C417A00624FFF /* Build configuration list for PBXAggregateTarget "pxproxygen" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				00D272A70F1C415C00624FFF /* Debug */,
+				00D272A80F1C415C00624FFF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

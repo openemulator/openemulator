@@ -1,7 +1,7 @@
 <!ELEMENT dml (device+)>
 <!ATTLIST dml version CDATA "1.0">
 
-<!ELEMENT device (connectors?,ports?,components)>
+<!ELEMENT device (defaultdevices?,connectors?,ports?,components)>
 <!ATTLIST device class CDATA #REQUIRED>
 <!ATTLIST device id CDATA #IMPLIED>
 <!-- type is "Core" for a computer or "Expansion" for an add-on -->
@@ -14,27 +14,31 @@
 <!ATTLIST device description CDATA #IMPLIED>
 <!ATTLIST device image CDATA #IMPLIED>
 
-<!ELEMENT defaultdevices (default+)>
-<!ELEMENT defaultdevice EMPTY>
+<!ELEMENT defaultdevices (defaultdevice+)>
+<!ELEMENT defaultdevice (defaultconnection*)>
 <!ATTLIST defaultdevice class CDATA #REQUIRED>
-<!ATTLIST defaultdevice id ID #IMPLIED>
+<!ATTLIST defaultdevice id CDATA #IMPLIED>
+
+<!ELEMENT defaultconnection EMPTY>
+<!ATTLIST defaultconnection from CDATA #REQUIRED>
+<!ATTLIST defaultconnection to CDATA #REQUIRED>
 
 <!ELEMENT connectors (connector+)>
 <!ELEMENT connector EMPTY>
-<!ATTLIST connector idref CDATA #REQUIRED>
 <!ATTLIST connector type CDATA #REQUIRED>
+<!ATTLIST connector component CDATA #REQUIRED>
+<!ATTLIST connector name CDATA #REQUIRED>
 
 <!ELEMENT ports (port+)>
 <!ELEMENT port EMPTY>
-<!ATTLIST port idref CDATA #REQUIRED>
-<!ATTLIST port property CDATA #REQUIRED>
 <!ATTLIST port type CDATA #REQUIRED>
-<!ATTLIST port title CDATA #REQUIRED>
+<!ATTLIST port property CDATA #REQUIRED>
+<!ATTLIST port name CDATA #REQUIRED>
 
 <!ELEMENT components (component+)>
 <!ELEMENT component (property*)>
 <!ATTLIST component class CDATA #REQUIRED>
-<!ATTLIST component id ID #IMPLIED>
+<!ATTLIST component id CDATA #IMPLIED>
 
 <!ELEMENT property EMPTY>
 <!ATTLIST property name CDATA #REQUIRED>

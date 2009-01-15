@@ -143,7 +143,7 @@
 	<key>CFBundleIconFile</key>
 	<string>OpenEmulator.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>org.openemulator</string>
+	<string>org.openemulator.OpenEmulator</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -155,7 +155,7 @@
 	<key>CFBundleSignature</key>
 	<string>opem</string>
 	<key>CFBundleVersion</key>
-	<string>430</string>
+	<string>${BUILD_NUMBER}</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>10.4.0</string>
 	<key>NSHumanReadableCopyright</key>

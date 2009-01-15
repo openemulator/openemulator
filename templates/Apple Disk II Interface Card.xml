@@ -1,13 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE DeviceList PUBLIC "-//OPENEMULATOR//DTD DEVICELIST 1.0//EN" "http://www-personal.umich.edu/~mressl/DTDs/DeviceList-1.0.dtd">
-<DeviceList version="1.0">
-<Device type="Expansion" name="Apple Disk II Interface Card" platform="Apple II" group="Disk Drive" image="Apple Disk II Interface Card.png" description="">
-    <ComponentList>
-    <Component class="AppleDiskIIInterfaceCard">
-        <Connection port="Apple II Slot" />
-        <Parameter name="Port 1" port="Apple 5.25 inch Disk Drive Port" />
-        <Parameter name="Port 2" port="Apple 5.25 inch Disk Drive Port" />
-    </Component>
-    </ComponentList>
-</Device>
-</DeviceList>
+<!DOCTYPE dml PUBLIC "-//OPENEMULATOR//DTD DML 1.0//EN" "http://www.openemulator.org/DTDs/dml-1.0.dtd">
+<dml version="1.0">
+<device class="Apple Disk II Interface Card" type="expansion" platform="Apple II" group="Disk Drive" description="" image="Apple Disk II Interface Card.png">
+    <defaultdevices>
+    <defaultdevice class="Apple Disk II Drive">
+        <defaultconnection from="Drive Connector" to="Port 1" />
+    </defaultdevice>
+    <defaultdevice class="Apple Disk II Drive">
+        <defaultconnection from="Drive Connector" to="Port 2" />
+    </defaultdevice>
+    </defaultdevices>
+    <connectors>
+    <connector type="Apple II Slot" component="AppleDiskIIInterfaceCard" name="Slot Connector" />
+    </connectors>
+    <ports>
+    <port type="Apple 5.25 inch Disk Drive port" property="AppleDiskIIInterfaceCard.port1" name="Port 1" />
+    <port type="Apple 5.25 inch Disk Drive port" property="AppleDiskIIInterfaceCard.port2" name="Port 2" />
+    </ports>
+    <components>
+    <component class="AppleDiskIIInterfaceCard">
+        <property name="port1" value="" />
+        <property name="port2" value="" />
+    </component>
+    </components>
+</device>
+</dml>

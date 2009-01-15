@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE DeviceList PUBLIC "-//OPENEMULATOR//DTD DEVICELIST 1.0//EN" "http://www-personal.umich.edu/~mressl/DTDs/DeviceList-1.0.dtd">
-<DeviceList version="1.0">
-<Device type="Host">
-    <ComponentList>
-    <Component class="AudioController" />
-    <Component class="DiskController" />
-    <Component class="EthernetController" />
-    <Component class="EventController" />
-    <Component class="JoystickController" />
-    <Component class="KeyboardController" />
-    <Component class="MouseController" />
-    <Component class="ResourceController" />
-    <Component class="SerialController" />
-    <Component class="TabletController" />
-    <Component class="VideoController" />
-    <Component class="WavePlayer" />
-    </ComponentList>
-</Device>
-</DeviceList>
+<!DOCTYPE dml PUBLIC "-//OPENEMULATOR//DTD DML 1.0//EN" "http://www.openemulator.org/DTDs/dml-1.0.dtd">
+<dml version="1.0">
+<device class="Host" type="host" platform="" group="">
+    <components>
+    <component class="AudioController" />
+    <component class="DiskController" />
+    <component class="EthernetController" />
+    <component class="EventController" />
+    <component class="JoystickController" />
+    <component class="KeyboardController" />
+    <component class="MouseController" />
+    <component class="ResourceController" />
+    <component class="SerialController" />
+    <component class="TabletController" />
+    <component class="VideoController" />
+    <component class="WavePlayer" />
+    </components>
+</device>
+</dml>
