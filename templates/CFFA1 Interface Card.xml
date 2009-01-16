@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dml PUBLIC "-//OPENEMULATOR//DTD DML 1.0//EN" "http://www.openemulator.org/DTDs/dml-1.0.dtd">
+<dml version="1.0">
+<device class="Compact Flash Interface Card" type="expansion" platform="Apple I" group="Disk Drive" ismountable="1" description="" image="CFFA1 Card.png">
+    <connectors>
+    <connector componentref="CFFA1" type="Apple I Slot" name="Slot Connector" />
+    </connectors>
+    <components>
+    <component class="CFFA1InterfaceCard" />
+    </components>
+</device>
+</dml>
