@@ -3,7 +3,7 @@
 <dml version="1.0">
 <device class="Apple Disk II" type="expansion" platform="Apple II" group="Disk Drive" ismountable="1" description="The Disk II was a 5.25&quot; floppy disk drive manufactured by Apple Computer. Introduced in 1978, the Disk II was designed specifically for use with the Apple II personal computer family to replace the slower cassette tape storage." image="Apple Disk II.png">
     <connectors>
-    <connector type="Apple 5.25 inch Disk Drive Port" component="AppleDiskII" name="Drive Connector" />
+    <connector type="Apple 5.25 inch Disk Drive Port" componentref="AppleDiskII" name="Drive Connector" />
     </connectors>
     <components>
     <component class="AppleDiskII" />

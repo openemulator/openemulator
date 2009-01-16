@@ -6,15 +6,15 @@
     <defaultdevice class="Host" />
     <defaultdevice class="Apple I Cassette Interface Card">
         <defaultconnection from="Slot Connector" to="Slot R" />
-    </default>
+    </defaultdevice>
     <defaultdevice class="Apple I BASIC Language Interface">
-        <defaultconnection idref="AppleISlotController" property="slotS" />
-    </default>
-    </defaults>
+        <defaultconnection from="Slot Connector" to="Slot S" />
+    </defaultdevice>
+    </defaultdevices>
     <ports>
-        <port property="AppleISlotController.slotR" type="Apple I Slot" name="Slot R" />
-        <port property="AppleISlotController.slotS" type="Apple I Slot" name="Slot S" />
-        <port property="AppleISlotController.slotT" type="Apple I Slot" name="Slot T" />
+        <port propertyref="AppleISlotController.slotR" type="Apple I Slot" name="Slot R" />
+        <port propertyref="AppleISlotController.slotS" type="Apple I Slot" name="Slot S" />
+        <port propertyref="AppleISlotController.slotT" type="Apple I Slot" name="Slot T" />
     </ports>
     <components>
     <component class="AppleIFloatingBus" />

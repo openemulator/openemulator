@@ -8,13 +8,13 @@
     </defaultdevice>
     </defaultdevices>
     <connectors>
-    <connector component="Apple35FloppyDiskDriveInterfaceCard" type="Apple II Slot" name="Slot Connector" />
+    <connector componentref="Apple35FloppyDiskDriveInterfaceCard" type="Apple II Slot" name="Slot Connector" />
     </connectors>
     <ports>
-    <port property="Apple35FloppyDiskDriveInterfaceCard.port1" type="Apple SmartPort" name="Port 1" />
-    <port property="Apple35FloppyDiskDriveInterfaceCard.port2" type="Apple SmartPort" name="Port 2" />
-    <port property="Apple35FloppyDiskDriveInterfaceCard.port3" type="Apple SmartPort" name="Port 3" />
-    <port property="Apple35FloppyDiskDriveInterfaceCard.port4" type="Apple SmartPort" name="Port 4" />
+    <port propertyref="Apple35FloppyDiskDriveInterfaceCard.port1" type="Apple SmartPort" name="Port 1" />
+    <port propertyref="Apple35FloppyDiskDriveInterfaceCard.port2" type="Apple SmartPort" name="Port 2" />
+    <port propertyref="Apple35FloppyDiskDriveInterfaceCard.port3" type="Apple SmartPort" name="Port 3" />
+    <port propertyref="Apple35FloppyDiskDriveInterfaceCard.port4" type="Apple SmartPort" name="Port 4" />
     </ports>
     <components>
     <component class="Apple35FloppyDiskDriveInterfaceCard">

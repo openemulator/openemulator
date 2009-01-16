@@ -26,13 +26,13 @@
 <!ELEMENT connectors (connector+)>
 <!ELEMENT connector EMPTY>
 <!ATTLIST connector type CDATA #REQUIRED>
-<!ATTLIST connector component CDATA #REQUIRED>
+<!ATTLIST connector componentref CDATA #REQUIRED>
 <!ATTLIST connector name CDATA #REQUIRED>
 
 <!ELEMENT ports (port+)>
 <!ELEMENT port EMPTY>
 <!ATTLIST port type CDATA #REQUIRED>
-<!ATTLIST port property CDATA #REQUIRED>
+<!ATTLIST port propertyref CDATA #REQUIRED>
 <!ATTLIST port name CDATA #REQUIRED>
 
 <!ELEMENT components (component+)>

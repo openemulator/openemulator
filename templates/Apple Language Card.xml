@@ -3,7 +3,7 @@
 <dml version="1.0">
 <device class="Apple Language Card" type="expansion" platform="Apple II" group="Memory expansion" description="The Apple Language Card is a 16 kiB expansion for the Apple II. It enables switching between Integer BASIC and Applesoft BASIC, and is required to run UCSD Pascal and ProDOS. This card should be installed in slot 0." image="">
     <connectors>
-    <connector component="AppleLanguageCard" type="Apple II Slot" name="Slot Connector" />
+    <connector componentref="AppleLanguageCard" type="Apple II Slot" name="Slot Connector" />
     </connectors>
     <components>
     <component class="AppleLanguageCard">

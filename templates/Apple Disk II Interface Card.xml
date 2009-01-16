@@ -11,11 +11,11 @@
     </defaultdevice>
     </defaultdevices>
     <connectors>
-    <connector type="Apple II Slot" component="AppleDiskIIInterfaceCard" name="Slot Connector" />
+    <connector type="Apple II Slot" componentref="AppleDiskIIInterfaceCard" name="Slot Connector" />
     </connectors>
     <ports>
-    <port type="Apple 5.25 inch Disk Drive port" property="AppleDiskIIInterfaceCard.port1" name="Port 1" />
-    <port type="Apple 5.25 inch Disk Drive port" property="AppleDiskIIInterfaceCard.port2" name="Port 2" />
+    <port type="Apple 5.25 inch Disk Drive port" propertyref="AppleDiskIIInterfaceCard.port1" name="Port 1" />
+    <port type="Apple 5.25 inch Disk Drive port" propertyref="AppleDiskIIInterfaceCard.port2" name="Port 2" />
     </ports>
     <components>
     <component class="AppleDiskIIInterfaceCard">
