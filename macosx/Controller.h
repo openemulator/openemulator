@@ -8,11 +8,6 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "InfoWindowController.h"
-
-#define DEFAULT_PROFILE		"~/Library/Application Support/AppleIIGo/"\
-							"Profile.appleiigo"
-
 #define APPLEIIGO_HOMEPAGE	"http://www.openemulator.org"
 #define APPLEIIGO_FORUMSURL	"http://groups.google.com/group/openemulator"
 #define APPLEIIGO_DEVURL	"http://code.google.com/p/openemulator"
@@ -20,18 +15,14 @@
 
 @interface Controller : NSObject
 {
-    NSUserDefaults * fDefaults;
+/*    NSUserDefaults * fDefaults;
     
 	InfoWindowController * fInfoController;
 	
 	NSSpeechSynthesizer * speechSynthesizer;
 	
-	IBOutlet NSWindow * fWindow;
+	IBOutlet NSWindow * fWindow;*/
 }
-
-- (IBAction) openDocument:(id) sender;
-
-- (IBAction) showInfo:(id) sender;
 
 - (IBAction) linkHomepage:(id) sender;
 - (IBAction) linkForums:(id) sender;

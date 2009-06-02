@@ -8,13 +8,9 @@
 
 #import "Controller.h"
 
-#define TOOLBAR_INSPECTOR @"Toolbar Inspector"
-#define TOOLBAR_PAUSE @"Toolbar Pause"
-#define TOOLBAR_RESET @"Toolbar Reset"
-#define TOOLBAR_POWEROFF @"Toolbar Poweroff"
-
 @implementation Controller
-- (id) init
+/*
+ - (id) init
 {
 	if (!(self = [super init]))
 		return self;
@@ -38,24 +34,6 @@
 						 withObject:@"NSRecentDocumentsMenu"];
 	
 	return self;
-}
-
-- (void) awakeFromNib
-{
-    NSToolbar * toolbar = [[NSToolbar alloc]
-						   initWithIdentifier:@"AppleIIGoToolbar"];
-    [toolbar setDelegate:self];
-    [toolbar setAllowsUserCustomization:YES];
-    [toolbar setAutosavesConfiguration:YES];
-    [toolbar setDisplayMode:NSToolbarDisplayModeIconOnly];
-    [fWindow setToolbar:toolbar];
-    [toolbar release];
-    
-    [fWindow setDelegate:self]; //do manually to avoid placement issue
-    [fWindow makeKeyAndOrderFront:nil];
-    
-    if ([fDefaults boolForKey:@"InfoWindowIsVisible"])
-        [self showInfo:nil];
 }
 
 - (void) applicationWillTerminate:(NSNotification *) notification
@@ -222,6 +200,6 @@
 {
 	NSURL *url = [NSURL	URLWithString:@APPLEIIGO_DONATEURL];
 	[[NSWorkspace sharedWorkspace] openURL:url];
-}
+}*/
 
 @end

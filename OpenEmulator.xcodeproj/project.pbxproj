@@ -13,14 +13,6 @@
 		000A78D40FBA483E00A0F12E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 000A78D20FBA483E00A0F12E /* main.m */; };
 		000A79270FBA49C500A0F12E /* DiskImage35.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000A79080FBA49C500A0F12E /* DiskImage35.icns */; };
 		000A79280FBA49C500A0F12E /* DiskImage525.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000A79090FBA49C500A0F12E /* DiskImage525.icns */; };
-		000A792B0FBA49C500A0F12E /* IBAudio.png in Resources */ = {isa = PBXBuildFile; fileRef = 000A790C0FBA49C500A0F12E /* IBAudio.png */; };
-		000A792C0FBA49C500A0F12E /* IBAudioSel.png in Resources */ = {isa = PBXBuildFile; fileRef = 000A790D0FBA49C500A0F12E /* IBAudioSel.png */; };
-		000A792D0FBA49C500A0F12E /* IBAudioSoundMax.png in Resources */ = {isa = PBXBuildFile; fileRef = 000A790E0FBA49C500A0F12E /* IBAudioSoundMax.png */; };
-		000A792E0FBA49C500A0F12E /* IBAudioSoundMin.png in Resources */ = {isa = PBXBuildFile; fileRef = 000A790F0FBA49C500A0F12E /* IBAudioSoundMin.png */; };
-		000A792F0FBA49C500A0F12E /* IBExpansions.png in Resources */ = {isa = PBXBuildFile; fileRef = 000A79100FBA49C500A0F12E /* IBExpansions.png */; };
-		000A79300FBA49C500A0F12E /* IBExpansionsSel.png in Resources */ = {isa = PBXBuildFile; fileRef = 000A79110FBA49C500A0F12E /* IBExpansionsSel.png */; };
-		000A79330FBA49C500A0F12E /* IBVideo.png in Resources */ = {isa = PBXBuildFile; fileRef = 000A79140FBA49C500A0F12E /* IBVideo.png */; };
-		000A79340FBA49C500A0F12E /* IBVideoSel.png in Resources */ = {isa = PBXBuildFile; fileRef = 000A79150FBA49C500A0F12E /* IBVideoSel.png */; };
 		000A79380FBA49C500A0F12E /* OpenEmulator.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000A79190FBA49C500A0F12E /* OpenEmulator.icns */; };
 		000A79390FBA49C500A0F12E /* OpenEmulatorDeviceList.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000A791A0FBA49C500A0F12E /* OpenEmulatorDeviceList.icns */; };
 		000A793E0FBA49C500A0F12E /* TBContinue.png in Resources */ = {isa = PBXBuildFile; fileRef = 000A791F0FBA49C500A0F12E /* TBContinue.png */; };
@@ -41,16 +33,10 @@
 		00317E390FD31D1A007F2B00 /* AppleGraphicsTablet.png in Resources */ = {isa = PBXBuildFile; fileRef = 00317E380FD31D1A007F2B00 /* AppleGraphicsTablet.png */; };
 		00317E780FD32169007F2B00 /* GraphicsTablet.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00317E760FD32169007F2B00 /* GraphicsTablet.xib */; };
 		00317E7B0FD3217B007F2B00 /* GraphicsTabletController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00317E7A0FD3217B007F2B00 /* GraphicsTabletController.m */; };
-		003AFD510FD4D40D0075BE9E /* IBDiskDrives.png in Resources */ = {isa = PBXBuildFile; fileRef = 003AFD4F0FD4D40D0075BE9E /* IBDiskDrives.png */; };
-		003AFD520FD4D40D0075BE9E /* IBDiskDrivesSel.png in Resources */ = {isa = PBXBuildFile; fileRef = 003AFD500FD4D40D0075BE9E /* IBDiskDrivesSel.png */; };
 		0064951E0FD20D6200D04F42 /* Document.m in Sources */ = {isa = PBXBuildFile; fileRef = 0064951C0FD20D6200D04F42 /* Document.m */; };
 		006EECAE0FCA5C7B003D2C8D /* Component.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 006EECAD0FCA5C7B003D2C8D /* Component.cpp */; };
 		006EEE900FCA781C003D2C8D /* DiskImage.icns in Resources */ = {isa = PBXBuildFile; fileRef = 006EEE8F0FCA781C003D2C8D /* DiskImage.icns */; };
 		00C07CC00FD24DC2004E0D3D /* DocumentWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00C07CBD0FD24DC2004E0D3D /* DocumentWindowController.m */; };
-		00C07DA60FD260CB004E0D3D /* IBEmulation.png in Resources */ = {isa = PBXBuildFile; fileRef = 00C07DA50FD260CB004E0D3D /* IBEmulation.png */; };
-		00C07DAA0FD260F9004E0D3D /* IBEmulationSel.png in Resources */ = {isa = PBXBuildFile; fileRef = 00C07DA70FD260F9004E0D3D /* IBEmulationSel.png */; };
-		00C07DAB0FD260F9004E0D3D /* IBPorts.png in Resources */ = {isa = PBXBuildFile; fileRef = 00C07DA80FD260F9004E0D3D /* IBPorts.png */; };
-		00C07DAC0FD260F9004E0D3D /* IBPortsSel.png in Resources */ = {isa = PBXBuildFile; fileRef = 00C07DA90FD260F9004E0D3D /* IBPortsSel.png */; };
 		00C07E360FD27CCF004E0D3D /* PRGeneral.png in Resources */ = {isa = PBXBuildFile; fileRef = 00C07E350FD27CCF004E0D3D /* PRGeneral.png */; };
 		00C07E940FD28217004E0D3D /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C07E930FD28217004E0D3D /* Quartz.framework */; };
 		00F009D50FD5804800C506AD /* IPMountHover.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F009CC0FD5804800C506AD /* IPMountHover.png */; };
@@ -62,6 +48,21 @@
 		00F009DB0FD5804800C506AD /* IPUnmountHover.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F009D20FD5804800C506AD /* IPUnmountHover.png */; };
 		00F009DC0FD5804800C506AD /* IPUnmountOff.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F009D30FD5804800C506AD /* IPUnmountOff.png */; };
 		00F009DD0FD5804800C506AD /* IPUnmountOn.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F009D40FD5804800C506AD /* IPUnmountOn.png */; };
+		00F00A070FD5838D00C506AD /* IPAudio.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F009F90FD5838D00C506AD /* IPAudio.png */; };
+		00F00A080FD5838D00C506AD /* IPAudioSel.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F009FA0FD5838D00C506AD /* IPAudioSel.png */; };
+		00F00A090FD5838D00C506AD /* IPAudioSoundMax.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F009FB0FD5838D00C506AD /* IPAudioSoundMax.png */; };
+		00F00A0A0FD5838D00C506AD /* IPAudioSoundMin.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F009FC0FD5838D00C506AD /* IPAudioSoundMin.png */; };
+		00F00A0B0FD5838D00C506AD /* IPDiskDrives.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F009FD0FD5838D00C506AD /* IPDiskDrives.png */; };
+		00F00A0C0FD5838D00C506AD /* IPDiskDrivesSel.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F009FE0FD5838D00C506AD /* IPDiskDrivesSel.png */; };
+		00F00A0D0FD5838D00C506AD /* IPEmulation.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F009FF0FD5838D00C506AD /* IPEmulation.png */; };
+		00F00A0E0FD5838D00C506AD /* IPEmulationSel.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F00A000FD5838D00C506AD /* IPEmulationSel.png */; };
+		00F00A0F0FD5838D00C506AD /* IPExpansions.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F00A010FD5838D00C506AD /* IPExpansions.png */; };
+		00F00A100FD5838D00C506AD /* IPExpansionsSel.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F00A020FD5838D00C506AD /* IPExpansionsSel.png */; };
+		00F00A110FD5838D00C506AD /* IPPorts.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F00A030FD5838D00C506AD /* IPPorts.png */; };
+		00F00A120FD5838D00C506AD /* IPPortsSel.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F00A040FD5838D00C506AD /* IPPortsSel.png */; };
+		00F00A130FD5838D00C506AD /* IPVideo.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F00A050FD5838D00C506AD /* IPVideo.png */; };
+		00F00A140FD5838D00C506AD /* IPVideoSel.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F00A060FD5838D00C506AD /* IPVideoSel.png */; };
+		00F00A170FD5842600C506AD /* Controller.m in Sources */ = {isa = PBXBuildFile; fileRef = 00F00A160FD5842600C506AD /* Controller.m */; };
 		8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
 
@@ -96,14 +97,6 @@
 		000A78D30FBA483E00A0F12E /* OpenEmulator_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OpenEmulator_Prefix.pch; path = macosx/OpenEmulator_Prefix.pch; sourceTree = "<group>"; };
 		000A79080FBA49C500A0F12E /* DiskImage35.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = DiskImage35.icns; sourceTree = "<group>"; };
 		000A79090FBA49C500A0F12E /* DiskImage525.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = DiskImage525.icns; sourceTree = "<group>"; };
-		000A790C0FBA49C500A0F12E /* IBAudio.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IBAudio.png; sourceTree = "<group>"; };
-		000A790D0FBA49C500A0F12E /* IBAudioSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IBAudioSel.png; sourceTree = "<group>"; };
-		000A790E0FBA49C500A0F12E /* IBAudioSoundMax.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IBAudioSoundMax.png; sourceTree = "<group>"; };
-		000A790F0FBA49C500A0F12E /* IBAudioSoundMin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IBAudioSoundMin.png; sourceTree = "<group>"; };
-		000A79100FBA49C500A0F12E /* IBExpansions.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IBExpansions.png; sourceTree = "<group>"; };
-		000A79110FBA49C500A0F12E /* IBExpansionsSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IBExpansionsSel.png; sourceTree = "<group>"; };
-		000A79140FBA49C500A0F12E /* IBVideo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IBVideo.png; sourceTree = "<group>"; };
-		000A79150FBA49C500A0F12E /* IBVideoSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IBVideoSel.png; sourceTree = "<group>"; };
 		000A79190FBA49C500A0F12E /* OpenEmulator.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = OpenEmulator.icns; sourceTree = "<group>"; };
 		000A791A0FBA49C500A0F12E /* OpenEmulatorDeviceList.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = OpenEmulatorDeviceList.icns; sourceTree = "<group>"; };
 		000A791F0FBA49C500A0F12E /* TBContinue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TBContinue.png; sourceTree = "<group>"; };
@@ -127,8 +120,6 @@
 		00317E770FD32169007F2B00 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/GraphicsTablet.xib; sourceTree = "<group>"; };
 		00317E790FD3217B007F2B00 /* GraphicsTabletController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GraphicsTabletController.h; path = macosx/GraphicsTabletController.h; sourceTree = "<group>"; };
 		00317E7A0FD3217B007F2B00 /* GraphicsTabletController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GraphicsTabletController.m; path = macosx/GraphicsTabletController.m; sourceTree = "<group>"; };
-		003AFD4F0FD4D40D0075BE9E /* IBDiskDrives.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IBDiskDrives.png; path = macosx/Images/IBDiskDrives.png; sourceTree = "<group>"; };
-		003AFD500FD4D40D0075BE9E /* IBDiskDrivesSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IBDiskDrivesSel.png; path = macosx/Images/IBDiskDrivesSel.png; sourceTree = "<group>"; };
 		0064951B0FD20D6200D04F42 /* Document.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Document.h; path = macosx/Document.h; sourceTree = "<group>"; };
 		0064951C0FD20D6200D04F42 /* Document.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Document.m; path = macosx/Document.m; sourceTree = "<group>"; };
 		006EECA40FCA5C31003D2C8D /* libemulator.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libemulator.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -137,10 +128,6 @@
 		006EEE8F0FCA781C003D2C8D /* DiskImage.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = DiskImage.icns; path = macosx/Images/DiskImage.icns; sourceTree = "<group>"; };
 		00C07CBC0FD24DC2004E0D3D /* DocumentWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DocumentWindowController.h; path = macosx/DocumentWindowController.h; sourceTree = "<group>"; };
 		00C07CBD0FD24DC2004E0D3D /* DocumentWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DocumentWindowController.m; path = macosx/DocumentWindowController.m; sourceTree = "<group>"; };
-		00C07DA50FD260CB004E0D3D /* IBEmulation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IBEmulation.png; path = macosx/Images/IBEmulation.png; sourceTree = "<group>"; };
-		00C07DA70FD260F9004E0D3D /* IBEmulationSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IBEmulationSel.png; path = macosx/Images/IBEmulationSel.png; sourceTree = "<group>"; };
-		00C07DA80FD260F9004E0D3D /* IBPorts.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IBPorts.png; path = macosx/Images/IBPorts.png; sourceTree = "<group>"; };
-		00C07DA90FD260F9004E0D3D /* IBPortsSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IBPortsSel.png; path = macosx/Images/IBPortsSel.png; sourceTree = "<group>"; };
 		00C07E350FD27CCF004E0D3D /* PRGeneral.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = PRGeneral.png; path = macosx/Images/PRGeneral.png; sourceTree = "<group>"; };
 		00C07E930FD28217004E0D3D /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = /System/Library/Frameworks/Quartz.framework; sourceTree = "<absolute>"; };
 		00F009CC0FD5804800C506AD /* IPMountHover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPMountHover.png; path = macosx/Images/IPMountHover.png; sourceTree = "<group>"; };
@@ -152,6 +139,22 @@
 		00F009D20FD5804800C506AD /* IPUnmountHover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPUnmountHover.png; path = macosx/Images/IPUnmountHover.png; sourceTree = "<group>"; };
 		00F009D30FD5804800C506AD /* IPUnmountOff.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPUnmountOff.png; path = macosx/Images/IPUnmountOff.png; sourceTree = "<group>"; };
 		00F009D40FD5804800C506AD /* IPUnmountOn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPUnmountOn.png; path = macosx/Images/IPUnmountOn.png; sourceTree = "<group>"; };
+		00F009F90FD5838D00C506AD /* IPAudio.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPAudio.png; path = macosx/Images/IPAudio.png; sourceTree = "<group>"; };
+		00F009FA0FD5838D00C506AD /* IPAudioSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPAudioSel.png; path = macosx/Images/IPAudioSel.png; sourceTree = "<group>"; };
+		00F009FB0FD5838D00C506AD /* IPAudioSoundMax.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPAudioSoundMax.png; path = macosx/Images/IPAudioSoundMax.png; sourceTree = "<group>"; };
+		00F009FC0FD5838D00C506AD /* IPAudioSoundMin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPAudioSoundMin.png; path = macosx/Images/IPAudioSoundMin.png; sourceTree = "<group>"; };
+		00F009FD0FD5838D00C506AD /* IPDiskDrives.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPDiskDrives.png; path = macosx/Images/IPDiskDrives.png; sourceTree = "<group>"; };
+		00F009FE0FD5838D00C506AD /* IPDiskDrivesSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPDiskDrivesSel.png; path = macosx/Images/IPDiskDrivesSel.png; sourceTree = "<group>"; };
+		00F009FF0FD5838D00C506AD /* IPEmulation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPEmulation.png; path = macosx/Images/IPEmulation.png; sourceTree = "<group>"; };
+		00F00A000FD5838D00C506AD /* IPEmulationSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPEmulationSel.png; path = macosx/Images/IPEmulationSel.png; sourceTree = "<group>"; };
+		00F00A010FD5838D00C506AD /* IPExpansions.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPExpansions.png; path = macosx/Images/IPExpansions.png; sourceTree = "<group>"; };
+		00F00A020FD5838D00C506AD /* IPExpansionsSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPExpansionsSel.png; path = macosx/Images/IPExpansionsSel.png; sourceTree = "<group>"; };
+		00F00A030FD5838D00C506AD /* IPPorts.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPPorts.png; path = macosx/Images/IPPorts.png; sourceTree = "<group>"; };
+		00F00A040FD5838D00C506AD /* IPPortsSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPPortsSel.png; path = macosx/Images/IPPortsSel.png; sourceTree = "<group>"; };
+		00F00A050FD5838D00C506AD /* IPVideo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPVideo.png; path = macosx/Images/IPVideo.png; sourceTree = "<group>"; };
+		00F00A060FD5838D00C506AD /* IPVideoSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPVideoSel.png; path = macosx/Images/IPVideoSel.png; sourceTree = "<group>"; };
+		00F00A150FD5842600C506AD /* Controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Controller.h; path = macosx/Controller.h; sourceTree = "<group>"; };
+		00F00A160FD5842600C506AD /* Controller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Controller.m; path = macosx/Controller.m; sourceTree = "<group>"; };
 		1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		8D15AC370486D014006FF6A4 /* OpenEmulator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenEmulator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -192,14 +195,6 @@
 			children = (
 				000A79080FBA49C500A0F12E /* DiskImage35.icns */,
 				000A79090FBA49C500A0F12E /* DiskImage525.icns */,
-				000A790C0FBA49C500A0F12E /* IBAudio.png */,
-				000A790D0FBA49C500A0F12E /* IBAudioSel.png */,
-				000A790E0FBA49C500A0F12E /* IBAudioSoundMax.png */,
-				000A790F0FBA49C500A0F12E /* IBAudioSoundMin.png */,
-				000A79100FBA49C500A0F12E /* IBExpansions.png */,
-				000A79110FBA49C500A0F12E /* IBExpansionsSel.png */,
-				000A79140FBA49C500A0F12E /* IBVideo.png */,
-				000A79150FBA49C500A0F12E /* IBVideoSel.png */,
 				000A79190FBA49C500A0F12E /* OpenEmulator.icns */,
 				000A791A0FBA49C500A0F12E /* OpenEmulatorDeviceList.icns */,
 				000A791F0FBA49C500A0F12E /* TBContinue.png */,
@@ -253,6 +248,8 @@
 		2A37F4ABFDCFA73011CA2CEA /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				00F00A150FD5842600C506AD /* Controller.h */,
+				00F00A160FD5842600C506AD /* Controller.m */,
 				00317E790FD3217B007F2B00 /* GraphicsTabletController.h */,
 				00317E7A0FD3217B007F2B00 /* GraphicsTabletController.m */,
 				00317E330FD31CE8007F2B00 /* PaperFeedController.h */,
@@ -274,6 +271,20 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				00F009F90FD5838D00C506AD /* IPAudio.png */,
+				00F009FA0FD5838D00C506AD /* IPAudioSel.png */,
+				00F009FB0FD5838D00C506AD /* IPAudioSoundMax.png */,
+				00F009FC0FD5838D00C506AD /* IPAudioSoundMin.png */,
+				00F009FD0FD5838D00C506AD /* IPDiskDrives.png */,
+				00F009FE0FD5838D00C506AD /* IPDiskDrivesSel.png */,
+				00F009FF0FD5838D00C506AD /* IPEmulation.png */,
+				00F00A000FD5838D00C506AD /* IPEmulationSel.png */,
+				00F00A010FD5838D00C506AD /* IPExpansions.png */,
+				00F00A020FD5838D00C506AD /* IPExpansionsSel.png */,
+				00F00A030FD5838D00C506AD /* IPPorts.png */,
+				00F00A040FD5838D00C506AD /* IPPortsSel.png */,
+				00F00A050FD5838D00C506AD /* IPVideo.png */,
+				00F00A060FD5838D00C506AD /* IPVideoSel.png */,
 				00F009CC0FD5804800C506AD /* IPMountHover.png */,
 				00F009CD0FD5804800C506AD /* IPMountOff.png */,
 				00F009CE0FD5804800C506AD /* IPMountOn.png */,
@@ -283,17 +294,11 @@
 				00F009D20FD5804800C506AD /* IPUnmountHover.png */,
 				00F009D30FD5804800C506AD /* IPUnmountOff.png */,
 				00F009D40FD5804800C506AD /* IPUnmountOn.png */,
-				003AFD4F0FD4D40D0075BE9E /* IBDiskDrives.png */,
-				003AFD500FD4D40D0075BE9E /* IBDiskDrivesSel.png */,
 				00317E760FD32169007F2B00 /* GraphicsTablet.xib */,
 				00317E380FD31D1A007F2B00 /* AppleGraphicsTablet.png */,
 				00317E2B0FD31CCC007F2B00 /* PaperFeed.xib */,
 				00317E140FD31A2D007F2B00 /* Preferences.xib */,
 				00C07E350FD27CCF004E0D3D /* PRGeneral.png */,
-				00C07DA70FD260F9004E0D3D /* IBEmulationSel.png */,
-				00C07DA80FD260F9004E0D3D /* IBPorts.png */,
-				00C07DA90FD260F9004E0D3D /* IBPortsSel.png */,
-				00C07DA50FD260CB004E0D3D /* IBEmulation.png */,
 				001F575B0FD1ED9F00EA246A /* Document.xib */,
 				0023EC7C0FCF8A8700029974 /* InspectorPanel.xib */,
 				006EEE8F0FCA781C003D2C8D /* DiskImage.icns */,
@@ -391,14 +396,6 @@
 				000A78D00FBA482E00A0F12E /* MainMenu.xib in Resources */,
 				000A79270FBA49C500A0F12E /* DiskImage35.icns in Resources */,
 				000A79280FBA49C500A0F12E /* DiskImage525.icns in Resources */,
-				000A792B0FBA49C500A0F12E /* IBAudio.png in Resources */,
-				000A792C0FBA49C500A0F12E /* IBAudioSel.png in Resources */,
-				000A792D0FBA49C500A0F12E /* IBAudioSoundMax.png in Resources */,
-				000A792E0FBA49C500A0F12E /* IBAudioSoundMin.png in Resources */,
-				000A792F0FBA49C500A0F12E /* IBExpansions.png in Resources */,
-				000A79300FBA49C500A0F12E /* IBExpansionsSel.png in Resources */,
-				000A79330FBA49C500A0F12E /* IBVideo.png in Resources */,
-				000A79340FBA49C500A0F12E /* IBVideoSel.png in Resources */,
 				000A79380FBA49C500A0F12E /* OpenEmulator.icns in Resources */,
 				000A79390FBA49C500A0F12E /* OpenEmulatorDeviceList.icns in Resources */,
 				000A793E0FBA49C500A0F12E /* TBContinue.png in Resources */,
@@ -411,17 +408,11 @@
 				006EEE900FCA781C003D2C8D /* DiskImage.icns in Resources */,
 				0023EC7E0FCF8A8700029974 /* InspectorPanel.xib in Resources */,
 				001F575D0FD1ED9F00EA246A /* Document.xib in Resources */,
-				00C07DA60FD260CB004E0D3D /* IBEmulation.png in Resources */,
-				00C07DAA0FD260F9004E0D3D /* IBEmulationSel.png in Resources */,
-				00C07DAB0FD260F9004E0D3D /* IBPorts.png in Resources */,
-				00C07DAC0FD260F9004E0D3D /* IBPortsSel.png in Resources */,
 				00C07E360FD27CCF004E0D3D /* PRGeneral.png in Resources */,
 				00317E160FD31A2D007F2B00 /* Preferences.xib in Resources */,
 				00317E2E0FD31CCC007F2B00 /* PaperFeed.xib in Resources */,
 				00317E390FD31D1A007F2B00 /* AppleGraphicsTablet.png in Resources */,
 				00317E780FD32169007F2B00 /* GraphicsTablet.xib in Resources */,
-				003AFD510FD4D40D0075BE9E /* IBDiskDrives.png in Resources */,
-				003AFD520FD4D40D0075BE9E /* IBDiskDrivesSel.png in Resources */,
 				00F009D50FD5804800C506AD /* IPMountHover.png in Resources */,
 				00F009D60FD5804800C506AD /* IPMountOff.png in Resources */,
 				00F009D70FD5804800C506AD /* IPMountOn.png in Resources */,
@@ -431,6 +422,20 @@
 				00F009DB0FD5804800C506AD /* IPUnmountHover.png in Resources */,
 				00F009DC0FD5804800C506AD /* IPUnmountOff.png in Resources */,
 				00F009DD0FD5804800C506AD /* IPUnmountOn.png in Resources */,
+				00F00A070FD5838D00C506AD /* IPAudio.png in Resources */,
+				00F00A080FD5838D00C506AD /* IPAudioSel.png in Resources */,
+				00F00A090FD5838D00C506AD /* IPAudioSoundMax.png in Resources */,
+				00F00A0A0FD5838D00C506AD /* IPAudioSoundMin.png in Resources */,
+				00F00A0B0FD5838D00C506AD /* IPDiskDrives.png in Resources */,
+				00F00A0C0FD5838D00C506AD /* IPDiskDrivesSel.png in Resources */,
+				00F00A0D0FD5838D00C506AD /* IPEmulation.png in Resources */,
+				00F00A0E0FD5838D00C506AD /* IPEmulationSel.png in Resources */,
+				00F00A0F0FD5838D00C506AD /* IPExpansions.png in Resources */,
+				00F00A100FD5838D00C506AD /* IPExpansionsSel.png in Resources */,
+				00F00A110FD5838D00C506AD /* IPPorts.png in Resources */,
+				00F00A120FD5838D00C506AD /* IPPortsSel.png in Resources */,
+				00F00A130FD5838D00C506AD /* IPVideo.png in Resources */,
+				00F00A140FD5838D00C506AD /* IPVideoSel.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -456,6 +461,7 @@
 				00C07CC00FD24DC2004E0D3D /* DocumentWindowController.m in Sources */,
 				00317E360FD31CE8007F2B00 /* PaperFeedController.m in Sources */,
 				00317E7B0FD3217B007F2B00 /* GraphicsTabletController.m in Sources */,
+				00F00A170FD5842600C506AD /* Controller.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -8,13 +8,13 @@
 		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="179"/>
-			<integer value="679"/>
+			<integer value="184"/>
 			<integer value="186"/>
 			<integer value="746"/>
-			<integer value="184"/>
+			<integer value="164"/>
+			<integer value="679"/>
+			<integer value="179"/>
 			<integer value="185"/>
-			<integer value="163"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -79,11 +79,11 @@
 									<int key="NSButtonFlags2">6</int>
 									<object class="NSCustomResource" key="NSNormalImage">
 										<string key="NSClassName">NSImage</string>
-										<string key="NSResourceName">IBEmulation</string>
+										<string key="NSResourceName">IPEmulation</string>
 									</object>
 									<object class="NSCustomResource" key="NSAlternateImage">
 										<string key="NSClassName">NSImage</string>
-										<string key="NSResourceName">IBEmulationSel</string>
+										<string key="NSResourceName">IPEmulationSel</string>
 									</object>
 									<string key="NSAlternateContents"/>
 									<string key="NSKeyEquivalent"/>
@@ -101,11 +101,11 @@
 									<int key="NSButtonFlags2">6</int>
 									<object class="NSCustomResource" key="NSNormalImage">
 										<string key="NSClassName">NSImage</string>
-										<string key="NSResourceName">IBExpansions</string>
+										<string key="NSResourceName">IPExpansions</string>
 									</object>
 									<object class="NSCustomResource" key="NSAlternateImage">
 										<string key="NSClassName">NSImage</string>
-										<string key="NSResourceName">IBExpansionsSel</string>
+										<string key="NSResourceName">IPExpansionsSel</string>
 									</object>
 									<int key="NSPeriodicDelay">400</int>
 									<int key="NSPeriodicInterval">75</int>
@@ -121,11 +121,11 @@
 									<int key="NSButtonFlags2">6</int>
 									<object class="NSCustomResource" key="NSNormalImage">
 										<string key="NSClassName">NSImage</string>
-										<string key="NSResourceName">IBDiskDrives</string>
+										<string key="NSResourceName">IPDiskDrives</string>
 									</object>
 									<object class="NSCustomResource" key="NSAlternateImage">
 										<string key="NSClassName">NSImage</string>
-										<string key="NSResourceName">IBDiskDrivesSel</string>
+										<string key="NSResourceName">IPDiskDrivesSel</string>
 									</object>
 									<int key="NSPeriodicDelay">400</int>
 									<int key="NSPeriodicInterval">75</int>
@@ -141,11 +141,11 @@
 									<int key="NSButtonFlags2">6</int>
 									<object class="NSCustomResource" key="NSNormalImage">
 										<string key="NSClassName">NSImage</string>
-										<string key="NSResourceName">IBPorts</string>
+										<string key="NSResourceName">IPPorts</string>
 									</object>
 									<object class="NSCustomResource" key="NSAlternateImage">
 										<string key="NSClassName">NSImage</string>
-										<string key="NSResourceName">IBPortsSel</string>
+										<string key="NSResourceName">IPPortsSel</string>
 									</object>
 									<int key="NSPeriodicDelay">400</int>
 									<int key="NSPeriodicInterval">75</int>
@@ -161,11 +161,11 @@
 									<int key="NSButtonFlags2">6</int>
 									<object class="NSCustomResource" key="NSNormalImage">
 										<string key="NSClassName">NSImage</string>
-										<string key="NSResourceName">IBVideo</string>
+										<string key="NSResourceName">IPVideo</string>
 									</object>
 									<object class="NSCustomResource" key="NSAlternateImage">
 										<string key="NSClassName">NSImage</string>
-										<string key="NSResourceName">IBVideoSel</string>
+										<string key="NSResourceName">IPVideoSel</string>
 									</object>
 									<int key="NSPeriodicDelay">400</int>
 									<int key="NSPeriodicInterval">75</int>
@@ -181,11 +181,11 @@
 									<int key="NSButtonFlags2">6</int>
 									<object class="NSCustomResource" key="NSNormalImage">
 										<string key="NSClassName">NSImage</string>
-										<string key="NSResourceName">IBAudio</string>
+										<string key="NSResourceName">IPAudio</string>
 									</object>
 									<object class="NSCustomResource" key="NSAlternateImage">
 										<string key="NSClassName">NSImage</string>
-										<string key="NSResourceName">IBAudioSel</string>
+										<string key="NSResourceName">IPAudioSel</string>
 									</object>
 									<int key="NSPeriodicDelay">400</int>
 									<int key="NSPeriodicInterval">75</int>
@@ -446,7 +446,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 									<object class="NSTextView" id="1016611326">
 										<reference key="NSNextResponder" ref="754036466"/>
 										<int key="NSvFlags">2322</int>
-										<string key="NSFrameSize">{153, 42}</string>
+										<string key="NSFrameSize">{153, 0}</string>
 										<reference key="NSSuperview" ref="754036466"/>
 										<object class="NSTextContainer" key="NSTextContainer" id="153913157">
 											<object class="NSLayoutManager" key="NSLayoutManager">
@@ -1869,7 +1869,7 @@ ARcABAAAAAEAAAACARwAAwAAAAEAAQAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 							<int key="NSCellFlags2">33554432</int>
 							<object class="NSCustomResource" key="NSContents">
 								<string key="NSClassName">NSImage</string>
-								<string key="NSResourceName">IBAudioSoundMax</string>
+								<string key="NSResourceName">IPAudioSoundMax</string>
 							</object>
 							<int key="NSAlign">0</int>
 							<int key="NSScale">2</int>
@@ -1901,7 +1901,7 @@ ARcABAAAAAEAAAACARwAAwAAAAEAAQAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 							<int key="NSCellFlags2">33554432</int>
 							<object class="NSCustomResource" key="NSContents">
 								<string key="NSClassName">NSImage</string>
-								<string key="NSResourceName">IBAudioSoundMin</string>
+								<string key="NSResourceName">IPAudioSoundMin</string>
 							</object>
 							<int key="NSAlign">0</int>
 							<int key="NSScale">2</int>

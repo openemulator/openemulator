@@ -391,6 +391,12 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				<string key="NSExtension">NSResponder</string>
 			</object>
 			<object class="NSUserDefaultsController" id="356871564">
+				<object class="NSMutableArray" key="NSDeclaredKeys">
+					<bool key="EncodedWithXMLCoder">YES</bool>
+					<string>OE</string>
+					<string>OENewDocuments</string>
+					<string>OEDefaultTemplateChooser</string>
+				</object>
 				<bool key="NSSharedInstance">YES</bool>
 			</object>
 		</object>
@@ -431,55 +437,19 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">enabled: values.OEEnableDefaultTemplate</string>
-						<reference key="source" ref="995131843"/>
+						<string key="label">selectedIndex: values.OEDefaultTemplateChooser</string>
+						<reference key="source" ref="11741413"/>
 						<reference key="destination" ref="356871564"/>
 						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="995131843"/>
+							<reference key="NSSource" ref="11741413"/>
 							<reference key="NSDestination" ref="356871564"/>
-							<string key="NSLabel">enabled: values.OEEnableDefaultTemplate</string>
-							<string key="NSBinding">enabled</string>
-							<string key="NSKeyPath">values.OEEnableDefaultTemplate</string>
+							<string key="NSLabel">selectedIndex: values.OEDefaultTemplateChooser</string>
+							<string key="NSBinding">selectedIndex</string>
+							<string key="NSKeyPath">values.OEDefaultTemplateChooser</string>
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
 					</object>
-					<int key="connectionID">1840</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: values.OEEnableDefaultTemplate</string>
-						<reference key="source" ref="272061744"/>
-						<reference key="destination" ref="356871564"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="272061744"/>
-							<reference key="NSDestination" ref="356871564"/>
-							<string key="NSLabel">value: values.OEEnableDefaultTemplate</string>
-							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">values.OEEnableDefaultTemplate</string>
-							<object class="NSDictionary" key="NSOptions">
-								<string key="NS.key.0">NSValueTransformerName</string>
-								<string key="NS.object.0">NSNegateBoolean</string>
-							</object>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">1857</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: values.OEEnableDefaultTemplate</string>
-						<reference key="source" ref="882976568"/>
-						<reference key="destination" ref="356871564"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="882976568"/>
-							<reference key="NSDestination" ref="356871564"/>
-							<string key="NSLabel">value: values.OEEnableDefaultTemplate</string>
-							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">values.OEEnableDefaultTemplate</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">1858</int>
+					<int key="connectionID">1862</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -733,7 +703,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">1858</int>
+			<int key="maxID">1862</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -772,6 +742,10 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				<object class="IBPartialClassDescription">
 					<string key="className">PreferencesController</string>
 					<string key="superclassName">NSWindowController</string>
+					<object class="NSMutableDictionary" key="actions">
+						<string key="NS.key.0">selectView:</string>
+						<string key="NS.object.0">id</string>
+					</object>
 					<object class="NSMutableDictionary" key="outlets">
 						<string key="NS.key.0">fGeneralView</string>
 						<string key="NS.object.0">id</string>
