@@ -21,22 +21,13 @@
 		000A79300FBA49C500A0F12E /* IBExpansionsSel.png in Resources */ = {isa = PBXBuildFile; fileRef = 000A79110FBA49C500A0F12E /* IBExpansionsSel.png */; };
 		000A79330FBA49C500A0F12E /* IBVideo.png in Resources */ = {isa = PBXBuildFile; fileRef = 000A79140FBA49C500A0F12E /* IBVideo.png */; };
 		000A79340FBA49C500A0F12E /* IBVideoSel.png in Resources */ = {isa = PBXBuildFile; fileRef = 000A79150FBA49C500A0F12E /* IBVideoSel.png */; };
-		000A79350FBA49C500A0F12E /* MountHover.png in Resources */ = {isa = PBXBuildFile; fileRef = 000A79160FBA49C500A0F12E /* MountHover.png */; };
-		000A79360FBA49C500A0F12E /* MountOff.png in Resources */ = {isa = PBXBuildFile; fileRef = 000A79170FBA49C500A0F12E /* MountOff.png */; };
-		000A79370FBA49C500A0F12E /* MountOn.png in Resources */ = {isa = PBXBuildFile; fileRef = 000A79180FBA49C500A0F12E /* MountOn.png */; };
 		000A79380FBA49C500A0F12E /* OpenEmulator.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000A79190FBA49C500A0F12E /* OpenEmulator.icns */; };
 		000A79390FBA49C500A0F12E /* OpenEmulatorDeviceList.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000A791A0FBA49C500A0F12E /* OpenEmulatorDeviceList.icns */; };
-		000A793A0FBA49C500A0F12E /* RevealHover.png in Resources */ = {isa = PBXBuildFile; fileRef = 000A791B0FBA49C500A0F12E /* RevealHover.png */; };
-		000A793B0FBA49C500A0F12E /* RevealOff.png in Resources */ = {isa = PBXBuildFile; fileRef = 000A791C0FBA49C500A0F12E /* RevealOff.png */; };
-		000A793C0FBA49C500A0F12E /* RevealOn.png in Resources */ = {isa = PBXBuildFile; fileRef = 000A791D0FBA49C500A0F12E /* RevealOn.png */; };
 		000A793E0FBA49C500A0F12E /* TBContinue.png in Resources */ = {isa = PBXBuildFile; fileRef = 000A791F0FBA49C500A0F12E /* TBContinue.png */; };
 		000A793F0FBA49C500A0F12E /* TBInspector.png in Resources */ = {isa = PBXBuildFile; fileRef = 000A79200FBA49C500A0F12E /* TBInspector.png */; };
 		000A79400FBA49C500A0F12E /* TBPause.png in Resources */ = {isa = PBXBuildFile; fileRef = 000A79210FBA49C500A0F12E /* TBPause.png */; };
 		000A79410FBA49C500A0F12E /* TBPower.png in Resources */ = {isa = PBXBuildFile; fileRef = 000A79220FBA49C500A0F12E /* TBPower.png */; };
 		000A79420FBA49C500A0F12E /* TBReset.png in Resources */ = {isa = PBXBuildFile; fileRef = 000A79230FBA49C500A0F12E /* TBReset.png */; };
-		000A79430FBA49C500A0F12E /* UnmountHover.png in Resources */ = {isa = PBXBuildFile; fileRef = 000A79240FBA49C500A0F12E /* UnmountHover.png */; };
-		000A79440FBA49C500A0F12E /* UnmountOff.png in Resources */ = {isa = PBXBuildFile; fileRef = 000A79250FBA49C500A0F12E /* UnmountOff.png */; };
-		000A79450FBA49C500A0F12E /* UnmountOn.png in Resources */ = {isa = PBXBuildFile; fileRef = 000A79260FBA49C500A0F12E /* UnmountOn.png */; };
 		000A79E10FBA4A8500A0F12E /* OpenEmulatorHelp in Resources */ = {isa = PBXBuildFile; fileRef = 000A79520FBA4A8400A0F12E /* OpenEmulatorHelp */; };
 		001F56F90FD1E8E500EA246A /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 001F56F80FD1E8E500EA246A /* Sparkle.framework */; };
 		001F570C0FD1E94400EA246A /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 001F56F80FD1E8E500EA246A /* Sparkle.framework */; };
@@ -62,6 +53,15 @@
 		00C07DAC0FD260F9004E0D3D /* IBPortsSel.png in Resources */ = {isa = PBXBuildFile; fileRef = 00C07DA90FD260F9004E0D3D /* IBPortsSel.png */; };
 		00C07E360FD27CCF004E0D3D /* PRGeneral.png in Resources */ = {isa = PBXBuildFile; fileRef = 00C07E350FD27CCF004E0D3D /* PRGeneral.png */; };
 		00C07E940FD28217004E0D3D /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C07E930FD28217004E0D3D /* Quartz.framework */; };
+		00F009D50FD5804800C506AD /* IPMountHover.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F009CC0FD5804800C506AD /* IPMountHover.png */; };
+		00F009D60FD5804800C506AD /* IPMountOff.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F009CD0FD5804800C506AD /* IPMountOff.png */; };
+		00F009D70FD5804800C506AD /* IPMountOn.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F009CE0FD5804800C506AD /* IPMountOn.png */; };
+		00F009D80FD5804800C506AD /* IPRevealHover.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F009CF0FD5804800C506AD /* IPRevealHover.png */; };
+		00F009D90FD5804800C506AD /* IPRevealOff.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F009D00FD5804800C506AD /* IPRevealOff.png */; };
+		00F009DA0FD5804800C506AD /* IPRevealOn.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F009D10FD5804800C506AD /* IPRevealOn.png */; };
+		00F009DB0FD5804800C506AD /* IPUnmountHover.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F009D20FD5804800C506AD /* IPUnmountHover.png */; };
+		00F009DC0FD5804800C506AD /* IPUnmountOff.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F009D30FD5804800C506AD /* IPUnmountOff.png */; };
+		00F009DD0FD5804800C506AD /* IPUnmountOn.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F009D40FD5804800C506AD /* IPUnmountOn.png */; };
 		8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
 
@@ -104,22 +104,13 @@
 		000A79110FBA49C500A0F12E /* IBExpansionsSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IBExpansionsSel.png; sourceTree = "<group>"; };
 		000A79140FBA49C500A0F12E /* IBVideo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IBVideo.png; sourceTree = "<group>"; };
 		000A79150FBA49C500A0F12E /* IBVideoSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IBVideoSel.png; sourceTree = "<group>"; };
-		000A79160FBA49C500A0F12E /* MountHover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MountHover.png; sourceTree = "<group>"; };
-		000A79170FBA49C500A0F12E /* MountOff.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MountOff.png; sourceTree = "<group>"; };
-		000A79180FBA49C500A0F12E /* MountOn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MountOn.png; sourceTree = "<group>"; };
 		000A79190FBA49C500A0F12E /* OpenEmulator.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = OpenEmulator.icns; sourceTree = "<group>"; };
 		000A791A0FBA49C500A0F12E /* OpenEmulatorDeviceList.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = OpenEmulatorDeviceList.icns; sourceTree = "<group>"; };
-		000A791B0FBA49C500A0F12E /* RevealHover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RevealHover.png; sourceTree = "<group>"; };
-		000A791C0FBA49C500A0F12E /* RevealOff.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RevealOff.png; sourceTree = "<group>"; };
-		000A791D0FBA49C500A0F12E /* RevealOn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RevealOn.png; sourceTree = "<group>"; };
 		000A791F0FBA49C500A0F12E /* TBContinue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TBContinue.png; sourceTree = "<group>"; };
 		000A79200FBA49C500A0F12E /* TBInspector.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TBInspector.png; sourceTree = "<group>"; };
 		000A79210FBA49C500A0F12E /* TBPause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TBPause.png; sourceTree = "<group>"; };
 		000A79220FBA49C500A0F12E /* TBPower.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TBPower.png; sourceTree = "<group>"; };
 		000A79230FBA49C500A0F12E /* TBReset.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TBReset.png; sourceTree = "<group>"; };
-		000A79240FBA49C500A0F12E /* UnmountHover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UnmountHover.png; sourceTree = "<group>"; };
-		000A79250FBA49C500A0F12E /* UnmountOff.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UnmountOff.png; sourceTree = "<group>"; };
-		000A79260FBA49C500A0F12E /* UnmountOn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UnmountOn.png; sourceTree = "<group>"; };
 		000A79520FBA4A8400A0F12E /* OpenEmulatorHelp */ = {isa = PBXFileReference; lastKnownFileType = folder; name = OpenEmulatorHelp; path = macosx/OpenEmulatorHelp; sourceTree = "<group>"; };
 		001F56F80FD1E8E500EA246A /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = macosx/Sparkle.framework; sourceTree = "<group>"; };
 		001F575C0FD1ED9F00EA246A /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Document.xib; sourceTree = "<group>"; };
@@ -152,6 +143,15 @@
 		00C07DA90FD260F9004E0D3D /* IBPortsSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IBPortsSel.png; path = macosx/Images/IBPortsSel.png; sourceTree = "<group>"; };
 		00C07E350FD27CCF004E0D3D /* PRGeneral.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = PRGeneral.png; path = macosx/Images/PRGeneral.png; sourceTree = "<group>"; };
 		00C07E930FD28217004E0D3D /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = /System/Library/Frameworks/Quartz.framework; sourceTree = "<absolute>"; };
+		00F009CC0FD5804800C506AD /* IPMountHover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPMountHover.png; path = macosx/Images/IPMountHover.png; sourceTree = "<group>"; };
+		00F009CD0FD5804800C506AD /* IPMountOff.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPMountOff.png; path = macosx/Images/IPMountOff.png; sourceTree = "<group>"; };
+		00F009CE0FD5804800C506AD /* IPMountOn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPMountOn.png; path = macosx/Images/IPMountOn.png; sourceTree = "<group>"; };
+		00F009CF0FD5804800C506AD /* IPRevealHover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPRevealHover.png; path = macosx/Images/IPRevealHover.png; sourceTree = "<group>"; };
+		00F009D00FD5804800C506AD /* IPRevealOff.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPRevealOff.png; path = macosx/Images/IPRevealOff.png; sourceTree = "<group>"; };
+		00F009D10FD5804800C506AD /* IPRevealOn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPRevealOn.png; path = macosx/Images/IPRevealOn.png; sourceTree = "<group>"; };
+		00F009D20FD5804800C506AD /* IPUnmountHover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPUnmountHover.png; path = macosx/Images/IPUnmountHover.png; sourceTree = "<group>"; };
+		00F009D30FD5804800C506AD /* IPUnmountOff.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPUnmountOff.png; path = macosx/Images/IPUnmountOff.png; sourceTree = "<group>"; };
+		00F009D40FD5804800C506AD /* IPUnmountOn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPUnmountOn.png; path = macosx/Images/IPUnmountOn.png; sourceTree = "<group>"; };
 		1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		8D15AC370486D014006FF6A4 /* OpenEmulator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenEmulator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -200,22 +200,13 @@
 				000A79110FBA49C500A0F12E /* IBExpansionsSel.png */,
 				000A79140FBA49C500A0F12E /* IBVideo.png */,
 				000A79150FBA49C500A0F12E /* IBVideoSel.png */,
-				000A79160FBA49C500A0F12E /* MountHover.png */,
-				000A79170FBA49C500A0F12E /* MountOff.png */,
-				000A79180FBA49C500A0F12E /* MountOn.png */,
 				000A79190FBA49C500A0F12E /* OpenEmulator.icns */,
 				000A791A0FBA49C500A0F12E /* OpenEmulatorDeviceList.icns */,
-				000A791B0FBA49C500A0F12E /* RevealHover.png */,
-				000A791C0FBA49C500A0F12E /* RevealOff.png */,
-				000A791D0FBA49C500A0F12E /* RevealOn.png */,
 				000A791F0FBA49C500A0F12E /* TBContinue.png */,
 				000A79200FBA49C500A0F12E /* TBInspector.png */,
 				000A79210FBA49C500A0F12E /* TBPause.png */,
 				000A79220FBA49C500A0F12E /* TBPower.png */,
 				000A79230FBA49C500A0F12E /* TBReset.png */,
-				000A79240FBA49C500A0F12E /* UnmountHover.png */,
-				000A79250FBA49C500A0F12E /* UnmountOff.png */,
-				000A79260FBA49C500A0F12E /* UnmountOn.png */,
 			);
 			name = Images;
 			path = macosx/Images;
@@ -283,6 +274,15 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				00F009CC0FD5804800C506AD /* IPMountHover.png */,
+				00F009CD0FD5804800C506AD /* IPMountOff.png */,
+				00F009CE0FD5804800C506AD /* IPMountOn.png */,
+				00F009CF0FD5804800C506AD /* IPRevealHover.png */,
+				00F009D00FD5804800C506AD /* IPRevealOff.png */,
+				00F009D10FD5804800C506AD /* IPRevealOn.png */,
+				00F009D20FD5804800C506AD /* IPUnmountHover.png */,
+				00F009D30FD5804800C506AD /* IPUnmountOff.png */,
+				00F009D40FD5804800C506AD /* IPUnmountOn.png */,
 				003AFD4F0FD4D40D0075BE9E /* IBDiskDrives.png */,
 				003AFD500FD4D40D0075BE9E /* IBDiskDrivesSel.png */,
 				00317E760FD32169007F2B00 /* GraphicsTablet.xib */,
@@ -399,22 +399,13 @@
 				000A79300FBA49C500A0F12E /* IBExpansionsSel.png in Resources */,
 				000A79330FBA49C500A0F12E /* IBVideo.png in Resources */,
 				000A79340FBA49C500A0F12E /* IBVideoSel.png in Resources */,
-				000A79350FBA49C500A0F12E /* MountHover.png in Resources */,
-				000A79360FBA49C500A0F12E /* MountOff.png in Resources */,
-				000A79370FBA49C500A0F12E /* MountOn.png in Resources */,
 				000A79380FBA49C500A0F12E /* OpenEmulator.icns in Resources */,
 				000A79390FBA49C500A0F12E /* OpenEmulatorDeviceList.icns in Resources */,
-				000A793A0FBA49C500A0F12E /* RevealHover.png in Resources */,
-				000A793B0FBA49C500A0F12E /* RevealOff.png in Resources */,
-				000A793C0FBA49C500A0F12E /* RevealOn.png in Resources */,
 				000A793E0FBA49C500A0F12E /* TBContinue.png in Resources */,
 				000A793F0FBA49C500A0F12E /* TBInspector.png in Resources */,
 				000A79400FBA49C500A0F12E /* TBPause.png in Resources */,
 				000A79410FBA49C500A0F12E /* TBPower.png in Resources */,
 				000A79420FBA49C500A0F12E /* TBReset.png in Resources */,
-				000A79430FBA49C500A0F12E /* UnmountHover.png in Resources */,
-				000A79440FBA49C500A0F12E /* UnmountOff.png in Resources */,
-				000A79450FBA49C500A0F12E /* UnmountOn.png in Resources */,
 				000A79E10FBA4A8500A0F12E /* OpenEmulatorHelp in Resources */,
 				0008FCD90FBA5D72005E876E /* Info.plist in Resources */,
 				006EEE900FCA781C003D2C8D /* DiskImage.icns in Resources */,
@@ -431,6 +422,15 @@
 				00317E780FD32169007F2B00 /* GraphicsTablet.xib in Resources */,
 				003AFD510FD4D40D0075BE9E /* IBDiskDrives.png in Resources */,
 				003AFD520FD4D40D0075BE9E /* IBDiskDrivesSel.png in Resources */,
+				00F009D50FD5804800C506AD /* IPMountHover.png in Resources */,
+				00F009D60FD5804800C506AD /* IPMountOff.png in Resources */,
+				00F009D70FD5804800C506AD /* IPMountOn.png in Resources */,
+				00F009D80FD5804800C506AD /* IPRevealHover.png in Resources */,
+				00F009D90FD5804800C506AD /* IPRevealOff.png in Resources */,
+				00F009DA0FD5804800C506AD /* IPRevealOn.png in Resources */,
+				00F009DB0FD5804800C506AD /* IPUnmountHover.png in Resources */,
+				00F009DC0FD5804800C506AD /* IPUnmountOff.png in Resources */,
+				00F009DD0FD5804800C506AD /* IPUnmountOn.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
