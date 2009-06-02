@@ -10,63 +10,56 @@
 
 Component::Component()
 {
-//	componentName = parameters["id"];
 }
 
 Component::~Component()
 {
 }
 
-string Component::getName()
-{
-	return componentName;
-}
-
-void Component::onDependenciesLinked()
+void Component::onInit()
 {
 }
 
-void Component::sendMessage(void * message)
+int Component::ioctl(int request, void * data)
 {
+	return IOCTL_OK;
 }
 
-void Component::attachListener(uint32_t eventIndex, Component &component)
+void Component::addObserver(Component * component)
 {
-	eventListenerList[eventIndex].push_back(component);
+	observers.push_back(component);
 }
 
-void Component::detachListener(uint32_t eventIndex, Component &component)
+void Component::removeObserver(Component * component)
 {
-	vector<Component> &eventListener = eventListenerList[eventIndex];
-	vector<Component>::iterator iterator;
-	for (iterator = eventListener.begin();
-		 iterator != eventListener.end();
+	vector<Component *>::iterator iterator;
+	for (iterator = observers.begin();
+		 iterator != observers.end();
 		 iterator++)
 	{
-		if (iterator->getName() == component.getName())
-			eventListener.erase(iterator);
+		if (*iterator == component)
+			observers.erase(iterator);
 	}
 }
 
-void Component::onEvent(string &source, uint32_t eventIndex)
+void Component::onNotification(Component * component)
 {
 }
 
-void Component::setEvent(uint32_t eventIndex)
+void Component::postNotification()
 {
-	vector<Component> &eventListener = eventListenerList[eventIndex];
-	vector<Component>::iterator iterator;
-	for (iterator = eventListener.begin();
-		 iterator != eventListener.end();
+	vector<Component *>::iterator iterator;
+	for (iterator = observers.begin();
+		 iterator != observers.end();
 		 iterator++)
-		iterator->onEvent(componentName, eventIndex);
+		(*iterator)->onNotification(this);
 }
 
-uint8_t Component::readMemory(uint32_t address)
+int Component::read(int address)
 {
 	return 0;
 }
 
-void Component::writeMemory(uint32_t address, uint8_t value)
+void Component::write(int address, int value)
 {
 }

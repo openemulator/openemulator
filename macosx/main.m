@@ -1,12 +1,12 @@
+//
+//  main.m
+//  OpenEmulator
+//
+//  Created by Marc Stefan Ressl on 12/05/09.
+//  Copyright ITBA 2009 . All rights reserved.
+//
 
-/**
- * OpenEmulator
- * Mac OS X main
- * (C) 2007-2008 by Marc S. Ressl (mressl@umich.edu)
- * Released under the GPL
- */
-
-#import "Cocoa/Cocoa.h"
+#import <Cocoa/Cocoa.h>
 
 int main(int argc, char *argv[])
 {

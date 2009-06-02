@@ -2,54 +2,42 @@
 /**
  * libemulator
  * Component interface
- * (C) 2008 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  */
 
 #ifndef COMPONENT_H
 #define COMPONENT_H
 
-#define COMPONENT_MAXEVENTS	64
-
-#include <string>
 #include <vector>
-#include <map>
-
 #include <stdint.h>
 
-using namespace std;
+#define IOCTL_OK	0
+#define IOCTL_ERROR	1
 
-struct dependencyType {
-	char * componentName;
-	class Component * component;
-};
+using namespace std;
 
 class Component {
 public:
 	Component();
 	virtual ~Component();
 	
-	string getName();
-	void setParameters(map<string, string> parameters);
-	map<string, string> getParameters();
+	virtual void onInit();
 	
-	virtual void onDependenciesLinked();
+	virtual int ioctl(int request, void * data);
 	
-	virtual void sendMessage(void * messageData);
+	void addObserver(class Component * component);
+	void removeObserver(class Component * component);
+	virtual void onNotification(class Component * component);
 	
-	virtual void onEvent(string &source, uint32_t eventIndex);
-	void attachListener(uint32_t eventIndex, class Component &component);
-	void detachListener(uint32_t eventIndex, class Component &component);
-	
-	virtual uint8_t readMemory(uint32_t address);
-	virtual void writeMemory(uint32_t address, uint8_t value);
+	virtual int read(int address);
+	virtual void write(int address, int value);
 	
 protected:
-	void setEvent(uint32_t eventIndex);
+	void postNotification();
 	
 private:
-	string componentName;
-	vector<Component> eventListenerList[COMPONENT_MAXEVENTS];
+	vector<class Component *> observers;
 };
 
 #endif

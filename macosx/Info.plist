@@ -9,6 +9,22 @@
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>emulation</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>OpenEmulatorDeviceList.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>OpenEmulator Emulation</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSTypeIsPackage</key>
+			<true/>
+			<key>NSDocumentClass</key>
+			<string>Document</string>
+		</dict>
+		<dict>
 			<key>CFBundleTypeName</key>
 			<string>NSStringPboardType</string>
 			<key>CFBundleTypeRole</key>
@@ -35,32 +51,6 @@
 			<array>
 				<string>AIFF</string>
 			</array>
-			<key>CFBundleTypeRole</key>
-			<string>Viewer</string>
-		</dict>
-		<dict>
-			<key>CFBundleTypeExtensions</key>
-			<array>
-				<string>emulation</string>
-			</array>
-			<key>CFBundleTypeIconFile</key>
-			<string>OpenEmulatorDeviceList.icns</string>
-			<key>CFBundleTypeName</key>
-			<string>OpenEmulator Emulation</string>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>LSTypeIsPackage</key>
-			<true/>
-		</dict>
-		<dict>
-			<key>CFBundleTypeExtensions</key>
-			<array>
-				<string>rom</string>
-			</array>
-			<key>CFBundleTypeIconFile</key>
-			<string>RomImage.icns</string>
-			<key>CFBundleTypeName</key>
-			<string>ROM Image</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 		</dict>
@@ -103,7 +93,7 @@
 				<string>hdv</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
-			<string>DiskImageHDD.icns</string>
+			<string>DiskImage.icns</string>
 			<key>CFBundleTypeName</key>
 			<string>Apple II Disk Image</string>
 			<key>CFBundleTypeRole</key>
@@ -115,9 +105,9 @@
 				<string>img</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
-			<string>DiskImageHDD.icns</string>
+			<string>DiskImage.icns</string>
 			<key>CFBundleTypeName</key>
-			<string></string>
+			<string>Disk Image</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 		</dict>
@@ -127,7 +117,7 @@
 				<string>fdi</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
-			<string>DiskImageHDD.icns</string>
+			<string>DiskImage.icns</string>
 			<key>CFBundleTypeName</key>
 			<string>Formatted Disk Image</string>
 			<key>CFBundleTypeRole</key>
@@ -151,7 +141,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.0</string>
+	<string>1.0</string>
 	<key>CFBundleSignature</key>
 	<string>opem</string>
 	<key>CFBundleVersion</key>
@@ -165,7 +155,7 @@
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 	<key>SUFeedURL</key>
-	<string>http://www.openemulator.org/appcast.xml</string>
+	<string>http://www.openemulator.org/updates/appcast.xml</string>
 	<key>SUPublicDSAKeyFile</key>
 	<string>sparkle_dsa_pub.pem</string>
 </dict>
