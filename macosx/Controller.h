@@ -2,31 +2,26 @@
 /**
  * OpenEmulator
  * Mac OS X Controller
- * (C) 2007-2008 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  */
 
 #import <Cocoa/Cocoa.h>
 
-#define APPLEIIGO_HOMEPAGE	"http://www.openemulator.org"
-#define APPLEIIGO_FORUMSURL	"http://groups.google.com/group/openemulator"
-#define APPLEIIGO_DEVURL	"http://code.google.com/p/openemulator"
-#define APPLEIIGO_DONATEURL	"http://www.openemulator.org/donate.html"
+#define LINK_HOMEPAGE	"http://www.openemulator.org"
+#define LINK_FORUMSURL	"http://groups.google.com/group/openemulator"
+#define LINK_DEVURL	"http://code.google.com/p/openemulator"
+#define LINK_DONATEURL	"http://www.openemulator.org/donate.html"
 
-@interface Controller : NSObject
+@interface Controller : NSWindowController
 {
-/*    NSUserDefaults * fDefaults;
-    
-	InfoWindowController * fInfoController;
-	
-	NSSpeechSynthesizer * speechSynthesizer;
-	
-	IBOutlet NSWindow * fWindow;*/
+	NSWorkspace *fWorkspace;
+	NSSpeechSynthesizer *fSpeechSynthesizer;
 }
 
-- (IBAction) linkHomepage:(id) sender;
-- (IBAction) linkForums:(id) sender;
-- (IBAction) linkDevelopment:(id) sender;
-- (IBAction) linkDonate:(id) sender;
+- (void)linkHomepage:(id) sender;
+- (void)linkForums:(id) sender;
+- (void)linkDevelopment:(id) sender;
+- (void)linkDonate:(id) sender;
 
 @end

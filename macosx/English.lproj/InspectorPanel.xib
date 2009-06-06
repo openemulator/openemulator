@@ -9,12 +9,11 @@
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
 			<integer value="184"/>
-			<integer value="186"/>
-			<integer value="746"/>
-			<integer value="164"/>
-			<integer value="679"/>
-			<integer value="179"/>
 			<integer value="185"/>
+			<integer value="179"/>
+			<integer value="163"/>
+			<integer value="679"/>
+			<integer value="746"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -446,7 +445,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 									<object class="NSTextView" id="1016611326">
 										<reference key="NSNextResponder" ref="754036466"/>
 										<int key="NSvFlags">2322</int>
-										<string key="NSFrameSize">{153, 0}</string>
+										<string key="NSFrameSize">{153, 42}</string>
 										<reference key="NSSuperview" ref="754036466"/>
 										<object class="NSTextContainer" key="NSTextContainer" id="153913157">
 											<object class="NSLayoutManager" key="NSLayoutManager">
@@ -738,7 +737,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				<string key="NSClassName">NSView</string>
 			</object>
 			<object class="NSCustomView" id="881392825">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">268</int>
 				<object class="NSMutableArray" key="NSSubviews">
 					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -841,7 +840,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 								</object>
 								<string key="NSFrame">{{1, 1}, {233, 206}}</string>
 								<reference key="NSSuperview" ref="121155788"/>
-								<reference key="NSNextKeyView" ref="96451871"/>
 								<reference key="NSDocView" ref="96451871"/>
 								<reference key="NSBGColor" ref="962395363"/>
 								<int key="NScvFlags">4</int>
@@ -868,7 +866,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						</object>
 						<string key="NSFrame">{{9, 37}, {235, 208}}</string>
 						<reference key="NSSuperview" ref="881392825"/>
-						<reference key="NSNextKeyView" ref="295717618"/>
 						<int key="NSsFlags">562</int>
 						<reference key="NSVScroller" ref="500160581"/>
 						<reference key="NSHScroller" ref="992853483"/>
@@ -884,7 +881,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<object class="NSTextFieldCell" key="NSCell" id="846866621">
 							<int key="NSCellFlags">67239424</int>
 							<int key="NSCellFlags2">4194304</int>
-							<string key="NSContents">Power off emulation to modify</string>
+							<string key="NSContents">To modify, power off emulation.</string>
 							<reference key="NSSupport" ref="26"/>
 							<reference key="NSControlView" ref="1052427329"/>
 							<reference key="NSBackgroundColor" ref="88397357"/>
@@ -930,7 +927,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					</object>
 				</object>
 				<string key="NSFrameSize">{255, 255}</string>
-				<reference key="NSSuperview"/>
 				<string key="NSClassName">NSView</string>
 			</object>
 			<object class="NSCustomView" id="742328531">
@@ -1062,7 +1058,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<object class="NSTextFieldCell" key="NSCell" id="817612499">
 							<int key="NSCellFlags">67239424</int>
 							<int key="NSCellFlags2">4194304</int>
-							<string key="NSContents">Power off emulation to modify</string>
+							<string key="NSContents">To modify, power off emulation.</string>
 							<reference key="NSSupport" ref="26"/>
 							<reference key="NSControlView" ref="189306605"/>
 							<reference key="NSBackgroundColor" ref="88397357"/>
@@ -1234,7 +1230,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<object class="NSTextFieldCell" key="NSCell" id="958477212">
 							<int key="NSCellFlags">67239424</int>
 							<int key="NSCellFlags2">4194304</int>
-							<string key="NSContents">Power off emulation to modify</string>
+							<string key="NSContents">To modify, power off emulation.</string>
 							<reference key="NSSupport" ref="26"/>
 							<reference key="NSControlView" ref="275093736"/>
 							<reference key="NSBackgroundColor" ref="88397357"/>
@@ -2025,6 +2021,13 @@ ARcABAAAAAEAAAACARwAAwAAAAEAAQAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 				<reference key="NSSuperview"/>
 				<string key="NSClassName">NSView</string>
 			</object>
+			<object class="NSObjectController" id="834901026">
+				<bool key="NSEditable">YES</bool>
+				<object class="_NSManagedProxy" key="_NSManagedProxy"/>
+			</object>
+			<object class="NSUserDefaultsController" id="879293045">
+				<bool key="NSSharedInstance">YES</bool>
+			</object>
 		</object>
 		<object class="IBObjectContainer" key="IBDocument.Objects">
 			<object class="NSMutableArray" key="connectionRecords">
@@ -2124,6 +2127,30 @@ ARcABAAAAAEAAAACARwAAwAAAAEAAQAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 						<reference key="destination" ref="79444536"/>
 					</object>
 					<int key="connectionID">827</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">contentObject: inspectedDocument</string>
+						<reference key="source" ref="834901026"/>
+						<reference key="destination" ref="762632889"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="834901026"/>
+							<reference key="NSDestination" ref="762632889"/>
+							<string key="NSLabel">contentObject: inspectedDocument</string>
+							<string key="NSBinding">contentObject</string>
+							<string key="NSKeyPath">inspectedDocument</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">844</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">documentController</string>
+						<reference key="source" ref="762632889"/>
+						<reference key="destination" ref="834901026"/>
+					</object>
+					<int key="connectionID">845</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -3162,6 +3189,17 @@ ARcABAAAAAEAAAACARwAAwAAAAEAAQAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 						<reference key="object" ref="804678540"/>
 						<reference key="parent" ref="220287982"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">839</int>
+						<reference key="object" ref="834901026"/>
+						<reference key="parent" ref="485438096"/>
+						<string key="objectName">Inspected Document</string>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">841</int>
+						<reference key="object" ref="879293045"/>
+						<reference key="parent" ref="485438096"/>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -3348,6 +3386,7 @@ ARcABAAAAAEAAAACARwAAwAAAAEAAQAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 					<string>836.IBPluginDependency</string>
 					<string>837.IBPluginDependency</string>
 					<string>838.IBPluginDependency</string>
+					<string>839.IBPluginDependency</string>
 				</object>
 				<object class="NSMutableArray" key="dict.values">
 					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -3355,9 +3394,9 @@ ARcABAAAAAEAAAACARwAAwAAAAEAAQAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 					<string>com.apple.InterfaceBuilderKit</string>
 					<string>com.apple.InterfaceBuilderKit</string>
 					<reference ref="9"/>
-					<string>{{548, 396}, {252, 24}}</string>
+					<string>{{569, 286}, {252, 24}}</string>
 					<boolean value="YES"/>
-					<string>{{548, 396}, {252, 24}}</string>
+					<string>{{569, 286}, {252, 24}}</string>
 					<boolean value="NO" id="6"/>
 					<reference ref="6"/>
 					<reference ref="6"/>
@@ -3531,6 +3570,7 @@ ARcABAAAAAEAAAACARwAAwAAAAEAAQAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="unlocalizedProperties">
@@ -3553,7 +3593,7 @@ ARcABAAAAAEAAAACARwAAwAAAAEAAQAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">838</int>
+			<int key="maxID">845</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -3578,6 +3618,7 @@ ARcABAAAAAEAAAACARwAAwAAAAEAAQAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSMutableArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>documentController</string>
 							<string>fAudioView</string>
 							<string>fDiskDrivesView</string>
 							<string>fEmulationView</string>
@@ -3589,6 +3630,7 @@ ARcABAAAAAEAAAACARwAAwAAAAEAAQAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>NSObjectController</string>
 							<string>NSView</string>
 							<string>NSView</string>
 							<string>NSView</string>
