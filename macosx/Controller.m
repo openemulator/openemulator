@@ -14,10 +14,23 @@
 {
 	if (self = [super init])
 	{
+        fDefaults = [NSUserDefaults standardUserDefaults];
 		fWorkspace = [NSWorkspace sharedWorkspace];
 	}
 	
 	return self;
+}
+
+- (void)applicationDidFinishLaunching:(NSNotification*)notification
+{
+	if ([fDefaults boolForKey:@"InspectorPanelIsVisible"])
+		[fInspectorPanelController toggleInspectorPanel:nil];
+}
+
+- (void)applicationWillTerminate:(NSNotification*)notification
+{
+	NSWindow *window = [fInspectorPanelController window];
+    [fDefaults setInteger:[window isVisible] forKey:@"InspectorPanelIsVisible"];
 }
 
 /*- (BOOL) application:(NSApplication *)theApplication
