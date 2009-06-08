@@ -34,30 +34,22 @@
 }
 
 - (void)makeWindowControllers {
-    NSArray *myControllers = [self windowControllers];
-	
-    // If this document displaced a transient document,
-	// it will already have been assigned a window controller.
-	// If that is not the case, create one.
-    if ([myControllers count] == 0) {
-        [self addWindowController:[[[DocumentWindowController allocWithZone:[self zone]] init]
-								   autorelease]];
-    }
+	DocumentWindowController *windowController = [[DocumentWindowController alloc] init];
+	[self addWindowController:windowController];
+	[windowController release];
 }
 
 - (BOOL)readFromFileWrapper:(NSFileWrapper *)fileWrapper
 					 ofType:(NSString *)typeName
 					  error:(NSError **)outError
 {
-    if ( outError != NULL ) {
-	}
-    return YES;
+	return YES;
 }
 
 - (NSFileWrapper *)fileWrapperOfType:(NSString *)typeName error:(NSError **)outError {
-	*outError = nil;
-	return nil;
-	//[[NSFileWrapper alloc] initWithPath:@"lolo"];
+	NSFileWrapper *fileWrapper = [[[NSFileWrapper alloc] initDirectoryWithFileWrappers:nil]
+								  autorelease];
+	return fileWrapper;
 }
 
 - (void)togglePower:(id)sender

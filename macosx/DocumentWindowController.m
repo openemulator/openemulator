@@ -20,7 +20,7 @@
     return @"Document";
 }
 
-- (void)windowDidFinishLoading
+- (void)windowDidLoad
 {
 	[self setDocumentEdited:TRUE];
 }
@@ -32,15 +32,32 @@
 								   object:self]];
 }
 
+- (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender
+{
+    if ((NSDragOperationGeneric & [sender draggingSourceOperationMask]) 
+		== NSDragOperationGeneric)
+    {
+        //this means that the sender is offering the type of operation we want
+        //return that we want the NSDragOperationGeneric operation that they 
+		//are offering
+        return NSDragOperationGeneric;
+    }
+    else
+    {
+        //since they aren't offering the type of operation we want, we have 
+		//to tell them we aren't interested
+        return NSDragOperationNone;
+    }
+}
+
 - (void)setFrameSize:(double)proportion
 {
 	NSWindow * window = [self window];
-	NSScreen * screen = [window screen];
-	NSView * view = [window contentView];
-	
 	NSRect windowFrame = [window frame];
-	NSRect screenFrame = [screen visibleFrame];
+	NSView * view = [window contentView];
 	NSRect viewFrame = [view frame];
+	NSScreen * screen = [window screen];
+	NSRect screenFrame = [screen visibleFrame];
 	
 	float deltaWidth = windowFrame.size.width - viewFrame.size.width;
 	float deltaHeight = windowFrame.size.height - viewFrame.size.height;
@@ -96,7 +113,38 @@
 
 - (void)toggleFullscreen:(id)sender
 {
-    CGAcquireDisplayFadeReservation(25, &tok);
+	NSWindow *window = [self window];
+	NSRect windowFrame = [window frame];
+	NSView *view = [window contentView];
+	NSRect viewFrame = [view frame];
+	NSScreen *screen = [window screen];
+	NSRect screenFrame = [screen frame];
+	
+	NSRect frame;
+	frame.origin.x = windowFrame.origin.x;
+	frame.origin.y = windowFrame.origin.y;
+	frame.size.width = viewFrame.size.width;
+	frame.size.height = viewFrame.size.height;
+	
+	NSWindow *fullscreenWindow = [[NSWindow alloc] initWithContentRect:frame
+															 styleMask:NSBorderlessWindowMask
+															   backing:NSBackingStoreBuffered
+																 defer:YES];
+    SetSystemUIMode(kUIModeAllHidden, kUIOptionAutoShowMenuBar);
+	[fullscreenWindow setContentView:view];
+    [fullscreenWindow makeKeyAndOrderFront:nil];
+	[fullscreenWindow setFrame:screenFrame display:YES animate:YES];
+	
+//	[window setContentView:nil];
+	
+/*	NSWindow * window = [view window];
+	
+//    normalFrame = [self frame];
+    [window setFrame:[[window screen] frame] display:YES animate:YES];
+
+//	[self fitToScreen:nil];
+
+/*    CGAcquireDisplayFadeReservation(25, &tok);
     CGDisplayFade(tok, 0.5, kCGDisplayBlendNormal, kCGDisplayBlendSolidColor, 0, 0, 0, TRUE);
 	
 /*	NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -104,15 +152,16 @@
 							 NSFullScreenModeAllScreens, nil];
 	NSWindow *window = [self window];
 	NSView *view = [window contentView];
-*/	SetSystemUIMode(kUIModeAllHidden, kUIOptionAutoShowMenuBar);
+*/	
 	
 	/*	if ([view isInFullScreenMode])
 		[view exitFullScreenModeWithOptions:options];
 	else
 		[view enterFullScreenMode:[window screen] withOptions:options];*/
 	
-	CGDisplayFade(tok, 0.5, kCGDisplayBlendSolidColor, kCGDisplayBlendNormal, 0, 0, 0, TRUE);
+/*	CGDisplayFade(tok, 0.5, kCGDisplayBlendSolidColor, kCGDisplayBlendNormal, 0, 0, 0, TRUE);
 	CGReleaseDisplayFadeReservation(tok);
+ */
 }
 
 @end

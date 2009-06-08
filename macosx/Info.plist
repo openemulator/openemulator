@@ -14,7 +14,7 @@
 				<string>emulation</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
-			<string>OpenEmulatorDeviceList.icns</string>
+			<string>Emulation.icns</string>
 			<key>CFBundleTypeName</key>
 			<string>OpenEmulator Emulation</string>
 			<key>CFBundleTypeRole</key>

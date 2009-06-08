@@ -46,27 +46,24 @@ NSString *itemIdentifiers[] =
 
 - (void)awakeFromNib
 {
-	NSPanel *window = (NSPanel *)[self window];
-	[window setBecomesKeyOnlyIfNeeded:YES];
+	NSPanel *panel = (NSPanel *)[self window];
+	[panel setBecomesKeyOnlyIfNeeded:YES];
 	
 	int tabTag = [fDefaults integerForKey:@"InspectorPanelView"];
 	[fTabMatrix selectCellWithTag:tabTag];
-	[self setView:tabTag isInit:TRUE];
+	[self setView:tabTag isInit:YES];
 }
 
-- (void)windowDidLoad
+/*- (void)windowDidLoad
 {
-	if ([fDefaults boolForKey:@"InspectorPanelIsVisible"])
-		[self toggleInspectorPanel:nil];
+    [super windowDidLoad];
 	
 /*    [self activeDocumentChanged];
     [NSApp addObserver:self
 			forKeyPath:@"mainWindow.windowController.document"
 			   options:0
-			   context:[InspectorPanelController class]];
-*/	
-    [super windowDidLoad];
-}
+			   context:[InspectorPanelController class]];	
+}*/
 
 - (void)toggleInspectorPanelNotification:(NSNotification *)notification
 {
@@ -80,7 +77,6 @@ NSString *itemIdentifiers[] =
 		[window close];
 	else
 		[window orderFront:nil];
-    [fDefaults setBool:[window isVisible] forKey:@"InspectorPanelIsVisible"];
 }
 
 - (BOOL)validateUserInterfaceItem:(id)item
@@ -118,7 +114,7 @@ NSString *itemIdentifiers[] =
 		inspectedDocument = nil;
 }
 
-- (void)inspectorPanelDidResignKey:(NSNotification *)notification
+/*- (void)inspectorPanelDidResignKey:(NSNotification *)notification
 {
     [documentController commitEditing];
 }
@@ -132,7 +128,7 @@ NSString *itemIdentifiers[] =
 		[self activeDocumentChanged];
 	else
 		[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
-}
+}*/
 
 - (NSView *)getView:(int)tabTag
 {
@@ -176,17 +172,17 @@ NSString *itemIdentifiers[] =
 	}
 	
 	NSWindow *window = [self window];
+	NSRect frame = [window frame];
+
 	NSView *view = [self getView:tabTag];
-	
-	NSRect windowRect = [window frame];
 	
 	float difference = ([view frame].size.height - oldHeight) *
 		[window userSpaceScaleFactor];
 	if (!isInit)
-		windowRect.origin.y -= difference;
-	windowRect.size.height += difference;
+		frame.origin.y -= difference;
+	frame.size.height += difference;
 	
-    [window setFrame:windowRect display:YES animate:YES];
+    [window setFrame:frame display:YES animate:YES];
 	[[window contentView] addSubview:view];
     [view setHidden:NO];
     

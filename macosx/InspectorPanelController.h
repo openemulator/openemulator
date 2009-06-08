@@ -10,14 +10,14 @@
 
 @interface InspectorPanelController : NSWindowController
 {
-    NSUserDefaults * fDefaults;
+    NSUserDefaults *fDefaults;
     IBOutlet NSObjectController *documentController;
     
 	id inspectedDocument;
 	
-	IBOutlet NSMatrix * fTabMatrix;
-    IBOutlet NSView * fEmulationView, * fExpansionsView, * fDiskDrivesView,
-		* fPortsView, * fVideoView, * fAudioView;
+	IBOutlet NSMatrix *fTabMatrix;
+    IBOutlet NSView *fEmulationView, *fExpansionsView, *fDiskDrivesView,
+		*fPortsView, *fVideoView, *fAudioView;
 	int oldTabTag;
 }
 
