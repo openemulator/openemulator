@@ -15,14 +15,83 @@
 
 @implementation DocumentWindowController
 
-- (NSString *)windowNibName
+- (void)awakeFromNib
 {
-    return @"Document";
+	NSToolbar *toolbar;
+	toolbar = [[NSToolbar alloc] initWithIdentifier:@"Document Toolbar"];
+	[toolbar setDelegate:self];
+	[toolbar setAllowsUserCustomization:YES];
+	[[self window] setToolbar:toolbar];
+	
+	[toolbar release];
 }
 
-- (void)windowDidLoad
+- (NSToolbarItem *)toolbar:(NSToolbar *)toolbar
+	 itemForItemIdentifier:(NSString *)ident
+ willBeInsertedIntoToolbar:(BOOL)flag
 {
-	[self setDocumentEdited:TRUE];
+	NSToolbarItem *item = [[NSToolbarItem alloc] initWithItemIdentifier:ident];
+	
+	if ([ident isEqualToString:@"Power Off"])
+	{
+		[item setLabel:NSLocalizedString(@"Power Off", "Preferences -> toolbar item title")];
+		[item setImage:[NSImage imageNamed:@"TBPower.png"]];
+		[item setTarget:self];
+		[item setAction:@selector(togglePower:)];
+		[item setAutovalidates:NO];
+	}
+	else if ([ident isEqualToString:@"Reset"])
+	{
+		[item setLabel:NSLocalizedString(@"Reset", "Preferences -> toolbar item title")];
+		[item setImage:[NSImage imageNamed:@"TBReset.png"]];
+		[item setTarget:self];
+		[item setAction:@selector(resetEmulation:)];
+		[item setAutovalidates:NO];
+	}
+	else if ([ident isEqualToString:@"Pause"])
+	{
+		[item setLabel:NSLocalizedString(@"Reset", "Preferences -> toolbar item title")];
+		[item setImage:[NSImage imageNamed:@"TBPause.png"]];
+		[item setTarget:self];
+		[item setAction:@selector(togglePause:)];
+		[item setAutovalidates:NO];
+	}
+	else if ([ident isEqualToString:@"Inspector"])
+	{
+		[item setLabel:NSLocalizedString(@"Inspector", "Preferences -> toolbar item title")];
+		[item setImage:[NSImage imageNamed:@"TBInspector.png"]];
+		[item setTarget:self];
+		[item setAction:@selector(toggleInspectorPanel:)];
+		[item setAutovalidates:NO];
+	}
+	else
+	{
+		[item release];
+		return nil;
+	}
+	
+	return [item autorelease];
+}
+
+- (NSArray *)toolbarSelectableItemIdentifiers:(NSToolbar *)toolbar
+{
+	return [self toolbarDefaultItemIdentifiers:toolbar];
+}
+
+- (NSArray *)toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar
+{
+	return [self toolbarAllowedItemIdentifiers:toolbar];
+}
+
+- (NSArray *)toolbarAllowedItemIdentifiers:(NSToolbar *)toolbar
+{
+	return [NSArray arrayWithObjects:@"Power Off",
+			NSToolbarSpaceItemIdentifier,
+			@"Reset",
+			@"Pause",
+			NSToolbarFlexibleSpaceItemIdentifier,
+			@"Inspector",
+			nil];
 }
 
 - (void)toggleInspectorPanel:(id)sender
@@ -52,11 +121,11 @@
 
 - (void)setFrameSize:(double)proportion
 {
-	NSWindow * window = [self window];
+	NSWindow *window = [self window];
 	NSRect windowFrame = [window frame];
-	NSView * view = [window contentView];
+	NSView *view = [window contentView];
 	NSRect viewFrame = [view frame];
-	NSScreen * screen = [window screen];
+	NSScreen *screen = [window screen];
 	NSRect screenFrame = [screen visibleFrame];
 	
 	float deltaWidth = windowFrame.size.width - viewFrame.size.width;
@@ -113,7 +182,7 @@
 
 - (void)toggleFullscreen:(id)sender
 {
-	NSWindow *window = [self window];
+/*	NSWindow *window = [self window];
 	NSRect windowFrame = [window frame];
 	NSView *view = [window contentView];
 	NSRect viewFrame = [view frame];
@@ -137,7 +206,7 @@
 	
 //	[window setContentView:nil];
 	
-/*	NSWindow * window = [view window];
+/*	NSWindow *window = [view window];
 	
 //    normalFrame = [self frame];
     [window setFrame:[[window screen] frame] display:YES animate:YES];

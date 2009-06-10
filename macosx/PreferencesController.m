@@ -17,8 +17,8 @@
 
 - (void)awakeFromNib
 {
-	NSToolbar * toolbar = [[NSToolbar alloc] initWithIdentifier:@"Preferences Toolbar"];
-	NSString * selectedItemIdentifier = @"General";
+	NSToolbar *toolbar = [[NSToolbar alloc] initWithIdentifier:@"Preferences Toolbar"];
+	NSString *selectedItemIdentifier = @"General";
 	
 	[toolbar setDelegate:self];
 	[toolbar setAllowsUserCustomization:NO];
@@ -36,7 +36,7 @@
 	  itemForItemIdentifier:(NSString *)ident
   willBeInsertedIntoToolbar:(BOOL)flag
 {
-	NSToolbarItem * item = [[NSToolbarItem alloc] initWithItemIdentifier:ident];
+	NSToolbarItem *item = [[NSToolbarItem alloc] initWithItemIdentifier:ident];
 	
 	if ([ident isEqualToString:@"General"])
 	{
@@ -67,7 +67,7 @@
 
 - (NSArray *)toolbarAllowedItemIdentifiers:(NSToolbar *)toolbar
 {
-	return [NSArray arrayWithObjects:@"General", nil];
+	return [NSArray arrayWithObjects:@"Power Off", @"Reset", @"Pause", @"Inspector", nil];
 }
 
 - (void)selectView:(id)sender
@@ -77,18 +77,18 @@
 
 - (void)setView:(NSString *)itemIdentifier
 {
-	NSView * view;
+	NSView *view;
 	if ([itemIdentifier isEqualToString:@"General"])
 		view = fGeneralView;
 	else
 		view = fGeneralView;
 	
-    NSWindow * window = [self window];
+    NSWindow *window = [self window];
     if ([window contentView] == view)
         return;
-
+	
 	[view setHidden:YES];
-
+	
     NSRect windowRect = [window frame];
     float difference = ([view frame].size.height - [[window contentView] frame].size.height) *
 		[window userSpaceScaleFactor];

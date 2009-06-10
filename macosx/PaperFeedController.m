@@ -16,4 +16,11 @@
 	return [super initWithWindowNibName:@"PaperFeed"];
 }
 
+- (void)awakeFromNib
+{
+	NSPanel *panel = (NSPanel *)[self window];
+	[panel setFrameUsingName:@"PaperFeed"];
+	[panel setFrameAutosaveName:@"PaperFeed"];
+}
+
 @end

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0004E8E90FDE4064009CE911 /* AddWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0004E8E80FDE4064009CE911 /* AddWindow.xib */; };
 		000A78CF0FBA482E00A0F12E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 000A78C90FBA482E00A0F12E /* InfoPlist.strings */; };
 		000A78D00FBA482E00A0F12E /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 000A78CB0FBA482E00A0F12E /* MainMenu.xib */; };
 		000A78D40FBA483E00A0F12E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 000A78D20FBA483E00A0F12E /* main.m */; };
@@ -92,6 +93,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0004E8E80FDE4064009CE911 /* AddWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AddWindow.xib; sourceTree = "<group>"; };
 		0008FCD80FBA5D72005E876E /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = macosx/Info.plist; sourceTree = "<group>"; };
 		000A78CA0FBA482E00A0F12E /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = macosx/English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		000A78CC0FBA482E00A0F12E /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/MainMenu.xib; sourceTree = "<group>"; };
@@ -321,6 +323,7 @@
 				000A79070FBA49C500A0F12E /* Images */,
 				000A78C90FBA482E00A0F12E /* InfoPlist.strings */,
 				000A78CB0FBA482E00A0F12E /* MainMenu.xib */,
+				0004E8E80FDE4064009CE911 /* AddWindow.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -451,6 +454,7 @@
 				00F00A140FD5838D00C506AD /* IPVideoSel.png in Resources */,
 				005486900FDC817900DBCFA8 /* Emulation.icns in Resources */,
 				005487840FDC86AB00DBCFA8 /* rom in Resources */,
+				0004E8E90FDE4064009CE911 /* AddWindow.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

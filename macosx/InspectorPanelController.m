@@ -48,6 +48,8 @@ NSString *itemIdentifiers[] =
 {
 	NSPanel *panel = (NSPanel *)[self window];
 	[panel setBecomesKeyOnlyIfNeeded:YES];
+	[panel setFrameUsingName:@"InspectorPanel"];
+	[panel setFrameAutosaveName:@"InspectorPanel"];
 	
 	int tabTag = [fDefaults integerForKey:@"InspectorPanelView"];
 	[fTabMatrix selectCellWithTag:tabTag];

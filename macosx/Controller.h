@@ -7,7 +7,10 @@
  */
 
 #import <Cocoa/Cocoa.h>
+
 #import "InspectorPanelController.h"
+#import "PaperFeedController.h"
+#import "GraphicsTabletController.h"
 
 #define LINK_HOMEPAGE	"http://www.openemulator.org"
 #define LINK_FORUMSURL	"http://groups.google.com/group/openemulator"
@@ -18,7 +21,6 @@
 {
 	NSUserDefaults *fDefaults;
 	NSWorkspace *fWorkspace;
-	NSSpeechSynthesizer *fSpeechSynthesizer;
 	
 	IBOutlet InspectorPanelController *fInspectorPanelController;
 }

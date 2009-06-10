@@ -21,19 +21,21 @@
 	return self;
 }
 
-- (void)applicationDidFinishLaunching:(NSNotification*)notification
+- (void)applicationDidFinishLaunching:(NSNotification *)notification
 {
 	if ([fDefaults boolForKey:@"InspectorPanelIsVisible"])
 		[fInspectorPanelController toggleInspectorPanel:nil];
 }
 
-- (void)applicationWillTerminate:(NSNotification*)notification
+- (void)applicationWillTerminate:(NSNotification *)notification
 {
-	NSWindow *window = [fInspectorPanelController window];
+	NSWindow *window;
+	
+	window = [fInspectorPanelController window];
     [fDefaults setInteger:[window isVisible] forKey:@"InspectorPanelIsVisible"];
 }
 
-/*- (BOOL) application:(NSApplication *)theApplication
+/*- (BOOL)application:(NSApplication *)theApplication
 			openFile:(NSString *)filename
 {
 	[[NSDocumentController sharedDocumentController]
@@ -42,7 +44,7 @@
 	return YES;
 }
 
-- (IBAction) openDocument:(id) sender
+- (void)openDocument:(id)sender
 {
 	NSOpenPanel *panel = [NSOpenPanel openPanel];
 	NSArray *fileTypes = [NSArray arrayWithObjects:

@@ -29,12 +29,14 @@
 {
 	[pasteboardTypes release];
 	[pasteboard release];
-
+	
 	[super dealloc];
 }
 
 - (void)makeWindowControllers {
-	DocumentWindowController *windowController = [[DocumentWindowController alloc] init];
+	DocumentWindowController *windowController;
+	windowController = [[DocumentWindowController alloc] initWithWindowNibName:@"Document"];
+	
 	[self addWindowController:windowController];
 	[windowController release];
 }
@@ -54,6 +56,7 @@
 
 - (void)togglePower:(id)sender
 {
+	[self updateChangeCount:NSChangeDone];
 }
 
 - (void)resetEmulation:(id)sender
@@ -121,7 +124,7 @@
 
 - (void)startSpeaking:(id)sender
 {
-	NSTextView * dummy = [[NSTextView alloc] init];
+	NSTextView *dummy = [[NSTextView alloc] init];
 	[dummy insertText:[self getDocumentText]];
 	[dummy startSpeaking:nil];
 }
