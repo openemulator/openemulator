@@ -79,7 +79,6 @@
 
 - (void)togglePower:(id)sender
 {
-	[self updateChangeCount:NSChangeDone];
 }
 
 - (void)resetEmulation:(id)sender
@@ -88,6 +87,7 @@
 
 - (void)togglePause:(id)sender
 {
+	[self updateChangeCount:NSChangeDone];
 }
 
 - (NSString *)getDocumentText
