@@ -23,6 +23,8 @@
 	NSWorkspace *fWorkspace;
 	
 	IBOutlet InspectorPanelController *fInspectorPanelController;
+	
+	int disableMenuBarCount;
 }
 
 - (void)linkHomepage:(id) sender;

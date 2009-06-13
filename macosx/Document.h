@@ -9,8 +9,13 @@
 #import <Cocoa/Cocoa.h>
 
 @interface Document : NSDocument {
+	IBOutlet id fWindow;
+	
 	NSPasteboard *pasteboard;
 	NSArray *pasteboardTypes;
+	
+	BOOL isFullscreen;
+	NSWindow *fullscreenWindow;
 }
 
 - (BOOL)validateCopy;

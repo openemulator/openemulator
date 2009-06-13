@@ -22,7 +22,6 @@
 	[toolbar setDelegate:self];
 	[toolbar setAllowsUserCustomization:YES];
 	[[self window] setToolbar:toolbar];
-	
 	[toolbar release];
 }
 
@@ -31,12 +30,13 @@
  willBeInsertedIntoToolbar:(BOOL)flag
 {
 	NSToolbarItem *item = [[NSToolbarItem alloc] initWithItemIdentifier:ident];
+	NSDocument *document = [self document];
 	
 	if ([ident isEqualToString:@"Power Off"])
 	{
 		[item setLabel:NSLocalizedString(@"Power Off", "Preferences -> toolbar item title")];
 		[item setImage:[NSImage imageNamed:@"TBPower.png"]];
-		[item setTarget:self];
+		[item setTarget:document];
 		[item setAction:@selector(togglePower:)];
 		[item setAutovalidates:NO];
 	}
@@ -44,7 +44,7 @@
 	{
 		[item setLabel:NSLocalizedString(@"Reset", "Preferences -> toolbar item title")];
 		[item setImage:[NSImage imageNamed:@"TBReset.png"]];
-		[item setTarget:self];
+		[item setTarget:document];
 		[item setAction:@selector(resetEmulation:)];
 		[item setAutovalidates:NO];
 	}
@@ -52,7 +52,7 @@
 	{
 		[item setLabel:NSLocalizedString(@"Reset", "Preferences -> toolbar item title")];
 		[item setImage:[NSImage imageNamed:@"TBPause.png"]];
-		[item setTarget:self];
+		[item setTarget:document];
 		[item setAction:@selector(togglePause:)];
 		[item setAutovalidates:NO];
 	}
@@ -71,11 +71,6 @@
 	}
 	
 	return [item autorelease];
-}
-
-- (NSArray *)toolbarSelectableItemIdentifiers:(NSToolbar *)toolbar
-{
-	return [self toolbarDefaultItemIdentifiers:toolbar];
 }
 
 - (NSArray *)toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar
@@ -182,7 +177,9 @@
 
 - (void)toggleFullscreen:(id)sender
 {
-/*	NSWindow *window = [self window];
+	NSDocument *document = [self document];
+
+	NSWindow *window = [self window];
 	NSRect windowFrame = [window frame];
 	NSView *view = [window contentView];
 	NSRect viewFrame = [view frame];
@@ -198,11 +195,20 @@
 	NSWindow *fullscreenWindow = [[NSWindow alloc] initWithContentRect:frame
 															 styleMask:NSBorderlessWindowMask
 															   backing:NSBackingStoreBuffered
-																 defer:YES];
-    SetSystemUIMode(kUIModeAllHidden, kUIOptionAutoShowMenuBar);
+																 defer:NO];
 	[fullscreenWindow setContentView:view];
-    [fullscreenWindow makeKeyAndOrderFront:nil];
+	
+//	DocumentWindowController *windowController;
+//	windowController = [[DocumentWindowController alloc] initWithWindow:fullscreenWindow];	
+//	[document removeWindowController:self];
+//	[document addWindowController:windowController];
+//	[windowController release];
+	[window orderOut:self];
+	
+	SetSystemUIMode(kUIModeAllHidden, kUIOptionAutoShowMenuBar);
+	[fullscreenWindow makeKeyAndOrderFront:self];
 	[fullscreenWindow setFrame:screenFrame display:YES animate:YES];
+//	[fullscreenWindow release];
 	
 //	[window setContentView:nil];
 	
@@ -210,9 +216,9 @@
 	
 //    normalFrame = [self frame];
     [window setFrame:[[window screen] frame] display:YES animate:YES];
-
+ 
 //	[self fitToScreen:nil];
-
+	
 /*    CGAcquireDisplayFadeReservation(25, &tok);
     CGDisplayFade(tok, 0.5, kCGDisplayBlendNormal, kCGDisplayBlendSolidColor, 0, 0, 0, TRUE);
 	

@@ -6,6 +6,8 @@
  * Released under the GPL
  */
 
+#import <Carbon/Carbon.h>
+
 #import "Controller.h"
 
 @implementation Controller
@@ -14,8 +16,20 @@
 {
 	if (self = [super init])
 	{
+		NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+		[nc addObserver:self
+			   selector:@selector(disableMenuBar:)
+				   name:@"disableMenuBarNotification"
+				 object:nil];
+		[nc addObserver:self
+			   selector:@selector(enableMenuBar:)
+				   name:@"enableMenuBarNotification"
+				 object:nil];
+		
         fDefaults = [NSUserDefaults standardUserDefaults];
 		fWorkspace = [NSWorkspace sharedWorkspace];
+
+		disableMenuBarCount = 0;
 	}
 	
 	return self;
@@ -33,6 +47,22 @@
 	
 	window = [fInspectorPanelController window];
     [fDefaults setInteger:[window isVisible] forKey:@"InspectorPanelIsVisible"];
+}
+
+- (void)disableMenuBar:(NSNotification *)notification
+{
+	disableMenuBarCount++;
+
+	if (disableMenuBarCount >= 1)
+		SetSystemUIMode(kUIModeAllHidden, kUIOptionAutoShowMenuBar);
+}
+
+- (void)enableMenuBar:(NSNotification *)notification
+{
+	disableMenuBarCount--;
+	
+	if (disableMenuBarCount <= 0)
+		SetSystemUIMode(kUIModeNormal, 0);
 }
 
 /*- (BOOL)application:(NSApplication *)theApplication

@@ -26,7 +26,6 @@
 	[toolbar setSizeMode:NSToolbarSizeModeRegular];
 	[toolbar setSelectedItemIdentifier:selectedItemIdentifier];
 	[[self window] setToolbar:toolbar];
-	
 	[toolbar release];
 	
     [self setView:selectedItemIdentifier];
@@ -67,7 +66,7 @@
 
 - (NSArray *)toolbarAllowedItemIdentifiers:(NSToolbar *)toolbar
 {
-	return [NSArray arrayWithObjects:@"Power Off", @"Reset", @"Pause", @"Inspector", nil];
+	return [NSArray arrayWithObjects:@"General", nil];
 }
 
 - (void)selectView:(id)sender

@@ -33,11 +33,7 @@ NSString *itemIdentifiers[] =
 			   selector:@selector(toggleInspectorPanelNotification:)
 				   name:@"toggleInspectorPanelNotification"
 				 object:nil];
-/*		[nc addObserver:self
-			   selector:@selector(inspectorPanelDidResignKey:)
-				   name:NSWindowDidResignKeyNotification
-				 object:[self window]];
-*/		
+		
 		oldTabTag = -1;
     }
 

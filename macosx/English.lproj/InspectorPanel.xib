@@ -8,12 +8,12 @@
 		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="746"/>
-			<integer value="179"/>
 			<integer value="185"/>
+			<integer value="179"/>
 			<integer value="186"/>
+			<integer value="783"/>
+			<integer value="793"/>
 			<integer value="184"/>
-			<integer value="679"/>
 			<integer value="163"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
