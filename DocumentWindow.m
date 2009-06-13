@@ -14,10 +14,28 @@
 {
 	return YES;
 }
-
-- (BOOL)isExcludedFromWindowsMenu
+/*
+- (void)keyDown:(NSEvent *)theEvent
 {
-	return NO;
+    // your code here
+}
+
+- (void)keyUp:(NSEvent *)theEvent
+{
+    // your code here
+}
+*/
+- (BOOL)validateUserInterfaceItem:(id)item
+{
+	if ([item action] == @selector(performClose:))
+		return YES;
+
+	return YES;
+}
+
+- (void)performClose:(id)sender
+{
+	[[self windowController] performClose:sender];
 }
 
 @end

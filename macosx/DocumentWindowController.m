@@ -15,8 +15,12 @@
 
 @implementation DocumentWindowController
 
-- (void)awakeFromNib
+- (void)windowDidLoad
 {
+	[super windowDidLoad];
+	
+	isFullscreen = NO;
+	
 	NSToolbar *toolbar;
 	toolbar = [[NSToolbar alloc] initWithIdentifier:@"Document Toolbar"];
 	[toolbar setDelegate:self];
@@ -89,6 +93,90 @@
 			nil];
 }
 
+- (BOOL)validateUserInterfaceItem:(id)item
+{
+	if ([item action] == @selector(setHalfSize:))
+		return !isFullscreen;
+	else if ([item action] == @selector(setActualSize:))
+		return !isFullscreen;
+	else if ([item action] == @selector(setDoubleSize:))
+		return !isFullscreen;
+	else if ([item action] == @selector(fitToScreen:))
+		return !isFullscreen;
+	else if ([item action] == @selector(toggleFullscreen:))
+	{
+		NSString *menuTitle = nil;
+		
+		if (!isFullscreen)
+			menuTitle = NSLocalizedString(@"Enter Fullscreen",
+										  @"Title for menu item to enter fullscreen"
+										  "(should be the same as the initial menu item in the nib).");
+		else
+			menuTitle = NSLocalizedString(@"Exit Fullscreen",
+										  @"Title for menu item to exit fullscreen.");
+		
+		[item setTitleWithMnemonic:menuTitle];
+	}
+	
+    return YES;
+}
+
+- (void)performClose:(id)sender
+{
+	if (isFullscreen)
+		[self toggleFullscreen:sender];
+	
+	[[self window] performClose:self];
+}
+
+- (void)saveDocument:(id)sender
+{
+	if (isFullscreen)
+		[self toggleFullscreen:sender];
+	
+	[[self document] saveDocument:sender];
+}
+
+- (void)saveDocumentAs:(id)sender
+{
+	if (isFullscreen)
+		[self toggleFullscreen:sender];
+	
+	[[self document] saveDocumentAs:sender];
+}
+
+- (void)revertDocumentToSaved:(id)sender
+{
+	if (isFullscreen)
+		[self toggleFullscreen:sender];
+	
+	[[self document] revertDocumentToSaved:sender];
+}
+
+- (void)saveDocumentAsTemplate:(id)sender
+{
+	if (isFullscreen)
+		[self toggleFullscreen:sender];
+	
+//	[[self document] saveDocumentAsTemplate:sender];
+}
+
+- (void)runPageLayout:(id)sender
+{
+	if (isFullscreen)
+		[self toggleFullscreen:sender];
+	
+	[[self document] runPageLayout:sender];
+}
+
+- (void)printDocument:(id)sender
+{
+	if (isFullscreen)
+		[self toggleFullscreen:sender];
+	
+	[[self document] printDocument:sender];
+}
+
 - (void)toggleInspectorPanel:(id)sender
 {
 	[[NSNotificationCenter defaultCenter] postNotification:
@@ -118,13 +206,13 @@
 {
 	NSWindow *window = [self window];
 	NSRect windowFrame = [window frame];
-	NSView *view = [window contentView];
-	NSRect viewFrame = [view frame];
+	NSView *content = [window contentView];
+	NSRect contentFrame = [content frame];
 	NSScreen *screen = [window screen];
 	NSRect screenFrame = [screen visibleFrame];
 	
-	float deltaWidth = windowFrame.size.width - viewFrame.size.width;
-	float deltaHeight = windowFrame.size.height - viewFrame.size.height;
+	float deltaWidth = windowFrame.size.width - contentFrame.size.width;
+	float deltaHeight = windowFrame.size.height - contentFrame.size.height;
 	float scale = [window userSpaceScaleFactor];
 	
 	windowFrame.origin.x += windowFrame.size.width / 2;
@@ -134,8 +222,8 @@
 	windowFrame.origin.x -= windowFrame.size.width / 2;
 	windowFrame.origin.y -= windowFrame.size.height;
 	
-	float maxX = screenFrame.origin.x + screenFrame.size.width - windowFrame.size.width;
-	float maxY = screenFrame.origin.y + screenFrame.size.height - windowFrame.size.height;
+	float maxX = NSMaxX(screenFrame) - windowFrame.size.width;
+	float maxY = NSMaxY(screenFrame) - windowFrame.size.height;
 	float minX = screenFrame.origin.x;
 	float minY = screenFrame.origin.y;
 	
@@ -177,66 +265,77 @@
 
 - (void)toggleFullscreen:(id)sender
 {
-	NSDocument *document = [self document];
-
+	/*
+	 CGDisplayFadeReservationToken tok;
+	 
+	 CGAcquireDisplayFadeReservation(25, &tok);
+	 CGDisplayFade(tok, 0.5, kCGDisplayBlendNormal, kCGDisplayBlendSolidColor, 0, 0, 0, TRUE);
+	 
+	 CGDisplayFade(tok, 0.5, kCGDisplayBlendSolidColor, kCGDisplayBlendNormal, 0, 0, 0, TRUE);
+	 CGReleaseDisplayFadeReservation(tok);
+	 */
+	
 	NSWindow *window = [self window];
-	NSRect windowFrame = [window frame];
-	NSView *view = [window contentView];
-	NSRect viewFrame = [view frame];
-	NSScreen *screen = [window screen];
-	NSRect screenFrame = [screen frame];
+	NSRect contentFrame = [window contentRectForFrameRect:[window frame]];
 	
-	NSRect frame;
-	frame.origin.x = windowFrame.origin.x;
-	frame.origin.y = windowFrame.origin.y;
-	frame.size.width = viewFrame.size.width;
-	frame.size.height = viewFrame.size.height;
-	
-	NSWindow *fullscreenWindow = [[NSWindow alloc] initWithContentRect:frame
+	if (!isFullscreen)
+	{
+		NSView *content = [window contentView];
+		NSRect screenFrame = [[window screen] frame];
+
+		fullscreenWindow = [[DocumentWindow alloc] initWithContentRect:contentFrame
 															 styleMask:NSBorderlessWindowMask
 															   backing:NSBackingStoreBuffered
 																 defer:NO];
-	[fullscreenWindow setContentView:view];
-	
-//	DocumentWindowController *windowController;
-//	windowController = [[DocumentWindowController alloc] initWithWindow:fullscreenWindow];	
-//	[document removeWindowController:self];
-//	[document addWindowController:windowController];
-//	[windowController release];
-	[window orderOut:self];
-	
-	SetSystemUIMode(kUIModeAllHidden, kUIOptionAutoShowMenuBar);
-	[fullscreenWindow makeKeyAndOrderFront:self];
-	[fullscreenWindow setFrame:screenFrame display:YES animate:YES];
-//	[fullscreenWindow release];
-	
-//	[window setContentView:nil];
-	
-/*	NSWindow *window = [view window];
-	
-//    normalFrame = [self frame];
-    [window setFrame:[[window screen] frame] display:YES animate:YES];
- 
-//	[self fitToScreen:nil];
-	
-/*    CGAcquireDisplayFadeReservation(25, &tok);
-    CGDisplayFade(tok, 0.5, kCGDisplayBlendNormal, kCGDisplayBlendSolidColor, 0, 0, 0, TRUE);
-	
-/*	NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
-							 [NSNumber numberWithBool:NO],
-							 NSFullScreenModeAllScreens, nil];
-	NSWindow *window = [self window];
-	NSView *view = [window contentView];
-*/	
-	
-	/*	if ([view isInFullScreenMode])
-		[view exitFullScreenModeWithOptions:options];
+		[content retain];
+		[window setContentView:nil];
+		[window setWindowController:nil];
+		[fullscreenWindow setContentView:content];
+		[fullscreenWindow setWindowController:self];
+		[content release];
+		
+		[[NSNotificationCenter defaultCenter] postNotification:
+		 [NSNotification notificationWithName:@"disableMenuBarNotification"
+									   object:self]];
+		[[NSApplication sharedApplication] addWindowsItem:fullscreenWindow
+													title:[window title]
+												 filename:NO];
+		[fullscreenWindow setDelegate:self];
+		[fullscreenWindow makeKeyAndOrderFront:self];
+		[fullscreenWindow setFrame:screenFrame display:YES animate:YES];
+		[window orderOut:self];
+		
+		isFullscreen = YES;
+	}
 	else
-		[view enterFullScreenMode:[window screen] withOptions:options];*/
-	
-/*	CGDisplayFade(tok, 0.5, kCGDisplayBlendSolidColor, kCGDisplayBlendNormal, 0, 0, 0, TRUE);
-	CGReleaseDisplayFadeReservation(tok);
- */
+	{
+		[window makeKeyAndOrderFront:self];
+		[fullscreenWindow makeKeyAndOrderFront:self];
+		
+		[[NSApplication sharedApplication] removeWindowsItem:fullscreenWindow];
+		[fullscreenWindow setFrame:contentFrame
+						   display:YES
+						   animate:YES];
+		
+		[window makeKeyAndOrderFront:self];
+		
+		NSView *content = [fullscreenWindow contentView];
+		[content retain];
+		[fullscreenWindow setContentView:nil];
+		[fullscreenWindow setWindowController:nil];
+		[window setContentView:content];
+		[window setWindowController:self];
+		[content release];
+		
+		[[NSNotificationCenter defaultCenter] postNotification:
+		 [NSNotification notificationWithName:@"enableMenuBarNotification"
+									   object:self]];
+		
+		[fullscreenWindow release];
+		fullscreenWindow = nil;
+		
+		isFullscreen = NO;
+	}
 }
 
 @end

@@ -15,8 +15,10 @@
 	return [super initWithWindowNibName:@"Preferences"];
 }
 
-- (void)awakeFromNib
+- (void)windowDidLoad
 {
+	[super windowDidLoad];
+	
 	NSToolbar *toolbar = [[NSToolbar alloc] initWithIdentifier:@"Preferences Toolbar"];
 	NSString *selectedItemIdentifier = @"General";
 	

@@ -40,8 +40,10 @@ NSString *itemIdentifiers[] =
     return self;
 }
 
-- (void)awakeFromNib
+- (void)windowDidLoad
 {
+    [super windowDidLoad];
+
 	NSPanel *panel = (NSPanel *)[self window];
 	[panel setBecomesKeyOnlyIfNeeded:YES];
 	[panel setFrameUsingName:@"InspectorPanel"];
@@ -50,18 +52,14 @@ NSString *itemIdentifiers[] =
 	int tabTag = [fDefaults integerForKey:@"InspectorPanelView"];
 	[fTabMatrix selectCellWithTag:tabTag];
 	[self setView:tabTag isInit:YES];
-}
 
-/*- (void)windowDidLoad
-{
-    [super windowDidLoad];
-	
-/*    [self activeDocumentChanged];
-    [NSApp addObserver:self
-			forKeyPath:@"mainWindow.windowController.document"
-			   options:0
-			   context:[InspectorPanelController class]];	
-}*/
+	/*    [self activeDocumentChanged];
+	 [NSApp addObserver:self
+	 forKeyPath:@"mainWindow.windowController.document"
+	 options:0
+	 context:[InspectorPanelController class]];
+*/
+}
 
 - (void)toggleInspectorPanelNotification:(NSNotification *)notification
 {

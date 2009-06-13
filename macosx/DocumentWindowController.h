@@ -8,10 +8,14 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "DocumentWindow.h"
+
 @interface DocumentWindowController : NSWindowController {
-	CGDisplayFadeReservationToken tok;
+	BOOL isFullscreen;
+	DocumentWindow *fullscreenWindow;
 }
 
+- (void)saveDocumentAsTemplate:(id)sender;
 - (void)toggleInspectorPanel:(id)sender;
 - (void)setHalfSize:(id)sender;
 - (void)setActualSize:(id)sender;

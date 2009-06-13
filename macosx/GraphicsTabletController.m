@@ -16,8 +16,10 @@
 	return [super initWithWindowNibName:@"GraphicsTablet"];
 }
 
-- (void)awakeFromNib
+- (void)windowDidLoad
 {
+	[super windowDidLoad];
+	
 	NSPanel *panel = (NSPanel *)[self window];
 	[panel setFrameUsingName:@"GraphicsTablet"];
 	[panel setFrameAutosaveName:@"GraphicsTablet"];
