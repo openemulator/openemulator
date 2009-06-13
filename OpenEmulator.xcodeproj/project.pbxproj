@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0004E8E90FDE4064009CE911 /* AddWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0004E8E80FDE4064009CE911 /* AddWindow.xib */; };
 		000740180FE3435D00AC5FD7 /* DocumentWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 000740170FE3435D00AC5FD7 /* DocumentWindow.m */; };
 		000A78CF0FBA482E00A0F12E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 000A78C90FBA482E00A0F12E /* InfoPlist.strings */; };
 		000A78D00FBA482E00A0F12E /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 000A78CB0FBA482E00A0F12E /* MainMenu.xib */; };
@@ -39,6 +38,7 @@
 		0064951E0FD20D6200D04F42 /* Document.m in Sources */ = {isa = PBXBuildFile; fileRef = 0064951C0FD20D6200D04F42 /* Document.m */; };
 		006EECAE0FCA5C7B003D2C8D /* Component.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 006EECAD0FCA5C7B003D2C8D /* Component.cpp */; };
 		006EEE900FCA781C003D2C8D /* DiskImage.icns in Resources */ = {isa = PBXBuildFile; fileRef = 006EEE8F0FCA781C003D2C8D /* DiskImage.icns */; };
+		0070EE940FE3773D00E2E74D /* AddWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0070EE920FE3773D00E2E74D /* AddWindow.xib */; };
 		00C07E360FD27CCF004E0D3D /* PRGeneral.png in Resources */ = {isa = PBXBuildFile; fileRef = 00C07E350FD27CCF004E0D3D /* PRGeneral.png */; };
 		00C07E940FD28217004E0D3D /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C07E930FD28217004E0D3D /* Quartz.framework */; };
 		00F009D50FD5804800C506AD /* IPMountHover.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F009CC0FD5804800C506AD /* IPMountHover.png */; };
@@ -93,7 +93,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		0004E8E80FDE4064009CE911 /* AddWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AddWindow.xib; sourceTree = "<group>"; };
 		000740160FE3435D00AC5FD7 /* DocumentWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DocumentWindow.h; sourceTree = "<group>"; };
 		000740170FE3435D00AC5FD7 /* DocumentWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DocumentWindow.m; sourceTree = "<group>"; };
 		0008FCD80FBA5D72005E876E /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = macosx/Info.plist; sourceTree = "<group>"; };
@@ -134,6 +133,7 @@
 		006EECAC0FCA5C7B003D2C8D /* Component.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Component.h; path = libemulator/Component.h; sourceTree = "<group>"; };
 		006EECAD0FCA5C7B003D2C8D /* Component.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Component.cpp; path = libemulator/Component.cpp; sourceTree = "<group>"; };
 		006EEE8F0FCA781C003D2C8D /* DiskImage.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = DiskImage.icns; path = macosx/Images/DiskImage.icns; sourceTree = "<group>"; };
+		0070EE930FE3773D00E2E74D /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/AddWindow.xib; sourceTree = "<group>"; };
 		00C07E350FD27CCF004E0D3D /* PRGeneral.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = PRGeneral.png; path = macosx/Images/PRGeneral.png; sourceTree = "<group>"; };
 		00C07E930FD28217004E0D3D /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = /System/Library/Frameworks/Quartz.framework; sourceTree = "<absolute>"; };
 		00F009CC0FD5804800C506AD /* IPMountHover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPMountHover.png; path = macosx/Images/IPMountHover.png; sourceTree = "<group>"; };
@@ -285,6 +285,7 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				0070EE920FE3773D00E2E74D /* AddWindow.xib */,
 				0054874B0FDC86AB00DBCFA8 /* rom */,
 				0008FCD80FBA5D72005E876E /* Info.plist */,
 				0054868F0FDC817900DBCFA8 /* Emulation.icns */,
@@ -323,7 +324,6 @@
 				000A79070FBA49C500A0F12E /* Images */,
 				000A78C90FBA482E00A0F12E /* InfoPlist.strings */,
 				000A78CB0FBA482E00A0F12E /* MainMenu.xib */,
-				0004E8E80FDE4064009CE911 /* AddWindow.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -454,7 +454,7 @@
 				00F00A140FD5838D00C506AD /* IPVideoSel.png in Resources */,
 				005486900FDC817900DBCFA8 /* Emulation.icns in Resources */,
 				005487840FDC86AB00DBCFA8 /* rom in Resources */,
-				0004E8E90FDE4064009CE911 /* AddWindow.xib in Resources */,
+				0070EE940FE3773D00E2E74D /* AddWindow.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -549,6 +549,14 @@
 				00317E770FD32169007F2B00 /* English */,
 			);
 			name = GraphicsTablet.xib;
+			sourceTree = "<group>";
+		};
+		0070EE920FE3773D00E2E74D /* AddWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0070EE930FE3773D00E2E74D /* English */,
+			);
+			name = AddWindow.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
