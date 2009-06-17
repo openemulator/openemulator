@@ -10,11 +10,11 @@
 			<bool key="EncodedWithXMLCoder">YES</bool>
 			<integer value="185"/>
 			<integer value="179"/>
-			<integer value="186"/>
-			<integer value="783"/>
-			<integer value="793"/>
-			<integer value="184"/>
 			<integer value="163"/>
+			<integer value="783"/>
+			<integer value="186"/>
+			<integer value="184"/>
+			<integer value="793"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1516,7 +1516,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 							<double key="NSMinValue">-1.000000e+00</double>
 							<double key="NSValue">0.000000e+00</double>
 							<double key="NSAltIncValue">0.000000e+00</double>
-							<int key="NSNumberOfTickMarks">2</int>
+							<int key="NSNumberOfTickMarks">3</int>
 							<int key="NSTickMarkPosition">0</int>
 							<bool key="NSAllowsTickMarkValuesOnly">NO</bool>
 							<bool key="NSVertical">NO</bool>

@@ -158,7 +158,7 @@
 	if (isFullscreen)
 		[self toggleFullscreen:sender];
 	
-//	[[self document] saveDocumentAsTemplate:sender];
+	[[self document] saveDocumentAsTemplate:sender];
 }
 
 - (void)runPageLayout:(id)sender
@@ -186,7 +186,7 @@
 
 - (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender
 {
-    if ((NSDragOperationGeneric & [sender draggingSourceOperationMask]) 
+    if (([sender draggingSourceOperationMask] & NSDragOperationGeneric) 
 		== NSDragOperationGeneric)
     {
         //this means that the sender is offering the type of operation we want
@@ -265,16 +265,6 @@
 
 - (void)toggleFullscreen:(id)sender
 {
-	/*
-	 CGDisplayFadeReservationToken tok;
-	 
-	 CGAcquireDisplayFadeReservation(25, &tok);
-	 CGDisplayFade(tok, 0.5, kCGDisplayBlendNormal, kCGDisplayBlendSolidColor, 0, 0, 0, TRUE);
-	 
-	 CGDisplayFade(tok, 0.5, kCGDisplayBlendSolidColor, kCGDisplayBlendNormal, 0, 0, 0, TRUE);
-	 CGReleaseDisplayFadeReservation(tok);
-	 */
-	
 	NSWindow *window = [self window];
 	NSRect contentFrame = [window contentRectForFrameRect:[window frame]];
 	
@@ -282,12 +272,13 @@
 	{
 		NSView *content = [window contentView];
 		NSRect screenFrame = [[window screen] frame];
-
+		
 		fullscreenWindow = [[DocumentWindow alloc] initWithContentRect:contentFrame
 															 styleMask:NSBorderlessWindowMask
 															   backing:NSBackingStoreBuffered
 																 defer:NO];
 		[content retain];
+		[window orderOut:self];
 		[window setContentView:nil];
 		[window setWindowController:nil];
 		[fullscreenWindow setContentView:content];
@@ -303,14 +294,13 @@
 		[fullscreenWindow setDelegate:self];
 		[fullscreenWindow makeKeyAndOrderFront:self];
 		[fullscreenWindow setFrame:screenFrame display:YES animate:YES];
-		[window orderOut:self];
 		
 		isFullscreen = YES;
 	}
 	else
 	{
-		[window makeKeyAndOrderFront:self];
-		[fullscreenWindow makeKeyAndOrderFront:self];
+//		[window makeKeyAndOrderFront:self];
+//		[fullscreenWindow orderFront:self];
 		
 		[[NSApplication sharedApplication] removeWindowsItem:fullscreenWindow];
 		[fullscreenWindow setFrame:contentFrame
@@ -336,6 +326,16 @@
 		
 		isFullscreen = NO;
 	}
+	
+	/*
+	 CGDisplayFadeReservationToken tok;
+	 
+	 CGAcquireDisplayFadeReservation(25, &tok);
+	 CGDisplayFade(tok, 0.5, kCGDisplayBlendNormal, kCGDisplayBlendSolidColor, 0, 0, 0, TRUE);
+	 
+	 CGDisplayFade(tok, 0.5, kCGDisplayBlendSolidColor, kCGDisplayBlendNormal, 0, 0, 0, TRUE);
+	 CGReleaseDisplayFadeReservation(tok);
+	 */
 }
 
 @end

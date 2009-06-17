@@ -10,12 +10,35 @@
 
 #import "Controller.h"
 
+static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
+						  unsigned long framesPerBuffer,
+						  const PaStreamCallbackTimeInfo* timeInfo,
+						  PaStreamCallbackFlags statusFlags,
+						  void *userData )
+{
+	float *in = (float *)inputBuffer;
+	float *out = (float *)outputBuffer;
+	unsigned int i;
+	
+	for(i = 0; i < framesPerBuffer; i++)
+	{
+		*out++ = (random() & 0xffff) / 65535.0f / 16;
+		*out++ = (random() & 0xffff) / 65535.0f / 16;
+	}
+	
+    return paContinue;
+}
+
 @implementation Controller
 
 - (id)init
 {
 	if (self = [super init])
 	{
+        fDefaults = [NSUserDefaults standardUserDefaults];
+		fWorkspace = [NSWorkspace sharedWorkspace];
+		
+		disableMenuBarCount = 0;
 		NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
 		[nc addObserver:self
 			   selector:@selector(disableMenuBar:)
@@ -26,10 +49,15 @@
 				   name:@"enableMenuBarNotification"
 				 object:nil];
 		
-        fDefaults = [NSUserDefaults standardUserDefaults];
-		fWorkspace = [NSWorkspace sharedWorkspace];
-
-		disableMenuBarCount = 0;
+		if (Pa_Initialize() != paNoError)
+			return self;
+		
+		if (Pa_OpenDefaultStream(&portAudioStream, 2, 2, paFloat32,
+								 48000, 256, portAudioCallback, self) != paNoError)
+			return self;
+		
+		if (Pa_StartStream(portAudioStream) != paNoError)
+			return self;
 	}
 	
 	return self;
@@ -47,6 +75,8 @@
 	
 	window = [fInspectorPanelController window];
     [fDefaults setInteger:[window isVisible] forKey:@"InspectorPanelIsVisible"];
+	
+	Pa_Terminate();
 }
 
 - (void)disableMenuBar:(NSNotification *)notification

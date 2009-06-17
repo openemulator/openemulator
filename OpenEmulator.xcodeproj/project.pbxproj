@@ -40,8 +40,14 @@
 		006EEE900FCA781C003D2C8D /* DiskImage.icns in Resources */ = {isa = PBXBuildFile; fileRef = 006EEE8F0FCA781C003D2C8D /* DiskImage.icns */; };
 		0070EE940FE3773D00E2E74D /* AddWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0070EE920FE3773D00E2E74D /* AddWindow.xib */; };
 		0070EF0E0FE380B900E2E74D /* DocumentWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0070EF0D0FE380B900E2E74D /* DocumentWindowController.m */; };
+		0075B18A0FE79A71009C1DFA /* DocumentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0075B1890FE79A71009C1DFA /* DocumentView.m */; };
+		0075B1B20FE79F7E009C1DFA /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0075B1B10FE79F7E009C1DFA /* OpenGL.framework */; };
+		00B3347D0FE41EF60042661D /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B3347C0FE41EF60042661D /* AudioToolbox.framework */; };
+		00B334810FE41EFE0042661D /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B334800FE41EFE0042661D /* AudioUnit.framework */; };
+		00B334850FE41F080042661D /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B334840FE41F080042661D /* CoreAudio.framework */; };
 		00C07E360FD27CCF004E0D3D /* PRGeneral.png in Resources */ = {isa = PBXBuildFile; fileRef = 00C07E350FD27CCF004E0D3D /* PRGeneral.png */; };
 		00C07E940FD28217004E0D3D /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C07E930FD28217004E0D3D /* Quartz.framework */; };
+		00C461C30FE4385300D747F6 /* libportaudio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C461C20FE4385300D747F6 /* libportaudio.a */; };
 		00F009D50FD5804800C506AD /* IPMountHover.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F009CC0FD5804800C506AD /* IPMountHover.png */; };
 		00F009D60FD5804800C506AD /* IPMountOff.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F009CD0FD5804800C506AD /* IPMountOff.png */; };
 		00F009D70FD5804800C506AD /* IPMountOn.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F009CE0FD5804800C506AD /* IPMountOn.png */; };
@@ -137,8 +143,16 @@
 		0070EE930FE3773D00E2E74D /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/AddWindow.xib; sourceTree = "<group>"; };
 		0070EF0C0FE380B900E2E74D /* DocumentWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DocumentWindowController.h; path = macosx/DocumentWindowController.h; sourceTree = "<group>"; };
 		0070EF0D0FE380B900E2E74D /* DocumentWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DocumentWindowController.m; path = macosx/DocumentWindowController.m; sourceTree = "<group>"; };
+		0075B1880FE79A71009C1DFA /* DocumentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DocumentView.h; sourceTree = "<group>"; };
+		0075B1890FE79A71009C1DFA /* DocumentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DocumentView.m; sourceTree = "<group>"; };
+		0075B1B10FE79F7E009C1DFA /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
+		00B3347C0FE41EF60042661D /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = /System/Library/Frameworks/AudioToolbox.framework; sourceTree = "<absolute>"; };
+		00B334800FE41EFE0042661D /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = /System/Library/Frameworks/AudioUnit.framework; sourceTree = "<absolute>"; };
+		00B334840FE41F080042661D /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = /System/Library/Frameworks/CoreAudio.framework; sourceTree = "<absolute>"; };
+		00B334880FE41F110042661D /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = /System/Library/Frameworks/CoreServices.framework; sourceTree = "<absolute>"; };
 		00C07E350FD27CCF004E0D3D /* PRGeneral.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = PRGeneral.png; path = macosx/Images/PRGeneral.png; sourceTree = "<group>"; };
 		00C07E930FD28217004E0D3D /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = /System/Library/Frameworks/Quartz.framework; sourceTree = "<absolute>"; };
+		00C461C20FE4385300D747F6 /* libportaudio.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libportaudio.a; path = portaudio/lib/.libs/libportaudio.a; sourceTree = "<group>"; };
 		00F009CC0FD5804800C506AD /* IPMountHover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPMountHover.png; path = macosx/Images/IPMountHover.png; sourceTree = "<group>"; };
 		00F009CD0FD5804800C506AD /* IPMountOff.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPMountOff.png; path = macosx/Images/IPMountOff.png; sourceTree = "<group>"; };
 		00F009CE0FD5804800C506AD /* IPMountOn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPMountOn.png; path = macosx/Images/IPMountOn.png; sourceTree = "<group>"; };
@@ -184,6 +198,11 @@
 				001F56F90FD1E8E500EA246A /* Sparkle.framework in Frameworks */,
 				00C07E940FD28217004E0D3D /* Quartz.framework in Frameworks */,
 				005C7BBC0FD8ED6F00426DD0 /* Carbon.framework in Frameworks */,
+				00B3347D0FE41EF60042661D /* AudioToolbox.framework in Frameworks */,
+				00B334810FE41EFE0042661D /* AudioUnit.framework in Frameworks */,
+				00B334850FE41F080042661D /* CoreAudio.framework in Frameworks */,
+				00C461C30FE4385300D747F6 /* libportaudio.a in Frameworks */,
+				0075B1B20FE79F7E009C1DFA /* OpenGL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -219,6 +238,7 @@
 		005486C40FDC84B200DBCFA8 /* Other Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				00C461C20FE4385300D747F6 /* libportaudio.a */,
 				001F56F80FD1E8E500EA246A /* Sparkle.framework */,
 			);
 			name = "Other Frameworks";
@@ -236,6 +256,11 @@
 		1058C7A6FEA54F5311CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0075B1B10FE79F7E009C1DFA /* OpenGL.framework */,
+				00B334880FE41F110042661D /* CoreServices.framework */,
+				00B334840FE41F080042661D /* CoreAudio.framework */,
+				00B334800FE41EFE0042661D /* AudioUnit.framework */,
+				00B3347C0FE41EF60042661D /* AudioToolbox.framework */,
 				005C7BBB0FD8ED6F00426DD0 /* Carbon.framework */,
 				00C07E930FD28217004E0D3D /* Quartz.framework */,
 				1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */,
@@ -283,6 +308,8 @@
 				0023EC860FCF8CC100029974 /* InspectorPanelController.m */,
 				000740160FE3435D00AC5FD7 /* DocumentWindow.h */,
 				000740170FE3435D00AC5FD7 /* DocumentWindow.m */,
+				0075B1880FE79A71009C1DFA /* DocumentView.h */,
+				0075B1890FE79A71009C1DFA /* DocumentView.m */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
@@ -376,6 +403,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C05733C708A9546B00998B17 /* Build configuration list for PBXNativeTarget "OpenEmulator" */;
 			buildPhases = (
+				00B3346F0FE41BF50042661D /* Build PortAudio */,
 				8D15AC2B0486D014006FF6A4 /* Resources */,
 				8D15AC300486D014006FF6A4 /* Sources */,
 				8D15AC330486D014006FF6A4 /* Frameworks */,
@@ -465,6 +493,23 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		00B3346F0FE41BF50042661D /* Build PortAudio */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Build PortAudio";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ ! -f portaudio/lib/.libs/libportaudio.a ];\nthen\n\tcd portaudio\n\t./configure --disable-shared --enable-static\n\tmake\t\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		006EECA10FCA5C31003D2C8D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -487,6 +532,7 @@
 				00F00A170FD5842600C506AD /* Controller.m in Sources */,
 				000740180FE3435D00AC5FD7 /* DocumentWindow.m in Sources */,
 				0070EF0E0FE380B900E2E74D /* DocumentWindowController.m in Sources */,
+				0075B18A0FE79A71009C1DFA /* DocumentView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -613,9 +659,15 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = macosx/OpenEmulator_Prefix.pch;
+				HEADER_SEARCH_PATHS = portaudio/include;
 				INFOPLIST_FILE = macosx/Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/portaudio/lib/.libs\"",
+				);
 				PRODUCT_NAME = OpenEmulator;
+				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
 			};
 			name = Debug;
 		};
@@ -631,9 +683,15 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = macosx/OpenEmulator_Prefix.pch;
+				HEADER_SEARCH_PATHS = portaudio/include;
 				INFOPLIST_FILE = macosx/Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/portaudio/lib/.libs\"",
+				);
 				PRODUCT_NAME = OpenEmulator;
+				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
 			};
 			name = Release;
 		};

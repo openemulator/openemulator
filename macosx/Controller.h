@@ -7,6 +7,7 @@
  */
 
 #import <Cocoa/Cocoa.h>
+#import "portaudio.h"
 
 #import "InspectorPanelController.h"
 #import "PaperFeedController.h"
@@ -19,12 +20,14 @@
 
 @interface Controller : NSObject
 {
+	IBOutlet InspectorPanelController *fInspectorPanelController;
+	
 	NSUserDefaults *fDefaults;
 	NSWorkspace *fWorkspace;
 	
-	IBOutlet InspectorPanelController *fInspectorPanelController;
-	
 	int disableMenuBarCount;
+
+	PaStream *portAudioStream;
 }
 
 - (void)linkHomepage:(id) sender;

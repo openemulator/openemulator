@@ -38,4 +38,16 @@
 	[[self windowController] performClose:sender];
 }
 
+- (BOOL)windowShouldClose:(id)window
+{
+	printf("windowShouldClose\n");
+	return YES;
+}
+
+- (void)close
+{
+	printf("close");
+	[super close];
+}
+
 @end
