@@ -54,7 +54,7 @@
 	}
 	else if ([ident isEqualToString:@"Pause"])
 	{
-		[item setLabel:NSLocalizedString(@"Reset", "Preferences -> toolbar item title")];
+		[item setLabel:NSLocalizedString(@"Pause", "Preferences -> toolbar item title")];
 		[item setImage:[NSImage imageNamed:@"TBPause.png"]];
 		[item setTarget:document];
 		[item setAction:@selector(togglePause:)];

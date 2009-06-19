@@ -31,6 +31,7 @@
 		00317E390FD31D1A007F2B00 /* AppleGraphicsTablet.png in Resources */ = {isa = PBXBuildFile; fileRef = 00317E380FD31D1A007F2B00 /* AppleGraphicsTablet.png */; };
 		00317E780FD32169007F2B00 /* GraphicsTablet.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00317E760FD32169007F2B00 /* GraphicsTablet.xib */; };
 		00317E7B0FD3217B007F2B00 /* GraphicsTabletController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00317E7A0FD3217B007F2B00 /* GraphicsTabletController.m */; };
+		004C26D80FEB53F6004AE5EA /* DocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 004C26D70FEB53F6004AE5EA /* DocumentController.m */; };
 		005486900FDC817900DBCFA8 /* Emulation.icns in Resources */ = {isa = PBXBuildFile; fileRef = 0054868F0FDC817900DBCFA8 /* Emulation.icns */; };
 		005486CA0FDC84E500DBCFA8 /* Sparkle.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 001F56F80FD1E8E500EA246A /* Sparkle.framework */; };
 		005487840FDC86AB00DBCFA8 /* rom in Resources */ = {isa = PBXBuildFile; fileRef = 0054874B0FDC86AB00DBCFA8 /* rom */; };
@@ -131,6 +132,8 @@
 		00317E770FD32169007F2B00 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/GraphicsTablet.xib; sourceTree = "<group>"; };
 		00317E790FD3217B007F2B00 /* GraphicsTabletController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GraphicsTabletController.h; path = macosx/GraphicsTabletController.h; sourceTree = "<group>"; };
 		00317E7A0FD3217B007F2B00 /* GraphicsTabletController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GraphicsTabletController.m; path = macosx/GraphicsTabletController.m; sourceTree = "<group>"; };
+		004C26D60FEB53F6004AE5EA /* DocumentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DocumentController.h; sourceTree = "<group>"; };
+		004C26D70FEB53F6004AE5EA /* DocumentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DocumentController.m; sourceTree = "<group>"; };
 		0054868F0FDC817900DBCFA8 /* Emulation.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = Emulation.icns; path = macosx/Images/Emulation.icns; sourceTree = "<group>"; };
 		0054874B0FDC86AB00DBCFA8 /* rom */ = {isa = PBXFileReference; lastKnownFileType = folder; path = rom; sourceTree = "<group>"; };
 		005C7BBB0FD8ED6F00426DD0 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
@@ -310,6 +313,8 @@
 				000740170FE3435D00AC5FD7 /* DocumentWindow.m */,
 				0075B1880FE79A71009C1DFA /* DocumentView.h */,
 				0075B1890FE79A71009C1DFA /* DocumentView.m */,
+				004C26D60FEB53F6004AE5EA /* DocumentController.h */,
+				004C26D70FEB53F6004AE5EA /* DocumentController.m */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
@@ -533,6 +538,7 @@
 				000740180FE3435D00AC5FD7 /* DocumentWindow.m in Sources */,
 				0070EF0E0FE380B900E2E74D /* DocumentWindowController.m in Sources */,
 				0075B18A0FE79A71009C1DFA /* DocumentView.m in Sources */,
+				004C26D80FEB53F6004AE5EA /* DocumentController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
