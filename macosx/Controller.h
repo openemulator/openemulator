@@ -7,7 +7,7 @@
  */
 
 #import <Cocoa/Cocoa.h>
-#import "portaudio.h"
+#import "portaudio/include/portaudio.h"
 
 #import "InspectorPanelController.h"
 #import "PaperFeedController.h"
