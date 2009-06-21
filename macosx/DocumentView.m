@@ -23,24 +23,25 @@
 	int bitmap[560 * 192];
 	
 	for (int i = 0; i < (sizeof(bitmap) / sizeof(int)); i++)
-		bitmap[i] = (rand() & 0xff) * 0x10101;
+		bitmap[i] = (random() & 0xff) * 0x10101;
 	
 	glDisable(GL_LIGHTING);
 	glDisable(GL_DITHER);
 	glDisable(GL_BLEND);
 	glDisable(GL_DEPTH_TEST);
 	
-	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_TEXTURE_RECTANGLE_EXT);
 	
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	
+    glDeleteTextures(1, &textureId);
 	glGenTextures(1, &textureId);
-	glBindTexture(GL_TEXTURE_2D, textureId);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glBindTexture(GL_TEXTURE_RECTANGLE_EXT, textureId);
+	glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	
-	glTexImage2D(GL_TEXTURE_2D,
-				 0, GL_RGBA, 256, 256,
+	glTexImage2D(GL_TEXTURE_RECTANGLE_EXT,
+				 0, GL_RGBA, 560, 192,
 				 0, GL_RGBA, GL_UNSIGNED_BYTE, bitmap);
 }
 
@@ -53,11 +54,11 @@
 	glBegin(GL_QUADS);
 	glTexCoord2f(0.0f, 0.0f);
 	glVertex2f(-1.0f, -1.0f);
-	glTexCoord2f(1.0f, 0.0f);
+	glTexCoord2f(560.0f, 0.0f);
 	glVertex2f(1.0f, -1.0f);
-	glTexCoord2f(1.0f, 1.0f);
+	glTexCoord2f(560.0f, 192.0f);
 	glVertex2f(1.0f,  1.0f);
-	glTexCoord2f(0.0f, 1.0f);
+	glTexCoord2f(0.0f, 192.0f);
 	glVertex2f(-1.0f,  1.0f);
 	glEnd();
 }
@@ -94,9 +95,9 @@
 		[[self openGLContext] makeCurrentContext];
 		
 		[self renderGl];
-
+		
 		NSTimer *timer;
-		timer = [NSTimer scheduledTimerWithTimeInterval:0.01666
+		timer = [NSTimer scheduledTimerWithTimeInterval:0.05
 												 target:self
 											   selector:@selector(tick:)
 											   userInfo:NULL
