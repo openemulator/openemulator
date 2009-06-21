@@ -15,7 +15,8 @@
 - (void)initGl
 {
 	
-	
+    glDeleteTextures(1, &textureId);
+	glGenTextures(1, &textureId);
 }
 
 - (void)renderGl
@@ -34,12 +35,10 @@
 	
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	
-    glDeleteTextures(1, &textureId);
-	glGenTextures(1, &textureId);
 	glBindTexture(GL_TEXTURE_RECTANGLE_EXT, textureId);
 	glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	
+
 	glTexImage2D(GL_TEXTURE_RECTANGLE_EXT,
 				 0, GL_RGBA, 560, 192,
 				 0, GL_RGBA, GL_UNSIGNED_BYTE, bitmap);
@@ -47,20 +46,35 @@
 
 - (void)viewGl
 {
+	GLfloat texX0, texY0;
+	GLfloat texX1, texY1;
+	
+/*    texX0 = (float)p_vout->fmt_out.i_x_offset;
+    texY0 = (float)p_vout->fmt_out.i_y_offset;
+    texX1 = texX0 + (float)p_vout->fmt_out.i_visible_width;
+	texY1 = texY0 + (float)p_vout->fmt_out.i_visible_height;
+*/
+	texX0 = 0;
+	texY0 = 0;
+	texX1 = 560;
+	texY1 = 192;
+	
 	glClear(GL_COLOR_BUFFER_BIT);
 	
-	glLoadIdentity();
+	glEnable(GL_TEXTURE_RECTANGLE_EXT);
 	
-	glBegin(GL_QUADS);
-	glTexCoord2f(0.0f, 0.0f);
+	glBegin(GL_POLYGON);
+	glTexCoord2f(texX0, texY0);
+	glVertex2f(-1.0f, 1.0f);
+	glTexCoord2f(texX1, texY0);
+	glVertex2f(1.0f, 1.0f);
+	glTexCoord2f(texX1, texY1);
+	glVertex2f(1.0f,  -1.0f);
+	glTexCoord2f(texX0, texY1);
 	glVertex2f(-1.0f, -1.0f);
-	glTexCoord2f(560.0f, 0.0f);
-	glVertex2f(1.0f, -1.0f);
-	glTexCoord2f(560.0f, 192.0f);
-	glVertex2f(1.0f,  1.0f);
-	glTexCoord2f(0.0f, 192.0f);
-	glVertex2f(-1.0f,  1.0f);
 	glEnd();
+	
+	glDisable(GL_TEXTURE_RECTANGLE_EXT);
 }
 
 - (void)tick:(NSTimer *)timer
@@ -97,7 +111,7 @@
 		[self renderGl];
 		
 		NSTimer *timer;
-		timer = [NSTimer scheduledTimerWithTimeInterval:0.05
+		timer = [NSTimer scheduledTimerWithTimeInterval:0.01666
 												 target:self
 											   selector:@selector(tick:)
 											   userInfo:NULL
@@ -111,6 +125,9 @@
 
 - (void)drawRect:(NSRect)rect
 {
+	NSRect viewRect = [self bounds];
+	glViewport (0, 0, viewRect.size.width, viewRect.size.height);
+	
 	[self viewGl];
 	
 	[[self openGLContext] flushBuffer];

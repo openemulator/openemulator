@@ -10,6 +10,8 @@
 
 @interface DocumentView : NSOpenGLView {
 	GLuint textureId;
+	
+	NSRect formatRect;
 }
 
 @end
