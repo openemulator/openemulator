@@ -11,7 +11,18 @@
 @interface DocumentView : NSOpenGLView {
 	GLuint textureId;
 	
-	NSRect formatRect;
+	float screenFrameProportion;
+	float viewWidthScale;
+	float viewHeightScale;
+	float viewOriginXScale;
+	float viewOriginYScale;
+	NSRect bufferFrame;
+	
+	NSRect cachedViewFrame;
 }
+
+- (void)initGl;
+- (void)renderGl;
+- (void)drawGl:(NSRect)viewFrame;
 
 @end
