@@ -1,26 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dml PUBLIC "-//OPENEMULATOR//DTD DML 1.0//EN" "http://www.openemulator.org/DTDs/dml-1.0.dtd">
 <dml version="1.0">
-<device class="Apple Disk II Interface Card" type="expansion" platform="Apple II" group="Disk Drive" description="" image="Apple Disk II Interface Card.png">
-    <defaultdevices>
-    <defaultdevice class="Apple Disk II Drive">
-        <defaultconnection from="Drive Connector" to="Port 1" />
-    </defaultdevice>
-    <defaultdevice class="Apple Disk II Drive">
-        <defaultconnection from="Drive Connector" to="Port 2" />
-    </defaultdevice>
-    </defaultdevices>
-    <connectors>
-    <connector type="Apple II Slot" componentref="AppleDiskIIInterfaceCard" name="Slot Connector" />
-    </connectors>
-    <ports>
-    <port type="Apple 5.25 inch Disk Drive port" propertyref="AppleDiskIIInterfaceCard.port1" name="Port 1" />
-    <port type="Apple 5.25 inch Disk Drive port" propertyref="AppleDiskIIInterfaceCard.port2" name="Port 2" />
-    </ports>
+<device class="Apple Disk II Interface Card" platform="Apple II" description="You also need to add Disk II Drives." image="Apple Disk II Interface Card.png" connectorType="Apple II Slot" connectorComponent="AppleDiskIIInterfaceCard">
     <components>
     <component class="AppleDiskIIInterfaceCard">
-        <property name="port1" value="" />
-        <property name="port2" value="" />
+        <port type="Apple II Disk Drive Port" name="drive1" label="Drive 1" />
+        <port type="Apple II Disk Drive Port" name="drive2" label="Drive 2" />
     </component>
     </components>
 </device>

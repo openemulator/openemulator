@@ -4,6 +4,8 @@
  * Mac OS X Controller
  * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
+ *
+ * Controls the emulator's main instance.
  */
 
 #import <Cocoa/Cocoa.h>

@@ -22,9 +22,9 @@ public:
 	Component();
 	virtual ~Component();
 	
-	virtual void onInit();
+	virtual void init();		// Missing: dictionary is sent here
 	
-	virtual int ioctl(int request, void * data);
+	virtual int ioctl(int command, void * data);
 	
 	void addObserver(class Component * component);
 	void removeObserver(class Component * component);

@@ -4,6 +4,8 @@
  * Mac OS X Document Window Controller
  * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
+ *
+ * Controls an emulation's window.
  */
 
 #import <Carbon/Carbon.h>
@@ -25,6 +27,7 @@
 	toolbar = [[NSToolbar alloc] initWithIdentifier:@"Document Toolbar"];
 	[toolbar setDelegate:self];
 	[toolbar setAllowsUserCustomization:YES];
+	[toolbar setAutosavesConfiguration:YES];
 	[[self window] setToolbar:toolbar];
 	[toolbar release];
 }
@@ -270,59 +273,49 @@
 	
 	if (!isFullscreen)
 	{
-		NSView *content = [window contentView];
-		NSRect screenFrame = [[window screen] frame];
-		
-		fullscreenWindow = [[DocumentWindow alloc] initWithContentRect:contentFrame
-															 styleMask:NSBorderlessWindowMask
-															   backing:NSBackingStoreBuffered
-																 defer:NO];
-		[content retain];
-		[window orderOut:self];
-		[window setContentView:nil];
-		[window setWindowController:nil];
-		[fullscreenWindow setContentView:content];
-		[fullscreenWindow setWindowController:self];
-		[content release];
-		
 		[[NSNotificationCenter defaultCenter] postNotification:
 		 [NSNotification notificationWithName:@"disableMenuBarNotification"
 									   object:self]];
+		
+		NSRect screenFrame = [[window screen] frame];
+		
+        DisableScreenUpdates();
+		fullscreenWindow = [[DocumentWindow alloc] initWithContentRect:contentFrame
+															 styleMask:NSBorderlessWindowMask
+															   backing:NSBackingStoreBuffered
+																 defer:YES];
+		[window orderOut:self];
+		[fullscreenWindow setContentView:[window contentView]];
+		[fullscreenWindow setWindowController:self];
+		[fullscreenWindow setDelegate:self];
+		[fullscreenWindow makeKeyAndOrderFront:self];
+        EnableScreenUpdates();
+		
+		[fullscreenWindow setFrame:screenFrame display:YES animate:YES];
+		
 		[[NSApplication sharedApplication] addWindowsItem:fullscreenWindow
 													title:[window title]
 												 filename:NO];
-		[fullscreenWindow setDelegate:self];
-		[fullscreenWindow makeKeyAndOrderFront:self];
-		[fullscreenWindow setFrame:screenFrame display:YES animate:YES];
 		
 		isFullscreen = YES;
 	}
 	else
 	{
-//		[window makeKeyAndOrderFront:self];
-//		[fullscreenWindow orderFront:self];
-		
 		[[NSApplication sharedApplication] removeWindowsItem:fullscreenWindow];
-		[fullscreenWindow setFrame:contentFrame
-						   display:YES
-						   animate:YES];
 		
-		[window makeKeyAndOrderFront:self];
+		[fullscreenWindow setFrame:contentFrame display:YES animate:YES];
 		
-		NSView *content = [fullscreenWindow contentView];
-		[content retain];
-		[fullscreenWindow setContentView:nil];
-		[fullscreenWindow setWindowController:nil];
-		[window setContentView:content];
+        DisableScreenUpdates();
+		[window setContentView:[fullscreenWindow contentView]];
 		[window setWindowController:self];
-		[content release];
+		[window setDelegate:self];
+		[window makeKeyAndOrderFront:self];
+		[fullscreenWindow release];
+        EnableScreenUpdates();
 		
 		[[NSNotificationCenter defaultCenter] postNotification:
 		 [NSNotification notificationWithName:@"enableMenuBarNotification"
 									   object:self]];
-		
-		[fullscreenWindow release];
-		fullscreenWindow = nil;
 		
 		isFullscreen = NO;
 	}
@@ -336,6 +329,25 @@
 	 CGDisplayFade(tok, 0.5, kCGDisplayBlendSolidColor, kCGDisplayBlendNormal, 0, 0, 0, TRUE);
 	 CGReleaseDisplayFadeReservation(tok);
 	 */
+}
+
+- (void)canCloseDocumentWithDelegate:(id)delegate
+				 shouldCloseSelector:(SEL)shouldCloseSelector
+						 contextInfo:(void*)contextInfo
+{
+	printf("canCloseDocumentWithDelegate\n");
+}
+
+- (BOOL)windowShouldClose:(id)window
+{
+	printf("windowShouldClose\n");
+	return YES;
+}
+
+- (void)close
+{
+	printf("close");
+	[super close];
 }
 
 @end

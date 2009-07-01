@@ -1,13 +1,14 @@
-//
-//  GraphicsTabletController.h
-//  OpenEmulator
-//
-//  Created by Marc S. Reßl on 31/05/09.
-//  Copyright 2009 ITBA. All rights reserved.
-//
+
+/**
+ * OpenEmulator
+ * Mac OS X Graphics Tablet Controller
+ * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
+ * Released under the GPL
+ *
+ * Controls the Apple Graphics Tablet.
+ */
 
 #import <Cocoa/Cocoa.h>
-
 
 @interface GraphicsTabletController : NSWindowController {
 

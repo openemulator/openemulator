@@ -1,9 +1,11 @@
 
 /**
  * OpenEmulator
- * Mac OS X InspectorPanel Controller
- * (C) 2008-2009 by Marc S. Ressl (mressl@umich.edu)
+ * Mac OS X Inspector Panel Controller
+ * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
+ *
+ * Controls the inspector.
  */
 
 #import <Cocoa/Cocoa.h>

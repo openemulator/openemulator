@@ -1,9 +1,11 @@
 
 /**
  * OpenEmulator
- * Mac OS X InspectorPanel Controller
- * (C) 2008-2009 by Marc S. Ressl (mressl@umich.edu)
+ * Mac OS X Inspector Panel Controller
+ * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
+ *
+ * Controls the inspector.
  */
 
 #import "InspectorPanelController.h"
@@ -14,7 +16,7 @@ NSString *itemIdentifiers[] =
 	@"Emulation",
 	@"Expansions",
 	@"Disk Drives",
-	@"Ports",
+	@"Printers and Modems",
 	@"Video",
 	@"Audio",
 };
@@ -27,7 +29,7 @@ NSString *itemIdentifiers[] =
 	
     if (self) {
         fDefaults = [NSUserDefaults standardUserDefaults];
-
+		
 		NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
 		[nc addObserver:self
 			   selector:@selector(toggleInspectorPanelNotification:)

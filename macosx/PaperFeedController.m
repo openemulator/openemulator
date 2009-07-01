@@ -1,19 +1,22 @@
-//
-//  PaperFeedController.m
-//  OpenEmulator
-//
-//  Created by Marc S. Reßl on 31/05/09.
-//  Copyright 2009 ITBA. All rights reserved.
-//
+
+/**
+ * OpenEmulator
+ * Mac OS X Paper Feed Controller
+ * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
+ * Released under the GPL
+ *
+ * Controls the paper feed.
+ */
 
 #import "PaperFeedController.h"
-
 
 @implementation PaperFeedController
 
 - (id)init
 {
-	return [super initWithWindowNibName:@"PaperFeed"];
+	self = [super initWithWindowNibName:@"PaperFeed"];
+	
+	return self;
 }
 
 - (void)windowDidLoad

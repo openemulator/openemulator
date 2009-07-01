@@ -4,6 +4,8 @@
  * Mac OS X Document
  * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
+ *
+ * Controls an emulation document.
  */
 
 #import "Document.h"

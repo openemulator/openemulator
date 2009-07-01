@@ -57,6 +57,25 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
+				<string>wav</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>audio/wav</string>
+				<string>audio/x-wav</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>Audio-WAV</string>
+			<key>CFBundleTypeOSTypes</key>
+			<array>
+				<string>WAV</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
 				<string>dsk</string>
 				<string>do</string>
 				<string>d13</string>
@@ -91,6 +110,7 @@
 				<string>2img</string>
 				<string>2mg</string>
 				<string>hdv</string>
+				<string>sdk</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
 			<string>DiskImage.icns</string>
@@ -98,6 +118,18 @@
 			<string>Apple II Disk Image</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>shk</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>DiskImage.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>SHK Archive</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
 		</dict>
 		<dict>
 			<key>CFBundleTypeExtensions</key>

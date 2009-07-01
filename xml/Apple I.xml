@@ -2,20 +2,6 @@
 <!DOCTYPE dml PUBLIC "-//OPENEMULATOR//DTD DML 1.0//EN" "http://www.openemulator.org/DTDs/dml-1.0.dtd">
 <dml version="1.0">
 <device class="Apple I" type="core" platform="Apple I" group="Apple I" description="The Apple I was Apple's first product. It was a fully assembled circuit board containing about 30 chips, but users still had to add a case, power supply, keyboard, and display. One major difference sets the Apple I apart — it was the first personal computer to use a keyboard." image="$RESOURCES/Apple I.png">
-    <defaultdevices>
-    <defaultdevice class="Host" />
-    <defaultdevice class="Apple I Cassette Interface Card">
-        <defaultconnection from="Slot Connector" to="Slot R" />
-    </defaultdevice>
-    <defaultdevice class="Apple I BASIC Language Interface">
-        <defaultconnection from="Slot Connector" to="Slot S" />
-    </defaultdevice>
-    </defaultdevices>
-    <ports>
-        <port propertyref="AppleISlotController.slotR" type="Apple I Slot" name="Slot R" />
-        <port propertyref="AppleISlotController.slotS" type="Apple I Slot" name="Slot S" />
-        <port propertyref="AppleISlotController.slotT" type="Apple I Slot" name="Slot T" />
-    </ports>
     <components>
     <component class="AppleIFloatingBus" />
     <component class="AppleIEventController">
@@ -36,10 +22,9 @@
         <property name="resourceController" value="Host::ResourceController" />
     </component>
     <component class="AppleISlotController">
-        <property name="mmu" value="AppleIMMU" />
-        <property name="slotR" value="" />
-        <property name="slotS" value="" />
-        <property name="slotT" value="" />
+        <port type="Apple I Slot" name="slotR" label="Slot R" />
+        <port type="Apple I Slot" name="slotS" label="Slot S" />
+        <port type="Apple I Slot" name="slotT" label="Slot T" />
     </component>
     <component class="AppleIVIA">
         <property name="mmu" value="AppleIMMU" />
@@ -47,7 +32,7 @@
     </component>
     <component class="AppleIVideoController">
         <property name="videoController" value="Host::VideoController" />
-        <property name="characterSet" value="$RESOURCES/Apple II Video ROM.bin" />
+        <property name="characterSet" value="/Resources/Apple II Video ROM.bin" />
     </component>
     </components>
 </device>

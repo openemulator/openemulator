@@ -4,6 +4,8 @@
  * Mac OS X Controller
  * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
+ *
+ * Controls the emulator's main instance.
  */
 
 #import <Carbon/Carbon.h>
@@ -11,10 +13,10 @@
 #import "Controller.h"
 
 static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
-						  unsigned long framesPerBuffer,
-						  const PaStreamCallbackTimeInfo* timeInfo,
-						  PaStreamCallbackFlags statusFlags,
-						  void *userData )
+							 unsigned long framesPerBuffer,
+							 const PaStreamCallbackTimeInfo* timeInfo,
+							 PaStreamCallbackFlags statusFlags,
+							 void *userData)
 {
 	float *in = (float *)inputBuffer;
 	float *out = (float *)outputBuffer;
@@ -22,8 +24,8 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 	
 	for(i = 0; i < framesPerBuffer; i++)
 	{
-		*out++ = (random() & 0xffff) / 65535.0f / 16;
-		*out++ = (random() & 0xffff) / 65535.0f / 16;
+		*out++ = (rand() & 0xffff) / 65535.0f / 16;
+		*out++ = (rand() & 0xffff) / 65535.0f / 16;
 	}
 	
     return paContinue;
@@ -53,7 +55,7 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 			return self;
 		
 		if (Pa_OpenDefaultStream(&portAudioStream, 2, 2, paFloat32,
-								 48000, 256, portAudioCallback, self) != paNoError)
+								 48000, 512, portAudioCallback, self) != paNoError)
 			return self;
 		
 		if (Pa_StartStream(portAudioStream) != paNoError)

@@ -4,8 +4,11 @@
  * Mac OS X Document View Controller
  * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
+ *
+ * Controls a window's content view (OpenGL).
  */
 
+#import <OpenGL/OpenGL.h>
 #import <OpenGL/gl.h>
 
 #import "DocumentView.h"
@@ -15,10 +18,13 @@
 - (id)initWithFrame:(NSRect)frame
 {
 	NSOpenGLPixelFormatAttribute pixelFormatAtrributes[] = {
-		NSOpenGLPFADoubleBuffer, 1,
-		NSOpenGLPFAWindow, 1,
+		NSOpenGLPFADoubleBuffer,
 		NSOpenGLPFAColorSize, 24,
 		NSOpenGLPFAAlphaSize, 8,
+		NSOpenGLPFADepthSize, 24,
+		NSOpenGLPFANoRecovery,
+		NSOpenGLPFAAccelerated,
+		NSOpenGLPFAWindow,
 		0
 	};
 	
@@ -29,15 +35,15 @@
 	if(self)
 	{
 		[[self openGLContext] makeCurrentContext];
+		[[self openGLContext] update];
+		
+		GLint params[] =
+		{
+			1
+		};
+		CGLSetParameter(CGLGetCurrentContext(), kCGLCPSwapInterval, params);
 		
 		[self initGl];
-		
-		NSTimer *timer;
-		timer = [NSTimer scheduledTimerWithTimeInterval:1/60.0f
-												 target:self
-											   selector:@selector(tick:)
-											   userInfo:NULL
-												repeats:YES];	
 	}
 	
 	[pixelFormat release];
@@ -47,20 +53,14 @@
 
 - (void)dealloc
 {
-	[super dealloc];
 	[self deallocGl];
-}
-
-- (void)tick:(NSTimer *)timer
-{
-	[[self openGLContext] makeCurrentContext];
-	[self renderGl];
-	
-	[self setNeedsDisplay:YES];
+	[super dealloc];
 }
 
 - (void)drawRect:(NSRect)rect
 {
+//	printf("x:%f y:%f\n", rect.origin.x, rect.origin.y);
+//	printf("w:%f h:%f\n", rect.size.width, rect.size.height);
 	[self drawGl:rect];
 	
 	[[self openGLContext] flushBuffer];
@@ -71,7 +71,7 @@
 - (void)initGl
 {
 	BOOL isPal = NO;
-	float overscan = 0.08f;
+	float overscan = 0.08f;//0.138f;
 	NSRect overscanFrame;
 	NSRect screenFrame;
 	NSRect renderFrame;
@@ -111,25 +111,31 @@
 	
 	bufferFrame.origin.x = 0;
 	bufferFrame.origin.y = 0;
-	bufferFrame.size.width = 561;
+	bufferFrame.size.width = 560;
 	bufferFrame.size.height = 384;
 	
 	cachedViewFrame.size.width = 0;
 	cachedViewFrame.size.height = 0;
 	
-	glDisable(GL_LIGHTING);
-	glDisable(GL_DITHER);
+	glDisable(GL_ALPHA_TEST);
 	glDisable(GL_BLEND);
 	glDisable(GL_DEPTH_TEST);
-	
-	glEnable(GL_TEXTURE_RECTANGLE_EXT);
+	glDisable(GL_DITHER);
+	glDisable(GL_FOG);
+	glDisable(GL_LIGHTING);
+	glDisable(GL_LOGIC_OP);
+	glDisable(GL_STENCIL_TEST);
+	glDisable(GL_TEXTURE_1D);
+	glDisable(GL_TEXTURE_2D);
+		
+	glEnable(GL_TEXTURE_RECTANGLE_ARB);
 	
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	
 	glGenTextures(1, &textureId);
-	glBindTexture(GL_TEXTURE_RECTANGLE_EXT, textureId);
-	glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glBindTexture(GL_TEXTURE_RECTANGLE_ARB, textureId);
+	glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	
 	[self renderGl];
 }
@@ -141,10 +147,11 @@
 
 - (void)renderGl
 {
-	int bitmap[561 * 384];
+	int bitmap[560 * 384];
 	
 	for (int i = 0; i < (sizeof(bitmap) / sizeof(int)); i++)
-		bitmap[i] = (random() & 0xff) * 0x010101;
+//		bitmap[i] = (random() & 0xff) * 0x010101;
+		bitmap[i] = ((i >> 1) & 0x1) * 0xffffff;
 	
 	glTexImage2D(GL_TEXTURE_RECTANGLE_EXT,
 				 0, GL_RGBA, NSMaxX(bufferFrame), NSMaxY(bufferFrame),
@@ -153,12 +160,12 @@
 
 - (void)drawGl:(NSRect)viewFrame
 {
-	if ((viewFrame.origin.x != cachedViewFrame.origin.x) ||
+/*	if ((viewFrame.origin.x != cachedViewFrame.origin.x) ||
 		(viewFrame.origin.y != cachedViewFrame.origin.y) ||
 		(viewFrame.size.width != cachedViewFrame.size.width) ||
 		(viewFrame.size.height != cachedViewFrame.size.height))
 	{
-		cachedViewFrame = viewFrame;
+*/		cachedViewFrame = viewFrame;
 		
 		float viewFrameProportion = NSWidth(viewFrame) / NSHeight(viewFrame);
 		if (viewFrameProportion > screenFrameProportion)
@@ -183,7 +190,7 @@
 				   viewFrame.size.width, viewFrame.size.height);
 		
 		glClear(GL_COLOR_BUFFER_BIT);
-	}
+//	}
 	
 	glBegin(GL_QUADS);
 	glTexCoord2f(NSMinX(bufferFrame), NSMinY(bufferFrame));

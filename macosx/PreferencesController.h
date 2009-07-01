@@ -4,6 +4,8 @@
  * Mac OS X Preferences Controller
  * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
+ *
+ * Controls the preferences.
  */
 
 #import <Cocoa/Cocoa.h>

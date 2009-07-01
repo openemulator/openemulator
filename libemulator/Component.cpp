@@ -16,11 +16,11 @@ Component::~Component()
 {
 }
 
-void Component::onInit()
+void Component::init()
 {
 }
 
-int Component::ioctl(int request, void * data)
+int Component::ioctl(int command, void * data)
 {
 	return IOCTL_OK;
 }
