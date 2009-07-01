@@ -1,45 +1,24 @@
 <!ELEMENT dml (device+)>
 <!ATTLIST dml version CDATA "1.0">
 
-<!ELEMENT device (defaultdevices?,connectors?,ports?,components)>
-<!ATTLIST device class CDATA #REQUIRED>
-<!ATTLIST device id CDATA #IMPLIED>
-<!-- type is "Core" for a computer or "Expansion" for an add-on -->
-<!ATTLIST device type (host|core|expansion) #REQUIRED>
-<!-- platform is a label for listing compatible expansions -->
-<!ATTLIST device platform CDATA #REQUIRED>
-<!-- group is a label for listing related resources -->
+<!ELEMENT device (component+)>
+<!ATTLIST device name CDATA #REQUIRED>
+<!ATTLIST device type (core|expansion|diskdrive|portdevice) #REQUIRED>
 <!ATTLIST device group CDATA #REQUIRED>
-<!ATTLIST device ismountable (0|1) "0">
+<!ATTLIST device isFixed (0|1) "0">
+<!ATTLIST device label CDATA #REQUIRED>
 <!ATTLIST device description CDATA #IMPLIED>
 <!ATTLIST device image CDATA #IMPLIED>
 
-<!ELEMENT defaultdevices (defaultdevice+)>
-<!ELEMENT defaultdevice (defaultconnection*)>
-<!ATTLIST defaultdevice class CDATA #REQUIRED>
-<!ATTLIST defaultdevice id CDATA #IMPLIED>
-
-<!ELEMENT defaultconnection EMPTY>
-<!ATTLIST defaultconnection from CDATA #REQUIRED>
-<!ATTLIST defaultconnection to CDATA #REQUIRED>
-
-<!ELEMENT connectors (connector+)>
-<!ELEMENT connector EMPTY>
-<!ATTLIST connector type CDATA #REQUIRED>
-<!ATTLIST connector componentref CDATA #REQUIRED>
-<!ATTLIST connector name CDATA #REQUIRED>
-
-<!ELEMENT ports (port+)>
-<!ELEMENT port EMPTY>
-<!ATTLIST port type CDATA #REQUIRED>
-<!ATTLIST port propertyref CDATA #REQUIRED>
-<!ATTLIST port name CDATA #REQUIRED>
-
-<!ELEMENT components (component+)>
-<!ELEMENT component (property*)>
+<!ELEMENT component (property+)>
+<!ELEMENT component (defaultconnection*)>
 <!ATTLIST component class CDATA #REQUIRED>
-<!ATTLIST component id CDATA #IMPLIED>
+<!ATTLIST component name CDATA #IMPLIED>
+<!ATTLIST component socketType CDATA #IMPLIED>
 
 <!ELEMENT property EMPTY>
-<!ATTLIST property name CDATA #REQUIRED>
+<!ATTLIST property key CDATA #REQUIRED>
+<!ATTLIST property type (number|string|component|resource) #REQUIRED>
 <!ATTLIST property value CDATA #REQUIRED>
+<!ATTLIST property socketType CDATA #IMPLIED>
+<!ATTLIST property label CDATA #IMPLIED>
