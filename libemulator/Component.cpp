@@ -20,6 +20,10 @@ void Component::init()
 {
 }
 
+void Component::terminate()
+{
+}
+
 int Component::ioctl(int command, void * data)
 {
 	return IOCTL_OK;
