@@ -3,22 +3,20 @@
 
 <!ELEMENT device (component+)>
 <!ATTLIST device name CDATA #REQUIRED>
-<!ATTLIST device type (core|expansion|diskdrive|portdevice) #REQUIRED>
+<!ATTLIST device platform CDATA #REQUIRED>
 <!ATTLIST device group CDATA #REQUIRED>
-<!ATTLIST device isFixed (0|1) "0">
 <!ATTLIST device label CDATA #REQUIRED>
 <!ATTLIST device description CDATA #IMPLIED>
 <!ATTLIST device image CDATA #IMPLIED>
 
 <!ELEMENT component (property+)>
-<!ELEMENT component (defaultconnection*)>
 <!ATTLIST component class CDATA #REQUIRED>
 <!ATTLIST component name CDATA #IMPLIED>
-<!ATTLIST component socketType CDATA #IMPLIED>
+<!ATTLIST component outlet CDATA #IMPLIED>
 
 <!ELEMENT property EMPTY>
 <!ATTLIST property key CDATA #REQUIRED>
-<!ATTLIST property type (number|string|component|resource) #REQUIRED>
+<!ATTLIST property type (number|string|component) #REQUIRED>
 <!ATTLIST property value CDATA #REQUIRED>
-<!ATTLIST property socketType CDATA #IMPLIED>
+<!ATTLIST property inlet CDATA #IMPLIED>
 <!ATTLIST property label CDATA #IMPLIED>
