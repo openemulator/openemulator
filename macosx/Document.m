@@ -52,7 +52,7 @@
 		return [self validatePaste];
     else if ([item action] == @selector(startSpeaking:))
 		return [self validateCopy];
-
+	
     return YES;
 }
 
@@ -65,7 +65,7 @@
 {
 	return [pasteboard availableTypeFromArray:pasteboardTypes] != nil;
 }
-
+ 
 - (BOOL)readFromFileWrapper:(NSFileWrapper *)fileWrapper
 					 ofType:(NSString *)typeName
 					  error:(NSError **)outError

@@ -12,6 +12,7 @@
 
 @interface PreferencesController : NSWindowController {
 	IBOutlet id fGeneralView;
+	IBOutlet id fSoundView;
 }
 
 - (void)selectView:(id)sender;

@@ -71,7 +71,7 @@
 - (void)initGl
 {
 	BOOL isPal = NO;
-	float overscan = 0.08f;//0.138f;
+	float overscan = 0.138f;//0.08f a normal tv
 	NSRect overscanFrame;
 	NSRect screenFrame;
 	NSRect renderFrame;
@@ -111,7 +111,7 @@
 	
 	bufferFrame.origin.x = 0;
 	bufferFrame.origin.y = 0;
-	bufferFrame.size.width = 560;
+	bufferFrame.size.width = 561;
 	bufferFrame.size.height = 384;
 	
 	cachedViewFrame.size.width = 0;
@@ -127,7 +127,7 @@
 	glDisable(GL_STENCIL_TEST);
 	glDisable(GL_TEXTURE_1D);
 	glDisable(GL_TEXTURE_2D);
-		
+	
 	glEnable(GL_TEXTURE_RECTANGLE_ARB);
 	
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -147,11 +147,11 @@
 
 - (void)renderGl
 {
-	int bitmap[560 * 384];
+	int bitmap[561 * 384];
 	
-	for (int i = 0; i < (sizeof(bitmap) / sizeof(int)); i++)
-//		bitmap[i] = (random() & 0xff) * 0x010101;
-		bitmap[i] = ((i >> 1) & 0x1) * 0xffffff;
+	for (int y = 0; y < 384; y++)
+		for (int x = 0; x < 560; x++)
+			bitmap[y * 561 + x] = (((x >> 0) & 0x1) ^ ((y >> 1) & 0x1)) * 0xffffff;
 	
 	glTexImage2D(GL_TEXTURE_RECTANGLE_EXT,
 				 0, GL_RGBA, NSMaxX(bufferFrame), NSMaxY(bufferFrame),

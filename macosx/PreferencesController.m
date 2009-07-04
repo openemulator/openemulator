@@ -51,6 +51,14 @@
 		[item setAction:@selector(selectView:)];
 		[item setAutovalidates:NO];
 	}
+	else if ([ident isEqualToString:@"Sound"])
+	{
+		[item setLabel:NSLocalizedString(@"Sound", "Preferences -> toolbar item title")];
+		[item setImage:[NSImage imageNamed:@"PRSound.png"]];
+		[item setTarget:self];
+		[item setAction:@selector(selectView:)];
+		[item setAutovalidates:NO];
+	}
 	else
 	{
 		[item release];
@@ -72,7 +80,7 @@
 
 - (NSArray *)toolbarAllowedItemIdentifiers:(NSToolbar *)toolbar
 {
-	return [NSArray arrayWithObjects:@"General", nil];
+	return [NSArray arrayWithObjects:@"General", @"Sound", nil];
 }
 
 - (void)selectView:(id)sender
@@ -85,6 +93,8 @@
 	NSView *view;
 	if ([itemIdentifier isEqualToString:@"General"])
 		view = fGeneralView;
+	if ([itemIdentifier isEqualToString:@"Sound"])
+		view = fSoundView;
 	else
 		view = fGeneralView;
 	
