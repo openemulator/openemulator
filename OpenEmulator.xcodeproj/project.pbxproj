@@ -16,6 +16,7 @@
 		00B3347D0FE41EF60042661D /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B3347C0FE41EF60042661D /* AudioToolbox.framework */; };
 		00B334810FE41EFE0042661D /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B334800FE41EFE0042661D /* AudioUnit.framework */; };
 		00B334850FE41F080042661D /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B334840FE41F080042661D /* CoreAudio.framework */; };
+		00B4174D1004197300BA7E45 /* AppController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B4174C1004197300BA7E45 /* AppController.m */; };
 		00C07E940FD28217004E0D3D /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C07E930FD28217004E0D3D /* Quartz.framework */; };
 		00D8448A0FFF04C0005802F0 /* AppleGraphicsTablet.png in Resources */ = {isa = PBXBuildFile; fileRef = 000F66360FF8368F00C8AF23 /* AppleGraphicsTablet.png */; };
 		00D8448B0FFF04C0005802F0 /* DiskImage.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000F66370FF8368F00C8AF23 /* DiskImage.icns */; };
@@ -65,7 +66,6 @@
 		00D844CA0FFF0505005802F0 /* NewDocument.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00D844BF0FFF0505005802F0 /* NewDocument.xib */; };
 		00D844CB0FFF0505005802F0 /* PaperFeed.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00D844C10FFF0505005802F0 /* PaperFeed.xib */; };
 		00D844CC0FFF0505005802F0 /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00D844C30FFF0505005802F0 /* Preferences.xib */; };
-		00D8457B0FFF0FD2005802F0 /* Controller.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D845640FFF0FD2005802F0 /* Controller.m */; };
 		00D8457C0FFF0FD2005802F0 /* Document.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D845660FFF0FD2005802F0 /* Document.m */; };
 		00D8457D0FFF0FD2005802F0 /* DocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D845680FFF0FD2005802F0 /* DocumentController.m */; };
 		00D8457E0FFF0FD2005802F0 /* DocumentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D8456A0FFF0FD2005802F0 /* DocumentView.m */; };
@@ -169,6 +169,8 @@
 		00B334800FE41EFE0042661D /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = /System/Library/Frameworks/AudioUnit.framework; sourceTree = "<absolute>"; };
 		00B334840FE41F080042661D /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = /System/Library/Frameworks/CoreAudio.framework; sourceTree = "<absolute>"; };
 		00B334880FE41F110042661D /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = /System/Library/Frameworks/CoreServices.framework; sourceTree = "<absolute>"; };
+		00B4174B1004197300BA7E45 /* AppController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppController.h; sourceTree = "<group>"; };
+		00B4174C1004197300BA7E45 /* AppController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppController.m; sourceTree = "<group>"; };
 		00C07E350FD27CCF004E0D3D /* PRGeneral.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PRGeneral.png; sourceTree = "<group>"; };
 		00C07E930FD28217004E0D3D /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = /System/Library/Frameworks/Quartz.framework; sourceTree = "<absolute>"; };
 		00D844B60FFF0505005802F0 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Document.xib; sourceTree = "<group>"; };
@@ -179,8 +181,6 @@
 		00D844C00FFF0505005802F0 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/NewDocument.xib; sourceTree = "<group>"; };
 		00D844C20FFF0505005802F0 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/PaperFeed.xib; sourceTree = "<group>"; };
 		00D844C40FFF0505005802F0 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Preferences.xib; sourceTree = "<group>"; };
-		00D845630FFF0FD2005802F0 /* Controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Controller.h; sourceTree = "<group>"; };
-		00D845640FFF0FD2005802F0 /* Controller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Controller.m; sourceTree = "<group>"; };
 		00D845650FFF0FD2005802F0 /* Document.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Document.h; sourceTree = "<group>"; };
 		00D845660FFF0FD2005802F0 /* Document.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Document.m; sourceTree = "<group>"; };
 		00D845670FFF0FD2005802F0 /* DocumentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DocumentController.h; sourceTree = "<group>"; };
@@ -402,8 +402,6 @@
 		2A37F4ABFDCFA73011CA2CEA /* macosx */ = {
 			isa = PBXGroup;
 			children = (
-				00D845630FFF0FD2005802F0 /* Controller.h */,
-				00D845640FFF0FD2005802F0 /* Controller.m */,
 				00D845650FFF0FD2005802F0 /* Document.h */,
 				00D845660FFF0FD2005802F0 /* Document.m */,
 				00D845670FFF0FD2005802F0 /* DocumentController.h */,
@@ -426,6 +424,8 @@
 				00D845780FFF0FD2005802F0 /* PaperFeedController.m */,
 				00D845790FFF0FD2005802F0 /* PreferencesController.h */,
 				00D8457A0FFF0FD2005802F0 /* PreferencesController.m */,
+				00B4174B1004197300BA7E45 /* AppController.h */,
+				00B4174C1004197300BA7E45 /* AppController.m */,
 			);
 			path = macosx;
 			sourceTree = "<group>";
@@ -601,7 +601,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				006EECAE0FCA5C7B003D2C8D /* Component.cpp in Sources */,
-				00D8457B0FFF0FD2005802F0 /* Controller.m in Sources */,
 				00D8457C0FFF0FD2005802F0 /* Document.m in Sources */,
 				00D8457D0FFF0FD2005802F0 /* DocumentController.m in Sources */,
 				00D8457E0FFF0FD2005802F0 /* DocumentView.m in Sources */,
@@ -613,6 +612,7 @@
 				00D845840FFF0FD2005802F0 /* NewDocumentWindowController.m in Sources */,
 				00D845850FFF0FD2005802F0 /* PaperFeedController.m in Sources */,
 				00D845860FFF0FD2005802F0 /* PreferencesController.m in Sources */,
+				00B4174D1004197300BA7E45 /* AppController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

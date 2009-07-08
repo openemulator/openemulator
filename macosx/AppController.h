@@ -1,11 +1,11 @@
 
 /**
  * OpenEmulator
- * Mac OS X Controller
+ * Mac OS X Application Controller
  * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls the emulator's main instance.
+ * Controls the application.
  */
 
 #import <Cocoa/Cocoa.h>
@@ -17,7 +17,6 @@
 
 @interface Controller : NSObject
 {
-
 }
 
 - (void)linkHomepage:(id) sender;
