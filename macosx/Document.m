@@ -61,21 +61,21 @@
 - (BOOL)validateUserInterfaceItem:(id)item
 {
 	if ([item action] == @selector(copy:))
-		return [self validateCopy];
+		return [self isCopyValid];
 	else if ([item action] == @selector(paste:))
-		return [self validatePaste];
+		return [self isPasteValid];
 	else if ([item action] == @selector(startSpeaking:))
-		return [self validateCopy];
+		return [self isCopyValid];
 	
 	return YES;
 }
 
-- (BOOL)validateCopy
+- (BOOL)isCopyValid
 {
 	return YES; // To-Do: libemulation
 }
 
-- (BOOL)validatePaste
+- (BOOL)isPasteValid
 {
 	return [pasteboard availableTypeFromArray:pasteboardTypes] != nil;
 }
@@ -130,7 +130,7 @@
 
 - (void)copy:(id)sender
 {
-	if ([self validateCopy])
+	if ([self isCopyValid])
 	{
 		[pasteboard declareTypes:pasteboardTypes owner:self];
 		[pasteboard setString:[self getDocumentText] forType:NSStringPboardType];
@@ -139,7 +139,7 @@
 
 - (void)paste:(id)sender
 {
-	if ([self validatePaste])
+	if ([self isPasteValid])
 	{
 		NSString *text = [pasteboard stringForType:NSStringPboardType];
 		NSMutableString *mutableText = [NSMutableString 

@@ -8,9 +8,9 @@
 		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="23"/>
 			<integer value="1865"/>
-			<integer value="1767"/>
+			<integer value="28"/>
+			<integer value="23"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -169,7 +169,7 @@
 							<object class="NSButtonCell" id="882976568">
 								<int key="NSCellFlags">67239424</int>
 								<int key="NSCellFlags2">0</int>
-								<string key="NSContents">Use Template: templateName</string>
+								<string key="NSContents">Use template: templateName</string>
 								<reference key="NSSupport" ref="86725571"/>
 								<int key="NSTag">1</int>
 								<reference key="NSControlView" ref="11741413"/>
@@ -401,13 +401,13 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<object class="NSButton" id="857452095">
 						<reference key="NSNextResponder" ref="32698542"/>
 						<int key="NSvFlags">256</int>
-						<string key="NSFrame">{{173, 35}, {188, 18}}</string>
+						<string key="NSFrame">{{173, 35}, {265, 18}}</string>
 						<reference key="NSSuperview" ref="32698542"/>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSButtonCell" key="NSCell" id="1050331044">
 							<int key="NSCellFlags">67239424</int>
 							<int key="NSCellFlags2">0</int>
-							<string key="NSContents">Enable sound input device</string>
+							<string key="NSContents">Enable input from sound device</string>
 							<reference key="NSSupport" ref="86725571"/>
 							<reference key="NSControlView" ref="857452095"/>
 							<int key="NSButtonFlags">1211912703</int>
@@ -512,6 +512,66 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<reference key="destination" ref="995131843"/>
 					</object>
 					<int key="connectionID">1884</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">fUseTemplate</string>
+						<reference key="source" ref="511492310"/>
+						<reference key="destination" ref="882976568"/>
+					</object>
+					<int key="connectionID">1897</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: values.useTemplateForNewDocuments</string>
+						<reference key="source" ref="882976568"/>
+						<reference key="destination" ref="356871564"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="882976568"/>
+							<reference key="NSDestination" ref="356871564"/>
+							<string key="NSLabel">value: values.useTemplateForNewDocuments</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">values.useTemplateForNewDocuments</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">1901</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: values.useTemplateForNewDocuments</string>
+						<reference key="source" ref="272061744"/>
+						<reference key="destination" ref="356871564"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="272061744"/>
+							<reference key="NSDestination" ref="356871564"/>
+							<string key="NSLabel">value: values.useTemplateForNewDocuments</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">values.useTemplateForNewDocuments</string>
+							<object class="NSDictionary" key="NSOptions">
+								<string key="NS.key.0">NSValueTransformerName</string>
+								<string key="NS.object.0">NSNegateBoolean</string>
+							</object>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">1903</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">enabled: values.useTemplateForNewDocuments</string>
+						<reference key="source" ref="995131843"/>
+						<reference key="destination" ref="356871564"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="995131843"/>
+							<reference key="NSDestination" ref="356871564"/>
+							<string key="NSLabel">enabled: values.useTemplateForNewDocuments</string>
+							<string key="NSBinding">enabled</string>
+							<string key="NSKeyPath">values.useTemplateForNewDocuments</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">1904</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -756,7 +816,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{266, 255}, {512, 91}}</string>
+					<string>{{268, 281}, {512, 91}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<real value="1.000000e+00"/>
 					<string>{{0, 701}, {539, 272}}</string>
@@ -803,7 +863,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">1884</int>
+			<int key="maxID">1904</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -861,9 +921,11 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>fGeneralView</string>
 							<string>fSoundView</string>
+							<string>fUseTemplate</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 						</object>

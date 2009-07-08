@@ -17,8 +17,8 @@
 
 - (id)initWithTemplateURL:(NSURL *)templateURL error:(NSError **)outError;
 
-- (BOOL)validateCopy;
-- (BOOL)validatePaste;
+- (BOOL)isCopyValid;
+- (BOOL)isPasteValid;
 
 - (void)togglePower:(id)sender;
 - (void)resetEmulation:(id)sender;

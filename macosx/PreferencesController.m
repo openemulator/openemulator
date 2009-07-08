@@ -35,6 +35,8 @@
 	[toolbar release];
 	
     [self setView:selectedItemIdentifier];
+	
+	[fUseTemplate setTitle:NSLocalizedString(@"Use template: Apple II", "Use template:")];
 }
 
 - (NSToolbarItem *)toolbar:(NSToolbar *)toolbar
