@@ -23,17 +23,17 @@
 	return self;
 }
 
-- (BOOL)windowShouldClose:(id)window
+- (void)windowWillClose:(NSNotification*)notification
 {
 	[documentController noteNewDocumentWindowClosed]; 
-	return YES;
 }
 
 - (void)performChoose:(id)sender
 {
 	NSError *error;
-
-	[documentController openUntitledDocumentAndDisplay:YES error:&error];
+	
+	[documentController openUntitledDocumentWithTemplateURL:[NSURL URLWithString:@"Apple II.emulation"]
+													  error:&error];
 	
 	[[self window] performClose:self];
 }

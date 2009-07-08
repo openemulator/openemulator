@@ -15,6 +15,8 @@
 	NSArray *pasteboardTypes;
 }
 
+- (id)initFromTemplate:(NSURL *)templateURL;
+
 - (BOOL)validateCopy;
 - (BOOL)validatePaste;
 

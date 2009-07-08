@@ -24,6 +24,7 @@ public:
 	
 	virtual void init();		// Missing: dictionary is sent here
 	virtual void terminate();	// Missing: dictionary is sent here
+	virtual void remove();		// Missing: dictionary is sent here
 	
 	virtual int ioctl(int command, void * data);
 	

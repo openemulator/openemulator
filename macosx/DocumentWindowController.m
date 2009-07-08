@@ -273,9 +273,7 @@
 	
 	if (!isFullscreen)
 	{
-		[[NSNotificationCenter defaultCenter] postNotification:
-		 [NSNotification notificationWithName:@"disableMenuBarNotification"
-									   object:self]];
+		[[NSDocumentController sharedDocumentController] disableMenuBar];
 		
 		NSRect screenFrame = [[window screen] frame];
 		
@@ -313,9 +311,7 @@
 		[fullscreenWindow release];
         EnableScreenUpdates();
 		
-		[[NSNotificationCenter defaultCenter] postNotification:
-		 [NSNotification notificationWithName:@"enableMenuBarNotification"
-									   object:self]];
+		[[NSDocumentController sharedDocumentController] enableMenuBar];
 		
 		isFullscreen = NO;
 	}

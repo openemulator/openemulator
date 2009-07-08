@@ -24,6 +24,10 @@ void Component::terminate()
 {
 }
 
+void Component::remove()
+{
+}
+
 int Component::ioctl(int command, void * data)
 {
 	return IOCTL_OK;

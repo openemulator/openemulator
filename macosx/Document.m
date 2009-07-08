@@ -13,7 +13,7 @@
 
 @implementation Document
 
-- (id)init
+- (id)initFromTemplate:(NSURL *)templateURL
 {
 	if (self = [super init])
 	{
@@ -25,6 +25,11 @@
 	}
 	
 	return self;
+}
+
+- (id)init
+{
+	return [self initFromTemplate:nil];
 }
 
 - (void)dealloc
@@ -48,12 +53,12 @@
 {
 	if ([item action] == @selector(copy:))
 		return [self validateCopy];
-    else if ([item action] == @selector(paste:))
+	else if ([item action] == @selector(paste:))
 		return [self validatePaste];
-    else if ([item action] == @selector(startSpeaking:))
+	else if ([item action] == @selector(startSpeaking:))
 		return [self validateCopy];
 	
-    return YES;
+	return YES;
 }
 
 - (BOOL)validateCopy
@@ -65,22 +70,30 @@
 {
 	return [pasteboard availableTypeFromArray:pasteboardTypes] != nil;
 }
- 
+
 - (BOOL)readFromFileWrapper:(NSFileWrapper *)fileWrapper
 					 ofType:(NSString *)typeName
 					  error:(NSError **)outError
 {
+	// Read files to memory, distribute to objects
+	// Pass emulation path to libemulator
+	// Note: Files should be opened once the emulation starts
+	// In case someone moves the emulation, they can be rewritten without problem
 	return YES;
 }
 
 - (NSFileWrapper *)fileWrapperOfType:(NSString *)typeName error:(NSError **)outError {
 	NSFileWrapper *fileWrapper = [[[NSFileWrapper alloc] initDirectoryWithFileWrappers:nil]
 								  autorelease];
+	// Generate file wrapper
+	// Add files
+	// And write to files
 	return fileWrapper;
 }
 
 - (void)togglePower:(id)sender
 {
+	[self updateChangeCount:NSChangeDone];
 }
 
 - (void)resetEmulation:(id)sender
@@ -89,7 +102,6 @@
 
 - (void)togglePause:(id)sender
 {
-	[self updateChangeCount:NSChangeDone];
 }
 
 - (NSString *)getDocumentText
