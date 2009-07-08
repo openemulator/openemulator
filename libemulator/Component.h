@@ -22,9 +22,9 @@ public:
 	Component();
 	virtual ~Component();
 	
-	virtual void init();		// Missing: dictionary is sent here
-	virtual void terminate();	// Missing: dictionary is sent here
-	virtual void remove();		// Missing: dictionary is sent here
+	virtual void init();		// Missing: dictionary ref is sent here
+	virtual void remove();
+	virtual void terminate();	// Missing: dictionary ref is sent here
 	
 	virtual int ioctl(int command, void * data);
 	

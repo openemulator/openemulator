@@ -117,4 +117,9 @@
 	[window setTitle:NSLocalizedString(itemIdentifier, "Preferences view")];
 }
 
+- (void)chooseTemplate:(id)sender
+{
+	
+}
+
 @end

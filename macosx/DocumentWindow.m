@@ -55,7 +55,7 @@
 
 - (void)close
 {
-	printf("DocumentWindow:wclose");
+	printf("DocumentWindow:close");
 	[super close];
 }
 

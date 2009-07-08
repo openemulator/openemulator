@@ -8,13 +8,13 @@
 		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="164"/>
-			<integer value="186"/>
 			<integer value="679"/>
-			<integer value="746"/>
 			<integer value="179"/>
 			<integer value="185"/>
+			<integer value="186"/>
 			<integer value="184"/>
+			<integer value="164"/>
+			<integer value="746"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1949,6 +1949,12 @@ ARcABAAAAAEAAAACARwAAwAAAAEAAQAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 				<string key="NSClassName">NSView</string>
 			</object>
 			<object class="NSObjectController" id="834901026">
+				<object class="NSMutableArray" key="NSDeclaredKeys">
+					<bool key="EncodedWithXMLCoder">YES</bool>
+					<string>computerName</string>
+					<string>inspectedDocument.name</string>
+					<string>inspectedDocument.image</string>
+				</object>
 				<bool key="NSEditable">YES</bool>
 				<object class="_NSManagedProxy" key="_NSManagedProxy"/>
 			</object>
@@ -2078,6 +2084,38 @@ ARcABAAAAAEAAAACARwAAwAAAAEAAQAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 						<reference key="destination" ref="834901026"/>
 					</object>
 					<int key="connectionID">845</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: selection.inspectedDocument.name</string>
+						<reference key="source" ref="907024236"/>
+						<reference key="destination" ref="834901026"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="907024236"/>
+							<reference key="NSDestination" ref="834901026"/>
+							<string key="NSLabel">value: selection.inspectedDocument.name</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">selection.inspectedDocument.name</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">917</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">data: selection.inspectedDocument.image</string>
+						<reference key="source" ref="382462649"/>
+						<reference key="destination" ref="834901026"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="382462649"/>
+							<reference key="NSDestination" ref="834901026"/>
+							<string key="NSLabel">data: selection.inspectedDocument.image</string>
+							<string key="NSBinding">data</string>
+							<string key="NSKeyPath">selection.inspectedDocument.image</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">920</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -3506,7 +3544,7 @@ ARcABAAAAAEAAAACARwAAwAAAAEAAQAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">914</int>
+			<int key="maxID">920</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">

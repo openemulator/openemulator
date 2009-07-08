@@ -31,8 +31,9 @@
 - (void)performChoose:(id)sender
 {
 	NSError *error;
+	NSString *url = [NSURL fileURLWithPath:@"/tmp/temp.emulation"];
 	
-	[documentController openUntitledDocumentWithTemplateURL:[NSURL URLWithString:@"Apple II.emulation"]
+	[documentController openUntitledDocumentFromTemplateURL:url
 													  error:&error];
 	
 	[[self window] performClose:self];

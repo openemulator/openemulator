@@ -20,6 +20,8 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 							 PaStreamCallbackFlags statusFlags,
 							 void *userData)
 {
+	return paContinue;
+	
 	float *in = (float *)inputBuffer;
 	float *out = (float *)outputBuffer;
 	unsigned int i;
@@ -76,27 +78,21 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 - (BOOL)application:(NSApplication *)theApplication
 		   openFile:(NSString *)filename
 {
+	NSError *error;
 	printf("openFile\n");
-	//	[[NSDocumentController sharedDocumentController]
-	//	 noteNewRecentDocumentURL:[NSURL fileURLWithPath:filename]];
-	
-	// If it is a disk image, mount and return yes
-	
-	// Otherwise return No, so the default document handler manages this situation
-	return NO;
-}
+	if ([[filename pathExtension] caseInsensitiveCompare:@"emulation"] == NSOrderedSame)
+		return NO;
 
-- (BOOL)application:(NSApplication *)theApplication
-		  openFiles:(NSArray *)filenames
-{
-	printf("openFile\n");
-	//	[[NSDocumentController sharedDocumentController]
-	//	 noteNewRecentDocumentURL:[NSURL fileURLWithPath:filename]];
+	if (![self currentDocument])
+		[self openUntitledDocumentAndDisplay:YES error:&error];
 	
-	// If it is a disk image, mount and return yes
+	// It is a disk image
 	
-	// Otherwise return No, so the default document handler manages this situation
-	return NO;
+	// If there is a default template, create a new emulation
+	
+	// Now mount it
+	
+	return YES;
 }
 
 - (void)applicationWillFinishLaunching:(NSNotification *)notification
@@ -115,10 +111,10 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 {
 	NSWindow *window;
 	
+	Pa_Terminate();
+	
 	window = [fInspectorPanelController window];
 	[fDefaults setInteger:[window isVisible] forKey:@"InspectorPanelIsVisible"];
-	
-	Pa_Terminate();
 }
 
 - (BOOL)validateUserInterfaceItem:(id)item
@@ -134,6 +130,12 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 	BOOL isChooseTemplate = YES;
 	if (isChooseTemplate)
 	{
+		*outError = [NSError errorWithDomain:NSCocoaErrorDomain
+										code:NSUserCancelledError userInfo:nil];
+		
+		if (isNewDocumentWindowOpen)
+			return nil;
+		
 		isNewDocumentWindowOpen = YES;
 		
 		NewDocumentWindowController *newDocumentWindowController;
@@ -141,19 +143,18 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 		
 		[newDocumentWindowController showWindow:self];
 		
-		*outError = [NSError errorWithDomain:NSCocoaErrorDomain
-										code:NSUserCancelledError userInfo:nil];
 		return nil;
 	}
 	else
 	{
-		return [super openUntitledDocumentAndDisplay:displayDocument error:outError];
+		NSURL *url = [NSURL fileURLWithPath:@"/tmp/test.emulation"];
+		return [self openUntitledDocumentFromTemplateURL:url error:outError];
 	}
 }
 
-- (id)openUntitledDocumentWithTemplateURL:(NSURL *)templateURL error:(NSError **)outError
+- (id)openUntitledDocumentFromTemplateURL:(NSURL *)templateURL error:(NSError **)outError
 {
-	NSDocument *document = [self makeUntitledDocumentWithTemplateURL:templateURL
+	NSDocument *document = [self makeUntitledDocumentFromTemplateURL:templateURL
 															   error:outError];
 	if (document)
 	{
@@ -165,11 +166,11 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 	return document;
 }
 
-- (id)makeUntitledDocumentWithTemplateURL:(NSURL *)templateURL error:(NSError **)outError
+- (id)makeUntitledDocumentFromTemplateURL:(NSURL *)templateURL error:(NSError **)outError
 {
 	*outError = [[NSError alloc] init];
 	
-	return [[Document alloc] initFromTemplate:templateURL];
+	return [[Document alloc] initWithTemplateURL:templateURL error:outError];
 }
 
 - (void)noteNewDocumentWindowClosed
@@ -185,10 +186,9 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 	{
 		NSURL *url = [[panel URLs] lastObject];
 		NSError *error;
-		// if (isDocument)
-		[self openDocumentWithContentsOfURL:url display:YES error:&error];
-		// else
-		// [[NSDocumentController sharedDocumentController] document] mountDiskImage:]:
+		
+		if (![self application:NSApp openFile:[url path]])
+			[self openDocumentWithContentsOfURL:url display:YES error:&error];
 	}
 }
 

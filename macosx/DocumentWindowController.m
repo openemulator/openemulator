@@ -331,18 +331,18 @@
 				 shouldCloseSelector:(SEL)shouldCloseSelector
 						 contextInfo:(void*)contextInfo
 {
-	printf("canCloseDocumentWithDelegate\n");
+	printf("DWC:canCloseDocumentWithDelegate\n");
 }
 
 - (BOOL)windowShouldClose:(id)window
 {
-	printf("windowShouldClose\n");
+	printf("DWC:windowShouldClose\n");
 	return YES;
 }
 
 - (void)close
 {
-	printf("close");
+	printf("DWC:close");
 	[super close];
 }
 

@@ -26,8 +26,8 @@
 	int disableMenuBarCount;
 }
 
-- (id)openUntitledDocumentWithTemplateURL:(NSURL *)templateURL error:(NSError **)outError;
-- (id)makeUntitledDocumentWithTemplateURL:(NSURL *)templateURL error:(NSError **)outError;
+- (id)openUntitledDocumentFromTemplateURL:(NSURL *)templateURL error:(NSError **)outError;
+- (id)makeUntitledDocumentFromTemplateURL:(NSURL *)templateURL error:(NSError **)outError;
 - (void)noteNewDocumentWindowClosed;
 - (void)disableMenuBar;
 - (void)enableMenuBar;

@@ -17,5 +17,6 @@
 
 - (void)selectView:(id)sender;
 - (void)setView:(NSString *)itemIdentifier;
+- (void)chooseTemplate:(id)sender;
 
 @end

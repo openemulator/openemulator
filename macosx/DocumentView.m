@@ -151,7 +151,7 @@
 	
 	for (int y = 0; y < 384; y++)
 		for (int x = 0; x < 560; x++)
-			bitmap[y * 561 + x] = (((x >> 0) & 0x1) ^ ((y >> 1) & 0x1)) * 0xffffff;
+			bitmap[y * 561 + x] = (((x >> 1) & 0x1) ^ ((y >> 1) & 0x1)) * 0xffffff;
 	
 	glTexImage2D(GL_TEXTURE_RECTANGLE_EXT,
 				 0, GL_RGBA, NSMaxX(bufferFrame), NSMaxY(bufferFrame),

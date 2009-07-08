@@ -13,7 +13,7 @@
 
 @implementation Document
 
-- (id)initFromTemplate:(NSURL *)templateURL
+- (id)init
 {
 	if (self = [super init])
 	{
@@ -22,20 +22,29 @@
 		
 		pasteboardTypes = [NSArray arrayWithObjects:NSStringPboardType, nil];
 		[pasteboardTypes retain];
+		
+		// To-Do: Create the temporary work folder
 	}
 	
 	return self;
 }
 
-- (id)init
+- (id)initWithTemplateURL:(NSURL *)templateURL
+					error:(NSError **)outError
 {
-	return [self initFromTemplate:nil];
+	// To-Do: If there is a template, copy the template's files to the work folder
+	// To-Do: Read info.xml to update inspector
+	return [self init];
+	
+	// To-Do: Start emulation
 }
 
 - (void)dealloc
 {
 	[pasteboardTypes release];
 	[pasteboard release];
+	
+	// To-Do: Remove the temporary work folder
 	
 	[super dealloc];
 }
@@ -71,33 +80,42 @@
 	return [pasteboard availableTypeFromArray:pasteboardTypes] != nil;
 }
 
-- (BOOL)readFromFileWrapper:(NSFileWrapper *)fileWrapper
-					 ofType:(NSString *)typeName
-					  error:(NSError **)outError
+- (BOOL)readFromURL:(NSURL *)absoluteURL
+			 ofType:(NSString *)typeName
+			  error:(NSError **)outError
 {
-	// Read files to memory, distribute to objects
-	// Pass emulation path to libemulator
-	// Note: Files should be opened once the emulation starts
-	// In case someone moves the emulation, they can be rewritten without problem
+	// To-Do: Erase the files in the temporary folder
+	// To-Do: Unzip the files in the .emulation file to the temporary work folder
+	// To-Do: Read info.xml to update inspector
+	// To-Do: Force a restart of libemulator
+	
+	*outError = [NSError errorWithDomain:@"test" code:0 userInfo:nil];
+	printf("readFromURL: %s\n", [[absoluteURL path] UTF8String]);
 	return YES;
 }
 
-- (NSFileWrapper *)fileWrapperOfType:(NSString *)typeName error:(NSError **)outError {
-	NSFileWrapper *fileWrapper = [[[NSFileWrapper alloc] initDirectoryWithFileWrappers:nil]
-								  autorelease];
-	// Generate file wrapper
-	// Add files
-	// And write to files
-	return fileWrapper;
+- (BOOL)writeToURL:(NSURL *)absoluteURL
+			ofType:(NSString *)typeName
+			 error:(NSError **)outError
+{
+	// To-Do: Force a file flush in libemulator
+	
+	NSString *path = [absoluteURL path];
+	FILE *fp;
+	fp = fopen([path UTF8String], "wb");
+	if (fp)
+		fclose(fp);
+	printf("writeToURL: %s\n", [path UTF8String]);
+	return YES;
 }
 
 - (void)togglePower:(id)sender
 {
-	[self updateChangeCount:NSChangeDone];
 }
 
 - (void)resetEmulation:(id)sender
 {
+	[self updateChangeCount:NSChangeDone];
 }
 
 - (void)togglePause:(id)sender
@@ -127,13 +145,14 @@
 		NSMutableString *mutableText = [NSMutableString 
 										stringWithString:text];
 		
-		// Convert newlines
+		// To-Do: Convert newlines in Apple II part
 		[mutableText replaceOccurrencesOfString:@"\n"
 									 withString:@"\r"
 										options:NSLiteralSearch
 										  range:NSMakeRange(0, [text length])];
 		
-		// To-do: Send to libemulation with [mutableText cStringUsingEncoding:NSASCIIStringEncoding]
+		// To-do: Send to libemulator
+		// (using [mutableText cStringUsingEncoding:NSASCIIStringEncoding])
 	}
 }
 
@@ -141,7 +160,7 @@
 {
 	NSTextView *dummy = [[NSTextView alloc] init];
 	[dummy insertText:[self getDocumentText]];
-	[dummy startSpeaking:nil];
+	[dummy startSpeaking:self];
 }
 
 @end

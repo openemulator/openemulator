@@ -15,7 +15,7 @@
 #define LINK_DEVURL	"http://code.google.com/p/openemulator"
 #define LINK_DONATEURL	"http://www.openemulator.org/donate.html"
 
-@interface Controller : NSObject
+@interface AppController : NSObject
 {
 }
 

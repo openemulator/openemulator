@@ -19,8 +19,6 @@
 			<string>OpenEmulator Emulation</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
-			<key>LSTypeIsPackage</key>
-			<true/>
 			<key>NSDocumentClass</key>
 			<string>Document</string>
 		</dict>
