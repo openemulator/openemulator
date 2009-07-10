@@ -59,11 +59,16 @@
 
 - (void)drawRect:(NSRect)rect
 {
-//	printf("x:%f y:%f\n", rect.origin.x, rect.origin.y);
-//	printf("w:%f h:%f\n", rect.size.width, rect.size.height);
-	[self drawGl:rect];
+	NSRect scaledRect = rect;
+	float scale = [[self window] userSpaceScaleFactor];
+	scaledRect.size.width *= scale;
+	scaledRect.size.height *= scale;
+	[self drawGl:scaledRect];
 	
 	[[self openGLContext] flushBuffer];
+	
+	//	printf("x:%f y:%f\n", rect.origin.x, rect.origin.y);
+	//	printf("w:%f h:%f\n", rect.size.width, rect.size.height);
 }
 
 

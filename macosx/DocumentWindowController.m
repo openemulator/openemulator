@@ -214,21 +214,21 @@
 	NSScreen *screen = [window screen];
 	NSRect screenFrame = [screen visibleFrame];
 	
-	float deltaWidth = windowFrame.size.width - contentFrame.size.width;
-	float deltaHeight = windowFrame.size.height - contentFrame.size.height;
+	float deltaWidth = NSWidth(windowFrame) - NSWidth(contentFrame);
+	float deltaHeight = NSHeight(windowFrame) - NSHeight(contentFrame);
 	float scale = [window userSpaceScaleFactor];
 	
-	windowFrame.origin.x += windowFrame.size.width / 2;
-	windowFrame.origin.y += windowFrame.size.height;
+	windowFrame.origin.x += NSWidth(windowFrame) / 2;
+	windowFrame.origin.y += NSHeight(windowFrame);
 	windowFrame.size.width = scale * (proportion * DEFAULT_FRAME_WIDTH + deltaWidth);
 	windowFrame.size.height = scale * (proportion * DEFAULT_FRAME_HEIGHT + deltaHeight);
-	windowFrame.origin.x -= windowFrame.size.width / 2;
-	windowFrame.origin.y -= windowFrame.size.height;
+	windowFrame.origin.x -= NSWidth(windowFrame) / 2;
+	windowFrame.origin.y -= NSHeight(windowFrame);
 	
-	float maxX = NSMaxX(screenFrame) - windowFrame.size.width;
-	float maxY = NSMaxY(screenFrame) - windowFrame.size.height;
-	float minX = screenFrame.origin.x;
-	float minY = screenFrame.origin.y;
+	float maxX = NSMaxX(screenFrame) - NSWidth(windowFrame);
+	float maxY = NSMaxY(screenFrame) - NSHeight(windowFrame);
+	float minX = NSMinX(screenFrame);
+	float minY = NSMinY(screenFrame);
 	
 	if (windowFrame.origin.x > maxX)
 		windowFrame.origin.x = maxX;
@@ -299,6 +299,10 @@
 	}
 	else
 	{
+		float scale = [window userSpaceScaleFactor];
+		contentFrame.size.width *= scale;
+		contentFrame.size.height *= scale;
+
 		[[NSApplication sharedApplication] removeWindowsItem:fullscreenWindow];
 		
 		[fullscreenWindow setFrame:contentFrame display:YES animate:YES];
