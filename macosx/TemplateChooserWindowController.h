@@ -10,8 +10,10 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "DocumentController.h"
 
-@interface TemplateChooserWindowController : NSObject {
+@interface TemplateChooserWindowController : NSWindowController
+{
 	DocumentController *documentController;
 }
 

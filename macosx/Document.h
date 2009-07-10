@@ -17,9 +17,6 @@
 	NSString *computerType;
 }
 
-- (NSString *)computerType;
-- (void)setComputerType:(NSString *)computerType;
-
 - (id)initWithTemplateURL:(NSURL *)templateURL error:(NSError **)outError;
 
 - (BOOL)isCopyValid;

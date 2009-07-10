@@ -9,7 +9,6 @@
  */
 
 #import "PreferencesController.h"
-#import "NewDocumentWindowController.h"
 
 @implementation PreferencesController
 
@@ -38,18 +37,7 @@
     [self setView:selectedItemIdentifier];
 	
 	userDefaults = [NSUserDefaults standardUserDefaults];
-	
-	BOOL useDefaultTemplate = [userDefaults boolForKey:@"useDefaultTemplate"];
-	[fShowTemplateChooserCell setIntValue:!useDefaultTemplate];
-	[fUseTemplateCell setIntValue:useDefaultTemplate];
-	[fChooseTemplateButton setEnabled:useDefaultTemplate];
-	
-	NSString *defaultTemplate = [userDefaults stringForKey:@"defaultTemplate"];
-	if (defaultTemplate != nil)
-	{
-		NSString *fUseTemplateTitle = NSLocalizedString(@"Use template:", "Use template:");
-		[fUseTemplateCell setTitle:[fUseTemplateTitle stringByAppendingString:defaultTemplate]];
-	}
+	[self useDefaultTemplate:[userDefaults boolForKey:@"useDefaultTemplate"]];
 }
 
 - (NSToolbarItem *)toolbar:(NSToolbar *)toolbar
@@ -132,30 +120,54 @@
 	[window setTitle:NSLocalizedString(itemIdentifier, "Preferences view")];
 }
 
-- (void)selectTemplate:(id)sender
+- (IBAction)selectTemplate:(id)sender
 {
 	[self useDefaultTemplate:[[sender selectedCell] tag]];
 }
 
-- (void)useDefaultTemplate:(BOOL)useDefaultTemplate
+- (IBAction)useDefaultTemplate:(BOOL)useDefaultTemplate
 {
+	NSString *useTemplateString = NSLocalizedString(@"Use template:", "Use template:");
+	useTemplateString = [useTemplateString stringByAppendingString:@" "];
+	NSString *defaultTemplateString = [userDefaults stringForKey:@"defaultTemplate"];
+	if (defaultTemplateString)
+	{
+		defaultTemplateString = [defaultTemplateString lastPathComponent];
+		defaultTemplateString = [defaultTemplateString stringByDeletingPathExtension];
+		useTemplateString = [useTemplateString stringByAppendingString:defaultTemplateString];
+	}
+	[fEnableDefaultTemplate setTitle:useTemplateString];
+	
+	[fDisableDefaultTemplate setIntValue:!useDefaultTemplate];
+	[fEnableDefaultTemplate setIntValue:useDefaultTemplate];
+	
 	[fChooseTemplateButton setEnabled:useDefaultTemplate];
+	
 	if (([userDefaults stringForKey:@"defaultTemplate"] == nil) && useDefaultTemplate)
 		[self chooseTemplate:self];
 	else
 		[userDefaults setBool:useDefaultTemplate forKey:@"useDefaultTemplate"];
 }
 
-- (void)chooseTemplate:(id)sender
+- (IBAction)chooseTemplate:(id)sender
 {
-	NewDocumentWindowController *newDocumentWindowController;
-	newDocumentWindowController = [[NewDocumentWindowController alloc] init:self];
-	
-	[NSApp beginSheet:[newDocumentWindowController window]
+	[NSApp beginSheet:fTemplateChooserSheet
 	   modalForWindow:[self window]
 		modalDelegate:self
 	   didEndSelector:@selector(didEndSheet:returnCode:contextInfo:)
 		  contextInfo:nil];
+}
+
+- (IBAction)closeTemplateSheet:(id)sender
+{
+	[NSApp endSheet:fTemplateChooserSheet];
+}
+
+- (IBAction)chooseTemplateSheet:(id)sender
+{
+	[userDefaults setObject:@"/Users/test/Apple II.emulation" forKey:@"defaultTemplate"];
+	
+	[NSApp endSheet:fTemplateChooserSheet];
 }
 
 - (void)didEndSheet:(NSWindow *)sheet
@@ -163,12 +175,8 @@
 		contextInfo:(void *)contextInfo
 { 
     [sheet orderOut:self];
-	[self useDefaultTemplate:NO];
+	
+	[self useDefaultTemplate:([userDefaults stringForKey:@"defaultTemplate"] != nil)];
 } 
-
-- (void)closeTemplateSheet:(id)sender
-{
-	[NSApp endSheet:fChooseTemplateSheet];
-}
 
 @end

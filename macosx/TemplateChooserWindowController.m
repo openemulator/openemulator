@@ -14,7 +14,7 @@
 
 - (id)init:(DocumentController *)theDocumentController
 {
-	self = [super initWithWindowNibName:@"NewDocument"];
+	self = [super initWithWindowNibName:@"TemplateChooserWindow"];
 	if (self)
 	{
 		documentController = theDocumentController;
@@ -23,9 +23,15 @@
 	return self;
 }
 
+- (id)init
+{
+	[self init:nil];
+}
+
 - (void)windowWillClose:(NSNotification *)notification
 {
-	[documentController noteNewDocumentWindowClosed]; 
+	if (documentController)
+		[documentController noteNewDocumentWindowClosed]; 
 }
 
 - (void)performChoose:(id)sender

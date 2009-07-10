@@ -12,7 +12,6 @@
 		005486CA0FDC84E500DBCFA8 /* Sparkle.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 001F56F80FD1E8E500EA246A /* Sparkle.framework */; };
 		005C7BBC0FD8ED6F00426DD0 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 005C7BBB0FD8ED6F00426DD0 /* Carbon.framework */; };
 		006EECAE0FCA5C7B003D2C8D /* Component.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 006EECAD0FCA5C7B003D2C8D /* Component.cpp */; };
-		006F08C61006F64B00CE75DD /* TemplateChooserSheet.xib in Resources */ = {isa = PBXBuildFile; fileRef = 006F08C21006F64B00CE75DD /* TemplateChooserSheet.xib */; };
 		006F08C71006F64B00CE75DD /* TemplateChooserWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 006F08C41006F64B00CE75DD /* TemplateChooserWindow.xib */; };
 		006F08CA1006F65A00CE75DD /* TemplateChooserWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 006F08C91006F65A00CE75DD /* TemplateChooserWindowController.m */; };
 		0075B1B20FE79F7E009C1DFA /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0075B1B10FE79F7E009C1DFA /* OpenGL.framework */; };
@@ -165,7 +164,6 @@
 		006EECAC0FCA5C7B003D2C8D /* Component.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Component.h; path = libemulator/Component.h; sourceTree = "<group>"; };
 		006EECAD0FCA5C7B003D2C8D /* Component.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Component.cpp; path = libemulator/Component.cpp; sourceTree = "<group>"; };
 		006EEE8F0FCA781C003D2C8D /* DiskImage.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = DiskImage.icns; sourceTree = "<group>"; };
-		006F08C31006F64B00CE75DD /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/TemplateChooserSheet.xib; sourceTree = "<group>"; };
 		006F08C51006F64B00CE75DD /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/TemplateChooserWindow.xib; sourceTree = "<group>"; };
 		006F08C81006F65A00CE75DD /* TemplateChooserWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TemplateChooserWindowController.h; sourceTree = "<group>"; };
 		006F08C91006F65A00CE75DD /* TemplateChooserWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TemplateChooserWindowController.m; sourceTree = "<group>"; };
@@ -435,7 +433,6 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				006F08C21006F64B00CE75DD /* TemplateChooserSheet.xib */,
 				006F08C41006F64B00CE75DD /* TemplateChooserWindow.xib */,
 				00D844B50FFF0505005802F0 /* Document.xib */,
 				00D844B70FFF0505005802F0 /* GraphicsTablet.xib */,
@@ -585,7 +582,6 @@
 				00D844CB0FFF0505005802F0 /* PaperFeed.xib in Resources */,
 				00D844CC0FFF0505005802F0 /* Preferences.xib in Resources */,
 				00D846290FFF23B7005802F0 /* PRSound.png in Resources */,
-				006F08C61006F64B00CE75DD /* TemplateChooserSheet.xib in Resources */,
 				006F08C71006F64B00CE75DD /* TemplateChooserWindow.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -631,14 +627,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		006F08C21006F64B00CE75DD /* TemplateChooserSheet.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				006F08C31006F64B00CE75DD /* English */,
-			);
-			name = TemplateChooserSheet.xib;
-			sourceTree = "<group>";
-		};
 		006F08C41006F64B00CE75DD /* TemplateChooserWindow.xib */ = {
 			isa = PBXVariantGroup;
 			children = (

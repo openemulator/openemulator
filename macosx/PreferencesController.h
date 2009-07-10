@@ -16,17 +16,20 @@
 	IBOutlet id fGeneralView;
 	IBOutlet id fSoundView;
 	
-	IBOutlet id fShowTemplateChooserCell;
-	IBOutlet id fUseTemplateCell;
+	IBOutlet id fDisableDefaultTemplate;
+	IBOutlet id fEnableDefaultTemplate;
 	IBOutlet id fChooseTemplateButton;
 	
-	IBOutlet id fChooseTemplateSheet;
+	IBOutlet id fTemplateChooserSheet;
 }
 
 - (void)selectView:(id)sender;
 - (void)setView:(NSString *)itemIdentifier;
-- (void)selectTemplate:(id)sender;
-- (void)chooseTemplate:(id)sender;
+
+- (IBAction)selectTemplate:(id)sender;
+- (IBAction)chooseTemplate:(id)sender;
+- (IBAction)useDefaultTemplate:(BOOL)useDefaultTemplate;
 - (IBAction)closeTemplateSheet:(id)sender;
+- (IBAction)chooseTemplateSheet:(id)sender;
 
 @end

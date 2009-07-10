@@ -12,7 +12,7 @@
 
 #import "Document.h"
 #import "DocumentController.h"
-#import "NewDocumentWindowController.h"
+#import "TemplateChooserWindowController.h"
 
 static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 							 unsigned long framesPerBuffer,
@@ -127,8 +127,10 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 
 - (id)openUntitledDocumentAndDisplay:(BOOL)displayDocument error:(NSError **)outError
 {
-	BOOL isChooseTemplate = YES;
-	if (isChooseTemplate)
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	
+	BOOL useDefaultTemplate = [userDefaults boolForKey:@"useDefaultTemplate"];
+	if (!useDefaultTemplate)
 	{
 		*outError = [NSError errorWithDomain:NSCocoaErrorDomain
 										code:NSUserCancelledError userInfo:nil];
@@ -138,16 +140,17 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 		
 		isNewDocumentWindowOpen = YES;
 		
-		NewDocumentWindowController *newDocumentWindowController;
-		newDocumentWindowController = [[NewDocumentWindowController alloc] init:self];
+		TemplateChooserWindowController *templateChooserWindowController;
+		templateChooserWindowController = [[TemplateChooserWindowController alloc] init:self];
 		
-		[newDocumentWindowController showWindow:self];
+		[templateChooserWindowController showWindow:self];
 		
 		return nil;
 	}
 	else
 	{
-		NSURL *url = [NSURL fileURLWithPath:@"/tmp/test.emulation"];
+		NSString *defaultTemplate = [userDefaults stringForKey:@"defaultTemplate"];
+		NSURL *url = [NSURL fileURLWithPath:defaultTemplate];
 		return [self openUntitledDocumentFromTemplateURL:url error:outError];
 	}
 }
