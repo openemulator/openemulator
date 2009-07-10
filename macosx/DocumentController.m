@@ -114,15 +114,29 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 	Pa_Terminate();
 	
 	window = [fInspectorPanelController window];
-	[fDefaults setInteger:[window isVisible] forKey:@"OEShowInspectorPanel"];
+	[fDefaults setBool:[window isVisible] forKey:@"OEShowInspectorPanel"];
 }
 
 - (BOOL)validateUserInterfaceItem:(id)item
 {
 	if ([item action] == @selector(newDocument:))
 		return !isNewDocumentWindowOpen;
+	else if ([item action] == @selector(newDocumentFromTemplateChooser:))
+		return !isNewDocumentWindowOpen;
 	
 	return YES;
+}
+
+- (IBAction)newDocumentFromTemplateChooser:(id)sender
+{
+	if (isNewDocumentWindowOpen)
+		return;
+	
+	isNewDocumentWindowOpen = YES;
+	
+	TemplateChooserWindowController *templateChooserWindowController;
+	templateChooserWindowController = [[TemplateChooserWindowController alloc] init:self];
+	[templateChooserWindowController showWindow:self];
 }
 
 - (id)openUntitledDocumentAndDisplay:(BOOL)displayDocument error:(NSError **)outError
@@ -132,19 +146,9 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 	BOOL useDefaultTemplate = [userDefaults boolForKey:@"OEUseDefaultTemplate"];
 	if (!useDefaultTemplate)
 	{
+		[self newDocumentFromTemplateChooser:self];
 		*outError = [NSError errorWithDomain:NSCocoaErrorDomain
 										code:NSUserCancelledError userInfo:nil];
-		
-		if (isNewDocumentWindowOpen)
-			return nil;
-		
-		isNewDocumentWindowOpen = YES;
-		
-		TemplateChooserWindowController *templateChooserWindowController;
-		templateChooserWindowController = [[TemplateChooserWindowController alloc] init:self];
-		
-		[templateChooserWindowController showWindow:self];
-		
 		return nil;
 	}
 	else

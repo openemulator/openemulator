@@ -19,6 +19,8 @@
 
 - (id)initWithTemplateURL:(NSURL *)templateURL error:(NSError **)outError;
 
+- (IBAction)saveDocumentAsTemplate:(id)sender;
+
 - (BOOL)isCopyValid;
 - (BOOL)isPasteValid;
 

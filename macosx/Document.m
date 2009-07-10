@@ -100,8 +100,8 @@
 			ofType:(NSString *)typeName
 			 error:(NSError **)outError
 {
-	// To-Do: Force a file flush in libemulator to our temporary work folder
-	
+	// To-Do: Force a state write in libemulator to our temporary work folder
+	// To-Do: Compress in zip format
 	NSString *path = [absoluteURL path];
 	FILE *fp;
 	fp = fopen([path UTF8String], "wb");
@@ -109,6 +109,27 @@
 		fclose(fp);
 	printf("writeToURL: %s\n", [path UTF8String]);
 	return YES;
+}
+
+- (IBAction)saveDocumentAsTemplate:(id)sender
+{
+	NSSavePanel *panel = [[NSSavePanel alloc] init];
+	
+	[panel setRequiredFileType:@"emulation"];
+	
+	[panel beginSheetForDirectory:@"/Users/mressl/Library/"
+							 file:nil
+				   modalForWindow:[self windowForSheet]
+					modalDelegate:self
+				   didEndSelector:@selector(saveDocumentAsTemplateDidEnd:returnCode:contextInfo:)
+					  contextInfo:nil];
+}
+
+- (void)saveDocumentAsTemplateDidEnd:(NSSavePanel *)panel
+						  returnCode:(int)returnCode
+						 contextInfo:(void *)contextInfo
+{
+	// To-Do: Call [self writeToURL:URL ]
 }
 
 - (void)togglePower:(id)sender

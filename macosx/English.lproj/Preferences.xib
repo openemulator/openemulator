@@ -8,9 +8,10 @@
 		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="1865"/>
 			<integer value="28"/>
 			<integer value="23"/>
+			<integer value="1865"/>
+			<integer value="1932"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -67,7 +68,7 @@
 				<string key="NSWindowContentMaxSize">{3.40282e+38, 3.40282e+38}</string>
 				<string key="NSWindowContentMinSize">{600, 400}</string>
 				<object class="NSView" key="NSWindowView" id="618274563">
-					<nil key="NSNextResponder"/>
+					<reference key="NSNextResponder"/>
 					<int key="NSvFlags">274</int>
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -176,7 +177,7 @@
 							<object class="NSTextFieldCell" key="NSCell" id="739645600">
 								<int key="NSCellFlags">68288064</int>
 								<int key="NSCellFlags2">272630784</int>
-								<string key="NSContents">Choose a template for your new emulation:</string>
+								<string key="NSContents">Choose a template for new emulations:</string>
 								<object class="NSFont" key="NSSupport">
 									<string key="NSName">LucidaGrande-Bold</string>
 									<double key="NSSize">1.300000e+01</double>
@@ -302,6 +303,7 @@
 									</object>
 									<string key="NSFrameSize">{157, 298}</string>
 									<reference key="NSSuperview" ref="48357485"/>
+									<reference key="NSNextKeyView" ref="47001144"/>
 									<reference key="NSDocView" ref="47001144"/>
 									<reference key="NSBGColor" ref="112416572"/>
 									<int key="NScvFlags">2</int>
@@ -328,6 +330,7 @@
 							</object>
 							<string key="NSFrame">{{1, 61}, {157, 298}}</string>
 							<reference key="NSSuperview" ref="618274563"/>
+							<reference key="NSNextKeyView" ref="982894341"/>
 							<int key="NSsFlags">528</int>
 							<reference key="NSVScroller" ref="377977615"/>
 							<reference key="NSHScroller" ref="991920299"/>
@@ -358,6 +361,7 @@
 						</object>
 					</object>
 					<string key="NSFrameSize">{600, 400}</string>
+					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1440, 878}}</string>
 				<string key="NSMinSize">{600, 422}</string>
@@ -710,6 +714,10 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				<string key="NSExtension">NSResponder</string>
 			</object>
 			<object class="NSUserDefaultsController" id="356871564">
+				<object class="NSMutableArray" key="NSDeclaredKeys">
+					<bool key="EncodedWithXMLCoder">YES</bool>
+					<string>OEUseSoundDeviceInput</string>
+				</object>
 				<bool key="NSSharedInstance">YES</bool>
 			</object>
 		</object>
@@ -773,22 +781,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<int key="connectionID">1919</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: values.enableSoundDeviceInput</string>
-						<reference key="source" ref="857452095"/>
-						<reference key="destination" ref="356871564"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="857452095"/>
-							<reference key="NSDestination" ref="356871564"/>
-							<string key="NSLabel">value: values.enableSoundDeviceInput</string>
-							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">values.enableSoundDeviceInput</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">1927</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">fChooseTemplateButton</string>
 						<reference key="source" ref="511492310"/>
@@ -835,6 +827,22 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<reference key="destination" ref="882976568"/>
 					</object>
 					<int key="connectionID">1978</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: values.OEUseSoundDeviceInput</string>
+						<reference key="source" ref="857452095"/>
+						<reference key="destination" ref="356871564"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="857452095"/>
+							<reference key="NSDestination" ref="356871564"/>
+							<string key="NSLabel">value: values.OEUseSoundDeviceInput</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">values.OEUseSoundDeviceInput</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">1979</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -1021,6 +1029,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 							<reference ref="618274563"/>
 						</object>
 						<reference key="parent" ref="37013934"/>
+						<string key="objectName">Template Chooser</string>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">1932</int>
@@ -1293,7 +1302,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">1978</int>
+			<int key="maxID">1979</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">

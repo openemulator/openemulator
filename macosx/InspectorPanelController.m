@@ -51,7 +51,7 @@ NSString *itemIdentifiers[] =
 	[panel setFrameUsingName:@"InspectorPanel"];
 	[panel setFrameAutosaveName:@"InspectorPanel"];
 	
-	int tabTag = [fDefaults integerForKey:@"InspectorPanelView"];
+	int tabTag = [fDefaults integerForKey:@"OEInspectorPanelViewIndex"];
 	[fTabMatrix selectCellWithTag:tabTag];
 	[self setView:tabTag isInit:YES];
 
@@ -184,9 +184,9 @@ NSString *itemIdentifiers[] =
 	[[window contentView] addSubview:view];
     [view setHidden:NO];
     
-	[window setTitle:NSLocalizedString(itemIdentifiers[tabTag], "Inspector Panel view")];
+	[window setTitle:NSLocalizedString(itemIdentifiers[tabTag], "")];
 	
-    [fDefaults setInteger:tabTag forKey:@"InspectorPanelView"];
+    [fDefaults setInteger:tabTag forKey:@"OEInspectorPanelViewIndex"];
 	oldTabTag = tabTag;
 }
 

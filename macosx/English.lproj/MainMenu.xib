@@ -8,7 +8,7 @@
 		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="106"/>
+			<integer value="808"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -208,10 +208,9 @@
 								</object>
 								<object class="NSMenuItem" id="98643607">
 									<reference key="NSMenu" ref="720053764"/>
-									<bool key="NSIsAlternate">YES</bool>
 									<string key="NSTitle">New from Template Chooser...</string>
-									<string key="NSKeyEquiv">n</string>
-									<int key="NSKeyEquivModMask">1572864</int>
+									<string key="NSKeyEquiv">N</string>
+									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="1033313550"/>
 									<reference key="NSMixedImage" ref="310636482"/>
@@ -310,7 +309,7 @@
 								</object>
 								<object class="NSMenuItem" id="885339154">
 									<reference key="NSMenu" ref="720053764"/>
-									<string type="base64-UTF8" key="NSTitle">U2F2ZSBBcyBUZW1wbGF0ZeKApg</string>
+									<string type="base64-UTF8" key="NSTitle">U2F2ZSBhcyBUZW1wbGF0ZeKApg</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="1033313550"/>
@@ -1213,14 +1212,6 @@
 					<int key="connectionID">805</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">saveDocumentAsTemplate:</string>
-						<reference key="source" ref="1014"/>
-						<reference key="destination" ref="885339154"/>
-					</object>
-					<int key="connectionID">806</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">fInspectorPanelController</string>
 						<reference key="source" ref="670222506"/>
@@ -1267,6 +1258,22 @@
 						<reference key="destination" ref="169253820"/>
 					</object>
 					<int key="connectionID">819</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">saveDocumentAsTemplate:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="885339154"/>
+					</object>
+					<int key="connectionID">821</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">newDocumentFromTemplateChooser:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="98643607"/>
+					</object>
+					<int key="connectionID">822</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -2152,7 +2159,7 @@
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
-					<string>{{537, 681}, {146, 23}}</string>
+					<string>{{513, 610}, {146, 23}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<string>{{522, 812}, {146, 23}}</string>
@@ -2346,7 +2353,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">819</int>
+			<int key="maxID">822</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -2384,11 +2391,13 @@
 						<object class="NSMutableArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>resetEmulation:</string>
+							<string>saveDocumentAsTemplate:</string>
 							<string>togglePause:</string>
 							<string>togglePower:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -2402,6 +2411,10 @@
 				<object class="IBPartialClassDescription">
 					<string key="className">DocumentController</string>
 					<string key="superclassName">NSDocumentController</string>
+					<object class="NSMutableDictionary" key="actions">
+						<string key="NS.key.0">newDocumentFromTemplateChooser:</string>
+						<string key="NS.object.0">id</string>
+					</object>
 					<object class="NSMutableDictionary" key="outlets">
 						<string key="NS.key.0">fInspectorPanelController</string>
 						<string key="NS.object.0">InspectorPanelController</string>
@@ -2514,12 +2527,14 @@
 						<object class="NSMutableArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>chooseTemplate:</string>
+							<string>chooseTemplateSheet:</string>
 							<string>closeTemplateSheet:</string>
 							<string>selectTemplate:</string>
 							<string>selectView:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -2531,11 +2546,11 @@
 						<object class="NSMutableArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>fChooseTemplateButton</string>
-							<string>fChooseTemplateSheet</string>
+							<string>fDisableDefaultTemplate</string>
+							<string>fEnableDefaultTemplate</string>
 							<string>fGeneralView</string>
-							<string>fShowTemplateChooserCell</string>
 							<string>fSoundView</string>
-							<string>fUseTemplateCell</string>
+							<string>fTemplateChooserSheet</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
