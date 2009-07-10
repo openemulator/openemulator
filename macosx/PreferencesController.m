@@ -37,7 +37,7 @@
     [self setView:selectedItemIdentifier];
 	
 	userDefaults = [NSUserDefaults standardUserDefaults];
-	[self useDefaultTemplate:[userDefaults boolForKey:@"useDefaultTemplate"]];
+	[self useDefaultTemplate:[userDefaults boolForKey:@"OEUseDefaultTemplate"]];
 }
 
 - (NSToolbarItem *)toolbar:(NSToolbar *)toolbar
@@ -129,12 +129,12 @@
 {
 	NSString *useTemplateString = NSLocalizedString(@"Use template:", "Use template:");
 	useTemplateString = [useTemplateString stringByAppendingString:@" "];
-	NSString *defaultTemplateString = [userDefaults stringForKey:@"defaultTemplate"];
-	if (defaultTemplateString)
+	NSString *defaultTemplate = [userDefaults stringForKey:@"OEDefaultTemplate"];
+	if (defaultTemplate)
 	{
-		defaultTemplateString = [defaultTemplateString lastPathComponent];
-		defaultTemplateString = [defaultTemplateString stringByDeletingPathExtension];
-		useTemplateString = [useTemplateString stringByAppendingString:defaultTemplateString];
+		NSString *defaultTemplateName = [[defaultTemplate lastPathComponent]
+										 stringByDeletingPathExtension];
+		useTemplateString = [useTemplateString stringByAppendingString:defaultTemplateName];
 	}
 	[fEnableDefaultTemplate setTitle:useTemplateString];
 	
@@ -143,10 +143,10 @@
 	
 	[fChooseTemplateButton setEnabled:useDefaultTemplate];
 	
-	if (([userDefaults stringForKey:@"defaultTemplate"] == nil) && useDefaultTemplate)
+	if ((defaultTemplate == nil) && useDefaultTemplate)
 		[self chooseTemplate:self];
 	else
-		[userDefaults setBool:useDefaultTemplate forKey:@"useDefaultTemplate"];
+		[userDefaults setBool:useDefaultTemplate forKey:@"OEUseDefaultTemplate"];
 }
 
 - (IBAction)chooseTemplate:(id)sender
@@ -165,7 +165,7 @@
 
 - (IBAction)chooseTemplateSheet:(id)sender
 {
-	[userDefaults setObject:@"/Users/test/Apple II.emulation" forKey:@"defaultTemplate"];
+	[userDefaults setObject:@"/Users/test/Apple II.emulation" forKey:@"OEDefaultTemplate"];
 	
 	[NSApp endSheet:fTemplateChooserSheet];
 }
@@ -176,7 +176,7 @@
 { 
     [sheet orderOut:self];
 	
-	[self useDefaultTemplate:([userDefaults stringForKey:@"defaultTemplate"] != nil)];
+	[self useDefaultTemplate:([userDefaults stringForKey:@"OEDefaultTemplate"] != nil)];
 } 
 
 @end

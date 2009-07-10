@@ -98,7 +98,7 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 - (void)applicationWillFinishLaunching:(NSNotification *)notification
 {
 	printf("applicationWillFinishLaunching\n");
-	if ([fDefaults boolForKey:@"InspectorPanelIsVisible"])
+	if ([fDefaults boolForKey:@"OEShowInspectorPanel"])
 		[fInspectorPanelController toggleInspectorPanel:self];
 }
 
@@ -114,7 +114,7 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 	Pa_Terminate();
 	
 	window = [fInspectorPanelController window];
-	[fDefaults setInteger:[window isVisible] forKey:@"InspectorPanelIsVisible"];
+	[fDefaults setInteger:[window isVisible] forKey:@"OEShowInspectorPanel"];
 }
 
 - (BOOL)validateUserInterfaceItem:(id)item
@@ -129,7 +129,7 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 {
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	
-	BOOL useDefaultTemplate = [userDefaults boolForKey:@"useDefaultTemplate"];
+	BOOL useDefaultTemplate = [userDefaults boolForKey:@"OEUseDefaultTemplate"];
 	if (!useDefaultTemplate)
 	{
 		*outError = [NSError errorWithDomain:NSCocoaErrorDomain
@@ -149,7 +149,7 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 	}
 	else
 	{
-		NSString *defaultTemplate = [userDefaults stringForKey:@"defaultTemplate"];
+		NSString *defaultTemplate = [userDefaults stringForKey:@"OEDefaultTemplate"];
 		NSURL *url = [NSURL fileURLWithPath:defaultTemplate];
 		return [self openUntitledDocumentFromTemplateURL:url error:outError];
 	}
