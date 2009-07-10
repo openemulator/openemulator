@@ -1,18 +1,18 @@
 
 /**
  * OpenEmulator
- * Mac OS X New Document Window Controller
+ * Mac OS X Template Chooser Window Controller
  * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls the new document window.
+ * Controls the template chooser window.
  */
 
-#import "NewDocumentWindowController.h"
+#import "TemplateChooserWindowController.h"
 
-@implementation NewDocumentWindowController
+@implementation TemplateChooserWindowController
 
-- (id)init:(DocumentController*)theDocumentController
+- (id)init:(DocumentController *)theDocumentController
 {
 	self = [super initWithWindowNibName:@"NewDocument"];
 	if (self)
@@ -23,7 +23,7 @@
 	return self;
 }
 
-- (void)windowWillClose:(NSNotification*)notification
+- (void)windowWillClose:(NSNotification *)notification
 {
 	[documentController noteNewDocumentWindowClosed]; 
 }

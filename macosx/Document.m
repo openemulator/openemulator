@@ -23,7 +23,9 @@
 		pasteboardTypes = [NSArray arrayWithObjects:NSStringPboardType, nil];
 		[pasteboardTypes retain];
 		
-		// To-Do: Create the temporary work folder
+		// To-Do: Create a temporary work folder
+		
+		computerType = @"Apple II";
 	}
 	
 	return self;
@@ -44,7 +46,7 @@
 	[pasteboardTypes release];
 	[pasteboard release];
 	
-	// To-Do: Remove the temporary work folder
+	// To-Do: Remove temporary work folder
 	
 	[super dealloc];
 }
@@ -98,7 +100,7 @@
 			ofType:(NSString *)typeName
 			 error:(NSError **)outError
 {
-	// To-Do: Force a file flush in libemulator
+	// To-Do: Force a file flush in libemulator to our temporary work folder
 	
 	NSString *path = [absoluteURL path];
 	FILE *fp;
@@ -111,15 +113,18 @@
 
 - (void)togglePower:(id)sender
 {
+	// To-Do: libemulation
 }
 
 - (void)resetEmulation:(id)sender
 {
+	// To-Do: libemulation
 	[self updateChangeCount:NSChangeDone];
 }
 
 - (void)togglePause:(id)sender
 {
+	// To-Do: libemulation
 }
 
 - (NSString *)getDocumentText
@@ -145,7 +150,7 @@
 		NSMutableString *mutableText = [NSMutableString 
 										stringWithString:text];
 		
-		// To-Do: Convert newlines in Apple II part
+		// To-Do: Convert newlines in libemulator
 		[mutableText replaceOccurrencesOfString:@"\n"
 									 withString:@"\r"
 										options:NSLiteralSearch

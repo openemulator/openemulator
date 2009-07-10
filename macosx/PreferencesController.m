@@ -9,6 +9,7 @@
  */
 
 #import "PreferencesController.h"
+#import "NewDocumentWindowController.h"
 
 @implementation PreferencesController
 
@@ -36,7 +37,19 @@
 	
     [self setView:selectedItemIdentifier];
 	
-	[fUseTemplate setTitle:NSLocalizedString(@"Use template: Apple II", "Use template:")];
+	userDefaults = [NSUserDefaults standardUserDefaults];
+	
+	BOOL useDefaultTemplate = [userDefaults boolForKey:@"useDefaultTemplate"];
+	[fShowTemplateChooserCell setIntValue:!useDefaultTemplate];
+	[fUseTemplateCell setIntValue:useDefaultTemplate];
+	[fChooseTemplateButton setEnabled:useDefaultTemplate];
+	
+	NSString *defaultTemplate = [userDefaults stringForKey:@"defaultTemplate"];
+	if (defaultTemplate != nil)
+	{
+		NSString *fUseTemplateTitle = NSLocalizedString(@"Use template:", "Use template:");
+		[fUseTemplateCell setTitle:[fUseTemplateTitle stringByAppendingString:defaultTemplate]];
+	}
 }
 
 - (NSToolbarItem *)toolbar:(NSToolbar *)toolbar
@@ -119,9 +132,43 @@
 	[window setTitle:NSLocalizedString(itemIdentifier, "Preferences view")];
 }
 
+- (void)selectTemplate:(id)sender
+{
+	[self useDefaultTemplate:[[sender selectedCell] tag]];
+}
+
+- (void)useDefaultTemplate:(BOOL)useDefaultTemplate
+{
+	[fChooseTemplateButton setEnabled:useDefaultTemplate];
+	if (([userDefaults stringForKey:@"defaultTemplate"] == nil) && useDefaultTemplate)
+		[self chooseTemplate:self];
+	else
+		[userDefaults setBool:useDefaultTemplate forKey:@"useDefaultTemplate"];
+}
+
 - (void)chooseTemplate:(id)sender
 {
+	NewDocumentWindowController *newDocumentWindowController;
+	newDocumentWindowController = [[NewDocumentWindowController alloc] init:self];
 	
+	[NSApp beginSheet:[newDocumentWindowController window]
+	   modalForWindow:[self window]
+		modalDelegate:self
+	   didEndSelector:@selector(didEndSheet:returnCode:contextInfo:)
+		  contextInfo:nil];
+}
+
+- (void)didEndSheet:(NSWindow *)sheet
+		 returnCode:(int)returnCode
+		contextInfo:(void *)contextInfo
+{ 
+    [sheet orderOut:self];
+	[self useDefaultTemplate:NO];
+} 
+
+- (void)closeTemplateSheet:(id)sender
+{
+	[NSApp endSheet:fChooseTemplateSheet];
 }
 
 @end

@@ -11,14 +11,22 @@
 #import <Cocoa/Cocoa.h>
 
 @interface PreferencesController : NSWindowController {
+	NSUserDefaults *userDefaults;
+	
 	IBOutlet id fGeneralView;
 	IBOutlet id fSoundView;
 	
-	IBOutlet id fUseTemplate;
+	IBOutlet id fShowTemplateChooserCell;
+	IBOutlet id fUseTemplateCell;
+	IBOutlet id fChooseTemplateButton;
+	
+	IBOutlet id fChooseTemplateSheet;
 }
 
 - (void)selectView:(id)sender;
 - (void)setView:(NSString *)itemIdentifier;
+- (void)selectTemplate:(id)sender;
 - (void)chooseTemplate:(id)sender;
+- (IBAction)closeTemplateSheet:(id)sender;
 
 @end

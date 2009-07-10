@@ -13,7 +13,12 @@
 @interface Document : NSDocument {
 	NSPasteboard *pasteboard;
 	NSArray *pasteboardTypes;
+	
+	NSString *computerType;
 }
+
+- (NSString *)computerType;
+- (void)setComputerType:(NSString *)computerType;
 
 - (id)initWithTemplateURL:(NSURL *)templateURL error:(NSError **)outError;
 

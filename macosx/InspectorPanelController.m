@@ -13,7 +13,7 @@
 
 NSString *itemIdentifiers[] = 
 {
-	@"Emulation",
+	@"Computer",
 	@"Expansions",
 	@"Disk Drives",
 	@"Printers and Modems",
@@ -38,7 +38,7 @@ NSString *itemIdentifiers[] =
 		
 		oldTabTag = -1;
     }
-
+	
     return self;
 }
 

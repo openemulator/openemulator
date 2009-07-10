@@ -8,9 +8,9 @@
 		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
+			<integer value="23"/>
 			<integer value="1865"/>
 			<integer value="28"/>
-			<integer value="23"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -169,7 +169,7 @@
 							<object class="NSButtonCell" id="882976568">
 								<int key="NSCellFlags">67239424</int>
 								<int key="NSCellFlags2">0</int>
-								<string key="NSContents">Use template: templateName</string>
+								<string key="NSContents">Use template:</string>
 								<reference key="NSSupport" ref="86725571"/>
 								<int key="NSTag">1</int>
 								<reference key="NSControlView" ref="11741413"/>
@@ -466,44 +466,12 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<int key="connectionID">1760</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">selectedIndex: values.OEDefaultTemplateChooser</string>
-						<reference key="source" ref="11741413"/>
-						<reference key="destination" ref="356871564"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="11741413"/>
-							<reference key="NSDestination" ref="356871564"/>
-							<string key="NSLabel">selectedIndex: values.OEDefaultTemplateChooser</string>
-							<string key="NSBinding">selectedIndex</string>
-							<string key="NSKeyPath">values.OEDefaultTemplateChooser</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">1862</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">fSoundView</string>
 						<reference key="source" ref="511492310"/>
 						<reference key="destination" ref="32698542"/>
 					</object>
 					<int key="connectionID">1881</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: values.fullDuplexSound</string>
-						<reference key="source" ref="857452095"/>
-						<reference key="destination" ref="356871564"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="857452095"/>
-							<reference key="NSDestination" ref="356871564"/>
-							<string key="NSLabel">value: values.fullDuplexSound</string>
-							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">values.fullDuplexSound</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">1883</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
@@ -514,64 +482,52 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<int key="connectionID">1884</int>
 				</object>
 				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">selectTemplate:</string>
+						<reference key="source" ref="511492310"/>
+						<reference key="destination" ref="11741413"/>
+					</object>
+					<int key="connectionID">1919</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: values.enableSoundDeviceInput</string>
+						<reference key="source" ref="857452095"/>
+						<reference key="destination" ref="356871564"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="857452095"/>
+							<reference key="NSDestination" ref="356871564"/>
+							<string key="NSLabel">value: values.enableSoundDeviceInput</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">values.enableSoundDeviceInput</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">1927</int>
+				</object>
+				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
-						<string key="label">fUseTemplate</string>
+						<string key="label">fChooseTemplateButton</string>
+						<reference key="source" ref="511492310"/>
+						<reference key="destination" ref="995131843"/>
+					</object>
+					<int key="connectionID">1928</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">fShowTemplateChooserCell</string>
+						<reference key="source" ref="511492310"/>
+						<reference key="destination" ref="272061744"/>
+					</object>
+					<int key="connectionID">1929</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">fUseTemplateCell</string>
 						<reference key="source" ref="511492310"/>
 						<reference key="destination" ref="882976568"/>
 					</object>
-					<int key="connectionID">1897</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: values.useTemplateForNewDocuments</string>
-						<reference key="source" ref="882976568"/>
-						<reference key="destination" ref="356871564"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="882976568"/>
-							<reference key="NSDestination" ref="356871564"/>
-							<string key="NSLabel">value: values.useTemplateForNewDocuments</string>
-							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">values.useTemplateForNewDocuments</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">1901</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: values.useTemplateForNewDocuments</string>
-						<reference key="source" ref="272061744"/>
-						<reference key="destination" ref="356871564"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="272061744"/>
-							<reference key="NSDestination" ref="356871564"/>
-							<string key="NSLabel">value: values.useTemplateForNewDocuments</string>
-							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">values.useTemplateForNewDocuments</string>
-							<object class="NSDictionary" key="NSOptions">
-								<string key="NS.key.0">NSValueTransformerName</string>
-								<string key="NS.object.0">NSNegateBoolean</string>
-							</object>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">1903</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">enabled: values.useTemplateForNewDocuments</string>
-						<reference key="source" ref="995131843"/>
-						<reference key="destination" ref="356871564"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="995131843"/>
-							<reference key="NSDestination" ref="356871564"/>
-							<string key="NSLabel">enabled: values.useTemplateForNewDocuments</string>
-							<string key="NSBinding">enabled</string>
-							<string key="NSKeyPath">values.useTemplateForNewDocuments</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">1904</int>
+					<int key="connectionID">1930</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -816,7 +772,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{268, 281}, {512, 91}}</string>
+					<string>{{270, 208}, {512, 91}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<real value="1.000000e+00"/>
 					<string>{{0, 701}, {539, 272}}</string>
@@ -831,7 +787,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<string>{1, -21}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="761722050"/>
-					<string>{{160, 418}, {512, 188}}</string>
+					<string>{{293, 404}, {512, 188}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="761722050"/>
 					<string>{{0, 701}, {539, 272}}</string>
@@ -863,7 +819,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">1904</int>
+			<int key="maxID">1930</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -907,10 +863,14 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<object class="NSMutableArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>chooseTemplate:</string>
+							<string>closeTemplateSheet:</string>
+							<string>selectTemplate:</string>
 							<string>selectView:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 						</object>
@@ -919,12 +879,18 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSMutableArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>fChooseTemplateButton</string>
+							<string>fChooseTemplateSheet</string>
 							<string>fGeneralView</string>
+							<string>fShowTemplateChooserCell</string>
 							<string>fSoundView</string>
-							<string>fUseTemplate</string>
+							<string>fUseTemplateCell</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
