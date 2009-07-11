@@ -11,8 +11,9 @@
 		004C272C0FEB55BE004AE5EA /* libportaudio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 004C272B0FEB55BE004AE5EA /* libportaudio.a */; };
 		005486CA0FDC84E500DBCFA8 /* Sparkle.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 001F56F80FD1E8E500EA246A /* Sparkle.framework */; };
 		005C7BBC0FD8ED6F00426DD0 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 005C7BBB0FD8ED6F00426DD0 /* Carbon.framework */; };
+		00679D08100817F700B38748 /* DeviceChooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00679D04100817F600B38748 /* DeviceChooser.xib */; };
+		00679D09100817F700B38748 /* TemplateChooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00679D06100817F700B38748 /* TemplateChooser.xib */; };
 		006EECAE0FCA5C7B003D2C8D /* Component.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 006EECAD0FCA5C7B003D2C8D /* Component.cpp */; };
-		006F08C71006F64B00CE75DD /* TemplateChooserWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 006F08C41006F64B00CE75DD /* TemplateChooserWindow.xib */; };
 		006F08CA1006F65A00CE75DD /* TemplateChooserWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 006F08C91006F65A00CE75DD /* TemplateChooserWindowController.m */; };
 		0075B1B20FE79F7E009C1DFA /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0075B1B10FE79F7E009C1DFA /* OpenGL.framework */; };
 		00B3347D0FE41EF60042661D /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B3347C0FE41EF60042661D /* AudioToolbox.framework */; };
@@ -160,11 +161,12 @@
 		005928540FFC94E200F24A57 /* templates */ = {isa = PBXFileReference; lastKnownFileType = folder; path = templates; sourceTree = "<group>"; };
 		005928850FFC94EB00F24A57 /* dml */ = {isa = PBXFileReference; lastKnownFileType = folder; path = dml; sourceTree = "<group>"; };
 		005C7BBB0FD8ED6F00426DD0 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
+		00679D05100817F700B38748 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/DeviceChooser.xib; sourceTree = "<group>"; };
+		00679D07100817F700B38748 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/TemplateChooser.xib; sourceTree = "<group>"; };
 		006EECA40FCA5C31003D2C8D /* libemulator.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libemulator.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		006EECAC0FCA5C7B003D2C8D /* Component.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Component.h; path = libemulator/Component.h; sourceTree = "<group>"; };
 		006EECAD0FCA5C7B003D2C8D /* Component.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Component.cpp; path = libemulator/Component.cpp; sourceTree = "<group>"; };
 		006EEE8F0FCA781C003D2C8D /* DiskImage.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = DiskImage.icns; sourceTree = "<group>"; };
-		006F08C51006F64B00CE75DD /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/TemplateChooserWindow.xib; sourceTree = "<group>"; };
 		006F08C81006F65A00CE75DD /* TemplateChooserWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TemplateChooserWindowController.h; sourceTree = "<group>"; };
 		006F08C91006F65A00CE75DD /* TemplateChooserWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TemplateChooserWindowController.m; sourceTree = "<group>"; };
 		0075B1B10FE79F7E009C1DFA /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
@@ -433,7 +435,8 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				006F08C41006F64B00CE75DD /* TemplateChooserWindow.xib */,
+				00679D04100817F600B38748 /* DeviceChooser.xib */,
+				00679D06100817F700B38748 /* TemplateChooser.xib */,
 				00D844B50FFF0505005802F0 /* Document.xib */,
 				00D844B70FFF0505005802F0 /* GraphicsTablet.xib */,
 				00D844B90FFF0505005802F0 /* InfoPlist.strings */,
@@ -582,7 +585,8 @@
 				00D844CB0FFF0505005802F0 /* PaperFeed.xib in Resources */,
 				00D844CC0FFF0505005802F0 /* Preferences.xib in Resources */,
 				00D846290FFF23B7005802F0 /* PRSound.png in Resources */,
-				006F08C71006F64B00CE75DD /* TemplateChooserWindow.xib in Resources */,
+				00679D08100817F700B38748 /* DeviceChooser.xib in Resources */,
+				00679D09100817F700B38748 /* TemplateChooser.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -627,12 +631,20 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		006F08C41006F64B00CE75DD /* TemplateChooserWindow.xib */ = {
+		00679D04100817F600B38748 /* DeviceChooser.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				006F08C51006F64B00CE75DD /* English */,
+				00679D05100817F700B38748 /* English */,
 			);
-			name = TemplateChooserWindow.xib;
+			name = DeviceChooser.xib;
+			sourceTree = "<group>";
+		};
+		00679D06100817F700B38748 /* TemplateChooser.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				00679D07100817F700B38748 /* English */,
+			);
+			name = TemplateChooser.xib;
 			sourceTree = "<group>";
 		};
 		00D844B50FFF0505005802F0 /* Document.xib */ = {

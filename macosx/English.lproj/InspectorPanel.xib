@@ -8,12 +8,12 @@
 		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="746"/>
-			<integer value="791"/>
-			<integer value="179"/>
-			<integer value="184"/>
 			<integer value="186"/>
-			<integer value="165"/>
+			<integer value="746"/>
+			<integer value="184"/>
+			<integer value="163"/>
+			<integer value="179"/>
+			<integer value="679"/>
 			<integer value="185"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
@@ -317,13 +317,13 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 												<string>WebURLsWithTitlesPboardType</string>
 											</object>
 										</object>
-										<string key="NSFrameSize">{153, 42}</string>
+										<string key="NSFrameSize">{153, 14}</string>
 										<reference key="NSSuperview" ref="815653606"/>
 										<object class="NSTextContainer" key="NSTextContainer" id="334551837">
 											<object class="NSLayoutManager" key="NSLayoutManager">
 												<object class="NSTextStorage" key="NSTextStorage">
 													<object class="NSMutableString" key="NSString">
-														<characters key="NS.bytes">This is a nice computer that does not work however.</characters>
+														<characters key="NS.bytes">Sample</characters>
 													</object>
 													<object class="NSDictionary" key="NSAttributes">
 														<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1926,6 +1926,7 @@ ARcABAAAAAEAAAACARwAAwAAAAEAAQAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 					<string>inspectedDocument.date</string>
 					<string>inspectedDocument.dateModified</string>
 					<string>inspectedDocument.runTime</string>
+					<string>power</string>
 				</object>
 				<bool key="NSEditable">YES</bool>
 				<object class="_NSManagedProxy" key="_NSManagedProxy"/>
@@ -2075,22 +2076,6 @@ ARcABAAAAAEAAAACARwAAwAAAAEAAQAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">data: selection.inspectedDocument.image</string>
-						<reference key="source" ref="382462649"/>
-						<reference key="destination" ref="834901026"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="382462649"/>
-							<reference key="NSDestination" ref="834901026"/>
-							<string key="NSLabel">data: selection.inspectedDocument.image</string>
-							<string key="NSBinding">data</string>
-							<string key="NSKeyPath">selection.inspectedDocument.image</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">920</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
 						<string key="label">value: selection.inspectedDocument.description</string>
 						<reference key="source" ref="287643088"/>
 						<reference key="destination" ref="834901026"/>
@@ -2120,22 +2105,6 @@ ARcABAAAAAEAAAACARwAAwAAAAEAAQAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 						</object>
 					</object>
 					<int key="connectionID">924</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: selection.inspectedDocument.runTime</string>
-						<reference key="source" ref="90259210"/>
-						<reference key="destination" ref="834901026"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="90259210"/>
-							<reference key="NSDestination" ref="834901026"/>
-							<string key="NSLabel">value: selection.inspectedDocument.runTime</string>
-							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">selection.inspectedDocument.runTime</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">925</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
@@ -3558,7 +3527,7 @@ ARcABAAAAAEAAAACARwAAwAAAAEAAQAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">928</int>
+			<int key="maxID">940</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">

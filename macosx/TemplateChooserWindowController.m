@@ -14,7 +14,7 @@
 
 - (id)init:(DocumentController *)theDocumentController
 {
-	self = [super initWithWindowNibName:@"TemplateChooserWindow"];
+	self = [super initWithWindowNibName:@"TemplateChooser"];
 	if (self)
 	{
 		documentController = theDocumentController;

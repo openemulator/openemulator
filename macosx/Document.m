@@ -26,6 +26,7 @@
 		// To-Do: Create a temporary work folder
 		
 		computerType = @"Apple II";
+		power = YES;
 	}
 	
 	return self;
@@ -134,6 +135,7 @@
 
 - (void)togglePower:(id)sender
 {
+	[self setPower:![self power]];
 	// To-Do: libemulation
 }
 
@@ -187,6 +189,24 @@
 	NSTextView *dummy = [[NSTextView alloc] init];
 	[dummy insertText:[self getDocumentText]];
 	[dummy startSpeaking:self];
+}
+
+- (void)setNilValueForKey:(NSString *)theKey 
+{ 
+    if ([theKey isEqualToString:@"power"]) { 
+        [self setValue:[NSNumber numberWithBool:YES] forKey:@"power"]; 
+    } else 
+        [super setNilValueForKey:theKey]; 
+} 
+
+- (BOOL)power
+{
+	return power;
+}
+
+- (void)setPower:(BOOL)thePower
+{
+	power = thePower;
 }
 
 @end

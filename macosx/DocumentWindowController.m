@@ -214,34 +214,32 @@
 	NSScreen *screen = [window screen];
 	NSRect screenFrame = [screen visibleFrame];
 	
-	float deltaWidth = NSWidth(windowFrame) - NSWidth(contentFrame);
-	float deltaHeight = NSHeight(windowFrame) - NSHeight(contentFrame);
-	float scale = [window userSpaceScaleFactor];
+	double scale = [window userSpaceScaleFactor];
+	contentFrame.size.width *= scale;
+	contentFrame.size.height *= scale;
+	double deltaWidth = NSWidth(windowFrame) - NSWidth(contentFrame);
+	double deltaHeight = NSHeight(windowFrame) - NSHeight(contentFrame);
 	
 	windowFrame.origin.x += NSWidth(windowFrame) / 2;
 	windowFrame.origin.y += NSHeight(windowFrame);
-	windowFrame.size.width = scale * (proportion * DEFAULT_FRAME_WIDTH + deltaWidth);
-	windowFrame.size.height = scale * (proportion * DEFAULT_FRAME_HEIGHT + deltaHeight);
+	windowFrame.size.width = scale * proportion * DEFAULT_FRAME_WIDTH + deltaWidth;
+	windowFrame.size.height = scale * proportion * DEFAULT_FRAME_HEIGHT + deltaHeight;
 	windowFrame.origin.x -= NSWidth(windowFrame) / 2;
 	windowFrame.origin.y -= NSHeight(windowFrame);
 	
-	float maxX = NSMaxX(screenFrame) - NSWidth(windowFrame);
-	float maxY = NSMaxY(screenFrame) - NSHeight(windowFrame);
-	float minX = NSMinX(screenFrame);
-	float minY = NSMinY(screenFrame);
+	if (NSMaxX(windowFrame) > NSMaxX(screenFrame))
+		windowFrame.origin.x = NSMaxX(screenFrame) - NSWidth(windowFrame);
+	if (NSMaxY(windowFrame) > NSMaxY(screenFrame))
+		windowFrame.origin.y = NSMaxY(screenFrame) - NSHeight(windowFrame);
+	if (NSMinX(windowFrame) < NSMinX(screenFrame))
+		windowFrame.origin.x = NSMinX(screenFrame);
+	if (NSMinY(windowFrame) < NSMinY(screenFrame))
+		windowFrame.origin.y = NSMinY(screenFrame);
 	
-	if (windowFrame.origin.x > maxX)
-		windowFrame.origin.x = maxX;
-	if (windowFrame.origin.y > maxY)
-		windowFrame.origin.y = maxY;
-	if (windowFrame.origin.x < minX)
-		windowFrame.origin.x = minX;
-	if (windowFrame.origin.y < minY)
-		windowFrame.origin.y = minY;
-	if (windowFrame.size.width > screenFrame.size.width)
-		windowFrame.size.width = screenFrame.size.width;
-	if (windowFrame.size.height > screenFrame.size.height)
-		windowFrame.size.height = screenFrame.size.height;
+	if (NSWidth(windowFrame) > NSWidth(screenFrame))
+		windowFrame.size.width = NSWidth(screenFrame);
+	if (NSHeight(windowFrame) > NSHeight(screenFrame))
+		windowFrame.size.height = NSHeight(screenFrame);
 	
 	[window setFrame:windowFrame display:YES animate:YES];
 }
@@ -275,8 +273,6 @@
 	{
 		[[NSDocumentController sharedDocumentController] disableMenuBar];
 		
-		NSRect screenFrame = [[window screen] frame];
-		
         DisableScreenUpdates();
 		fullscreenWindow = [[DocumentWindow alloc] initWithContentRect:contentFrame
 															 styleMask:NSBorderlessWindowMask
@@ -289,7 +285,9 @@
 		[fullscreenWindow makeKeyAndOrderFront:self];
         EnableScreenUpdates();
 		
-		[fullscreenWindow setFrame:screenFrame display:YES animate:YES];
+		[fullscreenWindow setFrame:[[window screen] frame]
+						   display:YES
+						   animate:YES];
 		
 		[[NSApplication sharedApplication] addWindowsItem:fullscreenWindow
 													title:[window title]
@@ -302,7 +300,7 @@
 		float scale = [window userSpaceScaleFactor];
 		contentFrame.size.width *= scale;
 		contentFrame.size.height *= scale;
-
+		
 		[[NSApplication sharedApplication] removeWindowsItem:fullscreenWindow];
 		
 		[fullscreenWindow setFrame:contentFrame display:YES animate:YES];
@@ -319,35 +317,6 @@
 		
 		isFullscreen = NO;
 	}
-	
-	/*
-	 CGDisplayFadeReservationToken tok;
-	 
-	 CGAcquireDisplayFadeReservation(25, &tok);
-	 CGDisplayFade(tok, 0.5, kCGDisplayBlendNormal, kCGDisplayBlendSolidColor, 0, 0, 0, TRUE);
-	 
-	 CGDisplayFade(tok, 0.5, kCGDisplayBlendSolidColor, kCGDisplayBlendNormal, 0, 0, 0, TRUE);
-	 CGReleaseDisplayFadeReservation(tok);
-	 */
-}
-
-- (void)canCloseDocumentWithDelegate:(id)delegate
-				 shouldCloseSelector:(SEL)shouldCloseSelector
-						 contextInfo:(void*)contextInfo
-{
-	printf("DWC:canCloseDocumentWithDelegate\n");
-}
-
-- (BOOL)windowShouldClose:(id)window
-{
-	printf("DWC:windowShouldClose\n");
-	return YES;
-}
-
-- (void)close
-{
-	printf("DWC:close");
-	[super close];
 }
 
 @end

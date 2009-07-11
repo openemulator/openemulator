@@ -15,6 +15,7 @@
 	NSArray *pasteboardTypes;
 	
 	NSString *computerType;
+	BOOL power;
 }
 
 - (id)initWithTemplateURL:(NSURL *)templateURL error:(NSError **)outError;
@@ -27,5 +28,8 @@
 - (void)togglePower:(id)sender;
 - (void)resetEmulation:(id)sender;
 - (void)togglePause:(id)sender;
+
+- (BOOL)power;
+- (void)setPower:(BOOL)thePower;
 
 @end

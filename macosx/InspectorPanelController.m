@@ -45,7 +45,7 @@ NSString *itemIdentifiers[] =
 - (void)windowDidLoad
 {
     [super windowDidLoad];
-
+	
 	NSPanel *panel = (NSPanel *)[self window];
 	[panel setBecomesKeyOnlyIfNeeded:YES];
 	[panel setFrameUsingName:@"InspectorPanel"];
@@ -54,7 +54,7 @@ NSString *itemIdentifiers[] =
 	int tabTag = [fDefaults integerForKey:@"OEInspectorPanelViewIndex"];
 	[fTabMatrix selectCellWithTag:tabTag];
 	[self setView:tabTag isInit:YES];
-
+	
 	/*    [self activeDocumentChanged];
 	 [NSApp addObserver:self
 	 forKeyPath:@"mainWindow.windowController.document"
