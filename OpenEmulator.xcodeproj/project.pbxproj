@@ -79,6 +79,12 @@
 		00D845850FFF0FD2005802F0 /* PaperFeedController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D845780FFF0FD2005802F0 /* PaperFeedController.m */; };
 		00D845860FFF0FD2005802F0 /* PreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D8457A0FFF0FD2005802F0 /* PreferencesController.m */; };
 		00D846290FFF23B7005802F0 /* PRSound.png in Resources */ = {isa = PBXBuildFile; fileRef = 00D846280FFF23B7005802F0 /* PRSound.png */; };
+		00FFD1F110092DDF00F347CB /* IPLockedHover.png in Resources */ = {isa = PBXBuildFile; fileRef = 00FFD1EB10092DDF00F347CB /* IPLockedHover.png */; };
+		00FFD1F210092DE000F347CB /* IPLockedOff.png in Resources */ = {isa = PBXBuildFile; fileRef = 00FFD1EC10092DDF00F347CB /* IPLockedOff.png */; };
+		00FFD1F310092DE000F347CB /* IPLockedOn.png in Resources */ = {isa = PBXBuildFile; fileRef = 00FFD1ED10092DDF00F347CB /* IPLockedOn.png */; };
+		00FFD1F410092DE000F347CB /* IPUnlockedHover.png in Resources */ = {isa = PBXBuildFile; fileRef = 00FFD1EE10092DDF00F347CB /* IPUnlockedHover.png */; };
+		00FFD1F510092DE000F347CB /* IPUnlockedOff.png in Resources */ = {isa = PBXBuildFile; fileRef = 00FFD1EF10092DDF00F347CB /* IPUnlockedOff.png */; };
+		00FFD1F610092DE000F347CB /* IPUnlockedOn.png in Resources */ = {isa = PBXBuildFile; fileRef = 00FFD1F010092DDF00F347CB /* IPUnlockedOn.png */; };
 		8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
 
@@ -229,6 +235,12 @@
 		00F00A040FD5838D00C506AD /* IPPortsSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPPortsSel.png; sourceTree = "<group>"; };
 		00F00A050FD5838D00C506AD /* IPVideo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPVideo.png; sourceTree = "<group>"; };
 		00F00A060FD5838D00C506AD /* IPVideoSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPVideoSel.png; sourceTree = "<group>"; };
+		00FFD1EB10092DDF00F347CB /* IPLockedHover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPLockedHover.png; sourceTree = "<group>"; };
+		00FFD1EC10092DDF00F347CB /* IPLockedOff.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPLockedOff.png; sourceTree = "<group>"; };
+		00FFD1ED10092DDF00F347CB /* IPLockedOn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPLockedOn.png; sourceTree = "<group>"; };
+		00FFD1EE10092DDF00F347CB /* IPUnlockedHover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPUnlockedHover.png; sourceTree = "<group>"; };
+		00FFD1EF10092DDF00F347CB /* IPUnlockedOff.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPUnlockedOff.png; sourceTree = "<group>"; };
+		00FFD1F010092DDF00F347CB /* IPUnlockedOn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPUnlockedOn.png; sourceTree = "<group>"; };
 		1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		8D15AC370486D014006FF6A4 /* OpenEmulator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenEmulator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -273,6 +285,12 @@
 		000A79070FBA49C500A0F12E /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				00FFD1EB10092DDF00F347CB /* IPLockedHover.png */,
+				00FFD1EC10092DDF00F347CB /* IPLockedOff.png */,
+				00FFD1ED10092DDF00F347CB /* IPLockedOn.png */,
+				00FFD1EE10092DDF00F347CB /* IPUnlockedHover.png */,
+				00FFD1EF10092DDF00F347CB /* IPUnlockedOff.png */,
+				00FFD1F010092DDF00F347CB /* IPUnlockedOn.png */,
 				00D846280FFF23B7005802F0 /* PRSound.png */,
 				000F66360FF8368F00C8AF23 /* AppleGraphicsTablet.png */,
 				000F66370FF8368F00C8AF23 /* DiskImage.icns */,
@@ -587,6 +605,12 @@
 				00D846290FFF23B7005802F0 /* PRSound.png in Resources */,
 				00679D08100817F700B38748 /* DeviceChooser.xib in Resources */,
 				00679D09100817F700B38748 /* TemplateChooser.xib in Resources */,
+				00FFD1F110092DDF00F347CB /* IPLockedHover.png in Resources */,
+				00FFD1F210092DE000F347CB /* IPLockedOff.png in Resources */,
+				00FFD1F310092DE000F347CB /* IPLockedOn.png in Resources */,
+				00FFD1F410092DE000F347CB /* IPUnlockedHover.png in Resources */,
+				00FFD1F510092DE000F347CB /* IPUnlockedOff.png in Resources */,
+				00FFD1F610092DE000F347CB /* IPUnlockedOn.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
