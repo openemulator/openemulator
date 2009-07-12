@@ -25,9 +25,7 @@
 		00D8448B0FFF04C0005802F0 /* DiskImage.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000F66370FF8368F00C8AF23 /* DiskImage.icns */; };
 		00D8448C0FFF04C0005802F0 /* DiskImage35.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000F66380FF8368F00C8AF23 /* DiskImage35.icns */; };
 		00D8448D0FFF04C0005802F0 /* DiskImage525.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000F66390FF8368F00C8AF23 /* DiskImage525.icns */; };
-		00D8448E0FFF04C0005802F0 /* dml in Resources */ = {isa = PBXBuildFile; fileRef = 005928850FFC94EB00F24A57 /* dml */; };
 		00D8448F0FFF04C0005802F0 /* Emulation.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000F663A0FF8368F00C8AF23 /* Emulation.icns */; };
-		00D844900FFF04C0005802F0 /* img in Resources */ = {isa = PBXBuildFile; fileRef = 005928450FFC94D200F24A57 /* img */; };
 		00D844920FFF04C0005802F0 /* IPAudio.png in Resources */ = {isa = PBXBuildFile; fileRef = 000F663B0FF8368F00C8AF23 /* IPAudio.png */; };
 		00D844930FFF04C0005802F0 /* IPAudioSel.png in Resources */ = {isa = PBXBuildFile; fileRef = 000F663C0FF8368F00C8AF23 /* IPAudioSel.png */; };
 		00D844940FFF04C0005802F0 /* IPAudioSoundMax.png in Resources */ = {isa = PBXBuildFile; fileRef = 000F663D0FF8368F00C8AF23 /* IPAudioSoundMax.png */; };
@@ -163,9 +161,7 @@
 		004C272B0FEB55BE004AE5EA /* libportaudio.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libportaudio.a; path = macosx/portaudio/lib/libportaudio.a; sourceTree = "<group>"; };
 		0054868F0FDC817900DBCFA8 /* Emulation.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Emulation.icns; sourceTree = "<group>"; };
 		0054874B0FDC86AB00DBCFA8 /* rom */ = {isa = PBXFileReference; lastKnownFileType = folder; path = rom; sourceTree = "<group>"; };
-		005928450FFC94D200F24A57 /* img */ = {isa = PBXFileReference; lastKnownFileType = folder; path = img; sourceTree = "<group>"; };
 		005928540FFC94E200F24A57 /* templates */ = {isa = PBXFileReference; lastKnownFileType = folder; path = templates; sourceTree = "<group>"; };
-		005928850FFC94EB00F24A57 /* dml */ = {isa = PBXFileReference; lastKnownFileType = folder; path = dml; sourceTree = "<group>"; };
 		005C7BBB0FD8ED6F00426DD0 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		00679D05100817F700B38748 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/DeviceChooser.xib; sourceTree = "<group>"; };
 		00679D07100817F700B38748 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/TemplateChooser.xib; sourceTree = "<group>"; };
@@ -462,9 +458,7 @@
 				00D844BD0FFF0505005802F0 /* MainMenu.xib */,
 				00D844C10FFF0505005802F0 /* PaperFeed.xib */,
 				00D844C30FFF0505005802F0 /* Preferences.xib */,
-				005928850FFC94EB00F24A57 /* dml */,
 				005928540FFC94E200F24A57 /* templates */,
-				005928450FFC94D200F24A57 /* img */,
 				0054874B0FDC86AB00DBCFA8 /* rom */,
 				0008FCD80FBA5D72005E876E /* Info.plist */,
 				000A79520FBA4A8400A0F12E /* OpenEmulatorHelp */,
@@ -559,9 +553,7 @@
 				00D8448B0FFF04C0005802F0 /* DiskImage.icns in Resources */,
 				00D8448C0FFF04C0005802F0 /* DiskImage35.icns in Resources */,
 				00D8448D0FFF04C0005802F0 /* DiskImage525.icns in Resources */,
-				00D8448E0FFF04C0005802F0 /* dml in Resources */,
 				00D8448F0FFF04C0005802F0 /* Emulation.icns in Resources */,
-				00D844900FFF04C0005802F0 /* img in Resources */,
 				00D844920FFF04C0005802F0 /* IPAudio.png in Resources */,
 				00D844930FFF04C0005802F0 /* IPAudioSel.png in Resources */,
 				00D844940FFF04C0005802F0 /* IPAudioSoundMax.png in Resources */,
