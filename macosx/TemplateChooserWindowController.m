@@ -25,19 +25,19 @@
 
 - (id)init
 {
-	[self init:nil];
+	return [self init:nil];
 }
 
 - (void)windowWillClose:(NSNotification *)notification
 {
 	if (documentController)
-		[documentController noteNewDocumentWindowClosed]; 
+		[documentController noteTemplateChooserWindowClosed]; 
 }
 
 - (void)performChoose:(id)sender
 {
 	NSError *error;
-	NSString *url = [NSURL fileURLWithPath:@"/tmp/temp.emulation"];
+	NSURL *url = [NSURL fileURLWithPath:@"/tmp/temp.emulation"];
 	
 	[documentController openUntitledDocumentFromTemplateURL:url
 													  error:&error];

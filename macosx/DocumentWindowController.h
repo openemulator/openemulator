@@ -10,16 +10,17 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "DocumentWindow.h"
+#import "DocumentController.h"
 
 @interface DocumentWindowController : NSWindowController {
+	DocumentController *documentController;
+	
 	BOOL isFullscreen;
-	DocumentWindow *fullscreenWindow;
+	id fullscreenWindow;
 	NSView *fullscreenView;
 }
 
 - (void)saveDocumentAsTemplate:(id)sender;
-- (void)toggleInspectorPanel:(id)sender;
 - (void)setHalfSize:(id)sender;
 - (void)setActualSize:(id)sender;
 - (void)setDoubleSize:(id)sender;

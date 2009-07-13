@@ -29,13 +29,6 @@ NSString *itemIdentifiers[] =
 	
     if (self) {
         fDefaults = [NSUserDefaults standardUserDefaults];
-		
-		NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
-		[nc addObserver:self
-			   selector:@selector(toggleInspectorPanelNotification:)
-				   name:@"toggleInspectorPanelNotification"
-				 object:nil];
-		
 		oldTabTag = -1;
     }
 	
@@ -55,17 +48,11 @@ NSString *itemIdentifiers[] =
 	[fTabMatrix selectCellWithTag:tabTag];
 	[self setView:tabTag isInit:YES];
 	
-	/*    [self activeDocumentChanged];
-	 [NSApp addObserver:self
-	 forKeyPath:@"mainWindow.windowController.document"
-	 options:0
-	 context:[InspectorPanelController class]];
-*/
-}
-
-- (void)toggleInspectorPanelNotification:(NSNotification *)notification
-{
-	[self toggleInspectorPanel:[notification object]];
+	[self setInspectedDocument:nil];
+	[NSApp addObserver:self
+			forKeyPath:@"mainWindow.windowController.document"
+			   options:0
+			   context:[InspectorPanelController class]];
 }
 
 - (void)toggleInspectorPanel:(id)sender
@@ -81,8 +68,7 @@ NSString *itemIdentifiers[] =
 {
     if ([item action] == @selector(toggleInspectorPanel:))
 	{  
-		NSString *menuTitle = nil;
-
+		NSString *menuTitle;
 		if (![[self window] isVisible])
 			menuTitle = NSLocalizedString(@"Show Inspector",
 										  @"Title for menu item to show the Inspector panel"
@@ -90,31 +76,20 @@ NSString *itemIdentifiers[] =
 		else
 			menuTitle = NSLocalizedString(@"Hide Inspector",
 										  @"Title for menu item to hide the Inspector panel.");
-		
 		[item setTitleWithMnemonic:menuTitle];
     }
 	
     return YES;
 }
 
-- (void)activeDocumentChanged
+- (id)inspectedDocument
 {
-    id mainDocument = [[[NSApp mainWindow] windowController] document];
-    if (mainDocument == inspectedDocument)
-		return;
-	
-	if (inspectedDocument)
-		[documentController commitEditing];
-	
-	if (mainDocument && [mainDocument isKindOfClass:[Document class]])
-		inspectedDocument = mainDocument;
-	else
-		inspectedDocument = nil;
+	return inspectedDocument;
 }
 
-/*- (void)inspectorPanelDidResignKey:(NSNotification *)notification
+- (void)setInspectedDocument:(id)theDocument
 {
-    [documentController commitEditing];
+	inspectedDocument = theDocument;
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath
@@ -126,7 +101,28 @@ NSString *itemIdentifiers[] =
 		[self activeDocumentChanged];
 	else
 		[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
-}*/
+}
+
+- (void)activeDocumentChanged
+{
+    id activeDocument = [[[NSApp mainWindow] windowController] document];
+    if (activeDocument == [self inspectedDocument])
+		return;
+	
+	if ([self inspectedDocument])
+		[documentController commitEditing];
+	
+	if (activeDocument && [activeDocument isKindOfClass:[Document class]])
+		[self setInspectedDocument:activeDocument];
+	else
+		[self setInspectedDocument:nil];
+}
+
+/*- (void)inspectorPanelDidResignKey:(NSNotification *)notification
+{
+    [documentController commitEditing];
+}
+*/
 
 - (NSView *)getView:(int)tabTag
 {

@@ -15,21 +15,22 @@
 
 @interface DocumentController : NSDocumentController {
 	NSUserDefaults *fDefaults;
+	
 	IBOutlet InspectorPanelController *fInspectorPanelController;
-
+	
 	NSArray *fileTypes;
-
+	
 	PaStream *portAudioStream;
 	
-	bool isNewDocumentWindowOpen;
-	
+	bool isTemplateChooserWindowOpen;
 	int disableMenuBarCount;
 }
 
+- (id)inspectorPanelController;
 - (IBAction)newDocumentFromTemplateChooser:(id)sender;
 - (id)openUntitledDocumentFromTemplateURL:(NSURL *)templateURL error:(NSError **)outError;
 - (id)makeUntitledDocumentFromTemplateURL:(NSURL *)templateURL error:(NSError **)outError;
-- (void)noteNewDocumentWindowClosed;
+- (void)noteTemplateChooserWindowClosed;
 - (void)disableMenuBar;
 - (void)enableMenuBar;
 

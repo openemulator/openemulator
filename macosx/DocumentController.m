@@ -53,6 +53,7 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 					 nil];
 		[fileTypes retain];
 		
+		isTemplateChooserWindowOpen = NO;
 		disableMenuBarCount = 0;
 		
 		if (Pa_Initialize() != paNoError)
@@ -75,6 +76,11 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 	[super dealloc];
 }
 
+- (id)inspectorPanelController
+{
+	return fInspectorPanelController;
+}
+
 - (BOOL)application:(NSApplication *)theApplication
 		   openFile:(NSString *)filename
 {
@@ -82,7 +88,7 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 	printf("openFile\n");
 	if ([[filename pathExtension] caseInsensitiveCompare:@"emulation"] == NSOrderedSame)
 		return NO;
-
+	
 	if (![self currentDocument])
 		[self openUntitledDocumentAndDisplay:YES error:&error];
 	
@@ -109,6 +115,7 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 
 - (void)applicationWillTerminate:(NSNotification *)notification
 {
+	printf("applicationWillTerminate\n");
 	NSWindow *window;
 	
 	Pa_Terminate();
@@ -120,19 +127,19 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 - (BOOL)validateUserInterfaceItem:(id)item
 {
 	if ([item action] == @selector(newDocument:))
-		return !isNewDocumentWindowOpen;
+		return !isTemplateChooserWindowOpen;
 	else if ([item action] == @selector(newDocumentFromTemplateChooser:))
-		return !isNewDocumentWindowOpen;
+		return !isTemplateChooserWindowOpen;
 	
 	return YES;
 }
 
 - (IBAction)newDocumentFromTemplateChooser:(id)sender
 {
-	if (isNewDocumentWindowOpen)
+	if (isTemplateChooserWindowOpen)
 		return;
 	
-	isNewDocumentWindowOpen = YES;
+	isTemplateChooserWindowOpen = YES;
 	
 	TemplateChooserWindowController *templateChooserWindowController;
 	templateChooserWindowController = [[TemplateChooserWindowController alloc] init:self];
@@ -180,9 +187,9 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 	return [[Document alloc] initWithTemplateURL:templateURL error:outError];
 }
 
-- (void)noteNewDocumentWindowClosed
+- (void)noteTemplateChooserWindowClosed
 {
-	isNewDocumentWindowOpen = NO;
+	isTemplateChooserWindowOpen = NO;
 }
 
 - (void)openDocument:(id)sender

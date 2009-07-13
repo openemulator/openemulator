@@ -24,7 +24,11 @@
 }
 
 - (void)toggleInspectorPanel:(id)sender;
+
 - (void)activeDocumentChanged;
+- (id)inspectedDocument;
+- (void)setInspectedDocument:(id)theDocument;
+
 - (void)selectView:(id)sender;
 - (void)setView:(int)tabTag isInit:(bool)isInit;
 

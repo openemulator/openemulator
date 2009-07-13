@@ -11,6 +11,7 @@
 #import <Carbon/Carbon.h>
 
 #import "DocumentWindowController.h"
+#import "DocumentWindow.h"
 
 #define DEFAULT_FRAME_WIDTH		640
 #define DEFAULT_FRAME_HEIGHT	480
@@ -22,6 +23,8 @@
 	[super windowDidLoad];
 	
 	isFullscreen = NO;
+	
+	documentController = [NSDocumentController sharedDocumentController];
 	
 	NSToolbar *toolbar;
 	toolbar = [[NSToolbar alloc] initWithIdentifier:@"Document Toolbar"];
@@ -67,7 +70,7 @@
 	{
 		[item setLabel:NSLocalizedString(@"Inspector", "Preferences -> toolbar item title")];
 		[item setImage:[NSImage imageNamed:@"TBInspector.png"]];
-		[item setTarget:self];
+		[item setTarget:[documentController inspectorPanelController]];
 		[item setAction:@selector(toggleInspectorPanel:)];
 		[item setAutovalidates:NO];
 	}
@@ -108,8 +111,7 @@
 		return !isFullscreen;
 	else if ([item action] == @selector(toggleFullscreen:))
 	{
-		NSString *menuTitle = nil;
-		
+		NSString *menuTitle;
 		if (!isFullscreen)
 			menuTitle = NSLocalizedString(@"Enter Fullscreen",
 										  @"Title for menu item to enter fullscreen"
@@ -117,13 +119,15 @@
 		else
 			menuTitle = NSLocalizedString(@"Exit Fullscreen",
 										  @"Title for menu item to exit fullscreen.");
-		
 		[item setTitleWithMnemonic:menuTitle];
 	}
 	
     return YES;
 }
 
+/*
+ * See if we can replace the following with an interception of the document close sheet
+ */
 - (void)performClose:(id)sender
 {
 	if (isFullscreen)
@@ -179,13 +183,9 @@
 	
 	[[self document] printDocument:sender];
 }
-
-- (void)toggleInspectorPanel:(id)sender
-{
-	[[NSNotificationCenter defaultCenter] postNotification:
-	 [NSNotification notificationWithName:@"toggleInspectorPanelNotification"
-								   object:self]];
-}
+/*
+ * See end
+ */
 
 - (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender
 {
@@ -220,8 +220,8 @@
 	double deltaWidth = NSWidth(windowFrame) - NSWidth(contentFrame);
 	double deltaHeight = NSHeight(windowFrame) - NSHeight(contentFrame);
 	
-	windowFrame.origin.x += NSWidth(windowFrame) / 2;
-	windowFrame.origin.y += NSHeight(windowFrame);
+	windowFrame.origin.x = NSMidX(windowFrame);
+	windowFrame.origin.y = NSMaxY(windowFrame);
 	windowFrame.size.width = scale * proportion * DEFAULT_FRAME_WIDTH + deltaWidth;
 	windowFrame.size.height = scale * proportion * DEFAULT_FRAME_HEIGHT + deltaHeight;
 	windowFrame.origin.x -= NSWidth(windowFrame) / 2;
@@ -271,7 +271,7 @@
 	
 	if (!isFullscreen)
 	{
-		[[NSDocumentController sharedDocumentController] disableMenuBar];
+		[documentController disableMenuBar];
 		
         DisableScreenUpdates();
 		fullscreenWindow = [[DocumentWindow alloc] initWithContentRect:contentFrame
@@ -289,9 +289,9 @@
 						   display:YES
 						   animate:YES];
 		
-		[[NSApplication sharedApplication] addWindowsItem:fullscreenWindow
-													title:[window title]
-												 filename:NO];
+		[NSApp addWindowsItem:fullscreenWindow
+						title:[window title]
+					 filename:NO];
 		
 		isFullscreen = YES;
 	}
@@ -301,7 +301,7 @@
 		contentFrame.size.width *= scale;
 		contentFrame.size.height *= scale;
 		
-		[[NSApplication sharedApplication] removeWindowsItem:fullscreenWindow];
+		[NSApp removeWindowsItem:fullscreenWindow];
 		
 		[fullscreenWindow setFrame:contentFrame display:YES animate:YES];
 		
@@ -313,7 +313,7 @@
 		[fullscreenWindow release];
         EnableScreenUpdates();
 		
-		[[NSDocumentController sharedDocumentController] enableMenuBar];
+		[documentController enableMenuBar];
 		
 		isFullscreen = NO;
 	}

@@ -25,8 +25,11 @@
 		
 		// To-Do: Create a temporary work folder
 		
-		computerType = @"Apple II";
 		power = YES;
+		
+		[self setType:@"Apple II"];
+		[self setModificationDate:[NSDate date]];
+		[self setVolume:1.0f];
 	}
 	
 	return self;
@@ -89,6 +92,7 @@
 {
 	// To-Do: Erase the files in the temporary folder
 	// To-Do: Unzip the files in the .emulation file to the temporary work folder
+	//        or just copy files if it is a package
 	// To-Do: Read info.xml to update inspector
 	// To-Do: Force a restart of libemulator
 	
@@ -103,6 +107,7 @@
 {
 	// To-Do: Force a state write in libemulator to our temporary work folder
 	// To-Do: Compress in zip format
+	//        or just copy files if destination is a package
 	NSString *path = [absoluteURL path];
 	FILE *fp;
 	fp = fopen([path UTF8String], "wb");
@@ -118,7 +123,7 @@
 	
 	[panel setRequiredFileType:@"emulation"];
 	
-	[panel beginSheetForDirectory:@"/Users/mressl/Library/"
+	[panel beginSheetForDirectory:@"/Users/mressl/Library/Application Support/OpenEmulator/Templates/"
 							 file:nil
 				   modalForWindow:[self windowForSheet]
 					modalDelegate:self
@@ -189,15 +194,16 @@
 	NSTextView *dummy = [[NSTextView alloc] init];
 	[dummy insertText:[self getDocumentText]];
 	[dummy startSpeaking:self];
+	[dummy release];
 }
 
-- (void)setNilValueForKey:(NSString *)theKey 
+/*- (void)setNilValueForKey:(NSString *)theKey 
 { 
     if ([theKey isEqualToString:@"power"]) { 
         [self setValue:[NSNumber numberWithBool:YES] forKey:@"power"]; 
     } else 
         [super setNilValueForKey:theKey]; 
-} 
+}*/
 
 - (BOOL)power
 {
@@ -206,7 +212,141 @@
 
 - (void)setPower:(BOOL)thePower
 {
-	power = thePower;
+	if (power != thePower)
+		power = thePower;
+}
+
+- (NSString *)type
+{
+	return [[type retain] autorelease];
+}
+
+- (void)setType:(NSString *)value
+{
+    if (type != value)
+	{
+        [type release];
+        type = [value copy];
+    }
+}
+
+- (NSString *)description
+{
+	return [[description retain] autorelease];
+}
+
+- (void)setDescription:(NSString *)value
+{
+    if (description != value)
+	{
+        [description release];
+        description = [value copy];
+    }
+}
+
+- (NSDate *)modificationDate
+{
+	return modificationDate;
+}
+
+- (void)setModificationDate:(NSDate *)value
+{
+    if (modificationDate != value)
+	{
+        [modificationDate release];
+        modificationDate = [value copy];
+    }
+}
+
+- (NSImage *)image
+{
+	return [[image retain] autorelease];
+}
+
+- (void)setImage:(NSImage *)value
+{
+    if (image != value)
+	{
+        [image release];
+        image = [value copy];
+    }
+}
+
+- (float)brightness
+{
+	return brightness;
+}
+
+- (void)setBrightness:(float)value
+{
+    if (brightness != value)
+		brightness = value;
+}
+
+- (float)contrast
+{
+	return contrast;
+}
+
+- (void)setContrast:(float)value
+{
+    if (contrast != value)
+		contrast = value;
+}
+
+- (float)saturation
+{
+	return saturation;
+}
+
+- (void)setSaturation:(float)value
+{
+    if (saturation != value)
+		saturation = value;
+}
+
+- (float)sharpness
+{
+	return sharpness;
+}
+
+- (void)setSharpness:(float)value
+{
+    if (sharpness != value)
+		sharpness = value;
+}
+
+- (float)temperature
+{
+	return temperature;
+}
+
+- (void)setTemperature:(float)value
+{
+    if (temperature != value)
+		temperature = value;
+}
+
+- (float)tint
+{
+	return tint;
+}
+
+- (void)setTint:(float)value
+{
+    if (tint != value)
+		tint = value;
+}
+
+- (float)volume
+{
+	return volume;
+}
+
+- (void)setVolume:(float)value
+{
+    if (volume != value)
+		volume = value;
 }
 
 @end
