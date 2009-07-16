@@ -22,9 +22,10 @@
 {
 	[super windowDidLoad];
 	
-	isFullscreen = NO;
+	fullscreen = NO;
 	
 	documentController = [NSDocumentController sharedDocumentController];
+	document = [self document];
 	
 	NSToolbar *toolbar;
 	toolbar = [[NSToolbar alloc] initWithIdentifier:@"Document Toolbar"];
@@ -40,11 +41,11 @@
  willBeInsertedIntoToolbar:(BOOL)flag
 {
 	NSToolbarItem *item = [[NSToolbarItem alloc] initWithItemIdentifier:ident];
-	NSDocument *document = [self document];
 	
 	if ([ident isEqualToString:@"Power Off"])
 	{
-		[item setLabel:NSLocalizedString(@"Power Off", "Preferences -> toolbar item title")];
+		[item setLabel:NSLocalizedString(@"Power",
+										 "Document toolbar item label")];
 		[item setImage:[NSImage imageNamed:@"TBPower.png"]];
 		[item setTarget:document];
 		[item setAction:@selector(togglePower:)];
@@ -52,7 +53,7 @@
 	}
 	else if ([ident isEqualToString:@"Reset"])
 	{
-		[item setLabel:NSLocalizedString(@"Reset", "Preferences -> toolbar item title")];
+		[item setLabel:NSLocalizedString(@"Reset", "Document toolbar item label")];
 		[item setImage:[NSImage imageNamed:@"TBReset.png"]];
 		[item setTarget:document];
 		[item setAction:@selector(resetEmulation:)];
@@ -60,7 +61,7 @@
 	}
 	else if ([ident isEqualToString:@"Pause"])
 	{
-		[item setLabel:NSLocalizedString(@"Pause", "Preferences -> toolbar item title")];
+		[item setLabel:NSLocalizedString(@"Pause", "Document toolbar item label")];
 		[item setImage:[NSImage imageNamed:@"TBPause.png"]];
 		[item setTarget:document];
 		[item setAction:@selector(togglePause:)];
@@ -68,7 +69,7 @@
 	}
 	else if ([ident isEqualToString:@"Inspector"])
 	{
-		[item setLabel:NSLocalizedString(@"Inspector", "Preferences -> toolbar item title")];
+		[item setLabel:NSLocalizedString(@"Inspector", "Document toolbar item label")];
 		[item setImage:[NSImage imageNamed:@"TBInspector.png"]];
 		[item setTarget:[documentController inspectorPanelController]];
 		[item setAction:@selector(toggleInspectorPanel:)];
@@ -102,17 +103,17 @@
 - (BOOL)validateUserInterfaceItem:(id)item
 {
 	if ([item action] == @selector(setHalfSize:))
-		return !isFullscreen;
+		return !fullscreen;
 	else if ([item action] == @selector(setActualSize:))
-		return !isFullscreen;
+		return !fullscreen;
 	else if ([item action] == @selector(setDoubleSize:))
-		return !isFullscreen;
+		return !fullscreen;
 	else if ([item action] == @selector(fitToScreen:))
-		return !isFullscreen;
+		return !fullscreen;
 	else if ([item action] == @selector(toggleFullscreen:))
 	{
 		NSString *menuTitle;
-		if (!isFullscreen)
+		if (!fullscreen)
 			menuTitle = NSLocalizedString(@"Enter Fullscreen",
 										  @"Title for menu item to enter fullscreen"
 										  "(should be the same as the initial menu item in the nib).");
@@ -130,7 +131,7 @@
  */
 - (void)performClose:(id)sender
 {
-	if (isFullscreen)
+	if (fullscreen)
 		[self toggleFullscreen:sender];
 	
 	[[self window] performClose:self];
@@ -138,7 +139,7 @@
 
 - (void)saveDocument:(id)sender
 {
-	if (isFullscreen)
+	if (fullscreen)
 		[self toggleFullscreen:sender];
 	
 	[[self document] saveDocument:sender];
@@ -146,7 +147,7 @@
 
 - (void)saveDocumentAs:(id)sender
 {
-	if (isFullscreen)
+	if (fullscreen)
 		[self toggleFullscreen:sender];
 	
 	[[self document] saveDocumentAs:sender];
@@ -154,7 +155,7 @@
 
 - (void)revertDocumentToSaved:(id)sender
 {
-	if (isFullscreen)
+	if (fullscreen)
 		[self toggleFullscreen:sender];
 	
 	[[self document] revertDocumentToSaved:sender];
@@ -162,7 +163,7 @@
 
 - (void)saveDocumentAsTemplate:(id)sender
 {
-	if (isFullscreen)
+	if (fullscreen)
 		[self toggleFullscreen:sender];
 	
 	[[self document] saveDocumentAsTemplate:sender];
@@ -170,7 +171,7 @@
 
 - (void)runPageLayout:(id)sender
 {
-	if (isFullscreen)
+	if (fullscreen)
 		[self toggleFullscreen:sender];
 	
 	[[self document] runPageLayout:sender];
@@ -178,7 +179,7 @@
 
 - (void)printDocument:(id)sender
 {
-	if (isFullscreen)
+	if (fullscreen)
 		[self toggleFullscreen:sender];
 	
 	[[self document] printDocument:sender];
@@ -269,7 +270,7 @@
 	NSWindow *window = [self window];
 	NSRect contentFrame = [window contentRectForFrameRect:[window frame]];
 	
-	if (!isFullscreen)
+	if (!fullscreen)
 	{
 		[documentController disableMenuBar];
 		
@@ -293,7 +294,7 @@
 						title:[window title]
 					 filename:NO];
 		
-		isFullscreen = YES;
+		fullscreen = YES;
 	}
 	else
 	{
@@ -315,7 +316,7 @@
 		
 		[documentController enableMenuBar];
 		
-		isFullscreen = NO;
+		fullscreen = NO;
 	}
 }
 

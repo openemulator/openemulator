@@ -15,7 +15,8 @@
 	NSArray *pasteboardTypes;
 	
 	BOOL power;
-	NSString *type;
+	BOOL pause;
+	NSString *label;
 	NSString *description;
 	NSDate *modificationDate;
 	NSImage *image;
@@ -48,8 +49,10 @@
 
 - (BOOL)power;
 - (void)setPower:(BOOL)value;
-- (NSString *)type;
-- (void)setType:(NSString *)value;
+- (BOOL)pause;
+- (void)setPause:(BOOL)value;
+- (NSString *)label;
+- (void)setLabel:(NSString *)value;
 - (NSString *)description;
 - (void)setDescription:(NSString *)value;
 - (NSDate *)modificationDate;

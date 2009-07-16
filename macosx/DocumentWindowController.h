@@ -10,12 +10,15 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "Document.h"
 #import "DocumentController.h"
 
-@interface DocumentWindowController : NSWindowController {
+@interface DocumentWindowController : NSWindowController
+{
+	Document *document;
 	DocumentController *documentController;
 	
-	BOOL isFullscreen;
+	BOOL fullscreen;
 	id fullscreenWindow;
 	NSView *fullscreenView;
 }

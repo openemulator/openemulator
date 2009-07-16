@@ -16,7 +16,6 @@
 		006EECAE0FCA5C7B003D2C8D /* Component.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 006EECAD0FCA5C7B003D2C8D /* Component.cpp */; };
 		006F08CA1006F65A00CE75DD /* TemplateChooserWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 006F08C91006F65A00CE75DD /* TemplateChooserWindowController.m */; };
 		0075B1B20FE79F7E009C1DFA /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0075B1B10FE79F7E009C1DFA /* OpenGL.framework */; };
-		008CCC67100E7B0D007A34C3 /* IPInfoOff.png in Resources */ = {isa = PBXBuildFile; fileRef = 008CCC66100E7B0D007A34C3 /* IPInfoOff.png */; };
 		00B3347D0FE41EF60042661D /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B3347C0FE41EF60042661D /* AudioToolbox.framework */; };
 		00B334810FE41EFE0042661D /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B334800FE41EFE0042661D /* AudioUnit.framework */; };
 		00B334850FE41F080042661D /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B334840FE41F080042661D /* CoreAudio.framework */; };
@@ -33,25 +32,14 @@
 		00D8448F0FFF04C0005802F0 /* Emulation.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000F663A0FF8368F00C8AF23 /* Emulation.icns */; };
 		00D844920FFF04C0005802F0 /* IPAudio.png in Resources */ = {isa = PBXBuildFile; fileRef = 000F663B0FF8368F00C8AF23 /* IPAudio.png */; };
 		00D844930FFF04C0005802F0 /* IPAudioSel.png in Resources */ = {isa = PBXBuildFile; fileRef = 000F663C0FF8368F00C8AF23 /* IPAudioSel.png */; };
-		00D844940FFF04C0005802F0 /* IPAudioSoundMax.png in Resources */ = {isa = PBXBuildFile; fileRef = 000F663D0FF8368F00C8AF23 /* IPAudioSoundMax.png */; };
-		00D844950FFF04C0005802F0 /* IPAudioSoundMin.png in Resources */ = {isa = PBXBuildFile; fileRef = 000F663E0FF8368F00C8AF23 /* IPAudioSoundMin.png */; };
 		00D844960FFF04C0005802F0 /* IPDiskDrives.png in Resources */ = {isa = PBXBuildFile; fileRef = 000F663F0FF8368F00C8AF23 /* IPDiskDrives.png */; };
 		00D844970FFF04C0005802F0 /* IPDiskDrivesSel.png in Resources */ = {isa = PBXBuildFile; fileRef = 000F66400FF8368F00C8AF23 /* IPDiskDrivesSel.png */; };
 		00D844980FFF04C0005802F0 /* IPEmulation.png in Resources */ = {isa = PBXBuildFile; fileRef = 000F66410FF8368F00C8AF23 /* IPEmulation.png */; };
 		00D844990FFF04C0005802F0 /* IPEmulationSel.png in Resources */ = {isa = PBXBuildFile; fileRef = 000F66420FF8368F00C8AF23 /* IPEmulationSel.png */; };
 		00D8449A0FFF04C0005802F0 /* IPExpansions.png in Resources */ = {isa = PBXBuildFile; fileRef = 000F66430FF8368F00C8AF23 /* IPExpansions.png */; };
 		00D8449B0FFF04C0005802F0 /* IPExpansionsSel.png in Resources */ = {isa = PBXBuildFile; fileRef = 000F66440FF8368F00C8AF23 /* IPExpansionsSel.png */; };
-		00D8449C0FFF04C0005802F0 /* IPMountHover.png in Resources */ = {isa = PBXBuildFile; fileRef = 000F66450FF8368F00C8AF23 /* IPMountHover.png */; };
-		00D8449D0FFF04C0005802F0 /* IPMountOff.png in Resources */ = {isa = PBXBuildFile; fileRef = 000F66460FF8368F00C8AF23 /* IPMountOff.png */; };
-		00D8449E0FFF04C0005802F0 /* IPMountOn.png in Resources */ = {isa = PBXBuildFile; fileRef = 000F66470FF8368F00C8AF23 /* IPMountOn.png */; };
 		00D8449F0FFF04C0005802F0 /* IPPorts.png in Resources */ = {isa = PBXBuildFile; fileRef = 000F66480FF8368F00C8AF23 /* IPPorts.png */; };
 		00D844A00FFF04C0005802F0 /* IPPortsSel.png in Resources */ = {isa = PBXBuildFile; fileRef = 000F66490FF8368F00C8AF23 /* IPPortsSel.png */; };
-		00D844A10FFF04C0005802F0 /* IPRevealHover.png in Resources */ = {isa = PBXBuildFile; fileRef = 000F664A0FF8368F00C8AF23 /* IPRevealHover.png */; };
-		00D844A20FFF04C0005802F0 /* IPRevealOff.png in Resources */ = {isa = PBXBuildFile; fileRef = 000F664B0FF8368F00C8AF23 /* IPRevealOff.png */; };
-		00D844A30FFF04C0005802F0 /* IPRevealOn.png in Resources */ = {isa = PBXBuildFile; fileRef = 000F664C0FF8368F00C8AF23 /* IPRevealOn.png */; };
-		00D844A40FFF04C0005802F0 /* IPUnmountHover.png in Resources */ = {isa = PBXBuildFile; fileRef = 000F664D0FF8368F00C8AF23 /* IPUnmountHover.png */; };
-		00D844A50FFF04C0005802F0 /* IPUnmountOff.png in Resources */ = {isa = PBXBuildFile; fileRef = 000F664E0FF8368F00C8AF23 /* IPUnmountOff.png */; };
-		00D844A60FFF04C0005802F0 /* IPUnmountOn.png in Resources */ = {isa = PBXBuildFile; fileRef = 000F664F0FF8368F00C8AF23 /* IPUnmountOn.png */; };
 		00D844A70FFF04C0005802F0 /* IPVideo.png in Resources */ = {isa = PBXBuildFile; fileRef = 000F66500FF8368F00C8AF23 /* IPVideo.png */; };
 		00D844A80FFF04C0005802F0 /* IPVideoSel.png in Resources */ = {isa = PBXBuildFile; fileRef = 000F66510FF8368F00C8AF23 /* IPVideoSel.png */; };
 		00D844A90FFF04C0005802F0 /* OpenEmulator.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000F66520FF8368F00C8AF23 /* OpenEmulator.icns */; };
@@ -82,12 +70,13 @@
 		00D845850FFF0FD2005802F0 /* PaperFeedController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D845780FFF0FD2005802F0 /* PaperFeedController.m */; };
 		00D845860FFF0FD2005802F0 /* PreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D8457A0FFF0FD2005802F0 /* PreferencesController.m */; };
 		00D846290FFF23B7005802F0 /* PRSound.png in Resources */ = {isa = PBXBuildFile; fileRef = 00D846280FFF23B7005802F0 /* PRSound.png */; };
-		00FFD1F110092DDF00F347CB /* IPLockedHover.png in Resources */ = {isa = PBXBuildFile; fileRef = 00FFD1EB10092DDF00F347CB /* IPLockedHover.png */; };
-		00FFD1F210092DE000F347CB /* IPLockedOff.png in Resources */ = {isa = PBXBuildFile; fileRef = 00FFD1EC10092DDF00F347CB /* IPLockedOff.png */; };
-		00FFD1F310092DE000F347CB /* IPLockedOn.png in Resources */ = {isa = PBXBuildFile; fileRef = 00FFD1ED10092DDF00F347CB /* IPLockedOn.png */; };
-		00FFD1F410092DE000F347CB /* IPUnlockedHover.png in Resources */ = {isa = PBXBuildFile; fileRef = 00FFD1EE10092DDF00F347CB /* IPUnlockedHover.png */; };
-		00FFD1F510092DE000F347CB /* IPUnlockedOff.png in Resources */ = {isa = PBXBuildFile; fileRef = 00FFD1EF10092DDF00F347CB /* IPUnlockedOff.png */; };
-		00FFD1F610092DE000F347CB /* IPUnlockedOn.png in Resources */ = {isa = PBXBuildFile; fileRef = 00FFD1F010092DDF00F347CB /* IPUnlockedOn.png */; };
+		00F86BCB100FD4210016867D /* IPInfo.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BC6100FD4210016867D /* IPInfo.png */; };
+		00F86BCC100FD4210016867D /* IPLocked.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BC7100FD4210016867D /* IPLocked.png */; };
+		00F86BCD100FD4210016867D /* IPMount.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BC8100FD4210016867D /* IPMount.png */; };
+		00F86BCE100FD4210016867D /* IPUnlocked.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BC9100FD4210016867D /* IPUnlocked.png */; };
+		00F86BCF100FD4210016867D /* IPUnmount.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BCA100FD4210016867D /* IPUnmount.png */; };
+		00F86BE3100FD4F60016867D /* IPSoundMax.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BE1100FD4F60016867D /* IPSoundMax.png */; };
+		00F86BE4100FD4F60016867D /* IPSoundMin.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BE2100FD4F60016867D /* IPSoundMin.png */; };
 		8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
 
@@ -133,25 +122,14 @@
 		000F663A0FF8368F00C8AF23 /* Emulation.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Emulation.icns; sourceTree = "<group>"; };
 		000F663B0FF8368F00C8AF23 /* IPAudio.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPAudio.png; sourceTree = "<group>"; };
 		000F663C0FF8368F00C8AF23 /* IPAudioSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPAudioSel.png; sourceTree = "<group>"; };
-		000F663D0FF8368F00C8AF23 /* IPAudioSoundMax.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPAudioSoundMax.png; sourceTree = "<group>"; };
-		000F663E0FF8368F00C8AF23 /* IPAudioSoundMin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPAudioSoundMin.png; sourceTree = "<group>"; };
 		000F663F0FF8368F00C8AF23 /* IPDiskDrives.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPDiskDrives.png; sourceTree = "<group>"; };
 		000F66400FF8368F00C8AF23 /* IPDiskDrivesSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPDiskDrivesSel.png; sourceTree = "<group>"; };
 		000F66410FF8368F00C8AF23 /* IPEmulation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPEmulation.png; sourceTree = "<group>"; };
 		000F66420FF8368F00C8AF23 /* IPEmulationSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPEmulationSel.png; sourceTree = "<group>"; };
 		000F66430FF8368F00C8AF23 /* IPExpansions.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPExpansions.png; sourceTree = "<group>"; };
 		000F66440FF8368F00C8AF23 /* IPExpansionsSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPExpansionsSel.png; sourceTree = "<group>"; };
-		000F66450FF8368F00C8AF23 /* IPMountHover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPMountHover.png; sourceTree = "<group>"; };
-		000F66460FF8368F00C8AF23 /* IPMountOff.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPMountOff.png; sourceTree = "<group>"; };
-		000F66470FF8368F00C8AF23 /* IPMountOn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPMountOn.png; sourceTree = "<group>"; };
 		000F66480FF8368F00C8AF23 /* IPPorts.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPPorts.png; sourceTree = "<group>"; };
 		000F66490FF8368F00C8AF23 /* IPPortsSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPPortsSel.png; sourceTree = "<group>"; };
-		000F664A0FF8368F00C8AF23 /* IPRevealHover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPRevealHover.png; sourceTree = "<group>"; };
-		000F664B0FF8368F00C8AF23 /* IPRevealOff.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPRevealOff.png; sourceTree = "<group>"; };
-		000F664C0FF8368F00C8AF23 /* IPRevealOn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPRevealOn.png; sourceTree = "<group>"; };
-		000F664D0FF8368F00C8AF23 /* IPUnmountHover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPUnmountHover.png; sourceTree = "<group>"; };
-		000F664E0FF8368F00C8AF23 /* IPUnmountOff.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPUnmountOff.png; sourceTree = "<group>"; };
-		000F664F0FF8368F00C8AF23 /* IPUnmountOn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPUnmountOn.png; sourceTree = "<group>"; };
 		000F66500FF8368F00C8AF23 /* IPVideo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPVideo.png; sourceTree = "<group>"; };
 		000F66510FF8368F00C8AF23 /* IPVideoSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPVideoSel.png; sourceTree = "<group>"; };
 		000F66520FF8368F00C8AF23 /* OpenEmulator.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = OpenEmulator.icns; sourceTree = "<group>"; };
@@ -177,7 +155,6 @@
 		006F08C81006F65A00CE75DD /* TemplateChooserWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TemplateChooserWindowController.h; sourceTree = "<group>"; };
 		006F08C91006F65A00CE75DD /* TemplateChooserWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TemplateChooserWindowController.m; sourceTree = "<group>"; };
 		0075B1B10FE79F7E009C1DFA /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
-		008CCC66100E7B0D007A34C3 /* IPInfoOff.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPInfoOff.png; path = macosx/Images/IPInfoOff.png; sourceTree = "<group>"; };
 		00B3347C0FE41EF60042661D /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = /System/Library/Frameworks/AudioToolbox.framework; sourceTree = "<absolute>"; };
 		00B334800FE41EFE0042661D /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = /System/Library/Frameworks/AudioUnit.framework; sourceTree = "<absolute>"; };
 		00B334840FE41F080042661D /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = /System/Library/Frameworks/CoreAudio.framework; sourceTree = "<absolute>"; };
@@ -218,19 +195,8 @@
 		00D845790FFF0FD2005802F0 /* PreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferencesController.h; sourceTree = "<group>"; };
 		00D8457A0FFF0FD2005802F0 /* PreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferencesController.m; sourceTree = "<group>"; };
 		00D846280FFF23B7005802F0 /* PRSound.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PRSound.png; sourceTree = "<group>"; };
-		00F009CC0FD5804800C506AD /* IPMountHover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPMountHover.png; sourceTree = "<group>"; };
-		00F009CD0FD5804800C506AD /* IPMountOff.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPMountOff.png; sourceTree = "<group>"; };
-		00F009CE0FD5804800C506AD /* IPMountOn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPMountOn.png; sourceTree = "<group>"; };
-		00F009CF0FD5804800C506AD /* IPRevealHover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPRevealHover.png; sourceTree = "<group>"; };
-		00F009D00FD5804800C506AD /* IPRevealOff.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPRevealOff.png; sourceTree = "<group>"; };
-		00F009D10FD5804800C506AD /* IPRevealOn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPRevealOn.png; sourceTree = "<group>"; };
-		00F009D20FD5804800C506AD /* IPUnmountHover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPUnmountHover.png; sourceTree = "<group>"; };
-		00F009D30FD5804800C506AD /* IPUnmountOff.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPUnmountOff.png; sourceTree = "<group>"; };
-		00F009D40FD5804800C506AD /* IPUnmountOn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPUnmountOn.png; sourceTree = "<group>"; };
 		00F009F90FD5838D00C506AD /* IPAudio.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPAudio.png; sourceTree = "<group>"; };
 		00F009FA0FD5838D00C506AD /* IPAudioSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPAudioSel.png; sourceTree = "<group>"; };
-		00F009FB0FD5838D00C506AD /* IPAudioSoundMax.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPAudioSoundMax.png; sourceTree = "<group>"; };
-		00F009FC0FD5838D00C506AD /* IPAudioSoundMin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPAudioSoundMin.png; sourceTree = "<group>"; };
 		00F009FD0FD5838D00C506AD /* IPDiskDrives.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPDiskDrives.png; sourceTree = "<group>"; };
 		00F009FE0FD5838D00C506AD /* IPDiskDrivesSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPDiskDrivesSel.png; sourceTree = "<group>"; };
 		00F009FF0FD5838D00C506AD /* IPEmulation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPEmulation.png; sourceTree = "<group>"; };
@@ -241,12 +207,13 @@
 		00F00A040FD5838D00C506AD /* IPPortsSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPPortsSel.png; sourceTree = "<group>"; };
 		00F00A050FD5838D00C506AD /* IPVideo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPVideo.png; sourceTree = "<group>"; };
 		00F00A060FD5838D00C506AD /* IPVideoSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPVideoSel.png; sourceTree = "<group>"; };
-		00FFD1EB10092DDF00F347CB /* IPLockedHover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPLockedHover.png; sourceTree = "<group>"; };
-		00FFD1EC10092DDF00F347CB /* IPLockedOff.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPLockedOff.png; sourceTree = "<group>"; };
-		00FFD1ED10092DDF00F347CB /* IPLockedOn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPLockedOn.png; sourceTree = "<group>"; };
-		00FFD1EE10092DDF00F347CB /* IPUnlockedHover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPUnlockedHover.png; sourceTree = "<group>"; };
-		00FFD1EF10092DDF00F347CB /* IPUnlockedOff.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPUnlockedOff.png; sourceTree = "<group>"; };
-		00FFD1F010092DDF00F347CB /* IPUnlockedOn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPUnlockedOn.png; sourceTree = "<group>"; };
+		00F86BC6100FD4210016867D /* IPInfo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPInfo.png; path = macosx/Images/IPInfo.png; sourceTree = "<group>"; };
+		00F86BC7100FD4210016867D /* IPLocked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPLocked.png; path = macosx/Images/IPLocked.png; sourceTree = "<group>"; };
+		00F86BC8100FD4210016867D /* IPMount.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPMount.png; path = macosx/Images/IPMount.png; sourceTree = "<group>"; };
+		00F86BC9100FD4210016867D /* IPUnlocked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPUnlocked.png; path = macosx/Images/IPUnlocked.png; sourceTree = "<group>"; };
+		00F86BCA100FD4210016867D /* IPUnmount.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPUnmount.png; path = macosx/Images/IPUnmount.png; sourceTree = "<group>"; };
+		00F86BE1100FD4F60016867D /* IPSoundMax.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPSoundMax.png; path = macosx/Images/IPSoundMax.png; sourceTree = "<group>"; };
+		00F86BE2100FD4F60016867D /* IPSoundMin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPSoundMin.png; path = macosx/Images/IPSoundMin.png; sourceTree = "<group>"; };
 		1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		8D15AC370486D014006FF6A4 /* OpenEmulator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenEmulator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -291,12 +258,6 @@
 		000A79070FBA49C500A0F12E /* Images */ = {
 			isa = PBXGroup;
 			children = (
-				00FFD1EB10092DDF00F347CB /* IPLockedHover.png */,
-				00FFD1EC10092DDF00F347CB /* IPLockedOff.png */,
-				00FFD1ED10092DDF00F347CB /* IPLockedOn.png */,
-				00FFD1EE10092DDF00F347CB /* IPUnlockedHover.png */,
-				00FFD1EF10092DDF00F347CB /* IPUnlockedOff.png */,
-				00FFD1F010092DDF00F347CB /* IPUnlockedOn.png */,
 				00D846280FFF23B7005802F0 /* PRSound.png */,
 				000F66360FF8368F00C8AF23 /* AppleGraphicsTablet.png */,
 				000F66370FF8368F00C8AF23 /* DiskImage.icns */,
@@ -305,25 +266,14 @@
 				000F663A0FF8368F00C8AF23 /* Emulation.icns */,
 				000F663B0FF8368F00C8AF23 /* IPAudio.png */,
 				000F663C0FF8368F00C8AF23 /* IPAudioSel.png */,
-				000F663D0FF8368F00C8AF23 /* IPAudioSoundMax.png */,
-				000F663E0FF8368F00C8AF23 /* IPAudioSoundMin.png */,
 				000F663F0FF8368F00C8AF23 /* IPDiskDrives.png */,
 				000F66400FF8368F00C8AF23 /* IPDiskDrivesSel.png */,
 				000F66410FF8368F00C8AF23 /* IPEmulation.png */,
 				000F66420FF8368F00C8AF23 /* IPEmulationSel.png */,
 				000F66430FF8368F00C8AF23 /* IPExpansions.png */,
 				000F66440FF8368F00C8AF23 /* IPExpansionsSel.png */,
-				000F66450FF8368F00C8AF23 /* IPMountHover.png */,
-				000F66460FF8368F00C8AF23 /* IPMountOff.png */,
-				000F66470FF8368F00C8AF23 /* IPMountOn.png */,
 				000F66480FF8368F00C8AF23 /* IPPorts.png */,
 				000F66490FF8368F00C8AF23 /* IPPortsSel.png */,
-				000F664A0FF8368F00C8AF23 /* IPRevealHover.png */,
-				000F664B0FF8368F00C8AF23 /* IPRevealOff.png */,
-				000F664C0FF8368F00C8AF23 /* IPRevealOn.png */,
-				000F664D0FF8368F00C8AF23 /* IPUnmountHover.png */,
-				000F664E0FF8368F00C8AF23 /* IPUnmountOff.png */,
-				000F664F0FF8368F00C8AF23 /* IPUnmountOn.png */,
 				000F66500FF8368F00C8AF23 /* IPVideo.png */,
 				000F66510FF8368F00C8AF23 /* IPVideoSel.png */,
 				000F66520FF8368F00C8AF23 /* OpenEmulator.icns */,
@@ -341,8 +291,6 @@
 				000A79090FBA49C500A0F12E /* DiskImage525.icns */,
 				00F009F90FD5838D00C506AD /* IPAudio.png */,
 				00F009FA0FD5838D00C506AD /* IPAudioSel.png */,
-				00F009FB0FD5838D00C506AD /* IPAudioSoundMax.png */,
-				00F009FC0FD5838D00C506AD /* IPAudioSoundMin.png */,
 				00F009FD0FD5838D00C506AD /* IPDiskDrives.png */,
 				00F009FE0FD5838D00C506AD /* IPDiskDrivesSel.png */,
 				00F009FF0FD5838D00C506AD /* IPEmulation.png */,
@@ -353,15 +301,6 @@
 				00F00A040FD5838D00C506AD /* IPPortsSel.png */,
 				00F00A050FD5838D00C506AD /* IPVideo.png */,
 				00F00A060FD5838D00C506AD /* IPVideoSel.png */,
-				00F009CC0FD5804800C506AD /* IPMountHover.png */,
-				00F009CD0FD5804800C506AD /* IPMountOff.png */,
-				00F009CE0FD5804800C506AD /* IPMountOn.png */,
-				00F009CF0FD5804800C506AD /* IPRevealHover.png */,
-				00F009D00FD5804800C506AD /* IPRevealOff.png */,
-				00F009D10FD5804800C506AD /* IPRevealOn.png */,
-				00F009D20FD5804800C506AD /* IPUnmountHover.png */,
-				00F009D30FD5804800C506AD /* IPUnmountOff.png */,
-				00F009D40FD5804800C506AD /* IPUnmountOn.png */,
 				000A79190FBA49C500A0F12E /* OpenEmulator.icns */,
 				000A791F0FBA49C500A0F12E /* TBContinue.png */,
 				000A79200FBA49C500A0F12E /* TBInspector.png */,
@@ -459,7 +398,13 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				008CCC66100E7B0D007A34C3 /* IPInfoOff.png */,
+				00F86BE1100FD4F60016867D /* IPSoundMax.png */,
+				00F86BE2100FD4F60016867D /* IPSoundMin.png */,
+				00F86BC6100FD4210016867D /* IPInfo.png */,
+				00F86BC7100FD4210016867D /* IPLocked.png */,
+				00F86BC8100FD4210016867D /* IPMount.png */,
+				00F86BC9100FD4210016867D /* IPUnlocked.png */,
+				00F86BCA100FD4210016867D /* IPUnmount.png */,
 				00C7F1D5100BC5B400AD0812 /* IPMinus.png */,
 				00C7F1D6100BC5B400AD0812 /* IPMinusSel.png */,
 				00C7F1D7100BC5B400AD0812 /* IPPlus.png */,
@@ -571,25 +516,14 @@
 				00D8448F0FFF04C0005802F0 /* Emulation.icns in Resources */,
 				00D844920FFF04C0005802F0 /* IPAudio.png in Resources */,
 				00D844930FFF04C0005802F0 /* IPAudioSel.png in Resources */,
-				00D844940FFF04C0005802F0 /* IPAudioSoundMax.png in Resources */,
-				00D844950FFF04C0005802F0 /* IPAudioSoundMin.png in Resources */,
 				00D844960FFF04C0005802F0 /* IPDiskDrives.png in Resources */,
 				00D844970FFF04C0005802F0 /* IPDiskDrivesSel.png in Resources */,
 				00D844980FFF04C0005802F0 /* IPEmulation.png in Resources */,
 				00D844990FFF04C0005802F0 /* IPEmulationSel.png in Resources */,
 				00D8449A0FFF04C0005802F0 /* IPExpansions.png in Resources */,
 				00D8449B0FFF04C0005802F0 /* IPExpansionsSel.png in Resources */,
-				00D8449C0FFF04C0005802F0 /* IPMountHover.png in Resources */,
-				00D8449D0FFF04C0005802F0 /* IPMountOff.png in Resources */,
-				00D8449E0FFF04C0005802F0 /* IPMountOn.png in Resources */,
 				00D8449F0FFF04C0005802F0 /* IPPorts.png in Resources */,
 				00D844A00FFF04C0005802F0 /* IPPortsSel.png in Resources */,
-				00D844A10FFF04C0005802F0 /* IPRevealHover.png in Resources */,
-				00D844A20FFF04C0005802F0 /* IPRevealOff.png in Resources */,
-				00D844A30FFF04C0005802F0 /* IPRevealOn.png in Resources */,
-				00D844A40FFF04C0005802F0 /* IPUnmountHover.png in Resources */,
-				00D844A50FFF04C0005802F0 /* IPUnmountOff.png in Resources */,
-				00D844A60FFF04C0005802F0 /* IPUnmountOn.png in Resources */,
 				00D844A70FFF04C0005802F0 /* IPVideo.png in Resources */,
 				00D844A80FFF04C0005802F0 /* IPVideoSel.png in Resources */,
 				00D844A90FFF04C0005802F0 /* OpenEmulator.icns in Resources */,
@@ -612,17 +546,17 @@
 				00D846290FFF23B7005802F0 /* PRSound.png in Resources */,
 				00679D08100817F700B38748 /* DeviceChooser.xib in Resources */,
 				00679D09100817F700B38748 /* TemplateChooser.xib in Resources */,
-				00FFD1F110092DDF00F347CB /* IPLockedHover.png in Resources */,
-				00FFD1F210092DE000F347CB /* IPLockedOff.png in Resources */,
-				00FFD1F310092DE000F347CB /* IPLockedOn.png in Resources */,
-				00FFD1F410092DE000F347CB /* IPUnlockedHover.png in Resources */,
-				00FFD1F510092DE000F347CB /* IPUnlockedOff.png in Resources */,
-				00FFD1F610092DE000F347CB /* IPUnlockedOn.png in Resources */,
 				00C7F1D9100BC5B500AD0812 /* IPMinus.png in Resources */,
 				00C7F1DA100BC5B500AD0812 /* IPMinusSel.png in Resources */,
 				00C7F1DB100BC5B500AD0812 /* IPPlus.png in Resources */,
 				00C7F1DC100BC5B500AD0812 /* IPPlusSel.png in Resources */,
-				008CCC67100E7B0D007A34C3 /* IPInfoOff.png in Resources */,
+				00F86BCB100FD4210016867D /* IPInfo.png in Resources */,
+				00F86BCC100FD4210016867D /* IPLocked.png in Resources */,
+				00F86BCD100FD4210016867D /* IPMount.png in Resources */,
+				00F86BCE100FD4210016867D /* IPUnlocked.png in Resources */,
+				00F86BCF100FD4210016867D /* IPUnmount.png in Resources */,
+				00F86BE3100FD4F60016867D /* IPSoundMax.png in Resources */,
+				00F86BE4100FD4F60016867D /* IPSoundMin.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

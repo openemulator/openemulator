@@ -25,10 +25,9 @@
 		
 		// To-Do: Create a temporary work folder
 		
-		power = YES;
-		
 		[self setPower:YES];
-		[self setType:@"Apple II"];
+		[self setPause:NO];
+		[self setLabel:@"Apple II"];
 		[self setDescription:@"The Apple II is a nice computer."];
 		[self setModificationDate:[NSDate date]];
 		[self setVolume:1.0f];
@@ -157,6 +156,7 @@
 
 - (void)togglePause:(id)sender
 {
+	[self setPause:![self pause]];
 	// To-Do: libemulation
 }
 
@@ -202,36 +202,39 @@
 	[dummy release];
 }
 
-/*- (void)setNilValueForKey:(NSString *)theKey 
-{ 
-    if ([theKey isEqualToString:@"power"]) { 
-        [self setValue:[NSNumber numberWithBool:YES] forKey:@"power"]; 
-    } else 
-        [super setNilValueForKey:theKey]; 
-}*/
-
 - (BOOL)power
 {
 	return power;
 }
 
-- (void)setPower:(BOOL)thePower
+- (void)setPower:(BOOL)value
 {
-	if (power != thePower)
-		power = thePower;
+	if (power != value)
+		power = value;
 }
 
-- (NSString *)type
+- (BOOL)pause
 {
-	return [[type retain] autorelease];
+	return pause;
 }
 
-- (void)setType:(NSString *)value
+- (void)setPause:(BOOL)value
 {
-    if (type != value)
+	if (pause != value)
+		pause = value;
+}
+
+- (NSString *)label
+{
+	return [[label retain] autorelease];
+}
+
+- (void)setLabel:(NSString *)value
+{
+    if (label != value)
 	{
-        [type release];
-        type = [value copy];
+        [label release];
+        label = [value copy];
     }
 }
 
@@ -282,27 +285,6 @@
 	return [[expansions retain] autorelease];
 }
 
-/*- (void)getExpansions:(id *)value range:(NSRange)range
-{
-    [expansions getObjects:value range:range];
-}*/
-
-/*- (int)countOfExpansions
-{
-	return [expansions count];
-}
-
-- (id)objectInExpansionsAtIndex:(unsigned)value
-{
-    return [expansions objectAtIndex:value];
-}
-
-- (void)setExpansions:(NSMutableArray *)value
-{
-    if (expansions != value)
-		expansions = [value mutableCopy];
-}
-*/
 - (void)insertObject:(id)value inExpansionsAtIndex:(NSUInteger)index
 {
     [expansions insertObject:value atIndex:index];
