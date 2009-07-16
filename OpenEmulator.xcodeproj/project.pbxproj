@@ -16,11 +16,16 @@
 		006EECAE0FCA5C7B003D2C8D /* Component.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 006EECAD0FCA5C7B003D2C8D /* Component.cpp */; };
 		006F08CA1006F65A00CE75DD /* TemplateChooserWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 006F08C91006F65A00CE75DD /* TemplateChooserWindowController.m */; };
 		0075B1B20FE79F7E009C1DFA /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0075B1B10FE79F7E009C1DFA /* OpenGL.framework */; };
+		008CCC67100E7B0D007A34C3 /* IPInfoOff.png in Resources */ = {isa = PBXBuildFile; fileRef = 008CCC66100E7B0D007A34C3 /* IPInfoOff.png */; };
 		00B3347D0FE41EF60042661D /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B3347C0FE41EF60042661D /* AudioToolbox.framework */; };
 		00B334810FE41EFE0042661D /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B334800FE41EFE0042661D /* AudioUnit.framework */; };
 		00B334850FE41F080042661D /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B334840FE41F080042661D /* CoreAudio.framework */; };
 		00B4174D1004197300BA7E45 /* AppController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B4174C1004197300BA7E45 /* AppController.m */; };
 		00C07E940FD28217004E0D3D /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C07E930FD28217004E0D3D /* Quartz.framework */; };
+		00C7F1D9100BC5B500AD0812 /* IPMinus.png in Resources */ = {isa = PBXBuildFile; fileRef = 00C7F1D5100BC5B400AD0812 /* IPMinus.png */; };
+		00C7F1DA100BC5B500AD0812 /* IPMinusSel.png in Resources */ = {isa = PBXBuildFile; fileRef = 00C7F1D6100BC5B400AD0812 /* IPMinusSel.png */; };
+		00C7F1DB100BC5B500AD0812 /* IPPlus.png in Resources */ = {isa = PBXBuildFile; fileRef = 00C7F1D7100BC5B400AD0812 /* IPPlus.png */; };
+		00C7F1DC100BC5B500AD0812 /* IPPlusSel.png in Resources */ = {isa = PBXBuildFile; fileRef = 00C7F1D8100BC5B400AD0812 /* IPPlusSel.png */; };
 		00D8448A0FFF04C0005802F0 /* AppleGraphicsTablet.png in Resources */ = {isa = PBXBuildFile; fileRef = 000F66360FF8368F00C8AF23 /* AppleGraphicsTablet.png */; };
 		00D8448B0FFF04C0005802F0 /* DiskImage.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000F66370FF8368F00C8AF23 /* DiskImage.icns */; };
 		00D8448C0FFF04C0005802F0 /* DiskImage35.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000F66380FF8368F00C8AF23 /* DiskImage35.icns */; };
@@ -172,6 +177,7 @@
 		006F08C81006F65A00CE75DD /* TemplateChooserWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TemplateChooserWindowController.h; sourceTree = "<group>"; };
 		006F08C91006F65A00CE75DD /* TemplateChooserWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TemplateChooserWindowController.m; sourceTree = "<group>"; };
 		0075B1B10FE79F7E009C1DFA /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
+		008CCC66100E7B0D007A34C3 /* IPInfoOff.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPInfoOff.png; path = macosx/Images/IPInfoOff.png; sourceTree = "<group>"; };
 		00B3347C0FE41EF60042661D /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = /System/Library/Frameworks/AudioToolbox.framework; sourceTree = "<absolute>"; };
 		00B334800FE41EFE0042661D /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = /System/Library/Frameworks/AudioUnit.framework; sourceTree = "<absolute>"; };
 		00B334840FE41F080042661D /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = /System/Library/Frameworks/CoreAudio.framework; sourceTree = "<absolute>"; };
@@ -180,6 +186,10 @@
 		00B4174C1004197300BA7E45 /* AppController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppController.m; sourceTree = "<group>"; };
 		00C07E350FD27CCF004E0D3D /* PRGeneral.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PRGeneral.png; sourceTree = "<group>"; };
 		00C07E930FD28217004E0D3D /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = /System/Library/Frameworks/Quartz.framework; sourceTree = "<absolute>"; };
+		00C7F1D5100BC5B400AD0812 /* IPMinus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPMinus.png; path = macosx/Images/IPMinus.png; sourceTree = "<group>"; };
+		00C7F1D6100BC5B400AD0812 /* IPMinusSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPMinusSel.png; path = macosx/Images/IPMinusSel.png; sourceTree = "<group>"; };
+		00C7F1D7100BC5B400AD0812 /* IPPlus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPPlus.png; path = macosx/Images/IPPlus.png; sourceTree = "<group>"; };
+		00C7F1D8100BC5B400AD0812 /* IPPlusSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPPlusSel.png; path = macosx/Images/IPPlusSel.png; sourceTree = "<group>"; };
 		00D844B60FFF0505005802F0 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Document.xib; sourceTree = "<group>"; };
 		00D844B80FFF0505005802F0 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/GraphicsTablet.xib; sourceTree = "<group>"; };
 		00D844BA0FFF0505005802F0 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = macosx/English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -449,6 +459,11 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				008CCC66100E7B0D007A34C3 /* IPInfoOff.png */,
+				00C7F1D5100BC5B400AD0812 /* IPMinus.png */,
+				00C7F1D6100BC5B400AD0812 /* IPMinusSel.png */,
+				00C7F1D7100BC5B400AD0812 /* IPPlus.png */,
+				00C7F1D8100BC5B400AD0812 /* IPPlusSel.png */,
 				00679D04100817F600B38748 /* DeviceChooser.xib */,
 				00679D06100817F700B38748 /* TemplateChooser.xib */,
 				00D844B50FFF0505005802F0 /* Document.xib */,
@@ -603,6 +618,11 @@
 				00FFD1F410092DE000F347CB /* IPUnlockedHover.png in Resources */,
 				00FFD1F510092DE000F347CB /* IPUnlockedOff.png in Resources */,
 				00FFD1F610092DE000F347CB /* IPUnlockedOn.png in Resources */,
+				00C7F1D9100BC5B500AD0812 /* IPMinus.png in Resources */,
+				00C7F1DA100BC5B500AD0812 /* IPMinusSel.png in Resources */,
+				00C7F1DB100BC5B500AD0812 /* IPPlus.png in Resources */,
+				00C7F1DC100BC5B500AD0812 /* IPPlusSel.png in Resources */,
+				008CCC67100E7B0D007A34C3 /* IPInfoOff.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

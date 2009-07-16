@@ -20,6 +20,11 @@
 	NSDate *modificationDate;
 	NSImage *image;
 
+	NSMutableArray *expansions;
+	NSMutableArray *diskDrives;
+	NSMutableArray *portDevices;
+	
+	int videoPreset;
 	float brightness;
 	float contrast;
 	float saturation;
@@ -51,6 +56,22 @@
 - (void)setModificationDate:(NSDate *)value;
 - (NSImage *)image;
 - (void)setImage:(NSImage *)value;
+
+- (NSMutableArray *)expansions;
+- (void)insertObject:(id)value inExpansionsAtIndex:(NSUInteger)index;
+- (void)removeObjectFromExpansionsAtIndex:(NSUInteger)index;
+
+- (NSMutableArray *)diskDrives;
+- (void)insertObject:(id)value inDiskDrivesAtIndex:(NSUInteger)index;
+- (void)removeObjectFromDiskDrivesAtIndex:(NSUInteger)index;
+
+- (NSMutableArray *)portDevices;
+- (void)insertObject:(id)value inPortDevicesAtIndex:(NSUInteger)index;
+- (void)removeObjectFromPortDevicesAtIndex:(NSUInteger)index;
+
+- (int)videoPreset;
+- (void)setVideoPreset:(int)value;
+
 - (float)brightness;
 - (void)setBrightness:(float)value;
 - (float)contrast;

@@ -40,7 +40,7 @@ NSString *itemIdentifiers[] =
     [super windowDidLoad];
 	
 	NSPanel *panel = (NSPanel *)[self window];
-	[panel setBecomesKeyOnlyIfNeeded:YES];
+//	[panel setBecomesKeyOnlyIfNeeded:YES];
 	[panel setFrameUsingName:@"InspectorPanel"];
 	[panel setFrameAutosaveName:@"InspectorPanel"];
 	

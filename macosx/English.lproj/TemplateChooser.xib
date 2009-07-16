@@ -8,7 +8,7 @@
 		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="42"/>
+			<integer value="43"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -68,7 +68,7 @@
 								</object>
 								<reference key="NSControlView" ref="486717285"/>
 								<int key="NSButtonFlags">-2038284033</int>
-								<int key="NSButtonFlags2">129</int>
+								<int key="NSButtonFlags2">1</int>
 								<string key="NSAlternateContents"/>
 								<string type="base64-UTF8" key="NSKeyEquivalent">DQ</string>
 								<int key="NSPeriodicDelay">200</int>
@@ -88,7 +88,7 @@
 								<reference key="NSSupport" ref="311966463"/>
 								<reference key="NSControlView" ref="522794357"/>
 								<int key="NSButtonFlags">-2038284033</int>
-								<int key="NSButtonFlags2">129</int>
+								<int key="NSButtonFlags2">1</int>
 								<string key="NSAlternateContents"/>
 								<string type="base64-UTF8" key="NSKeyEquivalent">Gw</string>
 								<int key="NSPeriodicDelay">200</int>
@@ -307,7 +307,7 @@
 									<double key="NSPercent">9.929078e-01</double>
 								</object>
 							</object>
-							<string key="NSFrame">{{1, 61}, {157, 298}}</string>
+							<string key="NSFrame">{{0, 61}, {157, 298}}</string>
 							<reference key="NSSuperview" ref="148496431"/>
 							<reference key="NSNextKeyView" ref="508141893"/>
 							<int key="NSsFlags">528</int>

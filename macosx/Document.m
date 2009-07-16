@@ -27,9 +27,14 @@
 		
 		power = YES;
 		
+		[self setPower:YES];
 		[self setType:@"Apple II"];
+		[self setDescription:@"The Apple II is a nice computer."];
 		[self setModificationDate:[NSDate date]];
 		[self setVolume:1.0f];
+		expansions = [[NSMutableArray alloc] init];
+		diskDrives = [[NSMutableArray alloc] init];
+		portDevices = [[NSMutableArray alloc] init];
 	}
 	
 	return self;
@@ -270,6 +275,83 @@
         [image release];
         image = [value copy];
     }
+}
+
+- (NSMutableArray *)expansions
+{
+	return [[expansions retain] autorelease];
+}
+
+/*- (void)getExpansions:(id *)value range:(NSRange)range
+{
+    [expansions getObjects:value range:range];
+}*/
+
+/*- (int)countOfExpansions
+{
+	return [expansions count];
+}
+
+- (id)objectInExpansionsAtIndex:(unsigned)value
+{
+    return [expansions objectAtIndex:value];
+}
+
+- (void)setExpansions:(NSMutableArray *)value
+{
+    if (expansions != value)
+		expansions = [value mutableCopy];
+}
+*/
+- (void)insertObject:(id)value inExpansionsAtIndex:(NSUInteger)index
+{
+    [expansions insertObject:value atIndex:index];
+}
+
+- (void)removeObjectFromExpansionsAtIndex:(NSUInteger)index
+{
+    [expansions removeObjectAtIndex:index];
+}
+
+- (NSMutableArray *)diskDrives
+{
+	return [[diskDrives retain] autorelease];
+}
+
+- (void)insertObject:(id)value inDiskDrivesAtIndex:(NSUInteger)index
+{
+    [diskDrives insertObject:value atIndex:index];
+}
+
+- (void)removeObjectFromDiskDrivesAtIndex:(NSUInteger)index
+{
+    [diskDrives removeObjectAtIndex:index];
+}
+
+- (NSMutableArray *)portDevices
+{
+	return [[portDevices retain] autorelease];
+}
+
+- (void)insertObject:(id)value inPortDevicesAtIndex:(NSUInteger)index
+{
+    [portDevices insertObject:value atIndex:index];
+}
+
+- (void)removeObjectFromPortDevicesAtIndex:(NSUInteger)index
+{
+    [portDevices removeObjectAtIndex:index];
+}
+
+- (int)videoPreset
+{
+	return videoPreset;
+}
+
+- (void)setVideoPreset:(int)value
+{
+    if (videoPreset != value)
+		videoPreset = value;
 }
 
 - (float)brightness

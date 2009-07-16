@@ -8,9 +8,10 @@
 		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="28"/>
 			<integer value="1865"/>
+			<integer value="28"/>
 			<integer value="23"/>
+			<integer value="1932"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -68,7 +69,7 @@
 				<string key="NSWindowContentMaxSize">{3.40282e+38, 3.40282e+38}</string>
 				<string key="NSWindowContentMinSize">{600, 400}</string>
 				<object class="NSView" key="NSWindowView" id="618274563">
-					<nil key="NSNextResponder"/>
+					<reference key="NSNextResponder"/>
 					<int key="NSvFlags">274</int>
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -89,7 +90,7 @@
 								</object>
 								<reference key="NSControlView" ref="891938470"/>
 								<int key="NSButtonFlags">-2038284033</int>
-								<int key="NSButtonFlags2">129</int>
+								<int key="NSButtonFlags2">1</int>
 								<string key="NSAlternateContents"/>
 								<string type="base64-UTF8" key="NSKeyEquivalent">DQ</string>
 								<int key="NSPeriodicDelay">200</int>
@@ -109,7 +110,7 @@
 								<reference key="NSSupport" ref="86725571"/>
 								<reference key="NSControlView" ref="909273995"/>
 								<int key="NSButtonFlags">-2038284033</int>
-								<int key="NSButtonFlags2">129</int>
+								<int key="NSButtonFlags2">1</int>
 								<string key="NSAlternateContents"/>
 								<string type="base64-UTF8" key="NSKeyEquivalent">Gw</string>
 								<int key="NSPeriodicDelay">200</int>
@@ -303,6 +304,7 @@
 									</object>
 									<string key="NSFrameSize">{157, 298}</string>
 									<reference key="NSSuperview" ref="48357485"/>
+									<reference key="NSNextKeyView" ref="47001144"/>
 									<reference key="NSDocView" ref="47001144"/>
 									<reference key="NSBGColor" ref="112416572"/>
 									<int key="NScvFlags">2</int>
@@ -314,6 +316,7 @@
 									<reference key="NSSuperview" ref="48357485"/>
 									<reference key="NSTarget" ref="48357485"/>
 									<string key="NSAction">_doScroller:</string>
+									<double key="NSCurValue">1.000000e+00</double>
 									<double key="NSPercent">9.966997e-01</double>
 								</object>
 								<object class="NSScroller" id="991920299">
@@ -327,8 +330,9 @@
 									<double key="NSPercent">9.929078e-01</double>
 								</object>
 							</object>
-							<string key="NSFrame">{{1, 61}, {157, 298}}</string>
+							<string key="NSFrame">{{0, 61}, {157, 298}}</string>
 							<reference key="NSSuperview" ref="618274563"/>
+							<reference key="NSNextKeyView" ref="982894341"/>
 							<int key="NSsFlags">528</int>
 							<reference key="NSVScroller" ref="377977615"/>
 							<reference key="NSHScroller" ref="991920299"/>
@@ -516,6 +520,7 @@
 									</object>
 									<string key="NSFrameSize">{442, 298}</string>
 									<reference key="NSSuperview" ref="963585245"/>
+									<reference key="NSNextKeyView" ref="204731862"/>
 									<reference key="NSDocView" ref="204731862"/>
 									<object class="NSColor" key="NSBGColor">
 										<int key="NSColorSpace">1</int>
@@ -546,6 +551,7 @@
 							</object>
 							<string key="NSFrame">{{158, 61}, {442, 298}}</string>
 							<reference key="NSSuperview" ref="618274563"/>
+							<reference key="NSNextKeyView" ref="437025516"/>
 							<int key="NSsFlags">528</int>
 							<reference key="NSVScroller" ref="716404904"/>
 							<reference key="NSHScroller" ref="993569478"/>
@@ -554,6 +560,7 @@
 						</object>
 					</object>
 					<string key="NSFrameSize">{600, 400}</string>
+					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1440, 878}}</string>
 				<string key="NSMinSize">{600, 422}</string>
