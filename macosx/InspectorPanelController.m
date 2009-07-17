@@ -25,7 +25,15 @@ NSString *itemIdentifiers[] =
 
 - (id)init
 {
-	return [super initWithWindowNibName:@"InspectorPanel"];
+	if (self = [super initWithWindowNibName:@"InspectorPanel"])
+	{
+		[[NSNotificationCenter defaultCenter] addObserver:self
+												 selector:@selector(toggleInspectorPanel:)
+													 name:@"toggleInspectorPanel"
+												   object:nil];
+	}
+	
+	return self;
 }
 
 - (void)windowDidLoad
@@ -36,7 +44,6 @@ NSString *itemIdentifiers[] =
 	oldTabTag = -1;
 	
 	NSPanel *panel = (NSPanel *)[self window];
-//	[panel setBecomesKeyOnlyIfNeeded:YES];
 	[panel setFrameUsingName:@"InspectorPanel"];
 	[panel setFrameAutosaveName:@"InspectorPanel"];
 	
@@ -44,11 +51,7 @@ NSString *itemIdentifiers[] =
 	[fTabMatrix selectCellWithTag:tabTag];
 	[self setView:tabTag isInit:YES];
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self
-											 selector:@selector(toggleInspectorPanel:)
-												 name:@"toggleInspectorPanel"
-											   object:nil];
-	
+	// TO-DO: remove this code...
 	[self setInspectedDocument:nil];
 	[NSApp addObserver:self
 			forKeyPath:@"mainWindow.windowController.document"
