@@ -10,22 +10,32 @@
 
 #import <Cocoa/Cocoa.h>
 
+#define DV_TEXTURE_VIDEO	0
+#define DV_TEXTURE_POWER	1
+#define DV_TEXTURE_PAUSE	2
+#define DV_TEXTURE_END		3
+
 @interface DocumentView : NSOpenGLView {
-	GLuint textureId;
+	GLuint texture[DV_TEXTURE_END];
+	NSRect textureRect[DV_TEXTURE_END];
 	
-	float screenFrameProportion;
+	float screenRectProportion;
 	float viewWidthScale;
 	float viewHeightScale;
 	float viewOriginXScale;
 	float viewOriginYScale;
-	NSRect bufferFrame;
 	
-	NSRect cachedViewFrame;
+	NSRect cachedViewRect;
+
+	NSRect videoRect;
+	NSRect osdRect;
+	
+	BOOL lastViewportUpdate;
 }
 
-- (void)initGl;
-- (void)deallocGl;
-- (void)renderGl;
-- (void)drawGl:(NSRect)viewFrame;
+- (void)initGL;
+- (void)deallocGL;
+- (void)renderGL;
+- (void)drawGL:(NSRect)viewFrame;
 
 @end

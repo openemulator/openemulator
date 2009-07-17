@@ -12,22 +12,23 @@
 
 @interface InspectorPanelController : NSWindowController
 {
-    NSUserDefaults *fDefaults;
-    IBOutlet NSObjectController *documentController;
-    
-	id inspectedDocument;
+    IBOutlet NSObjectController *fDocumentObjectController;
 	
 	IBOutlet NSMatrix *fTabMatrix;
     IBOutlet NSView *fEmulationView, *fExpansionsView, *fDiskDrivesView,
-		*fPortsView, *fVideoView, *fAudioView;
+	*fPortsView, *fVideoView, *fAudioView;
+	
+    NSUserDefaults *fDefaults;
+	id inspectedDocument;
 	int oldTabTag;
 }
 
-- (void)toggleInspectorPanel:(id)sender;
 
-- (void)activeDocumentChanged;
+- (void)activeDocumentDidChange;
 - (id)inspectedDocument;
 - (void)setInspectedDocument:(id)theDocument;
+
+- (void)toggleInspectorPanel:(id)sender;
 
 - (void)selectView:(id)sender;
 - (void)setView:(int)tabTag isInit:(bool)isInit;

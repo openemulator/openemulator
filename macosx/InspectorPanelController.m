@@ -40,23 +40,66 @@ NSString *itemIdentifiers[] =
 {
     [super windowDidLoad];
 	
-	fDefaults = [NSUserDefaults standardUserDefaults];
-	oldTabTag = -1;
-	
 	NSPanel *panel = (NSPanel *)[self window];
 	[panel setFrameUsingName:@"InspectorPanel"];
 	[panel setFrameAutosaveName:@"InspectorPanel"];
 	
+	fDefaults = [NSUserDefaults standardUserDefaults];
+	
+	oldTabTag = -1;
 	int tabTag = [fDefaults integerForKey:@"OEInspectorPanelViewIndex"];
 	[fTabMatrix selectCellWithTag:tabTag];
 	[self setView:tabTag isInit:YES];
 	
-	// TO-DO: remove this code...
-	[self setInspectedDocument:nil];
-	[NSApp addObserver:self
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(inspectorPanelDidResignKey:)
+												 name:NSWindowDidResignKeyNotification
+											   object:[self window]];
+	[self activeDocumentDidChange];
+    [NSApp addObserver:self
 			forKeyPath:@"mainWindow.windowController.document"
 			   options:0
 			   context:[InspectorPanelController class]];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath
+					  ofObject:(id)object
+						change:(NSDictionary *)change
+					   context:(void *)context
+{
+    if (context == [InspectorPanelController class])
+		[self activeDocumentDidChange];
+	else
+		[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+}
+
+- (void)activeDocumentDidChange
+{
+    id activeDocument = [[[NSApp mainWindow] windowController] document];
+    if (activeDocument != inspectedDocument)
+	{
+		if (inspectedDocument)
+			[fDocumentObjectController commitEditing];
+		
+		self.inspectedDocument = (activeDocument &&
+								  [activeDocument isKindOfClass:[Document class]
+								  ]) ? activeDocument : nil;   
+    }
+}
+
+- (void)inspectorPanelDidResignKey:(NSNotification *)notification
+{
+    [fDocumentObjectController commitEditing];
+}
+
+- (id)inspectedDocument
+{
+	return inspectedDocument;
+}
+
+- (void)setInspectedDocument:(id)value
+{
+	inspectedDocument = value;
 }
 
 - (void)toggleInspectorPanel:(id)sender
@@ -85,48 +128,6 @@ NSString *itemIdentifiers[] =
 	
     return YES;
 }
-
-- (id)inspectedDocument
-{
-	return inspectedDocument;
-}
-
-- (void)setInspectedDocument:(id)theDocument
-{
-	inspectedDocument = theDocument;
-}
-
-- (void)observeValueForKeyPath:(NSString *)keyPath
-					  ofObject:(id)object
-						change:(NSDictionary *)change
-					   context:(void *)context
-{
-    if (context == [InspectorPanelController class])
-		[self activeDocumentChanged];
-	else
-		[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
-}
-
-- (void)activeDocumentChanged
-{
-    id activeDocument = [[[NSApp mainWindow] windowController] document];
-    if (activeDocument == [self inspectedDocument])
-		return;
-	
-	if ([self inspectedDocument])
-		[documentController commitEditing];
-	
-	if (activeDocument && [activeDocument isKindOfClass:[Document class]])
-		[self setInspectedDocument:activeDocument];
-	else
-		[self setInspectedDocument:nil];
-}
-
-/*- (void)inspectorPanelDidResignKey:(NSNotification *)notification
-{
-    [documentController commitEditing];
-}
-*/
 
 - (NSView *)getView:(int)tabTag
 {
@@ -171,7 +172,7 @@ NSString *itemIdentifiers[] =
 	
 	NSWindow *window = [self window];
 	NSRect frame = [window frame];
-
+	
 	NSView *view = [self getView:tabTag];
 	
 	float difference = ([view frame].size.height - oldHeight) *
