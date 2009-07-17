@@ -76,11 +76,6 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 	[super dealloc];
 }
 
-- (id)inspectorPanelController
-{
-	return fInspectorPanelController;
-}
-
 - (BOOL)application:(NSApplication *)theApplication
 		   openFile:(NSString *)filename
 {

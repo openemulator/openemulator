@@ -48,19 +48,17 @@
 	
 	if ([ident isEqualToString:@"General"])
 	{
-		[item setLabel:NSLocalizedString(@"General", "Preferences -> toolbar item title")];
+		[item setLabel:NSLocalizedString(@"General", "Preferences toolbar item label")];
 		[item setImage:[NSImage imageNamed:@"PRGeneral.png"]];
 		[item setTarget:self];
 		[item setAction:@selector(selectView:)];
-		[item setAutovalidates:NO];
 	}
 	else if ([ident isEqualToString:@"Sound"])
 	{
-		[item setLabel:NSLocalizedString(@"Sound", "Preferences -> toolbar item title")];
+		[item setLabel:NSLocalizedString(@"Sound", "Preferences toolbar item label")];
 		[item setImage:[NSImage imageNamed:@"PRSound.png"]];
 		[item setTarget:self];
 		[item setAction:@selector(selectView:)];
-		[item setAutovalidates:NO];
 	}
 	else
 	{

@@ -13,7 +13,7 @@
 
 NSString *itemIdentifiers[] = 
 {
-	@"Computer",
+	@"Emulation",
 	@"Expansions",
 	@"Disk Drives",
 	@"Printers and Modems",
@@ -25,19 +25,15 @@ NSString *itemIdentifiers[] =
 
 - (id)init
 {
-	self = [super initWithWindowNibName:@"InspectorPanel"];
-	
-    if (self) {
-        fDefaults = [NSUserDefaults standardUserDefaults];
-		oldTabTag = -1;
-    }
-	
-    return self;
+	return [super initWithWindowNibName:@"InspectorPanel"];
 }
 
 - (void)windowDidLoad
 {
     [super windowDidLoad];
+	
+	fDefaults = [NSUserDefaults standardUserDefaults];
+	oldTabTag = -1;
 	
 	NSPanel *panel = (NSPanel *)[self window];
 //	[panel setBecomesKeyOnlyIfNeeded:YES];
@@ -47,6 +43,11 @@ NSString *itemIdentifiers[] =
 	int tabTag = [fDefaults integerForKey:@"OEInspectorPanelViewIndex"];
 	[fTabMatrix selectCellWithTag:tabTag];
 	[self setView:tabTag isInit:YES];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(toggleInspectorPanel:)
+												 name:@"toggleInspectorPanel"
+											   object:nil];
 	
 	[self setInspectedDocument:nil];
 	[NSApp addObserver:self

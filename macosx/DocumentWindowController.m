@@ -46,34 +46,38 @@
 	{
 		[item setLabel:NSLocalizedString(@"Power",
 										 "Document toolbar item label")];
+		[item setToolTip:NSLocalizedString(@"Enable or disable the emulation's power.",
+										   "Document toolbar item label")];
 		[item setImage:[NSImage imageNamed:@"TBPower.png"]];
 		[item setTarget:document];
 		[item setAction:@selector(togglePower:)];
-		[item setAutovalidates:NO];
 	}
 	else if ([ident isEqualToString:@"Reset"])
 	{
 		[item setLabel:NSLocalizedString(@"Reset", "Document toolbar item label")];
+		[item setToolTip:NSLocalizedString(@"Reset the emulation.",
+										   "Document toolbar item label")];
 		[item setImage:[NSImage imageNamed:@"TBReset.png"]];
 		[item setTarget:document];
 		[item setAction:@selector(resetEmulation:)];
-		[item setAutovalidates:NO];
 	}
 	else if ([ident isEqualToString:@"Pause"])
 	{
 		[item setLabel:NSLocalizedString(@"Pause", "Document toolbar item label")];
+		[item setToolTip:NSLocalizedString(@"Pause or continue the emulation.",
+										   "Document toolbar item label")];
 		[item setImage:[NSImage imageNamed:@"TBPause.png"]];
 		[item setTarget:document];
 		[item setAction:@selector(togglePause:)];
-		[item setAutovalidates:NO];
 	}
 	else if ([ident isEqualToString:@"Inspector"])
 	{
 		[item setLabel:NSLocalizedString(@"Inspector", "Document toolbar item label")];
+		[item setToolTip:NSLocalizedString(@"Show or hide the inspector window.",
+										   "Document toolbar item label")];
 		[item setImage:[NSImage imageNamed:@"TBInspector.png"]];
-		[item setTarget:[documentController inspectorPanelController]];
+		[item setTarget:self];
 		[item setAction:@selector(toggleInspectorPanel:)];
-		[item setAutovalidates:NO];
 	}
 	else
 	{
@@ -126,9 +130,15 @@
     return YES;
 }
 
+- (void)toggleInspectorPanel:(id)sender
+{
+	[[NSNotificationCenter defaultCenter] postNotificationName:@"toggleInspectorPanel"
+														object:self];
+}
+
 /*
  * See if we can replace the following with an interception of the document close sheet
- */
+
 - (void)performClose:(id)sender
 {
 	if (fullscreen)
@@ -184,7 +194,7 @@
 	
 	[[self document] printDocument:sender];
 }
-/*
+
  * See end
  */
 

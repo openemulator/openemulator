@@ -53,7 +53,7 @@
 
 - (void)dealloc
 {
-	[self deallocGl];
+//	[self deallocGl];
 	[super dealloc];
 }
 

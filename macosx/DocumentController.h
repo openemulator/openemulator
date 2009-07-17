@@ -26,7 +26,6 @@
 	int disableMenuBarCount;
 }
 
-- (id)inspectorPanelController;
 - (IBAction)newDocumentFromTemplateChooser:(id)sender;
 - (id)openUntitledDocumentFromTemplateURL:(NSURL *)templateURL error:(NSError **)outError;
 - (id)makeUntitledDocumentFromTemplateURL:(NSURL *)templateURL error:(NSError **)outError;
