@@ -5,58 +5,29 @@
  * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Manages fullscreen window messages.
+ * Overrides document window messages.
  */
 
 #import "DocumentWindow.h"
+#import "DocumentWindowController.h"
 
 @implementation DocumentWindow
 
-- (BOOL)canBecomeKeyWindow
+- (NSRect)constrainFrameRect:(NSRect)frameRect toScreen:(NSScreen *)screen
 {
-	return YES;
-}
-/*
-- (void)keyDown:(NSEvent *)theEvent
-{
-    // your code here
+	return frameRect;
 }
 
-- (void)keyUp:(NSEvent *)theEvent
-{
-    // your code here
-}
-*/
 - (BOOL)validateUserInterfaceItem:(id)item
 {
-	if ([item action] == @selector(performClose:))
+	DocumentWindowController *documentWindowController = [self windowController];
+	
+	if ([item action] == @selector(toggleToolbarShown:))
+		return ![documentWindowController fullscreen];
+	else if ([item action] == @selector(runToolbarCustomizationPalette:))
+		return ![documentWindowController fullscreen];
+	else
 		return YES;
-
-	return YES;
-}
-
-- (void)performClose:(id)sender
-{
-	[[self windowController] performClose:sender];
-}
-
-- (void)canCloseDocumentWithDelegate:(id)delegate
-				 shouldCloseSelector:(SEL)shouldCloseSelector
-						 contextInfo:(void*)contextInfo
-{
-	printf("DocumentWindow:canCloseDocumentWithDelegate\n");
-}
-
-- (BOOL)windowShouldClose:(id)window
-{
-	printf("DocumentWindow:windowShouldClose\n");
-	return YES;
-}
-
-- (void)close
-{
-	printf("DocumentWindow:close");
-	[super close];
 }
 
 @end

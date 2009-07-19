@@ -21,10 +21,10 @@
 	DocumentController *documentController;
 	
 	BOOL fullscreen;
-	id fullscreenWindow;
-	NSView *fullscreenView;
+	NSRect fullscreenExitRect;
 }
 
+- (BOOL)fullscreen;
 - (void)setHalfSize:(id)sender;
 - (void)setActualSize:(id)sender;
 - (void)setDoubleSize:(id)sender;

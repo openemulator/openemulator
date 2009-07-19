@@ -125,8 +125,8 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 		return !isTemplateChooserWindowOpen;
 	else if ([item action] == @selector(newDocumentFromTemplateChooser:))
 		return !isTemplateChooserWindowOpen;
-	
-	return YES;
+	else
+		return YES;
 }
 
 - (IBAction)newDocumentFromTemplateChooser:(id)sender

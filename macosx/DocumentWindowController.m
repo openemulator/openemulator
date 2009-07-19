@@ -21,11 +21,11 @@
 - (void)windowDidLoad
 {
 	[super windowDidLoad];
-	
-	fullscreen = NO;
-	
+
 	documentController = [NSDocumentController sharedDocumentController];
 	document = [self document];
+	
+	fullscreen = NO;
 	
 	NSToolbar *toolbar;
 	toolbar = [[NSToolbar alloc] initWithIdentifier:@"Document Toolbar"];
@@ -44,9 +44,22 @@
 				  options:NSKeyValueObservingOptionNew
 				  context:NULL];
 	
-	// To-Do: Improve the updating code
+	// To-Do: Improve the view updating code
 	[document setPower:[document power]];
 	[document setPause:[document pause]];
+}
+
+- (BOOL)fullscreen
+{
+	return fullscreen;
+}
+
+- (NSSize)windowWillResize:(NSWindow *)window toSize:(NSSize)proposedFrameSize
+{
+	if (fullscreen)
+		return [window frame].size;
+	else
+		return proposedFrameSize;
 }
 
 - (NSToolbarItem *)toolbar:(NSToolbar *)toolbar
@@ -119,15 +132,7 @@
 
 - (BOOL)validateUserInterfaceItem:(id)item
 {
-	if ([item action] == @selector(setHalfSize:))
-		return !fullscreen;
-	else if ([item action] == @selector(setActualSize:))
-		return !fullscreen;
-	else if ([item action] == @selector(setDoubleSize:))
-		return !fullscreen;
-	else if ([item action] == @selector(fitToScreen:))
-		return !fullscreen;
-	else if ([item action] == @selector(toggleFullscreen:))
+	if ([item action] == @selector(toggleFullscreen:))
 	{
 		NSString *menuTitle;
 		if (!fullscreen)
@@ -140,7 +145,7 @@
 		[item setTitleWithMnemonic:menuTitle];
 	}
 	
-    return YES;
+	return YES;
 }
 
 - (void)toggleInspectorPanel:(id)sender
@@ -148,68 +153,6 @@
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"toggleInspectorPanel"
 														object:self];
 }
-
-/*
- * See if we can replace the following with an interception of the document close sheet
-
-- (void)performClose:(id)sender
-{
-	if (fullscreen)
-		[self toggleFullscreen:sender];
-	
-	[[self window] performClose:self];
-}
-
-- (void)saveDocument:(id)sender
-{
-	if (fullscreen)
-		[self toggleFullscreen:sender];
-	
-	[[self document] saveDocument:sender];
-}
-
-- (void)saveDocumentAs:(id)sender
-{
-	if (fullscreen)
-		[self toggleFullscreen:sender];
-	
-	[[self document] saveDocumentAs:sender];
-}
-
-- (void)revertDocumentToSaved:(id)sender
-{
-	if (fullscreen)
-		[self toggleFullscreen:sender];
-	
-	[[self document] revertDocumentToSaved:sender];
-}
-
-- (void)saveDocumentAsTemplate:(id)sender
-{
-	if (fullscreen)
-		[self toggleFullscreen:sender];
-	
-	[[self document] saveDocumentAsTemplate:sender];
-}
-
-- (void)runPageLayout:(id)sender
-{
-	if (fullscreen)
-		[self toggleFullscreen:sender];
-	
-	[[self document] runPageLayout:sender];
-}
-
-- (void)printDocument:(id)sender
-{
-	if (fullscreen)
-		[self toggleFullscreen:sender];
-	
-	[[self document] printDocument:sender];
-}
-
- * See end
- */
 
 - (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender
 {
@@ -232,41 +175,43 @@
 - (void)setFrameSize:(double)proportion
 {
 	NSWindow *window = [self window];
-	NSRect windowFrame = [window frame];
+	NSRect windowRect = [window frame];
 	NSView *content = [window contentView];
-	NSRect contentFrame = [content frame];
+	NSRect contentRect = [content frame];
 	NSScreen *screen = [window screen];
-	NSRect screenFrame = [screen visibleFrame];
+	NSRect screenRect = [screen visibleFrame];
+	float scale = [window userSpaceScaleFactor];
 	
-	double scale = [window userSpaceScaleFactor];
-	contentFrame.size.width *= scale;
-	contentFrame.size.height *= scale;
+	contentRect.size.width *= scale;
+	contentRect.size.height *= scale;
 	
-	double deltaWidth = NSWidth(windowFrame) - NSWidth(contentFrame);
-	double deltaHeight = NSHeight(windowFrame) - NSHeight(contentFrame);
+	double deltaWidth = NSWidth(windowRect) - NSWidth(contentRect);
+	double deltaHeight = NSHeight(windowRect) - NSHeight(contentRect);
 	
-	windowFrame.origin.x = NSMidX(windowFrame);
-	windowFrame.origin.y = NSMaxY(windowFrame);
-	windowFrame.size.width = scale * proportion * DEFAULT_FRAME_WIDTH + deltaWidth;
-	windowFrame.size.height = scale * proportion * DEFAULT_FRAME_HEIGHT + deltaHeight;
-	windowFrame.origin.x -= NSWidth(windowFrame) / 2;
-	windowFrame.origin.y -= NSHeight(windowFrame);
+	windowRect.origin.x = NSMidX(windowRect);
+	windowRect.origin.y = NSMaxY(windowRect);
+	windowRect.size.width = scale * proportion * DEFAULT_FRAME_WIDTH + deltaWidth;
+	windowRect.size.height = scale * proportion * DEFAULT_FRAME_HEIGHT + deltaHeight;
+	windowRect.origin.x -= NSWidth(windowRect) / 2;
+	windowRect.origin.y -= NSHeight(windowRect);
 	
-	if (NSMaxX(windowFrame) > NSMaxX(screenFrame))
-		windowFrame.origin.x = NSMaxX(screenFrame) - NSWidth(windowFrame);
-	if (NSMaxY(windowFrame) > NSMaxY(screenFrame))
-		windowFrame.origin.y = NSMaxY(screenFrame) - NSHeight(windowFrame);
-	if (NSMinX(windowFrame) < NSMinX(screenFrame))
-		windowFrame.origin.x = NSMinX(screenFrame);
-	if (NSMinY(windowFrame) < NSMinY(screenFrame))
-		windowFrame.origin.y = NSMinY(screenFrame);
+	if (NSMaxX(windowRect) > NSMaxX(screenRect))
+		windowRect.origin.x = NSMaxX(screenRect) - NSWidth(windowRect);
+	if (NSMaxY(windowRect) > NSMaxY(screenRect))
+		windowRect.origin.y = NSMaxY(screenRect) - NSHeight(windowRect);
+	if (NSMinX(windowRect) < NSMinX(screenRect))
+		windowRect.origin.x = NSMinX(screenRect);
+	if (NSMinY(windowRect) < NSMinY(screenRect))
+		windowRect.origin.y = NSMinY(screenRect);
 	
-	if (NSWidth(windowFrame) > NSWidth(screenFrame))
-		windowFrame.size.width = NSWidth(screenFrame);
-	if (NSHeight(windowFrame) > NSHeight(screenFrame))
-		windowFrame.size.height = NSHeight(screenFrame);
+	if (NSWidth(windowRect) > NSWidth(screenRect))
+		windowRect.size.width = NSWidth(screenRect);
+	if (NSHeight(windowRect) > NSHeight(screenRect))
+		windowRect.size.height = NSHeight(screenRect);
 	
-	[window setFrame:windowFrame display:YES animate:YES];
+	[window setFrame:windowRect display:YES animate:YES];
+	
+	fullscreen = NO;
 }
 
 - (void)setHalfSize:(id)sender
@@ -292,51 +237,30 @@
 - (void)toggleFullscreen:(id)sender
 {
 	NSWindow *window = [self window];
-	NSRect contentFrame = [window contentRectForFrameRect:[window frame]];
 	
 	if (!fullscreen)
 	{
 		[documentController disableMenuBar];
 		
-        DisableScreenUpdates();
-		fullscreenWindow = [[DocumentWindow alloc] initWithContentRect:contentFrame
-															 styleMask:NSBorderlessWindowMask
-															   backing:NSBackingStoreBuffered
-																 defer:YES];
-		[window orderOut:self];
-		[fullscreenWindow setContentView:[window contentView]];
-		[fullscreenWindow setWindowController:self];
-		[fullscreenWindow setDelegate:self];
-		[fullscreenWindow makeKeyAndOrderFront:self];
-        EnableScreenUpdates();
+		fullscreenExitRect = [window frame];
+		NSRect contentRect = [[window contentView] frame];
+		float titlebarHeight = NSHeight(fullscreenExitRect) - ([window userSpaceScaleFactor] *
+															   NSHeight(contentRect));
 		
-		[fullscreenWindow setFrame:[[window screen] frame]
-						   display:YES
-						   animate:YES];
+		NSRect windowRect = [[window screen] frame];
+		windowRect.size.height += titlebarHeight;
 		
-		[NSApp addWindowsItem:fullscreenWindow
-						title:[window title]
-					 filename:NO];
+		[window setFrame:windowRect
+				 display:YES
+				 animate:YES];
 		
 		fullscreen = YES;
 	}
 	else
 	{
-		float scale = [window userSpaceScaleFactor];
-		contentFrame.size.width *= scale;
-		contentFrame.size.height *= scale;
-		
-		[NSApp removeWindowsItem:fullscreenWindow];
-		
-		[fullscreenWindow setFrame:contentFrame display:YES animate:YES];
-		
-        DisableScreenUpdates();
-		[window setContentView:[fullscreenWindow contentView]];
-		[window setWindowController:self];
-		[window setDelegate:self];
-		[window makeKeyAndOrderFront:self];
-		[fullscreenWindow release];
-        EnableScreenUpdates();
+		[window setFrame:fullscreenExitRect
+				 display:YES
+				 animate:YES];
 		
 		[documentController enableMenuBar];
 		

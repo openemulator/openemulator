@@ -62,12 +62,12 @@
     if ([keyPath isEqual:@"power"])
 	{
 		power = [[change objectForKey:NSKeyValueChangeNewKey] charValue];
-		[self drawRect:[self frame]];
+		[self setNeedsDisplay:YES];
     }
 	else if ([keyPath isEqual:@"pause"])
 	{
 		pause = [[change objectForKey:NSKeyValueChangeNewKey] charValue];
-		[self drawRect:[self frame]];
+		[self setNeedsDisplay:YES];
 	}
 	else
 		[super observeValueForKeyPath:keyPath
@@ -211,7 +211,7 @@
 		for (int x = 0; x < 560; x++)
 			bitmap[y * 560 + x] = (((x >> 2) & 0x1) ^ ((y >> 2) & 0x1)) * 0xffffff;
 //			bitmap[y * 560 + x] = 0xffffff;
-
+	
 	textureRect[0] = NSMakeRect(0, 0, 560, 384);
 	
 	glBindTexture(GL_TEXTURE_RECTANGLE_ARB, texture[DV_TEXTURE_VIDEO]);
@@ -229,9 +229,10 @@
 	
 	if (viewportUpdate | lastViewportUpdate);
 	{
+		// lastViewportUpdate is a patch, as for some reason drawRect is called twice
 		lastViewportUpdate = viewportUpdate;
 		cachedViewRect = viewRect;
-
+		
 		osdRect.size.width = textureRect[DV_TEXTURE_PAUSE].size.width / viewRect.size.width * 2.0;
 		osdRect.size.height = textureRect[DV_TEXTURE_PAUSE].size.height / viewRect.size.height * 2.0;
 		osdRect.origin.x = -osdRect.size.width / 2.0f;

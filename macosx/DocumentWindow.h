@@ -5,7 +5,7 @@
  * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Manages fullscreen window messages.
+ * Overrides document window messages.
  */
 
 #import <Cocoa/Cocoa.h>

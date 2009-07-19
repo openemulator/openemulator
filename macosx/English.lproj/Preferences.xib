@@ -8,10 +8,10 @@
 		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="1865"/>
-			<integer value="28"/>
-			<integer value="23"/>
 			<integer value="1932"/>
+			<integer value="28"/>
+			<integer value="1865"/>
+			<integer value="23"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -42,7 +42,7 @@
 				<int key="NSWindowStyleMask">3</int>
 				<int key="NSWindowBacking">2</int>
 				<string key="NSWindowRect">{{464, 668}, {512, 64}}</string>
-				<int key="NSWTFlags">1882719232</int>
+				<int key="NSWTFlags">1886913536</int>
 				<string key="NSWindowTitle">Preferences</string>
 				<string key="NSWindowClass">NSPanel</string>
 				<object class="NSMutableString" key="NSViewClass">
@@ -1503,8 +1503,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.imagekit.ibplugin</string>
-					<string>{{307, 701}, {512, 64}}</string>
-					<string>{{307, 701}, {512, 64}}</string>
+					<string>{{307, 702}, {512, 64}}</string>
+					<string>{{307, 702}, {512, 64}}</string>
 					<reference ref="761722050"/>
 					<string>{{127, 767}, {539, 107}}</string>
 					<reference ref="8"/>
