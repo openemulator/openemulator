@@ -20,13 +20,10 @@
 	NSRect textureRect[DV_TEXTURE_END];
 	
 	float screenRectProportion;
-	float viewWidthScale;
-	float viewHeightScale;
-	float viewOriginXScale;
-	float viewOriginYScale;
+	float videoWidthScale;
+	float videoHeightScale;
 	
-	NSRect cachedViewRect;
-	BOOL lastViewportUpdate;
+	NSRect lastViewRect;
 
 	NSRect videoRect;
 	NSRect osdRect;

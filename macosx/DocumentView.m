@@ -140,12 +140,14 @@
 		overscanRect.size.width = 702;
 		overscanRect.size.height = 576;
 		renderRect.size.width = NSWidth(overscanRect) * (63.5556f/(14*64+16)*(40*14)/52.6556f);
+		renderRect.size.height = 384.0f;
 	}
 	else
 	{
 		overscanRect.size.width = 704;
 		overscanRect.size.height = 483;
 		renderRect.size.width = NSWidth(overscanRect) * (64.0f/(14*64+16)*(40*14)/52.0f);
+		renderRect.size.height = 384.0f;
 	}
 	
 	overscanRect.origin.x = 0;
@@ -159,17 +161,14 @@
 	
 	screenRectProportion = 4.0f / 3.0f;
 	
-	renderRect.size.height = 384.0f;
 	renderRect.origin.x = (NSWidth(overscanRect) - NSWidth(renderRect)) / 2.0f;
 	renderRect.origin.y = (NSHeight(overscanRect) - NSHeight(renderRect)) / 2.0f;
 	
-	viewWidthScale = NSWidth(renderRect) / NSWidth(screenRect);
-	viewHeightScale = NSHeight(renderRect) / NSHeight(screenRect);
-	viewOriginXScale = (NSMinX(renderRect) - NSMinX(screenRect)) / NSWidth(screenRect);
-	viewOriginYScale = (NSMinY(renderRect) - NSMinY(screenRect)) / NSHeight(screenRect);
+	videoWidthScale = NSWidth(renderRect) / NSWidth(screenRect);
+	videoHeightScale = NSHeight(renderRect) / NSHeight(screenRect);
 	
-	cachedViewRect.size.width = 0;
-	cachedViewRect.size.height = 0;
+	lastViewRect.size.width = 0;
+	lastViewRect.size.height = 0;
 	
 	glDisable(GL_ALPHA_TEST);
 	glDisable(GL_DEPTH_TEST);
@@ -209,7 +208,7 @@
 	
 	for (int y = 0; y < 384; y++)
 		for (int x = 0; x < 560; x++)
-			bitmap[y * 560 + x] = (((x >> 2) & 0x1) ^ ((y >> 2) & 0x1)) * 0xffffff;
+			bitmap[y * 560 + x] = (((x >> 1) & 0x1) ^ ((y >> 1) & 0x1)) * 0x44cc33;
 //			bitmap[y * 560 + x] = 0xffffff;
 	
 	textureRect[0] = NSMakeRect(0, 0, 560, 384);
@@ -222,47 +221,40 @@
 
 - (void)drawGL:(NSRect)viewRect
 {
-	BOOL viewportUpdate = ((viewRect.origin.x != cachedViewRect.origin.x) ||
-						   (viewRect.origin.y != cachedViewRect.origin.y) ||
-						   (viewRect.size.width != cachedViewRect.size.width) ||
-						   (viewRect.size.height != cachedViewRect.size.height));
+	BOOL viewportUpdate = ((viewRect.origin.x != lastViewRect.origin.x) ||
+						   (viewRect.origin.y != lastViewRect.origin.y) ||
+						   (viewRect.size.width != lastViewRect.size.width) ||
+						   (viewRect.size.height != lastViewRect.size.height));
 	
-	if (viewportUpdate | lastViewportUpdate);
+	if (viewportUpdate);
 	{
-		// lastViewportUpdate is a patch, as for some reason drawRect is called twice
-		lastViewportUpdate = viewportUpdate;
-		cachedViewRect = viewRect;
+		lastViewRect = viewRect;
+		
+		float factor = NSWidth(viewRect) / NSHeight(viewRect) / screenRectProportion;
+		if (factor > 1.0f)
+		{
+			videoRect.size.width = 2.0f / factor;
+			videoRect.size.height = 2.0f;
+		}
+		else
+		{
+			videoRect.size.width = 2.0f;
+			videoRect.size.height = 2.0f * factor;
+		}
+		
+		videoRect.size.width *= videoWidthScale;
+		videoRect.size.height *= videoHeightScale;
+		videoRect.origin.x = -NSWidth(videoRect) / 2.0f;
+		videoRect.origin.y = -NSHeight(videoRect) / 2.0f;
 		
 		osdRect.size.width = textureRect[DV_TEXTURE_PAUSE].size.width / viewRect.size.width * 2.0;
 		osdRect.size.height = textureRect[DV_TEXTURE_PAUSE].size.height / viewRect.size.height * 2.0;
 		osdRect.origin.x = -osdRect.size.width / 2.0f;
 		osdRect.origin.y = -osdRect.size.height / 2.0f;
-		/*
-		float viewRectProportion = NSWidth(viewRect) / NSHeight(viewRect);
-		if (viewRectProportion > screenRectProportion)
-		{
-			float viewRectWidth = NSHeight(viewRect) * screenRectProportion;
-			viewRect.origin.x += (NSWidth(viewRect) - viewRectWidth) / 2.0f;
-			viewRect.size.width = viewRectWidth;
-		}
-		else
-		{
-			float viewRectHeight = NSWidth(viewRect) / screenRectProportion;
-			viewRect.origin.y += (NSHeight(viewRect) - viewRectHeight) / 2.0f;
-			viewRect.size.height = viewRectHeight;
-		}
 		
-		viewRect.origin.x += NSWidth(viewRect) * viewOriginXScale;
-		viewRect.origin.y += NSHeight(viewRect) * viewOriginYScale;
-		viewRect.size.width *= viewWidthScale;
-		viewRect.size.height *= viewHeightScale;
-		*/
 		glViewport(viewRect.origin.x, viewRect.origin.y,
 				   viewRect.size.width, viewRect.size.height);
-		
 		glClear(GL_COLOR_BUFFER_BIT);
-		
-		videoRect = NSMakeRect(-1, -1, 2, 2);
 	}
 	
 	if (power)
