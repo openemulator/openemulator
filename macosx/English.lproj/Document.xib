@@ -8,6 +8,7 @@
 		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
+			<integer value="6"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -41,7 +42,7 @@
 				<string key="NSWindowContentMaxSize">{3.40282e+38, 3.40282e+38}</string>
 				<string key="NSWindowContentMinSize">{320, 240}</string>
 				<object class="NSView" key="NSWindowView" id="568628114">
-					<nil key="NSNextResponder"/>
+					<reference key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -54,6 +55,7 @@
 						</object>
 					</object>
 					<string key="NSFrameSize">{640, 480}</string>
+					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1440, 878}}</string>
 				<string key="NSMinSize">{320, 262}</string>
@@ -81,6 +83,14 @@
 						<reference key="destination" ref="275939982"/>
 					</object>
 					<int key="connectionID">100094</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">fDocumentView</string>
+						<reference key="source" ref="512844837"/>
+						<reference key="destination" ref="373837997"/>
+					</object>
+					<int key="connectionID">100104</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -162,8 +172,8 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{390, 215}, {640, 480}}</string>
-					<string>{{390, 215}, {640, 480}}</string>
+					<string>{{111, 239}, {640, 480}}</string>
+					<string>{{111, 239}, {640, 480}}</string>
 					<integer value="1" id="9"/>
 					<boolean value="NO"/>
 					<string>{{201, 387}, {507, 413}}</string>
@@ -193,7 +203,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">100103</int>
+			<int key="maxID">100104</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -214,12 +224,10 @@
 						<object class="NSMutableArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>fitToScreen:</string>
-							<string>saveDocumentAsTemplate:</string>
 							<string>setActualSize:</string>
 							<string>setDoubleSize:</string>
 							<string>setHalfSize:</string>
 							<string>toggleFullscreen:</string>
-							<string>toggleInspectorPanel:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
@@ -228,6 +236,17 @@
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
+						</object>
+					</object>
+					<object class="NSMutableDictionary" key="outlets">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSMutableArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>fDocumentView</string>
+							<string>fullscreenWindow</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>id</string>
 							<string>id</string>
 						</object>

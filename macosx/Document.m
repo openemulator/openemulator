@@ -23,7 +23,7 @@
 		pasteboardTypes = [NSArray arrayWithObjects:NSStringPboardType, nil];
 		[pasteboardTypes retain];
 		
-		// To-Do: Create a temporary work folder
+		// To-Do: Create work folder in /tmp
 		
 		[self setPower:YES];
 		[self setPause:NO];
@@ -42,8 +42,7 @@
 - (id)initWithTemplateURL:(NSURL *)templateURL
 					error:(NSError **)outError
 {
-	// To-Do: If there is a template, copy the template's files to the work folder
-	// To-Do: Read info.xml to update inspector
+	// To-Do: call [self readFromURL]
 	return [self init];
 	
 	// To-Do: Start emulation
@@ -54,9 +53,61 @@
 	[pasteboardTypes release];
 	[pasteboard release];
 	
-	// To-Do: Remove temporary work folder
+	// To-Do: Remove work folder
 	
 	[super dealloc];
+}
+
+- (BOOL)readFromURL:(NSURL *)absoluteURL
+			 ofType:(NSString *)typeName
+			  error:(NSError **)outError
+{
+	// To-Do: Clean the work folder
+	// To-Do: If it is a file, unzip the .emulation files to a temporary work folder
+	// To-Do: If it is a package, copy the package folder to the temporary work folder
+	// To-Do: Read info.xml to update inspector
+	// To-Do: Reload libemulator
+	
+	*outError = [NSError errorWithDomain:@"test" code:0 userInfo:nil];
+	printf("readFromURL: %s\n", [[absoluteURL path] UTF8String]);
+	return YES;
+}
+
+- (BOOL)writeToURL:(NSURL *)absoluteURL
+			ofType:(NSString *)typeName
+			 error:(NSError **)outError
+{
+	// To-Do: Write the state with libemulator
+	// To-Do: If it is a file, zip the temporary work folder to the .emulation URL
+	// To-Do: If it is a package, copy the temporary work folder to the .emulation URL
+	NSString *path = [absoluteURL path];
+	FILE *fp;
+	fp = fopen([path UTF8String], "wb");
+	if (fp)
+		fclose(fp);
+	printf("writeToURL: %s\n", [path UTF8String]);
+	return YES;
+}
+
+- (IBAction)saveDocumentAsTemplate:(id)sender
+{
+	NSSavePanel *panel = [[NSSavePanel alloc] init];
+	
+	[panel setRequiredFileType:@"emulation"];
+	
+	[panel beginSheetForDirectory:@"/Users/mressl/Library/Application Support/OpenEmulator/Templates/"
+							 file:nil
+				   modalForWindow:[self windowForSheet]
+					modalDelegate:self
+				   didEndSelector:@selector(saveDocumentAsTemplateDidEnd:returnCode:contextInfo:)
+					  contextInfo:nil];
+}
+
+- (void)saveDocumentAsTemplateDidEnd:(NSSavePanel *)panel
+						  returnCode:(int)returnCode
+						 contextInfo:(void *)contextInfo
+{
+	// To-Do: Call [self writeToURL:URL ]
 }
 
 - (void)makeWindowControllers
@@ -88,58 +139,6 @@
 - (BOOL)isPasteValid
 {
 	return [pasteboard availableTypeFromArray:pasteboardTypes] != nil;
-}
-
-- (BOOL)readFromURL:(NSURL *)absoluteURL
-			 ofType:(NSString *)typeName
-			  error:(NSError **)outError
-{
-	// To-Do: Erase the files in the temporary folder
-	// To-Do: Unzip the files in the .emulation file to the temporary work folder
-	//        or just copy files if it is a package
-	// To-Do: Read info.xml to update inspector
-	// To-Do: Force a restart of libemulator
-	
-	*outError = [NSError errorWithDomain:@"test" code:0 userInfo:nil];
-	printf("readFromURL: %s\n", [[absoluteURL path] UTF8String]);
-	return YES;
-}
-
-- (BOOL)writeToURL:(NSURL *)absoluteURL
-			ofType:(NSString *)typeName
-			 error:(NSError **)outError
-{
-	// To-Do: Force a state write in libemulator to our temporary work folder
-	// To-Do: Compress in zip format
-	//        or just copy files if destination is a package
-	NSString *path = [absoluteURL path];
-	FILE *fp;
-	fp = fopen([path UTF8String], "wb");
-	if (fp)
-		fclose(fp);
-	printf("writeToURL: %s\n", [path UTF8String]);
-	return YES;
-}
-
-- (IBAction)saveDocumentAsTemplate:(id)sender
-{
-	NSSavePanel *panel = [[NSSavePanel alloc] init];
-	
-	[panel setRequiredFileType:@"emulation"];
-	
-	[panel beginSheetForDirectory:@"/Users/mressl/Library/Application Support/OpenEmulator/Templates/"
-							 file:nil
-				   modalForWindow:[self windowForSheet]
-					modalDelegate:self
-				   didEndSelector:@selector(saveDocumentAsTemplateDidEnd:returnCode:contextInfo:)
-					  contextInfo:nil];
-}
-
-- (void)saveDocumentAsTemplateDidEnd:(NSSavePanel *)panel
-						  returnCode:(int)returnCode
-						 contextInfo:(void *)contextInfo
-{
-	// To-Do: Call [self writeToURL:URL ]
 }
 
 - (void)togglePower:(id)sender
@@ -211,6 +210,8 @@
 {
 	if (power != value)
 		power = value;
+	if (power && [self pause])
+		[self setPause:NO];
 }
 
 - (BOOL)pause

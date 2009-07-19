@@ -26,11 +26,13 @@
 	float viewOriginYScale;
 	
 	NSRect cachedViewRect;
+	BOOL lastViewportUpdate;
 
 	NSRect videoRect;
 	NSRect osdRect;
-	
-	BOOL lastViewportUpdate;
+
+	BOOL power;
+	BOOL pause;
 }
 
 - (void)initGL;

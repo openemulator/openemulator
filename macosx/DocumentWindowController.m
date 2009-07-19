@@ -34,6 +34,19 @@
 	[toolbar setAutosavesConfiguration:YES];
 	[[self window] setToolbar:toolbar];
 	[toolbar release];
+	
+	[document addObserver:fDocumentView
+			   forKeyPath:@"power"
+				  options:NSKeyValueObservingOptionNew
+				  context:NULL];
+	[document addObserver:fDocumentView
+			   forKeyPath:@"pause"
+				  options:NSKeyValueObservingOptionNew
+				  context:NULL];
+	
+	// To-Do: Improve the updating code
+	[document setPower:[document power]];
+	[document setPause:[document pause]];
 }
 
 - (NSToolbarItem *)toolbar:(NSToolbar *)toolbar
@@ -228,6 +241,7 @@
 	double scale = [window userSpaceScaleFactor];
 	contentFrame.size.width *= scale;
 	contentFrame.size.height *= scale;
+	
 	double deltaWidth = NSWidth(windowFrame) - NSWidth(contentFrame);
 	double deltaHeight = NSHeight(windowFrame) - NSHeight(contentFrame);
 	

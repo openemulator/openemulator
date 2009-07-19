@@ -15,6 +15,8 @@
 
 @interface DocumentWindowController : NSWindowController
 {
+	IBOutlet id fDocumentView;
+	
 	Document *document;
 	DocumentController *documentController;
 	

@@ -54,11 +54,30 @@
 	[super dealloc];
 }
 
+- (void)observeValueForKeyPath:(NSString *)keyPath
+					  ofObject:(id)object
+                        change:(NSDictionary *)change
+                       context:(void *)context
+{ 
+    if ([keyPath isEqual:@"power"])
+	{
+		power = [[change objectForKey:NSKeyValueChangeNewKey] charValue];
+		[self drawRect:[self frame]];
+    }
+	else if ([keyPath isEqual:@"pause"])
+	{
+		pause = [[change objectForKey:NSKeyValueChangeNewKey] charValue];
+		[self drawRect:[self frame]];
+	}
+	else
+		[super observeValueForKeyPath:keyPath
+							 ofObject:object
+							   change:change
+							  context:context];
+} 
+
 - (void)drawRect:(NSRect)rect
 {
-	//	printf("x:%f y:%f\n", rect.origin.x, rect.origin.y);
-	//	printf("w:%f h:%f\n", rect.size.width, rect.size.height);
-	
 	NSRect viewRect = [self frame];
 	float scale = [[self window] userSpaceScaleFactor];
 	viewRect.size.width *= scale;
@@ -190,7 +209,7 @@
 	
 	for (int y = 0; y < 384; y++)
 		for (int x = 0; x < 560; x++)
-			bitmap[y * 560 + x] = (((x >> 1) & 0x1) ^ ((y >> 1) & 0x1)) * 0xffffff;
+			bitmap[y * 560 + x] = (((x >> 2) & 0x1) ^ ((y >> 2) & 0x1)) * 0xffffff;
 //			bitmap[y * 560 + x] = 0xffffff;
 
 	textureRect[0] = NSMakeRect(0, 0, 560, 384);
@@ -245,9 +264,14 @@
 		videoRect = NSMakeRect(-1, -1, 2, 2);
 	}
 	
-//	[self renderGLTexture:DV_TEXTURE_VIDEO toRect:videoRect withAlpha:0.5f];
-	[self renderGLTexture:DV_TEXTURE_POWER toRect:osdRect withAlpha:1.0f];
-//	[self renderGLTexture:DV_TEXTURE_PAUSE toRect:osdRect withAlpha:1.0f];
+	if (power)
+	{
+		[self renderGLTexture:DV_TEXTURE_VIDEO toRect:videoRect withAlpha:(pause ? 0.5f : 1.0f)];
+		if (pause)
+			[self renderGLTexture:DV_TEXTURE_PAUSE toRect:osdRect withAlpha:1.0f];
+	}
+	else
+		[self renderGLTexture:DV_TEXTURE_POWER toRect:osdRect withAlpha:1.0f];
 }
 
 @end
