@@ -68,7 +68,9 @@ NSString *itemIdentifiers[] =
 					   context:(void *)context
 {
     if (context == [InspectorPanelController class])
+	{
 		[self activeDocumentDidChange];
+	}
 	else
 		[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
@@ -78,6 +80,7 @@ NSString *itemIdentifiers[] =
     id activeDocument = [[[NSApp mainWindow] windowController] document];
     if (activeDocument != inspectedDocument)
 	{
+		printf("activeDocument:%d\n", [NSApp mainWindow]);
 		if (inspectedDocument)
 			[fDocumentObjectController commitEditing];
 		
