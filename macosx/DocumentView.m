@@ -130,7 +130,7 @@
 - (void)initGL
 {
 	BOOL isPal = NO;
-	float overscan = 0.138f;//0.08f a normal tv
+	float overscan = 0.137f;//0.08f a normal tv
 	NSRect overscanRect;
 	NSRect screenRect;
 	NSRect renderRect;
@@ -206,12 +206,17 @@
 {
 	int bitmap[560 * 384];
 	
-	for (int y = 0; y < 384; y++)
-		for (int x = 0; x < 560; x++)
-			bitmap[y * 560 + x] = (((x >> 1) & 0x1) ^ ((y >> 1) & 0x1)) * 0x44cc33;
-//			bitmap[y * 560 + x] = 0xffffff;
-	
 	textureRect[0] = NSMakeRect(0, 0, 560, 384);
+	
+	for (int y = 0; y < textureRect[0].size.height; y++)
+		for (int x = 0; x < textureRect[0].size.width; x++)
+		{
+			float l = (((x >> 0) & 0x1) ^ ((y >> 1) & 0x1)) * 0.5f + 0.5f;
+			int r = l * 0x33;
+			int g = l * 0xcc;
+			int b = l * 0x44;
+			bitmap[y * 560 + x] = (b << 16) | (g << 8) | r;
+		}
 	
 	glBindTexture(GL_TEXTURE_RECTANGLE_ARB, texture[DV_TEXTURE_VIDEO]);
 	glTexImage2D(GL_TEXTURE_RECTANGLE_EXT,
