@@ -1,22 +1,71 @@
-//
-//  InspectorCell.m
-//  OpenEmulator
-//
-//  Created by Marc S. Reßl on 19/07/09.
-//  Copyright 2009 ITBA. All rights reserved.
-//
+
+/**
+ * OpenEmulator
+ * Mac OS X Inspector Cell
+ * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
+ * Released under the GPL
+ *
+ * Controls an inspector's cell.
+ */
 
 #import "InspectorCell.h"
 
-
 @implementation InspectorCell
 
-- (void)drawInteriorWithFrame:(NSRect)frame inView:(NSView *)controlView
+- (NSAttributedString *)attributedStringValue
 {
-    frame.origin.y += 4.0;
-    frame.size.height -= 4.0;
+	NSMutableParagraphStyle * paragraphStyle;
+	paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+	[paragraphStyle setLineBreakMode:NSLineBreakByTruncatingTail];
 	
-    [super drawInteriorWithFrame:frame inView:controlView];
+	NSMutableAttributedString * fAttributedString;
+	
+	NSColor * titleColor, * statusColor;
+    if ([self backgroundStyle] == NSBackgroundStyleDark)
+        titleColor = statusColor = [NSColor whiteColor];
+    else
+    {
+        titleColor = [NSColor controlTextColor];
+        statusColor = [NSColor darkGrayColor];
+    }
+	
+	NSDictionary *fTitleAttributes = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
+									  [NSFont messageFontOfSize:12.0f],
+									  NSFontAttributeName,
+									  paragraphStyle,
+									  NSParagraphStyleAttributeName,
+									  titleColor,
+									  NSForegroundColorAttributeName,
+									  nil];
+	fAttributedString = [[NSMutableAttributedString alloc] initWithString:@"Disk II\n"
+															   attributes:fTitleAttributes];
+	
+	NSDictionary *fStatusAttributes = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
+									   [NSFont messageFontOfSize:9.0f],
+									   NSFontAttributeName,
+									   paragraphStyle,
+									   NSParagraphStyleAttributeName,
+									   statusColor,
+									   NSForegroundColorAttributeName,
+									   nil];
+	[fAttributedString appendAttributedString:[[NSMutableAttributedString alloc] initWithString:@"(on Slot 6 Drive 1)\n"
+											   "ProDOS System Disk 2.0.3.dsk"
+																					 attributes:fStatusAttributes]];
+	
+	return fAttributedString;
+}
+
+- (NSRect)titleRectForBounds:(NSRect)theRect
+{
+	NSRect titleFrame = [super titleRectForBounds:theRect];
+	NSSize titleSize = [[self attributedStringValue] size];
+	titleFrame.origin.y = theRect.origin.y + (theRect.size.height - titleSize.height) / 2.0;
+	return titleFrame;
+}
+
+- (void)drawInteriorWithFrame:(NSRect)cellFrame inView:(NSView *)controlView {
+    NSRect titleRect = [self titleRectForBounds:cellFrame];
+    [[self attributedStringValue] drawInRect:titleRect];
 }
 
 @end
