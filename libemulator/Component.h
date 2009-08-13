@@ -23,10 +23,10 @@ public:
 	virtual ~Component();
 	
 	virtual void init();		// Missing: dictionary ref is sent here
-	virtual void remove();
+	virtual void remove();		// Removes the component
 	virtual void terminate();	// Missing: dictionary ref is sent here
 	
-	virtual int ioctl(int command, void * data);
+	virtual int ioctl(int message, void * data);
 	
 	void addObserver(class Component * component);
 	void removeObserver(class Component * component);

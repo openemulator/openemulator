@@ -1,10 +1,9 @@
-/*
- *  emulator.h
- *  OpenEmulator
- *
- *  Created by Marc S. Reßl on 11/08/09.
- *  Copyright 2009 ITBA. All rights reserved.
- *
+
+/**
+ * libemulator
+ * Emulator interface
+ * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
+ * Released under the GPL
  */
 
 // Returns: {templatePath, platform, group, label, description, image,
@@ -19,9 +18,9 @@ void saveEmulationAs(void * emulation, char * path, int saveAsPackage);
 void closeEmulation(void * emulation);
 
 // This returns: deviceName, deviceLabel, deviceDescription, deviceImage, {componentId + outlet {property + inlet}}
-void getEmulationDeviceList(void * emulation);
+void getEmulationDevices(void * emulation);
 void addEmulationDevice(void * emulation, char * deviceTemplate, void * connections);
-void removeEmulationDevice(void * emulation, char * deviceId);
+void removeEmulationDevice(void * emulation, char * deviceName);
 
 // We use ioctl's to send power, reset, pause messages
 // We use ioctl's to do copy, paste, isCopyAvailable
@@ -36,6 +35,6 @@ void removeEmulationDevice(void * emulation, char * deviceId);
 // We use ioctl's to set joystick position and buttons
 // We use ioctl's to set graphics tablet position and buttons
 // We use ioctl's to get video frames
-void sendEmulationIOCTL(void * emulation, char * componentId, int message, void * data);
+void sendEmulationMessage(void * emulation, char * componentId, int message, void * data);
 
 // Note: move pause and power off images to libemulator
