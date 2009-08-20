@@ -17,9 +17,10 @@
 
 using namespace std;
 
-class Component {
-public:
-	Component();
+class Component
+	{
+	public:
+		Component();
 	virtual ~Component();
 	
 	virtual void init();		// Missing: dictionary ref is sent here

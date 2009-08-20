@@ -6,23 +6,26 @@
  * Released under the GPL
  */
 
-// Returns: {templatePath, platform, group, label, description, image,
-//			 {componentName, outlet {propertyKey, propertyValue, inlet}}
-//			}
-void getEmulationTemplates(char * paths);
-
-void * openEmulationFromTemplate(char * path);
-void * openEmulation(char * path);
-void runEmulationFrame(void * emulation);
-void saveEmulationAs(void * emulation, char * path, int saveAsPackage);
-void closeEmulation(void * emulation);
-
-// This returns: deviceName, deviceLabel, deviceDescription, deviceImage, {componentId + outlet {property + inlet}}
-void getEmulationDevices(void * emulation);
-void addEmulationDevice(void * emulation, char * deviceTemplate, void * connections);
-void removeEmulationDevice(void * emulation, char * deviceName);
+class Emulation
+{
+	Emulation();
+	~Emulation();
+	
+	static map getTemplates(char * paths);
+	
+	void runFrame();
+	void open(char * path);
+	void save(void * emulation, char * path, int saveAsPackage);
+	
+	void getDeviceList();
+	void addDevice(char * templatePath, void * connections);
+	void removeDevice(char * deviceName);
+	
+	void ioctl(char * componentId, int message, void * data);
+}
 
 // We use ioctl's to send power, reset, pause messages
+// We use ioctl's to send config messages
 // We use ioctl's to do copy, paste, isCopyAvailable
 // We use ioctl's to get/set video options
 // We use ioctl's to get/set audio volume
@@ -35,6 +38,5 @@ void removeEmulationDevice(void * emulation, char * deviceName);
 // We use ioctl's to set joystick position and buttons
 // We use ioctl's to set graphics tablet position and buttons
 // We use ioctl's to get video frames
-void sendEmulationMessage(void * emulation, char * componentId, int message, void * data);
 
 // Note: move pause and power off images to libemulator
