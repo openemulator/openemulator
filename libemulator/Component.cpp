@@ -16,21 +16,18 @@ Component::~Component()
 {
 }
 
-void Component::init()
-{
-}
-
-void Component::terminate()
-{
-}
-
-void Component::remove()
-{
-}
-
 int Component::ioctl(int command, void * data)
 {
-	return IOCTL_OK;
+	return 0;
+}
+
+int Component::read(int address)
+{
+	return 0;
+}
+
+void Component::write(int address, int value)
+{
 }
 
 void Component::addObserver(Component * component)
@@ -61,13 +58,4 @@ void Component::postNotification()
 		 iterator != observers.end();
 		 iterator++)
 		(*iterator)->onNotification(this);
-}
-
-int Component::read(int address)
-{
-	return 0;
-}
-
-void Component::write(int address, int value)
-{
 }
