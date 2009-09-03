@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dml PUBLIC "-//OPENEMULATOR//DTD DML 1.0//EN" "http://www.openemulator.org/DTDs/dml-1.0.dtd">
-<dml version="1.0" type="template" label="Apple 16kB Language Card" image="Apple Language Card.png" group="Memory">
+<dml version="1.0" label="Apple 16kB Language Card" image="Apple Language Card.png" group="Memory">
 
 <device name="dev0" label="Apple 16kB Language Card" image="Apple Language Card.png">
-    <component class="AppleLanguageCard" outlet="expansion/appleiislot">
-    </component>
+    <outlet name="AppleLanguageCard" type="expansion/appleiislot">
+    <component class="AppleLanguageCard" outlet="expansion/appleiislot" />
 </device>
 
 </dml>
