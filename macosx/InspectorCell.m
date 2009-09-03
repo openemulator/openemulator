@@ -12,6 +12,11 @@
 
 @implementation InspectorCell
 
+- (NSString *)toolTip
+{
+	return @"tool tip here";
+}
+
 - (NSAttributedString *)attributedStringValue
 {
 	NSMutableParagraphStyle * paragraphStyle;
@@ -37,7 +42,7 @@
 									  titleColor,
 									  NSForegroundColorAttributeName,
 									  nil];
-	fAttributedString = [[NSMutableAttributedString alloc] initWithString:@"Disk II\n"
+	fAttributedString = [[NSMutableAttributedString alloc] initWithString:@"Apple Disk II Interface Card\n"
 															   attributes:fTitleAttributes];
 	
 	NSDictionary *fStatusAttributes = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
@@ -48,8 +53,8 @@
 									   statusColor,
 									   NSForegroundColorAttributeName,
 									   nil];
-	[fAttributedString appendAttributedString:[[NSMutableAttributedString alloc] initWithString:@"(on Slot 6 Drive 1)\n"
-											   "ProDOS System Disk 2.0.3.dsk"
+	[fAttributedString appendAttributedString:[[NSMutableAttributedString alloc] initWithString:@"(on Apple IIGS Slot 6 Drive 1)"
+											   "\nProDOS System Disk 2.0.3.dsk"
 																					 attributes:fStatusAttributes]];
 	
 	return fAttributedString;

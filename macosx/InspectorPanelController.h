@@ -15,8 +15,12 @@
     IBOutlet NSObjectController *fDocumentObjectController;
 	
 	IBOutlet NSMatrix *fTabMatrix;
-    IBOutlet NSView *fEmulationView, *fExpansionsView, *fDiskDrivesView,
-	*fPortsView, *fVideoView, *fAudioView;
+    IBOutlet NSView *fEmulationView;
+	IBOutlet NSView *fExpansionsView;
+	IBOutlet NSView *fDiskDrivesView;
+	IBOutlet NSView *fPeripheralsView;
+	IBOutlet NSView *fVideoView;
+	IBOutlet NSView *fAudioView;
 	
     NSUserDefaults *fDefaults;
 	id inspectedDocument;

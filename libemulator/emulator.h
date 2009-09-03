@@ -6,38 +6,75 @@
  * Released under the GPL
  */
 
+#include <string>
 #include <vector>
 #include <map>
 
 using namespace std;
+
+struct DMLTemplate
+{
+	string path;
+	string label;
+	string image;
+	string description;
+	string group;
+};
+
+struct DMLOutlet
+{
+	string componentName;
+	string outletType;
+	string label;
+	string image;
+};
+
+struct DMLInlet
+{
+	string propertyName;
+	string inletType;
+	string label;
+	string image;
+};
+
+struct DMLFile
+{
+	string path;
+	string label;
+	string image;
+	string description;
+	string group;
+	
+	vector<DMLOutlet> outlets;
+};
 
 class Emulation
 {
 	Emulation();
 	~Emulation();
 	
-	static vector<string> getTemplates(string type, string platform); // Returns a list of devicePath's
-	static string getTemplateGroup(string templatePath);
-	static string getTemplateLabel(string templatePath);
-	static string getTemplateImage(string templatePath);
-	vector<string> string getTemplateOutlets(string templatePath);
+	static int readTemplates(char * templatesPath, vector<DMLTemplate> &templates);
+	static int readDMLs(char * dmlsPath, vector<DMLFile> &dmls);
 	
 	bool open(char * emulationPath);
 	bool runFrame();
-	bool save(char * emulationPath);	// Automatically handles packaging, according to extension
-	
-	vector<string> getOutlets(string type); // Returns a list of deviceName:componentName
-	string getOutletLabel(string componentName);
-	string getOutletImage(string componentName);	// Gets image property. if not available, uses device image
-	
-	vector<string> getFreeInlets(string type); // Returns a list of deviceName:componentName:property
-	string getInletLabel(string propertyName);
-	
-	bool addDevice(char * templatePath, map<string, string> connections); // inlet > outlet
-	void removeDevice(char * deviceName);
+	bool save(char * emulationPath);	// Makes zipped packages, if extension does not end in /
 	
 	void ioctl(char * componentName, int message, void * data);
+	
+	int getOutlets(vector<DMLOutlet> &outlets);
+	
+	int getAvailableDMLs(vector<DMLFile> &dmls, vector<DMLFile> &availableDMLs);
+	int getAvailableInlets(DMLOutlet &outlet, vector<DMLInlet> &availableInlets);
+	
+	bool addDevice(char * dmlPath, map<string, string> outletInletMap);	
+	void removeDevice(char * deviceName);
 };
+
+// For adding an emulation
+// 1) Search all .emulation files and packages
+// 2) getDMLInfo for every emulation
+// 3) Return a vector with all this information
 
 // We use ioctl's to update outlets
 // We use ioctl's to send power, reset, pause messages

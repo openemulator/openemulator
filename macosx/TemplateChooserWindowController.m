@@ -28,6 +28,11 @@
 	return [self init:nil];
 }
 
+- (void)windowDidLoad
+{
+	// Reset window size, leave window centered on screen
+}
+
 - (void)windowWillClose:(NSNotification *)notification
 {
 	if (documentController)

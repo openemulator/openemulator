@@ -1,18 +1,22 @@
 <!ELEMENT dml (device+)>
 <!ATTLIST dml version CDATA "1.0">
+<!ATTLIST dml type CDATA #REQUIRED>
+<!ATTLIST dml label CDATA #REQUIRED>
+<!ATTLIST dml image CDATA #REQUIRED>
+<!ATTLIST dml description CDATA #IMPLIED>
+<!ATTLIST dml group CDATA #IMPLIED>
 
 <!ELEMENT device (component+)>
 <!ATTLIST device name CDATA #REQUIRED>
-<!ATTLIST device platform CDATA #REQUIRED>
-<!ATTLIST device group CDATA #REQUIRED>
-<!ATTLIST device label CDATA #REQUIRED>
-<!ATTLIST device description CDATA #IMPLIED>
+<!ATTLIST device label CDATA #IMPLIED>
 <!ATTLIST device image CDATA #IMPLIED>
 
-<!ELEMENT component (property+)>
+<!ELEMENT component (property*)>
 <!ATTLIST component class CDATA #REQUIRED>
 <!ATTLIST component name CDATA #IMPLIED>
 <!ATTLIST component outlet CDATA #IMPLIED>
+<!ATTLIST component label CDATA #IMPLIED>
+<!ATTLIST component image CDATA #IMPLIED>
 
 <!ELEMENT property EMPTY>
 <!ATTLIST property key CDATA #REQUIRED>
@@ -20,3 +24,4 @@
 <!ATTLIST property value CDATA #REQUIRED>
 <!ATTLIST property inlet CDATA #IMPLIED>
 <!ATTLIST property label CDATA #IMPLIED>
+<!ATTLIST property image CDATA #IMPLIED>

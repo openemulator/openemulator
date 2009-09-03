@@ -24,7 +24,7 @@
 
 	NSMutableArray *expansions;
 	NSMutableArray *diskDrives;
-	NSMutableArray *portDevices;
+	NSMutableArray *peripherals;
 	
 	int videoPreset;
 	float brightness;
@@ -69,9 +69,9 @@
 - (void)insertObject:(id)value inDiskDrivesAtIndex:(NSUInteger)index;
 - (void)removeObjectFromDiskDrivesAtIndex:(NSUInteger)index;
 
-- (NSMutableArray *)portDevices;
-- (void)insertObject:(id)value inPortDevicesAtIndex:(NSUInteger)index;
-- (void)removeObjectFromPortDevicesAtIndex:(NSUInteger)index;
+- (NSMutableArray *)peripherals;
+- (void)insertObject:(id)value inPeripheralsAtIndex:(NSUInteger)index;
+- (void)removeObjectFromPeripheralsAtIndex:(NSUInteger)index;
 
 - (int)videoPreset;
 - (void)setVideoPreset:(int)value;

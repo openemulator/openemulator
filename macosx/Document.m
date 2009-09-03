@@ -33,7 +33,7 @@
 		[self setVolume:1.0f];
 		expansions = [[NSMutableArray alloc] init];
 		diskDrives = [[NSMutableArray alloc] init];
-		portDevices = [[NSMutableArray alloc] init];
+		peripherals = [[NSMutableArray alloc] init];
 	}
 	
 	return self;
@@ -311,19 +311,19 @@
     [diskDrives removeObjectAtIndex:index];
 }
 
-- (NSMutableArray *)portDevices
+- (NSMutableArray *)peripherals
 {
-	return [[portDevices retain] autorelease];
+	return [[peripherals retain] autorelease];
 }
 
-- (void)insertObject:(id)value inPortDevicesAtIndex:(NSUInteger)index
+- (void)insertObject:(id)value inPeripheralsAtIndex:(NSUInteger)index
 {
-    [portDevices insertObject:value atIndex:index];
+    [peripherals insertObject:value atIndex:index];
 }
 
-- (void)removeObjectFromPortDevicesAtIndex:(NSUInteger)index
+- (void)removeObjectFromPeripheralsAtIndex:(NSUInteger)index
 {
-    [portDevices removeObjectAtIndex:index];
+    [peripherals removeObjectAtIndex:index];
 }
 
 - (int)videoPreset
