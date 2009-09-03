@@ -58,7 +58,7 @@ class Emulation
 	
 	bool open(char * emulationPath);
 	bool runFrame();
-	bool save(char * emulationPath);	// Makes zipped packages, if extension does not end in /
+	bool save(char * emulationPath);
 	
 	void ioctl(char * componentName, int message, void * data);
 	

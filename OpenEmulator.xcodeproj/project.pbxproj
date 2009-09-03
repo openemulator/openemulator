@@ -72,6 +72,7 @@
 		00D845850FFF0FD2005802F0 /* PaperFeedController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D845780FFF0FD2005802F0 /* PaperFeedController.m */; };
 		00D845860FFF0FD2005802F0 /* PreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D8457A0FFF0FD2005802F0 /* PreferencesController.m */; };
 		00D846290FFF23B7005802F0 /* PRSound.png in Resources */ = {isa = PBXBuildFile; fileRef = 00D846280FFF23B7005802F0 /* PRSound.png */; };
+		00DCB89C10503451002A10B5 /* test.c in Sources */ = {isa = PBXBuildFile; fileRef = 00DCB89B10503451002A10B5 /* test.c */; };
 		00E7BABE103246490080CE39 /* emulator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00E7BABC103246490080CE39 /* emulator.cpp */; };
 		00F86BCB100FD4210016867D /* IPInfo.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BC6100FD4210016867D /* IPInfo.png */; };
 		00F86BCC100FD4210016867D /* IPLocked.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BC7100FD4210016867D /* IPLocked.png */; };
@@ -200,6 +201,8 @@
 		00D845790FFF0FD2005802F0 /* PreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferencesController.h; sourceTree = "<group>"; };
 		00D8457A0FFF0FD2005802F0 /* PreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferencesController.m; sourceTree = "<group>"; };
 		00D846280FFF23B7005802F0 /* PRSound.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PRSound.png; sourceTree = "<group>"; };
+		00DCB89A10503451002A10B5 /* test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = test.h; sourceTree = "<group>"; };
+		00DCB89B10503451002A10B5 /* test.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test.c; sourceTree = "<group>"; };
 		00E7BABC103246490080CE39 /* emulator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = emulator.cpp; path = libemulator/emulator.cpp; sourceTree = "<group>"; };
 		00E7BABD103246490080CE39 /* emulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = emulator.h; path = libemulator/emulator.h; sourceTree = "<group>"; };
 		00F009F90FD5838D00C506AD /* IPAudio.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPAudio.png; sourceTree = "<group>"; };
@@ -329,6 +332,8 @@
 		006EEC9A0FCA5BEA003D2C8D /* libemulator */ = {
 			isa = PBXGroup;
 			children = (
+				00DCB89A10503451002A10B5 /* test.h */,
+				00DCB89B10503451002A10B5 /* test.c */,
 				00E7BABC103246490080CE39 /* emulator.cpp */,
 				00E7BABD103246490080CE39 /* emulator.h */,
 				006EECAC0FCA5C7B003D2C8D /* Component.h */,
@@ -601,6 +606,7 @@
 				006F08CA1006F65A00CE75DD /* TemplateChooserWindowController.m in Sources */,
 				000B2C591013EA8300049B5F /* InspectorCell.m in Sources */,
 				00E7BABE103246490080CE39 /* emulator.cpp in Sources */,
+				00DCB89C10503451002A10B5 /* test.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
