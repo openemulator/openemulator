@@ -19,6 +19,10 @@ Emulation::~Emulation()
 bool Emulation::readTemplates(string templatesPath,
 							  map<string,DMLTemplate> &templates)
 {
+	DMLTemplate *a = new DMLTemplate;
+	
+	templates.insert(make_pair("test", a));
+	
 	return true;
 }
 
