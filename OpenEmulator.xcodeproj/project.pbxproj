@@ -14,7 +14,6 @@
 		005C7BBC0FD8ED6F00426DD0 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 005C7BBB0FD8ED6F00426DD0 /* Carbon.framework */; };
 		00679D08100817F700B38748 /* DeviceChooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00679D04100817F600B38748 /* DeviceChooser.xib */; };
 		00679D09100817F700B38748 /* TemplateChooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00679D06100817F700B38748 /* TemplateChooser.xib */; };
-		006EECAE0FCA5C7B003D2C8D /* Component.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 006EECAD0FCA5C7B003D2C8D /* Component.cpp */; };
 		006F08CA1006F65A00CE75DD /* TemplateChooserWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 006F08C91006F65A00CE75DD /* TemplateChooserWindowController.m */; };
 		0075B1B20FE79F7E009C1DFA /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0075B1B10FE79F7E009C1DFA /* OpenGL.framework */; };
 		00B3347D0FE41EF60042661D /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B3347C0FE41EF60042661D /* AudioToolbox.framework */; };
@@ -72,7 +71,10 @@
 		00D845850FFF0FD2005802F0 /* PaperFeedController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D845780FFF0FD2005802F0 /* PaperFeedController.m */; };
 		00D845860FFF0FD2005802F0 /* PreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D8457A0FFF0FD2005802F0 /* PreferencesController.m */; };
 		00D846290FFF23B7005802F0 /* PRSound.png in Resources */ = {isa = PBXBuildFile; fileRef = 00D846280FFF23B7005802F0 /* PRSound.png */; };
-		00E7BABE103246490080CE39 /* emulator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00E7BABC103246490080CE39 /* emulator.cpp */; };
+		00E2A86210532FA900910B53 /* emulator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00E7BABC103246490080CE39 /* emulator.cpp */; };
+		00E2A86510532FA900910B53 /* Component.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 006EECAD0FCA5C7B003D2C8D /* Component.cpp */; };
+		00E2A86810532FD200910B53 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B334880FE41F110042661D /* CoreServices.framework */; };
+		00E2A8751053305A00910B53 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 00E2A84D1053290200910B53 /* libxml2.dylib */; };
 		00F86BCB100FD4210016867D /* IPInfo.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BC6100FD4210016867D /* IPInfo.png */; };
 		00F86BCC100FD4210016867D /* IPLocked.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BC7100FD4210016867D /* IPLocked.png */; };
 		00F86BCD100FD4210016867D /* IPMount.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BC8100FD4210016867D /* IPMount.png */; };
@@ -200,6 +202,7 @@
 		00D845790FFF0FD2005802F0 /* PreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferencesController.h; sourceTree = "<group>"; };
 		00D8457A0FFF0FD2005802F0 /* PreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferencesController.m; sourceTree = "<group>"; };
 		00D846280FFF23B7005802F0 /* PRSound.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PRSound.png; sourceTree = "<group>"; };
+		00E2A84D1053290200910B53 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = /usr/lib/libxml2.dylib; sourceTree = "<absolute>"; };
 		00E7BABC103246490080CE39 /* emulator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = emulator.cpp; path = libemulator/emulator.cpp; sourceTree = "<group>"; };
 		00E7BABD103246490080CE39 /* emulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = emulator.h; path = libemulator/emulator.h; sourceTree = "<group>"; };
 		00F009F90FD5838D00C506AD /* IPAudio.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPAudio.png; sourceTree = "<group>"; };
@@ -230,6 +233,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00E2A8751053305A00910B53 /* libxml2.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -246,6 +250,7 @@
 				00B334850FE41F080042661D /* CoreAudio.framework in Frameworks */,
 				0075B1B20FE79F7E009C1DFA /* OpenGL.framework in Frameworks */,
 				004C272C0FEB55BE004AE5EA /* libportaudio.a in Frameworks */,
+				00E2A86810532FD200910B53 /* CoreServices.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -329,12 +334,21 @@
 		006EEC9A0FCA5BEA003D2C8D /* libemulator */ = {
 			isa = PBXGroup;
 			children = (
+				00E2A8741053305100910B53 /* Frameworks */,
 				00E7BABC103246490080CE39 /* emulator.cpp */,
 				00E7BABD103246490080CE39 /* emulator.h */,
 				006EECAC0FCA5C7B003D2C8D /* Component.h */,
 				006EECAD0FCA5C7B003D2C8D /* Component.cpp */,
 			);
 			name = libemulator;
+			sourceTree = "<group>";
+		};
+		00E2A8741053305100910B53 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				00E2A84D1053290200910B53 /* libxml2.dylib */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		1058C7A6FEA54F5311CA2CBB /* Linked Frameworks */ = {
@@ -579,6 +593,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00E2A86210532FA900910B53 /* emulator.cpp in Sources */,
+				00E2A86510532FA900910B53 /* Component.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -586,7 +602,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				006EECAE0FCA5C7B003D2C8D /* Component.cpp in Sources */,
 				00D8457C0FFF0FD2005802F0 /* Document.m in Sources */,
 				00D8457D0FFF0FD2005802F0 /* DocumentController.m in Sources */,
 				00D8457E0FFF0FD2005802F0 /* DocumentView.m in Sources */,
@@ -600,7 +615,6 @@
 				00B4174D1004197300BA7E45 /* AppController.m in Sources */,
 				006F08CA1006F65A00CE75DD /* TemplateChooserWindowController.m in Sources */,
 				000B2C591013EA8300049B5F /* InspectorCell.m in Sources */,
-				00E7BABE103246490080CE39 /* emulator.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -694,11 +708,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INSTALL_PATH = /usr/local/lib;
 				PREBINDING = NO;
 				PRODUCT_NAME = emulator;
@@ -709,10 +725,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_MODEL_TUNING = G5;
+				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INSTALL_PATH = /usr/local/lib;
 				PREBINDING = NO;
 				PRODUCT_NAME = emulator;
@@ -724,6 +742,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = "";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -753,6 +772,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				CURRENT_PROJECT_VERSION = "";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				FRAMEWORK_SEARCH_PATHS = (

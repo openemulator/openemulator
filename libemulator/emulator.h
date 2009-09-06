@@ -12,14 +12,6 @@
 
 using namespace std;
 
-struct DMLTemplate
-{
-	string label;
-	string image;
-	string description;
-	string group;
-};
-
 struct DMLOutlet
 {
 	string name;
@@ -36,7 +28,7 @@ struct DMLInlet
 	string image;
 };
 
-struct DMLFile
+struct DMLInfo
 {
 	string label;
 	string image;
@@ -48,25 +40,29 @@ struct DMLFile
 
 class Emulation
 {
+public:
 	Emulation();
 	~Emulation();
 	
-	static bool readTemplates(string templatesPath, map<string, DMLTemplate> &templates);
-	static bool readDMLs(string dmlsPath, map<string, DMLFile> &dmls);
+	static bool readTemplates(string templatesPath, map<string, DMLInfo> &templates);
+	static bool readDMLs(string dmlsPath, map<string, DMLInfo> &dmls);
 	
 	bool open(string emulationPath);
 	bool runFrame();
 	bool save(string emulationPath);
 	
-	bool ioctl(char * componentName, int message, void * data);
+	bool ioctl(string componentName, int message, void * data);
 	
 	bool getOutlets(vector<DMLOutlet> &outlets);
 	
-	bool getAvailableDMLs(map<string, DMLFile> &dmls, vector<string> &availableDMLs);
+	bool getAvailableDMLs(map<string, DMLInfo> &dmls, vector<string> &availableDMLs);
 	bool getAvailableInlets(DMLOutlet &outlet, vector<DMLInlet> &availableInlets);
 	
 	bool addDevice(string dmlPath, map<string, string> outletInletMap);	
-	void removeDevice(char * deviceName);
+	void removeDevice(string deviceName);
+	
+private:
+	static bool readDML(string path, DMLInfo &dmlInfo);
 };
 
 // We use ioctl's to update outlets

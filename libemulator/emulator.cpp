@@ -6,6 +6,11 @@
  * Released under the GPL
  */
 
+#include <dirent.h>
+#include <iostream>
+
+#include "libxml/encoding.h"
+
 #include "emulator.h"
 
 Emulation::Emulation()
@@ -16,19 +21,69 @@ Emulation::~Emulation()
 {
 }
 
-bool Emulation::readTemplates(string templatesPath,
-							  map<string,DMLTemplate> &templates)
+bool Emulation::readDML(string path, DMLInfo &dmlInfo)
 {
-	DMLTemplate *a = new DMLTemplate;
+	return true;
+}
+
+bool Emulation::readTemplates(string templatesPath,
+							  map<string, DMLInfo> &templates)
+{
+	DIR *dir;
+	struct dirent *entry;
 	
-	templates.insert(make_pair("test", a));
+	if ((dir = opendir(templatesPath.c_str())) == NULL)
+		return false;
+		
+	while ((entry = readdir(dir)) != NULL)
+	{
+		DMLInfo dmlInfo;
+		string path = templatesPath + '/' + entry->d_name;
+		
+		if(path.substr(path.find_last_of(".") + 1) != "emulation")
+			continue;
+		
+		if (entry->d_type | DT_DIR)
+			path = path + "/info.xml";
+		else
+		{
+			// Decompress info.xml from package
+		}
+		
+		if (readDML(path, dmlInfo))
+			templates[path] = dmlInfo;
+		
+		// Remove temporary file
+	}
+
+	closedir(dir);
 	
 	return true;
 }
 
 bool Emulation::readDMLs(string dmlsPath,
-						 map<string,DMLFile> &dmls)
+						 map<string, DMLInfo> &dmls)
 {
+	DIR *dir;
+	struct dirent *entry;
+	
+	if ((dir = opendir(dmlsPath.c_str())) == NULL)
+		return false;
+	
+	while ((entry = readdir(dir)) != NULL)
+	{
+		DMLInfo dmlInfo;
+		string path = dmlsPath + '/' + entry->d_name;
+		
+		if(path.substr(path.find_last_of(".") + 1) != "xml")
+			continue;
+		
+		if (readDML(path, dmlInfo))
+			dmls[path] = dmlInfo;
+	}
+	
+	closedir(dir);
+	
 	return true;
 }
 
@@ -47,7 +102,7 @@ bool Emulation::save(string emulationPath)
 	return true;
 }
 
-bool Emulation::ioctl(char * componentName, int message, void * data)
+bool Emulation::ioctl(string componentName, int message, void * data)
 {
 	return 0;
 }
@@ -57,7 +112,7 @@ bool Emulation::getOutlets(vector<DMLOutlet> &outlets)
 	return true;
 }
 
-bool Emulation::getAvailableDMLs(map<string, DMLFile> &dmls,
+bool Emulation::getAvailableDMLs(map<string, DMLInfo> &dmls,
 								 vector<string> &availableDMLs)
 {
 	return true;
@@ -75,6 +130,6 @@ bool Emulation::addDevice(string dmlPath,
 	return true;
 }
 
-void Emulation::removeDevice(char * deviceName)
+void Emulation::removeDevice(string deviceName)
 {
 }
