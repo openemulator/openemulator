@@ -26,7 +26,7 @@ Emulation::~Emulation()
 {
 }
 
-bool Emulation::readDML(char * dmlInfo, int dmlInfoSize)
+bool Emulation::readDML(char * dmlInfo, int dmlInfoSize, DMLInfo &dmlInfo)
 {
 	return false;
 }
