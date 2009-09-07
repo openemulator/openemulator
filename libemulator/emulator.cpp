@@ -23,68 +23,12 @@ Emulation::~Emulation()
 
 bool Emulation::readDML(string path, DMLInfo &dmlInfo)
 {
-	return true;
+	return false;
 }
 
-bool Emulation::readTemplates(string templatesPath,
-							  map<string, DMLInfo> &templates)
+bool Emulation::readTemplate(string path, DMLInfo &dmlInfo)
 {
-	DIR *dir;
-	struct dirent *entry;
-	
-	if ((dir = opendir(templatesPath.c_str())) == NULL)
-		return false;
-		
-	while ((entry = readdir(dir)) != NULL)
-	{
-		DMLInfo dmlInfo;
-		string path = templatesPath + '/' + entry->d_name;
-		
-		if(path.substr(path.find_last_of(".") + 1) != "emulation")
-			continue;
-		
-		if (entry->d_type | DT_DIR)
-			path = path + "/info.xml";
-		else
-		{
-			// Decompress info.xml from package
-		}
-		
-		if (readDML(path, dmlInfo))
-			templates[path] = dmlInfo;
-		
-		// Remove temporary file
-	}
-
-	closedir(dir);
-	
-	return true;
-}
-
-bool Emulation::readDMLs(string dmlsPath,
-						 map<string, DMLInfo> &dmls)
-{
-	DIR *dir;
-	struct dirent *entry;
-	
-	if ((dir = opendir(dmlsPath.c_str())) == NULL)
-		return false;
-	
-	while ((entry = readdir(dir)) != NULL)
-	{
-		DMLInfo dmlInfo;
-		string path = dmlsPath + '/' + entry->d_name;
-		
-		if(path.substr(path.find_last_of(".") + 1) != "xml")
-			continue;
-		
-		if (readDML(path, dmlInfo))
-			dmls[path] = dmlInfo;
-	}
-	
-	closedir(dir);
-	
-	return true;
+	return false;
 }
 
 bool Emulation::open(string emulationPath)

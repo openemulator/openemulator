@@ -44,12 +44,12 @@ public:
 	Emulation();
 	~Emulation();
 	
-	static bool readTemplates(string templatesPath, map<string, DMLInfo> &templates);
-	static bool readDMLs(string dmlsPath, map<string, DMLInfo> &dmls);
+	static bool readDML(string path, DMLInfo &dmlInfo);
+	static bool readTemplate(string path, DMLInfo &dmlInfo);
 	
-	bool open(string emulationPath);
+	bool open(string path);
 	bool runFrame();
-	bool save(string emulationPath);
+	bool save(string path);
 	
 	bool ioctl(string componentName, int message, void * data);
 	
@@ -58,11 +58,8 @@ public:
 	bool getAvailableDMLs(map<string, DMLInfo> &dmls, vector<string> &availableDMLs);
 	bool getAvailableInlets(DMLOutlet &outlet, vector<DMLInlet> &availableInlets);
 	
-	bool addDevice(string dmlPath, map<string, string> outletInletMap);	
+	bool addDML(string path, map<string, string> outletInletMap);	
 	void removeDevice(string deviceName);
-	
-private:
-	static bool readDML(string path, DMLInfo &dmlInfo);
 };
 
 // We use ioctl's to update outlets
