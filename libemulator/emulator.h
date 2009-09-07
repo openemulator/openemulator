@@ -44,6 +44,7 @@ public:
 	Emulation();
 	~Emulation();
 	
+	static bool readDML(char *dmlInfo, int dmlInfoSize);
 	static bool readDML(string path, DMLInfo &dmlInfo);
 	static bool readTemplate(string path, DMLInfo &dmlInfo);
 	

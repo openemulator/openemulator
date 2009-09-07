@@ -6,12 +6,17 @@
  * Released under the GPL
  */
 
+#include <stdio.h>
 #include <dirent.h>
 #include <iostream>
 
+#include "zip.h"
 #include "libxml/encoding.h"
 
 #include "emulator.h"
+
+#define DMLINFO_FILENAME "info.xml"
+#define DMLINFO_MAXBYTENUM 1000000
 
 Emulation::Emulation()
 {
@@ -21,14 +26,62 @@ Emulation::~Emulation()
 {
 }
 
-bool Emulation::readDML(string path, DMLInfo &dmlInfo)
+bool Emulation::readDML(char * dmlInfo, int dmlInfoSize)
 {
 	return false;
 }
 
+bool Emulation::readDML(string path, DMLInfo &dmlInfo)
+{
+	bool isError = true;
+
+	FILE *dmlFile;
+	if ((dmlFile = fopen(path.c_str(), "rb")) != NULL)
+	{
+		fseek(dmlFile, 0, SEEK_END);
+		int dmlFileSize = ftell(dmlFile);
+		fseek(dmlFile, 0, SEEK_SET);
+		
+		char dmlData[dmlFileSize];
+		if (fread(dmlData, 1, dmlFileSize, dmlFile) == dmlFileSize)
+			isError = readDML(dmlData, dmlFileSize);
+			
+		fclose(dmlFile);
+	}
+	
+	return !isError;
+}
+
 bool Emulation::readTemplate(string path, DMLInfo &dmlInfo)
 {
-	return false;
+	bool isError = true;
+	
+	struct zip *zipFile;
+	if ((zipFile = zip_open(path.c_str(), 0, NULL)) != NULL)
+	{
+		struct zip_stat dmlFileStat;
+		if (zip_stat(zipFile, DMLINFO_FILENAME, 0, &dmlFileStat) == 0)
+		{
+			int dmlFileSize = dmlFileStat.size;
+			if (dmlFileSize < DMLINFO_MAXBYTENUM)
+			{
+				struct zip_file *dmlFile;
+				
+				if ((dmlFile = zip_fopen(zipFile, DMLINFO_FILENAME, 0)) != NULL)
+				{
+					char dmlData[dmlFileSize];
+					if (zip_fread(dmlFile, dmlData, dmlFileSize) == dmlFileSize)
+						isError = readDML(dmlData, dmlFileSize);
+
+					zip_fclose(dmlFile);
+				}
+			}
+		}
+		
+		zip_close(zipFile);
+	}
+	
+	return !isError;
 }
 
 bool Emulation::open(string emulationPath)

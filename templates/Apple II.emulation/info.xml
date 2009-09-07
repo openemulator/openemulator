@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dml PUBLIC "-//OPENEMULATOR//DTD DML 1.0//EN" "http://www.openemulator.org/DTDs/dml-1.0.dtd">
-<dml version="1.0" type="emulation" label="Apple II" image="Apple II.png" description="The Apple II was the first highly successful mass produced microprocessor product. The Apple II had color and high-resolution graphics modes, sound capabilities and one of two built-in BASIC programming languages." group="Apple II">
+<dml version="1.0" label="Apple II" image="Apple II.png" description="The Apple II was the first highly successful mass produced microprocessor product. The Apple II had color and high-resolution graphics modes, sound capabilities and one of two built-in BASIC programming languages." group="Apple II">
 <device name="host">
     <component class="EventController">
         <property key="runTime" type="number" value="0.0" />
@@ -134,12 +134,7 @@
     <outlet name="AppleDiskIIInterfaceCard" type="expansion/appleiislot" />
     <inlet name="AppleDiskIIInterfaceCard.drive1" type="diskdrive/apple525" label="Drive 1" image="Apple Disk II Drive 1 Socket.png" />
     <inlet name="AppleDiskIIInterfaceCard.drive2" type="diskdrive/apple525" label="Drive 2" image="Apple Disk II Drive 2 Socket.png" />
-    <component class="AppleDiskIIInterfaceCard">
-        <property key="drive1" type="component" value="dev2:AppleDiskII" />
-        <property key="drive2" type="component" value="dev3:AppleDiskII" />
-        <property key="rom" type="component" value="AppleIIInterfaceROM" />
-    </component>
-    <component class="AppleIIInterfaceROM">
+     <component class="AppleIIInterfaceROM">
         <property key="romImage" type="string" value="roms/Apple Disk II Interface ROM.bin" />
     </component>
 </device>
