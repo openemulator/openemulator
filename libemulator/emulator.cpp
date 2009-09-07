@@ -56,6 +56,11 @@ bool Emulation::getOutlets(vector<DMLOutlet> &outlets)
 	return true;
 }
 
+bool Emulation::getInlets(vector<DMLInlet> &inlets)
+{
+	return true;
+}
+
 bool Emulation::getAvailableDMLs(map<string, DMLInfo> &dmls,
 								 vector<string> &availableDMLs)
 {
@@ -68,12 +73,12 @@ bool Emulation::getAvailableInlets(DMLOutlet &outlet,
 	return true;
 }
 
-bool Emulation::addDevice(string dmlPath,
+bool Emulation::addDML(string dmlPath,
 						  map<string, string> outletInletMap)
 {
 	return true;
 }
 
-void Emulation::removeDevice(string deviceName)
+void Emulation::removeDevicesFromOutlet(string outletName)
 {
 }

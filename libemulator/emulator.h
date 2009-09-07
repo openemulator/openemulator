@@ -54,12 +54,13 @@ public:
 	bool ioctl(string componentName, int message, void * data);
 	
 	bool getOutlets(vector<DMLOutlet> &outlets);
+	bool getInlets(vector<DMLInlet> &inlets);
 	
 	bool getAvailableDMLs(map<string, DMLInfo> &dmls, vector<string> &availableDMLs);
 	bool getAvailableInlets(DMLOutlet &outlet, vector<DMLInlet> &availableInlets);
 	
 	bool addDML(string path, map<string, string> outletInletMap);	
-	void removeDevice(string deviceName);
+	void removeDevicesFromOutlet(string outletName);
 };
 
 // We use ioctl's to update outlets
