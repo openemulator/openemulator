@@ -5,7 +5,7 @@
 <device name="dev0">
     <outlet name="AppleLanguageCard" type="expansion/appleiislot">
     <component class="AppleLanguageCard">
-        <property name="memory" type="file" value="{deviceName}Memory.bin" />
+        <property key="memory" type="path" value="${emulationPath}${deviceName}.bin" />
     </component>
 </device>
 
