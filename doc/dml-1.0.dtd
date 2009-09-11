@@ -22,11 +22,14 @@
 <!ATTLIST outlet label CDATA #IMPLIED>
 <!ATTLIST outlet image CDATA #IMPLIED>
 
-<!ELEMENT component (property)>
+<!ELEMENT component (property,connection)>
 <!ATTLIST component class CDATA #REQUIRED>
 <!ATTLIST component name CDATA #IMPLIED>
 
 <!ELEMENT property EMPTY>
 <!ATTLIST property key CDATA #REQUIRED>
-<!ATTLIST property type (number|string|component) #REQUIRED>
 <!ATTLIST property value CDATA #REQUIRED>
+
+<!ELEMENT connection EMPTY>
+<!ATTLIST connection key CDATA #REQUIRED>
+<!ATTLIST connection value CDATA #REQUIRED>

@@ -9,26 +9,9 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
 
+#include <string>
 #include <vector>
 #include <stdint.h>
-
-enum {
-	IOCTL_SETPROPERTY,
-	IOCTL_GETPROPERTY,
-	IOCTL_FRAMESTART,
-	IOCTL_FRAMEEND,
-	IOCTL_COMPONENTADDED,
-	IOCTL_COMPONENTREMOVED,
-	IOCTL_UIUPDATE,
-	IOCTL_CLIPBOARDCOPY,
-	IOCTL_CLIPBOARDPASTE,
-	IOCTL_AUDIOPLAY,
-	IOCTL_AUDIOPLAYSTOP,
-	IOCTL_AUDIORECORD,
-	IOCTL_AUDIORECORDSTOP,
-	IOCTL_MOUNTDISKIMAGE,
-	IOCTL_UNMOUNTDISKIMAGE,
-};
 
 using namespace std;
 
@@ -51,6 +34,44 @@ protected:
 	
 private:
 	vector<class Component *> observers;
+};
+
+
+enum {
+	IOCTL_OPEN,
+	IOCTL_SAVE,
+	IOCTL_CONNECT,
+	IOCTL_SETPROPERTY,
+	IOCTL_GETPROPERTY,
+	IOCTL_FRAMESTART,
+	IOCTL_FRAMEEND,
+	IOCTL_UIUPDATE,
+	IOCTL_CLIPBOARDCOPY,
+	IOCTL_CLIPBOARDPASTE,
+	IOCTL_AUDIOPLAY,
+	IOCTL_AUDIOPLAYSTOP,
+	IOCTL_AUDIORECORD,
+	IOCTL_AUDIORECORDSTOP,
+	IOCTL_MOUNT,
+	IOCTL_UNMOUNT,
+};
+
+struct DMLPaths
+{
+	const string &emulationPath;
+	const string &resourcesPath;
+};
+
+struct DMLProperty
+{
+	string key;
+	string value;
+};
+
+struct DMLConnection
+{
+	string key;
+	Component *component;
 };
 
 #endif

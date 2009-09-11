@@ -16,7 +16,6 @@
 #include "emulator.h"
 
 #define DMLINFO_FILENAME "info.xml"
-#define DMLINFO_MAXBYTENUM 1000000
 
 Emulation::Emulation()
 {
@@ -26,7 +25,7 @@ Emulation::~Emulation()
 {
 }
 
-bool Emulation::readDML(char * dmlInfo, int dmlInfoSize, DMLInfo &dmlInfo)
+bool Emulation::readDML(char *dmlData, int dmlDataSize, DMLInfo &dmlInfo)
 {
 	return false;
 }
@@ -44,8 +43,8 @@ bool Emulation::readDML(string path, DMLInfo &dmlInfo)
 		
 		char dmlData[dmlFileSize];
 		if (fread(dmlData, 1, dmlFileSize, dmlFile) == dmlFileSize)
-			isError = readDML(dmlData, dmlFileSize);
-			
+			isError = readDML(dmlData, dmlFileSize, dmlInfo);
+		
 		fclose(dmlFile);
 	}
 	
@@ -63,18 +62,15 @@ bool Emulation::readTemplate(string path, DMLInfo &dmlInfo)
 		if (zip_stat(zipFile, DMLINFO_FILENAME, 0, &dmlFileStat) == 0)
 		{
 			int dmlFileSize = dmlFileStat.size;
-			if (dmlFileSize < DMLINFO_MAXBYTENUM)
+			struct zip_file *dmlFile;
+			
+			if ((dmlFile = zip_fopen(zipFile, DMLINFO_FILENAME, 0)) != NULL)
 			{
-				struct zip_file *dmlFile;
-				
-				if ((dmlFile = zip_fopen(zipFile, DMLINFO_FILENAME, 0)) != NULL)
-				{
-					char dmlData[dmlFileSize];
-					if (zip_fread(dmlFile, dmlData, dmlFileSize) == dmlFileSize)
-						isError = readDML(dmlData, dmlFileSize);
+				char dmlData[dmlFileSize];
+				if (zip_fread(dmlFile, dmlData, dmlFileSize) == dmlFileSize)
+					isError = readDML(dmlData, dmlFileSize, dmlInfo);
 
-					zip_fclose(dmlFile);
-				}
+				zip_fclose(dmlFile);
 			}
 		}
 		
@@ -127,11 +123,11 @@ bool Emulation::getAvailableInlets(DMLOutlet &outlet,
 }
 
 bool Emulation::addDML(string dmlPath,
-						  map<string, string> outletInletMap)
+					   map<string, string> outletInletMap)
 {
 	return true;
 }
 
-void Emulation::removeDevicesFromOutlet(string outletName)
+void Emulation::removeDevicesOnOutlet(string outletName)
 {
 }

@@ -44,7 +44,7 @@ public:
 	Emulation();
 	~Emulation();
 	
-	static bool readDML(char *dmlInfo, int dmlInfoSize, DMLInfo &dmlInfo);
+	static bool readDML(char *dmlData, int dmlDataSize, DMLInfo &dmlInfo);
 	static bool readDML(string path, DMLInfo &dmlInfo);
 	static bool readTemplate(string path, DMLInfo &dmlInfo);
 	
@@ -61,7 +61,7 @@ public:
 	bool getAvailableInlets(DMLOutlet &outlet, vector<DMLInlet> &availableInlets);
 	
 	bool addDML(string path, map<string, string> outletInletMap);	
-	void removeDevicesFromOutlet(string outletName);
+	void removeDevicesOnOutlet(string outletName);
 };
 
 // We use ioctl's to update outlets
