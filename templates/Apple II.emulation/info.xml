@@ -67,6 +67,7 @@
     <component class="AppleIIMemory">
         <connection key="mmu" value="AppleIIMMU" />
         <property key="memorySize" value="49152" />
+        <data key="memory" src="${deviceName}.bin" />
     </component>
     <component class="AppleIIIOU">
         <connection key="mmu" value="AppleIIMMU" />
@@ -88,7 +89,7 @@
     <component class="AppleIIROM">
         <connection key="mmu" value="AppleIIMMU" />
         <connection key="romSocket" value="" />
-        <property key="romImage" value="Apple II ROM.bin" />
+        <resource key="romImage" src="roms/Apple II ROM.bin" />
     </component>
     <component class="AppleIIKeyboard">
         <connection key="keyboardController" value="host:KeyboardController" />
@@ -128,15 +129,21 @@
 
 <device name="dev0" label="Apple 16kB Language Card" image="Apple Language Card.png">
     <outlet name="AppleLanguageCard" type="expansion/appleiislot" />
-    <component class="AppleLanguageCard" />
+    <component class="AppleLanguageCard">
+        <data key="memory" src="${deviceName}.bin" />
+    </component>
 </device>
 
 <device name="dev1" label="Apple Disk II Interface Card" image="Apple Disk II Interface Card.png">
     <outlet name="AppleDiskIIInterfaceCard" type="expansion/appleiislot" />
     <inlet name="AppleDiskIIInterfaceCard.drive1" type="diskdrive/apple525" label="Drive 1" image="Apple Disk II Drive 1 Socket.png" />
     <inlet name="AppleDiskIIInterfaceCard.drive2" type="diskdrive/apple525" label="Drive 2" image="Apple Disk II Drive 2 Socket.png" />
+     <component class="DiskIIInterfaceCard">
+        <connection key="drive1" value="dev2:AppleDiskII" />
+        <connection key="drive2" value="dev3:AppleDiskII" />
+    </component>
      <component class="AppleIIInterfaceROM">
-        <property key="romImage" value="Apple Disk II Interface ROM.bin" />
+        <resource key="romImage" src="roms/Apple Disk II Interface ROM.bin" />
     </component>
 </device>
 
@@ -145,14 +152,22 @@
     <component class="AppleDiskII">
         <property key="diskImage" value="/Users/mressl/test2.dsk" />
         <property key="diskLock" value="0" />
+        <resource key="soundSpin" src="sounds/Apple Disk II Spin.wav" />
+        <resource key="soundArm" src="sounds/Apple Disk II Arm.wav" />
+        <resource key="soundStopper" src="sounds/Apple Disk II Stopper.wav" />
+        <resource key="soundError" src="sounds/Apple Disk II Error.wav" />
     </component>
 </device>
 
-<device name="dev3" label="Apple Disk II Drive" image="Apple Disk II Drive.png">
+<device name="dev3" label="Apple Disk II Drive 2" image="Apple Disk II Drive.png">
     <outlet name="AppleDiskII" type="diskdrive/apple525" />
     <component class="AppleDiskII">
         <property key="diskImage" value="" />
         <property key="diskLock" value="0" />
+        <resource key="soundSpin" src="sounds/Apple Disk II Spin 2.wav" />
+        <resource key="soundArm" src="sounds/Apple Disk II Arm.wav" />
+        <resource key="soundStopper" src="sounds/Apple Disk II Stopper.wav" />
+        <resource key="soundError" src="sounds/Apple Disk II Error.wav" />
     </component>
 </device>
 

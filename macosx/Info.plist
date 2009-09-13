@@ -21,8 +21,6 @@
 			<string>Editor</string>
 			<key>NSDocumentClass</key>
 			<string>Document</string>
-			<key>LSTypeIsPackage</key>
-			<true/>
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>

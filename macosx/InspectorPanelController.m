@@ -119,10 +119,12 @@ NSString *itemIdentifiers[] =
 		if (![[self window] isVisible])
 			menuTitle = NSLocalizedString(@"Show Inspector",
 										  @"Title for menu item to show the Inspector panel"
-										  "(should be the same as the initial menu item in the nib).");
+										  "(should be the same as the initial menu item in "
+										  "the nib).");
 		else
 			menuTitle = NSLocalizedString(@"Hide Inspector",
-										  @"Title for menu item to hide the Inspector panel.");
+										  @"Title for menu item to hide the Inspector "
+										  "panel.");
 		[item setTitleWithMnemonic:menuTitle];
     }
 	
