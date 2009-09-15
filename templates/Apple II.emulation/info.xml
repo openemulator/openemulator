@@ -41,7 +41,7 @@
     <inlet name="AppleIIGamePort.gamePort" type="expansion/appleiigame" label="Game Port" image="Apple II Game Port.png" />
     <inlet name="AppleIITVOutput.romSocket" type="expansion/appleiicharrom" label="Character ROM Socket" image="Apple II Character ROM Socket.png" />
     <component class="AppleIIEvents">
-        <connection key="eventController" value="host:EventController" />
+        <connection key="eventController" value="host::EventController" />
         <connection key="cpu" value="CPUMOS6502" />
         <connection key="cpuSocket" value="" />
         <connection key="secondaryCPU" value="" />
@@ -92,16 +92,17 @@
         <resource key="romImage" src="roms/Apple II ROM.bin" />
     </component>
     <component class="AppleIIKeyboard">
-        <connection key="keyboardController" value="host:KeyboardController" />
+        <connection key="keyboardController" value="host::KeyboardController" />
         <connection key="iou" value="AppleIIIOU" />
         <connection key="video" value="AppleIIVideo" />
     </component>
     <component class="AppleIICassetteOut">
         <connection key="iou" value="AppleIIIOU" />
         <connection key="video" value="AppleIIVideo" />
-        <property key="state" value="0" />
+        <connection key="speaker" value="AppleIISpeaker" />
     </component>
     <component class="AppleIISpeaker">
+        <connection key="audioController" value="host::AudioController" />
         <connection key="iou" value="AppleIIIOU" />
         <connection key="video" value="AppleIIVideo" />
         <property key="state" value="0" />
@@ -119,11 +120,13 @@
         <property key="an3" value="0" />
     </component>
     <component class="AppleIICassetteIn">
+        <connection key="audioController" value="host::AudioController" />
         <connection key="gamePort" value="AppleIIGamePort" />
     </component>
     <component class="AppleIITVOutput">
-        <property key="romImage" value="Apple II Video US ROM.bin" />
+        <connection key="videoController" value="host::VideoController" />
         <connection key="romSocket" value="" />
+        <resource key="romImage" value="roms/Apple II Video US ROM.bin" />
     </component>
 </device>
 
@@ -173,7 +176,9 @@
 
 <device name="dev4" label="Apple II Game Paddles/Joystick" image="Apple II Game Paddles.png">
     <outlet name="AppleIIGamePaddles" type="expansion/applegameport" />
-    <component class="AppleIIGamePaddles" />
+    <component class="AppleIIGamePaddles">
+        <connection key="joystickController" value="host::JoystickController" />
+    </component>
 </device>
 
 </dml>

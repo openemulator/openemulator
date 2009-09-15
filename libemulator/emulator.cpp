@@ -10,8 +10,9 @@
 #include <dirent.h>
 #include <iostream>
 
+#include <libxml/parser.h>
+#include <libxml/tree.h>
 #include "zip.h"
-#include "libxml/encoding.h"
 
 #include "emulator.h"
 
@@ -19,15 +20,41 @@
 
 Emulation::Emulation()
 {
+	xmlInitParser();
+	
+    LIBXML_TEST_VERSION
 }
 
 Emulation::~Emulation()
 {
+	xmlCleanupParser();
+	xmlMemoryDump();
 }
 
 bool Emulation::readDML(char *dmlData, int dmlDataSize, DMLInfo &dmlInfo)
 {
-	return false;
+	xmlDocPtr doc;
+	
+	xmlReadMemory(dmlData, dmlDataSize, NULL, NULL, 0);
+	
+	if (doc)
+	{
+		xmlNode *rootElement = NULL;
+		rootElement = xmlDocGetRootElement(doc);
+		
+		xmlNode *curNode = NULL;
+		for (curNode = rootElement; curNode; curNode = curNode->next)
+		{
+			if (curNode->type == XML_ELEMENT_NODE)
+				printf("node type: Element, name: %s\n", curNode->name);
+			
+//			print_element_names(curNode->children);
+		}
+		
+		xmlFreeDoc(doc);
+	}
+	
+	return (doc != NULL);
 }
 
 bool Emulation::readDML(string path, DMLInfo &dmlInfo)

@@ -38,28 +38,20 @@ private:
 
 
 enum {
-	IOCTL_OPEN,
-	IOCTL_SAVE,
-	IOCTL_CONNECT,
+	IOCTL_INIT = 0,
 	IOCTL_SETPROPERTY,
 	IOCTL_GETPROPERTY,
-	IOCTL_FRAMESTART,
-	IOCTL_FRAMEEND,
-	IOCTL_UIUPDATE,
 	IOCTL_CLIPBOARDCOPY,
 	IOCTL_CLIPBOARDPASTE,
-	IOCTL_AUDIOPLAY,
-	IOCTL_AUDIOPLAYSTOP,
-	IOCTL_AUDIORECORD,
-	IOCTL_AUDIORECORDSTOP,
 	IOCTL_MOUNT,
 	IOCTL_UNMOUNT,
+	IOCTL_UIUPDATE,
 };
 
-struct DMLPaths
+struct DMLConnection
 {
-	const string &emulationPath;
-	const string &resourcesPath;
+	string key;
+	Component *component;
 };
 
 struct DMLProperty
@@ -68,10 +60,11 @@ struct DMLProperty
 	string value;
 };
 
-struct DMLConnection
+struct DMLData
 {
 	string key;
-	Component *component;
+	int dataSize;
+	char *data;
 };
 
 #endif
