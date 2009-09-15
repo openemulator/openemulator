@@ -12,7 +12,7 @@
 
 #include <libxml/parser.h>
 #include <libxml/tree.h>
-#include "zip.h"
+//#include "zip.h"
 
 #include "emulator.h"
 
@@ -31,6 +31,16 @@ Emulation::~Emulation()
 	xmlMemoryDump();
 }
 
+void printElementNames(xmlNode *curNode)
+{
+	for (; curNode; curNode = curNode->next)
+	{
+		printf("node type: %d, name: %s\n", curNode->type, curNode->name);
+		
+		printElementNames(curNode->children);
+	}
+}
+
 bool Emulation::readDML(char *dmlData, int dmlDataSize, DMLInfo &dmlInfo)
 {
 	xmlDocPtr doc;
@@ -39,17 +49,9 @@ bool Emulation::readDML(char *dmlData, int dmlDataSize, DMLInfo &dmlInfo)
 	
 	if (doc)
 	{
-		xmlNode *rootElement = NULL;
-		rootElement = xmlDocGetRootElement(doc);
+		xmlNode *rootElement = xmlDocGetRootElement(doc);
 		
-		xmlNode *curNode = NULL;
-		for (curNode = rootElement; curNode; curNode = curNode->next)
-		{
-			if (curNode->type == XML_ELEMENT_NODE)
-				printf("node type: Element, name: %s\n", curNode->name);
-			
-//			print_element_names(curNode->children);
-		}
+		printElementNames(rootElement);
 		
 		xmlFreeDoc(doc);
 	}
@@ -82,7 +84,7 @@ bool Emulation::readTemplate(string path, DMLInfo &dmlInfo)
 {
 	bool isError = true;
 	
-	struct zip *zipFile;
+/*	struct zip *zipFile;
 	if ((zipFile = zip_open(path.c_str(), 0, NULL)) != NULL)
 	{
 		struct zip_stat dmlFileStat;
@@ -103,7 +105,7 @@ bool Emulation::readTemplate(string path, DMLInfo &dmlInfo)
 		
 		zip_close(zipFile);
 	}
-	
+	*/
 	return !isError;
 }
 

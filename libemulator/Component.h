@@ -21,13 +21,13 @@ public:
 	Component();
 	virtual ~Component();
 	
-	virtual int ioctl(int message, void * data);
+	virtual int ioctl(int message, void *data);
 	virtual int read(int address);
 	virtual void write(int address, int value);
 	
-	void addObserver(class Component * component);
-	void removeObserver(class Component * component);
-	virtual void onNotification(class Component * component);
+	void addObserver(class Component *component);
+	void removeObserver(class Component *component);
+	virtual void onNotification(class Component *component);
 	
 protected:
 	void postNotification();

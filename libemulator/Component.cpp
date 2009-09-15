@@ -30,12 +30,12 @@ void Component::write(int address, int value)
 {
 }
 
-void Component::addObserver(Component * component)
+void Component::addObserver(Component *component)
 {
 	observers.push_back(component);
 }
 
-void Component::removeObserver(Component * component)
+void Component::removeObserver(Component *component)
 {
 	vector<Component *>::iterator iterator;
 	for (iterator = observers.begin();
@@ -47,7 +47,7 @@ void Component::removeObserver(Component * component)
 	}
 }
 
-void Component::onNotification(Component * component)
+void Component::onNotification(Component *component)
 {
 }
 

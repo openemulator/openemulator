@@ -21,6 +21,7 @@
 		00B334850FE41F080042661D /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B334840FE41F080042661D /* CoreAudio.framework */; };
 		00B4174D1004197300BA7E45 /* AppController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B4174C1004197300BA7E45 /* AppController.m */; };
 		00C07E940FD28217004E0D3D /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C07E930FD28217004E0D3D /* Quartz.framework */; };
+		00C6C0C110602151004D084B /* roms in Resources */ = {isa = PBXBuildFile; fileRef = 00C6C08810602151004D084B /* roms */; };
 		00C7F1D9100BC5B500AD0812 /* IPMinus.png in Resources */ = {isa = PBXBuildFile; fileRef = 00C7F1D5100BC5B400AD0812 /* IPMinus.png */; };
 		00C7F1DA100BC5B500AD0812 /* IPMinusSel.png in Resources */ = {isa = PBXBuildFile; fileRef = 00C7F1D6100BC5B400AD0812 /* IPMinusSel.png */; };
 		00C7F1DB100BC5B500AD0812 /* IPPlus.png in Resources */ = {isa = PBXBuildFile; fileRef = 00C7F1D7100BC5B400AD0812 /* IPPlus.png */; };
@@ -47,7 +48,6 @@
 		00D844A90FFF04C0005802F0 /* OpenEmulator.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000F66520FF8368F00C8AF23 /* OpenEmulator.icns */; };
 		00D844AA0FFF04C0005802F0 /* OpenEmulatorHelp in Resources */ = {isa = PBXBuildFile; fileRef = 000A79520FBA4A8400A0F12E /* OpenEmulatorHelp */; };
 		00D844AB0FFF04C0005802F0 /* PRGeneral.png in Resources */ = {isa = PBXBuildFile; fileRef = 000F66530FF8368F00C8AF23 /* PRGeneral.png */; };
-		00D844AC0FFF04C0005802F0 /* rom in Resources */ = {isa = PBXBuildFile; fileRef = 0054874B0FDC86AB00DBCFA8 /* rom */; };
 		00D844AE0FFF04C0005802F0 /* TBInspector.png in Resources */ = {isa = PBXBuildFile; fileRef = 000F66560FF8368F00C8AF23 /* TBInspector.png */; };
 		00D844AF0FFF04C0005802F0 /* TBPause.png in Resources */ = {isa = PBXBuildFile; fileRef = 000F66570FF8368F00C8AF23 /* TBPause.png */; };
 		00D844B00FFF04C0005802F0 /* TBPower.png in Resources */ = {isa = PBXBuildFile; fileRef = 000F66580FF8368F00C8AF23 /* TBPower.png */; };
@@ -148,7 +148,6 @@
 		00317E380FD31D1A007F2B00 /* AppleGraphicsTablet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppleGraphicsTablet.png; sourceTree = "<group>"; };
 		004C272B0FEB55BE004AE5EA /* libportaudio.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libportaudio.a; path = macosx/portaudio/lib/libportaudio.a; sourceTree = "<group>"; };
 		0054868F0FDC817900DBCFA8 /* Emulation.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Emulation.icns; sourceTree = "<group>"; };
-		0054874B0FDC86AB00DBCFA8 /* rom */ = {isa = PBXFileReference; lastKnownFileType = folder; path = rom; sourceTree = "<group>"; };
 		005928540FFC94E200F24A57 /* templates */ = {isa = PBXFileReference; lastKnownFileType = folder; path = templates; sourceTree = "<group>"; };
 		005C7BBB0FD8ED6F00426DD0 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		00679D05100817F700B38748 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/DeviceChooser.xib; sourceTree = "<group>"; };
@@ -168,6 +167,7 @@
 		00B4174C1004197300BA7E45 /* AppController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppController.m; sourceTree = "<group>"; };
 		00C07E350FD27CCF004E0D3D /* PRGeneral.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PRGeneral.png; sourceTree = "<group>"; };
 		00C07E930FD28217004E0D3D /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = /System/Library/Frameworks/Quartz.framework; sourceTree = "<absolute>"; };
+		00C6C08810602151004D084B /* roms */ = {isa = PBXFileReference; lastKnownFileType = folder; path = roms; sourceTree = "<group>"; };
 		00C7F1D5100BC5B400AD0812 /* IPMinus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPMinus.png; path = macosx/Images/IPMinus.png; sourceTree = "<group>"; };
 		00C7F1D6100BC5B400AD0812 /* IPMinusSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPMinusSel.png; path = macosx/Images/IPMinusSel.png; sourceTree = "<group>"; };
 		00C7F1D7100BC5B400AD0812 /* IPPlus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPPlus.png; path = macosx/Images/IPPlus.png; sourceTree = "<group>"; };
@@ -421,6 +421,7 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				00C6C08810602151004D084B /* roms */,
 				00C8AA0610103D6A006A5734 /* OSDPause.png */,
 				00C8AA0710103D6A006A5734 /* OSDPower.png */,
 				00F86BE1100FD4F60016867D /* IPSoundMax.png */,
@@ -444,7 +445,6 @@
 				00D844C10FFF0505005802F0 /* PaperFeed.xib */,
 				00D844C30FFF0505005802F0 /* Preferences.xib */,
 				005928540FFC94E200F24A57 /* templates */,
-				0054874B0FDC86AB00DBCFA8 /* rom */,
 				0008FCD80FBA5D72005E876E /* Info.plist */,
 				000A79520FBA4A8400A0F12E /* OpenEmulatorHelp */,
 				000A79070FBA49C500A0F12E /* Images */,
@@ -554,7 +554,6 @@
 				00D844A90FFF04C0005802F0 /* OpenEmulator.icns in Resources */,
 				00D844AA0FFF04C0005802F0 /* OpenEmulatorHelp in Resources */,
 				00D844AB0FFF04C0005802F0 /* PRGeneral.png in Resources */,
-				00D844AC0FFF04C0005802F0 /* rom in Resources */,
 				00D844AE0FFF04C0005802F0 /* TBInspector.png in Resources */,
 				00D844AF0FFF04C0005802F0 /* TBPause.png in Resources */,
 				00D844B00FFF04C0005802F0 /* TBPower.png in Resources */,
@@ -583,6 +582,7 @@
 				00F86BE4100FD4F60016867D /* IPSoundMin.png in Resources */,
 				00C8AA0B10103D6A006A5734 /* OSDPause.png in Resources */,
 				00C8AA0C10103D6A006A5734 /* OSDPower.png in Resources */,
+				00C6C0C110602151004D084B /* roms in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

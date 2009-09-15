@@ -6,37 +6,52 @@
  * Released under the GPL
  */
 
-#include <string>
-#include <vector>
-#include <map>
-
-using namespace std;
-
-struct DMLOutlet
+typedef struct DMLPortType
 {
-	string name;
-	string type;
-	string label;
-	string image;
-};
-
-struct DMLInlet
-{
-	string name;
-	string type;
-	string label;
-	string image;
-};
-
-struct DMLInfo
-{
-	string label;
-	string image;
-	string description;
-	string group;
+	char * name;
+	char * type;
+	char * label;
+	char * image;
 	
-	vector<DMLOutlet> outlets;
-};
+	int connected;
+	
+	struct DMLPortType *next;
+} DMLPort;
+
+typedef struct
+{
+	char * label;
+	char * image;
+	char * description;
+	char * group;
+	
+	DMLPort * outlets;
+} DMLInfo;
+
+typedef struct
+{
+	
+	
+} Emulation;
+
+DMLInfo *dmlInfoRead(char * path);
+DMLInfo *dmlInfoReadFromTemplate(char * path);
+void dmlInfoFree(DMLInfo * dmlInfo);
+
+Emulation *emulatorOpen(char *path);
+int emulatorRunFrame(Emulation *emulation);
+int emulatorSave(Emulation *emulation, char *path);
+int emulatorClose(Emulation *emulation);
+
+int emulatorIoctl(char *componentName, int message, void * data);
+
+DMLPort *emulatorGetOutlets(Emulation *emulation);
+DMLPort *emulatorGetInlets(Emulation *emulation);
+
+int emulatorAddDML(char *path);
+void emulatorRemoveOutlet(char *outletName);
+
+
 
 class Emulation
 {
@@ -64,20 +79,21 @@ public:
 	void removeDevicesOnOutlet(string outletName);
 };
 
-// We use ioctl's to update outlets
-// We use ioctl's to send power, reset, pause messages
-// We use ioctl's to send config messages
-// We use ioctl's to do copy, paste, isCopyAvailable
-// We use ioctl's to get/set video options
-// We use ioctl's to get/set audio volume
-// We use ioctl's to play/record audio
-// We use ioctl's to lock/unlock disk drives
-// We use ioctl's to mount/unmount disk drives
-// We use ioctl's to get/set component options
-// We use ioctl's to send keyboard messages
-// We use ioctl's to set mouse position and buttons
-// We use ioctl's to set joystick position and buttons
-// We use ioctl's to set graphics tablet position and buttons
-// We use ioctl's to get video frames
+// ioctl's for:
+// * update outlets
+// * send power, reset, pause messages
+// * send config messages
+// * do copy, paste, isCopyAvailable
+// * get/set video options
+// * get/set audio volume
+// * play/record audio
+// * lock/unlock disk drives
+// * mount/unmount disk drives
+// * get/set component options
+// * send keyboard messages
+// * set mouse position and buttons
+// * set joystick position and buttons
+// * set graphics tablet position and buttons
+// * get video frames
 
 // Note: move pause and power off images to libemulator
