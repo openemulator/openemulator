@@ -11,28 +11,30 @@
 <!ATTLIST device image CDATA #IMPLIED>
 
 <!ELEMENT inlet EMPTY>
-<!ATTLIST inlet name CDATA #REQUIRED>
+<!ATTLIST inlet ref CDATA #REQUIRED>
 <!ATTLIST inlet type CDATA #REQUIRED>
+<!ATTLIST inlet subtype CDATA #REQUIRED>
 <!ATTLIST inlet label CDATA #IMPLIED>
 <!ATTLIST inlet image CDATA #IMPLIED>
 
 <!ELEMENT outlet EMPTY>
-<!ATTLIST outlet name CDATA #REQUIRED>
+<!ATTLIST outlet ref CDATA #REQUIRED>
 <!ATTLIST outlet type CDATA #REQUIRED>
+<!ATTLIST outlet subtype CDATA #REQUIRED>
 <!ATTLIST outlet label CDATA #IMPLIED>
 <!ATTLIST outlet image CDATA #IMPLIED>
 
 <!ELEMENT component (connection,property,data,resource)>
+<!ATTLIST component name CDATA #REQUIRED>
 <!ATTLIST component class CDATA #REQUIRED>
-<!ATTLIST component name CDATA #IMPLIED>
+
+<!ELEMENT connection EMPTY>
+<!ATTLIST connection key CDATA #REQUIRED>
+<!ATTLIST connection ref CDATA #REQUIRED>
 
 <!ELEMENT property EMPTY>
 <!ATTLIST property key CDATA #REQUIRED>
 <!ATTLIST property value CDATA #REQUIRED>
-
-<!ELEMENT connection EMPTY>
-<!ATTLIST connection key CDATA #REQUIRED>
-<!ATTLIST connection value CDATA #REQUIRED>
 
 <!ELEMENT data EMPTY>
 <!ATTLIST data key CDATA #REQUIRED>

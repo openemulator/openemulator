@@ -2,13 +2,13 @@
 <!DOCTYPE dml PUBLIC "-//OPENEMULATOR//DTD DML 1.0//EN" "http://www.openemulator.org/DTDs/dml-1.0.dtd">
 <dml version="1.0" label="Apple II" image="Apple II.png" description="The Apple II was the first highly successful mass produced microprocessor product. The Apple II had color and high-resolution graphics modes, sound capabilities and one of two built-in BASIC programming languages." group="Apple II">
 <device name="host">
-    <component class="EventController">
+    <component name="events" class="EventController">
         <property key="runTime" value="0.0" />
     </component>
-    <component class="AudioController">
+    <component name="audio" class="AudioController">
         <property key="volume" value="1.0" />
     </component>
-    <component class="VideoController">
+    <component name="video" class="VideoController">
         <property key="window" value="100 100 640 480 1440 900" />
         <property key="brightness" value="0.0" />
         <property key="contrast" value="0.0" />
@@ -17,43 +17,43 @@
         <property key="temperature" value="0.0" />
         <property key="tint" value="0.0" />
     </component>
-    <component class="KeyboardController">
+    <component name="keyboard" class="KeyboardController">
     </component>
-    <component class="JoystickController">
+    <component name="joystick" class="JoystickController">
     </component>
-    <component class="MouseController">
+    <component name="mouse" class="MouseController">
     </component>
-    <component class="TabletController">
+    <component name="tablet" class="TabletController">
     </component>
 </device>
 
 <device name="emulation" label="Apple II">
-    <inlet name="AppleIIEvents.cpuSocket" type="expansion/appleiicpu" label="CPU Chip Socket" image="Apple II CPU Chip Socket.png" />
-    <inlet name="AppleIIIOU.slot0" type="expansion/appleiislot" label="Slot 0" image="Apple II Slot.png" />
-    <inlet name="AppleIIIOU.slot1" type="expansion/appleiislot" label="Slot 1" image="Apple II Slot.png" />
-    <inlet name="AppleIIIOU.slot2" type="expansion/appleiislot" label="Slot 2" image="Apple II Slot.png" />
-    <inlet name="AppleIIIOU.slot3" type="expansion/appleiislot" label="Slot 3" image="Apple II Slot.png" />
-    <inlet name="AppleIIIOU.slot4" type="expansion/appleiislot" label="Slot 4" image="Apple II Slot.png" />
-    <inlet name="AppleIIIOU.slot5" type="expansion/appleiislot" label="Slot 5" image="Apple II Slot.png" />
-    <inlet name="AppleIIIOU.slot6" type="expansion/appleiislot" label="Slot 6" image="Apple II Slot.png" />
-    <inlet name="AppleIIIOU.slot7" type="expansion/appleiislot" label="Slot 7" image="Apple II Slot.png" />
-    <inlet name="AppleIIROM.romSocket" type="expansion/appleiirom" label="ROM Socket" image="Apple II ROM Socket.png" />
-    <inlet name="AppleIIGamePort.gamePort" type="expansion/appleiigame" label="Game Port" image="Apple II Game Port.png" />
-    <inlet name="AppleIITVOutput.romSocket" type="expansion/appleiicharrom" label="Character ROM Socket" image="Apple II Character ROM Socket.png" />
-    <component class="AppleIIEvents">
-        <connection key="eventController" value="host::EventController" />
-        <connection key="cpu" value="CPUMOS6502" />
-        <connection key="cpuSocket" value="" />
-        <connection key="secondaryCPU" value="" />
+    <inlet ref="events.cpuSocket" type="expansion" subtype="appleiicpu" label="CPU Socket" image="Apple II CPU Chip Socket.png" />
+    <inlet ref="iou.slot0" type="expansion" subtype="appleiislot" label="Slot 0" image="Apple II Slot.png" />
+    <inlet ref="iou.slot1" type="expansion" subtype="appleiislot" label="Slot 1" image="Apple II Slot.png" />
+    <inlet ref="iou.slot2" type="expansion" subtype="appleiislot" label="Slot 2" image="Apple II Slot.png" />
+    <inlet ref="iou.slot3" type="expansion" subtype="appleiislot" label="Slot 3" image="Apple II Slot.png" />
+    <inlet ref="iou.slot4" type="expansion" subtype="appleiislot" label="Slot 4" image="Apple II Slot.png" />
+    <inlet ref="iou.slot5" type="expansion" subtype="appleiislot" label="Slot 5" image="Apple II Slot.png" />
+    <inlet ref="iou.slot6" type="expansion" subtype="appleiislot" label="Slot 6" image="Apple II Slot.png" />
+    <inlet ref="iou.slot7" type="expansion" subtype="appleiislot" label="Slot 7" image="Apple II Slot.png" />
+    <inlet ref="rom.socket" type="expansion" subtype="appleiirom" label="ROM Socket" image="Apple II ROM Socket.png" />
+    <inlet ref="game.port" type="expansion" subtype="appleiigame" label="Game Port" image="Apple II Game Port.png" />
+    <inlet ref="tvOutput.socket" type="expansion" subtype="appleiicharrom" label="Character ROM Socket" image="Apple II Character ROM Socket.png" />
+    <component name="events" class="AppleIIEvents">
+        <connection key="hostEvents" ref="host::events" />
+        <connection key="cpu" ref="cpu" />
+        <connection key="cpuSocket" ref="" />
+        <connection key="secondaryCPU" ref="" />
         <property key="secondaryCPUEnabled" value="0" />
         <property key="cycleClockInc" value="14" />
         <property key="scanlineClockInc" value="2" />
     </component>
-    <component class="AppleIIInterrupts">
-        <connection key="cpu" value="CPUMOS6502" />
+    <component name="interrupts" class="AppleIIInterrupts">
+        <connection key="cpu" ref="cpu" />
     </component>
-    <component class="CPUMOS6502">
-        <connection key="mmu" value="AppleIIMMU" />
+    <component name="cpu" class="CPUMOS6502">
+        <connection key="mmu" ref="mmu" />
         <property key="A" value="0" />
         <property key="X" value="0" />
         <property key="Y" value="0" />
@@ -61,123 +61,124 @@
         <property key="P" value="0" />
         <property key="PC" value="0" />
     </component>
-    <component class="AppleIIMMU">
-        <connection key="video" value="AppleIIVideo" />
+    <component name="mmu" class="AppleIIMMU">
+        <connection key="video" ref="AppleIIVideo" />
     </component>
-    <component class="AppleIIMemory">
-        <connection key="mmu" value="AppleIIMMU" />
+    <component name="memory" class="AppleIIMemory">
+        <connection key="mmu" ref="mmu" />
         <property key="memorySize" value="49152" />
         <data key="memory" src="${deviceName}.bin" />
     </component>
-    <component class="AppleIIIOU">
-        <connection key="mmu" value="AppleIIMMU" />
-        <connection key="video" value="AppleIIVideo" />
-        <connection key="slotMemory" value="AppleIISlotMemory" />
-        <connection key="slot0" value="dev0:AppleLanguageCard" />
-        <connection key="slot1" value="" />
-        <connection key="slot2" value="" />
-        <connection key="slot3" value="" />
-        <connection key="slot4" value="" />
-        <connection key="slot5" value="" />
-        <connection key="slot6" value="dev1:AppleDiskIIInterfaceCard" />
-        <connection key="slot7" value="" />
+    <component name="iou" class="AppleIIIOU">
+        <connection key="mmu" ref="mmu" />
+        <connection key="video" ref="video" />
+        <connection key="slotMemory" ref="slotMemory" />
+        <connection key="slot0" ref="dev0::card" />
+        <connection key="slot1" ref="" />
+        <connection key="slot2" ref="" />
+        <connection key="slot3" ref="" />
+        <connection key="slot4" ref="" />
+        <connection key="slot5" ref="" />
+        <connection key="slot6" ref="dev1::card" />
+        <connection key="slot7" ref="" />
     </component>
-    <component class="AppleIISlotMemory">
-        <connection key="mmu" value="AppleIIMMU" />
-        <connection key="video" value="AppleIIVideo" />
+    <component name="slotMemory" class="AppleIISlotMemory">
+        <connection key="mmu" ref="mmu" />
+        <connection key="video" ref="video" />
     </component>
-    <component class="AppleIIROM">
-        <connection key="mmu" value="AppleIIMMU" />
-        <connection key="romSocket" value="" />
+    <component name="rom" class="AppleIIROM">
+        <connection key="mmu" ref="mmu" />
+        <connection key="socket" ref="" />
         <resource key="romImage" src="roms/Apple II ROM.bin" />
     </component>
-    <component class="AppleIIKeyboard">
-        <connection key="keyboardController" value="host::KeyboardController" />
-        <connection key="iou" value="AppleIIIOU" />
-        <connection key="video" value="AppleIIVideo" />
+    <component name="keyboard" class="AppleIIKeyboard">
+        <connection key="hostKeyboard" ref="host::keyboard" />
+        <connection key="iou" ref="iou" />
+        <connection key="video" ref="video" />
     </component>
-    <component class="AppleIICassetteOut">
-        <connection key="iou" value="AppleIIIOU" />
-        <connection key="video" value="AppleIIVideo" />
-        <connection key="speaker" value="AppleIISpeaker" />
+    <component name="cassetteOut" class="AppleIICassetteOut">
+        <connection key="iou" ref="iou" />
+        <connection key="video" ref="video" />
+        <connection key="speaker" ref="speaker" />
     </component>
-    <component class="AppleIISpeaker">
-        <connection key="audioController" value="host::AudioController" />
-        <connection key="iou" value="AppleIIIOU" />
-        <connection key="video" value="AppleIIVideo" />
-        <property key="state" value="0" />
+    <component name="speaker" class="AppleIISpeaker">
+        <connection key="hostAudio" ref="host::audio" />
+        <connection key="iou" ref="iou" />
+        <connection key="video" ref="video" />
+        <property key="state" ref="0" />
     </component>
-    <component class="AppleIIVideo">
-        <connection key="iou" value="AppleIIIOU" />
+    <component name="video" class="AppleIIVideo">
+        <connection key="iou" ref="iou" />
     </component>
-    <component class="AppleIIGamePort">
-        <connection key="iou" value="AppleIIIOU" />
-        <connection key="video" value="AppleIIVideo" />
-        <connection key="gameIO" value="dev4:AppleIIGamePaddles"/>
+    <component name="game" class="AppleIIGamePort">
+        <connection key="iou" ref="iou" />
+        <connection key="video" ref="video" />
+        <connection key="port" ref="dev4::port"/>
         <property key="an0" value="0" />
         <property key="an1" value="0" />
         <property key="an2" value="0" />
         <property key="an3" value="0" />
     </component>
-    <component class="AppleIICassetteIn">
-        <connection key="audioController" value="host::AudioController" />
-        <connection key="gamePort" value="AppleIIGamePort" />
+    <component name="cassetteIn" class="AppleIICassetteIn">
+        <connection key="hostAudio" ref="host::audio" />
+        <connection key="game" ref="game" />
     </component>
-    <component class="AppleIITVOutput">
-        <connection key="videoController" value="host::VideoController" />
-        <connection key="romSocket" value="" />
+    <component name="tvOutput" class="AppleIITVOutput">
+        <connection key="hostVideo" ref="host::video" />
+        <connection key="socket" ref="" />
         <resource key="romImage" value="roms/Apple II Video US ROM.bin" />
     </component>
 </device>
 
 <device name="dev0" label="Apple 16kB Language Card" image="Apple Language Card.png">
-    <outlet name="AppleLanguageCard" type="expansion/appleiislot" />
-    <component class="AppleLanguageCard">
+    <outlet ref="name" type="expansion" subtype="appleiislot" />
+    <component name="card" class="AppleLanguageCard">
         <data key="memory" src="${deviceName}.bin" />
     </component>
 </device>
 
 <device name="dev1" label="Apple Disk II Interface Card" image="Apple Disk II Interface Card.png">
-    <outlet name="AppleDiskIIInterfaceCard" type="expansion/appleiislot" />
-    <inlet name="AppleDiskIIInterfaceCard.drive1" type="diskdrive/apple525" label="Drive 1" image="Apple Disk II Drive 1 Socket.png" />
-    <inlet name="AppleDiskIIInterfaceCard.drive2" type="diskdrive/apple525" label="Drive 2" image="Apple Disk II Drive 2 Socket.png" />
-     <component class="DiskIIInterfaceCard">
-        <connection key="drive1" value="dev2:AppleDiskII" />
-        <connection key="drive2" value="dev3:AppleDiskII" />
+    <outlet ref="card" type="expansion" subtype="appleiislot" />
+    <inlet ref="card.drive1" type="diskdrive/apple525" label="Drive 1" image="Apple Disk II Drive 1 Socket.png" />
+    <inlet ref="card.drive2" type="diskdrive/apple525" label="Drive 2" image="Apple Disk II Drive 2 Socket.png" />
+    <component name="card" class="AppleDiskIIInterfaceCard">
+        <connection key="drive1" ref="dev2::drive" />
+        <connection key="drive2" ref="dev3::drive" />
+        <connection key="rom" ref="rom" />
     </component>
-     <component class="AppleIIInterfaceROM">
+     <component name="rom" class="AppleIIInterfaceROM">
         <resource key="romImage" src="roms/Apple Disk II Interface ROM.bin" />
     </component>
 </device>
 
 <device name="dev2" label="Apple Disk II Drive" image="Apple Disk II Drive.png">
-    <outlet name="AppleDiskII" type="diskdrive/apple525" />
-    <component class="AppleDiskII">
+    <outlet ref="drive" type="diskdrive" subtype="apple525" />
+    <component name="drive" class="AppleDiskII">
         <property key="diskImage" value="/Users/mressl/test2.dsk" />
         <property key="diskLock" value="0" />
         <resource key="soundSpin" src="sounds/Apple Disk II Spin.wav" />
         <resource key="soundArm" src="sounds/Apple Disk II Arm.wav" />
-        <resource key="soundStopper" src="sounds/Apple Disk II Stopper.wav" />
-        <resource key="soundError" src="sounds/Apple Disk II Error.wav" />
+        <resource key="soundStop" src="sounds/Apple Disk II Stop.wav" />
+        <resource key="soundShake" src="sounds/Apple Disk II Shake.wav" />
     </component>
 </device>
 
 <device name="dev3" label="Apple Disk II Drive 2" image="Apple Disk II Drive.png">
-    <outlet name="AppleDiskII" type="diskdrive/apple525" />
-    <component class="AppleDiskII">
+    <outlet ref="drive" type="diskdrive" subtype="apple525" />
+    <component name="drive" class="AppleDiskII">
         <property key="diskImage" value="" />
         <property key="diskLock" value="0" />
         <resource key="soundSpin" src="sounds/Apple Disk II Spin 2.wav" />
         <resource key="soundArm" src="sounds/Apple Disk II Arm.wav" />
-        <resource key="soundStopper" src="sounds/Apple Disk II Stopper.wav" />
-        <resource key="soundError" src="sounds/Apple Disk II Error.wav" />
+        <resource key="soundStop" src="sounds/Apple Disk II Stop.wav" />
+        <resource key="soundShake" src="sounds/Apple Disk II Shake.wav" />
     </component>
 </device>
 
-<device name="dev4" label="Apple II Game Paddles/Joystick" image="Apple II Game Paddles.png">
-    <outlet name="AppleIIGamePaddles" type="expansion/applegameport" />
-    <component class="AppleIIGamePaddles">
-        <connection key="joystickController" value="host::JoystickController" />
+<device name="dev4" label="Apple II Game Paddles" image="Apple II Game Paddles.png">
+    <outlet ref="port" type="expansion" subtype="applegameport" />
+    <component name="port" class="AppleIIGamePaddles">
+        <connection key="joystick" ref="host::joystick" />
     </component>
 </device>
 

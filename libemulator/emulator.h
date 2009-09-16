@@ -6,17 +6,18 @@
  * Released under the GPL
  */
 
-typedef struct DMLPortType
+typedef struct DMLPortNodeType
 {
-	char * name;
+	char * ref;
 	char * type;
+	char * subtype;
 	char * label;
 	char * image;
 	
-	int connected;
+	int isConnected;
 	
-	struct DMLPortType *next;
-} DMLPort;
+	struct DMLPortNodeType *next;
+} DMLPortNode;
 
 typedef struct
 {
@@ -25,35 +26,49 @@ typedef struct
 	char * description;
 	char * group;
 	
-	DMLPort * outlets;
+	DMLPortNode * inlets;
+	DMLPortNode * outlets;
 } DMLInfo;
 
-typedef struct
+typedef struct DMLConnectionNodeType
 {
+	char * inletRef;
+	char * outletRef;
 	
+	struct DMLConnectionNodeType *next;
+} DMLConnectionNode;
+
+typedef DMLConnectionNode *DMLConnections;
+
+typedef void * Emulation;
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+	DMLInfo *dmlInfoRead(char * path);
+	DMLInfo *dmlInfoReadFromTemplate(char * path);
+	void dmlInfoFree(DMLInfo * dmlInfo);
 	
-} Emulation;
+	DMLConnections *dmlConnectionsNew();
+	int dmlConnectionsAdd(DMLConnections * conn, char * inletRef, char * outletRef);
+	void dmlConnectionsFree(DMLConnections * conn);
+	
+	Emulation *emulatorOpen(char * path);
+	int emulatorSave(Emulation * emulation, char * path);
+	void emulatorClose(Emulation * emulation);
 
-DMLInfo *dmlInfoRead(char * path);
-DMLInfo *dmlInfoReadFromTemplate(char * path);
-void dmlInfoFree(DMLInfo * dmlInfo);
+	int emulatorIoctl(Emulation * emulation, char * componentName, int message, void * data);
+	
+	DMLInfo *emulatorGetDMLInfo(Emulation * emulation);
+	int emulatorAddDML(Emulation * emulation, char * path, DMLConnections * conn);
+	int emulatorRemoveOutlet(Emulation * emulation, char * outletRef);
+#ifdef __cplusplus
+}
+#endif
 
-Emulation *emulatorOpen(char *path);
-int emulatorRunFrame(Emulation *emulation);
-int emulatorSave(Emulation *emulation, char *path);
-int emulatorClose(Emulation *emulation);
-
-int emulatorIoctl(char *componentName, int message, void * data);
-
-DMLPort *emulatorGetOutlets(Emulation *emulation);
-DMLPort *emulatorGetInlets(Emulation *emulation);
-
-int emulatorAddDML(char *path);
-void emulatorRemoveOutlet(char *outletName);
-
-
-
-class Emulation
+/*
+ class Emulation
 {
 public:
 	Emulation();
@@ -78,8 +93,9 @@ public:
 	bool addDML(string path, map<string, string> outletInletMap);	
 	void removeDevicesOnOutlet(string outletName);
 };
-
+*/
 // ioctl's for:
+// * next frame
 // * update outlets
 // * send power, reset, pause messages
 // * send config messages
