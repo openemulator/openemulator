@@ -19,6 +19,8 @@
 
 #define DMLINFO_FILENAME "info.xml"
 
+using namespace std;
+
 class EmulationClass
 {
 private:
@@ -26,76 +28,123 @@ private:
 	vector<Component *> components;
 };
 
-DMLInfo *dmlInfoParseXML(xmlDocPtr doc)
+DMLPortNode *dmlPortParse(string deviceName, xmlNodePtr node)
 {
-	if (!doc)
+	DMLPortNode *portNode = new DMLPortNode;
+	
+	if (!portNode)
 		return NULL;
 	
+	portNode->ref = "";
+	portNode->type = "";
+	portNode->subtype = "";
+	portNode->label = "";
+	portNode->image = "";
+	portNode->next = NULL;
+	xmlChar *value;
+	
+	if ((value = xmlGetProp(node, BAD_CAST "ref")) != NULL)
+	{
+		string ref = (char *) value;
+		if (ref.find("::") == string::npos)
+			ref = deviceName + "::" + ref;
+		portNode->ref = (char *) xmlCharStrdup(ref.c_str());
+	}
+	if ((value = xmlGetProp(node, BAD_CAST "type")) != NULL)
+		portNode->type = (char *) xmlStrdup(value);
+	if ((value = xmlGetProp(node, BAD_CAST "subtype")) != NULL)
+		portNode->subtype = (char *) xmlStrdup(value);
+	if ((value = xmlGetProp(node, BAD_CAST "label")) != NULL)
+		portNode->label = (char *) xmlStrdup(value);
+	if ((value = xmlGetProp(node, BAD_CAST "image")) != NULL)
+		portNode->image = (char *) xmlStrdup(value);
+	
+	return portNode;
+}
+
+void dmlPortFree(DMLPortNode *node)
+{
+	xmlFree(node->ref);
+	xmlFree(node->type);
+	xmlFree(node->subtype);
+	xmlFree(node->label);
+	xmlFree(node->image);
+	
+	delete node;
+}
+
+DMLInfo *dmlInfoParse(xmlDocPtr doc)
+{
 	DMLInfo *dmlInfo = new DMLInfo;
+
+	if (!dmlInfo)
+		return NULL;
+	
+	dmlInfo->label = "";
+	dmlInfo->image = "";
+	dmlInfo->description = "";
+	dmlInfo->group = "";
+	dmlInfo->inlets = NULL;
+	dmlInfo->outlets = NULL;
 	
 	xmlNodePtr dmlNode = xmlDocGetRootElement(doc);
 	
-	char *attrib;
-	if ((attrib = xmlGetProp(dmlNode, "label")) != NULL)
-		dmlInfo->label = strdup(attrib);
-	if ((attrib = xmlGetProp(dmlNode, "image")) != NULL)
-		dmlInfo->image = strdup(attrib);
-	if ((attrib = xmlGetProp(dmlNode, "description")) != NULL)
-		dmlInfo->description = strdup(attrib);
-	if ((attrib = xmlGetProp(dmlNode, "group")) != NULL)
-		dmlInfo->group = strdup(attrib);
+	xmlChar *value;
+	if ((value = xmlGetProp(dmlNode, BAD_CAST "label")) != NULL)
+		dmlInfo->label = (char *) xmlStrdup(value);
+	if ((value = xmlGetProp(dmlNode, BAD_CAST "image")) != NULL)
+		dmlInfo->image = (char *) xmlStrdup(value);
+	if ((value = xmlGetProp(dmlNode, BAD_CAST "description")) != NULL)
+		dmlInfo->description = (char *) xmlStrdup(value);
+	if ((value = xmlGetProp(dmlNode, BAD_CAST "group")) != NULL)
+		dmlInfo->group = (char *) xmlStrdup(value);
 	
 	for(xmlNodePtr deviceNode = dmlNode->children;
 		deviceNode;
 		deviceNode = deviceNode->next)
 	{
+		string deviceName = (char *) deviceNode->name;
+		DMLPortNode **nextInlet = &dmlInfo->inlets;
+		DMLPortNode **nextOutlet = &dmlInfo->inlets;
+		
 		for(xmlNodePtr childNode = deviceNode->children;
 			childNode;
 			childNode = childNode->next)
 		{
-			if (!strcmp(childNode->name, "inlet"))
+			if (!xmlStrcmp(childNode->name, BAD_CAST "inlet"))
 			{
-				DMLPortNode *portNode = new DMLPortNode;
-
-				if ((attrib = xmlGetProp(dmlNode, "ref")) != NULL)
-					portNode->ref = strdup(attrib);
-				if ((attrib = xmlGetProp(dmlNode, "type")) != NULL)
-					portNode->type = strdup(attrib);
-				if ((attrib = xmlGetProp(dmlNode, "subtype")) != NULL)
-					portNode->subtype = strdup(attrib);
-				if ((attrib = xmlGetProp(dmlNode, "label")) != NULL)
-					portNode->label = strdup(attrib);
-				if ((attrib = xmlGetProp(dmlNode, "image")) != NULL)
-					portNode->image = strdup(attrib);
-				
-				portNode->next = dmlInfo->inlets;
-				dmlInfo->next = portNode;
+				*nextInlet = dmlPortParse(deviceName, childNode);
+				nextInlet = &(*nextInlet)->next;
 			}
-			if (!strcmp(childNode->name, "outlet"))
-				;
+			if (!xmlStrcmp(childNode->name, BAD_CAST "outlet"))
+			{
+				*nextOutlet = dmlPortParse(deviceName, childNode);
+				nextOutlet = &(*nextOutlet)->next;
+			}
 		}
 	}
-
-	return NULL;
+	
+	return dmlInfo;
 }
 
-extern "C" DMLInfo *dmlInfoRead(char * path)
+extern "C" DMLInfo *dmlInfoRead(char *path)
 {
 	DMLInfo *dmlInfo;
 	
 	xmlDocPtr doc = xmlReadFile(path, NULL, 0);
-	dmlInfo = dmlInfoParseXML(doc);
+	if (doc)
+		dmlInfo = dmlInfoParse(doc);
 	xmlFreeDoc(doc);
 	
 	return dmlInfo;
 }
 
-extern "C" DMLInfo *dmlInfoReadFromTemplate(char * path)
+extern "C" DMLInfo *dmlInfoReadFromTemplate(char *path)
 {
 	DMLInfo *dmlInfo = NULL;
 	
 	struct zip *zipFile;
-	if ((zipFile = zip_open(path.c_str(), 0, NULL)) != NULL)
+	if ((zipFile = zip_open(path, 0, NULL)) != NULL)
 	{
 		struct zip_stat dmlFileStat;
 		if (zip_stat(zipFile, DMLINFO_FILENAME, 0, &dmlFileStat) == 0)
@@ -108,12 +157,13 @@ extern "C" DMLInfo *dmlInfoReadFromTemplate(char * path)
 				char dmlData[dmlFileSize];
 				if (zip_fread(dmlFile, dmlData, dmlFileSize) == dmlFileSize)
 				{
-					xmlDocPtr doc = xmlReadMemory(xmlData,
-												  xmlDataSize,
+					xmlDocPtr doc = xmlReadMemory(dmlData,
+												  dmlFileSize,
 												  DMLINFO_FILENAME,
 												  NULL,
 												  0);
-					dmlInfo = dmlInfoParseXML(doc);
+					if (doc)
+						dmlInfo = dmlInfoParse(doc);
 					xmlFreeDoc(doc);
 				}
 				
@@ -127,32 +177,29 @@ extern "C" DMLInfo *dmlInfoReadFromTemplate(char * path)
 	return dmlInfo;
 }
 
-void dmlPortFree(DMLPortNode *node)
+extern "C" void dmlInfoFree(DMLInfo *dmlInfo)
 {
-	while (node)
+	DMLPortNode *node;
+	
+	node = dmlInfo->inlets;
+	while(node)
 	{
 		DMLPortNode *next = node->next;
-		
-		free(node->ref);
-		free(node->type);
-		free(node->subtype);
-		free(node->label);
-		free(node->image);
-		delete node;
-		
+		dmlPortFree(node);
 		node = next;
 	}
-}
-
-extern "C" void dmlInfoFree(DMLInfo * dmlInfo)
-{
-	dmlPortFree(dmlInfo->inlets);
-	dmlPortFree(dmlInfo->outlets);
+	node = dmlInfo->outlets;
+	while(node)
+	{
+		DMLPortNode *next = node->next;
+		dmlPortFree(node);
+		node = next;
+	}
 	
-	free(dmlInfo->label);
-	free(dmlInfo->description);
-	free(dmlInfo->image);
-	free(dmlInfo->group);
+	xmlFree(dmlInfo->label);
+	xmlFree(dmlInfo->description);
+	xmlFree(dmlInfo->image);
+	xmlFree(dmlInfo->group);
 	
 	delete dmlInfo;
 }
@@ -168,8 +215,8 @@ extern "C" int dmlConnectionsAdd(DMLConnections *conn, char *inletRef, char *out
 	node->next = *conn;
 	*conn = node;
 	
-	node->inletRef = new inletRef);
-	node->outletRef = strdup(outletRef);
+	node->inletRef = (char *) xmlCharStrdup(inletRef);
+	node->outletRef = (char *) xmlCharStrdup(outletRef);
 	
 	return 0;
 }
@@ -222,14 +269,13 @@ extern "C" int emulatorIoctl(Emulation * emulation,
 							 char * componentName, int message, void * data)
 {
 	// Find component in DML
-	// Get instance
-	// Call ioctl
+	// Call component ioctl
 	return 0;
 }
 
 extern "C" DMLInfo *emulatorGetDMLInfo(Emulation * emulation)
 {
-	DMLInfo *dmlInfoParseXML(xmlDocPtr doc)
+//	DMLInfo *dmlInfoParse()
 	// Build a DML Info from the XML structure in memory
 	return NULL;
 }
@@ -251,148 +297,3 @@ extern "C" int emulatorRemoveOutlet(Emulation * emulation, char * outletRef)
 	// Iterate from the beginning with all connected outlets
 	return 0;
 }
-
-/*
-Emulation::Emulation()
-{
-	xmlInitParser();
-	
-    LIBXML_TEST_VERSION
-}
-
-Emulation::~Emulation()
-{
-	xmlCleanupParser();
-	xmlMemoryDump();
-}
-
-void printElementNames(xmlNode *curNode)
-{
-	for (; curNode; curNode = curNode->next)
-	{
-		printf("node type: %d, name: %s\n", curNode->type, curNode->name);
-		
-		printElementNames(curNode->children);
-	}
-}
-
-bool Emulation::readDML(char *dmlData, int dmlDataSize, DMLInfo &dmlInfo)
-{
-	xmlDocPtr doc;
-	
-	xmlReadMemory(dmlData, dmlDataSize, NULL, NULL, 0);
-	
-	if (doc)
-	{
-		xmlNode *rootElement = xmlDocGetRootElement(doc);
-		
-		printElementNames(rootElement);
-		
-		xmlFreeDoc(doc);
-	}
-	
-	return (doc != NULL);
-}
-
-bool Emulation::readDML(string path, DMLInfo &dmlInfo)
-{
-	bool isError = true;
-
-	FILE *dmlFile;
-	if ((dmlFile = fopen(path.c_str(), "rb")) != NULL)
-	{
-		fseek(dmlFile, 0, SEEK_END);
-		int dmlFileSize = ftell(dmlFile);
-		fseek(dmlFile, 0, SEEK_SET);
-		
-		char dmlData[dmlFileSize];
-		if (fread(dmlData, 1, dmlFileSize, dmlFile) == dmlFileSize)
-			isError = readDML(dmlData, dmlFileSize, dmlInfo);
-		
-		fclose(dmlFile);
-	}
-	
-	return !isError;
-}
-
-bool Emulation::readTemplate(string path, DMLInfo &dmlInfo)
-{
-	bool isError = true;
-	
-	struct zip *zipFile;
-	if ((zipFile = zip_open(path.c_str(), 0, NULL)) != NULL)
-	{
-		struct zip_stat dmlFileStat;
-		if (zip_stat(zipFile, DMLINFO_FILENAME, 0, &dmlFileStat) == 0)
-		{
-			int dmlFileSize = dmlFileStat.size;
-			struct zip_file *dmlFile;
-			
-			if ((dmlFile = zip_fopen(zipFile, DMLINFO_FILENAME, 0)) != NULL)
-			{
-				char dmlData[dmlFileSize];
-				if (zip_fread(dmlFile, dmlData, dmlFileSize) == dmlFileSize)
-					isError = readDML(dmlData, dmlFileSize, dmlInfo);
-
-				zip_fclose(dmlFile);
-			}
-		}
-		
-		zip_close(zipFile);
-	}
-	
-	return !isError;
-}
-
-bool Emulation::open(string emulationPath)
-{
-	return true;
-}
-
-bool Emulation::runFrame()
-{
-	return true;
-}
-
-bool Emulation::save(string emulationPath)
-{
-	return true;
-}
-
-bool Emulation::ioctl(string componentName, int message, void * data)
-{
-	return 0;
-}
-
-bool Emulation::getOutlets(vector<DMLOutlet> &outlets)
-{
-	return true;
-}
-
-bool Emulation::getInlets(vector<DMLInlet> &inlets)
-{
-	return true;
-}
-
-bool Emulation::getAvailableDMLs(map<string, DMLInfo> &dmls,
-								 vector<string> &availableDMLs)
-{
-	return true;
-}
-
-bool Emulation::getAvailableInlets(DMLOutlet &outlet,
-								   vector<DMLInlet> &availableInlets)
-{
-	return true;
-}
-
-bool Emulation::addDML(string dmlPath,
-					   map<string, string> outletInletMap)
-{
-	return true;
-}
-
-void Emulation::removeDevicesOnOutlet(string outletName)
-{
-}
-*/

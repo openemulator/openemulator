@@ -1,16 +1,16 @@
-README for OpenEmulator
-=======================
-
-OpenEmulator is an accurate, portable Apple II emulator.
-
-It runs on Mac OS X (Cocoa interface),
-and any platform supporting wxWidgets (Windows, GTK+, X11, Motif and more).
+==README for OpenEmulator==
+OpenEmulator is an accurate, portable emulator of legacy home computers.
 
 Visit http://www.openemulator.org/ for more information.
 
+==Dependencies==
 
-Building OpenEmulator
-=====================
+OpenEmulator has the following dependencies:
+
+* libxml2. Available at http://www.xmlsoft.org
+* libzip. Available at http://nih.at/libzip/
+
+==Building==
 
 OpenEmulator has an Xcode project file (OpenEmulator.xcodeproj)
 for building in Xcode.
@@ -26,7 +26,7 @@ Building an OpenEmulator release from the command line:
 Building OpenEmulator from SVN (First Time):
 
     $ svn co http://openemulator.googlecode.com/svn/trunk/ openemulator-read-only
-    $ cd appleiigo
+    $ cd openemulator
     $ ./autogen.sh
     $ ./configure -q && make -s
 
