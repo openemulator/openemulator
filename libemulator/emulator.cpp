@@ -22,27 +22,109 @@
 class EmulationClass
 {
 private:
+	xmlDocPtr dml;
 	vector<Component *> components;
 };
 
+DMLInfo *dmlInfoParseXML(xmlDocPtr doc)
+{
+	if (!doc)
+		return NULL;
+	
+	DMLInfo *dmlInfo = new DMLInfo;
+	
+	xmlNodePtr dmlNode = xmlDocGetRootElement(doc);
+	
+	char *attrib;
+	if ((attrib = xmlGetProp(dmlNode, "label")) != NULL)
+		dmlInfo->label = strdup(attrib);
+	if ((attrib = xmlGetProp(dmlNode, "image")) != NULL)
+		dmlInfo->image = strdup(attrib);
+	if ((attrib = xmlGetProp(dmlNode, "description")) != NULL)
+		dmlInfo->description = strdup(attrib);
+	if ((attrib = xmlGetProp(dmlNode, "group")) != NULL)
+		dmlInfo->group = strdup(attrib);
+	
+	for(xmlNodePtr deviceNode = dmlNode->children;
+		deviceNode;
+		deviceNode = deviceNode->next)
+	{
+		for(xmlNodePtr childNode = deviceNode->children;
+			childNode;
+			childNode = childNode->next)
+		{
+			if (!strcmp(childNode->name, "inlet"))
+			{
+				DMLPortNode *portNode = new DMLPortNode;
+
+				if ((attrib = xmlGetProp(dmlNode, "ref")) != NULL)
+					portNode->ref = strdup(attrib);
+				if ((attrib = xmlGetProp(dmlNode, "type")) != NULL)
+					portNode->type = strdup(attrib);
+				if ((attrib = xmlGetProp(dmlNode, "subtype")) != NULL)
+					portNode->subtype = strdup(attrib);
+				if ((attrib = xmlGetProp(dmlNode, "label")) != NULL)
+					portNode->label = strdup(attrib);
+				if ((attrib = xmlGetProp(dmlNode, "image")) != NULL)
+					portNode->image = strdup(attrib);
+				
+				portNode->next = dmlInfo->inlets;
+				dmlInfo->next = portNode;
+			}
+			if (!strcmp(childNode->name, "outlet"))
+				;
+		}
+	}
+
+	return NULL;
+}
+
 extern "C" DMLInfo *dmlInfoRead(char * path)
 {
-	// Read DML File
-	// Load <dml ... data
-	// Iterate through <device's
-	// Load <inlet's
-	// Load <outlet's
-	return NULL;
+	DMLInfo *dmlInfo;
+	
+	xmlDocPtr doc = xmlReadFile(path, NULL, 0);
+	dmlInfo = dmlInfoParseXML(doc);
+	xmlFreeDoc(doc);
+	
+	return dmlInfo;
 }
 
 extern "C" DMLInfo *dmlInfoReadFromTemplate(char * path)
 {
-	// Get DML File in memory
-	// Load <dml ... data
-	// Iterate through <device's
-	// Load <inlet's
-	// Load <outlet's
-	return NULL;
+	DMLInfo *dmlInfo = NULL;
+	
+	struct zip *zipFile;
+	if ((zipFile = zip_open(path.c_str(), 0, NULL)) != NULL)
+	{
+		struct zip_stat dmlFileStat;
+		if (zip_stat(zipFile, DMLINFO_FILENAME, 0, &dmlFileStat) == 0)
+		{
+			int dmlFileSize = dmlFileStat.size;
+			struct zip_file *dmlFile;
+			
+			if ((dmlFile = zip_fopen(zipFile, DMLINFO_FILENAME, 0)) != NULL)
+			{
+				char dmlData[dmlFileSize];
+				if (zip_fread(dmlFile, dmlData, dmlFileSize) == dmlFileSize)
+				{
+					xmlDocPtr doc = xmlReadMemory(xmlData,
+												  xmlDataSize,
+												  DMLINFO_FILENAME,
+												  NULL,
+												  0);
+					dmlInfo = dmlInfoParseXML(doc);
+					xmlFreeDoc(doc);
+				}
+				
+				zip_fclose(dmlFile);
+			}
+		}
+		
+		zip_close(zipFile);
+	}
+	
+	return dmlInfo;
 }
 
 void dmlPortFree(DMLPortNode *node)
@@ -67,6 +149,11 @@ extern "C" void dmlInfoFree(DMLInfo * dmlInfo)
 	dmlPortFree(dmlInfo->inlets);
 	dmlPortFree(dmlInfo->outlets);
 	
+	free(dmlInfo->label);
+	free(dmlInfo->description);
+	free(dmlInfo->image);
+	free(dmlInfo->group);
+	
 	delete dmlInfo;
 }
 
@@ -75,13 +162,13 @@ extern "C" DMLConnections *dmlConnectionNew()
 	return new DMLConnections;
 }
 
-extern "C" int dmlConnectionsAdd(DMLConnections * conn, char * inletRef, char * outletRef)
+extern "C" int dmlConnectionsAdd(DMLConnections *conn, char *inletRef, char *outletRef)
 {
 	DMLConnectionNode *node = new DMLConnectionNode;
 	node->next = *conn;
 	*conn = node;
 	
-	node->inletRef = strdup(inletRef);
+	node->inletRef = new inletRef);
 	node->outletRef = strdup(outletRef);
 	
 	return 0;
@@ -131,7 +218,8 @@ extern "C" void emulatorClose(Emulation * emulation)
 	delete emulation;
 }
 
-extern "C" int emulatorIoctl(Emulation * emulation, char * componentName, int message, void * data)
+extern "C" int emulatorIoctl(Emulation * emulation,
+							 char * componentName, int message, void * data)
 {
 	// Find component in DML
 	// Get instance
@@ -141,6 +229,7 @@ extern "C" int emulatorIoctl(Emulation * emulation, char * componentName, int me
 
 extern "C" DMLInfo *emulatorGetDMLInfo(Emulation * emulation)
 {
+	DMLInfo *dmlInfoParseXML(xmlDocPtr doc)
 	// Build a DML Info from the XML structure in memory
 	return NULL;
 }
