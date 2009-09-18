@@ -28,18 +28,19 @@ private:
 	vector<Component *> components;
 };
 
-DMLPortNode *dmlPortParse(string deviceName, xmlNodePtr node)
+DMLPortNode *dmlPortParse(string deviceName,
+						  xmlNodePtr node)
 {
 	DMLPortNode *portNode = new DMLPortNode;
 	
 	if (!portNode)
 		return NULL;
 	
-	portNode->ref = "";
-	portNode->type = "";
-	portNode->subtype = "";
-	portNode->label = "";
-	portNode->image = "";
+	portNode->ref = NULL;
+	portNode->type = NULL;
+	portNode->subtype = NULL;
+	portNode->label = NULL;
+	portNode->image = NULL;
 	portNode->next = NULL;
 	xmlChar *value;
 	
@@ -49,15 +50,16 @@ DMLPortNode *dmlPortParse(string deviceName, xmlNodePtr node)
 		if (ref.find("::") == string::npos)
 			ref = deviceName + "::" + ref;
 		portNode->ref = (char *) xmlCharStrdup(ref.c_str());
+		xmlFree(value);
 	}
 	if ((value = xmlGetProp(node, BAD_CAST "type")) != NULL)
-		portNode->type = (char *) xmlStrdup(value);
+		portNode->type = (char *) value;
 	if ((value = xmlGetProp(node, BAD_CAST "subtype")) != NULL)
-		portNode->subtype = (char *) xmlStrdup(value);
+		portNode->subtype = (char *) value;
 	if ((value = xmlGetProp(node, BAD_CAST "label")) != NULL)
-		portNode->label = (char *) xmlStrdup(value);
+		portNode->label = (char *) value;
 	if ((value = xmlGetProp(node, BAD_CAST "image")) != NULL)
-		portNode->image = (char *) xmlStrdup(value);
+		portNode->image = (char *) value;
 	
 	return portNode;
 }
@@ -80,10 +82,10 @@ DMLInfo *dmlInfoParse(xmlDocPtr doc)
 	if (!dmlInfo)
 		return NULL;
 	
-	dmlInfo->label = "";
-	dmlInfo->image = "";
-	dmlInfo->description = "";
-	dmlInfo->group = "";
+	dmlInfo->label = NULL;
+	dmlInfo->image = NULL;
+	dmlInfo->description = NULL;
+	dmlInfo->group = NULL;
 	dmlInfo->inlets = NULL;
 	dmlInfo->outlets = NULL;
 	
@@ -91,13 +93,13 @@ DMLInfo *dmlInfoParse(xmlDocPtr doc)
 	
 	xmlChar *value;
 	if ((value = xmlGetProp(dmlNode, BAD_CAST "label")) != NULL)
-		dmlInfo->label = (char *) xmlStrdup(value);
+		dmlInfo->label = (char *) value;
 	if ((value = xmlGetProp(dmlNode, BAD_CAST "image")) != NULL)
-		dmlInfo->image = (char *) xmlStrdup(value);
+		dmlInfo->image = (char *) value;
 	if ((value = xmlGetProp(dmlNode, BAD_CAST "description")) != NULL)
-		dmlInfo->description = (char *) xmlStrdup(value);
+		dmlInfo->description = (char *) value;
 	if ((value = xmlGetProp(dmlNode, BAD_CAST "group")) != NULL)
-		dmlInfo->group = (char *) xmlStrdup(value);
+		dmlInfo->group = (char *) value;
 	
 	for(xmlNodePtr deviceNode = dmlNode->children;
 		deviceNode;
@@ -209,7 +211,9 @@ extern "C" DMLConnections *dmlConnectionNew()
 	return new DMLConnections;
 }
 
-extern "C" int dmlConnectionsAdd(DMLConnections *conn, char *inletRef, char *outletRef)
+extern "C" int dmlConnectionsAdd(DMLConnections *conn,
+								 char *inletRef,
+								 char *outletRef)
 {
 	DMLConnectionNode *node = new DMLConnectionNode;
 	node->next = *conn;
@@ -251,7 +255,8 @@ extern "C" Emulation *emulatorOpen(char * path)
 	return new Emulation;
 }
 
-extern "C" int emulatorSave(Emulation * emulation, char * path)
+extern "C" int emulatorSave(Emulation * emulation,
+							char * path)
 {
 	// Request all properties from components and update DML
 	// Save in-memory DML to disk
@@ -266,7 +271,9 @@ extern "C" void emulatorClose(Emulation * emulation)
 }
 
 extern "C" int emulatorIoctl(Emulation * emulation,
-							 char * componentName, int message, void * data)
+							 char * componentName,
+							 int message,
+							 void * data)
 {
 	// Find component in DML
 	// Call component ioctl
@@ -280,7 +287,9 @@ extern "C" DMLInfo *emulatorGetDMLInfo(Emulation * emulation)
 	return NULL;
 }
 
-extern "C" int emulatorAddDML(Emulation * emulation, char * path, DMLConnections * conn)
+extern "C" int emulatorAddDML(Emulation * emulation,
+							  char * path,
+							  DMLConnections * conn)
 {
 	// Load DML Tree
 	// Rename device names, so they don't step on old ones
@@ -290,7 +299,8 @@ extern "C" int emulatorAddDML(Emulation * emulation, char * path, DMLConnections
 	return 0;
 }
 
-extern "C" int emulatorRemoveOutlet(Emulation * emulation, char * outletRef)
+extern "C" int emulatorRemoveOutlet(Emulation * emulation,
+									char * outletRef)
 {
 	// Search component with outletRef
 	// Get components' inlets
