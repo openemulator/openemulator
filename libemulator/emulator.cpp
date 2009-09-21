@@ -136,14 +136,11 @@ extern "C" DMLInfo *dmlInfoRead(char *path)
 extern "C" DMLInfo *dmlInfoReadFromTemplate(char *path)
 {
 	Package package(path);
-	
 	if (!package.isOpen())
 		return NULL;
 	
 	DMLInfo *dmlInfo = NULL;
-	
 	vector<char> data;
-	
 	if (package.readFile(DMLINFO_FILENAME, data))
 	{
 		xmlDocPtr doc = xmlReadMemory(&data[0],
@@ -281,7 +278,7 @@ extern "C" int emulatorAddDML(DMLEmulation *dmlEmulation,
 	Emulation *emulation = (Emulation *) dmlEmulation;
 	map<string, string> connectionsMap;
 	
-	// Convert map to connectionsMap
+	// To-Do: convert map to connectionsMap
 	
 	return emulation->addDML(string(path), connectionsMap);
 }

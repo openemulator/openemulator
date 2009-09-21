@@ -8,13 +8,13 @@
 
 #include "ComponentFactory.h"
 
-//#include "EventController.h"
+#include "EventController.h"
 
-#define buildComponent(name) if (componentName == name) return new name()
+#define buildComponent(name) if (className == "name") return new name()
 
 Component *ComponentFactory::build(string className)
 {
-//	buildComponent("EventController");
+	buildComponent(EventController);
 	
 	return NULL;
 }

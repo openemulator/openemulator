@@ -43,6 +43,8 @@ Emulation::~Emulation()
 {
 	if (dml)
 		xmlFreeDoc(dml);
+	
+	destroyComponents();
 }
 
 string Emulation::getNodeProperty(xmlNodePtr node, string key)
@@ -135,6 +137,18 @@ bool Emulation::buildComponent(string deviceName, xmlNodePtr componentNode)
 		components[componentRef] = component;
 	
 	return (component != NULL);
+}
+
+void Emulation::destroyComponents()
+{
+	map<string, Component *>::iterator iterator;
+	for (iterator = components.begin();
+		 iterator != components.end();
+		 iterator++)
+	{
+		delete iterator->second;
+		components.erase(iterator);
+	}
 }
 
 bool Emulation::initComponent(string deviceName, xmlNodePtr componentNode)
@@ -357,7 +371,7 @@ bool Emulation::save(string emulationPath)
 								 DMLINFO_FILENAME,
 								 NULL,
 								 0);*/
-		
+			
 			error = !package->writeFile(DMLINFO_FILENAME, data);
 		}
 	}

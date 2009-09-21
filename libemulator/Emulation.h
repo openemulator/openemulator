@@ -51,6 +51,8 @@ private:
 	
 	bool buildComponents();
 	bool buildComponent(string deviceName, xmlNodePtr componentNode);
+	void destroyComponents();
+
 	bool initComponent(string deviceName, xmlNodePtr componentNode);
 	bool connectComponent(string deviceName,
 						  Component *component,
@@ -63,6 +65,7 @@ private:
 	
 	bool queryComponents();
 	bool queryComponent(string deviceName, xmlNodePtr componentNode);
+	
 	bool getComponentProperty(Component *component, xmlNodePtr propertyNode);
 	bool getComponentData(string deviceName,
 						  Component *component,
