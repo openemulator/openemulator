@@ -5,7 +5,7 @@
 <device name="dev0" label="Apple 16kB Language Card" image="Apple Language Card.png">
     <outlet name="AppleLanguageCard" type="expansion/appleiislot" />
     <component class="AppleLanguageCard">
-        <data key="memory" src="${deviceName}.bin" />
+        <data key="memory" src="${DEVICE_NAME}.bin" />
     </component>
 </device>
 

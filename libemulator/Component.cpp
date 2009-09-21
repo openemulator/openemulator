@@ -16,7 +16,7 @@ Component::~Component()
 {
 }
 
-int Component::ioctl(int command, void * data)
+int Component::ioctl(int command, void *data)
 {
 	return 0;
 }

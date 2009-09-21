@@ -12,21 +12,32 @@
 
 #include <libxml/parser.h>
 #include <libxml/tree.h>
-#include "zip.h"
 
 #include "emulator.h"
-#include "Component.h"
+#include "Emulation.h"
+#include "Package.h"
 
-#define DMLINFO_FILENAME "info.xml"
+// ioctl's for:
+// * next frame
+// * update outlets
+// * send power, reset, pause messages
+// * send config messages
+// * do copy, paste, isCopyAvailable
+// * get/set video options
+// * get/set audio volume
+// * play/record audio
+// * lock/unlock disk drives
+// * mount/unmount disk drives
+// * get/set component options
+// * send keyboard messages
+// * set mouse position and buttons
+// * set joystick position and buttons
+// * set graphics tablet position and buttons
+// * get video frames
+
+// Note: move pause and power off images to libemulator
 
 using namespace std;
-
-class EmulationClass
-{
-private:
-	xmlDocPtr dml;
-	vector<Component *> components;
-};
 
 DMLPortNode *dmlPortParse(string deviceName,
 						  xmlNodePtr node)
@@ -36,30 +47,22 @@ DMLPortNode *dmlPortParse(string deviceName,
 	if (!portNode)
 		return NULL;
 	
-	portNode->ref = NULL;
-	portNode->type = NULL;
-	portNode->subtype = NULL;
-	portNode->label = NULL;
-	portNode->image = NULL;
-	portNode->next = NULL;
-	xmlChar *value;
-	
-	if ((value = xmlGetProp(node, BAD_CAST "ref")) != NULL)
+	char *ref = (char *) xmlGetProp(node, BAD_CAST "ref");
+	if (ref)
 	{
-		string ref = (char *) value;
-		if (ref.find("::") == string::npos)
-			ref = deviceName + "::" + ref;
-		portNode->ref = (char *) xmlCharStrdup(ref.c_str());
-		xmlFree(value);
+		string refstr = ref;
+		xmlFree(ref);
+		if (refstr.find("::") == string::npos)
+			refstr = deviceName + "::" + refstr;
+		ref = (char *) xmlCharStrdup(refstr.c_str());
 	}
-	if ((value = xmlGetProp(node, BAD_CAST "type")) != NULL)
-		portNode->type = (char *) value;
-	if ((value = xmlGetProp(node, BAD_CAST "subtype")) != NULL)
-		portNode->subtype = (char *) value;
-	if ((value = xmlGetProp(node, BAD_CAST "label")) != NULL)
-		portNode->label = (char *) value;
-	if ((value = xmlGetProp(node, BAD_CAST "image")) != NULL)
-		portNode->image = (char *) value;
+	portNode->ref = (char *) ref;
+	portNode->type = (char *) xmlGetProp(node, BAD_CAST "type");
+	portNode->subtype = (char *) xmlGetProp(node, BAD_CAST "subtype");
+	portNode->label = (char *) xmlGetProp(node, BAD_CAST "label");
+	portNode->image = (char *) xmlGetProp(node, BAD_CAST "image");
+	
+	portNode->next = NULL;
 	
 	return portNode;
 }
@@ -78,28 +81,17 @@ void dmlPortFree(DMLPortNode *node)
 DMLInfo *dmlInfoParse(xmlDocPtr doc)
 {
 	DMLInfo *dmlInfo = new DMLInfo;
-
+	
 	if (!dmlInfo)
 		return NULL;
 	
-	dmlInfo->label = NULL;
-	dmlInfo->image = NULL;
-	dmlInfo->description = NULL;
-	dmlInfo->group = NULL;
+	xmlNodePtr dmlNode = xmlDocGetRootElement(doc);
+	dmlInfo->label = (char *) xmlGetProp(dmlNode, BAD_CAST "label");
+	dmlInfo->image = (char *) xmlGetProp(dmlNode, BAD_CAST "image");
+	dmlInfo->description = (char *) xmlGetProp(dmlNode, BAD_CAST "description");
+	dmlInfo->group = (char *) xmlGetProp(dmlNode, BAD_CAST "group");
 	dmlInfo->inlets = NULL;
 	dmlInfo->outlets = NULL;
-	
-	xmlNodePtr dmlNode = xmlDocGetRootElement(doc);
-	
-	xmlChar *value;
-	if ((value = xmlGetProp(dmlNode, BAD_CAST "label")) != NULL)
-		dmlInfo->label = (char *) value;
-	if ((value = xmlGetProp(dmlNode, BAD_CAST "image")) != NULL)
-		dmlInfo->image = (char *) value;
-	if ((value = xmlGetProp(dmlNode, BAD_CAST "description")) != NULL)
-		dmlInfo->description = (char *) value;
-	if ((value = xmlGetProp(dmlNode, BAD_CAST "group")) != NULL)
-		dmlInfo->group = (char *) value;
 	
 	for(xmlNodePtr deviceNode = dmlNode->children;
 		deviceNode;
@@ -143,37 +135,27 @@ extern "C" DMLInfo *dmlInfoRead(char *path)
 
 extern "C" DMLInfo *dmlInfoReadFromTemplate(char *path)
 {
+	Package package(path);
+	
+	if (!package.isOpen())
+		return NULL;
+	
 	DMLInfo *dmlInfo = NULL;
 	
-	struct zip *zipFile;
-	if ((zipFile = zip_open(path, 0, NULL)) != NULL)
+	vector<char> data;
+	
+	if (package.readFile(DMLINFO_FILENAME, data))
 	{
-		struct zip_stat dmlFileStat;
-		if (zip_stat(zipFile, DMLINFO_FILENAME, 0, &dmlFileStat) == 0)
-		{
-			int dmlFileSize = dmlFileStat.size;
-			struct zip_file *dmlFile;
-			
-			if ((dmlFile = zip_fopen(zipFile, DMLINFO_FILENAME, 0)) != NULL)
-			{
-				char dmlData[dmlFileSize];
-				if (zip_fread(dmlFile, dmlData, dmlFileSize) == dmlFileSize)
-				{
-					xmlDocPtr doc = xmlReadMemory(dmlData,
-												  dmlFileSize,
-												  DMLINFO_FILENAME,
-												  NULL,
-												  0);
-					if (doc)
-						dmlInfo = dmlInfoParse(doc);
-					xmlFreeDoc(doc);
-				}
-				
-				zip_fclose(dmlFile);
-			}
-		}
+		xmlDocPtr doc = xmlReadMemory(&data[0],
+									  data.size(),
+									  DMLINFO_FILENAME,
+									  NULL,
+									  0);
 		
-		zip_close(zipFile);
+		if (doc)
+			dmlInfo = dmlInfoParse(doc);
+		
+		xmlFreeDoc(doc);
 	}
 	
 	return dmlInfo;
@@ -225,7 +207,7 @@ extern "C" int dmlConnectionsAdd(DMLConnections *conn,
 	return 0;
 }
 
-extern "C" void dmlConnectionsFree(DMLConnections * conn)
+extern "C" void dmlConnectionsFree(DMLConnections *conn)
 {
 	DMLConnectionNode *node = *conn;
 	
@@ -243,67 +225,71 @@ extern "C" void dmlConnectionsFree(DMLConnections * conn)
 	delete conn;
 }
 
-extern "C" Emulation *emulatorOpen(char * path)
+extern "C" DMLEmulation *emulatorOpen(char *emulationPath, char *resourcePath)
 {
-	// Read DML
-	// Instantiate all components
-	// Send connection messages
-	// Send property messages
-	// Load data files and send data messages
-	// Load resource files and send resource messages
-	// Send init message to components
-	return new Emulation;
+	Emulation *emulation = new Emulation(emulationPath, resourcePath);
+	if (!emulation)
+		return NULL;
+	
+	if (!emulation->isOpen())
+	{
+		delete emulation;
+		emulation = NULL;
+	}
+	
+	return (DMLEmulation *) emulation;
 }
 
-extern "C" int emulatorSave(Emulation * emulation,
-							char * path)
+extern "C" int emulatorSave(DMLEmulation *dmlEmulation,
+							char *path)
 {
-	// Request all properties from components and update DML
-	// Save in-memory DML to disk
-	return 0;
+	Emulation *emulation = (Emulation *) dmlEmulation;
+	
+	return emulation->save(string(path));
 }
 
-extern "C" void emulatorClose(Emulation * emulation)
+extern "C" void emulatorClose(DMLEmulation *dmlEmulation)
 {
-	// Send close message to components
-	// Delete components
+	Emulation *emulation = (Emulation *) dmlEmulation;
+	
 	delete emulation;
 }
 
-extern "C" int emulatorIoctl(Emulation * emulation,
-							 char * componentName,
+extern "C" int emulatorIoctl(DMLEmulation *dmlEmulation,
+							 char *componentName,
 							 int message,
-							 void * data)
+							 void *data)
 {
-	// Find component in DML
-	// Call component ioctl
-	return 0;
+	Emulation *emulation = (Emulation *) dmlEmulation;
+	
+	return emulation->ioctl(string(componentName), message, data);
 }
 
-extern "C" DMLInfo *emulatorGetDMLInfo(Emulation * emulation)
+extern "C" DMLInfo *emulatorGetDMLInfo(DMLEmulation *dmlEmulation)
 {
-//	DMLInfo *dmlInfoParse()
-	// Build a DML Info from the XML structure in memory
-	return NULL;
+	Emulation *emulation = (Emulation *) dmlEmulation;
+	
+	xmlDocPtr dml = emulation->getDML();
+	
+	return dmlInfoParse(dml);
 }
 
-extern "C" int emulatorAddDML(Emulation * emulation,
-							  char * path,
-							  DMLConnections * conn)
+extern "C" int emulatorAddDML(DMLEmulation *dmlEmulation,
+							  char *path,
+							  DMLConnections *connections)
 {
-	// Load DML Tree
-	// Rename device names, so they don't step on old ones
-	// Update reference names in tree and conn
-	// Add new tree to old one
-	// Go over the connections, and set the inlets to the outlets
-	return 0;
+	Emulation *emulation = (Emulation *) dmlEmulation;
+	map<string, string> connectionsMap;
+	
+	// Convert map to connectionsMap
+	
+	return emulation->addDML(string(path), connectionsMap);
 }
 
-extern "C" int emulatorRemoveOutlet(Emulation * emulation,
-									char * outletRef)
+extern "C" int emulatorRemoveOutlet(DMLEmulation *dmlEmulation,
+									char *outletRef)
 {
-	// Search component with outletRef
-	// Get components' inlets
-	// Iterate from the beginning with all connected outlets
-	return 0;
+	Emulation *emulation = (Emulation *) dmlEmulation;
+	
+	return emulation->removeOutlet(string(outletRef));
 }

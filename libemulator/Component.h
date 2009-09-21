@@ -36,35 +36,32 @@ private:
 	vector<class Component *> observers;
 };
 
-
 enum {
-	IOCTL_INIT = 0,
+	IOCTL_SETCONNECTION,
 	IOCTL_SETPROPERTY,
 	IOCTL_GETPROPERTY,
-	IOCTL_CLIPBOARDCOPY,
-	IOCTL_CLIPBOARDPASTE,
-	IOCTL_MOUNT,
-	IOCTL_UNMOUNT,
-	IOCTL_UIUPDATE,
+	IOCTL_SETDATA,
+	IOCTL_GETDATA,
+	IOCTL_SETRESOURCE,
+	IOCTL_EVENT,
 };
 
-struct DMLConnection
+struct IOCTLConnection
 {
 	string key;
 	Component *component;
 };
 
-struct DMLProperty
+struct IOCTLProperty
 {
 	string key;
 	string value;
 };
 
-struct DMLData
+struct IOCTLData
 {
 	string key;
-	int dataSize;
-	char *data;
+	vector<char> data;
 };
 
 #endif

@@ -67,7 +67,7 @@
     <component name="memory" class="AppleIIMemory">
         <connection key="mmu" ref="mmu" />
         <property key="memorySize" value="49152" />
-        <data key="memory" src="${deviceName}.bin" />
+        <data key="memory" src="${DEVICE_NAME}.bin" />
     </component>
     <component name="iou" class="AppleIIIOU">
         <connection key="mmu" ref="mmu" />
@@ -133,7 +133,7 @@
 <device name="dev0" label="Apple 16kB Language Card" image="Apple Language Card.png">
     <outlet ref="name" type="expansion" subtype="appleiislot" />
     <component name="card" class="AppleLanguageCard">
-        <data key="memory" src="${deviceName}.bin" />
+        <data key="memory" src="${DEVICE_NAME}.bin" />
     </component>
 </device>
 
