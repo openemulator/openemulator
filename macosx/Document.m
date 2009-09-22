@@ -11,6 +11,8 @@
 #import "Document.h"
 #import "DocumentWindowController.h"
 
+#import "Emulation.h"
+
 @implementation Document
 
 - (id)init
@@ -42,6 +44,10 @@
 - (id)initWithTemplateURL:(NSURL *)templateURL
 					error:(NSError **)outError
 {
+	[self readFromURL:templateURL
+			   ofType:@"emulation"
+				error:NULL];
+	
 	// To-Do: call [self readFromURL]
 	return [self init];
 	
@@ -54,7 +60,9 @@
 	[pasteboard release];
 	
 	// To-Do: Remove work folder
-	
+/*	if (emulation)
+		emulatorClose(emulation);
+*/	
 	[super dealloc];
 }
 
@@ -62,6 +70,12 @@
 			 ofType:(NSString *)typeName
 			  error:(NSError **)outError
 {
+	const char *emulationPath = [[absoluteURL path] UTF8String];
+	const char *resourcePath = "/Users/mressl/Documents/OpenEmulator/openemulator/templates/Apple II.emulation/";
+	emulation = (void *) new Emulation(emulationPath, resourcePath);
+	
+	printf("readFromURL: %s\n", emulationPath);
+
 	// To-Do: Clean the work folder
 	// To-Do: If it is a file, unzip the .emulation files to a temporary work folder
 	// To-Do: If it is a package, copy the package folder to the temporary work folder
@@ -69,7 +83,6 @@
 	// To-Do: Reload libemulator
 	
 	*outError = [NSError errorWithDomain:@"test" code:0 userInfo:nil];
-	printf("readFromURL: %s\n", [[absoluteURL path] UTF8String]);
 	return YES;
 }
 
@@ -77,15 +90,16 @@
 			ofType:(NSString *)typeName
 			 error:(NSError **)outError
 {
+	const char * emulationPath = [[absoluteURL path] UTF8String];
+	((Emulation *) emulation).save(emulationPath);
+	
+	printf("writeToURL: %s\n", emulationPath);
+
 	// To-Do: Write the state with libemulator
 	// To-Do: If it is a file, zip the temporary work folder to the .emulation URL
 	// To-Do: If it is a package, copy the temporary work folder to the .emulation URL
-	NSString *path = [absoluteURL path];
-	FILE *fp;
-	fp = fopen([path UTF8String], "wb");
-	if (fp)
-		fclose(fp);
-	printf("writeToURL: %s\n", [path UTF8String]);
+
+	*outError = [NSError errorWithDomain:@"test" code:0 userInfo:nil];
 	return YES;
 }
 
@@ -95,7 +109,8 @@
 	
 	[panel setRequiredFileType:@"emulation"];
 	
-	[panel beginSheetForDirectory:@"/Users/mressl/Library/Application Support/OpenEmulator/Templates/"
+	[panel beginSheetForDirectory:@"/Users/mressl/Library/Application Support"
+								  "/OpenEmulator/Templates/"
 							 file:nil
 				   modalForWindow:[self windowForSheet]
 					modalDelegate:self

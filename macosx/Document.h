@@ -12,6 +12,8 @@
 
 @interface Document : NSDocument
 {
+	void *emulation;
+	
 	NSPasteboard *pasteboard;
 	NSArray *pasteboardTypes;
 	
@@ -21,7 +23,7 @@
 	NSString *description;
 	NSDate *modificationDate;
 	NSImage *image;
-
+	
 	NSMutableArray *expansions;
 	NSMutableArray *diskDrives;
 	NSMutableArray *peripherals;
