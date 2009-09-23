@@ -1,10 +1,9 @@
-/*
- *  EventController.h
- *  OpenEmulator
- *
- *  Created by Marc S. Reßl on 21/09/09.
- *  Copyright 2009 ITBA. All rights reserved.
- *
+
+/**
+ * libemulator
+ * Event Controller
+ * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
+ * Released under the GPL
  */
 
 #include "Component.h"

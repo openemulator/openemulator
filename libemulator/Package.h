@@ -11,25 +11,26 @@
 
 #include <string>
 #include <vector>
-#include <zip.h>
 
+#include <zip.h>
+ 
 using namespace std;
 
 class Package
 {
 public:
-	Package(string path);
+	Package(string packagePath);
 	~Package();
 
 	bool isOpen();
 	
-	bool readFile(string packagePath, vector<char> &data);
-	bool writeFile(string packagePath, vector<char> &data);
+	bool readFile(string localPath, vector<char> &data);
+	bool writeFile(string localPath, vector<char> &data);
 	
 private:
 	bool isPackageOpen;
 	
-	string path;
+	string packagePath;
 	struct zip *zip;
 };
 

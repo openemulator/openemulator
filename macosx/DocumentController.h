@@ -10,7 +10,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "portaudio/include/portaudio.h"
+#import "portaudio.h"
 #import "InspectorPanelController.h"
 
 @interface DocumentController : NSDocumentController {

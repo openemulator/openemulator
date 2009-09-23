@@ -6,6 +6,7 @@
  * Released under the GPL
  */
 
+#include <fstream>
 #include <libxml/parser.h>
 
 #include "Emulation.h"
@@ -80,6 +81,27 @@ string Emulation::buildSourcePath(string deviceName, string src)
 		src.replace(index, sizeof(COMPONENT_DATA_DEVICE_NAME) - 1, deviceName);
 	
 	return src;
+}
+
+bool Emulation::readFile(string path, vector<char> &data)
+{
+	bool error = true;
+	
+	ifstream file(path.c_str());
+	
+	if (file.is_open())
+	{
+		file.seekg(0, ios::end);
+		int size = file.tellg();
+		file.seekg(0, ios::beg);
+		
+		data.resize(size);
+		file.read(&data[0], size);
+		error = file.failbit;
+		file.close();
+	}
+	
+	return !error;
 }
 
 bool Emulation::buildComponents()
@@ -254,9 +276,8 @@ bool Emulation::setComponentResource(Component *component,
 	ioctl.key = key;
 	ioctl.data = vector<char>();
 	
-	// To-Do: Read file
-	
-	// if (!read) return false
+	if (!readFile(resourcePath + src, ioctl.data))
+		return false;
 	
 	component->ioctl(IOCTL_SETDATA, &ioctl);
 	
@@ -343,7 +364,7 @@ bool Emulation::getComponentData(string deviceName,
 	string key = getNodeProperty(dataNode, "key");
 	string src = buildSourcePath(deviceName, 
 								 getNodeProperty(dataNode, "src"));
-
+	
 	struct IOCTLData ioctl;
 	ioctl.key = key;
 	ioctl.data = vector<char>();
@@ -365,18 +386,25 @@ bool Emulation::save(string emulationPath)
 		package = new Package(emulationPath);
 		if (package->isOpen())
 		{
-			vector<char> data = vector<char>();
-/*			dml = xmlWriteMemory(&data[0],
-								 data.size(),
-								 DMLINFO_FILENAME,
-								 NULL,
-								 0);*/
+			xmlIndentTreeOutput = 1;
 			
-			error = !package->writeFile(DMLINFO_FILENAME, data);
+			xmlChar *datap;
+			int size;
+			xmlDocDumpFormatMemory(dml, &datap, &size, 1);
+
+			if (datap)
+			{
+				vector<char> data(size);
+				memcpy(&data[0], datap, size);
+				
+				xmlFree(datap);
+				
+				error = !package->writeFile(DMLINFO_FILENAME, data);
+			}
 		}
 	}
 	
-	return error;
+	return !error;
 }
 
 int Emulation::ioctl(string componentRef, int message, void *data)

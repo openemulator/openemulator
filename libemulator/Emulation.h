@@ -14,7 +14,9 @@
 
 #include <libxml/tree.h>
 
+#ifndef __OBJC2__
 #include "Component.h"
+#endif
 #include "Package.h"
 
 #define DMLINFO_FILENAME "info.xml"
@@ -36,6 +38,7 @@ public:
 	bool removeOutlet(string outletRef);
 	
 private:
+#ifndef __OBJC2__
 	bool isEmulationLoaded;
 	xmlDocPtr dml;
 	map<string, Component *> components;
@@ -49,10 +52,12 @@ private:
 	string buildComponentRef(string deviceName, string componentName);
 	string buildSourcePath(string deviceName, string src);
 	
+	bool readFile(string path, vector<char> &data);
+	
 	bool buildComponents();
 	bool buildComponent(string deviceName, xmlNodePtr componentNode);
 	void destroyComponents();
-
+	
 	bool initComponent(string deviceName, xmlNodePtr componentNode);
 	bool connectComponent(string deviceName,
 						  Component *component,
@@ -70,6 +75,7 @@ private:
 	bool getComponentData(string deviceName,
 						  Component *component,
 						  xmlNodePtr dataNode);
+#endif
 };
 
 #endif

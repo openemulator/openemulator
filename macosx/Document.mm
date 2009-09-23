@@ -60,9 +60,9 @@
 	[pasteboard release];
 	
 	// To-Do: Remove work folder
-/*	if (emulation)
-		emulatorClose(emulation);
-*/	
+	if (emulation)
+	 delete (Emulation *) emulation;
+	
 	[super dealloc];
 }
 
@@ -75,7 +75,7 @@
 	emulation = (void *) new Emulation(emulationPath, resourcePath);
 	
 	printf("readFromURL: %s\n", emulationPath);
-
+	
 	// To-Do: Clean the work folder
 	// To-Do: If it is a file, unzip the .emulation files to a temporary work folder
 	// To-Do: If it is a package, copy the package folder to the temporary work folder
@@ -91,14 +91,14 @@
 			 error:(NSError **)outError
 {
 	const char * emulationPath = [[absoluteURL path] UTF8String];
-	((Emulation *) emulation).save(emulationPath);
+	((Emulation *) emulation)->save(string(emulationPath));
 	
 	printf("writeToURL: %s\n", emulationPath);
-
+	
 	// To-Do: Write the state with libemulator
 	// To-Do: If it is a file, zip the temporary work folder to the .emulation URL
 	// To-Do: If it is a package, copy the temporary work folder to the .emulation URL
-
+	
 	*outError = [NSError errorWithDomain:@"test" code:0 userInfo:nil];
 	return YES;
 }
@@ -110,7 +110,7 @@
 	[panel setRequiredFileType:@"emulation"];
 	
 	[panel beginSheetForDirectory:@"/Users/mressl/Library/Application Support"
-								  "/OpenEmulator/Templates/"
+	 "/OpenEmulator/Templates/"
 							 file:nil
 				   modalForWindow:[self windowForSheet]
 					modalDelegate:self

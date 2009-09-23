@@ -6,24 +6,26 @@
  * Released under the GPL
  */
 
+#include "sys/stat.h"
 #include <fstream>
 
 #include "Package.h"
 
-#define PATH_SEPARATOR string("/")
+#define PATH_SEPARATOR "/"
 
-Package::Package(string path)
+Package::Package(string packagePath)
 {
-	this->path = path;
+	this->packagePath = packagePath;
 	
-	if (path.substr(path.size() - 1, 1) != "/")
+	if (packagePath.substr(packagePath.size() - 1, 1) != "/")
 	{
-		zip = zip_open(path.c_str(), ZIP_CREATE, NULL);
+		zip = zip_open(packagePath.c_str(), ZIP_CREATE, NULL);
 		isPackageOpen = (zip != NULL);
 	}
 	else
 	{
-		// To-Do: Create directory path
+		mkdir(packagePath.c_str(), 0777);
+		
 		isPackageOpen = true;
 	}
 }
@@ -41,7 +43,7 @@ bool Package::isOpen()
 	return isPackageOpen;
 }
 
-bool Package::readFile(string packagePath, vector<char> &data)
+bool Package::readFile(string localPath, vector<char> &data)
 {
 	bool error = true;
 	
@@ -50,9 +52,9 @@ bool Package::readFile(string packagePath, vector<char> &data)
 		struct zip_stat zipStat;
 		struct zip_file *zipFile;
 		
-		if (zip_stat(zip, (const char *) packagePath.c_str(), 0, &zipStat) == 0)
+		if (zip_stat(zip, (const char *) localPath.c_str(), 0, &zipStat) == 0)
 		{
-			if ((zipFile = zip_fopen(zip, packagePath.c_str(), 0)) == NULL)
+			if ((zipFile = zip_fopen(zip, localPath.c_str(), 0)) == NULL)
 			{
 				data.resize(zipStat.size);
 				error = (zip_fread(zipFile, &data[0], zipStat.size) != zipStat.size);
@@ -62,8 +64,7 @@ bool Package::readFile(string packagePath, vector<char> &data)
 	}
 	else
 	{
-		const char *path = (path + PATH_SEPARATOR + packagePath).c_str();
-		ifstream file(path);
+		ifstream file((packagePath + PATH_SEPARATOR + localPath).c_str());
 		
 		if (file.is_open())
 		{
@@ -71,16 +72,17 @@ bool Package::readFile(string packagePath, vector<char> &data)
 			int size = file.tellg();
 			file.seekg(0, ios::beg);
 			
+			data.resize(size);
 			file.read(&data[0], size);
 			error = file.failbit;
 			file.close();
 		}
 	}
 	
-	return error;
+	return !error;
 }
 
-bool Package::writeFile(string packagePath, vector<char> &data)
+bool Package::writeFile(string localPath, vector<char> &data)
 {
 	bool error = true;
 	
@@ -91,8 +93,8 @@ bool Package::writeFile(string packagePath, vector<char> &data)
 		if ((zipSource = zip_source_buffer(zip, &data[0], data.size(), 0)) != NULL)
 		{
 			int index;
-			if ((index = zip_name_locate(zip, packagePath.c_str(), 0)) == -1)
-				error = (zip_add(zip, packagePath.c_str(), zipSource) == -1);
+			if ((index = zip_name_locate(zip, localPath.c_str(), 0)) == -1)
+				error = (zip_add(zip, localPath.c_str(), zipSource) == -1);
 			else
 				error = (zip_replace(zip, index, zipSource) == -1);
 		
@@ -101,8 +103,7 @@ bool Package::writeFile(string packagePath, vector<char> &data)
 	}
 	else
 	{
-		const char *path = (path + PATH_SEPARATOR + packagePath).c_str();
-		ofstream file(path);
+		ofstream file((packagePath + PATH_SEPARATOR + localPath).c_str());
 		
 		if (file.is_open())
 		{
