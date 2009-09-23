@@ -13,13 +13,13 @@
 
 #define PATH_SEPARATOR "/"
 
-Package::Package(string packagePath)
+Package::Package(string packagePath, bool write)
 {
 	this->packagePath = packagePath;
 	
 	if (packagePath.substr(packagePath.size() - 1, 1) != "/")
 	{
-		zip = zip_open(packagePath.c_str(), ZIP_CREATE, NULL);
+		zip = zip_open(packagePath.c_str(), write ? ZIP_CREATE : 0, NULL);
 		isPackageOpen = (zip != NULL);
 	}
 	else

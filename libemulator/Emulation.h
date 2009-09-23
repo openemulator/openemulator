@@ -14,7 +14,7 @@
 
 #include <libxml/tree.h>
 
-#ifndef __OBJC2__
+#ifndef __OBJC__
 #include "Component.h"
 #endif
 #include "Package.h"

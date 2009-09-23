@@ -36,6 +36,8 @@
 		expansions = [[NSMutableArray alloc] init];
 		diskDrives = [[NSMutableArray alloc] init];
 		peripherals = [[NSMutableArray alloc] init];
+		
+		emulation = nil;
 	}
 	
 	return self;
@@ -44,14 +46,12 @@
 - (id)initWithTemplateURL:(NSURL *)templateURL
 					error:(NSError **)outError
 {
-	[self readFromURL:templateURL
-			   ofType:@"emulation"
-				error:NULL];
+	if (![self readFromURL:templateURL
+					ofType:@"emulation"
+					 error:outError])
+		return nil;
 	
-	// To-Do: call [self readFromURL]
 	return [self init];
-	
-	// To-Do: Start emulation
 }
 
 - (void)dealloc
@@ -59,9 +59,8 @@
 	[pasteboardTypes release];
 	[pasteboard release];
 	
-	// To-Do: Remove work folder
 	if (emulation)
-	 delete (Emulation *) emulation;
+		delete (Emulation *) emulation;
 	
 	[super dealloc];
 }
@@ -70,9 +69,16 @@
 			 ofType:(NSString *)typeName
 			  error:(NSError **)outError
 {
+	
 	const char *emulationPath = [[absoluteURL path] UTF8String];
 	const char *resourcePath = "/Users/mressl/Documents/OpenEmulator/openemulator/templates/Apple II.emulation/";
 	emulation = (void *) new Emulation(emulationPath, resourcePath);
+	
+	if (!emulation)
+	{
+		*outError = [NSError errorWithDomain:@"emulator" code:0 userInfo:nil];
+		return NO;
+	}
 	
 	printf("readFromURL: %s\n", emulationPath);
 	
@@ -82,8 +88,13 @@
 	// To-Do: Read info.xml to update inspector
 	// To-Do: Reload libemulator
 	
-	*outError = [NSError errorWithDomain:@"test" code:0 userInfo:nil];
-	return YES;
+	if (((Emulation *) emulation)->isOpen())
+		return YES;
+	
+	*outError = [NSError errorWithDomain:NSCocoaErrorDomain
+									code:NSFileReadUnknownError
+								userInfo:nil];
+	return NO;
 }
 
 - (BOOL)writeToURL:(NSURL *)absoluteURL

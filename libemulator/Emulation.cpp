@@ -20,7 +20,7 @@ Emulation::Emulation(string emulationPath, string resourcePath)
 	isEmulationLoaded = false;
 	
 	this->resourcePath = resourcePath;
-	package = new Package(emulationPath);
+	package = new Package(emulationPath, false);
 	if (package->isOpen())
 	{
 		vector<char> data;
@@ -383,7 +383,7 @@ bool Emulation::save(string emulationPath)
 	
 	if (queryComponents())
 	{
-		package = new Package(emulationPath);
+		package = new Package(emulationPath, true);
 		if (package->isOpen())
 		{
 			xmlIndentTreeOutput = 1;

@@ -344,6 +344,8 @@
 		005486C40FDC84B200DBCFA8 /* Other Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				00E2A84D1053290200910B53 /* libxml2.dylib */,
+				00A0BA51106981A7007930A5 /* libzip.a */,
 				00A0BA4C10698175007930A5 /* libportaudio.a */,
 				001F56F80FD1E8E500EA246A /* Sparkle.framework */,
 			);
@@ -375,8 +377,6 @@
 		00E2A8741053305100910B53 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				00E2A84D1053290200910B53 /* libxml2.dylib */,
-				00A0BA51106981A7007930A5 /* libzip.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

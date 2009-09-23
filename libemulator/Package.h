@@ -19,7 +19,7 @@ using namespace std;
 class Package
 {
 public:
-	Package(string packagePath);
+	Package(string packagePath, bool write);
 	~Package();
 
 	bool isOpen();
