@@ -27,8 +27,8 @@
 }
 
 - (IBAction)newDocumentFromTemplateChooser:(id)sender;
-- (id)openUntitledDocumentFromTemplateURL:(NSURL *)templateURL error:(NSError **)outError;
-- (id)makeUntitledDocumentFromTemplateURL:(NSURL *)templateURL error:(NSError **)outError;
+//- (id)openUntitledDocumentFromTemplateURL:(NSURL *)templateURL error:(NSError **)outError;
+//- (id)makeUntitledDocumentFromTemplateURL:(NSURL *)templateURL error:(NSError **)outError;
 - (void)noteTemplateChooserWindowClosed;
 - (void)disableMenuBar;
 - (void)enableMenuBar;

@@ -39,7 +39,7 @@
 	float volume;
 }
 
-- (id)initWithTemplateURL:(NSURL *)templateURL error:(NSError **)outError;
+//- (id)initWithTemplateURL:(NSURL *)templateURL error:(NSError **)outError;
 
 - (IBAction)saveDocumentAsTemplate:(id)sender;
 

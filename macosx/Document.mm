@@ -17,6 +17,8 @@
 
 - (id)init
 {
+	printf("init\n");
+
 	if (self = [super init])
 	{
 		pasteboard = [NSPasteboard generalPasteboard];
@@ -41,13 +43,16 @@
 	return self;
 }
 
-- (id)initWithTemplateURL:(NSURL *)templateURL
-					error:(NSError **)outError
+- (id)initWithContentsOfURL:(NSURL *)absoluteURL
+					 ofType:typeName
+					  error:(NSError **)outError
 {
-	if (![self readFromURL:templateURL
-					ofType:@"emulation"
-					 error:outError])
-		return nil;
+	printf("initWithContentsOfURL");
+	return [super initWithContentsOfURL:absoluteURL ofType:typeName error:outError];
+	
+	[self readFromURL:absoluteURL
+			   ofType:@"emulation"
+				error:outError];
 	
 	return [self init];
 }
@@ -71,11 +76,24 @@
 	const char *emulationPath = [[[absoluteURL path] stringByAppendingString:@"/"]
 								 UTF8String];
 	const char *resourcePath = [[[NSBundle mainBundle] resourcePath] UTF8String];
-	emulation = (void *) new Emulation(emulationPath, resourcePath);
+//	emulation = (void *) new Emulation(emulationPath, resourcePath);
 	
+	return YES;
 	if (!emulation)
 	{
-		*outError = [NSError errorWithDomain:@"emulator" code:0 userInfo:nil];
+		NSArray *objArray = [NSArray arrayWithObjects:@"Description",  
+							 @"FailureReason", @"RecoverySuggestion", nil];
+		NSArray *keyArray = [NSArray  
+							 arrayWithObjects:NSLocalizedDescriptionKey,  
+							 NSLocalizedFailureReasonErrorKey,  
+							 NSLocalizedRecoverySuggestionErrorKey, nil];        
+		NSDictionary *eDict = [NSDictionary dictionaryWithObjects:objArray  
+														  forKeys:keyArray];
+		
+		// fill outError
+		*outError = [NSError errorWithDomain:@"myDomain"
+										code:1  
+									userInfo:eDict];
 		return NO;
 	}
 	
@@ -99,7 +117,7 @@
 {
 	const char *emulationPath = [[[absoluteURL path] stringByAppendingString:@"/"]
 								 UTF8String];
-	((Emulation *) emulation)->save(string(emulationPath));
+//	((Emulation *) emulation)->save(string(emulationPath));
 	
 	printf("writeToURL: %s\n", emulationPath);
 	

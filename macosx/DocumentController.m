@@ -69,8 +69,9 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 - (BOOL)application:(NSApplication *)theApplication
 		   openFile:(NSString *)filename
 {
-	NSError *error;
 	printf("openFile\n");
+	
+	NSError *error;
 	if ([[filename pathExtension] caseInsensitiveCompare:@"emulation"] == NSOrderedSame)
 		return NO;
 	
@@ -93,10 +94,11 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 
 - (void)applicationDidFinishLaunching:(NSNotification *)notification
 {
+	printf("applicationDidFinishLaunching\n");
+	
 //	if ([fDefaults boolForKey:@"OEInspectorPanelVisible"])
 //		[fInspectorPanelController toggleInspectorPanel:self];
 	
-	printf("applicationDidFinishLaunching\n");
 /*	if (Pa_Initialize() != paNoError)
 		return;
 	
@@ -115,7 +117,7 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 	NSWindow *window;
 	
 //	Pa_Terminate();
-
+	
 //	window = [fInspectorPanelController window];
 //	[fDefaults setBool:[window isVisible] forKey:@"OEInspectorPanelVisible"];
 }
@@ -130,20 +132,10 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 		return YES;
 }
 
-- (IBAction)newDocumentFromTemplateChooser:(id)sender
-{
-	if (isTemplateChooserWindowOpen)
-		return;
-	
-	isTemplateChooserWindowOpen = YES;
-	
-	TemplateChooserWindowController *templateChooserWindowController;
-	templateChooserWindowController = [[TemplateChooserWindowController alloc] init:self];
-	[templateChooserWindowController showWindow:self];
-}
-
 - (id)openUntitledDocumentAndDisplay:(BOOL)displayDocument error:(NSError **)outError
 {
+	printf("openUntitledDocumentAndDisplay\n");
+	
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	
 	BOOL useDefaultTemplate = [userDefaults boolForKey:@"OEUseDefaultTemplate"];
@@ -157,9 +149,56 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 	else
 	{
 		NSString *defaultTemplate = [userDefaults stringForKey:@"OEDefaultTemplate"];
-		NSURL *url = [NSURL fileURLWithPath:defaultTemplate];
-		return [self openUntitledDocumentFromTemplateURL:url error:outError];
+		NSURL *absoluteURL = [NSURL fileURLWithPath:defaultTemplate];
+		return [self openDocumentWithContentsOfURL:absoluteURL
+										   display:displayDocument
+											 error:outError];
 	}
+}
+
+- (id)makeUntitledDocumentOfType:(NSString *)typeName error:(NSError **)outError
+{
+	printf("makeUntitledDocumentOfType\n");
+	
+	return [super makeUntitledDocumentOfType:typeName
+									   error:outError];
+}
+
+- (id)openUntitledDocumentWithContentsOfURL:(NSURL *)absoluteURL
+									display:(BOOL)displayDocument
+									  error:(NSError **)outError
+{
+	printf("openUntitledDocumentWithContentsOfURL\n");
+	
+	return [super openUntitledDocumentWithContentsOfURL:absoluteURL
+												display:displayDocument
+												  error:outError];
+}
+
+- (id)makeDocumentWithContentsOfURL:(NSURL *)absoluteURL
+							   type:(NSString *)typeName
+							  error:(NSError **)outError
+{
+	printf("makeDocumentWithContentsOfURL\n");
+	
+	return [super makeDocumentWithContentsOfURL:absoluteURL type:typeName error:outError];
+}
+
+
+
+
+
+
+- (IBAction)newDocumentFromTemplateChooser:(id)sender
+{
+	if (isTemplateChooserWindowOpen)
+		return;
+	
+	isTemplateChooserWindowOpen = YES;
+	
+	TemplateChooserWindowController *templateChooserWindowController;
+	templateChooserWindowController = [[TemplateChooserWindowController alloc] init:self];
+	[templateChooserWindowController showWindow:self];
 }
 
 - (id)openUntitledDocumentFromTemplateURL:(NSURL *)templateURL error:(NSError **)outError
@@ -190,7 +229,9 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 
 - (void)openDocument:(id)sender
 {
-	NSOpenPanel *panel = [NSOpenPanel openPanel];
+	printf("openDocument\n");
+	return [super openDocument:sender];
+/*	NSOpenPanel *panel = [NSOpenPanel openPanel];
 	
 	if ([panel runModalForTypes:fileTypes] == NSOKButton)
 	{
@@ -199,7 +240,7 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 		
 		if (![self application:NSApp openFile:[url path]])
 			[self openDocumentWithContentsOfURL:url display:YES error:&error];
-	}
+	}*/
 }
 
 - (void)disableMenuBar
