@@ -52,7 +52,7 @@ private:
 	string buildComponentRef(string deviceName, string componentName);
 	string buildSourcePath(string deviceName, string src);
 	
-	bool readFile(string path, vector<char> &data);
+	bool readResource(string path, vector<char> &data);
 	
 	bool buildComponents();
 	bool buildComponent(string deviceName, xmlNodePtr componentNode);

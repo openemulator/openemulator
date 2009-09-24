@@ -6,27 +6,36 @@
  * Released under the GPL
  */
 
-#include "sys/stat.h"
 #include <fstream>
+#include <sys/stat.h>
 
 #include "Package.h"
 
 #define PATH_SEPARATOR "/"
 
-Package::Package(string packagePath, bool write)
+Package::Package(string packagePath)
 {
 	this->packagePath = packagePath;
+	zip = NULL;
 	
-	if (packagePath.substr(packagePath.size() - 1, 1) != "/")
+	struct stat statbuf;
+	bool isPathCreated = (stat(packagePath.c_str(), &statbuf) == 0);
+	
+	bool isPackage;
+	if (isPathCreated)
+		isPackage = (statbuf.st_mode & S_IFDIR);
+	else
+		isPackage = (packagePath.substr(packagePath.size() - 1, 1) == "/");
+	
+	if (isPackage)
 	{
-		zip = zip_open(packagePath.c_str(), write ? ZIP_CREATE : 0, NULL);
-		isPackageOpen = (zip != NULL);
+		mkdir(packagePath.c_str(), 0777);
+		isPackageOpen = (stat(packagePath.c_str(), &statbuf) == 0);
 	}
 	else
 	{
-		mkdir(packagePath.c_str(), 0777);
-		
-		isPackageOpen = true;
+		zip = zip_open(packagePath.c_str(), ZIP_CREATE, NULL);
+		isPackageOpen = (zip != NULL);
 	}
 }
 
@@ -46,6 +55,9 @@ bool Package::isOpen()
 bool Package::readFile(string localPath, vector<char> &data)
 {
 	bool error = true;
+	
+	if (!isPackageOpen)
+		return false;
 	
 	if (zip)
 	{
@@ -74,7 +86,9 @@ bool Package::readFile(string localPath, vector<char> &data)
 			
 			data.resize(size);
 			file.read(&data[0], size);
-			error = file.failbit;
+			
+			error = !file.good();
+			
 			file.close();
 		}
 	}
@@ -85,6 +99,9 @@ bool Package::readFile(string localPath, vector<char> &data)
 bool Package::writeFile(string localPath, vector<char> &data)
 {
 	bool error = true;
+	
+	if (!isPackageOpen)
+		return false;
 	
 	if (zip)
 	{
@@ -108,7 +125,7 @@ bool Package::writeFile(string localPath, vector<char> &data)
 		if (file.is_open())
 		{
 			file.write(&data[0], data.size());
-			error = file.failbit;
+			error = !file.good();
 			file.close();
 		}
 	}

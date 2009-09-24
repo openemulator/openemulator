@@ -16,5 +16,6 @@ Component *ComponentFactory::build(string className)
 {
 	buildComponent(EventController);
 	
-	return NULL;
+	return new Component();
+//	return NULL;
 }

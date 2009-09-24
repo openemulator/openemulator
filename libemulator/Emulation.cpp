@@ -20,7 +20,7 @@ Emulation::Emulation(string emulationPath, string resourcePath)
 	isEmulationLoaded = false;
 	
 	this->resourcePath = resourcePath;
-	package = new Package(emulationPath, false);
+	package = new Package(emulationPath);
 	if (package->isOpen())
 	{
 		vector<char> data;
@@ -32,7 +32,8 @@ Emulation::Emulation(string emulationPath, string resourcePath)
 								NULL,
 								0);
 			
-			isEmulationLoaded = buildComponents();
+//			isEmulationLoaded = buildComponents();
+			isEmulationLoaded = true;
 		}
 	}
 	
@@ -51,7 +52,7 @@ Emulation::~Emulation()
 string Emulation::getNodeProperty(xmlNodePtr node, string key)
 {
 	char *value = (char *) xmlGetProp(node, BAD_CAST key.c_str());
-	string valueString = string(value);
+	string valueString = value ? value : "";
 	xmlFree(value);
 	
 	return valueString;
@@ -83,11 +84,11 @@ string Emulation::buildSourcePath(string deviceName, string src)
 	return src;
 }
 
-bool Emulation::readFile(string path, vector<char> &data)
+bool Emulation::readResource(string path, vector<char> &data)
 {
 	bool error = true;
 	
-	ifstream file(path.c_str());
+	ifstream file((resourcePath + path).c_str());
 	
 	if (file.is_open())
 	{
@@ -97,7 +98,7 @@ bool Emulation::readFile(string path, vector<char> &data)
 		
 		data.resize(size);
 		file.read(&data[0], size);
-		error = file.failbit;
+		error = !file.good();
 		file.close();
 	}
 	
@@ -113,15 +114,21 @@ bool Emulation::buildComponents()
 		deviceNode;
 		deviceNode = deviceNode->next)
 	{
-		string deviceName = (char *)deviceNode->name;
+		printf("alloc %s\n", deviceNode->name);
+		if (xmlStrcmp(deviceNode->name, BAD_CAST "device"))
+			continue;
+		
+		string deviceName = getNodeProperty(deviceNode, "name");
 		
 		for(xmlNodePtr componentNode = deviceNode->children;
 			componentNode;
 			componentNode = componentNode->next)
 		{
-			if (!xmlStrcmp(componentNode->name, BAD_CAST "component"))
-				if (!buildComponent(deviceName, componentNode))
-					return false;
+			if (xmlStrcmp(componentNode->name, BAD_CAST "component"))
+				continue;
+			
+			if (!buildComponent(deviceName, componentNode))
+				return false;
 		}
 	}
 	
@@ -130,17 +137,21 @@ bool Emulation::buildComponents()
 		deviceNode;
 		deviceNode = deviceNode->next)
 	{
-		string deviceName = (char *) deviceNode->name;
+		printf("ioctl %s\n", deviceNode->name);
+		if (xmlStrcmp(deviceNode->name, BAD_CAST "device"))
+			continue;
+		
+		string deviceName = getNodeProperty(deviceNode, "name");
 		
 		for(xmlNodePtr componentNode = deviceNode->children;
 			componentNode;
 			componentNode = componentNode->next)
 		{
-			if (!xmlStrcmp(componentNode->name, BAD_CAST "component"))
-			{
-				if (!initComponent(deviceName, componentNode))
-					return false;
-			}
+			if (xmlStrcmp(componentNode->name, BAD_CAST "component"))
+				continue;
+
+//			if (!initComponent(deviceName, componentNode))
+//				return false;
 		}
 	}
 	
@@ -155,8 +166,15 @@ bool Emulation::buildComponent(string deviceName, xmlNodePtr componentNode)
 	string componentRef = buildComponentRef(deviceName, string(componentName));
 	Component *component = ComponentFactory::build(string(componentClass));
 	
+	printf("buildComponent: %s\n", componentRef.c_str());
+	
 	if (component)
+	{
+//		if (components[componentRef])
+//			delete components[componentRef];
+		
 		components[componentRef] = component;
+	}
 	
 	return (component != NULL);
 }
@@ -180,28 +198,28 @@ bool Emulation::initComponent(string deviceName, xmlNodePtr componentNode)
 	string componentRef = buildComponentRef(deviceName, string(componentName));
 	Component *component = components[componentRef];
 	
-	for(xmlNodePtr propertyNode = componentNode->children;
-		propertyNode;
-		propertyNode = propertyNode->next)
+	for(xmlNodePtr node = componentNode->children;
+		node;
+		node = node->next)
 	{
-		if (xmlStrcmp(propertyNode->name, BAD_CAST "connection"))
+		if (!xmlStrcmp(node->name, BAD_CAST "connection"))
 		{
-			if (!connectComponent(deviceName, component, propertyNode))
+			if (!connectComponent(deviceName, component, node))
 				return false;
 		}
-		else if (xmlStrcmp(propertyNode->name, BAD_CAST "property"))
+		else if (!xmlStrcmp(node->name, BAD_CAST "property"))
 		{
-			if (!setComponentProperty(component, propertyNode))
+			if (!setComponentProperty(component, node))
 				return false;
 		}
-		else if (xmlStrcmp(propertyNode->name, BAD_CAST "data"))
+		else if (!xmlStrcmp(node->name, BAD_CAST "data"))
 		{
-			if (!setComponentData(deviceName, component, propertyNode))
+			if (!setComponentData(deviceName, component, node))
 				return false;
 		}
-		else if (xmlStrcmp(propertyNode->name, BAD_CAST "resource"))
+		else if (!xmlStrcmp(node->name, BAD_CAST "resource"))
 		{
-			if (!setComponentResource(component, propertyNode))
+			if (!setComponentResource(component, node))
 				return false;
 		}
 	}
@@ -236,6 +254,8 @@ bool Emulation::setComponentProperty(Component *component,
 {
 	string key = getNodeProperty(propertyNode, "key");
 	string value = getNodeProperty(propertyNode, "value");
+
+printf("%s < %s\n", key.c_str(), value.c_str());
 	
 	struct IOCTLProperty ioctl;
 	ioctl.key = key;
@@ -276,7 +296,7 @@ bool Emulation::setComponentResource(Component *component,
 	ioctl.key = key;
 	ioctl.data = vector<char>();
 	
-	if (!readFile(resourcePath + src, ioctl.data))
+	if (!readResource(resourcePath, ioctl.data))
 		return false;
 	
 	component->ioctl(IOCTL_SETDATA, &ioctl);
@@ -298,17 +318,20 @@ bool Emulation::queryComponents()
 		deviceNode;
 		deviceNode = deviceNode->next)
 	{
-		string deviceName = (char *) deviceNode->name;
+		if (xmlStrcmp(deviceNode->name, BAD_CAST "component"))
+			continue;
+		
+		string deviceName = getNodeProperty(deviceNode, "name");
 		
 		for(xmlNodePtr componentNode = deviceNode->children;
 			componentNode;
 			componentNode = componentNode->next)
 		{
-			if (!xmlStrcmp(componentNode->name, BAD_CAST "component"))
-			{
-				if (!queryComponent(deviceName, componentNode))
-					return false;
-			}
+			if (xmlStrcmp(componentNode->name, BAD_CAST "component"))
+				continue;
+			
+			if (!queryComponent(deviceName, componentNode))
+				return false;
 		}
 	}
 	
@@ -322,18 +345,18 @@ bool Emulation::queryComponent(string deviceName, xmlNodePtr componentNode)
 	string componentRef = buildComponentRef(deviceName, string(componentName));
 	Component *component = components[componentRef];
 	
-	for(xmlNodePtr propertyNode = componentNode->children;
-		propertyNode;
-		propertyNode = propertyNode->next)
+	for(xmlNodePtr node = componentNode->children;
+		node;
+		node = node->next)
 	{
-		if (xmlStrcmp(propertyNode->name, BAD_CAST "property"))
+		if (xmlStrcmp(node->name, BAD_CAST "property"))
 		{
-			if (!getComponentProperty(component, propertyNode))
+			if (!getComponentProperty(component, node))
 				return false;
 		}
-		else if (xmlStrcmp(propertyNode->name, BAD_CAST "data"))
+		else if (xmlStrcmp(node->name, BAD_CAST "data"))
 		{
-			if (!getComponentData(deviceName, component, propertyNode))
+			if (!getComponentData(deviceName, component, node))
 				return false;
 		}
 	}
@@ -383,7 +406,7 @@ bool Emulation::save(string emulationPath)
 	
 	if (queryComponents())
 	{
-		package = new Package(emulationPath, true);
+		package = new Package(emulationPath);
 		if (package->isOpen())
 		{
 			xmlIndentTreeOutput = 1;

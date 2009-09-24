@@ -13,13 +13,13 @@
 #include <vector>
 
 #include <zip.h>
- 
+
 using namespace std;
 
 class Package
 {
 public:
-	Package(string packagePath, bool write);
+	Package(string packagePath);
 	~Package();
 
 	bool isOpen();

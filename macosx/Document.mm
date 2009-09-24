@@ -25,8 +25,6 @@
 		pasteboardTypes = [NSArray arrayWithObjects:NSStringPboardType, nil];
 		[pasteboardTypes retain];
 		
-		// To-Do: Create work folder in /tmp
-		
 		[self setPower:YES];
 		[self setPause:NO];
 		[self setLabel:@"Apple II"];
@@ -62,6 +60,7 @@
 	if (emulation)
 		delete (Emulation *) emulation;
 	
+	printf("dealloc\n");
 	[super dealloc];
 }
 
@@ -69,9 +68,9 @@
 			 ofType:(NSString *)typeName
 			  error:(NSError **)outError
 {
-	
-	const char *emulationPath = [[absoluteURL path] UTF8String];
-	const char *resourcePath = "/Users/mressl/Documents/OpenEmulator/openemulator/templates/Apple II.emulation/";
+	const char *emulationPath = [[[absoluteURL path] stringByAppendingString:@"/"]
+								 UTF8String];
+	const char *resourcePath = [[[NSBundle mainBundle] resourcePath] UTF8String];
 	emulation = (void *) new Emulation(emulationPath, resourcePath);
 	
 	if (!emulation)
@@ -82,14 +81,11 @@
 	
 	printf("readFromURL: %s\n", emulationPath);
 	
-	// To-Do: Clean the work folder
-	// To-Do: If it is a file, unzip the .emulation files to a temporary work folder
-	// To-Do: If it is a package, copy the package folder to the temporary work folder
-	// To-Do: Read info.xml to update inspector
-	// To-Do: Reload libemulator
-	
 	if (((Emulation *) emulation)->isOpen())
 		return YES;
+	
+	delete (Emulation *) emulation;
+	emulation = NULL;
 	
 	*outError = [NSError errorWithDomain:NSCocoaErrorDomain
 									code:NSFileReadUnknownError
@@ -101,7 +97,8 @@
 			ofType:(NSString *)typeName
 			 error:(NSError **)outError
 {
-	const char * emulationPath = [[absoluteURL path] UTF8String];
+	const char *emulationPath = [[[absoluteURL path] stringByAppendingString:@"/"]
+								 UTF8String];
 	((Emulation *) emulation)->save(string(emulationPath));
 	
 	printf("writeToURL: %s\n", emulationPath);

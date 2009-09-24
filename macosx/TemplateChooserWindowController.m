@@ -42,7 +42,7 @@
 - (void)performChoose:(id)sender
 {
 	NSError *error;
-	NSURL *url = [NSURL fileURLWithPath:@"/tmp/temp.emulation"];
+	NSURL *url = [NSURL fileURLWithPath:@"/Users/mressl/Documents/OpenEmulator/openemulator/build/Debug/OpenEmulator.app/Contents/Resources/templates/Apple II.emulation"];
 	
 	[documentController openUntitledDocumentFromTemplateURL:url
 													  error:&error];
