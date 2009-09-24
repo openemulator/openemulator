@@ -38,7 +38,7 @@ public:
 	bool removeOutlet(string outletRef);
 	
 private:
-#ifndef __OBJC2__
+#ifndef __OBJC__
 	bool isEmulationLoaded;
 	xmlDocPtr dml;
 	map<string, Component *> components;
@@ -66,7 +66,8 @@ private:
 	bool setComponentData(string deviceName,
 						   Component *component,
 						   xmlNodePtr dataNode);
-	bool setComponentResource(Component *component, xmlNodePtr resourceNode);
+	bool setComponentResource(Component *component,
+							  xmlNodePtr resourceNode);
 	
 	bool queryComponents();
 	bool queryComponent(string deviceName, xmlNodePtr componentNode);

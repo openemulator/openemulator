@@ -19,6 +19,8 @@
 
 using namespace std;
 
+typedef map<string, string> EmulationProperties;
+
 class EmulationTemplate
 {
 public:
@@ -31,9 +33,9 @@ public:
 	map<string, string> getOutlets();
 	
 private:
-	map<string, string> properties;
-	map<string, string> inlets;
-	map<string, string> outlets;
+	EmulationProperties properties;
+	vector<EmulationProperties> inlets;
+	vector<EmulationProperties> outlets;
 };
 
 #endif
