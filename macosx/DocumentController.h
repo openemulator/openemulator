@@ -26,10 +26,15 @@
 	int disableMenuBarCount;
 }
 
+- (id)openUntitledDocumentFromTemplateURL:(NSURL *)absoluteURL
+								  display:(BOOL)displayDocument
+									error:(NSError **)outError;
+- (id)makeUntitledDocumentFromTemplateURL:(NSURL *)absoluteURL
+									error:(NSError **)outError;
+
 - (IBAction)newDocumentFromTemplateChooser:(id)sender;
-//- (id)openUntitledDocumentFromTemplateURL:(NSURL *)templateURL error:(NSError **)outError;
-//- (id)makeUntitledDocumentFromTemplateURL:(NSURL *)templateURL error:(NSError **)outError;
 - (void)noteTemplateChooserWindowClosed;
+
 - (void)disableMenuBar;
 - (void)enableMenuBar;
 

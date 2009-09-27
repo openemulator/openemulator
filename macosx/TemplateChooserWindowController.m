@@ -41,13 +41,18 @@
 
 - (void)performChoose:(id)sender
 {
+	[[self window] performClose:self];
+	
 	NSError *error;
 	NSURL *url = [NSURL fileURLWithPath:@"/Users/mressl/Documents/OpenEmulator/openemulator/build/Debug/OpenEmulator.app/Contents/Resources/templates/Apple II.emulation"];
 	
-	[documentController openUntitledDocumentFromTemplateURL:url
-													  error:&error];
-	
-	[[self window] performClose:self];
+	if (![documentController openUntitledDocumentFromTemplateURL:url
+														 display:YES
+														   error:&error])
+	{
+		NSAlert *alert = [NSAlert alertWithError:error];
+		[alert runModal];
+	}
 }
 
 @end

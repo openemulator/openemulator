@@ -88,7 +88,9 @@
 	[[self openGLContext] flushBuffer];
 }
 
-- (void)loadGLTextureFromResource:(NSString *)name ofType:(NSString *)type toIndex:(int)index
+- (void)loadGLTextureFromResource:(NSString *)name
+						   ofType:(NSString *)type
+						  toIndex:(int)index
 {
 	textureRect[index] = NSMakeRect(0, 0, 0, 0);
 	NSString *path = [[NSBundle mainBundle] pathForResource:name ofType:type];

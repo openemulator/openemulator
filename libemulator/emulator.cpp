@@ -17,25 +17,6 @@
 #include "Emulation.h"
 #include "Package.h"
 
-// ioctl's for:
-// * next frame
-// * update outlets
-// * send power, reset, pause messages
-// * send config messages
-// * do copy, paste, isCopyAvailable
-// * get/set video options
-// * get/set audio volume
-// * play/record audio
-// * lock/unlock disk drives
-// * mount/unmount disk drives
-// * get/set component options
-// * send keyboard messages
-// * set mouse position and buttons
-// * set joystick position and buttons
-// * set graphics tablet position and buttons
-// * get video frames
-
-// Note: move pause and power off images to libemulator
 
 using namespace std;
 

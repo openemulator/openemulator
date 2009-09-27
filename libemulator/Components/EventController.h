@@ -6,9 +6,9 @@
  * Released under the GPL
  */
 
-#include "Component.h"
+#include "OEComponent.h"
 
-class EventController : public Component
+class EventController : public OEComponent
 {
 
 };

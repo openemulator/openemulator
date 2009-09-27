@@ -6,16 +6,16 @@
  * Released under the GPL
  */
 
-#include "ComponentFactory.h"
+#include "OEComponentFactory.h"
 
 #include "EventController.h"
 
 #define buildComponent(name) if (className == "name") return new name()
 
-Component *ComponentFactory::build(string className)
+OEComponent *OEComponentFactory::build(string className)
 {
 	buildComponent(EventController);
 	
-	return new Component();
+	return new OEComponent();
 //	return NULL;
 }

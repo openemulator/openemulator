@@ -11,61 +11,71 @@
 #import "Document.h"
 #import "DocumentWindowController.h"
 
-#import "Emulation.h"
+#import "OEEmulation.h"
+
+#define TEMPLATE_FOLDER @"/Users/mressl/Library/Application Support"\
+	"/OpenEmulator/Templates/"
 
 @implementation Document
 
 - (id)init
 {
-	printf("init\n");
-
+	printf("[Document init]\n");
 	if (self = [super init])
 	{
+		emulation = nil;
+		
 		pasteboard = [NSPasteboard generalPasteboard];
 		[pasteboard retain];
 		
 		pasteboardTypes = [NSArray arrayWithObjects:NSStringPboardType, nil];
 		[pasteboardTypes retain];
 		
-		[self setPower:YES];
-		[self setPause:NO];
-		[self setLabel:@"Apple II"];
-		[self setDescription:@"The Apple II is a nice computer."];
+		[self setPower:false];
+		[self setLabel:@""];
+		[self setDescription:@""];
 		[self setModificationDate:[NSDate date]];
-		[self setVolume:1.0f];
+		[self setImage:nil];
+		
 		expansions = [[NSMutableArray alloc] init];
 		diskDrives = [[NSMutableArray alloc] init];
 		peripherals = [[NSMutableArray alloc] init];
 		
-		emulation = nil;
+		// To-Do: [self setVideoPreset:x];
+		[self setVolume:1.0f];
 	}
 	
 	return self;
 }
 
-- (id)initWithContentsOfURL:(NSURL *)absoluteURL
-					 ofType:typeName
-					  error:(NSError **)outError
+- (id)initFromTemplateURL:(NSURL *)absoluteURL
+					error:(NSError **)outError
 {
-	printf("initWithContentsOfURL");
-	return [super initWithContentsOfURL:absoluteURL ofType:typeName error:outError];
+	printf("[Document initFromTemplateURL]\n");
+	if ([self init])
+	{
+		if ([self readFromURL:absoluteURL
+					   ofType:nil
+						error:outError])
+			return self;
+	}
 	
-	[self readFromURL:absoluteURL
-			   ofType:@"emulation"
-				error:outError];
-	
-	return [self init];
+	*outError = [NSError errorWithDomain:NSCocoaErrorDomain
+									code:NSFileReadUnknownError
+								userInfo:nil];
+	return nil;
 }
 
 - (void)dealloc
 {
+	printf("dealloc\n");
+	
 	[pasteboardTypes release];
 	[pasteboard release];
 	
 	if (emulation)
-		delete (Emulation *) emulation;
+		delete (OEEmulation *) emulation;
 	
-	printf("dealloc\n");
 	[super dealloc];
 }
 
@@ -73,37 +83,23 @@
 			 ofType:(NSString *)typeName
 			  error:(NSError **)outError
 {
-	const char *emulationPath = [[[absoluteURL path] stringByAppendingString:@"/"]
-								 UTF8String];
+	printf("[Document readFromURL]\n");
+	const char *emulationPath = [[absoluteURL path] UTF8String];
 	const char *resourcePath = [[[NSBundle mainBundle] resourcePath] UTF8String];
-//	emulation = (void *) new Emulation(emulationPath, resourcePath);
 	
-	return YES;
-	if (!emulation)
+	if (emulation)
+		delete (OEEmulation *) emulation;
+	
+	emulation = (void *) new OEEmulation(emulationPath, resourcePath);
+	
+	if (emulation)
 	{
-		NSArray *objArray = [NSArray arrayWithObjects:@"Description",  
-							 @"FailureReason", @"RecoverySuggestion", nil];
-		NSArray *keyArray = [NSArray  
-							 arrayWithObjects:NSLocalizedDescriptionKey,  
-							 NSLocalizedFailureReasonErrorKey,  
-							 NSLocalizedRecoverySuggestionErrorKey, nil];        
-		NSDictionary *eDict = [NSDictionary dictionaryWithObjects:objArray  
-														  forKeys:keyArray];
+		if (((OEEmulation *) emulation)->isOpen())
+			return YES;
 		
-		// fill outError
-		*outError = [NSError errorWithDomain:@"myDomain"
-										code:1  
-									userInfo:eDict];
-		return NO;
+		delete (OEEmulation *) emulation;
+		emulation = NULL;
 	}
-	
-	printf("readFromURL: %s\n", emulationPath);
-	
-	if (((Emulation *) emulation)->isOpen())
-		return YES;
-	
-	delete (Emulation *) emulation;
-	emulation = NULL;
 	
 	*outError = [NSError errorWithDomain:NSCocoaErrorDomain
 									code:NSFileReadUnknownError
@@ -115,18 +111,19 @@
 			ofType:(NSString *)typeName
 			 error:(NSError **)outError
 {
+	printf("[Document writeToURL]\n");
 	const char *emulationPath = [[[absoluteURL path] stringByAppendingString:@"/"]
 								 UTF8String];
-//	((Emulation *) emulation)->save(string(emulationPath));
+	if (emulation)
+	{
+		if (((OEEmulation *) emulation)->save(string(emulationPath)))
+			return YES;
+	}
 	
-	printf("writeToURL: %s\n", emulationPath);
-	
-	// To-Do: Write the state with libemulator
-	// To-Do: If it is a file, zip the temporary work folder to the .emulation URL
-	// To-Do: If it is a package, copy the temporary work folder to the .emulation URL
-	
-	*outError = [NSError errorWithDomain:@"test" code:0 userInfo:nil];
-	return YES;
+	*outError = [NSError errorWithDomain:NSCocoaErrorDomain
+									code:NSFileWriteUnknownError
+								userInfo:nil];
+	return NO;
 }
 
 - (IBAction)saveDocumentAsTemplate:(id)sender
@@ -135,8 +132,7 @@
 	
 	[panel setRequiredFileType:@"emulation"];
 	
-	[panel beginSheetForDirectory:@"/Users/mressl/Library/Application Support"
-	 "/OpenEmulator/Templates/"
+	[panel beginSheetForDirectory:TEMPLATE_FOLDER
 							 file:nil
 				   modalForWindow:[self windowForSheet]
 					modalDelegate:self
@@ -148,7 +144,14 @@
 						  returnCode:(int)returnCode
 						 contextInfo:(void *)contextInfo
 {
-	// To-Do: Call [self writeToURL:URL ]
+	NSError *error;
+	if (![self writeToURL:[panel URL]
+				   ofType:nil
+					error:&error])
+	{
+		NSAlert *alert = [NSAlert alertWithError:error];
+		[alert runModal];
+	}
 }
 
 - (void)makeWindowControllers
@@ -182,21 +185,40 @@
 	return [pasteboard availableTypeFromArray:pasteboardTypes] != nil;
 }
 
-- (void)togglePower:(id)sender
+- (void)powerButtonPressedAndReleased:(id)sender
+{
+	[self powerButtonPressed:sender];
+	[self powerButtonReleased:sender];
+}
+
+- (void)powerButtonPressed:(id)sender
 {
 	[self setPower:![self power]];
 	// To-Do: libemulation
 }
 
-- (void)resetEmulation:(id)sender
+- (void)powerButtonReleased:(id)sender
+{
+}
+
+- (void)resetButtonPressedAndReleased:(id)sender
+{
+	[self resetButtonPressed:sender];
+	[self resetButtonReleased:sender];
+}
+
+- (void)resetButtonPressed:(id)sender
 {
 	// To-Do: libemulation
 	[self updateChangeCount:NSChangeDone];
 }
 
-- (void)togglePause:(id)sender
+- (void)resetButtonReleased:(id)sender
 {
-	[self setPause:![self pause]];
+}
+
+- (void)pauseButtonPressed:(id)sender
+{
 	// To-Do: libemulation
 }
 
@@ -251,19 +273,6 @@
 {
 	if (power != value)
 		power = value;
-	if (power && [self pause])
-		[self setPause:NO];
-}
-
-- (BOOL)pause
-{
-	return pause;
-}
-
-- (void)setPause:(BOOL)value
-{
-	if (pause != value)
-		pause = value;
 }
 
 - (NSString *)label

@@ -11,8 +11,6 @@
 
 #include "Package.h"
 
-#define PATH_SEPARATOR "/"
-
 Package::Package(string packagePath)
 {
 	this->packagePath = packagePath;
@@ -30,12 +28,12 @@ Package::Package(string packagePath)
 	if (isPackage)
 	{
 		mkdir(packagePath.c_str(), 0777);
-		isPackageOpen = (stat(packagePath.c_str(), &statbuf) == 0);
+		open = (stat(packagePath.c_str(), &statbuf) == 0);
 	}
 	else
 	{
 		zip = zip_open(packagePath.c_str(), ZIP_CREATE, NULL);
-		isPackageOpen = (zip != NULL);
+		open = (zip != NULL);
 	}
 }
 
@@ -49,14 +47,14 @@ Package::~Package()
 
 bool Package::isOpen()
 {
-	return isPackageOpen;
+	return open;
 }
 
 bool Package::readFile(string localPath, vector<char> &data)
 {
 	bool error = true;
 	
-	if (!isPackageOpen)
+	if (!open)
 		return false;
 	
 	if (zip)
@@ -76,7 +74,7 @@ bool Package::readFile(string localPath, vector<char> &data)
 	}
 	else
 	{
-		ifstream file((packagePath + PATH_SEPARATOR + localPath).c_str());
+		ifstream file((packagePath + PACKAGE_PATH_SEPARATOR + localPath).c_str());
 		
 		if (file.is_open())
 		{
@@ -100,7 +98,7 @@ bool Package::writeFile(string localPath, vector<char> &data)
 {
 	bool error = true;
 	
-	if (!isPackageOpen)
+	if (!open)
 		return false;
 	
 	if (zip)
@@ -120,7 +118,7 @@ bool Package::writeFile(string localPath, vector<char> &data)
 	}
 	else
 	{
-		ofstream file((packagePath + PATH_SEPARATOR + localPath).c_str());
+		ofstream file((packagePath + PACKAGE_PATH_SEPARATOR + localPath).c_str());
 		
 		if (file.is_open())
 		{
@@ -131,4 +129,11 @@ bool Package::writeFile(string localPath, vector<char> &data)
 	}
 	
 	return !error;
+}
+
+bool Package::remove()
+{
+	// To-Do: Remove
+
+	return true;
 }

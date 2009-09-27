@@ -18,7 +18,6 @@
 	NSArray *pasteboardTypes;
 	
 	BOOL power;
-	BOOL pause;
 	NSString *label;
 	NSString *description;
 	NSDate *modificationDate;
@@ -39,21 +38,23 @@
 	float volume;
 }
 
-//- (id)initWithTemplateURL:(NSURL *)templateURL error:(NSError **)outError;
+- (id)initFromTemplateURL:(NSURL *)templateURL error:(NSError **)outError;
 
 - (IBAction)saveDocumentAsTemplate:(id)sender;
 
 - (BOOL)isCopyValid;
 - (BOOL)isPasteValid;
 
-- (void)togglePower:(id)sender;
-- (void)resetEmulation:(id)sender;
-- (void)togglePause:(id)sender;
+- (void)powerButtonPressedAndReleased:(id)sender;
+- (void)powerButtonPressed:(id)sender;
+- (void)powerButtonReleased:(id)sender;
+- (void)resetButtonPressedAndReleased:(id)sender;
+- (void)resetButtonPressed:(id)sender;
+- (void)resetButtonReleased:(id)sender;
+- (void)pauseButtonPressed:(id)sender;
 
 - (BOOL)power;
 - (void)setPower:(BOOL)value;
-- (BOOL)pause;
-- (void)setPause:(BOOL)value;
 - (NSString *)label;
 - (void)setLabel:(NSString *)value;
 - (NSString *)description;

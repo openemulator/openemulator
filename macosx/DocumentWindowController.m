@@ -30,18 +30,13 @@
 	[[self window] setToolbar:toolbar];
 	[toolbar release];
 	
-	[document addObserver:fDocumentView
+/*	[document addObserver:fDocumentView
 			   forKeyPath:@"power"
 				  options:NSKeyValueObservingOptionNew
 				  context:NULL];
-	[document addObserver:fDocumentView
-			   forKeyPath:@"pause"
-				  options:NSKeyValueObservingOptionNew
-				  context:NULL];
-	
+*/	
 	// To-Do: Improve the view updating code
 	[document setPower:[document power]];
-	[document setPause:[document pause]];
 }
 
 - (NSToolbarItem *)toolbar:(NSToolbar *)toolbar
@@ -58,7 +53,7 @@
 										   "Document toolbar item label")];
 		[item setImage:[NSImage imageNamed:@"TBPower.png"]];
 		[item setTarget:document];
-		[item setAction:@selector(togglePower:)];
+		[item setAction:@selector(powerButtonPressed:)];
 	}
 	else if ([ident isEqualToString:@"Reset"])
 	{
@@ -67,7 +62,7 @@
 										   "Document toolbar item label")];
 		[item setImage:[NSImage imageNamed:@"TBReset.png"]];
 		[item setTarget:document];
-		[item setAction:@selector(resetEmulation:)];
+		[item setAction:@selector(resetButtonPressed:)];
 	}
 	else if ([ident isEqualToString:@"Pause"])
 	{
@@ -76,7 +71,7 @@
 										   "Document toolbar item label")];
 		[item setImage:[NSImage imageNamed:@"TBPause.png"]];
 		[item setTarget:document];
-		[item setAction:@selector(togglePause:)];
+		[item setAction:@selector(pauseButtonPressed:)];
 	}
 	else if ([ident isEqualToString:@"Inspector"])
 	{

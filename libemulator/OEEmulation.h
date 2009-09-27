@@ -6,31 +6,31 @@
  * Released under the GPL
  */
 
-#ifndef _EMULATION_H
-#define _EMULATION_H
+#ifndef _OEEMULATION_H
+#define _OEEMULATION_H
 
 #include <string>
 #include <map>
 
 #include <libxml/tree.h>
 
-#ifndef __OBJC__
-#include "Component.h"
-#endif
+#include "OEComponent.h"
 #include "Package.h"
 
 #define DMLINFO_FILENAME "info.xml"
 
 using namespace std;
 
-class Emulation
+class OEEmulation
 {
 public:
-	Emulation(string emulationPath, string resourcePath);
-	~Emulation();
+	OEEmulation(string emulationPath, string resourcePath);
+	~OEEmulation();
 	
 	bool isOpen();
+	
 	bool save(string emulationPath);
+	
 	int ioctl(string componentRef, int message, void *data);
 	
 	xmlDocPtr getDML();
@@ -38,10 +38,9 @@ public:
 	bool removeOutlet(string outletRef);
 	
 private:
-#ifndef __OBJC__
-	bool isEmulationLoaded;
+	bool open;
 	xmlDocPtr dml;
-	map<string, Component *> components;
+	map<string, OEComponent *> components;
 	
 	Package *package;
 	string resourcePath;
@@ -52,31 +51,29 @@ private:
 	string buildComponentRef(string deviceName, string componentName);
 	string buildSourcePath(string deviceName, string src);
 	
-	bool readResource(string path, vector<char> &data);
+	bool readResource(string localPath, vector<char> &data);
 	
 	bool buildComponents();
-	bool buildComponent(string deviceName, xmlNodePtr componentNode);
-	void destroyComponents();
-	
-	bool initComponent(string deviceName, xmlNodePtr componentNode);
-	bool connectComponent(string deviceName,
-						  Component *component,
-						  xmlNodePtr connectionNode);
-	bool setComponentProperty(Component *component, xmlNodePtr propertyNode);
-	bool setComponentData(string deviceName,
-						   Component *component,
-						   xmlNodePtr dataNode);
-	bool setComponentResource(Component *component,
-							  xmlNodePtr resourceNode);
-	
 	bool queryComponents();
-	bool queryComponent(string deviceName, xmlNodePtr componentNode);
+	void destructComponents();
 	
-	bool getComponentProperty(Component *component, xmlNodePtr propertyNode);
-	bool getComponentData(string deviceName,
-						  Component *component,
+	bool buildComponent(string deviceName, xmlNodePtr componentNode);
+	bool queryComponent(string deviceName, xmlNodePtr componentNode);
+	bool initComponent(string deviceName, xmlNodePtr componentNode);
+	
+	bool connectComponent(string deviceName,
+						  OEComponent *component,
+						  xmlNodePtr connectionNode);
+	bool setComponentProperty(OEComponent *component, xmlNodePtr propertyNode);
+	bool getComponentProperty(OEComponent *component, xmlNodePtr propertyNode);
+	bool setComponentData(string deviceName,
+						  OEComponent *component,
 						  xmlNodePtr dataNode);
-#endif
+	bool getComponentData(string deviceName,
+						  OEComponent *component,
+						  xmlNodePtr dataNode);
+	bool setComponentResource(OEComponent *component,
+							  xmlNodePtr resourceNode);
 };
 
 #endif

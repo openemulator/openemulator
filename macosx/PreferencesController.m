@@ -163,7 +163,7 @@
 
 - (IBAction)chooseTemplateSheet:(id)sender
 {
-	[userDefaults setObject:@"/Users/test/Apple II.emulation" forKey:@"OEDefaultTemplate"];
+	[userDefaults setObject:@"/Users/mressl/Apple II.emulation" forKey:@"OEDefaultTemplate"];
 	
 	[NSApp endSheet:fTemplateChooserSheet];
 }

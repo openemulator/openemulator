@@ -14,6 +14,8 @@
 
 #include <zip.h>
 
+#define PACKAGE_PATH_SEPARATOR "/"
+
 using namespace std;
 
 class Package
@@ -27,8 +29,10 @@ public:
 	bool readFile(string localPath, vector<char> &data);
 	bool writeFile(string localPath, vector<char> &data);
 	
+	bool remove();
+	
 private:
-	bool isPackageOpen;
+	bool open;
 	
 	string packagePath;
 	struct zip *zip;

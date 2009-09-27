@@ -63,20 +63,34 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 - (void)dealloc
 {
 	[fileTypes release];
+	
 	[super dealloc];
+}
+
+- (void)applicationWillFinishLaunching:(NSNotification *)notification
+{
+	printf("applicationWillFinishLaunching\n");
 }
 
 - (BOOL)application:(NSApplication *)theApplication
 		   openFile:(NSString *)filename
 {
 	printf("openFile\n");
-	
-	NSError *error;
 	if ([[filename pathExtension] caseInsensitiveCompare:@"emulation"] == NSOrderedSame)
 		return NO;
 	
 	if (![self currentDocument])
-		[self openUntitledDocumentAndDisplay:YES error:&error];
+	{
+		NSError *error;
+		if (![self openUntitledDocumentAndDisplay:YES
+											error:&error])
+		{
+			[NSAlert alertWithError:error];
+			[error release];
+			
+			return NO;
+		}
+	}
 	
 	// It is a disk image
 	
@@ -85,11 +99,6 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 	// Now mount it
 	
 	return YES;
-}
-
-- (void)applicationWillFinishLaunching:(NSNotification *)notification
-{
-	printf("applicationWillFinishLaunching\n");
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)notification
@@ -132,62 +141,86 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 		return YES;
 }
 
+- (IBAction)openDocument:(id)sender
+{
+	NSOpenPanel *panel = [NSOpenPanel openPanel];
+	
+	if ([panel runModalForTypes:fileTypes] == NSOKButton)
+	{
+		NSURL *url = [panel URL];
+		if ([self application:NSApp openFile:[url path]])
+			return;
+		
+		NSError *error;
+		if (![self openDocumentWithContentsOfURL:url display:YES error:&error])
+		{
+			[NSAlert alertWithError:error];
+			[error release];
+		}
+	}
+}
+
 - (id)openUntitledDocumentAndDisplay:(BOOL)displayDocument error:(NSError **)outError
 {
-	printf("openUntitledDocumentAndDisplay\n");
-	
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	
-	BOOL useDefaultTemplate = [userDefaults boolForKey:@"OEUseDefaultTemplate"];
-	if (!useDefaultTemplate)
+	if (![userDefaults boolForKey:@"OEUseDefaultTemplate"])
 	{
 		[self newDocumentFromTemplateChooser:self];
+		
 		*outError = [NSError errorWithDomain:NSCocoaErrorDomain
-										code:NSUserCancelledError userInfo:nil];
+										code:NSUserCancelledError
+									userInfo:nil];
 		return nil;
 	}
 	else
 	{
 		NSString *defaultTemplate = [userDefaults stringForKey:@"OEDefaultTemplate"];
+		id document = nil;
+		
+		if (!defaultTemplate)
+		{
+			*outError = [NSError errorWithDomain:@"emulatorDomain"
+											code:0
+										userInfo:nil];
+			return nil;
+		}
+		
 		NSURL *absoluteURL = [NSURL fileURLWithPath:defaultTemplate];
-		return [self openDocumentWithContentsOfURL:absoluteURL
-										   display:displayDocument
-											 error:outError];
+		document = [self openUntitledDocumentFromTemplateURL:absoluteURL
+													 display:displayDocument
+													   error:outError];
+		return document;
 	}
 }
 
-- (id)makeUntitledDocumentOfType:(NSString *)typeName error:(NSError **)outError
+- (id)openUntitledDocumentFromTemplateURL:(NSURL *)absoluteURL
+								  display:(BOOL)displayDocument
+									error:(NSError **)outError
 {
-	printf("makeUntitledDocumentOfType\n");
+	NSDocument *document;
 	
-	return [super makeUntitledDocumentOfType:typeName
-									   error:outError];
+	document = [self makeUntitledDocumentFromTemplateURL:absoluteURL
+												   error:outError];
+	if (document)
+	{
+		[self addDocument:document];
+		if (displayDocument)
+		{
+			[document makeWindowControllers];
+			[document showWindows];
+		}
+	}
+	
+	return document;
 }
 
-- (id)openUntitledDocumentWithContentsOfURL:(NSURL *)absoluteURL
-									display:(BOOL)displayDocument
-									  error:(NSError **)outError
+- (id)makeUntitledDocumentFromTemplateURL:(NSURL *)absoluteURL
+									error:(NSError **)outError
 {
-	printf("openUntitledDocumentWithContentsOfURL\n");
-	
-	return [super openUntitledDocumentWithContentsOfURL:absoluteURL
-												display:displayDocument
-												  error:outError];
+	return [[Document alloc] initFromTemplateURL:absoluteURL
+										   error:outError];
 }
-
-- (id)makeDocumentWithContentsOfURL:(NSURL *)absoluteURL
-							   type:(NSString *)typeName
-							  error:(NSError **)outError
-{
-	printf("makeDocumentWithContentsOfURL\n");
-	
-	return [super makeDocumentWithContentsOfURL:absoluteURL type:typeName error:outError];
-}
-
-
-
-
-
 
 - (IBAction)newDocumentFromTemplateChooser:(id)sender
 {
@@ -201,46 +234,9 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 	[templateChooserWindowController showWindow:self];
 }
 
-- (id)openUntitledDocumentFromTemplateURL:(NSURL *)templateURL error:(NSError **)outError
-{
-	NSDocument *document = [self makeUntitledDocumentFromTemplateURL:templateURL
-															   error:outError];
-	if (document)
-	{
-		[self addDocument:document];
-		[document makeWindowControllers];
-		[document showWindows];
-	}
-	
-	return document;
-}
-
-- (id)makeUntitledDocumentFromTemplateURL:(NSURL *)templateURL error:(NSError **)outError
-{
-	*outError = [[NSError alloc] init];
-	
-	return [[Document alloc] initWithTemplateURL:templateURL error:outError];
-}
-
 - (void)noteTemplateChooserWindowClosed
 {
 	isTemplateChooserWindowOpen = NO;
-}
-
-- (void)openDocument:(id)sender
-{
-	printf("openDocument\n");
-	return [super openDocument:sender];
-/*	NSOpenPanel *panel = [NSOpenPanel openPanel];
-	
-	if ([panel runModalForTypes:fileTypes] == NSOKButton)
-	{
-		NSURL *url = [[panel URLs] lastObject];
-		NSError *error;
-		
-		if (![self application:NSApp openFile:[url path]])
-			[self openDocumentWithContentsOfURL:url display:YES error:&error];
-	}*/
 }
 
 - (void)disableMenuBar
