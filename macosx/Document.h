@@ -20,7 +20,7 @@
 	BOOL power;
 	NSString *label;
 	NSString *description;
-	NSDate *modificationDate;
+	NSString *modificationDate;
 	NSImage *image;
 	
 	NSMutableArray *expansions;
@@ -59,8 +59,8 @@
 - (void)setLabel:(NSString *)value;
 - (NSString *)description;
 - (void)setDescription:(NSString *)value;
-- (NSDate *)modificationDate;
-- (void)setModificationDate:(NSDate *)value;
+- (NSString *)modificationDate;
+- (void)setModificationDate:(NSString *)value;
 - (NSImage *)image;
 - (void)setImage:(NSImage *)value;
 

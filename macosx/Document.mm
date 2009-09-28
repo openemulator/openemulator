@@ -21,7 +21,6 @@
 
 - (id)init
 {
-	printf("[Document init]\n");
 	if (self = [super init])
 	{
 		emulation = nil;
@@ -29,10 +28,17 @@
 		pasteboard = [NSPasteboard generalPasteboard];
 		pasteboardTypes = [[NSArray alloc] initWithObjects:NSStringPboardType, nil];
 		
+		NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+		[dateFormatter setDateStyle:NSDateFormatterMediumStyle];
+		[dateFormatter setTimeStyle:NSDateFormatterMediumStyle];
+		NSString *dateLabel;
+		dateLabel = [dateFormatter stringFromDate:[NSDate date]];
+		[dateFormatter release];
+		
 		[self setPower:false];
 		[self setLabel:@""];
 		[self setDescription:@""];
-		[self setModificationDate:[NSDate date]];
+		[self setModificationDate:dateLabel];
 		[self setImage:nil];
 		
 		expansions = [[NSMutableArray alloc] init];
@@ -49,7 +55,7 @@
 - (id)initFromTemplateURL:(NSURL *)absoluteURL
 					error:(NSError **)outError
 {
-	printf("[Document initFromTemplateURL]\n");
+	printf("initFromTemplateURL\n");
 	if ([self init])
 	{
 		if ([self readFromURL:absoluteURL
@@ -80,7 +86,7 @@
 			 ofType:(NSString *)typeName
 			  error:(NSError **)outError
 {
-	printf("[Document readFromURL]\n");
+	printf("readFromURL\n");
 	const char *emulationPath = [[absoluteURL path] UTF8String];
 	const char *resourcePath = [[[NSBundle mainBundle] resourcePath] UTF8String];
 	
@@ -120,7 +126,7 @@
 			ofType:(NSString *)typeName
 			 error:(NSError **)outError
 {
-	printf("[Document writeToURL]\n");
+	printf("writeToURL\n");
 	const char *emulationPath = [[[absoluteURL path] stringByAppendingString:@"/"]
 								 UTF8String];
 	if (emulation)
@@ -323,12 +329,12 @@
     }
 }
 
-- (NSDate *)modificationDate
+- (NSString *)modificationDate
 {
 	return modificationDate;
 }
 
-- (void)setModificationDate:(NSDate *)value
+- (void)setModificationDate:(NSString *)value
 {
     if (modificationDate != value)
 	{

@@ -97,7 +97,7 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 	
 	// To-Do: Mount disk image
 	
-	return YES;
+	return NO;
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)notification
