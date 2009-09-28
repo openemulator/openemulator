@@ -22,7 +22,7 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 {
 	return paContinue;
 	
-	float *in = (float *)inputBuffer;
+//	float *in = (float *)inputBuffer;
 	float *out = (float *)outputBuffer;
 	unsigned int i;
 	
@@ -42,7 +42,7 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 	if (self = [super init])
 	{
 		fDefaults = [NSUserDefaults standardUserDefaults];
-		fileTypes = [NSArray arrayWithObjects:
+		fileTypes = [[NSArray alloc] initWithObjects:
 					 @"emulation",
 					 @"wav", @"aiff", @"aif",
 					 @"dsk", @"do", @"d13", @"po", @"img", @"cpm", @"nib", @"v2d",
@@ -51,7 +51,6 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 					 @"shk", @"img",
 					 @"fdi",
 					 nil];
-		[fileTypes retain];
 		
 		isTemplateChooserWindowOpen = NO;
 		disableMenuBarCount = 0;
@@ -76,7 +75,7 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 		   openFile:(NSString *)filename
 {
 	printf("openFile\n");
-	if ([[filename pathExtension] caseInsensitiveCompare:@"emulation"] == NSOrderedSame)
+	if ([[filename pathExtension] compare:@"emulation"] == NSOrderedSame)
 		return NO;
 	
 	if (![self currentDocument])
@@ -85,18 +84,15 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 		if (![self openUntitledDocumentAndDisplay:YES
 											error:&error])
 		{
-			[NSAlert alertWithError:error];
-			[error release];
+			if (([[error domain] compare:NSCocoaErrorDomain] != NSOrderedSame) ||
+				([error code] != NSUserCancelledError))
+				[[NSAlert alertWithError:error] runModal];
 			
-			return NO;
+			return YES;
 		}
 	}
 	
-	// It is a disk image
-	
-	// If there is a default template, create a new emulation
-	
-	// Now mount it
+	// To-Do: Mount disk image
 	
 	return YES;
 }
@@ -123,10 +119,10 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 - (void)applicationWillTerminate:(NSNotification *)notification
 {
 	printf("applicationWillTerminate\n");
-	NSWindow *window;
 	
 //	Pa_Terminate();
 	
+//	NSWindow *window;
 //	window = [fInspectorPanelController window];
 //	[fDefaults setBool:[window isVisible] forKey:@"OEInspectorPanelVisible"];
 }
@@ -153,10 +149,7 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 		
 		NSError *error;
 		if (![self openDocumentWithContentsOfURL:url display:YES error:&error])
-		{
-			[NSAlert alertWithError:error];
-			[error release];
-		}
+			[[NSAlert alertWithError:error] runModal];
 	}
 }
 
@@ -218,8 +211,12 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 - (id)makeUntitledDocumentFromTemplateURL:(NSURL *)absoluteURL
 									error:(NSError **)outError
 {
-	return [[Document alloc] initFromTemplateURL:absoluteURL
-										   error:outError];
+	Document *document = [[Document alloc] initFromTemplateURL:absoluteURL
+														 error:outError];
+	if (!document)
+		return nil;
+	
+	return [document autorelease];
 }
 
 - (IBAction)newDocumentFromTemplateChooser:(id)sender

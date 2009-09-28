@@ -31,8 +31,7 @@
 	NSOpenGLPixelFormat *pixelFormat;
 	pixelFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:pixelFormatAtrributes];
 	
-	self = [super initWithFrame:rect pixelFormat:pixelFormat];
-	if(self)
+	if(self = [super initWithFrame:rect pixelFormat:pixelFormat])
 	{
 		[[self openGLContext] makeCurrentContext];
 		[[self openGLContext] update];

@@ -46,6 +46,11 @@
 {
 	NSToolbarItem *item = [[NSToolbarItem alloc] initWithItemIdentifier:ident];
 	
+	if (!item)
+		return nil;
+	
+	[item autorelease];
+	
 	if ([ident isEqualToString:@"General"])
 	{
 		[item setLabel:NSLocalizedString(@"General", "Preferences toolbar item label")];
@@ -60,13 +65,8 @@
 		[item setTarget:self];
 		[item setAction:@selector(selectView:)];
 	}
-	else
-	{
-		[item release];
-		return nil;
-	}
 	
-	return [item autorelease];
+	return item;
 }
 
 - (NSArray *)toolbarSelectableItemIdentifiers:(NSToolbar *)toolbar

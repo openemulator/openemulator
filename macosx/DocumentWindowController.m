@@ -18,7 +18,7 @@
 - (void)windowDidLoad
 {
 	[super windowDidLoad];
-
+	
 	documentController = [NSDocumentController sharedDocumentController];
 	document = [self document];
 	
@@ -44,6 +44,11 @@
  willBeInsertedIntoToolbar:(BOOL)flag
 {
 	NSToolbarItem *item = [[NSToolbarItem alloc] initWithItemIdentifier:ident];
+	
+	if (!item)
+		return nil;
+	
+	[item autorelease];
 	
 	if ([ident isEqualToString:@"Power Off"])
 	{
@@ -82,13 +87,8 @@
 		[item setTarget:self];
 		[item setAction:@selector(toggleInspectorPanel:)];
 	}
-	else
-	{
-		[item release];
-		return nil;
-	}
 	
-	return [item autorelease];
+	return item;
 }
 
 - (NSArray *)toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar

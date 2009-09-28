@@ -26,10 +26,7 @@
 		emulation = nil;
 		
 		pasteboard = [NSPasteboard generalPasteboard];
-		[pasteboard retain];
-		
-		pasteboardTypes = [NSArray arrayWithObjects:NSStringPboardType, nil];
-		[pasteboardTypes retain];
+		pasteboardTypes = [[NSArray alloc] initWithObjects:NSStringPboardType, nil];
 		
 		[self setPower:false];
 		[self setLabel:@""];
@@ -71,7 +68,6 @@
 	printf("dealloc\n");
 	
 	[pasteboardTypes release];
-	[pasteboard release];
 	
 	if (emulation)
 		delete (OEEmulation *) emulation;
@@ -129,9 +125,7 @@
 - (IBAction)saveDocumentAsTemplate:(id)sender
 {
 	NSSavePanel *panel = [[NSSavePanel alloc] init];
-	
 	[panel setRequiredFileType:@"emulation"];
-	
 	[panel beginSheetForDirectory:TEMPLATE_FOLDER
 							 file:nil
 				   modalForWindow:[self windowForSheet]
@@ -148,10 +142,7 @@
 	if (![self writeToURL:[panel URL]
 				   ofType:nil
 					error:&error])
-	{
-		NSAlert *alert = [NSAlert alertWithError:error];
-		[alert runModal];
-	}
+		[[NSAlert alertWithError:error] runModal];
 }
 
 - (void)makeWindowControllers

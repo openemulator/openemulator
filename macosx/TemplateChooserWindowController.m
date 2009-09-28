@@ -16,9 +16,7 @@
 {
 	self = [super initWithWindowNibName:@"TemplateChooser"];
 	if (self)
-	{
 		documentController = theDocumentController;
-	}
 	
 	return self;
 }
@@ -43,16 +41,13 @@
 {
 	[[self window] performClose:self];
 	
-	NSError *error;
-	NSURL *url = [NSURL fileURLWithPath:@"/Users/mressl/Documents/OpenEmulator/openemulator/build/Debug/OpenEmulator.app/Contents/Resources/templates/Apple II.emulation"];
+	NSURL *url = [NSURL fileURLWithPath:@"/Users/mressl/Apple II.emulation"];
 	
+	NSError *error;
 	if (![documentController openUntitledDocumentFromTemplateURL:url
 														 display:YES
 														   error:&error])
-	{
-		NSAlert *alert = [NSAlert alertWithError:error];
-		[alert runModal];
-	}
+		[[NSAlert alertWithError:error] runModal];
 }
 
 @end
