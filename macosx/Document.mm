@@ -124,9 +124,19 @@
 
 - (IBAction)saveDocumentAsTemplate:(id)sender
 {
+	NSString *path = @"~/Library/Application Support/Open Emulator/Templates";
+	path = [path stringByExpandingTildeInPath];
+	
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	if (![fileManager fileExistsAtPath:path])
+		[fileManager createDirectoryAtPath:path
+			   withIntermediateDirectories:YES
+								attributes:nil
+									 error:nil];
+	
 	NSSavePanel *panel = [[NSSavePanel alloc] init];
 	[panel setRequiredFileType:@"emulation"];
-	[panel beginSheetForDirectory:TEMPLATE_FOLDER
+	[panel beginSheetForDirectory:path
 							 file:nil
 				   modalForWindow:[self windowForSheet]
 					modalDelegate:self
@@ -138,6 +148,9 @@
 						  returnCode:(int)returnCode
 						 contextInfo:(void *)contextInfo
 {
+	if (returnCode != NSOKButton)
+		return;
+	
 	NSError *error;
 	if (![self writeToURL:[panel URL]
 				   ofType:nil
@@ -148,7 +161,8 @@
 - (void)makeWindowControllers
 {
 	NSWindowController *windowController;
-	windowController = [[DocumentWindowController alloc] initWithWindowNibName:@"Document"];
+	windowController = [[DocumentWindowController alloc]
+						initWithWindowNibName:@"Document"];
 	
 	[self addWindowController:windowController];
 	[windowController release];
