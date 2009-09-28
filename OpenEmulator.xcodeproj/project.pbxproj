@@ -12,6 +12,7 @@
 		00123BCC1069B8F200FB95A1 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 00E2A84D1053290200910B53 /* libxml2.dylib */; };
 		00123BCF1069B91200FB95A1 /* libzip.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00A0BA51106981A7007930A5 /* libzip.a */; };
 		001F56F90FD1E8E500EA246A /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 001F56F80FD1E8E500EA246A /* Sparkle.framework */; };
+		003E25E71070796700185260 /* images in Resources */ = {isa = PBXBuildFile; fileRef = 003E2597107075D900185260 /* images */; };
 		0043806410669AFB001CFCCF /* Package.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0043804C10668FAE001CFCCF /* Package.cpp */; };
 		004384841067641C001CFCCF /* EventController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 004384821067641C001CFCCF /* EventController.cpp */; };
 		005486CA0FDC84E500DBCFA8 /* Sparkle.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 001F56F80FD1E8E500EA246A /* Sparkle.framework */; };
@@ -32,7 +33,6 @@
 		00B334850FE41F080042661D /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B334840FE41F080042661D /* CoreAudio.framework */; };
 		00B4174D1004197300BA7E45 /* AppController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B4174C1004197300BA7E45 /* AppController.m */; };
 		00B974B410701DDA00BD1402 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = 00B974AD10701DCD00BD1402 /* sounds */; };
-		00B9774710705AF800BD1402 /* OEDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B9774610705AF800BD1402 /* OEDefines.h */; };
 		00C07E940FD28217004E0D3D /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C07E930FD28217004E0D3D /* Quartz.framework */; };
 		00C6C0C110602151004D084B /* roms in Resources */ = {isa = PBXBuildFile; fileRef = 00C6C08810602151004D084B /* roms */; };
 		00C7F1D9100BC5B500AD0812 /* IPMinus.png in Resources */ = {isa = PBXBuildFile; fileRef = 00C7F1D5100BC5B400AD0812 /* IPMinus.png */; };
@@ -154,6 +154,7 @@
 		000F66590FF8368F00C8AF23 /* TBReset.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TBReset.png; sourceTree = "<group>"; };
 		001F56F80FD1E8E500EA246A /* Sparkle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = Sparkle.framework; path = macosx/Sparkle.framework; sourceTree = "<group>"; };
 		00317E380FD31D1A007F2B00 /* AppleGraphicsTablet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppleGraphicsTablet.png; sourceTree = "<group>"; };
+		003E2597107075D900185260 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
 		0043804C10668FAE001CFCCF /* Package.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Package.cpp; path = libemulator/Package.cpp; sourceTree = "<group>"; };
 		0043804D10668FAE001CFCCF /* Package.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Package.h; path = libemulator/Package.h; sourceTree = "<group>"; };
 		004384821067641C001CFCCF /* EventController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EventController.cpp; path = libemulator/Components/EventController.cpp; sourceTree = "<group>"; };
@@ -452,6 +453,7 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				003E2597107075D900185260 /* images */,
 				00B974AD10701DCD00BD1402 /* sounds */,
 				00C6C08810602151004D084B /* roms */,
 				00C8AA0610103D6A006A5734 /* OSDPause.png */,
@@ -500,7 +502,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00B9774710705AF800BD1402 /* OEDefines.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -567,6 +568,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				003E25E71070796700185260 /* images in Resources */,
 				00B974B410701DDA00BD1402 /* sounds in Resources */,
 				00D8448A0FFF04C0005802F0 /* AppleGraphicsTablet.png in Resources */,
 				00D8448B0FFF04C0005802F0 /* DiskImage.icns in Resources */,

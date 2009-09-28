@@ -21,6 +21,7 @@
 	NSString *label;
 	NSString *description;
 	NSString *modificationDate;
+	NSString *runTime;
 	NSImage *image;
 	
 	NSMutableArray *expansions;
@@ -61,6 +62,8 @@
 - (void)setDescription:(NSString *)value;
 - (NSString *)modificationDate;
 - (void)setModificationDate:(NSString *)value;
+- (NSString *)runTime;
+- (void)setRunTime:(NSString *)value;
 - (NSImage *)image;
 - (void)setImage:(NSImage *)value;
 

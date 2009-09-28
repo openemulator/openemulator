@@ -35,11 +35,19 @@
 		dateLabel = [dateFormatter stringFromDate:[NSDate date]];
 		[dateFormatter release];
 		
+		NSString *path = [[[NSBundle mainBundle] resourcePath]
+						  stringByAppendingString:@"/images/Apple II.png"];
+		printf("%s", [path UTF8String]);
+		NSImage *theImage = [[NSImage alloc] initWithContentsOfFile:path];
+		if (theImage)
+			[theImage autorelease];
+		
 		[self setPower:false];
 		[self setLabel:@""];
 		[self setDescription:@""];
 		[self setModificationDate:dateLabel];
-		[self setImage:nil];
+		[self setRunTime:@"00:00:00"];
+		[self setImage:theImage];
 		
 		expansions = [[NSMutableArray alloc] init];
 		diskDrives = [[NSMutableArray alloc] init];
@@ -99,7 +107,19 @@
 	{
 		if (((OEEmulation *) emulation)->isOpen())
 		{
-//			xmlDocPtr dml = ((OEEmulation *) emulation)->getDML();
+			xmlDocPtr dml = ((OEEmulation *) emulation)->getDML();
+			
+			xmlNodePtr rootNode = xmlDocGetRootElement(dml);
+			
+			xmlChar *label = xmlGetProp(rootNode, BAD_CAST "label");
+			NSString *labelc = [NSString stringWithUTF8String:(const char *) label];
+			xmlFree(label);
+			[self setLabel:labelc]; 
+
+			xmlChar *desc = xmlGetProp(rootNode, BAD_CAST "description");
+			NSString *descc = [NSString stringWithUTF8String:(const char *) desc];
+			xmlFree(desc);
+			[self setDescription:descc]; 
 //			OEInfo oeInfo(dml);
 //			OEProperties properties = oeInfo.getProperties();
 			
@@ -340,6 +360,20 @@
 	{
         [modificationDate release];
         modificationDate = [value copy];
+    }
+}
+
+- (NSString *)runTime
+{
+	return runTime;
+}
+
+- (void)setRunTime:(NSString *)value
+{
+    if (runTime != value)
+	{
+        [runTime release];
+        runTime = [value copy];
     }
 }
 
