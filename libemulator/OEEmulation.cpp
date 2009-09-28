@@ -237,7 +237,7 @@ bool OEEmulation::initComponent(string deviceName, xmlNodePtr componentNode)
 	OEComponent *component = components[componentRef];
 	
 	printf("initComponent: %s\n", componentRef.c_str());
-
+	
 	for(xmlNodePtr node = componentNode->children;
 		node;
 		node = node->next)
@@ -432,7 +432,7 @@ bool OEEmulation::save(string emulationPath)
 				error = !package->writeFile(OE_DML_FILENAME, data);
 			}
 		}
-
+		
 		if (error)
 			package->remove();
 	}
@@ -445,7 +445,7 @@ int OEEmulation::ioctl(string componentRef, int message, void *data)
 	if (open)
 	{
 		OEComponent *component = components[componentRef];
-	
+		
 		if (component)
 			return component->ioctl(message, data);
 	}
