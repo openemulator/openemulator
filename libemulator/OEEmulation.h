@@ -14,10 +14,9 @@
 
 #include <libxml/tree.h>
 
+#include "OEDefines.h"
 #include "OEComponent.h"
 #include "Package.h"
-
-#define DMLINFO_FILENAME "info.xml"
 
 using namespace std;
 
@@ -48,7 +47,7 @@ private:
 	string getNodeProperty(xmlNodePtr node, string key);
 	void setNodeProperty(xmlNodePtr node, string key, string value);
 	
-	string buildComponentRef(string deviceName, string componentName);
+	string buildAbsoluteRef(string absoluteRef, string componentName);
 	string buildSourcePath(string deviceName, string src);
 	
 	bool readResource(string localPath, vector<char> &data);

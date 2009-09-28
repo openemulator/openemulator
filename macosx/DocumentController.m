@@ -69,6 +69,9 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 - (void)applicationWillFinishLaunching:(NSNotification *)notification
 {
 	printf("applicationWillFinishLaunching\n");
+	
+	if ([fDefaults boolForKey:@"OEInspectorPanelVisible"])
+		[fInspectorPanelController toggleInspectorPanel:self];
 }
 
 - (BOOL)application:(NSApplication *)theApplication
@@ -100,10 +103,7 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 - (void)applicationDidFinishLaunching:(NSNotification *)notification
 {
 	printf("applicationDidFinishLaunching\n");
-	
-//	if ([fDefaults boolForKey:@"OEInspectorPanelVisible"])
-//		[fInspectorPanelController toggleInspectorPanel:self];
-	
+			
 /*	if (Pa_Initialize() != paNoError)
 		return;
 	
@@ -122,9 +122,8 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 	
 //	Pa_Terminate();
 	
-//	NSWindow *window;
-//	window = [fInspectorPanelController window];
-//	[fDefaults setBool:[window isVisible] forKey:@"OEInspectorPanelVisible"];
+	NSWindow *window = [fInspectorPanelController window];
+	[fDefaults setBool:[window isVisible] forKey:@"OEInspectorPanelVisible"];
 }
 
 - (BOOL)validateUserInterfaceItem:(id)item

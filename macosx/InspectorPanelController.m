@@ -51,7 +51,7 @@ NSString *itemIdentifiers[] =
 	[fTabMatrix selectCellWithTag:tabTag];
 	[self setView:tabTag isInit:YES];
 	
-/*	[[NSNotificationCenter defaultCenter] addObserver:self
+	[[NSNotificationCenter defaultCenter] addObserver:self
 											 selector:@selector(inspectorPanelDidResignKey:)
 												 name:NSWindowDidResignKeyNotification
 											   object:[self window]];
@@ -59,7 +59,7 @@ NSString *itemIdentifiers[] =
     [NSApp addObserver:self
 			forKeyPath:@"mainWindow.windowController.document"
 			   options:0
-			   context:[InspectorPanelController class]];*/
+			   context:[InspectorPanelController class]];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath

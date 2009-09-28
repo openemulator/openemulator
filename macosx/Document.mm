@@ -12,6 +12,7 @@
 #import "DocumentWindowController.h"
 
 #import "OEEmulation.h"
+#import "OEInfo.h"
 
 #define TEMPLATE_FOLDER @"/Users/mressl/Library/Application Support"\
 	"/OpenEmulator/Templates/"
@@ -91,7 +92,19 @@
 	if (emulation)
 	{
 		if (((OEEmulation *) emulation)->isOpen())
+		{
+//			xmlDocPtr dml = ((OEEmulation *) emulation)->getDML();
+//			OEInfo oeInfo(dml);
+//			OEProperties properties = oeInfo.getProperties();
+			
+//			string desc = properties["description"];
+//			const char *d = desc.c_str();
+//			[self setDescription:[NSString stringWithUTF8String:d]];
+//			string description = properties["description"];
+//			[self setDescription:[NSString stringWithUTF8String:description.c_str()]];
+			
 			return YES;
+		}
 		
 		delete (OEEmulation *) emulation;
 		emulation = NULL;
@@ -204,6 +217,7 @@
 
 - (void)powerButtonReleased:(id)sender
 {
+	// To-Do: libemulation
 }
 
 - (void)resetButtonPressedAndReleased:(id)sender
@@ -220,6 +234,7 @@
 
 - (void)resetButtonReleased:(id)sender
 {
+	// To-Do: libemulation
 }
 
 - (void)pauseButtonPressed:(id)sender

@@ -32,6 +32,7 @@
 		00B334850FE41F080042661D /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B334840FE41F080042661D /* CoreAudio.framework */; };
 		00B4174D1004197300BA7E45 /* AppController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B4174C1004197300BA7E45 /* AppController.m */; };
 		00B974B410701DDA00BD1402 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = 00B974AD10701DCD00BD1402 /* sounds */; };
+		00B9774710705AF800BD1402 /* OEDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B9774610705AF800BD1402 /* OEDefines.h */; };
 		00C07E940FD28217004E0D3D /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C07E930FD28217004E0D3D /* Quartz.framework */; };
 		00C6C0C110602151004D084B /* roms in Resources */ = {isa = PBXBuildFile; fileRef = 00C6C08810602151004D084B /* roms */; };
 		00C7F1D9100BC5B500AD0812 /* IPMinus.png in Resources */ = {isa = PBXBuildFile; fileRef = 00C7F1D5100BC5B400AD0812 /* IPMinus.png */; };
@@ -186,6 +187,7 @@
 		00B4174B1004197300BA7E45 /* AppController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppController.h; sourceTree = "<group>"; };
 		00B4174C1004197300BA7E45 /* AppController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppController.m; sourceTree = "<group>"; };
 		00B974AD10701DCD00BD1402 /* sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; path = sounds; sourceTree = "<group>"; };
+		00B9774610705AF800BD1402 /* OEDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OEDefines.h; path = libemulator/OEDefines.h; sourceTree = "<group>"; };
 		00C07E350FD27CCF004E0D3D /* PRGeneral.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PRGeneral.png; sourceTree = "<group>"; };
 		00C07E930FD28217004E0D3D /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = /System/Library/Frameworks/Quartz.framework; sourceTree = "<absolute>"; };
 		00C6C08810602151004D084B /* roms */ = {isa = PBXFileReference; lastKnownFileType = folder; path = roms; sourceTree = "<group>"; };
@@ -368,6 +370,7 @@
 				0043804C10668FAE001CFCCF /* Package.cpp */,
 				0043804D10668FAE001CFCCF /* Package.h */,
 				00E2A8741053305100910B53 /* Frameworks */,
+				00B9774610705AF800BD1402 /* OEDefines.h */,
 			);
 			name = libemulator;
 			sourceTree = "<group>";
@@ -497,6 +500,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00B9774710705AF800BD1402 /* OEDefines.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -7,12 +7,11 @@
  */
 
 #include <fstream>
+
 #include <libxml/parser.h>
 
 #include "OEEmulation.h"
 #include "OEComponentFactory.h"
-
-#define COMPONENT_DATA_DEVICE_NAME "${DEVICE_NAME}"
 
 OEEmulation::OEEmulation(string emulationPath, string resourcePath)
 {
@@ -25,11 +24,11 @@ OEEmulation::OEEmulation(string emulationPath, string resourcePath)
 	if (package->isOpen())
 	{
 		vector<char> data;
-		if (package->readFile(DMLINFO_FILENAME, data))
+		if (package->readFile(OE_DML_FILENAME, data))
 		{
 			dml = xmlReadMemory(&data[0],
 								data.size(),
-								DMLINFO_FILENAME,
+								OE_DML_FILENAME,
 								NULL,
 								0);
 			
@@ -65,23 +64,29 @@ void OEEmulation::setNodeProperty(xmlNodePtr node, string key, string value)
 	xmlSetProp(node, BAD_CAST key.c_str(), BAD_CAST value.c_str());
 }
 
-string OEEmulation::buildComponentRef(string deviceName, string componentName)
+string OEEmulation::buildAbsoluteRef(string absoluteRef, string ref)
 {
-	if (componentName.size() == 0)
+	if (ref.size() == 0)
 		return string();
 	
-	if (componentName.find("::") == string::npos)
-		componentName = deviceName + "::" + componentName;
+	if (ref.find("::") == string::npos)
+	{
+		int index = absoluteRef.find("::");
+		if (index != string::npos)
+			absoluteRef = absoluteRef.substr(index);
+		
+		ref = absoluteRef + "::" + ref;
+	}
 	
-	return componentName;
+	return ref;
 }
 
 string OEEmulation::buildSourcePath(string deviceName, string src)
 {
 	// Replace COMPONENT_DATA_DEVICE_NAME with deviceName
-	int index = src.find(COMPONENT_DATA_DEVICE_NAME);
+	int index = src.find(OE_SUBSTITUTION_DEVICE_NAME);
 	if (index != string::npos)
-		src.replace(index, sizeof(COMPONENT_DATA_DEVICE_NAME) - 1, deviceName);
+		src.replace(index, sizeof(OE_SUBSTITUTION_DEVICE_NAME) - 1, deviceName);
 	
 	return src;
 }
@@ -90,7 +95,7 @@ bool OEEmulation::readResource(string localPath, vector<char> &data)
 {
 	bool error = true;
 	
-	ifstream file((resourcePath + PACKAGE_PATH_SEPARATOR + localPath).c_str());
+	ifstream file((resourcePath + OE_PATH_SEPARATOR + localPath).c_str());
 	
 	if (file.is_open())
 	{
@@ -110,6 +115,9 @@ bool OEEmulation::readResource(string localPath, vector<char> &data)
 bool OEEmulation::buildComponents()
 {
 	xmlNodePtr dmlNode = xmlDocGetRootElement(dml);
+	
+	if (getNodeProperty(dmlNode, "version") != "1.0")
+		return false;
 	
 	// Build components
 	for(xmlNodePtr deviceNode = dmlNode->children;
@@ -189,15 +197,14 @@ bool OEEmulation::queryComponents()
 
 void OEEmulation::destructComponents()
 {
-	map<string, OEComponent *>::iterator iterator;
-	for (iterator = components.begin();
-		 iterator != components.end();
-		 iterator++)
+	for (map<string, OEComponent *>::iterator i = components.begin();
+		 i != components.end();
+		 i++)
 	{
-		printf("destructComponent: %s\n", iterator->first.c_str());
+		printf("destructComponent: %s\n", i->first.c_str());
 		
-		delete iterator->second;
-		components.erase(iterator);
+		delete i->second;
+		components.erase(i);
 	}
 }
 
@@ -206,7 +213,7 @@ bool OEEmulation::buildComponent(string deviceName, xmlNodePtr componentNode)
 	string componentClass = getNodeProperty(componentNode, "class");
 	string componentName = getNodeProperty(componentNode, "name");
 	
-	string componentRef = buildComponentRef(deviceName, string(componentName));
+	string componentRef = buildAbsoluteRef(deviceName, componentName);
 	OEComponent *component = OEComponentFactory::build(string(componentClass));
 	
 	printf("buildComponent: %s\n", componentRef.c_str());
@@ -226,7 +233,7 @@ bool OEEmulation::initComponent(string deviceName, xmlNodePtr componentNode)
 {
 	string componentName = getNodeProperty(componentNode, "name");
 	
-	string componentRef = buildComponentRef(deviceName, string(componentName));
+	string componentRef = buildAbsoluteRef(deviceName, componentName);
 	OEComponent *component = components[componentRef];
 	
 	printf("initComponent: %s\n", componentRef.c_str());
@@ -264,7 +271,7 @@ bool OEEmulation::queryComponent(string deviceName, xmlNodePtr componentNode)
 {
 	string componentName = getNodeProperty(componentNode, "name");
 	
-	string componentRef = buildComponentRef(deviceName, string(componentName));
+	string componentRef = buildAbsoluteRef(deviceName, componentName);
 	OEComponent *component = components[componentRef];
 	
 	printf("queryComponent: %s\n", componentRef.c_str());
@@ -298,7 +305,7 @@ bool OEEmulation::connectComponent(string deviceName,
 	if (!ref.size())
 		return true;
 	
-	string componentRef = buildComponentRef(deviceName, ref);
+	string componentRef = buildAbsoluteRef(deviceName, ref);
 	OEComponent *connectedComponent = components[componentRef];
 	
 	if(!connectedComponent)
@@ -422,7 +429,7 @@ bool OEEmulation::save(string emulationPath)
 				
 				xmlFree(datap);
 				
-				error = !package->writeFile(DMLINFO_FILENAME, data);
+				error = !package->writeFile(OE_DML_FILENAME, data);
 			}
 		}
 

@@ -10,17 +10,17 @@
 #define _OEINFO_H
 
 #include <string>
+#include <vector>
 #include <map>
 
 #include <libxml/tree.h>
 
-#include "OEComponent.h"
-#include "Package.h"
+#include "OEDefines.h"
 
 using namespace std;
 
 typedef map<string, string> OEProperties;
-typedef map<string, OEProperties> OEPortProperties;
+typedef map<string, OEProperties> OEPorts;
 
 class OEInfo
 {
@@ -32,15 +32,26 @@ public:
 	bool isOpen();
 	
 	OEProperties getProperties();
-	OEPortProperties getInlets();
-	OEPortProperties getOutlets();
+	OEPorts getInlets();
+	OEPorts getOutlets();
 	
 private:
 	bool open;
 	
 	OEProperties properties;
-	OEPortProperties inlets;
-	OEPortProperties outlets;
+	OEPorts inlets;
+	OEPorts outlets;
+	
+	string getPathExtension(string path);
+	bool readFile(string path, vector<char> &data);
+	
+	string getNodeProperty(xmlNodePtr node, string key);
+	string buildAbsoluteRef(string absoluteRef, string ref);
+	
+	string getConnection(xmlDocPtr dml, string connectionRef);
+	
+	bool parse(xmlDocPtr dml);
+	void parsePort(OEPorts &ports, string deviceName, xmlNodePtr node);
 };
 
 #endif

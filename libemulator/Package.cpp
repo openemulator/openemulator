@@ -64,7 +64,7 @@ bool Package::readFile(string localPath, vector<char> &data)
 		
 		if (zip_stat(zip, (const char *) localPath.c_str(), 0, &zipStat) == 0)
 		{
-			if ((zipFile = zip_fopen(zip, localPath.c_str(), 0)) == NULL)
+			if ((zipFile = zip_fopen(zip, localPath.c_str(), 0)) != NULL)
 			{
 				data.resize(zipStat.size);
 				error = (zip_fread(zipFile, &data[0], zipStat.size) != zipStat.size);
@@ -112,7 +112,7 @@ bool Package::writeFile(string localPath, vector<char> &data)
 				error = (zip_add(zip, localPath.c_str(), zipSource) == -1);
 			else
 				error = (zip_replace(zip, index, zipSource) == -1);
-		
+			
 			zip_source_free(zipSource);
 		}
 	}

@@ -106,8 +106,9 @@
 	[view setHidden:YES];
 	
     NSRect windowRect = [window frame];
-    float difference = ([view frame].size.height - [[window contentView] frame].size.height) *
-		[window userSpaceScaleFactor];
+    float difference = (([view frame].size.height - 
+						[[window contentView] frame].size.height) *
+						[window userSpaceScaleFactor]);
     windowRect.origin.y -= difference;
     windowRect.size.height += difference;
 	
@@ -163,7 +164,8 @@
 
 - (IBAction)chooseTemplateSheet:(id)sender
 {
-	[userDefaults setObject:@"/Users/mressl/Apple II.emulation" forKey:@"OEDefaultTemplate"];
+	[userDefaults setObject:@"/Users/mressl/Apple II.emulation"
+					 forKey:@"OEDefaultTemplate"];
 	
 	[NSApp endSheet:fTemplateChooserSheet];
 }
