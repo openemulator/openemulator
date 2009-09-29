@@ -112,8 +112,7 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 		return;
 	
 	if (Pa_StartStream(portAudioStream) != paNoError)
-		return;
-*/
+		return;*/
 }
 
 - (void)applicationWillTerminate:(NSNotification *)notification

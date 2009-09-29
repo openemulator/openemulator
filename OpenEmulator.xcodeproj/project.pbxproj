@@ -347,9 +347,7 @@
 		005486C40FDC84B200DBCFA8 /* Other Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				00E2A84D1053290200910B53 /* libxml2.dylib */,
-				00A0BA51106981A7007930A5 /* libzip.a */,
-				00A0BA4C10698175007930A5 /* libportaudio.a */,
+				006EECA40FCA5C31003D2C8D /* libemulator.a */,
 				001F56F80FD1E8E500EA246A /* Sparkle.framework */,
 			);
 			name = "Other Frameworks";
@@ -386,9 +384,12 @@
 		1058C7A6FEA54F5311CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				00E2A84D1053290200910B53 /* libxml2.dylib */,
+				00A0BA51106981A7007930A5 /* libzip.a */,
+				00A0BA4C10698175007930A5 /* libportaudio.a */,
 				0075B1B10FE79F7E009C1DFA /* OpenGL.framework */,
-				00B334880FE41F110042661D /* CoreServices.framework */,
 				00B334840FE41F080042661D /* CoreAudio.framework */,
+				00B334880FE41F110042661D /* CoreServices.framework */,
 				00B334800FE41EFE0042661D /* AudioUnit.framework */,
 				00B3347C0FE41EF60042661D /* AudioToolbox.framework */,
 				005C7BBB0FD8ED6F00426DD0 /* Carbon.framework */,
@@ -402,7 +403,6 @@
 			isa = PBXGroup;
 			children = (
 				8D15AC370486D014006FF6A4 /* OpenEmulator.app */,
-				006EECA40FCA5C31003D2C8D /* libemulator.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -748,7 +748,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
@@ -769,7 +769,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
@@ -790,7 +790,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = "";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -819,7 +819,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CURRENT_PROJECT_VERSION = "";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				FRAMEWORK_SEARCH_PATHS = (
