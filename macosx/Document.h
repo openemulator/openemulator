@@ -17,7 +17,6 @@
 	NSPasteboard *pasteboard;
 	NSArray *pasteboardTypes;
 	
-	BOOL power;
 	NSString *label;
 	NSString *description;
 	NSString *modificationDate;
@@ -28,7 +27,6 @@
 	NSMutableArray *diskDrives;
 	NSMutableArray *peripherals;
 	
-	int videoPreset;
 	float brightness;
 	float contrast;
 	float saturation;
@@ -37,6 +35,9 @@
 	float tint;
 	
 	float volume;
+
+	BOOL power;
+	int videoPreset;
 }
 
 - (id)initFromTemplateURL:(NSURL *)templateURL error:(NSError **)outError;
@@ -66,6 +67,7 @@
 - (void)setRunTime:(NSString *)value;
 - (NSImage *)image;
 - (void)setImage:(NSImage *)value;
+- (void)setImagePath:(NSString *)imagePath;
 
 - (NSMutableArray *)expansions;
 - (void)insertObject:(id)value inExpansionsAtIndex:(NSUInteger)index;
@@ -78,9 +80,6 @@
 - (NSMutableArray *)peripherals;
 - (void)insertObject:(id)value inPeripheralsAtIndex:(NSUInteger)index;
 - (void)removeObjectFromPeripheralsAtIndex:(NSUInteger)index;
-
-- (int)videoPreset;
-- (void)setVideoPreset:(int)value;
 
 - (float)brightness;
 - (void)setBrightness:(float)value;

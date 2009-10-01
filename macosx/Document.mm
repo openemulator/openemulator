@@ -14,8 +14,7 @@
 #import "OEEmulation.h"
 #import "OEInfo.h"
 
-#define TEMPLATE_FOLDER @"/Users/mressl/Library/Application Support"\
-	"/OpenEmulator/Templates/"
+#define TEMPLATE_FOLDER @"~/Library/Application Support/Open Emulator/Templates"
 
 @implementation Document
 
@@ -28,33 +27,19 @@
 		pasteboard = [NSPasteboard generalPasteboard];
 		pasteboardTypes = [[NSArray alloc] initWithObjects:NSStringPboardType, nil];
 		
-		NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-		[dateFormatter setDateStyle:NSDateFormatterMediumStyle];
-		[dateFormatter setTimeStyle:NSDateFormatterMediumStyle];
-		NSString *dateLabel;
-		dateLabel = [dateFormatter stringFromDate:[NSDate date]];
-		[dateFormatter release];
-		
-		NSString *path = [[[NSBundle mainBundle] resourcePath]
-						  stringByAppendingString:@"/images/Apple II.png"];
-		printf("%s", [path UTF8String]);
-		NSImage *theImage = [[NSImage alloc] initWithContentsOfFile:path];
-		if (theImage)
-			[theImage autorelease];
-		
 		[self setPower:false];
-		[self setLabel:@""];
-		[self setDescription:@""];
-		[self setModificationDate:dateLabel];
-		[self setRunTime:@"00:00:00"];
-		[self setImage:theImage];
+		[self setLabel:nil];
+		[self setDescription:nil];
+		[self setModificationDate:nil];
+		[self setRunTime:nil];
+		[self setImage:nil];
 		
 		expansions = [[NSMutableArray alloc] init];
 		diskDrives = [[NSMutableArray alloc] init];
 		peripherals = [[NSMutableArray alloc] init];
 		
 		// To-Do: [self setVideoPreset:x];
-		[self setVolume:1.0f];
+		[self setVolume:nanf("")];
 	}
 	
 	return self;
@@ -63,7 +48,7 @@
 - (id)initFromTemplateURL:(NSURL *)absoluteURL
 					error:(NSError **)outError
 {
-	printf("initFromTemplateURL\n");
+//	printf("initFromTemplateURL\n");
 	if ([self init])
 	{
 		if ([self readFromURL:absoluteURL
@@ -80,8 +65,7 @@
 
 - (void)dealloc
 {
-	printf("dealloc\n");
-	
+//	printf("dealloc\n");
 	[pasteboardTypes release];
 	
 	if (emulation)
@@ -90,11 +74,52 @@
 	[super dealloc];
 }
 
+- (void) setDMLProperty:(NSString *)key value:(NSString *)value
+{
+	if (!emulation)
+		return;
+	
+	xmlDocPtr dml = ((OEEmulation *) emulation)->getDML();
+	
+	xmlNodePtr rootNode = xmlDocGetRootElement(dml);
+	
+	xmlSetProp(rootNode, BAD_CAST [key UTF8String], BAD_CAST [value UTF8String]);
+}
+
+- (NSString *) getDMLProperty:(NSString *)key
+{
+	if (!emulation)
+		return nil;
+	
+	xmlDocPtr dml = ((OEEmulation *) emulation)->getDML();
+	
+	xmlNodePtr rootNode = xmlDocGetRootElement(dml);
+	
+	xmlChar *valuec = xmlGetProp(rootNode, BAD_CAST [key UTF8String]);
+	NSString *value = [NSString stringWithUTF8String:(const char *) valuec];
+	xmlFree(valuec);
+	
+	return value;
+}
+
+- (NSImage *) getResourceImage:(NSString *)imagePath
+{
+	NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
+	NSString *path = [[resourcePath
+					   stringByAppendingString:@"/images/"]
+					  stringByAppendingString:imagePath];
+	NSImage *theImage = [[NSImage alloc] initWithContentsOfFile:path];
+	if (theImage)
+		[theImage autorelease];
+	
+	return theImage;
+}
+
 - (BOOL)readFromURL:(NSURL *)absoluteURL
 			 ofType:(NSString *)typeName
 			  error:(NSError **)outError
 {
-	printf("readFromURL\n");
+//	printf("readFromURL\n");
 	const char *emulationPath = [[absoluteURL path] UTF8String];
 	const char *resourcePath = [[[NSBundle mainBundle] resourcePath] UTF8String];
 	
@@ -107,27 +132,12 @@
 	{
 		if (((OEEmulation *) emulation)->isOpen())
 		{
-			xmlDocPtr dml = ((OEEmulation *) emulation)->getDML();
+			[self setLabel:[self getDMLProperty:@"label"]];
+			[self setDescription:[self getDMLProperty:@"description"]];
+			[self setImage:[self getResourceImage:[self getDMLProperty:@"image"]]];
 			
-			xmlNodePtr rootNode = xmlDocGetRootElement(dml);
-			
-			xmlChar *label = xmlGetProp(rootNode, BAD_CAST "label");
-			NSString *labelc = [NSString stringWithUTF8String:(const char *) label];
-			xmlFree(label);
-			[self setLabel:labelc]; 
-
-			xmlChar *desc = xmlGetProp(rootNode, BAD_CAST "description");
-			NSString *descc = [NSString stringWithUTF8String:(const char *) desc];
-			xmlFree(desc);
-			[self setDescription:descc]; 
-//			OEInfo oeInfo(dml);
-//			OEProperties properties = oeInfo.getProperties();
-			
-//			string desc = properties["description"];
-//			const char *d = desc.c_str();
-//			[self setDescription:[NSString stringWithUTF8String:d]];
-//			string description = properties["description"];
-//			[self setDescription:[NSString stringWithUTF8String:description.c_str()]];
+//			[self updateRuntime];
+//			[self updateDevices];
 			
 			return YES;
 		}
@@ -146,7 +156,7 @@
 			ofType:(NSString *)typeName
 			 error:(NSError **)outError
 {
-	printf("writeToURL\n");
+//	printf("writeToURL\n");
 	const char *emulationPath = [[[absoluteURL path] stringByAppendingString:@"/"]
 								 UTF8String];
 	if (emulation)
@@ -161,10 +171,24 @@
 	return NO;
 }
 
+- (void)setFileModificationDate:(NSDate *)date
+{
+	[super setFileModificationDate:date];
+
+	// Update modificationDate
+	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+	[dateFormatter setDateStyle:NSDateFormatterMediumStyle];
+	[dateFormatter setTimeStyle:NSDateFormatterMediumStyle];
+	NSString *value;
+	value = [dateFormatter stringFromDate:date];
+	[dateFormatter release];
+	
+	[self setModificationDate:value];
+}
+
 - (IBAction)saveDocumentAsTemplate:(id)sender
 {
-	NSString *path = @"~/Library/Application Support/Open Emulator/Templates";
-	path = [path stringByExpandingTildeInPath];
+	NSString *path = [TEMPLATE_FOLDER stringByExpandingTildeInPath];
 	
 	NSFileManager *fileManager = [NSFileManager defaultManager];
 	if (![fileManager fileExistsAtPath:path])
@@ -179,7 +203,8 @@
 							 file:nil
 				   modalForWindow:[self windowForSheet]
 					modalDelegate:self
-				   didEndSelector:@selector(saveDocumentAsTemplateDidEnd:returnCode:contextInfo:)
+				   didEndSelector:@selector(saveDocumentAsTemplateDidEnd:
+											returnCode:contextInfo:)
 					  contextInfo:nil];
 }
 
@@ -237,8 +262,8 @@
 
 - (void)powerButtonPressed:(id)sender
 {
-	[self setPower:![self power]];
 	// To-Do: libemulation
+	[self setPower:![self power]];
 }
 
 - (void)powerButtonReleased:(id)sender
@@ -255,7 +280,6 @@
 - (void)resetButtonPressed:(id)sender
 {
 	// To-Do: libemulation
-	[self updateChangeCount:NSChangeDone];
 }
 
 - (void)resetButtonReleased:(id)sender
@@ -288,17 +312,9 @@
 	if ([self isPasteValid])
 	{
 		NSString *text = [pasteboard stringForType:NSStringPboardType];
-		NSMutableString *mutableText = [NSMutableString 
-										stringWithString:text];
-		
-		// To-Do: Convert newlines in libemulator
-		[mutableText replaceOccurrencesOfString:@"\n"
-									 withString:@"\r"
-										options:NSLiteralSearch
-										  range:NSMakeRange(0, [text length])];
 		
 		// To-do: Send to libemulator
-		// (using [mutableText cStringUsingEncoding:NSASCIIStringEncoding])
+		// (using [text UTF8String])
 	}
 }
 
@@ -344,6 +360,11 @@
 {
     if (description != value)
 	{
+		if (description && value)
+			[self updateChangeCount:NSChangeDone];
+		
+		[self setDMLProperty:@"description" value:value];
+		
         [description release];
         description = [value copy];
     }
@@ -436,17 +457,6 @@
     [peripherals removeObjectAtIndex:index];
 }
 
-- (int)videoPreset
-{
-	return videoPreset;
-}
-
-- (void)setVideoPreset:(int)value
-{
-    if (videoPreset != value)
-		videoPreset = value;
-}
-
 - (float)brightness
 {
 	return brightness;
@@ -521,7 +531,12 @@
 - (void)setVolume:(float)value
 {
     if (volume != value)
-		volume = value;
+	{
+		if (isnan(volume) && value)
+			[self updateChangeCount:NSChangeDone];
+		
+        volume = value;
+	}
 }
 
 @end

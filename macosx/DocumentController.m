@@ -20,16 +20,14 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 							 PaStreamCallbackFlags statusFlags,
 							 void *userData)
 {
-	return paContinue;
-	
-//	float *in = (float *)inputBuffer;
+	float *in = (float *)inputBuffer;
 	float *out = (float *)outputBuffer;
 	unsigned int i;
 	
 	for(i = 0; i < framesPerBuffer; i++)
 	{
-		*out++ = (rand() & 0xffff) / 65535.0f / 16;
-		*out++ = (rand() & 0xffff) / 65535.0f / 16;
+		*out++ = (rand() & 0xffff) / 65535.0f / 256;
+		*out++ = (rand() & 0xffff) / 65535.0f / 256;
 	}
 	
 	return paContinue;
@@ -97,14 +95,23 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 	
 	// To-Do: Mount disk image
 	
-	return NO;
+	NSAlert *alert = [[NSAlert alloc] init];
+	[alert setMessageText:[NSString localizedStringWithFormat:
+						   @"The document \u201C%@\u201D could not be opened. "
+						   "This emulation cannot open files in this format.",
+						   [filename lastPathComponent]]];
+	[alert setAlertStyle:NSCriticalAlertStyle];
+	[alert runModal];
+	[alert release];
+	
+	return YES;
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)notification
 {
 	printf("applicationDidFinishLaunching\n");
-			
-/*	if (Pa_Initialize() != paNoError)
+	
+	if (Pa_Initialize() != paNoError)
 		return;
 	
 	if (Pa_OpenDefaultStream(&portAudioStream, 2, 2, paFloat32,
@@ -112,14 +119,14 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 		return;
 	
 	if (Pa_StartStream(portAudioStream) != paNoError)
-		return;*/
+		return;
 }
 
 - (void)applicationWillTerminate:(NSNotification *)notification
 {
 	printf("applicationWillTerminate\n");
 	
-//	Pa_Terminate();
+	Pa_Terminate();
 	
 	NSWindow *window = [fInspectorPanelController window];
 	[fDefaults setBool:[window isVisible] forKey:@"OEInspectorPanelVisible"];
@@ -171,7 +178,7 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 		
 		if (!defaultTemplate)
 		{
-			*outError = [NSError errorWithDomain:@"emulatorDomain"
+			*outError = [NSError errorWithDomain:@"libemulator"
 											code:0
 										userInfo:nil];
 			return nil;
