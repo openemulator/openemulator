@@ -20,7 +20,7 @@
 using namespace std;
 
 typedef map<string, string> OEProperties;
-typedef map<string, OEProperties> OEPorts;
+typedef map<string, OEProperties *> OEPorts;
 
 class OEInfo
 {
@@ -31,9 +31,9 @@ public:
 	
 	bool isOpen();
 	
-	OEProperties getProperties();
-	OEPorts getInlets();
-	OEPorts getOutlets();
+	OEProperties *getProperties();
+	OEPorts *getInlets();
+	OEPorts *getOutlets();
 	
 private:
 	bool open;

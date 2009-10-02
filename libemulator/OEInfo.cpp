@@ -58,6 +58,15 @@ OEInfo::OEInfo(xmlDocPtr dml)
 
 OEInfo::~OEInfo()
 {
+	for (OEPorts::iterator i = inlets.begin();
+		 i != inlets.end();
+		 i++)
+		delete i->second;
+	
+	for (OEPorts::iterator i = outlets.begin();
+		 i != outlets.end();
+		 i++)
+		delete i->second;
 }
 
 string OEInfo::getPathExtension(string path)
@@ -218,8 +227,8 @@ bool OEInfo::parse(xmlDocPtr dml)
 		
 		if (outlets.count(outletRef))
 		{
-			inlets[inletRef]["connected"] = "1";
-			outlets[outletRef]["connected"] = "1";
+			(*(inlets[inletRef]))["connected"] = "1";
+			(*(outlets[outletRef]))["connected"] = "1";
 		}
 	}
 	
@@ -230,12 +239,12 @@ void OEInfo::parsePort(OEPorts &ports, string deviceName, xmlNodePtr node)
 {
 	string ref = buildAbsoluteRef(deviceName, getNodeProperty(node, "ref"));
 	
-	OEProperties &properties = ports[ref];
-	properties["type"] = getNodeProperty(node, "type");
-	properties["subtype"] = getNodeProperty(node, "subtype");
-	properties["label"] = getNodeProperty(node, "label");
-	properties["image"] = getNodeProperty(node, "image");
-	properties["connected"] = "0";
+	OEProperties *properties = ports[ref];
+	(*properties)["type"] = getNodeProperty(node, "type");
+	(*properties)["subtype"] = getNodeProperty(node, "subtype");
+	(*properties)["label"] = getNodeProperty(node, "label");
+	(*properties)["image"] = getNodeProperty(node, "image");
+	(*properties)["connected"] = "0";
 }
 
 bool OEInfo::isOpen()
@@ -243,18 +252,17 @@ bool OEInfo::isOpen()
 	return open;
 }
 
-OEProperties OEInfo::getProperties()
+OEProperties *OEInfo::getProperties()
 {
-	OEProperties properties;
-	return properties;
+	return &properties;
 }
 
-OEPorts OEInfo::getInlets()
+OEPorts *OEInfo::getInlets()
 {
-	return inlets;
+	return &inlets;
 }
 
-OEPorts OEInfo::getOutlets()
+OEPorts *OEInfo::getOutlets()
 {
-	return outlets;
+	return &outlets;
 }

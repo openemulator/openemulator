@@ -56,32 +56,5 @@ private:
 
 // Note: move pause and power off images to libemulator
 
-enum {
-	IOCTL_SETCONNECTION,
-	IOCTL_SETPROPERTY,
-	IOCTL_GETPROPERTY,
-	IOCTL_SETDATA,
-	IOCTL_GETDATA,
-	IOCTL_SETRESOURCE,
-	IOCTL_EVENT,
-};
-
-struct IOCTLConnection
-{
-	string key;
-	OEComponent *component;
-};
-
-struct IOCTLProperty
-{
-	string key;
-	string value;
-};
-
-struct IOCTLData
-{
-	string key;
-	vector<char> data;
-};
 
 #endif

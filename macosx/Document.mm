@@ -27,19 +27,19 @@
 		pasteboard = [NSPasteboard generalPasteboard];
 		pasteboardTypes = [[NSArray alloc] initWithObjects:NSStringPboardType, nil];
 		
-		[self setPower:false];
-		[self setLabel:nil];
-		[self setDescription:nil];
-		[self setModificationDate:nil];
-		[self setRunTime:nil];
-		[self setImage:nil];
+		power = false;
+		label = nil;
+		description = nil;
+		modificationDate = nil;
+		runTime = nil;
+		image = nil;
 		
 		expansions = [[NSMutableArray alloc] init];
 		diskDrives = [[NSMutableArray alloc] init];
 		peripherals = [[NSMutableArray alloc] init];
 		
 		// To-Do: [self setVideoPreset:x];
-		[self setVolume:nanf("")];
+		volume = nil;
 	}
 	
 	return self;
@@ -102,6 +102,38 @@
 	return value;
 }
 
+- (void) setIoctlProperty:(NSString *)key ref:(NSString *)ref value:(NSString *)value
+{
+	if (!emulation)
+		return;
+	
+	OEIoctlProperty property;
+	
+	property.key = string([key UTF8String]);
+	property.value = string([value UTF8String]);
+	
+	((OEEmulation *)emulation)->ioctl(string([ref UTF8String]),
+									  OEIoctlSetProperty,
+									  &property);
+}
+
+- (NSString *) getIoctlProperty:(NSString *)key ref:(NSString *)ref
+{
+	if (!emulation)
+		return nil;
+	
+	OEIoctlProperty msg;
+	
+	msg.key = string([key UTF8String]);
+	
+	if (((OEEmulation *)emulation)->ioctl(string([ref UTF8String]),
+									  OEIoctlGetProperty,
+									  &msg))
+		return [NSString stringWithCString:msg.value.c_str()];
+	else
+		return nil;
+}
+
 - (NSImage *) getResourceImage:(NSString *)imagePath
 {
 	NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
@@ -113,6 +145,20 @@
 		[theImage autorelease];
 	
 	return theImage;
+}
+
+- (void) updateRunTime
+{
+	NSString *property = [self getIoctlProperty:@"runTime" ref:@"host::events"];
+	int timeDifference = [property intValue];
+	
+	int seconds = timeDifference % 60;
+	int minutes = (timeDifference / 60) % 60; 
+	int hours = (timeDifference / 3600) % 3600;
+	
+	NSString *value = [NSString stringWithFormat:@"%d:%02d:%02d", hours,  minutes, seconds];
+	
+	[self setRunTime:value];
 }
 
 - (BOOL)readFromURL:(NSURL *)absoluteURL
@@ -134,9 +180,17 @@
 		{
 			[self setLabel:[self getDMLProperty:@"label"]];
 			[self setDescription:[self getDMLProperty:@"description"]];
+			[self updateRunTime];
 			[self setImage:[self getResourceImage:[self getDMLProperty:@"image"]]];
 			
-//			[self updateRuntime];
+			[self setBrightness:[NSNumber numberWithFloat:0.0F]];
+			[self setContrast:[NSNumber numberWithFloat:0.0F]];
+			[self setSharpness:[NSNumber numberWithFloat:0.0F]];
+			[self setSaturation:[NSNumber numberWithFloat:0.0F]];
+			[self setTemperature:[NSNumber numberWithFloat:0.0F]];
+			[self setTint:[NSNumber numberWithFloat:0.0F]];
+
+			[self setVolume:[NSNumber numberWithFloat:1.0F]];
 //			[self updateDevices];
 			
 			return YES;
@@ -175,11 +229,10 @@
 {
 	[super setFileModificationDate:date];
 
-	// Update modificationDate
+	NSString *value;
 	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
 	[dateFormatter setDateStyle:NSDateFormatterMediumStyle];
 	[dateFormatter setTimeStyle:NSDateFormatterMediumStyle];
-	NSString *value;
 	value = [dateFormatter stringFromDate:date];
 	[dateFormatter release];
 	
@@ -360,7 +413,7 @@
 {
     if (description != value)
 	{
-		if (description && value)
+		if (description)
 			[self updateChangeCount:NSChangeDone];
 		
 		[self setDMLProperty:@"description" value:value];
@@ -457,86 +510,123 @@
     [peripherals removeObjectAtIndex:index];
 }
 
-- (float)brightness
+- (NSNumber *)brightness
 {
-	return brightness;
+	return [[brightness retain] autorelease];
 }
 
-- (void)setBrightness:(float)value
+- (void)setBrightness:(NSNumber *)value
 {
     if (brightness != value)
-		brightness = value;
+	{
+		if (brightness)
+			[self updateChangeCount:NSChangeDone];
+		
+        [brightness release];
+        brightness = [value copy];
+    }
 }
 
-- (float)contrast
+- (NSNumber *)contrast
 {
-	return contrast;
+	return [[contrast retain] autorelease];
 }
 
-- (void)setContrast:(float)value
+- (void)setContrast:(NSNumber *)value
 {
     if (contrast != value)
-		contrast = value;
+	{
+		if (contrast)
+			[self updateChangeCount:NSChangeDone];
+		
+        [contrast release];
+        contrast = [value copy];
+    }
 }
 
-- (float)saturation
+- (NSNumber *)sharpness
 {
-	return saturation;
+	return [[sharpness retain] autorelease];
 }
 
-- (void)setSaturation:(float)value
-{
-    if (saturation != value)
-		saturation = value;
-}
-
-- (float)sharpness
-{
-	return sharpness;
-}
-
-- (void)setSharpness:(float)value
+- (void)setSharpness:(NSNumber *)value
 {
     if (sharpness != value)
-		sharpness = value;
+	{
+		if (sharpness)
+			[self updateChangeCount:NSChangeDone];
+		
+        [sharpness release];
+        sharpness = [value copy];
+    }
 }
 
-- (float)temperature
+- (NSNumber *)saturation
 {
-	return temperature;
+	return [[saturation retain] autorelease];
 }
 
-- (void)setTemperature:(float)value
+- (void)setSaturation:(NSNumber *)value
+{
+    if (saturation != value)
+	{
+		if (saturation)
+			[self updateChangeCount:NSChangeDone];
+		
+        [saturation release];
+        saturation = [value copy];
+    }
+}
+
+- (NSNumber *)temperature
+{
+	return [[temperature retain] autorelease];
+}
+
+- (void)setTemperature:(NSNumber *)value
 {
     if (temperature != value)
-		temperature = value;
+	{
+		if (temperature)
+			[self updateChangeCount:NSChangeDone];
+		
+        [temperature release];
+        temperature = [value copy];
+    }
 }
 
-- (float)tint
+- (NSNumber *)tint
 {
-	return tint;
+	return [[tint retain] autorelease];
 }
 
-- (void)setTint:(float)value
+- (void)setTint:(NSNumber *)value
 {
     if (tint != value)
-		tint = value;
+	{
+		if (tint)
+			[self updateChangeCount:NSChangeDone];
+		
+        [tint release];
+        tint = [value copy];
+    }
 }
 
-- (float)volume
+- (NSNumber *)volume
 {
-	return volume;
+	return [[volume retain] autorelease];
 }
 
-- (void)setVolume:(float)value
+- (void)setVolume:(NSNumber *)value
 {
     if (volume != value)
 	{
-		if (isnan(volume) && value)
+		if (volume)
 			[self updateChangeCount:NSChangeDone];
 		
-        volume = value;
-	}
+        [volume release];
+        volume = [value copy];
+    }
 }
 
 @end

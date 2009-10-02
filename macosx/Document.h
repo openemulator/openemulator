@@ -27,14 +27,14 @@
 	NSMutableArray *diskDrives;
 	NSMutableArray *peripherals;
 	
-	float brightness;
-	float contrast;
-	float saturation;
-	float sharpness;
-	float temperature;
-	float tint;
+	NSNumber *brightness;
+	NSNumber *contrast;
+	NSNumber *sharpness;
+	NSNumber *saturation;
+	NSNumber *temperature;
+	NSNumber *tint;
 	
-	float volume;
+	NSNumber *volume;
 
 	BOOL power;
 	int videoPreset;
@@ -67,7 +67,6 @@
 - (void)setRunTime:(NSString *)value;
 - (NSImage *)image;
 - (void)setImage:(NSImage *)value;
-- (void)setImagePath:(NSString *)imagePath;
 
 - (NSMutableArray *)expansions;
 - (void)insertObject:(id)value inExpansionsAtIndex:(NSUInteger)index;
@@ -81,19 +80,20 @@
 - (void)insertObject:(id)value inPeripheralsAtIndex:(NSUInteger)index;
 - (void)removeObjectFromPeripheralsAtIndex:(NSUInteger)index;
 
-- (float)brightness;
-- (void)setBrightness:(float)value;
-- (float)contrast;
-- (void)setContrast:(float)value;
-- (float)saturation;
-- (void)setSaturation:(float)value;
-- (float)sharpness;
-- (void)setSharpness:(float)value;
-- (float)temperature;
-- (void)setTemperature:(float)value;
-- (float)tint;
-- (void)setTint:(float)value;
-- (float)volume;
-- (void)setVolume:(float)value;
+- (NSNumber *)brightness;
+- (void)setBrightness:(NSNumber *)value;
+- (NSNumber *)contrast;
+- (void)setContrast:(NSNumber *)value;
+- (NSNumber *)sharpness;
+- (void)setSharpness:(NSNumber *)value;
+- (NSNumber *)saturation;
+- (void)setSaturation:(NSNumber *)value;
+- (NSNumber *)temperature;
+- (void)setTemperature:(NSNumber *)value;
+- (NSNumber *)tint;
+- (void)setTint:(NSNumber *)value;
+
+- (NSNumber *)volume;
+- (void)setVolume:(NSNumber *)value;
 
 @end

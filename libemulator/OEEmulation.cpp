@@ -15,7 +15,7 @@
 
 OEEmulation::OEEmulation(string emulationPath, string resourcePath)
 {
-	printf("constructor\n");
+//	printf("OEEmulation::construct\n");
 	dml = NULL;
 	open = false;
 	
@@ -43,7 +43,7 @@ OEEmulation::OEEmulation(string emulationPath, string resourcePath)
 
 OEEmulation::~OEEmulation()
 {
-	printf("destructor\n");
+//	printf("OEEmulation::destruct\n");
 	if (dml)
 		xmlFreeDoc(dml);
 	
@@ -201,7 +201,7 @@ void OEEmulation::destructComponents()
 		 i != components.end();
 		 i++)
 	{
-		printf("destructComponent: %s\n", i->first.c_str());
+//		printf("OEEmulation::destructComponent: %s\n", i->first.c_str());
 		
 		delete i->second;
 		components.erase(i);
@@ -216,7 +216,7 @@ bool OEEmulation::buildComponent(string deviceName, xmlNodePtr componentNode)
 	string componentRef = buildAbsoluteRef(deviceName, componentName);
 	OEComponent *component = OEComponentFactory::build(string(componentClass));
 	
-	printf("buildComponent: %s\n", componentRef.c_str());
+//	printf("OEEmulation::buildComponent: %s\n", componentRef.c_str());
 	
 	if (component)
 	{
@@ -236,7 +236,7 @@ bool OEEmulation::initComponent(string deviceName, xmlNodePtr componentNode)
 	string componentRef = buildAbsoluteRef(deviceName, componentName);
 	OEComponent *component = components[componentRef];
 	
-	printf("initComponent: %s\n", componentRef.c_str());
+//	printf("OEEmulation::initComponent: %s\n", componentRef.c_str());
 	
 	for(xmlNodePtr node = componentNode->children;
 		node;
@@ -274,7 +274,7 @@ bool OEEmulation::queryComponent(string deviceName, xmlNodePtr componentNode)
 	string componentRef = buildAbsoluteRef(deviceName, componentName);
 	OEComponent *component = components[componentRef];
 	
-	printf("queryComponent: %s\n", componentRef.c_str());
+//	printf("OEEmulation::queryComponent: %s\n", componentRef.c_str());
 	
 	for(xmlNodePtr node = componentNode->children;
 		node;
@@ -311,11 +311,11 @@ bool OEEmulation::connectComponent(string deviceName,
 	if(!connectedComponent)
 		return false;
 	
-	struct IOCTLConnection ioctl;
-	ioctl.key = key;
-	ioctl.component = connectedComponent;
+	OEIoctlConnection msg;
+	msg.key = key;
+	msg.component = connectedComponent;
 	
-	component->ioctl(IOCTL_SETCONNECTION, &ioctl);
+	component->ioctl(OEIoctlSetConnection, &msg);
 	
 	return true;
 }
@@ -326,11 +326,11 @@ bool OEEmulation::setComponentProperty(OEComponent *component,
 	string key = getNodeProperty(propertyNode, "key");
 	string value = getNodeProperty(propertyNode, "value");
 	
-	struct IOCTLProperty ioctl;
-	ioctl.key = key;
-	ioctl.value = value;
+	OEIoctlProperty msg;
+	msg.key = key;
+	msg.value = value;
 	
-	component->ioctl(IOCTL_SETPROPERTY, &ioctl);
+	component->ioctl(OEIoctlSetProperty, &msg);
 	
 	return true;
 }
@@ -340,11 +340,11 @@ bool OEEmulation::getComponentProperty(OEComponent *component,
 {
 	string key = getNodeProperty(propertyNode, "key");
 	
-	struct IOCTLProperty ioctl;
-	ioctl.key = key;
+	OEIoctlProperty msg;
+	msg.key = key;
 	
-	if (component->ioctl(IOCTL_GETPROPERTY, &ioctl))
-		setNodeProperty(propertyNode, "value", ioctl.value);
+	if (component->ioctl(OEIoctlGetProperty, &msg))
+		setNodeProperty(propertyNode, "value", msg.value);
 	
 	return true;
 }
@@ -357,11 +357,11 @@ bool OEEmulation::setComponentData(string deviceName,
 	string src = buildSourcePath(deviceName,
 								 getNodeProperty(dataNode, "src"));
 	
-	struct IOCTLData ioctl;
-	ioctl.key = key;
+	OEIoctlData msg;
+	msg.key = key;
 	
-	if (package->readFile(src, ioctl.data))
-		component->ioctl(IOCTL_SETDATA, &ioctl);
+	if (package->readFile(src, msg.data))
+		component->ioctl(OEIoctlSetData, &msg);
 	
 	return true;
 }
@@ -374,12 +374,12 @@ bool OEEmulation::getComponentData(string deviceName,
 	string src = buildSourcePath(deviceName, 
 								 getNodeProperty(dataNode, "src"));
 	
-	struct IOCTLData ioctl;
-	ioctl.key = key;
+	OEIoctlData msg;
+	msg.key = key;
 	
-	if (component->ioctl(IOCTL_GETDATA, &ioctl))
+	if (component->ioctl(OEIoctlGetData, &msg))
 	{
-		if (!package->writeFile(src, ioctl.data))
+		if (!package->writeFile(src, msg.data))
 			return false;
 	}
 	
@@ -392,14 +392,13 @@ bool OEEmulation::setComponentResource(OEComponent *component,
 	string key = getNodeProperty(resourceNode, "key");
 	string src = getNodeProperty(resourceNode, "src");
 	
-	struct IOCTLData ioctl;
-	ioctl.key = key;
-	ioctl.data = vector<char>();
+	OEIoctlData msg;
+	msg.key = key;
 	
-	if (!readResource(src, ioctl.data))
+	if (!readResource(src, msg.data))
 		return false;
 	
-	component->ioctl(IOCTL_SETDATA, &ioctl);
+	component->ioctl(OEIoctlSetData, &msg);
 	
 	return true;
 }

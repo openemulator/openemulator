@@ -46,8 +46,10 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 					 @"dsk", @"do", @"d13", @"po", @"img", @"cpm", @"nib", @"v2d",
 					 @"vdsk",
 					 @"2mg", @"2img", @"hdv", @"sdk",
-					 @"shk", @"img",
 					 @"fdi",
+					 @"d64", @"g64", @"d64", @"d71", @"d81", @"t64",
+					 @"tap", @"prg", @"p00", @"crt",
+					 @"iso", @"cdr",
 					 nil];
 		
 		isTemplateChooserWindowOpen = NO;
@@ -66,7 +68,7 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 
 - (void)applicationWillFinishLaunching:(NSNotification *)notification
 {
-	printf("applicationWillFinishLaunching\n");
+//	printf("applicationWillFinishLaunching\n");
 	
 	if ([fDefaults boolForKey:@"OEInspectorPanelVisible"])
 		[fInspectorPanelController toggleInspectorPanel:self];
@@ -75,7 +77,7 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 - (BOOL)application:(NSApplication *)theApplication
 		   openFile:(NSString *)filename
 {
-	printf("openFile\n");
+//	printf("openFile\n");
 	if ([[filename pathExtension] compare:@"emulation"] == NSOrderedSame)
 		return NO;
 	
@@ -109,17 +111,20 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 
 - (void)applicationDidFinishLaunching:(NSNotification *)notification
 {
-	printf("applicationDidFinishLaunching\n");
+//	printf("applicationDidFinishLaunching\n");
 	
-	if (Pa_Initialize() != paNoError)
-		return;
+	int error;
+	if ((error = Pa_Initialize()) == paNoError)
+		if ((error = Pa_OpenDefaultStream(&portAudioStream, 
+										  0, 2, paFloat32,
+										  48000, 512,
+										  portAudioCallback, self)) == paNoError)
+			if ((error = Pa_StartStream(portAudioStream)) == paNoError)
+				return;
 	
-	if (Pa_OpenDefaultStream(&portAudioStream, 2, 2, paFloat32,
-							 48000, 512, portAudioCallback, self) != paNoError)
-		return;
+	fprintf(stderr, "portaudio: error %d\n", error);
 	
-	if (Pa_StartStream(portAudioStream) != paNoError)
-		return;
+	return;
 }
 
 - (void)applicationWillTerminate:(NSNotification *)notification
