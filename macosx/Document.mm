@@ -10,6 +10,7 @@
 
 #import "Document.h"
 #import "DocumentWindowController.h"
+#import "InspectorCell.h"
 
 #import "OEEmulation.h"
 #import "OEInfo.h"
@@ -129,7 +130,7 @@
 	if (((OEEmulation *)emulation)->ioctl(string([ref UTF8String]),
 									  OEIoctlGetProperty,
 									  &msg))
-		return [NSString stringWithCString:msg.value.c_str()];
+		return [NSString stringWithUTF8String:msg.value.c_str()];
 	else
 		return nil;
 }
@@ -156,9 +157,42 @@
 	int minutes = (timeDifference / 60) % 60; 
 	int hours = (timeDifference / 3600) % 3600;
 	
-	NSString *value = [NSString stringWithFormat:@"%d:%02d:%02d", hours,  minutes, seconds];
+	NSString *value = [NSString stringWithFormat:@"%d:%02d:%02d",
+					   hours,  minutes, seconds];
 	
 	[self setRunTime:value];
+}
+
+- (void) updateDevices
+{
+	OEInfo info(((OEEmulation *) emulation)->getDML());
+	if (!info.isOpen())
+		return;
+	
+	OEPorts *outlets = info.getInlets();
+	
+	for (OEPorts::iterator o = outlets->begin();
+		 o != outlets->end();
+		 o++)
+	{
+		if (o->type == "expansion")
+		{
+			[self insertObject:[[[InspectorCell alloc] init] autorelease]
+		   inExpansionsAtIndex:0];
+		}
+		else if (o->type == "diskdrive")
+		{
+			[self insertObject:[[[InspectorCell alloc] init] autorelease]
+		   inDiskDrivesAtIndex:0];
+		}
+		else if (o->type == "peripheral")
+		{
+			[self insertObject:[[[InspectorCell alloc] init] autorelease]
+		   inPeripheralsAtIndex:0];
+		}
+	}
+	
+	return;
 }
 
 - (BOOL)readFromURL:(NSURL *)absoluteURL
@@ -183,6 +217,8 @@
 			[self updateRunTime];
 			[self setImage:[self getResourceImage:[self getDMLProperty:@"image"]]];
 			
+			[self updateDevices];
+			
 			[self setBrightness:[NSNumber numberWithFloat:0.0F]];
 			[self setContrast:[NSNumber numberWithFloat:0.0F]];
 			[self setSharpness:[NSNumber numberWithFloat:0.0F]];
@@ -191,7 +227,6 @@
 			[self setTint:[NSNumber numberWithFloat:0.0F]];
 
 			[self setVolume:[NSNumber numberWithFloat:1.0F]];
-//			[self updateDevices];
 			
 			return YES;
 		}

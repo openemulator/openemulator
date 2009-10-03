@@ -129,7 +129,7 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 
 - (void)applicationWillTerminate:(NSNotification *)notification
 {
-	printf("applicationWillTerminate\n");
+//	printf("applicationWillTerminate\n");
 	
 	Pa_Terminate();
 	

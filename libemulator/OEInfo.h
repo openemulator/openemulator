@@ -11,7 +11,6 @@
 
 #include <string>
 #include <vector>
-#include <map>
 
 #include <libxml/tree.h>
 
@@ -19,8 +18,25 @@
 
 using namespace std;
 
-typedef map<string, string> OEProperties;
-typedef map<string, OEProperties *> OEPorts;
+typedef struct
+{
+	string label;
+	string image;
+	string description;
+	string group;
+} OEProperties;
+
+typedef struct
+{
+	string ref;
+	string type;
+	string subtype;
+	string label;
+	string image;
+	bool connected;
+} OEPortProperties;
+
+typedef vector<OEPortProperties> OEPorts;
 
 class OEInfo
 {
@@ -48,10 +64,13 @@ private:
 	string getNodeProperty(xmlNodePtr node, string key);
 	string buildAbsoluteRef(string absoluteRef, string ref);
 	
-	string getConnection(xmlDocPtr dml, string connectionRef);
+	string getConnectionRef(xmlDocPtr dml,
+							string inletRef);
+	OEPortProperties *getOutlet(string outletRef);
+	OEPortProperties *getOutletFromInlet(xmlDocPtr dml, string inletRef);
 	
 	bool parse(xmlDocPtr dml);
-	void parsePort(OEPorts &ports, string deviceName, xmlNodePtr node);
+	OEPortProperties parsePort(string deviceName, xmlNodePtr node);
 };
 
 #endif
