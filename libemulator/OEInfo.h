@@ -33,6 +33,7 @@ typedef struct
 	string subtype;
 	string label;
 	string image;
+	string title;
 	bool connected;
 } OEPortProperties;
 

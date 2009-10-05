@@ -28,7 +28,6 @@
 </device>
 
 <device name="emulation" label="Apple II">
-    <inlet ref="events.cpuSocket" type="expansion" subtype="appleiicpu" label="CPU Socket" image="Apple II CPU Chip Socket.png"/>
     <inlet ref="iou.slot0" type="expansion" subtype="appleiislot" label="Slot 0" image="Apple II Slot.png"/>
     <inlet ref="iou.slot1" type="expansion" subtype="appleiislot" label="Slot 1" image="Apple II Slot.png"/>
     <inlet ref="iou.slot2" type="expansion" subtype="appleiislot" label="Slot 2" image="Apple II Slot.png"/>
@@ -37,9 +36,10 @@
     <inlet ref="iou.slot5" type="expansion" subtype="appleiislot" label="Slot 5" image="Apple II Slot.png"/>
     <inlet ref="iou.slot6" type="expansion" subtype="appleiislot" label="Slot 6" image="Apple II Slot.png"/>
     <inlet ref="iou.slot7" type="expansion" subtype="appleiislot" label="Slot 7" image="Apple II Slot.png"/>
-    <inlet ref="rom.socket" type="expansion" subtype="appleiirom" label="ROM Socket" image="Apple II ROM Socket.png"/>
     <inlet ref="game.port" type="expansion" subtype="appleiigame" label="Game Port" image="Apple II Game Port.png"/>
+    <inlet ref="events.cpuSocket" type="expansion" subtype="appleiicpu" label="CPU Socket" image="Apple II CPU Chip Socket.png"/>
     <inlet ref="tvOutput.socket" type="expansion" subtype="appleiicharrom" label="Character ROM Socket" image="Apple II Character ROM Socket.png"/>
+    <inlet ref="rom.socket" type="expansion" subtype="appleiirom" label="ROM Socket" image="Apple II ROM Socket.png"/>
     <component name="events" class="AppleIIEvents">
         <connection key="hostEvents" ref="host::events"/>
         <connection key="cpu" ref="cpu"/>

@@ -169,27 +169,33 @@
 	if (!info.isOpen())
 		return;
 	
-	OEPorts *outlets = info.getInlets();
+	// To-Do: remove objects first
 	
+	OEPorts *outlets = info.getOutlets();
+	
+	int expansionIndex = 0;
+	int diskDriveIndex = 0;
+	int peripheralIndex = 0;
 	for (OEPorts::iterator o = outlets->begin();
 		 o != outlets->end();
 		 o++)
 	{
+		NSString *imagePath = [NSString stringWithUTF8String:o->image.c_str()];
+		NSImage *deviceImage = [self getResourceImage:imagePath];
+		if (!deviceImage)
+			deviceImage = [[[NSImage alloc] init] autorelease];
+		NSString *deviceLabel = [NSString stringWithUTF8String:o->label.c_str()];
+		
+		NSArray *keys = [NSArray arrayWithObjects:@"image", @"title", nil];
+		NSArray *objects = [NSArray arrayWithObjects:deviceImage, deviceLabel, nil];
+		NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithObjects:objects
+																	   forKeys:keys];
 		if (o->type == "expansion")
-		{
-			[self insertObject:[[[InspectorCell alloc] init] autorelease]
-		   inExpansionsAtIndex:0];
-		}
+			[self insertObject:dict inExpansionsAtIndex:expansionIndex++];
 		else if (o->type == "diskdrive")
-		{
-			[self insertObject:[[[InspectorCell alloc] init] autorelease]
-		   inDiskDrivesAtIndex:0];
-		}
+			[self insertObject:dict inDiskDrivesAtIndex:diskDriveIndex++];
 		else if (o->type == "peripheral")
-		{
-			[self insertObject:[[[InspectorCell alloc] init] autorelease]
-		   inPeripheralsAtIndex:0];
-		}
+			[self insertObject:dict inPeripheralsAtIndex:peripheralIndex++];
 	}
 	
 	return;
@@ -225,7 +231,7 @@
 			[self setSaturation:[NSNumber numberWithFloat:0.0F]];
 			[self setTemperature:[NSNumber numberWithFloat:0.0F]];
 			[self setTint:[NSNumber numberWithFloat:0.0F]];
-
+			
 			[self setVolume:[NSNumber numberWithFloat:1.0F]];
 			
 			return YES;
@@ -263,7 +269,7 @@
 - (void)setFileModificationDate:(NSDate *)date
 {
 	[super setFileModificationDate:date];
-
+	
 	NSString *value;
 	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
 	[dateFormatter setDateStyle:NSDateFormatterMediumStyle];

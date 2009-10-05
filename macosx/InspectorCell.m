@@ -17,7 +17,7 @@
 	return @"tool tip here";
 }
 
-- (NSAttributedString *)attributedStringValue
+/*- (NSAttributedString *)attributedStringValue
 {
 	NSMutableParagraphStyle * paragraphStyle;
 	paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
@@ -58,7 +58,7 @@
 																					 attributes:fStatusAttributes]];
 	
 	return fAttributedString;
-}
+}*/
 
 - (NSRect)titleRectForBounds:(NSRect)theRect
 {
