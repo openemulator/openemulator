@@ -219,15 +219,17 @@ bool OEInfo::parse(xmlDocPtr dml)
 			continue;
 		
 		string deviceName = getNodeProperty(deviceNode, "name");
+		string deviceLabel = getNodeProperty(deviceNode, "label");
+		string deviceImage = getNodeProperty(deviceNode, "image");
 		
 		for(xmlNodePtr node = deviceNode->children;
 			node;
 			node = node->next)
 		{
 			if (!xmlStrcmp(node->name, BAD_CAST "inlet"))
-				inlets.push_back(parsePort(deviceName, node));
+				inlets.push_back(parsePort(deviceName, deviceLabel, deviceImage, node));
 			else if (!xmlStrcmp(node->name, BAD_CAST "outlet"))
-				outlets.push_back(parsePort(deviceName, node));
+				outlets.push_back(parsePort(deviceName, deviceLabel, deviceImage, node));
 		}
 	}
 	
@@ -247,7 +249,10 @@ bool OEInfo::parse(xmlDocPtr dml)
 	return true;
 }
 
-OEPortProperties OEInfo::parsePort(string deviceName, xmlNodePtr node)
+OEPortProperties OEInfo::parsePort(string deviceName, 
+								   string deviceLabel,
+								   string deviceImage,
+								   xmlNodePtr node)
 {
 	OEPortProperties prop;
 	prop.ref = buildAbsoluteRef(deviceName, getNodeProperty(node, "ref"));
@@ -256,6 +261,11 @@ OEPortProperties OEInfo::parsePort(string deviceName, xmlNodePtr node)
 	prop.label = getNodeProperty(node, "label");
 	prop.image = getNodeProperty(node, "image");
 	prop.connected = false;
+	
+	if (!prop.label.size())
+		prop.label = deviceLabel;
+	if (!prop.image.size())
+		prop.image = deviceImage;
 	
 	return prop;
 }

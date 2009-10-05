@@ -163,7 +163,7 @@
     </component>
 </device>
 
-<device name="dev3" label="Apple Disk II Drive 2" image="Apple Disk II Drive.png">
+<device name="dev3" label="Apple Disk II Drive" image="Apple Disk II Drive.png">
     <outlet ref="drive" type="diskdrive" subtype="apple525"/>
     <component name="drive" class="AppleDiskII">
         <property key="diskImage" value=""/>

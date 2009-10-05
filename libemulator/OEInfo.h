@@ -71,7 +71,10 @@ private:
 	OEPortProperties *getOutletFromInlet(xmlDocPtr dml, string inletRef);
 	
 	bool parse(xmlDocPtr dml);
-	OEPortProperties parsePort(string deviceName, xmlNodePtr node);
+	OEPortProperties parsePort(string deviceName,
+							   string deviceLabel,
+							   string deviceImage,
+							   xmlNodePtr node);
 };
 
 #endif
