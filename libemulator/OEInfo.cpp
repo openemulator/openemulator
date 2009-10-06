@@ -115,24 +115,39 @@ string OEInfo::buildAbsoluteRef(string absoluteRef, string ref)
 	return ref;
 }
 
-string OEInfo::getConnectedOutletRef(xmlDocPtr dml, string inletRef)
+OESplitRef OEInfo::getSplitRef(string ref)
 {
-	// Split ref
-	int deviceIndex = inletRef.find(OE_DEVICE_SEP);
+	OESplitRef name;
+	
+	int deviceIndex = ref.find(OE_DEVICE_SEP);
 	if (deviceIndex == string::npos)
-		return "";
-	string deviceName = inletRef.substr(0, deviceIndex);
+	{
+		name.device = ref;
+		return name;
+	}
+	
+	name.device = ref.substr(0, deviceIndex);
 	deviceIndex += sizeof(OE_DEVICE_SEP) - 1;
 	
-	int componentIndex = inletRef.find(OE_COMPONENT_SEP, deviceIndex);
+	int componentIndex = ref.find(OE_COMPONENT_SEP, deviceIndex);
 	if (componentIndex == string::npos)
-		return "";
-	string componentName = inletRef.substr(deviceIndex,
-							   componentIndex - deviceIndex);
+	{
+		name.component = ref.substr(deviceIndex);
+		name.property = "";
+		return name;
+	}
+
+	name.component = ref.substr(deviceIndex, componentIndex - deviceIndex);
 	componentIndex += sizeof(OE_COMPONENT_SEP) - 1;
-	string connectionName = inletRef.substr(componentIndex);
+	name.property = ref.substr(componentIndex);
+
+	return name;
+}
+
+string OEInfo::getConnectedOutletRef(xmlDocPtr dml, string inletRef)
+{
+	OESplitRef splitRef = getSplitRef(inletRef);
 	
-	// Find connected ref
 	xmlNodePtr dmlNode = xmlDocGetRootElement(dml);
 	
 	for(xmlNodePtr deviceNode = dmlNode->children;
@@ -142,7 +157,7 @@ string OEInfo::getConnectedOutletRef(xmlDocPtr dml, string inletRef)
 		if (xmlStrcmp(deviceNode->name, BAD_CAST "device"))
 			continue;
 		
-		if (getNodeProperty(deviceNode, "name") != deviceName)
+		if (getNodeProperty(deviceNode, "name") != splitRef.device)
 			continue;
 		
 		for(xmlNodePtr componentNode = deviceNode->children;
@@ -152,7 +167,7 @@ string OEInfo::getConnectedOutletRef(xmlDocPtr dml, string inletRef)
 			if (xmlStrcmp(componentNode->name, BAD_CAST "component"))
 				continue;
 			
-			if (getNodeProperty(componentNode, "name") != componentName)
+			if (getNodeProperty(componentNode, "name") != splitRef.component)
 				continue;
 			
 			for(xmlNodePtr connectionNode = componentNode->children;
@@ -162,11 +177,11 @@ string OEInfo::getConnectedOutletRef(xmlDocPtr dml, string inletRef)
 				if (xmlStrcmp(connectionNode->name, BAD_CAST "connection"))
 					continue;
 				
-				if (getNodeProperty(connectionNode, "key") != connectionName)
+				if (getNodeProperty(connectionNode, "key") != splitRef.property)
 					continue;
 				
-				string ref = getNodeProperty(connectionNode, "ref");
-				return buildAbsoluteRef(deviceName, ref);
+				string outletRef = getNodeProperty(connectionNode, "ref");
+				return buildAbsoluteRef(splitRef.device, outletRef);
 			}
 		}
 	}
@@ -185,6 +200,29 @@ OEPortInfo *OEInfo::getOutletProperties(string outletRef)
 	}
 	
 	return NULL;
+}
+
+string OEInfo::getLongLabel(OEPortInfo *outlet)
+{
+	OEPortInfo *inlet = outlet->connectedPort;
+	if (!inlet)
+		return "";
+	OESplitRef iSplitRef = getSplitRef(inlet->ref);
+	
+	for (OEPortsInfo::iterator o = outletsInfo.begin();
+		 o != outletsInfo.end();
+		 o++)
+	{
+		OESplitRef oSplitRef = getSplitRef(o->ref);
+		// To-Do: Why is the following code not working?
+		if (iSplitRef.device == oSplitRef.device)
+		{
+			// To-Do: Add vector<string> protection
+			return getLongLabel(&(*o)) + outlet->deviceLabel;
+		}
+	}
+	
+	return inlet->deviceLabel;
 }
 
 bool OEInfo::parse(xmlDocPtr dml)
@@ -252,6 +290,10 @@ bool OEInfo::parse(xmlDocPtr dml)
 	}
 	
 	// Fill in long labels
+	for (OEPortsInfo::iterator o = outletsInfo.begin();
+		 o != outletsInfo.end();
+		 o++)
+		o->longLabel = getLongLabel(&(*o));
 	
 	return true;
 }
@@ -262,14 +304,15 @@ OEPortInfo OEInfo::parsePort(string deviceName,
 								   xmlNodePtr node)
 {
 	OEPortInfo prop;
+	
+	prop.deviceLabel = deviceLabel;
+	
 	prop.ref = buildAbsoluteRef(deviceName, getNodeProperty(node, "ref"));
 	prop.type = getNodeProperty(node, "type");
 	prop.subtype = getNodeProperty(node, "subtype");
 	prop.label = getNodeProperty(node, "label");
 	prop.image = getNodeProperty(node, "image");
 	
-	prop.deviceLabel = deviceLabel;
-	prop.longLabel = deviceLabel + " " + prop.label;
 	prop.connectedPort = NULL;
 	
 	if (!prop.label.size())
