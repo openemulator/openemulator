@@ -309,7 +309,12 @@ bool OEEmulation::connectComponent(string deviceName,
 	OEComponent *connectedComponent = components[componentRef];
 	
 	if(!connectedComponent)
+	{
+		fprintf(stderr,
+				"libemulator: could not connect \"%s\".\n",
+				componentRef.c_str());
 		return false;
+	}
 	
 	OEIoctlConnection msg;
 	msg.key = key;
@@ -380,7 +385,12 @@ bool OEEmulation::getComponentData(string deviceName,
 	if (component->ioctl(OEIoctlGetData, &msg))
 	{
 		if (!package->writeFile(src, msg.data))
+		{
+			fprintf(stderr,
+					"libemulator: could not write \"%s\".\n",
+					src.c_str());
 			return false;
+		}
 	}
 	
 	return true;
@@ -396,7 +406,12 @@ bool OEEmulation::setComponentResource(OEComponent *component,
 	msg.key = key;
 	
 	if (!readResource(src, msg.data))
+	{
+		fprintf(stderr,
+				"libemulator: could not read \"%s\".\n",
+				src.c_str());
 		return false;
+	}
 	
 	component->ioctl(OEIoctlSetData, &msg);
 	

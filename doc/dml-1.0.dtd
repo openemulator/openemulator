@@ -17,12 +17,18 @@
 <!ATTLIST inlet label CDATA #IMPLIED>
 <!ATTLIST inlet image CDATA #IMPLIED>
 
-<!ELEMENT outlet EMPTY>
+<!ELEMENT outlet (setting)>
 <!ATTLIST outlet ref CDATA #REQUIRED>
 <!ATTLIST outlet type CDATA #REQUIRED>
 <!ATTLIST outlet subtype CDATA #REQUIRED>
 <!ATTLIST outlet label CDATA #IMPLIED>
 <!ATTLIST outlet image CDATA #IMPLIED>
+
+<!ELEMENT setting EMPTY>
+<!ATTLIST outlet ref CDATA #REQUIRED>
+<!ATTLIST outlet type CDATA #REQUIRED>
+<!ATTLIST outlet options CDATA #IMPLIED>
+<!ATTLIST outlet label CDATA #IMPLIED>
 
 <!ELEMENT component (connection,property,data,resource)>
 <!ATTLIST component name CDATA #REQUIRED>

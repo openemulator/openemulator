@@ -29,6 +29,7 @@
 		00A0D43F106FF64800090223 /* OEInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A0D439106FF64800090223 /* OEInfo.cpp */; };
 		00A0D443106FF66000090223 /* OEComponentFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A0D441106FF66000090223 /* OEComponentFactory.cpp */; };
 		00A0D4BB106FFBB800090223 /* IPMount.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BC8100FD4210016867D /* IPMount.png */; };
+		00A97551107AD27500893DCE /* IPReveal.png in Resources */ = {isa = PBXBuildFile; fileRef = 00A97550107AD27500893DCE /* IPReveal.png */; };
 		00B3347D0FE41EF60042661D /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B3347C0FE41EF60042661D /* AudioToolbox.framework */; };
 		00B334810FE41EFE0042661D /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B334800FE41EFE0042661D /* AudioUnit.framework */; };
 		00B334850FE41F080042661D /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B334840FE41F080042661D /* CoreAudio.framework */; };
@@ -182,6 +183,7 @@
 		00A0D43A106FF64800090223 /* OEInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OEInfo.h; path = libemulator/OEInfo.h; sourceTree = "<group>"; };
 		00A0D441106FF66000090223 /* OEComponentFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OEComponentFactory.cpp; path = libemulator/OEComponentFactory.cpp; sourceTree = "<group>"; };
 		00A0D442106FF66000090223 /* OEComponentFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OEComponentFactory.h; path = libemulator/OEComponentFactory.h; sourceTree = "<group>"; };
+		00A97550107AD27500893DCE /* IPReveal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPReveal.png; path = macosx/Images/IPReveal.png; sourceTree = "<group>"; };
 		00B3347C0FE41EF60042661D /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = /System/Library/Frameworks/AudioToolbox.framework; sourceTree = "<absolute>"; };
 		00B334800FE41EFE0042661D /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = /System/Library/Frameworks/AudioUnit.framework; sourceTree = "<absolute>"; };
 		00B334840FE41F080042661D /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = /System/Library/Frameworks/CoreAudio.framework; sourceTree = "<absolute>"; };
@@ -453,6 +455,7 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				00A97550107AD27500893DCE /* IPReveal.png */,
 				003E2597107075D900185260 /* images */,
 				00B974AD10701DCD00BD1402 /* sounds */,
 				00C6C08810602151004D084B /* roms */,
@@ -619,6 +622,7 @@
 				00C8AA0C10103D6A006A5734 /* OSDPower.png in Resources */,
 				00C6C0C110602151004D084B /* roms in Resources */,
 				00A0D4BB106FFBB800090223 /* IPMount.png in Resources */,
+				00A97551107AD27500893DCE /* IPReveal.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -26,15 +26,18 @@ typedef struct
 	string group;
 } OEProperties;
 
-typedef struct
+typedef struct OEPortProperties
 {
 	string ref;
 	string type;
 	string subtype;
 	string label;
 	string image;
-	string title;
-	bool connected;
+	
+	string deviceLabel;
+	string longLabel;
+	
+	struct OEPortProperties *connectedPort;
 } OEPortProperties;
 
 typedef vector<OEPortProperties> OEPorts;
@@ -65,10 +68,8 @@ private:
 	string getNodeProperty(xmlNodePtr node, string key);
 	string buildAbsoluteRef(string absoluteRef, string ref);
 	
-	string getConnectionRef(xmlDocPtr dml,
-							string inletRef);
-	OEPortProperties *getOutlet(string outletRef);
-	OEPortProperties *getOutletFromInlet(xmlDocPtr dml, string inletRef);
+	string getConnectedOutletRef(xmlDocPtr dml, string inletRef);
+	OEPortProperties *getOutletProperties(string outletRef);
 	
 	bool parse(xmlDocPtr dml);
 	OEPortProperties parsePort(string deviceName,

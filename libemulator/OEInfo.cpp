@@ -18,9 +18,8 @@ OEInfo::OEInfo(string path)
 	open = false;
 	
 	vector<char> data;
-	
 	string pathExtension = getPathExtension(path);
-	if (pathExtension == "string")
+	if (pathExtension == "xml")
 	{
 		if (!readFile(path, data))
 			return;
@@ -116,9 +115,9 @@ string OEInfo::buildAbsoluteRef(string absoluteRef, string ref)
 	return ref;
 }
 
-string OEInfo::getConnectionRef(xmlDocPtr dml,
-								string inletRef)
+string OEInfo::getConnectedOutletRef(xmlDocPtr dml, string inletRef)
 {
+	// Split ref
 	int deviceIndex = inletRef.find(OE_DEVICE_SEP);
 	if (deviceIndex == string::npos)
 		return "";
@@ -133,7 +132,7 @@ string OEInfo::getConnectionRef(xmlDocPtr dml,
 	componentIndex += sizeof(OE_COMPONENT_SEP) - 1;
 	string connectionName = inletRef.substr(componentIndex);
 	
-	// Get connection ref
+	// Find connected ref
 	xmlNodePtr dmlNode = xmlDocGetRootElement(dml);
 	
 	for(xmlNodePtr deviceNode = dmlNode->children;
@@ -175,7 +174,7 @@ string OEInfo::getConnectionRef(xmlDocPtr dml,
 	return "";
 }
 
-OEPortProperties *OEInfo::getOutlet(string outletRef)
+OEPortProperties *OEInfo::getOutletProperties(string outletRef)
 {
 	for (OEPorts::iterator o = outlets.begin();
 		 o != outlets.end();
@@ -188,17 +187,6 @@ OEPortProperties *OEInfo::getOutlet(string outletRef)
 	return NULL;
 }
 
-OEPortProperties *OEInfo::getOutletFromInlet(xmlDocPtr dml, string inletRef)
-{
-	string outletRef;
-	outletRef = getConnectionRef(dml, inletRef);
-	
-	if (!outletRef.size())
-		return NULL;
-	
-	return getOutlet(outletRef);
-}
-
 bool OEInfo::parse(xmlDocPtr dml)
 {
 	xmlNodePtr dmlNode = xmlDocGetRootElement(dml);
@@ -206,11 +194,13 @@ bool OEInfo::parse(xmlDocPtr dml)
 	if (getNodeProperty(dmlNode, "version") != "1.0")
 		return false;
 	
+	// Find properties
 	properties.label = getNodeProperty(dmlNode, "label");
 	properties.image = getNodeProperty(dmlNode, "image");
 	properties.description = getNodeProperty(dmlNode, "description");
 	properties.group = getNodeProperty(dmlNode, "group");
 	
+	// Find inlets and outlets
 	for(xmlNodePtr deviceNode = dmlNode->children;
 		deviceNode;
 		deviceNode = deviceNode->next)
@@ -233,18 +223,29 @@ bool OEInfo::parse(xmlDocPtr dml)
 		}
 	}
 	
+	// Find connections
 	for (OEPorts::iterator i = inlets.begin();
 		 i != inlets.end();
 		 i++)
 	{
-		OEPortProperties *o = getOutletFromInlet(dml, i->ref);
+		string outletRef = getConnectedOutletRef(dml, i->ref);
+		if (!outletRef.size())
+			continue;
+		
+		OEPortProperties *o = getOutletProperties(outletRef);
 		
 		if (o)
 		{
-			i->connected = true;
-			o->connected = true;
+			i->connectedPort = &(*o);
+			o->connectedPort = &(*i);
 		}
+		else
+			fprintf(stderr,
+					"libemulator: warning, outlet \"%s\" does not exist.\n",
+					outletRef.c_str());
 	}
+	
+	// Fill in long labels
 	
 	return true;
 }
@@ -260,7 +261,10 @@ OEPortProperties OEInfo::parsePort(string deviceName,
 	prop.subtype = getNodeProperty(node, "subtype");
 	prop.label = getNodeProperty(node, "label");
 	prop.image = getNodeProperty(node, "image");
-	prop.connected = false;
+	
+	prop.deviceLabel = deviceLabel;
+	prop.longLabel = deviceLabel + " " + prop.label;
+	prop.connectedPort = NULL;
 	
 	if (!prop.label.size())
 		prop.label = deviceLabel;

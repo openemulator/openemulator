@@ -12,18 +12,24 @@
 
 @implementation InspectorCell
 
-- (NSString *)toolTip
+- (NSAttributedString *)attributedStringValue
 {
-	return @"tool tip here";
-}
-
-/*- (NSAttributedString *)attributedStringValue
-{
+	NSString *firstLine;
+	NSString *nextLines;
+	NSRange range = [[self stringValue] rangeOfString:@"\n"];
+	if (range.location != NSNotFound)
+	{
+		firstLine = [[self stringValue] substringToIndex:range.location + 1];
+		nextLines = [[self stringValue] substringFromIndex:range.location + 1];
+	}
+	else {
+		firstLine = [self stringValue];
+		nextLines = @"";
+	}
+	
 	NSMutableParagraphStyle * paragraphStyle;
 	paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
 	[paragraphStyle setLineBreakMode:NSLineBreakByTruncatingTail];
-	
-	NSMutableAttributedString * fAttributedString;
 	
 	NSColor * titleColor, * statusColor;
     if ([self backgroundStyle] == NSBackgroundStyleDark)
@@ -34,6 +40,7 @@
         statusColor = [NSColor darkGrayColor];
     }
 	
+	NSMutableAttributedString * fAttributedString;
 	NSDictionary *fTitleAttributes = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
 									  [NSFont messageFontOfSize:12.0f],
 									  NSFontAttributeName,
@@ -42,7 +49,7 @@
 									  titleColor,
 									  NSForegroundColorAttributeName,
 									  nil];
-	fAttributedString = [[NSMutableAttributedString alloc] initWithString:@"Apple Disk II Interface Card\n"
+	fAttributedString = [[NSMutableAttributedString alloc] initWithString:firstLine
 															   attributes:fTitleAttributes];
 	
 	NSDictionary *fStatusAttributes = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
@@ -53,12 +60,11 @@
 									   statusColor,
 									   NSForegroundColorAttributeName,
 									   nil];
-	[fAttributedString appendAttributedString:[[NSMutableAttributedString alloc] initWithString:@"(on Apple IIGS Slot 6 Drive 1)"
-											   "\nProDOS System Disk 2.0.3.dsk"
+	[fAttributedString appendAttributedString:[[NSMutableAttributedString alloc] initWithString:nextLines
 																					 attributes:fStatusAttributes]];
 	
 	return fAttributedString;
-}*/
+}
 
 - (NSRect)titleRectForBounds:(NSRect)theRect
 {
