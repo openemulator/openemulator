@@ -171,18 +171,16 @@
 	
 	// To-Do: remove objects first
 	
-	OEPorts *inlets = info.getInlets();
+	OEPortsInfo *outletsInfo = info.getOutletsInfo();
 	
 	int expansionIndex = 0;
 	int diskDriveIndex = 0;
 	int peripheralIndex = 0;
-	for (OEPorts::iterator i = inlets->begin();
-		 i != inlets->end();
-		 i++)
+	for (OEPortsInfo::iterator o = outletsInfo->begin();
+		 o != outletsInfo->end();
+		 o++)
 	{
-		OEPortProperties *o = i->connectedPort;
-		if (!o)
-			continue;
+		OEPortInfo *i = o->connectedPort;
 		
 		NSString *imagePath = [NSString stringWithUTF8String:o->image.c_str()];
 		NSImage *deviceImage = [self getResourceImage:imagePath];
@@ -192,19 +190,21 @@
 		NSString *deviceLabel = [NSString stringWithUTF8String:o->label.c_str()];
 		NSString *connectedLabel = [NSString stringWithUTF8String:
 									i->longLabel.c_str()];
-		NSString *deviceTitle = [NSString stringWithFormat:@"%@\n(on %@)",
+		NSString *mountLabel = @"";
+		NSString *deviceTitle = [NSString localizedStringWithFormat:@"%@\n(on %@)%@",
 								 deviceLabel,
-								 connectedLabel];
+								 connectedLabel,
+								 mountLabel];
 		
 		NSArray *keys = [NSArray arrayWithObjects:@"image", @"title", nil];
 		NSArray *objects = [NSArray arrayWithObjects:deviceImage, deviceTitle, nil];
 		NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithObjects:objects
 																	   forKeys:keys];
-		if (i->type == "expansion")
+		if (o->type == "expansion")
 			[self insertObject:dict inExpansionsAtIndex:expansionIndex++];
-		else if (i->type == "diskdrive")
+		else if (o->type == "diskdrive")
 			[self insertObject:dict inDiskDrivesAtIndex:diskDriveIndex++];
-		else if (i->type == "peripheral")
+		else if (o->type == "peripheral")
 			[self insertObject:dict inPeripheralsAtIndex:peripheralIndex++];
 	}
 	

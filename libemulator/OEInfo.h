@@ -24,9 +24,9 @@ typedef struct
 	string image;
 	string description;
 	string group;
-} OEProperties;
+} OEDMLInfo;
 
-typedef struct OEPortProperties
+typedef struct OEPortInfo
 {
 	string ref;
 	string type;
@@ -37,10 +37,10 @@ typedef struct OEPortProperties
 	string deviceLabel;
 	string longLabel;
 	
-	struct OEPortProperties *connectedPort;
-} OEPortProperties;
+	struct OEPortInfo *connectedPort;
+} OEPortInfo;
 
-typedef vector<OEPortProperties> OEPorts;
+typedef vector<OEPortInfo> OEPortsInfo;
 
 class OEInfo
 {
@@ -51,16 +51,16 @@ public:
 	
 	bool isOpen();
 	
-	OEProperties *getProperties();
-	OEPorts *getInlets();
-	OEPorts *getOutlets();
+	OEDMLInfo *getDMLInfo();
+	OEPortsInfo *getInletsInfo();
+	OEPortsInfo *getOutletsInfo();
 	
 private:
 	bool open;
 	
-	OEProperties properties;
-	OEPorts inlets;
-	OEPorts outlets;
+	OEDMLInfo dmlInfo;
+	OEPortsInfo inletsInfo;
+	OEPortsInfo outletsInfo;
 	
 	string getPathExtension(string path);
 	bool readFile(string path, vector<char> &data);
@@ -69,13 +69,13 @@ private:
 	string buildAbsoluteRef(string absoluteRef, string ref);
 	
 	string getConnectedOutletRef(xmlDocPtr dml, string inletRef);
-	OEPortProperties *getOutletProperties(string outletRef);
+	OEPortInfo *getOutletProperties(string outletRef);
 	
 	bool parse(xmlDocPtr dml);
-	OEPortProperties parsePort(string deviceName,
-							   string deviceLabel,
-							   string deviceImage,
-							   xmlNodePtr node);
+	OEPortInfo parsePort(string deviceName,
+						 string deviceLabel,
+						 string deviceImage,
+						 xmlNodePtr node);
 };
 
 #endif
