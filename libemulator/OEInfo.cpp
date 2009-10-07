@@ -202,27 +202,43 @@ OEPortInfo *OEInfo::getOutletProperties(string outletRef)
 	return NULL;
 }
 
-string OEInfo::getLongLabel(OEPortInfo *outlet)
+string OEInfo::buildConnectedLabel(OEPortInfo *outlet, vector<string> *refList)
 {
 	OEPortInfo *inlet = outlet->connectedPort;
 	if (!inlet)
-		return "";
+		return "Unknown";
 	OESplitRef iSplitRef = getSplitRef(inlet->ref);
 	
+	// For some odd reason, g++ does not like the next line in the loop
+	OESplitRef oSplitRef;
 	for (OEPortsInfo::iterator o = outletsInfo.begin();
 		 o != outletsInfo.end();
 		 o++)
 	{
-		OESplitRef oSplitRef = getSplitRef(o->ref);
-		// To-Do: Why is the following code not working?
-		if (iSplitRef.device == oSplitRef.device)
+		oSplitRef = getSplitRef(o->ref);
+		if (iSplitRef.device != oSplitRef.device)
+			continue;
+		
+		for (vector<string>::iterator r = refList->begin();
+			 r != refList->end();
+			 r++)
 		{
-			// To-Do: Add vector<string> protection
-			return getLongLabel(&(*o)) + outlet->deviceLabel;
+			if (*r == o->ref)
+				return inlet->label;
 		}
+		refList->push_back(o->ref);
+		
+		return buildConnectedLabel(&(*o), refList) + " " + inlet->label;
 	}
 	
-	return inlet->deviceLabel;
+	return inlet->deviceLabel + " " + inlet->label;
+}
+
+string OEInfo::buildConnectedLabel(OEPortInfo *outlet)
+{
+	vector<string> refList;
+	string test = buildConnectedLabel(outlet, &refList);
+	return test;
 }
 
 bool OEInfo::parse(xmlDocPtr dml)
@@ -232,13 +248,13 @@ bool OEInfo::parse(xmlDocPtr dml)
 	if (getNodeProperty(dmlNode, "version") != "1.0")
 		return false;
 	
-	// Find properties
+	// Set DML properties
 	dmlInfo.label = getNodeProperty(dmlNode, "label");
 	dmlInfo.image = getNodeProperty(dmlNode, "image");
 	dmlInfo.description = getNodeProperty(dmlNode, "description");
 	dmlInfo.group = getNodeProperty(dmlNode, "group");
 	
-	// Find inlets and outlets
+	// Build inlets and outlets
 	for(xmlNodePtr deviceNode = dmlNode->children;
 		deviceNode;
 		deviceNode = deviceNode->next)
@@ -267,7 +283,7 @@ bool OEInfo::parse(xmlDocPtr dml)
 		}
 	}
 	
-	// Find connections
+	// Find connectedPort's
 	for (OEPortsInfo::iterator i = inletsInfo.begin();
 		 i != inletsInfo.end();
 		 i++)
@@ -289,11 +305,16 @@ bool OEInfo::parse(xmlDocPtr dml)
 					outletRef.c_str());
 	}
 	
-	// Fill in long labels
+	// Build connectedLabel's
 	for (OEPortsInfo::iterator o = outletsInfo.begin();
 		 o != outletsInfo.end();
 		 o++)
-		o->longLabel = getLongLabel(&(*o));
+	{
+		o->connectedLabel = buildConnectedLabel(&(*o));
+		OEPortInfo *i = o->connectedPort;
+		if (i)
+			i->connectedLabel = o->connectedLabel;
+	}
 	
 	return true;
 }
@@ -305,13 +326,13 @@ OEPortInfo OEInfo::parsePort(string deviceName,
 {
 	OEPortInfo prop;
 	
-	prop.deviceLabel = deviceLabel;
-	
 	prop.ref = buildAbsoluteRef(deviceName, getNodeProperty(node, "ref"));
 	prop.type = getNodeProperty(node, "type");
 	prop.subtype = getNodeProperty(node, "subtype");
 	prop.label = getNodeProperty(node, "label");
 	prop.image = getNodeProperty(node, "image");
+	
+	prop.deviceLabel = deviceLabel;
 	
 	prop.connectedPort = NULL;
 	

@@ -28,16 +28,15 @@ typedef struct
 
 typedef struct OEPortInfo
 {
-	string deviceLabel;
-	
 	string ref;
 	string type;
 	string subtype;
 	string label;
 	string image;
 	
-	string longLabel;
+	string deviceLabel;
 	
+	string connectedLabel;
 	struct OEPortInfo *connectedPort;
 } OEPortInfo;
 
@@ -79,7 +78,8 @@ private:
 	
 	string getConnectedOutletRef(xmlDocPtr dml, string inletRef);
 	OEPortInfo *getOutletProperties(string outletRef);
-	string getLongLabel(OEPortInfo *outlet);
+	string buildConnectedLabel(OEPortInfo *outlet, vector<string> *refList);
+	string buildConnectedLabel(OEPortInfo *outlet);
 	
 	bool parse(xmlDocPtr dml);
 	OEPortInfo parsePort(string deviceName,

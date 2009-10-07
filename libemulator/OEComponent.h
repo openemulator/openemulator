@@ -9,7 +9,6 @@
 #ifndef _OECOMPONENT_H
 #define _OECOMPONENT_H
 
-#include <string>
 #include <vector>
 #include <stdint.h>
 

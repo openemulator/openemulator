@@ -169,7 +169,12 @@
 	if (!info.isOpen())
 		return;
 	
-	// To-Do: remove objects first
+	[expansions release];
+	expansions = [[NSMutableArray alloc] init];
+	[diskDrives release];
+	diskDrives = [[NSMutableArray alloc] init];
+	[peripherals release];
+	peripherals = [[NSMutableArray alloc] init];
 	
 	OEPortsInfo *outletsInfo = info.getOutletsInfo();
 	
@@ -180,8 +185,6 @@
 		 o != outletsInfo->end();
 		 o++)
 	{
-		OEPortInfo *i = o->connectedPort;
-		
 		NSString *imagePath = [NSString stringWithUTF8String:o->image.c_str()];
 		NSImage *deviceImage = [self getResourceImage:imagePath];
 		if (!deviceImage)
@@ -189,7 +192,7 @@
 		
 		NSString *deviceLabel = [NSString stringWithUTF8String:o->label.c_str()];
 		NSString *connectedLabel = [NSString stringWithUTF8String:
-									i->longLabel.c_str()];
+									o->connectedLabel.c_str()];
 		NSString *mountLabel = @"";
 		NSString *deviceTitle = [NSString localizedStringWithFormat:@"%@\n(on %@)%@",
 								 deviceLabel,
