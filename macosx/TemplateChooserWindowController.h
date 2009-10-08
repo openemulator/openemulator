@@ -14,7 +14,12 @@
 
 @interface TemplateChooserWindowController : NSWindowController
 {
+	IBOutlet id outlineView;
+	IBOutlet id imageBrowserView;
+	
 	DocumentController *documentController;
+	
+	NSArray *groups;
 }
 
 - (id)init:(DocumentController *)theDocumentController;

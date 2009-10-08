@@ -85,6 +85,7 @@
 		00D845860FFF0FD2005802F0 /* PreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D8457A0FFF0FD2005802F0 /* PreferencesController.m */; };
 		00D846290FFF23B7005802F0 /* PRSound.png in Resources */ = {isa = PBXBuildFile; fileRef = 00D846280FFF23B7005802F0 /* PRSound.png */; };
 		00E2A86810532FD200910B53 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B334880FE41F110042661D /* CoreServices.framework */; };
+		00EF028D107D9EFB00FE378D /* VerticallyCenteredCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00EF028C107D9EFB00FE378D /* VerticallyCenteredCell.m */; };
 		00F86BCB100FD4210016867D /* IPInfo.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BC6100FD4210016867D /* IPInfo.png */; };
 		00F86BCC100FD4210016867D /* IPLocked.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BC7100FD4210016867D /* IPLocked.png */; };
 		00F86BCE100FD4210016867D /* IPUnlocked.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BC9100FD4210016867D /* IPUnlocked.png */; };
@@ -227,6 +228,8 @@
 		00D8457A0FFF0FD2005802F0 /* PreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferencesController.m; sourceTree = "<group>"; };
 		00D846280FFF23B7005802F0 /* PRSound.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PRSound.png; sourceTree = "<group>"; };
 		00E2A84D1053290200910B53 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = /usr/lib/libxml2.dylib; sourceTree = "<absolute>"; };
+		00EF028B107D9EFB00FE378D /* VerticallyCenteredCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VerticallyCenteredCell.h; sourceTree = "<group>"; };
+		00EF028C107D9EFB00FE378D /* VerticallyCenteredCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VerticallyCenteredCell.m; sourceTree = "<group>"; };
 		00F009F90FD5838D00C506AD /* IPAudio.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPAudio.png; sourceTree = "<group>"; };
 		00F009FA0FD5838D00C506AD /* IPAudioSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPAudioSel.png; sourceTree = "<group>"; };
 		00F009FD0FD5838D00C506AD /* IPDiskDrives.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPDiskDrives.png; sourceTree = "<group>"; };
@@ -448,6 +451,8 @@
 				006F08C91006F65A00CE75DD /* TemplateChooserWindowController.m */,
 				000B2C571013EA8300049B5F /* InspectorCell.h */,
 				000B2C581013EA8300049B5F /* InspectorCell.m */,
+				00EF028B107D9EFB00FE378D /* VerticallyCenteredCell.h */,
+				00EF028C107D9EFB00FE378D /* VerticallyCenteredCell.m */,
 			);
 			path = macosx;
 			sourceTree = "<group>";
@@ -659,6 +664,7 @@
 				006F08CA1006F65A00CE75DD /* TemplateChooserWindowController.m in Sources */,
 				000B2C591013EA8300049B5F /* InspectorCell.m in Sources */,
 				00A0B8041069761A007930A5 /* Document.mm in Sources */,
+				00EF028D107D9EFB00FE378D /* VerticallyCenteredCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

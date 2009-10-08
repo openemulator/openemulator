@@ -74,7 +74,7 @@ private:
 	
 	string getNodeProperty(xmlNodePtr node, string key);
 	string buildAbsoluteRef(string absoluteRef, string ref);
-	OESplitRef OEInfo::getSplitRef(string ref);
+	OESplitRef buildSplitRef(string ref);
 	
 	string getConnectedOutletRef(xmlDocPtr dml, string inletRef);
 	OEPortInfo *getOutletProperties(string outletRef);

@@ -115,7 +115,7 @@ string OEInfo::buildAbsoluteRef(string absoluteRef, string ref)
 	return ref;
 }
 
-OESplitRef OEInfo::getSplitRef(string ref)
+OESplitRef OEInfo::buildSplitRef(string ref)
 {
 	OESplitRef name;
 	
@@ -146,7 +146,7 @@ OESplitRef OEInfo::getSplitRef(string ref)
 
 string OEInfo::getConnectedOutletRef(xmlDocPtr dml, string inletRef)
 {
-	OESplitRef splitRef = getSplitRef(inletRef);
+	OESplitRef splitRef = buildSplitRef(inletRef);
 	
 	xmlNodePtr dmlNode = xmlDocGetRootElement(dml);
 	
@@ -207,7 +207,7 @@ string OEInfo::buildConnectedLabel(OEPortInfo *outlet, vector<string> *refList)
 	OEPortInfo *inlet = outlet->connectedPort;
 	if (!inlet)
 		return "Unknown";
-	OESplitRef iSplitRef = getSplitRef(inlet->ref);
+	OESplitRef iSplitRef = buildSplitRef(inlet->ref);
 	
 	// For some odd reason, g++ does not like the next line in the loop
 	OESplitRef oSplitRef;
@@ -215,7 +215,7 @@ string OEInfo::buildConnectedLabel(OEPortInfo *outlet, vector<string> *refList)
 		 o != outletsInfo.end();
 		 o++)
 	{
-		oSplitRef = getSplitRef(o->ref);
+		oSplitRef = buildSplitRef(o->ref);
 		if (iSplitRef.device != oSplitRef.device)
 			continue;
 		

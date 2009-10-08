@@ -18,12 +18,67 @@
 	if (self)
 		documentController = theDocumentController;
 	
+	groups = [[NSArray arrayWithObjects:
+			   @"Amiga",
+			   @"Apple I, II, III",
+			   @"Apple Lisa",
+			   @"Atari",
+			   @"Commodore",
+			   @"Mac (680x0)",
+			   @"Mac (PowerPC)",
+			   @"PC",
+			   @"ZX Spectrum",
+			   @"My Templates", nil] retain]; 
+	
 	return self;
 }
 
 - (id)init
 {
 	return [self init:nil];
+}
+
+- (void)dealloc
+{
+	[groups retain];
+}
+
+- (void)awakeFromNib
+{
+	// To-Do: Read all templates
+	// Add them to the group list
+	// Populate the template list when the group list changes
+	
+	[outlineView setDataSource:self];
+	[outlineView reloadData];
+}
+
+- (id)outlineView:(NSOutlineView *)outlineView child:(NSInteger)index ofItem:(id)item
+{
+	if (!item)
+		return [groups objectAtIndex:index];
+	
+	return nil;
+}
+
+- (BOOL)outlineView:(NSOutlineView *)outlineView isItemExpandable:(id)item
+{
+	return NO;
+}
+
+- (NSInteger)outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(id)item
+{
+	if (!item)
+		return [groups count];
+	
+	return 0;
+}
+
+- (id)outlineView:(NSOutlineView *)outlineView
+objectValueForTableColumn:(NSTableColumn *)tableColumn
+		   byItem:(id)item
+{
+	return item;
 }
 
 - (void)windowDidLoad

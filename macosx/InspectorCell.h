@@ -8,11 +8,10 @@
  * Controls an inspector's cell.
  */
 
-#import <Cocoa/Cocoa.h>
+#import "VerticallyCenteredCell.h"
 
-@interface InspectorCell : NSTextFieldCell {
-//	NSMutableDictionary * fTitleAttributes;
-//	NSMutableDictionary * fStatusAttributes;
+@interface InspectorCell : VerticallyCenteredCell
+{
 }
 
 @end
