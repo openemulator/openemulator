@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		000B2C591013EA8300049B5F /* InspectorCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 000B2C581013EA8300049B5F /* InspectorCell.m */; };
 		00123BC91069B8D600FB95A1 /* libemulator.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 006EECA40FCA5C31003D2C8D /* libemulator.a */; };
 		00123BCC1069B8F200FB95A1 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 00E2A84D1053290200910B53 /* libxml2.dylib */; };
 		00123BCF1069B91200FB95A1 /* libzip.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00A0BA51106981A7007930A5 /* libzip.a */; };
@@ -129,8 +128,6 @@
 		000A79220FBA49C500A0F12E /* TBPower.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TBPower.png; sourceTree = "<group>"; };
 		000A79230FBA49C500A0F12E /* TBReset.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TBReset.png; sourceTree = "<group>"; };
 		000A79520FBA4A8400A0F12E /* OpenEmulatorHelp */ = {isa = PBXFileReference; lastKnownFileType = folder; name = OpenEmulatorHelp; path = macosx/OpenEmulatorHelp; sourceTree = "<group>"; };
-		000B2C571013EA8300049B5F /* InspectorCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InspectorCell.h; sourceTree = "<group>"; };
-		000B2C581013EA8300049B5F /* InspectorCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InspectorCell.m; sourceTree = "<group>"; };
 		000F66360FF8368F00C8AF23 /* AppleGraphicsTablet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppleGraphicsTablet.png; sourceTree = "<group>"; };
 		000F66370FF8368F00C8AF23 /* DiskImage.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = DiskImage.icns; sourceTree = "<group>"; };
 		000F66380FF8368F00C8AF23 /* DiskImage35.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = DiskImage35.icns; sourceTree = "<group>"; };
@@ -449,8 +446,6 @@
 				00B4174C1004197300BA7E45 /* AppController.m */,
 				006F08C81006F65A00CE75DD /* TemplateChooserWindowController.h */,
 				006F08C91006F65A00CE75DD /* TemplateChooserWindowController.m */,
-				000B2C571013EA8300049B5F /* InspectorCell.h */,
-				000B2C581013EA8300049B5F /* InspectorCell.m */,
 				00EF028B107D9EFB00FE378D /* VerticallyCenteredCell.h */,
 				00EF028C107D9EFB00FE378D /* VerticallyCenteredCell.m */,
 			);
@@ -662,7 +657,6 @@
 				00D845860FFF0FD2005802F0 /* PreferencesController.m in Sources */,
 				00B4174D1004197300BA7E45 /* AppController.m in Sources */,
 				006F08CA1006F65A00CE75DD /* TemplateChooserWindowController.m in Sources */,
-				000B2C591013EA8300049B5F /* InspectorCell.m in Sources */,
 				00A0B8041069761A007930A5 /* Document.mm in Sources */,
 				00EF028D107D9EFB00FE378D /* VerticallyCenteredCell.m in Sources */,
 			);

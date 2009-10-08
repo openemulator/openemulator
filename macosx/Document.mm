@@ -10,7 +10,6 @@
 
 #import "Document.h"
 #import "DocumentWindowController.h"
-#import "InspectorCell.h"
 
 #import "OEEmulation.h"
 #import "OEInfo.h"
@@ -163,6 +162,48 @@
 	[self setRunTime:value];
 }
 
+- (NSAttributedString *)formatDeviceLabel:(NSString *)deviceLabel
+					  withInformativeText:(NSString *)informativeText
+{
+	NSMutableParagraphStyle *paragraphStyle;
+	paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+	[paragraphStyle setLineBreakMode:NSLineBreakByTruncatingTail];
+	
+	NSColor *deviceLabelColor;
+	NSColor *informativeTextColor;
+/*    if ([self backgroundStyle] == NSBackgroundStyleDark)
+        titleColor = statusColor = [NSColor whiteColor];
+    else
+    {
+*/
+	deviceLabelColor = [NSColor controlTextColor];
+    informativeTextColor = [NSColor darkGrayColor];
+//    }
+	
+	NSDictionary *deviceLabelAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
+										   [NSFont messageFontOfSize:12.0f], NSFontAttributeName,
+										   paragraphStyle, NSParagraphStyleAttributeName,
+										   deviceLabelColor, NSForegroundColorAttributeName,
+										   nil];
+	NSDictionary *informativeTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
+											   [NSFont messageFontOfSize:9.0f], NSFontAttributeName,
+											   paragraphStyle, NSParagraphStyleAttributeName,
+											   informativeTextColor, NSForegroundColorAttributeName,
+											   nil];
+	
+	NSMutableAttributedString *aString;
+	aString = [[[NSMutableAttributedString alloc] initWithString:deviceLabel
+													  attributes:deviceLabelAttributes]
+						autorelease];
+	NSAttributedString *aInformativeText;
+	aInformativeText = [[[NSAttributedString alloc] initWithString:informativeText
+														attributes:informativeTextAttributes]
+						   autorelease];
+	[aString appendAttributedString:aInformativeText];
+	
+	return aString;
+}
+
 - (void) updateDevices
 {
 	OEInfo info(((OEEmulation *) emulation)->getDML());
@@ -192,17 +233,18 @@
 		
 		NSString *deviceLabel = [NSString stringWithUTF8String:o->label.c_str()];
 		NSString *connectedLabel = [NSString stringWithUTF8String:
-									o->connectedLabel.c_str()];
-		NSString *mountLabel = @"";
-		NSString *deviceTitle = [NSString localizedStringWithFormat:@"%@\n(on %@)%@",
-								 deviceLabel,
-								 connectedLabel,
-								 mountLabel];
+									 o->connectedLabel.c_str()];
+		NSString *informativeText = [NSString localizedStringWithFormat:@"%@\n(on %@)",
+									 deviceLabel,
+									 connectedLabel];
+
+		NSAttributedString *aString = [self formatDeviceLabel:deviceLabel
+										  withInformativeText:informativeText];
 		
-		NSArray *keys = [NSArray arrayWithObjects:@"image", @"title", nil];
-		NSArray *objects = [NSArray arrayWithObjects:deviceImage, deviceTitle, nil];
-		NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithObjects:objects
-																	   forKeys:keys];
+		NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
+							  deviceImage, @"image",
+							  aString, @"title",
+							  nil];
 		if (o->type == "expansion")
 			[self insertObject:dict inExpansionsAtIndex:expansionIndex++];
 		else if (o->type == "diskdrive")

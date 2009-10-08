@@ -18,29 +18,27 @@
 	if (self)
 		documentController = theDocumentController;
 	
-	groups = [[NSArray arrayWithObjects:
-			   @"Amiga",
-			   @"Apple I, II, III",
-			   @"Apple Lisa",
-			   @"Atari",
-			   @"Commodore",
-			   @"Mac (680x0)",
-			   @"Mac (PowerPC)",
-			   @"PC",
-			   @"ZX Spectrum",
-			   @"My Templates", nil] retain]; 
+	groups = [NSArray arrayWithObjects:
+			  @"Amiga",
+			  @"Apple I, II, III",
+			  @"Apple Lisa",
+			  @"Atari",
+			  @"Commodore",
+			  @"Mac (680x0)",
+			  @"Mac (PowerPC)",
+			  @"PC",
+			  @"ZX Spectrum",
+			  @"My Templates", nil];
+	if (groups)
+		[groups retain]; 
 	
 	return self;
 }
 
-- (id)init
-{
-	return [self init:nil];
-}
-
 - (void)dealloc
 {
-	[groups retain];
+	[groups release];
+	[super dealloc];
 }
 
 - (void)awakeFromNib

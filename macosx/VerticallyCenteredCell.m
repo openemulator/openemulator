@@ -12,17 +12,13 @@
 
 @implementation VerticallyCenteredCell
 
-- (NSRect)titleRectForBounds:(NSRect)theRect
+- (void)drawInteriorWithFrame:(NSRect)cellFrame inView:(NSView *)controlView
 {
-	NSRect titleFrame = [super titleRectForBounds:theRect];
-	NSSize titleSize = [[self attributedStringValue] size];
-	titleFrame.origin.y = theRect.origin.y + (theRect.size.height - titleSize.height) / 2.0;
-	return titleFrame;
-}
-
-- (void)drawInteriorWithFrame:(NSRect)cellFrame inView:(NSView *)controlView {
-    NSRect titleRect = [self titleRectForBounds:cellFrame];
-    [[self attributedStringValue] drawInRect:titleRect];
+    NSSize contentSize = [self cellSize];
+    cellFrame.origin.y += (cellFrame.size.height - contentSize.height) / 2.0;
+    cellFrame.size.height = contentSize.height;
+	
+    [super drawInteriorWithFrame:cellFrame inView:controlView];
 }
 
 @end
