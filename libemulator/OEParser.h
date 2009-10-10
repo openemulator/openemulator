@@ -6,8 +6,8 @@
  * Released under the GPL
  */
 
-#ifndef _OEINFO_H
-#define _OEINFO_H
+#ifndef _OEPARSER_H
+#define _OEPARSER_H
 
 #include <string>
 #include <vector>
@@ -49,12 +49,12 @@ typedef struct
 
 typedef vector<OEPortInfo> OEPortsInfo;
 
-class OEInfo
+class OEParser
 {
 public:
-	OEInfo(string path);
-	OEInfo(xmlDocPtr dml);
-	~OEInfo();
+	OEParser(string path);
+	OEParser(xmlDocPtr dml);
+	~OEParser();
 	
 	bool isOpen();
 	

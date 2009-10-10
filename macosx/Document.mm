@@ -11,8 +11,8 @@
 #import "Document.h"
 #import "DocumentWindowController.h"
 
-#import "OEEmulation.h"
-#import "OEInfo.h"
+#import "OEEmulator.h"
+#import "OEParser.h"
 
 #define TEMPLATE_FOLDER @"~/Library/Application Support/Open Emulator/Templates"
 
@@ -25,7 +25,9 @@
 		emulation = nil;
 		
 		pasteboard = [NSPasteboard generalPasteboard];
-		pasteboardTypes = [[NSArray alloc] initWithObjects:NSStringPboardType, nil];
+		pasteboardTypes = [[NSArray alloc] initWithObjects:
+						   NSStringPboardType,
+						   nil];
 		
 		power = false;
 		label = nil;
@@ -66,32 +68,35 @@
 - (void)dealloc
 {
 //	printf("dealloc\n");
-	[pasteboardTypes release];
-	
 	if (emulation)
-		delete (OEEmulation *) emulation;
+		delete (OEEmulator *) emulation;
+	
+	[pasteboardTypes release];
+	[expansions release];
+	[diskDrives release];
+	[peripherals release];
 	
 	[super dealloc];
 }
 
-- (void) setDMLProperty:(NSString *)key value:(NSString *)value
+- (void)setDMLProperty:(NSString *)key value:(NSString *)value
 {
 	if (!emulation)
 		return;
 	
-	xmlDocPtr dml = ((OEEmulation *) emulation)->getDML();
+	xmlDocPtr dml = ((OEEmulator *) emulation)->getDML();
 	
 	xmlNodePtr rootNode = xmlDocGetRootElement(dml);
 	
 	xmlSetProp(rootNode, BAD_CAST [key UTF8String], BAD_CAST [value UTF8String]);
 }
 
-- (NSString *) getDMLProperty:(NSString *)key
+- (NSString *)getDMLProperty:(NSString *)key
 {
 	if (!emulation)
 		return nil;
 	
-	xmlDocPtr dml = ((OEEmulation *) emulation)->getDML();
+	xmlDocPtr dml = ((OEEmulator *) emulation)->getDML();
 	
 	xmlNodePtr rootNode = xmlDocGetRootElement(dml);
 	
@@ -102,7 +107,7 @@
 	return value;
 }
 
-- (void) setIoctlProperty:(NSString *)key ref:(NSString *)ref value:(NSString *)value
+- (void)setIoctlProperty:(NSString *)key ref:(NSString *)ref value:(NSString *)value
 {
 	if (!emulation)
 		return;
@@ -112,12 +117,12 @@
 	property.key = string([key UTF8String]);
 	property.value = string([value UTF8String]);
 	
-	((OEEmulation *)emulation)->ioctl(string([ref UTF8String]),
+	((OEEmulator *)emulation)->ioctl(string([ref UTF8String]),
 									  OEIoctlSetProperty,
 									  &property);
 }
 
-- (NSString *) getIoctlProperty:(NSString *)key ref:(NSString *)ref
+- (NSString *)getIoctlProperty:(NSString *)key ref:(NSString *)ref
 {
 	if (!emulation)
 		return nil;
@@ -126,7 +131,7 @@
 	
 	msg.key = string([key UTF8String]);
 	
-	if (((OEEmulation *)emulation)->ioctl(string([ref UTF8String]),
+	if (((OEEmulator *)emulation)->ioctl(string([ref UTF8String]),
 									  OEIoctlGetProperty,
 									  &msg))
 		return [NSString stringWithUTF8String:msg.value.c_str()];
@@ -134,7 +139,7 @@
 		return nil;
 }
 
-- (NSImage *) getResourceImage:(NSString *)imagePath
+- (NSImage *)getResourceImage:(NSString *)imagePath
 {
 	NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
 	NSString *path = [[resourcePath
@@ -147,7 +152,7 @@
 	return theImage;
 }
 
-- (void) updateRunTime
+- (void)updateRunTime
 {
 	NSString *property = [self getIoctlProperty:@"runTime" ref:@"host::events"];
 	int timeDifference = [property intValue];
@@ -169,44 +174,38 @@
 	paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
 	[paragraphStyle setLineBreakMode:NSLineBreakByTruncatingTail];
 	
-	NSColor *deviceLabelColor;
-	NSColor *informativeTextColor;
-/*    if ([self backgroundStyle] == NSBackgroundStyleDark)
-        titleColor = statusColor = [NSColor whiteColor];
-    else
-    {
-*/
-	deviceLabelColor = [NSColor controlTextColor];
-    informativeTextColor = [NSColor darkGrayColor];
-//    }
-	
-	NSDictionary *deviceLabelAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
-										   [NSFont messageFontOfSize:12.0f], NSFontAttributeName,
-										   paragraphStyle, NSParagraphStyleAttributeName,
-										   deviceLabelColor, NSForegroundColorAttributeName,
-										   nil];
-	NSDictionary *informativeTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
-											   [NSFont messageFontOfSize:9.0f], NSFontAttributeName,
-											   paragraphStyle, NSParagraphStyleAttributeName,
-											   informativeTextColor, NSForegroundColorAttributeName,
-											   nil];
-	
+	NSDictionary *deviceLabelAttrs = [NSDictionary dictionaryWithObjectsAndKeys:
+									  [NSFont messageFontOfSize:12.0f],
+									  NSFontAttributeName,
+									  paragraphStyle,
+									  NSParagraphStyleAttributeName,
+									  [NSColor controlTextColor],
+									  NSForegroundColorAttributeName,
+									  nil];
 	NSMutableAttributedString *aString;
 	aString = [[[NSMutableAttributedString alloc] initWithString:deviceLabel
-													  attributes:deviceLabelAttributes]
+													  attributes:deviceLabelAttrs]
 						autorelease];
+	
+	NSDictionary *informativeTextAttrs = [NSDictionary dictionaryWithObjectsAndKeys:
+										  [NSFont messageFontOfSize:9.0f],
+										  NSFontAttributeName,
+										  paragraphStyle,
+										  NSParagraphStyleAttributeName,
+										  [NSColor darkGrayColor],
+										  NSForegroundColorAttributeName,
+										  nil];
 	NSAttributedString *aInformativeText;
 	aInformativeText = [[[NSAttributedString alloc] initWithString:informativeText
-														attributes:informativeTextAttributes]
-						   autorelease];
+						 attributes:informativeTextAttrs] autorelease];
 	[aString appendAttributedString:aInformativeText];
 	
 	return aString;
 }
 
-- (void) updateDevices
+- (void)updateDevices
 {
-	OEInfo info(((OEEmulation *) emulation)->getDML());
+	OEParser info(((OEEmulator *) emulation)->getDML());
 	if (!info.isOpen())
 		return;
 	
@@ -228,22 +227,18 @@
 	{
 		NSString *imagePath = [NSString stringWithUTF8String:o->image.c_str()];
 		NSImage *deviceImage = [self getResourceImage:imagePath];
-		if (!deviceImage)
-			deviceImage = [[[NSImage alloc] init] autorelease];
 		
 		NSString *deviceLabel = [NSString stringWithUTF8String:o->label.c_str()];
-		NSString *connectedLabel = [NSString stringWithUTF8String:
-									 o->connectedLabel.c_str()];
-		NSString *informativeText = [NSString localizedStringWithFormat:@"%@\n(on %@)",
-									 deviceLabel,
-									 connectedLabel];
-
+		NSString *informativeText = [NSString localizedStringWithFormat:@"\n(on %@)",
+									 [NSString stringWithUTF8String:
+									  o->connectedLabel.c_str()]];
+		
 		NSAttributedString *aString = [self formatDeviceLabel:deviceLabel
 										  withInformativeText:informativeText];
 		
 		NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
-							  deviceImage, @"image",
 							  aString, @"title",
+							  deviceImage, @"image",
 							  nil];
 		if (o->type == "expansion")
 			[self insertObject:dict inExpansionsAtIndex:expansionIndex++];
@@ -265,13 +260,13 @@
 	const char *resourcePath = [[[NSBundle mainBundle] resourcePath] UTF8String];
 	
 	if (emulation)
-		delete (OEEmulation *) emulation;
+		delete (OEEmulator *)emulation;
 	
-	emulation = (void *) new OEEmulation(emulationPath, resourcePath);
+	emulation = (void *)new OEEmulator(emulationPath, resourcePath);
 	
 	if (emulation)
 	{
-		if (((OEEmulation *) emulation)->isOpen())
+		if (((OEEmulator *)emulation)->isOpen())
 		{
 			[self setLabel:[self getDMLProperty:@"label"]];
 			[self setDescription:[self getDMLProperty:@"description"]];
@@ -292,7 +287,7 @@
 			return YES;
 		}
 		
-		delete (OEEmulation *) emulation;
+		delete (OEEmulator *)emulation;
 		emulation = NULL;
 	}
 	
@@ -311,7 +306,7 @@
 								 UTF8String];
 	if (emulation)
 	{
-		if (((OEEmulation *) emulation)->save(string(emulationPath)))
+		if (((OEEmulator *)emulation)->save(string(emulationPath)))
 			return YES;
 	}
 	

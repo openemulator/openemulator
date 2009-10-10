@@ -10,10 +10,10 @@
 
 #include <libxml/parser.h>
 
-#include "OEInfo.h"
+#include "OEParser.h"
 #include "Package.h"
 
-OEInfo::OEInfo(string path)
+OEParser::OEParser(string path)
 {
 	open = false;
 	
@@ -50,16 +50,16 @@ OEInfo::OEInfo(string path)
 	}
 }
 
-OEInfo::OEInfo(xmlDocPtr dml)
+OEParser::OEParser(xmlDocPtr dml)
 {
 	open = parse(dml);
 }
 
-OEInfo::~OEInfo()
+OEParser::~OEParser()
 {
 }
 
-string OEInfo::getPathExtension(string path)
+string OEParser::getPathExtension(string path)
 {
 	int extensionIndex = path.rfind('.');
 	if (extensionIndex == string::npos)
@@ -68,7 +68,7 @@ string OEInfo::getPathExtension(string path)
 	return path.substr(extensionIndex + 1);
 }
 
-bool OEInfo::readFile(string path, vector<char> &data)
+bool OEParser::readFile(string path, vector<char> &data)
 {
 	bool error = true;
 	
@@ -89,7 +89,7 @@ bool OEInfo::readFile(string path, vector<char> &data)
 	return !error;
 }
 
-string OEInfo::getNodeProperty(xmlNodePtr node, string key)
+string OEParser::getNodeProperty(xmlNodePtr node, string key)
 {
 	char *value = (char *) xmlGetProp(node, BAD_CAST key.c_str());
 	string valueString = value ? value : "";
@@ -98,7 +98,7 @@ string OEInfo::getNodeProperty(xmlNodePtr node, string key)
 	return valueString;
 }
 
-string OEInfo::buildAbsoluteRef(string absoluteRef, string ref)
+string OEParser::buildAbsoluteRef(string absoluteRef, string ref)
 {
 	if (ref.size() == 0)
 		return string();
@@ -115,7 +115,7 @@ string OEInfo::buildAbsoluteRef(string absoluteRef, string ref)
 	return ref;
 }
 
-OESplitRef OEInfo::buildSplitRef(string ref)
+OESplitRef OEParser::buildSplitRef(string ref)
 {
 	OESplitRef name;
 	
@@ -144,7 +144,7 @@ OESplitRef OEInfo::buildSplitRef(string ref)
 	return name;
 }
 
-string OEInfo::getConnectedOutletRef(xmlDocPtr dml, string inletRef)
+string OEParser::getConnectedOutletRef(xmlDocPtr dml, string inletRef)
 {
 	OESplitRef splitRef = buildSplitRef(inletRef);
 	
@@ -189,7 +189,7 @@ string OEInfo::getConnectedOutletRef(xmlDocPtr dml, string inletRef)
 	return "";
 }
 
-OEPortInfo *OEInfo::getOutletProperties(string outletRef)
+OEPortInfo *OEParser::getOutletProperties(string outletRef)
 {
 	for (OEPortsInfo::iterator o = outletsInfo.begin();
 		 o != outletsInfo.end();
@@ -202,7 +202,7 @@ OEPortInfo *OEInfo::getOutletProperties(string outletRef)
 	return NULL;
 }
 
-string OEInfo::buildConnectedLabel(OEPortInfo *outlet, vector<string> *refList)
+string OEParser::buildConnectedLabel(OEPortInfo *outlet, vector<string> *refList)
 {
 	OEPortInfo *inlet = outlet->connectedPort;
 	if (!inlet)
@@ -234,14 +234,14 @@ string OEInfo::buildConnectedLabel(OEPortInfo *outlet, vector<string> *refList)
 	return inlet->deviceLabel + " " + inlet->label;
 }
 
-string OEInfo::buildConnectedLabel(OEPortInfo *outlet)
+string OEParser::buildConnectedLabel(OEPortInfo *outlet)
 {
 	vector<string> refList;
 	string test = buildConnectedLabel(outlet, &refList);
 	return test;
 }
 
-bool OEInfo::parse(xmlDocPtr dml)
+bool OEParser::parse(xmlDocPtr dml)
 {
 	xmlNodePtr dmlNode = xmlDocGetRootElement(dml);
 	
@@ -319,7 +319,7 @@ bool OEInfo::parse(xmlDocPtr dml)
 	return true;
 }
 
-OEPortInfo OEInfo::parsePort(string deviceName, 
+OEPortInfo OEParser::parsePort(string deviceName, 
 								   string deviceLabel,
 								   string deviceImage,
 								   xmlNodePtr node)
@@ -344,22 +344,22 @@ OEPortInfo OEInfo::parsePort(string deviceName,
 	return prop;
 }
 
-bool OEInfo::isOpen()
+bool OEParser::isOpen()
 {
 	return open;
 }
 
-OEDMLInfo *OEInfo::getDMLInfo()
+OEDMLInfo *OEParser::getDMLInfo()
 {
 	return &dmlInfo;
 }
 
-vector<OEPortInfo> *OEInfo::getInletsInfo()
+vector<OEPortInfo> *OEParser::getInletsInfo()
 {
 	return &inletsInfo;
 }
 
-vector<OEPortInfo> *OEInfo::getOutletsInfo()
+vector<OEPortInfo> *OEParser::getOutletsInfo()
 {
 	return &outletsInfo;
 }

@@ -8,6 +8,10 @@
  * Controls the template chooser window.
  */
 
+#import <string>
+
+#import "OEParser.h"
+
 #import "TemplateChooserWindowController.h"
 
 @implementation TemplateChooserWindowController
@@ -16,21 +20,41 @@
 {
 	self = [super initWithWindowNibName:@"TemplateChooser"];
 	if (self)
+	{
 		documentController = theDocumentController;
-	
-	groups = [NSArray arrayWithObjects:
-			  @"Amiga",
-			  @"Apple I, II, III",
-			  @"Apple Lisa",
-			  @"Atari",
-			  @"Commodore",
-			  @"Mac (680x0)",
-			  @"Mac (PowerPC)",
-			  @"PC",
-			  @"ZX Spectrum",
-			  @"My Templates", nil];
-	if (groups)
-		[groups retain]; 
+		
+		groups = [[NSMutableArray alloc] init];
+		
+		NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
+		NSString *templateFolderPath = [resourcePath
+										stringByAppendingPathComponent:@"templates"];
+		NSError *error;
+		NSArray *templates = [[NSFileManager defaultManager]
+							  contentsOfDirectoryAtPath:templateFolderPath
+							  error:&error];
+		
+		int templatesCount = [templates count];
+		for (int i = 0; i < templatesCount; i++)
+		{
+			NSString *templatePath = [templateFolderPath
+									  stringByAppendingPathComponent:
+									  [templates objectAtIndex:i]];
+			string templatePathString = string([templatePath UTF8String]);
+			OEParser parser(templatePathString);
+			if (!parser.isOpen())
+				continue;
+			
+			OEDMLInfo *dmlInfo = parser.getDMLInfo();
+			NSString *group = [NSString stringWithUTF8String:dmlInfo->group.c_str()];
+			if (![groups containsObject:group])
+				[groups addObject:group];
+		}
+		
+		NSArray *sortedGroups = [groups sortedArrayUsingSelector:@selector(compare:)];
+		[groups release];
+		groups = [NSMutableArray arrayWithArray:sortedGroups];
+		[groups retain];
+	}
 	
 	return self;
 }

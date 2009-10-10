@@ -6,8 +6,8 @@
  * Released under the GPL
  */
 
-#ifndef _OEEMULATION_H
-#define _OEEMULATION_H
+#ifndef _OEEMULATOR_H
+#define _OEEMULATOR_H
 
 #include <string>
 #include <map>
@@ -20,11 +20,11 @@
 
 using namespace std;
 
-class OEEmulation
+class OEEmulator
 {
 public:
-	OEEmulation(string emulationPath, string resourcePath);
-	~OEEmulation();
+	OEEmulator(string emulationPath, string resourcePath);
+	~OEEmulator();
 	
 	bool isOpen();
 	
@@ -72,8 +72,7 @@ private:
 	bool getComponentData(string deviceName,
 						  OEComponent *component,
 						  xmlNodePtr dataNode);
-	bool setComponentResource(OEComponent *component,
-							  xmlNodePtr resourceNode);
+	bool setComponentResource(OEComponent *component, xmlNodePtr resourceNode);
 };
 
 #endif

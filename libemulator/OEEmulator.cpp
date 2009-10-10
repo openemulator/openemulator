@@ -1,7 +1,7 @@
 
 /**
  * libemulator
- * OEEmulation
+ * OEEmulator
  * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  */
@@ -10,12 +10,12 @@
 
 #include <libxml/parser.h>
 
-#include "OEEmulation.h"
+#include "OEEmulator.h"
 #include "OEComponentFactory.h"
 
-OEEmulation::OEEmulation(string emulationPath, string resourcePath)
+OEEmulator::OEEmulator(string emulationPath, string resourcePath)
 {
-//	printf("OEEmulation::construct\n");
+//	printf("OEEmulator::construct\n");
 	dml = NULL;
 	open = false;
 	
@@ -41,16 +41,16 @@ OEEmulation::OEEmulation(string emulationPath, string resourcePath)
 	package = NULL;
 }
 
-OEEmulation::~OEEmulation()
+OEEmulator::~OEEmulator()
 {
-//	printf("OEEmulation::destruct\n");
+//	printf("OEEmulator::destruct\n");
 	if (dml)
 		xmlFreeDoc(dml);
 	
 	destructComponents();
 }
 
-string OEEmulation::getNodeProperty(xmlNodePtr node, string key)
+string OEEmulator::getNodeProperty(xmlNodePtr node, string key)
 {
 	char *value = (char *) xmlGetProp(node, BAD_CAST key.c_str());
 	string valueString = value ? value : "";
@@ -59,12 +59,12 @@ string OEEmulation::getNodeProperty(xmlNodePtr node, string key)
 	return valueString;
 }
 
-void OEEmulation::setNodeProperty(xmlNodePtr node, string key, string value)
+void OEEmulator::setNodeProperty(xmlNodePtr node, string key, string value)
 {
 	xmlSetProp(node, BAD_CAST key.c_str(), BAD_CAST value.c_str());
 }
 
-string OEEmulation::buildAbsoluteRef(string absoluteRef, string ref)
+string OEEmulator::buildAbsoluteRef(string absoluteRef, string ref)
 {
 	if (ref.size() == 0)
 		return string();
@@ -81,7 +81,7 @@ string OEEmulation::buildAbsoluteRef(string absoluteRef, string ref)
 	return ref;
 }
 
-string OEEmulation::buildSourcePath(string deviceName, string src)
+string OEEmulator::buildSourcePath(string deviceName, string src)
 {
 	// Replace COMPONENT_DATA_DEVICE_NAME with deviceName
 	int index = src.find(OE_SUBSTITUTION_DEVICE_NAME);
@@ -91,7 +91,7 @@ string OEEmulation::buildSourcePath(string deviceName, string src)
 	return src;
 }
 
-bool OEEmulation::readResource(string localPath, vector<char> &data)
+bool OEEmulator::readResource(string localPath, vector<char> &data)
 {
 	bool error = true;
 	
@@ -112,7 +112,7 @@ bool OEEmulation::readResource(string localPath, vector<char> &data)
 	return !error;
 }
 
-bool OEEmulation::buildComponents()
+bool OEEmulator::buildComponents()
 {
 	xmlNodePtr dmlNode = xmlDocGetRootElement(dml);
 	
@@ -166,7 +166,7 @@ bool OEEmulation::buildComponents()
 	return true;
 }
 
-bool OEEmulation::queryComponents()
+bool OEEmulator::queryComponents()
 {
 	xmlNodePtr dmlNode = xmlDocGetRootElement(dml);
 	
@@ -195,20 +195,20 @@ bool OEEmulation::queryComponents()
 	return true;
 }
 
-void OEEmulation::destructComponents()
+void OEEmulator::destructComponents()
 {
 	for (map<string, OEComponent *>::iterator i = components.begin();
 		 i != components.end();
 		 i++)
 	{
-//		printf("OEEmulation::destructComponent: %s\n", i->first.c_str());
+//		printf("OEEmulator::destructComponent: %s\n", i->first.c_str());
 		
 		delete i->second;
 		components.erase(i);
 	}
 }
 
-bool OEEmulation::buildComponent(string deviceName, xmlNodePtr componentNode)
+bool OEEmulator::buildComponent(string deviceName, xmlNodePtr componentNode)
 {
 	string componentClass = getNodeProperty(componentNode, "class");
 	string componentName = getNodeProperty(componentNode, "name");
@@ -216,7 +216,7 @@ bool OEEmulation::buildComponent(string deviceName, xmlNodePtr componentNode)
 	string componentRef = buildAbsoluteRef(deviceName, componentName);
 	OEComponent *component = OEComponentFactory::build(string(componentClass));
 	
-//	printf("OEEmulation::buildComponent: %s\n", componentRef.c_str());
+//	printf("OEEmulator::buildComponent: %s\n", componentRef.c_str());
 	
 	if (component)
 	{
@@ -229,14 +229,14 @@ bool OEEmulation::buildComponent(string deviceName, xmlNodePtr componentNode)
 	return (component != NULL);
 }
 
-bool OEEmulation::initComponent(string deviceName, xmlNodePtr componentNode)
+bool OEEmulator::initComponent(string deviceName, xmlNodePtr componentNode)
 {
 	string componentName = getNodeProperty(componentNode, "name");
 	
 	string componentRef = buildAbsoluteRef(deviceName, componentName);
 	OEComponent *component = components[componentRef];
 	
-//	printf("OEEmulation::initComponent: %s\n", componentRef.c_str());
+//	printf("OEEmulator::initComponent: %s\n", componentRef.c_str());
 	
 	for(xmlNodePtr node = componentNode->children;
 		node;
@@ -267,14 +267,14 @@ bool OEEmulation::initComponent(string deviceName, xmlNodePtr componentNode)
 	return true;
 }
 
-bool OEEmulation::queryComponent(string deviceName, xmlNodePtr componentNode)
+bool OEEmulator::queryComponent(string deviceName, xmlNodePtr componentNode)
 {
 	string componentName = getNodeProperty(componentNode, "name");
 	
 	string componentRef = buildAbsoluteRef(deviceName, componentName);
 	OEComponent *component = components[componentRef];
 	
-//	printf("OEEmulation::queryComponent: %s\n", componentRef.c_str());
+//	printf("OEEmulator::queryComponent: %s\n", componentRef.c_str());
 	
 	for(xmlNodePtr node = componentNode->children;
 		node;
@@ -295,7 +295,7 @@ bool OEEmulation::queryComponent(string deviceName, xmlNodePtr componentNode)
 	return true;
 }
 
-bool OEEmulation::connectComponent(string deviceName,
+bool OEEmulator::connectComponent(string deviceName,
 								   OEComponent *component,
 								   xmlNodePtr connectionNode)
 {
@@ -325,7 +325,7 @@ bool OEEmulation::connectComponent(string deviceName,
 	return true;
 }
 
-bool OEEmulation::setComponentProperty(OEComponent *component,
+bool OEEmulator::setComponentProperty(OEComponent *component,
 									   xmlNodePtr propertyNode)
 {
 	string key = getNodeProperty(propertyNode, "key");
@@ -340,7 +340,7 @@ bool OEEmulation::setComponentProperty(OEComponent *component,
 	return true;
 }
 
-bool OEEmulation::getComponentProperty(OEComponent *component,
+bool OEEmulator::getComponentProperty(OEComponent *component,
 									   xmlNodePtr propertyNode)
 {
 	string key = getNodeProperty(propertyNode, "key");
@@ -354,7 +354,7 @@ bool OEEmulation::getComponentProperty(OEComponent *component,
 	return true;
 }
 
-bool OEEmulation::setComponentData(string deviceName,
+bool OEEmulator::setComponentData(string deviceName,
 								   OEComponent *component,
 								   xmlNodePtr dataNode)
 {
@@ -371,7 +371,7 @@ bool OEEmulation::setComponentData(string deviceName,
 	return true;
 }
 
-bool OEEmulation::getComponentData(string deviceName,
+bool OEEmulator::getComponentData(string deviceName,
 								   OEComponent *component,
 								   xmlNodePtr dataNode)
 {
@@ -396,7 +396,7 @@ bool OEEmulation::getComponentData(string deviceName,
 	return true;
 }
 
-bool OEEmulation::setComponentResource(OEComponent *component,
+bool OEEmulator::setComponentResource(OEComponent *component,
 									   xmlNodePtr resourceNode)
 {
 	string key = getNodeProperty(resourceNode, "key");
@@ -418,12 +418,12 @@ bool OEEmulation::setComponentResource(OEComponent *component,
 	return true;
 }
 
-bool OEEmulation::isOpen()
+bool OEEmulator::isOpen()
 {
 	return open;
 }
 
-bool OEEmulation::save(string emulationPath)
+bool OEEmulator::save(string emulationPath)
 {
 	bool error = true;
 	
@@ -454,7 +454,7 @@ bool OEEmulation::save(string emulationPath)
 	return !error;
 }
 
-int OEEmulation::ioctl(string componentRef, int message, void *data)
+int OEEmulator::ioctl(string componentRef, int message, void *data)
 {
 	if (open)
 	{
@@ -467,12 +467,12 @@ int OEEmulation::ioctl(string componentRef, int message, void *data)
 	return 0;
 }
 
-xmlDocPtr OEEmulation::getDML()
+xmlDocPtr OEEmulator::getDML()
 {
 	return dml;
 }
 
-bool OEEmulation::addDML(string path, map<string, string> connections)
+bool OEEmulator::addDML(string path, map<string, string> connections)
 {
 	// Load DML Tree
 	// Rename device names, so they don't step on old ones
@@ -482,7 +482,7 @@ bool OEEmulation::addDML(string path, map<string, string> connections)
 	return false;
 }
 
-bool OEEmulation::removeOutlet(string outletRef)
+bool OEEmulator::removeOutlet(string outletRef)
 {
 	// Search component with outletRef
 	// Get components' inlets

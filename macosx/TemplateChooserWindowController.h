@@ -19,7 +19,7 @@
 	
 	DocumentController *documentController;
 	
-	NSArray *groups;
+	NSMutableArray *groups;
 }
 
 - (id)init:(DocumentController *)theDocumentController;

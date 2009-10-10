@@ -19,15 +19,16 @@
 		005C7BBC0FD8ED6F00426DD0 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 005C7BBB0FD8ED6F00426DD0 /* Carbon.framework */; };
 		00679D08100817F700B38748 /* DeviceChooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00679D04100817F600B38748 /* DeviceChooser.xib */; };
 		00679D09100817F700B38748 /* TemplateChooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00679D06100817F700B38748 /* TemplateChooser.xib */; };
-		006F08CA1006F65A00CE75DD /* TemplateChooserWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 006F08C91006F65A00CE75DD /* TemplateChooserWindowController.m */; };
 		0075B1B20FE79F7E009C1DFA /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0075B1B10FE79F7E009C1DFA /* OpenGL.framework */; };
 		00A0B8041069761A007930A5 /* Document.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00A0B8031069761A007930A5 /* Document.mm */; };
 		00A0BA53106981C6007930A5 /* libportaudio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00A0BA4C10698175007930A5 /* libportaudio.a */; };
 		00A0D43B106FF64800090223 /* OEComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A0D435106FF64800090223 /* OEComponent.cpp */; };
-		00A0D43D106FF64800090223 /* OEEmulation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A0D437106FF64800090223 /* OEEmulation.cpp */; };
-		00A0D43F106FF64800090223 /* OEInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A0D439106FF64800090223 /* OEInfo.cpp */; };
 		00A0D443106FF66000090223 /* OEComponentFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A0D441106FF66000090223 /* OEComponentFactory.cpp */; };
 		00A0D4BB106FFBB800090223 /* IPMount.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BC8100FD4210016867D /* IPMount.png */; };
+		00A8C3FC1080064900D98FE0 /* InspectorDeviceCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00A8C3FB1080064900D98FE0 /* InspectorDeviceCell.m */; };
+		00A8C48C1080143600D98FE0 /* TemplateChooserWindowController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00A8C48B1080143600D98FE0 /* TemplateChooserWindowController.mm */; };
+		00A8C4E2108023AE00D98FE0 /* OEParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A8C4B11080220800D98FE0 /* OEParser.cpp */; };
+		00A8C4E3108023B200D98FE0 /* OEEmulator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A8C4AF1080220800D98FE0 /* OEEmulator.cpp */; };
 		00A97551107AD27500893DCE /* IPReveal.png in Resources */ = {isa = PBXBuildFile; fileRef = 00A97550107AD27500893DCE /* IPReveal.png */; };
 		00B3347D0FE41EF60042661D /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B3347C0FE41EF60042661D /* AudioToolbox.framework */; };
 		00B334810FE41EFE0042661D /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B334800FE41EFE0042661D /* AudioUnit.framework */; };
@@ -167,7 +168,6 @@
 		006EECA40FCA5C31003D2C8D /* libemulator.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libemulator.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		006EEE8F0FCA781C003D2C8D /* DiskImage.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = DiskImage.icns; sourceTree = "<group>"; };
 		006F08C81006F65A00CE75DD /* TemplateChooserWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TemplateChooserWindowController.h; sourceTree = "<group>"; };
-		006F08C91006F65A00CE75DD /* TemplateChooserWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TemplateChooserWindowController.m; sourceTree = "<group>"; };
 		0075B1B10FE79F7E009C1DFA /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
 		00A0B7B81068949D007930A5 /* Document.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Document.h; sourceTree = "<group>"; };
 		00A0B8031069761A007930A5 /* Document.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Document.mm; sourceTree = "<group>"; };
@@ -175,12 +175,15 @@
 		00A0BA51106981A7007930A5 /* libzip.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libzip.a; path = /usr/local/lib/libzip.a; sourceTree = "<absolute>"; };
 		00A0D435106FF64800090223 /* OEComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OEComponent.cpp; path = libemulator/OEComponent.cpp; sourceTree = "<group>"; };
 		00A0D436106FF64800090223 /* OEComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OEComponent.h; path = libemulator/OEComponent.h; sourceTree = "<group>"; };
-		00A0D437106FF64800090223 /* OEEmulation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OEEmulation.cpp; path = libemulator/OEEmulation.cpp; sourceTree = "<group>"; };
-		00A0D438106FF64800090223 /* OEEmulation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OEEmulation.h; path = libemulator/OEEmulation.h; sourceTree = "<group>"; };
-		00A0D439106FF64800090223 /* OEInfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OEInfo.cpp; path = libemulator/OEInfo.cpp; sourceTree = "<group>"; };
-		00A0D43A106FF64800090223 /* OEInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OEInfo.h; path = libemulator/OEInfo.h; sourceTree = "<group>"; };
 		00A0D441106FF66000090223 /* OEComponentFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OEComponentFactory.cpp; path = libemulator/OEComponentFactory.cpp; sourceTree = "<group>"; };
 		00A0D442106FF66000090223 /* OEComponentFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OEComponentFactory.h; path = libemulator/OEComponentFactory.h; sourceTree = "<group>"; };
+		00A8C3FA1080064900D98FE0 /* InspectorDeviceCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InspectorDeviceCell.h; sourceTree = "<group>"; };
+		00A8C3FB1080064900D98FE0 /* InspectorDeviceCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InspectorDeviceCell.m; sourceTree = "<group>"; };
+		00A8C48B1080143600D98FE0 /* TemplateChooserWindowController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TemplateChooserWindowController.mm; sourceTree = "<group>"; };
+		00A8C4AF1080220800D98FE0 /* OEEmulator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OEEmulator.cpp; path = libemulator/OEEmulator.cpp; sourceTree = "<group>"; };
+		00A8C4B01080220800D98FE0 /* OEEmulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OEEmulator.h; path = libemulator/OEEmulator.h; sourceTree = "<group>"; };
+		00A8C4B11080220800D98FE0 /* OEParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OEParser.cpp; path = libemulator/OEParser.cpp; sourceTree = "<group>"; };
+		00A8C4B21080220800D98FE0 /* OEParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OEParser.h; path = libemulator/OEParser.h; sourceTree = "<group>"; };
 		00A97550107AD27500893DCE /* IPReveal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPReveal.png; path = macosx/Images/IPReveal.png; sourceTree = "<group>"; };
 		00B3347C0FE41EF60042661D /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = /System/Library/Frameworks/AudioToolbox.framework; sourceTree = "<absolute>"; };
 		00B334800FE41EFE0042661D /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = /System/Library/Frameworks/AudioUnit.framework; sourceTree = "<absolute>"; };
@@ -358,14 +361,14 @@
 		006EEC9A0FCA5BEA003D2C8D /* libemulator */ = {
 			isa = PBXGroup;
 			children = (
+				00A8C4AF1080220800D98FE0 /* OEEmulator.cpp */,
+				00A8C4B01080220800D98FE0 /* OEEmulator.h */,
+				00A8C4B11080220800D98FE0 /* OEParser.cpp */,
+				00A8C4B21080220800D98FE0 /* OEParser.h */,
 				00A0D441106FF66000090223 /* OEComponentFactory.cpp */,
 				00A0D442106FF66000090223 /* OEComponentFactory.h */,
 				00A0D435106FF64800090223 /* OEComponent.cpp */,
 				00A0D436106FF64800090223 /* OEComponent.h */,
-				00A0D437106FF64800090223 /* OEEmulation.cpp */,
-				00A0D438106FF64800090223 /* OEEmulation.h */,
-				00A0D439106FF64800090223 /* OEInfo.cpp */,
-				00A0D43A106FF64800090223 /* OEInfo.h */,
 				004384821067641C001CFCCF /* EventController.cpp */,
 				004384831067641C001CFCCF /* EventController.h */,
 				0043804C10668FAE001CFCCF /* Package.cpp */,
@@ -422,6 +425,7 @@
 		2A37F4ABFDCFA73011CA2CEA /* macosx */ = {
 			isa = PBXGroup;
 			children = (
+				00A8C48B1080143600D98FE0 /* TemplateChooserWindowController.mm */,
 				00A0B8031069761A007930A5 /* Document.mm */,
 				00A0B7B81068949D007930A5 /* Document.h */,
 				00D845670FFF0FD2005802F0 /* DocumentController.h */,
@@ -445,9 +449,10 @@
 				00B4174B1004197300BA7E45 /* AppController.h */,
 				00B4174C1004197300BA7E45 /* AppController.m */,
 				006F08C81006F65A00CE75DD /* TemplateChooserWindowController.h */,
-				006F08C91006F65A00CE75DD /* TemplateChooserWindowController.m */,
 				00EF028B107D9EFB00FE378D /* VerticallyCenteredCell.h */,
 				00EF028C107D9EFB00FE378D /* VerticallyCenteredCell.m */,
+				00A8C3FA1080064900D98FE0 /* InspectorDeviceCell.h */,
+				00A8C3FB1080064900D98FE0 /* InspectorDeviceCell.m */,
 			);
 			path = macosx;
 			sourceTree = "<group>";
@@ -636,9 +641,9 @@
 				0043806410669AFB001CFCCF /* Package.cpp in Sources */,
 				004384841067641C001CFCCF /* EventController.cpp in Sources */,
 				00A0D43B106FF64800090223 /* OEComponent.cpp in Sources */,
-				00A0D43D106FF64800090223 /* OEEmulation.cpp in Sources */,
-				00A0D43F106FF64800090223 /* OEInfo.cpp in Sources */,
 				00A0D443106FF66000090223 /* OEComponentFactory.cpp in Sources */,
+				00A8C4E2108023AE00D98FE0 /* OEParser.cpp in Sources */,
+				00A8C4E3108023B200D98FE0 /* OEEmulator.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -656,9 +661,10 @@
 				00D845850FFF0FD2005802F0 /* PaperFeedController.m in Sources */,
 				00D845860FFF0FD2005802F0 /* PreferencesController.m in Sources */,
 				00B4174D1004197300BA7E45 /* AppController.m in Sources */,
-				006F08CA1006F65A00CE75DD /* TemplateChooserWindowController.m in Sources */,
 				00A0B8041069761A007930A5 /* Document.mm in Sources */,
 				00EF028D107D9EFB00FE378D /* VerticallyCenteredCell.m in Sources */,
+				00A8C3FC1080064900D98FE0 /* InspectorDeviceCell.m in Sources */,
+				00A8C48C1080143600D98FE0 /* TemplateChooserWindowController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
