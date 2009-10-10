@@ -12,25 +12,25 @@
 
 @implementation AppController
 
-- (void)linkHomepage:(id)sender
+- (void) linkHomepage:(id) sender
 {
 	NSURL *url = [NSURL	URLWithString:@LINK_HOMEPAGE];
 	[[NSWorkspace sharedWorkspace] openURL:url];
 }
 
-- (void)linkForums:(id)sender
+- (void) linkForums:(id) sender
 {
 	NSURL *url = [NSURL	URLWithString:@LINK_FORUMSURL];
 	[[NSWorkspace sharedWorkspace] openURL:url];
 }
 
-- (void)linkDevelopment:(id)sender
+- (void) linkDevelopment:(id) sender
 {
 	NSURL *url = [NSURL	URLWithString:@LINK_DEVURL];
 	[[NSWorkspace sharedWorkspace] openURL:url];
 }
 
-- (void)linkDonate:(id)sender
+- (void) linkDonate:(id) sender
 {
 	NSURL *url = [NSURL	URLWithString:@LINK_DONATEURL];
 	[[NSWorkspace sharedWorkspace] openURL:url];

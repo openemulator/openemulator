@@ -12,14 +12,14 @@
 
 @implementation PreferencesController
 
-- (id)init
+- (id) init
 {
 	self = [super initWithWindowNibName:@"Preferences"];
 	
 	return self;
 }
 
-- (void)windowDidLoad
+- (void) windowDidLoad
 {
 	[super windowDidLoad];
 	
@@ -40,9 +40,9 @@
 	[self useDefaultTemplate:[userDefaults boolForKey:@"OEUseDefaultTemplate"]];
 }
 
-- (NSToolbarItem *)toolbar:(NSToolbar *)toolbar
-	  itemForItemIdentifier:(NSString *)ident
-  willBeInsertedIntoToolbar:(BOOL)flag
+- (NSToolbarItem *) toolbar:(NSToolbar *) toolbar
+	  itemForItemIdentifier:(NSString *) ident
+  willBeInsertedIntoToolbar:(BOOL) flag
 {
 	NSToolbarItem *item = [[NSToolbarItem alloc] initWithItemIdentifier:ident];
 	
@@ -69,27 +69,27 @@
 	return item;
 }
 
-- (NSArray *)toolbarSelectableItemIdentifiers:(NSToolbar *)toolbar
+- (NSArray *) toolbarSelectableItemIdentifiers:(NSToolbar *) toolbar
 {
 	return [self toolbarDefaultItemIdentifiers:toolbar];
 }
 
-- (NSArray *)toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar
+- (NSArray *) toolbarDefaultItemIdentifiers:(NSToolbar *) toolbar
 {
 	return [self toolbarAllowedItemIdentifiers:toolbar];
 }
 
-- (NSArray *)toolbarAllowedItemIdentifiers:(NSToolbar *)toolbar
+- (NSArray *) toolbarAllowedItemIdentifiers:(NSToolbar *) toolbar
 {
 	return [NSArray arrayWithObjects:@"General", @"Sound", nil];
 }
 
-- (void)selectView:(id)sender
+- (void) selectView:(id) sender
 {
 	[self setView:[sender itemIdentifier]];
 }
 
-- (void)setView:(NSString *)itemIdentifier
+- (void) setView:(NSString *) itemIdentifier
 {
 	NSView *view;
 	if ([itemIdentifier isEqualToString:@"General"])
@@ -119,12 +119,12 @@
 	[window setTitle:NSLocalizedString(itemIdentifier, "Preferences view")];
 }
 
-- (IBAction)selectTemplate:(id)sender
+- (IBAction) selectTemplate:(id) sender
 {
 	[self useDefaultTemplate:[[sender selectedCell] tag]];
 }
 
-- (IBAction)useDefaultTemplate:(BOOL)useDefaultTemplate
+- (IBAction) useDefaultTemplate:(BOOL) useDefaultTemplate
 {
 	NSString *useTemplateString = NSLocalizedString(@"Use template:", "Use template:");
 	useTemplateString = [useTemplateString stringByAppendingString:@" "];
@@ -148,7 +148,7 @@
 		[userDefaults setBool:useDefaultTemplate forKey:@"OEUseDefaultTemplate"];
 }
 
-- (IBAction)chooseTemplate:(id)sender
+- (IBAction) chooseTemplate:(id) sender
 {
 	[NSApp beginSheet:fTemplateChooserSheet
 	   modalForWindow:[self window]
@@ -157,12 +157,12 @@
 		  contextInfo:nil];
 }
 
-- (IBAction)closeTemplateSheet:(id)sender
+- (IBAction) closeTemplateSheet:(id) sender
 {
 	[NSApp endSheet:fTemplateChooserSheet];
 }
 
-- (IBAction)chooseTemplateSheet:(id)sender
+- (IBAction) chooseTemplateSheet:(id) sender
 {
 	[userDefaults setObject:@"/Users/mressl/Apple II.emulation"
 					 forKey:@"OEDefaultTemplate"];
@@ -170,9 +170,9 @@
 	[NSApp endSheet:fTemplateChooserSheet];
 }
 
-- (void)didEndSheet:(NSWindow *)sheet
-		 returnCode:(int)returnCode
-		contextInfo:(void *)contextInfo
+- (void) didEndSheet:(NSWindow *) sheet
+		  returnCode:(int) returnCode
+		 contextInfo:(void *) contextInfo
 { 
     [sheet orderOut:self];
 	

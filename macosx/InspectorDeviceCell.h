@@ -12,7 +12,6 @@
 
 @interface InspectorDeviceCell : NSTextFieldCell
 {
-	
 }
 
 @end

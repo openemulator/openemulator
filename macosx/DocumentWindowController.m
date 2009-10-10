@@ -15,7 +15,7 @@
 
 @implementation DocumentWindowController
 
-- (void)windowDidLoad
+- (void) windowDidLoad
 {
 	[super windowDidLoad];
 	
@@ -39,9 +39,9 @@
 	[document setPower:[document power]];
 }
 
-- (NSToolbarItem *)toolbar:(NSToolbar *)toolbar
-	 itemForItemIdentifier:(NSString *)ident
- willBeInsertedIntoToolbar:(BOOL)flag
+- (NSToolbarItem *) toolbar:(NSToolbar *) toolbar
+	  itemForItemIdentifier:(NSString *) ident
+  willBeInsertedIntoToolbar:(BOOL) flag
 {
 	NSToolbarItem *item = [[NSToolbarItem alloc] initWithItemIdentifier:ident];
 	
@@ -91,12 +91,12 @@
 	return item;
 }
 
-- (NSArray *)toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar
+- (NSArray *) toolbarDefaultItemIdentifiers:(NSToolbar *) toolbar
 {
 	return [self toolbarAllowedItemIdentifiers:toolbar];
 }
 
-- (NSArray *)toolbarAllowedItemIdentifiers:(NSToolbar *)toolbar
+- (NSArray *) toolbarAllowedItemIdentifiers:(NSToolbar *) toolbar
 {
 	return [NSArray arrayWithObjects:@"Power Off",
 			NSToolbarSpaceItemIdentifier,
@@ -107,13 +107,13 @@
 			nil];
 }
 
-- (void)toggleInspectorPanel:(id)sender
+- (void) toggleInspectorPanel:(id) sender
 {
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"toggleInspectorPanel"
 														object:self];
 }
 
-- (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender
+- (NSDragOperation) draggingEntered:(id <NSDraggingInfo>) sender
 {
     if (([sender draggingSourceOperationMask] & NSDragOperationGeneric) 
 		== NSDragOperationGeneric)

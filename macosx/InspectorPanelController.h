@@ -27,14 +27,13 @@
 	int oldTabTag;
 }
 
+- (void) activeDocumentDidChange;
+- (id) inspectedDocument;
+- (void) setInspectedDocument:(id) theDocument;
 
-- (void)activeDocumentDidChange;
-- (id)inspectedDocument;
-- (void)setInspectedDocument:(id)theDocument;
+- (void) toggleInspectorPanel:(id) sender;
 
-- (void)toggleInspectorPanel:(id)sender;
-
-- (void)selectView:(id)sender;
-- (void)setView:(int)tabTag isInit:(bool)isInit;
+- (void) selectView:(id) sender;
+- (void) setView:(int) tabTag init:(BOOL) isInit;
 
 @end

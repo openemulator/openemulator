@@ -16,7 +16,7 @@
 
 @implementation DocumentWindow
 
-- (void)dealloc
+- (void) dealloc
 {
 	if (fullscreen)
 		[self toggleFullscreen:self];
@@ -24,12 +24,12 @@
 	[super dealloc];
 }
 
-- (NSRect)constrainFrameRect:(NSRect)frameRect toScreen:(NSScreen *)screen
+- (NSRect) constrainFrameRect:(NSRect) frameRect toScreen:(NSScreen *) screen
 {
 	return frameRect;
 }
 
-- (NSSize)windowWillResize:(NSWindow *)window toSize:(NSSize)proposedFrameSize
+- (NSSize) windowWillResize:(NSWindow *) window toSize:(NSSize) proposedFrameSize
 {
 	if (!fullscreen)
 		return proposedFrameSize;
@@ -37,24 +37,24 @@
 		return [window frame].size;
 }
 
-- (BOOL)windowShouldZoom:(NSWindow *)window toFrame:(NSRect)proposedFrame
+- (BOOL) windowShouldZoom:(NSWindow *) window toFrame:(NSRect) proposedFrame
 {
 	return !fullscreen;
 }
 
-- (void)setFrameOrigin:(NSPoint)point
+- (void) setFrameOrigin:(NSPoint) point
 {
 	if (!fullscreen)
 		[super setFrameOrigin:point];
 }
 
-- (void)setFrameTopLeftPoint:(NSPoint)point
+- (void) setFrameTopLeftPoint:(NSPoint) point
 {
 	if (!fullscreen)
 		[super setFrameTopLeftPoint:point];
 }
 
-- (BOOL)validateUserInterfaceItem:(id)item
+- (BOOL) validateUserInterfaceItem:(id) item
 {
 	if ([item action] == @selector(setHalfSize:))
 		return !fullscreen;
@@ -87,7 +87,7 @@
 		return YES;
 }
 
-- (void)setFrameSize:(double)proportion
+- (void) setFrameSize:(double) proportion
 {
 	NSRect windowRect = [self frame];
 	NSView *content = [self contentView];
@@ -126,27 +126,27 @@
 	[self setFrame:windowRect display:YES animate:YES];
 }
 
-- (void)setHalfSize:(id)sender
+- (void) setHalfSize:(id) sender
 {
 	[self setFrameSize:0.5];
 }
 
-- (void)setActualSize:(id)sender
+- (void) setActualSize:(id) sender
 {
 	[self setFrameSize:1.0];
 }
 
-- (void)setDoubleSize:(id)sender
+- (void) setDoubleSize:(id) sender
 {
 	[self setFrameSize:2.0];
 }
 
-- (void)fitToScreen:(id)sender
+- (void) fitToScreen:(id) sender
 {
 	[self setFrameSize:256.0];
 }
 
-- (void)toggleFullscreen:(id)sender
+- (void) toggleFullscreen:(id) sender
 {
 	DocumentController *documentController;
 	documentController = [NSDocumentController sharedDocumentController];

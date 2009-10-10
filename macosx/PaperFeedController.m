@@ -12,18 +12,18 @@
 
 @implementation PaperFeedController
 
-- (id)init
+- (id) init
 {
 	self = [super initWithWindowNibName:@"PaperFeed"];
 	
 	return self;
 }
 
-- (void)windowDidLoad
+- (void) windowDidLoad
 {
 	[super windowDidLoad];
 	
-	NSPanel *panel = (NSPanel *)[self window];
+	NSPanel *panel = (NSPanel *) [self window];
 	[panel setFrameUsingName:@"PaperFeed"];
 	[panel setFrameAutosaveName:@"PaperFeed"];
 }

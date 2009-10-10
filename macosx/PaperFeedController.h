@@ -10,8 +10,8 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface PaperFeedController : NSWindowController {
-
+@interface PaperFeedController : NSWindowController
+{
 }
 
 @end

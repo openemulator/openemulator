@@ -19,9 +19,9 @@
 {
 }
 
-- (void)linkHomepage:(id) sender;
-- (void)linkForums:(id) sender;
-- (void)linkDevelopment:(id) sender;
-- (void)linkDonate:(id) sender;
+- (void) linkHomepage:(id) sender;
+- (void) linkForums:(id) sender;
+- (void) linkDevelopment:(id) sender;
+- (void) linkDonate:(id) sender;
 
 @end

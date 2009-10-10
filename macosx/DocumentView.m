@@ -15,7 +15,7 @@
 
 @implementation DocumentView
 
-- (id)initWithFrame:(NSRect)rect
+- (id) initWithFrame:(NSRect) rect
 {
 	NSOpenGLPixelFormatAttribute pixelFormatAtrributes[] = {
 		NSOpenGLPFADoubleBuffer,
@@ -47,16 +47,16 @@
 	return self;
 }
 
-- (void)dealloc
+- (void) dealloc
 {
 	[self deallocGL];
 	[super dealloc];
 }
 
-- (void)observeValueForKeyPath:(NSString *)keyPath
-					  ofObject:(id)object
-                        change:(NSDictionary *)change
-                       context:(void *)context
+- (void) observeValueForKeyPath:(NSString *) keyPath
+					   ofObject:(id) object
+						 change:(NSDictionary *) change
+						context:(void *) context
 { 
     if ([keyPath isEqual:@"power"])
 	{
@@ -75,7 +75,7 @@
 							  context:context];
 } 
 
-- (void)drawRect:(NSRect)rect
+- (void) drawRect:(NSRect) rect
 {
 	NSRect viewRect = [self frame];
 	float scale = [[self window] userSpaceScaleFactor];
@@ -87,9 +87,9 @@
 	[[self openGLContext] flushBuffer];
 }
 
-- (void)loadGLTextureFromResource:(NSString *)name
-						   ofType:(NSString *)type
-						  toIndex:(int)index
+- (void) loadGLTextureFromResource:(NSString *) name
+							ofType:(NSString *) type
+						   toIndex:(int) index
 {
 	textureRect[index] = NSMakeRect(0, 0, 0, 0);
 	NSString *path = [[NSBundle mainBundle] pathForResource:name ofType:type];
@@ -109,7 +109,7 @@
 				 0, format, GL_UNSIGNED_BYTE, [bitmap bitmapData]);
 }
 
-- (void)renderGLTexture:(int)index toRect:(NSRect)rect withAlpha:(float)alpha
+- (void) renderGLTexture:(int) index toRect:(NSRect) rect withAlpha:(float) alpha
 {
 	glColor4f(1.0f, 1.0f, 1.0f, alpha);
 	
@@ -128,7 +128,7 @@
 	glEnd();
 }
 
-- (void)initGL
+- (void) initGL
 {
 	BOOL isPal = NO;
 	float overscan = 0.137f;//0.08f a normal tv
@@ -198,12 +198,12 @@
 	[self renderGL];
 }
 
-- (void)deallocGL
+- (void) deallocGL
 {
 	glDeleteTextures((sizeof(texture) / sizeof(texture[0])), texture);
 }
 
-- (void)renderGL
+- (void) renderGL
 {
 	int bitmap[560 * 384];
 	
@@ -225,7 +225,7 @@
 				 0, GL_RGBA, GL_UNSIGNED_BYTE, bitmap);
 }
 
-- (void)drawGL:(NSRect)viewRect
+- (void) drawGL:(NSRect) viewRect
 {
 	BOOL viewportUpdate = ((viewRect.origin.x != lastViewRect.origin.x) ||
 						   (viewRect.origin.y != lastViewRect.origin.y) ||

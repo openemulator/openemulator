@@ -18,7 +18,7 @@
 
 @implementation Document
 
-- (id)init
+- (id) init
 {
 	if (self = [super init])
 	{
@@ -47,8 +47,8 @@
 	return self;
 }
 
-- (id)initFromTemplateURL:(NSURL *)absoluteURL
-					error:(NSError **)outError
+- (id) initFromTemplateURL:(NSURL *) absoluteURL
+					 error:(NSError **) outError
 {
 //	printf("initFromTemplateURL\n");
 	if ([self init])
@@ -65,7 +65,7 @@
 	return nil;
 }
 
-- (void)dealloc
+- (void) dealloc
 {
 //	printf("dealloc\n");
 	if (emulation)
@@ -79,7 +79,7 @@
 	[super dealloc];
 }
 
-- (void)setDMLProperty:(NSString *)key value:(NSString *)value
+- (void) setDMLProperty:(NSString *) key value:(NSString *) value
 {
 	if (!emulation)
 		return;
@@ -91,7 +91,7 @@
 	xmlSetProp(rootNode, BAD_CAST [key UTF8String], BAD_CAST [value UTF8String]);
 }
 
-- (NSString *)getDMLProperty:(NSString *)key
+- (NSString *) getDMLProperty:(NSString *) key
 {
 	if (!emulation)
 		return nil;
@@ -107,7 +107,7 @@
 	return value;
 }
 
-- (void)setIoctlProperty:(NSString *)key ref:(NSString *)ref value:(NSString *)value
+- (void) setIoctlProperty:(NSString *) key ref:(NSString *) ref value:(NSString *) value
 {
 	if (!emulation)
 		return;
@@ -122,7 +122,7 @@
 									  &property);
 }
 
-- (NSString *)getIoctlProperty:(NSString *)key ref:(NSString *)ref
+- (NSString *) getIoctlProperty:(NSString *)key ref:(NSString *) ref
 {
 	if (!emulation)
 		return nil;
@@ -139,7 +139,7 @@
 		return nil;
 }
 
-- (NSImage *)getResourceImage:(NSString *)imagePath
+- (NSImage *) getResourceImage:(NSString *) imagePath
 {
 	NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
 	NSString *path = [[resourcePath
@@ -152,7 +152,7 @@
 	return theImage;
 }
 
-- (void)updateRunTime
+- (void) updateRunTime
 {
 	NSString *property = [self getIoctlProperty:@"runTime" ref:@"host::events"];
 	int timeDifference = [property intValue];
@@ -167,8 +167,8 @@
 	[self setRunTime:value];
 }
 
-- (NSAttributedString *)formatDeviceLabel:(NSString *)deviceLabel
-					  withInformativeText:(NSString *)informativeText
+- (NSAttributedString *) formatDeviceLabel:(NSString *) deviceLabel
+					   withInformativeText:(NSString *) informativeText
 {
 	NSMutableParagraphStyle *paragraphStyle;
 	paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
@@ -203,7 +203,7 @@
 	return aString;
 }
 
-- (void)updateDevices
+- (void) updateDevices
 {
 	OEParser info(((OEEmulator *) emulation)->getDML());
 	if (!info.isOpen())
@@ -251,9 +251,9 @@
 	return;
 }
 
-- (BOOL)readFromURL:(NSURL *)absoluteURL
-			 ofType:(NSString *)typeName
-			  error:(NSError **)outError
+- (BOOL) readFromURL:(NSURL *) absoluteURL
+			  ofType:(NSString *) typeName
+			   error:(NSError **) outError
 {
 //	printf("readFromURL\n");
 	const char *emulationPath = [[absoluteURL path] UTF8String];
@@ -297,9 +297,9 @@
 	return NO;
 }
 
-- (BOOL)writeToURL:(NSURL *)absoluteURL
-			ofType:(NSString *)typeName
-			 error:(NSError **)outError
+- (BOOL) writeToURL:(NSURL *) absoluteURL
+			 ofType:(NSString *) typeName
+			  error:(NSError **) outError
 {
 //	printf("writeToURL\n");
 	const char *emulationPath = [[[absoluteURL path] stringByAppendingString:@"/"]
@@ -316,7 +316,7 @@
 	return NO;
 }
 
-- (void)setFileModificationDate:(NSDate *)date
+- (void) setFileModificationDate:(NSDate *) date
 {
 	[super setFileModificationDate:date];
 	
@@ -330,7 +330,7 @@
 	[self setModificationDate:value];
 }
 
-- (IBAction)saveDocumentAsTemplate:(id)sender
+- (IBAction) saveDocumentAsTemplate:(id) sender
 {
 	NSString *path = [TEMPLATE_FOLDER stringByExpandingTildeInPath];
 	
@@ -352,9 +352,9 @@
 					  contextInfo:nil];
 }
 
-- (void)saveDocumentAsTemplateDidEnd:(NSSavePanel *)panel
-						  returnCode:(int)returnCode
-						 contextInfo:(void *)contextInfo
+- (void) saveDocumentAsTemplateDidEnd:(NSSavePanel *) panel
+						   returnCode:(int) returnCode
+						  contextInfo:(void *) contextInfo
 {
 	if (returnCode != NSOKButton)
 		return;
@@ -366,7 +366,7 @@
 		[[NSAlert alertWithError:error] runModal];
 }
 
-- (void)makeWindowControllers
+- (void) makeWindowControllers
 {
 	NSWindowController *windowController;
 	windowController = [[DocumentWindowController alloc]
@@ -376,7 +376,7 @@
 	[windowController release];
 }
 
-- (BOOL)validateUserInterfaceItem:(id)item
+- (BOOL) validateUserInterfaceItem:(id) item
 {
 	if ([item action] == @selector(copy:))
 		return [self isCopyValid];
@@ -388,61 +388,61 @@
 	return YES;
 }
 
-- (BOOL)isCopyValid
+- (BOOL) isCopyValid
 {
 	return YES; // To-Do: libemulation
 }
 
-- (BOOL)isPasteValid
+- (BOOL) isPasteValid
 {
 	return [pasteboard availableTypeFromArray:pasteboardTypes] != nil;
 }
 
-- (void)powerButtonPressedAndReleased:(id)sender
+- (void) powerButtonPressedAndReleased:(id) sender
 {
 	[self powerButtonPressed:sender];
 	[self powerButtonReleased:sender];
 }
 
-- (void)powerButtonPressed:(id)sender
+- (void) powerButtonPressed:(id) sender
 {
 	// To-Do: libemulation
 	[self setPower:![self power]];
 }
 
-- (void)powerButtonReleased:(id)sender
+- (void) powerButtonReleased:(id) sender
 {
 	// To-Do: libemulation
 }
 
-- (void)resetButtonPressedAndReleased:(id)sender
+- (void) resetButtonPressedAndReleased:(id) sender
 {
 	[self resetButtonPressed:sender];
 	[self resetButtonReleased:sender];
 }
 
-- (void)resetButtonPressed:(id)sender
+- (void) resetButtonPressed:(id) sender
 {
 	// To-Do: libemulation
 }
 
-- (void)resetButtonReleased:(id)sender
+- (void) resetButtonReleased:(id) sender
 {
 	// To-Do: libemulation
 }
 
-- (void)pauseButtonPressed:(id)sender
+- (void) pauseButtonPressed:(id) sender
 {
 	// To-Do: libemulation
 }
 
-- (NSString *)getDocumentText
+- (NSString *) getDocumentText
 {
 	// To-Do: libemulation
 	return @"This is a meticulously designed test of the speech synthesizing system.";  
 }
 
-- (void)copy:(id)sender
+- (void) copy:(id) sender
 {
 	if ([self isCopyValid])
 	{
@@ -451,7 +451,7 @@
 	}
 }
 
-- (void)paste:(id)sender
+- (void) paste:(id) sender
 {
 	if ([self isPasteValid])
 	{
@@ -462,7 +462,7 @@
 	}
 }
 
-- (void)startSpeaking:(id)sender
+- (void) startSpeaking:(id) sender
 {
 	NSTextView *dummy = [[NSTextView alloc] init];
 	[dummy insertText:[self getDocumentText]];
@@ -470,23 +470,23 @@
 	[dummy release];
 }
 
-- (BOOL)power
+- (BOOL) power
 {
 	return power;
 }
 
-- (void)setPower:(BOOL)value
+- (void) setPower:(BOOL) value
 {
 	if (power != value)
 		power = value;
 }
 
-- (NSString *)label
+- (NSString *) label
 {
 	return [[label retain] autorelease];
 }
 
-- (void)setLabel:(NSString *)value
+- (void) setLabel:(NSString *) value
 {
     if (label != value)
 	{
@@ -495,12 +495,12 @@
     }
 }
 
-- (NSString *)description
+- (NSString *) description
 {
 	return [[description retain] autorelease];
 }
 
-- (void)setDescription:(NSString *)value
+- (void) setDescription:(NSString *) value
 {
     if (description != value)
 	{
@@ -514,12 +514,12 @@
     }
 }
 
-- (NSString *)modificationDate
+- (NSString *) modificationDate
 {
 	return modificationDate;
 }
 
-- (void)setModificationDate:(NSString *)value
+- (void) setModificationDate:(NSString *) value
 {
     if (modificationDate != value)
 	{
@@ -528,12 +528,12 @@
     }
 }
 
-- (NSString *)runTime
+- (NSString *) runTime
 {
 	return runTime;
 }
 
-- (void)setRunTime:(NSString *)value
+- (void)setRunTime:(NSString *) value
 {
     if (runTime != value)
 	{
@@ -542,12 +542,12 @@
     }
 }
 
-- (NSImage *)image
+- (NSImage *) image
 {
 	return [[image retain] autorelease];
 }
 
-- (void)setImage:(NSImage *)value
+- (void)setImage:(NSImage *) value
 {
     if (image != value)
 	{
@@ -556,57 +556,57 @@
     }
 }
 
-- (NSMutableArray *)expansions
+- (NSMutableArray *) expansions
 {
 	return [[expansions retain] autorelease];
 }
 
-- (void)insertObject:(id)value inExpansionsAtIndex:(NSUInteger)index
+- (void) insertObject:(id) value inExpansionsAtIndex:(NSUInteger) index
 {
     [expansions insertObject:value atIndex:index];
 }
 
-- (void)removeObjectFromExpansionsAtIndex:(NSUInteger)index
+- (void) removeObjectFromExpansionsAtIndex:(NSUInteger) index
 {
     [expansions removeObjectAtIndex:index];
 }
 
-- (NSMutableArray *)diskDrives
+- (NSMutableArray *) diskDrives
 {
 	return [[diskDrives retain] autorelease];
 }
 
-- (void)insertObject:(id)value inDiskDrivesAtIndex:(NSUInteger)index
+- (void) insertObject:(id) value inDiskDrivesAtIndex:(NSUInteger) index
 {
     [diskDrives insertObject:value atIndex:index];
 }
 
-- (void)removeObjectFromDiskDrivesAtIndex:(NSUInteger)index
+- (void) removeObjectFromDiskDrivesAtIndex:(NSUInteger) index
 {
     [diskDrives removeObjectAtIndex:index];
 }
 
-- (NSMutableArray *)peripherals
+- (NSMutableArray *) peripherals
 {
 	return [[peripherals retain] autorelease];
 }
 
-- (void)insertObject:(id)value inPeripheralsAtIndex:(NSUInteger)index
+- (void) insertObject:(id) value inPeripheralsAtIndex:(NSUInteger) index
 {
     [peripherals insertObject:value atIndex:index];
 }
 
-- (void)removeObjectFromPeripheralsAtIndex:(NSUInteger)index
+- (void) removeObjectFromPeripheralsAtIndex:(NSUInteger) index
 {
     [peripherals removeObjectAtIndex:index];
 }
 
-- (NSNumber *)brightness
+- (NSNumber *) brightness
 {
 	return [[brightness retain] autorelease];
 }
 
-- (void)setBrightness:(NSNumber *)value
+- (void) setBrightness:(NSNumber *) value
 {
     if (brightness != value)
 	{
@@ -618,12 +618,12 @@
     }
 }
 
-- (NSNumber *)contrast
+- (NSNumber *) contrast
 {
 	return [[contrast retain] autorelease];
 }
 
-- (void)setContrast:(NSNumber *)value
+- (void) setContrast:(NSNumber *) value
 {
     if (contrast != value)
 	{
@@ -635,12 +635,12 @@
     }
 }
 
-- (NSNumber *)sharpness
+- (NSNumber *) sharpness
 {
 	return [[sharpness retain] autorelease];
 }
 
-- (void)setSharpness:(NSNumber *)value
+- (void) setSharpness:(NSNumber *) value
 {
     if (sharpness != value)
 	{
@@ -652,12 +652,12 @@
     }
 }
 
-- (NSNumber *)saturation
+- (NSNumber *) saturation
 {
 	return [[saturation retain] autorelease];
 }
 
-- (void)setSaturation:(NSNumber *)value
+- (void) setSaturation:(NSNumber *) value
 {
     if (saturation != value)
 	{
@@ -669,12 +669,12 @@
     }
 }
 
-- (NSNumber *)temperature
+- (NSNumber *) temperature
 {
 	return [[temperature retain] autorelease];
 }
 
-- (void)setTemperature:(NSNumber *)value
+- (void) setTemperature:(NSNumber *) value
 {
     if (temperature != value)
 	{
@@ -686,12 +686,12 @@
     }
 }
 
-- (NSNumber *)tint
+- (NSNumber *) tint
 {
 	return [[tint retain] autorelease];
 }
 
-- (void)setTint:(NSNumber *)value
+- (void) setTint:(NSNumber *) value
 {
     if (tint != value)
 	{
@@ -703,12 +703,12 @@
     }
 }
 
-- (NSNumber *)volume
+- (NSNumber *) volume
 {
 	return [[volume retain] autorelease];
 }
 
-- (void)setVolume:(NSNumber *)value
+- (void) setVolume:(NSNumber *) value
 {
     if (volume != value)
 	{

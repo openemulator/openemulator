@@ -9,20 +9,24 @@
  */
 
 #import <Cocoa/Cocoa.h>
+#import <Quartz/Quartz.h>
 
 #import "DocumentController.h"
 
 @interface TemplateChooserWindowController : NSWindowController
 {
-	IBOutlet id outlineView;
-	IBOutlet id imageBrowserView;
+	IBOutlet id fOutlineView;
+	IBOutlet id fChooserView;
 	
 	DocumentController *documentController;
 	
+	NSMutableDictionary *templates;
 	NSMutableArray *groups;
+	
+	NSString *selectedGroup;
 }
 
-- (id)init:(DocumentController *)theDocumentController;
-- (void)performChoose:(id)sender;
+- (id) init:(DocumentController *) theDocumentController;
+- (void) performChoose:(id) sender;
 
 @end

@@ -32,9 +32,9 @@
 	BOOL pause;
 }
 
-- (void)initGL;
-- (void)deallocGL;
-- (void)renderGL;
-- (void)drawGL:(NSRect)viewFrame;
+- (void) initGL;
+- (void) deallocGL;
+- (void) renderGL;
+- (void) drawGL:(NSRect)viewFrame;
 
 @end

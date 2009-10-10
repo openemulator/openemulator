@@ -10,8 +10,8 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface GraphicsTabletController : NSWindowController {
-
+@interface GraphicsTabletController : NSWindowController
+{
 }
 
 @end

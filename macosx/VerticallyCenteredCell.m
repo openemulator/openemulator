@@ -12,7 +12,7 @@
 
 @implementation VerticallyCenteredCell
 
-- (void)drawInteriorWithFrame:(NSRect)cellFrame inView:(NSView *)controlView
+- (void) drawInteriorWithFrame:(NSRect) cellFrame inView:(NSView *) controlView
 {
     NSSize contentSize = [self cellSize];
     cellFrame.origin.y += (cellFrame.size.height - contentSize.height) / 2.0;

@@ -36,11 +36,11 @@ NSString *itemIdentifiers[] =
 	return self;
 }
 
-- (void)windowDidLoad
+- (void) windowDidLoad
 {
     [super windowDidLoad];
 	
-	NSPanel *panel = (NSPanel *)[self window];
+	NSPanel *panel = (NSPanel *) [self window];
 	[panel setFrameUsingName:@"InspectorPanel"];
 	[panel setFrameAutosaveName:@"InspectorPanel"];
 	
@@ -49,7 +49,7 @@ NSString *itemIdentifiers[] =
 	oldTabTag = -1;
 	int tabTag = [fDefaults integerForKey:@"OEInspectorPanelViewIndex"];
 	[fTabMatrix selectCellWithTag:tabTag];
-	[self setView:tabTag isInit:YES];
+	[self setView:tabTag init:YES];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self
 											 selector:@selector(inspectorPanelDidResignKey:)
@@ -62,10 +62,10 @@ NSString *itemIdentifiers[] =
 			   context:[InspectorPanelController class]];
 }
 
-- (void)observeValueForKeyPath:(NSString *)keyPath
-					  ofObject:(id)object
-						change:(NSDictionary *)change
-					   context:(void *)context
+- (void) observeValueForKeyPath:(NSString *) keyPath
+					   ofObject:(id) object
+						 change:(NSDictionary *) change
+						context:(void *) context
 {
     if (context == [InspectorPanelController class])
 		[self activeDocumentDidChange];
@@ -73,7 +73,7 @@ NSString *itemIdentifiers[] =
 		[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
 
-- (void)activeDocumentDidChange
+- (void) activeDocumentDidChange
 {
     id activeDocument = [[[NSApp mainWindow] windowController] document];
     if (activeDocument != inspectedDocument)
@@ -87,22 +87,22 @@ NSString *itemIdentifiers[] =
     }
 }
 
-- (void)inspectorPanelDidResignKey:(NSNotification *)notification
+- (void) inspectorPanelDidResignKey:(NSNotification *) notification
 {
     [fDocumentObjectController commitEditing];
 }
 
-- (id)inspectedDocument
+- (id) inspectedDocument
 {
 	return inspectedDocument;
 }
 
-- (void)setInspectedDocument:(id)value
+- (void) setInspectedDocument:(id) value
 {
 	inspectedDocument = value;
 }
 
-- (void)toggleInspectorPanel:(id)sender
+- (void) toggleInspectorPanel:(id) sender
 {
     NSWindow *window = [self window];
     if ([window isVisible])
@@ -111,7 +111,7 @@ NSString *itemIdentifiers[] =
 		[window orderFront:nil];
 }
 
-- (BOOL)validateUserInterfaceItem:(id)item
+- (BOOL) validateUserInterfaceItem:(id) item
 {
     if ([item action] == @selector(toggleInspectorPanel:))
 	{  
@@ -131,7 +131,7 @@ NSString *itemIdentifiers[] =
     return YES;
 }
 
-- (NSView *)getView:(int)tabTag
+- (NSView *) getView:(int) tabTag
 {
 	switch (tabTag)
 	{
@@ -152,12 +152,12 @@ NSString *itemIdentifiers[] =
 	return fEmulationView;
 }
 
-- (void)selectView:(id)sender
+- (void) selectView:(id) sender
 {
-	[self setView:[fTabMatrix selectedTag] isInit:FALSE];
+	[self setView:[fTabMatrix selectedTag] init:FALSE];
 }
 
-- (void)setView:(int)tabTag isInit:(bool)isInit
+- (void) setView:(int) tabTag init:(BOOL) isInit
 {
 	if (tabTag == oldTabTag)
 		 return;

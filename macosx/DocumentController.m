@@ -35,7 +35,7 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 
 @implementation DocumentController
 
-- (id)init
+- (id) init
 {
 	if (self = [super init])
 	{
@@ -59,14 +59,14 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 	return self;
 }
 
-- (void)dealloc
+- (void) dealloc
 {
 	[fileTypes release];
 	
 	[super dealloc];
 }
 
-- (void)applicationWillFinishLaunching:(NSNotification *)notification
+- (void) applicationWillFinishLaunching:(NSNotification *) notification
 {
 //	printf("applicationWillFinishLaunching\n");
 	
@@ -74,8 +74,8 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 		[fInspectorPanelController toggleInspectorPanel:self];
 }
 
-- (BOOL)application:(NSApplication *)theApplication
-		   openFile:(NSString *)filename
+- (BOOL) application:(NSApplication *) theApplication
+			openFile:(NSString *) filename
 {
 //	printf("openFile\n");
 	if ([[filename pathExtension] compare:@"emulation"] == NSOrderedSame)
@@ -109,7 +109,7 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 	return YES;
 }
 
-- (void)applicationDidFinishLaunching:(NSNotification *)notification
+- (void) applicationDidFinishLaunching:(NSNotification *) notification
 {
 //	printf("applicationDidFinishLaunching\n");
 	
@@ -127,7 +127,7 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 	return;
 }
 
-- (void)applicationWillTerminate:(NSNotification *)notification
+- (void) applicationWillTerminate:(NSNotification *) notification
 {
 //	printf("applicationWillTerminate\n");
 	
@@ -137,7 +137,7 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 	[fDefaults setBool:[window isVisible] forKey:@"OEInspectorPanelVisible"];
 }
 
-- (BOOL)validateUserInterfaceItem:(id)item
+- (BOOL) validateUserInterfaceItem:(id) item
 {
 	if ([item action] == @selector(newDocument:))
 		return !isTemplateChooserWindowOpen;
@@ -147,7 +147,7 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 		return YES;
 }
 
-- (IBAction)openDocument:(id)sender
+- (IBAction) openDocument:(id) sender
 {
 	NSOpenPanel *panel = [NSOpenPanel openPanel];
 	
@@ -163,7 +163,7 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 	}
 }
 
-- (id)openUntitledDocumentAndDisplay:(BOOL)displayDocument error:(NSError **)outError
+- (id) openUntitledDocumentAndDisplay:(BOOL) displayDocument error:(NSError **) outError
 {
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	
@@ -197,9 +197,9 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 	}
 }
 
-- (id)openUntitledDocumentFromTemplateURL:(NSURL *)absoluteURL
-								  display:(BOOL)displayDocument
-									error:(NSError **)outError
+- (id) openUntitledDocumentFromTemplateURL:(NSURL *) absoluteURL
+								   display:(BOOL) displayDocument
+									 error:(NSError **) outError
 {
 	NSDocument *document;
 	
@@ -218,8 +218,8 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 	return document;
 }
 
-- (id)makeUntitledDocumentFromTemplateURL:(NSURL *)absoluteURL
-									error:(NSError **)outError
+- (id) makeUntitledDocumentFromTemplateURL:(NSURL *) absoluteURL
+									 error:(NSError **) outError
 {
 	Document *document = [[Document alloc] initFromTemplateURL:absoluteURL
 														 error:outError];
@@ -229,7 +229,7 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 	return [document autorelease];
 }
 
-- (IBAction)newDocumentFromTemplateChooser:(id)sender
+- (IBAction) newDocumentFromTemplateChooser:(id) sender
 {
 	if (isTemplateChooserWindowOpen)
 		return;
@@ -241,12 +241,12 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 	[templateChooserWindowController showWindow:self];
 }
 
-- (void)noteTemplateChooserWindowClosed
+- (void) noteTemplateChooserWindowClosed
 {
 	isTemplateChooserWindowOpen = NO;
 }
 
-- (void)disableMenuBar
+- (void) disableMenuBar
 {
 	disableMenuBarCount++;
 	
@@ -254,7 +254,7 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 		SetSystemUIMode(kUIModeAllHidden, kUIOptionAutoShowMenuBar);
 }
 
-- (void)enableMenuBar
+- (void) enableMenuBar
 {
 	disableMenuBarCount--;
 	

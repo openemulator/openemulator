@@ -12,7 +12,7 @@
 
 @implementation InspectorDeviceCell
 
-- (void)drawInteriorWithFrame:(NSRect)cellFrame inView:(NSView *)controlView {
+- (void) drawInteriorWithFrame:(NSRect) cellFrame inView:(NSView *) controlView {
  	NSMutableAttributedString *aString;
 	aString = [[NSMutableAttributedString alloc] initWithAttributedString:
 			   [self attributedStringValue]];
