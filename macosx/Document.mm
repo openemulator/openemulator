@@ -14,8 +14,6 @@
 #import "OEEmulator.h"
 #import "OEParser.h"
 
-#define TEMPLATE_FOLDER @"~/Library/Application Support/Open Emulator/Templates"
-
 @implementation Document
 
 - (id) init
@@ -72,6 +70,7 @@
 		delete (OEEmulator *) emulation;
 	
 	[pasteboardTypes release];
+	
 	[expansions release];
 	[diskDrives release];
 	[peripherals release];
@@ -171,7 +170,8 @@
 					   withInformativeText:(NSString *) informativeText
 {
 	NSMutableParagraphStyle *paragraphStyle;
-	paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+	paragraphStyle = [[[NSParagraphStyle defaultParagraphStyle] mutableCopy]
+					  autorelease];
 	[paragraphStyle setLineBreakMode:NSLineBreakByTruncatingTail];
 	
 	NSDictionary *deviceLabelAttrs = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -341,7 +341,7 @@
 								attributes:nil
 									 error:nil];
 	
-	NSSavePanel *panel = [[NSSavePanel alloc] init];
+	NSSavePanel *panel = [NSSavePanel savePanel];
 	[panel setRequiredFileType:@"emulation"];
 	[panel beginSheetForDirectory:path
 							 file:nil

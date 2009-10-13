@@ -39,7 +39,6 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 {
 	if (self = [super init])
 	{
-		fDefaults = [NSUserDefaults standardUserDefaults];
 		fileTypes = [[NSArray alloc] initWithObjects:
 					 @"emulation",
 					 @"wav", @"aiff", @"aif",
@@ -70,7 +69,8 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 {
 //	printf("applicationWillFinishLaunching\n");
 	
-	if ([fDefaults boolForKey:@"OEInspectorPanelVisible"])
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	if ([userDefaults boolForKey:@"OEInspectorPanelVisible"])
 		[fInspectorPanelController toggleInspectorPanel:self];
 }
 
@@ -133,8 +133,9 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 	
 	Pa_Terminate();
 	
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	NSWindow *window = [fInspectorPanelController window];
-	[fDefaults setBool:[window isVisible] forKey:@"OEInspectorPanelVisible"];
+	[userDefaults setBool:[window isVisible] forKey:@"OEInspectorPanelVisible"];
 }
 
 - (BOOL) validateUserInterfaceItem:(id) item
@@ -166,7 +167,6 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 - (id) openUntitledDocumentAndDisplay:(BOOL) displayDocument error:(NSError **) outError
 {
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-	
 	if (![userDefaults boolForKey:@"OEUseDefaultTemplate"])
 	{
 		[self newDocumentFromTemplateChooser:self];

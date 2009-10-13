@@ -10,6 +10,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+#define TEMPLATE_FOLDER @"~/Library/Application Support/Open Emulator/Templates"
+
 @interface Document : NSDocument
 {
 	void *emulation;

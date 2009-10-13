@@ -6,6 +6,7 @@
  * Released under the GPL
  */
 
+#include <iostream>
 #include <fstream>
 
 #include <libxml/parser.h>
@@ -310,9 +311,7 @@ bool OEEmulator::connectComponent(string deviceName,
 	
 	if(!connectedComponent)
 	{
-		fprintf(stderr,
-				"libemulator: could not connect \"%s\".\n",
-				componentRef.c_str());
+		cerr << "libemulator: could not connect \"" + componentRef + "\"." << endl;
 		return false;
 	}
 	
@@ -386,9 +385,7 @@ bool OEEmulator::getComponentData(string deviceName,
 	{
 		if (!package->writeFile(src, msg.data))
 		{
-			fprintf(stderr,
-					"libemulator: could not write \"%s\".\n",
-					src.c_str());
+			cerr << "libemulator: could not write \"" + src + "\"." << endl;
 			return false;
 		}
 	}
@@ -407,9 +404,7 @@ bool OEEmulator::setComponentResource(OEComponent *component,
 	
 	if (!readResource(src, msg.data))
 	{
-		fprintf(stderr,
-				"libemulator: could not read \"%s\".\n",
-				src.c_str());
+		cerr << "libemulator: could not read \"" + src + "\"." << endl;
 		return false;
 	}
 	

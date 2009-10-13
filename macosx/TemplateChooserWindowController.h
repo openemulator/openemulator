@@ -20,13 +20,15 @@
 	
 	DocumentController *documentController;
 	
-	NSMutableDictionary *templates;
-	NSMutableArray *groups;
+	NSMutableDictionary *groups;
+	NSMutableArray *groupNames;
 	
 	NSString *selectedGroup;
 }
 
 - (id) init:(DocumentController *) theDocumentController;
+- (void) addTemplatesFromPath:(NSString *) path
+			   forceGroupName:(NSString *) forcedGroupName;
 - (void) performChoose:(id) sender;
 
 @end

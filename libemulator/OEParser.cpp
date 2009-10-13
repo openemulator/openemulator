@@ -6,6 +6,7 @@
  * Released under the GPL
  */
 
+#include <iostream>
 #include <fstream>
 
 #include <libxml/parser.h>
@@ -26,10 +27,10 @@ OEParser::OEParser(string path)
 	}
 	else if (pathExtension == "emulation")
 	{
-		Package *package = new Package(path);
-		if (package->isOpen())
+		Package package(path);
+		if (package.isOpen())
 		{
-			if (!package->readFile(OE_DML_FILENAME, data))
+			if (!package.readFile(OE_DML_FILENAME, data))
 				return;
 		}
 	}
@@ -300,9 +301,8 @@ bool OEParser::parse(xmlDocPtr dml)
 			o->connectedPort = &(*i);
 		}
 		else
-			fprintf(stderr,
-					"libemulator: warning, outlet \"%s\" does not exist.\n",
-					outletRef.c_str());
+			cerr << "libemulator: warning, outlet \"" << outletRef <<
+			"\" does not exist." << endl;
 	}
 	
 	// Build connectedLabel's

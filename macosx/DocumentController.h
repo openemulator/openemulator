@@ -14,8 +14,6 @@
 #import "InspectorPanelController.h"
 
 @interface DocumentController : NSDocumentController {
-	NSUserDefaults *fDefaults;
-	
 	IBOutlet InspectorPanelController *fInspectorPanelController;
 	
 	NSArray *fileTypes;

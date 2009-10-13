@@ -14,6 +14,7 @@
 
 #import "TemplateChooserWindowController.h"
 #import "ChooserItem.h"
+#import "Document.h"
 
 @implementation TemplateChooserWindowController
 
@@ -24,60 +25,23 @@
 	{
 		documentController = theDocumentController;
 		
-		templates = [[NSMutableDictionary alloc] init];
+		groups = [[NSMutableDictionary alloc] init];
 		
 		NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
-		NSString *imageFolderPath = [resourcePath
-									 stringByAppendingPathComponent:@"images"];
-		NSString *templateFolderPath = [resourcePath
-										stringByAppendingPathComponent:@"templates"];
-		NSError *error;
-		NSArray *templateLocalPaths = [[NSFileManager defaultManager]
-									   contentsOfDirectoryAtPath:templateFolderPath
-									   error:&error];
+		NSString *templatesPath = [resourcePath
+								   stringByAppendingPathComponent:@"templates"];
+		[self addTemplatesFromPath:templatesPath
+					forceGroupName:nil];
 		
-		int templatesCount = [templateLocalPaths count];
-		for (int i = 0; i < templatesCount; i++)
-		{
-			NSString *templateLocalPath = [templateLocalPaths objectAtIndex:i];
-			NSString *templatePath = [templateFolderPath stringByAppendingPathComponent:
-									  templateLocalPath];
-			string templatePathString = string([templatePath UTF8String]);
-			OEParser parser(templatePathString);
-			if (!parser.isOpen())
-				continue;
-			
-			OEDMLInfo *dmlInfo = parser.getDMLInfo();
-			NSString *label = [NSString stringWithUTF8String:dmlInfo->label.c_str()];
-			NSString *imageName = [NSString stringWithUTF8String:dmlInfo->image.c_str()];
-			NSString *description = [NSString stringWithUTF8String:dmlInfo->image.c_str()];
-			NSString *groupName = [NSString stringWithUTF8String:dmlInfo->group.c_str()];
-			
-			if (![templates objectForKey:groupName])
-			{
-				if (!selectedGroup)
-					selectedGroup = [groupName retain];
-				
-				NSMutableArray *group = [[[NSMutableArray alloc] init] autorelease];
-				[templates setObject:group forKey:groupName];
-			}
-			NSString *imagePath = [imageFolderPath stringByAppendingPathComponent:
-								   imageName];
-			ChooserItem *item = [[[ChooserItem alloc] initWithItem:templatePath
-															 label:label
-														 imagePath:imagePath
-													   description:description]
-								 autorelease];
-			[[templates objectForKey:groupName] addObject:item];
-		}
+		NSString *userTemplatesPath = [TEMPLATE_FOLDER stringByExpandingTildeInPath];
+		[self addTemplatesFromPath:userTemplatesPath
+					forceGroupName:NSLocalizedString(@"My Templates",
+													 @"My Templates")];
 		
-		groups = [NSMutableArray arrayWithArray:[[templates allKeys]
-												 sortedArrayUsingSelector:
-												 @selector(compare:)]];
-		[groups retain];
-		
-		// Add only if there are personal templates
-//		[groups addObject:@"My Templates"];
+		groupNames = [NSMutableArray arrayWithArray:[[groups allKeys]
+													 sortedArrayUsingSelector:
+													 @selector(compare:)]];
+		[groupNames retain];
 	}
 	
 	return self;
@@ -85,11 +49,97 @@
 
 - (void) dealloc
 {
+	[groupNames release];
 	[groups release];
-	[templates release];
 	[selectedGroup release];
 	
 	[super dealloc];
+}
+
+- (void) addTemplatesFromPath:(NSString *) path
+			   forceGroupName:(NSString *) forcedGroupName
+{
+	NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
+	NSString *imagesPath = [resourcePath
+							stringByAppendingPathComponent:@"images"];
+	
+	NSError *error;
+	NSArray *templateFilenames = [[NSFileManager defaultManager]
+								  contentsOfDirectoryAtPath:path
+								  error:&error];
+	
+	int templatesCount = [templateFilenames count];
+	for (int i = 0; i < templatesCount; i++)
+	{
+		NSString *templateFilename = [templateFilenames objectAtIndex:i];
+		NSString *templatePath = [path stringByAppendingPathComponent:templateFilename];
+		string templatePathString = string([templatePath UTF8String]);
+		OEParser parser(templatePathString);
+		if (!parser.isOpen())
+			continue;
+		
+		NSString *label = [templateFilename stringByDeletingPathExtension];
+		
+		OEDMLInfo *dmlInfo = parser.getDMLInfo();
+		NSString *imageName = [NSString stringWithUTF8String:dmlInfo->image.c_str()];
+		NSString *description = [NSString stringWithUTF8String:dmlInfo->image.c_str()];
+		NSString *groupName = [NSString stringWithUTF8String:dmlInfo->group.c_str()];
+		
+		if (forcedGroupName)
+			groupName = forcedGroupName;
+		
+		if (![groups objectForKey:groupName])
+		{
+			NSMutableArray *group = [[[NSMutableArray alloc] init] autorelease];
+			[groups setObject:group forKey:groupName];
+		}
+		NSString *imagePath = [imagesPath stringByAppendingPathComponent:imageName];
+		ChooserItem *item = [[ChooserItem alloc] initWithItem:templatePath
+														 label:label
+													 imagePath:imagePath
+												  description:description];
+		if (item)
+			[item autorelease];
+		
+		[[groups objectForKey:groupName] addObject:item];
+	}
+}
+
+- (void) selectLastTemplate
+{
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	NSString *lastTemplatePath = [userDefaults stringForKey:@"OELastTemplate"];
+	
+	int lastGroupIndex = -1;
+	int lastChooserIndex = -1;
+	
+	int groupsCount = [groupNames count];
+	for (int i = 0; i < groupsCount; i++)
+	{
+		NSString *groupName = [groupNames objectAtIndex:i];
+		NSArray *templates = [groups objectForKey:groupName];
+		
+		int templatesCount = [templates count]; 
+		for (int j = 0; j < templatesCount; j++)
+		{
+			ChooserItem *item = [templates objectAtIndex:j];
+			
+			NSString *templatePath = [item itemPath];
+			if ([templatePath compare:lastTemplatePath] == NSOrderedSame)
+			{
+				lastGroupIndex = i;
+				lastChooserIndex = j;
+			}
+		}
+	}
+	
+	if (lastGroupIndex == -1)
+		return;
+	
+	[fOutlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:lastGroupIndex]
+			  byExtendingSelection:NO];
+	[fChooserView setSelectionIndexes:[NSIndexSet indexSetWithIndex:lastChooserIndex]
+				 byExtendingSelection:NO];
 }
 
 - (void) awakeFromNib
@@ -116,26 +166,18 @@
 	aSize.width = 96;
 	aSize.height = 64;
 	[fChooserView setCellSize:aSize];
-	[fChooserView setCellsStyleMask:IKCellsStyleTitled];
-	[fChooserView setAllowsMultipleSelection:NO];
-	[fChooserView setAllowsEmptySelection:NO];
 	[fChooserView setDelegate:self];
 	[fChooserView setDataSource:self];
 	[fChooserView reloadData];
-	
-	// Init outline and chooser to last initialized values
-	[fOutlineView selectRowIndexes:[NSIndexSet
-									indexSetWithIndex:[groups indexOfObject:@"Apple II"]]
-			  byExtendingSelection:NO];
-	[fChooserView setSelectionIndexes:[NSIndexSet indexSetWithIndex:0]
-				 byExtendingSelection:NO];
+
+	[self selectLastTemplate];
 }
 
 - (id) outlineView:(NSOutlineView *) outlineView child:(NSInteger) index ofItem:(id) item
 {
 	if (!item)
-		return [groups objectAtIndex:index];
-	
+		return [groupNames objectAtIndex:index];
+			
 	return nil;
 }
 
@@ -164,7 +206,7 @@ objectValueForTableColumn:(NSTableColumn *) tableColumn
 	if (selectedGroup)
 		[selectedGroup release];
 	
-	selectedGroup = [[groups objectAtIndex:[fOutlineView selectedRow]] retain];
+	selectedGroup = [[groupNames objectAtIndex:[fOutlineView selectedRow]] retain];
 	[fChooserView reloadData];
 	[fChooserView setSelectionIndexes:[NSIndexSet indexSetWithIndex:0]
 				 byExtendingSelection:NO];
@@ -175,7 +217,7 @@ objectValueForTableColumn:(NSTableColumn *) tableColumn
 	if (!selectedGroup)
 		return 0;
 	
-	return [[templates objectForKey:selectedGroup] count];
+	return [[groups objectForKey:selectedGroup] count];
 }
 
 - (id) imageBrowser:(IKImageBrowserView *) aBrowser itemAtIndex:(NSUInteger) index
@@ -183,7 +225,7 @@ objectValueForTableColumn:(NSTableColumn *) tableColumn
 	if (!selectedGroup)
 		return 0;
 	
-	return [[templates objectForKey:selectedGroup] objectAtIndex:index];
+	return [[groups objectForKey:selectedGroup] objectAtIndex:index];
 }
 
 - (void) imageBrowser:(IKImageBrowserView *) aBrowser
@@ -214,9 +256,14 @@ cellWasDoubleClickedAtIndex:(NSUInteger) index
 	if(url)
 	{
 		NSError *error;
-		if (![documentController openUntitledDocumentFromTemplateURL:url
-															 display:YES
-															   error:&error])
+		if ([documentController openUntitledDocumentFromTemplateURL:url
+															display:YES
+															  error:&error])
+		{
+			[[NSUserDefaults standardUserDefaults] setObject:[item itemPath]
+													  forKey:@"OELastTemplate"];
+		}
+		else
 			[[NSAlert alertWithError:error] runModal];
 	}
 }
