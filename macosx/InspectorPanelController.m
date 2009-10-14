@@ -40,9 +40,7 @@ NSString *itemIdentifiers[] =
 {
     [super windowDidLoad];
 	
-	NSPanel *panel = (NSPanel *) [self window];
-	[panel setFrameUsingName:@"InspectorPanel"];
-	[panel setFrameAutosaveName:@"InspectorPanel"];
+	[self setWindowFrameAutosaveName:@"InspectorPanel"];
 	
 	fDefaults = [NSUserDefaults standardUserDefaults];
 	

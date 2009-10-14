@@ -166,18 +166,23 @@
 	aSize.width = 96;
 	aSize.height = 64;
 	[fChooserView setCellSize:aSize];
+	[fChooserView setAllowsEmptySelection:NO];
+	[fChooserView setAllowsMultipleSelection:NO];
+	[fChooserView setCellsStyleMask:IKCellsStyleTitled];
 	[fChooserView setDelegate:self];
 	[fChooserView setDataSource:self];
 	[fChooserView reloadData];
-
+	
 	[self selectLastTemplate];
+	
+	[self setShouldCascadeWindows:NO];
 }
 
 - (id) outlineView:(NSOutlineView *) outlineView child:(NSInteger) index ofItem:(id) item
 {
 	if (!item)
 		return [groupNames objectAtIndex:index];
-			
+	
 	return nil;
 }
 
@@ -228,15 +233,21 @@ objectValueForTableColumn:(NSTableColumn *) tableColumn
 	return [[groups objectForKey:selectedGroup] objectAtIndex:index];
 }
 
+- (void) imageBrowserSelectionDidChange:(IKImageBrowserView *) aBrowser
+{
+	int index = [[fChooserView selectionIndexes] firstIndex];
+	if (index != NSNotFound)
+	{
+		ChooserItem *item = [self imageBrowser:fChooserView itemAtIndex:index];
+		[[NSUserDefaults standardUserDefaults] setObject:[item itemPath]
+												  forKey:@"OELastTemplate"];
+	}
+}
+
 - (void) imageBrowser:(IKImageBrowserView *) aBrowser
 cellWasDoubleClickedAtIndex:(NSUInteger) index
 {
 	[self performChoose:aBrowser];
-}
-
-- (void) windowDidLoad
-{
-	// Reset window size, leave window centered on screen
 }
 
 - (void) windowWillClose:(NSNotification *) notification
@@ -256,14 +267,9 @@ cellWasDoubleClickedAtIndex:(NSUInteger) index
 	if(url)
 	{
 		NSError *error;
-		if ([documentController openUntitledDocumentFromTemplateURL:url
-															display:YES
-															  error:&error])
-		{
-			[[NSUserDefaults standardUserDefaults] setObject:[item itemPath]
-													  forKey:@"OELastTemplate"];
-		}
-		else
+		if (![documentController openUntitledDocumentFromTemplateURL:url
+															 display:YES
+															   error:&error])
 			[[NSAlert alertWithError:error] runModal];
 	}
 }

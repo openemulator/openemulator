@@ -21,10 +21,8 @@
 - (void) windowDidLoad
 {
 	[super windowDidLoad];
-	
-	NSPanel *panel = (NSPanel *) [self window];
-	[panel setFrameUsingName:@"GraphicsTablet"];
-	[panel setFrameAutosaveName:@"GraphicsTablet"];
+
+	[self setWindowFrameAutosaveName:@"GraphicsTablet"];
 }
 
 @end

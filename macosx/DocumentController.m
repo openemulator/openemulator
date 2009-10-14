@@ -223,10 +223,10 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 {
 	Document *document = [[Document alloc] initFromTemplateURL:absoluteURL
 														 error:outError];
-	if (!document)
-		return nil;
+	if (document)
+		return [document autorelease];
 	
-	return [document autorelease];
+	return nil;
 }
 
 - (IBAction) newDocumentFromTemplateChooser:(id) sender

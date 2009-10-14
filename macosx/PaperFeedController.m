@@ -23,9 +23,7 @@
 {
 	[super windowDidLoad];
 	
-	NSPanel *panel = (NSPanel *) [self window];
-	[panel setFrameUsingName:@"PaperFeed"];
-	[panel setFrameAutosaveName:@"PaperFeed"];
+	[self setWindowFrameAutosaveName:@"PaperFeed"];
 }
 
 @end
