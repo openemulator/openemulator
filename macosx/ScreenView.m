@@ -11,9 +11,9 @@
 #import <OpenGL/OpenGL.h>
 #import <OpenGL/gl.h>
 
-#import "DocumentView.h"
+#import "ScreenView.h"
 
-@implementation DocumentView
+@implementation ScreenView
 
 - (id) initWithFrame:(NSRect) rect
 {
@@ -29,7 +29,8 @@
 	};
 	
 	NSOpenGLPixelFormat *pixelFormat;
-	pixelFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:pixelFormatAtrributes];
+	pixelFormat = [[NSOpenGLPixelFormat alloc]
+				   initWithAttributes:pixelFormatAtrributes];
 	
 	if(self = [super initWithFrame:rect pixelFormat:pixelFormat])
 	{
@@ -92,15 +93,17 @@
 						   toIndex:(int) index
 {
 	textureRect[index] = NSMakeRect(0, 0, 0, 0);
-	NSString *path = [[NSBundle mainBundle] pathForResource:name ofType:type];
-	NSBitmapImageRep *bitmap = [NSBitmapImageRep imageRepWithContentsOfFile:path];
+	NSString *path = [[NSBundle mainBundle] pathForResource:name
+													 ofType:type];
+	NSBitmapImageRep *bitmap = [NSBitmapImageRep
+								imageRepWithContentsOfFile:path];
 	
 	if (!bitmap)
 		return;
 	
 	NSRect rect = NSMakeRect(0, 0, [bitmap size].width, [bitmap size].height);
 	GLenum format = [bitmap hasAlpha] ? GL_RGBA : GL_RGB;
-		
+	
 	textureRect[index] = rect;
 	
 	glBindTexture(GL_TEXTURE_RECTANGLE_ARB, texture[index]);
@@ -109,7 +112,9 @@
 				 0, format, GL_UNSIGNED_BYTE, [bitmap bitmapData]);
 }
 
-- (void) renderGLTexture:(int) index toRect:(NSRect) rect withAlpha:(float) alpha
+- (void) renderGLTexture:(int) index
+				  toRect:(NSRect) rect
+			   withAlpha:(float) alpha
 {
 	glColor4f(1.0f, 1.0f, 1.0f, alpha);
 	
@@ -131,7 +136,7 @@
 - (void) initGL
 {
 	BOOL isPal = NO;
-	float overscan = 0.137f;//0.08f a normal tv
+	float overscan = 0.137f;//0.08f for a normal tv
 	NSRect overscanRect;
 	NSRect screenRect;
 	NSRect renderRect;
@@ -140,14 +145,16 @@
 	{
 		overscanRect.size.width = 702;
 		overscanRect.size.height = 576;
-		renderRect.size.width = NSWidth(overscanRect) * (63.5556f/(14*64+16)*(40*14)/52.6556f);
+		renderRect.size.width = NSWidth(overscanRect) *
+		(63.5556f/(14*64+16)*(40*14)/52.6556f);
 		renderRect.size.height = 384.0f;
 	}
 	else
 	{
 		overscanRect.size.width = 704;
 		overscanRect.size.height = 483;
-		renderRect.size.width = NSWidth(overscanRect) * (64.0f/(14*64+16)*(40*14)/52.0f);
+		renderRect.size.width = NSWidth(overscanRect) *
+		(64.0f/(14*64+16)*(40*14)/52.0f);
 		renderRect.size.height = 384.0f;
 	}
 	
@@ -188,8 +195,12 @@
 	
 	glGenTextures((sizeof(texture) / sizeof(texture[0])), texture);
 	
-	[self loadGLTextureFromResource:@"OSDPower" ofType:@"png" toIndex:DV_TEXTURE_POWER];
-	[self loadGLTextureFromResource:@"OSDPause" ofType:@"png" toIndex:DV_TEXTURE_PAUSE];
+	[self loadGLTextureFromResource:@"OSDPower"
+							 ofType:@"png"
+							toIndex:DV_TEXTURE_POWER];
+	[self loadGLTextureFromResource:@"OSDPause"
+							 ofType:@"png"
+							toIndex:DV_TEXTURE_PAUSE];
 	
 	glBindTexture(GL_TEXTURE_RECTANGLE_ARB, texture[DV_TEXTURE_VIDEO]);
 	glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -236,7 +247,8 @@
 	{
 		lastViewRect = viewRect;
 		
-		float factor = NSWidth(viewRect) / NSHeight(viewRect) / screenRectProportion;
+		float factor = NSWidth(viewRect) / NSHeight(viewRect) /
+		screenRectProportion;
 		if (factor > 1.0f)
 		{
 			videoRect.size.width = 2.0f / factor;
@@ -253,8 +265,10 @@
 		videoRect.origin.x = -NSWidth(videoRect) / 2.0f;
 		videoRect.origin.y = -NSHeight(videoRect) / 2.0f;
 		
-		osdRect.size.width = textureRect[DV_TEXTURE_PAUSE].size.width / viewRect.size.width * 2.0;
-		osdRect.size.height = textureRect[DV_TEXTURE_PAUSE].size.height / viewRect.size.height * 2.0;
+		osdRect.size.width = textureRect[DV_TEXTURE_PAUSE].size.width / 
+		viewRect.size.width * 2.0;
+		osdRect.size.height = textureRect[DV_TEXTURE_PAUSE].size.height / 
+		viewRect.size.height * 2.0;
 		osdRect.origin.x = -osdRect.size.width / 2.0f;
 		osdRect.origin.y = -osdRect.size.height / 2.0f;
 		
@@ -265,12 +279,18 @@
 	
 	if (power)
 	{
-		[self renderGLTexture:DV_TEXTURE_VIDEO toRect:videoRect withAlpha:(pause ? 0.5f : 1.0f)];
+		[self renderGLTexture:DV_TEXTURE_VIDEO 
+					   toRect:videoRect 
+					withAlpha:(pause ? 0.5f : 1.0f)];
 		if (pause)
-			[self renderGLTexture:DV_TEXTURE_PAUSE toRect:osdRect withAlpha:1.0f];
+			[self renderGLTexture:DV_TEXTURE_PAUSE
+						   toRect:osdRect
+						withAlpha:1.0f];
 	}
 	else
-		[self renderGLTexture:DV_TEXTURE_POWER toRect:osdRect withAlpha:1.0f];
+		[self renderGLTexture:DV_TEXTURE_POWER
+					   toRect:osdRect
+					withAlpha:1.0f];
 }
 
 @end

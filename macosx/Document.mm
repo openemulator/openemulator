@@ -205,8 +205,8 @@
 
 - (void) updateDevices
 {
-	OEParser info(((OEEmulator *) emulation)->getDML());
-	if (!info.isOpen())
+	OEParser parser(((OEEmulator *) emulation)->getDML());
+	if (!parser.isOpen())
 		return;
 	
 	[expansions release];
@@ -216,7 +216,7 @@
 	[peripherals release];
 	peripherals = [[NSMutableArray alloc] init];
 	
-	OEPortsInfo *outletsInfo = info.getOutletsInfo();
+	OEPortsInfo *outletsInfo = parser.getOutletsInfo();
 	
 	int expansionIndex = 0;
 	int diskDriveIndex = 0;
@@ -269,6 +269,7 @@
 		if (((OEEmulator *)emulation)->isOpen())
 		{
 			[self setLabel:[self getDMLProperty:@"label"]];
+			[self setGroup:[self getDMLProperty:@"group"]];
 			[self setDescription:[self getDMLProperty:@"description"]];
 			[self updateRunTime];
 			[self setImage:[self getResourceImage:[self getDMLProperty:@"image"]]];
@@ -369,8 +370,7 @@
 - (void) makeWindowControllers
 {
 	NSWindowController *windowController;
-	windowController = [[DocumentWindowController alloc]
-						initWithWindowNibName:@"Document"];
+	windowController = [[DocumentWindowController alloc] init];
 	
 	[self addWindowController:windowController];
 	[windowController release];
@@ -398,40 +398,51 @@
 	return [pasteboard availableTypeFromArray:pasteboardTypes] != nil;
 }
 
-- (void) powerButtonPressedAndReleased:(id) sender
+- (void) shutdownButtonPressedAndReleased:(id) sender
 {
-	[self powerButtonPressed:sender];
-	[self powerButtonReleased:sender];
+	[self shutdownButtonPressed:sender];
+	[self shutdownButtonReleased:sender];
 }
 
-- (void) powerButtonPressed:(id) sender
+- (void) shutdownButtonPressed:(id) sender
 {
 	// To-Do: libemulation
 	[self setPower:![self power]];
 }
 
-- (void) powerButtonReleased:(id) sender
+- (void) shutdownButtonReleased:(id) sender
 {
 	// To-Do: libemulation
 }
 
-- (void) resetButtonPressedAndReleased:(id) sender
+- (void) restartButtonPressedAndReleased:(id) sender
 {
-	[self resetButtonPressed:sender];
-	[self resetButtonReleased:sender];
+	[self restartButtonPressed:sender];
+	[self restartButtonReleased:sender];
 }
 
-- (void) resetButtonPressed:(id) sender
-{
-	// To-Do: libemulation
-}
-
-- (void) resetButtonReleased:(id) sender
+- (void) restartButtonPressed:(id) sender
 {
 	// To-Do: libemulation
 }
 
-- (void) pauseButtonPressed:(id) sender
+- (void) restartButtonReleased:(id) sender
+{
+	// To-Do: libemulation
+}
+
+- (void) sleepButtonPressedAndReleased:(id) sender
+{
+	[self sleepButtonPressed:sender];
+	[self sleepButtonReleased:sender];
+}
+
+- (void) sleepButtonPressed:(id) sender
+{
+	// To-Do: libemulation
+}
+
+- (void) sleepButtonReleased:(id) sender
 {
 	// To-Do: libemulation
 }
@@ -492,6 +503,20 @@
 	{
         [label release];
         label = [value copy];
+    }
+}
+
+- (NSString *) group
+{
+	return [[group retain] autorelease];
+}
+
+- (void) setGroup:(NSString *) value
+{
+    if (group != value)
+	{
+        [group release];
+        group = [value copy];
     }
 }
 

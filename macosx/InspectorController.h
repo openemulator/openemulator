@@ -1,7 +1,7 @@
 
 /**
  * OpenEmulator
- * Mac OS X Inspector Panel Controller
+ * Mac OS X Inspector Controller
  * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
@@ -10,11 +10,12 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface InspectorPanelController : NSWindowController
+@interface InspectorController : NSWindowController
 {
     IBOutlet NSObjectController *fDocumentObjectController;
 	
 	IBOutlet NSMatrix *fTabMatrix;
+	
     IBOutlet NSView *fEmulationView;
 	IBOutlet NSView *fExpansionsView;
 	IBOutlet NSView *fDiskDrivesView;
@@ -22,18 +23,21 @@
 	IBOutlet NSView *fVideoView;
 	IBOutlet NSView *fAudioView;
 	
-    NSUserDefaults *fDefaults;
+	int selectedViewIndex;
+	
 	id inspectedDocument;
-	int oldTabTag;
 }
 
 - (void) activeDocumentDidChange;
 - (id) inspectedDocument;
 - (void) setInspectedDocument:(id) theDocument;
 
-- (void) toggleInspectorPanel:(id) sender;
+- (void) toggleInspector:(id) sender;
 
 - (void) selectView:(id) sender;
-- (void) setView:(int) tabTag init:(BOOL) isInit;
+- (void) setView:(int) viewIndex;
+
+- (void) restoreWindowState:(id) sender;
+- (void) storeWindowState:(id) sender;
 
 @end

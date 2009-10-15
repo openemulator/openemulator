@@ -20,6 +20,7 @@
 	NSArray *pasteboardTypes;
 	
 	NSString *label;
+	NSString *group;
 	NSString *description;
 	NSString *modificationDate;
 	NSString *runTime;
@@ -49,18 +50,22 @@
 - (BOOL) isCopyValid;
 - (BOOL) isPasteValid;
 
-- (void) powerButtonPressedAndReleased:(id)sender;
-- (void) powerButtonPressed:(id)sender;
-- (void) powerButtonReleased:(id)sender;
-- (void) resetButtonPressedAndReleased:(id)sender;
-- (void) resetButtonPressed:(id)sender;
-- (void) resetButtonReleased:(id)sender;
-- (void) pauseButtonPressed:(id)sender;
+- (void) shutdownButtonPressedAndReleased:(id)sender;
+- (void) shutdownButtonPressed:(id)sender;
+- (void) shutdownButtonReleased:(id)sender;
+- (void) restartButtonPressedAndReleased:(id)sender;
+- (void) restartButtonPressed:(id)sender;
+- (void) restartButtonReleased:(id)sender;
+- (void) sleepButtonPressedAndReleased:(id)sender;
+- (void) sleepButtonPressed:(id)sender;
+- (void) sleepButtonReleased:(id)sender;
 
 - (BOOL) power;
 - (void) setPower:(BOOL)value;
 - (NSString *) label;
 - (void) setLabel:(NSString *) value;
+- (NSString *) group;
+- (void) setGroup:(NSString *) value;
 - (NSString *) description;
 - (void) setDescription:(NSString *) value;
 - (NSString *) modificationDate;

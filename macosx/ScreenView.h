@@ -1,11 +1,11 @@
 
 /**
  * OpenEmulator
- * Mac OS X Document View Controller
+ * Mac OS X Screen View Controller
  * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls a window's content view (OpenGL).
+ * Controls a screen's content view (OpenGL).
  */
 
 #import <Cocoa/Cocoa.h>
@@ -15,7 +15,7 @@
 #define DV_TEXTURE_PAUSE	2
 #define DV_TEXTURE_END		3
 
-@interface DocumentView : NSOpenGLView {
+@interface ScreenView : NSOpenGLView {
 	GLuint texture[DV_TEXTURE_END];
 	NSRect textureRect[DV_TEXTURE_END];
 	
@@ -24,10 +24,10 @@
 	float videoHeightScale;
 	
 	NSRect lastViewRect;
-
+	
 	NSRect videoRect;
 	NSRect osdRect;
-
+	
 	BOOL power;
 	BOOL pause;
 }

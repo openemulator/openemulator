@@ -15,6 +15,13 @@
 
 @implementation DocumentWindowController
 
+- (id) init
+{
+	self = [self initWithWindowNibName:@"Document"];
+	
+	return self;
+}
+
 - (void) windowDidLoad
 {
 	[super windowDidLoad];
@@ -30,11 +37,6 @@
 	[[self window] setToolbar:toolbar];
 	[toolbar release];
 	
-/*	[document addObserver:fDocumentView
-			   forKeyPath:@"power"
-				  options:NSKeyValueObservingOptionNew
-				  context:NULL];
-*/	
 	// To-Do: Improve the view updating code
 	[document setPower:[document power]];
 }
@@ -43,40 +45,39 @@
 	  itemForItemIdentifier:(NSString *) ident
   willBeInsertedIntoToolbar:(BOOL) flag
 {
-	NSToolbarItem *item = [[NSToolbarItem alloc] initWithItemIdentifier:ident];
-	
+	NSToolbarItem *item;
+	item = [[NSToolbarItem alloc] initWithItemIdentifier:ident];
 	if (!item)
 		return nil;
 	
 	[item autorelease];
-	
-	if ([ident isEqualToString:@"Power Off"])
+	if ([ident isEqualToString:@"Shutdown"])
 	{
-		[item setLabel:NSLocalizedString(@"Power",
+		[item setLabel:NSLocalizedString(@"Shut Down",
 										 "Document toolbar item label")];
-		[item setToolTip:NSLocalizedString(@"Enable or disable the emulation's power.",
+		[item setToolTip:NSLocalizedString(@"Shut the emulation on or off.",
 										   "Document toolbar item label")];
-		[item setImage:[NSImage imageNamed:@"TBPower.png"]];
+		[item setImage:[NSImage imageNamed:@"TBShutdown.png"]];
 		[item setTarget:document];
-		[item setAction:@selector(powerButtonPressed:)];
+		[item setAction:@selector(shutdownButtonPressed:)];
 	}
-	else if ([ident isEqualToString:@"Reset"])
+	else if ([ident isEqualToString:@"Restart"])
 	{
-		[item setLabel:NSLocalizedString(@"Reset", "Document toolbar item label")];
-		[item setToolTip:NSLocalizedString(@"Reset the emulation.",
+		[item setLabel:NSLocalizedString(@"Restart", "Document toolbar item label")];
+		[item setToolTip:NSLocalizedString(@"Reset or restart the emulation.",
 										   "Document toolbar item label")];
-		[item setImage:[NSImage imageNamed:@"TBReset.png"]];
+		[item setImage:[NSImage imageNamed:@"TBRestart.png"]];
 		[item setTarget:document];
-		[item setAction:@selector(resetButtonPressed:)];
+		[item setAction:@selector(restartButtonPressed:)];
 	}
-	else if ([ident isEqualToString:@"Pause"])
+	else if ([ident isEqualToString:@"Sleep"])
 	{
-		[item setLabel:NSLocalizedString(@"Pause", "Document toolbar item label")];
+		[item setLabel:NSLocalizedString(@"Sleep", "Document toolbar item label")];
 		[item setToolTip:NSLocalizedString(@"Pause or continue the emulation.",
 										   "Document toolbar item label")];
-		[item setImage:[NSImage imageNamed:@"TBPause.png"]];
+		[item setImage:[NSImage imageNamed:@"TBSleep.png"]];
 		[item setTarget:document];
-		[item setAction:@selector(pauseButtonPressed:)];
+		[item setAction:@selector(sleepButtonPressed:)];
 	}
 	else if ([ident isEqualToString:@"Inspector"])
 	{
@@ -85,7 +86,7 @@
 										   "Document toolbar item label")];
 		[item setImage:[NSImage imageNamed:@"TBInspector.png"]];
 		[item setTarget:self];
-		[item setAction:@selector(toggleInspectorPanel:)];
+		[item setAction:@selector(toggleInspector:)];
 	}
 	
 	return item;
@@ -98,18 +99,18 @@
 
 - (NSArray *) toolbarAllowedItemIdentifiers:(NSToolbar *) toolbar
 {
-	return [NSArray arrayWithObjects:@"Power Off",
+	return [NSArray arrayWithObjects:@"Shutdown",
 			NSToolbarSpaceItemIdentifier,
-			@"Reset",
-			@"Pause",
+			@"Restart",
+			@"Sleep",
 			NSToolbarFlexibleSpaceItemIdentifier,
 			@"Inspector",
 			nil];
 }
 
-- (void) toggleInspectorPanel:(id) sender
+- (void) toggleInspector:(id) sender
 {
-	[[NSNotificationCenter defaultCenter] postNotificationName:@"toggleInspectorPanel"
+	[[NSNotificationCenter defaultCenter] postNotificationName:@"toggleInspector"
 														object:self];
 }
 

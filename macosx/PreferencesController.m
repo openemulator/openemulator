@@ -15,14 +15,28 @@
 - (id) init
 {
 	self = [super initWithWindowNibName:@"Preferences"];
+
+	if (self)
+	{
+		templateChooser = [[TemplateChooser alloc] init];
+		[templateChooser setDelegate:self];
+	}
 	
 	return self;
+}
+
+- (void) dealloc
+{
+	NSLog(@"PreferencesController dealloc");
+	[super dealloc];
+	
+	[templateChooser release];
 }
 
 - (void) windowDidLoad
 {
 	[super windowDidLoad];
-	
+
 	NSToolbar *toolbar = [[NSToolbar alloc] initWithIdentifier:@"Preferences Toolbar"];
 	NSString *selectedItemIdentifier = @"General";
 	
@@ -36,8 +50,10 @@
 	
     [self setView:selectedItemIdentifier];
 	
-	userDefaults = [NSUserDefaults standardUserDefaults];
-	[self useDefaultTemplate:[userDefaults boolForKey:@"OEUseDefaultTemplate"]];
+	[self updateUseDefaultTemplate];
+	
+	[templateChooser populateOutlineView:fTemplateChooserOutlineView
+						  andChooserView:fTemplateChooserChooserView];
 }
 
 - (NSToolbarItem *) toolbar:(NSToolbar *) toolbar
@@ -119,37 +135,47 @@
 	[window setTitle:NSLocalizedString(itemIdentifier, "Preferences view")];
 }
 
-- (IBAction) selectTemplate:(id) sender
+- (void) updateUseDefaultTemplate
 {
-	[self useDefaultTemplate:[[sender selectedCell] tag]];
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	[self setUseDefaultTemplate:[userDefaults boolForKey:@"OEUseDefaultTemplate"]];
 }
 
-- (IBAction) useDefaultTemplate:(BOOL) useDefaultTemplate
+- (void) setUseDefaultTemplate:(BOOL) useDefaultTemplate
 {
-	NSString *useTemplateString = NSLocalizedString(@"Use template:", "Use template:");
-	useTemplateString = [useTemplateString stringByAppendingString:@" "];
-	NSString *defaultTemplate = [userDefaults stringForKey:@"OEDefaultTemplate"];
+	NSString *useTemplateString = NSLocalizedString(@"Use template: ", "Use template: ");
+	NSString *defaultTemplate = [[NSUserDefaults standardUserDefaults]
+								 stringForKey:@"OEDefaultTemplate"];
 	if (defaultTemplate)
 	{
 		NSString *defaultTemplateName = [[defaultTemplate lastPathComponent]
 										 stringByDeletingPathExtension];
 		useTemplateString = [useTemplateString stringByAppendingString:defaultTemplateName];
 	}
-	[fEnableDefaultTemplate setTitle:useTemplateString];
 	
-	[fDisableDefaultTemplate setIntValue:!useDefaultTemplate];
-	[fEnableDefaultTemplate setIntValue:useDefaultTemplate];
-	
+	[fShowTemplateChooserRadio setIntValue:!useDefaultTemplate];
+	[fUseTemplateRadio setIntValue:useDefaultTemplate];
+	[fUseTemplateRadio setTitle:useTemplateString];
 	[fChooseTemplateButton setEnabled:useDefaultTemplate];
 	
 	if ((defaultTemplate == nil) && useDefaultTemplate)
 		[self chooseTemplate:self];
 	else
-		[userDefaults setBool:useDefaultTemplate forKey:@"OEUseDefaultTemplate"];
+		[[NSUserDefaults standardUserDefaults] setBool:useDefaultTemplate
+												forKey:@"OEUseDefaultTemplate"];
+}
+
+- (IBAction) selectTemplate:(id) sender
+{
+	[self setUseDefaultTemplate:[[sender selectedCell] tag]];
 }
 
 - (IBAction) chooseTemplate:(id) sender
 {
+	NSString *itemPath = [[NSUserDefaults standardUserDefaults]
+						  stringForKey:@"OEDefaultTemplate"];
+	[templateChooser selectItemWithItemPath:itemPath];
+	
 	[NSApp beginSheet:fTemplateChooserSheet
 	   modalForWindow:[self window]
 		modalDelegate:self
@@ -162,12 +188,15 @@
 	[NSApp endSheet:fTemplateChooserSheet];
 }
 
-- (IBAction) chooseTemplateSheet:(id) sender
+- (void) templateChooserWasDoubleClicked:(id) sender
 {
-	[userDefaults setObject:@"/Users/mressl/Apple II.emulation"
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	[userDefaults setObject:[templateChooser selectedItemPath]
 					 forKey:@"OEDefaultTemplate"];
+	[userDefaults setBool:YES
+				   forKey:@"OEUseDefaultTemplate"];
 	
-	[NSApp endSheet:fTemplateChooserSheet];
+	[self closeTemplateSheet:sender];
 }
 
 - (void) didEndSheet:(NSWindow *) sheet
@@ -176,7 +205,7 @@
 { 
     [sheet orderOut:self];
 	
-	[self useDefaultTemplate:([userDefaults stringForKey:@"OEDefaultTemplate"] != nil)];
-} 
+	[self updateUseDefaultTemplate];
+}
 
 @end

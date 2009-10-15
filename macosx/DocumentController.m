@@ -12,7 +12,7 @@
 
 #import "Document.h"
 #import "DocumentController.h"
-#import "TemplateChooserWindowController.h"
+#import "TemplateChooserController.h"
 
 static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 							 unsigned long framesPerBuffer,
@@ -20,7 +20,7 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 							 PaStreamCallbackFlags statusFlags,
 							 void *userData)
 {
-	float *in = (float *)inputBuffer;
+//	float *in = (float *)inputBuffer;
 	float *out = (float *)outputBuffer;
 	unsigned int i;
 	
@@ -51,7 +51,6 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 					 @"iso", @"cdr",
 					 nil];
 		
-		isTemplateChooserWindowOpen = NO;
 		disableMenuBarCount = 0;
 	}
 	
@@ -67,17 +66,25 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 
 - (void) applicationWillFinishLaunching:(NSNotification *) notification
 {
-//	printf("applicationWillFinishLaunching\n");
+	//	printf("applicationWillFinishLaunching\n");
+	[fInspectorController restoreWindowState:self];
 	
-	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-	if ([userDefaults boolForKey:@"OEInspectorPanelVisible"])
-		[fInspectorPanelController toggleInspectorPanel:self];
+	int error;
+	if ((error = Pa_Initialize()) == paNoError)
+		if ((error = Pa_OpenDefaultStream(&portAudioStream, 
+										  0, 2, paFloat32,
+										  48000, 512,
+										  portAudioCallback, self)) == paNoError)
+			if ((error = Pa_StartStream(portAudioStream)) == paNoError)
+				return;
+	
+	fprintf(stderr, "portaudio: error %d\n", error);
 }
 
 - (BOOL) application:(NSApplication *) theApplication
 			openFile:(NSString *) filename
 {
-//	printf("openFile\n");
+	//	printf("openFile\n");
 	if ([[filename pathExtension] compare:@"emulation"] == NSOrderedSame)
 		return NO;
 	
@@ -111,41 +118,30 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 
 - (void) applicationDidFinishLaunching:(NSNotification *) notification
 {
-//	printf("applicationDidFinishLaunching\n");
-	
-	int error;
-	if ((error = Pa_Initialize()) == paNoError)
-		if ((error = Pa_OpenDefaultStream(&portAudioStream, 
-										  0, 2, paFloat32,
-										  48000, 512,
-										  portAudioCallback, self)) == paNoError)
-			if ((error = Pa_StartStream(portAudioStream)) == paNoError)
-				return;
-	
-	fprintf(stderr, "portaudio: error %d\n", error);
-	
-	return;
+	//	printf("applicationDidFinishLaunching\n");
 }
 
 - (void) applicationWillTerminate:(NSNotification *) notification
 {
-//	printf("applicationWillTerminate\n");
-	
+	//	printf("applicationWillTerminate\n");
 	Pa_Terminate();
 	
-	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-	NSWindow *window = [fInspectorPanelController window];
-	[userDefaults setBool:[window isVisible] forKey:@"OEInspectorPanelVisible"];
+	[fInspectorController storeWindowState:self];
 }
 
 - (BOOL) validateUserInterfaceItem:(id) item
 {
 	if ([item action] == @selector(newDocument:))
-		return !isTemplateChooserWindowOpen;
+		return ![[fTemplateChooserController window] isVisible];
 	else if ([item action] == @selector(newDocumentFromTemplateChooser:))
-		return !isTemplateChooserWindowOpen;
+		return ![[fTemplateChooserController window] isVisible];
 	else
 		return YES;
+}
+
+- (IBAction) newDocumentFromTemplateChooser:(id) sender
+{
+	[fTemplateChooserController showWindow:sender];
 }
 
 - (IBAction) openDocument:(id) sender
@@ -229,21 +225,28 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 	return nil;
 }
 
-- (IBAction) newDocumentFromTemplateChooser:(id) sender
+- (void) linkHomepage:(id) sender
 {
-	if (isTemplateChooserWindowOpen)
-		return;
-	
-	isTemplateChooserWindowOpen = YES;
-	
-	TemplateChooserWindowController *templateChooserWindowController;
-	templateChooserWindowController = [[TemplateChooserWindowController alloc] init:self];
-	[templateChooserWindowController showWindow:self];
+	NSURL *url = [NSURL	URLWithString:LINK_HOMEPAGE];
+	[[NSWorkspace sharedWorkspace] openURL:url];
 }
 
-- (void) noteTemplateChooserWindowClosed
+- (void) linkForums:(id) sender
 {
-	isTemplateChooserWindowOpen = NO;
+	NSURL *url = [NSURL	URLWithString:LINK_FORUMSURL];
+	[[NSWorkspace sharedWorkspace] openURL:url];
+}
+
+- (void) linkDevelopment:(id) sender
+{
+	NSURL *url = [NSURL	URLWithString:LINK_DEVURL];
+	[[NSWorkspace sharedWorkspace] openURL:url];
+}
+
+- (void) linkDonate:(id) sender
+{
+	NSURL *url = [NSURL	URLWithString:LINK_DONATEURL];
+	[[NSWorkspace sharedWorkspace] openURL:url];
 }
 
 - (void) disableMenuBar

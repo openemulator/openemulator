@@ -33,7 +33,6 @@ public:
 	int ioctl(string componentRef, int message, void *data);
 	
 	xmlDocPtr getDML();
-	bool setDMLProperty(string key, string value);
 	bool addDML(string dmlPath, map<string, string> connections);
 	bool removeOutlet(string outletRef);
 	

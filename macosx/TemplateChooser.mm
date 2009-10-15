@@ -12,30 +12,29 @@
 
 #import "OEParser.h"
 
-#import "TemplateChooserWindowController.h"
+#import "TemplateChooser.h"
 #import "ChooserItem.h"
 #import "Document.h"
 
-@implementation TemplateChooserWindowController
+@implementation TemplateChooser
 
-- (id) init:(DocumentController *) theDocumentController
+- (id) init
 {
-	self = [super initWithWindowNibName:@"TemplateChooser"];
+	self = [super init];
+	
 	if (self)
 	{
-		documentController = theDocumentController;
-		
 		groups = [[NSMutableDictionary alloc] init];
 		
 		NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
 		NSString *templatesPath = [resourcePath
 								   stringByAppendingPathComponent:@"templates"];
 		[self addTemplatesFromPath:templatesPath
-					forceGroupName:nil];
+						 groupName:nil];
 		
 		NSString *userTemplatesPath = [TEMPLATE_FOLDER stringByExpandingTildeInPath];
 		[self addTemplatesFromPath:userTemplatesPath
-					forceGroupName:NSLocalizedString(@"My Templates",
+						 groupName:NSLocalizedString(@"My Templates",
 													 @"My Templates")];
 		
 		groupNames = [NSMutableArray arrayWithArray:[[groups allKeys]
@@ -51,13 +50,20 @@
 {
 	[groupNames release];
 	[groups release];
-	[selectedGroup release];
+	
+	if (selectedGroup)
+		[selectedGroup release];
 	
 	[super dealloc];
 }
 
+- (void) setDelegate:(id)theDelegate
+{
+	templateChooserDelegate = theDelegate;
+}
+
 - (void) addTemplatesFromPath:(NSString *) path
-			   forceGroupName:(NSString *) forcedGroupName
+					groupName:(NSString *) theGroupName
 {
 	NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
 	NSString *imagesPath = [resourcePath
@@ -85,8 +91,8 @@
 		NSString *description = [NSString stringWithUTF8String:dmlInfo->image.c_str()];
 		NSString *groupName = [NSString stringWithUTF8String:dmlInfo->group.c_str()];
 		
-		if (forcedGroupName)
-			groupName = forcedGroupName;
+		if (theGroupName)
+			groupName = theGroupName;
 		
 		if (![groups objectForKey:groupName])
 		{
@@ -95,8 +101,8 @@
 		}
 		NSString *imagePath = [imagesPath stringByAppendingPathComponent:imageName];
 		ChooserItem *item = [[ChooserItem alloc] initWithItem:templatePath
-														 label:label
-													 imagePath:imagePath
+														label:label
+													imagePath:imagePath
 												  description:description];
 		if (item)
 			[item autorelease];
@@ -105,13 +111,68 @@
 	}
 }
 
-- (void) selectLastTemplate
+- (void) updateSelectedGroup
 {
-	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-	NSString *lastTemplatePath = [userDefaults stringForKey:@"OELastTemplate"];
+	if (selectedGroup)
+	{
+		[selectedGroup release];
+		selectedGroup = nil;
+	}
 	
-	int lastGroupIndex = -1;
-	int lastChooserIndex = -1;
+	int row = [fOutlineView selectedRow];
+	if (row != -1)
+	{
+		selectedGroup = [groupNames objectAtIndex:row];
+		[selectedGroup retain];
+	}
+}
+
+- (void) populateOutlineView:(id) outlineView
+			  andChooserView:(id) chooserView
+{
+	fOutlineView = [outlineView retain];
+	fChooserView = [chooserView retain];
+	
+	outlineMessagesDisabled = YES;
+	[fOutlineView setDataSource:self];
+	[fOutlineView setDelegate:self];
+	[fOutlineView reloadData];
+	
+	NSSize aSize;
+	aSize.width = 96;
+	aSize.height = 64;
+	NSDictionary *attrs = [NSDictionary dictionaryWithObjectsAndKeys:
+						   [NSFont messageFontOfSize:11.0f], NSFontAttributeName,
+						   [NSColor blackColor], NSForegroundColorAttributeName,
+						   nil];
+	NSDictionary *hAttrs = [NSDictionary dictionaryWithObjectsAndKeys:
+							[NSFont messageFontOfSize:11.0f], NSFontAttributeName,
+							[NSColor whiteColor], NSForegroundColorAttributeName,
+							nil];	
+	[fChooserView setAllowsEmptySelection:NO];
+	[fChooserView setAllowsMultipleSelection:NO];
+	[fChooserView setCellSize:aSize];
+	[fChooserView setCellsStyleMask:IKCellsStyleTitled];
+	[fChooserView setDataSource:self];
+	[fChooserView setDelegate:self];
+	[fChooserView setValue:attrs
+					forKey:IKImageBrowserCellsTitleAttributesKey];
+	[fChooserView setValue:hAttrs
+					forKey:IKImageBrowserCellsHighlightedTitleAttributesKey];
+	outlineMessagesDisabled = NO;
+	
+	chooserMessagesDisabled = YES;
+	[self updateSelectedGroup];
+	[fChooserView reloadData];
+	[fChooserView setSelectionIndexes:[NSIndexSet indexSetWithIndex:0]
+				 byExtendingSelection:NO];
+	chooserMessagesDisabled = NO;
+}
+
+- (void) selectItemWithItemPath:(NSString *) itemPath
+{
+	int lastGroupIndex = 0;
+	int lastChooserIndex = 0;
 	
 	int groupsCount = [groupNames count];
 	for (int i = 0; i < groupsCount; i++)
@@ -123,9 +184,7 @@
 		for (int j = 0; j < templatesCount; j++)
 		{
 			ChooserItem *item = [templates objectAtIndex:j];
-			
-			NSString *templatePath = [item itemPath];
-			if ([templatePath compare:lastTemplatePath] == NSOrderedSame)
+			if ([[item itemPath] compare:itemPath] == NSOrderedSame)
 			{
 				lastGroupIndex = i;
 				lastChooserIndex = j;
@@ -133,49 +192,19 @@
 		}
 	}
 	
-	if (lastGroupIndex == -1)
-		return;
-	
+	outlineMessagesDisabled = YES;
+	[fOutlineView selectRowIndexes:[NSIndexSet indexSet]
+			  byExtendingSelection:NO];
 	[fOutlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:lastGroupIndex]
 			  byExtendingSelection:NO];
+	outlineMessagesDisabled = NO;
+	
+	chooserMessagesDisabled = YES;
+	[fChooserView reloadData];
 	[fChooserView setSelectionIndexes:[NSIndexSet indexSetWithIndex:lastChooserIndex]
 				 byExtendingSelection:NO];
-}
-
-- (void) awakeFromNib
-{
-	[fOutlineView setDelegate:self];
-	[fOutlineView setDataSource:self];
-	[fOutlineView reloadData];
-	
-	NSDictionary *attrs = [NSDictionary dictionaryWithObjectsAndKeys:
-						   [NSFont messageFontOfSize:11.0f], NSFontAttributeName,
-						   [NSColor blackColor], NSForegroundColorAttributeName,
-						   nil];
-	
-	NSDictionary *hAttrs = [NSDictionary dictionaryWithObjectsAndKeys:
-						   [NSFont messageFontOfSize:11.0f], NSFontAttributeName,
-						   [NSColor whiteColor], NSForegroundColorAttributeName,
-						   nil];
-	
-	[fChooserView setValue:attrs
-					forKey:IKImageBrowserCellsTitleAttributesKey];
-	[fChooserView setValue:hAttrs
-					forKey:IKImageBrowserCellsHighlightedTitleAttributesKey];
-	NSSize aSize;
-	aSize.width = 96;
-	aSize.height = 64;
-	[fChooserView setCellSize:aSize];
-	[fChooserView setAllowsEmptySelection:NO];
-	[fChooserView setAllowsMultipleSelection:NO];
-	[fChooserView setCellsStyleMask:IKCellsStyleTitled];
-	[fChooserView setDelegate:self];
-	[fChooserView setDataSource:self];
-	[fChooserView reloadData];
-	
-	[self selectLastTemplate];
-	
-	[self setShouldCascadeWindows:NO];
+	[fChooserView scrollIndexToVisible:lastChooserIndex];
+	chooserMessagesDisabled = NO;
 }
 
 - (id) outlineView:(NSOutlineView *) outlineView child:(NSInteger) index ofItem:(id) item
@@ -194,7 +223,7 @@
 - (NSInteger) outlineView:(NSOutlineView *) outlineView numberOfChildrenOfItem:(id) item
 {
 	if (!item)
-		return [groups count];
+		return [groupNames count];
 	
 	return 0;
 }
@@ -208,13 +237,18 @@ objectValueForTableColumn:(NSTableColumn *) tableColumn
 
 - (void) outlineViewSelectionDidChange:(NSNotification *) notification
 {
-	if (selectedGroup)
-		[selectedGroup release];
+	[self updateSelectedGroup];
 	
-	selectedGroup = [[groupNames objectAtIndex:[fOutlineView selectedRow]] retain];
-	[fChooserView reloadData];
-	[fChooserView setSelectionIndexes:[NSIndexSet indexSetWithIndex:0]
-				 byExtendingSelection:NO];
+	if (!outlineMessagesDisabled)
+	{
+		chooserMessagesDisabled = YES;
+		[fChooserView reloadData];
+		[fChooserView setSelectionIndexes:[NSIndexSet indexSetWithIndex:0]
+					 byExtendingSelection:NO];
+		chooserMessagesDisabled = NO;
+		
+		[self imageBrowserSelectionDidChange:nil];
+	}
 }
 
 - (NSUInteger) numberOfItemsInImageBrowser:(IKImageBrowserView *) aBrowser
@@ -228,50 +262,38 @@ objectValueForTableColumn:(NSTableColumn *) tableColumn
 - (id) imageBrowser:(IKImageBrowserView *) aBrowser itemAtIndex:(NSUInteger) index
 {
 	if (!selectedGroup)
-		return 0;
+		return nil;
 	
 	return [[groups objectForKey:selectedGroup] objectAtIndex:index];
 }
 
 - (void) imageBrowserSelectionDidChange:(IKImageBrowserView *) aBrowser
 {
-	int index = [[fChooserView selectionIndexes] firstIndex];
-	if (index != NSNotFound)
+	if (!chooserMessagesDisabled)
 	{
-		ChooserItem *item = [self imageBrowser:fChooserView itemAtIndex:index];
-		[[NSUserDefaults standardUserDefaults] setObject:[item itemPath]
-												  forKey:@"OELastTemplate"];
+		if ([templateChooserDelegate respondsToSelector:
+			 @selector(templateChooserSelectionDidChange:)])
+			[templateChooserDelegate templateChooserSelectionDidChange:self];
 	}
 }
 
 - (void) imageBrowser:(IKImageBrowserView *) aBrowser
 cellWasDoubleClickedAtIndex:(NSUInteger) index
 {
-	[self performChoose:aBrowser];
+	if ([templateChooserDelegate respondsToSelector:
+		  @selector(templateChooserWasDoubleClicked:)])
+		[templateChooserDelegate templateChooserWasDoubleClicked:self];
 }
 
-- (void) windowWillClose:(NSNotification *) notification
+- (NSString *) selectedItemPath
 {
-	if (documentController)
-		[documentController noteTemplateChooserWindowClosed]; 
-}
-
-- (void) performChoose:(id) sender
-{
-	[[self window] performClose:self];
-	
 	int index = [[fChooserView selectionIndexes] firstIndex];
-	ChooserItem *item = [self imageBrowser:fChooserView itemAtIndex:index];
-	NSURL *url = [NSURL fileURLWithPath:[item itemPath]];
+	if (index == NSNotFound)
+		return nil;
 	
-	if(url)
-	{
-		NSError *error;
-		if (![documentController openUntitledDocumentFromTemplateURL:url
-															 display:YES
-															   error:&error])
-			[[NSAlert alertWithError:error] runModal];
-	}
+	ChooserItem *item = [self imageBrowser:fChooserView itemAtIndex:index];
+	
+	return [[[item itemPath] copy] autorelease];
 }
 
 @end

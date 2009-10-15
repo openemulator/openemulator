@@ -11,27 +11,36 @@
 #import <Cocoa/Cocoa.h>
 
 #import "portaudio.h"
-#import "InspectorPanelController.h"
+#import "TemplateChooserController.h"
+#import "InspectorController.h"
+
+#define LINK_HOMEPAGE	@"http://www.openemulator.org"
+#define LINK_FORUMSURL	@"http://groups.google.com/group/openemulator"
+#define LINK_DEVURL		@"http://code.google.com/p/openemulator"
+#define LINK_DONATEURL	@"http://www.openemulator.org/donate.html"
 
 @interface DocumentController : NSDocumentController {
-	IBOutlet InspectorPanelController *fInspectorPanelController;
+	IBOutlet id fTemplateChooserController;
+	IBOutlet id fInspectorController;
 	
 	NSArray *fileTypes;
 	
 	PaStream *portAudioStream;
 	
-	bool isTemplateChooserWindowOpen;
 	int disableMenuBarCount;
 }
 
+- (IBAction) newDocumentFromTemplateChooser:(id) sender;
 - (id) openUntitledDocumentFromTemplateURL:(NSURL *) absoluteURL
 								   display:(BOOL) displayDocument
 									 error:(NSError **) outError;
 - (id) makeUntitledDocumentFromTemplateURL:(NSURL *) absoluteURL
 									 error:(NSError **) outError;
 
-- (IBAction) newDocumentFromTemplateChooser:(id) sender;
-- (void) noteTemplateChooserWindowClosed;
+- (IBAction) linkHomepage:(id) sender;
+- (IBAction) linkForums:(id) sender;
+- (IBAction) linkDevelopment:(id) sender;
+- (IBAction) linkDonate:(id) sender;
 
 - (void) disableMenuBar;
 - (void) enableMenuBar;

@@ -24,6 +24,16 @@
 	[super dealloc];
 }
 
+- (void) keyDown:(NSEvent *)theEvent
+{
+	NSLog(@"keyDown: %@", theEvent);
+}
+
+- (void) keyUp:(NSEvent *)theEvent
+{
+	NSLog(@"keyUp: %@", theEvent);
+}
+
 - (NSRect) constrainFrameRect:(NSRect) frameRect toScreen:(NSScreen *) screen
 {
 	return frameRect;

@@ -10,27 +10,32 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "TemplateChooser.h"
+
 @interface PreferencesController : NSWindowController
 {
-	NSUserDefaults *userDefaults;
-	
 	IBOutlet id fGeneralView;
 	IBOutlet id fSoundView;
 	
-	IBOutlet id fDisableDefaultTemplate;
-	IBOutlet id fEnableDefaultTemplate;
+	IBOutlet id fShowTemplateChooserRadio;
+	IBOutlet id fUseTemplateRadio;
 	IBOutlet id fChooseTemplateButton;
 	
 	IBOutlet id fTemplateChooserSheet;
+	IBOutlet id fTemplateChooserOutlineView;
+	IBOutlet id fTemplateChooserChooserView;
+	
+	TemplateChooser *templateChooser;
 }
 
-- (void) selectView:(id) sender;
 - (void) setView:(NSString *) itemIdentifier;
 
+- (void) updateUseDefaultTemplate;
+- (void) setUseDefaultTemplate:(BOOL) useDefaultTemplate;
 - (IBAction) selectTemplate:(id) sender;
 - (IBAction) chooseTemplate:(id) sender;
-- (IBAction) useDefaultTemplate:(BOOL) useDefaultTemplate;
+
 - (IBAction) closeTemplateSheet:(id) sender;
-- (IBAction) chooseTemplateSheet:(id) sender;
+- (void) templateChooserWasDoubleClicked:(id) sender;
 
 @end
