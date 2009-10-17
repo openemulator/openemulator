@@ -23,6 +23,7 @@
 	TemplateChooser *templateChooser;
 }
 
-- (void) templateChooserWasDoubleClicked:(id) sender;
+- (void) updateTemplate;
+- (IBAction) chooseTemplate:(id) sender;
 
 @end

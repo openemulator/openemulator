@@ -27,7 +27,6 @@
 
 - (void) dealloc
 {
-	NSLog(@"PreferencesController dealloc");
 	[super dealloc];
 	
 	[templateChooser release];
@@ -52,8 +51,8 @@
 	
 	[self updateUseDefaultTemplate];
 	
-	[templateChooser populateOutlineView:fTemplateChooserOutlineView
-						  andChooserView:fTemplateChooserChooserView];
+	[templateChooser setupOutlineView:fTemplateChooserOutlineView
+					   andChooserView:fTemplateChooserChooserView];
 }
 
 - (NSToolbarItem *) toolbar:(NSToolbar *) toolbar
@@ -172,8 +171,10 @@
 
 - (IBAction) chooseTemplate:(id) sender
 {
-	NSString *itemPath = [[NSUserDefaults standardUserDefaults]
-						  stringForKey:@"OEDefaultTemplate"];
+	[templateChooser updateUserTemplates];
+	
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	NSString *itemPath = [userDefaults stringForKey:@"OEDefaultTemplate"];
 	[templateChooser selectItemWithItemPath:itemPath];
 	
 	[NSApp beginSheet:fTemplateChooserSheet
@@ -190,6 +191,11 @@
 
 - (void) templateChooserWasDoubleClicked:(id) sender
 {
+	[self chooseTemplateSheet:sender];
+}
+
+- (IBAction) chooseTemplateSheet:(id) sender
+{
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	[userDefaults setObject:[templateChooser selectedItemPath]
 					 forKey:@"OEDefaultTemplate"];
@@ -198,7 +204,6 @@
 	
 	[self closeTemplateSheet:sender];
 }
-
 - (void) didEndSheet:(NSWindow *) sheet
 		  returnCode:(int) returnCode
 		 contextInfo:(void *) contextInfo

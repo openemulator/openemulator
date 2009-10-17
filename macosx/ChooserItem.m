@@ -20,13 +20,13 @@
 	if (self = [super init])
 	{
 		if (theItemPath)
-			itemPath = [theItemPath retain];
+			itemPath = [theItemPath copy];
 		if (theLabel)
-			label = [theLabel retain];
+			label = [theLabel copy];
 		if (theImagePath)
-			imagePath = [theImagePath retain];
+			imagePath = [theImagePath copy];
 		if (theDescription)
-			description = [theDescription retain];
+			description = [theDescription copy];
 	}
 	
 	return self;

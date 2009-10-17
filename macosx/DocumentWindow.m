@@ -34,6 +34,11 @@
 	NSLog(@"keyUp: %@", theEvent);
 }
 
+- (void) flagsChanged:(NSEvent *)theEvent
+{
+	NSLog(@"flagsChanged: %@", theEvent);
+}
+
 - (NSRect) constrainFrameRect:(NSRect) frameRect toScreen:(NSScreen *) screen
 {
 	return frameRect;

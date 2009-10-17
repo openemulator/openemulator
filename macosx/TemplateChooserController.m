@@ -38,28 +38,42 @@
 	
 	[self setWindowFrameAutosaveName:@"TemplateChooser"];
 	
-	[templateChooser populateOutlineView:fOutlineView
-						  andChooserView:fChooserView];
+	[templateChooser setupOutlineView:fOutlineView
+					   andChooserView:fChooserView];
 	
-	NSString *itemPath = [[NSUserDefaults standardUserDefaults]
-						  stringForKey:@"OELastTemplate"];
-	[templateChooser selectItemWithItemPath:itemPath];
+	[self updateTemplate];
 }
 
-- (void) templateChooserSelectionDidChange:(id) sender
+- (void) updateTemplate
 {
-	NSString *selectedItemPath = [templateChooser selectedItemPath];
-	if (!selectedItemPath)
-		return;
+	[templateChooser updateUserTemplates];
 	
-	NSLog(@"selectedItemPath: %@", selectedItemPath);
-	[[NSUserDefaults standardUserDefaults] setObject:selectedItemPath
-											  forKey:@"OELastTemplate"]; 	 
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	NSString *itemPath = [userDefaults stringForKey:@"OELastTemplate"];
+	[templateChooser selectItemWithItemPath:itemPath];
+	
+	[[self window] center];
+}
+
+- (void) showWindow:(id) sender
+{
+	[self updateTemplate];
+	[super showWindow:sender];
 }
 
 - (void) templateChooserWasDoubleClicked:(id) sender
 {
-	NSURL *url = [NSURL fileURLWithPath:[templateChooser selectedItemPath]];
+	[self chooseTemplate:sender];
+}
+
+- (IBAction) chooseTemplate:(id) sender
+{
+	NSString *itemPath = [templateChooser selectedItemPath];
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	[userDefaults setObject:itemPath
+					 forKey:@"OELastTemplate"];
+	
+	NSURL *url = [NSURL fileURLWithPath:itemPath];
 	
 	[[self window] orderOut:self];
 	

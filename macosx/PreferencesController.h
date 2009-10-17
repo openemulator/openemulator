@@ -36,6 +36,6 @@
 - (IBAction) chooseTemplate:(id) sender;
 
 - (IBAction) closeTemplateSheet:(id) sender;
-- (void) templateChooserWasDoubleClicked:(id) sender;
+- (IBAction) chooseTemplateSheet:(id) sender;
 
 @end

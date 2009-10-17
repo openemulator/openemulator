@@ -225,6 +225,22 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 	return nil;
 }
 
+- (void) disableMenuBar
+{
+	disableMenuBarCount++;
+	
+	if (disableMenuBarCount == 1)
+		SetSystemUIMode(kUIModeAllHidden, kUIOptionAutoShowMenuBar);
+}
+
+- (void) enableMenuBar
+{
+	disableMenuBarCount--;
+	
+	if (disableMenuBarCount == 0)
+		SetSystemUIMode(kUIModeNormal, 0);
+}
+
 - (void) linkHomepage:(id) sender
 {
 	NSURL *url = [NSURL	URLWithString:LINK_HOMEPAGE];
@@ -247,22 +263,6 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 {
 	NSURL *url = [NSURL	URLWithString:LINK_DONATEURL];
 	[[NSWorkspace sharedWorkspace] openURL:url];
-}
-
-- (void) disableMenuBar
-{
-	disableMenuBarCount++;
-	
-	if (disableMenuBarCount == 1)
-		SetSystemUIMode(kUIModeAllHidden, kUIOptionAutoShowMenuBar);
-}
-
-- (void) enableMenuBar
-{
-	disableMenuBarCount--;
-	
-	if (disableMenuBarCount == 0)
-		SetSystemUIMode(kUIModeNormal, 0);
 }
 
 @end

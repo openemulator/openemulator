@@ -435,20 +435,20 @@
 					<int key="connectionID">254</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">templateChooserWasDoubleClicked:</string>
-						<reference key="source" ref="1001"/>
-						<reference key="destination" ref="486717285"/>
-					</object>
-					<int key="connectionID">255</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">window</string>
 						<reference key="source" ref="1001"/>
 						<reference key="destination" ref="249516031"/>
 					</object>
 					<int key="connectionID">256</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">chooseTemplate:</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="486717285"/>
+					</object>
+					<int key="connectionID">257</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -677,10 +677,10 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{233, 251}, {600, 400}}</string>
+					<string>{{171, 259}, {600, 400}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{233, 251}, {600, 400}}</string>
-					<boolean value="YES"/>
+					<string>{{171, 259}, {600, 400}}</string>
+					<boolean value="NO"/>
 					<boolean value="YES"/>
 					<string>{600, 400}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -721,7 +721,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">256</int>
+			<int key="maxID">257</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -730,8 +730,17 @@
 					<string key="className">TemplateChooserController</string>
 					<string key="superclassName">NSWindowController</string>
 					<object class="NSMutableDictionary" key="actions">
-						<string key="NS.key.0">templateChooserWasDoubleClicked:</string>
-						<string key="NS.object.0">id</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>chooseTemplate:</string>
+							<string>templateChooserWasDoubleClicked:</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
+							<string>id</string>
+						</object>
 					</object>
 					<object class="NSMutableDictionary" key="outlets">
 						<bool key="EncodedWithXMLCoder">YES</bool>

@@ -14,6 +14,7 @@
 			<bool key="EncodedWithXMLCoder">YES</bool>
 			<integer value="23"/>
 			<integer value="28"/>
+			<integer value="2050"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -443,7 +444,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				<string key="NSWindowContentMaxSize">{3.40282e+38, 3.40282e+38}</string>
 				<string key="NSWindowContentMinSize">{600, 400}</string>
 				<object class="NSView" key="NSWindowView" id="851795274">
-					<nil key="NSNextResponder"/>
+					<reference key="NSNextResponder"/>
 					<int key="NSvFlags">274</int>
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -771,6 +772,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						</object>
 					</object>
 					<string key="NSFrameSize">{600, 400}</string>
+					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1440, 878}}</string>
 				<string key="NSMinSize">{600, 422}</string>
@@ -896,14 +898,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<int key="connectionID">2078</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">templateChooserWasDoubleClicked:</string>
-						<reference key="source" ref="511492310"/>
-						<reference key="destination" ref="28376548"/>
-					</object>
-					<int key="connectionID">2079</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">fShowTemplateChooserRadio</string>
 						<reference key="source" ref="511492310"/>
@@ -918,6 +912,14 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<reference key="destination" ref="882976568"/>
 					</object>
 					<int key="connectionID">2081</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">chooseTemplateSheet:</string>
+						<reference key="source" ref="511492310"/>
+						<reference key="destination" ref="28376548"/>
+					</object>
+					<int key="connectionID">2082</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -1345,9 +1347,9 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<real value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{190, 217}, {600, 400}}</string>
+					<string>{{161, 145}, {600, 400}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{190, 217}, {600, 400}}</string>
+					<string>{{161, 145}, {600, 400}}</string>
 					<boolean value="NO"/>
 					<boolean value="YES"/>
 					<string>{600, 400}</string>
@@ -1410,7 +1412,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">2081</int>
+			<int key="maxID">2082</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -1454,9 +1456,9 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>chooseTemplate:</string>
+							<string>chooseTemplateSheet:</string>
 							<string>closeTemplateSheet:</string>
 							<string>selectTemplate:</string>
-							<string>templateChooserWasDoubleClicked:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>

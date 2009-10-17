@@ -14,7 +14,6 @@
 @protocol TemplateChooserDelegate <NSObject>
 
 @optional
-- (void)templateChooserSelectionDidChange:(id)sender;
 - (void)templateChooserWasDoubleClicked:(id)sender;
 
 @end
@@ -30,16 +29,14 @@
 	NSMutableArray *groupNames;
 	
 	NSString *selectedGroup;
-	BOOL outlineMessagesDisabled;
-	BOOL chooserMessagesDisabled;
 }
 
 - (void) setDelegate:(id)theDelegate;
+- (void) updateUserTemplates;
 - (void) addTemplatesFromPath:(NSString *) path
 					groupName:(NSString *) theGroupName;
-
-- (void) populateOutlineView:(id) outlineView
-			  andChooserView:(id) chooserView;
+- (void) setupOutlineView:(id) outlineView
+		   andChooserView:(id) chooserView;
 - (void) selectItemWithItemPath:(NSString *) itemPath;
 - (NSString *) selectedItemPath;
 

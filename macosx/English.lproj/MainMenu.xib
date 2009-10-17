@@ -12,7 +12,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="609"/>
+			<integer value="29"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -647,7 +647,8 @@
 								<object class="NSMenuItem" id="58928646">
 									<reference key="NSMenu" ref="361438485"/>
 									<string key="NSTitle">Shut Down</string>
-									<string key="NSKeyEquiv"/>
+									<string key="NSKeyEquiv">.</string>
+									<int key="NSKeyEquivModMask">1572864</int>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="1033313550"/>
 									<reference key="NSMixedImage" ref="310636482"/>
@@ -665,7 +666,8 @@
 								<object class="NSMenuItem" id="231350452">
 									<reference key="NSMenu" ref="361438485"/>
 									<string key="NSTitle">Restart</string>
-									<string key="NSKeyEquiv"/>
+									<string key="NSKeyEquiv">r</string>
+									<int key="NSKeyEquivModMask">1572864</int>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="1033313550"/>
 									<reference key="NSMixedImage" ref="310636482"/>
@@ -673,7 +675,8 @@
 								<object class="NSMenuItem" id="273033769">
 									<reference key="NSMenu" ref="361438485"/>
 									<string key="NSTitle">Sleep</string>
-									<string key="NSKeyEquiv"/>
+									<string key="NSKeyEquiv">p</string>
+									<int key="NSKeyEquivModMask">1572864</int>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="1033313550"/>
 									<reference key="NSMixedImage" ref="310636482"/>
@@ -2281,7 +2284,7 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{464, 456}, {126, 73}}</string>
+					<string>{{464, 456}, {162, 73}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{475, 832}, {234, 43}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -2470,11 +2473,15 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>restoreWindowState:</string>
 							<string>selectView:</string>
+							<string>storeWindowState:</string>
 							<string>toggleInspector:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 						</object>
@@ -2544,13 +2551,13 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>fChooseTemplateButton</string>
-							<string>fDisableDefaultTemplate</string>
-							<string>fEnableDefaultTemplate</string>
 							<string>fGeneralView</string>
+							<string>fShowTemplateChooserRadio</string>
 							<string>fSoundView</string>
 							<string>fTemplateChooserChooserView</string>
 							<string>fTemplateChooserOutlineView</string>
 							<string>fTemplateChooserSheet</string>
+							<string>fUseTemplateRadio</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>

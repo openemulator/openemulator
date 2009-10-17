@@ -37,12 +37,12 @@
 - (id) makeUntitledDocumentFromTemplateURL:(NSURL *) absoluteURL
 									 error:(NSError **) outError;
 
+- (void) disableMenuBar;
+- (void) enableMenuBar;
+
 - (IBAction) linkHomepage:(id) sender;
 - (IBAction) linkForums:(id) sender;
 - (IBAction) linkDevelopment:(id) sender;
 - (IBAction) linkDonate:(id) sender;
-
-- (void) disableMenuBar;
-- (void) enableMenuBar;
 
 @end

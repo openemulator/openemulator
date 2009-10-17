@@ -32,15 +32,7 @@
 		[self addTemplatesFromPath:templatesPath
 						 groupName:nil];
 		
-		NSString *userTemplatesPath = [TEMPLATE_FOLDER stringByExpandingTildeInPath];
-		[self addTemplatesFromPath:userTemplatesPath
-						 groupName:NSLocalizedString(@"My Templates",
-													 @"My Templates")];
-		
-		groupNames = [NSMutableArray arrayWithArray:[[groups allKeys]
-													 sortedArrayUsingSelector:
-													 @selector(compare:)]];
-		[groupNames retain];
+		[self updateUserTemplates];
 	}
 	
 	return self;
@@ -54,12 +46,34 @@
 	if (selectedGroup)
 		[selectedGroup release];
 	
+	if (fOutlineView)
+		[fOutlineView release];
+	if (fChooserView)
+		[fChooserView release];
+	
 	[super dealloc];
 }
 
 - (void) setDelegate:(id)theDelegate
 {
 	templateChooserDelegate = theDelegate;
+}
+
+- (void) updateUserTemplates
+{
+	NSString *selectedItemPath = [self selectedItemPath];
+	
+	NSString *userTemplatesGroupName = NSLocalizedString(@"My Templates",
+														 @"My Templates");
+	NSMutableArray *userTemplatesArray = [groups objectForKey:userTemplatesGroupName];
+	if (userTemplatesArray)
+		[groups removeObjectForKey:userTemplatesGroupName];
+	
+	NSString *userTemplatesPath = [TEMPLATE_FOLDER stringByExpandingTildeInPath];
+	[self addTemplatesFromPath:userTemplatesPath
+					 groupName:userTemplatesGroupName];
+	
+	[self selectItemWithItemPath:selectedItemPath];
 }
 
 - (void) addTemplatesFromPath:(NSString *) path
@@ -109,31 +123,22 @@
 		
 		[[groups objectForKey:groupName] addObject:item];
 	}
-}
-
-- (void) updateSelectedGroup
-{
-	if (selectedGroup)
-	{
-		[selectedGroup release];
-		selectedGroup = nil;
-	}
 	
-	int row = [fOutlineView selectedRow];
-	if (row != -1)
-	{
-		selectedGroup = [groupNames objectAtIndex:row];
-		[selectedGroup retain];
-	}
+	if (groupNames)
+		[groupNames release];
+	
+	groupNames = [NSMutableArray arrayWithArray:[[groups allKeys]
+												 sortedArrayUsingSelector:
+												 @selector(compare:)]];
+	[groupNames retain];
 }
 
-- (void) populateOutlineView:(id) outlineView
-			  andChooserView:(id) chooserView
+- (void) setupOutlineView:(id) outlineView
+		   andChooserView:(id) chooserView
 {
 	fOutlineView = [outlineView retain];
 	fChooserView = [chooserView retain];
 	
-	outlineMessagesDisabled = YES;
 	[fOutlineView setDataSource:self];
 	[fOutlineView setDelegate:self];
 	[fOutlineView reloadData];
@@ -159,52 +164,8 @@
 					forKey:IKImageBrowserCellsTitleAttributesKey];
 	[fChooserView setValue:hAttrs
 					forKey:IKImageBrowserCellsHighlightedTitleAttributesKey];
-	outlineMessagesDisabled = NO;
 	
-	chooserMessagesDisabled = YES;
-	[self updateSelectedGroup];
-	[fChooserView reloadData];
-	[fChooserView setSelectionIndexes:[NSIndexSet indexSetWithIndex:0]
-				 byExtendingSelection:NO];
-	chooserMessagesDisabled = NO;
-}
-
-- (void) selectItemWithItemPath:(NSString *) itemPath
-{
-	int lastGroupIndex = 0;
-	int lastChooserIndex = 0;
-	
-	int groupsCount = [groupNames count];
-	for (int i = 0; i < groupsCount; i++)
-	{
-		NSString *groupName = [groupNames objectAtIndex:i];
-		NSArray *templates = [groups objectForKey:groupName];
-		
-		int templatesCount = [templates count]; 
-		for (int j = 0; j < templatesCount; j++)
-		{
-			ChooserItem *item = [templates objectAtIndex:j];
-			if ([[item itemPath] compare:itemPath] == NSOrderedSame)
-			{
-				lastGroupIndex = i;
-				lastChooserIndex = j;
-			}
-		}
-	}
-	
-	outlineMessagesDisabled = YES;
-	[fOutlineView selectRowIndexes:[NSIndexSet indexSet]
-			  byExtendingSelection:NO];
-	[fOutlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:lastGroupIndex]
-			  byExtendingSelection:NO];
-	outlineMessagesDisabled = NO;
-	
-	chooserMessagesDisabled = YES;
-	[fChooserView reloadData];
-	[fChooserView setSelectionIndexes:[NSIndexSet indexSetWithIndex:lastChooserIndex]
-				 byExtendingSelection:NO];
-	[fChooserView scrollIndexToVisible:lastChooserIndex];
-	chooserMessagesDisabled = NO;
+	[self outlineViewSelectionDidChange:nil];
 }
 
 - (id) outlineView:(NSOutlineView *) outlineView child:(NSInteger) index ofItem:(id) item
@@ -237,18 +198,22 @@ objectValueForTableColumn:(NSTableColumn *) tableColumn
 
 - (void) outlineViewSelectionDidChange:(NSNotification *) notification
 {
-	[self updateSelectedGroup];
-	
-	if (!outlineMessagesDisabled)
+	if (selectedGroup)
 	{
-		chooserMessagesDisabled = YES;
-		[fChooserView reloadData];
-		[fChooserView setSelectionIndexes:[NSIndexSet indexSetWithIndex:0]
-					 byExtendingSelection:NO];
-		chooserMessagesDisabled = NO;
-		
-		[self imageBrowserSelectionDidChange:nil];
+		[selectedGroup release];
+		selectedGroup = nil;
 	}
+	
+	int row = [fOutlineView selectedRow];
+	if (row != -1)
+	{
+		selectedGroup = [groupNames objectAtIndex:row];
+		[selectedGroup retain];
+	}
+	
+	[fChooserView reloadData];
+	[fChooserView setSelectionIndexes:[NSIndexSet indexSetWithIndex:0]
+				 byExtendingSelection:NO];
 }
 
 - (NSUInteger) numberOfItemsInImageBrowser:(IKImageBrowserView *) aBrowser
@@ -267,22 +232,46 @@ objectValueForTableColumn:(NSTableColumn *) tableColumn
 	return [[groups objectForKey:selectedGroup] objectAtIndex:index];
 }
 
-- (void) imageBrowserSelectionDidChange:(IKImageBrowserView *) aBrowser
-{
-	if (!chooserMessagesDisabled)
-	{
-		if ([templateChooserDelegate respondsToSelector:
-			 @selector(templateChooserSelectionDidChange:)])
-			[templateChooserDelegate templateChooserSelectionDidChange:self];
-	}
-}
-
 - (void) imageBrowser:(IKImageBrowserView *) aBrowser
 cellWasDoubleClickedAtIndex:(NSUInteger) index
 {
 	if ([templateChooserDelegate respondsToSelector:
 		  @selector(templateChooserWasDoubleClicked:)])
 		[templateChooserDelegate templateChooserWasDoubleClicked:self];
+}
+
+- (void) selectItemWithItemPath:(NSString *) itemPath
+{
+	int groupIndex = 0;
+	int chooserIndex = 0;
+	
+	int groupsCount = [groupNames count];
+	for (int i = 0; i < groupsCount; i++)
+	{
+		NSString *groupName = [groupNames objectAtIndex:i];
+		NSArray *templates = [groups objectForKey:groupName];
+		
+		int templatesCount = [templates count]; 
+		for (int j = 0; j < templatesCount; j++)
+		{
+			ChooserItem *item = [templates objectAtIndex:j];
+			if ([[item itemPath] compare:itemPath] == NSOrderedSame)
+			{
+				groupIndex = i;
+				chooserIndex = j;
+			}
+		}
+	}
+	
+	[fOutlineView selectRowIndexes:[NSIndexSet indexSet]
+			  byExtendingSelection:NO];
+	[fOutlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:groupIndex]
+			  byExtendingSelection:NO];
+	
+	[fChooserView reloadData];
+	[fChooserView setSelectionIndexes:[NSIndexSet indexSetWithIndex:chooserIndex]
+				 byExtendingSelection:NO];
+	[fChooserView scrollIndexToVisible:chooserIndex];
 }
 
 - (NSString *) selectedItemPath
