@@ -86,6 +86,7 @@
 		00D845860FFF0FD2005802F0 /* PreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D8457A0FFF0FD2005802F0 /* PreferencesController.m */; };
 		00D846290FFF23B7005802F0 /* PRSound.png in Resources */ = {isa = PBXBuildFile; fileRef = 00D846280FFF23B7005802F0 /* PRSound.png */; };
 		00E2A86810532FD200910B53 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B334880FE41F110042661D /* CoreServices.framework */; };
+		00E8A396108CCAA200D0A137 /* devices in Resources */ = {isa = PBXBuildFile; fileRef = 00E8A393108CCAA200D0A137 /* devices */; };
 		00EF028D107D9EFB00FE378D /* VerticallyCenteredCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00EF028C107D9EFB00FE378D /* VerticallyCenteredCell.m */; };
 		00F86BCB100FD4210016867D /* IPInfo.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BC6100FD4210016867D /* IPInfo.png */; };
 		00F86BCC100FD4210016867D /* IPLocked.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BC7100FD4210016867D /* IPLocked.png */; };
@@ -184,7 +185,7 @@
 		00A8C4B01080220800D98FE0 /* OEEmulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OEEmulator.h; path = libemulator/OEEmulator.h; sourceTree = "<group>"; };
 		00A8C4B11080220800D98FE0 /* OEParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OEParser.cpp; path = libemulator/OEParser.cpp; sourceTree = "<group>"; };
 		00A8C4B21080220800D98FE0 /* OEParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OEParser.h; path = libemulator/OEParser.h; sourceTree = "<group>"; };
-		00A97550107AD27500893DCE /* IPReveal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPReveal.png; path = macosx/Images/IPReveal.png; sourceTree = "<group>"; };
+		00A97550107AD27500893DCE /* IPReveal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPReveal.png; sourceTree = "<group>"; };
 		00B3347C0FE41EF60042661D /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = /System/Library/Frameworks/AudioToolbox.framework; sourceTree = "<absolute>"; };
 		00B334800FE41EFE0042661D /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = /System/Library/Frameworks/AudioUnit.framework; sourceTree = "<absolute>"; };
 		00B334840FE41F080042661D /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = /System/Library/Frameworks/CoreAudio.framework; sourceTree = "<absolute>"; };
@@ -195,17 +196,17 @@
 		00B5709D10863C2A00CDE4A7 /* TemplateChooserController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TemplateChooserController.m; sourceTree = "<group>"; };
 		00B974AD10701DCD00BD1402 /* sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; path = sounds; sourceTree = "<group>"; };
 		00B9774610705AF800BD1402 /* OEDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OEDefines.h; path = libemulator/OEDefines.h; sourceTree = "<group>"; };
-		00BB4D561086C1160071B584 /* TBRestart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = TBRestart.png; path = macosx/Images/TBRestart.png; sourceTree = "<group>"; };
-		00BB4D571086C1160071B584 /* TBShutdown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = TBShutdown.png; path = macosx/Images/TBShutdown.png; sourceTree = "<group>"; };
-		00BB4D581086C1160071B584 /* TBSleep.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = TBSleep.png; path = macosx/Images/TBSleep.png; sourceTree = "<group>"; };
+		00BB4D561086C1160071B584 /* TBRestart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TBRestart.png; sourceTree = "<group>"; };
+		00BB4D571086C1160071B584 /* TBShutdown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TBShutdown.png; sourceTree = "<group>"; };
+		00BB4D581086C1160071B584 /* TBSleep.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TBSleep.png; sourceTree = "<group>"; };
 		00C07E350FD27CCF004E0D3D /* PRGeneral.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PRGeneral.png; sourceTree = "<group>"; };
 		00C6C08810602151004D084B /* roms */ = {isa = PBXFileReference; lastKnownFileType = folder; path = roms; sourceTree = "<group>"; };
-		00C7F1D5100BC5B400AD0812 /* IPMinus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPMinus.png; path = macosx/Images/IPMinus.png; sourceTree = "<group>"; };
-		00C7F1D6100BC5B400AD0812 /* IPMinusSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPMinusSel.png; path = macosx/Images/IPMinusSel.png; sourceTree = "<group>"; };
-		00C7F1D7100BC5B400AD0812 /* IPPlus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPPlus.png; path = macosx/Images/IPPlus.png; sourceTree = "<group>"; };
-		00C7F1D8100BC5B400AD0812 /* IPPlusSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPPlusSel.png; path = macosx/Images/IPPlusSel.png; sourceTree = "<group>"; };
-		00C8AA0610103D6A006A5734 /* OSDPause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = OSDPause.png; path = macosx/Images/OSDPause.png; sourceTree = "<group>"; };
-		00C8AA0710103D6A006A5734 /* OSDPower.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = OSDPower.png; path = macosx/Images/OSDPower.png; sourceTree = "<group>"; };
+		00C7F1D5100BC5B400AD0812 /* IPMinus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPMinus.png; sourceTree = "<group>"; };
+		00C7F1D6100BC5B400AD0812 /* IPMinusSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPMinusSel.png; sourceTree = "<group>"; };
+		00C7F1D7100BC5B400AD0812 /* IPPlus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPPlus.png; sourceTree = "<group>"; };
+		00C7F1D8100BC5B400AD0812 /* IPPlusSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPPlusSel.png; sourceTree = "<group>"; };
+		00C8AA0610103D6A006A5734 /* OSDPause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = OSDPause.png; sourceTree = "<group>"; };
+		00C8AA0710103D6A006A5734 /* OSDPower.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = OSDPower.png; sourceTree = "<group>"; };
 		00D844B60FFF0505005802F0 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Document.xib; sourceTree = "<group>"; };
 		00D844B80FFF0505005802F0 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/GraphicsTablet.xib; sourceTree = "<group>"; };
 		00D844BA0FFF0505005802F0 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = macosx/English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -228,6 +229,7 @@
 		00D8457A0FFF0FD2005802F0 /* PreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferencesController.m; sourceTree = "<group>"; };
 		00D846280FFF23B7005802F0 /* PRSound.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PRSound.png; sourceTree = "<group>"; };
 		00E2A84D1053290200910B53 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = /usr/lib/libxml2.dylib; sourceTree = "<absolute>"; };
+		00E8A393108CCAA200D0A137 /* devices */ = {isa = PBXFileReference; lastKnownFileType = folder; path = devices; sourceTree = "<group>"; };
 		00EF028B107D9EFB00FE378D /* VerticallyCenteredCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VerticallyCenteredCell.h; sourceTree = "<group>"; };
 		00EF028C107D9EFB00FE378D /* VerticallyCenteredCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VerticallyCenteredCell.m; sourceTree = "<group>"; };
 		00F009F90FD5838D00C506AD /* IPAudio.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPAudio.png; sourceTree = "<group>"; };
@@ -242,13 +244,13 @@
 		00F00A040FD5838D00C506AD /* IPPortsSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPPortsSel.png; sourceTree = "<group>"; };
 		00F00A050FD5838D00C506AD /* IPVideo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPVideo.png; sourceTree = "<group>"; };
 		00F00A060FD5838D00C506AD /* IPVideoSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPVideoSel.png; sourceTree = "<group>"; };
-		00F86BC6100FD4210016867D /* IPInfo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPInfo.png; path = macosx/Images/IPInfo.png; sourceTree = "<group>"; };
-		00F86BC7100FD4210016867D /* IPLocked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPLocked.png; path = macosx/Images/IPLocked.png; sourceTree = "<group>"; };
-		00F86BC8100FD4210016867D /* IPMount.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPMount.png; path = macosx/Images/IPMount.png; sourceTree = "<group>"; };
-		00F86BC9100FD4210016867D /* IPUnlocked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPUnlocked.png; path = macosx/Images/IPUnlocked.png; sourceTree = "<group>"; };
-		00F86BCA100FD4210016867D /* IPUnmount.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPUnmount.png; path = macosx/Images/IPUnmount.png; sourceTree = "<group>"; };
-		00F86BE1100FD4F60016867D /* IPSoundMax.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPSoundMax.png; path = macosx/Images/IPSoundMax.png; sourceTree = "<group>"; };
-		00F86BE2100FD4F60016867D /* IPSoundMin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPSoundMin.png; path = macosx/Images/IPSoundMin.png; sourceTree = "<group>"; };
+		00F86BC6100FD4210016867D /* IPInfo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPInfo.png; sourceTree = "<group>"; };
+		00F86BC7100FD4210016867D /* IPLocked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPLocked.png; sourceTree = "<group>"; };
+		00F86BC8100FD4210016867D /* IPMount.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPMount.png; sourceTree = "<group>"; };
+		00F86BC9100FD4210016867D /* IPUnlocked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPUnlocked.png; sourceTree = "<group>"; };
+		00F86BCA100FD4210016867D /* IPUnmount.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPUnmount.png; sourceTree = "<group>"; };
+		00F86BE1100FD4F60016867D /* IPSoundMax.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPSoundMax.png; sourceTree = "<group>"; };
+		00F86BE2100FD4F60016867D /* IPSoundMin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPSoundMin.png; sourceTree = "<group>"; };
 		1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		8D15AC370486D014006FF6A4 /* OpenEmulator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenEmulator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -297,6 +299,23 @@
 		000A79070FBA49C500A0F12E /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				00C8AA0610103D6A006A5734 /* OSDPause.png */,
+				00BB4D561086C1160071B584 /* TBRestart.png */,
+				00BB4D571086C1160071B584 /* TBShutdown.png */,
+				00BB4D581086C1160071B584 /* TBSleep.png */,
+				00A97550107AD27500893DCE /* IPReveal.png */,
+				00C8AA0710103D6A006A5734 /* OSDPower.png */,
+				00F86BE1100FD4F60016867D /* IPSoundMax.png */,
+				00F86BE2100FD4F60016867D /* IPSoundMin.png */,
+				00F86BC6100FD4210016867D /* IPInfo.png */,
+				00F86BC7100FD4210016867D /* IPLocked.png */,
+				00F86BC8100FD4210016867D /* IPMount.png */,
+				00F86BC9100FD4210016867D /* IPUnlocked.png */,
+				00F86BCA100FD4210016867D /* IPUnmount.png */,
+				00C7F1D5100BC5B400AD0812 /* IPMinus.png */,
+				00C7F1D6100BC5B400AD0812 /* IPMinusSel.png */,
+				00C7F1D7100BC5B400AD0812 /* IPPlus.png */,
+				00C7F1D8100BC5B400AD0812 /* IPPlusSel.png */,
 				00D846280FFF23B7005802F0 /* PRSound.png */,
 				000F66360FF8368F00C8AF23 /* AppleGraphicsTablet.png */,
 				000F66370FF8368F00C8AF23 /* DiskImage.icns */,
@@ -456,27 +475,11 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				00BB4D561086C1160071B584 /* TBRestart.png */,
-				00BB4D571086C1160071B584 /* TBShutdown.png */,
-				00BB4D581086C1160071B584 /* TBSleep.png */,
+				00E8A393108CCAA200D0A137 /* devices */,
 				005E5F751086B16C00E573D4 /* Inspector.xib */,
-				00A97550107AD27500893DCE /* IPReveal.png */,
 				003E2597107075D900185260 /* images */,
 				00B974AD10701DCD00BD1402 /* sounds */,
 				00C6C08810602151004D084B /* roms */,
-				00C8AA0610103D6A006A5734 /* OSDPause.png */,
-				00C8AA0710103D6A006A5734 /* OSDPower.png */,
-				00F86BE1100FD4F60016867D /* IPSoundMax.png */,
-				00F86BE2100FD4F60016867D /* IPSoundMin.png */,
-				00F86BC6100FD4210016867D /* IPInfo.png */,
-				00F86BC7100FD4210016867D /* IPLocked.png */,
-				00F86BC8100FD4210016867D /* IPMount.png */,
-				00F86BC9100FD4210016867D /* IPUnlocked.png */,
-				00F86BCA100FD4210016867D /* IPUnmount.png */,
-				00C7F1D5100BC5B400AD0812 /* IPMinus.png */,
-				00C7F1D6100BC5B400AD0812 /* IPMinusSel.png */,
-				00C7F1D7100BC5B400AD0812 /* IPPlus.png */,
-				00C7F1D8100BC5B400AD0812 /* IPPlusSel.png */,
 				00679D04100817F600B38748 /* DeviceChooser.xib */,
 				00679D06100817F700B38748 /* TemplateChooser.xib */,
 				00D844B50FFF0505005802F0 /* Document.xib */,
@@ -627,6 +630,7 @@
 				00BB4D591086C1160071B584 /* TBRestart.png in Resources */,
 				00BB4D5A1086C1160071B584 /* TBShutdown.png in Resources */,
 				00BB4D5B1086C1160071B584 /* TBSleep.png in Resources */,
+				00E8A396108CCAA200D0A137 /* devices in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
