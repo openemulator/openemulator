@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		00123BC91069B8D600FB95A1 /* libemulator.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 006EECA40FCA5C31003D2C8D /* libemulator.a */; };
 		00123BCC1069B8F200FB95A1 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 00E2A84D1053290200910B53 /* libxml2.dylib */; };
-		00123BCF1069B91200FB95A1 /* libzip.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00A0BA51106981A7007930A5 /* libzip.a */; };
 		001F56F90FD1E8E500EA246A /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 001F56F80FD1E8E500EA246A /* Sparkle.framework */; };
 		003E25E71070796700185260 /* images in Resources */ = {isa = PBXBuildFile; fileRef = 003E2597107075D900185260 /* images */; };
 		0043806410669AFB001CFCCF /* Package.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0043804C10668FAE001CFCCF /* Package.cpp */; };
@@ -36,6 +35,8 @@
 		00B3347D0FE41EF60042661D /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B3347C0FE41EF60042661D /* AudioToolbox.framework */; };
 		00B334810FE41EFE0042661D /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B334800FE41EFE0042661D /* AudioUnit.framework */; };
 		00B334850FE41F080042661D /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B334840FE41F080042661D /* CoreAudio.framework */; };
+		00B43832108E55C200930908 /* Chooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00B43831108E55C200930908 /* Chooser.xib */; };
+		00B43847108E603300930908 /* ChooserController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B43846108E603300930908 /* ChooserController.mm */; };
 		00B5704310862AA800CDE4A7 /* TemplateChooser.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B5704210862AA800CDE4A7 /* TemplateChooser.mm */; };
 		00B5709E10863C2A00CDE4A7 /* TemplateChooserController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B5709D10863C2A00CDE4A7 /* TemplateChooserController.m */; };
 		00B974B410701DDA00BD1402 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = 00B974AD10701DCD00BD1402 /* sounds */; };
@@ -87,6 +88,7 @@
 		00D846290FFF23B7005802F0 /* PRSound.png in Resources */ = {isa = PBXBuildFile; fileRef = 00D846280FFF23B7005802F0 /* PRSound.png */; };
 		00E2A86810532FD200910B53 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B334880FE41F110042661D /* CoreServices.framework */; };
 		00E8A396108CCAA200D0A137 /* devices in Resources */ = {isa = PBXBuildFile; fileRef = 00E8A393108CCAA200D0A137 /* devices */; };
+		00E8A3E2108CCD5D00D0A137 /* libzip.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00A0BA51106981A7007930A5 /* libzip.a */; };
 		00EF028D107D9EFB00FE378D /* VerticallyCenteredCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00EF028C107D9EFB00FE378D /* VerticallyCenteredCell.m */; };
 		00F86BCB100FD4210016867D /* IPInfo.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BC6100FD4210016867D /* IPInfo.png */; };
 		00F86BCC100FD4210016867D /* IPLocked.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BC7100FD4210016867D /* IPLocked.png */; };
@@ -190,6 +192,9 @@
 		00B334800FE41EFE0042661D /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = /System/Library/Frameworks/AudioUnit.framework; sourceTree = "<absolute>"; };
 		00B334840FE41F080042661D /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = /System/Library/Frameworks/CoreAudio.framework; sourceTree = "<absolute>"; };
 		00B334880FE41F110042661D /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = /System/Library/Frameworks/CoreServices.framework; sourceTree = "<absolute>"; };
+		00B43825108E545A00930908 /* ChooserController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChooserController.h; sourceTree = "<group>"; };
+		00B43831108E55C200930908 /* Chooser.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Chooser.xib; sourceTree = "<group>"; };
+		00B43846108E603300930908 /* ChooserController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ChooserController.mm; sourceTree = "<group>"; };
 		00B5704110862AA800CDE4A7 /* TemplateChooser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TemplateChooser.h; sourceTree = "<group>"; };
 		00B5704210862AA800CDE4A7 /* TemplateChooser.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TemplateChooser.mm; sourceTree = "<group>"; };
 		00B5709C10863C2A00CDE4A7 /* TemplateChooserController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TemplateChooserController.h; sourceTree = "<group>"; };
@@ -267,7 +272,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00123BCF1069B91200FB95A1 /* libzip.a in Frameworks */,
 				00123BCC1069B8F200FB95A1 /* libxml2.dylib in Frameworks */,
 				00123BC91069B8D600FB95A1 /* libemulator.a in Frameworks */,
 				00A0BA53106981C6007930A5 /* libportaudio.a in Frameworks */,
@@ -280,6 +284,7 @@
 				0075B1B20FE79F7E009C1DFA /* OpenGL.framework in Frameworks */,
 				00E2A86810532FD200910B53 /* CoreServices.framework in Frameworks */,
 				004F8127107A477300AE3527 /* Quartz.framework in Frameworks */,
+				00E8A3E2108CCD5D00D0A137 /* libzip.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -438,6 +443,7 @@
 		2A37F4ABFDCFA73011CA2CEA /* macosx */ = {
 			isa = PBXGroup;
 			children = (
+				00B43846108E603300930908 /* ChooserController.mm */,
 				00A0B8031069761A007930A5 /* Document.mm */,
 				00A0B7B81068949D007930A5 /* Document.h */,
 				00D845670FFF0FD2005802F0 /* DocumentController.h */,
@@ -468,6 +474,7 @@
 				005B81D8108680B9009D4804 /* ScreenView.m */,
 				005E5F6C1086B0E100E573D4 /* InspectorController.h */,
 				005E5F6D1086B0E100E573D4 /* InspectorController.m */,
+				00B43825108E545A00930908 /* ChooserController.h */,
 			);
 			path = macosx;
 			sourceTree = "<group>";
@@ -475,6 +482,7 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				00B43831108E55C200930908 /* Chooser.xib */,
 				00E8A393108CCAA200D0A137 /* devices */,
 				005E5F751086B16C00E573D4 /* Inspector.xib */,
 				003E2597107075D900185260 /* images */,
@@ -631,6 +639,7 @@
 				00BB4D5A1086C1160071B584 /* TBShutdown.png in Resources */,
 				00BB4D5B1086C1160071B584 /* TBSleep.png in Resources */,
 				00E8A396108CCAA200D0A137 /* devices in Resources */,
+				00B43832108E55C200930908 /* Chooser.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -669,6 +678,7 @@
 				00B5709E10863C2A00CDE4A7 /* TemplateChooserController.m in Sources */,
 				005B81D9108680B9009D4804 /* ScreenView.m in Sources */,
 				005E5F6E1086B0E100E573D4 /* InspectorController.m in Sources */,
+				00B43847108E603300930908 /* ChooserController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
