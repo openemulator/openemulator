@@ -170,6 +170,8 @@
 
 - (IBAction) chooseDefaultTemplate:(id) sender
 {
+	[chooserController updateUserTemplates];
+	
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	NSString *itemPath = [userDefaults stringForKey:@"OEDefaultTemplate"];
 	[chooserController selectItemWithItemPath:itemPath];
@@ -179,11 +181,6 @@
 		modalDelegate:self
 	   didEndSelector:@selector(didEndSheet:returnCode:contextInfo:)
 		  contextInfo:nil];
-}
-
-- (IBAction) closeTemplateSheet:(id) sender
-{
-	[NSApp endSheet:fTemplateChooserSheet];
 }
 
 - (void) chooserWasDoubleClicked:(id) sender
@@ -201,6 +198,12 @@
 	
 	[self closeTemplateSheet:sender];
 }
+
+- (IBAction) closeTemplateSheet:(id) sender
+{
+	[NSApp endSheet:fTemplateChooserSheet];
+}
+
 - (void) didEndSheet:(NSWindow *) sheet
 		  returnCode:(int) returnCode
 		 contextInfo:(void *) contextInfo

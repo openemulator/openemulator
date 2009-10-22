@@ -33,7 +33,7 @@
 - (IBAction) selectUseDefaultTemplate:(id) sender;
 - (IBAction) chooseDefaultTemplate:(id) sender;
 
-- (IBAction) closeTemplateSheet:(id) sender;
 - (IBAction) chooseTemplateInSheet:(id) sender;
+- (IBAction) closeTemplateSheet:(id) sender;
 
 @end
