@@ -40,8 +40,6 @@ NSString *itemIdentifiers[] =
 
 - (void) windowDidLoad
 {
-	[super windowDidLoad];
-	
 	[self setWindowFrameAutosaveName:@"Inspector"];
 	
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];

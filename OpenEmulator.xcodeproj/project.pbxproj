@@ -37,7 +37,6 @@
 		00B334850FE41F080042661D /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B334840FE41F080042661D /* CoreAudio.framework */; };
 		00B43832108E55C200930908 /* Chooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00B43831108E55C200930908 /* Chooser.xib */; };
 		00B43847108E603300930908 /* ChooserController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B43846108E603300930908 /* ChooserController.mm */; };
-		00B5704310862AA800CDE4A7 /* TemplateChooser.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B5704210862AA800CDE4A7 /* TemplateChooser.mm */; };
 		00B5709E10863C2A00CDE4A7 /* TemplateChooserController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B5709D10863C2A00CDE4A7 /* TemplateChooserController.m */; };
 		00B974B410701DDA00BD1402 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = 00B974AD10701DCD00BD1402 /* sounds */; };
 		00BB4D591086C1160071B584 /* TBRestart.png in Resources */ = {isa = PBXBuildFile; fileRef = 00BB4D561086C1160071B584 /* TBRestart.png */; };
@@ -195,8 +194,6 @@
 		00B43825108E545A00930908 /* ChooserController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChooserController.h; sourceTree = "<group>"; };
 		00B43831108E55C200930908 /* Chooser.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Chooser.xib; sourceTree = "<group>"; };
 		00B43846108E603300930908 /* ChooserController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ChooserController.mm; sourceTree = "<group>"; };
-		00B5704110862AA800CDE4A7 /* TemplateChooser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TemplateChooser.h; sourceTree = "<group>"; };
-		00B5704210862AA800CDE4A7 /* TemplateChooser.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TemplateChooser.mm; sourceTree = "<group>"; };
 		00B5709C10863C2A00CDE4A7 /* TemplateChooserController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TemplateChooserController.h; sourceTree = "<group>"; };
 		00B5709D10863C2A00CDE4A7 /* TemplateChooserController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TemplateChooserController.m; sourceTree = "<group>"; };
 		00B974AD10701DCD00BD1402 /* sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; path = sounds; sourceTree = "<group>"; };
@@ -466,8 +463,6 @@
 				00A8C3FB1080064900D98FE0 /* InspectorDeviceCell.m */,
 				0071E3B810803F7300F2D54F /* ChooserItem.h */,
 				0071E3B910803F7300F2D54F /* ChooserItem.m */,
-				00B5704110862AA800CDE4A7 /* TemplateChooser.h */,
-				00B5704210862AA800CDE4A7 /* TemplateChooser.mm */,
 				00B5709C10863C2A00CDE4A7 /* TemplateChooserController.h */,
 				00B5709D10863C2A00CDE4A7 /* TemplateChooserController.m */,
 				005B81D7108680B9009D4804 /* ScreenView.h */,
@@ -674,7 +669,6 @@
 				00EF028D107D9EFB00FE378D /* VerticallyCenteredCell.m in Sources */,
 				00A8C3FC1080064900D98FE0 /* InspectorDeviceCell.m in Sources */,
 				0071E3BA10803F7300F2D54F /* ChooserItem.m in Sources */,
-				00B5704310862AA800CDE4A7 /* TemplateChooser.mm in Sources */,
 				00B5709E10863C2A00CDE4A7 /* TemplateChooserController.m in Sources */,
 				005B81D9108680B9009D4804 /* ScreenView.m in Sources */,
 				005E5F6E1086B0E100E573D4 /* InspectorController.m in Sources */,

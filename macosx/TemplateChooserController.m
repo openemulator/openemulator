@@ -18,8 +18,8 @@
 	
 	if (self)
 	{
-		templateChooser = [[TemplateChooser alloc] init];
-		[templateChooser setDelegate:self];
+		chooserController = [[ChooserController alloc] initWithTemplates];
+		[chooserController setDelegate:self];
 	}
 	
 	return self;
@@ -29,46 +29,46 @@
 {
 	[super dealloc];
 	
-	[templateChooser release];
+	[chooserController release];
 }
 
 - (void) windowDidLoad
 {
-	[super windowDidLoad];
-	
 	[self setWindowFrameAutosaveName:@"TemplateChooser"];
 	
-	[templateChooser setupOutlineView:fOutlineView
-					   andChooserView:fChooserView];
+	NSView *view = [chooserController view];
+	[fChooserView addSubview:view];
+	[view setFrame:[fChooserView bounds]];
 	
-	[self updateTemplate];
+	[self updateTemplates];
 }
 
-- (void) updateTemplate
+- (void) updateTemplates
 {
-	[templateChooser updateUserTemplates];
+	[chooserController updateUserTemplates];
 	
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	NSString *itemPath = [userDefaults stringForKey:@"OELastTemplate"];
-	[templateChooser selectItemWithItemPath:itemPath];
+	[chooserController selectItemWithItemPath:itemPath];
 	
 	[[self window] center];
 }
 
 - (void) showWindow:(id) sender
 {
-	[self updateTemplate];
+	[self updateTemplates];
+	
 	[super showWindow:sender];
 }
 
-- (void) templateChooserWasDoubleClicked:(id) sender
+- (void) chooserWasDoubleClicked:(id) sender
 {
 	[self chooseTemplate:sender];
 }
 
 - (IBAction) chooseTemplate:(id) sender
 {
-	NSString *itemPath = [templateChooser selectedItemPath];
+	NSString *itemPath = [chooserController selectedItemPath];
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	[userDefaults setObject:itemPath
 					 forKey:@"OELastTemplate"];

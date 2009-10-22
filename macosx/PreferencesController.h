@@ -10,7 +10,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "TemplateChooser.h"
+#import "ChooserController.h"
 
 @interface PreferencesController : NSWindowController
 {
@@ -22,20 +22,18 @@
 	IBOutlet id fChooseTemplateButton;
 	
 	IBOutlet id fTemplateChooserSheet;
-	IBOutlet id fTemplateChooserOutlineView;
-	IBOutlet id fTemplateChooserChooserView;
-	
-	TemplateChooser *templateChooser;
+	IBOutlet id fTemplateChooserView;
+	ChooserController *chooserController;
 }
 
 - (void) setView:(NSString *) itemIdentifier;
 
 - (void) updateUseDefaultTemplate;
 - (void) setUseDefaultTemplate:(BOOL) useDefaultTemplate;
-- (IBAction) selectTemplate:(id) sender;
-- (IBAction) chooseTemplate:(id) sender;
+- (IBAction) selectUseDefaultTemplate:(id) sender;
+- (IBAction) chooseDefaultTemplate:(id) sender;
 
 - (IBAction) closeTemplateSheet:(id) sender;
-- (IBAction) chooseTemplateSheet:(id) sender;
+- (IBAction) chooseTemplateInSheet:(id) sender;
 
 @end

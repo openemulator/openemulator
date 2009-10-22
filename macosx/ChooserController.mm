@@ -12,7 +12,6 @@
 
 #import "OEParser.h"
 
-#import "TemplateChooser.h"
 #import "ChooserItem.h"
 #import "Document.h"
 
@@ -54,7 +53,7 @@
 	{
 		NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
 		NSString *templatesPath = [resourcePath
-								   stringByAppendingPathComponent:@"templates"];
+								   stringByAppendingPathComponent:@"devices"];
 		[self addTemplatesFromPath:templatesPath
 						 groupName:nil];
 	}
@@ -78,7 +77,7 @@
 	[super dealloc];
 }
 
-- (void) loadView
+- (void) awakeFromNib
 {
 	NSSize aSize;
 	aSize.width = 96;

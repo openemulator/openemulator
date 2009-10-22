@@ -18,8 +18,8 @@
 
 	if (self)
 	{
-		templateChooser = [[TemplateChooser alloc] init];
-		[templateChooser setDelegate:self];
+		chooserController = [[ChooserController alloc] initWithTemplates];
+		[chooserController setDelegate:self];
 	}
 	
 	return self;
@@ -29,13 +29,11 @@
 {
 	[super dealloc];
 	
-	[templateChooser release];
+	[chooserController release];
 }
 
 - (void) windowDidLoad
 {
-	[super windowDidLoad];
-
 	NSToolbar *toolbar = [[NSToolbar alloc] initWithIdentifier:@"Preferences Toolbar"];
 	NSString *selectedItemIdentifier = @"General";
 	
@@ -49,10 +47,11 @@
 	
     [self setView:selectedItemIdentifier];
 	
-	[self updateUseDefaultTemplate];
+	NSView *view = [chooserController view];
+	[fTemplateChooserView addSubview:view];
+	[view setFrame:[fTemplateChooserView bounds]];
 	
-	[templateChooser setupOutlineView:fTemplateChooserOutlineView
-					   andChooserView:fTemplateChooserChooserView];
+	[self updateUseDefaultTemplate];
 }
 
 - (NSToolbarItem *) toolbar:(NSToolbar *) toolbar
@@ -158,24 +157,22 @@
 	[fChooseTemplateButton setEnabled:useDefaultTemplate];
 	
 	if ((defaultTemplate == nil) && useDefaultTemplate)
-		[self chooseTemplate:self];
+		[self chooseDefaultTemplate:self];
 	else
 		[[NSUserDefaults standardUserDefaults] setBool:useDefaultTemplate
 												forKey:@"OEUseDefaultTemplate"];
 }
 
-- (IBAction) selectTemplate:(id) sender
+- (IBAction) selectUseDefaultTemplate:(id) sender
 {
 	[self setUseDefaultTemplate:[[sender selectedCell] tag]];
 }
 
-- (IBAction) chooseTemplate:(id) sender
+- (IBAction) chooseDefaultTemplate:(id) sender
 {
-	[templateChooser updateUserTemplates];
-	
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	NSString *itemPath = [userDefaults stringForKey:@"OEDefaultTemplate"];
-	[templateChooser selectItemWithItemPath:itemPath];
+	[chooserController selectItemWithItemPath:itemPath];
 	
 	[NSApp beginSheet:fTemplateChooserSheet
 	   modalForWindow:[self window]
@@ -189,15 +186,15 @@
 	[NSApp endSheet:fTemplateChooserSheet];
 }
 
-- (void) templateChooserWasDoubleClicked:(id) sender
+- (void) chooserWasDoubleClicked:(id) sender
 {
-	[self chooseTemplateSheet:sender];
+	[self chooseTemplateInSheet:sender];
 }
 
-- (IBAction) chooseTemplateSheet:(id) sender
+- (IBAction) chooseTemplateInSheet:(id) sender
 {
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-	[userDefaults setObject:[templateChooser selectedItemPath]
+	[userDefaults setObject:[chooserController selectedItemPath]
 					 forKey:@"OEDefaultTemplate"];
 	[userDefaults setBool:YES
 				   forKey:@"OEUseDefaultTemplate"];
