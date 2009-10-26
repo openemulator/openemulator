@@ -10,7 +10,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "ChooserController.h"
+#import "TemplateChooserViewController.h"
 
 @interface PreferencesController : NSWindowController
 {
@@ -23,7 +23,7 @@
 	
 	IBOutlet id fTemplateChooserSheet;
 	IBOutlet id fTemplateChooserView;
-	ChooserController *chooserController;
+	TemplateChooserViewController *templateChooserViewController;
 }
 
 - (void) setView:(NSString *) itemIdentifier;

@@ -1,61 +1,26 @@
 
 /**
  * OpenEmulator
- * Mac OS X Chooser Controller
+ * Mac OS X Chooser View Controller
  * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements an chooser controller for template and device choosing.
+ * Implements an chooser view controller for template and device choosing.
  */
 
-#import "ChooserController.h"
-
-#import "OEParser.h"
-
+#import "ChooserViewController.h"
 #import "ChooserItem.h"
-#import "Document.h"
 
-@implementation ChooserController
+@implementation ChooserViewController
 
 - (id) init
 {
 	self = [super initWithNibName:@"Chooser" bundle:nil];
 	
 	if (self)
+	{
 		groups = [[NSMutableDictionary alloc] init];
-	
-	return self;
-}
-
-- (id) initWithTemplates
-{
-	self = [self init];
-	
-	if (self)
-	{
-		NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
-		NSString *templatesPath = [resourcePath
-								   stringByAppendingPathComponent:@"templates"];
-		[self addTemplatesFromPath:templatesPath
-						 groupName:nil];
-	
-		[self updateUserTemplates];
-	}
-	
-	return self;
-}
-
-- (id) initWithDevices
-{
-	self = [self init];
-	
-	if (self)
-	{
-		NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
-		NSString *templatesPath = [resourcePath
-								   stringByAppendingPathComponent:@"devices"];
-		[self addTemplatesFromPath:templatesPath
-						 groupName:nil];
+		groupNames = [[NSMutableArray alloc] init];
 	}
 	
 	return self;
@@ -80,8 +45,9 @@
 - (void) awakeFromNib
 {
 	NSSize aSize;
-	aSize.width = 96;
+	aSize.width = 112;
 	aSize.height = 64;
+	
 	NSDictionary *attrs = [NSDictionary dictionaryWithObjectsAndKeys:
 						   [NSFont messageFontOfSize:11.0f], NSFontAttributeName,
 						   [NSColor blackColor], NSForegroundColorAttributeName,
@@ -89,7 +55,8 @@
 	NSDictionary *hAttrs = [NSDictionary dictionaryWithObjectsAndKeys:
 							[NSFont messageFontOfSize:11.0f], NSFontAttributeName,
 							[NSColor whiteColor], NSForegroundColorAttributeName,
-							nil];	
+							nil];
+	
 	[fImageBrowserView setAllowsEmptySelection:NO];
 	[fImageBrowserView setAllowsMultipleSelection:NO];
 	[fImageBrowserView setCellSize:aSize];
@@ -102,80 +69,6 @@
 - (void) setDelegate:(id)theDelegate
 {
 	chooserDelegate = theDelegate;
-}
-
-- (void) updateUserTemplates
-{
-	NSString *selectedItemPath = [self selectedItemPath];
-	
-	NSString *userTemplatesGroupName = NSLocalizedString(@"My Templates",
-														 @"My Templates");
-	NSMutableArray *userTemplatesArray = [groups objectForKey:userTemplatesGroupName];
-	if (userTemplatesArray)
-		[groups removeObjectForKey:userTemplatesGroupName];
-	
-	NSString *userTemplatesPath = [TEMPLATE_FOLDER stringByExpandingTildeInPath];
-	[self addTemplatesFromPath:userTemplatesPath
-					 groupName:userTemplatesGroupName];
-	
-	[self selectItemWithItemPath:selectedItemPath];
-}
-
-- (void) addTemplatesFromPath:(NSString *) path
-					groupName:(NSString *) theGroupName
-{
-	NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
-	NSString *imagesPath = [resourcePath
-							stringByAppendingPathComponent:@"images"];
-	
-	NSError *error;
-	NSArray *templateFilenames = [[NSFileManager defaultManager]
-								  contentsOfDirectoryAtPath:path
-								  error:&error];
-	
-	int templatesCount = [templateFilenames count];
-	for (int i = 0; i < templatesCount; i++)
-	{
-		NSString *templateFilename = [templateFilenames objectAtIndex:i];
-		NSString *templatePath = [path stringByAppendingPathComponent:templateFilename];
-		string templatePathString = string([templatePath UTF8String]);
-		OEParser parser(templatePathString);
-		if (!parser.isOpen())
-			continue;
-		
-		NSString *label = [templateFilename stringByDeletingPathExtension];
-		
-		OEDMLInfo *dmlInfo = parser.getDMLInfo();
-		NSString *imageName = [NSString stringWithUTF8String:dmlInfo->image.c_str()];
-		NSString *description = [NSString stringWithUTF8String:dmlInfo->image.c_str()];
-		NSString *groupName = [NSString stringWithUTF8String:dmlInfo->group.c_str()];
-		
-		if (theGroupName)
-			groupName = theGroupName;
-		
-		if (![groups objectForKey:groupName])
-		{
-			NSMutableArray *group = [[[NSMutableArray alloc] init] autorelease];
-			[groups setObject:group forKey:groupName];
-		}
-		NSString *imagePath = [imagesPath stringByAppendingPathComponent:imageName];
-		ChooserItem *item = [[ChooserItem alloc] initWithItem:templatePath
-														label:label
-													imagePath:imagePath
-												  description:description];
-		if (item)
-			[item autorelease];
-		
-		[[groups objectForKey:groupName] addObject:item];
-	}
-	
-	if (groupNames)
-		[groupNames release];
-	
-	groupNames = [NSMutableArray arrayWithArray:[[groups allKeys]
-												 sortedArrayUsingSelector:
-												 @selector(compare:)]];
-	[groupNames retain];
 }
 
 - (id) outlineView:(NSOutlineView *) outlineView child:(NSInteger) index ofItem:(id) item
@@ -280,7 +173,7 @@ cellWasDoubleClickedAtIndex:(NSUInteger) index
 	
 	[fImageBrowserView reloadData];
 	[fImageBrowserView setSelectionIndexes:[NSIndexSet indexSetWithIndex:chooserIndex]
-				 byExtendingSelection:NO];
+					  byExtendingSelection:NO];
 	[fImageBrowserView scrollIndexToVisible:chooserIndex];
 }
 
@@ -292,7 +185,6 @@ cellWasDoubleClickedAtIndex:(NSUInteger) index
 	
 	ChooserItem *item = [self imageBrowser:fImageBrowserView
 							   itemAtIndex:index];
-	
 	return [[[item itemPath] copy] autorelease];
 }
 

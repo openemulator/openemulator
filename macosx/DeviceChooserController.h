@@ -11,17 +11,16 @@
 #import <Cocoa/Cocoa.h>
 
 #import "DocumentController.h"
-#import "TemplateChooserViewController.h"
+#import "DeviceChooserViewController.h"
 
-@interface TemplateChooserController : NSWindowController
+@interface DeviceChooserController : NSWindowController
 {
-	IBOutlet id fDocumentController;
-	
+	IBOutlet id fMessage;
 	IBOutlet id fChooserView;
-	TemplateChooserViewController *templateChooserViewController;
+	DeviceChooserViewController *deviceChooserViewController;
+	IBOutlet id fConnectView;
 }
 
-- (void) updateTemplates;
 - (IBAction) chooseTemplate:(id) sender;
 
 @end

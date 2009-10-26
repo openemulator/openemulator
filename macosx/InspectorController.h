@@ -23,6 +23,8 @@
 	IBOutlet NSView *fVideoView;
 	IBOutlet NSView *fAudioView;
 	
+	IBOutlet id fDeviceChooserController;
+	
 	int selectedViewIndex;
 	
 	id inspectedDocument;
@@ -39,5 +41,7 @@
 
 - (void) restoreWindowState:(id) sender;
 - (void) storeWindowState:(id) sender;
+
+- (void) addDevices:(id) sender;
 
 @end

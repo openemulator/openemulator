@@ -207,4 +207,9 @@ NSString *itemIdentifiers[] =
 				   forKey:@"OEInspectorIsVisible"];
 }
 
+- (void) addDevices:(id) sender
+{
+	[fDeviceChooserController showWindow:sender];
+}
+
 @end

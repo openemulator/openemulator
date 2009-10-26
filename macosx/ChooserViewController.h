@@ -1,11 +1,11 @@
 
 /**
  * OpenEmulator
- * Mac OS X Chooser Controller
+ * Mac OS X Chooser View Controller
  * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements a dml chooser controller.
+ * Implements a dml chooser view controller.
  */
 
 #import <Cocoa/Cocoa.h>
@@ -17,7 +17,7 @@
 
 @end
 
-@interface ChooserController : NSViewController
+@interface ChooserViewController : NSViewController
 {
 	id fOutlineView;
 	id fImageBrowserView;
@@ -30,12 +30,8 @@
 	NSString *selectedGroup;
 }
 
-- (id) initWithTemplates;
-- (id) initWithDevices;
 - (void) setDelegate:(id)theDelegate;
-- (void) updateUserTemplates;
-- (void) addTemplatesFromPath:(NSString *) path
-					groupName:(NSString *) theGroupName;
+
 - (void) selectItemWithItemPath:(NSString *) itemPath;
 - (NSString *) selectedItemPath;
 

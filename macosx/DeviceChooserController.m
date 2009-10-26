@@ -1,25 +1,25 @@
 
 /**
  * OpenEmulator
- * Mac OS X Template Chooser Controller
+ * Mac OS X Device Chooser Controller
  * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Controls the new document from template window.
  */
 
-#import "TemplateChooserController.h"
+#import "DeviceChooserController.h"
 
-@implementation TemplateChooserController
+@implementation DeviceChooserController
 
 - (id) init
 {
-	self = [super initWithWindowNibName:@"TemplateChooser"];
+	self = [super initWithWindowNibName:@"DeviceChooser"];
 	
 	if (self)
 	{
-		templateChooserViewController = [[TemplateChooserViewController alloc] init];
-		[templateChooserViewController setDelegate:self];
+		deviceChooserViewController = [[DeviceChooserViewController alloc] init];
+		[deviceChooserViewController setDelegate:self];
 	}
 	
 	return self;
@@ -29,34 +29,25 @@
 {
 	[super dealloc];
 	
-	[templateChooserViewController release];
+	[deviceChooserViewController release];
 }
 
 - (void) windowDidLoad
 {
-	[self setWindowFrameAutosaveName:@"TemplateChooser"];
+	[self setWindowFrameAutosaveName:@"DeviceChooser"];
 	
-	NSView *view = [templateChooserViewController view];
+	NSView *view = [deviceChooserViewController view];
 	[fChooserView addSubview:view];
 	[view setFrame:[fChooserView bounds]];
 	
-	[self updateTemplates];
-}
-
-- (void) updateTemplates
-{
-	[templateChooserViewController updateUserTemplates];
-	
-	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-	NSString *itemPath = [userDefaults stringForKey:@"OELastTemplate"];
-	[templateChooserViewController selectItemWithItemPath:itemPath];
-	
 	[[self window] center];
+	
+//	[deviceChooserViewController selectItemWithItemPath:nil];
 }
 
 - (void) showWindow:(id) sender
 {
-	[self updateTemplates];
+	[[self window] center];
 	
 	[super showWindow:sender];
 }
@@ -68,7 +59,7 @@
 
 - (IBAction) chooseTemplate:(id) sender
 {
-	NSString *itemPath = [templateChooserViewController selectedItemPath];
+	NSString *itemPath = [deviceChooserViewController selectedItemPath];
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	[userDefaults setObject:itemPath
 					 forKey:@"OELastTemplate"];
@@ -79,11 +70,11 @@
 	
 	if (url)
 	{
-		NSError *error;
+/*		NSError *error;
 		if (![fDocumentController openUntitledDocumentFromTemplateURL:url
 															  display:YES
 																error:&error])
-			[[NSAlert alertWithError:error] runModal];
+			[[NSAlert alertWithError:error] runModal];*/
 	}
 }
 

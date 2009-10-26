@@ -18,8 +18,8 @@
 
 	if (self)
 	{
-		chooserController = [[ChooserController alloc] initWithTemplates];
-		[chooserController setDelegate:self];
+		templateChooserViewController = [[TemplateChooserViewController alloc] init];
+		[templateChooserViewController setDelegate:self];
 	}
 	
 	return self;
@@ -29,7 +29,7 @@
 {
 	[super dealloc];
 	
-	[chooserController release];
+	[templateChooserViewController release];
 }
 
 - (void) windowDidLoad
@@ -47,7 +47,7 @@
 	
     [self setView:selectedItemIdentifier];
 	
-	NSView *view = [chooserController view];
+	NSView *view = [templateChooserViewController view];
 	[fTemplateChooserView addSubview:view];
 	[view setFrame:[fTemplateChooserView bounds]];
 	
@@ -170,11 +170,11 @@
 
 - (IBAction) chooseDefaultTemplate:(id) sender
 {
-	[chooserController updateUserTemplates];
+	[templateChooserViewController updateUserTemplates];
 	
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	NSString *itemPath = [userDefaults stringForKey:@"OEDefaultTemplate"];
-	[chooserController selectItemWithItemPath:itemPath];
+	[templateChooserViewController selectItemWithItemPath:itemPath];
 	
 	[NSApp beginSheet:fTemplateChooserSheet
 	   modalForWindow:[self window]
@@ -191,7 +191,7 @@
 - (IBAction) chooseTemplateInSheet:(id) sender
 {
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-	[userDefaults setObject:[chooserController selectedItemPath]
+	[userDefaults setObject:[templateChooserViewController selectedItemPath]
 					 forKey:@"OEDefaultTemplate"];
 	[userDefaults setBool:YES
 				   forKey:@"OEUseDefaultTemplate"];
