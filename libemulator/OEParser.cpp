@@ -192,8 +192,8 @@ string OEParser::getConnectedOutletRef(xmlDocPtr dml, string inletRef)
 
 OEPortInfo *OEParser::getOutletProperties(string outletRef)
 {
-	for (OEPortsInfo::iterator o = outletsInfo.begin();
-		 o != outletsInfo.end();
+	for (OEPortsInfo::iterator o = dmlInfo.outlets.begin();
+		 o != dmlInfo.outlets.end();
 		 o++)
 	{
 		if (o->ref == outletRef)
@@ -203,7 +203,7 @@ OEPortInfo *OEParser::getOutletProperties(string outletRef)
 	return NULL;
 }
 
-string OEParser::buildConnectedLabel(OEPortInfo *outlet, vector<string> *refList)
+string OEParser::recurseAndBuildConnectedLabel(OEPortInfo *outlet, vector<string> *refList)
 {
 	OEPortInfo *inlet = outlet->connectedPort;
 	if (!inlet)
@@ -212,8 +212,8 @@ string OEParser::buildConnectedLabel(OEPortInfo *outlet, vector<string> *refList
 	
 	// For some odd reason, g++ does not like the next line in the loop
 	OESplitRef oSplitRef;
-	for (OEPortsInfo::iterator o = outletsInfo.begin();
-		 o != outletsInfo.end();
+	for (OEPortsInfo::iterator o = dmlInfo.outlets.begin();
+		 o != dmlInfo.outlets.end();
 		 o++)
 	{
 		oSplitRef = buildSplitRef(o->ref);
@@ -229,7 +229,7 @@ string OEParser::buildConnectedLabel(OEPortInfo *outlet, vector<string> *refList
 		}
 		refList->push_back(o->ref);
 		
-		return buildConnectedLabel(&(*o), refList) + " " + inlet->label;
+		return recurseAndBuildConnectedLabel(&(*o), refList) + " " + inlet->label;
 	}
 	
 	return inlet->deviceLabel + " " + inlet->label;
@@ -238,8 +238,8 @@ string OEParser::buildConnectedLabel(OEPortInfo *outlet, vector<string> *refList
 string OEParser::buildConnectedLabel(OEPortInfo *outlet)
 {
 	vector<string> refList;
-	string test = buildConnectedLabel(outlet, &refList);
-	return test;
+	string connectedLabel = recurseAndBuildConnectedLabel(outlet, &refList);
+	return connectedLabel;
 }
 
 bool OEParser::parse(xmlDocPtr dml)
@@ -272,21 +272,21 @@ bool OEParser::parse(xmlDocPtr dml)
 			node = node->next)
 		{
 			if (!xmlStrcmp(node->name, BAD_CAST "inlet"))
-				inletsInfo.push_back(parsePort(deviceName,
-											   deviceLabel,
-											   deviceImage,
-											   node));
+				dmlInfo.inlets.push_back(parsePort(deviceName,
+												   deviceLabel,
+												   deviceImage,
+												   node));
 			else if (!xmlStrcmp(node->name, BAD_CAST "outlet"))
-				outletsInfo.push_back(parsePort(deviceName,
-												deviceLabel,
-												deviceImage,
-												node));
+				dmlInfo.outlets.push_back(parsePort(deviceName,
+													deviceLabel,
+													deviceImage,
+													node));
 		}
 	}
 	
 	// Find connectedPort's
-	for (OEPortsInfo::iterator i = inletsInfo.begin();
-		 i != inletsInfo.end();
+	for (OEPortsInfo::iterator i = dmlInfo.inlets.begin();
+		 i != dmlInfo.inlets.end();
 		 i++)
 	{
 		string outletRef = getConnectedOutletRef(dml, i->ref);
@@ -301,13 +301,13 @@ bool OEParser::parse(xmlDocPtr dml)
 			o->connectedPort = &(*i);
 		}
 		else
-			cerr << "libemulator: warning, outlet \"" << outletRef <<
+			cerr << "libemulator: warning: outlet \"" << outletRef <<
 			"\" does not exist." << endl;
 	}
 	
 	// Build connectedLabel's
-	for (OEPortsInfo::iterator o = outletsInfo.begin();
-		 o != outletsInfo.end();
+	for (OEPortsInfo::iterator o = dmlInfo.outlets.begin();
+		 o != dmlInfo.outlets.end();
 		 o++)
 	{
 		o->connectedLabel = buildConnectedLabel(&(*o));
@@ -352,14 +352,4 @@ bool OEParser::isOpen()
 OEDMLInfo *OEParser::getDMLInfo()
 {
 	return &dmlInfo;
-}
-
-vector<OEPortInfo> *OEParser::getInletsInfo()
-{
-	return &inletsInfo;
-}
-
-vector<OEPortInfo> *OEParser::getOutletsInfo()
-{
-	return &outletsInfo;
 }

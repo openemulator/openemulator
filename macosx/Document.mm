@@ -216,23 +216,22 @@
 	[peripherals release];
 	peripherals = [[NSMutableArray alloc] init];
 	
-	OEPortsInfo *outletsInfo = parser.getOutletsInfo();
+	OEDMLInfo *dmlInfo = parser.getDMLInfo();
 	
 	int expansionIndex = 0;
 	int diskDriveIndex = 0;
 	int peripheralIndex = 0;
-	for (OEPortsInfo::iterator o = outletsInfo->begin();
-		 o != outletsInfo->end();
+	for (OEPortsInfo::iterator o = dmlInfo->outlets.begin();
+		 o != dmlInfo->outlets.end();
 		 o++)
 	{
 		NSString *imagePath = [NSString stringWithUTF8String:o->image.c_str()];
-		NSImage *deviceImage = [self getResourceImage:imagePath];
-		
 		NSString *deviceLabel = [NSString stringWithUTF8String:o->label.c_str()];
+		
+		NSImage *deviceImage = [self getResourceImage:imagePath];
 		NSString *informativeText = [NSString localizedStringWithFormat:@"\n(on %@)",
 									 [NSString stringWithUTF8String:
 									  o->connectedLabel.c_str()]];
-		
 		NSAttributedString *aString = [self formatDeviceLabel:deviceLabel
 										  withInformativeText:informativeText];
 		
@@ -415,34 +414,34 @@
 	// To-Do: libemulation
 }
 
-- (void) restartButtonPressedAndReleased:(id) sender
+- (void) resetButtonPressedAndReleased:(id) sender
 {
-	[self restartButtonPressed:sender];
-	[self restartButtonReleased:sender];
+	[self resetButtonPressed:sender];
+	[self resetButtonReleased:sender];
 }
 
-- (void) restartButtonPressed:(id) sender
-{
-	// To-Do: libemulation
-}
-
-- (void) restartButtonReleased:(id) sender
+- (void) resetButtonPressed:(id) sender
 {
 	// To-Do: libemulation
 }
 
-- (void) sleepButtonPressedAndReleased:(id) sender
-{
-	[self sleepButtonPressed:sender];
-	[self sleepButtonReleased:sender];
-}
-
-- (void) sleepButtonPressed:(id) sender
+- (void) resetButtonReleased:(id) sender
 {
 	// To-Do: libemulation
 }
 
-- (void) sleepButtonReleased:(id) sender
+- (void) pauseButtonPressedAndReleased:(id) sender
+{
+	[self pauseButtonPressed:sender];
+	[self pauseButtonReleased:sender];
+}
+
+- (void) pauseButtonPressed:(id) sender
+{
+	// To-Do: libemulation
+}
+
+- (void) pauseButtonReleased:(id) sender
 {
 	// To-Do: libemulation
 }
@@ -466,7 +465,7 @@
 {
 	if ([self isPasteValid])
 	{
-		NSString *text = [pasteboard stringForType:NSStringPboardType];
+//		NSString *text = [pasteboard stringForType:NSStringPboardType];
 		
 		// To-do: Send to libemulator
 		// (using [text UTF8String])

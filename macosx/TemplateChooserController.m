@@ -32,31 +32,33 @@
 	[templateChooserViewController release];
 }
 
-- (void) windowDidLoad
-{
-	[self setWindowFrameAutosaveName:@"TemplateChooser"];
-	
-	NSView *view = [templateChooserViewController view];
-	[fChooserView addSubview:view];
-	[view setFrame:[fChooserView bounds]];
-	
-	[self updateTemplates];
-}
-
-- (void) updateTemplates
+- (void) updateTemplateChooser
 {
 	[templateChooserViewController updateUserTemplates];
 	
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	NSString *itemPath = [userDefaults stringForKey:@"OELastTemplate"];
-	[templateChooserViewController selectItemWithItemPath:itemPath];
+	[templateChooserViewController selectItemWithPath:itemPath];
 	
 	[[self window] center];
+	
+	[fChooseButton setEnabled:([templateChooserViewController selectedItemPath]
+							   != nil)];
+}
+
+- (void) awakeFromNib
+{
+	[self setWindowFrameAutosaveName:@"TemplateChooser"];
+	
+	NSView *view = [templateChooserViewController view];
+	[fTemplateChooserView addSubview:view];
+	
+	[self updateTemplateChooser];
 }
 
 - (void) showWindow:(id) sender
 {
-	[self updateTemplates];
+	[self updateTemplateChooser];
 	
 	[super showWindow:sender];
 }
@@ -69,11 +71,14 @@
 - (IBAction) chooseTemplate:(id) sender
 {
 	NSString *itemPath = [templateChooserViewController selectedItemPath];
-	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-	[userDefaults setObject:itemPath
-					 forKey:@"OELastTemplate"];
-	
-	NSURL *url = [NSURL fileURLWithPath:itemPath];
+	NSURL *url = nil;
+	if (itemPath)
+	{
+		NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+		[userDefaults setObject:itemPath
+						 forKey:@"OELastTemplate"];
+		url = [NSURL fileURLWithPath:itemPath];
+	}
 	
 	[[self window] orderOut:self];
 	

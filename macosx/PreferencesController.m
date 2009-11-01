@@ -49,7 +49,6 @@
 	
 	NSView *view = [templateChooserViewController view];
 	[fTemplateChooserView addSubview:view];
-	[view setFrame:[fTemplateChooserView bounds]];
 	
 	[self updateUseDefaultTemplate];
 }
@@ -85,17 +84,17 @@
 
 - (NSArray *) toolbarSelectableItemIdentifiers:(NSToolbar *) toolbar
 {
-	return [self toolbarDefaultItemIdentifiers:toolbar];
+	return [NSArray arrayWithObjects:@"General", @"Sound", nil];
 }
 
 - (NSArray *) toolbarDefaultItemIdentifiers:(NSToolbar *) toolbar
 {
-	return [self toolbarAllowedItemIdentifiers:toolbar];
+	return [self toolbarSelectableItemIdentifiers:toolbar];
 }
 
 - (NSArray *) toolbarAllowedItemIdentifiers:(NSToolbar *) toolbar
 {
-	return [NSArray arrayWithObjects:@"General", @"Sound", nil];
+	return [self toolbarSelectableItemIdentifiers:toolbar];
 }
 
 - (void) selectView:(id) sender
@@ -173,8 +172,11 @@
 	[templateChooserViewController updateUserTemplates];
 	
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-	NSString *itemPath = [userDefaults stringForKey:@"OEDefaultTemplate"];
-	[templateChooserViewController selectItemWithItemPath:itemPath];
+	NSString *path = [userDefaults stringForKey:@"OEDefaultTemplate"];
+	[templateChooserViewController selectItemWithPath:path];
+	
+	[fTemplateChooserChooseButton setEnabled:
+	 ([templateChooserViewController selectedItemPath] != nil)];
 	
 	[NSApp beginSheet:fTemplateChooserSheet
 	   modalForWindow:[self window]

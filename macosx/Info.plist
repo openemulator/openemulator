@@ -46,7 +46,7 @@
 				<string>audio/x-aiff</string>
 			</array>
 			<key>CFBundleTypeName</key>
-			<string>Audio-AIFF</string>
+			<string>AIFF Audio</string>
 			<key>CFBundleTypeOSTypes</key>
 			<array>
 				<string>AIFF</string>
@@ -65,7 +65,7 @@
 				<string>audio/x-wav</string>
 			</array>
 			<key>CFBundleTypeName</key>
-			<string>Audio-WAV</string>
+			<string>Waveform Audio</string>
 			<key>CFBundleTypeOSTypes</key>
 			<array>
 				<string>WAV</string>
@@ -80,7 +80,6 @@
 				<string>do</string>
 				<string>d13</string>
 				<string>po</string>
-				<string>img</string>
 				<string>cpm</string>
 				<string>nib</string>
 				<string>v2d</string>
@@ -109,7 +108,6 @@
 			<array>
 				<string>2img</string>
 				<string>2mg</string>
-				<string>hdv</string>
 				<string>sdk</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
@@ -122,24 +120,20 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
-				<string>shk</string>
+				<string>d64</string>
+				<string>g64</string>
+				<string>d71</string>
+				<string>d81</string>
+				<string>t64</string>
+				<string>tap</string>
+				<string>prog</string>
+				<string>p00</string>
+				<string>crt</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
-			<string>DiskImage.icns</string>
+			<string>DiskImage525.icns</string>
 			<key>CFBundleTypeName</key>
-			<string>SHK Archive</string>
-			<key>CFBundleTypeRole</key>
-			<string>Viewer</string>
-		</dict>
-		<dict>
-			<key>CFBundleTypeExtensions</key>
-			<array>
-				<string>img</string>
-			</array>
-			<key>CFBundleTypeIconFile</key>
-			<string>DiskImage.icns</string>
-			<key>CFBundleTypeName</key>
-			<string>Disk Image</string>
+			<string>Commodore 64 Disk Image</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 		</dict>
@@ -152,6 +146,33 @@
 			<string>DiskImage.icns</string>
 			<key>CFBundleTypeName</key>
 			<string>Formatted Disk Image</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>img</string>
+				<string>hdv</string>
+				<string>hfv</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>DiskImage.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>Disk Image</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>iso</string>
+				<string>cdr</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>DiskImage.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>ISO Disk Image</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 		</dict>

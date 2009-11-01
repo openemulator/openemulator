@@ -17,11 +17,11 @@
 {
 	IBOutlet id fDocumentController;
 	
-	IBOutlet id fChooserView;
+	IBOutlet id fTemplateChooserView;
+	IBOutlet id fChooseButton;
 	TemplateChooserViewController *templateChooserViewController;
 }
 
-- (void) updateTemplates;
 - (IBAction) chooseTemplate:(id) sender;
 
 @end

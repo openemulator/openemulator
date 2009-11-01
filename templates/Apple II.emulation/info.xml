@@ -36,7 +36,7 @@
     <inlet ref="iou.slot5" type="expansion" subtype="appleiislot" label="Slot 5" image="Apple II Slot.png" />
     <inlet ref="iou.slot6" type="expansion" subtype="appleiislot" label="Slot 6" image="Apple II Slot.png" />
     <inlet ref="iou.slot7" type="expansion" subtype="appleiislot" label="Slot 7" image="Apple II Slot.png" />
-    <inlet ref="game.port" type="expansion" subtype="appleiigame" label="Game Port" image="Apple II Game Port.png" />
+    <inlet ref="game.port" type="peripheral" subtype="appleiigame" label="Game Port" image="Apple II Game Port.png" />
     <inlet ref="events.cpuSocket" type="expansion" subtype="appleiicpu" label="CPU Socket" image="Apple II CPU Chip Socket.png" />
     <inlet ref="tvOutput.socket" type="expansion" subtype="appleiicharrom" label="Character ROM Socket" image="Apple II Character ROM Socket.png" />
     <inlet ref="rom.socket" type="expansion" subtype="appleiirom" label="ROM Socket" image="Apple II ROM Socket.png" />
@@ -149,7 +149,7 @@
 		<setting ref="charactersPerLine" type="option" options="40,72,80,132" label="Characters Per Line" />
 		<setting ref="delayAfterCR" type="checkbox" label="Delay after CR" />
 	</outlet>
-    <inlet ref="card.port" type="peripheral" subtype="serial" label="Port" image="Serial Port.png" />
+    <inlet ref="card.port" type="peripheral" subtype="serialport" label="Port" image="Serial Port.png" />
     <component name="card" class="AppleDiskIIInterfaceCard">
         <connection key="port" ref="" />
         <connection key="rom" ref="rom" />
@@ -211,7 +211,7 @@
 </device>
 
 <device name="dev4" label="Apple II Game Paddles" image="Apple II Game Paddles.png">
-    <outlet ref="port" type="expansion" subtype="applegameport" />
+    <outlet ref="port" type="peripheral" subtype="applegameport" />
     <component name="port" class="AppleIIGamePaddles">
         <connection key="joystick" ref="host::joystick" />
     </component>

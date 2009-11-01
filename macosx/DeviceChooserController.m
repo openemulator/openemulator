@@ -32,40 +32,68 @@
 	[deviceChooserViewController release];
 }
 
-- (void) windowDidLoad
+- (void) updateDeviceChooser
+{
+	[deviceChooserViewController selectItemWithPath:nil];
+	
+	[[self window] center];
+	
+	[fPreviousButton setEnabled:NO];
+	[fNextButton setEnabled:([deviceChooserViewController selectedItemPath]
+							 != nil)];
+	
+	[fMessage setStringValue:
+	 NSLocalizedString(@"Choose a template for your new expansion:",
+					   @"Choose a template for your new expansion")];
+}
+
+- (void) awakeFromNib
 {
 	[self setWindowFrameAutosaveName:@"DeviceChooser"];
 	
 	NSView *view = [deviceChooserViewController view];
 	[fChooserView addSubview:view];
-	[view setFrame:[fChooserView bounds]];
 	
-	[[self window] center];
-	
-//	[deviceChooserViewController selectItemWithItemPath:nil];
+	[self updateDeviceChooser];
 }
 
 - (void) showWindow:(id) sender
 {
-	[[self window] center];
+	[self updateDeviceChooser];
 	
 	[super showWindow:sender];
 }
 
-- (void) chooserWasDoubleClicked:(id) sender
+- (void) runModal:(id) sender
 {
-	[self chooseTemplate:sender];
+	[NSApp runModalForWindow:[self window]];
 }
 
-- (IBAction) chooseTemplate:(id) sender
+- (void) chooserWasDoubleClicked:(id) sender
+{
+	[self performNext:sender];
+}
+
+- (IBAction) performCancel:(id) sender
+{
+	[NSApp abortModal];
+	[[self window] orderOut:self];
+}
+
+- (IBAction) performPrevious:(id) sender
+{
+	[NSApp abortModal];
+	[[self window] orderOut:self];
+}
+
+- (IBAction) performNext:(id) sender
 {
 	NSString *itemPath = [deviceChooserViewController selectedItemPath];
-	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-	[userDefaults setObject:itemPath
-					 forKey:@"OELastTemplate"];
+	NSURL *url = nil;
+	if (itemPath)
+		url = [NSURL fileURLWithPath:itemPath];
 	
-	NSURL *url = [NSURL fileURLWithPath:itemPath];
-	
+	[NSApp stopModal];
 	[[self window] orderOut:self];
 	
 	if (url)

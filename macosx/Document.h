@@ -53,12 +53,12 @@
 - (void) shutdownButtonPressedAndReleased:(id)sender;
 - (void) shutdownButtonPressed:(id)sender;
 - (void) shutdownButtonReleased:(id)sender;
-- (void) restartButtonPressedAndReleased:(id)sender;
-- (void) restartButtonPressed:(id)sender;
-- (void) restartButtonReleased:(id)sender;
-- (void) sleepButtonPressedAndReleased:(id)sender;
-- (void) sleepButtonPressed:(id)sender;
-- (void) sleepButtonReleased:(id)sender;
+- (void) resetButtonPressedAndReleased:(id)sender;
+- (void) resetButtonPressed:(id)sender;
+- (void) resetButtonReleased:(id)sender;
+- (void) pauseButtonPressedAndReleased:(id)sender;
+- (void) pauseButtonPressed:(id)sender;
+- (void) pauseButtonReleased:(id)sender;
 
 - (BOOL) power;
 - (void) setPower:(BOOL)value;

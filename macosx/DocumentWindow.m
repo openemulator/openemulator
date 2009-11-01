@@ -71,15 +71,7 @@
 
 - (BOOL) validateUserInterfaceItem:(id) item
 {
-	if ([item action] == @selector(setHalfSize:))
-		return !fullscreen;
-	else if ([item action] == @selector(setActualSize:))
-		return !fullscreen;
-	else if ([item action] == @selector(setDoubleSize:))
-		return !fullscreen;
-	else if ([item action] == @selector(fitToScreen:))
-		return !fullscreen;
-	else if ([item action] == @selector(toggleFullscreen:))
+	if ([item action] == @selector(toggleFullscreen:))
 	{
 		NSString *menuTitle;
 		if (!fullscreen)
@@ -141,26 +133,6 @@
 	[self setFrame:windowRect display:YES animate:YES];
 }
 
-- (void) setHalfSize:(id) sender
-{
-	[self setFrameSize:0.5];
-}
-
-- (void) setActualSize:(id) sender
-{
-	[self setFrameSize:1.0];
-}
-
-- (void) setDoubleSize:(id) sender
-{
-	[self setFrameSize:2.0];
-}
-
-- (void) fitToScreen:(id) sender
-{
-	[self setFrameSize:256.0];
-}
-
 - (void) toggleFullscreen:(id) sender
 {
 	DocumentController *documentController;
@@ -194,6 +166,24 @@
 		
 		fullscreen = NO;
 	}
+}
+
+- (void) setActualSize:(id) sender
+{
+	if (!fullscreen)
+		[self setFrameSize:1.0];
+}
+
+- (void) setDoubleSize:(id) sender
+{
+	if (!fullscreen)
+		[self setFrameSize:2.0];
+}
+
+- (void) fitToScreen:(id) sender
+{
+	if (!fullscreen)
+		[self setFrameSize:256.0];
 }
 
 @end

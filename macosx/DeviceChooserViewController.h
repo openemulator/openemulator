@@ -14,9 +14,11 @@
 
 @interface DeviceChooserViewController : ChooserViewController
 {
-
+	NSMutableArray *deviceInfos;
 }
 
-- (void) loadDevicesFromPath:(NSString *) path;
+
+- (void) updateDevicesWithOutlets:(NSArray *)availableInletNames
+					andOutletType:(NSString *)type;
 
 @end

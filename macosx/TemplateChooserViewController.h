@@ -16,8 +16,6 @@
 {
 }
 
-- (void) addTemplatesFromPath:(NSString *) path
-				 setGroupName:(NSString *) theGroupName;
 - (void) updateUserTemplates;
 
 @end

@@ -24,7 +24,6 @@
 		0071E3BA10803F7300F2D54F /* ChooserItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 0071E3B910803F7300F2D54F /* ChooserItem.m */; };
 		0075B1B20FE79F7E009C1DFA /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0075B1B10FE79F7E009C1DFA /* OpenGL.framework */; };
 		00A0B8041069761A007930A5 /* Document.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00A0B8031069761A007930A5 /* Document.mm */; };
-		00A0BA53106981C6007930A5 /* libportaudio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00A0BA4C10698175007930A5 /* libportaudio.a */; };
 		00A0D43B106FF64800090223 /* OEComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A0D435106FF64800090223 /* OEComponent.cpp */; };
 		00A0D443106FF66000090223 /* OEComponentFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A0D441106FF66000090223 /* OEComponentFactory.cpp */; };
 		00A0D4BB106FFBB800090223 /* IPMount.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BC8100FD4210016867D /* IPMount.png */; };
@@ -41,6 +40,9 @@
 		00BB4D591086C1160071B584 /* TBRestart.png in Resources */ = {isa = PBXBuildFile; fileRef = 00BB4D561086C1160071B584 /* TBRestart.png */; };
 		00BB4D5A1086C1160071B584 /* TBShutdown.png in Resources */ = {isa = PBXBuildFile; fileRef = 00BB4D571086C1160071B584 /* TBShutdown.png */; };
 		00BB4D5B1086C1160071B584 /* TBSleep.png in Resources */ = {isa = PBXBuildFile; fileRef = 00BB4D581086C1160071B584 /* TBSleep.png */; };
+		00C5805F109A3DDF00B00626 /* libportaudio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C5805D109A3DDF00B00626 /* libportaudio.a */; };
+		00C58060109A3DDF00B00626 /* libzip.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C5805E109A3DDF00B00626 /* libzip.a */; };
+		00C58073109A3E9D00B00626 /* libz.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C58072109A3E9D00B00626 /* libz.a */; };
 		00C6C0C110602151004D084B /* roms in Resources */ = {isa = PBXBuildFile; fileRef = 00C6C08810602151004D084B /* roms */; };
 		00C7F1D9100BC5B500AD0812 /* IPMinus.png in Resources */ = {isa = PBXBuildFile; fileRef = 00C7F1D5100BC5B400AD0812 /* IPMinus.png */; };
 		00C7F1DA100BC5B500AD0812 /* IPMinusSel.png in Resources */ = {isa = PBXBuildFile; fileRef = 00C7F1D6100BC5B400AD0812 /* IPMinusSel.png */; };
@@ -87,7 +89,6 @@
 		00D846290FFF23B7005802F0 /* PRSound.png in Resources */ = {isa = PBXBuildFile; fileRef = 00D846280FFF23B7005802F0 /* PRSound.png */; };
 		00E2A86810532FD200910B53 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B334880FE41F110042661D /* CoreServices.framework */; };
 		00E8A396108CCAA200D0A137 /* devices in Resources */ = {isa = PBXBuildFile; fileRef = 00E8A393108CCAA200D0A137 /* devices */; };
-		00E8A3E2108CCD5D00D0A137 /* libzip.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00A0BA51106981A7007930A5 /* libzip.a */; };
 		00EF028D107D9EFB00FE378D /* VerticallyCenteredCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00EF028C107D9EFB00FE378D /* VerticallyCenteredCell.m */; };
 		00F86BCB100FD4210016867D /* IPInfo.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BC6100FD4210016867D /* IPInfo.png */; };
 		00F86BCC100FD4210016867D /* IPLocked.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BC7100FD4210016867D /* IPLocked.png */; };
@@ -177,8 +178,6 @@
 		0075B1B10FE79F7E009C1DFA /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
 		00A0B7B81068949D007930A5 /* Document.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Document.h; sourceTree = "<group>"; };
 		00A0B8031069761A007930A5 /* Document.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Document.mm; sourceTree = "<group>"; };
-		00A0BA4C10698175007930A5 /* libportaudio.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libportaudio.a; path = /usr/local/lib/libportaudio.a; sourceTree = "<absolute>"; };
-		00A0BA51106981A7007930A5 /* libzip.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libzip.a; path = /usr/local/lib/libzip.a; sourceTree = "<absolute>"; };
 		00A0D435106FF64800090223 /* OEComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OEComponent.cpp; path = libemulator/OEComponent.cpp; sourceTree = "<group>"; };
 		00A0D436106FF64800090223 /* OEComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OEComponent.h; path = libemulator/OEComponent.h; sourceTree = "<group>"; };
 		00A0D441106FF66000090223 /* OEComponentFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OEComponentFactory.cpp; path = libemulator/OEComponentFactory.cpp; sourceTree = "<group>"; };
@@ -204,6 +203,9 @@
 		00BB4D571086C1160071B584 /* TBShutdown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TBShutdown.png; sourceTree = "<group>"; };
 		00BB4D581086C1160071B584 /* TBSleep.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TBSleep.png; sourceTree = "<group>"; };
 		00C07E350FD27CCF004E0D3D /* PRGeneral.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PRGeneral.png; sourceTree = "<group>"; };
+		00C5805D109A3DDF00B00626 /* libportaudio.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libportaudio.a; path = /opt/local/lib/libportaudio.a; sourceTree = "<absolute>"; };
+		00C5805E109A3DDF00B00626 /* libzip.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libzip.a; path = /opt/local/lib/libzip.a; sourceTree = "<absolute>"; };
+		00C58072109A3E9D00B00626 /* libz.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libz.a; path = /opt/local/lib/libz.a; sourceTree = "<absolute>"; };
 		00C6C08810602151004D084B /* roms */ = {isa = PBXFileReference; lastKnownFileType = folder; path = roms; sourceTree = "<group>"; };
 		00C7F1D5100BC5B400AD0812 /* IPMinus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPMinus.png; sourceTree = "<group>"; };
 		00C7F1D6100BC5B400AD0812 /* IPMinusSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPMinusSel.png; sourceTree = "<group>"; };
@@ -280,7 +282,6 @@
 			files = (
 				00123BCC1069B8F200FB95A1 /* libxml2.dylib in Frameworks */,
 				00123BC91069B8D600FB95A1 /* libemulator.a in Frameworks */,
-				00A0BA53106981C6007930A5 /* libportaudio.a in Frameworks */,
 				8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */,
 				001F56F90FD1E8E500EA246A /* Sparkle.framework in Frameworks */,
 				005C7BBC0FD8ED6F00426DD0 /* Carbon.framework in Frameworks */,
@@ -290,7 +291,9 @@
 				0075B1B20FE79F7E009C1DFA /* OpenGL.framework in Frameworks */,
 				00E2A86810532FD200910B53 /* CoreServices.framework in Frameworks */,
 				004F8127107A477300AE3527 /* Quartz.framework in Frameworks */,
-				00E8A3E2108CCD5D00D0A137 /* libzip.a in Frameworks */,
+				00C5805F109A3DDF00B00626 /* libportaudio.a in Frameworks */,
+				00C58060109A3DDF00B00626 /* libzip.a in Frameworks */,
+				00C58073109A3E9D00B00626 /* libz.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -376,6 +379,9 @@
 		005486C40FDC84B200DBCFA8 /* Other Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				00C58072109A3E9D00B00626 /* libz.a */,
+				00C5805D109A3DDF00B00626 /* libportaudio.a */,
+				00C5805E109A3DDF00B00626 /* libzip.a */,
 				006EECA40FCA5C31003D2C8D /* libemulator.a */,
 				001F56F80FD1E8E500EA246A /* Sparkle.framework */,
 			);
@@ -414,8 +420,6 @@
 			isa = PBXGroup;
 			children = (
 				00E2A84D1053290200910B53 /* libxml2.dylib */,
-				00A0BA51106981A7007930A5 /* libzip.a */,
-				00A0BA4C10698175007930A5 /* libportaudio.a */,
 				1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */,
 				004F8126107A477300AE3527 /* Quartz.framework */,
 				0075B1B10FE79F7E009C1DFA /* OpenGL.framework */,
@@ -792,20 +796,32 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_ENABLE_SYMBOL_SEPARATION = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GENERATE_MASTER_OBJECT_FILE = YES;
 				HEADER_SEARCH_PATHS = (
+					macosx/include,
 					/usr/local/include,
+					/opt/local/include,
 					/usr/include/libxml2,
 				);
 				INSTALL_PATH = /usr/local/lib;
-				LIBRARY_SEARCH_PATHS = "";
+				LIBRARY_SEARCH_PATHS = (
+					macosx/lib,
+					/opt/local/lib,
+					/usr/local/lib,
+					"$(inherited)",
+				);
 				PREBINDING = NO;
 				PRODUCT_NAME = emulator;
+				SDKROOT = macosx10.5;
 			};
 			name = Debug;
 		};
@@ -813,20 +829,31 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_ENABLE_SYMBOL_SEPARATION = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
 				GCC_MODEL_TUNING = G5;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GENERATE_MASTER_OBJECT_FILE = YES;
 				HEADER_SEARCH_PATHS = (
+					macosx/include,
 					/usr/local/include,
+					/opt/local/include,
 					/usr/include/libxml2,
 				);
 				INSTALL_PATH = /usr/local/lib;
-				LIBRARY_SEARCH_PATHS = "";
+				LIBRARY_SEARCH_PATHS = (
+					macosx/lib,
+					/opt/local/lib,
+					/usr/local/lib,
+					"$(inherited)",
+				);
 				PREBINDING = NO;
 				PRODUCT_NAME = emulator;
-				ZERO_LINK = NO;
+				SDKROOT = macosx10.5;
 			};
 			name = Release;
 		};
@@ -834,7 +861,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = "";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -844,18 +871,28 @@
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_PPC64 = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = macosx/OpenEmulator_Prefix.pch;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				HEADER_SEARCH_PATHS = (
+					macosx/include,
 					/usr/local/include,
+					/opt/local/include,
 					/usr/include/libxml2,
 				);
 				INFOPLIST_FILE = macosx/Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = /usr/local/lib;
+				LIBRARY_SEARCH_PATHS = (
+					macosx/lib,
+					/usr/local/lib,
+					/opt/local/lib,
+					"\"$(SRCROOT)/../../../Desktop\"",
+				);
 				PRODUCT_NAME = OpenEmulator;
+				SDKROOT = macosx10.5;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
 			};
 			name = Debug;
@@ -864,7 +901,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				CURRENT_PROJECT_VERSION = "";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -875,14 +912,23 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = macosx/OpenEmulator_Prefix.pch;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				HEADER_SEARCH_PATHS = (
+					macosx/include,
 					/usr/local/include,
+					/opt/local/include,
 					/usr/include/libxml2,
 				);
 				INFOPLIST_FILE = macosx/Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = /usr/local/lib;
+				LIBRARY_SEARCH_PATHS = (
+					macosx/lib,
+					/usr/local/lib,
+					/opt/local/lib,
+					"\"$(SRCROOT)/../../../Desktop\"",
+				);
 				PRODUCT_NAME = OpenEmulator;
+				SDKROOT = macosx10.5;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
 			};
 			name = Release;

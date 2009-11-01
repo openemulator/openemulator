@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dml PUBLIC "-//OPENEMULATOR//DTD DML 1.0//EN" "http://www.openemulator.org/DTDs/dml-1.0.dtd">
+<dml version="1.0" label="Disk II Drive 2" image="Apple Disk II Drive.png" group="Disk Drives">
+
+<device name="dev0" label="Apple Disk II Drive 2" image="Apple Disk II Drive.png">
+    <outlet ref="drive" type="diskdrive" subtype="apple525">
+		<setting ref="lock" type="checkbox" label="Lock Disk Drive" />
+	</outlet>
+    <component name="drive" class="AppleDiskII">
+        <property key="diskImage" value=" /Users/mressl/test2.dsk" />
+        <property key="lock" value="0" />
+        <resource key="soundSpin" src="sounds/Apple Disk II Spin.wav" />
+        <resource key="soundArm" src="sounds/Apple Disk II Arm.wav" />
+        <resource key="soundStop" src="sounds/Apple Disk II Stop.wav" />
+        <resource key="soundShake" src="sounds/Apple Disk II Shake.wav" />
+    </component>
+</device>
+
+</dml>

@@ -209,7 +209,7 @@ NSString *itemIdentifiers[] =
 
 - (void) addDevices:(id) sender
 {
-	[fDeviceChooserController showWindow:sender];
+	[fDeviceChooserController runModal:self];
 }
 
 @end

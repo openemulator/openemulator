@@ -1,37 +1,46 @@
-==README for OpenEmulator==
-OpenEmulator is an accurate, portable emulator of legacy home computers.
+OpenEmulator
+============
 
-Visit http://www.openemulator.org/ for more information.
+  This is OpenEmulator, a cross-platform emulator of many legacy computer
+systems.
 
-==Dependencies==
+  For more information, take a look at the included man pages. Try
+openemulator(3).
 
-OpenEmulator has the following dependencies:
+  For generic installation instructions, see file 'INSTALL'. Just in case,
+you should have libxml2, libzip and libportaudio available. If you don't
+have apt-get powers, you can find them at these websites:
 
-* libxml2. Available at http://www.xmlsoft.org
-* libzip. Available at http://nih.at/libzip/
+	http://www.nih.at/libzip
+	http://www.portaudio.com
+	http://www.xmlsoft.org
 
-==Building==
+  If you make a binary distribution, please include a pointer to the
+distribution site:
 
-OpenEmulator has an Xcode project file (OpenEmulator.xcodeproj)
-for building in Xcode.
+	http://www.openemulator.org
 
-Building an OpenEmulator release from the command line:
+The latest version can always be found there.
 
-    $ tar xvfj openemulator-X.Y.tar.bz2
-    $ cd openemulator-X.Y
-    $ ./configure -q && make -s
-    $ su (if necessary for the next line)
-    $ make install
+Mail suggestions and bug reports to <mressl@umich.edu>.
 
-Building OpenEmulator from SVN (First Time):
+Mac OS X
+========
 
-    $ svn co http://openemulator.googlecode.com/svn/trunk/ openemulator-read-only
-    $ cd openemulator
-    $ ./autogen.sh
-    $ ./configure -q && make -s
+  Before compiling the OpenEmulator XCode project under Mac OS X, you need
+libzip and libportaudio. The easiest way to accomplish this is to
+install MacPorts. If you are under Snow Leopard, enter the following commands:
 
-Building OpenEmulator from SVN (Updating):
+  sudo port install libzip +universal configure.universal_cflags="-arch ppc -arch i386 -arch x86_64" configure.universal_ldflags="-arch ppc -arch i386 -arch x86_64"
 
-    $ cd openemulator-X.Y
-    $ svn up
-    $ make -s
+  sudo port install portaudio +universal configure.universal_cflags="-arch ppc -arch i386 -arch x86_64" configure.universal_ldflags="-arch ppc -arch i386 -arch x86_64"
+
+  Otherwise, try:
+
+  sudo port install libzip +universal
+  sudo port install portaudio +universal
+
+Windows
+=======
+
+  Not yet available.

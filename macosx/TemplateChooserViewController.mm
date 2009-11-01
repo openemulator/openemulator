@@ -5,7 +5,7 @@
  * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements an chooser view controller for template and device choosing.
+ * Implements a template chooser view controller.
  */
 
 #import "TemplateChooserViewController.h"
@@ -17,24 +17,6 @@
 
 @implementation TemplateChooserViewController
 
-- (id) init
-{
-	self = [super init];
-	
-	if (self)
-	{
-		NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
-		NSString *templatesPath = [resourcePath
-								   stringByAppendingPathComponent:@"templates"];
-		[self addTemplatesFromPath:templatesPath
-					  setGroupName:nil];
-		
-		[self updateUserTemplates];
-	}
-	
-	return self;
-}
-
 - (void) addTemplatesFromPath:(NSString *) path
 				 setGroupName:(NSString *) theGroupName
 {
@@ -42,10 +24,9 @@
 	NSString *imagesPath = [resourcePath
 							stringByAppendingPathComponent:@"images"];
 	
-	NSError *error;
 	NSArray *templateFilenames = [[NSFileManager defaultManager]
 								  contentsOfDirectoryAtPath:path
-								  error:&error];
+								  error:nil];
 	
 	int templateFilenamesCount = [templateFilenames count];
 	for (int i = 0; i < templateFilenamesCount; i++)
@@ -61,7 +42,7 @@
 		
 		OEDMLInfo *dmlInfo = parser.getDMLInfo();
 		NSString *imageName = [NSString stringWithUTF8String:dmlInfo->image.c_str()];
-		NSString *description = [NSString stringWithUTF8String:dmlInfo->image.c_str()];
+		NSString *description = [NSString stringWithUTF8String:dmlInfo->description.c_str()];
 		NSString *groupName = [NSString stringWithUTF8String:dmlInfo->group.c_str()];
 		
 		if (theGroupName)
@@ -82,31 +63,43 @@
 		
 		[[groups objectForKey:groupName] addObject:item];
 	}
-	
-	if (groupNames)
-		[groupNames release];
-	
-	groupNames = [NSMutableArray arrayWithArray:[[groups allKeys]
-												 sortedArrayUsingSelector:
-												 @selector(compare:)]];
-	[groupNames retain];
 }
 
 - (void) updateUserTemplates
 {
-	NSString *selectedItemPath = [self selectedItemPath];
-	
 	NSString *userTemplatesGroupName = NSLocalizedString(@"My Templates",
 														 @"My Templates");
-	NSMutableArray *userTemplatesArray = [groups objectForKey:userTemplatesGroupName];
-	if (userTemplatesArray)
+	
+	NSString *selectedItemPath = [self selectedItemPath];
+	if ([groups objectForKey:userTemplatesGroupName])
+	{
 		[groups removeObjectForKey:userTemplatesGroupName];
+		[groupNames removeLastObject];
+	}
 	
 	NSString *userTemplatesPath = [TEMPLATE_FOLDER stringByExpandingTildeInPath];
 	[self addTemplatesFromPath:userTemplatesPath
 				  setGroupName:userTemplatesGroupName];
 	
-	[self selectItemWithItemPath:selectedItemPath];
+	if ([groups objectForKey:userTemplatesGroupName])
+		[groupNames addObject:userTemplatesGroupName];
+	[self selectItemWithPath:selectedItemPath];
+}
+
+- (void) awakeFromNib
+{
+	[super awakeFromNib];
+	
+	NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
+	NSString *templatesPath = [resourcePath
+							   stringByAppendingPathComponent:@"templates"];
+	
+	[self addTemplatesFromPath:templatesPath
+				  setGroupName:nil];
+	[groupNames addObjectsFromArray:[[groups allKeys]
+									 sortedArrayUsingSelector:@selector(compare:)]];
+	
+	[self updateUserTemplates];
 }
 
 @end

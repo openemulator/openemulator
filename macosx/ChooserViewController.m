@@ -28,18 +28,18 @@
 
 - (void) dealloc
 {
-	[groupNames release];
 	[groups release];
+	[groupNames release];
 	
 	if (selectedGroup)
 		[selectedGroup release];
 	
-	if (fOutlineView)
-		[fOutlineView release];
-	if (fImageBrowserView)
-		[fImageBrowserView release];
-	
 	[super dealloc];
+}
+
+- (void) setDelegate:(id)theDelegate
+{
+	chooserDelegate = theDelegate;
 }
 
 - (void) awakeFromNib
@@ -47,7 +47,6 @@
 	NSSize aSize;
 	aSize.width = 112;
 	aSize.height = 64;
-	
 	NSDictionary *attrs = [NSDictionary dictionaryWithObjectsAndKeys:
 						   [NSFont messageFontOfSize:11.0f], NSFontAttributeName,
 						   [NSColor blackColor], NSForegroundColorAttributeName,
@@ -66,24 +65,6 @@
 						 forKey:IKImageBrowserCellsHighlightedTitleAttributesKey];
 }
 
-- (void) setDelegate:(id)theDelegate
-{
-	chooserDelegate = theDelegate;
-}
-
-- (id) outlineView:(NSOutlineView *) outlineView child:(NSInteger) index ofItem:(id) item
-{
-	if (!item)
-		return [groupNames objectAtIndex:index];
-	
-	return nil;
-}
-
-- (BOOL) outlineView:(NSOutlineView *) outlineView isItemExpandable:(id) item
-{
-	return NO;
-}
-
 - (NSInteger) outlineView:(NSOutlineView *) outlineView numberOfChildrenOfItem:(id) item
 {
 	if (!item)
@@ -92,11 +73,24 @@
 	return 0;
 }
 
-- (id)outlineView: (NSOutlineView *) outlineView
+- (id)outlineView:(NSOutlineView *) outlineView
 objectValueForTableColumn:(NSTableColumn *) tableColumn
 		   byItem:(id) item
 {
 	return item;
+}
+
+- (BOOL) outlineView:(NSOutlineView *) outlineView isItemExpandable:(id) item
+{
+	return NO;
+}
+
+- (id) outlineView:(NSOutlineView *) outlineView child:(NSInteger) index ofItem:(id) item
+{
+	if (!item)
+		return [groupNames objectAtIndex:index];
+	
+	return nil;
 }
 
 - (void) outlineViewSelectionDidChange:(NSNotification *) notification
@@ -143,7 +137,7 @@ cellWasDoubleClickedAtIndex:(NSUInteger) index
 		[chooserDelegate chooserWasDoubleClicked:self];
 }
 
-- (void) selectItemWithItemPath:(NSString *) itemPath
+- (void) selectItemWithPath:(NSString *) itemPath
 {
 	int groupIndex = 0;
 	int chooserIndex = 0;
@@ -166,6 +160,7 @@ cellWasDoubleClickedAtIndex:(NSUInteger) index
 		}
 	}
 	
+	[fOutlineView reloadData];
 	[fOutlineView selectRowIndexes:[NSIndexSet indexSet]
 			  byExtendingSelection:NO];
 	[fOutlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:groupIndex]
@@ -179,7 +174,7 @@ cellWasDoubleClickedAtIndex:(NSUInteger) index
 
 - (NSString *) selectedItemPath
 {
-	int index = [[fImageBrowserView selectionIndexes] firstIndex];
+	NSUInteger index = [[fImageBrowserView selectionIndexes] firstIndex];
 	if (index == NSNotFound)
 		return nil;
 	

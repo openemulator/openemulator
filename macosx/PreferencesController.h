@@ -23,6 +23,7 @@
 	
 	IBOutlet id fTemplateChooserSheet;
 	IBOutlet id fTemplateChooserView;
+	IBOutlet id fTemplateChooserChooseButton;
 	TemplateChooserViewController *templateChooserViewController;
 }
 

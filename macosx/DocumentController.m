@@ -41,13 +41,13 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 	{
 		fileTypes = [[NSArray alloc] initWithObjects:
 					 @"emulation",
-					 @"wav", @"aiff", @"aif",
-					 @"dsk", @"do", @"d13", @"po", @"img", @"cpm", @"nib", @"v2d",
-					 @"vdsk",
-					 @"2mg", @"2img", @"hdv", @"sdk",
-					 @"fdi",
-					 @"d64", @"g64", @"d64", @"d71", @"d81", @"t64",
+					 @"aiff", @"aif", @"wav",
+					 @"dsk", @"do", @"d13", @"po", @"cpm", @"nib", @"v2d",
+					 @"vdsk", @"2mg", @"2img", @"hdv", @"sdk",
+					 @"d64", @"g64", @"d71", @"d81", @"t64",
 					 @"tap", @"prg", @"p00", @"crt",
+					 @"fdi",
+					 @"img", @"hdv", @"hfv",
 					 @"iso", @"cdr",
 					 nil];
 		
@@ -69,7 +69,7 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 	//	printf("applicationWillFinishLaunching\n");
 	[fInspectorController restoreWindowState:self];
 	
-	int error;
+/*	int error;
 	if ((error = Pa_Initialize()) == paNoError)
 		if ((error = Pa_OpenDefaultStream(&portAudioStream, 
 										  0, 2, paFloat32,
@@ -78,7 +78,7 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 			if ((error = Pa_StartStream(portAudioStream)) == paNoError)
 				return;
 	
-	fprintf(stderr, "portaudio: error %d\n", error);
+	fprintf(stderr, "portaudio: error %d\n", error);*/
 }
 
 - (BOOL) application:(NSApplication *) theApplication
@@ -124,7 +124,7 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 - (void) applicationWillTerminate:(NSNotification *) notification
 {
 	//	printf("applicationWillTerminate\n");
-	Pa_Terminate();
+//	Pa_Terminate();
 	
 	[fInspectorController storeWindowState:self];
 }

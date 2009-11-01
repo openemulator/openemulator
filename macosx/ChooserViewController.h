@@ -32,7 +32,7 @@
 
 - (void) setDelegate:(id)theDelegate;
 
-- (void) selectItemWithItemPath:(NSString *) itemPath;
+- (void) selectItemWithPath:(NSString *) itemPath;
 - (NSString *) selectedItemPath;
 
 @end

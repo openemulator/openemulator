@@ -3,7 +3,7 @@
 	<data>
 		<int key="IBDocument.SystemTarget">1050</int>
 		<string key="IBDocument.SystemVersion">10B504</string>
-		<string key="IBDocument.InterfaceBuilderVersion">732</string>
+		<string key="IBDocument.InterfaceBuilderVersion">740</string>
 		<string key="IBDocument.AppKitVersion">1038.2</string>
 		<string key="IBDocument.HIToolboxVersion">437.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
@@ -15,7 +15,7 @@
 			</object>
 			<object class="NSMutableArray" key="dict.values">
 				<bool key="EncodedWithXMLCoder">YES</bool>
-				<string>732</string>
+				<string>740</string>
 				<string>1.1</string>
 			</object>
 		</object>
@@ -40,7 +40,7 @@
 		<object class="NSMutableArray" key="IBDocument.RootObjects" id="110858478">
 			<bool key="EncodedWithXMLCoder">YES</bool>
 			<object class="NSCustomObject" id="762632889">
-				<string key="NSClassName">ChooserController</string>
+				<string key="NSClassName">ChooserViewController</string>
 			</object>
 			<object class="NSCustomObject" id="932410077">
 				<string key="NSClassName">FirstResponder</string>
@@ -70,7 +70,7 @@
 											<bool key="EncodedWithXMLCoder">YES</bool>
 											<object class="IKImageBrowserView" id="934617816">
 												<reference key="NSNextResponder" ref="1071614473"/>
-												<int key="NSvFlags">274</int>
+												<int key="NSvFlags">18</int>
 												<object class="NSMutableSet" key="NSDragTypes">
 													<bool key="EncodedWithXMLCoder">YES</bool>
 													<object class="NSArray" key="set.sortedObjects">
@@ -508,11 +508,19 @@
 				<bool key="EncodedWithXMLCoder">YES</bool>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
+						<string key="label">view</string>
+						<reference key="source" ref="762632889"/>
+						<reference key="destination" ref="551990427"/>
+					</object>
+					<int key="connectionID">131</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
 						<string key="label">fOutlineView</string>
 						<reference key="source" ref="762632889"/>
 						<reference key="destination" ref="470825805"/>
 					</object>
-					<int key="connectionID">125</int>
+					<int key="connectionID">151</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
@@ -520,23 +528,7 @@
 						<reference key="source" ref="762632889"/>
 						<reference key="destination" ref="934617816"/>
 					</object>
-					<int key="connectionID">126</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">dataSource</string>
-						<reference key="source" ref="470825805"/>
-						<reference key="destination" ref="762632889"/>
-					</object>
-					<int key="connectionID">127</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">delegate</string>
-						<reference key="source" ref="470825805"/>
-						<reference key="destination" ref="762632889"/>
-					</object>
-					<int key="connectionID">128</int>
+					<int key="connectionID">152</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
@@ -544,7 +536,23 @@
 						<reference key="source" ref="934617816"/>
 						<reference key="destination" ref="762632889"/>
 					</object>
-					<int key="connectionID">129</int>
+					<int key="connectionID">153</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">dataSource</string>
+						<reference key="source" ref="470825805"/>
+						<reference key="destination" ref="762632889"/>
+					</object>
+					<int key="connectionID">154</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">delegate</string>
+						<reference key="source" ref="470825805"/>
+						<reference key="destination" ref="762632889"/>
+					</object>
+					<int key="connectionID">155</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
@@ -552,15 +560,7 @@
 						<reference key="source" ref="934617816"/>
 						<reference key="destination" ref="762632889"/>
 					</object>
-					<int key="connectionID">130</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">view</string>
-						<reference key="source" ref="762632889"/>
-						<reference key="destination" ref="551990427"/>
-					</object>
-					<int key="connectionID">131</int>
+					<int key="connectionID">156</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -595,40 +595,13 @@
 						<reference key="object" ref="551990427"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<reference ref="241945045"/>
 							<reference ref="101146792"/>
 							<reference ref="19312502"/>
 							<reference ref="717100174"/>
-							<reference ref="241945045"/>
 						</object>
 						<reference key="parent" ref="0"/>
 						<string key="objectName">Chooser View</string>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">112</int>
-						<reference key="object" ref="101146792"/>
-						<object class="NSMutableArray" key="children">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="889134219"/>
-							<reference ref="391644231"/>
-							<reference ref="1071614473"/>
-						</object>
-						<reference key="parent" ref="551990427"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">113</int>
-						<reference key="object" ref="19312502"/>
-						<reference key="parent" ref="551990427"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">114</int>
-						<reference key="object" ref="717100174"/>
-						<object class="NSMutableArray" key="children">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="460209183"/>
-							<reference ref="308298459"/>
-							<reference ref="470825805"/>
-						</object>
-						<reference key="parent" ref="551990427"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">115</int>
@@ -636,14 +609,55 @@
 						<reference key="parent" ref="551990427"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">116</int>
-						<reference key="object" ref="460209183"/>
-						<reference key="parent" ref="717100174"/>
+						<int key="objectID">112</int>
+						<reference key="object" ref="101146792"/>
+						<object class="NSMutableArray" key="children">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<reference ref="1071614473"/>
+							<reference ref="391644231"/>
+							<reference ref="889134219"/>
+						</object>
+						<reference key="parent" ref="551990427"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">117</int>
-						<reference key="object" ref="308298459"/>
-						<reference key="parent" ref="717100174"/>
+						<int key="objectID">123</int>
+						<reference key="object" ref="1071614473"/>
+						<object class="NSMutableArray" key="children">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<reference ref="934617816"/>
+						</object>
+						<reference key="parent" ref="101146792"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">122</int>
+						<reference key="object" ref="391644231"/>
+						<reference key="parent" ref="101146792"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">121</int>
+						<reference key="object" ref="889134219"/>
+						<reference key="parent" ref="101146792"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">113</int>
+						<reference key="object" ref="19312502"/>
+						<reference key="parent" ref="551990427"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">124</int>
+						<reference key="object" ref="934617816"/>
+						<reference key="parent" ref="1071614473"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">114</int>
+						<reference key="object" ref="717100174"/>
+						<object class="NSMutableArray" key="children">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<reference ref="470825805"/>
+							<reference ref="308298459"/>
+							<reference ref="460209183"/>
+						</object>
+						<reference key="parent" ref="551990427"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">118</int>
@@ -669,28 +683,14 @@
 						<reference key="parent" ref="458818238"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">121</int>
-						<reference key="object" ref="889134219"/>
-						<reference key="parent" ref="101146792"/>
+						<int key="objectID">117</int>
+						<reference key="object" ref="308298459"/>
+						<reference key="parent" ref="717100174"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">122</int>
-						<reference key="object" ref="391644231"/>
-						<reference key="parent" ref="101146792"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">123</int>
-						<reference key="object" ref="1071614473"/>
-						<object class="NSMutableArray" key="children">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="934617816"/>
-						</object>
-						<reference key="parent" ref="101146792"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">124</int>
-						<reference key="object" ref="934617816"/>
-						<reference key="parent" ref="1071614473"/>
+						<int key="objectID">116</int>
+						<reference key="object" ref="460209183"/>
+						<reference key="parent" ref="717100174"/>
 					</object>
 				</object>
 			</object>
@@ -721,7 +721,7 @@
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>{{70, 280}, {600, 299}}</string>
+					<string>{{149, 167}, {600, 299}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -755,13 +755,13 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">131</int>
+			<int key="maxID">156</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
 				<bool key="EncodedWithXMLCoder">YES</bool>
 				<object class="IBPartialClassDescription">
-					<string key="className">ChooserController</string>
+					<string key="className">ChooserViewController</string>
 					<string key="superclassName">NSViewController</string>
 					<object class="NSMutableDictionary" key="outlets">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -780,7 +780,7 @@
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">macosx/ChooserController.h</string>
+						<string key="minorKey">macosx/ChooserViewController.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
@@ -911,7 +911,7 @@
 			<integer value="3000" key="NS.object.0"/>
 		</object>
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
-		<string key="IBDocument.LastKnownRelativeProjectPath">OpenEmulator.xcodeproj</string>
+		<string key="IBDocument.LastKnownRelativeProjectPath">../../OpenEmulator.xcodeproj</string>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 	</data>
 </archive>

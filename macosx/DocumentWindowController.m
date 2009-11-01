@@ -59,23 +59,23 @@
 		[item setTarget:document];
 		[item setAction:@selector(shutdownButtonPressed:)];
 	}
-	else if ([ident isEqualToString:@"Restart"])
+	else if ([ident isEqualToString:@"Reset"])
 	{
-		[item setLabel:NSLocalizedString(@"Restart", "Document toolbar item label")];
-		[item setToolTip:NSLocalizedString(@"Reset or restart the emulation.",
+		[item setLabel:NSLocalizedString(@"Reset", "Document toolbar item label")];
+		[item setToolTip:NSLocalizedString(@"Reset the emulation.",
 										   "Document toolbar item label")];
 		[item setImage:[NSImage imageNamed:@"TBRestart.png"]];
 		[item setTarget:document];
-		[item setAction:@selector(restartButtonPressed:)];
+		[item setAction:@selector(resetButtonPressed:)];
 	}
-	else if ([ident isEqualToString:@"Sleep"])
+	else if ([ident isEqualToString:@"Pause"])
 	{
-		[item setLabel:NSLocalizedString(@"Sleep", "Document toolbar item label")];
+		[item setLabel:NSLocalizedString(@"Pause", "Document toolbar item label")];
 		[item setToolTip:NSLocalizedString(@"Pause or continue the emulation.",
 										   "Document toolbar item label")];
 		[item setImage:[NSImage imageNamed:@"TBSleep.png"]];
 		[item setTarget:document];
-		[item setAction:@selector(sleepButtonPressed:)];
+		[item setAction:@selector(pauseButtonPressed:)];
 	}
 	else if ([ident isEqualToString:@"Inspector"])
 	{
@@ -92,18 +92,18 @@
 
 - (NSArray *) toolbarDefaultItemIdentifiers:(NSToolbar *) toolbar
 {
-	return [self toolbarAllowedItemIdentifiers:toolbar];
+	return [NSArray arrayWithObjects:@"Shutdown",
+			NSToolbarSpaceItemIdentifier,
+			@"Reset",
+			@"Pause",
+			NSToolbarFlexibleSpaceItemIdentifier,
+			@"Inspector",
+			nil];
 }
 
 - (NSArray *) toolbarAllowedItemIdentifiers:(NSToolbar *) toolbar
 {
-	return [NSArray arrayWithObjects:@"Shutdown",
-			NSToolbarSpaceItemIdentifier,
-			@"Restart",
-			@"Sleep",
-			NSToolbarFlexibleSpaceItemIdentifier,
-			@"Inspector",
-			nil];
+	return [self toolbarDefaultItemIdentifiers:toolbar];
 }
 
 - (void) toggleInspector:(id) sender

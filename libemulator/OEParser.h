@@ -18,13 +18,13 @@
 
 using namespace std;
 
-typedef struct
+typedef struct 
 {
+	string ref;
+	string type;
+	string options;
 	string label;
-	string image;
-	string description;
-	string group;
-} OEDMLInfo;
+} OESettingsInfo;
 
 typedef struct OEPortInfo
 {
@@ -38,7 +38,20 @@ typedef struct OEPortInfo
 	
 	string connectedLabel;
 	struct OEPortInfo *connectedPort;
+	
+	vector<OESettingsInfo> settings;
 } OEPortInfo;
+
+typedef struct
+{
+	string label;
+	string image;
+	string description;
+	string group;
+	
+	vector<OEPortInfo> inlets;
+	vector<OEPortInfo> outlets;
+} OEDMLInfo;
 
 typedef struct
 {
@@ -59,15 +72,11 @@ public:
 	bool isOpen();
 	
 	OEDMLInfo *getDMLInfo();
-	OEPortsInfo *getInletsInfo();
-	OEPortsInfo *getOutletsInfo();
 	
 private:
 	bool open;
 	
 	OEDMLInfo dmlInfo;
-	OEPortsInfo inletsInfo;
-	OEPortsInfo outletsInfo;
 	
 	string getPathExtension(string path);
 	bool readFile(string path, vector<char> &data);
@@ -78,7 +87,7 @@ private:
 	
 	string getConnectedOutletRef(xmlDocPtr dml, string inletRef);
 	OEPortInfo *getOutletProperties(string outletRef);
-	string buildConnectedLabel(OEPortInfo *outlet, vector<string> *refList);
+	string recurseAndBuildConnectedLabel(OEPortInfo *outlet, vector<string> *refList);
 	string buildConnectedLabel(OEPortInfo *outlet);
 	
 	bool parse(xmlDocPtr dml);

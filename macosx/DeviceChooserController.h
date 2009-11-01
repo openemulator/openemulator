@@ -17,10 +17,17 @@
 {
 	IBOutlet id fMessage;
 	IBOutlet id fChooserView;
+	IBOutlet id fPreviousButton;
+	IBOutlet id fNextButton;
+	
 	DeviceChooserViewController *deviceChooserViewController;
 	IBOutlet id fConnectView;
 }
 
-- (IBAction) chooseTemplate:(id) sender;
+- (void) runModal:(id) sender;
+
+- (IBAction) performCancel:(id) sender;
+- (IBAction) performPrevious:(id) sender;
+- (IBAction) performNext:(id) sender;
 
 @end

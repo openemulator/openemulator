@@ -10,24 +10,25 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "DeviceChooserController.h"
+
 @interface InspectorController : NSWindowController
 {
-    IBOutlet NSObjectController *fDocumentObjectController;
+	IBOutlet NSObjectController *fDocumentObjectController;
 	
 	IBOutlet NSMatrix *fTabMatrix;
 	
-    IBOutlet NSView *fEmulationView;
+	IBOutlet NSView *fEmulationView;
 	IBOutlet NSView *fExpansionsView;
 	IBOutlet NSView *fDiskDrivesView;
 	IBOutlet NSView *fPeripheralsView;
 	IBOutlet NSView *fVideoView;
 	IBOutlet NSView *fAudioView;
 	
-	IBOutlet id fDeviceChooserController;
-	
 	int selectedViewIndex;
-	
 	id inspectedDocument;
+	
+	IBOutlet id fDeviceChooserController;
 }
 
 - (void) activeDocumentDidChange;
