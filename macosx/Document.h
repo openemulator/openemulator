@@ -50,9 +50,9 @@
 - (BOOL) isCopyValid;
 - (BOOL) isPasteValid;
 
-- (void) shutdownButtonPressedAndReleased:(id)sender;
-- (void) shutdownButtonPressed:(id)sender;
-- (void) shutdownButtonReleased:(id)sender;
+- (void) powerButtonPressedAndReleased:(id)sender;
+- (void) powerButtonPressed:(id)sender;
+- (void) powerButtonReleased:(id)sender;
 - (void) resetButtonPressedAndReleased:(id)sender;
 - (void) resetButtonPressed:(id)sender;
 - (void) resetButtonReleased:(id)sender;

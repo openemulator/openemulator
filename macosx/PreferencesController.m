@@ -34,6 +34,8 @@
 
 - (void) windowDidLoad
 {
+	[super windowDidLoad];
+	
 	NSToolbar *toolbar = [[NSToolbar alloc] initWithIdentifier:@"Preferences Toolbar"];
 	NSString *selectedItemIdentifier = @"General";
 	
@@ -49,6 +51,7 @@
 	
 	NSView *view = [templateChooserViewController view];
 	[fTemplateChooserView addSubview:view];
+	[view setFrameSize:[fTemplateChooserView frame].size];
 	
 	[self updateUseDefaultTemplate];
 }

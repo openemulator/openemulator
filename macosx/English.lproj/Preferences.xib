@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="7.10">
 	<data>
-		<int key="IBDocument.SystemTarget">1060</int>
+		<int key="IBDocument.SystemTarget">1050</int>
 		<string key="IBDocument.SystemVersion">10B504</string>
-		<string key="IBDocument.InterfaceBuilderVersion">732</string>
+		<string key="IBDocument.InterfaceBuilderVersion">740</string>
 		<string key="IBDocument.AppKitVersion">1038.2</string>
 		<string key="IBDocument.HIToolboxVersion">437.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
-			<string key="NS.object.0">732</string>
+			<string key="NS.object.0">740</string>
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="23"/>
 			<integer value="28"/>
+			<integer value="23"/>
 			<integer value="2050"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
@@ -530,7 +530,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 							<int key="NSTitlePosition">0</int>
 							<bool key="NSTransparent">NO</bool>
 						</object>
-						<object class="NSCustomView" id="685284380">
+						<object class="NSCustomView" id="166163176">
 							<reference key="NSNextResponder" ref="851795274"/>
 							<int key="NSvFlags">274</int>
 							<string key="NSFrame">{{0, 61}, {600, 299}}</string>
@@ -649,14 +649,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<int key="connectionID">2081</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">fTemplateChooserView</string>
-						<reference key="source" ref="511492310"/>
-						<reference key="destination" ref="685284380"/>
-					</object>
-					<int key="connectionID">2084</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
 						<string key="label">chooseDefaultTemplate:</string>
 						<reference key="source" ref="511492310"/>
@@ -695,6 +687,14 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<reference key="destination" ref="28376548"/>
 					</object>
 					<int key="connectionID">2089</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">fTemplateChooserView</string>
+						<reference key="source" ref="511492310"/>
+						<reference key="destination" ref="166163176"/>
+					</object>
+					<int key="connectionID">2091</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -890,7 +890,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 							<reference ref="28376548"/>
 							<reference ref="257632565"/>
 							<reference ref="723529837"/>
-							<reference ref="685284380"/>
+							<reference ref="166163176"/>
 						</object>
 						<reference key="parent" ref="495246826"/>
 					</object>
@@ -942,8 +942,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<reference key="parent" ref="859841711"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">2083</int>
-						<reference key="object" ref="685284380"/>
+						<int key="objectID">2090</int>
+						<reference key="object" ref="166163176"/>
 						<reference key="parent" ref="851795274"/>
 					</object>
 				</object>
@@ -987,7 +987,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<string>2067.IBPluginDependency</string>
 					<string>2068.IBPluginDependency</string>
 					<string>2069.IBPluginDependency</string>
-					<string>2083.IBPluginDependency</string>
+					<string>2090.IBPluginDependency</string>
 					<string>23.IBEditorWindowLastContentRect</string>
 					<string>23.IBPluginDependency</string>
 					<string>23.IBWindowTemplateEditedContentRect</string>
@@ -1032,9 +1032,9 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<real value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{151, 88}, {600, 400}}</string>
+					<string>{{184, 176}, {600, 400}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{151, 88}, {600, 400}}</string>
+					<string>{{184, 176}, {600, 400}}</string>
 					<boolean value="NO"/>
 					<boolean value="YES"/>
 					<string>{600, 400}</string>
@@ -1085,7 +1085,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">2089</int>
+			<int key="maxID">2091</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -1256,7 +1256,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 		<int key="IBDocument.localizationMode">0</int>
 		<object class="NSMutableDictionary" key="IBDocument.PluginDeclaredDependencyDefaults">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin.macosx</string>
-			<integer value="1060" key="NS.object.0"/>
+			<integer value="1050" key="NS.object.0"/>
 		</object>
 		<object class="NSMutableDictionary" key="IBDocument.PluginDeclaredDevelopmentDependencies">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin.InterfaceBuilder3</string>

@@ -397,19 +397,19 @@
 	return [pasteboard availableTypeFromArray:pasteboardTypes] != nil;
 }
 
-- (void) shutdownButtonPressedAndReleased:(id) sender
+- (void) powerButtonPressedAndReleased:(id) sender
 {
-	[self shutdownButtonPressed:sender];
-	[self shutdownButtonReleased:sender];
+	[self powerButtonPressed:sender];
+	[self powerButtonReleased:sender];
 }
 
-- (void) shutdownButtonPressed:(id) sender
+- (void) powerButtonPressed:(id) sender
 {
 	// To-Do: libemulation
 	[self setPower:![self power]];
 }
 
-- (void) shutdownButtonReleased:(id) sender
+- (void) powerButtonReleased:(id) sender
 {
 	// To-Do: libemulation
 }

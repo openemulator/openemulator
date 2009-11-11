@@ -21,6 +21,8 @@
 
 - (void) windowDidLoad
 {
+	[super windowDidLoad];
+	
 	[self setWindowFrameAutosaveName:@"PaperFeed"];
 }
 

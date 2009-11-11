@@ -46,12 +46,15 @@
 							   != nil)];
 }
 
-- (void) awakeFromNib
+- (void) windowDidLoad
 {
+	[super windowDidLoad];
+	
 	[self setWindowFrameAutosaveName:@"TemplateChooser"];
 	
 	NSView *view = [templateChooserViewController view];
 	[fTemplateChooserView addSubview:view];
+	[view setFrameSize:[fTemplateChooserView frame].size];
 	
 	[self updateTemplateChooser];
 }

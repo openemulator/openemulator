@@ -168,6 +168,12 @@
 	}
 }
 
+- (void) setHalfSize:(id) sender
+{
+	if (!fullscreen)
+		[self setFrameSize:0.5];
+}
+
 - (void) setActualSize:(id) sender
 {
 	if (!fullscreen)

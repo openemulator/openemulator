@@ -36,10 +36,17 @@
 	if (self = [super init])
 	{
 		dmlInfo = *info;
-		path = thePath;
+		path = [thePath copy];
 	}
 	
 	return self;
+}
+
+- (void) dealloc
+{
+	[super dealloc];
+	
+	[path release];
 }
 
 - (OEDMLInfo *) dmlInfo
@@ -99,17 +106,16 @@
 															  atPath:devicePath];
 		[deviceInfos addObject:deviceInfo];
 	}
-	
-	[self updateDevicesWithOutlets:nil
-					 andOutletType:nil];
 }
 
-- (void) updateDevicesWithOutlets:(NSArray *)availableInletNames
-					andOutletType:(NSString *)type
+- (void) updateForInlets:(NSArray *)inlets
 {
 	NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
 	NSString *imagesPath = [resourcePath
 							stringByAppendingPathComponent:@"images"];
+	
+	[groups removeAllObjects];
+	[groupNames removeAllObjects];
 	
 	int count = [deviceInfos count];
 	for (int i = 0; i < count; i++)

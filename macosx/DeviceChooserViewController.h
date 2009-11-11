@@ -17,8 +17,6 @@
 	NSMutableArray *deviceInfos;
 }
 
-
-- (void) updateDevicesWithOutlets:(NSArray *)availableInletNames
-					andOutletType:(NSString *)type;
+- (void) updateForInlets:(NSArray *)inlets;
 
 @end

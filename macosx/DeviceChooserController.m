@@ -38,6 +38,8 @@
 	
 	[[self window] center];
 	
+	[deviceChooserViewController updateForInlets:nil];
+
 	[fPreviousButton setEnabled:NO];
 	[fNextButton setEnabled:([deviceChooserViewController selectedItemPath]
 							 != nil)];
@@ -47,21 +49,24 @@
 					   @"Choose a template for your new expansion")];
 }
 
-- (void) awakeFromNib
+- (void) windowDidLoad
 {
+	[super windowDidLoad];
+	
 	[self setWindowFrameAutosaveName:@"DeviceChooser"];
 	
 	NSView *view = [deviceChooserViewController view];
 	[fChooserView addSubview:view];
+	[view setFrameSize:[fChooserView frame].size];
 	
 	[self updateDeviceChooser];
 }
 
 - (void) showWindow:(id) sender
 {
-	[self updateDeviceChooser];
-	
 	[super showWindow:sender];
+	
+	[self updateDeviceChooser];
 }
 
 - (void) runModal:(id) sender

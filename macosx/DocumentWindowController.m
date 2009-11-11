@@ -49,15 +49,15 @@
 		return nil;
 	
 	[item autorelease];
-	if ([ident isEqualToString:@"Shutdown"])
+	if ([ident isEqualToString:@"Power"])
 	{
-		[item setLabel:NSLocalizedString(@"Shut Down",
+		[item setLabel:NSLocalizedString(@"Power",
 										 "Document toolbar item label")];
-		[item setToolTip:NSLocalizedString(@"Shut the emulation on or off.",
+		[item setToolTip:NSLocalizedString(@"Power the emulation on or off.",
 										   "Document toolbar item label")];
 		[item setImage:[NSImage imageNamed:@"TBShutdown.png"]];
 		[item setTarget:document];
-		[item setAction:@selector(shutdownButtonPressed:)];
+		[item setAction:@selector(powerButtonPressedAndReleased:)];
 	}
 	else if ([ident isEqualToString:@"Reset"])
 	{
@@ -66,7 +66,7 @@
 										   "Document toolbar item label")];
 		[item setImage:[NSImage imageNamed:@"TBRestart.png"]];
 		[item setTarget:document];
-		[item setAction:@selector(resetButtonPressed:)];
+		[item setAction:@selector(resetButtonPressedAndReleased:)];
 	}
 	else if ([ident isEqualToString:@"Pause"])
 	{
@@ -75,12 +75,12 @@
 										   "Document toolbar item label")];
 		[item setImage:[NSImage imageNamed:@"TBSleep.png"]];
 		[item setTarget:document];
-		[item setAction:@selector(pauseButtonPressed:)];
+		[item setAction:@selector(pauseButtonPressedAndReleased:)];
 	}
-	else if ([ident isEqualToString:@"Inspector"])
+	else if ([ident isEqualToString:@"Info"])
 	{
-		[item setLabel:NSLocalizedString(@"Inspector", "Document toolbar item label")];
-		[item setToolTip:NSLocalizedString(@"Show or hide the inspector window.",
+		[item setLabel:NSLocalizedString(@"Info", "Document toolbar item label")];
+		[item setToolTip:NSLocalizedString(@"Get Info.",
 										   "Document toolbar item label")];
 		[item setImage:[NSImage imageNamed:@"TBInspector.png"]];
 		[item setTarget:self];
@@ -92,12 +92,12 @@
 
 - (NSArray *) toolbarDefaultItemIdentifiers:(NSToolbar *) toolbar
 {
-	return [NSArray arrayWithObjects:@"Shutdown",
+	return [NSArray arrayWithObjects:@"Power",
 			NSToolbarSpaceItemIdentifier,
 			@"Reset",
 			@"Pause",
 			NSToolbarFlexibleSpaceItemIdentifier,
-			@"Inspector",
+			@"Info",
 			nil];
 }
 
