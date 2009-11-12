@@ -10,6 +10,7 @@
 
 #import "Document.h"
 #import "DocumentWindowController.h"
+#import "InfoWindowController.h"
 
 #import "OEEmulator.h"
 #import "OEParser.h"
@@ -369,8 +370,12 @@
 - (void) makeWindowControllers
 {
 	NSWindowController *windowController;
-	windowController = [[DocumentWindowController alloc] init];
 	
+	windowController = [[DocumentWindowController alloc] init];
+	[self addWindowController:windowController];
+	[windowController release];
+
+	windowController = [[InfoWindowController alloc] init];
 	[self addWindowController:windowController];
 	[windowController release];
 }

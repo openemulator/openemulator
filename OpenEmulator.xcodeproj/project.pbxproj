@@ -11,6 +11,8 @@
 		00123BCC1069B8F200FB95A1 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 00E2A84D1053290200910B53 /* libxml2.dylib */; };
 		001F56F90FD1E8E500EA246A /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 001F56F80FD1E8E500EA246A /* Sparkle.framework */; };
 		003E25E71070796700185260 /* images in Resources */ = {isa = PBXBuildFile; fileRef = 003E2597107075D900185260 /* images */; };
+		0040605F10ABB06A00B4A33F /* InfoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0040605E10ABB06A00B4A33F /* InfoController.m */; };
+		0040606D10ABB34400B4A33F /* InfoWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0040606C10ABB34400B4A33F /* InfoWindowController.m */; };
 		0043806410669AFB001CFCCF /* Package.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0043804C10668FAE001CFCCF /* Package.cpp */; };
 		004384841067641C001CFCCF /* EventController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 004384821067641C001CFCCF /* EventController.cpp */; };
 		0044A6AA10A77572008C3EE4 /* ButtonBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 0044A6A510A77572008C3EE4 /* ButtonBackground.png */; };
@@ -161,6 +163,10 @@
 		001F56F80FD1E8E500EA246A /* Sparkle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = Sparkle.framework; path = macosx/Sparkle.framework; sourceTree = "<group>"; };
 		00317E380FD31D1A007F2B00 /* AppleGraphicsTablet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppleGraphicsTablet.png; sourceTree = "<group>"; };
 		003E2597107075D900185260 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
+		0040605D10ABB06A00B4A33F /* InfoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoController.h; sourceTree = "<group>"; };
+		0040605E10ABB06A00B4A33F /* InfoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfoController.m; sourceTree = "<group>"; };
+		0040606B10ABB34400B4A33F /* InfoWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoWindowController.h; sourceTree = "<group>"; };
+		0040606C10ABB34400B4A33F /* InfoWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfoWindowController.m; sourceTree = "<group>"; };
 		0043804C10668FAE001CFCCF /* Package.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Package.cpp; path = libemulator/Package.cpp; sourceTree = "<group>"; };
 		0043804D10668FAE001CFCCF /* Package.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Package.h; path = libemulator/Package.h; sourceTree = "<group>"; };
 		004384821067641C001CFCCF /* EventController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EventController.cpp; path = libemulator/Components/EventController.cpp; sourceTree = "<group>"; };
@@ -500,6 +506,10 @@
 				00FE0C041095353B00B92AB7 /* TemplateChooserViewController.h */,
 				00FE0C051095353B00B92AB7 /* TemplateChooserViewController.mm */,
 				00FE0C071095354300B92AB7 /* DeviceChooserViewController.h */,
+				0040605D10ABB06A00B4A33F /* InfoController.h */,
+				0040605E10ABB06A00B4A33F /* InfoController.m */,
+				0040606B10ABB34400B4A33F /* InfoWindowController.h */,
+				0040606C10ABB34400B4A33F /* InfoWindowController.m */,
 			);
 			path = macosx;
 			sourceTree = "<group>";
@@ -717,6 +727,8 @@
 				00FE0C061095353B00B92AB7 /* TemplateChooserViewController.mm in Sources */,
 				00FE0C171095371B00B92AB7 /* ChooserViewController.m in Sources */,
 				00FE0C6310953F7000B92AB7 /* DeviceChooserViewController.mm in Sources */,
+				0040605F10ABB06A00B4A33F /* InfoController.m in Sources */,
+				0040606D10ABB34400B4A33F /* InfoWindowController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -891,7 +903,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = "";
 				FRAMEWORK_SEARCH_PATHS = (
