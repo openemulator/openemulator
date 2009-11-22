@@ -67,7 +67,7 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 - (void) applicationWillFinishLaunching:(NSNotification *) notification
 {
 	//	printf("applicationWillFinishLaunching\n");
-//	[fInspectorController restoreWindowState:self];
+	[fInspectorController restoreWindowState:self];
 	
 /*	int error;
 	if ((error = Pa_Initialize()) == paNoError)
@@ -126,7 +126,7 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 	//	printf("applicationWillTerminate\n");
 //	Pa_Terminate();
 	
-//	[fInspectorController storeWindowState:self];
+	[fInspectorController storeWindowState:self];
 }
 
 - (BOOL) validateUserInterfaceItem:(id) item

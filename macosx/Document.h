@@ -30,13 +30,6 @@
 	NSMutableArray *diskDrives;
 	NSMutableArray *peripherals;
 	
-	NSNumber *brightness;
-	NSNumber *contrast;
-	NSNumber *sharpness;
-	NSNumber *saturation;
-	NSNumber *temperature;
-	NSNumber *tint;
-	
 	NSNumber *volume;
 
 	BOOL power;
@@ -86,19 +79,6 @@
 - (NSMutableArray *) peripherals;
 - (void) insertObject:(id) value inPeripheralsAtIndex:(NSUInteger) index;
 - (void) removeObjectFromPeripheralsAtIndex:(NSUInteger) index;
-
-- (NSNumber *) brightness;
-- (void) setBrightness:(NSNumber *) value;
-- (NSNumber *) contrast;
-- (void) setContrast:(NSNumber *) value;
-- (NSNumber *) sharpness;
-- (void) setSharpness:(NSNumber *) value;
-- (NSNumber *) saturation;
-- (void) setSaturation:(NSNumber *) value;
-- (NSNumber *) temperature;
-- (void) setTemperature:(NSNumber *) value;
-- (NSNumber *) tint;
-- (void) setTint:(NSNumber *) value;
 
 - (NSNumber *) volume;
 - (void) setVolume:(NSNumber *) value;

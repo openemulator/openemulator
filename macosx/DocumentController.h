@@ -20,6 +20,7 @@
 
 @interface DocumentController : NSDocumentController {
 	IBOutlet id fTemplateChooserController;
+	IBOutlet id fInspectorController;
 	
 	NSArray *fileTypes;
 	

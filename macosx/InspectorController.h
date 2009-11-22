@@ -22,7 +22,6 @@
 	IBOutlet NSView *fExpansionsView;
 	IBOutlet NSView *fDiskDrivesView;
 	IBOutlet NSView *fPeripheralsView;
-	IBOutlet NSView *fVideoView;
 	IBOutlet NSView *fAudioView;
 	
 	int selectedViewIndex;

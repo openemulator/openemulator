@@ -17,7 +17,6 @@ NSString *itemIdentifiers[] =
 	@"Expansions",
 	@"Disk Drives",
 	@"Peripherals",
-	@"Video",
 	@"Audio",
 };
 
@@ -144,8 +143,6 @@ NSString *itemIdentifiers[] =
 		case 3:
 			return fPeripheralsView;
 		case 4:
-			return fVideoView;
-		case 5:
 			return fAudioView;
 	}
 	

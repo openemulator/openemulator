@@ -10,7 +10,6 @@
 
 #import "Document.h"
 #import "DocumentWindowController.h"
-#import "InfoWindowController.h"
 
 #import "OEEmulator.h"
 #import "OEParser.h"
@@ -276,13 +275,6 @@
 			
 			[self updateDevices];
 			
-			[self setBrightness:[NSNumber numberWithFloat:0.0F]];
-			[self setContrast:[NSNumber numberWithFloat:0.0F]];
-			[self setSharpness:[NSNumber numberWithFloat:0.0F]];
-			[self setSaturation:[NSNumber numberWithFloat:0.0F]];
-			[self setTemperature:[NSNumber numberWithFloat:0.0F]];
-			[self setTint:[NSNumber numberWithFloat:0.0F]];
-			
 			[self setVolume:[NSNumber numberWithFloat:1.0F]];
 			
 			return YES;
@@ -372,10 +364,6 @@
 	NSWindowController *windowController;
 	
 	windowController = [[DocumentWindowController alloc] init];
-	[self addWindowController:windowController];
-	[windowController release];
-
-	windowController = [[InfoWindowController alloc] init];
 	[self addWindowController:windowController];
 	[windowController release];
 }
@@ -628,108 +616,6 @@
 - (void) removeObjectFromPeripheralsAtIndex:(NSUInteger) index
 {
     [peripherals removeObjectAtIndex:index];
-}
-
-- (NSNumber *) brightness
-{
-	return [[brightness retain] autorelease];
-}
-
-- (void) setBrightness:(NSNumber *) value
-{
-    if (brightness != value)
-	{
-		if (brightness)
-			[self updateChangeCount:NSChangeDone];
-		
-        [brightness release];
-        brightness = [value copy];
-    }
-}
-
-- (NSNumber *) contrast
-{
-	return [[contrast retain] autorelease];
-}
-
-- (void) setContrast:(NSNumber *) value
-{
-    if (contrast != value)
-	{
-		if (contrast)
-			[self updateChangeCount:NSChangeDone];
-		
-        [contrast release];
-        contrast = [value copy];
-    }
-}
-
-- (NSNumber *) sharpness
-{
-	return [[sharpness retain] autorelease];
-}
-
-- (void) setSharpness:(NSNumber *) value
-{
-    if (sharpness != value)
-	{
-		if (sharpness)
-			[self updateChangeCount:NSChangeDone];
-		
-        [sharpness release];
-        sharpness = [value copy];
-    }
-}
-
-- (NSNumber *) saturation
-{
-	return [[saturation retain] autorelease];
-}
-
-- (void) setSaturation:(NSNumber *) value
-{
-    if (saturation != value)
-	{
-		if (saturation)
-			[self updateChangeCount:NSChangeDone];
-		
-        [saturation release];
-        saturation = [value copy];
-    }
-}
-
-- (NSNumber *) temperature
-{
-	return [[temperature retain] autorelease];
-}
-
-- (void) setTemperature:(NSNumber *) value
-{
-    if (temperature != value)
-	{
-		if (temperature)
-			[self updateChangeCount:NSChangeDone];
-		
-        [temperature release];
-        temperature = [value copy];
-    }
-}
-
-- (NSNumber *) tint
-{
-	return [[tint retain] autorelease];
-}
-
-- (void) setTint:(NSNumber *) value
-{
-    if (tint != value)
-	{
-		if (tint)
-			[self updateChangeCount:NSChangeDone];
-		
-        [tint release];
-        tint = [value copy];
-    }
 }
 
 - (NSNumber *) volume

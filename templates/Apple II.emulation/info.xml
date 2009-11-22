@@ -9,13 +9,6 @@
         <property key="volume" value="1.0" />
     </component>
     <component name="video" class="VideoController">
-        <property key="window" value="100 100 640 480 1440 900" />
-        <property key="brightness" value="0.0" />
-        <property key="contrast" value="0.0" />
-        <property key="sharpness" value="0.0" />
-        <property key="saturation" value="0.0" />
-        <property key="temperature" value="0.0" />
-        <property key="tint" value="0.0" />
     </component>
     <component name="keyboard" class="KeyboardController">
     </component>
@@ -38,7 +31,8 @@
     <inlet ref="iou.slot7" type="expansion" subtype="appleiislot" label="Slot 7" image="Apple II Slot.png" />
     <inlet ref="game.port" type="peripheral" subtype="appleiigame" label="Game Port" image="Apple II Game Port.png" />
     <inlet ref="events.cpuSocket" type="expansion" subtype="appleiicpu" label="CPU Socket" image="Apple II CPU Chip Socket.png" />
-    <inlet ref="tvOutput.socket" type="expansion" subtype="appleiicharrom" label="Character ROM Socket" image="Apple II Character ROM Socket.png" />
+    <inlet ref="videoGen.charROMSocket" type="expansion" subtype="appleiicharrom" label="Character ROM Socket" image="Apple II Character ROM Socket.png" />
+    <inlet ref="videoGen.monitor" type="peripheral" subtype="appleiimonitor" label="Video Connector" image="Apple II Video Connector.png" />
     <inlet ref="rom.socket" type="expansion" subtype="appleiirom" label="ROM Socket" image="Apple II ROM Socket.png" />
     <component name="events" class="AppleIIEvents">
         <connection key="hostEvents" ref="host::events" />
@@ -123,10 +117,10 @@
         <connection key="hostAudio" ref="host::audio" />
         <connection key="game" ref="game" />
     </component>
-    <component name="tvOutput" class="AppleIITVOutput">
-        <connection key="hostVideo" ref="host::video" />
-        <connection key="socket" ref="" />
-        <resource key="romImage" src="roms/Apple II Video US ROM.bin" />
+    <component name="videoGen" class="AppleIIVideoGen">
+        <connection key="charROMSocket" ref="" />
+        <connection key="monitor" ref="dev5::monitor" />
+        <resource key="charROMImage" src="roms/Apple II Video US ROM.bin" />
     </component>
 </device>
 
@@ -207,6 +201,13 @@
         <resource key="soundArm" src="sounds/Apple Disk II Arm.wav" />
         <resource key="soundStop" src="sounds/Apple Disk II Stop.wav" />
         <resource key="soundShake" src="sounds/Apple Disk II Shake.wav" />
+    </component>
+</device>
+
+<device name="dev5" label="Apple Monitor //" image="Apple Monitor II.png">
+    <outlet ref="monitor" type="peripheral" subtype="appleiimonitor" />
+    <component name="monitor" class="AppleMonitorII">
+        <connection key="joystick" ref="host::video" />
     </component>
 </device>
 
