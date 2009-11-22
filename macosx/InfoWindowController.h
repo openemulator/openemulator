@@ -13,9 +13,9 @@
 #import "Document.h"
 #import "DocumentController.h"
 
-@interface InfoWindowController : NSObject
+@interface InfoWindowController : NSWindowController
 {
-	IBOutlet id fDocumentView;
+	IBOutlet id fInfoView;
 	
 	Document *document;
 	DocumentController *documentController;

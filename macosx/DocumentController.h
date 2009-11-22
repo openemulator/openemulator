@@ -12,7 +12,6 @@
 
 #import "portaudio.h"
 #import "TemplateChooserController.h"
-#import "InspectorController.h"
 
 #define LINK_HOMEPAGE	@"http://www.openemulator.org"
 #define LINK_FORUMSURL	@"http://groups.google.com/group/openemulator"
@@ -21,7 +20,6 @@
 
 @interface DocumentController : NSDocumentController {
 	IBOutlet id fTemplateChooserController;
-	IBOutlet id fInspectorController;
 	
 	NSArray *fileTypes;
 	
