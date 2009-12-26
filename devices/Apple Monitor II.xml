@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dml PUBLIC "-//OPENEMULATOR//DTD DML 1.0//EN" "http://www.openemulator.org/DTDs/dml-1.0.dtd">
+<dml version="1.0" label="Apple Monitor II" image="Apple Monitor II.png" group="Monitors">
+
+<device name="dev0" label="Apple Monitor II" image="Apple Monitor II.png">
+    <outlet ref="monitor" type="peripheral" subtype="appleiivideo" />
+    <component name="monitor" class="AppleMonitorII">
+    </component>
+</device>
+
+</dml>
