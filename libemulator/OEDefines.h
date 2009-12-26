@@ -17,9 +17,6 @@
 #define OE_SUBSTITUTION_DEVICE_NAME "${DEVICE_NAME}"
 #define OE_PATH_SEPARATOR "/"
 
-#define OE_DEVICE_SEP "::"
-#define OE_COMPONENT_SEP "."
-
 #define OE_DML_FILENAME "info.xml"
 
 enum {
