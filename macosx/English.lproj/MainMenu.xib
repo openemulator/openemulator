@@ -855,11 +855,11 @@
 			<object class="NSCustomObject" id="976629">
 				<string key="NSClassName">TemplateChooserController</string>
 			</object>
-			<object class="NSCustomObject" id="826139144">
-				<string key="NSClassName">PreferencesController</string>
-			</object>
 			<object class="NSCustomObject" id="78716432">
 				<string key="NSClassName">DeviceChooserController</string>
+			</object>
+			<object class="NSCustomObject" id="826139144">
+				<string key="NSClassName">PreferencesController</string>
 			</object>
 			<object class="NSCustomObject" id="965091180">
 				<string key="NSClassName">PaperFeedController</string>

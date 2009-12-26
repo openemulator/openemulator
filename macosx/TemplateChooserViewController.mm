@@ -8,9 +8,11 @@
  * Implements a template chooser view controller.
  */
 
+#import <string>
+
 #import "TemplateChooserViewController.h"
 
-#import "OEParser.h"
+#import "OEInfo.h"
 
 #import "ChooserItem.h"
 #import "Document.h"
@@ -33,35 +35,33 @@
 	{
 		NSString *templateFilename = [templateFilenames objectAtIndex:i];
 		NSString *templatePath = [path stringByAppendingPathComponent:templateFilename];
-		string templatePathString = string([templatePath UTF8String]);
-		OEParser parser(templatePathString);
-		if (!parser.isOpen())
-			continue;
-		
-		NSString *label = [templateFilename stringByDeletingPathExtension];
-		
-		OEDMLInfo *dmlInfo = parser.getDMLInfo();
-		NSString *imageName = [NSString stringWithUTF8String:dmlInfo->image.c_str()];
-		NSString *description = [NSString stringWithUTF8String:dmlInfo->description.c_str()];
-		NSString *groupName = [NSString stringWithUTF8String:dmlInfo->group.c_str()];
-		
-		if (theGroupName)
-			groupName = theGroupName;
-		
-		if (![groups objectForKey:groupName])
+		OEInfo info(string([templatePath UTF8String]));
+		if (info.isLoaded())
 		{
-			NSMutableArray *group = [[[NSMutableArray alloc] init] autorelease];
-			[groups setObject:group forKey:groupName];
+			NSString *label = [templateFilename stringByDeletingPathExtension];
+			NSString *imageName = [NSString stringWithUTF8String:info.getImage().c_str()];
+			NSString *description = [NSString stringWithUTF8String:info.getDescription().c_str()];
+			NSString *groupName = [NSString stringWithUTF8String:info.getGroup().c_str()];
+			
+			if (theGroupName)
+				groupName = theGroupName;
+			
+			if (![groups objectForKey:groupName])
+			{
+				NSMutableArray *group = [[[NSMutableArray alloc] init] autorelease];
+				[groups setObject:group forKey:groupName];
+			}
+			NSString *imagePath = [imagesPath stringByAppendingPathComponent:imageName];
+			ChooserItem *item = [[ChooserItem alloc] initWithItem:templatePath
+															label:label
+														imagePath:imagePath
+													  description:description];
+			if (item)
+			{
+				[item autorelease];
+				[[groups objectForKey:groupName] addObject:item];
+			}
 		}
-		NSString *imagePath = [imagesPath stringByAppendingPathComponent:imageName];
-		ChooserItem *item = [[ChooserItem alloc] initWithItem:templatePath
-														label:label
-													imagePath:imagePath
-												  description:description];
-		if (item)
-			[item autorelease];
-		
-		[[groups objectForKey:groupName] addObject:item];
 	}
 }
 

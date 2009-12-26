@@ -11,8 +11,8 @@
 #import "Document.h"
 #import "DocumentWindowController.h"
 
-#import "OEEmulator.h"
-#import "OEParser.h"
+#import "OEEmulation.h"
+#import "OEInfo.h"
 
 @implementation Document
 
@@ -37,9 +37,6 @@
 		expansions = [[NSMutableArray alloc] init];
 		diskDrives = [[NSMutableArray alloc] init];
 		peripherals = [[NSMutableArray alloc] init];
-		
-		// To-Do: [self setVideoPreset:x];
-		volume = nil;
 	}
 	
 	return self;
@@ -67,7 +64,7 @@
 {
 //	printf("dealloc\n");
 	if (emulation)
-		delete (OEEmulator *) emulation;
+		delete (OEEmulation *) emulation;
 	
 	[pasteboardTypes release];
 	
@@ -83,7 +80,7 @@
 	if (!emulation)
 		return;
 	
-	xmlDocPtr dml = ((OEEmulator *) emulation)->getDML();
+	xmlDocPtr dml = ((OEEmulation *) emulation)->getDML();
 	
 	xmlNodePtr rootNode = xmlDocGetRootElement(dml);
 	
@@ -95,7 +92,7 @@
 	if (!emulation)
 		return nil;
 	
-	xmlDocPtr dml = ((OEEmulator *) emulation)->getDML();
+	xmlDocPtr dml = ((OEEmulation *) emulation)->getDML();
 	
 	xmlNodePtr rootNode = xmlDocGetRootElement(dml);
 	
@@ -116,7 +113,7 @@
 	property.key = string([key UTF8String]);
 	property.value = string([value UTF8String]);
 	
-	((OEEmulator *)emulation)->ioctl(string([ref UTF8String]),
+	((OEEmulation *)emulation)->ioctl(string([ref UTF8String]),
 									  OEIoctlSetProperty,
 									  &property);
 }
@@ -130,7 +127,7 @@
 	
 	msg.key = string([key UTF8String]);
 	
-	if (((OEEmulator *)emulation)->ioctl(string([ref UTF8String]),
+	if (((OEEmulation *)emulation)->ioctl(string([ref UTF8String]),
 									  OEIoctlGetProperty,
 									  &msg))
 		return [NSString stringWithUTF8String:msg.value.c_str()];
@@ -205,10 +202,6 @@
 
 - (void) updateDevices
 {
-	OEParser parser(((OEEmulator *) emulation)->getDML());
-	if (!parser.isOpen())
-		return;
-	
 	[expansions release];
 	expansions = [[NSMutableArray alloc] init];
 	[diskDrives release];
@@ -216,13 +209,18 @@
 	[peripherals release];
 	peripherals = [[NSMutableArray alloc] init];
 	
-	OEDMLInfo *dmlInfo = parser.getDMLInfo();
+	xmlDocPtr dmlDocPtr = ((OEEmulation *) emulation)->getDML();
+	OEInfo info(dmlDocPtr);
+	if (!info.isLoaded())
+		return;
+	
+	OEPorts *outlets = info.getOutlets();
 	
 	int expansionIndex = 0;
 	int diskDriveIndex = 0;
 	int peripheralIndex = 0;
-	for (OEPortsInfo::iterator o = dmlInfo->outlets.begin();
-		 o != dmlInfo->outlets.end();
+	for (OEPorts::iterator o = outlets->begin();
+		 o != outlets->end();
 		 o++)
 	{
 		NSString *imagePath = [NSString stringWithUTF8String:o->image.c_str()];
@@ -259,13 +257,13 @@
 	const char *resourcePath = [[[NSBundle mainBundle] resourcePath] UTF8String];
 	
 	if (emulation)
-		delete (OEEmulator *)emulation;
+		delete (OEEmulation *)emulation;
 	
-	emulation = (void *)new OEEmulator(emulationPath, resourcePath);
+	emulation = (void *)new OEEmulation(emulationPath, resourcePath);
 	
 	if (emulation)
 	{
-		if (((OEEmulator *)emulation)->isOpen())
+		if (((OEEmulation *)emulation)->isOpen())
 		{
 			[self setLabel:[self getDMLProperty:@"label"]];
 			[self setGroup:[self getDMLProperty:@"group"]];
@@ -275,12 +273,10 @@
 			
 			[self updateDevices];
 			
-			[self setVolume:[NSNumber numberWithFloat:1.0F]];
-			
 			return YES;
 		}
 		
-		delete (OEEmulator *)emulation;
+		delete (OEEmulation *)emulation;
 		emulation = NULL;
 	}
 	
@@ -299,7 +295,7 @@
 								 UTF8String];
 	if (emulation)
 	{
-		if (((OEEmulator *)emulation)->save(string(emulationPath)))
+		if (((OEEmulation *)emulation)->save(string(emulationPath)))
 			return YES;
 	}
 	
@@ -616,23 +612,6 @@
 - (void) removeObjectFromPeripheralsAtIndex:(NSUInteger) index
 {
     [peripherals removeObjectAtIndex:index];
-}
-
-- (NSNumber *) volume
-{
-	return [[volume retain] autorelease];
-}
-
-- (void) setVolume:(NSNumber *) value
-{
-    if (volume != value)
-	{
-		if (volume)
-			[self updateChangeCount:NSChangeDone];
-		
-        [volume release];
-        volume = [value copy];
-    }
 }
 
 @end

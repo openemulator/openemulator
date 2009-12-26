@@ -12,12 +12,12 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="1392"/>
-			<integer value="186"/>
 			<integer value="679"/>
+			<integer value="185"/>
 			<integer value="1173"/>
 			<integer value="165"/>
-			<integer value="185"/>
+			<integer value="186"/>
+			<integer value="1392"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -69,7 +69,7 @@
 							<object class="NSMutableArray" key="NSCells">
 								<bool key="EncodedWithXMLCoder">YES</bool>
 								<object class="NSButtonCell" id="72949216">
-									<int key="NSCellFlags">-2080244224</int>
+									<int key="NSCellFlags">67239424</int>
 									<int key="NSCellFlags2">0</int>
 									<string key="NSContents"/>
 									<object class="NSFont" key="NSSupport" id="911500604">
@@ -235,7 +235,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 								<int key="NSPeriodicDelay">400</int>
 								<int key="NSPeriodicInterval">75</int>
 							</object>
-							<reference key="NSSelectedCell" ref="72949216"/>
+							<int key="NSSelectedCol">3</int>
+							<reference key="NSSelectedCell" ref="292200284"/>
 							<object class="NSColor" key="NSBackgroundColor" id="88397357">
 								<int key="NSColorSpace">6</int>
 								<string key="NSCatalogName">System</string>
@@ -1525,26 +1526,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						</object>
 					</object>
 					<int key="connectionID">965</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: selection.volume</string>
-						<reference key="source" ref="374127453"/>
-						<reference key="destination" ref="834901026"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="374127453"/>
-							<reference key="NSDestination" ref="834901026"/>
-							<string key="NSLabel">value: selection.volume</string>
-							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">selection.volume</string>
-							<object class="NSDictionary" key="NSOptions">
-								<string key="NS.key.0">NSNoSelectionPlaceholder</string>
-								<real value="1" key="NS.object.0"/>
-							</object>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">998</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
@@ -3243,7 +3224,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<object class="IBToolTipAttribute" key="NS.object.0">
 							<string key="name">ToolTip</string>
 							<reference key="object" ref="292200284"/>
-							<string key="toolTip">Printers and Modems inspector</string>
+							<string key="toolTip">Peripherals inspector</string>
 						</object>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3326,7 +3307,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<object class="IBToolTipAttribute" key="NS.object.0">
 							<string key="name">ToolTip</string>
 							<reference key="object" ref="367717054"/>
-							<string key="toolTip">Video inspector</string>
+							<string key="toolTip">Audio inspector</string>
 						</object>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>

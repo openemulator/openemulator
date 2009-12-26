@@ -30,8 +30,6 @@
 	NSMutableArray *diskDrives;
 	NSMutableArray *peripherals;
 	
-	NSNumber *volume;
-
 	BOOL power;
 	int videoPreset;
 }
@@ -79,8 +77,5 @@
 - (NSMutableArray *) peripherals;
 - (void) insertObject:(id) value inPeripheralsAtIndex:(NSUInteger) index;
 - (void) removeObjectFromPeripheralsAtIndex:(NSUInteger) index;
-
-- (NSNumber *) volume;
-- (void) setVolume:(NSNumber *) value;
 
 @end

@@ -45,8 +45,8 @@
 							 != nil)];
 	
 	[fMessage setStringValue:
-	 NSLocalizedString(@"Choose a template for your new expansion:",
-					   @"Choose a template for your new expansion")];
+	 NSLocalizedString(@"Choose a template for your new device:",
+					   @"Choose a template for your new device:")];
 }
 
 - (void) windowDidLoad

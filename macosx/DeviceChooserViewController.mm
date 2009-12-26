@@ -10,32 +10,30 @@
 
 #import "DeviceChooserViewController.h"
 
-#import "OEParser.h"
+#import "OEInfo.h"
 
 #import "ChooserItem.h"
 #import "Document.h"
 
 @interface DeviceInfo : NSObject
 {
-	OEDMLInfo dmlInfo;
+	OEInfo *info;
 	NSString *path;
 }
 
-- (id) initWithDMLInfo:(OEDMLInfo *) info
-				atPath:(NSString *) path;
-- (OEDMLInfo *) dmlInfo;
+- (id) initWithPath:(NSString *) path;
+- (OEInfo *) info;
 - (NSString *) path;
 
 @end
 
 @implementation DeviceInfo
 
-- initWithDMLInfo:(OEDMLInfo *) info
-		   atPath:(NSString *) thePath;
+- initWithPath:(NSString *) thePath;
 {
 	if (self = [super init])
 	{
-		dmlInfo = *info;
+		info = new OEInfo(string([thePath UTF8String]));
 		path = [thePath copy];
 	}
 	
@@ -46,12 +44,13 @@
 {
 	[super dealloc];
 	
+	delete info;
 	[path release];
 }
 
-- (OEDMLInfo *) dmlInfo
+- (OEInfo *) info
 {
-	return &dmlInfo;
+	return info;
 }
 
 - (NSString *) path
@@ -97,14 +96,12 @@
 		NSString *deviceFilename = [deviceFilenames objectAtIndex:i];
 		NSString *devicePath = [templatesPath
 								stringByAppendingPathComponent:deviceFilename];
-		OEParser parser(string([devicePath UTF8String]));
-		if (!parser.isOpen())
-			continue;
-		
-		OEDMLInfo *dmlInfo = parser.getDMLInfo();
-		DeviceInfo *deviceInfo = [[DeviceInfo alloc] initWithDMLInfo:dmlInfo
-															  atPath:devicePath];
-		[deviceInfos addObject:deviceInfo];
+		DeviceInfo *deviceInfo = [[DeviceInfo alloc] initWithPath:devicePath];
+		if (deviceInfo)
+		{
+			[deviceInfo autorelease];
+			[deviceInfos addObject:deviceInfo];
+		}
 	}
 }
 
@@ -121,12 +118,27 @@
 	for (int i = 0; i < count; i++)
 	{
 		DeviceInfo *deviceInfo = [deviceInfos objectAtIndex:i];
+		OEInfo *info = [deviceInfo info];
 		
-		OEDMLInfo *dmlInfo = [deviceInfo dmlInfo];
-		NSString *label = [NSString stringWithUTF8String:dmlInfo->label.c_str()];
-		NSString *imageName = [NSString stringWithUTF8String:dmlInfo->image.c_str()];
-		NSString *description = [NSString stringWithUTF8String:dmlInfo->description.c_str()];
-		NSString *groupName = [NSString stringWithUTF8String:dmlInfo->group.c_str()];
+		// 1: Copy available inlets
+		// 2: For every unconnected outlet in the device, remove the inlet
+		// 3: If the list ends up empty, we are ok
+/*		NSArray *testInlets = [NSArray arrayWithArray:inlets];
+		if (!testInlets)
+			continue;
+		
+		OEPorts *outlets = info->getOutlets();
+		for (OEPorts::iterator o = outlets.begin();
+			 o != outlets.end();
+			 o++)
+		{
+			if (
+		}
+*/		
+		NSString *label = [NSString stringWithUTF8String:info->getLabel().c_str()];
+		NSString *imageName = [NSString stringWithUTF8String:info->getImage().c_str()];
+		NSString *description = [NSString stringWithUTF8String:info->getDescription().c_str()];
+		NSString *groupName = [NSString stringWithUTF8String:info->getGroup().c_str()];
 		
 		if (![groups objectForKey:groupName])
 		{
