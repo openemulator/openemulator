@@ -42,10 +42,10 @@
 
 - (void) dealloc
 {
-	[super dealloc];
-	
 	delete info;
 	[path release];
+
+	[super dealloc];
 }
 
 - (OEInfo *) info
@@ -74,9 +74,9 @@
 
 - (void) dealloc
 {
-	[super dealloc];
-	
 	[deviceInfos release];
+
+	[super dealloc];
 }
 
 - (void) awakeFromNib

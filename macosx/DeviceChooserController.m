@@ -29,9 +29,9 @@
 
 - (void) dealloc
 {
-	[super dealloc];
-	
 	[deviceChooserViewController release];
+
+	[super dealloc];
 }
 
 - (void) updateDeviceChooser
@@ -85,12 +85,14 @@
 - (IBAction) performCancel:(id) sender
 {
 	[NSApp abortModal];
+	
 	[[self window] orderOut:self];
 }
 
 - (IBAction) performPrevious:(id) sender
 {
 	[NSApp abortModal];
+	
 	[[self window] orderOut:self];
 }
 

@@ -243,8 +243,6 @@
 		00EF028C107D9EFB00FE378D /* VerticallyCenteredCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VerticallyCenteredCell.m; sourceTree = "<group>"; };
 		00F009F90FD5838D00C506AD /* IPAudio.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPAudio.png; sourceTree = "<group>"; };
 		00F009FA0FD5838D00C506AD /* IPAudioSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPAudioSel.png; sourceTree = "<group>"; };
-		00F009FD0FD5838D00C506AD /* IPDiskDrives.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPDiskDrives.png; sourceTree = "<group>"; };
-		00F009FE0FD5838D00C506AD /* IPDiskDrivesSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPDiskDrivesSel.png; sourceTree = "<group>"; };
 		00F009FF0FD5838D00C506AD /* IPEmulation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPEmulation.png; sourceTree = "<group>"; };
 		00F00A000FD5838D00C506AD /* IPEmulationSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPEmulationSel.png; sourceTree = "<group>"; };
 		00F00A010FD5838D00C506AD /* IPExpansions.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPExpansions.png; sourceTree = "<group>"; };
@@ -355,8 +353,6 @@
 				000A79090FBA49C500A0F12E /* DiskImage525.icns */,
 				00F009F90FD5838D00C506AD /* IPAudio.png */,
 				00F009FA0FD5838D00C506AD /* IPAudioSel.png */,
-				00F009FD0FD5838D00C506AD /* IPDiskDrives.png */,
-				00F009FE0FD5838D00C506AD /* IPDiskDrivesSel.png */,
 				00F009FF0FD5838D00C506AD /* IPEmulation.png */,
 				00F00A000FD5838D00C506AD /* IPEmulationSel.png */,
 				00F00A010FD5838D00C506AD /* IPExpansions.png */,

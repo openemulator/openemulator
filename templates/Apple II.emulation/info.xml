@@ -164,8 +164,8 @@
 
 <device name="dev1" label="Apple Disk II Interface Card" image="Apple Disk II Interface Card.png">
     <outlet ref="card" type="appleiislot" />
-    <inlet ref="card.drive1" subtype="appledisk525" category="storage" label="Drive 1" image="Apple Disk II Drive 1 Socket.png" />
-    <inlet ref="card.drive2" subtype="appledisk525" category="storage" label="Drive 2" image="Apple Disk II Drive 2 Socket.png" />
+    <inlet ref="card.drive1" type="appledisk525" category="storage" label="Drive 1" image="Apple Disk II Drive 1 Socket.png" />
+    <inlet ref="card.drive2" type="appledisk525" category="storage" label="Drive 2" image="Apple Disk II Drive 2 Socket.png" />
     <component name="card" class="AppleDiskIIInterfaceCard">
         <connection key="drive1" ref="dev2::drive" />
         <connection key="drive2" ref="" />

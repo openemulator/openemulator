@@ -24,6 +24,8 @@
 
 - (void) windowDidLoad
 {
+	[super windowDidLoad];
+	
 	documentController = [NSDocumentController sharedDocumentController];
 	document = [self document];
 	

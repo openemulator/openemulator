@@ -44,6 +44,8 @@
 
 - (void) awakeFromNib
 {
+	[super awakeFromNib];
+	
 	NSSize aSize;
 	aSize.width = 112;
 	aSize.height = 64;

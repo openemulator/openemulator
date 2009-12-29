@@ -27,9 +27,9 @@
 
 - (void) dealloc
 {
-	[super dealloc];
-	
 	[templateChooserViewController release];
+	
+	[super dealloc];
 }
 
 - (void) windowDidLoad
