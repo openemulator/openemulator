@@ -5,7 +5,7 @@
  * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls a screen's content view (OpenGL).
+ * Controls an emulation screen view.
  */
 
 #import <Cocoa/Cocoa.h>

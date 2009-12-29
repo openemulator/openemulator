@@ -5,7 +5,7 @@
  * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Manages documents.
+ * Controls emulations.
  */
 
 #import <Cocoa/Cocoa.h>
@@ -30,10 +30,10 @@
 }
 
 - (IBAction) newDocumentFromTemplateChooser:(id) sender;
-- (id) openUntitledDocumentFromTemplateURL:(NSURL *) absoluteURL
+- (id) openUntitledDocumentWithTemplateURL:(NSURL *) absoluteURL
 								   display:(BOOL) displayDocument
 									 error:(NSError **) outError;
-- (id) makeUntitledDocumentFromTemplateURL:(NSURL *) absoluteURL
+- (id) makeUntitledDocumentWithTemplateURL:(NSURL *) absoluteURL
 									 error:(NSError **) outError;
 
 - (void) disableMenuBar;

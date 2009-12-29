@@ -201,7 +201,7 @@ OEPort OEInfo::parsePort(OERef deviceRef,
 	
 	port.ref = deviceRef.buildRef(getNodeProperty(node, "ref"));
 	port.type = getNodeProperty(node, "type");
-	port.subtype = getNodeProperty(node, "subtype");
+	port.category = getNodeProperty(node, "category");
 	port.label = getNodeProperty(node, "label");
 	port.image = getNodeProperty(node, "image");
 	

@@ -21,19 +21,19 @@
 </device>
 
 <device name="emulation" label="Apple II">
-    <inlet ref="iou.slot0" type="expansion" subtype="appleiislot" label="Slot 0" image="Apple II Slot.png" />
-    <inlet ref="iou.slot1" type="expansion" subtype="appleiislot" label="Slot 1" image="Apple II Slot.png" />
-    <inlet ref="iou.slot2" type="expansion" subtype="appleiislot" label="Slot 2" image="Apple II Slot.png" />
-    <inlet ref="iou.slot3" type="expansion" subtype="appleiislot" label="Slot 3" image="Apple II Slot.png" />
-    <inlet ref="iou.slot4" type="expansion" subtype="appleiislot" label="Slot 4" image="Apple II Slot.png" />
-    <inlet ref="iou.slot5" type="expansion" subtype="appleiislot" label="Slot 5" image="Apple II Slot.png" />
-    <inlet ref="iou.slot6" type="expansion" subtype="appleiislot" label="Slot 6" image="Apple II Slot.png" />
-    <inlet ref="iou.slot7" type="expansion" subtype="appleiislot" label="Slot 7" image="Apple II Slot.png" />
-    <inlet ref="game.port" type="peripheral" subtype="appleiigame" label="Game Port" image="Apple II Game Port.png" />
-    <inlet ref="events.cpuSocket" type="expansion" subtype="appleiicpu" label="CPU Socket" image="Apple II CPU Chip Socket.png" />
-    <inlet ref="videoGen.charROMSocket" type="expansion" subtype="appleiicharrom" label="Character ROM Socket" image="Apple II Character ROM Socket.png" />
-    <inlet ref="videoGen.monitor" type="peripheral" subtype="appleiimonitor" label="Video Connector" image="Apple II Video Connector.png" />
-    <inlet ref="rom.socket" type="expansion" subtype="appleiirom" label="ROM Socket" image="Apple II ROM Socket.png" />
+    <inlet ref="iou.slot0" type="appleiislot" category="expansion" label="Slot 0" image="Apple II Slot.png" />
+    <inlet ref="iou.slot1" type="appleiislot" category="expansion" label="Slot 1" image="Apple II Slot.png" />
+    <inlet ref="iou.slot2" type="appleiislot" category="expansion" label="Slot 2" image="Apple II Slot.png" />
+    <inlet ref="iou.slot3" type="appleiislot" category="expansion" label="Slot 3" image="Apple II Slot.png" />
+    <inlet ref="iou.slot4" type="appleiislot" category="expansion" label="Slot 4" image="Apple II Slot.png" />
+    <inlet ref="iou.slot5" type="appleiislot" category="expansion" label="Slot 5" image="Apple II Slot.png" />
+    <inlet ref="iou.slot6" type="appleiislot" category="expansion" label="Slot 6" image="Apple II Slot.png" />
+    <inlet ref="iou.slot7" type="appleiislot" category="expansion" label="Slot 7" image="Apple II Slot.png" />
+    <inlet ref="game.port" type="appleiigame" category="peripheral" label="Game Port" image="Apple II Game Port.png" />
+    <inlet ref="events.cpuSocket" type="appleiicpu" category="expansion" label="CPU Socket" image="Apple II CPU Chip Socket.png" />
+    <inlet ref="videoGen.charROMSocket" type="expansion" category="appleiicharrom" label="Character ROM Socket" image="Apple II Character ROM Socket.png" />
+    <inlet ref="videoGen.monitor" type="appleiimonitor" category="peripheral" label="Video Connector" image="Apple II Video Connector.png" />
+    <inlet ref="rom.socket" type="appleiirom" category="expansion" label="ROM Socket" image="Apple II ROM Socket.png" />
     <component name="events" class="AppleIIEvents">
         <connection key="hostEvents" ref="host::events" />
         <connection key="cpu" ref="cpu" />
@@ -125,14 +125,14 @@
 </device>
 
 <device name="dev0" label="Apple 16kB Language Card" image="Apple Language Card.png">
-    <outlet ref="card" type="expansion" subtype="appleiislot" />
+    <outlet ref="card" type="appleiislot" />
     <component name="card" class="AppleLanguageCard">
         <data key="memory" src="${DEVICE_NAME}.bin" />
     </component>
 </device>
 
 <device name="dev5" label="Apple II Super Serial Card" image="Apple II Super Serial Card.png">
-    <outlet ref="card" type="expansion" subtype="appleiislot">
+    <outlet ref="card" type="appleiislot">
 		<setting ref="mode" type="option" options="Communications Mode,Printer Mode" label="Mode" />
 		<setting ref="baudRate" type="option" options="50,75,110,135,150,300,600,1200,1800,2400,3600,4800,7200,9600,19200" label="Baud Rate" />
 		<setting ref="dataBits" type="option" options="7,8" label="Data Bits" />
@@ -143,12 +143,12 @@
 		<setting ref="charactersPerLine" type="option" options="40,72,80,132" label="Characters Per Line" />
 		<setting ref="delayAfterCR" type="checkbox" label="Delay after CR" />
 	</outlet>
-    <inlet ref="card.port" type="peripheral" subtype="serialport" label="Port" image="Serial Port.png" />
+    <inlet ref="card.port" type="serialport" category="peripheral" label="Port" image="Serial Port.png" />
     <component name="card" class="AppleDiskIIInterfaceCard">
         <connection key="port" ref="" />
         <connection key="rom" ref="rom" />
 		<property key="mode" value="0" />
-		<property key="baudRate" value="14" />
+		<property key="baudRate" value="9600" />
 		<property key="dataBits" value="1" />
 		<property key="stopBits" value="1" />
 		<property key="parity" value="0" />
@@ -163,12 +163,12 @@
 </device>
 
 <device name="dev1" label="Apple Disk II Interface Card" image="Apple Disk II Interface Card.png">
-    <outlet ref="card" type="expansion" subtype="appleiislot" />
-    <inlet ref="card.drive1" type="diskdrive" subtype="apple525" label="Drive 1" image="Apple Disk II Drive 1 Socket.png" />
-    <inlet ref="card.drive2" type="diskdrive" subtype="apple525" label="Drive 2" image="Apple Disk II Drive 2 Socket.png" />
+    <outlet ref="card" type="appleiislot" />
+    <inlet ref="card.drive1" subtype="appledisk525" category="storage" label="Drive 1" image="Apple Disk II Drive 1 Socket.png" />
+    <inlet ref="card.drive2" subtype="appledisk525" category="storage" label="Drive 2" image="Apple Disk II Drive 2 Socket.png" />
     <component name="card" class="AppleDiskIIInterfaceCard">
         <connection key="drive1" ref="dev2::drive" />
-        <connection key="drive2" ref="dev3::drive" />
+        <connection key="drive2" ref="" />
         <connection key="rom" ref="rom" />
     </component>
 	<component name="rom" class="AppleIIInterfaceROM">
@@ -177,7 +177,7 @@
 </device>
 
 <device name="dev2" label="Apple Disk II Drive" image="Apple Disk II Drive.png">
-    <outlet ref="drive" type="diskdrive" subtype="apple525">
+    <outlet ref="drive" type="appledisk525">
 		<setting ref="lock" type="checkbox" label="Lock Disk Drive" />
 	</outlet>
     <component name="drive" class="AppleDiskII">
@@ -190,29 +190,15 @@
     </component>
 </device>
 
-<device name="dev3" label="Apple Disk II Drive" image="Apple Disk II Drive.png">
-    <outlet ref="drive" type="diskdrive" subtype="apple525">
-		<setting ref="lock" type="checkbox" label="Lock Disk Drive" />
-	</outlet>
-    <component name="drive" class="AppleDiskII">
-        <property key="diskImage" value="" />
-        <property key="lock" value="0" />
-        <resource key="soundSpin" src="sounds/Apple Disk II Spin 2.wav" />
-        <resource key="soundArm" src="sounds/Apple Disk II Arm.wav" />
-        <resource key="soundStop" src="sounds/Apple Disk II Stop.wav" />
-        <resource key="soundShake" src="sounds/Apple Disk II Shake.wav" />
-    </component>
-</device>
-
 <device name="dev5" label="Apple Monitor //" image="Apple Monitor II.png">
-    <outlet ref="monitor" type="peripheral" subtype="appleiimonitor" />
+    <outlet ref="monitor" type="appleiivideo" />
     <component name="monitor" class="AppleMonitorII">
         <connection key="joystick" ref="host::video" />
     </component>
 </device>
 
 <device name="dev4" label="Apple II Game Paddles" image="Apple II Game Paddles.png">
-    <outlet ref="port" type="peripheral" subtype="applegameport" />
+    <outlet ref="port" type="applegame" />
     <component name="port" class="AppleIIGamePaddles">
         <connection key="joystick" ref="host::joystick" />
     </component>

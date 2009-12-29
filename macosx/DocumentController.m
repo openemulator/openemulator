@@ -5,7 +5,7 @@
  * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Manages documents.
+ * Controls emulations.
  */
 
 #import <Carbon/Carbon.h>
@@ -186,20 +186,20 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 		}
 		
 		NSURL *absoluteURL = [NSURL fileURLWithPath:defaultTemplate];
-		document = [self openUntitledDocumentFromTemplateURL:absoluteURL
+		document = [self openUntitledDocumentWithTemplateURL:absoluteURL
 													 display:displayDocument
 													   error:outError];
 		return document;
 	}
 }
 
-- (id) openUntitledDocumentFromTemplateURL:(NSURL *) absoluteURL
+- (id) openUntitledDocumentWithTemplateURL:(NSURL *) absoluteURL
 								   display:(BOOL) displayDocument
 									 error:(NSError **) outError
 {
 	NSDocument *document;
 	
-	document = [self makeUntitledDocumentFromTemplateURL:absoluteURL
+	document = [self makeUntitledDocumentWithTemplateURL:absoluteURL
 												   error:outError];
 	if (document)
 	{
@@ -214,10 +214,10 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 	return document;
 }
 
-- (id) makeUntitledDocumentFromTemplateURL:(NSURL *) absoluteURL
+- (id) makeUntitledDocumentWithTemplateURL:(NSURL *) absoluteURL
 									 error:(NSError **) outError
 {
-	Document *document = [[Document alloc] initFromTemplateURL:absoluteURL
+	Document *document = [[Document alloc] initWithTemplateURL:absoluteURL
 														 error:outError];
 	if (document)
 		return [document autorelease];

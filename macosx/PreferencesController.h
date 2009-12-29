@@ -5,7 +5,7 @@
  * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls the preferences.
+ * Controls the preferences window.
  */
 
 #import <Cocoa/Cocoa.h>

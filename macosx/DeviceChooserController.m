@@ -5,10 +5,12 @@
  * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls the new document from template window.
+ * Controls the device chooser window.
  */
 
 #import "DeviceChooserController.h"
+
+#import "Document.h"
 
 @implementation DeviceChooserController
 
@@ -38,8 +40,9 @@
 	
 	[[self window] center];
 	
-	[deviceChooserViewController updateForInlets:nil];
-
+	Document *currentDocument = [fDocumentController currentDocument];
+	[deviceChooserViewController updateForInlets:[currentDocument freeInlets]];
+	
 	[fPreviousButton setEnabled:NO];
 	[fNextButton setEnabled:([deviceChooserViewController selectedItemPath]
 							 != nil)];

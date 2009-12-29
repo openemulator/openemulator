@@ -5,7 +5,7 @@
  * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements an chooser item for template and device choosing.
+ * Controls an item in a device or template chooser view.
  */
 
 #import "ChooserItem.h"

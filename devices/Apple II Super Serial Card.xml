@@ -3,7 +3,7 @@
 <dml version="1.0" label="Super Serial Card" image="Apple II Super Serial Card.png" group="Serial Port Controllers">
 
 <device name="dev5" label="Apple II Super Serial Card" image="Apple II Super Serial Card.png">
-    <outlet ref="card" type="expansion" subtype="appleiislot">
+    <outlet ref="card" type="appleiislot">
 		<setting ref="mode" type="option" options="Communications Mode,Printer Mode" label="Mode" />
 		<setting ref="baudRate" type="option" options="50,75,110,135,150,300,600,1200,1800,2400,3600,4800,7200,9600,19200" label="Baud Rate" />
 		<setting ref="dataBits" type="option" options="7,8" label="Data Bits" />
@@ -14,12 +14,12 @@
 		<setting ref="charactersPerLine" type="option" options="40,72,80,132" label="Characters Per Line" />
 		<setting ref="delayAfterCR" type="checkbox" label="Delay after CR" />
 	</outlet>
-    <inlet ref="card.port" type="peripheral" subtype="serial" label="Port" image="Serial Port.png" />
+    <inlet ref="card.port" category="peripheral" type="serialport" label="Port" image="Serial Port.png" />
     <component name="card" class="AppleDiskIIInterfaceCard">
         <connection key="port" ref="" />
         <connection key="rom" ref="rom" />
 		<property key="mode" value="0" />
-		<property key="baudRate" value="14" />
+		<property key="baudRate" value="9600" />
 		<property key="dataBits" value="1" />
 		<property key="stopBits" value="1" />
 		<property key="parity" value="0" />

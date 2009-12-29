@@ -5,7 +5,7 @@
  * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls an emulation document.
+ * Handles an emulation.
  */
 
 #import <Cocoa/Cocoa.h>
@@ -26,20 +26,18 @@
 	NSString *runTime;
 	NSImage *image;
 	
+	NSMutableArray *freeInlets;
+	
 	NSMutableArray *expansions;
-	NSMutableArray *diskDrives;
+	NSMutableArray *storage;
 	NSMutableArray *peripherals;
 	
 	BOOL power;
-	int videoPreset;
 }
 
-- (id) initFromTemplateURL:(NSURL *) templateURL error:(NSError **) outError;
+- (id) initWithTemplateURL:(NSURL *) templateURL error:(NSError **) outError;
 
 - (IBAction) saveDocumentAsTemplate:(id)sender;
-
-- (BOOL) isCopyValid;
-- (BOOL) isPasteValid;
 
 - (void) powerButtonPressedAndReleased:(id)sender;
 - (void) powerButtonPressed:(id)sender;
@@ -50,6 +48,9 @@
 - (void) pauseButtonPressedAndReleased:(id)sender;
 - (void) pauseButtonPressed:(id)sender;
 - (void) pauseButtonReleased:(id)sender;
+
+- (BOOL) isCopyValid;
+- (BOOL) isPasteValid;
 
 - (BOOL) power;
 - (void) setPower:(BOOL)value;
@@ -66,13 +67,15 @@
 - (NSImage *) image;
 - (void) setImage:(NSImage *) value;
 
+- (NSMutableArray *) freeInlets;
+
 - (NSMutableArray *) expansions;
 - (void) insertObject:(id) value inExpansionsAtIndex:(NSUInteger) index;
 - (void) removeObjectFromExpansionsAtIndex:(NSUInteger) index;
 
-- (NSMutableArray *) diskDrives;
-- (void) insertObject:(id) value inDiskDrivesAtIndex:(NSUInteger) index;
-- (void) removeObjectFromDiskDrivesAtIndex:(NSUInteger) index;
+- (NSMutableArray *) storage;
+- (void) insertObject:(id) value inStorageAtIndex:(NSUInteger) index;
+- (void) removeObjectFromStorageAtIndex:(NSUInteger) index;
 
 - (NSMutableArray *) peripherals;
 - (void) insertObject:(id) value inPeripheralsAtIndex:(NSUInteger) index;

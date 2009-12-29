@@ -5,7 +5,7 @@
  * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Overrides document window messages.
+ * Handles document window messages.
  */
 
 #import <Cocoa/Cocoa.h>

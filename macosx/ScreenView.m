@@ -1,11 +1,11 @@
 
 /**
  * OpenEmulator
- * Mac OS X Document View Controller
+ * Mac OS X Screen View Controller
  * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls a window's content view (OpenGL).
+ * Controls an emulation screen view.
  */
 
 #import <OpenGL/OpenGL.h>

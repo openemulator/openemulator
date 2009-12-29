@@ -3,9 +3,9 @@
 <dml version="1.0" label="Disk II Card" image="Apple Disk II Interface Card.png" group="Disk Drive Controllers">
 
 <device name="dev0" label="Apple Disk II Interface Card" image="Apple Disk II Interface Card.png">
-    <outlet ref="card" type="expansion" subtype="appleiislot" />
-    <inlet ref="card.drive1" type="diskdrive" subtype="apple525" label="Drive 1" image="Apple Disk II Drive 1 Socket.png" />
-    <inlet ref="card.drive2" type="diskdrive" subtype="apple525" label="Drive 2" image="Apple Disk II Drive 2 Socket.png" />
+    <outlet ref="card" type="appleiislot" />
+    <inlet ref="card.drive1" type="storage" subtype="appledisk525" label="Drive 1" image="Apple Disk II Drive 1 Socket.png" />
+    <inlet ref="card.drive2" type="storage" subtype="appledisk525" label="Drive 2" image="Apple Disk II Drive 2 Socket.png" />
     <component name="card" class="AppleDiskIIInterfaceCard">
         <connection key="drive1" ref="" />
         <connection key="drive2" ref="" />

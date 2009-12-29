@@ -1,11 +1,11 @@
 
 /**
  * OpenEmulator
- * Mac OS X Chooser View Controller
+ * Mac OS X Device Chooser View Controller
  * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements a device chooser view controller.
+ * Controls a device chooser view.
  */
 
 #import "DeviceChooserViewController.h"
@@ -105,7 +105,7 @@
 	}
 }
 
-- (void) updateForInlets:(NSArray *)inlets
+- (void) updateForInlets:(NSMutableArray *)freeInlets
 {
 	NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
 	NSString *imagesPath = [resourcePath
@@ -114,27 +114,45 @@
 	[groups removeAllObjects];
 	[groupNames removeAllObjects];
 	
-	int count = [deviceInfos count];
-	for (int i = 0; i < count; i++)
+	for (int i = 0; i < [deviceInfos count]; i++)
 	{
 		DeviceInfo *deviceInfo = [deviceInfos objectAtIndex:i];
 		OEInfo *info = [deviceInfo info];
 		
-		// 1: Copy available inlets
-		// 2: For every unconnected outlet in the device, remove the inlet
-		// 3: If the list ends up empty, we are ok
-/*		NSArray *testInlets = [NSArray arrayWithArray:inlets];
-		if (!testInlets)
-			continue;
-		
+		// Verify if device is connectable
+		NSMutableArray *inlets = [NSMutableArray arrayWithArray:freeInlets];
 		OEPorts *outlets = info->getOutlets();
-		for (OEPorts::iterator o = outlets.begin();
-			 o != outlets.end();
+		BOOL isDeviceConnectable = YES;
+		for (OEPorts::iterator o = outlets->begin();
+			 o != outlets->end();
 			 o++)
 		{
-			if (
+			if (o->connectedPort)
+				continue;
+			
+			NSString *outletType = [NSString stringWithUTF8String:o->type.c_str()];
+			BOOL isInletFound = NO;
+			for (int j = 0; j < [inlets count]; j++)
+			{
+				NSString *type = [inlets objectAtIndex:j];
+				if ([type compare:outletType] == NSOrderedSame)
+				{
+					[inlets removeObjectAtIndex:j];
+					isInletFound = YES;
+					break;
+				}
+			}
+			
+			if (!isInletFound)
+			{
+				isDeviceConnectable = NO;
+				break;
+			}
 		}
-*/		
+		if (!isDeviceConnectable)
+			continue;
+		
+		// Add device
 		NSString *label = [NSString stringWithUTF8String:info->getLabel().c_str()];
 		NSString *imageName = [NSString stringWithUTF8String:info->getImage().c_str()];
 		NSString *description = [NSString stringWithUTF8String:info->getDescription().c_str()];

@@ -13,11 +13,11 @@
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
 			<integer value="679"/>
-			<integer value="185"/>
-			<integer value="1173"/>
-			<integer value="165"/>
 			<integer value="186"/>
 			<integer value="1392"/>
+			<integer value="746"/>
+			<integer value="185"/>
+			<integer value="165"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -114,7 +114,7 @@
 									<int key="NSPeriodicInterval">75</int>
 								</object>
 								<object class="NSButtonCell" id="19599519">
-									<int key="NSCellFlags">67239424</int>
+									<int key="NSCellFlags">-2080244224</int>
 									<int key="NSCellFlags2">0</int>
 									<string key="NSContents"/>
 									<reference key="NSSupport" ref="911500604"/>
@@ -124,11 +124,11 @@
 									<int key="NSButtonFlags2">6</int>
 									<object class="NSCustomResource" key="NSNormalImage">
 										<string key="NSClassName">NSImage</string>
-										<string key="NSResourceName">IPDiskDrives</string>
+										<string key="NSResourceName">IPStorage</string>
 									</object>
 									<object class="NSCustomResource" key="NSAlternateImage">
 										<string key="NSClassName">NSImage</string>
-										<string key="NSResourceName">IPDiskDrivesSel</string>
+										<string key="NSResourceName">IPStorageSel</string>
 									</object>
 									<int key="NSPeriodicDelay">400</int>
 									<int key="NSPeriodicInterval">75</int>
@@ -235,8 +235,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 								<int key="NSPeriodicDelay">400</int>
 								<int key="NSPeriodicInterval">75</int>
 							</object>
-							<int key="NSSelectedCol">3</int>
-							<reference key="NSSelectedCell" ref="292200284"/>
+							<int key="NSSelectedCol">2</int>
+							<reference key="NSSelectedCell" ref="19599519"/>
 							<object class="NSColor" key="NSBackgroundColor" id="88397357">
 								<int key="NSColorSpace">6</int>
 								<string key="NSCatalogName">System</string>
@@ -1415,19 +1415,12 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<string>description</string>
 					<string>modificationDate</string>
 					<string>image</string>
-					<string>brightness</string>
-					<string>contrast</string>
-					<string>saturation</string>
-					<string>sharpness</string>
-					<string>temperature</string>
-					<string>tint</string>
-					<string>volume</string>
 					<string>expansions</string>
-					<string>diskDrives</string>
 					<string>peripherals</string>
 					<string>runTime</string>
 					<string>label</string>
 					<string>group</string>
+					<string>storage</string>
 				</object>
 				<bool key="NSEditable">YES</bool>
 				<object class="_NSManagedProxy" key="_NSManagedProxy"/>
@@ -1451,7 +1444,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<string>image</string>
 					<string>title</string>
-					<string>locked</string>
 				</object>
 				<bool key="NSEditable">YES</bool>
 				<object class="_NSManagedProxy" key="_NSManagedProxy"/>
@@ -1494,14 +1486,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<reference key="destination" ref="881392825"/>
 					</object>
 					<int key="connectionID">699</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">fDiskDrivesView</string>
-						<reference key="source" ref="762632889"/>
-						<reference key="destination" ref="742328531"/>
-					</object>
-					<int key="connectionID">819</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
@@ -1622,22 +1606,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">contentArray: selection.diskDrives</string>
-						<reference key="source" ref="382065968"/>
-						<reference key="destination" ref="834901026"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="382065968"/>
-							<reference key="NSDestination" ref="834901026"/>
-							<string key="NSLabel">contentArray: selection.diskDrives</string>
-							<string key="NSBinding">contentArray</string>
-							<string key="NSKeyPath">selection.diskDrives</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">1142</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
 						<string key="label">enabled: canRemove</string>
 						<reference key="source" ref="76457656"/>
 						<reference key="destination" ref="59207083"/>
@@ -1742,27 +1710,11 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
-						<string key="label">add:</string>
-						<reference key="source" ref="382065968"/>
-						<reference key="destination" ref="691035560"/>
-					</object>
-					<int key="connectionID">1189</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
 						<string key="label">remove:</string>
 						<reference key="source" ref="382065968"/>
 						<reference key="destination" ref="246679973"/>
 					</object>
 					<int key="connectionID">1191</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">add:</string>
-						<reference key="source" ref="59207083"/>
-						<reference key="destination" ref="550896703"/>
-					</object>
-					<int key="connectionID">1192</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
@@ -2066,22 +2018,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<int key="connectionID">1416</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: selection.description</string>
-						<reference key="source" ref="859860552"/>
-						<reference key="destination" ref="834901026"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="859860552"/>
-							<reference key="NSDestination" ref="834901026"/>
-							<string key="NSLabel">value: selection.description</string>
-							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">selection.description</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">1417</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">fEmulationView</string>
 						<reference key="source" ref="762632889"/>
@@ -2136,6 +2072,62 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						</object>
 					</object>
 					<int key="connectionID">1424</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">fStorageView</string>
+						<reference key="source" ref="762632889"/>
+						<reference key="destination" ref="742328531"/>
+					</object>
+					<int key="connectionID">1426</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: selection.description</string>
+						<reference key="source" ref="859860552"/>
+						<reference key="destination" ref="834901026"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="859860552"/>
+							<reference key="NSDestination" ref="834901026"/>
+							<string key="NSLabel">value: selection.description</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">selection.description</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">1428</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">contentArray: selection.storage</string>
+						<reference key="source" ref="382065968"/>
+						<reference key="destination" ref="834901026"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="382065968"/>
+							<reference key="NSDestination" ref="834901026"/>
+							<string key="NSLabel">contentArray: selection.storage</string>
+							<string key="NSBinding">contentArray</string>
+							<string key="NSKeyPath">selection.storage</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">1429</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">addDevices:</string>
+						<reference key="source" ref="762632889"/>
+						<reference key="destination" ref="550896703"/>
+					</object>
+					<int key="connectionID">1430</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">addDevices:</string>
+						<reference key="source" ref="762632889"/>
+						<reference key="destination" ref="691035560"/>
+					</object>
+					<int key="connectionID">1431</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -2431,7 +2423,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 							<reference ref="285052788"/>
 						</object>
 						<reference key="parent" ref="0"/>
-						<string key="objectName">Disk Drives</string>
+						<string key="objectName">Storage</string>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">696</int>
@@ -2618,7 +2610,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<int key="objectID">1139</int>
 						<reference key="object" ref="382065968"/>
 						<reference key="parent" ref="0"/>
-						<string key="objectName">Disk Drives Controller</string>
+						<string key="objectName">Storage Controller</string>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">1140</int>
@@ -3139,7 +3131,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{140, 431}, {255, 256}}</string>
+					<string>{{12, 593}, {255, 256}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<object class="NSMutableDictionary">
@@ -3215,7 +3207,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<object class="IBToolTipAttribute" key="NS.object.0">
 							<string key="name">ToolTip</string>
 							<reference key="object" ref="19599519"/>
-							<string key="toolTip">Disk Drives inspector</string>
+							<string key="toolTip">Storage inspector</string>
 						</object>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3230,7 +3222,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{527, 403}, {255, 173}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{271, 600}, {255, 249}}</string>
+					<string>{{12, 311}, {255, 249}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
@@ -3300,7 +3292,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{527, 599}, {255, 249}}</string>
+					<string>{{268, 311}, {255, 249}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<object class="NSMutableDictionary">
 						<string key="NS.key.0">ToolTip</string>
@@ -3311,7 +3303,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						</object>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{15, 229}, {255, 249}}</string>
+					<string>{{524, 311}, {255, 249}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 				</object>
@@ -3332,7 +3324,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">1424</int>
+			<int key="maxID">1431</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -3365,11 +3357,11 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>fAudioView</string>
 							<string>fDeviceChooserController</string>
-							<string>fDiskDrivesView</string>
 							<string>fDocumentObjectController</string>
 							<string>fEmulationView</string>
 							<string>fExpansionsView</string>
 							<string>fPeripheralsView</string>
+							<string>fStorageView</string>
 							<string>fTabMatrix</string>
 							<string>inspectedDocument</string>
 						</object>
@@ -3377,8 +3369,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>NSView</string>
 							<string>id</string>
-							<string>NSView</string>
 							<string>NSObjectController</string>
+							<string>NSView</string>
 							<string>NSView</string>
 							<string>NSView</string>
 							<string>NSView</string>

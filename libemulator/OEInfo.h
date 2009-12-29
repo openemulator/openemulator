@@ -48,7 +48,7 @@ public:
 	{
 		ref = port.ref;
 		type = port.type;
-		subtype = port.subtype;
+		category = port.category;
 		label = port.label;
 		image = port.image;
 		
@@ -62,7 +62,7 @@ public:
 	
 	OERef ref;
 	string type;
-	string subtype;
+	string category;
 	string label;
 	string image;
 	

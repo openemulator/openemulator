@@ -13,14 +13,13 @@
 <!ELEMENT inlet EMPTY>
 <!ATTLIST inlet ref CDATA #REQUIRED>
 <!ATTLIST inlet type CDATA #REQUIRED>
-<!ATTLIST inlet subtype CDATA #REQUIRED>
+<!ATTLIST inlet category CDATA #REQUIRED>
 <!ATTLIST inlet label CDATA #IMPLIED>
 <!ATTLIST inlet image CDATA #IMPLIED>
 
 <!ELEMENT outlet (setting)>
 <!ATTLIST outlet ref CDATA #REQUIRED>
 <!ATTLIST outlet type CDATA #REQUIRED>
-<!ATTLIST outlet subtype CDATA #REQUIRED>
 <!ATTLIST outlet label CDATA #IMPLIED>
 <!ATTLIST outlet image CDATA #IMPLIED>
 

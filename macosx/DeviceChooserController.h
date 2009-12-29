@@ -1,11 +1,11 @@
 
 /**
  * OpenEmulator
- * Mac OS X Template Chooser Controller
+ * Mac OS X Device Chooser Controller
  * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls the template chooser.
+ * Controls the device chooser window.
  */
 
 #import <Cocoa/Cocoa.h>
@@ -20,8 +20,10 @@
 	IBOutlet id fPreviousButton;
 	IBOutlet id fNextButton;
 	
-	DeviceChooserViewController *deviceChooserViewController;
+	IBOutlet DocumentController *fDocumentController;
 	IBOutlet id fConnectView;
+	
+	DeviceChooserViewController *deviceChooserViewController;
 }
 
 - (void) runModal:(id) sender;

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0011696510E7CC59007A5EFB /* IPStorageSel.png in Resources */ = {isa = PBXBuildFile; fileRef = 0011696410E7CC4E007A5EFB /* IPStorageSel.png */; };
+		0011696610E7CC59007A5EFB /* IPStorage.png in Resources */ = {isa = PBXBuildFile; fileRef = 0011696310E7CC4E007A5EFB /* IPStorage.png */; };
 		00123BC91069B8D600FB95A1 /* libemulator.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 006EECA40FCA5C31003D2C8D /* libemulator.a */; };
 		00123BCC1069B8F200FB95A1 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 00E2A84D1053290200910B53 /* libxml2.dylib */; };
 		001F56F90FD1E8E500EA246A /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 001F56F80FD1E8E500EA246A /* Sparkle.framework */; };
@@ -61,8 +63,6 @@
 		00D8448F0FFF04C0005802F0 /* Emulation.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000F663A0FF8368F00C8AF23 /* Emulation.icns */; };
 		00D844920FFF04C0005802F0 /* IPAudio.png in Resources */ = {isa = PBXBuildFile; fileRef = 000F663B0FF8368F00C8AF23 /* IPAudio.png */; };
 		00D844930FFF04C0005802F0 /* IPAudioSel.png in Resources */ = {isa = PBXBuildFile; fileRef = 000F663C0FF8368F00C8AF23 /* IPAudioSel.png */; };
-		00D844960FFF04C0005802F0 /* IPDiskDrives.png in Resources */ = {isa = PBXBuildFile; fileRef = 000F663F0FF8368F00C8AF23 /* IPDiskDrives.png */; };
-		00D844970FFF04C0005802F0 /* IPDiskDrivesSel.png in Resources */ = {isa = PBXBuildFile; fileRef = 000F66400FF8368F00C8AF23 /* IPDiskDrivesSel.png */; };
 		00D844980FFF04C0005802F0 /* IPEmulation.png in Resources */ = {isa = PBXBuildFile; fileRef = 000F66410FF8368F00C8AF23 /* IPEmulation.png */; };
 		00D844990FFF04C0005802F0 /* IPEmulationSel.png in Resources */ = {isa = PBXBuildFile; fileRef = 000F66420FF8368F00C8AF23 /* IPEmulationSel.png */; };
 		00D8449A0FFF04C0005802F0 /* IPExpansions.png in Resources */ = {isa = PBXBuildFile; fileRef = 000F66430FF8368F00C8AF23 /* IPExpansions.png */; };
@@ -140,8 +140,6 @@
 		000F663A0FF8368F00C8AF23 /* Emulation.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Emulation.icns; sourceTree = "<group>"; };
 		000F663B0FF8368F00C8AF23 /* IPAudio.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPAudio.png; sourceTree = "<group>"; };
 		000F663C0FF8368F00C8AF23 /* IPAudioSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPAudioSel.png; sourceTree = "<group>"; };
-		000F663F0FF8368F00C8AF23 /* IPDiskDrives.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPDiskDrives.png; sourceTree = "<group>"; };
-		000F66400FF8368F00C8AF23 /* IPDiskDrivesSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPDiskDrivesSel.png; sourceTree = "<group>"; };
 		000F66410FF8368F00C8AF23 /* IPEmulation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPEmulation.png; sourceTree = "<group>"; };
 		000F66420FF8368F00C8AF23 /* IPEmulationSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPEmulationSel.png; sourceTree = "<group>"; };
 		000F66430FF8368F00C8AF23 /* IPExpansions.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPExpansions.png; sourceTree = "<group>"; };
@@ -151,6 +149,8 @@
 		000F66520FF8368F00C8AF23 /* OpenEmulator.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = OpenEmulator.icns; sourceTree = "<group>"; };
 		000F66530FF8368F00C8AF23 /* PRGeneral.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PRGeneral.png; sourceTree = "<group>"; };
 		000F66560FF8368F00C8AF23 /* TBInspector.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TBInspector.png; sourceTree = "<group>"; };
+		0011696310E7CC4E007A5EFB /* IPStorage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPStorage.png; path = macosx/Images/IPStorage.png; sourceTree = "<group>"; };
+		0011696410E7CC4E007A5EFB /* IPStorageSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPStorageSel.png; path = macosx/Images/IPStorageSel.png; sourceTree = "<group>"; };
 		001F56F80FD1E8E500EA246A /* Sparkle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = Sparkle.framework; path = macosx/Sparkle.framework; sourceTree = "<group>"; };
 		00317E380FD31D1A007F2B00 /* AppleGraphicsTablet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppleGraphicsTablet.png; sourceTree = "<group>"; };
 		003E2597107075D900185260 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
@@ -338,8 +338,6 @@
 				000F663A0FF8368F00C8AF23 /* Emulation.icns */,
 				000F663B0FF8368F00C8AF23 /* IPAudio.png */,
 				000F663C0FF8368F00C8AF23 /* IPAudioSel.png */,
-				000F663F0FF8368F00C8AF23 /* IPDiskDrives.png */,
-				000F66400FF8368F00C8AF23 /* IPDiskDrivesSel.png */,
 				000F66410FF8368F00C8AF23 /* IPEmulation.png */,
 				000F66420FF8368F00C8AF23 /* IPEmulationSel.png */,
 				000F66430FF8368F00C8AF23 /* IPExpansions.png */,
@@ -496,6 +494,8 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				0011696310E7CC4E007A5EFB /* IPStorage.png */,
+				0011696410E7CC4E007A5EFB /* IPStorageSel.png */,
 				00D1958B1093712E008FB014 /* Chooser.xib */,
 				00E8A393108CCAA200D0A137 /* devices */,
 				005E5F751086B16C00E573D4 /* Inspector.xib */,
@@ -610,8 +610,6 @@
 				00D8448F0FFF04C0005802F0 /* Emulation.icns in Resources */,
 				00D844920FFF04C0005802F0 /* IPAudio.png in Resources */,
 				00D844930FFF04C0005802F0 /* IPAudioSel.png in Resources */,
-				00D844960FFF04C0005802F0 /* IPDiskDrives.png in Resources */,
-				00D844970FFF04C0005802F0 /* IPDiskDrivesSel.png in Resources */,
 				00D844980FFF04C0005802F0 /* IPEmulation.png in Resources */,
 				00D844990FFF04C0005802F0 /* IPEmulationSel.png in Resources */,
 				00D8449A0FFF04C0005802F0 /* IPExpansions.png in Resources */,
@@ -652,6 +650,8 @@
 				00BB4D5A1086C1160071B584 /* TBShutdown.png in Resources */,
 				00BB4D5B1086C1160071B584 /* TBSleep.png in Resources */,
 				00D1958D1093712E008FB014 /* Chooser.xib in Resources */,
+				0011696510E7CC59007A5EFB /* IPStorageSel.png in Resources */,
+				0011696610E7CC59007A5EFB /* IPStorage.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

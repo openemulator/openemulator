@@ -5,7 +5,7 @@
  * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls the new document from template window.
+ * Controls the template chooser window.
  */
 
 #import "TemplateChooserController.h"
@@ -61,9 +61,9 @@
 
 - (void) showWindow:(id) sender
 {
-	[self updateTemplateChooser];
-	
 	[super showWindow:sender];
+	
+	[self updateTemplateChooser];
 }
 
 - (void) chooserWasDoubleClicked:(id) sender
@@ -88,7 +88,7 @@
 	if (url)
 	{
 		NSError *error;
-		if (![fDocumentController openUntitledDocumentFromTemplateURL:url
+		if (![fDocumentController openUntitledDocumentWithTemplateURL:url
 															  display:YES
 																error:&error])
 			[[NSAlert alertWithError:error] runModal];

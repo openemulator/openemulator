@@ -5,7 +5,7 @@
  * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls the inspector.
+ * Controls the inspector window.
  */
 
 #import "InspectorController.h"
@@ -15,7 +15,7 @@ NSString *itemIdentifiers[] =
 {
 	@"Emulation",
 	@"Expansions",
-	@"Disk Drives",
+	@"Storage",
 	@"Peripherals",
 	@"Audio",
 };
@@ -139,7 +139,7 @@ NSString *itemIdentifiers[] =
 		case 1:
 			return fExpansionsView;
 		case 2:
-			return fDiskDrivesView;
+			return fStorageView;
 		case 3:
 			return fPeripheralsView;
 		case 4:

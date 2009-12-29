@@ -5,7 +5,7 @@
  * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements an chooser view controller for template and device choosing.
+ * Controls a device or template chooser view.
  */
 
 #import "ChooserViewController.h"

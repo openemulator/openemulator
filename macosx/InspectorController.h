@@ -5,7 +5,7 @@
  * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls the inspector.
+ * Controls the inspector window.
  */
 
 #import <Cocoa/Cocoa.h>
@@ -20,7 +20,7 @@
 	
 	IBOutlet NSView *fEmulationView;
 	IBOutlet NSView *fExpansionsView;
-	IBOutlet NSView *fDiskDrivesView;
+	IBOutlet NSView *fStorageView;
 	IBOutlet NSView *fPeripheralsView;
 	IBOutlet NSView *fAudioView;
 	

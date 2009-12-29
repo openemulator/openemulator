@@ -5,7 +5,7 @@
  * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements a dml chooser view controller.
+ * Controls a device or template chooser view.
  */
 
 #import <Cocoa/Cocoa.h>

@@ -5,7 +5,7 @@
  * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements a device chooser view controller.
+ * Controls a device chooser view.
  */
 
 #import <Cocoa/Cocoa.h>
@@ -17,6 +17,6 @@
 	NSMutableArray *deviceInfos;
 }
 
-- (void) updateForInlets:(NSArray *)inlets;
+- (void) updateForInlets:(NSMutableArray *)inlets;
 
 @end

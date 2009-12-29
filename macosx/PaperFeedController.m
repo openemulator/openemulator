@@ -5,7 +5,7 @@
  * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls the paper feed.
+ * Controls the paper feed window.
  */
 
 #import "PaperFeedController.h"

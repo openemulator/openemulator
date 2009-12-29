@@ -5,7 +5,7 @@
  * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements a template chooser view controller.
+ * Controls a template chooser view.
  */
 
 #import <Cocoa/Cocoa.h>

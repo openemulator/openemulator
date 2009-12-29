@@ -5,7 +5,7 @@
  * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls an emulation document.
+ * Handles an emulation.
  */
 
 #import "Document.h"
@@ -34,18 +34,20 @@
 		runTime = nil;
 		image = nil;
 		
+		freeInlets = [[NSMutableArray alloc] init];
+		
 		expansions = [[NSMutableArray alloc] init];
-		diskDrives = [[NSMutableArray alloc] init];
+		storage = [[NSMutableArray alloc] init];
 		peripherals = [[NSMutableArray alloc] init];
 	}
 	
 	return self;
 }
 
-- (id) initFromTemplateURL:(NSURL *) absoluteURL
+- (id) initWithTemplateURL:(NSURL *) absoluteURL
 					 error:(NSError **) outError
 {
-//	printf("initFromTemplateURL\n");
+//	printf("initWithemplateURL\n");
 	if ([self init])
 	{
 		if ([self readFromURL:absoluteURL
@@ -68,8 +70,10 @@
 	
 	[pasteboardTypes release];
 	
+	[freeInlets release];
+	
 	[expansions release];
-	[diskDrives release];
+	[storage release];
 	[peripherals release];
 	
 	[super dealloc];
@@ -202,23 +206,39 @@
 
 - (void) updateDevices
 {
+	[freeInlets release];
+	freeInlets = [[NSMutableArray alloc] init];
+	
 	[expansions release];
 	expansions = [[NSMutableArray alloc] init];
-	[diskDrives release];
-	diskDrives = [[NSMutableArray alloc] init];
+	[storage release];
+	storage = [[NSMutableArray alloc] init];
 	[peripherals release];
 	peripherals = [[NSMutableArray alloc] init];
 	
+	// Process info
 	xmlDocPtr dmlDocPtr = ((OEEmulation *) emulation)->getDML();
 	OEInfo info(dmlDocPtr);
 	if (!info.isLoaded())
 		return;
 	
-	OEPorts *outlets = info.getOutlets();
+	// Build free inlets array
+	OEPorts *inlets = info.getInlets();
+	for (OEPorts::iterator i = inlets->begin();
+		 i != inlets->end();
+		 i++)
+	{
+		if (i->connectedPort)
+			continue;
+		
+		[freeInlets addObject:[NSString stringWithUTF8String:i->type.c_str()]];
+	}
 	
+	// Build expansion, storage and peripherals list
 	int expansionIndex = 0;
-	int diskDriveIndex = 0;
+	int storageIndex = 0;
 	int peripheralIndex = 0;
+	OEPorts *outlets = info.getOutlets();
 	for (OEPorts::iterator o = outlets->begin();
 		 o != outlets->end();
 		 o++)
@@ -237,11 +257,12 @@
 							  aString, @"title",
 							  deviceImage, @"image",
 							  nil];
-		if (o->type == "expansion")
+		string category = o->connectedPort->category;
+		if (category == "expansion")
 			[self insertObject:dict inExpansionsAtIndex:expansionIndex++];
-		else if (o->type == "diskdrive")
-			[self insertObject:dict inDiskDrivesAtIndex:diskDriveIndex++];
-		else if (o->type == "peripheral")
+		else if (category == "storage")
+			[self insertObject:dict inStorageAtIndex:storageIndex++];
+		else if (category == "peripheral")
 			[self insertObject:dict inPeripheralsAtIndex:peripheralIndex++];
 	}
 	
@@ -376,16 +397,6 @@
 	return YES;
 }
 
-- (BOOL) isCopyValid
-{
-	return YES; // To-Do: libemulation
-}
-
-- (BOOL) isPasteValid
-{
-	return [pasteboard availableTypeFromArray:pasteboardTypes] != nil;
-}
-
 - (void) powerButtonPressedAndReleased:(id) sender
 {
 	[self powerButtonPressed:sender];
@@ -435,7 +446,17 @@
 	// To-Do: libemulation
 }
 
-- (NSString *) getDocumentText
+- (BOOL) isCopyValid
+{
+	return YES; // To-Do: libemulation
+}
+
+- (BOOL) isPasteValid
+{
+	return [pasteboard availableTypeFromArray:pasteboardTypes] != nil;
+}
+
+- (NSString *) documentText
 {
 	// To-Do: libemulation
 	return @"This is a meticulously designed test of the speech synthesizing system.";  
@@ -446,7 +467,7 @@
 	if ([self isCopyValid])
 	{
 		[pasteboard declareTypes:pasteboardTypes owner:self];
-		[pasteboard setString:[self getDocumentText] forType:NSStringPboardType];
+		[pasteboard setString:[self documentText] forType:NSStringPboardType];
 	}
 }
 
@@ -464,7 +485,7 @@
 - (void) startSpeaking:(id) sender
 {
 	NSTextView *dummy = [[NSTextView alloc] init];
-	[dummy insertText:[self getDocumentText]];
+	[dummy insertText:[self documentText]];
 	[dummy startSpeaking:self];
 	[dummy release];
 }
@@ -569,6 +590,11 @@
     }
 }
 
+- (NSMutableArray *) freeInlets
+{
+	return freeInlets;
+}
+
 - (NSMutableArray *) expansions
 {
 	return [[expansions retain] autorelease];
@@ -584,19 +610,19 @@
     [expansions removeObjectAtIndex:index];
 }
 
-- (NSMutableArray *) diskDrives
+- (NSMutableArray *) storage
 {
-	return [[diskDrives retain] autorelease];
+	return [[storage retain] autorelease];
 }
 
-- (void) insertObject:(id) value inDiskDrivesAtIndex:(NSUInteger) index
+- (void) insertObject:(id) value inStorageAtIndex:(NSUInteger) index
 {
-    [diskDrives insertObject:value atIndex:index];
+    [storage insertObject:value atIndex:index];
 }
 
-- (void) removeObjectFromDiskDrivesAtIndex:(NSUInteger) index
+- (void) removeObjectFromStorageAtIndex:(NSUInteger) index
 {
-    [diskDrives removeObjectAtIndex:index];
+    [storage removeObjectAtIndex:index];
 }
 
 - (NSMutableArray *) peripherals
