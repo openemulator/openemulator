@@ -13,16 +13,16 @@
 
 @interface ChooserItem : NSObject
 {
-    NSString *itemPath;
-    NSString *label;
+    NSString *title;
+    NSString *subtitle;
     NSString *imagePath;
-    NSString *description;
+    NSString *data;
 }
 
-- (id) initWithItem:(NSString *) theItemPath
-			  label:(NSString *) theLabel
-		  imagePath:(NSString *) theImagePath
-		description:(NSString *) theDescription;
-- (NSString *) itemPath;
+- (id) initWithTitle:(NSString *) theTitle
+			subtitle:(NSString *) theSubtitle
+		   imagePath:(NSString *) theImagePath
+				data:(NSString *) theData;
+- (NSString *) data;
 
 @end

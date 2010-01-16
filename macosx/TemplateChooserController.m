@@ -73,14 +73,14 @@
 
 - (IBAction) chooseTemplate:(id) sender
 {
-	NSString *itemPath = [templateChooserViewController selectedItemPath];
+	NSString *templatePath = [templateChooserViewController selectedItemPath];
 	NSURL *url = nil;
-	if (itemPath)
+	if (templatePath)
 	{
 		NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-		[userDefaults setObject:itemPath
+		[userDefaults setObject:templatePath
 						 forKey:@"OELastTemplate"];
-		url = [NSURL fileURLWithPath:itemPath];
+		url = [NSURL fileURLWithPath:templatePath];
 	}
 	
 	[[self window] orderOut:self];

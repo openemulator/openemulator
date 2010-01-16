@@ -18,5 +18,6 @@
 }
 
 - (void) updateForInlets:(NSMutableArray *)inlets;
+- (NSMutableArray *)selectedItemOutlets;
 
 @end

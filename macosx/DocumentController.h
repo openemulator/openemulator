@@ -11,6 +11,7 @@
 #import <Cocoa/Cocoa.h>
 
 #import "portaudio.h"
+#import "InspectorController.h"
 #import "TemplateChooserController.h"
 
 #define LINK_HOMEPAGE	@"http://www.openemulator.org"

@@ -10,20 +10,25 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "DocumentController.h"
 #import "DeviceChooserViewController.h"
+#import "ConnectorViewController.h"
 
 @interface DeviceChooserController : NSWindowController
 {
 	IBOutlet id fMessage;
-	IBOutlet id fChooserView;
+	IBOutlet id fSubview;
 	IBOutlet id fPreviousButton;
 	IBOutlet id fNextButton;
 	
-	IBOutlet DocumentController *fDocumentController;
-	IBOutlet id fConnectView;
+	IBOutlet id fDocumentController;
 	
 	DeviceChooserViewController *deviceChooserViewController;
+	ConnectorViewController *connectorViewController;
+	
+	id activeView;
+	int activeStep;
+	
+	NSMutableArray *selectedItemOutlets;
 }
 
 - (void) runModal:(id) sender;

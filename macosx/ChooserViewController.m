@@ -154,7 +154,7 @@ cellWasDoubleClickedAtIndex:(NSUInteger) index
 		for (int j = 0; j < templatesCount; j++)
 		{
 			ChooserItem *item = [templates objectAtIndex:j];
-			if ([[item itemPath] compare:itemPath] == NSOrderedSame)
+			if ([[item data] compare:itemPath] == NSOrderedSame)
 			{
 				groupIndex = i;
 				chooserIndex = j;
@@ -182,7 +182,7 @@ cellWasDoubleClickedAtIndex:(NSUInteger) index
 	
 	ChooserItem *item = [self imageBrowser:fImageBrowserView
 							   itemAtIndex:index];
-	return [[[item itemPath] copy] autorelease];
+	return [[[item data] copy] autorelease];
 }
 
 @end

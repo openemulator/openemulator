@@ -231,7 +231,16 @@
 		if (i->connectedPort)
 			continue;
 		
-		[freeInlets addObject:[NSString stringWithUTF8String:i->type.c_str()]];
+		NSString *portType = [NSString stringWithUTF8String:i->type.c_str()];
+		NSString *portLabel = [NSString stringWithUTF8String:i->label.c_str()];
+		NSString *portImage = [NSString stringWithUTF8String:i->image.c_str()];
+		
+		NSMutableDictionary *dict = [[[NSMutableDictionary alloc] init] autorelease];
+		[dict setObject:portType forKey:@"type"];
+		[dict setObject:portLabel forKey:@"label"];
+		[dict setObject:portImage forKey:@"image"];
+		
+		[freeInlets addObject:dict];
 	}
 	
 	// Build expansion, storage and peripherals list
@@ -374,6 +383,11 @@
 				   ofType:nil
 					error:&error])
 		[[NSAlert alertWithError:error] runModal];
+}
+
+- (void) addDevice:path connected:(NSMutableArray *) connections
+{
+	
 }
 
 - (void) makeWindowControllers

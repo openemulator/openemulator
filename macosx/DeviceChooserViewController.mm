@@ -119,10 +119,10 @@
 		DeviceInfo *deviceInfo = [deviceInfos objectAtIndex:i];
 		OEInfo *info = [deviceInfo info];
 		
-		// Verify if device is connectable
+		// Check if device's outlets match emulation inlets
 		NSMutableArray *inlets = [NSMutableArray arrayWithArray:freeInlets];
 		OEPorts *outlets = info->getOutlets();
-		BOOL isDeviceConnectable = YES;
+		BOOL isMatch = YES;
 		for (OEPorts::iterator o = outlets->begin();
 			 o != outlets->end();
 			 o++)
@@ -134,7 +134,9 @@
 			BOOL isInletFound = NO;
 			for (int j = 0; j < [inlets count]; j++)
 			{
-				NSString *type = [inlets objectAtIndex:j];
+				NSMutableDictionary *dict = [inlets objectAtIndex:j];
+				NSString *type = [dict objectForKey:@"type"];
+				
 				if ([type compare:outletType] == NSOrderedSame)
 				{
 					[inlets removeObjectAtIndex:j];
@@ -145,18 +147,22 @@
 			
 			if (!isInletFound)
 			{
-				isDeviceConnectable = NO;
+				isMatch = NO;
 				break;
 			}
 		}
-		if (!isDeviceConnectable)
+		if (!isMatch)
 			continue;
 		
 		// Add device
-		NSString *label = [NSString stringWithUTF8String:info->getLabel().c_str()];
-		NSString *imageName = [NSString stringWithUTF8String:info->getImage().c_str()];
-		NSString *description = [NSString stringWithUTF8String:info->getDescription().c_str()];
-		NSString *groupName = [NSString stringWithUTF8String:info->getGroup().c_str()];
+		NSString *label = [NSString stringWithUTF8String:
+						   info->getLabel().c_str()];
+		NSString *imageName = [NSString stringWithUTF8String:
+							   info->getImage().c_str()];
+		NSString *description = [NSString stringWithUTF8String:
+								 info->getDescription().c_str()];
+		NSString *groupName = [NSString stringWithUTF8String:
+							   info->getGroup().c_str()];
 		
 		if (![groups objectForKey:groupName])
 		{
@@ -164,10 +170,10 @@
 			[groups setObject:group forKey:groupName];
 		}
 		NSString *imagePath = [imagesPath stringByAppendingPathComponent:imageName];
-		ChooserItem *item = [[ChooserItem alloc] initWithItem:[deviceInfo path]
-														label:label
-													imagePath:imagePath
-												  description:description];
+		ChooserItem *item = [[ChooserItem alloc] initWithTitle:label
+													  subtitle:description
+													 imagePath:imagePath
+														  data:[deviceInfo path]];
 		if (!item)
 			continue;
 		
@@ -179,6 +185,56 @@
 									 sortedArrayUsingSelector:@selector(compare:)]];
 	
 	[self selectItemWithPath:nil];
+}
+
+- (NSMutableArray *)selectedItemOutlets
+{
+	// Find selected device
+	NSString *itemPath = [self selectedItemPath];
+	if (!itemPath)
+		return NULL;
+	
+	OEInfo *info = NULL;
+	for (int i = 0; i < [deviceInfos count]; i++)
+	{
+		DeviceInfo *deviceInfo = [deviceInfos objectAtIndex:i];
+		if ([[deviceInfo path] compare:itemPath] == NSOrderedSame)
+		{
+			info = [deviceInfo info];
+			break;
+		}
+	}
+	
+	if (!info)
+		return NULL;
+	
+	// List unconnected outlets
+	NSMutableArray *freeOutlets = [[NSMutableArray alloc] init];
+	if (!freeOutlets)
+		return NULL;
+	[freeOutlets autorelease];
+	
+	OEPorts *outlets = info->getOutlets();
+	for (OEPorts::iterator o = outlets->begin();
+		 o != outlets->end();
+		 o++)
+	{
+		if (o->connectedPort)
+			continue;
+		
+		NSString *portType = [NSString stringWithUTF8String:o->type.c_str()];
+		NSString *portLabel = [NSString stringWithUTF8String:o->label.c_str()];
+		NSString *portImage = [NSString stringWithUTF8String:o->image.c_str()];
+		
+		NSMutableDictionary *dict = [[[NSMutableDictionary alloc] init] autorelease];
+		[dict setObject:portType forKey:@"type"];
+		[dict setObject:portLabel forKey:@"label"];
+		[dict setObject:portImage forKey:@"image"];
+		
+		[freeOutlets addObject:dict];
+	}
+	
+	return freeOutlets;
 }
 
 @end

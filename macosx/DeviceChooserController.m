@@ -9,7 +9,6 @@
  */
 
 #import "DeviceChooserController.h"
-
 #import "Document.h"
 
 @implementation DeviceChooserController
@@ -22,6 +21,12 @@
 	{
 		deviceChooserViewController = [[DeviceChooserViewController alloc] init];
 		[deviceChooserViewController setDelegate:self];
+		
+		connectorViewController = [[ConnectorViewController alloc] init];
+		[connectorViewController setDelegate:self];
+		
+		activeView = NULL;
+		selectedItemOutlets = NULL;
 	}
 	
 	return self;
@@ -29,16 +34,36 @@
 
 - (void) dealloc
 {
-	[deviceChooserViewController release];
-
 	[super dealloc];
+	
+	[deviceChooserViewController release];
+	[connectorViewController release];
 }
 
-- (void) updateDeviceChooser
+- (void) updateView:(id) view
 {
-	[deviceChooserViewController selectItemWithPath:nil];
+	if (view == activeView)
+		return;
 	
+	if (activeView)
+	{
+		[activeView setHidden:YES];
+		[activeView removeFromSuperview];
+	}
+	[fSubview addSubview:view];
+	[view setFrameSize:[fSubview frame].size];
+	
+	activeView = view;
+}
+
+- (void) setDeviceChooserView
+{
 	[[self window] center];
+	
+	activeStep = 0;
+	[self updateView:[deviceChooserViewController view]];
+	
+	[deviceChooserViewController selectItemWithPath:nil];
 	
 	Document *currentDocument = [fDocumentController currentDocument];
 	[deviceChooserViewController updateForInlets:[currentDocument freeInlets]];
@@ -52,24 +77,34 @@
 					   @"Choose a template for your new device:")];
 }
 
+- (void) setConnectorView
+{
+	[self updateView:[connectorViewController view]];
+	
+	[fPreviousButton setEnabled:YES];
+	[fNextButton setEnabled:([deviceChooserViewController selectedItemPath]
+							 != nil)];
+	
+	[fMessage setStringValue:
+	 NSLocalizedString(@"Choose a connection for your new device:",
+					   @"Choose a connection for your new device:")];
+	
+}
+
 - (void) windowDidLoad
 {
 	[super windowDidLoad];
 	
 	[self setWindowFrameAutosaveName:@"DeviceChooser"];
 	
-	NSView *view = [deviceChooserViewController view];
-	[fChooserView addSubview:view];
-	[view setFrameSize:[fChooserView frame].size];
-	
-	[self updateDeviceChooser];
+	[self setDeviceChooserView];
 }
 
 - (void) showWindow:(id) sender
 {
 	[super showWindow:sender];
 	
-	[self updateDeviceChooser];
+	[self setDeviceChooserView];
 }
 
 - (void) runModal:(id) sender
@@ -91,28 +126,35 @@
 
 - (IBAction) performPrevious:(id) sender
 {
-	[NSApp abortModal];
+	activeStep--;
 	
-	[[self window] orderOut:self];
+	if (activeStep == 0)
+		[self setDeviceChooserView];
+	else
+		[self setConnectorView];
 }
 
 - (IBAction) performNext:(id) sender
 {
-	NSString *itemPath = [deviceChooserViewController selectedItemPath];
-	NSURL *url = nil;
-	if (itemPath)
-		url = [NSURL fileURLWithPath:itemPath];
+	activeStep++;
 	
-	[NSApp stopModal];
-	[[self window] orderOut:self];
-	
-	if (url)
+	if (activeStep == 1)
 	{
-/*		NSError *error;
-		if (![fDocumentController openUntitledDocumentFromTemplateURL:url
-															  display:YES
-																error:&error])
-			[[NSAlert alertWithError:error] runModal];*/
+		if (selectedItemOutlets)
+			[selectedItemOutlets release];
+		
+		selectedItemOutlets = [deviceChooserViewController selectedItemOutlets];
+		[selectedItemOutlets retain];
+	}
+	
+	if (activeStep <= [selectedItemOutlets count])
+	{
+		[self setConnectorView];
+	}
+	else
+	{
+		[NSApp stopModal];
+		[[self window] orderOut:self];
 	}
 }
 

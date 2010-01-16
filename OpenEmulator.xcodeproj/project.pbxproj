@@ -12,6 +12,7 @@
 		00123BC91069B8D600FB95A1 /* libemulator.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 006EECA40FCA5C31003D2C8D /* libemulator.a */; };
 		00123BCC1069B8F200FB95A1 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 00E2A84D1053290200910B53 /* libxml2.dylib */; };
 		001F56F90FD1E8E500EA246A /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 001F56F80FD1E8E500EA246A /* Sparkle.framework */; };
+		003318AF1101492B00CC1782 /* Connector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 003318AD1101492B00CC1782 /* Connector.xib */; };
 		003E25E71070796700185260 /* images in Resources */ = {isa = PBXBuildFile; fileRef = 003E2597107075D900185260 /* images */; };
 		003FB21410BA3D5D00D3697B /* devices in Resources */ = {isa = PBXBuildFile; fileRef = 00E8A393108CCAA200D0A137 /* devices */; };
 		0043806410669AFB001CFCCF /* Package.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0043804C10668FAE001CFCCF /* Package.cpp */; };
@@ -25,7 +26,6 @@
 		00679D08100817F700B38748 /* DeviceChooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00679D04100817F600B38748 /* DeviceChooser.xib */; };
 		00679D09100817F700B38748 /* TemplateChooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00679D06100817F700B38748 /* TemplateChooser.xib */; };
 		0071E3BA10803F7300F2D54F /* ChooserItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 0071E3B910803F7300F2D54F /* ChooserItem.m */; };
-		0072B1DD10E578E500AC7EBD /* OEEmulation.h in Headers */ = {isa = PBXBuildFile; fileRef = 0072B1DB10E578E500AC7EBD /* OEEmulation.h */; };
 		0072B1DE10E578E500AC7EBD /* OEEmulation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0072B1DC10E578E500AC7EBD /* OEEmulation.cpp */; };
 		0075B1B20FE79F7E009C1DFA /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0075B1B10FE79F7E009C1DFA /* OpenGL.framework */; };
 		009277FD10E2BB3A00C645D0 /* OEInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00C11A5010E1B2D900F067D6 /* OEInfo.cpp */; };
@@ -43,6 +43,7 @@
 		00B334850FE41F080042661D /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B334840FE41F080042661D /* CoreAudio.framework */; };
 		00B5709E10863C2A00CDE4A7 /* TemplateChooserController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B5709D10863C2A00CDE4A7 /* TemplateChooserController.m */; };
 		00B974B410701DDA00BD1402 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = 00B974AD10701DCD00BD1402 /* sounds */; };
+		00BADDC51100EDC600EB0344 /* ConnectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00BADD451100BE8300EB0344 /* ConnectorViewController.m */; };
 		00BB4D591086C1160071B584 /* TBRestart.png in Resources */ = {isa = PBXBuildFile; fileRef = 00BB4D561086C1160071B584 /* TBRestart.png */; };
 		00BB4D5A1086C1160071B584 /* TBShutdown.png in Resources */ = {isa = PBXBuildFile; fileRef = 00BB4D571086C1160071B584 /* TBShutdown.png */; };
 		00BB4D5B1086C1160071B584 /* TBSleep.png in Resources */ = {isa = PBXBuildFile; fileRef = 00BB4D581086C1160071B584 /* TBSleep.png */; };
@@ -153,6 +154,7 @@
 		0011696410E7CC4E007A5EFB /* IPStorageSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPStorageSel.png; path = macosx/Images/IPStorageSel.png; sourceTree = "<group>"; };
 		001F56F80FD1E8E500EA246A /* Sparkle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = Sparkle.framework; path = macosx/Sparkle.framework; sourceTree = "<group>"; };
 		00317E380FD31D1A007F2B00 /* AppleGraphicsTablet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppleGraphicsTablet.png; sourceTree = "<group>"; };
+		003318AE1101492B00CC1782 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Connector.xib; sourceTree = "<group>"; };
 		003E2597107075D900185260 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
 		0043804C10668FAE001CFCCF /* Package.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Package.cpp; path = libemulator/Package.cpp; sourceTree = "<group>"; };
 		0043804D10668FAE001CFCCF /* Package.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Package.h; path = libemulator/Package.h; sourceTree = "<group>"; };
@@ -199,6 +201,8 @@
 		00B5709D10863C2A00CDE4A7 /* TemplateChooserController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TemplateChooserController.m; sourceTree = "<group>"; };
 		00B974AD10701DCD00BD1402 /* sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; path = sounds; sourceTree = "<group>"; };
 		00B9774610705AF800BD1402 /* OEDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OEDefines.h; path = libemulator/OEDefines.h; sourceTree = "<group>"; };
+		00BADD441100BE8300EB0344 /* ConnectorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConnectorViewController.h; sourceTree = "<group>"; };
+		00BADD451100BE8300EB0344 /* ConnectorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConnectorViewController.m; sourceTree = "<group>"; };
 		00BB4D561086C1160071B584 /* TBRestart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TBRestart.png; sourceTree = "<group>"; };
 		00BB4D571086C1160071B584 /* TBShutdown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TBShutdown.png; sourceTree = "<group>"; };
 		00BB4D581086C1160071B584 /* TBSleep.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TBSleep.png; sourceTree = "<group>"; };
@@ -483,6 +487,8 @@
 				00FE0C041095353B00B92AB7 /* TemplateChooserViewController.h */,
 				00FE0C051095353B00B92AB7 /* TemplateChooserViewController.mm */,
 				00FE0C071095354300B92AB7 /* DeviceChooserViewController.h */,
+				00BADD441100BE8300EB0344 /* ConnectorViewController.h */,
+				00BADD451100BE8300EB0344 /* ConnectorViewController.m */,
 			);
 			path = macosx;
 			sourceTree = "<group>";
@@ -490,6 +496,7 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				003318AD1101492B00CC1782 /* Connector.xib */,
 				0011696310E7CC4E007A5EFB /* IPStorage.png */,
 				0011696410E7CC4E007A5EFB /* IPStorageSel.png */,
 				00D1958B1093712E008FB014 /* Chooser.xib */,
@@ -530,7 +537,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0072B1DD10E578E500AC7EBD /* OEEmulation.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -648,6 +654,7 @@
 				00D1958D1093712E008FB014 /* Chooser.xib in Resources */,
 				0011696510E7CC59007A5EFB /* IPStorageSel.png in Resources */,
 				0011696610E7CC59007A5EFB /* IPStorage.png in Resources */,
+				003318AF1101492B00CC1782 /* Connector.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -691,6 +698,7 @@
 				00FE0C061095353B00B92AB7 /* TemplateChooserViewController.mm in Sources */,
 				00FE0C171095371B00B92AB7 /* ChooserViewController.m in Sources */,
 				00FE0C6310953F7000B92AB7 /* DeviceChooserViewController.mm in Sources */,
+				00BADDC51100EDC600EB0344 /* ConnectorViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -705,6 +713,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		003318AD1101492B00CC1782 /* Connector.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				003318AE1101492B00CC1782 /* English */,
+			);
+			name = Connector.xib;
+			sourceTree = "<group>";
+		};
 		005E5F751086B16C00E573D4 /* Inspector.xib */ = {
 			isa = PBXVariantGroup;
 			children = (

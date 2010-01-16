@@ -52,10 +52,10 @@
 				[groups setObject:group forKey:groupName];
 			}
 			NSString *imagePath = [imagesPath stringByAppendingPathComponent:imageName];
-			ChooserItem *item = [[ChooserItem alloc] initWithItem:templatePath
-															label:label
-														imagePath:imagePath
-													  description:description];
+			ChooserItem *item = [[ChooserItem alloc] initWithTitle:label
+														  subtitle:description
+														 imagePath:imagePath
+															  data:templatePath];
 			if (item)
 			{
 				[item autorelease];

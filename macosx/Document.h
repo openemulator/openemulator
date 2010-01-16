@@ -39,6 +39,8 @@
 
 - (IBAction) saveDocumentAsTemplate:(id)sender;
 
+- (void) addDevice:path connected:(NSMutableArray *) connections;
+
 - (void) powerButtonPressedAndReleased:(id)sender;
 - (void) powerButtonPressed:(id)sender;
 - (void) powerButtonReleased:(id)sender;

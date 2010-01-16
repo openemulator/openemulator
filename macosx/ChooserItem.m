@@ -12,21 +12,21 @@
 
 @implementation ChooserItem
 
-- (id)initWithItem:(NSString *) theItemPath
-			 label:(NSString *) theLabel
-		 imagePath:(NSString *) theImagePath
-	   description:(NSString *) theDescription
+- (id)initWithTitle:(NSString *) theTitle
+		   subtitle:(NSString *) theSubtitle
+		  imagePath:(NSString *) theImagePath
+			   data:(NSString *) theData
 {
 	if (self = [super init])
 	{
-		if (theItemPath)
-			itemPath = [theItemPath copy];
-		if (theLabel)
-			label = [theLabel copy];
+		if (theTitle)
+			title = [theTitle copy];
+		if (theSubtitle)
+			subtitle = [theSubtitle copy];
 		if (theImagePath)
 			imagePath = [theImagePath copy];
-		if (theDescription)
-			description = [theDescription copy];
+		if (theData)
+			data = [theData copy];
 	}
 	
 	return self;
@@ -34,10 +34,10 @@
 
 - (void)dealloc
 {
-    [itemPath release];
-    [label release];
+    [title release];
+    [subtitle release];
     [imagePath release];
-    [description release];
+    [data release];
 	
     [super dealloc];
 }
@@ -54,22 +54,22 @@
 
 - (NSString *) imageTitle
 {
-	return label;
+	return title;
 }
 
 - (NSString *) imageSubtitle
 {
-	return description;
+	return subtitle;
 }
 
 - (NSString *) imageUID
 {
-    return [[itemPath retain] autorelease];
+    return [[data retain] autorelease];
 }
 
-- (NSString *) itemPath
+- (NSString *) data
 {
-	return [[itemPath retain] autorelease];
+	return [[data retain] autorelease];
 }
 
 @end
