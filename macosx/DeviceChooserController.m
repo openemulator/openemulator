@@ -25,7 +25,9 @@
 		connectorViewController = [[ConnectorViewController alloc] init];
 		[connectorViewController setDelegate:self];
 		
-		activeView = NULL;
+		currentView = NULL;
+		currentStep = 0;
+		
 		selectedItemOutlets = NULL;
 	}
 	
@@ -42,25 +44,23 @@
 
 - (void) updateView:(id) view
 {
-	if (view == activeView)
+	if (view == currentView)
 		return;
 	
-	if (activeView)
+	if (currentView)
 	{
-		[activeView setHidden:YES];
-		[activeView removeFromSuperview];
+		[currentView setHidden:YES];
+		[currentView removeFromSuperview];
 	}
-	[fSubview addSubview:view];
-	[view setFrameSize:[fSubview frame].size];
+	[fView addSubview:view];
+	[view setFrameSize:[fView frame].size];
+	[view setHidden:NO];
 	
-	activeView = view;
+	currentView = view;
 }
 
 - (void) setDeviceChooserView
 {
-	[[self window] center];
-	
-	activeStep = 0;
 	[self updateView:[deviceChooserViewController view]];
 	
 	[deviceChooserViewController selectItemWithPath:nil];
@@ -86,8 +86,8 @@
 							 != nil)];
 	
 	[fMessage setStringValue:
-	 NSLocalizedString(@"Choose a connection for your new device:",
-					   @"Choose a connection for your new device:")];
+	 NSLocalizedString(@"Choose an inlet for 'Apple Language Card':",
+					   @"Choose an inlet for your new device:")];
 	
 }
 
@@ -97,12 +97,16 @@
 	
 	[self setWindowFrameAutosaveName:@"DeviceChooser"];
 	
+	[[self window] center];
+	
 	[self setDeviceChooserView];
 }
 
 - (void) showWindow:(id) sender
 {
 	[super showWindow:sender];
+	
+	[[self window] center];
 	
 	[self setDeviceChooserView];
 }
@@ -126,9 +130,9 @@
 
 - (IBAction) performPrevious:(id) sender
 {
-	activeStep--;
+	currentStep--;
 	
-	if (activeStep == 0)
+	if (currentStep == 0)
 		[self setDeviceChooserView];
 	else
 		[self setConnectorView];
@@ -136,9 +140,9 @@
 
 - (IBAction) performNext:(id) sender
 {
-	activeStep++;
+	currentStep++;
 	
-	if (activeStep == 1)
+	if (currentStep == 1)
 	{
 		if (selectedItemOutlets)
 			[selectedItemOutlets release];
@@ -147,7 +151,7 @@
 		[selectedItemOutlets retain];
 	}
 	
-	if (activeStep <= [selectedItemOutlets count])
+	if (currentStep <= [selectedItemOutlets count])
 	{
 		[self setConnectorView];
 	}

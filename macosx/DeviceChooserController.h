@@ -16,7 +16,7 @@
 @interface DeviceChooserController : NSWindowController
 {
 	IBOutlet id fMessage;
-	IBOutlet id fSubview;
+	IBOutlet id fView;
 	IBOutlet id fPreviousButton;
 	IBOutlet id fNextButton;
 	
@@ -25,8 +25,8 @@
 	DeviceChooserViewController *deviceChooserViewController;
 	ConnectorViewController *connectorViewController;
 	
-	id activeView;
-	int activeStep;
+	id currentView;
+	int currentStep;
 	
 	NSMutableArray *selectedItemOutlets;
 }
