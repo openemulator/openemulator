@@ -2,7 +2,7 @@
 /**
  * OpenEmulator
  * Mac OS X Device Chooser Controller
- * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Controls the device chooser window.
@@ -25,10 +25,10 @@
 	DeviceChooserViewController *deviceChooserViewController;
 	ConnectorViewController *connectorViewController;
 	
+	NSArray *selectedItemOutlets;
+	
 	id currentView;
 	int currentStep;
-	
-	NSMutableArray *selectedItemOutlets;
 }
 
 - (void) runModal:(id) sender;

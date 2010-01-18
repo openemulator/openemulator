@@ -91,6 +91,7 @@
 		00D846290FFF23B7005802F0 /* PRSound.png in Resources */ = {isa = PBXBuildFile; fileRef = 00D846280FFF23B7005802F0 /* PRSound.png */; };
 		00E2A86810532FD200910B53 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B334880FE41F110042661D /* CoreServices.framework */; };
 		00EF028D107D9EFB00FE378D /* VerticallyCenteredCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00EF028C107D9EFB00FE378D /* VerticallyCenteredCell.m */; };
+		00F0ED6711028C8800208090 /* DiskImage525.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000F66390FF8368F00C8AF23 /* DiskImage525.icns */; };
 		00F86BCB100FD4210016867D /* IPInfo.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BC6100FD4210016867D /* IPInfo.png */; };
 		00F86BCC100FD4210016867D /* IPLocked.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BC7100FD4210016867D /* IPLocked.png */; };
 		00F86BCE100FD4210016867D /* IPUnlocked.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BC9100FD4210016867D /* IPUnlocked.png */; };
@@ -655,6 +656,7 @@
 				0011696510E7CC59007A5EFB /* IPStorageSel.png in Resources */,
 				0011696610E7CC59007A5EFB /* IPStorage.png in Resources */,
 				003318AF1101492B00CC1782 /* Connector.xib in Resources */,
+				00F0ED6711028C8800208090 /* DiskImage525.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

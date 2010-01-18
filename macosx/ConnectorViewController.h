@@ -1,11 +1,11 @@
 
 /**
  * OpenEmulator
- * Mac OS X Chooser View Controller
- * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
+ * Mac OS X Connector View Controller
+ * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls a device or template chooser view.
+ * Controls a connector view.
  */
 
 #import <Cocoa/Cocoa.h>
@@ -23,9 +23,19 @@
 	
 	id<ConnectorDelegate> connectorDelegate;
 	
-	NSArray *items;
+	NSMutableArray *items;
+	
+	NSArray *outlets;
+	NSArray *inlets;
+	
+	NSMutableArray *map;
 }
 
 - (void) setDelegate:(id)theDelegate;
+
+- (void) setupWithOutlets:(NSArray *) theOutlets
+				andInlets:(NSArray *) theInlets;
+- (void) updateWithIndex:(int) index;
+- (NSMutableDictionary *) connections;
 
 @end

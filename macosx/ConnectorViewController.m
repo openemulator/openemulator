@@ -2,10 +2,10 @@
 /**
  * OpenEmulator
  * Mac OS X Connector View Controller
- * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls a conncetor view.
+ * Controls a connector view.
  */
 
 #import "ConnectorViewController.h"
@@ -28,11 +28,41 @@
 	[super dealloc];
 	
 	[items release];
+	if (outlets)
+		[outlets release];
+	if (inlets)
+		[inlets release];
 }
 
 - (void) setDelegate:(id)theDelegate
 {
 	connectorDelegate = theDelegate;
+}
+
+- (void) awakeFromNib
+{
+	[super awakeFromNib];
+	
+	NSSize aSize;
+	aSize.width = 128;
+	aSize.height = 64;
+	NSDictionary *attrs = [NSDictionary dictionaryWithObjectsAndKeys:
+						   [NSFont messageFontOfSize:11.0f], NSFontAttributeName,
+						   [NSColor blackColor], NSForegroundColorAttributeName,
+						   nil];
+	NSDictionary *hAttrs = [NSDictionary dictionaryWithObjectsAndKeys:
+							[NSFont messageFontOfSize:11.0f], NSFontAttributeName,
+							[NSColor whiteColor], NSForegroundColorAttributeName,
+							nil];
+	
+	[fImageBrowserView setAllowsEmptySelection:NO];
+	[fImageBrowserView setAllowsMultipleSelection:NO];
+	[fImageBrowserView setCellsStyleMask:IKCellsStyleTitled];
+	[fImageBrowserView setCellSize:aSize];
+	[fImageBrowserView setValue:attrs
+						 forKey:IKImageBrowserCellsTitleAttributesKey];
+	[fImageBrowserView setValue:hAttrs
+						 forKey:IKImageBrowserCellsHighlightedTitleAttributesKey];
 }
 
 - (NSUInteger) numberOfItemsInImageBrowser:(IKImageBrowserView *) aBrowser
@@ -62,6 +92,59 @@ cellWasDoubleClickedAtIndex:(NSUInteger) index
 	ChooserItem *item = [self imageBrowser:fImageBrowserView
 							   itemAtIndex:index];
 	return [[[item data] copy] autorelease];
+}
+
+- (void) setupWithOutlets:(NSArray *) theOutlets
+				andInlets:(NSArray *) theInlets;
+{
+	if (outlets)
+		[outlets release];
+	outlets = theOutlets;
+	[outlets retain];
+	
+	if (inlets)
+		[inlets release];
+	inlets = theInlets;
+	[inlets retain];
+}
+
+- (void) updateWithIndex:(int) index
+{
+	NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
+	NSString *imagesPath = [resourcePath
+							stringByAppendingPathComponent:@"images"];
+	
+	NSMutableDictionary *outlet;
+	outlet = [outlets objectAtIndex:index];
+	
+	[items removeAllObjects];
+	for (int i = 0; i < [inlets count]; i++)
+	{
+		NSMutableDictionary *dict = [inlets objectAtIndex:i];
+		NSString *imageName = [dict objectForKey:@"image"];
+		NSString *imagePath = [imagesPath
+							   stringByAppendingPathComponent:imageName];
+		ChooserItem *item = [[ChooserItem alloc]
+							 initWithTitle:[dict objectForKey:@"label"]
+							 subtitle:@""
+							 imagePath:imagePath
+							 data:[dict objectForKey:@"type"]];
+		if (item)
+		{
+			[item autorelease];
+			[items addObject:item];
+		}
+	}
+	
+	[fImageBrowserView reloadData];
+	[fImageBrowserView setSelectionIndexes:[NSIndexSet
+											indexSetWithIndex:0]
+					  byExtendingSelection:NO];
+}
+
+- (NSMutableDictionary *) connections
+{
+	return NULL;
 }
 
 @end

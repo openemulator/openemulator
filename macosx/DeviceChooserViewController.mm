@@ -2,7 +2,7 @@
 /**
  * OpenEmulator
  * Mac OS X Device Chooser View Controller
- * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Controls a device chooser view.
@@ -105,7 +105,7 @@
 	}
 }
 
-- (void) updateForInlets:(NSMutableArray *)freeInlets
+- (void) updateWithInlets:(NSMutableArray *)freeInlets
 {
 	NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
 	NSString *imagesPath = [resourcePath

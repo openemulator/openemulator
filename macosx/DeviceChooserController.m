@@ -2,7 +2,7 @@
 /**
  * OpenEmulator
  * Mac OS X Device Chooser Controller
- * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Controls the device chooser window.
@@ -26,9 +26,6 @@
 		[connectorViewController setDelegate:self];
 		
 		currentView = NULL;
-		currentStep = 0;
-		
-		selectedItemOutlets = NULL;
 	}
 	
 	return self;
@@ -38,15 +35,18 @@
 {
 	[super dealloc];
 	
+	if (selectedItemOutlets)
+		[selectedItemOutlets release];
+	
 	[deviceChooserViewController release];
 	[connectorViewController release];
 }
 
 - (void) updateView:(id) view
+			  title:(NSString *) title
+	previousEnabled:(BOOL) previousEnabled
+		   lastStep:(BOOL) lastStep
 {
-	if (view == currentView)
-		return;
-	
 	if (currentView)
 	{
 		[currentView setHidden:YES];
@@ -57,38 +57,51 @@
 	[view setHidden:NO];
 	
 	currentView = view;
+	
+	[fMessage setStringValue:title];
+	
+	[fPreviousButton setEnabled:previousEnabled];
+	if (lastStep)
+		[fNextButton setTitle:NSLocalizedString(@"Finish", @"Finish")];
+	else
+		[fNextButton setTitle:NSLocalizedString(@"Next", @"Next")];
 }
 
 - (void) setDeviceChooserView
 {
-	[self updateView:[deviceChooserViewController view]];
-	
-	[deviceChooserViewController selectItemWithPath:nil];
-	
-	Document *currentDocument = [fDocumentController currentDocument];
-	[deviceChooserViewController updateForInlets:[currentDocument freeInlets]];
-	
-	[fPreviousButton setEnabled:NO];
-	[fNextButton setEnabled:([deviceChooserViewController selectedItemPath]
-							 != nil)];
-	
-	[fMessage setStringValue:
-	 NSLocalizedString(@"Choose a template for your new device:",
-					   @"Choose a template for your new device:")];
+	[self updateView:[deviceChooserViewController view]
+			   title:NSLocalizedString(@"Choose a template for your new device:",
+									   @"Choose a template for your new device:")
+	 previousEnabled:NO
+			lastStep:NO
+	 ];
 }
 
-- (void) setConnectorView
+- (void) setConnectorViewAtIndex:(int) index
 {
-	[self updateView:[connectorViewController view]];
+	NSString *label;
+	label = [[selectedItemOutlets objectAtIndex:index] objectForKey:@"label"];
 	
-	[fPreviousButton setEnabled:YES];
-	[fNextButton setEnabled:([deviceChooserViewController selectedItemPath]
-							 != nil)];
+	[self updateView:[connectorViewController view]
+			   title:[NSString localizedStringWithFormat:
+					  @"Choose an inlet for \u201C%@\u201D:", label,
+					  @"Choose an inlet for \u201C%@\u201D:"]
+	 previousEnabled:YES
+			lastStep:(index == ([selectedItemOutlets count] - 1))
+	 ];
 	
-	[fMessage setStringValue:
-	 NSLocalizedString(@"Choose an inlet for 'Apple Language Card':",
-					   @"Choose an inlet for your new device:")];
+	[connectorViewController updateWithIndex:index];
+}
+
+- (void) setup
+{
+	currentStep = 0;
+	[self setDeviceChooserView];
 	
+	NSArray *freeInlets = [[fDocumentController currentDocument] freeInlets];
+	[deviceChooserViewController updateWithInlets:freeInlets];
+	
+	[fNextButton setEnabled:([deviceChooserViewController selectedItemPath] != nil)];
 }
 
 - (void) windowDidLoad
@@ -97,22 +110,14 @@
 	
 	[self setWindowFrameAutosaveName:@"DeviceChooser"];
 	
-	[[self window] center];
-	
-	[self setDeviceChooserView];
-}
-
-- (void) showWindow:(id) sender
-{
-	[super showWindow:sender];
-	
-	[[self window] center];
-	
-	[self setDeviceChooserView];
+	[self setup];
 }
 
 - (void) runModal:(id) sender
 {
+	if ([self isWindowLoaded])
+		[self setup];
+	
 	[NSApp runModalForWindow:[self window]];
 }
 
@@ -121,11 +126,16 @@
 	[self performNext:sender];
 }
 
+- (void) connectorWasDoubleClicked:(id) sender
+{
+	[self performNext:sender];
+}
+
 - (IBAction) performCancel:(id) sender
 {
-	[NSApp abortModal];
-	
 	[[self window] orderOut:self];
+	
+	[NSApp abortModal];
 }
 
 - (IBAction) performPrevious:(id) sender
@@ -135,7 +145,7 @@
 	if (currentStep == 0)
 		[self setDeviceChooserView];
 	else
-		[self setConnectorView];
+		[self setConnectorViewAtIndex:(currentStep - 1)];
 }
 
 - (IBAction) performNext:(id) sender
@@ -149,16 +159,20 @@
 		
 		selectedItemOutlets = [deviceChooserViewController selectedItemOutlets];
 		[selectedItemOutlets retain];
+		
+		NSArray *freeInlets = [[fDocumentController currentDocument] freeInlets];
+		
+		[connectorViewController setupWithOutlets:selectedItemOutlets
+										andInlets:freeInlets];
 	}
 	
 	if (currentStep <= [selectedItemOutlets count])
-	{
-		[self setConnectorView];
-	}
+		[self setConnectorViewAtIndex:(currentStep - 1)];
 	else
 	{
-		[NSApp stopModal];
-		[[self window] orderOut:self];
+		[self performCancel:sender];
+		
+		// Call addDML
 	}
 }
 

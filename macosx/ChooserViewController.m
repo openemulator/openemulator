@@ -47,7 +47,7 @@
 	[super awakeFromNib];
 	
 	NSSize aSize;
-	aSize.width = 112;
+	aSize.width = 128;
 	aSize.height = 64;
 	NSDictionary *attrs = [NSDictionary dictionaryWithObjectsAndKeys:
 						   [NSFont messageFontOfSize:11.0f], NSFontAttributeName,
@@ -60,6 +60,7 @@
 	
 	[fImageBrowserView setAllowsEmptySelection:NO];
 	[fImageBrowserView setAllowsMultipleSelection:NO];
+	[fImageBrowserView setCellsStyleMask:IKCellsStyleTitled];
 	[fImageBrowserView setCellSize:aSize];
 	[fImageBrowserView setValue:attrs
 						 forKey:IKImageBrowserCellsTitleAttributesKey];
