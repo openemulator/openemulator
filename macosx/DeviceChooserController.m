@@ -35,11 +35,13 @@
 {
 	[super dealloc];
 	
-	if (selectedItemOutlets)
-		[selectedItemOutlets release];
-	
 	[deviceChooserViewController release];
 	[connectorViewController release];
+
+	if (selectedItemOutlets)
+		[selectedItemOutlets release];
+	if (selectedItemInlets)
+		[selectedItemInlets release];
 }
 
 - (void) updateView:(id) view
@@ -47,16 +49,19 @@
 	previousEnabled:(BOOL) previousEnabled
 		   lastStep:(BOOL) lastStep
 {
-	if (currentView)
+	if (view != currentView)
 	{
-		[currentView setHidden:YES];
-		[currentView removeFromSuperview];
-	}
-	[fView addSubview:view];
-	[view setFrameSize:[fView frame].size];
-	[view setHidden:NO];
+		if (currentView)
+		{
+			[currentView setHidden:YES];
+			[currentView removeFromSuperview];
+		}
+		[fView addSubview:view];
+		[view setFrameSize:[fView frame].size];
+		[view setHidden:NO];
 	
-	currentView = view;
+		currentView = view;
+	}
 	
 	[fMessage setStringValue:title];
 	
@@ -90,7 +95,40 @@
 			lastStep:(index == ([selectedItemOutlets count] - 1))
 	 ];
 	
-	[connectorViewController updateWithIndex:index];
+	NSMutableDictionary *outlet = [selectedItemOutlets objectAtIndex:index];
+	NSString *outletType = [outlet objectForKey:@"type"];
+	
+	NSArray *freeInlets = [[fDocumentController currentDocument] freeInlets];
+	NSMutableArray *inlets = [NSMutableArray array];
+	
+	for (int i = 0; i < [freeInlets count]; i++)
+	{
+		NSMutableDictionary *inlet = [freeInlets objectAtIndex:i];
+		NSString *inletType = [inlet objectForKey:@"type"];
+		
+		if ([inletType compare:outletType] != NSOrderedSame)
+			continue;
+		
+		NSString *inletRef = [inlet objectForKey:@"ref"];
+		BOOL isAvailable = YES;
+		for (int j = 0; j < [selectedItemInlets count]; j++)
+		{
+			NSString *prevInletRef = [selectedItemInlets objectAtIndex:j];
+			
+			if ([prevInletRef compare:inletRef] == NSOrderedSame)
+			{
+				isAvailable = NO;
+				break;
+			}
+		}
+
+		if (!isAvailable)
+			continue;
+		
+		[inlets addObject:inlet];
+	}
+	
+	[connectorViewController updateWithInlets:inlets];
 }
 
 - (void) setup
@@ -145,26 +183,41 @@
 	if (currentStep == 0)
 		[self setDeviceChooserView];
 	else
+	{
+		NSRange theRange;
+		theRange.location = currentStep - 1;
+		theRange.length = [selectedItemInlets count] - theRange.location;
+		[selectedItemInlets removeObjectsInRange:theRange];
+		
 		[self setConnectorViewAtIndex:(currentStep - 1)];
+	}
 }
 
 - (IBAction) performNext:(id) sender
 {
-	currentStep++;
-	
-	if (currentStep == 1)
+	if (currentStep == 0)
 	{
 		if (selectedItemOutlets)
 			[selectedItemOutlets release];
-		
 		selectedItemOutlets = [deviceChooserViewController selectedItemOutlets];
 		[selectedItemOutlets retain];
 		
-		NSArray *freeInlets = [[fDocumentController currentDocument] freeInlets];
-		
-		[connectorViewController setupWithOutlets:selectedItemOutlets
-										andInlets:freeInlets];
+		if (selectedItemInlets)
+			[selectedItemInlets release];
+		selectedItemInlets = [[NSMutableArray alloc] init];
 	}
+	else
+	{
+		NSRange range;
+		range.location = currentStep - 1;
+		range.length = [selectedItemInlets count] - range.location;
+		[selectedItemInlets removeObjectsInRange:range];
+		
+		NSString *inletRef = [connectorViewController selectedInletRef];
+		[selectedItemInlets addObject:inletRef];
+	}
+	
+	currentStep++;
 	
 	if (currentStep <= [selectedItemOutlets count])
 		[self setConnectorViewAtIndex:(currentStep - 1)];

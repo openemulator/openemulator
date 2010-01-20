@@ -105,7 +105,7 @@
 	}
 }
 
-- (void) updateWithInlets:(NSMutableArray *)freeInlets
+- (void) updateWithInlets:(NSArray *)freeInlets
 {
 	NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
 	NSString *imagesPath = [resourcePath
@@ -222,14 +222,18 @@
 		if (o->connectedPort)
 			continue;
 		
+		string stringRef = o->ref.getStringRef();
+		
 		NSString *portType = [NSString stringWithUTF8String:o->type.c_str()];
 		NSString *portLabel = [NSString stringWithUTF8String:o->label.c_str()];
 		NSString *portImage = [NSString stringWithUTF8String:o->image.c_str()];
+		NSString *portRef = [NSString stringWithUTF8String:stringRef.c_str()];
 		
 		NSMutableDictionary *dict = [[[NSMutableDictionary alloc] init] autorelease];
 		[dict setObject:portType forKey:@"type"];
 		[dict setObject:portLabel forKey:@"label"];
 		[dict setObject:portImage forKey:@"image"];
+		[dict setObject:portRef forKey:@"ref"];
 		
 		[freeOutlets addObject:dict];
 	}

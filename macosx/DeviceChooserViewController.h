@@ -17,7 +17,7 @@
 	NSMutableArray *deviceInfos;
 }
 
-- (void) updateWithInlets:(NSMutableArray *)inlets;
+- (void) updateWithInlets:(NSArray *)inlets;
 - (NSMutableArray *)selectedItemOutlets;
 
 @end

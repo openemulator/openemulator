@@ -231,14 +231,18 @@
 		if (i->connectedPort)
 			continue;
 		
+		string stringRef = i->ref.getStringRef();
+		
 		NSString *portType = [NSString stringWithUTF8String:i->type.c_str()];
 		NSString *portLabel = [NSString stringWithUTF8String:i->label.c_str()];
 		NSString *portImage = [NSString stringWithUTF8String:i->image.c_str()];
+		NSString *portRef = [NSString stringWithUTF8String:stringRef.c_str()];
 		
 		NSMutableDictionary *dict = [[[NSMutableDictionary alloc] init] autorelease];
 		[dict setObject:portType forKey:@"type"];
 		[dict setObject:portLabel forKey:@"label"];
 		[dict setObject:portImage forKey:@"image"];
+		[dict setObject:portRef forKey:@"ref"];
 		
 		[freeInlets addObject:dict];
 	}

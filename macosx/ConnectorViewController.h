@@ -24,18 +24,10 @@
 	id<ConnectorDelegate> connectorDelegate;
 	
 	NSMutableArray *items;
-	
-	NSArray *outlets;
-	NSArray *inlets;
-	
-	NSMutableArray *map;
 }
 
 - (void) setDelegate:(id)theDelegate;
-
-- (void) setupWithOutlets:(NSArray *) theOutlets
-				andInlets:(NSArray *) theInlets;
-- (void) updateWithIndex:(int) index;
-- (NSMutableDictionary *) connections;
+- (void) updateWithInlets:(NSArray *) inlets;
+- (NSString *) selectedInletRef;
 
 @end

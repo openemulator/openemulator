@@ -26,6 +26,7 @@
 	ConnectorViewController *connectorViewController;
 	
 	NSArray *selectedItemOutlets;
+	NSMutableArray *selectedItemInlets;
 	
 	id currentView;
 	int currentStep;

@@ -28,10 +28,6 @@
 	[super dealloc];
 	
 	[items release];
-	if (outlets)
-		[outlets release];
-	if (inlets)
-		[inlets release];
 }
 
 - (void) setDelegate:(id)theDelegate
@@ -44,7 +40,7 @@
 	[super awakeFromNib];
 	
 	NSSize aSize;
-	aSize.width = 128;
+	aSize.width = 104;
 	aSize.height = 64;
 	NSDictionary *attrs = [NSDictionary dictionaryWithObjectsAndKeys:
 						   [NSFont messageFontOfSize:11.0f], NSFontAttributeName,
@@ -83,52 +79,27 @@ cellWasDoubleClickedAtIndex:(NSUInteger) index
 		[connectorDelegate connectorWasDoubleClicked:self];
 }
 
-- (NSString *) selectedItemPath
-{
-	NSUInteger index = [[fImageBrowserView selectionIndexes] firstIndex];
-	if (index == NSNotFound)
-		return nil;
-	
-	ChooserItem *item = [self imageBrowser:fImageBrowserView
-							   itemAtIndex:index];
-	return [[[item data] copy] autorelease];
-}
-
-- (void) setupWithOutlets:(NSArray *) theOutlets
-				andInlets:(NSArray *) theInlets;
-{
-	if (outlets)
-		[outlets release];
-	outlets = theOutlets;
-	[outlets retain];
-	
-	if (inlets)
-		[inlets release];
-	inlets = theInlets;
-	[inlets retain];
-}
-
-- (void) updateWithIndex:(int) index
+- (void) updateWithInlets:(NSArray *) inlets
 {
 	NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
 	NSString *imagesPath = [resourcePath
 							stringByAppendingPathComponent:@"images"];
 	
-	NSMutableDictionary *outlet;
-	outlet = [outlets objectAtIndex:index];
-	
 	[items removeAllObjects];
 	for (int i = 0; i < [inlets count]; i++)
 	{
-		NSMutableDictionary *dict = [inlets objectAtIndex:i];
-		NSString *imageName = [dict objectForKey:@"image"];
+		NSMutableDictionary *inlet = [inlets objectAtIndex:i];
+		
+		NSString *imageName = [inlet objectForKey:@"image"];
 		NSString *imagePath = [imagesPath
 							   stringByAppendingPathComponent:imageName];
+		
 		ChooserItem *item = [[ChooserItem alloc]
-							 initWithTitle:[dict objectForKey:@"label"]
+							 initWithTitle:[inlet objectForKey:@"label"]
 							 subtitle:@""
 							 imagePath:imagePath
-							 data:[dict objectForKey:@"type"]];
+							 data:[inlet objectForKey:@"ref"]];
+		
 		if (item)
 		{
 			[item autorelease];
@@ -142,9 +113,15 @@ cellWasDoubleClickedAtIndex:(NSUInteger) index
 					  byExtendingSelection:NO];
 }
 
-- (NSMutableDictionary *) connections
+- (NSString *) selectedInletRef
 {
-	return NULL;
+	NSUInteger index = [[fImageBrowserView selectionIndexes] firstIndex];
+	if (index == NSNotFound)
+		return nil;
+	
+	ChooserItem *item = [self imageBrowser:fImageBrowserView
+							   itemAtIndex:index];
+	return [[[item data] copy] autorelease];
 }
 
 @end

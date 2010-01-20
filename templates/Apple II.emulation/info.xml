@@ -67,13 +67,13 @@
         <connection key="mmu" ref="mmu" />
         <connection key="video" ref="video" />
         <connection key="slotMemory" ref="slotMemory" />
-        <connection key="slot0" ref="dev0::card" />
-        <connection key="slot1" ref="dev5::card" />
+        <connection key="slot0" ref="" />
+        <connection key="slot1" ref="" />
         <connection key="slot2" ref="" />
         <connection key="slot3" ref="" />
         <connection key="slot4" ref="" />
         <connection key="slot5" ref="" />
-        <connection key="slot6" ref="dev1::card" />
+        <connection key="slot6" ref="" />
         <connection key="slot7" ref="" />
     </component>
     <component name="slotMemory" class="AppleIISlotMemory">
@@ -107,7 +107,7 @@
     <component name="game" class="AppleIIGamePort">
         <connection key="iou" ref="iou" />
         <connection key="video" ref="video" />
-        <connection key="port" ref="dev4::port" />
+        <connection key="port" ref="" />
         <property key="an0" value="0" />
         <property key="an1" value="0" />
         <property key="an2" value="0" />
@@ -119,88 +119,8 @@
     </component>
     <component name="videoGen" class="AppleIIVideoGen">
         <connection key="charROMSocket" ref="" />
-        <connection key="monitor" ref="dev5::monitor" />
+        <connection key="monitor" ref="" />
         <resource key="charROMImage" src="roms/Apple II Video US ROM.bin" />
-    </component>
-</device>
-
-<device name="dev0" label="Apple 16kB Language Card" image="Apple Language Card.png">
-    <outlet ref="card" type="appleiislot" />
-    <component name="card" class="AppleLanguageCard">
-        <data key="memory" src="${DEVICE_NAME}.bin" />
-    </component>
-</device>
-
-<device name="dev5" label="Apple II Super Serial Card" image="Apple II Super Serial Card.png">
-    <outlet ref="card" type="appleiislot">
-		<setting ref="mode" type="option" options="Communications Mode,Printer Mode" label="Mode" />
-		<setting ref="baudRate" type="option" options="50,75,110,135,150,300,600,1200,1800,2400,3600,4800,7200,9600,19200" label="Baud Rate" />
-		<setting ref="dataBits" type="option" options="7,8" label="Data Bits" />
-		<setting ref="stopBits" type="option" options="1,2" label="Stop Bits" />
-		<setting ref="parity" type="option" options="None,Even,Odd" label="Parity" />
-		<setting ref="autoLFAfterCR" type="checkbox" label="Auto LF after CR" />
-		<setting ref="interrupts" type="checkbox" label="Interrupts" />
-		<setting ref="charactersPerLine" type="option" options="40,72,80,132" label="Characters Per Line" />
-		<setting ref="delayAfterCR" type="checkbox" label="Delay after CR" />
-	</outlet>
-    <inlet ref="card.port" type="serialport" category="peripheral" label="Port" image="Serial Port.png" />
-    <component name="card" class="AppleDiskIIInterfaceCard">
-        <connection key="port" ref="" />
-        <connection key="rom" ref="rom" />
-		<property key="mode" value="0" />
-		<property key="baudRate" value="9600" />
-		<property key="dataBits" value="1" />
-		<property key="stopBits" value="1" />
-		<property key="parity" value="0" />
-		<property key="autoLFAfterCR" value="0" />
-		<property key="interrupts" value="0" />
-		<property key="charactersPerLine" value="0" />
-		<property key="delayAfterCR" value="0" />
-    </component>
-	<component name="rom" class="AppleIIInterfaceROM">
-        <resource key="romImage" src="roms/Apple II Super Serial Card ROM.bin" />
-    </component>
-</device>
-
-<device name="dev1" label="Apple Disk II Interface Card" image="Apple Disk II Interface Card.png">
-    <outlet ref="card" type="appleiislot" />
-    <inlet ref="card.drive1" type="appledisk525" category="storage" label="Drive 1" image="Apple Disk II Drive 1 Socket.png" />
-    <inlet ref="card.drive2" type="appledisk525" category="storage" label="Drive 2" image="Apple Disk II Drive 2 Socket.png" />
-    <component name="card" class="AppleDiskIIInterfaceCard">
-        <connection key="drive1" ref="dev2::drive" />
-        <connection key="drive2" ref="" />
-        <connection key="rom" ref="rom" />
-    </component>
-	<component name="rom" class="AppleIIInterfaceROM">
-        <resource key="romImage" src="roms/Apple Disk II Interface Card ROM.bin" />
-    </component>
-</device>
-
-<device name="dev2" label="Apple Disk II Drive" image="Apple Disk II Drive.png">
-    <outlet ref="drive" type="appledisk525">
-		<setting ref="lock" type="checkbox" label="Lock Disk Drive" />
-	</outlet>
-    <component name="drive" class="AppleDiskII">
-        <property key="diskImage" value=" /Users/mressl/test2.dsk" />
-        <property key="lock" value="0" />
-        <resource key="soundSpin" src="sounds/Apple Disk II Spin.wav" />
-        <resource key="soundArm" src="sounds/Apple Disk II Arm.wav" />
-        <resource key="soundStop" src="sounds/Apple Disk II Stop.wav" />
-        <resource key="soundShake" src="sounds/Apple Disk II Shake.wav" />
-    </component>
-</device>
-
-<device name="dev5" label="Apple Monitor //" image="Apple Monitor II.png">
-    <outlet ref="monitor" type="appleiivideo" />
-    <component name="monitor" class="AppleMonitorII">
-        <connection key="joystick" ref="host::video" />
-    </component>
-</device>
-
-<device name="dev4" label="Apple II Game Paddles" image="Apple II Game Paddles.png">
-    <outlet ref="port" type="applegame" />
-    <component name="port" class="AppleIIGamePaddles">
-        <connection key="joystick" ref="host::joystick" />
     </component>
 </device>
 
