@@ -472,8 +472,17 @@ bool OEEmulation::addDML(string path, map<string, string> connections)
 	// Load DML Tree
 	// Rename device names, so they don't step on old ones
 	// Update reference names in tree and conn
-	// Add new tree to old one
+	// Add new tree to old one:
+	/*
+	 * ¿Dónde inserto el device en el DML?
+	 * Busco el inlet correspondiente.
+	 * Busco el próximo inlet ocupado.
+	 * Si no lo encuentro, busco el primer outlet del inlet encontrado.
+	 * Busco el inlet correspondiente, busco el próximo inlet ocupado, repito op anterior.
+	 * Inserto antes del inlet encontrado. Sino al final.
+	 */
 	// Go over the connections, and set the inlets to the outlets
+
 	return false;
 }
 
@@ -482,5 +491,12 @@ bool OEEmulation::removeOutlet(string outletRef)
 	// Search component with outletRef
 	// Get components' inlets
 	// Iterate from the beginning with all connected outlets
+
+	/*
+	 * Busco el deviceName del outlet seleccionado
+	 * Elimino los componentes de memoria, y del <device> de DML
+	 * Busco todo outlet que referencia el device seleccionado
+	 * Repito el paso 1 recursivamente
+	 */
 	return false;
 }

@@ -225,7 +225,18 @@
 	{
 		[self performCancel:sender];
 		
-		// Call addDML
+		NSString *dmlPath = [deviceChooserViewController selectedItemPath];
+		NSMutableDictionary *connections = [NSMutableDictionary dictionary];
+		for (int i = 0; i < [selectedItemOutlets count]; i++)
+		{
+			NSString *inletRef = [selectedItemInlets objectAtIndex:i];
+			NSString *outletRef = [[selectedItemOutlets objectAtIndex:i]
+								   objectForKey:@"ref"];
+			[connections setObject:outletRef forKey:inletRef];
+		}
+		
+		[[fDocumentController currentDocument] addDML:dmlPath
+										  connections:connections];
 	}
 }
 

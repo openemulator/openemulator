@@ -40,7 +40,7 @@
 		GLint param = 1;
 		CGLSetParameter(CGLGetCurrentContext(), kCGLCPSwapInterval, &param);
 		
-		[self initGL];
+//		[self initGL];
 	}
 	
 	[pixelFormat release];
@@ -52,7 +52,7 @@
 {
 	[super dealloc];
 
-	[self deallocGL];
+//	[self deallocGL];
 }
 
 - (void) observeValueForKeyPath:(NSString *) keyPath

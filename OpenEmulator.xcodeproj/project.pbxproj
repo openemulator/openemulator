@@ -33,10 +33,7 @@
 		00A0B8041069761A007930A5 /* Document.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00A0B8031069761A007930A5 /* Document.mm */; };
 		00A0D43B106FF64800090223 /* OEComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A0D435106FF64800090223 /* OEComponent.cpp */; };
 		00A0D443106FF66000090223 /* OEComponentFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A0D441106FF66000090223 /* OEComponentFactory.cpp */; };
-		00A0D4BB106FFBB800090223 /* IPMount.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BC8100FD4210016867D /* IPMount.png */; };
 		00A8C3FC1080064900D98FE0 /* InspectorDeviceCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00A8C3FB1080064900D98FE0 /* InspectorDeviceCell.m */; };
-		00A8C4E3108023B200D98FE0 /* OEEmulator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A8C4AF1080220800D98FE0 /* OEEmulator.cpp */; };
-		00A97551107AD27500893DCE /* IPReveal.png in Resources */ = {isa = PBXBuildFile; fileRef = 00A97550107AD27500893DCE /* IPReveal.png */; };
 		00B2D72C10914659004783F9 /* DeviceChooserController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B2D72B10914659004783F9 /* DeviceChooserController.m */; };
 		00B3347D0FE41EF60042661D /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B3347C0FE41EF60042661D /* AudioToolbox.framework */; };
 		00B334810FE41EFE0042661D /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B334800FE41EFE0042661D /* AudioUnit.framework */; };
@@ -92,10 +89,6 @@
 		00E2A86810532FD200910B53 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B334880FE41F110042661D /* CoreServices.framework */; };
 		00EF028D107D9EFB00FE378D /* VerticallyCenteredCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00EF028C107D9EFB00FE378D /* VerticallyCenteredCell.m */; };
 		00F0ED6711028C8800208090 /* DiskImage525.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000F66390FF8368F00C8AF23 /* DiskImage525.icns */; };
-		00F86BCB100FD4210016867D /* IPInfo.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BC6100FD4210016867D /* IPInfo.png */; };
-		00F86BCC100FD4210016867D /* IPLocked.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BC7100FD4210016867D /* IPLocked.png */; };
-		00F86BCE100FD4210016867D /* IPUnlocked.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BC9100FD4210016867D /* IPUnlocked.png */; };
-		00F86BCF100FD4210016867D /* IPUnmount.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BCA100FD4210016867D /* IPUnmount.png */; };
 		00F86BE3100FD4F60016867D /* IPSoundMax.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BE1100FD4F60016867D /* IPSoundMax.png */; };
 		00F86BE4100FD4F60016867D /* IPSoundMin.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BE2100FD4F60016867D /* IPSoundMin.png */; };
 		00FE0C061095353B00B92AB7 /* TemplateChooserViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00FE0C051095353B00B92AB7 /* TemplateChooserViewController.mm */; };
@@ -189,9 +182,6 @@
 		00A0D442106FF66000090223 /* OEComponentFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OEComponentFactory.h; path = libemulator/OEComponentFactory.h; sourceTree = "<group>"; };
 		00A8C3FA1080064900D98FE0 /* InspectorDeviceCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InspectorDeviceCell.h; sourceTree = "<group>"; };
 		00A8C3FB1080064900D98FE0 /* InspectorDeviceCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InspectorDeviceCell.m; sourceTree = "<group>"; };
-		00A8C4AF1080220800D98FE0 /* OEEmulator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OEEmulator.cpp; path = libemulator/OEEmulator.cpp; sourceTree = "<group>"; };
-		00A8C4B01080220800D98FE0 /* OEEmulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OEEmulator.h; path = libemulator/OEEmulator.h; sourceTree = "<group>"; };
-		00A97550107AD27500893DCE /* IPReveal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPReveal.png; sourceTree = "<group>"; };
 		00B2D72A10914659004783F9 /* DeviceChooserController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceChooserController.h; sourceTree = "<group>"; };
 		00B2D72B10914659004783F9 /* DeviceChooserController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceChooserController.m; sourceTree = "<group>"; };
 		00B3347C0FE41EF60042661D /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = /System/Library/Frameworks/AudioToolbox.framework; sourceTree = "<absolute>"; };
@@ -254,11 +244,6 @@
 		00F00A020FD5838D00C506AD /* IPExpansionsSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPExpansionsSel.png; sourceTree = "<group>"; };
 		00F00A030FD5838D00C506AD /* IPPorts.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPPorts.png; sourceTree = "<group>"; };
 		00F00A040FD5838D00C506AD /* IPPortsSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPPortsSel.png; sourceTree = "<group>"; };
-		00F86BC6100FD4210016867D /* IPInfo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPInfo.png; sourceTree = "<group>"; };
-		00F86BC7100FD4210016867D /* IPLocked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPLocked.png; sourceTree = "<group>"; };
-		00F86BC8100FD4210016867D /* IPMount.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPMount.png; sourceTree = "<group>"; };
-		00F86BC9100FD4210016867D /* IPUnlocked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPUnlocked.png; sourceTree = "<group>"; };
-		00F86BCA100FD4210016867D /* IPUnmount.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPUnmount.png; sourceTree = "<group>"; };
 		00F86BE1100FD4F60016867D /* IPSoundMax.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPSoundMax.png; sourceTree = "<group>"; };
 		00F86BE2100FD4F60016867D /* IPSoundMin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPSoundMin.png; sourceTree = "<group>"; };
 		00FE0C00109534CE00B92AB7 /* ChooserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChooserViewController.h; sourceTree = "<group>"; };
@@ -320,15 +305,9 @@
 				00BB4D561086C1160071B584 /* TBRestart.png */,
 				00BB4D571086C1160071B584 /* TBShutdown.png */,
 				00BB4D581086C1160071B584 /* TBSleep.png */,
-				00A97550107AD27500893DCE /* IPReveal.png */,
 				00C8AA0710103D6A006A5734 /* OSDPower.png */,
 				00F86BE1100FD4F60016867D /* IPSoundMax.png */,
 				00F86BE2100FD4F60016867D /* IPSoundMin.png */,
-				00F86BC6100FD4210016867D /* IPInfo.png */,
-				00F86BC7100FD4210016867D /* IPLocked.png */,
-				00F86BC8100FD4210016867D /* IPMount.png */,
-				00F86BC9100FD4210016867D /* IPUnlocked.png */,
-				00F86BCA100FD4210016867D /* IPUnmount.png */,
 				00C7F1D5100BC5B400AD0812 /* IPMinus.png */,
 				00C7F1D6100BC5B400AD0812 /* IPMinusSel.png */,
 				00C7F1D7100BC5B400AD0812 /* IPPlus.png */,
@@ -390,8 +369,6 @@
 				009277FB10E2BB2E00C645D0 /* OERef.h */,
 				00C11A5010E1B2D900F067D6 /* OEInfo.cpp */,
 				00C11A5110E1B2D900F067D6 /* OEInfo.h */,
-				00A8C4AF1080220800D98FE0 /* OEEmulator.cpp */,
-				00A8C4B01080220800D98FE0 /* OEEmulator.h */,
 				00A0D441106FF66000090223 /* OEComponentFactory.cpp */,
 				00A0D442106FF66000090223 /* OEComponentFactory.h */,
 				00A0D435106FF64800090223 /* OEComponent.cpp */,
@@ -637,17 +614,11 @@
 				00C7F1DA100BC5B500AD0812 /* IPMinusSel.png in Resources */,
 				00C7F1DB100BC5B500AD0812 /* IPPlus.png in Resources */,
 				00C7F1DC100BC5B500AD0812 /* IPPlusSel.png in Resources */,
-				00F86BCB100FD4210016867D /* IPInfo.png in Resources */,
-				00F86BCC100FD4210016867D /* IPLocked.png in Resources */,
-				00F86BCE100FD4210016867D /* IPUnlocked.png in Resources */,
-				00F86BCF100FD4210016867D /* IPUnmount.png in Resources */,
 				00F86BE3100FD4F60016867D /* IPSoundMax.png in Resources */,
 				00F86BE4100FD4F60016867D /* IPSoundMin.png in Resources */,
 				00C8AA0B10103D6A006A5734 /* OSDPause.png in Resources */,
 				00C8AA0C10103D6A006A5734 /* OSDPower.png in Resources */,
 				00C6C0C110602151004D084B /* roms in Resources */,
-				00A0D4BB106FFBB800090223 /* IPMount.png in Resources */,
-				00A97551107AD27500893DCE /* IPReveal.png in Resources */,
 				005E5F771086B16C00E573D4 /* Inspector.xib in Resources */,
 				00BB4D591086C1160071B584 /* TBRestart.png in Resources */,
 				00BB4D5A1086C1160071B584 /* TBShutdown.png in Resources */,
@@ -671,7 +642,6 @@
 				004384841067641C001CFCCF /* EventController.cpp in Sources */,
 				00A0D43B106FF64800090223 /* OEComponent.cpp in Sources */,
 				00A0D443106FF66000090223 /* OEComponentFactory.cpp in Sources */,
-				00A8C4E3108023B200D98FE0 /* OEEmulator.cpp in Sources */,
 				009277FD10E2BB3A00C645D0 /* OEInfo.cpp in Sources */,
 				009277FE10E2BB3B00C645D0 /* OERef.cpp in Sources */,
 				0072B1DE10E578E500AC7EBD /* OEEmulation.cpp in Sources */,

@@ -389,9 +389,26 @@
 		[[NSAlert alertWithError:error] runModal];
 }
 
-- (void) addDevice:path connected:(NSMutableArray *) connections
+- (void) addDML:(NSString *) path
+	connections:(NSDictionary *) connections
 {
+	string pathString = [path UTF8String];
+	map<string, string> connectionsMap;
 	
+	NSEnumerator *i = [connections keyEnumerator];
+	NSString *inletRef;
+	
+	while (inletRef = [i nextObject])
+	{
+		NSString *outletRef = [connections objectForKey:inletRef];
+		
+		string inletRefString = [inletRef UTF8String];
+		string outletRefString = [outletRef UTF8String];
+		
+		connectionsMap[inletRefString] = outletRefString;
+	}
+	
+	((OEEmulation *) emulation)->addDML(pathString, connectionsMap);
 }
 
 - (void) makeWindowControllers
