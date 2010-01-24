@@ -97,9 +97,19 @@ string OERef::getDevice() const
 	return device;
 }
 
+void OERef::setComponent(string component)
+{
+	this->component = component;
+}
+
 string OERef::getComponent() const
 {
 	return component;
+}
+
+void OERef::setProperty(string property)
+{
+	this->property = property;
 }
 
 string OERef::getProperty() const

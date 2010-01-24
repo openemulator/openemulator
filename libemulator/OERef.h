@@ -27,7 +27,9 @@ public:
 	
 	void setDevice(string device);
 	string getDevice() const;
+	void setComponent(string component);
 	string getComponent() const;
+	void setProperty(string property);
 	string getProperty() const;
 	
 	string getStringRef();

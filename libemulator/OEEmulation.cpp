@@ -608,18 +608,18 @@ void OEEmulation::buildDeviceNameMap(xmlDocPtr deviceDML, map<string, string> &d
 void OEEmulation::renameDMLRefs(xmlDocPtr doc, map<string, string> &deviceNameMap)
 {
 	xmlNodePtr node = xmlDocGetRootElement(doc);
-	for(xmlNodePtr childNode = node->children;
-		childNode;
-		childNode = childNode->next)
+	for(xmlNodePtr deviceNode = node->children;
+		deviceNode;
+		deviceNode = deviceNode->next)
 	{
-		if (xmlStrcmp(childNode->name, BAD_CAST "device"))
+		if (xmlStrcmp(deviceNode->name, BAD_CAST "device"))
 			continue;
 		
-		string deviceName = deviceNameMap[getXMLProperty(childNode, "name")];
-		setXMLProperty(childNode, "name", deviceName);
+		string deviceName = deviceNameMap[getXMLProperty(deviceNode, "name")];
+		setXMLProperty(deviceNode, "name", deviceName);
 		OERef deviceRef(deviceName);
 		
-		for(xmlNodePtr componentNode = childNode->children;
+		for(xmlNodePtr componentNode = deviceNode->children;
 			componentNode;
 			componentNode = componentNode->next)
 		{
@@ -658,20 +658,42 @@ void OEEmulation::renameConnections(map<string, string> &connections,
 		connections[i->first] = deviceNameMap[i->second];
 }
 
-void OEEmulation::insertDML(xmlDocPtr deviceDML, xmlDocPtr documentDML, string insertBeforeRef)
+void OEEmulation::insertDML(xmlDocPtr documentDML, xmlDocPtr deviceDML, string insertRef)
 {
 	// Search inlet and previous busy inlet
-	xmlNodePtr node = xmlDocGetRootElement(deviceDML);
-	for(xmlNodePtr childNode = node->children;
-		childNode;
-		childNode = childNode->next)
+	xmlNodePtr node = xmlDocGetRootElement(documentDML);
+	for(xmlNodePtr deviceNode = node->children;
+		deviceNode;
+		deviceNode = deviceNode->next)
 	{
-		if (xmlStrcmp(childNode->name, BAD_CAST "device"))
+		if (xmlStrcmp(deviceNode->name, BAD_CAST "device"))
 			continue;
 		
+		string deviceName = getXMLProperty(deviceNode, "name");
+		OERef deviceRef(deviceName);
+		
+		string prevInletRef;
+		
+		for(xmlNodePtr inletNode = deviceNode->children;
+			inletNode;
+			inletNode = inletNode->next)
+		{
+			if (xmlStrcmp(inletNode->name, BAD_CAST "inlet"))
+				continue;
+			
+			string inletRelativeRef = getXMLProperty(inletNode, "ref");
+			string inletRef = deviceRef.buildRef(inletRelativeRef).getStringRef();
+			
+			if (inletRef == insertRef)
+			{
+				
+			}
+			
+			if (inletRef.size())
+				prevInletRef = inletRef;
+		}
 	}
 	
-	return true;
 	// If found, select the device pointed by the inlet
 	// If not found, select the current device
 	// Insert after selected device
@@ -708,7 +730,7 @@ bool OEEmulation::addDML(string path, map<string, string> connections)
 	
 	reconnectDML(documentDML);
 	
-	return false;
+	return true;
 }
 
 bool OEEmulation::removeOutlet(OERef outletRef)

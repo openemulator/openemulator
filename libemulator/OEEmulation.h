@@ -85,7 +85,7 @@ private:
 	void buildDeviceNameMap(xmlDocPtr deviceDML, map<string, string> &deviceNameMap);
 	void renameDMLRefs(xmlDocPtr doc, map<string, string> &deviceNameMap);
 	void renameConnections(map<string, string> &connections, map<string, string> &deviceNameMap);
-	void insertDML(xmlDocPtr deviceDML, xmlDocPtr documentDML, string insertBeforeRef);
+	void insertDML(xmlDocPtr documentDML, xmlDocPtr deviceDML, string insertRef);
 	bool isDeviceNameInDML(xmlDocPtr doc, string deviceName);
 };
 
