@@ -87,6 +87,11 @@ bool OERef::isValid()
 	return (device.size() != 0);
 }
 
+void OERef::setDevice(string device)
+{
+	this->device = device;
+}
+
 string OERef::getDevice() const
 {
 	return device;

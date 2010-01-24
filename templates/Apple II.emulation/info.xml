@@ -20,23 +20,23 @@
     </component>
 </device>
 
-<device name="emulation" label="Apple II">
-    <inlet ref="iou.slot0" type="appleiislot" category="expansion" label="Slot 0" image="Apple II Slot.png" />
-    <inlet ref="iou.slot1" type="appleiislot" category="expansion" label="Slot 1" image="Apple II Slot.png" />
-    <inlet ref="iou.slot2" type="appleiislot" category="expansion" label="Slot 2" image="Apple II Slot.png" />
-    <inlet ref="iou.slot3" type="appleiislot" category="expansion" label="Slot 3" image="Apple II Slot.png" />
-    <inlet ref="iou.slot4" type="appleiislot" category="expansion" label="Slot 4" image="Apple II Slot.png" />
-    <inlet ref="iou.slot5" type="appleiislot" category="expansion" label="Slot 5" image="Apple II Slot.png" />
-    <inlet ref="iou.slot6" type="appleiislot" category="expansion" label="Slot 6" image="Apple II Slot.png" />
-    <inlet ref="iou.slot7" type="appleiislot" category="expansion" label="Slot 7" image="Apple II Slot.png" />
-    <inlet ref="game.port" type="appleiigame" category="peripheral" label="Game Port" image="Apple II Game Port.png" />
-    <inlet ref="events.cpuSocket" type="appleiicpu" category="expansion" label="CPU Socket" image="Apple II CPU Chip Socket.png" />
-    <inlet ref="videoGen.charROMSocket" type="expansion" category="appleiicharrom" label="Character ROM Socket" image="Apple II Character ROM Socket.png" />
-    <inlet ref="videoGen.monitor" type="appleiimonitor" category="peripheral" label="Video Connector" image="Apple II Video Connector.png" />
-    <inlet ref="rom.socket" type="appleiirom" category="expansion" label="ROM Socket" image="Apple II ROM Socket.png" />
+<device name="dev0" label="Apple II">
+    <inlet ref="dev0::iou.slot0" type="appleiislot" category="expansion" label="Slot 0" image="Apple II Slot.png" />
+    <inlet ref="dev0::iou.slot1" type="appleiislot" category="expansion" label="Slot 1" image="Apple II Slot.png" />
+    <inlet ref="dev0::iou.slot2" type="appleiislot" category="expansion" label="Slot 2" image="Apple II Slot.png" />
+    <inlet ref="dev0::iou.slot3" type="appleiislot" category="expansion" label="Slot 3" image="Apple II Slot.png" />
+    <inlet ref="dev0::iou.slot4" type="appleiislot" category="expansion" label="Slot 4" image="Apple II Slot.png" />
+    <inlet ref="dev0::iou.slot5" type="appleiislot" category="expansion" label="Slot 5" image="Apple II Slot.png" />
+    <inlet ref="dev0::iou.slot6" type="appleiislot" category="expansion" label="Slot 6" image="Apple II Slot.png" />
+    <inlet ref="dev0::iou.slot7" type="appleiislot" category="expansion" label="Slot 7" image="Apple II Slot.png" />
+    <inlet ref="dev0::game.port" type="appleiigame" category="peripheral" label="Game Port" image="Apple II Game Port.png" />
+    <inlet ref="dev0::events.cpuSocket" type="appleiicpu" category="expansion" label="CPU Socket" image="Apple II CPU Chip Socket.png" />
+    <inlet ref="dev0::videoGen.charROMSocket" type="expansion" category="appleiicharrom" label="Character ROM Socket" image="Apple II Character ROM Socket.png" />
+    <inlet ref="dev0::videoGen.monitor" type="appleiimonitor" category="peripheral" label="Video Connector" image="Apple II Video Connector.png" />
+    <inlet ref="dev0::rom.socket" type="appleiirom" category="expansion" label="ROM Socket" image="Apple II ROM Socket.png" />
     <component name="events" class="AppleIIEvents">
         <connection key="hostEvents" ref="host::events" />
-        <connection key="cpu" ref="cpu" />
+        <connection key="cpu" ref="dev0::cpu" />
         <connection key="cpuSocket" ref="" />
         <connection key="secondaryCPU" ref="" />
         <property key="secondaryCPUEnabled" value="0" />
@@ -44,10 +44,10 @@
         <property key="scanlineClockInc" value="2" />
     </component>
     <component name="interrupts" class="AppleIIInterrupts">
-        <connection key="cpu" ref="cpu" />
+        <connection key="cpu" ref="dev0::cpu" />
     </component>
     <component name="cpu" class="CPUMOS6502">
-        <connection key="mmu" ref="mmu" />
+        <connection key="mmu" ref="dev0::mmu" />
         <property key="A" value="0" />
         <property key="X" value="0" />
         <property key="Y" value="0" />
@@ -56,17 +56,17 @@
         <property key="PC" value="0" />
     </component>
     <component name="mmu" class="AppleIIMMU">
-        <connection key="video" ref="video" />
+        <connection key="video" ref="dev0::video" />
     </component>
     <component name="memory" class="AppleIIMemory">
-        <connection key="mmu" ref="mmu" />
+        <connection key="mmu" ref="dev0::mmu" />
         <property key="memorySize" value="49152" />
         <data key="memory" src="${DEVICE_NAME}.bin" />
     </component>
     <component name="iou" class="AppleIIIOU">
-        <connection key="mmu" ref="mmu" />
-        <connection key="video" ref="video" />
-        <connection key="slotMemory" ref="slotMemory" />
+        <connection key="mmu" ref="dev0::mmu" />
+        <connection key="video" ref="dev0::video" />
+        <connection key="slotMemory" ref="dev0::slotMemory" />
         <connection key="slot0" ref="" />
         <connection key="slot1" ref="" />
         <connection key="slot2" ref="" />
@@ -77,36 +77,36 @@
         <connection key="slot7" ref="" />
     </component>
     <component name="slotMemory" class="AppleIISlotMemory">
-        <connection key="mmu" ref="mmu" />
-        <connection key="video" ref="video" />
+        <connection key="mmu" ref="dev0::mmu" />
+        <connection key="video" ref="dev0::video" />
     </component>
     <component name="rom" class="AppleIIROM">
-        <connection key="mmu" ref="mmu" />
+        <connection key="mmu" ref="dev0::mmu" />
         <connection key="socket" ref="" />
         <resource key="romImage" src="roms/Apple II ROM.bin" />
     </component>
     <component name="keyboard" class="AppleIIKeyboard">
         <connection key="hostKeyboard" ref="host::keyboard" />
-        <connection key="iou" ref="iou" />
-        <connection key="video" ref="video" />
+        <connection key="iou" ref="dev0::iou" />
+        <connection key="video" ref="dev0::video" />
     </component>
     <component name="cassetteOut" class="AppleIICassetteOut">
-        <connection key="iou" ref="iou" />
-        <connection key="video" ref="video" />
-        <connection key="speaker" ref="speaker" />
+        <connection key="iou" ref="dev0::iou" />
+        <connection key="video" ref="dev0::video" />
+        <connection key="speaker" ref="dev0::speaker" />
     </component>
     <component name="speaker" class="AppleIISpeaker">
         <connection key="hostAudio" ref="host::audio" />
-        <connection key="iou" ref="iou" />
-        <connection key="video" ref="video" />
+        <connection key="iou" ref="dev0::iou" />
+        <connection key="video" ref="dev0::video" />
         <property key="state" ref="0" />
     </component>
     <component name="video" class="AppleIIVideo">
-        <connection key="iou" ref="iou" />
+        <connection key="iou" ref="dev0::iou" />
     </component>
     <component name="game" class="AppleIIGamePort">
-        <connection key="iou" ref="iou" />
-        <connection key="video" ref="video" />
+        <connection key="iou" ref="dev0::iou" />
+        <connection key="video" ref="dev0::video" />
         <connection key="port" ref="" />
         <property key="an0" value="0" />
         <property key="an1" value="0" />
@@ -115,7 +115,7 @@
     </component>
     <component name="cassetteIn" class="AppleIICassetteIn">
         <connection key="hostAudio" ref="host::audio" />
-        <connection key="game" ref="game" />
+        <connection key="game" ref="dev0::game" />
     </component>
     <component name="videoGen" class="AppleIIVideoGen">
         <connection key="charROMSocket" ref="" />

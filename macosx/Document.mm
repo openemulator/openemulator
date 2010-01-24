@@ -256,6 +256,9 @@
 		 o != outlets->end();
 		 o++)
 	{
+		if (!o->connectedPort)
+			continue;
+		
 		NSString *imagePath = [NSString stringWithUTF8String:o->image.c_str()];
 		NSString *deviceLabel = [NSString stringWithUTF8String:o->label.c_str()];
 		
@@ -270,6 +273,7 @@
 							  aString, @"title",
 							  deviceImage, @"image",
 							  nil];
+		
 		string category = o->connectedPort->category;
 		if (category == "expansion")
 			[self insertObject:dict inExpansionsAtIndex:expansionIndex++];
@@ -409,6 +413,8 @@
 	}
 	
 	((OEEmulation *) emulation)->addDML(pathString, connectionsMap);
+	
+	[self updateDevices];
 }
 
 - (void) makeWindowControllers

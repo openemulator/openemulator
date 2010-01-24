@@ -16,9 +16,12 @@
 
 #include "OEDefines.h"
 #include "OEComponent.h"
+#include "OERef.h"
 #include "Package.h"
 
 using namespace std;
+
+typedef map<string, OEComponent *> OEComponentsMap;
 
 class OEEmulation
 {
@@ -34,44 +37,56 @@ public:
 	
 	xmlDocPtr getDML();
 	bool addDML(string dmlPath, map<string, string> connections);
-	bool removeOutlet(string outletRef);
+	bool removeOutlet(OERef outletRef);
 	
 private:
 	bool open;
-	xmlDocPtr dml;
-	map<string, OEComponent *> components;
+	xmlDocPtr documentDML;
+	OEComponentsMap components;
 	
 	Package *package;
 	string resourcePath;
 	
-	string getNodeProperty(xmlNodePtr node, string key);
-	void setNodeProperty(xmlNodePtr node, string key, string value);
+	bool readFile(string path, vector<char> &data);
 	
-	string buildAbsoluteRef(string absoluteRef, string componentName);
-	string buildSourcePath(string deviceName, string src);
+	string getXMLProperty(xmlNodePtr node, string key);
+	void setXMLProperty(xmlNodePtr node, string key, string value);
+	
+	string buildSourcePath(string src, OERef deviceRef);
 	
 	bool readResource(string localPath, vector<char> &data);
 	
-	bool buildComponents();
-	bool queryComponents();
-	void destructComponents();
+	bool validateDML(xmlDocPtr doc);
+	bool constructDML(xmlDocPtr doc);
+	bool initDML(xmlDocPtr doc);
+	bool reconnectDML(xmlDocPtr doc);
+	bool updateDML(xmlDocPtr doc);
+	void destroyDML(xmlDocPtr doc);
 	
-	bool buildComponent(string deviceName, xmlNodePtr componentNode);
-	bool queryComponent(string deviceName, xmlNodePtr componentNode);
-	bool initComponent(string deviceName, xmlNodePtr componentNode);
+	bool constructDevice(xmlNodePtr node);
+	bool initDevice(xmlNodePtr node);
+	bool reconnectDevice(xmlNodePtr node);
+	bool updateDevice(xmlNodePtr node);
+	void destroyDevice(xmlNodePtr node);
 	
-	bool connectComponent(string deviceName,
-						  OEComponent *component,
-						  xmlNodePtr connectionNode);
-	bool setComponentProperty(OEComponent *component, xmlNodePtr propertyNode);
-	bool getComponentProperty(OEComponent *component, xmlNodePtr propertyNode);
-	bool setComponentData(string deviceName,
-						  OEComponent *component,
-						  xmlNodePtr dataNode);
-	bool getComponentData(string deviceName,
-						  OEComponent *component,
-						  xmlNodePtr dataNode);
-	bool setComponentResource(OEComponent *component, xmlNodePtr resourceNode);
+	bool constructComponent(xmlNodePtr node, OERef deviceRef);
+	bool initComponent(xmlNodePtr node, OERef deviceRef);
+	bool reconnectComponent(xmlNodePtr node, OERef deviceRef);
+	bool updateComponent(xmlNodePtr node, OERef deviceRef);
+	void destroyComponent(xmlNodePtr node, OERef deviceRef);
+	
+	bool setConnection(xmlNodePtr node, OEComponent *component, OERef deviceRef);
+	bool setProperty(xmlNodePtr node, OEComponent *component);
+	bool getProperty(xmlNodePtr node, OEComponent *component);
+	bool setData(xmlNodePtr node, OEComponent *component, OERef deviceRef);
+	bool getData(xmlNodePtr node, OEComponent *component, OERef deviceRef);
+	bool setResource(xmlNodePtr node, OEComponent *component);
+
+	map<string, string> buildDeviceNameMap(xmlDocPtr doc);
+	void renameDMLRefs(xmlDocPtr doc, map<string, string> &deviceNameMap);
+	void renameConnections(map<string, string> &connections, map<string, string> &deviceNameMap);
+	void insertDML(xmlDocPtr deviceDML, xmlDocPtr documentDML);
+	bool isDeviceNameInDML(xmlDocPtr doc, string deviceName);
 };
 
 #endif

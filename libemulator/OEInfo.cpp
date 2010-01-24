@@ -43,11 +43,11 @@ OEInfo::OEInfo(string path)
 						OE_DML_FILENAME,
 						NULL,
 						0);
-	if (dml)
-	{
-		parse(dml);
-		xmlFreeDoc(dml);
-	}
+	if (!dml)
+		return;
+	
+	parse(dml);
+	xmlFreeDoc(dml);
 }
 
 OEInfo::OEInfo(xmlDocPtr dml)

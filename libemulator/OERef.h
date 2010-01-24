@@ -25,6 +25,7 @@ public:
 	
 	bool isValid();
 	
+	void setDevice(string device);
 	string getDevice() const;
 	string getComponent() const;
 	string getProperty() const;
