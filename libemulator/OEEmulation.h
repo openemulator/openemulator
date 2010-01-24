@@ -17,7 +17,7 @@
 #include "OEDefines.h"
 #include "OEComponent.h"
 #include "OERef.h"
-#include "Package.h"
+#include "OEPackage.h"
 
 using namespace std;
 
@@ -44,7 +44,7 @@ private:
 	xmlDocPtr documentDML;
 	OEComponentsMap components;
 	
-	Package *package;
+	OEPackage *package;
 	string resourcePath;
 	
 	bool readFile(string path, vector<char> &data);
@@ -82,10 +82,10 @@ private:
 	bool getData(xmlNodePtr node, OEComponent *component, OERef deviceRef);
 	bool setResource(xmlNodePtr node, OEComponent *component);
 
-	map<string, string> buildDeviceNameMap(xmlDocPtr doc);
+	void buildDeviceNameMap(xmlDocPtr deviceDML, map<string, string> &deviceNameMap);
 	void renameDMLRefs(xmlDocPtr doc, map<string, string> &deviceNameMap);
 	void renameConnections(map<string, string> &connections, map<string, string> &deviceNameMap);
-	void insertDML(xmlDocPtr deviceDML, xmlDocPtr documentDML);
+	void insertDML(xmlDocPtr deviceDML, xmlDocPtr documentDML, string insertBeforeRef);
 	bool isDeviceNameInDML(xmlDocPtr doc, string deviceName);
 };
 

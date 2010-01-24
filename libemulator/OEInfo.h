@@ -106,17 +106,17 @@ private:
 	string getPathExtension(string path);
 	bool readFile(string path, vector<char> &data);
 	
-	string getNodeProperty(xmlNodePtr node, string key);
+	string getXMLProperty(xmlNodePtr node, string key);
 	
-	OERef getOutletRefForInletRef(xmlDocPtr dml, OERef inletRef);
+	bool validateDML(xmlDocPtr doc);
+	
+	OERef getOutletRefForInletRef(xmlDocPtr doc, OERef inletRef);
 	OEPort *getOutlet(OERef outletRef);
 	string makeLabel(OEPort *outlet, vector<OERef> *refs);
 	
-	OEPort parsePort(OERef deviceRef,
-					 string deviceLabel,
-					 string deviceImage,
-					 xmlNodePtr node);
-	void parse(xmlDocPtr dml);
+	OEPort parsePort(xmlNodePtr node, OERef deviceRef, string deviceLabel, string deviceImage);
+	void parseDevice(xmlNodePtr node);
+	void parse(xmlDocPtr doc);
 };
 
 #endif

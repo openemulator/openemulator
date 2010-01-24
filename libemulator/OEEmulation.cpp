@@ -21,7 +21,7 @@ OEEmulation::OEEmulation(string emulationPath, string resourcePath)
 	open = false;
 	
 	this->resourcePath = resourcePath;
-	package = new Package(emulationPath);
+	package = new OEPackage(emulationPath);
 	if (package->isOpen())
 	{
 		vector<char> data;
@@ -522,7 +522,7 @@ bool OEEmulation::save(string emulationPath)
 {
 	bool error = true;
 	
-	package = new Package(emulationPath);
+	package = new OEPackage(emulationPath);
 	if (package->isOpen())
 	{
 		if (open && updateDML(documentDML))
@@ -584,10 +584,8 @@ bool OEEmulation::isDeviceNameInDML(xmlDocPtr doc, string deviceName)
 	return false;
 }
 
-map<string, string> OEEmulation::buildDeviceNameMap(xmlDocPtr deviceDML)
+void OEEmulation::buildDeviceNameMap(xmlDocPtr deviceDML, map<string, string> &deviceNameMap)
 {
-	map<string, string> deviceNameMap;
-	
 	xmlNodePtr node = xmlDocGetRootElement(deviceDML);
 	int devIndex = 0;
 	for(xmlNodePtr childNode = node->children;
@@ -605,8 +603,6 @@ map<string, string> OEEmulation::buildDeviceNameMap(xmlDocPtr deviceDML)
 			devIndex++;
 		deviceNameMap[deviceName] = newDeviceName;
 	}
-	
-	return deviceNameMap;
 }
 
 void OEEmulation::renameDMLRefs(xmlDocPtr doc, map<string, string> &deviceNameMap)
@@ -662,18 +658,30 @@ void OEEmulation::renameConnections(map<string, string> &connections,
 		connections[i->first] = deviceNameMap[i->second];
 }
 
-void OEEmulation::insertDML(xmlDocPtr deviceDML, xmlDocPtr documentDML)
+void OEEmulation::insertDML(xmlDocPtr deviceDML, xmlDocPtr documentDML, string insertBeforeRef)
 {
+	// Search inlet and previous busy inlet
+	xmlNodePtr node = xmlDocGetRootElement(deviceDML);
+	for(xmlNodePtr childNode = node->children;
+		childNode;
+		childNode = childNode->next)
+	{
+		if (xmlStrcmp(childNode->name, BAD_CAST "device"))
+			continue;
+		
+	}
 	
+	return true;
+	// If found, select the device pointed by the inlet
+	// If not found, select the current device
+	// Insert after selected device
 }
 
 bool OEEmulation::addDML(string path, map<string, string> connections)
 {
-	// Load DML tree
 	vector<char> data;
 	if (!readFile(path, data))
 		return false;
-	
 	xmlDocPtr deviceDML;
 	deviceDML = xmlReadMemory(&data[0],
 							  data.size(),
@@ -682,20 +690,19 @@ bool OEEmulation::addDML(string path, map<string, string> connections)
 							  0);
 	if (!deviceDML)
 		return false;
-	
 	if (!validateDML(deviceDML))
 	{
 		xmlFreeDoc(deviceDML);
 		return false;
 	}
 	
-	map<string, string> deviceNameMap = buildDeviceNameMap(deviceDML);
+	map<string, string> deviceNameMap;
+	buildDeviceNameMap(deviceDML, deviceNameMap);
 	
 	renameDMLRefs(deviceDML, deviceNameMap);
-	
 	renameConnections(connections, deviceNameMap);
 
-	insertDML(deviceDML, documentDML);
+	insertDML(deviceDML, documentDML, "");
 	
 	constructDML(deviceDML);
 	

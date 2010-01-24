@@ -12,7 +12,7 @@
 #include <libxml/parser.h>
 
 #include "OEInfo.h"
-#include "Package.h"
+#include "OEPackage.h"
 
 OEInfo::OEInfo(string path)
 {
@@ -27,7 +27,7 @@ OEInfo::OEInfo(string path)
 	}
 	else if (pathExtension == "emulation")
 	{
-		Package package(path);
+		OEPackage package(path);
 		if (package.isOpen())
 		{
 			if (!package.readFile(OE_DML_FILENAME, data))
@@ -98,13 +98,20 @@ bool OEInfo::readFile(string path, vector<char> &data)
 	return !error;
 }
 
-string OEInfo::getNodeProperty(xmlNodePtr node, string key)
+string OEInfo::getXMLProperty(xmlNodePtr node, string key)
 {
 	char *value = (char *) xmlGetProp(node, BAD_CAST key.c_str());
 	string valueString = value ? value : "";
 	xmlFree(value);
 	
 	return valueString;
+}
+
+bool OEInfo::validateDML(xmlDocPtr doc)
+{
+	xmlNodePtr node = xmlDocGetRootElement(doc);
+	
+	return (getXMLProperty(node, "version") == "1.0");
 }
 
 OERef OEInfo::getOutletRefForInletRef(xmlDocPtr dml, OERef inletRef)
@@ -118,7 +125,7 @@ OERef OEInfo::getOutletRefForInletRef(xmlDocPtr dml, OERef inletRef)
 		if (xmlStrcmp(deviceNode->name, BAD_CAST "device"))
 			continue;
 		
-		if (getNodeProperty(deviceNode, "name") != inletRef.getDevice())
+		if (getXMLProperty(deviceNode, "name") != inletRef.getDevice())
 			continue;
 		
 		for(xmlNodePtr componentNode = deviceNode->children;
@@ -128,7 +135,7 @@ OERef OEInfo::getOutletRefForInletRef(xmlDocPtr dml, OERef inletRef)
 			if (xmlStrcmp(componentNode->name, BAD_CAST "component"))
 				continue;
 			
-			if (getNodeProperty(componentNode, "name") != inletRef.getComponent())
+			if (getXMLProperty(componentNode, "name") != inletRef.getComponent())
 				continue;
 			
 			for(xmlNodePtr connectionNode = componentNode->children;
@@ -138,10 +145,10 @@ OERef OEInfo::getOutletRefForInletRef(xmlDocPtr dml, OERef inletRef)
 				if (xmlStrcmp(connectionNode->name, BAD_CAST "connection"))
 					continue;
 				
-				if (getNodeProperty(connectionNode, "key") != inletRef.getProperty())
+				if (getXMLProperty(connectionNode, "key") != inletRef.getProperty())
 					continue;
 				
-				string stringRef = getNodeProperty(connectionNode, "ref");
+				string stringRef = getXMLProperty(connectionNode, "ref");
 				if (stringRef.size())
 					return inletRef.buildRef(stringRef);
 			}
@@ -192,18 +199,18 @@ string OEInfo::makeLabel(OEPort *outlet, vector<OERef> *refs)
 	return inlet->deviceLabel + " " + inlet->label;
 }
 
-OEPort OEInfo::parsePort(OERef deviceRef,
+OEPort OEInfo::parsePort(xmlNodePtr node,
+						 OERef deviceRef,
 						 string deviceLabel,
-						 string deviceImage,
-						 xmlNodePtr node)
+						 string deviceImage)
 {
 	OEPort port;
 	
-	port.ref = deviceRef.buildRef(getNodeProperty(node, "ref"));
-	port.type = getNodeProperty(node, "type");
-	port.category = getNodeProperty(node, "category");
-	port.label = getNodeProperty(node, "label");
-	port.image = getNodeProperty(node, "image");
+	port.ref = deviceRef.buildRef(getXMLProperty(node, "ref"));
+	port.type = getXMLProperty(node, "type");
+	port.category = getXMLProperty(node, "category");
+	port.label = getXMLProperty(node, "label");
+	port.image = getXMLProperty(node, "image");
 	
 	port.deviceLabel = deviceLabel;
 	
@@ -219,47 +226,46 @@ OEPort OEInfo::parsePort(OERef deviceRef,
 	return port;
 }
 
-void OEInfo::parse(xmlDocPtr dml)
+void OEInfo::parseDevice(xmlNodePtr node)
 {
-	xmlNodePtr dmlNode = xmlDocGetRootElement(dml);
+	OERef deviceRef = OERef(getXMLProperty(node, "name"));
+	string deviceLabel = getXMLProperty(node, "label");
+	string deviceImage = getXMLProperty(node, "image");
+	
+	for(xmlNodePtr childNode = node->children;
+		childNode;
+		childNode = childNode->next)
+	{
+		if (!xmlStrcmp(childNode->name, BAD_CAST "inlet"))
+			inlets.push_back(parsePort(childNode, deviceRef, deviceLabel, deviceImage));
+		else if (!xmlStrcmp(childNode->name, BAD_CAST "outlet"))
+			outlets.push_back(parsePort(childNode, deviceRef, deviceLabel, deviceImage));
+	}
+}
+
+void OEInfo::parse(xmlDocPtr doc)
+{
+	xmlNodePtr node = xmlDocGetRootElement(doc);
 	
 	loaded = false;
-	if (getNodeProperty(dmlNode, "version") != "1.0")
+	if (getXMLProperty(node, "version") != "1.0")
 		return;
 	
 	// Get info properties
-	label = getNodeProperty(dmlNode, "label");
-	image = getNodeProperty(dmlNode, "image");
-	description = getNodeProperty(dmlNode, "description");
-	group = getNodeProperty(dmlNode, "group");
+	label = getXMLProperty(node, "label");
+	image = getXMLProperty(node, "image");
+	description = getXMLProperty(node, "description");
+	group = getXMLProperty(node, "group");
 	
 	// Make inlets and outlets
-	for(xmlNodePtr deviceNode = dmlNode->children;
-		deviceNode;
-		deviceNode = deviceNode->next)
+	for(xmlNodePtr childNode = node->children;
+		childNode;
+		childNode = childNode->next)
 	{
-		if (xmlStrcmp(deviceNode->name, BAD_CAST "device"))
+		if (xmlStrcmp(childNode->name, BAD_CAST "device"))
 			continue;
 		
-		OERef deviceRef = OERef(getNodeProperty(deviceNode, "name"));
-		string deviceLabel = getNodeProperty(deviceNode, "label");
-		string deviceImage = getNodeProperty(deviceNode, "image");
-		
-		for(xmlNodePtr node = deviceNode->children;
-			node;
-			node = node->next)
-		{
-			if (!xmlStrcmp(node->name, BAD_CAST "inlet"))
-				inlets.push_back(parsePort(deviceRef,
-										   deviceLabel,
-										   deviceImage,
-										   node));
-			else if (!xmlStrcmp(node->name, BAD_CAST "outlet"))
-				outlets.push_back(parsePort(deviceRef,
-											deviceLabel,
-											deviceImage,
-											node));
-		}
+		parseDevice(childNode);
 	}
 	
 	// Make connections
@@ -267,7 +273,7 @@ void OEInfo::parse(xmlDocPtr dml)
 		 i != inlets.end();
 		 i++)
 	{
-		OERef outletRef = getOutletRefForInletRef(dml, i->ref);
+		OERef outletRef = getOutletRefForInletRef(doc, i->ref);
 		if (!outletRef.isValid())
 			continue;
 		
