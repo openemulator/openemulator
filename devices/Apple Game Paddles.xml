@@ -5,7 +5,7 @@
 <device name="dev0" label="Apple II Game Paddles" image="Apple II Game Paddles.png">
     <outlet ref="port" type="appleiigame" />
     <component name="port" class="AppleIIGamePaddles">
-        <connection key="joystick" ref="host::joystick" />
+        <connection name="joystick" ref="host::joystick" />
     </component>
 </device>
 

@@ -79,7 +79,7 @@
 	[super dealloc];
 }
 
-- (void) setDMLProperty:(NSString *) key value:(NSString *) value
+- (void) setDMLProperty:(NSString *) name value:(NSString *) value
 {
 	if (!emulation)
 		return;
@@ -88,10 +88,10 @@
 	
 	xmlNodePtr rootNode = xmlDocGetRootElement(dml);
 	
-	xmlSetProp(rootNode, BAD_CAST [key UTF8String], BAD_CAST [value UTF8String]);
+	xmlSetProp(rootNode, BAD_CAST [name UTF8String], BAD_CAST [value UTF8String]);
 }
 
-- (NSString *) getDMLProperty:(NSString *) key
+- (NSString *) getDMLProperty:(NSString *) name
 {
 	if (!emulation)
 		return nil;
@@ -100,21 +100,21 @@
 	
 	xmlNodePtr rootNode = xmlDocGetRootElement(dml);
 	
-	xmlChar *valuec = xmlGetProp(rootNode, BAD_CAST [key UTF8String]);
+	xmlChar *valuec = xmlGetProp(rootNode, BAD_CAST [name UTF8String]);
 	NSString *value = [NSString stringWithUTF8String:(const char *) valuec];
 	xmlFree(valuec);
 	
 	return value;
 }
 
-- (void) setIoctlProperty:(NSString *) key ref:(NSString *) ref value:(NSString *) value
+- (void) setIoctlProperty:(NSString *) name ref:(NSString *) ref value:(NSString *) value
 {
 	if (!emulation)
 		return;
 	
 	OEIoctlProperty property;
 	
-	property.key = string([key UTF8String]);
+	property.name = string([name UTF8String]);
 	property.value = string([value UTF8String]);
 	
 	((OEEmulation *)emulation)->ioctl(string([ref UTF8String]),
@@ -122,14 +122,14 @@
 									  &property);
 }
 
-- (NSString *) getIoctlProperty:(NSString *)key ref:(NSString *) ref
+- (NSString *) getIoctlProperty:(NSString *)name ref:(NSString *) ref
 {
 	if (!emulation)
 		return nil;
 	
 	OEIoctlProperty msg;
 	
-	msg.key = string([key UTF8String]);
+	msg.name = string([name UTF8String]);
 	
 	if (((OEEmulation *)emulation)->ioctl(string([ref UTF8String]),
 									  OEIoctlGetProperty,

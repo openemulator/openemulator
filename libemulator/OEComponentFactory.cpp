@@ -2,8 +2,10 @@
 /**
  * libemulator
  * Component Factory
- * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
+ *
+ * Builds components
  */
 
 #include "OEComponentFactory.h"

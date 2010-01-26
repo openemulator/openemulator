@@ -1,10 +1,11 @@
-/*
- *  OERef.cpp
- *  OpenEmulator
+
+/**
+ * libemulator
+ * DML Reference
+ * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
+ * Released under the GPL
  *
- *  Created by Marc S. Reßl on 23/12/09.
- *  Copyright 2009 ITBA. All rights reserved.
- *
+ * Type for representing DML refs
  */
 
 #include <iostream>
@@ -61,6 +62,9 @@ bool OERef::operator==(const OERef &ref)
 	if (component != ref.component)
 		return false;
 	
+	if (property != ref.property)
+		return false;
+	
 	return true;
 }
 
@@ -82,9 +86,9 @@ ostream &operator<<(ostream &stream, const OERef &ref)
 	return stream;
 }
 
-bool OERef::isValid()
+bool OERef::isEmpty()
 {
-	return (device.size() != 0);
+	return (!device.size());
 }
 
 void OERef::setDevice(string device)
@@ -117,6 +121,26 @@ string OERef::getProperty() const
 	return property;
 }
 
+OERef OERef::getRef(string stringRef)
+{
+	if (!stringRef.size())
+		return *this;
+	else if (stringRef.find("::") == string::npos)
+		return OERef(getDevice() + "::" + stringRef);
+	else
+		return OERef(stringRef);
+}
+
+OERef OERef::getDeviceRef()
+{
+	return OERef(getDevice());
+}
+
+OERef OERef::getComponentRef()
+{
+	return OERef(getDevice() + "::" + getComponent());
+}
+
 string OERef::getStringRef()
 {
 	if (!device.size())
@@ -129,12 +153,7 @@ string OERef::getStringRef()
 		return device + "::" + component + "." + property;
 }
 
-OERef OERef::buildRef(string relativeStringRef)
+string OERef::getStringRef(string stringRef)
 {
-	if (relativeStringRef.size() == 0)
-		return OERef(getStringRef());
-	else if (relativeStringRef.find("::") == string::npos)
-		return OERef(getDevice() + "::" + relativeStringRef);
-	else
-		return OERef(relativeStringRef);
+	return getRef(stringRef).getStringRef();
 }

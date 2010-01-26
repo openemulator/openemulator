@@ -2,8 +2,10 @@
 /**
  * libemulator
  * DML Reference
- * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
+ *
+ * Type for representing DML refs
  */
 
 #ifndef _OEREF_H
@@ -23,7 +25,7 @@ public:
 	OERef &operator=(const OERef &ref);
 	bool operator==(const OERef &ref);
 	
-	bool isValid();
+	bool isEmpty();
 	
 	void setDevice(string device);
 	string getDevice() const;
@@ -32,8 +34,12 @@ public:
 	void setProperty(string property);
 	string getProperty() const;
 	
+	OERef getRef(string stringRef);
+	OERef getDeviceRef();
+	OERef getComponentRef();
+	
 	string getStringRef();
-	OERef buildRef(string relativeStringRef);
+	string getStringRef(string stringRef);
 	
 private:
 	string device;

@@ -2,8 +2,10 @@
 /**
  * libemulator
  * Emulation
- * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
+ *
+ * Controls an emulation
  */
 
 #ifndef _OEEMULATION_H
@@ -22,6 +24,7 @@
 using namespace std;
 
 typedef map<string, OEComponent *> OEComponentsMap;
+typedef map<string, string> OEStringRefMap;
 
 class OEEmulation
 {
@@ -33,11 +36,11 @@ public:
 	
 	bool save(string emulationPath);
 	
-	int ioctl(string componentRef, int message, void *data);
+	int ioctl(string ref, int message, void *data);
 	
 	xmlDocPtr getDML();
-	bool addDML(string dmlPath, map<string, string> connections);
-	bool removeOutlet(OERef outletRef);
+	bool addDML(string path, OEStringRefMap connections);
+	bool removeDevicesFromOutletRef(OERef ref);
 	
 private:
 	bool open;
@@ -47,10 +50,11 @@ private:
 	OEPackage *package;
 	string resourcePath;
 	
+	string toString(int i);
 	bool readFile(string path, vector<char> &data);
 	
-	string getXMLProperty(xmlNodePtr node, string key);
-	void setXMLProperty(xmlNodePtr node, string key, string value);
+	string getXMLProperty(xmlNodePtr node, string name);
+	void setXMLProperty(xmlNodePtr node, string name, string value);
 	
 	string buildSourcePath(string src, OERef deviceRef);
 	
@@ -81,12 +85,15 @@ private:
 	bool setData(xmlNodePtr node, OEComponent *component, OERef deviceRef);
 	bool getData(xmlNodePtr node, OEComponent *component, OERef deviceRef);
 	bool setResource(xmlNodePtr node, OEComponent *component);
-
-	void buildDeviceNameMap(xmlDocPtr deviceDML, map<string, string> &deviceNameMap);
-	void renameDMLRefs(xmlDocPtr doc, map<string, string> &deviceNameMap);
-	void renameConnections(map<string, string> &connections, map<string, string> &deviceNameMap);
-	void insertDML(xmlDocPtr documentDML, xmlDocPtr deviceDML, string insertRef);
-	bool isDeviceNameInDML(xmlDocPtr doc, string deviceName);
+	
+	xmlNodePtr getNodeForRef(xmlDocPtr doc, OERef ref);
+	OERef getOutletRefForInletRef(xmlDocPtr doc, OERef ref);
+	
+	void buildDeviceNameMap(xmlDocPtr doc, xmlDocPtr elem, OEStringRefMap &deviceNameMap);
+	void renameDMLRefs(xmlDocPtr doc, OEStringRefMap &deviceNameMap);
+	void renameConnections(OEStringRefMap &connections, OEStringRefMap &deviceNameMap);
+	xmlNodePtr getInsertionPointForInletRef(xmlDocPtr doc, OERef ref);
+	bool mergeDMLs(xmlDocPtr doc, xmlDocPtr elem, OEStringRefMap &connections);
 };
 
 #endif

@@ -7,12 +7,12 @@
     <inlet ref="card.drive1" type="appledisk525" category="storage" label="Drive 1" image="Apple Disk II Drive 1 Socket.png" />
     <inlet ref="card.drive2" type="appledisk525" category="storage" label="Drive 2" image="Apple Disk II Drive 2 Socket.png" />
     <component name="card" class="AppleDiskIIInterfaceCard">
-        <connection key="drive1" ref="" />
-        <connection key="drive2" ref="" />
-        <connection key="rom" ref="rom" />
+        <connection name="drive1" ref="" />
+        <connection name="drive2" ref="" />
+        <connection name="rom" ref="rom" />
     </component>
 	<component name="rom" class="AppleIIInterfaceROM">
-        <resource key="romImage" src="roms/Apple Disk II Interface Card ROM.bin" />
+        <resource name="romImage" src="roms/Apple Disk II Interface Card ROM.bin" />
     </component>
 </device>
 

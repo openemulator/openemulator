@@ -5,11 +5,11 @@
 <device name="dev0" label="Epson FX-80" image="Epson FX-80.png">
     <outlet ref="printer" type="parallelport" />
     <component name="printer" class="EpsonFX80">
-        <property key="someParam" value="0" />
-        <resource key="soundSpin" src="sounds/Apple Disk II Spin.wav" />
-        <resource key="soundArm" src="sounds/Apple Disk II Arm.wav" />
-        <resource key="soundStop" src="sounds/Apple Disk II Stop.wav" />
-        <resource key="soundShake" src="sounds/Apple Disk II Shake.wav" />
+        <property name="someParam" value="0" />
+        <resource name="soundSpin" src="sounds/Apple Disk II Spin.wav" />
+        <resource name="soundArm" src="sounds/Apple Disk II Arm.wav" />
+        <resource name="soundStop" src="sounds/Apple Disk II Stop.wav" />
+        <resource name="soundShake" src="sounds/Apple Disk II Shake.wav" />
     </component>
 </device>
 

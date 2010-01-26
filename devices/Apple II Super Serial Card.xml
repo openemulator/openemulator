@@ -2,7 +2,7 @@
 <!DOCTYPE dml PUBLIC "-//OPENEMULATOR//DTD DML 1.0//EN" "http://www.openemulator.org/DTDs/dml-1.0.dtd">
 <dml version="1.0" label="Super Serial Card" image="Apple II Super Serial Card.png" group="Serial Port Controllers">
 
-<device name="dev5" label="Apple II Super Serial Card" image="Apple II Super Serial Card.png">
+<device name="dev0" label="Apple II Super Serial Card" image="Apple II Super Serial Card.png">
     <outlet ref="card" type="appleiislot">
 		<setting ref="mode" type="option" options="Communications Mode,Printer Mode" label="Mode" />
 		<setting ref="baudRate" type="option" options="50,75,110,135,150,300,600,1200,1800,2400,3600,4800,7200,9600,19200" label="Baud Rate" />
@@ -16,20 +16,20 @@
 	</outlet>
     <inlet ref="card.port" type="serialport" category="peripheral" label="Port" image="Serial Port.png" />
     <component name="card" class="AppleDiskIIInterfaceCard">
-        <connection key="port" ref="" />
-        <connection key="rom" ref="rom" />
-		<property key="mode" value="0" />
-		<property key="baudRate" value="9600" />
-		<property key="dataBits" value="1" />
-		<property key="stopBits" value="1" />
-		<property key="parity" value="0" />
-		<property key="autoLFAfterCR" value="0" />
-		<property key="interrupts" value="0" />
-		<property key="charactersPerLine" value="0" />
-		<property key="delayAfterCR" value="0" />
+        <connection name="port" ref="" />
+        <connection name="rom" ref="rom" />
+		<property name="mode" value="0" />
+		<property name="baudRate" value="9600" />
+		<property name="dataBits" value="1" />
+		<property name="stopBits" value="1" />
+		<property name="parity" value="0" />
+		<property name="autoLFAfterCR" value="0" />
+		<property name="interrupts" value="0" />
+		<property name="charactersPerLine" value="0" />
+		<property name="delayAfterCR" value="0" />
     </component>
 	<component name="rom" class="AppleIIInterfaceROM">
-        <resource key="romImage" src="roms/Apple II Super Serial Card ROM.bin" />
+        <resource name="romImage" src="roms/Apple II Super Serial Card ROM.bin" />
     </component>
 </device>
 

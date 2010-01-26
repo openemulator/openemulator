@@ -24,27 +24,27 @@
 <!ATTLIST outlet image CDATA #IMPLIED>
 
 <!ELEMENT setting EMPTY>
-<!ATTLIST outlet ref CDATA #REQUIRED>
-<!ATTLIST outlet type CDATA #REQUIRED>
-<!ATTLIST outlet options CDATA #IMPLIED>
-<!ATTLIST outlet label CDATA #IMPLIED>
+<!ATTLIST setting ref CDATA #REQUIRED>
+<!ATTLIST setting type CDATA #REQUIRED>
+<!ATTLIST setting options CDATA #IMPLIED>
+<!ATTLIST setting label CDATA #IMPLIED>
 
 <!ELEMENT component (connection,property,data,resource)>
 <!ATTLIST component name CDATA #REQUIRED>
 <!ATTLIST component class CDATA #REQUIRED>
 
 <!ELEMENT connection EMPTY>
-<!ATTLIST connection key CDATA #REQUIRED>
+<!ATTLIST connection name CDATA #REQUIRED>
 <!ATTLIST connection ref CDATA #REQUIRED>
 
 <!ELEMENT property EMPTY>
-<!ATTLIST property key CDATA #REQUIRED>
+<!ATTLIST property name CDATA #REQUIRED>
 <!ATTLIST property value CDATA #REQUIRED>
 
 <!ELEMENT data EMPTY>
-<!ATTLIST data key CDATA #REQUIRED>
+<!ATTLIST data name CDATA #REQUIRED>
 <!ATTLIST data src CDATA #REQUIRED>
 
 <!ELEMENT resource EMPTY>
-<!ATTLIST resource key CDATA #REQUIRED>
+<!ATTLIST resource name CDATA #REQUIRED>
 <!ATTLIST resource src CDATA #REQUIRED>

@@ -2,8 +2,10 @@
 /**
  * libemulator
  * Package class
- * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
+ *
+ * Type for accessing DML packages (zip and directory type)
  */
 
 #ifndef _OEPACKAGE_H

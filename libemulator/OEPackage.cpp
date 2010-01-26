@@ -2,8 +2,10 @@
 /**
  * libemulator
  * Package class
- * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
+ *
+ * Type for accessing DML packages (zip and directory type)
  */
 
 #include <fstream>
@@ -16,6 +18,8 @@ OEPackage::OEPackage(string packagePath)
 	this->packagePath = packagePath;
 	zip = NULL;
 	
+	
+	// To-Do: Make platform independent
 	struct stat statbuf;
 	bool isPathCreated = (stat(packagePath.c_str(), &statbuf) == 0);
 	

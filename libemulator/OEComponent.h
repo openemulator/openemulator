@@ -2,15 +2,23 @@
 /**
  * libemulator
  * OEComponent
- * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
+ *
+ * Component type
  */
 
 #ifndef _OECOMPONENT_H
 #define _OECOMPONENT_H
 
+#include <string>
 #include <vector>
 #include <stdint.h>
+
+#define OE_SUBSTITUTION_DEVICE_NAME "${DEVICE_NAME}"
+#define OE_PATH_SEPARATOR "/"
+
+#define OE_DML_FILENAME "info.xml"
 
 using namespace std;
 
@@ -34,6 +42,34 @@ protected:
 private:
 	vector<class OEComponent *> observers;
 };
+
+enum {
+	OEIoctlSetConnection,
+	OEIoctlSetProperty,
+	OEIoctlGetProperty,
+	OEIoctlSetData,
+	OEIoctlGetData,
+	OEIoctlSetResource,
+	OEIoctlSetEvent,
+};
+
+typedef struct
+{
+	string name;
+	OEComponent *component;
+} OEIoctlConnection;
+
+typedef struct
+{
+	string name;
+	string value;
+} OEIoctlProperty;
+
+typedef struct
+{
+	string name;
+	vector<char> data;
+} OEIoctlData;
 
 // ioctl's for:
 // * next frame

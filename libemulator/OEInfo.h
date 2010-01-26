@@ -2,8 +2,10 @@
 /**
  * libemulator
  * OEInfo
- * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
+ *
+ * Parses a DML file
  */
 
 #ifndef _OEINFO_H
@@ -105,18 +107,21 @@ private:
 	
 	string getPathExtension(string path);
 	bool readFile(string path, vector<char> &data);
+	string getXMLProperty(xmlNodePtr node, string name);
 	
-	string getXMLProperty(xmlNodePtr node, string key);
-	
-	bool validateDML(xmlDocPtr doc);
-	
-	OERef getOutletRefForInletRef(xmlDocPtr doc, OERef inletRef);
-	OEPort *getOutlet(OERef outletRef);
-	string makeLabel(OEPort *outlet, vector<OERef> *refs);
-	
-	OEPort parsePort(xmlNodePtr node, OERef deviceRef, string deviceLabel, string deviceImage);
-	void parseDevice(xmlNodePtr node);
 	void parse(xmlDocPtr doc);
+	bool validateDML(xmlDocPtr doc);
+	void parseDML(xmlDocPtr doc);
+	void parseDevice(xmlNodePtr node);
+	OEPort parsePort(xmlNodePtr node, OERef ref, string label, string image);
+	
+	void setConnections(xmlDocPtr doc);
+	xmlNodePtr getNodeForRef(xmlDocPtr doc, OERef ref);
+	OERef getOutletRefForInletRef(xmlDocPtr doc, OERef ref);
+	OEPort *getOutletPortForOutletRef(OERef ref);
+	
+	void setLabels();
+	string setLabel(OEPort *outlet, vector<OERef> *visitedRefs);
 };
 
 #endif

@@ -5,10 +5,10 @@
 <device name="dev0" label="Videx Videoterm" image="Videx Videoterm.png">
     <outlet ref="card" type="appleiislot" />
     <component name="card" class="VidexVideoterm">
-        <connection key="rom" ref="rom" />
+        <connection name="rom" ref="rom" />
     </component>
 	<component name="rom" class="AppleIIInterfaceROM">
-        <resource key="romImage" src="roms/Videx Videoterm ROM.bin" />
+        <resource name="romImage" src="roms/Videx Videoterm 2.4 ROM.bin" />
     </component>
 </device>
 

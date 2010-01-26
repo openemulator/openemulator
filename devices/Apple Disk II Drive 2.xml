@@ -7,12 +7,12 @@
 		<setting ref="lock" type="checkbox" label="Lock Disk Drive" />
 	</outlet>
     <component name="drive" class="AppleDiskII">
-        <property key="diskImage" value=" /Users/mressl/test2.dsk" />
-        <property key="lock" value="0" />
-        <resource key="soundSpin" src="sounds/Apple Disk II Spin.wav" />
-        <resource key="soundArm" src="sounds/Apple Disk II Arm.wav" />
-        <resource key="soundStop" src="sounds/Apple Disk II Stop.wav" />
-        <resource key="soundShake" src="sounds/Apple Disk II Shake.wav" />
+        <property name="diskImage" value=" /Users/mressl/test2.dsk" />
+        <property name="lock" value="0" />
+        <resource name="soundSpin" src="sounds/Apple Disk II Spin.wav" />
+        <resource name="soundArm" src="sounds/Apple Disk II Arm.wav" />
+        <resource name="soundStop" src="sounds/Apple Disk II Stop.wav" />
+        <resource name="soundShake" src="sounds/Apple Disk II Shake.wav" />
     </component>
 </device>
 
