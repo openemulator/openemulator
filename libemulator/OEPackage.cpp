@@ -8,8 +8,14 @@
  * Type for accessing DML packages (zip and directory type)
  */
 
-#include <fstream>
+#ifdef _WIN32
+#include <windows.h>
+#else
 #include <sys/stat.h>
+#include <dirent.h>
+#endif
+
+#include <fstream>
 
 #include "OEPackage.h"
 
@@ -18,21 +24,16 @@ OEPackage::OEPackage(string packagePath)
 	this->packagePath = packagePath;
 	zip = NULL;
 	
-	
-	// To-Do: Make platform independent
-	struct stat statbuf;
-	bool isPathCreated = (stat(packagePath.c_str(), &statbuf) == 0);
-	
 	bool isPackage;
-	if (isPathCreated)
-		isPackage = (statbuf.st_mode & S_IFDIR);
+	if (isPathValid(packagePath))
+		isPackage = isFolder(packagePath);
 	else
 		isPackage = (packagePath.substr(packagePath.size() - 1, 1) == "/");
 	
 	if (isPackage)
 	{
-		mkdir(packagePath.c_str(), 0777);
-		open = (stat(packagePath.c_str(), &statbuf) == 0);
+		makeDirectory(packagePath);
+		open = isPathValid(packagePath);
 	}
 	else
 	{
@@ -78,7 +79,7 @@ bool OEPackage::readFile(string localPath, vector<char> &data)
 	}
 	else
 	{
-		ifstream file((packagePath + PACKAGE_PATH_SEPARATOR + localPath).c_str());
+		ifstream file((packagePath + OE_PATH_SEPARATOR + localPath).c_str());
 		
 		if (file.is_open())
 		{
@@ -122,7 +123,7 @@ bool OEPackage::writeFile(string localPath, vector<char> &data)
 	}
 	else
 	{
-		ofstream file((packagePath + PACKAGE_PATH_SEPARATOR + localPath).c_str());
+		ofstream file((packagePath + OE_PATH_SEPARATOR + localPath).c_str());
 		
 		if (file.is_open())
 		{
@@ -137,7 +138,89 @@ bool OEPackage::writeFile(string localPath, vector<char> &data)
 
 bool OEPackage::remove()
 {
-	// To-Do: Remove
+	if (zip)
+		zip_close(zip);
+	
+	zip = NULL;
+	
+	return removePath(packagePath);
+}
 
-	return true;
+bool OEPackage::isPathValid(string path)
+{
+#ifdef _WIN32
+	return (GetFileAttributes(path.c_str()) != INVALID_FILE_ATTRIBUTES);
+#else
+	struct stat statbuf;
+	return (stat(packagePath.c_str(), &statbuf) == 0);
+#endif
+}
+
+bool OEPackage::isFolder(string path)
+{
+#ifdef _WIN32
+	return (GetFileAttributes(path.c_str()) & FILE_ATTRIBUTE_DIRECTORY);
+#else
+	struct stat statbuf;
+	if (stat(packagePath.c_str(), &statbuf) != 0)
+		return false;
+	return (statbuf.st_mode & S_IFDIR);
+#endif
+}
+
+bool OEPackage::makeDirectory(string path)
+{
+#ifdef _WIN32
+	return CreateDirectory(path.c_str())
+#else
+	return (mkdir(packagePath.c_str(), 0777) == 0);
+#endif
+}
+
+bool OEPackage::removePath(string path)
+{
+#ifdef _WIN32
+	if (!isFolder(path))
+		return DeleteFile(path.c_str());
+	
+	string dirPath = path + "\\*";
+	WIN32_FIND_DATA findFileData;
+	HANDLE hFind = FindFirstFile(dirPath.c_str(), &findFileData);
+	if (hFind == INVALID_HANDLE_VALUE)
+		return false;
+	
+	while (FindNextFile(hFind, &findFileData))
+	{
+		string fileName = findFileData.cFileName;
+		if ((fileName == ".") || (fileName == ".."))
+			continue;
+		
+		removePath(path + "\\" + fileName);
+	}
+	
+	FindClose(hFind);
+	
+	return RemoveDirectory(path);
+#else
+	if (!isFolder(path))
+		return (unlink(path.c_str()) == 0);
+	
+	DIR *dir;
+	if (!(dir = opendir(path.c_str())))
+		return false;
+	
+	struct dirent *dp;
+	while ((dp = readdir(dir)) != NULL)
+	{
+		string fileName = string(dp->d_name);
+		if ((fileName == ".") || (fileName == ".."))
+			continue;
+		
+		removePath(path + "\\" + fileName);
+	}
+	
+	closedir(dir);
+	
+	return rmdir(path.c_str());
+#endif
 }

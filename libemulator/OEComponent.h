@@ -13,12 +13,6 @@
 
 #include <string>
 #include <vector>
-#include <stdint.h>
-
-#define OE_SUBSTITUTION_DEVICE_NAME "${DEVICE_NAME}"
-#define OE_PATH_SEPARATOR "/"
-
-#define OE_DML_FILENAME "info.xml"
 
 using namespace std;
 
@@ -90,6 +84,5 @@ typedef struct
 // * get video frames
 
 // Note: move pause and power off images to libemulator
-
 
 #endif

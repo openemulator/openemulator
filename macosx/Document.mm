@@ -228,7 +228,7 @@
 		 i != inlets->end();
 		 i++)
 	{
-		if (i->connectedPort)
+		if (i->connectionPort)
 			continue;
 		
 		string stringRef = i->ref.getStringRef();
@@ -247,7 +247,7 @@
 		[freeInlets addObject:dict];
 	}
 	
-	// Build expansion, storage and peripherals list
+	// Build outlet lists
 	int expansionIndex = 0;
 	int storageIndex = 0;
 	int peripheralIndex = 0;
@@ -256,7 +256,7 @@
 		 o != outlets->end();
 		 o++)
 	{
-		if (!o->connectedPort)
+		if (!o->connectionPort)
 			continue;
 		
 		NSString *imagePath = [NSString stringWithUTF8String:o->image.c_str()];
@@ -265,7 +265,7 @@
 		NSImage *deviceImage = [self getResourceImage:imagePath];
 		NSString *informativeText = [NSString localizedStringWithFormat:@"\n(on %@)",
 									 [NSString stringWithUTF8String:
-									  o->connectedLabel.c_str()]];
+									  o->connectionLabel.c_str()]];
 		NSAttributedString *aString = [self formatDeviceLabel:deviceLabel
 										  withInformativeText:informativeText];
 		
@@ -274,7 +274,7 @@
 							  deviceImage, @"image",
 							  nil];
 		
-		string category = o->connectedPort->category;
+		string category = o->connectionPort->category;
 		if (category == "expansion")
 			[self insertObject:dict inExpansionsAtIndex:expansionIndex++];
 		else if (category == "storage")

@@ -20,41 +20,18 @@ OEInfo::OEInfo(string path)
 {
 	loaded = false;
 	
-	vector<char> data;
-	string pathExtension = getPathExtension(path);
-	if (pathExtension == "xml")
+	xmlDocPtr doc = loadDML(path);
+	if (doc)
 	{
-		if (!readFile(path, data))
-			return;
+		processDML(doc);
+		
+		xmlFreeDoc(doc);
 	}
-	else if (pathExtension == "emulation")
-	{
-		OEPackage package(path);
-		if (package.isOpen())
-		{
-			if (!package.readFile(OE_DML_FILENAME, data))
-				return;
-		}
-	}
-	else
-		return;
-	
-	xmlDocPtr dml;
-	dml = xmlReadMemory(&data[0],
-						data.size(),
-						OE_DML_FILENAME,
-						NULL,
-						0);
-	if (!dml)
-		return;
-	
-	parse(dml);
-	xmlFreeDoc(dml);
 }
 
-OEInfo::OEInfo(xmlDocPtr dml)
+OEInfo::OEInfo(xmlDocPtr doc)
 {
-	parse(dml);
+	processDML(doc);
 }
 
 OEInfo::OEInfo(const OEInfo &info)
@@ -68,6 +45,42 @@ OEInfo::OEInfo(const OEInfo &info)
 	
 	inlets = info.inlets;
 	outlets = info.outlets;
+}
+
+
+bool OEInfo::isLoaded()
+{
+	return loaded;
+}
+
+string OEInfo::getLabel()
+{
+	return label;
+}
+
+string OEInfo::getImage()
+{
+	return image;
+}
+
+string OEInfo::getDescription()
+{
+	return description;
+}
+
+string OEInfo::getGroup()
+{
+	return group;
+}
+
+OEPorts *OEInfo::getInlets()
+{
+	return &inlets;
+}
+
+OEPorts *OEInfo::getOutlets()
+{
+	return &outlets;
 }
 
 string OEInfo::getPathExtension(string path)
@@ -109,24 +122,53 @@ string OEInfo::getXMLProperty(xmlNodePtr node, string name)
 	return valueString;
 }
 
-void OEInfo::parse(xmlDocPtr doc)
+xmlDocPtr OEInfo::loadDML(string path)
+{
+	vector<char> data;
+	string pathExtension = getPathExtension(path);
+	if (pathExtension == "xml")
+	{
+		if (!readFile(path, data))
+			return NULL;
+	}
+	else if (pathExtension == "emulation")
+	{
+		OEPackage package(path);
+		if (package.isOpen())
+		{
+			if (!package.readFile(OE_INFO_FILENAME, data))
+				return NULL;
+		}
+	}
+	else
+		return NULL;
+	
+	return xmlReadMemory(&data[0], data.size(), OE_INFO_FILENAME, NULL, 0);
+}
+
+void OEInfo::processDML(xmlDocPtr doc)
 {
 	loaded = false;
 	
 	if (!validateDML(doc))
 		return;
 	
+	getDMLProperties(doc);
+	parseDML(doc);
+	setConnections(doc);
+	setConnectionLabels();
+	
+	loaded = true;
+}
+
+void OEInfo::getDMLProperties(xmlDocPtr doc)
+{
 	xmlNodePtr node = xmlDocGetRootElement(doc);
+	
 	label = getXMLProperty(node, "label");
 	image = getXMLProperty(node, "image");
 	description = getXMLProperty(node, "description");
 	group = getXMLProperty(node, "group");
-	
-	parseDML(doc);
-	setConnections(doc);
-	setLabels();
-	
-	loaded = true;
 }
 
 bool OEInfo::validateDML(xmlDocPtr doc)
@@ -166,31 +208,48 @@ void OEInfo::parseDevice(xmlNodePtr node)
 	}
 }
 
-OEPort OEInfo::parsePort(xmlNodePtr node,
-						 OERef deviceRef,
-						 string deviceLabel,
-						 string deviceImage)
+OEPort OEInfo::parsePort(xmlNodePtr node, OERef ref, string label, string image)
 {
 	OEPort port;
 	
-	port.ref = deviceRef.getRef(getXMLProperty(node, "ref"));
+	port.ref = ref.getRef(getXMLProperty(node, "ref"));
 	port.type = getXMLProperty(node, "type");
 	port.category = getXMLProperty(node, "category");
 	port.label = getXMLProperty(node, "label");
 	port.image = getXMLProperty(node, "image");
 	
-	port.deviceLabel = deviceLabel;
+	port.deviceLabel = label;
 	
-	port.connectedPort = NULL;
+	port.connectionPort = NULL;
 	
 	if (!port.label.size())
-		port.label = deviceLabel;
+		port.label = label;
 	if (!port.image.size())
-		port.image = deviceImage;
+		port.image = image;
 	
-	// To-do: parse settings
+	for(xmlNodePtr childNode = node->children;
+		childNode;
+		childNode = childNode->next)
+	{
+		if (xmlStrcmp(childNode->name, BAD_CAST "setting"))
+			continue;
+		
+		port.settings.push_back(parseSetting(childNode, port.ref));
+	}
 	
 	return port;
+}
+
+OESetting OEInfo::parseSetting(xmlNodePtr node, OERef ref)
+{
+	OESetting setting;
+	
+	setting.ref = ref.getRef(getXMLProperty(node, "ref"));
+	setting.type = getXMLProperty(node, "type");
+	setting.options = getXMLProperty(node, "options");
+	setting.label = getXMLProperty(node, "label");
+	
+	return setting;
 }
 
 void OEInfo::setConnections(xmlDocPtr doc)
@@ -206,8 +265,8 @@ void OEInfo::setConnections(xmlDocPtr doc)
 		OEPort *o = getOutletPortForOutletRef(outletRef);
 		if (o)
 		{
-			i->connectedPort = &(*o);
-			o->connectedPort = &(*i);
+			i->connectionPort = &(*o);
+			o->connectionPort = &(*i);
 		}
 		else
 			cerr << "libemulator: warning: outlet \"" << outletRef <<
@@ -252,9 +311,9 @@ xmlNodePtr OEInfo::getNodeForRef(xmlDocPtr doc, OERef ref)
 				connectionNode;
 				connectionNode = connectionNode->next)
 			{
-				if (xmlStrcmp(componentNode->name, BAD_CAST "connection"))
+				if (xmlStrcmp(connectionNode->name, BAD_CAST "connection"))
 					continue;
-
+				
 				if (getXMLProperty(connectionNode, "name") != ref.getProperty())
 					continue;
 				
@@ -292,79 +351,45 @@ OEPort *OEInfo::getOutletPortForOutletRef(OERef ref)
 	return NULL;
 }
 
-void OEInfo::setLabels()
+void OEInfo::setConnectionLabels()
 {
 	for (OEPorts::iterator o = outlets.begin();
 		 o != outlets.end();
 		 o++)
 	{
 		vector<OERef> refs;
-		o->connectedLabel = setLabel(&(*o), &refs);
-		OEPort *i = o->connectedPort;
+		o->connectionLabel = getConnectionLabel(&(*o), &refs);
+		OEPort *i = o->connectionPort;
 		if (i)
-			i->connectedLabel = o->connectedLabel;
+			i->connectionLabel = o->connectionLabel;
 	}
 }
 
-string OEInfo::setLabel(OEPort *outlet, vector<OERef> *visitedRefs)
+string OEInfo::getConnectionLabel(OEPort *outletPort, vector<OERef> *visitedRefs)
 {
-	OEPort *inlet = outlet->connectedPort;
-	if (!inlet)
+	OEPort *inletPort = outletPort->connectionPort;
+	if (!inletPort)
 		return "Unknown";
 	
 	for (OEPorts::iterator o = outlets.begin();
 		 o != outlets.end();
 		 o++)
 	{
-		if (inlet->ref == o->ref)
+		if (inletPort->ref == o->ref)
 		{
+			// Circularity check
 			for (vector<OERef>::iterator r = visitedRefs->begin();
 				 r != visitedRefs->end();
 				 r++)
 			{
 				if (o->ref == *r)
-					return inlet->label;
+					return inletPort->label;
 			}
 			visitedRefs->push_back(o->ref);
 			
-			return setLabel(&(*o), visitedRefs) + " " + inlet->label;
+			return getConnectionLabel(&(*o), visitedRefs) + " " + inletPort->label;
 		}
 	}
 	
-	return inlet->deviceLabel + " " + inlet->label;
-}
-
-bool OEInfo::isLoaded()
-{
-	return loaded;
-}
-
-string OEInfo::getLabel()
-{
-	return label;
-}
-
-string OEInfo::getImage()
-{
-	return image;
-}
-
-string OEInfo::getDescription()
-{
-	return description;
-}
-
-string OEInfo::getGroup()
-{
-	return group;
-}
-
-OEPorts *OEInfo::getInlets()
-{
-	return &inlets;
-}
-
-OEPorts *OEInfo::getOutlets()
-{
-	return &outlets;
+	return inletPort->deviceLabel + " " + inletPort->label;
 }

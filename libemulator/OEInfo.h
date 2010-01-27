@@ -16,7 +16,6 @@
 
 #include <libxml/tree.h>
 
-#include "OEDefines.h"
 #include "OERef.h"
 
 using namespace std;
@@ -24,6 +23,9 @@ using namespace std;
 class OESetting
 {
 public:
+	OESetting()
+	{
+	}
 	OESetting(const OESetting &setting)
 	{
 		ref = setting.ref;
@@ -56,8 +58,8 @@ public:
 		
 		deviceLabel = port.deviceLabel;
 		
-		connectedLabel = port.connectedLabel;
-		connectedPort = port.connectedPort;
+		connectionLabel = port.connectionLabel;
+		connectionPort = port.connectionPort;
 		
 		settings = port.settings;
 	}
@@ -70,8 +72,8 @@ public:
 	
 	string deviceLabel;
 	
-	string connectedLabel;
-	OEPort *connectedPort;
+	string connectionLabel;
+	OEPort *connectionPort;
 	
 	OESettings settings;
 };
@@ -82,7 +84,7 @@ class OEInfo
 {
 public:
 	OEInfo(string path);
-	OEInfo(xmlDocPtr dml);
+	OEInfo(xmlDocPtr doc);
 	OEInfo(const OEInfo &info);
 	
 	bool isLoaded();
@@ -109,19 +111,23 @@ private:
 	bool readFile(string path, vector<char> &data);
 	string getXMLProperty(xmlNodePtr node, string name);
 	
-	void parse(xmlDocPtr doc);
+	xmlDocPtr loadDML(string path);
+	void processDML(xmlDocPtr doc);
+	
+	void getDMLProperties(xmlDocPtr);
 	bool validateDML(xmlDocPtr doc);
 	void parseDML(xmlDocPtr doc);
 	void parseDevice(xmlNodePtr node);
 	OEPort parsePort(xmlNodePtr node, OERef ref, string label, string image);
+	OESetting parseSetting(xmlNodePtr node, OERef ref);
 	
 	void setConnections(xmlDocPtr doc);
 	xmlNodePtr getNodeForRef(xmlDocPtr doc, OERef ref);
 	OERef getOutletRefForInletRef(xmlDocPtr doc, OERef ref);
 	OEPort *getOutletPortForOutletRef(OERef ref);
 	
-	void setLabels();
-	string setLabel(OEPort *outlet, vector<OERef> *visitedRefs);
+	void setConnectionLabels();
+	string getConnectionLabel(OEPort *outletPort, vector<OERef> *visitedRefs);
 };
 
 #endif

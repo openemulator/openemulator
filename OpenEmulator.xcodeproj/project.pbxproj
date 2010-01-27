@@ -192,7 +192,6 @@
 		00B5709C10863C2A00CDE4A7 /* TemplateChooserController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TemplateChooserController.h; sourceTree = "<group>"; };
 		00B5709D10863C2A00CDE4A7 /* TemplateChooserController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TemplateChooserController.m; sourceTree = "<group>"; };
 		00B974AD10701DCD00BD1402 /* sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; path = sounds; sourceTree = "<group>"; };
-		00B9774610705AF800BD1402 /* OEDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OEDefines.h; path = libemulator/OEDefines.h; sourceTree = "<group>"; };
 		00BADD441100BE8300EB0344 /* ConnectorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConnectorViewController.h; sourceTree = "<group>"; };
 		00BADD451100BE8300EB0344 /* ConnectorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConnectorViewController.m; sourceTree = "<group>"; };
 		00BB4D561086C1160071B584 /* TBRestart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TBRestart.png; sourceTree = "<group>"; };
@@ -379,7 +378,6 @@
 				004384821067641C001CFCCF /* EventController.cpp */,
 				004384831067641C001CFCCF /* EventController.h */,
 				00E2A8741053305100910B53 /* Frameworks */,
-				00B9774610705AF800BD1402 /* OEDefines.h */,
 				0072B1DB10E578E500AC7EBD /* OEEmulation.h */,
 				0072B1DC10E578E500AC7EBD /* OEEmulation.cpp */,
 			);

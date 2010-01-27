@@ -127,7 +127,7 @@
 			 o != outlets->end();
 			 o++)
 		{
-			if (o->connectedPort)
+			if (o->connectionPort)
 				continue;
 			
 			NSString *outletType = [NSString stringWithUTF8String:o->type.c_str()];
@@ -219,7 +219,7 @@
 		 o != outlets->end();
 		 o++)
 	{
-		if (o->connectedPort)
+		if (o->connectionPort)
 			continue;
 		
 		string stringRef = o->ref.getStringRef();

@@ -16,7 +16,13 @@
 
 #include <zip.h>
 
-#define PACKAGE_PATH_SEPARATOR "/"
+#ifdef _WIN32
+#define OE_PATH_SEPARATOR "\\"
+#else
+#define OE_PATH_SEPARATOR "/"
+#endif
+
+#define OE_INFO_FILENAME "info.xml"
 
 using namespace std;
 
@@ -38,6 +44,11 @@ private:
 	
 	string packagePath;
 	struct zip *zip;
+	
+	bool isPathValid(string path);
+	bool isFolder(string path);
+	bool makeDirectory(string path);
+	bool removePath(string path);
 };
 
 #endif

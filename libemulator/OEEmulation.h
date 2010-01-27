@@ -16,10 +16,11 @@
 
 #include <libxml/tree.h>
 
-#include "OEDefines.h"
-#include "OEComponent.h"
 #include "OERef.h"
+#include "OEComponent.h"
 #include "OEPackage.h"
+
+#define OE_DEVICENAME_SUBST_STRING "${DEVICE_NAME}"
 
 using namespace std;
 

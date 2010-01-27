@@ -27,11 +27,11 @@ OEEmulation::OEEmulation(string emulationPath, string resourcePath)
 	if (package->isOpen())
 	{
 		vector<char> data;
-		if (package->readFile(OE_DML_FILENAME, data))
+		if (package->readFile(OE_INFO_FILENAME, data))
 		{
 			documentDML = xmlReadMemory(&data[0],
 										data.size(),
-										OE_DML_FILENAME,
+										OE_INFO_FILENAME,
 										NULL,
 										0);
 			
@@ -78,7 +78,7 @@ bool OEEmulation::save(string emulationPath)
 				
 				xmlFree(datap);
 				
-				error = !package->writeFile(OE_DML_FILENAME, data);
+				error = !package->writeFile(OE_INFO_FILENAME, data);
 			}
 		}
 		
@@ -115,7 +115,7 @@ bool OEEmulation::addDML(string path, OEStringRefMap connections)
 	xmlDocPtr deviceDML;
 	deviceDML = xmlReadMemory(&data[0],
 							  data.size(),
-							  OE_DML_FILENAME,
+							  OE_INFO_FILENAME,
 							  NULL,
 							  0);
 	if (!deviceDML)
@@ -197,9 +197,9 @@ void OEEmulation::setXMLProperty(xmlNodePtr node, string name, string value)
 string OEEmulation::buildSourcePath(string src, OERef deviceRef)
 {
 	string deviceName = deviceRef.getStringRef();
-	int index = src.find(OE_SUBSTITUTION_DEVICE_NAME);
+	int index = src.find(OE_DEVICENAME_SUBST_STRING);
 	if (index != string::npos)
-		src.replace(index, sizeof(OE_SUBSTITUTION_DEVICE_NAME) - 1, deviceName);
+		src.replace(index, sizeof(OE_DEVICENAME_SUBST_STRING) - 1, deviceName);
 	
 	return src;
 }
@@ -720,9 +720,9 @@ void OEEmulation::renameDMLRefs(xmlDocPtr doc, OEStringRefMap &deviceNameMap)
 		if (xmlStrcmp(deviceNode->name, BAD_CAST "device"))
 			continue;
 		
-		string deviceName = deviceNameMap[getXMLProperty(deviceNode, "name")];
-		setXMLProperty(deviceNode, "name", deviceName);
+		string deviceName = getXMLProperty(deviceNode, "name");
 		OERef deviceRef(deviceName);
+		setXMLProperty(deviceNode, "name", deviceNameMap[deviceName]);
 		
 		for(xmlNodePtr componentNode = deviceNode->children;
 			componentNode;
@@ -740,13 +740,13 @@ void OEEmulation::renameDMLRefs(xmlDocPtr doc, OEStringRefMap &deviceNameMap)
 				if (xmlStrcmp(node->name, BAD_CAST "connection"))
 					continue;
 				
-				OERef ref = componentRef.getRef(getXMLProperty(node, "ref"));
-				string deviceName = ref.getDevice();
+				OERef outletRef = componentRef.getRef(getXMLProperty(node, "ref"));
+				string outletDeviceName = outletRef.getDevice();
 				
-				if (deviceNameMap.count(deviceName) > 0)
+				if (deviceNameMap.count(outletDeviceName))
 				{
-					ref.setDevice(deviceNameMap[deviceName]);
-					setXMLProperty(node, "ref", ref.getStringRef());
+					outletRef.setDevice(deviceNameMap[outletDeviceName]);
+					setXMLProperty(node, "ref", outletRef.getStringRef());
 				}
 			}
 		}
@@ -759,7 +759,11 @@ void OEEmulation::renameConnections(OEStringRefMap &connections,
 	for (OEStringRefMap::iterator i = connections.begin();
 		 i != connections.end();
 		 i++)
-		connections[i->first] = deviceNameMap[i->second];
+	{
+		OERef outletRef = OERef(i->second);
+		outletRef.setDevice(deviceNameMap[outletRef.getDevice()]);
+		connections[i->first] = outletRef.getStringRef();
+	}
 }
 
 xmlNodePtr OEEmulation::getInsertionPointForInletRef(xmlDocPtr doc, OERef ref)
@@ -809,9 +813,9 @@ bool OEEmulation::mergeDMLs(xmlDocPtr doc, xmlDocPtr elem, OEStringRefMap &conne
 	{
 		xmlAddNextSibling(insertionPoint, childNode);
 	}*/
-
+	
 	xmlAddNextSibling(insertionPoint, node);
-									  
+	
 	for (OEStringRefMap::iterator i = connections.begin();
 		 i != connections.end();
 		 i++)

@@ -4,15 +4,15 @@
 
 <device name="dev0" label="Apple II Super Serial Card" image="Apple II Super Serial Card.png">
     <outlet ref="card" type="appleiislot">
-		<setting ref="mode" type="option" options="Communications Mode,Printer Mode" label="Mode" />
-		<setting ref="baudRate" type="option" options="50,75,110,135,150,300,600,1200,1800,2400,3600,4800,7200,9600,19200" label="Baud Rate" />
-		<setting ref="dataBits" type="option" options="7,8" label="Data Bits" />
-		<setting ref="stopBits" type="option" options="1,2" label="Stop Bits" />
-		<setting ref="parity" type="option" options="None,Even,Odd" label="Parity" />
-		<setting ref="autoLFAfterCR" type="checkbox" label="Auto LF after CR" />
-		<setting ref="interrupts" type="checkbox" label="Interrupts" />
-		<setting ref="charactersPerLine" type="option" options="40,72,80,132" label="Characters Per Line" />
-		<setting ref="delayAfterCR" type="checkbox" label="Delay after CR" />
+		<setting ref="card.mode" type="option" options="Communications Mode,Printer Mode" label="Mode" />
+		<setting ref="card.baudRate" type="option" options="50,75,110,135,150,300,600,1200,1800,2400,3600,4800,7200,9600,19200" label="Baud Rate" />
+		<setting ref="card.dataBits" type="option" options="7,8" label="Data Bits" />
+		<setting ref="card.stopBits" type="option" options="1,2" label="Stop Bits" />
+		<setting ref="card.parity" type="option" options="None,Even,Odd" label="Parity" />
+		<setting ref="card.autoLFAfterCR" type="checkbox" label="Auto LF after CR" />
+		<setting ref="card.interrupts" type="checkbox" label="Interrupts" />
+		<setting ref="card.charactersPerLine" type="option" options="40,72,80,132" label="Characters Per Line" />
+		<setting ref="card.delayAfterCR" type="checkbox" label="Delay after CR" />
 	</outlet>
     <inlet ref="card.port" type="serialport" category="peripheral" label="Port" image="Serial Port.png" />
     <component name="card" class="AppleDiskIIInterfaceCard">
