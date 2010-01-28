@@ -41,7 +41,8 @@ public:
 	
 	xmlDocPtr getDML();
 	bool addDML(string path, OEStringRefMap connections);
-	bool removeDevicesFromOutletRef(OERef ref);
+	bool isDeviceTerminal(OERef ref);
+	bool removeDevices(OERef ref);
 	
 private:
 	bool open;
@@ -93,7 +94,7 @@ private:
 	void buildDeviceNameMap(xmlDocPtr doc, xmlDocPtr elem, OEStringRefMap &deviceNameMap);
 	void renameDMLRefs(xmlDocPtr doc, OEStringRefMap &deviceNameMap);
 	void renameConnections(OEStringRefMap &connections, OEStringRefMap &deviceNameMap);
-	xmlNodePtr getInsertionPointForInletRef(xmlDocPtr doc, OERef ref);
+	xmlNodePtr getInsertionNodeForInlet(xmlDocPtr doc, OERef ref);
 	bool mergeDMLs(xmlDocPtr doc, xmlDocPtr elem, OEStringRefMap &connections);
 };
 

@@ -10,6 +10,4 @@
 	<component name="rom" class="AppleIIInterfaceROM">
         <resource name="romImage" src="roms/Videx Videoterm 2.4 ROM.bin" />
     </component>
-</device>
-
-</dml>
+</device></dml>

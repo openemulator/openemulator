@@ -31,6 +31,4 @@
 	<component name="rom" class="AppleIIInterfaceROM">
         <resource name="romImage" src="roms/Apple II Super Serial Card ROM.bin" />
     </component>
-</device>
-
-</dml>
+</device></dml>

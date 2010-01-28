@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dml PUBLIC "-//OPENEMULATOR//DTD DML 1.0//EN" "http://www.openemulator.org/DTDs/dml-1.0.dtd">
-<dml version="1.0" label="Disk II Card" image="Apple Disk II Interface Card.png" group="Disk Drive Controllers">
+<dml version="1.0" label="Disk II Interface" image="Apple Disk II Interface Card.png" group="Disk Drive Controllers">
 
 <device name="dev0" label="Apple Disk II Interface Card" image="Apple Disk II Interface Card.png">
     <outlet ref="card" type="appleiislot" />
@@ -14,6 +14,4 @@
 	<component name="rom" class="AppleIIInterfaceROM">
         <resource name="romImage" src="roms/Apple Disk II Interface Card ROM.bin" />
     </component>
-</device>
-
-</dml>
+</device></dml>

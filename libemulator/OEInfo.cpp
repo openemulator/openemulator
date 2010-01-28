@@ -353,41 +353,41 @@ OEPort *OEInfo::getOutletPortForOutletRef(OERef ref)
 
 void OEInfo::setConnectionLabels()
 {
-	for (OEPorts::iterator o = outlets.begin();
-		 o != outlets.end();
-		 o++)
+	for (OEPorts::iterator i = inlets.begin();
+		 i != inlets.end();
+		 i++)
 	{
 		vector<OERef> refs;
-		o->connectionLabel = getConnectionLabel(&(*o), &refs);
-		OEPort *i = o->connectionPort;
-		if (i)
-			i->connectionLabel = o->connectionLabel;
+		i->connectionLabel = getConnectionLabel(&(*i), refs);
+		OEPort *o = i->connectionPort;
+		if (o)
+			o->connectionLabel = i->connectionLabel;
 	}
 }
 
-string OEInfo::getConnectionLabel(OEPort *outletPort, vector<OERef> *visitedRefs)
+string OEInfo::getConnectionLabel(OEPort *inletPort, vector<OERef> &visitedRefs)
 {
-	OEPort *inletPort = outletPort->connectionPort;
-	if (!inletPort)
-		return "Unknown";
-	
 	for (OEPorts::iterator o = outlets.begin();
 		 o != outlets.end();
 		 o++)
 	{
-		if (inletPort->ref == o->ref)
+		if (o->ref.getDevice() == inletPort->ref.getDevice())
 		{
-			// Circularity check
-			for (vector<OERef>::iterator r = visitedRefs->begin();
-				 r != visitedRefs->end();
-				 r++)
+			// Avoid circular references
+			for (vector<OERef>::iterator v = visitedRefs.begin();
+				 v != visitedRefs.end();
+				 v++)
 			{
-				if (o->ref == *r)
-					return inletPort->label;
+				if (o->ref == *v)
+					return inletPort->deviceLabel;
 			}
-			visitedRefs->push_back(o->ref);
+			visitedRefs.push_back(o->ref);
 			
-			return getConnectionLabel(&(*o), visitedRefs) + " " + inletPort->label;
+			OEPort *i = o->connectionPort;
+			if (!i)
+				break;
+			
+			return getConnectionLabel(i, visitedRefs) + " " + inletPort->label;
 		}
 	}
 	

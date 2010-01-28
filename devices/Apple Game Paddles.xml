@@ -7,6 +7,4 @@
     <component name="port" class="AppleIIGamePaddles">
         <connection name="joystick" ref="host::joystick" />
     </component>
-</device>
-
-</dml>
+</device></dml>

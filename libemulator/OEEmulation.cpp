@@ -142,7 +142,12 @@ bool OEEmulation::addDML(string path, OEStringRefMap connections)
 	return true;
 }
 
-bool OEEmulation::removeDevicesFromOutletRef(OERef ref)
+bool isDeviceTerminal(OERef ref)
+{
+	return true;
+}
+
+bool OEEmulation::removeDevices(OERef ref)
 {
 	// Search device with outletRef
 	// Find device's inlets
@@ -740,7 +745,11 @@ void OEEmulation::renameDMLRefs(xmlDocPtr doc, OEStringRefMap &deviceNameMap)
 				if (xmlStrcmp(node->name, BAD_CAST "connection"))
 					continue;
 				
-				OERef outletRef = componentRef.getRef(getXMLProperty(node, "ref"));
+				string outletStringRef = getXMLProperty(node, "ref");
+				if (!outletStringRef.size())
+					continue;
+				
+				OERef outletRef = componentRef.getRef(outletStringRef);
 				string outletDeviceName = outletRef.getDevice();
 				
 				if (deviceNameMap.count(outletDeviceName))
@@ -766,14 +775,14 @@ void OEEmulation::renameConnections(OEStringRefMap &connections,
 	}
 }
 
-xmlNodePtr OEEmulation::getInsertionPointForInletRef(xmlDocPtr doc, OERef ref)
+xmlNodePtr OEEmulation::getInsertionNodeForInlet(xmlDocPtr doc, OERef ref)
 {
 	OERef deviceRef = ref.getDeviceRef();
 	xmlNodePtr deviceNode = getNodeForRef(doc, deviceRef);
 	if (!deviceNode)
 		return NULL;
 	
-	OERef prevDeviceRef;
+	OERef prevDeviceRef = deviceRef;
 	for(xmlNodePtr inletNode = deviceNode->children;
 		inletNode;
 		inletNode = inletNode->next)
@@ -782,14 +791,12 @@ xmlNodePtr OEEmulation::getInsertionPointForInletRef(xmlDocPtr doc, OERef ref)
 			continue;
 		
 		OERef inletRef = deviceRef.getRef(getXMLProperty(inletNode, "ref"));
-		OERef outletRef = getOutletRefForInletRef(doc, inletRef);
-		if (outletRef.isEmpty())
-			continue;
-
 		if (inletRef == ref)
 			return getNodeForRef(doc, prevDeviceRef);
-
-		prevDeviceRef = inletRef.getDeviceRef();
+		
+		OERef outletRef = getOutletRefForInletRef(doc, inletRef);
+		if (!outletRef.isEmpty())
+			prevDeviceRef = outletRef.getDeviceRef();
 	}
 	
 	return deviceNode;
@@ -802,19 +809,17 @@ bool OEEmulation::mergeDMLs(xmlDocPtr doc, xmlDocPtr elem, OEStringRefMap &conne
 	if (i != connections.end())
 		firstInletRef = OERef(i->first);
 	
-	xmlNodePtr insertionPoint = getInsertionPointForInletRef(doc, firstInletRef);
-	if (!insertionPoint)
-		return false;
-	
+	xmlNodePtr insertionNode = getInsertionNodeForInlet(doc, firstInletRef);
 	xmlNodePtr node = xmlCopyNode(xmlDocGetRootElement(elem), 1);
-/*	for(xmlNodePtr childNode = node->children;
+	for(xmlNodePtr childNode = node->children;
 		childNode;
 		childNode = childNode->next)
 	{
-		xmlAddNextSibling(insertionPoint, childNode);
-	}*/
-	
-	xmlAddNextSibling(insertionPoint, node);
+		if (!insertionNode)
+			return false;
+		xmlAddNextSibling(insertionNode, xmlCopyNode(childNode, 1));
+		insertionNode = insertionNode->next;
+	}
 	
 	for (OEStringRefMap::iterator i = connections.begin();
 		 i != connections.end();

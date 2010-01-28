@@ -28,11 +28,11 @@
     <inlet ref="iou.slot5" type="appleiislot" category="expansion" label="Slot 5" image="Apple II Slot.png" />
     <inlet ref="iou.slot6" type="appleiislot" category="expansion" label="Slot 6" image="Apple II Slot.png" />
     <inlet ref="iou.slot7" type="appleiislot" category="expansion" label="Slot 7" image="Apple II Slot.png" />
-    <inlet ref="game.port" type="appleiigame" category="peripheral" label="Game Port" image="Apple IIe Game Port.png" />
-    <inlet ref="events.cpuSocket" type="appleiicpu" category="expansion" label="CPU Socket" image="Apple II CPU Chip Socket.png" />
     <inlet ref="videoGen.charROMSocket" type="expansion" category="appleiicharrom" label="Character ROM Socket" image="Apple II Character ROM Socket.png" />
-    <inlet ref="videoGen.monitor" type="appleiimonitor" category="peripheral" label="Video Connector" image="Apple II Video Connector.png" />
     <inlet ref="rom.socket" type="appleiirom" category="expansion" label="ROM Socket" image="Apple II ROM Socket.png" />
+    <inlet ref="events.cpuSocket" type="appleiicpu" category="expansion" label="CPU Socket" image="Apple II CPU Chip Socket.png" />
+    <inlet ref="videoGen.monitor" type="appleiimonitor" category="peripheral" label="Video Connector" image="Apple II Video Connector.png" />
+    <inlet ref="game.port" type="appleiigame" category="peripheral" label="Game Port" image="Apple IIe Game Port.png" />
     <component name="events" class="AppleIIEvents">
         <connection name="hostEvents" ref="host::events" />
         <connection name="cpu" ref="cpu" />

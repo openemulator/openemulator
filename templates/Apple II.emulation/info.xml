@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dml PUBLIC "-//OPENEMULATOR//DTD DML 1.0//EN" "http://www.openemulator.org/DTDs/dml-1.0.dtd">
 <dml version="1.0" label="Apple II" image="Apple II.png" description="The Apple II was the first highly successful mass produced microprocessor product. The Apple II had color and high-resolution graphics modes, sound capabilities and one of two built-in BASIC programming languages." group="Apple II">
+
 <device name="host">
     <component name="events" class="EventController">
         <property name="runTime" value="0.0" />
@@ -29,11 +30,11 @@
     <inlet ref="iou.slot5" type="appleiislot" category="expansion" label="Slot 5" image="Apple II Slot.png" />
     <inlet ref="iou.slot6" type="appleiislot" category="expansion" label="Slot 6" image="Apple II Slot.png" />
     <inlet ref="iou.slot7" type="appleiislot" category="expansion" label="Slot 7" image="Apple II Slot.png" />
-    <inlet ref="game.port" type="appleiigame" category="peripheral" label="Game Port" image="Apple II Game Port.png" />
-    <inlet ref="events.cpuSocket" type="appleiicpu" category="expansion" label="CPU Socket" image="Apple II CPU Chip Socket.png" />
     <inlet ref="videoGen.charROMSocket" type="expansion" category="appleiicharrom" label="Character ROM Socket" image="Apple II Character ROM Socket.png" />
-    <inlet ref="videoGen.monitor" type="appleiimonitor" category="peripheral" label="Video Connector" image="Apple II Video Connector.png" />
     <inlet ref="rom.socket" type="appleiirom" category="expansion" label="ROM Socket" image="Apple II ROM Socket.png" />
+    <inlet ref="events.cpuSocket" type="appleiicpu" category="expansion" label="CPU Socket" image="Apple II CPU Chip Socket.png" />
+    <inlet ref="videoGen.monitor" type="appleiimonitor" category="peripheral" label="Video Connector" image="Apple II Video Connector.png" />
+    <inlet ref="game.port" type="appleiigame" category="peripheral" label="Game Port" image="Apple II Game Port.png" />
     <component name="events" class="AppleIIEvents">
         <connection name="hostEvents" ref="host::events" />
         <connection name="cpu" ref="cpu" />

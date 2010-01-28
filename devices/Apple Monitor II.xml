@@ -6,6 +6,4 @@
     <outlet ref="monitor" type="appleiimonitor" />
     <component name="monitor" class="AppleMonitorII">
     </component>
-</device>
-
-</dml>
+</device></dml>

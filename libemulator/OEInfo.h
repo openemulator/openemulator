@@ -127,7 +127,7 @@ private:
 	OEPort *getOutletPortForOutletRef(OERef ref);
 	
 	void setConnectionLabels();
-	string getConnectionLabel(OEPort *outletPort, vector<OERef> *visitedRefs);
+	string getConnectionLabel(OEPort *outletPort, vector<OERef> &visitedRefs);
 };
 
 #endif

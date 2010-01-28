@@ -40,7 +40,7 @@
 	[super awakeFromNib];
 	
 	NSSize aSize;
-	aSize.width = 104;
+	aSize.width = 160;
 	aSize.height = 64;
 	NSDictionary *attrs = [NSDictionary dictionaryWithObjectsAndKeys:
 						   [NSFont messageFontOfSize:11.0f], NSFontAttributeName,

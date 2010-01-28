@@ -234,7 +234,7 @@
 		string stringRef = i->ref.getStringRef();
 		
 		NSString *portType = [NSString stringWithUTF8String:i->type.c_str()];
-		NSString *portLabel = [NSString stringWithUTF8String:i->label.c_str()];
+		NSString *portLabel = [NSString stringWithUTF8String:i->connectionLabel.c_str()];
 		NSString *portImage = [NSString stringWithUTF8String:i->image.c_str()];
 		NSString *portRef = [NSString stringWithUTF8String:stringRef.c_str()];
 		

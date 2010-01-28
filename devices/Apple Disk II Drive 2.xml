@@ -2,7 +2,7 @@
 <!DOCTYPE dml PUBLIC "-//OPENEMULATOR//DTD DML 1.0//EN" "http://www.openemulator.org/DTDs/dml-1.0.dtd">
 <dml version="1.0" label="Disk II Drive 2" image="Apple Disk II Drive.png" group="Disk Drives">
 
-<device name="dev0" label="Apple Disk II Drive 2" image="Apple Disk II Drive.png">
+<device name="dev0" label="Apple Disk II" image="Apple Disk II Drive.png">
     <outlet ref="drive" type="appledisk525">
 		<setting ref="drive.lock" type="checkbox" label="Lock Disk Drive" />
 	</outlet>
@@ -14,6 +14,4 @@
         <resource name="soundStop" src="sounds/Apple Disk II Stop.wav" />
         <resource name="soundShake" src="sounds/Apple Disk II Shake.wav" />
     </component>
-</device>
-
-</dml>
+</device></dml>
