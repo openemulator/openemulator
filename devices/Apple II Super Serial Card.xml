@@ -14,7 +14,7 @@
 		<setting ref="card.charactersPerLine" type="option" options="40,72,80,132" label="Characters Per Line" />
 		<setting ref="card.delayAfterCR" type="checkbox" label="Delay after CR" />
 	</outlet>
-    <inlet ref="card.port" type="serialport" category="peripheral" label="Port" image="Serial Port.png" />
+    <inlet ref="card.port" type="serialport" category="peripheral" label="Serial Port" image="Serial Port.png" />
     <component name="card" class="AppleDiskIIInterfaceCard">
         <connection name="port" ref="" />
         <connection name="rom" ref="rom" />
