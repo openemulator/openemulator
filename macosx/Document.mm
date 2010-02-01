@@ -393,8 +393,8 @@
 		[[NSAlert alertWithError:error] runModal];
 }
 
-- (void) addDML:(NSString *) path
-	connections:(NSDictionary *) connections
+- (void) addDevices:(NSString *) path
+		connections:(NSDictionary *) connections
 {
 	string pathString = [path UTF8String];
 	map<string, string> connectionsMap;

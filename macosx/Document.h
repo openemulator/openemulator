@@ -39,7 +39,7 @@
 
 - (IBAction) saveDocumentAsTemplate:(id)sender;
 
-- (void) addDML:path connections:(NSDictionary *) connections;
+- (void) addDevices:(NSString *) path connections:(NSDictionary *) connections;
 
 - (void) powerButtonPressedAndReleased:(id)sender;
 - (void) powerButtonPressed:(id)sender;

@@ -852,8 +852,7 @@ xmlNodePtr OEEmulation::getNodeOfPreviousInlet(xmlDocPtr doc, OERef ref)
 	if (!deviceNode)
 		return NULL;
 	
-	OERef prevRef = deviceRef;
-	vector<OERef> visitedRefs;
+	OERef prevRef;
 	for(xmlNodePtr inletNode = deviceNode->children;
 		inletNode;
 		inletNode = inletNode->next)
@@ -863,7 +862,15 @@ xmlNodePtr OEEmulation::getNodeOfPreviousInlet(xmlDocPtr doc, OERef ref)
 		
 		OERef inletRef = deviceRef.getRef(getXMLProperty(inletNode, "ref"));
 		if (inletRef == ref)
-			return getNodeOfLastInlet(doc, prevRef, visitedRefs);
+		{
+			if (prevRef.isEmpty())
+				return deviceNode;
+			else
+			{
+				vector<OERef> visitedRefs;
+				return getNodeOfLastInlet(doc, prevRef, visitedRefs);
+			}
+		}
 		
 		OERef outletRef = getOutletForInlet(doc, inletRef);
 		if (!outletRef.isEmpty())

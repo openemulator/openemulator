@@ -37,7 +37,7 @@
 	
 	[deviceChooserViewController release];
 	[connectorViewController release];
-
+	
 	if (selectedItemOutlets)
 		[selectedItemOutlets release];
 	if (selectedItemInlets)
@@ -235,8 +235,8 @@
 			[connections setObject:outletRef forKey:inletRef];
 		}
 		
-		[[fDocumentController currentDocument] addDML:dmlPath
-										  connections:connections];
+		[[fDocumentController currentDocument] addDevices:dmlPath
+											  connections:connections];
 	}
 }
 
