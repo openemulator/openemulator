@@ -3,9 +3,8 @@
 <dml version="1.0" label="Disk II Drive 1" image="Apple Disk II Drive.png" group="Disk Drives">
 
 <device name="dev0" label="Apple Disk II" image="Apple Disk II Drive.png">
-    <outlet ref="drive" type="appledisk525">
-		<setting ref="drive.lock" type="checkbox" label="Lock Disk Drive" />
-	</outlet>
+    <outlet ref="drive" type="appledisk525" />
+    <setting ref="drive.lock" type="checkbox" label="Lock Disk Drive" />
     <component name="drive" class="AppleDiskII">
         <property name="diskImage" value=" /Users/mressl/test2.dsk" />
         <property name="lock" value="0" />

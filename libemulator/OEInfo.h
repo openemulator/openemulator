@@ -60,8 +60,6 @@ public:
 		
 		connectionLabel = port.connectionLabel;
 		connectionPort = port.connectionPort;
-		
-		settings = port.settings;
 	}
 	
 	OERef ref;
@@ -74,8 +72,6 @@ public:
 	
 	string connectionLabel;
 	OEPort *connectionPort;
-	
-	OESettings settings;
 };
 
 typedef vector<OEPort> OEPorts;
@@ -95,6 +91,7 @@ public:
 	string getGroup();
 	OEPorts *getInlets();
 	OEPorts *getOutlets();
+	OEPorts *getSettings();
 	
 private:
 	bool loaded;
@@ -106,6 +103,7 @@ private:
 	
 	OEPorts inlets;
 	OEPorts outlets;
+	OESettings settings;
 	
 	string getPathExtension(string path);
 	bool readFile(string path, vector<char> &data);
@@ -123,8 +121,8 @@ private:
 	
 	void setConnections(xmlDocPtr doc);
 	xmlNodePtr getNodeForRef(xmlDocPtr doc, OERef ref);
-	OERef getOutletRefForInletRef(xmlDocPtr doc, OERef ref);
-	OEPort *getOutletPortForOutletRef(OERef ref);
+	OERef getOutletForInlet(xmlDocPtr doc, OERef ref);
+	OEPort *getPortForOutlet(OERef ref);
 	
 	void setConnectionLabels();
 	string getConnectionLabel(OEPort *outletPort, vector<OERef> &visitedRefs);

@@ -107,7 +107,7 @@ xmlDocPtr OEEmulation::getDML()
 	return documentDML;
 }
 
-bool OEEmulation::addDML(string path, OEStringRefMap connections)
+bool OEEmulation::addDevices(string path, OEStringRefMap connections)
 {
 	vector<char> data;
 	if (!readFile(path, data))
@@ -142,19 +142,52 @@ bool OEEmulation::addDML(string path, OEStringRefMap connections)
 	return true;
 }
 
-bool isDeviceTerminal(OERef ref)
+bool OEEmulation::isDeviceAtInletTerminal(OERef ref)
 {
+	OERef deviceRef = getOutletForInlet(documentDML, ref).getDeviceRef();
+	xmlNodePtr deviceNode = getNodeForRef(documentDML, deviceRef);
+	if (!deviceNode)
+		return NULL;
+	
+	for(xmlNodePtr inletNode = deviceNode->children;
+		inletNode;
+		inletNode = inletNode->next)
+	{
+		if (xmlStrcmp(inletNode->name, BAD_CAST "inlet"))
+			continue;
+		
+		OERef inletRef = deviceRef.getRef(getXMLProperty(inletNode, "ref"));
+		OERef outletRef = getOutletForInlet(documentDML, inletRef);
+		if (!outletRef.isEmpty())
+			return false;
+	}
+	
 	return true;
 }
 
-bool OEEmulation::removeDevices(OERef ref)
+bool OEEmulation::removeDevicesOnInlet(OERef ref)
 {
-	// Search device with outletRef
-	// Find device's inlets
-	// Iterate removal for every connected device
-	// Remove component of device
+	OERef deviceRef = getOutletForInlet(documentDML, ref).getDeviceRef();
+	xmlNodePtr deviceNode = getNodeForRef(documentDML, deviceRef);
+	if (!deviceNode)
+		return false;
 	
-	return false;
+	for(xmlNodePtr inletNode = deviceNode->children;
+		inletNode;
+		inletNode = inletNode->next)
+	{
+		if (xmlStrcmp(inletNode->name, BAD_CAST "inlet"))
+			continue;
+		
+		OERef inletRef = deviceRef.getRef(getXMLProperty(inletNode, "ref"));
+		if (!removeDevicesOnInlet(inletRef))
+			return false;
+		setXMLProperty(inletNode, "ref", "");
+	}
+	
+	destroyComponent(deviceNode, deviceRef);
+	
+	return true;
 }
 
 string OEEmulation::toString(int i)
@@ -677,7 +710,7 @@ xmlNodePtr OEEmulation::getNodeForRef(xmlDocPtr doc, OERef ref)
 	return NULL;
 }
 
-OERef OEEmulation::getOutletRefForInletRef(xmlDocPtr doc, OERef ref)
+OERef OEEmulation::getOutletForInlet(xmlDocPtr doc, OERef ref)
 {
 	xmlNodePtr connectionNode = getNodeForRef(doc, ref);
 	if (!connectionNode)
@@ -775,14 +808,52 @@ void OEEmulation::renameConnections(OEStringRefMap &connections,
 	}
 }
 
-xmlNodePtr OEEmulation::getInsertionNodeForInlet(xmlDocPtr doc, OERef ref)
+xmlNodePtr OEEmulation::getNodeOfLastInlet(xmlDocPtr doc, OERef ref, vector<OERef> &visitedRefs)
 {
 	OERef deviceRef = ref.getDeviceRef();
 	xmlNodePtr deviceNode = getNodeForRef(doc, deviceRef);
 	if (!deviceNode)
 		return NULL;
 	
-	OERef prevDeviceRef = deviceRef;
+	// Avoid circular reference
+	for (vector<OERef>::iterator v = visitedRefs.begin();
+		 v != visitedRefs.end();
+		 v++)
+	{
+		if (deviceRef == *v)
+			return NULL;
+	}
+	visitedRefs.push_back(deviceRef);
+	
+	OERef lastRef;
+	for(xmlNodePtr inletNode = deviceNode->children;
+		inletNode;
+		inletNode = inletNode->next)
+	{
+		if (xmlStrcmp(inletNode->name, BAD_CAST "inlet"))
+			continue;
+		
+		OERef inletRef = deviceRef.getRef(getXMLProperty(inletNode, "ref"));
+		OERef outletRef = getOutletForInlet(doc, inletRef);
+		if (!outletRef.isEmpty())
+			lastRef = outletRef;
+	}
+	
+	if (lastRef.isEmpty())
+		return deviceNode;
+	
+	return getNodeOfLastInlet(doc, lastRef, visitedRefs);
+}
+
+xmlNodePtr OEEmulation::getNodeOfPreviousInlet(xmlDocPtr doc, OERef ref)
+{
+	OERef deviceRef = ref.getDeviceRef();
+	xmlNodePtr deviceNode = getNodeForRef(doc, deviceRef);
+	if (!deviceNode)
+		return NULL;
+	
+	OERef prevRef = deviceRef;
+	vector<OERef> visitedRefs;
 	for(xmlNodePtr inletNode = deviceNode->children;
 		inletNode;
 		inletNode = inletNode->next)
@@ -792,11 +863,11 @@ xmlNodePtr OEEmulation::getInsertionNodeForInlet(xmlDocPtr doc, OERef ref)
 		
 		OERef inletRef = deviceRef.getRef(getXMLProperty(inletNode, "ref"));
 		if (inletRef == ref)
-			return getNodeForRef(doc, prevDeviceRef);
+			return getNodeOfLastInlet(doc, prevRef, visitedRefs);
 		
-		OERef outletRef = getOutletRefForInletRef(doc, inletRef);
+		OERef outletRef = getOutletForInlet(doc, inletRef);
 		if (!outletRef.isEmpty())
-			prevDeviceRef = outletRef.getDeviceRef();
+			prevRef = outletRef;
 	}
 	
 	return deviceNode;
@@ -809,16 +880,16 @@ bool OEEmulation::mergeDMLs(xmlDocPtr doc, xmlDocPtr elem, OEStringRefMap &conne
 	if (i != connections.end())
 		firstInletRef = OERef(i->first);
 	
-	xmlNodePtr insertionNode = getInsertionNodeForInlet(doc, firstInletRef);
+	xmlNodePtr previousNode = getNodeOfPreviousInlet(doc, firstInletRef);
 	xmlNodePtr node = xmlCopyNode(xmlDocGetRootElement(elem), 1);
 	for(xmlNodePtr childNode = node->children;
 		childNode;
 		childNode = childNode->next)
 	{
-		if (!insertionNode)
+		if (!previousNode)
 			return false;
-		xmlAddNextSibling(insertionNode, xmlCopyNode(childNode, 1));
-		insertionNode = insertionNode->next;
+		xmlAddNextSibling(previousNode, xmlCopyNode(childNode, 1));
+		previousNode = previousNode->next;
 	}
 	
 	for (OEStringRefMap::iterator i = connections.begin();

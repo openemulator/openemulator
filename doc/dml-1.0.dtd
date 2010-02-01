@@ -5,7 +5,7 @@
 <!ATTLIST dml description CDATA #IMPLIED>
 <!ATTLIST dml group CDATA #IMPLIED>
 
-<!ELEMENT device (inlet,outlet,component)>
+<!ELEMENT device (inlet,outlet,setting,component)>
 <!ATTLIST device name CDATA #REQUIRED>
 <!ATTLIST device label CDATA #IMPLIED>
 <!ATTLIST device image CDATA #IMPLIED>
@@ -17,7 +17,7 @@
 <!ATTLIST inlet label CDATA #IMPLIED>
 <!ATTLIST inlet image CDATA #IMPLIED>
 
-<!ELEMENT outlet (setting)>
+<!ELEMENT outlet EMPTY>
 <!ATTLIST outlet ref CDATA #REQUIRED>
 <!ATTLIST outlet type CDATA #REQUIRED>
 <!ATTLIST outlet label CDATA #IMPLIED>

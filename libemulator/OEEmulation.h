@@ -40,9 +40,9 @@ public:
 	int ioctl(string ref, int message, void *data);
 	
 	xmlDocPtr getDML();
-	bool addDML(string path, OEStringRefMap connections);
-	bool isDeviceTerminal(OERef ref);
-	bool removeDevices(OERef ref);
+	bool addDevices(string path, OEStringRefMap connections);
+	bool isDeviceAtInletTerminal(OERef ref);
+	bool removeDevicesOnInlet(OERef ref);
 	
 private:
 	bool open;
@@ -89,12 +89,13 @@ private:
 	bool setResource(xmlNodePtr node, OEComponent *component);
 	
 	xmlNodePtr getNodeForRef(xmlDocPtr doc, OERef ref);
-	OERef getOutletRefForInletRef(xmlDocPtr doc, OERef ref);
+	OERef getOutletForInlet(xmlDocPtr doc, OERef ref);
 	
 	void buildDeviceNameMap(xmlDocPtr doc, xmlDocPtr elem, OEStringRefMap &deviceNameMap);
 	void renameDMLRefs(xmlDocPtr doc, OEStringRefMap &deviceNameMap);
 	void renameConnections(OEStringRefMap &connections, OEStringRefMap &deviceNameMap);
-	xmlNodePtr getInsertionNodeForInlet(xmlDocPtr doc, OERef ref);
+	xmlNodePtr getNodeOfLastInlet(xmlDocPtr doc, OERef ref, vector<OERef> &visitedRefs);
+	xmlNodePtr getNodeOfPreviousInlet(xmlDocPtr doc, OERef ref);
 	bool mergeDMLs(xmlDocPtr doc, xmlDocPtr elem, OEStringRefMap &connections);
 };
 

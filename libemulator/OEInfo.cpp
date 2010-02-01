@@ -205,6 +205,8 @@ void OEInfo::parseDevice(xmlNodePtr node)
 			inlets.push_back(parsePort(childNode, ref, label, image));
 		else if (!xmlStrcmp(childNode->name, BAD_CAST "outlet"))
 			outlets.push_back(parsePort(childNode, ref, label, image));
+		else if (!xmlStrcmp(childNode->name, BAD_CAST "setting"))
+			settings.push_back(parseSetting(childNode, ref));
 	}
 }
 
@@ -227,16 +229,6 @@ OEPort OEInfo::parsePort(xmlNodePtr node, OERef ref, string label, string image)
 	if (!port.image.size())
 		port.image = image;
 	
-	for(xmlNodePtr childNode = node->children;
-		childNode;
-		childNode = childNode->next)
-	{
-		if (xmlStrcmp(childNode->name, BAD_CAST "setting"))
-			continue;
-		
-		port.settings.push_back(parseSetting(childNode, port.ref));
-	}
-	
 	return port;
 }
 
@@ -258,11 +250,11 @@ void OEInfo::setConnections(xmlDocPtr doc)
 		 i != inlets.end();
 		 i++)
 	{
-		OERef outletRef = getOutletRefForInletRef(doc, i->ref);
+		OERef outletRef = getOutletForInlet(doc, i->ref);
 		if (outletRef.isEmpty())
 			continue;
 		
-		OEPort *o = getOutletPortForOutletRef(outletRef);
+		OEPort *o = getPortForOutlet(outletRef);
 		if (o)
 		{
 			i->connectionPort = &(*o);
@@ -325,7 +317,7 @@ xmlNodePtr OEInfo::getNodeForRef(xmlDocPtr doc, OERef ref)
 	return NULL;
 }
 
-OERef OEInfo::getOutletRefForInletRef(xmlDocPtr doc, OERef ref)
+OERef OEInfo::getOutletForInlet(xmlDocPtr doc, OERef ref)
 {
 	xmlNodePtr connectionNode = getNodeForRef(doc, ref);
 	if (!connectionNode)
@@ -338,7 +330,7 @@ OERef OEInfo::getOutletRefForInletRef(xmlDocPtr doc, OERef ref)
 		return OERef();
 }
 
-OEPort *OEInfo::getOutletPortForOutletRef(OERef ref)
+OEPort *OEInfo::getPortForOutlet(OERef ref)
 {
 	for (OEPorts::iterator o = outlets.begin();
 		 o != outlets.end();
@@ -373,7 +365,7 @@ string OEInfo::getConnectionLabel(OEPort *inletPort, vector<OERef> &visitedRefs)
 	{
 		if (o->ref.getDevice() == inletPort->ref.getDevice())
 		{
-			// Avoid circular references
+			// Avoid circular reference
 			for (vector<OERef>::iterator v = visitedRefs.begin();
 				 v != visitedRefs.end();
 				 v++)

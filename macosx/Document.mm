@@ -412,7 +412,7 @@
 		connectionsMap[inletRefString] = outletRefString;
 	}
 	
-	((OEEmulation *) emulation)->addDML(pathString, connectionsMap);
+	((OEEmulation *) emulation)->addDevices(pathString, connectionsMap);
 	
 	[self updateDevices];
 }
