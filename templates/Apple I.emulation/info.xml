@@ -11,7 +11,10 @@
     </component>
 </device>
 
-<device name="dev0" label="IBM PC">
+<device name="dev0" label="Apple I">
+    <inlet ref="iou.slotP" type="appleislot" category="expansion" label="Slot P" image="Apple I Slot.png" />
+    <inlet ref="iou.slotQ" type="appleislot" category="expansion" label="Slot Q" image="Apple I Slot.png" />
+    <inlet ref="iou.slotR" type="appleislot" category="expansion" label="Slot R" image="Apple I Slot.png" />
 </device>
 
 </dml>
