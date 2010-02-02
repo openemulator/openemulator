@@ -44,25 +44,30 @@
 
 - (void) awakeFromNib
 {
-	NSSize aSize;
-	aSize.width = 104;
-	aSize.height = 64;
-	NSDictionary *attrs = [NSDictionary dictionaryWithObjectsAndKeys:
-						   [NSFont messageFontOfSize:11.0f], NSFontAttributeName,
-						   [NSColor blackColor], NSForegroundColorAttributeName,
-						   nil];
-	NSDictionary *hAttrs = [NSDictionary dictionaryWithObjectsAndKeys:
-							[NSFont messageFontOfSize:11.0f], NSFontAttributeName,
-							[NSColor whiteColor], NSForegroundColorAttributeName,
-							nil];
+	NSSize cellSize;
+	NSDictionary *titleAttributes;
+	NSDictionary *subtitleAttributes;
+	
+	cellSize.width = 104;
+	cellSize.height = 64;
+	titleAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
+					   [NSFont messageFontOfSize:11.0f], NSFontAttributeName,
+					   [NSColor blackColor], NSForegroundColorAttributeName,
+					   nil];
+	subtitleAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
+						  [NSFont messageFontOfSize:11.0f], NSFontAttributeName,
+						  [NSColor whiteColor], NSForegroundColorAttributeName,
+						  nil];
 	
 	[fImageBrowserView setAllowsEmptySelection:NO];
 	[fImageBrowserView setAllowsMultipleSelection:NO];
 	[fImageBrowserView setCellsStyleMask:IKCellsStyleTitled];
-	[fImageBrowserView setCellSize:aSize];
-	[fImageBrowserView setValue:attrs
+	[fImageBrowserView setCellSize:cellSize];
+	[fImageBrowserView setDataSource:self];
+	[fImageBrowserView setDelegate:self];
+	[fImageBrowserView setValue:titleAttributes
 						 forKey:IKImageBrowserCellsTitleAttributesKey];
-	[fImageBrowserView setValue:hAttrs
+	[fImageBrowserView setValue:subtitleAttributes
 						 forKey:IKImageBrowserCellsHighlightedTitleAttributesKey];
 }
 

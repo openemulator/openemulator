@@ -21,6 +21,11 @@
 </device>
 
 <device name="dev0" label="IBM PC">
+    <inlet ref="iou.slot1" type="isaslot" category="expansion" label="Slot 1" image="IBM ISA Slot.png" />
+    <inlet ref="iou.slot2" type="isaslot" category="expansion" label="Slot 2" image="IBM ISA Slot.png" />
+    <inlet ref="iou.slot3" type="isaslot" category="expansion" label="Slot 3" image="IBM ISA Slot.png" />
+    <inlet ref="iou.slot4" type="isaslot" category="expansion" label="Slot 4" image="IBM ISA Slot.png" />
+    <inlet ref="iou.slot5" type="isaslot" category="expansion" label="Slot 5" image="IBM ISA Slot.png" />
 </device>
 
 </dml>

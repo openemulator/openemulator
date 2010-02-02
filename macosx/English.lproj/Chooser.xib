@@ -12,7 +12,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="111"/>
+			<integer value="158"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -338,22 +338,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
-						<string key="label">dataSource</string>
-						<reference key="source" ref="470825805"/>
-						<reference key="destination" ref="762632889"/>
-					</object>
-					<int key="connectionID">154</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">delegate</string>
-						<reference key="source" ref="470825805"/>
-						<reference key="destination" ref="762632889"/>
-					</object>
-					<int key="connectionID">155</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
 						<string key="label">fImageBrowserView</string>
 						<reference key="source" ref="762632889"/>
 						<reference key="destination" ref="419097122"/>
@@ -362,19 +346,19 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
-						<string key="label">delegate</string>
-						<reference key="source" ref="419097122"/>
+						<string key="label">dataSource</string>
+						<reference key="source" ref="470825805"/>
 						<reference key="destination" ref="762632889"/>
 					</object>
-					<int key="connectionID">162</int>
+					<int key="connectionID">164</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
-						<string key="label">dataSource</string>
-						<reference key="source" ref="419097122"/>
+						<string key="label">delegate</string>
+						<reference key="source" ref="470825805"/>
 						<reference key="destination" ref="762632889"/>
 					</object>
-					<int key="connectionID">163</int>
+					<int key="connectionID">165</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -529,7 +513,7 @@
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>{{124, 189}, {600, 299}}</string>
+					<string>{{141, 150}, {600, 299}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -566,7 +550,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">163</int>
+			<int key="maxID">171</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">

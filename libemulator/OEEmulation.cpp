@@ -165,7 +165,7 @@ bool OEEmulation::isDeviceAtInletTerminal(OERef ref)
 	return true;
 }
 
-bool OEEmulation::removeDevicesOnInlet(OERef ref)
+bool OEEmulation::removeDevicesAtInlet(OERef ref)
 {
 	OERef deviceRef = getOutletForInlet(documentDML, ref).getDeviceRef();
 	xmlNodePtr deviceNode = getNodeForRef(documentDML, deviceRef);
@@ -180,7 +180,7 @@ bool OEEmulation::removeDevicesOnInlet(OERef ref)
 			continue;
 		
 		OERef inletRef = deviceRef.getRef(getXMLProperty(inletNode, "ref"));
-		if (!removeDevicesOnInlet(inletRef))
+		if (!removeDevicesAtInlet(inletRef))
 			return false;
 		setXMLProperty(inletNode, "ref", "");
 	}
