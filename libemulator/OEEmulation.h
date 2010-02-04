@@ -41,8 +41,8 @@ public:
 	
 	xmlDocPtr getDML();
 	bool addDevices(string path, OEStringRefMap connections);
-	bool isDeviceAtInletTerminal(OERef ref);
-	bool removeDevicesAtInlet(OERef ref);
+	bool isDeviceTerminal(OERef ref);
+	bool removeDevice(OERef ref);
 	
 private:
 	bool open;

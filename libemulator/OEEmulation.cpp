@@ -134,7 +134,7 @@ bool OEEmulation::addDevices(string path, OEStringRefMap connections)
 	if (mergeDMLs(documentDML, deviceDML, connections))
 	{
 		constructDML(deviceDML);
-		reconnectDML(documentDML);
+		connectDevices(connections);
 	}
 	
 	xmlFreeDoc(deviceDML);
@@ -142,9 +142,9 @@ bool OEEmulation::addDevices(string path, OEStringRefMap connections)
 	return true;
 }
 
-bool OEEmulation::isDeviceAtInletTerminal(OERef ref)
+bool OEEmulation::isDeviceTerminal(OERef ref)
 {
-	OERef deviceRef = getOutletForInlet(documentDML, ref).getDeviceRef();
+	OERef deviceRef = ref.getDeviceRef();
 	xmlNodePtr deviceNode = getNodeForRef(documentDML, deviceRef);
 	if (!deviceNode)
 		return NULL;
@@ -165,9 +165,9 @@ bool OEEmulation::isDeviceAtInletTerminal(OERef ref)
 	return true;
 }
 
-bool OEEmulation::removeDevicesAtInlet(OERef ref)
+bool OEEmulation::removeDevice(OERef ref)
 {
-	OERef deviceRef = getOutletForInlet(documentDML, ref).getDeviceRef();
+	OERef deviceRef = ref.getDeviceRef();
 	xmlNodePtr deviceNode = getNodeForRef(documentDML, deviceRef);
 	if (!deviceNode)
 		return false;
@@ -180,11 +180,12 @@ bool OEEmulation::removeDevicesAtInlet(OERef ref)
 			continue;
 		
 		OERef inletRef = deviceRef.getRef(getXMLProperty(inletNode, "ref"));
-		if (!removeDevicesAtInlet(inletRef))
+		if (!removeDevice(getOutletForInlet(documentDML, inletRef)))
 			return false;
 		setXMLProperty(inletNode, "ref", "");
 	}
 	
+	disconnectDevice(deviceRef);
 	destroyComponent(deviceNode, deviceRef);
 	
 	return true;
