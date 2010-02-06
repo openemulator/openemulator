@@ -22,7 +22,7 @@ OEEmulation::OEEmulation(string path, string resourcePath)
 	loaded = false;
 	documentDML = NULL;
 	
-	this->resourcePath = path;
+	this->resourcePath = resourcePath;
 	
 	package = new OEPackage(path);
 	if (package->isOpen())
@@ -46,7 +46,7 @@ OEEmulation::OEEmulation(string path, string resourcePath)
 							loaded = true;
 						else
 							cerr << "libemulator: could not initialize \"" + path + "\"." << endl;
-						}
+					}
 					else
 						cerr << "libemulator: could not construct \"" + path + "\"." << endl;
 				}
