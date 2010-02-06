@@ -29,14 +29,16 @@ public:
 	
 	void setDevice(string device);
 	string getDevice() const;
+	OERef getDeviceRef();
+	
 	void setComponent(string component);
 	string getComponent() const;
+	
 	void setProperty(string property);
 	string getProperty() const;
+	OERef getComponentRef();
 	
 	OERef getRef(string stringRef);
-	OERef getDeviceRef();
-	OERef getComponentRef();
 	
 	string getStringRef();
 	string getStringRef(string stringRef);

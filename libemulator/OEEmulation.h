@@ -30,12 +30,12 @@ typedef map<string, string> OEStringRefMap;
 class OEEmulation
 {
 public:
-	OEEmulation(string emulationPath, string resourcePath);
+	OEEmulation(string path, string resourcePath);
 	~OEEmulation();
 	
-	bool isOpen();
+	bool isLoaded();
 	
-	bool save(string emulationPath);
+	bool save(string path);
 	
 	int ioctl(string ref, int message, void *data);
 	
@@ -45,7 +45,7 @@ public:
 	bool removeDevice(OERef ref);
 	
 private:
-	bool open;
+	bool loaded;
 	xmlDocPtr documentDML;
 	OEComponentsMap components;
 	
@@ -53,31 +53,26 @@ private:
 	string resourcePath;
 	
 	string toString(int i);
+	
 	bool readFile(string path, vector<char> &data);
+	string buildSourcePath(string src, OERef deviceRef);
 	
 	string getXMLProperty(xmlNodePtr node, string name);
 	void setXMLProperty(xmlNodePtr node, string name, string value);
 	
-	string buildSourcePath(string src, OERef deviceRef);
-	
-	bool readResource(string localPath, vector<char> &data);
-	
 	bool validateDML(xmlDocPtr doc);
 	bool constructDML(xmlDocPtr doc);
 	bool initDML(xmlDocPtr doc);
-	bool reconnectDML(xmlDocPtr doc);
 	bool updateDML(xmlDocPtr doc);
 	void destroyDML(xmlDocPtr doc);
 	
 	bool constructDevice(xmlNodePtr node);
 	bool initDevice(xmlNodePtr node);
-	bool reconnectDevice(xmlNodePtr node);
 	bool updateDevice(xmlNodePtr node);
 	void destroyDevice(xmlNodePtr node);
 	
 	bool constructComponent(xmlNodePtr node, OERef deviceRef);
 	bool initComponent(xmlNodePtr node, OERef deviceRef);
-	bool reconnectComponent(xmlNodePtr node, OERef deviceRef);
 	bool updateComponent(xmlNodePtr node, OERef deviceRef);
 	void destroyComponent(xmlNodePtr node, OERef deviceRef);
 	
@@ -90,13 +85,17 @@ private:
 	
 	xmlNodePtr getNodeForRef(xmlDocPtr doc, OERef ref);
 	OERef getOutletForInlet(xmlDocPtr doc, OERef ref);
-	
-	void buildDeviceNameMap(xmlDocPtr doc, xmlDocPtr elem, OEStringRefMap &deviceNameMap);
-	void renameDMLRefs(xmlDocPtr doc, OEStringRefMap &deviceNameMap);
-	void renameConnections(OEStringRefMap &connections, OEStringRefMap &deviceNameMap);
+	xmlNodePtr getNodeOfFirstInlet(xmlDocPtr, OERef ref);
 	xmlNodePtr getNodeOfLastInlet(xmlDocPtr doc, OERef ref, vector<OERef> &visitedRefs);
 	xmlNodePtr getNodeOfPreviousInlet(xmlDocPtr doc, OERef ref);
-	bool mergeDMLs(xmlDocPtr doc, xmlDocPtr elem, OEStringRefMap &connections);
+	
+	void buildDeviceNameMap(xmlDocPtr doc, xmlDocPtr elem, OEStringRefMap &deviceNameMap);
+	void renameDMLConnections(xmlDocPtr doc, OEStringRefMap &connections, OEStringRefMap &deviceNameMap);
+	
+	bool connectDevices(xmlDocPtr doc, OEStringRefMap &connections);
+	bool disconnectDevice(xmlDocPtr doc, OERef ref);
+	
+	bool insertDoc(xmlNodePtr node, xmlDocPtr doc);
 };
 
 #endif

@@ -17,13 +17,14 @@
 #include "OEEmulation.h"
 #include "OEComponentFactory.h"
 
-OEEmulation::OEEmulation(string emulationPath, string resourcePath)
+OEEmulation::OEEmulation(string path, string resourcePath)
 {
+	loaded = false;
 	documentDML = NULL;
-	open = false;
 	
-	this->resourcePath = resourcePath;
-	package = new OEPackage(emulationPath);
+	this->resourcePath = path;
+	
+	package = new OEPackage(path);
 	if (package->isOpen())
 	{
 		vector<char> data;
@@ -35,9 +36,25 @@ OEEmulation::OEEmulation(string emulationPath, string resourcePath)
 										NULL,
 										0);
 			
-			constructDML(documentDML);
-			if (initDML(documentDML))
-				open = true;
+			if (documentDML)
+			{
+				if (validateDML(documentDML))
+				{
+					if (constructDML(documentDML))
+					{
+						if (initDML(documentDML))
+							loaded = true;
+						else
+							cerr << "libemulator: could not initialize \"" + path + "\"." << endl;
+						}
+					else
+						cerr << "libemulator: could not construct \"" + path + "\"." << endl;
+				}
+				else
+					cerr << "libemulator: could not validate \"" + path + "\"." << endl;
+			}
+			else
+				cerr << "libemulator: could not parse \"" + path + "\"." << endl;
 		}
 	}
 	
@@ -47,25 +64,29 @@ OEEmulation::OEEmulation(string emulationPath, string resourcePath)
 
 OEEmulation::~OEEmulation()
 {
+	if (!documentDML)
+		return;
+	
 	destroyDML(documentDML);
-	
-	if (documentDML)
-		xmlFreeDoc(documentDML);
+	xmlFreeDoc(documentDML);
 }
 
-bool OEEmulation::isOpen()
+bool OEEmulation::isLoaded()
 {
-	return open;
+	return loaded;
 }
 
-bool OEEmulation::save(string emulationPath)
+bool OEEmulation::save(string path)
 {
-	bool error = true;
+	if (!isLoaded())
+		return false;
+
+	bool success = false;
 	
-	package = new OEPackage(emulationPath);
+	package = new OEPackage(path);
 	if (package->isOpen())
 	{
-		if (open && updateDML(documentDML))
+		if (updateDML(documentDML))
 		{
 			xmlChar *datap;
 			int size;
@@ -78,28 +99,39 @@ bool OEEmulation::save(string emulationPath)
 				
 				xmlFree(datap);
 				
-				error = !package->writeFile(OE_INFO_FILENAME, data);
+				if (package->writeFile(OE_INFO_FILENAME, data))
+					success = true;
+				else
+					cerr << "libemulator: could not write \"" + path + "\"." << endl;
 			}
+			else
+				cerr << "libemulator: could not dump \"" + path + "\"." << endl;
 		}
+		else
+			cerr << "libemulator: could not update \"" + path + "\"." << endl;
 		
-		if (error)
+		if (!success)
 			package->remove();
 	}
+	else
+		cerr << "libemulator: could not open \"" + path + "\"." << endl;
 	
-	return !error;
+	delete package;
+	package = NULL;
+	
+	return success;
 }
 
 int OEEmulation::ioctl(string ref, int message, void *data)
 {
-	if (open)
-	{
-		OEComponent *component = components[ref];
-		
-		if (component)
-			return component->ioctl(message, data);
-	}
+	if (!isLoaded())
+		return 0;
 	
-	return 0;
+	if (!components.count(ref))
+		return 0;
+	OEComponent *component = components[ref];
+	
+	return component->ioctl(message, data);
 }
 
 xmlDocPtr OEEmulation::getDML()
@@ -109,45 +141,83 @@ xmlDocPtr OEEmulation::getDML()
 
 bool OEEmulation::addDevices(string path, OEStringRefMap connections)
 {
+	if (!isLoaded())
+		return false;
+	
 	vector<char> data;
 	if (!readFile(path, data))
 		return false;
-	xmlDocPtr deviceDML;
-	deviceDML = xmlReadMemory(&data[0],
-							  data.size(),
-							  OE_INFO_FILENAME,
-							  NULL,
-							  0);
-	if (!deviceDML)
+	
+	xmlDocPtr doc;
+	doc = xmlReadMemory(&data[0],
+						data.size(),
+						OE_INFO_FILENAME,
+						NULL,
+						0);
+	if (!doc)
 		return false;
-	if (!validateDML(deviceDML))
+	
+	bool success = false;
+	
+	if (validateDML(doc))
 	{
-		xmlFreeDoc(deviceDML);
-		return false;
+		map<string, string> deviceNameMap;
+		buildDeviceNameMap(documentDML, doc, deviceNameMap);
+		renameDMLConnections(doc, connections, deviceNameMap);
+		
+		if (constructDML(doc))
+		{
+			if (initDML(doc))
+			{
+				OERef firstInletRef;
+				OEStringRefMap::iterator i = connections.begin();
+				if (i != connections.end())
+					firstInletRef = OERef(i->first);
+				
+				if (insertDoc(getNodeOfPreviousInlet(documentDML, firstInletRef), doc))
+				{
+					if (connectDevices(documentDML, connections))
+						success = true;
+					else
+						cerr << "libemulator: could not connect \"" + path + "\"." << endl;
+				}
+				else
+					cerr << "libemulator: could not insert \"" + path + "\"." << endl;
+			}
+			else
+				cerr << "libemulator: could not initialize \"" + path + "\"." << endl;
+		}
+		else
+			cerr << "libemulator: could not construct \"" + path + "\"." << endl;
 	}
+	else
+		cerr << "libemulator: could not validate \"" + path + "\"." << endl;
 	
-	map<string, string> deviceNameMap;
-	buildDeviceNameMap(documentDML, deviceDML, deviceNameMap);
-	renameDMLRefs(deviceDML, deviceNameMap);
-	renameConnections(connections, deviceNameMap);
+	xmlFreeDoc(doc);
 	
-	if (mergeDMLs(documentDML, deviceDML, connections))
-	{
-		constructDML(deviceDML);
-		connectDevices(connections);
-	}
-	
-	xmlFreeDoc(deviceDML);
-	
-	return true;
+	return success;
 }
 
 bool OEEmulation::isDeviceTerminal(OERef ref)
 {
+	if (!isLoaded())
+		return false;
+	
+	return (getNodeOfFirstInlet(documentDML, ref) == NULL);
+}
+
+bool OEEmulation::removeDevice(OERef ref)
+{
+	if (!isLoaded())
+		return false;
+	
 	OERef deviceRef = ref.getDeviceRef();
 	xmlNodePtr deviceNode = getNodeForRef(documentDML, deviceRef);
 	if (!deviceNode)
-		return NULL;
+	{
+		cerr << "libemulator: could not remove \"" + ref.getStringRef() + "\"." << endl;
+		return false;
+	}
 	
 	for(xmlNodePtr inletNode = deviceNode->children;
 		inletNode;
@@ -158,35 +228,12 @@ bool OEEmulation::isDeviceTerminal(OERef ref)
 		
 		OERef inletRef = deviceRef.getRef(getXMLProperty(inletNode, "ref"));
 		OERef outletRef = getOutletForInlet(documentDML, inletRef);
-		if (!outletRef.isEmpty())
+		if (!removeDevice(outletRef))
 			return false;
 	}
 	
-	return true;
-}
-
-bool OEEmulation::removeDevice(OERef ref)
-{
-	OERef deviceRef = ref.getDeviceRef();
-	xmlNodePtr deviceNode = getNodeForRef(documentDML, deviceRef);
-	if (!deviceNode)
-		return false;
-	
-	for(xmlNodePtr inletNode = deviceNode->children;
-		inletNode;
-		inletNode = inletNode->next)
-	{
-		if (xmlStrcmp(inletNode->name, BAD_CAST "inlet"))
-			continue;
-		
-		OERef inletRef = deviceRef.getRef(getXMLProperty(inletNode, "ref"));
-		if (!removeDevice(getOutletForInlet(documentDML, inletRef)))
-			return false;
-		setXMLProperty(inletNode, "ref", "");
-	}
-	
-	disconnectDevice(deviceRef);
-	destroyComponent(deviceNode, deviceRef);
+	disconnectDevice(documentDML, deviceRef);
+	destroyDevice(deviceNode);
 	
 	return true;
 }
@@ -200,7 +247,7 @@ string OEEmulation::toString(int i)
 
 bool OEEmulation::readFile(string path, vector<char> &data)
 {
-	bool error = true;
+	bool success = false;
 	
 	ifstream file(path.c_str());
 	
@@ -212,11 +259,21 @@ bool OEEmulation::readFile(string path, vector<char> &data)
 		
 		data.resize(size);
 		file.read(&data[0], size);
-		error = !file.good();
+		success = file.good();
 		file.close();
 	}
 	
-	return !error;
+	return success;
+}
+
+string OEEmulation::buildSourcePath(string src, OERef deviceRef)
+{
+	string deviceName = deviceRef.getStringRef();
+	int index = src.find(OE_DEVICENAME_SUBST_STRING);
+	if (index != string::npos)
+		src.replace(index, sizeof(OE_DEVICENAME_SUBST_STRING) - 1, deviceName);
+	
+	return src;
 }
 
 string OEEmulation::getXMLProperty(xmlNodePtr node, string name)
@@ -233,48 +290,17 @@ void OEEmulation::setXMLProperty(xmlNodePtr node, string name, string value)
 	xmlSetProp(node, BAD_CAST name.c_str(), BAD_CAST value.c_str());
 }
 
-string OEEmulation::buildSourcePath(string src, OERef deviceRef)
-{
-	string deviceName = deviceRef.getStringRef();
-	int index = src.find(OE_DEVICENAME_SUBST_STRING);
-	if (index != string::npos)
-		src.replace(index, sizeof(OE_DEVICENAME_SUBST_STRING) - 1, deviceName);
-	
-	return src;
-}
-
-bool OEEmulation::readResource(string localPath, vector<char> &data)
-{
-	bool error = true;
-	
-	ifstream file((resourcePath + OE_PATH_SEPARATOR + localPath).c_str());
-	
-	if (file.is_open())
-	{
-		file.seekg(0, ios::end);
-		int size = file.tellg();
-		file.seekg(0, ios::beg);
-		
-		data.resize(size);
-		file.read(&data[0], size);
-		error = !file.good();
-		file.close();
-	}
-	
-	return !error;
-}
-
 bool OEEmulation::validateDML(xmlDocPtr doc)
 {
-	xmlNodePtr node = xmlDocGetRootElement(doc);
+	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
 	
-	return (getXMLProperty(node, "version") == "1.0");
+	return (getXMLProperty(rootNode, "version") == "1.0");
 }
 
 bool OEEmulation::constructDML(xmlDocPtr doc)
 {
-	xmlNodePtr node = xmlDocGetRootElement(doc);
-	for(xmlNodePtr childNode = node->children;
+	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+	for(xmlNodePtr childNode = rootNode->children;
 		childNode;
 		childNode = childNode->next)
 	{
@@ -290,8 +316,8 @@ bool OEEmulation::constructDML(xmlDocPtr doc)
 
 bool OEEmulation::initDML(xmlDocPtr doc)
 {
-	xmlNodePtr node = xmlDocGetRootElement(doc);
-	for(xmlNodePtr childNode = node->children;
+	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+	for(xmlNodePtr childNode = rootNode->children;
 		childNode;
 		childNode = childNode->next)
 	{
@@ -305,27 +331,10 @@ bool OEEmulation::initDML(xmlDocPtr doc)
 	return true;
 }
 
-bool OEEmulation::reconnectDML(xmlDocPtr doc)
-{
-	xmlNodePtr node = xmlDocGetRootElement(doc);
-	for(xmlNodePtr childNode = node->children;
-		childNode;
-		childNode = childNode->next)
-	{
-		if (xmlStrcmp(childNode->name, BAD_CAST "device"))
-			continue;
-		
-		if (!reconnectDevice(childNode))
-			return false;
-	}
-	
-	return true;
-}
-
 bool OEEmulation::updateDML(xmlDocPtr doc)
 {
-	xmlNodePtr node = xmlDocGetRootElement(doc);
-	for(xmlNodePtr childNode = node->children;
+	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+	for(xmlNodePtr childNode = rootNode->children;
 		childNode;
 		childNode = childNode->next)
 	{
@@ -340,8 +349,8 @@ bool OEEmulation::updateDML(xmlDocPtr doc)
 
 void OEEmulation::destroyDML(xmlDocPtr doc)
 {
-	xmlNodePtr node = xmlDocGetRootElement(doc);
-	for(xmlNodePtr childNode = node->children;
+	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+	for(xmlNodePtr childNode = rootNode->children;
 		childNode;
 		childNode = childNode->next)
 	{
@@ -386,23 +395,6 @@ bool OEEmulation::initDevice(xmlNodePtr node)
 	return true;
 }
 
-bool OEEmulation::reconnectDevice(xmlNodePtr node)
-{
-	OERef deviceRef(getXMLProperty(node, "name"));
-	for(xmlNodePtr childNode = node->children;
-		childNode;
-		childNode = childNode->next)
-	{
-		if (xmlStrcmp(childNode->name, BAD_CAST "component"))
-			continue;
-		
-		if (!reconnectComponent(childNode, deviceRef))
-			return false;
-	}
-	
-	return true;
-}
-
 bool OEEmulation::updateDevice(xmlNodePtr node)
 {
 	OERef deviceRef(getXMLProperty(node, "name"));
@@ -438,27 +430,26 @@ bool OEEmulation::constructComponent(xmlNodePtr node, OERef deviceRef)
 {
 	string componentClass = getXMLProperty(node, "class");
 	string componentName = getXMLProperty(node, "name");
-	
 	OEComponent *component = OEComponentFactory::build(string(componentClass));
+	if (!component)
+		return false;
 	
-	if (component)
-	{
-		string componentRef = deviceRef.getStringRef(componentName);
-//		printf("OEEmulation::constructComponent: %s\n", componentRef.c_str());
-		
-		if (components[componentRef])
-			delete components[componentRef];
-		
-		components[componentRef] = component;
-	}
+	string componentRef = deviceRef.getStringRef(componentName);
+//	printf("OEEmulation::constructComponent: %s\n", componentRef.c_str());
 	
-	return (component != NULL);
+	if (components.count(componentRef))
+		components.erase(componentRef);
+	components[componentRef] = component;
+	
+	return true;
 }
 
 bool OEEmulation::initComponent(xmlNodePtr node, OERef deviceRef)
 {
 	string componentName = getXMLProperty(node, "name");
 	string componentRef = deviceRef.getStringRef(componentName);
+	if (!components.count(componentRef))
+		return false;
 	OEComponent *component = components[componentRef];
 	
 	//	printf("OEEmulation::initComponent: %s\n", componentRef.c_str());
@@ -492,32 +483,12 @@ bool OEEmulation::initComponent(xmlNodePtr node, OERef deviceRef)
 	return true;
 }
 
-bool OEEmulation::reconnectComponent(xmlNodePtr node, OERef deviceRef)
-{
-	string componentName = getXMLProperty(node, "name");
-	string componentRef = deviceRef.getStringRef(componentName);
-	OEComponent *component = components[componentRef];
-	
-	//	printf("OEEmulation::initComponent: %s\n", componentRef.c_str());
-	
-	for(xmlNodePtr childNode = node->children;
-		childNode;
-		childNode = childNode->next)
-	{
-		if (!xmlStrcmp(childNode->name, BAD_CAST "connection"))
-		{
-			if (!setConnection(childNode, component, deviceRef))
-				return false;
-		}
-	}
-	
-	return true;
-}
-
 bool OEEmulation::updateComponent(xmlNodePtr node, OERef deviceRef)
 {
 	string componentName = getXMLProperty(node, "name");
 	string componentRef = deviceRef.getStringRef(componentName);
+	if (!components.count(componentRef))
+		return false;
 	OEComponent *component = components[componentRef];
 	
 	//	printf("OEEmulation::queryComponent: %s\n", componentRef.c_str());
@@ -546,7 +517,8 @@ void OEEmulation::destroyComponent(xmlNodePtr node, OERef deviceRef)
 	string componentName = getXMLProperty(node, "name");
 	string componentRef = deviceRef.getStringRef(componentName);
 	
-	delete components[componentRef];
+	if (!components.count(componentRef))
+		return;
 	components.erase(componentRef);
 }
 
@@ -562,13 +534,12 @@ bool OEEmulation::setConnection(xmlNodePtr node, OEComponent *component, OERef d
 	else
 	{
 		string componentRef = deviceRef.getStringRef(ref);
-		connectedComponent = components[componentRef];
-		
-		if(!connectedComponent)
+		if (!components.count(componentRef))
 		{
 			cerr << "libemulator: could not connect \"" + componentRef + "\"." << endl;
 			return false;
 		}
+		connectedComponent = components[componentRef];
 	}
 	
 	OEIoctlConnection msg;
@@ -615,7 +586,7 @@ bool OEEmulation::setData(xmlNodePtr node, OEComponent *component, OERef deviceR
 	OEIoctlData msg;
 	msg.name = name;
 	
-	if (package->readFile(src, msg.data))
+	if (package && package->readFile(src, msg.data))
 		component->ioctl(OEIoctlSetData, &msg);
 	
 	return true;
@@ -644,12 +615,12 @@ bool OEEmulation::getData(xmlNodePtr node, OEComponent *component, OERef deviceR
 bool OEEmulation::setResource(xmlNodePtr node, OEComponent *component)
 {
 	string name = getXMLProperty(node, "name");
-	string src = getXMLProperty(node, "src");
+	string src = resourcePath + OE_PATH_SEPARATOR + getXMLProperty(node, "src");
 	
 	OEIoctlData msg;
 	msg.name = name;
 	
-	if (!readResource(src, msg.data))
+	if (!readFile(src, msg.data))
 	{
 		cerr << "libemulator: could not read \"" + src + "\"." << endl;
 		return false;
@@ -662,12 +633,12 @@ bool OEEmulation::setResource(xmlNodePtr node, OEComponent *component)
 
 xmlNodePtr OEEmulation::getNodeForRef(xmlDocPtr doc, OERef ref)
 {
-	xmlNodePtr root = xmlDocGetRootElement(doc);
+	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
 	
 	if (!ref.getDevice().size())
 		return NULL;
 	
-	for(xmlNodePtr deviceNode = root->children;
+	for(xmlNodePtr deviceNode = rootNode->children;
 		deviceNode;
 		deviceNode = deviceNode->next)
 	{
@@ -724,89 +695,26 @@ OERef OEEmulation::getOutletForInlet(xmlDocPtr doc, OERef ref)
 		return OERef();
 }
 
-void OEEmulation::buildDeviceNameMap(xmlDocPtr doc, xmlDocPtr elem,
-									 OEStringRefMap &deviceNameMap)
+xmlNodePtr OEEmulation::getNodeOfFirstInlet(xmlDocPtr, OERef ref)
 {
-	xmlNodePtr node = xmlDocGetRootElement(elem);
+	OERef deviceRef = ref.getDeviceRef();
+	xmlNodePtr deviceNode = getNodeForRef(documentDML, deviceRef);
+	if (!deviceNode)
+		return NULL;
 	
-	int devIndex = 0;
-	for(xmlNodePtr childNode = node->children;
-		childNode;
-		childNode = childNode->next)
+	for(xmlNodePtr inletNode = deviceNode->children;
+		inletNode;
+		inletNode = inletNode->next)
 	{
-		if (xmlStrcmp(childNode->name, BAD_CAST "device"))
+		if (xmlStrcmp(inletNode->name, BAD_CAST "inlet"))
 			continue;
 		
-		string deviceName = getXMLProperty(childNode, "name");
-		
-		string newDeviceName;
-		do {
-			newDeviceName = "dev" + toString(devIndex);
-			devIndex++;
-		} while (getNodeForRef(doc, OERef(newDeviceName)));
-		deviceNameMap[deviceName] = newDeviceName;
+		OERef inletRef = deviceRef.getRef(getXMLProperty(inletNode, "ref"));
+		OERef outletRef = getOutletForInlet(documentDML, inletRef);
+		return getNodeForRef(documentDML, outletRef);
 	}
-}
-
-void OEEmulation::renameDMLRefs(xmlDocPtr doc, OEStringRefMap &deviceNameMap)
-{
-	xmlNodePtr node = xmlDocGetRootElement(doc);
 	
-	for(xmlNodePtr deviceNode = node->children;
-		deviceNode;
-		deviceNode = deviceNode->next)
-	{
-		if (xmlStrcmp(deviceNode->name, BAD_CAST "device"))
-			continue;
-		
-		string deviceName = getXMLProperty(deviceNode, "name");
-		OERef deviceRef(deviceName);
-		setXMLProperty(deviceNode, "name", deviceNameMap[deviceName]);
-		
-		for(xmlNodePtr componentNode = deviceNode->children;
-			componentNode;
-			componentNode = componentNode->next)
-		{
-			if (xmlStrcmp(componentNode->name, BAD_CAST "component"))
-				continue;
-			
-			OERef componentRef = deviceRef.getRef(getXMLProperty(componentNode, "name"));
-			
-			for(xmlNodePtr node = componentNode->children;
-				node;
-				node = node->next)
-			{
-				if (xmlStrcmp(node->name, BAD_CAST "connection"))
-					continue;
-				
-				string outletStringRef = getXMLProperty(node, "ref");
-				if (!outletStringRef.size())
-					continue;
-				
-				OERef outletRef = componentRef.getRef(outletStringRef);
-				string outletDeviceName = outletRef.getDevice();
-				
-				if (deviceNameMap.count(outletDeviceName))
-				{
-					outletRef.setDevice(deviceNameMap[outletDeviceName]);
-					setXMLProperty(node, "ref", outletRef.getStringRef());
-				}
-			}
-		}
-	}
-}
-
-void OEEmulation::renameConnections(OEStringRefMap &connections,
-									OEStringRefMap &deviceNameMap)
-{
-	for (OEStringRefMap::iterator i = connections.begin();
-		 i != connections.end();
-		 i++)
-	{
-		OERef outletRef = OERef(i->second);
-		outletRef.setDevice(deviceNameMap[outletRef.getDevice()]);
-		connections[i->first] = outletRef.getStringRef();
-	}
+	return NULL;
 }
 
 xmlNodePtr OEEmulation::getNodeOfLastInlet(xmlDocPtr doc, OERef ref, vector<OERef> &visitedRefs)
@@ -851,7 +759,7 @@ xmlNodePtr OEEmulation::getNodeOfPreviousInlet(xmlDocPtr doc, OERef ref)
 	OERef deviceRef = ref.getDeviceRef();
 	xmlNodePtr deviceNode = getNodeForRef(doc, deviceRef);
 	if (!deviceNode)
-		return NULL;
+		return xmlDocGetRootElement(doc);
 	
 	OERef prevRef;
 	for(xmlNodePtr inletNode = deviceNode->children;
@@ -881,32 +789,172 @@ xmlNodePtr OEEmulation::getNodeOfPreviousInlet(xmlDocPtr doc, OERef ref)
 	return deviceNode;
 }
 
-bool OEEmulation::mergeDMLs(xmlDocPtr doc, xmlDocPtr elem, OEStringRefMap &connections)
+void OEEmulation::buildDeviceNameMap(xmlDocPtr doc, xmlDocPtr elem,
+									 OEStringRefMap &deviceNameMap)
 {
-	OERef firstInletRef;
-	OEStringRefMap::iterator i = connections.begin();
-	if (i != connections.end())
-		firstInletRef = OERef(i->first);
+	xmlNodePtr rootNode = xmlDocGetRootElement(elem);
 	
-	xmlNodePtr previousNode = getNodeOfPreviousInlet(doc, firstInletRef);
-	xmlNodePtr node = xmlCopyNode(xmlDocGetRootElement(elem), 1);
-	for(xmlNodePtr childNode = node->children;
+	int devIndex = 0;
+	for(xmlNodePtr childNode = rootNode->children;
 		childNode;
 		childNode = childNode->next)
 	{
-		if (!previousNode)
-			return false;
-		xmlAddNextSibling(previousNode, xmlCopyNode(childNode, 1));
-		previousNode = previousNode->next;
+		if (xmlStrcmp(childNode->name, BAD_CAST "device"))
+			continue;
+		
+		string deviceName = getXMLProperty(childNode, "name");
+		
+		string newDeviceName;
+		do {
+			newDeviceName = "dev" + toString(devIndex);
+			devIndex++;
+		} while (getNodeForRef(doc, OERef(newDeviceName)));
+		deviceNameMap[deviceName] = newDeviceName;
+	}
+}
+
+void OEEmulation::renameDMLConnections(xmlDocPtr doc,
+									   OEStringRefMap &connections,
+									   OEStringRefMap &deviceNameMap)
+{
+	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+	
+	for(xmlNodePtr deviceNode = rootNode->children;
+		deviceNode;
+		deviceNode = deviceNode->next)
+	{
+		if (xmlStrcmp(deviceNode->name, BAD_CAST "device"))
+			continue;
+		
+		string deviceName = getXMLProperty(deviceNode, "name");
+		OERef deviceRef(deviceName);
+		setXMLProperty(deviceNode, "name", deviceNameMap[deviceName]);
+		
+		for(xmlNodePtr componentNode = deviceNode->children;
+			componentNode;
+			componentNode = componentNode->next)
+		{
+			if (xmlStrcmp(componentNode->name, BAD_CAST "component"))
+				continue;
+			
+			OERef componentRef = deviceRef.getRef(getXMLProperty(componentNode, "name"));
+			
+			for(xmlNodePtr node = componentNode->children;
+				node;
+				node = node->next)
+			{
+				if (xmlStrcmp(node->name, BAD_CAST "connection"))
+					continue;
+				
+				string outletStringRef = getXMLProperty(node, "ref");
+				if (!outletStringRef.size())
+					continue;
+				
+				OERef outletRef = componentRef.getRef(outletStringRef);
+				string outletDeviceName = outletRef.getDevice();
+				
+				if (deviceNameMap.count(outletDeviceName))
+				{
+					outletRef.setDevice(deviceNameMap[outletDeviceName]);
+					setXMLProperty(node, "ref", outletRef.getStringRef());
+				}
+			}
+		}
 	}
 	
 	for (OEStringRefMap::iterator i = connections.begin();
 		 i != connections.end();
 		 i++)
 	{
-		xmlNodePtr node = getNodeForRef(doc, OERef(i->first));
-		if (node)
-			setXMLProperty(node, "ref", i->second);
+		OERef outletRef = OERef(i->second);
+		outletRef.setDevice(deviceNameMap[outletRef.getDevice()]);
+		connections[i->first] = outletRef.getStringRef();
+	}
+}
+
+bool OEEmulation::connectDevices(xmlDocPtr doc, OEStringRefMap &connections)
+{
+	for (OEStringRefMap::iterator i = connections.begin();
+		 i != connections.end();
+		 i++)
+	{
+		OERef inletRef = OERef(i->first);
+		OERef deviceRef = inletRef.getDeviceRef();
+		xmlNodePtr node = getNodeForRef(doc, inletRef);
+		if (!node)
+			return false;
+		
+		string componentRef = inletRef.getComponentRef().getStringRef();
+		if (!components.count(componentRef))
+			return false;
+		OEComponent *component = components[componentRef];
+		
+		setXMLProperty(node, "ref", i->second);
+		setConnection(node, component, deviceRef);
+	}
+	
+	return true;
+}
+
+bool OEEmulation::disconnectDevice(xmlDocPtr doc, OERef ref)
+{
+	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+	
+	for(xmlNodePtr deviceNode = rootNode->children;
+		deviceNode;
+		deviceNode = deviceNode->next)
+	{
+		if (xmlStrcmp(deviceNode->name, BAD_CAST "device"))
+			continue;
+		
+		OERef deviceRef(getXMLProperty(deviceNode, "name"));
+		
+		for(xmlNodePtr componentNode = deviceNode->children;
+			componentNode;
+			componentNode = componentNode->next)
+		{
+			if (xmlStrcmp(componentNode->name, BAD_CAST "component"))
+				continue;
+			
+			string componentName = getXMLProperty(componentNode, "name");
+			string componentRef = deviceRef.getStringRef(componentName);
+			
+			for(xmlNodePtr connectionNode = componentNode->children;
+				connectionNode;
+				connectionNode = connectionNode->next)
+			{
+				if (xmlStrcmp(connectionNode->name, BAD_CAST "connection"))
+					continue;
+				
+				OERef inletRef = deviceRef.getRef(getXMLProperty(connectionNode, "ref"));
+				if (!(inletRef == ref))
+					continue;
+				
+				if (!components.count(componentRef))
+					return false;
+				OEComponent *component = components[componentRef];
+				
+				setXMLProperty(connectionNode, "ref", "");
+				setConnection(connectionNode, component, deviceRef);
+			}
+		}
+	}
+	
+	return true;
+}
+
+bool OEEmulation::insertDoc(xmlNodePtr node, xmlDocPtr doc)
+{
+	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+	
+	for(xmlNodePtr childNode = rootNode->children;
+		childNode;
+		childNode = childNode->next)
+	{
+		if (!node)
+			return false;
+		xmlAddNextSibling(node, xmlCopyNode(childNode, 1));
+		node = node->next;
 	}
 	
 	return true;

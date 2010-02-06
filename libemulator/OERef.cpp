@@ -101,6 +101,11 @@ string OERef::getDevice() const
 	return device;
 }
 
+OERef OERef::getDeviceRef()
+{
+	return OERef(getDevice());
+}
+
 void OERef::setComponent(string component)
 {
 	this->component = component;
@@ -109,6 +114,11 @@ void OERef::setComponent(string component)
 string OERef::getComponent() const
 {
 	return component;
+}
+
+OERef OERef::getComponentRef()
+{
+	return OERef(getDevice() + "::" + getComponent());
 }
 
 void OERef::setProperty(string property)
@@ -129,16 +139,6 @@ OERef OERef::getRef(string stringRef)
 		return OERef(getDevice() + "::" + stringRef);
 	else
 		return OERef(stringRef);
-}
-
-OERef OERef::getDeviceRef()
-{
-	return OERef(getDevice());
-}
-
-OERef OERef::getComponentRef()
-{
-	return OERef(getDevice() + "::" + getComponent());
 }
 
 string OERef::getStringRef()

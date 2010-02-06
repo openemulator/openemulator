@@ -301,7 +301,7 @@
 	
 	if (emulation)
 	{
-		if (((OEEmulation *)emulation)->isOpen())
+		if (((OEEmulation *)emulation)->isLoaded())
 		{
 			[self setLabel:[self getDMLProperty:@"label"]];
 			[self setGroup:[self getDMLProperty:@"group"]];
