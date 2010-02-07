@@ -32,7 +32,7 @@
 	int currentStep;
 }
 
-- (void) runModal:(id) sender;
+- (void) runModal:(id) sender forInletsOfType:(NSString *) type;
 
 - (IBAction) performCancel:(id) sender;
 - (IBAction) performPrevious:(id) sender;

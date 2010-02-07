@@ -151,7 +151,7 @@
 	[self setup];
 }
 
-- (void) runModal:(id) sender
+- (void) runModal:(id) sender forInletsOfType:(NSString *) type
 {
 	if ([self isWindowLoaded])
 		[self setup];

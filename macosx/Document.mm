@@ -206,15 +206,19 @@
 
 - (void) updateDevices
 {
-	[freeInlets release];
-	freeInlets = [[NSMutableArray alloc] init];
+	int count;
 	
-	[expansions release];
-	expansions = [[NSMutableArray alloc] init];
-	[storage release];
-	storage = [[NSMutableArray alloc] init];
-	[peripherals release];
-	peripherals = [[NSMutableArray alloc] init];
+	[freeInlets removeAllObjects];
+	
+	count = [expansions count];
+	for (int i = 0; i < count; i++)
+		[self removeObjectFromExpansionsAtIndex:0];
+	count = [storage count];
+	for (int i = 0; i < count; i++)
+		[self removeObjectFromStorageAtIndex:0];
+	count = [peripherals count];
+	for (int i = 0; i < count; i++)
+		[self removeObjectFromPeripheralsAtIndex:0];
 	
 	// Process info
 	xmlDocPtr dmlDocPtr = ((OEEmulation *) emulation)->getDML();
@@ -259,19 +263,23 @@
 		if (!o->connectionPort)
 			continue;
 		
-		NSString *imagePath = [NSString stringWithUTF8String:o->image.c_str()];
+		NSString *deviceImage = [NSString stringWithUTF8String:o->image.c_str()];
 		NSString *deviceLabel = [NSString stringWithUTF8String:o->label.c_str()];
+		NSString *deviceRef = [NSString stringWithUTF8String:o->ref.getStringRef().
+							   c_str()];
 		
-		NSImage *deviceImage = [self getResourceImage:imagePath];
-		NSString *informativeText = [NSString localizedStringWithFormat:@"\n(on %@)",
-									 [NSString stringWithUTF8String:
-									  o->connectionLabel.c_str()]];
-		NSAttributedString *aString = [self formatDeviceLabel:deviceLabel
-										  withInformativeText:informativeText];
+		NSImage *theImage = [self getResourceImage:deviceImage];
+		NSString *text = [NSString localizedStringWithFormat:@"\n(on %@)",
+						  [NSString stringWithUTF8String:
+						   o->connectionLabel.c_str()]];
+		NSAttributedString *theTitle = [self formatDeviceLabel:deviceLabel
+										withInformativeText:text];
 		
 		NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
-							  aString, @"title",
-							  deviceImage, @"image",
+							  theTitle, @"title",
+							  theImage, @"image",
+							  deviceLabel, @"label",
+							  deviceRef, @"ref",
 							  nil];
 		
 		string category = o->connectionPort->category;
@@ -304,7 +312,6 @@
 		if (((OEEmulation *)emulation)->isLoaded())
 		{
 			[self setLabel:[self getDMLProperty:@"label"]];
-			[self setGroup:[self getDMLProperty:@"group"]];
 			[self setDescription:[self getDMLProperty:@"description"]];
 			[self updateRunTime];
 			[self setImage:[self getResourceImage:[self getDMLProperty:@"image"]]];
@@ -412,7 +419,72 @@
 		connectionsMap[inletRefString] = outletRefString;
 	}
 	
-	((OEEmulation *) emulation)->addDevices(pathString, connectionsMap);
+	if (!((OEEmulation *) emulation)->addDevices(pathString, connectionsMap))
+	{
+		NSString *messageText = @"The device could not be added.";
+		
+		NSAlert *alert = [NSAlert alertWithMessageText:
+						  NSLocalizedString(messageText, messageText)
+										 defaultButton:NSLocalizedString(@"OK", @"OK")
+									   alternateButton:nil
+										   otherButton:nil
+							 informativeTextWithFormat:@""
+						  ];
+		
+		[alert runModal];
+	}
+	
+	[self updateDevices];
+}
+
+- (void) removeDevice:(NSDictionary *) dict
+{
+	NSString *deviceRef = [dict objectForKey:@"ref"];
+	NSString *deviceLabel = [dict objectForKey:@"label"];
+	
+	string refString = [deviceRef UTF8String];
+	
+	if (!((OEEmulation *) emulation)->isDeviceTerminal(refString))
+	{
+		NSString *messageText = @"Do you want to remove the device \u201C%@\u201D?";
+		NSString *informativeText = @"There are other devices connected to it. "
+		"They will be removed as well.";
+		
+		NSAlert *alert = [NSAlert alertWithMessageText:
+						  [NSString localizedStringWithFormat:messageText,
+						   deviceLabel, messageText]
+										 defaultButton:
+						  NSLocalizedString(@"OK", @"OK")
+									   alternateButton:
+						  nil
+										   otherButton:
+						  NSLocalizedString(@"Cancel", @"Cancel")
+							 informativeTextWithFormat:
+						  NSLocalizedString(informativeText, informativeText)
+						  ];
+		
+		if ([alert runModal] != NSAlertDefaultReturn)
+			return;
+	}
+	
+	if (!((OEEmulation *) emulation)->removeDevice(refString))
+	{
+		NSString *messageText = @"The device could not be removed.";
+		
+		NSAlert *alert = [NSAlert alertWithMessageText:
+						  NSLocalizedString(messageText, messageText)
+										 defaultButton:
+						  NSLocalizedString(@"OK", @"OK")
+									   alternateButton:
+						  nil
+										   otherButton:
+						  nil
+							 informativeTextWithFormat:
+						  @""
+						  ];
+		
+		[alert runModal];
+	}
 	
 	[self updateDevices];
 }
@@ -553,20 +625,6 @@
 	{
         [label release];
         label = [value copy];
-    }
-}
-
-- (NSString *) group
-{
-	return [[group retain] autorelease];
-}
-
-- (void) setGroup:(NSString *) value
-{
-    if (group != value)
-	{
-        [group release];
-        group = [value copy];
     }
 }
 

@@ -40,6 +40,7 @@
 - (IBAction) saveDocumentAsTemplate:(id)sender;
 
 - (void) addDevices:(NSString *) path connections:(NSDictionary *) connections;
+- (void) removeDevice:(NSDictionary *) dict;
 
 - (void) powerButtonPressedAndReleased:(id)sender;
 - (void) powerButtonPressed:(id)sender;
@@ -58,8 +59,6 @@
 - (void) setPower:(BOOL)value;
 - (NSString *) label;
 - (void) setLabel:(NSString *) value;
-- (NSString *) group;
-- (void) setGroup:(NSString *) value;
 - (NSString *) description;
 - (void) setDescription:(NSString *) value;
 - (NSString *) modificationDate;

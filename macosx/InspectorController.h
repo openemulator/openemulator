@@ -11,6 +11,7 @@
 #import <Cocoa/Cocoa.h>
 
 #import "DeviceChooserController.h"
+#import "Document.h"
 
 @interface InspectorController : NSWindowController
 {
@@ -24,8 +25,12 @@
 	IBOutlet NSView *fPeripheralsView;
 	IBOutlet NSView *fAudioView;
 	
+	IBOutlet NSArrayController *fExpansionsController;
+	IBOutlet NSArrayController *fStorageController;
+	IBOutlet NSArrayController *fPeripheralsController;
+	
 	int selectedViewIndex;
-	id inspectedDocument;
+	Document *inspectedDocument;
 	
 	IBOutlet id fDeviceChooserController;
 }
@@ -42,6 +47,13 @@
 - (void) restoreWindowState:(id) sender;
 - (void) storeWindowState:(id) sender;
 
-- (void) addDevices:(id) sender;
+- (void) addExpansion:(id) sender;
+- (void) removeExpansion:(id) sender;
+- (void) addStorage:(id) sender;
+- (void) removeStorage:(id) sender;
+- (void) addPeripheral:(id) sender;
+- (void) removePeripheral:(id) sender;
+
+- (void) removeDevice:(NSDictionary *) dict;
 
 @end

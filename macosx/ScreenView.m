@@ -17,6 +17,8 @@
 
 - (id) initWithFrame:(NSRect) rect
 {
+	[super initWithFrame:rect];
+	
 	NSOpenGLPixelFormatAttribute pixelFormatAtrributes[] = {
 		NSOpenGLPFADoubleBuffer,
 		NSOpenGLPFAColorSize, 24,

@@ -56,7 +56,11 @@ OEEmulation::OEEmulation(string path, string resourcePath)
 			else
 				cerr << "libemulator: could not parse \"" + path + "\"." << endl;
 		}
+		else
+			cerr << "libemulator: could not read \"" + path + "\"." << endl;
 	}
+	else
+		cerr << "libemulator: could not open \"" + path + "\"." << endl;
 	
 	delete package;
 	package = NULL;
@@ -146,7 +150,10 @@ bool OEEmulation::addDevices(string path, OEStringRefMap connections)
 	
 	vector<char> data;
 	if (!readFile(path, data))
+	{
+		cerr << "libemulator: could not read \"" + path + "\"." << endl;
 		return false;
+	}
 	
 	xmlDocPtr doc;
 	doc = xmlReadMemory(&data[0],
@@ -155,7 +162,10 @@ bool OEEmulation::addDevices(string path, OEStringRefMap connections)
 						NULL,
 						0);
 	if (!doc)
+	{
+		cerr << "libemulator: could not parse \"" + path + "\"." << endl;
 		return false;
+	}
 	
 	bool success = false;
 	
@@ -215,7 +225,7 @@ bool OEEmulation::removeDevice(OERef ref)
 	xmlNodePtr deviceNode = getNodeForRef(documentDML, deviceRef);
 	if (!deviceNode)
 	{
-		cerr << "libemulator: could not remove \"" + ref.getStringRef() + "\"." << endl;
+		cerr << "libemulator: could not find device of \"" + ref.getStringRef() + "\"." << endl;
 		return false;
 	}
 	
@@ -228,12 +238,30 @@ bool OEEmulation::removeDevice(OERef ref)
 		
 		OERef inletRef = deviceRef.getRef(getXMLProperty(inletNode, "ref"));
 		OERef outletRef = getOutletForInlet(documentDML, inletRef);
+		if (outletRef.isEmpty())
+			continue;
+		
 		if (!removeDevice(outletRef))
+		{
+			cerr << "libemulator: could not remove outlet \"" + outletRef.getStringRef() +
+			"\" of \"" + ref.getStringRef() + "\"." << endl;
 			return false;
+		}
 	}
 	
-	disconnectDevice(documentDML, deviceRef);
+	if (!disconnectDevice(documentDML, deviceRef))
+	{
+		cerr << "libemulator: could not disconnect inlets of \"" + ref.getStringRef() + "\"." << endl;
+		return false;
+	}
+	if (deviceNode->next && (deviceNode->next->type == XML_TEXT_NODE))
+	{
+		destroyDevice(deviceNode->next);
+		xmlUnlinkNode(deviceNode->next);
+	}
 	destroyDevice(deviceNode);
+	xmlUnlinkNode(deviceNode);
+	xmlFreeNode(deviceNode);
 	
 	return true;
 }
@@ -430,16 +458,17 @@ bool OEEmulation::constructComponent(xmlNodePtr node, OERef deviceRef)
 {
 	string componentClass = getXMLProperty(node, "class");
 	string componentName = getXMLProperty(node, "name");
+	
 	OEComponent *component = OEComponentFactory::build(string(componentClass));
 	if (!component)
 		return false;
 	
-	string componentRef = deviceRef.getStringRef(componentName);
-//	printf("OEEmulation::constructComponent: %s\n", componentRef.c_str());
+	string stringRef = deviceRef.getStringRef(componentName);
+//	printf("OEEmulation::constructComponent: %s\n", stringRef.c_str());
 	
-	if (components.count(componentRef))
-		components.erase(componentRef);
-	components[componentRef] = component;
+	if (components.count(stringRef))
+		components.erase(stringRef);
+	components[stringRef] = component;
 	
 	return true;
 }
@@ -447,12 +476,13 @@ bool OEEmulation::constructComponent(xmlNodePtr node, OERef deviceRef)
 bool OEEmulation::initComponent(xmlNodePtr node, OERef deviceRef)
 {
 	string componentName = getXMLProperty(node, "name");
-	string componentRef = deviceRef.getStringRef(componentName);
-	if (!components.count(componentRef))
-		return false;
-	OEComponent *component = components[componentRef];
 	
-	//	printf("OEEmulation::initComponent: %s\n", componentRef.c_str());
+	string stringRef = deviceRef.getStringRef(componentName);
+	if (!components.count(stringRef))
+		return false;
+	OEComponent *component = components[stringRef];
+	
+	//	printf("OEEmulation::initComponent: %s\n", stringRef.c_str());
 	
 	for(xmlNodePtr childNode = node->children;
 		childNode;
@@ -486,12 +516,13 @@ bool OEEmulation::initComponent(xmlNodePtr node, OERef deviceRef)
 bool OEEmulation::updateComponent(xmlNodePtr node, OERef deviceRef)
 {
 	string componentName = getXMLProperty(node, "name");
-	string componentRef = deviceRef.getStringRef(componentName);
-	if (!components.count(componentRef))
-		return false;
-	OEComponent *component = components[componentRef];
 	
-	//	printf("OEEmulation::queryComponent: %s\n", componentRef.c_str());
+	string stringRef = deviceRef.getStringRef(componentName);
+	if (!components.count(stringRef))
+		return false;
+	OEComponent *component = components[stringRef];
+	
+	//	printf("OEEmulation::queryComponent: %s\n", stringRef.c_str());
 	
 	for(xmlNodePtr childNode = node->children;
 		childNode;
@@ -515,32 +546,33 @@ bool OEEmulation::updateComponent(xmlNodePtr node, OERef deviceRef)
 void OEEmulation::destroyComponent(xmlNodePtr node, OERef deviceRef)
 {
 	string componentName = getXMLProperty(node, "name");
-	string componentRef = deviceRef.getStringRef(componentName);
 	
-	if (!components.count(componentRef))
+	string stringRef = deviceRef.getStringRef(componentName);
+	
+	if (!components.count(stringRef))
 		return;
-	components.erase(componentRef);
+	components.erase(stringRef);
 }
 
 bool OEEmulation::setConnection(xmlNodePtr node, OEComponent *component, OERef deviceRef)
 {
-	OEComponent *connectedComponent;
-	
 	string name = getXMLProperty(node, "name");
 	string ref = getXMLProperty(node, "ref");
 	
-	if (!ref.size())
-		connectedComponent = NULL;
-	else
+	OEComponent *connectedComponent;
+	
+	if (ref.size())
 	{
-		string componentRef = deviceRef.getStringRef(ref);
-		if (!components.count(componentRef))
+		string stringRef = deviceRef.getStringRef(ref);
+		if (!components.count(stringRef))
 		{
-			cerr << "libemulator: could not connect \"" + componentRef + "\"." << endl;
+			cerr << "libemulator: could not connect \"" + stringRef + "\"." << endl;
 			return false;
 		}
-		connectedComponent = components[componentRef];
+		connectedComponent = components[stringRef];
 	}
+	else
+		connectedComponent = NULL;
 	
 	OEIoctlConnection msg;
 	msg.name = name;
@@ -884,10 +916,10 @@ bool OEEmulation::connectDevices(xmlDocPtr doc, OEStringRefMap &connections)
 		if (!node)
 			return false;
 		
-		string componentRef = inletRef.getComponentRef().getStringRef();
-		if (!components.count(componentRef))
+		string stringRef = inletRef.getComponentRef().getStringRef();
+		if (!components.count(stringRef))
 			return false;
-		OEComponent *component = components[componentRef];
+		OEComponent *component = components[stringRef];
 		
 		setXMLProperty(node, "ref", i->second);
 		setConnection(node, component, deviceRef);
@@ -916,8 +948,7 @@ bool OEEmulation::disconnectDevice(xmlDocPtr doc, OERef ref)
 			if (xmlStrcmp(componentNode->name, BAD_CAST "component"))
 				continue;
 			
-			string componentName = getXMLProperty(componentNode, "name");
-			string componentRef = deviceRef.getStringRef(componentName);
+			OERef componentRef = deviceRef.getRef(getXMLProperty(componentNode, "name"));
 			
 			for(xmlNodePtr connectionNode = componentNode->children;
 				connectionNode;
@@ -926,13 +957,18 @@ bool OEEmulation::disconnectDevice(xmlDocPtr doc, OERef ref)
 				if (xmlStrcmp(connectionNode->name, BAD_CAST "connection"))
 					continue;
 				
-				OERef inletRef = deviceRef.getRef(getXMLProperty(connectionNode, "ref"));
-				if (!(inletRef == ref))
+				string outletStringRef = getXMLProperty(connectionNode, "ref");
+				if (!outletStringRef.size())
 					continue;
 				
-				if (!components.count(componentRef))
+				OERef outletRef = componentRef.getRef(outletStringRef);
+				if (!(outletRef.getDeviceRef() == ref.getDeviceRef()))
+					continue;
+				
+				string stringRef = componentRef.getStringRef();
+				if (!components.count(stringRef))
 					return false;
-				OEComponent *component = components[componentRef];
+				OEComponent *component = components[stringRef];
 				
 				setXMLProperty(connectionNode, "ref", "");
 				setConnection(connectionNode, component, deviceRef);

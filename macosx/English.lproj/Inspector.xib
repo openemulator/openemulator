@@ -12,12 +12,12 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
+			<integer value="679"/>
+			<integer value="1071"/>
+			<integer value="1392"/>
 			<integer value="163"/>
 			<integer value="746"/>
-			<integer value="186"/>
 			<integer value="185"/>
-			<integer value="679"/>
-			<integer value="1392"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -51,7 +51,7 @@
 				<string key="NSWindowTitle">Inspector</string>
 				<string key="NSWindowClass">NSPanel</string>
 				<nil key="NSViewClass"/>
-				<string key="NSWindowContentMaxSize">{1.79769e+308, 1.79769e+308}</string>
+				<string key="NSWindowContentMaxSize">{3.40282e+38, 3.40282e+38}</string>
 				<string key="NSWindowContentMinSize">{252, 24}</string>
 				<object class="NSView" key="NSWindowView" id="330288021">
 					<reference key="NSNextResponder"/>
@@ -243,7 +243,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 								<string key="NSColorName">controlColor</string>
 								<object class="NSColor" key="NSColor" id="832347256">
 									<int key="NSColorSpace">3</int>
-									<bytes key="NSWhite">MC42NjY2NjY2NjY3AA</bytes>
+									<bytes key="NSWhite">MC42NjY2NjY2ODY1AA</bytes>
 								</object>
 							</object>
 							<object class="NSColor" key="NSCellBackgroundColor" id="588956889">
@@ -258,7 +258,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1440, 878}}</string>
 				<string key="NSMinSize">{252, 40}</string>
-				<string key="NSMaxSize">{1.79769e+308, 1.79769e+308}</string>
+				<string key="NSMaxSize">{3.40282e+38, 3.40282e+38}</string>
 				<string key="NSFrameAutosaveName"/>
 			</object>
 			<object class="NSCustomView" id="518285090">
@@ -1621,14 +1621,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<int key="connectionID">1149</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">remove:</string>
-						<reference key="source" ref="657407640"/>
-						<reference key="destination" ref="1035444867"/>
-					</object>
-					<int key="connectionID">1151</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
 						<string key="label">enabled: canAdd</string>
 						<reference key="source" ref="691035560"/>
@@ -1707,22 +1699,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						</object>
 					</object>
 					<int key="connectionID">1187</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">remove:</string>
-						<reference key="source" ref="382065968"/>
-						<reference key="destination" ref="246679973"/>
-					</object>
-					<int key="connectionID">1191</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">remove:</string>
-						<reference key="source" ref="59207083"/>
-						<reference key="destination" ref="76457656"/>
-					</object>
-					<int key="connectionID">1193</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
@@ -1994,14 +1970,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<int key="connectionID">1384</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">addDevices:</string>
-						<reference key="source" ref="762632889"/>
-						<reference key="destination" ref="526259183"/>
-					</object>
-					<int key="connectionID">1391</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
 						<string key="label">value: selection.image</string>
 						<reference key="source" ref="687750170"/>
@@ -2115,19 +2083,75 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
-						<string key="label">addDevices:</string>
+						<string key="label">addExpansion:</string>
 						<reference key="source" ref="762632889"/>
-						<reference key="destination" ref="550896703"/>
+						<reference key="destination" ref="526259183"/>
 					</object>
-					<int key="connectionID">1430</int>
+					<int key="connectionID">1436</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
-						<string key="label">addDevices:</string>
+						<string key="label">addStorage:</string>
 						<reference key="source" ref="762632889"/>
 						<reference key="destination" ref="691035560"/>
 					</object>
-					<int key="connectionID">1431</int>
+					<int key="connectionID">1438</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">addPeripheral:</string>
+						<reference key="source" ref="762632889"/>
+						<reference key="destination" ref="550896703"/>
+					</object>
+					<int key="connectionID">1439</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">removeExpansion:</string>
+						<reference key="source" ref="762632889"/>
+						<reference key="destination" ref="1035444867"/>
+					</object>
+					<int key="connectionID">1440</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">removePeripheral:</string>
+						<reference key="source" ref="762632889"/>
+						<reference key="destination" ref="76457656"/>
+					</object>
+					<int key="connectionID">1441</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">removeStorage:</string>
+						<reference key="source" ref="762632889"/>
+						<reference key="destination" ref="246679973"/>
+					</object>
+					<int key="connectionID">1442</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">fExpansionsController</string>
+						<reference key="source" ref="762632889"/>
+						<reference key="destination" ref="657407640"/>
+					</object>
+					<int key="connectionID">1449</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">fStorageController</string>
+						<reference key="source" ref="762632889"/>
+						<reference key="destination" ref="382065968"/>
+					</object>
+					<int key="connectionID">1450</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">fPeripheralsController</string>
+						<reference key="source" ref="762632889"/>
+						<reference key="destination" ref="59207083"/>
+					</object>
+					<int key="connectionID">1451</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -3157,10 +3181,10 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{561, 346}, {255, 24}}</string>
+					<string>{{59, 711}, {255, 24}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
-					<string>{{561, 346}, {255, 24}}</string>
+					<string>{{59, 711}, {255, 24}}</string>
 					<boolean value="NO"/>
 					<boolean value="NO"/>
 					<boolean value="YES"/>
@@ -3220,7 +3244,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						</object>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{527, 403}, {255, 173}}</string>
+					<string>{{578, 683}, {255, 173}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{329, 261}, {255, 299}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3292,7 +3316,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{756, 379}, {255, 299}}</string>
+					<string>{{572, 358}, {255, 299}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<object class="NSMutableDictionary">
 						<string key="NS.key.0">ToolTip</string>
@@ -3303,7 +3327,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						</object>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{861, 131}, {255, 299}}</string>
+					<string>{{567, 32}, {255, 299}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 				</object>
@@ -3324,7 +3348,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">1431</int>
+			<int key="maxID">1451</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -3336,7 +3360,12 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>addDevices:</string>
+							<string>addExpansion:</string>
+							<string>addPeripheral:</string>
+							<string>addStorage:</string>
+							<string>removeExpansion:</string>
+							<string>removePeripheral:</string>
+							<string>removeStorage:</string>
 							<string>restoreWindowState:</string>
 							<string>selectView:</string>
 							<string>storeWindowState:</string>
@@ -3344,6 +3373,11 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -3359,8 +3393,11 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 							<string>fDeviceChooserController</string>
 							<string>fDocumentObjectController</string>
 							<string>fEmulationView</string>
+							<string>fExpansionsController</string>
 							<string>fExpansionsView</string>
+							<string>fPeripheralsController</string>
 							<string>fPeripheralsView</string>
+							<string>fStorageController</string>
 							<string>fStorageView</string>
 							<string>fTabMatrix</string>
 							<string>inspectedDocument</string>
@@ -3371,8 +3408,11 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 							<string>id</string>
 							<string>NSObjectController</string>
 							<string>NSView</string>
+							<string>NSArrayController</string>
 							<string>NSView</string>
+							<string>NSArrayController</string>
 							<string>NSView</string>
+							<string>NSArrayController</string>
 							<string>NSView</string>
 							<string>NSMatrix</string>
 							<string>id</string>

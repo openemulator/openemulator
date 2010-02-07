@@ -206,9 +206,39 @@ NSString *itemIdentifiers[] =
 				   forKey:@"OEInspectorIsVisible"];
 }
 
-- (void) addDevices:(id) sender
+- (void) addExpansion:(id) sender
 {
-	[fDeviceChooserController runModal:self];
+	[fDeviceChooserController runModal:self forInletsOfType:@"expansions"];
+}
+
+- (void) removeExpansion:(id) sender
+{
+	[self removeDevice:[[fExpansionsController selectedObjects] objectAtIndex:0]];
+}
+
+- (void) addStorage:(id) sender
+{
+	[fDeviceChooserController runModal:self forInletsOfType:@"storage"];
+}
+
+- (void) removeStorage:(id) sender
+{
+	[self removeDevice:[[fStorageController selectedObjects] objectAtIndex:0]];
+}
+
+- (void) addPeripheral:(id) sender
+{
+	[fDeviceChooserController runModal:self forInletsOfType:@"peripherals"];
+}
+
+- (void) removePeripheral:(id) sender
+{
+	[self removeDevice:[[fPeripheralsController selectedObjects] objectAtIndex:0]];
+}
+
+- (void) removeDevice:(NSDictionary *) dict 
+{
+	[inspectedDocument removeDevice:dict];
 }
 
 @end
