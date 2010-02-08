@@ -28,11 +28,21 @@
 	NSArray *selectedItemOutlets;
 	NSMutableArray *selectedItemInlets;
 	
+	NSString *category;
+	
 	id currentView;
 	int currentStep;
 }
 
-- (void) runModal:(id) sender forInletsOfType:(NSString *) type;
+- (void) runModal:(id) sender forCategory:(NSString *) theCategory;
+
+- (void) setup;
+- (void) setDeviceChooserView;
+- (void) setConnectorViewAtIndex:(int) index;
+- (void) updateView:(id) view
+			  title:(NSString *) title
+	previousEnabled:(BOOL) previousEnabled
+		   lastStep:(BOOL) lastStep;
 
 - (IBAction) performCancel:(id) sender;
 - (IBAction) performPrevious:(id) sender;

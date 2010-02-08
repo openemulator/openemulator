@@ -208,7 +208,7 @@ NSString *itemIdentifiers[] =
 
 - (void) addExpansion:(id) sender
 {
-	[fDeviceChooserController runModal:self forInletsOfType:@"expansions"];
+	[fDeviceChooserController runModal:self forCategory:@"expansion"];
 }
 
 - (void) removeExpansion:(id) sender
@@ -218,7 +218,7 @@ NSString *itemIdentifiers[] =
 
 - (void) addStorage:(id) sender
 {
-	[fDeviceChooserController runModal:self forInletsOfType:@"storage"];
+	[fDeviceChooserController runModal:self forCategory:@"storage"];
 }
 
 - (void) removeStorage:(id) sender
@@ -228,7 +228,7 @@ NSString *itemIdentifiers[] =
 
 - (void) addPeripheral:(id) sender
 {
-	[fDeviceChooserController runModal:self forInletsOfType:@"peripherals"];
+	[fDeviceChooserController runModal:self forCategory:@"peripheral"];
 }
 
 - (void) removePeripheral:(id) sender

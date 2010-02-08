@@ -237,16 +237,18 @@
 		
 		string stringRef = i->ref.getStringRef();
 		
+		NSString *portRef = [NSString stringWithUTF8String:stringRef.c_str()];
 		NSString *portType = [NSString stringWithUTF8String:i->type.c_str()];
+		NSString *portCategory = [NSString stringWithUTF8String:i->category.c_str()];
 		NSString *portLabel = [NSString stringWithUTF8String:i->connectionLabel.c_str()];
 		NSString *portImage = [NSString stringWithUTF8String:i->image.c_str()];
-		NSString *portRef = [NSString stringWithUTF8String:stringRef.c_str()];
 		
 		NSMutableDictionary *dict = [[[NSMutableDictionary alloc] init] autorelease];
+		[dict setObject:portRef forKey:@"ref"];
 		[dict setObject:portType forKey:@"type"];
+		[dict setObject:portCategory forKey:@"category"];
 		[dict setObject:portLabel forKey:@"label"];
 		[dict setObject:portImage forKey:@"image"];
-		[dict setObject:portRef forKey:@"ref"];
 		
 		[freeInlets addObject:dict];
 	}
@@ -423,14 +425,9 @@
 	{
 		NSString *messageText = @"The device could not be added.";
 		
-		NSAlert *alert = [NSAlert alertWithMessageText:
-						  NSLocalizedString(messageText, messageText)
-										 defaultButton:NSLocalizedString(@"OK", @"OK")
-									   alternateButton:nil
-										   otherButton:nil
-							 informativeTextWithFormat:@""
-						  ];
-		
+		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+		[alert setMessageText:NSLocalizedString(messageText, messageText)];
+		[alert setAlertStyle:NSWarningAlertStyle];
 		[alert runModal];
 	}
 	
@@ -447,22 +444,16 @@
 	if (!((OEEmulation *) emulation)->isDeviceTerminal(refString))
 	{
 		NSString *messageText = @"Do you want to remove the device \u201C%@\u201D?";
-		NSString *informativeText = @"There are other devices connected to it. "
-		"They will be removed as well.";
+		NSString *informativeText = @"There is one or more devices connected to it, "
+		"which will be removed as well.";
 		
-		NSAlert *alert = [NSAlert alertWithMessageText:
-						  [NSString localizedStringWithFormat:messageText,
-						   deviceLabel, messageText]
-										 defaultButton:
-						  NSLocalizedString(@"OK", @"OK")
-									   alternateButton:
-						  nil
-										   otherButton:
-						  NSLocalizedString(@"Cancel", @"Cancel")
-							 informativeTextWithFormat:
-						  NSLocalizedString(informativeText, informativeText)
-						  ];
-		
+		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+		[alert setMessageText:[NSString localizedStringWithFormat:messageText,
+							   deviceLabel, messageText]];
+		[alert setInformativeText:NSLocalizedString(informativeText,
+													informativeText)];
+		[alert addButtonWithTitle:NSLocalizedString(@"OK", @"OK")];
+		[alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"Cancel")];
 		if ([alert runModal] != NSAlertDefaultReturn)
 			return;
 	}
@@ -471,18 +462,9 @@
 	{
 		NSString *messageText = @"The device could not be removed.";
 		
-		NSAlert *alert = [NSAlert alertWithMessageText:
-						  NSLocalizedString(messageText, messageText)
-										 defaultButton:
-						  NSLocalizedString(@"OK", @"OK")
-									   alternateButton:
-						  nil
-										   otherButton:
-						  nil
-							 informativeTextWithFormat:
-						  @""
-						  ];
-		
+		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+		[alert setMessageText:NSLocalizedString(messageText, messageText)];
+		[alert setAlertStyle:NSWarningAlertStyle];
 		[alert runModal];
 	}
 	

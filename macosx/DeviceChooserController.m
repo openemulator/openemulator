@@ -42,34 +42,65 @@
 		[selectedItemOutlets release];
 	if (selectedItemInlets)
 		[selectedItemInlets release];
+	
+	if (category)
+		[category release];
 }
 
-- (void) updateView:(id) view
-			  title:(NSString *) title
-	previousEnabled:(BOOL) previousEnabled
-		   lastStep:(BOOL) lastStep
+- (void) runModal:(id) sender forCategory:(NSString *) theCategory
 {
-	if (view != currentView)
+	if (category)
+		[category release];
+	category = [theCategory copy];
+	
+	if ([self isWindowLoaded])
+		[self setup];
+	
+	[NSApp runModalForWindow:[self window]];
+}
+
+- (void) windowDidLoad
+{
+	[super windowDidLoad];
+	
+	[self setWindowFrameAutosaveName:@"DeviceChooser"];
+	
+	[self setup];
+}
+
+- (void) setup
+{
+	currentStep = 0;
+	[self setDeviceChooserView];
+	
+	NSArray *freeInlets = [[fDocumentController currentDocument] freeInlets];
+	[deviceChooserViewController updateWithInlets:freeInlets
+									  andCategory:category];
+	
+	[fNextButton setEnabled:([deviceChooserViewController selectedItemPath] != nil)];
+	
+	if (![deviceChooserViewController selectedItemPath])
 	{
-		if (currentView)
-		{
-			[currentView setHidden:YES];
-			[currentView removeFromSuperview];
-		}
-		[fView addSubview:view];
-		[view setFrameSize:[fView frame].size];
-		[view setHidden:NO];
-	
-		currentView = view;
+		NSString *messageText = @"There are no available devices of this type for the "
+		"current configuration.";
+		
+		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+		[alert setMessageText:NSLocalizedString(messageText, messageText)];
+		[alert setAlertStyle:NSWarningAlertStyle];
+		[alert beginSheetModalForWindow:[self window]
+						  modalDelegate:self
+						 didEndSelector:@selector(errorSheetDidEnd:returnCode:contextInfo:)
+							contextInfo:nil];
 	}
+}
 	
-	[fMessage setStringValue:title];
+- (void) errorSheetDidEnd:(NSAlert *) alert
+			   returnCode:(int) returnCode
+			  contextInfo:(void *) contextInfo
+{
+	[[alert window] orderOut:self];
 	
-	[fPreviousButton setEnabled:previousEnabled];
-	if (lastStep)
-		[fNextButton setTitle:NSLocalizedString(@"Finish", @"Finish")];
-	else
-		[fNextButton setTitle:NSLocalizedString(@"Next", @"Next")];
+	[self performCancel:self];
 }
 
 - (void) setDeviceChooserView
@@ -121,7 +152,7 @@
 				break;
 			}
 		}
-
+		
 		if (!isAvailable)
 			continue;
 		
@@ -131,32 +162,32 @@
 	[connectorViewController updateWithInlets:inlets];
 }
 
-- (void) setup
+- (void) updateView:(id) view
+			  title:(NSString *) title
+	previousEnabled:(BOOL) previousEnabled
+		   lastStep:(BOOL) lastStep
 {
-	currentStep = 0;
-	[self setDeviceChooserView];
+	if (view != currentView)
+	{
+		if (currentView)
+		{
+			[currentView setHidden:YES];
+			[currentView removeFromSuperview];
+		}
+		[fView addSubview:view];
+		[view setFrameSize:[fView frame].size];
+		[view setHidden:NO];
+		
+		currentView = view;
+	}
 	
-	NSArray *freeInlets = [[fDocumentController currentDocument] freeInlets];
-	[deviceChooserViewController updateWithInlets:freeInlets];
+	[fMessage setStringValue:title];
 	
-	[fNextButton setEnabled:([deviceChooserViewController selectedItemPath] != nil)];
-}
-
-- (void) windowDidLoad
-{
-	[super windowDidLoad];
-	
-	[self setWindowFrameAutosaveName:@"DeviceChooser"];
-	
-	[self setup];
-}
-
-- (void) runModal:(id) sender forInletsOfType:(NSString *) type
-{
-	if ([self isWindowLoaded])
-		[self setup];
-	
-	[NSApp runModalForWindow:[self window]];
+	[fPreviousButton setEnabled:previousEnabled];
+	if (lastStep)
+		[fNextButton setTitle:NSLocalizedString(@"Finish", @"Finish")];
+	else
+		[fNextButton setTitle:NSLocalizedString(@"Next", @"Next")];
 }
 
 - (void) chooserWasDoubleClicked:(id) sender

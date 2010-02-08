@@ -105,7 +105,8 @@
 	}
 }
 
-- (void) updateWithInlets:(NSArray *)freeInlets
+- (void) updateWithInlets:(NSArray *) freeInlets
+			  andCategory:(NSString *) category
 {
 	NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
 	NSString *imagesPath = [resourcePath
@@ -122,7 +123,8 @@
 		// Check if device's outlets match emulation inlets
 		NSMutableArray *inlets = [NSMutableArray arrayWithArray:freeInlets];
 		OEPorts *outlets = info->getOutlets();
-		BOOL isMatch = YES;
+		BOOL isInletsFound = YES;
+		BOOL isCategoryFound = NO;
 		for (OEPorts::iterator o = outlets->begin();
 			 o != outlets->end();
 			 o++)
@@ -135,23 +137,29 @@
 			for (int j = 0; j < [inlets count]; j++)
 			{
 				NSMutableDictionary *dict = [inlets objectAtIndex:j];
-				NSString *type = [dict objectForKey:@"type"];
+				NSString *inletType = [dict objectForKey:@"type"];
 				
-				if ([type compare:outletType] == NSOrderedSame)
+				if ([inletType compare:outletType] == NSOrderedSame)
 				{
 					[inlets removeObjectAtIndex:j];
 					isInletFound = YES;
-					break;
+					
+					NSString *inletCategory = [dict objectForKey:@"category"];
+					if ([inletCategory compare:category] == NSOrderedSame)
+						isCategoryFound = YES;
 				}
 			}
 			
 			if (!isInletFound)
 			{
-				isMatch = NO;
+				isInletsFound = NO;
 				break;
 			}
 		}
-		if (!isMatch)
+		
+		if (!isInletsFound)
+			continue;
+		if (!isCategoryFound)
 			continue;
 		
 		// Add device
@@ -187,7 +195,7 @@
 	[self selectItemWithPath:nil];
 }
 
-- (NSMutableArray *)selectedItemOutlets
+- (NSMutableArray *) selectedItemOutlets
 {
 	// Find selected device
 	NSString *itemPath = [self selectedItemPath];
