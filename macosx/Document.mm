@@ -47,7 +47,6 @@
 - (id) initWithTemplateURL:(NSURL *) absoluteURL
 					 error:(NSError **) outError
 {
-//	printf("initWithemplateURL\n");
 	if ([self init])
 	{
 		if ([self readFromURL:absoluteURL
@@ -64,7 +63,8 @@
 
 - (void) dealloc
 {
-//	printf("dealloc\n");
+	[super dealloc];
+	
 	if (emulation)
 		delete (OEEmulation *) emulation;
 	
@@ -75,8 +75,6 @@
 	[expansions release];
 	[storage release];
 	[peripherals release];
-	
-	[super dealloc];
 }
 
 - (void) setDMLProperty:(NSString *) name value:(NSString *) value
@@ -226,7 +224,7 @@
 	if (!info.isLoaded())
 		return;
 	
-	// Build free inlets array
+	// Process inlets
 	OEPorts *inlets = info.getInlets();
 	for (OEPorts::iterator i = inlets->begin();
 		 i != inlets->end();
@@ -253,7 +251,7 @@
 		[freeInlets addObject:dict];
 	}
 	
-	// Build outlet lists
+	// Process outlets
 	int expansionIndex = 0;
 	int storageIndex = 0;
 	int peripheralIndex = 0;
@@ -300,7 +298,6 @@
 			  ofType:(NSString *) typeName
 			   error:(NSError **) outError
 {
-//	printf("readFromURL\n");
 	const char *emulationPath = [[absoluteURL path] UTF8String];
 	const char *resourcePath = [[[NSBundle mainBundle] resourcePath] UTF8String];
 	
@@ -337,7 +334,6 @@
 			 ofType:(NSString *) typeName
 			  error:(NSError **) outError
 {
-//	printf("writeToURL\n");
 	const char *emulationPath = [[[absoluteURL path] stringByAppendingString:@"/"]
 								 UTF8String];
 	if (emulation)
@@ -402,6 +398,11 @@
 		[[NSAlert alertWithError:error] runModal];
 }
 
+- (void) tick:(float) ms
+{
+	
+}
+
 - (void) addDevices:(NSString *) path
 		connections:(NSDictionary *) connections
 {
@@ -430,8 +431,9 @@
 		[alert setAlertStyle:NSWarningAlertStyle];
 		[alert runModal];
 	}
-	
+
 	[self updateDevices];
+	[self updateChangeCount:NSChangeDone];
 }
 
 - (void) removeDevice:(NSDictionary *) dict
@@ -464,11 +466,11 @@
 		
 		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
 		[alert setMessageText:NSLocalizedString(messageText, messageText)];
-		[alert setAlertStyle:NSWarningAlertStyle];
 		[alert runModal];
 	}
 	
 	[self updateDevices];
+	[self updateChangeCount:NSChangeDone];
 }
 
 - (void) makeWindowControllers
@@ -543,7 +545,8 @@
 
 - (BOOL) isCopyValid
 {
-	return YES; // To-Do: libemulation
+	// To-Do: libemulation
+	return YES;
 }
 
 - (BOOL) isPasteValid
@@ -579,10 +582,9 @@
 
 - (void) startSpeaking:(id) sender
 {
-	NSTextView *dummy = [[NSTextView alloc] init];
+	NSTextView *dummy = [[[NSTextView alloc] init] autorelease];
 	[dummy insertText:[self documentText]];
 	[dummy startSpeaking:self];
-	[dummy release];
 }
 
 - (BOOL) power

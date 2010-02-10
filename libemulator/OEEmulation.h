@@ -90,7 +90,9 @@ private:
 	xmlNodePtr getNodeOfPreviousInlet(xmlDocPtr doc, OERef ref);
 	
 	void buildDeviceNameMap(xmlDocPtr doc, xmlDocPtr elem, OEStringRefMap &deviceNameMap);
-	void renameDMLConnections(xmlDocPtr doc, OEStringRefMap &connections, OEStringRefMap &deviceNameMap);
+	void renameDMLConnections(xmlDocPtr doc,
+							  OEStringRefMap &connections,
+							  OEStringRefMap &deviceNameMap);
 	
 	bool connectDevices(xmlDocPtr doc, OEStringRefMap &connections);
 	bool disconnectDevice(xmlDocPtr doc, OERef ref);

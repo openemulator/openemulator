@@ -27,6 +27,7 @@
 		0071E3BA10803F7300F2D54F /* ChooserItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 0071E3B910803F7300F2D54F /* ChooserItem.m */; };
 		0072B1DE10E578E500AC7EBD /* OEEmulation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0072B1DC10E578E500AC7EBD /* OEEmulation.cpp */; };
 		0075B1B20FE79F7E009C1DFA /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0075B1B10FE79F7E009C1DFA /* OpenGL.framework */; };
+		008107DE1120C57600D744FB /* TemplateChooserViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00FE0C051095353B00B92AB7 /* TemplateChooserViewController.mm */; };
 		008BAB43110CA25900B648EF /* OEPackage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 008BAB41110CA25900B648EF /* OEPackage.cpp */; };
 		008BAB44110CA25900B648EF /* OEPackage.h in Headers */ = {isa = PBXBuildFile; fileRef = 008BAB42110CA25900B648EF /* OEPackage.h */; };
 		009277FD10E2BB3A00C645D0 /* OEInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00C11A5010E1B2D900F067D6 /* OEInfo.cpp */; };
@@ -92,7 +93,6 @@
 		00F0ED6711028C8800208090 /* DiskImage525.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000F66390FF8368F00C8AF23 /* DiskImage525.icns */; };
 		00F86BE3100FD4F60016867D /* IPSoundMax.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BE1100FD4F60016867D /* IPSoundMax.png */; };
 		00F86BE4100FD4F60016867D /* IPSoundMin.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BE2100FD4F60016867D /* IPSoundMin.png */; };
-		00FE0C061095353B00B92AB7 /* TemplateChooserViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00FE0C051095353B00B92AB7 /* TemplateChooserViewController.mm */; };
 		00FE0C171095371B00B92AB7 /* ChooserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00FE0C161095371B00B92AB7 /* ChooserViewController.m */; };
 		00FE0C6310953F7000B92AB7 /* DeviceChooserViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00FE0C6210953F7000B92AB7 /* DeviceChooserViewController.mm */; };
 		8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
@@ -667,10 +667,10 @@
 				005B81D9108680B9009D4804 /* ScreenView.m in Sources */,
 				005E5F6E1086B0E100E573D4 /* InspectorController.m in Sources */,
 				00B2D72C10914659004783F9 /* DeviceChooserController.m in Sources */,
-				00FE0C061095353B00B92AB7 /* TemplateChooserViewController.mm in Sources */,
 				00FE0C171095371B00B92AB7 /* ChooserViewController.m in Sources */,
 				00FE0C6310953F7000B92AB7 /* DeviceChooserViewController.mm in Sources */,
 				00BADDC51100EDC600EB0344 /* ConnectorViewController.m in Sources */,
+				008107DE1120C57600D744FB /* TemplateChooserViewController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -41,7 +41,7 @@
 	NSDictionary *titleAttributes;
 	NSDictionary *subtitleAttributes;
 	
-	cellSize.width = 160;
+	cellSize.width = 112;
 	cellSize.height = 64;
 	titleAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
 					   [NSFont messageFontOfSize:11.0f], NSFontAttributeName,

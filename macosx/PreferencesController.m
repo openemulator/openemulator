@@ -27,15 +27,13 @@
 
 - (void) dealloc
 {
-	[templateChooserViewController release];
-	
 	[super dealloc];
+	
+	[templateChooserViewController release];
 }
 
 - (void) windowDidLoad
 {
-	[super windowDidLoad];
-	
 	NSToolbar *toolbar = [[NSToolbar alloc] initWithIdentifier:@"Preferences Toolbar"];
 	NSString *selectedItemIdentifier = @"General";
 	

@@ -39,6 +39,8 @@
 
 - (IBAction) saveDocumentAsTemplate:(id)sender;
 
+- (void) tick:(float) ms;
+
 - (void) addDevices:(NSString *) path connections:(NSDictionary *) connections;
 - (void) removeDevice:(NSDictionary *) dict;
 

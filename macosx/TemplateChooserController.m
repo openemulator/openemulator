@@ -32,8 +32,10 @@
 	[templateChooserViewController release];
 }
 
-- (void) updateTemplateChooser
+- (void) run
 {
+	[self showWindow:self];
+	
 	[templateChooserViewController updateUserTemplates];
 	
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -48,22 +50,11 @@
 
 - (void) windowDidLoad
 {
-	[super windowDidLoad];
-	
 	[self setWindowFrameAutosaveName:@"TemplateChooser"];
 	
 	NSView *view = [templateChooserViewController view];
 	[fTemplateChooserView addSubview:view];
 	[view setFrameSize:[fTemplateChooserView frame].size];
-	
-	[self updateTemplateChooser];
-}
-
-- (void) showWindow:(id) sender
-{
-	[super showWindow:sender];
-	
-	[self updateTemplateChooser];
 }
 
 - (void) chooserWasDoubleClicked:(id) sender

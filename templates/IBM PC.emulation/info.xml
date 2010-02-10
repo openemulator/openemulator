@@ -6,7 +6,6 @@
         <property name="runTime" value="0.0" />
     </component>
     <component name="audio" class="AudioController">
-        <property name="volume" value="1.0" />
     </component>
     <component name="video" class="VideoController">
     </component>

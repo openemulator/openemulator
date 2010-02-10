@@ -163,14 +163,11 @@
 			continue;
 		
 		// Add device
-		NSString *label = [NSString stringWithUTF8String:
-						   info->getLabel().c_str()];
-		NSString *imageName = [NSString stringWithUTF8String:
-							   info->getImage().c_str()];
-		NSString *description = [NSString stringWithUTF8String:
-								 info->getDescription().c_str()];
-		NSString *groupName = [NSString stringWithUTF8String:
-							   info->getGroup().c_str()];
+		NSString *label = [NSString stringWithUTF8String:info->getLabel().c_str()];
+		NSString *imageName = [NSString stringWithUTF8String:info->getImage().c_str()];
+		NSString *description = [NSString stringWithUTF8String:info->getDescription().
+								 c_str()];
+		NSString *groupName = [NSString stringWithUTF8String:info->getGroup().c_str()];
 		
 		if (![groups objectForKey:groupName])
 		{

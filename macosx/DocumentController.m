@@ -8,6 +8,13 @@
  * Controls emulations.
  */
 
+#import <sys/time.h>
+#import <signal.h>
+#import <unistd.h>
+#import <stdio.h>
+#import <time.h>
+#import <errno.h>
+
 #import <Carbon/Carbon.h>
 
 #import "Document.h"
@@ -33,10 +40,36 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 	return paContinue;
 }
 
+void alarmHandler(int signal)
+{
+//	NSArray *documents = [[NSDocumentController sharedDocumentController] documents];
+//	printf("%d\n", [documents count]);
+/*	int count = [documents count];
+	for (int i = 0; i < count; i++)
+	{
+		[[documents objectAtIndex:i] tick];
+	}
+ */
+}
+
 @implementation DocumentController
 
 - (id) init
 {
+	struct sigaction signalAction;
+	sigemptyset(&signalAction.sa_mask);
+	signalAction.sa_flags = 0;
+	signalAction.sa_handler = alarmHandler;
+	sigaction(SIGALRM, &signalAction, NULL);
+	
+	struct itimerval value;
+	value.it_interval.tv_sec = 0;
+	value.it_interval.tv_usec = 100000;
+	value.it_value.tv_sec = 0;
+	value.it_value.tv_usec = 100000;
+	if (setitimer(ITIMER_REAL, &value, NULL) != 0)
+		return nil;
+	
 	if (self = [super init])
 	{
 		fileTypes = [[NSArray alloc] initWithObjects:
@@ -104,14 +137,13 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 	
 	// To-Do: Mount disk image
 	
-	NSAlert *alert = [[NSAlert alloc] init];
+	NSAlert *alert = [[[NSAlert alloc] init] autorelease];
 	[alert setMessageText:[NSString localizedStringWithFormat:
 						   @"The document \u201C%@\u201D could not be opened. "
 						   "This emulation cannot open files in this format.",
 						   [filename lastPathComponent]]];
 	[alert setAlertStyle:NSCriticalAlertStyle];
 	[alert runModal];
-	[alert release];
 	
 	return YES;
 }
@@ -141,7 +173,7 @@ static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
 
 - (IBAction) newDocumentFromTemplateChooser:(id) sender
 {
-	[fTemplateChooserController showWindow:sender];
+	[fTemplateChooserController run];
 }
 
 - (IBAction) openDocument:(id) sender

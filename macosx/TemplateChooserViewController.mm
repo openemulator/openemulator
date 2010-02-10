@@ -19,50 +19,18 @@
 
 @implementation TemplateChooserViewController
 
-- (void) addTemplatesFromPath:(NSString *) path
-				 setGroupName:(NSString *) theGroupName
+- (void) awakeFromNib
 {
+	[super awakeFromNib];
+	
 	NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
-	NSString *imagesPath = [resourcePath
-							stringByAppendingPathComponent:@"images"];
+	NSString *templatesPath = [resourcePath
+							   stringByAppendingPathComponent:@"templates"];
 	
-	NSArray *templateFilenames = [[NSFileManager defaultManager]
-								  contentsOfDirectoryAtPath:path
-								  error:nil];
-	
-	int templateFilenamesCount = [templateFilenames count];
-	for (int i = 0; i < templateFilenamesCount; i++)
-	{
-		NSString *templateFilename = [templateFilenames objectAtIndex:i];
-		NSString *templatePath = [path stringByAppendingPathComponent:templateFilename];
-		OEInfo info(string([templatePath UTF8String]));
-		if (info.isLoaded())
-		{
-			NSString *label = [templateFilename stringByDeletingPathExtension];
-			NSString *imageName = [NSString stringWithUTF8String:info.getImage().c_str()];
-			NSString *description = [NSString stringWithUTF8String:info.getDescription().c_str()];
-			NSString *groupName = [NSString stringWithUTF8String:info.getGroup().c_str()];
-			
-			if (theGroupName)
-				groupName = theGroupName;
-			
-			if (![groups objectForKey:groupName])
-			{
-				NSMutableArray *group = [[[NSMutableArray alloc] init] autorelease];
-				[groups setObject:group forKey:groupName];
-			}
-			NSString *imagePath = [imagesPath stringByAppendingPathComponent:imageName];
-			ChooserItem *item = [[ChooserItem alloc] initWithTitle:label
-														  subtitle:description
-														 imagePath:imagePath
-															  data:templatePath];
-			if (item)
-			{
-				[item autorelease];
-				[[groups objectForKey:groupName] addObject:item];
-			}
-		}
-	}
+	[self addTemplatesFromPath:templatesPath
+				  setGroupName:nil];
+	[groupNames addObjectsFromArray:[[groups allKeys]
+									 sortedArrayUsingSelector:@selector(compare:)]];
 }
 
 - (void) updateUserTemplates
@@ -86,18 +54,51 @@
 	[self selectItemWithPath:selectedItemPath];
 }
 
-- (void) awakeFromNib
+- (void) addTemplatesFromPath:(NSString *) path
+				 setGroupName:(NSString *) theGroupName
 {
-	[super awakeFromNib];
-	
 	NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
-	NSString *templatesPath = [resourcePath
-							   stringByAppendingPathComponent:@"templates"];
+	NSString *imagesPath = [resourcePath
+							stringByAppendingPathComponent:@"images"];
 	
-	[self addTemplatesFromPath:templatesPath
-				  setGroupName:nil];
-	[groupNames addObjectsFromArray:[[groups allKeys]
-									 sortedArrayUsingSelector:@selector(compare:)]];
+	NSArray *templateFilenames = [[NSFileManager defaultManager]
+								  contentsOfDirectoryAtPath:path
+								  error:nil];
+	
+	int templateFilenamesCount = [templateFilenames count];
+	for (int i = 0; i < templateFilenamesCount; i++)
+	{
+		NSString *templateFilename = [templateFilenames objectAtIndex:i];
+		NSString *templatePath = [path stringByAppendingPathComponent:templateFilename];
+		OEInfo info(string([templatePath UTF8String]));
+		if (info.isLoaded())
+		{
+			NSString *label = [templateFilename stringByDeletingPathExtension];
+			NSString *imageName = [NSString stringWithUTF8String:info.getImage().c_str()];
+			NSString *description = [NSString stringWithUTF8String:info.getDescription().
+									 c_str()];
+			NSString *groupName = [NSString stringWithUTF8String:info.getGroup().c_str()];
+			
+			if (theGroupName)
+				groupName = theGroupName;
+			
+			if (![groups objectForKey:groupName])
+			{
+				NSMutableArray *group = [[[NSMutableArray alloc] init] autorelease];
+				[groups setObject:group forKey:groupName];
+			}
+			NSString *imagePath = [imagesPath stringByAppendingPathComponent:imageName];
+			ChooserItem *item = [[ChooserItem alloc] initWithTitle:label
+														  subtitle:description
+														 imagePath:imagePath
+															  data:templatePath];
+			if (item)
+			{
+				[item autorelease];
+				[[groups objectForKey:groupName] addObject:item];
+			}
+		}
+	}
 }
 
 @end

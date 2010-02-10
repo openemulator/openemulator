@@ -24,6 +24,11 @@
 	[super dealloc];
 }
 
+- (void) insertText:(id) aString
+{
+	NSLog(@"insertText: %$", aString);
+}
+
 - (void) keyDown:(NSEvent *)theEvent
 {
 	NSLog(@"keyDown: %@", theEvent);

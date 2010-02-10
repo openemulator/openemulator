@@ -32,11 +32,12 @@
 	
 	id currentView;
 	int currentStep;
+	
+	BOOL isWindowSetup;
 }
 
 - (void) runModal:(id) sender forCategory:(NSString *) theCategory;
 
-- (void) setup;
 - (void) setDeviceChooserView;
 - (void) setConnectorViewAtIndex:(int) index;
 - (void) updateView:(id) view

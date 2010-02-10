@@ -53,23 +53,8 @@
 		[category release];
 	category = [theCategory copy];
 	
-	if ([self isWindowLoaded])
-		[self setup];
+	[self loadWindow];
 	
-	[NSApp runModalForWindow:[self window]];
-}
-
-- (void) windowDidLoad
-{
-	[super windowDidLoad];
-	
-	[self setWindowFrameAutosaveName:@"DeviceChooser"];
-	
-	[self setup];
-}
-
-- (void) setup
-{
 	currentStep = 0;
 	[self setDeviceChooserView];
 	
@@ -81,26 +66,22 @@
 	
 	if (![deviceChooserViewController selectedItemPath])
 	{
-		NSString *messageText = @"There are no available devices of this type for the "
-		"current configuration.";
+		NSString *messageText = @"No devices of this kind can be added.";
+		NSString *informativeText = @"There are no available ports in the current "
+		"configuration.";
 		
 		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
 		[alert setMessageText:NSLocalizedString(messageText, messageText)];
-		[alert setAlertStyle:NSWarningAlertStyle];
-		[alert beginSheetModalForWindow:[self window]
-						  modalDelegate:self
-						 didEndSelector:@selector(errorSheetDidEnd:returnCode:contextInfo:)
-							contextInfo:nil];
+		[alert setInformativeText:NSLocalizedString(informativeText, informativeText)];
+		[alert runModal];
 	}
+	else
+		[NSApp runModalForWindow:[self window]];
 }
-	
-- (void) errorSheetDidEnd:(NSAlert *) alert
-			   returnCode:(int) returnCode
-			  contextInfo:(void *) contextInfo
+
+- (void) windowDidLoad
 {
-	[[alert window] orderOut:self];
-	
-	[self performCancel:self];
+	[self setWindowFrameAutosaveName:@"DeviceChooser"];
 }
 
 - (void) setDeviceChooserView

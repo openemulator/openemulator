@@ -100,7 +100,6 @@
 													 ofType:type];
 	NSBitmapImageRep *bitmap = [NSBitmapImageRep
 								imageRepWithContentsOfFile:path];
-	
 	if (!bitmap)
 		return;
 	
