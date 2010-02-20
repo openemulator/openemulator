@@ -5,7 +5,7 @@
  * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Parses a DML file
+ * Parses a DML file.
  */
 
 #ifndef _OEINFO_H

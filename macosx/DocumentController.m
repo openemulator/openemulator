@@ -8,68 +8,17 @@
  * Controls emulations.
  */
 
-#import <sys/time.h>
-#import <signal.h>
-#import <unistd.h>
-#import <stdio.h>
-#import <time.h>
-#import <errno.h>
-
 #import <Carbon/Carbon.h>
 
 #import "Document.h"
 #import "DocumentController.h"
 #import "TemplateChooserController.h"
-
-static int portAudioCallback(const void *inputBuffer, void *outputBuffer,
-							 unsigned long framesPerBuffer,
-							 const PaStreamCallbackTimeInfo* timeInfo,
-							 PaStreamCallbackFlags statusFlags,
-							 void *userData)
-{
-//	float *in = (float *)inputBuffer;
-	float *out = (float *)outputBuffer;
-	unsigned int i;
-	
-	for(i = 0; i < framesPerBuffer; i++)
-	{
-		*out++ = (rand() & 0xffff) / 65535.0f / 256;
-		*out++ = (rand() & 0xffff) / 65535.0f / 256;
-	}
-	
-	return paContinue;
-}
-
-void alarmHandler(int signal)
-{
-//	NSArray *documents = [[NSDocumentController sharedDocumentController] documents];
-//	printf("%d\n", [documents count]);
-/*	int count = [documents count];
-	for (int i = 0; i < count; i++)
-	{
-		[[documents objectAtIndex:i] tick];
-	}
- */
-}
+#import "OEPortaudioC.h"
 
 @implementation DocumentController
 
 - (id) init
 {
-	struct sigaction signalAction;
-	sigemptyset(&signalAction.sa_mask);
-	signalAction.sa_flags = 0;
-	signalAction.sa_handler = alarmHandler;
-	sigaction(SIGALRM, &signalAction, NULL);
-	
-	struct itimerval value;
-	value.it_interval.tv_sec = 0;
-	value.it_interval.tv_usec = 100000;
-	value.it_value.tv_sec = 0;
-	value.it_value.tv_usec = 100000;
-	if (setitimer(ITIMER_REAL, &value, NULL) != 0)
-		return nil;
-	
 	if (self = [super init])
 	{
 		fileTypes = [[NSArray alloc] initWithObjects:
@@ -85,6 +34,12 @@ void alarmHandler(int signal)
 					 nil];
 		
 		disableMenuBarCount = 0;
+		
+		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+		[defaults addObserver:self
+				   forKeyPath:@"values.OEFullDuplex"
+					  options:NSKeyValueObservingOptionNew
+					  context:NULL];
 	}
 	
 	return self;
@@ -99,25 +54,14 @@ void alarmHandler(int signal)
 
 - (void) applicationWillFinishLaunching:(NSNotification *) notification
 {
-	//	printf("applicationWillFinishLaunching\n");
 	[fInspectorController restoreWindowState:self];
 	
-/*	int error;
-	if ((error = Pa_Initialize()) == paNoError)
-		if ((error = Pa_OpenDefaultStream(&portAudioStream, 
-										  0, 2, paFloat32,
-										  48000, 512,
-										  portAudioCallback, self)) == paNoError)
-			if ((error = Pa_StartStream(portAudioStream)) == paNoError)
-				return;
-	
-	fprintf(stderr, "portaudio: error %d\n", error);*/
+	c_oepaOpen();
 }
 
 - (BOOL) application:(NSApplication *) theApplication
 			openFile:(NSString *) filename
 {
-	//	printf("openFile\n");
 	if ([[filename pathExtension] compare:@"emulation"] == NSOrderedSame)
 		return NO;
 	
@@ -150,15 +94,27 @@ void alarmHandler(int signal)
 
 - (void) applicationDidFinishLaunching:(NSNotification *) notification
 {
-	//	printf("applicationDidFinishLaunching\n");
 }
 
 - (void) applicationWillTerminate:(NSNotification *) notification
 {
-	//	printf("applicationWillTerminate\n");
-//	Pa_Terminate();
+	c_oepaClose();
 	
 	[fInspectorController storeWindowState:self];
+}
+
+- (void) observeValueForKeyPath:(NSString *) keyPath
+					   ofObject:(id) object
+						 change:(NSDictionary *) change
+                        context:(void *) context
+{
+	NSLog(@"Observed.");
+	if ([keyPath isEqualToString:@"values.OEFullDuplex"])
+	{
+		id object = [change objectForKey:NSKeyValueChangeNewKey];
+		int value = [object intValue];
+		c_oepaSetFullDuplex(value);
+	}
 }
 
 - (BOOL) validateUserInterfaceItem:(id) item
@@ -194,8 +150,8 @@ void alarmHandler(int signal)
 
 - (id) openUntitledDocumentAndDisplay:(BOOL) displayDocument error:(NSError **) outError
 {
-	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-	if (![userDefaults boolForKey:@"OEUseDefaultTemplate"])
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	if (![defaults boolForKey:@"OEUseDefaultTemplate"])
 	{
 		[self newDocumentFromTemplateChooser:self];
 		
@@ -206,7 +162,7 @@ void alarmHandler(int signal)
 	}
 	else
 	{
-		NSString *defaultTemplate = [userDefaults stringForKey:@"OEDefaultTemplate"];
+		NSString *defaultTemplate = [defaults stringForKey:@"OEDefaultTemplate"];
 		id document = nil;
 		
 		if (!defaultTemplate)

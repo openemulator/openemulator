@@ -10,7 +10,6 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "portaudio.h"
 #import "InspectorController.h"
 #import "TemplateChooserController.h"
 
@@ -25,9 +24,9 @@
 	
 	NSArray *fileTypes;
 	
-	PaStream *portAudioStream;
-	
 	int disableMenuBarCount;
+	
+	BOOL fullDuplexState;
 }
 
 - (IBAction) newDocumentFromTemplateChooser:(id) sender;

@@ -49,15 +49,15 @@ void OEComponent::removeObserver(OEComponent *component)
 	}
 }
 
-void OEComponent::onNotification(OEComponent *component)
+void OEComponent::onNotification(OEComponent *component, int message, void *data)
 {
 }
 
-void OEComponent::postNotification()
+void OEComponent::postNotification(int message, void *data)
 {
 	vector<OEComponent *>::iterator iterator;
 	for (iterator = observers.begin();
 		 iterator != observers.end();
 		 iterator++)
-		(*iterator)->onNotification(this);
+		(*iterator)->onNotification(this, message, data);
 }

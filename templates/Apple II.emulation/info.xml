@@ -3,20 +3,26 @@
 <dml version="1.0" label="Apple II" image="Apple II.png" description="The Apple II was the first highly successful mass produced microprocessor product. The Apple II had color and high-resolution graphics modes, sound capabilities and one of two built-in BASIC programming languages." group="Apple II">
 
 <device name="host">
-    <component name="events" class="EventController">
+    <component name="events" class="HostEvents">
         <property name="runTime" value="0.0" />
     </component>
-    <component name="audio" class="AudioController">
+    <component name="audio" class="HostAudio">
     </component>
-    <component name="video" class="VideoController">
+    <component name="video" class="HostVideo">
     </component>
-    <component name="keyboard" class="KeyboardController">
+    <component name="keyboard" class="HostKeyboard">
     </component>
-    <component name="joystick" class="JoystickController">
+    <component name="joystick" class="HostJoystick">
     </component>
-    <component name="mouse" class="MouseController">
+    <component name="mouse" class="HostMouse">
     </component>
-    <component name="tablet" class="TabletController">
+    <component name="tablet" class="HostTablet">
+    </component>
+    <component name="net" class="HostNet">
+    </component>
+    <component name="serial" class="HostSerial">
+    </component>
+    <component name="parallel" class="HostParallel">
     </component>
 </device>
 

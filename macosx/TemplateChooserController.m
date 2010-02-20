@@ -38,8 +38,8 @@
 	
 	[templateChooserViewController updateUserTemplates];
 	
-	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-	NSString *itemPath = [userDefaults stringForKey:@"OELastTemplate"];
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	NSString *itemPath = [defaults stringForKey:@"OELastTemplate"];
 	[templateChooserViewController selectItemWithPath:itemPath];
 	
 	[[self window] center];
@@ -68,9 +68,9 @@
 	NSURL *url = nil;
 	if (templatePath)
 	{
-		NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-		[userDefaults setObject:templatePath
-						 forKey:@"OELastTemplate"];
+		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+		[defaults setObject:templatePath
+					 forKey:@"OELastTemplate"];
 		url = [NSURL fileURLWithPath:templatePath];
 	}
 	

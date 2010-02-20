@@ -135,15 +135,15 @@
 
 - (void) updateUseDefaultTemplate
 {
-	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-	[self setUseDefaultTemplate:[userDefaults boolForKey:@"OEUseDefaultTemplate"]];
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	[self setUseDefaultTemplate:[defaults boolForKey:@"OEUseDefaultTemplate"]];
 }
 
 - (void) setUseDefaultTemplate:(BOOL) useDefaultTemplate
 {
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	NSString *useTemplateString = NSLocalizedString(@"Use template: ", "Use template: ");
-	NSString *defaultTemplate = [[NSUserDefaults standardUserDefaults]
-								 stringForKey:@"OEDefaultTemplate"];
+	NSString *defaultTemplate = [defaults stringForKey:@"OEDefaultTemplate"];
 	if (defaultTemplate)
 	{
 		NSString *defaultTemplateName = [[defaultTemplate lastPathComponent]
@@ -159,8 +159,8 @@
 	if ((defaultTemplate == nil) && useDefaultTemplate)
 		[self chooseDefaultTemplate:self];
 	else
-		[[NSUserDefaults standardUserDefaults] setBool:useDefaultTemplate
-												forKey:@"OEUseDefaultTemplate"];
+		[defaults setBool:useDefaultTemplate
+				   forKey:@"OEUseDefaultTemplate"];
 }
 
 - (IBAction) selectUseDefaultTemplate:(id) sender
@@ -172,8 +172,8 @@
 {
 	[templateChooserViewController updateUserTemplates];
 	
-	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-	NSString *path = [userDefaults stringForKey:@"OEDefaultTemplate"];
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	NSString *path = [defaults stringForKey:@"OEDefaultTemplate"];
 	[templateChooserViewController selectItemWithPath:path];
 	
 	[fTemplateChooserChooseButton setEnabled:
@@ -193,11 +193,11 @@
 
 - (IBAction) chooseTemplateInSheet:(id) sender
 {
-	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-	[userDefaults setObject:[templateChooserViewController selectedItemPath]
-					 forKey:@"OEDefaultTemplate"];
-	[userDefaults setBool:YES
-				   forKey:@"OEUseDefaultTemplate"];
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	[defaults setObject:[templateChooserViewController selectedItemPath]
+				 forKey:@"OEDefaultTemplate"];
+	[defaults setBool:YES
+			   forKey:@"OEUseDefaultTemplate"];
 	
 	[self closeTemplateSheet:sender];
 }

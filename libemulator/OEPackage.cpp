@@ -72,7 +72,8 @@ bool OEPackage::readFile(string localPath, vector<char> &data)
 			if ((zipFile = zip_fopen(zip, localPath.c_str(), 0)) != NULL)
 			{
 				data.resize(zipStat.size);
-				error = (zip_fread(zipFile, &data[0], zipStat.size) != zipStat.size);
+				error = (zip_fread(zipFile, &data[0], zipStat.size) !=
+						 zipStat.size);
 				zip_fclose(zipFile);
 			}
 		}

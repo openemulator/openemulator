@@ -41,8 +41,8 @@ NSString *itemIdentifiers[] =
 {
 	[self setWindowFrameAutosaveName:@"Inspector"];
 	
-	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-	int viewIndex = [userDefaults integerForKey:@"OEInspectorSelectedViewIndex"];
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	int viewIndex = [defaults integerForKey:@"OEInspectorSelectedViewIndex"];
  	[fTabMatrix selectCellWithTag:viewIndex];
 	[self setView:viewIndex];
 	
@@ -185,23 +185,23 @@ NSString *itemIdentifiers[] =
 	
 	selectedViewIndex = viewIndex;
 	
-	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-	[userDefaults setInteger:selectedViewIndex
-					  forKey:@"OEInspectorSelectedViewIndex"];
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	[defaults setInteger:selectedViewIndex
+				  forKey:@"OEInspectorSelectedViewIndex"];
 }
 
 - (void) restoreWindowState:(id) sender
 {
-	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-	if ([userDefaults boolForKey:@"OEInspectorIsVisible"])
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	if ([defaults boolForKey:@"OEInspectorIsVisible"])
 		[self showWindow:self];	
 }
 
 - (void) storeWindowState:(id) sender
 {
-	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-	[userDefaults setBool:[[self window] isVisible]
-				   forKey:@"OEInspectorIsVisible"];
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	[defaults setBool:[[self window] isVisible]
+			   forKey:@"OEInspectorIsVisible"];
 }
 
 - (void) addExpansion:(id) sender

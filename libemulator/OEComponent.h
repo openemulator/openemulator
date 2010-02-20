@@ -28,10 +28,10 @@ public:
 	
 	void addObserver(class OEComponent *component);
 	void removeObserver(class OEComponent *component);
-	virtual void onNotification(class OEComponent *component);
+	virtual void onNotification(class OEComponent *component, int message, void *data);
 	
 protected:
-	void postNotification();
+	void postNotification(int message, void *data);
 	
 private:
 	vector<class OEComponent *> observers;

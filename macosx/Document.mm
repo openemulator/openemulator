@@ -14,6 +14,8 @@
 #import "OEEmulation.h"
 #import "OEInfo.h"
 
+#import "OEPortaudio.h"
+
 @implementation Document
 
 - (id) init
@@ -66,7 +68,7 @@
 	[super dealloc];
 	
 	if (emulation)
-		delete (OEEmulation *) emulation;
+		oepaDestroy((OEEmulation *) emulation);
 	
 	[pasteboardTypes release];
 	
@@ -110,14 +112,15 @@
 	if (!emulation)
 		return;
 	
-	OEIoctlProperty property;
+	OEIoctlProperty msg;
 	
-	property.name = string([name UTF8String]);
-	property.value = string([value UTF8String]);
+	msg.name = string([name UTF8String]);
+	msg.value = string([value UTF8String]);
 	
-	((OEEmulation *)emulation)->ioctl(string([ref UTF8String]),
-									  OEIoctlSetProperty,
-									  &property);
+	oepaIoctl((OEEmulation *) emulation,
+			  string([ref UTF8String]),
+			  OEIoctlSetProperty,
+			  &msg);
 }
 
 - (NSString *) getIoctlProperty:(NSString *)name ref:(NSString *) ref
@@ -129,9 +132,10 @@
 	
 	msg.name = string([name UTF8String]);
 	
-	if (((OEEmulation *)emulation)->ioctl(string([ref UTF8String]),
-									  OEIoctlGetProperty,
-									  &msg))
+	if (oepaIoctl((OEEmulation *) emulation,
+				  string([ref UTF8String]),
+				  OEIoctlSetProperty,
+				  &msg))
 		return [NSString stringWithUTF8String:msg.value.c_str()];
 	else
 		return nil;
@@ -304,7 +308,7 @@
 	if (emulation)
 		delete (OEEmulation *)emulation;
 	
-	emulation = (void *)new OEEmulation(emulationPath, resourcePath);
+	emulation = (void *) oepaConstruct(emulationPath, resourcePath);
 	
 	if (emulation)
 	{
@@ -320,7 +324,7 @@
 			return YES;
 		}
 		
-		delete (OEEmulation *)emulation;
+		oepaDestroy((OEEmulation *) emulation);
 		emulation = NULL;
 	}
 	
@@ -338,7 +342,7 @@
 								 UTF8String];
 	if (emulation)
 	{
-		if (((OEEmulation *)emulation)->save(string(emulationPath)))
+		if (oepaSave((OEEmulation *) emulation, string(emulationPath)))
 			return YES;
 	}
 	
@@ -422,7 +426,7 @@
 		connectionsMap[inletRefString] = outletRefString;
 	}
 	
-	if (!((OEEmulation *) emulation)->addDevices(pathString, connectionsMap))
+	if (!oepaAddDevices((OEEmulation *) emulation, pathString, connectionsMap))
 	{
 		NSString *messageText = @"The device could not be added.";
 		
@@ -443,7 +447,7 @@
 	
 	string refString = [deviceRef UTF8String];
 	
-	if (!((OEEmulation *) emulation)->isDeviceTerminal(refString))
+	if (!oepaIsDeviceTerminal((OEEmulation *) emulation, refString))
 	{
 		NSString *messageText = @"Do you want to remove the device \u201C%@\u201D?";
 		NSString *informativeText = @"There is one or more devices connected to it, "
@@ -460,7 +464,7 @@
 			return;
 	}
 	
-	if (!((OEEmulation *) emulation)->removeDevice(refString))
+	if (!oepaRemoveDevice((OEEmulation *) emulation, refString))
 	{
 		NSString *messageText = @"The device could not be removed.";
 		
