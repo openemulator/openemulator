@@ -14,6 +14,18 @@
 #include <string>
 #include <vector>
 
+#define OE_IOCTL_USER_MESSAGES 8
+
+// Messages
+enum {
+	COMPONENT_SET_CONNECTION = 0,
+	COMPONENT_SET_PROPERTY,
+	COMPONENT_GET_PROPERTY,
+	COMPONENT_SET_DATA,
+	COMPONENT_GET_DATA,
+	COMPONENT_SET_RESOURCE,
+};
+
 using namespace std;
 
 class OEComponent
@@ -34,17 +46,7 @@ protected:
 	void postNotification(int message, void *data);
 	
 private:
-	vector<class OEComponent *> observers;
-};
-
-enum {
-	OEIoctlSetConnection,
-	OEIoctlSetProperty,
-	OEIoctlGetProperty,
-	OEIoctlSetData,
-	OEIoctlGetData,
-	OEIoctlSetResource,
-	OEIoctlSetEvent,
+	vector<OEComponent *> observers;
 };
 
 typedef struct

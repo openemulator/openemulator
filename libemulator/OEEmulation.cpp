@@ -578,7 +578,7 @@ bool OEEmulation::setConnection(xmlNodePtr node, OEComponent *component, OERef d
 	msg.name = name;
 	msg.component = connectedComponent;
 	
-	component->ioctl(OEIoctlSetConnection, &msg);
+	component->ioctl(COMPONENT_SET_CONNECTION, &msg);
 	
 	return true;
 }
@@ -592,7 +592,7 @@ bool OEEmulation::setProperty(xmlNodePtr node, OEComponent *component)
 	msg.name = name;
 	msg.value = value;
 	
-	component->ioctl(OEIoctlSetProperty, &msg);
+	component->ioctl(COMPONENT_SET_PROPERTY, &msg);
 	
 	return true;
 }
@@ -604,7 +604,7 @@ bool OEEmulation::getProperty(xmlNodePtr node, OEComponent *component)
 	OEIoctlProperty msg;
 	msg.name = name;
 	
-	if (component->ioctl(OEIoctlGetProperty, &msg))
+	if (component->ioctl(COMPONENT_GET_PROPERTY, &msg))
 		setXMLProperty(node, "value", msg.value);
 	
 	return true;
@@ -619,7 +619,7 @@ bool OEEmulation::setData(xmlNodePtr node, OEComponent *component, OERef deviceR
 	msg.name = name;
 	
 	if (package && package->readFile(src, msg.data))
-		component->ioctl(OEIoctlSetData, &msg);
+		component->ioctl(COMPONENT_SET_DATA, &msg);
 	
 	return true;
 }
@@ -632,7 +632,7 @@ bool OEEmulation::getData(xmlNodePtr node, OEComponent *component, OERef deviceR
 	OEIoctlData msg;
 	msg.name = name;
 	
-	if (component->ioctl(OEIoctlGetData, &msg))
+	if (component->ioctl(COMPONENT_GET_DATA, &msg))
 	{
 		if (!package->writeFile(src, msg.data))
 		{
@@ -658,7 +658,7 @@ bool OEEmulation::setResource(xmlNodePtr node, OEComponent *component)
 		return false;
 	}
 	
-	component->ioctl(OEIoctlSetData, &msg);
+	component->ioctl(COMPONENT_SET_RESOURCE, &msg);
 	
 	return true;
 }

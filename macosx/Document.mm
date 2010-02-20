@@ -119,7 +119,7 @@
 	
 	oepaIoctl((OEEmulation *) emulation,
 			  string([ref UTF8String]),
-			  OEIoctlSetProperty,
+			  COMPONENT_SET_PROPERTY,
 			  &msg);
 }
 
@@ -134,7 +134,7 @@
 	
 	if (oepaIoctl((OEEmulation *) emulation,
 				  string([ref UTF8String]),
-				  OEIoctlSetProperty,
+				  COMPONENT_GET_PROPERTY,
 				  &msg))
 		return [NSString stringWithUTF8String:msg.value.c_str()];
 	else

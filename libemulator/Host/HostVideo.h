@@ -10,13 +10,16 @@
 
 #include "OEComponent.h"
 
+// Registers virtual screens (add, remove). Components provide the HostVideoFrame
+// Provides these frames to the screen update function
+
 // Messages
 enum
 {
-	HOST_VIDEO_ADD_SCREEN,
+	HOST_VIDEO_ADD_SCREEN = OE_IOCTL_USER_MESSAGES,
 	HOST_VIDEO_REMOVE_SCREEN,
+	HOST_VIDEO_GET_SCREEN_NUM,
 	HOST_VIDEO_GET_SCREEN,
-	HOST_VIDEO_SET_SCREEN,
 };
 
 typedef struct

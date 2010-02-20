@@ -10,7 +10,13 @@
 
 #include "OEComponent.h"
 
+// Receives HOST_AUDIO_BUFFERSTART
+// It is possible to configure one CPU
+// Calls the CPU
+// Translates sample and CPU clocks (clocksPerSample)
+// Receives IRQ and NMI requests, and routes them to the CPU
+// Receives HOST_EVENTS_RESET_UP and routes it to the CPU
+
 class AppleIIEvents : public OEComponent
 {
-
 };
