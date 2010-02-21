@@ -2,20 +2,28 @@
 <!DOCTYPE dml PUBLIC "-//OPENEMULATOR//DTD DML 1.0//EN" "http://www.openemulator.org/DTDs/dml-1.0.dtd">
 <dml version="1.0" label="IBM PC 5150" image="IBM PC 5150.png" description="" group="PC">
 <device name="host">
-    <component name="events" class="EventController">
+    <component name="events" class="HostEvents">
+    </component>
+    <component name="audio" class="HostAudio">
         <property name="runTime" value="0.0" />
+        <property name="isPaused" value="0" />
     </component>
-    <component name="audio" class="AudioController">
+    <component name="video" class="HostVideo">
+        <property name="window" value="-1 -1 640 480" />
     </component>
-    <component name="video" class="VideoController">
+    <component name="keyboard" class="HostKeyboard">
     </component>
-    <component name="keyboard" class="KeyboardController">
+    <component name="joystick" class="HostJoystick">
     </component>
-    <component name="joystick" class="JoystickController">
+    <component name="mouse" class="HostMouse">
     </component>
-    <component name="mouse" class="MouseController">
+    <component name="tablet" class="HostTablet">
     </component>
-    <component name="tablet" class="TabletController">
+    <component name="net" class="HostNet">
+    </component>
+    <component name="serial" class="HostSerial">
+    </component>
+    <component name="parallel" class="HostParallel">
     </component>
 </device>
 

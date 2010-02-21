@@ -2,12 +2,28 @@
 <!DOCTYPE dml PUBLIC "-//OPENEMULATOR//DTD DML 1.0//EN" "http://www.openemulator.org/DTDs/dml-1.0.dtd">
 <dml version="1.0" label="Apple I" image="Apple I.png" description="" group="Apple I">
 <device name="host">
-    <component name="events" class="EventController">
+    <component name="events" class="HostEvents">
+    </component>
+    <component name="audio" class="HostAudio">
         <property name="runTime" value="0.0" />
+        <property name="isPaused" value="0" />
     </component>
-    <component name="video" class="VideoController">
+    <component name="video" class="HostVideo">
+        <property name="window" value="-1 -1 640 480" />
     </component>
-    <component name="keyboard" class="KeyboardController">
+    <component name="keyboard" class="HostKeyboard">
+    </component>
+    <component name="joystick" class="HostJoystick">
+    </component>
+    <component name="mouse" class="HostMouse">
+    </component>
+    <component name="tablet" class="HostTablet">
+    </component>
+    <component name="net" class="HostNet">
+    </component>
+    <component name="serial" class="HostSerial">
+    </component>
+    <component name="parallel" class="HostParallel">
     </component>
 </device>
 

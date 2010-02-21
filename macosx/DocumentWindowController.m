@@ -77,6 +77,15 @@
 		[item setTarget:document];
 		[item setAction:@selector(pauseButtonPressedAndReleased:)];
 	}
+	else if ([ident isEqualToString:@"Interrupt"])
+	{
+		[item setLabel:NSLocalizedString(@"Interrupt", "Document toolbar item label")];
+		[item setToolTip:NSLocalizedString(@"Interrupt the emulation.",
+										   "Document toolbar item label")];
+		[item setImage:[NSImage imageNamed:@"TBInterrupt.png"]];
+		[item setTarget:document];
+		[item setAction:@selector(interruptButtonPressedAndReleased:)];
+	}
 	else if ([ident isEqualToString:@"Info"])
 	{
 		[item setLabel:NSLocalizedString(@"Info", "Document toolbar item label")];
@@ -92,7 +101,8 @@
 
 - (NSArray *) toolbarDefaultItemIdentifiers:(NSToolbar *) toolbar
 {
-	return [NSArray arrayWithObjects:@"Power",
+	return [NSArray arrayWithObjects:
+			@"Power",
 			NSToolbarSpaceItemIdentifier,
 			@"Reset",
 			@"Pause",
@@ -103,7 +113,15 @@
 
 - (NSArray *) toolbarAllowedItemIdentifiers:(NSToolbar *) toolbar
 {
-	return [self toolbarDefaultItemIdentifiers:toolbar];
+	return [NSArray arrayWithObjects:
+			@"Power",
+			@"Reset",
+			@"Pause",
+			@"Interrupt",
+			@"Info",
+			NSToolbarSpaceItemIdentifier,
+			NSToolbarFlexibleSpaceItemIdentifier,
+			nil];
 }
 
 - (void) toggleInspector:(id) sender

@@ -7,3 +7,5 @@
  *
  * OpenEmulator/OpenGL interface.
  */
+
+void oeglDraw();

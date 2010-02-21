@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dml PUBLIC "-//OPENEMULATOR//DTD DML 1.0//EN" "http://www.openemulator.org/DTDs/dml-1.0.dtd">
 <dml version="1.0" label="Apple II" image="Apple II.png" description="The Apple II was the first highly successful mass produced microprocessor product. The Apple II had color and high-resolution graphics modes, sound capabilities and one of two built-in BASIC programming languages." group="Apple II">
-
 <device name="host">
     <component name="events" class="HostEvents">
-        <property name="runTime" value="0.0" />
     </component>
     <component name="audio" class="HostAudio">
+        <property name="runTime" value="0.0" />
+        <property name="isPaused" value="0" />
     </component>
     <component name="video" class="HostVideo">
+        <property name="window" value="-1 -1 640 480" />
     </component>
     <component name="keyboard" class="HostKeyboard">
     </component>

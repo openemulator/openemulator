@@ -65,27 +65,27 @@ static int oepaCallback(const void *inputBuffer,
 		
 		pthread_cond_signal(&(*i)->cond);
 		pthread_mutex_unlock(&(*i)->mutex);
+	}
+	
+	float *in = (float *)inputBuffer;
+	float *out = (float *)outputBuffer;
+	
+	for(int n = 0; n < framesPerBuffer; n++)
+	{
+		static double phase = 0;
 		
-		float *in = (float *)inputBuffer;
-		float *out = (float *)outputBuffer;
+		float value = 0;
+		if (in)
+			value += *in;
 		
-		for(int n = 0; n < framesPerBuffer; n++)
-		{
-			static double phase = 0;
-			
-			float value = 0;
-			if (in)
-				value += *in;
-			
-			//		float value = 0.01 * (rand() & 0xffff) / 65535.0;
-			value += 0.05 * sin(phase);
-			phase += 2 * M_PI * 440 / oepaSampleRate;
-			*out += value;
-			
-			if (in)
-				in += oepaChannelNum;
-			out += oepaChannelNum;
-		}
+		//		float value = 0.01 * (rand() & 0xffff) / 65535.0;
+		value += 0.05 * sin(phase);
+		phase += 2 * M_PI * 440 / oepaSampleRate;
+		*out += value;
+		
+		if (in)
+			in += oepaChannelNum;
+		out += oepaChannelNum;
 	}
 	
 	pthread_mutex_unlock(&oepaMutex);
