@@ -10,6 +10,14 @@
 
 #include "OEComponent.h"
 
+// Messages
+enum
+{
+	APPLEII_EVENTS_SELECT_MAINCPU = COMPONENT_USER,
+	APPLEII_EVENTS_SELECT_AUXCPU,
+	APPLEII_EVENTS_GET_SAMPLEINDEX,
+};
+
 // Receives HOST_AUDIO_BUFFERSTART
 // It is possible to configure one CPU
 // Calls the CPU

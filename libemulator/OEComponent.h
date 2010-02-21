@@ -14,7 +14,7 @@
 #include <string>
 #include <vector>
 
-#define OE_IOCTL_USER_MESSAGES 8
+#define COMPONENT_USER 8
 
 // Messages
 enum {

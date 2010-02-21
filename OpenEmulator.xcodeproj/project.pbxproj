@@ -64,8 +64,6 @@
 		00C8AA0C10103D6A006A5734 /* OSDPower.png in Resources */ = {isa = PBXBuildFile; fileRef = 00C8AA0710103D6A006A5734 /* OSDPower.png */; };
 		00C9C1A9113076A500366C56 /* OEOpenGL.h in Headers */ = {isa = PBXBuildFile; fileRef = 00C9C1A7113076A500366C56 /* OEOpenGL.h */; };
 		00C9C1AA113076A500366C56 /* OEOpenGL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00C9C1A8113076A500366C56 /* OEOpenGL.cpp */; };
-		00C9C1B1113076E800366C56 /* OENcurses.h in Headers */ = {isa = PBXBuildFile; fileRef = 00C9C1AF113076E800366C56 /* OENcurses.h */; };
-		00C9C1B2113076E800366C56 /* OENcurses.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00C9C1B0113076E800366C56 /* OENcurses.cpp */; };
 		00C9C26D1130872200366C56 /* HostAudio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00C9C26B1130872200366C56 /* HostAudio.cpp */; };
 		00C9C26E1130872200366C56 /* HostAudio.h in Headers */ = {isa = PBXBuildFile; fileRef = 00C9C26C1130872200366C56 /* HostAudio.h */; };
 		00C9C2741130886600366C56 /* SSI263A.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00C9C2721130886600366C56 /* SSI263A.cpp */; };
@@ -235,8 +233,6 @@
 		00C8AA0710103D6A006A5734 /* OSDPower.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = OSDPower.png; sourceTree = "<group>"; };
 		00C9C1A7113076A500366C56 /* OEOpenGL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEOpenGL.h; sourceTree = "<group>"; };
 		00C9C1A8113076A500366C56 /* OEOpenGL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEOpenGL.cpp; sourceTree = "<group>"; };
-		00C9C1AF113076E800366C56 /* OENcurses.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OENcurses.h; sourceTree = "<group>"; };
-		00C9C1B0113076E800366C56 /* OENcurses.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OENcurses.cpp; sourceTree = "<group>"; };
 		00C9C26B1130872200366C56 /* HostAudio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HostAudio.cpp; sourceTree = "<group>"; };
 		00C9C26C1130872200366C56 /* HostAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostAudio.h; sourceTree = "<group>"; };
 		00C9C2721130886600366C56 /* SSI263A.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SSI263A.cpp; sourceTree = "<group>"; };
@@ -405,8 +401,6 @@
 				0066C350112F3272001F7A51 /* OEPortaudioC.h */,
 				00C9C1A7113076A500366C56 /* OEOpenGL.h */,
 				00C9C1A8113076A500366C56 /* OEOpenGL.cpp */,
-				00C9C1AF113076E800366C56 /* OENcurses.h */,
-				00C9C1B0113076E800366C56 /* OENcurses.cpp */,
 			);
 			path = cli;
 			sourceTree = "<group>";
@@ -597,7 +591,6 @@
 				0066C352112F3272001F7A51 /* OEPortaudio.h in Headers */,
 				0066C353112F3272001F7A51 /* OEPortaudioC.h in Headers */,
 				00C9C1A9113076A500366C56 /* OEOpenGL.h in Headers */,
-				00C9C1B1113076E800366C56 /* OENcurses.h in Headers */,
 				00C9C26E1130872200366C56 /* HostAudio.h in Headers */,
 				00C9C2751130886600366C56 /* SSI263A.h in Headers */,
 				00C9C30E1130976000366C56 /* HostVideo.h in Headers */,
@@ -735,7 +728,6 @@
 				008BAB43110CA25900B648EF /* OEPackage.cpp in Sources */,
 				0066C351112F3272001F7A51 /* OEPortaudio.cpp in Sources */,
 				00C9C1AA113076A500366C56 /* OEOpenGL.cpp in Sources */,
-				00C9C1B2113076E800366C56 /* OENcurses.cpp in Sources */,
 				00C9C26D1130872200366C56 /* HostAudio.cpp in Sources */,
 				00C9C2741130886600366C56 /* SSI263A.cpp in Sources */,
 				00C9C30D1130976000366C56 /* HostVideo.cpp in Sources */,

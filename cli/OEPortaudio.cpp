@@ -1,12 +1,14 @@
 
 /**
  * OpenEmulator
- * OpenEmulator-portaudio interface
+ * OpenEmulator/portaudio interface
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * OpenEmulator-portaudio interface.
+ * OpenEmulator/portaudio interface.
  */
+
+#include "math.h"
 
 #include <vector>
 
@@ -15,7 +17,7 @@
 #include "OEPortaudio.h"
 #include "HostAudio.h"
 
-#define OEPA_SAMPLERATE 48000;
+#define OEPA_SAMPLERATE 48000.0;
 #define OEPA_CHANNELNUM 2;
 #define OEPA_FRAMESPERBUFFER 512;
 
@@ -33,7 +35,7 @@ typedef struct
 typedef vector<OEPAEmulation *> OEPAEmulations;
 
 bool oepaFullDuplex = false;
-int oepaSampleRate = OEPA_SAMPLERATE;
+double oepaSampleRate = OEPA_SAMPLERATE;
 int oepaChannelNum = OEPA_CHANNELNUM;
 int oepaFramesPerBuffer = OEPA_FRAMESPERBUFFER;
 
@@ -63,15 +65,27 @@ static int oepaCallback(const void *inputBuffer,
 		
 		pthread_cond_signal(&(*i)->cond);
 		pthread_mutex_unlock(&(*i)->mutex);
-	}
-	
-	float *in = (float *)inputBuffer;
-	float *out = (float *)outputBuffer;
-	
-	for(int n = 0; n < framesPerBuffer; n++)
-	{
-		*out++ = (rand() & 0xffff) / 65535.0f * 0.01;
-		*out++ = (rand() & 0xffff) / 65535.0f * 0.01;
+		
+		float *in = (float *)inputBuffer;
+		float *out = (float *)outputBuffer;
+		
+		for(int n = 0; n < framesPerBuffer; n++)
+		{
+			static double phase = 0;
+			
+			float value = 0;
+			if (in)
+				value += *in;
+			
+			//		float value = 0.01 * (rand() & 0xffff) / 65535.0;
+			value += 0.05 * sin(phase);
+			phase += 2 * M_PI * 440 / oepaSampleRate;
+			*out += value;
+			
+			if (in)
+				in += oepaChannelNum;
+			out += oepaChannelNum;
+		}
 	}
 	
 	pthread_mutex_unlock(&oepaMutex);
@@ -79,7 +93,7 @@ static int oepaCallback(const void *inputBuffer,
 	return paContinue;
 }
 
-void *oepaRun(void *arg)
+void *oepaRunEmulation(void *arg)
 {
 	OEPAEmulation *oepaEmulation = (OEPAEmulation *) arg;
 	
@@ -88,6 +102,8 @@ void *oepaRun(void *arg)
 	{
 		// Call renderBuffer
 	//	oepaEmulation->emulation.ioctl("host::audio", 0, &hostAudio);
+		
+		for (int i = 0; i < 100000; i++);
 		
 		pthread_cond_wait(&oepaEmulation->cond, &oepaEmulation->mutex);
 	}
@@ -137,8 +153,7 @@ bool oepaAudioOpen()
 		if (status == paNoError)
 		{
 			status = Pa_OpenDefaultStream(&oepaStream,
-										  oepaFullDuplex ? 
-										  oepaChannelNum : 0,
+										  oepaFullDuplex ? oepaChannelNum : 0,
 										  oepaChannelNum,
 										  paFloat32,
 										  oepaSampleRate,
@@ -226,7 +241,7 @@ OEEmulation *oepaConstruct(string path, string resourcePath)
 		pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
 		pthread_create(&oepaEmulation->thread,
 					   &attr,
-					   oepaRun,
+					   oepaRunEmulation,
 					   (void *) oepaEmulation);
 		
 		pthread_mutex_lock(&oepaMutex);
@@ -336,4 +351,3 @@ extern "C" void c_oepaClose()
 {
 	oepaClose();
 }
-				 

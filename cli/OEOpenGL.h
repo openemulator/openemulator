@@ -1,9 +1,9 @@
-/*
- *  OEOpenGL.h
- *  OpenEmulator
- *
- *  Created by Marc S. Reßl on 20/02/10.
- *  Copyright 2010 ITBA. All rights reserved.
- *
- */
 
+/**
+ * OpenEmulator
+ * OpenEmulator/OpenGL interface
+ * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
+ * Released under the GPL
+ *
+ * OpenEmulator/OpenGL interface.
+ */

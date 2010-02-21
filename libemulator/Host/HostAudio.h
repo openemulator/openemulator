@@ -13,7 +13,7 @@
 // Messages
 enum
 {
-	HOST_AUDIO_RENDERBUFFER = OE_IOCTL_USER_MESSAGES,
+	HOST_AUDIO_RENDERBUFFER = COMPONENT_USER,
 	HOST_AUDIO_GETBUFFER,
 	HOST_AUDIO_SET_PAUSE,
 	HOST_AUDIO_GET_PAUSE,
@@ -38,5 +38,6 @@ typedef struct
 
 class HostAudio : public OEComponent
 {
-
+public:
+	int ioctl(int message, void *data);
 };
