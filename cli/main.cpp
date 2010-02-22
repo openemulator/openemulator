@@ -25,13 +25,12 @@ GLfloat light1_diffuse[] =	{1.0, 0.0, 0.0, 1.0};
 GLfloat light1_position[] =	{1.0, 1.0, 1.0, 0.0};
 GLfloat light2_diffuse[] =	{0.0, 1.0, 0.0, 1.0};
 GLfloat light2_position[] =	{-1.0, -1.0, 1.0, 0.0};
-float s = 0.0;
 GLfloat angle1 = 0.0;
 GLfloat angle2 = 0.0;
 
 void initAnimation()
 {
-	glNewList(1, GL_COMPILE);  /* create ico display list */
+	glNewList(1, GL_COMPILE);
 	glutSolidIcosahedron();
 	glEndList();
 	
@@ -43,6 +42,7 @@ void initAnimation()
 	glLightfv(GL_LIGHT1, GL_POSITION, light1_position);
 	glLightfv(GL_LIGHT2, GL_DIFFUSE, light2_diffuse);
 	glLightfv(GL_LIGHT2, GL_POSITION, light2_position);
+	
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_BLEND);
@@ -64,8 +64,7 @@ void initAnimation()
 
 void updateAnimation()
 {
-	angle1 = (GLfloat) fmod(angle1 + 0.8, 360.0);
-	angle2 = (GLfloat) fmod(angle2 + 1.1, 360.0);
+	angle1 = (GLfloat) fmod(angle1 + 360.0/200, 360.0);
 	glutPostRedisplay();
 }
 
@@ -77,14 +76,13 @@ void drawAnimation()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_LIGHT1);
 	glEnable(GL_LIGHT2);
-	amb[3] = dif[3] = cos(s) / 2.0 + 0.5;
+	amb[3] = dif[3] = 2.5;
 	glMaterialfv(GL_FRONT, GL_AMBIENT, amb);
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, dif);
 	
 	glPushMatrix();
-	glTranslatef(-0.3, -0.3, 0.0);
 	glRotatef(angle1, 1.0, 5.0, 0.0);
-	glCallList(1);        /* render ico display list */
+	glCallList(1);
 	glPopMatrix();
 }
 
@@ -102,12 +100,14 @@ void reshapeFunc(int width, int height)
 
 void keyboardFunc(unsigned char key, int x, int y)
 {
-	
+	// Send ioctl with ASCII key
 }
 
 void mouseFunc(int button, int state, int x, int y)
 {
-	
+	// button: GLUT_LEFT_BUTTON, GLUT_MIDDLE_BUTTON, GLUT_RIGHT_BUTTON
+	// StatE: GLUT_UP or GLUT_DOWN
+	// Send ioctl
 }
 
 void visibilityFunc(int value)
@@ -117,7 +117,31 @@ void visibilityFunc(int value)
 
 void specialFunc(int key, int x, int y)
 {
-	
+	// Send ioctl with special key
+	switch (key)
+	{
+		case GLUT_KEY_F1:
+		case GLUT_KEY_F2:
+		case GLUT_KEY_F3:
+		case GLUT_KEY_F4:
+		case GLUT_KEY_F5:
+		case GLUT_KEY_F6:
+		case GLUT_KEY_F7:
+		case GLUT_KEY_F8:
+		case GLUT_KEY_F9:
+		case GLUT_KEY_F10:
+		case GLUT_KEY_F11:
+		case GLUT_KEY_F12:
+		case GLUT_KEY_LEFT:
+		case GLUT_KEY_UP:
+		case GLUT_KEY_RIGHT:
+		case GLUT_KEY_DOWN:
+		case GLUT_KEY_PAGE_UP:
+		case GLUT_KEY_PAGE_DOWN:
+		case GLUT_KEY_HOME:
+		case GLUT_KEY_END:
+		case GLUT_KEY_INSERT:
+	}
 }
 
 void timerFunc(int value)
