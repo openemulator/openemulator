@@ -11,13 +11,10 @@
 #include "stdio.h"
 #include "math.h"
 
-#ifdef __APPLE__
-#include "GLUT/glut.h"
-#else
-#include "GL/glut.h"
-#endif
+#include "SDL/SDL.h"
+#include "SDL/SDL_opengl.h"
 
-#include "OEPortaudio.h"
+#include "oepa.h"
 
 GLfloat light0_ambient[] =	{0.2, 0.2, 0.2, 1.0};
 GLfloat light0_diffuse[] =	{0.0, 0.0, 0.0, 1.0};
@@ -28,6 +25,7 @@ GLfloat light2_position[] =	{-1.0, -1.0, 1.0, 0.0};
 GLfloat angle1 = 0.0;
 GLfloat angle2 = 0.0;
 
+/*
 void initAnimation()
 {
 	glNewList(1, GL_COMPILE);
@@ -51,14 +49,15 @@ void initAnimation()
 	glLineWidth(0.5);
 	
 	glMatrixMode(GL_PROJECTION);
-	gluPerspective( /* field of view in degree */ 40.0,
-				   /* aspect ratio */ 1.0,
-				   /* Z near */ 1.0, /* Z far */ 10.0);
+	gluPerspective(40.0,
+				   1.0,
+				   1.0,
+				   10.0);
 	glMatrixMode(GL_MODELVIEW);
-	gluLookAt(0.0, 0.0, 5.0,  /* eye is at (0,0,5) */
-			  0.0, 0.0, 0.0,      /* center is at (0,0,0) */
-			  0.0, 1.0, 0.);      /* up is in positive Y direction */
-	glTranslatef(0.0, 0.6, -1.0);
+	gluLookAt(0.0, 0.0, 5.0,
+			  0.0, 0.0, 0.0,
+			  0.0, 1.0, 0.);
+ 	glTranslatef(0.0, 0.6, -1.0);
 	
 }
 
@@ -150,28 +149,58 @@ void timerFunc(int value)
 	updateAnimation();
 	glutTimerFunc(20, timerFunc, 0);
 }
+*/
 
 int main(int argc, char *argv[])
 {
 	oepaOpen();
 	
-	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-	glutCreateWindow("OpenEmulator");
-	glutReshapeWindow(640, 480);
+	int sdlWidth = 640;
+	int sdlHeight = 480;
+	bool sdlFullScreen = false;
 	
-	glutDisplayFunc(displayFunc);
-	glutReshapeFunc(reshapeFunc);
-	glutKeyboardFunc(keyboardFunc);
-	glutMouseFunc(mouseFunc);
-	glutVisibilityFunc(visibilityFunc);
-	glutSpecialFunc(specialFunc);
-	glutTimerFunc(0, timerFunc, 0);
+	SDL_Init(SDL_INIT_TIMER |
+			 SDL_INIT_VIDEO |
+			 SDL_INIT_CDROM |
+			 SDL_INIT_JOYSTICK);
+
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
 	
-	initAnimation();
+	SDL_Surface *videoSurface;
+	videoSurface = SDL_SetVideoMode(sdlWidth,
+									sdlHeight,
+									0,
+									SDL_OPENGL |
+									(sdlFullScreen ? SDL_FULLSCREEN : 0)
+									);
 	
-	glutMainLoop();
+	bool isRunning = true;
+    SDL_Event event;
+    while (isRunning && SDL_WaitEvent(&event))
+	{
+        switch(event.type)
+		{
+			case SDL_USEREVENT:
+//				HandleUserEvents(&event);
+				break;
+			case SDL_KEYDOWN:
+				break;
+			case SDL_MOUSEBUTTONDOWN:
+				break;
+			case SDL_QUIT:
+				isRunning = false;
+				break;
+			default:
+				break;
+        }
+    }
 	
+	SDL_Quit();
 	oepaClose();
+	
 	return 0;
 }

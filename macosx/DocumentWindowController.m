@@ -53,6 +53,8 @@
 	{
 		[item setLabel:NSLocalizedString(@"Power",
 										 "Document toolbar item label")];
+		[item setPaletteLabel:NSLocalizedString(@"Power",
+												"Document toolbar item label")];
 		[item setToolTip:NSLocalizedString(@"Power the emulation on or off.",
 										   "Document toolbar item label")];
 		[item setImage:[NSImage imageNamed:@"TBShutdown.png"]];
@@ -61,7 +63,10 @@
 	}
 	else if ([ident isEqualToString:@"Reset"])
 	{
-		[item setLabel:NSLocalizedString(@"Reset", "Document toolbar item label")];
+		[item setLabel:NSLocalizedString(@"Reset",
+										 "Document toolbar item label")];
+		[item setPaletteLabel:NSLocalizedString(@"Reset",
+												"Document toolbar item label")];
 		[item setToolTip:NSLocalizedString(@"Reset the emulation.",
 										   "Document toolbar item label")];
 		[item setImage:[NSImage imageNamed:@"TBRestart.png"]];
@@ -70,7 +75,12 @@
 	}
 	else if ([ident isEqualToString:@"Pause"])
 	{
-		[item setLabel:NSLocalizedString(@"Pause", "Document toolbar item label")];
+		[item setLabel:NSLocalizedString(@"Pause",
+										 "Document toolbar item label")];
+		[item setPaletteLabel:NSLocalizedString(@"Pause",
+												"Document toolbar item label")];
+		[item setPaletteLabel:NSLocalizedString(@"Pause",
+												"Document toolbar item label")];
 		[item setToolTip:NSLocalizedString(@"Pause or continue the emulation.",
 										   "Document toolbar item label")];
 		[item setImage:[NSImage imageNamed:@"TBSleep.png"]];
@@ -79,7 +89,10 @@
 	}
 	else if ([ident isEqualToString:@"Interrupt"])
 	{
-		[item setLabel:NSLocalizedString(@"Interrupt", "Document toolbar item label")];
+		[item setLabel:NSLocalizedString(@"Interrupt",
+										 "Document toolbar item label")];
+		[item setPaletteLabel:NSLocalizedString(@"Interrupt",
+												"Document toolbar item label")];
 		[item setToolTip:NSLocalizedString(@"Interrupt the emulation.",
 										   "Document toolbar item label")];
 		[item setImage:[NSImage imageNamed:@"TBInterrupt.png"]];
@@ -88,7 +101,10 @@
 	}
 	else if ([ident isEqualToString:@"Info"])
 	{
-		[item setLabel:NSLocalizedString(@"Info", "Document toolbar item label")];
+		[item setLabel:NSLocalizedString(@"Info",
+										 "Document toolbar item label")];
+		[item setPaletteLabel:NSLocalizedString(@"Info",
+												"Document toolbar item label")];
 		[item setToolTip:NSLocalizedString(@"Get Info.",
 										   "Document toolbar item label")];
 		[item setImage:[NSImage imageNamed:@"TBInspector.png"]];

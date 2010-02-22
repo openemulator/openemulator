@@ -14,7 +14,7 @@
 #import "OEEmulation.h"
 #import "OEInfo.h"
 
-#import "OEPortaudio.h"
+#import "oepa.h"
 
 @implementation Document
 

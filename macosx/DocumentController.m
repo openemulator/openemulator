@@ -13,7 +13,8 @@
 #import "Document.h"
 #import "DocumentController.h"
 #import "TemplateChooserController.h"
-#import "OEPortaudioC.h"
+
+#import "oepa_c.h"
 
 @implementation DocumentController
 
