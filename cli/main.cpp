@@ -141,6 +141,7 @@ void specialFunc(int key, int x, int y)
 		case GLUT_KEY_HOME:
 		case GLUT_KEY_END:
 		case GLUT_KEY_INSERT:
+			break;
 	}
 }
 
