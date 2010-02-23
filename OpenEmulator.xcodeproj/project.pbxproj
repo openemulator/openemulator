@@ -104,6 +104,7 @@
 		00E0B06E1132DC2E004DB96D /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0054E3541131BD00006D32D9 /* OpenGL.framework */; };
 		00E0B07B1132DC46004DB96D /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 00E0B07A1132DC46004DB96D /* libxml2.dylib */; };
 		00E0B19C1132DE4D004DB96D /* SDLMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E0B19A1132DE4D004DB96D /* SDLMain.m */; };
+		00E0B1D01132E154004DB96D /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00E0B1CF1132E154004DB96D /* GLUT.framework */; };
 		00EF028D107D9EFB00FE378D /* VerticallyCenteredCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00EF028C107D9EFB00FE378D /* VerticallyCenteredCell.m */; };
 		00F0ED6711028C8800208090 /* DiskImage525.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000F66390FF8368F00C8AF23 /* DiskImage525.icns */; };
 		00F86BE3100FD4F60016867D /* IPSoundMax.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BE1100FD4F60016867D /* IPSoundMax.png */; };
@@ -124,7 +125,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 006EECA30FCA5C31003D2C8D /* emulator */;
+			remoteGlobalIDString = 006EECA30FCA5C31003D2C8D;
 			remoteInfo = emulator;
 		};
 /* End PBXContainerItemProxy section */
@@ -277,6 +278,7 @@
 		00E0B07A1132DC46004DB96D /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = /usr/lib/libxml2.dylib; sourceTree = "<absolute>"; };
 		00E0B19A1132DE4D004DB96D /* SDLMain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDLMain.m; sourceTree = "<group>"; };
 		00E0B19B1132DE4D004DB96D /* SDLMain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDLMain.h; sourceTree = "<group>"; };
+		00E0B1CF1132E154004DB96D /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = /System/Library/Frameworks/GLUT.framework; sourceTree = "<absolute>"; };
 		00E2A84D1053290200910B53 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = /usr/lib/libxml2.dylib; sourceTree = "<absolute>"; };
 		00E8A393108CCAA200D0A137 /* devices */ = {isa = PBXFileReference; lastKnownFileType = folder; path = devices; sourceTree = "<group>"; };
 		00EF028B107D9EFB00FE378D /* VerticallyCenteredCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VerticallyCenteredCell.h; sourceTree = "<group>"; };
@@ -312,6 +314,7 @@
 				00E0B06C1132DC25004DB96D /* libportaudio.a in Frameworks */,
 				00E0B06D1132DC2E004DB96D /* SDL.framework in Frameworks */,
 				00E0B06E1132DC2E004DB96D /* OpenGL.framework in Frameworks */,
+				00E0B1D01132E154004DB96D /* GLUT.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -407,6 +410,7 @@
 		0054E33E1131BCC9006D32D9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				00E0B1CF1132E154004DB96D /* GLUT.framework */,
 				00E0B0671132DC08004DB96D /* libemulator.a */,
 				00E0B0691132DC11004DB96D /* libportaudio.a */,
 				00E0B07A1132DC46004DB96D /* libxml2.dylib */,

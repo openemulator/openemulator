@@ -8,4 +8,6 @@
  * OpenEmulator/OpenGL interface.
  */
 
+void oeglOpen();
 void oeglDraw();
+void oeglClose();

@@ -202,6 +202,30 @@ bool oepaReopen()
 	return status;
 }
 
+void oepaSetSampleRate(double value)
+{
+	oepaSampleRate = value;
+	
+	if (oepaAudioIsOpen())
+		oepaReopen();
+}
+
+void oepaSetFramesPerBuffer(int value)
+{
+	oepaFramesPerBuffer = value;
+	
+	if (oepaAudioIsOpen())
+		oepaReopen();
+}
+
+void oepaSetChannelNum(int value)
+{
+	oepaChannelNum = value;
+	
+	if (oepaAudioIsOpen())
+		oepaReopen();
+}
+
 void oepaSetFullDuplex(bool value)
 {
 	oepaFullDuplex = value;

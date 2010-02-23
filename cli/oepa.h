@@ -12,6 +12,9 @@
 
 #include "OEEmulation.h"
 
+void oepaSetSampleRate(double value);
+void oepaSetFramesPerBuffer(int value);
+void oepaSetChannelNum(int value);
 void oepaSetFullDuplex(bool value);
 
 void oepaOpen();
