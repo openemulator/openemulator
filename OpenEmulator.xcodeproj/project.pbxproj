@@ -441,6 +441,7 @@
 			isa = PBXGroup;
 			children = (
 				0054E6701131BF66006D32D9 /* code */,
+				006EEC9A0FCA5BEA003D2C8D /* libemulator */,
 				0054E33E1131BCC9006D32D9 /* Frameworks */,
 			);
 			name = oesdl;
@@ -467,6 +468,7 @@
 				0072B1DC10E578E500AC7EBD /* OEEmulation.cpp */,
 			);
 			name = libemulator;
+			path = ..;
 			sourceTree = "<group>";
 		};
 		00C9C26A1130872200366C56 /* Host */ = {
@@ -517,7 +519,6 @@
 		2A37F4AAFDCFA73011CA2CEA /* OpenEmulator */ = {
 			isa = PBXGroup;
 			children = (
-				006EEC9A0FCA5BEA003D2C8D /* libemulator */,
 				000A78A50FBA464600A0F12E /* OpenEmulator */,
 				0055C1EC1123AC0500D4CFFC /* oesdl */,
 				19C28FB0FE9D524F11CA2CBB /* Products */,
