@@ -1,10 +1,11 @@
-/*
- *  HostEvents.h
- *  OpenEmulator
+
+/**
+ * libemulator
+ * Host System
+ * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
+ * Released under the GPL
  *
- *  Created by Marc S. Reßl on 20/02/10.
- *  Copyright 2010 ITBA. All rights reserved.
- *
+ * Controls host system events
  */
 
 #include "OEComponent.h"
