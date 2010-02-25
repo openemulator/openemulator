@@ -326,10 +326,11 @@ typedef struct
 
 typedef struct
 {
-	int ;
 	int usageId;
+	bool keyState;
+	int unicode;
+	int modifierState;
 } OEIoctlKey;
-
 
 // ioctl's for:
 // * next frame
