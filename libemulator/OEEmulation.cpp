@@ -548,7 +548,6 @@ void OEEmulation::destroyComponent(xmlNodePtr node, OERef deviceRef)
 	string componentName = getXMLProperty(node, "name");
 	
 	string stringRef = deviceRef.getStringRef(componentName);
-	
 	if (!components.count(stringRef))
 		return;
 	components.erase(stringRef);

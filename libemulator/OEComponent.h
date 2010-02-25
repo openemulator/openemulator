@@ -11,10 +11,17 @@
 #ifndef _OECOMPONENT_H
 #define _OECOMPONENT_H
 
-#include <string>
-#include <vector>
-
-#define COMPONENT_USER 8
+// Messages
+enum {
+	COMPONENT_SET_CONNECTION,
+	COMPONENT_SET_PROPERTY,
+	COMPONENT_GET_PROPERTY,
+	COMPONENT_SET_DATA,
+	COMPONENT_GET_DATA,
+	COMPONENT_SET_RESOURCE,
+	COMPONENT_HID_EVENT,
+	COMPONENT_USER,
+};
 
 #define HID_S_POWERDOWN		0x81
 #define HID_S_SLEEP			0x82
@@ -273,15 +280,8 @@
 #define HID_K_RIGHTALT		0xe6
 #define HID_K_RIGHTGUI		0xe7
 
-// Messages
-enum {
-	COMPONENT_SET_CONNECTION = 0,
-	COMPONENT_SET_PROPERTY,
-	COMPONENT_GET_PROPERTY,
-	COMPONENT_SET_DATA,
-	COMPONENT_GET_DATA,
-	COMPONENT_SET_RESOURCE,
-};
+#include <string>
+#include <vector>
 
 using namespace std;
 
@@ -297,7 +297,9 @@ public:
 	
 	void addObserver(class OEComponent *component);
 	void removeObserver(class OEComponent *component);
-	virtual void onNotification(class OEComponent *component, int message, void *data);
+	virtual void onNotification(class OEComponent *component,
+								int message,
+								void *data);
 	
 protected:
 	void postNotification(int message, void *data);
@@ -330,7 +332,14 @@ typedef struct
 	bool keyState;
 	int unicode;
 	int modifierState;
-} OEIoctlKey;
+} OEIoctlHID;
+
+typedef struct
+{
+	OEComponent *component;
+	int lowAddress;
+	int highAddress;
+} OEIoctlMemoryMap;
 
 // ioctl's for:
 // * next frame

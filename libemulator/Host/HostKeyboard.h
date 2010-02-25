@@ -1,13 +1,10 @@
-/*
- *  HostKeyboard.h
- *  OpenEmulator
+
+/**
+ * libemulator
+ * Host Keyboard
+ * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
+ * Released under the GPL
  *
- *  Created by Marc S. Reßl on 20/02/10.
- *  Copyright 2010 ITBA. All rights reserved.
- *
+ * Controls host keyboard events
  */
 
-// Distributes HOST_EVENT_KEY_DOWN
-// Distributes HOST_EVENT_KEY_UP
-// Keys are made up of a standard USB code
-// and a UNICODE mapping (non-zero if defined)

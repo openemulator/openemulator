@@ -39,13 +39,10 @@
 		00B703881135ACA7005E4B65 /* OEInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B703791135AC91005E4B65 /* OEInfo.cpp */; };
 		00B7038A1135ACAA005E4B65 /* OERef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B7037D1135AC91005E4B65 /* OERef.cpp */; };
 		00B7038E1135ACAD005E4B65 /* OEPackage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B7037B1135AC91005E4B65 /* OEPackage.cpp */; };
-		00B7039F1135ACBD005E4B65 /* AppleIIEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B703901135ACBD005E4B65 /* AppleIIEvents.cpp */; };
 		00B703A11135ACBD005E4B65 /* SSI263A.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B703931135ACBD005E4B65 /* SSI263A.cpp */; };
-		00B703A21135ACBD005E4B65 /* SSI263A.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B703941135ACBD005E4B65 /* SSI263A.h */; };
 		00B703A31135ACBD005E4B65 /* HostAudio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B703971135ACBD005E4B65 /* HostAudio.cpp */; };
 		00B703A71135ACBD005E4B65 /* HostKeyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B7039B1135ACBD005E4B65 /* HostKeyboard.cpp */; };
 		00B703A91135ACBD005E4B65 /* HostVideo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B7039D1135ACBD005E4B65 /* HostVideo.cpp */; };
-		00B703B81135AD16005E4B65 /* HostSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B703B61135AD16005E4B65 /* HostSystem.h */; };
 		00B703B91135AD16005E4B65 /* HostSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B703B71135AD16005E4B65 /* HostSystem.cpp */; };
 		00B974B410701DDA00BD1402 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = 00B974AD10701DCD00BD1402 /* sounds */; };
 		00BADDC51100EDC600EB0344 /* ConnectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00BADD451100BE8300EB0344 /* ConnectorViewController.m */; };
@@ -109,6 +106,19 @@
 		00E0B1D01132E154004DB96D /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00E0B1CF1132E154004DB96D /* GLUT.framework */; };
 		00EF028D107D9EFB00FE378D /* VerticallyCenteredCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00EF028C107D9EFB00FE378D /* VerticallyCenteredCell.m */; };
 		00F0ED6711028C8800208090 /* DiskImage525.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000F66390FF8368F00C8AF23 /* DiskImage525.icns */; };
+		00F1AEFC11370EF5006642AD /* AppleIISystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00F1AEFA11370EF5006642AD /* AppleIISystem.cpp */; };
+		00F1AF0011370EFE006642AD /* AppleIIMMU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00F1AEFE11370EFE006642AD /* AppleIIMMU.cpp */; };
+		00F1AF0611370FD2006642AD /* DAC1bit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00F1AF0411370FD2006642AD /* DAC1bit.cpp */; };
+		00F1AF0A11370FE1006642AD /* AppleIISpeaker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00F1AF0811370FE1006642AD /* AppleIISpeaker.cpp */; };
+		00F1AF0E11370FEB006642AD /* AppleIIMemory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00F1AF0C11370FEB006642AD /* AppleIIMemory.cpp */; };
+		00F1AF211137107C006642AD /* MOS6502.h in Headers */ = {isa = PBXBuildFile; fileRef = 00F1AF1F1137107C006642AD /* MOS6502.h */; };
+		00F1AF221137107C006642AD /* MOS6502.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00F1AF201137107C006642AD /* MOS6502.cpp */; };
+		00F1AF2511371084006642AD /* W65C02.h in Headers */ = {isa = PBXBuildFile; fileRef = 00F1AF2311371084006642AD /* W65C02.h */; };
+		00F1AF2611371084006642AD /* W65C02.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00F1AF2411371084006642AD /* W65C02.cpp */; };
+		00F1AF29113710A5006642AD /* W65C816S.h in Headers */ = {isa = PBXBuildFile; fileRef = 00F1AF27113710A5006642AD /* W65C816S.h */; };
+		00F1AF2A113710A5006642AD /* W65C816S.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00F1AF28113710A5006642AD /* W65C816S.cpp */; };
+		00F1AF2D1137119A006642AD /* Z80.h in Headers */ = {isa = PBXBuildFile; fileRef = 00F1AF2B1137119A006642AD /* Z80.h */; };
+		00F1AF2E1137119A006642AD /* Z80.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00F1AF2C1137119A006642AD /* Z80.cpp */; };
 		00F86BE3100FD4F60016867D /* IPSoundMax.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BE1100FD4F60016867D /* IPSoundMax.png */; };
 		00F86BE4100FD4F60016867D /* IPSoundMin.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BE2100FD4F60016867D /* IPSoundMin.png */; };
 		00FE0C171095371B00B92AB7 /* ChooserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00FE0C161095371B00B92AB7 /* ChooserViewController.m */; };
@@ -216,8 +226,6 @@
 		00B7037B1135AC91005E4B65 /* OEPackage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEPackage.cpp; sourceTree = "<group>"; };
 		00B7037C1135AC91005E4B65 /* OEPackage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEPackage.h; sourceTree = "<group>"; };
 		00B7037D1135AC91005E4B65 /* OERef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OERef.cpp; sourceTree = "<group>"; };
-		00B703901135ACBD005E4B65 /* AppleIIEvents.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleIIEvents.cpp; sourceTree = "<group>"; };
-		00B703911135ACBD005E4B65 /* AppleIIEvents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleIIEvents.h; sourceTree = "<group>"; };
 		00B703931135ACBD005E4B65 /* SSI263A.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SSI263A.cpp; sourceTree = "<group>"; };
 		00B703941135ACBD005E4B65 /* SSI263A.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSI263A.h; sourceTree = "<group>"; };
 		00B703971135ACBD005E4B65 /* HostAudio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HostAudio.cpp; sourceTree = "<group>"; };
@@ -293,6 +301,24 @@
 		00F00A020FD5838D00C506AD /* IPExpansionsSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPExpansionsSel.png; sourceTree = "<group>"; };
 		00F00A030FD5838D00C506AD /* IPPorts.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPPorts.png; sourceTree = "<group>"; };
 		00F00A040FD5838D00C506AD /* IPPortsSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPPortsSel.png; sourceTree = "<group>"; };
+		00F1AEF911370EF5006642AD /* AppleIISystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleIISystem.h; sourceTree = "<group>"; };
+		00F1AEFA11370EF5006642AD /* AppleIISystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleIISystem.cpp; sourceTree = "<group>"; };
+		00F1AEFD11370EFE006642AD /* AppleIIMMU.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleIIMMU.h; sourceTree = "<group>"; };
+		00F1AEFE11370EFE006642AD /* AppleIIMMU.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleIIMMU.cpp; sourceTree = "<group>"; };
+		00F1AF0311370FD2006642AD /* DAC1bit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DAC1bit.h; sourceTree = "<group>"; };
+		00F1AF0411370FD2006642AD /* DAC1bit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DAC1bit.cpp; sourceTree = "<group>"; };
+		00F1AF0711370FE1006642AD /* AppleIISpeaker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleIISpeaker.h; sourceTree = "<group>"; };
+		00F1AF0811370FE1006642AD /* AppleIISpeaker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleIISpeaker.cpp; sourceTree = "<group>"; };
+		00F1AF0B11370FEB006642AD /* AppleIIMemory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleIIMemory.h; sourceTree = "<group>"; };
+		00F1AF0C11370FEB006642AD /* AppleIIMemory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleIIMemory.cpp; sourceTree = "<group>"; };
+		00F1AF1F1137107C006642AD /* MOS6502.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOS6502.h; sourceTree = "<group>"; };
+		00F1AF201137107C006642AD /* MOS6502.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MOS6502.cpp; sourceTree = "<group>"; };
+		00F1AF2311371084006642AD /* W65C02.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = W65C02.h; sourceTree = "<group>"; };
+		00F1AF2411371084006642AD /* W65C02.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = W65C02.cpp; sourceTree = "<group>"; };
+		00F1AF27113710A5006642AD /* W65C816S.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = W65C816S.h; sourceTree = "<group>"; };
+		00F1AF28113710A5006642AD /* W65C816S.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = W65C816S.cpp; sourceTree = "<group>"; };
+		00F1AF2B1137119A006642AD /* Z80.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Z80.h; sourceTree = "<group>"; };
+		00F1AF2C1137119A006642AD /* Z80.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Z80.cpp; sourceTree = "<group>"; };
 		00F86BE1100FD4F60016867D /* IPSoundMax.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPSoundMax.png; sourceTree = "<group>"; };
 		00F86BE2100FD4F60016867D /* IPSoundMin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPSoundMin.png; sourceTree = "<group>"; };
 		00FE0C00109534CE00B92AB7 /* ChooserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChooserViewController.h; sourceTree = "<group>"; };
@@ -454,7 +480,6 @@
 			children = (
 				00B7038F1135ACBD005E4B65 /* AppleII */,
 				00B703921135ACBD005E4B65 /* Common */,
-				00B703951135ACBD005E4B65 /* Components */,
 				00B703961135ACBD005E4B65 /* Host */,
 				00B703721135AC91005E4B65 /* OERef.h */,
 				00B703731135AC91005E4B65 /* OEComponent.cpp */,
@@ -475,8 +500,14 @@
 		00B7038F1135ACBD005E4B65 /* AppleII */ = {
 			isa = PBXGroup;
 			children = (
-				00B703901135ACBD005E4B65 /* AppleIIEvents.cpp */,
-				00B703911135ACBD005E4B65 /* AppleIIEvents.h */,
+				00F1AEF911370EF5006642AD /* AppleIISystem.h */,
+				00F1AEFA11370EF5006642AD /* AppleIISystem.cpp */,
+				00F1AEFD11370EFE006642AD /* AppleIIMMU.h */,
+				00F1AEFE11370EFE006642AD /* AppleIIMMU.cpp */,
+				00F1AF0711370FE1006642AD /* AppleIISpeaker.h */,
+				00F1AF0811370FE1006642AD /* AppleIISpeaker.cpp */,
+				00F1AF0B11370FEB006642AD /* AppleIIMemory.h */,
+				00F1AF0C11370FEB006642AD /* AppleIIMemory.cpp */,
 			);
 			path = AppleII;
 			sourceTree = "<group>";
@@ -486,15 +517,18 @@
 			children = (
 				00B703931135ACBD005E4B65 /* SSI263A.cpp */,
 				00B703941135ACBD005E4B65 /* SSI263A.h */,
+				00F1AF0311370FD2006642AD /* DAC1bit.h */,
+				00F1AF0411370FD2006642AD /* DAC1bit.cpp */,
+				00F1AF1F1137107C006642AD /* MOS6502.h */,
+				00F1AF201137107C006642AD /* MOS6502.cpp */,
+				00F1AF2311371084006642AD /* W65C02.h */,
+				00F1AF2411371084006642AD /* W65C02.cpp */,
+				00F1AF27113710A5006642AD /* W65C816S.h */,
+				00F1AF28113710A5006642AD /* W65C816S.cpp */,
+				00F1AF2B1137119A006642AD /* Z80.h */,
+				00F1AF2C1137119A006642AD /* Z80.cpp */,
 			);
 			path = Common;
-			sourceTree = "<group>";
-		};
-		00B703951135ACBD005E4B65 /* Components */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Components;
 			sourceTree = "<group>";
 		};
 		00B703961135ACBD005E4B65 /* Host */ = {
@@ -630,8 +664,10 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00B703A21135ACBD005E4B65 /* SSI263A.h in Headers */,
-				00B703B81135AD16005E4B65 /* HostSystem.h in Headers */,
+				00F1AF211137107C006642AD /* MOS6502.h in Headers */,
+				00F1AF2511371084006642AD /* W65C02.h in Headers */,
+				00F1AF29113710A5006642AD /* W65C816S.h in Headers */,
+				00F1AF2D1137119A006642AD /* Z80.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -791,12 +827,20 @@
 				00B703881135ACA7005E4B65 /* OEInfo.cpp in Sources */,
 				00B7038A1135ACAA005E4B65 /* OERef.cpp in Sources */,
 				00B7038E1135ACAD005E4B65 /* OEPackage.cpp in Sources */,
-				00B7039F1135ACBD005E4B65 /* AppleIIEvents.cpp in Sources */,
 				00B703A11135ACBD005E4B65 /* SSI263A.cpp in Sources */,
 				00B703A31135ACBD005E4B65 /* HostAudio.cpp in Sources */,
 				00B703A71135ACBD005E4B65 /* HostKeyboard.cpp in Sources */,
 				00B703A91135ACBD005E4B65 /* HostVideo.cpp in Sources */,
 				00B703B91135AD16005E4B65 /* HostSystem.cpp in Sources */,
+				00F1AEFC11370EF5006642AD /* AppleIISystem.cpp in Sources */,
+				00F1AF0011370EFE006642AD /* AppleIIMMU.cpp in Sources */,
+				00F1AF0611370FD2006642AD /* DAC1bit.cpp in Sources */,
+				00F1AF0A11370FE1006642AD /* AppleIISpeaker.cpp in Sources */,
+				00F1AF0E11370FEB006642AD /* AppleIIMemory.cpp in Sources */,
+				00F1AF221137107C006642AD /* MOS6502.cpp in Sources */,
+				00F1AF2611371084006642AD /* W65C02.cpp in Sources */,
+				00F1AF2A113710A5006642AD /* W65C816S.cpp in Sources */,
+				00F1AF2E1137119A006642AD /* Z80.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

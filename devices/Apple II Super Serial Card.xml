@@ -14,7 +14,7 @@
     <setting ref="card.interrupts" type="checkbox" label="Interrupts" />
     <setting ref="card.charactersPerLine" type="option" options="40,72,80,132" label="Characters Per Line" />
     <setting ref="card.delayAfterCR" type="checkbox" label="Delay after CR" />
-    <component name="card" class="AppleDiskIIInterfaceCard">
+    <component name="card" class="AppleIISuperSerialCard">
         <connection name="port" ref="" />
         <connection name="rom" ref="rom" />
 		<property name="mode" value="0" />
@@ -27,7 +27,7 @@
 		<property name="charactersPerLine" value="0" />
 		<property name="delayAfterCR" value="0" />
     </component>
-	<component name="rom" class="AppleIIInterfaceROM">
-        <resource name="romImage" src="roms/Apple II Super Serial Card ROM.bin" />
+	<component name="rom" class="ROM">
+        <resource name="memoryImage" src="roms/Apple II Super Serial Card ROM.bin" />
     </component>
 </device></dml>

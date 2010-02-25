@@ -2,7 +2,7 @@
 <!DOCTYPE dml PUBLIC "-//OPENEMULATOR//DTD DML 1.0//EN" "http://www.openemulator.org/DTDs/dml-1.0.dtd">
 <dml version="1.0" label="Apple II" image="Apple II.png" description="The Apple II was the first highly successful mass produced microprocessor product. The Apple II had color and high-resolution graphics modes, sound capabilities and one of two built-in BASIC programming languages." group="Apple II">
 <device name="host">
-    <component name="events" class="HostEvents">
+    <component name="system" class="HostSystem">
     </component>
     <component name="audio" class="HostAudio">
         <property name="runTime" value="0.0" />
@@ -41,8 +41,8 @@
     <inlet ref="videoGen.charROMSocket" type="expansion" category="appleiicharrom" label="Character ROM Socket" image="Apple II Character ROM Socket.png" />
     <inlet ref="rom.socket" type="appleiirom" category="expansion" label="ROM Socket" image="Apple II ROM Socket.png" />
     <inlet ref="events.cpuSocket" type="appleiicpu" category="expansion" label="CPU Socket" image="Apple II CPU Chip Socket.png" />
-    <component name="events" class="AppleIIEvents">
-        <connection name="hostEvents" ref="host::events" />
+    <component name="system" class="AppleIISystem">
+        <connection name="hostSystem" ref="host::system" />
         <connection name="cpu" ref="cpu" />
         <connection name="cpuSocket" ref="" />
         <connection name="secondaryCPU" ref="" />
@@ -50,10 +50,7 @@
         <property name="cycleClockInc" value="14" />
         <property name="scanlineClockInc" value="2" />
     </component>
-    <component name="interrupts" class="AppleIIInterrupts">
-        <connection name="cpu" ref="cpu" />
-    </component>
-    <component name="cpu" class="CPUMOS6502">
+    <component name="cpu" class="MOS6502">
         <connection name="mmu" ref="mmu" />
         <property name="A" value="0" />
         <property name="X" value="0" />
@@ -65,10 +62,11 @@
     <component name="mmu" class="AppleIIMMU">
         <connection name="video" ref="video" />
     </component>
-    <component name="memory" class="AppleIIMemory">
+    <component name="memory" class="RAM">
         <connection name="mmu" ref="mmu" />
-        <property name="memorySize" value="49152" />
-        <data name="memory" src="${DEVICE_NAME}.bin" />
+        <property name="map" value="0" />
+        <property name="size" value="49152" />
+        <data name="image" src="${DEVICE_NAME}.bin" />
     </component>
     <component name="iou" class="AppleIIIOU">
         <connection name="mmu" ref="mmu" />
@@ -83,14 +81,15 @@
         <connection name="slot6" ref="" />
         <connection name="slot7" ref="" />
     </component>
-    <component name="slotMemory" class="AppleIISlotMemory">
+    <component name="cardMemory" class="AppleIICardMemory">
         <connection name="mmu" ref="mmu" />
         <connection name="video" ref="video" />
     </component>
-    <component name="rom" class="AppleIIROM">
+    <component name="rom" class="ROM">
         <connection name="mmu" ref="mmu" />
         <connection name="socket" ref="" />
-        <resource name="romImage" src="roms/Apple II ROM.bin" />
+        <property name="memoryOffset" value="d000" />
+        <resource name="memoryImage" src="roms/Apple II ROM.bin" />
     </component>
     <component name="keyboard" class="AppleIIKeyboard">
         <connection name="hostKeyboard" ref="host::keyboard" />

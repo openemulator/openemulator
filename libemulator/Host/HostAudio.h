@@ -20,13 +20,7 @@ enum
 	HOST_AUDIO_GET_RUNTIME,
 };
 
-// Notifications
-enum
-{
-	HOST_AUDIO_BUFFERSTART,
-	HOST_AUDIO_BUFFEREND,
-};
-
+// Types
 typedef struct
 {
 	float *inputData;
@@ -35,6 +29,13 @@ typedef struct
 	int frameNum;
 	int channelNum;
 } HostAudioBuffer;
+
+// Notifications
+enum
+{
+	HOST_AUDIO_BUFFERSTART,
+	HOST_AUDIO_BUFFEREND,
+};
 
 class HostAudio : public OEComponent
 {

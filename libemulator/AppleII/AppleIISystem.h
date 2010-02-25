@@ -1,11 +1,11 @@
 
 /**
  * libemulator
- * Apple II Events
+ * Apple II System
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls Apple II events
+ * Controls an Apple II system
  */
 
 #include "OEComponent.h"
