@@ -216,6 +216,16 @@ void sdlHandleKeyboardEvent(bool isKeyDown, SDL_keysym keysym)
 	int usbUsageId = 0;
 	if (sym < 512)
 		usbUsageId = sdlKeyTable[sym];
+	
+	if ((sym == SDLK_CAPSLOCK) || (sym == SDLK_NUMLOCK) || (sym == SDLK_SCROLLOCK))
+	{
+		isKeyDown = true;
+		printf("kd:%d scan:%02x sym:%02x usb:%02x\n", isKeyDown, scan, sym, 
+			   usbUsageId);
+		
+		isKeyDown = false;
+	}
+		
 	printf("kd:%d scan:%02x sym:%02x usb:%02x\n", isKeyDown, scan, sym, usbUsageId);
 }
 
