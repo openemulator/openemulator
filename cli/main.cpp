@@ -314,7 +314,7 @@ int main(int argc, char *argv[])
 				about();
 				return 0;
 			default:
-				printf("Unknown option '-%c'\n");
+				printf("Unknown option '-%c'\n", c);
 				return 0;				
 		}
 	}

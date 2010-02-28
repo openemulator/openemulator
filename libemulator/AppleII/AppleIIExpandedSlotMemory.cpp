@@ -15,11 +15,11 @@ int AppleIIExpandedSlotMemory::ioctl(int message, void *data)
 	switch(message)
 	{
 		case OEIOCTL_CONNECT:
-			OEIoctlConnection *conn = (OEIoctlConnection *) data;
-			if (conn->name == "floatingBus")
-				floatingBus = conn->component;
-			else if (conn->name == "expandedSlotMemory")
-				expandedSlotMemory = conn->component;
+			OEIoctlConnection *connection = (OEIoctlConnection *) data;
+			if (connection->name == "floatingBus")
+				floatingBus = connection->component;
+			else if (connection->name == "expandedSlotMemory")
+				expandedSlotMemory = connection->component;
 	}
 	
 	return 0;

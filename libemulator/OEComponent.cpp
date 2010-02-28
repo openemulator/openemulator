@@ -8,6 +8,8 @@
  * Component type
  */
 
+#include <sstream>
+
 #include "OEComponent.h"
 
 OEComponent::OEComponent()
@@ -60,4 +62,16 @@ void OEComponent::postNotification(int message, void *data)
 		 iterator != observers.end();
 		 iterator++)
 		(*iterator)->onNotification(this, message, data);
+}
+
+int OEComponent::intValue(string value)
+{
+	if (value.substr(0, 2) == "0x")
+	{
+		unsigned int i;   
+		std::stringstream ss;
+		ss << std::hex << value.substr(2);
+		ss >> i;
+	}
+	return atoi(value.c_str());
 }

@@ -10,6 +10,13 @@
 
 #include "AppleIISlotMemory.h"
 
+void AppleIISlotMemory::setSlot(int index, OEComponent *slotComponent)
+{
+	// Send mmu and floating bus to slot
+	
+	// Retrieve the slot device io, memory and expanded memory areas
+}
+
 int AppleIISlotMemory::ioctl(int message, void *data)
 {
 	switch(message)
@@ -20,6 +27,8 @@ int AppleIISlotMemory::ioctl(int message, void *data)
 				floatingBus = conn->component;
 			else if (conn->name == "expandedSlotMemory")
 				expandedSlotMemory = conn->component;
+			else if (conn->name == "slot0")
+				setSlot(0, conn->component);
 	}
 	
 	return 0;
@@ -28,15 +37,19 @@ int AppleIISlotMemory::ioctl(int message, void *data)
 int AppleIISlotMemory::read(int address)
 {
 	int index = (address >> 12) & 0x7;
-	connectionMessage.component = slotMemory[index];
+	OEComponent *component = slotMemoryMap[index];
+	
+	connectionMessage.component = component;
 	expandedSlotMemory->ioctl(OEIOCTL_CONNECT, &connectionMessage);
-	return slotMemory[index]->read(address);
+	return component->read(address);
 }
 
 void AppleIISlotMemory::write(int address, int value)
 {
 	int index = (address >> 12) & 0x7;
-	connectionMessage.component = slotMemory[index];
+	OEComponent *component = slotMemoryMap[index];
+	
+	connectionMessage.component = component;
 	expandedSlotMemory->ioctl(OEIOCTL_CONNECT, &connectionMessage);
-	expandedSlotMemory->write((address >> 12) & 0x7, value);
+	component->write(address, value);
 }

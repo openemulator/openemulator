@@ -10,12 +10,12 @@
 
 #include "OEComponent.h"
 
-typedef struct 
+typedef struct
 {
-	int index;
-	OEComponent *slotMemory;
-	OEComponent *expandedSlotMemory;
-} SlotMemoryMessage;
+	OEComponent *slotIo;			// Get slot's io
+	OEComponent *slotMemory;		// Get slot's memory
+	OEComponent *expandedSlotMemory;// Get slot's expanded memory 
+} SlotMemoryQuery;
 
 class AppleIISlotMemory : public OEComponent
 {
@@ -25,8 +25,13 @@ public:
 	void write(int address, int value);
 	
 private:
+	OEComponent *floatingBus;
 	OEComponent *expandedSlotMemory;
-	 *slots[8];
+	
+	OEComponent *slotMemoryMap[8];
+	OEComponent *expandedSlotMemoryMap[8];
 	
 	OEIoctlConnection connectionMessage;
+	
+	void setSlot(int index, OEComponent *slotComponent);
 };

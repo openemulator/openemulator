@@ -28,9 +28,43 @@
 </device>
 
 <device name="dev0" label="Apple I">
-    <inlet ref="iou.slotP" type="appleislot" category="expansion" label="Slot P" image="Apple I Slot.png" />
-    <inlet ref="iou.slotQ" type="appleislot" category="expansion" label="Slot Q" image="Apple I Slot.png" />
-    <inlet ref="iou.slotR" type="appleislot" category="expansion" label="Slot R" image="Apple I Slot.png" />
+    <inlet ref="video.monitor" type="appleiimonitor" category="peripheral" label="Video Connector" image="Apple II Video Connector.png" />
+    <inlet ref="iou.cassette" type="appleislot" category="expansion" label="Slot P" image="Apple I Slot.png" />
+    <inlet ref="iou.slot1" type="appleislot" category="expansion" label="Slot 1" image="Apple I Slot.png" />
+    <inlet ref="iou.slot2" type="appleislot" category="expansion" label="Slot 2" image="Apple I Slot.png" />
+    <inlet ref="iou.slot3" type="appleislot" category="expansion" label="Slot 3" image="Apple I Slot.png" />
+    <component name="system" class="AppleISystem">
+        <connection name="hostSystem" ref="host::system" />
+        <connection name="cpu" ref="cpu" />
+        <connection name="cpuSocket" ref="" />
+    </component>
+    <component name="cpu" class="MOS6502">
+        <connection name="memory" ref="mmu" />
+        <property name="a" value="0" />
+        <property name="x" value="0" />
+        <property name="y" value="0" />
+        <property name="s" value="0" />
+        <property name="p" value="0" />
+        <property name="pc" value="0" />
+    </component>
+    <component name="ram" class="RAM">
+        <property name="offset" value="0x0000" />
+        <property name="size" value="0xc000" />
+        <data name="image" src="${DEVICE_NAME}.bin" />
+    </component>
+    <component name="pia" class="PIA6821">
+    </component>
+    <component name="rom" class="ROM">
+        <connection name="mmu" ref="mmu" />
+        <property name="offset" value="0xd000" />
+        <resource name="image" src="roms/Apple I ROM.bin" />
+    </component>
+    <component name="mmu" class="MMU">
+        <connection name="floatingBus" ref="floatingBus" />
+        <connection name="ram" ref="ram" />
+        <connection name="pia" ref="pia" />
+        <connection name="rom" ref="rom" />
+    </component>
 </device>
 
 </dml>
