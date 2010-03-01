@@ -47,12 +47,26 @@
         <property name="p" value="0" />
         <property name="pc" value="0" />
     </component>
-    <component name="ram" class="RAM">
+    <component name="lowMemory" class="RAM">
         <property name="offset" value="0x0000" />
-        <property name="size" value="0xc000" />
+        <property name="size" value="0x1000" />
+        <data name="image" src="${DEVICE_NAME}.bin" />
+    </component>
+    <component name="highMemory" class="RAM">
+        <property name="offset" value="0xe000" />
+        <property name="size" value="0x1000" />
         <data name="image" src="${DEVICE_NAME}.bin" />
     </component>
     <component name="pia" class="PIA6821">
+        <connection name="interfaceA" ref="" />
+        <connection name="interruptA" ref="" />
+        <connection name="interfaceB" ref="" />
+        <connection name="interruptB" ref="" />
+    </component>
+    <component name="highMemory" class="RAM">
+        <property name="offset" value="0xe000" />
+        <property name="size" value="0x1000" />
+        <data name="image" src="${DEVICE_NAME}.bin" />
     </component>
     <component name="rom" class="ROM">
         <connection name="mmu" ref="mmu" />
