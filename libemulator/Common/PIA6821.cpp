@@ -42,6 +42,22 @@ int PIA6821::ioctl(int message, void *data)
 				irqB = connection->component;
 			break;
 		}
+		case OEIOCTL_SET_PROPERTY:
+		{
+			OEIoctlProperty *property = (OEIoctlProperty *) data;
+			if (property->name == "offset")
+				offset = intValue(property->value);
+			else if (property->name == "offset")
+				size = intValue(property->value);
+			break;
+		}
+		case OEIOCTL_GET_MEMORYRANGE:
+		{
+			OEIoctlRange *range = (OEIoctlRange *) data;
+			range->offset = offset;
+			range->size = size;
+			break;
+		}
 		case PIA6821_RESET:
 		{
 			reset();

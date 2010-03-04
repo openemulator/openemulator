@@ -44,6 +44,9 @@ public:
 	void write(int address, int value);
 	
 private:
+	int offset;
+	int size;
+	
 	int controlRegisterA;
 	int dataDirectionRegisterA;
 	int dataRegisterA;
