@@ -10,12 +10,19 @@
 
 #include "OEComponent.h"
 
+#define APPLEIISLOTMEMORY_SIZE 0x800
+
+enum
+{
+	APPLEIISLOTMEMORY_QUERY = OEIOCTL_USER,
+};
+
 typedef struct
 {
 	OEComponent *slotIo;			// Get slot's io
 	OEComponent *slotMemory;		// Get slot's memory
 	OEComponent *expandedSlotMemory;// Get slot's expanded memory 
-} SlotMemoryQuery;
+} AppleIISlotMemoryQuery;
 
 class AppleIISlotMemory : public OEComponent
 {
@@ -25,13 +32,16 @@ public:
 	void write(int address, int value);
 	
 private:
-	OEComponent *floatingBus;
-	OEComponent *expandedSlotMemory;
+	int offset;
 	
+	OEComponent *system;
+	OEComponent *mmu;
+	OEComponent *floatingBus;
+	OEComponent *io;
+	OEComponent *expandedSlotMemory;
+
 	OEComponent *slotMemoryMap[8];
 	OEComponent *expandedSlotMemoryMap[8];
-	
-	OEIoctlConnection connectionMessage;
 	
 	void setSlot(int index, OEComponent *slotComponent);
 };

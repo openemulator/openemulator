@@ -10,7 +10,7 @@
 
 #include "OEComponent.h"
 
-class AppleIIExpandedSlotMemory : public OEComponent
+class AppleIIExpansionSlotMemory : public OEComponent
 {
 public:
 	int ioctl(int message, void *data);

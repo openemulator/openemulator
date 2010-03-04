@@ -20,6 +20,7 @@ enum {
 	OEIOCTL_GET_DATA,
 	OEIOCTL_SET_RESOURCE,
 	OEIOCTL_GET_MEMORYRANGE,
+	OEIOCTL_MAP_MEMORYRANGE,
 	OEIOCTL_USER,
 };
 
@@ -76,5 +77,12 @@ typedef struct
 	int offset;
 	int size;
 } OEIoctlMemoryRange;
+
+typedef struct
+{
+	OEComponent *component;
+	int offset;
+	int size;
+} OEIoctlMapMemoryRange;
 
 #endif

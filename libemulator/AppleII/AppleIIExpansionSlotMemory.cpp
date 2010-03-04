@@ -8,9 +8,9 @@
  * Controls the Apple II C800-CFFF range.
  */
 
-#include "AppleIIExpandedSlotMemory.h"
+#include "AppleIIExpansionSlotMemory.h"
 
-int AppleIIExpandedSlotMemory::ioctl(int message, void *data)
+int AppleIIExpansionSlotMemory::ioctl(int message, void *data)
 {
 	switch(message)
 	{
@@ -25,7 +25,7 @@ int AppleIIExpandedSlotMemory::ioctl(int message, void *data)
 	return 0;
 }
 
-int AppleIIExpandedSlotMemory::read(int address)
+int AppleIIExpansionSlotMemory::read(int address)
 {
 	if (address == 0xcfff)
 		expandedSlotMemory = floatingBus;
@@ -33,7 +33,7 @@ int AppleIIExpandedSlotMemory::read(int address)
 	return expandedSlotMemory->read(address);
 }
 
-void AppleIIExpandedSlotMemory::write(int address, int value)
+void AppleIIExpansionSlotMemory::write(int address, int value)
 {
 	if (address == 0xcfff)
 		expandedSlotMemory = floatingBus;
