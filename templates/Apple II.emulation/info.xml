@@ -67,9 +67,9 @@
         <property name="pc" value="0" />
     </component>
     <component name="ram" class="RAM">
+        <data name="image" src="${DEVICE_NAME}.bin" />
         <property name="offset" value="0x0000" />
         <property name="size" value="0xc000" />
-        <data name="image" src="${DEVICE_NAME}.bin" />
     </component>
     <component name="keyboard" class="AppleIIKeyboard">
         <connection name="hostKeyboard" ref="host::keyboard" />
@@ -107,12 +107,12 @@
         <connection name="game" ref="game" />
     </component>
     <component name="io" class="MemoryMap8bit">
-        <connection name="floatingBus" ref="floatingBus" />
-        <connection name="keyboard" ref="keyboard" />
-        <connection name="cassetteOut" ref="speaker" />
-        <connection name="speaker" ref="speaker" />
-        <connection name="video" ref="video" />
-        <connection name="game" ref="game" />
+        <connection name="" ref="floatingBus" />
+        <connection name="" ref="keyboard" />
+        <connection name="" ref="speaker" />
+        <connection name="" ref="speaker" />
+        <connection name="" ref="video" />
+        <connection name="" ref="game" />
         <property name="offset" value="0xc000" />
     </component>
     <component name="slotMemory" class="AppleIISlotMemory">
@@ -141,12 +141,12 @@
         <resource name="image" src="roms/Apple II ROM.bin" />
     </component>
     <component name="memory" class="MemoryMap16bit">
-        <connection name="floatingBus" ref="floatingBus" />
-        <connection name="ram" ref="ram" />
-        <connection name="io" ref="io" />
-        <connection name="slot" ref="slot" />
-        <connection name="expandedSlot" ref="expandedSlot" />
-        <connection name="rom" ref="rom" />
+        <connection name="" ref="floatingBus" />
+        <connection name="" ref="ram" />
+        <connection name="" ref="io" />
+        <connection name="" ref="slot" />
+        <connection name="" ref="expandedSlot" />
+        <connection name="" ref="rom" />
     </component>
 </device>
 

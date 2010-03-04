@@ -17,6 +17,8 @@
 		000671C4113F318000781A92 /* MemoryMap8Bit.h in Headers */ = {isa = PBXBuildFile; fileRef = 000671C0113F318000781A92 /* MemoryMap8Bit.h */; };
 		000671C5113F318000781A92 /* MemoryMap16Bit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000671C1113F318000781A92 /* MemoryMap16Bit.cpp */; };
 		000671C6113F318000781A92 /* MemoryMap16Bit.h in Headers */ = {isa = PBXBuildFile; fileRef = 000671C2113F318000781A92 /* MemoryMap16Bit.h */; };
+		00067200113F339700781A92 /* Zero.h in Headers */ = {isa = PBXBuildFile; fileRef = 000671FE113F339700781A92 /* Zero.h */; };
+		00067201113F339700781A92 /* Zero.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000671FF113F339700781A92 /* Zero.cpp */; };
 		0011696510E7CC59007A5EFB /* IPStorageSel.png in Resources */ = {isa = PBXBuildFile; fileRef = 0011696410E7CC4E007A5EFB /* IPStorageSel.png */; };
 		0011696610E7CC59007A5EFB /* IPStorage.png in Resources */ = {isa = PBXBuildFile; fileRef = 0011696310E7CC4E007A5EFB /* IPStorage.png */; };
 		00123BC91069B8D600FB95A1 /* libemulator.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 006EECA40FCA5C31003D2C8D /* libemulator.a */; };
@@ -177,6 +179,8 @@
 		000671C0113F318000781A92 /* MemoryMap8Bit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemoryMap8Bit.h; sourceTree = "<group>"; };
 		000671C1113F318000781A92 /* MemoryMap16Bit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MemoryMap16Bit.cpp; sourceTree = "<group>"; };
 		000671C2113F318000781A92 /* MemoryMap16Bit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemoryMap16Bit.h; sourceTree = "<group>"; };
+		000671FE113F339700781A92 /* Zero.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Zero.h; sourceTree = "<group>"; };
+		000671FF113F339700781A92 /* Zero.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Zero.cpp; sourceTree = "<group>"; };
 		0008FCD80FBA5D72005E876E /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = macosx/Info.plist; sourceTree = "<group>"; };
 		000A79080FBA49C500A0F12E /* DiskImage35.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = DiskImage35.icns; sourceTree = "<group>"; };
 		000A79090FBA49C500A0F12E /* DiskImage525.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = DiskImage525.icns; sourceTree = "<group>"; };
@@ -557,6 +561,8 @@
 		00B703921135ACBD005E4B65 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				000671FE113F339700781A92 /* Zero.h */,
+				000671FF113F339700781A92 /* Zero.cpp */,
 				000671BF113F318000781A92 /* MemoryMap8Bit.cpp */,
 				000671C0113F318000781A92 /* MemoryMap8Bit.h */,
 				000671C1113F318000781A92 /* MemoryMap16Bit.cpp */,
@@ -723,6 +729,7 @@
 				00067196113F2EFB00781A92 /* Random.h in Headers */,
 				000671C4113F318000781A92 /* MemoryMap8Bit.h in Headers */,
 				000671C6113F318000781A92 /* MemoryMap16Bit.h in Headers */,
+				00067200113F339700781A92 /* Zero.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -905,6 +912,7 @@
 				00067195113F2EFB00781A92 /* Random.cpp in Sources */,
 				000671C3113F318000781A92 /* MemoryMap8Bit.cpp in Sources */,
 				000671C5113F318000781A92 /* MemoryMap16Bit.cpp in Sources */,
+				00067201113F339700781A92 /* Zero.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
