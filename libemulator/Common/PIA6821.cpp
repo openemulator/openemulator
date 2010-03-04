@@ -53,9 +53,9 @@ int PIA6821::ioctl(int message, void *data)
 		}
 		case OEIOCTL_GET_MEMORYRANGE:
 		{
-			OEIoctlRange *range = (OEIoctlRange *) data;
-			range->offset = offset;
-			range->size = size;
+			OEIoctlMemoryRange *memoryRange = (OEIoctlMemoryRange *) data;
+			memoryRange->offset = offset;
+			memoryRange->size = size;
 			break;
 		}
 		case PIA6821_RESET:
