@@ -63,25 +63,28 @@ private:
 	bool validateDML(xmlDocPtr doc);
 	bool constructDML(xmlDocPtr doc);
 	bool initDML(xmlDocPtr doc);
+	bool connectDML(xmlDocPtr doc);
 	bool updateDML(xmlDocPtr doc);
 	void destroyDML(xmlDocPtr doc);
 	
 	bool constructDevice(xmlNodePtr node);
 	bool initDevice(xmlNodePtr node);
+	bool connectDevice(xmlNodePtr node);
 	bool updateDevice(xmlNodePtr node);
 	void destroyDevice(xmlNodePtr node);
 	
 	bool constructComponent(xmlNodePtr node, OERef deviceRef);
 	bool initComponent(xmlNodePtr node, OERef deviceRef);
+	bool connectComponent(xmlNodePtr node, OERef deviceRef);
 	bool updateComponent(xmlNodePtr node, OERef deviceRef);
 	void destroyComponent(xmlNodePtr node, OERef deviceRef);
 	
-	bool setConnection(xmlNodePtr node, OEComponent *component, OERef deviceRef);
 	bool setProperty(xmlNodePtr node, OEComponent *component);
 	bool getProperty(xmlNodePtr node, OEComponent *component);
 	bool setData(xmlNodePtr node, OEComponent *component, OERef deviceRef);
 	bool getData(xmlNodePtr node, OEComponent *component, OERef deviceRef);
 	bool setResource(xmlNodePtr node, OEComponent *component);
+	bool setConnection(xmlNodePtr node, OEComponent *component, OERef deviceRef);
 	
 	xmlNodePtr getNodeForRef(xmlDocPtr doc, OERef ref);
 	OERef getOutletForInlet(xmlDocPtr doc, OERef ref);

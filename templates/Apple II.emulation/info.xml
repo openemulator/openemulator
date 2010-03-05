@@ -28,7 +28,7 @@
 </device>
 
 <device name="dev0" label="Apple II">
-    <inlet ref="video.monitor" type="appleiimonitor" category="peripheral" label="Video Connector" image="Apple II Video Connector.png" />
+    <inlet ref="video.monitor" type="compositemonitor" category="peripheral" label="Video Connector" image="Apple II Video Connector.png" />
     <inlet ref="game.port" type="appleiigame" category="peripheral" label="Game Port" image="Apple II Game Port.png" />
     <inlet ref="slot.slot0" type="appleiislot" category="expansion" label="Slot 0" image="Apple II Slot.png" />
     <inlet ref="slot.slot1" type="appleiislot" category="expansion" label="Slot 1" image="Apple II Slot.png" />
@@ -63,10 +63,27 @@
         <property name="p" value="0" />
         <property name="pc" value="0" />
     </component>
+    <component name="mmu" class="AppleIIMMU">
+        <connection name="hostSystem" ref="host::system" />
+        <connection name="floatingBus" ref="floatingBus" />
+        <connection name="memoryMap" ref="memoryMap" />
+        <connection name="romD0" ref="romD0" />
+        <connection name="romD8" ref="romD8" />
+        <connection name="romE0" ref="romE0" />
+        <connection name="romE8" ref="romE8" />
+        <connection name="romF0" ref="romF0" />
+        <connection name="romF8" ref="romF8" />
+        <property name="romEnable" value="0" />
+    </component>
     <component name="ram" class="RAM">
         <data name="image" src="${DEVICE_NAME}.bin" />
         <property name="offset" value="0x0000" />
         <property name="size" value="0xc000" />
+    </component>
+    <component name="videoMemory" class="AppleIIVideo">
+        <resource name="image" src="roms/Signetics 2513 Character ROM.bin" />
+        <property name="offset" value="0x50" />
+        <property name="size" value="0x08" />
     </component>
     <component name="keyboard" class="AppleIIKeyboard">
         <connection name="hostKeyboard" ref="host::keyboard" />
@@ -74,15 +91,12 @@
         <property name="offset" value="0x00" />
         <property name="size" value="0x20" />
     </component>
-    <component name="speaker" class="AppleIISpeaker">
+    <component name="speaker" class="DAC1bit">
+        <connection name="hostAudio" ref="host::audio" />
         <connection name="floatingBus" ref="floatingBus" />
-        <connection name="dac" ref="dac" />
+        <property name="value" value="0" />
         <property name="offset" value="0x20" />
         <property name="size" value="0x20" />
-    </component>
-    <component name="dac" class="DAC1bit">
-        <connection name="hostAudio" ref="host::audio" />
-        <property name="value" value="0" />
     </component>
     <component name="video" class="AppleIIVideo">
         <resource name="image" src="roms/Signetics 2513 Character ROM.bin" />
@@ -102,6 +116,8 @@
     <component name="cassetteIn" class="AppleIICassetteIn">
         <connection name="hostAudio" ref="host::audio" />
         <connection name="game" ref="game" />
+        <property name="offset" value="0x60" />
+        <property name="size" value="0x01" />
     </component>
     <component name="io" class="MemoryMap8bit">
         <connection name="" ref="floatingBus" />
@@ -155,18 +171,6 @@
     <component name="romF8" class="ROM">
         <resource name="image" src="roms/Apple II F8 ROM.bin" />
         <property name="offset" value="0xf800" />
-    </component>
-    <component name="mmu" class="AppleIIMMU">
-        <connection name="hostSystem" ref="host::system" />
-        <connection name="floatingBus" ref="floatingBus" />
-        <connection name="memoryMap" ref="memoryMap" />
-        <connection name="romD0" ref="romD0" />
-        <connection name="romD8" ref="romD8" />
-        <connection name="romE0" ref="romE0" />
-        <connection name="romE8" ref="romE8" />
-        <connection name="romF0" ref="romF0" />
-        <connection name="romF8" ref="romF8" />
-        <property name="romEnabled" value="0" />
     </component>
     <component name="memoryMap" class="MemoryMap16bit">
         <connection name="" ref="floatingBus" />

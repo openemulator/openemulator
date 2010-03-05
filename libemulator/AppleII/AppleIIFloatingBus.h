@@ -12,4 +12,11 @@
 
 class AppleIIFloatingBus : public OEComponent
 {
+public:
+	int ioctl(int message, void *data);
+	int read(int address);
+	
+private:
+	int offset;
+	int size;
 };

@@ -43,7 +43,12 @@ OEEmulation::OEEmulation(string path, string resourcePath)
 					if (constructDML(documentDML))
 					{
 						if (initDML(documentDML))
-							loaded = true;
+						{
+							if (connectDML(documentDML))
+								loaded = true;
+							else
+								cerr << "libemulator: could not connect \"" + path + "\"." << endl;
+						}
 						else
 							cerr << "libemulator: could not initialize \"" + path + "\"." << endl;
 					}
@@ -359,6 +364,24 @@ bool OEEmulation::initDML(xmlDocPtr doc)
 	return true;
 }
 
+
+bool OEEmulation::connectDML(xmlDocPtr doc)
+{
+	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+	for(xmlNodePtr childNode = rootNode->children;
+		childNode;
+		childNode = childNode->next)
+	{
+		if (xmlStrcmp(childNode->name, BAD_CAST "device"))
+			continue;
+		
+		if (!connectDevice(childNode))
+			return false;
+	}
+	
+	return true;
+}
+
 bool OEEmulation::updateDML(xmlDocPtr doc)
 {
 	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
@@ -417,6 +440,23 @@ bool OEEmulation::initDevice(xmlNodePtr node)
 			continue;
 		
 		if (!initComponent(childNode, deviceRef))
+			return false;
+	}
+	
+	return true;
+}
+
+bool OEEmulation::connectDevice(xmlNodePtr node)
+{
+	OERef deviceRef(getXMLProperty(node, "name"));
+	for(xmlNodePtr childNode = node->children;
+		childNode;
+		childNode = childNode->next)
+	{
+		if (xmlStrcmp(childNode->name, BAD_CAST "component"))
+			continue;
+		
+		if (!connectComponent(childNode, deviceRef))
 			return false;
 	}
 	
@@ -488,12 +528,7 @@ bool OEEmulation::initComponent(xmlNodePtr node, OERef deviceRef)
 		childNode;
 		childNode = childNode->next)
 	{
-		if (!xmlStrcmp(childNode->name, BAD_CAST "connection"))
-		{
-			if (!setConnection(childNode, component, deviceRef))
-				return false;
-		}
-		else if (!xmlStrcmp(childNode->name, BAD_CAST "property"))
+		if (!xmlStrcmp(childNode->name, BAD_CAST "property"))
 		{
 			if (!setProperty(childNode, component))
 				return false;
@@ -506,6 +541,31 @@ bool OEEmulation::initComponent(xmlNodePtr node, OERef deviceRef)
 		else if (!xmlStrcmp(childNode->name, BAD_CAST "resource"))
 		{
 			if (!setResource(childNode, component))
+				return false;
+		}
+	}
+	
+	return true;
+}
+
+bool OEEmulation::connectComponent(xmlNodePtr node, OERef deviceRef)
+{
+	string componentName = getXMLProperty(node, "name");
+	
+	string stringRef = deviceRef.getStringRef(componentName);
+	if (!components.count(stringRef))
+		return false;
+	OEComponent *component = components[stringRef];
+	
+	//	printf("OEEmulation::initComponent: %s\n", stringRef.c_str());
+	
+	for(xmlNodePtr childNode = node->children;
+		childNode;
+		childNode = childNode->next)
+	{
+		if (!xmlStrcmp(childNode->name, BAD_CAST "connection"))
+		{
+			if (!setConnection(childNode, component, deviceRef))
 				return false;
 		}
 	}
@@ -551,35 +611,6 @@ void OEEmulation::destroyComponent(xmlNodePtr node, OERef deviceRef)
 	if (!components.count(stringRef))
 		return;
 	components.erase(stringRef);
-}
-
-bool OEEmulation::setConnection(xmlNodePtr node, OEComponent *component, OERef deviceRef)
-{
-	string name = getXMLProperty(node, "name");
-	string ref = getXMLProperty(node, "ref");
-	
-	OEComponent *connectedComponent;
-	
-	if (ref.size())
-	{
-		string stringRef = deviceRef.getStringRef(ref);
-		if (!components.count(stringRef))
-		{
-			cerr << "libemulator: could not connect \"" + stringRef + "\"." << endl;
-			return false;
-		}
-		connectedComponent = components[stringRef];
-	}
-	else
-		connectedComponent = NULL;
-	
-	OEIoctlConnection msg;
-	msg.name = name;
-	msg.component = connectedComponent;
-	
-	component->ioctl(OEIOCTL_CONNECT, &msg);
-	
-	return true;
 }
 
 bool OEEmulation::setProperty(xmlNodePtr node, OEComponent *component)
@@ -658,6 +689,35 @@ bool OEEmulation::setResource(xmlNodePtr node, OEComponent *component)
 	}
 	
 	component->ioctl(OEIOCTL_SET_RESOURCE, &msg);
+	
+	return true;
+}
+
+bool OEEmulation::setConnection(xmlNodePtr node, OEComponent *component, OERef deviceRef)
+{
+	string name = getXMLProperty(node, "name");
+	string ref = getXMLProperty(node, "ref");
+	
+	OEComponent *connectedComponent;
+	
+	if (ref.size())
+	{
+		string stringRef = deviceRef.getStringRef(ref);
+		if (!components.count(stringRef))
+		{
+			cerr << "libemulator: could not connect \"" + stringRef + "\"." << endl;
+			return false;
+		}
+		connectedComponent = components[stringRef];
+	}
+	else
+		connectedComponent = NULL;
+	
+	OEIoctlConnection msg;
+	msg.name = name;
+	msg.component = connectedComponent;
+	
+	component->ioctl(OEIOCTL_CONNECT, &msg);
 	
 	return true;
 }

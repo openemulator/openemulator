@@ -12,6 +12,9 @@
 
 #include "HostSystem.h"
 
+#define APPLEIIMMU_ROM_OFFSET	0xd000
+#define APPLEIIMMU_ROM_SIZE		0x3000
+
 AppleIIMMU::AppleIIMMU()
 {
 	hostSystem = NULL;
@@ -28,6 +31,15 @@ void AppleIIMMU::mapComponent(OEComponent *component)
 	OEIoctlMemoryMap memoryMap;
 	
 	component->ioctl(OEIOCTL_GET_MEMORYMAP, &memoryMap);
+	memory->ioctl(OEIOCTL_SET_MEMORYMAP, &memoryMap);
+}
+
+void AppleIIMMU::mapFloatingBus()
+{
+	OEIoctlMemoryMap memoryMap;
+	memoryMap.component = floatingBus;
+	memoryMap.offset = APPLEIIMMU_ROM_OFFSET;
+	memoryMap.size = APPLEIIMMU_ROM_SIZE;
 	memory->ioctl(OEIOCTL_SET_MEMORYMAP, &memoryMap);
 }
 
@@ -66,11 +78,7 @@ int AppleIIMMU::ioctl(int message, void *data)
 		}
 		case APPLEIIMMU_DISABLE_ROM:
 		{
-			OEIoctlMemoryMap memoryMap;
-			memoryMap.component = floatingBus;
-			memoryMap.offset = 0xd000;
-			memoryMap.size = 0x3000;
-			memory->ioctl(OEIOCTL_SET_MEMORYMAP, &memoryMap);
+			mapFloatingBus();
 			break;
 		}
 		case APPLEIIMMU_ENABLE_ROM:

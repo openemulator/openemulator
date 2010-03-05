@@ -1,21 +1,21 @@
 
 /**
  * libemulator
- * PIA6821
+ * MC6821
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls a generic 6821 Peripheral Interface Adapter
+ * Controls a generic MC6821 Peripheral Interface Adapter
  */
 
-#include "PIA6821.h"
+#include "MC6821.h"
 
-PIA6821::PIA6821()
+MC6821::MC6821()
 {
 	reset();
 }
 
-void PIA6821::reset()
+void MC6821::reset()
 {
 	controlRegisterA = 0;
 	dataDirectionRegisterA = 0;
@@ -25,7 +25,7 @@ void PIA6821::reset()
 	dataRegisterB = 0;
 }
 
-int PIA6821::ioctl(int message, void *data)
+int MC6821::ioctl(int message, void *data)
 {
 	switch(message)
 	{
@@ -58,7 +58,7 @@ int PIA6821::ioctl(int message, void *data)
 			memoryMap->size = size;
 			break;
 		}
-		case PIA6821_RESET:
+		case MC6821_RESET:
 		{
 			reset();
 			break;
@@ -68,12 +68,12 @@ int PIA6821::ioctl(int message, void *data)
 	return 0;
 }
 
-int PIA6821::read(int address)
+int MC6821::read(int address)
 {
 	switch(address & 0x3)
 	{
-		case PIA6821_RS_DATAREGISTERA:
-			if (controlRegisterA & PIA6821_CR_DATAREGISTER)
+		case MC6821_RS_DATAREGISTERA:
+			if (controlRegisterA & MC6821_CR_DATAREGISTER)
 			{
 				if (controlRegisterA)
 					break;
@@ -81,28 +81,28 @@ int PIA6821::read(int address)
 			}
 			else
 				return dataDirectionRegisterA;
-		case PIA6821_RS_CONTROLREGISTERA:
+		case MC6821_RS_CONTROLREGISTERA:
 			return controlRegisterA;
-		case PIA6821_RS_DATAREGISTERB:
-			if (controlRegisterB & PIA6821_CR_DATAREGISTER)
+		case MC6821_RS_DATAREGISTERB:
+			if (controlRegisterB & MC6821_CR_DATAREGISTER)
 				return dataRegisterB;
 			else
 				return dataDirectionRegisterB;
-		case PIA6821_RS_CONTROLREGISTERB:
+		case MC6821_RS_CONTROLREGISTERB:
 			return controlRegisterB;
 	}
 	
 	return 0;
 }
 
-void PIA6821::write(int address, int value)
+void MC6821::write(int address, int value)
 {
 	switch(address & 0x3)
 	{
-		case PIA6821_RS_DATAREGISTERA:
-		case PIA6821_RS_CONTROLREGISTERA:
-		case PIA6821_RS_DATAREGISTERB:
-		case PIA6821_RS_CONTROLREGISTERB:
+		case MC6821_RS_DATAREGISTERA:
+		case MC6821_RS_CONTROLREGISTERA:
+		case MC6821_RS_DATAREGISTERB:
+		case MC6821_RS_CONTROLREGISTERB:
 			break;
 	}
 }

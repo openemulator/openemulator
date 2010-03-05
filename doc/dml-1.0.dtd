@@ -29,13 +29,9 @@
 <!ATTLIST setting options CDATA #IMPLIED>
 <!ATTLIST setting label CDATA #IMPLIED>
 
-<!ELEMENT component (connection,property,data,resource)>
+<!ELEMENT component (property,data,resource,connection)>
 <!ATTLIST component name CDATA #REQUIRED>
 <!ATTLIST component class CDATA #REQUIRED>
-
-<!ELEMENT connection EMPTY>
-<!ATTLIST connection name CDATA #REQUIRED>
-<!ATTLIST connection ref CDATA #REQUIRED>
 
 <!ELEMENT property EMPTY>
 <!ATTLIST property name CDATA #REQUIRED>
@@ -48,3 +44,7 @@
 <!ELEMENT resource EMPTY>
 <!ATTLIST resource name CDATA #REQUIRED>
 <!ATTLIST resource src CDATA #REQUIRED>
+
+<!ELEMENT connection EMPTY>
+<!ATTLIST connection name CDATA #REQUIRED>
+<!ATTLIST connection ref CDATA #REQUIRED>
