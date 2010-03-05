@@ -47,6 +47,8 @@
 		008107DE1120C57600D744FB /* TemplateChooserViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00FE0C051095353B00B92AB7 /* TemplateChooserViewController.mm */; };
 		00910107113AAE60005EBB62 /* AppleISystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00910105113AAE60005EBB62 /* AppleISystem.cpp */; };
 		00A0B8041069761A007930A5 /* Document.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00A0B8031069761A007930A5 /* Document.mm */; };
+		00A7BBCE11407A7F006F5C6B /* AppleIIMMU.h in Headers */ = {isa = PBXBuildFile; fileRef = 00A7BBCC11407A7F006F5C6B /* AppleIIMMU.h */; };
+		00A7BBCF11407A7F006F5C6B /* AppleIIMMU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A7BBCD11407A7F006F5C6B /* AppleIIMMU.cpp */; };
 		00A8C3FC1080064900D98FE0 /* InspectorDeviceCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00A8C3FB1080064900D98FE0 /* InspectorDeviceCell.m */; };
 		00AA1E6E113821C600F11BE2 /* AppleIIKeyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00AA1E6C113821C600F11BE2 /* AppleIIKeyboard.cpp */; };
 		00AA1E721138269900F11BE2 /* AppleIISlotMemory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00AA1E701138269900F11BE2 /* AppleIISlotMemory.cpp */; };
@@ -240,6 +242,8 @@
 		00910106113AAE60005EBB62 /* AppleISystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleISystem.h; sourceTree = "<group>"; };
 		00A0B7B81068949D007930A5 /* Document.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Document.h; sourceTree = "<group>"; };
 		00A0B8031069761A007930A5 /* Document.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Document.mm; sourceTree = "<group>"; };
+		00A7BBCC11407A7F006F5C6B /* AppleIIMMU.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleIIMMU.h; sourceTree = "<group>"; };
+		00A7BBCD11407A7F006F5C6B /* AppleIIMMU.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleIIMMU.cpp; sourceTree = "<group>"; };
 		00A8C3FA1080064900D98FE0 /* InspectorDeviceCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InspectorDeviceCell.h; sourceTree = "<group>"; };
 		00A8C3FB1080064900D98FE0 /* InspectorDeviceCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InspectorDeviceCell.m; sourceTree = "<group>"; };
 		00AA1E6B113821C600F11BE2 /* AppleIIKeyboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleIIKeyboard.h; sourceTree = "<group>"; };
@@ -554,6 +558,8 @@
 				00AA1E701138269900F11BE2 /* AppleIISlotMemory.cpp */,
 				00067157113F2B8500781A92 /* AppleIIFloatingBus.h */,
 				00067158113F2B8500781A92 /* AppleIIFloatingBus.cpp */,
+				00A7BBCC11407A7F006F5C6B /* AppleIIMMU.h */,
+				00A7BBCD11407A7F006F5C6B /* AppleIIMMU.cpp */,
 			);
 			path = AppleII;
 			sourceTree = "<group>";
@@ -730,6 +736,7 @@
 				000671C4113F318000781A92 /* MemoryMap8Bit.h in Headers */,
 				000671C6113F318000781A92 /* MemoryMap16Bit.h in Headers */,
 				00067200113F339700781A92 /* Zero.h in Headers */,
+				00A7BBCE11407A7F006F5C6B /* AppleIIMMU.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -913,6 +920,7 @@
 				000671C3113F318000781A92 /* MemoryMap8Bit.cpp in Sources */,
 				000671C5113F318000781A92 /* MemoryMap16Bit.cpp in Sources */,
 				00067201113F339700781A92 /* Zero.cpp in Sources */,
+				00A7BBCF11407A7F006F5C6B /* AppleIIMMU.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

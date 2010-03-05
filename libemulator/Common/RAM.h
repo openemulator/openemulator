@@ -19,5 +19,6 @@ public:
 	
 private:
 	int offset;
+	int mask;
 	vector<char> memory;
 };

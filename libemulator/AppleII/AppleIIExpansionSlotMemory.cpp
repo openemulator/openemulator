@@ -18,8 +18,25 @@ int AppleIIExpansionSlotMemory::ioctl(int message, void *data)
 			OEIoctlConnection *connection = (OEIoctlConnection *) data;
 			if (connection->name == "floatingBus")
 				floatingBus = connection->component;
-			else if (connection->name == "expandedSlotMemory")
-				expandedSlotMemory = connection->component;
+			break;
+		case OEIOCTL_SET_PROPERTY:
+		{
+			OEIoctlProperty *property = (OEIoctlProperty *) data;
+			if (property->name == "offset")
+				offset = intValue(property->value);
+			break;
+		}
+		case OEIOCTL_GET_MEMORYMAP:
+		{
+			OEIoctlMemoryMap *memoryMap = (OEIoctlMemoryMap *) data;
+			memoryMap->component = this;
+			memoryMap->offset = offset;
+			memoryMap->size = APPLEIIEXPANSIONSLOTMEMORY_SIZE;
+			break;
+		}
+		case APPLEIIEXPANSIONSLOTMEMORY_SET_SLOT:
+			expandedSlotMemory = (OEComponent *) data;
+			break;
 	}
 	
 	return 0;
@@ -27,7 +44,7 @@ int AppleIIExpansionSlotMemory::ioctl(int message, void *data)
 
 int AppleIIExpansionSlotMemory::read(int address)
 {
-	if (address == 0xcfff)
+	if ((address & APPLEIIEXPANSIONSLOTMEMORY_MASK) == APPLEIIEXPANSIONSLOTMEMORY_MASK)
 		expandedSlotMemory = floatingBus;
 	
 	return expandedSlotMemory->read(address);
@@ -35,7 +52,7 @@ int AppleIIExpansionSlotMemory::read(int address)
 
 void AppleIIExpansionSlotMemory::write(int address, int value)
 {
-	if (address == 0xcfff)
+	if ((address & (APPLEIIEXPANSIONSLOTMEMORY_MASK)) == APPLEIIEXPANSIONSLOTMEMORY_MASK)
 		expandedSlotMemory = floatingBus;
 	
 	expandedSlotMemory->write(address, value);

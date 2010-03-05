@@ -16,20 +16,12 @@ int Zero::ioctl(int message, void *data)
 {
 	switch(message)
 	{
-		case OEIOCTL_SET_PROPERTY:
+		case OEIOCTL_GET_MEMORYMAP:
 		{
-			OEIoctlProperty *property = (OEIoctlProperty *) data;
-			if (property->name == "offset")
-				offset = intValue(property->value);
-			else if (property->name == "size")
-				size = intValue(property->value);
-			break;
-		}
-		case OEIOCTL_GET_MEMORYRANGE:
-		{
-			OEIoctlMemoryRange *memoryRange = (OEIoctlMemoryRange *) data;
-			memoryRange->offset = offset;
-			memoryRange->size = size;
+			OEIoctlMemoryMap *memoryMap = (OEIoctlMemoryMap *) data;
+			memoryMap->component = this;
+			memoryMap->offset = 0;
+			memoryMap->size = INT_MAX;
 			break;
 		}
 	}

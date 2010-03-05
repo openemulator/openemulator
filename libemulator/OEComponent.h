@@ -19,9 +19,9 @@ enum {
 	OEIOCTL_SET_DATA,
 	OEIOCTL_GET_DATA,
 	OEIOCTL_SET_RESOURCE,
-	OEIOCTL_GET_MEMORYRANGE,
-	OEIOCTL_MAP_MEMORYRANGE,
-	OEIOCTL_SET_IRQ,
+	OEIOCTL_GET_MEMORYMAP,
+	OEIOCTL_SET_MEMORYMAP,
+	OEIOCTL_ASSERT_IRQ,
 	OEIOCTL_RELEASE_IRQ,
 	OEIOCTL_USER,
 };
@@ -50,11 +50,12 @@ public:
 protected:
 	void postNotification(int message, void *data);
 	
-	int intValue(string value);
-	
 private:
 	vector<OEComponent *> observers;
 };
+
+int intValue(string value);
+int nextPowerOf2(int value);
 
 typedef struct
 {
@@ -76,15 +77,9 @@ typedef struct
 
 typedef struct
 {
-	int offset;
-	int size;
-} OEIoctlMemoryRange;
-
-typedef struct
-{
 	OEComponent *component;
 	int offset;
 	int size;
-} OEIoctlMapMemoryRange;
+} OEIoctlMemoryMap;
 
 #endif

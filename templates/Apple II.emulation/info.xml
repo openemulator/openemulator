@@ -3,10 +3,10 @@
 <dml version="1.0" label="Apple II" image="Apple II.png" description="The Apple II was the first highly successful mass produced microprocessor product. The Apple II had color and high-resolution graphics modes, sound capabilities and one of two built-in BASIC programming languages." group="Apple II">
 <device name="host">
     <component name="system" class="HostSystem">
-    </component>
-    <component name="audio" class="HostAudio">
         <property name="runTime" value="0.0" />
         <property name="isPaused" value="0" />
+    </component>
+    <component name="audio" class="HostAudio">
     </component>
     <component name="video" class="HostVideo">
         <property name="window" value="-1 -1 640 480" />
@@ -54,11 +54,8 @@
     <component name="floatingBus" class="AppleIIFloatingBus">
         <connection name="system" ref="system" />
     </component>
-    <component name="mmu" class="AppleIIMMU">
-        <connection name="memory" ref="memory" />
-    </component>
     <component name="cpu" class="MOS6502">
-        <connection name="memory" ref="memory" />
+        <connection name="memory" ref="memoryMap" />
         <property name="a" value="0" />
         <property name="x" value="0" />
         <property name="y" value="0" />
@@ -80,10 +77,10 @@
     <component name="speaker" class="AppleIISpeaker">
         <connection name="floatingBus" ref="floatingBus" />
         <connection name="dac" ref="dac" />
-        <property name="offset" value="0x30" />
-        <property name="size" value="0x10" />
+        <property name="offset" value="0x20" />
+        <property name="size" value="0x20" />
     </component>
-    <component name="speaker" class="DAC1bit">
+    <component name="dac" class="DAC1bit">
         <connection name="hostAudio" ref="host::audio" />
         <property name="value" value="0" />
     </component>
@@ -110,17 +107,17 @@
         <connection name="" ref="floatingBus" />
         <connection name="" ref="keyboard" />
         <connection name="" ref="speaker" />
-        <connection name="" ref="speaker" />
         <connection name="" ref="video" />
         <connection name="" ref="game" />
         <property name="offset" value="0xc000" />
     </component>
     <component name="slotMemory" class="AppleIISlotMemory">
-        <connection name="system" ref="system" />
-        <connection name="mmu" ref="mmu" />
-        <connection name="floatingBus" ref="floatingBus" />
-        <connection name="io" ref="io" />
         <connection name="expansionSlotMemory" ref="expansionSlotMemory" />
+        <connection name="io" ref="io" />
+        <connection name="system" ref="system" />
+        <connection name="floatingBus" ref="floatingBus" />
+        <connection name="mmu" ref="mmu" />
+        <connection name="memory" ref="memory" />
         <connection name="slot0" ref="" />
         <connection name="slot1" ref="" />
         <connection name="slot2" ref="" />
@@ -135,18 +132,48 @@
         <connection name="floatingBus" ref="floatingBus" />
         <property name="offset" value="0xc800" />
     </component>
-    <component name="rom" class="ROM">
-        <connection name="mmu" ref="mmu" />
+    <component name="romD0" class="ROM">
+        <resource name="image" src="roms/Apple II D0 ROM.bin" />
         <property name="offset" value="0xd000" />
-        <resource name="image" src="roms/Apple II ROM.bin" />
     </component>
-    <component name="memory" class="MemoryMap16bit">
+    <component name="romD8" class="ROM">
+        <resource name="image" src="roms/Apple II D8 ROM.bin" />
+        <property name="offset" value="0xd800" />
+    </component>
+    <component name="romE0" class="ROM">
+        <resource name="image" src="roms/Apple II E0 ROM.bin" />
+        <property name="offset" value="0xe000" />
+    </component>
+    <component name="romE8" class="ROM">
+        <resource name="image" src="roms/Apple II E8 ROM.bin" />
+        <property name="offset" value="0xe800" />
+    </component>
+    <component name="romF0" class="ROM">
+        <resource name="image" src="roms/Apple II F0 ROM.bin" />
+        <property name="offset" value="0xf000" />
+    </component>
+    <component name="romF8" class="ROM">
+        <resource name="image" src="roms/Apple II F8 ROM.bin" />
+        <property name="offset" value="0xf800" />
+    </component>
+    <component name="mmu" class="AppleIIMMU">
+        <connection name="hostSystem" ref="host::system" />
+        <connection name="floatingBus" ref="floatingBus" />
+        <connection name="memoryMap" ref="memoryMap" />
+        <connection name="romD0" ref="romD0" />
+        <connection name="romD8" ref="romD8" />
+        <connection name="romE0" ref="romE0" />
+        <connection name="romE8" ref="romE8" />
+        <connection name="romF0" ref="romF0" />
+        <connection name="romF8" ref="romF8" />
+        <property name="romEnabled" value="0" />
+    </component>
+    <component name="memoryMap" class="MemoryMap16bit">
         <connection name="" ref="floatingBus" />
         <connection name="" ref="ram" />
         <connection name="" ref="io" />
         <connection name="" ref="slot" />
         <connection name="" ref="expandedSlot" />
-        <connection name="" ref="rom" />
     </component>
 </device>
 

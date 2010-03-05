@@ -10,6 +10,14 @@
 
 #include "OEComponent.h"
 
+enum
+{
+	APPLEIIEXPANSIONSLOTMEMORY_SET_SLOT = OEIOCTL_USER,
+};
+
+#define APPLEIIEXPANSIONSLOTMEMORY_SIZE	0x800
+#define APPLEIIEXPANSIONSLOTMEMORY_MASK 0x7ff
+
 class AppleIIExpansionSlotMemory : public OEComponent
 {
 public:
@@ -18,6 +26,8 @@ public:
 	void write(int address, int value);
 
 private:
+	int offset;
+	
 	OEComponent *floatingBus;
 	OEComponent *expandedSlotMemory;
 };

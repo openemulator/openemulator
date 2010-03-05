@@ -34,12 +34,14 @@ public:
 private:
 	int offset;
 	
-	OEComponent *system;
-	OEComponent *mmu;
-	OEComponent *floatingBus;
-	OEComponent *io;
 	OEComponent *expandedSlotMemory;
-
+	OEComponent *io;
+	
+	OEComponent *system;
+	OEComponent *floatingBus;
+	OEComponent *mmu;
+	OEComponent *memory;
+	
 	OEComponent *slotMemoryMap[8];
 	OEComponent *expandedSlotMemoryMap[8];
 	

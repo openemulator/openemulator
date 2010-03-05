@@ -36,9 +36,9 @@ int MemoryMap8Bit::ioctl(int message, void *data)
 		case OEIOCTL_CONNECT:
 		{
 			OEIoctlConnection *connection = (OEIoctlConnection *) data;
-			OEIoctlMemoryRange memoryRange;
-			connection->component->ioctl(OEIOCTL_GET_MEMORYRANGE, &memoryRange);
-			setRange(connection->component, memoryRange.offset, memoryRange.size);
+			OEIoctlMemoryMap memoryMap;
+			connection->component->ioctl(OEIOCTL_GET_MEMORYMAP, &memoryMap);
+			setRange(memoryMap.component, memoryMap.offset, memoryMap.size);
 			break;
 		}
 		case OEIOCTL_SET_PROPERTY:
@@ -47,17 +47,19 @@ int MemoryMap8Bit::ioctl(int message, void *data)
 			if (property->name == "offset")
 				offset = intValue(property->value);
 		}
-		case OEIOCTL_GET_MEMORYRANGE:
+		case OEIOCTL_GET_MEMORYMAP:
 		{
-			OEIoctlMemoryRange *memoryRange = (OEIoctlMemoryRange *) data;
-			memoryRange->offset = offset;
-			memoryRange->size = MEMORYMAP8BIT_SIZE;
+			OEIoctlMemoryMap *memoryMap = (OEIoctlMemoryMap *) data;
+			memoryMap->component = this;
+			memoryMap->offset = offset;
+			memoryMap->size = MEMORYMAP8BIT_SIZE;
 			break;
 		}
-		case OEIOCTL_MAP_MEMORYRANGE:
+		case OEIOCTL_SET_MEMORYMAP:
 		{
-			OEIoctlMapMemoryRange *mapMemoryRange = (OEIoctlMapMemoryRange *) data;
-			setRange(mapMemoryRange->component, mapMemoryRange->offset, mapMemoryRange->size);
+			OEIoctlMemoryMap *memoryMap = (OEIoctlMemoryMap *) data;
+			setRange(memoryMap->component, memoryMap->offset, memoryMap->size);
+			break;
 		}
 	}
 	

@@ -27,7 +27,10 @@ int RAM::ioctl(int message, void *data)
 		{
 			OEIoctlData *setData = (OEIoctlData *) data;
 			if (setData->name == "image")
+			{
 				memory = setData->data;
+				mask = nextPowerOf2(memory.size()) - 1;
+			}
 			break;
 		}
 		case OEIOCTL_GET_DATA:
@@ -37,11 +40,12 @@ int RAM::ioctl(int message, void *data)
 				getData->data = memory;
 			break;
 		}
-		case OEIOCTL_GET_MEMORYRANGE:
+		case OEIOCTL_GET_MEMORYMAP:
 		{
-			OEIoctlMemoryRange *memoryRange = (OEIoctlMemoryRange *) data;
-			memoryRange->offset = offset;
-			memoryRange->size = memory.size();
+			OEIoctlMemoryMap *memoryMap = (OEIoctlMemoryMap *) data;
+			memoryMap->component = this;
+			memoryMap->offset = offset;
+			memoryMap->size = memory.size();
 			break;
 		}
 	}
@@ -51,10 +55,10 @@ int RAM::ioctl(int message, void *data)
 
 int RAM::read(int address)
 {
-	return memory[address + offset];
+	return memory[address & mask];
 }
 
 void RAM::write(int address, int value)
 {
-	memory[address + offset] = value;
+	memory[address & mask] = value;
 }

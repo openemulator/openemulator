@@ -9,6 +9,8 @@
  */
 
 #include "AppleIISlotMemory.h"
+
+#include "AppleIIExpansionSlotMemory.h"
 #include "MemoryMap8bit.h"
 
 void AppleIISlotMemory::setSlot(int index, OEComponent *component)
@@ -19,22 +21,26 @@ void AppleIISlotMemory::setSlot(int index, OEComponent *component)
 	connection.component = system;
 	component->ioctl(OEIOCTL_CONNECT, &connection);
 	
-	connection.name = "mmu";
+	connection.name = "floatingBus";
+	connection.component = floatingBus;
+	component->ioctl(OEIOCTL_CONNECT, &connection);
+	
+	connection.name = "memory";
 	connection.component = mmu;
 	component->ioctl(OEIOCTL_CONNECT, &connection);
 	
-	connection.name = "floatingBus";
-	connection.component = floatingBus;
+	connection.name = "mmu";
+	connection.component = mmu;
 	component->ioctl(OEIOCTL_CONNECT, &connection);
 	
 	AppleIISlotMemoryQuery slotMemoryQuery;
 	component->ioctl(APPLEIISLOTMEMORY_QUERY, &slotMemoryQuery);
 	
-	OEIoctlMapMemoryRange mapMemoryRange;
-	mapMemoryRange.component = component;
-	mapMemoryRange.offset = 0x80 + (index << 4);
-	mapMemoryRange.size = 0x10;
-	io->ioctl(OEIOCTL_MAP_MEMORYRANGE, &mapMemoryRange);
+	OEIoctlMemoryMap memoryMap;
+	memoryMap.component = component;
+	memoryMap.offset = 0x80 + (index << 4);
+	memoryMap.size = 0x10;
+	io->ioctl(OEIOCTL_SET_MEMORYMAP, &memoryMap);
 	slotMemoryMap[index] = slotMemoryQuery.slotMemory;
 	expandedSlotMemoryMap[index] = slotMemoryQuery.expandedSlotMemory;
 }
@@ -48,12 +54,14 @@ int AppleIISlotMemory::ioctl(int message, void *data)
 			OEIoctlConnection *connection = (OEIoctlConnection *) data;
 			if (connection->name == "system")
 				system = connection->component;
-			else if (connection->name == "mmu")
-				mmu = connection->component;
 			else if (connection->name == "floatingBus")
 				floatingBus = connection->component;
 			else if (connection->name == "io")
+				mmu = connection->component;
+			else if (connection->name == "memory")
 				io = connection->component;
+			else if (connection->name == "mmu")
+				memory = connection->component;
 			else if (connection->name == "expandedSlotMemory")
 				expandedSlotMemory = connection->component;
 			else if (connection->name == "slot0")
@@ -81,11 +89,12 @@ int AppleIISlotMemory::ioctl(int message, void *data)
 				offset = intValue(property->value);
 			break;
 		}
-		case OEIOCTL_GET_MEMORYRANGE:
+		case OEIOCTL_GET_MEMORYMAP:
 		{
-			OEIoctlMemoryRange *memoryRange = (OEIoctlMemoryRange *) data;
-			memoryRange->offset = offset;
-			memoryRange->size = APPLEIISLOTMEMORY_SIZE;
+			OEIoctlMemoryMap *memoryMap = (OEIoctlMemoryMap *) data;
+			memoryMap->component = this;
+			memoryMap->offset = offset;
+			memoryMap->size = APPLEIISLOTMEMORY_SIZE;
 			break;
 		}
 	}
@@ -96,23 +105,13 @@ int AppleIISlotMemory::ioctl(int message, void *data)
 int AppleIISlotMemory::read(int address)
 {
 	OEComponent *component = slotMemoryMap[(address >> 12) & 0x7];
-	
-	OEIoctlConnection connection;
-	connection.name = "expandedSlotMemory";
-	connection.component = component;
-	expandedSlotMemory->ioctl(OEIOCTL_CONNECT, &connection);
-	
+	expandedSlotMemory->ioctl(APPLEIIEXPANSIONSLOTMEMORY_SET_SLOT, &component);
 	return component->read(address);
 }
 
 void AppleIISlotMemory::write(int address, int value)
 {
 	OEComponent *component = slotMemoryMap[(address >> 12) & 0x7];
-	
-	OEIoctlConnection connection;
-	connection.name = "expandedSlotMemory";
-	connection.component = component;
-	expandedSlotMemory->ioctl(OEIOCTL_CONNECT, &connection);
-	
+	expandedSlotMemory->ioctl(APPLEIIEXPANSIONSLOTMEMORY_SET_SLOT, &component);
 	component->write(address, value);
 }

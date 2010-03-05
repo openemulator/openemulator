@@ -25,22 +25,26 @@ int ROM::ioctl(int message, void *data)
 		{
 			OEIoctlData *setData = (OEIoctlData *) data;
 			if (setData->name == "image")
+			{
 				memory = setData->data;
+				mask = nextPowerOf2(memory.size()) - 1;
+			}
 			break;
 		}
-		case OEIOCTL_GET_MEMORYRANGE:
+		case OEIOCTL_GET_MEMORYMAP:
 		{
-			OEIoctlMemoryRange *memoryRange = (OEIoctlMemoryRange *) data;
-			memoryRange->offset = offset;
-			memoryRange->size = memory.size();
+			OEIoctlMemoryMap *memoryMap = (OEIoctlMemoryMap *) data;
+			memoryMap->component = this;
+			memoryMap->offset = offset;
+			memoryMap->size = memory.size();
 			break;
 		}
 	}
 	
 	return 0;
-}	
+}
 
 int ROM::read(int address)
 {
-	return memory[address + offset];
+	return memory[address & mask];
 }

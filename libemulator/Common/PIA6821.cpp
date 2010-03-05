@@ -47,15 +47,15 @@ int PIA6821::ioctl(int message, void *data)
 			OEIoctlProperty *property = (OEIoctlProperty *) data;
 			if (property->name == "offset")
 				offset = intValue(property->value);
-			else if (property->name == "offset")
+			else if (property->name == "size")
 				size = intValue(property->value);
 			break;
 		}
-		case OEIOCTL_GET_MEMORYRANGE:
+		case OEIOCTL_GET_MEMORYMAP:
 		{
-			OEIoctlMemoryRange *memoryRange = (OEIoctlMemoryRange *) data;
-			memoryRange->offset = offset;
-			memoryRange->size = size;
+			OEIoctlMemoryMap *memoryMap = (OEIoctlMemoryMap *) data;
+			memoryMap->offset = offset;
+			memoryMap->size = size;
 			break;
 		}
 		case PIA6821_RESET:

@@ -8,6 +8,7 @@
  * Component type
  */
 
+#include "math.h"
 #include <sstream>
 
 #include "OEComponent.h"
@@ -64,7 +65,7 @@ void OEComponent::postNotification(int message, void *data)
 		(*iterator)->onNotification(this, message, data);
 }
 
-int OEComponent::intValue(string value)
+int intValue(string value)
 {
 	if (value.substr(0, 2) == "0x")
 	{
@@ -74,4 +75,9 @@ int OEComponent::intValue(string value)
 		ss >> i;
 	}
 	return atoi(value.c_str());
+}
+
+int nextPowerOf2(int value)
+{
+	return (int) pow(2, ceil(log2(value)));
 }
