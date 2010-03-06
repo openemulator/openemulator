@@ -28,7 +28,7 @@
 </device>
 
 <device name="dev0" label="Apple I">
-    <inlet ref="video.monitor" type="compositemonitor" category="peripheral" label="Video Connector" image="Apple II Video Connector.png" />
+    <inlet ref="video.monitor" type="tvmonitor" category="peripheral" label="Video Connector" image="Apple II Video Connector.png" />
     <inlet ref="system.slot1" type="appleislot" category="expansion" label="Slot 1" image="Apple I Slot.png" />
     <inlet ref="system.slot2" type="appleislot" category="expansion" label="Slot 2" image="Apple I Slot.png" />
     <component name="system" class="AppleISystem">
@@ -50,23 +50,26 @@
         <property name="p" value="0" />
         <property name="pc" value="0" />
     </component>
-    <component name="lowMemory" class="RAM">
-        <data name="image" src="${DEVICE_NAME}Ram1.bin" />
+    <component name="memory" class="RAM">
+        <data name="image" src="${DEVICE_NAME}.bin" />
         <property name="offset" value="0x0000" />
-        <property name="size" value="0x1000" />
+        <property name="size" value="0x2000" />
     </component>
-    <component name="pia" class="MC6821">
-        <connection name="interfaceA" ref="" />
-        <connection name="interruptA" ref="" />
-        <connection name="interfaceB" ref="" />
-        <connection name="interruptB" ref="" />
+    <component name="keyboard" class="AppleIKeyboard">
+        <connection name="hostKeyboard" ref="host::keyboard" />
+    </component>
+    <component name="video" class="AppleIVideo">
+        <resource name="image" src="roms/Signetics 2513 Video ROM.bin" />
+    </component name="io">
+        <connection name="pia" ref="pia" />
         <property name="offset" value="0xd000" />
         <property name="size" value="0x1000" />
     </component>
-    <component name="highMemory" class="RAM">
-        <data name="image" src="${DEVICE_NAME}Ram2.bin" />
-        <property name="offset" value="0xe000" />
-        <property name="size" value="0x1000" />
+    <component name="pia" class="MC6821">
+        <connection name="interfaceA" ref="keyboard" />
+        <connection name="interruptA" ref="" />
+        <connection name="interfaceB" ref="video" />
+        <connection name="interruptB" ref="" />
     </component>
     <component name="rom" class="ROM">
         <resource name="image" src="roms/Apple I ROM.bin" />
@@ -75,7 +78,7 @@
     <component name="memory" class="MemoryMap16Bit">
         <connection name="" ref="floatingBus" />
         <connection name="" ref="lowMemory" />
-        <connection name="" ref="pia" />
+        <connection name="" ref="io" />
         <connection name="" ref="highMemory" />
         <connection name="" ref="rom" />
     </component>

@@ -40,4 +40,5 @@ private:
 	OEComponent *romF8;
 	
 	void mapComponent(OEComponent *component);
+	void mapFloatingBus();
 };

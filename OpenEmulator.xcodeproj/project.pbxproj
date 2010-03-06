@@ -42,6 +42,9 @@
 		00679D09100817F700B38748 /* TemplateChooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00679D06100817F700B38748 /* TemplateChooser.xib */; };
 		0071E3BA10803F7300F2D54F /* ChooserItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 0071E3B910803F7300F2D54F /* ChooserItem.m */; };
 		008107DE1120C57600D744FB /* TemplateChooserViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00FE0C051095353B00B92AB7 /* TemplateChooserViewController.mm */; };
+		0085973D11431AA300DD08C5 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0085973C11431AA300DD08C5 /* GLUT.framework */; };
+		0085975C11431B6600DD08C5 /* HostJoystick.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0085975A11431B6600DD08C5 /* HostJoystick.cpp */; };
+		0085975D11431B6600DD08C5 /* HostJoystick.h in Headers */ = {isa = PBXBuildFile; fileRef = 0085975B11431B6600DD08C5 /* HostJoystick.h */; };
 		00910107113AAE60005EBB62 /* AppleISystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00910105113AAE60005EBB62 /* AppleISystem.cpp */; };
 		00A0B8041069761A007930A5 /* Document.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00A0B8031069761A007930A5 /* Document.mm */; };
 		00A62FFC11415DF0005E8500 /* MC6821.h in Headers */ = {isa = PBXBuildFile; fileRef = 00A62FFA11415DF0005E8500 /* MC6821.h */; };
@@ -235,6 +238,9 @@
 		006EEE8F0FCA781C003D2C8D /* DiskImage.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = DiskImage.icns; sourceTree = "<group>"; };
 		0071E3B810803F7300F2D54F /* ChooserItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChooserItem.h; sourceTree = "<group>"; };
 		0071E3B910803F7300F2D54F /* ChooserItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChooserItem.m; sourceTree = "<group>"; };
+		0085973C11431AA300DD08C5 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = /System/Library/Frameworks/GLUT.framework; sourceTree = "<absolute>"; };
+		0085975A11431B6600DD08C5 /* HostJoystick.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HostJoystick.cpp; sourceTree = "<group>"; };
+		0085975B11431B6600DD08C5 /* HostJoystick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostJoystick.h; sourceTree = "<group>"; };
 		00910105113AAE60005EBB62 /* AppleISystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleISystem.cpp; sourceTree = "<group>"; };
 		00910106113AAE60005EBB62 /* AppleISystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleISystem.h; sourceTree = "<group>"; };
 		00A0B7B81068949D007930A5 /* Document.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Document.h; sourceTree = "<group>"; };
@@ -404,6 +410,7 @@
 				0054E4A71131BE8A006D32D9 /* OpenGL.framework in Frameworks */,
 				0054E6311131BEE7006D32D9 /* Carbon.framework in Frameworks */,
 				0054E66C1131BF58006D32D9 /* Quartz.framework in Frameworks */,
+				0085973D11431AA300DD08C5 /* GLUT.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -475,6 +482,7 @@
 		0054E33E1131BCC9006D32D9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0085973C11431AA300DD08C5 /* GLUT.framework */,
 				00E0B1CF1132E154004DB96D /* GLUT.framework */,
 				00E0B0671132DC08004DB96D /* libemulator.a */,
 				00E0B0691132DC11004DB96D /* libportaudio.a */,
@@ -601,6 +609,8 @@
 		00B703961135ACBD005E4B65 /* Host */ = {
 			isa = PBXGroup;
 			children = (
+				0085975A11431B6600DD08C5 /* HostJoystick.cpp */,
+				0085975B11431B6600DD08C5 /* HostJoystick.h */,
 				00B703B61135AD16005E4B65 /* HostSystem.h */,
 				00B703B71135AD16005E4B65 /* HostSystem.cpp */,
 				00B703971135ACBD005E4B65 /* HostAudio.cpp */,
@@ -739,6 +749,7 @@
 				00A7BBCE11407A7F006F5C6B /* AppleIIMMU.h in Headers */,
 				00A62FFC11415DF0005E8500 /* MC6821.h in Headers */,
 				00A6300111415E3C005E8500 /* MC6845.h in Headers */,
+				0085975D11431B6600DD08C5 /* HostJoystick.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -923,6 +934,7 @@
 				00A7BBCF11407A7F006F5C6B /* AppleIIMMU.cpp in Sources */,
 				00A62FFD11415DF0005E8500 /* MC6821.cpp in Sources */,
 				00A6300211415E3C005E8500 /* MC6845.cpp in Sources */,
+				0085975C11431B6600DD08C5 /* HostJoystick.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

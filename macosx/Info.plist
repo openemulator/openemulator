@@ -22,7 +22,7 @@
 			<key>NSDocumentClass</key>
 			<string>Document</string>
 			<key>LSTypeIsPackage</key>
-			<true/>
+			<false/>
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
