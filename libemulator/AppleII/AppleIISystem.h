@@ -13,9 +13,9 @@
 // Messages
 enum
 {
-	APPLEII_EVENTS_SELECT_MAINCPU = OEIOCTL_USER,
-	APPLEII_EVENTS_SELECT_AUXCPU,
-	APPLEII_EVENTS_GET_SAMPLEINDEX,
+	APPLEIISYSTEM_SELECT_MAINCPU = OEIOCTL_USER,
+	APPLEIISYSTEM_SELECT_AUXCPU,
+	APPLEIISYSTEM_GET_SAMPLEINDEX,
 };
 
 // Receives HOST_AUDIO_BUFFERSTART
@@ -25,6 +25,6 @@ enum
 // Receives IRQ and NMI requests, and routes them to the CPU
 // Receives HOST_EVENTS_RESET_UP and routes it to the CPU
 
-class AppleIIEvents : public OEComponent
+class AppleIISystem : public OEComponent
 {
 };

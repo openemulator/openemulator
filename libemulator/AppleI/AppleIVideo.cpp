@@ -1,12 +1,12 @@
 
 /**
  * libemulator
- * Apple II System
+ * Apple I Video
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls an Apple II system
+ * Controls the Apple I Video
  */
 
-#include "AppleIISystem.h"
+#include "AppleIVideo.h"
 

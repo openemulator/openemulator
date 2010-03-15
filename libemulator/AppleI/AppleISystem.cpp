@@ -1,11 +1,16 @@
-/*
- *  AppleIISystem.cpp
- *  OpenEmulator
+
+/**
+ * libemulator
+ * Apple I System
+ * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
+ * Released under the GPL
  *
- *  Created by Marc S. Reßl on 25/02/10.
- *  Copyright 2010 ITBA. All rights reserved.
- *
+ * Controls an Apple I system
  */
 
-#include "AppleIISystem.h"
+#include "AppleISystem.h"
 
+int AppleISystem::ioctl(int message, void *data)
+{
+	return 0;	
+}

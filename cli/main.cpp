@@ -323,8 +323,8 @@ int main(int argc, char *argv[])
 	
 	// oepaConstruct
 	// Determine host::video width and height
-	sdlWidth = 640;
-	sdlHeight = 480;
+	sdlWidth = 768;
+	sdlHeight = 576;
 	
 	sdlOpen(sdlWidth, sdlHeight, sdlFullScreen, sdlUpdateFrequency);
 	oeglOpen();

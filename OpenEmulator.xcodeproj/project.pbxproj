@@ -25,6 +25,10 @@
 		003318AF1101492B00CC1782 /* Connector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 003318AD1101492B00CC1782 /* Connector.xib */; };
 		003E25E71070796700185260 /* images in Resources */ = {isa = PBXBuildFile; fileRef = 003E2597107075D900185260 /* images */; };
 		003FB21410BA3D5D00D3697B /* devices in Resources */ = {isa = PBXBuildFile; fileRef = 00E8A393108CCAA200D0A137 /* devices */; };
+		0049B99B114C929200B686BB /* AppleIIO.h in Headers */ = {isa = PBXBuildFile; fileRef = 0049B999114C929200B686BB /* AppleIIO.h */; };
+		0049B99C114C929200B686BB /* AppleIIO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0049B99A114C929200B686BB /* AppleIIO.cpp */; };
+		0049B9A5114C9EA900B686BB /* AppleIFloatingBus.h in Headers */ = {isa = PBXBuildFile; fileRef = 0049B9A3114C9EA900B686BB /* AppleIFloatingBus.h */; };
+		0049B9A6114C9EA900B686BB /* AppleIFloatingBus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0049B9A4114C9EA900B686BB /* AppleIFloatingBus.cpp */; };
 		005398DB113A00CA00CA7CE4 /* ROM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 005397E31139EC1F00CA7CE4 /* ROM.cpp */; };
 		005398DC113A00CA00CA7CE4 /* RAM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 005397E01139EC1800CA7CE4 /* RAM.cpp */; };
 		005398DE113A00CF00CA7CE4 /* Z80.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00F1AF2C1137119A006642AD /* Z80.cpp */; };
@@ -84,6 +88,10 @@
 		00C7F1DC100BC5B500AD0812 /* IPPlusSel.png in Resources */ = {isa = PBXBuildFile; fileRef = 00C7F1D8100BC5B400AD0812 /* IPPlusSel.png */; };
 		00C8AA0B10103D6A006A5734 /* OSDPause.png in Resources */ = {isa = PBXBuildFile; fileRef = 00C8AA0610103D6A006A5734 /* OSDPause.png */; };
 		00C8AA0C10103D6A006A5734 /* OSDPower.png in Resources */ = {isa = PBXBuildFile; fileRef = 00C8AA0710103D6A006A5734 /* OSDPower.png */; };
+		00D184F0114C8E8F00F4AB12 /* AppleIVideo.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D184EE114C8E8F00F4AB12 /* AppleIVideo.h */; };
+		00D184F1114C8E8F00F4AB12 /* AppleIVideo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00D184EF114C8E8F00F4AB12 /* AppleIVideo.cpp */; };
+		00D184F4114C8E9A00F4AB12 /* AppleIKeyboard.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D184F2114C8E9A00F4AB12 /* AppleIKeyboard.h */; };
+		00D184F5114C8E9A00F4AB12 /* AppleIKeyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00D184F3114C8E9A00F4AB12 /* AppleIKeyboard.cpp */; };
 		00D1958D1093712E008FB014 /* Chooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00D1958B1093712E008FB014 /* Chooser.xib */; };
 		00D8448A0FFF04C0005802F0 /* AppleGraphicsTablet.png in Resources */ = {isa = PBXBuildFile; fileRef = 000F66360FF8368F00C8AF23 /* AppleGraphicsTablet.png */; };
 		00D8448B0FFF04C0005802F0 /* DiskImage.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000F66370FF8368F00C8AF23 /* DiskImage.icns */; };
@@ -213,6 +221,10 @@
 		00317E380FD31D1A007F2B00 /* AppleGraphicsTablet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppleGraphicsTablet.png; sourceTree = "<group>"; };
 		003318AE1101492B00CC1782 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Connector.xib; sourceTree = "<group>"; };
 		003E2597107075D900185260 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
+		0049B999114C929200B686BB /* AppleIIO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleIIO.h; sourceTree = "<group>"; };
+		0049B99A114C929200B686BB /* AppleIIO.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleIIO.cpp; sourceTree = "<group>"; };
+		0049B9A3114C9EA900B686BB /* AppleIFloatingBus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleIFloatingBus.h; sourceTree = "<group>"; };
+		0049B9A4114C9EA900B686BB /* AppleIFloatingBus.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleIFloatingBus.cpp; sourceTree = "<group>"; };
 		005397DF1139EC1800CA7CE4 /* RAM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RAM.h; sourceTree = "<group>"; };
 		005397E01139EC1800CA7CE4 /* RAM.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RAM.cpp; sourceTree = "<group>"; };
 		005397E21139EC1F00CA7CE4 /* ROM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ROM.h; sourceTree = "<group>"; };
@@ -300,6 +312,10 @@
 		00C7F1D8100BC5B400AD0812 /* IPPlusSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPPlusSel.png; sourceTree = "<group>"; };
 		00C8AA0610103D6A006A5734 /* OSDPause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = OSDPause.png; sourceTree = "<group>"; };
 		00C8AA0710103D6A006A5734 /* OSDPower.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = OSDPower.png; sourceTree = "<group>"; };
+		00D184EE114C8E8F00F4AB12 /* AppleIVideo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleIVideo.h; sourceTree = "<group>"; };
+		00D184EF114C8E8F00F4AB12 /* AppleIVideo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleIVideo.cpp; sourceTree = "<group>"; };
+		00D184F2114C8E9A00F4AB12 /* AppleIKeyboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleIKeyboard.h; sourceTree = "<group>"; };
+		00D184F3114C8E9A00F4AB12 /* AppleIKeyboard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleIKeyboard.cpp; sourceTree = "<group>"; };
 		00D1958C1093712E008FB014 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Chooser.xib; sourceTree = "<group>"; };
 		00D844B60FFF0505005802F0 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Document.xib; sourceTree = "<group>"; };
 		00D844B80FFF0505005802F0 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/GraphicsTablet.xib; sourceTree = "<group>"; };
@@ -548,6 +564,14 @@
 			children = (
 				00910105113AAE60005EBB62 /* AppleISystem.cpp */,
 				00910106113AAE60005EBB62 /* AppleISystem.h */,
+				00D184EE114C8E8F00F4AB12 /* AppleIVideo.h */,
+				00D184EF114C8E8F00F4AB12 /* AppleIVideo.cpp */,
+				00D184F2114C8E9A00F4AB12 /* AppleIKeyboard.h */,
+				00D184F3114C8E9A00F4AB12 /* AppleIKeyboard.cpp */,
+				0049B999114C929200B686BB /* AppleIIO.h */,
+				0049B99A114C929200B686BB /* AppleIIO.cpp */,
+				0049B9A3114C9EA900B686BB /* AppleIFloatingBus.h */,
+				0049B9A4114C9EA900B686BB /* AppleIFloatingBus.cpp */,
 			);
 			path = AppleI;
 			sourceTree = "<group>";
@@ -750,6 +774,10 @@
 				00A62FFC11415DF0005E8500 /* MC6821.h in Headers */,
 				00A6300111415E3C005E8500 /* MC6845.h in Headers */,
 				0085975D11431B6600DD08C5 /* HostJoystick.h in Headers */,
+				00D184F0114C8E8F00F4AB12 /* AppleIVideo.h in Headers */,
+				00D184F4114C8E9A00F4AB12 /* AppleIKeyboard.h in Headers */,
+				0049B99B114C929200B686BB /* AppleIIO.h in Headers */,
+				0049B9A5114C9EA900B686BB /* AppleIFloatingBus.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -935,6 +963,10 @@
 				00A62FFD11415DF0005E8500 /* MC6821.cpp in Sources */,
 				00A6300211415E3C005E8500 /* MC6845.cpp in Sources */,
 				0085975C11431B6600DD08C5 /* HostJoystick.cpp in Sources */,
+				00D184F1114C8E8F00F4AB12 /* AppleIVideo.cpp in Sources */,
+				00D184F5114C8E9A00F4AB12 /* AppleIKeyboard.cpp in Sources */,
+				0049B99C114C929200B686BB /* AppleIIO.cpp in Sources */,
+				0049B9A6114C9EA900B686BB /* AppleIFloatingBus.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

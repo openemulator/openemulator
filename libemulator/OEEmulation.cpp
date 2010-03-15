@@ -43,14 +43,10 @@ OEEmulation::OEEmulation(string path, string resourcePath)
 					if (constructDML(documentDML))
 					{
 						if (initDML(documentDML))
-						{
-							if (connectDML(documentDML))
-								loaded = true;
-							else
-								cerr << "libemulator: could not connect \"" + path + "\"." << endl;
-						}
+							loaded = true;
 						else
-							cerr << "libemulator: could not initialize \"" + path + "\"." << endl;
+							cerr << "libemulator: could not initialize \"" + path + "\"."
+							<< endl;
 					}
 					else
 						cerr << "libemulator: could not construct \"" + path + "\"." << endl;
@@ -256,7 +252,8 @@ bool OEEmulation::removeDevice(OERef ref)
 	
 	if (!disconnectDevice(documentDML, deviceRef))
 	{
-		cerr << "libemulator: could not disconnect inlets of \"" + ref.getStringRef() + "\"." << endl;
+		cerr << "libemulator: could not disconnect inlets of \"" + ref.getStringRef() +
+		"\"." << endl;
 		return false;
 	}
 	if (deviceNode->next && (deviceNode->next->type == XML_TEXT_NODE))
@@ -365,23 +362,6 @@ bool OEEmulation::initDML(xmlDocPtr doc)
 }
 
 
-bool OEEmulation::connectDML(xmlDocPtr doc)
-{
-	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
-	for(xmlNodePtr childNode = rootNode->children;
-		childNode;
-		childNode = childNode->next)
-	{
-		if (xmlStrcmp(childNode->name, BAD_CAST "device"))
-			continue;
-		
-		if (!connectDevice(childNode))
-			return false;
-	}
-	
-	return true;
-}
-
 bool OEEmulation::updateDML(xmlDocPtr doc)
 {
 	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
@@ -440,23 +420,6 @@ bool OEEmulation::initDevice(xmlNodePtr node)
 			continue;
 		
 		if (!initComponent(childNode, deviceRef))
-			return false;
-	}
-	
-	return true;
-}
-
-bool OEEmulation::connectDevice(xmlNodePtr node)
-{
-	OERef deviceRef(getXMLProperty(node, "name"));
-	for(xmlNodePtr childNode = node->children;
-		childNode;
-		childNode = childNode->next)
-	{
-		if (xmlStrcmp(childNode->name, BAD_CAST "component"))
-			continue;
-		
-		if (!connectComponent(childNode, deviceRef))
 			return false;
 	}
 	
@@ -528,6 +491,11 @@ bool OEEmulation::initComponent(xmlNodePtr node, OERef deviceRef)
 		childNode;
 		childNode = childNode->next)
 	{
+		if (!xmlStrcmp(childNode->name, BAD_CAST "connection"))
+		{
+			if (!setConnection(childNode, component, deviceRef))
+				return false;
+		}
 		if (!xmlStrcmp(childNode->name, BAD_CAST "property"))
 		{
 			if (!setProperty(childNode, component))
@@ -541,31 +509,6 @@ bool OEEmulation::initComponent(xmlNodePtr node, OERef deviceRef)
 		else if (!xmlStrcmp(childNode->name, BAD_CAST "resource"))
 		{
 			if (!setResource(childNode, component))
-				return false;
-		}
-	}
-	
-	return true;
-}
-
-bool OEEmulation::connectComponent(xmlNodePtr node, OERef deviceRef)
-{
-	string componentName = getXMLProperty(node, "name");
-	
-	string stringRef = deviceRef.getStringRef(componentName);
-	if (!components.count(stringRef))
-		return false;
-	OEComponent *component = components[stringRef];
-	
-	//	printf("OEEmulation::initComponent: %s\n", stringRef.c_str());
-	
-	for(xmlNodePtr childNode = node->children;
-		childNode;
-		childNode = childNode->next)
-	{
-		if (!xmlStrcmp(childNode->name, BAD_CAST "connection"))
-		{
-			if (!setConnection(childNode, component, deviceRef))
 				return false;
 		}
 	}

@@ -1,11 +1,11 @@
 
 /**
  * libemulator
- * Apple II System
+ * Apple I System
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls an Apple II system
+ * Controls an Apple I system
  */
 
 #include "OEComponent.h"
@@ -13,9 +13,7 @@
 // Messages
 enum
 {
-	APPLEII_EVENTS_SELECT_MAINCPU = OEIOCTL_USER,
-	APPLEII_EVENTS_SELECT_AUXCPU,
-	APPLEII_EVENTS_GET_SAMPLEINDEX,
+	APPLEISYSTEM_GET_SAMPLEINDEX,
 };
 
 // Receives HOST_AUDIO_BUFFERSTART
@@ -25,6 +23,8 @@ enum
 // Receives IRQ and NMI requests, and routes them to the CPU
 // Receives HOST_EVENTS_RESET_UP and routes it to the CPU
 
-class AppleIIEvents : public OEComponent
+class AppleISystem : public OEComponent
 {
+public:
+	int ioctl(int message, void *data);
 };

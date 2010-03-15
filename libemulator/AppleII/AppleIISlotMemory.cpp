@@ -29,6 +29,13 @@ void AppleIISlotMemory::setSlot(int index, OEComponent *component)
 	connection.component = mmu;
 	component->ioctl(OEIOCTL_CONNECT, &connection);
 	
+
+	
+	
+	  
+	
+	
+	 
 	connection.name = "mmu";
 	connection.component = mmu;
 	component->ioctl(OEIOCTL_CONNECT, &connection);
