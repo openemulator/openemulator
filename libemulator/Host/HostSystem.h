@@ -55,3 +55,8 @@ enum
 	HOST_SYSTEM_UPDATE_DEVICELIST = OEIOCTL_USER,
 	HOST_SYSTEM_IS_DEVICELIST_UPDATED,
 };
+
+
+class HostSystem : public OEComponent
+{
+};

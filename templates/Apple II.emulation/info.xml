@@ -42,7 +42,7 @@
     <inlet ref="system.cpuSocket" type="appleiicpu" category="expansion" label="CPU Socket" image="Apple II CPU Chip Socket.png" />
     <inlet ref="mmu.romSocket" type="appleiirom" category="expansion" label="ROM Socket" image="Apple II ROM Socket.png" />
     <component name="system" class="AppleIISystem">
-        <connection name="hostSystem" ref="host::system" />
+        <connection name="hostAudio" ref="host::audio" />
         <connection name="cpu" ref="cpu" />
         <connection name="cpu2" ref="" />
         <connection name="cpuSocket" ref="" />

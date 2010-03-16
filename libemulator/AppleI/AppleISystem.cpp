@@ -12,5 +12,6 @@
 
 int AppleISystem::ioctl(int message, void *data)
 {
+	// When connected to host::audio, receive notifications from audio buffers
 	return 0;	
 }

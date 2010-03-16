@@ -9,3 +9,8 @@
  */
 
 #include "OEComponent.h"
+
+
+class HostJoystick : public OEComponent
+{
+};

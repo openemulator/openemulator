@@ -44,10 +44,11 @@ void MC6821::setControlRegisterA(int value)
 	controlRegisterA = value;
 	bool isIRQ = controlRegisterA & (MC6821_CR_IRQ1FLAG | MC6821_CR_IRQ2FLAG);
 	
-	if (wasIRQ && !isIRQ)
-		irqA->ioctl(OEIOCTL_RELEASE_IRQ, NULL);
-	else if (!wasIRQ && isIRQ)
-		irqA->ioctl(OEIOCTL_ASSERT_IRQ, NULL);
+	if (irqA)
+		if (wasIRQ && !isIRQ)
+			irqA->ioctl(OEIOCTL_RELEASE_IRQ, NULL);
+		else if (!wasIRQ && isIRQ)
+			irqA->ioctl(OEIOCTL_ASSERT_IRQ, NULL);
 }
 
 void MC6821::setControlRegisterB(int value)
@@ -56,10 +57,11 @@ void MC6821::setControlRegisterB(int value)
 	controlRegisterB = value;
 	bool isIRQ = controlRegisterB & (MC6821_CR_IRQ1FLAG | MC6821_CR_IRQ2FLAG);
 	
-	if (wasIRQ && !isIRQ)
-		irqB->ioctl(OEIOCTL_RELEASE_IRQ, NULL);
-	else if (!wasIRQ && isIRQ)
-		irqB->ioctl(OEIOCTL_ASSERT_IRQ, NULL);
+	if (irqB)
+		if (wasIRQ && !isIRQ)
+			irqB->ioctl(OEIOCTL_RELEASE_IRQ, NULL);
+		else if (!wasIRQ && isIRQ)
+			irqB->ioctl(OEIOCTL_ASSERT_IRQ, NULL);
 }
 
 int MC6821::ioctl(int message, void *data)
@@ -83,13 +85,13 @@ int MC6821::ioctl(int message, void *data)
 		{
 			OEIoctlProperty *property = (OEIoctlProperty *) data;
 			if (property->name == "controlRegisterA")
-				setControlRegisterA(intValue(property->value));
+				controlRegisterA = intValue(property->value);
 			else if (property->name == "dataDirectionRegisterA")
 				dataDirectionRegisterA = intValue(property->value);
 			else if (property->name == "outputRegisterA")
 				outputRegisterA = intValue(property->value);
 			else if (property->name == "controlRegisterB")
-				setControlRegisterB(intValue(property->value));
+				controlRegisterB = intValue(property->value);
 			else if (property->name == "dataDirectionRegisterB")
 				dataDirectionRegisterB = intValue(property->value);
 			else if (property->name == "outputRegisterB")
@@ -134,9 +136,10 @@ int MC6821::ioctl(int message, void *data)
 		}
 		case MC6821_SET_CA1:
 		{
-			int value = *((int *) data);
-			if ((!(controlRegisterA & MC6821_CR_C1LOWTOHIGH) && ca1 && !value) ||
-				((controlRegisterA & MC6821_CR_C1LOWTOHIGH) && !ca1 && value))
+			bool value = *((int *) data);
+			bool isLowToHigh = (controlRegisterA & MC6821_CR_C1LOWTOHIGH);
+			if ((!isLowToHigh && ca1 && !value) ||
+				(isLowToHigh && !ca1 && value))
 			{
 				if (controlRegisterA & MC6821_CR_C1ENABLEIRQ)
 					setControlRegisterA(controlRegisterA | MC6821_CR_IRQ1FLAG);
@@ -153,15 +156,16 @@ int MC6821::ioctl(int message, void *data)
 		}
 		case MC6821_SET_CA2:
 		{
-			int value = *((int *) data);
-			if ((!(controlRegisterA & MC6821_CR_C2LOWTOHIGH) && ca2 && !value) ||
-				((controlRegisterA & MC6821_CR_C2LOWTOHIGH) && !ca2 && value))
+			bool value = *((int *) data);
+			bool isLowToHigh = (controlRegisterA & MC6821_CR_C2LOWTOHIGH);
+			if ((!isLowToHigh && ca2 && !value) ||
+				(isLowToHigh && !ca2 && value))
 			{
 				if ((controlRegisterA & (MC6821_CR_C2OUTPUT && MC6821_CR_C2ENABLEIRQ)) ==
 					MC6821_CR_C2ENABLEIRQ)
 					setControlRegisterA(controlRegisterA | MC6821_CR_IRQ2FLAG);
 			}
-			if (controlRegisterA & MC6821_CR_C2OUTPUT)
+			if ((controlRegisterA & MC6821_CR_C2OUTPUT) && (ca2 != value))
 				interfaceA->write(MC6821_AD_C2, value);
 			ca2 = value;
 			break;
@@ -174,9 +178,10 @@ int MC6821::ioctl(int message, void *data)
 		}
 		case MC6821_SET_CB1:
 		{
-			int value = *((int *) data);
-			if ((!(controlRegisterB & MC6821_CR_C1LOWTOHIGH) && cb1 && !value) ||
-				((controlRegisterB & MC6821_CR_C1LOWTOHIGH) && !cb1 && value))
+			bool value = *((int *) data);
+			bool isLowToHigh = (controlRegisterB & MC6821_CR_C1LOWTOHIGH);
+			if ((!isLowToHigh && cb1 && !value) ||
+				(isLowToHigh && !cb1 && value))
 			{
 				if (controlRegisterB & MC6821_CR_C1ENABLEIRQ)
 					setControlRegisterB(controlRegisterB | MC6821_CR_IRQ1FLAG);
@@ -193,16 +198,18 @@ int MC6821::ioctl(int message, void *data)
 		}
 		case MC6821_SET_CB2:
 		{
-			int value = *((int *) data);
-			if ((!(controlRegisterB & MC6821_CR_C2LOWTOHIGH) && cb1 && !value) ||
-				((controlRegisterB & MC6821_CR_C2LOWTOHIGH) && !cb1 && value))
+			bool value = *((int *) data);
+			bool isLowToHigh = (controlRegisterB & MC6821_CR_C1LOWTOHIGH);
+			if ((!isLowToHigh && cb1 && !value) ||
+				(isLowToHigh && !cb1 && value))
 			{
 				if ((controlRegisterB & (MC6821_CR_C2OUTPUT && MC6821_CR_C2ENABLEIRQ)) ==
 					MC6821_CR_C1ENABLEIRQ)
 					setControlRegisterB(controlRegisterB | MC6821_CR_IRQ2FLAG);
 			}
+			if (cb2 != value)
+				interfaceB->write(MC6821_AD_C2, cb2);
 			cb2 = value;
-			interfaceB->write(MC6821_AD_C2, cb2);
 			break;
 		}
 		case MC6821_GET_CB2:
@@ -226,18 +233,18 @@ int MC6821::read(int address)
 				if (controlRegisterA & (MC6821_CR_C2OUTPUT | MC6821_CR_C2DIRECT) ==
 					MC6821_CR_C2OUTPUT)
 				{
-					int value = 0;
-					ioctl(MC6821_SET_CA2, &value);
+					int ca2 = 0;
+					ioctl(MC6821_SET_CA2, &ca2);
 					if (controlRegisterA & MC6821_CR_C2ERESTORE)
 					{
-						value = 1;
-						ioctl(MC6821_SET_CA2, &value);
+						ca2 = 1;
+						ioctl(MC6821_SET_CA2, &ca2);
 					}
 				}
 				setControlRegisterA(controlRegisterA & 
 									~(MC6821_CR_IRQ1FLAG | MC6821_CR_IRQ2FLAG));
 				outputRegisterA &= dataDirectionRegisterA;
-				outputRegisterA |= interfaceA->read(MC6821_AD_DATA) & (~dataDirectionRegisterA);
+				outputRegisterA |= interfaceA->read(MC6821_AD_DATA) & ~dataDirectionRegisterA;
 				return outputRegisterA;
 			}
 			else
@@ -250,7 +257,7 @@ int MC6821::read(int address)
 				setControlRegisterB(controlRegisterB & 
 									~(MC6821_CR_IRQ1FLAG | MC6821_CR_IRQ2FLAG));
 				outputRegisterB &= dataDirectionRegisterB;
-				outputRegisterB |= interfaceA->read(MC6821_AD_DATA) & (~dataDirectionRegisterB);
+				outputRegisterB |= interfaceA->read(MC6821_AD_DATA) & ~dataDirectionRegisterB;
 				return outputRegisterB;
 			}
 			else
@@ -280,8 +287,8 @@ void MC6821::write(int address, int value)
 			if (value & (MC6821_CR_C2OUTPUT | MC6821_CR_C2DIRECT) ==
 				(MC6821_CR_C2OUTPUT | MC6821_CR_C2DIRECT))
 			{
-				value &= MC6821_CR_C2SET;
-				ioctl(MC6821_SET_CA2, &value);
+				int ca2 = value & MC6821_CR_C2SET;
+				ioctl(MC6821_SET_CA2, &ca2);
 			}
 			break;
 		case MC6821_RS_OUTPUTREGISTERB:
@@ -290,12 +297,12 @@ void MC6821::write(int address, int value)
 				if (controlRegisterB & (MC6821_CR_C2OUTPUT | MC6821_CR_C2DIRECT) ==
 					MC6821_CR_C2OUTPUT)
 				{
-					int value = 0;
-					ioctl(MC6821_SET_CB2, &value);
+					int cb2 = 0;
+					ioctl(MC6821_SET_CB2, &cb2);
 					if (controlRegisterB & MC6821_CR_C2ERESTORE)
 					{
-						value = 1;
-						ioctl(MC6821_SET_CB2, &value);
+						cb2 = 1;
+						ioctl(MC6821_SET_CB2, &cb2);
 					}
 				}
 				outputRegisterB = value;
@@ -309,8 +316,8 @@ void MC6821::write(int address, int value)
 			if (value & (MC6821_CR_C2OUTPUT | MC6821_CR_C2DIRECT) ==
 				(MC6821_CR_C2OUTPUT | MC6821_CR_C2DIRECT))
 			{
-				value &= MC6821_CR_C2SET;
-				ioctl(MC6821_SET_CB2, &value);
+				int cb2 = value & MC6821_CR_C2SET;
+				ioctl(MC6821_SET_CB2, &cb2);
 			}
 			break;
 	}

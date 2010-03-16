@@ -16,7 +16,7 @@
 // Messages
 enum
 {
-	HOST_VIDEO_ADD_SCREEN = OE_IOCTL_USER_MESSAGES,
+	HOST_VIDEO_ADD_SCREEN = OEIOCTL_USER,
 	HOST_VIDEO_REMOVE_SCREEN,
 	HOST_VIDEO_GET_SCREEN_NUM,
 	HOST_VIDEO_GET_SCREEN,
@@ -42,7 +42,7 @@ typedef struct
 // maxWidth * xn
 // maxHeight * yn
 
-class HostAudio : public OEComponent
+class HostVideo : public OEComponent
 {
 
 };

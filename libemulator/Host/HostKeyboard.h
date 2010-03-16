@@ -8,6 +8,8 @@
  * Controls host keyboard events
  */
 
+#include "OEComponent.h"
+
 #define HID_K_A					0x04
 #define HID_K_B					0x05
 #define HID_K_C					0x06
@@ -233,3 +235,7 @@ typedef struct
 	int unicode;
 	int modifierState;
 } OEIoctlKeyEvent;
+
+class HostKeyboard : public OEComponent
+{
+};

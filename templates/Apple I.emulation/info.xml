@@ -32,11 +32,12 @@
     <inlet ref="system.slot1" type="appleislot" category="expansion" label="Slot 1" image="Apple I Slot.png" />
     <inlet ref="system.slot2" type="appleislot" category="expansion" label="Slot 2" image="Apple I Slot.png" />
     <component name="system" class="AppleISystem">
-        <connection name="hostSystem" ref="host::system" />
+        <connection name="hostAudio" ref="host::audio" />
         <connection name="cpu" ref="cpu" />
         <connection name="cpuSocket" ref="" />
         <connection name="slot1" ref="" />
         <connection name="slot2" ref="" />
+        <property name="internalCPUEnabled" value="1" />
     </component>
     <component name="floatingBus" class="AppleIFloatingBus">
         <connection name="system" ref="system" />
