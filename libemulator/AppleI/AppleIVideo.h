@@ -10,8 +10,8 @@
 
 #include "OEComponent.h"
 
-#define APPLEIVIDEO_CHARACTER_WIDTH 40
-#define APPLEIVIDEO_CHARACTER_HEIGHT 24
+#define APPLEIVIDEO_TERM_WIDTH 40
+#define APPLEIVIDEO_TERM_HEIGHT 24
 
 class AppleIVideo : public OEComponent
 {
@@ -24,5 +24,5 @@ private:
 	OEComponent *cpuSocket;
 	
 	vector<char> characterSet;
-	char screen[APPLEIVIDEO_CHARACTER_HEIGHT][APPLEIVIDEO_CHARACTER_WIDTH];
+	char screen[APPLEIVIDEO_TERM_HEIGHT][APPLEIVIDEO_TERM_WIDTH];
 };

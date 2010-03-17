@@ -9,6 +9,7 @@
  */
 
 #include "AppleIKeyboard.h"
+#include "HostKeyboard.h"
 #include "MC6821.h"
 
 #define APPLEIKEYBOARD_MASK	0x40
@@ -35,7 +36,7 @@ int AppleIKeyboard::ioctl(int message, void *data)
 			if ((keyEvent->isDown) && (keyEvent->unicode < 128))
 			{
 				key = keyEvent->unicode;
-			
+				
 				bool value = true;
 				pia->ioctl(MC6821_SET_CA1, &value);
 			}

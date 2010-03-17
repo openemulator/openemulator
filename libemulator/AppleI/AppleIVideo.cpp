@@ -10,7 +10,7 @@
 
 #include "AppleIVideo.h"
 
-void AppleIVideo::ioctl(int messages, void *data)
+int AppleIVideo::ioctl(int message, void *data)
 {
 	switch(message)
 	{

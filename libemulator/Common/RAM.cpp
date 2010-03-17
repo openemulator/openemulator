@@ -10,6 +10,8 @@
 
 #include "RAM.h"
 
+#include "HostSystem.h"
+
 int RAM::ioctl(int message, void *data)
 {
 	switch(message)
