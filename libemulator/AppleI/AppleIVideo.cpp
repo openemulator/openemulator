@@ -10,3 +10,34 @@
 
 #include "AppleIVideo.h"
 
+void AppleIVideo::ioctl(int messages, void *data)
+{
+	switch(message)
+	{
+		case OEIOCTL_CONNECT:
+		{
+			OEIoctlConnection *connection = (OEIoctlConnection *) data;
+			if (connection->name == "system")
+			{
+				OEComponent *system = connection->component;
+				system->addObserver(this);
+			}
+			break;
+		}
+		case OEIOCTL_SET_RESOURCE:
+		{
+			OEIoctlData *resource = (OEIoctlData *) data;
+			if (resource->name == "image")
+				characterSet = resource->data;
+			break;
+		}
+	}
+	
+	return false;
+}
+
+void AppleIVideo::write(int address, int value)
+{
+	
+	
+}

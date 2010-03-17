@@ -63,16 +63,19 @@ private:
 	bool validateDML(xmlDocPtr doc);
 	bool constructDML(xmlDocPtr doc);
 	bool initDML(xmlDocPtr doc);
+	bool connectDML(xmlDocPtr doc);
 	bool updateDML(xmlDocPtr doc);
 	void destroyDML(xmlDocPtr doc);
 	
 	bool constructDevice(xmlNodePtr node);
 	bool initDevice(xmlNodePtr node);
+	bool connectDevice(xmlNodePtr node);
 	bool updateDevice(xmlNodePtr node);
 	void destroyDevice(xmlNodePtr node);
 	
 	bool constructComponent(xmlNodePtr node, OERef deviceRef);
 	bool initComponent(xmlNodePtr node, OERef deviceRef);
+	bool connectComponent(xmlNodePtr node, OERef deviceRef);
 	bool updateComponent(xmlNodePtr node, OERef deviceRef);
 	void destroyComponent(xmlNodePtr node, OERef deviceRef);
 	

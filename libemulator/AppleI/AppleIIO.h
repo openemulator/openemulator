@@ -19,7 +19,7 @@ class AppleIIO : public OEComponent
 private:
 	int offset;
 	int size;
-
+	
 	OEComponent *pia;
 	OEComponent *floatingBus;
 };

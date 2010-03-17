@@ -14,6 +14,12 @@ int RAM::ioctl(int message, void *data)
 {
 	switch(message)
 	{
+		case OEIOCTL_CONNECT:
+		{
+			OEIoctlConnection *connection = (OEIoctlConnection *) data;
+			if (connection->name == "hostSystem")
+				connection->component->addObserver(this);
+		}
 		case OEIOCTL_SET_PROPERTY:
 		{
 			OEIoctlProperty *property = (OEIoctlProperty *) data;
@@ -38,7 +44,10 @@ int RAM::ioctl(int message, void *data)
 			OEIoctlData *getData = (OEIoctlData *) data;
 			if (getData->name == "image")
 				getData->data = memory;
-			break;
+			else
+				return false;
+			
+			return true;
 		}
 		case OEIOCTL_GET_MEMORYMAP:
 		{
@@ -48,9 +57,16 @@ int RAM::ioctl(int message, void *data)
 			memoryMap->size = memory.size();
 			break;
 		}
+		case OEIOCTL_NOTIFY:
+		{
+			OEIoctlNotification *notification = (OEIoctlNotification *) data;
+			if (notification->message == HID_S_COLDRESTART);
+			// Set up reset pattern
+			break;
+		}
 	}
 	
-	return 0;
+	return false;
 }	
 
 int RAM::read(int address)

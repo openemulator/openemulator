@@ -28,7 +28,7 @@
 </device>
 
 <device name="dev0" label="Apple II">
-    <inlet ref="videoGenerator.monitor" type="applecomposite" category="peripheral" label="Video Connector" image="Apple II Video Connector.png" />
+    <inlet ref="video.monitor" type="appleiicomposite" category="peripheral" label="Video Connector" image="Apple II Video Connector.png" />
     <inlet ref="game.port" type="appleiigame" category="peripheral" label="Game Port" image="Apple II Game Port.png" />
     <inlet ref="slot.slot0" type="appleiislot" category="expansion" label="Slot 0" image="Apple II Slot.png" />
     <inlet ref="slot.slot1" type="appleiislot" category="expansion" label="Slot 1" image="Apple II Slot.png" />
@@ -38,7 +38,7 @@
     <inlet ref="slot.slot5" type="appleiislot" category="expansion" label="Slot 5" image="Apple II Slot.png" />
     <inlet ref="slot.slot6" type="appleiislot" category="expansion" label="Slot 6" image="Apple II Slot.png" />
     <inlet ref="slot.slot7" type="appleiislot" category="expansion" label="Slot 7" image="Apple II Slot.png" />
-    <inlet ref="videoGenerator.romSocket" type="appleiichar" category="expansion" label="Video ROM Socket" image="Apple II Video ROM Socket.png" />
+    <inlet ref="video.romSocket" type="appleiichar" category="expansion" label="Video ROM Socket" image="Apple II Video ROM Socket.png" />
     <inlet ref="system.cpuSocket" type="appleiicpu" category="expansion" label="CPU Socket" image="Apple II CPU Chip Socket.png" />
     <inlet ref="mmu.romSocket" type="appleiirom" category="expansion" label="ROM Socket" image="Apple II ROM Socket.png" />
     <component name="system" class="AppleIISystem">
@@ -63,12 +63,32 @@
         <property name="p" value="0" />
         <property name="pc" value="0" />
     </component>
+    <component name="memoryMap" class="MemoryMap16bit">
+        <connection name="" ref="floatingBus" />
+        <connection name="" ref="ram" />
+        <connection name="" ref="io" />
+        <connection name="" ref="slot" />
+        <connection name="" ref="expandedSlot" />
+    </component>
+    <component name="mmu" class="AppleIIMMU">
+        <connection name="hostSystem" ref="host::system" />
+        <connection name="floatingBus" ref="floatingBus" />
+        <connection name="memoryMap" ref="memoryMap" />
+        <connection name="romD0" ref="romD0" />
+        <connection name="romD8" ref="romD8" />
+        <connection name="romE0" ref="romE0" />
+        <connection name="romE8" ref="romE8" />
+        <connection name="romF0" ref="romF0" />
+        <connection name="romF8" ref="romF8" />
+        <property name="romEnable" value="0" />
+    </component>
     <component name="memory" class="RAM">
         <data name="image" src="${DEVICE_NAME}.bin" />
         <property name="offset" value="0x0000" />
         <property name="size" value="0xc000" />
     </component>
     <component name="video" class="AppleIIVideo">
+        <resource name="image" src="roms/Signetics 2513 Video ROM.bin" />
         <connection name="monitor" ref="" />
         <connection name="romSocket" ref="" />
         <connection name="memoryMap" ref="memoryMap" />
@@ -159,25 +179,6 @@
     <component name="romF8" class="ROM">
         <resource name="image" src="roms/Apple II F8 ROM.bin" />
         <property name="offset" value="0xf800" />
-    </component>
-    <component name="memoryMap" class="MemoryMap16bit">
-        <connection name="" ref="floatingBus" />
-        <connection name="" ref="ram" />
-        <connection name="" ref="io" />
-        <connection name="" ref="slot" />
-        <connection name="" ref="expandedSlot" />
-    </component>
-    <component name="mmu" class="AppleIIMMU">
-        <connection name="hostSystem" ref="host::system" />
-        <connection name="floatingBus" ref="floatingBus" />
-        <connection name="memoryMap" ref="memoryMap" />
-        <connection name="romD0" ref="romD0" />
-        <connection name="romD8" ref="romD8" />
-        <connection name="romE0" ref="romE0" />
-        <connection name="romE8" ref="romE8" />
-        <connection name="romF0" ref="romF0" />
-        <connection name="romF8" ref="romF8" />
-        <property name="romEnable" value="0" />
     </component>
 </device>
 

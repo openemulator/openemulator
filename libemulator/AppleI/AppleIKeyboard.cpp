@@ -9,4 +9,40 @@
  */
 
 #include "AppleIKeyboard.h"
+#include "MC6821.h"
 
+int AppleIKeyboard::ioctl(int message, void *data)
+{
+	switch (message)
+	{
+		case OEIOCTL_CONNECT:
+		{
+			OEIoctlConnection *connection = (OEIoctlConnection *) data;
+			if (connection->name == "hostKeyboard")
+			{
+				hostKeyboard = connection->component;
+				hostKeyboard->addObserver(this);
+			}
+			break;
+		}
+		case OEIOCTL_NOTIFY:
+		{
+			OEIoctlNotification *notification = (OEIoctlNotification *) data;
+			
+			key = notification->message;
+			
+			bool value = true;
+			pia->ioctl(MC6821_SET_CA1, &value);
+		}
+	}
+	
+	return false;
+}
+
+int AppleIKeyboard::read(int address)
+{
+	bool value = false;
+	pia->ioctl(MC6821_SET_CA1, &value);
+	
+	return key;
+}

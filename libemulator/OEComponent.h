@@ -11,6 +11,9 @@
 #ifndef _OECOMPONENT_H
 #define _OECOMPONENT_H
 
+#include <string>
+#include <vector>
+
 // Messages
 enum {
 	OEIOCTL_CONNECT,
@@ -21,13 +24,11 @@ enum {
 	OEIOCTL_SET_RESOURCE,
 	OEIOCTL_GET_MEMORYMAP,
 	OEIOCTL_SET_MEMORYMAP,
+	OEIOCTL_NOTIFY,
 	OEIOCTL_ASSERT_IRQ,
 	OEIOCTL_RELEASE_IRQ,
 	OEIOCTL_USER,
 };
-
-#include <string>
-#include <vector>
 
 using namespace std;
 
@@ -43,9 +44,6 @@ public:
 	
 	void addObserver(class OEComponent *component);
 	void removeObserver(class OEComponent *component);
-	virtual void onNotification(class OEComponent *component,
-								int message,
-								void *data);
 	
 protected:
 	void postNotification(int message, void *data);
@@ -81,5 +79,12 @@ typedef struct
 	int offset;
 	int size;
 } OEIoctlMemoryMap;
+
+typedef struct
+{
+	OEComponent *component;
+	int message;
+	void *data;
+} OEIoctlNotification;
 
 #endif

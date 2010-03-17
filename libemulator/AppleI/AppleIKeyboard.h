@@ -8,3 +8,17 @@
  * Controls the Apple I Keyboard
  */
 
+#include "OEComponent.h"
+
+class AppleIKeyboard : public OEComponent
+{
+public:
+	int ioctl(int message, void *data);
+	int read(int address);
+	
+private:
+	OEComponent *hostKeyboard;
+	OEComponent *pia;
+	
+	int key;
+};

@@ -128,6 +128,10 @@ int MC6821::ioctl(int message, void *data)
 				property->value = cb1;
 			else if (property->name == "cb2")
 				property->value = cb2;
+			else
+				return false;
+			
+			return true;
 		}
 		case MC6821_RESET:
 		{
@@ -220,7 +224,7 @@ int MC6821::ioctl(int message, void *data)
 		}
 	}
 	
-	return 0;
+	return false;
 }
 
 int MC6821::read(int address)

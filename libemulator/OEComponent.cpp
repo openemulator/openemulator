@@ -52,17 +52,18 @@ void OEComponent::removeObserver(OEComponent *component)
 	}
 }
 
-void OEComponent::onNotification(OEComponent *component, int message, void *data)
-{
-}
-
 void OEComponent::postNotification(int message, void *data)
 {
+	OEIoctlNotification notification;
+	notification.component = this;
+	notification.message = message;
+	notification.data = data;
+	
 	vector<OEComponent *>::iterator iterator;
 	for (iterator = observers.begin();
 		 iterator != observers.end();
 		 iterator++)
-		(*iterator)->onNotification(this, message, data);
+		(*iterator)->ioctl(OEIOCTL_NOTIFY, &notification);
 }
 
 int intValue(string value)

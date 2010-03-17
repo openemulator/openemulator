@@ -15,8 +15,6 @@
 		000671C4113F318000781A92 /* MemoryMap8Bit.h in Headers */ = {isa = PBXBuildFile; fileRef = 000671C0113F318000781A92 /* MemoryMap8Bit.h */; };
 		000671C5113F318000781A92 /* MemoryMap16Bit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000671C1113F318000781A92 /* MemoryMap16Bit.cpp */; };
 		000671C6113F318000781A92 /* MemoryMap16Bit.h in Headers */ = {isa = PBXBuildFile; fileRef = 000671C2113F318000781A92 /* MemoryMap16Bit.h */; };
-		00067200113F339700781A92 /* Zero.h in Headers */ = {isa = PBXBuildFile; fileRef = 000671FE113F339700781A92 /* Zero.h */; };
-		00067201113F339700781A92 /* Zero.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000671FF113F339700781A92 /* Zero.cpp */; };
 		0011696510E7CC59007A5EFB /* IPStorageSel.png in Resources */ = {isa = PBXBuildFile; fileRef = 0011696410E7CC4E007A5EFB /* IPStorageSel.png */; };
 		0011696610E7CC59007A5EFB /* IPStorage.png in Resources */ = {isa = PBXBuildFile; fileRef = 0011696310E7CC4E007A5EFB /* IPStorage.png */; };
 		00123BC91069B8D600FB95A1 /* libemulator.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 006EECA40FCA5C31003D2C8D /* libemulator.a */; };
@@ -57,6 +55,8 @@
 		00A6300211415E3C005E8500 /* MC6845.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A6300011415E3C005E8500 /* MC6845.cpp */; };
 		00A7BBCE11407A7F006F5C6B /* AppleIIMMU.h in Headers */ = {isa = PBXBuildFile; fileRef = 00A7BBCC11407A7F006F5C6B /* AppleIIMMU.h */; };
 		00A7BBCF11407A7F006F5C6B /* AppleIIMMU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A7BBCD11407A7F006F5C6B /* AppleIIMMU.cpp */; };
+		00A7BD4211514DF50019B14F /* AppleICassetteInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 00A7BD4011514DF50019B14F /* AppleICassetteInterface.h */; };
+		00A7BD4311514DF50019B14F /* AppleICassetteInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A7BD4111514DF50019B14F /* AppleICassetteInterface.cpp */; };
 		00A8C3FC1080064900D98FE0 /* InspectorDeviceCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00A8C3FB1080064900D98FE0 /* InspectorDeviceCell.m */; };
 		00AA1E6E113821C600F11BE2 /* AppleIIKeyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00AA1E6C113821C600F11BE2 /* AppleIIKeyboard.cpp */; };
 		00AA1E721138269900F11BE2 /* AppleIISlotMemory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00AA1E701138269900F11BE2 /* AppleIISlotMemory.cpp */; };
@@ -191,8 +191,6 @@
 		000671C0113F318000781A92 /* MemoryMap8Bit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemoryMap8Bit.h; sourceTree = "<group>"; };
 		000671C1113F318000781A92 /* MemoryMap16Bit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MemoryMap16Bit.cpp; sourceTree = "<group>"; };
 		000671C2113F318000781A92 /* MemoryMap16Bit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemoryMap16Bit.h; sourceTree = "<group>"; };
-		000671FE113F339700781A92 /* Zero.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Zero.h; sourceTree = "<group>"; };
-		000671FF113F339700781A92 /* Zero.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Zero.cpp; sourceTree = "<group>"; };
 		0008FCD80FBA5D72005E876E /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = macosx/Info.plist; sourceTree = "<group>"; };
 		000A79080FBA49C500A0F12E /* DiskImage35.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = DiskImage35.icns; sourceTree = "<group>"; };
 		000A79090FBA49C500A0F12E /* DiskImage525.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = DiskImage525.icns; sourceTree = "<group>"; };
@@ -263,6 +261,8 @@
 		00A6300011415E3C005E8500 /* MC6845.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MC6845.cpp; sourceTree = "<group>"; };
 		00A7BBCC11407A7F006F5C6B /* AppleIIMMU.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleIIMMU.h; sourceTree = "<group>"; };
 		00A7BBCD11407A7F006F5C6B /* AppleIIMMU.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleIIMMU.cpp; sourceTree = "<group>"; };
+		00A7BD4011514DF50019B14F /* AppleICassetteInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleICassetteInterface.h; sourceTree = "<group>"; };
+		00A7BD4111514DF50019B14F /* AppleICassetteInterface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleICassetteInterface.cpp; sourceTree = "<group>"; };
 		00A8C3FA1080064900D98FE0 /* InspectorDeviceCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InspectorDeviceCell.h; sourceTree = "<group>"; };
 		00A8C3FB1080064900D98FE0 /* InspectorDeviceCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InspectorDeviceCell.m; sourceTree = "<group>"; };
 		00AA1E6B113821C600F11BE2 /* AppleIIKeyboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleIIKeyboard.h; sourceTree = "<group>"; };
@@ -572,6 +572,8 @@
 				0049B99A114C929200B686BB /* AppleIIO.cpp */,
 				0049B9A3114C9EA900B686BB /* AppleIFloatingBus.h */,
 				0049B9A4114C9EA900B686BB /* AppleIFloatingBus.cpp */,
+				00A7BD4011514DF50019B14F /* AppleICassetteInterface.h */,
+				00A7BD4111514DF50019B14F /* AppleICassetteInterface.cpp */,
 			);
 			path = AppleI;
 			sourceTree = "<group>";
@@ -602,8 +604,6 @@
 			children = (
 				00A62FFA11415DF0005E8500 /* MC6821.h */,
 				00A62FFB11415DF0005E8500 /* MC6821.cpp */,
-				000671FE113F339700781A92 /* Zero.h */,
-				000671FF113F339700781A92 /* Zero.cpp */,
 				000671BF113F318000781A92 /* MemoryMap8Bit.cpp */,
 				000671C0113F318000781A92 /* MemoryMap8Bit.h */,
 				000671C1113F318000781A92 /* MemoryMap16Bit.cpp */,
@@ -769,7 +769,6 @@
 				00067159113F2B8500781A92 /* AppleIIFloatingBus.h in Headers */,
 				000671C4113F318000781A92 /* MemoryMap8Bit.h in Headers */,
 				000671C6113F318000781A92 /* MemoryMap16Bit.h in Headers */,
-				00067200113F339700781A92 /* Zero.h in Headers */,
 				00A7BBCE11407A7F006F5C6B /* AppleIIMMU.h in Headers */,
 				00A62FFC11415DF0005E8500 /* MC6821.h in Headers */,
 				00A6300111415E3C005E8500 /* MC6845.h in Headers */,
@@ -778,6 +777,7 @@
 				00D184F4114C8E9A00F4AB12 /* AppleIKeyboard.h in Headers */,
 				0049B99B114C929200B686BB /* AppleIIO.h in Headers */,
 				0049B9A5114C9EA900B686BB /* AppleIFloatingBus.h in Headers */,
+				00A7BD4211514DF50019B14F /* AppleICassetteInterface.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -958,7 +958,6 @@
 				0006715A113F2B8500781A92 /* AppleIIFloatingBus.cpp in Sources */,
 				000671C3113F318000781A92 /* MemoryMap8Bit.cpp in Sources */,
 				000671C5113F318000781A92 /* MemoryMap16Bit.cpp in Sources */,
-				00067201113F339700781A92 /* Zero.cpp in Sources */,
 				00A7BBCF11407A7F006F5C6B /* AppleIIMMU.cpp in Sources */,
 				00A62FFD11415DF0005E8500 /* MC6821.cpp in Sources */,
 				00A6300211415E3C005E8500 /* MC6845.cpp in Sources */,
@@ -967,6 +966,7 @@
 				00D184F5114C8E9A00F4AB12 /* AppleIKeyboard.cpp in Sources */,
 				0049B99C114C929200B686BB /* AppleIIO.cpp in Sources */,
 				0049B9A6114C9EA900B686BB /* AppleIFloatingBus.cpp in Sources */,
+				00A7BD4311514DF50019B14F /* AppleICassetteInterface.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -228,10 +228,15 @@
 #define HID_K_RIGHTALT		0xe6
 #define HID_K_RIGHTGUI		0xe7
 
+enum
+{
+	HOSTKEYBOARD_EVENT = OEIOCTL_USER,
+};
+
 typedef struct
 {
 	int usageId;
-	bool keyState;
+	bool isDown;
 	int unicode;
 	int modifierState;
 } OEIoctlKeyEvent;

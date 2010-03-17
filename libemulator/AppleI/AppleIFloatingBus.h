@@ -1,9 +1,22 @@
-/*
- *  AppleIFloatingBus.h
- *  OpenEmulator
+
+/**
+ * libemulator
+ * Apple I Floating Bus
+ * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
+ * Released under the GPL
  *
- *  Created by Marc S. Reßl on 14/03/10.
- *  Copyright 2010 ITBA. All rights reserved.
- *
+ * Controls the Apple I Floating Bus
  */
 
+#include "OEComponent.h"
+
+class AppleIFloatingBus : public OEComponent
+{
+public:
+	int ioctl(int message, void * data);
+	int read(int address);
+
+private:
+	OEComponent *system;
+	OEComponent *memory;
+};

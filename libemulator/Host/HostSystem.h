@@ -52,10 +52,16 @@
 // Messages
 enum
 {
-	HOST_SYSTEM_UPDATE_DEVICELIST = OEIOCTL_USER,
-	HOST_SYSTEM_IS_DEVICELIST_UPDATED,
+	HOSTSYSTEM_UPDATE_DEVICELIST = OEIOCTL_USER,
+	HOSTSYSTEM_IS_DEVICELIST_UPDATED,
+	HOSTSYSTEM_EVENT,
 };
 
+typedef struct
+{
+	int usageId;
+	bool isDown;
+} OEIoctlSystemEvent;
 
 class HostSystem : public OEComponent
 {

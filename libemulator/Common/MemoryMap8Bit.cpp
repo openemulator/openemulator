@@ -63,7 +63,7 @@ int MemoryMap8Bit::ioctl(int message, void *data)
 		}
 	}
 	
-	return 0;
+	return false;
 }
 
 int MemoryMap8Bit::read(int address)

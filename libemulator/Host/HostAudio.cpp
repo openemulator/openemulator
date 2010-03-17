@@ -14,11 +14,12 @@ int HostAudio::ioctl(int message, void *data)
 {
 	switch (message)
 	{
-		case HOST_AUDIO_RENDERBUFFER:
-			postNotification(HOST_AUDIO_BUFFERSTART, NULL);
-			postNotification(HOST_AUDIO_BUFFEREND, NULL);
+		case HOSTAUDIO_RENDERBUFFER:
+			postNotification(HOSTAUDIO_BUFFERSTART, data);
+			postNotification(HOSTAUDIO_BUFFERRENDER, data);
+			postNotification(HOSTAUDIO_BUFFEREND, data);
 			return true;
-		case HOST_AUDIO_GETBUFFER:
+		case HOSTAUDIO_GETBUFFER:
 			return true;
 	}
 	

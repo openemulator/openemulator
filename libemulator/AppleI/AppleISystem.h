@@ -13,7 +13,13 @@
 // Messages
 enum
 {
-	APPLEISYSTEM_GET_SAMPLEINDEX,
+	APPLEISYSTEM_GET_SAMPLEINDEX = OEIOCTL_USER,
+};
+
+// Notifications
+enum
+{
+	APPLEISYSTEM_VBL,
 };
 
 // Receives HOST_AUDIO_BUFFERSTART
@@ -27,4 +33,10 @@ class AppleISystem : public OEComponent
 {
 public:
 	int ioctl(int message, void *data);
+	
+private:
+	OEComponent *cpu;
+	OEComponent *cpuSocket;
+	
+	bool internalCPUEnabled;
 };

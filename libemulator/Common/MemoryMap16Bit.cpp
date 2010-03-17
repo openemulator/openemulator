@@ -57,7 +57,7 @@ int MemoryMap16Bit::ioctl(int message, void *data)
 		}
 	}
 	
-	return 0;
+	return false;
 }
 
 int MemoryMap16Bit::read(int address)

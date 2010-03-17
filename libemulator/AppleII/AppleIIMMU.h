@@ -10,12 +10,6 @@
 
 #include "OEComponent.h"
 
-enum
-{
-	APPLEIIMMU_DISABLE_ROM = OEIOCTL_USER,
-	APPLEIIMMU_ENABLE_ROM,
-};
-
 class AppleIIMMU : public OEComponent
 {
 public:
@@ -30,7 +24,7 @@ private:
 	
 	OEComponent *hostSystem;
 	OEComponent *floatingBus;
-	OEComponent *memory;
+	OEComponent *memoryMap;
 	
 	OEComponent *romD0;
 	OEComponent *romD8;
@@ -39,6 +33,10 @@ private:
 	OEComponent *romF0;
 	OEComponent *romF8;
 	
+	bool romEnable;
+	
 	void mapComponent(OEComponent *component);
 	void mapFloatingBus();
+	void updateRomEnable();
+	void setRomEnable(bool value);
 };

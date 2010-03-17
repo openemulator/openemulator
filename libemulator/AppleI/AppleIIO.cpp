@@ -10,6 +10,8 @@
 
 #include "AppleIIO.h"
 
+#define APPLEIIO_MASK	0x10
+
 int AppleIIO::ioctl(int message, void *data)
 {
 	switch(message)
@@ -42,12 +44,12 @@ int AppleIIO::ioctl(int message, void *data)
 		}
 	}
 	
-	return 0;
+	return false;
 }
 
 int AppleIIO::read(int address)
 {
-	if (address & 0x10)
+	if (address & APPLEIIO_MASK)
 		return pia->read(address);
 	else
 		return floatingBus->read(address);
@@ -55,7 +57,7 @@ int AppleIIO::read(int address)
 
 void AppleIIO::write(int address, int value)
 {
-	if (address & 0x10)
+	if (address & APPLEIIO_MASK)
 		pia->write(address, value);
 	else
 		floatingBus->write(address, value);

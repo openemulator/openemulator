@@ -28,9 +28,11 @@
 </device>
 
 <device name="dev0" label="Apple I">
-    <inlet ref="video.monitor" type="applecomposite" category="peripheral" label="Video Connector" image="RCA Connector.png" />
+    <inlet ref="video.monitor" type="appleiicomposite" category="peripheral" label="Video Connector" image="RCA Connector.png" />
     <inlet ref="system.slot1" type="appleislot" category="expansion" label="Slot 1" image="Apple I Slot.png" />
     <inlet ref="system.slot2" type="appleislot" category="expansion" label="Slot 2" image="Apple I Slot.png" />
+    <inlet ref="system.cpuSocket" type="appleiicpu" category="expansion" label="CPU Socket" image="Apple II CPU Chip Socket.png" />
+    <inlet ref="video.romSocket" type="appleiichar" category="peripheral" label="Video Connector" image="RCA Connector.png" />
     <component name="system" class="AppleISystem">
         <connection name="hostAudio" ref="host::audio" />
         <connection name="cpu" ref="cpu" />
@@ -39,11 +41,8 @@
         <connection name="slot2" ref="" />
         <property name="internalCPUEnabled" value="1" />
     </component>
-    <component name="floatingBus" class="AppleIFloatingBus">
-        <connection name="system" ref="system" />
-    </component>
     <component name="cpu" class="MOS6502">
-        <connection name="memory" ref="memory" />
+        <connection name="memory" ref="memoryMap" />
         <property name="a" value="0" />
         <property name="x" value="0" />
         <property name="y" value="0" />
@@ -51,24 +50,33 @@
         <property name="p" value="0" />
         <property name="pc" value="0" />
     </component>
-    <component name="memory" class="RAM">
+    <component name="memoryMap" class="MemoryMap16Bit">
+        <connection name="" ref="floatingBus" />
+        <connection name="" ref="ram" />
+        <connection name="" ref="io" />
+        <connection name="" ref="rom" />
+    </component>
+    <component name="floatingBus" class="AppleIFloatingBus">
+        <connection name="system" ref="system" />
+        <connection name="memory" ref="memory" />
+    </component>
+    <component name="ram" class="RAM">
+        <connection name="hostSystem" ref="host::system" />
         <data name="image" src="${DEVICE_NAME}.bin" />
         <property name="offset" value="0x0000" />
         <property name="size" value="0x2000" />
+        <property name="resetPattern" value="0000ffff" />
     </component>
     <component name="video" class="AppleIVideo">
+        <resource name="image" src="roms/Signetics 2513 Video ROM.bin" />
+        <connection name="system" ref="system" />
+        <connection name="pia" ref="pia" />
         <connection name="monitor" ref="" />
         <connection name="romSocket" ref="" />
-        <resource name="image" src="roms/Signetics 2513 Video ROM.bin" />
     </component>
     <component name="keyboard" class="AppleIKeyboard">
         <connection name="hostKeyboard" ref="host::keyboard" />
-    </component>
-    </component name="io" class="AppleIIO">
         <connection name="pia" ref="pia" />
-        <connection name="floatingBus" ref="floatingBus" />
-        <property name="offset" value="0xd000" />
-        <property name="size" value="0x1000" />
     </component>
     <component name="pia" class="MC6821">
         <connection name="interfaceA" ref="keyboard" />
@@ -86,16 +94,15 @@
         <property name="cb1" value="0" />
         <property name="cb2" value="0" />
     </component>
+    </component name="io" class="AppleIIO">
+        <connection name="pia" ref="pia" />
+        <connection name="floatingBus" ref="floatingBus" />
+        <property name="offset" value="0xd000" />
+        <property name="size" value="0x1000" />
+    </component>
     <component name="rom" class="ROM">
         <resource name="image" src="roms/Apple I ROM.bin" />
         <property name="offset" value="0xff00" />
-    </component>
-    <component name="memory" class="MemoryMap16Bit">
-        <connection name="" ref="floatingBus" />
-        <connection name="" ref="lowMemory" />
-        <connection name="" ref="io" />
-        <connection name="" ref="highMemory" />
-        <connection name="" ref="rom" />
     </component>
 </device>
 

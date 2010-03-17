@@ -8,3 +8,21 @@
  * Controls the Apple I Video
  */
 
+#include "OEComponent.h"
+
+#define APPLEIVIDEO_CHARACTER_WIDTH 40
+#define APPLEIVIDEO_CHARACTER_HEIGHT 24
+
+class AppleIVideo : public OEComponent
+{
+public:
+	int ioctl(int message, void *data);
+	void write(int address, int value);
+	
+private:
+	OEComponent *cpu;
+	OEComponent *cpuSocket;
+	
+	vector<char> characterSet;
+	char screen[APPLEIVIDEO_CHARACTER_HEIGHT][APPLEIVIDEO_CHARACTER_WIDTH];
+};
