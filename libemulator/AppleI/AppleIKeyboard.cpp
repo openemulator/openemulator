@@ -11,6 +11,8 @@
 #include "AppleIKeyboard.h"
 #include "MC6821.h"
 
+#define APPLEIKEYBOARD_MASK	0x40
+
 int AppleIKeyboard::ioctl(int message, void *data)
 {
 	switch (message)
@@ -28,11 +30,15 @@ int AppleIKeyboard::ioctl(int message, void *data)
 		case OEIOCTL_NOTIFY:
 		{
 			OEIoctlNotification *notification = (OEIoctlNotification *) data;
+			OEIoctlKeyEvent *keyEvent = (OEIoctlKeyEvent *) notification->data;
 			
-			key = notification->message;
+			if ((keyEvent->isDown) && (keyEvent->unicode < 128))
+			{
+				key = keyEvent->unicode;
 			
-			bool value = true;
-			pia->ioctl(MC6821_SET_CA1, &value);
+				bool value = true;
+				pia->ioctl(MC6821_SET_CA1, &value);
+			}
 		}
 	}
 	
@@ -44,5 +50,5 @@ int AppleIKeyboard::read(int address)
 	bool value = false;
 	pia->ioctl(MC6821_SET_CA1, &value);
 	
-	return key;
+	return key | APPLEIKEYBOARD_MASK;
 }

@@ -32,7 +32,7 @@ int AppleIFloatingBus::read(int address)
 {
 	address = 0;
 	
-	// To-Do: Ask system for the current time, calculate last refresh byte.
+	// To-Do: Ask system for current time, calculate last refresh byte.
 	
 	return memory->read(address);
 }
