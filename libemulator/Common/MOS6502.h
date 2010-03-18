@@ -14,4 +14,8 @@ class MOS6502 : public OEComponent
 {
 public:
 	int ioctl(int message, void *data);		
+
+private:
+	OEComponent *memoryMap;
+	int a, x, y, s, p, pc;
 };
