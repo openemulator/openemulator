@@ -137,8 +137,6 @@
 		00E0B07B1132DC46004DB96D /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 00E0B07A1132DC46004DB96D /* libxml2.dylib */; };
 		00E0B19C1132DE4D004DB96D /* SDLMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E0B19A1132DE4D004DB96D /* SDLMain.m */; };
 		00E0B1D01132E154004DB96D /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00E0B1CF1132E154004DB96D /* GLUT.framework */; };
-		00ECB98F115292EB00414264 /* 6510core.c in Sources */ = {isa = PBXBuildFile; fileRef = 00ECB98D115292EB00414264 /* 6510core.c */; };
-		00ECB990115292EB00414264 /* 6510core.h in Headers */ = {isa = PBXBuildFile; fileRef = 00ECB98E115292EB00414264 /* 6510core.h */; };
 		00EF028D107D9EFB00FE378D /* VerticallyCenteredCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00EF028C107D9EFB00FE378D /* VerticallyCenteredCell.m */; };
 		00F0ED6711028C8800208090 /* DiskImage525.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000F66390FF8368F00C8AF23 /* DiskImage525.icns */; };
 		00F1AEFC11370EF5006642AD /* AppleIISystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00F1AEFA11370EF5006642AD /* AppleIISystem.cpp */; };
@@ -792,7 +790,6 @@
 				0049B99B114C929200B686BB /* AppleIIO.h in Headers */,
 				0049B9A5114C9EA900B686BB /* AppleIFloatingBus.h in Headers */,
 				00A7BD4211514DF50019B14F /* AppleICassetteInterface.h in Headers */,
-				00ECB990115292EB00414264 /* 6510core.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -982,7 +979,6 @@
 				0049B99C114C929200B686BB /* AppleIIO.cpp in Sources */,
 				0049B9A6114C9EA900B686BB /* AppleIFloatingBus.cpp in Sources */,
 				00A7BD4311514DF50019B14F /* AppleICassetteInterface.cpp in Sources */,
-				00ECB98F115292EB00414264 /* 6510core.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
