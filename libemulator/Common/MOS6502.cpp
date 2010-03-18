@@ -1,11 +1,16 @@
-/*
- *  MOS6502.cpp
- *  OpenEmulator
+
+/**
+ * libemulator
+ * MOS6502
+ * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
+ * Released under the GPL
  *
- *  Created by Marc S. Reßl on 25/02/10.
- *  Copyright 2010 ITBA. All rights reserved.
- *
+ * Controls a MOS6502 microprocessor.
  */
 
 #include "MOS6502.h"
 
+int MOS6502::ioctl(int message, void *data)
+{
+	return false;
+}
