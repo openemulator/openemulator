@@ -14,4 +14,4 @@ class MOS6502 : public OEComponent
 {
 public:
 	int ioctl(int message, void *data);		
-}:
+};
