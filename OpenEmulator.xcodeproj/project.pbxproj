@@ -64,6 +64,34 @@
 		00AA8807115498FE00869CF3 /* apple_ntsc.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AA8803115498FE00869CF3 /* apple_ntsc.h */; };
 		00AA8808115498FE00869CF3 /* apple_ntsc_config.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AA8804115498FE00869CF3 /* apple_ntsc_config.h */; };
 		00AA8809115498FE00869CF3 /* apple_ntsc_impl.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AA8805115498FE00869CF3 /* apple_ntsc_impl.h */; };
+		00AA88DF11549B1100869CF3 /* Debugger.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AA88C211549B1100869CF3 /* Debugger.h */; };
+		00AA88E011549B1100869CF3 /* 6502dasm.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AA88C411549B1100869CF3 /* 6502dasm.c */; };
+		00AA88E111549B1100869CF3 /* ill02.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AA88C511549B1100869CF3 /* ill02.h */; };
+		00AA88E211549B1100869CF3 /* m4510.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AA88C611549B1100869CF3 /* m4510.c */; };
+		00AA88E311549B1100869CF3 /* m4510.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AA88C711549B1100869CF3 /* m4510.h */; };
+		00AA88E411549B1100869CF3 /* m6502.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AA88C811549B1100869CF3 /* m6502.c */; };
+		00AA88E511549B1100869CF3 /* m6502.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AA88C911549B1100869CF3 /* m6502.h */; };
+		00AA88E611549B1100869CF3 /* m6509.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AA88CB11549B1100869CF3 /* m6509.c */; };
+		00AA88E711549B1100869CF3 /* m6509.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AA88CC11549B1100869CF3 /* m6509.h */; };
+		00AA88E811549B1100869CF3 /* m65ce02.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AA88CD11549B1100869CF3 /* m65ce02.c */; };
+		00AA88E911549B1100869CF3 /* m65ce02.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AA88CE11549B1100869CF3 /* m65ce02.h */; };
+		00AA88EA11549B1100869CF3 /* minc4510.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AA88CF11549B1100869CF3 /* minc4510.h */; };
+		00AA88EB11549B1100869CF3 /* mincce02.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AA88D011549B1100869CF3 /* mincce02.h */; };
+		00AA88EC11549B1100869CF3 /* ops02.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AA88D111549B1100869CF3 /* ops02.h */; };
+		00AA88ED11549B1100869CF3 /* ops09.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AA88D211549B1100869CF3 /* ops09.h */; };
+		00AA88EE11549B1100869CF3 /* ops4510.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AA88D311549B1100869CF3 /* ops4510.h */; };
+		00AA88EF11549B1100869CF3 /* opsc02.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AA88D411549B1100869CF3 /* opsc02.h */; };
+		00AA88F011549B1100869CF3 /* opsce02.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AA88D511549B1100869CF3 /* opsce02.h */; };
+		00AA88F111549B1100869CF3 /* opsn2a03.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AA88D611549B1100869CF3 /* opsn2a03.h */; };
+		00AA88F211549B1100869CF3 /* t6502.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AA88D711549B1100869CF3 /* t6502.c */; };
+		00AA88F311549B1100869CF3 /* t6509.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AA88D811549B1100869CF3 /* t6509.c */; };
+		00AA88F411549B1100869CF3 /* t6510.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AA88D911549B1100869CF3 /* t6510.c */; };
+		00AA88F511549B1100869CF3 /* t65c02.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AA88DA11549B1100869CF3 /* t65c02.c */; };
+		00AA88F611549B1100869CF3 /* t65ce02.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AA88DB11549B1100869CF3 /* t65ce02.c */; };
+		00AA88F711549B1100869CF3 /* t65sc02.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AA88DC11549B1100869CF3 /* t65sc02.c */; };
+		00AA88F811549B1100869CF3 /* tdeco16.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AA88DD11549B1100869CF3 /* tdeco16.c */; };
+		00AA88F911549B1100869CF3 /* tn2a03.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AA88DE11549B1100869CF3 /* tn2a03.c */; };
+		00AA88FD11549B3300869CF3 /* Cpuintrf.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AA88FC11549B3300869CF3 /* Cpuintrf.h */; };
 		00B2D72C10914659004783F9 /* DeviceChooserController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B2D72B10914659004783F9 /* DeviceChooserController.m */; };
 		00B5709E10863C2A00CDE4A7 /* TemplateChooserController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B5709D10863C2A00CDE4A7 /* TemplateChooserController.m */; };
 		00B703851135ACA5005E4B65 /* OEComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B703731135AC91005E4B65 /* OEComponent.cpp */; };
@@ -277,6 +305,34 @@
 		00AA8803115498FE00869CF3 /* apple_ntsc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = apple_ntsc.h; sourceTree = "<group>"; };
 		00AA8804115498FE00869CF3 /* apple_ntsc_config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = apple_ntsc_config.h; sourceTree = "<group>"; };
 		00AA8805115498FE00869CF3 /* apple_ntsc_impl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = apple_ntsc_impl.h; sourceTree = "<group>"; };
+		00AA88C211549B1100869CF3 /* Debugger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Debugger.h; sourceTree = "<group>"; };
+		00AA88C411549B1100869CF3 /* 6502dasm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = 6502dasm.c; sourceTree = "<group>"; };
+		00AA88C511549B1100869CF3 /* ill02.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ill02.h; sourceTree = "<group>"; };
+		00AA88C611549B1100869CF3 /* m4510.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = m4510.c; sourceTree = "<group>"; };
+		00AA88C711549B1100869CF3 /* m4510.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = m4510.h; sourceTree = "<group>"; };
+		00AA88C811549B1100869CF3 /* m6502.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = m6502.c; sourceTree = "<group>"; };
+		00AA88C911549B1100869CF3 /* m6502.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = m6502.h; sourceTree = "<group>"; };
+		00AA88CB11549B1100869CF3 /* m6509.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = m6509.c; sourceTree = "<group>"; };
+		00AA88CC11549B1100869CF3 /* m6509.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = m6509.h; sourceTree = "<group>"; };
+		00AA88CD11549B1100869CF3 /* m65ce02.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = m65ce02.c; sourceTree = "<group>"; };
+		00AA88CE11549B1100869CF3 /* m65ce02.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = m65ce02.h; sourceTree = "<group>"; };
+		00AA88CF11549B1100869CF3 /* minc4510.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = minc4510.h; sourceTree = "<group>"; };
+		00AA88D011549B1100869CF3 /* mincce02.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mincce02.h; sourceTree = "<group>"; };
+		00AA88D111549B1100869CF3 /* ops02.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ops02.h; sourceTree = "<group>"; };
+		00AA88D211549B1100869CF3 /* ops09.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ops09.h; sourceTree = "<group>"; };
+		00AA88D311549B1100869CF3 /* ops4510.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ops4510.h; sourceTree = "<group>"; };
+		00AA88D411549B1100869CF3 /* opsc02.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = opsc02.h; sourceTree = "<group>"; };
+		00AA88D511549B1100869CF3 /* opsce02.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = opsce02.h; sourceTree = "<group>"; };
+		00AA88D611549B1100869CF3 /* opsn2a03.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = opsn2a03.h; sourceTree = "<group>"; };
+		00AA88D711549B1100869CF3 /* t6502.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = t6502.c; sourceTree = "<group>"; };
+		00AA88D811549B1100869CF3 /* t6509.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = t6509.c; sourceTree = "<group>"; };
+		00AA88D911549B1100869CF3 /* t6510.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = t6510.c; sourceTree = "<group>"; };
+		00AA88DA11549B1100869CF3 /* t65c02.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = t65c02.c; sourceTree = "<group>"; };
+		00AA88DB11549B1100869CF3 /* t65ce02.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = t65ce02.c; sourceTree = "<group>"; };
+		00AA88DC11549B1100869CF3 /* t65sc02.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = t65sc02.c; sourceTree = "<group>"; };
+		00AA88DD11549B1100869CF3 /* tdeco16.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tdeco16.c; sourceTree = "<group>"; };
+		00AA88DE11549B1100869CF3 /* tn2a03.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tn2a03.c; sourceTree = "<group>"; };
+		00AA88FC11549B3300869CF3 /* Cpuintrf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cpuintrf.h; sourceTree = "<group>"; };
 		00B2D72A10914659004783F9 /* DeviceChooserController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceChooserController.h; sourceTree = "<group>"; };
 		00B2D72B10914659004783F9 /* DeviceChooserController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceChooserController.m; sourceTree = "<group>"; };
 		00B5709C10863C2A00CDE4A7 /* TemplateChooserController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TemplateChooserController.h; sourceTree = "<group>"; };
@@ -598,6 +654,49 @@
 			path = apple_ntsc_0.1.0;
 			sourceTree = "<group>";
 		};
+		00AA88C111549B1100869CF3 /* mess */ = {
+			isa = PBXGroup;
+			children = (
+				00AA88FC11549B3300869CF3 /* Cpuintrf.h */,
+				00AA88C211549B1100869CF3 /* Debugger.h */,
+				00AA88C311549B1100869CF3 /* m6502 */,
+			);
+			path = mess;
+			sourceTree = "<group>";
+		};
+		00AA88C311549B1100869CF3 /* m6502 */ = {
+			isa = PBXGroup;
+			children = (
+				00AA88C411549B1100869CF3 /* 6502dasm.c */,
+				00AA88C511549B1100869CF3 /* ill02.h */,
+				00AA88C611549B1100869CF3 /* m4510.c */,
+				00AA88C711549B1100869CF3 /* m4510.h */,
+				00AA88C811549B1100869CF3 /* m6502.c */,
+				00AA88C911549B1100869CF3 /* m6502.h */,
+				00AA88CB11549B1100869CF3 /* m6509.c */,
+				00AA88CC11549B1100869CF3 /* m6509.h */,
+				00AA88CD11549B1100869CF3 /* m65ce02.c */,
+				00AA88CE11549B1100869CF3 /* m65ce02.h */,
+				00AA88CF11549B1100869CF3 /* minc4510.h */,
+				00AA88D011549B1100869CF3 /* mincce02.h */,
+				00AA88D111549B1100869CF3 /* ops02.h */,
+				00AA88D211549B1100869CF3 /* ops09.h */,
+				00AA88D311549B1100869CF3 /* ops4510.h */,
+				00AA88D411549B1100869CF3 /* opsc02.h */,
+				00AA88D511549B1100869CF3 /* opsce02.h */,
+				00AA88D611549B1100869CF3 /* opsn2a03.h */,
+				00AA88D711549B1100869CF3 /* t6502.c */,
+				00AA88D811549B1100869CF3 /* t6509.c */,
+				00AA88D911549B1100869CF3 /* t6510.c */,
+				00AA88DA11549B1100869CF3 /* t65c02.c */,
+				00AA88DB11549B1100869CF3 /* t65ce02.c */,
+				00AA88DC11549B1100869CF3 /* t65sc02.c */,
+				00AA88DD11549B1100869CF3 /* tdeco16.c */,
+				00AA88DE11549B1100869CF3 /* tn2a03.c */,
+			);
+			path = m6502;
+			sourceTree = "<group>";
+		};
 		00B7038F1135ACBD005E4B65 /* AppleII */ = {
 			isa = PBXGroup;
 			children = (
@@ -671,6 +770,7 @@
 			isa = PBXGroup;
 			children = (
 				00AA8801115498FE00869CF3 /* apple_ntsc_0.1.0 */,
+				00AA88C111549B1100869CF3 /* mess */,
 			);
 			path = External;
 			sourceTree = "<group>";
@@ -809,6 +909,21 @@
 				00AA8807115498FE00869CF3 /* apple_ntsc.h in Headers */,
 				00AA8808115498FE00869CF3 /* apple_ntsc_config.h in Headers */,
 				00AA8809115498FE00869CF3 /* apple_ntsc_impl.h in Headers */,
+				00AA88DF11549B1100869CF3 /* Debugger.h in Headers */,
+				00AA88E111549B1100869CF3 /* ill02.h in Headers */,
+				00AA88E311549B1100869CF3 /* m4510.h in Headers */,
+				00AA88E511549B1100869CF3 /* m6502.h in Headers */,
+				00AA88E711549B1100869CF3 /* m6509.h in Headers */,
+				00AA88E911549B1100869CF3 /* m65ce02.h in Headers */,
+				00AA88EA11549B1100869CF3 /* minc4510.h in Headers */,
+				00AA88EB11549B1100869CF3 /* mincce02.h in Headers */,
+				00AA88EC11549B1100869CF3 /* ops02.h in Headers */,
+				00AA88ED11549B1100869CF3 /* ops09.h in Headers */,
+				00AA88EE11549B1100869CF3 /* ops4510.h in Headers */,
+				00AA88EF11549B1100869CF3 /* opsc02.h in Headers */,
+				00AA88F011549B1100869CF3 /* opsce02.h in Headers */,
+				00AA88F111549B1100869CF3 /* opsn2a03.h in Headers */,
+				00AA88FD11549B3300869CF3 /* Cpuintrf.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -999,6 +1114,19 @@
 				0049B9A6114C9EA900B686BB /* AppleIFloatingBus.cpp in Sources */,
 				00A7BD4311514DF50019B14F /* AppleICassetteInterface.cpp in Sources */,
 				00AA8806115498FE00869CF3 /* apple_ntsc.c in Sources */,
+				00AA88E011549B1100869CF3 /* 6502dasm.c in Sources */,
+				00AA88E211549B1100869CF3 /* m4510.c in Sources */,
+				00AA88E411549B1100869CF3 /* m6502.c in Sources */,
+				00AA88E611549B1100869CF3 /* m6509.c in Sources */,
+				00AA88E811549B1100869CF3 /* m65ce02.c in Sources */,
+				00AA88F211549B1100869CF3 /* t6502.c in Sources */,
+				00AA88F311549B1100869CF3 /* t6509.c in Sources */,
+				00AA88F411549B1100869CF3 /* t6510.c in Sources */,
+				00AA88F511549B1100869CF3 /* t65c02.c in Sources */,
+				00AA88F611549B1100869CF3 /* t65ce02.c in Sources */,
+				00AA88F711549B1100869CF3 /* t65sc02.c in Sources */,
+				00AA88F811549B1100869CF3 /* tdeco16.c in Sources */,
+				00AA88F911549B1100869CF3 /* tn2a03.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
