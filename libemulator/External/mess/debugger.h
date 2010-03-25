@@ -7,3 +7,7 @@
  *
  */
 
+struct device_config
+{
+
+};

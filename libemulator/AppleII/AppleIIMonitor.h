@@ -10,7 +10,7 @@
 
 #include "OEComponent.h"
 
-class AppleIIMonitor::public OEComponent
+class AppleIIMonitor : public OEComponent
 {
 public:
 	int ioctl(int message, void *data);
