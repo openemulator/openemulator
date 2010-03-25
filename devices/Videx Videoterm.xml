@@ -3,11 +3,12 @@
 <dml version="1.0" label="Videx Videoterm" image="Videx Videoterm.png" group="80 Column Cards">
 
 <device name="dev0" label="Videx Videoterm" image="Videx Videoterm.png">
-    <outlet ref="card" type="appleiislot" />
+    <outlet ref="card" type="AppleIISlot" />
     <component name="card" class="VidexVideoterm">
+        <connection name="hostVideo" ref="host::video" />
         <connection name="rom" ref="rom" />
     </component>
-	<component name="rom" class="AppleIIInterfaceROM">
-        <resource name="romImage" src="roms/Videx Videoterm 2.4 ROM.bin" />
+	<component name="rom" class="ROM">
+        <resource name="image" src="roms/Videx Videoterm 2.4 ROM.bin" />
     </component>
 </device></dml>

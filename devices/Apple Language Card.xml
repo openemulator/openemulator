@@ -3,7 +3,7 @@
 <dml version="1.0" label="16kB Language Card" image="Apple Language Card.png" group="Memory">
 
 <device name="dev0" label="Apple 16kB Language Card" image="Apple Language Card.png">
-    <outlet ref="card" type="appleiislot" />
+    <outlet ref="card" type="AppleIISlot" />
     <component name="card" class="AppleLanguageCard">
         <data name="memory" src="${DEVICE_NAME}.bin" />
     </component>

@@ -21,6 +21,8 @@
 		00123BCC1069B8F200FB95A1 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 00E2A84D1053290200910B53 /* libxml2.dylib */; };
 		001F56F90FD1E8E500EA246A /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 001F56F80FD1E8E500EA246A /* Sparkle.framework */; };
 		003318AF1101492B00CC1782 /* Connector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 003318AD1101492B00CC1782 /* Connector.xib */; };
+		00373841115A852E008BE723 /* AppleIIMonitor.h in Headers */ = {isa = PBXBuildFile; fileRef = 0037383F115A852E008BE723 /* AppleIIMonitor.h */; };
+		00373842115A852E008BE723 /* AppleIIMonitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00373840115A852E008BE723 /* AppleIIMonitor.cpp */; };
 		003E25E71070796700185260 /* images in Resources */ = {isa = PBXBuildFile; fileRef = 003E2597107075D900185260 /* images */; };
 		003FB21410BA3D5D00D3697B /* devices in Resources */ = {isa = PBXBuildFile; fileRef = 00E8A393108CCAA200D0A137 /* devices */; };
 		0049B99B114C929200B686BB /* AppleIIO.h in Headers */ = {isa = PBXBuildFile; fileRef = 0049B999114C929200B686BB /* AppleIIO.h */; };
@@ -60,10 +62,6 @@
 		00A8C3FC1080064900D98FE0 /* InspectorDeviceCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00A8C3FB1080064900D98FE0 /* InspectorDeviceCell.m */; };
 		00AA1E6E113821C600F11BE2 /* AppleIIKeyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00AA1E6C113821C600F11BE2 /* AppleIIKeyboard.cpp */; };
 		00AA1E721138269900F11BE2 /* AppleIISlotMemory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00AA1E701138269900F11BE2 /* AppleIISlotMemory.cpp */; };
-		00AA8806115498FE00869CF3 /* apple_ntsc.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AA8802115498FE00869CF3 /* apple_ntsc.c */; };
-		00AA8807115498FE00869CF3 /* apple_ntsc.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AA8803115498FE00869CF3 /* apple_ntsc.h */; };
-		00AA8808115498FE00869CF3 /* apple_ntsc_config.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AA8804115498FE00869CF3 /* apple_ntsc_config.h */; };
-		00AA8809115498FE00869CF3 /* apple_ntsc_impl.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AA8805115498FE00869CF3 /* apple_ntsc_impl.h */; };
 		00AA88DF11549B1100869CF3 /* Debugger.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AA88C211549B1100869CF3 /* Debugger.h */; };
 		00AA88E011549B1100869CF3 /* 6502dasm.c in Sources */ = {isa = PBXBuildFile; fileRef = 00AA88C411549B1100869CF3 /* 6502dasm.c */; };
 		00AA88E111549B1100869CF3 /* ill02.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AA88C511549B1100869CF3 /* ill02.h */; };
@@ -250,6 +248,8 @@
 		001F56F80FD1E8E500EA246A /* Sparkle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = Sparkle.framework; path = macosx/Sparkle.framework; sourceTree = "<group>"; };
 		00317E380FD31D1A007F2B00 /* AppleGraphicsTablet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppleGraphicsTablet.png; sourceTree = "<group>"; };
 		003318AE1101492B00CC1782 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Connector.xib; sourceTree = "<group>"; };
+		0037383F115A852E008BE723 /* AppleIIMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleIIMonitor.h; sourceTree = "<group>"; };
+		00373840115A852E008BE723 /* AppleIIMonitor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleIIMonitor.cpp; sourceTree = "<group>"; };
 		003E2597107075D900185260 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
 		0049B999114C929200B686BB /* AppleIIO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleIIO.h; sourceTree = "<group>"; };
 		0049B99A114C929200B686BB /* AppleIIO.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleIIO.cpp; sourceTree = "<group>"; };
@@ -301,10 +301,6 @@
 		00AA1E6C113821C600F11BE2 /* AppleIIKeyboard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleIIKeyboard.cpp; sourceTree = "<group>"; };
 		00AA1E6F1138269900F11BE2 /* AppleIISlotMemory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleIISlotMemory.h; sourceTree = "<group>"; };
 		00AA1E701138269900F11BE2 /* AppleIISlotMemory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleIISlotMemory.cpp; sourceTree = "<group>"; };
-		00AA8802115498FE00869CF3 /* apple_ntsc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = apple_ntsc.c; sourceTree = "<group>"; };
-		00AA8803115498FE00869CF3 /* apple_ntsc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = apple_ntsc.h; sourceTree = "<group>"; };
-		00AA8804115498FE00869CF3 /* apple_ntsc_config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = apple_ntsc_config.h; sourceTree = "<group>"; };
-		00AA8805115498FE00869CF3 /* apple_ntsc_impl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = apple_ntsc_impl.h; sourceTree = "<group>"; };
 		00AA88C211549B1100869CF3 /* Debugger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Debugger.h; sourceTree = "<group>"; };
 		00AA88C411549B1100869CF3 /* 6502dasm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = 6502dasm.c; sourceTree = "<group>"; };
 		00AA88C511549B1100869CF3 /* ill02.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ill02.h; sourceTree = "<group>"; };
@@ -643,17 +639,6 @@
 			path = AppleI;
 			sourceTree = "<group>";
 		};
-		00AA8801115498FE00869CF3 /* apple_ntsc_0.1.0 */ = {
-			isa = PBXGroup;
-			children = (
-				00AA8802115498FE00869CF3 /* apple_ntsc.c */,
-				00AA8803115498FE00869CF3 /* apple_ntsc.h */,
-				00AA8804115498FE00869CF3 /* apple_ntsc_config.h */,
-				00AA8805115498FE00869CF3 /* apple_ntsc_impl.h */,
-			);
-			path = apple_ntsc_0.1.0;
-			sourceTree = "<group>";
-		};
 		00AA88C111549B1100869CF3 /* mess */ = {
 			isa = PBXGroup;
 			children = (
@@ -714,6 +699,8 @@
 				00067158113F2B8500781A92 /* AppleIIFloatingBus.cpp */,
 				00A7BBCC11407A7F006F5C6B /* AppleIIMMU.h */,
 				00A7BBCD11407A7F006F5C6B /* AppleIIMMU.cpp */,
+				0037383F115A852E008BE723 /* AppleIIMonitor.h */,
+				00373840115A852E008BE723 /* AppleIIMonitor.cpp */,
 			);
 			path = AppleII;
 			sourceTree = "<group>";
@@ -769,7 +756,6 @@
 		00ECB98C115292EB00414264 /* External */ = {
 			isa = PBXGroup;
 			children = (
-				00AA8801115498FE00869CF3 /* apple_ntsc_0.1.0 */,
 				00AA88C111549B1100869CF3 /* mess */,
 			);
 			path = External;
@@ -906,9 +892,6 @@
 				0049B99B114C929200B686BB /* AppleIIO.h in Headers */,
 				0049B9A5114C9EA900B686BB /* AppleIFloatingBus.h in Headers */,
 				00A7BD4211514DF50019B14F /* AppleICassetteInterface.h in Headers */,
-				00AA8807115498FE00869CF3 /* apple_ntsc.h in Headers */,
-				00AA8808115498FE00869CF3 /* apple_ntsc_config.h in Headers */,
-				00AA8809115498FE00869CF3 /* apple_ntsc_impl.h in Headers */,
 				00AA88DF11549B1100869CF3 /* Debugger.h in Headers */,
 				00AA88E111549B1100869CF3 /* ill02.h in Headers */,
 				00AA88E311549B1100869CF3 /* m4510.h in Headers */,
@@ -924,6 +907,7 @@
 				00AA88F011549B1100869CF3 /* opsce02.h in Headers */,
 				00AA88F111549B1100869CF3 /* opsn2a03.h in Headers */,
 				00AA88FD11549B3300869CF3 /* Cpuintrf.h in Headers */,
+				00373841115A852E008BE723 /* AppleIIMonitor.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1113,7 +1097,6 @@
 				0049B99C114C929200B686BB /* AppleIIO.cpp in Sources */,
 				0049B9A6114C9EA900B686BB /* AppleIFloatingBus.cpp in Sources */,
 				00A7BD4311514DF50019B14F /* AppleICassetteInterface.cpp in Sources */,
-				00AA8806115498FE00869CF3 /* apple_ntsc.c in Sources */,
 				00AA88E011549B1100869CF3 /* 6502dasm.c in Sources */,
 				00AA88E211549B1100869CF3 /* m4510.c in Sources */,
 				00AA88E411549B1100869CF3 /* m6502.c in Sources */,
@@ -1127,6 +1110,7 @@
 				00AA88F711549B1100869CF3 /* t65sc02.c in Sources */,
 				00AA88F811549B1100869CF3 /* tdeco16.c in Sources */,
 				00AA88F911549B1100869CF3 /* tn2a03.c in Sources */,
+				00373842115A852E008BE723 /* AppleIIMonitor.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

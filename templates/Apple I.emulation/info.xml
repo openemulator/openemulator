@@ -34,21 +34,21 @@
     <inlet ref="system.cpuSocket" type="appleiicpu" category="expansion" label="CPU Socket" image="Apple II CPU Chip Socket.png" />
     <inlet ref="video.romSocket" type="appleiichar" category="peripheral" label="Video Connector" image="RCA Connector.png" />
     <component name="system" class="AppleISystem">
+        <property name="internalCPUEnabled" value="1" />
         <connection name="hostAudio" ref="host::audio" />
         <connection name="cpu" ref="cpu" />
         <connection name="cpuSocket" ref="" />
         <connection name="slot1" ref="" />
         <connection name="slot2" ref="" />
-        <property name="internalCPUEnabled" value="1" />
     </component>
     <component name="cpu" class="MOS6502">
-        <connection name="memory" ref="memoryMap" />
         <property name="a" value="0" />
         <property name="x" value="0" />
         <property name="y" value="0" />
         <property name="s" value="0" />
         <property name="p" value="0" />
         <property name="pc" value="0" />
+        <connection name="memory" ref="memoryMap" />
     </component>
     <component name="memoryMap" class="MemoryMap16Bit">
         <connection name="" ref="floatingBus" />
@@ -61,14 +61,15 @@
         <connection name="memory" ref="memory" />
     </component>
     <component name="ram" class="RAM">
-        <connection name="hostSystem" ref="host::system" />
         <data name="image" src="${DEVICE_NAME}.bin" />
         <property name="offset" value="0x0000" />
         <property name="size" value="0x2000" />
         <property name="resetPattern" value="0000ffff" />
+        <connection name="hostSystem" ref="host::system" />
     </component>
     <component name="video" class="AppleIVideo">
         <resource name="image" src="roms/Signetics 2513 Video ROM.bin" />
+        <connection name="hostVideo" ref="host::video" />
         <connection name="system" ref="system" />
         <connection name="pia" ref="pia" />
         <connection name="monitor" ref="" />
@@ -79,10 +80,6 @@
         <connection name="pia" ref="pia" />
     </component>
     <component name="pia" class="MC6821">
-        <connection name="interfaceA" ref="keyboard" />
-        <connection name="interfaceB" ref="video" />
-        <connection name="interruptA" ref="" />
-        <connection name="interruptB" ref="" />
         <property name="controlRegisterA" value="0" />
         <property name="dataDirectionRegisterA" value="0" />
         <property name="dataRegisterA" value="0" />
@@ -93,16 +90,20 @@
         <property name="ca2" value="0" />
         <property name="cb1" value="0" />
         <property name="cb2" value="0" />
+        <connection name="interfaceA" ref="keyboard" />
+        <connection name="interfaceB" ref="video" />
+        <connection name="interruptA" ref="" />
+        <connection name="interruptB" ref="" />
     </component>
     </component name="io" class="AppleIIO">
-        <connection name="pia" ref="pia" />
-        <connection name="floatingBus" ref="floatingBus" />
         <property name="offset" value="0xd000" />
         <property name="size" value="0x1000" />
+        <connection name="pia" ref="pia" />
+        <connection name="floatingBus" ref="floatingBus" />
     </component>
     <component name="rom" class="ROM">
-        <resource name="image" src="roms/Apple I ROM.bin" />
         <property name="offset" value="0xff00" />
+        <resource name="image" src="roms/Apple I ROM.bin" />
     </component>
 </device>
 

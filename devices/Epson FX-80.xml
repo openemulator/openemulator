@@ -3,7 +3,7 @@
 <dml version="1.0" label="Epson FX-80" image="Epson FX-80.png" group="Printers">
 
 <device name="dev0" label="Epson FX-80" image="Epson FX-80.png">
-    <outlet ref="printer" type="serialport" />
+    <outlet ref="printer" type="ParallelPort" />
     <component name="printer" class="EpsonFX80">
         <property name="someParam" value="0" />
         <resource name="soundSpin" src="sounds/Apple Disk II Spin.wav" />
