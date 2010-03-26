@@ -1,24 +1,27 @@
 
 /**
- * libemulator
- * Signal processing functions
+ * libntsc
+ * Useful signal processing functions
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements common signal processing functions
+ * Implements useful signal processing functions.
  */
 
 #include <math.h>
+#include <stdlib.h>
 
-#include "SignalProcessing.h"
+#include "signalProcessing.h"
 
 //
 // Based on code at:
 // http://nolandda.org/pusite/cs490-dsp/dft.c.html
 //
-void calculateRealIDFT(double *w, unsigned int n)
+int calculateRealIDFT(double *w, unsigned int n)
 {
-	double x[n];
+	double *x = malloc(sizeof(double) * n);
+	if (!x)
+		return 0;
 	
 	for (int i = 0; i < n; i++)
 	{
@@ -31,6 +34,10 @@ void calculateRealIDFT(double *w, unsigned int n)
 	
 	for (int i = 0; i < n; i++)
 		w[i] = x[i] / n;
+	
+	free(x);
+	
+	return 1;
 }
 
 void calculateLanczosWindow(double *w, unsigned int n, double fc)
@@ -51,7 +58,7 @@ void calculateLanczosWindow(double *w, unsigned int n, double fc)
 // Based on ideas at:
 // http://www.dsprelated.com/showarticle/42.php
 //
-void calculateChebyshevWindow(double *w, unsigned int n, double sidelobeDb)
+int calculateChebyshevWindow(double *w, unsigned int n, double sidelobeDb)
 {
 	int m = n - 1;
 	double alpha = sidelobeDb / 20.0;
@@ -66,7 +73,8 @@ void calculateChebyshevWindow(double *w, unsigned int n, double sidelobeDb)
 			w[i] = pow(-1, i) * cos(m * acos(a));
 	}
 	
-	calculateRealIDFT(w, m);
+	if (!calculateRealIDFT(w, m))
+		return 0;
 	
 	w[0] /= 2.0;
 	w[m] = w[0];
@@ -74,6 +82,8 @@ void calculateChebyshevWindow(double *w, unsigned int n, double sidelobeDb)
 	double norm = 1.0 / w[m / 2];
 	for (int i = 0; i < m; i++)
 		w[i] *= norm;
+	
+	return 1;
 }
 
 void applyWindow(double *x, double *w, unsigned int n)
