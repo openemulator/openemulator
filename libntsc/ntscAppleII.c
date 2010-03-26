@@ -8,5 +8,5 @@
  * Implements an Apple II NTSC emulation.
  */
 
-#include "appleII.h"
+#include "ntscAppleII.h"
 
