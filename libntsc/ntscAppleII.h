@@ -8,6 +8,9 @@
  * Implements an Apple II NTSC emulation.
  */
 
+#define NTSC_APPLEII_N	17
+#define NTSC_APPLEII_CHEBYSHEV_SIDELOBE_DB	50.0
+
 typedef struct NTSCAppleIIData;
 
 int ntscAppleIIInit(NTSCAppleIIData *data, NTSCConfiguration *config);
