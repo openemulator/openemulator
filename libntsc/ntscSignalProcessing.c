@@ -11,7 +11,21 @@
 #include <math.h>
 #include <stdlib.h>
 
-#include "signalProcessing.h"
+#include "ntscSignalProcessing.h"
+
+double ntscStandardRGBToYUV[NTSC_DECODERMATRIX_SIZE] = 
+{
+	1.0,		0.0,		1.139883,
+	1.0,		-0.394642,	-0.580622,
+	1.0,		2.032062,	0,
+};
+
+double ntscCXA2025ASRGBToYUV[NTSC_DECODERMATRIX_SIZE] = 
+{
+	1.0,		1.630,		0.317,
+	1.0,		-0.378,		-0.466,
+	1.0,		1.089,		1.677,
+};
 
 //
 // Based on code at:
@@ -86,7 +100,7 @@ int calculateChebyshevWindow(double *w, unsigned int n, double sidelobeDb)
 	return 1;
 }
 
-void applyWindow(double *x, double *w, unsigned int n)
+void multiplyWindow(double *x, double *w, unsigned int n)
 {
 	for (int i = 0; i < n; i++)
 		x[i] *= w[i];
@@ -101,4 +115,32 @@ void normalizeWindow(double *w, unsigned int n)
 	double gain = 1.0 / sum;
 	for (int i = 0; i < n; i++)
 		w[i] *= gain;
+}
+
+void copyDecoderMatrix(double *to, double *from)
+{
+	for (int i = 0; i < NTSC_DECODERMATRIX_SIZE; i++)
+		*to++ = *from++;
+}
+
+void transformDecoderMatrix(double *m, double saturation, double hue)
+{
+	double cosArg = cos(M_PI * hue) * saturation;
+	double sinArg = sin(M_PI * hue) * saturation;
+	
+	for (int i = 0; i < NTSC_DECODERMATRIX_DIM; i++)
+	{
+		double u = m[NTSC_DECODERMATRIX_U];
+		double v = m[NTSC_DECODERMATRIX_V];
+		
+		m[NTSC_DECODERMATRIX_U] = u * cosArg - v * sinArg;
+		m[NTSC_DECODERMATRIX_V] = u * sinArg + v * cosArg;
+		
+		m += NTSC_DECODERMATRIX_DIM;
+	}
+}
+
+void convolve(double *x, double *w)
+{
+
 }

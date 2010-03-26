@@ -44,6 +44,8 @@
 		005C43EB113121F2006AEE84 /* TBInterrupt.png in Resources */ = {isa = PBXBuildFile; fileRef = 005C43EA113121F2006AEE84 /* TBInterrupt.png */; };
 		005E5F6E1086B0E100E573D4 /* InspectorController.m in Sources */ = {isa = PBXBuildFile; fileRef = 005E5F6D1086B0E100E573D4 /* InspectorController.m */; };
 		005E5F771086B16C00E573D4 /* Inspector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 005E5F751086B16C00E573D4 /* Inspector.xib */; };
+		00610049115CF08A004D1511 /* ntscSignalProcessing.c in Sources */ = {isa = PBXBuildFile; fileRef = 00610047115CF08A004D1511 /* ntscSignalProcessing.c */; };
+		00610091115CFB82004D1511 /* ntscAppleII.c in Sources */ = {isa = PBXBuildFile; fileRef = 002EC09B115C57C400480C7F /* ntscAppleII.c */; };
 		00679D08100817F700B38748 /* DeviceChooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00679D04100817F600B38748 /* DeviceChooser.xib */; };
 		00679D09100817F700B38748 /* TemplateChooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00679D06100817F700B38748 /* TemplateChooser.xib */; };
 		0071E3BA10803F7300F2D54F /* ChooserItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 0071E3B910803F7300F2D54F /* ChooserItem.m */; };
@@ -154,8 +156,6 @@
 		00F86BE4100FD4F60016867D /* IPSoundMin.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BE2100FD4F60016867D /* IPSoundMin.png */; };
 		00FE0C171095371B00B92AB7 /* ChooserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00FE0C161095371B00B92AB7 /* ChooserViewController.m */; };
 		00FE0C6310953F7000B92AB7 /* DeviceChooserViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00FE0C6210953F7000B92AB7 /* DeviceChooserViewController.mm */; };
-		00FF25D4115C36B200C82CA0 /* signalProcessing.h in Headers */ = {isa = PBXBuildFile; fileRef = 00FF25D2115C36B200C82CA0 /* signalProcessing.h */; };
-		00FF2707115C386700C82CA0 /* signalProcessing.c in Sources */ = {isa = PBXBuildFile; fileRef = 00FF25D1115C36B200C82CA0 /* signalProcessing.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -260,6 +260,8 @@
 		005E5F6C1086B0E100E573D4 /* InspectorController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InspectorController.h; sourceTree = "<group>"; };
 		005E5F6D1086B0E100E573D4 /* InspectorController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InspectorController.m; sourceTree = "<group>"; };
 		005E5F761086B16C00E573D4 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Inspector.xib; sourceTree = "<group>"; };
+		00610047115CF08A004D1511 /* ntscSignalProcessing.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ntscSignalProcessing.c; sourceTree = "<group>"; };
+		00610048115CF08A004D1511 /* ntscSignalProcessing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ntscSignalProcessing.h; sourceTree = "<group>"; };
 		00679D05100817F700B38748 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/DeviceChooser.xib; sourceTree = "<group>"; };
 		00679D07100817F700B38748 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/TemplateChooser.xib; sourceTree = "<group>"; };
 		006EECA40FCA5C31003D2C8D /* libemulator.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libemulator.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -433,8 +435,6 @@
 		00FE0C071095354300B92AB7 /* DeviceChooserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceChooserViewController.h; sourceTree = "<group>"; };
 		00FE0C161095371B00B92AB7 /* ChooserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChooserViewController.m; sourceTree = "<group>"; };
 		00FE0C6210953F7000B92AB7 /* DeviceChooserViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DeviceChooserViewController.mm; sourceTree = "<group>"; };
-		00FF25D1115C36B200C82CA0 /* signalProcessing.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = signalProcessing.c; sourceTree = "<group>"; };
-		00FF25D2115C36B200C82CA0 /* signalProcessing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = signalProcessing.h; sourceTree = "<group>"; };
 		00FF25F2115C385000C82CA0 /* libntsc.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libntsc.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D15AC370486D014006FF6A4 /* OpenEmulator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenEmulator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -761,8 +761,8 @@
 		00FF25C4115C365800C82CA0 /* libntsc */ = {
 			isa = PBXGroup;
 			children = (
-				00FF25D1115C36B200C82CA0 /* signalProcessing.c */,
-				00FF25D2115C36B200C82CA0 /* signalProcessing.h */,
+				00610047115CF08A004D1511 /* ntscSignalProcessing.c */,
+				00610048115CF08A004D1511 /* ntscSignalProcessing.h */,
 				00759303115C39E600D6DDF0 /* ntsc.h */,
 				002EC09A115C57C400480C7F /* ntscAppleII.h */,
 				002EC09B115C57C400480C7F /* ntscAppleII.c */,
@@ -904,7 +904,6 @@
 				0049B9A5114C9EA900B686BB /* AppleIFloatingBus.h in Headers */,
 				00A7BD4211514DF50019B14F /* AppleICassetteInterface.h in Headers */,
 				00373841115A852E008BE723 /* AppleIIMonitor.h in Headers */,
-				00FF25D4115C36B200C82CA0 /* signalProcessing.h in Headers */,
 				00759304115C39E600D6DDF0 /* ntsc.h in Headers */,
 				002EC09C115C57C400480C7F /* ntscAppleII.h in Headers */,
 			);
@@ -1131,7 +1130,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00FF2707115C386700C82CA0 /* signalProcessing.c in Sources */,
+				00610049115CF08A004D1511 /* ntscSignalProcessing.c in Sources */,
+				00610091115CFB82004D1511 /* ntscAppleII.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
