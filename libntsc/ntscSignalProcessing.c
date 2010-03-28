@@ -27,6 +27,9 @@ double ntscCXA2025ASRGBToYUV[NTSC_DECODERMATRIX_SIZE] =
 	1.0,		1.089,		1.677,
 };
 
+double ntscUPhase[] = {1, 0, -1, 0, 1, 0, -1, 0};
+double ntscVPhase[] = {0, 1, 0, -1, 0, 1, 0, -1};
+
 //
 // Based on code at:
 // http://nolandda.org/pusite/cs490-dsp/dft.c.html
@@ -130,17 +133,26 @@ void transformDecoderMatrix(double *m, double saturation, double hue)
 	
 	for (int i = 0; i < NTSC_DECODERMATRIX_DIM; i++)
 	{
-		double u = m[NTSC_DECODERMATRIX_U];
-		double v = m[NTSC_DECODERMATRIX_V];
+		double u = m[1];
+		double v = m[2];
 		
-		m[NTSC_DECODERMATRIX_U] = u * cosArg - v * sinArg;
-		m[NTSC_DECODERMATRIX_V] = u * sinArg + v * cosArg;
+		m[1] = u * cosArg - v * sinArg;
+		m[2] = u * sinArg + v * cosArg;
 		
 		m += NTSC_DECODERMATRIX_DIM;
 	}
 }
 
-void convolve(double *x, double *w)
+void applyDecoderMatrix(double *rgb, double *yuv, double *m)
 {
+	*rgb++ = m[0] * yuv[0] + m[1] * yuv[1] + m[2] * yuv[2];
+	*rgb++ = m[3] * yuv[0] + m[4] * yuv[1] + m[5] * yuv[2];
+	*rgb++ = m[6] * yuv[0] + m[7] * yuv[1] + m[8] * yuv[2];
+}
 
+void applyGainAndOffset(double *rgb, double gain, double offset)
+{
+	*rgb++ = *rgb * gain + offset;
+	*rgb++ = *rgb * gain + offset;
+	*rgb++ = *rgb * gain + offset;
 }

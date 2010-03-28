@@ -11,12 +11,10 @@
 #define NTSC_DECODERMATRIX_DIM 3
 #define NTSC_DECODERMATRIX_SIZE 9
 
-#define NTSC_DECODERMATRIX_Y 0
-#define NTSC_DECODERMATRIX_U 1
-#define NTSC_DECODERMATRIX_V 2
-
 extern double ntscStandardRGBToYUV[NTSC_DECODERMATRIX_SIZE];
 extern double ntscCXA2025ASRGBToYUV[NTSC_DECODERMATRIX_SIZE];
+extern double ntscUPhase[8];
+extern double ntscVPhase[8];
 
 // Window functions
 int calculateRealIDFT(double *w, unsigned int n);
@@ -25,6 +23,8 @@ int calculateChebyshevWindow(double *w, unsigned int n, double sidelobeDb);
 void multiplyWindow(double *x, double *w, unsigned int n);
 void normalizeWindow(double *w, unsigned int n);
 
-// Decoder matrix functions
+// RGB functions
 void copyDecoderMatrix(double *to, double *from);
 void transformDecoderMatrix(double *m, double saturation, double hue);
+void applyDecoderMatrix(double *rgb, double *yuv, double *m);
+void applyGainAndOffset(double *rgb, double gain, double offset);
