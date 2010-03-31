@@ -118,7 +118,7 @@ int ntscCGABlit(NTSCCGAData data,
 	while (height--)
 	{
 		int n;
-		int *d0 = data[NTSC_CGA_BLACK];
+		int *d0;
 		int *d1 = data[NTSC_CGA_BLACK];
 		int *d2 = data[NTSC_CGA_BLACK];
 		int *d3 = data[NTSC_CGA_BLACK];
@@ -129,7 +129,7 @@ int ntscCGABlit(NTSCCGAData data,
 		int *d8 = data[NTSC_CGA_BLACK];
 		int *d9 = data[NTSC_CGA_BLACK];
 		int *d10 = data[NTSC_CGA_BLACK];
-		int *d11;
+		int *d11 = data[NTSC_CGA_BLACK];
 		int value;
 		
 		for (n = chunkNum; n; n--)

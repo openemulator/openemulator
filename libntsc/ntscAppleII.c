@@ -85,9 +85,9 @@ int ntscAppleIIBlit(NTSCAppleIIData data,
 	while (height--)
 	{
 		int n;
-		int *d0 = data[NTSC_APPLEII_BLACK];
+		int *d0;
 		int *d1 = data[NTSC_APPLEII_BLACK];
-		int *d2;
+		int *d2 = data[NTSC_APPLEII_BLACK];
 		int value;
 		
 		for (n = chunkNum; n; n--)
