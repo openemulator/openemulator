@@ -1,19 +1,19 @@
 
 /**
  * libemulator
- * MOS6502
+ * MOS6509
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Emulates a MOS6502 microprocessor.
+ * Emulates a MOS6509 microprocessor.
  */
 
 #include "OEComponent.h"
 
-class MOS6502 : public OEComponent
+class MOS6509 : public OEComponent
 {
 public:
-	MOS6502();
+	MOS6509();
 	
 	int ioctl(int message, void *data);		
 	
@@ -30,6 +30,11 @@ private:
 	UINT8 x;
 	UINT8 y;
 	UINT8 p;
+	
+	// 4 bits, addressed over address 0
+	OEPair pcBank;	
+	// 4 bits, addressed over address 1
+	OEPair indBank;
 
 	int irqCount;
 

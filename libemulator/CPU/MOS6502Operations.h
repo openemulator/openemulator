@@ -1,11 +1,11 @@
 
 /**
  * libemulator
- * MOS6502
+ * MOS6502Operations
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls a MOS6502 microprocessor.
+ * Implements MOS6502 operations.
  */
 
 /*****************************************************************************
@@ -30,6 +30,10 @@
  *
  *****************************************************************************/
 
+/* Interrupt vectors */
+#define MOS6502_NMI_VEC	0xfffa
+#define MOS6502_RST_VEC	0xfffc
+#define MOS6502_IRQ_VEC	0xfffe
 
 /* 6502 flags */
 #define F_C 0x01
@@ -247,7 +251,6 @@
 	EAH = RDMEM(EAD);											\
 	EAL = tmp
 
-
 /* read a value into tmp */
 /* Base number of cycles taken for each mode (including reading of opcode):
    RD_IMM       2
@@ -416,8 +419,8 @@
 	PUSH(PCL);													\
 	PUSH(P | F_B);												\
 	P = (P | F_I);												\
-	PCL = RDMEM(M6502_IRQ_VEC); 								\
-	PCH = RDMEM(M6502_IRQ_VEC+1)
+	PCL = RDMEM(MOS6502_IRQ_VEC); 								\
+	PCH = RDMEM(MOS6502_IRQ_VEC+1)
 
 /* 6502 ********************************************************
  * BVC  Branch if overflow clear
