@@ -28,8 +28,8 @@
 </device>
 
 <device name="dev0" label="Apple IIe">
-    <inlet ref="videoGen.monitor" type="appleiimonitor" category="peripheral" label="Video Connector" image="Apple II Video Connector.png" />
-    <inlet ref="game.port" type="appleiigame" category="peripheral" label="Game Port" image="Apple IIe Game Port.png" />
+    <inlet ref="videoGen.monitor" type="AppleIICompositeVideo" category="peripheral" label="Video Connector" image="Apple II Video Connector.png" />
+    <inlet ref="game.port" type="AppleIIGame" category="peripheral" label="Game Port" image="Apple IIe Game Port.png" />
     <inlet ref="iou.auxslot" type="appleiiauxslot" category="expansion" label="Aux Slot" image="Apple II Aux Slot.png" />
     <inlet ref="iou.slot1" type="appleiislot" category="expansion" label="Slot 1" image="Apple II Slot.png" />
     <inlet ref="iou.slot2" type="appleiislot" category="expansion" label="Slot 2" image="Apple II Slot.png" />

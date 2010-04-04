@@ -33,10 +33,9 @@ private:
 		
 	int irqCount;
 		
-	UINT8 pending_irq;
-	UINT8 after_cli;
-	UINT8 nmi_state;
-	UINT8 so_state;
+	UINT8 pendingIRQ;
+	UINT8 afterCLI;
+	UINT8 overflow;
 	
 	int icount;
 		

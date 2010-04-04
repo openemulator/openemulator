@@ -8,44 +8,27 @@
  * Implements high-quality NTSC video emulation.
  */
 
-/*
- Notes on the internal pixel format:
-
- * Packed pixel format is 0xxRRRR RRRRxxGG GGGGGGxx BBBBBBBB
-   (xx are junk bits)
- * Packed color components are added a 0x100 offset
- * Packed pixels can be added together and provide RGB mixing 
- * Color component range 0x0XX is clamped to 0
- * Color component range 0x1XX is linear
- * Color component range 0x2XX and 0x3XX is clamped to 0xff
- 
+/**
+ * Notes on the processing:
+ *
+ * - Image widths should be multiple of 24.
+ * - Pixels are represented using this 32-bit format:
+ *   0ooRRRR RRRRooGG GGGGGGoo BBBBBBBB
+ *   (R, G, B are the color components, o are overflow bits)
+ * - Pixels can be added together with simple integer addition
+ * - Packed color component range 0x0XX is clamped to 0x00
+ * - Packed color component range 0x1XX is mapped to 0x00..0xff
+ * - Packed color component range 0x2XX-0x3XX is clamped to 0xff
+ *
+ * Acknoledgements to blargg and newrisingsun for their
+ * research, implementation and optimization of NTSC emulation.
  */
 
 #ifndef _NTSC_H
 #define _NTSC_H
 
-#define NTSC_COLORGAIN		255.0
-#define NTSC_COLOROFFSET	256.5
-
-#define NTSC_CLAMP_ANDMASK	(1 << 28) | (1 << 18) | (1 << 8)
-#define NTSC_CLAMP_ORMASK	(1 << 29) | (1 << 19) | (1 << 9)
-
-// Macros
-#define NTSC_PACK(r, g, b)\
-	(((int) r << 20) | ((int) g << 10) | ((int) b))
-
-#define NTSC_UNPACK(value)\
-	(value >> 4 & 0xff0000) | (value >> 2 & 0x00ff00) | (value & 0x0000ff)
-
-#define NTSC_CLAMP(value)\
-{\
-	int andMask = (value & NTSC_CLAMP_ANDMASK);\
-	int orMask = (value & NTSC_CLAMP_ORMASK);\
-	andMask -= (andMask >> 8);\
-	orMask -= (orMask >> 9);\
-	value &= andMask;\
-	value |= orMask;\
-}
+#define NTSC_DECODERMATRIX_DIM	3
+#define NTSC_DECODERMATRIX_SIZE	9
 
 #ifdef __cplusplus
 extern "c" {
@@ -58,11 +41,14 @@ typedef struct
 	float saturation;
 	float hue;
 	
-	double *decoderMatrix;
-	
 	float lumaBandwidth;
 	float chromaBandwidth;
+	
+	const double *decoderMatrix;
 } NTSCConfiguration;
+
+extern const double ntscStandardRGBToYUV[NTSC_DECODERMATRIX_SIZE];
+extern const double ntscCXA2025ASRGBToYUV[NTSC_DECODERMATRIX_SIZE];
 
 #include "ntscAppleII.h"
 #include "ntscCGA.h"
@@ -70,5 +56,5 @@ typedef struct
 #ifdef __cplusplus
 }
 #endif
-		
+
 #endif

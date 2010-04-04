@@ -20,36 +20,41 @@ public:
 	
 private:
 	OEComponent *memory;
+	OEComponent *port;
 	
-	OEPair prvpc;
+	// 8080
+	OEPair ppc;
 	OEPair pc;
 	OEPair sp;
+	OEPair ea;
+	
 	OEPair af;
 	OEPair bc;
 	OEPair de;
 	OEPair hl;
-	OEPair ix;
-	OEPair iy;
-	OEPair wz;
 
+	// Z80
 	OEPair af2;
 	OEPair bc2;
 	OEPair de2;
 	OEPair hl2;
-
+	OEPair ix;
+	OEPair iy;
+	OEPair wz;
+	UINT8 i;
 	UINT8 r;
+	
 	UINT8 rr;
+	
 	UINT8 iff1;
 	UINT8 iff2;
 	UINT8 halt;
 	UINT8 im;
-	UINT8 i;
 	
 	UINT8 nmi_state;		/* nmi line state */
 	UINT8 nmi_pending;		/* nmi pending */
 	UINT8 irq_state;		/* irq line state */
 	UINT8 after_ei;			/* are we in the EI shadow? */
-	UINT32 ea;
 	
 	void execute();
 };

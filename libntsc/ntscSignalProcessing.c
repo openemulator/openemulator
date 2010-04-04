@@ -11,34 +11,21 @@
 #include <math.h>
 #include <stdlib.h>
 
+#include "ntsc.h"
 #include "ntscSignalProcessing.h"
 
-double ntscStandardRGBToYUV[NTSC_DECODERMATRIX_SIZE] = 
-{
-	1.0,		0.0,		1.139883,
-	1.0,		-0.394642,	-0.580622,
-	1.0,		2.032062,	0,
-};
-
-double ntscCXA2025ASRGBToYUV[NTSC_DECODERMATRIX_SIZE] = 
-{
-	1.0,		1.630,		0.317,
-	1.0,		-0.378,		-0.466,
-	1.0,		1.089,		1.677,
-};
-
-double ntscUPhase[] = {1, 0, -1, 0, 1, 0, -1, 0};
-double ntscVPhase[] = {0, 1, 0, -1, 0, 1, 0, -1};
+double ntscUPhase[] = {1, 0, -1, 0};
+double ntscVPhase[] = {0, 1, 0, -1};
 
 //
 // Based on code at:
 // http://nolandda.org/pusite/cs490-dsp/dft.c.html
 //
-int calculateRealIDFT(double *w, unsigned int n)
+void calculateRealIDFT(double *w, unsigned int n)
 {
 	double *x = malloc(sizeof(double) * n);
 	if (!x)
-		return 0;
+		return;
 	
 	for (int i = 0; i < n; i++)
 	{
@@ -54,7 +41,7 @@ int calculateRealIDFT(double *w, unsigned int n)
 	
 	free(x);
 	
-	return 1;
+	return;
 }
 
 void calculateLanczosWindow(double *w, unsigned int n, double fc)
@@ -75,7 +62,7 @@ void calculateLanczosWindow(double *w, unsigned int n, double fc)
 // Based on ideas at:
 // http://www.dsprelated.com/showarticle/42.php
 //
-int calculateChebyshevWindow(double *w, unsigned int n, double sidelobeDb)
+void calculateChebyshevWindow(double *w, unsigned int n, double sidelobeDb)
 {
 	int m = n - 1;
 	double alpha = sidelobeDb / 20.0;
@@ -90,8 +77,7 @@ int calculateChebyshevWindow(double *w, unsigned int n, double sidelobeDb)
 			w[i] = pow(-1, i) * cos(m * acos(a));
 	}
 	
-	if (!calculateRealIDFT(w, m))
-		return 0;
+	calculateRealIDFT(w, m);
 	
 	w[0] /= 2.0;
 	w[m] = w[0];
@@ -100,7 +86,7 @@ int calculateChebyshevWindow(double *w, unsigned int n, double sidelobeDb)
 	for (int i = 0; i < m; i++)
 		w[i] *= norm;
 	
-	return 1;
+	return;
 }
 
 void multiplyWindow(double *x, double *w, unsigned int n)
@@ -120,7 +106,7 @@ void normalizeWindow(double *w, unsigned int n)
 		w[i] *= gain;
 }
 
-void copyDecoderMatrix(double *to, double *from)
+void copyDecoderMatrix(double *to, const double *from)
 {
 	for (int i = 0; i < NTSC_DECODERMATRIX_SIZE; i++)
 		*to++ = *from++;

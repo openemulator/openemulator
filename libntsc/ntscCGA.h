@@ -11,23 +11,26 @@
 #ifndef _NTSC_CGA_H
 #define _NTSC_CGA_H
 
-// Filter size should be a multiple of 8, minus 1.
+// Modifiable parameters:
 #define NTSC_CGA_FILTER_N	17
 #define NTSC_CGA_CHEBYSHEV_SIDELOBE_DB	50.0
 
 // Do not modify these defines:
-#define NTSC_CGA_CHUNKSIZE	8
-#define NTSC_CGA_CHUNKNUM	(1 << NTSC_APPLEII_CHUNKSIZE)
-#define NTSC_CGA_BLOCKSIZE	(NTSC_APPLEII_FILTER_N + NTSC_APPLEII_CHUNKSIZE - 1)
-#define NTSC_CGA_BLOCKBYTESIZE (NTSC_APPLEII_BLOCKSIZE / 8)
+#define NTSC_CGA_INPUTNUM		16
+#define NTSC_CGA_INPUTSIZE		(1 << NTSC_CGA_INPUTNUM)
+#define NTSC_CGA_SIGNALNUM		8
+#define NTSC_CGA_SIGNALSIZE		(1 << NTSC_CGA_SIGNALNUM)
+#define NTSC_CGA_BLOCKSIZE		24
+#define NTSC_CGA_CHUNKSIZE		4
 
-#define NTSC_CGA_BLACK 0
+#define NTSC_CGA_SIGNALBLACK 0
 
-typedef int NTSCCGAData[NTSC_CGA_CHUNKNUM][NTSC_CGA_BLOCKSIZE];
+typedef int NTSCCGASignalToPixel[NTSC_CGA_SIGNALSIZE][NTSC_CGA_BLOCKSIZE];
 
-int ntscCGAInit(NTSCCGAData data, NTSCConfiguration *config);
-int ntscCGABlit(NTSCCGAData data,
-				int *output, int *input,
+void ntscCGAInit(NTSCCGASignalToPixel signalToPixel,
+				NTSCConfiguration *config);
+void ntscCGABlit(NTSCCGASignalToPixel signalToPixel,
+				int *output, unsigned char *input,
 				int width, int height);
 
 #endif

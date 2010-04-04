@@ -107,17 +107,17 @@
  *  extra cycle if page boundary is crossed
  ***************************************************************/
 #define BRA(cond)												\
-	{																\
-		INT8 tmp2 = RDOPARG();										\
-		if (cond)													\
-		{															\
-			RDMEM(PCW);												\
-			EAW = PCW + (signed char)tmp2;							\
-			if ( EAH != PCH ) {										\
-				RDMEM( (PCH << 8 ) | EAL) ;							\
-			}														\
-			PCD = EAD;												\
-		}															\
+	{															\
+		INT8 tmp2 = RDOPARG();									\
+		if (cond)												\
+		{														\
+			RDMEM(PCW);											\
+			EAW = PCW + (signed char)tmp2;						\
+			if ( EAH != PCH ) {									\
+				RDMEM( (PCH << 8 ) | EAL) ;						\
+			}													\
+			PCD = EAD;											\
+		}														\
 	}
 
 /***************************************************************
@@ -448,10 +448,10 @@
  * CLI  Clear interrupt flag
  ***************************************************************/
 #define CLI 													\
-	if (irqCount && (P & F_I)) { 		\
+	if (irqCount && (P & F_I)) {								\
 		/* kludge for now until IRQ rewrite: ignore if RTI follows */ \
 		if (PEEKOP() != 0x40) \
-			after_cli = 1;									\
+			afterCLI = 1;										\
 	}															\
 	P &= ~F_I
 
@@ -520,7 +520,8 @@
  *  ILL Illegal opcode
  ***************************************************************/
 #define ILL 													\
-	OELog("M6502 illegal opcode %04x: %02x\n", (PCW-1) & 0xffff, memory->read((PCW - 1) & 0xffff))
+	OELog("M6502 illegal opcode %04x: %02x\n",					\
+		(PCW-1) & 0xffff, memory->read((PCW - 1) & 0xffff))
 
 /* 6502 ********************************************************
  *  INC Increment memory
@@ -539,7 +540,7 @@
 /* 6502 ********************************************************
  *  INY Increment index Y
  ***************************************************************/
-#define INY 													\
+#define INY														\
 	Y = (UINT8)(Y+1);											\
 	SET_NZ(Y)
 
@@ -547,9 +548,9 @@
  *  JMP Jump to address
  *  set PC to the effective address
  ***************************************************************/
-#define JMP 													\
-	if( EAD == PPC && !pending_irq && !after_cli )	\
-		if( icount > 0 ) icount = 0;				\
+#define JMP														\
+	if( EAD == PPC && !pendingIRQ && !afterCLI )				\
+		if( icount > 0 ) icount = 0;							\
 	PCD = EAD
 
 /* 6502 ********************************************************
@@ -636,8 +637,8 @@
 	if ( P & F_I ) {											\
 		PULL(P);												\
 		if (irqCount && !(P & F_I)) {							\
-			OELog("M6502 PLP sets after_cli\n");				\
-			after_cli = 1;										\
+			OELog("M6502 PLP sets afterCLI\n");					\
+			afterCLI = 1;										\
 		}														\
 	} else {													\
 		PULL(P);												\
@@ -678,8 +679,8 @@
 	P |= F_T | F_B; 											\
 	if(irqCount && !(P & F_I) )									\
 	{															\
-		OELog("M6502 RTI sets after_cli\n");					\
-		after_cli = 1;											\
+		OELog("M6502 RTI sets afterCLI\n");						\
+		afterCLI = 1;											\
 	}
 
 /* 6502 ********************************************************

@@ -28,11 +28,11 @@
 </device>
 
 <device name="dev0" label="Apple I">
-    <inlet ref="video.monitor" type="appleiicomposite" category="peripheral" label="Video Connector" image="RCA Connector.png" />
-    <inlet ref="system.slot1" type="appleislot" category="expansion" label="Slot 1" image="Apple I Slot.png" />
-    <inlet ref="system.slot2" type="appleislot" category="expansion" label="Slot 2" image="Apple I Slot.png" />
-    <inlet ref="system.cpuSocket" type="appleiicpu" category="expansion" label="CPU Socket" image="Apple II CPU Chip Socket.png" />
-    <inlet ref="video.romSocket" type="appleiichar" category="peripheral" label="Video Connector" image="RCA Connector.png" />
+    <inlet ref="video.monitor" type="AppleIICompositeVideo" category="peripheral" label="Video Connector" image="RCA Connector.png" />
+    <inlet ref="system.slot1" type="AppleISlot" category="expansion" label="Slot 1" image="Apple I Slot.png" />
+    <inlet ref="system.slot2" type="AppleISlot" category="expansion" label="Slot 2" image="Apple I Slot.png" />
+    <inlet ref="system.cpuSocket" type="AppleIICPU" category="expansion" label="CPU Socket" image="Apple II CPU Chip Socket.png" />
+    <inlet ref="video.romSocket" type="AppleIIVideoROM" category="peripheral" label="Video Connector" image="RCA Connector.png" />
     <component name="system" class="AppleISystem">
         <property name="internalCPUEnabled" value="1" />
         <connection name="hostAudio" ref="host::audio" />

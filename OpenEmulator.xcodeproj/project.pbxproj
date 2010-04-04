@@ -13,7 +13,6 @@
 		000671C3113F318000781A92 /* MemoryMap8Bit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000671BF113F318000781A92 /* MemoryMap8Bit.cpp */; };
 		000671C5113F318000781A92 /* MemoryMap16Bit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000671C1113F318000781A92 /* MemoryMap16Bit.cpp */; };
 		000FF7F01163E6FC0009E666 /* RP2A03.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000FF7ED1163E6FC0009E666 /* RP2A03.cpp */; };
-		000FF89611641AEB0009E666 /* CSG4510.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000FF89411641AEB0009E666 /* CSG4510.cpp */; };
 		0011696510E7CC59007A5EFB /* IPStorageSel.png in Resources */ = {isa = PBXBuildFile; fileRef = 0011696410E7CC4E007A5EFB /* IPStorageSel.png */; };
 		0011696610E7CC59007A5EFB /* IPStorage.png in Resources */ = {isa = PBXBuildFile; fileRef = 0011696310E7CC4E007A5EFB /* IPStorage.png */; };
 		00123BC91069B8D600FB95A1 /* libemulator.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 006EECA40FCA5C31003D2C8D /* libemulator.a */; };
@@ -22,7 +21,8 @@
 		00188DA6115DC59500FFACC0 /* W65C816S.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00188D99115DC58800FFACC0 /* W65C816S.cpp */; };
 		00188DA8115DC59700FFACC0 /* MOS6502.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00188D95115DC58800FFACC0 /* MOS6502.cpp */; };
 		001F56F90FD1E8E500EA246A /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 001F56F80FD1E8E500EA246A /* Sparkle.framework */; };
-		002EC09D115C57C400480C7F /* ntscAppleII.c in Sources */ = {isa = PBXBuildFile; fileRef = 002EC09B115C57C400480C7F /* ntscAppleII.c */; };
+		002C27A8116873F100FAE6E6 /* ntsc.c in Sources */ = {isa = PBXBuildFile; fileRef = 002C26B3116867FB00FAE6E6 /* ntsc.c */; };
+		00311CFF1166526800D9CF80 /* Z80Opcodes.h in Headers */ = {isa = PBXBuildFile; fileRef = 00311CFE1166526800D9CF80 /* Z80Opcodes.h */; };
 		003318AF1101492B00CC1782 /* Connector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 003318AD1101492B00CC1782 /* Connector.xib */; };
 		00373842115A852E008BE723 /* AppleIIMonitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00373840115A852E008BE723 /* AppleIIMonitor.cpp */; };
 		003E25E71070796700185260 /* images in Resources */ = {isa = PBXBuildFile; fileRef = 003E2597107075D900185260 /* images */; };
@@ -217,16 +217,12 @@
 		000F66520FF8368F00C8AF23 /* OpenEmulator.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = OpenEmulator.icns; sourceTree = "<group>"; };
 		000F66530FF8368F00C8AF23 /* PRGeneral.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PRGeneral.png; sourceTree = "<group>"; };
 		000F66560FF8368F00C8AF23 /* TBInspector.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TBInspector.png; sourceTree = "<group>"; };
-		000FF7A51163E3560009E666 /* CSG65CE02.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSG65CE02.h; sourceTree = "<group>"; };
-		000FF7A61163E3560009E666 /* CSG65CE02.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CSG65CE02.cpp; sourceTree = "<group>"; };
 		000FF7EB1163E6FC0009E666 /* RP2A03IllegalOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RP2A03IllegalOperations.h; sourceTree = "<group>"; };
 		000FF7EC1163E6FC0009E666 /* RP2A03.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RP2A03.h; sourceTree = "<group>"; };
 		000FF7ED1163E6FC0009E666 /* RP2A03.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RP2A03.cpp; sourceTree = "<group>"; };
 		000FF8021163EB290009E666 /* RP2A03Opcodes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RP2A03Opcodes.h; sourceTree = "<group>"; };
 		000FF8121163ECA00009E666 /* RP2A03Operations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RP2A03Operations.h; sourceTree = "<group>"; };
 		000FF86D116419F70009E666 /* Z80Operations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Z80Operations.h; sourceTree = "<group>"; };
-		000FF89311641AEB0009E666 /* CSG4510.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSG4510.h; sourceTree = "<group>"; };
-		000FF89411641AEB0009E666 /* CSG4510.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CSG4510.cpp; sourceTree = "<group>"; };
 		0011696310E7CC4E007A5EFB /* IPStorage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPStorage.png; path = macosx/Images/IPStorage.png; sourceTree = "<group>"; };
 		0011696410E7CC4E007A5EFB /* IPStorageSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPStorageSel.png; path = macosx/Images/IPStorageSel.png; sourceTree = "<group>"; };
 		00188D95115DC58800FFACC0 /* MOS6502.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MOS6502.cpp; sourceTree = "<group>"; };
@@ -236,11 +232,14 @@
 		00188D9B115DC58800FFACC0 /* Z80.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Z80.cpp; sourceTree = "<group>"; };
 		00188D9C115DC58800FFACC0 /* Z80.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Z80.h; sourceTree = "<group>"; };
 		001F56F80FD1E8E500EA246A /* Sparkle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = Sparkle.framework; path = macosx/Sparkle.framework; sourceTree = "<group>"; };
+		002C26B3116867FB00FAE6E6 /* ntsc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ntsc.c; sourceTree = "<group>"; };
+		002C27B41168744200FAE6E6 /* libemulator.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libemulator.a; path = ../openemulator/build/Debug/libemulator.a; sourceTree = SOURCE_ROOT; };
 		002EC09A115C57C400480C7F /* ntscAppleII.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ntscAppleII.h; sourceTree = "<group>"; };
 		002EC09B115C57C400480C7F /* ntscAppleII.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ntscAppleII.c; sourceTree = "<group>"; };
 		002F77701162EB6A00B0ECF1 /* MOS6502Operations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOS6502Operations.h; sourceTree = "<group>"; };
 		002F77721162EB7400B0ECF1 /* MOS6502IllegalOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOS6502IllegalOperations.h; sourceTree = "<group>"; };
 		002F77851162EBB200B0ECF1 /* MOS6502Opcodes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOS6502Opcodes.h; sourceTree = "<group>"; };
+		00311CFE1166526800D9CF80 /* Z80Opcodes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Z80Opcodes.h; sourceTree = "<group>"; };
 		00317E380FD31D1A007F2B00 /* AppleGraphicsTablet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppleGraphicsTablet.png; sourceTree = "<group>"; };
 		003318AE1101492B00CC1782 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Connector.xib; sourceTree = "<group>"; };
 		0037383F115A852E008BE723 /* AppleIIMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleIIMonitor.h; sourceTree = "<group>"; };
@@ -541,8 +540,6 @@
 				000FF7EB1163E6FC0009E666 /* RP2A03IllegalOperations.h */,
 				000FF7EC1163E6FC0009E666 /* RP2A03.h */,
 				000FF7ED1163E6FC0009E666 /* RP2A03.cpp */,
-				000FF7A51163E3560009E666 /* CSG65CE02.h */,
-				000FF7A61163E3560009E666 /* CSG65CE02.cpp */,
 				009B4F5D1163A48100E9A6F9 /* MOS6509.cpp */,
 				009B4F5E1163A48100E9A6F9 /* MOS6509.h */,
 				009B4F551163A45500E9A6F9 /* W65C02S.h */,
@@ -561,8 +558,7 @@
 				009B4F621163A4B500E9A6F9 /* MOS6509Operations.h */,
 				009B4F641163A4E700E9A6F9 /* MOS6509Opcodes.h */,
 				000FF86D116419F70009E666 /* Z80Operations.h */,
-				000FF89311641AEB0009E666 /* CSG4510.h */,
-				000FF89411641AEB0009E666 /* CSG4510.cpp */,
+				00311CFE1166526800D9CF80 /* Z80Opcodes.h */,
 			);
 			path = CPU;
 			sourceTree = "<group>";
@@ -724,6 +720,7 @@
 				00759303115C39E600D6DDF0 /* ntsc.h */,
 				002EC09A115C57C400480C7F /* ntscAppleII.h */,
 				002EC09B115C57C400480C7F /* ntscAppleII.c */,
+				002C26B3116867FB00FAE6E6 /* ntsc.c */,
 			);
 			path = libntsc;
 			sourceTree = "<group>";
@@ -731,6 +728,7 @@
 		19C28FB0FE9D524F11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
+				002C27B41168744200FAE6E6 /* libemulator.a */,
 				8D15AC370486D014006FF6A4 /* OpenEmulator.app */,
 				0054E2E41131B9EF006D32D9 /* oesdl */,
 				00FF25F2115C385000C82CA0 /* libntsc.a */,
@@ -848,6 +846,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00311CFF1166526800D9CF80 /* Z80Opcodes.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1060,14 +1059,12 @@
 				0049B9A6114C9EA900B686BB /* AppleIFloatingBus.cpp in Sources */,
 				00A7BD4311514DF50019B14F /* AppleICassetteInterface.cpp in Sources */,
 				00373842115A852E008BE723 /* AppleIIMonitor.cpp in Sources */,
-				002EC09D115C57C400480C7F /* ntscAppleII.c in Sources */,
 				00188DA5115DC59500FFACC0 /* Z80.cpp in Sources */,
 				00188DA6115DC59500FFACC0 /* W65C816S.cpp in Sources */,
 				00188DA8115DC59700FFACC0 /* MOS6502.cpp in Sources */,
 				009B4F5A1163A45500E9A6F9 /* W65C02S.cpp in Sources */,
 				009B4F5F1163A48100E9A6F9 /* MOS6509.cpp in Sources */,
 				000FF7F01163E6FC0009E666 /* RP2A03.cpp in Sources */,
-				000FF89611641AEB0009E666 /* CSG4510.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1078,6 +1075,7 @@
 				00610049115CF08A004D1511 /* ntscSignalProcessing.c in Sources */,
 				00610091115CFB82004D1511 /* ntscAppleII.c in Sources */,
 				0001ACF6115FADE40091B176 /* ntscCGA.c in Sources */,
+				002C27A8116873F100FAE6E6 /* ntsc.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1225,7 +1223,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(NATIVE_ARCH)";
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
@@ -1292,7 +1290,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(NATIVE_ARCH)";
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
@@ -1315,6 +1313,7 @@
 					/usr/local/lib,
 					"$(inherited)",
 					"\"$(SRCROOT)/build/Debug\"",
+					"\"$(SRCROOT)/../openemulator/build/Debug\"",
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = emulator;
@@ -1348,6 +1347,7 @@
 					/usr/local/lib,
 					"$(inherited)",
 					"\"$(SRCROOT)/build/Debug\"",
+					"\"$(SRCROOT)/../openemulator/build/Debug\"",
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = emulator;
@@ -1359,7 +1359,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(NATIVE_ARCH)";
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;

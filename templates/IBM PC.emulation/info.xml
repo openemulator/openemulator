@@ -9,7 +9,7 @@
         <property name="isPaused" value="0" />
     </component>
     <component name="video" class="HostVideo">
-        <property name="window" value="-1 -1 640 480" />
+        <property name="window" value="-1 -1 768 576" />
     </component>
     <component name="keyboard" class="HostKeyboard">
     </component>

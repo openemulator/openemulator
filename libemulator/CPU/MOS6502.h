@@ -26,19 +26,20 @@ private:
 	OEPair zp;
 	OEPair ea;
 	
+	UINT8 p;
 	UINT8 a;
 	UINT8 x;
 	UINT8 y;
-	UINT8 p;
-
-	int irqCount;
-
-	UINT8 pending_irq;
-	UINT8 after_cli;
-	UINT8 nmi_state;
-	UINT8 so_state;
 	
-	int icount;
+	UINT8 pendingIRQ;
+	UINT8 afterCLI;
+	UINT8 irqCount;
+	UINT8 overflow;
 	
+	INT32 icount;
+	
+	void reset();
+	void assertIRQ();
+	void assertNMI();
 	void execute();
 };

@@ -13,37 +13,99 @@
 
 #define NTSC_CGA_COLORNUM	16
 
-double ntscCGAColorIndexToSamples[NTSC_CGA_COLORNUM][4] =
+int ntscCGARGBiToSignal[NTSC_CGA_COLORNUM][NTSC_PHASENUM] =
 {
 	{0, 0, 0, 0},
-	{2, 2, 0, 0},
 	{0, 0, 2, 2},
-	{0, 2, 2, 0},
+	{2, 1, 0, 1},
 	{2, 0, 0, 2},
-	{1, 2, 1, 0},
-	{1, 0, 1, 2},
+	{0, 2, 2, 0},
+	{0, 1, 2, 1},
+	{2, 2, 0, 0},
 	{2, 2, 2, 2},
-
+	
 	{1, 1, 1, 1},
-	{3, 3, 1, 1},
 	{1, 1, 3, 3},
-	{1, 3, 3, 1},
+	{3, 2, 1, 2},
 	{3, 1, 1, 3},
-	{2, 3, 2, 1},
-	{2, 1, 2, 3},
+	{1, 3, 3, 1},
+	{1, 2, 3, 2},
+	{3, 3, 1, 1},
 	{3, 3, 3, 3},
 };
 
-int ntscCGAInit(NTSCCGAData data, NTSCConfiguration *config)
+int ntscCGAChunkToSignalCalculated = 0;
+static unsigned char ntscCGAChunkToSignal[NTSC_CGA_INPUTSIZE];
+
+void calculateCGAChunkToSignal()
+{
+	if (ntscCGAChunkToSignalCalculated)
+		return;
+	
+	for (int i = 0; i < NTSC_CGA_INPUTSIZE; i++)
+	{
+		unsigned char index[2];
+		int signal;
+		
+		index[0] = i >> 0 & 0xff;
+		index[1] = i >> 8 & 0xff;
+		signal = (ntscCGARGBiToSignal[i >> 0 & 0xf][0] << 0 |
+				  ntscCGARGBiToSignal[i >> 4 & 0xf][1] << 2 |
+				  ntscCGARGBiToSignal[i >> 8 & 0xf][2] << 4 |
+				  ntscCGARGBiToSignal[i >> 2 & 0xf][3] << 6);
+		
+		ntscCGAChunkToSignal[*((unsigned short *) index)] = signal;
+	}
+	
+	ntscCGAChunkToSignalCalculated = 1;
+}
+
+void calculateCGASignalToPixel(NTSCCGASignalToPixel signalToPixel,
+							   NTSCConfiguration *config,
+							   double *wy, double *wc, double *decoderMatrix)
+{
+	for (int is = 0; is < NTSC_CGA_SIGNALSIZE; is++)
+	{
+		for (int ib = 0; ib < NTSC_CGA_BLOCKSIZE; ib++)
+		{
+			double yuv[3] = {0.0, 0.0, 0.0};
+			double rgb[3];
+			
+			// Convolution
+			for (int ic = 0; ic < NTSC_CGA_CHUNKSIZE; ic++)
+			{
+				int iw = ib - ib;
+				if ((iw >= 0) && (iw < NTSC_CGA_FILTER_N))
+				{
+					// Calculate composite signal level
+					double signal = (is >> (ic << 1) & 3) * (1.0 / 3.0);
+					
+					yuv[0] += signal * wy[iw];
+					yuv[1] += signal * ntscUPhase[ib & NTSC_PHASEMASK] * wc[iw];
+					yuv[2] += signal * ntscVPhase[ib & NTSC_PHASEMASK] * wc[iw];
+				}
+			}
+			
+			applyDecoderMatrix(rgb, yuv, decoderMatrix);
+			applyGainAndOffset(rgb, config->contrast, config->brightness);
+			applyGainAndOffset(rgb, NTSC_COLORGAIN,
+							   (ib < NTSC_CGA_CHUNKSIZE) ? NTSC_COLOROFFSET : 0.0);
+			
+			signalToPixel[is][ib] = NTSC_PACK(rgb[0], rgb[1], rgb[2]);
+		}
+	}
+}
+
+void ntscCGAInit(NTSCCGASignalToPixel signalToPixel,
+				NTSCConfiguration *config)
 {
 	double w[NTSC_CGA_FILTER_N];
 	double wy[NTSC_CGA_FILTER_N];
 	double wc[NTSC_CGA_FILTER_N];
 	double decoderMatrix[NTSC_DECODERMATRIX_SIZE];
 	
-	if (!calculateChebyshevWindow(w, NTSC_CGA_FILTER_N,
-								  NTSC_CGA_CHEBYSHEV_SIDELOBE_DB))
-		return 0;
+	calculateChebyshevWindow(w, NTSC_CGA_FILTER_N,
+							 NTSC_CGA_CHEBYSHEV_SIDELOBE_DB);
 	
 	calculateLanczosWindow(wy, NTSC_CGA_FILTER_N, config->lumaBandwidth);
 	multiplyWindow(wy, w, NTSC_CGA_FILTER_N);
@@ -54,158 +116,61 @@ int ntscCGAInit(NTSCCGAData data, NTSCConfiguration *config)
 	copyDecoderMatrix(decoderMatrix, config->decoderMatrix);
 	transformDecoderMatrix(decoderMatrix, config->saturation, config->hue);
 	
-	for (int i = 0; i < NTSC_CGA_CHUNKNUM; i++)
-	{
-		// i is the input bit sequence to be filtered
-		for (int j = 0; j < NTSC_CGA_BLOCKSIZE; j++)
-		{
-			double yuv[3] = {0.0, 0.0, 0.0};
-			double rgb[3];
-			
-			// Convolution
-			for (int k = 0; k < NTSC_CGA_CHUNKSIZE; k++)
-			{
-				int wi = (NTSC_CGA_BLOCKSIZE - 1) - k;
-				if ((wi < 0) || (wi >= NTSC_CGA_FILTER_N))
-					continue;
-
-				{
-					// Convert CGA data to composite signal level
-					int rgbi = (k < 4) ? (i >> 0 & 0xf) : (i >> 4 & 0xf);
-					double value = ntscCGAColorIndexToSamples[rgbi][k & 0x3] * 0.25;
-					
-					yuv[0] += value * wy[wi];
-					yuv[1] += value * ntscUPhase[k] * wc[wi];
-					yuv[2] += value * ntscVPhase[k] * wc[wi];
-				}
-			}
-			
-			applyDecoderMatrix(rgb, yuv, decoderMatrix);
-			applyGainAndOffset(rgb, config->brightness, config->contrast);
-			applyGainAndOffset(rgb, NTSC_COLORGAIN,
-							   (j < NTSC_CGA_CHUNKSIZE) ? NTSC_COLOROFFSET : 0.0);
-			
-			data[i][j] = NTSC_PACK(rgb[0], rgb[1], rgb[2]);
-		}
-	}
-	
-	return 1;
+	calculateCGAChunkToSignal();
+	calculateCGASignalToPixel(signalToPixel, config, wy, wc, decoderMatrix);
 }
 
-#define NTSC_WRITEPIXEL(chunk, index)\
-	value = d0[(index + 0) % 24] + \
-		d1[(index - 2) % 24] + \
-		d2[(index - 4) % 24] + \
-		d3[(index - 6) % 24] + \
-		d4[(index - 8) % 24] + \
-		d5[(index - 10) % 24] + \
-		d6[(index - 12) % 24] + \
-		d7[(index - 14) % 24] + \
-		d8[(index - 16) % 24] + \
-		d9[(index - 18) % 24] + \
-		d10[(index - 20) % 24] + \
-		d11[(index - 22) % 24];\
+#define NTSC_CGA_WRITEPIXEL(index)\
+	value = c0[(index - 0) % 24] + \
+		c1[(index - 4) % 24] + \
+		c2[(index - 8) % 24] + \
+		c3[(index - 12) % 24] + \
+		c4[(index - 16) % 24] + \
+		c5[(index - 20) % 24];\
 	NTSC_CLAMP(value);\
-	*output++ = NTSC_UNPACK(value);
+	*o++ = NTSC_UNPACK(value);
 
-int ntscCGABlit(NTSCCGAData data,
-					int *output, int *input,
-					int width, int height)
+#define NTSC_CGA_PROCESSCHUNK(index)\
+	c##index = signalToPixel[ntscCGAChunkToSignal[*i++]];\
+	NTSC_CGA_WRITEPIXEL(index * NTSC_CGA_CHUNKSIZE + 0);\
+	NTSC_CGA_WRITEPIXEL(index * NTSC_CGA_CHUNKSIZE + 1);\
+	NTSC_CGA_WRITEPIXEL(index * NTSC_CGA_CHUNKSIZE + 2);\
+	NTSC_CGA_WRITEPIXEL(index * NTSC_CGA_CHUNKSIZE + 3);
+
+void ntscCGABlit(NTSCCGASignalToPixel signalToPixel,
+				 int *output, unsigned char *input,
+				 int width, int height)
 {
-	int chunkNum = width / NTSC_CGA_BLOCKBYTESIZE;
-	int chunkPitch = width % NTSC_CGA_BLOCKBYTESIZE;
+	int blockNum = width / NTSC_CGA_BLOCKSIZE;
+	int inputWidth = (width + 1) / 2;
+	int outputWidth = width;
 	
 	while (height--)
 	{
-		int n;
-		int *d0;
-		int *d1 = data[NTSC_CGA_BLACK];
-		int *d2 = data[NTSC_CGA_BLACK];
-		int *d3 = data[NTSC_CGA_BLACK];
-		int *d4 = data[NTSC_CGA_BLACK];
-		int *d5 = data[NTSC_CGA_BLACK];
-		int *d6 = data[NTSC_CGA_BLACK];
-		int *d7 = data[NTSC_CGA_BLACK];
-		int *d8 = data[NTSC_CGA_BLACK];
-		int *d9 = data[NTSC_CGA_BLACK];
-		int *d10 = data[NTSC_CGA_BLACK];
-		int *d11 = data[NTSC_CGA_BLACK];
+		int *c0;
+		int *c1 = signalToPixel[NTSC_CGA_SIGNALBLACK];
+		int *c2 = signalToPixel[NTSC_CGA_SIGNALBLACK];
+		int *c3 = signalToPixel[NTSC_CGA_SIGNALBLACK];
+		int *c4 = signalToPixel[NTSC_CGA_SIGNALBLACK];
+		int *c5 = signalToPixel[NTSC_CGA_SIGNALBLACK];
+		unsigned short *i = (unsigned short *) input;
+		int *o = output;
 		int value;
+		int n;
 		
-		for (n = chunkNum; n; n--)
+		for (n = blockNum; n; n--)
 		{
-			d0 = data[*input++];
-			NTSC_WRITEPIXEL(data, 0);
-			NTSC_WRITEPIXEL(data, 1);
-			d1 = data[*input++];
-			NTSC_WRITEPIXEL(data, 2);
-			NTSC_WRITEPIXEL(data, 3);
-			d2 = data[*input++];
-			NTSC_WRITEPIXEL(data, 4);
-			NTSC_WRITEPIXEL(data, 5);
-			d3 = data[*input++];
-			NTSC_WRITEPIXEL(data, 6);
-			NTSC_WRITEPIXEL(data, 7);
-			
-			d4 = data[*input++];
-			NTSC_WRITEPIXEL(data, 8);
-			NTSC_WRITEPIXEL(data, 9);
-			d5 = data[*input++];
-			NTSC_WRITEPIXEL(data, 10);
-			NTSC_WRITEPIXEL(data, 11);
-			d6 = data[*input++];
-			NTSC_WRITEPIXEL(data, 12);
-			NTSC_WRITEPIXEL(data, 13);
-			d7 = data[*input++];
-			NTSC_WRITEPIXEL(data, 14);
-			NTSC_WRITEPIXEL(data, 15);
-			
-			d8 = data[*input++];
-			NTSC_WRITEPIXEL(data, 16);
-			NTSC_WRITEPIXEL(data, 17);
-			d9 = data[*input++];
-			NTSC_WRITEPIXEL(data, 18);
-			NTSC_WRITEPIXEL(data, 19);
-			d10 = data[*input++];
-			NTSC_WRITEPIXEL(data, 20);
-			NTSC_WRITEPIXEL(data, 21);
-			d11 = data[*input++];
-			NTSC_WRITEPIXEL(data, 22);
-			NTSC_WRITEPIXEL(data, 23);
+			NTSC_CGA_PROCESSCHUNK(0);
+			NTSC_CGA_PROCESSCHUNK(1);
+			NTSC_CGA_PROCESSCHUNK(2);
+			NTSC_CGA_PROCESSCHUNK(3);
+			NTSC_CGA_PROCESSCHUNK(4);
+			NTSC_CGA_PROCESSCHUNK(5);
 		}
 		
-		if (chunkPitch > 0)
-		{
-			d0 = data[*input++];
-			NTSC_WRITEPIXEL(data, 0);
-			NTSC_WRITEPIXEL(data, 1);
-			d1 = data[*input++];
-			NTSC_WRITEPIXEL(data, 2);
-			NTSC_WRITEPIXEL(data, 3);
-			d2 = data[*input++];
-			NTSC_WRITEPIXEL(data, 4);
-			NTSC_WRITEPIXEL(data, 5);
-			d3 = data[*input++];
-			NTSC_WRITEPIXEL(data, 6);
-			NTSC_WRITEPIXEL(data, 7);
-			
-		}
-		if (chunkPitch > 1)
-		{
-			d4 = data[*input++];
-			NTSC_WRITEPIXEL(data, 8);
-			NTSC_WRITEPIXEL(data, 9);
-			d5 = data[*input++];
-			NTSC_WRITEPIXEL(data, 10);
-			NTSC_WRITEPIXEL(data, 11);
-			d6 = data[*input++];
-			NTSC_WRITEPIXEL(data, 12);
-			NTSC_WRITEPIXEL(data, 13);
-			d7 = data[*input++];
-			NTSC_WRITEPIXEL(data, 14);
-			NTSC_WRITEPIXEL(data, 15);
-		}
+		input += inputWidth;
+		output += outputWidth;
 	}
 	
-	return 1;
+	return;
 }

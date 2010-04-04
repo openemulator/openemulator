@@ -28,7 +28,7 @@
 </device>
 
 <device name="dev0" label="Apple II">
-    <inlet ref="video.monitor" type="AppleIICompositeMonitor" category="peripheral" label="Video Connector" image="Apple II Video Connector.png" />
+    <inlet ref="video.monitor" type="AppleIICompositeVideo" category="peripheral" label="Video Connector" image="Apple II Video Connector.png" />
     <inlet ref="game.port" type="AppleIIGame" category="peripheral" label="Game Port" image="Apple II Game Port.png" />
     <inlet ref="slot.slot0" type="AppleIISlot" category="expansion" label="Slot 0" image="Apple II Slot.png" />
     <inlet ref="slot.slot1" type="AppleIISlot" category="expansion" label="Slot 1" image="Apple II Slot.png" />
