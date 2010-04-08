@@ -14,8 +14,8 @@
 #include "ntsc.h"
 #include "ntscSignalProcessing.h"
 
-double ntscUPhase[] = {1, 0, -1, 0};
-double ntscVPhase[] = {0, 1, 0, -1};
+double ntscUPhase[] = {M_SQRT2, 0, -M_SQRT2, 0};
+double ntscVPhase[] = {0, -M_SQRT2, 0, M_SQRT2};
 
 //
 // Based on code at:
@@ -82,10 +82,6 @@ void calculateChebyshevWindow(double *w, unsigned int n, double sidelobeDb)
 	w[0] /= 2.0;
 	w[m] = w[0];
 	
-	double norm = 1.0 / w[m / 2];
-	for (int i = 0; i < m; i++)
-		w[i] *= norm;
-	
 	return;
 }
 
@@ -136,9 +132,9 @@ void applyDecoderMatrix(double *rgb, double *yuv, double *m)
 	*rgb++ = m[6] * yuv[0] + m[7] * yuv[1] + m[8] * yuv[2];
 }
 
-void applyGainAndOffset(double *rgb, double gain, double offset)
+void applyOffsetAndGain(double *rgb, double offset, double gain)
 {
-	*rgb++ = *rgb * gain + offset;
-	*rgb++ = *rgb * gain + offset;
-	*rgb++ = *rgb * gain + offset;
+	*rgb++ = offset + *rgb * gain;
+	*rgb++ = offset + *rgb * gain;
+	*rgb++ = offset + *rgb * gain;
 }

@@ -81,15 +81,16 @@ void calculateCGASignalToPixel(NTSCCGASignalToPixel signalToPixel,
 					double signal = (is >> (ic << 1) & 3) * (1.0 / 3.0);
 					
 					yuv[0] += signal * wy[iw];
-					yuv[1] += signal * ntscUPhase[ib & NTSC_PHASEMASK] * wc[iw];
-					yuv[2] += signal * ntscVPhase[ib & NTSC_PHASEMASK] * wc[iw];
+					yuv[1] += signal * ntscUPhase[ic & NTSC_PHASEMASK] * wc[iw];
+					yuv[2] += signal * ntscVPhase[ic & NTSC_PHASEMASK] * wc[iw];
 				}
 			}
 			
 			applyDecoderMatrix(rgb, yuv, decoderMatrix);
-			applyGainAndOffset(rgb, config->contrast, config->brightness);
-			applyGainAndOffset(rgb, NTSC_COLORGAIN,
-							   (ib < NTSC_CGA_CHUNKSIZE) ? NTSC_COLOROFFSET : 0.0);
+			applyOffsetAndGain(rgb, config->brightness * NTSC_CGA_OFFSETGAIN,
+							   config->contrast);
+			applyOffsetAndGain(rgb, NTSC_COLOROFFSET * NTSC_CGA_OFFSETGAIN,
+							   NTSC_COLORGAIN);
 			
 			signalToPixel[is][ib] = NTSC_PACK(rgb[0], rgb[1], rgb[2]);
 		}
@@ -109,9 +110,11 @@ void ntscCGAInit(NTSCCGASignalToPixel signalToPixel,
 	
 	calculateLanczosWindow(wy, NTSC_CGA_FILTER_N, config->lumaBandwidth);
 	multiplyWindow(wy, w, NTSC_CGA_FILTER_N);
+	normalizeWindow(wy, NTSC_APPLEII_FILTER_N);
 	
 	calculateLanczosWindow(wc, NTSC_CGA_FILTER_N, config->chromaBandwidth);
 	multiplyWindow(wc, w, NTSC_CGA_FILTER_N);
+	normalizeWindow(wc, NTSC_APPLEII_FILTER_N);
 	
 	copyDecoderMatrix(decoderMatrix, config->decoderMatrix);
 	transformDecoderMatrix(decoderMatrix, config->saturation, config->hue);
@@ -121,12 +124,12 @@ void ntscCGAInit(NTSCCGASignalToPixel signalToPixel,
 }
 
 #define NTSC_CGA_WRITEPIXEL(index)\
-	value = c0[(index - 0) % 24] + \
-		c1[(index - 4) % 24] + \
-		c2[(index - 8) % 24] + \
-		c3[(index - 12) % 24] + \
-		c4[(index - 16) % 24] + \
-		c5[(index - 20) % 24];\
+	value = c0[(index + 24 - 0) % 24] + \
+		c1[(index + 24 - 4) % 24] + \
+		c2[(index + 24 - 8) % 24] + \
+		c3[(index + 24 - 12) % 24] + \
+		c4[(index + 24 - 16) % 24] + \
+		c5[(index + 24 - 20) % 24];\
 	NTSC_CLAMP(value);\
 	*o++ = NTSC_UNPACK(value);
 

@@ -14,8 +14,8 @@
 #define NTSC_PHASENUM		4
 #define NTSC_PHASEMASK		(NTSC_PHASENUM - 1)
 
-#define NTSC_CLAMP_ANDMASK	(1 << 28) | (1 << 18) | (1 << 8)
-#define NTSC_CLAMP_ORMASK	(1 << 29) | (1 << 19) | (1 << 9)
+#define NTSC_CLAMP_ANDMASK	(1 << 28 | 1 << 18 | 1 << 8)
+#define NTSC_CLAMP_ORMASK	(1 << 29 | 1 << 19 | 1 << 9)
 
 // Macros
 #define NTSC_PACK(r, g, b)\
@@ -34,8 +34,8 @@ value &= andMask;\
 value |= orMask;\
 }
 
-extern double ntscUPhase[8];
-extern double ntscVPhase[8];
+extern double ntscUPhase[NTSC_PHASENUM];
+extern double ntscVPhase[NTSC_PHASENUM];
 
 // Window functions
 void calculateRealIDFT(double *w, unsigned int n);
@@ -48,4 +48,4 @@ void normalizeWindow(double *w, unsigned int n);
 void copyDecoderMatrix(double *to, const double *from);
 void transformDecoderMatrix(double *m, double saturation, double hue);
 void applyDecoderMatrix(double *rgb, double *yuv, double *m);
-void applyGainAndOffset(double *rgb, double gain, double offset);
+void applyOffsetAndGain(double *rgb, double offset, double gain);
