@@ -16,21 +16,21 @@
 int ntscCGARGBiToSignal[NTSC_CGA_COLORNUM][NTSC_PHASENUM] =
 {
 	{0, 0, 0, 0},
-	{0, 0, 2, 2},
-	{2, 1, 0, 1},
-	{2, 0, 0, 2},
-	{0, 2, 2, 0},
 	{0, 1, 2, 1},
-	{2, 2, 0, 0},
+	{2, 0, 0, 2},
+	{1, 0, 1, 2},
+	{1, 2, 1, 0},
+	{0, 2, 2, 0},
+	{2, 1, 0, 1},
 	{2, 2, 2, 2},
 	
 	{1, 1, 1, 1},
-	{1, 1, 3, 3},
-	{3, 2, 1, 2},
-	{3, 1, 1, 3},
-	{1, 3, 3, 1},
 	{1, 2, 3, 2},
-	{3, 3, 1, 1},
+	{3, 1, 1, 3},
+	{2, 1, 2, 3},
+	{2, 3, 2, 1},
+	{1, 3, 3, 1},
+	{3, 2, 1, 2},
 	{3, 3, 3, 3},
 };
 
@@ -52,7 +52,7 @@ void calculateCGAChunkToSignal()
 		signal = (ntscCGARGBiToSignal[i >> 0 & 0xf][0] << 0 |
 				  ntscCGARGBiToSignal[i >> 4 & 0xf][1] << 2 |
 				  ntscCGARGBiToSignal[i >> 8 & 0xf][2] << 4 |
-				  ntscCGARGBiToSignal[i >> 2 & 0xf][3] << 6);
+				  ntscCGARGBiToSignal[i >> 12 & 0xf][3] << 6);
 		
 		ntscCGAChunkToSignal[*((unsigned short *) index)] = signal;
 	}
@@ -74,15 +74,15 @@ void calculateCGASignalToPixel(NTSCCGASignalToPixel signalToPixel,
 			// Convolution
 			for (int ic = 0; ic < NTSC_CGA_CHUNKSIZE; ic++)
 			{
-				int iw = ib - ib;
+				int iw = ib - ic;
 				if ((iw >= 0) && (iw < NTSC_CGA_FILTER_N))
 				{
 					// Calculate composite signal level
 					double signal = (is >> (ic << 1) & 3) * (1.0 / 3.0);
 					
 					yuv[0] += signal * wy[iw];
-					yuv[1] += signal * ntscUPhase[ic & NTSC_PHASEMASK] * wc[iw];
-					yuv[2] += signal * ntscVPhase[ic & NTSC_PHASEMASK] * wc[iw];
+					yuv[1] += signal * ntscUPhase[(ic + 2) & NTSC_PHASEMASK] * wc[iw];
+					yuv[2] += signal * ntscVPhase[(ic + 2) & NTSC_PHASEMASK] * wc[iw];
 				}
 			}
 			
@@ -160,6 +160,8 @@ void ntscCGABlit(NTSCCGASignalToPixel signalToPixel,
 		int *o = output;
 		int value;
 		int n;
+		
+		int *c = &signalToPixel;
 		
 		for (n = blockNum; n; n--)
 		{

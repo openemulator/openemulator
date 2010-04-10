@@ -19,7 +19,7 @@
 
 // Macros
 #define NTSC_PACK(r, g, b)\
-(((int) r << 20) | ((int) g << 10) | ((int) b))
+((((int) r & 0x3ff) << 20) | (((int) g & 0x3ff) << 10) | ((int) b & 0x3ff))
 
 #define NTSC_UNPACK(value)\
 (value >> 4 & 0xff0000) | (value >> 2 & 0x00ff00) | (value & 0x0000ff)
