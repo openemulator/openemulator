@@ -27,9 +27,6 @@
 #ifndef _NTSC_H
 #define _NTSC_H
 
-#define NTSC_DECODERMATRIX_DIM	3
-#define NTSC_DECODERMATRIX_SIZE	9
-
 #ifdef __cplusplus
 extern "c" {
 #endif
@@ -38,17 +35,18 @@ typedef struct
 {
 	float brightness;
 	float contrast;
+	
 	float saturation;
 	float hue;
 	
 	float lumaBandwidth;
 	float chromaBandwidth;
 	
-	const double *decoderMatrix;
+	const float *decoderMatrix;
 } NTSCConfiguration;
 
-extern const double ntscStandardRGBToYUV[NTSC_DECODERMATRIX_SIZE];
-extern const double ntscCXA2025ASRGBToYUV[NTSC_DECODERMATRIX_SIZE];
+extern const float ntscStandardRGBToYUV[];
+extern const float ntscCXA2025ASRGBToYUV[];
 
 #include "ntscAppleII.h"
 #include "ntscCGA.h"

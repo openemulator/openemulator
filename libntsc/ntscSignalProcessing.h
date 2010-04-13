@@ -8,8 +8,11 @@
  * Implements useful signal processing functions.
  */
 
-#define NTSC_COLORGAIN		255.0
-#define NTSC_COLOROFFSET	256.5
+#define NTSC_DECODERMATRIX_DIM	3
+#define NTSC_DECODERMATRIX_SIZE	9
+
+#define NTSC_COLORGAIN		255.0F
+#define NTSC_COLOROFFSET	256.5F
 
 #define NTSC_PHASENUM		4
 #define NTSC_PHASEMASK		(NTSC_PHASENUM - 1)
@@ -34,18 +37,21 @@ value &= andMask;\
 value |= orMask;\
 }
 
-extern double ntscUPhase[NTSC_PHASENUM];
-extern double ntscVPhase[NTSC_PHASENUM];
+extern float ntscUPhase[NTSC_PHASENUM];
+extern float ntscVPhase[NTSC_PHASENUM];
 
 // Window functions
-void calculateRealIDFT(double *w, unsigned int n);
-void calculateLanczosWindow(double *w, unsigned int n, double fc);
-void calculateChebyshevWindow(double *w, unsigned int n, double sidelobeDb);
-void multiplyWindow(double *x, double *w, unsigned int n);
-void normalizeWindow(double *w, unsigned int n);
+void calculateRealIDFT(float *w, unsigned int n);
+void calculateLanczosWindow(float *w, unsigned int n, float fc);
+void calculateChebyshevWindow(float *w, unsigned int n, float sidelobeDb);
+void multiplyWindow(float *x, float *w, unsigned int n);
+void normalizeWindow(float *w, unsigned int n);
 
 // RGB functions
-void copyDecoderMatrix(double *to, const double *from);
-void transformDecoderMatrix(double *m, double saturation, double hue);
-void applyDecoderMatrix(double *rgb, double *yuv, double *m);
-void applyOffsetAndGain(double *rgb, double offset, double gain);
+void copyDecoderMatrix(float *to, const float *from);
+void transformDecoderMatrix(float *m, float saturation, float hue);
+void applyDecoderMatrix(float *rgb, float *yuv, float *m);
+void applyOffsetAndGain(float *rgb, float offset, float gain);
+
+// Pixel functions
+void interpolateScanlines(int *buffer, int width, int height, int pitch);

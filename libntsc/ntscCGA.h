@@ -16,22 +16,25 @@
 #define NTSC_CGA_CHEBYSHEV_SIDELOBE_DB	50.0
 
 // Do not modify these defines:
-#define NTSC_CGA_INPUTNUM		16
-#define NTSC_CGA_INPUTSIZE		(1 << NTSC_CGA_INPUTNUM)
-#define NTSC_CGA_SIGNALNUM		8
-#define NTSC_CGA_SIGNALSIZE		(1 << NTSC_CGA_SIGNALNUM)
-#define NTSC_CGA_BLOCKSIZE		24
-#define NTSC_CGA_CHUNKSIZE		4
-#define NTSC_CGA_OFFSETGAIN		(1.0 * NTSC_CGA_CHUNKSIZE / NTSC_CGA_BLOCKSIZE)
+#define NTSC_CGA_RGBITOSAMPLEBITNUM	16
+#define NTSC_CGA_RGBITOSAMPLESIZE	(1 << NTSC_CGA_RGBITOSAMPLEBITNUM)
 
-#define NTSC_CGA_SIGNALBLACK 0
+#define NTSC_CGA_INPUTBITNUM	8
+#define NTSC_CGA_INPUTSIZE		(1 << NTSC_CGA_INPUTBITNUM)
+#define NTSC_CGA_INPUTSAMPLENUM	4
 
-typedef int NTSCCGASignalToPixel[NTSC_CGA_SIGNALSIZE][NTSC_CGA_BLOCKSIZE];
+#define NTSC_CGA_OUTPUTSIZE		24
+#define NTSC_CGA_OFFSETGAIN		(1.0 * NTSC_CGA_INPUTSAMPLENUM / \
+								NTSC_CGA_OUTPUTSIZE)
 
-void ntscCGAInit(NTSCCGASignalToPixel signalToPixel,
+#define NTSC_CGA_INPUTBLACK	0
+
+typedef int NTSCCGA[NTSC_CGA_INPUTSIZE][NTSC_CGA_OUTPUTSIZE];
+
+void ntscCGAInit(NTSCCGA convolutionTable,
 				NTSCConfiguration *config);
-void ntscCGABlit(NTSCCGASignalToPixel signalToPixel,
-				int *output, unsigned char *input,
-				int width, int height);
+void ntscCGABlit(NTSCCGA convolutionTable,
+				 unsigned char *input, int width, int height,
+				 int *output, int outputPitch, int doubleScanlines);
 
 #endif

@@ -11,49 +11,52 @@
 #include "ntsc.h"
 #include "ntscSignalProcessing.h"
 
-void calculateAppleIISignalToPixel(NTSCCGASignalToPixel signalToPixel,
+//
+// RGB block convolution based on Blargg's NTSC NES emulation
+//
+void calculateAppleIISignalToPixel(NTSCAppleII convolutionTable,
 								   NTSCConfiguration *config,
-								   double *wy, double *wc, double *decoderMatrix)
+								   float *wy, float *wc, float *decoderMatrix)
 {
-	for (int is = 0; is < NTSC_APPLEII_SIGNALSIZE; is++)
+	for (int i = 0; i < NTSC_APPLEII_INPUTSIZE; i++)
 	{
-		for (int ib = 0; ib < NTSC_APPLEII_BLOCKSIZE; ib++)
+		for (int o = 0; o < NTSC_APPLEII_OUTPUTSIZE; o++)
 		{
-			double yuv[3] = {0.0, 0.0, 0.0};
-			double rgb[3];
+			float yuv[3] = {0.0, 0.0, 0.0};
+			float rgb[3];
 			
 			// Convolution
-			for (int ic = 0; ic < NTSC_APPLEII_CHUNKSIZE; ic++)
+			for (int c = 0; c < NTSC_APPLEII_INPUTSAMPLENUM; c++)
 			{
-				int iw = ib - ic;
-				if ((iw >= 0) && (iw < NTSC_APPLEII_FILTER_N))
+				int w = o - c;
+				if ((w >= 0) && (w < NTSC_APPLEII_FILTER_N))
 				{
 					// Calculate composite signal level
-					double signal = is >> ic & 1;
+					float signal = i >> c & 1;
 					
-					yuv[0] += signal * wy[iw];
-					yuv[1] += signal * ntscUPhase[ic & NTSC_PHASEMASK] * wc[iw];
-					yuv[2] += signal * ntscVPhase[ic & NTSC_PHASEMASK] * wc[iw];
+					yuv[0] += signal * wy[w];
+					yuv[1] += signal * ntscUPhase[c & NTSC_PHASEMASK] * wc[w];
+					yuv[2] += signal * ntscVPhase[c & NTSC_PHASEMASK] * wc[w];
 				}
 			}
 			
 			applyDecoderMatrix(rgb, yuv, decoderMatrix);
-			applyOffsetAndGain(rgb, config->brightness * NTSC_APPLEII_OFFSETGAIN, 
-							   config->contrast);
-			applyOffsetAndGain(rgb, NTSC_COLOROFFSET * NTSC_APPLEII_OFFSETGAIN,
-							   NTSC_COLORGAIN);
+			applyOffsetAndGain(rgb, o < NTSC_APPLEII_INPUTSAMPLENUM ?
+							   config->brightness : 0, config->contrast);
+			applyOffsetAndGain(rgb, o < NTSC_APPLEII_INPUTSAMPLENUM ?
+							   NTSC_COLOROFFSET : 0, NTSC_COLORGAIN);
 			
-			signalToPixel[is][ib] = NTSC_PACK(rgb[0], rgb[1], rgb[2]);
+			convolutionTable[i][o] = NTSC_PACK(rgb[0], rgb[1], rgb[2]);
 		}
 	}
 }
 
-void ntscAppleIIInit(NTSCAppleIISignalToPixel signalToPixel, NTSCConfiguration *config)
+void ntscAppleIIInit(NTSCAppleII convolutionTable, NTSCConfiguration *config)
 {
-	double w[NTSC_APPLEII_FILTER_N];
-	double wy[NTSC_APPLEII_FILTER_N];
-	double wc[NTSC_APPLEII_FILTER_N];
-	double decoderMatrix[NTSC_DECODERMATRIX_SIZE];
+	float w[NTSC_APPLEII_FILTER_N];
+	float wy[NTSC_APPLEII_FILTER_N];
+	float wc[NTSC_APPLEII_FILTER_N];
+	float decoderMatrix[NTSC_DECODERMATRIX_SIZE];
 	
 	calculateChebyshevWindow(w, NTSC_APPLEII_FILTER_N,
 							 NTSC_APPLEII_CHEBYSHEV_SIDELOBE_DB);
@@ -69,7 +72,7 @@ void ntscAppleIIInit(NTSCAppleIISignalToPixel signalToPixel, NTSCConfiguration *
 	copyDecoderMatrix(decoderMatrix, config->decoderMatrix);
 	transformDecoderMatrix(decoderMatrix, config->saturation, config->hue);
 	
-	calculateAppleIISignalToPixel(signalToPixel, config, wy, wc, decoderMatrix);
+	calculateAppleIISignalToPixel(convolutionTable, config, wy, wc, decoderMatrix);
 }
 
 #define NTSC_APPLEII_WRITEPIXEL(index)\
@@ -80,35 +83,38 @@ void ntscAppleIIInit(NTSCAppleIISignalToPixel signalToPixel, NTSCConfiguration *
 	*o++ = NTSC_UNPACK(value);
 
 #define NTSC_APPLEII_PROCESSCHUNK(index)\
-	c##index = signalToPixel[*i++];\
-	NTSC_APPLEII_WRITEPIXEL(index * NTSC_APPLEII_CHUNKSIZE + 0);\
-	NTSC_APPLEII_WRITEPIXEL(index * NTSC_APPLEII_CHUNKSIZE + 1);\
-	NTSC_APPLEII_WRITEPIXEL(index * NTSC_APPLEII_CHUNKSIZE + 2);\
-	NTSC_APPLEII_WRITEPIXEL(index * NTSC_APPLEII_CHUNKSIZE + 3);\
-	NTSC_APPLEII_WRITEPIXEL(index * NTSC_APPLEII_CHUNKSIZE + 4);\
-	NTSC_APPLEII_WRITEPIXEL(index * NTSC_APPLEII_CHUNKSIZE + 5);\
-	NTSC_APPLEII_WRITEPIXEL(index * NTSC_APPLEII_CHUNKSIZE + 6);\
-	NTSC_APPLEII_WRITEPIXEL(index * NTSC_APPLEII_CHUNKSIZE + 7);
+	c##index = convolutionTable[*i++];\
+	NTSC_APPLEII_WRITEPIXEL(index * NTSC_APPLEII_INPUTSAMPLENUM + 0);\
+	NTSC_APPLEII_WRITEPIXEL(index * NTSC_APPLEII_INPUTSAMPLENUM + 1);\
+	NTSC_APPLEII_WRITEPIXEL(index * NTSC_APPLEII_INPUTSAMPLENUM + 2);\
+	NTSC_APPLEII_WRITEPIXEL(index * NTSC_APPLEII_INPUTSAMPLENUM + 3);\
+	NTSC_APPLEII_WRITEPIXEL(index * NTSC_APPLEII_INPUTSAMPLENUM + 4);\
+	NTSC_APPLEII_WRITEPIXEL(index * NTSC_APPLEII_INPUTSAMPLENUM + 5);\
+	NTSC_APPLEII_WRITEPIXEL(index * NTSC_APPLEII_INPUTSAMPLENUM + 6);\
+	NTSC_APPLEII_WRITEPIXEL(index * NTSC_APPLEII_INPUTSAMPLENUM + 7);
 
-void ntscAppleIIBlit(NTSCAppleIISignalToPixel signalToPixel,
-					 int *output, unsigned char *input,
-					 int width, int height)
+void ntscAppleIIBlit(NTSCAppleII convolutionTable,
+					 unsigned char *input, int width, int height,
+					 int *output, int outputPitch, int doubleScanlines)
 {
-	int blockNum = width / NTSC_APPLEII_BLOCKSIZE;
 	int inputWidth = (width + 7) / 8;
-	int outputWidth = width;
+	int inputHeight = height;
 	
-	while (height--)
+	int outputNum = width / NTSC_APPLEII_OUTPUTSIZE;
+	int outputWidth = doubleScanlines ? (width + outputPitch) * 2 : width + outputPitch;
+	int *frameBuffer = output;
+	
+	while (inputHeight--)
 	{
 		int *c0;
-		int *c1 = signalToPixel[NTSC_APPLEII_SIGNALBLACK];
-		int *c2 = signalToPixel[NTSC_APPLEII_SIGNALBLACK];
+		int *c1 = convolutionTable[NTSC_APPLEII_INPUTBLACK];
+		int *c2 = convolutionTable[NTSC_APPLEII_INPUTBLACK];
+		
 		unsigned char *i = input;
 		int *o = output;
 		int value;
-		int n;
 		
-		for (n = blockNum; n; n--)
+		for (int n = outputNum; n; n--)
 		{
 			NTSC_APPLEII_PROCESSCHUNK(0);
 			NTSC_APPLEII_PROCESSCHUNK(1);
@@ -118,6 +124,9 @@ void ntscAppleIIBlit(NTSCAppleIISignalToPixel signalToPixel,
 		input += inputWidth;
 		output += outputWidth;
 	}
+	
+	if (doubleScanlines)
+		interpolateScanlines(frameBuffer, width, height, outputPitch);
 	
 	return;
 }
