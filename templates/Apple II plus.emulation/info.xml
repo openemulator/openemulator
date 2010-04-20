@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dml PUBLIC "-//OPENEMULATOR//DTD DML 1.0//EN" "http://www.openemulator.org/DTDs/dml-1.0.dtd">
-<dml version="1.0" label="Apple II" image="Apple II.png" description="The Apple II was the first highly successful mass produced microprocessor product. The Apple II had color and high-resolution graphics modes, sound capabilities and one of two built-in BASIC programming languages." group="Apple II">
+<dml version="1.0" label="Apple II+" image="Apple II.png" description="The Apple II was the first highly successful mass produced microprocessor product. The Apple II had color and high-resolution graphics modes, sound capabilities and one of two built-in BASIC programming languages." group="Apple II">
 <device name="host">
     <component name="system" class="HostSystem">
         <property name="runTime" value="0.0" />
@@ -155,27 +155,27 @@
     </component>
     <component name="romD0" class="ROM">
         <property name="map" value="0xd000-0xd7ff" />
-        <resource name="image" src="roms/Apple II Programmers Aid ROM.bin" />
+        <resource name="image" src="roms/Apple II plus D0 ROM.bin" />
     </component>
     <component name="romD8" class="ROM">
         <property name="map" value="0xd800-0xdfff" />
-        <resource name="image" src="roms/Apple II Programmers Aid ROM.bin" />
+        <resource name="image" src="roms/Apple II plus D8 ROM.bin" />
     </component>
     <component name="romE0" class="ROM">
         <property name="map" value="0xe000-0xe7ff" />
-        <resource name="image" src="roms/Apple II E0 ROM.bin" />
+        <resource name="image" src="roms/Apple II plus E0 ROM.bin" />
     </component>
     <component name="romE8" class="ROM">
         <property name="map" value="0xe800-0xefff" />
-        <resource name="image" src="roms/Apple II E8 ROM.bin" />
+        <resource name="image" src="roms/Apple II plus E8 ROM.bin" />
     </component>
     <component name="romF0" class="ROM">
         <property name="map" value="0xf000-0xffff" />
-        <resource name="image" src="roms/Apple II F0 ROM.bin" />
+        <resource name="image" src="roms/Apple II plus F0 ROM.bin" />
     </component>
     <component name="romF8" class="ROM">
         <property name="map" value="0xf800-0xffff" />
-        <resource name="image" src="roms/Apple II F8 ROM.bin" />
+        <resource name="image" src="roms/Apple II plus F8 ROM.bin" />
     </component>
 </device>
 

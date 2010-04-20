@@ -44,5 +44,9 @@ typedef struct
 
 class HostVideo : public OEComponent
 {
-
+public:
+	int ioctl(int message, void *data);
+	
+private:
+	vector<HostVideoFrame *> videoFrames;
 };

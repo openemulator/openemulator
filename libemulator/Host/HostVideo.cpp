@@ -8,5 +8,21 @@
  * Controls host video events
  */
 
-#include "HostAudio.h"
+#include "HostVideo.h"
 
+int HostVideo::ioctl(int message, void *data)
+{
+	switch (message)
+	{
+		case HOST_VIDEO_ADD_SCREEN:
+			return true;
+		case HOST_VIDEO_REMOVE_SCREEN:
+			return true;
+		case HOST_VIDEO_GET_SCREEN_NUM:
+			return true;
+		case HOST_VIDEO_GET_SCREEN:
+			return true;
+	}
+	
+	return false;
+}

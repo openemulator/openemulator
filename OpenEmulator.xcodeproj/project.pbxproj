@@ -62,6 +62,8 @@
 		00AA1E6E113821C600F11BE2 /* AppleIIKeyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00AA1E6C113821C600F11BE2 /* AppleIIKeyboard.cpp */; };
 		00AA1E721138269900F11BE2 /* AppleIISlotMemory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00AA1E701138269900F11BE2 /* AppleIISlotMemory.cpp */; };
 		00B2D72C10914659004783F9 /* DeviceChooserController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B2D72B10914659004783F9 /* DeviceChooserController.m */; };
+		00B4F934117E43E8008D622F /* MemoryOffset.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B4F932117E43E8008D622F /* MemoryOffset.h */; };
+		00B4F935117E43E8008D622F /* MemoryOffset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B4F933117E43E8008D622F /* MemoryOffset.cpp */; };
 		00B5709E10863C2A00CDE4A7 /* TemplateChooserController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B5709D10863C2A00CDE4A7 /* TemplateChooserController.m */; };
 		00B703851135ACA5005E4B65 /* OEComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B703731135AC91005E4B65 /* OEComponent.cpp */; };
 		00B703861135ACA6005E4B65 /* OEComponentFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B703751135AC91005E4B65 /* OEComponentFactory.cpp */; };
@@ -135,6 +137,7 @@
 		00E0B06E1132DC2E004DB96D /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0054E3541131BD00006D32D9 /* OpenGL.framework */; };
 		00E0B07B1132DC46004DB96D /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 00E0B07A1132DC46004DB96D /* libxml2.dylib */; };
 		00E0B19C1132DE4D004DB96D /* SDLMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E0B19A1132DE4D004DB96D /* SDLMain.m */; };
+		00E2299611768DF4004E71F7 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009B4F2611639D7700E9A6F9 /* GLUT.framework */; };
 		00EF028D107D9EFB00FE378D /* VerticallyCenteredCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00EF028C107D9EFB00FE378D /* VerticallyCenteredCell.m */; };
 		00F0ED6711028C8800208090 /* DiskImage525.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000F66390FF8368F00C8AF23 /* DiskImage525.icns */; };
 		00F1AEFC11370EF5006642AD /* AppleIISystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00F1AEFA11370EF5006642AD /* AppleIISystem.cpp */; };
@@ -309,6 +312,8 @@
 		00AA1E701138269900F11BE2 /* AppleIISlotMemory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleIISlotMemory.cpp; sourceTree = "<group>"; };
 		00B2D72A10914659004783F9 /* DeviceChooserController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceChooserController.h; sourceTree = "<group>"; };
 		00B2D72B10914659004783F9 /* DeviceChooserController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceChooserController.m; sourceTree = "<group>"; };
+		00B4F932117E43E8008D622F /* MemoryOffset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemoryOffset.h; sourceTree = "<group>"; };
+		00B4F933117E43E8008D622F /* MemoryOffset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MemoryOffset.cpp; sourceTree = "<group>"; };
 		00B5709C10863C2A00CDE4A7 /* TemplateChooserController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TemplateChooserController.h; sourceTree = "<group>"; };
 		00B5709D10863C2A00CDE4A7 /* TemplateChooserController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TemplateChooserController.m; sourceTree = "<group>"; };
 		00B703721135AC91005E4B65 /* OERef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OERef.h; sourceTree = "<group>"; };
@@ -464,6 +469,7 @@
 				0054E4A71131BE8A006D32D9 /* OpenGL.framework in Frameworks */,
 				0054E6311131BEE7006D32D9 /* Carbon.framework in Frameworks */,
 				0054E66C1131BF58006D32D9 /* Quartz.framework in Frameworks */,
+				00E2299611768DF4004E71F7 /* GLUT.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -566,7 +572,6 @@
 		0054E33E1131BCC9006D32D9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				009B4F2611639D7700E9A6F9 /* GLUT.framework */,
 				009B4F1011639D3D00E9A6F9 /* libntsc.a */,
 				00E0B0671132DC08004DB96D /* libemulator.a */,
 				00E0B0691132DC11004DB96D /* libportaudio.a */,
@@ -689,6 +694,8 @@
 				005397E31139EC1F00CA7CE4 /* ROM.cpp */,
 				00A62FFF11415E3C005E8500 /* MC6845.h */,
 				00A6300011415E3C005E8500 /* MC6845.cpp */,
+				00B4F932117E43E8008D622F /* MemoryOffset.h */,
+				00B4F933117E43E8008D622F /* MemoryOffset.cpp */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -825,6 +832,7 @@
 		2A37F4C3FDCFA73011CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				009B4F2611639D7700E9A6F9 /* GLUT.framework */,
 				0054E6301131BEE7006D32D9 /* Carbon.framework */,
 				0054E4A01131BE7A006D32D9 /* Cocoa.framework */,
 				006EECA40FCA5C31003D2C8D /* libemulator.a */,
@@ -847,6 +855,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				00311CFF1166526800D9CF80 /* Z80Opcodes.h in Headers */,
+				00B4F934117E43E8008D622F /* MemoryOffset.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1065,6 +1074,7 @@
 				009B4F5A1163A45500E9A6F9 /* W65C02S.cpp in Sources */,
 				009B4F5F1163A48100E9A6F9 /* MOS6509.cpp in Sources */,
 				000FF7F01163E6FC0009E666 /* RP2A03.cpp in Sources */,
+				00B4F935117E43E8008D622F /* MemoryOffset.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1223,7 +1233,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				ARCHS = "$(NATIVE_ARCH)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
@@ -1290,7 +1300,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				ARCHS = "$(NATIVE_ARCH)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
@@ -1359,7 +1369,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				ARCHS = "$(NATIVE_ARCH)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
@@ -1390,7 +1400,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				ARCHS = "$(NATIVE_ARCH)";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = "";
 				FRAMEWORK_SEARCH_PATHS = (

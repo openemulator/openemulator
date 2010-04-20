@@ -30,9 +30,9 @@ typedef struct
 {
 	float *inputData;
 	float *outputData;
-	int sampleRate;
-	int frameNum;
+	float sampleRate;
 	int channelNum;
+	int frameNum;
 } HostAudioBuffer;
 
 class HostAudio : public OEComponent

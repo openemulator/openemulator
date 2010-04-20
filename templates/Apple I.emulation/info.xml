@@ -2,7 +2,9 @@
 <!DOCTYPE dml PUBLIC "-//OPENEMULATOR//DTD DML 1.0//EN" "http://www.openemulator.org/DTDs/dml-1.0.dtd">
 <dml version="1.0" label="Apple I" image="Apple I.png" description="" group="Apple I">
 <device name="host">
-    <component name="events" class="HostEvents">
+    <component name="system" class="HostSystem">
+        <property name="runTime" value="0.0" />
+        <property name="isPaused" value="0" />
     </component>
     <component name="audio" class="HostAudio">
         <property name="runTime" value="0.0" />
@@ -19,24 +21,25 @@
     </component>
     <component name="tablet" class="HostTablet">
     </component>
-    <component name="net" class="HostNet">
-    </component>
     <component name="serial" class="HostSerial">
     </component>
     <component name="parallel" class="HostParallel">
     </component>
+    <component name="net" class="HostNet">
+    </component>
+    <component name="camera" class="HostCamera">
+    </component>
 </device>
 
 <device name="dev0" label="Apple I">
-    <inlet ref="video.monitor" type="AppleIICompositeVideo" category="peripheral" label="Video Connector" image="RCA Connector.png" />
+    <inlet ref="video.monitor" type="AppleIICompositeVideo" category="peripheral" label="Video Connector" image="Apple II Video Connector.png" />
     <inlet ref="system.slot1" type="AppleISlot" category="expansion" label="Slot 1" image="Apple I Slot.png" />
     <inlet ref="system.slot2" type="AppleISlot" category="expansion" label="Slot 2" image="Apple I Slot.png" />
     <inlet ref="system.cpuSocket" type="AppleIICPU" category="expansion" label="CPU Socket" image="Apple II CPU Chip Socket.png" />
     <inlet ref="video.romSocket" type="AppleIIVideoROM" category="peripheral" label="Video Connector" image="RCA Connector.png" />
     <component name="system" class="AppleISystem">
-        <property name="internalCPUEnabled" value="1" />
         <connection name="hostAudio" ref="host::audio" />
-        <connection name="cpu" ref="cpu" />
+        <connection name="cpuInternal" ref="cpu" />
         <connection name="cpuSocket" ref="" />
         <connection name="slot1" ref="" />
         <connection name="slot2" ref="" />
@@ -52,7 +55,7 @@
     </component>
     <component name="memoryMap" class="MemoryMap16Bit">
         <connection name="" ref="floatingBus" />
-        <connection name="" ref="ram" />
+        <connection name="" ref="memory" />
         <connection name="" ref="io" />
         <connection name="" ref="rom" />
     </component>
@@ -60,11 +63,11 @@
         <connection name="system" ref="system" />
         <connection name="memory" ref="memory" />
     </component>
-    <component name="ram" class="RAM">
+    <component name="memory" class="RAM">
         <data name="image" src="${DEVICE_NAME}.bin" />
-        <property name="offset" value="0x0000" />
+        <property name="map" value="0x0000" />
         <property name="size" value="0x2000" />
-        <property name="resetPattern" value="0000ffff" />
+        <property name="resetPattern" value="0x00" />
         <connection name="hostSystem" ref="host::system" />
     </component>
     <component name="video" class="AppleIVideo">
@@ -95,15 +98,14 @@
         <connection name="interruptA" ref="" />
         <connection name="interruptB" ref="" />
     </component>
-    </component name="io" class="AppleIIO">
-        <property name="offset" value="0xd000" />
-        <property name="size" value="0x1000" />
+    <component name="io" class="AppleIIO">
+        <property name="map" value="0xd000-0xdfff" />
         <connection name="pia" ref="pia" />
         <connection name="floatingBus" ref="floatingBus" />
     </component>
     <component name="rom" class="ROM">
-        <property name="offset" value="0xff00" />
-        <resource name="image" src="roms/Apple I ROM.bin" />
+        <property name="map" value="0xff00-0xffff" />
+        <resource name="image" src="roms/Apple I Monitor ROM.bin" />
     </component>
 </device>
 

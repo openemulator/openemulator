@@ -27,6 +27,8 @@ OEInfo::OEInfo(string path)
 		
 		xmlFreeDoc(doc);
 	}
+	else
+		cerr << "OEInfo: couldn't parse %s\n" + path;
 }
 
 OEInfo::OEInfo(xmlDocPtr doc)
