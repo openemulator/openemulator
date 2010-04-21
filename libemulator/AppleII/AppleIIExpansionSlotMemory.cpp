@@ -14,18 +14,18 @@ int AppleIIExpansionSlotMemory::ioctl(int message, void *data)
 {
 	switch(message)
 	{
-		case OEIOCTL_CONNECT:
-		{
-			OEIoctlConnection *connection = (OEIoctlConnection *) data;
-			if (connection->name == "floatingBus")
-				floatingBus = connection->component;
-			break;
-		}
 		case OEIOCTL_SET_PROPERTY:
 		{
 			OEIoctlProperty *property = (OEIoctlProperty *) data;
 			if (property->name == "offset")
 				offset = intValue(property->value);
+			break;
+		}
+		case OEIOCTL_CONNECT:
+		{
+			OEIoctlConnection *connection = (OEIoctlConnection *) data;
+			if (connection->name == "floatingBus")
+				floatingBus = connection->component;
 			break;
 		}
 		case OEIOCTL_GET_MEMORYMAP:

@@ -8,18 +8,12 @@
  * Controls a generic memory offset logic
  */
 
-#include "RAM.h"
+#include "MemoryOffset.h"
 
-int RAM::ioctl(int message, void *data)
+int MemoryOffset::ioctl(int message, void *data)
 {
 	switch(message)
 	{
-		case OEIOCTL_CONNECT:
-		{
-			OEIoctlConnection *connection = (OEIoctlConnection *) data;
-			if (connection->name == "component")
-				component = connection->value;
-		}
 		case OEIOCTL_SET_PROPERTY:
 		{
 			OEIoctlProperty *property = (OEIoctlProperty *) data;
@@ -27,12 +21,18 @@ int RAM::ioctl(int message, void *data)
 				offset = intValue(property->value);
 			break;
 		}
+		case OEIOCTL_CONNECT:
+		{
+			OEIoctlConnection *connection = (OEIoctlConnection *) data;
+			if (connection->name == "component")
+				component = connection->component;
+		}
 		case OEIOCTL_GET_MEMORYMAP:
 		{
 			OEIoctlMemoryMap *memoryMap = (OEIoctlMemoryMap *) data;
 			memoryMap->component = this;
 			memoryMap->offset = offset;
-			memoryMap->size = memory.size();
+			memoryMap->size = 0;
 			break;
 		}
 	}
@@ -40,12 +40,12 @@ int RAM::ioctl(int message, void *data)
 	return false;
 }	
 
-int RAM::read(int address)
+int MemoryOffset::read(int address)
 {
 	return component->read(address + offset);
 }
 
-void RAM::write(int address, int value)
+void MemoryOffset::write(int address, int value)
 {
 	component->write(address + offset, value);
 }

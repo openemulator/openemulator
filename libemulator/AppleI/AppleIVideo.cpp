@@ -14,6 +14,13 @@ int AppleIVideo::ioctl(int message, void *data)
 {
 	switch(message)
 	{
+		case OEIOCTL_SET_RESOURCE:
+		{
+			OEIoctlData *resource = (OEIoctlData *) data;
+			if (resource->name == "image")
+				characterSet = resource->data;
+			break;
+		}
 		case OEIOCTL_CONNECT:
 		{
 			OEIoctlConnection *connection = (OEIoctlConnection *) data;
@@ -22,13 +29,6 @@ int AppleIVideo::ioctl(int message, void *data)
 				OEComponent *system = connection->component;
 				system->addObserver(this);
 			}
-			break;
-		}
-		case OEIOCTL_SET_RESOURCE:
-		{
-			OEIoctlData *resource = (OEIoctlData *) data;
-			if (resource->name == "image")
-				characterSet = resource->data;
 			break;
 		}
 	}

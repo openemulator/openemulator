@@ -15,19 +15,6 @@ int AppleISystem::ioctl(int message, void *data)
 {
 	switch (message)
 	{
-		case OEIOCTL_CONNECT:
-		{
-			OEIoctlConnection *connection = (OEIoctlConnection *) data;
-			if (connection->name == "hostAudio")
-			{
-				OEComponent *hostAudio = connection->component;
-				hostAudio->addObserver(this);
-			}
-			else if (connection->name == "cpu")
-				cpu = connection->component;
-			else if (connection->name == "cpuSocket")
-				cpuSocket = connection->component;
-		}
 		case OEIOCTL_SET_PROPERTY:
 		{
 			OEIoctlProperty *property = (OEIoctlProperty *) data;
@@ -43,6 +30,19 @@ int AppleISystem::ioctl(int message, void *data)
 				return false;
 			
 			return true;
+		}
+		case OEIOCTL_CONNECT:
+		{
+			OEIoctlConnection *connection = (OEIoctlConnection *) data;
+			if (connection->name == "hostAudio")
+			{
+				OEComponent *hostAudio = connection->component;
+				hostAudio->addObserver(this);
+			}
+			else if (connection->name == "cpu")
+				cpu = connection->component;
+			else if (connection->name == "cpuSocket")
+				cpuSocket = connection->component;
 		}
 		case OEIOCTL_NOTIFY:
 		{

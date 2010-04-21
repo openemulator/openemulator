@@ -6,27 +6,18 @@
         <property name="runTime" value="0.0" />
         <property name="isPaused" value="0" />
     </component>
-    <component name="audio" class="HostAudio">
-    </component>
     <component name="video" class="HostVideo">
         <property name="window" value="-1 -1 768 576" />
     </component>
-    <component name="keyboard" class="HostKeyboard">
-    </component>
-    <component name="joystick" class="HostJoystick">
-    </component>
-    <component name="mouse" class="HostMouse">
-    </component>
-    <component name="tablet" class="HostTablet">
-    </component>
-    <component name="serial" class="HostSerial">
-    </component>
-    <component name="parallel" class="HostParallel">
-    </component>
-    <component name="net" class="HostNet">
-    </component>
-    <component name="camera" class="HostCamera">
-    </component>
+    <component name="audio" class="HostAudio" />
+    <component name="keyboard" class="HostKeyboard" />
+    <component name="joystick" class="HostJoystick" />
+    <component name="mouse" class="HostMouse" />
+    <component name="tablet" class="HostTablet" />
+    <component name="serial" class="HostSerial" />
+    <component name="parallel" class="HostParallel" />
+    <component name="net" class="HostNet" />
+    <component name="camera" class="HostCamera" />
 </device>
 
 <device name="dev0" label="Apple II">
@@ -44,34 +35,33 @@
     <inlet ref="system.cpuSocket" type="AppleIICPU" category="expansion" label="CPU Socket" image="Apple II CPU Chip Socket.png" />
     <inlet ref="mmu.romSocket" type="AppleIIROM" category="expansion" label="ROM Socket" image="Apple II ROM Socket.png" />
     <component name="system" class="AppleIISystem">
-        <property name="cpuSelect" value="0" />
+        <property name="isCpuExternal" value="0" />
         <property name="cycleClockInc" value="14" />
         <property name="scanlineClockInc" value="2" />
         <connection name="hostAudio" ref="host::audio" />
-        <connection name="cpu" ref="cpu" />
+        <connection name="cpuInternal" ref="cpu" />
         <connection name="cpuExternal" ref="" />
         <connection name="cpuSocket" ref="" />
     </component>
     <component name="cpu" class="MOS6502">
-        <connection name="memory" ref="memoryMap" />
         <property name="a" value="0" />
         <property name="x" value="0" />
         <property name="y" value="0" />
         <property name="s" value="0" />
         <property name="p" value="0" />
         <property name="pc" value="0" />
+        <connection name="memory" ref="memoryMap" />
     </component>
-    <component name="memoryMap" class="MemoryMap16bit">
-        <connection name="" ref="floatingBus" />
-        <connection name="" ref="memory" />
-        <connection name="" ref="io" />
-        <connection name="" ref="slotMemory" />
-        <connection name="" ref="slotExpansionMemory" />
-    </component>
+    <component name="memoryMap" class="MemoryMap16bit" />
     <component name="mmu" class="AppleIIMMU">
+        <property name="inh" value="0" />
         <connection name="hostSystem" ref="host::system" />
         <connection name="memoryMap" ref="memoryMap" />
         <connection name="floatingBus" ref="floatingBus" />
+        <connection name="memory" ref="memory" />
+        <connection name="io" ref="io" />
+        <connection name="slotMemory" ref="slotMemory" />
+        <connection name="slotExpansionMemory" ref="slotExpansionMemory" />
         <connection name="romD0" ref="romD0" />
         <connection name="romD8" ref="romD8" />
         <connection name="romE0" ref="romE0" />
@@ -79,18 +69,17 @@
         <connection name="romF0" ref="romF0" />
         <connection name="romF8" ref="romF8" />
         <connection name="romSocket" ref="" />
-        <property name="inh" value="0" />
     </component>
     <component name="floatingBus" class="AppleIIFloatingBus">
         <connection name="system" ref="system" />
     </component>
     <component name="memory" class="RAM">
-        <data name="image" src="${DEVICE_NAME}.bin" />
-        <property name="map" value="0x0000" />
+        <property name="map" value="0x0000-0xbfff" />
         <property name="size" value="0xc000" />
+        <data name="image" src="${DEVICE_NAME}.bin" />
     </component>
     <component name="io" class="MemoryMap8bit">
-        <property name="map" value="0xc000" />
+        <property name="map" value="0xc000-0xcfff" />
         <connection name="" ref="floatingBus" />
         <connection name="" ref="keyboard" />
         <connection name="" ref="speaker" />
