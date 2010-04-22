@@ -63,7 +63,8 @@
     </component>
     <component name="memoryMap" class="MemoryMap16bit">
         <connection name="" ref="floatingBus" />
-        <connection name="" ref="memory" />
+        <connection name="" ref="memory0000" />
+        <connection name="" ref="memory8000" />
         <connection name="" ref="io" />
         <connection name="" ref="slotMemory" />
         <connection name="" ref="slotExpansionMemory" />
@@ -84,10 +85,15 @@
     <component name="floatingBus" class="AppleIIFloatingBus">
         <connection name="system" ref="system" />
     </component>
-    <component name="memory" class="RAM">
+    <component name="memory0000" class="RAM">
         <data name="image" src="${DEVICE_NAME}.bin" />
-        <property name="map" value="0x0000" />
-        <property name="size" value="0xc000" />
+        <property name="map" value="0x0000-0x7fff" />
+        <property name="size" value="0x4000" />
+    </component>
+    <component name="memory8000" class="RAM">
+        <data name="image" src="${DEVICE_NAME}.bin" />
+        <property name="map" value="0x0000-0x3fff" />
+        <property name="size" value="0x4000" />
     </component>
     <component name="io" class="MemoryMap8bit">
         <property name="map" value="0xc000" />

@@ -29,13 +29,6 @@ void AppleIISlotMemory::setSlot(int index, OEComponent *component)
 	connection.component = mmu;
 	component->ioctl(OEIOCTL_CONNECT, &connection);
 	
-
-	
-	
-	  
-	
-	
-	 
 	connection.name = "mmu";
 	connection.component = mmu;
 	component->ioctl(OEIOCTL_CONNECT, &connection);
@@ -45,8 +38,13 @@ void AppleIISlotMemory::setSlot(int index, OEComponent *component)
 	
 	OEIoctlMemoryMap memoryMap;
 	memoryMap.component = component;
-	memoryMap.offset = 0x80 + (index << 4);
-	memoryMap.size = 0x10;
+	string stringMap = "0xc0";
+	stringMap += index;
+	stringMap += "0-0xc0";
+	stringMap += index;
+	stringMap += "f";
+	memoryMap.mapVector.push_back(stringMap);
+	
 	io->ioctl(OEIOCTL_SET_MEMORYMAP, &memoryMap);
 	slotMemoryMap[index] = slotMemoryQuery.slotMemory;
 	expandedSlotMemoryMap[index] = slotMemoryQuery.expandedSlotMemory;
@@ -56,6 +54,13 @@ int AppleIISlotMemory::ioctl(int message, void *data)
 {
 	switch(message)
 	{
+		case OEIOCTL_SET_PROPERTY:
+		{
+			OEIoctlProperty *property = (OEIoctlProperty *) data;
+			if (property->name == "offset")
+				offset = intValue(property->value);
+			break;
+		}
 		case OEIOCTL_CONNECT:
 		{
 			OEIoctlConnection *connection = (OEIoctlConnection *) data;
@@ -89,19 +94,11 @@ int AppleIISlotMemory::ioctl(int message, void *data)
 				setSlot(7, connection->component);
 			break;
 		}
-		case OEIOCTL_SET_PROPERTY:
-		{
-			OEIoctlProperty *property = (OEIoctlProperty *) data;
-			if (property->name == "offset")
-				offset = intValue(property->value);
-			break;
-		}
 		case OEIOCTL_GET_MEMORYMAP:
 		{
 			OEIoctlMemoryMap *memoryMap = (OEIoctlMemoryMap *) data;
 			memoryMap->component = this;
-			memoryMap->offset = offset;
-			memoryMap->size = APPLEIISLOTMEMORY_SIZE;
+			memoryMap->mapVector = mapVector;
 			break;
 		}
 	}

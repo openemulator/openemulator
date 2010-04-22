@@ -12,23 +12,31 @@
 
 #include "HostSystem.h"
 
+vector<char> RAM::convertHexString(string hexString)
+{
+	vector<char> data;
+	
+	for (string::iterator i = hexString.begin();
+		 i != hexString.end();
+		 i += 2)
+	{
+		data
+	}
+}
+
 int RAM::ioctl(int message, void *data)
 {
 	switch(message)
 	{
-		case OEIOCTL_CONNECT:
-		{
-			OEIoctlConnection *connection = (OEIoctlConnection *) data;
-			if (connection->name == "hostSystem")
-				connection->component->addObserver(this);
-		}
 		case OEIOCTL_SET_PROPERTY:
 		{
 			OEIoctlProperty *property = (OEIoctlProperty *) data;
-			if (property->name == "offset")
-				offset = intValue(property->value);
+			if (property->name == "map")
+				mapVector.push_back(property->value);
 			else if (property->name == "size")
-				memory.resize(intValue(property->value));
+				size = intValue(property->value);
+			else if (property->name == "resetPattern")
+				resetPattern = convertHexString(property->value);
 			break;
 		}
 		case OEIOCTL_SET_DATA:
@@ -37,7 +45,8 @@ int RAM::ioctl(int message, void *data)
 			if (setData->name == "image")
 			{
 				memory = setData->data;
-				mask = nextPowerOf2(memory.size()) - 1;
+				memory.resize(size);
+				mask = getPowerOf2(memory.size()) - 1;
 			}
 			break;
 		}
@@ -51,12 +60,17 @@ int RAM::ioctl(int message, void *data)
 			
 			return true;
 		}
+		case OEIOCTL_CONNECT:
+		{
+			OEIoctlConnection *connection = (OEIoctlConnection *) data;
+			if (connection->name == "hostSystem")
+				connection->component->addObserver(this);
+		}
 		case OEIOCTL_GET_MEMORYMAP:
 		{
 			OEIoctlMemoryMap *memoryMap = (OEIoctlMemoryMap *) data;
 			memoryMap->component = this;
-			memoryMap->offset = offset;
-			memoryMap->size = memory.size();
+			memoryMap->mapVector = mapVector;
 			break;
 		}
 		case OEIOCTL_NOTIFY:

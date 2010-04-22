@@ -18,7 +18,11 @@ public:
 	void write(int address, int value);
 	
 private:
-	int offset;
+	vector<string> mapVector;
+	vector<char> resetPattern;
+	
+	int size;
 	int mask;
+	
 	vector<char> memory;
 };

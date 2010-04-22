@@ -78,7 +78,7 @@ int intValue(string value)
 	return atoi(value.c_str());
 }
 
-int nextPowerOf2(int value)
+int getPowerOf2(int value)
 {
-	return (int) pow(2, ceil(log2(value)));
+	return (int) pow(2, floor(log2(value)));
 }

@@ -80,7 +80,7 @@ private:
 };
 
 int intValue(string value);
-int nextPowerOf2(int value);
+int getPowerOf2(int value);
 
 typedef struct
 {
@@ -103,8 +103,7 @@ typedef struct
 typedef struct
 {
 	OEComponent *component;
-	int offset;
-	int size;
+	vector<string> mapVector;
 } OEIoctlMemoryMap;
 
 typedef struct

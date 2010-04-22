@@ -17,7 +17,8 @@ public:
 	int read(int address);
 	
 private:
-	int offset;
+	vector<string> mapVector;
+	
 	int mask;
 	vector<char> memory;
 };

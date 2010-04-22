@@ -17,8 +17,8 @@ int ROM::ioctl(int message, void *data)
 		case OEIOCTL_SET_PROPERTY:
 		{
 			OEIoctlProperty *property = (OEIoctlProperty *) data;
-			if (property->name == "offset")
-				offset = intValue(property->value);
+			if (property->name == "map")
+				mapVector.push_back(property->value);
 			break;
 		}
 		case OEIOCTL_SET_RESOURCE:
@@ -27,7 +27,7 @@ int ROM::ioctl(int message, void *data)
 			if (setData->name == "image")
 			{
 				memory = setData->data;
-				mask = nextPowerOf2(memory.size()) - 1;
+				mask = getPowerOf2(memory.size()) - 1;
 			}
 			break;
 		}
@@ -35,8 +35,7 @@ int ROM::ioctl(int message, void *data)
 		{
 			OEIoctlMemoryMap *memoryMap = (OEIoctlMemoryMap *) data;
 			memoryMap->component = this;
-			memoryMap->offset = offset;
-			memoryMap->size = memory.size();
+			memoryMap->mapVector = mapVector;
 			break;
 		}
 	}
