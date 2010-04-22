@@ -52,16 +52,19 @@
         <property name="pc" value="0" />
         <connection name="memory" ref="memoryMap" />
     </component>
-    <component name="memoryMap" class="MemoryMap16bit" />
+    <component name="memoryMap" class="MemoryMap16bit">
+        <connection name="floatingBus" ref="floatingBus" />
+        <connection name="memory" ref="memory" />
+        <connection name="ioMap" ref="ioMap" />
+        <connection name="slotMemory" ref="slotMemory" />
+        <connection name="slotExpansionMemory" ref="slotExpansionMemory" />
+    </component>
     <component name="mmu" class="AppleIIMMU">
+        <property name="map" value="0x50-0x57" />
         <property name="inh" value="0" />
         <connection name="hostSystem" ref="host::system" />
         <connection name="memoryMap" ref="memoryMap" />
         <connection name="floatingBus" ref="floatingBus" />
-        <connection name="memory" ref="memory" />
-        <connection name="io" ref="io" />
-        <connection name="slotMemory" ref="slotMemory" />
-        <connection name="slotExpansionMemory" ref="slotExpansionMemory" />
         <connection name="romD0" ref="romD0" />
         <connection name="romD8" ref="romD8" />
         <connection name="romE0" ref="romE0" />
@@ -78,7 +81,7 @@
         <property name="size" value="0xc000" />
         <data name="image" src="${DEVICE_NAME}.bin" />
     </component>
-    <component name="io" class="MemoryMap8bit">
+    <component name="ioMap" class="MemoryMap8bit">
         <property name="map" value="0xc000-0xcfff" />
         <connection name="" ref="floatingBus" />
         <connection name="" ref="keyboard" />
@@ -123,12 +126,12 @@
     </component>
     <component name="slotMemory" class="AppleIISlotMemory">
         <property name="map" value="0xc100-0xc7ff" />
-        <connection name="slotExpansionMemory" ref="slotExpansionMemory" />
-        <connection name="io" ref="io" />
         <connection name="system" ref="system" />
-        <connection name="floatingBus" ref="floatingBus" />
-        <connection name="mmu" ref="mmu" />
         <connection name="memoryMap" ref="memoryMap" />
+        <connection name="mmu" ref="mmu" />
+        <connection name="floatingBus" ref="floatingBus" />
+        <connection name="ioMap" ref="ioMap" />
+        <connection name="slotExpansionMemory" ref="slotExpansionMemory" />
         <connection name="slot0" ref="" />
         <connection name="slot1" ref="" />
         <connection name="slot2" ref="" />

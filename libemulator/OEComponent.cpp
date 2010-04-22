@@ -66,19 +66,41 @@ void OEComponent::postNotification(int message, void *data)
 		(*iterator)->ioctl(OEIOCTL_NOTIFY, &notification);
 }
 
-int intValue(string value)
+int getInt(string value)
 {
 	if (value.substr(0, 2) == "0x")
 	{
-		unsigned int i;   
+		unsigned int i;
 		std::stringstream ss;
 		ss << std::hex << value.substr(2);
 		ss >> i;
+		return i;
 	}
-	return atoi(value.c_str());
+	else
+		return atoi(value.c_str());
 }
 
-int getPowerOf2(int value)
+vector<char> getCharVector(string value)
 {
-	return (int) pow(2, floor(log2(value)));
+	vector<char> result;
+	
+	if (value.substr(0, 2) == "0x")
+		value = value.substr(2);
+	
+	int size = value.size() / 2;
+	for (int i = 0; i < size; i++)
+	{
+		unsigned int n;
+		std::stringstream ss;
+		ss << std::hex << value.substr(i * 2, 2);
+		ss >> n;
+		result[i] = n;
+	}
+	
+	return result;
+}
+
+int getNextPowerOf2(int value)
+{
+	return (int) pow(2, ceil(log2(value)));
 }

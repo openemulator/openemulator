@@ -21,7 +21,7 @@ typedef struct
 {
 	OEComponent *slotIo;			// Get slot's io
 	OEComponent *slotMemory;		// Get slot's memory
-	OEComponent *expandedSlotMemory;// Get slot's expanded memory 
+	OEComponent *slotExpansionMemory;// Get slot's expanded memory 
 } AppleIISlotMemoryQuery;
 
 class AppleIISlotMemory : public OEComponent
@@ -32,18 +32,17 @@ public:
 	void write(int address, int value);
 	
 private:
-	int offset;
-	
-	OEComponent *expandedSlotMemory;
-	OEComponent *io;
+	vector<string> mapVector;
 	
 	OEComponent *system;
-	OEComponent *floatingBus;
+	OEComponent *memoryMap;
 	OEComponent *mmu;
-	OEComponent *memory;
+	OEComponent *floatingBus;
+	OEComponent *ioMap;
+	OEComponent *slotExpansionMemory;
 	
 	OEComponent *slotMemoryMap[8];
-	OEComponent *expandedSlotMemoryMap[8];
+	OEComponent *slotExpansionMemoryMap[8];
 	
 	void setSlot(int index, OEComponent *slotComponent);
 };

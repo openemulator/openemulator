@@ -79,8 +79,9 @@ private:
 	vector<OEComponent *> observers;
 };
 
-int intValue(string value);
-int getPowerOf2(int value);
+int getInt(string value);
+vector<char> getCharVector(string value);
+int getNextPowerOf2(int value);
 
 typedef struct
 {

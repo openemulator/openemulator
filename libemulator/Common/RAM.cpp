@@ -12,16 +12,10 @@
 
 #include "HostSystem.h"
 
-vector<char> RAM::convertHexString(string hexString)
+RAM::RAM()
 {
-	vector<char> data;
-	
-	for (string::iterator i = hexString.begin();
-		 i != hexString.end();
-		 i += 2)
-	{
-		data
-	}
+	size = 0;
+	mask = 0;
 }
 
 int RAM::ioctl(int message, void *data)
@@ -34,9 +28,9 @@ int RAM::ioctl(int message, void *data)
 			if (property->name == "map")
 				mapVector.push_back(property->value);
 			else if (property->name == "size")
-				size = intValue(property->value);
+				size = getInt(property->value);
 			else if (property->name == "resetPattern")
-				resetPattern = convertHexString(property->value);
+				resetPattern = getCharVector(property->value);
 			break;
 		}
 		case OEIOCTL_SET_DATA:
@@ -46,7 +40,7 @@ int RAM::ioctl(int message, void *data)
 			{
 				memory = setData->data;
 				memory.resize(size);
-				mask = getPowerOf2(memory.size()) - 1;
+				mask = getNextPowerOf2(memory.size()) - 1;
 			}
 			break;
 		}
@@ -77,7 +71,10 @@ int RAM::ioctl(int message, void *data)
 		{
 			OEIoctlNotification *notification = (OEIoctlNotification *) data;
 			if (notification->message == HID_S_COLDRESTART);
-			// Set up reset pattern
+			{
+				for (int i = 0; i < memory.size(); i++)
+					memory[i] = resetPattern[i % resetPattern.size()];
+			}
 			break;
 		}
 	}

@@ -17,8 +17,7 @@ class AppleIIO : public OEComponent
 	void write(int address, int value);
 	
 private:
-	int offset;
-	int size;
+	vector<string> mapVector;
 	
 	OEComponent *pia;
 	OEComponent *floatingBus;

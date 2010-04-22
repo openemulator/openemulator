@@ -33,17 +33,17 @@ int W65C02S::ioctl(int message, void *data)
 		{
 			OEIoctlProperty *property = (OEIoctlProperty *) data;
 			if (property->name == "a")
-				a = intValue(property->value);
+				a = getInt(property->value);
 			else if (property->name == "x")
-				x = intValue(property->value);
+				x = getInt(property->value);
 			else if (property->name == "y")
-				y = intValue(property->value);
+				y = getInt(property->value);
 			else if (property->name == "p")
-				p = intValue(property->value);
+				p = getInt(property->value);
 			else if (property->name == "sp")
-				sp.b.l = intValue(property->value);
+				sp.b.l = getInt(property->value);
 			else if (property->name == "pc")
-				pc.w.l = intValue(property->value);
+				pc.w.l = getInt(property->value);
 			break;
 		}
 		case OEIOCTL_GET_PROPERTY:

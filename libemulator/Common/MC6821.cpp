@@ -85,25 +85,25 @@ int MC6821::ioctl(int message, void *data)
 		{
 			OEIoctlProperty *property = (OEIoctlProperty *) data;
 			if (property->name == "controlRegisterA")
-				controlRegisterA = intValue(property->value);
+				controlRegisterA = getInt(property->value);
 			else if (property->name == "dataDirectionRegisterA")
-				dataDirectionRegisterA = intValue(property->value);
+				dataDirectionRegisterA = getInt(property->value);
 			else if (property->name == "outputRegisterA")
-				outputRegisterA = intValue(property->value);
+				outputRegisterA = getInt(property->value);
 			else if (property->name == "controlRegisterB")
-				controlRegisterB = intValue(property->value);
+				controlRegisterB = getInt(property->value);
 			else if (property->name == "dataDirectionRegisterB")
-				dataDirectionRegisterB = intValue(property->value);
+				dataDirectionRegisterB = getInt(property->value);
 			else if (property->name == "outputRegisterB")
-				outputRegisterB = intValue(property->value);
+				outputRegisterB = getInt(property->value);
 			else if (property->name == "ca1")
-				ca1 = intValue(property->value);
+				ca1 = getInt(property->value);
 			else if (property->name == "ca2")
-				ca2 = intValue(property->value);
+				ca2 = getInt(property->value);
 			else if (property->name == "cb1")
-				cb1 = intValue(property->value);
+				cb1 = getInt(property->value);
 			else if (property->name == "cb2")
-				cb2 = intValue(property->value);
+				cb2 = getInt(property->value);
 		}
 		case OEIOCTL_GET_PROPERTY:
 		{

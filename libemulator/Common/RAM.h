@@ -13,16 +13,16 @@
 class RAM : public OEComponent
 {
 public:
+	RAM();
 	int ioctl(int message, void *data);
 	int read(int address);
 	void write(int address, int value);
 	
 private:
 	vector<string> mapVector;
-	vector<char> resetPattern;
 	
 	int size;
 	int mask;
-	
 	vector<char> memory;
+	vector<char> resetPattern;
 };

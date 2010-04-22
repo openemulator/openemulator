@@ -23,8 +23,10 @@ public:
 	void write(int address, int value);
 	
 private:
+	vector<string> mapVector;
+	
 	OEComponent *readMap[MEMORYMAP16BIT_SIZE];
 	OEComponent *writeMap[MEMORYMAP16BIT_SIZE];
 	
-	void setRange(OEComponent *component, int start, int end);
+	void setRange(OEComponent *component, vector<string> mapVector);
 };

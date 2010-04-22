@@ -20,14 +20,13 @@ int AppleIIFloatingBus::ioctl(int message, void *data)
 		{
 			OEIoctlMemoryMap *memoryMap = (OEIoctlMemoryMap *) data;
 			memoryMap->component = this;
-			memoryMap->offset = 0;
-			memoryMap->size = INT_MAX;
+			memoryMap->mapVector.push_back("0x0-0xffffffff");
 			break;
 		}
 	}
 	
 	return 0;
-}	
+}
 
 int AppleIIFloatingBus::read(int address)
 {

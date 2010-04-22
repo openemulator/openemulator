@@ -10,6 +10,11 @@
 
 #include "ROM.h"
 
+ROM::ROM()
+{
+	mask = 0;
+}
+
 int ROM::ioctl(int message, void *data)
 {
 	switch(message)
@@ -27,7 +32,7 @@ int ROM::ioctl(int message, void *data)
 			if (setData->name == "image")
 			{
 				memory = setData->data;
-				mask = getPowerOf2(memory.size()) - 1;
+				mask = getNextPowerOf2(memory.size()) - 1;
 			}
 			break;
 		}

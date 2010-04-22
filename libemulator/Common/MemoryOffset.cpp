@@ -17,8 +17,10 @@ int MemoryOffset::ioctl(int message, void *data)
 		case OEIOCTL_SET_PROPERTY:
 		{
 			OEIoctlProperty *property = (OEIoctlProperty *) data;
-			if (property->name == "offset")
-				offset = intValue(property->value);
+			if (property->name == "map")
+				mapVector.push_back(property->value);
+			else if (property->name == "offset")
+				offset = getInt(property->value);
 			break;
 		}
 		case OEIOCTL_CONNECT:
@@ -31,8 +33,7 @@ int MemoryOffset::ioctl(int message, void *data)
 		{
 			OEIoctlMemoryMap *memoryMap = (OEIoctlMemoryMap *) data;
 			memoryMap->component = this;
-			memoryMap->offset = offset;
-			memoryMap->size = 0;
+			memoryMap->mapVector = mapVector;
 			break;
 		}
 	}

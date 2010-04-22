@@ -19,7 +19,7 @@ int AppleISystem::ioctl(int message, void *data)
 		{
 			OEIoctlProperty *property = (OEIoctlProperty *) data;
 			if (property->name == "internalCPUEnabled")
-				internalCPUEnabled = intValue(property->value);
+				internalCPUEnabled = getInt(property->value);
 		}
 		case OEIOCTL_GET_PROPERTY:
 		{

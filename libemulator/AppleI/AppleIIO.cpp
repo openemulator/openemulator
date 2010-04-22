@@ -28,18 +28,15 @@ int AppleIIO::ioctl(int message, void *data)
 		case OEIOCTL_SET_PROPERTY:
 		{
 			OEIoctlProperty *property = (OEIoctlProperty *) data;
-			if (property->name == "offset")
-				offset = intValue(property->value);
-			else if (property->name == "size")
-				size = intValue(property->value);
+			if (property->name == "map")
+				mapVector.push_back(property->value);
 			break;
 		}
 		case OEIOCTL_GET_MEMORYMAP:
 		{
 			OEIoctlMemoryMap *memoryMap = (OEIoctlMemoryMap *) data;
 			memoryMap->component = this;
-			memoryMap->offset = offset;
-			memoryMap->size = size;
+			memoryMap->mapVector = mapVector;
 			break;
 		}
 	}

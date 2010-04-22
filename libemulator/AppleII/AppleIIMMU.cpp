@@ -18,8 +18,9 @@
 AppleIIMMU::AppleIIMMU()
 {
 	hostSystem = NULL;
-
+	memoryMap = NULL;
 	floatingBus = NULL;
+	
 	romD0 = NULL;
 	romD8 = NULL;
 	romE0 = NULL;
@@ -52,8 +53,7 @@ void AppleIIMMU::mapFloatingBus()
 	
 	OEIoctlMemoryMap componentMemoryMap;
 	componentMemoryMap.component = floatingBus;
-	componentMemoryMap.offset = APPLEIIMMU_ROM_OFFSET;
-	componentMemoryMap.size = APPLEIIMMU_ROM_SIZE;
+	componentMemoryMap.mapVector = mapVector;
 	memoryMap->ioctl(OEIOCTL_SET_MEMORYMAP, &componentMemoryMap);
 }
 
@@ -136,7 +136,7 @@ int AppleIIMMU::ioctl(int message, void *data)
 		{
 			OEIoctlProperty *property = (OEIoctlProperty *) data;
 			if (property->name == "romEnable")
-				setRomEnable(intValue(property->value));
+				setRomEnable(getInt(property->value));
 			break;
 		}
 		case OEIOCTL_GET_PROPERTY:

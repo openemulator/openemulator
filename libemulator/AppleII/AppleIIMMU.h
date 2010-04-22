@@ -20,11 +20,11 @@ public:
 	void onNotification(OEComponent *component, int message, void *data);
 	
 private:
-	int offset;
+	vector<string> mapVector;
 	
 	OEComponent *hostSystem;
-	OEComponent *floatingBus;
 	OEComponent *memoryMap;
+	OEComponent *floatingBus;
 	
 	OEComponent *romD0;
 	OEComponent *romD8;

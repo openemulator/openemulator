@@ -34,23 +34,23 @@ int MOS6502::ioctl(int message, void *data)
 		{
 			OEIoctlProperty *property = (OEIoctlProperty *) data;
 			if (property->name == "pc")
-				pc.w.l = intValue(property->value);
+				pc.w.l = getInt(property->value);
 			else if (property->name == "sp")
-				sp.w.l = intValue(property->value);
+				sp.w.l = getInt(property->value);
 			else if (property->name == "p")
-				p = intValue(property->value);
+				p = getInt(property->value);
 			else if (property->name == "a")
-				a = intValue(property->value);
+				a = getInt(property->value);
 			else if (property->name == "x")
-				x = intValue(property->value);
+				x = getInt(property->value);
 			else if (property->name == "y")
-				y = intValue(property->value);
+				y = getInt(property->value);
 			else if (property->name == "pendingIRQ")
-				pendingIRQ = intValue(property->value);
+				pendingIRQ = getInt(property->value);
 			else if (property->name == "afterCLI")
-				afterCLI = intValue(property->value);
+				afterCLI = getInt(property->value);
 			else if (property->name == "irqCount")
-				irqCount = intValue(property->value);
+				irqCount = getInt(property->value);
 			break;
 		}
 		case OEIOCTL_GET_PROPERTY:

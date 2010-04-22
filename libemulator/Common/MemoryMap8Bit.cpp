@@ -12,16 +12,18 @@
 
 MemoryMap8Bit::MemoryMap8Bit()
 {
-	offset = 0;
-	
 	for (int i = 0; i < MEMORYMAP8BIT_SIZE; i++)
 		readMap[i] = writeMap[i] = 0;
 }
 
-void MemoryMap8Bit::setRange(OEComponent *component, int start, int end)
+void MemoryMap8Bit::setRange(OEComponent *component, vector<string> mapVector)
 {
+	int start;
+	int end;
+	
 	start &= MEMORYMAP8BIT_MASK;
 	end &= MEMORYMAP8BIT_MASK;
+	
 	for (int i = start; i < end; i++)
 	{
 		readMap[i] = component;
@@ -38,27 +40,26 @@ int MemoryMap8Bit::ioctl(int message, void *data)
 			OEIoctlConnection *connection = (OEIoctlConnection *) data;
 			OEIoctlMemoryMap memoryMap;
 			connection->component->ioctl(OEIOCTL_GET_MEMORYMAP, &memoryMap);
-			setRange(memoryMap.component, memoryMap.offset, memoryMap.size);
+			setRange(memoryMap.component, memoryMap.mapVector);
 			break;
 		}
 		case OEIOCTL_SET_PROPERTY:
 		{
 			OEIoctlProperty *property = (OEIoctlProperty *) data;
-			if (property->name == "offset")
-				offset = intValue(property->value);
+			if (property->name == "map")
+				mapVector.push_back(property->value);
 		}
 		case OEIOCTL_GET_MEMORYMAP:
 		{
 			OEIoctlMemoryMap *memoryMap = (OEIoctlMemoryMap *) data;
 			memoryMap->component = this;
-			memoryMap->offset = offset;
-			memoryMap->size = MEMORYMAP8BIT_SIZE;
+			memoryMap->mapVector = mapVector;
 			break;
 		}
 		case OEIOCTL_SET_MEMORYMAP:
 		{
 			OEIoctlMemoryMap *memoryMap = (OEIoctlMemoryMap *) data;
-			setRange(memoryMap->component, memoryMap->offset, memoryMap->size);
+			setRange(memoryMap->component, memoryMap->mapVector);
 			break;
 		}
 	}
