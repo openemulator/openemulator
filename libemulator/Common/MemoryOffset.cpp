@@ -10,6 +10,11 @@
 
 #include "MemoryOffset.h"
 
+MemoryOffset::MemoryOffset()
+{
+	offset = 0;
+}
+
 int MemoryOffset::ioctl(int message, void *data)
 {
 	switch(message)
@@ -21,6 +26,7 @@ int MemoryOffset::ioctl(int message, void *data)
 				mapVector.push_back(property->value);
 			else if (property->name == "offset")
 				offset = getInt(property->value);
+			
 			break;
 		}
 		case OEIOCTL_CONNECT:
@@ -28,12 +34,15 @@ int MemoryOffset::ioctl(int message, void *data)
 			OEIoctlConnection *connection = (OEIoctlConnection *) data;
 			if (connection->name == "component")
 				component = connection->component;
+			
+			break;
 		}
 		case OEIOCTL_GET_MEMORYMAP:
 		{
 			OEIoctlMemoryMap *memoryMap = (OEIoctlMemoryMap *) data;
 			memoryMap->component = this;
 			memoryMap->mapVector = mapVector;
+			
 			break;
 		}
 	}

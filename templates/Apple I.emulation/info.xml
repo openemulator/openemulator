@@ -14,13 +14,13 @@
     <component name="joystick" class="HostJoystick" />
     <component name="mouse" class="HostMouse" />
     <component name="tablet" class="HostTablet" />
-    <component name="serial" class="HostSerial" />
-    <component name="parallel" class="HostParallel" />
-    <component name="net" class="HostNet" />
     <component name="camera" class="HostCamera" />
+    <component name="parallel" class="HostParallel" />
+    <component name="serial" class="HostSerial" />
+    <component name="net" class="HostNet" />
 </device>
 
-<device name="dev0" label="Apple I">
+<device name="appleI" label="Apple I">
     <inlet ref="video.monitor" type="AppleIICompositeVideo" category="peripheral" label="Video Connector" image="Apple II Video Connector.png" />
     <inlet ref="system.slot1" type="AppleISlot" category="expansion" label="Slot 1" image="Apple I Slot.png" />
     <inlet ref="system.slot2" type="AppleISlot" category="expansion" label="Slot 2" image="Apple I Slot.png" />
@@ -30,6 +30,8 @@
         <connection name="hostAudio" ref="host::audio" />
         <connection name="cpuInternal" ref="cpu" />
         <connection name="cpuSocket" ref="" />
+        <connection name="memoryMap" ref="" />
+        <connection name="floatingBus" ref="" />
         <connection name="slot1" ref="" />
         <connection name="slot2" ref="" />
     </component>
@@ -40,22 +42,30 @@
         <property name="s" value="0" />
         <property name="p" value="0" />
         <property name="pc" value="0" />
-        <connection name="memory" ref="memoryMap" />
+        <connection name="memoryMap" ref="memoryMap" />
     </component>
     <component name="memoryMap" class="MemoryMap16Bit">
         <connection name="" ref="floatingBus" />
-        <connection name="" ref="memory" />
+        <connection name="" ref="ram1" />
+        <connection name="" ref="ram2" />
         <connection name="" ref="io" />
         <connection name="" ref="rom" />
     </component>
     <component name="floatingBus" class="AppleIFloatingBus">
         <connection name="system" ref="system" />
-        <connection name="memory" ref="memory" />
+        <connection name="memoryMap" ref="memoryMap" />
     </component>
-    <component name="memory" class="RAM">
+    <component name="ram1" class="RAM">
         <data name="image" src="${DEVICE_NAME}.bin" />
-        <property name="map" value="0x0000-0x1fff" />
-        <property name="size" value="0x2000" />
+        <property name="map" value="0x0000-0x0fff" />
+        <property name="size" value="0x1000" />
+        <property name="resetPattern" value="0x00" />
+        <connection name="hostSystem" ref="host::system" />
+    </component>
+    <component name="ram2" class="RAM">
+        <data name="image" src="${DEVICE_NAME}.bin" />
+        <property name="map" value="0xe000-0xefff" />
+        <property name="size" value="0x1000" />
         <property name="resetPattern" value="0x00" />
         <connection name="hostSystem" ref="host::system" />
     </component>
@@ -93,7 +103,7 @@
         <connection name="floatingBus" ref="floatingBus" />
     </component>
     <component name="rom" class="ROM">
-        <property name="map" value="0xff00-0xffff" />
+        <property name="map" value="0xf000-0xffff" />
         <resource name="image" src="roms/Apple I Monitor ROM.bin" />
     </component>
 </device>

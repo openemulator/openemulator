@@ -44,8 +44,6 @@ enum
 class MC6821 : public OEComponent
 {
 public:
-	MC6821();
-	
 	int ioctl(int message, void *data);
 	int read(int address);
 	void write(int address, int value);

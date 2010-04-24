@@ -24,10 +24,11 @@ int MOS6502::ioctl(int message, void *data)
 		case OEIOCTL_CONNECT:
 		{
 			OEIoctlConnection *connection = (OEIoctlConnection *) data;
-			if (connection->name == "memory")
+			if (connection->name == "memoryMap")
 				memory = connection->component;
 			else if (connection->name == "hostSystem")
 				connection->component->addObserver(this);
+			
 			break;
 		}
 		case OEIOCTL_SET_PROPERTY:
@@ -51,6 +52,7 @@ int MOS6502::ioctl(int message, void *data)
 				afterCLI = getInt(property->value);
 			else if (property->name == "irqCount")
 				irqCount = getInt(property->value);
+			
 			break;
 		}
 		case OEIOCTL_GET_PROPERTY:

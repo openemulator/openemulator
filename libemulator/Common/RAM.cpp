@@ -12,12 +12,6 @@
 
 #include "HostSystem.h"
 
-RAM::RAM()
-{
-	size = 0;
-	mask = 0;
-}
-
 int RAM::ioctl(int message, void *data)
 {
 	switch(message)
@@ -28,9 +22,14 @@ int RAM::ioctl(int message, void *data)
 			if (property->name == "map")
 				mapVector.push_back(property->value);
 			else if (property->name == "size")
-				size = getInt(property->value);
+			{
+				size = getPreviousPowerOf2(getInt(property->value));
+				memory.resize(size);
+				mask = size ? (size - 1) : 0;
+			}
 			else if (property->name == "resetPattern")
 				resetPattern = getCharVector(property->value);
+			
 			break;
 		}
 		case OEIOCTL_SET_DATA:
@@ -40,8 +39,8 @@ int RAM::ioctl(int message, void *data)
 			{
 				memory = setData->data;
 				memory.resize(size);
-				mask = getNextPowerOf2(memory.size()) - 1;
 			}
+			
 			break;
 		}
 		case OEIOCTL_GET_DATA:
@@ -59,12 +58,15 @@ int RAM::ioctl(int message, void *data)
 			OEIoctlConnection *connection = (OEIoctlConnection *) data;
 			if (connection->name == "hostSystem")
 				connection->component->addObserver(this);
+			
+			break;
 		}
 		case OEIOCTL_GET_MEMORYMAP:
 		{
 			OEIoctlMemoryMap *memoryMap = (OEIoctlMemoryMap *) data;
 			memoryMap->component = this;
 			memoryMap->mapVector = mapVector;
+			
 			break;
 		}
 		case OEIOCTL_NOTIFY:
@@ -75,6 +77,7 @@ int RAM::ioctl(int message, void *data)
 				for (int i = 0; i < memory.size(); i++)
 					memory[i] = resetPattern[i % resetPattern.size()];
 			}
+			
 			break;
 		}
 	}

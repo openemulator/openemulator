@@ -10,28 +10,65 @@
 
 #include "OEComponentFactory.h"
 
-// AUTOBUILD_INCLUDE_START - Do not modify this section
-#include "HostAudio.h"
-#include "HostJoystick.h"
-#include "HostKeyboard.h"
+// FACTORY_INCLUDE_START - Do not modify this section
 #include "HostSystem.h"
 #include "HostVideo.h"
-#include "MC6821.h"
-// AUTOBUILD_INCLUDE_END - Do not modify this section
+#include "HostAudio.h"
+#include "HostKeyboard.h"
+#include "HostJoystick.h"
+#include "HostMouse.h"
+#include "HostTablet.h"
+#include "HostCamera.h"
+#include "HostParallel.h"
+#include "HostSerial.h"
+#include "HostNet.h"
 
-#define matchComponent(name) if (className == "name") return new name()
+#include "RAM.h"
+#include "ROM.h"
+#include "MemoryMap8Bit.h"
+#include "MemoryMap16Bit.h"
+#include "MC6821.h"
+
+#include "MOS6502.h"
+
+#include "AppleISystem.h"
+#include "AppleIFloatingBus.h"
+#include "AppleIVideo.h"
+#include "AppleIKeyboard.h"
+#include "AppleIIO.h"
+// FACTORY_INCLUDE_END - Do not modify this section
+
+#define matchComponent(name) if (className == #name) return new name()
 
 OEComponent *OEComponentFactory::build(string className)
 {
-// AUTOBUILD_CODE_START - Do not modify this section
-	matchComponent(HostAudio);
-	matchComponent(HostJoystick);
-	matchComponent(HostKeyboard);
+// FACTORY_CODE_START - Do not modify this section
 	matchComponent(HostSystem);
 	matchComponent(HostVideo);
-	matchComponent(MC6821);
-// AUTOBUILD_CODE_END - Do not modify this section
+	matchComponent(HostAudio);
+	matchComponent(HostKeyboard);
+	matchComponent(HostJoystick);
+	matchComponent(HostMouse);
+	matchComponent(HostTablet);
+	matchComponent(HostCamera);
+	matchComponent(HostParallel);
+	matchComponent(HostSerial);
+	matchComponent(HostNet);
 	
-	return new OEComponent();
-//	return NULL;
+	matchComponent(RAM);
+	matchComponent(ROM);
+	matchComponent(MemoryMap8Bit);
+	matchComponent(MemoryMap16Bit);
+	matchComponent(MC6821);
+	
+	matchComponent(MOS6502);
+	
+	matchComponent(AppleISystem);
+	matchComponent(AppleIFloatingBus);
+	matchComponent(AppleIVideo);
+	matchComponent(AppleIKeyboard);
+	matchComponent(AppleIIO);
+// FACTORY_CODE_END - Do not modify this section
+	
+	return NULL;
 }

@@ -11,12 +11,10 @@
 #include "OEComponent.h"
 
 #define MEMORYMAP8BIT_SIZE	0x100
-#define MEMORYMAP8BIT_MASK	0xff
 
 class MemoryMap8Bit : public OEComponent
 {
 public:
-	MemoryMap8Bit();
 	int ioctl(int message, void *data);
 	int read(int address);
 	void write(int address, int value);

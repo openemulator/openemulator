@@ -38,6 +38,18 @@
 		0054E4A71131BE8A006D32D9 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0054E4A61131BE8A006D32D9 /* OpenGL.framework */; };
 		0054E6311131BEE7006D32D9 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0054E6301131BEE7006D32D9 /* Carbon.framework */; };
 		0054E66C1131BF58006D32D9 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0054E66B1131BF58006D32D9 /* Quartz.framework */; };
+		005B485F11829406008C7E42 /* HostMouse.h in Headers */ = {isa = PBXBuildFile; fileRef = 005B485D11829406008C7E42 /* HostMouse.h */; };
+		005B486011829406008C7E42 /* HostMouse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 005B485E11829406008C7E42 /* HostMouse.cpp */; };
+		005B487811829472008C7E42 /* HostTablet.h in Headers */ = {isa = PBXBuildFile; fileRef = 005B487611829472008C7E42 /* HostTablet.h */; };
+		005B487911829472008C7E42 /* HostTablet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 005B487711829472008C7E42 /* HostTablet.cpp */; };
+		005B4885118294AF008C7E42 /* HostSerial.h in Headers */ = {isa = PBXBuildFile; fileRef = 005B4883118294AF008C7E42 /* HostSerial.h */; };
+		005B4886118294AF008C7E42 /* HostSerial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 005B4884118294AF008C7E42 /* HostSerial.cpp */; };
+		005B4889118294B5008C7E42 /* HostParallel.h in Headers */ = {isa = PBXBuildFile; fileRef = 005B4887118294B5008C7E42 /* HostParallel.h */; };
+		005B488A118294B5008C7E42 /* HostParallel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 005B4888118294B5008C7E42 /* HostParallel.cpp */; };
+		005B4891118294C9008C7E42 /* HostCamera.h in Headers */ = {isa = PBXBuildFile; fileRef = 005B488F118294C9008C7E42 /* HostCamera.h */; };
+		005B4892118294C9008C7E42 /* HostCamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 005B4890118294C9008C7E42 /* HostCamera.cpp */; };
+		005B48A6118295AD008C7E42 /* HostNet.h in Headers */ = {isa = PBXBuildFile; fileRef = 005B48A4118295AD008C7E42 /* HostNet.h */; };
+		005B48A7118295AD008C7E42 /* HostNet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 005B48A5118295AD008C7E42 /* HostNet.cpp */; };
 		005B81D9108680B9009D4804 /* ScreenView.m in Sources */ = {isa = PBXBuildFile; fileRef = 005B81D8108680B9009D4804 /* ScreenView.m */; };
 		005C43EB113121F2006AEE84 /* TBInterrupt.png in Resources */ = {isa = PBXBuildFile; fileRef = 005C43EA113121F2006AEE84 /* TBInterrupt.png */; };
 		005E5F6E1086B0E100E573D4 /* InspectorController.m in Sources */ = {isa = PBXBuildFile; fileRef = 005E5F6D1086B0E100E573D4 /* InspectorController.m */; };
@@ -266,6 +278,18 @@
 		0054E6301131BEE7006D32D9 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		0054E66B1131BF58006D32D9 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
 		005928540FFC94E200F24A57 /* templates */ = {isa = PBXFileReference; lastKnownFileType = folder; path = templates; sourceTree = "<group>"; };
+		005B485D11829406008C7E42 /* HostMouse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostMouse.h; sourceTree = "<group>"; };
+		005B485E11829406008C7E42 /* HostMouse.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HostMouse.cpp; sourceTree = "<group>"; };
+		005B487611829472008C7E42 /* HostTablet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostTablet.h; sourceTree = "<group>"; };
+		005B487711829472008C7E42 /* HostTablet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HostTablet.cpp; sourceTree = "<group>"; };
+		005B4883118294AF008C7E42 /* HostSerial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostSerial.h; sourceTree = "<group>"; };
+		005B4884118294AF008C7E42 /* HostSerial.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HostSerial.cpp; sourceTree = "<group>"; };
+		005B4887118294B5008C7E42 /* HostParallel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostParallel.h; sourceTree = "<group>"; };
+		005B4888118294B5008C7E42 /* HostParallel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HostParallel.cpp; sourceTree = "<group>"; };
+		005B488F118294C9008C7E42 /* HostCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostCamera.h; sourceTree = "<group>"; };
+		005B4890118294C9008C7E42 /* HostCamera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HostCamera.cpp; sourceTree = "<group>"; };
+		005B48A4118295AD008C7E42 /* HostNet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostNet.h; sourceTree = "<group>"; };
+		005B48A5118295AD008C7E42 /* HostNet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HostNet.cpp; sourceTree = "<group>"; };
 		005B81D7108680B9009D4804 /* ScreenView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScreenView.h; sourceTree = "<group>"; };
 		005B81D8108680B9009D4804 /* ScreenView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScreenView.m; sourceTree = "<group>"; };
 		005C43EA113121F2006AEE84 /* TBInterrupt.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = TBInterrupt.png; path = macosx/Images/TBInterrupt.png; sourceTree = "<group>"; };
@@ -714,6 +738,18 @@
 				00B7039C1135ACBD005E4B65 /* HostKeyboard.h */,
 				00B7039D1135ACBD005E4B65 /* HostVideo.cpp */,
 				00B7039E1135ACBD005E4B65 /* HostVideo.h */,
+				005B485D11829406008C7E42 /* HostMouse.h */,
+				005B485E11829406008C7E42 /* HostMouse.cpp */,
+				005B487611829472008C7E42 /* HostTablet.h */,
+				005B487711829472008C7E42 /* HostTablet.cpp */,
+				005B4883118294AF008C7E42 /* HostSerial.h */,
+				005B4884118294AF008C7E42 /* HostSerial.cpp */,
+				005B4887118294B5008C7E42 /* HostParallel.h */,
+				005B4888118294B5008C7E42 /* HostParallel.cpp */,
+				005B488F118294C9008C7E42 /* HostCamera.h */,
+				005B4890118294C9008C7E42 /* HostCamera.cpp */,
+				005B48A4118295AD008C7E42 /* HostNet.h */,
+				005B48A5118295AD008C7E42 /* HostNet.cpp */,
 			);
 			path = Host;
 			sourceTree = "<group>";
@@ -858,6 +894,12 @@
 				00311CFF1166526800D9CF80 /* Z80Opcodes.h in Headers */,
 				00B4F934117E43E8008D622F /* MemoryOffset.h in Headers */,
 				00170499117FD51D006C87BC /* AppleIISlotExpansionMemory.h in Headers */,
+				005B485F11829406008C7E42 /* HostMouse.h in Headers */,
+				005B487811829472008C7E42 /* HostTablet.h in Headers */,
+				005B4885118294AF008C7E42 /* HostSerial.h in Headers */,
+				005B4889118294B5008C7E42 /* HostParallel.h in Headers */,
+				005B4891118294C9008C7E42 /* HostCamera.h in Headers */,
+				005B48A6118295AD008C7E42 /* HostNet.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1077,6 +1119,12 @@
 				000FF7F01163E6FC0009E666 /* RP2A03.cpp in Sources */,
 				00B4F935117E43E8008D622F /* MemoryOffset.cpp in Sources */,
 				0017049A117FD51D006C87BC /* AppleIISlotExpansionMemory.cpp in Sources */,
+				005B486011829406008C7E42 /* HostMouse.cpp in Sources */,
+				005B487911829472008C7E42 /* HostTablet.cpp in Sources */,
+				005B4886118294AF008C7E42 /* HostSerial.cpp in Sources */,
+				005B488A118294B5008C7E42 /* HostParallel.cpp in Sources */,
+				005B4892118294C9008C7E42 /* HostCamera.cpp in Sources */,
+				005B48A7118295AD008C7E42 /* HostNet.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1235,7 +1283,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(NATIVE_ARCH)";
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
@@ -1302,7 +1350,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(NATIVE_ARCH)";
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
@@ -1371,7 +1419,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(NATIVE_ARCH)";
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
@@ -1402,7 +1450,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(NATIVE_ARCH)";
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = "";
 				FRAMEWORK_SEARCH_PATHS = (

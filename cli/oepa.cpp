@@ -30,6 +30,8 @@ typedef struct
 	pthread_cond_t cond;
 	vector<float> inputAudio;
 	vector<float> outputAudio;
+	
+	HostAudioBuffer hostAudioBuffer;
 } OEPAEmulation;
 
 typedef vector<OEPAEmulation *> OEPAEmulations;
@@ -60,8 +62,9 @@ static int oepaCallback(const void *inputBuffer,
 	{
 		pthread_mutex_lock(&(*i)->mutex);
 		
-		// Call getBuffer
-//		(*i)->emulation.ioctl("host::audio", 0, &hostAudio);
+		(*i)->emulation->ioctl("host::audio",
+							   HOSTAUDIO_RENDERBUFFER,
+							   &((*i)->hostAudioBuffer));
 		
 		pthread_cond_signal(&(*i)->cond);
 		pthread_mutex_unlock(&(*i)->mutex);

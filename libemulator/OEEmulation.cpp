@@ -47,27 +47,32 @@ OEEmulation::OEEmulation(string path, string resourcePath)
 							if (connectDML(documentDML))
 								loaded = true;
 							else
-								cerr << "libemulator: connectDML() failed, \"" + path + "\"."
-								<< endl;
+								cerr << "OEEmulation: connectDML() for \"" << path <<
+									"\" failed." << endl;
 						}
 						else
-							cerr << "libemulator: initDML() failed, \"" + path + "\"."
-							<< endl;
+							cerr << "OEEmulation: initDML() for \"" << path <<
+								"\" failed." << endl;
 					}
 					else
-						cerr << "libemulator: constructDML() failed, \"" + path + "\"." << endl;
+						cerr << "OEEmulation: constructDML() for \"" << path <<
+							"\" failed." << endl;
 				}
 				else
-					cerr << "libemulator: validateDML() failed, \"" + path + "\"." << endl;
+					cerr << "OEEmulation: validateDML() for \"" << path <<
+						"\" failed." << endl;
 			}
 			else
-				cerr << "libemulator: xmlReadMemory() failed, \"" + path + "\"." << endl;
+				cerr << "OEEmulation: xmlReadMemory() failed, \"" << path <<
+					"\" failed." << endl;
 		}
 		else
-			cerr << "libemulator: readFile() failed, \"" + path + "\"." << endl;
+			cerr << "OEEmulation: readFile() for \"" << path <<
+				"\" failed." << endl;
 	}
 	else
-		cerr << "libemulator: OEPackage() failed, \"" + path + "\"." << endl;
+		cerr << "OEEmulation: OEPackage() for \"" << path <<
+			"\" failed." << endl;
 	
 	delete package;
 	package = NULL;
@@ -113,19 +118,19 @@ bool OEEmulation::save(string path)
 				if (package->writeFile(OE_INFO_FILENAME, data))
 					success = true;
 				else
-					cerr << "libemulator: could not write \"" + path + "\"." << endl;
+					cerr << "OEEmulation: could not write \"" << path << "\"." << endl;
 			}
 			else
-				cerr << "libemulator: could not dump \"" + path + "\"." << endl;
+				cerr << "OEEmulation: could not dump \"" << path << "\"." << endl;
 		}
 		else
-			cerr << "libemulator: could not update \"" + path + "\"." << endl;
+			cerr << "OEEmulation: could not update \"" << path << "\"." << endl;
 		
 		if (!success)
 			package->remove();
 	}
 	else
-		cerr << "libemulator: could not open \"" + path + "\"." << endl;
+		cerr << "OEEmulation: could not open \"" << path << "\"." << endl;
 	
 	delete package;
 	package = NULL;
@@ -158,7 +163,7 @@ bool OEEmulation::addDevices(string path, OEStringRefMap connections)
 	vector<char> data;
 	if (!readFile(path, data))
 	{
-		cerr << "libemulator: could not read \"" + path + "\"." << endl;
+		cerr << "OEEmulation: could not read \"" << path << "\"." << endl;
 		return false;
 	}
 	
@@ -170,7 +175,7 @@ bool OEEmulation::addDevices(string path, OEStringRefMap connections)
 						0);
 	if (!doc)
 	{
-		cerr << "libemulator: could not parse \"" + path + "\"." << endl;
+		cerr << "OEEmulation: could not parse \"" << path << "\"." << endl;
 		return false;
 	}
 	
@@ -196,19 +201,19 @@ bool OEEmulation::addDevices(string path, OEStringRefMap connections)
 					if (connectDevices(documentDML, connections))
 						success = true;
 					else
-						cerr << "libemulator: could not connect \"" + path + "\"." << endl;
+						cerr << "OEEmulation: could not connect \"" << path << "\"." << endl;
 				}
 				else
-					cerr << "libemulator: could not insert \"" + path + "\"." << endl;
+					cerr << "OEEmulation: could not insert \"" << path << "\"." << endl;
 			}
 			else
-				cerr << "libemulator: could not initialize \"" + path + "\"." << endl;
+				cerr << "OEEmulation: could not initialize \"" << path << "\"." << endl;
 		}
 		else
-			cerr << "libemulator: could not construct \"" + path + "\"." << endl;
+			cerr << "OEEmulation: could not construct \"" << path << "\"." << endl;
 	}
 	else
-		cerr << "libemulator: could not validate \"" + path + "\"." << endl;
+		cerr << "OEEmulation: could not validate \"" << path << "\"." << endl;
 	
 	xmlFreeDoc(doc);
 	
@@ -232,7 +237,8 @@ bool OEEmulation::removeDevice(OERef ref)
 	xmlNodePtr deviceNode = getNodeForRef(documentDML, deviceRef);
 	if (!deviceNode)
 	{
-		cerr << "libemulator: could not find device of \"" + ref.getStringRef() + "\"." << endl;
+		cerr << "OEEmulation: could not find device of \"" <<
+			ref.getStringRef() << "\"." << endl;
 		return false;
 	}
 	
@@ -250,16 +256,17 @@ bool OEEmulation::removeDevice(OERef ref)
 		
 		if (!removeDevice(outletRef))
 		{
-			cerr << "libemulator: could not remove outlet \"" + outletRef.getStringRef() +
-			"\" of \"" + ref.getStringRef() + "\"." << endl;
+			cerr << "OEEmulation: could not remove outlet \"" <<
+				outletRef.getStringRef() << "\" of \"" << ref.getStringRef() <<
+				"\"." << endl;
 			return false;
 		}
 	}
 	
 	if (!disconnectDevice(documentDML, deviceRef))
 	{
-		cerr << "libemulator: could not disconnect inlets of \"" + ref.getStringRef() +
-		"\"." << endl;
+		cerr << "OEEmulation: could not disconnect inlets of \"" <<
+			ref.getStringRef() << "\"." << endl;
 		return false;
 	}
 	if (deviceNode->next && (deviceNode->next->type == XML_TEXT_NODE))
@@ -500,11 +507,16 @@ bool OEEmulation::constructComponent(xmlNodePtr node, OERef deviceRef)
 	string componentClass = getXMLProperty(node, "class");
 	string componentName = getXMLProperty(node, "name");
 	
+	string stringRef = deviceRef.getStringRef(componentName);
+	
 	OEComponent *component = OEComponentFactory::build(string(componentClass));
 	if (!component)
+	{
+		cerr << "OEEmulation: constructComponent() for deviceRef \"" << 
+			stringRef << "\" failed.\n";
 		return false;
+	}
 	
-	string stringRef = deviceRef.getStringRef(componentName);
 //	printf("OEEmulation::constructComponent: %s\n", stringRef.c_str());
 	
 	if (components.count(stringRef))
@@ -663,7 +675,7 @@ bool OEEmulation::getData(xmlNodePtr node, OEComponent *component, OERef deviceR
 	{
 		if (!package->writeFile(src, msg.data))
 		{
-			cerr << "libemulator: could not write \"" + src + "\"." << endl;
+			cerr << "OEEmulation: could not write \"" << src << "\"." << endl;
 			return false;
 		}
 	}
@@ -681,7 +693,7 @@ bool OEEmulation::setResource(xmlNodePtr node, OEComponent *component)
 	
 	if (!readFile(src, msg.data))
 	{
-		cerr << "libemulator: could not read \"" + src + "\"." << endl;
+		cerr << "OEEmulation: could not read \"" << src << "\"." << endl;
 		return false;
 	}
 	
@@ -702,7 +714,7 @@ bool OEEmulation::setConnection(xmlNodePtr node, OEComponent *component, OERef d
 		string stringRef = deviceRef.getStringRef(ref);
 		if (!components.count(stringRef))
 		{
-			cerr << "libemulator: could not connect \"" + stringRef + "\"." << endl;
+			cerr << "OEEmulation: could not connect \"" << stringRef << "\"." << endl;
 			return false;
 		}
 		connectedComponent = components[stringRef];

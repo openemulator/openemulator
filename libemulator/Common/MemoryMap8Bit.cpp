@@ -8,26 +8,37 @@
  * Controls a generic 8-bit memory map
  */
 
-#include "MemoryMap8Bit.h"
+#include <iostream>
 
-MemoryMap8Bit::MemoryMap8Bit()
-{
-	for (int i = 0; i < MEMORYMAP8BIT_SIZE; i++)
-		readMap[i] = writeMap[i] = 0;
-}
+#include "MemoryMap8Bit.h"
 
 void MemoryMap8Bit::setRange(OEComponent *component, vector<string> mapVector)
 {
-	int start;
-	int end;
-	
-	start &= MEMORYMAP8BIT_MASK;
-	end &= MEMORYMAP8BIT_MASK;
-	
-	for (int i = start; i < end; i++)
+	for (vector<string>::iterator i = mapVector.begin();
+		 i != mapVector.end();
+		 i++)
 	{
-		readMap[i] = component;
-		writeMap[i] = component;
+		string range = *i;
+		size_t separatorPos = range.find('-');
+		if (separatorPos == string::npos)
+		{
+			cerr << "MemoryMap8Bit: range " << range << " invalid.\n";
+			continue;
+		}
+		
+		int start = getInt(range.substr(0, separatorPos));
+		int end = getInt(range.substr(separatorPos + 1));
+		if (start > end)
+		{
+			cerr << "MemoryMap8Bit: range " << range << " invalid.\n";
+			continue;
+		}
+		
+		for (int i = start; i < end; i++)
+		{
+			readMap[i] = component;
+			writeMap[i] = component;
+		}
 	}
 }
 
@@ -41,6 +52,7 @@ int MemoryMap8Bit::ioctl(int message, void *data)
 			OEIoctlMemoryMap memoryMap;
 			connection->component->ioctl(OEIOCTL_GET_MEMORYMAP, &memoryMap);
 			setRange(memoryMap.component, memoryMap.mapVector);
+			
 			break;
 		}
 		case OEIOCTL_SET_PROPERTY:
@@ -48,18 +60,22 @@ int MemoryMap8Bit::ioctl(int message, void *data)
 			OEIoctlProperty *property = (OEIoctlProperty *) data;
 			if (property->name == "map")
 				mapVector.push_back(property->value);
+			
+			break;
 		}
 		case OEIOCTL_GET_MEMORYMAP:
 		{
 			OEIoctlMemoryMap *memoryMap = (OEIoctlMemoryMap *) data;
 			memoryMap->component = this;
 			memoryMap->mapVector = mapVector;
+			
 			break;
 		}
 		case OEIOCTL_SET_MEMORYMAP:
 		{
 			OEIoctlMemoryMap *memoryMap = (OEIoctlMemoryMap *) data;
 			setRange(memoryMap->component, memoryMap->mapVector);
+			
 			break;
 		}
 	}
@@ -69,10 +85,10 @@ int MemoryMap8Bit::ioctl(int message, void *data)
 
 int MemoryMap8Bit::read(int address)
 {
-	return readMap[address & MEMORYMAP8BIT_MASK]->read(address);
+	return readMap[address & 0xff]->read(address);
 }
 
 void MemoryMap8Bit::write(int address, int value)
 {
-	readMap[address & MEMORYMAP8BIT_MASK]->write(address, value);
+	readMap[address & 0xff]->write(address, value);
 }

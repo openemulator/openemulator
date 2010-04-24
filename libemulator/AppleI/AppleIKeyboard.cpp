@@ -26,6 +26,7 @@ int AppleIKeyboard::ioctl(int message, void *data)
 				hostKeyboard = connection->component;
 				hostKeyboard->addObserver(this);
 			}
+			
 			break;
 		}
 		case OEIOCTL_NOTIFY:
@@ -40,6 +41,8 @@ int AppleIKeyboard::ioctl(int message, void *data)
 				bool value = true;
 				pia->ioctl(MC6821_SET_CA1, &value);
 			}
+			
+			break;
 		}
 	}
 	

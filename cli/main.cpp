@@ -154,7 +154,7 @@ void about()
 	printf("  -s <samplerate>    Sets audio sample rate\n");
 	printf("  -b <buffersize>    Sets audio buffer size\n");
 	printf("  -c <channelnum>    Sets audio channel number\n");
-	printf("  -i                 Enabled audio input\n");
+	printf("  -i                 Enable audio input\n");
 	printf("  -w <width>         Set screen width\n");
 	printf("  -h <height>        Set screen height\n");
 	printf("  -f                 Set full screen\n");
@@ -233,6 +233,7 @@ void sdlRunEventLoop()
 {
 	bool isRunning = true;
     SDL_Event event;
+	
     while (isRunning && SDL_WaitEvent(&event))
 	{
         switch(event.type)

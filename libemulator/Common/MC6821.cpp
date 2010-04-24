@@ -10,19 +10,6 @@
 
 #include "MC6821.h"
 
-MC6821::MC6821()
-{
-	interfaceA = NULL;
-	interfaceB = NULL;
-	irqA = NULL;
-	irqB = NULL;
-	
-	controlRegisterA = 0;
-	controlRegisterB = 0;
-	
-	reset();
-}
-
 void MC6821::reset()
 {
 	setControlRegisterA(0);
@@ -79,6 +66,7 @@ int MC6821::ioctl(int message, void *data)
 				irqA = connection->component;
 			else if (connection->name == "irqB")
 				irqB = connection->component;
+			
 			break;
 		}
 		case OEIOCTL_SET_PROPERTY:
@@ -104,6 +92,8 @@ int MC6821::ioctl(int message, void *data)
 				cb1 = getInt(property->value);
 			else if (property->name == "cb2")
 				cb2 = getInt(property->value);
+			
+			break;
 		}
 		case OEIOCTL_GET_PROPERTY:
 		{
@@ -156,6 +146,7 @@ int MC6821::ioctl(int message, void *data)
 				}
 			}
 			ca1 = value;
+			
 			break;
 		}
 		case MC6821_SET_CA2:
@@ -172,12 +163,14 @@ int MC6821::ioctl(int message, void *data)
 			if ((controlRegisterA & MC6821_CR_C2OUTPUT) && (ca2 != value))
 				interfaceA->write(MC6821_AD_C2, value);
 			ca2 = value;
+			
 			break;
 		}
 		case MC6821_GET_CA2:
 		{
 			int *value = (int *) data;
 			*value = ca2;
+			
 			break;
 		}
 		case MC6821_SET_CB1:
@@ -198,6 +191,7 @@ int MC6821::ioctl(int message, void *data)
 				}
 			}
 			cb1 = value;
+			
 			break;
 		}
 		case MC6821_SET_CB2:
@@ -214,12 +208,14 @@ int MC6821::ioctl(int message, void *data)
 			if (cb2 != value)
 				interfaceB->write(MC6821_AD_C2, cb2);
 			cb2 = value;
+			
 			break;
 		}
 		case MC6821_GET_CB2:
 		{
 			int *value = (int *) data;
 			*value = cb2;
+			
 			break;
 		}
 	}

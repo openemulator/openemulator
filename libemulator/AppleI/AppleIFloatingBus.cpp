@@ -21,6 +21,7 @@ int AppleIFloatingBus::ioctl(int message, void * data)
 				system = connection->component;
 			else if (connection->name == "memory")
 				memory = connection->component;
+			
 			break;
 		}
 	}

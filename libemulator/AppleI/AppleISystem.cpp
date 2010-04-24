@@ -20,6 +20,8 @@ int AppleISystem::ioctl(int message, void *data)
 			OEIoctlProperty *property = (OEIoctlProperty *) data;
 			if (property->name == "internalCPUEnabled")
 				internalCPUEnabled = getInt(property->value);
+			
+			break;
 		}
 		case OEIOCTL_GET_PROPERTY:
 		{
@@ -43,6 +45,8 @@ int AppleISystem::ioctl(int message, void *data)
 				cpu = connection->component;
 			else if (connection->name == "cpuSocket")
 				cpuSocket = connection->component;
+			
+			break;
 		}
 		case OEIOCTL_NOTIFY:
 		{
@@ -59,6 +63,8 @@ int AppleISystem::ioctl(int message, void *data)
 		{
 			float *index = (float *) data;
 			*index = 0;
+			
+			break;
 		}
 	}
 	

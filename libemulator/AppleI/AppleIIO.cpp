@@ -23,6 +23,7 @@ int AppleIIO::ioctl(int message, void *data)
 				pia = connection->component;
 			else if (connection->name == "floatingBus")
 				floatingBus = connection->component;
+			
 			break;
 		}
 		case OEIOCTL_SET_PROPERTY:
@@ -30,6 +31,7 @@ int AppleIIO::ioctl(int message, void *data)
 			OEIoctlProperty *property = (OEIoctlProperty *) data;
 			if (property->name == "map")
 				mapVector.push_back(property->value);
+			
 			break;
 		}
 		case OEIOCTL_GET_MEMORYMAP:
@@ -37,6 +39,7 @@ int AppleIIO::ioctl(int message, void *data)
 			OEIoctlMemoryMap *memoryMap = (OEIoctlMemoryMap *) data;
 			memoryMap->component = this;
 			memoryMap->mapVector = mapVector;
+			
 			break;
 		}
 	}

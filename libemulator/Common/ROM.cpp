@@ -10,11 +10,6 @@
 
 #include "ROM.h"
 
-ROM::ROM()
-{
-	mask = 0;
-}
-
 int ROM::ioctl(int message, void *data)
 {
 	switch(message)
@@ -24,6 +19,7 @@ int ROM::ioctl(int message, void *data)
 			OEIoctlProperty *property = (OEIoctlProperty *) data;
 			if (property->name == "map")
 				mapVector.push_back(property->value);
+			
 			break;
 		}
 		case OEIOCTL_SET_RESOURCE:
@@ -32,8 +28,10 @@ int ROM::ioctl(int message, void *data)
 			if (setData->name == "image")
 			{
 				memory = setData->data;
-				mask = getNextPowerOf2(memory.size()) - 1;
+				int size = getPreviousPowerOf2(memory.size());
+				mask = size ? (size - 1) : 0;
 			}
+			
 			break;
 		}
 		case OEIOCTL_GET_MEMORYMAP:
@@ -41,6 +39,7 @@ int ROM::ioctl(int message, void *data)
 			OEIoctlMemoryMap *memoryMap = (OEIoctlMemoryMap *) data;
 			memoryMap->component = this;
 			memoryMap->mapVector = mapVector;
+			
 			break;
 		}
 	}

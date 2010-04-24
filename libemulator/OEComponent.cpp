@@ -88,6 +88,8 @@ vector<char> getCharVector(string value)
 		value = value.substr(2);
 	
 	int size = value.size() / 2;
+	result.resize(size);
+	
 	for (int i = 0; i < size; i++)
 	{
 		unsigned int n;
@@ -100,7 +102,7 @@ vector<char> getCharVector(string value)
 	return result;
 }
 
-int getNextPowerOf2(int value)
+int getPreviousPowerOf2(int value)
 {
-	return (int) pow(2, ceil(log2(value)));
+	return (int) pow(2, floor(log2(value)));
 }
