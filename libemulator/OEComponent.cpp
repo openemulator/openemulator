@@ -80,6 +80,18 @@ int getInt(string value)
 		return atoi(value.c_str());
 }
 
+double getFloat(string value)
+{
+	return atof(value.c_str());
+}
+
+string getHex(int value)
+{
+	std::stringstream ss;
+	ss << "0x" << std::hex << value;
+	return ss.str();
+}
+
 vector<char> getCharVector(string value)
 {
 	vector<char> result;

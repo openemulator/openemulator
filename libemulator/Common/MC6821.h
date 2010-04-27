@@ -10,6 +10,7 @@
 
 #include "OEComponent.h"
 
+// Messages
 enum
 {
 	MC6821_RESET = OEIOCTL_USER,
@@ -21,14 +22,20 @@ enum
 	MC6821_GET_CB2,
 };
 
-#define MC6821_RS_OUTPUTREGISTERA	0x00
+// Notifications
+enum {
+	MC6821_CA2_CHANGED,
+	MC6821_CB2_CHANGED,
+};
+
+#define MC6821_RS_DATAREGISTERA		0x00
 #define MC6821_RS_CONTROLREGISTERA	0x01
-#define MC6821_RS_OUTPUTREGISTERB	0x02
+#define MC6821_RS_DATAREGISTERB		0x02
 #define MC6821_RS_CONTROLREGISTERB	0x03
 
 #define MC6821_CR_C1ENABLEIRQ		0x01
 #define MC6821_CR_C1LOWTOHIGH		0x02
-#define MC6821_CR_OUTPUTREGISTER	0x04
+#define MC6821_CR_DATAREGISTER		0x04
 #define MC6821_CR_C2ENABLEIRQ		0x08	// If C2OUTPUT is clear
 #define MC6821_CR_C2LOWTOHIGH		0x10	// If C2OUTPUT is clear
 #define MC6821_CR_C2ERESTORE		0x08	// If C2OUTPUT is set and C2DIRECT is clear
@@ -38,33 +45,32 @@ enum
 #define MC6821_CR_IRQ2FLAG			0x40
 #define MC6821_CR_IRQ1FLAG			0x80
 
-#define MC6821_AD_DATA				0x00
-#define MC6821_AD_C2				0x01
-
 class MC6821 : public OEComponent
 {
 public:
+	MC6821();
+	
 	int ioctl(int message, void *data);
 	int read(int address);
 	void write(int address, int value);
 	
 private:
-	OEComponent *interfaceA;
-	OEComponent *irqA;
-	OEComponent *interfaceB;
-	OEComponent *irqB;
-	
 	int controlRegisterA;
 	int dataDirectionRegisterA;
-	int outputRegisterA;
+	int dataRegisterA;
 	int controlRegisterB;
 	int dataDirectionRegisterB;
-	int outputRegisterB;
+	int dataRegisterB;
 	
 	bool ca1;
 	bool ca2;
 	bool cb1;
 	bool cb2;
+	
+	OEComponent *interfaceA;
+	OEComponent *irqA;
+	OEComponent *interfaceB;
+	OEComponent *irqB;
 	
 	void reset();
 	void setControlRegisterA(int value);

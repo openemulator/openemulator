@@ -37,7 +37,7 @@ int MOS6502::ioctl(int message, void *data)
 			if (property->name == "pc")
 				pc.w.l = getInt(property->value);
 			else if (property->name == "sp")
-				sp.w.l = getInt(property->value);
+				sp.b.l = getInt(property->value);
 			else if (property->name == "p")
 				p = getInt(property->value);
 			else if (property->name == "a")
@@ -59,17 +59,17 @@ int MOS6502::ioctl(int message, void *data)
 		{
 			OEIoctlProperty *property = (OEIoctlProperty *) data;
 			if (property->name == "pc")
-				property->value = pc.w.l;
+				property->value = getHex(pc.w.l);
 			else if (property->name == "sp")
-				property->value = sp.w.l;
+				property->value = getHex(sp.b.l);
 			else if (property->name == "p")
-				property->value = p;
+				property->value = getHex(p);
 			else if (property->name == "a")
-				property->value = a;
+				property->value = getHex(a);
 			else if (property->name == "x")
-				property->value = x;
+				property->value = getHex(x);
 			else if (property->name == "y")
-				property->value = y;
+				property->value = getHex(y);
 			else if (property->name == "pendingIRQ")
 				property->value = pendingIRQ;
 			else if (property->name == "afterCLI")

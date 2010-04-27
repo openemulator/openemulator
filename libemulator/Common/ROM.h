@@ -13,6 +13,8 @@
 class ROM : public OEComponent
 {
 public:
+	ROM();
+	
 	int ioctl(int message, void *data);
 	int read(int address);
 	

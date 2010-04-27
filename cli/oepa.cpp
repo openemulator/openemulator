@@ -9,250 +9,355 @@
  */
 
 #include "math.h"
+#include <iostream>
 
-#include <vector>
+#include <pthread.h>
 
 #include "portaudio.h"
 
 #include "oepa.h"
-#include "HostAudio.h"
 
-#define OEPA_SAMPLERATE 48000.0;
-#define OEPA_CHANNELNUM 2;
-#define OEPA_FRAMESPERBUFFER 512;
-
-typedef struct
-{
-	bool isRunning;
-	OEEmulation *emulation;
-	pthread_t thread;
-	pthread_mutex_t mutex;
-	pthread_cond_t cond;
-	vector<float> inputAudio;
-	vector<float> outputAudio;
-	
-	HostAudioBuffer hostAudioBuffer;
-} OEPAEmulation;
-
-typedef vector<OEPAEmulation *> OEPAEmulations;
-
+// Configuration variables
 bool oepaFullDuplex = false;
 double oepaSampleRate = OEPA_SAMPLERATE;
 int oepaChannelNum = OEPA_CHANNELNUM;
 int oepaFramesPerBuffer = OEPA_FRAMESPERBUFFER;
+int oepaBufferNum = OEPA_BUFFERNUM;
 
-PaStream *oepaStream = NULL;
+// Audio callback
+bool oepaAudioOpen = false;
+PaStream *oepaAudioStream = NULL;
+volatile int oepaAudioBufferIndex = 0;
+volatile int oepaEmulationBufferIndex = 0;
+vector<float> oepaInputBuffer;
+vector<float> oepaOutputBuffer;
 
-pthread_mutex_t oepaMutex;
-OEPAEmulations oepaEmulations;
+// Timer thread (when there is no audio)
+bool oepaTimerThreadOpen = false;
+pthread_t oepaTimerThread;
 
-static int oepaCallback(const void *inputBuffer,
-						void *outputBuffer,
-						unsigned long framesPerBuffer,
-						const PaStreamCallbackTimeInfo* timeInfo,
-						PaStreamCallbackFlags statusFlags,
-						void *userData)
+// Emulations thread variables
+bool oepaEmulationsThreadOpen = false;
+pthread_t oepaEmulationsThread;
+pthread_mutex_t oepaEmulationsMutex;
+vector<OEEmulation *> oepaEmulations;
+
+//
+// Audio and timer
+//
+static int oepaCallbackAudio(const void *inputBuffer,
+							 void *outputBuffer,
+							 unsigned long framesPerBuffer,
+							 const PaStreamCallbackTimeInfo* timeInfo,
+							 PaStreamCallbackFlags statusFlags,
+							 void *userData)
 {
-	memset(outputBuffer, 0, sizeof(float) * oepaChannelNum * framesPerBuffer);
+	int bufferSize = oepaFramesPerBuffer * oepaChannelNum;
 	
-	pthread_mutex_lock(&oepaMutex);
-	
-	OEPAEmulations::iterator i;
-	for (i = oepaEmulations.begin(); i != oepaEmulations.end(); i++)
+	if (oepaAudioBufferIndex == oepaEmulationBufferIndex)
 	{
-		pthread_mutex_lock(&(*i)->mutex);
+		float *out = (float *) outputBuffer;
+		for (int i = 0; i < bufferSize; i++)
+			*out++ = (float) (((short) rand()) / 32768);
 		
-		(*i)->emulation->ioctl("host::audio",
-							   HOSTAUDIO_RENDERBUFFER,
-							   &((*i)->hostAudioBuffer));
-		
-		pthread_cond_signal(&(*i)->cond);
-		pthread_mutex_unlock(&(*i)->mutex);
+		return paContinue;
 	}
 	
-	float *in = (float *)inputBuffer;
-	float *out = (float *)outputBuffer;
-	
-	for(int n = 0; n < framesPerBuffer; n++)
+	if (inputBuffer)
 	{
-		static double phase = 0;
-		
-		float value = 0;
-		if (in)
-			value += *in;
-		
-		//		float value = 0.01 * (rand() & 0xffff) / 65535.0;
-		value += 0.05 * sin(phase);
-		phase += 2 * M_PI * 440 / oepaSampleRate;
-		*out += value;
-		
-		if (in)
-			in += oepaChannelNum;
-		out += oepaChannelNum;
+		memcpy(&oepaInputBuffer[bufferSize * oepaAudioBufferIndex],
+			   inputBuffer,
+			   bufferSize * sizeof(float));
 	}
+	memcpy(outputBuffer,
+		   &oepaOutputBuffer[bufferSize * oepaAudioBufferIndex],
+		   bufferSize * sizeof(float));
 	
-	pthread_mutex_unlock(&oepaMutex);
+	oepaAudioBufferIndex = (oepaAudioBufferIndex + 1) % oepaBufferNum;
 	
 	return paContinue;
 }
 
-void *oepaRunEmulation(void *arg)
+void *oepaRunTimer(void *arg)
 {
-	OEPAEmulation *oepaEmulation = (OEPAEmulation *) arg;
-	
-	pthread_mutex_lock(&oepaEmulation->mutex);
-	while (oepaEmulation->isRunning)
+	while (oepaTimerThreadOpen)
 	{
-		// Call renderBuffer
-	//	oepaEmulation->emulation.ioctl("host::audio", 0, &hostAudio);
+		usleep(1E6 * oepaFramesPerBuffer / oepaSampleRate);
 		
-		for (int i = 0; i < 100000; i++);
-		
-		pthread_cond_wait(&oepaEmulation->cond, &oepaEmulation->mutex);
-	}
-	pthread_mutex_unlock(&oepaEmulation->mutex);
-	
-	return NULL;
-}
-
-void oepaGetVideo(OEEmulation *emulation)
-{
-	
-}
-
-OEPAEmulation *oepaGetEmulation(OEEmulation *emulation)
-{
-	OEPAEmulations::iterator i;
-	for (i = oepaEmulations.begin(); i != oepaEmulations.end(); i++)
-	{
-		if ((*i)->emulation == emulation)
-			return *i;
+		oepaAudioBufferIndex = (oepaAudioBufferIndex + 1) % oepaBufferNum;
 	}
 	
 	return NULL;
 }
 
-OEPAEmulation *oepaEraseEmulation(OEEmulation *emulation)
+bool oepaIsAudioOpen()
 {
-	OEPAEmulations::iterator i;
-	for (i = oepaEmulations.begin(); i != oepaEmulations.end(); i++)
+	return oepaAudioOpen;
+}
+
+void oepaCloseAudio()
+{
+	if (!oepaAudioOpen)
+		return;
+	
+	if (oepaAudioStream)
 	{
-		if ((*i)->emulation == emulation)
+		Pa_StopStream(oepaAudioStream);
+		Pa_CloseStream(oepaAudioStream);
+		oepaAudioStream = NULL;
+	}
+	
+	if (oepaTimerThreadOpen)
+	{
+		oepaTimerThreadOpen = false;
+		
+		void *status;
+		pthread_join(oepaTimerThread, &status);
+	}
+	
+	oepaAudioOpen = false;
+}
+
+bool oepaOpenAudio()
+{
+	if (oepaAudioOpen)
+		oepaCloseAudio();
+	
+	int status = Pa_Initialize();
+	if (status == paNoError)
+	{
+		status = Pa_OpenDefaultStream(&oepaAudioStream,
+									  oepaFullDuplex ? oepaChannelNum : 0,
+									  oepaChannelNum,
+									  paFloat32,
+									  oepaSampleRate,
+									  oepaFramesPerBuffer,
+									  oepaCallbackAudio,
+									  NULL);
+		if (status == paNoError)
 		{
-			OEPAEmulation *oepaEmulation = *i;
-			oepaEmulations.erase(i);
-			return oepaEmulation;
+			status = Pa_StartStream(oepaAudioStream);
+			if (status == paNoError)
+			{
+				oepaAudioOpen = true;
+				return true;
+			}
+			else
+				cerr <<  "oepa: couldn't start audio stream, error " << status << "\n";
+			
+			Pa_CloseStream(oepaAudioStream);
 		}
+		else
+			cerr <<  "oepa: couldn't open audio stream, error " << status << "\n";
 	}
+	else
+		cerr <<  "oepa: couldn't init portaudio, error " << status << "\n";
+	
+	int error;
+	pthread_attr_t attr;
+	error = pthread_attr_init(&attr);
+	if (!error)
+	{
+		error = pthread_attr_setdetachstate(&attr,
+											PTHREAD_CREATE_JOINABLE);
+		if (!error)
+		{
+			oepaTimerThreadOpen = true;
+			error = pthread_create(&oepaTimerThread,
+								   &attr,
+								   oepaRunTimer,
+								   NULL);
+			if (!error)
+			{
+				oepaAudioOpen = true;
+				return true;
+			}
+			else
+				cerr << "oepa: couldn't create timer thread, error " << error << "\n";
+		}
+		else
+			cerr << "oepa: couldn't attr timer thread, error " << error << "\n";
+	}
+	else
+		cerr << "oepa: couldn't init timer thread, error " << error << "\n";
 	
 	return false;
 }
 
-bool oepaAudioOpen()
+void oepaSetFullDuplex(bool value)
 {
-	if (!oepaStream)
-	{
-		int status = Pa_Initialize();
-		if (status == paNoError)
-		{
-			status = Pa_OpenDefaultStream(&oepaStream,
-										  oepaFullDuplex ? oepaChannelNum : 0,
-										  oepaChannelNum,
-										  paFloat32,
-										  oepaSampleRate,
-										  oepaFramesPerBuffer,
-										  oepaCallback,
-										  NULL);
-			if (status == paNoError)
-				status = Pa_StartStream(oepaStream);
-		}
-		
-		if (status != paNoError)
-		{
-			fprintf(stderr, "portaudio: couldn't open audio, error %d\n", status);
-			return false;
-		}
-	}
+	bool isAudioOpen = oepaAudioOpen;
 	
-	return true;
-}
-
-void oepaAudioClose()
-{
-	if (oepaStream)
-	{
-		Pa_StopStream(oepaStream);
-		Pa_CloseStream(oepaStream);
-		
-		oepaStream = NULL;
-	}
-}
-
-bool oepaAudioIsOpen()
-{
-	return (oepaStream != NULL);
-}
-
-bool oepaReopen()
-{
-	bool status;
+	if (isAudioOpen)
+		oepaCloseAudio();
 	
-	pthread_mutex_lock(&oepaMutex);
-	oepaAudioClose();
-	status = oepaAudioOpen();
-	pthread_mutex_unlock(&oepaMutex);
+	oepaFullDuplex = value;
 	
-	return status;
+	if (isAudioOpen)
+		oepaOpenAudio();
 }
 
 void oepaSetSampleRate(double value)
 {
+	bool isAudioOpen = oepaAudioOpen;
+	
+	if (isAudioOpen)
+		oepaCloseAudio();
+	
 	oepaSampleRate = value;
 	
-	if (oepaAudioIsOpen())
-		oepaReopen();
-}
-
-void oepaSetFramesPerBuffer(int value)
-{
-	oepaFramesPerBuffer = value;
-	
-	if (oepaAudioIsOpen())
-		oepaReopen();
+	if (isAudioOpen)
+		oepaOpenAudio();
 }
 
 void oepaSetChannelNum(int value)
 {
+	bool isAudioOpen = oepaAudioOpen;
+	
+	if (isAudioOpen)
+		oepaCloseAudio();
+	
 	oepaChannelNum = value;
 	
-	if (oepaAudioIsOpen())
-		oepaReopen();
+	if (isAudioOpen)
+		oepaOpenAudio();
 }
 
-void oepaSetFullDuplex(bool value)
+void oepaSetFramesPerBuffer(int value)
 {
-	oepaFullDuplex = value;
+	bool isAudioOpen = oepaAudioOpen;
 	
-	if (oepaAudioIsOpen())
-		oepaReopen();
+	if (isAudioOpen)
+		oepaCloseAudio();
+	
+	oepaFramesPerBuffer = value;
+	
+	if (isAudioOpen)
+		oepaOpenAudio();
 }
+
+void oepaSetBufferNum(int value)
+{
+	bool isAudioOpen = oepaAudioOpen;
+	
+	if (isAudioOpen)
+		oepaCloseAudio();
+	
+	oepaBufferNum = value;
+	
+	if (isAudioOpen)
+		oepaOpenAudio();
+}
+
+//
+// Emulations
+//
+void *oepaRunEmulations(void *arg)
+{
+	vector<float> inputBuffer;
+	vector<float> outputBuffer;
+	int framesPerBuffer = 0;
+	int channelNum = 0;
+	
+	while (oepaEmulationsThreadOpen)
+	{
+		if (oepaAudioBufferIndex != oepaEmulationBufferIndex)
+		{
+			pthread_mutex_lock(&oepaEmulationsMutex);
+			
+			if ((oepaFramesPerBuffer != framesPerBuffer) ||
+				(oepaChannelNum != channelNum))
+			{
+				inputBuffer.resize(oepaFramesPerBuffer * oepaChannelNum * 2);
+				outputBuffer.resize(oepaFramesPerBuffer * oepaChannelNum * 2);
+				framesPerBuffer = oepaFramesPerBuffer;
+			}
+			
+			HostAudioBuffer buffer = {
+				oepaSampleRate,
+				oepaChannelNum,
+				oepaFramesPerBuffer,
+				&inputBuffer[0],
+				&outputBuffer[0],
+			};
+			
+			for (vector<OEEmulation *>::iterator i = oepaEmulations.begin();
+				 i != oepaEmulations.end();
+				 i++)
+				(*i)->ioctl("host::audio", HOSTAUDIO_RENDERBUFFER, &buffer);
+			
+			pthread_mutex_unlock(&oepaEmulationsMutex);
+			
+			oepaEmulationBufferIndex = (oepaEmulationBufferIndex + 1) % oepaBufferNum;
+		}
+		
+		usleep(1000);
+	}
+	
+	return NULL;
+}
+
+void oepaCloseEmulations()
+{
+	
+}
+
+bool oepaOpenEmulations()
+{
+	pthread_mutex_init(oepaEmulationsMutex, NULL);
+	
+	int error;
+	pthread_attr_t attr;
+	error = pthread_attr_init(&attr);
+	if (!error)
+	{
+		error = pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
+		if (!error)
+		{
+			oepaEmulationsThreadOpen = true;
+			error = pthread_create(&oepaEmulationsThread,
+								   &attr,
+								   oepaRunEmulations,
+								   NULL);
+			if (!error)
+			{
+				oepaAudioOpen = true;
+				return true;
+			}
+			else
+				cerr << "oepa: couldn't create emulations thread, error " << error << "\n";
+		}
+		else
+			cerr << "oepa: couldn't attr emulations thread, error " << error << "\n";
+	}
+	else
+		cerr << "oepa: couldn't init emulations thread, error " << error << "\n";
+	
+	return false;
+}
+
+
 
 void oepaOpen()
 {
-	pthread_mutex_init(&oepaMutex, NULL);
 	
-	oepaAudioOpen();
+	oepaOpenThread();
+	oepaOpenAudio();
 }
 
 void oepaClose()
 {
-	oepaAudioClose();
+	oepaCloseAudio();
+	oepaCloseThread();
 	
 	pthread_mutex_destroy(&oepaMutex);
 }
 
 OEEmulation *oepaConstruct(string path, string resourcePath)
 {
+	
+	pthread_mutex_lock(&oepaMutex);
+	
 	OEPAEmulation *oepaEmulation = new OEPAEmulation;
 	if (!oepaEmulation)
 		return NULL;
@@ -261,6 +366,9 @@ OEEmulation *oepaConstruct(string path, string resourcePath)
 	if (oepaEmulation->emulation)
 	{
 		oepaEmulation->isRunning = true;
+		
+		oepaUpdateAudio(oepaEmulation);
+		
 		pthread_mutex_init(&oepaEmulation->mutex, NULL);
 		pthread_cond_init(&oepaEmulation->cond, NULL);
 		pthread_attr_t attr;
@@ -269,97 +377,121 @@ OEEmulation *oepaConstruct(string path, string resourcePath)
 		pthread_create(&oepaEmulation->thread,
 					   &attr,
 					   oepaRunEmulation,
-					   (void *) oepaEmulation);
+					   oepaEmulation);
 		
-		pthread_mutex_lock(&oepaMutex);
 		oepaEmulations.push_back(oepaEmulation);
 		pthread_mutex_unlock(&oepaMutex);
 	}
 	else
-		delete oepaEmulation;
-	
-	return oepaEmulation->emulation;
-}
-
-void oepaDestroy(OEEmulation *emulation)
-{
-	pthread_mutex_lock(&oepaMutex);
-	OEPAEmulation *oepaEmulation = oepaEraseEmulation(emulation);
-	pthread_mutex_unlock(&oepaMutex);
-	
-	if (oepaEmulation)
 	{
-		oepaEmulation->isRunning = false;
-		pthread_cond_signal(&oepaEmulation->cond);
-		void *status;
-		pthread_join(oepaEmulation->thread, &status);
-		pthread_mutex_destroy(&oepaEmulation->mutex);
-		pthread_cond_destroy(&oepaEmulation->cond);
+		delete oepaEmulation;
+		oepaEmulation = NULL;
 	}
 	
-	delete emulation;
+	return oepaEmulation;
 }
 
-void oepaLock(OEEmulation *emulation)
+void oepaDestroy(OEPAEmulation *oepaEmulation)
+{
+	if (!oepaEmulation)
+		return;
+	
+	pthread_mutex_lock(&oepaMutex);
+	
+	for (OEPAEmulations::iterator i = oepaEmulations.begin();
+		 i != oepaEmulations.end();
+		 i++)
+	{
+		if ((*i) == oepaEmulation)
+		{
+			oepaEmulations.erase(i);
+			break;
+		}
+	}
+	
+	pthread_mutex_unlock(&oepaMutex);
+	
+	oepaEmulation->isRunning = false;
+	pthread_cond_signal(&oepaEmulation->cond);
+	void *status;
+	pthread_join(oepaEmulation->thread, &status);
+	pthread_mutex_destroy(&oepaEmulation->mutex);
+	pthread_cond_destroy(&oepaEmulation->cond);
+	
+	if (oepaEmulation->emulation)
+		delete oepaEmulation->emulation;
+	
+	delete oepaEmulation;
+}
+
+void oepaLock(OEPAEmulation *oepaEmulation)
 {
 	pthread_mutex_lock(&oepaMutex);
-	OEPAEmulation *oepaEmulation = oepaGetEmulation(emulation);
 	if (oepaEmulation)
 		pthread_mutex_lock(&oepaEmulation->mutex);
 }
 
-void oepaUnlock(OEEmulation *emulation)
+void oepaUnlock(OEPAEmulation *oepaEmulation)
 {
-	OEPAEmulation *oepaEmulation = oepaGetEmulation(emulation);
 	if (oepaEmulation)
 		pthread_mutex_unlock(&oepaEmulation->mutex);
 	pthread_mutex_unlock(&oepaMutex);
 }
 
-bool oepaSave(OEEmulation *emulation,
+bool oepaIsLoaded(OEPAEmulation *oepaEmulation)
+{
+	return oepaEmulation->emulation->isLoaded();
+}
+
+bool oepaSave(OEPAEmulation *oepaEmulation,
 			  string path)
 {
-	oepaLock(emulation);
-	bool status = emulation->save(path);
-	oepaUnlock(emulation);
+	oepaLock(oepaEmulation);
+	bool status = oepaEmulation->emulation->save(path);
+	oepaUnlock(oepaEmulation);
 	
 	return status;
 }
 
-int oepaIoctl(OEEmulation *emulation,
-			   string device, int message, void *data)
+int oepaIoctl(OEPAEmulation *oepaEmulation,
+			  string device, int message, void *data)
 {
-	oepaLock(emulation);
-	int status = emulation->ioctl(device, message, data);
-	oepaUnlock(emulation);
+	oepaLock(oepaEmulation);
+	int status = oepaEmulation->emulation->ioctl(device, message, data);
+	oepaUnlock(oepaEmulation);
 	
 	return status;
 }
 
-bool oepaAddDevices(OEEmulation *emulation, string path,
+xmlDocPtr oepaGetDML(OEPAEmulation *oepaEmulation)
+{
+	return oepaEmulation->emulation->getDML();
+}
+
+bool oepaAddDevices(OEPAEmulation *oepaEmulation, string path,
 					OEStringRefMap connections)
 {
-	oepaLock(emulation);
-	bool status = emulation->addDevices(path, connections);
-	oepaUnlock(emulation);
+	oepaLock(oepaEmulation);
+	bool status = oepaEmulation->emulation->addDevices(path, connections);
+	oepaUnlock(oepaEmulation);
 	
 	return status;
 }
 
-bool oepaIsDeviceTerminal(OEEmulation *emulation, OERef ref)
+bool oepaIsDeviceTerminal(OEPAEmulation *oepaEmulation, OERef ref)
 {
-	oepaLock(emulation);
-	bool status = emulation->isDeviceTerminal(ref);
-	oepaUnlock(emulation);
+	oepaLock(oepaEmulation);
+	bool status = oepaEmulation->emulation->isDeviceTerminal(ref);
+	oepaUnlock(oepaEmulation);
 	
 	return status;
 }
 
-bool oepaRemoveDevice(OEEmulation *emulation, OERef ref)
+bool oepaRemoveDevice(OEPAEmulation *oepaEmulation, OERef ref)
 {
-	oepaLock(emulation);
-	bool status = emulation->removeDevice(ref);
-	oepaUnlock(emulation);
+	oepaLock(oepaEmulation);
+	bool status = oepaEmulation->emulation->removeDevice(ref);
+	oepaUnlock(oepaEmulation);
 	
 	return status;
 }

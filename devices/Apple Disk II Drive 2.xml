@@ -6,8 +6,10 @@
     <outlet ref="drive" type="Apple525DiskDrive" />
     <setting ref="drive.lock" type="checkbox" label="Lock Disk Drive" />
     <component name="drive" class="AppleDiskII">
-        <property name="diskImage" value=" /Users/mressl/test2.dsk" />
+        <property name="image" value=" /Users/mressl/test2.dsk" />
         <property name="lock" value="0" />
+        <property name="speedMean" value="300.0" />
+        <property name="speedVariance" value="1.0" />
         <resource name="soundSpin" src="sounds/Apple Disk II Spin.wav" />
         <resource name="soundArm" src="sounds/Apple Disk II Arm.wav" />
         <resource name="soundStop" src="sounds/Apple Disk II Stop.wav" />

@@ -12,6 +12,16 @@
 
 #include "HostSystem.h"
 
+RAM::RAM()
+{
+	size = 1;
+	mask = 0;
+	
+	memory.resize(size);
+	resetPattern.resize(size);
+	resetPattern[0] = 0;
+}
+
 int RAM::ioctl(int message, void *data)
 {
 	switch(message)
@@ -24,8 +34,10 @@ int RAM::ioctl(int message, void *data)
 			else if (property->name == "size")
 			{
 				size = getPreviousPowerOf2(getInt(property->value));
+				if (size < 1)
+					size = 1;
 				memory.resize(size);
-				mask = size ? (size - 1) : 0;
+				mask = size - 1;
 			}
 			else if (property->name == "resetPattern")
 				resetPattern = getCharVector(property->value);
@@ -72,7 +84,7 @@ int RAM::ioctl(int message, void *data)
 		case OEIOCTL_NOTIFY:
 		{
 			OEIoctlNotification *notification = (OEIoctlNotification *) data;
-			if (notification->message == HID_S_COLDRESTART);
+			if (notification->message == HOSTSYSTEM_RESET)
 			{
 				for (int i = 0; i < memory.size(); i++)
 					memory[i] = resetPattern[i % resetPattern.size()];

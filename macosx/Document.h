@@ -12,9 +12,11 @@
 
 #define TEMPLATE_FOLDER @"~/Library/Application Support/Open Emulator/Templates"
 
+typedef struct OEEmulation OEEmulation;
+
 @interface Document : NSDocument
 {
-	void *emulation;
+	OEEmulation *emulation;
 	
 	NSPasteboard *pasteboard;
 	NSArray *pasteboardTypes;
@@ -53,6 +55,9 @@
 - (void) pauseButtonPressedAndReleased:(id)sender;
 - (void) pauseButtonPressed:(id)sender;
 - (void) pauseButtonReleased:(id)sender;
+- (void) interruptButtonPressedAndReleased:(id)sender;
+- (void) interruptButtonPressed:(id)sender;
+- (void) interruptButtonReleased:(id)sender;
 
 - (BOOL) isCopyValid;
 - (BOOL) isPasteValid;

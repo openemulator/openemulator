@@ -10,6 +10,11 @@
 
 #include "AppleIVideo.h"
 
+AppleIVideo::AppleIVideo()
+{
+	memset(screen, 0, APPLEIVIDEO_TERM_HEIGHT * APPLEIVIDEO_TERM_HEIGHT);
+}
+
 int AppleIVideo::ioctl(int message, void *data)
 {
 	switch(message)

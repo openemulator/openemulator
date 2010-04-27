@@ -32,11 +32,13 @@ enum
 class AppleISystem : public OEComponent
 {
 public:
+	AppleISystem();
+	
 	int ioctl(int message, void *data);
 	
 private:
 	OEComponent *cpu;
 	OEComponent *cpuSocket;
 	
-	bool internalCPUEnabled;
+	bool isCPUExternal;
 };

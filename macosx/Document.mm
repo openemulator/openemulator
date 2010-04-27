@@ -16,6 +16,8 @@
 
 #import "oepa.h"
 
+#import "HostSystem.h"
+
 @implementation Document
 
 - (id) init
@@ -68,7 +70,7 @@
 	[super dealloc];
 	
 	if (emulation)
-		oepaDestroy((OEEmulation *) emulation);
+		oepaDestroy(emulation);
 	
 	[pasteboardTypes release];
 	
@@ -84,7 +86,7 @@
 	if (!emulation)
 		return;
 	
-	xmlDocPtr dml = ((OEEmulation *) emulation)->getDML();
+	xmlDocPtr dml = oepaGetDML(emulation);
 	
 	xmlNodePtr rootNode = xmlDocGetRootElement(dml);
 	
@@ -96,7 +98,7 @@
 	if (!emulation)
 		return nil;
 	
-	xmlDocPtr dml = ((OEEmulation *) emulation)->getDML();
+	xmlDocPtr dml = oepaGetDML(emulation);
 	
 	xmlNodePtr rootNode = xmlDocGetRootElement(dml);
 	
@@ -117,7 +119,7 @@
 	msg.name = string([name UTF8String]);
 	msg.value = string([value UTF8String]);
 	
-	oepaIoctl((OEEmulation *) emulation,
+	oepaIoctl(emulation,
 			  string([ref UTF8String]),
 			  OEIOCTL_SET_PROPERTY,
 			  &msg);
@@ -132,7 +134,7 @@
 	
 	msg.name = string([name UTF8String]);
 	
-	if (oepaIoctl((OEEmulation *) emulation,
+	if (oepaIoctl(emulation,
 				  string([ref UTF8String]),
 				  OEIOCTL_GET_PROPERTY,
 				  &msg))
@@ -223,7 +225,7 @@
 		[self removeObjectFromPeripheralsAtIndex:0];
 	
 	// Process info
-	xmlDocPtr dmlDocPtr = ((OEEmulation *) emulation)->getDML();
+	xmlDocPtr dmlDocPtr = oepaGetDML(emulation);
 	OEInfo info(dmlDocPtr);
 	if (!info.isLoaded())
 		return;
@@ -306,13 +308,13 @@
 	const char *resourcePath = [[[NSBundle mainBundle] resourcePath] UTF8String];
 	
 	if (emulation)
-		delete (OEEmulation *)emulation;
+		oepaDestroy(emulation);
 	
-	emulation = (void *) oepaConstruct(emulationPath, resourcePath);
+	emulation = oepaConstruct(emulationPath, resourcePath);
 	
 	if (emulation)
 	{
-		if (((OEEmulation *)emulation)->isLoaded())
+		if (oepaIsLoaded(emulation))
 		{
 			[self setLabel:[self getDMLProperty:@"label"]];
 			[self setDescription:[self getDMLProperty:@"description"]];
@@ -324,7 +326,7 @@
 			return YES;
 		}
 		
-		oepaDestroy((OEEmulation *) emulation);
+		oepaDestroy(emulation);
 		emulation = NULL;
 	}
 	
@@ -342,7 +344,7 @@
 								 UTF8String];
 	if (emulation)
 	{
-		if (oepaSave((OEEmulation *) emulation, string(emulationPath)))
+		if (oepaSave(emulation, string(emulationPath)))
 			return YES;
 	}
 	
@@ -426,7 +428,7 @@
 		connectionsMap[inletRefString] = outletRefString;
 	}
 	
-	if (!oepaAddDevices((OEEmulation *) emulation, pathString, connectionsMap))
+	if (!oepaAddDevices(emulation, pathString, connectionsMap))
 	{
 		NSString *messageText = @"The device could not be added.";
 		
@@ -447,7 +449,7 @@
 	
 	string refString = [deviceRef UTF8String];
 	
-	if (!oepaIsDeviceTerminal((OEEmulation *) emulation, refString))
+	if (!oepaIsDeviceTerminal(emulation, refString))
 	{
 		NSString *messageText = @"Do you want to remove the device \u201C%@\u201D?";
 		NSString *informativeText = @"There is one or more devices connected to it, "
@@ -464,7 +466,7 @@
 			return;
 	}
 	
-	if (!oepaRemoveDevice((OEEmulation *) emulation, refString))
+	if (!oepaRemoveDevice(emulation, refString))
 	{
 		NSString *messageText = @"The device could not be removed.";
 		
@@ -506,13 +508,14 @@
 
 - (void) powerButtonPressed:(id) sender
 {
-	// To-Do: libemulation
-	[self setPower:![self power]];
+	OEIoctlHostSystemEvent event = {HOSTSYSTEM_POWER, true};
+	oepaIoctl(emulation, "host::system", OEIOCTL_POST_NOTIFICATION, &event);
 }
 
 - (void) powerButtonReleased:(id) sender
 {
-	// To-Do: libemulation
+	OEIoctlHostSystemEvent event = {HOSTSYSTEM_POWER, false};
+	oepaIoctl(emulation, "host::system", OEIOCTL_POST_NOTIFICATION, &event);
 }
 
 - (void) resetButtonPressedAndReleased:(id) sender
@@ -523,12 +526,14 @@
 
 - (void) resetButtonPressed:(id) sender
 {
-	// To-Do: libemulation
+	OEIoctlHostSystemEvent event = {HOSTSYSTEM_RESET, false};
+	oepaIoctl(emulation, "host::system", OEIOCTL_POST_NOTIFICATION, &event);
 }
 
 - (void) resetButtonReleased:(id) sender
 {
-	// To-Do: libemulation
+	OEIoctlHostSystemEvent event = {HOSTSYSTEM_RESET, false};
+	oepaIoctl(emulation, "host::system", OEIOCTL_POST_NOTIFICATION, &event);
 }
 
 - (void) pauseButtonPressedAndReleased:(id) sender
@@ -539,12 +544,32 @@
 
 - (void) pauseButtonPressed:(id) sender
 {
-	// To-Do: libemulation
+	OEIoctlHostSystemEvent event = {HOSTSYSTEM_PAUSE, true};
+	oepaIoctl(emulation, "host::system", OEIOCTL_POST_NOTIFICATION, &event);
 }
 
 - (void) pauseButtonReleased:(id) sender
 {
-	// To-Do: libemulation
+	OEIoctlHostSystemEvent event = {HOSTSYSTEM_PAUSE, false};
+	oepaIoctl(emulation, "host::system", OEIOCTL_POST_NOTIFICATION, &event);
+}
+
+- (void) interruptButtonPressedAndReleased:(id) sender
+{
+	[self pauseButtonPressed:sender];
+	[self pauseButtonReleased:sender];
+}
+
+- (void) interruptButtonPressed:(id) sender
+{
+	OEIoctlHostSystemEvent event = {HOSTSYSTEM_INTERRUPT, true};
+	oepaIoctl(emulation, "host::system", OEIOCTL_POST_NOTIFICATION, &event);
+}
+
+- (void) interruptButtonReleased:(id) sender
+{
+	OEIoctlHostSystemEvent event = {HOSTSYSTEM_INTERRUPT, true};
+	oepaIoctl(emulation, "host::system", OEIOCTL_POST_NOTIFICATION, &event);
 }
 
 - (BOOL) isCopyValid

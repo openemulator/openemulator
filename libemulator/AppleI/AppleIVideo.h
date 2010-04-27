@@ -16,6 +16,8 @@
 class AppleIVideo : public OEComponent
 {
 public:
+	AppleIVideo();
+	
 	int ioctl(int message, void *data);
 	void write(int address, int value);
 	

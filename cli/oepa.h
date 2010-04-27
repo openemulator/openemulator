@@ -8,14 +8,19 @@
  * OpenEmulator/portaudio interface.
  */
 
-#include <pthread.h>
-
 #include "OEEmulation.h"
+#include "HostAudio.h"
 
-void oepaSetSampleRate(double value);
-void oepaSetFramesPerBuffer(int value);
-void oepaSetChannelNum(int value);
+#define OEPA_SAMPLERATE 48000.0;
+#define OEPA_CHANNELNUM 2;
+#define OEPA_FRAMESPERBUFFER 512;
+#define OEPA_BUFFERNUM 2;
+
 void oepaSetFullDuplex(bool value);
+void oepaSetSampleRate(double value);
+void oepaSetChannelNum(int value);
+void oepaSetFramesPerBuffer(int value);
+void oepaSetBufferNum(int value);
 
 void oepaOpen();
 void oepaClose();
@@ -23,8 +28,11 @@ void oepaClose();
 OEEmulation *oepaConstruct(string path, string resourcePath);
 void oepaDestroy(OEEmulation *emulation);
 
+bool oepaIsLoaded(OEEmulation *emulation);
 bool oepaSave(OEEmulation *emulation, string path);
 int oepaIoctl(OEEmulation *emulation, string ref, int message, void *data);
+
+xmlDocPtr oepaGetDML(OEEmulation *emulation);
 bool oepaAddDevices(OEEmulation *emulation,
 					string path,
 					OEStringRefMap connections);

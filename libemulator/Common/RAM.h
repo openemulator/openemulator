@@ -13,6 +13,8 @@
 class RAM : public OEComponent
 {
 public:
+	RAM();
+	
 	int ioctl(int message, void *data);
 	int read(int address);
 	void write(int address, int value);

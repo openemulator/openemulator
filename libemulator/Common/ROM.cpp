@@ -10,6 +10,13 @@
 
 #include "ROM.h"
 
+ROM::ROM()
+{
+	mask = 0;
+	
+	memory.resize(1);
+}
+
 int ROM::ioctl(int message, void *data)
 {
 	switch(message)
@@ -29,7 +36,10 @@ int ROM::ioctl(int message, void *data)
 			{
 				memory = setData->data;
 				int size = getPreviousPowerOf2(memory.size());
-				mask = size ? (size - 1) : 0;
+				if (size < 1)
+					size = 1;
+				memory.resize(size);
+				mask = size - 1;
 			}
 			
 			break;

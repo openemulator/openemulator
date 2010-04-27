@@ -11,6 +11,11 @@
 #include "AppleISystem.h"
 #include "HostAudio.h"
 
+AppleISystem::AppleISystem()
+{
+	isCPUExternal = false;
+}
+
 int AppleISystem::ioctl(int message, void *data)
 {
 	switch (message)
@@ -18,16 +23,16 @@ int AppleISystem::ioctl(int message, void *data)
 		case OEIOCTL_SET_PROPERTY:
 		{
 			OEIoctlProperty *property = (OEIoctlProperty *) data;
-			if (property->name == "internalCPUEnabled")
-				internalCPUEnabled = getInt(property->value);
+			if (property->name == "isCPUExternal")
+				isCPUExternal = getInt(property->value);
 			
 			break;
 		}
 		case OEIOCTL_GET_PROPERTY:
 		{
 			OEIoctlProperty *property = (OEIoctlProperty *) data;
-			if (property->name == "internalCPUEnabled")
-				property->value = internalCPUEnabled;
+			if (property->name == "isCPUExternal")
+				property->value = isCPUExternal;
 			else
 				return false;
 			
@@ -51,7 +56,7 @@ int AppleISystem::ioctl(int message, void *data)
 		case OEIOCTL_NOTIFY:
 		{
 			OEIoctlNotification *notification = (OEIoctlNotification *) data;
-			if (notification->message == HOSTAUDIO_BUFFERRENDER)
+			if (notification->message == HOSTAUDIO_RENDER_DID_START)
 			{
 				// Implement simulation
 				

@@ -156,11 +156,11 @@ int AppleIIMMU::ioctl(int message, void *data)
 
 void AppleIIMMU::onNotification(OEComponent *component, int message, void *data)
 {
-	switch(message)
+/*	switch(message)
 	{
 		case HID_S_COLDRESTART:
 		case HID_S_WARMRESTART:
 			setRomEnable(true);
 			break;
-	}
+	}*/
 }

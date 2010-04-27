@@ -46,20 +46,20 @@ int MemoryMap8Bit::ioctl(int message, void *data)
 {
 	switch(message)
 	{
+		case OEIOCTL_SET_PROPERTY:
+		{
+			OEIoctlProperty *property = (OEIoctlProperty *) data;
+			if (property->name == "map")
+				mapVector.push_back(property->value);
+			
+			break;
+		}
 		case OEIOCTL_CONNECT:
 		{
 			OEIoctlConnection *connection = (OEIoctlConnection *) data;
 			OEIoctlMemoryMap memoryMap;
 			connection->component->ioctl(OEIOCTL_GET_MEMORYMAP, &memoryMap);
 			setRange(memoryMap.component, memoryMap.mapVector);
-			
-			break;
-		}
-		case OEIOCTL_SET_PROPERTY:
-		{
-			OEIoctlProperty *property = (OEIoctlProperty *) data;
-			if (property->name == "map")
-				mapVector.push_back(property->value);
 			
 			break;
 		}

@@ -27,8 +27,10 @@
     <inlet ref="system.cpuSocket" type="AppleIICPU" category="expansion" label="CPU Socket" image="Apple II CPU Chip Socket.png" />
     <inlet ref="video.romSocket" type="AppleIIVideoROM" category="peripheral" label="Video Connector" image="RCA Connector.png" />
     <component name="system" class="AppleISystem">
+        <property name="isCPUExternal" value="0" />
         <connection name="hostAudio" ref="host::audio" />
         <connection name="cpuInternal" ref="cpu" />
+        <connection name="cpuExternal" ref="cpu" />
         <connection name="cpuSocket" ref="" />
         <connection name="memoryMap" ref="" />
         <connection name="floatingBus" ref="" />
@@ -53,20 +55,19 @@
     </component>
     <component name="floatingBus" class="AppleIFloatingBus">
         <connection name="system" ref="system" />
-        <connection name="memoryMap" ref="memoryMap" />
+        <connection name="ram1" ref="ram1" />
+        <connection name="ram2" ref="ram2" />
     </component>
     <component name="ram1" class="RAM">
         <data name="image" src="${DEVICE_NAME}.bin" />
         <property name="map" value="0x0000-0x0fff" />
         <property name="size" value="0x1000" />
-        <property name="resetPattern" value="0x00" />
         <connection name="hostSystem" ref="host::system" />
     </component>
     <component name="ram2" class="RAM">
         <data name="image" src="${DEVICE_NAME}.bin" />
         <property name="map" value="0xe000-0xefff" />
         <property name="size" value="0x1000" />
-        <property name="resetPattern" value="0x00" />
         <connection name="hostSystem" ref="host::system" />
     </component>
     <component name="video" class="AppleIVideo">
@@ -93,8 +94,8 @@
         <property name="cb1" value="0" />
         <property name="cb2" value="0" />
         <connection name="interfaceA" ref="keyboard" />
-        <connection name="interfaceB" ref="video" />
         <connection name="interruptA" ref="" />
+        <connection name="interfaceB" ref="video" />
         <connection name="interruptB" ref="" />
     </component>
     <component name="io" class="AppleIIO">

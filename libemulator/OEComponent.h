@@ -43,14 +43,15 @@ typedef union
 
 // Messages
 enum {
-	OEIOCTL_CONNECT,
 	OEIOCTL_SET_PROPERTY,
 	OEIOCTL_GET_PROPERTY,
 	OEIOCTL_SET_DATA,
 	OEIOCTL_GET_DATA,
 	OEIOCTL_SET_RESOURCE,
-	OEIOCTL_GET_MEMORYMAP,
+	OEIOCTL_CONNECT,
 	OEIOCTL_SET_MEMORYMAP,
+	OEIOCTL_GET_MEMORYMAP,
+	OEIOCTL_POST_NOTIFICATION,
 	OEIOCTL_NOTIFY,
 	OEIOCTL_ASSERT_IRQ,
 	OEIOCTL_RELEASE_IRQ,
@@ -80,6 +81,8 @@ private:
 };
 
 int getInt(string value);
+double getFloat(string value);
+string getHex(int value);
 vector<char> getCharVector(string value);
 int getPreviousPowerOf2(int value);
 

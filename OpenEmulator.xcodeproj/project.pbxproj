@@ -16,14 +16,12 @@
 		0011696610E7CC59007A5EFB /* IPStorage.png in Resources */ = {isa = PBXBuildFile; fileRef = 0011696310E7CC4E007A5EFB /* IPStorage.png */; };
 		00123BC91069B8D600FB95A1 /* libemulator.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 006EECA40FCA5C31003D2C8D /* libemulator.a */; };
 		00123BCC1069B8F200FB95A1 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 00E2A84D1053290200910B53 /* libxml2.dylib */; };
-		00170499117FD51D006C87BC /* AppleIISlotExpansionMemory.h in Headers */ = {isa = PBXBuildFile; fileRef = 00170497117FD51D006C87BC /* AppleIISlotExpansionMemory.h */; };
 		0017049A117FD51D006C87BC /* AppleIISlotExpansionMemory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00170498117FD51D006C87BC /* AppleIISlotExpansionMemory.cpp */; };
 		00188DA5115DC59500FFACC0 /* Z80.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00188D9B115DC58800FFACC0 /* Z80.cpp */; };
 		00188DA6115DC59500FFACC0 /* W65C816S.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00188D99115DC58800FFACC0 /* W65C816S.cpp */; };
 		00188DA8115DC59700FFACC0 /* MOS6502.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00188D95115DC58800FFACC0 /* MOS6502.cpp */; };
 		001F56F90FD1E8E500EA246A /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 001F56F80FD1E8E500EA246A /* Sparkle.framework */; };
 		002C27A8116873F100FAE6E6 /* ntsc.c in Sources */ = {isa = PBXBuildFile; fileRef = 002C26B3116867FB00FAE6E6 /* ntsc.c */; };
-		00311CFF1166526800D9CF80 /* Z80Opcodes.h in Headers */ = {isa = PBXBuildFile; fileRef = 00311CFE1166526800D9CF80 /* Z80Opcodes.h */; };
 		003318AF1101492B00CC1782 /* Connector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 003318AD1101492B00CC1782 /* Connector.xib */; };
 		00373842115A852E008BE723 /* AppleIIMonitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00373840115A852E008BE723 /* AppleIIMonitor.cpp */; };
 		003E25E71070796700185260 /* images in Resources */ = {isa = PBXBuildFile; fileRef = 003E2597107075D900185260 /* images */; };
@@ -38,17 +36,11 @@
 		0054E4A71131BE8A006D32D9 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0054E4A61131BE8A006D32D9 /* OpenGL.framework */; };
 		0054E6311131BEE7006D32D9 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0054E6301131BEE7006D32D9 /* Carbon.framework */; };
 		0054E66C1131BF58006D32D9 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0054E66B1131BF58006D32D9 /* Quartz.framework */; };
-		005B485F11829406008C7E42 /* HostMouse.h in Headers */ = {isa = PBXBuildFile; fileRef = 005B485D11829406008C7E42 /* HostMouse.h */; };
 		005B486011829406008C7E42 /* HostMouse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 005B485E11829406008C7E42 /* HostMouse.cpp */; };
-		005B487811829472008C7E42 /* HostTablet.h in Headers */ = {isa = PBXBuildFile; fileRef = 005B487611829472008C7E42 /* HostTablet.h */; };
 		005B487911829472008C7E42 /* HostTablet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 005B487711829472008C7E42 /* HostTablet.cpp */; };
-		005B4885118294AF008C7E42 /* HostSerial.h in Headers */ = {isa = PBXBuildFile; fileRef = 005B4883118294AF008C7E42 /* HostSerial.h */; };
 		005B4886118294AF008C7E42 /* HostSerial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 005B4884118294AF008C7E42 /* HostSerial.cpp */; };
-		005B4889118294B5008C7E42 /* HostParallel.h in Headers */ = {isa = PBXBuildFile; fileRef = 005B4887118294B5008C7E42 /* HostParallel.h */; };
 		005B488A118294B5008C7E42 /* HostParallel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 005B4888118294B5008C7E42 /* HostParallel.cpp */; };
-		005B4891118294C9008C7E42 /* HostCamera.h in Headers */ = {isa = PBXBuildFile; fileRef = 005B488F118294C9008C7E42 /* HostCamera.h */; };
 		005B4892118294C9008C7E42 /* HostCamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 005B4890118294C9008C7E42 /* HostCamera.cpp */; };
-		005B48A6118295AD008C7E42 /* HostNet.h in Headers */ = {isa = PBXBuildFile; fileRef = 005B48A4118295AD008C7E42 /* HostNet.h */; };
 		005B48A7118295AD008C7E42 /* HostNet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 005B48A5118295AD008C7E42 /* HostNet.cpp */; };
 		005B81D9108680B9009D4804 /* ScreenView.m in Sources */ = {isa = PBXBuildFile; fileRef = 005B81D8108680B9009D4804 /* ScreenView.m */; };
 		005C43EB113121F2006AEE84 /* TBInterrupt.png in Resources */ = {isa = PBXBuildFile; fileRef = 005C43EA113121F2006AEE84 /* TBInterrupt.png */; };
@@ -75,7 +67,6 @@
 		00AA1E6E113821C600F11BE2 /* AppleIIKeyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00AA1E6C113821C600F11BE2 /* AppleIIKeyboard.cpp */; };
 		00AA1E721138269900F11BE2 /* AppleIISlotMemory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00AA1E701138269900F11BE2 /* AppleIISlotMemory.cpp */; };
 		00B2D72C10914659004783F9 /* DeviceChooserController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B2D72B10914659004783F9 /* DeviceChooserController.m */; };
-		00B4F934117E43E8008D622F /* MemoryOffset.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B4F932117E43E8008D622F /* MemoryOffset.h */; };
 		00B4F935117E43E8008D622F /* MemoryOffset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B4F933117E43E8008D622F /* MemoryOffset.cpp */; };
 		00B5709E10863C2A00CDE4A7 /* TemplateChooserController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B5709D10863C2A00CDE4A7 /* TemplateChooserController.m */; };
 		00B703851135ACA5005E4B65 /* OEComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B703731135AC91005E4B65 /* OEComponent.cpp */; };
@@ -642,7 +633,6 @@
 				00B703921135ACBD005E4B65 /* Common */,
 				00188D94115DC58800FFACC0 /* CPU */,
 				00B703961135ACBD005E4B65 /* Host */,
-				00B703721135AC91005E4B65 /* OERef.h */,
 				00B703731135AC91005E4B65 /* OEComponent.cpp */,
 				00B703741135AC91005E4B65 /* OEComponent.h */,
 				00B703751135AC91005E4B65 /* OEComponentFactory.cpp */,
@@ -654,6 +644,7 @@
 				00B7037B1135AC91005E4B65 /* OEPackage.cpp */,
 				00B7037C1135AC91005E4B65 /* OEPackage.h */,
 				00B7037D1135AC91005E4B65 /* OERef.cpp */,
+				00B703721135AC91005E4B65 /* OERef.h */,
 			);
 			path = libemulator;
 			sourceTree = "<group>";
@@ -891,15 +882,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00311CFF1166526800D9CF80 /* Z80Opcodes.h in Headers */,
-				00B4F934117E43E8008D622F /* MemoryOffset.h in Headers */,
-				00170499117FD51D006C87BC /* AppleIISlotExpansionMemory.h in Headers */,
-				005B485F11829406008C7E42 /* HostMouse.h in Headers */,
-				005B487811829472008C7E42 /* HostTablet.h in Headers */,
-				005B4885118294AF008C7E42 /* HostSerial.h in Headers */,
-				005B4889118294B5008C7E42 /* HostParallel.h in Headers */,
-				005B4891118294C9008C7E42 /* HostCamera.h in Headers */,
-				005B48A6118295AD008C7E42 /* HostNet.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

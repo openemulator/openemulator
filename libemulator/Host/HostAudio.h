@@ -20,23 +20,30 @@ enum
 // Notifications
 enum
 {
-	HOSTAUDIO_BUFFERSTART,
-	HOSTAUDIO_BUFFERRENDER,
-	HOSTAUDIO_BUFFEREND,
+	HOSTAUDIO_RENDER_WILL_START,
+	HOSTAUDIO_RENDER_DID_START,
+	HOSTAUDIO_RENDER_WILL_END,
+	HOSTAUDIO_RENDER_DID_END,
 };
 
 // Types
 typedef struct
 {
-	float *inputData;
-	float *outputData;
 	float sampleRate;
 	int channelNum;
 	int frameNum;
+	float *input;
+	float *output;
 } HostAudioBuffer;
 
 class HostAudio : public OEComponent
 {
 public:
+	HostAudio();
+	
 	int ioctl(int message, void *data);
+	
+private:
+	float f;
+	float phase;
 };
