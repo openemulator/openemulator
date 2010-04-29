@@ -92,12 +92,12 @@ static int oepaCallbackAudio(const void *inputBuffer,
 	
 	if (inputBuffer)
 	{
-		memcpy(&oepaInputBuffer[bufferSize * oepaAudioBufferIndex],
+		memcpy(&oepaInputBuffer[sampleNum * oepaAudioBufferIndex],
 			   inputBuffer,
 			   sampleNum * sizeof(float));
 	}
 	memcpy(outputBuffer,
-		   &oepaOutputBuffer[bufferSize * oepaAudioBufferIndex],
+		   &oepaOutputBuffer[sampleNum * oepaAudioBufferIndex],
 		   sampleNum * sizeof(float));
 	
 	oepaAudioBufferIndex = (oepaAudioBufferIndex + 1) % oepaBufferNum;
@@ -136,15 +136,15 @@ void *oepaRunEmulations(void *arg)
 			{
 				framesPerBuffer = oepaFramesPerBuffer;
 				channelNum = oepaChannelNum;
-				bufferSize = framesPerBuffer * channelNum * sizeof(float);
+				sampleNum = framesPerBuffer * channelNum;
 				
-				inputBuffer.resize(framesPerBuffer * channelNum * 2);
-				memset(&inputBuffer[0], 0, bufferSize);
-				outputBuffer.resize(framesPerBuffer * channelNum * 2);
-				memset(&outputBuffer[0], 0, bufferSize);
+				inputBuffer.resize(2 * sampleNum);
+				memset(&inputBuffer[0], 0, 2 * sampleNum * sizeof(float));
+				outputBuffer.resize(2 * sampleNum);
+				memset(&outputBuffer[0], 0, 2 * sampleNum * sizeof(float));
 			}
 			
-			memcpy(&inputBuffer[0], oepaInputBuffer, bufferSize);
+			memcpy(&inputBuffer[0], &oepaInputBuffer[0], sampleNum * sizeof(float));
 			
 			HostAudioBuffer buffer =
 			{
@@ -160,7 +160,7 @@ void *oepaRunEmulations(void *arg)
 				 i++)
 				(*i)->ioctl("host::audio", HOSTAUDIO_RENDERBUFFER, &buffer);
 			
-			memcpy(&inputBuffer[0], oepaInputBuffer, bufferSize);
+			memcpy(&inputBuffer[0], &oepaInputBuffer[0], sampleNum * sizeof(float));
 			pthread_mutex_unlock(&oepaEmulationsMutex);
 			
 			oepaEmulationBufferIndex = (oepaEmulationBufferIndex + 1) % oepaBufferNum;
