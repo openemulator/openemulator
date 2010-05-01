@@ -79,13 +79,14 @@ static int oepaCallbackAudio(const void *inputBuffer,
 							 PaStreamCallbackFlags statusFlags,
 							 void *userData)
 {
-	int sampleNum = oepaFramesPerBuffer * oepaChannelNum;
+	int sampleNum = framesPerBuffer * oepaChannelNum;
 	
-	if (oepaAudioBufferIndex == oepaEmulationBufferIndex)
+	if ((oepaAudioBufferIndex == oepaEmulationBufferIndex) ||
+		(oepaFramesPerBuffer != framesPerBuffer))
 	{
 		float *out = (float *) outputBuffer;
 		for (int i = 0; i < sampleNum; i++)
-			*out++ = (float) (((short) rand()) / 32768);
+			*out++ = (0.1 * rand()) / RAND_MAX;
 		
 		return paContinue;
 	}
@@ -377,8 +378,9 @@ bool oepaOpenEmulations()
 						   &attr,
 						   oepaRunEmulations,
 						   NULL);
-	if (!error)
+	if (error)
 	{
+		oepaEmulationsThreadOpen = false;
 		cerr << "oepa: couldn't create emulations thread, error " << error << "\n";
 		return false;
 	}
