@@ -35,12 +35,6 @@
 					 nil];
 		
 		disableMenuBarCount = 0;
-		
-		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-		[defaults addObserver:self
-				   forKeyPath:@"values.OEFullDuplex"
-					  options:NSKeyValueObservingOptionNew
-					  context:NULL];
 	}
 	
 	return self;
@@ -57,7 +51,17 @@
 {
 	[fInspectorController restoreWindowState:self];
 	
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	if ([defaults valueForKey:@"OEFullDuplex"] == nil)
+		[defaults setBool:TRUE forKey:@"OEFullDuplex"];
+	
+	c_oepaSetFullDuplex([defaults boolForKey:@"OEFullDuplex"]);
 	c_oepaOpen();
+	
+	[defaults addObserver:self
+			   forKeyPath:@"OEFullDuplex"
+				  options:NSKeyValueObservingOptionNew
+				  context:nil];
 }
 
 - (BOOL) application:(NSApplication *) theApplication
@@ -109,8 +113,7 @@
 						 change:(NSDictionary *) change
                         context:(void *) context
 {
-	NSLog(@"Observed.");
-	if ([keyPath isEqualToString:@"values.OEFullDuplex"])
+	if ([keyPath isEqualToString:@"OEFullDuplex"])
 	{
 		id object = [change objectForKey:NSKeyValueChangeNewKey];
 		int value = [object intValue];

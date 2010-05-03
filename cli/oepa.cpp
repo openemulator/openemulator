@@ -8,7 +8,6 @@
  * OpenEmulator/portaudio interface.
  */
 
-#include "math.h"
 #include <iostream>
 
 #include <pthread.h>
@@ -17,57 +16,28 @@
 
 #include "oepa.h"
 
-// Configuration variables
+// Configuration
 bool oepaFullDuplex = false;
 double oepaSampleRate = OEPA_SAMPLERATE;
 int oepaChannelNum = OEPA_CHANNELNUM;
 int oepaFramesPerBuffer = OEPA_FRAMESPERBUFFER;
 int oepaBufferNum = OEPA_BUFFERNUM;
 
-// Audio callback
+// Audio
 bool oepaAudioOpen = false;
-PaStream *oepaAudioStream = NULL;
 volatile int oepaAudioBufferIndex = 0;
-volatile int oepaEmulationBufferIndex = 0;
+volatile int oepaEmulationsBufferIndex = 0;
 vector<float> oepaInputBuffer;
 vector<float> oepaOutputBuffer;
-
-// Timer thread (when there is no audio)
+PaStream *oepaAudioStream = NULL;
 bool oepaTimerThreadOpen = false;
 pthread_t oepaTimerThread;
 
-// Emulations thread variables
+// Emulations
 bool oepaEmulationsThreadOpen = false;
 pthread_t oepaEmulationsThread;
 pthread_mutex_t oepaEmulationsMutex;
 vector<OEEmulation *> oepaEmulations;
-
-/*
-void calculate()
-{
-	HostAudioBuffer *buffer = &oepaEmulation->hostAudioBuffer;
-	float *in = buffer->input;
-	float *out = buffer->output;
-	
-	for(int i = 0; i < buffer->frameNum; i++)
-	{
-		static double phase = 0;
-		float value = 0;
-		//				value += *in;
-		//				value += 0.01 * (rand() & 0xffff) / 65535.0;
-		value += 0.05 * sin(phase);
-		phase += 2 * M_PI * 440 / buffer->sampleRate;
-		if (oh)
-		{
-			out[0] += value;
-			out[1] = 0;
-		}
-		
-		in += buffer->channelNum;
-		out += buffer->channelNum;
-	}
-}
-*/
 
 //
 // Audio
@@ -79,27 +49,26 @@ static int oepaCallbackAudio(const void *inputBuffer,
 							 PaStreamCallbackFlags statusFlags,
 							 void *userData)
 {
-	int sampleNum = framesPerBuffer * oepaChannelNum;
+	int bufferSampleNum = oepaFramesPerBuffer * oepaChannelNum;
 	
-	if ((oepaAudioBufferIndex == oepaEmulationBufferIndex) ||
-		(oepaFramesPerBuffer != framesPerBuffer))
+	if (oepaAudioBufferIndex == oepaEmulationsBufferIndex)
 	{
 		float *out = (float *) outputBuffer;
-		for (int i = 0; i < sampleNum; i++)
-			*out++ = (0.1 * rand()) / RAND_MAX;
+		for (int i = 0; i < bufferSampleNum; i++)
+			*out++ = rand() * (0.1 / RAND_MAX);
 		
 		return paContinue;
 	}
 	
 	if (inputBuffer)
-	{
-		memcpy(&oepaInputBuffer[sampleNum * oepaAudioBufferIndex],
-			   inputBuffer,
-			   sampleNum * sizeof(float));
-	}
+		memcpy(&oepaInputBuffer[oepaAudioBufferIndex * bufferSampleNum],
+			   inputBuffer, bufferSampleNum * sizeof(float));
+	else
+		memset(&oepaInputBuffer[oepaAudioBufferIndex * bufferSampleNum],
+			   0, bufferSampleNum * sizeof(float));
 	memcpy(outputBuffer,
-		   &oepaOutputBuffer[sampleNum * oepaAudioBufferIndex],
-		   sampleNum * sizeof(float));
+		   &oepaOutputBuffer[oepaAudioBufferIndex * bufferSampleNum],
+		   bufferSampleNum * sizeof(float));
 	
 	oepaAudioBufferIndex = (oepaAudioBufferIndex + 1) % oepaBufferNum;
 	
@@ -111,6 +80,9 @@ void *oepaRunTimer(void *arg)
 	while (oepaTimerThreadOpen)
 	{
 		usleep(1E6 * oepaFramesPerBuffer / oepaSampleRate);
+		
+		if (oepaAudioBufferIndex == oepaEmulationsBufferIndex)
+			continue;
 		
 		oepaAudioBufferIndex = (oepaAudioBufferIndex + 1) % oepaBufferNum;
 	}
@@ -124,11 +96,17 @@ void *oepaRunEmulations(void *arg)
 	vector<float> outputBuffer;
 	int framesPerBuffer = 0;
 	int channelNum = 0;
-	int sampleNum = 0;
+	int bufferSampleNum = 0;
+	int bufferByteNum = 0;
 	
 	while (oepaEmulationsThreadOpen)
 	{
-		if (oepaAudioBufferIndex != oepaEmulationBufferIndex)
+		int audioIndex = oepaAudioBufferIndex;
+		int nextIndex = (oepaEmulationsBufferIndex + 1) % oepaBufferNum;
+		
+		if (audioIndex == nextIndex)
+			usleep(1000);
+		else
 		{
 			pthread_mutex_lock(&oepaEmulationsMutex);
 			
@@ -137,15 +115,23 @@ void *oepaRunEmulations(void *arg)
 			{
 				framesPerBuffer = oepaFramesPerBuffer;
 				channelNum = oepaChannelNum;
-				sampleNum = framesPerBuffer * channelNum;
+				bufferSampleNum = framesPerBuffer * channelNum;
+				bufferByteNum = bufferSampleNum * sizeof(float);
 				
-				inputBuffer.resize(2 * sampleNum);
-				memset(&inputBuffer[0], 0, 2 * sampleNum * sizeof(float));
-				outputBuffer.resize(2 * sampleNum);
-				memset(&outputBuffer[0], 0, 2 * sampleNum * sizeof(float));
+				inputBuffer.resize(2 * bufferSampleNum);
+				memset(&inputBuffer[0], 0,
+					   2 * bufferByteNum);
+				outputBuffer.resize(2 * bufferSampleNum);
+				memset(&outputBuffer[0], 0,
+					   2 * bufferByteNum);
 			}
 			
-			memcpy(&inputBuffer[0], &oepaInputBuffer[0], sampleNum * sizeof(float));
+			memcpy(&inputBuffer[0],
+				   &inputBuffer[bufferSampleNum],
+				   bufferByteNum);
+			memcpy(&inputBuffer[bufferSampleNum],
+				   &oepaInputBuffer[oepaEmulationsBufferIndex * bufferSampleNum],
+				   bufferByteNum);
 			
 			HostAudioBuffer buffer =
 			{
@@ -161,21 +147,20 @@ void *oepaRunEmulations(void *arg)
 				 i++)
 				(*i)->ioctl("host::audio", HOSTAUDIO_RENDERBUFFER, &buffer);
 			
-			memcpy(&inputBuffer[0], &oepaInputBuffer[0], sampleNum * sizeof(float));
+			memcpy(&oepaOutputBuffer[oepaEmulationsBufferIndex * bufferSampleNum],
+				   &outputBuffer[0],
+				   bufferByteNum);
+			memcpy(&outputBuffer[0],
+				   &outputBuffer[bufferSampleNum],
+				   bufferByteNum);
+			
 			pthread_mutex_unlock(&oepaEmulationsMutex);
 			
-			oepaEmulationBufferIndex = (oepaEmulationBufferIndex + 1) % oepaBufferNum;
+			oepaEmulationsBufferIndex = nextIndex;
 		}
-		
-		usleep(1000);
 	}
 	
 	return NULL;
-}
-
-bool oepaIsAudioOpen()
-{
-	return oepaAudioOpen;
 }
 
 void oepaCloseAudio()
@@ -205,6 +190,8 @@ bool oepaOpenAudio()
 {
 	if (oepaAudioOpen)
 		oepaCloseAudio();
+	
+	oepaAudioBufferIndex = 0;
 	
 	int status = Pa_Initialize();
 	if (status == paNoError)
@@ -267,71 +254,6 @@ bool oepaOpenAudio()
 	return false;
 }
 
-void oepaSetFullDuplex(bool value)
-{
-	bool isAudioOpen = oepaAudioOpen;
-	
-	if (isAudioOpen)
-		oepaCloseAudio();
-	
-	oepaFullDuplex = value;
-	
-	if (isAudioOpen)
-		oepaOpenAudio();
-}
-
-void oepaSetSampleRate(double value)
-{
-	bool isAudioOpen = oepaAudioOpen;
-	
-	if (isAudioOpen)
-		oepaCloseAudio();
-	
-	oepaSampleRate = value;
-	
-	if (isAudioOpen)
-		oepaOpenAudio();
-}
-
-void oepaSetChannelNum(int value)
-{
-	bool isAudioOpen = oepaAudioOpen;
-	
-	if (isAudioOpen)
-		oepaCloseAudio();
-	
-	oepaChannelNum = value;
-	
-	if (isAudioOpen)
-		oepaOpenAudio();
-}
-
-void oepaSetFramesPerBuffer(int value)
-{
-	bool isAudioOpen = oepaAudioOpen;
-	
-	if (isAudioOpen)
-		oepaCloseAudio();
-	
-	oepaFramesPerBuffer = value;
-	
-	if (isAudioOpen)
-		oepaOpenAudio();
-}
-
-void oepaSetBufferNum(int value)
-{
-	bool isAudioOpen = oepaAudioOpen;
-	
-	if (isAudioOpen)
-		oepaCloseAudio();
-	
-	oepaBufferNum = value;
-	
-	if (isAudioOpen)
-		oepaOpenAudio();
-}
-
 //
 // Emulations
 //
@@ -351,46 +273,127 @@ bool oepaOpenEmulations()
 {
 	int error;
 	
+	int bufferSize = oepaBufferNum * oepaFramesPerBuffer * oepaChannelNum;
+	oepaInputBuffer.resize(bufferSize);
+	oepaOutputBuffer.resize(bufferSize);
+	
+	oepaEmulationsBufferIndex = 0;
+	
 	error = pthread_mutex_init(&oepaEmulationsMutex, NULL);
-	if (error)
+	if (!error)
 	{
-		cerr << "oepa: couldn't init emulations mutex, error " << error << "\n";
-		return false;
+		pthread_attr_t attr;
+		error = pthread_attr_init(&attr);
+		if (!error)
+		{
+			sched_param param;
+			
+			error = pthread_attr_getschedparam(&attr, &param);
+			if (!error)
+			{
+				param.sched_priority *= 1.5;
+				pthread_attr_setschedparam(&attr, &param);
+			}
+			
+			error = pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
+			if (!error)
+			{
+				oepaEmulationsThreadOpen = true;
+				error = pthread_create(&oepaEmulationsThread,
+									   &attr,
+									   oepaRunEmulations,
+									   NULL);
+				if (!error)
+					return true;
+				else
+					cerr << "oepa: couldn't create emulations thread, error " <<
+					error << "\n";
+			}
+			else
+				cerr << "oepa: couldn't attr emulations thread, error " <<
+				error << "\n";
+		}
+		else
+			cerr << "oepa: couldn't init emulations attr, error " <<
+			error << "\n";		
 	}
+	else
+		cerr << "oepa: couldn't init emulations mutex, error " <<
+		error << "\n";
 	
-	pthread_attr_t attr;
-	error = pthread_attr_init(&attr);
-	if (error)
-	{
-		cerr << "oepa: couldn't init emulations attr, error " << error << "\n";
-		return false;
-	}
+	return false;
+}
+
+bool oepaDisableAudio()
+{
+	bool state = oepaAudioOpen;
 	
-	error = pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
-	if (error)
-	{
-		cerr << "oepa: couldn't attr emulations thread, error " << error << "\n";
-		return false;
-	}
+	if (state)
+		oepaCloseAudio();
 	
-	oepaEmulationsThreadOpen = true;
-	error = pthread_create(&oepaEmulationsThread,
-						   &attr,
-						   oepaRunEmulations,
-						   NULL);
-	if (error)
-	{
-		oepaEmulationsThreadOpen = false;
-		cerr << "oepa: couldn't create emulations thread, error " << error << "\n";
-		return false;
-	}
+	if (oepaEmulationsThreadOpen)
+		pthread_mutex_lock(&oepaEmulationsMutex);
 	
-	return true;
+	return state;
+}
+
+void oepaEnableAudio(bool state)
+{
+	if (oepaEmulationsThreadOpen)
+		pthread_mutex_unlock(&oepaEmulationsMutex);
+	
+	if (state)
+		oepaOpenAudio();
 }
 
 //
-// OEPA Interface
+// Interface
 //
+void oepaSetFullDuplex(bool value)
+{
+	bool state = oepaDisableAudio();
+	
+	oepaFullDuplex = value;
+	
+	oepaEnableAudio(state);
+}
+
+void oepaSetSampleRate(double value)
+{
+	bool state = oepaDisableAudio();
+	
+	oepaSampleRate = value;
+	
+	oepaEnableAudio(state);
+}
+
+void oepaSetChannelNum(int value)
+{
+	bool state = oepaDisableAudio();
+	
+	oepaChannelNum = value;
+	
+	oepaEnableAudio(state);
+}
+
+void oepaSetFramesPerBuffer(int value)
+{
+	bool state = oepaDisableAudio();
+	
+	oepaFramesPerBuffer = value;
+	
+	oepaEnableAudio(state);
+}
+
+void oepaSetBufferNum(int value)
+{
+	bool state = oepaDisableAudio();
+	
+	oepaBufferNum = value + 1;
+	
+	oepaEnableAudio(state);
+}
+
 void oepaOpen()
 {
 	oepaOpenEmulations();

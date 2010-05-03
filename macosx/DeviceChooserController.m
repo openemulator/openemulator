@@ -67,8 +67,8 @@
 	if (![deviceChooserViewController selectedItemPath])
 	{
 		NSString *messageText = @"No devices of this kind can be added.";
-		NSString *informativeText = @"There are no available ports in the current "
-		"configuration.";
+		NSString *informativeText = @"There are no available devices for "
+		"the current configuration.";
 		
 		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
 		[alert setMessageText:NSLocalizedString(messageText, messageText)];

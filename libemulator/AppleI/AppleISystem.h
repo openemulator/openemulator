@@ -41,4 +41,5 @@ private:
 	OEComponent *cpuSocket;
 	
 	bool isCPUExternal;
+	double phase;
 };

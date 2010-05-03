@@ -8,6 +8,8 @@
  * Controls an Apple I system
  */
 
+#include "math.h"
+
 #include "AppleISystem.h"
 #include "HostAudio.h"
 
@@ -58,6 +60,18 @@ int AppleISystem::ioctl(int message, void *data)
 			OEIoctlNotification *notification = (OEIoctlNotification *) data;
 			if (notification->message == HOSTAUDIO_RENDER_DID_START)
 			{
+				HostAudioBuffer *buffer = (HostAudioBuffer *) notification->data;
+				float *out = buffer->output;
+				int sampleNum = buffer->channelNum * buffer->frameNum;
+				
+				for(int i = 0; i < sampleNum; i++)
+				{
+					float value = 0.05 * sin(phase);
+					*out++ = value;
+					
+					phase += 2 * M_PI * 220 / buffer->sampleRate;
+				}
+				
 				// Implement simulation
 				
 				// postNotification APPLEISYSTEM_VBL
