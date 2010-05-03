@@ -52,14 +52,22 @@
 	[fInspectorController restoreWindowState:self];
 	
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	if ([defaults valueForKey:@"OEFullDuplex"] == nil)
+	
+	if (![defaults valueForKey:@"OEFullDuplex"])
 		[defaults setBool:TRUE forKey:@"OEFullDuplex"];
+	if (![defaults valueForKey:@"OEVolume"])
+		[defaults setFloat:1.0 forKey:@"OEVolume"];
 	
 	c_oepaSetFullDuplex([defaults boolForKey:@"OEFullDuplex"]);
+	c_oepaSetVolume([defaults floatForKey:@"OEVolume"]);
 	c_oepaOpen();
 	
 	[defaults addObserver:self
 			   forKeyPath:@"OEFullDuplex"
+				  options:NSKeyValueObservingOptionNew
+				  context:nil];
+	[defaults addObserver:self
+			   forKeyPath:@"OEVolume"
 				  options:NSKeyValueObservingOptionNew
 				  context:nil];
 }
@@ -118,6 +126,12 @@
 		id object = [change objectForKey:NSKeyValueChangeNewKey];
 		int value = [object intValue];
 		c_oepaSetFullDuplex(value);
+	}
+	else if ([keyPath isEqualToString:@"OEVolume"])
+	{
+		id object = [change objectForKey:NSKeyValueChangeNewKey];
+		float value = [object floatValue];
+		c_oepaSetVolume(value);
 	}
 }
 

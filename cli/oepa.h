@@ -11,16 +11,20 @@
 #include "OEEmulation.h"
 #include "HostAudio.h"
 
-#define OEPA_SAMPLERATE 48000.0
-#define OEPA_CHANNELNUM 2
-#define OEPA_FRAMESPERBUFFER 512
-#define OEPA_BUFFERNUM 3
+#define OEPA_SAMPLERATE			48000.0
+#define OEPA_CHANNELNUM			2
+#define OEPA_FRAMESPERBUFFER	512
+#define OEPA_BUFFERNUM			3
+
+#define OEPA_VOLUMEFILTERFREQ	20.0
 
 void oepaSetFullDuplex(bool value);
 void oepaSetSampleRate(double value);
 void oepaSetChannelNum(int value);
 void oepaSetFramesPerBuffer(int value);
 void oepaSetBufferNum(int value);
+
+void oepaSetVolume(float value);
 
 void oepaOpen();
 void oepaClose();

@@ -8,6 +8,7 @@
  * OpenEmulator/portaudio interface.
  */
 
+#include <math.h>
 #include <iostream>
 
 #include <pthread.h>
@@ -29,7 +30,11 @@ volatile int oepaAudioBufferIndex = 0;
 volatile int oepaEmulationsBufferIndex = 0;
 vector<float> oepaInputBuffer;
 vector<float> oepaOutputBuffer;
+
 PaStream *oepaAudioStream = NULL;
+float oepaVolume = 1.0F;
+float oepaInstantVolume = 1.0F;
+float oepaVolumeAlpha = 0.0F;
 bool oepaTimerThreadOpen = false;
 pthread_t oepaTimerThread;
 
@@ -66,9 +71,12 @@ static int oepaCallbackAudio(const void *inputBuffer,
 	else
 		memset(&oepaInputBuffer[oepaAudioBufferIndex * bufferSampleNum],
 			   0, bufferSampleNum * sizeof(float));
-	memcpy(outputBuffer,
-		   &oepaOutputBuffer[oepaAudioBufferIndex * bufferSampleNum],
-		   bufferSampleNum * sizeof(float));
+	
+	float *in = &oepaOutputBuffer[oepaAudioBufferIndex * bufferSampleNum];
+	float *out = (float *) outputBuffer;
+	for (int i = 0; i < bufferSampleNum; i++)
+		*out++ = *in++ * oepaInstantVolume;
+	oepaInstantVolume += (oepaVolume - oepaInstantVolume) * oepaVolumeAlpha;
 	
 	oepaAudioBufferIndex = (oepaAudioBufferIndex + 1) % oepaBufferNum;
 	
@@ -193,6 +201,11 @@ bool oepaOpenAudio()
 	
 	oepaAudioBufferIndex = 0;
 	
+	float bufferSampleRate = oepaSampleRate / oepaFramesPerBuffer;
+	float rc = 1 / 2.0 / M_PI / OEPA_VOLUMEFILTERFREQ;
+	oepaVolumeAlpha = bufferSampleRate / (rc + bufferSampleRate);
+	oepaInstantVolume = oepaVolume;
+	
 	int status = Pa_Initialize();
 	if (status == paNoError)
 	{
@@ -204,6 +217,21 @@ bool oepaOpenAudio()
 									  oepaFramesPerBuffer,
 									  oepaCallbackAudio,
 									  NULL);
+		if ((status != paNoError) && oepaFullDuplex)
+		{
+			cerr <<  "oepa: couldn't start audio stream, error " << status << 
+				", attempting half-duplex\n";
+			
+			status = Pa_OpenDefaultStream(&oepaAudioStream,
+										  0,
+										  oepaChannelNum,
+										  paFloat32,
+										  oepaSampleRate,
+										  oepaFramesPerBuffer,
+										  oepaCallbackAudio,
+										  NULL);
+		}
+			
 		if (status == paNoError)
 		{
 			status = Pa_StartStream(oepaAudioStream);
@@ -394,6 +422,11 @@ void oepaSetBufferNum(int value)
 	oepaEnableAudio(state);
 }
 
+void oepaSetVolume(float value)
+{
+	oepaVolume = value;
+}
+
 void oepaOpen()
 {
 	oepaOpenEmulations();
@@ -501,6 +534,11 @@ bool oepaRemoveDevice(OEEmulation *emulation, OERef ref)
 extern "C" void c_oepaSetFullDuplex(int value)
 {
 	oepaSetFullDuplex(value);
+}
+
+extern "C" void c_oepaSetVolume(float value)
+{
+	oepaSetVolume(value);
 }
 
 extern "C" void c_oepaOpen()

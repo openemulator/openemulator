@@ -15,6 +15,8 @@ extern "C"
 #endif
 
 void c_oepaSetFullDuplex(int value);
+void c_oepaSetVolume(float value);
+
 void c_oepaOpen();
 void c_oepaClose();
 
