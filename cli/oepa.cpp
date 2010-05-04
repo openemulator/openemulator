@@ -545,6 +545,24 @@ extern "C" void c_oepaSetVolume(float value)
 	oepaSetVolume(value);
 }
 
+extern "C" int c_oepaStartRecord(char *path)
+{
+	return 1;
+}
+
+extern "C" void c_oepaStopRecord()
+{
+}
+
+extern "C" int c_oepaStartPlayback(char *path)
+{
+	return 1;
+}
+
+extern "C" void c_oepaStopPlayback()
+{
+}
+
 extern "C" void c_oepaOpen()
 {
 	oepaOpen();

@@ -15,8 +15,15 @@ extern "C"
 #endif
 
 void c_oepaSetFullDuplex(int value);
+
 void c_oepaSetVolume(float value);
 
+int c_oepaStartRecord(char *path);
+void C_oepaStopRecord();
+int c_oepaStartPlayback(char *path);
+void c_oepaStopPlayback();
+	
+	
 void c_oepaOpen();
 void c_oepaClose();
 

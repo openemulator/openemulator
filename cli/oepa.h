@@ -26,6 +26,11 @@ void oepaSetBufferNum(int value);
 
 void oepaSetVolume(float value);
 
+bool oepaStartRecord(string path);
+void oepaStopRecord();
+bool oepaStartPlayback(string path);
+void oepaStopPlayback();
+
 void oepaOpen();
 void oepaClose();
 
