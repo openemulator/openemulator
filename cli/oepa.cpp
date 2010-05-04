@@ -74,9 +74,13 @@ static int oepaCallbackAudio(const void *inputBuffer,
 	
 	float *in = &oepaOutputBuffer[oepaAudioBufferIndex * bufferSampleNum];
 	float *out = (float *) outputBuffer;
-	for (int i = 0; i < bufferSampleNum; i++)
-		*out++ = *in++ * oepaInstantVolume;
-	oepaInstantVolume += (oepaVolume - oepaInstantVolume) * oepaVolumeAlpha;
+	for (int i = 0; i < oepaFramesPerBuffer; i++)
+	{
+		for (int c = 0; c < oepaChannelNum; c++)
+			*out++ = *in++ * oepaInstantVolume;
+		
+		oepaInstantVolume += (oepaVolume - oepaInstantVolume) * oepaVolumeAlpha;
+	}
 	
 	oepaAudioBufferIndex = (oepaAudioBufferIndex + 1) % oepaBufferNum;
 	
@@ -201,9 +205,9 @@ bool oepaOpenAudio()
 	
 	oepaAudioBufferIndex = 0;
 	
-	float bufferSampleRate = oepaSampleRate / oepaFramesPerBuffer;
+	float t = 1.0 / oepaSampleRate;
 	float rc = 1 / 2.0 / M_PI / OEPA_VOLUMEFILTERFREQ;
-	oepaVolumeAlpha = bufferSampleRate / (rc + bufferSampleRate);
+	oepaVolumeAlpha = t / (rc + t);
 	oepaInstantVolume = oepaVolume;
 	
 	int status = Pa_Initialize();
