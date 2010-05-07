@@ -18,12 +18,13 @@ void c_oepaSetFullDuplex(int value);
 
 void c_oepaSetVolume(float value);
 
-int c_oepaStartRecord(char *path);
-void C_oepaStopRecord();
 int c_oepaStartPlayback(char *path);
+float c_oepaGetPlaybackTime();
 void c_oepaStopPlayback();
-	
-	
+int c_oepaStartRecording(char *path);
+float c_oepaGetRecordingTime();
+void c_oepaStopRecording();
+
 void c_oepaOpen();
 void c_oepaClose();
 

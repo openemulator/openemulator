@@ -28,6 +28,9 @@
 	IBOutlet NSArrayController *fExpansionsController;
 	IBOutlet NSArrayController *fStorageController;
 	IBOutlet NSArrayController *fPeripheralsController;
+
+	IBOutlet NSTextField *fPlaybackLabel;
+	IBOutlet NSTextField *fRecordingLabel;
 	
 	int selectedViewIndex;
 	Document *inspectedDocument;

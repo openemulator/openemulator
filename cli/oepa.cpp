@@ -431,6 +431,35 @@ void oepaSetVolume(float value)
 	oepaVolume = value;
 }
 
+bool oepaStartPlayback(string path)
+{
+	return true;
+}
+
+float oepaGetPlaybackTime()
+{
+	return 0.0;
+}
+
+void oepaStopPlayback()
+{
+}
+
+bool oepaStartRecording(string path)
+{
+	return true;
+}
+
+float oepaGetRecordingTime()
+{
+	return 0.0;
+}
+
+void oepaStopRecording()
+{
+}
+
+
 void oepaOpen()
 {
 	oepaOpenEmulations();
@@ -545,22 +574,34 @@ extern "C" void c_oepaSetVolume(float value)
 	oepaSetVolume(value);
 }
 
-extern "C" int c_oepaStartRecord(char *path)
-{
-	return 1;
-}
-
-extern "C" void c_oepaStopRecord()
-{
-}
-
 extern "C" int c_oepaStartPlayback(char *path)
 {
-	return 1;
+	return oepaStartPlayback(path);
+}
+
+extern "C" float c_oepaGetPlaybackTime()
+{
+	return oepaGetPlaybackTime();
 }
 
 extern "C" void c_oepaStopPlayback()
 {
+	oepaStopPlayback();
+}
+
+extern "C" int c_oepaStartRecording(char *path)
+{
+	return oepaStartRecording(path);
+}
+
+extern "C" float c_oepaGetRecordingTime()
+{
+	return oepaGetRecordingTime();
+}
+
+extern "C" void c_oepaStopRecording()
+{
+	oepaStopRecording();
 }
 
 extern "C" void c_oepaOpen()
