@@ -29,16 +29,20 @@ Mac OS X
 
   Before compiling the OpenEmulator XCode project under Mac OS X, you need
 libzip and libportaudio. The easiest way to accomplish this is to
-install MacPorts. If you are under Snow Leopard, enter the following commands:
+install MacPorts.
 
-  sudo port install libzip +universal configure.universal_cflags="-arch ppc -arch i386 -arch x86_64" configure.universal_ldflags="-arch ppc -arch i386 -arch x86_64"
+  If you want to build universal binaries, you should edit the file
+/opt/local/etc/macports/macports.conf, and change the "universal_archs"
+entry to the following:
 
-  sudo port install portaudio +universal configure.universal_cflags="-arch ppc -arch i386 -arch x86_64" configure.universal_ldflags="-arch ppc -arch i386 -arch x86_64"
+universal_archs		x86_64 i386 ppc
 
-  Otherwise, try:
+  The next step is installing required libraries:
 
   sudo port install libzip +universal
   sudo port install portaudio +universal
+  sudo port install libsndfile +universal
+  sudo port install libsamplerate +universal
 
 Windows
 =======

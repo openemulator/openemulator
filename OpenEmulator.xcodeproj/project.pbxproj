@@ -752,9 +752,9 @@
 			children = (
 				000A78A50FBA464600A0F12E /* OpenEmulator */,
 				0055C1EC1123AC0500D4CFFC /* oesdl */,
-				2A37F4C3FDCFA73011CA2CEA /* Frameworks */,
 				006EEC9A0FCA5BEA003D2C8D /* libemulator */,
 				00FF25C4115C365800C82CA0 /* libntsc */,
+				2A37F4C3FDCFA73011CA2CEA /* Frameworks */,
 				19C28FB0FE9D524F11CA2CBB /* Products */,
 			);
 			name = OpenEmulator;

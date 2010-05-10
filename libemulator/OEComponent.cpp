@@ -85,6 +85,13 @@ double getFloat(string value)
 	return atof(value.c_str());
 }
 
+string getString(int value)
+{
+	std::stringstream ss;
+	ss << value;
+	return ss.str();
+}
+
 string getHex(int value)
 {
 	std::stringstream ss;

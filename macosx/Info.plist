@@ -39,6 +39,7 @@
 			<array>
 				<string>aiff</string>
 				<string>aif</string>
+				<string>aifc</string>
 			</array>
 			<key>CFBundleTypeMIMETypes</key>
 			<array>
@@ -47,10 +48,6 @@
 			</array>
 			<key>CFBundleTypeName</key>
 			<string>AIFF Audio</string>
-			<key>CFBundleTypeOSTypes</key>
-			<array>
-				<string>AIFF</string>
-			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 		</dict>
@@ -76,6 +73,48 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
+				<string>flac</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>audio/flac</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>FLAC Audio File</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>ogg</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>audio/ogg</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>Ogg Vorbis File</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>oga</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>audio/ogg</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>Ogg Audio File</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
 				<string>dsk</string>
 				<string>do</string>
 				<string>d13</string>
@@ -87,7 +126,7 @@
 			<key>CFBundleTypeIconFile</key>
 			<string>DiskImage525.icns</string>
 			<key>CFBundleTypeName</key>
-			<string>Apple II Disk Image</string>
+			<string>Apple II 5.25&quot; Disk Image</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 		</dict>
@@ -99,7 +138,7 @@
 			<key>CFBundleTypeIconFile</key>
 			<string>DiskImage35.icns</string>
 			<key>CFBundleTypeName</key>
-			<string>Apple II Disk Image</string>
+			<string>Apple II 3.5&quot; Disk Image</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 		</dict>

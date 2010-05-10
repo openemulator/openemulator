@@ -82,6 +82,7 @@ private:
 
 int getInt(string value);
 double getFloat(string value);
+string getString(int value);
 string getHex(int value);
 vector<char> getCharVector(string value);
 int getPreviousPowerOf2(int value);

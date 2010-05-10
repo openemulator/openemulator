@@ -34,7 +34,7 @@ int AppleISystem::ioctl(int message, void *data)
 		{
 			OEIoctlProperty *property = (OEIoctlProperty *) data;
 			if (property->name == "isCPUExternal")
-				property->value = isCPUExternal;
+				property->value = getString(isCPUExternal);
 			else
 				return false;
 			
