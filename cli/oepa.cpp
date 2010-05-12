@@ -28,8 +28,8 @@ int oepaBufferNum = OEPA_BUFFERNUM;
 
 // Audio
 bool oepaAudioOpen = false;
-volatile int oepaAudioBufferIndex = 0;
-volatile int oepaEmulationsBufferIndex = 0;
+volatile int oepaAudioBufferIndex = 0; // Index to buffer that was transferred through audio device
+volatile int oepaEmulationsBufferIndex = 0; // Index to buffer that is to be processed
 vector<float> oepaInputBuffer;
 vector<float> oepaOutputBuffer;
 
@@ -337,7 +337,7 @@ bool oepaOpenAudio()
 										  oepaCallbackAudio,
 										  NULL);
 		}
-			
+		
 		if (status == paNoError)
 		{
 			status = Pa_StartStream(oepaAudioStream);
@@ -413,6 +413,7 @@ bool oepaOpenEmulations()
 	oepaInputBuffer.resize(bufferSize);
 	oepaOutputBuffer.resize(bufferSize);
 	
+	oepaAudioBufferIndex = (oepaEmulationsBufferIndex + 1) % oepaBufferNum;
 	oepaEmulationsBufferIndex = 0;
 	oepaPlayback = false;
 	oepaRecording = false;
@@ -677,6 +678,10 @@ float oepaGetRecordingTime()
 void oepaOpen()
 {
 	oepaOpenEmulations();
+	
+	while (oepaAudioBufferIndex != oepaEmulationsBufferIndex)
+		usleep(1000);
+	
 	oepaOpenAudio();
 }
 
