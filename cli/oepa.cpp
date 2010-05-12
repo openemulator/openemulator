@@ -72,10 +72,12 @@ static int oepaCallbackAudio(const void *inputBuffer,
 							 PaStreamCallbackFlags statusFlags,
 							 void *userData)
 {
-	int sampleNum = oepaFramesPerBuffer * oepaChannelNum;
-	int sampleIndex = oepaAudioBufferIndex * sampleNum;
+	int nextIndex = (oepaAudioBufferIndex + 1) % oepaBufferNum;
 	
-	if (oepaAudioBufferIndex == oepaEmulationsBufferIndex)
+	int sampleNum = oepaFramesPerBuffer * oepaChannelNum;
+	int sampleIndex = nextIndex * sampleNum;
+	
+	if (nextIndex == oepaEmulationsBufferIndex)
 	{
 		float *out = (float *) outputBuffer;
 		for (int i = 0; i < sampleNum; i++)
@@ -101,7 +103,7 @@ static int oepaCallbackAudio(const void *inputBuffer,
 		oepaInstantVolume += (oepaVolume - oepaInstantVolume) * oepaVolumeAlpha;
 	}
 	
-	oepaAudioBufferIndex = (oepaAudioBufferIndex + 1) % oepaBufferNum;
+	oepaAudioBufferIndex = nextIndex;
 	
 	return paContinue;
 }
@@ -112,10 +114,12 @@ void *oepaRunTimer(void *arg)
 	{
 		usleep(1E6 * oepaFramesPerBuffer / oepaSampleRate);
 		
-		if (oepaAudioBufferIndex == oepaEmulationsBufferIndex)
+		int nextIndex = (oepaAudioBufferIndex + 1) % oepaBufferNum;
+		
+		if (oepaAudioBufferIndex == nextIndex)
 			continue;
 		
-		oepaAudioBufferIndex = (oepaAudioBufferIndex + 1) % oepaBufferNum;
+		oepaAudioBufferIndex = nextIndex;
 	}
 	
 	return NULL;
@@ -204,75 +208,70 @@ void *oepaRunEmulations(void *arg)
 	int bufferSampleNum = 0;
 	int bufferByteNum = 0;
 	
-	int buffer2Index;
-	
 	while (oepaEmulationsOpen)
 	{
-		int audioIndex = oepaAudioBufferIndex;
-		int nextIndex = (oepaEmulationsBufferIndex + 1) % oepaBufferNum;
-		
-		if (audioIndex == nextIndex)
-			usleep(1000);
-		else
+		if (oepaAudioBufferIndex == oepaEmulationsBufferIndex)
 		{
-			pthread_mutex_lock(&oepaEmulationsMutex);
-			
-			if ((oepaFramesPerBuffer != framesPerBuffer) ||
-				(oepaChannelNum != channelNum))
-			{
-				framesPerBuffer = oepaFramesPerBuffer;
-				channelNum = oepaChannelNum;
-				bufferSampleNum = framesPerBuffer * channelNum;
-				bufferByteNum = bufferSampleNum * sizeof(float);
-				
-				buffer2Index = oepaEmulationsBufferIndex * bufferSampleNum;
-				
-				inputBuffer.resize(2 * bufferSampleNum);
-				memset(&inputBuffer[0], 0,
-					   2 * bufferByteNum);
-				outputBuffer.resize(2 * bufferSampleNum);
-				memset(&outputBuffer[0], 0,
-					   2 * bufferByteNum);
-			}
-			
-			memcpy(&inputBuffer[0],
-				   &inputBuffer[bufferSampleNum],
-				   bufferByteNum);
-			memcpy(&inputBuffer[bufferSampleNum],
-				   &oepaInputBuffer[buffer2Index],
-				   bufferByteNum);
-			
-			if (oepaPlayback)
-				oepaPlaybackAudio(&inputBuffer[buffer2Index], oepaFramesPerBuffer);
-			
-			HostAudioBuffer buffer =
-			{
-				oepaSampleRate,
-				oepaChannelNum,
-				oepaFramesPerBuffer,
-				&inputBuffer[0],
-				&outputBuffer[0],
-			};
-			
-			for (vector<OEEmulation *>::iterator i = oepaEmulations.begin();
-				 i != oepaEmulations.end();
-				 i++)
-				(*i)->ioctl("host::audio", HOSTAUDIO_RENDERBUFFER, &buffer);
-			
-			if (oepaRecording)
-				oepaRecordAudio(&outputBuffer[0], oepaFramesPerBuffer);
-			
-			memcpy(&oepaOutputBuffer[buffer2Index],
-				   &outputBuffer[0],
-				   bufferByteNum);
-			memcpy(&outputBuffer[0],
-				   &outputBuffer[bufferSampleNum],
-				   bufferByteNum);
-			
-			pthread_mutex_unlock(&oepaEmulationsMutex);
-			
-			oepaEmulationsBufferIndex = nextIndex;
+			usleep(1000);
+			continue;
 		}
+		
+		pthread_mutex_lock(&oepaEmulationsMutex);
+		
+		if ((oepaFramesPerBuffer != framesPerBuffer) ||
+			(oepaChannelNum != channelNum))
+		{
+			framesPerBuffer = oepaFramesPerBuffer;
+			channelNum = oepaChannelNum;
+			bufferSampleNum = framesPerBuffer * channelNum;
+			bufferByteNum = bufferSampleNum * sizeof(float);
+			
+			inputBuffer.resize(2 * bufferSampleNum);
+			memset(&inputBuffer[0], 0,
+				   2 * bufferByteNum);
+			outputBuffer.resize(2 * bufferSampleNum);
+			memset(&outputBuffer[0], 0,
+				   2 * bufferByteNum);
+		}
+		
+		int bufferIndex = oepaEmulationsBufferIndex * bufferSampleNum;
+		memcpy(&inputBuffer[0],
+			   &inputBuffer[bufferSampleNum],
+			   bufferByteNum);
+		memcpy(&inputBuffer[bufferSampleNum],
+			   &oepaInputBuffer[bufferIndex],
+			   bufferByteNum);
+		
+		if (oepaPlayback)
+			oepaPlaybackAudio(&inputBuffer[bufferIndex], oepaFramesPerBuffer);
+		
+		HostAudioBuffer buffer =
+		{
+			oepaSampleRate,
+			oepaChannelNum,
+			oepaFramesPerBuffer,
+			&inputBuffer[0],
+			&outputBuffer[0],
+		};
+		
+		for (vector<OEEmulation *>::iterator i = oepaEmulations.begin();
+			 i != oepaEmulations.end();
+			 i++)
+			(*i)->ioctl("host::audio", HOSTAUDIO_RENDERBUFFER, &buffer);
+		
+		if (oepaRecording)
+			oepaRecordAudio(&outputBuffer[0], oepaFramesPerBuffer);
+		
+		memcpy(&oepaOutputBuffer[bufferIndex],
+			   &outputBuffer[0],
+			   bufferByteNum);
+		memcpy(&outputBuffer[0],
+			   &outputBuffer[bufferSampleNum],
+			   bufferByteNum);
+		
+		pthread_mutex_unlock(&oepaEmulationsMutex);
+		
+		oepaEmulationsBufferIndex = (oepaEmulationsBufferIndex + 1) % oepaBufferNum;
 	}
 	
 	return NULL;
