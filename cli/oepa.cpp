@@ -24,15 +24,16 @@ bool oepaFullDuplex = false;
 double oepaSampleRate = OEPA_SAMPLERATE;
 int oepaChannelNum = OEPA_CHANNELNUM;
 int oepaFramesPerBuffer = OEPA_FRAMESPERBUFFER;
-int oepaBufferNum = OEPA_BUFFERNUM;
+int oepaBufferNum = OEPA_BUFFERNUM + 1;
 
-// Audio
-bool oepaAudioOpen = false;
-volatile int oepaAudioBufferIndex = 0; // Index to buffer that was transferred through audio device
-volatile int oepaEmulationsBufferIndex = 0; // Index to buffer that is to be processed
+// Audio buffers
+volatile int oepaBufferStartIndex = 0;
+volatile int oepaBufferEndIndex = 0;
 vector<float> oepaInputBuffer;
 vector<float> oepaOutputBuffer;
 
+// Audio
+bool oepaAudioOpen = false;
 PaStream *oepaAudioStream = NULL;
 float oepaVolume = 1.0F;
 float oepaInstantVolume = 1.0F;
@@ -72,19 +73,20 @@ static int oepaCallbackAudio(const void *inputBuffer,
 							 PaStreamCallbackFlags statusFlags,
 							 void *userData)
 {
-	int nextIndex = (oepaAudioBufferIndex + 1) % oepaBufferNum;
-	
-	int sampleNum = oepaFramesPerBuffer * oepaChannelNum;
-	int sampleIndex = nextIndex * sampleNum;
-	
-	if (nextIndex == oepaEmulationsBufferIndex)
+	if (oepaBufferStartIndex == oepaBufferEndIndex) ||
+		(framesPerBuffer != oepaFramesPerBuffer))
 	{
 		float *out = (float *) outputBuffer;
+		int sampleNum = framesPerBuffer * oepaChannelNum;
+		
 		for (int i = 0; i < sampleNum; i++)
 			*out++ = rand() * (0.1 / RAND_MAX);
 		
 		return paContinue;
 	}
+	
+	int sampleNum = oepaFramesPerBuffer * oepaChannelNum;
+	int sampleIndex = oepaBufferEndIndex * sampleNum;
 	
 	if (inputBuffer)
 		memcpy(&oepaInputBuffer[sampleIndex],
