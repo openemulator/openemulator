@@ -27,11 +27,13 @@ void oepaSetBufferNum(int value);
 void oepaSetVolume(float value);
 
 bool oepaStartPlayback(string path);
-float oepaGetPlaybackTime();
 void oepaStopPlayback();
+bool oepaIsPlayback();
+float oepaGetPlaybackTime();
 bool oepaStartRecording(string path);
-float oepaGetRecordingTime();
 void oepaStopRecording();
+bool oepaIsRecording();
+float oepaGetRecordingTime();
 
 void oepaOpen();
 void oepaClose();

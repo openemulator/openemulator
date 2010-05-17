@@ -61,15 +61,17 @@ int AppleISystem::ioctl(int message, void *data)
 			if (notification->message == HOSTAUDIO_RENDER_DID_START)
 			{
 				HostAudioBuffer *buffer = (HostAudioBuffer *) notification->data;
+				float *in = buffer->input;
 				float *out = buffer->output;
 				int sampleNum = buffer->channelNum * buffer->frameNum;
 				
 				for(int i = 0; i < sampleNum; i++)
 				{
-					float value = 0.05 * sin(phase);
-					*out++ = value;
+//					float value = 0.05 * sin(phase);
+					*out++ = *in++;
+//					*out++ = value;
 					
-					phase += 2 * M_PI * 220 / buffer->sampleRate;
+//					phase += 2 * M_PI * 220 / buffer->sampleRate;
 				}
 				
 				// Implement simulation
