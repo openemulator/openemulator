@@ -63,6 +63,9 @@
 		00679D09100817F700B38748 /* TemplateChooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00679D06100817F700B38748 /* TemplateChooser.xib */; };
 		0071E3BA10803F7300F2D54F /* ChooserItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 0071E3B910803F7300F2D54F /* ChooserItem.m */; };
 		008107DE1120C57600D744FB /* TemplateChooserViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00FE0C051095353B00B92AB7 /* TemplateChooserViewController.mm */; };
+		008283F011A35D3A00B2B530 /* IPAudioPlay.png in Resources */ = {isa = PBXBuildFile; fileRef = 008283EF11A35D3A00B2B530 /* IPAudioPlay.png */; };
+		0082840411A3603800B2B530 /* IPAudioRecord.png in Resources */ = {isa = PBXBuildFile; fileRef = 0082840211A3603800B2B530 /* IPAudioRecord.png */; };
+		0082847C11A422C700B2B530 /* IPAudioStop.png in Resources */ = {isa = PBXBuildFile; fileRef = 0082847B11A422C700B2B530 /* IPAudioStop.png */; };
 		0085975C11431B6600DD08C5 /* HostJoystick.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0085975A11431B6600DD08C5 /* HostJoystick.cpp */; };
 		00910107113AAE60005EBB62 /* AppleISystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00910105113AAE60005EBB62 /* AppleISystem.cpp */; };
 		009B4F2711639D7700E9A6F9 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009B4F2611639D7700E9A6F9 /* GLUT.framework */; };
@@ -76,6 +79,7 @@
 		00A8C3FC1080064900D98FE0 /* InspectorDeviceCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00A8C3FB1080064900D98FE0 /* InspectorDeviceCell.m */; };
 		00AA1E6E113821C600F11BE2 /* AppleIIKeyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00AA1E6C113821C600F11BE2 /* AppleIIKeyboard.cpp */; };
 		00AA1E721138269900F11BE2 /* AppleIISlotMemory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00AA1E701138269900F11BE2 /* AppleIISlotMemory.cpp */; };
+		00AD746911A2F10E00BAC29C /* DocumentController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00AD746811A2F10E00BAC29C /* DocumentController.mm */; };
 		00B2D72C10914659004783F9 /* DeviceChooserController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B2D72B10914659004783F9 /* DeviceChooserController.m */; };
 		00B4F935117E43E8008D622F /* MemoryOffset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B4F933117E43E8008D622F /* MemoryOffset.cpp */; };
 		00B5709E10863C2A00CDE4A7 /* TemplateChooserController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B5709D10863C2A00CDE4A7 /* TemplateChooserController.m */; };
@@ -131,7 +135,6 @@
 		00D844C90FFF0505005802F0 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00D844BD0FFF0505005802F0 /* MainMenu.xib */; };
 		00D844CB0FFF0505005802F0 /* PaperFeed.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00D844C10FFF0505005802F0 /* PaperFeed.xib */; };
 		00D844CC0FFF0505005802F0 /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00D844C30FFF0505005802F0 /* Preferences.xib */; };
-		00D8457D0FFF0FD2005802F0 /* DocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D845680FFF0FD2005802F0 /* DocumentController.m */; };
 		00D8457F0FFF0FD2005802F0 /* DocumentWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D8456C0FFF0FD2005802F0 /* DocumentWindow.m */; };
 		00D845800FFF0FD2005802F0 /* DocumentWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D8456E0FFF0FD2005802F0 /* DocumentWindowController.m */; };
 		00D845810FFF0FD2005802F0 /* GraphicsTabletController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D845700FFF0FD2005802F0 /* GraphicsTabletController.m */; };
@@ -301,6 +304,9 @@
 		0071E3B810803F7300F2D54F /* ChooserItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChooserItem.h; sourceTree = "<group>"; };
 		0071E3B910803F7300F2D54F /* ChooserItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChooserItem.m; sourceTree = "<group>"; };
 		00759303115C39E600D6DDF0 /* ntsc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ntsc.h; sourceTree = "<group>"; };
+		008283EF11A35D3A00B2B530 /* IPAudioPlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPAudioPlay.png; path = macosx/Images/IPAudioPlay.png; sourceTree = "<group>"; };
+		0082840211A3603800B2B530 /* IPAudioRecord.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPAudioRecord.png; path = macosx/Images/IPAudioRecord.png; sourceTree = "<group>"; };
+		0082847B11A422C700B2B530 /* IPAudioStop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPAudioStop.png; path = macosx/Images/IPAudioStop.png; sourceTree = "<group>"; };
 		0085975A11431B6600DD08C5 /* HostJoystick.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HostJoystick.cpp; sourceTree = "<group>"; };
 		0085975B11431B6600DD08C5 /* HostJoystick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostJoystick.h; sourceTree = "<group>"; };
 		00910105113AAE60005EBB62 /* AppleISystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleISystem.cpp; sourceTree = "<group>"; };
@@ -330,6 +336,7 @@
 		00AA1E6C113821C600F11BE2 /* AppleIIKeyboard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleIIKeyboard.cpp; sourceTree = "<group>"; };
 		00AA1E6F1138269900F11BE2 /* AppleIISlotMemory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleIISlotMemory.h; sourceTree = "<group>"; };
 		00AA1E701138269900F11BE2 /* AppleIISlotMemory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleIISlotMemory.cpp; sourceTree = "<group>"; };
+		00AD746811A2F10E00BAC29C /* DocumentController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DocumentController.mm; sourceTree = "<group>"; };
 		00B2D72A10914659004783F9 /* DeviceChooserController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceChooserController.h; sourceTree = "<group>"; };
 		00B2D72B10914659004783F9 /* DeviceChooserController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceChooserController.m; sourceTree = "<group>"; };
 		00B4F932117E43E8008D622F /* MemoryOffset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemoryOffset.h; sourceTree = "<group>"; };
@@ -387,7 +394,6 @@
 		00D844C20FFF0505005802F0 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/PaperFeed.xib; sourceTree = "<group>"; };
 		00D844C40FFF0505005802F0 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Preferences.xib; sourceTree = "<group>"; };
 		00D845670FFF0FD2005802F0 /* DocumentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DocumentController.h; sourceTree = "<group>"; };
-		00D845680FFF0FD2005802F0 /* DocumentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DocumentController.m; sourceTree = "<group>"; };
 		00D8456B0FFF0FD2005802F0 /* DocumentWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DocumentWindow.h; sourceTree = "<group>"; };
 		00D8456C0FFF0FD2005802F0 /* DocumentWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DocumentWindow.m; sourceTree = "<group>"; };
 		00D8456D0FFF0FD2005802F0 /* DocumentWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DocumentWindowController.h; sourceTree = "<group>"; };
@@ -403,7 +409,6 @@
 		00D846280FFF23B7005802F0 /* PRSound.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PRSound.png; sourceTree = "<group>"; };
 		00E0AFCC1132CA8B004DB96D /* oegl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = oegl.cpp; sourceTree = "<group>"; };
 		00E0AFCD1132CA8B004DB96D /* oegl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = oegl.h; sourceTree = "<group>"; };
-		00E0AFCE1132CA8B004DB96D /* oepa_c.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = oepa_c.h; sourceTree = "<group>"; };
 		00E0AFCF1132CA8B004DB96D /* oepa.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = oepa.cpp; sourceTree = "<group>"; };
 		00E0AFD01132CA8B004DB96D /* oepa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = oepa.h; sourceTree = "<group>"; };
 		00E0B19A1132DE4D004DB96D /* SDLMain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDLMain.m; sourceTree = "<group>"; };
@@ -593,7 +598,6 @@
 				00E0AFCD1132CA8B004DB96D /* oegl.h */,
 				00E0AFCF1132CA8B004DB96D /* oepa.cpp */,
 				00E0AFD01132CA8B004DB96D /* oepa.h */,
-				00E0AFCE1132CA8B004DB96D /* oepa_c.h */,
 				00E0B19B1132DE4D004DB96D /* SDLMain.h */,
 				00E0B19A1132DE4D004DB96D /* SDLMain.m */,
 			);
@@ -763,12 +767,12 @@
 		2A37F4ABFDCFA73011CA2CEA /* macosx */ = {
 			isa = PBXGroup;
 			children = (
+				00AD746811A2F10E00BAC29C /* DocumentController.mm */,
 				00FE0C6210953F7000B92AB7 /* DeviceChooserViewController.mm */,
 				00FE0C161095371B00B92AB7 /* ChooserViewController.m */,
 				00A0B8031069761A007930A5 /* Document.mm */,
 				00A0B7B81068949D007930A5 /* Document.h */,
 				00D845670FFF0FD2005802F0 /* DocumentController.h */,
-				00D845680FFF0FD2005802F0 /* DocumentController.m */,
 				00D8456B0FFF0FD2005802F0 /* DocumentWindow.h */,
 				00D8456C0FFF0FD2005802F0 /* DocumentWindow.m */,
 				00D8456D0FFF0FD2005802F0 /* DocumentWindowController.h */,
@@ -808,6 +812,9 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				0082847B11A422C700B2B530 /* IPAudioStop.png */,
+				0082840211A3603800B2B530 /* IPAudioRecord.png */,
+				008283EF11A35D3A00B2B530 /* IPAudioPlay.png */,
 				005C43EA113121F2006AEE84 /* TBInterrupt.png */,
 				003318AD1101492B00CC1782 /* Connector.xib */,
 				0011696310E7CC4E007A5EFB /* IPStorage.png */,
@@ -1020,6 +1027,9 @@
 				003318AF1101492B00CC1782 /* Connector.xib in Resources */,
 				00F0ED6711028C8800208090 /* DiskImage525.icns in Resources */,
 				005C43EB113121F2006AEE84 /* TBInterrupt.png in Resources */,
+				008283F011A35D3A00B2B530 /* IPAudioPlay.png in Resources */,
+				0082840411A3603800B2B530 /* IPAudioRecord.png in Resources */,
+				0082847C11A422C700B2B530 /* IPAudioStop.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1105,7 +1115,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00D8457D0FFF0FD2005802F0 /* DocumentController.m in Sources */,
 				00D8457F0FFF0FD2005802F0 /* DocumentWindow.m in Sources */,
 				00D845800FFF0FD2005802F0 /* DocumentWindowController.m in Sources */,
 				00D845810FFF0FD2005802F0 /* GraphicsTabletController.m in Sources */,
@@ -1126,6 +1135,7 @@
 				008107DE1120C57600D744FB /* TemplateChooserViewController.mm in Sources */,
 				00E0AFDE1132CB76004DB96D /* oegl.cpp in Sources */,
 				00E0AFDF1132CB77004DB96D /* oepa.cpp in Sources */,
+				00AD746911A2F10E00BAC29C /* DocumentController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

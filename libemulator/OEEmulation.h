@@ -89,10 +89,14 @@ private:
 	xmlNodePtr getNodeForRef(xmlDocPtr doc, OERef ref);
 	OERef getOutletForInlet(xmlDocPtr doc, OERef ref);
 	xmlNodePtr getNodeOfFirstInlet(xmlDocPtr, OERef ref);
-	xmlNodePtr getNodeOfLastInlet(xmlDocPtr doc, OERef ref, vector<OERef> &visitedRefs);
+	xmlNodePtr getNodeOfLastInlet(xmlDocPtr doc,
+								  OERef ref,
+								  vector<OERef> &visitedRefs);
 	xmlNodePtr getNodeOfPreviousInlet(xmlDocPtr doc, OERef ref);
 	
-	void buildDeviceNameMap(xmlDocPtr doc, xmlDocPtr elem, OEStringRefMap &deviceNameMap);
+	void buildDeviceNameMap(xmlDocPtr doc,
+							xmlDocPtr elem,
+							OEStringRefMap &deviceNameMap);
 	void renameDMLConnections(xmlDocPtr doc,
 							  OEStringRefMap &connections,
 							  OEStringRefMap &deviceNameMap);

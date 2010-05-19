@@ -12,9 +12,15 @@
 
 #import "Document.h"
 #import "DocumentController.h"
+#import "InspectorController.h"
 #import "TemplateChooserController.h"
 
-#import "oepa_c.h"
+#import "oepa.h"
+
+#define LINK_HOMEPAGE	@"http://www.openemulator.org"
+#define LINK_FORUMSURL	@"http://groups.google.com/group/openemulator"
+#define LINK_DEVURL		@"http://code.google.com/p/openemulator"
+#define LINK_DONATEURL	@"http://www.openemulator.org/donate.html"
 
 @implementation DocumentController
 
@@ -22,17 +28,27 @@
 {
 	if (self = [super init])
 	{
-		fileTypes = [[NSArray alloc] initWithObjects:
-					 @"emulation",
-					 @"aiff", @"aif", @"wav",
-					 @"dsk", @"do", @"d13", @"po", @"cpm", @"nib", @"v2d",
-					 @"vdsk", @"2mg", @"2img", @"hdv", @"sdk",
-					 @"d64", @"g64", @"d71", @"d81", @"t64",
-					 @"tap", @"prg", @"p00", @"crt",
-					 @"fdi",
-					 @"img", @"hdv", @"hfv",
-					 @"iso", @"cdr",
-					 nil];
+		diskImageFileTypes = [[NSArray alloc] initWithObjects:
+							  @"dsk", @"do", @"d13", @"po", @"cpm", @"nib", @"v2d",
+							  @"vdsk", @"2mg", @"2img", @"hdv", @"sdk",
+							  @"d64", @"g64", @"d71", @"d81", @"t64",
+							  @"tap", @"prg", @"p00", @"crt",
+							  @"fdi",
+							  @"img", @"hdv", @"hfv",
+							  @"iso", @"cdr",
+							  nil];
+		
+		audioFileTypes = [[NSArray alloc] initWithObjects:
+						  @"wav",
+						  @"aiff", @"aif", @"aifc",
+						  @"au",
+						  @"flac",
+						  @"caf",
+						  @"ogg", @"oga",
+						  nil];
+		
+		audioPlaybackURL = nil;
+		audioRecordingURL = nil;
 		
 		disableMenuBarCount = 0;
 	}
@@ -42,7 +58,19 @@
 
 - (void) dealloc
 {
-	[fileTypes release];
+	[diskImageFileTypes release];
+	[audioFileTypes release];
+	
+	if (audioRecordingURL)
+	{
+		NSFileManager *fileManager = [NSFileManager defaultManager];
+		NSError *error;
+		
+		[fileManager removeItemAtPath:[audioRecordingURL path]
+								error:&error];
+		
+		[audioRecordingURL release];
+	}
 	
 	[super dealloc];
 }
@@ -58,9 +86,9 @@
 	if (![defaults valueForKey:@"OEVolume"])
 		[defaults setFloat:1.0 forKey:@"OEVolume"];
 	
-	c_oepaSetFullDuplex([defaults boolForKey:@"OEFullDuplex"]);
-	c_oepaSetVolume([defaults floatForKey:@"OEVolume"]);
-	c_oepaOpen();
+	oepaSetFullDuplex([defaults boolForKey:@"OEFullDuplex"]);
+	oepaSetVolume([defaults floatForKey:@"OEVolume"]);
+	oepaOpen();
 	
 	[defaults addObserver:self
 			   forKeyPath:@"OEFullDuplex"
@@ -75,9 +103,13 @@
 - (BOOL) application:(NSApplication *) theApplication
 			openFile:(NSString *) filename
 {
-	if ([[filename pathExtension] compare:@"emulation"] == NSOrderedSame)
+	NSString *extension = [[filename pathExtension] lowercaseString];
+	
+	// Open an emulation through standard interface
+	if ([extension compare:@OE_EXTENSION] == NSOrderedSame)
 		return NO;
 	
+	// Open default document if other filetype
 	if (![self currentDocument])
 	{
 		NSError *error;
@@ -92,8 +124,20 @@
 		}
 	}
 	
-	// To-Do: Mount disk image
+	// Open audio files
+	if ([audioFileTypes containsObject:extension])
+	{
+		[self setPlaybackURL:[NSURL URLWithString:filename]];
+		return YES;
+	}
 	
+	// Mount disk images
+	if ([diskImageFileTypes containsObject:extension])
+	{
+		
+	}
+	
+	// Otherwise display error
 	NSAlert *alert = [[[NSAlert alloc] init] autorelease];
 	[alert setMessageText:[NSString localizedStringWithFormat:
 						   @"The document \u201C%@\u201D could not be opened. "
@@ -111,7 +155,7 @@
 
 - (void) applicationWillTerminate:(NSNotification *) notification
 {
-	c_oepaClose();
+	oepaClose();
 	
 	[fInspectorController storeWindowState:self];
 }
@@ -125,13 +169,13 @@
 	{
 		id object = [change objectForKey:NSKeyValueChangeNewKey];
 		int value = [object intValue];
-		c_oepaSetFullDuplex(value);
+		oepaSetFullDuplex(value);
 	}
 	else if ([keyPath isEqualToString:@"OEVolume"])
 	{
 		id object = [change objectForKey:NSKeyValueChangeNewKey];
 		float value = [object floatValue];
-		c_oepaSetVolume(value);
+		oepaSetVolume(value);
 	}
 }
 
@@ -153,6 +197,10 @@
 - (IBAction) openDocument:(id) sender
 {
 	NSOpenPanel *panel = [NSOpenPanel openPanel];
+	NSMutableArray *fileTypes = [NSMutableArray array];
+	[fileTypes addObject:@OE_EXTENSION];
+	[fileTypes addObjectsFromArray:audioFileTypes];
+	[fileTypes addObjectsFromArray:diskImageFileTypes];
 	
 	if ([panel runModalForTypes:fileTypes] == NSOKButton)
 	{
@@ -231,6 +279,100 @@
 	return nil;
 }
 
+- (void) setPlaybackURL:(NSURL *) theURL
+{
+	if (audioPlaybackURL)
+		[audioPlaybackURL release];
+	
+	audioPlaybackURL = [theURL copy];
+	oepaStartPlayback([[theURL path] UTF8String]);
+}
+
+- (void) togglePlayback
+{
+	if (!oepaIsPlayback())
+		oepaStartPlayback([[audioPlaybackURL path] UTF8String]);
+	else
+		oepaStopPlayback();
+}
+
+- (BOOL) playback
+{
+	return oepaIsPlayback();
+}
+
+- (float) playbackTime
+{
+	return oepaGetPlaybackTime();
+}
+
+- (float) playbackDuration
+{
+	return oepaGetPlaybackDuration();
+}
+
+- (NSURL *) playbackURL
+{
+	if (audioPlaybackURL)
+		return [[audioPlaybackURL copy] autorelease];
+	else
+		return nil;
+}
+
+- (void) toggleRecording
+{
+	if (!oepaIsRecording())
+	{
+		NSString *thePath = [NSTemporaryDirectory()
+							 stringByAppendingPathComponent:@"oerecording"];
+		audioRecordingURL = [[NSURL alloc] initWithString:thePath];
+		
+		oepaStartRecording([[audioRecordingURL path] UTF8String]);
+	}
+	else
+		oepaStopRecording();
+}
+
+- (void) saveRecordingAs:(NSURL *) theURL
+{
+	if (!audioRecordingURL)
+		return;
+	
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	NSError *error;
+	
+	[fileManager moveItemAtPath:[audioRecordingURL path]
+						 toPath:[theURL path]
+						  error:&error];
+	
+	[audioRecordingURL release];
+	
+	audioRecordingURL = nil;
+}
+
+- (BOOL) recording
+{
+	return oepaIsRecording();
+}
+
+- (float) recordingTime
+{
+	return oepaGetRecordingTime();
+}
+
+- (long long) recordingSize
+{
+	return oepaGetRecordingSize();
+}
+
+- (NSURL *) recordingURL
+{
+	if (audioRecordingURL)
+		return [[audioRecordingURL copy] autorelease];
+	else
+		return nil;
+}
+
 - (void) disableMenuBar
 {
 	disableMenuBarCount++;
@@ -247,25 +389,25 @@
 		SetSystemUIMode(kUIModeNormal, 0);
 }
 
-- (void) linkHomepage:(id) sender
+- (void) openHomepage:(id) sender
 {
 	NSURL *url = [NSURL	URLWithString:LINK_HOMEPAGE];
 	[[NSWorkspace sharedWorkspace] openURL:url];
 }
 
-- (void) linkForums:(id) sender
+- (void) openForums:(id) sender
 {
 	NSURL *url = [NSURL	URLWithString:LINK_FORUMSURL];
 	[[NSWorkspace sharedWorkspace] openURL:url];
 }
 
-- (void) linkDevelopment:(id) sender
+- (void) openDevelopment:(id) sender
 {
 	NSURL *url = [NSURL	URLWithString:LINK_DEVURL];
 	[[NSWorkspace sharedWorkspace] openURL:url];
 }
 
-- (void) linkDonate:(id) sender
+- (void) openDonate:(id) sender
 {
 	NSURL *url = [NSURL	URLWithString:LINK_DONATEURL];
 	[[NSWorkspace sharedWorkspace] openURL:url];

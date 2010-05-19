@@ -37,23 +37,6 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
-				<string>aiff</string>
-				<string>aif</string>
-				<string>aifc</string>
-			</array>
-			<key>CFBundleTypeMIMETypes</key>
-			<array>
-				<string>audio/aiff</string>
-				<string>audio/x-aiff</string>
-			</array>
-			<key>CFBundleTypeName</key>
-			<string>AIFF Audio</string>
-			<key>CFBundleTypeRole</key>
-			<string>Viewer</string>
-		</dict>
-		<dict>
-			<key>CFBundleTypeExtensions</key>
-			<array>
 				<string>wav</string>
 			</array>
 			<key>CFBundleTypeMIMETypes</key>
@@ -73,6 +56,33 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
+				<string>aiff</string>
+				<string>aif</string>
+				<string>aifc</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>audio/aiff</string>
+				<string>audio/x-aiff</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>AIFF Audio</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>au</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>AU Audio</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
 				<string>flac</string>
 			</array>
 			<key>CFBundleTypeMIMETypes</key>
@@ -81,6 +91,16 @@
 			</array>
 			<key>CFBundleTypeName</key>
 			<string>FLAC Audio File</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>caf</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>Core Audio Format</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 		</dict>

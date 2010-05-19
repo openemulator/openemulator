@@ -133,7 +133,7 @@ xmlDocPtr OEInfo::loadDML(string path)
 		if (!readFile(path, data))
 			return NULL;
 	}
-	else if (pathExtension == "emulation")
+	else if (pathExtension == OE_EXTENSION)
 	{
 		OEPackage package(path);
 		if (package.isOpen())

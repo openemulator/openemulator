@@ -39,31 +39,31 @@ typedef struct OEEmulation OEEmulation;
 
 - (id) initWithTemplateURL:(NSURL *) templateURL error:(NSError **) outError;
 
-- (IBAction) saveDocumentAsTemplate:(id)sender;
+- (IBAction) saveDocumentAsTemplate:(id) sender;
 
 - (void) tick:(float) ms;
 
 - (void) addDevices:(NSString *) path connections:(NSDictionary *) connections;
 - (void) removeDevice:(NSDictionary *) dict;
 
-- (void) powerButtonPressedAndReleased:(id)sender;
-- (void) powerButtonPressed:(id)sender;
-- (void) powerButtonReleased:(id)sender;
-- (void) resetButtonPressedAndReleased:(id)sender;
-- (void) resetButtonPressed:(id)sender;
-- (void) resetButtonReleased:(id)sender;
-- (void) pauseButtonPressedAndReleased:(id)sender;
-- (void) pauseButtonPressed:(id)sender;
-- (void) pauseButtonReleased:(id)sender;
-- (void) interruptButtonPressedAndReleased:(id)sender;
-- (void) interruptButtonPressed:(id)sender;
-- (void) interruptButtonReleased:(id)sender;
+- (void) powerButtonPressedAndReleased:(id) sender;
+- (void) powerButtonPressed:(id) sender;
+- (void) powerButtonReleased:(id) sender;
+- (void) resetButtonPressedAndReleased:(id) sender;
+- (void) resetButtonPressed:(id) sender;
+- (void) resetButtonReleased:(id) sender;
+- (void) pauseButtonPressedAndReleased:(id) sender;
+- (void) pauseButtonPressed:(id) sender;
+- (void) pauseButtonReleased:(id) sender;
+- (void) interruptButtonPressedAndReleased:(id) sender;
+- (void) interruptButtonPressed:(id) sender;
+- (void) interruptButtonReleased:(id) sender;
 
 - (BOOL) isCopyValid;
 - (BOOL) isPasteValid;
 
 - (BOOL) power;
-- (void) setPower:(BOOL)value;
+- (void) setPower:(BOOL) value;
 - (NSString *) label;
 - (void) setLabel:(NSString *) value;
 - (NSString *) description;

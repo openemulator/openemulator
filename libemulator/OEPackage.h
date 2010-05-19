@@ -22,6 +22,7 @@
 #define OE_PATH_SEPARATOR "/"
 #endif
 
+#define OE_EXTENSION "emulation"
 #define OE_INFO_FILENAME "info.xml"
 
 using namespace std;

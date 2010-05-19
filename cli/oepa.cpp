@@ -49,19 +49,20 @@ vector<OEEmulation *> oepaEmulations;
 // Audio playback
 bool oepaPlayback = false;
 SNDFILE *oepaPlaybackFile;
-long long oepaPlaybackFrameNum;
+long long oepaPlaybackFrameNum = 0;
+long long oepaPlaybackFrameDuration = 0;
 int oepaPlaybackChannelNum;
 double oepaPlaybackSRCRatio;
 SRC_STATE *oepaPlaybackSRC;
 bool oepaPlaybackEndOfInput;
 vector<float> oepaPlaybackBuffer;
-int oepaPlaybackBufferFrameIndex;
-int oepaPlaybackBufferFrameNum;
+int oepaPlaybackBufferFrameBegin;
+int oepaPlaybackBufferFrameEnd;
 
 // Audio recording
 bool oepaRecording = false;
 SNDFILE *oepaRecordingFile;
-long long oepaRecordingFrameNum;
+long long oepaRecordingFrameNum = 0;
 
 // Buffers
 int oepaGetBufferInputSize()
@@ -186,6 +187,7 @@ void oepaCloseAudio()
 	{
 		Pa_StopStream(oepaAudioStream);
 		Pa_CloseStream(oepaAudioStream);
+		
 		oepaAudioStream = NULL;
 	}
 	
@@ -223,8 +225,8 @@ bool oepaOpenAudio()
 									  NULL);
 		if ((status != paNoError) && oepaFullDuplex)
 		{
-			cerr <<  "oepa: couldn't start audio stream, error " <<
-			status << ", attempting half-duplex\n";
+			cerr <<  "oepa: couldn't open audio stream (error " <<
+			status << "), attempting half-duplex\n";
 			
 			status = Pa_OpenDefaultStream(&oepaAudioStream,
 										  0,
@@ -245,18 +247,18 @@ bool oepaOpenAudio()
 				return true;
 			}
 			else
-				cerr <<  "oepa: couldn't start audio stream, error " <<
-				status << "\n";
+				cerr <<  "oepa: couldn't start audio stream (error " <<
+				status << ")\n";
 			
 			Pa_CloseStream(oepaAudioStream);
 		}
 		else
-			cerr <<  "oepa: couldn't open audio stream, error " <<
-			status << "\n";
+			cerr <<  "oepa: couldn't open audio stream (error " <<
+			status << ")\n";
 	}
 	else
-		cerr <<  "oepa: couldn't init portaudio, error " <<
-		status << "\n";
+		cerr <<  "oepa: couldn't init portaudio (error " <<
+		status << ")\n";
 	
 	int error;
 	pthread_attr_t attr;
@@ -278,16 +280,16 @@ bool oepaOpenAudio()
 				return true;
 			}
 			else
-				cerr << "oepa: couldn't create timer thread, error " <<
-				error << "\n";
+				cerr << "oepa: couldn't create timer thread (error " <<
+				error << ")\n";
 		}
 		else
-			cerr << "oepa: couldn't attr timer thread, error " <<
-			error << "\n";
+			cerr << "oepa: couldn't attr timer thread (error " <<
+			error << ")\n";
 	}
 	else
-		cerr << "oepa: couldn't init timer thread, error " <<
-		error << "\n";
+		cerr << "oepa: couldn't init timer thread (error " <<
+		error << ")\n";
 	
 	return false;
 }
@@ -298,34 +300,35 @@ bool oepaOpenAudio()
 void oepaPlaybackAudio(float *buffer, int frameNum, int channelNum)
 {
 	vector<float> srcBuffer;
-	srcBuffer.resize(frameNum * channelNum);
+	srcBuffer.resize(frameNum * oepaPlaybackChannelNum);
 	
-	int playbackFramesPerBuffer = oepaPlaybackBuffer.size() /
+	int playbackBufferFrameNum = oepaPlaybackBuffer.size() /
 		oepaPlaybackChannelNum;
-	int framesPerBuffer = oepaPlaybackBufferFrameNum * oepaPlaybackChannelNum;
-	int index = oepaPlaybackBufferFrameIndex * oepaPlaybackChannelNum;
 	
 	do
 	{
-		if (!oepaPlaybackBufferFrameNum)
+		if (oepaPlaybackBufferFrameBegin >= oepaPlaybackBufferFrameEnd)
 		{
 			int n = sf_readf_float(oepaPlaybackFile,
 								   &oepaPlaybackBuffer[0],
-								   playbackFramesPerBuffer);
+								   playbackBufferFrameNum);
 			
-			oepaPlaybackBufferFrameIndex = 0;
-			oepaPlaybackBufferFrameNum = n;
+			oepaPlaybackBufferFrameBegin = 0;
+			oepaPlaybackBufferFrameEnd = n;
 			
-			if (playbackFramesPerBuffer != n)
+			if (n != playbackBufferFrameNum)
 				oepaPlaybackEndOfInput = true;
 		}
 		
+		int index = oepaPlaybackBufferFrameBegin * oepaPlaybackChannelNum;
+		int inputFrameNum = (oepaPlaybackBufferFrameEnd - 
+							 oepaPlaybackBufferFrameBegin);
 		SRC_DATA srcData =
 		{
 			&oepaPlaybackBuffer[index],
 			&srcBuffer[0],
-			oepaPlaybackBufferFrameNum,
-			framesPerBuffer,
+			inputFrameNum,
+			frameNum,
 			0,
 			0,
 			oepaPlaybackEndOfInput,
@@ -333,10 +336,11 @@ void oepaPlaybackAudio(float *buffer, int frameNum, int channelNum)
 		};
 		src_process(oepaPlaybackSRC, &srcData);
 		
-		if (srcData.output_frames != srcData.output_frames_gen)
+		if (!srcData.output_frames_gen)
 		{
 			sf_close(oepaPlaybackFile);
 			src_delete(oepaPlaybackSRC);
+			
 			oepaPlayback = false;
 			
 			return;
@@ -352,7 +356,8 @@ void oepaPlaybackAudio(float *buffer, int frameNum, int channelNum)
 			buffer += channelNum;
 		}
 		
-		oepaPlaybackBufferFrameNum -= srcData.input_frames_used;
+		oepaPlaybackFrameNum += srcData.output_frames_gen;
+		oepaPlaybackBufferFrameBegin += srcData.input_frames_used;
 		frameNum -= srcData.output_frames_gen;
 	} while (frameNum > 0);
 }
@@ -365,6 +370,7 @@ void oepaRecordAudio(float *buffer, int frameNum, int channelNum)
 	if (frameNum != n)
 	{
 		sf_close(oepaRecordingFile);
+		
 		oepaRecording = false;
 	}
 }
@@ -481,7 +487,7 @@ bool oepaOpenProcess()
 			error = pthread_attr_getschedparam(&attr, &param);
 			if (!error)
 			{
-				param.sched_priority *= 1.5;
+				param.sched_priority *= 2;
 				pthread_attr_setschedparam(&attr, &param);
 			}
 			
@@ -496,20 +502,20 @@ bool oepaOpenProcess()
 				if (!error)
 					return true;
 				else
-					cerr << "oepa: couldn't create process thread, error " <<
-					error << "\n";
+					cerr << "oepa: couldn't create process thread (error " <<
+					error << ")\n";
 			}
 			else
-				cerr << "oepa: couldn't attr process thread, error " <<
-				error << "\n";
+				cerr << "oepa: couldn't attr process thread (error " <<
+				error << ")\n";
 		}
 		else
-			cerr << "oepa: couldn't init process attr, error " <<
-			error << "\n";		
+			cerr << "oepa: couldn't init process attr (error " <<
+			error << ")\n";		
 	}
 	else
-		cerr << "oepa: couldn't init process mutex, error " <<
-		error << "\n";
+		cerr << "oepa: couldn't init process mutex (error " <<
+		error << ")\n";
 	
 	return false;
 }
@@ -587,20 +593,23 @@ bool oepaStartPlayback(string path)
 		if (oepaPlaybackSRC)
 		{
 			oepaPlaybackEndOfInput = false;
-			oepaPlaybackBufferFrameIndex = 0;
-			oepaPlaybackBufferFrameNum = 0;
-			oepaPlaybackBuffer.resize(oepaFramesPerBuffer * oepaPlaybackChannelNum * 
-									  oepaPlaybackSRCRatio * 2);
+			oepaPlaybackBufferFrameBegin = 0;
+			oepaPlaybackBufferFrameEnd = 0;
+			
+			int framesPerBuffer = 2 * oepaPlaybackSRCRatio * oepaFramesPerBuffer;
+			oepaPlaybackBuffer.resize(framesPerBuffer * oepaPlaybackChannelNum);
 			
 			oepaPlayback = true;
 		}
 		else
 		{
-			cerr << "oepa: couldn't init sample rate converter, error " <<
-			error << "\n";
+			cerr << "oepa: couldn't init sample rate converter (error " <<
+			error << ")\n";
 			sf_close(oepaPlaybackFile);
 		}
 	}
+	else
+		cerr << "oepa: couldn't open file " << path << "\n";
 	
 	oepaUnlockProcess();
 	
@@ -615,6 +624,11 @@ bool oepaIsPlayback()
 float oepaGetPlaybackTime()
 {
 	return (float) oepaPlaybackFrameNum / oepaSampleRate;
+}
+
+float oepaGetPlaybackDuration()
+{
+	return (float) oepaPlaybackFrameDuration / oepaSampleRate;
 }
 
 void oepaStopRecording()
@@ -639,7 +653,7 @@ bool oepaStartRecording(string path)
 		0,
 		oepaSampleRate,
 		oepaChannelNum,
-		SF_FORMAT_WAV,
+		SF_FORMAT_WAV | SF_FORMAT_PCM_16,
 		0,
 		0,
 	};
@@ -651,6 +665,8 @@ bool oepaStartRecording(string path)
 	
 	if (oepaRecordingFile)
 		oepaRecording = true;
+	else
+		cerr << "oepa: couldn't open temporary file " << path << "\n";
 	
 	oepaUnlockProcess();
 	
@@ -665,6 +681,11 @@ bool oepaIsRecording()
 float oepaGetRecordingTime()
 {
 	return (float) oepaRecordingFrameNum / oepaSampleRate;
+}
+
+long long oepaGetRecordingSize()
+{
+	return (long long) oepaRecordingFrameNum * oepaChannelNum * sizeof(short);
 }
 
 bool oepaDisableAudio()
@@ -844,64 +865,4 @@ bool oepaRemoveDevice(OEEmulation *emulation, OERef ref)
 	pthread_mutex_unlock(&oepaProcessMutex);
 	
 	return status;
-}
-
-extern "C" void c_oepaSetFullDuplex(int value)
-{
-	oepaSetFullDuplex(value);
-}
-
-extern "C" void c_oepaSetVolume(float value)
-{
-	oepaSetVolume(value);
-}
-
-extern "C" int c_oepaStartPlayback(char *path)
-{
-	return oepaStartPlayback(path);
-}
-
-extern "C" float c_oepaGetPlaybackTime()
-{
-	return oepaGetPlaybackTime();
-}
-
-extern "C" void c_oepaStopPlayback()
-{
-	oepaStopPlayback();
-}
-
-extern "C" int c_oepaIsPlayback()
-{
-	return oepaIsPlayback();
-}
-
-extern "C" int c_oepaStartRecording(char *path)
-{
-	return oepaStartRecording(path);
-}
-
-extern "C" float c_oepaGetRecordingTime()
-{
-	return oepaGetRecordingTime();
-}
-
-extern "C" void c_oepaStopRecording()
-{
-	oepaStopRecording();
-}
-
-extern "C" int c_oepaIsRecording()
-{
-	return oepaIsRecording();
-}
-
-extern "C" void c_oepaOpen()
-{
-	oepaOpen();
-}
-
-extern "C" void c_oepaClose()
-{
-	oepaClose();
 }

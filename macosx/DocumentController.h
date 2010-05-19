@@ -10,23 +10,17 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "InspectorController.h"
-#import "TemplateChooserController.h"
-
-#define LINK_HOMEPAGE	@"http://www.openemulator.org"
-#define LINK_FORUMSURL	@"http://groups.google.com/group/openemulator"
-#define LINK_DEVURL		@"http://code.google.com/p/openemulator"
-#define LINK_DONATEURL	@"http://www.openemulator.org/donate.html"
-
 @interface DocumentController : NSDocumentController {
 	IBOutlet id fTemplateChooserController;
 	IBOutlet id fInspectorController;
 	
-	NSArray *fileTypes;
+	NSArray *diskImageFileTypes;
+	NSArray *audioFileTypes;
+	
+	NSURL *audioPlaybackURL;
+	NSURL *audioRecordingURL;
 	
 	int disableMenuBarCount;
-	
-	BOOL fullDuplexState;
 }
 
 - (IBAction) newDocumentFromTemplateChooser:(id) sender;
@@ -36,12 +30,26 @@
 - (id) makeUntitledDocumentWithTemplateURL:(NSURL *) absoluteURL
 									 error:(NSError **) outError;
 
+- (void) setPlaybackURL:(NSURL *) theURL;
+- (void) togglePlayback;
+- (BOOL) playback;
+- (float) playbackTime;
+- (float) playbackDuration;
+- (NSURL *) playbackURL;
+
+- (void) toggleRecording;
+- (void) saveRecordingAs:(NSURL *) theURL;
+- (BOOL) recording;
+- (float) recordingTime;
+- (long long) recordingSize;
+- (NSURL *) recordingURL;
+
 - (void) disableMenuBar;
 - (void) enableMenuBar;
 
-- (IBAction) linkHomepage:(id) sender;
-- (IBAction) linkForums:(id) sender;
-- (IBAction) linkDevelopment:(id) sender;
-- (IBAction) linkDonate:(id) sender;
+- (IBAction) openHomepage:(id) sender;
+- (IBAction) openForums:(id) sender;
+- (IBAction) openDevelopment:(id) sender;
+- (IBAction) openDonate:(id) sender;
 
 @end

@@ -14,7 +14,7 @@
 #define OEPA_SAMPLERATE			48000.0
 #define OEPA_CHANNELNUM			2
 #define OEPA_FRAMESPERBUFFER	512
-#define OEPA_BUFFERNUM			2
+#define OEPA_BUFFERNUM			3
 
 #define OEPA_VOLUMEFILTERFREQ	20.0
 
@@ -30,10 +30,13 @@ bool oepaStartPlayback(string path);
 void oepaStopPlayback();
 bool oepaIsPlayback();
 float oepaGetPlaybackTime();
+float oepaGetPlaybackDuration();
+
 bool oepaStartRecording(string path);
 void oepaStopRecording();
 bool oepaIsRecording();
 float oepaGetRecordingTime();
+long long oepaGetRecordingSize();
 
 void oepaOpen();
 void oepaClose();

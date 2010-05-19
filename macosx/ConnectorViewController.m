@@ -56,7 +56,7 @@
 	[fImageBrowserView setAllowsMultipleSelection:NO];
 	[fImageBrowserView setCellsStyleMask:IKCellsStyleTitled];
 	[fImageBrowserView setCellSize:cellSize];
-	[fImageBrowserView setDataSource:self];
+ 	[fImageBrowserView setDataSource:self];
 	[fImageBrowserView setDelegate:self];
 	[fImageBrowserView setValue:titleAttributes
 						 forKey:IKImageBrowserCellsTitleAttributesKey];

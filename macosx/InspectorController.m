@@ -55,6 +55,12 @@ NSString *itemIdentifiers[] =
 			forKeyPath:@"mainWindow.windowController.document"
 			   options:0
 			   context:[InspectorController class]];
+
+	timer = [NSTimer scheduledTimerWithTimeInterval:0.25
+											 target:self
+										   selector:@selector(timerDidExpire:)
+										   userInfo:nil
+											repeats:YES];
 }
 
 - (void) observeValueForKeyPath:(NSString *) keyPath
@@ -88,6 +94,14 @@ NSString *itemIdentifiers[] =
 - (void) inspectorDidResignKey:(NSNotification *) notification
 {
     [fDocumentObjectController commitEditing];
+}
+
+- (void) timerDidExpire:(NSTimer *) theTimer
+{
+//	[self updateRuntime];
+//	[self updateDiskImage];
+	[self updatePlayback];
+	[self updateRecording];
 }
 
 - (id) inspectedDocument
@@ -237,6 +251,124 @@ NSString *itemIdentifiers[] =
 - (void) removeDevice:(NSDictionary *) dict 
 {
 	[inspectedDocument removeDevice:dict];
+}
+
+- (NSString *) formatTime:(int) time
+{
+	return [NSString stringWithFormat:@"%02d:%02d:%02d",
+			time / 3600,
+			(time / 60) % 60,
+			time % 60];
+}
+
+- (NSString *) formatSize:(long long) size
+{
+	if (size < 1e6)
+		return [NSString stringWithFormat:@"%3.0f kB", size / 1000.0];
+	else if (size < 1e9)
+		return [NSString stringWithFormat:@"%3.1f MB", size / 1000000.0];
+	else
+		return [NSString stringWithFormat:@"%3.1f GB", size / 1000000000.0];
+}
+
+- (void) updatePlayback
+{
+	NSURL *url = [fDocumentController playbackURL];
+	if (!url)
+	{
+		[fPlaybackNameLabel setStringValue:@""];
+		[fPlaybackTimeLabel setToolTip:@"--:--:--"];
+		[fPlaybackDurationLabel setToolTip:@"--:--:--"];
+	}
+	else
+	{
+		NSString *path = [[url path] lastPathComponent];
+		NSString *timeLabel = [self formatTime:[fDocumentController playbackTime]];
+		NSString *durationLabel = [self formatTime:[fDocumentController playbackDuration]];
+		[fPlaybackNameLabel setStringValue:path];
+		[fPlaybackNameLabel setToolTip:path];
+		[fPlaybackTimeLabel setStringValue:timeLabel];
+		[fPlaybackDurationLabel setStringValue:durationLabel];
+	}
+
+	BOOL isPlayback = [fDocumentController playback];
+	[fOpenPlaybackButton setEnabled:!isPlayback];
+	[fTogglePlaybackButton setEnabled:url ? YES : NO];
+	[fTogglePlaybackButton setImage:(isPlayback ?
+									 [NSImage imageNamed:@"IPAudioStop.png"] :
+									 [NSImage imageNamed:@"IPAudioPlay.png"]
+									 )];
+}	
+
+- (IBAction) openPlayback:(id) sender
+{
+	NSOpenPanel *panel = [NSOpenPanel openPanel];
+	NSArray *fileTypes = [[NSArray alloc] initWithObjects:
+						  @"wav",
+						  @"aiff", @"aif", @"aifc",
+						  @"au",
+						  @"flac",
+						  @"caf",
+						  @"ogg", @"oga",
+						  nil];
+	
+	if ([panel runModalForTypes:fileTypes] == NSOKButton)
+	{
+		NSURL *url = [panel URL];
+		[fDocumentController setPlaybackURL:url];
+		
+		[self updatePlayback];
+	}
+}
+
+- (IBAction) togglePlayback:(id) sender
+{
+	[fDocumentController togglePlayback];
+}
+
+- (void) updateRecording
+{
+	NSURL *url = [fDocumentController recordingURL];
+	if (!url)
+	{
+		[fRecordingTimeLabel setStringValue:@"--:--:--"];
+		[fRecordingSizeLabel setStringValue:@"- kB"];
+		[fSaveRecordingAsButton setEnabled:NO];
+	}
+	else
+	{
+		NSString *timeLabel = [self formatTime:[fDocumentController recordingTime]];
+		NSString *sizeLabel = [self formatSize:[fDocumentController recordingSize]];
+		[fRecordingTimeLabel setStringValue:timeLabel];
+		[fRecordingSizeLabel setStringValue:sizeLabel];
+	}
+	
+	BOOL isRecording = [fDocumentController recording];
+	[fToggleRecordingButton setImage:(isRecording ?
+									  [NSImage imageNamed:@"IPAudioStop.png"] :
+									  [NSImage imageNamed:@"IPAudioRecord.png"]
+									  )];
+	[fSaveRecordingAsButton setEnabled:(url && !isRecording)];
+}
+
+- (IBAction) toggleRecording:(id) sender
+{
+	[fDocumentController toggleRecording];
+}
+
+- (IBAction) saveRecording:(id) sender
+{
+	NSSavePanel *panel = [NSSavePanel savePanel];
+	[panel setAllowedFileTypes:[NSArray arrayWithObject:@"wav"]];
+	[panel setAllowsOtherFileTypes:NO];	
+	
+	if ([panel runModal] == NSOKButton)
+	{
+		NSURL *url = [panel URL];
+		[fDocumentController saveRecordingAs:url];
+		
+		[self updateRecording];
+	}
 }
 
 @end
