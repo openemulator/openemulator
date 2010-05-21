@@ -1,15 +1,11 @@
 
 /**
  * libemulator
- * MC6845
+ * DAC 1-bit
  * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements a MC6845
+ * Implements a 1-bit DAC
  */
 
-#include "OEComponent.h"
-
-class MC6845 : public OEComponent
-{
-};
+#include "DAC1bit.h"

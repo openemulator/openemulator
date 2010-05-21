@@ -13,17 +13,30 @@
 // Registers virtual screens (add, remove). Components provide the HostVideoFrame
 // Provides these frames to the screen update function
 
+// getScreen returns a vector of frames to be updated
+
+// positionLeft and positionTop is updated through:
+// XC = ceil(sqrt(N))
+// YC = ceil(N / XC)
+
 // Messages
 enum
 {
-	HOST_VIDEO_ADD_SCREEN = OEIOCTL_USER,
-	HOST_VIDEO_REMOVE_SCREEN,
-	HOST_VIDEO_GET_SCREEN_NUM,
-	HOST_VIDEO_GET_SCREEN,
+	HOSTVIDEO_ADD_SCREEN = OEIOCTL_USER,
+	HOSTVIDEO_REMOVE_SCREEN,
+	HOSTVIDEO_GET_FRAME,
+	HOSTVIDEO_RETURN_FRAME,
+	
+	HOSTVIDEO_GET_SCREEN,
+	
+	HOSTVIDEO_SET_WINDOWSIZE,
+	HOSTVIDEO_GET_WINDOWSIZE,
+	HOSTVIDEO_GET_ACTUALSIZE,
 };
 
 typedef struct
 {
+	double timeStamp;
 	int *framebufferData;
 	int framebufferWidth;
 	int framebufferHeight;
@@ -31,6 +44,9 @@ typedef struct
 	int contentHeight;
 	int screenWidth;
 	int screenHeight;
+	int positionLeft;
+	int positionTop;
+	bool isUpdated;
 } HostVideoFrame;
 
 // Calculation of contents

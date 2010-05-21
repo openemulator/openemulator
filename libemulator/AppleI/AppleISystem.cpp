@@ -61,7 +61,6 @@ int AppleISystem::ioctl(int message, void *data)
 			if (notification->message == HOSTAUDIO_RENDER_DID_START)
 			{
 				HostAudioBuffer *buffer = (HostAudioBuffer *) notification->data;
-				float *in = buffer->input;
 				float *out = buffer->output;
 				int sampleNum = buffer->channelNum * buffer->frameNum;
 				

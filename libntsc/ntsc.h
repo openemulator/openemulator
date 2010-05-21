@@ -20,7 +20,7 @@
  * - Packed color component range 0x1XX is mapped to 0x00..0xff
  * - Packed color component range 0x2XX-0x3XX is clamped to 0xff
  *
- * Acknoledgements to blargg and newrisingsun for their
+ * Acknowledgemends to blargg and newrisingsun for their
  * research, implementation and optimization of NTSC emulation.
  */
 
@@ -48,8 +48,8 @@ typedef struct
 extern const float ntscStandardRGBToYUV[];
 extern const float ntscCXA2025ASRGBToYUV[];
 
-#include "ntscAppleII.h"
-#include "ntscCGA.h"
+#include "ntsc1Bit.h"
+#include "ntsc2Bit.h"
 
 #ifdef __cplusplus
 }

@@ -1,16 +1,15 @@
 
 /**
  * libemulator
- * Host Audio
+ * Composite Monitor
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls host audio events
+ * Controls a composite monitor.
  */
 
 #include "OEComponent.h"
 
-class HostAudio : public OEComponent
+class CompositeMonitor : public OEComponent
 {
-
 };

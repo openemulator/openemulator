@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0001ACF6115FADE40091B176 /* ntscCGA.c in Sources */ = {isa = PBXBuildFile; fileRef = 0001ACF4115FADE40091B176 /* ntscCGA.c */; };
 		0006715A113F2B8500781A92 /* AppleIIFloatingBus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00067158113F2B8500781A92 /* AppleIIFloatingBus.cpp */; };
 		000671C3113F318000781A92 /* MemoryMap8Bit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000671BF113F318000781A92 /* MemoryMap8Bit.cpp */; };
 		000671C5113F318000781A92 /* MemoryMap16Bit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000671C1113F318000781A92 /* MemoryMap16Bit.cpp */; };
@@ -34,7 +33,6 @@
 		001F916911925BE8005383B3 /* SDL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 001F916811925BE8005383B3 /* SDL.framework */; };
 		002C27A8116873F100FAE6E6 /* ntsc.c in Sources */ = {isa = PBXBuildFile; fileRef = 002C26B3116867FB00FAE6E6 /* ntsc.c */; };
 		003318AF1101492B00CC1782 /* Connector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 003318AD1101492B00CC1782 /* Connector.xib */; };
-		00373842115A852E008BE723 /* AppleIIMonitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00373840115A852E008BE723 /* AppleIIMonitor.cpp */; };
 		003E25E71070796700185260 /* images in Resources */ = {isa = PBXBuildFile; fileRef = 003E2597107075D900185260 /* images */; };
 		003FB21410BA3D5D00D3697B /* devices in Resources */ = {isa = PBXBuildFile; fileRef = 00E8A393108CCAA200D0A137 /* devices */; };
 		0049B99C114C929200B686BB /* AppleIIO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0049B99A114C929200B686BB /* AppleIIO.cpp */; };
@@ -58,7 +56,6 @@
 		005E5F6E1086B0E100E573D4 /* InspectorController.m in Sources */ = {isa = PBXBuildFile; fileRef = 005E5F6D1086B0E100E573D4 /* InspectorController.m */; };
 		005E5F771086B16C00E573D4 /* Inspector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 005E5F751086B16C00E573D4 /* Inspector.xib */; };
 		00610049115CF08A004D1511 /* ntscSignalProcessing.c in Sources */ = {isa = PBXBuildFile; fileRef = 00610047115CF08A004D1511 /* ntscSignalProcessing.c */; };
-		00610091115CFB82004D1511 /* ntscAppleII.c in Sources */ = {isa = PBXBuildFile; fileRef = 002EC09B115C57C400480C7F /* ntscAppleII.c */; };
 		00679D08100817F700B38748 /* DeviceChooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00679D04100817F600B38748 /* DeviceChooser.xib */; };
 		00679D09100817F700B38748 /* TemplateChooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00679D06100817F700B38748 /* TemplateChooser.xib */; };
 		0071E3BA10803F7300F2D54F /* ChooserItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 0071E3B910803F7300F2D54F /* ChooserItem.m */; };
@@ -68,6 +65,14 @@
 		0082847C11A422C700B2B530 /* IPAudioStop.png in Resources */ = {isa = PBXBuildFile; fileRef = 0082847B11A422C700B2B530 /* IPAudioStop.png */; };
 		0085975C11431B6600DD08C5 /* HostJoystick.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0085975A11431B6600DD08C5 /* HostJoystick.cpp */; };
 		00910107113AAE60005EBB62 /* AppleISystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00910105113AAE60005EBB62 /* AppleISystem.cpp */; };
+		00984D7911A7376200B9C0B5 /* ntsc1Bit.c in Sources */ = {isa = PBXBuildFile; fileRef = 00984D7511A7376200B9C0B5 /* ntsc1Bit.c */; };
+		00984D7A11A7376200B9C0B5 /* ntsc1Bit.h in Headers */ = {isa = PBXBuildFile; fileRef = 00984D7611A7376200B9C0B5 /* ntsc1Bit.h */; };
+		00984D7B11A7376200B9C0B5 /* ntsc2Bit.c in Sources */ = {isa = PBXBuildFile; fileRef = 00984D7711A7376200B9C0B5 /* ntsc2Bit.c */; };
+		00984D7C11A7376200B9C0B5 /* ntsc2Bit.h in Headers */ = {isa = PBXBuildFile; fileRef = 00984D7811A7376200B9C0B5 /* ntsc2Bit.h */; };
+		00984D9911A73B1000B9C0B5 /* CompositeMonitor.h in Headers */ = {isa = PBXBuildFile; fileRef = 00984D9711A73B1000B9C0B5 /* CompositeMonitor.h */; };
+		00984D9A11A73B1000B9C0B5 /* CompositeMonitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00984D9811A73B1000B9C0B5 /* CompositeMonitor.cpp */; };
+		00984DA611A73C7E00B9C0B5 /* DAC1Bit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00984DA411A73C7E00B9C0B5 /* DAC1Bit.cpp */; };
+		00984DA711A73C7E00B9C0B5 /* DAC1Bit.h in Headers */ = {isa = PBXBuildFile; fileRef = 00984DA511A73C7E00B9C0B5 /* DAC1Bit.h */; };
 		009B4F2711639D7700E9A6F9 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009B4F2611639D7700E9A6F9 /* GLUT.framework */; };
 		009B4F5A1163A45500E9A6F9 /* W65C02S.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 009B4F561163A45500E9A6F9 /* W65C02S.cpp */; };
 		009B4F5F1163A48100E9A6F9 /* MOS6509.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 009B4F5D1163A48100E9A6F9 /* MOS6509.cpp */; };
@@ -89,7 +94,6 @@
 		00B703881135ACA7005E4B65 /* OEInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B703791135AC91005E4B65 /* OEInfo.cpp */; };
 		00B7038A1135ACAA005E4B65 /* OERef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B7037D1135AC91005E4B65 /* OERef.cpp */; };
 		00B7038E1135ACAD005E4B65 /* OEPackage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B7037B1135AC91005E4B65 /* OEPackage.cpp */; };
-		00B703A11135ACBD005E4B65 /* SSI263A.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B703931135ACBD005E4B65 /* SSI263A.cpp */; };
 		00B703A31135ACBD005E4B65 /* HostAudio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B703971135ACBD005E4B65 /* HostAudio.cpp */; };
 		00B703A71135ACBD005E4B65 /* HostKeyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B7039B1135ACBD005E4B65 /* HostKeyboard.cpp */; };
 		00B703A91135ACBD005E4B65 /* HostVideo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B7039D1135ACBD005E4B65 /* HostVideo.cpp */; };
@@ -151,7 +155,6 @@
 		00EF028D107D9EFB00FE378D /* VerticallyCenteredCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00EF028C107D9EFB00FE378D /* VerticallyCenteredCell.m */; };
 		00F0ED6711028C8800208090 /* DiskImage525.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000F66390FF8368F00C8AF23 /* DiskImage525.icns */; };
 		00F1AEFC11370EF5006642AD /* AppleIISystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00F1AEFA11370EF5006642AD /* AppleIISystem.cpp */; };
-		00F1AF0611370FD2006642AD /* DAC1bit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00F1AF0411370FD2006642AD /* DAC1bit.cpp */; };
 		00F1AF0A11370FE1006642AD /* AppleIISpeaker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00F1AF0811370FE1006642AD /* AppleIISpeaker.cpp */; };
 		00F86BE3100FD4F60016867D /* IPSoundMax.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BE1100FD4F60016867D /* IPSoundMax.png */; };
 		00F86BE4100FD4F60016867D /* IPSoundMin.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BE2100FD4F60016867D /* IPSoundMin.png */; };
@@ -198,8 +201,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		0001ACF4115FADE40091B176 /* ntscCGA.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ntscCGA.c; sourceTree = "<group>"; };
-		0001ACF5115FADE40091B176 /* ntscCGA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ntscCGA.h; sourceTree = "<group>"; };
 		00067157113F2B8500781A92 /* AppleIIFloatingBus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleIIFloatingBus.h; sourceTree = "<group>"; };
 		00067158113F2B8500781A92 /* AppleIIFloatingBus.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleIIFloatingBus.cpp; sourceTree = "<group>"; };
 		000671BF113F318000781A92 /* MemoryMap8Bit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MemoryMap8Bit.cpp; sourceTree = "<group>"; };
@@ -250,16 +251,12 @@
 		001F916811925BE8005383B3 /* SDL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL.framework; path = /Library/Frameworks/SDL.framework; sourceTree = "<absolute>"; };
 		002C26B3116867FB00FAE6E6 /* ntsc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ntsc.c; sourceTree = "<group>"; };
 		002C27B41168744200FAE6E6 /* libemulator.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libemulator.a; path = ../openemulator/build/Debug/libemulator.a; sourceTree = SOURCE_ROOT; };
-		002EC09A115C57C400480C7F /* ntscAppleII.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ntscAppleII.h; sourceTree = "<group>"; };
-		002EC09B115C57C400480C7F /* ntscAppleII.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ntscAppleII.c; sourceTree = "<group>"; };
 		002F77701162EB6A00B0ECF1 /* MOS6502Operations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOS6502Operations.h; sourceTree = "<group>"; };
 		002F77721162EB7400B0ECF1 /* MOS6502IllegalOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOS6502IllegalOperations.h; sourceTree = "<group>"; };
 		002F77851162EBB200B0ECF1 /* MOS6502Opcodes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOS6502Opcodes.h; sourceTree = "<group>"; };
 		00311CFE1166526800D9CF80 /* Z80Opcodes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Z80Opcodes.h; sourceTree = "<group>"; };
 		00317E380FD31D1A007F2B00 /* AppleGraphicsTablet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppleGraphicsTablet.png; sourceTree = "<group>"; };
 		003318AE1101492B00CC1782 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Connector.xib; sourceTree = "<group>"; };
-		0037383F115A852E008BE723 /* AppleIIMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleIIMonitor.h; sourceTree = "<group>"; };
-		00373840115A852E008BE723 /* AppleIIMonitor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleIIMonitor.cpp; sourceTree = "<group>"; };
 		003E2597107075D900185260 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
 		0049B999114C929200B686BB /* AppleIIO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleIIO.h; sourceTree = "<group>"; };
 		0049B99A114C929200B686BB /* AppleIIO.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleIIO.cpp; sourceTree = "<group>"; };
@@ -311,6 +308,14 @@
 		0085975B11431B6600DD08C5 /* HostJoystick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostJoystick.h; sourceTree = "<group>"; };
 		00910105113AAE60005EBB62 /* AppleISystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleISystem.cpp; sourceTree = "<group>"; };
 		00910106113AAE60005EBB62 /* AppleISystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleISystem.h; sourceTree = "<group>"; };
+		00984D7511A7376200B9C0B5 /* ntsc1Bit.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ntsc1Bit.c; sourceTree = "<group>"; };
+		00984D7611A7376200B9C0B5 /* ntsc1Bit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ntsc1Bit.h; sourceTree = "<group>"; };
+		00984D7711A7376200B9C0B5 /* ntsc2Bit.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ntsc2Bit.c; sourceTree = "<group>"; };
+		00984D7811A7376200B9C0B5 /* ntsc2Bit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ntsc2Bit.h; sourceTree = "<group>"; };
+		00984D9711A73B1000B9C0B5 /* CompositeMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompositeMonitor.h; sourceTree = "<group>"; };
+		00984D9811A73B1000B9C0B5 /* CompositeMonitor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CompositeMonitor.cpp; sourceTree = "<group>"; };
+		00984DA411A73C7E00B9C0B5 /* DAC1Bit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DAC1Bit.cpp; sourceTree = "<group>"; };
+		00984DA511A73C7E00B9C0B5 /* DAC1Bit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DAC1Bit.h; sourceTree = "<group>"; };
 		009B4F2611639D7700E9A6F9 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = /System/Library/Frameworks/GLUT.framework; sourceTree = "<absolute>"; };
 		009B4F551163A45500E9A6F9 /* W65C02S.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = W65C02S.h; sourceTree = "<group>"; };
 		009B4F561163A45500E9A6F9 /* W65C02S.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = W65C02S.cpp; sourceTree = "<group>"; };
@@ -355,8 +360,6 @@
 		00B7037B1135AC91005E4B65 /* OEPackage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEPackage.cpp; sourceTree = "<group>"; };
 		00B7037C1135AC91005E4B65 /* OEPackage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEPackage.h; sourceTree = "<group>"; };
 		00B7037D1135AC91005E4B65 /* OERef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OERef.cpp; sourceTree = "<group>"; };
-		00B703931135ACBD005E4B65 /* SSI263A.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SSI263A.cpp; sourceTree = "<group>"; };
-		00B703941135ACBD005E4B65 /* SSI263A.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSI263A.h; sourceTree = "<group>"; };
 		00B703971135ACBD005E4B65 /* HostAudio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HostAudio.cpp; sourceTree = "<group>"; };
 		00B703981135ACBD005E4B65 /* HostAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostAudio.h; sourceTree = "<group>"; };
 		00B7039B1135ACBD005E4B65 /* HostKeyboard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HostKeyboard.cpp; sourceTree = "<group>"; };
@@ -427,8 +430,6 @@
 		00F00A040FD5838D00C506AD /* IPPortsSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPPortsSel.png; sourceTree = "<group>"; };
 		00F1AEF911370EF5006642AD /* AppleIISystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleIISystem.h; sourceTree = "<group>"; };
 		00F1AEFA11370EF5006642AD /* AppleIISystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleIISystem.cpp; sourceTree = "<group>"; };
-		00F1AF0311370FD2006642AD /* DAC1bit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DAC1bit.h; sourceTree = "<group>"; };
-		00F1AF0411370FD2006642AD /* DAC1bit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DAC1bit.cpp; sourceTree = "<group>"; };
 		00F1AF0711370FE1006642AD /* AppleIISpeaker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleIISpeaker.h; sourceTree = "<group>"; };
 		00F1AF0811370FE1006642AD /* AppleIISpeaker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleIISpeaker.cpp; sourceTree = "<group>"; };
 		00F86BE1100FD4F60016867D /* IPSoundMax.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPSoundMax.png; sourceTree = "<group>"; };
@@ -663,8 +664,6 @@
 				00067158113F2B8500781A92 /* AppleIIFloatingBus.cpp */,
 				00A7BBCC11407A7F006F5C6B /* AppleIIMMU.h */,
 				00A7BBCD11407A7F006F5C6B /* AppleIIMMU.cpp */,
-				0037383F115A852E008BE723 /* AppleIIMonitor.h */,
-				00373840115A852E008BE723 /* AppleIIMonitor.cpp */,
 				00170497117FD51D006C87BC /* AppleIISlotExpansionMemory.h */,
 				00170498117FD51D006C87BC /* AppleIISlotExpansionMemory.cpp */,
 			);
@@ -674,16 +673,14 @@
 		00B703921135ACBD005E4B65 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				00984DA411A73C7E00B9C0B5 /* DAC1Bit.cpp */,
+				00984DA511A73C7E00B9C0B5 /* DAC1Bit.h */,
 				00A62FFA11415DF0005E8500 /* MC6821.h */,
 				00A62FFB11415DF0005E8500 /* MC6821.cpp */,
 				000671BF113F318000781A92 /* MemoryMap8Bit.cpp */,
 				000671C0113F318000781A92 /* MemoryMap8Bit.h */,
 				000671C1113F318000781A92 /* MemoryMap16Bit.cpp */,
 				000671C2113F318000781A92 /* MemoryMap16Bit.h */,
-				00B703931135ACBD005E4B65 /* SSI263A.cpp */,
-				00B703941135ACBD005E4B65 /* SSI263A.h */,
-				00F1AF0311370FD2006642AD /* DAC1bit.h */,
-				00F1AF0411370FD2006642AD /* DAC1bit.cpp */,
 				005397DF1139EC1800CA7CE4 /* RAM.h */,
 				005397E01139EC1800CA7CE4 /* RAM.cpp */,
 				005397E21139EC1F00CA7CE4 /* ROM.h */,
@@ -692,6 +689,8 @@
 				00A6300011415E3C005E8500 /* MC6845.cpp */,
 				00B4F932117E43E8008D622F /* MemoryOffset.h */,
 				00B4F933117E43E8008D622F /* MemoryOffset.cpp */,
+				00984D9711A73B1000B9C0B5 /* CompositeMonitor.h */,
+				00984D9811A73B1000B9C0B5 /* CompositeMonitor.cpp */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -728,13 +727,13 @@
 		00FF25C4115C365800C82CA0 /* libntsc */ = {
 			isa = PBXGroup;
 			children = (
-				0001ACF4115FADE40091B176 /* ntscCGA.c */,
-				0001ACF5115FADE40091B176 /* ntscCGA.h */,
+				00984D7511A7376200B9C0B5 /* ntsc1Bit.c */,
+				00984D7611A7376200B9C0B5 /* ntsc1Bit.h */,
+				00984D7711A7376200B9C0B5 /* ntsc2Bit.c */,
+				00984D7811A7376200B9C0B5 /* ntsc2Bit.h */,
 				00610047115CF08A004D1511 /* ntscSignalProcessing.c */,
 				00610048115CF08A004D1511 /* ntscSignalProcessing.h */,
 				00759303115C39E600D6DDF0 /* ntsc.h */,
-				002EC09A115C57C400480C7F /* ntscAppleII.h */,
-				002EC09B115C57C400480C7F /* ntscAppleII.c */,
 				002C26B3116867FB00FAE6E6 /* ntsc.c */,
 			);
 			path = libntsc;
@@ -869,6 +868,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00984DA711A73C7E00B9C0B5 /* DAC1Bit.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -876,6 +876,9 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00984D7A11A7376200B9C0B5 /* ntsc1Bit.h in Headers */,
+				00984D7C11A7376200B9C0B5 /* ntsc2Bit.h in Headers */,
+				00984D9911A73B1000B9C0B5 /* CompositeMonitor.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1057,13 +1060,11 @@
 				00B703881135ACA7005E4B65 /* OEInfo.cpp in Sources */,
 				00B7038A1135ACAA005E4B65 /* OERef.cpp in Sources */,
 				00B7038E1135ACAD005E4B65 /* OEPackage.cpp in Sources */,
-				00B703A11135ACBD005E4B65 /* SSI263A.cpp in Sources */,
 				00B703A31135ACBD005E4B65 /* HostAudio.cpp in Sources */,
 				00B703A71135ACBD005E4B65 /* HostKeyboard.cpp in Sources */,
 				00B703A91135ACBD005E4B65 /* HostVideo.cpp in Sources */,
 				00B703B91135AD16005E4B65 /* HostSystem.cpp in Sources */,
 				00F1AEFC11370EF5006642AD /* AppleIISystem.cpp in Sources */,
-				00F1AF0611370FD2006642AD /* DAC1bit.cpp in Sources */,
 				00F1AF0A11370FE1006642AD /* AppleIISpeaker.cpp in Sources */,
 				00AA1E6E113821C600F11BE2 /* AppleIIKeyboard.cpp in Sources */,
 				00AA1E721138269900F11BE2 /* AppleIISlotMemory.cpp in Sources */,
@@ -1082,7 +1083,6 @@
 				0049B99C114C929200B686BB /* AppleIIO.cpp in Sources */,
 				0049B9A6114C9EA900B686BB /* AppleIFloatingBus.cpp in Sources */,
 				00A7BD4311514DF50019B14F /* AppleICassetteInterface.cpp in Sources */,
-				00373842115A852E008BE723 /* AppleIIMonitor.cpp in Sources */,
 				00188DA5115DC59500FFACC0 /* Z80.cpp in Sources */,
 				00188DA6115DC59500FFACC0 /* W65C816S.cpp in Sources */,
 				00188DA8115DC59700FFACC0 /* MOS6502.cpp in Sources */,
@@ -1097,6 +1097,7 @@
 				005B488A118294B5008C7E42 /* HostParallel.cpp in Sources */,
 				005B4892118294C9008C7E42 /* HostCamera.cpp in Sources */,
 				005B48A7118295AD008C7E42 /* HostNet.cpp in Sources */,
+				00984DA611A73C7E00B9C0B5 /* DAC1Bit.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1105,9 +1106,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				00610049115CF08A004D1511 /* ntscSignalProcessing.c in Sources */,
-				00610091115CFB82004D1511 /* ntscAppleII.c in Sources */,
-				0001ACF6115FADE40091B176 /* ntscCGA.c in Sources */,
 				002C27A8116873F100FAE6E6 /* ntsc.c in Sources */,
+				00984D7911A7376200B9C0B5 /* ntsc1Bit.c in Sources */,
+				00984D7B11A7376200B9C0B5 /* ntsc2Bit.c in Sources */,
+				00984D9A11A73B1000B9C0B5 /* CompositeMonitor.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

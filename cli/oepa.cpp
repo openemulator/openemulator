@@ -131,6 +131,8 @@ static int oepaCallbackAudio(const void *inputBuffer,
 		int samplesPerBuffer = framesPerBuffer * oepaChannelNum;
 		float *out = (float *) outputBuffer;
 		
+		// To-Do: Replace volume with last energy average
+		
 		for (int i = 0; i < samplesPerBuffer; i++)
 			*out++ = rand() * (0.1 / RAND_MAX);
 		
