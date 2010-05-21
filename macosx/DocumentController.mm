@@ -82,16 +82,23 @@
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	
 	if (![defaults valueForKey:@"OEFullDuplex"])
-		[defaults setBool:TRUE forKey:@"OEFullDuplex"];
+		[defaults setBool:YES forKey:@"OEFullDuplex"];
+	if (![defaults valueForKey:@"OEPlayThrough"])
+		[defaults setBool:YES forKey:@"OEPlayThrough"];
 	if (![defaults valueForKey:@"OEVolume"])
 		[defaults setFloat:1.0 forKey:@"OEVolume"];
 	
 	oepaSetFullDuplex([defaults boolForKey:@"OEFullDuplex"]);
+	oepaSetPlayThrough([defaults floatForKey:@"OEPlayThrough"]);
 	oepaSetVolume([defaults floatForKey:@"OEVolume"]);
 	oepaOpen();
 	
 	[defaults addObserver:self
 			   forKeyPath:@"OEFullDuplex"
+				  options:NSKeyValueObservingOptionNew
+				  context:nil];
+	[defaults addObserver:self
+			   forKeyPath:@"OEPlayThrough"
 				  options:NSKeyValueObservingOptionNew
 				  context:nil];
 	[defaults addObserver:self
@@ -170,6 +177,12 @@
 		id object = [change objectForKey:NSKeyValueChangeNewKey];
 		int value = [object intValue];
 		oepaSetFullDuplex(value);
+	}
+	else if ([keyPath isEqualToString:@"OEPlayThrough"])
+	{
+		id object = [change objectForKey:NSKeyValueChangeNewKey];
+		int value = [object intValue];
+		oepaSetPlayThrough(value);
 	}
 	else if ([keyPath isEqualToString:@"OEVolume"])
 	{

@@ -68,7 +68,7 @@ int AppleISystem::ioctl(int message, void *data)
 				for(int i = 0; i < sampleNum; i++)
 				{
 					float value = 0.05 * sin(phase);
-					*out++ += *in++;// + value;
+					*out++ += value;
 					phase += 2 * M_PI * 220 / buffer->sampleRate;
 				}
 				

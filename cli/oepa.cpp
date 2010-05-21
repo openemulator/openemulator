@@ -21,6 +21,7 @@
 
 // Configuration
 bool oepaFullDuplex = false;
+bool oepaPlayThrough = false;
 double oepaSampleRate = OEPA_SAMPLERATE;
 int oepaChannelNum = OEPA_CHANNELNUM;
 int oepaFramesPerBuffer = OEPA_FRAMESPERBUFFER;
@@ -49,8 +50,8 @@ vector<OEEmulation *> oepaEmulations;
 // Audio playback
 bool oepaPlayback = false;
 SNDFILE *oepaPlaybackFile;
+long long oepaPlaybackFrameIndex = 0;
 long long oepaPlaybackFrameNum = 0;
-long long oepaPlaybackFrameDuration = 0;
 int oepaPlaybackChannelNum;
 double oepaPlaybackSRCRatio;
 SRC_STATE *oepaPlaybackSRC;
@@ -350,13 +351,13 @@ void oepaPlaybackAudio(float *buffer, int frameNum, int channelNum)
 		for (int i = 0; i < srcData.output_frames_gen; i++)
 		{
 			for (int ch = 0; ch < channelNum; ch++)
-				buffer[ch] += in[ch % channelNum];
+				buffer[ch] += in[ch % oepaPlaybackChannelNum];
 			
 			in += oepaPlaybackChannelNum;
 			buffer += channelNum;
 		}
 		
-		oepaPlaybackFrameNum += srcData.output_frames_gen;
+		oepaPlaybackFrameIndex += srcData.output_frames_gen;
 		oepaPlaybackBufferFrameBegin += srcData.input_frames_used;
 		frameNum -= srcData.output_frames_gen;
 	} while (frameNum > 0);
@@ -422,6 +423,13 @@ void *oepaProcess(void *arg)
 		memcpy(&inputBuffer[samplesPerBuffer],
 			   buffer,
 			   bytesPerBuffer);
+		
+		// Play through
+		if (oepaPlayThrough)
+		{
+			for (int i = 0; i < samplesPerBuffer; i++)
+				outputBuffer[i] += inputBuffer[i];
+		}
 		
 		// Output
 		HostAudioBuffer hostAudioBuffer =
@@ -578,7 +586,7 @@ bool oepaStartPlayback(string path)
 	
 	oepaLockProcess();
 	
-	oepaPlaybackFrameNum = 0;
+	oepaPlaybackFrameIndex = 0;
 	oepaPlaybackFile = sf_open(path.c_str(), SFM_READ, &sfInfo);
 	if (oepaPlaybackFile)
 	{
@@ -598,6 +606,8 @@ bool oepaStartPlayback(string path)
 			
 			int framesPerBuffer = 2 * oepaPlaybackSRCRatio * oepaFramesPerBuffer;
 			oepaPlaybackBuffer.resize(framesPerBuffer * oepaPlaybackChannelNum);
+
+			oepaPlaybackFrameNum = sfInfo.frames * oepaPlaybackSRCRatio;
 			
 			oepaPlayback = true;
 		}
@@ -623,12 +633,12 @@ bool oepaIsPlayback()
 
 float oepaGetPlaybackTime()
 {
-	return (float) oepaPlaybackFrameNum / oepaSampleRate;
+	return (float) oepaPlaybackFrameIndex / oepaSampleRate;
 }
 
 float oepaGetPlaybackDuration()
 {
-	return (float) oepaPlaybackFrameDuration / oepaSampleRate;
+	return (float) oepaPlaybackFrameNum / oepaSampleRate;
 }
 
 void oepaStopRecording()
@@ -697,9 +707,6 @@ bool oepaDisableAudio()
 	
 	oepaLockProcess();
 	
-	oepaStopPlayback();
-	oepaStopRecording();
-	
 	return state;
 }
 
@@ -724,6 +731,9 @@ void oepaSetFullDuplex(bool value)
 
 void oepaSetSampleRate(double value)
 {
+	oepaStopPlayback();
+	oepaStopRecording();
+	
 	bool state = oepaDisableAudio();
 	
 	oepaSampleRate = value;
@@ -733,6 +743,9 @@ void oepaSetSampleRate(double value)
 
 void oepaSetChannelNum(int value)
 {
+	oepaStopPlayback();
+	oepaStopRecording();
+	
 	bool state = oepaDisableAudio();
 	
 	oepaChannelNum = value;
@@ -761,6 +774,11 @@ void oepaSetBufferNum(int value)
 void oepaSetVolume(float value)
 {
 	oepaVolume = value;
+}
+
+void oepaSetPlayThrough(bool value)
+{
+	oepaPlayThrough = value;
 }
 
 OEEmulation *oepaConstruct(string path, string resourcePath)

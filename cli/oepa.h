@@ -25,6 +25,7 @@ void oepaSetFramesPerBuffer(int value);
 void oepaSetBufferNum(int value);
 
 void oepaSetVolume(float value);
+void oepaSetPlayThrough(bool value);
 
 bool oepaStartPlayback(string path);
 void oepaStopPlayback();
