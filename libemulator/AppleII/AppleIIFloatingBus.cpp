@@ -16,11 +16,11 @@ int AppleIIFloatingBus::ioctl(int message, void *data)
 {
 	switch(message)
 	{
-		case OEIOCTL_GET_MEMORYMAP:
+		case OE_GET_MEMORYMAP:
 		{
-			OEIoctlMemoryMap *memoryMap = (OEIoctlMemoryMap *) data;
+			OEMemoryMap *memoryMap = (OEMemoryMap *) data;
 			memoryMap->component = this;
-			memoryMap->mapVector.push_back("0x0-0xffffffff");
+			memoryMap->range.push_back("0x0-0xffffffff");
 			break;
 		}
 	}

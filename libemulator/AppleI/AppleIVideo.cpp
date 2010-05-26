@@ -19,20 +19,20 @@ int AppleIVideo::ioctl(int message, void *data)
 {
 	switch(message)
 	{
-		case OEIOCTL_SET_RESOURCE:
+		case OE_SET_RESOURCE:
 		{
-			OEIoctlData *resource = (OEIoctlData *) data;
+			OEData *resource = (OEData *) data;
 			if (resource->name == "image")
 				characterSet = resource->data;
 			break;
 		}
-		case OEIOCTL_CONNECT:
+		case OE_CONNECT:
 		{
-			OEIoctlConnection *connection = (OEIoctlConnection *) data;
+			OEConnection *connection = (OEConnection *) data;
 			if (connection->name == "system")
 			{
 				OEComponent *system = connection->component;
-				system->addObserver(this);
+//				system->addObserver(this);
 			}
 			break;
 		}

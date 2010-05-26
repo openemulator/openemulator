@@ -20,7 +20,7 @@ public:
 	void write(int address, int value);
 	
 private:
-	vector<string> mapVector;
+	OEMemoryRange mappedRange;
 	
 	int size;
 	int mask;

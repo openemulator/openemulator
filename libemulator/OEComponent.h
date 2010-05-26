@@ -43,19 +43,18 @@ typedef union
 
 // Messages
 enum {
-	OEIOCTL_SET_PROPERTY,
-	OEIOCTL_GET_PROPERTY,
-	OEIOCTL_SET_DATA,
-	OEIOCTL_GET_DATA,
-	OEIOCTL_SET_RESOURCE,
-	OEIOCTL_CONNECT,
-	OEIOCTL_SET_MEMORYMAP,
-	OEIOCTL_GET_MEMORYMAP,
-	OEIOCTL_POST_NOTIFICATION,
-	OEIOCTL_NOTIFY,
-	OEIOCTL_ASSERT_IRQ,
-	OEIOCTL_RELEASE_IRQ,
-	OEIOCTL_USER,
+	OE_SET_PROPERTY,
+	OE_GET_PROPERTY,
+	OE_SET_DATA,
+	OE_GET_DATA,
+	OE_SET_RESOURCE,
+	OE_CONNECT,
+	OE_NOTIFY,
+	OE_SET_MEMORYMAP,
+	OE_GET_MEMORYMAP,
+	OE_ASSERT_IRQ,
+	OE_RELEASE_IRQ,
+	OE_USER,
 };
 
 using namespace std;
@@ -70,52 +69,56 @@ public:
 	virtual int read(int address);
 	virtual void write(int address, int value);
 	
-	void addObserver(class OEComponent *component);
-	void removeObserver(class OEComponent *component);
-	
 protected:
-	void postNotification(int message, void *data);
+	void addObserver(vector<OEComponent *> &o,
+					 OEComponent *component);
+	void removeObserver(vector<OEComponent *> &o,
+						OEComponent *component);
+	void postNotification(int id,
+						  vector<OEComponent *> &o,
+						  void *data);
 	
-private:
-	vector<OEComponent *> observers;
+	int getInt(string value);
+	double getFloat(string value);
+	string getString(int value);
+	string getHex(int value);
+	vector<char> getCharVector(string value);
+	int getPreviousPowerOf2(int value);
 };
 
-int getInt(string value);
-double getFloat(string value);
-string getString(int value);
-string getHex(int value);
-vector<char> getCharVector(string value);
-int getPreviousPowerOf2(int value);
+typedef vector<OEComponent *> OEObserverList;
 
 typedef struct
 {
 	string name;
 	OEComponent *component;
-} OEIoctlConnection;
+} OEConnection;
 
 typedef struct
 {
 	string name;
 	string value;
-} OEIoctlProperty;
+} OEProperty;
 
 typedef struct
 {
 	string name;
 	vector<char> data;
-} OEIoctlData;
+} OEData;
 
 typedef struct
 {
+	int id;
 	OEComponent *component;
-	vector<string> mapVector;
-} OEIoctlMemoryMap;
-
-typedef struct
-{
-	OEComponent *component;
-	int message;
 	void *data;
-} OEIoctlNotification;
+} OENotification;
+
+typedef vector<string> OEMemoryRange;
+
+typedef struct
+{
+	OEComponent *component;
+	OEMemoryRange range;
+} OEMemoryMap;
 
 #endif

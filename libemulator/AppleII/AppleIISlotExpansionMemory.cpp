@@ -14,25 +14,25 @@ int AppleIISlotExpansionMemory::ioctl(int message, void *data)
 {
 	switch(message)
 	{
-		case OEIOCTL_SET_PROPERTY:
+		case OE_SET_PROPERTY:
 		{
-			OEIoctlProperty *property = (OEIoctlProperty *) data;
+			OEProperty *property = (OEProperty *) data;
 			if (property->name == "map")
-				mapVector.push_back(property->value);
+				mappedRange.push_back(property->value);
 			break;
 		}
-		case OEIOCTL_CONNECT:
+		case OE_CONNECT:
 		{
-			OEIoctlConnection *connection = (OEIoctlConnection *) data;
+			OEConnection *connection = (OEConnection *) data;
 			if (connection->name == "floatingBus")
 				floatingBus = connection->component;
 			break;
 		}
-		case OEIOCTL_GET_MEMORYMAP:
+		case OE_GET_MEMORYMAP:
 		{
-			OEIoctlMemoryMap *memoryMap = (OEIoctlMemoryMap *) data;
+			OEMemoryMap *memoryMap = (OEMemoryMap *) data;
 			memoryMap->component = this;
-			memoryMap->mapVector = mapVector;
+			memoryMap->range = mappedRange;
 			break;
 		}
 		case APPLEIISLOTEXPANSIONMEMORY_SET_SLOT:

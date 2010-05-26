@@ -561,7 +561,7 @@ void oepaClose()
 
 void oepaStopPlayback()
 {
-	if (!oepaPlaybackFile)
+	if (!oepaPlayback)
 		return;
 	
 	oepaLockProcess();

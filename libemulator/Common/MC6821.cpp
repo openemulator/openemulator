@@ -44,9 +44,9 @@ void MC6821::setControlRegisterA(int value)
 	if (irqA)
 	{
 		if (wasIRQ && !isIRQ)
-			irqA->ioctl(OEIOCTL_RELEASE_IRQ, NULL);
+			irqA->ioctl(OE_RELEASE_IRQ, NULL);
 		else if (!wasIRQ && isIRQ)
-			irqA->ioctl(OEIOCTL_ASSERT_IRQ, NULL);
+			irqA->ioctl(OE_ASSERT_IRQ, NULL);
 	}
 }
 
@@ -59,9 +59,9 @@ void MC6821::setControlRegisterB(int value)
 	if (irqB)
 	{
 		if (wasIRQ && !isIRQ)
-			irqB->ioctl(OEIOCTL_RELEASE_IRQ, NULL);
+			irqB->ioctl(OE_RELEASE_IRQ, NULL);
 		else if (!wasIRQ && isIRQ)
-			irqB->ioctl(OEIOCTL_ASSERT_IRQ, NULL);
+			irqB->ioctl(OE_ASSERT_IRQ, NULL);
 	}
 }
 
@@ -69,9 +69,9 @@ int MC6821::ioctl(int message, void *data)
 {
 	switch(message)
 	{
-		case OEIOCTL_SET_PROPERTY:
+		case OE_SET_PROPERTY:
 		{
-			OEIoctlProperty *property = (OEIoctlProperty *) data;
+			OEProperty *property = (OEProperty *) data;
 			if (property->name == "controlRegisterA")
 				setControlRegisterA(getInt(property->value));
 			else if (property->name == "dataDirectionRegisterA")
@@ -95,9 +95,9 @@ int MC6821::ioctl(int message, void *data)
 			
 			break;
 		}
-		case OEIOCTL_GET_PROPERTY:
+		case OE_GET_PROPERTY:
 		{
-			OEIoctlProperty *property = (OEIoctlProperty *) data;
+			OEProperty *property = (OEProperty *) data;
 			if (property->name == "controlRegisterA")
 				property->value = getHex(controlRegisterA);
 			else if (property->name == "dataDirectionRegisterA")
@@ -123,9 +123,9 @@ int MC6821::ioctl(int message, void *data)
 			
 			return true;
 		}
-		case OEIOCTL_CONNECT:
+		case OE_CONNECT:
 		{
-			OEIoctlConnection *connection = (OEIoctlConnection *) data;
+			OEConnection *connection = (OEConnection *) data;
 			if (connection->name == "interfaceA")
 				interfaceA = connection->component;
 			else if (connection->name == "interfaceB")
@@ -175,7 +175,7 @@ int MC6821::ioctl(int message, void *data)
 					setControlRegisterA(controlRegisterA | MC6821_CR_IRQ2FLAG);
 			}
 			if ((controlRegisterA & MC6821_CR_C2OUTPUT) && (ca2 != value))
-				postNotification(MC6821_CA2_CHANGED, NULL);
+				postNotification(MC6821_CA2_CHANGED, observers, NULL);
 			ca2 = value;
 			
 			break;
@@ -220,7 +220,7 @@ int MC6821::ioctl(int message, void *data)
 					setControlRegisterB(controlRegisterB | MC6821_CR_IRQ2FLAG);
 			}
 			if (cb2 != value)
-				postNotification(MC6821_CB2_CHANGED, NULL);
+				postNotification(MC6821_CB2_CHANGED, observers, NULL);
 			cb2 = value;
 			
 			break;

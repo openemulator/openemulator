@@ -280,7 +280,7 @@
 
 enum
 {
-	HOSTHID_EVENT = OEIOCTL_USER,
+	HOSTHID_EVENT = OE_USER,
 };
 
 typedef struct
@@ -290,7 +290,7 @@ typedef struct
 	bool isDown;
 	int unicode;
 	int modifierState;
-} OEIoctlKeyEvent;
+} OEHIDEvent;
 
 class HostHID : public OEComponent
 {

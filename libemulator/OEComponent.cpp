@@ -35,38 +35,41 @@ void OEComponent::write(int address, int value)
 {
 }
 
-void OEComponent::addObserver(OEComponent *component)
+void OEComponent::addObserver(OEObserverList &o, OEComponent *component)
 {
-	observers.push_back(component);
+	o.push_back(component);
 }
 
-void OEComponent::removeObserver(OEComponent *component)
+void OEComponent::removeObserver(OEObserverList &o, OEComponent *component)
 {
-	vector<OEComponent *>::iterator iterator;
-	for (iterator = observers.begin();
-		 iterator != observers.end();
+	OEObserverList::iterator iterator;
+	for (iterator = o.begin();
+		 iterator != o.end();
 		 iterator++)
 	{
 		if (*iterator == component)
-			observers.erase(iterator);
+		{
+			o.erase(iterator);
+			break;
+		}
 	}
 }
 
-void OEComponent::postNotification(int message, void *data)
+void OEComponent::postNotification(int id, OEObserverList &o, void *data)
 {
-	OEIoctlNotification notification;
+	OENotification notification;
+	notification.id = id;
 	notification.component = this;
-	notification.message = message;
 	notification.data = data;
 	
 	vector<OEComponent *>::iterator iterator;
-	for (iterator = observers.begin();
-		 iterator != observers.end();
+	for (iterator = o.begin();
+		 iterator != o.end();
 		 iterator++)
-		(*iterator)->ioctl(OEIOCTL_NOTIFY, &notification);
+		(*iterator)->ioctl(OE_NOTIFY, &notification);
 }
 
-int getInt(string value)
+int OEComponent::getInt(string value)
 {
 	if (value.substr(0, 2) == "0x")
 	{
@@ -80,26 +83,26 @@ int getInt(string value)
 		return atoi(value.c_str());
 }
 
-double getFloat(string value)
+double OEComponent::getFloat(string value)
 {
 	return atof(value.c_str());
 }
 
-string getString(int value)
+string OEComponent::getString(int value)
 {
 	std::stringstream ss;
 	ss << value;
 	return ss.str();
 }
 
-string getHex(int value)
+string OEComponent::getHex(int value)
 {
 	std::stringstream ss;
 	ss << "0x" << std::hex << value;
 	return ss.str();
 }
 
-vector<char> getCharVector(string value)
+vector<char> OEComponent::getCharVector(string value)
 {
 	vector<char> result;
 	
@@ -121,7 +124,7 @@ vector<char> getCharVector(string value)
 	return result;
 }
 
-int getPreviousPowerOf2(int value)
+int OEComponent::getPreviousPowerOf2(int value)
 {
 	return (int) pow(2, floor(log2(value)));
 }

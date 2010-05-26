@@ -2,24 +2,15 @@
 <!DOCTYPE dml PUBLIC "-//OPENEMULATOR//DTD DML 1.0//EN" "http://www.openemulator.org/DTDs/dml-1.0.dtd">
 <dml version="1.0" label="Apple II" image="Apple II.png" description="The Apple II was the first highly successful mass produced microprocessor product. The Apple II had color and high-resolution graphics modes, sound capabilities and one of two built-in BASIC programming languages." group="Apple II">
 <device name="host">
-    <component name="system" class="HostSystem">
+    <component name="audio" class="HostAudio">
         <property name="runTime" value="0.0" />
         <property name="isPaused" value="0" />
     </component>
     <component name="video" class="HostVideo">
         <property name="window" value="-1 -1 768 576" />
     </component>
-    <component name="audio" class="HostAudio">
-        <property name="runTime" value="0.0" />
-    </component>
-    <component name="keyboard" class="HostKeyboard" />
-    <component name="joystick" class="HostJoystick" />
-    <component name="mouse" class="HostMouse" />
-    <component name="tablet" class="HostTablet" />
-    <component name="camera" class="HostCamera" />
-    <component name="parallel" class="HostParallel" />
-    <component name="serial" class="HostSerial" />
-    <component name="net" class="HostNet" />
+    <component name="hid" class="HostHID" />
+    <component name="port" class="HostPort" />
 </device>
 
 <device name="dev0" label="Apple II">

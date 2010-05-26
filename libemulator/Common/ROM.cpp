@@ -21,17 +21,17 @@ int ROM::ioctl(int message, void *data)
 {
 	switch(message)
 	{
-		case OEIOCTL_SET_PROPERTY:
+		case OE_SET_PROPERTY:
 		{
-			OEIoctlProperty *property = (OEIoctlProperty *) data;
+			OEProperty *property = (OEProperty *) data;
 			if (property->name == "map")
-				mapVector.push_back(property->value);
+				mappedRange.push_back(property->value);
 			
 			break;
 		}
-		case OEIOCTL_SET_RESOURCE:
+		case OE_SET_RESOURCE:
 		{
-			OEIoctlData *setData = (OEIoctlData *) data;
+			OEData *setData = (OEData *) data;
 			if (setData->name == "image")
 			{
 				memory = setData->data;
@@ -44,11 +44,11 @@ int ROM::ioctl(int message, void *data)
 			
 			break;
 		}
-		case OEIOCTL_GET_MEMORYMAP:
+		case OE_GET_MEMORYMAP:
 		{
-			OEIoctlMemoryMap *memoryMap = (OEIoctlMemoryMap *) data;
+			OEMemoryMap *memoryMap = (OEMemoryMap *) data;
 			memoryMap->component = this;
-			memoryMap->mapVector = mapVector;
+			memoryMap->range = mappedRange;
 			
 			break;
 		}

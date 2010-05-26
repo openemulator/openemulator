@@ -46,35 +46,35 @@ int MemoryMap8Bit::ioctl(int message, void *data)
 {
 	switch(message)
 	{
-		case OEIOCTL_SET_PROPERTY:
+		case OE_SET_PROPERTY:
 		{
-			OEIoctlProperty *property = (OEIoctlProperty *) data;
+			OEProperty *property = (OEProperty *) data;
 			if (property->name == "map")
-				mapVector.push_back(property->value);
+				mappedRange.push_back(property->value);
 			
 			break;
 		}
-		case OEIOCTL_CONNECT:
+		case OE_CONNECT:
 		{
-			OEIoctlConnection *connection = (OEIoctlConnection *) data;
-			OEIoctlMemoryMap memoryMap;
-			connection->component->ioctl(OEIOCTL_GET_MEMORYMAP, &memoryMap);
-			setRange(memoryMap.component, memoryMap.mapVector);
+			OEConnection *connection = (OEConnection *) data;
+			OEMemoryMap memoryMap;
+			connection->component->ioctl(OE_GET_MEMORYMAP, &memoryMap);
+			setRange(memoryMap.component, memoryMap.range);
 			
 			break;
 		}
-		case OEIOCTL_GET_MEMORYMAP:
+		case OE_GET_MEMORYMAP:
 		{
-			OEIoctlMemoryMap *memoryMap = (OEIoctlMemoryMap *) data;
+			OEMemoryMap *memoryMap = (OEMemoryMap *) data;
 			memoryMap->component = this;
-			memoryMap->mapVector = mapVector;
+			memoryMap->range = mappedRange;
 			
 			break;
 		}
-		case OEIOCTL_SET_MEMORYMAP:
+		case OE_SET_MEMORYMAP:
 		{
-			OEIoctlMemoryMap *memoryMap = (OEIoctlMemoryMap *) data;
-			setRange(memoryMap->component, memoryMap->mapVector);
+			OEMemoryMap *memoryMap = (OEMemoryMap *) data;
+			setRange(memoryMap->component, memoryMap->range);
 			
 			break;
 		}

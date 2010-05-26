@@ -10,8 +10,6 @@
 
 #include "AppleIIMMU.h"
 
-#include "HostSystem.h"
-
 #define APPLEIIMMU_ROM_OFFSET	0xd000
 #define APPLEIIMMU_ROM_SIZE		0x3000
 
@@ -31,8 +29,8 @@ AppleIIMMU::AppleIIMMU()
 
 AppleIIMMU::~AppleIIMMU()
 {
-	if (hostSystem)
-		hostSystem->removeObserver(this);
+//	if (hostSystem)
+	//	hostSystem->removeObserver(this);
 }
 
 void AppleIIMMU::mapComponent(OEComponent *component)
@@ -40,10 +38,10 @@ void AppleIIMMU::mapComponent(OEComponent *component)
 	if (!component)
 		return;
 	
-	OEIoctlMemoryMap componentMemoryMap;
+	OEMemoryMap componentMemoryMap;
 	
-	component->ioctl(OEIOCTL_GET_MEMORYMAP, &componentMemoryMap);
-	memoryMap->ioctl(OEIOCTL_SET_MEMORYMAP, &componentMemoryMap);
+	component->ioctl(OE_GET_MEMORYMAP, &componentMemoryMap);
+	memoryMap->ioctl(OE_SET_MEMORYMAP, &componentMemoryMap);
 }
 
 void AppleIIMMU::mapFloatingBus()
@@ -51,10 +49,10 @@ void AppleIIMMU::mapFloatingBus()
 	if (!floatingBus)
 		return;
 	
-	OEIoctlMemoryMap componentMemoryMap;
+	OEMemoryMap componentMemoryMap;
 	componentMemoryMap.component = floatingBus;
-	componentMemoryMap.mapVector = mapVector;
-	memoryMap->ioctl(OEIOCTL_SET_MEMORYMAP, &componentMemoryMap);
+	componentMemoryMap.range = mappedRange;
+	memoryMap->ioctl(OE_SET_MEMORYMAP, &componentMemoryMap);
 }
 
 void AppleIIMMU::updateRomEnable()
@@ -85,13 +83,13 @@ int AppleIIMMU::ioctl(int message, void *data)
 {
 	switch(message)
 	{
-		case OEIOCTL_CONNECT:
+		case OE_CONNECT:
 		{
-			OEIoctlConnection *connection = (OEIoctlConnection *) data;
+			OEConnection *connection = (OEConnection *) data;
 			if (connection->name == "hostSystem")
 			{
 				hostSystem = connection->component;
-				hostSystem->addObserver(this);
+//				hostSystem->addObserver(this);
 			}
 			else if (connection->name == "floatingBus")
 			{
@@ -132,16 +130,16 @@ int AppleIIMMU::ioctl(int message, void *data)
 			}
 			break;
 		}
-		case OEIOCTL_SET_PROPERTY:
+		case OE_SET_PROPERTY:
 		{
-			OEIoctlProperty *property = (OEIoctlProperty *) data;
+			OEProperty *property = (OEProperty *) data;
 			if (property->name == "romEnable")
 				setRomEnable(getInt(property->value));
 			break;
 		}
-		case OEIOCTL_GET_PROPERTY:
+		case OE_GET_PROPERTY:
 		{
-			OEIoctlProperty *property = (OEIoctlProperty *) data;
+			OEProperty *property = (OEProperty *) data;
 			if (property->name == "romEnable")
 				property->value = romEnable;
 			else

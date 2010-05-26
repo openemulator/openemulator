@@ -10,8 +10,6 @@
 
 #include "RAM.h"
 
-#include "HostSystem.h"
-
 RAM::RAM()
 {
 	size = 1;
@@ -26,11 +24,11 @@ int RAM::ioctl(int message, void *data)
 {
 	switch(message)
 	{
-		case OEIOCTL_SET_PROPERTY:
+		case OE_SET_PROPERTY:
 		{
-			OEIoctlProperty *property = (OEIoctlProperty *) data;
+			OEProperty *property = (OEProperty *) data;
 			if (property->name == "map")
-				mapVector.push_back(property->value);
+				mappedRange.push_back(property->value);
 			else if (property->name == "size")
 			{
 				size = getPreviousPowerOf2(getInt(property->value));
@@ -44,9 +42,9 @@ int RAM::ioctl(int message, void *data)
 			
 			break;
 		}
-		case OEIOCTL_SET_DATA:
+		case OE_SET_DATA:
 		{
-			OEIoctlData *setData = (OEIoctlData *) data;
+			OEData *setData = (OEData *) data;
 			if (setData->name == "image")
 			{
 				memory = setData->data;
@@ -55,9 +53,9 @@ int RAM::ioctl(int message, void *data)
 			
 			break;
 		}
-		case OEIOCTL_GET_DATA:
+		case OE_GET_DATA:
 		{
-			OEIoctlData *getData = (OEIoctlData *) data;
+			OEData *getData = (OEData *) data;
 			if (getData->name == "image")
 				getData->data = memory;
 			else
@@ -65,31 +63,31 @@ int RAM::ioctl(int message, void *data)
 			
 			return true;
 		}
-		case OEIOCTL_CONNECT:
+		case OE_CONNECT:
 		{
-			OEIoctlConnection *connection = (OEIoctlConnection *) data;
-			if (connection->name == "hostSystem")
-				connection->component->addObserver(this);
+			OEConnection *connection = (OEConnection *) data;
+//			if (connection->name == "hostSystem")
+//				connection->component->addObserver(this);
 			
 			break;
 		}
-		case OEIOCTL_GET_MEMORYMAP:
+		case OE_GET_MEMORYMAP:
 		{
-			OEIoctlMemoryMap *memoryMap = (OEIoctlMemoryMap *) data;
+			OEMemoryMap *memoryMap = (OEMemoryMap *) data;
 			memoryMap->component = this;
-			memoryMap->mapVector = mapVector;
+			memoryMap->range = mappedRange;
 			
 			break;
 		}
-		case OEIOCTL_NOTIFY:
+		case OE_NOTIFY:
 		{
-			OEIoctlNotification *notification = (OEIoctlNotification *) data;
+/*			OENotification *notification = (OENotification *) data;
 			if (notification->message == HOSTSYSTEM_RESET)
 			{
 				for (int i = 0; i < memory.size(); i++)
 					memory[i] = resetPattern[i % resetPattern.size()];
 			}
-			
+*/			
 			break;
 		}
 	}

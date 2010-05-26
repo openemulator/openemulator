@@ -20,18 +20,18 @@ int W65C02S::ioctl(int message, void *data)
 {
 	switch(message)
 	{
-		case OEIOCTL_CONNECT:
+		case OE_CONNECT:
 		{
-			OEIoctlConnection *connection = (OEIoctlConnection *) data;
+			OEConnection *connection = (OEConnection *) data;
 			if (connection->name == "memory")
 				memory = connection->component;
-			else if (connection->name == "hostSystem")
-				connection->component->addObserver(this);
+//			else if (connection->name == "hostSystem")
+//				connection->component->addObserver(this);
 			break;
 		}
-		case OEIOCTL_SET_PROPERTY:
+		case OE_SET_PROPERTY:
 		{
-			OEIoctlProperty *property = (OEIoctlProperty *) data;
+			OEProperty *property = (OEProperty *) data;
 			if (property->name == "a")
 				a = getInt(property->value);
 			else if (property->name == "x")
@@ -46,9 +46,9 @@ int W65C02S::ioctl(int message, void *data)
 				pc.w.l = getInt(property->value);
 			break;
 		}
-		case OEIOCTL_GET_PROPERTY:
+		case OE_GET_PROPERTY:
 		{
-			OEIoctlProperty *property = (OEIoctlProperty *) data;
+			OEProperty *property = (OEProperty *) data;
 			if (property->name == "a")
 				property->value = a;
 			else if (property->name == "x")

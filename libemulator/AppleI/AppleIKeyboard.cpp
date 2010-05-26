@@ -9,7 +9,8 @@
  */
 
 #include "AppleIKeyboard.h"
-#include "HostKeyboard.h"
+
+#include "HostHID.h"
 #include "MC6821.h"
 
 #define APPLEIKEYBOARD_MASK	0x40
@@ -18,25 +19,25 @@ int AppleIKeyboard::ioctl(int message, void *data)
 {
 	switch (message)
 	{
-		case OEIOCTL_CONNECT:
+		case OE_CONNECT:
 		{
-			OEIoctlConnection *connection = (OEIoctlConnection *) data;
-			if (connection->name == "hostKeyboard")
+			OEConnection *connection = (OEConnection *) data;
+			if (connection->name == "hostHID")
 			{
 				hostKeyboard = connection->component;
-				hostKeyboard->addObserver(this);
+//				hostKeyboard->addObserver(this);
 			}
 			
 			break;
 		}
-		case OEIOCTL_NOTIFY:
+		case OE_NOTIFY:
 		{
-			OEIoctlNotification *notification = (OEIoctlNotification *) data;
-			OEIoctlKeyEvent *keyEvent = (OEIoctlKeyEvent *) notification->data;
+			OENotification *notification = (OENotification *) data;
+			OEHIDEvent *event = (OEHIDEvent *) notification->data;
 			
-			if ((keyEvent->isDown) && (keyEvent->unicode < 128))
+			if ((event->isDown) && (event->unicode < 128))
 			{
-				key = keyEvent->unicode;
+				key = event->unicode;
 				
 				bool value = true;
 				pia->ioctl(MC6821_SET_CA1, &value);

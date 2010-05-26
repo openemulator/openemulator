@@ -2,23 +2,15 @@
 <!DOCTYPE dml PUBLIC "-//OPENEMULATOR//DTD DML 1.0//EN" "http://www.openemulator.org/DTDs/dml-1.0.dtd">
 <dml version="1.0" label="Apple I" image="Apple I.png" description="" group="Apple I">
 <device name="host">
-    <component name="system" class="HostSystem">
+    <component name="audio" class="HostAudio">
+        <property name="runTime" value="0.0" />
         <property name="isPaused" value="0" />
     </component>
     <component name="video" class="HostVideo">
         <property name="window" value="-1 -1 768 576" />
     </component>
-    <component name="audio" class="HostAudio">
-        <property name="runTime" value="0.0" />
-    </component>
-    <component name="keyboard" class="HostKeyboard" />
-    <component name="joystick" class="HostJoystick" />
-    <component name="mouse" class="HostMouse" />
-    <component name="tablet" class="HostTablet" />
-    <component name="camera" class="HostCamera" />
-    <component name="parallel" class="HostParallel" />
-    <component name="serial" class="HostSerial" />
-    <component name="net" class="HostNet" />
+    <component name="hid" class="HostHID" />
+    <component name="port" class="HostPort" />
 </device>
 
 <device name="appleI" label="Apple I">
@@ -80,7 +72,7 @@
         <connection name="romSocket" ref="" />
     </component>
     <component name="keyboard" class="AppleIKeyboard">
-        <connection name="hostKeyboard" ref="host::keyboard" />
+        <connection name="hostHID" ref="host::hid" />
         <connection name="pia" ref="pia" />
     </component>
     <component name="pia" class="MC6821">

@@ -14,7 +14,7 @@
 
 enum
 {
-	APPLEIISLOTMEMORY_QUERY = OEIOCTL_USER,
+	APPLEIISLOTMEMORY_QUERY = OE_USER,
 };
 
 typedef struct
@@ -32,7 +32,7 @@ public:
 	void write(int address, int value);
 	
 private:
-	vector<string> mapVector;
+	vector<string> mappedRange;
 	
 	OEComponent *system;
 	OEComponent *memoryMap;

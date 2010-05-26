@@ -20,7 +20,7 @@ public:
 	void onNotification(OEComponent *component, int message, void *data);
 	
 private:
-	vector<string> mapVector;
+	vector<string> mappedRange;
 	
 	OEComponent *hostSystem;
 	OEComponent *memoryMap;

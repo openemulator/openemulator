@@ -12,7 +12,7 @@
 
 enum
 {
-	APPLEIISLOTEXPANSIONMEMORY_SET_SLOT = OEIOCTL_USER,
+	APPLEIISLOTEXPANSIONMEMORY_SET_SLOT = OE_USER,
 };
 
 #define APPLEIISLOTEXPANSIONMEMORY_SIZE	0x800
@@ -26,7 +26,7 @@ public:
 	void write(int address, int value);
 	
 private:
-	vector<string> mapVector;
+	OEMemoryRange mappedRange;
 	
 	OEComponent *floatingBus;
 	OEComponent *expandedSlotMemory;

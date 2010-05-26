@@ -14,17 +14,17 @@ int HostVideo::ioctl(int message, void *data)
 {
 	switch (message)
 	{
-		case OEIOCTL_SET_PROPERTY:
+		case OE_SET_PROPERTY:
 		{
-			OEIoctlProperty *property = (OEIoctlProperty *) data;
+			OEProperty *property = (OEProperty *) data;
 //			if (property->name == "window")
 //				runTime = getFloat(property->value);
 			
 			break;
 		}
-		case OEIOCTL_GET_PROPERTY:
+		case OE_GET_PROPERTY:
 		{
-			OEIoctlProperty *property = (OEIoctlProperty *) data;
+			OEProperty *property = (OEProperty *) data;
 //			if (property->name == "window")
 //				property->value = runTime;
 			

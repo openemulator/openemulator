@@ -21,19 +21,19 @@ int MOS6502::ioctl(int message, void *data)
 {
 	switch(message)
 	{
-		case OEIOCTL_CONNECT:
+		case OE_CONNECT:
 		{
-			OEIoctlConnection *connection = (OEIoctlConnection *) data;
+			OEConnection *connection = (OEConnection *) data;
 			if (connection->name == "memoryMap")
 				memory = connection->component;
-			else if (connection->name == "hostSystem")
-				connection->component->addObserver(this);
+//			else if (connection->name == "hostSystem")
+//				connection->component->addObserver(this);
 			
 			break;
 		}
-		case OEIOCTL_SET_PROPERTY:
+		case OE_SET_PROPERTY:
 		{
-			OEIoctlProperty *property = (OEIoctlProperty *) data;
+			OEProperty *property = (OEProperty *) data;
 			if (property->name == "pc")
 				pc.w.l = getInt(property->value);
 			else if (property->name == "sp")
@@ -55,9 +55,9 @@ int MOS6502::ioctl(int message, void *data)
 			
 			break;
 		}
-		case OEIOCTL_GET_PROPERTY:
+		case OE_GET_PROPERTY:
 		{
-			OEIoctlProperty *property = (OEIoctlProperty *) data;
+			OEProperty *property = (OEProperty *) data;
 			if (property->name == "pc")
 				property->value = getHex(pc.w.l);
 			else if (property->name == "sp")

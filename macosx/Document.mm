@@ -112,14 +112,14 @@
 	if (!emulation)
 		return;
 	
-	OEIoctlProperty msg;
+	OEProperty msg;
 	
 	msg.name = string([name UTF8String]);
 	msg.value = string([value UTF8String]);
 	
 	oepaIoctl(emulation,
 			  string([ref UTF8String]),
-			  OEIOCTL_SET_PROPERTY,
+			  OE_SET_PROPERTY,
 			  &msg);
 }
 
@@ -128,13 +128,13 @@
 	if (!emulation)
 		return nil;
 	
-	OEIoctlProperty msg;
+	OEProperty msg;
 	
 	msg.name = string([name UTF8String]);
 	
 	if (oepaIoctl(emulation,
 				  string([ref UTF8String]),
-				  OEIOCTL_GET_PROPERTY,
+				  OE_GET_PROPERTY,
 				  &msg))
 		return [NSString stringWithUTF8String:msg.value.c_str()];
 	else
@@ -506,14 +506,14 @@
 
 - (void) powerButtonPressed:(id) sender
 {
-//	OEIoctlHostSystemEvent event = {HOSTSYSTEM_POWER, true};
-//	oepaIoctl(emulation, "host::audio", OEIOCTL_POST_NOTIFICATION, &event);
+//	OEHostSystemEvent event = {HOSTSYSTEM_POWER, true};
+//	oepaIoctl(emulation, "host::audio", OE_POST_NOTIFICATION, &event);
 }
 
 - (void) powerButtonReleased:(id) sender
 {
-//	OEIoctlHostSystemEvent event = {HOSTAUDIO_POWER, false};
-//	oepaIoctl(emulation, "host::audio", OEIOCTL_POST_NOTIFICATION, &event);
+//	OEHostSystemEvent event = {HOSTAUDIO_POWER, false};
+//	oepaIoctl(emulation, "host::audio", OE_POST_NOTIFICATION, &event);
 }
 
 - (void) resetButtonPressedAndReleased:(id) sender
@@ -524,14 +524,14 @@
 
 - (void) resetButtonPressed:(id) sender
 {
-//	OEIoctlHostSystemEvent event = {HOSTSYSTEM_RESET, false};
-//	oepaIoctl(emulation, "host::system", OEIOCTL_POST_NOTIFICATION, &event);
+//	OEHostSystemEvent event = {HOSTSYSTEM_RESET, false};
+//	oepaIoctl(emulation, "host::system", OE_POST_NOTIFICATION, &event);
 }
 
 - (void) resetButtonReleased:(id) sender
 {
-//	OEIoctlHostSystemEvent event = {HOSTSYSTEM_RESET, false};
-//	oepaIoctl(emulation, "host::system", OEIOCTL_POST_NOTIFICATION, &event);
+//	OEHostSystemEvent event = {HOSTSYSTEM_RESET, false};
+//	oepaIoctl(emulation, "host::system", OE_POST_NOTIFICATION, &event);
 }
 
 - (void) pauseButtonPressedAndReleased:(id) sender
@@ -542,14 +542,14 @@
 
 - (void) pauseButtonPressed:(id) sender
 {
-//	OEIoctlHostSystemEvent event = {HOSTSYSTEM_PAUSE, true};
-//	oepaIoctl(emulation, "host::system", OEIOCTL_POST_NOTIFICATION, &event);
+//	OEHostSystemEvent event = {HOSTSYSTEM_PAUSE, true};
+//	oepaIoctl(emulation, "host::system", OE_POST_NOTIFICATION, &event);
 }
 
 - (void) pauseButtonReleased:(id) sender
 {
-//	OEIoctlHostSystemEvent event = {HOSTSYSTEM_PAUSE, false};
-//	oepaIoctl(emulation, "host::system", OEIOCTL_POST_NOTIFICATION, &event);
+//	OEHostSystemEvent event = {HOSTSYSTEM_PAUSE, false};
+//	oepaIoctl(emulation, "host::system", OE_POST_NOTIFICATION, &event);
 }
 
 - (void) interruptButtonPressedAndReleased:(id) sender
@@ -560,14 +560,14 @@
 
 - (void) interruptButtonPressed:(id) sender
 {
-//	OEIoctlHostSystemEvent event = {HOSTSYSTEM_INTERRUPT, true};
-//	oepaIoctl(emulation, "host::system", OEIOCTL_POST_NOTIFICATION, &event);
+//	OEHostSystemEvent event = {HOSTSYSTEM_INTERRUPT, true};
+//	oepaIoctl(emulation, "host::system", OE_POST_NOTIFICATION, &event);
 }
 
 - (void) interruptButtonReleased:(id) sender
 {
-//	OEIoctlHostSystemEvent event = {HOSTSYSTEM_INTERRUPT, true};
-//	oepaIoctl(emulation, "host::system", OEIOCTL_POST_NOTIFICATION, &event);
+//	OEHostSystemEvent event = {HOSTSYSTEM_INTERRUPT, true};
+//	oepaIoctl(emulation, "host::system", OE_POST_NOTIFICATION, &event);
 }
 
 - (BOOL) isCopyValid

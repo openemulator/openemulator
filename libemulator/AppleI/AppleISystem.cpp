@@ -22,17 +22,17 @@ int AppleISystem::ioctl(int message, void *data)
 {
 	switch (message)
 	{
-		case OEIOCTL_SET_PROPERTY:
+		case OE_SET_PROPERTY:
 		{
-			OEIoctlProperty *property = (OEIoctlProperty *) data;
+			OEProperty *property = (OEProperty *) data;
 			if (property->name == "isCPUExternal")
 				isCPUExternal = getInt(property->value);
 			
 			break;
 		}
-		case OEIOCTL_GET_PROPERTY:
+		case OE_GET_PROPERTY:
 		{
-			OEIoctlProperty *property = (OEIoctlProperty *) data;
+			OEProperty *property = (OEProperty *) data;
 			if (property->name == "isCPUExternal")
 				property->value = getString(isCPUExternal);
 			else
@@ -40,13 +40,13 @@ int AppleISystem::ioctl(int message, void *data)
 			
 			return true;
 		}
-		case OEIOCTL_CONNECT:
+		case OE_CONNECT:
 		{
-			OEIoctlConnection *connection = (OEIoctlConnection *) data;
+			OEConnection *connection = (OEConnection *) data;
 			if (connection->name == "hostAudio")
 			{
 				OEComponent *hostAudio = connection->component;
-				hostAudio->addObserver(this);
+//				hostAudio->addObserver(this);
 			}
 			else if (connection->name == "cpu")
 				cpu = connection->component;
@@ -55,10 +55,10 @@ int AppleISystem::ioctl(int message, void *data)
 			
 			break;
 		}
-		case OEIOCTL_NOTIFY:
+		case OE_NOTIFY:
 		{
-			OEIoctlNotification *notification = (OEIoctlNotification *) data;
-			if (notification->message == HOSTAUDIO_RENDER_DID_START)
+			OENotification *notification = (OENotification *) data;
+			if (notification->id == HOSTAUDIO_RENDER_DID_START)
 			{
 				HostAudioBuffer *buffer = (HostAudioBuffer *) notification->data;
 				float *out = buffer->output;

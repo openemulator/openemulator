@@ -19,7 +19,7 @@ public:
 	int read(int address);
 	
 private:
-	vector<string> mapVector;
+	OEMemoryRange mappedRange;
 	
 	int mask;
 	vector<char> memory;

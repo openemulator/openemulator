@@ -18,7 +18,7 @@
 // Messages
 enum
 {
-	HOSTAUDIO_RENDERBUFFER = OEIOCTL_USER,
+	HOSTAUDIO_RENDERBUFFER = OE_USER,
 	HOSTAUDIO_GETBUFFER,
 	HOSTAUDIO_ADD_RUNTIME,
 	HOSTAUDIO_GET_RUNTIME,
@@ -50,6 +50,11 @@ public:
 	int ioctl(int message, void *data);
 	
 private:
+	OEObserverList renderWillStartObservers;
+	OEObserverList renderDidStartObservers;
+	OEObserverList renderWillEndObservers;
+	OEObserverList renderDidEndObservers;
+	
 	double runTime;
 	bool isPaused;
 };

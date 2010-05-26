@@ -21,7 +21,7 @@ public:
 	void write(int address, int value);
 	
 private:
-	vector<string> mapVector;
+	OEMemoryRange mappedRange;
 	
 	OEComponent *readMap[MEMORYMAP16BIT_SIZE];
 	OEComponent *writeMap[MEMORYMAP16BIT_SIZE];

@@ -14,9 +14,9 @@ int AppleIFloatingBus::ioctl(int message, void * data)
 {
 	switch(message)
 	{
-		case OEIOCTL_CONNECT:
+		case OE_CONNECT:
 		{
-			OEIoctlConnection *connection = (OEIoctlConnection *) data;
+			OEConnection *connection = (OEConnection *) data;
 			if (connection->name == "system")
 				system = connection->component;
 			else if (connection->name == "memory")

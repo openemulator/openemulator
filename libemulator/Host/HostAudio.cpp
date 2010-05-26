@@ -16,9 +16,9 @@ int HostAudio::ioctl(int message, void *data)
 {
 	switch (message)
 	{
-		case OEIOCTL_SET_PROPERTY:
+		case OE_SET_PROPERTY:
 		{
-			OEIoctlProperty *property = (OEIoctlProperty *) data;
+			OEProperty *property = (OEProperty *) data;
 			if (property->name == "runTime")
 				runTime = getFloat(property->value);
 			else if (property->name == "isPaused")
@@ -26,9 +26,9 @@ int HostAudio::ioctl(int message, void *data)
 			
 			break;
 		}
-		case OEIOCTL_GET_PROPERTY:
+		case OE_GET_PROPERTY:
 		{
-			OEIoctlProperty *property = (OEIoctlProperty *) data;
+			OEProperty *property = (OEProperty *) data;
 			if (property->name == "runTime")
 				property->value = runTime;
 			else if (property->name == "isPaused")
@@ -38,10 +38,18 @@ int HostAudio::ioctl(int message, void *data)
 		}
 		case HOSTAUDIO_RENDERBUFFER:
 		{
-			postNotification(HOSTAUDIO_RENDER_WILL_START, data);
-			postNotification(HOSTAUDIO_RENDER_DID_START, data);
-			postNotification(HOSTAUDIO_RENDER_WILL_END, data);
-			postNotification(HOSTAUDIO_RENDER_DID_END, data);
+			postNotification(HOSTAUDIO_RENDER_WILL_START,
+							 renderWillStartObservers,
+							 data);
+			postNotification(HOSTAUDIO_RENDER_DID_START,
+							 renderWillStartObservers,
+							 data);
+			postNotification(HOSTAUDIO_RENDER_WILL_END, 
+							 renderWillStartObservers,
+							 data);
+			postNotification(HOSTAUDIO_RENDER_DID_END, 
+							 renderWillStartObservers,
+							 data);
 			
 			return true;
 		}
