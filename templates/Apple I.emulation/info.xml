@@ -3,13 +3,14 @@
 <dml version="1.0" label="Apple I" image="Apple I.png" description="" group="Apple I">
 <device name="host">
     <component name="system" class="HostSystem">
-        <property name="runTime" value="0.0" />
         <property name="isPaused" value="0" />
     </component>
     <component name="video" class="HostVideo">
         <property name="window" value="-1 -1 768 576" />
     </component>
-    <component name="audio" class="HostAudio" />
+    <component name="audio" class="HostAudio">
+        <property name="runTime" value="0.0" />
+    </component>
     <component name="keyboard" class="HostKeyboard" />
     <component name="joystick" class="HostJoystick" />
     <component name="mouse" class="HostMouse" />

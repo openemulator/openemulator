@@ -40,6 +40,12 @@ void calculate1BitSignalToPixel(NTSC1Bit convolutionTable,
 				}
 			}
 			
+			if (config->colorize)
+			{
+				yuv[1] = (1.0 / M_SQRT2) * yuv[0];
+				yuv[2] = 0;
+			}
+			
 			applyDecoderMatrix(rgb, yuv, decoderMatrix);
 			applyOffsetAndGain(rgb, o < NTSC_1BIT_INPUTSAMPLENUM ?
 							   config->brightness : 0, config->contrast);

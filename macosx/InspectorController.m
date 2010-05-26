@@ -55,12 +55,12 @@ NSString *itemIdentifiers[] =
 			forKeyPath:@"mainWindow.windowController.document"
 			   options:0
 			   context:[InspectorController class]];
-
-	timer = [NSTimer scheduledTimerWithTimeInterval:0.25
-											 target:self
-										   selector:@selector(timerDidExpire:)
-										   userInfo:nil
-											repeats:YES];
+	
+	[NSTimer scheduledTimerWithTimeInterval:0.25
+									 target:self
+								   selector:@selector(timerDidExpire:)
+								   userInfo:nil
+									repeats:YES];
 }
 
 - (void) observeValueForKeyPath:(NSString *) keyPath

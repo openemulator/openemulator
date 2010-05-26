@@ -6,27 +6,20 @@
         <property name="runTime" value="0.0" />
         <property name="isPaused" value="0" />
     </component>
-    <component name="audio" class="HostAudio">
-    </component>
     <component name="video" class="HostVideo">
         <property name="window" value="-1 -1 768 576" />
     </component>
-    <component name="keyboard" class="HostKeyboard">
+    <component name="audio" class="HostAudio">
+        <property name="runTime" value="0.0" />
     </component>
-    <component name="joystick" class="HostJoystick">
-    </component>
-    <component name="mouse" class="HostMouse">
-    </component>
-    <component name="tablet" class="HostTablet">
-    </component>
-    <component name="serial" class="HostSerial">
-    </component>
-    <component name="parallel" class="HostParallel">
-    </component>
-    <component name="net" class="HostNet">
-    </component>
-    <component name="camera" class="HostCamera">
-    </component>
+    <component name="keyboard" class="HostKeyboard" />
+    <component name="joystick" class="HostJoystick" />
+    <component name="mouse" class="HostMouse" />
+    <component name="tablet" class="HostTablet" />
+    <component name="camera" class="HostCamera" />
+    <component name="parallel" class="HostParallel" />
+    <component name="serial" class="HostSerial" />
+    <component name="net" class="HostNet" />
 </device>
 
 <device name="dev0" label="Apple II">

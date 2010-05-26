@@ -9,6 +9,7 @@
  */
 
 #import <Carbon/Carbon.h>
+#import <QuartzCore/QuartzCore.h>
 
 #import "Document.h"
 #import "DocumentController.h"
@@ -21,6 +22,8 @@
 #define LINK_FORUMSURL	@"http://groups.google.com/group/openemulator"
 #define LINK_DEVURL		@"http://code.google.com/p/openemulator"
 #define LINK_DONATEURL	@"http://www.openemulator.org/donate.html"
+
+#define TIMER_FREQUENCY	10.0
 
 @implementation DocumentController
 
@@ -51,7 +54,13 @@
 		audioRecordingURL = nil;
 		
 		disableMenuBarCount = 0;
-	}
+		
+/*		CVReturn ret;
+		CGOpenGLDisplayMask	totalDisplayMask = 0;
+		CVDisplayLinkRef	displayLink;
+		ret = CVDisplayLinkCreateWithOpenGLDisplayMask(totalDisplayMask, &displayLink);
+		CVDisplayLinkSetOutputCallback(displayLink, renderCallback, self);
+*/	}
 	
 	return self;
 }
@@ -166,6 +175,17 @@
 	
 	[fInspectorController storeWindowState:self];
 }
+
+/*static CVReturn renderCallback(CVDisplayLinkRef displayLink, 
+							   const CVTimeStamp *inNow, 
+							   const CVTimeStamp *inOutputTime, 
+							   CVOptionFlags flagsIn, 
+							   CVOptionFlags *flagsOut, 
+							   void *displayLinkContext)
+{
+	NSLog(@"Oh no");
+    return [(VideoView*)displayLinkContext renderTime:inOutputTime];
+}*/
 
 - (void) observeValueForKeyPath:(NSString *) keyPath
 					   ofObject:(id) object

@@ -16,8 +16,6 @@
 
 #import "oepa.h"
 
-#import "HostSystem.h"
-
 @implementation Document
 
 - (id) init
@@ -508,14 +506,14 @@
 
 - (void) powerButtonPressed:(id) sender
 {
-	OEIoctlHostSystemEvent event = {HOSTSYSTEM_POWER, true};
-	oepaIoctl(emulation, "host::system", OEIOCTL_POST_NOTIFICATION, &event);
+//	OEIoctlHostSystemEvent event = {HOSTSYSTEM_POWER, true};
+//	oepaIoctl(emulation, "host::audio", OEIOCTL_POST_NOTIFICATION, &event);
 }
 
 - (void) powerButtonReleased:(id) sender
 {
-	OEIoctlHostSystemEvent event = {HOSTSYSTEM_POWER, false};
-	oepaIoctl(emulation, "host::system", OEIOCTL_POST_NOTIFICATION, &event);
+//	OEIoctlHostSystemEvent event = {HOSTAUDIO_POWER, false};
+//	oepaIoctl(emulation, "host::audio", OEIOCTL_POST_NOTIFICATION, &event);
 }
 
 - (void) resetButtonPressedAndReleased:(id) sender
@@ -526,14 +524,14 @@
 
 - (void) resetButtonPressed:(id) sender
 {
-	OEIoctlHostSystemEvent event = {HOSTSYSTEM_RESET, false};
-	oepaIoctl(emulation, "host::system", OEIOCTL_POST_NOTIFICATION, &event);
+//	OEIoctlHostSystemEvent event = {HOSTSYSTEM_RESET, false};
+//	oepaIoctl(emulation, "host::system", OEIOCTL_POST_NOTIFICATION, &event);
 }
 
 - (void) resetButtonReleased:(id) sender
 {
-	OEIoctlHostSystemEvent event = {HOSTSYSTEM_RESET, false};
-	oepaIoctl(emulation, "host::system", OEIOCTL_POST_NOTIFICATION, &event);
+//	OEIoctlHostSystemEvent event = {HOSTSYSTEM_RESET, false};
+//	oepaIoctl(emulation, "host::system", OEIOCTL_POST_NOTIFICATION, &event);
 }
 
 - (void) pauseButtonPressedAndReleased:(id) sender
@@ -544,14 +542,14 @@
 
 - (void) pauseButtonPressed:(id) sender
 {
-	OEIoctlHostSystemEvent event = {HOSTSYSTEM_PAUSE, true};
-	oepaIoctl(emulation, "host::system", OEIOCTL_POST_NOTIFICATION, &event);
+//	OEIoctlHostSystemEvent event = {HOSTSYSTEM_PAUSE, true};
+//	oepaIoctl(emulation, "host::system", OEIOCTL_POST_NOTIFICATION, &event);
 }
 
 - (void) pauseButtonReleased:(id) sender
 {
-	OEIoctlHostSystemEvent event = {HOSTSYSTEM_PAUSE, false};
-	oepaIoctl(emulation, "host::system", OEIOCTL_POST_NOTIFICATION, &event);
+//	OEIoctlHostSystemEvent event = {HOSTSYSTEM_PAUSE, false};
+//	oepaIoctl(emulation, "host::system", OEIOCTL_POST_NOTIFICATION, &event);
 }
 
 - (void) interruptButtonPressedAndReleased:(id) sender
@@ -562,14 +560,14 @@
 
 - (void) interruptButtonPressed:(id) sender
 {
-	OEIoctlHostSystemEvent event = {HOSTSYSTEM_INTERRUPT, true};
-	oepaIoctl(emulation, "host::system", OEIOCTL_POST_NOTIFICATION, &event);
+//	OEIoctlHostSystemEvent event = {HOSTSYSTEM_INTERRUPT, true};
+//	oepaIoctl(emulation, "host::system", OEIOCTL_POST_NOTIFICATION, &event);
 }
 
 - (void) interruptButtonReleased:(id) sender
 {
-	OEIoctlHostSystemEvent event = {HOSTSYSTEM_INTERRUPT, true};
-	oepaIoctl(emulation, "host::system", OEIOCTL_POST_NOTIFICATION, &event);
+//	OEIoctlHostSystemEvent event = {HOSTSYSTEM_INTERRUPT, true};
+//	oepaIoctl(emulation, "host::system", OEIOCTL_POST_NOTIFICATION, &event);
 }
 
 - (BOOL) isCopyValid

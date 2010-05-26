@@ -1,11 +1,11 @@
 
 /**
  * libemulator
- * Host Keyboard
+ * Host Port
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls host keyboard events
+ * Controls host ports (serial, parallel, ethernet, usb, firewire)
  */
 
 #include "OEComponent.h"
@@ -33,7 +33,7 @@
 #define HID_S_DPADDOWN						0x91
 #define HID_S_DPADRIGHT						0x92
 #define HID_S_DPADLEFT						0x93
-			
+
 #define HID_S_DOCK							0xa0
 #define HID_S_UNDOCK						0xa1
 #define HID_S_SETUP							0xa2
@@ -214,7 +214,7 @@
 #define HID_K_CLEARAGAIN					0xa2
 #define HID_K_CRSELPROPS					0xa3
 #define HID_K_EXSEL							0xa4
-		
+
 #define HID_KP_00							0xb0
 #define HID_KP_000							0xb1
 #define HID_KP_THOUSANDSSEPARATOR			0xb2
@@ -261,7 +261,7 @@
 #define HID_KP_OCTAL						0xdb
 #define HID_KP_DECIMAL						0xdc
 #define HID_KP_HEXADECIMAL					0xdd
-		
+
 #define HID_K_LEFTCONTROL					0xe0
 #define HID_K_LEFTSHIFT						0xe1
 #define HID_K_LEFTALT						0xe2
@@ -280,7 +280,7 @@
 
 enum
 {
-	HOSTKEYBOARD_EVENT = OEIOCTL_USER,
+	HOSTHID_EVENT = OEIOCTL_USER,
 };
 
 typedef struct
@@ -292,6 +292,6 @@ typedef struct
 	int modifierState;
 } OEIoctlKeyEvent;
 
-class HostKeyboard : public OEComponent
+class HostHID : public OEComponent
 {
 };

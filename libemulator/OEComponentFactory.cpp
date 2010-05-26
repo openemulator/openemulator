@@ -11,17 +11,10 @@
 #include "OEComponentFactory.h"
 
 // FACTORY_INCLUDE_START - Do not modify this section
-#include "HostSystem.h"
-#include "HostVideo.h"
 #include "HostAudio.h"
-#include "HostKeyboard.h"
-#include "HostJoystick.h"
-#include "HostMouse.h"
-#include "HostTablet.h"
-#include "HostCamera.h"
-#include "HostParallel.h"
-#include "HostSerial.h"
-#include "HostNet.h"
+#include "HostVideo.h"
+#include "HostHID.h"
+#include "HostPort.h"
 
 #include "RAM.h"
 #include "ROM.h"
@@ -49,17 +42,10 @@
 OEComponent *OEComponentFactory::build(string className)
 {
 // FACTORY_CODE_START - Do not modify this section
-	matchComponent(HostSystem);
-	matchComponent(HostVideo);
 	matchComponent(HostAudio);
-	matchComponent(HostKeyboard);
-	matchComponent(HostJoystick);
-	matchComponent(HostMouse);
-	matchComponent(HostTablet);
-	matchComponent(HostCamera);
-	matchComponent(HostParallel);
-	matchComponent(HostSerial);
-	matchComponent(HostNet);
+	matchComponent(HostVideo);
+	matchComponent(HostHID);
+	matchComponent(HostPort);
 	
 	matchComponent(RAM);
 	matchComponent(ROM);

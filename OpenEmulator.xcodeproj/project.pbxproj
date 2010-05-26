@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		00044D9211AB7FFF002F6891 /* HostHID.h in Headers */ = {isa = PBXBuildFile; fileRef = 00044D9011AB7FFF002F6891 /* HostHID.h */; };
+		00044D9311AB7FFF002F6891 /* HostHID.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00044D9111AB7FFF002F6891 /* HostHID.cpp */; };
+		00044D9611AB801C002F6891 /* HostPort.h in Headers */ = {isa = PBXBuildFile; fileRef = 00044D9411AB801C002F6891 /* HostPort.h */; };
+		00044D9711AB801C002F6891 /* HostPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00044D9511AB801C002F6891 /* HostPort.cpp */; };
 		0006715A113F2B8500781A92 /* AppleIIFloatingBus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00067158113F2B8500781A92 /* AppleIIFloatingBus.cpp */; };
 		000671C3113F318000781A92 /* MemoryMap8Bit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000671BF113F318000781A92 /* MemoryMap8Bit.cpp */; };
 		000671C5113F318000781A92 /* MemoryMap16Bit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000671C1113F318000781A92 /* MemoryMap16Bit.cpp */; };
@@ -45,12 +49,6 @@
 		0054E4A71131BE8A006D32D9 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0054E4A61131BE8A006D32D9 /* OpenGL.framework */; };
 		0054E6311131BEE7006D32D9 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0054E6301131BEE7006D32D9 /* Carbon.framework */; };
 		0054E66C1131BF58006D32D9 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0054E66B1131BF58006D32D9 /* Quartz.framework */; };
-		005B486011829406008C7E42 /* HostMouse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 005B485E11829406008C7E42 /* HostMouse.cpp */; };
-		005B487911829472008C7E42 /* HostTablet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 005B487711829472008C7E42 /* HostTablet.cpp */; };
-		005B4886118294AF008C7E42 /* HostSerial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 005B4884118294AF008C7E42 /* HostSerial.cpp */; };
-		005B488A118294B5008C7E42 /* HostParallel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 005B4888118294B5008C7E42 /* HostParallel.cpp */; };
-		005B4892118294C9008C7E42 /* HostCamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 005B4890118294C9008C7E42 /* HostCamera.cpp */; };
-		005B48A7118295AD008C7E42 /* HostNet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 005B48A5118295AD008C7E42 /* HostNet.cpp */; };
 		005B81D9108680B9009D4804 /* ScreenView.m in Sources */ = {isa = PBXBuildFile; fileRef = 005B81D8108680B9009D4804 /* ScreenView.m */; };
 		005C43EB113121F2006AEE84 /* TBInterrupt.png in Resources */ = {isa = PBXBuildFile; fileRef = 005C43EA113121F2006AEE84 /* TBInterrupt.png */; };
 		005E5F6E1086B0E100E573D4 /* InspectorController.m in Sources */ = {isa = PBXBuildFile; fileRef = 005E5F6D1086B0E100E573D4 /* InspectorController.m */; };
@@ -58,17 +56,16 @@
 		00610049115CF08A004D1511 /* ntscSignalProcessing.c in Sources */ = {isa = PBXBuildFile; fileRef = 00610047115CF08A004D1511 /* ntscSignalProcessing.c */; };
 		00679D08100817F700B38748 /* DeviceChooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00679D04100817F600B38748 /* DeviceChooser.xib */; };
 		00679D09100817F700B38748 /* TemplateChooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00679D06100817F700B38748 /* TemplateChooser.xib */; };
+		006B894011A9D464001A34A5 /* ntscCGA.c in Sources */ = {isa = PBXBuildFile; fileRef = 006B893E11A9D464001A34A5 /* ntscCGA.c */; };
+		006B894111A9D464001A34A5 /* ntscCGA.h in Headers */ = {isa = PBXBuildFile; fileRef = 006B893F11A9D464001A34A5 /* ntscCGA.h */; };
 		0071E3BA10803F7300F2D54F /* ChooserItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 0071E3B910803F7300F2D54F /* ChooserItem.m */; };
 		008107DE1120C57600D744FB /* TemplateChooserViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00FE0C051095353B00B92AB7 /* TemplateChooserViewController.mm */; };
 		008283F011A35D3A00B2B530 /* IPAudioPlay.png in Resources */ = {isa = PBXBuildFile; fileRef = 008283EF11A35D3A00B2B530 /* IPAudioPlay.png */; };
 		0082840411A3603800B2B530 /* IPAudioRecord.png in Resources */ = {isa = PBXBuildFile; fileRef = 0082840211A3603800B2B530 /* IPAudioRecord.png */; };
 		0082847C11A422C700B2B530 /* IPAudioStop.png in Resources */ = {isa = PBXBuildFile; fileRef = 0082847B11A422C700B2B530 /* IPAudioStop.png */; };
-		0085975C11431B6600DD08C5 /* HostJoystick.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0085975A11431B6600DD08C5 /* HostJoystick.cpp */; };
 		00910107113AAE60005EBB62 /* AppleISystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00910105113AAE60005EBB62 /* AppleISystem.cpp */; };
 		00984D7911A7376200B9C0B5 /* ntsc1Bit.c in Sources */ = {isa = PBXBuildFile; fileRef = 00984D7511A7376200B9C0B5 /* ntsc1Bit.c */; };
 		00984D7A11A7376200B9C0B5 /* ntsc1Bit.h in Headers */ = {isa = PBXBuildFile; fileRef = 00984D7611A7376200B9C0B5 /* ntsc1Bit.h */; };
-		00984D7B11A7376200B9C0B5 /* ntsc2Bit.c in Sources */ = {isa = PBXBuildFile; fileRef = 00984D7711A7376200B9C0B5 /* ntsc2Bit.c */; };
-		00984D7C11A7376200B9C0B5 /* ntsc2Bit.h in Headers */ = {isa = PBXBuildFile; fileRef = 00984D7811A7376200B9C0B5 /* ntsc2Bit.h */; };
 		00984D9911A73B1000B9C0B5 /* CompositeMonitor.h in Headers */ = {isa = PBXBuildFile; fileRef = 00984D9711A73B1000B9C0B5 /* CompositeMonitor.h */; };
 		00984D9A11A73B1000B9C0B5 /* CompositeMonitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00984D9811A73B1000B9C0B5 /* CompositeMonitor.cpp */; };
 		00984DA611A73C7E00B9C0B5 /* DAC1Bit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00984DA411A73C7E00B9C0B5 /* DAC1Bit.cpp */; };
@@ -95,9 +92,7 @@
 		00B7038A1135ACAA005E4B65 /* OERef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B7037D1135AC91005E4B65 /* OERef.cpp */; };
 		00B7038E1135ACAD005E4B65 /* OEPackage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B7037B1135AC91005E4B65 /* OEPackage.cpp */; };
 		00B703A31135ACBD005E4B65 /* HostAudio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B703971135ACBD005E4B65 /* HostAudio.cpp */; };
-		00B703A71135ACBD005E4B65 /* HostKeyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B7039B1135ACBD005E4B65 /* HostKeyboard.cpp */; };
 		00B703A91135ACBD005E4B65 /* HostVideo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B7039D1135ACBD005E4B65 /* HostVideo.cpp */; };
-		00B703B91135AD16005E4B65 /* HostSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B703B71135AD16005E4B65 /* HostSystem.cpp */; };
 		00B974B410701DDA00BD1402 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = 00B974AD10701DCD00BD1402 /* sounds */; };
 		00BADDC51100EDC600EB0344 /* ConnectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00BADD451100BE8300EB0344 /* ConnectorViewController.m */; };
 		00BB4D591086C1160071B584 /* TBRestart.png in Resources */ = {isa = PBXBuildFile; fileRef = 00BB4D561086C1160071B584 /* TBRestart.png */; };
@@ -201,6 +196,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		00044D9011AB7FFF002F6891 /* HostHID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostHID.h; sourceTree = "<group>"; };
+		00044D9111AB7FFF002F6891 /* HostHID.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HostHID.cpp; sourceTree = "<group>"; };
+		00044D9411AB801C002F6891 /* HostPort.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostPort.h; sourceTree = "<group>"; };
+		00044D9511AB801C002F6891 /* HostPort.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HostPort.cpp; sourceTree = "<group>"; };
 		00067157113F2B8500781A92 /* AppleIIFloatingBus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleIIFloatingBus.h; sourceTree = "<group>"; };
 		00067158113F2B8500781A92 /* AppleIIFloatingBus.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleIIFloatingBus.cpp; sourceTree = "<group>"; };
 		000671BF113F318000781A92 /* MemoryMap8Bit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MemoryMap8Bit.cpp; sourceTree = "<group>"; };
@@ -274,18 +273,6 @@
 		0054E6301131BEE7006D32D9 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		0054E66B1131BF58006D32D9 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
 		005928540FFC94E200F24A57 /* templates */ = {isa = PBXFileReference; lastKnownFileType = folder; path = templates; sourceTree = "<group>"; };
-		005B485D11829406008C7E42 /* HostMouse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostMouse.h; sourceTree = "<group>"; };
-		005B485E11829406008C7E42 /* HostMouse.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HostMouse.cpp; sourceTree = "<group>"; };
-		005B487611829472008C7E42 /* HostTablet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostTablet.h; sourceTree = "<group>"; };
-		005B487711829472008C7E42 /* HostTablet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HostTablet.cpp; sourceTree = "<group>"; };
-		005B4883118294AF008C7E42 /* HostSerial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostSerial.h; sourceTree = "<group>"; };
-		005B4884118294AF008C7E42 /* HostSerial.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HostSerial.cpp; sourceTree = "<group>"; };
-		005B4887118294B5008C7E42 /* HostParallel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostParallel.h; sourceTree = "<group>"; };
-		005B4888118294B5008C7E42 /* HostParallel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HostParallel.cpp; sourceTree = "<group>"; };
-		005B488F118294C9008C7E42 /* HostCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostCamera.h; sourceTree = "<group>"; };
-		005B4890118294C9008C7E42 /* HostCamera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HostCamera.cpp; sourceTree = "<group>"; };
-		005B48A4118295AD008C7E42 /* HostNet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostNet.h; sourceTree = "<group>"; };
-		005B48A5118295AD008C7E42 /* HostNet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HostNet.cpp; sourceTree = "<group>"; };
 		005B81D7108680B9009D4804 /* ScreenView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScreenView.h; sourceTree = "<group>"; };
 		005B81D8108680B9009D4804 /* ScreenView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScreenView.m; sourceTree = "<group>"; };
 		005C43EA113121F2006AEE84 /* TBInterrupt.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = TBInterrupt.png; path = macosx/Images/TBInterrupt.png; sourceTree = "<group>"; };
@@ -296,6 +283,8 @@
 		00610048115CF08A004D1511 /* ntscSignalProcessing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ntscSignalProcessing.h; sourceTree = "<group>"; };
 		00679D05100817F700B38748 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/DeviceChooser.xib; sourceTree = "<group>"; };
 		00679D07100817F700B38748 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/TemplateChooser.xib; sourceTree = "<group>"; };
+		006B893E11A9D464001A34A5 /* ntscCGA.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ntscCGA.c; sourceTree = "<group>"; };
+		006B893F11A9D464001A34A5 /* ntscCGA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ntscCGA.h; sourceTree = "<group>"; };
 		006EECA40FCA5C31003D2C8D /* libemulator.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libemulator.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		006EEE8F0FCA781C003D2C8D /* DiskImage.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = DiskImage.icns; sourceTree = "<group>"; };
 		0071E3B810803F7300F2D54F /* ChooserItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChooserItem.h; sourceTree = "<group>"; };
@@ -304,14 +293,10 @@
 		008283EF11A35D3A00B2B530 /* IPAudioPlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPAudioPlay.png; path = macosx/Images/IPAudioPlay.png; sourceTree = "<group>"; };
 		0082840211A3603800B2B530 /* IPAudioRecord.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPAudioRecord.png; path = macosx/Images/IPAudioRecord.png; sourceTree = "<group>"; };
 		0082847B11A422C700B2B530 /* IPAudioStop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPAudioStop.png; path = macosx/Images/IPAudioStop.png; sourceTree = "<group>"; };
-		0085975A11431B6600DD08C5 /* HostJoystick.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HostJoystick.cpp; sourceTree = "<group>"; };
-		0085975B11431B6600DD08C5 /* HostJoystick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostJoystick.h; sourceTree = "<group>"; };
 		00910105113AAE60005EBB62 /* AppleISystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleISystem.cpp; sourceTree = "<group>"; };
 		00910106113AAE60005EBB62 /* AppleISystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleISystem.h; sourceTree = "<group>"; };
 		00984D7511A7376200B9C0B5 /* ntsc1Bit.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ntsc1Bit.c; sourceTree = "<group>"; };
 		00984D7611A7376200B9C0B5 /* ntsc1Bit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ntsc1Bit.h; sourceTree = "<group>"; };
-		00984D7711A7376200B9C0B5 /* ntsc2Bit.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ntsc2Bit.c; sourceTree = "<group>"; };
-		00984D7811A7376200B9C0B5 /* ntsc2Bit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ntsc2Bit.h; sourceTree = "<group>"; };
 		00984D9711A73B1000B9C0B5 /* CompositeMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompositeMonitor.h; sourceTree = "<group>"; };
 		00984D9811A73B1000B9C0B5 /* CompositeMonitor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CompositeMonitor.cpp; sourceTree = "<group>"; };
 		00984DA411A73C7E00B9C0B5 /* DAC1Bit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DAC1Bit.cpp; sourceTree = "<group>"; };
@@ -362,12 +347,8 @@
 		00B7037D1135AC91005E4B65 /* OERef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OERef.cpp; sourceTree = "<group>"; };
 		00B703971135ACBD005E4B65 /* HostAudio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HostAudio.cpp; sourceTree = "<group>"; };
 		00B703981135ACBD005E4B65 /* HostAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostAudio.h; sourceTree = "<group>"; };
-		00B7039B1135ACBD005E4B65 /* HostKeyboard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HostKeyboard.cpp; sourceTree = "<group>"; };
-		00B7039C1135ACBD005E4B65 /* HostKeyboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostKeyboard.h; sourceTree = "<group>"; };
 		00B7039D1135ACBD005E4B65 /* HostVideo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HostVideo.cpp; sourceTree = "<group>"; };
 		00B7039E1135ACBD005E4B65 /* HostVideo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostVideo.h; sourceTree = "<group>"; };
-		00B703B61135AD16005E4B65 /* HostSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostSystem.h; sourceTree = "<group>"; };
-		00B703B71135AD16005E4B65 /* HostSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HostSystem.cpp; sourceTree = "<group>"; };
 		00B974AD10701DCD00BD1402 /* sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; path = sounds; sourceTree = "<group>"; };
 		00BADD441100BE8300EB0344 /* ConnectorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConnectorViewController.h; sourceTree = "<group>"; };
 		00BADD451100BE8300EB0344 /* ConnectorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConnectorViewController.m; sourceTree = "<group>"; };
@@ -698,28 +679,14 @@
 		00B703961135ACBD005E4B65 /* Host */ = {
 			isa = PBXGroup;
 			children = (
-				0085975A11431B6600DD08C5 /* HostJoystick.cpp */,
-				0085975B11431B6600DD08C5 /* HostJoystick.h */,
-				00B703B61135AD16005E4B65 /* HostSystem.h */,
-				00B703B71135AD16005E4B65 /* HostSystem.cpp */,
 				00B703971135ACBD005E4B65 /* HostAudio.cpp */,
 				00B703981135ACBD005E4B65 /* HostAudio.h */,
-				00B7039B1135ACBD005E4B65 /* HostKeyboard.cpp */,
-				00B7039C1135ACBD005E4B65 /* HostKeyboard.h */,
 				00B7039D1135ACBD005E4B65 /* HostVideo.cpp */,
 				00B7039E1135ACBD005E4B65 /* HostVideo.h */,
-				005B485D11829406008C7E42 /* HostMouse.h */,
-				005B485E11829406008C7E42 /* HostMouse.cpp */,
-				005B487611829472008C7E42 /* HostTablet.h */,
-				005B487711829472008C7E42 /* HostTablet.cpp */,
-				005B4883118294AF008C7E42 /* HostSerial.h */,
-				005B4884118294AF008C7E42 /* HostSerial.cpp */,
-				005B4887118294B5008C7E42 /* HostParallel.h */,
-				005B4888118294B5008C7E42 /* HostParallel.cpp */,
-				005B488F118294C9008C7E42 /* HostCamera.h */,
-				005B4890118294C9008C7E42 /* HostCamera.cpp */,
-				005B48A4118295AD008C7E42 /* HostNet.h */,
-				005B48A5118295AD008C7E42 /* HostNet.cpp */,
+				00044D9011AB7FFF002F6891 /* HostHID.h */,
+				00044D9111AB7FFF002F6891 /* HostHID.cpp */,
+				00044D9411AB801C002F6891 /* HostPort.h */,
+				00044D9511AB801C002F6891 /* HostPort.cpp */,
 			);
 			path = Host;
 			sourceTree = "<group>";
@@ -727,10 +694,10 @@
 		00FF25C4115C365800C82CA0 /* libntsc */ = {
 			isa = PBXGroup;
 			children = (
+				006B893E11A9D464001A34A5 /* ntscCGA.c */,
+				006B893F11A9D464001A34A5 /* ntscCGA.h */,
 				00984D7511A7376200B9C0B5 /* ntsc1Bit.c */,
 				00984D7611A7376200B9C0B5 /* ntsc1Bit.h */,
-				00984D7711A7376200B9C0B5 /* ntsc2Bit.c */,
-				00984D7811A7376200B9C0B5 /* ntsc2Bit.h */,
 				00610047115CF08A004D1511 /* ntscSignalProcessing.c */,
 				00610048115CF08A004D1511 /* ntscSignalProcessing.h */,
 				00759303115C39E600D6DDF0 /* ntsc.h */,
@@ -877,8 +844,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				00984D7A11A7376200B9C0B5 /* ntsc1Bit.h in Headers */,
-				00984D7C11A7376200B9C0B5 /* ntsc2Bit.h in Headers */,
 				00984D9911A73B1000B9C0B5 /* CompositeMonitor.h in Headers */,
+				006B894111A9D464001A34A5 /* ntscCGA.h in Headers */,
+				00044D9211AB7FFF002F6891 /* HostHID.h in Headers */,
+				00044D9611AB801C002F6891 /* HostPort.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1061,9 +1030,7 @@
 				00B7038A1135ACAA005E4B65 /* OERef.cpp in Sources */,
 				00B7038E1135ACAD005E4B65 /* OEPackage.cpp in Sources */,
 				00B703A31135ACBD005E4B65 /* HostAudio.cpp in Sources */,
-				00B703A71135ACBD005E4B65 /* HostKeyboard.cpp in Sources */,
 				00B703A91135ACBD005E4B65 /* HostVideo.cpp in Sources */,
-				00B703B91135AD16005E4B65 /* HostSystem.cpp in Sources */,
 				00F1AEFC11370EF5006642AD /* AppleIISystem.cpp in Sources */,
 				00F1AF0A11370FE1006642AD /* AppleIISpeaker.cpp in Sources */,
 				00AA1E6E113821C600F11BE2 /* AppleIIKeyboard.cpp in Sources */,
@@ -1077,7 +1044,6 @@
 				00A7BBCF11407A7F006F5C6B /* AppleIIMMU.cpp in Sources */,
 				00A62FFD11415DF0005E8500 /* MC6821.cpp in Sources */,
 				00A6300211415E3C005E8500 /* MC6845.cpp in Sources */,
-				0085975C11431B6600DD08C5 /* HostJoystick.cpp in Sources */,
 				00D184F1114C8E8F00F4AB12 /* AppleIVideo.cpp in Sources */,
 				00D184F5114C8E9A00F4AB12 /* AppleIKeyboard.cpp in Sources */,
 				0049B99C114C929200B686BB /* AppleIIO.cpp in Sources */,
@@ -1091,12 +1057,6 @@
 				000FF7F01163E6FC0009E666 /* RP2A03.cpp in Sources */,
 				00B4F935117E43E8008D622F /* MemoryOffset.cpp in Sources */,
 				0017049A117FD51D006C87BC /* AppleIISlotExpansionMemory.cpp in Sources */,
-				005B486011829406008C7E42 /* HostMouse.cpp in Sources */,
-				005B487911829472008C7E42 /* HostTablet.cpp in Sources */,
-				005B4886118294AF008C7E42 /* HostSerial.cpp in Sources */,
-				005B488A118294B5008C7E42 /* HostParallel.cpp in Sources */,
-				005B4892118294C9008C7E42 /* HostCamera.cpp in Sources */,
-				005B48A7118295AD008C7E42 /* HostNet.cpp in Sources */,
 				00984DA611A73C7E00B9C0B5 /* DAC1Bit.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1108,8 +1068,10 @@
 				00610049115CF08A004D1511 /* ntscSignalProcessing.c in Sources */,
 				002C27A8116873F100FAE6E6 /* ntsc.c in Sources */,
 				00984D7911A7376200B9C0B5 /* ntsc1Bit.c in Sources */,
-				00984D7B11A7376200B9C0B5 /* ntsc2Bit.c in Sources */,
 				00984D9A11A73B1000B9C0B5 /* CompositeMonitor.cpp in Sources */,
+				006B894011A9D464001A34A5 /* ntscCGA.c in Sources */,
+				00044D9311AB7FFF002F6891 /* HostHID.cpp in Sources */,
+				00044D9711AB801C002F6891 /* HostPort.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

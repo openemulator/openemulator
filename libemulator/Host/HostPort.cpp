@@ -1,12 +1,11 @@
 
 /**
  * libemulator
- * Host Serial Port
+ * Host Port
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls host serial port events
+ * Controls host ports (serial, parallel, ethernet, usb, firewire)
  */
 
-#include "HostSerial.h"
-
+#include "HostPort.h"

@@ -46,8 +46,6 @@
 	IBOutlet NSTextField *fRecordingSizeLabel;
 	IBOutlet NSButton *fToggleRecordingButton;
 	IBOutlet NSButton *fSaveRecordingAsButton;
-	
-	NSTimer *timer;
 }
 
 - (void) activeDocumentDidChange;

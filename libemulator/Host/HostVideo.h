@@ -25,13 +25,12 @@ enum
 	HOSTVIDEO_ADD_SCREEN = OEIOCTL_USER,
 	HOSTVIDEO_REMOVE_SCREEN,
 	HOSTVIDEO_GET_FRAME,
-	HOSTVIDEO_RETURN_FRAME,
+	HOSTVIDEO_DRAW_FRAME,
 	
-	HOSTVIDEO_GET_SCREEN,
-	
+	HOSTVIDEO_GET_SCREENS,
 	HOSTVIDEO_SET_WINDOWSIZE,
 	HOSTVIDEO_GET_WINDOWSIZE,
-	HOSTVIDEO_GET_ACTUALSIZE,
+	HOSTVIDEO_GET_ACTUALWINDOWSIZE,
 };
 
 typedef struct
@@ -44,8 +43,8 @@ typedef struct
 	int contentHeight;
 	int screenWidth;
 	int screenHeight;
-	int positionLeft;
-	int positionTop;
+	int screenLeft;
+	int screenTop;
 	bool isUpdated;
 } HostVideoFrame;
 

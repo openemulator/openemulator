@@ -28,7 +28,7 @@ OEInfo::OEInfo(string path)
 		xmlFreeDoc(doc);
 	}
 	else
-		cerr << "OEInfo: couldn't parse" + path + "\n";
+		cerr << "OEInfo: could not construct \"" << path << "\"" << endl;
 }
 
 OEInfo::OEInfo(xmlDocPtr doc)
@@ -263,8 +263,8 @@ void OEInfo::setConnections(xmlDocPtr doc)
 			o->connectionPort = &(*i);
 		}
 		else
-			cerr << "libemulator: warning: outlet \"" << outletRef <<
-			"\" does not exist." << endl;
+			cerr << "OEInfo: could not connect inlet \"" <<
+				i->ref << "\" to outlet \"" << outletRef << "\"" << endl;
 	}
 }
 

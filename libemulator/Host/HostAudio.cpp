@@ -12,15 +12,30 @@
 
 #include "HostAudio.h"
 
-HostAudio::HostAudio()
-{
-	f = rand() * (1000.0 / 32767.0);
-}
-
 int HostAudio::ioctl(int message, void *data)
 {
 	switch (message)
 	{
+		case OEIOCTL_SET_PROPERTY:
+		{
+			OEIoctlProperty *property = (OEIoctlProperty *) data;
+			if (property->name == "runTime")
+				runTime = getFloat(property->value);
+			else if (property->name == "isPaused")
+				isPaused = getInt(property->value);
+			
+			break;
+		}
+		case OEIOCTL_GET_PROPERTY:
+		{
+			OEIoctlProperty *property = (OEIoctlProperty *) data;
+			if (property->name == "runTime")
+				property->value = runTime;
+			else if (property->name == "isPaused")
+				property->value = isPaused;
+			
+			break;
+		}
 		case HOSTAUDIO_RENDERBUFFER:
 		{
 			postNotification(HOSTAUDIO_RENDER_WILL_START, data);
@@ -29,6 +44,16 @@ int HostAudio::ioctl(int message, void *data)
 			postNotification(HOSTAUDIO_RENDER_DID_END, data);
 			
 			return true;
+		}
+		case HOSTAUDIO_ADD_RUNTIME:
+		{
+			runTime += *((double *) data);
+			break;
+		}
+		case HOSTAUDIO_GET_RUNTIME:
+		{
+			*((double *) data) = runTime;
+			break;
 		}
 	}
 	

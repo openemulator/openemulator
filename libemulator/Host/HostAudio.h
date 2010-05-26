@@ -10,11 +10,18 @@
 
 #include "OEComponent.h"
 
+#define HOSTSYSTEM_POWER		0x00
+#define HOSTSYSTEM_PAUSE		0x01
+#define HOSTSYSTEM_RESET		0x02
+#define HOSTSYSTEM_INTERRUPT	0x03
+
 // Messages
 enum
 {
 	HOSTAUDIO_RENDERBUFFER = OEIOCTL_USER,
 	HOSTAUDIO_GETBUFFER,
+	HOSTAUDIO_ADD_RUNTIME,
+	HOSTAUDIO_GET_RUNTIME,
 };
 
 // Notifications
@@ -32,6 +39,7 @@ typedef struct
 	float sampleRate;
 	int channelNum;
 	int frameNum;
+	
 	float *input;
 	float *output;
 } HostAudioBuffer;
@@ -39,11 +47,9 @@ typedef struct
 class HostAudio : public OEComponent
 {
 public:
-	HostAudio();
-	
 	int ioctl(int message, void *data);
 	
 private:
-	float f;
-	float phase;
+	double runTime;
+	bool isPaused;
 };
