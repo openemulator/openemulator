@@ -5,7 +5,7 @@
  * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Component type
+ * Component definition
  */
 
 #ifndef _OECOMPONENT_H
@@ -13,8 +13,10 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 #include <stdio.h>
+
 #define OELog(...) fprintf(stderr, __VA_ARGS__)
 
 typedef unsigned char UINT8;
@@ -41,23 +43,14 @@ typedef union
 	INT32 sd;
 } OEPair;
 
-// Messages
-enum {
-	OE_SET_PROPERTY,
-	OE_GET_PROPERTY,
-	OE_SET_DATA,
-	OE_GET_DATA,
-	OE_SET_RESOURCE,
-	OE_CONNECT,
-	OE_NOTIFY,
-	OE_SET_MEMORYMAP,
-	OE_GET_MEMORYMAP,
-	OE_ASSERT_IRQ,
-	OE_RELEASE_IRQ,
-	OE_USER,
-};
-
 using namespace std;
+
+class OEComponent;
+
+typedef vector<char> OEData;
+typedef vector<string> OEMemoryRange;
+typedef vector<OEComponent *> OEObservers;
+typedef map<int, OEObservers> OEObserverMap;
 
 class OEComponent
 {
@@ -65,60 +58,40 @@ public:
 	OEComponent();
 	virtual ~OEComponent();
 	
+	virtual bool setProperty(string name, string &value);
+	virtual bool getProperty(string name, string &value);
+	virtual bool setData(string name, OEData &data);
+	virtual bool getData(string name, OEData &data);
+	virtual bool setResource(string name, OEData &data);
+	virtual bool connect(string name, OEComponent *component);
+	
+	bool addObserver(OEComponent *component, int notification);
+	bool removeObserver(OEComponent *component, int notification);
+	virtual void notify(int notification, OEComponent *component, void *data);
+	
+	virtual bool setMemoryMap(OEComponent *component, OEMemoryRange &range);
+	virtual bool getMemoryMap(OEMemoryRange &range);
+	
+	virtual bool assertInterrupt(int id);
+	virtual bool releaseInterrupt(int id);
+	
 	virtual int ioctl(int message, void *data);
+	
 	virtual int read(int address);
 	virtual void write(int address, int value);
 	
 protected:
-	void addObserver(vector<OEComponent *> &o,
-					 OEComponent *component);
-	void removeObserver(vector<OEComponent *> &o,
-						OEComponent *component);
-	void postNotification(int id,
-						  vector<OEComponent *> &o,
-						  void *data);
+	OEObserverMap observers;
+	
+	void postNotification(int notification, void *data);
 	
 	int getInt(string value);
 	double getFloat(string value);
 	string getString(int value);
 	string getHex(int value);
 	vector<char> getCharVector(string value);
-	int getPreviousPowerOf2(int value);
+	int getLowerPowerOf2(int value);
+	string getRange(int start, int end);
 };
-
-typedef vector<OEComponent *> OEObserverList;
-
-typedef struct
-{
-	string name;
-	OEComponent *component;
-} OEConnection;
-
-typedef struct
-{
-	string name;
-	string value;
-} OEProperty;
-
-typedef struct
-{
-	string name;
-	vector<char> data;
-} OEData;
-
-typedef struct
-{
-	int id;
-	OEComponent *component;
-	void *data;
-} OENotification;
-
-typedef vector<string> OEMemoryRange;
-
-typedef struct
-{
-	OEComponent *component;
-	OEMemoryRange range;
-} OEMemoryMap;
 
 #endif

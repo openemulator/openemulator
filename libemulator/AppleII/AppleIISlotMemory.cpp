@@ -17,94 +17,76 @@
 
 void AppleIISlotMemory::setSlot(int index, OEComponent *component)
 {
-	OEConnection connection;
-	
-	connection.name = "system";
-	connection.component = system;
-	component->ioctl(OE_CONNECT, &connection);
-	
-	connection.name = "memoryMap";
-	connection.component = floatingBus;
-	component->ioctl(OE_CONNECT, &connection);
-	
-	connection.name = "mmu";
-	connection.component = mmu;
-	component->ioctl(OE_CONNECT, &connection);
-	
-	connection.name = "floatingBus";
-	connection.component = mmu;
-	component->ioctl(OE_CONNECT, &connection);
+	component->connect("system", system);
+	component->connect("memoryMap", memoryMap);
+	component->connect("mmu", mmu);
+	component->connect("floatingBus", floatingBus);
 	
 	AppleIISlotMemoryQuery slotMemoryQuery;
 	component->ioctl(APPLEIISLOTMEMORY_QUERY, &slotMemoryQuery);
 	
-	stringstream ss;
-	int baseAddr = 0xc080 + index << 4;
-	ss << std::hex << baseAddr << "-" << (baseAddr + 0xf);
+	int start = 0xc080 + index << 4;
+	int end = start + 0x000f;
 	
-	OEMemoryMap memoryMap;
-	memoryMap.component = component;
-	memoryMap.range.push_back(ss.str());
+	OEMemoryRange range;
+	range.push_back(getRange(start, end));
+	ioMap->setMemoryMap(this, range);
 	
-	ioMap->ioctl(OE_SET_MEMORYMAP, &memoryMap);
 	slotMemoryMap[index] = slotMemoryQuery.slotMemory;
 	slotExpansionMemoryMap[index] = slotMemoryQuery.slotExpansionMemory;
 }
 
-int AppleIISlotMemory::ioctl(int message, void *data)
+bool AppleIISlotMemory::setProperty(string name, string &value)
 {
-	switch(message)
-	{
-		case OE_SET_PROPERTY:
-		{
-			OEProperty *property = (OEProperty *) data;
-			if (property->name == "map")
-				mappedRange.push_back(property->value);
-			break;
-		}
-		case OE_CONNECT:
-		{
-			OEConnection *connection = (OEConnection *) data;
-			if (connection->name == "system")
-				system = connection->component;
-			else if (connection->name == "memoryMap")
-				memoryMap = connection->component;
-			else if (connection->name == "mmu")
-				mmu = connection->component;
-			else if (connection->name == "floatingBus")
-				floatingBus = connection->component;
-			else if (connection->name == "ioMap")
-				ioMap = connection->component;
-			else if (connection->name == "slotExpansionMemory")
-				slotExpansionMemory = connection->component;
-			else if (connection->name == "slot0")
-				setSlot(0, connection->component);
-			else if (connection->name == "slot1")
-				setSlot(1, connection->component);
-			else if (connection->name == "slot2")
-				setSlot(2, connection->component);
-			else if (connection->name == "slot3")
-				setSlot(3, connection->component);
-			else if (connection->name == "slot4")
-				setSlot(4, connection->component);
-			else if (connection->name == "slot5")
-				setSlot(5, connection->component);
-			else if (connection->name == "slot6")
-				setSlot(6, connection->component);
-			else if (connection->name == "slot7")
-				setSlot(7, connection->component);
-			break;
-		}
-		case OE_GET_MEMORYMAP:
-		{
-			OEMemoryMap *memoryMap = (OEMemoryMap *) data;
-			memoryMap->component = this;
-			memoryMap->range = mappedRange;
-			break;
-		}
-	}
+	if (name == "map")
+		mappedRange.push_back(value);
+	else
+		return false;
 	
-	return 0;
+	return true;
+}
+
+bool AppleIISlotMemory::connect(string name, OEComponent *component)
+{
+	if (name == "system")
+		system = component;
+	else if (name == "memoryMap")
+		memoryMap = component;
+	else if (name == "mmu")
+		mmu = component;
+	else if (name == "floatingBus")
+		floatingBus = component;
+	else if (name == "ioMap")
+		ioMap = component;
+	else if (name == "slotExpansionMemory")
+		slotExpansionMemory = component;
+	else if (name == "slot0")
+		setSlot(0, component);
+	else if (name == "slot1")
+		setSlot(1, component);
+	else if (name == "slot2")
+		setSlot(2, component);
+	else if (name == "slot3")
+		setSlot(3, component);
+	else if (name == "slot4")
+		setSlot(4, component);
+	else if (name == "slot5")
+		setSlot(5, component);
+	else if (name == "slot6")
+		setSlot(6, component);
+	else if (name == "slot7")
+		setSlot(7, component);
+	else
+		return false;
+	
+	return true;
+}
+
+bool AppleIISlotMemory::getMemoryMap(OEMemoryRange &range)
+{
+	range = mappedRange;
+	
+	return true;
 }
 
 int AppleIISlotMemory::read(int address)

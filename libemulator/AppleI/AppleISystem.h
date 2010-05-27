@@ -13,7 +13,7 @@
 // Messages
 enum
 {
-	APPLEISYSTEM_GET_SAMPLEINDEX = OE_USER,
+	APPLEISYSTEM_GET_SAMPLEINDEX,
 };
 
 // Notifications

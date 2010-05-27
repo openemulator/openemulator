@@ -5,7 +5,7 @@
  * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Component type
+ * Component definition
  */
 
 #include "math.h"
@@ -21,6 +21,99 @@ OEComponent::~OEComponent()
 {
 }
 
+bool OEComponent::setProperty(string name, string &value)
+{
+	return false;
+}
+
+bool OEComponent::getProperty(string name, string &value)
+{
+	return false;
+}
+
+bool OEComponent::setData(string name, OEData &data)
+{
+	return false;
+}
+
+bool OEComponent::getData(string name, OEData &data)
+{
+	return false;
+}
+
+bool OEComponent::setResource(string name, OEData &data)
+{
+	return false;
+}
+
+bool OEComponent::connect(string name, OEComponent *component)
+{
+	return false;
+}
+
+bool OEComponent::addObserver(OEComponent *component,
+							  int notification)
+{
+	observers[notification].push_back(component);
+	
+	return true;
+}
+
+bool OEComponent::removeObserver(OEComponent *component,
+								 int notification)
+{
+	
+	OEObservers::iterator i;
+	for (i = observers[notification].begin();
+		 i != observers[notification].end();
+		 i++)
+	{
+		if (*i == component)
+		{
+			observers[notification].erase(i);
+			return true;
+		}
+	}
+	
+	return false;
+}
+
+void OEComponent::postNotification(int notification, void *data)
+{
+	OEObservers::iterator i;
+	for (i = observers[notification].begin();
+		 i != observers[notification].end();
+		 i++)
+		(*i)->notify(notification, this, data);
+}
+
+void OEComponent::notify(int notification,
+						 OEComponent *component,
+						 void *data)
+{
+}
+
+bool OEComponent::setMemoryMap(OEComponent *component,
+							   OEMemoryRange &range)
+{
+	return false;
+}
+
+bool OEComponent::getMemoryMap(OEMemoryRange &range)
+{
+	return false;
+}
+
+bool OEComponent::assertInterrupt(int id)
+{
+	return false;
+}
+
+bool OEComponent::releaseInterrupt(int id)
+{
+	return false;
+}
+
 int OEComponent::ioctl(int command, void *data)
 {
 	return 0;
@@ -33,40 +126,6 @@ int OEComponent::read(int address)
 
 void OEComponent::write(int address, int value)
 {
-}
-
-void OEComponent::addObserver(OEObserverList &o, OEComponent *component)
-{
-	o.push_back(component);
-}
-
-void OEComponent::removeObserver(OEObserverList &o, OEComponent *component)
-{
-	OEObserverList::iterator iterator;
-	for (iterator = o.begin();
-		 iterator != o.end();
-		 iterator++)
-	{
-		if (*iterator == component)
-		{
-			o.erase(iterator);
-			break;
-		}
-	}
-}
-
-void OEComponent::postNotification(int id, OEObserverList &o, void *data)
-{
-	OENotification notification;
-	notification.id = id;
-	notification.component = this;
-	notification.data = data;
-	
-	vector<OEComponent *>::iterator iterator;
-	for (iterator = o.begin();
-		 iterator != o.end();
-		 iterator++)
-		(*iterator)->ioctl(OE_NOTIFY, &notification);
 }
 
 int OEComponent::getInt(string value)
@@ -124,7 +183,13 @@ vector<char> OEComponent::getCharVector(string value)
 	return result;
 }
 
-int OEComponent::getPreviousPowerOf2(int value)
+int OEComponent::getLowerPowerOf2(int value)
 {
 	return (int) pow(2, floor(log2(value)));
 }
+
+string OEComponent::getRange(int start, int end)
+{
+	
+}
+

@@ -15,7 +15,12 @@ class RAM : public OEComponent
 public:
 	RAM();
 	
-	int ioctl(int message, void *data);
+	bool setProperty(string name, string &value);
+	bool setData(string name, OEData &data);
+	bool getData(string name, OEData &data);
+	bool connect(string name, OEComponent *component);
+	void notify(int notification, OEComponent *component);
+	
 	int read(int address);
 	void write(int address, int value);
 	

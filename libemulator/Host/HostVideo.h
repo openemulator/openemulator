@@ -22,7 +22,7 @@
 // Messages
 enum
 {
-	HOSTVIDEO_ADD_SCREEN = OE_USER,
+	HOSTVIDEO_ADD_SCREEN,
 	HOSTVIDEO_REMOVE_SCREEN,
 	HOSTVIDEO_GET_FRAME,
 	HOSTVIDEO_DRAW_FRAME,
@@ -60,6 +60,9 @@ typedef struct
 class HostVideo : public OEComponent
 {
 public:
+	bool setProperty(string name, string &value);
+	bool getProperty(string name, string &value);
+	
 	int ioctl(int message, void *data);
 	
 private:

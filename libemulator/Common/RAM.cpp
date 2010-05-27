@@ -20,80 +20,64 @@ RAM::RAM()
 	resetPattern[0] = 0;
 }
 
-int RAM::ioctl(int message, void *data)
+bool RAM::setProperty(string name, string &value)
 {
-	switch(message)
+	if (name == "map")
+		mappedRange.push_back(value);
+	else if (name == "size")
 	{
-		case OE_SET_PROPERTY:
-		{
-			OEProperty *property = (OEProperty *) data;
-			if (property->name == "map")
-				mappedRange.push_back(property->value);
-			else if (property->name == "size")
-			{
-				size = getPreviousPowerOf2(getInt(property->value));
-				if (size < 1)
-					size = 1;
-				memory.resize(size);
-				mask = size - 1;
-			}
-			else if (property->name == "resetPattern")
-				resetPattern = getCharVector(property->value);
-			
-			break;
-		}
-		case OE_SET_DATA:
-		{
-			OEData *setData = (OEData *) data;
-			if (setData->name == "image")
-			{
-				memory = setData->data;
-				memory.resize(size);
-			}
-			
-			break;
-		}
-		case OE_GET_DATA:
-		{
-			OEData *getData = (OEData *) data;
-			if (getData->name == "image")
-				getData->data = memory;
-			else
-				return false;
-			
-			return true;
-		}
-		case OE_CONNECT:
-		{
-			OEConnection *connection = (OEConnection *) data;
-//			if (connection->name == "hostSystem")
-//				connection->component->addObserver(this);
-			
-			break;
-		}
-		case OE_GET_MEMORYMAP:
-		{
-			OEMemoryMap *memoryMap = (OEMemoryMap *) data;
-			memoryMap->component = this;
-			memoryMap->range = mappedRange;
-			
-			break;
-		}
-		case OE_NOTIFY:
-		{
-/*			OENotification *notification = (OENotification *) data;
-			if (notification->message == HOSTSYSTEM_RESET)
-			{
-				for (int i = 0; i < memory.size(); i++)
-					memory[i] = resetPattern[i % resetPattern.size()];
-			}
-*/			
-			break;
-		}
+		size = getLowerPowerOf2(getInt(value));
+		if (size < 1)
+			size = 1;
+		memory.resize(size);
+		mask = size - 1;
 	}
+	else if (name == "resetPattern")
+		resetPattern = getCharVector(value);
+	else
+		return false;
 	
+	return true;
+}
+
+bool RAM::setData(string name, OEData &data)
+{
+	if (name == "image")
+	{
+		memory = data;
+		memory.resize(size);
+	}
+	else
+		return false;
+	
+	return true;
+}
+
+bool RAM::getData(string name, OEData &data)
+{
+	if (name == "image")
+		data = memory;
+	else
+		return false;
+	
+	return true;
+}
+
+bool RAM::connect(string name, OEComponent *component)
+{
 	return false;
-}	
+}
+
+void RAM::notify(int notification, OEComponent *component)
+{
+	/*			OENotification *notification = (OENotification *) data;
+	 if (notification->message == HOSTSYSTEM_RESET)
+	 {
+	 for (int i = 0; i < memory.size(); i++)
+	 memory[i] = resetPattern[i % resetPattern.size()];
+	 }
+	 */			
+}
 
 int RAM::read(int address)
 {

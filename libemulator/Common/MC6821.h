@@ -13,7 +13,7 @@
 // Messages
 enum
 {
-	MC6821_RESET = OE_USER,
+	MC6821_RESET,
 	MC6821_SET_CA1,
 	MC6821_SET_CA2,
 	MC6821_GET_CA2,
@@ -50,13 +50,16 @@ class MC6821 : public OEComponent
 public:
 	MC6821();
 	
+	bool getProperty(string name, string &value);
+	bool setProperty(string name, string &value);
+	bool connect(string name, OEComponent *component);
+	
 	int ioctl(int message, void *data);
+
 	int read(int address);
 	void write(int address, int value);
 	
 private:
-	OEObserverList observers;
-	
 	int controlRegisterA;
 	int dataDirectionRegisterA;
 	int dataRegisterA;

@@ -280,7 +280,7 @@
 
 enum
 {
-	HOSTHID_EVENT = OE_USER,
+	HOSTHID_EVENT,
 };
 
 typedef struct

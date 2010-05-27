@@ -618,6 +618,7 @@ void OEEmulation::destroyComponent(xmlNodePtr node, OERef deviceRef)
 	string stringRef = deviceRef.getStringRef(componentName);
 	if (!components.count(stringRef))
 		return;
+	
 	components.erase(stringRef);
 }
 
@@ -626,24 +627,18 @@ bool OEEmulation::setProperty(xmlNodePtr node, OEComponent *component)
 	string name = getXMLProperty(node, "name");
 	string value = getXMLProperty(node, "value");
 	
-	OEProperty msg;
-	msg.name = name;
-	msg.value = value;
-	
-	component->ioctl(OE_SET_PROPERTY, &msg);
-	
-	return true;
+	return component->setProperty(name, value);
 }
 
 bool OEEmulation::getProperty(xmlNodePtr node, OEComponent *component)
 {
 	string name = getXMLProperty(node, "name");
+	string value;
 	
-	OEProperty msg;
-	msg.name = name;
+	if (!component->getProperty(name, value))
+		return false;
 	
-	if (component->ioctl(OE_GET_PROPERTY, &msg))
-		setXMLProperty(node, "value", msg.value);
+	setXMLProperty(node, "value", value);
 	
 	return true;
 }
@@ -653,13 +648,14 @@ bool OEEmulation::setData(xmlNodePtr node, OEComponent *component, OERef deviceR
 	string name = getXMLProperty(node, "name");
 	string src = buildSourcePath(getXMLProperty(node, "src"), deviceRef);
 	
-	OEData msg;
-	msg.name = name;
+	OEData data;
+	if (!package)
+		return false;
 	
-	if (package && package->readFile(src, msg.data))
-		component->ioctl(OE_SET_DATA, &msg);
+	if (!package->readFile(src, data))
+		return true;
 	
-	return true;
+	return component->setData(name, data);
 }
 
 bool OEEmulation::getData(xmlNodePtr node, OEComponent *component, OERef deviceRef)
@@ -667,19 +663,17 @@ bool OEEmulation::getData(xmlNodePtr node, OEComponent *component, OERef deviceR
 	string name = getXMLProperty(node, "name");
 	string src = buildSourcePath(getXMLProperty(node, "src"), deviceRef);
 	
-	OEData msg;
-	msg.name = name;
+	OEData data;
 	
-	if (component->ioctl(OE_GET_DATA, &msg))
+	if (component->getData(name, data))
 	{
-		if (!package->writeFile(src, msg.data))
-		{
-			cerr << "OEEmulation: could not write \"" << src << "\"" << endl;
-			return false;
-		}
+		if (package->writeFile(src, data))
+			return true;
+		
+		cerr << "OEEmulation: could not write \"" << src << "\"" << endl;
 	}
 	
-	return true;
+	return false;
 }
 
 bool OEEmulation::setResource(xmlNodePtr node, OEComponent *component)
@@ -687,18 +681,16 @@ bool OEEmulation::setResource(xmlNodePtr node, OEComponent *component)
 	string name = getXMLProperty(node, "name");
 	string src = resourcePath + OE_PATH_SEPARATOR + getXMLProperty(node, "src");
 	
-	OEData msg;
-	msg.name = name;
+	OEData data;
 	
-	if (!readFile(src, msg.data))
+	if (!readFile(src, data))
 	{
 		cerr << "OEEmulation: could not read \"" << src << "\"" << endl;
+		
 		return false;
 	}
 	
-	component->ioctl(OE_SET_RESOURCE, &msg);
-	
-	return true;
+	return component->setResource(name, data);
 }
 
 bool OEEmulation::setConnection(xmlNodePtr node, OEComponent *component, OERef deviceRef)
@@ -706,7 +698,7 @@ bool OEEmulation::setConnection(xmlNodePtr node, OEComponent *component, OERef d
 	string name = getXMLProperty(node, "name");
 	string ref = getXMLProperty(node, "ref");
 	
-	OEComponent *connectedComponent;
+	OEComponent *connection;
 	
 	if (ref.size())
 	{
@@ -716,18 +708,12 @@ bool OEEmulation::setConnection(xmlNodePtr node, OEComponent *component, OERef d
 			cerr << "OEEmulation: could not connect \"" << stringRef << "\"" << endl;
 			return false;
 		}
-		connectedComponent = components[stringRef];
+		connection = components[stringRef];
 	}
 	else
-		connectedComponent = NULL;
+		connection = NULL;
 	
-	OEConnection msg;
-	msg.name = name;
-	msg.component = connectedComponent;
-	
-	component->ioctl(OE_CONNECT, &msg);
-	
-	return true;
+	return component->connect(name, connection);
 }
 
 xmlNodePtr OEEmulation::getNodeForRef(xmlDocPtr doc, OERef ref)

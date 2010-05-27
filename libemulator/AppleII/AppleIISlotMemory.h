@@ -12,9 +12,10 @@
 
 #define APPLEIISLOTMEMORY_SIZE 0x800
 
+// Messages
 enum
 {
-	APPLEIISLOTMEMORY_QUERY = OE_USER,
+	APPLEIISLOTMEMORY_QUERY,
 };
 
 typedef struct
@@ -27,7 +28,10 @@ typedef struct
 class AppleIISlotMemory : public OEComponent
 {
 public:
-	int ioctl(int message, void *data);
+	bool setProperty(string name, string &value);
+	bool connect(string name, OEComponent *component);
+	bool getMemoryMap(OEMemoryRange &range);
+	
 	int read(int address);
 	void write(int address, int value);
 	

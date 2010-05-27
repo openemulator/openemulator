@@ -44,9 +44,9 @@ void MC6821::setControlRegisterA(int value)
 	if (irqA)
 	{
 		if (wasIRQ && !isIRQ)
-			irqA->ioctl(OE_RELEASE_IRQ, NULL);
+			irqA->releaseInterrupt(0);
 		else if (!wasIRQ && isIRQ)
-			irqA->ioctl(OE_ASSERT_IRQ, NULL);
+			irqA->assertInterrupt(0);
 	}
 }
 
@@ -59,84 +59,88 @@ void MC6821::setControlRegisterB(int value)
 	if (irqB)
 	{
 		if (wasIRQ && !isIRQ)
-			irqB->ioctl(OE_RELEASE_IRQ, NULL);
+			irqB->releaseInterrupt(0);
 		else if (!wasIRQ && isIRQ)
-			irqB->ioctl(OE_ASSERT_IRQ, NULL);
+			irqB->assertInterrupt(0);
 	}
+}
+
+bool MC6821::setProperty(string name, string &value)
+{
+	if (name == "controlRegisterA")
+		setControlRegisterA(getInt(value));
+	else if (name == "dataDirectionRegisterA")
+		dataDirectionRegisterA = getInt(value);
+	else if (name == "dataRegisterA")
+		dataRegisterA = getInt(value);
+	else if (name == "controlRegisterB")
+		setControlRegisterB(getInt(value));
+	else if (name == "dataDirectionRegisterB")
+		dataDirectionRegisterB = getInt(value);
+	else if (name == "dataRegisterB")
+		dataRegisterB = getInt(value);
+	else if (name == "ca1")
+		ca1 = getInt(value);
+	else if (name == "ca2")
+		ca2 = getInt(value);
+	else if (name == "cb1")
+		cb1 = getInt(value);
+	else if (name == "cb2")
+		cb2 = getInt(value);
+	else
+		return false;
+	
+	return true;
+}
+
+bool MC6821::getProperty(string name, string &value)
+{
+	if (name == "controlRegisterA")
+		value = getHex(controlRegisterA);
+	else if (name == "dataDirectionRegisterA")
+		value = getHex(dataDirectionRegisterA);
+	else if (name == "dataRegisterA")
+		value = getHex(dataRegisterA);
+	else if (name == "controlRegisterB")
+		value = getHex(controlRegisterB);
+	else if (name == "dataDirectionRegisterB")
+		value = getHex(dataDirectionRegisterB);
+	else if (name == "dataRegisterB")
+		value = getHex(dataRegisterB);
+	else if (name == "ca1")
+		value = ca1;
+	else if (name == "ca2")
+		value = ca2;
+	else if (name == "cb1")
+		value = cb1;
+	else if (name == "cb2")
+		value = cb2;
+	else
+		return false;
+	
+	return true;
+}
+
+bool MC6821::connect(string name, OEComponent *component)
+{
+	if (name == "interfaceA")
+		interfaceA = component;
+	else if (name == "interfaceB")
+		interfaceB = component;
+	else if (name == "irqA")
+		irqA = component;
+	else if (name == "irqB")
+		irqB = component;
+	else
+		return false;
+	
+	return true;
 }
 
 int MC6821::ioctl(int message, void *data)
 {
-	switch(message)
+	switch (message)
 	{
-		case OE_SET_PROPERTY:
-		{
-			OEProperty *property = (OEProperty *) data;
-			if (property->name == "controlRegisterA")
-				setControlRegisterA(getInt(property->value));
-			else if (property->name == "dataDirectionRegisterA")
-				dataDirectionRegisterA = getInt(property->value);
-			else if (property->name == "dataRegisterA")
-				dataRegisterA = getInt(property->value);
-			else if (property->name == "controlRegisterB")
-				setControlRegisterB(getInt(property->value));
-			else if (property->name == "dataDirectionRegisterB")
-				dataDirectionRegisterB = getInt(property->value);
-			else if (property->name == "dataRegisterB")
-				dataRegisterB = getInt(property->value);
-			else if (property->name == "ca1")
-				ca1 = getInt(property->value);
-			else if (property->name == "ca2")
-				ca2 = getInt(property->value);
-			else if (property->name == "cb1")
-				cb1 = getInt(property->value);
-			else if (property->name == "cb2")
-				cb2 = getInt(property->value);
-			
-			break;
-		}
-		case OE_GET_PROPERTY:
-		{
-			OEProperty *property = (OEProperty *) data;
-			if (property->name == "controlRegisterA")
-				property->value = getHex(controlRegisterA);
-			else if (property->name == "dataDirectionRegisterA")
-				property->value = getHex(dataDirectionRegisterA);
-			else if (property->name == "dataRegisterA")
-				property->value = getHex(dataRegisterA);
-			else if (property->name == "controlRegisterB")
-				property->value = getHex(controlRegisterB);
-			else if (property->name == "dataDirectionRegisterB")
-				property->value = getHex(dataDirectionRegisterB);
-			else if (property->name == "dataRegisterB")
-				property->value = getHex(dataRegisterB);
-			else if (property->name == "ca1")
-				property->value = ca1;
-			else if (property->name == "ca2")
-				property->value = ca2;
-			else if (property->name == "cb1")
-				property->value = cb1;
-			else if (property->name == "cb2")
-				property->value = cb2;
-			else
-				return false;
-			
-			return true;
-		}
-		case OE_CONNECT:
-		{
-			OEConnection *connection = (OEConnection *) data;
-			if (connection->name == "interfaceA")
-				interfaceA = connection->component;
-			else if (connection->name == "interfaceB")
-				interfaceB = connection->component;
-			else if (connection->name == "irqA")
-				irqA = connection->component;
-			else if (connection->name == "irqB")
-				irqB = connection->component;
-			
-			break;
-		}
 		case MC6821_RESET:
 		{
 			reset();
@@ -175,7 +179,7 @@ int MC6821::ioctl(int message, void *data)
 					setControlRegisterA(controlRegisterA | MC6821_CR_IRQ2FLAG);
 			}
 			if ((controlRegisterA & MC6821_CR_C2OUTPUT) && (ca2 != value))
-				postNotification(MC6821_CA2_CHANGED, observers, NULL);
+				postNotification(MC6821_CA2_CHANGED, NULL);
 			ca2 = value;
 			
 			break;
@@ -220,7 +224,7 @@ int MC6821::ioctl(int message, void *data)
 					setControlRegisterB(controlRegisterB | MC6821_CR_IRQ2FLAG);
 			}
 			if (cb2 != value)
-				postNotification(MC6821_CB2_CHANGED, observers, NULL);
+				postNotification(MC6821_CB2_CHANGED, NULL);
 			cb2 = value;
 			
 			break;

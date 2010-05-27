@@ -10,26 +10,31 @@
 
 #include "HostVideo.h"
 
+bool HostVideo::setProperty(string name, string &value)
+{
+	if (name == "window")
+		;
+	else
+		return false;
+	
+	return true;
+}
+
+bool HostVideo::getProperty(string name, string &value)
+{
+	if (name == "window")
+		;
+	else
+		return false;
+	
+	return true;
+}
+
+
 int HostVideo::ioctl(int message, void *data)
 {
 	switch (message)
 	{
-		case OE_SET_PROPERTY:
-		{
-			OEProperty *property = (OEProperty *) data;
-//			if (property->name == "window")
-//				runTime = getFloat(property->value);
-			
-			break;
-		}
-		case OE_GET_PROPERTY:
-		{
-			OEProperty *property = (OEProperty *) data;
-//			if (property->name == "window")
-//				property->value = runTime;
-			
-			break;
-		}
 		case HOSTVIDEO_ADD_SCREEN:
 			return true;
 		case HOSTVIDEO_REMOVE_SCREEN:

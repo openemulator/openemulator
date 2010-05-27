@@ -15,6 +15,11 @@ class ROM : public OEComponent
 public:
 	ROM();
 	
+	bool setProperty(string name, string &value);
+	bool setResource(string name, OEData &data);
+	
+	bool getMemoryMap(OEMemoryRange &range);
+	
 	int ioctl(int message, void *data);
 	int read(int address);
 	
