@@ -67,6 +67,7 @@ public:
 	
 	bool addObserver(OEComponent *component, int notification);
 	bool removeObserver(OEComponent *component, int notification);
+	void postNotification(int notification, void *data);
 	virtual void notify(int notification, OEComponent *component, void *data);
 	
 	virtual bool setMemoryMap(OEComponent *component, OEMemoryRange &range);
@@ -82,8 +83,6 @@ public:
 	
 protected:
 	OEObserverMap observers;
-	
-	void postNotification(int notification, void *data);
 	
 	int getInt(string value);
 	double getFloat(string value);
