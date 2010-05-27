@@ -25,7 +25,7 @@ public:
 	void write(int address, int value);
 	
 private:
-	OEMemoryRange mappedRange;
+	string mappedRange;
 	
 	int size;
 	int mask;

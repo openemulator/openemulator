@@ -10,23 +10,16 @@
 
 #include "AppleIFloatingBus.h"
 
-int AppleIFloatingBus::ioctl(int message, void * data)
+bool AppleIFloatingBus::connect(string name, OEComponent *component)
 {
-	switch(message)
-	{
-		case OE_CONNECT:
-		{
-			OEConnection *connection = (OEConnection *) data;
-			if (connection->name == "system")
-				system = connection->component;
-			else if (connection->name == "memory")
-				memory = connection->component;
-			
-			break;
-		}
-	}
+	if (name == "system")
+		system = component;
+	else if (name == "memory")
+		memory = component;
+	else
+		return false;
 	
-	return false;
+	return true;
 }
 
 int AppleIFloatingBus::read(int address)

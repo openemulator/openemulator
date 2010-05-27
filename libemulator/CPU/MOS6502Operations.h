@@ -637,7 +637,7 @@
 	if ( P & F_I ) {											\
 		PULL(P);												\
 		if (irqCount && !(P & F_I)) {							\
-			OELog("M6502 PLP sets afterCLI\n");					\
+			OELog("M6502 PLP sets afterCLI");					\
 			afterCLI = 1;										\
 		}														\
 	} else {													\
@@ -679,7 +679,7 @@
 	P |= F_T | F_B; 											\
 	if(irqCount && !(P & F_I) )									\
 	{															\
-		OELog("M6502 RTI sets afterCLI\n");						\
+		OELog("M6502 RTI sets afterCLI");						\
 		afterCLI = 1;											\
 	}
 

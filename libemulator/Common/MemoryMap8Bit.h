@@ -18,14 +18,14 @@ public:
 	bool setProperty(string name, string value);
 	bool connect(string name, OEComponent *component);
 	
-	bool setMemoryMap(OEComponent *component, OEMemoryRange range);
-	bool getMemoryMap(OEMemoryRange &range);
+	bool setMemoryMap(OEComponent *component, string ranges);
+	bool getMemoryMap(string &ranges);
 	
 	int read(int address);
 	void write(int address, int value);
 	
 private:
-	OEMemoryRange mappedRange;
+	string mappedRange;
 	
 	OEComponent *readMap[MEMORYMAP8BIT_SIZE];
 	OEComponent *writeMap[MEMORYMAP8BIT_SIZE];

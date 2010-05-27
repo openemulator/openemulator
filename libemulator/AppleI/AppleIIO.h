@@ -12,12 +12,16 @@
 
 class AppleIIO : public OEComponent
 {
-	int ioctl(int message, void *data);
+	bool setProperty(string name, string value);
+	bool connect(string name, OEComponent *component);
+	
+	bool getMemoryMap(string &range);
+	
 	int read(int address);
 	void write(int address, int value);
 	
 private:
-	OEMemoryRange mappedRange;
+	string mappedRange;
 	
 	OEComponent *pia;
 	OEComponent *floatingBus;

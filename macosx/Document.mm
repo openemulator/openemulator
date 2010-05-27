@@ -107,38 +107,33 @@
 	return value;
 }
 
-- (void) setIoctlProperty:(NSString *) name ref:(NSString *) ref value:(NSString *) value
+- (BOOL) setComponentProperty:(NSString *) name
+							ref:(NSString *) ref
+							value:(NSString *) value
 {
 	if (!emulation)
-		return;
+		return false;
 	
-	OEProperty msg;
-	
-	msg.name = string([name UTF8String]);
-	msg.value = string([value UTF8String]);
-	
-	oepaIoctl(emulation,
-			  string([ref UTF8String]),
-			  OE_SET_PROPERTY,
-			  &msg);
+	return oepaSetProperty(emulation,
+						   string([ref UTF8String]),
+						   string([name UTF8String]),
+						   string([value UTF8String]));
 }
 
-- (NSString *) getIoctlProperty:(NSString *)name ref:(NSString *) ref
+- (NSString *) getIoctlProperty:(NSString *) name
+							ref:(NSString *) ref
 {
 	if (!emulation)
 		return nil;
 	
-	OEProperty msg;
-	
-	msg.name = string([name UTF8String]);
-	
-	if (oepaIoctl(emulation,
-				  string([ref UTF8String]),
-				  OE_GET_PROPERTY,
-				  &msg))
-		return [NSString stringWithUTF8String:msg.value.c_str()];
-	else
-		return nil;
+	string value;
+	if (oepaGetProperty(emulation,
+						string([ref UTF8String]),
+						string([name UTF8String]),
+						value))
+		return [NSString stringWithUTF8String:value.c_str()];
+			
+	return @"";
 }
 
 - (NSImage *) getResourceImage:(NSString *) imagePath

@@ -16,17 +16,17 @@
 class MemoryMap16Bit : public OEComponent
 {
 public:
-	bool setProperty(string name, string value);
-	bool connect(string name, OEComponent *component);
+	bool setProperty(const string &name, const string &value);
+	bool connect(const string &name, OEComponent *component);
 	
-	bool setMemoryMap(OEComponent *component, OEMemoryRange range);
-	bool getMemoryMap(OEMemoryRange &range);
+	bool setMemoryMap(OEComponent *component, const string &range);
+	bool getMemoryMap(string &range);
 	
 	int read(int address);
 	void write(int address, int value);
 	
 private:
-	OEMemoryRange mappedRange;
+	string mappedRange;
 	
 	OEComponent *readMap[MEMORYMAP16BIT_SIZE];
 	OEComponent *writeMap[MEMORYMAP16BIT_SIZE];

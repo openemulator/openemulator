@@ -12,39 +12,33 @@
 
 #define APPLEIIO_MASK	0x10
 
-int AppleIIO::ioctl(int message, void *data)
+bool AppleIIO::setProperty(string name, string value)
 {
-	switch(message)
-	{
-		case OE_CONNECT:
-		{
-			OEConnection *connection = (OEConnection *) data;
-			if (connection->name == "pia")
-				pia = connection->component;
-			else if (connection->name == "floatingBus")
-				floatingBus = connection->component;
-			
-			break;
-		}
-		case OE_SET_PROPERTY:
-		{
-			OEProperty *property = (OEProperty *) data;
-			if (property->name == "map")
-				mappedRange.push_back(property->value);
-			
-			break;
-		}
-		case OE_GET_MEMORYMAP:
-		{
-			OEMemoryMap *memoryMap = (OEMemoryMap *) data;
-			memoryMap->component = this;
-			memoryMap->range = mappedRange;
-			
-			break;
-		}
-	}
+	if (name == "map")
+		mappedRange = value;
+	else
+		return false;
 	
-	return false;
+	return true;
+}
+
+bool AppleIIO::connect(string name, OEComponent *component)
+{
+	if (name == "pia")
+		pia = component;
+	else if (name == "floatingBus")
+		floatingBus = component;
+	else
+		return false;
+	
+	return true;
+}
+
+bool AppleIIO::getMemoryMap(string &range)
+{
+	range = mappedRange;
+	
+	return true;
 }
 
 int AppleIIO::read(int address)

@@ -23,7 +23,7 @@ RAM::RAM()
 bool RAM::setProperty(string name, string &value)
 {
 	if (name == "map")
-		mappedRange.push_back(value);
+		mappedRange = value;
 	else if (name == "size")
 	{
 		size = getLowerPowerOf2(getInt(value));

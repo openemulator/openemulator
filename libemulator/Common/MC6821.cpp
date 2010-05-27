@@ -65,7 +65,7 @@ void MC6821::setControlRegisterB(int value)
 	}
 }
 
-bool MC6821::setProperty(string name, string &value)
+bool MC6821::setProperty(const string &name, const string &value)
 {
 	if (name == "controlRegisterA")
 		setControlRegisterA(getInt(value));
@@ -93,7 +93,7 @@ bool MC6821::setProperty(string name, string &value)
 	return true;
 }
 
-bool MC6821::getProperty(string name, string &value)
+bool MC6821::getProperty(const string &name, string &value)
 {
 	if (name == "controlRegisterA")
 		value = getHex(controlRegisterA);
@@ -121,7 +121,7 @@ bool MC6821::getProperty(string name, string &value)
 	return true;
 }
 
-bool MC6821::connect(string name, OEComponent *component)
+bool MC6821::connect(const string &name, OEComponent *component)
 {
 	if (name == "interfaceA")
 		interfaceA = component;

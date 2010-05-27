@@ -15,7 +15,7 @@
 bool MemoryMap8Bit::setProperty(string name, string value)
 {
 	if (name == "map")
-		mappedRange.push_back(value);
+		mappedRange = value;
 	else
 		return false;
 	
@@ -24,7 +24,7 @@ bool MemoryMap8Bit::setProperty(string name, string value)
 
 bool MemoryMap8Bit::connect(string name, OEComponent *component)
 {
-	OEMemoryRange range;
+	string range;
 	component->getMemoryMap(range);
 	
 	setMemoryMap(component, range);
@@ -32,39 +32,33 @@ bool MemoryMap8Bit::connect(string name, OEComponent *component)
 	return true;
 }
 
-bool MemoryMap8Bit::setMemoryMap(OEComponent *component, OEMemoryRange range)
+bool MemoryMap8Bit::setMemoryMap(OEComponent *component, string ranges)
 {
-	for (vector<string>::iterator i = range.begin();
-		 i != range.end();
+	OEMemoryRanges memoryRanges = getRanges(ranges);
+	
+	for (OEMemoryRanges::iterator i = memoryRanges.begin();
+		 i != memoryRanges.end();
 		 i++)
 	{
-		string range = *i;
-		size_t separatorPos = range.find('-');
-		if (separatorPos == string::npos)
+		if (i->end >= MEMORYMAP8BIT_SIZE)
 		{
-			cerr << "MemoryMap8Bit: range " << range << " invalid.\n";
+			OELog("");
 			return false;
 		}
 		
-		int start = getInt(range.substr(0, separatorPos));
-		int end = getInt(range.substr(separatorPos + 1));
-		if (start > end)
+		for (int n = i->start; n < i->end; n++)
 		{
-			cerr << "MemoryMap8Bit: range " << range << " invalid.\n";
-			return false;
-		}
-		
-		for (int i = start; i < end; i++)
-		{
-			readMap[i] = component;
-			writeMap[i] = component;
+			if (i->read)
+				readMap[i] = component;
+			if (i->write)
+				writeMap[i] = component;
 		}
 	}
 	
 	return true;
 }
 
-bool MemoryMap8Bit::getMemoryMap(OEMemoryRange &range)
+bool MemoryMap8Bit::getMemoryMap(string &range)
 {
 	range = mappedRange;
 	

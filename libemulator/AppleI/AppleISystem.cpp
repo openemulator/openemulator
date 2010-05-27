@@ -18,65 +18,63 @@ AppleISystem::AppleISystem()
 	isCPUExternal = false;
 }
 
+bool AppleISystem::setProperty(string name, string value)
+{
+	if (name == "isCPUExternal")
+		isCPUExternal = getInt(value);
+	else
+		return false;
+	
+	return true;
+}
+
+bool AppleISystem::getProperty(string name, string &value)
+{
+	if (name == "isCPUExternal")
+		value = getString(isCPUExternal);
+	else
+		return false;
+
+	return true;
+}
+
+bool AppleISystem::connect(string name, OEComponent *component)
+{
+	if (name == "hostAudio")
+		;
+		// component->addObserver(this);
+	else if (name == "cpu")
+		cpu = component;
+	else if (name == "cpuSocket")
+		cpuSocket = component;
+	else
+		return false;
+	
+	return true;
+}
+
+void AppleISystem::notify(int notification, OEComponent *component, void *data)
+{
+//	if (notification == HOSTAUDIO_RENDER_DID_START)
+	HostAudioBuffer *buffer = (HostAudioBuffer *) data;
+	float *out = buffer->output;
+	int sampleNum = buffer->channelNum * buffer->frameNum;
+		
+	for(int i = 0; i < sampleNum; i++)
+	{
+		*out++ += 0.05 * sin(phase);
+		phase += 2 * M_PI * 220 / buffer->sampleRate;
+	}
+		
+	// Implement simulation
+		
+	// postNotification APPLEISYSTEM_VBL
+}
+
 int AppleISystem::ioctl(int message, void *data)
 {
 	switch (message)
 	{
-		case OE_SET_PROPERTY:
-		{
-			OEProperty *property = (OEProperty *) data;
-			if (property->name == "isCPUExternal")
-				isCPUExternal = getInt(property->value);
-			
-			break;
-		}
-		case OE_GET_PROPERTY:
-		{
-			OEProperty *property = (OEProperty *) data;
-			if (property->name == "isCPUExternal")
-				property->value = getString(isCPUExternal);
-			else
-				return false;
-			
-			return true;
-		}
-		case OE_CONNECT:
-		{
-			OEConnection *connection = (OEConnection *) data;
-			if (connection->name == "hostAudio")
-			{
-				OEComponent *hostAudio = connection->component;
-//				hostAudio->addObserver(this);
-			}
-			else if (connection->name == "cpu")
-				cpu = connection->component;
-			else if (connection->name == "cpuSocket")
-				cpuSocket = connection->component;
-			
-			break;
-		}
-		case OE_NOTIFY:
-		{
-			OENotification *notification = (OENotification *) data;
-			if (notification->id == HOSTAUDIO_RENDER_DID_START)
-			{
-				HostAudioBuffer *buffer = (HostAudioBuffer *) notification->data;
-				float *out = buffer->output;
-				int sampleNum = buffer->channelNum * buffer->frameNum;
-				
-				for(int i = 0; i < sampleNum; i++)
-				{
-					float value = 0.05 * sin(phase);
-					*out++ += value;
-					phase += 2 * M_PI * 220 / buffer->sampleRate;
-				}
-				
-				// Implement simulation
-				
-				// postNotification APPLEISYSTEM_VBL
-			}
-			break;
-		}
 		case APPLEISYSTEM_GET_SAMPLEINDEX:
 		{
 			float *index = (float *) data;

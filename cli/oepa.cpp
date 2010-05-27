@@ -446,7 +446,10 @@ void *oepaProcess(void *arg)
 		for (vector<OEEmulation *>::iterator i = oepaEmulations.begin();
 			 i != oepaEmulations.end();
 			 i++)
-			(*i)->ioctl("host::audio", HOSTAUDIO_RENDERBUFFER, &hostAudioBuffer);
+		{
+			OEComponent *component = (*i)->getComponent("host::audio");
+			component->ioctl(HOSTAUDIO_RENDERBUFFER, &hostAudioBuffer);
+		}
 		
 		memcpy(buffer,
 			   &outputBuffer[0],
@@ -837,12 +840,37 @@ bool oepaSave(OEEmulation *emulation, string path)
 	return status;
 }
 
-int oepaIoctl(OEEmulation *emulation,
-			  string device, int message, void *data)
+bool oepaSetProperty(OEEmulation *emulation, string ref, string name, string value)
 {
 	pthread_mutex_lock(&oepaProcessMutex);
 	
-	int status = emulation->ioctl(device, message, data);
+	OEComponent *component = emulation->getComponent(ref);
+	bool status = component->setProperty(name, value);
+	
+	pthread_mutex_unlock(&oepaProcessMutex);
+	
+	return status;
+}
+
+bool oepaGetProperty(OEEmulation *emulation, string ref, string name, string &value)
+{
+	pthread_mutex_lock(&oepaProcessMutex);
+	
+	OEComponent *component = emulation->getComponent(ref);
+	bool status = component->setProperty(name, value);
+	
+	pthread_mutex_unlock(&oepaProcessMutex);
+	
+	return status;
+}
+
+int oepaIoctl(OEEmulation *emulation,
+			  string ref, int message, void *data)
+{
+	pthread_mutex_lock(&oepaProcessMutex);
+	
+	OEComponent *component = emulation->getComponent(ref);
+	bool status = component->ioctl(message, data);
 	
 	pthread_mutex_unlock(&oepaProcessMutex);
 	

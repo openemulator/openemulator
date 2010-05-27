@@ -15,30 +15,25 @@ AppleIVideo::AppleIVideo()
 	memset(screen, 0, APPLEIVIDEO_TERM_HEIGHT * APPLEIVIDEO_TERM_HEIGHT);
 }
 
-int AppleIVideo::ioctl(int message, void *data)
+bool AppleIVideo::setResource(string name, OEData &data)
 {
-	switch(message)
-	{
-		case OE_SET_RESOURCE:
-		{
-			OEData *resource = (OEData *) data;
-			if (resource->name == "image")
-				characterSet = resource->data;
-			break;
-		}
-		case OE_CONNECT:
-		{
-			OEConnection *connection = (OEConnection *) data;
-			if (connection->name == "system")
-			{
-				OEComponent *system = connection->component;
-//				system->addObserver(this);
-			}
-			break;
-		}
-	}
+	if (name == "image")
+		characterSet = data;
+	else
+		return false;
 	
-	return false;
+	return true;
+}
+
+bool AppleIVideo::connect(string name, OEComponent *component)
+{
+	if (name == "system")
+//		component->addObserver(this, <#int notification#>)
+		;
+	else
+		return false;
+	
+	return true;
 }
 
 void AppleIVideo::write(int address, int value)

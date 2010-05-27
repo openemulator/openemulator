@@ -13,7 +13,9 @@
 class AppleIKeyboard : public OEComponent
 {
 public:
-	int ioctl(int message, void *data);
+	bool connect(string name, OEComponent *component);
+	void notify(int notification, OEComponent *component, void *data);
+	
 	int read(int address);
 	
 private:

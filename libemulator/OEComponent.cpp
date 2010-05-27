@@ -21,32 +21,32 @@ OEComponent::~OEComponent()
 {
 }
 
-bool OEComponent::setProperty(string name, string value)
+bool OEComponent::setProperty(const string &name, const string &value)
 {
 	return false;
 }
 
-bool OEComponent::getProperty(string name, string &value)
+bool OEComponent::getProperty(const string &name, string &value)
 {
 	return false;
 }
 
-bool OEComponent::setData(string name, OEData &data)
+bool OEComponent::setData(const string &name, const OEData &data)
 {
 	return false;
 }
 
-bool OEComponent::getData(string name, OEData &data)
+bool OEComponent::getData(const string &name, OEData &data)
 {
 	return false;
 }
 
-bool OEComponent::setResource(string name, OEData &data)
+bool OEComponent::setResource(const string &name, const OEData &data)
 {
 	return false;
 }
 
-bool OEComponent::connect(string name, OEComponent *component)
+bool OEComponent::connect(const string &name, OEComponent *component)
 {
 	return false;
 }
@@ -54,7 +54,7 @@ bool OEComponent::connect(string name, OEComponent *component)
 bool OEComponent::addObserver(OEComponent *component,
 							  int notification)
 {
-	observers[notification].push_back(component);
+	observerMap[notification].push_back(component);
 	
 	return true;
 }
@@ -64,13 +64,13 @@ bool OEComponent::removeObserver(OEComponent *component,
 {
 	
 	OEObservers::iterator i;
-	for (i = observers[notification].begin();
-		 i != observers[notification].end();
+	for (i = observerMap[notification].begin();
+		 i != observerMap[notification].end();
 		 i++)
 	{
 		if (*i == component)
 		{
-			observers[notification].erase(i);
+			observerMap[notification].erase(i);
 			return true;
 		}
 	}
@@ -81,8 +81,8 @@ bool OEComponent::removeObserver(OEComponent *component,
 void OEComponent::postNotification(int notification, void *data)
 {
 	OEObservers::iterator i;
-	for (i = observers[notification].begin();
-		 i != observers[notification].end();
+	for (i = observerMap[notification].begin();
+		 i != observerMap[notification].end();
 		 i++)
 		(*i)->notify(notification, this, data);
 }
@@ -93,13 +93,12 @@ void OEComponent::notify(int notification,
 {
 }
 
-bool OEComponent::setMemoryMap(OEComponent *component,
-							   OEMemoryRange &range)
+bool OEComponent::setMemoryMap(OEComponent *component, const string &range)
 {
 	return false;
 }
 
-bool OEComponent::getMemoryMap(OEMemoryRange &range)
+bool OEComponent::getMemoryMap(string &range)
 {
 	return false;
 }
@@ -128,7 +127,7 @@ void OEComponent::write(int address, int value)
 {
 }
 
-int OEComponent::getInt(string value)
+int OEComponent::getInt(const string &value)
 {
 	if (value.substr(0, 2) == "0x")
 	{
@@ -142,7 +141,7 @@ int OEComponent::getInt(string value)
 		return atoi(value.c_str());
 }
 
-double OEComponent::getFloat(string value)
+double OEComponent::getFloat(const string &value)
 {
 	return atof(value.c_str());
 }
@@ -161,21 +160,18 @@ string OEComponent::getHex(int value)
 	return ss.str();
 }
 
-vector<char> OEComponent::getCharVector(string value)
+OEData OEComponent::getCharVector(const string &value)
 {
-	vector<char> result;
-	
-	if (value.substr(0, 2) == "0x")
-		value = value.substr(2);
-	
-	int size = value.size() / 2;
+	OEData result;
+	int start = (value.substr(0, 2) == "0x") ? 2 : 0;
+	int size = value.size() / 2 - start;
 	result.resize(size);
 	
 	for (int i = 0; i < size; i++)
 	{
 		unsigned int n;
 		std::stringstream ss;
-		ss << std::hex << value.substr(i * 2, 2);
+		ss << std::hex << value.substr(start + i * 2, 2);
 		ss >> n;
 		result[i] = n;
 	}
@@ -188,8 +184,46 @@ int OEComponent::getLowerPowerOf2(int value)
 	return (int) pow(2, floor(log2(value)));
 }
 
-string OEComponent::getRange(int start, int end)
+OEMemoryRanges OEComponent::getRanges(const string &ranges)
 {
+	OEMemoryRanges result;
 	
+	size_t startPos = ranges.find_first_not_of(',', 0);
+	size_t endPos = ranges.find_first_of(',', startPos);
+	
+	while ((startPos != string::npos) || (endPos != string::npos))
+	{
+		string range = ranges.substr(startPos, endPos - startPos);
+		
+		bool isRead = false;
+		bool isWrite = false;
+		
+		while (range[0] == 'R' do {
+			if (range[0] == 'R')
+			{
+				isRead = true;
+			}
+		else if (range[0] == 'W')
+			isWrite = true;
+		if (!isRead && !isWrite)
+			isRead = isWrite = true;
+		
+		size_t separatorPos = range.find_first_of('-');
+		if (separatorPos == string::npos)
+		{
+			OELog("range \"" + ranges + "\" invalid");
+			return false;
+		}
+		
+		int start = getInt(range.substr(0, separatorPos));
+		int end = getInt(range.substr(separatorPos + 1));
+		if (start > end)
+		{
+			OELog("range \"" + ranges + "\" invalid");
+			return false;
+		}
+		
+		startPos = range.find_first_not_of(',', endPos);
+		endPos = range.find_first_of(',', startPos);
+	}
 }
-

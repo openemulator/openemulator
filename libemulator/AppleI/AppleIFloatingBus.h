@@ -13,7 +13,8 @@
 class AppleIFloatingBus : public OEComponent
 {
 public:
-	int ioctl(int message, void * data);
+	bool connect(string name, OEComponent *component);
+	
 	int read(int address);
 
 private:

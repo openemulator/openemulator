@@ -13,6 +13,7 @@
 
 #include <string>
 #include <map>
+#include <iostream>
 
 #include <libxml/tree.h>
 
@@ -37,7 +38,7 @@ public:
 	
 	bool save(string path);
 	
-	int ioctl(string ref, int message, void *data);
+	OEComponent *getComponent(string ref);
 	
 	xmlDocPtr getDML();
 	bool addDevices(string path, OEStringRefMap connections);

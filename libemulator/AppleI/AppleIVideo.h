@@ -18,7 +18,9 @@ class AppleIVideo : public OEComponent
 public:
 	AppleIVideo();
 	
-	int ioctl(int message, void *data);
+	bool setResource(string name, OEData &data);
+	bool connect(string name, OEComponent *component);
+	
 	void write(int address, int value);
 	
 private:

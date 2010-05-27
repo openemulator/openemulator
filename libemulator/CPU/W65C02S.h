@@ -15,8 +15,10 @@ class W65C02S : public OEComponent
 public:
 	W65C02S();
 		
-	int ioctl(int message, void *data);		
-		
+	bool setProperty(string name, string value);
+	bool getProperty(string name, string &value);
+	bool connect(string name, OEComponent *component);
+	
 private:
 	OEComponent *memory;
 		

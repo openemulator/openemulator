@@ -15,7 +15,9 @@ class MOS6502 : public OEComponent
 public:
 	MOS6502();
 	
-	int ioctl(int message, void *data);		
+	bool setProperty(string name, string value);
+	bool getProperty(string name, string &value);
+	bool connect(string name, OEComponent *component);
 	
 private:
 	OEComponent *memory;
@@ -26,17 +28,17 @@ private:
 	OEPair zp;
 	OEPair ea;
 	
-	UINT8 p;
-	UINT8 a;
-	UINT8 x;
-	UINT8 y;
+	UInt8 p;
+	UInt8 a;
+	UInt8 x;
+	UInt8 y;
 	
-	UINT8 pendingIRQ;
-	UINT8 afterCLI;
-	UINT8 irqCount;
-	UINT8 overflow;
+	UInt8 pendingIRQ;
+	UInt8 afterCLI;
+	UInt8 irqCount;
+	UInt8 overflow;
 	
-	INT32 icount;
+	Int32 icount;
 	
 	void reset();
 	void assertIRQ();

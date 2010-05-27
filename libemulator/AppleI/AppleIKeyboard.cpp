@@ -15,39 +15,28 @@
 
 #define APPLEIKEYBOARD_MASK	0x40
 
-int AppleIKeyboard::ioctl(int message, void *data)
+bool AppleIKeyboard::connect(string name, OEComponent *component)
 {
-	switch (message)
-	{
-		case OE_CONNECT:
-		{
-			OEConnection *connection = (OEConnection *) data;
-			if (connection->name == "hostHID")
-			{
-				hostKeyboard = connection->component;
-//				hostKeyboard->addObserver(this);
-			}
-			
-			break;
-		}
-		case OE_NOTIFY:
-		{
-			OENotification *notification = (OENotification *) data;
-			OEHIDEvent *event = (OEHIDEvent *) notification->data;
-			
-			if ((event->isDown) && (event->unicode < 128))
-			{
-				key = event->unicode;
-				
-				bool value = true;
-				pia->ioctl(MC6821_SET_CA1, &value);
-			}
-			
-			break;
-		}
-	}
+	if (name == "hostHID")
+		// component->addObserver(this);
+		;
+	else
+		return false;
 	
-	return false;
+	return true;
+}
+
+void AppleIKeyboard::notify(int notification, OEComponent *component, void *data)
+{
+	OEHIDEvent *event = (OEHIDEvent *) data;
+	
+	if ((event->isDown) && (event->unicode < 128))
+	{
+		key = event->unicode;
+		
+		bool value = true;
+		pia->ioctl(MC6821_SET_CA1, &value);
+	}
 }
 
 int AppleIKeyboard::read(int address)

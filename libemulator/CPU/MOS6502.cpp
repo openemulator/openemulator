@@ -17,72 +17,69 @@ MOS6502::MOS6502()
 	zp.d = 0;
 }
 
-int MOS6502::ioctl(int message, void *data)
+bool MOS6502::setProperty(string name, string value)
 {
-	switch(message)
-	{
-		case OE_CONNECT:
-		{
-			OEConnection *connection = (OEConnection *) data;
-			if (connection->name == "memoryMap")
-				memory = connection->component;
-//			else if (connection->name == "hostSystem")
-//				connection->component->addObserver(this);
-			
-			break;
-		}
-		case OE_SET_PROPERTY:
-		{
-			OEProperty *property = (OEProperty *) data;
-			if (property->name == "pc")
-				pc.w.l = getInt(property->value);
-			else if (property->name == "sp")
-				sp.b.l = getInt(property->value);
-			else if (property->name == "p")
-				p = getInt(property->value);
-			else if (property->name == "a")
-				a = getInt(property->value);
-			else if (property->name == "x")
-				x = getInt(property->value);
-			else if (property->name == "y")
-				y = getInt(property->value);
-			else if (property->name == "pendingIRQ")
-				pendingIRQ = getInt(property->value);
-			else if (property->name == "afterCLI")
-				afterCLI = getInt(property->value);
-			else if (property->name == "irqCount")
-				irqCount = getInt(property->value);
-			
-			break;
-		}
-		case OE_GET_PROPERTY:
-		{
-			OEProperty *property = (OEProperty *) data;
-			if (property->name == "pc")
-				property->value = getHex(pc.w.l);
-			else if (property->name == "sp")
-				property->value = getHex(sp.b.l);
-			else if (property->name == "p")
-				property->value = getHex(p);
-			else if (property->name == "a")
-				property->value = getHex(a);
-			else if (property->name == "x")
-				property->value = getHex(x);
-			else if (property->name == "y")
-				property->value = getHex(y);
-			else if (property->name == "pendingIRQ")
-				property->value = pendingIRQ;
-			else if (property->name == "afterCLI")
-				property->value = afterCLI;
-			else if (property->name == "irqCount")
-				property->value = irqCount;
-			else
-				return false;
-			
-			return true;
-		}
-	}
-	return false;
+	if (name == "pc")
+		pc.w.l = getInt(value);
+	else if (name == "sp")
+		sp.b.l = getInt(value);
+	else if (name == "p")
+		p = getInt(value);
+	else if (name == "a")
+		a = getInt(value);
+	else if (name == "x")
+		x = getInt(value);
+	else if (name == "y")
+		y = getInt(value);
+	else if (name == "pendingIRQ")
+		pendingIRQ = getInt(value);
+	else if (name == "afterCLI")
+		afterCLI = getInt(value);
+	else if (name == "irqCount")
+		irqCount = getInt(value);
+	else
+		return false;
+	
+	return true;
+}
+
+bool MOS6502::getProperty(string name, string &value)
+{
+	if (name == "pc")
+		value = getHex(pc.w.l);
+	else if (name == "sp")
+		value = getHex(sp.b.l);
+	else if (name == "p")
+		value = getHex(p);
+	else if (name == "a")
+		value = getHex(a);
+	else if (name == "x")
+		value = getHex(x);
+	else if (name == "y")
+		value = getHex(y);
+	else if (name == "pendingIRQ")
+		value = pendingIRQ;
+	else if (name == "afterCLI")
+		value = afterCLI;
+	else if (name == "irqCount")
+		value = irqCount;
+	else
+		return false;
+	
+	return true;
+}
+
+bool MOS6502::connect(string name, OEComponent *component)
+{
+	if (name == "memoryMap")
+		memory = component;
+	else if (name == "hostSystem")
+	// component->addObserver(this);
+		;
+	else
+		return false;
+	
+	return true;
 }
 
 void MOS6502::reset()
@@ -96,7 +93,7 @@ void MOS6502::reset()
 
 void MOS6502::assertNMI()
 {
-	OELog("M6502 set_nmi_line(ASSERT)\n");
+//	OELog("M6502 set_nmi_line(ASSERT)\n");
 	EAD = MOS6502_NMI_VEC;
 	icount -= 2;
 	PUSH(PCH);
@@ -105,7 +102,7 @@ void MOS6502::assertNMI()
 	P |= F_I;		/* set I flag */
 	PCL = RDMEM(EAD);
 	PCH = RDMEM(EAD+1);
-	OELog("M6502 takes NMI ($%04x)\n", PCD);
+//	OELog("M6502 takes NMI (" + PCD + ")\n");
 }
 
 void MOS6502::assertIRQ()

@@ -47,6 +47,9 @@ void oepaDestroy(OEEmulation *emulation);
 
 bool oepaIsLoaded(OEEmulation *emulation);
 bool oepaSave(OEEmulation *emulation, string path);
+
+bool oepaSetProperty(OEEmulation *emulation, string ref, string name, string value);
+bool oepaGetProperty(OEEmulation *emulation, string ref, string name, string &value);
 int oepaIoctl(OEEmulation *emulation, string ref, int message, void *data);
 
 xmlDocPtr oepaGetDML(OEEmulation *emulation);

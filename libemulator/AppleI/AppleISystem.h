@@ -34,6 +34,12 @@ class AppleISystem : public OEComponent
 public:
 	AppleISystem();
 	
+	bool setProperty(string name, string value);
+	bool getProperty(string name, string &value);
+	bool connect(string name, OEComponent *component);
+	
+	void notify(int notification, OEComponent *component, void *data);
+	
 	int ioctl(int message, void *data);
 	
 private:

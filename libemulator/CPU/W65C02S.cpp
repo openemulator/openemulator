@@ -16,58 +16,69 @@ W65C02S::W65C02S()
 	sp.b.h = 0x01;
 }
 
-int W65C02S::ioctl(int message, void *data)
+bool W65C02S::setProperty(string name, string value)
 {
-	switch(message)
-	{
-		case OE_CONNECT:
-		{
-			OEConnection *connection = (OEConnection *) data;
-			if (connection->name == "memory")
-				memory = connection->component;
-//			else if (connection->name == "hostSystem")
-//				connection->component->addObserver(this);
-			break;
-		}
-		case OE_SET_PROPERTY:
-		{
-			OEProperty *property = (OEProperty *) data;
-			if (property->name == "a")
-				a = getInt(property->value);
-			else if (property->name == "x")
-				x = getInt(property->value);
-			else if (property->name == "y")
-				y = getInt(property->value);
-			else if (property->name == "p")
-				p = getInt(property->value);
-			else if (property->name == "sp")
-				sp.b.l = getInt(property->value);
-			else if (property->name == "pc")
-				pc.w.l = getInt(property->value);
-			break;
-		}
-		case OE_GET_PROPERTY:
-		{
-			OEProperty *property = (OEProperty *) data;
-			if (property->name == "a")
-				property->value = a;
-			else if (property->name == "x")
-				property->value = x;
-			else if (property->name == "y")
-				property->value = y;
-			else if (property->name == "p")
-				property->value = p;
-			else if (property->name == "sp")
-				property->value = sp.d;
-			else if (property->name == "pc")
-				property->value = pc.d;
-			else
-				return false;
-			
-			return true;
-		}
-	}
-	return false;
+	if (name == "pc")
+		pc.w.l = getInt(value);
+	else if (name == "sp")
+		sp.b.l = getInt(value);
+	else if (name == "p")
+		p = getInt(value);
+	else if (name == "a")
+		a = getInt(value);
+	else if (name == "x")
+		x = getInt(value);
+	else if (name == "y")
+		y = getInt(value);
+	else if (name == "pendingIRQ")
+		pendingIRQ = getInt(value);
+	else if (name == "afterCLI")
+		afterCLI = getInt(value);
+	else if (name == "irqCount")
+		irqCount = getInt(value);
+	else
+		return false;
+	
+	return true;
+}
+
+bool W65C02S::getProperty(string name, string &value)
+{
+	if (name == "pc")
+		value = getHex(pc.w.l);
+	else if (name == "sp")
+		value = getHex(sp.b.l);
+	else if (name == "p")
+		value = getHex(p);
+	else if (name == "a")
+		value = getHex(a);
+	else if (name == "x")
+		value = getHex(x);
+	else if (name == "y")
+		value = getHex(y);
+	else if (name == "pendingIRQ")
+		value = pendingIRQ;
+	else if (name == "afterCLI")
+		value = afterCLI;
+	else if (name == "irqCount")
+		value = irqCount;
+	else
+		return false;
+	
+	return true;
+}
+
+bool W65C02S::connect(string name, OEComponent *component)
+{
+	if (name == "memoryMap")
+		memory = component;
+	else if (name == "hostSystem")
+		// component->addObserver(this);
+		;
+	else
+		return false;
+	
+	return true;
 }
 
 void W65C02S::execute()

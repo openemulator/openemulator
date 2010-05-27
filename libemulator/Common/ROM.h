@@ -18,13 +18,12 @@ public:
 	bool setProperty(string name, string &value);
 	bool setResource(string name, OEData &data);
 	
-	bool getMemoryMap(OEMemoryRange &range);
+	bool getMemoryMap(string &range);
 	
-	int ioctl(int message, void *data);
 	int read(int address);
 	
 private:
-	OEMemoryRange mappedRange;
+	string mappedRange;
 	
 	int mask;
 	vector<char> memory;

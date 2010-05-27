@@ -15,7 +15,7 @@
 bool MemoryMap16Bit::setProperty(string name, string value)
 {
 	if (name == "map")
-		mappedRange.push_back(value);
+		mappedRange = value;
 	else
 		return false;
 	
@@ -24,7 +24,7 @@ bool MemoryMap16Bit::setProperty(string name, string value)
 
 bool MemoryMap16Bit::connect(string name, OEComponent *component)
 {
-	OEMemoryRange range;
+	string range;
 	component->getMemoryMap(range);
 	
 	setMemoryMap(component, range);
@@ -32,7 +32,7 @@ bool MemoryMap16Bit::connect(string name, OEComponent *component)
 	return true;
 }
 
-bool MemoryMap16Bit::setMemoryMap(OEComponent *component, OEMemoryRange range)
+bool MemoryMap16Bit::setMemoryMap(OEComponent *component, string range)
 {
 	for (vector<string>::iterator i = range.begin();
 		 i != range.end();
@@ -66,7 +66,7 @@ bool MemoryMap16Bit::setMemoryMap(OEComponent *component, OEMemoryRange range)
 	return true;
 }
 
-bool MemoryMap16Bit::getMemoryMap(OEMemoryRange &range)
+bool MemoryMap16Bit::getMemoryMap(string &range)
 {
 	range = mappedRange;
 	

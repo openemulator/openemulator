@@ -15,47 +15,41 @@ MemoryOffset::MemoryOffset()
 	offset = 0;
 }
 
-int MemoryOffset::ioctl(int message, void *data)
+bool MemoryOffset::setProperty(string name, string value)
 {
-	switch(message)
-	{
-		case OE_SET_PROPERTY:
-		{
-			OEProperty *property = (OEProperty *) data;
-			if (property->name == "map")
-				mappedRange.push_back(property->value);
-			else if (property->name == "offset")
-				offset = getInt(property->value);
-			
-			break;
-		}
-		case OE_CONNECT:
-		{
-			OEConnection *connection = (OEConnection *) data;
-			if (connection->name == "component")
-				component = connection->component;
-			
-			break;
-		}
-		case OE_GET_MEMORYMAP:
-		{
-			OEMemoryMap *memoryMap = (OEMemoryMap *) data;
-			memoryMap->component = this;
-			memoryMap->range = mappedRange;
-			
-			break;
-		}
-	}
+	if (name == "map")
+		mappedRange = value;
+	else if (name == "offset")
+		offset = getInt(value);
+	else
+		return false;
 	
-	return false;
-}	
+	return true;
+}
+
+bool MemoryOffset::connect(string name, OEComponent *component)
+{
+	if (name == "component")
+		connectedComponent = component;
+	else
+		return false;
+	
+	return true;
+}
+
+bool MemoryOffset::getMemoryMap(string &range)
+{
+	range = mappedRange;
+	
+	return true;
+}
 
 int MemoryOffset::read(int address)
 {
-	return component->read(address + offset);
+	return connectedComponent->read(address + offset);
 }
 
 void MemoryOffset::write(int address, int value)
 {
-	component->write(address + offset, value);
+	connectedComponent->write(address + offset, value);
 }

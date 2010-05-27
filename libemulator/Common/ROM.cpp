@@ -20,7 +20,7 @@ ROM::ROM()
 bool ROM::setProperty(string name, string &value)
 {
 	if (name == "map")
-		mappedRange.push_back(value);
+		mappedRange = value;
 	else
 		return false;
 	
@@ -44,7 +44,7 @@ bool ROM::setResource(string name, OEData &data)
 	return true;
 }
 
-bool ROM::getMemoryMap(OEMemoryRange &range)
+bool ROM::getMemoryMap(string &range)
 {
 	range = mappedRange;
 	

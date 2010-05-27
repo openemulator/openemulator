@@ -15,14 +15,18 @@ class MemoryOffset : public OEComponent
 public:
 	MemoryOffset();
 	
-	int ioctl(int message, void *data);
+	bool setProperty(string name, string value);
+	bool connect(string name, OEComponent *component);
+	
+	bool getMemoryMap(string &range);
+	
 	int read(int address);
 	void write(int address, int value);
 	
 private:
-	OEMemoryRange mappedRange;
+	string mappedRange;
 	
 	int offset;
 	
-	OEComponent *component;
+	OEComponent *connectedComponent;
 };
