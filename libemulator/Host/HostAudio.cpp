@@ -10,7 +10,7 @@
 
 #include "HostAudio.h"
 
-bool HostAudio::setProperty(string name, string &value)
+bool HostAudio::setProperty(string name, string value)
 {
 	if (name == "runTime")
 		runTime = getFloat(value);

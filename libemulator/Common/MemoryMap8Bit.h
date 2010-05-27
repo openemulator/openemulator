@@ -15,7 +15,12 @@
 class MemoryMap8Bit : public OEComponent
 {
 public:
-	int ioctl(int message, void *data);
+	bool setProperty(string name, string value);
+	bool connect(string name, OEComponent *component);
+	
+	bool setMemoryMap(OEComponent *component, OEMemoryRange range);
+	bool getMemoryMap(OEMemoryRange &range);
+	
 	int read(int address);
 	void write(int address, int value);
 	
@@ -24,6 +29,4 @@ private:
 	
 	OEComponent *readMap[MEMORYMAP8BIT_SIZE];
 	OEComponent *writeMap[MEMORYMAP8BIT_SIZE];
-	
-	void setRange(OEComponent *component, vector<string> mapVector);
 };

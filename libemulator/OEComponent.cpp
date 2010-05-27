@@ -21,7 +21,7 @@ OEComponent::~OEComponent()
 {
 }
 
-bool OEComponent::setProperty(string name, string &value)
+bool OEComponent::setProperty(string name, string value)
 {
 	return false;
 }

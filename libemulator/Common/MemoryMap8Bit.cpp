@@ -12,10 +12,30 @@
 
 #include "MemoryMap8Bit.h"
 
-void MemoryMap8Bit::setRange(OEComponent *component, vector<string> mapVector)
+bool MemoryMap8Bit::setProperty(string name, string value)
 {
-	for (vector<string>::iterator i = mapVector.begin();
-		 i != mapVector.end();
+	if (name == "map")
+		mappedRange.push_back(value);
+	else
+		return false;
+	
+	return true;
+}
+
+bool MemoryMap8Bit::connect(string name, OEComponent *component)
+{
+	OEMemoryRange range;
+	component->getMemoryMap(range);
+	
+	setMemoryMap(component, range);
+	
+	return true;
+}
+
+bool MemoryMap8Bit::setMemoryMap(OEComponent *component, OEMemoryRange range)
+{
+	for (vector<string>::iterator i = range.begin();
+		 i != range.end();
 		 i++)
 	{
 		string range = *i;
@@ -23,7 +43,7 @@ void MemoryMap8Bit::setRange(OEComponent *component, vector<string> mapVector)
 		if (separatorPos == string::npos)
 		{
 			cerr << "MemoryMap8Bit: range " << range << " invalid.\n";
-			continue;
+			return false;
 		}
 		
 		int start = getInt(range.substr(0, separatorPos));
@@ -31,7 +51,7 @@ void MemoryMap8Bit::setRange(OEComponent *component, vector<string> mapVector)
 		if (start > end)
 		{
 			cerr << "MemoryMap8Bit: range " << range << " invalid.\n";
-			continue;
+			return false;
 		}
 		
 		for (int i = start; i < end; i++)
@@ -40,47 +60,15 @@ void MemoryMap8Bit::setRange(OEComponent *component, vector<string> mapVector)
 			writeMap[i] = component;
 		}
 	}
+	
+	return true;
 }
 
-int MemoryMap8Bit::ioctl(int message, void *data)
+bool MemoryMap8Bit::getMemoryMap(OEMemoryRange &range)
 {
-	switch(message)
-	{
-		case OE_SET_PROPERTY:
-		{
-			OEProperty *property = (OEProperty *) data;
-			if (property->name == "map")
-				mappedRange.push_back(property->value);
-			
-			break;
-		}
-		case OE_CONNECT:
-		{
-			OEConnection *connection = (OEConnection *) data;
-			OEMemoryMap memoryMap;
-			connection->component->ioctl(OE_GET_MEMORYMAP, &memoryMap);
-			setRange(memoryMap.component, memoryMap.range);
-			
-			break;
-		}
-		case OE_GET_MEMORYMAP:
-		{
-			OEMemoryMap *memoryMap = (OEMemoryMap *) data;
-			memoryMap->component = this;
-			memoryMap->range = mappedRange;
-			
-			break;
-		}
-		case OE_SET_MEMORYMAP:
-		{
-			OEMemoryMap *memoryMap = (OEMemoryMap *) data;
-			setRange(memoryMap->component, memoryMap->range);
-			
-			break;
-		}
-	}
+	range = mappedRange;
 	
-	return false;
+	return true;
 }
 
 int MemoryMap8Bit::read(int address)
@@ -90,5 +78,5 @@ int MemoryMap8Bit::read(int address)
 
 void MemoryMap8Bit::write(int address, int value)
 {
-	readMap[address & 0xff]->write(address, value);
+	writeMap[address & 0xff]->write(address, value);
 }

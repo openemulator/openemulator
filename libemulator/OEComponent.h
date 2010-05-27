@@ -58,7 +58,7 @@ public:
 	OEComponent();
 	virtual ~OEComponent();
 	
-	virtual bool setProperty(string name, string &value);
+	virtual bool setProperty(string name, string value);
 	virtual bool getProperty(string name, string &value);
 	virtual bool setData(string name, OEData &data);
 	virtual bool getData(string name, OEData &data);

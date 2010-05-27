@@ -60,7 +60,7 @@ typedef struct
 class HostVideo : public OEComponent
 {
 public:
-	bool setProperty(string name, string &value);
+	bool setProperty(string name, string value);
 	bool getProperty(string name, string &value);
 	
 	int ioctl(int message, void *data);

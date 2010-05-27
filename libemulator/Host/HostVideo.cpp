@@ -10,7 +10,7 @@
 
 #include "HostVideo.h"
 
-bool HostVideo::setProperty(string name, string &value)
+bool HostVideo::setProperty(string name, string value)
 {
 	if (name == "window")
 		;
