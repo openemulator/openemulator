@@ -18,7 +18,7 @@ AppleISystem::AppleISystem()
 	isCPUExternal = false;
 }
 
-bool AppleISystem::setProperty(string name, string value)
+bool AppleISystem::setProperty(const string &name, const string &value)
 {
 	if (name == "isCPUExternal")
 		isCPUExternal = getInt(value);
@@ -28,7 +28,7 @@ bool AppleISystem::setProperty(string name, string value)
 	return true;
 }
 
-bool AppleISystem::getProperty(string name, string &value)
+bool AppleISystem::getProperty(const string &name, string &value)
 {
 	if (name == "isCPUExternal")
 		value = getString(isCPUExternal);
@@ -38,13 +38,15 @@ bool AppleISystem::getProperty(string name, string &value)
 	return true;
 }
 
-bool AppleISystem::connect(string name, OEComponent *component)
+bool AppleISystem::connect(const string &name, OEComponent *component)
 {
 	if (name == "hostAudio")
 		;
 		// component->addObserver(this);
 	else if (name == "cpu")
 		cpu = component;
+	else if (name == "cpuExternal")
+		cpuSocket = component;
 	else if (name == "cpuSocket")
 		cpuSocket = component;
 	else

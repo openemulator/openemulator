@@ -17,7 +17,7 @@ ROM::ROM()
 	memory.resize(1);
 }
 
-bool ROM::setProperty(string name, string &value)
+bool ROM::setProperty(const string &name, const string &value)
 {
 	if (name == "map")
 		mappedRange = value;
@@ -27,7 +27,7 @@ bool ROM::setProperty(string name, string &value)
 	return true;
 }
 
-bool ROM::setResource(string name, OEData &data)
+bool ROM::setResource(const string &name, const OEData &data)
 {
 	if (name == "image")
 	{

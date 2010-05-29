@@ -45,20 +45,12 @@ OEEmulation::OEEmulation(string path, string resourcePath)
 						{
 							if (connectDML(documentDML))
 								loaded = true;
-							else
-								OELog("could not connect \"" + path + "\"");
 						}
-						else
-							OELog("could not initialize \"" + path + "\"");
 					}
-					else
-						OELog("could not construct \"" + path + "\"");
 				}
-				else
-					OELog("could not validate info.xml in \"" + path + "\"");
 			}
 			else
-				OELog("could not decode info.xml in \"" + path + "\"");
+				OELog("could not parse info.xml in \"" + path + "\"");
 		}
 		else
 			OELog("could not read info.xml in \"" + path + "\"");
@@ -113,10 +105,8 @@ bool OEEmulation::save(string path)
 					OELog("could not write info.xml in \"" + path + "\"");
 			}
 			else
-				OELog("could not dump info.xml for \"" + path + "\"");
+				OELog("could not dump info.xml in \"" + path + "\"");
 		}
-		else
-			OELog("could not update \"" + path + "\"");
 		
 		if (!success)
 			package->remove();
@@ -166,7 +156,7 @@ bool OEEmulation::addDevices(string path, OEStringRefMap connections)
 						0);
 	if (!doc)
 	{
-		OELog("could not decode \"" + path + "\"");
+		OELog("could not parse \"" + path + "\"");
 		return false;
 	}
 	
@@ -327,7 +317,13 @@ bool OEEmulation::validateDML(xmlDocPtr doc)
 {
 	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
 	
-	return (getXMLProperty(rootNode, "version") == "1.0");
+	if (getXMLProperty(rootNode, "version") != "1.0")
+	{
+		OELog("unknown DML version");
+		return false;
+	}
+	else
+		return true;
 }
 
 bool OEEmulation::constructDML(xmlDocPtr doc)
@@ -374,7 +370,8 @@ bool OEEmulation::connectDML(xmlDocPtr doc)
 		if (xmlStrcmp(childNode->name, BAD_CAST "device"))
 			continue;
 		
-		connectDevice(childNode);
+		if (!connectDevice(childNode))
+			return false;
 	}
 	
 	return true;
@@ -502,8 +499,8 @@ bool OEEmulation::constructComponent(xmlNodePtr node, OERef deviceRef)
 	OEComponent *component = OEComponentFactory::build(string(componentClass));
 	if (!component)
 	{
-		OELog("could not instantiate \"" + componentClass + "\" at \"" +
-			  stringRef + "\"");
+		OELog("could not construct \"" + stringRef + "\" (" +
+			  componentClass + ")");
 		return false;
 	}
 	
@@ -520,7 +517,11 @@ bool OEEmulation::initComponent(xmlNodePtr node, OERef deviceRef)
 	
 	string stringRef = deviceRef.getStringRef(componentName);
 	if (!components.count(stringRef))
+	{
+		OELog("could not find " + stringRef);
+		
 		return false;
+	}
 	OEComponent *component = components[stringRef];
 	
 	for(xmlNodePtr childNode = node->children;
@@ -531,19 +532,29 @@ bool OEEmulation::initComponent(xmlNodePtr node, OERef deviceRef)
 		{
 			if (!setProperty(childNode, component))
 			{
-				OELog("Could not set property " + stringRef);
+				OELog("could not set property " + stringRef + "." +
+					  getXMLProperty(childNode, "name"));
+				
 				return false;
 			}
 		}
 		else if (!xmlStrcmp(childNode->name, BAD_CAST "data"))
-		{
 			if (!setData(childNode, component, deviceRef))
+			{
+				OELog("could not set data " + stringRef + "." +
+					  getXMLProperty(childNode, "name"));
+				
 				return false;
-		}
+			}
 		else if (!xmlStrcmp(childNode->name, BAD_CAST "resource"))
 		{
 			if (!setResource(childNode, component))
+			{
+				OELog("could not set resource " + stringRef + "." +
+					  getXMLProperty(childNode, "name"));
+				
 				return false;
+			}
 		}
 	}
 	
@@ -556,7 +567,11 @@ bool OEEmulation::connectComponent(xmlNodePtr node, OERef deviceRef)
 	
 	string stringRef = deviceRef.getStringRef(componentName);
 	if (!components.count(stringRef))
+	{
+		OELog("could not find " + stringRef);
+		
 		return false;
+	}
 	OEComponent *component = components[stringRef];
 	
 	for(xmlNodePtr childNode = node->children;
@@ -566,7 +581,12 @@ bool OEEmulation::connectComponent(xmlNodePtr node, OERef deviceRef)
 		if (!xmlStrcmp(childNode->name, BAD_CAST "connection"))
 		{
 			if (!setConnection(childNode, component, deviceRef))
+			{
+				OELog("could not connect " + stringRef + "." +
+					  getXMLProperty(childNode, "name"));
+				
 				return false;
+			}
 		}
 	}
 	
@@ -579,7 +599,11 @@ bool OEEmulation::updateComponent(xmlNodePtr node, OERef deviceRef)
 	
 	string stringRef = deviceRef.getStringRef(componentName);
 	if (!components.count(stringRef))
+	{
+		OELog("could not find " + stringRef);
+		
 		return false;
+	}
 	OEComponent *component = components[stringRef];
 	
 	for(xmlNodePtr childNode = node->children;
@@ -589,12 +613,22 @@ bool OEEmulation::updateComponent(xmlNodePtr node, OERef deviceRef)
 		if (!xmlStrcmp(childNode->name, BAD_CAST "property"))
 		{
 			if (!getProperty(childNode, component))
+			{
+				OELog("could not get property " + stringRef + "." +
+					  getXMLProperty(childNode, "name"));
+				
 				return false;
+			}
 		}
 		else if (!xmlStrcmp(childNode->name, BAD_CAST "data"))
 		{
 			if (!getData(childNode, component, deviceRef))
+			{
+				OELog("could not get data " + stringRef + "." +
+					  getXMLProperty(childNode, "name"));
+				
 				return false;
+			}
 		}
 	}
 	
@@ -607,8 +641,11 @@ void OEEmulation::destroyComponent(xmlNodePtr node, OERef deviceRef)
 	
 	string stringRef = deviceRef.getStringRef(componentName);
 	if (!components.count(stringRef))
+	{
+		OELog("could not find " + stringRef);
+		
 		return;
-	
+	}	
 	components.erase(stringRef);
 }
 
@@ -625,10 +662,8 @@ bool OEEmulation::getProperty(xmlNodePtr node, OEComponent *component)
 	string name = getXMLProperty(node, "name");
 	string value;
 	
-	if (!component->getProperty(name, value))
-		return false;
-	
-	setXMLProperty(node, "value", value);
+	if (component->getProperty(name, value))
+		setXMLProperty(node, "value", value);
 	
 	return true;
 }
@@ -659,8 +694,6 @@ bool OEEmulation::getData(xmlNodePtr node, OEComponent *component, OERef deviceR
 	{
 		if (package->writeFile(src, data))
 			return true;
-		
-		OELog("could not write \"" + src + "\"");
 	}
 	
 	return false;
@@ -674,11 +707,7 @@ bool OEEmulation::setResource(xmlNodePtr node, OEComponent *component)
 	OEData data;
 	
 	if (!readFile(src, data))
-	{
-		OELog("could not read \"" + src + "\"");
-		
 		return false;
-	}
 	
 	return component->setResource(name, data);
 }
@@ -688,20 +717,16 @@ bool OEEmulation::setConnection(xmlNodePtr node, OEComponent *component, OERef d
 	string name = getXMLProperty(node, "name");
 	string ref = getXMLProperty(node, "ref");
 	
-	OEComponent *connection;
+	OEComponent *connection = NULL;
 	
 	if (ref.size())
 	{
 		string stringRef = deviceRef.getStringRef(ref);
 		if (!components.count(stringRef))
-		{
-			OELog("could not connect \"" + stringRef + "\"");
 			return false;
-		}
+		
 		connection = components[stringRef];
 	}
-	else
-		connection = NULL;
 	
 	return component->connect(name, connection);
 }
@@ -965,7 +990,13 @@ bool OEEmulation::connectDevices(xmlDocPtr doc, OEStringRefMap &connections)
 		OEComponent *component = components[stringRef];
 		
 		setXMLProperty(node, "ref", i->second);
-		setConnection(node, component, deviceRef);
+		if (!setConnection(node, component, deviceRef))
+		{
+			OELog("could not connect " + stringRef + "." +
+				  getXMLProperty(node, "name"));
+			
+			return false;
+		}
 	}
 	
 	return true;
@@ -1014,7 +1045,13 @@ bool OEEmulation::disconnectDevice(xmlDocPtr doc, OERef ref)
 				OEComponent *component = components[stringRef];
 				
 				setXMLProperty(connectionNode, "ref", "");
-				setConnection(connectionNode, component, deviceRef);
+				if (!setConnection(connectionNode, component, deviceRef))
+				{
+					OELog("could not disconnect " + stringRef + "." +
+						  getXMLProperty(connectionNode, "name"));
+					
+					return false;
+				}
 			}
 		}
 	}

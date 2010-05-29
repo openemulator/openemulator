@@ -845,6 +845,9 @@ bool oepaSetProperty(OEEmulation *emulation, string ref, string name, string val
 	pthread_mutex_lock(&oepaProcessMutex);
 	
 	OEComponent *component = emulation->getComponent(ref);
+	if (!component)
+		return false;
+	
 	bool status = component->setProperty(name, value);
 	
 	pthread_mutex_unlock(&oepaProcessMutex);
@@ -857,6 +860,9 @@ bool oepaGetProperty(OEEmulation *emulation, string ref, string name, string &va
 	pthread_mutex_lock(&oepaProcessMutex);
 	
 	OEComponent *component = emulation->getComponent(ref);
+	if (!component)
+		return false;
+	
 	bool status = component->setProperty(name, value);
 	
 	pthread_mutex_unlock(&oepaProcessMutex);

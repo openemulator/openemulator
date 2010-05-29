@@ -27,7 +27,7 @@
 #define HID_S_MENULEFT						0x8b
 #define HID_S_MENUUP						0x8c
 #define HID_S_MENUDOWN						0x8d
-#define HID_S_COLDRESTART					0x8d
+#define HID_S_COLDRESTART					0x8e
 #define HID_S_WARMRESTART					0x8f
 #define HID_S_DPADUP						0x90
 #define HID_S_DPADDOWN						0x91
@@ -285,7 +285,6 @@ enum
 
 typedef struct
 {
-	int usagePage;
 	int usageId;
 	bool isDown;
 	int unicode;

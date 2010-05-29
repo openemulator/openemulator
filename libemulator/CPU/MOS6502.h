@@ -15,9 +15,9 @@ class MOS6502 : public OEComponent
 public:
 	MOS6502();
 	
-	bool setProperty(string name, string value);
-	bool getProperty(string name, string &value);
-	bool connect(string name, OEComponent *component);
+	bool setProperty(const string &name, const string &value);
+	bool getProperty(const string &name, string &value);
+	bool connect(const string &name, OEComponent *component);
 	
 private:
 	OEComponent *memory;
@@ -28,17 +28,17 @@ private:
 	OEPair zp;
 	OEPair ea;
 	
-	UInt8 p;
-	UInt8 a;
-	UInt8 x;
-	UInt8 y;
+	OEUInt8 p;
+	OEUInt8 a;
+	OEUInt8 x;
+	OEUInt8 y;
 	
-	UInt8 pendingIRQ;
-	UInt8 afterCLI;
-	UInt8 irqCount;
-	UInt8 overflow;
+	OEUInt8 pendingIRQ;
+	OEUInt8 afterCLI;
+	OEUInt8 irqCount;
+	OEUInt8 overflow;
 	
-	Int32 icount;
+	OEInt32 icount;
 	
 	void reset();
 	void assertIRQ();

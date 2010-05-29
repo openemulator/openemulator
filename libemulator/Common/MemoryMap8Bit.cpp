@@ -12,7 +12,7 @@
 
 #include "MemoryMap8Bit.h"
 
-bool MemoryMap8Bit::setProperty(string name, string value)
+bool MemoryMap8Bit::setProperty(const string &name, const string &value)
 {
 	if (name == "map")
 		mappedRange = value;
@@ -22,7 +22,7 @@ bool MemoryMap8Bit::setProperty(string name, string value)
 	return true;
 }
 
-bool MemoryMap8Bit::connect(string name, OEComponent *component)
+bool MemoryMap8Bit::connect(const string &name, OEComponent *component)
 {
 	string range;
 	component->getMemoryMap(range);
@@ -32,26 +32,29 @@ bool MemoryMap8Bit::connect(string name, OEComponent *component)
 	return true;
 }
 
-bool MemoryMap8Bit::setMemoryMap(OEComponent *component, string ranges)
+bool MemoryMap8Bit::setMemoryMap(OEComponent *component, const string &value)
 {
-	OEMemoryRanges memoryRanges = getRanges(ranges);
+	OEMemoryRanges ranges;
 	
-	for (OEMemoryRanges::iterator i = memoryRanges.begin();
-		 i != memoryRanges.end();
+	if (!getRanges(ranges, value))
+		return false;
+	
+	for (OEMemoryRanges::iterator i = ranges.begin();
+		 i != ranges.end();
 		 i++)
 	{
 		if (i->end >= MEMORYMAP8BIT_SIZE)
 		{
-			OELog("");
+			OELog("memory range " + value + "invalid");
 			return false;
 		}
 		
-		for (int n = i->start; n < i->end; n++)
+		for (int j = i->start; j < i->end; j++)
 		{
 			if (i->read)
-				readMap[i] = component;
+				readMap[j] = component;
 			if (i->write)
-				writeMap[i] = component;
+				writeMap[j] = component;
 		}
 	}
 	

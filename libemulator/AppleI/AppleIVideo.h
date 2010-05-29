@@ -18,8 +18,8 @@ class AppleIVideo : public OEComponent
 public:
 	AppleIVideo();
 	
-	bool setResource(string name, OEData &data);
-	bool connect(string name, OEComponent *component);
+	bool setResource(const string &name, const OEData &data);
+	bool connect(const string &name, OEComponent *component);
 	
 	void write(int address, int value);
 	

@@ -10,19 +10,21 @@
 
 #include "HostAudio.h"
 
-bool HostAudio::setProperty(string name, string value)
+bool HostAudio::setProperty(const string &name, const string &value)
 {
 	if (name == "runTime")
 		runTime = getFloat(value);
-	else if (name == "isPaused")
+	else if (name == "power")
 		isPaused = getInt(value);
+	else if (name == "notes")
+		;
 	else
 		return false;
 	
 	return true;
 }
 
-bool HostAudio::getProperty(string name, string &value)
+bool HostAudio::getProperty(const string &name, string &value)
 {
 	if (name == "runTime")
 		value = runTime;

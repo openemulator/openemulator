@@ -151,7 +151,7 @@
 
 - (void) updateRunTime
 {
-	NSString *property = [self getIoctlProperty:@"runTime" ref:@"host::events"];
+	NSString *property = [self getIoctlProperty:@"runTime" ref:@"host::audio"];
 	int timeDifference = [property intValue];
 	
 	int seconds = timeDifference % 60;

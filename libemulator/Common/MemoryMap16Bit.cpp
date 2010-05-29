@@ -12,7 +12,7 @@
 
 #include "MemoryMap16Bit.h"
 
-bool MemoryMap16Bit::setProperty(string name, string value)
+bool MemoryMap16Bit::setProperty(const string &name, const string &value)
 {
 	if (name == "map")
 		mappedRange = value;
@@ -22,7 +22,7 @@ bool MemoryMap16Bit::setProperty(string name, string value)
 	return true;
 }
 
-bool MemoryMap16Bit::connect(string name, OEComponent *component)
+bool MemoryMap16Bit::connect(const string &name, OEComponent *component)
 {
 	string range;
 	component->getMemoryMap(range);
@@ -32,34 +32,33 @@ bool MemoryMap16Bit::connect(string name, OEComponent *component)
 	return true;
 }
 
-bool MemoryMap16Bit::setMemoryMap(OEComponent *component, string range)
+bool MemoryMap16Bit::setMemoryMap(OEComponent *component, const string &value)
 {
-	for (vector<string>::iterator i = range.begin();
-		 i != range.end();
+	OEMemoryRanges ranges;
+	
+	if (!getRanges(ranges, value))
+		return false;
+	
+	for (OEMemoryRanges::iterator i = ranges.begin();
+		 i != ranges.end();
 		 i++)
 	{
-		string range = *i;
-		size_t separatorPos = range.find('-');
-		if (separatorPos == string::npos)
+		if ((i->end >= MEMORYMAP16BIT_SIZE * 0x100) ||
+			(i->start & 0xff) || ((i->end & 0xff) != 0xff))
 		{
-			cerr << "MemoryMap16Bit: range " << range << " invalid.\n";
+			OELog("memory range " + value + "invalid");
 			return false;
 		}
 		
-		int start = getInt(range.substr(0, separatorPos));
-		int end = getInt(range.substr(separatorPos + 1));
-		if ((start > end) || (start & 0xff) || ((end & 0xff) != 0xff))
-		{
-			cerr << "MemoryMap16Bit: range " << range << " invalid.\n";
-			return false;
-		}
+		int startPage = i->start >> 8;
+		int endPage = i->end >> 8;
 		
-		int startPage = start >> 8; 
-		int endPage = end >> 8; 
-		for (int i = startPage; i < endPage; i++)
+		for (int j = startPage; j < endPage; j++)
 		{
-			readMap[i] = component;
-			writeMap[i] = component;
+			if (i->read)
+				readMap[j] = component;
+			if (i->write)
+				writeMap[j] = component;
 		}
 	}
 	

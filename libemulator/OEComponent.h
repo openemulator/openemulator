@@ -21,28 +21,28 @@
 
 #define OELog(text) cerr << "OEEmulator: " << (text) << endl
 
-typedef unsigned char UInt8;
-typedef char Int8;
-typedef unsigned short UInt16;
-typedef short Int16;
-typedef unsigned int UInt32;
-typedef int Int32;
+typedef unsigned char OEUInt8;
+typedef char OEInt8;
+typedef unsigned short OEUInt16;
+typedef short OEInt16;
+typedef unsigned int OEUInt32;
+typedef int OEInt32;
 
 typedef union
 {
 #ifndef OE_LSB_FIRST
-	struct { UInt8 h3, h2, h, l; } b;
-	struct { Int8 h3, h2, h, l; } sb;
-	struct { UInt16 h, l; } w;
-	struct { Int8 h, l; } sw;
+	struct { OEUInt8 h3, h2, h, l; } b;
+	struct { OEInt8 h3, h2, h, l; } sb;
+	struct { OEUInt16 h, l; } w;
+	struct { OEInt8 h, l; } sw;
 #else
-	struct { UInt8 l, h, h2, h3; } b;
-	struct { Int8 l, h, h2, h3; } sb;
-	struct { UInt16 l, h; } w;
-	struct { Int16 l, h; } sw;
+	struct { OEUInt8 l, h, h2, h3; } b;
+	struct { OEInt8 l, h, h2, h3; } sb;
+	struct { OEUInt16 l, h; } w;
+	struct { OEInt16 l, h; } sw;
 #endif
-	UInt32 d;
-	Int32 sd;
+	OEUInt32 d;
+	OEInt32 sd;
 } OEPair;
 
 typedef struct
@@ -50,8 +50,8 @@ typedef struct
 	bool read;
 	bool write;
 	
-	UInt32 start;
-	UInt32 end;
+	OEUInt32 start;
+	OEUInt32 end;
 } OEMemoryRange;
 
 using namespace std;
@@ -81,8 +81,8 @@ public:
 	void postNotification(int notification, void *data);
 	virtual void notify(int notification, OEComponent *component, void *data);
 	
-	virtual bool setMemoryMap(OEComponent *component, const string &ranges);
-	virtual bool getMemoryMap(string &ranges);
+	virtual bool setMemoryMap(OEComponent *component, const string &value);
+	virtual bool getMemoryMap(string &value);
 	
 	bool assertInterrupt(int id);
 	bool releaseInterrupt(int id);
@@ -101,7 +101,8 @@ protected:
 	string getHex(int value);
 	OEData getCharVector(const string &value);
 	int getLowerPowerOf2(int value);
-	OEMemoryRanges getRanges(const string &ranges);
+	bool getRange(OEMemoryRange &range, const string &value);
+	bool getRanges(OEMemoryRanges &ranges, const string &value);
 };
 
 #endif

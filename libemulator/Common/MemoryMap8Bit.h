@@ -15,11 +15,11 @@
 class MemoryMap8Bit : public OEComponent
 {
 public:
-	bool setProperty(string name, string value);
-	bool connect(string name, OEComponent *component);
+	bool setProperty(const string &name, const string &value);
+	bool connect(const string &name, OEComponent *component);
 	
-	bool setMemoryMap(OEComponent *component, string ranges);
-	bool getMemoryMap(string &ranges);
+	bool setMemoryMap(OEComponent *component, const string &value);
+	bool getMemoryMap(string &value);
 	
 	int read(int address);
 	void write(int address, int value);

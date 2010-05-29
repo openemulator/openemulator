@@ -34,9 +34,9 @@ class AppleISystem : public OEComponent
 public:
 	AppleISystem();
 	
-	bool setProperty(string name, string value);
-	bool getProperty(string name, string &value);
-	bool connect(string name, OEComponent *component);
+	bool setProperty(const string &name, const string &value);
+	bool getProperty(const string &name, string &value);
+	bool connect(const string &name, OEComponent *component);
 	
 	void notify(int notification, OEComponent *component, void *data);
 	

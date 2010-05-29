@@ -4,7 +4,8 @@
 <device name="host">
     <component name="audio" class="HostAudio">
         <property name="runTime" value="0.0" />
-        <property name="isPaused" value="0" />
+        <property name="power" value="1" />
+        <property name="notes" value="" />
     </component>
     <component name="video" class="HostVideo">
         <property name="window" value="-1 -1 768 576" />
@@ -22,8 +23,8 @@
     <component name="system" class="AppleISystem">
         <property name="isCPUExternal" value="0" />
         <connection name="hostAudio" ref="host::audio" />
-        <connection name="cpuInternal" ref="cpu" />
-        <connection name="cpuExternal" ref="cpu" />
+        <connection name="cpu" ref="cpu" />
+        <connection name="cpuExternal" ref="" />
         <connection name="cpuSocket" ref="" />
         <connection name="memoryMap" ref="" />
         <connection name="floatingBus" ref="" />

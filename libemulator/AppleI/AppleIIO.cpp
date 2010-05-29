@@ -12,7 +12,7 @@
 
 #define APPLEIIO_MASK	0x10
 
-bool AppleIIO::setProperty(string name, string value)
+bool AppleIIO::setProperty(const string &name, const string &value)
 {
 	if (name == "map")
 		mappedRange = value;
@@ -22,7 +22,7 @@ bool AppleIIO::setProperty(string name, string value)
 	return true;
 }
 
-bool AppleIIO::connect(string name, OEComponent *component)
+bool AppleIIO::connect(const string &name, OEComponent *component)
 {
 	if (name == "pia")
 		pia = component;

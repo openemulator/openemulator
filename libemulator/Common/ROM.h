@@ -15,8 +15,8 @@ class ROM : public OEComponent
 public:
 	ROM();
 	
-	bool setProperty(string name, string &value);
-	bool setResource(string name, OEData &data);
+	bool setProperty(const string &name, const string &value);
+	bool setResource(const string &name, const OEData &data);
 	
 	bool getMemoryMap(string &range);
 	

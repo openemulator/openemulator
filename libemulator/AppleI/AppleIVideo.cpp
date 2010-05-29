@@ -15,7 +15,7 @@ AppleIVideo::AppleIVideo()
 	memset(screen, 0, APPLEIVIDEO_TERM_HEIGHT * APPLEIVIDEO_TERM_HEIGHT);
 }
 
-bool AppleIVideo::setResource(string name, OEData &data)
+bool AppleIVideo::setResource(const string &name, const OEData &data)
 {
 	if (name == "image")
 		characterSet = data;
@@ -25,7 +25,7 @@ bool AppleIVideo::setResource(string name, OEData &data)
 	return true;
 }
 
-bool AppleIVideo::connect(string name, OEComponent *component)
+bool AppleIVideo::connect(const string &name, OEComponent *component)
 {
 	if (name == "system")
 //		component->addObserver(this, <#int notification#>)

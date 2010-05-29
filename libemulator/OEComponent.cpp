@@ -93,12 +93,12 @@ void OEComponent::notify(int notification,
 {
 }
 
-bool OEComponent::setMemoryMap(OEComponent *component, const string &range)
+bool OEComponent::setMemoryMap(OEComponent *component, const string &value)
 {
 	return false;
 }
 
-bool OEComponent::getMemoryMap(string &range)
+bool OEComponent::getMemoryMap(string &value)
 {
 	return false;
 }
@@ -184,46 +184,60 @@ int OEComponent::getLowerPowerOf2(int value)
 	return (int) pow(2, floor(log2(value)));
 }
 
-OEMemoryRanges OEComponent::getRanges(const string &ranges)
+bool OEComponent::getRange(OEMemoryRange &range, const string &value)
 {
-	OEMemoryRanges result;
+	range.read = false;
+	range.write = false;
 	
-	size_t startPos = ranges.find_first_not_of(',', 0);
-	size_t endPos = ranges.find_first_of(',', startPos);
+	size_t pos = 0;
+	
+	while(1)
+	{
+		if (pos == value.size())
+			return false;
+		else if ((value[pos] == 'R') || (value[pos] == 'r'))
+			range.read = true;
+		else if ((value[pos] == 'W') || (value[pos] == 'w'))
+			range.write = true;
+		else
+			break;
+	}
+	
+	if (!range.read && !range.write)
+		range.read = range.write = true;
+	
+	size_t separatorPos = value.find_first_of('-', pos);
+	if (separatorPos == string::npos)
+		return false;
+	
+	range.start = getInt(value.substr(pos, separatorPos));
+	range.end = getInt(value.substr(separatorPos + 1));
+	if (range.start > range.end)
+		return false;
+	
+	return true;
+}
+
+bool OEComponent::getRanges(OEMemoryRanges &ranges, const string &value)
+{
+	size_t startPos = value.find_first_not_of(',', 0);
+	size_t endPos = value.find_first_of(',', startPos);
 	
 	while ((startPos != string::npos) || (endPos != string::npos))
 	{
-		string range = ranges.substr(startPos, endPos - startPos);
+		OEMemoryRange range;
 		
-		bool isRead = false;
-		bool isWrite = false;
-		
-		while (range[0] == 'R' do {
-			if (range[0] == 'R')
-			{
-				isRead = true;
-			}
-		else if (range[0] == 'W')
-			isWrite = true;
-		if (!isRead && !isWrite)
-			isRead = isWrite = true;
-		
-		size_t separatorPos = range.find_first_of('-');
-		if (separatorPos == string::npos)
+		if (!getRange(range, value.substr(startPos, endPos - startPos)))
 		{
-			OELog("range \"" + ranges + "\" invalid");
+			OELog("memory range \"" + value + "\" invalid");
 			return false;
 		}
 		
-		int start = getInt(range.substr(0, separatorPos));
-		int end = getInt(range.substr(separatorPos + 1));
-		if (start > end)
-		{
-			OELog("range \"" + ranges + "\" invalid");
-			return false;
-		}
+		ranges.push_back(range);
 		
-		startPos = range.find_first_not_of(',', endPos);
-		endPos = range.find_first_of(',', startPos);
+		startPos = value.find_first_not_of(',', endPos);
+		endPos = value.find_first_of(',', startPos);
 	}
+	
+	return true;
 }

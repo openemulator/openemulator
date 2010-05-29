@@ -17,11 +17,11 @@ MOS6502::MOS6502()
 	zp.d = 0;
 }
 
-bool MOS6502::setProperty(string name, string value)
+bool MOS6502::setProperty(const string &name, const string &value)
 {
 	if (name == "pc")
 		pc.w.l = getInt(value);
-	else if (name == "sp")
+	else if (name == "s")
 		sp.b.l = getInt(value);
 	else if (name == "p")
 		p = getInt(value);
@@ -43,11 +43,11 @@ bool MOS6502::setProperty(string name, string value)
 	return true;
 }
 
-bool MOS6502::getProperty(string name, string &value)
+bool MOS6502::getProperty(const string &name, string &value)
 {
 	if (name == "pc")
 		value = getHex(pc.w.l);
-	else if (name == "sp")
+	else if (name == "s")
 		value = getHex(sp.b.l);
 	else if (name == "p")
 		value = getHex(p);
@@ -69,7 +69,7 @@ bool MOS6502::getProperty(string name, string &value)
 	return true;
 }
 
-bool MOS6502::connect(string name, OEComponent *component)
+bool MOS6502::connect(const string &name, OEComponent *component)
 {
 	if (name == "memoryMap")
 		memory = component;
@@ -142,7 +142,7 @@ void MOS6502::execute()
 //		if (debuggerHook)
 //			debuggerHook();
 		
-		UINT8 opcode = RDOP();
+		OEUInt8 opcode = RDOP();
 		switch (opcode)
 		{
 			MOS6502_OP(00);

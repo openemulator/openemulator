@@ -20,7 +20,7 @@ RAM::RAM()
 	resetPattern[0] = 0;
 }
 
-bool RAM::setProperty(string name, string &value)
+bool RAM::setProperty(const string &name, const string &value)
 {
 	if (name == "map")
 		mappedRange = value;
@@ -40,7 +40,7 @@ bool RAM::setProperty(string name, string &value)
 	return true;
 }
 
-bool RAM::setData(string name, OEData &data)
+bool RAM::setData(const string &name, OEData &data)
 {
 	if (name == "image")
 	{
@@ -53,7 +53,7 @@ bool RAM::setData(string name, OEData &data)
 	return true;
 }
 
-bool RAM::getData(string name, OEData &data)
+bool RAM::getData(const string &name, OEData &data)
 {
 	if (name == "image")
 		data = memory;
@@ -63,7 +63,7 @@ bool RAM::getData(string name, OEData &data)
 	return true;
 }
 
-bool RAM::connect(string name, OEComponent *component)
+bool RAM::connect(const string &name, OEComponent *component)
 {
 	return false;
 }
@@ -77,6 +77,13 @@ void RAM::notify(int notification, OEComponent *component)
 	 memory[i] = resetPattern[i % resetPattern.size()];
 	 }
 	 */			
+}
+
+bool RAM::getMemoryMap(string &value)
+{
+	value = mappedRange;
+	
+	return true;
 }
 
 int RAM::read(int address)

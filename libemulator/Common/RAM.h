@@ -15,11 +15,14 @@ class RAM : public OEComponent
 public:
 	RAM();
 	
-	bool setProperty(string name, string &value);
-	bool setData(string name, OEData &data);
-	bool getData(string name, OEData &data);
-	bool connect(string name, OEComponent *component);
+	bool setProperty(const string &name, const string &value);
+	bool setData(const string &name, OEData &data);
+	bool getData(const string &name, OEData &data);
+	bool connect(const string &name, OEComponent *component);
+	
 	void notify(int notification, OEComponent *component);
+
+	bool getMemoryMap(string &value);
 	
 	int read(int address);
 	void write(int address, int value);
