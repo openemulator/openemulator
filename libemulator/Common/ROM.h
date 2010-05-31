@@ -20,7 +20,7 @@ public:
 	
 	bool getMemoryMap(string &range);
 	
-	int read(int address);
+	OEUInt8 read(int address);
 	
 private:
 	string mappedRange;

@@ -15,11 +15,16 @@
 
 #define APPLEIKEYBOARD_MASK	0x40
 
-bool AppleIKeyboard::connect(string name, OEComponent *component)
+bool AppleIKeyboard::connect(const string &name, OEComponent *component)
 {
 	if (name == "hostHID")
+	{
+		hostHID = component;
 		// component->addObserver(this);
-		;
+
+	}
+	else if (name == "pia")
+		pia = component;
 	else
 		return false;
 	
@@ -39,7 +44,7 @@ void AppleIKeyboard::notify(int notification, OEComponent *component, void *data
 	}
 }
 
-int AppleIKeyboard::read(int address)
+OEUInt8 AppleIKeyboard::read(int address)
 {
 	bool value = false;
 	pia->ioctl(MC6821_SET_CA1, &value);

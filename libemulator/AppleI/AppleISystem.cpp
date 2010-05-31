@@ -49,6 +49,14 @@ bool AppleISystem::connect(const string &name, OEComponent *component)
 		cpuSocket = component;
 	else if (name == "cpuSocket")
 		cpuSocket = component;
+	else if (name == "memoryMap")
+		cpuSocket = component;
+	else if (name == "floatingBus")
+		cpuSocket = component;
+	else if (name == "slot1")
+		cpuSocket = component;
+	else if (name == "slot2")
+		cpuSocket = component;
 	else
 		return false;
 	

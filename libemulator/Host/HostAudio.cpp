@@ -52,12 +52,12 @@ int HostAudio::ioctl(int message, void *data)
 		case HOSTAUDIO_ADD_RUNTIME:
 		{
 			runTime += *((double *) data);
-			break;
+			return true;
 		}
 		case HOSTAUDIO_GET_RUNTIME:
 		{
 			*((double *) data) = runTime;
-			break;
+			return true;
 		}
 	}
 	

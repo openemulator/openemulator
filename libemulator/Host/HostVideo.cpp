@@ -10,6 +10,15 @@
 
 #include "HostVideo.h"
 
+// Calculation of contents
+//
+// xn = ceil(sqrt(N))
+// un = ceil(N/xn)
+//
+// The size of each screen is:
+// maxWidth * xn
+// maxHeight * yn
+
 bool HostVideo::setProperty(const string &name, const string &value)
 {
 	if (name == "window")
@@ -38,6 +47,12 @@ int HostVideo::ioctl(int message, void *data)
 		case HOSTVIDEO_ADD_SCREEN:
 			return true;
 		case HOSTVIDEO_REMOVE_SCREEN:
+			return true;
+		case HOSTVIDEO_QUERY_FRAME:
+			return true;
+		case HOSTVIDEO_RETURN_FRAME:
+			return true;
+		case HOSTVIDEO_SET_CALLBACK:
 			return true;
 	}
 	

@@ -13,9 +13,9 @@
 class AppleIFloatingBus : public OEComponent
 {
 public:
-	bool connect(string name, OEComponent *component);
+	bool connect(const string &name, OEComponent *component);
 	
-	int read(int address);
+	OEUInt8 read(int address);
 
 private:
 	OEComponent *system;

@@ -15,7 +15,7 @@ MemoryOffset::MemoryOffset()
 	offset = 0;
 }
 
-bool MemoryOffset::setProperty(string name, string value)
+bool MemoryOffset::setProperty(const string &name, const string &value)
 {
 	if (name == "map")
 		mappedRange = value;
@@ -27,7 +27,7 @@ bool MemoryOffset::setProperty(string name, string value)
 	return true;
 }
 
-bool MemoryOffset::connect(string name, OEComponent *component)
+bool MemoryOffset::connect(const string &name, OEComponent *component)
 {
 	if (name == "component")
 		connectedComponent = component;
@@ -44,12 +44,12 @@ bool MemoryOffset::getMemoryMap(string &range)
 	return true;
 }
 
-int MemoryOffset::read(int address)
+OEUInt8 MemoryOffset::read(int address)
 {
 	return connectedComponent->read(address + offset);
 }
 
-void MemoryOffset::write(int address, int value)
+void MemoryOffset::write(int address, OEUInt8 value)
 {
 	connectedComponent->write(address + offset, value);
 }

@@ -13,13 +13,13 @@
 class AppleIKeyboard : public OEComponent
 {
 public:
-	bool connect(string name, OEComponent *component);
+	bool connect(const string &name, OEComponent *component);
 	void notify(int notification, OEComponent *component, void *data);
 	
-	int read(int address);
+	OEUInt8 read(int address);
 	
 private:
-	OEComponent *hostKeyboard;
+	OEComponent *hostHID;
 	OEComponent *pia;
 	
 	int key;

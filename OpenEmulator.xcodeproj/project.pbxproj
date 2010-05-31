@@ -7,10 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		00044D9211AB7FFF002F6891 /* HostHID.h in Headers */ = {isa = PBXBuildFile; fileRef = 00044D9011AB7FFF002F6891 /* HostHID.h */; };
-		00044D9311AB7FFF002F6891 /* HostHID.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00044D9111AB7FFF002F6891 /* HostHID.cpp */; };
-		00044D9611AB801C002F6891 /* HostPort.h in Headers */ = {isa = PBXBuildFile; fileRef = 00044D9411AB801C002F6891 /* HostPort.h */; };
-		00044D9711AB801C002F6891 /* HostPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00044D9511AB801C002F6891 /* HostPort.cpp */; };
 		000671C3113F318000781A92 /* MemoryMap8Bit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000671BF113F318000781A92 /* MemoryMap8Bit.cpp */; };
 		000671C5113F318000781A92 /* MemoryMap16Bit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000671C1113F318000781A92 /* MemoryMap16Bit.cpp */; };
 		0011696510E7CC59007A5EFB /* IPStorageSel.png in Resources */ = {isa = PBXBuildFile; fileRef = 0011696410E7CC4E007A5EFB /* IPStorageSel.png */; };
@@ -30,7 +26,8 @@
 		001F916311925BB7005383B3 /* libzip.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C5805E109A3DDF00B00626 /* libzip.a */; };
 		001F916411925BBE005383B3 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0054E4A61131BE8A006D32D9 /* OpenGL.framework */; };
 		001F916911925BE8005383B3 /* SDL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 001F916811925BE8005383B3 /* SDL.framework */; };
-		002C27A8116873F100FAE6E6 /* ntsc.c in Sources */ = {isa = PBXBuildFile; fileRef = 002C26B3116867FB00FAE6E6 /* ntsc.c */; };
+		002295BD11B328CB0046B098 /* HostPrinter.h in Headers */ = {isa = PBXBuildFile; fileRef = 002295BB11B328CB0046B098 /* HostPrinter.h */; };
+		002295BE11B328CB0046B098 /* HostPrinter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 002295BC11B328CB0046B098 /* HostPrinter.cpp */; };
 		003318AF1101492B00CC1782 /* Connector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 003318AD1101492B00CC1782 /* Connector.xib */; };
 		003E25E71070796700185260 /* images in Resources */ = {isa = PBXBuildFile; fileRef = 003E2597107075D900185260 /* images */; };
 		003FB21410BA3D5D00D3697B /* devices in Resources */ = {isa = PBXBuildFile; fileRef = 00E8A393108CCAA200D0A137 /* devices */; };
@@ -48,21 +45,22 @@
 		005C43EB113121F2006AEE84 /* TBInterrupt.png in Resources */ = {isa = PBXBuildFile; fileRef = 005C43EA113121F2006AEE84 /* TBInterrupt.png */; };
 		005E5F6E1086B0E100E573D4 /* InspectorController.m in Sources */ = {isa = PBXBuildFile; fileRef = 005E5F6D1086B0E100E573D4 /* InspectorController.m */; };
 		005E5F771086B16C00E573D4 /* Inspector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 005E5F751086B16C00E573D4 /* Inspector.xib */; };
-		00610049115CF08A004D1511 /* ntscSignalProcessing.c in Sources */ = {isa = PBXBuildFile; fileRef = 00610047115CF08A004D1511 /* ntscSignalProcessing.c */; };
 		00679D08100817F700B38748 /* DeviceChooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00679D04100817F600B38748 /* DeviceChooser.xib */; };
 		00679D09100817F700B38748 /* TemplateChooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00679D06100817F700B38748 /* TemplateChooser.xib */; };
-		006B894011A9D464001A34A5 /* ntscCGA.c in Sources */ = {isa = PBXBuildFile; fileRef = 006B893E11A9D464001A34A5 /* ntscCGA.c */; };
-		006B894111A9D464001A34A5 /* ntscCGA.h in Headers */ = {isa = PBXBuildFile; fileRef = 006B893F11A9D464001A34A5 /* ntscCGA.h */; };
 		0071E3BA10803F7300F2D54F /* ChooserItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 0071E3B910803F7300F2D54F /* ChooserItem.m */; };
 		008107DE1120C57600D744FB /* TemplateChooserViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00FE0C051095353B00B92AB7 /* TemplateChooserViewController.mm */; };
 		008283F011A35D3A00B2B530 /* IPAudioPlay.png in Resources */ = {isa = PBXBuildFile; fileRef = 008283EF11A35D3A00B2B530 /* IPAudioPlay.png */; };
 		0082840411A3603800B2B530 /* IPAudioRecord.png in Resources */ = {isa = PBXBuildFile; fileRef = 0082840211A3603800B2B530 /* IPAudioRecord.png */; };
 		0082847C11A422C700B2B530 /* IPAudioStop.png in Resources */ = {isa = PBXBuildFile; fileRef = 0082847B11A422C700B2B530 /* IPAudioStop.png */; };
+		008E3E5811B0E725008621B7 /* composite.c in Sources */ = {isa = PBXBuildFile; fileRef = 008E3E5011B0E725008621B7 /* composite.c */; };
+		008E3E5911B0E725008621B7 /* composite.h in Headers */ = {isa = PBXBuildFile; fileRef = 008E3E5111B0E725008621B7 /* composite.h */; };
+		008E3E5A11B0E725008621B7 /* composite1Bit.c in Sources */ = {isa = PBXBuildFile; fileRef = 008E3E5211B0E725008621B7 /* composite1Bit.c */; };
+		008E3E5B11B0E725008621B7 /* composite1Bit.h in Headers */ = {isa = PBXBuildFile; fileRef = 008E3E5311B0E725008621B7 /* composite1Bit.h */; };
+		008E3E5C11B0E725008621B7 /* compositeCGA.c in Sources */ = {isa = PBXBuildFile; fileRef = 008E3E5411B0E725008621B7 /* compositeCGA.c */; };
+		008E3E5D11B0E725008621B7 /* compositeCGA.h in Headers */ = {isa = PBXBuildFile; fileRef = 008E3E5511B0E725008621B7 /* compositeCGA.h */; };
+		008E3E5E11B0E725008621B7 /* compositeSignalProcessing.c in Sources */ = {isa = PBXBuildFile; fileRef = 008E3E5611B0E725008621B7 /* compositeSignalProcessing.c */; };
+		008E3E5F11B0E725008621B7 /* compositeSignalProcessing.h in Headers */ = {isa = PBXBuildFile; fileRef = 008E3E5711B0E725008621B7 /* compositeSignalProcessing.h */; };
 		00910107113AAE60005EBB62 /* AppleISystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00910105113AAE60005EBB62 /* AppleISystem.cpp */; };
-		00984D7911A7376200B9C0B5 /* ntsc1Bit.c in Sources */ = {isa = PBXBuildFile; fileRef = 00984D7511A7376200B9C0B5 /* ntsc1Bit.c */; };
-		00984D7A11A7376200B9C0B5 /* ntsc1Bit.h in Headers */ = {isa = PBXBuildFile; fileRef = 00984D7611A7376200B9C0B5 /* ntsc1Bit.h */; };
-		00984D9911A73B1000B9C0B5 /* CompositeMonitor.h in Headers */ = {isa = PBXBuildFile; fileRef = 00984D9711A73B1000B9C0B5 /* CompositeMonitor.h */; };
-		00984D9A11A73B1000B9C0B5 /* CompositeMonitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00984D9811A73B1000B9C0B5 /* CompositeMonitor.cpp */; };
 		00984DA611A73C7E00B9C0B5 /* DAC1Bit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00984DA411A73C7E00B9C0B5 /* DAC1Bit.cpp */; };
 		00984DA711A73C7E00B9C0B5 /* DAC1Bit.h in Headers */ = {isa = PBXBuildFile; fileRef = 00984DA511A73C7E00B9C0B5 /* DAC1Bit.h */; };
 		009B4F2711639D7700E9A6F9 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009B4F2611639D7700E9A6F9 /* GLUT.framework */; };
@@ -222,7 +220,8 @@
 		001F915711925B56005383B3 /* libsndfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsndfile.a; path = /opt/local/lib/libsndfile.a; sourceTree = "<absolute>"; };
 		001F915A11925B74005383B3 /* libsamplerate.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsamplerate.a; path = /opt/local/lib/libsamplerate.a; sourceTree = "<absolute>"; };
 		001F916811925BE8005383B3 /* SDL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL.framework; path = /Library/Frameworks/SDL.framework; sourceTree = "<absolute>"; };
-		002C26B3116867FB00FAE6E6 /* ntsc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ntsc.c; sourceTree = "<group>"; };
+		002295BB11B328CB0046B098 /* HostPrinter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostPrinter.h; sourceTree = "<group>"; };
+		002295BC11B328CB0046B098 /* HostPrinter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HostPrinter.cpp; sourceTree = "<group>"; };
 		002C27B41168744200FAE6E6 /* libemulator.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libemulator.a; path = ../openemulator/build/Debug/libemulator.a; sourceTree = SOURCE_ROOT; };
 		002F77701162EB6A00B0ECF1 /* MOS6502Operations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOS6502Operations.h; sourceTree = "<group>"; };
 		002F77721162EB7400B0ECF1 /* MOS6502IllegalOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOS6502IllegalOperations.h; sourceTree = "<group>"; };
@@ -252,24 +251,25 @@
 		005E5F6C1086B0E100E573D4 /* InspectorController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InspectorController.h; sourceTree = "<group>"; };
 		005E5F6D1086B0E100E573D4 /* InspectorController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InspectorController.m; sourceTree = "<group>"; };
 		005E5F761086B16C00E573D4 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Inspector.xib; sourceTree = "<group>"; };
-		00610047115CF08A004D1511 /* ntscSignalProcessing.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ntscSignalProcessing.c; sourceTree = "<group>"; };
-		00610048115CF08A004D1511 /* ntscSignalProcessing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ntscSignalProcessing.h; sourceTree = "<group>"; };
 		00679D05100817F700B38748 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/DeviceChooser.xib; sourceTree = "<group>"; };
 		00679D07100817F700B38748 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/TemplateChooser.xib; sourceTree = "<group>"; };
-		006B893E11A9D464001A34A5 /* ntscCGA.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ntscCGA.c; sourceTree = "<group>"; };
-		006B893F11A9D464001A34A5 /* ntscCGA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ntscCGA.h; sourceTree = "<group>"; };
 		006EECA40FCA5C31003D2C8D /* libemulator.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libemulator.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		006EEE8F0FCA781C003D2C8D /* DiskImage.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = DiskImage.icns; sourceTree = "<group>"; };
 		0071E3B810803F7300F2D54F /* ChooserItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChooserItem.h; sourceTree = "<group>"; };
 		0071E3B910803F7300F2D54F /* ChooserItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChooserItem.m; sourceTree = "<group>"; };
-		00759303115C39E600D6DDF0 /* ntsc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ntsc.h; sourceTree = "<group>"; };
 		008283EF11A35D3A00B2B530 /* IPAudioPlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPAudioPlay.png; path = macosx/Images/IPAudioPlay.png; sourceTree = "<group>"; };
 		0082840211A3603800B2B530 /* IPAudioRecord.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPAudioRecord.png; path = macosx/Images/IPAudioRecord.png; sourceTree = "<group>"; };
 		0082847B11A422C700B2B530 /* IPAudioStop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPAudioStop.png; path = macosx/Images/IPAudioStop.png; sourceTree = "<group>"; };
+		008E3E5011B0E725008621B7 /* composite.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = composite.c; sourceTree = "<group>"; };
+		008E3E5111B0E725008621B7 /* composite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = composite.h; sourceTree = "<group>"; };
+		008E3E5211B0E725008621B7 /* composite1Bit.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = composite1Bit.c; sourceTree = "<group>"; };
+		008E3E5311B0E725008621B7 /* composite1Bit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = composite1Bit.h; sourceTree = "<group>"; };
+		008E3E5411B0E725008621B7 /* compositeCGA.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = compositeCGA.c; sourceTree = "<group>"; };
+		008E3E5511B0E725008621B7 /* compositeCGA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = compositeCGA.h; sourceTree = "<group>"; };
+		008E3E5611B0E725008621B7 /* compositeSignalProcessing.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = compositeSignalProcessing.c; sourceTree = "<group>"; };
+		008E3E5711B0E725008621B7 /* compositeSignalProcessing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = compositeSignalProcessing.h; sourceTree = "<group>"; };
 		00910105113AAE60005EBB62 /* AppleISystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleISystem.cpp; sourceTree = "<group>"; };
 		00910106113AAE60005EBB62 /* AppleISystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleISystem.h; sourceTree = "<group>"; };
-		00984D7511A7376200B9C0B5 /* ntsc1Bit.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ntsc1Bit.c; sourceTree = "<group>"; };
-		00984D7611A7376200B9C0B5 /* ntsc1Bit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ntsc1Bit.h; sourceTree = "<group>"; };
 		00984D9711A73B1000B9C0B5 /* CompositeMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompositeMonitor.h; sourceTree = "<group>"; };
 		00984D9811A73B1000B9C0B5 /* CompositeMonitor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CompositeMonitor.cpp; sourceTree = "<group>"; };
 		00984DA411A73C7E00B9C0B5 /* DAC1Bit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DAC1Bit.cpp; sourceTree = "<group>"; };
@@ -376,7 +376,7 @@
 		00FE0C071095354300B92AB7 /* DeviceChooserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceChooserViewController.h; sourceTree = "<group>"; };
 		00FE0C161095371B00B92AB7 /* ChooserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChooserViewController.m; sourceTree = "<group>"; };
 		00FE0C6210953F7000B92AB7 /* DeviceChooserViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DeviceChooserViewController.mm; sourceTree = "<group>"; };
-		00FF25F2115C385000C82CA0 /* libntsc.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libntsc.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		00FF25F2115C385000C82CA0 /* libcomposite.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libcomposite.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D15AC370486D014006FF6A4 /* OpenEmulator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenEmulator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -609,23 +609,25 @@
 				00044D9111AB7FFF002F6891 /* HostHID.cpp */,
 				00044D9411AB801C002F6891 /* HostPort.h */,
 				00044D9511AB801C002F6891 /* HostPort.cpp */,
+				002295BB11B328CB0046B098 /* HostPrinter.h */,
+				002295BC11B328CB0046B098 /* HostPrinter.cpp */,
 			);
 			path = Host;
 			sourceTree = "<group>";
 		};
-		00FF25C4115C365800C82CA0 /* libntsc */ = {
+		00FF25C4115C365800C82CA0 /* libcomposite */ = {
 			isa = PBXGroup;
 			children = (
-				006B893E11A9D464001A34A5 /* ntscCGA.c */,
-				006B893F11A9D464001A34A5 /* ntscCGA.h */,
-				00984D7511A7376200B9C0B5 /* ntsc1Bit.c */,
-				00984D7611A7376200B9C0B5 /* ntsc1Bit.h */,
-				00610047115CF08A004D1511 /* ntscSignalProcessing.c */,
-				00610048115CF08A004D1511 /* ntscSignalProcessing.h */,
-				00759303115C39E600D6DDF0 /* ntsc.h */,
-				002C26B3116867FB00FAE6E6 /* ntsc.c */,
+				008E3E5011B0E725008621B7 /* composite.c */,
+				008E3E5111B0E725008621B7 /* composite.h */,
+				008E3E5211B0E725008621B7 /* composite1Bit.c */,
+				008E3E5311B0E725008621B7 /* composite1Bit.h */,
+				008E3E5411B0E725008621B7 /* compositeCGA.c */,
+				008E3E5511B0E725008621B7 /* compositeCGA.h */,
+				008E3E5611B0E725008621B7 /* compositeSignalProcessing.c */,
+				008E3E5711B0E725008621B7 /* compositeSignalProcessing.h */,
 			);
-			path = libntsc;
+			path = libcomposite;
 			sourceTree = "<group>";
 		};
 		19C28FB0FE9D524F11CA2CBB /* Products */ = {
@@ -634,7 +636,7 @@
 				002C27B41168744200FAE6E6 /* libemulator.a */,
 				8D15AC370486D014006FF6A4 /* OpenEmulator.app */,
 				0054E2E41131B9EF006D32D9 /* oesdl */,
-				00FF25F2115C385000C82CA0 /* libntsc.a */,
+				00FF25F2115C385000C82CA0 /* libcomposite.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -645,7 +647,7 @@
 				000A78A50FBA464600A0F12E /* OpenEmulator */,
 				0055C1EC1123AC0500D4CFFC /* oesdl */,
 				006EEC9A0FCA5BEA003D2C8D /* libemulator */,
-				00FF25C4115C365800C82CA0 /* libntsc */,
+				00FF25C4115C365800C82CA0 /* libcomposite */,
 				2A37F4C3FDCFA73011CA2CEA /* Frameworks */,
 				19C28FB0FE9D524F11CA2CBB /* Products */,
 			);
@@ -758,6 +760,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				00984DA711A73C7E00B9C0B5 /* DAC1Bit.h in Headers */,
+				002295BD11B328CB0046B098 /* HostPrinter.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -765,11 +768,10 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00984D7A11A7376200B9C0B5 /* ntsc1Bit.h in Headers */,
-				00984D9911A73B1000B9C0B5 /* CompositeMonitor.h in Headers */,
-				006B894111A9D464001A34A5 /* ntscCGA.h in Headers */,
-				00044D9211AB7FFF002F6891 /* HostHID.h in Headers */,
-				00044D9611AB801C002F6891 /* HostPort.h in Headers */,
+				008E3E5911B0E725008621B7 /* composite.h in Headers */,
+				008E3E5B11B0E725008621B7 /* composite1Bit.h in Headers */,
+				008E3E5D11B0E725008621B7 /* compositeCGA.h in Headers */,
+				008E3E5F11B0E725008621B7 /* compositeSignalProcessing.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -811,9 +813,9 @@
 			productReference = 006EECA40FCA5C31003D2C8D /* libemulator.a */;
 			productType = "com.apple.product-type.library.static";
 		};
-		00FF25F1115C385000C82CA0 /* ntsc */ = {
+		00FF25F1115C385000C82CA0 /* composite */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 00FF25F9115C385A00C82CA0 /* Build configuration list for PBXNativeTarget "ntsc" */;
+			buildConfigurationList = 00FF25F9115C385A00C82CA0 /* Build configuration list for PBXNativeTarget "composite" */;
 			buildPhases = (
 				00FF25EE115C385000C82CA0 /* Headers */,
 				00FF25EF115C385000C82CA0 /* Sources */,
@@ -823,9 +825,9 @@
 			);
 			dependencies = (
 			);
-			name = ntsc;
+			name = composite;
 			productName = ntsc;
-			productReference = 00FF25F2115C385000C82CA0 /* libntsc.a */;
+			productReference = 00FF25F2115C385000C82CA0 /* libcomposite.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 		8D15AC270486D014006FF6A4 /* OpenEmulator */ = {
@@ -863,7 +865,7 @@
 				8D15AC270486D014006FF6A4 /* OpenEmulator */,
 				0054E2E31131B9EF006D32D9 /* oesdl */,
 				006EECA30FCA5C31003D2C8D /* emulator */,
-				00FF25F1115C385000C82CA0 /* ntsc */,
+				00FF25F1115C385000C82CA0 /* composite */,
 			);
 		};
 /* End PBXProject section */
@@ -968,6 +970,7 @@
 				00188DA8115DC59700FFACC0 /* MOS6502.cpp in Sources */,
 				00B4F935117E43E8008D622F /* MemoryOffset.cpp in Sources */,
 				00984DA611A73C7E00B9C0B5 /* DAC1Bit.cpp in Sources */,
+				002295BE11B328CB0046B098 /* HostPrinter.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -975,13 +978,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00610049115CF08A004D1511 /* ntscSignalProcessing.c in Sources */,
-				002C27A8116873F100FAE6E6 /* ntsc.c in Sources */,
-				00984D7911A7376200B9C0B5 /* ntsc1Bit.c in Sources */,
-				00984D9A11A73B1000B9C0B5 /* CompositeMonitor.cpp in Sources */,
-				006B894011A9D464001A34A5 /* ntscCGA.c in Sources */,
-				00044D9311AB7FFF002F6891 /* HostHID.cpp in Sources */,
-				00044D9711AB801C002F6891 /* HostPort.cpp in Sources */,
+				008E3E5811B0E725008621B7 /* composite.c in Sources */,
+				008E3E5A11B0E725008621B7 /* composite1Bit.c in Sources */,
+				008E3E5C11B0E725008621B7 /* compositeCGA.c in Sources */,
+				008E3E5E11B0E725008621B7 /* compositeSignalProcessing.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1023,7 +1023,7 @@
 		};
 		009B4EFC11639CF600E9A6F9 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 00FF25F1115C385000C82CA0 /* ntsc */;
+			target = 00FF25F1115C385000C82CA0 /* composite */;
 			targetProxy = 009B4EFB11639CF600E9A6F9 /* PBXContainerItemProxy */;
 		};
 		00E0B0601132DBA4004DB96D /* PBXTargetDependency */ = {
@@ -1273,7 +1273,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INSTALL_PATH = /usr/local/lib;
 				PREBINDING = NO;
-				PRODUCT_NAME = ntsc;
+				PRODUCT_NAME = composite;
 			};
 			name = Debug;
 		};
@@ -1415,7 +1415,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		00FF25F9115C385A00C82CA0 /* Build configuration list for PBXNativeTarget "ntsc" */ = {
+		00FF25F9115C385A00C82CA0 /* Build configuration list for PBXNativeTarget "composite" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				00FF25F3115C385100C82CA0 /* Debug */,

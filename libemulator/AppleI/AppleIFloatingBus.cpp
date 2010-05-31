@@ -10,11 +10,13 @@
 
 #include "AppleIFloatingBus.h"
 
-bool AppleIFloatingBus::connect(string name, OEComponent *component)
+bool AppleIFloatingBus::connect(const string &name, OEComponent *component)
 {
 	if (name == "system")
 		system = component;
-	else if (name == "memory")
+	else if (name == "ram1")
+		memory = component;
+	else if (name == "ram2")
 		memory = component;
 	else
 		return false;
@@ -22,7 +24,7 @@ bool AppleIFloatingBus::connect(string name, OEComponent *component)
 	return true;
 }
 
-int AppleIFloatingBus::read(int address)
+OEUInt8 AppleIFloatingBus::read(int address)
 {
 	address = 0;
 	

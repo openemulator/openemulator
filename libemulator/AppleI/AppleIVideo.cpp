@@ -27,9 +27,16 @@ bool AppleIVideo::setResource(const string &name, const OEData &data)
 
 bool AppleIVideo::connect(const string &name, OEComponent *component)
 {
-	if (name == "system")
-//		component->addObserver(this, <#int notification#>)
-		;
+	if (name == "hostVideo")
+		hostVideo = component;
+	else if (name == "system")
+		system = component;
+	else if (name == "pia")
+		pia = component;
+	else if (name == "monitor")
+		monitor = component;
+	else if (name == "videoROM")
+		videoROM = component;
 	else
 		return false;
 	

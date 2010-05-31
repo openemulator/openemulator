@@ -17,8 +17,8 @@ class AppleIIO : public OEComponent
 	
 	bool getMemoryMap(string &range);
 	
-	int read(int address);
-	void write(int address, int value);
+	OEUInt8 read(int address);
+	void write(int address, OEUInt8 value);
 	
 private:
 	string mappedRange;

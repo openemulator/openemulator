@@ -56,8 +56,8 @@ public:
 	
 	int ioctl(int message, void *data);
 
-	int read(int address);
-	void write(int address, int value);
+	OEUInt8 read(int address);
+	void write(int address, OEUInt8 value);
 	
 private:
 	int controlRegisterA;

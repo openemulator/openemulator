@@ -65,7 +65,15 @@ bool RAM::getData(const string &name, OEData &data)
 
 bool RAM::connect(const string &name, OEComponent *component)
 {
-	return false;
+	if (name == "hostHID")
+	{
+		hostHID = component;
+//		hostHID->addObserver(
+	}
+	else
+		return false;
+	
+	return true;
 }
 
 void RAM::notify(int notification, OEComponent *component)
@@ -86,12 +94,12 @@ bool RAM::getMemoryMap(string &value)
 	return true;
 }
 
-int RAM::read(int address)
+OEUInt8 RAM::read(int address)
 {
 	return memory[address & mask];
 }
 
-void RAM::write(int address, int value)
+void RAM::write(int address, OEUInt8 value)
 {
 	memory[address & mask] = value;
 }

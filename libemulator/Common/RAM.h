@@ -24,11 +24,13 @@ public:
 
 	bool getMemoryMap(string &value);
 	
-	int read(int address);
-	void write(int address, int value);
+	OEUInt8 read(int address);
+	void write(int address, OEUInt8 value);
 	
 private:
 	string mappedRange;
+
+	OEComponent *hostHID;
 	
 	int size;
 	int mask;

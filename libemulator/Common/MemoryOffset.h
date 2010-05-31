@@ -15,13 +15,13 @@ class MemoryOffset : public OEComponent
 public:
 	MemoryOffset();
 	
-	bool setProperty(string name, string value);
-	bool connect(string name, OEComponent *component);
+	bool setProperty(const string &name, const string &value);
+	bool connect(const string &name, OEComponent *component);
 	
 	bool getMemoryMap(string &range);
 	
-	int read(int address);
-	void write(int address, int value);
+	OEUInt8 read(int address);
+	void write(int address, OEUInt8 value);
 	
 private:
 	string mappedRange;

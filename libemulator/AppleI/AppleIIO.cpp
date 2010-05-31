@@ -41,7 +41,7 @@ bool AppleIIO::getMemoryMap(string &range)
 	return true;
 }
 
-int AppleIIO::read(int address)
+OEUInt8 AppleIIO::read(int address)
 {
 	if (address & APPLEIIO_MASK)
 		return pia->read(address);
@@ -49,7 +49,7 @@ int AppleIIO::read(int address)
 		return floatingBus->read(address);
 }
 
-void AppleIIO::write(int address, int value)
+void AppleIIO::write(int address, OEUInt8 value)
 {
 	if (address & APPLEIIO_MASK)
 		pia->write(address, value);

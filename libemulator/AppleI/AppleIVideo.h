@@ -24,8 +24,11 @@ public:
 	void write(int address, int value);
 	
 private:
-	OEComponent *cpu;
-	OEComponent *cpuSocket;
+	OEComponent *hostVideo;
+	OEComponent *system;
+	OEComponent *pia;
+	OEComponent *monitor;
+	OEComponent *videoROM;
 	
 	vector<char> characterSet;
 	char screen[APPLEIVIDEO_TERM_HEIGHT][APPLEIVIDEO_TERM_WIDTH];

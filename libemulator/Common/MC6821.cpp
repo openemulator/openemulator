@@ -144,7 +144,7 @@ int MC6821::ioctl(int message, void *data)
 		case MC6821_RESET:
 		{
 			reset();
-			break;
+			return true;
 		}
 		case MC6821_SET_CA1:
 		{
@@ -165,7 +165,7 @@ int MC6821::ioctl(int message, void *data)
 			}
 			ca1 = value;
 			
-			break;
+			return true;
 		}
 		case MC6821_SET_CA2:
 		{
@@ -182,14 +182,14 @@ int MC6821::ioctl(int message, void *data)
 				postNotification(MC6821_CA2_CHANGED, NULL);
 			ca2 = value;
 			
-			break;
+			return true;
 		}
 		case MC6821_GET_CA2:
 		{
 			int *value = (int *) data;
 			*value = ca2;
 			
-			break;
+			return true;
 		}
 		case MC6821_SET_CB1:
 		{
@@ -210,7 +210,7 @@ int MC6821::ioctl(int message, void *data)
 			}
 			cb1 = value;
 			
-			break;
+			return true;
 		}
 		case MC6821_SET_CB2:
 		{
@@ -227,21 +227,21 @@ int MC6821::ioctl(int message, void *data)
 				postNotification(MC6821_CB2_CHANGED, NULL);
 			cb2 = value;
 			
-			break;
+			return true;
 		}
 		case MC6821_GET_CB2:
 		{
 			int *value = (int *) data;
 			*value = cb2;
 			
-			break;
+			return true;
 		}
 	}
 	
 	return false;
 }
 
-int MC6821::read(int address)
+OEUInt8 MC6821::read(int address)
 {
 	switch(address & 0x3)
 	{
@@ -287,7 +287,7 @@ int MC6821::read(int address)
 	return 0;
 }
 
-void MC6821::write(int address, int value)
+void MC6821::write(int address, OEUInt8 value)
 {
 	switch(address & 0x3)
 	{

@@ -51,7 +51,7 @@ bool ROM::getMemoryMap(string &range)
 	return true;
 }
 
-int ROM::read(int address)
+OEUInt8 ROM::read(int address)
 {
 	return memory[address & mask];
 }
