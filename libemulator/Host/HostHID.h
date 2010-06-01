@@ -10,10 +10,6 @@
 
 #include "OEComponent.h"
 
-#define HID_PAGE_GENERIC					0x01
-#define HID_PAGE_KEYBOARD					0x07
-#define HID_PAGE_LED						0x08
-
 #define HID_S_POWERDOWN						0x81
 #define HID_S_SLEEP							0x82
 #define HID_S_WAKEUP						0x83
@@ -278,18 +274,33 @@
 #define HID_L_KANA							0x05
 #define HID_L_SHIFT							0x07
 
+// Notifications
 enum
 {
-	HOSTHID_EVENT,
-};
+	HID_PAGE_SYSTEM = 1,
+	HID_PAGE_KEYBOARD = 7,
+	HID_PAGE_LED = 8,
+	HID_PAGE_MOUSE,
+	HID_PAGE_JOYSTICK,
+	HID_PAGE_TABLET,
+} OEHIDKeyEvent;
 
+// Structures
+typedef struct
+{
+	bool isDown;
+	int unicode;
+	int modifierState;
+} OEHIDKeyEvent;
+
+// Structures
 typedef struct
 {
 	int usageId;
 	bool isDown;
 	int unicode;
 	int modifierState;
-} OEHIDEvent;
+} OEHIDKeyEvent;
 
 class HostHID : public OEComponent
 {

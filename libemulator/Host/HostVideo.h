@@ -36,6 +36,10 @@ typedef struct
 	bool updated;
 } HostVideoFrame;
 
+typedef vector<HostVideoFrame> HostVideoFrames;
+
+typedef void (*HostVideoCallback)(HostVideoFrames videoFrames, void *userData);
+
 class HostVideo : public OEComponent
 {
 public:
@@ -45,5 +49,6 @@ public:
 	int ioctl(int message, void *data);
 	
 private:
-	vector<HostVideoFrame *> videoFrames;
+	string window;
+	HostVideoFrames videoFrames;
 };

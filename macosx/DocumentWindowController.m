@@ -35,6 +35,8 @@
 	[[self window] setToolbar:toolbar];
 	[toolbar release];
 	
+    [mImageBrowser setDraggingDestinationDelegate:self];
+	
 	// To-Do: Improve the view updating code
 	[document setPower:[document power]];
 }

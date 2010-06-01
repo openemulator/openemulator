@@ -22,7 +22,7 @@
 bool HostVideo::setProperty(const string &name, const string &value)
 {
 	if (name == "window")
-		;
+		window = value;
 	else
 		return false;
 	
@@ -32,7 +32,7 @@ bool HostVideo::setProperty(const string &name, const string &value)
 bool HostVideo::getProperty(const string &name, string &value)
 {
 	if (name == "window")
-		;
+		value = window;
 	else
 		return false;
 	
