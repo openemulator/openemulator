@@ -33,7 +33,7 @@ bool AppleIKeyboard::connect(const string &name, OEComponent *component)
 
 void AppleIKeyboard::notify(int notification, OEComponent *component, void *data)
 {
-	OEHIDEvent *event = (OEHIDEvent *) data;
+	OEHIDKeyEvent *event = (OEHIDKeyEvent *) data;
 	
 	if ((event->isDown) && (event->unicode < 128))
 	{

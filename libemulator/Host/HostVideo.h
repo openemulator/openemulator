@@ -21,6 +21,13 @@ enum
 	HOSTVIDEO_SET_CALLBACK,
 };
 
+// Notifications
+enum
+{
+	HOSTVIDEO_RECEIVED_FRAME,
+	HOSTVIDEO_SENT_FRAME,
+};
+
 // Structures
 typedef struct
 {

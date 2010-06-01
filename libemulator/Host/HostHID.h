@@ -283,15 +283,7 @@ enum
 	HID_PAGE_MOUSE,
 	HID_PAGE_JOYSTICK,
 	HID_PAGE_TABLET,
-} OEHIDKeyEvent;
-
-// Structures
-typedef struct
-{
-	bool isDown;
-	int unicode;
-	int modifierState;
-} OEHIDKeyEvent;
+};
 
 // Structures
 typedef struct

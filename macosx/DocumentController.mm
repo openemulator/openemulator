@@ -125,6 +125,13 @@
 	if ([extension compare:@OE_EXTENSION] == NSOrderedSame)
 		return NO;
 	
+	// Open audio files
+	if ([audioFileTypes containsObject:extension])
+	{
+		[self setPlaybackURL:[NSURL fileURLWithPath:filename]];
+		return YES;
+	}
+	
 	// Open default document if other filetype
 	if (![self currentDocument])
 	{
@@ -138,13 +145,6 @@
 			
 			return YES;
 		}
-	}
-	
-	// Open audio files
-	if ([audioFileTypes containsObject:extension])
-	{
-		[self setPlaybackURL:[NSURL URLWithString:filename]];
-		return YES;
 	}
 	
 	// Mount disk images
@@ -318,7 +318,8 @@
 		[audioPlaybackURL release];
 	
 	audioPlaybackURL = [theURL copy];
-	oepaStartPlayback([[theURL path] UTF8String]);
+	if (audioPlaybackURL)
+		oepaStartPlayback([[audioPlaybackURL path] UTF8String]);
 }
 
 - (void) togglePlayback
@@ -358,7 +359,7 @@
 	{
 		NSString *thePath = [NSTemporaryDirectory()
 							 stringByAppendingPathComponent:@"oerecording"];
-		audioRecordingURL = [[NSURL alloc] initWithString:thePath];
+		audioRecordingURL = [[NSURL alloc] initFileURLWithPath:thePath];
 		
 		oepaStartRecording([[audioRecordingURL path] UTF8String]);
 	}
