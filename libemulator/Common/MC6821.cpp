@@ -13,10 +13,11 @@
 MC6821::MC6821()
 {
 	interfaceA = NULL;
+	interfaceB = NULL;
+	
 	irqANotification = 0;
 	irqA = NULL;
 
-	interfaceB = NULL;
 	irqBNotification = 0;
 	irqB = NULL;
 	
@@ -56,12 +57,12 @@ void MC6821::setControlRegisterB(int value)
 		if (wasIRQ && !isIRQ)
 		{
 			bool value = false;
-			irqA->postNotification(irqANotification, &value);
+			irqB->postNotification(irqBNotification, &value);
 		}
 		else if (!wasIRQ && isIRQ)
 		{
 			bool value = true;
-			irqA->postNotification(irqANotification, &value);
+			irqB->postNotification(irqBNotification, &value);
 		}
 	}
 }
@@ -88,6 +89,10 @@ bool MC6821::setProperty(const string &name, const string &value)
 		cb1 = getInt(value);
 	else if (name == "cb2")
 		cb2 = getInt(value);
+	else if (name == "irqANotification")
+		irqANotification = getInt(value);
+	else if (name == "irqBNotification")
+		irqBNotification = getInt(value);
 	else if (name == "resetNotification")
 		resetNotification = getInt(value);
 	else
