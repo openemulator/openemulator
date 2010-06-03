@@ -85,7 +85,7 @@ enum
 #define HOSTHID_K_R								0x15
 #define HOSTHID_K_S								0x16
 #define HOSTHID_K_T								0x17
-#define HOSTHID_K_T								0x18
+#define HOSTHID_K_U								0x18
 #define HOSTHID_K_V								0x19
 #define HOSTHID_K_W								0x1a
 #define HOSTHID_K_X								0x1b

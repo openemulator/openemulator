@@ -60,7 +60,6 @@
 		008E3E5F11B0E725008621B7 /* compositeSignalProcessing.h in Headers */ = {isa = PBXBuildFile; fileRef = 008E3E5711B0E725008621B7 /* compositeSignalProcessing.h */; };
 		00910107113AAE60005EBB62 /* AppleISystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00910105113AAE60005EBB62 /* AppleISystem.cpp */; };
 		00984DA611A73C7E00B9C0B5 /* DAC1Bit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00984DA411A73C7E00B9C0B5 /* DAC1Bit.cpp */; };
-		00984DA711A73C7E00B9C0B5 /* DAC1Bit.h in Headers */ = {isa = PBXBuildFile; fileRef = 00984DA511A73C7E00B9C0B5 /* DAC1Bit.h */; };
 		009B4F2711639D7700E9A6F9 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009B4F2611639D7700E9A6F9 /* GLUT.framework */; };
 		00A0B8041069761A007930A5 /* Document.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00A0B8031069761A007930A5 /* Document.mm */; };
 		00A62FFD11415DF0005E8500 /* MC6821.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A62FFB11415DF0005E8500 /* MC6821.cpp */; };
@@ -97,6 +96,9 @@
 		00D184F1114C8E8F00F4AB12 /* AppleIVideo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00D184EF114C8E8F00F4AB12 /* AppleIVideo.cpp */; };
 		00D184F5114C8E9A00F4AB12 /* AppleIKeyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00D184F3114C8E9A00F4AB12 /* AppleIKeyboard.cpp */; };
 		00D1958D1093712E008FB014 /* Chooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00D1958B1093712E008FB014 /* Chooser.xib */; };
+		00D5D13C11B73F8400C77A67 /* CompositeMonitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00984D9811A73B1000B9C0B5 /* CompositeMonitor.cpp */; };
+		00D5D13D11B73F8600C77A67 /* HostHID.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00044D9111AB7FFF002F6891 /* HostHID.cpp */; };
+		00D5D13E11B73F8700C77A67 /* HostPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00044D9511AB801C002F6891 /* HostPort.cpp */; };
 		00D8448A0FFF04C0005802F0 /* AppleGraphicsTablet.png in Resources */ = {isa = PBXBuildFile; fileRef = 000F66360FF8368F00C8AF23 /* AppleGraphicsTablet.png */; };
 		00D8448B0FFF04C0005802F0 /* DiskImage.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000F66370FF8368F00C8AF23 /* DiskImage.icns */; };
 		00D8448C0FFF04C0005802F0 /* DiskImage35.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000F66380FF8368F00C8AF23 /* DiskImage35.icns */; };
@@ -753,7 +755,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00984DA711A73C7E00B9C0B5 /* DAC1Bit.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -963,6 +964,9 @@
 				00188DA8115DC59700FFACC0 /* MOS6502.cpp in Sources */,
 				00B4F935117E43E8008D622F /* MemoryOffset.cpp in Sources */,
 				00984DA611A73C7E00B9C0B5 /* DAC1Bit.cpp in Sources */,
+				00D5D13C11B73F8400C77A67 /* CompositeMonitor.cpp in Sources */,
+				00D5D13D11B73F8600C77A67 /* HostHID.cpp in Sources */,
+				00D5D13E11B73F8700C77A67 /* HostPort.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1141,7 +1145,6 @@
 					macosx/lib,
 					/usr/local/lib,
 					/opt/local/lib,
-					"\"$(SRCROOT)/../../../Desktop\"",
 					"\"$(SRCROOT)/build/Debug\"",
 				);
 				OTHER_LDFLAGS = (
@@ -1211,7 +1214,6 @@
 					/usr/local/lib,
 					"$(inherited)",
 					"\"$(SRCROOT)/build/Debug\"",
-					"\"$(SRCROOT)/../openemulator/build/Debug\"",
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = emulator;
@@ -1316,7 +1318,6 @@
 					macosx/lib,
 					/usr/local/lib,
 					/opt/local/lib,
-					"\"$(SRCROOT)/../../../Desktop\"",
 				);
 				PRODUCT_NAME = OpenEmulator;
 				SDKROOT = macosx10.5;

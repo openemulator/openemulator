@@ -33,9 +33,15 @@ void MC6821::setControlRegisterA(int value)
 	if (irqA)
 	{
 		if (wasIRQ && !isIRQ)
-			irqA->releaseInterrupt(0);
+		{
+			bool value = false;
+			irqA->postNotification(irqANotification, &value);
+		}
 		else if (!wasIRQ && isIRQ)
-			irqA->assertInterrupt(0);
+		{
+			bool value = true;
+			irqA->postNotification(irqANotification, &value);
+		}
 	}
 }
 
@@ -48,9 +54,15 @@ void MC6821::setControlRegisterB(int value)
 	if (irqB)
 	{
 		if (wasIRQ && !isIRQ)
-			irqB->releaseInterrupt(0);
+		{
+			bool value = false;
+			irqA->postNotification(irqANotification, &value);
+		}
 		else if (!wasIRQ && isIRQ)
-			irqB->assertInterrupt(0);
+		{
+			bool value = true;
+			irqA->postNotification(irqANotification, &value);
+		}
 	}
 }
 

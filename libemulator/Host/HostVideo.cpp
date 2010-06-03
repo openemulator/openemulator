@@ -69,9 +69,11 @@ int HostVideo::ioctl(int message, void *data)
 	switch (message)
 	{
 		case HOSTVIDEO_REGISTER_HOST:
+		{
 			OEHostObserver *observer = (OEHostObserver *) data;
 			hostObserver = *observer;
 			return true;
+		}
 		case HOSTVIDEO_ADD_SCREEN:
 			return true;
 		case HOSTVIDEO_REMOVE_SCREEN:

@@ -39,7 +39,7 @@ int HostPort::ioctl(int message, void *data)
 {
 	switch (message)
 	{
-		case HostPort_REGISTER_HOST:
+		case HOSTPORT_REGISTER_HOST:
 			OEHostObserver *observer = (OEHostObserver *) data;
 			hostObserver = *observer;
 			return true;

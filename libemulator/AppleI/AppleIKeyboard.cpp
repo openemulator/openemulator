@@ -26,10 +26,10 @@ bool AppleIKeyboard::connect(const string &name, OEComponent *component)
 	if (name == "hostHID")
 	{
 		if (hostHID)
-			hostHID->removeObserver(this, HOSTHID_EVENT_UNICODEKEYBOARD);
+			hostHID->removeObserver(this, HOSTHID_UNICODEKEYBOARD_EVENT);
 		hostHID = component;
 		if (hostHID)
-			hostHID->addObserver(this, HOSTHID_EVENT_UNICODEKEYBOARD);
+			hostHID->addObserver(this, HOSTHID_UNICODEKEYBOARD_EVENT);
 	}
 	else if (name == "pia")
 		pia = component;
