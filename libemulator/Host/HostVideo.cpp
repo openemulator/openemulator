@@ -48,16 +48,22 @@ bool HostVideo::getProperty(const string &name, string &value)
 
 bool HostVideo::addObserver(OEComponent *component, int notification)
 {
-	hostObserver.addObserver(notification);
+	if (hostObserver.addObserver)
+		hostObserver.addObserver(notification);
 	return OEComponent::addObserver(component, notification);
 }
 
 bool HostVideo::removeObserver(OEComponent *component, int notification)
 {
-	hostObserver.removeObserver(notification);
+	if (hostObserver.removeObserver)
+		hostObserver.removeObserver(notification);
 	return OEComponent::removeObserver(component, notification);
 }
 
+void HostVideo::notify(int notification, OEComponent *component, void *data)
+{
+	hostObserver.notify(notification, data);
+}
 
 int HostVideo::ioctl(int message, void *data)
 {
@@ -65,15 +71,17 @@ int HostVideo::ioctl(int message, void *data)
 	{
 		case HOSTVIDEO_REGISTER_HOST:
 		{
-			OEHostObserver *observer = (OEHostObserver *) data;
-			hostObserver = *observer;
+			if (hostObserver.notify)
+				removeObserver(this, HOSTVIDEO_FRAME_DID_RENDER);
+			hostObserver = *((OEHostObserver *) data);
+			if (hostObserver.notify)
+				addObserver(this, HOSTVIDEO_FRAME_DID_RENDER);
 			return true;
 		}
 		case HOSTVIDEO_ADD_SCREEN:
+			videoFrames.push_back((HostVideoFrame *) data);
 			return true;
 		case HOSTVIDEO_REMOVE_SCREEN:
-			return true;
-		case HOSTVIDEO_RENDER_SCREEN:
 			return true;
 	}
 	

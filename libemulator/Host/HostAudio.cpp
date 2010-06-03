@@ -56,15 +56,6 @@ int HostAudio::ioctl(int message, void *data)
 {
 	switch (message)
 	{
-		case HOSTAUDIO_RENDER_BUFFER:
-		{
-			postNotification(HOSTAUDIO_RENDER_WILL_START, data);
-			postNotification(HOSTAUDIO_RENDER_DID_START, data);
-			postNotification(HOSTAUDIO_RENDER_WILL_END, data);
-			postNotification(HOSTAUDIO_RENDER_DID_END, data);
-			
-			return true;
-		}
 		case HOSTAUDIO_ADD_RUNTIME:
 		{
 			runTime += *((double *) data);

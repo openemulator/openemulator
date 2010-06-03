@@ -16,7 +16,6 @@ enum
 	HOSTVIDEO_REGISTER_HOST,
 	HOSTVIDEO_ADD_SCREEN,
 	HOSTVIDEO_REMOVE_SCREEN,
-	HOSTVIDEO_RENDER_SCREEN,
 };
 
 // Notifications
@@ -51,7 +50,7 @@ public:
 	
 	bool addObserver(OEComponent *component, int notification);
 	bool removeObserver(OEComponent *component, int notification);
-	void postNotification(int notification, void *data);
+	void notify(int notification, OEComponent *component, void *data);
 	
 	int ioctl(int message, void *data);
 	

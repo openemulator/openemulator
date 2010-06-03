@@ -383,7 +383,6 @@ public:
 	
 	bool addObserver(OEComponent *component, int notification);
 	bool removeObserver(OEComponent *component, int notification);
-	void postNotification(int notification, void *data);
 	
 	int ioctl(int message, void *data);
 	

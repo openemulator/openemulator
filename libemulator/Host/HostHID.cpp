@@ -28,12 +28,6 @@ bool HostHID::removeObserver(OEComponent *component, int notification)
 	return OEComponent::removeObserver(component, notification);
 }
 
-void HostHID::postNotification(int notification, void *data)
-{
-	hostObserver.notify(notification, data);
-	OEComponent::postNotification(notification, data);
-}
-
 int HostHID::ioctl(int message, void *data)
 {
 	switch (message)

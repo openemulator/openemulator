@@ -448,7 +448,14 @@ void *oepaProcess(void *arg)
 			 i++)
 		{
 			OEComponent *component = (*i)->getComponent("host::audio");
-			component->ioctl(HOSTAUDIO_RENDER_BUFFER, &hostAudioBuffer);
+			component->postNotification(HOSTAUDIO_RENDER_WILL_BEGIN,
+										&hostAudioBuffer);
+			component->postNotification(HOSTAUDIO_RENDER_DID_BEGIN,
+										&hostAudioBuffer);
+			component->postNotification(HOSTAUDIO_RENDER_WILL_END,
+										&hostAudioBuffer);
+			component->postNotification(HOSTAUDIO_RENDER_DID_END,
+										&hostAudioBuffer);
 		}
 		
 		memcpy(buffer,
@@ -870,12 +877,29 @@ bool oepaGetProperty(OEEmulation *emulation, string ref, string name, string &va
 	return status;
 }
 
+void oepaPostNotification(OEEmulation *emulation,
+						  string ref, int notification, void *data)
+{
+	pthread_mutex_lock(&oepaProcessMutex);
+	
+	OEComponent *component = emulation->getComponent(ref);
+	if (!component)
+		return;
+	
+	component->postNotification(notification, data);
+	
+	pthread_mutex_unlock(&oepaProcessMutex);
+}
+
 int oepaIoctl(OEEmulation *emulation,
 			  string ref, int message, void *data)
 {
 	pthread_mutex_lock(&oepaProcessMutex);
 	
 	OEComponent *component = emulation->getComponent(ref);
+	if (!component)
+		return false;
+	
 	bool status = component->ioctl(message, data);
 	
 	pthread_mutex_unlock(&oepaProcessMutex);
