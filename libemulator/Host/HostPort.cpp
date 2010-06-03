@@ -29,20 +29,41 @@ bool HostPort::removeObserver(OEComponent *component, int notification)
 	return OEComponent::removeObserver(component, notification);
 }
 
-void HostPort::postNotification(int notification, void *data)
-{
-	hostObserver.notify(notification, data);
-	OEComponent::postNotification(notification, data);
-}
-
 int HostPort::ioctl(int message, void *data)
 {
 	switch (message)
 	{
 		case HOSTPORT_REGISTER_HOST:
-			OEHostObserver *observer = (OEHostObserver *) data;
-			hostObserver = *observer;
+		{
+			if (hostObserver.notify)
+			{
+				removeObserver(this, HOSTPORT_WRITE_SERIAL1);
+				removeObserver(this, HOSTPORT_WRITE_SERIAL2);
+				removeObserver(this, HOSTPORT_WRITE_SERIAL3);
+				removeObserver(this, HOSTPORT_WRITE_SERIAL4);
+				removeObserver(this, HOSTPORT_WRITE_PARALLEL);
+				removeObserver(this, HOSTPORT_WRITE_MIDI);
+				removeObserver(this, HOSTPORT_WRITE_ETHERNET1);
+				removeObserver(this, HOSTPORT_WRITE_ETHERNET2);
+				removeObserver(this, HOSTPORT_WRITE_USB);
+				removeObserver(this, HOSTPORT_WRITE_PDF);
+			}
+			hostObserver = *((OEHostObserver *) data);
+			if (hostObserver.notify)
+			{
+				addObserver(this, HOSTPORT_WRITE_SERIAL1);
+				addObserver(this, HOSTPORT_WRITE_SERIAL2);
+				addObserver(this, HOSTPORT_WRITE_SERIAL3);
+				addObserver(this, HOSTPORT_WRITE_SERIAL4);
+				addObserver(this, HOSTPORT_WRITE_PARALLEL);
+				addObserver(this, HOSTPORT_WRITE_MIDI);
+				addObserver(this, HOSTPORT_WRITE_ETHERNET1);
+				addObserver(this, HOSTPORT_WRITE_ETHERNET2);
+				addObserver(this, HOSTPORT_WRITE_USB);
+				addObserver(this, HOSTPORT_WRITE_PDF);
+			}
 			return true;
+		}
 	}
 	
 	return false;

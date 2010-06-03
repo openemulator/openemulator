@@ -28,14 +28,24 @@ bool HostHID::removeObserver(OEComponent *component, int notification)
 	return OEComponent::removeObserver(component, notification);
 }
 
+void HostHID::notify(int notification, OEComponent *component, void *data)
+{
+	hostObserver.notify(notification, data);
+}
+
 int HostHID::ioctl(int message, void *data)
 {
 	switch (message)
 	{
 		case HOSTHID_REGISTER_HOST:
-			OEHostObserver *observer = (OEHostObserver *) data;
-			hostObserver = *observer;
+		{
+			if (hostObserver.notify)
+				removeObserver(this, HOSTHID_LED_EVENT);
+			hostObserver = *((OEHostObserver *) data);
+			if (hostObserver.notify)
+				addObserver(this, HOSTHID_LED_EVENT);
 			return true;
+		}
 	}
 	
 	return false;

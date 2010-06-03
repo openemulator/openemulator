@@ -14,6 +14,8 @@
 		00123BC91069B8D600FB95A1 /* libemulator.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 006EECA40FCA5C31003D2C8D /* libemulator.a */; };
 		00123BCC1069B8F200FB95A1 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 00E2A84D1053290200910B53 /* libxml2.dylib */; };
 		00188DA8115DC59700FFACC0 /* MOS6502.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00188D95115DC58800FFACC0 /* MOS6502.cpp */; };
+		001D66B711B7F5C700B88406 /* oegl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00E0AFCC1132CA8B004DB96D /* oegl.cpp */; };
+		001D66B811B7F5C800B88406 /* oepa.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00E0AFCF1132CA8B004DB96D /* oepa.cpp */; };
 		001F56F90FD1E8E500EA246A /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 001F56F80FD1E8E500EA246A /* Sparkle.framework */; };
 		001F915811925B56005383B3 /* libsndfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 001F915711925B56005383B3 /* libsndfile.a */; };
 		001F915911925B56005383B3 /* libsndfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 001F915711925B56005383B3 /* libsndfile.a */; };
@@ -51,13 +53,9 @@
 		0082840411A3603800B2B530 /* IPAudioRecord.png in Resources */ = {isa = PBXBuildFile; fileRef = 0082840211A3603800B2B530 /* IPAudioRecord.png */; };
 		0082847C11A422C700B2B530 /* IPAudioStop.png in Resources */ = {isa = PBXBuildFile; fileRef = 0082847B11A422C700B2B530 /* IPAudioStop.png */; };
 		008E3E5811B0E725008621B7 /* composite.c in Sources */ = {isa = PBXBuildFile; fileRef = 008E3E5011B0E725008621B7 /* composite.c */; };
-		008E3E5911B0E725008621B7 /* composite.h in Headers */ = {isa = PBXBuildFile; fileRef = 008E3E5111B0E725008621B7 /* composite.h */; };
 		008E3E5A11B0E725008621B7 /* composite1Bit.c in Sources */ = {isa = PBXBuildFile; fileRef = 008E3E5211B0E725008621B7 /* composite1Bit.c */; };
-		008E3E5B11B0E725008621B7 /* composite1Bit.h in Headers */ = {isa = PBXBuildFile; fileRef = 008E3E5311B0E725008621B7 /* composite1Bit.h */; };
 		008E3E5C11B0E725008621B7 /* compositeCGA.c in Sources */ = {isa = PBXBuildFile; fileRef = 008E3E5411B0E725008621B7 /* compositeCGA.c */; };
-		008E3E5D11B0E725008621B7 /* compositeCGA.h in Headers */ = {isa = PBXBuildFile; fileRef = 008E3E5511B0E725008621B7 /* compositeCGA.h */; };
 		008E3E5E11B0E725008621B7 /* compositeSignalProcessing.c in Sources */ = {isa = PBXBuildFile; fileRef = 008E3E5611B0E725008621B7 /* compositeSignalProcessing.c */; };
-		008E3E5F11B0E725008621B7 /* compositeSignalProcessing.h in Headers */ = {isa = PBXBuildFile; fileRef = 008E3E5711B0E725008621B7 /* compositeSignalProcessing.h */; };
 		00910107113AAE60005EBB62 /* AppleISystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00910105113AAE60005EBB62 /* AppleISystem.cpp */; };
 		00984DA611A73C7E00B9C0B5 /* DAC1Bit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00984DA411A73C7E00B9C0B5 /* DAC1Bit.cpp */; };
 		009B4F2711639D7700E9A6F9 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009B4F2611639D7700E9A6F9 /* GLUT.framework */; };
@@ -131,8 +129,6 @@
 		00D846290FFF23B7005802F0 /* PRSound.png in Resources */ = {isa = PBXBuildFile; fileRef = 00D846280FFF23B7005802F0 /* PRSound.png */; };
 		00E0AFD11132CA8B004DB96D /* oegl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00E0AFCC1132CA8B004DB96D /* oegl.cpp */; };
 		00E0AFD21132CA8B004DB96D /* oepa.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00E0AFCF1132CA8B004DB96D /* oepa.cpp */; };
-		00E0AFDE1132CB76004DB96D /* oegl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00E0AFCC1132CA8B004DB96D /* oegl.cpp */; };
-		00E0AFDF1132CB77004DB96D /* oepa.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00E0AFCF1132CA8B004DB96D /* oepa.cpp */; };
 		00E0B19C1132DE4D004DB96D /* SDLMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E0B19A1132DE4D004DB96D /* SDLMain.m */; };
 		00E2299611768DF4004E71F7 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009B4F2611639D7700E9A6F9 /* GLUT.framework */; };
 		00EF028D107D9EFB00FE378D /* VerticallyCenteredCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00EF028C107D9EFB00FE378D /* VerticallyCenteredCell.m */; };
@@ -762,10 +758,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				008E3E5911B0E725008621B7 /* composite.h in Headers */,
-				008E3E5B11B0E725008621B7 /* composite1Bit.h in Headers */,
-				008E3E5D11B0E725008621B7 /* compositeCGA.h in Headers */,
-				008E3E5F11B0E725008621B7 /* compositeSignalProcessing.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1003,9 +995,9 @@
 				00FE0C6310953F7000B92AB7 /* DeviceChooserViewController.mm in Sources */,
 				00BADDC51100EDC600EB0344 /* ConnectorViewController.m in Sources */,
 				008107DE1120C57600D744FB /* TemplateChooserViewController.mm in Sources */,
-				00E0AFDE1132CB76004DB96D /* oegl.cpp in Sources */,
-				00E0AFDF1132CB77004DB96D /* oepa.cpp in Sources */,
 				00AD746911A2F10E00BAC29C /* DocumentController.mm in Sources */,
+				001D66B711B7F5C700B88406 /* oegl.cpp in Sources */,
+				001D66B811B7F5C800B88406 /* oepa.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
