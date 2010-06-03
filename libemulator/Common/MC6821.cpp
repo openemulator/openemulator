@@ -13,26 +13,15 @@
 MC6821::MC6821()
 {
 	interfaceA = NULL;
+	irqANotification = 0;
 	irqA = NULL;
+
 	interfaceB = NULL;
+	irqBNotification = 0;
 	irqB = NULL;
 	
-	reset();
-}
-
-void MC6821::reset()
-{
-	setControlRegisterA(0);
-	dataDirectionRegisterA = 0;
-	dataRegisterA = 0;
-	setControlRegisterB(0);
-	dataDirectionRegisterB = 0;
-	dataRegisterB = 0;
-	
-	ca1 = false;
-	ca2 = false;
-	cb1 = false;
-	cb2 = false;
+	resetNotification = 0;
+	reset = NULL;
 }
 
 void MC6821::setControlRegisterA(int value)
@@ -87,6 +76,8 @@ bool MC6821::setProperty(const string &name, const string &value)
 		cb1 = getInt(value);
 	else if (name == "cb2")
 		cb2 = getInt(value);
+	else if (name == "resetNotification")
+		resetNotification = getInt(value);
 	else
 		return false;
 	
@@ -131,21 +122,39 @@ bool MC6821::connect(const string &name, OEComponent *component)
 		irqA = component;
 	else if (name == "irqB")
 		irqB = component;
+	else if (name == "reset")
+	{
+		if (reset)
+			reset->removeObserver(this, resetNotification);
+		reset = component;
+		if (reset)
+			reset->addObserver(this, resetNotification);
+	}
 	else
 		return false;
 	
 	return true;
 }
 
+void MC6821::notify(int notification, OEComponent *component, void *data)
+{
+	setControlRegisterA(0);
+	dataDirectionRegisterA = 0;
+	dataRegisterA = 0;
+	setControlRegisterB(0);
+	dataDirectionRegisterB = 0;
+	dataRegisterB = 0;
+	
+	ca1 = false;
+	ca2 = false;
+	cb1 = false;
+	cb2 = false;
+}
+
 int MC6821::ioctl(int message, void *data)
 {
 	switch (message)
 	{
-		case MC6821_RESET:
-		{
-			reset();
-			return true;
-		}
 		case MC6821_SET_CA1:
 		{
 			bool value = *((int *) data);

@@ -85,7 +85,7 @@ int AppleISystem::ioctl(int message, void *data)
 {
 	switch (message)
 	{
-		case APPLEISYSTEM_GET_SAMPLEINDEX:
+		case APPLEISYSTEM_GET_FRAMEINDEX:
 		{
 			float *index = (float *) data;
 			*index = 0;

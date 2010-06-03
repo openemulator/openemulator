@@ -20,7 +20,7 @@ public:
 	bool getData(const string &name, OEData &data);
 	bool connect(const string &name, OEComponent *component);
 	
-	void notify(int notification, OEComponent *component);
+	void notify(int notification, OEComponent *component, void *data);
 
 	bool getMemoryMap(string &value);
 	
@@ -30,7 +30,8 @@ public:
 private:
 	string mappedRange;
 
-	OEComponent *hostHID;
+	int resetNotification;
+	OEComponent *reset;
 	
 	int size;
 	int mask;

@@ -5,23 +5,16 @@
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls host audio events
+ * Controls host audio events and system state
  */
 
 #include "OEComponent.h"
 
-#define HOSTSYSTEM_POWER		0x00
-#define HOSTSYSTEM_PAUSE		0x01
-#define HOSTSYSTEM_RESET		0x02
-#define HOSTSYSTEM_INTERRUPT	0x03
-
 // Messages
 enum
 {
-	HOSTAUDIO_RENDERBUFFER,
-	HOSTAUDIO_GETBUFFER,
+	HOSTAUDIO_RENDER_BUFFER,
 	HOSTAUDIO_ADD_RUNTIME,
-	HOSTAUDIO_GET_RUNTIME,
 };
 
 // Notifications
@@ -31,6 +24,17 @@ enum
 	HOSTAUDIO_RENDER_DID_START,
 	HOSTAUDIO_RENDER_WILL_END,
 	HOSTAUDIO_RENDER_DID_END,
+	HOSTAUDIO_SYSTEM_DID_POWER_ON,
+	HOSTAUDIO_SYSTEM_DID_PAUSE,
+	HOSTAUDIO_SYSTEM_DID_POWER_OFF,
+};
+
+// States
+enum
+{
+	HOSTAUDIO_SYSTEM_POWERED_ON = 0,
+	HOSTAUDIO_SYSTEM_PAUSED = 1,
+	HOSTAUDIO_SYSTEM_POWERED_OFF = 2,
 };
 
 // Types
@@ -53,6 +57,7 @@ public:
 	int ioctl(int message, void *data);
 	
 private:
+	int state;
 	double runTime;
-	bool isPaused;
+	string notes;
 };

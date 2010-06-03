@@ -13,6 +13,8 @@
 class AppleIKeyboard : public OEComponent
 {
 public:
+	AppleIKeyboard();
+	
 	bool connect(const string &name, OEComponent *component);
 	void notify(int notification, OEComponent *component, void *data);
 	

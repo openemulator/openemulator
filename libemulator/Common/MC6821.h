@@ -13,7 +13,6 @@
 // Messages
 enum
 {
-	MC6821_RESET,
 	MC6821_SET_CA1,
 	MC6821_SET_CA2,
 	MC6821_GET_CA2,
@@ -54,12 +53,25 @@ public:
 	bool getProperty(const string &name, string &value);
 	bool connect(const string &name, OEComponent *component);
 	
+	void notify(int notification, OEComponent *component, void *data);
+	
 	int ioctl(int message, void *data);
 
 	OEUInt8 read(int address);
 	void write(int address, OEUInt8 value);
 	
 private:
+	int resetNotification;
+	OEComponent *reset;
+	
+	OEComponent *interfaceA;
+	int irqANotification;
+	OEComponent *irqA;
+
+	OEComponent *interfaceB;
+	int irqBNotification;
+	OEComponent *irqB;
+	
 	int controlRegisterA;
 	int dataDirectionRegisterA;
 	int dataRegisterA;
@@ -72,12 +84,6 @@ private:
 	bool cb1;
 	bool cb2;
 	
-	OEComponent *interfaceA;
-	OEComponent *irqA;
-	OEComponent *interfaceB;
-	OEComponent *irqB;
-	
-	void reset();
 	void setControlRegisterA(int value);
 	void setControlRegisterB(int value);
 };

@@ -12,6 +12,9 @@
 
 RAM::RAM()
 {
+	resetNotification = 0;
+	reset = NULL;
+	
 	size = 1;
 	mask = 0;
 	
@@ -34,6 +37,8 @@ bool RAM::setProperty(const string &name, const string &value)
 	}
 	else if (name == "resetPattern")
 		resetPattern = getCharVector(value);
+	else if (name == "resetNotification")
+		resetNotification = getInt(value);
 	else
 		return false;
 	
@@ -65,10 +70,13 @@ bool RAM::getData(const string &name, OEData &data)
 
 bool RAM::connect(const string &name, OEComponent *component)
 {
-	if (name == "hostHID")
+	if (name == "reset")
 	{
-		hostHID = component;
-//		hostHID->addObserver(
+		if (reset)
+			reset->removeObserver(this, resetNotification);
+		reset = component;
+		if (reset)
+			reset->addObserver(this, resetNotification);
 	}
 	else
 		return false;
@@ -76,15 +84,10 @@ bool RAM::connect(const string &name, OEComponent *component)
 	return true;
 }
 
-void RAM::notify(int notification, OEComponent *component)
+void RAM::notify(int notification, OEComponent *component, void *data)
 {
-	/*			OENotification *notification = (OENotification *) data;
-	 if (notification->message == HOSTSYSTEM_RESET)
-	 {
-	 for (int i = 0; i < memory.size(); i++)
-	 memory[i] = resetPattern[i % resetPattern.size()];
-	 }
-	 */			
+	for (int i = 0; i < memory.size(); i++)
+		memory[i] = resetPattern[i % resetPattern.size()];
 }
 
 bool RAM::getMemoryMap(string &value)

@@ -103,16 +103,6 @@ bool OEComponent::getMemoryMap(string &value)
 	return false;
 }
 
-bool OEComponent::assertInterrupt(int id)
-{
-	return false;
-}
-
-bool OEComponent::releaseInterrupt(int id)
-{
-	return false;
-}
-
 int OEComponent::ioctl(int command, void *data)
 {
 	return 0;

@@ -448,7 +448,7 @@ void *oepaProcess(void *arg)
 			 i++)
 		{
 			OEComponent *component = (*i)->getComponent("host::audio");
-			component->ioctl(HOSTAUDIO_RENDERBUFFER, &hostAudioBuffer);
+			component->ioctl(HOSTAUDIO_RENDER_BUFFER, &hostAudioBuffer);
 		}
 		
 		memcpy(buffer,

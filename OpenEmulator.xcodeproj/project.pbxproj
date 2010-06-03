@@ -26,8 +26,6 @@
 		001F916311925BB7005383B3 /* libzip.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C5805E109A3DDF00B00626 /* libzip.a */; };
 		001F916411925BBE005383B3 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0054E4A61131BE8A006D32D9 /* OpenGL.framework */; };
 		001F916911925BE8005383B3 /* SDL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 001F916811925BE8005383B3 /* SDL.framework */; };
-		002295BD11B328CB0046B098 /* HostPrinter.h in Headers */ = {isa = PBXBuildFile; fileRef = 002295BB11B328CB0046B098 /* HostPrinter.h */; };
-		002295BE11B328CB0046B098 /* HostPrinter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 002295BC11B328CB0046B098 /* HostPrinter.cpp */; };
 		003318AF1101492B00CC1782 /* Connector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 003318AD1101492B00CC1782 /* Connector.xib */; };
 		003E25E71070796700185260 /* images in Resources */ = {isa = PBXBuildFile; fileRef = 003E2597107075D900185260 /* images */; };
 		003FB21410BA3D5D00D3697B /* devices in Resources */ = {isa = PBXBuildFile; fileRef = 00E8A393108CCAA200D0A137 /* devices */; };
@@ -220,8 +218,6 @@
 		001F915711925B56005383B3 /* libsndfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsndfile.a; path = /opt/local/lib/libsndfile.a; sourceTree = "<absolute>"; };
 		001F915A11925B74005383B3 /* libsamplerate.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsamplerate.a; path = /opt/local/lib/libsamplerate.a; sourceTree = "<absolute>"; };
 		001F916811925BE8005383B3 /* SDL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL.framework; path = /Library/Frameworks/SDL.framework; sourceTree = "<absolute>"; };
-		002295BB11B328CB0046B098 /* HostPrinter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostPrinter.h; sourceTree = "<group>"; };
-		002295BC11B328CB0046B098 /* HostPrinter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HostPrinter.cpp; sourceTree = "<group>"; };
 		002C27B41168744200FAE6E6 /* libemulator.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libemulator.a; path = ../openemulator/build/Debug/libemulator.a; sourceTree = SOURCE_ROOT; };
 		002F77701162EB6A00B0ECF1 /* MOS6502Operations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOS6502Operations.h; sourceTree = "<group>"; };
 		002F77721162EB7400B0ECF1 /* MOS6502IllegalOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOS6502IllegalOperations.h; sourceTree = "<group>"; };
@@ -609,8 +605,6 @@
 				00044D9111AB7FFF002F6891 /* HostHID.cpp */,
 				00044D9411AB801C002F6891 /* HostPort.h */,
 				00044D9511AB801C002F6891 /* HostPort.cpp */,
-				002295BB11B328CB0046B098 /* HostPrinter.h */,
-				002295BC11B328CB0046B098 /* HostPrinter.cpp */,
 			);
 			path = Host;
 			sourceTree = "<group>";
@@ -760,7 +754,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				00984DA711A73C7E00B9C0B5 /* DAC1Bit.h in Headers */,
-				002295BD11B328CB0046B098 /* HostPrinter.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -970,7 +963,6 @@
 				00188DA8115DC59700FFACC0 /* MOS6502.cpp in Sources */,
 				00B4F935117E43E8008D622F /* MemoryOffset.cpp in Sources */,
 				00984DA611A73C7E00B9C0B5 /* DAC1Bit.cpp in Sources */,
-				002295BE11B328CB0046B098 /* HostPrinter.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

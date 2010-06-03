@@ -15,13 +15,21 @@
 
 #define APPLEIKEYBOARD_MASK	0x40
 
+AppleIKeyboard::AppleIKeyboard()
+{
+	hostHID = NULL;
+	pia = NULL;
+}
+
 bool AppleIKeyboard::connect(const string &name, OEComponent *component)
 {
 	if (name == "hostHID")
 	{
+		if (hostHID)
+			hostHID->removeObserver(this, HOSTHID_EVENT_UNICODEKEYBOARD);
 		hostHID = component;
-		// component->addObserver(this);
-
+		if (hostHID)
+			hostHID->addObserver(this, HOSTHID_EVENT_UNICODEKEYBOARD);
 	}
 	else if (name == "pia")
 		pia = component;
@@ -33,15 +41,12 @@ bool AppleIKeyboard::connect(const string &name, OEComponent *component)
 
 void AppleIKeyboard::notify(int notification, OEComponent *component, void *data)
 {
-	OEHIDKeyEvent *event = (OEHIDKeyEvent *) data;
+	HostHIDEvent *event = (HostHIDEvent *) data;
 	
-	if ((event->isDown) && (event->unicode < 128))
-	{
-		key = event->unicode;
-		
-		bool value = true;
-		pia->ioctl(MC6821_SET_CA1, &value);
-	}
+	key = event->usageId;
+	
+	bool value = true;
+	pia->ioctl(MC6821_SET_CA1, &value);
 }
 
 OEUInt8 AppleIKeyboard::read(int address)
