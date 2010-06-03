@@ -58,11 +58,6 @@ bool HostVideo::removeObserver(OEComponent *component, int notification)
 	return OEComponent::removeObserver(component, notification);
 }
 
-void HostVideo::postNotification(int notification, void *data)
-{
-	hostObserver.notify(notification, data);
-	OEComponent::postNotification(notification, data);
-}
 
 int HostVideo::ioctl(int message, void *data)
 {
@@ -77,6 +72,8 @@ int HostVideo::ioctl(int message, void *data)
 		case HOSTVIDEO_ADD_SCREEN:
 			return true;
 		case HOSTVIDEO_REMOVE_SCREEN:
+			return true;
+		case HOSTVIDEO_RENDER_SCREEN:
 			return true;
 	}
 	
