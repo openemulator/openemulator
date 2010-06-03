@@ -226,10 +226,13 @@ bool OEComponent::getRange(OEMemoryRange &range, const string &value)
 	
 	size_t separatorPos = value.find_first_of('-', pos);
 	if (separatorPos == string::npos)
-		return false;
+		range.end = range.start = getInt(value.substr(pos));
+	else
+	{
+		range.start = getInt(value.substr(pos, separatorPos));
+		range.end = getInt(value.substr(separatorPos + 1));
+	}
 	
-	range.start = getInt(value.substr(pos, separatorPos));
-	range.end = getInt(value.substr(separatorPos + 1));
 	if (range.start > range.end)
 		return false;
 	

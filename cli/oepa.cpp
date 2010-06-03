@@ -877,20 +877,6 @@ bool oepaGetProperty(OEEmulation *emulation, string ref, string name, string &va
 	return status;
 }
 
-void oepaPostNotification(OEEmulation *emulation,
-						  string ref, int notification, void *data)
-{
-	pthread_mutex_lock(&oepaProcessMutex);
-	
-	OEComponent *component = emulation->getComponent(ref);
-	if (!component)
-		return;
-	
-	component->postNotification(notification, data);
-	
-	pthread_mutex_unlock(&oepaProcessMutex);
-}
-
 int oepaIoctl(OEEmulation *emulation,
 			  string ref, int message, void *data)
 {

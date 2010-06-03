@@ -63,17 +63,6 @@ typedef vector<OEComponent *> OEObservers;
 typedef map<int, OEObservers> OEObserverMap;
 typedef vector<OEMemoryRange> OEMemoryRanges;
 
-typedef void (*OEAddObserverCallback)(int notification);
-typedef void (*OERemoveObserverCallback)(int notification);
-typedef void (*OENotifyCallback)(int notification, void *data);
-
-typedef struct
-{
-	OEAddObserverCallback addObserver;
-	OERemoveObserverCallback removeObserver;
-	OENotifyCallback notify;
-} OEHostObserver;
-
 class OEComponent
 {
 public:
@@ -87,9 +76,9 @@ public:
 	virtual bool setResource(const string &name, const OEData &data);
 	virtual bool connect(const string &name, OEComponent *component);
 	
-	virtual bool addObserver(OEComponent *component, int notification);
-	virtual bool removeObserver(OEComponent *component, int notification);
-	virtual void postNotification(int notification, void *data);
+	bool addObserver(OEComponent *component, int notification);
+	bool removeObserver(OEComponent *component, int notification);
+	void postNotification(int notification, void *data);
 	virtual void notify(int notification, OEComponent *component, void *data);
 	
 	virtual bool setMemoryMap(OEComponent *component, const string &value);

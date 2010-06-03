@@ -14,18 +14,11 @@ bool HostAudio::setProperty(const string &name, const string &value)
 {
 	if (name == "state")
 	{
-		state = getInt(value);
-		switch(state)
+		int newState = getInt(value);
+		if (state != newState)
 		{
-			case HOSTAUDIO_SYSTEM_POWERED_ON:
-				postNotification(HOSTAUDIO_SYSTEM_DID_POWER_ON, NULL);
-				break;
-			case HOSTAUDIO_SYSTEM_PAUSED:
-				postNotification(HOSTAUDIO_SYSTEM_DID_PAUSE, NULL);
-				break;
-			case HOSTAUDIO_SYSTEM_POWERED_OFF:
-				postNotification(HOSTAUDIO_SYSTEM_DID_POWER_OFF, NULL);
-				break;
+			state = newState;
+			postNotification(HOSTAUDIO_SYSTEM_STATE_CHANGED, &state);
 		}
 	}
 	else if (name == "runTime")

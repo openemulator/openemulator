@@ -13,7 +13,8 @@
 // Messages
 enum
 {
-	HOSTHID_REGISTER_HOST,
+	HOSTHID_REGISTER_HOSTOBSERVER,
+	HOSTHID_POST_LED_EVENT,
 };
 
 // Notifications
@@ -376,17 +377,17 @@ typedef struct
 	int value;
 } HostHIDEvent;
 
+typedef void (*HostHIDObserver)(int notification, void *data);
+
 class HostHID : public OEComponent
 {
 public:
 	HostHID();
 	
-	bool addObserver(OEComponent *component, int notification);
-	bool removeObserver(OEComponent *component, int notification);
 	void notify(int notification, OEComponent *component, void *data);
 	
 	int ioctl(int message, void *data);
 	
 private:
-	OEHostObserver hostObserver;
+	HostHIDObserver hostObserver;
 };
