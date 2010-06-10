@@ -14,10 +14,10 @@
 enum
 {
 	HOSTVIDEO_REGISTER_HOST,
-	HOSTVIDEO_UPDATE_RENDER,
 	
 	HOSTVIDEO_ADD_SCREEN,
 	HOSTVIDEO_REMOVE_SCREEN,
+	HOSTVIDEO_UPDATE_SCREEN,
 };
 
 // Structures
@@ -35,21 +35,12 @@ typedef struct
 
 typedef vector<HostVideoFrame *> HostVideoFrames;
 
-typedef void (*HostVideoPostFrame)();
-typedef bool (*HostVideoOpenDevice)(OEComponent *component);
-typedef void (*HostVideoCloseDevice)();
-
-typedef struct
-{
-	HostVideoPostFrame postFrame;
-	HostVideoOpenDevice openDevice;
-	HostVideoCloseDevice closeDevice;
-} HostVideoCallbacks;
+typedef void (*HostVideoObserver)(HostVideoFrames &frames);
 
 class HostVideo : public OEComponent
 {
 public:
-	HostVideo::HostVideo();
+	HostVideo();
 	
 	bool setProperty(const string &name, const string &value);
 	bool getProperty(const string &name, string &value);
@@ -60,5 +51,5 @@ private:
 	string window;
 	HostVideoFrames frames;
 	
-	HostVideoCallbacks callbacks;
+	HostVideoObserver observer;
 };

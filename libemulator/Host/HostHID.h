@@ -13,8 +13,7 @@
 // Messages
 enum
 {
-	HOSTHID_REGISTER_HOSTOBSERVER,
-	HOSTHID_POST_LED_EVENT,
+	HOSTHID_REGISTER_HOST,
 };
 
 // Notifications
@@ -23,7 +22,6 @@ enum
 	HOSTHID_SYSTEM_EVENT,
 	HOSTHID_KEYBOARD_EVENT,
 	HOSTHID_UNICODEKEYBOARD_EVENT,
-	HOSTHID_LED_EVENT,
 	HOSTHID_MOUSE_EVENT,
 	HOSTHID_JOYSTICK_EVENT,
 	HOSTHID_TABLET_EVENT,
@@ -377,17 +375,22 @@ typedef struct
 	int value;
 } HostHIDEvent;
 
-typedef void (*HostHIDObserver)(int notification, void *data);
+typedef void (*HostHIDObserver)(int value);
 
 class HostHID : public OEComponent
 {
 public:
 	HostHID();
 	
+	bool setProperty(const string &name, const string &value);
+	bool getProperty(const string &name, string &value);
+	
 	void notify(int notification, OEComponent *component, void *data);
 	
 	int ioctl(int message, void *data);
 	
 private:
-	HostHIDObserver hostObserver;
+	HostHIDObserver observer;
+	
+	int ledState;
 };

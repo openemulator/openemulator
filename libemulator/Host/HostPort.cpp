@@ -12,9 +12,9 @@
 
 HostPort::HostPort()
 {
-	hostObserver.addObserver = NULL;
-	hostObserver.removeObserver = NULL;
-	hostObserver.notify = NULL;
+	observer.addObserver = NULL;
+	observer.removeObserver = NULL;
+	observer.notify = NULL;
 }
 
 bool HostPort::addObserver(OEComponent *component, int notification)

@@ -21,9 +21,7 @@
 
 HostVideo::HostVideo()
 {
-	callbacks.postFrame = NULL;
-	callbacks.openDevice = NULL;
-	callbacks.closeDevice = NULL;
+	observer = NULL;
 }
 
 bool HostVideo::setProperty(const string &name, const string &value)
@@ -51,10 +49,12 @@ int HostVideo::ioctl(int message, void *data)
 	switch (message)
 	{
 		case HOSTVIDEO_REGISTER_HOST:
-			callbacks = *((HostVideoCallbacks *) data);
+			observer = *((HostVideoObserver *) data);
 			return true;
 		case HOSTVIDEO_ADD_SCREEN:
 			frames.push_back((HostVideoFrame *) data);
+			if (observer)
+				observer(frames);
 			return true;
 		case HOSTVIDEO_REMOVE_SCREEN:
 			for (HostVideoFrames::iterator i = frames.begin();
@@ -64,6 +64,12 @@ int HostVideo::ioctl(int message, void *data)
 				if ((*i) == data)
 					frames.erase(i);
 			}
+			if (observer)
+				observer(frames);
+			return true;
+		case HOSTVIDEO_UPDATE_SCREEN:
+			if (observer)
+				observer(frames);
 			return true;
 	}
 	

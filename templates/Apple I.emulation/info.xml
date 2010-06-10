@@ -10,7 +10,9 @@
     <component name="video" class="HostVideo">
         <property name="window" value="-1 -1 768 576" />
     </component>
-    <component name="hid" class="HostHID" />
+    <component name="hid" class="HostHID">
+        <property name="led" value="0" />
+    </component>
     <component name="port" class="HostPort" />
 </device>
 
