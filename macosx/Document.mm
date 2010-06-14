@@ -31,10 +31,9 @@
 		
 		image = nil;
 		label = nil;
-		description = nil;
+		notes = nil;
 		modificationDate = nil;
 		powerState = nil;
-		notes = nil;
 		
 		freeInlets = [[NSMutableArray alloc] init];
 		
@@ -321,7 +320,7 @@
 		if (oepaIsLoaded(emulation))
 		{
 			[self setLabel:[self getDMLProperty:@"label"]];
-			[self setDescription:[self getDMLProperty:@"description"]];
+			[self setNotes:[self getComponentProperty:@"notes" ref:@"host::host"]];
 			[self updatePowerState];
 			[self setImage:[self getResourceImage:[self getDMLProperty:@"image"]]];
 			
@@ -527,17 +526,17 @@
     }
 }
 
-- (NSString *) description
+- (NSString *) notes
 {
-	return [[description retain] autorelease];
+	return [[notes retain] autorelease];
 }
 
-- (void) setDescription:(NSString *) value
+- (void) setNotes:(NSString *) value
 {
-    if (description != value)
+    if (notes != value)
 	{
-        [description release];
-        description = [value copy];
+        [notes release];
+        notes = [value copy];
     }
 }
 
@@ -566,20 +565,6 @@
 	{
         [powerState release];
         powerState = [value copy];
-    }
-}
-
-- (NSString *) notes
-{
-	return [[notes retain] autorelease];
-}
-
-- (void) setNotes:(NSString *) value
-{
-    if (notes != value)
-	{
-        [notes release];
-        notes = [value copy];
     }
 }
 

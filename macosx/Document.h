@@ -23,10 +23,9 @@ typedef struct OEEmulation OEEmulation;
 	
 	NSImage *image;
 	NSString *label;
-	NSString *description;
+	NSString *notes;
 	NSString *modificationDate;
 	NSString *powerState;
-	NSString *notes;
 	
 	NSMutableArray *freeInlets;
 	
@@ -43,14 +42,12 @@ typedef struct OEEmulation OEEmulation;
 - (void) setImage:(NSImage *) value;
 - (NSString *) label;
 - (void) setLabel:(NSString *) value;
-- (NSString *) description;
-- (void) setDescription:(NSString *) value;
+- (NSString *) notes;
+- (void) setNotes:(NSString *) value;
 - (NSString *) modificationDate;
 - (void) setModificationDate:(NSString *) value;
 - (NSString *) powerState;
 - (void) setPowerState:(NSString *) value;
-- (NSString *) notes;
-- (void) setNotes:(NSString *) value;
 
 - (NSMutableArray *) freeInlets;
 

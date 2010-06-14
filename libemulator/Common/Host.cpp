@@ -26,7 +26,6 @@ bool Host::setProperty(const string &name, const string &value)
 		if (powerState != state)
 		{
 			powerState = state;
-			postNotification(HOST_POWERSTATE_DID_CHANGE, &state);
 		}
 	}
 	else if (name == "videoWindow")
@@ -55,7 +54,7 @@ int Host::ioctl(int message, void *data)
 {
 	switch (message)
 	{
-		case HOST_SET_POWER_STATE:
+		case HOST_SET_POWERSTATE:
 			powerState = *((int *) data);
 			return true;
 	}
