@@ -10,26 +10,26 @@
 
 #include "AppleIKeyboard.h"
 
-#include "HostHID.h"
+#include "Host.h"
 #include "MC6821.h"
 
 #define APPLEIKEYBOARD_MASK	0x40
 
 AppleIKeyboard::AppleIKeyboard()
 {
-	hostHID = NULL;
+	host = NULL;
 	pia = NULL;
 }
 
 bool AppleIKeyboard::connect(const string &name, OEComponent *component)
 {
-	if (name == "hostHID")
+	if (name == "host")
 	{
-		if (hostHID)
-			hostHID->removeObserver(this, HOSTHID_UNICODEKEYBOARD_EVENT);
-		hostHID = component;
-		if (hostHID)
-			hostHID->addObserver(this, HOSTHID_UNICODEKEYBOARD_EVENT);
+		if (host)
+			host->removeObserver(this, HOST_HID_UNICODEKEYBOARD_EVENT);
+		host = component;
+		if (host)
+			host->addObserver(this, HOST_HID_UNICODEKEYBOARD_EVENT);
 	}
 	else if (name == "pia")
 		pia = component;

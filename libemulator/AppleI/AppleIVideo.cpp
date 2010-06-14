@@ -27,8 +27,8 @@ bool AppleIVideo::setResource(const string &name, const OEData &data)
 
 bool AppleIVideo::connect(const string &name, OEComponent *component)
 {
-	if (name == "hostVideo")
-		hostVideo = component;
+	if (name == "host")
+		host = component;
 	else if (name == "system")
 		system = component;
 	else if (name == "pia")
@@ -45,6 +45,4 @@ bool AppleIVideo::connect(const string &name, OEComponent *component)
 
 void AppleIVideo::write(int address, int value)
 {
-	
-	
 }

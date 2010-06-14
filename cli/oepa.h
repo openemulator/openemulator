@@ -9,7 +9,7 @@
  */
 
 #include "OEEmulation.h"
-#include "HostAudio.h"
+#include "Host.h"
 
 #define OEPA_SAMPLERATE			48000.0
 #define OEPA_CHANNELNUM			2

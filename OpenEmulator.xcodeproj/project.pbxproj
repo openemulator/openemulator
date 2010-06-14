@@ -28,9 +28,15 @@
 		001F916311925BB7005383B3 /* libzip.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C5805E109A3DDF00B00626 /* libzip.a */; };
 		001F916411925BBE005383B3 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0054E4A61131BE8A006D32D9 /* OpenGL.framework */; };
 		001F916911925BE8005383B3 /* SDL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 001F916811925BE8005383B3 /* SDL.framework */; };
+		0032967711C5A7B5003FD49A /* IPMount.png in Resources */ = {isa = PBXBuildFile; fileRef = 0032967011C5A7B5003FD49A /* IPMount.png */; };
+		0032967811C5A7B5003FD49A /* IPUnmount.png in Resources */ = {isa = PBXBuildFile; fileRef = 0032967111C5A7B5003FD49A /* IPUnmount.png */; };
+		0032967B11C5A7B5003FD49A /* TBPowerDown.png in Resources */ = {isa = PBXBuildFile; fileRef = 0032967411C5A7B5003FD49A /* TBPowerDown.png */; };
+		0032967D11C5A7B5003FD49A /* TBWakeUp.png in Resources */ = {isa = PBXBuildFile; fileRef = 0032967611C5A7B5003FD49A /* TBWakeUp.png */; };
+		0032969D11C5AEA7003FD49A /* TBDebuggerBreak.png in Resources */ = {isa = PBXBuildFile; fileRef = 0032969C11C5AEA7003FD49A /* TBDebuggerBreak.png */; };
 		003318AF1101492B00CC1782 /* Connector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 003318AD1101492B00CC1782 /* Connector.xib */; };
 		003E25E71070796700185260 /* images in Resources */ = {isa = PBXBuildFile; fileRef = 003E2597107075D900185260 /* images */; };
 		003FB21410BA3D5D00D3697B /* devices in Resources */ = {isa = PBXBuildFile; fileRef = 00E8A393108CCAA200D0A137 /* devices */; };
+		0048673B11C4478200ECD52C /* Host.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0048673911C4478200ECD52C /* Host.cpp */; };
 		0049B99C114C929200B686BB /* AppleIIO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0049B99A114C929200B686BB /* AppleIIO.cpp */; };
 		0049B9A6114C9EA900B686BB /* AppleIFloatingBus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0049B9A4114C9EA900B686BB /* AppleIFloatingBus.cpp */; };
 		005398DB113A00CA00CA7CE4 /* ROM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 005397E31139EC1F00CA7CE4 /* ROM.cpp */; };
@@ -42,7 +48,6 @@
 		0054E6311131BEE7006D32D9 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0054E6301131BEE7006D32D9 /* Carbon.framework */; };
 		0054E66C1131BF58006D32D9 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0054E66B1131BF58006D32D9 /* Quartz.framework */; };
 		005B81D9108680B9009D4804 /* ScreenView.m in Sources */ = {isa = PBXBuildFile; fileRef = 005B81D8108680B9009D4804 /* ScreenView.m */; };
-		005C43EB113121F2006AEE84 /* TBInterrupt.png in Resources */ = {isa = PBXBuildFile; fileRef = 005C43EA113121F2006AEE84 /* TBInterrupt.png */; };
 		005E5F6E1086B0E100E573D4 /* InspectorController.m in Sources */ = {isa = PBXBuildFile; fileRef = 005E5F6D1086B0E100E573D4 /* InspectorController.m */; };
 		005E5F771086B16C00E573D4 /* Inspector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 005E5F751086B16C00E573D4 /* Inspector.xib */; };
 		00679D08100817F700B38748 /* DeviceChooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00679D04100817F600B38748 /* DeviceChooser.xib */; };
@@ -74,12 +79,9 @@
 		00B703881135ACA7005E4B65 /* OEInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B703791135AC91005E4B65 /* OEInfo.cpp */; };
 		00B7038A1135ACAA005E4B65 /* OERef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B7037D1135AC91005E4B65 /* OERef.cpp */; };
 		00B7038E1135ACAD005E4B65 /* OEPackage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B7037B1135AC91005E4B65 /* OEPackage.cpp */; };
-		00B703A31135ACBD005E4B65 /* HostAudio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B703971135ACBD005E4B65 /* HostAudio.cpp */; };
-		00B703A91135ACBD005E4B65 /* HostVideo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B7039D1135ACBD005E4B65 /* HostVideo.cpp */; };
 		00B974B410701DDA00BD1402 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = 00B974AD10701DCD00BD1402 /* sounds */; };
 		00BADDC51100EDC600EB0344 /* ConnectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00BADD451100BE8300EB0344 /* ConnectorViewController.m */; };
 		00BB4D591086C1160071B584 /* TBRestart.png in Resources */ = {isa = PBXBuildFile; fileRef = 00BB4D561086C1160071B584 /* TBRestart.png */; };
-		00BB4D5A1086C1160071B584 /* TBShutdown.png in Resources */ = {isa = PBXBuildFile; fileRef = 00BB4D571086C1160071B584 /* TBShutdown.png */; };
 		00BB4D5B1086C1160071B584 /* TBSleep.png in Resources */ = {isa = PBXBuildFile; fileRef = 00BB4D581086C1160071B584 /* TBSleep.png */; };
 		00C5805F109A3DDF00B00626 /* libportaudio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C5805D109A3DDF00B00626 /* libportaudio.a */; };
 		00C58060109A3DDF00B00626 /* libzip.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C5805E109A3DDF00B00626 /* libzip.a */; };
@@ -95,8 +97,6 @@
 		00D184F5114C8E9A00F4AB12 /* AppleIKeyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00D184F3114C8E9A00F4AB12 /* AppleIKeyboard.cpp */; };
 		00D1958D1093712E008FB014 /* Chooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00D1958B1093712E008FB014 /* Chooser.xib */; };
 		00D5D13C11B73F8400C77A67 /* CompositeMonitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00984D9811A73B1000B9C0B5 /* CompositeMonitor.cpp */; };
-		00D5D13D11B73F8600C77A67 /* HostHID.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00044D9111AB7FFF002F6891 /* HostHID.cpp */; };
-		00D5D13E11B73F8700C77A67 /* HostPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00044D9511AB801C002F6891 /* HostPort.cpp */; };
 		00D8448A0FFF04C0005802F0 /* AppleGraphicsTablet.png in Resources */ = {isa = PBXBuildFile; fileRef = 000F66360FF8368F00C8AF23 /* AppleGraphicsTablet.png */; };
 		00D8448B0FFF04C0005802F0 /* DiskImage.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000F66370FF8368F00C8AF23 /* DiskImage.icns */; };
 		00D8448C0FFF04C0005802F0 /* DiskImage35.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000F66380FF8368F00C8AF23 /* DiskImage35.icns */; };
@@ -178,10 +178,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		00044D9011AB7FFF002F6891 /* HostHID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostHID.h; sourceTree = "<group>"; };
-		00044D9111AB7FFF002F6891 /* HostHID.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HostHID.cpp; sourceTree = "<group>"; };
-		00044D9411AB801C002F6891 /* HostPort.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostPort.h; sourceTree = "<group>"; };
-		00044D9511AB801C002F6891 /* HostPort.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HostPort.cpp; sourceTree = "<group>"; };
 		000671BF113F318000781A92 /* MemoryMap8Bit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MemoryMap8Bit.cpp; sourceTree = "<group>"; };
 		000671C0113F318000781A92 /* MemoryMap8Bit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemoryMap8Bit.h; sourceTree = "<group>"; };
 		000671C1113F318000781A92 /* MemoryMap16Bit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MemoryMap16Bit.cpp; sourceTree = "<group>"; };
@@ -221,8 +217,15 @@
 		002F77721162EB7400B0ECF1 /* MOS6502IllegalOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOS6502IllegalOperations.h; sourceTree = "<group>"; };
 		002F77851162EBB200B0ECF1 /* MOS6502Opcodes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOS6502Opcodes.h; sourceTree = "<group>"; };
 		00317E380FD31D1A007F2B00 /* AppleGraphicsTablet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppleGraphicsTablet.png; sourceTree = "<group>"; };
+		0032967011C5A7B5003FD49A /* IPMount.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPMount.png; path = macosx/Images/IPMount.png; sourceTree = "<group>"; };
+		0032967111C5A7B5003FD49A /* IPUnmount.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPUnmount.png; path = macosx/Images/IPUnmount.png; sourceTree = "<group>"; };
+		0032967411C5A7B5003FD49A /* TBPowerDown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = TBPowerDown.png; path = macosx/Images/TBPowerDown.png; sourceTree = "<group>"; };
+		0032967611C5A7B5003FD49A /* TBWakeUp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = TBWakeUp.png; path = macosx/Images/TBWakeUp.png; sourceTree = "<group>"; };
+		0032969C11C5AEA7003FD49A /* TBDebuggerBreak.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = TBDebuggerBreak.png; path = macosx/Images/TBDebuggerBreak.png; sourceTree = "<group>"; };
 		003318AE1101492B00CC1782 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Connector.xib; sourceTree = "<group>"; };
 		003E2597107075D900185260 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
+		0048673811C4478200ECD52C /* Host.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Host.h; sourceTree = "<group>"; };
+		0048673911C4478200ECD52C /* Host.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Host.cpp; sourceTree = "<group>"; };
 		0049B999114C929200B686BB /* AppleIIO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleIIO.h; sourceTree = "<group>"; };
 		0049B99A114C929200B686BB /* AppleIIO.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleIIO.cpp; sourceTree = "<group>"; };
 		0049B9A3114C9EA900B686BB /* AppleIFloatingBus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleIFloatingBus.h; sourceTree = "<group>"; };
@@ -241,7 +244,6 @@
 		005928540FFC94E200F24A57 /* templates */ = {isa = PBXFileReference; lastKnownFileType = folder; path = templates; sourceTree = "<group>"; };
 		005B81D7108680B9009D4804 /* ScreenView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScreenView.h; sourceTree = "<group>"; };
 		005B81D8108680B9009D4804 /* ScreenView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScreenView.m; sourceTree = "<group>"; };
-		005C43EA113121F2006AEE84 /* TBInterrupt.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = TBInterrupt.png; path = macosx/Images/TBInterrupt.png; sourceTree = "<group>"; };
 		005E5F6C1086B0E100E573D4 /* InspectorController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InspectorController.h; sourceTree = "<group>"; };
 		005E5F6D1086B0E100E573D4 /* InspectorController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InspectorController.m; sourceTree = "<group>"; };
 		005E5F761086B16C00E573D4 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Inspector.xib; sourceTree = "<group>"; };
@@ -298,15 +300,10 @@
 		00B7037B1135AC91005E4B65 /* OEPackage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEPackage.cpp; sourceTree = "<group>"; };
 		00B7037C1135AC91005E4B65 /* OEPackage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEPackage.h; sourceTree = "<group>"; };
 		00B7037D1135AC91005E4B65 /* OERef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OERef.cpp; sourceTree = "<group>"; };
-		00B703971135ACBD005E4B65 /* HostAudio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HostAudio.cpp; sourceTree = "<group>"; };
-		00B703981135ACBD005E4B65 /* HostAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostAudio.h; sourceTree = "<group>"; };
-		00B7039D1135ACBD005E4B65 /* HostVideo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HostVideo.cpp; sourceTree = "<group>"; };
-		00B7039E1135ACBD005E4B65 /* HostVideo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostVideo.h; sourceTree = "<group>"; };
 		00B974AD10701DCD00BD1402 /* sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; path = sounds; sourceTree = "<group>"; };
 		00BADD441100BE8300EB0344 /* ConnectorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConnectorViewController.h; sourceTree = "<group>"; };
 		00BADD451100BE8300EB0344 /* ConnectorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConnectorViewController.m; sourceTree = "<group>"; };
 		00BB4D561086C1160071B584 /* TBRestart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TBRestart.png; sourceTree = "<group>"; };
-		00BB4D571086C1160071B584 /* TBShutdown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TBShutdown.png; sourceTree = "<group>"; };
 		00BB4D581086C1160071B584 /* TBSleep.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TBSleep.png; sourceTree = "<group>"; };
 		00C07E350FD27CCF004E0D3D /* PRGeneral.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PRGeneral.png; sourceTree = "<group>"; };
 		00C5805D109A3DDF00B00626 /* libportaudio.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libportaudio.a; path = /opt/local/lib/libportaudio.a; sourceTree = "<absolute>"; };
@@ -443,7 +440,6 @@
 			children = (
 				00C8AA0610103D6A006A5734 /* OSDPause.png */,
 				00BB4D561086C1160071B584 /* TBRestart.png */,
-				00BB4D571086C1160071B584 /* TBShutdown.png */,
 				00BB4D581086C1160071B584 /* TBSleep.png */,
 				00C8AA0710103D6A006A5734 /* OSDPower.png */,
 				00F86BE1100FD4F60016867D /* IPSoundMax.png */,
@@ -524,7 +520,6 @@
 				00B7038F1135ACBD005E4B65 /* AppleII */,
 				00B703921135ACBD005E4B65 /* Common */,
 				00188D94115DC58800FFACC0 /* CPU */,
-				00B703961135ACBD005E4B65 /* Host */,
 				00B703731135AC91005E4B65 /* OEComponent.cpp */,
 				00B703741135AC91005E4B65 /* OEComponent.h */,
 				00B703751135AC91005E4B65 /* OEComponentFactory.cpp */,
@@ -588,23 +583,10 @@
 				00B4F933117E43E8008D622F /* MemoryOffset.cpp */,
 				00984D9711A73B1000B9C0B5 /* CompositeMonitor.h */,
 				00984D9811A73B1000B9C0B5 /* CompositeMonitor.cpp */,
+				0048673811C4478200ECD52C /* Host.h */,
+				0048673911C4478200ECD52C /* Host.cpp */,
 			);
 			path = Common;
-			sourceTree = "<group>";
-		};
-		00B703961135ACBD005E4B65 /* Host */ = {
-			isa = PBXGroup;
-			children = (
-				00B703971135ACBD005E4B65 /* HostAudio.cpp */,
-				00B703981135ACBD005E4B65 /* HostAudio.h */,
-				00B7039D1135ACBD005E4B65 /* HostVideo.cpp */,
-				00B7039E1135ACBD005E4B65 /* HostVideo.h */,
-				00044D9011AB7FFF002F6891 /* HostHID.h */,
-				00044D9111AB7FFF002F6891 /* HostHID.cpp */,
-				00044D9411AB801C002F6891 /* HostPort.h */,
-				00044D9511AB801C002F6891 /* HostPort.cpp */,
-			);
-			path = Host;
 			sourceTree = "<group>";
 		};
 		00FF25C4115C365800C82CA0 /* libcomposite */ = {
@@ -694,10 +676,14 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				0032969C11C5AEA7003FD49A /* TBDebuggerBreak.png */,
+				0032967011C5A7B5003FD49A /* IPMount.png */,
+				0032967111C5A7B5003FD49A /* IPUnmount.png */,
+				0032967411C5A7B5003FD49A /* TBPowerDown.png */,
+				0032967611C5A7B5003FD49A /* TBWakeUp.png */,
 				0082847B11A422C700B2B530 /* IPAudioStop.png */,
 				0082840211A3603800B2B530 /* IPAudioRecord.png */,
 				008283EF11A35D3A00B2B530 /* IPAudioPlay.png */,
-				005C43EA113121F2006AEE84 /* TBInterrupt.png */,
 				003318AD1101492B00CC1782 /* Connector.xib */,
 				0011696310E7CC4E007A5EFB /* IPStorage.png */,
 				0011696410E7CC4E007A5EFB /* IPStorageSel.png */,
@@ -901,17 +887,20 @@
 				00C6C0C110602151004D084B /* roms in Resources */,
 				005E5F771086B16C00E573D4 /* Inspector.xib in Resources */,
 				00BB4D591086C1160071B584 /* TBRestart.png in Resources */,
-				00BB4D5A1086C1160071B584 /* TBShutdown.png in Resources */,
 				00BB4D5B1086C1160071B584 /* TBSleep.png in Resources */,
 				00D1958D1093712E008FB014 /* Chooser.xib in Resources */,
 				0011696510E7CC59007A5EFB /* IPStorageSel.png in Resources */,
 				0011696610E7CC59007A5EFB /* IPStorage.png in Resources */,
 				003318AF1101492B00CC1782 /* Connector.xib in Resources */,
 				00F0ED6711028C8800208090 /* DiskImage525.icns in Resources */,
-				005C43EB113121F2006AEE84 /* TBInterrupt.png in Resources */,
 				008283F011A35D3A00B2B530 /* IPAudioPlay.png in Resources */,
 				0082840411A3603800B2B530 /* IPAudioRecord.png in Resources */,
 				0082847C11A422C700B2B530 /* IPAudioStop.png in Resources */,
+				0032967711C5A7B5003FD49A /* IPMount.png in Resources */,
+				0032967811C5A7B5003FD49A /* IPUnmount.png in Resources */,
+				0032967B11C5A7B5003FD49A /* TBPowerDown.png in Resources */,
+				0032967D11C5A7B5003FD49A /* TBWakeUp.png in Resources */,
+				0032969D11C5AEA7003FD49A /* TBDebuggerBreak.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -939,8 +928,6 @@
 				00B703881135ACA7005E4B65 /* OEInfo.cpp in Sources */,
 				00B7038A1135ACAA005E4B65 /* OERef.cpp in Sources */,
 				00B7038E1135ACAD005E4B65 /* OEPackage.cpp in Sources */,
-				00B703A31135ACBD005E4B65 /* HostAudio.cpp in Sources */,
-				00B703A91135ACBD005E4B65 /* HostVideo.cpp in Sources */,
 				005398DB113A00CA00CA7CE4 /* ROM.cpp in Sources */,
 				005398DC113A00CA00CA7CE4 /* RAM.cpp in Sources */,
 				00910107113AAE60005EBB62 /* AppleISystem.cpp in Sources */,
@@ -957,8 +944,7 @@
 				00B4F935117E43E8008D622F /* MemoryOffset.cpp in Sources */,
 				00984DA611A73C7E00B9C0B5 /* DAC1Bit.cpp in Sources */,
 				00D5D13C11B73F8400C77A67 /* CompositeMonitor.cpp in Sources */,
-				00D5D13D11B73F8600C77A67 /* HostHID.cpp in Sources */,
-				00D5D13E11B73F8700C77A67 /* HostPort.cpp in Sources */,
+				0048673B11C4478200ECD52C /* Host.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

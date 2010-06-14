@@ -11,11 +11,7 @@
 #include "OEComponentFactory.h"
 
 // FACTORY_INCLUDE_START - Do not modify this section
-#include "HostAudio.h"
-#include "HostVideo.h"
-#include "HostHID.h"
-#include "HostPort.h"
-
+#include "Host.h"
 #include "RAM.h"
 #include "ROM.h"
 #include "MemoryMap8Bit.h"
@@ -42,11 +38,7 @@
 OEComponent *OEComponentFactory::build(string className)
 {
 // FACTORY_CODE_START - Do not modify this section
-	matchComponent(HostAudio);
-	matchComponent(HostVideo);
-	matchComponent(HostHID);
-	matchComponent(HostPort);
-	
+	matchComponent(Host);
 	matchComponent(RAM);
 	matchComponent(ROM);
 	matchComponent(MemoryMap8Bit);

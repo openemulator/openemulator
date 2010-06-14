@@ -21,7 +21,7 @@ public:
 	OEUInt8 read(int address);
 	
 private:
-	OEComponent *hostHID;
+	OEComponent *host;
 	OEComponent *pia;
 	
 	int key;

@@ -12,7 +12,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="81"/>
+			<integer value="609"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -646,8 +646,26 @@
 								<bool key="EncodedWithXMLCoder">YES</bool>
 								<object class="NSMenuItem" id="58928646">
 									<reference key="NSMenu" ref="361438485"/>
-									<string key="NSTitle">Power</string>
-									<string key="NSKeyEquiv">.</string>
+									<string key="NSTitle">Power Down</string>
+									<string key="NSKeyEquiv">p</string>
+									<int key="NSKeyEquivModMask">1572864</int>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="1033313550"/>
+									<reference key="NSMixedImage" ref="310636482"/>
+								</object>
+								<object class="NSMenuItem" id="932460877">
+									<reference key="NSMenu" ref="361438485"/>
+									<string key="NSTitle">Sleep</string>
+									<string key="NSKeyEquiv">s</string>
+									<int key="NSKeyEquivModMask">1572864</int>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="1033313550"/>
+									<reference key="NSMixedImage" ref="310636482"/>
+								</object>
+								<object class="NSMenuItem" id="302083824">
+									<reference key="NSMenu" ref="361438485"/>
+									<string key="NSTitle">Wake Up</string>
+									<string key="NSKeyEquiv">w</string>
 									<int key="NSKeyEquivModMask">1572864</int>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="1033313550"/>
@@ -665,7 +683,7 @@
 								</object>
 								<object class="NSMenuItem" id="231350452">
 									<reference key="NSMenu" ref="361438485"/>
-									<string key="NSTitle">Reset</string>
+									<string key="NSTitle">Restart</string>
 									<string key="NSKeyEquiv">r</string>
 									<int key="NSKeyEquivModMask">1572864</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -674,17 +692,8 @@
 								</object>
 								<object class="NSMenuItem" id="273033769">
 									<reference key="NSMenu" ref="361438485"/>
-									<string key="NSTitle">Pause</string>
-									<string key="NSKeyEquiv">p</string>
-									<int key="NSKeyEquivModMask">1572864</int>
-									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="1033313550"/>
-									<reference key="NSMixedImage" ref="310636482"/>
-								</object>
-								<object class="NSMenuItem" id="689724184">
-									<reference key="NSMenu" ref="361438485"/>
-									<string key="NSTitle">Interrupt</string>
-									<string key="NSKeyEquiv">i</string>
+									<string key="NSTitle">Debugger Break</string>
+									<string key="NSKeyEquiv">b</string>
 									<int key="NSKeyEquivModMask">1572864</int>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="1033313550"/>
@@ -1292,14 +1301,6 @@
 					<int key="connectionID">874</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">pauseButtonPressedAndReleased:</string>
-						<reference key="source" ref="1014"/>
-						<reference key="destination" ref="689724184"/>
-					</object>
-					<int key="connectionID">876</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">fDocumentController</string>
 						<reference key="source" ref="406189837"/>
@@ -1338,6 +1339,22 @@
 						<reference key="destination" ref="169253820"/>
 					</object>
 					<int key="connectionID">881</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">powerButtonPressedAndReleased:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="932460877"/>
+					</object>
+					<int key="connectionID">883</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">powerButtonPressedAndReleased:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="302083824"/>
+					</object>
+					<int key="connectionID">885</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -1875,10 +1892,11 @@
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="231350452"/>
-							<reference ref="58928646"/>
 							<reference ref="676833672"/>
-							<reference ref="689724184"/>
 							<reference ref="273033769"/>
+							<reference ref="932460877"/>
+							<reference ref="302083824"/>
+							<reference ref="58928646"/>
 						</object>
 						<reference key="parent" ref="942780802"/>
 					</object>
@@ -1890,11 +1908,6 @@
 					<object class="IBObjectRecord">
 						<int key="objectID">612</int>
 						<reference key="object" ref="231350452"/>
-						<reference key="parent" ref="361438485"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">613</int>
-						<reference key="object" ref="58928646"/>
 						<reference key="parent" ref="361438485"/>
 					</object>
 					<object class="IBObjectRecord">
@@ -2021,8 +2034,18 @@
 						<reference key="parent" ref="444160175"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">875</int>
-						<reference key="object" ref="689724184"/>
+						<int key="objectID">882</int>
+						<reference key="object" ref="932460877"/>
+						<reference key="parent" ref="361438485"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">884</int>
+						<reference key="object" ref="302083824"/>
+						<reference key="parent" ref="361438485"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">613</int>
+						<reference key="object" ref="58928646"/>
 						<reference key="parent" ref="361438485"/>
 					</object>
 				</object>
@@ -2207,7 +2230,8 @@
 					<string>83.ImportedFromIB2</string>
 					<string>854.IBPluginDependency</string>
 					<string>871.IBPluginDependency</string>
-					<string>875.IBPluginDependency</string>
+					<string>882.IBPluginDependency</string>
+					<string>884.IBPluginDependency</string>
 				</object>
 				<object class="NSMutableArray" key="dict.values">
 					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -2264,7 +2288,7 @@
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>{{301, 193}, {227, 213}}</string>
+					<string>{{294, 78}, {227, 213}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>{{197, 734}, {243, 243}}</string>
@@ -2286,7 +2310,7 @@
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>{{99, 316}, {478, 20}}</string>
+					<string>{{118, 291}, {478, 20}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>{74, 862}</string>
@@ -2296,7 +2320,7 @@
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>{{540, 406}, {225, 123}}</string>
+					<string>{{464, 168}, {225, 123}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>{{525, 802}, {197, 73}}</string>
@@ -2324,7 +2348,7 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>{{23, 794}, {245, 183}}</string>
-					<string>{{510, 139}, {231, 213}}</string>
+					<string>{{338, 78}, {231, 213}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{475, 832}, {234, 43}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -2339,7 +2363,7 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{560, 259}, {148, 93}}</string>
+					<string>{{388, 178}, {200, 113}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{475, 832}, {234, 43}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -2377,7 +2401,7 @@
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>{{233, 63}, {299, 253}}</string>
+					<string>{{252, 38}, {299, 253}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>{{155, 774}, {199, 203}}</string>
@@ -2385,6 +2409,7 @@
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -2406,7 +2431,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">881</int>
+			<int key="maxID">885</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -2624,15 +2649,20 @@
 							<string>fEmulationView</string>
 							<string>fExpansionsController</string>
 							<string>fExpansionsView</string>
+							<string>fOpenPlaybackButton</string>
 							<string>fPeripheralsController</string>
 							<string>fPeripheralsView</string>
-							<string>fPlaybackLabel</string>
-							<string>fRecordingLabel</string>
+							<string>fPlaybackDurationLabel</string>
+							<string>fPlaybackNameLabel</string>
+							<string>fPlaybackTimeLabel</string>
+							<string>fRecordingSizeLabel</string>
+							<string>fRecordingTimeLabel</string>
+							<string>fSaveRecordingAsButton</string>
 							<string>fStorageController</string>
 							<string>fStorageView</string>
 							<string>fTabMatrix</string>
 							<string>fTogglePlaybackButton</string>
-							<string>fToggleRecordButton</string>
+							<string>fToggleRecordingButton</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
@@ -2643,10 +2673,15 @@
 							<string>NSView</string>
 							<string>NSArrayController</string>
 							<string>NSView</string>
+							<string>NSButton</string>
 							<string>NSArrayController</string>
 							<string>NSView</string>
 							<string>NSTextField</string>
 							<string>NSTextField</string>
+							<string>NSTextField</string>
+							<string>NSTextField</string>
+							<string>NSTextField</string>
+							<string>NSButton</string>
 							<string>NSArrayController</string>
 							<string>NSView</string>
 							<string>NSMatrix</string>

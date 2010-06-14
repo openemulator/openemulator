@@ -447,14 +447,14 @@ void *oepaProcess(void *arg)
 			 i != oepaEmulations.end();
 			 i++)
 		{
-			OEComponent *component = (*i)->getComponent("host::audio");
-			component->postNotification(HOSTAUDIO_RENDER_WILL_BEGIN,
+			OEComponent *component = (*i)->getComponent("host::host");
+			component->postNotification(HOST_AUDIO_RENDER_WILL_BEGIN,
 										&hostAudioBuffer);
-			component->postNotification(HOSTAUDIO_RENDER_DID_BEGIN,
+			component->postNotification(HOST_AUDIO_RENDER_DID_BEGIN,
 										&hostAudioBuffer);
-			component->postNotification(HOSTAUDIO_RENDER_WILL_END,
+			component->postNotification(HOST_AUDIO_RENDER_WILL_END,
 										&hostAudioBuffer);
-			component->postNotification(HOSTAUDIO_RENDER_DID_END,
+			component->postNotification(HOST_AUDIO_RENDER_DID_END,
 										&hostAudioBuffer);
 		}
 		
@@ -852,10 +852,15 @@ bool oepaSetProperty(OEEmulation *emulation, string ref, string name, string val
 	pthread_mutex_lock(&oepaProcessMutex);
 	
 	OEComponent *component = emulation->getComponent(ref);
-	if (!component)
-		return false;
-	
-	bool status = component->setProperty(name, value);
+	bool status;
+	if (component)
+		status = component->setProperty(name, value);
+	else
+	{
+		status = false;
+		cerr << "oepa: could not set property " + ref + "." + value + 
+			"(ref not found)";
+	}
 	
 	pthread_mutex_unlock(&oepaProcessMutex);
 	
@@ -867,10 +872,15 @@ bool oepaGetProperty(OEEmulation *emulation, string ref, string name, string &va
 	pthread_mutex_lock(&oepaProcessMutex);
 	
 	OEComponent *component = emulation->getComponent(ref);
-	if (!component)
-		return false;
-	
-	bool status = component->setProperty(name, value);
+	bool status;
+	if (component)
+		status = component->setProperty(name, value);
+	else
+	{
+		status = false;
+		cerr << "oepa: could not get property " + ref + "." + name + 
+			"(ref not found)";
+	}
 	
 	pthread_mutex_unlock(&oepaProcessMutex);
 	
@@ -883,10 +893,15 @@ int oepaIoctl(OEEmulation *emulation,
 	pthread_mutex_lock(&oepaProcessMutex);
 	
 	OEComponent *component = emulation->getComponent(ref);
-	if (!component)
-		return false;
-	
-	bool status = component->ioctl(message, data);
+	bool status;
+	if (component)
+		status = component->ioctl(message, data);
+	else
+	{
+		status = false;
+		cerr << "oepa: could not ioctl " + ref + 
+			"(ref not found)";
+	}
 	
 	pthread_mutex_unlock(&oepaProcessMutex);
 	

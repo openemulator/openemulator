@@ -29,12 +29,12 @@
 						   NSStringPboardType,
 						   nil];
 		
-		power = false;
+		image = nil;
 		label = nil;
 		description = nil;
 		modificationDate = nil;
-		runTime = nil;
-		image = nil;
+		powerState = nil;
+		notes = nil;
 		
 		freeInlets = [[NSMutableArray alloc] init];
 		
@@ -79,18 +79,6 @@
 	[peripherals release];
 }
 
-- (void) setDMLProperty:(NSString *) name value:(NSString *) value
-{
-	if (!emulation)
-		return;
-	
-	xmlDocPtr dml = oepaGetDML(emulation);
-	
-	xmlNodePtr rootNode = xmlDocGetRootElement(dml);
-	
-	xmlSetProp(rootNode, BAD_CAST [name UTF8String], BAD_CAST [value UTF8String]);
-}
-
 - (NSString *) getDMLProperty:(NSString *) name
 {
 	if (!emulation)
@@ -120,8 +108,8 @@
 						   string([value UTF8String]));
 }
 
-- (NSString *) getIoctlProperty:(NSString *) name
-							ref:(NSString *) ref
+- (NSString *) getComponentProperty:(NSString *) name
+								ref:(NSString *) ref
 {
 	if (!emulation)
 		return nil;
@@ -147,21 +135,6 @@
 		[theImage autorelease];
 	
 	return theImage;
-}
-
-- (void) updateRunTime
-{
-	NSString *property = [self getIoctlProperty:@"runTime" ref:@"host::audio"];
-	int timeDifference = [property intValue];
-	
-	int seconds = timeDifference % 60;
-	int minutes = (timeDifference / 60) % 60; 
-	int hours = (timeDifference / 3600) % 3600;
-	
-	NSString *value = [NSString stringWithFormat:@"%d:%02d:%02d",
-					   hours,  minutes, seconds];
-	
-	[self setRunTime:value];
 }
 
 - (NSAttributedString *) formatDeviceLabel:(NSString *) deviceLabel
@@ -199,6 +172,44 @@
 	[aString appendAttributedString:aInformativeText];
 	
 	return aString;
+}
+
+- (void) updatePowerState
+{
+	NSString *property = [self getComponentProperty:@"powerState" ref:@"host::host"];
+	int value = [property intValue];
+	
+	switch (value)
+	{
+		case HOST_POWERSTATE_ON:
+			[self setPowerState:
+			 NSLocalizedString(@"Powered on", @"Powered on")];
+			break;
+		case HOST_POWERSTATE_PAUSED:
+			[self setPowerState:
+			 NSLocalizedString(@"Paused", @"Paused")];
+			break;
+		case HOST_POWERSTATE_STANDBY:
+			[self setPowerState:
+			 NSLocalizedString(@"Standby", @"Standby")];
+			break;
+		case HOST_POWERSTATE_SLEEP:
+			[self setPowerState:
+			 NSLocalizedString(@"Suspended", @"Sleep")];
+			break;
+		case HOST_POWERSTATE_HIBERNATE:
+			[self setPowerState:
+			 NSLocalizedString(@"Hibernate", @"Hibernate")];
+			break;
+		case HOST_POWERSTATE_OFF:
+			[self setPowerState:
+			 NSLocalizedString(@"Powered off", @"Powered off")];
+			break;
+		default:
+			[self setPowerState:
+			 NSLocalizedString(@"Unknown", @"Unknown power state")];
+			break;
+	}
 }
 
 - (void) updateDevices
@@ -272,7 +283,7 @@
 						  [NSString stringWithUTF8String:
 						   o->connectionLabel.c_str()]];
 		NSAttributedString *theTitle = [self formatDeviceLabel:deviceLabel
-										withInformativeText:text];
+										   withInformativeText:text];
 		
 		NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
 							  theTitle, @"title",
@@ -311,7 +322,7 @@
 		{
 			[self setLabel:[self getDMLProperty:@"label"]];
 			[self setDescription:[self getDMLProperty:@"description"]];
-			[self updateRunTime];
+			[self updatePowerState];
 			[self setImage:[self getResourceImage:[self getDMLProperty:@"image"]]];
 			
 			[self updateDevices];
@@ -395,11 +406,6 @@
 				   ofType:nil
 					error:&error])
 		[[NSAlert alertWithError:error] runModal];
-}
-
-- (void) tick:(float) ms
-{
-	
 }
 
 - (void) addDevices:(NSString *) path
@@ -491,6 +497,140 @@
 		return [self isCopyValid];
 	
 	return YES;
+}
+
+- (NSImage *) image
+{
+	return [[image retain] autorelease];
+}
+
+- (void)setImage:(NSImage *) value
+{
+    if (image != value)
+	{
+        [image release];
+        image = [value copy];
+    }
+}
+
+- (NSString *) label
+{
+	return [[label retain] autorelease];
+}
+
+- (void) setLabel:(NSString *) value
+{
+    if (label != value)
+	{
+        [label release];
+        label = [value copy];
+    }
+}
+
+- (NSString *) description
+{
+	return [[description retain] autorelease];
+}
+
+- (void) setDescription:(NSString *) value
+{
+    if (description != value)
+	{
+        [description release];
+        description = [value copy];
+    }
+}
+
+- (NSString *) modificationDate
+{
+	return modificationDate;
+}
+
+- (void) setModificationDate:(NSString *) value
+{
+    if (modificationDate != value)
+	{
+        [modificationDate release];
+        modificationDate = [value copy];
+    }
+}
+
+- (NSString *) powerState
+{
+	return powerState;
+}
+
+- (void)setPowerState:(NSString *) value
+{
+    if (powerState != value)
+	{
+        [powerState release];
+        powerState = [value copy];
+    }
+}
+
+- (NSString *) notes
+{
+	return [[notes retain] autorelease];
+}
+
+- (void) setNotes:(NSString *) value
+{
+    if (notes != value)
+	{
+        [notes release];
+        notes = [value copy];
+    }
+}
+
+- (NSMutableArray *) freeInlets
+{
+	return freeInlets;
+}
+
+- (NSMutableArray *) expansions
+{
+	return [[expansions retain] autorelease];
+}
+
+- (void) insertObject:(id) value inExpansionsAtIndex:(NSUInteger) index
+{
+    [expansions insertObject:value atIndex:index];
+}
+
+- (void) removeObjectFromExpansionsAtIndex:(NSUInteger) index
+{
+    [expansions removeObjectAtIndex:index];
+}
+
+- (NSMutableArray *) storage
+{
+	return [[storage retain] autorelease];
+}
+
+- (void) insertObject:(id) value inStorageAtIndex:(NSUInteger) index
+{
+    [storage insertObject:value atIndex:index];
+}
+
+- (void) removeObjectFromStorageAtIndex:(NSUInteger) index
+{
+    [storage removeObjectAtIndex:index];
+}
+
+- (NSMutableArray *) peripherals
+{
+	return [[peripherals retain] autorelease];
+}
+
+- (void) insertObject:(id) value inPeripheralsAtIndex:(NSUInteger) index
+{
+    [peripherals insertObject:value atIndex:index];
+}
+
+- (void) removeObjectFromPeripheralsAtIndex:(NSUInteger) index
+{
+    [peripherals removeObjectAtIndex:index];
 }
 
 - (void) powerButtonPressedAndReleased:(id) sender
@@ -607,142 +747,6 @@
 	NSTextView *dummy = [[[NSTextView alloc] init] autorelease];
 	[dummy insertText:[self documentText]];
 	[dummy startSpeaking:self];
-}
-
-- (BOOL) power
-{
-	return power;
-}
-
-- (void) setPower:(BOOL) value
-{
-	if (power != value)
-		power = value;
-}
-
-- (NSString *) label
-{
-	return [[label retain] autorelease];
-}
-
-- (void) setLabel:(NSString *) value
-{
-    if (label != value)
-	{
-        [label release];
-        label = [value copy];
-    }
-}
-
-- (NSString *) description
-{
-	return [[description retain] autorelease];
-}
-
-- (void) setDescription:(NSString *) value
-{
-    if (description != value)
-	{
-		if (description)
-			[self updateChangeCount:NSChangeDone];
-		
-		[self setDMLProperty:@"description" value:value];
-		
-        [description release];
-        description = [value copy];
-    }
-}
-
-- (NSString *) modificationDate
-{
-	return modificationDate;
-}
-
-- (void) setModificationDate:(NSString *) value
-{
-    if (modificationDate != value)
-	{
-        [modificationDate release];
-        modificationDate = [value copy];
-    }
-}
-
-- (NSString *) runTime
-{
-	return runTime;
-}
-
-- (void)setRunTime:(NSString *) value
-{
-    if (runTime != value)
-	{
-        [runTime release];
-        runTime = [value copy];
-    }
-}
-
-- (NSImage *) image
-{
-	return [[image retain] autorelease];
-}
-
-- (void)setImage:(NSImage *) value
-{
-    if (image != value)
-	{
-        [image release];
-        image = [value copy];
-    }
-}
-
-- (NSMutableArray *) freeInlets
-{
-	return freeInlets;
-}
-
-- (NSMutableArray *) expansions
-{
-	return [[expansions retain] autorelease];
-}
-
-- (void) insertObject:(id) value inExpansionsAtIndex:(NSUInteger) index
-{
-    [expansions insertObject:value atIndex:index];
-}
-
-- (void) removeObjectFromExpansionsAtIndex:(NSUInteger) index
-{
-    [expansions removeObjectAtIndex:index];
-}
-
-- (NSMutableArray *) storage
-{
-	return [[storage retain] autorelease];
-}
-
-- (void) insertObject:(id) value inStorageAtIndex:(NSUInteger) index
-{
-    [storage insertObject:value atIndex:index];
-}
-
-- (void) removeObjectFromStorageAtIndex:(NSUInteger) index
-{
-    [storage removeObjectAtIndex:index];
-}
-
-- (NSMutableArray *) peripherals
-{
-	return [[peripherals retain] autorelease];
-}
-
-- (void) insertObject:(id) value inPeripheralsAtIndex:(NSUInteger) index
-{
-    [peripherals insertObject:value atIndex:index];
-}
-
-- (void) removeObjectFromPeripheralsAtIndex:(NSUInteger) index
-{
-    [peripherals removeObjectAtIndex:index];
 }
 
 @end

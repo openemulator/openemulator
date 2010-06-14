@@ -98,7 +98,6 @@ NSString *itemIdentifiers[] =
 
 - (void) timerDidExpire:(NSTimer *) theTimer
 {
-//	[self updateRuntime];
 //	[self updateDiskImage];
 	[self updatePlayback];
 	[self updateRecording];
@@ -131,8 +130,8 @@ NSString *itemIdentifiers[] =
 		if (![[self window] isVisible])
 			menuTitle = NSLocalizedString(@"Show Inspector",
 										  @"Title for menu item to show the Inspector "
-										  "(should be the same as the initial menu item in "
-										  "the nib).");
+										  "(should be the same as the initial menu item "
+										  "in the nib).");
 		else
 			menuTitle = NSLocalizedString(@"Hide Inspector",
 										  @"Title for menu item to hide the Inspector.");
@@ -271,6 +270,12 @@ NSString *itemIdentifiers[] =
 		return [NSString stringWithFormat:@"%3.1f GB", size / 1000000000.0];
 }
 
+- (void) updateState
+{
+	
+	
+}
+
 - (void) updatePlayback
 {
 	NSURL *url = [fDocumentController playbackURL];
@@ -284,7 +289,8 @@ NSString *itemIdentifiers[] =
 	{
 		NSString *path = [[url path] lastPathComponent];
 		NSString *timeLabel = [self formatTime:[fDocumentController playbackTime]];
-		NSString *durationLabel = [self formatTime:[fDocumentController playbackDuration]];
+		NSString *durationLabel = [self formatTime:
+								   [fDocumentController playbackDuration]];
 		[fPlaybackNameLabel setStringValue:path];
 		[fPlaybackNameLabel setToolTip:path];
 		[fPlaybackTimeLabel setStringValue:timeLabel];

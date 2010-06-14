@@ -36,9 +36,6 @@
 	[toolbar release];
 	
 //    [mImageBrowser setDraggingDestinationDelegate:self];
-	
-	// To-Do: Improve the view updating code
-	[document setPower:[document power]];
 }
 
 - (NSToolbarItem *) toolbar:(NSToolbar *) toolbar
@@ -51,55 +48,66 @@
 		return nil;
 	
 	[item autorelease];
-	if ([ident isEqualToString:@"Power"])
+	if ([ident isEqualToString:@"Power Down"])
 	{
-		[item setLabel:NSLocalizedString(@"Power",
+		[item setLabel:NSLocalizedString(@"Power Down",
 										 "Document toolbar item label")];
-		[item setPaletteLabel:NSLocalizedString(@"Power",
+		[item setPaletteLabel:NSLocalizedString(@"Power Down",
 												"Document toolbar item label")];
-		[item setToolTip:NSLocalizedString(@"Power the emulation on or off.",
+		[item setToolTip:NSLocalizedString(@"Initiate power-down.",
 										   "Document toolbar item label")];
-		[item setImage:[NSImage imageNamed:@"TBShutdown.png"]];
+		[item setImage:[NSImage imageNamed:@"TBPowerDown.png"]];
 		[item setTarget:document];
 		[item setAction:@selector(powerButtonPressedAndReleased:)];
 	}
-	else if ([ident isEqualToString:@"Reset"])
+	else if ([ident isEqualToString:@"Sleep"])
 	{
-		[item setLabel:NSLocalizedString(@"Reset",
+		[item setLabel:NSLocalizedString(@"Sleep",
 										 "Document toolbar item label")];
-		[item setPaletteLabel:NSLocalizedString(@"Reset",
+		[item setPaletteLabel:NSLocalizedString(@"Sleep",
 												"Document toolbar item label")];
-		[item setToolTip:NSLocalizedString(@"Reset the emulation.",
-										   "Document toolbar item label")];
-		[item setImage:[NSImage imageNamed:@"TBRestart.png"]];
-		[item setTarget:document];
-		[item setAction:@selector(resetButtonPressedAndReleased:)];
-	}
-	else if ([ident isEqualToString:@"Pause"])
-	{
-		[item setLabel:NSLocalizedString(@"Pause",
-										 "Document toolbar item label")];
-		[item setPaletteLabel:NSLocalizedString(@"Pause",
-												"Document toolbar item label")];
-		[item setPaletteLabel:NSLocalizedString(@"Pause",
-												"Document toolbar item label")];
-		[item setToolTip:NSLocalizedString(@"Pause or continue the emulation.",
+		[item setToolTip:NSLocalizedString(@"Initiate low power mode.",
 										   "Document toolbar item label")];
 		[item setImage:[NSImage imageNamed:@"TBSleep.png"]];
 		[item setTarget:document];
+		[item setAction:@selector(powerButtonPressedAndReleased:)];
+	}
+	else if ([ident isEqualToString:@"Wake Up"])
+	{
+		[item setLabel:NSLocalizedString(@"Wake Up",
+										 "Document toolbar item label")];
+		[item setPaletteLabel:NSLocalizedString(@"Wake Up",
+												"Document toolbar item label")];
+		[item setToolTip:NSLocalizedString(@"Initiate full power state.",
+										   "Document toolbar item label")];
+		[item setImage:[NSImage imageNamed:@"TBWakeUp.png"]];
+		[item setTarget:document];
+		[item setAction:@selector(resetButtonPressedAndReleased:)];
+	}
+	else if ([ident isEqualToString:@"Restart"])
+	{
+		[item setLabel:NSLocalizedString(@"Restart",
+										 "Document toolbar item label")];
+		[item setPaletteLabel:NSLocalizedString(@"Restart",
+												"Document toolbar item label")];
+		[item setToolTip:NSLocalizedString(@"Restart the system at the most "
+										   " primitive level.",
+										   "Document toolbar item label")];
+		[item setImage:[NSImage imageNamed:@"TBRestart.png"]];
+		[item setTarget:document];
 		[item setAction:@selector(pauseButtonPressedAndReleased:)];
 	}
-	else if ([ident isEqualToString:@"Interrupt"])
+	else if ([ident isEqualToString:@"Debugger Break"])
 	{
-		[item setLabel:NSLocalizedString(@"Interrupt",
+		[item setLabel:NSLocalizedString(@"Debugger Break",
 										 "Document toolbar item label")];
-		[item setPaletteLabel:NSLocalizedString(@"Interrupt",
+		[item setPaletteLabel:NSLocalizedString(@"Debugger Break",
 												"Document toolbar item label")];
-		[item setToolTip:NSLocalizedString(@"Interrupt the emulation.",
+		[item setToolTip:NSLocalizedString(@"Break into the operating system debugger.",
 										   "Document toolbar item label")];
-		[item setImage:[NSImage imageNamed:@"TBInterrupt.png"]];
+		[item setImage:[NSImage imageNamed:@"TBDebuggerBreak.png"]];
 		[item setTarget:document];
-		[item setAction:@selector(interruptButtonPressedAndReleased:)];
+		[item setAction:@selector(pauseButtonPressedAndReleased:)];
 	}
 	else if ([ident isEqualToString:@"Info"])
 	{
@@ -120,10 +128,9 @@
 - (NSArray *) toolbarDefaultItemIdentifiers:(NSToolbar *) toolbar
 {
 	return [NSArray arrayWithObjects:
-			@"Power",
-			NSToolbarSpaceItemIdentifier,
-			@"Reset",
-			@"Pause",
+			@"Power Down",
+			@"Sleep",
+			@"Wake Up",
 			NSToolbarFlexibleSpaceItemIdentifier,
 			@"Info",
 			nil];
@@ -132,10 +139,11 @@
 - (NSArray *) toolbarAllowedItemIdentifiers:(NSToolbar *) toolbar
 {
 	return [NSArray arrayWithObjects:
-			@"Power",
-			@"Reset",
-			@"Pause",
-			@"Interrupt",
+			@"Power Down",
+			@"Sleep",
+			@"Wake Up",
+			@"Restart",
+			@"Debugger Break",
 			@"Info",
 			NSToolbarSpaceItemIdentifier,
 			NSToolbarFlexibleSpaceItemIdentifier,

@@ -24,7 +24,7 @@ public:
 	void write(int address, int value);
 	
 private:
-	OEComponent *hostVideo;
+	OEComponent *host;
 	OEComponent *system;
 	OEComponent *pia;
 	OEComponent *monitor;

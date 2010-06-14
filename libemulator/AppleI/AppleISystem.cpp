@@ -11,7 +11,7 @@
 #include "math.h"
 
 #include "AppleISystem.h"
-#include "HostAudio.h"
+#include "Host.h"
 
 AppleISystem::AppleISystem()
 {
@@ -40,7 +40,7 @@ bool AppleISystem::getProperty(const string &name, string &value)
 
 bool AppleISystem::connect(const string &name, OEComponent *component)
 {
-	if (name == "hostAudio")
+	if (name == "host")
 		;
 		// component->addObserver(this);
 	else if (name == "cpu")
