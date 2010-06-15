@@ -11,8 +11,8 @@
 #import "DocumentWindow.h"
 #import "DocumentWindowController.h"
 
-#define DEFAULT_FRAME_WIDTH		640
-#define DEFAULT_FRAME_HEIGHT	480
+#define DEFAULT_FRAME_WIDTH		768
+#define DEFAULT_FRAME_HEIGHT	576
 
 @implementation DocumentWindow
 

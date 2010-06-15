@@ -5,7 +5,7 @@
     <component name="host" class="Host">
         <property name="powerState" value="0" />
         <property name="videoWindow" value="-1 -1 768 576" />
-        <property name="notes" />
+        <property name="notes" value="" />
     </component>
 </device>
 
