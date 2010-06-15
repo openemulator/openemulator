@@ -11,7 +11,7 @@
 		000671C5113F318000781A92 /* MemoryMap16Bit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000671C1113F318000781A92 /* MemoryMap16Bit.cpp */; };
 		0011696510E7CC59007A5EFB /* IPStorageSel.png in Resources */ = {isa = PBXBuildFile; fileRef = 0011696410E7CC4E007A5EFB /* IPStorageSel.png */; };
 		0011696610E7CC59007A5EFB /* IPStorage.png in Resources */ = {isa = PBXBuildFile; fileRef = 0011696310E7CC4E007A5EFB /* IPStorage.png */; };
-		00123BC91069B8D600FB95A1 /* libemulator.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 006EECA40FCA5C31003D2C8D /* libemulator.a */; };
+		00123BC91069B8D600FB95A1 /* libemulation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 006EECA40FCA5C31003D2C8D /* libemulation.a */; };
 		00123BCC1069B8F200FB95A1 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 00E2A84D1053290200910B53 /* libxml2.dylib */; };
 		00188DA8115DC59700FFACC0 /* MOS6502.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00188D95115DC58800FFACC0 /* MOS6502.cpp */; };
 		001D66B711B7F5C700B88406 /* oegl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00E0AFCC1132CA8B004DB96D /* oegl.cpp */; };
@@ -21,7 +21,7 @@
 		001F915911925B56005383B3 /* libsndfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 001F915711925B56005383B3 /* libsndfile.a */; };
 		001F915B11925B74005383B3 /* libsamplerate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 001F915A11925B74005383B3 /* libsamplerate.a */; };
 		001F915C11925B74005383B3 /* libsamplerate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 001F915A11925B74005383B3 /* libsamplerate.a */; };
-		001F915F11925BB2005383B3 /* libemulator.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 006EECA40FCA5C31003D2C8D /* libemulator.a */; };
+		001F915F11925BB2005383B3 /* libemulation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 006EECA40FCA5C31003D2C8D /* libemulation.a */; };
 		001F916011925BB4005383B3 /* libportaudio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C5805D109A3DDF00B00626 /* libportaudio.a */; };
 		001F916111925BB5005383B3 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 00E2A84D1053290200910B53 /* libxml2.dylib */; };
 		001F916211925BB6005383B3 /* libz.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C58072109A3E9D00B00626 /* libz.a */; };
@@ -249,7 +249,7 @@
 		005E5F761086B16C00E573D4 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Inspector.xib; sourceTree = "<group>"; };
 		00679D05100817F700B38748 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/DeviceChooser.xib; sourceTree = "<group>"; };
 		00679D07100817F700B38748 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/TemplateChooser.xib; sourceTree = "<group>"; };
-		006EECA40FCA5C31003D2C8D /* libemulator.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libemulator.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		006EECA40FCA5C31003D2C8D /* libemulation.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libemulation.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		006EEE8F0FCA781C003D2C8D /* DiskImage.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = DiskImage.icns; sourceTree = "<group>"; };
 		0071E3B810803F7300F2D54F /* ChooserItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChooserItem.h; sourceTree = "<group>"; };
 		0071E3B910803F7300F2D54F /* ChooserItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChooserItem.m; sourceTree = "<group>"; };
@@ -379,7 +379,7 @@
 				009B4F2711639D7700E9A6F9 /* GLUT.framework in Frameworks */,
 				001F915911925B56005383B3 /* libsndfile.a in Frameworks */,
 				001F915C11925B74005383B3 /* libsamplerate.a in Frameworks */,
-				001F915F11925BB2005383B3 /* libemulator.a in Frameworks */,
+				001F915F11925BB2005383B3 /* libemulation.a in Frameworks */,
 				001F916011925BB4005383B3 /* libportaudio.a in Frameworks */,
 				001F916111925BB5005383B3 /* libxml2.dylib in Frameworks */,
 				001F916211925BB6005383B3 /* libz.a in Frameworks */,
@@ -407,7 +407,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00123BC91069B8D600FB95A1 /* libemulator.a in Frameworks */,
+				00123BC91069B8D600FB95A1 /* libemulation.a in Frameworks */,
 				00123BCC1069B8F200FB95A1 /* libxml2.dylib in Frameworks */,
 				001F56F90FD1E8E500EA246A /* Sparkle.framework in Frameworks */,
 				00C5805F109A3DDF00B00626 /* libportaudio.a in Frameworks */,
@@ -513,7 +513,7 @@
 			path = cli;
 			sourceTree = "<group>";
 		};
-		006EEC9A0FCA5BEA003D2C8D /* libemulator */ = {
+		006EEC9A0FCA5BEA003D2C8D /* libemulation */ = {
 			isa = PBXGroup;
 			children = (
 				00910104113AAE60005EBB62 /* AppleI */,
@@ -533,7 +533,7 @@
 				00B7037D1135AC91005E4B65 /* OERef.cpp */,
 				00B703721135AC91005E4B65 /* OERef.h */,
 			);
-			path = libemulator;
+			path = libemulation;
 			sourceTree = "<group>";
 		};
 		00910104113AAE60005EBB62 /* AppleI */ = {
@@ -620,7 +620,7 @@
 			children = (
 				000A78A50FBA464600A0F12E /* OpenEmulator */,
 				0055C1EC1123AC0500D4CFFC /* oesdl */,
-				006EEC9A0FCA5BEA003D2C8D /* libemulator */,
+				006EEC9A0FCA5BEA003D2C8D /* libemulation */,
 				00FF25C4115C365800C82CA0 /* libcomposite */,
 				2A37F4C3FDCFA73011CA2CEA /* Frameworks */,
 				19C28FB0FE9D524F11CA2CBB /* Products */,
@@ -719,7 +719,7 @@
 				009B4F2611639D7700E9A6F9 /* GLUT.framework */,
 				0054E6301131BEE7006D32D9 /* Carbon.framework */,
 				0054E4A01131BE7A006D32D9 /* Cocoa.framework */,
-				006EECA40FCA5C31003D2C8D /* libemulator.a */,
+				006EECA40FCA5C31003D2C8D /* libemulation.a */,
 				00C5805D109A3DDF00B00626 /* libportaudio.a */,
 				00E2A84D1053290200910B53 /* libxml2.dylib */,
 				00C5805E109A3DDF00B00626 /* libzip.a */,
@@ -767,9 +767,9 @@
 			productReference = 0054E2E41131B9EF006D32D9 /* oesdl */;
 			productType = "com.apple.product-type.tool";
 		};
-		006EECA30FCA5C31003D2C8D /* emulator */ = {
+		006EECA30FCA5C31003D2C8D /* emulation */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 006EECAB0FCA5C4F003D2C8D /* Build configuration list for PBXNativeTarget "emulator" */;
+			buildConfigurationList = 006EECAB0FCA5C4F003D2C8D /* Build configuration list for PBXNativeTarget "emulation" */;
 			buildPhases = (
 				006EECA00FCA5C31003D2C8D /* Headers */,
 				006EECA10FCA5C31003D2C8D /* Sources */,
@@ -780,9 +780,9 @@
 			dependencies = (
 				009B4EFC11639CF600E9A6F9 /* PBXTargetDependency */,
 			);
-			name = emulator;
+			name = emulation;
 			productName = emulator;
-			productReference = 006EECA40FCA5C31003D2C8D /* libemulator.a */;
+			productReference = 006EECA40FCA5C31003D2C8D /* libemulation.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 		00FF25F1115C385000C82CA0 /* composite */ = {
@@ -836,7 +836,7 @@
 			targets = (
 				8D15AC270486D014006FF6A4 /* OpenEmulator */,
 				0054E2E31131B9EF006D32D9 /* oesdl */,
-				006EECA30FCA5C31003D2C8D /* emulator */,
+				006EECA30FCA5C31003D2C8D /* emulation */,
 				00FF25F1115C385000C82CA0 /* composite */,
 			);
 		};
@@ -992,7 +992,7 @@
 /* Begin PBXTargetDependency section */
 		006EECE60FCA6097003D2C8D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 006EECA30FCA5C31003D2C8D /* emulator */;
+			target = 006EECA30FCA5C31003D2C8D /* emulation */;
 			targetProxy = 006EECE50FCA6097003D2C8D /* PBXContainerItemProxy */;
 		};
 		009B4EFC11639CF600E9A6F9 /* PBXTargetDependency */ = {
@@ -1002,7 +1002,7 @@
 		};
 		00E0B0601132DBA4004DB96D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 006EECA30FCA5C31003D2C8D /* emulator */;
+			target = 006EECA30FCA5C31003D2C8D /* emulation */;
 			targetProxy = 00E0B05F1132DBA4004DB96D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -1194,7 +1194,7 @@
 					"\"$(SRCROOT)/build/Debug\"",
 				);
 				PREBINDING = NO;
-				PRODUCT_NAME = emulator;
+				PRODUCT_NAME = emulation;
 				SDKROOT = macosx10.5;
 			};
 			name = Debug;
@@ -1377,7 +1377,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		006EECAB0FCA5C4F003D2C8D /* Build configuration list for PBXNativeTarget "emulator" */ = {
+		006EECAB0FCA5C4F003D2C8D /* Build configuration list for PBXNativeTarget "emulation" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				006EECA50FCA5C32003D2C8D /* Debug */,
