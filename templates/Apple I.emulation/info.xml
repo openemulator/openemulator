@@ -44,14 +44,14 @@
         <connection name="ram2" ref="ram2" />
     </component>
     <component name="ram1" class="RAM">
-        <data name="image" src="${DEVICE_NAME}.bin" />
+        <data name="image" src="${REF}.bin" />
         <property name="map" value="0x0000-0x0fff" />
         <property name="size" value="0x1000" />
         <property name="resetNotification" value="0" />
         <connection name="reset" ref="system" />
     </component>
     <component name="ram2" class="RAM">
-        <data name="image" src="${DEVICE_NAME}.bin" />
+        <data name="image" src="${REF}.bin" />
         <property name="map" value="0xe000-0xefff" />
         <property name="size" value="0x1000" />
         <property name="resetNotification" value="0" />

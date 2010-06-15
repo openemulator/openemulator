@@ -291,10 +291,10 @@ bool OEEmulation::readFile(string path, vector<char> &data)
 
 string OEEmulation::buildSourcePath(string src, OERef deviceRef)
 {
-	string deviceName = deviceRef.getStringRef();
-	int index = src.find(OE_DEVICENAME_SUBST_STRING);
+	string deviceName = deviceRef.getDevice() + "_" + deviceRef.getComponent();
+	int index = src.find(OE_REF_SUBST_STRING);
 	if (index != string::npos)
-		src.replace(index, sizeof(OE_DEVICENAME_SUBST_STRING) - 1, deviceName);
+		src.replace(index, sizeof(OE_REF_SUBST_STRING) - 1, deviceName);
 	
 	return src;
 }
@@ -493,20 +493,19 @@ bool OEEmulation::constructComponent(xmlNodePtr node, OERef deviceRef)
 {
 	string componentClass = getXMLProperty(node, "class");
 	string componentName = getXMLProperty(node, "name");
-	
-	string stringRef = deviceRef.getStringRef(componentName);
+	string componentRef = deviceRef.getStringRef(componentName);
 	
 	OEComponent *component = OEComponentFactory::build(string(componentClass));
 	if (!component)
 	{
-		OELog("could not construct \"" + stringRef + "\" (" +
+		OELog("could not construct \"" + componentRef + "\" (" +
 			  componentClass + ")");
 		return false;
 	}
 	
-	if (components.count(stringRef))
-		components.erase(stringRef);
-	components[stringRef] = component;
+	if (components.count(componentRef))
+		components.erase(componentRef);
+	components[componentRef] = component;
 	
 	return true;
 }
@@ -514,16 +513,16 @@ bool OEEmulation::constructComponent(xmlNodePtr node, OERef deviceRef)
 bool OEEmulation::initComponent(xmlNodePtr node, OERef deviceRef)
 {
 	string componentName = getXMLProperty(node, "name");
+	string componentRef = deviceRef.getStringRef(componentName);
 	
-	string stringRef = deviceRef.getStringRef(componentName);
-	if (!components.count(stringRef))
+	if (!components.count(componentRef))
 	{
-		OELog("could not find " + stringRef);
+		OELog("could not find " + componentRef);
 		
 		return false;
 	}
-	OEComponent *component = components[stringRef];
 	
+	OEComponent *component = components[componentRef];
 	for(xmlNodePtr childNode = node->children;
 		childNode;
 		childNode = childNode->next)
@@ -532,16 +531,16 @@ bool OEEmulation::initComponent(xmlNodePtr node, OERef deviceRef)
 		{
 			if (!setProperty(childNode, component))
 			{
-				OELog("could not set property " + stringRef + "." +
+				OELog("could not set property " + componentRef + "." +
 					  getXMLProperty(childNode, "name"));
 				
 				return false;
 			}
 		}
 		else if (!xmlStrcmp(childNode->name, BAD_CAST "data"))
-			if (!setData(childNode, component, deviceRef))
+			if (!setData(childNode, component, componentRef))
 			{
-				OELog("could not set data " + stringRef + "." +
+				OELog("could not set data " + componentRef + "." +
 					  getXMLProperty(childNode, "name"));
 				
 				return false;
@@ -550,7 +549,7 @@ bool OEEmulation::initComponent(xmlNodePtr node, OERef deviceRef)
 		{
 			if (!setResource(childNode, component))
 			{
-				OELog("could not set resource " + stringRef + "." +
+				OELog("could not set resource " + componentRef + "." +
 					  getXMLProperty(childNode, "name"));
 				
 				return false;
@@ -564,25 +563,25 @@ bool OEEmulation::initComponent(xmlNodePtr node, OERef deviceRef)
 bool OEEmulation::connectComponent(xmlNodePtr node, OERef deviceRef)
 {
 	string componentName = getXMLProperty(node, "name");
+	string componentRef = deviceRef.getStringRef(componentName);
 	
-	string stringRef = deviceRef.getStringRef(componentName);
-	if (!components.count(stringRef))
+	if (!components.count(componentRef))
 	{
-		OELog("could not find " + stringRef);
+		OELog("could not find " + componentRef);
 		
 		return false;
 	}
-	OEComponent *component = components[stringRef];
 	
+	OEComponent *component = components[componentRef];
 	for(xmlNodePtr childNode = node->children;
 		childNode;
 		childNode = childNode->next)
 	{
 		if (!xmlStrcmp(childNode->name, BAD_CAST "connection"))
 		{
-			if (!setConnection(childNode, component, deviceRef))
+			if (!setConnection(childNode, component, componentRef))
 			{
-				OELog("could not connect " + stringRef + "." +
+				OELog("could not connect " + componentRef + "." +
 					  getXMLProperty(childNode, "name"));
 				
 				return false;
@@ -596,16 +595,16 @@ bool OEEmulation::connectComponent(xmlNodePtr node, OERef deviceRef)
 bool OEEmulation::updateComponent(xmlNodePtr node, OERef deviceRef)
 {
 	string componentName = getXMLProperty(node, "name");
+	string componentRef = deviceRef.getStringRef(componentName);
 	
-	string stringRef = deviceRef.getStringRef(componentName);
-	if (!components.count(stringRef))
+	if (!components.count(componentRef))
 	{
-		OELog("could not find " + stringRef);
+		OELog("could not find " + componentRef);
 		
 		return false;
 	}
-	OEComponent *component = components[stringRef];
 	
+	OEComponent *component = components[componentRef];
 	for(xmlNodePtr childNode = node->children;
 		childNode;
 		childNode = childNode->next)
@@ -614,7 +613,7 @@ bool OEEmulation::updateComponent(xmlNodePtr node, OERef deviceRef)
 		{
 			if (!getProperty(childNode, component))
 			{
-				OELog("could not get property " + stringRef + "." +
+				OELog("could not get property " + componentRef + "." +
 					  getXMLProperty(childNode, "name"));
 				
 				return false;
@@ -622,9 +621,9 @@ bool OEEmulation::updateComponent(xmlNodePtr node, OERef deviceRef)
 		}
 		else if (!xmlStrcmp(childNode->name, BAD_CAST "data"))
 		{
-			if (!getData(childNode, component, deviceRef))
+			if (!getData(childNode, component, componentRef))
 			{
-				OELog("could not get data " + stringRef + "." +
+				OELog("could not get data " + componentRef + "." +
 					  getXMLProperty(childNode, "name"));
 				
 				return false;
@@ -638,15 +637,15 @@ bool OEEmulation::updateComponent(xmlNodePtr node, OERef deviceRef)
 void OEEmulation::destroyComponent(xmlNodePtr node, OERef deviceRef)
 {
 	string componentName = getXMLProperty(node, "name");
+	string componentRef = deviceRef.getStringRef(componentName);
 	
-	string stringRef = deviceRef.getStringRef(componentName);
-	if (!components.count(stringRef))
+	if (!components.count(componentRef))
 	{
-		OELog("could not find " + stringRef);
+		OELog("could not find " + componentRef);
 		
 		return;
 	}	
-	components.erase(stringRef);
+	components.erase(componentRef);
 }
 
 bool OEEmulation::setProperty(xmlNodePtr node, OEComponent *component)
@@ -668,10 +667,10 @@ bool OEEmulation::getProperty(xmlNodePtr node, OEComponent *component)
 	return true;
 }
 
-bool OEEmulation::setData(xmlNodePtr node, OEComponent *component, OERef deviceRef)
+bool OEEmulation::setData(xmlNodePtr node, OEComponent *component, OERef componentRef)
 {
 	string name = getXMLProperty(node, "name");
-	string src = buildSourcePath(getXMLProperty(node, "src"), deviceRef);
+	string src = buildSourcePath(getXMLProperty(node, "src"), componentRef);
 	
 	OEData data;
 	if (!package)
@@ -683,10 +682,10 @@ bool OEEmulation::setData(xmlNodePtr node, OEComponent *component, OERef deviceR
 	return component->setData(name, data);
 }
 
-bool OEEmulation::getData(xmlNodePtr node, OEComponent *component, OERef deviceRef)
+bool OEEmulation::getData(xmlNodePtr node, OEComponent *component, OERef componentRef)
 {
 	string name = getXMLProperty(node, "name");
-	string src = buildSourcePath(getXMLProperty(node, "src"), deviceRef);
+	string src = buildSourcePath(getXMLProperty(node, "src"), componentRef);
 	
 	OEData data;
 	
@@ -712,20 +711,19 @@ bool OEEmulation::setResource(xmlNodePtr node, OEComponent *component)
 	return component->setResource(name, data);
 }
 
-bool OEEmulation::setConnection(xmlNodePtr node, OEComponent *component, OERef deviceRef)
+bool OEEmulation::setConnection(xmlNodePtr node, OEComponent *component, OERef componentRef)
 {
 	string name = getXMLProperty(node, "name");
 	string ref = getXMLProperty(node, "ref");
 	
 	OEComponent *connection = NULL;
-	
 	if (ref.size())
 	{
-		string stringRef = deviceRef.getStringRef(ref);
-		if (!components.count(stringRef))
+		string connectionRef = componentRef.getStringRef(ref);
+		if (!components.count(connectionRef))
 			return false;
 		
-		connection = components[stringRef];
+		connection = components[connectionRef];
 	}
 	
 	return component->connect(name, connection);

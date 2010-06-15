@@ -21,7 +21,7 @@
 #include "OEComponent.h"
 #include "OEPackage.h"
 
-#define OE_DEVICENAME_SUBST_STRING "${DEVICE_NAME}"
+#define OE_REF_SUBST_STRING "${REF}"
 
 using namespace std;
 
