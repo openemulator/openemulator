@@ -98,7 +98,6 @@ NSString *itemIdentifiers[] =
 
 - (void) timerDidExpire:(NSTimer *) theTimer
 {
-//	[self updateDiskImage];
 	[self updatePlayback];
 	[self updateRecording];
 }

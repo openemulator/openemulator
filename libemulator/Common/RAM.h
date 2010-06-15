@@ -16,7 +16,7 @@ public:
 	RAM();
 	
 	bool setProperty(const string &name, const string &value);
-	bool setData(const string &name, OEData &data);
+	bool setData(const string &name, const OEData &data);
 	bool getData(const string &name, OEData &data);
 	bool connect(const string &name, OEComponent *component);
 	

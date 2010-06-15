@@ -40,6 +40,8 @@
 		expansions = [[NSMutableArray alloc] init];
 		storage = [[NSMutableArray alloc] init];
 		peripherals = [[NSMutableArray alloc] init];
+		
+		[self setFileModificationDate:[NSDate date]];
 	}
 	
 	return self;
@@ -198,7 +200,7 @@
 			break;
 		case HOST_POWERSTATE_HIBERNATE:
 			[self setPowerState:
-			 NSLocalizedString(@"Hibernate", @"Hibernate")];
+			 NSLocalizedString(@"Hibernated", @"Hibernated")];
 			break;
 		case HOST_POWERSTATE_OFF:
 			[self setPowerState:
@@ -347,6 +349,10 @@
 								 UTF8String];
 	if (emulation)
 	{
+		[self setComponentProperty:@"notes"
+							   ref:@"host::host"
+							 value:[self notes]];
+		
 		if (oepaSave(emulation, string(emulationPath)))
 			return YES;
 	}

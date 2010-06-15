@@ -65,7 +65,9 @@ bool oepaRecording = false;
 SNDFILE *oepaRecordingFile;
 long long oepaRecordingFrameNum = 0;
 
-// Buffers
+//
+// Audio buffers
+//
 int oepaGetBufferInputSize()
 {
 	int stateNum = 2 * oepaBufferNum;
@@ -874,7 +876,7 @@ bool oepaGetProperty(OEEmulation *emulation, string ref, string name, string &va
 	OEComponent *component = emulation->getComponent(ref);
 	bool status;
 	if (component)
-		status = component->setProperty(name, value);
+		status = component->getProperty(name, value);
 	else
 	{
 		status = false;

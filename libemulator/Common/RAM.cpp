@@ -45,7 +45,7 @@ bool RAM::setProperty(const string &name, const string &value)
 	return true;
 }
 
-bool RAM::setData(const string &name, OEData &data)
+bool RAM::setData(const string &name, const OEData &data)
 {
 	if (name == "image")
 	{
