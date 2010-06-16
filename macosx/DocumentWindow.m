@@ -91,6 +91,14 @@
 		
 		return YES;
 	}
+	else if ([item action] == @selector(setHalfSize:))
+		return !fullscreen;
+	else if ([item action] == @selector(setActualSize:))
+		return !fullscreen;
+	else if ([item action] == @selector(setDoubleSize:))
+		return !fullscreen;
+	else if ([item action] == @selector(fitToScreen:))
+		return !fullscreen;
 	else if ([item action] == @selector(toggleToolbarShown:))
 		return !fullscreen;
 	else if ([item action] == @selector(runToolbarCustomizationPalette:))
