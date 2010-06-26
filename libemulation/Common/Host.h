@@ -10,20 +10,6 @@
 
 #include "OEComponent.h"
 
-// Messages
-enum
-{
-	HOST_ADD_SCREEN,
-	HOST_REMOVE_SCREEN,
-	HOST_UPDATE_VIDEO,
-	
-	HOST_SET_MOUSE_CAPTURE,
-	HOST_POST_HID_EVENT,
-	
-	HOST_OPEN_DEVICE,
-	HOST_CLOSE_DEVICE,
-};
-
 // Notifications
 enum
 {
@@ -34,34 +20,16 @@ enum
 	HOST_AUDIO_RENDER_WILL_END,
 	HOST_AUDIO_RENDER_DID_END,
 	
+	HOST_VIDEO_DID_UPDATE,
+	
 	HOST_HID_SYSTEM_EVENT,
 	HOST_HID_KEYBOARD_EVENT,
+	POST_HID_KEYBOARD_LED_EVENT,
 	HOST_HID_UNICODEKEYBOARD_EVENT,
 	HOST_HID_POINTER_EVENT,
 	HOST_HID_MOUSE_EVENT,
 	HOST_HID_JOYSTICK_EVENT,
 	HOST_HID_TABLET_EVENT,
-	
-	HOST_PDF_RENDER_EVENT,
-};
-
-// Devices
-enum
-{
-	HOST_POWERSTATE,
-	HOST_VIDEO,
-	HOST_HID,
-	HOST_SERIALPORT1,
-	HOST_SERIALPORT2,
-	HOST_SERIALPORT3,
-	HOST_SERIALPORT4,
-	HOST_PARALLELPORT1,
-	HOST_PARALLELPORT2,
-	HOST_MIDI,
-	HOST_ETHERNET1,
-	HOST_ETHERNET2,
-	HOST_USB,
-	HOST_CAMERA,
 };
 
 // Power States
@@ -452,8 +420,34 @@ enum
 	HOST_HID_J4_BUTTON12,
 };
 
+// Messages
+enum
+{
+	HOST_REGISTER_HOST,
+	
+	HOST_ADD_SCREEN,
+	HOST_REMOVE_SCREEN,
+	HOST_UPDATE_VIDEO,
+};
+
+// Devices - API to be determined
+enum
+{
+	HOST_SERIALPORT1,
+	HOST_SERIALPORT2,
+	HOST_SERIALPORT3,
+	HOST_SERIALPORT4,
+	HOST_PARALLELPORT1,
+	HOST_PARALLELPORT2,
+	HOST_MIDI,
+	HOST_ETHERNET1,
+	HOST_ETHERNET2,
+	HOST_USB,
+	HOST_CAMERA,
+};
+
 // Data types
-typedef void (*HostCallback)(int message, char *data);
+typedef void (*HostObserver)(int message, void *data);
 
 typedef struct
 {
@@ -487,13 +481,18 @@ public:
 	bool setProperty(const string &name, const string &value);
 	bool getProperty(const string &name, string &value);
 	
+	void notify(int notification, OEComponent *component, void *data);
+	
 	int ioctl(int message, void *data);
 	
 private:
+	HostObserver hostObserver;
+	
 	string notes;
 	int powerState;
-	int hidLEDState;
-	
+	bool hidMouseCapture;
 	string videoWindow;
+	
 	HostVideoFrames videoFrames;
+	int hidLEDState;
 };

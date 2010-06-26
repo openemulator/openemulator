@@ -68,12 +68,12 @@ bool MemoryMap8Bit::getMemoryMap(string &range)
 	return true;
 }
 
-OEUInt8 MemoryMap8Bit::read(int address)
+OEUInt8 MemoryMap8Bit::read(OEInt32 address)
 {
 	return readMap[address & 0xff]->read(address);
 }
 
-void MemoryMap8Bit::write(int address, OEUInt8 value)
+void MemoryMap8Bit::write(OEInt32 address, OEUInt8 value)
 {
 	writeMap[address & 0xff]->write(address, value);
 }

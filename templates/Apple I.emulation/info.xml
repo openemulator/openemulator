@@ -3,9 +3,10 @@
 <dml version="1.0" label="Apple I" image="Apple I.png" description="" group="Apple I" notes="" window="-1 -1 768 576">
 <device name="host">
     <component name="host" class="Host">
-        <property name="powerState" value="0" />
-        <property name="videoWindow" value="-1 -1 768 576" />
         <property name="notes" value="" />
+        <property name="powerState" value="0" />
+        <property name="hidMouseCapture" value="1" />
+        <property name="videoWindow" value="-1 -1 768 576" />
     </component>
 </device>
 

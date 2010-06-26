@@ -105,42 +105,42 @@ bool OEComponent::getMemoryMap(string &value)
 
 int OEComponent::ioctl(int command, void *data)
 {
-	return 0;
+	return false;
 }
 
-OEUInt8 OEComponent::read(int address)
+OEUInt8 OEComponent::read(OEUInt32 address)
 {
 	return 0;
 }
 
-void OEComponent::write(int address, OEUInt8 value)
+void OEComponent::write(OEUInt32 address, OEUInt8 value)
 {
 }
 
-OEUInt16 OEComponent::read16(int address)
-{
-	return 0;
-}
-
-void OEComponent::write16(int address, OEUInt16 value)
-{
-}
-
-OEUInt32 OEComponent::read32(int address)
+OEUInt16 OEComponent::readw(OEUInt32 address)
 {
 	return 0;
 }
 
-void OEComponent::write32(int address, OEUInt32 value)
+void OEComponent::writew(OEUInt32 address, OEUInt16 value)
 {
 }
 
-bool OEComponent::read(int address, OEData &value)
+OEUInt32 OEComponent::readd(OEUInt32 address)
+{
+	return 0;
+}
+
+void OEComponent::writed(OEUInt32 address, OEUInt32 value)
+{
+}
+
+bool OEComponent::read(OEUInt32 address, OEData &value)
 {
 	return false;
 }
 
-bool OEComponent::write(int address, OEData &value)
+bool OEComponent::write(OEUInt32 address, OEData &value)
 {
 	return false;
 }

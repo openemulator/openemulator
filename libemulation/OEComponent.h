@@ -86,14 +86,14 @@ public:
 	
 	virtual int ioctl(int message, void *data);
 	
-	virtual OEUInt8 read(int address);
-	virtual void write(int address, OEUInt8 value);
-	virtual OEUInt16 read16(int address);
-	virtual void write16(int address, OEUInt16 value);
-	virtual OEUInt32 read32(int address);
-	virtual void write32(int address, OEUInt32 value);
-	virtual bool read(int address, OEData &value);
-	virtual bool write(int address, OEData &value);
+	virtual OEUInt8 read(OEUInt32 address);
+	virtual void write(OEUInt32 address, OEUInt8 value);
+	virtual OEUInt16 readw(OEUInt32 address);
+	virtual void writew(OEUInt32 address, OEUInt16 value);
+	virtual OEUInt32 readd(OEUInt32 address);
+	virtual void writed(OEUInt32 address, OEUInt32 value);
+	virtual bool read(OEUInt32 address, OEData &value);
+	virtual bool write(OEUInt32 address, OEData &value);
 	
 protected:
 	OEObserverMap observerMap;

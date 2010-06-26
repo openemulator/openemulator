@@ -21,8 +21,8 @@ public:
 	bool setMemoryMap(OEComponent *component, const string &value);
 	bool getMemoryMap(string &value);
 	
-	OEUInt8 read(int address);
-	void write(int address, OEUInt8 value);
+	OEUInt8 read(OEInt32 address);
+	void write(OEInt32 address, OEUInt8 value);
 	
 private:
 	string mappedRange;
