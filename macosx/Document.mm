@@ -40,8 +40,6 @@
 		expansions = [[NSMutableArray alloc] init];
 		storage = [[NSMutableArray alloc] init];
 		peripherals = [[NSMutableArray alloc] init];
-		
-		[self setFileModificationDate:[NSDate date]];
 	}
 	
 	return self;
