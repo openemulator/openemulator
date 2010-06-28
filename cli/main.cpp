@@ -13,8 +13,6 @@
 
 #include <sstream>
 
-#include <OpenGL/OpenGL.h>
-
 #include "SDL/SDL.h"
 #include "SDL/SDL_opengl.h"
 
@@ -215,9 +213,6 @@ int sdlOpen(int width, int height, int fullscreen)
 	
 	for (int i = 0; i < sizeof(sdlKeyMap) / sizeof(SDLKeyMapEntry); i++)
 		sdlInverseKeyMap[sdlKeyMap[i].sym] = sdlKeyMap[i].usbUsageId;
-	
-	const GLint VBL = 1;
-	CGLSetParameter(CGLGetCurrentContext(), kCGLCPSwapInterval, &VBL);
 	
 	return 0;
 }

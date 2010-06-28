@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		000671C3113F318000781A92 /* MemoryMap8Bit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000671BF113F318000781A92 /* MemoryMap8Bit.cpp */; };
 		000671C5113F318000781A92 /* MemoryMap16Bit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000671C1113F318000781A92 /* MemoryMap16Bit.cpp */; };
+		000DAA5611D95A05006360A2 /* DocumentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 000DAA5411D95A05006360A2 /* DocumentView.m */; };
 		0011696510E7CC59007A5EFB /* IPStorageSel.png in Resources */ = {isa = PBXBuildFile; fileRef = 0011696410E7CC4E007A5EFB /* IPStorageSel.png */; };
 		0011696610E7CC59007A5EFB /* IPStorage.png in Resources */ = {isa = PBXBuildFile; fileRef = 0011696310E7CC4E007A5EFB /* IPStorage.png */; };
 		00123BC91069B8D600FB95A1 /* libemulation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 006EECA40FCA5C31003D2C8D /* libemulation.a */; };
@@ -47,7 +48,6 @@
 		0054E4A71131BE8A006D32D9 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0054E4A61131BE8A006D32D9 /* OpenGL.framework */; };
 		0054E6311131BEE7006D32D9 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0054E6301131BEE7006D32D9 /* Carbon.framework */; };
 		0054E66C1131BF58006D32D9 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0054E66B1131BF58006D32D9 /* Quartz.framework */; };
-		005B81D9108680B9009D4804 /* ScreenView.m in Sources */ = {isa = PBXBuildFile; fileRef = 005B81D8108680B9009D4804 /* ScreenView.m */; };
 		005E5F6E1086B0E100E573D4 /* InspectorController.m in Sources */ = {isa = PBXBuildFile; fileRef = 005E5F6D1086B0E100E573D4 /* InspectorController.m */; };
 		005E5F771086B16C00E573D4 /* Inspector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 005E5F751086B16C00E573D4 /* Inspector.xib */; };
 		00679D08100817F700B38748 /* DeviceChooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00679D04100817F600B38748 /* DeviceChooser.xib */; };
@@ -188,6 +188,8 @@
 		000A79190FBA49C500A0F12E /* OpenEmulator.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = OpenEmulator.icns; sourceTree = "<group>"; };
 		000A79200FBA49C500A0F12E /* TBInspector.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TBInspector.png; sourceTree = "<group>"; };
 		000A79520FBA4A8400A0F12E /* OpenEmulatorHelp */ = {isa = PBXFileReference; lastKnownFileType = folder; name = OpenEmulatorHelp; path = macosx/OpenEmulatorHelp; sourceTree = "<group>"; };
+		000DAA5411D95A05006360A2 /* DocumentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DocumentView.m; sourceTree = "<group>"; };
+		000DAA5511D95A05006360A2 /* DocumentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DocumentView.h; sourceTree = "<group>"; };
 		000F66360FF8368F00C8AF23 /* AppleGraphicsTablet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppleGraphicsTablet.png; sourceTree = "<group>"; };
 		000F66370FF8368F00C8AF23 /* DiskImage.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = DiskImage.icns; sourceTree = "<group>"; };
 		000F66380FF8368F00C8AF23 /* DiskImage35.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = DiskImage35.icns; sourceTree = "<group>"; };
@@ -242,8 +244,6 @@
 		0054E6301131BEE7006D32D9 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		0054E66B1131BF58006D32D9 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
 		005928540FFC94E200F24A57 /* templates */ = {isa = PBXFileReference; lastKnownFileType = folder; path = templates; sourceTree = "<group>"; };
-		005B81D7108680B9009D4804 /* ScreenView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScreenView.h; sourceTree = "<group>"; };
-		005B81D8108680B9009D4804 /* ScreenView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScreenView.m; sourceTree = "<group>"; };
 		005E5F6C1086B0E100E573D4 /* InspectorController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InspectorController.h; sourceTree = "<group>"; };
 		005E5F6D1086B0E100E573D4 /* InspectorController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InspectorController.m; sourceTree = "<group>"; };
 		005E5F761086B16C00E573D4 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Inspector.xib; sourceTree = "<group>"; };
@@ -631,6 +631,8 @@
 		2A37F4ABFDCFA73011CA2CEA /* macosx */ = {
 			isa = PBXGroup;
 			children = (
+				000DAA5411D95A05006360A2 /* DocumentView.m */,
+				000DAA5511D95A05006360A2 /* DocumentView.h */,
 				00AD746811A2F10E00BAC29C /* DocumentController.mm */,
 				00FE0C6210953F7000B92AB7 /* DeviceChooserViewController.mm */,
 				00FE0C161095371B00B92AB7 /* ChooserViewController.m */,
@@ -657,8 +659,6 @@
 				0071E3B910803F7300F2D54F /* ChooserItem.m */,
 				00B5709C10863C2A00CDE4A7 /* TemplateChooserController.h */,
 				00B5709D10863C2A00CDE4A7 /* TemplateChooserController.m */,
-				005B81D7108680B9009D4804 /* ScreenView.h */,
-				005B81D8108680B9009D4804 /* ScreenView.m */,
 				005E5F6C1086B0E100E573D4 /* InspectorController.h */,
 				005E5F6D1086B0E100E573D4 /* InspectorController.m */,
 				00B2D72A10914659004783F9 /* DeviceChooserController.h */,
@@ -974,7 +974,6 @@
 				00A8C3FC1080064900D98FE0 /* InspectorDeviceCell.m in Sources */,
 				0071E3BA10803F7300F2D54F /* ChooserItem.m in Sources */,
 				00B5709E10863C2A00CDE4A7 /* TemplateChooserController.m in Sources */,
-				005B81D9108680B9009D4804 /* ScreenView.m in Sources */,
 				005E5F6E1086B0E100E573D4 /* InspectorController.m in Sources */,
 				00B2D72C10914659004783F9 /* DeviceChooserController.m in Sources */,
 				00FE0C171095371B00B92AB7 /* ChooserViewController.m in Sources */,
@@ -984,6 +983,7 @@
 				00AD746911A2F10E00BAC29C /* DocumentController.mm in Sources */,
 				001D66B711B7F5C700B88406 /* oegl.cpp in Sources */,
 				001D66B811B7F5C800B88406 /* oepa.cpp in Sources */,
+				000DAA5611D95A05006360A2 /* DocumentView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -624,51 +624,71 @@
     [peripherals removeObjectAtIndex:index];
 }
 
-- (void) powerDownPressed:(id) sender
+- (void) keyDown:(id) sender
+{
+	HostHIDEvent event = {
+		HOST_HID_K,
+		1,
+	};
+	oepaPostNotification(emulation, "host::host",
+						 HOST_HID_KEYBOARD_EVENT, &event);
+}
+
+- (void) keyUp:(id) sender
+{
+	HostHIDEvent event = {
+		HOST_HID_K,
+		0,
+	};
+	oepaPostNotification(emulation, "host::host",
+						 HOST_HID_KEYBOARD_EVENT, &event);
+}
+
+- (void) powerDown:(id) sender
 {
 	HostHIDEvent event = {
 		HOST_HID_S_POWERDOWN,
-		0,
+		1,
 	};
 	oepaPostNotification(emulation, "host::host",
 						 HOST_HID_SYSTEM_EVENT, &event);
 }
 
-- (void) sleepPressed:(id) sender
+- (void) sleep:(id) sender
 {
 	HostHIDEvent event = {
 		HOST_HID_S_SLEEP,
-		0,
+		1,
 	};
 	oepaPostNotification(emulation, "host::host",
 						 HOST_HID_SYSTEM_EVENT, &event);
 }
 
-- (void) wakeUpPressed:(id) sender
+- (void) wakeUp:(id) sender
 {
 	HostHIDEvent event = {
 		HOST_HID_S_WAKEUP,
-		0,
+		1,
 	};
 	oepaPostNotification(emulation, "host::host",
 						 HOST_HID_SYSTEM_EVENT, &event);
 }
 
-- (void) restartPressed:(id) sender
+- (void) restart:(id) sender
 {
 	HostHIDEvent event = {
 		HOST_HID_S_COLDRESTART,
-		0,
+		1,
 	};
 	oepaPostNotification(emulation, "host::host",
 						 HOST_HID_SYSTEM_EVENT, &event);
 }
 
-- (void) interruptPressed:(id) sender
+- (void) interrupt:(id) sender
 {
 	HostHIDEvent event = {
 		HOST_HID_S_DEBUGGERBREAK,
-		0,
+		1,
 	};
 	oepaPostNotification(emulation, "host::host",
 						 HOST_HID_SYSTEM_EVENT, &event);

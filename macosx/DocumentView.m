@@ -1,31 +1,29 @@
 
 /**
  * OpenEmulator
- * Mac OS X Screen View Controller
+ * Mac OS X Document View Controller
  * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls an emulation screen view.
+ * Controls an emulation view.
  */
 
 #import <OpenGL/OpenGL.h>
 #import <OpenGL/gl.h>
 
-#import "ScreenView.h"
+#import "DocumentView.h"
 
-@implementation ScreenView
+@implementation DocumentView
 
 - (id) initWithFrame:(NSRect) rect
 {
-	[super initWithFrame:rect];
-	
 	NSOpenGLPixelFormatAttribute pixelFormatAtrributes[] = {
 		NSOpenGLPFADoubleBuffer,
 		NSOpenGLPFAColorSize, 24,
 		NSOpenGLPFAAlphaSize, 8,
-		NSOpenGLPFADepthSize, 24,
-		NSOpenGLPFANoRecovery,
-		NSOpenGLPFAAccelerated,
+		NSOpenGLPFADepthSize, 0,
+		NSOpenGLPFAStencilSize, 0,
+		NSOpenGLPFAAccumSize, 0,
 		NSOpenGLPFAWindow,
 		0
 	};
@@ -33,19 +31,23 @@
 	NSOpenGLPixelFormat *pixelFormat;
 	pixelFormat = [[NSOpenGLPixelFormat alloc]
 				   initWithAttributes:pixelFormatAtrributes];
-	
-	if(self = [super initWithFrame:rect pixelFormat:pixelFormat])
+	if (!pixelFormat)
 	{
-		[[self openGLContext] makeCurrentContext];
-		[[self openGLContext] update];
-		
-		GLint param = 1;
-		CGLSetParameter(CGLGetCurrentContext(), kCGLCPSwapInterval, &param);
-		
-//		[self initGL];
+		NSLog(@"Cannot create NSOpenGLPixelFormat");
+		return self;
 	}
 	
-	[pixelFormat release];
+	[pixelFormat autorelease];
+
+	if (self = [super initWithFrame:rect pixelFormat:pixelFormat])
+	{
+		[[self openGLContext] makeCurrentContext];
+		
+		GLint value = 1;
+		CGLSetParameter(CGLGetCurrentContext(), kCGLCPSwapInterval, &value);
+		
+		[self initGL];
+	}
 	
 	return self;
 }
@@ -54,10 +56,10 @@
 {
 	[super dealloc];
 
-//	[self deallocGL];
+	[self deallocGL];
 }
 
-- (void) observeValueForKeyPath:(NSString *) keyPath
+/*- (void) observeValueForKeyPath:(NSString *) keyPath
 					   ofObject:(id) object
 						 change:(NSDictionary *) change
 						context:(void *) context
@@ -77,7 +79,8 @@
 							 ofObject:object
 							   change:change
 							  context:context];
-} 
+}
+*/
 
 - (void) drawRect:(NSRect) rect
 {
@@ -138,7 +141,7 @@
 - (void) initGL
 {
 	BOOL isPal = NO;
-	float overscan = 0.137f;//0.08f for a normal tv
+	float overscan = 0.137f;	//0.08f for a normal tv
 	NSRect overscanRect;
 	NSRect screenRect;
 	NSRect renderRect;
@@ -245,7 +248,7 @@
 						   (viewRect.size.width != lastViewRect.size.width) ||
 						   (viewRect.size.height != lastViewRect.size.height));
 	
-	if (viewportUpdate);
+	if (viewportUpdate)
 	{
 		lastViewRect = viewRect;
 		
@@ -279,7 +282,7 @@
 		glClear(GL_COLOR_BUFFER_BIT);
 	}
 	
-	if (power)
+/*	if (power)
 	{
 		[self renderGLTexture:DV_TEXTURE_VIDEO 
 					   toRect:videoRect 
@@ -289,7 +292,7 @@
 						   toRect:osdRect
 						withAlpha:1.0f];
 	}
-	else
+	else*/
 		[self renderGLTexture:DV_TEXTURE_POWER
 					   toRect:osdRect
 					withAlpha:1.0f];

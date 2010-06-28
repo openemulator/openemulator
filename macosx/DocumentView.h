@@ -1,11 +1,11 @@
 
 /**
  * OpenEmulator
- * Mac OS X Screen View Controller
+ * Mac OS X Document View Controller
  * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls an emulation screen view.
+ * Controls an emulation view.
  */
 
 #import <Cocoa/Cocoa.h>
@@ -15,7 +15,7 @@
 #define DV_TEXTURE_PAUSE	2
 #define DV_TEXTURE_END		3
 
-@interface ScreenView : NSOpenGLView {
+@interface DocumentView : NSOpenGLView {
 	GLuint texture[DV_TEXTURE_END];
 	NSRect textureRect[DV_TEXTURE_END];
 	
