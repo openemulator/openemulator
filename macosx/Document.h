@@ -66,18 +66,11 @@ typedef struct OEEmulation OEEmulation;
 - (void) addDevices:(NSString *) path connections:(NSDictionary *) connections;
 - (void) removeDevice:(NSDictionary *) dict;
 
-- (void) powerButtonPressedAndReleased:(id) sender;
-- (void) powerButtonPressed:(id) sender;
-- (void) powerButtonReleased:(id) sender;
-- (void) resetButtonPressedAndReleased:(id) sender;
-- (void) resetButtonPressed:(id) sender;
-- (void) resetButtonReleased:(id) sender;
-- (void) pauseButtonPressedAndReleased:(id) sender;
-- (void) pauseButtonPressed:(id) sender;
-- (void) pauseButtonReleased:(id) sender;
-- (void) interruptButtonPressedAndReleased:(id) sender;
-- (void) interruptButtonPressed:(id) sender;
-- (void) interruptButtonReleased:(id) sender;
+- (void) powerDownPressed:(id) sender;
+- (void) sleepPressed:(id) sender;
+- (void) wakeUpPressed:(id) sender;
+- (void) restartPressed:(id) sender;
+- (void) interruptPressed:(id) sender;
 
 - (BOOL) isCopyValid;
 - (BOOL) isPasteValid;

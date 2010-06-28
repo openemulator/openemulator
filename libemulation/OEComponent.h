@@ -19,7 +19,7 @@
 
 #include <stdio.h>
 
-#define OELog(text) cerr << "OEEmulator: " << (text) << endl
+#define OELog(text) cerr << "libmulator: " << (text) << endl
 
 typedef unsigned char OEUInt8;
 typedef char OEInt8;

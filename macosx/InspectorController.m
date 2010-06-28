@@ -269,12 +269,6 @@ NSString *itemIdentifiers[] =
 		return [NSString stringWithFormat:@"%3.1f GB", size / 1000000000.0];
 }
 
-- (void) updateState
-{
-	
-	
-}
-
 - (void) updatePlayback
 {
 	NSURL *url = [fDocumentController playbackURL];

@@ -2,10 +2,10 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="7.10">
 	<data>
 		<int key="IBDocument.SystemTarget">1050</int>
-		<string key="IBDocument.SystemVersion">10D573</string>
+		<string key="IBDocument.SystemVersion">10F569</string>
 		<string key="IBDocument.InterfaceBuilderVersion">762</string>
 		<string key="IBDocument.AppKitVersion">1038.29</string>
-		<string key="IBDocument.HIToolboxVersion">460.00</string>
+		<string key="IBDocument.HIToolboxVersion">461.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
 			<string key="NS.object.0">762</string>
@@ -1254,30 +1254,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
-						<string key="label">pauseButtonPressedAndReleased:</string>
-						<reference key="source" ref="1014"/>
-						<reference key="destination" ref="273033769"/>
-					</object>
-					<int key="connectionID">868</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">resetButtonPressedAndReleased:</string>
-						<reference key="source" ref="1014"/>
-						<reference key="destination" ref="231350452"/>
-					</object>
-					<int key="connectionID">869</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">powerButtonPressedAndReleased:</string>
-						<reference key="source" ref="1014"/>
-						<reference key="destination" ref="58928646"/>
-					</object>
-					<int key="connectionID">870</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
 						<string key="label">setActualSize:</string>
 						<reference key="source" ref="1014"/>
 						<reference key="destination" ref="922491169"/>
@@ -1342,19 +1318,43 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
-						<string key="label">powerButtonPressedAndReleased:</string>
+						<string key="label">powerDownPressed:</string>
 						<reference key="source" ref="1014"/>
-						<reference key="destination" ref="932460877"/>
+						<reference key="destination" ref="58928646"/>
 					</object>
-					<int key="connectionID">883</int>
+					<int key="connectionID">886</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
-						<string key="label">powerButtonPressedAndReleased:</string>
+						<string key="label">sleepPressed:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="932460877"/>
+					</object>
+					<int key="connectionID">887</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">wakeUpPressed:</string>
 						<reference key="source" ref="1014"/>
 						<reference key="destination" ref="302083824"/>
 					</object>
-					<int key="connectionID">885</int>
+					<int key="connectionID">888</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">restartPressed:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="231350452"/>
+					</object>
+					<int key="connectionID">889</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">interruptPressed:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="273033769"/>
+					</object>
+					<int key="connectionID">890</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -2310,7 +2310,7 @@
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>{{118, 291}, {478, 20}}</string>
+					<string>{{138, 349}, {478, 20}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>{74, 862}</string>
@@ -2363,7 +2363,7 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{388, 178}, {200, 113}}</string>
+					<string>{{408, 236}, {200, 113}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{475, 832}, {234, 43}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -2431,7 +2431,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">885</int>
+			<int key="maxID">890</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -2487,29 +2487,15 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>interruptButtonPressed:</string>
-							<string>interruptButtonPressedAndReleased:</string>
-							<string>interruptButtonReleased:</string>
-							<string>pauseButtonPressed:</string>
-							<string>pauseButtonPressedAndReleased:</string>
-							<string>pauseButtonReleased:</string>
-							<string>powerButtonPressed:</string>
-							<string>powerButtonPressedAndReleased:</string>
-							<string>powerButtonReleased:</string>
-							<string>resetButtonPressed:</string>
-							<string>resetButtonPressedAndReleased:</string>
-							<string>resetButtonReleased:</string>
+							<string>interruptPressed:</string>
+							<string>powerDownPressed:</string>
+							<string>restartPressed:</string>
 							<string>saveDocumentAsTemplate:</string>
+							<string>sleepPressed:</string>
+							<string>wakeUpPressed:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>

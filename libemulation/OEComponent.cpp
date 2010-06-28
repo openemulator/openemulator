@@ -62,20 +62,14 @@ bool OEComponent::addObserver(OEComponent *component,
 bool OEComponent::removeObserver(OEComponent *component,
 								 int notification)
 {
+	OEObservers::iterator first = observerMap[notification].begin();
+	OEObservers::iterator last = observerMap[notification].end();
+	OEObservers::iterator i = remove(first, last, component);
 	
-	OEObservers::iterator i;
-	for (i = observerMap[notification].begin();
-		 i != observerMap[notification].end();
-		 i++)
-	{
-		if (*i == component)
-		{
-			observerMap[notification].erase(i);
-			return true;
-		}
-	}
+	if (i != last)
+		observerMap[notification].erase(i, last);
 	
-	return false;
+	return (i != last);
 }
 
 void OEComponent::postNotification(int notification, void *data)
@@ -150,8 +144,8 @@ int OEComponent::getInt(const string &value)
 	if (value.substr(0, 2) == "0x")
 	{
 		unsigned int i;
-		std::stringstream ss;
-		ss << std::hex << value.substr(2);
+		stringstream ss;
+		ss << hex << value.substr(2);
 		ss >> i;
 		return i;
 	}
@@ -166,15 +160,15 @@ double OEComponent::getFloat(const string &value)
 
 string OEComponent::getString(int value)
 {
-	std::stringstream ss;
+	stringstream ss;
 	ss << value;
 	return ss.str();
 }
 
 string OEComponent::getHex(int value)
 {
-	std::stringstream ss;
-	ss << "0x" << std::hex << value;
+	stringstream ss;
+	ss << "0x" << hex << value;
 	return ss.str();
 }
 
@@ -188,8 +182,8 @@ OEData OEComponent::getCharVector(const string &value)
 	for (int i = 0; i < size; i++)
 	{
 		unsigned int n;
-		std::stringstream ss;
-		ss << std::hex << value.substr(start + i * 2, 2);
+		stringstream ss;
+		ss << hex << value.substr(start + i * 2, 2);
 		ss >> n;
 		result[i] = n;
 	}

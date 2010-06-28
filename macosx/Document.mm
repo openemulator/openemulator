@@ -16,6 +16,8 @@
 
 #import "oepa.h"
 
+#import "Host.h"
+
 @implementation Document
 
 - (id) init
@@ -622,76 +624,54 @@
     [peripherals removeObjectAtIndex:index];
 }
 
-- (void) powerButtonPressedAndReleased:(id) sender
+- (void) powerDownPressed:(id) sender
 {
-	[self powerButtonPressed:sender];
-	[self powerButtonReleased:sender];
+	HostHIDEvent event = {
+		HOST_HID_S_POWERDOWN,
+		0,
+	};
+	oepaPostNotification(emulation, "host::host",
+						 HOST_HID_SYSTEM_EVENT, &event);
 }
 
-- (void) powerButtonPressed:(id) sender
+- (void) sleepPressed:(id) sender
 {
-//	OEHostSystemEvent event = {HOSTSYSTEM_POWER, true};
-//	oepaIoctl(emulation, "host::audio", OE_POST_NOTIFICATION, &event);
+	HostHIDEvent event = {
+		HOST_HID_S_SLEEP,
+		0,
+	};
+	oepaPostNotification(emulation, "host::host",
+						 HOST_HID_SYSTEM_EVENT, &event);
 }
 
-- (void) powerButtonReleased:(id) sender
+- (void) wakeUpPressed:(id) sender
 {
-//	OEHostSystemEvent event = {HOSTAUDIO_POWER, false};
-//	oepaIoctl(emulation, "host::audio", OE_POST_NOTIFICATION, &event);
+	HostHIDEvent event = {
+		HOST_HID_S_WAKEUP,
+		0,
+	};
+	oepaPostNotification(emulation, "host::host",
+						 HOST_HID_SYSTEM_EVENT, &event);
 }
 
-- (void) resetButtonPressedAndReleased:(id) sender
+- (void) restartPressed:(id) sender
 {
-	[self resetButtonPressed:sender];
-	[self resetButtonReleased:sender];
+	HostHIDEvent event = {
+		HOST_HID_S_COLDRESTART,
+		0,
+	};
+	oepaPostNotification(emulation, "host::host",
+						 HOST_HID_SYSTEM_EVENT, &event);
 }
 
-- (void) resetButtonPressed:(id) sender
+- (void) interruptPressed:(id) sender
 {
-//	OEHostSystemEvent event = {HOSTSYSTEM_RESET, false};
-//	oepaIoctl(emulation, "host::system", OE_POST_NOTIFICATION, &event);
-}
-
-- (void) resetButtonReleased:(id) sender
-{
-//	OEHostSystemEvent event = {HOSTSYSTEM_RESET, false};
-//	oepaIoctl(emulation, "host::system", OE_POST_NOTIFICATION, &event);
-}
-
-- (void) pauseButtonPressedAndReleased:(id) sender
-{
-	[self pauseButtonPressed:sender];
-	[self pauseButtonReleased:sender];
-}
-
-- (void) pauseButtonPressed:(id) sender
-{
-//	OEHostSystemEvent event = {HOSTSYSTEM_PAUSE, true};
-//	oepaIoctl(emulation, "host::system", OE_POST_NOTIFICATION, &event);
-}
-
-- (void) pauseButtonReleased:(id) sender
-{
-//	OEHostSystemEvent event = {HOSTSYSTEM_PAUSE, false};
-//	oepaIoctl(emulation, "host::system", OE_POST_NOTIFICATION, &event);
-}
-
-- (void) interruptButtonPressedAndReleased:(id) sender
-{
-	[self pauseButtonPressed:sender];
-	[self pauseButtonReleased:sender];
-}
-
-- (void) interruptButtonPressed:(id) sender
-{
-//	OEHostSystemEvent event = {HOSTSYSTEM_INTERRUPT, true};
-//	oepaIoctl(emulation, "host::system", OE_POST_NOTIFICATION, &event);
-}
-
-- (void) interruptButtonReleased:(id) sender
-{
-//	OEHostSystemEvent event = {HOSTSYSTEM_INTERRUPT, true};
-//	oepaIoctl(emulation, "host::system", OE_POST_NOTIFICATION, &event);
+	HostHIDEvent event = {
+		HOST_HID_S_DEBUGGERBREAK,
+		0,
+	};
+	oepaPostNotification(emulation, "host::host",
+						 HOST_HID_SYSTEM_EVENT, &event);
 }
 
 - (BOOL) isCopyValid

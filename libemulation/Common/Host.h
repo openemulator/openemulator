@@ -20,11 +20,8 @@ enum
 	HOST_AUDIO_RENDER_WILL_END,
 	HOST_AUDIO_RENDER_DID_END,
 	
-	HOST_VIDEO_DID_UPDATE,
-	
 	HOST_HID_SYSTEM_EVENT,
 	HOST_HID_KEYBOARD_EVENT,
-	POST_HID_KEYBOARD_LED_EVENT,
 	HOST_HID_UNICODEKEYBOARD_EVENT,
 	HOST_HID_POINTER_EVENT,
 	HOST_HID_MOUSE_EVENT,
@@ -315,21 +312,26 @@ enum {
 };
 
 // HID UNICODE Events
-#define HOST_HID_U_CTRL		(1 << 0)
-#define HOST_HID_U_SHIFT	(1 << 1)
-#define HOST_HID_U_ALT		(1 << 2)
-#define HOST_HID_U_GUI		(1 << 3)
+#define HOST_HID_U_CTRL			(1 << 0)
+#define HOST_HID_U_SHIFT		(1 << 1)
+#define HOST_HID_U_ALT			(1 << 2)
+#define HOST_HID_U_GUI			(1 << 3)
 
 // HID LED Events
+#define HOST_HID_L_NUMLOCK		(1 << 0)
+#define HOST_HID_L_CAPSLOCK		(1 << 1)
+#define HOST_HID_L_SCROLLLOCK	(1 << 2)
+#define HOST_HID_L_COMPOSE		(1 << 3)
+#define HOST_HID_L_KANA			(1 << 4)
+#define HOST_HID_L_POWER		(1 << 5)
+#define HOST_HID_L_SHIFT		(1 << 6)
+
+// HID Pointer Events
 enum
 {
-	HOST_HID_L_NUMLOCK = 0x01,
-	HOST_HID_L_CAPSLOCK,
-	HOST_HID_L_SCROLLLOCK,
-	HOST_HID_L_COMPOSE,
-	HOST_HID_L_KANA,
-	HOST_HID_L_POWER,
-	HOST_HID_L_SHIFT,
+	HOST_HID_P_X,
+	HOST_HID_P_Y,
+	HOST_HID_P_BUTTON,
 };
 
 // HID Mouse Events
@@ -341,14 +343,6 @@ enum
 	HOST_HID_M_BUTTON2,
 	HOST_HID_M_BUTTON3,
 	HOST_HID_M_WHEEL,
-};
-
-// HID Pointer Events
-enum
-{
-	HOST_HID_P_X,
-	HOST_HID_P_Y,
-	HOST_HID_P_BUTTON,
 };
 
 // HID Joystick Events
@@ -423,11 +417,16 @@ enum
 // Messages
 enum
 {
-	HOST_REGISTER_HOST,
+	HOST_REGISTER_EMULATION,
+	HOST_REGISTER_POWER,
+	HOST_REGISTER_VIDEO,
+	HOST_REGISTER_HID,
 	
 	HOST_ADD_SCREEN,
 	HOST_REMOVE_SCREEN,
 	HOST_UPDATE_VIDEO,
+	
+	HOST_SET_KEYBOARD_LED,
 };
 
 // Devices - API to be determined
@@ -447,7 +446,7 @@ enum
 };
 
 // Data types
-typedef void (*HostObserver)(int message, void *data);
+typedef void (*HostObserver)(void *emulation, void *data);
 
 typedef struct
 {
@@ -469,9 +468,9 @@ typedef struct
 	int screenWidth;
 	int screenHeight;
 	bool updated;
-} HostVideoFrame;
+} HostVideoScreen;
 
-typedef vector<HostVideoFrame *> HostVideoFrames;
+typedef vector<HostVideoScreen *> HostVideoScreens;
 
 class Host : public OEComponent
 {
@@ -481,18 +480,21 @@ public:
 	bool setProperty(const string &name, const string &value);
 	bool getProperty(const string &name, string &value);
 	
-	void notify(int notification, OEComponent *component, void *data);
-	
 	int ioctl(int message, void *data);
 	
 private:
-	HostObserver hostObserver;
+	void *emulation;
+	HostObserver hostPower;
+	HostObserver hostVideo;
+	HostObserver hostHID;
 	
 	string notes;
 	int powerState;
 	bool hidMouseCapture;
 	string videoWindow;
 	
-	HostVideoFrames videoFrames;
-	int hidLEDState;
+	HostVideoScreens videoScreens;
+	
+	bool addScreen(HostVideoScreen *screen);
+	bool removeScreen(HostVideoScreen *screen);
 };

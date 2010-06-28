@@ -8,8 +8,10 @@
  * OpenEmulator/portaudio interface.
  */
 
+#ifndef _OEPA_H
+#define _OEPA_H
+
 #include "OEEmulation.h"
-#include "Host.h"
 
 #define OEPA_SAMPLERATE			48000.0
 #define OEPA_CHANNELNUM			2
@@ -52,8 +54,10 @@ bool oepaSetProperty(OEEmulation *emulation,
 					 string ref, string name, string value);
 bool oepaGetProperty(OEEmulation *emulation,
 					 string ref, string name, string &value);
-int oepaIoctl(OEEmulation *emulation,
-			  string ref, int message, void *data);
+void oepaPostNotification(OEEmulation *emulation,
+						  string ref, int notification, void *data);
+void oepaIoctl(OEEmulation *emulation,
+			   string ref, int message, void *data);
 
 xmlDocPtr oepaGetDML(OEEmulation *emulation);
 bool oepaAddDevices(OEEmulation *emulation,
@@ -61,3 +65,5 @@ bool oepaAddDevices(OEEmulation *emulation,
 					OEStringRefMap connections);
 bool oepaIsDeviceTerminal(OEEmulation *emulation, OERef ref);
 bool oepaRemoveDevice(OEEmulation *emulation, OERef ref);
+
+#endif

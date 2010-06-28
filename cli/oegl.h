@@ -8,6 +8,15 @@
  * OpenEmulator/OpenGL interface.
  */
 
-void oeglOpen();
-void oeglDraw();
+#ifndef _OEGL_H
+#define _OEGL_H
+
+typedef void (*OEGLSetContext)(void *emulation);
+
+// User interface
+void oeglOpen(OEGLSetContext setContext);
 void oeglClose();
+void oeglInit(void *emulation);
+void oeglDraw(void *emulation);
+
+#endif

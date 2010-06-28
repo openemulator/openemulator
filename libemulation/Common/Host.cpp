@@ -12,9 +12,9 @@
 
 Host::Host()
 {
-	hostObserver = NULL;
-	
-	hidLEDState = 0;
+	hostPower = NULL;
+	hostVideo = NULL;
+	hostHID = NULL;
 }
 
 bool Host::setProperty(const string &name, const string &value)
@@ -27,6 +27,8 @@ bool Host::setProperty(const string &name, const string &value)
 		if (powerState != state)
 		{
 			powerState = state;
+			if (hostPower)
+				hostPower(emulation, NULL);
 		}
 	}
 	else if (name == "hidMouseCapture")
@@ -44,9 +46,9 @@ bool Host::getProperty(const string &name, string &value)
 	if (name == "notes")
 		value = notes;
 	else if (name == "powerState")
-		value = powerState;
+		value = getString(powerState);
 	else if (name == "hidMouseCapture")
-		value = hidMouseCapture;
+		value = getString(hidMouseCapture);
 	else if (name == "videoWindow")
 		value = videoWindow;
 	else
@@ -55,26 +57,67 @@ bool Host::getProperty(const string &name, string &value)
 	return true;
 }
 
-void Host::notify(int notification, OEComponent *component, void *data)
+bool Host::addScreen(HostVideoScreen *screen)
 {
-	if (hostObserver)
-		hostObserver(notification, data);
+	videoScreens.push_back(screen);
+	
+	return true;
+}
+
+bool Host::removeScreen(HostVideoScreen *screen)
+{
+	HostVideoScreens::iterator first = videoScreens.begin();
+	HostVideoScreens::iterator last = videoScreens.end();
+	HostVideoScreens::iterator i = remove(first, last, screen);
+	
+	if (i != last)
+		videoScreens.erase(i, last);
+	
+	return (i != last);
 }
 
 int Host::ioctl(int message, void *data)
 {
+	bool status = false;
+	
 	switch(message)
 	{
-		case HOST_REGISTER_HOST:
-			if (data)
-				hostObserver = (HostObserver) data;
+		case HOST_REGISTER_EMULATION:
+			emulation = data;
 			return true;
+			
+		case HOST_REGISTER_POWER:
+			hostPower = (HostObserver) data;
+			return true;
+			
+		case HOST_REGISTER_VIDEO:
+			hostVideo = (HostObserver) data;
+			return true;
+			
+		case HOST_REGISTER_HID:
+			hostHID = (HostObserver) data;
+			return true;
+			
 		case HOST_ADD_SCREEN:
-			return true;
+			status = addScreen((HostVideoScreen *) data);
+			if (hostVideo)
+				hostVideo(emulation, &videoScreens);
+			return status;
+			
 		case HOST_REMOVE_SCREEN:
-			return true;
+			status = removeScreen((HostVideoScreen *) data);
+			if (hostVideo)
+				hostVideo(emulation, &videoScreens);
+			return status;
+			
 		case HOST_UPDATE_VIDEO:
-			postNotification(HOST_VIDEO_DID_UPDATE, NULL);
+			if (hostVideo)
+				hostVideo(emulation, &videoScreens);
+			return true;
+			
+		case HOST_SET_KEYBOARD_LED:
+			if (hostHID)
+				hostHID(emulation, data);
 			return true;
 	}
 	

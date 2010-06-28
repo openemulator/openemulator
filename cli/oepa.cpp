@@ -10,7 +10,6 @@
 
 #include <math.h>
 #include <iostream>
-
 #include <pthread.h>
 
 #include "portaudio.h"
@@ -18,6 +17,12 @@
 #include "samplerate.h"
 
 #include "oepa.h"
+
+#include "Host.h"
+
+using namespace std;
+
+#define oepaLog(text) cerr << "oepa: " << text << endl
 
 // Configuration
 bool oepaFullDuplex = false;
@@ -230,8 +235,8 @@ bool oepaOpenAudio()
 									  NULL);
 		if ((status != paNoError) && oepaFullDuplex)
 		{
-			cerr <<  "oepa: couldn't open audio stream (error " <<
-			status << "), attempting half-duplex\n";
+			oepaLog("couldn't open audio stream (error " << status <<
+					"), attempting half-duplex");
 			
 			status = Pa_OpenDefaultStream(&oepaAudioStream,
 										  0,
@@ -252,18 +257,15 @@ bool oepaOpenAudio()
 				return true;
 			}
 			else
-				cerr <<  "oepa: couldn't start audio stream (error " <<
-				status << ")\n";
+				oepaLog("couldn't start audio stream (error " << status << ")");
 			
 			Pa_CloseStream(oepaAudioStream);
 		}
 		else
-			cerr <<  "oepa: couldn't open audio stream (error " <<
-			status << ")\n";
+			oepaLog("couldn't open audio stream (error " << status << ")");
 	}
 	else
-		cerr <<  "oepa: couldn't init portaudio (error " <<
-		status << ")\n";
+		oepaLog("couldn't init portaudio (error " << status << ")");
 	
 	int error;
 	pthread_attr_t attr;
@@ -285,16 +287,13 @@ bool oepaOpenAudio()
 				return true;
 			}
 			else
-				cerr << "oepa: couldn't create timer thread (error " <<
-				error << ")\n";
+				oepaLog("couldn't create timer thread (error " << error << ")");
 		}
 		else
-			cerr << "oepa: couldn't attr timer thread (error " <<
-			error << ")\n";
+			oepaLog("couldn't attr timer thread (error " << error << ")");
 	}
 	else
-		cerr << "oepa: couldn't init timer thread (error " <<
-		error << ")\n";
+		oepaLog("couldn't init timer thread (error " << error << ")");
 	
 	return false;
 }
@@ -450,6 +449,9 @@ void *oepaProcess(void *arg)
 			 i++)
 		{
 			OEComponent *component = (*i)->getComponent("host::host");
+			if (!component)
+				continue;
+			
 			component->postNotification(HOST_AUDIO_RENDER_WILL_BEGIN,
 										&hostAudioBuffer);
 			component->postNotification(HOST_AUDIO_RENDER_DID_BEGIN,
@@ -524,20 +526,20 @@ bool oepaOpenProcess()
 				if (!error)
 					return true;
 				else
-					cerr << "oepa: couldn't create process thread (error " <<
-					error << ")\n";
+					oepaLog("couldn't create process thread (error " <<
+							error << ")");
 			}
 			else
-				cerr << "oepa: couldn't attr process thread (error " <<
-				error << ")\n";
+				oepaLog("couldn't attr process thread (error " <<
+						error << ")");
 		}
 		else
-			cerr << "oepa: couldn't init process attr (error " <<
-			error << ")\n";		
+			oepaLog("couldn't init process attr (error " <<
+					error << ")");
 	}
 	else
-		cerr << "oepa: couldn't init process mutex (error " <<
-		error << ")\n";
+		oepaLog("couldn't init process mutex (error " <<
+				error << ")");
 	
 	return false;
 }
@@ -627,13 +629,13 @@ bool oepaStartPlayback(string path)
 		}
 		else
 		{
-			cerr << "oepa: couldn't init sample rate converter (error " <<
-			error << ")\n";
+			oepaLog("couldn't init sample rate converter (error " <<
+					error << ")");
 			sf_close(oepaPlaybackFile);
 		}
 	}
 	else
-		cerr << "oepa: couldn't open file " << path << "\n";
+		oepaLog("couldn't open file " << path);
 	
 	oepaUnlockProcess();
 	
@@ -690,7 +692,7 @@ bool oepaStartRecording(string path)
 	if (oepaRecordingFile)
 		oepaRecording = true;
 	else
-		cerr << "oepa: couldn't open temporary file " << path << "\n";
+		oepaLog("couldn't open temporary file " << path);
 	
 	oepaUnlockProcess();
 	
@@ -860,8 +862,8 @@ bool oepaSetProperty(OEEmulation *emulation, string ref, string name, string val
 	else
 	{
 		status = false;
-		cerr << "oepa: could not set property " + ref + "." + value + 
-			"(ref not found)";
+		oepaLog("could not set property " << ref << "." << name <<
+				" (ref not found)");
 	}
 	
 	pthread_mutex_unlock(&oepaProcessMutex);
@@ -880,8 +882,8 @@ bool oepaGetProperty(OEEmulation *emulation, string ref, string name, string &va
 	else
 	{
 		status = false;
-		cerr << "oepa: could not get property " + ref + "." + name + 
-			"(ref not found)";
+		oepaLog("could not get property " << ref << "." << name << 
+				" (ref not found)");
 	}
 	
 	pthread_mutex_unlock(&oepaProcessMutex);
@@ -889,25 +891,38 @@ bool oepaGetProperty(OEEmulation *emulation, string ref, string name, string &va
 	return status;
 }
 
-int oepaIoctl(OEEmulation *emulation,
-			  string ref, int message, void *data)
+void oepaPostNotification(OEEmulation *emulation,
+						  string ref, int notification, void *data)
 {
 	pthread_mutex_lock(&oepaProcessMutex);
 	
 	OEComponent *component = emulation->getComponent(ref);
-	bool status;
 	if (component)
-		status = component->ioctl(message, data);
+		component->postNotification(notification, data);
 	else
 	{
-		status = false;
-		cerr << "oepa: could not ioctl " + ref + 
-			"(ref not found)";
+		oepaLog("could not post notification to " << ref <<
+				" (ref not found)");
 	}
 	
 	pthread_mutex_unlock(&oepaProcessMutex);
+}
+
+void oepaIoctl(OEEmulation *emulation,
+			   string ref, int message, void *data)
+{
+	pthread_mutex_lock(&oepaProcessMutex);
 	
-	return status;
+	OEComponent *component = emulation->getComponent(ref);
+	if (component)
+		component->ioctl(message, data);
+	else
+	{
+		oepaLog("could not ioctl " << ref <<
+				" (ref not found)");
+	}
+	
+	pthread_mutex_unlock(&oepaProcessMutex);
 }
 
 xmlDocPtr oepaGetDML(OEEmulation *emulation)

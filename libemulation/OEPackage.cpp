@@ -24,6 +24,9 @@ OEPackage::OEPackage(string packagePath)
 	this->packagePath = packagePath;
 	zip = NULL;
 	
+	if (!packagePath.size())
+		return;
+	
 	bool isPackage;
 	if (isPathValid(packagePath))
 		isPackage = isFolder(packagePath);

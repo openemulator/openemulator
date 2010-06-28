@@ -16,6 +16,48 @@
 
 @implementation DocumentWindow
 
+- (id) initWithSize: (NSSize) size
+{
+	[super initWithContentRect:NSMakeRect(0,0,size.width,size.height)
+					 styleMask:NSBorderlessWindowMask
+					   backing:NSBackingStoreBuffered
+						 defer:NO];
+	
+	NSOpenGLPixelFormatAttribute attribs[] =
+	{
+		NSOpenGLPFADoubleBuffer,
+		NSOpenGLPFAColorSize, (NSOpenGLPixelFormatAttribute) 24,
+		NSOpenGLPFAAlphaSize, (NSOpenGLPixelFormatAttribute) 8,
+		NSOpenGLPFADepthSize, (NSOpenGLPixelFormatAttribute) 8,
+		NSOpenGLPFAStencilSize, (NSOpenGLPixelFormatAttribute) 0,
+		NSOpenGLPFAAccumSize, (NSOpenGLPixelFormatAttribute) 0,
+		0
+	};
+	
+	NSOpenGLPixelFormat * format;
+	format = [[[NSOpenGLPixelFormat alloc] initWithAttributes: attribs] autorelease];
+	
+	if (!format)
+	{
+		NSLog(@"Cannot create NSOpenGLPixelFormat");
+		return self;
+	}
+	
+	NSOpenGLContext *context;
+	context = [[NSOpenGLContext alloc] initWithFormat:format
+										 shareContext: nil];
+	
+	if (!context)
+	{
+		NSLog(@"No context");
+		return self;
+	}
+	
+	[context makeCurrentContext];
+	
+	return self;
+}
+
 - (void) dealloc
 {
 	if (fullscreen)
