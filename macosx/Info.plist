@@ -167,7 +167,6 @@
 			<array>
 				<string>2img</string>
 				<string>2mg</string>
-				<string>sdk</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
 			<string>DiskImage.icns</string>
@@ -265,7 +264,7 @@
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
-	<string>NSApplication</string>
+	<string>Application</string>
 	<key>SUFeedURL</key>
 	<string>http://www.openemulator.org/updates/appcast.xml</string>
 	<key>SUPublicDSAKeyFile</key>

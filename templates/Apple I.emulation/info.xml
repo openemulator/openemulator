@@ -48,15 +48,13 @@
         <data name="image" src="${REF}.bin" />
         <property name="map" value="0x0000-0x0fff" />
         <property name="size" value="0x1000" />
-        <property name="resetNotification" value="0" />
-        <connection name="reset" ref="system" />
+        <connection name="host" ref="host::host" />
     </component>
     <component name="ram2" class="RAM">
         <data name="image" src="${REF}.bin" />
         <property name="map" value="0xe000-0xefff" />
         <property name="size" value="0x1000" />
-        <property name="resetNotification" value="0" />
-        <connection name="reset" ref="system" />
+        <connection name="host" ref="host::host" />
     </component>
     <component name="video" class="AppleIVideo">
         <resource name="image" src="roms/Signetics 2513 Video ROM.bin" />
@@ -86,8 +84,6 @@
         <connection name="irqA" ref="" />
         <property name="irqBNotification" value="0" />
         <connection name="irqB" ref="" />
-        <property name="resetNotification" value="0" />
-        <connection name="reset" ref="system" />
     </component>
     <component name="io" class="AppleIIO">
         <property name="map" value="0xd000-0xdfff" />

@@ -25,6 +25,23 @@
 
 #define TIMER_FREQUENCY	10.0
 
+// Note:
+// See if we can use CGSSetGlobalHotKeyOperatingMode to 
+// disable key capture
+
+typedef int CGSConnection;
+typedef enum
+{
+	kCGSGlobalHotKeyEnable = 0,
+	kCGSGlobalHotKeyDisable,
+	kCGSGlobalHotKeyInvalid = -1,
+} CGSGlobalHotKeyOperatingMode;
+
+extern CGError CGSGetGlobalHotKeyOperatingMode(CGSConnection Connection, 
+											   CGSGlobalHotKeyOperatingMode *enmMode);
+extern CGError CGSSetGlobalHotKeyOperatingMode(CGSConnection Connection,
+											   CGSGlobalHotKeyOperatingMode enmMode);
+
 @implementation DocumentController
 
 - (id) init
@@ -312,6 +329,16 @@
 	return nil;
 }
 
+- (void) keyDown:(NSEvent *) theEvent
+{
+	NSLog(@"keyDown");
+}
+
+- (void) keyUp:(NSEvent *) theEvent
+{
+	NSLog(@"keyUp");
+}
+
 - (void) setPlaybackURL:(NSURL *) theURL
 {
 	if (audioPlaybackURL)
@@ -405,6 +432,64 @@
 		return [[audioRecordingURL copy] autorelease];
 	else
 		return nil;
+}
+
+- (void) setGlobalHotKeys:(BOOL) state
+{
+/*    static unsigned s_cComplaints = 0;
+	
+// Lazy connect to the core graphics service.
+    if (!g_fConnectedToCGS)
+    {
+        g_CGSConnection = _CGSDefaultConnection();
+        g_fConnectedToCGS = true;
+    }
+	
+// Get the current mode.
+    CGSGlobalHotKeyOperatingMode enmMode = kCGSGlobalHotKeyInvalid;
+    CGSGetGlobalHotKeyOperatingMode(g_CGSConnection, &enmMode);
+    if (    enmMode != kCGSGlobalHotKeyEnable
+        &&  enmMode != kCGSGlobalHotKeyDisable)
+    {
+        AssertMsgFailed(("%d\n", enmMode));
+        if (s_cComplaints++ < 32)
+            LogRel(("DarwinDisableGlobalHotKeys: Unexpected enmMode=%d\n", enmMode));
+        return;
+    }
+	
+// Calc the new mode.
+    if (fDisable)
+    {
+        if (enmMode != kCGSGlobalHotKeyEnable)
+            return;
+        enmMode = kCGSGlobalHotKeyDisable;
+    }
+    else
+    {
+        if (enmMode != kCGSGlobalHotKeyDisable)
+            return;
+        enmMode = kCGSGlobalHotKeyEnable;
+    }
+	
+// Try set it and check the actual result.
+    CGSSetGlobalHotKeyOperatingMode(g_CGSConnection, enmMode);
+    CGSGlobalHotKeyOperatingMode enmNewMode = kCGSGlobalHotKeyInvalid;
+    CGSGetGlobalHotKeyOperatingMode(g_CGSConnection, &enmNewMode);
+    if (enmNewMode != enmMode)
+    {
+		// If the screensaver kicks in we should ignore failure here.
+        AssertMsg(enmMode == kCGSGlobalHotKeyEnable, ("enmNewMode=%d enmMode=%d\n", enmNewMode, enmMode));
+        if (s_cComplaints++ < 32)
+            LogRel(("DarwinDisableGlobalHotKeys: Failed to change mode; enmNewMode=%d enmMode=%d\n", enmNewMode, enmMode));
+    }*/
+}
+
+- (void) disableGlobalHotKeys
+{
+}
+
+- (void) enableGlobalHotKeys
+{
 }
 
 - (void) disableMenuBar

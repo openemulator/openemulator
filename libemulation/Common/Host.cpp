@@ -15,7 +15,14 @@ bool Host::setProperty(const string &name, const string &value)
 	if (name == "notes")
 		notes = value;
 	else if (name == "powerState")
-		powerState = getInt(value);
+	{
+		int newPowerState = getInt(value);
+		if (newPowerState != powerState)
+		{
+			powerState = newPowerState;
+			postNotification(HOST_POWERSTATE_DID_CHANGE, &powerState);
+		}
+	}
 	else if (name == "hidMouseCapture")
 		hidMouseCapture = getInt(value);
 	else if (name == "hidKeyboardLEDs")
@@ -67,17 +74,16 @@ bool Host::removeScreen(HostVideoScreen *screen)
 
 int Host::ioctl(int message, void *data)
 {
-	bool status = false;
-	
 	switch(message)
 	{
 		case HOST_ADD_SCREEN:
-			status = addScreen((HostVideoScreen *) data);
-			return status;
+			return addScreen((HostVideoScreen *) data);
 			
 		case HOST_REMOVE_SCREEN:
-			status = removeScreen((HostVideoScreen *) data);
-			return status;
+			return removeScreen((HostVideoScreen *) data);
+			
+		case HOST_UPDATE_SCREEN:
+			return true;
 			
 		case HOST_GET_SCREENS:
 		{

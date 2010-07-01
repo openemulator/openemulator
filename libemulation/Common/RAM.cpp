@@ -10,10 +10,12 @@
 
 #include "RAM.h"
 
+#include "Host.h"
+
 RAM::RAM()
 {
-	resetNotification = 0;
-	reset = NULL;
+	host = NULL;
+	powered = 0;
 	
 	size = 1;
 	mask = 0;
@@ -37,8 +39,6 @@ bool RAM::setProperty(const string &name, const string &value)
 	}
 	else if (name == "resetPattern")
 		resetPattern = getCharVector(value);
-	else if (name == "resetNotification")
-		resetNotification = getInt(value);
 	else
 		return false;
 	
@@ -61,7 +61,10 @@ bool RAM::setData(const string &name, const OEData &data)
 bool RAM::getData(const string &name, OEData &data)
 {
 	if (name == "image")
-		data = memory;
+	{
+		if (!powered)
+			data = memory;
+	}
 	else
 		return false;
 	
@@ -70,13 +73,21 @@ bool RAM::getData(const string &name, OEData &data)
 
 bool RAM::connect(const string &name, OEComponent *component)
 {
-	if (name == "reset")
+	if (name == "host")
 	{
-		if (reset)
-			reset->removeObserver(this, resetNotification);
-		reset = component;
-		if (reset)
-			reset->addObserver(this, resetNotification);
+		if (host)
+		{
+			host->removeObserver(this, HOST_POWERSTATE_DID_CHANGE);
+			host->removeObserver(this, HOST_HID_SYSTEM_EVENT);
+		}
+		
+		host = component;
+		
+		if (host)
+		{
+			host->addObserver(this, HOST_POWERSTATE_DID_CHANGE);
+			host->addObserver(this, HOST_HID_SYSTEM_EVENT);
+		}
 	}
 	else
 		return false;
@@ -86,8 +97,18 @@ bool RAM::connect(const string &name, OEComponent *component)
 
 void RAM::notify(int notification, OEComponent *component, void *data)
 {
-	for (int i = 0; i < memory.size(); i++)
-		memory[i] = resetPattern[i % resetPattern.size()];
+	if (notification == HOST_POWERSTATE_DID_CHANGE)
+	{
+		bool willBePowered = (*((int *) data) <= HOST_POWERSTATE_HIBERNATE);
+		
+		if (!powered && willBePowered)
+		{
+			for (int i = 0; i < memory.size(); i++)
+				memory[i] = resetPattern[i % resetPattern.size()];
+		}
+		
+		powered = willBePowered;
+	}
 }
 
 bool RAM::getMemoryMap(string &value)

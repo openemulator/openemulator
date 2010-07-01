@@ -12,6 +12,8 @@
 
 @interface DocumentWindow : NSWindow
 {
+	int modifierFlags;
+	
 	BOOL fullscreen;
 	NSRect fullscreenExitRect;
 	

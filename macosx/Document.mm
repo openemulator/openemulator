@@ -626,6 +626,7 @@
 
 - (void) keyDown:(int) keyCode
 {
+	NSLog(@"keyDown: %02x", keyCode);
 	HostHIDEvent event =
 	{
 		keyCode,
@@ -637,6 +638,7 @@
 
 - (void) keyUp:(int) keyCode
 {
+	NSLog(@"keyUp: %02x", keyCode);
 	HostHIDEvent event =
 	{
 		keyCode,
@@ -648,7 +650,7 @@
 
 - (void) sendUnicodeChar:(int) unicodeChar
 {
-	NSLog(@"sendUnicodeChar: %d", unicodeChar);
+//	NSLog(@"sendUnicodeChar: %02x", unicodeChar);
 	HostHIDEvent event =
 	{
 		unicodeChar,
@@ -660,50 +662,35 @@
 
 - (void) powerDown:(id) sender
 {
-	HostHIDEvent event = {
-		HOST_HID_S_POWERDOWN,
-		1,
-	};
+	int event = HOST_HID_S_POWERDOWN;
 	oepaPostNotification(emulation, "host::host",
 						 HOST_HID_SYSTEM_EVENT, &event);
 }
 
 - (void) sleep:(id) sender
 {
-	HostHIDEvent event = {
-		HOST_HID_S_SLEEP,
-		1,
-	};
+	int event = HOST_HID_S_SLEEP;
 	oepaPostNotification(emulation, "host::host",
 						 HOST_HID_SYSTEM_EVENT, &event);
 }
 
 - (void) wakeUp:(id) sender
 {
-	HostHIDEvent event = {
-		HOST_HID_S_WAKEUP,
-		1,
-	};
+	int event = HOST_HID_S_WAKEUP;
 	oepaPostNotification(emulation, "host::host",
 						 HOST_HID_SYSTEM_EVENT, &event);
 }
 
 - (void) restart:(id) sender
 {
-	HostHIDEvent event = {
-		HOST_HID_S_COLDRESTART,
-		1,
-	};
+	int event = HOST_HID_S_COLDRESTART;
 	oepaPostNotification(emulation, "host::host",
 						 HOST_HID_SYSTEM_EVENT, &event);
 }
 
 - (void) debuggerBreak:(id) sender
 {
-	HostHIDEvent event = {
-		HOST_HID_S_DEBUGGERBREAK,
-		1,
-	};
+	int event = HOST_HID_S_DEBUGGERBREAK;
 	oepaPostNotification(emulation, "host::host",
 						 HOST_HID_SYSTEM_EVENT, &event);
 }

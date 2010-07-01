@@ -49,7 +49,6 @@ OEInfo::OEInfo(const OEInfo &info)
 	outlets = info.outlets;
 }
 
-
 bool OEInfo::isLoaded()
 {
 	return loaded;

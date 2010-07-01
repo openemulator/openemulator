@@ -19,12 +19,12 @@
 #include "oepa.h"
 #include "oegl.h"
 
-#include "Host.h"
+#include "HostHID.h"
 
 typedef struct
 {
 	SDLKey sym;
-	int usbUsageId;
+	int usageId;
 } SDLKeyMapEntry;
 
 SDLKeyMapEntry sdlKeyMap[] = 
@@ -212,7 +212,7 @@ int sdlOpen(int width, int height, int fullscreen)
 	SDL_AddTimer(updateInterval, sdlCallback, NULL);
 	
 	for (int i = 0; i < sizeof(sdlKeyMap) / sizeof(SDLKeyMapEntry); i++)
-		sdlInverseKeyMap[sdlKeyMap[i].sym] = sdlKeyMap[i].usbUsageId;
+		sdlInverseKeyMap[sdlKeyMap[i].sym] = sdlKeyMap[i].usageId;
 	
 	return 0;
 }
@@ -222,20 +222,20 @@ void sdlHandleKeyboardEvent(bool isKeyDown, SDL_keysym keysym)
 	int scan = keysym.scancode;
 	SDLKey sym = keysym.sym;
 	
-	int usbUsageId = 0;
+	int usageId = 0;
 	if (sym < 512)
-		usbUsageId = sdlInverseKeyMap[sym];
+		usageId = sdlInverseKeyMap[sym];
 	
 	if ((sym == SDLK_CAPSLOCK) || (sym == SDLK_NUMLOCK) || (sym == SDLK_SCROLLOCK))
 	{
 		isKeyDown = true;
 		printf("kd:%d scan:%02x sym:%02x usb:%02x\n", isKeyDown, scan, sym, 
-			   usbUsageId);
+			   usageId);
 		
 		isKeyDown = false;
 	}
 	
-	printf("kd:%d scan:%02x sym:%02x usb:%02x\n", isKeyDown, scan, sym, usbUsageId);
+	printf("kd:%d scan:%02x sym:%02x usb:%02x\n", isKeyDown, scan, sym, usageId);
 }
 
 void sdlSetContext(void *emulation)
@@ -398,6 +398,7 @@ int main(int argc, char *argv[])
 		oeglInit(emulation);
 		
 		sdlRunEventLoop();
+		
 		oepaSave(emulation, emulationPath);
 		oepaDestroy(emulation);
 		

@@ -28,10 +28,10 @@ public:
 	void write(int address, OEUInt8 value);
 	
 private:
+	OEComponent *host;
+	
 	string mappedRange;
-
-	int resetNotification;
-	OEComponent *reset;
+	bool powered;
 	
 	int size;
 	int mask;
