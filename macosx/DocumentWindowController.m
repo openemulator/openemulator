@@ -58,7 +58,7 @@
 										   "Document toolbar item label")];
 		[item setImage:[NSImage imageNamed:@"TBPowerDown.png"]];
 		[item setTarget:document];
-		[item setAction:@selector(powerDownPressed:)];
+		[item setAction:@selector(powerDown:)];
 	}
 	else if ([ident isEqualToString:@"Sleep"])
 	{
@@ -70,7 +70,7 @@
 										   "Document toolbar item label")];
 		[item setImage:[NSImage imageNamed:@"TBSleep.png"]];
 		[item setTarget:document];
-		[item setAction:@selector(sleepPressed:)];
+		[item setAction:@selector(sleep:)];
 	}
 	else if ([ident isEqualToString:@"Wake Up"])
 	{
@@ -82,7 +82,7 @@
 										   "Document toolbar item label")];
 		[item setImage:[NSImage imageNamed:@"TBWakeUp.png"]];
 		[item setTarget:document];
-		[item setAction:@selector(wakeUpPressed:)];
+		[item setAction:@selector(wakeUp:)];
 	}
 	else if ([ident isEqualToString:@"Restart"])
 	{
@@ -95,7 +95,7 @@
 										   "Document toolbar item label")];
 		[item setImage:[NSImage imageNamed:@"TBRestart.png"]];
 		[item setTarget:document];
-		[item setAction:@selector(restartPressed:)];
+		[item setAction:@selector(restart:)];
 	}
 	else if ([ident isEqualToString:@"Debugger Break"])
 	{
@@ -107,7 +107,7 @@
 										   "Document toolbar item label")];
 		[item setImage:[NSImage imageNamed:@"TBDebuggerBreak.png"]];
 		[item setTarget:document];
-		[item setAction:@selector(interruptPressed:)];
+		[item setAction:@selector(debuggerBreak:)];
 	}
 	else if ([ident isEqualToString:@"Info"])
 	{

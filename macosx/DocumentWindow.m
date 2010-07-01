@@ -31,20 +31,24 @@
 
 - (void) keyDown:(NSEvent *)theEvent
 {
+	Document *document = [[self windowController] document];
 	NSString *characters = [theEvent characters];
 	
-	[[[self windowController] document] keyDown:[theEvent code]];
-	[[[self windowController] document] unicodeKeyPressed:characters];
+	if (![theEvent isARepeat])
+		[document keyDown:[theEvent keyCode]];
+	
+	for (int i = 0; i < [characters length]; i++)
+		[[[self windowController] document] sendUnicodeChar:[characters characterAtIndex:i]];
 }
 
 - (void) keyUp:(NSEvent *)theEvent
 {
-	[[[self windowController] document] keyUp:[theEvent code]];
+	Document *document = [[self windowController] document];
+	[document keyUp:[theEvent keyCode]];
 }
 
 - (void) flagsChanged:(NSEvent *)theEvent
 {
-	NSLog(@"flagsChanged: %@", theEvent);
 }
 
 - (NSRect) constrainFrameRect:(NSRect) frameRect toScreen:(NSScreen *) screen

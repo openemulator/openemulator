@@ -2,7 +2,7 @@
 /**
  * OpenEmulator
  * Mac OS X Document
- * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Handles an emulation.
@@ -97,8 +97,8 @@
 }
 
 - (BOOL) setComponentProperty:(NSString *) name
-							ref:(NSString *) ref
-							value:(NSString *) value
+						  ref:(NSString *) ref
+						value:(NSString *) value
 {
 	if (!emulation)
 		return false;
@@ -121,7 +121,7 @@
 						string([name UTF8String]),
 						value))
 		return [NSString stringWithUTF8String:value.c_str()];
-			
+	
 	return @"";
 }
 
@@ -186,7 +186,7 @@
 			[self setPowerState:
 			 NSLocalizedString(@"Powered on", @"Powered on")];
 			break;
-		case HOST_POWERSTATE_PAUSED:
+		case HOST_POWERSTATE_PAUSE:
 			[self setPowerState:
 			 NSLocalizedString(@"Paused", @"Paused")];
 			break;
@@ -196,7 +196,7 @@
 			break;
 		case HOST_POWERSTATE_SLEEP:
 			[self setPowerState:
-			 NSLocalizedString(@"Suspended", @"Sleep")];
+			 NSLocalizedString(@"Suspended", @"Suspended")];
 			break;
 		case HOST_POWERSTATE_HIBERNATE:
 			[self setPowerState:
@@ -495,11 +495,11 @@
 - (BOOL) validateUserInterfaceItem:(id) item
 {
 	if ([item action] == @selector(copy:))
-		return [self isCopyValid];
+		return [self isCopyable];
 	else if ([item action] == @selector(paste:))
-		return [self isPasteValid];
+		return [self isPasteable];
 	else if ([item action] == @selector(startSpeaking:))
-		return [self isCopyValid];
+		return [self isCopyable];
 	
 	return YES;
 }
@@ -624,24 +624,38 @@
     [peripherals removeObjectAtIndex:index];
 }
 
-- (void) keyDown:(id) sender
+- (void) keyDown:(int) keyCode
 {
-	HostHIDEvent event = {
-		HOST_HID_K,
+	HostHIDEvent event =
+	{
+		keyCode,
 		1,
 	};
 	oepaPostNotification(emulation, "host::host",
 						 HOST_HID_KEYBOARD_EVENT, &event);
 }
 
-- (void) keyUp:(id) sender
+- (void) keyUp:(int) keyCode
 {
-	HostHIDEvent event = {
-		HOST_HID_K,
+	HostHIDEvent event =
+	{
+		keyCode,
 		0,
 	};
 	oepaPostNotification(emulation, "host::host",
 						 HOST_HID_KEYBOARD_EVENT, &event);
+}
+
+- (void) sendUnicodeChar:(int) unicodeChar
+{
+	NSLog(@"sendUnicodeChar: %d", unicodeChar);
+	HostHIDEvent event =
+	{
+		unicodeChar,
+		0,
+	};
+	oepaPostNotification(emulation, "host::host",
+						 HOST_HID_UNICODEKEYBOARD_EVENT, &event);
 }
 
 - (void) powerDown:(id) sender
@@ -684,7 +698,7 @@
 						 HOST_HID_SYSTEM_EVENT, &event);
 }
 
-- (void) interrupt:(id) sender
+- (void) debuggerBreak:(id) sender
 {
 	HostHIDEvent event = {
 		HOST_HID_S_DEBUGGERBREAK,
@@ -694,26 +708,30 @@
 						 HOST_HID_SYSTEM_EVENT, &event);
 }
 
-- (BOOL) isCopyValid
+- (BOOL) isCopyable
 {
-	// To-Do: libemulation
-	return YES;
+	return oepaIoctl(emulation, "host::host", HOST_IS_COPYABLE, NULL);
 }
 
-- (BOOL) isPasteValid
+- (BOOL) isPasteable
 {
+	if (!oepaIoctl(emulation, "host::host", HOST_IS_PASTEABLE, NULL))
+		return NO;
+	
 	return [pasteboard availableTypeFromArray:pasteboardTypes] != nil;
 }
 
 - (NSString *) documentText
 {
-	// To-Do: libemulation
-	return @"This is a meticulously designed test of the speech synthesizing system.";  
+	string characterString;
+	oepaPostNotification(emulation, "host::host",
+						 HOST_CLIPBOARD_COPY_EVENT, &characterString);
+	return [NSString stringWithUTF8String:characterString.c_str()];
 }
 
 - (void) copy:(id) sender
 {
-	if ([self isCopyValid])
+	if ([self isCopyable])
 	{
 		[pasteboard declareTypes:pasteboardTypes owner:self];
 		[pasteboard setString:[self documentText] forType:NSStringPboardType];
@@ -722,12 +740,13 @@
 
 - (void) paste:(id) sender
 {
-	if ([self isPasteValid])
+	if ([self isPasteable])
 	{
-//		NSString *text = [pasteboard stringForType:NSStringPboardType];
+		NSString *characters = [pasteboard stringForType:NSStringPboardType];
+		string characterString([characters UTF8String]);
 		
-		// To-do: Send to libemulator
-		// (using [text UTF8String])
+		oepaPostNotification(emulation, "host::host", 
+							 HOST_CLIPBOARD_PASTE_EVENT, &characterString);
 	}
 }
 

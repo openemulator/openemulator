@@ -908,14 +908,15 @@ void oepaPostNotification(OEEmulation *emulation,
 	pthread_mutex_unlock(&oepaProcessMutex);
 }
 
-void oepaIoctl(OEEmulation *emulation,
+int oepaIoctl(OEEmulation *emulation,
 			   string ref, int message, void *data)
 {
 	pthread_mutex_lock(&oepaProcessMutex);
 	
 	OEComponent *component = emulation->getComponent(ref);
+	int status = 0;
 	if (component)
-		component->ioctl(message, data);
+		status = component->ioctl(message, data);
 	else
 	{
 		oepaLog("could not ioctl " << ref <<
@@ -923,6 +924,8 @@ void oepaIoctl(OEEmulation *emulation,
 	}
 	
 	pthread_mutex_unlock(&oepaProcessMutex);
+	
+	return status;
 }
 
 xmlDocPtr oepaGetDML(OEEmulation *emulation)

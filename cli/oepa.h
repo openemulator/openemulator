@@ -56,8 +56,8 @@ bool oepaGetProperty(OEEmulation *emulation,
 					 string ref, string name, string &value);
 void oepaPostNotification(OEEmulation *emulation,
 						  string ref, int notification, void *data);
-void oepaIoctl(OEEmulation *emulation,
-			   string ref, int message, void *data);
+int oepaIoctl(OEEmulation *emulation,
+			  string ref, int message, void *data);
 
 xmlDocPtr oepaGetDML(OEEmulation *emulation);
 bool oepaAddDevices(OEEmulation *emulation,

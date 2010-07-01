@@ -27,13 +27,16 @@ enum
 	HOST_HID_MOUSE_EVENT,
 	HOST_HID_JOYSTICK_EVENT,
 	HOST_HID_TABLET_EVENT,
+	
+	HOST_CLIPBOARD_COPY_EVENT,
+	HOST_CLIPBOARD_PASTE_EVENT,
 };
 
 // Power States
 enum
 {
 	HOST_POWERSTATE_ON = 0,
-	HOST_POWERSTATE_PAUSED,
+	HOST_POWERSTATE_PAUSE,
 	HOST_POWERSTATE_STANDBY,
 	HOST_POWERSTATE_SLEEP,
 	HOST_POWERSTATE_HIBERNATE,
@@ -417,16 +420,12 @@ enum
 // Messages
 enum
 {
-	HOST_REGISTER_EMULATION,
-	HOST_REGISTER_POWER,
-	HOST_REGISTER_VIDEO,
-	HOST_REGISTER_HID,
-	
 	HOST_ADD_SCREEN,
 	HOST_REMOVE_SCREEN,
-	HOST_UPDATE_VIDEO,
+	HOST_GET_SCREENS,
 	
-	HOST_SET_KEYBOARD_LED,
+	HOST_IS_COPYABLE,
+	HOST_IS_PASTEABLE,
 };
 
 // Devices - API to be determined
@@ -446,8 +445,6 @@ enum
 };
 
 // Data types
-typedef void (*HostObserver)(void *emulation, void *data);
-
 typedef struct
 {
 	float sampleRate;
@@ -475,22 +472,16 @@ typedef vector<HostVideoScreen *> HostVideoScreens;
 class Host : public OEComponent
 {
 public:
-	Host();
-	
 	bool setProperty(const string &name, const string &value);
 	bool getProperty(const string &name, string &value);
 	
 	int ioctl(int message, void *data);
 	
 private:
-	void *emulation;
-	HostObserver hostPower;
-	HostObserver hostVideo;
-	HostObserver hostHID;
-	
 	string notes;
 	int powerState;
 	bool hidMouseCapture;
+	int hidKeyboardLEDs;
 	string videoWindow;
 	
 	HostVideoScreens videoScreens;

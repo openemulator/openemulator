@@ -54,9 +54,9 @@
 
 - (void) dealloc
 {
-	[super dealloc];
-
 	[self deallocGL];
+	
+	[super dealloc];
 }
 
 /*- (void) observeValueForKeyPath:(NSString *) keyPath

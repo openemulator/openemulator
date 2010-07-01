@@ -2,7 +2,7 @@
 /**
  * OpenEmulator
  * Mac OS X Document
- * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Handles an emulation.
@@ -66,13 +66,17 @@ typedef struct OEEmulation OEEmulation;
 - (void) addDevices:(NSString *) path connections:(NSDictionary *) connections;
 - (void) removeDevice:(NSDictionary *) dict;
 
-- (void) powerDownPressed:(id) sender;
-- (void) sleepPressed:(id) sender;
-- (void) wakeUpPressed:(id) sender;
-- (void) restartPressed:(id) sender;
-- (void) interruptPressed:(id) sender;
+- (void) keyDown:(int) event;
+- (void) keyUp:(int) event;
+- (void) sendUnicodeChar:(int) unicodeChar;
 
-- (BOOL) isCopyValid;
-- (BOOL) isPasteValid;
+- (void) powerDown:(id) sender;
+- (void) sleep:(id) sender;
+- (void) wakeUp:(id) sender;
+- (void) restart:(id) sender;
+- (void) debuggerBreak:(id) sender;
+
+- (BOOL) isCopyable;
+- (BOOL) isPasteable;
 
 @end

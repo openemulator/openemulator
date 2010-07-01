@@ -10,29 +10,16 @@
 
 #include "Host.h"
 
-Host::Host()
-{
-	hostPower = NULL;
-	hostVideo = NULL;
-	hostHID = NULL;
-}
-
 bool Host::setProperty(const string &name, const string &value)
 {
 	if (name == "notes")
 		notes = value;
 	else if (name == "powerState")
-	{
-		int state = getInt(value);
-		if (powerState != state)
-		{
-			powerState = state;
-			if (hostPower)
-				hostPower(emulation, NULL);
-		}
-	}
+		powerState = getInt(value);
 	else if (name == "hidMouseCapture")
 		hidMouseCapture = getInt(value);
+	else if (name == "hidKeyboardLEDs")
+		hidKeyboardLEDs = getInt(value);
 	else if (name == "videoWindow")
 		videoWindow = value;
 	else
@@ -49,6 +36,8 @@ bool Host::getProperty(const string &name, string &value)
 		value = getString(powerState);
 	else if (name == "hidMouseCapture")
 		value = getString(hidMouseCapture);
+	else if (name == "hidKeyboardLEDs")
+		value = getString(hidKeyboardLEDs);
 	else if (name == "videoWindow")
 		value = videoWindow;
 	else
@@ -82,43 +71,26 @@ int Host::ioctl(int message, void *data)
 	
 	switch(message)
 	{
-		case HOST_REGISTER_EMULATION:
-			emulation = data;
-			return true;
-			
-		case HOST_REGISTER_POWER:
-			hostPower = (HostObserver) data;
-			return true;
-			
-		case HOST_REGISTER_VIDEO:
-			hostVideo = (HostObserver) data;
-			return true;
-			
-		case HOST_REGISTER_HID:
-			hostHID = (HostObserver) data;
-			return true;
-			
 		case HOST_ADD_SCREEN:
 			status = addScreen((HostVideoScreen *) data);
-			if (hostVideo)
-				hostVideo(emulation, &videoScreens);
 			return status;
 			
 		case HOST_REMOVE_SCREEN:
 			status = removeScreen((HostVideoScreen *) data);
-			if (hostVideo)
-				hostVideo(emulation, &videoScreens);
 			return status;
 			
-		case HOST_UPDATE_VIDEO:
-			if (hostVideo)
-				hostVideo(emulation, &videoScreens);
+		case HOST_GET_SCREENS:
+		{
+			HostVideoScreens **videoScreensP = (HostVideoScreens **) data;
+			*videoScreensP = &videoScreens;
 			return true;
+		}
+		
+		case HOST_IS_COPYABLE:
+			return (observerMap[HOST_CLIPBOARD_COPY_EVENT].size() != 0);
 			
-		case HOST_SET_KEYBOARD_LED:
-			if (hostHID)
-				hostHID(emulation, data);
-			return true;
+		case HOST_IS_PASTEABLE:
+			return (observerMap[HOST_CLIPBOARD_PASTE_EVENT].size() != 0);
 	}
 	
 	return false;
