@@ -626,7 +626,7 @@
 
 - (void) keyDown:(int) keyCode
 {
-	NSLog(@"keyDown: %02x", keyCode);
+//	NSLog(@"keyDown: %02x", keyCode);
 	HostHIDEvent event =
 	{
 		keyCode,
@@ -638,7 +638,7 @@
 
 - (void) keyUp:(int) keyCode
 {
-	NSLog(@"keyUp: %02x", keyCode);
+//	NSLog(@"keyUp: %02x", keyCode);
 	HostHIDEvent event =
 	{
 		keyCode,

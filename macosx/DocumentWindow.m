@@ -82,7 +82,7 @@ CocoaKeyMapEntry cocoaKeyMap[] =
 	{0x21, HOST_HID_K_LEFTBRACKET},
 	{0x1e, HOST_HID_K_RIGHTBRACKET},
 	{0x2a, HOST_HID_K_BACKSLASH},
-	{0x56, HOST_HID_K_NON_US1},
+	{0x0a, HOST_HID_K_NON_US1},
 	{0x29, HOST_HID_K_SEMICOLON},
 	{0x27, HOST_HID_K_QUOTE},
 	{0x32, HOST_HID_K_GRAVEACCENT},
@@ -131,6 +131,7 @@ CocoaKeyMapEntry cocoaKeyMap[] =
 	{0x5b, HOST_HID_KP_8},
 	{0x5c, HOST_HID_KP_9},
 	{0x52, HOST_HID_KP_0},
+	{0x51, HOST_HID_KP_EQUAL},
 	{0x41, HOST_HID_KP_PERIOD},
 	{0x7f, HOST_HID_K_POWER},
 
@@ -189,7 +190,9 @@ int cocoaInverseKeyMap[512];
 	
 	if (![theEvent isARepeat])
 		[document keyDown:[self translateKeyCode:[theEvent keyCode]]];
-	
+
+	NSLog(@"keyDown1: %02x", [theEvent keyCode]);
+
 	for (int i = 0; i < [characters length]; i++)
 	{
 		int unicodeChar = [characters characterAtIndex:i];
@@ -200,6 +203,7 @@ int cocoaInverseKeyMap[512];
 
 - (void) keyUp:(NSEvent *) theEvent
 {
+	NSLog(@"keyUp1: %02x", [theEvent keyCode]);
 	Document *document = [[self windowController] document];
 	[document keyUp:[self translateKeyCode:[theEvent keyCode]]];
 }
