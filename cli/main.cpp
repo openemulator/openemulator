@@ -8,10 +8,10 @@
  * Program entry point.
  */
 
-#include <sys/time.h>
-
 #include "stdio.h"
 #include "getopt.h"
+
+#include <sys/time.h>
 
 #include <sstream>
 
@@ -333,6 +333,12 @@ void sdlRunEventLoop()
 				sdlSendJoystickButtonEvent(event.jbutton.which,
 										   event.jbutton.button,
 										   event.jbutton.state == SDL_JOYBUTTONDOWN);
+				break;
+				
+			case SDL_JOYHATMOTION:
+				sdlSendJoystickHatEvent(event.jaxis.which,
+										 event.jaxis.axis,
+										 event.jaxis.value);
 				break;
 				
 			case SDL_QUIT:
