@@ -219,6 +219,17 @@ int sdlOpen(int width, int height, int fullscreen)
 	return 0;
 }
 
+void sdlSendHIDEvent(int notification, int usageId, int value)
+{
+	HostHIDEvent hidEvent;
+	hidEvent.usageId = usageId;
+	hidEvent.value = value;
+	oepaPostNotification(sdlEmulation, HOST_DEVICE,
+						 notification, &hidEvent);
+	
+	printf("sendHIDEvent: %d, %d, %d\n", notification, usageId, value);
+}
+
 void sdlSendKeyboardEvent(bool isKeyDown, SDL_keysym keysym)
 {
 	int scan = keysym.scancode;
@@ -240,24 +251,31 @@ void sdlSendKeyboardEvent(bool isKeyDown, SDL_keysym keysym)
 	printf("kd:%d scan:%02x sym:%02x usb:%02x\n", isKeyDown, scan, sym, usageId);
 }
 
-void sdlSendJoystickAxisEvent(int which, int axis, int value)
+void sdlSetGrabMode(bool state, vector<bool> &mouseButtonsState)
 {
-	HostHIDEvent hidEvent;
-	hidEvent.usageId = HOST_HID_J_AXIS1 + axis;
-	hidEvent.value = value;
-	oepaPostNotification(sdlEmulation, HOST_DEVICE,
-						 HOST_HID_JOYSTICK1_EVENT + which,
-						 &hidEvent);
-}
-
-void sdlSendJoystickButtonEvent(int which, int button, bool state)
-{
-	HostHIDEvent hidEvent;
-	hidEvent.usageId = HOST_HID_J_BUTTON1 + button;
-	hidEvent.value = state;
-	oepaPostNotification(sdlEmulation, HOST_DEVICE,
-						 HOST_HID_JOYSTICK1_EVENT + which,
-						 &hidEvent);
+	SDL_WM_GrabInput(state ? SDL_GRAB_ON : SDL_GRAB_OFF);
+	
+	// Move mouse button events
+	for (int i = 0; i < mouseButtonsState.size(); i++)
+	{
+		if (!mouseButtonsState[i])
+			continue;
+		
+		if (state)
+		{
+			sdlSendHIDEvent(HOST_HID_POINTER_EVENT,
+							HOST_HID_P_BUTTON1 + i, false);
+			sdlSendHIDEvent(HOST_HID_MOUSE_EVENT,
+							HOST_HID_M_BUTTON1 + i, true);
+		}
+		else
+		{
+			sdlSendHIDEvent(HOST_HID_MOUSE_EVENT,
+							HOST_HID_M_BUTTON1 + i, false);
+			sdlSendHIDEvent(HOST_HID_POINTER_EVENT,
+							HOST_HID_P_BUTTON1 + i, true);
+		}
+	}
 }
 
 void sdlRunEventLoop()
@@ -265,7 +283,10 @@ void sdlRunEventLoop()
 	bool isRunning = true;
     SDL_Event event;
 	bool mouseCaptured = false;
+	vector<bool> mouseButtonsState;
 	
+	mouseButtonsState.resize(8);
+
     while (isRunning && SDL_WaitEvent(&event))
 	{
         switch(event.type)
@@ -285,60 +306,88 @@ void sdlRunEventLoop()
 				break;
 				
 			case SDL_KEYDOWN:
+				sdlSendHIDEvent(HOST_HID_UNICODEKEYBOARD_EVENT,
+								event.key.keysym.unicode,
+								1);
 			case SDL_KEYUP:
 				sdlSendKeyboardEvent(event.type == SDL_KEYDOWN,
 									 event.key.keysym);
 				break;
 				
 			case SDL_MOUSEMOTION:
-				if (!mouseCaptured)
+				if (mouseCaptured)
 				{
-//					sendPointerPosition(x);
-//					sendPointerPosition(y);
+					if (event.motion.xrel)
+						sdlSendHIDEvent(HOST_HID_MOUSE_EVENT,
+										HOST_HID_M_RX,
+										event.motion.xrel);
+					if (event.motion.yrel)
+						sdlSendHIDEvent(HOST_HID_MOUSE_EVENT,
+										HOST_HID_M_RY,
+										event.motion.yrel);
 				}
 				else
 				{
-//					if (rx)
-//						sendMouseMotion(rx);
-//					if (ry)
-//						sendMouseMotion(ry);
+					sdlSendHIDEvent(HOST_HID_POINTER_EVENT,
+									HOST_HID_P_X,
+									event.motion.x);
+					sdlSendHIDEvent(HOST_HID_MOUSE_EVENT,
+									HOST_HID_P_X,
+									event.motion.y);
 				}
 				break;
 				
 			case SDL_MOUSEBUTTONDOWN:
-				if (!mouseCaptured)
-					if (sdlMouseCapture)
-						SDL_WM_GrabInput(SDL_GRAB_ON);
-//					else
-//						sendPointerEvent();
-//				else
-//					sendMouseEvent();
-				break;
-				
+				if (!mouseCaptured &&
+					sdlMouseCapture &&
+					(event.button.button == SDL_BUTTON_LEFT))
+				{
+					sdlSetGrabMode(true, mouseButtonsState);
+					break;
+				}
 			case SDL_MOUSEBUTTONUP:
-//				if (mouseCaptured)
-//					sendMouseEvent();
-//				else if (mouseCapture)
-//					sendPointerEvent();
+			{
+				bool state = (event.button.state == SDL_PRESSED);
+				if (mouseButtonsState[event.button.button] == state)
+					break;
+				
+				if (mouseCaptured)
+					sdlSendHIDEvent(HOST_HID_MOUSE_EVENT,
+									HOST_HID_M_BUTTON1 + event.button.button,
+									state);
+				else
+					sdlSendHIDEvent(HOST_HID_POINTER_EVENT,
+									HOST_HID_P_BUTTON1 + event.button.button,
+									state);
 				break;
+			}
 				
 			case SDL_JOYAXISMOTION:
-				sdlSendJoystickAxisEvent(event.jaxis.which,
-										 event.jaxis.axis,
-										 event.jaxis.value);
+				sdlSendHIDEvent(HOST_HID_JOYSTICK1_EVENT + event.jaxis.which,
+								HOST_HID_J_AXIS1 + event.jaxis.axis,
+								event.jaxis.value + 32768);
 				break;
 				
 			case SDL_JOYBUTTONDOWN:
 			case SDL_JOYBUTTONUP:
-				sdlSendJoystickButtonEvent(event.jbutton.which,
-										   event.jbutton.button,
-										   event.jbutton.state == SDL_JOYBUTTONDOWN);
+				sdlSendHIDEvent(HOST_HID_JOYSTICK1_EVENT + event.jbutton.which,
+								HOST_HID_J_BUTTON1 + event.jbutton.button,
+								event.jbutton.state == SDL_PRESSED);
 				break;
 				
 			case SDL_JOYHATMOTION:
-				sdlSendJoystickHatEvent(event.jaxis.which,
-										 event.jaxis.axis,
-										 event.jaxis.value);
+				sdlSendHIDEvent(HOST_HID_JOYSTICK1_EVENT + event.jhat.which,
+								HOST_HID_J_HAT1 + event.jhat.hat,
+								event.jhat.value);
+				break;
+				
+			case SDL_JOYBALLMOTION:
+				sdlSendHIDEvent(HOST_HID_JOYSTICK1_EVENT + event.jball.which,
+								HOST_HID_J_RELAXIS1 + 2 * event.jball.ball,
+								event.jball.xrel);
+				sdlSendHIDEvent(HOST_HID_JOYSTICK1_EVENT + event.jball.which,
+								HOST_HID_J_RELAXIS2 + 2 * event.jball.ball,
+								event.jball.yrel);
 				break;
 				
 			case SDL_QUIT:
