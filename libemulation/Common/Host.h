@@ -21,13 +21,16 @@ enum
 	HOST_AUDIO_RENDER_DID_BEGIN,
 	HOST_AUDIO_RENDER_WILL_END,
 	HOST_AUDIO_RENDER_DID_END,
-	
+
 	HOST_HID_SYSTEM_EVENT,
 	HOST_HID_KEYBOARD_EVENT,
 	HOST_HID_UNICODEKEYBOARD_EVENT,
 	HOST_HID_POINTER_EVENT,
 	HOST_HID_MOUSE_EVENT,
-	HOST_HID_JOYSTICK_EVENT,
+	HOST_HID_JOYSTICK1_EVENT,
+	HOST_HID_JOYSTICK2_EVENT,
+	HOST_HID_JOYSTICK3_EVENT,
+	HOST_HID_JOYSTICK4_EVENT,
 	HOST_HID_TABLET_EVENT,
 	
 	HOST_CLIPBOARD_COPY_EVENT,
@@ -51,6 +54,7 @@ enum
 	HOST_ADD_SCREEN,
 	HOST_REMOVE_SCREEN,
 	HOST_UPDATE_SCREEN,
+	HOST_GET_VIDEO_UPDATE,
 	HOST_GET_SCREENS,
 	
 	HOST_IS_COPYABLE,
@@ -108,12 +112,15 @@ public:
 	
 private:
 	string notes;
+	
 	int powerState;
+	
+	string videoWindow;
+	bool videoUpdate;
+	HostVideoScreens videoScreens;
+	
 	bool hidMouseCapture;
 	int hidKeyboardLEDs;
-	string videoWindow;
-	
-	HostVideoScreens videoScreens;
 	
 	bool addScreen(HostVideoScreen *screen);
 	bool removeScreen(HostVideoScreen *screen);

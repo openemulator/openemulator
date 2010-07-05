@@ -5,20 +5,15 @@
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * OpenEmulator/OpenGL interface.
+ * OpenEmulator/OpenGL interface
  */
 
 #include <math.h>
-#include <pthread.h>
 
 #include <OpenGL/OpenGL.h>
 #include <GLUT/glut.h>
 
 #include "oegl.h"
-
-// OEGL Variables
-OEGLSetContext oeglSetContext = NULL;
-pthread_mutex_t oeglContextMutex;
 
 // Temporary
 GLfloat light0_ambient[] =	{0.2, 0.2, 0.2, 1.0};
@@ -30,20 +25,8 @@ GLfloat light2_position[] =	{-1.0, -1.0, 1.0, 0.0};
 GLfloat angle1 = 0.0;
 GLfloat angle2 = 0.0;
 
-void oeglOpen(OEGLSetContext setContext)
-{
-	oeglSetContext = setContext;
-}
-
-void oeglClose()
-{
-}
-
 void oeglInit(void *emulation)
 {
-	if (oeglSetContext)
-		oeglSetContext(emulation);
-	
 	glDisable(GL_ALPHA_TEST);
 	glDisable(GL_BLEND);
 	glDisable(GL_CULL_FACE);
@@ -79,9 +62,6 @@ void oeglInit(void *emulation)
 
 void oeglDraw(void *emulation)
 {
-	if (oeglSetContext)
-		oeglSetContext(emulation);
-	
 	angle1 = (GLfloat) fmod(angle1 + 360.0 / 200, 360.0);
 	
 	static GLfloat amb[] = {0.4, 0.4, 0.4, 0.0};

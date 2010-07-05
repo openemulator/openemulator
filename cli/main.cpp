@@ -8,6 +8,8 @@
  * Program entry point.
  */
 
+#include <sys/time.h>
+
 #include "stdio.h"
 #include "getopt.h"
 
@@ -19,7 +21,9 @@
 #include "oepa.h"
 #include "oegl.h"
 
-#include "HostHID.h"
+#include "Host.h"
+
+#define HOST_DEVICE "host::host"
 
 typedef struct
 {
@@ -147,7 +151,8 @@ SDLKeyMapEntry sdlKeyMap[] =
 };
 
 int sdlInverseKeyMap[512];
-OEEmulation *emulation;
+OEEmulation *sdlEmulation;
+bool sdlMouseCapture;
 
 void about()
 {
@@ -204,20 +209,17 @@ int sdlOpen(int width, int height, int fullscreen)
 									SDL_OPENGL |
 									(fullscreen ? SDL_FULLSCREEN : SDL_RESIZABLE)
 									);
-	
 	SDL_WM_SetCaption("OpenEmulator", NULL);
 	
-	double updateFrequency = 60.0;
-	int updateInterval = 1000.0 / updateFrequency;
-	SDL_AddTimer(updateInterval, sdlCallback, NULL);
-	
+	SDL_EnableUNICODE(1);
 	for (int i = 0; i < sizeof(sdlKeyMap) / sizeof(SDLKeyMapEntry); i++)
 		sdlInverseKeyMap[sdlKeyMap[i].sym] = sdlKeyMap[i].usageId;
 	
+	SDL_AddTimer(1, sdlCallback, NULL);
 	return 0;
 }
 
-void sdlHandleKeyboardEvent(bool isKeyDown, SDL_keysym keysym)
+void sdlSendKeyboardEvent(bool isKeyDown, SDL_keysym keysym)
 {
 	int scan = keysym.scancode;
 	SDLKey sym = keysym.sym;
@@ -238,39 +240,99 @@ void sdlHandleKeyboardEvent(bool isKeyDown, SDL_keysym keysym)
 	printf("kd:%d scan:%02x sym:%02x usb:%02x\n", isKeyDown, scan, sym, usageId);
 }
 
-void sdlSetContext(void *emulation)
+void sdlSendJoystickAxisEvent(int which, int axis, int value)
 {
+	HostHIDEvent hidEvent;
+	hidEvent.usageId = HOST_HID_J_AXIS1 + axis;
+	hidEvent.value = value;
+	oepaPostNotification(sdlEmulation, HOST_DEVICE,
+						 HOST_HID_JOYSTICK1_EVENT + which,
+						 &hidEvent);
+}
+
+void sdlSendJoystickButtonEvent(int which, int button, bool state)
+{
+	HostHIDEvent hidEvent;
+	hidEvent.usageId = HOST_HID_J_BUTTON1 + button;
+	hidEvent.value = state;
+	oepaPostNotification(sdlEmulation, HOST_DEVICE,
+						 HOST_HID_JOYSTICK1_EVENT + which,
+						 &hidEvent);
 }
 
 void sdlRunEventLoop()
 {
 	bool isRunning = true;
     SDL_Event event;
+	bool mouseCaptured = false;
 	
     while (isRunning && SDL_WaitEvent(&event))
 	{
         switch(event.type)
 		{
 			case SDL_USEREVENT:
-				oeglDraw(emulation);
+			{
+				static int last;
+				timeval tim;
+				gettimeofday(&tim, NULL);
+				
+//				printf("%d\n", (1000000 + tim.tv_usec - last) % 1000000);
+				last = tim.tv_usec;
+				
+				oeglDraw(sdlEmulation);
 				SDL_GL_SwapBuffers();
+			}
 				break;
 				
 			case SDL_KEYDOWN:
 			case SDL_KEYUP:
-				sdlHandleKeyboardEvent(event.type == SDL_KEYDOWN,
-									   event.key.keysym);
+				sdlSendKeyboardEvent(event.type == SDL_KEYDOWN,
+									 event.key.keysym);
 				break;
 				
 			case SDL_MOUSEMOTION:
+				if (!mouseCaptured)
+				{
+//					sendPointerPosition(x);
+//					sendPointerPosition(y);
+				}
+				else
+				{
+//					if (rx)
+//						sendMouseMotion(rx);
+//					if (ry)
+//						sendMouseMotion(ry);
+				}
+				break;
+				
 			case SDL_MOUSEBUTTONDOWN:
+				if (!mouseCaptured)
+					if (sdlMouseCapture)
+						SDL_WM_GrabInput(SDL_GRAB_ON);
+//					else
+//						sendPointerEvent();
+//				else
+//					sendMouseEvent();
+				break;
+				
 			case SDL_MOUSEBUTTONUP:
-				// SDL_WM_GrabInput(SDL_GRAB_ON)
+//				if (mouseCaptured)
+//					sendMouseEvent();
+//				else if (mouseCapture)
+//					sendPointerEvent();
 				break;
 				
 			case SDL_JOYAXISMOTION:
+				sdlSendJoystickAxisEvent(event.jaxis.which,
+										 event.jaxis.axis,
+										 event.jaxis.value);
+				break;
+				
 			case SDL_JOYBUTTONDOWN:
 			case SDL_JOYBUTTONUP:
+				sdlSendJoystickButtonEvent(event.jbutton.which,
+										   event.jbutton.button,
+										   event.jbutton.state == SDL_JOYBUTTONDOWN);
 				break;
 				
 			case SDL_QUIT:
@@ -292,13 +354,13 @@ int main(int argc, char *argv[])
 {
 	string emulationPath;
 	string resourcePath;
-	
-	int sdlLeft = 0;
-	int sdlTop = 0;
-	int sdlWidth = 768;
-	int sdlHeight = 512;
-	bool sdlSetVideoWindow = false;
-	bool sdlFullScreen = false;
+
+	int videoLeft = 0;
+	int videoTop = 0;
+	int videoWidth = 768;
+	int videoHeight = 512;
+	bool videoCanvasSizeSet = false;
+	bool videoFullScreen = false;
 	
 	{
 		int c;
@@ -328,17 +390,17 @@ int main(int argc, char *argv[])
 					break;
 					
 				case 'w':
-					sdlWidth = atoi(optarg);
-					sdlSetVideoWindow = true;
+					videoWidth = atoi(optarg);
+					videoCanvasSizeSet = true;
 					break;
 					
 				case 'h':
-					sdlHeight = atoi(optarg);
-					sdlSetVideoWindow = true;
+					videoHeight = atoi(optarg);
+					videoCanvasSizeSet = true;
 					break;
 					
 				case 'f':
-					sdlFullScreen = true;
+					videoFullScreen = true;
 					break;
 					
 				case '?':
@@ -362,52 +424,54 @@ int main(int argc, char *argv[])
 	if (index < argc)
 		emulationPath = string(argv[index++]);
 	
-	emulation = oepaConstruct(emulationPath, resourcePath);
+	oepaOpen();
 	
-	if (emulation && emulation->isLoaded())
+	sdlEmulation = oepaConstruct(emulationPath, resourcePath);
+	if (sdlEmulation && sdlEmulation->isLoaded())
 	{
+		// Configure emulation
 		string value;
-		if (oepaGetProperty(emulation, "host::host", "videoWindow", value))
+		if (oepaGetProperty(sdlEmulation, HOST_DEVICE, "videoWindow", value))
 		{
 			float x, y, w, h;
 			if (sscanf(value.c_str(), "%f %f %f %f", &x, &y, &w, &h) == 4)
 			{
-				if (!sdlSetVideoWindow)
+				if (!videoCanvasSizeSet)
 				{
-					sdlWidth = (int) w;
-					sdlHeight = (int) h;
+					videoWidth = (int) w;
+					videoHeight = (int) h;
 				}
 				
-				sdlLeft = (int) x;
-				sdlTop = (int) y;
+				videoLeft = (int) x;
+				videoTop = (int) y;
 			}
 		}
 		
 		stringstream ss;
-		ss << sdlLeft << " " << sdlTop << " " << sdlWidth << " " << sdlHeight;
-		oepaSetProperty(emulation, "host::host", "videoWindow", ss.str());
+		ss << videoLeft << " " << videoTop << " " << videoWidth << " " << videoHeight;
+		oepaSetProperty(sdlEmulation, HOST_DEVICE, "videoWindow", ss.str());
 		
-		oepaIoctl(emulation, "host::host", HOST_REGISTER_VIDEO, (void *) oeglDraw);
+		oepaGetProperty(sdlEmulation, HOST_DEVICE, "mouseCapture", value);
+		sdlMouseCapture = (value == "1") ? true : false;
 		
 		// To-Do: mount disk images
 		
-		sdlOpen(sdlWidth, sdlHeight, sdlFullScreen);
-		oeglOpen(sdlSetContext);
-		oepaOpen();
+		// Open video
+		sdlOpen(videoWidth, videoHeight, videoFullScreen);
+		oeglInit(sdlEmulation);
 		
-		oeglInit(emulation);
-		
+		// Run emulation
 		sdlRunEventLoop();
 		
-		oepaSave(emulation, emulationPath);
-		oepaDestroy(emulation);
-		
-		oepaClose();
-		oeglClose();
+		// Close
+		oepaSave(sdlEmulation, emulationPath);
+		oepaDestroy(sdlEmulation);
 		sdlClose();
 	}
 	else
 		printf("Could not open emulation.\n");
+	
+	oepaClose();
 	
 	return 0;
 }
