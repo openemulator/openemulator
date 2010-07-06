@@ -261,10 +261,10 @@ bool OEEmulation::removeDevice(OERef ref)
 	return true;
 }
 
-string OEEmulation::toString(int i)
+string OEEmulation::getString(int value)
 {
 	stringstream ss;
-	ss << i;
+	ss << value;
 	return ss.str();
 }
 
@@ -904,7 +904,7 @@ void OEEmulation::buildDeviceNameMap(xmlDocPtr doc, xmlDocPtr elem,
 		
 		string newDeviceName;
 		do {
-			newDeviceName = "dev" + toString(devIndex);
+			newDeviceName = "dev" + getString(devIndex);
 			devIndex++;
 		} while (getNodeForRef(doc, OERef(newDeviceName)));
 		deviceNameMap[deviceName] = newDeviceName;

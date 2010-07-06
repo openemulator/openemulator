@@ -81,9 +81,6 @@ public:
 	void postNotification(int notification, void *data);
 	virtual void notify(int notification, OEComponent *component, void *data);
 	
-	virtual bool setMemoryMap(OEComponent *component, const string &value);
-	virtual bool getMemoryMap(string &value);
-	
 	virtual int ioctl(int message, void *data);
 	
 	virtual OEUInt8 read(OEUInt32 address);
@@ -95,6 +92,9 @@ public:
 	virtual bool read(OEUInt32 address, OEData &value);
 	virtual bool write(OEUInt32 address, OEData &value);
 	
+	virtual bool setMemoryMap(OEComponent *component, const string &value);
+	virtual bool getMemoryMap(string &value);
+	
 protected:
 	OEObserverMap observerMap;
 	
@@ -103,7 +103,7 @@ protected:
 	string getString(int value);
 	string getHex(int value);
 	OEData getCharVector(const string &value);
-	int getLowerPowerOf2(int value);
+	int getNextPowerOf2(int value);
 	bool getRange(OEMemoryRange &range, const string &value);
 	bool getRanges(OEMemoryRanges &ranges, const string &value);
 };

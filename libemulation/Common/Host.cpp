@@ -73,19 +73,19 @@ int Host::ioctl(int message, void *data)
 	switch(message)
 	{
 		case HOST_ADD_SCREEN:
-			videoUpdate = true;
+			videoUpdated = true;
 			return addScreen((HostVideoScreen *) data);
 			
 		case HOST_REMOVE_SCREEN:
-			videoUpdate = true;
+			videoUpdated = true;
 			return removeScreen((HostVideoScreen *) data);
 			
 		case HOST_UPDATE_SCREEN:
-			videoUpdate = true;
+			videoUpdated = true;
 			return true;
 			
-		case HOST_GET_VIDEO_UPDATE:
-			*((bool **) data) = &videoUpdate;
+		case HOST_GET_VIDEO_UPDATED:
+			*((bool **) data) = &videoUpdated;
 			return true;
 			
 		case HOST_GET_SCREENS:

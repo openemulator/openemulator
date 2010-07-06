@@ -23,6 +23,8 @@
 
 #include "Host.h"
 
+#define sdlLog(text) cerr << "oecli: " << text << endl
+
 #define HOST_DEVICE "host::host"
 #define SDL_INVERSE_KEYMAP_SIZE 512
 
@@ -153,6 +155,8 @@ SDLKeyMapEntry sdlKeyMap[] =
 
 OEEmulation *sdlEmulation;
 
+bool sdlOpenGLSwap;
+
 int sdlInverseKeyMap[SDL_INVERSE_KEYMAP_SIZE];
 bool sdlCtrlPressed;
 bool sdlAltPressed;
@@ -176,45 +180,38 @@ void about()
 	printf("  -f                 Set full screen\n");
 }
 
-Uint32 sdlCallback(Uint32 interval, void *param)
+bool sdlOpen(int width, int height, int fullscreen)
 {
-	SDL_Event event = {SDL_USEREVENT};
-	SDL_PushEvent(&event);
-	return interval;
-}
-
-int sdlOpen(int width, int height, int fullscreen)
-{
-	SDL_Init(SDL_INIT_VIDEO |
-			 SDL_INIT_TIMER |
-			 SDL_INIT_JOYSTICK);
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) != 0)
+		return false;
 	
 	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
-	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
-	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 8);
-	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 0);
-	SDL_GL_SetAttribute(SDL_GL_ACCUM_RED_SIZE, 0);
-	SDL_GL_SetAttribute(SDL_GL_ACCUM_GREEN_SIZE, 0);
-	SDL_GL_SetAttribute(SDL_GL_ACCUM_BLUE_SIZE, 0);
-	SDL_GL_SetAttribute(SDL_GL_ACCUM_ALPHA_SIZE, 0);
-	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 0);
+	
+	SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 1);	// SDL 1.2
+//	SDL_GL_SetSwapInterval(1);						// SDL 1.3
+
+	int value;
+	SDL_GL_GetAttribute(SDL_GL_SWAP_CONTROL, &value);
+	sdlOpenGLSwap = (value != 0);
 	
 	SDL_Surface *videoSurface;
 	videoSurface = SDL_SetVideoMode(width,
 									height,
 									0,
 									SDL_OPENGL |
-									(fullscreen ? SDL_FULLSCREEN : SDL_RESIZABLE)
+									(fullscreen ? SDL_FULLSCREEN : 0)
 									);
+	if (!videoSurface)
+		return false;
+	
 	SDL_WM_SetCaption("OpenEmulator", NULL);
 	
 	SDL_EnableUNICODE(1);
 	for (int i = 0; i < sizeof(sdlKeyMap) / sizeof(SDLKeyMapEntry); i++)
 		sdlInverseKeyMap[sdlKeyMap[i].sym] = sdlKeyMap[i].usageId;
-	
-	SDL_AddTimer(1, sdlCallback, NULL);
 	
 	sdlCtrlPressed = false;
 	sdlAltPressed = false;
@@ -223,7 +220,7 @@ int sdlOpen(int width, int height, int fullscreen)
 	sdlMouseCaptured = false;
 	sdlMouseCaptureRelease = false;
 	
-	return 0;
+	return true;
 }
 
 void sdlSendHIDEvent(int notification, int usageId, int value)
@@ -254,7 +251,7 @@ void sdlSetGrabMode(bool state)
 {
 	SDL_WM_GrabInput(state ? SDL_GRAB_ON : SDL_GRAB_OFF);
 	SDL_ShowCursor(state ? SDL_DISABLE : SDL_ENABLE);
-					
+	
 	// Move mouse button events
 	for (int i = 0; i < sdlMouseButtonState.size(); i++)
 	{
@@ -298,164 +295,185 @@ void sdlSendMouseButtonEvent(int button, bool state)
 void sdlRunEventLoop()
 {
     SDL_Event event;
-	bool isRunning = true;
+	bool running = true;
+	
 	int keyDownCount = 0;
 	
-    while (isRunning && SDL_WaitEvent(&event))
+    while (running)
 	{
-        switch(event.type)
+		// Handle SDL events
+		while (SDL_PollEvent(&event))
 		{
-			case SDL_USEREVENT:
+			switch(event.type)
 			{
-				static int last;
-				timeval tim;
-				gettimeofday(&tim, NULL);
-				
-//				printf("%d\n", (1000000 + tim.tv_usec - last) % 1000000);
-				last = tim.tv_usec;
-				
-				oeglDraw(sdlEmulation);
-				SDL_GL_SwapBuffers();
-			}
-				break;
-				
-			case SDL_KEYDOWN:
-				if ((event.key.keysym.unicode) &&
-					(event.key.keysym.unicode < 0xf700) &&
-					(event.key.keysym.unicode >= 0xf900))
-					sdlSendHIDEvent(HOST_HID_UNICODEKEYBOARD_EVENT,
-									event.key.keysym.unicode, 1);
-				sdlSendHIDEvent(HOST_HID_KEYBOARD_EVENT,
-								sdlTranslateKeysym(event.key.keysym.sym), 1);
-
-				if ((event.key.keysym.sym == SDLK_CAPSLOCK) ||
-					(event.key.keysym.sym == SDLK_NUMLOCK) ||
-					(event.key.keysym.sym == SDLK_SCROLLOCK))
-					sdlSendHIDEvent(HOST_HID_KEYBOARD_EVENT,
-									sdlTranslateKeysym(event.key.keysym.sym), 0);
-				else
-					keyDownCount++;
-				
-				// CTRL-ALT releases mouse capture
-				sdlUpdateCtrlAlt(event.key.keysym.sym, true);
-				
-				if (sdlMouseCaptured && sdlCtrlPressed && sdlAltPressed)
-					sdlMouseCaptureRelease = true;
-				break;
-				
-			case SDL_KEYUP:
-				if ((event.key.keysym.sym == SDLK_CAPSLOCK) ||
-					(event.key.keysym.sym == SDLK_NUMLOCK) ||
-					(event.key.keysym.sym == SDLK_SCROLLOCK))
-					sdlSendHIDEvent(HOST_HID_KEYBOARD_EVENT,
-									sdlTranslateKeysym(event.key.keysym.sym), 1);
-				else
-					keyDownCount--;
-				sdlSendHIDEvent(HOST_HID_KEYBOARD_EVENT,
-								sdlTranslateKeysym(event.key.keysym.sym), 0);
-				
-				sdlUpdateCtrlAlt(event.key.keysym.sym, false);
-				
-				// Was mouse capture pressed, and no keys are down?
-				if (sdlMouseCaptureRelease && !keyDownCount)
-				{
-					sdlMouseCaptured = false;
-					sdlMouseCaptureRelease = false;
-					sdlSetGrabMode(false);
-				}
-				break;
-				
-			case SDL_MOUSEMOTION:
-				if (sdlMouseCaptured)
-				{
-					if (event.motion.xrel)
-						sdlSendHIDEvent(HOST_HID_MOUSE_EVENT,
-										HOST_HID_M_RX,
-										event.motion.xrel);
-					if (event.motion.yrel)
-						sdlSendHIDEvent(HOST_HID_MOUSE_EVENT,
-										HOST_HID_M_RY,
-										event.motion.yrel);
-				}
-				else
-				{
-					sdlSendHIDEvent(HOST_HID_POINTER_EVENT,
-									HOST_HID_P_X,
-									event.motion.x);
-					sdlSendHIDEvent(HOST_HID_POINTER_EVENT,
-									HOST_HID_P_Y,
-									event.motion.y);
-				}
-				break;
-				
-			case SDL_MOUSEBUTTONDOWN:
-				if ((event.button.button == SDL_BUTTON_WHEELUP) ||
-					(event.button.button == SDL_BUTTON_WHEELDOWN))
-				{
-					int value = (event.button.button == SDL_BUTTON_WHEELUP) ? 1 : -1;
-					if (sdlMouseCaptured)
-						sdlSendHIDEvent(HOST_HID_MOUSE_EVENT,
-										HOST_HID_M_WHEEL,
-										value);
-					else
-						sdlSendHIDEvent(HOST_HID_POINTER_EVENT,
-										HOST_HID_P_WHEEL,
-										value);
-				}
-				else
-				{
-					if (sdlMouseCapture && !sdlMouseCaptured)
+				case SDL_KEYDOWN:
+					// CTRL-BACKSPACE to quit
+					if (sdlCtrlPressed &&
+						(event.key.keysym.sym == SDLK_BACKSPACE))
 					{
-						sdlMouseCaptured = true;
-						sdlSetGrabMode(true);
-						break;
+						SDL_QuitEvent event = {SDL_QUIT};
+						SDL_PushEvent((SDL_Event *) &event);
 					}
 					
-					sdlSendMouseButtonEvent(event.button.button, true);
-				}
-				break;
-				
-			case SDL_MOUSEBUTTONUP:
-				if ((event.button.button != SDL_BUTTON_WHEELUP) &&
-					(event.button.button != SDL_BUTTON_WHEELDOWN))
-					sdlSendMouseButtonEvent(event.button.button, false);
-				break;
-				
-			case SDL_JOYAXISMOTION:
-				sdlSendHIDEvent(HOST_HID_JOYSTICK1_EVENT + event.jaxis.which,
-								HOST_HID_J_AXIS1 + event.jaxis.axis,
-								event.jaxis.value + 32768);
-				break;
-				
-			case SDL_JOYBUTTONDOWN:
-			case SDL_JOYBUTTONUP:
-				sdlSendHIDEvent(HOST_HID_JOYSTICK1_EVENT + event.jbutton.which,
-								HOST_HID_J_BUTTON1 + event.jbutton.button,
-								event.jbutton.state == SDL_PRESSED);
-				break;
-				
-			case SDL_JOYHATMOTION:
-				sdlSendHIDEvent(HOST_HID_JOYSTICK1_EVENT + event.jhat.which,
-								HOST_HID_J_HAT1 + event.jhat.hat,
-								event.jhat.value);
-				break;
-				
-			case SDL_JOYBALLMOTION:
-				sdlSendHIDEvent(HOST_HID_JOYSTICK1_EVENT + event.jball.which,
-								HOST_HID_J_RELAXIS1 + 2 * event.jball.ball,
-								event.jball.xrel);
-				sdlSendHIDEvent(HOST_HID_JOYSTICK1_EVENT + event.jball.which,
-								HOST_HID_J_RELAXIS2 + 2 * event.jball.ball,
-								event.jball.yrel);
-				break;
-				
-			case SDL_QUIT:
-				isRunning = false;
-				break;
-				
-			default:
-				break;
-        }
+					// UNICODE
+					if (event.key.keysym.unicode)
+					{
+						int unicode = event.key.keysym.unicode;
+						if (unicode == 127)
+							unicode = 8;
+						if ((unicode < 0xf700) || (unicode >= 0xf900))
+							sdlSendHIDEvent(HOST_HID_UNICODEKEYBOARD_EVENT,
+											unicode, 1);
+					}
+					
+					// Keyboard event
+					sdlSendHIDEvent(HOST_HID_KEYBOARD_EVENT,
+									sdlTranslateKeysym(event.key.keysym.sym), 1);
+					
+					if ((event.key.keysym.sym == SDLK_CAPSLOCK) ||
+						(event.key.keysym.sym == SDLK_NUMLOCK) ||
+						(event.key.keysym.sym == SDLK_SCROLLOCK))
+						sdlSendHIDEvent(HOST_HID_KEYBOARD_EVENT,
+										sdlTranslateKeysym(event.key.keysym.sym), 0);
+					else
+						keyDownCount++;
+					
+					// CTRL-ALT releases mouse capture
+					sdlUpdateCtrlAlt(event.key.keysym.sym, true);
+					
+					if (sdlMouseCaptured && sdlCtrlPressed && sdlAltPressed)
+						sdlMouseCaptureRelease = true;
+					break;
+					
+				case SDL_KEYUP:
+					// Keyboard event
+					if ((event.key.keysym.sym == SDLK_CAPSLOCK) ||
+						(event.key.keysym.sym == SDLK_NUMLOCK) ||
+						(event.key.keysym.sym == SDLK_SCROLLOCK))
+						sdlSendHIDEvent(HOST_HID_KEYBOARD_EVENT,
+										sdlTranslateKeysym(event.key.keysym.sym), 1);
+					else
+						keyDownCount--;
+					sdlSendHIDEvent(HOST_HID_KEYBOARD_EVENT,
+									sdlTranslateKeysym(event.key.keysym.sym), 0);
+					
+					// CTRL-ALT released mouse capture
+					sdlUpdateCtrlAlt(event.key.keysym.sym, false);
+					
+					if (sdlMouseCaptureRelease && !keyDownCount)
+					{
+						sdlMouseCaptured = false;
+						sdlMouseCaptureRelease = false;
+						sdlSetGrabMode(false);
+					}
+					break;
+					
+				case SDL_MOUSEMOTION:
+					if (sdlMouseCaptured)
+					{
+						// Relative mouse event
+						if (event.motion.xrel)
+							sdlSendHIDEvent(HOST_HID_MOUSE_EVENT,
+											HOST_HID_M_RX,
+											event.motion.xrel);
+						if (event.motion.yrel)
+							sdlSendHIDEvent(HOST_HID_MOUSE_EVENT,
+											HOST_HID_M_RY,
+											event.motion.yrel);
+					}
+					else
+					{
+						// Absolute pointer event
+						sdlSendHIDEvent(HOST_HID_POINTER_EVENT,
+										HOST_HID_P_X,
+										event.motion.x);
+						sdlSendHIDEvent(HOST_HID_POINTER_EVENT,
+										HOST_HID_P_Y,
+										event.motion.y);
+					}
+					break;
+					
+				case SDL_MOUSEBUTTONDOWN:
+					if ((event.button.button == SDL_BUTTON_WHEELUP) ||
+						(event.button.button == SDL_BUTTON_WHEELDOWN))
+					{
+						// Mouse wheel event
+						int value = ((event.button.button == SDL_BUTTON_WHEELUP) ?
+									 1 : -1);
+						if (sdlMouseCaptured)
+							sdlSendHIDEvent(HOST_HID_MOUSE_EVENT,
+											HOST_HID_M_WHEEL,
+											value);
+						else
+							sdlSendHIDEvent(HOST_HID_POINTER_EVENT,
+											HOST_HID_P_WHEEL,
+											value);
+					}
+					else
+					{
+						// Mouse button event
+						if (sdlMouseCapture && !sdlMouseCaptured)
+						{
+							sdlMouseCaptured = true;
+							sdlSetGrabMode(true);
+							break;
+						}
+						
+						sdlSendMouseButtonEvent(event.button.button, true);
+					}
+					break;
+					
+				case SDL_MOUSEBUTTONUP:
+					if ((event.button.button != SDL_BUTTON_WHEELUP) &&
+						(event.button.button != SDL_BUTTON_WHEELDOWN))
+						sdlSendMouseButtonEvent(event.button.button, false);
+					break;
+					
+				case SDL_JOYAXISMOTION:
+					sdlSendHIDEvent(HOST_HID_JOYSTICK1_EVENT + event.jaxis.which,
+									HOST_HID_J_AXIS1 + event.jaxis.axis,
+									event.jaxis.value + 32768);
+					break;
+					
+				case SDL_JOYBALLMOTION:
+					sdlSendHIDEvent(HOST_HID_JOYSTICK1_EVENT + event.jball.which,
+									HOST_HID_J_RELAXIS1 + 2 * event.jball.ball,
+									event.jball.xrel);
+					sdlSendHIDEvent(HOST_HID_JOYSTICK1_EVENT + event.jball.which,
+									HOST_HID_J_RELAXIS2 + 2 * event.jball.ball,
+									event.jball.yrel);
+					break;
+					
+				case SDL_JOYHATMOTION:
+					sdlSendHIDEvent(HOST_HID_JOYSTICK1_EVENT + event.jhat.which,
+									HOST_HID_J_HAT1 + event.jhat.hat,
+									event.jhat.value);
+					break;
+					
+				case SDL_JOYBUTTONDOWN:
+					sdlSendHIDEvent(HOST_HID_JOYSTICK1_EVENT + event.jbutton.which,
+									HOST_HID_J_BUTTON1 + event.jbutton.button, 1);
+					break;
+					
+				case SDL_JOYBUTTONUP:
+					sdlSendHIDEvent(HOST_HID_JOYSTICK1_EVENT + event.jbutton.which,
+									HOST_HID_J_BUTTON1 + event.jbutton.button, 0);
+					break;
+					
+				case SDL_QUIT:
+					running = false;
+					break;
+					
+				default:
+					break;
+			}
+		}
+		
+		oeglDraw(sdlEmulation);
+		SDL_GL_SwapBuffers();
+		
+		if (!sdlOpenGLSwap)
+			SDL_Delay(5);
     }
 }
 
@@ -468,7 +486,7 @@ int main(int argc, char *argv[])
 {
 	string emulationPath;
 	string resourcePath;
-
+	
 	int videoLeft = 0;
 	int videoTop = 0;
 	int videoWidth = 768;
@@ -538,7 +556,11 @@ int main(int argc, char *argv[])
 	if (index < argc)
 		emulationPath = string(argv[index++]);
 	
-	oepaOpen();
+	if (!oepaOpen())
+	{
+		sdlLog("could not open oepa");
+		return 0;
+	}
 	
 	sdlEmulation = oepaConstruct(emulationPath, resourcePath);
 	if (sdlEmulation && sdlEmulation->isLoaded())
@@ -572,19 +594,24 @@ int main(int argc, char *argv[])
 		// To-Do: mount disk images
 		
 		// Open video
-		sdlOpen(videoWidth, videoHeight, videoFullScreen);
-		oeglInit(sdlEmulation);
-		
-		// Run emulation
-		sdlRunEventLoop();
-		
-		// Close
-		oepaSave(sdlEmulation, emulationPath);
+		if (sdlOpen(videoWidth, videoHeight, videoFullScreen))
+		{
+			oeglInit(sdlEmulation);
+			
+			// Run emulation
+			sdlRunEventLoop();
+			
+			// Close
+			oepaSave(sdlEmulation, emulationPath);
+			sdlClose();
+		}
+		else
+			sdlLog("coult not open sdl");
+
 		oepaDestroy(sdlEmulation);
-		sdlClose();
 	}
 	else
-		printf("Could not open emulation.\n");
+		sdlLog("could not open emulation");
 	
 	oepaClose();
 	

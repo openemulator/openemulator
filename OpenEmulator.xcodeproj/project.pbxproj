@@ -15,6 +15,7 @@
 		00123BC91069B8D600FB95A1 /* libemulation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 006EECA40FCA5C31003D2C8D /* libemulation.a */; };
 		00123BCC1069B8F200FB95A1 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 00E2A84D1053290200910B53 /* libxml2.dylib */; };
 		00188DA8115DC59700FFACC0 /* MOS6502.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00188D95115DC58800FFACC0 /* MOS6502.cpp */; };
+		001CD46A11E2D0F4008A7B6C /* oedev.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 001CD46911E2D0F4008A7B6C /* oedev.cpp */; };
 		001D66B711B7F5C700B88406 /* oegl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00E0AFCC1132CA8B004DB96D /* oegl.cpp */; };
 		001D66B811B7F5C800B88406 /* oepa.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00E0AFCF1132CA8B004DB96D /* oepa.cpp */; };
 		001F56F90FD1E8E500EA246A /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 001F56F80FD1E8E500EA246A /* Sparkle.framework */; };
@@ -212,6 +213,8 @@
 		0011696410E7CC4E007A5EFB /* IPStorageSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPStorageSel.png; path = macosx/Images/IPStorageSel.png; sourceTree = "<group>"; };
 		00188D95115DC58800FFACC0 /* MOS6502.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MOS6502.cpp; sourceTree = "<group>"; };
 		00188D96115DC58800FFACC0 /* MOS6502.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOS6502.h; sourceTree = "<group>"; };
+		001CD46811E2D0F4008A7B6C /* oedev.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = oedev.h; sourceTree = "<group>"; };
+		001CD46911E2D0F4008A7B6C /* oedev.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = oedev.cpp; sourceTree = "<group>"; };
 		001F56F80FD1E8E500EA246A /* Sparkle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = Sparkle.framework; path = macosx/Sparkle.framework; sourceTree = "<group>"; };
 		001F915711925B56005383B3 /* libsndfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsndfile.a; path = /opt/local/lib/libsndfile.a; sourceTree = "<absolute>"; };
 		001F915A11925B74005383B3 /* libsamplerate.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsamplerate.a; path = /opt/local/lib/libsamplerate.a; sourceTree = "<absolute>"; };
@@ -240,7 +243,7 @@
 		005397E31139EC1F00CA7CE4 /* ROM.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ROM.cpp; sourceTree = "<group>"; };
 		0054868F0FDC817900DBCFA8 /* Emulation.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Emulation.icns; sourceTree = "<group>"; };
 		0054E1FF1131B7D6006D32D9 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		0054E2E41131B9EF006D32D9 /* oe */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = oe; sourceTree = BUILT_PRODUCTS_DIR; };
+		0054E2E41131B9EF006D32D9 /* oecli */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = oecli; sourceTree = BUILT_PRODUCTS_DIR; };
 		0054E4A01131BE7A006D32D9 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		0054E4A61131BE8A006D32D9 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		0054E6301131BEE7006D32D9 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
@@ -503,7 +506,7 @@
 			path = CPU;
 			sourceTree = "<group>";
 		};
-		0055C1EC1123AC0500D4CFFC /* cli */ = {
+		0055C1EC1123AC0500D4CFFC /* oecli */ = {
 			isa = PBXGroup;
 			children = (
 				0054E1FF1131B7D6006D32D9 /* main.cpp */,
@@ -513,7 +516,10 @@
 				00E0AFD01132CA8B004DB96D /* oepa.h */,
 				00E0B19B1132DE4D004DB96D /* SDLMain.h */,
 				00E0B19A1132DE4D004DB96D /* SDLMain.m */,
+				001CD46811E2D0F4008A7B6C /* oedev.h */,
+				001CD46911E2D0F4008A7B6C /* oedev.cpp */,
 			);
+			name = oecli;
 			path = cli;
 			sourceTree = "<group>";
 		};
@@ -614,7 +620,7 @@
 			children = (
 				002C27B41168744200FAE6E6 /* libemulator.a */,
 				8D15AC370486D014006FF6A4 /* OpenEmulator.app */,
-				0054E2E41131B9EF006D32D9 /* oe */,
+				0054E2E41131B9EF006D32D9 /* oecli */,
 				00FF25F2115C385000C82CA0 /* libcomposite.a */,
 			);
 			name = Products;
@@ -624,7 +630,7 @@
 			isa = PBXGroup;
 			children = (
 				000A78A50FBA464600A0F12E /* OpenEmulator */,
-				0055C1EC1123AC0500D4CFFC /* cli */,
+				0055C1EC1123AC0500D4CFFC /* oecli */,
 				006EEC9A0FCA5BEA003D2C8D /* libemulation */,
 				00FF25C4115C365800C82CA0 /* libcomposite */,
 				2A37F4C3FDCFA73011CA2CEA /* Frameworks */,
@@ -758,9 +764,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		0054E2E31131B9EF006D32D9 /* oe */ = {
+		0054E2E31131B9EF006D32D9 /* oecli */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 0054E2E81131BA0D006D32D9 /* Build configuration list for PBXNativeTarget "oe" */;
+			buildConfigurationList = 0054E2E81131BA0D006D32D9 /* Build configuration list for PBXNativeTarget "oecli" */;
 			buildPhases = (
 				0054E2E11131B9EF006D32D9 /* Sources */,
 				0054E2E21131B9EF006D32D9 /* Frameworks */,
@@ -770,9 +776,9 @@
 			dependencies = (
 				00E0B0601132DBA4004DB96D /* PBXTargetDependency */,
 			);
-			name = oe;
+			name = oecli;
 			productName = oecli;
-			productReference = 0054E2E41131B9EF006D32D9 /* oe */;
+			productReference = 0054E2E41131B9EF006D32D9 /* oecli */;
 			productType = "com.apple.product-type.tool";
 		};
 		006EECA30FCA5C31003D2C8D /* emulation */ = {
@@ -843,7 +849,7 @@
 			projectRoot = "";
 			targets = (
 				8D15AC270486D014006FF6A4 /* OpenEmulator */,
-				0054E2E31131B9EF006D32D9 /* oe */,
+				0054E2E31131B9EF006D32D9 /* oecli */,
 				006EECA30FCA5C31003D2C8D /* emulation */,
 				00FF25F1115C385000C82CA0 /* composite */,
 			);
@@ -993,6 +999,7 @@
 				001D66B811B7F5C800B88406 /* oepa.cpp in Sources */,
 				000DAA5611D95A05006360A2 /* DocumentView.m in Sources */,
 				006115C211DD0347008AA3EE /* Application.m in Sources */,
+				001CD46A11E2D0F4008A7B6C /* oedev.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1141,7 +1148,7 @@
 					AppKit,
 				);
 				PREBINDING = NO;
-				PRODUCT_NAME = oe;
+				PRODUCT_NAME = oecli;
 			};
 			name = Debug;
 		};
@@ -1377,7 +1384,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		0054E2E81131BA0D006D32D9 /* Build configuration list for PBXNativeTarget "oe" */ = {
+		0054E2E81131BA0D006D32D9 /* Build configuration list for PBXNativeTarget "oecli" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0054E2E61131B9EF006D32D9 /* Debug */,

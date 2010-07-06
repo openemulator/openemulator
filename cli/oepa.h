@@ -41,7 +41,7 @@ bool oepaIsRecording();
 float oepaGetRecordingTime();
 long long oepaGetRecordingSize();
 
-void oepaOpen();
+bool oepaOpen();
 void oepaClose();
 
 OEEmulation *oepaConstruct(string path, string resourcePath);

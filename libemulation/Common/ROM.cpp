@@ -32,7 +32,7 @@ bool ROM::setResource(const string &name, const OEData &data)
 	if (name == "image")
 	{
 		memory = data;
-		int size = getLowerPowerOf2(memory.size());
+		int size = getNextPowerOf2(memory.size());
 		if (size < 1)
 			size = 1;
 		memory.resize(size);

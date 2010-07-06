@@ -87,16 +87,6 @@ void OEComponent::notify(int notification,
 {
 }
 
-bool OEComponent::setMemoryMap(OEComponent *component, const string &value)
-{
-	return false;
-}
-
-bool OEComponent::getMemoryMap(string &value)
-{
-	return false;
-}
-
 int OEComponent::ioctl(int command, void *data)
 {
 	return false;
@@ -135,6 +125,16 @@ bool OEComponent::read(OEUInt32 address, OEData &value)
 }
 
 bool OEComponent::write(OEUInt32 address, OEData &value)
+{
+	return false;
+}
+
+bool OEComponent::setMemoryMap(OEComponent *component, const string &value)
+{
+	return false;
+}
+
+bool OEComponent::getMemoryMap(string &value)
 {
 	return false;
 }
@@ -191,9 +191,9 @@ OEData OEComponent::getCharVector(const string &value)
 	return result;
 }
 
-int OEComponent::getLowerPowerOf2(int value)
+int OEComponent::getNextPowerOf2(int value)
 {
-	return (int) pow(2, floor(log2(value)));
+	return (int) pow(2, ceil(log2(value)));
 }
 
 bool OEComponent::getRange(OEMemoryRange &range, const string &value)

@@ -5,8 +5,8 @@
     <component name="host" class="Host">
         <property name="notes" value="" />
         <property name="powerState" value="0" />
-        <property name="hidMouseCapture" value="1" />
         <property name="videoWindow" value="-1 -1 768 576" />
+        <property name="hidMouseCapture" value="1" />
     </component>
 </device>
 

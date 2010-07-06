@@ -53,7 +53,7 @@ private:
 	OEPackage *package;
 	string resourcePath;
 	
-	string toString(int i);
+	string getString(int value);
 	
 	bool readFile(string path, vector<char> &data);
 	string buildSourcePath(string src, OERef deviceRef);

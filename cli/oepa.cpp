@@ -283,6 +283,7 @@ bool oepaOpenAudio()
 								   NULL);
 			if (!error)
 			{
+				oepaLog("started silent timer thread");
 				oepaAudioOpen = true;
 				return true;
 			}
@@ -559,12 +560,18 @@ void oepaUnlockProcess()
 //
 // Interface
 //
-void oepaOpen()
+bool oepaOpen()
 {
 	oepaInitBuffer();
 	
-	oepaOpenProcess();
-	oepaOpenAudio();
+	if (oepaOpenProcess())
+	{
+		if (oepaOpenAudio())
+			return true;
+		oepaCloseProcess();
+	}
+	
+	return false;
 }
 
 void oepaClose()

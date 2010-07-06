@@ -31,7 +31,7 @@ bool RAM::setProperty(const string &name, const string &value)
 		mappedRange = value;
 	else if (name == "size")
 	{
-		size = getLowerPowerOf2(getInt(value));
+		size = getNextPowerOf2(getInt(value));
 		if (size < 1)
 			size = 1;
 		memory.resize(size);

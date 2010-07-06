@@ -31,7 +31,8 @@ OEPackage::OEPackage(string packagePath)
 	if (isPathValid(packagePath))
 		isPackage = isFolder(packagePath);
 	else
-		isPackage = (packagePath.substr(packagePath.size() - 1, 1) == "/");
+		isPackage = (packagePath.substr(packagePath.size() - 1, 1) == 
+					 OE_PATH_SEPARATOR);
 	
 	if (isPackage)
 	{
@@ -187,7 +188,7 @@ bool OEPackage::removePath(string path)
 	if (!isFolder(path))
 		return DeleteFile(path.c_str());
 	
-	string dirPath = path + "\\*";
+	string dirPath = path + OE_PATH_SEPARATOR + "*";
 	WIN32_FIND_DATA findFileData;
 	HANDLE hFind = FindFirstFile(dirPath.c_str(), &findFileData);
 	if (hFind == INVALID_HANDLE_VALUE)
@@ -199,7 +200,7 @@ bool OEPackage::removePath(string path)
 		if ((fileName == ".") || (fileName == ".."))
 			continue;
 		
-		removePath(path + "\\" + fileName);
+		removePath(path + OE_PATH_SEPARATOR + fileName);
 	}
 	
 	FindClose(hFind);
@@ -220,7 +221,7 @@ bool OEPackage::removePath(string path)
 		if ((fileName == ".") || (fileName == ".."))
 			continue;
 		
-		removePath(path + "\\" + fileName);
+		removePath(path + OE_PATH_SEPARATOR + fileName);
 	}
 	
 	closedir(dir);
