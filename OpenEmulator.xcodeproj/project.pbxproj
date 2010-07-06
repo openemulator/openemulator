@@ -503,7 +503,7 @@
 			path = CPU;
 			sourceTree = "<group>";
 		};
-		0055C1EC1123AC0500D4CFFC /* oe */ = {
+		0055C1EC1123AC0500D4CFFC /* cli */ = {
 			isa = PBXGroup;
 			children = (
 				0054E1FF1131B7D6006D32D9 /* main.cpp */,
@@ -514,7 +514,6 @@
 				00E0B19B1132DE4D004DB96D /* SDLMain.h */,
 				00E0B19A1132DE4D004DB96D /* SDLMain.m */,
 			);
-			name = oe;
 			path = cli;
 			sourceTree = "<group>";
 		};
@@ -625,7 +624,7 @@
 			isa = PBXGroup;
 			children = (
 				000A78A50FBA464600A0F12E /* OpenEmulator */,
-				0055C1EC1123AC0500D4CFFC /* oe */,
+				0055C1EC1123AC0500D4CFFC /* cli */,
 				006EEC9A0FCA5BEA003D2C8D /* libemulation */,
 				00FF25C4115C365800C82CA0 /* libcomposite */,
 				2A37F4C3FDCFA73011CA2CEA /* Frameworks */,

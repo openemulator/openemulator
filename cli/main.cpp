@@ -24,6 +24,7 @@
 #include "Host.h"
 
 #define HOST_DEVICE "host::host"
+#define SDL_INVERSE_KEYMAP_SIZE 512
 
 typedef struct
 {
@@ -150,9 +151,16 @@ SDLKeyMapEntry sdlKeyMap[] =
 	{SDLK_RMETA, HOST_HID_K_RIGHTGUI},
 };
 
-int sdlInverseKeyMap[512];
 OEEmulation *sdlEmulation;
+
+int sdlInverseKeyMap[SDL_INVERSE_KEYMAP_SIZE];
+bool sdlCtrlPressed;
+bool sdlAltPressed;
+
+vector<bool> sdlMouseButtonState;
 bool sdlMouseCapture;
+bool sdlMouseCaptured;
+bool sdlMouseCaptureRelease;
 
 void about()
 {
@@ -170,17 +178,8 @@ void about()
 
 Uint32 sdlCallback(Uint32 interval, void *param)
 {
-	SDL_Event event;
-	SDL_UserEvent userevent;
-	
-	userevent.type = SDL_USEREVENT;
-	userevent.code = 0;
-	
-	event.type = SDL_USEREVENT;
-	event.user = userevent;
-	
+	SDL_Event event = {SDL_USEREVENT};
 	SDL_PushEvent(&event);
-	
 	return interval;
 }
 
@@ -216,6 +215,14 @@ int sdlOpen(int width, int height, int fullscreen)
 		sdlInverseKeyMap[sdlKeyMap[i].sym] = sdlKeyMap[i].usageId;
 	
 	SDL_AddTimer(1, sdlCallback, NULL);
+	
+	sdlCtrlPressed = false;
+	sdlAltPressed = false;
+	
+	sdlMouseButtonState.resize(8);
+	sdlMouseCaptured = false;
+	sdlMouseCaptureRelease = false;
+	
 	return 0;
 }
 
@@ -230,35 +237,28 @@ void sdlSendHIDEvent(int notification, int usageId, int value)
 	printf("sendHIDEvent: %d, %d, %d\n", notification, usageId, value);
 }
 
-void sdlSendKeyboardEvent(bool isKeyDown, SDL_keysym keysym)
+int sdlTranslateKeysym(int sym)
 {
-	int scan = keysym.scancode;
-	SDLKey sym = keysym.sym;
-	
-	int usageId = 0;
-	if (sym < 512)
-		usageId = sdlInverseKeyMap[sym];
-	
-	if ((sym == SDLK_CAPSLOCK) || (sym == SDLK_NUMLOCK) || (sym == SDLK_SCROLLOCK))
-	{
-		isKeyDown = true;
-		printf("kd:%d scan:%02x sym:%02x usb:%02x\n", isKeyDown, scan, sym, 
-			   usageId);
-		
-		isKeyDown = false;
-	}
-	
-	printf("kd:%d scan:%02x sym:%02x usb:%02x\n", isKeyDown, scan, sym, usageId);
+	return (sym < SDL_INVERSE_KEYMAP_SIZE) ? sdlInverseKeyMap[sym] : 0;
 }
 
-void sdlSetGrabMode(bool state, vector<bool> &mouseButtonsState)
+void sdlUpdateCtrlAlt(int sym, bool state)
+{
+	if ((sym == SDLK_LCTRL) || (sym == SDLK_RCTRL))
+		sdlCtrlPressed = state;
+	if ((sym == SDLK_LALT) || (sym == SDLK_RALT))
+		sdlAltPressed = state;
+}
+
+void sdlSetGrabMode(bool state)
 {
 	SDL_WM_GrabInput(state ? SDL_GRAB_ON : SDL_GRAB_OFF);
-	
+	SDL_ShowCursor(state ? SDL_DISABLE : SDL_ENABLE);
+					
 	// Move mouse button events
-	for (int i = 0; i < mouseButtonsState.size(); i++)
+	for (int i = 0; i < sdlMouseButtonState.size(); i++)
 	{
-		if (!mouseButtonsState[i])
+		if (!sdlMouseButtonState[i])
 			continue;
 		
 		if (state)
@@ -278,15 +278,29 @@ void sdlSetGrabMode(bool state, vector<bool> &mouseButtonsState)
 	}
 }
 
+void sdlSendMouseButtonEvent(int button, bool state)
+{
+	if (sdlMouseButtonState[button] == state)
+		return;
+	
+	sdlMouseButtonState[button] = state;
+	
+	if (sdlMouseCaptured)
+		sdlSendHIDEvent(HOST_HID_MOUSE_EVENT,
+						HOST_HID_M_BUTTON1 + button,
+						state);
+	else
+		sdlSendHIDEvent(HOST_HID_POINTER_EVENT,
+						HOST_HID_P_BUTTON1 + button,
+						state);
+}
+
 void sdlRunEventLoop()
 {
-	bool isRunning = true;
     SDL_Event event;
-	bool mouseCaptured = false;
-	vector<bool> mouseButtonsState;
+	bool isRunning = true;
+	int keyDownCount = 0;
 	
-	mouseButtonsState.resize(8);
-
     while (isRunning && SDL_WaitEvent(&event))
 	{
         switch(event.type)
@@ -306,16 +320,53 @@ void sdlRunEventLoop()
 				break;
 				
 			case SDL_KEYDOWN:
-				sdlSendHIDEvent(HOST_HID_UNICODEKEYBOARD_EVENT,
-								event.key.keysym.unicode,
-								1);
+				if ((event.key.keysym.unicode) &&
+					(event.key.keysym.unicode < 0xf700) &&
+					(event.key.keysym.unicode >= 0xf900))
+					sdlSendHIDEvent(HOST_HID_UNICODEKEYBOARD_EVENT,
+									event.key.keysym.unicode, 1);
+				sdlSendHIDEvent(HOST_HID_KEYBOARD_EVENT,
+								sdlTranslateKeysym(event.key.keysym.sym), 1);
+
+				if ((event.key.keysym.sym == SDLK_CAPSLOCK) ||
+					(event.key.keysym.sym == SDLK_NUMLOCK) ||
+					(event.key.keysym.sym == SDLK_SCROLLOCK))
+					sdlSendHIDEvent(HOST_HID_KEYBOARD_EVENT,
+									sdlTranslateKeysym(event.key.keysym.sym), 0);
+				else
+					keyDownCount++;
+				
+				// CTRL-ALT releases mouse capture
+				sdlUpdateCtrlAlt(event.key.keysym.sym, true);
+				
+				if (sdlMouseCaptured && sdlCtrlPressed && sdlAltPressed)
+					sdlMouseCaptureRelease = true;
+				break;
+				
 			case SDL_KEYUP:
-				sdlSendKeyboardEvent(event.type == SDL_KEYDOWN,
-									 event.key.keysym);
+				if ((event.key.keysym.sym == SDLK_CAPSLOCK) ||
+					(event.key.keysym.sym == SDLK_NUMLOCK) ||
+					(event.key.keysym.sym == SDLK_SCROLLOCK))
+					sdlSendHIDEvent(HOST_HID_KEYBOARD_EVENT,
+									sdlTranslateKeysym(event.key.keysym.sym), 1);
+				else
+					keyDownCount--;
+				sdlSendHIDEvent(HOST_HID_KEYBOARD_EVENT,
+								sdlTranslateKeysym(event.key.keysym.sym), 0);
+				
+				sdlUpdateCtrlAlt(event.key.keysym.sym, false);
+				
+				// Was mouse capture pressed, and no keys are down?
+				if (sdlMouseCaptureRelease && !keyDownCount)
+				{
+					sdlMouseCaptured = false;
+					sdlMouseCaptureRelease = false;
+					sdlSetGrabMode(false);
+				}
 				break;
 				
 			case SDL_MOUSEMOTION:
-				if (mouseCaptured)
+				if (sdlMouseCaptured)
 				{
 					if (event.motion.xrel)
 						sdlSendHIDEvent(HOST_HID_MOUSE_EVENT,
@@ -331,36 +382,44 @@ void sdlRunEventLoop()
 					sdlSendHIDEvent(HOST_HID_POINTER_EVENT,
 									HOST_HID_P_X,
 									event.motion.x);
-					sdlSendHIDEvent(HOST_HID_MOUSE_EVENT,
-									HOST_HID_P_X,
+					sdlSendHIDEvent(HOST_HID_POINTER_EVENT,
+									HOST_HID_P_Y,
 									event.motion.y);
 				}
 				break;
 				
 			case SDL_MOUSEBUTTONDOWN:
-				if (!mouseCaptured &&
-					sdlMouseCapture &&
-					(event.button.button == SDL_BUTTON_LEFT))
+				if ((event.button.button == SDL_BUTTON_WHEELUP) ||
+					(event.button.button == SDL_BUTTON_WHEELDOWN))
 				{
-					sdlSetGrabMode(true, mouseButtonsState);
-					break;
+					int value = (event.button.button == SDL_BUTTON_WHEELUP) ? 1 : -1;
+					if (sdlMouseCaptured)
+						sdlSendHIDEvent(HOST_HID_MOUSE_EVENT,
+										HOST_HID_M_WHEEL,
+										value);
+					else
+						sdlSendHIDEvent(HOST_HID_POINTER_EVENT,
+										HOST_HID_P_WHEEL,
+										value);
 				}
-			case SDL_MOUSEBUTTONUP:
-			{
-				bool state = (event.button.state == SDL_PRESSED);
-				if (mouseButtonsState[event.button.button] == state)
-					break;
-				
-				if (mouseCaptured)
-					sdlSendHIDEvent(HOST_HID_MOUSE_EVENT,
-									HOST_HID_M_BUTTON1 + event.button.button,
-									state);
 				else
-					sdlSendHIDEvent(HOST_HID_POINTER_EVENT,
-									HOST_HID_P_BUTTON1 + event.button.button,
-									state);
+				{
+					if (sdlMouseCapture && !sdlMouseCaptured)
+					{
+						sdlMouseCaptured = true;
+						sdlSetGrabMode(true);
+						break;
+					}
+					
+					sdlSendMouseButtonEvent(event.button.button, true);
+				}
 				break;
-			}
+				
+			case SDL_MOUSEBUTTONUP:
+				if ((event.button.button != SDL_BUTTON_WHEELUP) &&
+					(event.button.button != SDL_BUTTON_WHEELDOWN))
+					sdlSendMouseButtonEvent(event.button.button, false);
+				break;
 				
 			case SDL_JOYAXISMOTION:
 				sdlSendHIDEvent(HOST_HID_JOYSTICK1_EVENT + event.jaxis.which,
@@ -420,7 +479,7 @@ int main(int argc, char *argv[])
 	{
 		int c;
 		
-		while ((c = getopt(argc, argv, "r:s:b:c:iw:h:fu:")) != -1)
+		while ((c = getopt(argc, argv, "r:s:b:c:iw:h:f")) != -1)
 		{
 			switch (c)
 			{
@@ -506,8 +565,9 @@ int main(int argc, char *argv[])
 		ss << videoLeft << " " << videoTop << " " << videoWidth << " " << videoHeight;
 		oepaSetProperty(sdlEmulation, HOST_DEVICE, "videoWindow", ss.str());
 		
-		oepaGetProperty(sdlEmulation, HOST_DEVICE, "mouseCapture", value);
-		sdlMouseCapture = (value == "1") ? true : false;
+		if (oepaGetProperty(sdlEmulation, HOST_DEVICE, "hidMouseCapture", value) &&
+			(value == "1"))
+			sdlMouseCapture = true;
 		
 		// To-Do: mount disk images
 		
