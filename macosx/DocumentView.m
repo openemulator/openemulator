@@ -59,29 +59,6 @@
 	[super dealloc];
 }
 
-/*- (void) observeValueForKeyPath:(NSString *) keyPath
-					   ofObject:(id) object
-						 change:(NSDictionary *) change
-						context:(void *) context
-{ 
-    if ([keyPath isEqual:@"power"])
-	{
-		power = [[change objectForKey:NSKeyValueChangeNewKey] charValue];
-		[self setNeedsDisplay:YES];
-    }
-	else if ([keyPath isEqual:@"pause"])
-	{
-		pause = [[change objectForKey:NSKeyValueChangeNewKey] charValue];
-		[self setNeedsDisplay:YES];
-	}
-	else
-		[super observeValueForKeyPath:keyPath
-							 ofObject:object
-							   change:change
-							  context:context];
-}
-*/
-
 - (void) drawRect:(NSRect) rect
 {
 	NSRect viewRect = [self frame];
@@ -228,7 +205,7 @@
 	for (int y = 0; y < textureRect[0].size.height; y++)
 		for (int x = 0; x < textureRect[0].size.width; x++)
 		{
-			float l = (((x >> 0) & 0x1) ^ ((y >> 1) & 0x1)) * 0.5f + 0.5f;
+			float l = (((x >> 0) & 0x1) ^ ((y >> 1) & 0x1)) * 1.0f + 0.0f;
 			int r = l * 0x33;
 			int g = l * 0xcc;
 			int b = l * 0x44;
@@ -282,20 +259,20 @@
 		glClear(GL_COLOR_BUFFER_BIT);
 	}
 	
-/*	if (power)
-	{
+//	if (power)
+//	{
 		[self renderGLTexture:DV_TEXTURE_VIDEO 
 					   toRect:videoRect 
 					withAlpha:(pause ? 0.5f : 1.0f)];
-		if (pause)
+/*		if (pause)
 			[self renderGLTexture:DV_TEXTURE_PAUSE
 						   toRect:osdRect
 						withAlpha:1.0f];
 	}
-	else*/
+	else
 		[self renderGLTexture:DV_TEXTURE_POWER
 					   toRect:osdRect
-					withAlpha:1.0f];
+					withAlpha:1.0f];*/
 }
 
 @end

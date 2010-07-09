@@ -15,7 +15,6 @@
 		00123BC91069B8D600FB95A1 /* libemulation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 006EECA40FCA5C31003D2C8D /* libemulation.a */; };
 		00123BCC1069B8F200FB95A1 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 00E2A84D1053290200910B53 /* libxml2.dylib */; };
 		00188DA8115DC59700FFACC0 /* MOS6502.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00188D95115DC58800FFACC0 /* MOS6502.cpp */; };
-		001CD46A11E2D0F4008A7B6C /* oedev.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 001CD46911E2D0F4008A7B6C /* oedev.cpp */; };
 		001D66B711B7F5C700B88406 /* oegl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00E0AFCC1132CA8B004DB96D /* oegl.cpp */; };
 		001D66B811B7F5C800B88406 /* oepa.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00E0AFCF1132CA8B004DB96D /* oepa.cpp */; };
 		001F56F90FD1E8E500EA246A /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 001F56F80FD1E8E500EA246A /* Sparkle.framework */; };
@@ -213,8 +212,6 @@
 		0011696410E7CC4E007A5EFB /* IPStorageSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPStorageSel.png; path = macosx/Images/IPStorageSel.png; sourceTree = "<group>"; };
 		00188D95115DC58800FFACC0 /* MOS6502.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MOS6502.cpp; sourceTree = "<group>"; };
 		00188D96115DC58800FFACC0 /* MOS6502.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOS6502.h; sourceTree = "<group>"; };
-		001CD46811E2D0F4008A7B6C /* oedev.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = oedev.h; sourceTree = "<group>"; };
-		001CD46911E2D0F4008A7B6C /* oedev.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = oedev.cpp; sourceTree = "<group>"; };
 		001F56F80FD1E8E500EA246A /* Sparkle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = Sparkle.framework; path = macosx/Sparkle.framework; sourceTree = "<group>"; };
 		001F915711925B56005383B3 /* libsndfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsndfile.a; path = /opt/local/lib/libsndfile.a; sourceTree = "<absolute>"; };
 		001F915A11925B74005383B3 /* libsamplerate.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsamplerate.a; path = /opt/local/lib/libsamplerate.a; sourceTree = "<absolute>"; };
@@ -516,8 +513,6 @@
 				00E0AFD01132CA8B004DB96D /* oepa.h */,
 				00E0B19B1132DE4D004DB96D /* SDLMain.h */,
 				00E0B19A1132DE4D004DB96D /* SDLMain.m */,
-				001CD46811E2D0F4008A7B6C /* oedev.h */,
-				001CD46911E2D0F4008A7B6C /* oedev.cpp */,
 			);
 			name = oecli;
 			path = cli;
@@ -999,7 +994,6 @@
 				001D66B811B7F5C800B88406 /* oepa.cpp in Sources */,
 				000DAA5611D95A05006360A2 /* DocumentView.m in Sources */,
 				006115C211DD0347008AA3EE /* Application.m in Sources */,
-				001CD46A11E2D0F4008A7B6C /* oedev.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
