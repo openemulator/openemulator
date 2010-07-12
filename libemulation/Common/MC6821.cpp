@@ -116,13 +116,13 @@ bool MC6821::getProperty(const string &name, string &value)
 	else if (name == "dataRegisterB")
 		value = getHex(dataRegisterB);
 	else if (name == "ca1")
-		value = ca1;
+		value = getString(ca1);
 	else if (name == "ca2")
-		value = ca2;
+		value = getString(ca2);
 	else if (name == "cb1")
-		value = cb1;
+		value = getString(cb1);
 	else if (name == "cb2")
-		value = cb2;
+		value = getString(cb2);
 	else
 		return false;
 	

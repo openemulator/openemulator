@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dml PUBLIC "-//OPENEMULATOR//DTD DML 1.0//EN" "http://www.openemulator.org/DTDs/dml-1.0.dtd">
-<dml version="1.0" label="Apple I" image="Apple I.png" description="" group="Apple I" notes="" window="-1 -1 768 576">
+<dml version="1.0" label="Apple I" image="Apple I.png" description="" group="Apple I">
 <device name="host">
     <component name="host" class="Host">
         <property name="notes" value="" />

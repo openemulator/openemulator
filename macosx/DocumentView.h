@@ -9,32 +9,25 @@
  */
 
 #import <Cocoa/Cocoa.h>
+#import <Quartz/Quartz.h>
 
-#define DV_TEXTURE_VIDEO	0
-#define DV_TEXTURE_POWER	1
-#define DV_TEXTURE_PAUSE	2
-#define DV_TEXTURE_END		3
+#define DOCUMENT_KEYMAP_SIZE		256
+#define DOCUMENT_MOUSE_BUTTONNUM	8
 
-@interface DocumentView : NSOpenGLView {
-	GLuint texture[DV_TEXTURE_END];
-	NSRect textureRect[DV_TEXTURE_END];
+@interface DocumentView : NSOpenGLView
+{
+	CVDisplayLinkRef displayLink;
+	void *oeglContext;
+
+	int keyMap[DOCUMENT_KEYMAP_SIZE];
+	int keyModifierFlags;
+	int keyDownCount;
 	
-	float screenRectProportion;
-	float videoWidthScale;
-	float videoHeightScale;
-	
-	NSRect lastViewRect;
-	
-	NSRect videoRect;
-	NSRect osdRect;
-	
-	BOOL power;
-	BOOL pause;
+	BOOL mouseButtonState[DOCUMENT_MOUSE_BUTTONNUM];
+	BOOL mouseCaptured;
+	BOOL mouseCaptureRelease;
 }
 
-- (void) initGL;
-- (void) deallocGL;
-- (void) renderGL;
-- (void) drawGL:(NSRect)viewFrame;
+- (void) drawFrame;
 
 @end

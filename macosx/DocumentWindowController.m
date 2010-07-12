@@ -34,8 +34,6 @@
 	[toolbar setAutosavesConfiguration:YES];
 	[[self window] setToolbar:toolbar];
 	[toolbar release];
-	
-//    [mImageBrowser setDraggingDestinationDelegate:self];
 }
 
 - (NSToolbarItem *) toolbar:(NSToolbar *) toolbar
@@ -155,24 +153,6 @@
 {
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"toggleInspector"
 														object:self];
-}
-
-- (NSDragOperation) draggingEntered:(id <NSDraggingInfo>) sender
-{
-    if (([sender draggingSourceOperationMask] & NSDragOperationGeneric) 
-		== NSDragOperationGeneric)
-    {
-        //this means that the sender is offering the type of operation we want
-        //return that we want the NSDragOperationGeneric operation that they 
-		//are offering
-        return NSDragOperationGeneric;
-    }
-    else
-    {
-        //since they aren't offering the type of operation we want, we have 
-		//to tell them we aren't interested
-        return NSDragOperationNone;
-    }
 }
 
 @end

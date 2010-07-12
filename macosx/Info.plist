@@ -184,7 +184,7 @@
 				<string>d81</string>
 				<string>t64</string>
 				<string>tap</string>
-				<string>prog</string>
+				<string>prg</string>
 				<string>p00</string>
 				<string>crt</string>
 			</array>
@@ -211,6 +211,7 @@
 			<key>CFBundleTypeExtensions</key>
 			<array>
 				<string>img</string>
+				<string>dmg</string>
 				<string>hdv</string>
 				<string>hfv</string>
 			</array>
@@ -252,7 +253,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>0.4</string>
 	<key>CFBundleSignature</key>
 	<string>opem</string>
 	<key>CFBundleVersion</key>

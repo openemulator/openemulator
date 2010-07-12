@@ -12,13 +12,8 @@
 
 @interface DocumentWindow : NSWindow
 {
-	int modifierFlags;
-	
-	BOOL fullscreen;
-	NSRect fullscreenExitRect;
-	
-	int width;
-	int height;
+	BOOL videoFullscreen;
+	NSRect videoWindowRect;
 }
 
 - (void) toggleFullscreen:(id) sender;

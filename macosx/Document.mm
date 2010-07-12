@@ -20,16 +20,11 @@
 
 @implementation Document
 
-- (id) init
+- (id)init
 {
 	if (self = [super init])
 	{
 		emulation = nil;
-		
-		pasteboard = [NSPasteboard generalPasteboard];
-		pasteboardTypes = [[NSArray alloc] initWithObjects:
-						   NSStringPboardType,
-						   nil];
 		
 		image = nil;
 		label = nil;
@@ -47,8 +42,8 @@
 	return self;
 }
 
-- (id) initWithTemplateURL:(NSURL *) absoluteURL
-					 error:(NSError **) outError
+- (id)initWithTemplateURL:(NSURL *)absoluteURL
+					error:(NSError **)outError
 {
 	if ([self init])
 	{
@@ -64,14 +59,12 @@
 	return nil;
 }
 
-- (void) dealloc
+- (void)dealloc
 {
 	[super dealloc];
 	
 	if (emulation)
 		oepaDestroy(emulation);
-	
-	[pasteboardTypes release];
 	
 	[freeInlets release];
 	
@@ -80,7 +73,7 @@
 	[peripherals release];
 }
 
-- (NSString *) getDMLProperty:(NSString *) name
+- (NSString *)getDMLProperty:(NSString *)name
 {
 	if (!emulation)
 		return nil;
@@ -90,34 +83,30 @@
 	xmlNodePtr rootNode = xmlDocGetRootElement(dml);
 	
 	xmlChar *valuec = xmlGetProp(rootNode, BAD_CAST [name UTF8String]);
-	NSString *value = [NSString stringWithUTF8String:(const char *) valuec];
+	NSString *value = [NSString stringWithUTF8String:(const char *)valuec];
 	xmlFree(valuec);
 	
 	return value;
 }
 
-- (BOOL) setComponentProperty:(NSString *) name
-						  ref:(NSString *) ref
-						value:(NSString *) value
+- (BOOL)setHostProperty:(NSString *)name
+				  value:(NSString *)value
 {
 	if (!emulation)
 		return false;
 	
-	return oepaSetProperty(emulation,
-						   string([ref UTF8String]),
+	return oepaSetProperty(emulation, HOST_DEVICE,
 						   string([name UTF8String]),
 						   string([value UTF8String]));
 }
 
-- (NSString *) getComponentProperty:(NSString *) name
-								ref:(NSString *) ref
+- (NSString *)getHostProperty:(NSString *)name
 {
 	if (!emulation)
 		return nil;
 	
 	string value;
-	if (oepaGetProperty(emulation,
-						string([ref UTF8String]),
+	if (oepaGetProperty(emulation, HOST_DEVICE,
 						string([name UTF8String]),
 						value))
 		return [NSString stringWithUTF8String:value.c_str()];
@@ -125,7 +114,7 @@
 	return @"";
 }
 
-- (NSImage *) getResourceImage:(NSString *) imagePath
+- (NSImage *)getResourceImage:(NSString *)imagePath
 {
 	NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
 	NSString *path = [[resourcePath
@@ -138,8 +127,8 @@
 	return theImage;
 }
 
-- (NSAttributedString *) formatDeviceLabel:(NSString *) deviceLabel
-					   withInformativeText:(NSString *) informativeText
+- (NSAttributedString *)formatDeviceLabel:(NSString *)deviceLabel
+					  withInformativeText:(NSString *)informativeText
 {
 	NSMutableParagraphStyle *paragraphStyle;
 	paragraphStyle = [[[NSParagraphStyle defaultParagraphStyle] mutableCopy]
@@ -175,9 +164,9 @@
 	return aString;
 }
 
-- (void) updatePowerState
+- (void)updatePowerState
 {
-	NSString *property = [self getComponentProperty:@"powerState" ref:@"host::host"];
+	NSString *property = [self getHostProperty:@"powerState"];
 	int value = [property intValue];
 	
 	switch (value)
@@ -213,7 +202,7 @@
 	}
 }
 
-- (void) updateDevices
+- (void)updateDevices
 {
 	int count;
 	
@@ -305,9 +294,9 @@
 	return;
 }
 
-- (BOOL) readFromURL:(NSURL *) absoluteURL
-			  ofType:(NSString *) typeName
-			   error:(NSError **) outError
+- (BOOL)readFromURL:(NSURL *)absoluteURL
+			 ofType:(NSString *)typeName
+			  error:(NSError **)outError
 {
 	const char *emulationPath = [[absoluteURL path] UTF8String];
 	const char *resourcePath = [[[NSBundle mainBundle] resourcePath] UTF8String];
@@ -322,7 +311,7 @@
 		if (oepaIsLoaded(emulation))
 		{
 			[self setLabel:[self getDMLProperty:@"label"]];
-			[self setNotes:[self getComponentProperty:@"notes" ref:@"host::host"]];
+			[self setNotes:[self getHostProperty:@"notes"]];
 			[self updatePowerState];
 			[self setImage:[self getResourceImage:[self getDMLProperty:@"image"]]];
 			
@@ -341,17 +330,15 @@
 	return NO;
 }
 
-- (BOOL) writeToURL:(NSURL *) absoluteURL
-			 ofType:(NSString *) typeName
-			  error:(NSError **) outError
+- (BOOL)writeToURL:(NSURL *)absoluteURL
+			ofType:(NSString *)typeName
+			 error:(NSError **)outError
 {
 	const char *emulationPath = [[[absoluteURL path] stringByAppendingString:@"/"]
 								 UTF8String];
 	if (emulation)
 	{
-		[self setComponentProperty:@"notes"
-							   ref:@"host::host"
-							 value:[self notes]];
+		[self setHostProperty:@"notes" value:[self notes]];
 		
 		if (oepaSave(emulation, string(emulationPath)))
 			return YES;
@@ -363,7 +350,7 @@
 	return NO;
 }
 
-- (void) setFileModificationDate:(NSDate *) date
+- (void)setFileModificationDate:(NSDate *)date
 {
 	[super setFileModificationDate:date];
 	
@@ -377,7 +364,7 @@
 	[self setModificationDate:value];
 }
 
-- (IBAction) saveDocumentAsTemplate:(id) sender
+- (IBAction)saveDocumentAsTemplate:(id)sender
 {
 	NSString *path = [TEMPLATE_FOLDER stringByExpandingTildeInPath];
 	
@@ -399,9 +386,9 @@
 					  contextInfo:nil];
 }
 
-- (void) saveDocumentAsTemplateDidEnd:(NSSavePanel *) panel
-						   returnCode:(int) returnCode
-						  contextInfo:(void *) contextInfo
+- (void)saveDocumentAsTemplateDidEnd:(NSSavePanel *)panel
+						  returnCode:(int)returnCode
+						 contextInfo:(void *)contextInfo
 {
 	if (returnCode != NSOKButton)
 		return;
@@ -413,8 +400,8 @@
 		[[NSAlert alertWithError:error] runModal];
 }
 
-- (void) addDevices:(NSString *) path
-		connections:(NSDictionary *) connections
+- (void)addDevices:(NSString *)path
+	   connections:(NSDictionary *)connections
 {
 	string pathString = [path UTF8String];
 	map<string, string> connectionsMap;
@@ -446,7 +433,7 @@
 	[self updateChangeCount:NSChangeDone];
 }
 
-- (void) removeDevice:(NSDictionary *) dict
+- (void)removeDevice:(NSDictionary *)dict
 {
 	NSString *deviceRef = [dict objectForKey:@"ref"];
 	NSString *deviceLabel = [dict objectForKey:@"label"];
@@ -483,7 +470,7 @@
 	[self updateChangeCount:NSChangeDone];
 }
 
-- (void) makeWindowControllers
+- (void)makeWindowControllers
 {
 	NSWindowController *windowController;
 	
@@ -492,7 +479,7 @@
 	[windowController release];
 }
 
-- (BOOL) validateUserInterfaceItem:(id) item
+- (BOOL)validateUserInterfaceItem:(id)item
 {
 	if ([item action] == @selector(copy:))
 		return [self isCopyable];
@@ -504,12 +491,12 @@
 	return YES;
 }
 
-- (NSImage *) image
+- (NSImage *)image
 {
 	return [[image retain] autorelease];
 }
 
-- (void)setImage:(NSImage *) value
+- (void)setImage:(NSImage *)value
 {
     if (image != value)
 	{
@@ -518,12 +505,12 @@
     }
 }
 
-- (NSString *) label
+- (NSString *)label
 {
 	return [[label retain] autorelease];
 }
 
-- (void) setLabel:(NSString *) value
+- (void)setLabel:(NSString *)value
 {
     if (label != value)
 	{
@@ -532,12 +519,12 @@
     }
 }
 
-- (NSString *) notes
+- (NSString *)notes
 {
 	return [[notes retain] autorelease];
 }
 
-- (void) setNotes:(NSString *) value
+- (void)setNotes:(NSString *)value
 {
     if (notes != value)
 	{
@@ -546,12 +533,12 @@
     }
 }
 
-- (NSString *) modificationDate
+- (NSString *)modificationDate
 {
 	return modificationDate;
 }
 
-- (void) setModificationDate:(NSString *) value
+- (void)setModificationDate:(NSString *)value
 {
     if (modificationDate != value)
 	{
@@ -560,12 +547,12 @@
     }
 }
 
-- (NSString *) powerState
+- (NSString *)powerState
 {
 	return powerState;
 }
 
-- (void)setPowerState:(NSString *) value
+- (void)setPowerState:(NSString *)value
 {
     if (powerState != value)
 	{
@@ -574,170 +561,161 @@
     }
 }
 
-- (NSMutableArray *) freeInlets
+- (NSMutableArray *)freeInlets
 {
 	return freeInlets;
 }
 
-- (NSMutableArray *) expansions
+- (NSMutableArray *)expansions
 {
 	return [[expansions retain] autorelease];
 }
 
-- (void) insertObject:(id) value inExpansionsAtIndex:(NSUInteger) index
+- (void)insertObject:(id)value inExpansionsAtIndex:(NSUInteger)index
 {
     [expansions insertObject:value atIndex:index];
 }
 
-- (void) removeObjectFromExpansionsAtIndex:(NSUInteger) index
+- (void)removeObjectFromExpansionsAtIndex:(NSUInteger)index
 {
     [expansions removeObjectAtIndex:index];
 }
 
-- (NSMutableArray *) storage
+- (NSMutableArray *)storage
 {
 	return [[storage retain] autorelease];
 }
 
-- (void) insertObject:(id) value inStorageAtIndex:(NSUInteger) index
+- (void)insertObject:(id)value inStorageAtIndex:(NSUInteger)index
 {
     [storage insertObject:value atIndex:index];
 }
 
-- (void) removeObjectFromStorageAtIndex:(NSUInteger) index
+- (void)removeObjectFromStorageAtIndex:(NSUInteger)index
 {
     [storage removeObjectAtIndex:index];
 }
 
-- (NSMutableArray *) peripherals
+- (NSMutableArray *)peripherals
 {
 	return [[peripherals retain] autorelease];
 }
 
-- (void) insertObject:(id) value inPeripheralsAtIndex:(NSUInteger) index
+- (void)insertObject:(id)value inPeripheralsAtIndex:(NSUInteger)index
 {
     [peripherals insertObject:value atIndex:index];
 }
 
-- (void) removeObjectFromPeripheralsAtIndex:(NSUInteger) index
+- (void)removeObjectFromPeripheralsAtIndex:(NSUInteger)index
 {
     [peripherals removeObjectAtIndex:index];
 }
 
-- (void) keyDown:(int) keyCode
+- (void)sendHIDEvent:(int)notification usageId:(int)usageId value:(float)value
 {
-//	NSLog(@"keyDown: %02x", keyCode);
-	HostHIDEvent event =
-	{
-		keyCode,
-		1,
-	};
-	oepaPostNotification(emulation, "host::host",
-						 HOST_HID_KEYBOARD_EVENT, &event);
+	NSLog(@"sendHIDEvent:%d usageId:%d value:%f", notification, usageId, value);
+	
+	HostHIDEvent hidEvent;
+	hidEvent.usageId = usageId;
+	hidEvent.value = value;
+	
+	oepaPostNotification(emulation, HOST_DEVICE,
+						 notification, &hidEvent);	
 }
 
-- (void) keyUp:(int) keyCode
+- (void)powerDown:(id)sender
 {
-//	NSLog(@"keyUp: %02x", keyCode);
-	HostHIDEvent event =
-	{
-		keyCode,
-		0,
-	};
-	oepaPostNotification(emulation, "host::host",
-						 HOST_HID_KEYBOARD_EVENT, &event);
+	[self sendHIDEvent:HOST_HID_SYSTEM_EVENT
+			   usageId:HOST_HID_S_POWERDOWN
+				 value:1];
 }
 
-- (void) sendUnicodeChar:(int) unicodeChar
+- (void)sleep:(id)sender
 {
-//	NSLog(@"sendUnicodeChar: %02x", unicodeChar);
-	HostHIDEvent event =
-	{
-		unicodeChar,
-		0,
-	};
-	oepaPostNotification(emulation, "host::host",
-						 HOST_HID_UNICODEKEYBOARD_EVENT, &event);
+	[self sendHIDEvent:HOST_HID_SYSTEM_EVENT
+			   usageId:HOST_HID_S_SLEEP
+				 value:1];
 }
 
-- (void) powerDown:(id) sender
+- (void)wakeUp:(id)sender
 {
-	int event = HOST_HID_S_POWERDOWN;
-	oepaPostNotification(emulation, "host::host",
-						 HOST_HID_SYSTEM_EVENT, &event);
+	[self sendHIDEvent:HOST_HID_SYSTEM_EVENT
+			   usageId:HOST_HID_S_WAKEUP
+				 value:1];
 }
 
-- (void) sleep:(id) sender
+- (void)restart:(id)sender
 {
-	int event = HOST_HID_S_SLEEP;
-	oepaPostNotification(emulation, "host::host",
-						 HOST_HID_SYSTEM_EVENT, &event);
+	[self sendHIDEvent:HOST_HID_SYSTEM_EVENT
+			   usageId:HOST_HID_S_COLDRESTART
+				 value:1];
 }
 
-- (void) wakeUp:(id) sender
+- (void)debuggerBreak:(id)sender
 {
-	int event = HOST_HID_S_WAKEUP;
-	oepaPostNotification(emulation, "host::host",
-						 HOST_HID_SYSTEM_EVENT, &event);
+	[self sendHIDEvent:HOST_HID_SYSTEM_EVENT
+			   usageId:HOST_HID_S_DEBUGGERBREAK
+				 value:1];
 }
 
-- (void) restart:(id) sender
+- (BOOL)mouseCapture
 {
-	int event = HOST_HID_S_COLDRESTART;
-	oepaPostNotification(emulation, "host::host",
-						 HOST_HID_SYSTEM_EVENT, &event);
+	NSString *value = [self getHostProperty:@"hidMouseCapture"];
+	
+	return ([value compare:@"1"] == NSOrderedSame) ? YES : NO;
 }
 
-- (void) debuggerBreak:(id) sender
+- (BOOL)isCopyable
 {
-	int event = HOST_HID_S_DEBUGGERBREAK;
-	oepaPostNotification(emulation, "host::host",
-						 HOST_HID_SYSTEM_EVENT, &event);
+	return oepaIoctl(emulation, HOST_DEVICE, HOST_IS_COPYABLE, NULL);
 }
 
-- (BOOL) isCopyable
+- (BOOL)isPasteable
 {
-	return oepaIoctl(emulation, "host::host", HOST_IS_COPYABLE, NULL);
-}
-
-- (BOOL) isPasteable
-{
-	if (!oepaIoctl(emulation, "host::host", HOST_IS_PASTEABLE, NULL))
+	if (!oepaIoctl(emulation, HOST_DEVICE, HOST_IS_PASTEABLE, NULL))
 		return NO;
+	
+	NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
+	NSArray *pasteboardTypes = [NSArray arrayWithObjects:NSStringPboardType, nil];
 	
 	return [pasteboard availableTypeFromArray:pasteboardTypes] != nil;
 }
 
-- (NSString *) documentText
+- (NSString *)documentText
 {
 	string characterString;
-	oepaPostNotification(emulation, "host::host",
+	oepaPostNotification(emulation, HOST_DEVICE,
 						 HOST_CLIPBOARD_COPY_EVENT, &characterString);
 	return [NSString stringWithUTF8String:characterString.c_str()];
 }
 
-- (void) copy:(id) sender
+- (void)copy:(id)sender
 {
 	if ([self isCopyable])
 	{
+		NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
+		NSArray *pasteboardTypes = [NSArray arrayWithObjects:NSStringPboardType, nil];
+		
 		[pasteboard declareTypes:pasteboardTypes owner:self];
 		[pasteboard setString:[self documentText] forType:NSStringPboardType];
 	}
 }
 
-- (void) paste:(id) sender
+- (void)paste:(id)sender
 {
 	if ([self isPasteable])
 	{
+		NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
+		
 		NSString *characters = [pasteboard stringForType:NSStringPboardType];
 		string characterString([characters UTF8String]);
 		
-		oepaPostNotification(emulation, "host::host", 
+		oepaPostNotification(emulation, HOST_DEVICE, 
 							 HOST_CLIPBOARD_PASTE_EVENT, &characterString);
 	}
 }
 
-- (void) startSpeaking:(id) sender
+- (void)startSpeaking:(id)sender
 {
 	NSTextView *dummy = [[[NSTextView alloc] init] autorelease];
 	[dummy insertText:[self documentText]];

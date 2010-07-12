@@ -9,7 +9,6 @@
  */
 
 #import <Carbon/Carbon.h>
-#import <QuartzCore/QuartzCore.h>
 
 #import "Document.h"
 #import "DocumentController.h"
@@ -23,38 +22,20 @@
 #define LINK_DEVURL		@"http://code.google.com/p/openemulator"
 #define LINK_DONATEURL	@"http://www.openemulator.org/donate.html"
 
-#define TIMER_FREQUENCY	10.0
-
-// Note:
-// See if we can use CGSSetGlobalHotKeyOperatingMode to 
-// disable key capture
-
-typedef int CGSConnection;
-typedef enum
-{
-	kCGSGlobalHotKeyEnable = 0,
-	kCGSGlobalHotKeyDisable,
-	kCGSGlobalHotKeyInvalid = -1,
-} CGSGlobalHotKeyOperatingMode;
-
-extern CGError CGSGetGlobalHotKeyOperatingMode(CGSConnection Connection, 
-											   CGSGlobalHotKeyOperatingMode *enmMode);
-extern CGError CGSSetGlobalHotKeyOperatingMode(CGSConnection Connection,
-											   CGSGlobalHotKeyOperatingMode enmMode);
-
 @implementation DocumentController
 
-- (id) init
+- (id)init
 {
 	if (self = [super init])
 	{
 		diskImageFileTypes = [[NSArray alloc] initWithObjects:
 							  @"dsk", @"do", @"d13", @"po", @"cpm", @"nib", @"v2d",
-							  @"vdsk", @"2mg", @"2img", @"hdv", @"sdk",
+							  @"vdsk",
+							  @"2mg", @"2img",
 							  @"d64", @"g64", @"d71", @"d81", @"t64",
 							  @"tap", @"prg", @"p00", @"crt",
 							  @"fdi",
-							  @"img", @"hdv", @"hfv",
+							  @"img", @"dmg", @"hdv", @"hfv",
 							  @"iso", @"cdr",
 							  nil];
 		
@@ -71,18 +52,12 @@ extern CGError CGSSetGlobalHotKeyOperatingMode(CGSConnection Connection,
 		audioRecordingURL = nil;
 		
 		disableMenuBarCount = 0;
-		
-/*		CVReturn ret;
-		CGOpenGLDisplayMask	totalDisplayMask = 0;
-		CVDisplayLinkRef	displayLink;
-		ret = CVDisplayLinkCreateWithOpenGLDisplayMask(totalDisplayMask, &displayLink);
-		CVDisplayLinkSetOutputCallback(displayLink, renderCallback, self);
-*/	}
+	}
 	
 	return self;
 }
 
-- (void) dealloc
+- (void)dealloc
 {
 	[diskImageFileTypes release];
 	[audioFileTypes release];
@@ -101,7 +76,7 @@ extern CGError CGSSetGlobalHotKeyOperatingMode(CGSConnection Connection,
 	[super dealloc];
 }
 
-- (void) applicationWillFinishLaunching:(NSNotification *) notification
+- (void)applicationWillFinishLaunching:(NSNotification *)notification
 {
 	[fInspectorController restoreWindowState:self];
 	
@@ -133,8 +108,8 @@ extern CGError CGSSetGlobalHotKeyOperatingMode(CGSConnection Connection,
 				  context:nil];
 }
 
-- (BOOL) application:(NSApplication *) theApplication
-			openFile:(NSString *) filename
+- (BOOL)application:(NSApplication *)theApplication
+		   openFile:(NSString *)filename
 {
 	NSString *extension = [[filename pathExtension] lowercaseString];
 	
@@ -182,32 +157,21 @@ extern CGError CGSSetGlobalHotKeyOperatingMode(CGSConnection Connection,
 	return YES;
 }
 
-- (void) applicationDidFinishLaunching:(NSNotification *) notification
+- (void)applicationDidFinishLaunching:(NSNotification *)notification
 {
 }
 
-- (void) applicationWillTerminate:(NSNotification *) notification
+- (void)applicationWillTerminate:(NSNotification *)notification
 {
 	oepaClose();
 	
 	[fInspectorController storeWindowState:self];
 }
 
-/*static CVReturn renderCallback(CVDisplayLinkRef displayLink, 
-							   const CVTimeStamp *inNow, 
-							   const CVTimeStamp *inOutputTime, 
-							   CVOptionFlags flagsIn, 
-							   CVOptionFlags *flagsOut, 
-							   void *displayLinkContext)
-{
-	NSLog(@"Oh no");
-    return [(VideoView*)displayLinkContext renderTime:inOutputTime];
-}*/
-
-- (void) observeValueForKeyPath:(NSString *) keyPath
-					   ofObject:(id) object
-						 change:(NSDictionary *) change
-                        context:(void *) context
+- (void)observeValueForKeyPath:(NSString *)keyPath
+					  ofObject:(id)object
+						change:(NSDictionary *)change
+                       context:(void *)context
 {
 	if ([keyPath isEqualToString:@"OEFullDuplex"])
 	{
@@ -229,7 +193,7 @@ extern CGError CGSSetGlobalHotKeyOperatingMode(CGSConnection Connection,
 	}
 }
 
-- (BOOL) validateUserInterfaceItem:(id) item
+- (BOOL)validateUserInterfaceItem:(id)item
 {
 	if ([item action] == @selector(newDocument:))
 		return ![[fTemplateChooserController window] isVisible];
@@ -239,12 +203,12 @@ extern CGError CGSSetGlobalHotKeyOperatingMode(CGSConnection Connection,
 		return YES;
 }
 
-- (IBAction) newDocumentFromTemplateChooser:(id) sender
+- (IBAction)newDocumentFromTemplateChooser:(id)sender
 {
 	[fTemplateChooserController run];
 }
 
-- (IBAction) openDocument:(id) sender
+- (IBAction)openDocument:(id)sender
 {
 	NSOpenPanel *panel = [NSOpenPanel openPanel];
 	NSMutableArray *fileTypes = [NSMutableArray array];
@@ -264,7 +228,8 @@ extern CGError CGSSetGlobalHotKeyOperatingMode(CGSConnection Connection,
 	}
 }
 
-- (id) openUntitledDocumentAndDisplay:(BOOL) displayDocument error:(NSError **) outError
+- (id)openUntitledDocumentAndDisplay:(BOOL)displayDocument
+							   error:(NSError **)outError
 {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	if (![defaults boolForKey:@"OEUseDefaultTemplate"])
@@ -297,9 +262,9 @@ extern CGError CGSSetGlobalHotKeyOperatingMode(CGSConnection Connection,
 	}
 }
 
-- (id) openUntitledDocumentWithTemplateURL:(NSURL *) absoluteURL
-								   display:(BOOL) displayDocument
-									 error:(NSError **) outError
+- (id)openUntitledDocumentWithTemplateURL:(NSURL *)absoluteURL
+								  display:(BOOL)displayDocument
+									error:(NSError **)outError
 {
 	NSDocument *document;
 	
@@ -318,8 +283,8 @@ extern CGError CGSSetGlobalHotKeyOperatingMode(CGSConnection Connection,
 	return document;
 }
 
-- (id) makeUntitledDocumentWithTemplateURL:(NSURL *) absoluteURL
-									 error:(NSError **) outError
+- (id)makeUntitledDocumentWithTemplateURL:(NSURL *)absoluteURL
+									error:(NSError **)outError
 {
 	Document *document = [[Document alloc] initWithTemplateURL:absoluteURL
 														 error:outError];
@@ -329,17 +294,7 @@ extern CGError CGSSetGlobalHotKeyOperatingMode(CGSConnection Connection,
 	return nil;
 }
 
-- (void) keyDown:(NSEvent *) theEvent
-{
-	NSLog(@"keyDown");
-}
-
-- (void) keyUp:(NSEvent *) theEvent
-{
-	NSLog(@"keyUp");
-}
-
-- (void) setPlaybackURL:(NSURL *) theURL
+- (void)setPlaybackURL:(NSURL *)theURL
 {
 	if (audioPlaybackURL)
 		[audioPlaybackURL release];
@@ -349,7 +304,7 @@ extern CGError CGSSetGlobalHotKeyOperatingMode(CGSConnection Connection,
 		oepaStartPlayback([[audioPlaybackURL path] UTF8String]);
 }
 
-- (void) togglePlayback
+- (void)togglePlayback
 {
 	if (!oepaIsPlayback())
 		oepaStartPlayback([[audioPlaybackURL path] UTF8String]);
@@ -357,22 +312,22 @@ extern CGError CGSSetGlobalHotKeyOperatingMode(CGSConnection Connection,
 		oepaStopPlayback();
 }
 
-- (BOOL) playback
+- (BOOL)playback
 {
 	return oepaIsPlayback();
 }
 
-- (float) playbackTime
+- (float)playbackTime
 {
 	return oepaGetPlaybackTime();
 }
 
-- (float) playbackDuration
+- (float)playbackDuration
 {
 	return oepaGetPlaybackDuration();
 }
 
-- (NSURL *) playbackURL
+- (NSURL *)playbackURL
 {
 	if (audioPlaybackURL)
 		return [[audioPlaybackURL copy] autorelease];
@@ -380,7 +335,7 @@ extern CGError CGSSetGlobalHotKeyOperatingMode(CGSConnection Connection,
 		return nil;
 }
 
-- (void) toggleRecording
+- (void)toggleRecording
 {
 	if (!oepaIsRecording())
 	{
@@ -394,7 +349,7 @@ extern CGError CGSSetGlobalHotKeyOperatingMode(CGSConnection Connection,
 		oepaStopRecording();
 }
 
-- (void) saveRecordingAs:(NSURL *) theURL
+- (void)saveRecordingAs:(NSURL *)theURL
 {
 	if (!audioRecordingURL)
 		return;
@@ -411,22 +366,22 @@ extern CGError CGSSetGlobalHotKeyOperatingMode(CGSConnection Connection,
 	audioRecordingURL = nil;
 }
 
-- (BOOL) recording
+- (BOOL)recording
 {
 	return oepaIsRecording();
 }
 
-- (float) recordingTime
+- (float)recordingTime
 {
 	return oepaGetRecordingTime();
 }
 
-- (long long) recordingSize
+- (long long)recordingSize
 {
 	return oepaGetRecordingSize();
 }
 
-- (NSURL *) recordingURL
+- (NSURL *)recordingURL
 {
 	if (audioRecordingURL)
 		return [[audioRecordingURL copy] autorelease];
@@ -434,65 +389,7 @@ extern CGError CGSSetGlobalHotKeyOperatingMode(CGSConnection Connection,
 		return nil;
 }
 
-- (void) setGlobalHotKeys:(BOOL) state
-{
-/*    static unsigned s_cComplaints = 0;
-	
-// Lazy connect to the core graphics service.
-    if (!g_fConnectedToCGS)
-    {
-        g_CGSConnection = _CGSDefaultConnection();
-        g_fConnectedToCGS = true;
-    }
-	
-// Get the current mode.
-    CGSGlobalHotKeyOperatingMode enmMode = kCGSGlobalHotKeyInvalid;
-    CGSGetGlobalHotKeyOperatingMode(g_CGSConnection, &enmMode);
-    if (    enmMode != kCGSGlobalHotKeyEnable
-        &&  enmMode != kCGSGlobalHotKeyDisable)
-    {
-        AssertMsgFailed(("%d\n", enmMode));
-        if (s_cComplaints++ < 32)
-            LogRel(("DarwinDisableGlobalHotKeys: Unexpected enmMode=%d\n", enmMode));
-        return;
-    }
-	
-// Calc the new mode.
-    if (fDisable)
-    {
-        if (enmMode != kCGSGlobalHotKeyEnable)
-            return;
-        enmMode = kCGSGlobalHotKeyDisable;
-    }
-    else
-    {
-        if (enmMode != kCGSGlobalHotKeyDisable)
-            return;
-        enmMode = kCGSGlobalHotKeyEnable;
-    }
-	
-// Try set it and check the actual result.
-    CGSSetGlobalHotKeyOperatingMode(g_CGSConnection, enmMode);
-    CGSGlobalHotKeyOperatingMode enmNewMode = kCGSGlobalHotKeyInvalid;
-    CGSGetGlobalHotKeyOperatingMode(g_CGSConnection, &enmNewMode);
-    if (enmNewMode != enmMode)
-    {
-		// If the screensaver kicks in we should ignore failure here.
-        AssertMsg(enmMode == kCGSGlobalHotKeyEnable, ("enmNewMode=%d enmMode=%d\n", enmNewMode, enmMode));
-        if (s_cComplaints++ < 32)
-            LogRel(("DarwinDisableGlobalHotKeys: Failed to change mode; enmNewMode=%d enmMode=%d\n", enmNewMode, enmMode));
-    }*/
-}
-
-- (void) disableGlobalHotKeys
-{
-}
-
-- (void) enableGlobalHotKeys
-{
-}
-
-- (void) disableMenuBar
+- (void)disableMenuBar
 {
 	disableMenuBarCount++;
 	
@@ -500,7 +397,7 @@ extern CGError CGSSetGlobalHotKeyOperatingMode(CGSConnection Connection,
 		SetSystemUIMode(kUIModeAllHidden, kUIOptionAutoShowMenuBar);
 }
 
-- (void) enableMenuBar
+- (void)enableMenuBar
 {
 	disableMenuBarCount--;
 	
@@ -508,25 +405,25 @@ extern CGError CGSSetGlobalHotKeyOperatingMode(CGSConnection Connection,
 		SetSystemUIMode(kUIModeNormal, 0);
 }
 
-- (void) openHomepage:(id) sender
+- (void)openHomepage:(id)sender
 {
 	NSURL *url = [NSURL	URLWithString:LINK_HOMEPAGE];
 	[[NSWorkspace sharedWorkspace] openURL:url];
 }
 
-- (void) openForums:(id) sender
+- (void)openForums:(id)sender
 {
 	NSURL *url = [NSURL	URLWithString:LINK_FORUMSURL];
 	[[NSWorkspace sharedWorkspace] openURL:url];
 }
 
-- (void) openDevelopment:(id) sender
+- (void)openDevelopment:(id)sender
 {
 	NSURL *url = [NSURL	URLWithString:LINK_DEVURL];
 	[[NSWorkspace sharedWorkspace] openURL:url];
 }
 
-- (void) openDonate:(id) sender
+- (void)openDonate:(id)sender
 {
 	NSURL *url = [NSURL	URLWithString:LINK_DONATEURL];
 	[[NSWorkspace sharedWorkspace] openURL:url];

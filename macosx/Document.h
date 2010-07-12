@@ -18,9 +18,6 @@ typedef struct OEEmulation OEEmulation;
 {
 	OEEmulation *emulation;
 	
-	NSPasteboard *pasteboard;
-	NSArray *pasteboardTypes;
-	
 	NSImage *image;
 	NSString *label;
 	NSString *notes;
@@ -35,7 +32,6 @@ typedef struct OEEmulation OEEmulation;
 }
 
 - (id) initWithTemplateURL:(NSURL *) templateURL error:(NSError **) outError;
-
 - (IBAction) saveDocumentAsTemplate:(id) sender;
 
 - (NSImage *) image;
@@ -66,15 +62,15 @@ typedef struct OEEmulation OEEmulation;
 - (void) addDevices:(NSString *) path connections:(NSDictionary *) connections;
 - (void) removeDevice:(NSDictionary *) dict;
 
-- (void) keyDown:(int) event;
-- (void) keyUp:(int) event;
-- (void) sendUnicodeChar:(int) unicodeChar;
+- (void) sendHIDEvent:(int)notification usageId:(int)usageId value:(float)value;
 
 - (void) powerDown:(id) sender;
 - (void) sleep:(id) sender;
 - (void) wakeUp:(id) sender;
 - (void) restart:(id) sender;
 - (void) debuggerBreak:(id) sender;
+
+- (BOOL) mouseCapture;
 
 - (BOOL) isCopyable;
 - (BOOL) isPasteable;
