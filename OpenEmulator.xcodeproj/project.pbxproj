@@ -54,6 +54,8 @@
 		00679D08100817F700B38748 /* DeviceChooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00679D04100817F600B38748 /* DeviceChooser.xib */; };
 		00679D09100817F700B38748 /* TemplateChooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00679D06100817F700B38748 /* TemplateChooser.xib */; };
 		0071E3BA10803F7300F2D54F /* ChooserItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 0071E3B910803F7300F2D54F /* ChooserItem.m */; };
+		0077069411EB632800535F6D /* oehid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0077069311EB632800535F6D /* oehid.cpp */; };
+		0077069B11EB638500535F6D /* DocumentWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 0077069A11EB638500535F6D /* DocumentWindow.m */; };
 		008107DE1120C57600D744FB /* TemplateChooserViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00FE0C051095353B00B92AB7 /* TemplateChooserViewController.mm */; };
 		008283F011A35D3A00B2B530 /* IPAudioPlay.png in Resources */ = {isa = PBXBuildFile; fileRef = 008283EF11A35D3A00B2B530 /* IPAudioPlay.png */; };
 		0082840411A3603800B2B530 /* IPAudioRecord.png in Resources */ = {isa = PBXBuildFile; fileRef = 0082840211A3603800B2B530 /* IPAudioRecord.png */; };
@@ -83,7 +85,6 @@
 		00B7038A1135ACAA005E4B65 /* OERef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B7037D1135AC91005E4B65 /* OERef.cpp */; };
 		00B7038E1135ACAD005E4B65 /* OEPackage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B7037B1135AC91005E4B65 /* OEPackage.cpp */; };
 		00B974B410701DDA00BD1402 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = 00B974AD10701DCD00BD1402 /* sounds */; };
-		00BA910411EA4AD300A48F72 /* DocumentWindow.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00BA910311EA4AD300A48F72 /* DocumentWindow.mm */; };
 		00BADDC51100EDC600EB0344 /* ConnectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00BADD451100BE8300EB0344 /* ConnectorViewController.m */; };
 		00BB4D591086C1160071B584 /* TBRestart.png in Resources */ = {isa = PBXBuildFile; fileRef = 00BB4D561086C1160071B584 /* TBRestart.png */; };
 		00BB4D5B1086C1160071B584 /* TBSleep.png in Resources */ = {isa = PBXBuildFile; fileRef = 00BB4D581086C1160071B584 /* TBSleep.png */; };
@@ -256,6 +257,9 @@
 		006EEE8F0FCA781C003D2C8D /* DiskImage.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = DiskImage.icns; sourceTree = "<group>"; };
 		0071E3B810803F7300F2D54F /* ChooserItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChooserItem.h; sourceTree = "<group>"; };
 		0071E3B910803F7300F2D54F /* ChooserItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChooserItem.m; sourceTree = "<group>"; };
+		0077069211EB632800535F6D /* oehid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = oehid.h; sourceTree = "<group>"; };
+		0077069311EB632800535F6D /* oehid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = oehid.cpp; sourceTree = "<group>"; };
+		0077069A11EB638500535F6D /* DocumentWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DocumentWindow.m; sourceTree = "<group>"; };
 		008283EF11A35D3A00B2B530 /* IPAudioPlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPAudioPlay.png; path = macosx/Images/IPAudioPlay.png; sourceTree = "<group>"; };
 		0082840211A3603800B2B530 /* IPAudioRecord.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPAudioRecord.png; path = macosx/Images/IPAudioRecord.png; sourceTree = "<group>"; };
 		0082847B11A422C700B2B530 /* IPAudioStop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPAudioStop.png; path = macosx/Images/IPAudioStop.png; sourceTree = "<group>"; };
@@ -307,7 +311,6 @@
 		00B7037C1135AC91005E4B65 /* OEPackage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEPackage.h; sourceTree = "<group>"; };
 		00B7037D1135AC91005E4B65 /* OERef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OERef.cpp; sourceTree = "<group>"; };
 		00B974AD10701DCD00BD1402 /* sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; path = sounds; sourceTree = "<group>"; };
-		00BA910311EA4AD300A48F72 /* DocumentWindow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DocumentWindow.mm; sourceTree = "<group>"; };
 		00BADD441100BE8300EB0344 /* ConnectorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConnectorViewController.h; sourceTree = "<group>"; };
 		00BADD451100BE8300EB0344 /* ConnectorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConnectorViewController.m; sourceTree = "<group>"; };
 		00BB4D561086C1160071B584 /* TBRestart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TBRestart.png; sourceTree = "<group>"; };
@@ -511,6 +514,8 @@
 				00E0AFD01132CA8B004DB96D /* oepa.h */,
 				00E0B19B1132DE4D004DB96D /* SDLMain.h */,
 				00E0B19A1132DE4D004DB96D /* SDLMain.m */,
+				0077069211EB632800535F6D /* oehid.h */,
+				0077069311EB632800535F6D /* oehid.cpp */,
 			);
 			name = oecli;
 			path = cli;
@@ -634,9 +639,9 @@
 		2A37F4ABFDCFA73011CA2CEA /* macosx */ = {
 			isa = PBXGroup;
 			children = (
+				0077069A11EB638500535F6D /* DocumentWindow.m */,
 				00A1F31811EAEBE4001511D0 /* TabletController.h */,
 				00A1F31911EAEBE4001511D0 /* TabletController.m */,
-				00BA910311EA4AD300A48F72 /* DocumentWindow.mm */,
 				0041613F11E82D7300986586 /* DocumentView.mm */,
 				000DAA5511D95A05006360A2 /* DocumentView.h */,
 				00AD746811A2F10E00BAC29C /* DocumentController.mm */,
@@ -988,8 +993,9 @@
 				001D66B811B7F5C800B88406 /* oepa.cpp in Sources */,
 				006115C211DD0347008AA3EE /* Application.m in Sources */,
 				0041614011E82D7300986586 /* DocumentView.mm in Sources */,
-				00BA910411EA4AD300A48F72 /* DocumentWindow.mm in Sources */,
 				00A1F31A11EAEBE4001511D0 /* TabletController.m in Sources */,
+				0077069411EB632800535F6D /* oehid.cpp in Sources */,
+				0077069B11EB638500535F6D /* DocumentWindow.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

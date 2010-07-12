@@ -18,14 +18,10 @@
 {
 	CVDisplayLinkRef displayLink;
 	void *oeglContext;
-
+	void *oehidContext;
+	
 	int keyMap[DOCUMENT_KEYMAP_SIZE];
 	int keyModifierFlags;
-	int keyDownCount;
-	
-	BOOL mouseButtonState[DOCUMENT_MOUSE_BUTTONNUM];
-	BOOL mouseCaptured;
-	BOOL mouseCaptureRelease;
 }
 
 - (void) drawFrame;

@@ -331,29 +331,6 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	}
 }
 
-- (void)hidSetKey:(int)usageId value:(BOOL)value
-{
-	if (!usageId)
-		return;
-	
-	Document *document = [[[self window] windowController] document];
-	
-	[document sendHIDEvent:HOST_HID_KEYBOARD_EVENT
-				   usageId:usageId
-					 value:value];
-	
-	int downCount = keyDownCount + (value ? 1 : -1);
-	keyDownCount = downCount < 0 ? 0 : downCount;
-	
-	if (mouseCaptureRelease && !keyDownCount)
-	{
-		mouseCaptureRelease = NO;
-		mouseCaptured = NO;
-		[self hidSetMouseCapture:NO];
-	}
-	
-}
-
 - (void)hidSendUnicode:(int)unicode
 {
 	if (unicode == 127)
