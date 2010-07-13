@@ -57,8 +57,6 @@ enum
 	HOST_ADD_SCREEN,
 	HOST_REMOVE_SCREEN,
 	HOST_UPDATE_SCREEN,
-	HOST_GET_VIDEO_UPDATED,
-	HOST_GET_SCREENS,
 	
 	HOST_IS_COPYABLE,
 	HOST_IS_PASTEABLE,
@@ -345,13 +343,13 @@ enum {
 #define HOST_HID_L_SHIFT		(1 << 6)
 
 // HID Unicode key modifier
-#define HOST_HID_U_CONTROL
-#define HOST_HID_U_SHIFT
-#define HOST_HID_U_ALT
-#define HOST_HID_U_GUI
-#define HOST_HID_U_CAPSLOCK
-#define HOST_HID_U_ANYKEY
-#define HOST_HID_U_KEYPAD
+#define HOST_HID_U_CONTROL		(1 << 0)
+#define HOST_HID_U_SHIFT		(1 << 1)
+#define HOST_HID_U_ALT			(1 << 2)
+#define HOST_HID_U_GUI			(1 << 3)
+#define HOST_HID_U_CAPSLOCK		(1 << 4)
+#define HOST_HID_U_ANYKEY		(1 << 5)
+#define HOST_HID_U_KEYPAD		(1 << 6)
 
 // HID Pointer Events
 enum
@@ -366,8 +364,8 @@ enum
 	HOST_HID_P_BUTTON6,
 	HOST_HID_P_BUTTON7,
 	HOST_HID_P_BUTTON8,
-	HOST_HID_P_WY,
 	HOST_HID_P_WX,
+	HOST_HID_P_WY,
 };
 
 // HID Mouse Events
@@ -383,13 +381,13 @@ enum
 	HOST_HID_M_BUTTON6,
 	HOST_HID_M_BUTTON7,
 	HOST_HID_M_BUTTON8,
-	HOST_HID_M_WY,
 	HOST_HID_M_WX,
+	HOST_HID_M_WY,
 };
 
 // HID Joystick Events
 //
-// Axis range is 0..65535. 32768 is centered
+// Axis range is -1.0 .. 1.0
 enum
 {
 	HOST_HID_J_AXIS1,
@@ -399,6 +397,7 @@ enum
 	HOST_HID_J_AXIS5,
 	HOST_HID_J_AXIS6,
 	HOST_HID_J_AXIS7,
+	HOST_HID_J_AXIS8,
 	HOST_HID_J_AXIS9,
 	HOST_HID_J_AXIS10,
 	HOST_HID_J_AXIS11,
@@ -427,10 +426,10 @@ enum
 	HOST_HID_J_HAT2,
 	HOST_HID_J_HAT3,
 	HOST_HID_J_HAT4,
-	HOST_HID_J_RELAXIS1,
-	HOST_HID_J_RELAXIS2,
-	HOST_HID_J_RELAXIS3,
-	HOST_HID_J_RELAXIS4,
+	HOST_HID_J_RAXIS1,
+	HOST_HID_J_RAXIS2,
+	HOST_HID_J_RAXIS3,
+	HOST_HID_J_RAXIS4,
 };
 
 // HID Tablet Events
@@ -449,22 +448,6 @@ enum
 	HOST_HID_T_PROXIMITY,
 };
 
-// Devices - API to be determined
-/*enum
- {
- HOST_SERIALPORT1,
- HOST_SERIALPORT2,
- HOST_SERIALPORT3,
- HOST_SERIALPORT4,
- HOST_PARALLELPORT1,
- HOST_PARALLELPORT2,
- HOST_MIDI,
- HOST_ETHERNET1,
- HOST_ETHERNET2,
- HOST_USB,
- HOST_CAMERA,
- };*/
-
 // Data types
 typedef struct
 {
@@ -478,14 +461,22 @@ typedef struct
 
 typedef struct
 {
-	int *framebufferData;
 	int framebufferWidth;
 	int framebufferHeight;
 	int contentWidth;
 	int contentHeight;
-	int screenWidth;
-	int screenHeight;
-	bool updated;
+	int paddingTop;
+	int paddingRight;
+	int paddingBottom;
+	int paddingLeft;
+} HostVideoStyle;
+
+typedef struct
+{
+	HostVideoStyle style;
+	int readIndex;
+	int writeIndex;
+	UInt32 *framebuffer[2];
 } HostVideoScreen;
 
 typedef vector<HostVideoScreen *> HostVideoScreens;
