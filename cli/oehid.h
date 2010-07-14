@@ -28,9 +28,8 @@ typedef struct
 	bool joystickDown[OEHID_JOYSTICK_NUM][OEHID_JOYSTICKDOWN_SIZE];
 	bool tabletDown[OEHID_TABLETDOWN_SIZE];
 	
-	BOOL mouseButtonState[DOCUMENT_MOUSE_BUTTONNUM];
-	BOOL mouseCaptured;
-	BOOL mouseCaptureRelease;
+	bool mouseCaptured;
+	bool mouseCaptureRelease;
 } OEHIDContext;
 
 OEHIDContext *oehidOpen(OEEmulation *emulation,

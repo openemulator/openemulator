@@ -54,13 +54,49 @@ enum
 // Messages
 enum
 {
+	HOST_REGISTER_VIDEO,
+	
 	HOST_ADD_SCREEN,
 	HOST_REMOVE_SCREEN,
-	HOST_UPDATE_SCREEN,
 	
 	HOST_IS_COPYABLE,
 	HOST_IS_PASTEABLE,
 };
+
+// Data types
+typedef struct
+{
+	float sampleRate;
+	int channelNum;
+	int frameNum;
+	
+	float *input;
+	float *output;
+} HostAudioBuffer;
+
+#define HOST_VIDEO_FRAMEBUFFERNUM 2
+
+typedef struct
+{
+	int framebufferWidth;
+	int framebufferHeight;
+	int contentWidth;
+	int contentHeight;
+	int paddingTop;
+	int paddingRight;
+	int paddingBottom;
+	int paddingLeft;
+} HostVideoConfiguration;
+
+typedef struct
+{
+	HostVideoConfiguration conf;
+	int readIndex;
+	int writeIndex;
+	OEInt32 *framebuffer[HOST_VIDEO_FRAMEBUFFERNUM];
+} HostVideoScreen;
+
+typedef vector<HostVideoScreen *> HostVideoScreens;
 
 // Structures
 typedef struct
@@ -447,39 +483,6 @@ enum
 	HOST_HID_T_BUTTON8,
 	HOST_HID_T_PROXIMITY,
 };
-
-// Data types
-typedef struct
-{
-	float sampleRate;
-	int channelNum;
-	int frameNum;
-	
-	float *input;
-	float *output;
-} HostAudioBuffer;
-
-typedef struct
-{
-	int framebufferWidth;
-	int framebufferHeight;
-	int contentWidth;
-	int contentHeight;
-	int paddingTop;
-	int paddingRight;
-	int paddingBottom;
-	int paddingLeft;
-} HostVideoStyle;
-
-typedef struct
-{
-	HostVideoStyle style;
-	int readIndex;
-	int writeIndex;
-	UInt32 *framebuffer[2];
-} HostVideoScreen;
-
-typedef vector<HostVideoScreen *> HostVideoScreens;
 
 class Host : public OEComponent
 {

@@ -31,7 +31,7 @@ void oehidClose(OEHIDContext *context)
 
 void oehidSend(OEHIDContext *context, int usageId, float value)
 {
-		context->emulation->postNotificaiton
+	context->emulation->postNotification();
 }
 
 void oehidSendSystemEvent(OEHIDContext *context, int usageId)

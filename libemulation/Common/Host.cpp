@@ -72,6 +72,9 @@ int Host::ioctl(int message, void *data)
 {
 	switch(message)
 	{
+		case HOST_REGISTER_VIDEO:
+			break;
+			
 		case HOST_ADD_SCREEN:
 			videoUpdated = true;
 			return addScreen((HostVideoScreen *) data);
@@ -79,18 +82,6 @@ int Host::ioctl(int message, void *data)
 		case HOST_REMOVE_SCREEN:
 			videoUpdated = true;
 			return removeScreen((HostVideoScreen *) data);
-			
-		case HOST_UPDATE_SCREEN:
-			videoUpdated = true;
-			return true;
-			
-		case HOST_GET_VIDEO_UPDATED:
-			*((bool **) data) = &videoUpdated;
-			return true;
-			
-		case HOST_GET_SCREENS:
-			*((HostVideoScreens *) data) = videoScreens;
-			return true;
 			
 		case HOST_IS_COPYABLE:
 			return (observerMap[HOST_CLIPBOARD_COPY_EVENT].size() != 0);

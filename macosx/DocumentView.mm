@@ -189,12 +189,6 @@ DocumentKeyMapInverseEntry documentKeyMapInverse[] =
 			keyMap[keyCode] = usageId;
 		}
 		keyModifierFlags = 0;
-		keyDownCount = 0;
-		
-		for (int i = 0; i < DOCUMENT_MOUSE_BUTTONNUM; i++)
-			mouseButtonState[i] = NO;
-		mouseCaptured = NO;
-		mouseCaptureRelease = NO;
 	}
 	
 	return self;
