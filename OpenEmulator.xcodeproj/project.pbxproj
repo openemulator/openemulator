@@ -14,8 +14,6 @@
 		00123BC91069B8D600FB95A1 /* libemulation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 006EECA40FCA5C31003D2C8D /* libemulation.a */; };
 		00123BCC1069B8F200FB95A1 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 00E2A84D1053290200910B53 /* libxml2.dylib */; };
 		00188DA8115DC59700FFACC0 /* MOS6502.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00188D95115DC58800FFACC0 /* MOS6502.cpp */; };
-		001D66B711B7F5C700B88406 /* oegl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00E0AFCC1132CA8B004DB96D /* oegl.cpp */; };
-		001D66B811B7F5C800B88406 /* oepa.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00E0AFCF1132CA8B004DB96D /* oepa.cpp */; };
 		001F56F90FD1E8E500EA246A /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 001F56F80FD1E8E500EA246A /* Sparkle.framework */; };
 		001F915811925B56005383B3 /* libsndfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 001F915711925B56005383B3 /* libsndfile.a */; };
 		001F915911925B56005383B3 /* libsndfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 001F915711925B56005383B3 /* libsndfile.a */; };
@@ -54,7 +52,6 @@
 		00679D08100817F700B38748 /* DeviceChooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00679D04100817F600B38748 /* DeviceChooser.xib */; };
 		00679D09100817F700B38748 /* TemplateChooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00679D06100817F700B38748 /* TemplateChooser.xib */; };
 		0071E3BA10803F7300F2D54F /* ChooserItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 0071E3B910803F7300F2D54F /* ChooserItem.m */; };
-		0077069411EB632800535F6D /* oehid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0077069311EB632800535F6D /* oehid.cpp */; };
 		0077069B11EB638500535F6D /* DocumentWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 0077069A11EB638500535F6D /* DocumentWindow.m */; };
 		008107DE1120C57600D744FB /* TemplateChooserViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00FE0C051095353B00B92AB7 /* TemplateChooserViewController.mm */; };
 		008283F011A35D3A00B2B530 /* IPAudioPlay.png in Resources */ = {isa = PBXBuildFile; fileRef = 008283EF11A35D3A00B2B530 /* IPAudioPlay.png */; };
@@ -129,8 +126,6 @@
 		00D845850FFF0FD2005802F0 /* PaperFeedController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D845780FFF0FD2005802F0 /* PaperFeedController.m */; };
 		00D845860FFF0FD2005802F0 /* PreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D8457A0FFF0FD2005802F0 /* PreferencesController.m */; };
 		00D846290FFF23B7005802F0 /* PRSound.png in Resources */ = {isa = PBXBuildFile; fileRef = 00D846280FFF23B7005802F0 /* PRSound.png */; };
-		00E0AFD11132CA8B004DB96D /* oegl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00E0AFCC1132CA8B004DB96D /* oegl.cpp */; };
-		00E0AFD21132CA8B004DB96D /* oepa.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00E0AFCF1132CA8B004DB96D /* oepa.cpp */; };
 		00E0B19C1132DE4D004DB96D /* SDLMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E0B19A1132DE4D004DB96D /* SDLMain.m */; };
 		00E2299611768DF4004E71F7 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009B4F2611639D7700E9A6F9 /* GLUT.framework */; };
 		00EF028D107D9EFB00FE378D /* VerticallyCenteredCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00EF028C107D9EFB00FE378D /* VerticallyCenteredCell.m */; };
@@ -257,8 +252,6 @@
 		006EEE8F0FCA781C003D2C8D /* DiskImage.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = DiskImage.icns; sourceTree = "<group>"; };
 		0071E3B810803F7300F2D54F /* ChooserItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChooserItem.h; sourceTree = "<group>"; };
 		0071E3B910803F7300F2D54F /* ChooserItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChooserItem.m; sourceTree = "<group>"; };
-		0077069211EB632800535F6D /* oehid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = oehid.h; sourceTree = "<group>"; };
-		0077069311EB632800535F6D /* oehid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = oehid.cpp; sourceTree = "<group>"; };
 		0077069A11EB638500535F6D /* DocumentWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DocumentWindow.m; sourceTree = "<group>"; };
 		008283EF11A35D3A00B2B530 /* IPAudioPlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPAudioPlay.png; path = macosx/Images/IPAudioPlay.png; sourceTree = "<group>"; };
 		0082840211A3603800B2B530 /* IPAudioRecord.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPAudioRecord.png; path = macosx/Images/IPAudioRecord.png; sourceTree = "<group>"; };
@@ -347,10 +340,6 @@
 		00D845790FFF0FD2005802F0 /* PreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferencesController.h; sourceTree = "<group>"; };
 		00D8457A0FFF0FD2005802F0 /* PreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferencesController.m; sourceTree = "<group>"; };
 		00D846280FFF23B7005802F0 /* PRSound.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PRSound.png; sourceTree = "<group>"; };
-		00E0AFCC1132CA8B004DB96D /* oegl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = oegl.cpp; sourceTree = "<group>"; };
-		00E0AFCD1132CA8B004DB96D /* oegl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = oegl.h; sourceTree = "<group>"; };
-		00E0AFCF1132CA8B004DB96D /* oepa.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = oepa.cpp; sourceTree = "<group>"; };
-		00E0AFD01132CA8B004DB96D /* oepa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = oepa.h; sourceTree = "<group>"; };
 		00E0B19A1132DE4D004DB96D /* SDLMain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDLMain.m; sourceTree = "<group>"; };
 		00E0B19B1132DE4D004DB96D /* SDLMain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDLMain.h; sourceTree = "<group>"; };
 		00E2A84D1053290200910B53 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = /usr/lib/libxml2.dylib; sourceTree = "<absolute>"; };
@@ -508,14 +497,8 @@
 			isa = PBXGroup;
 			children = (
 				0054E1FF1131B7D6006D32D9 /* main.cpp */,
-				00E0AFCC1132CA8B004DB96D /* oegl.cpp */,
-				00E0AFCD1132CA8B004DB96D /* oegl.h */,
-				00E0AFCF1132CA8B004DB96D /* oepa.cpp */,
-				00E0AFD01132CA8B004DB96D /* oepa.h */,
 				00E0B19B1132DE4D004DB96D /* SDLMain.h */,
 				00E0B19A1132DE4D004DB96D /* SDLMain.m */,
-				0077069211EB632800535F6D /* oehid.h */,
-				0077069311EB632800535F6D /* oehid.cpp */,
 			);
 			name = oecli;
 			path = cli;
@@ -922,8 +905,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				0054E2FE1131BA67006D32D9 /* main.cpp in Sources */,
-				00E0AFD11132CA8B004DB96D /* oegl.cpp in Sources */,
-				00E0AFD21132CA8B004DB96D /* oepa.cpp in Sources */,
 				00E0B19C1132DE4D004DB96D /* SDLMain.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -989,12 +970,9 @@
 				00BADDC51100EDC600EB0344 /* ConnectorViewController.m in Sources */,
 				008107DE1120C57600D744FB /* TemplateChooserViewController.mm in Sources */,
 				00AD746911A2F10E00BAC29C /* DocumentController.mm in Sources */,
-				001D66B711B7F5C700B88406 /* oegl.cpp in Sources */,
-				001D66B811B7F5C800B88406 /* oepa.cpp in Sources */,
 				006115C211DD0347008AA3EE /* Application.m in Sources */,
 				0041614011E82D7300986586 /* DocumentView.mm in Sources */,
 				00A1F31A11EAEBE4001511D0 /* TabletController.m in Sources */,
-				0077069411EB632800535F6D /* oehid.cpp in Sources */,
 				0077069B11EB638500535F6D /* DocumentWindow.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
