@@ -5,15 +5,16 @@ OpenEmulator
 systems.
 
   For more information, take a look at the included man pages. Try
-openemulator(3).
+oecli(3).
 
-  For generic installation instructions, see file 'INSTALL'. Just in case,
-you should have libxml2, libzip and libportaudio available. If you don't
-have apt-get powers, you can find them at these websites:
-
-	http://www.nih.at/libzip
-	http://www.portaudio.com
-	http://www.xmlsoft.org
+  For generic installation instructions, see file 'INSTALL'. OpenEmulator
+requires these external libraries:
+ 
+* libxml2 (http://www.xmlsoft.org)
+* libzip (http://www.nih.at/libzip)
+* portaudio (http://www.portaudio.com)
+* libsndfile (http://www.mega-nerd.com/libsndfile)
+* libsamplerate (http://www.mega-nerd.com/SRC)
 
   If you make a binary distribution, please include a pointer to the
 distribution site:
@@ -27,17 +28,17 @@ Mail suggestions and bug reports to <mressl@umich.edu>.
 Mac OS X
 ========
 
-  Before compiling the OpenEmulator XCode project under Mac OS X, you need
-libzip and libportaudio. The easiest way to accomplish this is to
-install MacPorts.
+  In order to compile the OpenEmulator XCode project under Mac OS X, you
+need some external libraries not available on a default Mac OS X
+installation. The easiest way to install them is through MacPorts.
 
-  If you want to build universal binaries, you should edit the file
+  If you want to build universal binaries, edit the file
 /opt/local/etc/macports/macports.conf, and change the "universal_archs"
 entry to the following:
 
 universal_archs		x86_64 i386 ppc
 
-  The next step is installing required libraries:
+  The next step is installing the required libraries:
 
   sudo port install libzip +universal
   sudo port install portaudio +universal
