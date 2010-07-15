@@ -10,18 +10,24 @@
 
 #import <Cocoa/Cocoa.h>
 
+typedef struct OEPA OEPA;
+
 @interface DocumentController : NSDocumentController {
 	IBOutlet id fTemplateChooserController;
 	IBOutlet id fInspectorController;
 	
+	OEPA *oepa;
+	
 	NSArray *diskImageFileTypes;
 	NSArray *audioFileTypes;
 	
-	NSURL *audioPlaybackURL;
+	NSURL *audioPlayURL;
 	NSURL *audioRecordingURL;
 	
 	int disableMenuBarCount;
 }
+
+- (void *)constructEmulation:(NSURL *)url;
 
 - (IBAction)newDocumentFromTemplateChooser:(id)sender;
 - (id)openUntitledDocumentWithTemplateURL:(NSURL *)absoluteURL
@@ -30,12 +36,12 @@
 - (id)makeUntitledDocumentWithTemplateURL:(NSURL *)absoluteURL
 									error:(NSError **)outError;
 
-- (void)setPlaybackURL:(NSURL *)theURL;
-- (void)togglePlayback;
-- (BOOL)playback;
-- (float)playbackTime;
-- (float)playbackDuration;
-- (NSURL *)playbackURL;
+- (void)setPlayURL:(NSURL *)theURL;
+- (void)togglePlay;
+- (BOOL)playing;
+- (float)playTime;
+- (float)playDuration;
+- (NSURL *)playURL;
 
 - (void)toggleRecording;
 - (void)saveRecordingAs:(NSURL *)theURL;

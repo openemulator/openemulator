@@ -11,14 +11,12 @@
 #import <Cocoa/Cocoa.h>
 
 #import "Document.h"
-#import "DocumentController.h"
 
 @interface DocumentWindowController : NSWindowController
 {
 	IBOutlet id fDocumentView;
 	
 	Document *document;
-	DocumentController *documentController;
 	
 	BOOL fullscreen;
 	NSRect fullscreenExitRect;

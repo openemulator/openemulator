@@ -24,14 +24,16 @@ enum
 	OEGL_TEX_NUM,
 };
 
-typedef struct
+class OEGL
 {
-	GLuint texture[OEGL_TEX_NUM];
-} OEGLContext;
-
-OEGLContext *oeglOpen();
-void oeglClose(OEGLContext *context);
-void oeglUpdate(OEGLContext *context, void *ref);
-void oeglDraw(OEGLContext *context, int width, int height);
+	OEGL();
+	~OEGL();
+	
+	void update(HostVideoScreens *screens);
+	void draw(int width, int height);
+	
+	private:
+		GLuint texture[OEGL_TEX_NUM];
+};
 
 #endif

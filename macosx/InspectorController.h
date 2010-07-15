@@ -37,11 +37,12 @@
 	IBOutlet NSArrayController *fStorageController;
 	IBOutlet NSArrayController *fPeripheralsController;
 	
-	IBOutlet NSTextField *fPlaybackNameLabel;
-	IBOutlet NSTextField *fPlaybackTimeLabel;
-	IBOutlet NSTextField *fPlaybackDurationLabel;
-	IBOutlet NSButton *fOpenPlaybackButton;
-	IBOutlet NSButton *fTogglePlaybackButton;
+	IBOutlet NSTextField *fPlayNameLabel;
+	IBOutlet NSTextField *fPlayTimeLabel;
+	IBOutlet NSTextField *fPlayDurationLabel;
+	IBOutlet NSButton *fOpenPlayButton;
+	IBOutlet NSButton *fTogglePlayButton;
+	
 	IBOutlet NSTextField *fRecordingTimeLabel;
 	IBOutlet NSTextField *fRecordingSizeLabel;
 	IBOutlet NSButton *fToggleRecordingButton;
@@ -69,9 +70,9 @@
 
 - (void) removeDevice:(NSDictionary *) dict;
 
-- (void) updatePlayback;
-- (IBAction) openPlayback:(id) sender;
-- (IBAction) togglePlayback:(id) sender;
+- (void) updatePlay;
+- (IBAction) openPlay:(id) sender;
+- (IBAction) togglePlay:(id) sender;
 
 - (void) updateRecording;
 - (IBAction) toggleRecording:(id) sender;

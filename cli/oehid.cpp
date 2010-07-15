@@ -9,38 +9,53 @@
  */
 
 #include "oehid.h"
+#include "oepa.h"
 
-OEHIDContext *oehidOpen(OEEmulation *emulation,
-						HIDSetCaptureCallback setCaptureCallback)
+#include "Host.h"
+
+OEHID::OEHID(OEPAEmulation *emulation,
+			 OEHIDSetCaptureCallback setCaptureCallback)
 {
-	OEHIDContext *context = new OEHIDContext;
+	this->emulation = emulation;
+	this->setCaptureCallback = setCaptureCallback;
 	
-	context->emulation = emulation;
-	context->setCaptureCallback = setCaptureCallback;
-	
-	memset(context->keyDown, sizeof(context->keyDown), 0);
-	memset(context->mouseDown, sizeof(context->mouseDown), 0);
-	
-	return context;
+	memset(keyDown, sizeof(keyDown), 0);
+	memset(mouseDown, sizeof(mouseDown), 0);
 }
 
-void oehidClose(OEHIDContext *context)
+OEHID::~OEHID()
 {
-	delete context;
 }
 
-void oehidSend(OEHIDContext *context, int usageId, float value)
+void OEHID::send(int notification, int usageId, float value)
 {
-	context->emulation->postNotification();
+	HostHIDEvent hidEvent;
+	hidEvent.usageId = usageId;
+	hidEvent.value = value;
+	
+	emulation->postNotification(HOST_DEVICE, notification, &hidEvent);
+
+	printf("%d %d %f\n", notification, usageId, value);
 }
 
-void oehidSendSystemEvent(OEHIDContext *context, int usageId)
+void OEHID::sendSystemEvent(int usageId)
+{
+	send(HOST_HID_SYSTEM_EVENT, usageId, 0);
+}
+
+void OEHID::setKey(int usageId, bool value)
 {
 	
 }
 
-void oehidSetKey(OEHIDContext *context, int usageId, bool value);
-void oehidSendUnicode(OEHIDContext *context, int unicode);
+void OEHID::sendUnicode(int unicode)
+{
+	if (unicode == 127)
+		unicode = 8;
+	
+	if ((unicode < 0xf700) || (unicode >= 0xf900))
+		send(HOST_HID_UNICODEKEYBOARD_EVENT, unicode, 0);
+}
 
 void oehidSetMouseButton(OEHIDContext *context, int index, bool value);
 void oehidSetMousePosition(OEHIDContext *context, float x, float y);

@@ -24,7 +24,6 @@
 
 - (void) windowDidLoad
 {
-	documentController = [NSDocumentController sharedDocumentController];
 	document = [self document];
 	
 	NSToolbar *toolbar;

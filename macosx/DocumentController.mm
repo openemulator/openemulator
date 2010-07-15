@@ -10,8 +10,9 @@
 
 #import <Carbon/Carbon.h>
 
-#import "Document.h"
 #import "DocumentController.h"
+
+#import "Document.h"
 #import "InspectorController.h"
 #import "TemplateChooserController.h"
 
@@ -28,6 +29,8 @@
 {
 	if (self = [super init])
 	{
+		oepa = new OEPA([[[NSBundle mainBundle] resourcePath] UTF8String]);
+		
 		diskImageFileTypes = [[NSArray alloc] initWithObjects:
 							  @"dsk", @"do", @"d13", @"po", @"cpm", @"nib", @"v2d",
 							  @"vdsk",
@@ -48,7 +51,7 @@
 						  @"ogg", @"oga",
 						  nil];
 		
-		audioPlaybackURL = nil;
+		audioPlayURL = nil;
 		audioRecordingURL = nil;
 		
 		disableMenuBarCount = 0;
@@ -89,10 +92,11 @@
 	if (![defaults valueForKey:@"OEVolume"])
 		[defaults setFloat:1.0 forKey:@"OEVolume"];
 	
-	oepaSetFullDuplex([defaults boolForKey:@"OEFullDuplex"]);
-	oepaSetPlayThrough([defaults floatForKey:@"OEPlayThrough"]);
-	oepaSetVolume([defaults floatForKey:@"OEVolume"]);
-	oepaOpen();
+	oepa->setFullDuplex([defaults boolForKey:@"OEFullDuplex"]);
+	oepa->setPlayThrough([defaults floatForKey:@"OEPlayThrough"]);
+	oepa->setVolume([defaults floatForKey:@"OEVolume"]);
+	
+	oepa->open();
 	
 	[defaults addObserver:self
 			   forKeyPath:@"OEFullDuplex"
@@ -120,7 +124,7 @@
 	// Open audio files
 	if ([audioFileTypes containsObject:extension])
 	{
-		[self setPlaybackURL:[NSURL fileURLWithPath:filename]];
+		[self setPlayURL:[NSURL fileURLWithPath:filename]];
 		return YES;
 	}
 	
@@ -163,7 +167,7 @@
 
 - (void)applicationWillTerminate:(NSNotification *)notification
 {
-	oepaClose();
+	oepa->close();
 	
 	[fInspectorController storeWindowState:self];
 }
@@ -177,19 +181,19 @@
 	{
 		id object = [change objectForKey:NSKeyValueChangeNewKey];
 		int value = [object intValue];
-		oepaSetFullDuplex(value);
+		oepa->setFullDuplex(value);
 	}
 	else if ([keyPath isEqualToString:@"OEPlayThrough"])
 	{
 		id object = [change objectForKey:NSKeyValueChangeNewKey];
 		int value = [object intValue];
-		oepaSetPlayThrough(value);
+		oepa->setPlayThrough(value);
 	}
 	else if ([keyPath isEqualToString:@"OEVolume"])
 	{
 		id object = [change objectForKey:NSKeyValueChangeNewKey];
 		float value = [object floatValue];
-		oepaSetVolume(value);
+		oepa->setVolume(value);
 	}
 }
 
@@ -201,6 +205,12 @@
 		return ![[fTemplateChooserController window] isVisible];
 	else
 		return YES;
+}
+
+- (void *)constructEmulation:(NSURL *)url
+{
+	return oepa->constructEmulation([[url path] UTF8String]);
+	
 }
 
 - (IBAction)newDocumentFromTemplateChooser:(id)sender
@@ -294,59 +304,59 @@
 	return nil;
 }
 
-- (void)setPlaybackURL:(NSURL *)theURL
+- (void)setPlayURL:(NSURL *)theURL
 {
-	if (audioPlaybackURL)
-		[audioPlaybackURL release];
+	if (audioPlayURL)
+		[audioPlayURL release];
 	
-	audioPlaybackURL = [theURL copy];
-	if (audioPlaybackURL)
-		oepaStartPlayback([[audioPlaybackURL path] UTF8String]);
+	audioPlayURL = [theURL copy];
+	if (audioPlayURL)
+		oepa->startPlaying([[audioPlayURL path] UTF8String]);
 }
 
-- (void)togglePlayback
+- (void)togglePlay
 {
-	if (!oepaIsPlayback())
-		oepaStartPlayback([[audioPlaybackURL path] UTF8String]);
+	if (!oepa->isPlaying())
+		oepa->startPlaying([[audioPlayURL path] UTF8String]);
 	else
-		oepaStopPlayback();
+		oepa->stopPlaying();
 }
 
-- (BOOL)playback
+- (BOOL)playing
 {
-	return oepaIsPlayback();
+	return oepa->isPlaying();
 }
 
-- (float)playbackTime
+- (float)playTime
 {
-	return oepaGetPlaybackTime();
+	return oepa->getPlayTime();
 }
 
-- (float)playbackDuration
+- (float)playDuration
 {
-	return oepaGetPlaybackDuration();
+	return oepa->getPlayDuration();
 }
 
-- (NSURL *)playbackURL
+- (NSURL *)playURL
 {
-	if (audioPlaybackURL)
-		return [[audioPlaybackURL copy] autorelease];
+	if (audioPlayURL)
+		return [[audioPlayURL copy] autorelease];
 	else
 		return nil;
 }
 
 - (void)toggleRecording
 {
-	if (!oepaIsRecording())
+	if (!oepa->isRecording())
 	{
 		NSString *thePath = [NSTemporaryDirectory()
 							 stringByAppendingPathComponent:@"oerecording"];
 		audioRecordingURL = [[NSURL alloc] initFileURLWithPath:thePath];
 		
-		oepaStartRecording([[audioRecordingURL path] UTF8String]);
+		oepa->startRecording([[audioRecordingURL path] UTF8String]);
 	}
 	else
-		oepaStopRecording();
+		oepa->stopRecording();
 }
 
 - (void)saveRecordingAs:(NSURL *)theURL
@@ -368,17 +378,17 @@
 
 - (BOOL)recording
 {
-	return oepaIsRecording();
+	return oepa->isRecording();
 }
 
 - (float)recordingTime
 {
-	return oepaGetRecordingTime();
+	return oepa->getRecordingTime();
 }
 
 - (long long)recordingSize
 {
-	return oepaGetRecordingSize();
+	return oepa->getRecordingSize();
 }
 
 - (NSURL *)recordingURL

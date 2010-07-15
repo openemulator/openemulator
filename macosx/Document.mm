@@ -9,14 +9,13 @@
  */
 
 #import "Document.h"
+#import "DocumentController.h"
 #import "DocumentWindowController.h"
 
-#import "OEEmulation.h"
 #import "OEInfo.h"
+#import "Host.h"
 
 #import "oepa.h"
-
-#import "Host.h"
 
 @implementation Document
 
@@ -63,8 +62,7 @@
 {
 	[super dealloc];
 	
-	if (emulation)
-		oepaDestroy(emulation);
+	delete emulation;
 	
 	[freeInlets release];
 	
@@ -78,7 +76,7 @@
 	if (!emulation)
 		return nil;
 	
-	xmlDocPtr dml = oepaGetDML(emulation);
+	xmlDocPtr dml = emulation->getDML();
 	
 	xmlNodePtr rootNode = xmlDocGetRootElement(dml);
 	
@@ -95,9 +93,9 @@
 	if (!emulation)
 		return false;
 	
-	return oepaSetProperty(emulation, HOST_DEVICE,
-						   string([name UTF8String]),
-						   string([value UTF8String]));
+	return emulation->setProperty(HOST_DEVICE,
+								  string([name UTF8String]),
+								  string([value UTF8String]));
 }
 
 - (NSString *)getHostProperty:(NSString *)name
@@ -106,9 +104,9 @@
 		return nil;
 	
 	string value;
-	if (oepaGetProperty(emulation, HOST_DEVICE,
-						string([name UTF8String]),
-						value))
+	if (emulation->getProperty(HOST_DEVICE,
+							   string([name UTF8String]),
+							   value))
 		return [NSString stringWithUTF8String:value.c_str()];
 	
 	return @"";
@@ -219,7 +217,7 @@
 		[self removeObjectFromPeripheralsAtIndex:0];
 	
 	// Process info
-	xmlDocPtr dmlDocPtr = oepaGetDML(emulation);
+	xmlDocPtr dmlDocPtr = emulation->getDML();
 	OEInfo info(dmlDocPtr);
 	if (!info.isLoaded())
 		return;
@@ -298,17 +296,15 @@
 			 ofType:(NSString *)typeName
 			  error:(NSError **)outError
 {
-	const char *emulationPath = [[absoluteURL path] UTF8String];
-	const char *resourcePath = [[[NSBundle mainBundle] resourcePath] UTF8String];
+	DocumentController *documentController;
+	documentController = [NSDocumentController sharedDocumentController];
 	
-	if (emulation)
-		oepaDestroy(emulation);
-	
-	emulation = oepaConstruct(emulationPath, resourcePath);
+	delete emulation;
+	emulation = (OEPAEmulation *) [documentController constructEmulation:absoluteURL];
 	
 	if (emulation)
 	{
-		if (oepaIsLoaded(emulation))
+		if (emulation->isLoaded())
 		{
 			[self setLabel:[self getDMLProperty:@"label"]];
 			[self setNotes:[self getHostProperty:@"notes"]];
@@ -320,7 +316,7 @@
 			return YES;
 		}
 		
-		oepaDestroy(emulation);
+		delete emulation;
 		emulation = NULL;
 	}
 	
@@ -340,7 +336,7 @@
 	{
 		[self setHostProperty:@"notes" value:[self notes]];
 		
-		if (oepaSave(emulation, string(emulationPath)))
+		if (emulation->save(string(emulationPath)))
 			return YES;
 	}
 	
@@ -419,7 +415,7 @@
 		connectionsMap[inletRefString] = outletRefString;
 	}
 	
-	if (!oepaAddDevices(emulation, pathString, connectionsMap))
+	if (!emulation->addDevices(pathString, connectionsMap))
 	{
 		NSString *messageText = @"The device could not be added.";
 		
@@ -440,7 +436,7 @@
 	
 	string refString = [deviceRef UTF8String];
 	
-	if (!oepaIsDeviceTerminal(emulation, refString))
+	if (!emulation->isDeviceTerminal(refString))
 	{
 		NSString *messageText = @"Do you want to remove the device \u201C%@\u201D?";
 		NSString *informativeText = @"There is one or more devices connected to it, "
@@ -457,7 +453,7 @@
 			return;
 	}
 	
-	if (!oepaRemoveDevice(emulation, refString))
+	if (!emulation->removeDevice(refString))
 	{
 		NSString *messageText = @"The device could not be removed.";
 		
@@ -619,8 +615,7 @@
 	hidEvent.usageId = usageId;
 	hidEvent.value = value;
 	
-	oepaPostNotification(emulation, HOST_DEVICE,
-						 notification, &hidEvent);	
+	emulation->postNotification(HOST_DEVICE, notification, &hidEvent);	
 }
 
 - (void)powerDown:(id)sender
@@ -667,12 +662,12 @@
 
 - (BOOL)isCopyable
 {
-	return oepaIoctl(emulation, HOST_DEVICE, HOST_IS_COPYABLE, NULL);
+	return emulation->ioctl(HOST_DEVICE, HOST_IS_COPYABLE, NULL);
 }
 
 - (BOOL)isPasteable
 {
-	if (!oepaIoctl(emulation, HOST_DEVICE, HOST_IS_PASTEABLE, NULL))
+	if (!emulation->ioctl(HOST_DEVICE, HOST_IS_PASTEABLE, NULL))
 		return NO;
 	
 	NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
@@ -684,8 +679,8 @@
 - (NSString *)documentText
 {
 	string characterString;
-	oepaPostNotification(emulation, HOST_DEVICE,
-						 HOST_CLIPBOARD_COPY_EVENT, &characterString);
+	emulation->postNotification(HOST_DEVICE,
+								HOST_CLIPBOARD_COPY_EVENT, &characterString);
 	return [NSString stringWithUTF8String:characterString.c_str()];
 }
 
@@ -710,8 +705,8 @@
 		NSString *characters = [pasteboard stringForType:NSStringPboardType];
 		string characterString([characters UTF8String]);
 		
-		oepaPostNotification(emulation, HOST_DEVICE, 
-							 HOST_CLIPBOARD_PASTE_EVENT, &characterString);
+		emulation->postNotification(HOST_DEVICE, 
+									HOST_CLIPBOARD_PASTE_EVENT, &characterString);
 	}
 }
 

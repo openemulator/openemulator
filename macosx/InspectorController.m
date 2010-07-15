@@ -98,7 +98,7 @@ NSString *itemIdentifiers[] =
 
 - (void) timerDidExpire:(NSTimer *) theTimer
 {
-	[self updatePlayback];
+	[self updatePlay];
 	[self updateRecording];
 }
 
@@ -269,37 +269,37 @@ NSString *itemIdentifiers[] =
 		return [NSString stringWithFormat:@"%3.1f GB", size / 1000000000.0];
 }
 
-- (void) updatePlayback
+- (void) updatePlay
 {
-	NSURL *url = [fDocumentController playbackURL];
+	NSURL *url = [fDocumentController playURL];
 	if (!url)
 	{
-		[fPlaybackNameLabel setStringValue:@""];
-		[fPlaybackTimeLabel setToolTip:@"--:--:--"];
-		[fPlaybackDurationLabel setToolTip:@"--:--:--"];
+		[fPlayNameLabel setStringValue:@""];
+		[fPlayTimeLabel setToolTip:@"--:--:--"];
+		[fPlayDurationLabel setToolTip:@"--:--:--"];
 	}
 	else
 	{
 		NSString *path = [[url path] lastPathComponent];
-		NSString *timeLabel = [self formatTime:[fDocumentController playbackTime]];
+		NSString *timeLabel = [self formatTime:[fDocumentController playTime]];
 		NSString *durationLabel = [self formatTime:
-								   [fDocumentController playbackDuration]];
-		[fPlaybackNameLabel setStringValue:path];
-		[fPlaybackNameLabel setToolTip:path];
-		[fPlaybackTimeLabel setStringValue:timeLabel];
-		[fPlaybackDurationLabel setStringValue:durationLabel];
+								   [fDocumentController playDuration]];
+		[fPlayNameLabel setStringValue:path];
+		[fPlayNameLabel setToolTip:path];
+		[fPlayTimeLabel setStringValue:timeLabel];
+		[fPlayDurationLabel setStringValue:durationLabel];
 	}
 
-	BOOL isPlayback = [fDocumentController playback];
-	[fOpenPlaybackButton setEnabled:!isPlayback];
-	[fTogglePlaybackButton setEnabled:url ? YES : NO];
-	[fTogglePlaybackButton setImage:(isPlayback ?
+	BOOL isPlaying = [fDocumentController playing];
+	[fOpenPlayButton setEnabled:!isPlaying];
+	[fTogglePlayButton setEnabled:url ? YES : NO];
+	[fTogglePlayButton setImage:(isPlaying ?
 									 [NSImage imageNamed:@"IPAudioStop.png"] :
 									 [NSImage imageNamed:@"IPAudioPlay.png"]
 									 )];
 }	
 
-- (IBAction) openPlayback:(id) sender
+- (IBAction) openPlay:(id) sender
 {
 	NSOpenPanel *panel = [NSOpenPanel openPanel];
 	NSArray *fileTypes = [[NSArray alloc] initWithObjects:
@@ -314,15 +314,15 @@ NSString *itemIdentifiers[] =
 	if ([panel runModalForTypes:fileTypes] == NSOKButton)
 	{
 		NSURL *url = [panel URL];
-		[fDocumentController setPlaybackURL:url];
+		[fDocumentController setPlayURL:url];
 		
-		[self updatePlayback];
+		[self updatePlay];
 	}
 }
 
-- (IBAction) togglePlayback:(id) sender
+- (IBAction) togglePlay:(id) sender
 {
-	[fDocumentController togglePlayback];
+	[fDocumentController togglePlay];
 }
 
 - (void) updateRecording

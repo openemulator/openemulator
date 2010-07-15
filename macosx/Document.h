@@ -12,11 +12,11 @@
 
 #define TEMPLATE_FOLDER @"~/Library/Application Support/Open Emulator/Templates"
 
-typedef struct OEEmulation OEEmulation;
+typedef struct OEPAEmulation OEPAEmulation;
 
 @interface Document : NSDocument
 {
-	OEEmulation *emulation;
+	OEPAEmulation *emulation;
 	
 	NSImage *image;
 	NSString *label;

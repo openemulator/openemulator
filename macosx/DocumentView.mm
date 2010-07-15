@@ -146,7 +146,6 @@ DocumentKeyMapInverseEntry documentKeyMapInverse[] =
 	{0x3c, HOST_HID_K_RIGHTSHIFT},
 	{0x3d, HOST_HID_K_RIGHTALT},
 	{0x36, HOST_HID_K_RIGHTGUI},
-	
 };
 
 @implementation DocumentView
@@ -178,7 +177,7 @@ DocumentKeyMapInverseEntry documentKeyMapInverse[] =
 	if (self = [super initWithFrame:rect pixelFormat:pixelFormat])
 	{
 		oeglContext = nil;
-
+		
 		memset(keyMap, sizeof(keyMap), 0);
 		for (int i = 0;
 			 i < sizeof(documentKeyMapInverse) / sizeof(DocumentKeyMapInverseEntry);
@@ -322,21 +321,6 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 						   usageId:HOST_HID_P_BUTTON1 + i
 							 value:YES];
 		}
-	}
-}
-
-- (void)hidSendUnicode:(int)unicode
-{
-	if (unicode == 127)
-		unicode = 8;
-	
-	if ((unicode < 0xf700) || (unicode >= 0xf900))
-	{
-		Document *document = [[[self window] windowController] document];
-		
-		[document sendHIDEvent:HOST_HID_UNICODEKEYBOARD_EVENT
-					   usageId:unicode
-						 value:0];
 	}
 }
 

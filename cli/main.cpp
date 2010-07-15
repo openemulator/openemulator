@@ -237,17 +237,6 @@ bool sdlOpen(int width, int height, int fullscreen)
 	return true;
 }
 
-void sdlSendHIDEvent(int notification, int usageId, float value)
-{
-	printf("%d %d %f\n", notification, usageId, value);
-	
-	HostHIDEvent hidEvent;
-	hidEvent.usageId = usageId;
-	hidEvent.value = value;
-	oepaPostNotification(sdlEmulation, HOST_DEVICE,
-						 notification, &hidEvent);
-}
-
 void sdlSetKeyMapEntry(string translation)
 {
 	int sym = 0;

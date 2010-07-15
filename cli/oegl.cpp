@@ -12,12 +12,8 @@
 
 #include "oegl.h"
 
-OEGLContext *oeglOpen()
+OEGL::OEGL()
 {
-	OEGLContext *context = new OEGLContext;
-	if (!context)
-		return NULL;
-	
 	glDisable(GL_ALPHA_TEST);
 	glDisable(GL_CULL_FACE);
 	glDisable(GL_DEPTH_TEST);
@@ -31,23 +27,20 @@ OEGLContext *oeglOpen()
 	
 	glClearColor(0.0, 0.0, 0.0, 0.5);
 	
-	// Prepare for textures
-	glGenTextures(OEGL_TEX_NUM, context->texture);
-	
-	return context;
+	// Prepare textures
+	glGenTextures(OEGL_TEX_NUM, texture);
 }
 
-void oeglClose(OEGLContext *context)
+OEGL::~OEGL()
 {
-	if (context)
-		glDeleteTextures(OEGL_TEX_NUM, context->texture);
+	glDeleteTextures(OEGL_TEX_NUM, texture);
 }
 
-void oeglUpdate(OEGLContext *context, void *ref)
+void OEGL::update(HostVideoScreens *screens)
 {
 }
 
-void oeglDraw(OEGLContext *context, int width, int height)
+void OEGL::draw(int width, int height)
 {
 	int framebufferWidth = 560;
 	int framebufferHeight = 384;
@@ -59,10 +52,7 @@ void oeglDraw(OEGLContext *context, int width, int height)
 	glViewport(0, 0, width, height);
 	
 	glClear(GL_COLOR_BUFFER_BIT);
-	
-	if (!context)
-		return;
-	
+		
 	// Upload texture
 	int *framebuffer = new int[framebufferWidth * framebufferHeight];
 	int *p = framebuffer;
@@ -88,7 +78,7 @@ void oeglDraw(OEGLContext *context, int width, int height)
 		}
 	}
 	
-	glBindTexture(GL_TEXTURE_RECTANGLE_EXT, context->texture[OEGL_TEX_FRAME]);
+	glBindTexture(GL_TEXTURE_RECTANGLE_EXT, texture[OEGL_TEX_FRAME]);
 	glTexImage2D(GL_TEXTURE_RECTANGLE_EXT,
 				 0, GL_RGB, framebufferWidth, framebufferHeight,
 				 0, GL_RGBA, GL_UNSIGNED_BYTE, framebuffer);

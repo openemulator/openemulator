@@ -10,18 +10,44 @@
 
 #include "OEEmulation.h"
 
+#include "oepa.h"
+
 #define OEHID_KEYDOWN_SIZE		256
 #define OEHID_MOUSEDOWN_SIZE	8
 #define OEHID_JOYSTICK_NUM		4
 #define OEHID_JOYSTICKDOWN_SIZE	16
 #define OEHID_TABLETDOWN_SIZE	8
 
-typedef void (*HIDSetCaptureCallback)(void *userData, bool value);
+typedef void (*OEHIDSetCaptureCallback)(void *userData, bool value);
 
-typedef struct
+class OEHID
 {
-	OEEmulation *emulation;
-	HIDSetCaptureCallback setCaptureCallback;
+public:
+	OEHID(OEPAEmulation *emulation,
+		  OEHIDSetCaptureCallback setCaptureCallback);
+	~OEHID();
+	
+	void sendSystemEvent(int usageId);
+	void setKey(int usageId, bool value);
+	void sendUnicode(int unicode);
+	
+	void setMouseButton(int index, bool value);
+	void setMousePosition(float x, float y);
+	void moveMouse(float rx, float ry);
+	void sendMouseWheelEvent(int index, float value);
+	
+	void setJoystickButton(int deviceIndex, int index, bool value);
+	void setJoystickPosition(int deviceIndex, float x, float y);
+	void sendJoystickHatEvent(int deviceIndex, int index, float value);
+	void moveJoystickBall(int deviceIndex, int index, float value);
+	
+	void oehidSetTabletButton(bool value);
+	void oehidSetTabletPosition(float x, float y);
+	void oehidSetTabletProximity(bool value);
+	
+private:
+	OEPAEmulation *emulation;
+	OEHIDSetCaptureCallback setCaptureCallback;
 	
 	bool keyDown[OEHID_KEYDOWN_SIZE];
 	bool mouseDown[OEHID_MOUSEDOWN_SIZE];
@@ -30,31 +56,6 @@ typedef struct
 	
 	bool mouseCaptured;
 	bool mouseCaptureRelease;
-} OEHIDContext;
-
-OEHIDContext *oehidOpen(OEEmulation *emulation,
-						HIDSetCaptureCallback setCaptureCallback);
-void oehidClose(OEHIDContext *context);
-
-void oehidSendSystemEvent(OEHIDContext *context, int usageId);
-
-void oehidSetKey(OEHIDContext *context, int usageId, bool value);
-void oehidSendUnicode(OEHIDContext *context, int unicode);
-
-void oehidSetMouseButton(OEHIDContext *context, int index, bool value);
-void oehidSetMousePosition(OEHIDContext *context, float x, float y);
-void oehidMoveMouse(OEHIDContext *context, float rx, float ry);
-void oehidSendMouseWheelEvent(OEHIDContext *context, int index, float value);
-
-void oehidSetJoystickButton(OEHIDContext *context,
-							int deviceIndex, int index, bool value);
-void oehidSetJoystickPosition(OEHIDContext *context,
-							  int deviceIndex, float x, float y);
-void oehidSendJoystickHatEvent(OEHIDContext *context,
-							   int deviceIndex, int index, float value);
-void oehidMoveJoystickBall(OEHIDContext *context,
-						   int deviceIndex, int index, float value);
-
-void oehidSetTabletButton(OEHIDContext *context, bool value);
-void oehidSetTabletPosition(OEHIDContext *context, float x, float y);
-void oehidSetTabletProximity(OEHIDContext *context, bool value);
+	
+	void send(int notification, int usageId, float value);
+};
