@@ -27,14 +27,14 @@ typedef struct OEPA OEPA;
 	int disableMenuBarCount;
 }
 
-- (void *)constructEmulation:(NSURL *)url;
-
 - (IBAction)newDocumentFromTemplateChooser:(id)sender;
 - (id)openUntitledDocumentWithTemplateURL:(NSURL *)absoluteURL
 								  display:(BOOL)displayDocument
 									error:(NSError **)outError;
 - (id)makeUntitledDocumentWithTemplateURL:(NSURL *)absoluteURL
 									error:(NSError **)outError;
+
+- (void *)constructEmulation:(NSURL *)url;
 
 - (void)setPlayURL:(NSURL *)theURL;
 - (void)togglePlay;

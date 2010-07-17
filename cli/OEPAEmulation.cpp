@@ -12,6 +12,12 @@
 OEPAEmulation::OEPAEmulation(OEPA *oepa, string path, string resourcePath) :
 OEEmulation(path, resourcePath), oepa(oepa)
 {
+	oepa->addEmulation(this);
+}
+
+OEPAEmulation::~OEPAEmulation()
+{
+	oepa->removeEmulation(this);
 }
 
 bool OEPAEmulation::save(string path)

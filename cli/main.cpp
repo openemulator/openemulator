@@ -151,7 +151,7 @@ SDLKeyMapInverseEntry sdlKeyMapInverse[] =
 	{SDLK_RMETA, HOST_HID_K_RIGHTGUI},
 };
 
-OEEmulation *sdlEmulation;
+OEPAEmulation *sdlEmulation;
 OEGL *sdlOEGL;
 OEHID *sdlOEHID;
 
@@ -262,69 +262,6 @@ void sdlSetCapture(void *userData, bool value)
 	SDL_ShowCursor(value ? SDL_DISABLE : SDL_ENABLE);
 }
 
-
-
-
-
-
-void sdlSetMouseButton(int index, bool value)
-{
-		
-	if (sdlMouseButtonState[index] == value)
-		return;
-	
-	sdlMouseButtonState[index] = value;
-	
-	if (sdlMouseCaptured)
-		sdlSendHIDEvent(HOST_HID_MOUSE_EVENT,
-						HOST_HID_M_BUTTON1 + index,
-						value);
-	else
-		sdlSendHIDEvent(HOST_HID_POINTER_EVENT,
-						HOST_HID_P_BUTTON1 + index,
-						value);
-}
-
-void sdlSetMouseWheel(int index, float value)
-{
-	if (sdlMouseCaptured)
-		sdlSendHIDEvent(HOST_HID_MOUSE_EVENT,
-						HOST_HID_M_WX + index,
-						value);
-	else
-		sdlSendHIDEvent(HOST_HID_POINTER_EVENT,
-						HOST_HID_P_WX + index,
-						value);
-}
-
-void sdlSetMousePosition(float x, float y, float rx, float ry)
-{
-	if (sdlMouseCaptured)
-	{
-		if (rx)
-			sdlSendHIDEvent(HOST_HID_MOUSE_EVENT,
-							HOST_HID_M_RX,
-							rx);
-		if (ry)
-			sdlSendHIDEvent(HOST_HID_MOUSE_EVENT,
-							HOST_HID_M_RY,
-							ry);
-	}
-	else
-	{
-		sdlSendHIDEvent(HOST_HID_POINTER_EVENT,
-						HOST_HID_P_X,
-						x);
-		sdlSendHIDEvent(HOST_HID_POINTER_EVENT,
-						HOST_HID_P_Y,
-						y);
-	}
-}
-
-
-
-
-
 void sdlRunEventLoop()
 {
     SDL_Event event;
@@ -347,26 +284,26 @@ void sdlRunEventLoop()
 					}
 					
 					if (event.key.keysym.unicode)
-						sdlSendUnicode(event.key.keysym.unicode);
+						sdlOEHID->sendUnicode(event.key.keysym.unicode);
 					
-					oehid->setKey(sdlGetUsageId(event.key.keysym.sym), true);
+					sdlOEHID->setKey(sdlGetUsageId(event.key.keysym.sym), true);
 					if ((event.key.keysym.sym == SDLK_CAPSLOCK) ||
 						(event.key.keysym.sym == SDLK_NUMLOCK) ||
 						(event.key.keysym.sym == SDLK_SCROLLOCK))
-						oehid->setKey(sdlGetUsageId(event.key.keysym.sym), false);
+						sdlOEHID->setKey(sdlGetUsageId(event.key.keysym.sym), false);
 					break;
 					
 				case SDL_KEYUP:
 					if ((event.key.keysym.sym == SDLK_CAPSLOCK) ||
 						(event.key.keysym.sym == SDLK_NUMLOCK) ||
 						(event.key.keysym.sym == SDLK_SCROLLOCK))
-						oehid->setKey(sdlGetUsageId(event.key.keysym.sym), true);
-					oehid->setKey(sdlGetUsageId(event.key.keysym.sym), false);
+						sdlOEHID->setKey(sdlGetUsageId(event.key.keysym.sym), true);
+					sdlOEHID->setKey(sdlGetUsageId(event.key.keysym.sym), false);
 					break;
 					
 				case SDL_MOUSEMOTION:
-					oehid->setMousePosition(event.motion.x, event.motion.y);
-					oehid->moveMouse(event.motion.xrel, event.motion.yrel);
+					sdlOEHID->setMousePosition(event.motion.x, event.motion.y);
+					sdlOEHID->moveMouse(event.motion.xrel, event.motion.yrel);
 					break;
 					
 				case SDL_MOUSEBUTTONDOWN:
@@ -375,16 +312,16 @@ void sdlRunEventLoop()
 					{
 						float value = ((event.button.button == SDL_BUTTON_WHEELUP) ?
 									   1 : -1);
-						oehid->setMouseWheelEvent(0, value);
+						sdlOEHID->sendMouseWheelEvent(0, value);
 						break;
 					}
 					
-					if (index < SDL_MOUSE_BUTTONNUM)
+					if (event.button.button < 8)
 					{
-						int indexMap[SDL_MOUSE_BUTTONNUM] = {0, 0, 2, 1, 0, 0, 3, 4};
+						int indexMap[] = {0, 0, 2, 1, 0, 0, 3, 4};
 						int index = indexMap[event.button.button];
 						
-						oehid->setMouseButton(index, true);
+						sdlOEHID->setMouseButton(index, true);
 					}
 					break;
 					
@@ -393,43 +330,43 @@ void sdlRunEventLoop()
 						(event.button.button == SDL_BUTTON_WHEELDOWN))
 						break;
 					
-					if (index < SDL_MOUSE_BUTTONNUM)
+					if (event.button.button < 8)
 					{
-						int indexMap[SDL_MOUSE_BUTTONNUM] = {0, 0, 2, 1, 0, 0, 3, 4};
+						int indexMap[] = {0, 0, 2, 1, 0, 0, 3, 4};
 						int index = indexMap[event.button.button];
 						
-						oehid->setMouseButton(index, false);
+						sdlOEHID->setMouseButton(index, false);
 					}
 					break;
 					
 				case SDL_JOYAXISMOTION:
-					oehid->setJoystickPosition(event.jaxis.which,
-											   event.jaxis.axis,
-											   event.jaxis.value);
+					sdlOEHID->setJoystickPosition(event.jaxis.which,
+												  event.jaxis.axis,
+												  event.jaxis.value);
 					break;
 					
 				case SDL_JOYBALLMOTION:
-					oehid->moveJoystickBall(event.jball.which,
-											event.jball.xrel,
-											event.jball.yrel);
+					sdlOEHID->moveJoystickBall(event.jball.which,
+											   event.jball.xrel,
+											   event.jball.yrel);
 					break;
 					
 				case SDL_JOYHATMOTION:
-					oehid->sendJoystickHatEvent(event.jhat.which,
-												event.jhat.hat,
-												event.jhat.value);
+					sdlOEHID->sendJoystickHatEvent(event.jhat.which,
+												   event.jhat.hat,
+												   event.jhat.value);
 					break;
 					
 				case SDL_JOYBUTTONDOWN:
-					oehid->setJoystickButton(event.jbutton.which,
-											 event.jbutton.button,
-											 1);
+					sdlOEHID->setJoystickButton(event.jbutton.which,
+												event.jbutton.button,
+												1);
 					break;
 					
 				case SDL_JOYBUTTONUP:
-					oehid->setJoystickButton(event.jbutton.which,
-											 event.jbutton.button,
-											 0);
+					sdlOEHID->setJoystickButton(event.jbutton.which,
+												event.jbutton.button,
+												0);
 					break;
 					
 				case SDL_QUIT:
@@ -441,7 +378,7 @@ void sdlRunEventLoop()
 			}
 		}
 		
-		oeglDraw(sdlOEGLContext, sdlVideoWidth, sdlVideoHeight);
+		sdlOEGL->draw(sdlVideoWidth, sdlVideoHeight);
 		SDL_GL_SwapBuffers();
 		
 		if (!sdlVideoSync)
@@ -466,6 +403,13 @@ int main(int argc, char *argv[])
 	bool videoCanvasSizeSet = false;
 	bool videoFullScreen = false;
 	
+	OEPA *oepa = new OEPA();
+	if (!oepa)
+	{
+		sdlLog("could not open oepa");
+		return 0;
+	}
+	
 	{
 		int c;
 		
@@ -478,19 +422,19 @@ int main(int argc, char *argv[])
 					break;
 					
 				case 's':
-					oepaSetSampleRate(atoi(optarg));
+					oepa->setSampleRate(atoi(optarg));
 					break;
 					
 				case 'b':
-					oepaSetFramesPerBuffer(atoi(optarg));
+					oepa->setFramesPerBuffer(atoi(optarg));
 					break;
 					
 				case 'c':
-					oepaSetChannelNum(atoi(optarg));
+					oepa->setChannelNum(atoi(optarg));
 					break;
 					
 				case 'i':
-					oepaSetFullDuplex(true);
+					oepa->setFullDuplex(true);
 					break;
 					
 				case 'w':
@@ -532,19 +476,13 @@ int main(int argc, char *argv[])
 	if (index < argc)
 		emulationPath = string(argv[index++]);
 	
-	oepa = new OEPA();
-	if (!oepa)
-	{
-		sdlLog("could not open oepa");
-		return 0;
-	}
-	
 	sdlEmulation = new OEPAEmulation(oepa, emulationPath, resourcePath);
 	if (sdlEmulation && sdlEmulation->isLoaded())
 	{
-		// Configure emulation
+		sdlOEHID = new OEHID(sdlEmulation, sdlSetCapture);
+		
 		string value;
-		if (oepaGetProperty(sdlEmulation, HOST_DEVICE, "videoWindow", value))
+		if (sdlEmulation->getProperty(HOST_DEVICE, "videoWindow", value))
 		{
 			float x, y, w, h;
 			if (sscanf(value.c_str(), "%f %f %f %f", &x, &y, &w, &h) == 4)
@@ -562,37 +500,37 @@ int main(int argc, char *argv[])
 		
 		stringstream ss;
 		ss << videoLeft << " " << videoTop << " " << videoWidth << " " << videoHeight;
-		oepaSetProperty(sdlEmulation, HOST_DEVICE, "videoWindow", ss.str());
-		
-		if (oepaGetProperty(sdlEmulation, HOST_DEVICE, "hidMouseCapture", value) &&
-			(value == "1"))
-			sdlMouseCapture = true;
+		sdlEmulation->setProperty(HOST_DEVICE, "videoWindow", ss.str());
 		
 		// To-Do: mount disk images
 		
 		// Open video
 		if (sdlOpen(videoWidth, videoHeight, videoFullScreen))
 		{
-			sdlOEGLContext = oeglOpen();
+			sdlOEGL = new OEGL();
+			
+			oepa->open();
 			
 			// Run emulation
 			sdlRunEventLoop();
 			
+			oepa->close();
+			
 			// Close
-			oepaSave(sdlEmulation, emulationPath);
+			sdlEmulation->save(emulationPath);
 
-			oeglClose(sdlOEGLContext);
+			delete sdlOEGL;
 			sdlClose();
 		}
 		else
 			sdlLog("coult not open sdl");
-
-		oepaDestroy(sdlEmulation);
+		
+		delete sdlEmulation;
 	}
 	else
 		sdlLog("could not open emulation");
 	
-	oepaClose();
+	delete oepa;
 	
 	return 0;
 }

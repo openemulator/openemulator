@@ -134,6 +134,10 @@
 		00E2299611768DF4004E71F7 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009B4F2611639D7700E9A6F9 /* GLUT.framework */; };
 		00EF028D107D9EFB00FE378D /* VerticallyCenteredCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00EF028C107D9EFB00FE378D /* VerticallyCenteredCell.m */; };
 		00F0ED6711028C8800208090 /* DiskImage525.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000F66390FF8368F00C8AF23 /* DiskImage525.icns */; };
+		00F500BA11F1823800CCA0C5 /* OEGL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0074ED4211EF64430005A4E8 /* OEGL.cpp */; };
+		00F500BB11F1823900CCA0C5 /* OEHID.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0074ED4411EF64430005A4E8 /* OEHID.cpp */; };
+		00F500BC11F1823900CCA0C5 /* OEPA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0074ED4611EF64430005A4E8 /* OEPA.cpp */; };
+		00F500BD11F1823B00CCA0C5 /* OEPAEmulation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0080FB5011F0DE88004D91A3 /* OEPAEmulation.cpp */; };
 		00F86BE3100FD4F60016867D /* IPSoundMax.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BE1100FD4F60016867D /* IPSoundMax.png */; };
 		00F86BE4100FD4F60016867D /* IPSoundMin.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BE2100FD4F60016867D /* IPSoundMin.png */; };
 		00FE0C171095371B00B92AB7 /* ChooserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00FE0C161095371B00B92AB7 /* ChooserViewController.m */; };
@@ -926,6 +930,10 @@
 			files = (
 				0054E2FE1131BA67006D32D9 /* main.cpp in Sources */,
 				00E0B19C1132DE4D004DB96D /* SDLMain.m in Sources */,
+				00F500BA11F1823800CCA0C5 /* OEGL.cpp in Sources */,
+				00F500BB11F1823900CCA0C5 /* OEHID.cpp in Sources */,
+				00F500BC11F1823900CCA0C5 /* OEPA.cpp in Sources */,
+				00F500BD11F1823B00CCA0C5 /* OEPAEmulation.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

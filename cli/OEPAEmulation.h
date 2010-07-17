@@ -19,6 +19,7 @@ class OEPAEmulation : public OEEmulation
 {
 public:
 	OEPAEmulation(OEPA *oepa, string path, string resourcePath);
+	~OEPAEmulation();
 	
 	bool save(string path);
 	

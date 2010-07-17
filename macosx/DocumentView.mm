@@ -149,15 +149,15 @@ DocumentKeyMapInverseEntry documentKeyMapInverse[] =
 	{0x36, HOST_HID_K_RIGHTGUI},
 };
 
-void cocoaSetCapture(void *userData, bool value)
+@implementation DocumentView
+
+static void setCapture(void *userData, bool value)
 {
 	if (value)
 		CGDisplayHideCursor(kCGDirectMainDisplay);
 	else
 		CGDisplayShowCursor(kCGDirectMainDisplay);
 }
-
-@implementation DocumentView
 
 - (id)initWithFrame:(NSRect)rect
 {
@@ -188,7 +188,7 @@ void cocoaSetCapture(void *userData, bool value)
 		Document *document = [[[self window] windowController] document];
 		
 		oegl = new OEGL();
-		oehid = new OEHID((OEPAEmulation *)self, cocoaSetCapture);
+		oehid = new OEHID((OEPAEmulation *)[document emulation], setCapture);
 		
 		memset(keyMap, sizeof(keyMap), 0);
 		for (int i = 0;
@@ -199,6 +199,7 @@ void cocoaSetCapture(void *userData, bool value)
 			int usageId = documentKeyMapInverse[i].usageId;
 			keyMap[keyCode] = usageId;
 		}
+		
 		keyModifierFlags = 0;
 	}
 	
@@ -285,7 +286,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	CGLUnlockContext((CGLContextObj)[currentContext CGLContextObj]);
 }
 
-- (int)hidGetUsageId:(int)keyCode
+- (int)getUsageId:(int)keyCode
 {
 	int usageId = (keyCode < DOCUMENT_KEYMAP_SIZE) ? keyMap[keyCode] : 0;
 	
@@ -295,9 +296,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	return usageId;
 }
 
-- (void)hidUpdateFlags:(int)flags
-			   forMask:(int)mask
-			   usageId:(int)usageId
+- (void)updateFlags:(int)flags
+			forMask:(int)mask
+			usageId:(int)usageId
 {
 	if ((flags & mask) == (keyModifierFlags & mask))
 		return;
@@ -314,26 +315,26 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 		((OEHID *)oehid)->sendUnicode([characters characterAtIndex:i]);
 	
 	if (![theEvent isARepeat])
-		((OEHID *)oehid)->setKey([self hidGetUsageId:[theEvent keyCode]], true);
+		((OEHID *)oehid)->setKey([self getUsageId:[theEvent keyCode]], true);
 }
 
 - (void)keyUp:(NSEvent *)theEvent
 {
-	((OEHID *)oehid)->setKey([self hidGetUsageId:[theEvent keyCode]], false);
+	((OEHID *)oehid)->setKey([self getUsageId:[theEvent keyCode]], false);
 }
 
 - (void)flagsChanged:(NSEvent *)theEvent
 {
 	int flags = [theEvent modifierFlags];
 	
-	[self hidUpdateFlags:flags forMask:COCOA_LCTRL usageId:HOST_HID_K_LEFTCONTROL];
-	[self hidUpdateFlags:flags forMask:COCOA_LSHIFT usageId:HOST_HID_K_LEFTSHIFT];
-	[self hidUpdateFlags:flags forMask:COCOA_LALT usageId:HOST_HID_K_LEFTALT];
-	[self hidUpdateFlags:flags forMask:COCOA_LGUI usageId:HOST_HID_K_LEFTGUI];
-	[self hidUpdateFlags:flags forMask:COCOA_RCTRL usageId:HOST_HID_K_RIGHTCONTROL];
-	[self hidUpdateFlags:flags forMask:COCOA_RSHIFT usageId:HOST_HID_K_RIGHTSHIFT];
-	[self hidUpdateFlags:flags forMask:COCOA_RALT usageId:HOST_HID_K_RIGHTALT];
-	[self hidUpdateFlags:flags forMask:COCOA_RGUI usageId:HOST_HID_K_RIGHTGUI];
+	[self updateFlags:flags forMask:COCOA_LCTRL usageId:HOST_HID_K_LEFTCONTROL];
+	[self updateFlags:flags forMask:COCOA_LSHIFT usageId:HOST_HID_K_LEFTSHIFT];
+	[self updateFlags:flags forMask:COCOA_LALT usageId:HOST_HID_K_LEFTALT];
+	[self updateFlags:flags forMask:COCOA_LGUI usageId:HOST_HID_K_LEFTGUI];
+	[self updateFlags:flags forMask:COCOA_RCTRL usageId:HOST_HID_K_RIGHTCONTROL];
+	[self updateFlags:flags forMask:COCOA_RSHIFT usageId:HOST_HID_K_RIGHTSHIFT];
+	[self updateFlags:flags forMask:COCOA_RALT usageId:HOST_HID_K_RIGHTALT];
+	[self updateFlags:flags forMask:COCOA_RGUI usageId:HOST_HID_K_RIGHTGUI];
 	
 	// To-Do: NSAlphaShiftKeyMask
 	

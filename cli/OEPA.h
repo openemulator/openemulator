@@ -32,7 +32,6 @@ class OEPA
 {
 public:
 	OEPA();
-	~OEPA();
 	
 	void setFullDuplex(bool value);
 	void setSampleRate(double value);

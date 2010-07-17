@@ -62,9 +62,6 @@
 
 - (void)dealloc
 {
-	[diskImageFileTypes release];
-	[audioFileTypes release];
-	
 	if (audioRecordingURL)
 	{
 		NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -75,6 +72,11 @@
 		
 		[audioRecordingURL release];
 	}
+	
+	[diskImageFileTypes release];
+	[audioFileTypes release];
+	
+	delete oepa;
 	
 	[super dealloc];
 }
@@ -207,26 +209,6 @@
 		return YES;
 }
 
-- (void *)constructEmulation:(NSURL *)url
-{
-	string path = string([[url path] UTF8String]);
-	string resourcePath = string([[[NSBundle mainBundle] resourcePath] UTF8String]);
-	
-	OEPAEmulation *emulation = new OEPAEmulation(oepa, path, resourcePath);
-	
-	if (emulation)
-		oepa->addEmulation(emulation);
-	
-	return emulation;
-}
-
-- (void)destroyEmulation:(void *)emulation
-{
-	oepa->removeEmulation((OEPAEmulation *) emulation);
-	
-	delete (OEPAEmulation *)emulation;
-}
-
 - (IBAction)newDocumentFromTemplateChooser:(id)sender
 {
 	[fTemplateChooserController run];
@@ -316,6 +298,16 @@
 		return [document autorelease];
 	
 	return nil;
+}
+
+- (void *)constructEmulation:(NSURL *)url
+{
+	string path = string([[url path] UTF8String]);
+	string resourcePath = string([[[NSBundle mainBundle] resourcePath] UTF8String]);
+	
+	OEPAEmulation *emulation = new OEPAEmulation(oepa, path, resourcePath);
+	
+	return emulation;
 }
 
 - (void)setPlayURL:(NSURL *)theURL
