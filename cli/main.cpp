@@ -14,15 +14,16 @@
 
 #include "SDL/SDL.h"
 
-#include "oepa.h"
-#include "oegl.h"
+#include "OEPA.h"
+#include "OEGL.h"
+#include "OEHID.h"
+
 #include "Host.h"
 
 #define sdlLog(text) cerr << "oecli: " << text << endl
 
 #define SDL_KEYMAP_SIZE		512
 #define SDL_KEYPRESSED_SIZE	512
-#define SDL_MOUSE_BUTTONNUM 8
 
 typedef struct
 {
@@ -151,20 +152,14 @@ SDLKeyMapInverseEntry sdlKeyMapInverse[] =
 };
 
 OEEmulation *sdlEmulation;
-OEGLContext *sdlOEGLContext;
+OEGL *sdlOEGL;
+OEHID *sdlOEHID;
 
 float sdlVideoWidth;
 float sdlVideoHeight;
 bool sdlVideoSync;
 
 int sdlKeyMap[SDL_KEYMAP_SIZE];
-bool sdlKeyPressed[SDL_KEYPRESSED_SIZE];
-int sdlKeyDownCount;
-
-bool sdlMouseButtonState[SDL_MOUSE_BUTTONNUM];
-bool sdlMouseCapture;
-bool sdlMouseCaptured;
-bool sdlMouseCaptureRelease;
 
 void about()
 {
@@ -218,7 +213,6 @@ bool sdlOpen(int width, int height, int fullscreen)
 	SDL_EnableUNICODE(1);
 	SDL_EnableKeyRepeat(500, 80);
 	memset(sdlKeyMap, sizeof(sdlKeyMap), 0);
-	memset(sdlKeyPressed, sizeof(sdlKeyPressed), 0);
 	for (int i = 0;
 		 i < sizeof(sdlKeyMapInverse) / sizeof(SDLKeyMapInverseEntry);
 		 i++)
@@ -227,12 +221,6 @@ bool sdlOpen(int width, int height, int fullscreen)
 		int usageId = sdlKeyMapInverse[i].usageId;
 		sdlKeyMap[sym] = usageId;
 	}
-	sdlKeyDownCount = 0;
-	
-	for (int i = 0; i < SDL_MOUSE_BUTTONNUM; i++)
-		sdlMouseButtonState[i] = false;
-	sdlMouseCaptured = false;
-	sdlMouseCaptureRelease = false;
 	
 	return true;
 }
@@ -241,7 +229,7 @@ void sdlSetKeyMapEntry(string translation)
 {
 	int sym = 0;
 	int usageId = 0;
-
+	
 	int sepIndex = translation.find(',');
 	if (sepIndex != string::npos)
 	{
@@ -268,73 +256,19 @@ int sdlGetUsageId(int keysym)
 	return usageId;
 }
 
-void sdlSetMouseCapture(bool value)
+void sdlSetCapture(void *userData, bool value)
 {
 	SDL_WM_GrabInput(value ? SDL_GRAB_ON : SDL_GRAB_OFF);
 	SDL_ShowCursor(value ? SDL_DISABLE : SDL_ENABLE);
-	
-	// Move mouse button events
-	for (int i = 0; i < SDL_MOUSE_BUTTONNUM; i++)
-	{
-		if (!sdlMouseButtonState[i])
-			continue;
-		
-		if (value)
-		{
-			sdlSendHIDEvent(HOST_HID_POINTER_EVENT,
-							HOST_HID_P_BUTTON1 + i, false);
-			sdlSendHIDEvent(HOST_HID_MOUSE_EVENT,
-							HOST_HID_M_BUTTON1 + i, true);
-		}
-		else
-		{
-			sdlSendHIDEvent(HOST_HID_MOUSE_EVENT,
-							HOST_HID_M_BUTTON1 + i, false);
-			sdlSendHIDEvent(HOST_HID_POINTER_EVENT,
-							HOST_HID_P_BUTTON1 + i, true);
-		}
-	}
 }
 
-void sdlSetKey(int usageId, bool value)
-{
-	if (!usageId || (usageId >= SDL_KEYPRESSED_SIZE))
-		return;
-	
-	if (sdlKeyPressed[usageId] == value)
-		return;
-	
-	sdlKeyPressed[usageId] = value;
-	
-	sdlSendHIDEvent(HOST_HID_KEYBOARD_EVENT, usageId, value);
-	
-	int downCount = sdlKeyDownCount + (value ? 1 : -1);
-	sdlKeyDownCount = downCount < 0 ? 0 : downCount;
-	
-	if (sdlMouseCaptureRelease && !sdlKeyDownCount)
-	{
-		sdlMouseCaptureRelease = false;
-		sdlMouseCaptured = false;
-		sdlSetMouseCapture(false);
-	}
-}
 
-void sdlSendUnicode(int unicode)
-{
-	if (unicode == 127)
-		unicode = 8;
-	
-	if ((unicode < 0xf700) || (unicode >= 0xf900))
-		sdlSendHIDEvent(HOST_HID_UNICODEKEYBOARD_EVENT, unicode, 0);
-}
+
+
+
 
 void sdlSetMouseButton(int index, bool value)
 {
-	if (index >= SDL_MOUSE_BUTTONNUM)
-		return;
-	
-	int indexMap[SDL_MOUSE_BUTTONNUM] = {0, 0, 2, 1, 0, 0, 3, 4};
-	index = indexMap[index];
 		
 	if (sdlMouseButtonState[index] == value)
 		return;
@@ -387,6 +321,10 @@ void sdlSetMousePosition(float x, float y, float rx, float ry)
 	}
 }
 
+
+
+
+
 void sdlRunEventLoop()
 {
     SDL_Event event;
@@ -411,34 +349,24 @@ void sdlRunEventLoop()
 					if (event.key.keysym.unicode)
 						sdlSendUnicode(event.key.keysym.unicode);
 					
-					sdlSetKey(sdlGetUsageId(event.key.keysym.sym), true);
+					oehid->setKey(sdlGetUsageId(event.key.keysym.sym), true);
 					if ((event.key.keysym.sym == SDLK_CAPSLOCK) ||
 						(event.key.keysym.sym == SDLK_NUMLOCK) ||
 						(event.key.keysym.sym == SDLK_SCROLLOCK))
-						sdlSetKey(sdlGetUsageId(event.key.keysym.sym), false);
-					
-					{
-						int sym = event.key.keysym.sym;
-						int mod = event.key.keysym.mod;
-						bool isCtrl = (sym == SDLK_LCTRL) || (sym == SDLK_RCTRL);
-						bool isAlt = (sym == SDLK_LALT) || (sym == SDLK_RALT);
-						if ((isCtrl && (mod & KMOD_ALT)) ||
-							(isAlt && (mod & KMOD_CTRL)))
-							sdlMouseCaptureRelease = true;
-					}
+						oehid->setKey(sdlGetUsageId(event.key.keysym.sym), false);
 					break;
 					
 				case SDL_KEYUP:
 					if ((event.key.keysym.sym == SDLK_CAPSLOCK) ||
 						(event.key.keysym.sym == SDLK_NUMLOCK) ||
 						(event.key.keysym.sym == SDLK_SCROLLOCK))
-						sdlSetKey(sdlGetUsageId(event.key.keysym.sym), true);
-					sdlSetKey(sdlGetUsageId(event.key.keysym.sym), false);
+						oehid->setKey(sdlGetUsageId(event.key.keysym.sym), true);
+					oehid->setKey(sdlGetUsageId(event.key.keysym.sym), false);
 					break;
 					
 				case SDL_MOUSEMOTION:
-					sdlSetMousePosition(event.motion.x, event.motion.y,
-										event.motion.xrel, event.motion.yrel);
+					oehid->setMousePosition(event.motion.x, event.motion.y);
+					oehid->moveMouse(event.motion.xrel, event.motion.yrel);
 					break;
 					
 				case SDL_MOUSEBUTTONDOWN:
@@ -447,19 +375,17 @@ void sdlRunEventLoop()
 					{
 						float value = ((event.button.button == SDL_BUTTON_WHEELUP) ?
 									   1 : -1);
-						sdlSetMouseWheel(0, value);
+						oehid->setMouseWheelEvent(0, value);
 						break;
 					}
 					
-					if (sdlMouseCapture && !sdlMouseCaptured &&
-						(event.button.button == SDL_BUTTON_LEFT))
+					if (index < SDL_MOUSE_BUTTONNUM)
 					{
-						sdlMouseCaptured = true;
-						sdlSetMouseCapture(true);
-						break;
+						int indexMap[SDL_MOUSE_BUTTONNUM] = {0, 0, 2, 1, 0, 0, 3, 4};
+						int index = indexMap[event.button.button];
+						
+						oehid->setMouseButton(index, true);
 					}
-					
-					sdlSetMouseButton(event.button.button, true);
 					break;
 					
 				case SDL_MOUSEBUTTONUP:
@@ -467,38 +393,43 @@ void sdlRunEventLoop()
 						(event.button.button == SDL_BUTTON_WHEELDOWN))
 						break;
 					
-					sdlSetMouseButton(event.button.button, false);
+					if (index < SDL_MOUSE_BUTTONNUM)
+					{
+						int indexMap[SDL_MOUSE_BUTTONNUM] = {0, 0, 2, 1, 0, 0, 3, 4};
+						int index = indexMap[event.button.button];
+						
+						oehid->setMouseButton(index, false);
+					}
 					break;
 					
 				case SDL_JOYAXISMOTION:
-					sdlSendHIDEvent(HOST_HID_JOYSTICK1_EVENT + event.jaxis.which,
-									HOST_HID_J_AXIS1 + event.jaxis.axis,
-									event.jaxis.value);
+					oehid->setJoystickPosition(event.jaxis.which,
+											   event.jaxis.axis,
+											   event.jaxis.value);
 					break;
 					
 				case SDL_JOYBALLMOTION:
-					sdlSendHIDEvent(HOST_HID_JOYSTICK1_EVENT + event.jball.which,
-									HOST_HID_J_RELAXIS1 + 2 * event.jball.ball,
-									event.jball.xrel);
-					sdlSendHIDEvent(HOST_HID_JOYSTICK1_EVENT + event.jball.which,
-									HOST_HID_J_RELAXIS2 + 2 * event.jball.ball,
-									event.jball.yrel);
+					oehid->moveJoystickBall(event.jball.which,
+											event.jball.xrel,
+											event.jball.yrel);
 					break;
 					
 				case SDL_JOYHATMOTION:
-					sdlSendHIDEvent(HOST_HID_JOYSTICK1_EVENT + event.jhat.which,
-									HOST_HID_J_HAT1 + event.jhat.hat,
-									event.jhat.value);
+					oehid->sendJoystickHatEvent(event.jhat.which,
+												event.jhat.hat,
+												event.jhat.value);
 					break;
 					
 				case SDL_JOYBUTTONDOWN:
-					sdlSendHIDEvent(HOST_HID_JOYSTICK1_EVENT + event.jbutton.which,
-									HOST_HID_J_BUTTON1 + event.jbutton.button, 1);
+					oehid->setJoystickButton(event.jbutton.which,
+											 event.jbutton.button,
+											 1);
 					break;
 					
 				case SDL_JOYBUTTONUP:
-					sdlSendHIDEvent(HOST_HID_JOYSTICK1_EVENT + event.jbutton.which,
-									HOST_HID_J_BUTTON1 + event.jbutton.button, 0);
+					oehid->setJoystickButton(event.jbutton.which,
+											 event.jbutton.button,
+											 0);
 					break;
 					
 				case SDL_QUIT:
@@ -601,13 +532,14 @@ int main(int argc, char *argv[])
 	if (index < argc)
 		emulationPath = string(argv[index++]);
 	
-	if (!oepaOpen())
+	oepa = new OEPA();
+	if (!oepa)
 	{
 		sdlLog("could not open oepa");
 		return 0;
 	}
 	
-	sdlEmulation = oepaConstruct(emulationPath, resourcePath);
+	sdlEmulation = new OEPAEmulation(oepa, emulationPath, resourcePath);
 	if (sdlEmulation && sdlEmulation->isLoaded())
 	{
 		// Configure emulation

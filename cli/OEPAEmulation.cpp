@@ -14,11 +14,6 @@ OEEmulation(path, resourcePath), oepa(oepa)
 {
 }
 
-OEPAEmulation::~OEPAEmulation()
-{
-	
-}
-
 bool OEPAEmulation::save(string path)
 {
 	oepa->lockProcess();

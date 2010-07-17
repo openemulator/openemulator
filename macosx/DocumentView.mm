@@ -11,7 +11,8 @@
 #import "DocumentView.h"
 #import "Document.h"
 
-#import "oegl.h"
+#import "OEGL.h"
+#import "OEHID.h"
 
 #import "Host.h"
 
@@ -148,6 +149,14 @@ DocumentKeyMapInverseEntry documentKeyMapInverse[] =
 	{0x36, HOST_HID_K_RIGHTGUI},
 };
 
+void cocoaSetCapture(void *userData, bool value)
+{
+	if (value)
+		CGDisplayHideCursor(kCGDirectMainDisplay);
+	else
+		CGDisplayShowCursor(kCGDirectMainDisplay);
+}
+
 @implementation DocumentView
 
 - (id)initWithFrame:(NSRect)rect
@@ -176,7 +185,10 @@ DocumentKeyMapInverseEntry documentKeyMapInverse[] =
 	[pixelFormat autorelease];
 	if (self = [super initWithFrame:rect pixelFormat:pixelFormat])
 	{
-		oeglContext = nil;
+		Document *document = [[[self window] windowController] document];
+		
+		oegl = new OEGL();
+		oehid = new OEHID((OEPAEmulation *)self, cocoaSetCapture);
 		
 		memset(keyMap, sizeof(keyMap), 0);
 		for (int i = 0;
@@ -197,7 +209,10 @@ DocumentKeyMapInverseEntry documentKeyMapInverse[] =
 {
     CVDisplayLinkRelease(displayLink);
 	
-	oeglClose((OEGLContext *)oeglContext);
+	if (oehid)
+		delete (OEHID *)oehid;
+	if (oegl)
+		delete (OEGL *)oegl;
 	
 	[super dealloc];
 }
@@ -221,8 +236,6 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (void)prepareOpenGL
 {
-	oeglContext = oeglOpen();
-	
 	GLint value = 1;
 	[[self openGLContext] setValues:&value forParameter:NSOpenGLCPSwapInterval]; 
 	
@@ -265,7 +278,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	CGLLockContext((CGLContextObj)[currentContext CGLContextObj]);
 	
 	NSRect frame = [self bounds];
-	oeglDraw((OEGLContext *)oeglContext, NSWidth(frame), NSHeight(frame));
+	((OEGL *)oegl)->draw(NSWidth(frame), NSHeight(frame));
 	
 	[currentContext flushBuffer];
 	
@@ -282,48 +295,6 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	return usageId;
 }
 
-- (BOOL)hidMouseCapture
-{
-	Document *document = [[[self window] windowController] document];
-	return [document mouseCapture];
-}
-
-- (void)hidSetMouseCapture:(BOOL)value
-{
-	if (value)
-		CGDisplayHideCursor(kCGDirectMainDisplay);
-	else
-		CGDisplayShowCursor(kCGDirectMainDisplay);
-	
-	// Move mouse button events
-	for (int i = 0; i < DOCUMENT_MOUSE_BUTTONNUM; i++)
-	{
-		if (!mouseButtonState[i])
-			continue;
-		
-		Document *document = [[[self window] windowController] document];
-		
-		if (value)
-		{
-			[document sendHIDEvent:HOST_HID_POINTER_EVENT
-						   usageId:HOST_HID_P_BUTTON1 + i
-							 value:NO];
-			[document sendHIDEvent:HOST_HID_MOUSE_EVENT
-						   usageId:HOST_HID_M_BUTTON1 + i
-							 value:YES];
-		}
-		else
-		{
-			[document sendHIDEvent:HOST_HID_MOUSE_EVENT
-						   usageId:HOST_HID_M_BUTTON1 + i
-							 value:NO];
-			[document sendHIDEvent:HOST_HID_POINTER_EVENT
-						   usageId:HOST_HID_P_BUTTON1 + i
-							 value:YES];
-		}
-	}
-}
-
 - (void)hidUpdateFlags:(int)flags
 			   forMask:(int)mask
 			   usageId:(int)usageId
@@ -333,88 +304,22 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	
 	BOOL value = ((flags & mask) != 0);
 	
-	[self hidSetKey:usageId value:value];
-}
-
-- (void)hidSetMouseButton:(int)index value:(BOOL)value
-{
-	if (index >= DOCUMENT_MOUSE_BUTTONNUM)
-		return;
-	
-	if (mouseButtonState[index] == value)
-		return;
-	
-	mouseButtonState[index] = value;
-	
-	Document *document = [[[self window] windowController] document];
-	if (mouseCaptured)
-		[document sendHIDEvent:HOST_HID_MOUSE_EVENT
-					   usageId:HOST_HID_M_BUTTON1 + index
-						 value:value];
-	else
-		[document sendHIDEvent:HOST_HID_POINTER_EVENT
-					   usageId:HOST_HID_P_BUTTON1 + index
-						 value:value];
-}
-
-- (void)hidSetMouseWheel:(int)index value:(float)value
-{
-	if (!value)
-		return;
-	
-	Document *document = [[[self window] windowController] document];
-	
-	if (mouseCaptured)
-		[document sendHIDEvent:HOST_HID_MOUSE_EVENT
-					   usageId:HOST_HID_M_WX + index
-						 value:value];
-	else
-		[document sendHIDEvent:HOST_HID_POINTER_EVENT
-					   usageId:HOST_HID_P_WX + index
-						 value:value];
-}
-
-- (void)hidSetMousePosition:(NSPoint)position delta:(NSPoint)delta
-{
-	Document *document = [[[self window] windowController] document];
-	
-	if (mouseCaptured)
-	{
-		if (delta.x)
-			[document sendHIDEvent:HOST_HID_MOUSE_EVENT
-						   usageId:HOST_HID_M_RX 
-							 value:delta.x];
-		if (delta.y)
-			[document sendHIDEvent:HOST_HID_MOUSE_EVENT
-						   usageId:HOST_HID_M_RY 
-							 value:delta.y];
-	}
-	else
-	{
-		[document sendHIDEvent:HOST_HID_POINTER_EVENT
-					   usageId:HOST_HID_P_X
-						 value:position.x];
-		[document sendHIDEvent:HOST_HID_POINTER_EVENT
-					   usageId:HOST_HID_P_Y
-						 value:position.y];
-	}
+	((OEHID *)oehid)->setKey(usageId, value);
 }
 
 - (void)keyDown:(NSEvent *)theEvent
 {
 	NSString *characters = [theEvent characters];
 	for (int i = 0; i < [characters length]; i++)
-		[self hidSendUnicode:[characters characterAtIndex:i]];
+		((OEHID *)oehid)->sendUnicode([characters characterAtIndex:i]);
 	
 	if (![theEvent isARepeat])
-			[self hidSetKey:[self hidGetUsageId:[theEvent keyCode]]
-					  value:YES];
+		((OEHID *)oehid)->setKey([self hidGetUsageId:[theEvent keyCode]], true);
 }
 
 - (void)keyUp:(NSEvent *)theEvent
 {
-	[self hidSetKey:[self hidGetUsageId:[theEvent keyCode]]
-			  value:NO];
+	((OEHID *)oehid)->setKey([self hidGetUsageId:[theEvent keyCode]], false);
 }
 
 - (void)flagsChanged:(NSEvent *)theEvent
@@ -432,11 +337,6 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	
 	// To-Do: NSAlphaShiftKeyMask
 	
-	BOOL isCtrl = ((flags & NSControlKeyMask) != 0);
-	BOOL isAlt = ((flags & NSAlternateKeyMask) != 0);
-	if (isCtrl && isAlt)
-		mouseCaptureRelease = YES;
-	
 	keyModifierFlags = flags;	
 }
 
@@ -444,11 +344,8 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 {
 	NSPoint position = [NSEvent mouseLocation];
 	
-	NSPoint delta;
-	delta.x = [theEvent deltaX];
-	delta.y = [theEvent deltaY];
-	
-	[self hidSetMousePosition:position delta:delta];
+	((OEHID *)oehid)->setMousePosition(position.x, position.y);
+	((OEHID *)oehid)->moveMouse([theEvent deltaX], [theEvent deltaY]);
 }
 
 - (void)mouseDragged:(NSEvent *)theEvent
@@ -468,46 +365,38 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (void)mouseDown:(NSEvent *)theEvent
 {
-	if ([self hidMouseCapture] && !mouseCaptured)
-	{
-		mouseCaptured = YES;
-		[self hidSetMouseCapture:YES];
-		
-		return;
-	}
-	
-	[self hidSetMouseButton:0 value:YES];
+	((OEHID *)oehid)->setMouseButton(0, true);
 }
 
 - (void)mouseUp:(NSEvent *)theEvent
 {
-	[self hidSetMouseButton:0 value:NO];
+	((OEHID *)oehid)->setMouseButton(0, false);
 }
 
 - (void)rightMouseDown:(NSEvent *)theEvent
 {
-	[self hidSetMouseButton:1 value:YES];
+	((OEHID *)oehid)->setMouseButton(1, true);
 }
 
 - (void)rightMouseUp:(NSEvent *)theEvent
 {
-	[self hidSetMouseButton:1 value:NO];
+	((OEHID *)oehid)->setMouseButton(1, false);
 }
 
 - (void)otherMouseDown:(NSEvent *)theEvent
 {
-	[self hidSetMouseButton:[theEvent buttonNumber] value:YES];
+	((OEHID *)oehid)->setMouseButton([theEvent buttonNumber], true);
 }
 
 - (void)otherMouseUp:(NSEvent *)theEvent
 {
-	[self hidSetMouseButton:[theEvent buttonNumber] value:NO];
+	((OEHID *)oehid)->setMouseButton([theEvent buttonNumber], false);
 }
 
 - (void)scrollWheel:(NSEvent *)theEvent
 {
-	[self hidSetMouseWheel:0 value:[theEvent deltaX]];
-	[self hidSetMouseWheel:1 value:[theEvent deltaY]];
+	((OEHID *)oehid)->sendMouseWheelEvent(0, [theEvent deltaX]);
+	((OEHID *)oehid)->sendMouseWheelEvent(1, [theEvent deltaY]);
 }
 
 @end

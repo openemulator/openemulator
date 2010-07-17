@@ -220,7 +220,7 @@
 	return emulation;
 }
 
-- (void *)destroyEmulation:(void *)emulation
+- (void)destroyEmulation:(void *)emulation
 {
 	oepa->removeEmulation((OEPAEmulation *) emulation);
 	

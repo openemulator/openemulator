@@ -11,13 +11,14 @@
 #ifndef _OEPAEMULATION_H
 #define _OEPAEMULATION_H
 
-#include "OEPA.h"
+#include "OEEmulation.h"
+
+typedef struct OEPA;
 
 class OEPAEmulation : public OEEmulation
 {
 public:
 	OEPAEmulation(OEPA *oepa, string path, string resourcePath);
-	~OEPAEmulation();
 	
 	bool save(string path);
 	

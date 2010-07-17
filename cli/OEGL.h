@@ -26,6 +26,7 @@ enum
 
 class OEGL
 {
+public:
 	OEGL();
 	~OEGL();
 	

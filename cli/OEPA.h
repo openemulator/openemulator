@@ -48,9 +48,9 @@ public:
 	bool addEmulation(OEPAEmulation *emulation);
 	void removeEmulation(OEPAEmulation *emulation);
 	
-	int runAudio(const void *inputBuffer,
-				 void *outputBuffer,
-				 int frameNum);
+	void runAudio(const void *inputBuffer,
+				  void *outputBuffer,
+				  int frameNum);
 	void runTimer();
 	
 	void lockProcess();

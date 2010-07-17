@@ -25,6 +25,8 @@ static int oepaRunAudio(const void *inputBuffer,
 						void *userData)
 {
 	((OEPA *) userData)->runAudio(inputBuffer, outputBuffer, framesPerBuffer);
+	
+	return paContinue;
 }
 
 void *oepaRunTimer(void *arg)
@@ -255,7 +257,7 @@ bool OEPA::openAudio()
 									  sampleRate,
 									  framesPerBuffer,
 									  oepaRunAudio,
-									  NULL);
+									  this);
 		if ((status != paNoError) && fullDuplex)
 		{
 			oepaLog("couldn't open audio stream (error " << status <<
@@ -268,7 +270,7 @@ bool OEPA::openAudio()
 										  sampleRate,
 										  framesPerBuffer,
 										  oepaRunAudio,
-										  NULL);
+										  this);
 		}
 		
 		if (status == paNoError)
@@ -303,7 +305,7 @@ bool OEPA::openAudio()
 			error = pthread_create(&timerThread,
 								   &attr,
 								   oepaRunTimer,
-								   NULL);
+								   this);
 			if (!error)
 			{
 				oepaLog("started silent timer thread");
@@ -368,9 +370,9 @@ void OEPA::enableAudio(bool state)
 		openAudio();
 }
 
-int OEPA::runAudio(const void *inputBuffer,
-				   void *outputBuffer,
-				   int frameNum)
+void OEPA::runAudio(const void *inputBuffer,
+					void *outputBuffer,
+					int frameNum)
 {
 	if ((getBufferOutputSize() <= 0) ||
 		(frameNum != framesPerBuffer))
@@ -383,7 +385,7 @@ int OEPA::runAudio(const void *inputBuffer,
 		for (int i = 0; i < samplesPerBuffer; i++)
 			*out++ = rand() * (0.1 / RAND_MAX);
 		
-		return paContinue;
+		return;
 	}
 	
 	int samplesPerBuffer = frameNum * channelNum;
@@ -412,7 +414,7 @@ int OEPA::runAudio(const void *inputBuffer,
 	
 	incrementBufferInputIndex();
 	
-	return paContinue;
+	return;
 }
 
 void OEPA::runTimer()
@@ -460,7 +462,7 @@ bool OEPA::openProcess()
 				error = pthread_create(&processThread,
 									   &attr,
 									   oepaRunProcess,
-									   NULL);
+									   this);
 				if (!error)
 					return true;
 				else
@@ -573,7 +575,7 @@ void OEPA::runProcess()
 			&outputBuffer[0],
 		};
 		
-		for (vector<OEEmulation *>::iterator i = emulations.begin();
+		for (vector<OEPAEmulation *>::iterator i = emulations.begin();
 			 i != emulations.end();
 			 i++)
 		{
