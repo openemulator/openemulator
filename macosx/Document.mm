@@ -15,7 +15,7 @@
 #import "OEInfo.h"
 #import "Host.h"
 
-#import "oepa.h"
+#import "OEPAEmulation.h"
 
 @implementation Document
 

@@ -16,7 +16,7 @@
 #import "InspectorController.h"
 #import "TemplateChooserController.h"
 
-#import "oepa.h"
+#import "OEPA.h"
 
 #define LINK_HOMEPAGE	@"http://www.openemulator.org"
 #define LINK_FORUMSURL	@"http://groups.google.com/group/openemulator"
@@ -29,7 +29,7 @@
 {
 	if (self = [super init])
 	{
-		oepa = new OEPA([[[NSBundle mainBundle] resourcePath] UTF8String]);
+		oepa = new OEPA();
 		
 		diskImageFileTypes = [[NSArray alloc] initWithObjects:
 							  @"dsk", @"do", @"d13", @"po", @"cpm", @"nib", @"v2d",
@@ -209,8 +209,22 @@
 
 - (void *)constructEmulation:(NSURL *)url
 {
-	return oepa->constructEmulation([[url path] UTF8String]);
+	string path = string([[url path] UTF8String]);
+	string resourcePath = string([[[NSBundle mainBundle] resourcePath] UTF8String]);
 	
+	OEPAEmulation *emulation = new OEPAEmulation(oepa, path, resourcePath);
+	
+	if (emulation)
+		oepa->addEmulation(emulation);
+	
+	return emulation;
+}
+
+- (void *)destroyEmulation:(void *)emulation
+{
+	oepa->removeEmulation((OEPAEmulation *) emulation);
+	
+	delete (OEPAEmulation *)emulation;
 }
 
 - (IBAction)newDocumentFromTemplateChooser:(id)sender
