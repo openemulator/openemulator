@@ -52,9 +52,9 @@ An "inlet" element defines an inlet for connecting other devices to this device.
 \
 It has the following tags:\
 \
-* ref: The property address that holds the component address to the other device\
+* ref: The address of the property that holds the address of the component used to communicate with the other device\
 * type: A name that must match the corresponding outlet. For example: "CompositeVideo"\
-* category: One of the following: "expansion" (for connectors that are physically in the main emulated computer), "peripheral" (for connectors that are physically outside of the main emulated computer), "storage" (for peripherals that provide persistent data storage, e.g. disk drives)\
+* category: One of the following: "expansion" (for connectors that are physically inside the main emulated computer), "peripheral" (for connectors that are physically outside of the main emulated computer), "storage" (for peripherals that provide persistent data storage, e.g. disk drives)\
 * label: The name of this inlet (for UI purposes). For example: "Video Connector", "Slot 2"\
 * image: A path to an image for this inlet (relative to the "resources" folder)\
 \
@@ -63,16 +63,16 @@ An "outlet" element defines an outlet for connecting this device to another devi
 \
 It has the following tags:\
 \
-* ref: The component address used to communicate with this device\
+* ref: The address of the component used to communicate with this device\
 * type: A name that must match the corresponding inlet. For example: "CompositeVideo"\
 * label: The name of this outlet (for UI purposes). For example: "Video Jack", "Port 1". Not required.\
-* image: A path to an image for this inlet (relative to the "resources" folder). Not required.\
+* image: A path to an image for this outlet (relative to the "resources" folder). Not required.\
 \
 ==="setting"===\
 A "setting" element defines a property that can be configured through the host user interface. It has the following tags:\
 \
 * ref: The property address to be set with this setting\
-* type: One of the following: "checkbox" for properties that can be set ("1") or unset("0"), "option" for properties that are one from a list of options, and "slider" for properties that can have a value within a range.\
+* type: One of the following: "checkbox" for properties that can be set ("1") or unset("0"), "option" for properties that are one of many, and "slider" for properties that can have a numeric value within a range.\
 * options: If the setting is of type "option", a comma-separated list of possible values (e.g. "None, Even, Odd"). If the setting is of type "slider", a comma-separated list of minimum, step, maximum value. E.g. ("0.0, 0.01, 1.0" for a volume control). This tag is not used for checkbox settings.\
 * label: The name of this setting (for UI purposes).\
 \
@@ -82,7 +82,7 @@ A "component" element defines a component. It has the following tags:\
 * name: The component address of the component\
 * class: The class of the component. This should match the name of the C++ class to be instantiated\
 \
-A "component" element may contain "property", "data", "resource" or "connection" elements:\
+A "component" element may contain "property", "data", "resource" or "connection" elements.\
 \
 ==="property"===\
 A "property" element defines a property which is set (through the OEComponent.setProperty call) when the emulation is instantiated, and get (through the OEComponent.getProperty call) when the emulation is about to be terminated. If the getProperty call returns false, the property is not modified.\
