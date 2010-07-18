@@ -34,6 +34,11 @@ typedef struct OEPAEmulation OEPAEmulation;
 - (id) initWithTemplateURL:(NSURL *) templateURL error:(NSError **) outError;
 - (IBAction) saveDocumentAsTemplate:(id) sender;
 
+- (void *)emulation;
+
+- (void) addDevices:(NSString *) path connections:(NSDictionary *) connections;
+- (void) removeDevice:(NSDictionary *) dict;
+
 - (NSImage *) image;
 - (void) setImage:(NSImage *) value;
 - (NSString *) label;
@@ -58,21 +63,5 @@ typedef struct OEPAEmulation OEPAEmulation;
 - (NSMutableArray *) peripherals;
 - (void) insertObject:(id) value inPeripheralsAtIndex:(NSUInteger) index;
 - (void) removeObjectFromPeripheralsAtIndex:(NSUInteger) index;
-
-- (void) addDevices:(NSString *) path connections:(NSDictionary *) connections;
-- (void) removeDevice:(NSDictionary *) dict;
-
-- (void) sendHIDEvent:(int)notification usageId:(int)usageId value:(float)value;
-
-- (void) powerDown:(id) sender;
-- (void) sleep:(id) sender;
-- (void) wakeUp:(id) sender;
-- (void) restart:(id) sender;
-- (void) debuggerBreak:(id) sender;
-
-- (BOOL) mouseCapture;
-
-- (BOOL) isCopyable;
-- (BOOL) isPasteable;
 
 @end

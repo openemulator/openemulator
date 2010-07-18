@@ -1,11 +1,11 @@
 
 /**
  * libcomposite
- * Useful signal processing functions
+ * Generic signal processing functions
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements useful signal processing functions.
+ * Implements generic signal processing functions.
  */
 
 #include <math.h>

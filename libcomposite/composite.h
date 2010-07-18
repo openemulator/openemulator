@@ -1,11 +1,11 @@
 
 /**
- * libntsc
- * NTSC emulation library
+ * libcomposite
+ * Composite video emulation library
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements high-quality NTSC video emulation.
+ * Implements high-quality composite video emulation.
  */
 
 /*

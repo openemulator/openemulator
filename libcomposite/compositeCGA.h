@@ -1,11 +1,11 @@
 
 /**
- * libntsc
- * CGA NTSC
+ * libcomposite
+ * CGA composite video
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements a CGA NTSC emulation.
+ * Implements a CGA composite video emulation.
  */
 
 #ifndef _COMPOSITE_CGA_H

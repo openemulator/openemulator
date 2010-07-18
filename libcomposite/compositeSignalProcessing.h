@@ -1,11 +1,11 @@
 
 /**
- * libntsc
- * Signal processing functions
+ * libcomposite
+ * Generic signal processing functions
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements required signal processing functions.
+ * Implements generic signal processing functions.
  */
 
 #define COMPOSITE_DECODERMATRIX_DIM		3

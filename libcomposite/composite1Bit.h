@@ -1,11 +1,11 @@
 
 /**
- * libntsc
- * 1-bit NTSC
+ * libcomposite
+ * 1-bit composite video
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements a 1-bit NTSC emulation.
+ * Implements a 1-bit composite video emulation.
  */
 
 #ifndef _COMPOSITE_1BIT_H

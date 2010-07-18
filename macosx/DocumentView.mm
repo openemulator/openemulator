@@ -400,4 +400,29 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	((OEHID *)oehid)->sendMouseWheelEvent(1, [theEvent deltaY]);
 }
 
+- (void)powerDown:(id)sender
+{
+	((OEHID *)oehid)->sendSystemEvent(HOST_HID_S_POWERDOWN);
+}
+
+- (void)sleep:(id)sender
+{
+	((OEHID *)oehid)->sendSystemEvent(HOST_HID_S_SLEEP);
+}
+
+- (void)wakeUp:(id)sender
+{
+	((OEHID *)oehid)->sendSystemEvent(HOST_HID_S_WAKEUP);
+}
+
+- (void)restart:(id)sender
+{
+	((OEHID *)oehid)->sendSystemEvent(HOST_HID_S_COLDRESTART);
+}
+
+- (void)debuggerBreak:(id)sender
+{
+	((OEHID *)oehid)->sendSystemEvent(HOST_HID_S_DEBUGGERBREAK);
+}
+
 @end

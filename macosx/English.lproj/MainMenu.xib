@@ -12,7 +12,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="460"/>
+			<integer value="106"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -894,14 +894,6 @@
 				<bool key="EncodedWithXMLCoder">YES</bool>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
-						<string key="label">orderFrontStandardAboutPanel:</string>
-						<reference key="source" ref="1021"/>
-						<reference key="destination" ref="238522557"/>
-					</object>
-					<int key="connectionID">142</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
 						<string key="label">performClose:</string>
 						<reference key="source" ref="1014"/>
 						<reference key="destination" ref="776162233"/>
@@ -1197,14 +1189,6 @@
 					<int key="connectionID">845</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">toggleInspector:</string>
-						<reference key="source" ref="406189837"/>
-						<reference key="destination" ref="672306149"/>
-					</object>
-					<int key="connectionID">846</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">fInspectorController</string>
 						<reference key="source" ref="670222506"/>
@@ -1227,30 +1211,6 @@
 						<reference key="destination" ref="98643607"/>
 					</object>
 					<int key="connectionID">864</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">newDocument:</string>
-						<reference key="source" ref="670222506"/>
-						<reference key="destination" ref="705341025"/>
-					</object>
-					<int key="connectionID">865</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">openDocument:</string>
-						<reference key="source" ref="670222506"/>
-						<reference key="destination" ref="722745758"/>
-					</object>
-					<int key="connectionID">866</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">clearRecentDocuments:</string>
-						<reference key="source" ref="670222506"/>
-						<reference key="destination" ref="759406840"/>
-					</object>
-					<int key="connectionID">867</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
@@ -1355,6 +1315,46 @@
 						<reference key="destination" ref="273033769"/>
 					</object>
 					<int key="connectionID">895</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">toggleInspector:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="672306149"/>
+					</object>
+					<int key="connectionID">896</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">newDocument:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="705341025"/>
+					</object>
+					<int key="connectionID">897</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">openDocument:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="722745758"/>
+					</object>
+					<int key="connectionID">898</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">clearRecentDocuments:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="759406840"/>
+					</object>
+					<int key="connectionID">899</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">orderFrontStandardAboutPanel:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="238522557"/>
+					</object>
+					<int key="connectionID">900</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -1973,7 +1973,7 @@
 						<int key="objectID">765</int>
 						<reference key="object" ref="755372781"/>
 						<reference key="parent" ref="0"/>
-						<string key="objectName">Graphics Tablet Controller</string>
+						<string key="objectName">Tablet Controller</string>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">766</int>
@@ -2238,7 +2238,7 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>{{516, 193}, {317, 123}}</string>
+					<string>{{509, 464}, {317, 123}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>{{596, 852}, {216, 23}}</string>
@@ -2246,7 +2246,7 @@
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>{{558, 323}, {143, 23}}</string>
+					<string>{{525, 504}, {143, 23}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>{{522, 812}, {146, 23}}</string>
@@ -2288,7 +2288,7 @@
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>{{294, 78}, {227, 213}}</string>
+					<string>{{268, 374}, {227, 213}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>{{197, 734}, {243, 243}}</string>
@@ -2298,7 +2298,7 @@
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>{{501, 543}, {167, 43}}</string>
+					<string>{{495, 384}, {164, 43}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>{{608, 612}, {167, 43}}</string>
@@ -2310,7 +2310,7 @@
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>{{138, 349}, {478, 20}}</string>
+					<string>{{92, 587}, {478, 20}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>{74, 862}</string>
@@ -2320,7 +2320,7 @@
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>{{484, 226}, {233, 123}}</string>
+					<string>{{438, 464}, {233, 123}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>{{525, 802}, {197, 73}}</string>
@@ -2344,11 +2344,11 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>{{206, 326}, {233, 203}}</string>
+					<string>{{104, 384}, {233, 203}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>{{23, 794}, {245, 183}}</string>
-					<string>{{338, 78}, {231, 213}}</string>
+					<string>{{312, 374}, {231, 213}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{475, 832}, {234, 43}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -2363,7 +2363,7 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{408, 236}, {200, 113}}</string>
+					<string>{{362, 474}, {200, 113}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{475, 832}, {234, 43}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -2401,7 +2401,7 @@
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>{{252, 38}, {299, 253}}</string>
+					<string>{{226, 334}, {299, 253}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>{{155, 774}, {199, 203}}</string>
@@ -2431,7 +2431,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">895</int>
+			<int key="maxID">900</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -2547,63 +2547,14 @@
 					<string key="className">Document</string>
 					<string key="superclassName">NSDocument</string>
 					<object class="NSMutableDictionary" key="actions">
-						<bool key="EncodedWithXMLCoder">YES</bool>
-						<object class="NSArray" key="dict.sortedKeys">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>debuggerBreak:</string>
-							<string>powerDown:</string>
-							<string>restart:</string>
-							<string>saveDocumentAsTemplate:</string>
-							<string>sleep:</string>
-							<string>wakeUp:</string>
-						</object>
-						<object class="NSMutableArray" key="dict.values">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-						</object>
+						<string key="NS.key.0">saveDocumentAsTemplate:</string>
+						<string key="NS.object.0">id</string>
 					</object>
 					<object class="NSMutableDictionary" key="actionInfosByName">
-						<bool key="EncodedWithXMLCoder">YES</bool>
-						<object class="NSArray" key="dict.sortedKeys">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>debuggerBreak:</string>
-							<string>powerDown:</string>
-							<string>restart:</string>
-							<string>saveDocumentAsTemplate:</string>
-							<string>sleep:</string>
-							<string>wakeUp:</string>
-						</object>
-						<object class="NSMutableArray" key="dict.values">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<object class="IBActionInfo">
-								<string key="name">debuggerBreak:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">powerDown:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">restart:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">saveDocumentAsTemplate:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">sleep:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">wakeUp:</string>
-								<string key="candidateClassName">id</string>
-							</object>
+						<string key="NS.key.0">saveDocumentAsTemplate:</string>
+						<object class="IBActionInfo" key="NS.object.0">
+							<string key="name">saveDocumentAsTemplate:</string>
+							<string key="candidateClassName">id</string>
 						</object>
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
@@ -2705,6 +2656,67 @@
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
+					<string key="className">DocumentView</string>
+					<string key="superclassName">NSOpenGLView</string>
+					<object class="NSMutableDictionary" key="actions">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>debuggerBreak:</string>
+							<string>powerDown:</string>
+							<string>restart:</string>
+							<string>sleep:</string>
+							<string>wakeUp:</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+						</object>
+					</object>
+					<object class="NSMutableDictionary" key="actionInfosByName">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>debuggerBreak:</string>
+							<string>powerDown:</string>
+							<string>restart:</string>
+							<string>sleep:</string>
+							<string>wakeUp:</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<object class="IBActionInfo">
+								<string key="name">debuggerBreak:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">powerDown:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">restart:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">sleep:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">wakeUp:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+						</object>
+					</object>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">macosx/DocumentView.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
 					<string key="className">DocumentWindow</string>
 					<string key="superclassName">NSWindow</string>
 					<object class="NSMutableDictionary" key="actions">
@@ -2775,7 +2787,7 @@
 							<string>addExpansion:</string>
 							<string>addPeripheral:</string>
 							<string>addStorage:</string>
-							<string>openPlayback:</string>
+							<string>openPlay:</string>
 							<string>removeExpansion:</string>
 							<string>removePeripheral:</string>
 							<string>removeStorage:</string>
@@ -2784,7 +2796,7 @@
 							<string>selectView:</string>
 							<string>storeWindowState:</string>
 							<string>toggleInspector:</string>
-							<string>togglePlayback:</string>
+							<string>togglePlay:</string>
 							<string>toggleRecording:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
@@ -2812,7 +2824,7 @@
 							<string>addExpansion:</string>
 							<string>addPeripheral:</string>
 							<string>addStorage:</string>
-							<string>openPlayback:</string>
+							<string>openPlay:</string>
 							<string>removeExpansion:</string>
 							<string>removePeripheral:</string>
 							<string>removeStorage:</string>
@@ -2821,7 +2833,7 @@
 							<string>selectView:</string>
 							<string>storeWindowState:</string>
 							<string>toggleInspector:</string>
-							<string>togglePlayback:</string>
+							<string>togglePlay:</string>
 							<string>toggleRecording:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
@@ -2839,7 +2851,7 @@
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
-								<string key="name">openPlayback:</string>
+								<string key="name">openPlay:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
@@ -2875,7 +2887,7 @@
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
-								<string key="name">togglePlayback:</string>
+								<string key="name">togglePlay:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
@@ -2895,19 +2907,19 @@
 							<string>fEmulationView</string>
 							<string>fExpansionsController</string>
 							<string>fExpansionsView</string>
-							<string>fOpenPlaybackButton</string>
+							<string>fOpenPlayButton</string>
 							<string>fPeripheralsController</string>
 							<string>fPeripheralsView</string>
-							<string>fPlaybackDurationLabel</string>
-							<string>fPlaybackNameLabel</string>
-							<string>fPlaybackTimeLabel</string>
+							<string>fPlayDurationLabel</string>
+							<string>fPlayNameLabel</string>
+							<string>fPlayTimeLabel</string>
 							<string>fRecordingSizeLabel</string>
 							<string>fRecordingTimeLabel</string>
 							<string>fSaveRecordingAsButton</string>
 							<string>fStorageController</string>
 							<string>fStorageView</string>
 							<string>fTabMatrix</string>
-							<string>fTogglePlaybackButton</string>
+							<string>fTogglePlayButton</string>
 							<string>fToggleRecordingButton</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
@@ -2946,19 +2958,19 @@
 							<string>fEmulationView</string>
 							<string>fExpansionsController</string>
 							<string>fExpansionsView</string>
-							<string>fOpenPlaybackButton</string>
+							<string>fOpenPlayButton</string>
 							<string>fPeripheralsController</string>
 							<string>fPeripheralsView</string>
-							<string>fPlaybackDurationLabel</string>
-							<string>fPlaybackNameLabel</string>
-							<string>fPlaybackTimeLabel</string>
+							<string>fPlayDurationLabel</string>
+							<string>fPlayNameLabel</string>
+							<string>fPlayTimeLabel</string>
 							<string>fRecordingSizeLabel</string>
 							<string>fRecordingTimeLabel</string>
 							<string>fSaveRecordingAsButton</string>
 							<string>fStorageController</string>
 							<string>fStorageView</string>
 							<string>fTabMatrix</string>
-							<string>fTogglePlaybackButton</string>
+							<string>fTogglePlayButton</string>
 							<string>fToggleRecordingButton</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
@@ -2992,7 +3004,7 @@
 								<string key="candidateClassName">NSView</string>
 							</object>
 							<object class="IBToOneOutletInfo">
-								<string key="name">fOpenPlaybackButton</string>
+								<string key="name">fOpenPlayButton</string>
 								<string key="candidateClassName">NSButton</string>
 							</object>
 							<object class="IBToOneOutletInfo">
@@ -3004,15 +3016,15 @@
 								<string key="candidateClassName">NSView</string>
 							</object>
 							<object class="IBToOneOutletInfo">
-								<string key="name">fPlaybackDurationLabel</string>
+								<string key="name">fPlayDurationLabel</string>
 								<string key="candidateClassName">NSTextField</string>
 							</object>
 							<object class="IBToOneOutletInfo">
-								<string key="name">fPlaybackNameLabel</string>
+								<string key="name">fPlayNameLabel</string>
 								<string key="candidateClassName">NSTextField</string>
 							</object>
 							<object class="IBToOneOutletInfo">
-								<string key="name">fPlaybackTimeLabel</string>
+								<string key="name">fPlayTimeLabel</string>
 								<string key="candidateClassName">NSTextField</string>
 							</object>
 							<object class="IBToOneOutletInfo">
@@ -3040,7 +3052,7 @@
 								<string key="candidateClassName">NSMatrix</string>
 							</object>
 							<object class="IBToOneOutletInfo">
-								<string key="name">fTogglePlaybackButton</string>
+								<string key="name">fTogglePlayButton</string>
 								<string key="candidateClassName">NSButton</string>
 							</object>
 							<object class="IBToOneOutletInfo">

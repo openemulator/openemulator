@@ -396,6 +396,11 @@
 		[[NSAlert alertWithError:error] runModal];
 }
 
+- (void *)emulation
+{
+	return emulation;
+}
+
 - (void)addDevices:(NSString *)path
 	   connections:(NSDictionary *)connections
 {
@@ -473,18 +478,6 @@
 	windowController = [[DocumentWindowController alloc] init];
 	[self addWindowController:windowController];
 	[windowController release];
-}
-
-- (BOOL)validateUserInterfaceItem:(id)item
-{
-	if ([item action] == @selector(copy:))
-		return [self isCopyable];
-	else if ([item action] == @selector(paste:))
-		return [self isPasteable];
-	else if ([item action] == @selector(startSpeaking:))
-		return [self isCopyable];
-	
-	return YES;
 }
 
 - (NSImage *)image
@@ -607,59 +600,6 @@
     [peripherals removeObjectAtIndex:index];
 }
 
-- (void)sendHIDEvent:(int)notification usageId:(int)usageId value:(float)value
-{
-	NSLog(@"sendHIDEvent:%d usageId:%d value:%f", notification, usageId, value);
-	
-	HostHIDEvent hidEvent;
-	hidEvent.usageId = usageId;
-	hidEvent.value = value;
-	
-	emulation->postNotification(HOST_DEVICE, notification, &hidEvent);	
-}
-
-- (void)powerDown:(id)sender
-{
-	[self sendHIDEvent:HOST_HID_SYSTEM_EVENT
-			   usageId:HOST_HID_S_POWERDOWN
-				 value:1];
-}
-
-- (void)sleep:(id)sender
-{
-	[self sendHIDEvent:HOST_HID_SYSTEM_EVENT
-			   usageId:HOST_HID_S_SLEEP
-				 value:1];
-}
-
-- (void)wakeUp:(id)sender
-{
-	[self sendHIDEvent:HOST_HID_SYSTEM_EVENT
-			   usageId:HOST_HID_S_WAKEUP
-				 value:1];
-}
-
-- (void)restart:(id)sender
-{
-	[self sendHIDEvent:HOST_HID_SYSTEM_EVENT
-			   usageId:HOST_HID_S_COLDRESTART
-				 value:1];
-}
-
-- (void)debuggerBreak:(id)sender
-{
-	[self sendHIDEvent:HOST_HID_SYSTEM_EVENT
-			   usageId:HOST_HID_S_DEBUGGERBREAK
-				 value:1];
-}
-
-- (BOOL)mouseCapture
-{
-	NSString *value = [self getHostProperty:@"hidMouseCapture"];
-	
-	return ([value compare:@"1"] == NSOrderedSame) ? YES : NO;
-}
-
 - (BOOL)isCopyable
 {
 	return emulation->ioctl(HOST_DEVICE, HOST_IS_COPYABLE, NULL);
@@ -674,6 +614,18 @@
 	NSArray *pasteboardTypes = [NSArray arrayWithObjects:NSStringPboardType, nil];
 	
 	return [pasteboard availableTypeFromArray:pasteboardTypes] != nil;
+}
+
+- (BOOL)validateUserInterfaceItem:(id)item
+{
+	if ([item action] == @selector(copy:))
+		return [self isCopyable];
+	else if ([item action] == @selector(paste:))
+		return [self isPasteable];
+	else if ([item action] == @selector(startSpeaking:))
+		return [self isCopyable];
+	
+	return YES;
 }
 
 - (NSString *)documentText
