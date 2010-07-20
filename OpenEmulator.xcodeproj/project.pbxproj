@@ -41,7 +41,6 @@
 		005398DB113A00CA00CA7CE4 /* ROM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 005397E31139EC1F00CA7CE4 /* ROM.cpp */; };
 		005398DC113A00CA00CA7CE4 /* RAM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 005397E01139EC1800CA7CE4 /* RAM.cpp */; };
 		005486CA0FDC84E500DBCFA8 /* Sparkle.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 001F56F80FD1E8E500EA246A /* Sparkle.framework */; };
-		0054E2FE1131BA67006D32D9 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0054E1FF1131B7D6006D32D9 /* main.cpp */; };
 		0054E4A11131BE7A006D32D9 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0054E4A01131BE7A006D32D9 /* Cocoa.framework */; };
 		0054E4A71131BE8A006D32D9 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0054E4A61131BE8A006D32D9 /* OpenGL.framework */; };
 		0054E6311131BEE7006D32D9 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0054E6301131BEE7006D32D9 /* Carbon.framework */; };
@@ -52,11 +51,7 @@
 		00679D08100817F700B38748 /* DeviceChooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00679D04100817F600B38748 /* DeviceChooser.xib */; };
 		00679D09100817F700B38748 /* TemplateChooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00679D06100817F700B38748 /* TemplateChooser.xib */; };
 		0071E3BA10803F7300F2D54F /* ChooserItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 0071E3B910803F7300F2D54F /* ChooserItem.m */; };
-		0074ED4811EF64430005A4E8 /* OEGL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0074ED4211EF64430005A4E8 /* OEGL.cpp */; };
-		0074ED4911EF64430005A4E8 /* OEHID.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0074ED4411EF64430005A4E8 /* OEHID.cpp */; };
-		0074ED4A11EF64430005A4E8 /* OEPA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0074ED4611EF64430005A4E8 /* OEPA.cpp */; };
 		0077069B11EB638500535F6D /* DocumentWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 0077069A11EB638500535F6D /* DocumentWindow.m */; };
-		0080FB5111F0DE88004D91A3 /* OEPAEmulation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0080FB5011F0DE88004D91A3 /* OEPAEmulation.cpp */; };
 		008107DE1120C57600D744FB /* TemplateChooserViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00FE0C051095353B00B92AB7 /* TemplateChooserViewController.mm */; };
 		008283F011A35D3A00B2B530 /* IPAudioPlay.png in Resources */ = {isa = PBXBuildFile; fileRef = 008283EF11A35D3A00B2B530 /* IPAudioPlay.png */; };
 		0082840411A3603800B2B530 /* IPAudioRecord.png in Resources */ = {isa = PBXBuildFile; fileRef = 0082840211A3603800B2B530 /* IPAudioRecord.png */; };
@@ -89,6 +84,16 @@
 		00BADDC51100EDC600EB0344 /* ConnectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00BADD451100BE8300EB0344 /* ConnectorViewController.m */; };
 		00BB4D591086C1160071B584 /* TBRestart.png in Resources */ = {isa = PBXBuildFile; fileRef = 00BB4D561086C1160071B584 /* TBRestart.png */; };
 		00BB4D5B1086C1160071B584 /* TBSleep.png in Resources */ = {isa = PBXBuildFile; fileRef = 00BB4D581086C1160071B584 /* TBSleep.png */; };
+		00C3CF9011F557A000EA2453 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00C3CF8D11F557A000EA2453 /* main.cpp */; };
+		00C3CF9111F557A000EA2453 /* SDLMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 00C3CF8F11F557A000EA2453 /* SDLMain.m */; };
+		00C3CF9B11F557AC00EA2453 /* OEGL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00C3CF9311F557AC00EA2453 /* OEGL.cpp */; };
+		00C3CF9C11F557AC00EA2453 /* OEHID.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00C3CF9511F557AC00EA2453 /* OEHID.cpp */; };
+		00C3CF9D11F557AC00EA2453 /* OEPA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00C3CF9711F557AC00EA2453 /* OEPA.cpp */; };
+		00C3CF9E11F557AC00EA2453 /* OEPAEmulation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00C3CF9911F557AC00EA2453 /* OEPAEmulation.cpp */; };
+		00C3D0D711F5584900EA2453 /* OEGL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00C3CF9311F557AC00EA2453 /* OEGL.cpp */; };
+		00C3D0D811F5584A00EA2453 /* OEHID.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00C3CF9511F557AC00EA2453 /* OEHID.cpp */; };
+		00C3D0D911F5584B00EA2453 /* OEPA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00C3CF9711F557AC00EA2453 /* OEPA.cpp */; };
+		00C3D0DA11F5584C00EA2453 /* OEPAEmulation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00C3CF9911F557AC00EA2453 /* OEPAEmulation.cpp */; };
 		00C5805F109A3DDF00B00626 /* libportaudio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C5805D109A3DDF00B00626 /* libportaudio.a */; };
 		00C58060109A3DDF00B00626 /* libzip.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C5805E109A3DDF00B00626 /* libzip.a */; };
 		00C58073109A3E9D00B00626 /* libz.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C58072109A3E9D00B00626 /* libz.a */; };
@@ -130,14 +135,9 @@
 		00D845850FFF0FD2005802F0 /* PaperFeedController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D845780FFF0FD2005802F0 /* PaperFeedController.m */; };
 		00D845860FFF0FD2005802F0 /* PreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D8457A0FFF0FD2005802F0 /* PreferencesController.m */; };
 		00D846290FFF23B7005802F0 /* PRSound.png in Resources */ = {isa = PBXBuildFile; fileRef = 00D846280FFF23B7005802F0 /* PRSound.png */; };
-		00E0B19C1132DE4D004DB96D /* SDLMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E0B19A1132DE4D004DB96D /* SDLMain.m */; };
 		00E2299611768DF4004E71F7 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009B4F2611639D7700E9A6F9 /* GLUT.framework */; };
 		00EF028D107D9EFB00FE378D /* VerticallyCenteredCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00EF028C107D9EFB00FE378D /* VerticallyCenteredCell.m */; };
 		00F0ED6711028C8800208090 /* DiskImage525.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000F66390FF8368F00C8AF23 /* DiskImage525.icns */; };
-		00F500BA11F1823800CCA0C5 /* OEGL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0074ED4211EF64430005A4E8 /* OEGL.cpp */; };
-		00F500BB11F1823900CCA0C5 /* OEHID.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0074ED4411EF64430005A4E8 /* OEHID.cpp */; };
-		00F500BC11F1823900CCA0C5 /* OEPA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0074ED4611EF64430005A4E8 /* OEPA.cpp */; };
-		00F500BD11F1823B00CCA0C5 /* OEPAEmulation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0080FB5011F0DE88004D91A3 /* OEPAEmulation.cpp */; };
 		00F86BE3100FD4F60016867D /* IPSoundMax.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BE1100FD4F60016867D /* IPSoundMax.png */; };
 		00F86BE4100FD4F60016867D /* IPSoundMin.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BE2100FD4F60016867D /* IPSoundMin.png */; };
 		00FE0C171095371B00B92AB7 /* ChooserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00FE0C161095371B00B92AB7 /* ChooserViewController.m */; };
@@ -242,7 +242,6 @@
 		005397E21139EC1F00CA7CE4 /* ROM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ROM.h; sourceTree = "<group>"; };
 		005397E31139EC1F00CA7CE4 /* ROM.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ROM.cpp; sourceTree = "<group>"; };
 		0054868F0FDC817900DBCFA8 /* Emulation.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Emulation.icns; sourceTree = "<group>"; };
-		0054E1FF1131B7D6006D32D9 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		0054E2E41131B9EF006D32D9 /* oecli */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = oecli; sourceTree = BUILT_PRODUCTS_DIR; };
 		0054E4A01131BE7A006D32D9 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		0054E4A61131BE8A006D32D9 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
@@ -260,15 +259,7 @@
 		006EEE8F0FCA781C003D2C8D /* DiskImage.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = DiskImage.icns; sourceTree = "<group>"; };
 		0071E3B810803F7300F2D54F /* ChooserItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChooserItem.h; sourceTree = "<group>"; };
 		0071E3B910803F7300F2D54F /* ChooserItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChooserItem.m; sourceTree = "<group>"; };
-		0074ED4211EF64430005A4E8 /* OEGL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEGL.cpp; sourceTree = "<group>"; };
-		0074ED4311EF64430005A4E8 /* OEGL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEGL.h; sourceTree = "<group>"; };
-		0074ED4411EF64430005A4E8 /* OEHID.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEHID.cpp; sourceTree = "<group>"; };
-		0074ED4511EF64430005A4E8 /* OEHID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEHID.h; sourceTree = "<group>"; };
-		0074ED4611EF64430005A4E8 /* OEPA.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEPA.cpp; sourceTree = "<group>"; };
-		0074ED4711EF64430005A4E8 /* OEPA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEPA.h; sourceTree = "<group>"; };
 		0077069A11EB638500535F6D /* DocumentWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DocumentWindow.m; sourceTree = "<group>"; };
-		0080FB4F11F0DE88004D91A3 /* OEPAEmulation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEPAEmulation.h; sourceTree = "<group>"; };
-		0080FB5011F0DE88004D91A3 /* OEPAEmulation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEPAEmulation.cpp; sourceTree = "<group>"; };
 		008283EF11A35D3A00B2B530 /* IPAudioPlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPAudioPlay.png; path = macosx/Images/IPAudioPlay.png; sourceTree = "<group>"; };
 		0082840211A3603800B2B530 /* IPAudioRecord.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPAudioRecord.png; path = macosx/Images/IPAudioRecord.png; sourceTree = "<group>"; };
 		0082847B11A422C700B2B530 /* IPAudioStop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPAudioStop.png; path = macosx/Images/IPAudioStop.png; sourceTree = "<group>"; };
@@ -325,6 +316,17 @@
 		00BB4D561086C1160071B584 /* TBRestart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TBRestart.png; sourceTree = "<group>"; };
 		00BB4D581086C1160071B584 /* TBSleep.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TBSleep.png; sourceTree = "<group>"; };
 		00C07E350FD27CCF004E0D3D /* PRGeneral.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PRGeneral.png; sourceTree = "<group>"; };
+		00C3CF8D11F557A000EA2453 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		00C3CF8E11F557A000EA2453 /* SDLMain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDLMain.h; sourceTree = "<group>"; };
+		00C3CF8F11F557A000EA2453 /* SDLMain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDLMain.m; sourceTree = "<group>"; };
+		00C3CF9311F557AC00EA2453 /* OEGL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEGL.cpp; sourceTree = "<group>"; };
+		00C3CF9411F557AC00EA2453 /* OEGL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEGL.h; sourceTree = "<group>"; };
+		00C3CF9511F557AC00EA2453 /* OEHID.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEHID.cpp; sourceTree = "<group>"; };
+		00C3CF9611F557AC00EA2453 /* OEHID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEHID.h; sourceTree = "<group>"; };
+		00C3CF9711F557AC00EA2453 /* OEPA.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEPA.cpp; sourceTree = "<group>"; };
+		00C3CF9811F557AC00EA2453 /* OEPA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEPA.h; sourceTree = "<group>"; };
+		00C3CF9911F557AC00EA2453 /* OEPAEmulation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEPAEmulation.cpp; sourceTree = "<group>"; };
+		00C3CF9A11F557AC00EA2453 /* OEPAEmulation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEPAEmulation.h; sourceTree = "<group>"; };
 		00C5805D109A3DDF00B00626 /* libportaudio.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libportaudio.a; path = /opt/local/lib/libportaudio.a; sourceTree = "<absolute>"; };
 		00C5805E109A3DDF00B00626 /* libzip.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libzip.a; path = /opt/local/lib/libzip.a; sourceTree = "<absolute>"; };
 		00C58072109A3E9D00B00626 /* libz.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libz.a; path = /opt/local/lib/libz.a; sourceTree = "<absolute>"; };
@@ -356,8 +358,6 @@
 		00D845790FFF0FD2005802F0 /* PreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferencesController.h; sourceTree = "<group>"; };
 		00D8457A0FFF0FD2005802F0 /* PreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferencesController.m; sourceTree = "<group>"; };
 		00D846280FFF23B7005802F0 /* PRSound.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PRSound.png; sourceTree = "<group>"; };
-		00E0B19A1132DE4D004DB96D /* SDLMain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDLMain.m; sourceTree = "<group>"; };
-		00E0B19B1132DE4D004DB96D /* SDLMain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDLMain.h; sourceTree = "<group>"; };
 		00E2A84D1053290200910B53 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = /usr/lib/libxml2.dylib; sourceTree = "<absolute>"; };
 		00E8A393108CCAA200D0A137 /* devices */ = {isa = PBXFileReference; lastKnownFileType = folder; path = devices; sourceTree = "<group>"; };
 		00EF028B107D9EFB00FE378D /* VerticallyCenteredCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VerticallyCenteredCell.h; sourceTree = "<group>"; };
@@ -509,25 +509,6 @@
 			path = CPU;
 			sourceTree = "<group>";
 		};
-		0055C1EC1123AC0500D4CFFC /* oecli */ = {
-			isa = PBXGroup;
-			children = (
-				0074ED4211EF64430005A4E8 /* OEGL.cpp */,
-				0074ED4311EF64430005A4E8 /* OEGL.h */,
-				0074ED4411EF64430005A4E8 /* OEHID.cpp */,
-				0074ED4511EF64430005A4E8 /* OEHID.h */,
-				0074ED4611EF64430005A4E8 /* OEPA.cpp */,
-				0074ED4711EF64430005A4E8 /* OEPA.h */,
-				0054E1FF1131B7D6006D32D9 /* main.cpp */,
-				00E0B19B1132DE4D004DB96D /* SDLMain.h */,
-				00E0B19A1132DE4D004DB96D /* SDLMain.m */,
-				0080FB4F11F0DE88004D91A3 /* OEPAEmulation.h */,
-				0080FB5011F0DE88004D91A3 /* OEPAEmulation.cpp */,
-			);
-			name = oecli;
-			path = cli;
-			sourceTree = "<group>";
-		};
 		006EEC9A0FCA5BEA003D2C8D /* libemulation */ = {
 			isa = PBXGroup;
 			children = (
@@ -604,6 +585,31 @@
 			path = Common;
 			sourceTree = "<group>";
 		};
+		00C3CF8C11F557A000EA2453 /* SDL */ = {
+			isa = PBXGroup;
+			children = (
+				00C3CF8D11F557A000EA2453 /* main.cpp */,
+				00C3CF8E11F557A000EA2453 /* SDLMain.h */,
+				00C3CF8F11F557A000EA2453 /* SDLMain.m */,
+			);
+			path = SDL;
+			sourceTree = "<group>";
+		};
+		00C3CF9211F557AC00EA2453 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				00C3CF9311F557AC00EA2453 /* OEGL.cpp */,
+				00C3CF9411F557AC00EA2453 /* OEGL.h */,
+				00C3CF9511F557AC00EA2453 /* OEHID.cpp */,
+				00C3CF9611F557AC00EA2453 /* OEHID.h */,
+				00C3CF9711F557AC00EA2453 /* OEPA.cpp */,
+				00C3CF9811F557AC00EA2453 /* OEPA.h */,
+				00C3CF9911F557AC00EA2453 /* OEPAEmulation.cpp */,
+				00C3CF9A11F557AC00EA2453 /* OEPAEmulation.h */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
 		00FF25C4115C365800C82CA0 /* libcomposite */ = {
 			isa = PBXGroup;
 			children = (
@@ -634,7 +640,8 @@
 			isa = PBXGroup;
 			children = (
 				000A78A50FBA464600A0F12E /* OpenEmulator */,
-				0055C1EC1123AC0500D4CFFC /* oecli */,
+				00C3CF8C11F557A000EA2453 /* SDL */,
+				00C3CF9211F557AC00EA2453 /* src */,
 				006EEC9A0FCA5BEA003D2C8D /* libemulation */,
 				00FF25C4115C365800C82CA0 /* libcomposite */,
 				2A37F4C3FDCFA73011CA2CEA /* Frameworks */,
@@ -928,12 +935,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0054E2FE1131BA67006D32D9 /* main.cpp in Sources */,
-				00E0B19C1132DE4D004DB96D /* SDLMain.m in Sources */,
-				00F500BA11F1823800CCA0C5 /* OEGL.cpp in Sources */,
-				00F500BB11F1823900CCA0C5 /* OEHID.cpp in Sources */,
-				00F500BC11F1823900CCA0C5 /* OEPA.cpp in Sources */,
-				00F500BD11F1823B00CCA0C5 /* OEPAEmulation.cpp in Sources */,
+				00C3CF9011F557A000EA2453 /* main.cpp in Sources */,
+				00C3CF9111F557A000EA2453 /* SDLMain.m in Sources */,
+				00C3CF9B11F557AC00EA2453 /* OEGL.cpp in Sources */,
+				00C3CF9C11F557AC00EA2453 /* OEHID.cpp in Sources */,
+				00C3CF9D11F557AC00EA2453 /* OEPA.cpp in Sources */,
+				00C3CF9E11F557AC00EA2453 /* OEPAEmulation.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1002,10 +1009,10 @@
 				0041614011E82D7300986586 /* DocumentView.mm in Sources */,
 				00A1F31A11EAEBE4001511D0 /* TabletController.m in Sources */,
 				0077069B11EB638500535F6D /* DocumentWindow.m in Sources */,
-				0074ED4811EF64430005A4E8 /* OEGL.cpp in Sources */,
-				0074ED4911EF64430005A4E8 /* OEHID.cpp in Sources */,
-				0074ED4A11EF64430005A4E8 /* OEPA.cpp in Sources */,
-				0080FB5111F0DE88004D91A3 /* OEPAEmulation.cpp in Sources */,
+				00C3D0D711F5584900EA2453 /* OEGL.cpp in Sources */,
+				00C3D0D811F5584A00EA2453 /* OEHID.cpp in Sources */,
+				00C3D0D911F5584B00EA2453 /* OEPA.cpp in Sources */,
+				00C3D0DA11F5584C00EA2453 /* OEPAEmulation.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

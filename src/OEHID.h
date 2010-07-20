@@ -19,13 +19,14 @@
 #define OEHID_JOYSTICKAXIS_NUM		16
 #define OEHID_TABLETBUTTON_NUM		8
 
-typedef void (*OEHIDSetCapture)(void *userData, bool value);
+typedef void (*OEHIDCallback)(void *userData, int value);
 
 class OEHID
 {
 public:
 	OEHID(OEPAEmulation *emulation,
-		  OEHIDSetCapture setCapture);
+		  OEHIDCallback setMouseCapture,
+		  OEHIDCallback setKeyboardLEDs);
 	~OEHID();
 	
 	void sendSystemEvent(int usageId);
@@ -48,7 +49,8 @@ public:
 	
 private:
 	OEPAEmulation *emulation;
-	OEHIDSetCapture setCapture;
+	OEHIDCallback setMouseCapture;
+	OEHIDCallback setKeyboardLEDs;
 	
 	int keyDownCount;
 	bool keyDown[OEHID_KEY_NUM];

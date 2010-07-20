@@ -13,9 +13,10 @@
 #import "DocumentWindowController.h"
 
 #import "OEInfo.h"
-#import "Host.h"
 
 #import "OEPAEmulation.h"
+#import "OEGL.h"
+#import "OEHID.h"
 
 @implementation Document
 
@@ -24,6 +25,8 @@
 	if (self = [super init])
 	{
 		emulation = nil;
+		oegl = nil;
+		oehid = nil;
 		
 		image = nil;
 		label = nil;
@@ -313,6 +316,8 @@
 			
 			[self updateDevices];
 			
+			oegl = new OEGL(
+			
 			return YES;
 		}
 		
@@ -396,9 +401,14 @@
 		[[NSAlert alertWithError:error] runModal];
 }
 
-- (void *)emulation
+- (void *)oegl
 {
-	return emulation;
+	return oegl;
+}
+
+- (void *)oehid
+{
+	return oehid;
 }
 
 - (void)addDevices:(NSString *)path

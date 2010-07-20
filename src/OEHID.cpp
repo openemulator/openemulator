@@ -14,10 +14,12 @@
 #include "Host.h"
 
 OEHID::OEHID(OEPAEmulation *emulation,
-			 OEHIDSetCapture setCapture)
+			 OEHIDCallback setMouseCapture,
+			 OEHIDCallback setKeyboardLEDs)
 {
 	this->emulation = emulation;
-	this->setCapture = setCapture;
+	this->setMouseCapture = setMouseCapture;
+	this->setKeyboardLEDs = setKeyboardLEDs;
 	
 	keyDownCount = 0;
 	memset(keyDown, sizeof(keyDown), 0);
@@ -68,7 +70,7 @@ void OEHID::setKey(int usageId, bool value)
 	{
 		mouseCaptureRelease = false;
 		mouseCaptured = false;
-		setCapture(emulation, false);
+		setMouseCapture(emulation, false);
 	}
 }
 
@@ -98,7 +100,7 @@ void OEHID::setMouseButton(int index, bool value)
 	else if (!mouseCaptured && (index == 0))
 	{
 		mouseCaptured = true;
-		setCapture(emulation, true);
+		setMouseCapture(emulation, true);
 	}
 	else
 		send(HOST_HID_POINTER_EVENT,

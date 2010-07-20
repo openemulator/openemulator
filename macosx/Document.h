@@ -13,10 +13,14 @@
 #define TEMPLATE_FOLDER @"~/Library/Application Support/Open Emulator/Templates"
 
 typedef struct OEPAEmulation OEPAEmulation;
+typedef struct OEGL OEGL;
+typedef struct OEHID OEHID;
 
 @interface Document : NSDocument
 {
 	OEPAEmulation *emulation;
+	OEGL *oegl;
+	OEHID *oehid;
 	
 	NSImage *image;
 	NSString *label;
@@ -34,7 +38,8 @@ typedef struct OEPAEmulation OEPAEmulation;
 - (id) initWithTemplateURL:(NSURL *) templateURL error:(NSError **) outError;
 - (IBAction) saveDocumentAsTemplate:(id) sender;
 
-- (void *)emulation;
+- (void *)oehid;
+- (void *)oegl;
 
 - (void) addDevices:(NSString *) path connections:(NSDictionary *) connections;
 - (void) removeDevice:(NSDictionary *) dict;

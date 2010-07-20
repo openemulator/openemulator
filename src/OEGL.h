@@ -24,17 +24,19 @@ enum
 	OEGL_TEX_NUM,
 };
 
+typedef void (*OEGLCallback)(void *userData, int value);
+
 class OEGL
 {
 public:
-	OEGL();
+	OEGL(OEGLCallback updateScreens);
 	~OEGL();
 	
 	void update(HostVideoScreens *screens);
 	void draw(int width, int height);
 	
-	private:
-		GLuint texture[OEGL_TEX_NUM];
+private:
+	GLuint texture[OEGL_TEX_NUM];
 };
 
 #endif
