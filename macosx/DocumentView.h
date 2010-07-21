@@ -16,9 +16,12 @@
 
 @interface DocumentView : NSOpenGLView
 {
-	CVDisplayLinkRef displayLink;
+	IBOutlet id fDocumentWindowController;
+	
 	void *oegl;
 	void *oehid;
+	
+	CVDisplayLinkRef displayLink;
 	
 	int keyMap[DOCUMENT_KEYMAP_SIZE];
 	int keyModifierFlags;

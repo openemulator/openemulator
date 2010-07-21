@@ -72,7 +72,10 @@ int Host::ioctl(int message, void *data)
 {
 	switch(message)
 	{
-		case HOST_REGISTER_VIDEO:
+		case HOST_REGISTER_SCREENS_UPDATE:
+			break;
+			
+		case HOST_REGISTER_KEYBOARD_LEDS_UPDATE:
 			break;
 			
 		case HOST_ADD_SCREEN:

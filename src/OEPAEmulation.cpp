@@ -1,39 +1,47 @@
-/*
- *  OEPAEmulation.cpp
- *  OpenEmulator
+
+/**
+ * OpenEmulator
+ * OEPA Emulation interface
+ * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
+ * Released under the GPL
  *
- *  Created by Marc S. Ressl on 7/16/10.
- *  Copyright 2010 __MyCompanyName__. All rights reserved.
- *
+ * OEPA Emulation interface.
  */
 
+#include "OEPAEmulation.h"
 #include "OEPA.h"
 
-OEPAEmulation::OEPAEmulation(OEPA *oepa, string path, string resourcePath) :
-OEEmulation(path, resourcePath), oepa(oepa)
+OEPAEmulation::OEPAEmulation(OEPA *oepa,
+							 string path, string resourcePath) :
+OEEmulation(path, resourcePath)
 {
-	oepa->addEmulation(this);
+	this->oepa = oepa;
 }
 
-OEPAEmulation::~OEPAEmulation()
+void OEPAEmulation::lock()
 {
-	oepa->removeEmulation(this);
+	((OEPA *)oepa)->lockProcess();
+}
+
+void OEPAEmulation::unlock()
+{
+	((OEPA *)oepa)->unlockProcess();
 }
 
 bool OEPAEmulation::save(string path)
 {
-	oepa->lockProcess();
+	lock();
 	
 	bool status = OEEmulation::save(path);
 	
-	oepa->unlockProcess();
+	unlock();
 	
 	return status;
 }
 
 bool OEPAEmulation::setProperty(string ref, string name, string value)
 {
-	oepa->lockProcess();
+	lock();
 	
 	OEComponent *component = getComponent(ref);
 	bool status;
@@ -46,14 +54,14 @@ bool OEPAEmulation::setProperty(string ref, string name, string value)
 				" (ref not found)");
 	}
 	
-	oepa->unlockProcess();
+	unlock();
 	
 	return status;
 }
 
 bool OEPAEmulation::getProperty(string ref, string name, string &value)
 {
-	oepa->lockProcess();
+	lock();
 	
 	OEComponent *component = getComponent(ref);
 	bool status;
@@ -66,14 +74,14 @@ bool OEPAEmulation::getProperty(string ref, string name, string &value)
 				" (ref not found)");
 	}
 	
-	oepa->unlockProcess();
+	unlock();
 	
 	return status;
 }
 
 void OEPAEmulation::postNotification(string ref, int notification, void *data)
 {
-	oepa->lockProcess();
+	lock();
 	
 	OEComponent *component = getComponent(ref);
 	if (component)
@@ -84,12 +92,12 @@ void OEPAEmulation::postNotification(string ref, int notification, void *data)
 				" (ref not found)");
 	}
 	
-	oepa->unlockProcess();
+	unlock();
 }
 
 int OEPAEmulation::ioctl(string ref, int message, void *data)
 {
-	oepa->lockProcess();
+	lock();
 	
 	OEComponent *component = getComponent(ref);
 	int status = 0;
@@ -101,40 +109,40 @@ int OEPAEmulation::ioctl(string ref, int message, void *data)
 				" (ref not found)");
 	}
 	
-	oepa->unlockProcess();
+	unlock();
 	
 	return status;
 }
 
 bool OEPAEmulation::addDevices(string path, OEStringRefMap connections)
 {
-	oepa->lockProcess();
+	lock();
 	
 	bool status = OEEmulation::addDevices(path, connections);
 	
-	oepa->unlockProcess();
+	unlock();
 	
 	return status;
 }
 
 bool OEPAEmulation::isDeviceTerminal(OERef ref)
 {
-	oepa->lockProcess();
+	lock();
 	
 	bool status = OEEmulation::isDeviceTerminal(ref);
 	
-	oepa->unlockProcess();
+	unlock();
 	
 	return status;
 }
 
 bool OEPAEmulation::removeDevice(OERef ref)
 {
-	oepa->lockProcess();
+	lock();
 	
 	bool status = OEEmulation::removeDevice(ref);
 	
-	oepa->unlockProcess();
+	unlock();
 	
 	return status;
 }

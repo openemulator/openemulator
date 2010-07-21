@@ -14,8 +14,6 @@
 
 @interface DocumentWindowController : NSWindowController
 {
-	IBOutlet id fDocumentView;
-	
 	Document *document;
 	
 	BOOL fullscreen;

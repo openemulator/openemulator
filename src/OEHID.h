@@ -1,16 +1,17 @@
 
 /**
  * OpenEmulator
- * OpenEmulator/HID interface
+ * OpenEmulator HID interface
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * OpenEmulator/HID interface.
+ * OpenEmulator HID interface.
  */
 
-#include "OEEmulation.h"
+#ifndef _OEHID_H
+#define _OEHID_H
 
-#include "oepa.h"
+#include "OEPAEmulation.h"
 
 #define OEHID_KEY_NUM				256
 #define OEHID_MOUSEBUTTON_NUM		8
@@ -27,7 +28,6 @@ public:
 	OEHID(OEPAEmulation *emulation,
 		  OEHIDCallback setMouseCapture,
 		  OEHIDCallback setKeyboardLEDs);
-	~OEHID();
 	
 	void sendSystemEvent(int usageId);
 	void setKey(int usageId, bool value);
@@ -49,6 +49,7 @@ public:
 	
 private:
 	OEPAEmulation *emulation;
+	
 	OEHIDCallback setMouseCapture;
 	OEHIDCallback setKeyboardLEDs;
 	
@@ -63,3 +64,5 @@ private:
 	
 	void send(int notification, int usageId, float value);
 };
+
+#endif

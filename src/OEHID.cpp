@@ -1,15 +1,14 @@
 
 /**
  * OpenEmulator
- * OpenEmulator/HID interface
+ * OpenEmulator HID interface
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * OpenEmulator/HID interface.
+ * OpenEmulator HID interface.
  */
 
-#include "oehid.h"
-#include "oepa.h"
+#include "OEHID.h"
 
 #include "Host.h"
 
@@ -28,17 +27,14 @@ OEHID::OEHID(OEPAEmulation *emulation,
 	memset(tabletButtonDown, sizeof(tabletButtonDown), 0);
 }
 
-OEHID::~OEHID()
-{
-}
-
 void OEHID::send(int notification, int usageId, float value)
 {
 	HostHIDEvent hidEvent;
 	hidEvent.usageId = usageId;
 	hidEvent.value = value;
 	
-	emulation->postNotification(HOST_DEVICE, notification, &hidEvent);
+	if (emulation)
+		emulation->postNotification(HOST_DEVICE, notification, &hidEvent);
 	
 	printf("%d %d %f\n", notification, usageId, value);
 }

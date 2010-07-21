@@ -329,6 +329,8 @@ bool OEEmulation::validateDML(xmlDocPtr doc)
 bool OEEmulation::constructDML(xmlDocPtr doc)
 {
 	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+	if (!rootNode)
+		return false;
 	for(xmlNodePtr childNode = rootNode->children;
 		childNode;
 		childNode = childNode->next)
@@ -346,6 +348,9 @@ bool OEEmulation::constructDML(xmlDocPtr doc)
 bool OEEmulation::initDML(xmlDocPtr doc)
 {
 	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+	if (!rootNode)
+		return false;
+	
 	for(xmlNodePtr childNode = rootNode->children;
 		childNode;
 		childNode = childNode->next)
@@ -363,6 +368,9 @@ bool OEEmulation::initDML(xmlDocPtr doc)
 bool OEEmulation::connectDML(xmlDocPtr doc)
 {
 	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+	if (!rootNode)
+		return false;
+	
 	for(xmlNodePtr childNode = rootNode->children;
 		childNode;
 		childNode = childNode->next)
@@ -380,6 +388,9 @@ bool OEEmulation::connectDML(xmlDocPtr doc)
 bool OEEmulation::updateDML(xmlDocPtr doc)
 {
 	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+	if (!rootNode)
+		return false;
+	
 	for(xmlNodePtr childNode = rootNode->children;
 		childNode;
 		childNode = childNode->next)
@@ -396,6 +407,9 @@ bool OEEmulation::updateDML(xmlDocPtr doc)
 void OEEmulation::destroyDML(xmlDocPtr doc)
 {
 	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+	if (!rootNode)
+		return;
+	
 	for(xmlNodePtr childNode = rootNode->children;
 		childNode;
 		childNode = childNode->next)

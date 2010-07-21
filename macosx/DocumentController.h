@@ -10,13 +10,11 @@
 
 #import <Cocoa/Cocoa.h>
 
-typedef struct OEPA OEPA;
-
 @interface DocumentController : NSDocumentController {
 	IBOutlet id fTemplateChooserController;
 	IBOutlet id fInspectorController;
 	
-	OEPA *oepa;
+	void *oepa;
 	
 	NSArray *diskImageFileTypes;
 	NSArray *audioFileTypes;
@@ -27,6 +25,8 @@ typedef struct OEPA OEPA;
 	int disableMenuBarCount;
 }
 
+- (void *)oepa;
+
 - (IBAction)newDocumentFromTemplateChooser:(id)sender;
 - (id)openUntitledDocumentWithTemplateURL:(NSURL *)absoluteURL
 								  display:(BOOL)displayDocument
@@ -34,7 +34,8 @@ typedef struct OEPA OEPA;
 - (id)makeUntitledDocumentWithTemplateURL:(NSURL *)absoluteURL
 									error:(NSError **)outError;
 
-- (void *)constructEmulation:(NSURL *)url;
+- (BOOL)addEmulation:(void *)emulation;
+- (void)removeEmulation:(void *)emulation;
 
 - (void)setPlayURL:(NSURL *)theURL;
 - (void)togglePlay;

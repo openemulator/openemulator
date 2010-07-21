@@ -12,25 +12,25 @@
 
 #include "OEGL.h"
 
-inline OEGLPoint OEGLMakePoint(float x, float y)
+inline OEPoint OEMakePoint(float x, float y)
 {
-	OEGLPoint p;
+	OEPoint p;
 	p.x = x;
 	p.y = y;
 	return p;
 }
 
-inline OEGLSize OEGLMakeSize(float w, float h)
+inline OESize OEMakeSize(float w, float h)
 {
-	OEGLSize s;
+	OESize s;
 	s.width = w;
 	s.height = h;
 	return s;
 }
 
-inline OEGLRect OEGLMakeRect(float x, float y, float w, float h)
+inline OERect OEMakeRect(float x, float y, float w, float h)
 {
-	OEGLRect r;
+	OERect r;
 	r.origin.x = x;
 	r.origin.y = y;
 	r.size.width = w;
@@ -38,27 +38,27 @@ inline OEGLRect OEGLMakeRect(float x, float y, float w, float h)
 	return r;
 }
 
-inline float OEGLRatio(OEGLSize s)
+inline float OERatio(OESize s)
 {
 	return s.width ? (s.width / s.height) : 1.0F;
 }
 
-inline float OEGLMinX(OEGLRect r)
+inline float OEMinX(OERect r)
 {
 	return r.origin.x;
 }
 
-inline float OEGLMaxX(OEGLRect r)
+inline float OEMaxX(OERect r)
 {
 	return r.origin.x + r.size.width;
 }
 
-inline float OEGLMinY(OEGLRect r)
+inline float OEMinY(OERect r)
 {
 	return r.origin.y;
 }
 
-inline float OEGLMaxY(OEGLRect r)
+inline float OEMaxY(OERect r)
 {
 	return r.origin.y + r.size.height;
 }
@@ -82,11 +82,11 @@ OEGL::OEGL()
 	
 	pthread_mutex_init(&glMutex, NULL);
 	
-	windowSize = OEGLMakeSize(0, 0);
+	windowSize = OEMakeSize(0, 0);
 	
 	columnNum = 1;
 	rowNum = 1;
-	cellSize = OEGLMakeSize(0, 0);
+	cellSize = OEMakeSize(0, 0);
 }
 
 OEGL::~OEGL()
@@ -117,8 +117,8 @@ void OEGL::draw(int width, int height)
 	
 	if ((width != windowSize.width) || (height != windowSize.height))
 	{
-		windowSize = OEGLMakeSize(width, height);
-		windowAspectRatio = OEGLRatio(windowSize);
+		windowSize = OEMakeSize(width, height);
+		windowAspectRatio = OERatio(windowSize);
 		windowRedraw = true;
 	}
 	
@@ -139,23 +139,23 @@ void OEGL::draw(int width, int height)
 	pthread_mutex_unlock(&glMutex);
 }
 
-OEGLSize OEGL::getScreenSize(HostVideoConfiguration *conf)
+OESize OEGL::getScreenSize(HostVideoConfiguration *conf)
 {
-	return OEGLMakeSize(conf->paddingLeft +	conf->contentWidth +
-						conf->paddingRight,
-						conf->paddingTop + conf->contentHeight +
-						conf->paddingBottom);
+	return OEMakeSize(conf->paddingLeft +	conf->contentWidth +
+					  conf->paddingRight,
+					  conf->paddingTop + conf->contentHeight +
+					  conf->paddingBottom);
 }
 
 void OEGL::updateCellSize()
 {
-	cellSize = OEGLMakeSize(0, 0);
+	cellSize = OEMakeSize(0, 0);
 	
 	for (HostVideoScreens::iterator i = screens.begin();
 		 i != screens.end();
 		 i++)
 	{
-		OEGLSize size = getScreenSize(&(*i)->conf);
+		OESize size = getScreenSize(&(*i)->conf);
 		
 		if (size.width > cellSize.width)
 			cellSize.width = size.width;
@@ -183,14 +183,14 @@ void OEGL::drawScreen(HostVideoScreen *screen, int index)
 	int x = index % columnNum;
 	int y = index / columnNum;
 	
-	OEGLRect frame = OEGLMakeRect(2.0F * x / columnNum - 1.0F,
-								  2.0F * y / rowNum - 1.0F,
-								  2.0F / columnNum,
-								  2.0F / rowNum);
+	OERect frame = OEMakeRect(2.0F * x / columnNum - 1.0F,
+							  2.0F * y / rowNum - 1.0F,
+							  2.0F / columnNum,
+							  2.0F / rowNum);
 	
 	// Correct aspect ratio
-	OEGLSize screenSize = getScreenSize(conf);
-	float screenAspectRatio = OEGLRatio(screenSize);
+	OESize screenSize = getScreenSize(conf);
+	float screenAspectRatio = OERatio(screenSize);
 	
 	if (screenAspectRatio < windowAspectRatio)
 	{
@@ -214,14 +214,14 @@ void OEGL::drawScreen(HostVideoScreen *screen, int index)
 	frame.size.height *= conf->contentHeight / screenSize.height;
 	
 	// Draw
-	OEGLSize framebufferSize = OEGLMakeSize(conf->framebufferWidth,
-											conf->framebufferHeight);
+	OESize framebufferSize = OEMakeSize(conf->framebufferWidth,
+										conf->framebufferHeight);
 	OEUInt32 *framebuffer = screen->framebuffer[0];	
 	
 	renderScreen(framebuffer, framebufferSize, frame);
 }
 
-void OEGL::renderScreen(OEUInt32 *framebuffer, OEGLSize framebufferSize, OEGLRect frame)
+void OEGL::renderScreen(OEUInt32 *framebuffer, OESize framebufferSize, OERect frame)
 {
 	// Upload texture
 	glBindTexture(GL_TEXTURE_RECTANGLE_EXT, texture[OEGL_TEX_FRAME]);
@@ -232,12 +232,12 @@ void OEGL::renderScreen(OEUInt32 *framebuffer, OEGLSize framebufferSize, OEGLRec
 	// Render quad
 	glBegin(GL_QUADS);
 	glTexCoord2f(0, 0);
-	glVertex2f(OEGLMinX(frame), OEGLMaxY(frame));
+	glVertex2f(OEMinX(frame), OEMaxY(frame));
 	glTexCoord2f(framebufferSize.width, 0);
-	glVertex2f(OEGLMaxX(frame), OEGLMaxY(frame));
+	glVertex2f(OEMaxX(frame), OEMaxY(frame));
 	glTexCoord2f(framebufferSize.width, framebufferSize.height);
-	glVertex2f(OEGLMaxX(frame), OEGLMinY(frame));
+	glVertex2f(OEMaxX(frame), OEMinY(frame));
 	glTexCoord2f(0, framebufferSize.height);
-	glVertex2f(OEGLMinX(frame), OEGLMinY(frame));
+	glVertex2f(OEMinX(frame), OEMinY(frame));
 	glEnd();
 }

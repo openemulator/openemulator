@@ -76,9 +76,14 @@
 	[diskImageFileTypes release];
 	[audioFileTypes release];
 	
-	delete oepa;
+	delete (OEPA *)oepa;
 	
 	[super dealloc];
+}
+
+- (void *)oepa
+{
+	return oepa;
 }
 
 - (void)applicationWillFinishLaunching:(NSNotification *)notification
@@ -94,11 +99,11 @@
 	if (![defaults valueForKey:@"OEVolume"])
 		[defaults setFloat:1.0 forKey:@"OEVolume"];
 	
-	oepa->setFullDuplex([defaults boolForKey:@"OEFullDuplex"]);
-	oepa->setPlayThrough([defaults floatForKey:@"OEPlayThrough"]);
-	oepa->setVolume([defaults floatForKey:@"OEVolume"]);
+	((OEPA *)oepa)->setFullDuplex([defaults boolForKey:@"OEFullDuplex"]);
+	((OEPA *)oepa)->setPlayThrough([defaults floatForKey:@"OEPlayThrough"]);
+	((OEPA *)oepa)->setVolume([defaults floatForKey:@"OEVolume"]);
 	
-	oepa->open();
+	((OEPA *)oepa)->open();
 	
 	[defaults addObserver:self
 			   forKeyPath:@"OEFullDuplex"
@@ -169,7 +174,7 @@
 
 - (void)applicationWillTerminate:(NSNotification *)notification
 {
-	oepa->close();
+	((OEPA *)oepa)->close();
 	
 	[fInspectorController storeWindowState:self];
 }
@@ -183,19 +188,19 @@
 	{
 		id object = [change objectForKey:NSKeyValueChangeNewKey];
 		int value = [object intValue];
-		oepa->setFullDuplex(value);
+		((OEPA *)oepa)->setFullDuplex(value);
 	}
 	else if ([keyPath isEqualToString:@"OEPlayThrough"])
 	{
 		id object = [change objectForKey:NSKeyValueChangeNewKey];
 		int value = [object intValue];
-		oepa->setPlayThrough(value);
+		((OEPA *)oepa)->setPlayThrough(value);
 	}
 	else if ([keyPath isEqualToString:@"OEVolume"])
 	{
 		id object = [change objectForKey:NSKeyValueChangeNewKey];
 		float value = [object floatValue];
-		oepa->setVolume(value);
+		((OEPA *)oepa)->setVolume(value);
 	}
 }
 
@@ -279,6 +284,7 @@
 	if (document)
 	{
 		[self addDocument:document];
+		
 		if (displayDocument)
 		{
 			[document makeWindowControllers];
@@ -300,14 +306,14 @@
 	return nil;
 }
 
-- (void *)constructEmulation:(NSURL *)url
+- (BOOL)addEmulation:(void *)emulation
 {
-	string path = string([[url path] UTF8String]);
-	string resourcePath = string([[[NSBundle mainBundle] resourcePath] UTF8String]);
-	
-	OEPAEmulation *emulation = new OEPAEmulation(oepa, path, resourcePath);
-	
-	return emulation;
+	return ((OEPA *)oepa)->addEmulation((OEPAEmulation *)emulation);
+}
+
+- (void)removeEmulation:(void *)emulation
+{
+	((OEPA *)oepa)->removeEmulation((OEPAEmulation *)emulation);
 }
 
 - (void)setPlayURL:(NSURL *)theURL
@@ -317,30 +323,30 @@
 	
 	audioPlayURL = [theURL copy];
 	if (audioPlayURL)
-		oepa->startPlaying([[audioPlayURL path] UTF8String]);
+		((OEPA *)oepa)->startPlaying([[audioPlayURL path] UTF8String]);
 }
 
 - (void)togglePlay
 {
-	if (!oepa->isPlaying())
-		oepa->startPlaying([[audioPlayURL path] UTF8String]);
+	if (!((OEPA *)oepa)->isPlaying())
+		((OEPA *)oepa)->startPlaying([[audioPlayURL path] UTF8String]);
 	else
-		oepa->stopPlaying();
+		((OEPA *)oepa)->stopPlaying();
 }
 
 - (BOOL)playing
 {
-	return oepa->isPlaying();
+	return ((OEPA *)oepa)->isPlaying();
 }
 
 - (float)playTime
 {
-	return oepa->getPlayTime();
+	return ((OEPA *)oepa)->getPlayTime();
 }
 
 - (float)playDuration
 {
-	return oepa->getPlayDuration();
+	return ((OEPA *)oepa)->getPlayDuration();
 }
 
 - (NSURL *)playURL
@@ -353,16 +359,16 @@
 
 - (void)toggleRecording
 {
-	if (!oepa->isRecording())
+	if (!((OEPA *)oepa)->isRecording())
 	{
 		NSString *thePath = [NSTemporaryDirectory()
 							 stringByAppendingPathComponent:@"oerecording"];
 		audioRecordingURL = [[NSURL alloc] initFileURLWithPath:thePath];
 		
-		oepa->startRecording([[audioRecordingURL path] UTF8String]);
+		((OEPA *)oepa)->startRecording([[audioRecordingURL path] UTF8String]);
 	}
 	else
-		oepa->stopRecording();
+		((OEPA *)oepa)->stopRecording();
 }
 
 - (void)saveRecordingAs:(NSURL *)theURL
@@ -384,17 +390,17 @@
 
 - (BOOL)recording
 {
-	return oepa->isRecording();
+	return ((OEPA *)oepa)->isRecording();
 }
 
 - (float)recordingTime
 {
-	return oepa->getRecordingTime();
+	return ((OEPA *)oepa)->getRecordingTime();
 }
 
 - (long long)recordingSize
 {
-	return oepa->getRecordingSize();
+	return ((OEPA *)oepa)->getRecordingSize();
 }
 
 - (NSURL *)recordingURL

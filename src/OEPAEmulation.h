@@ -1,11 +1,11 @@
 
 /**
  * OpenEmulator
- * OEEmulation portaudio class
+ * OEPA Emulation interface
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * OEEmulation OEPA enhanced interface.
+ * OEPA Emulation interface.
  */
 
 #ifndef _OEPAEMULATION_H
@@ -13,13 +13,12 @@
 
 #include "OEEmulation.h"
 
-typedef struct OEPA;
+class OEPA;
 
 class OEPAEmulation : public OEEmulation
 {
 public:
 	OEPAEmulation(OEPA *oepa, string path, string resourcePath);
-	~OEPAEmulation();
 	
 	bool save(string path);
 	
@@ -33,7 +32,10 @@ public:
 	bool removeDevice(OERef ref);
 	
 private:
-	OEPA *oepa;
+	void *oepa;
+	
+	void lock();
+	void unlock();
 };
 
 #endif

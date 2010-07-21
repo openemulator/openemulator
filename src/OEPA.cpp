@@ -1,17 +1,17 @@
 
 /**
  * OpenEmulator
- * OpenEmulator/portaudio interface
+ * OpenEmulator portaudio interface
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * OpenEmulator/portaudio interface.
+ * OpenEmulator portaudio interface.
  */
 
 #include <math.h>
 #include <iostream>
 
-#include "oepa.h"
+#include "OEPA.h"
 
 #include "Host.h"
 

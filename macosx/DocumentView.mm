@@ -14,8 +14,6 @@
 #import "OEGL.h"
 #import "OEHID.h"
 
-#import "Host.h"
-
 #define COCOA_LCTRL				(1 << 0)
 #define COCOA_LSHIFT			(1 << 1)
 #define COCOA_LALT				(1 << 3)
@@ -151,12 +149,16 @@ DocumentKeyMapInverseEntry documentKeyMapInverse[] =
 
 @implementation DocumentView
 
-static void setCapture(void *userData, bool value)
+static void setCapture(void *userData, int value)
 {
 	if (value)
 		CGDisplayHideCursor(kCGDirectMainDisplay);
 	else
 		CGDisplayShowCursor(kCGDirectMainDisplay);
+}
+
+static void setKeyboardLEDs(void *userData, int value)
+{
 }
 
 - (id)initWithFrame:(NSRect)rect
@@ -185,10 +187,11 @@ static void setCapture(void *userData, bool value)
 	[pixelFormat autorelease];
 	if (self = [super initWithFrame:rect pixelFormat:pixelFormat])
 	{
-		Document *document = [[[self window] windowController] document];
+		Document *document = [fDocumentWindowController document];
+		OEPAEmulation *emulation = (OEPAEmulation *)[document emulation];
 		
 		oegl = new OEGL();
-		oehid = new OEHID((OEPAEmulation *)[document emulation], setCapture);
+		oehid = new OEHID(emulation, setCapture, setKeyboardLEDs);
 		
 		memset(keyMap, sizeof(keyMap), 0);
 		for (int i = 0;
@@ -208,12 +211,10 @@ static void setCapture(void *userData, bool value)
 
 - (void)dealloc
 {
-    CVDisplayLinkRelease(displayLink);
+	delete (OEHID *)oehid;
+	delete (OEGL *)oegl;
 	
-	if (oehid)
-		delete (OEHID *)oehid;
-	if (oegl)
-		delete (OEGL *)oegl;
+    CVDisplayLinkRelease(displayLink);
 	
 	[super dealloc];
 }

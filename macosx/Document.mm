@@ -13,10 +13,8 @@
 #import "DocumentWindowController.h"
 
 #import "OEInfo.h"
-
 #import "OEPAEmulation.h"
-#import "OEGL.h"
-#import "OEHID.h"
+#import "Host.h"
 
 @implementation Document
 
@@ -25,8 +23,6 @@
 	if (self = [super init])
 	{
 		emulation = nil;
-		oegl = nil;
-		oehid = nil;
 		
 		image = nil;
 		label = nil;
@@ -63,15 +59,45 @@
 
 - (void)dealloc
 {
-	[super dealloc];
-	
-	delete emulation;
+	[self deleteEmulation];
 	
 	[freeInlets release];
 	
 	[expansions release];
 	[storage release];
 	[peripherals release];
+	
+	[super dealloc];
+}
+
+- (void)constructEmulation:(NSURL *)url
+{
+	DocumentController *documentController;
+	documentController = [NSDocumentController sharedDocumentController];
+	
+	OEPA *oepa = (OEPA *)[documentController oepa];
+	string path = string([[url path] UTF8String]);
+	string resourcePath = string([[[NSBundle mainBundle] resourcePath] UTF8String]);
+	
+	emulation = new OEPAEmulation(oepa, path, resourcePath);
+	
+	[documentController addEmulation:emulation];
+}
+
+- (void)deleteEmulation
+{
+	DocumentController *documentController;
+	documentController = [NSDocumentController sharedDocumentController];
+	[documentController removeEmulation:emulation];
+	
+	delete (OEPAEmulation *)emulation;
+	
+	emulation = nil;
+}
+
+- (void *)emulation
+{
+	return emulation;
 }
 
 - (NSString *)getDMLProperty:(NSString *)name
@@ -79,7 +105,7 @@
 	if (!emulation)
 		return nil;
 	
-	xmlDocPtr dml = emulation->getDML();
+	xmlDocPtr dml = ((OEPAEmulation *)emulation)->getDML();
 	
 	xmlNodePtr rootNode = xmlDocGetRootElement(dml);
 	
@@ -96,9 +122,9 @@
 	if (!emulation)
 		return false;
 	
-	return emulation->setProperty(HOST_DEVICE,
-								  string([name UTF8String]),
-								  string([value UTF8String]));
+	return ((OEPAEmulation *)emulation)->setProperty(HOST_DEVICE,
+													 string([name UTF8String]),
+													 string([value UTF8String]));
 }
 
 - (NSString *)getHostProperty:(NSString *)name
@@ -107,12 +133,22 @@
 		return nil;
 	
 	string value;
-	if (emulation->getProperty(HOST_DEVICE,
-							   string([name UTF8String]),
-							   value))
+	if (((OEPAEmulation *)emulation)->getProperty(HOST_DEVICE,
+												  string([name UTF8String]),
+												  value))
 		return [NSString stringWithUTF8String:value.c_str()];
 	
 	return @"";
+}
+
+- (void)postHostNotification:(int)notification data:(void *)data
+{
+	((OEPAEmulation *)emulation)->postNotification(HOST_DEVICE, notification, data);
+}
+
+- (int)hostIoctl:(int)message data:(void *)data
+{
+	return ((OEPAEmulation *)emulation)->ioctl(HOST_DEVICE, message, data);
 }
 
 - (NSImage *)getResourceImage:(NSString *)imagePath
@@ -147,7 +183,7 @@
 	NSMutableAttributedString *aString;
 	aString = [[[NSMutableAttributedString alloc] initWithString:deviceLabel
 													  attributes:deviceLabelAttrs]
-						autorelease];
+			   autorelease];
 	
 	NSDictionary *informativeTextAttrs = [NSDictionary dictionaryWithObjectsAndKeys:
 										  [NSFont messageFontOfSize:9.0f],
@@ -159,7 +195,8 @@
 										  nil];
 	NSAttributedString *aInformativeText;
 	aInformativeText = [[[NSAttributedString alloc] initWithString:informativeText
-						 attributes:informativeTextAttrs] autorelease];
+														attributes:informativeTextAttrs]
+						autorelease];
 	[aString appendAttributedString:aInformativeText];
 	
 	return aString;
@@ -220,7 +257,7 @@
 		[self removeObjectFromPeripheralsAtIndex:0];
 	
 	// Process info
-	xmlDocPtr dmlDocPtr = emulation->getDML();
+	xmlDocPtr dmlDocPtr = ((OEPAEmulation *)emulation)->getDML();
 	OEInfo info(dmlDocPtr);
 	if (!info.isLoaded())
 		return;
@@ -299,15 +336,12 @@
 			 ofType:(NSString *)typeName
 			  error:(NSError **)outError
 {
-	DocumentController *documentController;
-	documentController = [NSDocumentController sharedDocumentController];
-	
-	delete emulation;
-	emulation = (OEPAEmulation *) [documentController constructEmulation:absoluteURL];
+	[self deleteEmulation];
+	[self constructEmulation:absoluteURL];
 	
 	if (emulation)
 	{
-		if (emulation->isLoaded())
+		if (((OEPAEmulation *)emulation)->isLoaded())
 		{
 			[self setLabel:[self getDMLProperty:@"label"]];
 			[self setNotes:[self getHostProperty:@"notes"]];
@@ -316,13 +350,10 @@
 			
 			[self updateDevices];
 			
-			oegl = new OEGL(
-			
 			return YES;
 		}
 		
-		delete emulation;
-		emulation = NULL;
+		[self deleteEmulation];
 	}
 	
 	*outError = [NSError errorWithDomain:NSCocoaErrorDomain
@@ -341,7 +372,7 @@
 	{
 		[self setHostProperty:@"notes" value:[self notes]];
 		
-		if (emulation->save(string(emulationPath)))
+		if (((OEPAEmulation *)emulation)->save(string(emulationPath)))
 			return YES;
 	}
 	
@@ -401,16 +432,6 @@
 		[[NSAlert alertWithError:error] runModal];
 }
 
-- (void *)oegl
-{
-	return oegl;
-}
-
-- (void *)oehid
-{
-	return oehid;
-}
-
 - (void)addDevices:(NSString *)path
 	   connections:(NSDictionary *)connections
 {
@@ -430,7 +451,7 @@
 		connectionsMap[inletRefString] = outletRefString;
 	}
 	
-	if (!emulation->addDevices(pathString, connectionsMap))
+	if (!((OEPAEmulation *)emulation)->addDevices(pathString, connectionsMap))
 	{
 		NSString *messageText = @"The device could not be added.";
 		
@@ -439,7 +460,7 @@
 		[alert setAlertStyle:NSWarningAlertStyle];
 		[alert runModal];
 	}
-
+	
 	[self updateDevices];
 	[self updateChangeCount:NSChangeDone];
 }
@@ -451,7 +472,7 @@
 	
 	string refString = [deviceRef UTF8String];
 	
-	if (!emulation->isDeviceTerminal(refString))
+	if (!((OEPAEmulation *)emulation)->isDeviceTerminal(refString))
 	{
 		NSString *messageText = @"Do you want to remove the device \u201C%@\u201D?";
 		NSString *informativeText = @"There is one or more devices connected to it, "
@@ -468,7 +489,7 @@
 			return;
 	}
 	
-	if (!emulation->removeDevice(refString))
+	if (!((OEPAEmulation *)emulation)->removeDevice(refString))
 	{
 		NSString *messageText = @"The device could not be removed.";
 		
@@ -612,12 +633,12 @@
 
 - (BOOL)isCopyable
 {
-	return emulation->ioctl(HOST_DEVICE, HOST_IS_COPYABLE, NULL);
+	return [self hostIoctl:HOST_IS_COPYABLE data:NULL] ? YES : NO;
 }
 
 - (BOOL)isPasteable
 {
-	if (!emulation->ioctl(HOST_DEVICE, HOST_IS_PASTEABLE, NULL))
+	if (![self hostIoctl:HOST_IS_PASTEABLE data:NULL])
 		return NO;
 	
 	NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
@@ -641,8 +662,8 @@
 - (NSString *)documentText
 {
 	string characterString;
-	emulation->postNotification(HOST_DEVICE,
-								HOST_CLIPBOARD_COPY_EVENT, &characterString);
+	[self postHostNotification:HOST_CLIPBOARD_COPY_EVENT data:&characterString];
+
 	return [NSString stringWithUTF8String:characterString.c_str()];
 }
 
@@ -667,8 +688,7 @@
 		NSString *characters = [pasteboard stringForType:NSStringPboardType];
 		string characterString([characters UTF8String]);
 		
-		emulation->postNotification(HOST_DEVICE, 
-									HOST_CLIPBOARD_PASTE_EVENT, &characterString);
+		[self postHostNotification:HOST_CLIPBOARD_PASTE_EVENT data:&characterString];
 	}
 }
 

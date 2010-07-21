@@ -12,15 +12,9 @@
 
 #define TEMPLATE_FOLDER @"~/Library/Application Support/Open Emulator/Templates"
 
-typedef struct OEPAEmulation OEPAEmulation;
-typedef struct OEGL OEGL;
-typedef struct OEHID OEHID;
-
 @interface Document : NSDocument
 {
-	OEPAEmulation *emulation;
-	OEGL *oegl;
-	OEHID *oehid;
+	void *emulation;
 	
 	NSImage *image;
 	NSString *label;
@@ -35,38 +29,39 @@ typedef struct OEHID OEHID;
 	NSMutableArray *peripherals;
 }
 
-- (id) initWithTemplateURL:(NSURL *) templateURL error:(NSError **) outError;
-- (IBAction) saveDocumentAsTemplate:(id) sender;
+- (void)constructEmulation:(NSURL *)url;
+- (void)deleteEmulation;
+- (void *)emulation;
 
-- (void *)oehid;
-- (void *)oegl;
+- (id)initWithTemplateURL:(NSURL *)templateURL error:(NSError **)outError;
+- (IBAction)saveDocumentAsTemplate:(id)sender;
 
-- (void) addDevices:(NSString *) path connections:(NSDictionary *) connections;
-- (void) removeDevice:(NSDictionary *) dict;
+- (void)addDevices:(NSString *)path connections:(NSDictionary *)connections;
+- (void)removeDevice:(NSDictionary *)dict;
 
-- (NSImage *) image;
-- (void) setImage:(NSImage *) value;
-- (NSString *) label;
-- (void) setLabel:(NSString *) value;
-- (NSString *) notes;
-- (void) setNotes:(NSString *) value;
-- (NSString *) modificationDate;
-- (void) setModificationDate:(NSString *) value;
-- (NSString *) powerState;
-- (void) setPowerState:(NSString *) value;
+- (NSImage *)image;
+- (void)setImage:(NSImage *)value;
+- (NSString *)label;
+- (void)setLabel:(NSString *)value;
+- (NSString *)notes;
+- (void)setNotes:(NSString *)value;
+- (NSString *)modificationDate;
+- (void)setModificationDate:(NSString *)value;
+- (NSString *)powerState;
+- (void)setPowerState:(NSString *)value;
 
-- (NSMutableArray *) freeInlets;
+- (NSMutableArray *)freeInlets;
 
-- (NSMutableArray *) expansions;
-- (void) insertObject:(id) value inExpansionsAtIndex:(NSUInteger) index;
-- (void) removeObjectFromExpansionsAtIndex:(NSUInteger) index;
+- (NSMutableArray *)expansions;
+- (void)insertObject:(id)value inExpansionsAtIndex:(NSUInteger)index;
+- (void)removeObjectFromExpansionsAtIndex:(NSUInteger)index;
 
-- (NSMutableArray *) storage;
-- (void) insertObject:(id) value inStorageAtIndex:(NSUInteger) index;
-- (void) removeObjectFromStorageAtIndex:(NSUInteger) index;
+- (NSMutableArray *)storage;
+- (void)insertObject:(id)value inStorageAtIndex:(NSUInteger)index;
+- (void)removeObjectFromStorageAtIndex:(NSUInteger)index;
 
-- (NSMutableArray *) peripherals;
-- (void) insertObject:(id) value inPeripheralsAtIndex:(NSUInteger) index;
-- (void) removeObjectFromPeripheralsAtIndex:(NSUInteger) index;
+- (NSMutableArray *)peripherals;
+- (void)insertObject:(id)value inPeripheralsAtIndex:(NSUInteger)index;
+- (void)removeObjectFromPeripheralsAtIndex:(NSUInteger)index;
 
 @end

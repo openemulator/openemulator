@@ -201,7 +201,7 @@
 - (void)fitToScreen:(id)sender
 {
 	if (!videoFullscreen)
-		[self setFrameSize:256.0];
+		[self setFrameSize:1000.0];
 }
 
 @end

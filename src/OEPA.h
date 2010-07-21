@@ -1,11 +1,11 @@
 
 /**
  * OpenEmulator
- * OpenEmulator/portaudio interface
+ * OpenEmulator portaudio interface
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * OpenEmulator/portaudio interface.
+ * OpenEmulator portaudio interface.
  */
 
 #ifndef _OEPA_H
@@ -17,7 +17,6 @@
 #include "samplerate.h"
 
 #include "OEPAEmulation.h"
-#include "OEEmulation.h"
 
 #define OEPA_SAMPLERATE			48000.0
 #define OEPA_CHANNELNUM			2

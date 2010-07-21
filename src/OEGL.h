@@ -29,19 +29,19 @@ typedef struct
 {
 	float x;
 	float y;
-} OEGLPoint;
+} OEPoint;
 
 typedef struct
 {
 	float width;
 	float height;
-} OEGLSize;
+} OESize;
 
 typedef struct
 {
-	OEGLPoint origin;
-	OEGLSize size;
-} OEGLRect;
+	OEPoint origin;
+	OESize size;
+} OERect;
 
 class OEGL
 {
@@ -56,24 +56,25 @@ private:
 	GLuint texture[OEGL_TEX_NUM];
 	pthread_mutex_t glMutex;
 	
-	OEGLSize windowSize;
+	OESize windowSize;
 	float windowAspectRatio;
 	bool windowRedraw;
 	
 	HostVideoScreens screens;
+	
 	int columnNum;
 	int rowNum;
-	OEGLSize cellSize;
+	OESize cellSize;
 	
-	OEGLSize getScreenSize(HostVideoConfiguration *conf);
+	OESize getScreenSize(HostVideoConfiguration *conf);
 	
 	void updateCellSize();
 	void updateScreenMatrix();
 	
 	void drawScreen(HostVideoScreen *screen, int index);
-
-	void renderScreen(OEUInt32 *frambuffer, OEGLSize framebufferSize,
-					  OEGLRect frame);
+	
+	void renderScreen(OEUInt32 *framebuffer, OESize framebufferSize,
+					  OERect frame);
 };
 
 #endif
