@@ -40,17 +40,6 @@ enum
 	HOST_CLIPBOARD_PASTE_EVENT,
 };
 
-// Power States
-enum
-{
-	HOST_POWERSTATE_ON = 0,
-	HOST_POWERSTATE_PAUSE,
-	HOST_POWERSTATE_STANDBY,
-	HOST_POWERSTATE_SLEEP,
-	HOST_POWERSTATE_HIBERNATE,
-	HOST_POWERSTATE_OFF,
-};
-
 // Messages
 enum
 {
@@ -63,7 +52,18 @@ enum
 	HOST_IS_PASTEABLE,
 };
 
-// Data types
+// Power states
+enum
+{
+	HOST_POWERSTATE_ON = 0,
+	HOST_POWERSTATE_PAUSE,
+	HOST_POWERSTATE_STANDBY,
+	HOST_POWERSTATE_SLEEP,
+	HOST_POWERSTATE_HIBERNATE,
+	HOST_POWERSTATE_OFF,
+};
+
+// Audio
 typedef struct
 {
 	float sampleRate;
@@ -74,18 +74,19 @@ typedef struct
 	float *output;
 } HostAudioBuffer;
 
+// Video
 #define HOST_VIDEO_FRAMEBUFFERNUM 2
 
 typedef struct
 {
 	int framebufferWidth;
 	int framebufferHeight;
-	int contentWidth;
-	int contentHeight;
-	int paddingTop;
-	int paddingRight;
-	int paddingBottom;
-	int paddingLeft;
+	float contentWidth;
+	float contentHeight;
+	float paddingTop;
+	float paddingRight;
+	float paddingBottom;
+	float paddingLeft;
 } HostVideoConfiguration;
 
 typedef struct
@@ -93,19 +94,19 @@ typedef struct
 	HostVideoConfiguration conf;
 	int readIndex;
 	int writeIndex;
-	OEInt32 *framebuffer[HOST_VIDEO_FRAMEBUFFERNUM];
+	OEUInt32 *framebuffer[HOST_VIDEO_FRAMEBUFFERNUM];
 } HostVideoScreen;
 
 typedef vector<HostVideoScreen *> HostVideoScreens;
 
-// Structures
+// HID
 typedef struct
 {
 	int usageId;
 	float value;
 } HostHIDEvent;
 
-// HID System Events
+// HID System Event
 enum
 {
 	HOST_HID_S_POWERDOWN = 0x81,
