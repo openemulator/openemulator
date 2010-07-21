@@ -14,6 +14,6 @@
 {
 }
 
-- (void) sendEvent:(NSEvent *) theEvent;
+- (void)sendEvent:(NSEvent *)theEvent;
 
 @end

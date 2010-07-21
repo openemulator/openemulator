@@ -13,12 +13,12 @@
 
 @implementation TabletController
 
-- (id) init
+- (id)init
 {
 	return [super initWithWindowNibName:@"Tablet"];
 }
 
-- (void) windowDidLoad
+- (void)windowDidLoad
 {
 	[self setWindowFrameAutosaveName:@"Tablet"];
 }

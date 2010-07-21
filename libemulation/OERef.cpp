@@ -47,9 +47,12 @@ OERef::OERef(const OERef &ref)
 
 OERef &OERef::operator=(const OERef &ref)
 {
-	device = ref.device;
-	component = ref.component;
-	property = ref.property;
+	if (this != &ref)
+	{
+		device = ref.device;
+		component = ref.component;
+		property = ref.property;
+	}
 	
 	return *this;
 }
@@ -66,24 +69,6 @@ bool OERef::operator==(const OERef &ref)
 		return false;
 	
 	return true;
-}
-
-ostream &operator<<(ostream &stream, const OERef &ref)
-{
-	if (ref.getDevice().size())
-	{
-		stream << ref.getDevice();
-		
-		if (ref.getComponent().size())
-		{
-			stream << string("::") << ref.getComponent();
-			
-			if (ref.getProperty().size())
-				stream << string(".") << ref.getProperty();
-		}
-	}
-	
-	return stream;
 }
 
 bool OERef::isEmpty()

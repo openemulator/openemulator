@@ -125,7 +125,7 @@
 	NSString *extension = [[filename pathExtension] lowercaseString];
 	
 	// Open an emulation through standard interface
-	if ([extension compare:@OE_EXTENSION] == NSOrderedSame)
+	if ([extension compare:@OE_PACKAGE_EXTENSION] == NSOrderedSame)
 		return NO;
 	
 	// Open audio files
@@ -223,7 +223,7 @@
 {
 	NSOpenPanel *panel = [NSOpenPanel openPanel];
 	NSMutableArray *fileTypes = [NSMutableArray array];
-	[fileTypes addObject:@OE_EXTENSION];
+	[fileTypes addObject:@OE_PACKAGE_EXTENSION];
 	[fileTypes addObjectsFromArray:audioFileTypes];
 	[fileTypes addObjectsFromArray:diskImageFileTypes];
 	

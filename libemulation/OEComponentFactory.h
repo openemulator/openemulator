@@ -15,10 +15,6 @@
 
 #include "OEComponent.h"
 
-class OEComponentFactory
-{
-public:
-	static OEComponent *build(string className);
-};
+OEComponent *oeBuild(string className);
 
 #endif

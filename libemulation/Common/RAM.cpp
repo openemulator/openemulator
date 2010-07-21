@@ -15,14 +15,29 @@
 RAM::RAM()
 {
 	host = NULL;
+	
 	powered = 0;
 	
-	size = 1;
-	mask = 0;
+	memory = new OEData();
+	updateMemory(1);
 	
-	memory.resize(size);
-	resetPattern.resize(size);
+	resetPattern.resize(1);
 	resetPattern[0] = 0;
+}
+
+RAM::~RAM()
+{
+	memory->release();
+}
+
+void RAM::updateMemory(int size)
+{
+	size = getNextPowerOf2(size);
+	if (size < 1)
+		size = 1;
+	memory->resize(size);
+	mask = size - 1;
+	data = memory->getData();
 }
 
 bool RAM::setProperty(const string &name, const string &value)
@@ -31,11 +46,8 @@ bool RAM::setProperty(const string &name, const string &value)
 		mappedRange = value;
 	else if (name == "size")
 	{
-		size = getNextPowerOf2(getInt(value));
-		if (size < 1)
-			size = 1;
-		memory.resize(size);
-		mask = size - 1;
+		size = getInt(value);
+		updateMemory(size);
 	}
 	else if (name == "resetPattern")
 		resetPattern = getCharVector(value);
@@ -45,12 +57,15 @@ bool RAM::setProperty(const string &name, const string &value)
 	return true;
 }
 
-bool RAM::setData(const string &name, const OEData &data)
+bool RAM::setData(const string &name, OEData *data)
 {
 	if (name == "image")
 	{
+		memory->release();
 		memory = data;
-		memory.resize(size);
+		memory->retain();
+		
+		updateMemory(size);
 	}
 	else
 		return false;
@@ -58,12 +73,12 @@ bool RAM::setData(const string &name, const OEData &data)
 	return true;
 }
 
-bool RAM::getData(const string &name, OEData &data)
+bool RAM::getData(const string &name, OEData **data)
 {
 	if (name == "image")
 	{
-		if (!powered)
-			data = memory;
+		if (powered)
+			*data = memory;
 	}
 	else
 		return false;
@@ -97,17 +112,24 @@ bool RAM::connect(const string &name, OEComponent *component)
 
 void RAM::notify(int notification, OEComponent *component, void *data)
 {
-	if (notification == HOST_POWERSTATE_DID_CHANGE)
+	switch (notification)
 	{
-		bool willBePowered = (*((int *) data) <= HOST_POWERSTATE_HIBERNATE);
-		
-		if (!powered && willBePowered)
+		case HOST_POWERSTATE_DID_CHANGE:
 		{
-			for (int i = 0; i < memory.size(); i++)
-				memory[i] = resetPattern[i % resetPattern.size()];
+			int powerState = *((int *) data);
+			
+			powered = (powerState <= HOST_POWERSTATE_STANDBY);
 		}
-		
-		powered = willBePowered;
+		case HOST_HID_SYSTEM_EVENT:
+		{
+			HostHIDEvent *event = (HostHIDEvent *)data;
+			if (event->usageId == HOST_HID_S_COLDRESTART)
+			{
+				for (int i = 0; i < memory->size(); i++)
+					memory[i] = resetPattern[i % resetPattern.size()];
+			}
+			break;
+		}
 	}
 }
 
@@ -120,10 +142,10 @@ bool RAM::getMemoryMap(string &value)
 
 OEUInt8 RAM::read(int address)
 {
-	return memory[address & mask];
+	return data[address & mask];
 }
 
 void RAM::write(int address, OEUInt8 value)
 {
-	memory[address & mask] = value;
+	data[address & mask] = value;
 }

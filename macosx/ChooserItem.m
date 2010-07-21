@@ -12,10 +12,10 @@
 
 @implementation ChooserItem
 
-- (id)initWithTitle:(NSString *) theTitle
-		   subtitle:(NSString *) theSubtitle
-		  imagePath:(NSString *) theImagePath
-			   data:(NSString *) theData
+- (id)initWithTitle:(NSString *)theTitle
+		   subtitle:(NSString *)theSubtitle
+		  imagePath:(NSString *)theImagePath
+			   data:(NSString *)theData
 {
 	if (self = [super init])
 	{
@@ -42,32 +42,32 @@
     [super dealloc];
 }
 
-- (NSString *) imageRepresentationType
+- (NSString *)imageRepresentationType
 {
 	return IKImageBrowserPathRepresentationType;
 }
 
-- (id) imageRepresentation
+- (id)imageRepresentation
 {
 	return imagePath;
 }
 
-- (NSString *) imageTitle
+- (NSString *)imageTitle
 {
 	return title;
 }
 
-- (NSString *) imageSubtitle
+- (NSString *)imageSubtitle
 {
 	return subtitle;
 }
 
-- (NSString *) imageUID
+- (NSString *)imageUID
 {
     return [[data retain] autorelease];
 }
 
-- (NSString *) data
+- (NSString *)data
 {
 	return [[data retain] autorelease];
 }

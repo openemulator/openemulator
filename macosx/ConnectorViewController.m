@@ -13,7 +13,7 @@
 
 @implementation ConnectorViewController
 
-- (id) init
+- (id)init
 {
 	self = [super initWithNibName:@"Connector" bundle:nil];
 	
@@ -23,19 +23,19 @@
 	return self;
 }
 
-- (void) dealloc
+- (void)dealloc
 {
 	[super dealloc];
 	
 	[items release];
 }
 
-- (void) setDelegate:(id)theDelegate
+- (void)setDelegate:(id)theDelegate
 {
 	connectorDelegate = theDelegate;
 }
 
-- (void) awakeFromNib
+- (void)awakeFromNib
 {
 	NSSize cellSize;
 	NSDictionary *titleAttributes;
@@ -64,25 +64,25 @@
 						 forKey:IKImageBrowserCellsHighlightedTitleAttributesKey];
 }
 
-- (NSUInteger) numberOfItemsInImageBrowser:(IKImageBrowserView *) aBrowser
+- (NSUInteger)numberOfItemsInImageBrowser:(IKImageBrowserView *)aBrowser
 {
 	return [items count];
 }
 
-- (id) imageBrowser:(IKImageBrowserView *) aBrowser itemAtIndex:(NSUInteger) index
+- (id)imageBrowser:(IKImageBrowserView *)aBrowser itemAtIndex:(NSUInteger)index
 {
 	return [items objectAtIndex:index];
 }
 
-- (void) imageBrowser:(IKImageBrowserView *) aBrowser
-cellWasDoubleClickedAtIndex:(NSUInteger) index
+- (void)imageBrowser:(IKImageBrowserView *)aBrowser
+cellWasDoubleClickedAtIndex:(NSUInteger)index
 {
 	if ([connectorDelegate respondsToSelector:
 		 @selector(connectorWasDoubleClicked:)])
 		[connectorDelegate connectorWasDoubleClicked:self];
 }
 
-- (void) updateWithInlets:(NSArray *) inlets
+- (void)updateWithInlets:(NSArray *)inlets
 {
 	NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
 	NSString *imagesPath = [resourcePath
@@ -116,7 +116,7 @@ cellWasDoubleClickedAtIndex:(NSUInteger) index
 					  byExtendingSelection:NO];
 }
 
-- (NSString *) selectedInletRef
+- (NSString *)selectedInletRef
 {
 	NSUInteger index = [[fImageBrowserView selectionIndexes] firstIndex];
 	if (index == NSNotFound)

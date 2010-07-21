@@ -12,7 +12,7 @@
 
 @implementation PreferencesController
 
-- (id) init
+- (id)init
 {
 	self = [super initWithWindowNibName:@"Preferences"];
 
@@ -25,14 +25,14 @@
 	return self;
 }
 
-- (void) dealloc
+- (void)dealloc
 {
 	[super dealloc];
 	
 	[templateChooserViewController release];
 }
 
-- (void) windowDidLoad
+- (void)windowDidLoad
 {
 	NSToolbar *toolbar = [[NSToolbar alloc] initWithIdentifier:@"Preferences Toolbar"];
 	NSString *selectedItemIdentifier = @"General";
@@ -54,9 +54,9 @@
 	[self updateUseDefaultTemplate];
 }
 
-- (NSToolbarItem *) toolbar:(NSToolbar *) toolbar
-	  itemForItemIdentifier:(NSString *) ident
-  willBeInsertedIntoToolbar:(BOOL) flag
+- (NSToolbarItem *)toolbar:(NSToolbar *)toolbar
+	 itemForItemIdentifier:(NSString *)ident
+ willBeInsertedIntoToolbar:(BOOL)flag
 {
 	NSToolbarItem *item = [[NSToolbarItem alloc] initWithItemIdentifier:ident];
 	
@@ -83,27 +83,27 @@
 	return item;
 }
 
-- (NSArray *) toolbarSelectableItemIdentifiers:(NSToolbar *) toolbar
+- (NSArray *)toolbarSelectableItemIdentifiers:(NSToolbar *)toolbar
 {
 	return [NSArray arrayWithObjects:@"General", @"Sound", nil];
 }
 
-- (NSArray *) toolbarDefaultItemIdentifiers:(NSToolbar *) toolbar
+- (NSArray *)toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar
 {
 	return [self toolbarSelectableItemIdentifiers:toolbar];
 }
 
-- (NSArray *) toolbarAllowedItemIdentifiers:(NSToolbar *) toolbar
+- (NSArray *)toolbarAllowedItemIdentifiers:(NSToolbar *)toolbar
 {
 	return [self toolbarSelectableItemIdentifiers:toolbar];
 }
 
-- (void) selectView:(id) sender
+- (void)selectView:(id)sender
 {
 	[self setView:[sender itemIdentifier]];
 }
 
-- (void) setView:(NSString *) itemIdentifier
+- (void)setView:(NSString *)itemIdentifier
 {
 	NSView *view;
 	if ([itemIdentifier isEqualToString:@"General"])
@@ -133,13 +133,13 @@
 	[window setTitle:NSLocalizedString(itemIdentifier, "Preferences view")];
 }
 
-- (void) updateUseDefaultTemplate
+- (void)updateUseDefaultTemplate
 {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	[self setUseDefaultTemplate:[defaults boolForKey:@"OEUseDefaultTemplate"]];
 }
 
-- (void) setUseDefaultTemplate:(BOOL) useDefaultTemplate
+- (void)setUseDefaultTemplate:(BOOL)useDefaultTemplate
 {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	NSString *useTemplateString = NSLocalizedString(@"Use template: ", "Use template: ");
@@ -163,12 +163,12 @@
 				   forKey:@"OEUseDefaultTemplate"];
 }
 
-- (IBAction) selectUseDefaultTemplate:(id) sender
+- (IBAction)selectUseDefaultTemplate:(id)sender
 {
 	[self setUseDefaultTemplate:[[sender selectedCell] tag]];
 }
 
-- (IBAction) chooseDefaultTemplate:(id) sender
+- (IBAction)chooseDefaultTemplate:(id)sender
 {
 	[templateChooserViewController updateUserTemplates];
 	
@@ -186,12 +186,12 @@
 		  contextInfo:nil];
 }
 
-- (void) chooserWasDoubleClicked:(id) sender
+- (void)chooserWasDoubleClicked:(id)sender
 {
 	[self chooseTemplateInSheet:sender];
 }
 
-- (IBAction) chooseTemplateInSheet:(id) sender
+- (IBAction)chooseTemplateInSheet:(id)sender
 {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	[defaults setObject:[templateChooserViewController selectedItemPath]
@@ -202,14 +202,14 @@
 	[self closeTemplateSheet:sender];
 }
 
-- (IBAction) closeTemplateSheet:(id) sender
+- (IBAction)closeTemplateSheet:(id)sender
 {
 	[NSApp endSheet:fTemplateChooserSheet];
 }
 
-- (void) didEndSheet:(NSWindow *) sheet
-		  returnCode:(int) returnCode
-		 contextInfo:(void *) contextInfo
+- (void)didEndSheet:(NSWindow *)sheet
+		 returnCode:(int)returnCode
+		contextInfo:(void *)contextInfo
 { 
     [sheet orderOut:self];
 	

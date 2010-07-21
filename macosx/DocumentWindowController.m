@@ -15,14 +15,14 @@
 
 @implementation DocumentWindowController
 
-- (id) init
+- (id)init
 {
 	self = [self initWithWindowNibName:@"Document"];
 	
 	return self;
 }
 
-- (void) windowDidLoad
+- (void)windowDidLoad
 {
 	document = [self document];
 	
@@ -35,9 +35,9 @@
 	[toolbar release];
 }
 
-- (NSToolbarItem *) toolbar:(NSToolbar *) toolbar
-	  itemForItemIdentifier:(NSString *) ident
-  willBeInsertedIntoToolbar:(BOOL) flag
+- (NSToolbarItem *)toolbar:(NSToolbar *)toolbar
+	 itemForItemIdentifier:(NSString *)ident
+ willBeInsertedIntoToolbar:(BOOL)flag
 {
 	NSToolbarItem *item;
 	item = [[NSToolbarItem alloc] initWithItemIdentifier:ident];
@@ -122,7 +122,7 @@
 	return item;
 }
 
-- (NSArray *) toolbarDefaultItemIdentifiers:(NSToolbar *) toolbar
+- (NSArray *)toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar
 {
 	return [NSArray arrayWithObjects:
 			@"Power Down",
@@ -133,7 +133,7 @@
 			nil];
 }
 
-- (NSArray *) toolbarAllowedItemIdentifiers:(NSToolbar *) toolbar
+- (NSArray *)toolbarAllowedItemIdentifiers:(NSToolbar *)toolbar
 {
 	return [NSArray arrayWithObjects:
 			@"Power Down",
@@ -148,7 +148,7 @@
 			nil];
 }
 
-- (void) toggleInspector:(id) sender
+- (void)toggleInspector:(id)sender
 {
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"toggleInspector"
 														object:self];

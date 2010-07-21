@@ -76,6 +76,7 @@
 	documentController = [NSDocumentController sharedDocumentController];
 	
 	OEPA *oepa = (OEPA *)[documentController oepa];
+	
 	string path = string([[url path] UTF8String]);
 	string resourcePath = string([[[NSBundle mainBundle] resourcePath] UTF8String]);
 	
@@ -88,6 +89,7 @@
 {
 	DocumentController *documentController;
 	documentController = [NSDocumentController sharedDocumentController];
+	
 	[documentController removeEmulation:emulation];
 	
 	delete (OEPAEmulation *)emulation;

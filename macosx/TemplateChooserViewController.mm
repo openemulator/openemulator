@@ -19,7 +19,7 @@
 
 @implementation TemplateChooserViewController
 
-- (void) awakeFromNib
+- (void)awakeFromNib
 {
 	[super awakeFromNib];
 	
@@ -33,7 +33,7 @@
 									 sortedArrayUsingSelector:@selector(compare:)]];
 }
 
-- (void) updateUserTemplates
+- (void)updateUserTemplates
 {
 	NSString *userTemplatesGroupName = NSLocalizedString(@"My Templates",
 														 @"My Templates");
@@ -54,8 +54,8 @@
 	[self selectItemWithPath:selectedItemPath];
 }
 
-- (void) addTemplatesFromPath:(NSString *) path
-				 setGroupName:(NSString *) theGroupName
+- (void)addTemplatesFromPath:(NSString *)path
+				setGroupName:(NSString *)theGroupName
 {
 	NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
 	NSString *imagesPath = [resourcePath
@@ -71,7 +71,7 @@
 		NSString *templateFilename = [templateFilenames objectAtIndex:i];
 		NSString *templatePath = [path stringByAppendingPathComponent:templateFilename];
 		OEInfo info(string([templatePath UTF8String]));
-		if (info.isLoaded())
+		if (info.isOpen())
 		{
 			NSString *label = [templateFilename stringByDeletingPathExtension];
 			NSString *imageName = [NSString stringWithUTF8String:info.getImage().c_str()];

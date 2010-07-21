@@ -36,17 +36,17 @@
 	BOOL isWindowSetup;
 }
 
-- (void) runModal:(id) sender forCategory:(NSString *) theCategory;
+- (void)runModal:(id)sender forCategory:(NSString *)theCategory;
 
-- (void) setDeviceChooserView;
-- (void) setConnectorViewAtIndex:(int) index;
-- (void) updateView:(id) view
-			  title:(NSString *) title
-	previousEnabled:(BOOL) previousEnabled
-		   lastStep:(BOOL) lastStep;
+- (void)setDeviceChooserView;
+- (void)setConnectorViewAtIndex:(int)index;
+- (void)updateView:(id)view
+			 title:(NSString *)title
+   previousEnabled:(BOOL)previousEnabled
+		  lastStep:(BOOL)lastStep;
 
-- (IBAction) performCancel:(id) sender;
-- (IBAction) performPrevious:(id) sender;
-- (IBAction) performNext:(id) sender;
+- (IBAction)performCancel:(id)sender;
+- (IBAction)performPrevious:(id)sender;
+- (IBAction)performNext:(id)sender;
 
 @end

@@ -14,9 +14,10 @@ class ROM : public OEComponent
 {
 public:
 	ROM();
+	~ROM();
 	
 	bool setProperty(const string &name, const string &value);
-	bool setResource(const string &name, const OEData &data);
+	bool setResource(const string &name, OEData *data);
 	
 	bool getMemoryMap(string &range);
 	
@@ -25,6 +26,9 @@ public:
 private:
 	string mappedRange;
 	
+	OEData *memory;
 	int mask;
-	vector<char> memory;
+	OEUInt8 *data;
+	
+	void updateMemory(int size);
 };

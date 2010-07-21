@@ -12,7 +12,7 @@
 
 @implementation Application
 
-- (void) sendEvent:(NSEvent *) theEvent
+- (void)sendEvent:(NSEvent *)theEvent
 {
 	if (([theEvent type] == NSKeyDown) ||
 		([theEvent type] == NSKeyUp))

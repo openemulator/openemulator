@@ -26,8 +26,8 @@
 	NSMutableArray *items;
 }
 
-- (void) setDelegate:(id)theDelegate;
-- (void) updateWithInlets:(NSArray *) inlets;
-- (NSString *) selectedInletRef;
+- (void)setDelegate:(id)theDelegate;
+- (void)updateWithInlets:(NSArray *)inlets;
+- (NSString *)selectedInletRef;
 
 @end

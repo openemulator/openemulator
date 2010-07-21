@@ -19,10 +19,10 @@
     NSString *data;
 }
 
-- (id) initWithTitle:(NSString *) theTitle
-			subtitle:(NSString *) theSubtitle
-		   imagePath:(NSString *) theImagePath
-				data:(NSString *) theData;
-- (NSString *) data;
+- (id)initWithTitle:(NSString *)theTitle
+		   subtitle:(NSString *)theSubtitle
+		  imagePath:(NSString *)theImagePath
+			   data:(NSString *)theData;
+- (NSString *)data;
 
 @end

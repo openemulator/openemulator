@@ -27,6 +27,8 @@
 
 #define oepaLog(text) cerr << "oepa: " << text << endl
 
+typedef vector<OEPAEmulation *> OEPAEmulations;
+
 class OEPA
 {
 public:
@@ -49,11 +51,11 @@ public:
 	void runAudio(const void *inputBuffer,
 				  void *outputBuffer,
 				  int frameNum);
-	void runTimer();
+	void runAudioTimer();
 	
-	void lockProcess();
-	void unlockProcess();
-	void runProcess();
+	void lockEmulations();
+	void unlockEmulations();
+	void runEmulations();
 	
 	bool startPlaying(string path);
 	void stopPlaying();
@@ -87,10 +89,10 @@ private:
 	bool timerThreadShouldRun;
 	pthread_t timerThread;
 	
-	bool processThreadShouldRun;
-	pthread_t processThread;
-	pthread_mutex_t processMutex;
-	vector<OEPAEmulation *> emulations;
+	bool emulationsThreadShouldRun;
+	pthread_t emulationsThread;
+	pthread_mutex_t emulationsMutex;
+	OEPAEmulations emulations;
 	
 	bool playing;
 	SNDFILE *playFile;
@@ -121,8 +123,8 @@ private:
 	bool disableAudio();
 	void enableAudio(bool state);
 	
-	bool openProcess();
-	void closeProcess();
+	bool openEmulations();
+	void closeEmulations();
 	
 	void playAudio(float *buffer, int frameNum, int channelNum);
 	void recordAudio(float *buffer, int frameNum, int channelNum);

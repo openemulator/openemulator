@@ -12,7 +12,7 @@
 
 @implementation TemplateChooserController
 
-- (id) init
+- (id)init
 {
 	self = [super initWithWindowNibName:@"TemplateChooser"];
 	
@@ -25,14 +25,14 @@
 	return self;
 }
 
-- (void) dealloc
+- (void)dealloc
 {
 	[super dealloc];
 	
 	[templateChooserViewController release];
 }
 
-- (void) run
+- (void)run
 {
 	[self showWindow:self];
 	
@@ -48,7 +48,7 @@
 							   != nil)];
 }
 
-- (void) windowDidLoad
+- (void)windowDidLoad
 {
 	[self setWindowFrameAutosaveName:@"TemplateChooser"];
 	
@@ -57,12 +57,12 @@
 	[view setFrameSize:[fTemplateChooserView frame].size];
 }
 
-- (void) chooserWasDoubleClicked:(id) sender
+- (void)chooserWasDoubleClicked:(id)sender
 {
 	[self chooseTemplate:sender];
 }
 
-- (IBAction) chooseTemplate:(id) sender
+- (IBAction)chooseTemplate:(id)sender
 {
 	NSString *templatePath = [templateChooserViewController selectedItemPath];
 	NSURL *url = nil;

@@ -22,7 +22,7 @@
 	TemplateChooserViewController *templateChooserViewController;
 }
 
-- (void) run;
-- (IBAction) chooseTemplate:(id) sender;
+- (void)run;
+- (IBAction)chooseTemplate:(id)sender;
 
 @end

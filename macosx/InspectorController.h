@@ -49,33 +49,33 @@
 	IBOutlet NSButton *fSaveRecordingAsButton;
 }
 
-- (void) activeDocumentDidChange;
-- (id) inspectedDocument;
-- (void) setInspectedDocument:(id) theDocument;
+- (void)activeDocumentDidChange;
+- (id)inspectedDocument;
+- (void)setInspectedDocument:(id)theDocument;
 
-- (void) toggleInspector:(id) sender;
+- (void)toggleInspector:(id)sender;
 
-- (void) selectView:(id) sender;
-- (void) setView:(int) viewIndex;
+- (void)selectView:(id)sender;
+- (void)setView:(int)viewIndex;
 
-- (void) restoreWindowState:(id) sender;
-- (void) storeWindowState:(id) sender;
+- (void)restoreWindowState:(id)sender;
+- (void)storeWindowState:(id)sender;
 
-- (void) addExpansion:(id) sender;
-- (void) removeExpansion:(id) sender;
-- (void) addStorage:(id) sender;
-- (void) removeStorage:(id) sender;
-- (void) addPeripheral:(id) sender;
-- (void) removePeripheral:(id) sender;
+- (void)addExpansion:(id)sender;
+- (void)removeExpansion:(id)sender;
+- (void)addStorage:(id)sender;
+- (void)removeStorage:(id)sender;
+- (void)addPeripheral:(id)sender;
+- (void)removePeripheral:(id)sender;
 
-- (void) removeDevice:(NSDictionary *) dict;
+- (void)removeDevice:(NSDictionary *)dict;
 
-- (void) updatePlay;
-- (IBAction) openPlay:(id) sender;
-- (IBAction) togglePlay:(id) sender;
+- (void)updatePlay;
+- (IBAction)openPlay:(id)sender;
+- (IBAction)togglePlay:(id)sender;
 
-- (void) updateRecording;
-- (IBAction) toggleRecording:(id) sender;
-- (IBAction) saveRecording:(id) sender;
+- (void)updateRecording;
+- (IBAction)toggleRecording:(id)sender;
+- (IBAction)saveRecording:(id)sender;
 
 @end

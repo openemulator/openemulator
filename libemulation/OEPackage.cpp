@@ -8,6 +8,8 @@
  * Type for accessing DML packages (zip and directory type)
  */
 
+#include <fstream>
+
 #ifdef _WIN32
 #include <windows.h>
 #else
@@ -15,55 +17,76 @@
 #include <dirent.h>
 #endif
 
-#include <fstream>
-
 #include "OEPackage.h"
 
-OEPackage::OEPackage(string packagePath)
+OEPackage::OEPackage()
 {
-	this->packagePath = packagePath;
-	zip = NULL;
-	
-	if (!packagePath.size())
-		return;
-	
-	bool isPackage;
-	if (isPathValid(packagePath))
-		isPackage = isFolder(packagePath);
-	else
-		isPackage = (packagePath.substr(packagePath.size() - 1, 1) == 
-					 OE_PATH_SEPARATOR);
-	
-	if (isPackage)
-	{
-		makeDirectory(packagePath);
-		open = isPathValid(packagePath);
-	}
-	else
-	{
-		zip = zip_open(packagePath.c_str(), ZIP_CREATE, NULL);
-		open = (zip != NULL);
-	}
+	init();
+}
+
+OEPackage::OEPackage(string path)
+{
+	init();
+	open(path);
 }
 
 OEPackage::~OEPackage()
 {
-	if (zip)
-		zip_close(zip);
+	close();
+}
+
+void OEPackage::init()
+{
+	openState = false;
 	
 	zip = NULL;
 }
 
-bool OEPackage::isOpen()
+bool OEPackage::open(string path)
 {
-	return open;
+	close();
+	this->path = path;
+	
+	bool isPackage;
+	if (isPathValid(path))
+		isPackage = isFolder(path);
+	else
+		isPackage = (path.substr(path.size() - 1, 1) == 
+					 OE_PATH_SEPARATOR);
+	
+	if (isPackage)
+	{
+		makeDirectory(path);
+		openState = isPathValid(path);
+	}
+	else
+	{
+		zip = zip_open(path.c_str(), ZIP_CREATE, NULL);
+		openState = (zip != NULL);
+	}
+	
+	return openState;
 }
 
-bool OEPackage::readFile(string localPath, vector<char> &data)
+bool OEPackage::isOpen()
+{
+	return openState;
+}
+
+void OEPackage::close()
+{
+	openState = false;
+	
+	if (zip)
+		zip_close(zip);
+	zip = NULL;
+}
+
+bool OEPackage::readFile(string localPath, OEData *data)
 {
 	bool error = true;
 	
-	if (!open)
+	if (!openState)
 		return false;
 	
 	if (zip)
@@ -75,8 +98,9 @@ bool OEPackage::readFile(string localPath, vector<char> &data)
 		{
 			if ((zipFile = zip_fopen(zip, localPath.c_str(), 0)) != NULL)
 			{
-				data.resize(zipStat.size);
-				error = (zip_fread(zipFile, &data[0], zipStat.size) !=
+				data->resize(zipStat.size);
+				error = (zip_fread(zipFile,
+								   data->getData(), data->size()) !=
 						 zipStat.size);
 				zip_fclose(zipFile);
 			}
@@ -84,7 +108,7 @@ bool OEPackage::readFile(string localPath, vector<char> &data)
 	}
 	else
 	{
-		ifstream file((packagePath + OE_PATH_SEPARATOR + localPath).c_str());
+		ifstream file((path + OE_PATH_SEPARATOR + localPath).c_str());
 		
 		if (file.is_open())
 		{
@@ -92,8 +116,8 @@ bool OEPackage::readFile(string localPath, vector<char> &data)
 			int size = file.tellg();
 			file.seekg(0, ios::beg);
 			
-			data.resize(size);
-			file.read(&data[0], size);
+			data->resize(size);
+			file.read((char *) data.getData(), data.size());
 			
 			error = !file.good();
 			
@@ -104,18 +128,20 @@ bool OEPackage::readFile(string localPath, vector<char> &data)
 	return !error;
 }
 
-bool OEPackage::writeFile(string localPath, vector<char> &data)
+bool OEPackage::writeFile(string localPath, OEData *data)
 {
 	bool error = true;
 	
-	if (!open)
+	if (!openState)
 		return false;
 	
 	if (zip)
 	{
 		struct zip_source *zipSource = NULL;
 		
-		if ((zipSource = zip_source_buffer(zip, &data[0], data.size(), 0)) != NULL)
+		if ((zipSource = zip_source_buffer(zip,
+										   data->getData(), data->size(),
+										   0)) != NULL)
 		{
 			int index;
 			if ((index = zip_name_locate(zip, localPath.c_str(), 0)) == -1)
@@ -128,11 +154,11 @@ bool OEPackage::writeFile(string localPath, vector<char> &data)
 	}
 	else
 	{
-		ofstream file((packagePath + OE_PATH_SEPARATOR + localPath).c_str());
+		ofstream file((path + OE_PATH_SEPARATOR + localPath).c_str());
 		
 		if (file.is_open())
 		{
-			file.write(&data[0], data.size());
+			file.write((char *) data->getData(), data->size());
 			error = !file.good();
 			file.close();
 		}
@@ -143,12 +169,9 @@ bool OEPackage::writeFile(string localPath, vector<char> &data)
 
 bool OEPackage::remove()
 {
-	if (zip)
-		zip_close(zip);
+	close();
 	
-	zip = NULL;
-	
-	return removePath(packagePath);
+	return removePath(path);
 }
 
 bool OEPackage::isPathValid(string path)
@@ -157,7 +180,7 @@ bool OEPackage::isPathValid(string path)
 	return (GetFileAttributes(path.c_str()) != INVALID_FILE_ATTRIBUTES);
 #else
 	struct stat statbuf;
-	return (stat(packagePath.c_str(), &statbuf) == 0);
+	return (stat(path.c_str(), &statbuf) == 0);
 #endif
 }
 
@@ -167,7 +190,7 @@ bool OEPackage::isFolder(string path)
 	return (GetFileAttributes(path.c_str()) & FILE_ATTRIBUTE_DIRECTORY);
 #else
 	struct stat statbuf;
-	if (stat(packagePath.c_str(), &statbuf) != 0)
+	if (stat(path.c_str(), &statbuf) != 0)
 		return false;
 	return (statbuf.st_mode & S_IFDIR);
 #endif
@@ -178,7 +201,7 @@ bool OEPackage::makeDirectory(string path)
 #ifdef _WIN32
 	return CreateDirectory(path.c_str())
 #else
-	return (mkdir(packagePath.c_str(), 0777) == 0);
+	return (mkdir(path.c_str(), 0777) == 0);
 #endif
 }
 

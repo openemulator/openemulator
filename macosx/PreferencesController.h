@@ -27,14 +27,14 @@
 	TemplateChooserViewController *templateChooserViewController;
 }
 
-- (void) setView:(NSString *) itemIdentifier;
+- (void)setView:(NSString *)itemIdentifier;
 
-- (void) updateUseDefaultTemplate;
-- (void) setUseDefaultTemplate:(BOOL) useDefaultTemplate;
-- (IBAction) selectUseDefaultTemplate:(id) sender;
-- (IBAction) chooseDefaultTemplate:(id) sender;
+- (void)updateUseDefaultTemplate;
+- (void)setUseDefaultTemplate:(BOOL)useDefaultTemplate;
+- (IBAction)selectUseDefaultTemplate:(id)sender;
+- (IBAction)chooseDefaultTemplate:(id)sender;
 
-- (IBAction) chooseTemplateInSheet:(id) sender;
-- (IBAction) closeTemplateSheet:(id) sender;
+- (IBAction)chooseTemplateInSheet:(id)sender;
+- (IBAction)closeTemplateSheet:(id)sender;
 
 @end

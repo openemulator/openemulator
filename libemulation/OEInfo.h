@@ -11,14 +11,12 @@
 #ifndef _OEINFO_H
 #define _OEINFO_H
 
+#include <iostream>
 #include <string>
 #include <vector>
 
-#include <libxml/tree.h>
-
+#include "OEDML.h"
 #include "OERef.h"
-
-using namespace std;
 
 class OESetting
 {
@@ -39,8 +37,6 @@ public:
 	string options;
 	string label;
 };
-
-typedef vector<OESetting> OESettings;
 
 class OEPort
 {
@@ -74,28 +70,43 @@ public:
 	OEPort *connectionPort;
 };
 
+typedef vector<OESetting> OESettings;
 typedef vector<OEPort> OEPorts;
 
-class OEInfo
+class OEInfo : public OEDML
 {
 public:
+	OEInfo();
 	OEInfo(string path);
-	OEInfo(xmlDocPtr doc);
-	OEInfo(const OEInfo &info);
 	
-	bool isLoaded();
+	bool open(string path);
+	bool isOpen();
+	void close();
 	
 	string getLabel();
 	string getImage();
 	string getDescription();
 	string getGroup();
+	
 	OEPorts *getInlets();
 	OEPorts *getOutlets();
-	OEPorts *getSettings();
+	OESettings *getSettings();
+	
+protected:
+	void analyze();
+	void analyzeConnections();
+	void analyzeLabels();
+	
+	xmlNodePtr getNodeForRef(xmlDocPtr doc, OERef ref);
+	OERef getOutletForInlet(xmlDocPtr doc, OERef ref);
+	OEPort *getPortForOutlet(OERef ref);
+	string getConnectionLabel(OEPort *outletPort, vector<OERef> &visitedRefs);
+	
+	string getString(int value);
+	string getXMLProperty(xmlNodePtr node, string name);
+	void setXMLProperty(xmlNodePtr node, string name, string value);
 	
 private:
-	bool loaded;
-	
 	string label;
 	string image;
 	string description;
@@ -105,27 +116,9 @@ private:
 	OEPorts outlets;
 	OESettings settings;
 	
-	string getPathExtension(string path);
-	bool readFile(string path, vector<char> &data);
-	string getXMLProperty(xmlNodePtr node, string name);
-	
-	xmlDocPtr loadDML(string path);
-	void processDML(xmlDocPtr doc);
-	
-	void getDMLProperties(xmlDocPtr);
-	bool validateDML(xmlDocPtr doc);
-	void parseDML(xmlDocPtr doc);
-	void parseDevice(xmlNodePtr node);
-	OEPort parsePort(xmlNodePtr node, OERef ref, string label, string image);
-	OESetting parseSetting(xmlNodePtr node, OERef ref);
-	
-	void setConnections(xmlDocPtr doc);
-	xmlNodePtr getNodeForRef(xmlDocPtr doc, OERef ref);
-	OERef getOutletForInlet(xmlDocPtr doc, OERef ref);
-	OEPort *getPortForOutlet(OERef ref);
-	
-	void setConnectionLabels();
-	string getConnectionLabel(OEPort *outletPort, vector<OERef> &visitedRefs);
+	void analyzeDevice(xmlNodePtr node);
+	OEPort analyzePort(xmlNodePtr node, OERef ref, string label, string image);
+	OESetting analyzeSetting(xmlNodePtr node, OERef ref);
 };
 
 #endif

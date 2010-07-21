@@ -18,7 +18,7 @@ class AppleIVideo : public OEComponent
 public:
 	AppleIVideo();
 	
-	bool setResource(const string &name, const OEData &data);
+	bool setResource(const string &name, const OEData *data);
 	bool connect(const string &name, OEComponent *component);
 	
 	void write(int address, int value);
@@ -30,6 +30,6 @@ private:
 	OEComponent *monitor;
 	OEComponent *videoROM;
 	
-	vector<char> characterSet;
+	OEData characterSet;
 	char screen[APPLEIVIDEO_TERM_HEIGHT][APPLEIVIDEO_TERM_WIDTH];
 };

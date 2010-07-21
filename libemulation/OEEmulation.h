@@ -11,57 +11,37 @@
 #ifndef _OEEMULATION_H
 #define _OEEMULATION_H
 
-#include <string>
 #include <map>
-#include <iostream>
 
-#include <libxml/tree.h>
-
-#include "OERef.h"
+#include "OEInfo.h"
 #include "OEComponent.h"
-#include "OEPackage.h"
 
 #define OE_REF_SUBST_STRING "${REF}"
-
-using namespace std;
 
 typedef map<string, OEComponent *> OEComponentsMap;
 typedef map<string, string> OEStringRefMap;
 
-class OEEmulation
+class OEEmulation : public OEInfo
 {
 public:
+	OEEmulation(string path);
 	OEEmulation(string path, string resourcePath);
 	~OEEmulation();
 	
-	bool isLoaded();
-	
+	bool open(string path);
+	bool isOpen();
 	bool save(string path);
+	void close();
 	
 	OEComponent *getComponent(string ref);
 	
-	xmlDocPtr getDML();
 	bool addDevices(string path, OEStringRefMap connections);
-	bool isDeviceTerminal(OERef ref);
 	bool removeDevice(OERef ref);
 	
 private:
-	bool loaded;
-	xmlDocPtr documentDML;
+	string resourcePath;
 	OEComponentsMap components;
 	
-	OEPackage *package;
-	string resourcePath;
-	
-	string getString(int value);
-	
-	bool readFile(string path, vector<char> &data);
-	string buildSourcePath(string src, OERef deviceRef);
-	
-	string getXMLProperty(xmlNodePtr node, string name);
-	void setXMLProperty(xmlNodePtr node, string name, string value);
-	
-	bool validateDML(xmlDocPtr doc);
 	bool constructDML(xmlDocPtr doc);
 	bool initDML(xmlDocPtr doc);
 	bool connectDML(xmlDocPtr doc);
@@ -87,9 +67,7 @@ private:
 	bool setResource(xmlNodePtr node, OEComponent *component);
 	bool setConnection(xmlNodePtr node, OEComponent *component, OERef deviceRef);
 	
-	xmlNodePtr getNodeForRef(xmlDocPtr doc, OERef ref);
-	OERef getOutletForInlet(xmlDocPtr doc, OERef ref);
-	xmlNodePtr getNodeOfFirstInlet(xmlDocPtr, OERef ref);
+	xmlNodePtr getNodeOfFirstInlet(xmlDocPtr doc, OERef ref);
 	xmlNodePtr getNodeOfLastInlet(xmlDocPtr doc,
 								  OERef ref,
 								  vector<OERef> &visitedRefs);
@@ -106,6 +84,8 @@ private:
 	bool disconnectDevice(xmlDocPtr doc, OERef ref);
 	
 	bool insertDoc(xmlNodePtr node, xmlDocPtr doc);
+	
+	string buildSourcePath(string src, OERef deviceRef);
 };
 
 #endif

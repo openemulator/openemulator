@@ -11,10 +11,10 @@
 #ifndef _OEREF_H
 #define _OEREF_H
 
+#include "OETypes.h"
+
 #define OE_DEVICE_SEP "::"
 #define OE_COMPONENT_SEP "."
-
-using namespace std;
 
 class OERef
 {
@@ -48,7 +48,5 @@ private:
 	string component;
 	string property;
 };
-
-ostream &operator<<(ostream &stream, const OERef &ref);
 
 #endif

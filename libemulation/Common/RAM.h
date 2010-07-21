@@ -14,14 +14,15 @@ class RAM : public OEComponent
 {
 public:
 	RAM();
+	~RAM();
 	
 	bool setProperty(const string &name, const string &value);
-	bool setData(const string &name, const OEData &data);
-	bool getData(const string &name, OEData &data);
+	bool setData(const string &name, OEData *data);
+	bool getData(const string &name, OEData **data);
 	bool connect(const string &name, OEComponent *component);
 	
 	void notify(int notification, OEComponent *component, void *data);
-
+	
 	bool getMemoryMap(string &value);
 	
 	OEUInt8 read(int address);
@@ -31,10 +32,16 @@ private:
 	OEComponent *host;
 	
 	string mappedRange;
+	
 	bool powered;
 	
 	int size;
+	
+	OEData *memory;
 	int mask;
-	vector<char> memory;
-	vector<char> resetPattern;
+	OEUInt8 *data;
+	
+	OEData resetPattern;
+	
+	void updateMemory(int size);
 };

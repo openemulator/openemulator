@@ -21,15 +21,15 @@
 	NSString *path;
 }
 
-- (id) initWithPath:(NSString *) path;
-- (OEInfo *) info;
-- (NSString *) path;
+- (id)initWithPath:(NSString *)path;
+- (OEInfo *)info;
+- (NSString *)path;
 
 @end
 
 @implementation DeviceInfo
 
-- initWithPath:(NSString *) thePath;
+- initWithPath:(NSString *)thePath;
 {
 	if (self = [super init])
 	{
@@ -40,7 +40,7 @@
 	return self;
 }
 
-- (void) dealloc
+- (void)dealloc
 {
 	delete info;
 	[path release];
@@ -48,12 +48,12 @@
 	[super dealloc];
 }
 
-- (OEInfo *) info
+- (OEInfo *)info
 {
 	return info;
 }
 
-- (NSString *) path
+- (NSString *)path
 {
 	return path;
 }
@@ -62,7 +62,7 @@
 
 @implementation DeviceChooserViewController
 
-- (id) init
+- (id)init
 {
 	self = [super init];
 	
@@ -72,14 +72,14 @@
 	return self;
 }
 
-- (void) dealloc
+- (void)dealloc
 {
 	[deviceInfos release];
 
 	[super dealloc];
 }
 
-- (void) awakeFromNib
+- (void)awakeFromNib
 {
 	[super awakeFromNib];
 	
@@ -105,8 +105,8 @@
 	}
 }
 
-- (void) updateWithInlets:(NSArray *) freeInlets
-			  andCategory:(NSString *) category
+- (void)updateWithInlets:(NSArray *)freeInlets
+			 andCategory:(NSString *)category
 {
 	NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
 	NSString *imagesPath = [resourcePath
@@ -192,7 +192,7 @@
 	[self selectItemWithPath:nil];
 }
 
-- (NSMutableArray *) selectedItemOutlets
+- (NSMutableArray *)selectedItemOutlets
 {
 	// Find selected device
 	NSString *itemPath = [self selectedItemPath];

@@ -13,7 +13,7 @@
 
 @implementation ChooserViewController
 
-- (id) init
+- (id)init
 {
 	self = [super initWithNibName:@"Chooser" bundle:nil];
 	
@@ -26,7 +26,7 @@
 	return self;
 }
 
-- (void) dealloc
+- (void)dealloc
 {
 	[groups release];
 	[groupNames release];
@@ -37,12 +37,12 @@
 	[super dealloc];
 }
 
-- (void) setDelegate:(id)theDelegate
+- (void)setDelegate:(id)theDelegate
 {
 	chooserDelegate = theDelegate;
 }
 
-- (void) awakeFromNib
+- (void)awakeFromNib
 {
 	NSSize cellSize;
 	NSDictionary *titleAttributes;
@@ -71,7 +71,7 @@
 						 forKey:IKImageBrowserCellsHighlightedTitleAttributesKey];
 }
 
-- (NSInteger) outlineView:(NSOutlineView *) outlineView numberOfChildrenOfItem:(id) item
+- (NSInteger)outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(id)item
 {
 	if (!item)
 		return [groupNames count];
@@ -79,19 +79,19 @@
 	return 0;
 }
 
-- (id)outlineView:(NSOutlineView *) outlineView
-objectValueForTableColumn:(NSTableColumn *) tableColumn
-		   byItem:(id) item
+- (id)outlineView:(NSOutlineView *)outlineView
+objectValueForTableColumn:(NSTableColumn *)tableColumn
+		   byItem:(id)item
 {
 	return item;
 }
 
-- (BOOL) outlineView:(NSOutlineView *) outlineView isItemExpandable:(id) item
+- (BOOL)outlineView:(NSOutlineView *)outlineView isItemExpandable:(id)item
 {
 	return NO;
 }
 
-- (id) outlineView:(NSOutlineView *) outlineView child:(NSInteger) index ofItem:(id) item
+- (id)outlineView:(NSOutlineView *)outlineView child:(NSInteger)index ofItem:(id)item
 {
 	if (!item)
 		return [groupNames objectAtIndex:index];
@@ -99,7 +99,7 @@ objectValueForTableColumn:(NSTableColumn *) tableColumn
 	return nil;
 }
 
-- (void) outlineViewSelectionDidChange:(NSNotification *) notification
+- (void)outlineViewSelectionDidChange:(NSNotification *)notification
 {
 	if (selectedGroup)
 	{
@@ -119,7 +119,7 @@ objectValueForTableColumn:(NSTableColumn *) tableColumn
 					  byExtendingSelection:NO];
 }
 
-- (NSUInteger) numberOfItemsInImageBrowser:(IKImageBrowserView *) aBrowser
+- (NSUInteger)numberOfItemsInImageBrowser:(IKImageBrowserView *)aBrowser
 {
 	if (!selectedGroup)
 		return 0;
@@ -127,7 +127,7 @@ objectValueForTableColumn:(NSTableColumn *) tableColumn
 	return [[groups objectForKey:selectedGroup] count];
 }
 
-- (id) imageBrowser:(IKImageBrowserView *) aBrowser itemAtIndex:(NSUInteger) index
+- (id)imageBrowser:(IKImageBrowserView *)aBrowser itemAtIndex:(NSUInteger)index
 {
 	if (!selectedGroup)
 		return nil;
@@ -135,15 +135,15 @@ objectValueForTableColumn:(NSTableColumn *) tableColumn
 	return [[groups objectForKey:selectedGroup] objectAtIndex:index];
 }
 
-- (void) imageBrowser:(IKImageBrowserView *) aBrowser
-cellWasDoubleClickedAtIndex:(NSUInteger) index
+- (void)imageBrowser:(IKImageBrowserView *)aBrowser
+cellWasDoubleClickedAtIndex:(NSUInteger)index
 {
 	if ([chooserDelegate respondsToSelector:
 		 @selector(chooserWasDoubleClicked:)])
 		[chooserDelegate chooserWasDoubleClicked:self];
 }
 
-- (void) selectItemWithPath:(NSString *) itemPath
+- (void)selectItemWithPath:(NSString *)itemPath
 {
 	int groupIndex = 0;
 	int chooserIndex = 0;
@@ -178,7 +178,7 @@ cellWasDoubleClickedAtIndex:(NSUInteger) index
 	[fImageBrowserView scrollIndexToVisible:chooserIndex];
 }
 
-- (NSString *) selectedItemPath
+- (NSString *)selectedItemPath
 {
 	NSUInteger index = [[fImageBrowserView selectionIndexes] firstIndex];
 	if (index == NSNotFound)

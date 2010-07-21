@@ -20,12 +20,12 @@ OEEmulation(path, resourcePath)
 
 void OEPAEmulation::lock()
 {
-	((OEPA *)oepa)->lockProcess();
+	((OEPA *)oepa)->lockEmulations();
 }
 
 void OEPAEmulation::unlock()
 {
-	((OEPA *)oepa)->unlockProcess();
+	((OEPA *)oepa)->unlockEmulations();
 }
 
 bool OEPAEmulation::save(string path)

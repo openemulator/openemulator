@@ -12,14 +12,14 @@
 
 @implementation PaperFeedController
 
-- (id) init
+- (id)init
 {
 	self = [super initWithWindowNibName:@"PaperFeed"];
 	
 	return self;
 }
 
-- (void) windowDidLoad
+- (void)windowDidLoad
 {
 	[self setWindowFrameAutosaveName:@"PaperFeed"];
 }

@@ -37,7 +37,7 @@ NSString *itemIdentifiers[] =
 	return self;
 }
 
-- (void) windowDidLoad
+- (void)windowDidLoad
 {
 	[self setWindowFrameAutosaveName:@"Inspector"];
 	
@@ -63,10 +63,10 @@ NSString *itemIdentifiers[] =
 									repeats:YES];
 }
 
-- (void) observeValueForKeyPath:(NSString *) keyPath
-					   ofObject:(id) object
-						 change:(NSDictionary *) change
-						context:(void *) context
+- (void)observeValueForKeyPath:(NSString *)keyPath
+					  ofObject:(id)object
+						change:(NSDictionary *)change
+					   context:(void *)context
 {
     if (context == [InspectorController class])
 		[self activeDocumentDidChange];
@@ -77,7 +77,7 @@ NSString *itemIdentifiers[] =
 							  context:context];
 }
 
-- (void) activeDocumentDidChange
+- (void)activeDocumentDidChange
 {
     id activeDocument = [[[NSApp mainWindow] windowController] document];
     if (activeDocument != inspectedDocument)
@@ -91,28 +91,28 @@ NSString *itemIdentifiers[] =
     }
 }
 
-- (void) inspectorDidResignKey:(NSNotification *) notification
+- (void)inspectorDidResignKey:(NSNotification *)notification
 {
     [fDocumentObjectController commitEditing];
 }
 
-- (void) timerDidExpire:(NSTimer *) theTimer
+- (void)timerDidExpire:(NSTimer *)theTimer
 {
 	[self updatePlay];
 	[self updateRecording];
 }
 
-- (id) inspectedDocument
+- (id)inspectedDocument
 {
 	return inspectedDocument;
 }
 
-- (void) setInspectedDocument:(id) value
+- (void)setInspectedDocument:(id)value
 {
 	inspectedDocument = value;
 }
 
-- (void) toggleInspector:(id) sender
+- (void)toggleInspector:(id)sender
 {
     NSWindow *window = [self window];
     if ([window isVisible])
@@ -121,7 +121,7 @@ NSString *itemIdentifiers[] =
 		[window orderFront:sender];
 }
 
-- (BOOL) validateUserInterfaceItem:(id) item
+- (BOOL)validateUserInterfaceItem:(id)item
 {
     if ([item action] == @selector(toggleInspector:))
 	{  
@@ -140,7 +140,7 @@ NSString *itemIdentifiers[] =
     return YES;
 }
 
-- (NSView *) getView:(int) viewIndex
+- (NSView *)getView:(int)viewIndex
 {
 	switch (viewIndex)
 	{
@@ -159,12 +159,12 @@ NSString *itemIdentifiers[] =
 	return fEmulationView;
 }
 
-- (void) selectView:(id) sender
+- (void)selectView:(id)sender
 {
 	[self setView:[fTabMatrix selectedTag]];
 }
 
-- (void) setView:(int) viewIndex
+- (void)setView:(int)viewIndex
 {
 	if (selectedViewIndex == viewIndex)
 		return;
@@ -202,56 +202,56 @@ NSString *itemIdentifiers[] =
 				  forKey:@"OEInspectorSelectedViewIndex"];
 }
 
-- (void) restoreWindowState:(id) sender
+- (void)restoreWindowState:(id)sender
 {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	if ([defaults boolForKey:@"OEInspectorIsVisible"])
 		[self showWindow:self];	
 }
 
-- (void) storeWindowState:(id) sender
+- (void)storeWindowState:(id)sender
 {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	[defaults setBool:[[self window] isVisible]
 			   forKey:@"OEInspectorIsVisible"];
 }
 
-- (void) addExpansion:(id) sender
+- (void)addExpansion:(id)sender
 {
 	[fDeviceChooserController runModal:self forCategory:@"expansion"];
 }
 
-- (void) removeExpansion:(id) sender
+- (void)removeExpansion:(id)sender
 {
 	[self removeDevice:[[fExpansionsController selectedObjects] objectAtIndex:0]];
 }
 
-- (void) addStorage:(id) sender
+- (void)addStorage:(id)sender
 {
 	[fDeviceChooserController runModal:self forCategory:@"storage"];
 }
 
-- (void) removeStorage:(id) sender
+- (void)removeStorage:(id)sender
 {
 	[self removeDevice:[[fStorageController selectedObjects] objectAtIndex:0]];
 }
 
-- (void) addPeripheral:(id) sender
+- (void)addPeripheral:(id)sender
 {
 	[fDeviceChooserController runModal:self forCategory:@"peripheral"];
 }
 
-- (void) removePeripheral:(id) sender
+- (void)removePeripheral:(id)sender
 {
 	[self removeDevice:[[fPeripheralsController selectedObjects] objectAtIndex:0]];
 }
 
-- (void) removeDevice:(NSDictionary *) dict 
+- (void)removeDevice:(NSDictionary *)dict 
 {
 	[inspectedDocument removeDevice:dict];
 }
 
-- (NSString *) formatTime:(int) time
+- (NSString *)formatTime:(int)time
 {
 	return [NSString stringWithFormat:@"%02d:%02d:%02d",
 			time / 3600,
@@ -259,7 +259,7 @@ NSString *itemIdentifiers[] =
 			time % 60];
 }
 
-- (NSString *) formatSize:(long long) size
+- (NSString *)formatSize:(long long)size
 {
 	if (size < 1e6)
 		return [NSString stringWithFormat:@"%3.0f kB", size / 1000.0];
@@ -269,7 +269,7 @@ NSString *itemIdentifiers[] =
 		return [NSString stringWithFormat:@"%3.1f GB", size / 1000000000.0];
 }
 
-- (void) updatePlay
+- (void)updatePlay
 {
 	NSURL *url = [fDocumentController playURL];
 	if (!url)
@@ -299,7 +299,7 @@ NSString *itemIdentifiers[] =
 									 )];
 }	
 
-- (IBAction) openPlay:(id) sender
+- (IBAction)openPlay:(id)sender
 {
 	NSOpenPanel *panel = [NSOpenPanel openPanel];
 	NSArray *fileTypes = [[NSArray alloc] initWithObjects:
@@ -320,12 +320,12 @@ NSString *itemIdentifiers[] =
 	}
 }
 
-- (IBAction) togglePlay:(id) sender
+- (IBAction)togglePlay:(id)sender
 {
 	[fDocumentController togglePlay];
 }
 
-- (void) updateRecording
+- (void)updateRecording
 {
 	NSURL *url = [fDocumentController recordingURL];
 	if (!url)
@@ -350,12 +350,12 @@ NSString *itemIdentifiers[] =
 	[fSaveRecordingAsButton setEnabled:(url && !isRecording)];
 }
 
-- (IBAction) toggleRecording:(id) sender
+- (IBAction)toggleRecording:(id)sender
 {
 	[fDocumentController toggleRecording];
 }
 
-- (IBAction) saveRecording:(id) sender
+- (IBAction)saveRecording:(id)sender
 {
 	NSSavePanel *panel = [NSSavePanel savePanel];
 	[panel setAllowedFileTypes:[NSArray arrayWithObject:@"wav"]];

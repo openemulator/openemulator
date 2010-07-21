@@ -12,9 +12,23 @@
 
 ROM::ROM()
 {
-	mask = 0;
-	
-	memory.resize(1);
+	memory = new OEData();
+	updateMemory(1);
+}
+
+ROM::~ROM()
+{
+	memory->release();
+}
+
+void ROM::updateMemory(int size)
+{
+	size = getNextPowerOf2(size);
+	if (size < 1)
+		size = 1;
+	memory->resize(size);
+	mask = size - 1;
+	data = memory->getData();
 }
 
 bool ROM::setProperty(const string &name, const string &value)
@@ -27,16 +41,15 @@ bool ROM::setProperty(const string &name, const string &value)
 	return true;
 }
 
-bool ROM::setResource(const string &name, const OEData &data)
+bool ROM::setResource(const string &name, OEData *data)
 {
 	if (name == "image")
 	{
+		memory->release();
 		memory = data;
-		int size = getNextPowerOf2(memory.size());
-		if (size < 1)
-			size = 1;
-		memory.resize(size);
-		mask = size - 1;
+		memory->retain();
+		
+		updateMemory(memory->size());
 	}
 	else
 		return false;
@@ -53,5 +66,5 @@ bool ROM::getMemoryMap(string &range)
 
 OEUInt8 ROM::read(int address)
 {
-	return memory[address & mask];
+	return data[address & mask];
 }

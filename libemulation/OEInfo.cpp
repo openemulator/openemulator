@@ -8,50 +8,52 @@
  * Parses a DML file.
  */
 
-#include <iostream>
 #include <fstream>
+#include <sstream>
 
 #include <libxml/parser.h>
 
 #include "OEInfo.h"
-#include "OEPackage.h"
 
-OEInfo::OEInfo(string path)
+OEInfo::OEInfo() : OEDML()
 {
-	loaded = false;
+}
+
+OEInfo::OEInfo(string path) : OEDML()
+{
+	open(path);
+}
+
+bool OEInfo::open(string path)
+{
+	close();
 	
-	xmlDocPtr doc = loadDML(path);
-	if (doc)
+	if (OEDML::open(path))
 	{
-		processDML(doc);
+		analyzeDML();
+		analyzeDMLConnections();
+		analyzeDMLLabels();
 		
-		xmlFreeDoc(doc);
+		return true;
 	}
-	else
-		cerr << "OEInfo: could not construct \"" << path << "\"" << endl;
-}
-
-OEInfo::OEInfo(xmlDocPtr doc)
-{
-	processDML(doc);
-}
-
-OEInfo::OEInfo(const OEInfo &info)
-{
-	loaded = info.loaded;
 	
-	label = info.label;
-	image = info.image;
-	description = info.description;
-	group = info.group;
+	close();
 	
-	inlets = info.inlets;
-	outlets = info.outlets;
+	return false;
 }
 
-bool OEInfo::isLoaded()
+void OEInfo::close()
 {
-	return loaded;
+	OEDML::close();
+	
+	label = "";
+	image = "";
+	description = "";
+	group = "";
+	
+	inlets.clear();
+	outlets.clear();
+	settings.clear();
 }
 
 string OEInfo::getLabel()
@@ -84,85 +86,16 @@ OEPorts *OEInfo::getOutlets()
 	return &outlets;
 }
 
-string OEInfo::getPathExtension(string path)
+OESettings *OEInfo::getSettings()
 {
-	int extensionIndex = path.rfind('.');
-	if (extensionIndex == string::npos)
-		return "";
-	
-	return path.substr(extensionIndex + 1);
+	return &settings;
 }
 
-bool OEInfo::readFile(string path, vector<char> &data)
-{
-	bool error = true;
-	
-	ifstream file(path.c_str());
-	
-	if (file.is_open())
-	{
-		file.seekg(0, ios::end);
-		int size = file.tellg();
-		file.seekg(0, ios::beg);
-		
-		data.resize(size);
-		file.read(&data[0], size);
-		error = !file.good();
-		file.close();
-	}
-	
-	return !error;
-}
+//
+// Analysis
+//
 
-string OEInfo::getXMLProperty(xmlNodePtr node, string name)
-{
-	char *value = (char *) xmlGetProp(node, BAD_CAST name.c_str());
-	string valueString = value ? value : "";
-	xmlFree(value);
-	
-	return valueString;
-}
-
-xmlDocPtr OEInfo::loadDML(string path)
-{
-	vector<char> data;
-	string pathExtension = getPathExtension(path);
-	if (pathExtension == "xml")
-	{
-		if (!readFile(path, data))
-			return NULL;
-	}
-	else if (pathExtension == OE_EXTENSION)
-	{
-		OEPackage package(path);
-		if (package.isOpen())
-		{
-			if (!package.readFile(OE_INFO_FILENAME, data))
-				return NULL;
-		}
-	}
-	else
-		return NULL;
-	
-	return xmlReadMemory(&data[0], data.size(), OE_INFO_FILENAME, NULL, 0);
-}
-
-void OEInfo::processDML(xmlDocPtr doc)
-{
-	loaded = false;
-	
-	if (!validateDML(doc))
-		return;
-	
-	getDMLProperties(doc);
-	parseDML(doc);
-	setConnections(doc);
-	setConnectionLabels();
-	
-	loaded = true;
-}
-
-void OEInfo::getDMLProperties(xmlDocPtr doc)
+void OEInfo::analyze()
 {
 	xmlNodePtr node = xmlDocGetRootElement(doc);
 	
@@ -170,29 +103,17 @@ void OEInfo::getDMLProperties(xmlDocPtr doc)
 	image = getXMLProperty(node, "image");
 	description = getXMLProperty(node, "description");
 	group = getXMLProperty(node, "group");
-}
-
-bool OEInfo::validateDML(xmlDocPtr doc)
-{
-	xmlNodePtr node = xmlDocGetRootElement(doc);
-	
-	return (getXMLProperty(node, "version") == "1.0");
-}
-
-void OEInfo::parseDML(xmlDocPtr doc)
-{
-	xmlNodePtr node = xmlDocGetRootElement(doc);
 	
 	for(xmlNodePtr childNode = node->children;
 		childNode;
 		childNode = childNode->next)
 	{
 		if (!xmlStrcmp(childNode->name, BAD_CAST "device"))
-			parseDevice(childNode);
+			analyzeDevice(childNode);
 	}
 }
 
-void OEInfo::parseDevice(xmlNodePtr node)
+void OEInfo::analyzeDevice(xmlNodePtr node)
 {
 	OERef ref = OERef(getXMLProperty(node, "name"));
 	string label = getXMLProperty(node, "label");
@@ -203,15 +124,15 @@ void OEInfo::parseDevice(xmlNodePtr node)
 		childNode = childNode->next)
 	{
 		if (!xmlStrcmp(childNode->name, BAD_CAST "inlet"))
-			inlets.push_back(parsePort(childNode, ref, label, image));
+			inlets.push_back(analyzePort(childNode, ref, label, image));
 		else if (!xmlStrcmp(childNode->name, BAD_CAST "outlet"))
-			outlets.push_back(parsePort(childNode, ref, label, image));
+			outlets.push_back(analyzePort(childNode, ref, label, image));
 		else if (!xmlStrcmp(childNode->name, BAD_CAST "setting"))
-			settings.push_back(parseSetting(childNode, ref));
+			settings.push_back(analyzeSetting(childNode, ref));
 	}
 }
 
-OEPort OEInfo::parsePort(xmlNodePtr node, OERef ref, string label, string image)
+OEPort OEInfo::analyzePort(xmlNodePtr node, OERef ref, string label, string image)
 {
 	OEPort port;
 	
@@ -233,7 +154,7 @@ OEPort OEInfo::parsePort(xmlNodePtr node, OERef ref, string label, string image)
 	return port;
 }
 
-OESetting OEInfo::parseSetting(xmlNodePtr node, OERef ref)
+OESetting OEInfo::analyzeSetting(xmlNodePtr node, OERef ref)
 {
 	OESetting setting;
 	
@@ -245,7 +166,7 @@ OESetting OEInfo::parseSetting(xmlNodePtr node, OERef ref)
 	return setting;
 }
 
-void OEInfo::setConnections(xmlDocPtr doc)
+void OEInfo::analyzeConnections()
 {
 	for (OEPorts::iterator i = inlets.begin();
 		 i != inlets.end();
@@ -262,14 +183,28 @@ void OEInfo::setConnections(xmlDocPtr doc)
 			o->connectionPort = &(*i);
 		}
 		else
-			cerr << "OEInfo: could not connect inlet \"" <<
-				i->ref << "\" to outlet \"" << outletRef << "\"" << endl;
+			OELog("could not connect inlet \"" + i->ref.getStringRef() +
+				  "\" to outlet \"" + outletRef.getStringRef() + "\"");
 	}
 }
 
-xmlNodePtr OEInfo::getNodeForRef(xmlDocPtr doc, OERef ref)
+void OEInfo::analyzeLabels()
 {
-	xmlNodePtr root = xmlDocGetRootElement(doc);
+	for (OEPorts::iterator i = inlets.begin();
+		 i != inlets.end();
+		 i++)
+	{
+		vector<OERef> refs;
+		i->connectionLabel = getConnectionLabel(&(*i), refs);
+		OEPort *o = i->connectionPort;
+		if (o)
+			o->connectionLabel = i->connectionLabel;
+	}
+}
+
+xmlNodePtr OEInfo::getNodeForRef(xmlDocPtr dml, OERef ref)
+{
+	xmlNodePtr root = xmlDocGetRootElement(dml);
 	
 	if (!ref.getDevice().size())
 		return NULL;
@@ -318,9 +253,9 @@ xmlNodePtr OEInfo::getNodeForRef(xmlDocPtr doc, OERef ref)
 	return NULL;
 }
 
-OERef OEInfo::getOutletForInlet(xmlDocPtr doc, OERef ref)
+OERef OEInfo::getOutletForInlet(xmlDocPtr dml, OERef ref)
 {
-	xmlNodePtr connectionNode = getNodeForRef(doc, ref);
+	xmlNodePtr connectionNode = getNodeForRef(dml, ref);
 	if (!connectionNode)
 		return OERef();
 	
@@ -342,20 +277,6 @@ OEPort *OEInfo::getPortForOutlet(OERef ref)
 	}
 	
 	return NULL;
-}
-
-void OEInfo::setConnectionLabels()
-{
-	for (OEPorts::iterator i = inlets.begin();
-		 i != inlets.end();
-		 i++)
-	{
-		vector<OERef> refs;
-		i->connectionLabel = getConnectionLabel(&(*i), refs);
-		OEPort *o = i->connectionPort;
-		if (o)
-			o->connectionLabel = i->connectionLabel;
-	}
 }
 
 string OEInfo::getConnectionLabel(OEPort *inletPort, vector<OERef> &visitedRefs)

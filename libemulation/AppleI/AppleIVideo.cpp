@@ -15,10 +15,10 @@ AppleIVideo::AppleIVideo()
 	memset(screen, 0, APPLEIVIDEO_TERM_HEIGHT * APPLEIVIDEO_TERM_HEIGHT);
 }
 
-bool AppleIVideo::setResource(const string &name, const OEData &data)
+bool AppleIVideo::setResource(const string &name, const OEData *data)
 {
 	if (name == "image")
-		characterSet = data;
+		characterSet = *data;
 	else
 		return false;
 	

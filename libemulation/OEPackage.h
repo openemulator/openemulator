@@ -11,10 +11,9 @@
 #ifndef _OEPACKAGE_H
 #define _OEPACKAGE_H
 
-#include <string>
-#include <vector>
-
 #include <zip.h>
+
+#include "OETypes.h"
 
 #ifdef _WIN32
 #define OE_PATH_SEPARATOR "\\"
@@ -22,29 +21,31 @@
 #define OE_PATH_SEPARATOR "/"
 #endif
 
-#define OE_EXTENSION "emulation"
-#define OE_INFO_FILENAME "info.xml"
-
 using namespace std;
 
 class OEPackage
 {
 public:
-	OEPackage(string packagePath);
+	OEPackage();
+	OEPackage(string path);
 	~OEPackage();
-
-	bool isOpen();
 	
-	bool readFile(string localPath, vector<char> &data);
-	bool writeFile(string localPath, vector<char> &data);
+	bool open(string path);
+	bool isOpen();
+	void close();
+	
+	bool readFile(string localPath, OEData *data);
+	bool writeFile(string localPath, OEData *data);
 	
 	bool remove();
 	
 private:
-	bool open;
+	bool openState;
 	
-	string packagePath;
+	string path;
 	struct zip *zip;
+	
+	void init();
 	
 	bool isPathValid(string path);
 	bool isFolder(string path);

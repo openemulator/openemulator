@@ -31,17 +31,17 @@ bool OEComponent::getProperty(const string &name, string &value)
 	return false;
 }
 
-bool OEComponent::setData(const string &name, const OEData &data)
+bool OEComponent::setData(const string &name, OEData *data)
 {
 	return false;
 }
 
-bool OEComponent::getData(const string &name, OEData &data)
+bool OEComponent::getData(const string &name, OEData **data)
 {
 	return false;
 }
 
-bool OEComponent::setResource(const string &name, const OEData &data)
+bool OEComponent::setResource(const string &name, OEData *data)
 {
 	return false;
 }
@@ -119,12 +119,12 @@ void OEComponent::writed(OEUInt32 address, OEUInt32 value)
 {
 }
 
-bool OEComponent::read(OEUInt32 address, OEData &value)
+bool OEComponent::readBlock(OEUInt32 address, OEData *value)
 {
 	return false;
 }
 
-bool OEComponent::write(OEUInt32 address, OEData &value)
+bool OEComponent::writeBlock(OEUInt32 address, const OEData *value)
 {
 	return false;
 }

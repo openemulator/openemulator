@@ -140,6 +140,8 @@
 		00F0ED6711028C8800208090 /* DiskImage525.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000F66390FF8368F00C8AF23 /* DiskImage525.icns */; };
 		00F86BE3100FD4F60016867D /* IPSoundMax.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BE1100FD4F60016867D /* IPSoundMax.png */; };
 		00F86BE4100FD4F60016867D /* IPSoundMin.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BE2100FD4F60016867D /* IPSoundMin.png */; };
+		00FA328711F76255000B9574 /* OEDML.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00FA328611F76255000B9574 /* OEDML.cpp */; };
+		00FA33FA11F783DC000B9574 /* OEData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00FA33F911F783DC000B9574 /* OEData.cpp */; };
 		00FE0C171095371B00B92AB7 /* ChooserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00FE0C161095371B00B92AB7 /* ChooserViewController.m */; };
 		00FE0C6310953F7000B92AB7 /* DeviceChooserViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00FE0C6210953F7000B92AB7 /* DeviceChooserViewController.mm */; };
 /* End PBXBuildFile section */
@@ -372,6 +374,11 @@
 		00F00A040FD5838D00C506AD /* IPPortsSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPPortsSel.png; sourceTree = "<group>"; };
 		00F86BE1100FD4F60016867D /* IPSoundMax.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPSoundMax.png; sourceTree = "<group>"; };
 		00F86BE2100FD4F60016867D /* IPSoundMin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPSoundMin.png; sourceTree = "<group>"; };
+		00FA328511F76255000B9574 /* OEDML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEDML.h; sourceTree = "<group>"; };
+		00FA328611F76255000B9574 /* OEDML.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEDML.cpp; sourceTree = "<group>"; };
+		00FA328C11F7647E000B9574 /* OETypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OETypes.h; sourceTree = "<group>"; };
+		00FA33F811F783DC000B9574 /* OEData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEData.h; sourceTree = "<group>"; };
+		00FA33F911F783DC000B9574 /* OEData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEData.cpp; sourceTree = "<group>"; };
 		00FE0C00109534CE00B92AB7 /* ChooserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChooserViewController.h; sourceTree = "<group>"; };
 		00FE0C041095353B00B92AB7 /* TemplateChooserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TemplateChooserViewController.h; sourceTree = "<group>"; };
 		00FE0C051095353B00B92AB7 /* TemplateChooserViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TemplateChooserViewController.mm; sourceTree = "<group>"; };
@@ -528,6 +535,11 @@
 				00B7037C1135AC91005E4B65 /* OEPackage.h */,
 				00B7037D1135AC91005E4B65 /* OERef.cpp */,
 				00B703721135AC91005E4B65 /* OERef.h */,
+				00FA328511F76255000B9574 /* OEDML.h */,
+				00FA328611F76255000B9574 /* OEDML.cpp */,
+				00FA328C11F7647E000B9574 /* OETypes.h */,
+				00FA33F811F783DC000B9574 /* OEData.h */,
+				00FA33F911F783DC000B9574 /* OEData.cpp */,
 			);
 			path = libemulation;
 			sourceTree = "<group>";
@@ -941,6 +953,7 @@
 				00C3CF9C11F557AC00EA2453 /* OEHID.cpp in Sources */,
 				00C3CF9D11F557AC00EA2453 /* OEPA.cpp in Sources */,
 				00C3CF9E11F557AC00EA2453 /* OEPAEmulation.cpp in Sources */,
+				00FA328711F76255000B9574 /* OEDML.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1013,6 +1026,7 @@
 				00C3D0D811F5584A00EA2453 /* OEHID.cpp in Sources */,
 				00C3D0D911F5584B00EA2453 /* OEPA.cpp in Sources */,
 				00C3D0DA11F5584C00EA2453 /* OEPAEmulation.cpp in Sources */,
+				00FA33FA11F783DC000B9574 /* OEData.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

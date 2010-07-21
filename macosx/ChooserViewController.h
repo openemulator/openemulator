@@ -30,9 +30,9 @@
 	NSString *selectedGroup;
 }
 
-- (void) setDelegate:(id)theDelegate;
+- (void)setDelegate:(id)theDelegate;
 
-- (void) selectItemWithPath:(NSString *) itemPath;
-- (NSString *) selectedItemPath;
+- (void)selectItemWithPath:(NSString *)itemPath;
+- (NSString *)selectedItemPath;
 
 @end

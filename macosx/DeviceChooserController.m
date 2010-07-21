@@ -13,7 +13,7 @@
 
 @implementation DeviceChooserController
 
-- (id) init
+- (id)init
 {
 	self = [super initWithWindowNibName:@"DeviceChooser"];
 	
@@ -31,7 +31,7 @@
 	return self;
 }
 
-- (void) dealloc
+- (void)dealloc
 {
 	[super dealloc];
 	
@@ -47,7 +47,7 @@
 		[category release];
 }
 
-- (void) runModal:(id) sender forCategory:(NSString *) theCategory
+- (void)runModal:(id)sender forCategory:(NSString *)theCategory
 {
 	if (category)
 		[category release];
@@ -79,12 +79,12 @@
 		[NSApp runModalForWindow:[self window]];
 }
 
-- (void) windowDidLoad
+- (void)windowDidLoad
 {
 	[self setWindowFrameAutosaveName:@"DeviceChooser"];
 }
 
-- (void) setDeviceChooserView
+- (void)setDeviceChooserView
 {
 	[self updateView:[deviceChooserViewController view]
 			   title:NSLocalizedString(@"Choose a template for your new device:",
@@ -94,7 +94,7 @@
 	 ];
 }
 
-- (void) setConnectorViewAtIndex:(int) index
+- (void)setConnectorViewAtIndex:(int)index
 {
 	NSString *label;
 	label = [[selectedItemOutlets objectAtIndex:index] objectForKey:@"label"];
@@ -143,10 +143,10 @@
 	[connectorViewController updateWithInlets:inlets];
 }
 
-- (void) updateView:(id) view
-			  title:(NSString *) title
-	previousEnabled:(BOOL) previousEnabled
-		   lastStep:(BOOL) lastStep
+- (void)updateView:(id)view
+			 title:(NSString *)title
+   previousEnabled:(BOOL)previousEnabled
+		  lastStep:(BOOL)lastStep
 {
 	if (view != currentView)
 	{
@@ -171,24 +171,24 @@
 		[fNextButton setTitle:NSLocalizedString(@"Next", @"Next")];
 }
 
-- (void) chooserWasDoubleClicked:(id) sender
+- (void)chooserWasDoubleClicked:(id)sender
 {
 	[self performNext:sender];
 }
 
-- (void) connectorWasDoubleClicked:(id) sender
+- (void)connectorWasDoubleClicked:(id)sender
 {
 	[self performNext:sender];
 }
 
-- (IBAction) performCancel:(id) sender
+- (IBAction)performCancel:(id)sender
 {
 	[[self window] orderOut:self];
 	
 	[NSApp abortModal];
 }
 
-- (IBAction) performPrevious:(id) sender
+- (IBAction)performPrevious:(id)sender
 {
 	currentStep--;
 	
@@ -205,7 +205,7 @@
 	}
 }
 
-- (IBAction) performNext:(id) sender
+- (IBAction)performNext:(id)sender
 {
 	if (currentStep == 0)
 	{

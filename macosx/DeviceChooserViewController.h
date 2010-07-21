@@ -17,8 +17,8 @@
 	NSMutableArray *deviceInfos;
 }
 
-- (void) updateWithInlets:(NSArray *) freeInlets
-			  andCategory:(NSString *) viewType;
+- (void)updateWithInlets:(NSArray *)freeInlets
+			 andCategory:(NSString *)viewType;
 - (NSMutableArray *)selectedItemOutlets;
 
 @end
