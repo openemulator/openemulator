@@ -35,7 +35,7 @@ bool OEEmulation::open(string path)
 {
 	close();
 	
-	if (OEDML::open(path))
+	if (OEInfo:open(path))
 	{
 		if (iterate(constructDevice))
 		{
@@ -187,21 +187,6 @@ bool OEEmulation::removeDevice(OERef ref)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //
 // DML Operations
 //
@@ -212,19 +197,84 @@ bool OEEmulation::iterate(bool (OEEmulation::*callback)(xmlNodePtr node))
 		childNode;
 		childNode = childNode->next)
 	{
-		if (xmlStrcmp(childNode->name, BAD_CAST "device"))
-			continue;
-		
-		if (!(this->*callback)(childNode))
-			return false;
+		if (!xmlStrcmp(childNode->name, BAD_CAST "device"))
+			if (!(this->*callback)(childNode))
+				return false;
 	}
 	
 	return true;
 }
 
 bool OEEmulation::iterateDevice(xmlNodePtr node,
-								bool (OEEmulation::*callback)(xmlNodePtr node, OERef ref))
+								bool (OEEmulation::*callback)(xmlNodePtr node,
+															  OERef ref))
 {
+	OERef deviceRef(getXMLProperty(node, "name"));
+	for(xmlNodePtr childNode = node->children;
+		childNode;
+		childNode = childNode->next)
+	{
+		if (!xmlStrcmp(childNode->name, BAD_CAST "component"))
+			if (!(this->*callback)(childNode, deviceRef))
+				return false;
+	}
+	
+	return true;
+}
+
+bool OEEmulation::iterateComponent(xmlNodePtr node,
+								   bool (OEEmulation::*callback)(xmlNodePtr node,
+																 OERef ref))
+{
+	string componentName = getXMLProperty(node, "name");
+	string componentRef = deviceRef.getStringRef(componentName);
+	
+	if (!components.count(componentRef))
+	{
+		OELog("could not find " + componentRef);
+		
+		return false;
+	}
+	
+	OEComponent *component = components[componentRef];
+	for(xmlNodePtr childNode = node->children;
+		childNode;
+		childNode = childNode->next)
+	{
+		if (!xmlStrcmp(childNode->name, BAD_CAST "property"))
+		{
+			if (!setProperty(childNode, component))
+			{
+				OELog("could not set property " + componentRef + "." +
+					  getXMLProperty(childNode, "name"));
+				
+				return false;
+			}
+		}
+		else if (!xmlStrcmp(childNode->name, BAD_CAST "data"))
+			if (!setData(childNode, component, componentRef))
+			{
+				OELog("could not set data " + componentRef + "." +
+					  getXMLProperty(childNode, "name"));
+				
+				return false;
+			}
+			else if (!xmlStrcmp(childNode->name, BAD_CAST "resource"))
+			{
+				if (!setResource(childNode, component))
+				{
+					OELog("could not set resource " + componentRef + "." +
+						  getXMLProperty(childNode, "name"));
+					
+					return false;
+				}
+			}
+	}
+	
+	return true;
+
+	
+	
 	OERef deviceRef(getXMLProperty(node, "name"));
 	for(xmlNodePtr childNode = node->children;
 		childNode;
@@ -265,6 +315,11 @@ bool OEEmulation::destroyDevice(xmlNodePtr node)
 	return iterateDevice(node, destroyComponent);
 }
 
+
+
+
+
+
 bool OEEmulation::constructComponent(xmlNodePtr node, OERef deviceRef)
 {
 	string componentClass = getXMLProperty(node, "class");
@@ -285,6 +340,9 @@ bool OEEmulation::constructComponent(xmlNodePtr node, OERef deviceRef)
 	
 	return true;
 }
+
+
+
 
 bool OEEmulation::initComponent(xmlNodePtr node, OERef deviceRef)
 {
@@ -424,6 +482,12 @@ void OEEmulation::destroyComponent(xmlNodePtr node, OERef deviceRef)
 	components.erase(componentRef);
 }
 
+
+
+
+//
+// Component operations
+//
 bool OEEmulation::setProperty(xmlNodePtr node, OEComponent *component)
 {
 	string name = getXMLProperty(node, "name");
@@ -505,6 +569,11 @@ bool OEEmulation::setConnection(xmlNodePtr node, OEComponent *component, OERef c
 	return component->connect(name, connection);
 }
 
+
+
+//
+// Helpers
+//
 xmlNodePtr OEEmulation::getNodeOfFirstInlet(xmlDocPtr doc, OERef ref)
 {
 	OERef deviceRef = ref.getDeviceRef();
