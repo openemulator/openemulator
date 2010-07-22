@@ -44,7 +44,7 @@ bool OEDML::open(string path)
 	string pathExtension = getPathExtension(path);
 	if (pathExtension == OE_STANDALONE_EXTENSION)
 	{
-		if (!(openState = readFile(path, data)))
+		if (!(openState = readFile(path, &data)))
 			OELog("could not open \"" + path + "\"");
 	}
 	else if (pathExtension == OE_PACKAGE_EXTENSION)
@@ -53,7 +53,7 @@ bool OEDML::open(string path)
 		if (package && package->isOpen())
 		{
 			if (!(openState = package->readFile(OE_PACKAGE_DML_FILENAME,
-												data)))
+												&data)))
 				OELog("could not read " + OE_PACKAGE_DML_FILENAME +
 					  " in \"" + path + "\"");
 		}
@@ -100,10 +100,14 @@ bool OEDML::save(string path)
 	if (pathExtension == OE_STANDALONE_EXTENSION)
 	{
 		update();
-		dump(data);
 		
-		if (!(openState = writeFile(path, data)))
-			OELog("could not open \"" + path + "\"");
+		if (dump(data))
+		{
+			if (!(openState = writeFile(path, &data)))
+				OELog("could not open \"" + path + "\"");
+		}
+		else
+			OELog("could not dump DML for \"" + path + "\"");
 	}
 	else if (pathExtension == OE_PACKAGE_EXTENSION)
 	{
@@ -112,33 +116,21 @@ bool OEDML::save(string path)
 		{
 			update();
 			
-			if (!(openState = package->writeFile(OE_PACKAGE_DML_FILENAME,
-												 data)))
-				OELog("could not write " + OE_PACKAGE_DML_FILENAME +
-					  " in \"" + path + "\"");
+			if (dump(data))
+			{
+				if (!(openState = package->writeFile(OE_PACKAGE_DML_FILENAME,
+													 data)))
+					OELog("could not write " + OE_PACKAGE_DML_FILENAME +
+						  " in \"" + path + "\"");
+			}
+			else
+				OELog("could not dump DML for \"" + path + "\"");
 		}
 		else
 			OELog("could not open package \"" + path + "\"");
 	}
 	else
 		OELog("could not identify type of \"" + path + "\"");
-	
-	if (openState)
-	{
-		doc = xmlReadMemory(data[0], data.size(),
-							OE_PACKAGE_DML_FILENAME, NULL, 0)
-		if (!doc)
-		{
-			openState = false;
-			OELog("could not parse DML of \"" + path + "\"");
-		}
-	}
-	
-	if (openState)
-	{
-		if (!openState = validate())
-			OELog("unknown DML version");
-	}
 	
 	if (!openState)
 		close();
@@ -155,6 +147,9 @@ void OEDML::close()
 	package = NULL;
 }
 
+//
+// DML Operations
+//
 bool OEDML::validate()
 {
 	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
@@ -167,10 +162,22 @@ bool OEDML::dump(OEData *data)
 	int size;
 	xmlDocDumpMemory(doc, &p, &size);
 	
+	if (!p)
+		return false;
+	
 	data->resize(size);
 	memcpy(data->getData(), p, size);
+	
+	return true;
 }
 
+void OEDML::update()
+{
+}
+
+//
+// Helpers
+//
 string OEDML::getString(int value)
 {
 	stringstream ss;

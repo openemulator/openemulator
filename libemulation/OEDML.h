@@ -32,12 +32,11 @@ public:
 	bool save(string path);
 	void close();
 	
-	xmlDocPtr getXMLDoc();
-	OEPackage *getPackage();
-	
 protected:
 	OEPackage *package;
 	xmlDocPtr doc;
+	
+	virtual void update();
 	
 private:
 	bool openState;
@@ -45,6 +44,7 @@ private:
 	void init();
 	
 	bool validate();
+	bool dump();
 	
 	string getString(int value);
 	string getPathExtension(string path);

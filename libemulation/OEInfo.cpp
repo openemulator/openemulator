@@ -30,9 +30,9 @@ bool OEInfo::open(string path)
 	
 	if (OEDML::open(path))
 	{
-		analyzeDML();
-		analyzeDMLConnections();
-		analyzeDMLLabels();
+		analyze();
+		analyzeConnections();
+		analyzeLabels();
 		
 		return true;
 	}
@@ -44,8 +44,6 @@ bool OEInfo::open(string path)
 
 void OEInfo::close()
 {
-	OEDML::close();
-	
 	label = "";
 	image = "";
 	description = "";
@@ -54,6 +52,8 @@ void OEInfo::close()
 	inlets.clear();
 	outlets.clear();
 	settings.clear();
+
+	OEDML::close();
 }
 
 string OEInfo::getLabel()

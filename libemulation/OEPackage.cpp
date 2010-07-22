@@ -117,7 +117,7 @@ bool OEPackage::readFile(string localPath, OEData *data)
 			file.seekg(0, ios::beg);
 			
 			data->resize(size);
-			file.read((char *) data.getData(), data.size());
+			file.read((char *) data->getData(), data->size());
 			
 			error = !file.good();
 			

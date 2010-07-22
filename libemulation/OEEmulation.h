@@ -29,8 +29,6 @@ public:
 	~OEEmulation();
 	
 	bool open(string path);
-	bool isOpen();
-	bool save(string path);
 	void close();
 	
 	OEComponent *getComponent(string ref);
@@ -42,17 +40,15 @@ private:
 	string resourcePath;
 	OEComponentsMap components;
 	
-	bool constructDML(xmlDocPtr doc);
-	bool initDML(xmlDocPtr doc);
-	bool connectDML(xmlDocPtr doc);
-	bool updateDML(xmlDocPtr doc);
-	void destroyDML(xmlDocPtr doc);
+	bool iterate(bool (OEEmulation::*callback)(xmlNodePtr node));
+	bool iterateDevice(xmlNodePtr node,
+					   bool (OEEmulation::*callback)(xmlNodePtr node, OERef ref));
 	
 	bool constructDevice(xmlNodePtr node);
 	bool initDevice(xmlNodePtr node);
 	bool connectDevice(xmlNodePtr node);
 	bool updateDevice(xmlNodePtr node);
-	void destroyDevice(xmlNodePtr node);
+	bool destroyDevice(xmlNodePtr node);
 	
 	bool constructComponent(xmlNodePtr node, OERef deviceRef);
 	bool initComponent(xmlNodePtr node, OERef deviceRef);
