@@ -8,7 +8,11 @@
  * Encapsulates a DML document.
  */
 
+#include <sstream>
+#include <fstream>
+
 #include "OEDML.h"
+#include "OEAddress.h"
 
 OEDML::OEDML()
 {
@@ -31,7 +35,8 @@ OEDML::~OEDML()
 
 void OEDML::init()
 {
-	openState = false;
+	is_open = false;
+	
 	package = NULL;
 	doc = NULL;
 }
@@ -44,7 +49,9 @@ bool OEDML::open(string path)
 	string pathExtension = getPathExtension(path);
 	if (pathExtension == OE_STANDALONE_EXTENSION)
 	{
-		if (!(openState = readFile(path, &data)))
+		is_open = readFile(path, &data);
+		
+		if (!is_open)
 			OELog("could not open \"" + path + "\"");
 	}
 	else if (pathExtension == OE_PACKAGE_EXTENSION)
@@ -52,9 +59,10 @@ bool OEDML::open(string path)
 		package = new OEPackage(path);
 		if (package && package->isOpen())
 		{
-			if (!(openState = package->readFile(OE_PACKAGE_DML_FILENAME,
-												&data)))
-				OELog("could not read " + OE_PACKAGE_DML_FILENAME +
+			is_open = package->readFile(OE_PACKAGE_DML_FILENAME, &data);
+			
+			if (!is_open)
+				OELog(string("could not read ") + OE_PACKAGE_DML_FILENAME +
 					  " in \"" + path + "\"");
 		}
 		else
@@ -63,32 +71,37 @@ bool OEDML::open(string path)
 	else
 		OELog("could not identify type of \"" + path + "\"");
 	
-	if (openState)
+	if (is_open)
 	{
-		doc = xmlReadMemory(data[0], data.size(),
-							OE_PACKAGE_DML_FILENAME, NULL, 0)
+		doc = xmlReadMemory(&data[0],
+							data.size(),
+							OE_PACKAGE_DML_FILENAME,
+							NULL,
+							0);
+		
 		if (!doc)
 		{
-			openState = false;
+			is_open = false;
 			OELog("could not parse DML of \"" + path + "\"");
 		}
 	}
 	
-	if (openState)
+	if (is_open)
 	{
-		if (!openState = validate())
+		is_open = validate();
+		if (!is_open)
 			OELog("unknown DML version");
 	}
 	
-	if (!openState)
+	if (!is_open)
 		close();
 	
-	return openState;
+	return is_open;
 }
 
 bool OEDML::isOpen()
 {
-	return openState;
+	return is_open;
 }
 
 bool OEDML::save(string path)
@@ -101,9 +114,11 @@ bool OEDML::save(string path)
 	{
 		update();
 		
-		if (dump(data))
+		if (dump(&data))
 		{
-			if (!(openState = writeFile(path, &data)))
+			is_open = writeFile(path, &data);
+			
+			if (!is_open)
 				OELog("could not open \"" + path + "\"");
 		}
 		else
@@ -116,11 +131,11 @@ bool OEDML::save(string path)
 		{
 			update();
 			
-			if (dump(data))
+			if (dump(&data))
 			{
-				if (!(openState = package->writeFile(OE_PACKAGE_DML_FILENAME,
-													 data)))
-					OELog("could not write " + OE_PACKAGE_DML_FILENAME +
+				is_open = package->writeFile(OE_PACKAGE_DML_FILENAME, &data);
+				if (!is_open)
+					OELog(string("could not write ") + OE_PACKAGE_DML_FILENAME +
 						  " in \"" + path + "\"");
 			}
 			else
@@ -132,15 +147,15 @@ bool OEDML::save(string path)
 	else
 		OELog("could not identify type of \"" + path + "\"");
 	
-	if (!openState)
+	if (!is_open)
 		close();
 	
-	return openState;
+	return is_open;
 }
 
 void OEDML::close()
 {
-	openState = false;
+	is_open = false;
 	
 	if (package)
 		delete package;
@@ -153,7 +168,8 @@ void OEDML::close()
 bool OEDML::validate()
 {
 	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
-	return getXMLProperty(rootNode, "version") == "1.0");
+	
+	return (getXMLProperty(rootNode, "version") == "1.0");
 }
 
 bool OEDML::dump(OEData *data)
@@ -173,6 +189,77 @@ bool OEDML::dump(OEData *data)
 
 void OEDML::update()
 {
+}
+
+//
+// DML Functions
+//
+xmlNodePtr OEDML::getNode(string ref)
+{
+	OEAddress address(ref);
+	
+	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+	
+	if (address.getDevice() == "")
+		return NULL;
+	
+	for(xmlNodePtr deviceNode = rootNode->children;
+		deviceNode;
+		deviceNode = deviceNode->next)
+	{
+		if (xmlStrcmp(deviceNode->name, BAD_CAST "device"))
+			continue;
+		
+		if (getXMLProperty(deviceNode, "name") != address.getDevice())
+			continue;
+		
+		if (address.getComponent() == "")
+			return deviceNode;
+		
+		for(xmlNodePtr componentNode = deviceNode->children;
+			componentNode;
+			componentNode = componentNode->next)
+		{
+			if (xmlStrcmp(componentNode->name, BAD_CAST "component"))
+				continue;
+			
+			if (getXMLProperty(componentNode, "name") != address.getComponent())
+				continue;
+			
+			if (address.getProperty() == "")
+				return componentNode;
+			
+			for(xmlNodePtr connectionNode = componentNode->children;
+				connectionNode;
+				connectionNode = connectionNode->next)
+			{
+				if (xmlStrcmp(connectionNode->name, BAD_CAST "connection"))
+					continue;
+				
+				if (getXMLProperty(connectionNode, "name") != address.getProperty())
+					continue;
+				
+				return connectionNode;
+			}
+		}
+	}
+	
+	return NULL;
+}
+
+string OEDML::getOutletRef(string ref)
+{
+	OEAddress address(ref);
+	
+	xmlNodePtr connectionNode = getNode(ref);
+	if (!connectionNode)
+		return "";
+	
+	string connectionRef = getXMLProperty(connectionNode, "ref");
+	if (connectionRef == "")
+		return "";
+	
+	return address.ref(connectionRef);
 }
 
 //
@@ -196,7 +283,7 @@ string OEDML::getPathExtension(string path)
 
 bool OEDML::readFile(string path, OEData *data)
 {
-	bool error = true;
+	bool success = false;
 	
 	ifstream file(path.c_str());
 	
@@ -207,31 +294,31 @@ bool OEDML::readFile(string path, OEData *data)
 		file.seekg(0, ios::beg);
 		
 		data->resize(size);
-		file.read(data.getData(), size);
-		error = !file.good();
+		file.read(data->getData(), size);
+		success = file.good();
 		file.close();
 	}
 	
-	return !error;
+	return success;
 }
 
 bool OEDML::writeFile(string path, OEData *data)
 {
-	bool error = true;
+	bool success = false;
 	
 	ofstream file(path.c_str());
 	
 	if (file.is_open())
 	{
-		file.write(data.getData(), data.getSize());
-		error = !file.good();
+		file.write(data->getData(), data->size());
+		success = file.good();
 		file.close();
 	}
 	
-	return !error;
+	return success;
 }
 
-string OEInfo::getXMLProperty(xmlNodePtr node, string name)
+string OEDML::getXMLProperty(xmlNodePtr node, string name)
 {
 	char *value = (char *) xmlGetProp(node, BAD_CAST name.c_str());
 	string valueString = value ? value : "";
@@ -240,7 +327,7 @@ string OEInfo::getXMLProperty(xmlNodePtr node, string name)
 	return valueString;
 }
 
-void OEInfo::setXMLProperty(xmlNodePtr node, string name, string value)
+void OEDML::setXMLProperty(xmlNodePtr node, string name, string value)
 {
 	xmlSetProp(node, BAD_CAST name.c_str(), BAD_CAST value.c_str());
 }

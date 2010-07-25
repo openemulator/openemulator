@@ -1,24 +1,30 @@
 =Device Markup Language 1.0=
-DML (Device Markup Language) is a language for describing emulation components and their interconnections, as well as for storing the component's state.
+DML (Device Markup Language) is a language for describing software emulations of generic computer systems.
+
+An emulation is described in terms of devices. Each device represents a distinct physical entity, for example a floppy disk drive, a memory expansion, or a printer.
+
+At a lower level, each device is described as a collection of reusable software components, for example RAM, DMA controllers or CPU's. DML provides a way for interconnecting these software components, as well as for storing their states.
 
 This document describes the version 1.0 of this specification.
 
 ==Definitions==
 * This document uses quotes for indicating the start and end of a string.
-* The resources folder is a folder containing emulation resource files, and is usually organized with the following hierarchy:
+* The resources folder is a folder containing emulation resource files. It is usually organized in the following way:
   - roms/ - Stores ROM images
   - images/ - Stores emulation images
   - sounds/ - Stores emulation sounds
 * Images should be stored in PNG format
 * Sounds should be stored in WAV format or OGG/Vorbis format
-* Labels should be expressed in the native language of the device, and if otherwise unclear, in english
+* Labels should be expressed in the native language of the device. If unclear, english should be used
 
 ==DML Format==
-DML files can be stored stand-alone (for storing device descriptions), or packaged (for storing both device descriptions and state).
+DML files can be stored stand-alone (for storing device descriptions only), or packaged (for storing both device descriptions and state).
 
-The packaged format consists of a folder of extension ".emulation". Within this folder should be an "info.xml" file with the DML description, and optionally component state files (e.g. for storing RAM content).
+The standalone format consists of a file of extension ".xml". This file should store the DML description.
 
-The packaged format files can also be compressed with the ZIP format. Here the "info.xml" file and component state files are compressed at the ZIP root level. The compressed file should be of extension ".emulation".
+The packaged format consists of a folder of extension ".emulation". This folder should contain an "info.xml" file for storing the DML description. The folder can also contain component state files (e.g. for storing RAM content).
+
+The packaged format can also be compressed using ZIP compression. All files in the archive (info.xml and component state files) should be stored at the ZIP root level, and the resulting file must be of extension ".emulation". 
 
 ==DML Tags==
 
@@ -31,37 +37,40 @@ The DML language is based on XML. The main XML element must be a "dml" element. 
 * description: A human-interface description of this emulation (used in template/device selectors)
 * group: A name used for grouping this emulation in the template/device selector. For example: "Apple I", "PC", "Printers".
 
-The "dml" element may contain only "device" elements.
+The "dml" element may only contain "device" elements.
 
 ==="device"===
-Each "device" element corresponds to a distinct physical device in the emulation (e.g. a computer, a printer, an external disk drive, an external keyboard).
+Each "device" element corresponds to a distinct physical device in the emulation.
 
 The "device" element has the following tags:
 
 * name: The device name of this device. Usually in the form "dev[x]", with [x] being a positive integer
+* type: One of the following: "expansion" (for devices that are physically inside the main emulated computer), "storage" (for peripherals that provide persistent data storage, e.g. disk drives), "peripheral" (for devices that are physically outside of the main emulated computer)
+* options: A comma-separated list of options. The only option defined in this specification is "static", which signals that a device should not be removed.
 * label: The human-interface name of this device
 * image: A path to an image of this device (relative to the "resources" folder)
 
 The "device" element may contain "inlet", "outlet", "setting" or "component" elements.
 
 ==="inlet"===
-An "inlet" element defines an inlet for connecting other devices to this device.
+An "inlet" element signals that a device's component is accepting an outlet.
 
 It has the following tags:
 
 * ref: The address of the property that holds the address of the other device's main component (used for communication)
-* type: A connector name that must match the corresponding outlet. For example: "CompositeVideo"
-* category: One of the following: "expansion" (for connectors that are physically inside the main emulated computer), "peripheral" (for connectors that are physically outside of the main emulated computer), "storage" (for peripherals that provide persistent data storage, e.g. disk drives)
+* type: A connector name that must match the corresponding outlet. For example: "SerialPort"
 * label: The human-interface name of this inlet. For example: "Video Connector", "Slot 2"
 * image: A path to an image for this inlet (relative to the "resources" folder)
 
 ==="outlet"===
-An "outlet" element defines an outlet for connecting this device to another device.
+An "outlet" element signals that a device's components can be used for connecting 
+
+defines an outlet for connecting this device to another device.
 
 It has the following tags:
 
 * ref: The address of the main component. This is used for communicating with this device
-* type: A connector name that must match the corresponding inlet. For example: "CompositeVideo"
+* type: A connector name that must match the corresponding inlet. For example: "SerialPort"
 * label: The human-interface name of this outlet. For example: "Video Jack", "Port 1". Not required.
 * image: A path to an image for this outlet (relative to the "resources" folder). Not required.
 

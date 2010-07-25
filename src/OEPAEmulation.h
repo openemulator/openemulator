@@ -27,9 +27,9 @@ public:
 	void postNotification(string ref, int notification, void *data);
 	int ioctl(string ref, int message, void *data);
 	
-	bool addDevices(string path, OEStringRefMap connections);
-	bool isDeviceTerminal(OERef ref);
-	bool removeDevice(OERef ref);
+	bool addDevices(string path, map<string, string> connections);
+	bool isDeviceTerminal(string ref);
+	bool removeDevice(string ref);
 	
 private:
 	void *oepa;

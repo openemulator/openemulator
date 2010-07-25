@@ -14,6 +14,7 @@
 #include <libxml/tree.h>
 
 #include "OETypes.h"
+
 #include "OEPackage.h"
 
 #define OE_STANDALONE_EXTENSION "xml"
@@ -38,20 +39,25 @@ protected:
 	
 	virtual void update();
 	
+	xmlNodePtr getNode(string ref);
+	string getOutletRef(string ref);
+	
+	string getString(int value);
+	string getPathExtension(string path);
+	
+	bool readFile(string path, OEData *data);
+	bool writeFile(string path, OEData *data);
+	
+	string getXMLProperty(xmlNodePtr node, string name);
+	void setXMLProperty(xmlNodePtr node, string name, string value);
+	
 private:
-	bool openState;
+	bool is_open;
 	
 	void init();
 	
 	bool validate();
-	bool dump();
-	
-	string getString(int value);
-	string getPathExtension(string path);
-	bool readFile(string path, OEData *data);
-	bool writeFile(string path, OEData *data);
-	string getXMLProperty(xmlNodePtr node, string name);
-	void setXMLProperty(xmlNodePtr node, string name, string value);
+	bool dump(OEData *data);
 };
 
 #endif

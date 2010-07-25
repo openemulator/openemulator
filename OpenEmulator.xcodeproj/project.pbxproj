@@ -26,6 +26,10 @@
 		001F916311925BB7005383B3 /* libzip.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C5805E109A3DDF00B00626 /* libzip.a */; };
 		001F916411925BBE005383B3 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0054E4A61131BE8A006D32D9 /* OpenGL.framework */; };
 		001F916911925BE8005383B3 /* SDL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 001F916811925BE8005383B3 /* SDL.framework */; };
+		0030C51711FBA4D9009DF0DD /* OEDML.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00FA328611F76255000B9574 /* OEDML.cpp */; };
+		0030C51811FBA4DC009DF0DD /* OEData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00FA33F911F783DC000B9574 /* OEData.cpp */; };
+		0030C52911FBA518009DF0DD /* libcomposite.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00FF25F2115C385000C82CA0 /* libcomposite.a */; };
+		0030C52A11FBA523009DF0DD /* OEPA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00C3CF9711F557AC00EA2453 /* OEPA.cpp */; };
 		0032967711C5A7B5003FD49A /* IPMount.png in Resources */ = {isa = PBXBuildFile; fileRef = 0032967011C5A7B5003FD49A /* IPMount.png */; };
 		0032967811C5A7B5003FD49A /* IPUnmount.png in Resources */ = {isa = PBXBuildFile; fileRef = 0032967111C5A7B5003FD49A /* IPUnmount.png */; };
 		0032967B11C5A7B5003FD49A /* TBPowerDown.png in Resources */ = {isa = PBXBuildFile; fileRef = 0032967411C5A7B5003FD49A /* TBPowerDown.png */; };
@@ -78,7 +82,6 @@
 		00B703861135ACA6005E4B65 /* OEComponentFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B703751135AC91005E4B65 /* OEComponentFactory.cpp */; };
 		00B703871135ACA7005E4B65 /* OEEmulation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B703771135AC91005E4B65 /* OEEmulation.cpp */; };
 		00B703881135ACA7005E4B65 /* OEInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B703791135AC91005E4B65 /* OEInfo.cpp */; };
-		00B7038A1135ACAA005E4B65 /* OERef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B7037D1135AC91005E4B65 /* OERef.cpp */; };
 		00B7038E1135ACAD005E4B65 /* OEPackage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B7037B1135AC91005E4B65 /* OEPackage.cpp */; };
 		00B974B410701DDA00BD1402 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = 00B974AD10701DCD00BD1402 /* sounds */; };
 		00BADDC51100EDC600EB0344 /* ConnectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00BADD451100BE8300EB0344 /* ConnectorViewController.m */; };
@@ -88,7 +91,6 @@
 		00C3CF9111F557A000EA2453 /* SDLMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 00C3CF8F11F557A000EA2453 /* SDLMain.m */; };
 		00C3CF9B11F557AC00EA2453 /* OEGL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00C3CF9311F557AC00EA2453 /* OEGL.cpp */; };
 		00C3CF9C11F557AC00EA2453 /* OEHID.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00C3CF9511F557AC00EA2453 /* OEHID.cpp */; };
-		00C3CF9D11F557AC00EA2453 /* OEPA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00C3CF9711F557AC00EA2453 /* OEPA.cpp */; };
 		00C3CF9E11F557AC00EA2453 /* OEPAEmulation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00C3CF9911F557AC00EA2453 /* OEPAEmulation.cpp */; };
 		00C3D0D711F5584900EA2453 /* OEGL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00C3CF9311F557AC00EA2453 /* OEGL.cpp */; };
 		00C3D0D811F5584A00EA2453 /* OEHID.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00C3CF9511F557AC00EA2453 /* OEHID.cpp */; };
@@ -140,8 +142,7 @@
 		00F0ED6711028C8800208090 /* DiskImage525.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000F66390FF8368F00C8AF23 /* DiskImage525.icns */; };
 		00F86BE3100FD4F60016867D /* IPSoundMax.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BE1100FD4F60016867D /* IPSoundMax.png */; };
 		00F86BE4100FD4F60016867D /* IPSoundMin.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BE2100FD4F60016867D /* IPSoundMin.png */; };
-		00FA328711F76255000B9574 /* OEDML.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00FA328611F76255000B9574 /* OEDML.cpp */; };
-		00FA33FA11F783DC000B9574 /* OEData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00FA33F911F783DC000B9574 /* OEData.cpp */; };
+		00FCBA5611FBF1EB0036EB3E /* OEAddress.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00FCBA5511FBF1EB0036EB3E /* OEAddress.cpp */; };
 		00FE0C171095371B00B92AB7 /* ChooserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00FE0C161095371B00B92AB7 /* ChooserViewController.m */; };
 		00FE0C6310953F7000B92AB7 /* DeviceChooserViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00FE0C6210953F7000B92AB7 /* DeviceChooserViewController.mm */; };
 /* End PBXBuildFile section */
@@ -220,7 +221,6 @@
 		001F915711925B56005383B3 /* libsndfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsndfile.a; path = /opt/local/lib/libsndfile.a; sourceTree = "<absolute>"; };
 		001F915A11925B74005383B3 /* libsamplerate.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsamplerate.a; path = /opt/local/lib/libsamplerate.a; sourceTree = "<absolute>"; };
 		001F916811925BE8005383B3 /* SDL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL.framework; path = /Library/Frameworks/SDL.framework; sourceTree = "<absolute>"; };
-		002C27B41168744200FAE6E6 /* libemulator.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libemulator.a; path = ../openemulator/build/Debug/libemulator.a; sourceTree = SOURCE_ROOT; };
 		002F77701162EB6A00B0ECF1 /* MOS6502Operations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOS6502Operations.h; sourceTree = "<group>"; };
 		002F77721162EB7400B0ECF1 /* MOS6502IllegalOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOS6502IllegalOperations.h; sourceTree = "<group>"; };
 		002F77851162EBB200B0ECF1 /* MOS6502Opcodes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOS6502Opcodes.h; sourceTree = "<group>"; };
@@ -300,7 +300,6 @@
 		00B4F933117E43E8008D622F /* MemoryOffset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MemoryOffset.cpp; sourceTree = "<group>"; };
 		00B5709C10863C2A00CDE4A7 /* TemplateChooserController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TemplateChooserController.h; sourceTree = "<group>"; };
 		00B5709D10863C2A00CDE4A7 /* TemplateChooserController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TemplateChooserController.m; sourceTree = "<group>"; };
-		00B703721135AC91005E4B65 /* OERef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OERef.h; sourceTree = "<group>"; };
 		00B703731135AC91005E4B65 /* OEComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEComponent.cpp; sourceTree = "<group>"; };
 		00B703741135AC91005E4B65 /* OEComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEComponent.h; sourceTree = "<group>"; };
 		00B703751135AC91005E4B65 /* OEComponentFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEComponentFactory.cpp; sourceTree = "<group>"; };
@@ -311,7 +310,6 @@
 		00B7037A1135AC91005E4B65 /* OEInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEInfo.h; sourceTree = "<group>"; };
 		00B7037B1135AC91005E4B65 /* OEPackage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEPackage.cpp; sourceTree = "<group>"; };
 		00B7037C1135AC91005E4B65 /* OEPackage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEPackage.h; sourceTree = "<group>"; };
-		00B7037D1135AC91005E4B65 /* OERef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OERef.cpp; sourceTree = "<group>"; };
 		00B974AD10701DCD00BD1402 /* sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; path = sounds; sourceTree = "<group>"; };
 		00BADD441100BE8300EB0344 /* ConnectorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConnectorViewController.h; sourceTree = "<group>"; };
 		00BADD451100BE8300EB0344 /* ConnectorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConnectorViewController.m; sourceTree = "<group>"; };
@@ -379,6 +377,8 @@
 		00FA328C11F7647E000B9574 /* OETypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OETypes.h; sourceTree = "<group>"; };
 		00FA33F811F783DC000B9574 /* OEData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEData.h; sourceTree = "<group>"; };
 		00FA33F911F783DC000B9574 /* OEData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEData.cpp; sourceTree = "<group>"; };
+		00FCBA5411FBF1EB0036EB3E /* OEAddress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEAddress.h; sourceTree = "<group>"; };
+		00FCBA5511FBF1EB0036EB3E /* OEAddress.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEAddress.cpp; sourceTree = "<group>"; };
 		00FE0C00109534CE00B92AB7 /* ChooserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChooserViewController.h; sourceTree = "<group>"; };
 		00FE0C041095353B00B92AB7 /* TemplateChooserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TemplateChooserViewController.h; sourceTree = "<group>"; };
 		00FE0C051095353B00B92AB7 /* TemplateChooserViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TemplateChooserViewController.mm; sourceTree = "<group>"; };
@@ -404,6 +404,7 @@
 				001F916311925BB7005383B3 /* libzip.a in Frameworks */,
 				001F916411925BBE005383B3 /* OpenGL.framework in Frameworks */,
 				001F916911925BE8005383B3 /* SDL.framework in Frameworks */,
+				0030C52911FBA518009DF0DD /* libcomposite.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -533,13 +534,13 @@
 				00B7037A1135AC91005E4B65 /* OEInfo.h */,
 				00B7037B1135AC91005E4B65 /* OEPackage.cpp */,
 				00B7037C1135AC91005E4B65 /* OEPackage.h */,
-				00B7037D1135AC91005E4B65 /* OERef.cpp */,
-				00B703721135AC91005E4B65 /* OERef.h */,
 				00FA328511F76255000B9574 /* OEDML.h */,
 				00FA328611F76255000B9574 /* OEDML.cpp */,
 				00FA328C11F7647E000B9574 /* OETypes.h */,
 				00FA33F811F783DC000B9574 /* OEData.h */,
 				00FA33F911F783DC000B9574 /* OEData.cpp */,
+				00FCBA5411FBF1EB0036EB3E /* OEAddress.h */,
+				00FCBA5511FBF1EB0036EB3E /* OEAddress.cpp */,
 			);
 			path = libemulation;
 			sourceTree = "<group>";
@@ -640,7 +641,6 @@
 		19C28FB0FE9D524F11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				002C27B41168744200FAE6E6 /* libemulator.a */,
 				8D15AC370486D014006FF6A4 /* OpenEmulator.app */,
 				0054E2E41131B9EF006D32D9 /* oecli */,
 				00FF25F2115C385000C82CA0 /* libcomposite.a */,
@@ -951,9 +951,8 @@
 				00C3CF9111F557A000EA2453 /* SDLMain.m in Sources */,
 				00C3CF9B11F557AC00EA2453 /* OEGL.cpp in Sources */,
 				00C3CF9C11F557AC00EA2453 /* OEHID.cpp in Sources */,
-				00C3CF9D11F557AC00EA2453 /* OEPA.cpp in Sources */,
 				00C3CF9E11F557AC00EA2453 /* OEPAEmulation.cpp in Sources */,
-				00FA328711F76255000B9574 /* OEDML.cpp in Sources */,
+				0030C52A11FBA523009DF0DD /* OEPA.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -965,7 +964,6 @@
 				00B703861135ACA6005E4B65 /* OEComponentFactory.cpp in Sources */,
 				00B703871135ACA7005E4B65 /* OEEmulation.cpp in Sources */,
 				00B703881135ACA7005E4B65 /* OEInfo.cpp in Sources */,
-				00B7038A1135ACAA005E4B65 /* OERef.cpp in Sources */,
 				00B7038E1135ACAD005E4B65 /* OEPackage.cpp in Sources */,
 				005398DB113A00CA00CA7CE4 /* ROM.cpp in Sources */,
 				005398DC113A00CA00CA7CE4 /* RAM.cpp in Sources */,
@@ -984,6 +982,8 @@
 				00984DA611A73C7E00B9C0B5 /* DAC1Bit.cpp in Sources */,
 				00D5D13C11B73F8400C77A67 /* CompositeMonitor.cpp in Sources */,
 				0048673B11C4478200ECD52C /* Host.cpp in Sources */,
+				0030C51711FBA4D9009DF0DD /* OEDML.cpp in Sources */,
+				0030C51811FBA4DC009DF0DD /* OEData.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1026,7 +1026,7 @@
 				00C3D0D811F5584A00EA2453 /* OEHID.cpp in Sources */,
 				00C3D0D911F5584B00EA2453 /* OEPA.cpp in Sources */,
 				00C3D0DA11F5584C00EA2453 /* OEPAEmulation.cpp in Sources */,
-				00FA33FA11F783DC000B9574 /* OEData.cpp in Sources */,
+				00FCBA5611FBF1EB0036EB3E /* OEAddress.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

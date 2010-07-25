@@ -50,7 +50,7 @@ void OEData::release()
 		delete this;
 }
 
-OEUInt8 *OEData::getData()
+char *OEData::getData()
 {
 	return &data[0];
 }
@@ -60,7 +60,7 @@ size_t OEData::size()
 	return data.size();
 }
 
-OEUInt8 &OEData::operator[](const size_t pos)
+char &OEData::operator[](const size_t pos)
 {
 	return data[pos];
 }

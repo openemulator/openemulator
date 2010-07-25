@@ -16,62 +16,45 @@
 #include <vector>
 
 #include "OEDML.h"
-#include "OERef.h"
 
-class OESetting
+typedef struct
 {
-public:
-	OESetting()
-	{
-	}
-	OESetting(const OESetting &setting)
-	{
-		ref = setting.ref;
-		type = setting.type;
-		options = setting.options;
-		label = setting.label;
-	}
-	
-	OERef ref;
+	string ref;
 	string type;
 	string options;
 	string label;
-};
+} OESetting;
 
-class OEPort
+typedef vector<OESetting *> OESettings;
+
+typedef struct
 {
-public:
-	OEPort()
-	{
-	}
-	OEPort(const OEPort &port)
-	{
-		ref = port.ref;
-		type = port.type;
-		category = port.category;
-		label = port.label;
-		image = port.image;
-		
-		deviceLabel = port.deviceLabel;
-		
-		connectionLabel = port.connectionLabel;
-		connectionPort = port.connectionPort;
-	}
-	
-	OERef ref;
+	string ref;
 	string type;
-	string category;
+	string options;
 	string label;
 	string image;
 	
-	string deviceLabel;
-	
 	string connectionLabel;
-	OEPort *connectionPort;
-};
+	
+	OESettings settings;
+} OEDevice;
 
-typedef vector<OESetting> OESettings;
-typedef vector<OEPort> OEPorts;
+typedef vector<OEDevice *> OEDevices;
+
+typedef struct _OEPort
+{
+	string ref;
+	string type;
+	string label;
+	string image;
+	
+	struct _OEPort *connection;
+	
+	OEDevice *device;
+} OEPort;
+
+typedef vector<OEPort *> OEPorts;
 
 class OEInfo : public OEDML
 {
@@ -88,23 +71,9 @@ public:
 	string getDescription();
 	string getGroup();
 	
+	OEDevices *getDevices();
 	OEPorts *getInlets();
 	OEPorts *getOutlets();
-	OESettings *getSettings();
-	
-protected:
-	void analyze();
-	void analyzeConnections();
-	void analyzeLabels();
-	
-	xmlNodePtr getNodeForRef(xmlDocPtr doc, OERef ref);
-	OERef getOutletForInlet(xmlDocPtr doc, OERef ref);
-	OEPort *getPortForOutlet(OERef ref);
-	string getConnectionLabel(OEPort *outletPort, vector<OERef> &visitedRefs);
-	
-	string getString(int value);
-	string getXMLProperty(xmlNodePtr node, string name);
-	void setXMLProperty(xmlNodePtr node, string name, string value);
 	
 private:
 	string label;
@@ -112,13 +81,22 @@ private:
 	string description;
 	string group;
 	
+	OEDevices devices;
 	OEPorts inlets;
 	OEPorts outlets;
-	OESettings settings;
 	
-	void analyzeDevice(xmlNodePtr node);
-	OEPort analyzePort(xmlNodePtr node, OERef ref, string label, string image);
-	OESetting analyzeSetting(xmlNodePtr node, OERef ref);
+	void init();
+	
+	bool analyze();
+	
+	void analyzeDeviceNode(xmlNodePtr node);
+	OEPort *analyzePortNode(xmlNodePtr node, OEDevice *device);
+	OESetting *analyzeSettingNode(xmlNodePtr node, string ref);
+	
+	bool analyzeConnections();
+	
+	string getConnectionLabel(string ref);
+	string getConnectionLabel(OEPort *outlet, vector<string> &visitedRefs);
 };
 
 #endif

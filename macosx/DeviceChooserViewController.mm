@@ -125,21 +125,21 @@
 		OEPorts *outlets = info->getOutlets();
 		BOOL isInletsFound = YES;
 		BOOL isCategoryFound = NO;
-		for (OEPorts::iterator o = outlets->begin();
-			 o != outlets->end();
-			 o++)
+		for (OEPorts::iterator outlet = outlets->begin();
+			 outlet != outlets->end();
+			 outlet++)
 		{
-			if (o->connectionPort)
+			if ((*outlet)->connection)
 				continue;
 			
-			NSString *outletType = [NSString stringWithUTF8String:o->type.c_str()];
+			NSString *type = [NSString stringWithUTF8String:(*outlet)->type.c_str()];
 			BOOL isInletFound = NO;
 			for (int j = 0; j < [inlets count]; j++)
 			{
 				NSMutableDictionary *dict = [inlets objectAtIndex:j];
 				NSString *inletType = [dict objectForKey:@"type"];
 				
-				if ([inletType compare:outletType] == NSOrderedSame)
+				if ([inletType compare:type] == NSOrderedSame)
 				{
 					[inlets removeObjectAtIndex:j];
 					isInletFound = YES;
@@ -220,18 +220,18 @@
 	[freeOutlets autorelease];
 	
 	OEPorts *outlets = info->getOutlets();
-	for (OEPorts::iterator o = outlets->begin();
-		 o != outlets->end();
-		 o++)
+	for (OEPorts::iterator outlet = outlets->begin();
+		 outlet != outlets->end();
+		 outlet++)
 	{
-		if (o->connectionPort)
+		if ((*outlet)->connection)
 			continue;
 		
-		string stringRef = o->ref.getStringRef();
+		string stringRef = (*outlet)->ref;
 		
-		NSString *portType = [NSString stringWithUTF8String:o->type.c_str()];
-		NSString *portLabel = [NSString stringWithUTF8String:o->label.c_str()];
-		NSString *portImage = [NSString stringWithUTF8String:o->image.c_str()];
+		NSString *portType = [NSString stringWithUTF8String:(*outlet)->type.c_str()];
+		NSString *portLabel = [NSString stringWithUTF8String:(*outlet)->label.c_str()];
+		NSString *portImage = [NSString stringWithUTF8String:(*outlet)->image.c_str()];
 		NSString *portRef = [NSString stringWithUTF8String:stringRef.c_str()];
 		
 		NSMutableDictionary *dict = [[[NSMutableDictionary alloc] init] autorelease];

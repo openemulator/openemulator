@@ -28,7 +28,7 @@ private:
 	
 	OEData *memory;
 	int mask;
-	OEUInt8 *data;
+	char *data;
 	
 	void updateMemory(int size);
 };

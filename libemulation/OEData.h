@@ -29,15 +29,15 @@ public:
 	void retain();
 	void release();
 	
-	OEUInt8 *getData();
+	char *getData();
 	size_t size();
-	OEUInt8 &operator[](const size_t pos);
+	char &operator[](const size_t pos);
 	
 	bool resize(int size);
 	
 private:
 	int retainCount;
-	vector<OEUInt8> data;
+	vector<char> data;
 	
 	void init();
 };

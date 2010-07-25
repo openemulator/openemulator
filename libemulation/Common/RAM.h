@@ -39,7 +39,7 @@ private:
 	
 	OEData *memory;
 	int mask;
-	OEUInt8 *data;
+	char *data;
 	
 	OEData resetPattern;
 	
