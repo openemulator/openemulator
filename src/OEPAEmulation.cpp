@@ -114,29 +114,18 @@ int OEPAEmulation::ioctl(string ref, int message, void *data)
 	return status;
 }
 
-bool OEPAEmulation::addDevices(string path, OEStringRefMap connections)
+bool OEPAEmulation::addDML(string path, OEConnections connections)
 {
 	lock();
 	
-	bool status = OEEmulation::addDevices(path, connections);
+	bool status = OEEmulation::addDML(path, connections);
 	
 	unlock();
 	
 	return status;
 }
 
-bool OEPAEmulation::isDeviceTerminal(OERef ref)
-{
-	lock();
-	
-	bool status = OEEmulation::isDeviceTerminal(ref);
-	
-	unlock();
-	
-	return status;
-}
-
-bool OEPAEmulation::removeDevice(OERef ref)
+bool OEPAEmulation::removeDevice(string ref)
 {
 	lock();
 	

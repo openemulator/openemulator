@@ -11,8 +11,6 @@
 #ifndef _OECOMPONENTFACTORY_H
 #define _OECOMPONENTFACTORY_H
 
-#include <string>
-
 #include "OEComponent.h"
 
 OEComponent *oeBuild(string className);

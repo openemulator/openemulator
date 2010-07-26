@@ -100,7 +100,7 @@ bool OEPackage::readFile(string localPath, OEData *data)
 			{
 				data->resize(zipStat.size);
 				error = (zip_fread(zipFile,
-								   data->getData(), data->size()) !=
+								   &data->front(), data->size()) !=
 						 zipStat.size);
 				zip_fclose(zipFile);
 			}
@@ -117,7 +117,7 @@ bool OEPackage::readFile(string localPath, OEData *data)
 			file.seekg(0, ios::beg);
 			
 			data->resize(size);
-			file.read((char *) data->getData(), data->size());
+			file.read(&data->front(), data->size());
 			
 			error = !file.good();
 			
@@ -140,7 +140,7 @@ bool OEPackage::writeFile(string localPath, OEData *data)
 		struct zip_source *zipSource = NULL;
 		
 		if ((zipSource = zip_source_buffer(zip,
-										   data->getData(), data->size(),
+										   &data->front(), data->size(),
 										   0)) != NULL)
 		{
 			int index;
@@ -158,7 +158,7 @@ bool OEPackage::writeFile(string localPath, OEData *data)
 		
 		if (file.is_open())
 		{
-			file.write((char *) data->getData(), data->size());
+			file.write(&data->front(), data->size());
 			error = !file.good();
 			file.close();
 		}

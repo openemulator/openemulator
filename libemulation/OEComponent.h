@@ -11,8 +11,6 @@
 #ifndef _OECOMPONENT_H
 #define _OECOMPONENT_H
 
-#include <map>
-
 #include "OETypes.h"
 
 typedef struct
@@ -24,14 +22,12 @@ typedef struct
 	OEUInt32 end;
 } OEMemoryRange;
 
-using namespace std;
+typedef vector<OEMemoryRange> OEMemoryRanges;
 
 class OEComponent;
 
 typedef vector<OEComponent *> OEObservers;
 typedef map<int, OEObservers> OEObserverMap;
-
-typedef vector<OEMemoryRange> OEMemoryRanges;
 
 class OEComponent
 {

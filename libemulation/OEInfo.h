@@ -11,10 +11,6 @@
 #ifndef _OEINFO_H
 #define _OEINFO_H
 
-#include <iostream>
-#include <string>
-#include <vector>
-
 #include "OEDML.h"
 
 typedef struct

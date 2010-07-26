@@ -27,7 +27,7 @@ RAM::RAM()
 
 RAM::~RAM()
 {
-	memory->release();
+	delete memory;
 }
 
 void RAM::updateMemory(int size)
@@ -37,7 +37,7 @@ void RAM::updateMemory(int size)
 		size = 1;
 	memory->resize(size);
 	mask = size - 1;
-	data = memory->getData();
+	data = &memory->front();
 }
 
 bool RAM::setProperty(const string &name, const string &value)
@@ -61,9 +61,8 @@ bool RAM::setData(const string &name, OEData *data)
 {
 	if (name == "image")
 	{
-		memory->release();
+		delete memory;
 		memory = data;
-		memory->retain();
 		
 		updateMemory(size);
 	}
@@ -126,7 +125,7 @@ void RAM::notify(int notification, OEComponent *component, void *data)
 			if (event->usageId == HOST_HID_S_COLDRESTART)
 			{
 				for (int i = 0; i < memory->size(); i++)
-					memory[i] = resetPattern[i % resetPattern.size()];
+					(*memory)[i] = resetPattern[i % resetPattern.size()];
 			}
 			break;
 		}

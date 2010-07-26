@@ -102,22 +102,6 @@
 	return emulation;
 }
 
-- (NSString *)getDMLProperty:(NSString *)name
-{
-	if (!emulation)
-		return nil;
-	
-	xmlDocPtr dml = ((OEPAEmulation *)emulation)->getDML();
-	
-	xmlNodePtr rootNode = xmlDocGetRootElement(dml);
-	
-	xmlChar *valuec = xmlGetProp(rootNode, BAD_CAST [name UTF8String]);
-	NSString *value = [NSString stringWithUTF8String:(const char *)valuec];
-	xmlFree(valuec);
-	
-	return value;
-}
-
 - (BOOL)setHostProperty:(NSString *)name
 				  value:(NSString *)value
 {
@@ -258,19 +242,13 @@
 	for (int i = 0; i < count; i++)
 		[self removeObjectFromPeripheralsAtIndex:0];
 	
-	// Process info
-	xmlDocPtr dmlDocPtr = ((OEPAEmulation *)emulation)->getDML();
-	OEInfo info(dmlDocPtr);
-	if (!info.isLoaded())
-		return;
-	
 	// Process inlets
-	OEPorts *inlets = info.getInlets();
-	for (OEPorts::iterator i = inlets->begin();
-		 i != inlets->end();
-		 i++)
+	OEDevices *devices = ((OEPAEmulation *)emulation)->getDevices();
+	for (OEDevices::iterator device = devices->begin();
+		 device != devices->end();
+		 device++)
 	{
-		if (i->connectionPort)
+		if ((*device)->type.size())
 			continue;
 		
 		string stringRef = i->ref.getStringRef();
@@ -343,12 +321,17 @@
 	
 	if (emulation)
 	{
-		if (((OEPAEmulation *)emulation)->isLoaded())
+		if (((OEPAEmulation *)emulation)->isOpen())
 		{
-			[self setLabel:[self getDMLProperty:@"label"]];
-			[self setNotes:[self getHostProperty:@"notes"]];
+			string value;
+			
+			value = ((OEPAEmulation *)emulation)->getLabel();
+			[self setLabel:[NSString stringWithUTF8String:label.c_str()]];
+			value = ((OEPAEmulation *)emulation)->getNotes();
+			[self setNotes:[NSString stringWithUTF8String:label.c_str()]];
 			[self updatePowerState];
-			[self setImage:[self getResourceImage:[self getDMLProperty:@"image"]]];
+			value = ((OEPAEmulation *)emulation)->getImage();
+			[self setImage:[self getResourceImage:[NSString stringWithUTF8String:value.c_str()]]];
 			
 			[self updateDevices];
 			
@@ -453,7 +436,7 @@
 		connectionsMap[inletRefString] = outletRefString;
 	}
 	
-	if (!((OEPAEmulation *)emulation)->addDevices(pathString, connectionsMap))
+	if (!((OEPAEmulation *)emulation)->addDML(pathString, connectionsMap))
 	{
 		NSString *messageText = @"The device could not be added.";
 		

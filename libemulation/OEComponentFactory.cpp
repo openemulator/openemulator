@@ -30,7 +30,6 @@
 #include "AppleIKeyboard.h"
 #include "AppleIIO.h"
 #include "AppleICassetteInterface.h"
-
 // FACTORY_INCLUDE_END - Do not modify this section
 
 #define matchComponent(name) if (className == #name) return new name()
@@ -56,6 +55,7 @@ OEComponent *oeBuild(string className)
 	matchComponent(AppleIVideo);
 	matchComponent(AppleIKeyboard);
 	matchComponent(AppleIIO);
+	matchComponent(AppleICassetteInterface);
 // FACTORY_CODE_END - Do not modify this section
 	
 	return NULL;

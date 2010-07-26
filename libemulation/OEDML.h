@@ -21,6 +21,8 @@
 #define OE_PACKAGE_EXTENSION "emulation"
 #define OE_PACKAGE_DML_FILENAME "info.xml"
 
+typedef map<string, string> OEConnections;
+
 class OEDML
 {
 public:
@@ -33,6 +35,9 @@ public:
 	bool save(string path);
 	void close();
 	
+	bool add(string path, OEConnections &connections);
+	bool remove(string deviceName);
+	
 protected:
 	OEPackage *package;
 	xmlDocPtr doc;
@@ -40,7 +45,7 @@ protected:
 	virtual void update();
 	
 	xmlNodePtr getNode(string ref);
-	string getOutletRef(string ref);
+	string followRef(string ref);
 	
 	string getString(int value);
 	string getPathExtension(string path);

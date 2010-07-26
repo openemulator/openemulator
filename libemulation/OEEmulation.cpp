@@ -16,8 +16,14 @@
 #include "OEEmulation.h"
 #include "OEComponentFactory.h"
 
+OEEmulation::OEEmulation() : OEInfo()
+{
+}
+
 OEEmulation::OEEmulation(string path) : OEInfo()
 {
+	resourcePath = OE_DEFAULT_RESOURCE_PATH;
+	open(path);
 }
 
 OEEmulation::OEEmulation(string path, string resourcePath) : OEInfo()
@@ -55,7 +61,7 @@ void OEEmulation::close()
 
 OEComponent *OEEmulation::getComponent(string ref)
 {
-	if (components.find(ref) == map::end)
+	if (!components.count(ref))
 		return NULL;
 	
 	return components[ref];
@@ -126,7 +132,7 @@ bool OEEmulation::addDML(string path, OEConnections connections)
 	return success;*/
 }
 
-bool OEEmulation::removeDevice(OERef ref)
+bool OEEmulation::removeDevice(string ref)
 {
 	return true;
 }
@@ -136,7 +142,8 @@ bool OEEmulation::removeDevice(OERef ref)
 //
 // DML Operations
 //
-bool OEEmulation::constructDevices(xmlDocPtr doc)
+/*
+bool OEEmulation::construct()
 {
 	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
 	for(xmlNodePtr childNode = rootNode->children;
@@ -145,23 +152,6 @@ bool OEEmulation::constructDevices(xmlDocPtr doc)
 	{
 		if (!xmlStrcmp(childNode->name, BAD_CAST "device"))
 			if (!constructComponents(childNode))
-				return false;
-	}
-	
-	return true;
-}
-
-bool OEEmulation::iterateDevice(xmlNodePtr node,
-								bool (OEEmulation::*callback)(xmlNodePtr node,
-															  OERef ref))
-{
-	OERef deviceRef(getXMLProperty(node, "name"));
-	for(xmlNodePtr childNode = node->children;
-		childNode;
-		childNode = childNode->next)
-	{
-		if (!xmlStrcmp(childNode->name, BAD_CAST "component"))
-			if (!(this->*callback)(childNode, deviceRef))
 				return false;
 	}
 	
@@ -817,3 +807,4 @@ string OEEmulation::buildSourcePath(string src, OERef deviceRef)
 	
 	return src;
 }
+*/

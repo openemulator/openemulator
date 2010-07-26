@@ -8,8 +8,6 @@
  * Type for transforming DML addresses
  */
 
-#include <iostream>
-
 #include "OEAddress.h"
 
 OEAddress::OEAddress()
@@ -35,21 +33,6 @@ OEAddress::OEAddress(string ref)
 	}
 	
 	setComponent(ref);
-}
-
-string OEAddress::filter(string value)
-{
-	string out;
-	
-	for (string::iterator i = value.begin();
-		 i != value.end();
-		 i++)
-	{
-		if (((*i) != ':') || ((*i) != '.'))
-			out += *i;
-	}
-			
-	return out;
 }
 
 void OEAddress::setDevice(string value)
@@ -123,4 +106,19 @@ string OEAddress::relativeRef(string value)
 		address.setProperty("");
 	
 	return address.ref();
+}
+
+string OEAddress::filter(string value)
+{
+	string out;
+	
+	for (string::iterator i = value.begin();
+		 i != value.end();
+		 i++)
+	{
+		if (((*i) != ':') || ((*i) != '.'))
+			out += *i;
+	}
+	
+	return out;
 }

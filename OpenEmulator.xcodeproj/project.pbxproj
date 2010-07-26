@@ -27,7 +27,6 @@
 		001F916411925BBE005383B3 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0054E4A61131BE8A006D32D9 /* OpenGL.framework */; };
 		001F916911925BE8005383B3 /* SDL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 001F916811925BE8005383B3 /* SDL.framework */; };
 		0030C51711FBA4D9009DF0DD /* OEDML.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00FA328611F76255000B9574 /* OEDML.cpp */; };
-		0030C51811FBA4DC009DF0DD /* OEData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00FA33F911F783DC000B9574 /* OEData.cpp */; };
 		0030C52911FBA518009DF0DD /* libcomposite.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00FF25F2115C385000C82CA0 /* libcomposite.a */; };
 		0030C52A11FBA523009DF0DD /* OEPA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00C3CF9711F557AC00EA2453 /* OEPA.cpp */; };
 		0032967711C5A7B5003FD49A /* IPMount.png in Resources */ = {isa = PBXBuildFile; fileRef = 0032967011C5A7B5003FD49A /* IPMount.png */; };
@@ -142,7 +141,6 @@
 		00F0ED6711028C8800208090 /* DiskImage525.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000F66390FF8368F00C8AF23 /* DiskImage525.icns */; };
 		00F86BE3100FD4F60016867D /* IPSoundMax.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BE1100FD4F60016867D /* IPSoundMax.png */; };
 		00F86BE4100FD4F60016867D /* IPSoundMin.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BE2100FD4F60016867D /* IPSoundMin.png */; };
-		00FCBA5611FBF1EB0036EB3E /* OEAddress.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00FCBA5511FBF1EB0036EB3E /* OEAddress.cpp */; };
 		00FE0C171095371B00B92AB7 /* ChooserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00FE0C161095371B00B92AB7 /* ChooserViewController.m */; };
 		00FE0C6310953F7000B92AB7 /* DeviceChooserViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00FE0C6210953F7000B92AB7 /* DeviceChooserViewController.mm */; };
 /* End PBXBuildFile section */
@@ -375,8 +373,6 @@
 		00FA328511F76255000B9574 /* OEDML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEDML.h; sourceTree = "<group>"; };
 		00FA328611F76255000B9574 /* OEDML.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEDML.cpp; sourceTree = "<group>"; };
 		00FA328C11F7647E000B9574 /* OETypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OETypes.h; sourceTree = "<group>"; };
-		00FA33F811F783DC000B9574 /* OEData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEData.h; sourceTree = "<group>"; };
-		00FA33F911F783DC000B9574 /* OEData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEData.cpp; sourceTree = "<group>"; };
 		00FCBA5411FBF1EB0036EB3E /* OEAddress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEAddress.h; sourceTree = "<group>"; };
 		00FCBA5511FBF1EB0036EB3E /* OEAddress.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEAddress.cpp; sourceTree = "<group>"; };
 		00FE0C00109534CE00B92AB7 /* ChooserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChooserViewController.h; sourceTree = "<group>"; };
@@ -537,8 +533,6 @@
 				00FA328511F76255000B9574 /* OEDML.h */,
 				00FA328611F76255000B9574 /* OEDML.cpp */,
 				00FA328C11F7647E000B9574 /* OETypes.h */,
-				00FA33F811F783DC000B9574 /* OEData.h */,
-				00FA33F911F783DC000B9574 /* OEData.cpp */,
 				00FCBA5411FBF1EB0036EB3E /* OEAddress.h */,
 				00FCBA5511FBF1EB0036EB3E /* OEAddress.cpp */,
 			);
@@ -983,7 +977,6 @@
 				00D5D13C11B73F8400C77A67 /* CompositeMonitor.cpp in Sources */,
 				0048673B11C4478200ECD52C /* Host.cpp in Sources */,
 				0030C51711FBA4D9009DF0DD /* OEDML.cpp in Sources */,
-				0030C51811FBA4DC009DF0DD /* OEData.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1026,7 +1019,6 @@
 				00C3D0D811F5584A00EA2453 /* OEHID.cpp in Sources */,
 				00C3D0D911F5584B00EA2453 /* OEPA.cpp in Sources */,
 				00C3D0DA11F5584C00EA2453 /* OEPAEmulation.cpp in Sources */,
-				00FCBA5611FBF1EB0036EB3E /* OEAddress.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

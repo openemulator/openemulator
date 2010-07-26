@@ -7,3 +7,8 @@
  *
  */
 
+#include "OEComponent.h"
+
+class AppleICassetteInterface : public OEComponent
+{
+};

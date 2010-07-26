@@ -13,6 +13,8 @@
 
 #include <string>
 #include <vector>
+#include <map>
+
 #include <iostream>
 
 using namespace std;
@@ -46,6 +48,6 @@ typedef union
 	OEInt32 sd;
 } OEPair;
 
-#include "OEData.h"
+typedef vector<char> OEData;
 
 #endif

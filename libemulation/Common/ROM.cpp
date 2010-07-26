@@ -18,7 +18,7 @@ ROM::ROM()
 
 ROM::~ROM()
 {
-	memory->release();
+	delete memory;
 }
 
 void ROM::updateMemory(int size)
@@ -28,7 +28,7 @@ void ROM::updateMemory(int size)
 		size = 1;
 	memory->resize(size);
 	mask = size - 1;
-	data = memory->getData();
+	data = &memory->front();
 }
 
 bool ROM::setProperty(const string &name, const string &value)
@@ -45,9 +45,8 @@ bool ROM::setResource(const string &name, OEData *data)
 {
 	if (name == "image")
 	{
-		memory->release();
+		delete memory;
 		memory = data;
-		memory->retain();
 		
 		updateMemory(memory->size());
 	}

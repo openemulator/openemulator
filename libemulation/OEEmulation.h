@@ -11,19 +11,18 @@
 #ifndef _OEEMULATION_H
 #define _OEEMULATION_H
 
-#include <map>
-
 #include "OEInfo.h"
 #include "OEComponent.h"
 
 #define OE_REF_SUBST_STRING "${REF}"
+#define OE_DEFAULT_RESOURCE_PATH "./resources"
 
 typedef map<string, OEComponent *> OEComponents;
-typedef map<string, string> OEConnections;
 
 class OEEmulation : public OEInfo
 {
 public:
+	OEEmulation();
 	OEEmulation(string path);
 	OEEmulation(string path, string resourcePath);
 	~OEEmulation();

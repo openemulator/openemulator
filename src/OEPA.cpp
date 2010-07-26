@@ -180,7 +180,6 @@ void OEPA::removeEmulation(OEPAEmulation *emulation)
 //
 // Audio buffering
 //
-
 int OEPA::getBufferInputSize()
 {
 	int stateNum = 2 * bufferNum;
@@ -233,7 +232,6 @@ void OEPA::initBuffer()
 //
 // Audio
 //
-
 bool OEPA::openAudio()
 {
 	if (audioOpen)
@@ -428,7 +426,6 @@ void OEPA::runAudioTimer()
 //
 // Emulations
 //
-
 bool OEPA::openEmulations()
 {
 	int error;
@@ -610,7 +607,6 @@ void OEPA::runEmulations()
 //
 // Play/Recording
 //
-
 bool OEPA::startPlaying(string path)
 {
 	stopPlaying();

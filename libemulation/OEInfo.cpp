@@ -216,7 +216,7 @@ bool OEInfo::analyzeConnections()
 		 inlet != inlets.end();
 		 inlet++)
 	{
-		string ref = getOutletRef((*inlet)->ref);
+		string ref = followRef((*inlet)->ref);
 		if (ref == "")
 			continue;
 		

@@ -12,6 +12,7 @@
 #include <fstream>
 
 #include "OEDML.h"
+
 #include "OEAddress.h"
 
 OEDML::OEDML()
@@ -162,6 +163,47 @@ void OEDML::close()
 	package = NULL;
 }
 
+bool OEDML::add(string path, OEConnections &connections)
+{
+	OEDML emulation(path);
+}
+
+bool OEDML::remove(string ref)
+{
+	OEAddress address;
+	address.setDevice(OEAddress(ref).getDevice());
+	
+	xmlNodePtr node = getNode(address.ref());
+	if (!node)
+	{
+		OELog("could not find node for \"" + ref + "\"");
+		return false;
+	}
+	
+	for (xmlNodePtr childNode = node->children;
+		 childNode;
+		 childNode++)
+	{
+		if (xmlStrcmp(childNode->name, BAD_CAST "inlet"))
+			continue;
+		
+		string inletRef = address.ref(getXMLProperty(childNode, "ref"));
+		string outletRef = followRef(inletRef);
+		if (outletRef == "")
+			continue;
+		
+		if (!remove(outletRef))
+			return false;
+	}
+	
+	if (node->next && (node->next->type == XML_TEXT_NODE))
+		xmlUnlinkNode(node->next);
+	xmlUnlinkNode(node);
+	xmlFreeNode(node);
+	
+	return true;
+}
+
 //
 // DML Operations
 //
@@ -182,7 +224,7 @@ bool OEDML::dump(OEData *data)
 		return false;
 	
 	data->resize(size);
-	memcpy(data->getData(), p, size);
+	memcpy(&data->front(), p, size);
 	
 	return true;
 }
@@ -196,12 +238,12 @@ void OEDML::update()
 //
 xmlNodePtr OEDML::getNode(string ref)
 {
+	if (!doc)
+		return NULL;
+	
 	OEAddress address(ref);
 	
 	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
-	
-	if (address.getDevice() == "")
-		return NULL;
 	
 	for(xmlNodePtr deviceNode = rootNode->children;
 		deviceNode;
@@ -247,7 +289,7 @@ xmlNodePtr OEDML::getNode(string ref)
 	return NULL;
 }
 
-string OEDML::getOutletRef(string ref)
+string OEDML::followRef(string ref)
 {
 	OEAddress address(ref);
 	
@@ -294,7 +336,7 @@ bool OEDML::readFile(string path, OEData *data)
 		file.seekg(0, ios::beg);
 		
 		data->resize(size);
-		file.read(data->getData(), size);
+		file.read(&data->front(), size);
 		success = file.good();
 		file.close();
 	}
@@ -310,7 +352,7 @@ bool OEDML::writeFile(string path, OEData *data)
 	
 	if (file.is_open())
 	{
-		file.write(data->getData(), data->size());
+		file.write(&data->front(), data->size());
 		success = file.good();
 		file.close();
 	}
