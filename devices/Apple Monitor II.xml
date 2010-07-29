@@ -2,7 +2,7 @@
 <!DOCTYPE dml PUBLIC "-//OPENEMULATOR//DTD DML 1.0//EN" "http://www.openemulator.org/DTDs/dml-1.0.dtd">
 <dml version="1.0" label="Apple Monitor II" image="Apple Monitor II.png" group="Monitors">
 
-<device name="dev0" label="Apple Monitor II" image="Apple Monitor II.png">
+<device name="dev0" type="peripheral" label="Apple Monitor II" image="Apple Monitor II.png">
     <outlet ref="monitor" type="AppleIICompositeMonitor" />
     <setting ref="monitor.brightness" type="value" options="0.0,2.0" label="Brightness" />
     <setting ref="monitor.contrast" type="value" options="0.0,2.0" label="Contrast" />
@@ -13,7 +13,7 @@
         <property name="contrast" value="1.0" />
         <property name="saturation" value="1.0" />
         <property name="hue" value="0.08333" />
-        <property name="colorize" value="#ffffff" />
+        <property name="colorize" value="0" />
         <property name="lumaBandwidth" value="0.3" />
         <property name="chromaBandwidth" value="0.06" />
     </component>

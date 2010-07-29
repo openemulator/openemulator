@@ -57,10 +57,13 @@ class OEInfo : public OEDML
 public:
 	OEInfo();
 	OEInfo(string path);
+	~OEInfo();
 	
 	bool open(string path);
 	bool isOpen();
-	void close();
+	
+	bool add(string path, OEConnections &connections);
+	bool remove(string ref);
 	
 	string getLabel();
 	string getImage();
@@ -85,14 +88,19 @@ private:
 	
 	bool analyze();
 	
-	void analyzeDeviceNode(xmlNodePtr node);
-	OEPort *analyzePortNode(xmlNodePtr node, OEDevice *device);
-	OESetting *analyzeSettingNode(xmlNodePtr node, string ref);
+	void analyzeHeader(xmlNodePtr node);
+	void analyzeDevices(xmlNodePtr node);
+	
+	void addDevice(xmlNodePtr node);
+	void addSetting(xmlNodePtr node, OEDevice *device);
+	void addPort(xmlNodePtr node, OEDevice *device, OEPorts &ports);
+	void removeDevices();
+	void removePorts(OEPorts &ports);
 	
 	bool analyzeConnections();
-	
-	string getConnectionLabel(string ref);
-	string getConnectionLabel(OEPort *outlet, vector<string> &visitedRefs);
+	string buildConnectionLabel(string ref);
+	string buildConnectionLabel(OEPort *outlet, vector<string> &visitedRefs);
+	bool findCircularConnection(string ref, vector<string> &visitedRefs);
 };
 
 #endif

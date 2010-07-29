@@ -53,7 +53,7 @@ bool OEDML::open(string path)
 		is_open = readFile(path, &data);
 		
 		if (!is_open)
-			OELog("could not open \"" + path + "\"");
+			OELog("could not open '" + path + "'");
 	}
 	else if (pathExtension == OE_PACKAGE_EXTENSION)
 	{
@@ -63,14 +63,14 @@ bool OEDML::open(string path)
 			is_open = package->readFile(OE_PACKAGE_DML_FILENAME, &data);
 			
 			if (!is_open)
-				OELog(string("could not read ") + OE_PACKAGE_DML_FILENAME +
-					  " in \"" + path + "\"");
+				OELog(string("could not read '") + OE_PACKAGE_DML_FILENAME +
+					  "' in '" + path + "'");
 		}
 		else
-			OELog("could not open package \"" + path + "\"");
+			OELog("could not open package '" + path + "'");
 	}
 	else
-		OELog("could not identify type of \"" + path + "\"");
+		OELog("could not identify type of '" + path + "'");
 	
 	if (is_open)
 	{
@@ -83,7 +83,7 @@ bool OEDML::open(string path)
 		if (!doc)
 		{
 			is_open = false;
-			OELog("could not parse DML of \"" + path + "\"");
+			OELog("could not parse DML of '" + path + "'");
 		}
 	}
 	
@@ -120,10 +120,10 @@ bool OEDML::save(string path)
 			is_open = writeFile(path, &data);
 			
 			if (!is_open)
-				OELog("could not open \"" + path + "\"");
+				OELog("could not open '" + path + "'");
 		}
 		else
-			OELog("could not dump DML for \"" + path + "\"");
+			OELog("could not dump DML for '" + path + "'");
 	}
 	else if (pathExtension == OE_PACKAGE_EXTENSION)
 	{
@@ -137,16 +137,16 @@ bool OEDML::save(string path)
 				is_open = package->writeFile(OE_PACKAGE_DML_FILENAME, &data);
 				if (!is_open)
 					OELog(string("could not write ") + OE_PACKAGE_DML_FILENAME +
-						  " in \"" + path + "\"");
+						  " in '" + path + "'");
 			}
 			else
-				OELog("could not dump DML for \"" + path + "\"");
+				OELog("could not dump DML for '" + path + "'");
 		}
 		else
-			OELog("could not open package \"" + path + "\"");
+			OELog("could not open '" + path + "'");
 	}
 	else
-		OELog("could not identify type of \"" + path + "\"");
+		OELog("could not identify type of '" + path + "'");
 	
 	if (!is_open)
 		close();
@@ -165,20 +165,14 @@ void OEDML::close()
 
 bool OEDML::add(string path, OEConnections &connections)
 {
-	OEDML emulation(path);
+	return false;
 }
 
-bool OEDML::remove(string ref)
+bool OEDML::remove(string deviceName)
 {
-	OEAddress address;
-	address.setDevice(OEAddress(ref).getDevice());
-	
-	xmlNodePtr node = getNode(address.ref());
+	xmlNodePtr node = getDeviceNode(deviceName);
 	if (!node)
-	{
-		OELog("could not find node for \"" + ref + "\"");
 		return false;
-	}
 	
 	for (xmlNodePtr childNode = node->children;
 		 childNode;
@@ -187,21 +181,24 @@ bool OEDML::remove(string ref)
 		if (xmlStrcmp(childNode->name, BAD_CAST "inlet"))
 			continue;
 		
-		string inletRef = address.ref(getXMLProperty(childNode, "ref"));
-		string outletRef = followRef(inletRef);
-		if (outletRef == "")
-			continue;
-		
-		if (!remove(outletRef))
-			return false;
+		string outletRef = followInlet(childNode, deviceName);
+		if (!outletRef)
+			if (!remove(outletRef))
+				return false;
 	}
 	
-	if (node->next && (node->next->type == XML_TEXT_NODE))
-		xmlUnlinkNode(node->next);
-	xmlUnlinkNode(node);
-	xmlFreeNode(node);
+	remove(node);
 	
 	return true;
+}
+
+void remove(xmlNodePtr node)
+{
+	if (node->next && (node->next->type == XML_TEXT_NODE))
+		xmlUnlinkNode(node->next);
+	
+	xmlUnlinkNode(node);
+	xmlFreeNode(node);
 }
 
 //
@@ -218,8 +215,8 @@ bool OEDML::dump(OEData *data)
 {
 	xmlChar *p;
 	int size;
-	xmlDocDumpMemory(doc, &p, &size);
 	
+	xmlDocDumpMemory(doc, &p, &size);
 	if (!p)
 		return false;
 	
@@ -234,74 +231,94 @@ void OEDML::update()
 }
 
 //
-// DML Functions
+// DML
 //
-xmlNodePtr OEDML::getNode(string ref)
+xmlNodePtr OEDML::getDeviceNode(string deviceName)
 {
-	if (!doc)
+	return getNode(deviceName + OE_DEVICE_SEPARATOR);
+}
+
+xmlNodePtr OEDML::getComponentNode(string deviceName,
+								   string componentName)
+{
+	return getNode(deviceName + OE_DEVICE_SEPARATOR + componentName);
+}
+
+xmlNodePtr OEDML::getConnectionNode(string address)
+{
+	OEAddress 
+	if (deviceName == "")
 		return NULL;
-	
-	OEAddress address(ref);
-	
-	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
-	
-	for(xmlNodePtr deviceNode = rootNode->children;
-		deviceNode;
-		deviceNode = deviceNode->next)
+	if (componentName == "")
+		return NULL;
+	if (connectionName == "")
+		return NULL;
+}
+
+xmlNodePtr OEDML::getNode(OEAddress address)
+{
+	if (doc)
 	{
-		if (xmlStrcmp(deviceNode->name, BAD_CAST "device"))
-			continue;
+		xmlNodePtr rootNode = xmlDocGetRootElement(doc);
 		
-		if (getXMLProperty(deviceNode, "name") != address.getDevice())
-			continue;
-		
-		if (address.getComponent() == "")
-			return deviceNode;
-		
-		for(xmlNodePtr componentNode = deviceNode->children;
-			componentNode;
-			componentNode = componentNode->next)
+		for(xmlNodePtr deviceNode = rootNode->children;
+			deviceNode;
+			deviceNode = deviceNode->next)
 		{
-			if (xmlStrcmp(componentNode->name, BAD_CAST "component"))
+			if (xmlStrcmp(deviceNode->name, BAD_CAST "device"))
 				continue;
 			
-			if (getXMLProperty(componentNode, "name") != address.getComponent())
+			if (getXMLProperty(deviceNode, "name") != deviceName)
 				continue;
 			
-			if (address.getProperty() == "")
-				return componentNode;
+			if (address.getComponent() == "")
+				return deviceNode;
 			
-			for(xmlNodePtr connectionNode = componentNode->children;
-				connectionNode;
-				connectionNode = connectionNode->next)
+			for(xmlNodePtr componentNode = deviceNode->children;
+				componentNode;
+				componentNode = componentNode->next)
 			{
-				if (xmlStrcmp(connectionNode->name, BAD_CAST "connection"))
+				if (xmlStrcmp(componentNode->name, BAD_CAST "component"))
 					continue;
 				
-				if (getXMLProperty(connectionNode, "name") != address.getProperty())
+				if (getXMLProperty(componentNode, "name") != address.getComponent())
 					continue;
 				
-				return connectionNode;
+				if (address.getProperty() == "")
+					return componentNode;
+				
+				for(xmlNodePtr connectionNode = componentNode->children;
+					connectionNode;
+					connectionNode = connectionNode->next)
+				{
+					if (xmlStrcmp(connectionNode->name, BAD_CAST "connection"))
+						continue;
+					
+					if (getXMLProperty(connectionNode, "name") != address.getProperty())
+						continue;
+					
+					return connectionNode;
+				}
 			}
 		}
 	}
 	
+	OELog("could not find node '" + address.ref() + "'");
+	
 	return NULL;
 }
 
-string OEDML::followRef(string ref)
+xmlNodePtr followInlet(string xmlNodePtr inletNode, string deviceName)
 {
-	OEAddress address(ref);
-	
-	xmlNodePtr connectionNode = getNode(ref);
+	string inletAddress = deviceAddress.address(getXMLProperty(inletNode, "ref"));
+	xmlNodePtr connectionNode = getConnectionNode(inletAddress);
 	if (!connectionNode)
-		return "";
+		return false;
 	
 	string connectionRef = getXMLProperty(connectionNode, "ref");
 	if (connectionRef == "")
-		return "";
-	
-	return address.ref(connectionRef);
+		continue;
+	string outletRef = OEAddress(inletRef).ref(connectionRef);
 }
 
 //

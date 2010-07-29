@@ -18,8 +18,12 @@ class OEPA;
 class OEPAEmulation : public OEEmulation
 {
 public:
+	OEPAEmulation();
+	OEPAEmulation(string path);
+	OEPAEmulation(string path, string resourcePath);
 	OEPAEmulation(OEPA *oepa, string path, string resourcePath);
 	
+	bool open(string path);
 	bool save(string path);
 	
 	bool setProperty(string ref, string name, string value);
@@ -27,8 +31,8 @@ public:
 	void postNotification(string ref, int notification, void *data);
 	int ioctl(string ref, int message, void *data);
 	
-	bool addDML(string path, OEConnections connections);
-	bool removeDevice(string ref);
+	bool add(string path, OEConnections &connections);
+	bool remove(string ref);
 	
 private:
 	void *oepa;

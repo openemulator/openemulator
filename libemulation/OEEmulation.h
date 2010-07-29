@@ -14,9 +14,6 @@
 #include "OEInfo.h"
 #include "OEComponent.h"
 
-#define OE_REF_SUBST_STRING "${REF}"
-#define OE_DEFAULT_RESOURCE_PATH "./resources"
-
 typedef map<string, OEComponent *> OEComponents;
 
 class OEEmulation : public OEInfo
@@ -32,57 +29,43 @@ public:
 	
 	OEComponent *getComponent(string ref);
 	
-	bool addDML(string path, OEConnections connections);
-	bool removeDevice(string ref);
+	bool add(string path, OEConnections &connections);
+	bool remove(string ref);
+	
+protected:
 	
 private:
 	string resourcePath;
 	OEComponents components;
 	
+	bool setComponent(string ref, OEComponent *component);
+	
 	bool construct();
-	bool init();
-	bool connect();
-	void update();
-	void destroy();
-	
 	bool constructDevice(xmlNodePtr node);
-	bool initDevice(xmlNodePtr node);
-	bool connectDevice(xmlNodePtr node);
-	bool updateDevice(xmlNodePtr node);
-	bool destroyDevice(xmlNodePtr node);
-	
 	bool constructComponent(xmlNodePtr node, string deviceRef);
+	
+	bool init();
+	bool initDevice(xmlNodePtr node);
 	bool initComponent(xmlNodePtr node, string deviceRef);
+	
+	bool connect();
+	bool connectDevice(xmlNodePtr node);
 	bool connectComponent(xmlNodePtr node, string deviceRef);
+	
+	void update();
+	bool updateDevice(xmlNodePtr node);
 	bool updateComponent(xmlNodePtr node, string deviceRef);
+	
+	void destroy();
+	bool destroyDevice(xmlNodePtr node);
 	void destroyComponent(xmlNodePtr node, string deviceRef);
 	
 	bool setProperty(xmlNodePtr node, OEComponent *component);
 	bool getProperty(xmlNodePtr node, OEComponent *component);
-	bool setData(xmlNodePtr node, OEComponent *component, string deviceRef);
-	bool getData(xmlNodePtr node, OEComponent *component, string deviceRef);
+	bool setData(xmlNodePtr node, OEComponent *component, string ref);
+	bool getData(xmlNodePtr node, OEComponent *component, string ref);
 	bool setResource(xmlNodePtr node, OEComponent *component);
-	bool setConnection(xmlNodePtr node, OEComponent *component, string deviceRef);
-	
-	xmlNodePtr getNodeOfFirstInlet(xmlDocPtr doc, string ref);
-	xmlNodePtr getNodeOfLastInlet(xmlDocPtr doc,
-								  string ref,
-								  vector<string> &refs);
-	xmlNodePtr getNodeOfPreviousInlet(xmlDocPtr doc, string ref);
-	
-	void buildDeviceNameMap(xmlDocPtr doc,
-							xmlDocPtr elem,
-							OEConnections &deviceNameMap);
-	void renameDMLConnections(xmlDocPtr doc,
-							  OEConnections &connections,
-							  OEConnections &deviceNameMap);
-	
-	bool connectDevices(xmlDocPtr doc, map<string, string> &connections);
-	bool disconnectDevice(xmlDocPtr doc, string ref);
-	
-	bool insertDoc(xmlNodePtr node, xmlDocPtr doc);
-	
-	string buildSourcePath(string src, string deviceRef);
+	bool connect(xmlNodePtr node, OEComponent *component, string ref);
 };
 
 #endif

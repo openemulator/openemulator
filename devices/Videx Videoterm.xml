@@ -2,10 +2,10 @@
 <!DOCTYPE dml PUBLIC "-//OPENEMULATOR//DTD DML 1.0//EN" "http://www.openemulator.org/DTDs/dml-1.0.dtd">
 <dml version="1.0" label="Videx Videoterm" image="Videx Videoterm.png" group="80 Column Cards">
 
-<device name="dev0" label="Videx Videoterm" image="Videx Videoterm.png">
+<device name="dev0" type="expansion" label="Videx Videoterm" image="Videx Videoterm.png">
     <outlet ref="card" type="AppleIISlot" />
     <component name="card" class="VidexVideoterm">
-        <connection name="hostVideo" ref="host::video" />
+        <connection name="host" ref="host:host" />
         <connection name="rom" ref="rom" />
     </component>
 	<component name="rom" class="ROM">

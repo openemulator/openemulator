@@ -26,53 +26,44 @@ OEInfo::OEInfo(string path) : OEDML()
 	open(path);
 }
 
+OEInfo::~OEInfo()
+{
+	removeDevices();
+	removePorts(inlets);
+	removePorts(outlets);
+}
+
 bool OEInfo::open(string path)
 {
-	close();
+	removeDevices();
+	removePorts(inlets);
+	removePorts(outlets);
 	
-	if (OEDML::open(path))
-		if (analyze())
-			return true;
+	if (!OEDML::open(path))
+		return false;
+	
+	if (analyze())
+		return true;
 	
 	close();
 	
 	return false;
 }
 
-void OEInfo::close()
+bool OEInfo::add(string path, OEConnections &connections)
 {
-	label = "";
-	image = "";
-	description = "";
-	group = "";
+	if (!OEDML::add(path, connections))
+		return false;
 	
-	// Delete devices
-	for (OEDevices::iterator device = devices.begin();
-		 device != devices.end();
-		 device++)
-	{
-		OESettings *settings = &(*device)->settings;
-		for (OESettings::iterator setting = settings->begin();
-			 setting != settings->end();
-			 setting++)
-			delete *setting;
-		
-		delete *device;
-	}
+	return analyze();
+}
+
+bool OEInfo::remove(string ref)
+{
+	if (!OEDML::remove(ref))
+		return false;
 	
-	// Delete inlets
-	for (OEPorts::iterator inlet = inlets.begin();
-		 inlet != inlets.end();
-		 inlet++)
-		delete *inlet;
-	
-	// Delete outlets
-	for (OEPorts::iterator outlet = outlets.begin();
-		 outlet != outlets.end();
-		 outlet++)
-		delete *outlet;
-	
-	OEDML::close();
+	return analyze();
 }
 
 string OEInfo::getLabel()
@@ -113,46 +104,39 @@ OEPorts *OEInfo::getOutlets()
 //
 // Analysis
 //
-
 bool OEInfo::analyze()
 {
-	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+	xmlNodePtr node = xmlDocGetRootElement(doc);
 	
-	// Analyze header
-	label = getXMLProperty(rootNode, "label");
-	image = getXMLProperty(rootNode, "image");
-	description = getXMLProperty(rootNode, "description");
-	group = getXMLProperty(rootNode, "group");
-	
-	// Analyze devices
-	for(xmlNodePtr node = rootNode->children;
-		node;
-		node = node->next)
-	{
-		if (!xmlStrcmp(node->name, BAD_CAST "device"))
-			analyzeDeviceNode(node);
-	}
-	
-	// Analyze connections
-	if (!analyzeConnections())
-		return false;
-	
-	// Analyze connection labels
-	for (OEDevices::iterator device = devices.begin();
-		 device != devices.end();
-		 device++)
-		(*device)->connectionLabel = getConnectionLabel((*device)->ref);
-	
-	return true;
+	analyzeHeader(node);
+	analyzeDevices(node);
+	return analyzeConnections();
 }
 
-void OEInfo::analyzeDeviceNode(xmlNodePtr node)
+void OEInfo::analyzeHeader(xmlNodePtr node)
+{
+	label = getXMLProperty(node, "label");
+	image = getXMLProperty(node, "image");
+	description = getXMLProperty(node, "description");
+	group = getXMLProperty(node, "group");
+}
+
+void OEInfo::analyzeDevices(xmlNodePtr node)
+{
+	for(xmlNodePtr childNode = node->children;
+		childNode;
+		childNode = childNode->next)
+		if (!xmlStrcmp(childNode->name, BAD_CAST "device"))
+			addDevice(node);
+}
+
+void OEInfo::addDevice(xmlNodePtr node)
 {
 	OEDevice *device = new OEDevice();
+	if (!device)
+		return;
 	
-	OEAddress address;
-	address.setDevice(getXMLProperty(node, "name"));
-	device->ref = address.ref();
+	device->ref = OEAddress(getXMLProperty(node, "name") + OE_DEVICE_SEP).address();
 	device->type = getXMLProperty(node, "type");
 	device->options = getXMLProperty(node, "options");
 	device->label = getXMLProperty(node, "label");
@@ -167,18 +151,35 @@ void OEInfo::analyzeDeviceNode(xmlNodePtr node)
 		childNode = childNode->next)
 	{
 		if (!xmlStrcmp(childNode->name, BAD_CAST "inlet"))
-			inlets.push_back(analyzePortNode(childNode, device));
+			addPort(childNode, device, inlets);
 		else if (!xmlStrcmp(childNode->name, BAD_CAST "outlet"))
-			outlets.push_back(analyzePortNode(childNode,device));
+			addPort(childNode, device, outlets);
 		else if (!xmlStrcmp(childNode->name, BAD_CAST "setting"))
-			device->settings.push_back(analyzeSettingNode(childNode,
-														  device->ref));
+			addSetting(childNode, device);
 	}
 }
 
-OEPort *OEInfo::analyzePortNode(xmlNodePtr node, OEDevice *device)
+void OEInfo::addSetting(xmlNodePtr node, OEDevice *device)
+{
+	OESetting *setting = new OESetting();
+	if (!setting)
+		return;
+	
+	OEAddress address(device->ref);
+	
+	setting->ref = address.ref(getXMLProperty(node, "ref"));
+	setting->type = getXMLProperty(node, "type");
+	setting->options = getXMLProperty(node, "options");
+	setting->label = getXMLProperty(node, "label");
+	
+	device->settings.push_back(setting);
+}
+
+void OEInfo::addPort(xmlNodePtr node, OEDevice *device, OEPorts &ports)
 {
 	OEPort *port = new OEPort();
+	if (!port)
+		return;
 	
 	OEAddress address(device->ref);
 	port->ref = address.ref(getXMLProperty(node, "ref"));
@@ -194,32 +195,57 @@ OEPort *OEInfo::analyzePortNode(xmlNodePtr node, OEDevice *device)
 	port->connection = NULL;
 	port->device = device;
 	
-	return port;
+	ports.push_back(port);
 }
 
-OESetting *OEInfo::analyzeSettingNode(xmlNodePtr node, string ref)
+void OEInfo::removeDevices()
 {
-	OESetting *setting = new OESetting();
+	for (OEDevices::iterator device = devices.begin();
+		 device != devices.end();
+		 device++)
+	{
+		OESettings *settings = &(*device)->settings;
+		for (OESettings::iterator setting = settings->begin();
+			 setting != settings->end();
+			 setting++)
+			delete *setting;
+		
+		delete *device;
+	}
 	
-	OEAddress address(ref);
-	setting->ref = address.ref(getXMLProperty(node, "ref"));
-	setting->type = getXMLProperty(node, "type");
-	setting->options = getXMLProperty(node, "options");
-	setting->label = getXMLProperty(node, "label");
+	devices.clear();
+}
+
+void OEInfo::removePorts(OEPorts &ports)
+{
+	for (OEPorts::iterator port = ports.begin();
+		 port != ports.end();
+		 port++)
+		delete *port;
 	
-	return setting;
+	ports.clear();
 }
 
 bool OEInfo::analyzeConnections()
 {
+	// Analyze inlets
 	for (OEPorts::iterator inlet = inlets.begin();
 		 inlet != inlets.end();
 		 inlet++)
 	{
-		string ref = followRef((*inlet)->ref);
-		if (ref == "")
+		// Follow inlet ref to connection
+		OEAddress address((*inlet)->ref);
+		xmlNodePtr connectionNode = getNode(address.ref());
+		if (!connectionNode)
+			return false;
+		
+		string connectionRef = getXMLProperty(connectionNode, "ref");
+		if (connectionRef == "")
 			continue;
 		
+		string ref = address.ref(connectionRef);
+		
+		// Search outlet
 		for (OEPorts::iterator outlet = outlets.begin();
 			 outlet != outlets.end();
 			 outlet++)
@@ -228,8 +254,8 @@ bool OEInfo::analyzeConnections()
 			{
 				if ((*outlet)->connection)
 				{
-					OELog(string("inlet \"") +
-						  (*inlet)->ref + "\" is connected to more than one outlet");
+					OELog(string("reconnection of inlet '") +
+						  address.ref() + "'");
 					
 					return false;
 				}
@@ -238,21 +264,38 @@ bool OEInfo::analyzeConnections()
 				(*outlet)->connection = *inlet;
 			}
 		}
+		
 		if (!(*inlet)->connection)
 		{
-			OELog(string("could not connect inlet \"") +
-				  (*inlet)->ref + "\" to outlet \"" + ref + "\"");
+			OELog(string("could not find '") + ref + "'");
 			
 			return false;
 		}
 	}
 	
+	// Analyze disconnected outlets
+	for (OEPorts::iterator outlet = outlets.begin();
+		 outlet != outlets.end();
+		 outlet++)
+		if (!(*outlet)->connection)
+		{
+			OELog(string("outlet '") +
+				  (*outlet)->ref + "' is not connected");
+			
+			return false;
+		}
+	
+	// Analyze connection labels
+	for (OEDevices::iterator device = devices.begin();
+		 device != devices.end();
+		 device++)
+		(*device)->connectionLabel = buildConnectionLabel((*device)->ref);
+	
 	return true;
 }
 
-string OEInfo::getConnectionLabel(string ref)
+string OEInfo::buildConnectionLabel(string ref)
 {
-	string deviceName = OEAddress(ref).getDevice();
 	string label;
 	
 	// Find all outlets
@@ -261,20 +304,20 @@ string OEInfo::getConnectionLabel(string ref)
 		 outlet++)
 	{
 		OEAddress address((*outlet)->ref);
-		if (address.getDevice() == deviceName)
+		if (address.getDevice() == ref)
 		{
 			vector<string> visitedRefs;
 			
 			if (label != "")
 				label += ", ";
-			label += getConnectionLabel(*outlet, visitedRefs);
+			label += buildConnectionLabel(*outlet, visitedRefs);
 		}
 	}
 	
 	return label;
 }
 
-string OEInfo::getConnectionLabel(OEPort *outlet, vector<string> &visitedRefs)
+string OEInfo::buildConnectionLabel(OEPort *outlet, vector<string> &visitedRefs)
 {
 	string label = outlet->device->label;
 	
@@ -293,20 +336,28 @@ string OEInfo::getConnectionLabel(OEPort *outlet, vector<string> &visitedRefs)
 		OEAddress address((*outlet)->ref);
 		if (address.getDevice() == device)
 		{
-			// Circular reference check
-			for (vector<string>::iterator visitedRef = visitedRefs.begin();
-				 visitedRef != visitedRefs.end();
-				 visitedRef++)
-			{
-				if ((*outlet)->ref == *visitedRef)
-					return label;
-			}
-			visitedRefs.push_back((*outlet)->ref);
+			if (findCircularConnection((*outlet)->ref, visitedRefs))
+				return label;
 			
-			return getConnectionLabel(*outlet, visitedRefs) + " " + inlet->label;
+			return buildConnectionLabel(*outlet, visitedRefs) + " " + inlet->label;
 		}
 	}
 	
 	// The device has no outlets. Return device's label
 	return label;
+}
+
+bool OEInfo::findCircularConnection(string ref, vector<string> &visitedRefs)
+{
+	for (vector<string>::iterator visitedRef = visitedRefs.begin();
+		 visitedRef != visitedRefs.end();
+		 visitedRef++)
+	{
+		if (ref == *visitedRef)
+			return true;
+	}
+	
+	visitedRefs.push_back(ref);
+	
+	return false;
 }

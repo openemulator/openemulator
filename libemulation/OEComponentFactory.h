@@ -13,6 +13,10 @@
 
 #include "OEComponent.h"
 
-OEComponent *oeBuild(string className);
+class OEComponentFactory
+{
+public:
+	static OEComponent *build(string className);
+};
 
 #endif

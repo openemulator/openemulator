@@ -36,16 +36,16 @@ public:
 	void close();
 	
 	bool add(string path, OEConnections &connections);
-	bool remove(string deviceName);
+	bool remove(string address);
 	
 protected:
 	OEPackage *package;
 	xmlDocPtr doc;
 	
 	virtual void update();
+	virtual bool remove(xmlNodePtr node);
 	
-	xmlNodePtr getNode(string ref);
-	string followRef(string ref);
+	xmlNodePtr getNode(string address);
 	
 	string getString(int value);
 	string getPathExtension(string path);

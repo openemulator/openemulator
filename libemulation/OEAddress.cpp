@@ -14,25 +14,25 @@ OEAddress::OEAddress()
 {
 }
 
-OEAddress::OEAddress(string ref)
+OEAddress::OEAddress(string address)
 {
 	int index;
 	
-	index = ref.find(OE_DEVICE_SEP);
+	index = address.find(OE_DEVICE_SEPARATOR);
 	if (index != string::npos)
 	{
-		setDevice(ref.substr(0, index));
-		ref = ref.substr(index + sizeof(OE_DEVICE_SEP) - 1);
+		setDevice(address.substr(0, index));
+		address = address.substr(index + sizeof(OE_DEVICE_SEPARATOR) - 1);
 	}
 	
-	index = ref.find(OE_COMPONENT_SEP);
+	index = address.find(OE_CONNECTION_SEPARATOR);
 	if (index != string::npos)
 	{
-		setProperty(ref.substr(index + sizeof(OE_COMPONENT_SEP) - 1));
-		ref = ref.substr(0, index);
+		setProperty(address.substr(index + sizeof(OE_CONNECTION_SEPARATOR) - 1));
+		address = address.substr(0, index);
 	}
 	
-	setComponent(ref);
+	setComponent(address);
 }
 
 void OEAddress::setDevice(string value)
@@ -65,45 +65,35 @@ string OEAddress::getProperty() const
 	return property;
 }
 
-string OEAddress::ref()
+string OEAddress::address()
 {
-	string ref;
+	string address;
 	
-	if (device != "")
-		ref += device + "::";
-	
-	ref += component;
-	
+	address += device;
+	address += "::";
+	address += component;
 	if (property != "")
-		ref += "." + property;
+		address += "." + property;
 	
-	return ref;
+	return address;
 }
 
-string OEAddress::ref(string value)
+string OEAddress::address(string ref)
 {
-	OEAddress address = OEAddress(value);
+	OEAddress address = OEAddress(ref);
 	
 	if (address.getDevice() == "")
 		address.setDevice(device);
-	if (address.getComponent() == "")
-		address.setComponent(component);
-	if (address.getProperty() == "")
-		address.setProperty(property);
 	
 	return address.ref();
 }
 
-string OEAddress::relativeRef(string value)
+string OEAddress::ref(string address)
 {
-	OEAddress address = OEAddress(value);
+	OEAddress address = OEAddress(address);
 	
 	if (address.getDevice() == device)
 		address.setDevice("");
-	if (address.getComponent() == component)
-		address.setComponent("");
-	if (address.getProperty() == property)
-		address.setProperty("");
 	
 	return address.ref();
 }
@@ -116,7 +106,7 @@ string OEAddress::filter(string value)
 		 i != value.end();
 		 i++)
 	{
-		if (((*i) != ':') || ((*i) != '.'))
+		if (isalpha(*i) || isnumber(*i))
 			out += *i;
 	}
 	

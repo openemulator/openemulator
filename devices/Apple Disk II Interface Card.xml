@@ -2,7 +2,7 @@
 <!DOCTYPE dml PUBLIC "-//OPENEMULATOR//DTD DML 1.0//EN" "http://www.openemulator.org/DTDs/dml-1.0.dtd">
 <dml version="1.0" label="Disk II Interface" image="Apple Disk II Interface Card.png" group="Disk Drive Controllers">
 
-<device name="dev0" category="expansion" label="Apple Disk II Interface Card" image="Apple Disk II Interface Card.png">
+<device name="dev0" type="expansion" label="Apple Disk II Interface Card" image="Apple Disk II Interface Card.png">
     <outlet ref="card" type="AppleIISlot" />
     <inlet ref="card.drive1" type="Apple525DiskDrive" label="Drive 1" image="Apple Disk II Socket.png" />
     <inlet ref="card.drive2" type="Apple525DiskDrive" label="Drive 2" image="Apple Disk II Socket.png" />

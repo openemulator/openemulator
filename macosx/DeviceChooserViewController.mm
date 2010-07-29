@@ -44,7 +44,7 @@
 {
 	delete info;
 	[path release];
-
+	
 	[super dealloc];
 }
 
@@ -75,7 +75,7 @@
 - (void)dealloc
 {
 	[deviceInfos release];
-
+	
 	[super dealloc];
 }
 

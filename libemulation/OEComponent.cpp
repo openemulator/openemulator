@@ -244,7 +244,7 @@ bool OEComponent::getRanges(OEMemoryRanges &ranges, const string &value)
 		
 		if (!getRange(range, value.substr(startPos, endPos - startPos)))
 		{
-			OELog("memory range \"" + value + "\" invalid");
+			OELog("memory range '" + value + "' invalid");
 			return false;
 		}
 		

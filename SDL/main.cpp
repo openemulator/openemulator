@@ -239,7 +239,7 @@ void sdlSetKeyMapEntry(string translation)
 	
 	if ((sym <= 0) || (sym >= SDL_KEYMAP_SIZE) || !usageId)
 	{
-		sdlLog("Invalid keymap entry \"" << translation << "\"");
+		sdlLog("Invalid keymap entry '" << translation << "'");
 		return;
 	}
 	

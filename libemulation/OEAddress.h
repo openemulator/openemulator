@@ -13,27 +13,22 @@
 
 #include "OETypes.h"
 
-#define OE_DEVICE_SEP "::"
-#define OE_COMPONENT_SEP "."
+#define OE_DEVICE_SEPARATOR ":"
+#define OE_CONNECTION_SEPARATOR "."
 
 class OEAddress
 {
 public:
 	OEAddress();
-	OEAddress(string ref);
+	OEAddress(string address);
 	
-	void setDevice(string value);
 	string getDevice() const;
-	
-	void setComponent(string value);
 	string getComponent() const;
-	
-	void setProperty(string value);
 	string getProperty() const;
 	
-	string ref();
-	string ref(string value);
-	string relativeRef(string value);
+	string address();
+	string address(string ref);
+	string ref(string address);
 	
 private:
 	string device;
@@ -41,6 +36,10 @@ private:
 	string property;
 	
 	string filter(string value);
+	
+	void setDevice(string value);
+	void setComponent(string value);
+	void setProperty(string value);
 };
 
 #endif

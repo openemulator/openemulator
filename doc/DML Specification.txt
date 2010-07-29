@@ -3,7 +3,7 @@ DML (Device Markup Language) is a language for describing software emulations of
 
 An emulation is described in terms of devices. Each device represents a distinct physical entity, for example a floppy disk drive, a memory expansion, or a printer.
 
-At a lower level, each device is described as a collection of reusable software components, for example RAM, DMA controllers or CPU's. DML provides a way for interconnecting these software components, as well as for storing their states.
+At a lower level, each device is described as a collection of reusable software components, for example RAM, DMA controllers or CPUs. DML provides a way for interconnecting these software components, as well as for storing their states.
 
 This document describes the version 1.0 of this specification.
 
@@ -29,7 +29,7 @@ The packaged format can also be compressed using ZIP compression. All files in t
 ==DML Tags==
 
 ==="dml"===
-The DML language is based on XML. The main XML element must be a "dml" element. This element has the following tags:
+The DML language is based on XML. The main XML element must be a "del" element. This element has the following tags:
 
 * version: Should be "1.0"
 * label: The human-interface name of this emulation
@@ -114,9 +114,7 @@ I has the following tags:
 ==DML Addresses==
 The "ref" tags in the DML description describes references to other components or properties with a DML address. This address is constructed as follows:
 
-[device::][component][.property]
-
-It is possible to construct partial addresses, by omitting the "device::" or "component" part.
+[device{:}][component][.property]
 
 ==Architecture==
 * DML is inlet-centric. This means that it is the inlet component that is notified about a connected device. 

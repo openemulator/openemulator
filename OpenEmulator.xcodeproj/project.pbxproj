@@ -445,7 +445,6 @@
 			isa = PBXGroup;
 			children = (
 				2A37F4ABFDCFA73011CA2CEA /* macosx */,
-				2A37F4B8FDCFA73011CA2CEA /* Resources */,
 			);
 			name = OpenEmulator;
 			sourceTree = "<group>";
@@ -659,6 +658,7 @@
 		2A37F4ABFDCFA73011CA2CEA /* macosx */ = {
 			isa = PBXGroup;
 			children = (
+				2A37F4B8FDCFA73011CA2CEA /* Resources */,
 				0077069A11EB638500535F6D /* DocumentWindow.m */,
 				00A1F31811EAEBE4001511D0 /* TabletController.h */,
 				00A1F31911EAEBE4001511D0 /* TabletController.m */,
@@ -737,6 +737,7 @@
 				000A79070FBA49C500A0F12E /* Images */,
 			);
 			name = Resources;
+			path = ..;
 			sourceTree = "<group>";
 		};
 		2A37F4C3FDCFA73011CA2CEA /* Frameworks */ = {

@@ -2,17 +2,17 @@
 <!DOCTYPE dml PUBLIC "-//OPENEMULATOR//DTD DML 1.0//EN" "http://www.openemulator.org/DTDs/dml-1.0.dtd">
 <dml version="1.0" label="Super Serial Card" image="Apple II Super Serial Card.png" group="Serial Port Controllers">
 
-<device name="dev0" label="Apple II Super Serial Card" image="Apple II Super Serial Card.png">
+<device name="dev0" type="expansion" label="Apple II Super Serial Card" image="Apple II Super Serial Card.png">
     <outlet ref="card" type="AppleIISlot" />
-    <inlet ref="card.port" type="SerialPort" category="peripheral" label="Serial Port" image="Serial Port.png" />
-    <setting ref="card.mode" type="option" options="Communications Mode,Printer Mode" label="Mode" />
-    <setting ref="card.baudRate" type="option" options="50,75,110,135,150,300,600,1200,1800,2400,3600,4800,7200,9600,19200" label="Baud Rate" />
-    <setting ref="card.dataBits" type="option" options="7,8" label="Data Bits" />
-    <setting ref="card.stopBits" type="option" options="1,2" label="Stop Bits" />
-    <setting ref="card.parity" type="option" options="None,Even,Odd" label="Parity" />
+    <inlet ref="card.port" type="SerialPort" label="Serial Port" image="Serial Port.png" />
+    <setting ref="card.mode" type="select" options="Communications Mode,Printer Mode" label="Mode" />
+    <setting ref="card.baudRate" type="select" options="50,75,110,135,150,300,600,1200,1800,2400,3600,4800,7200,9600,19200" label="Baud Rate" />
+    <setting ref="card.dataBits" type="select" options="7,8" label="Data Bits" />
+    <setting ref="card.stopBits" type="select" options="1,2" label="Stop Bits" />
+    <setting ref="card.parity" type="select" options="None,Even,Odd" label="Parity" />
     <setting ref="card.autoLFAfterCR" type="checkbox" label="Auto LF after CR" />
     <setting ref="card.interrupts" type="checkbox" label="Interrupts" />
-    <setting ref="card.charactersPerLine" type="option" options="40,72,80,132" label="Characters Per Line" />
+    <setting ref="card.charactersPerLine" type="select" options="40,72,80,132" label="Characters Per Line" />
     <setting ref="card.delayAfterCR" type="checkbox" label="Delay after CR" />
     <component name="card" class="AppleIISuperSerialCard">
         <connection name="port" ref="" />
@@ -26,6 +26,7 @@
 		<property name="interrupts" value="0" />
 		<property name="charactersPerLine" value="0" />
 		<property name="delayAfterCR" value="0" />
+		<connection name="host" ref="host:host" />
     </component>
 	<component name="rom" class="ROM">
         <resource name="memoryImage" src="roms/Apple II Super Serial Card ROM.bin" />

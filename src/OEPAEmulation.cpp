@@ -11,12 +11,26 @@
 #include "OEPAEmulation.h"
 #include "OEPA.h"
 
+OEPAEmulation::OEPAEmulation(string path) :
+OEEmulation()
+{
+	oepa = NULL;
+}
+
+OEPAEmulation::OEPAEmulation(string path, string resourcePath) :
+OEEmulation(path, resourcePath)
+{
+	oepa = NULL;
+}
+
 OEPAEmulation::OEPAEmulation(OEPA *oepa,
 							 string path, string resourcePath) :
 OEEmulation(path, resourcePath)
 {
 	this->oepa = oepa;
 }
+
+
 
 void OEPAEmulation::lock()
 {

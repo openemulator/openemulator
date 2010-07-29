@@ -2,14 +2,14 @@
 <!DOCTYPE dml PUBLIC "-//OPENEMULATOR//DTD DML 1.0//EN" "http://www.openemulator.org/DTDs/dml-1.0.dtd">
 <dml version="1.0" label="Disk II Drive 1" image="Apple Disk II Drive.png" group="Disk Drives">
 
-<device name="dev0" label="Apple Disk II" image="Apple Disk II Drive.png">
+<device name="dev0" type="storage" label="Apple Disk II" image="Apple Disk II Drive.png">
     <outlet ref="drive" type="Apple525DiskDrive" />
     <setting ref="drive.lock" type="checkbox" label="Lock Disk Drive" />
     <component name="drive" class="AppleDiskII">
         <property name="image" value=" /Users/mressl/test2.dsk" />
         <property name="lock" value="0" />
-        <property name="speedMean" value="300.0" />
-        <property name="speedVariance" value="1.0" />
+        <property name="rpm" value="300.0" />
+        <property name="rpmVariance" value="1.0" />
         <resource name="soundSpin" src="sounds/Apple Disk II Spin.wav" />
         <resource name="soundArm" src="sounds/Apple Disk II Arm.wav" />
         <resource name="soundStop" src="sounds/Apple Disk II Stop.wav" />
