@@ -26,10 +26,10 @@ bool AppleIKeyboard::connect(const string &name, OEComponent *component)
 	if (name == "host")
 	{
 		if (host)
-			host->removeObserver(this, HOST_HID_UNICODEKEYBOARD_EVENT);
+			host->removeObserver(this, HOST_HID_UNICODEKEYBOARD_CHANGED);
 		host = component;
 		if (host)
-			host->addObserver(this, HOST_HID_UNICODEKEYBOARD_EVENT);
+			host->addObserver(this, HOST_HID_UNICODEKEYBOARD_CHANGED);
 	}
 	else if (name == "pia")
 		pia = component;
@@ -46,13 +46,13 @@ void AppleIKeyboard::notify(int notification, OEComponent *component, void *data
 	key = event->usageId;
 	
 	bool value = true;
-	pia->ioctl(MC6821_SET_CA1, &value);
+	pia->postEvent(pia, MC6821_SET_CA1, &value);
 }
 
 OEUInt8 AppleIKeyboard::read(int address)
 {
 	bool value = false;
-	pia->ioctl(MC6821_SET_CA1, &value);
+	pia->postEvent(pia, MC6821_SET_CA1, &value);
 	
 	return key | APPLEIKEYBOARD_MASK;
 }

@@ -178,15 +178,27 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
-				<string>d64</string>
-				<string>g64</string>
-				<string>d71</string>
-				<string>d81</string>
 				<string>t64</string>
 				<string>tap</string>
 				<string>prg</string>
-				<string>p00</string>
-				<string>crt</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>DiskImage525.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>Commodore 64 Program</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>d64</string>
+				<string>d71</string>
+				<string>d80</string>
+				<string>d81</string>
+				<string>d82</string>
+				<string>x64</string>
+				<string>g64</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
 			<string>DiskImage525.icns</string>
@@ -194,6 +206,18 @@
 			<string>Commodore 64 Disk Image</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>crt</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>DiskImage.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>Commodore 64 Cartridge</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
 		</dict>
 		<dict>
 			<key>CFBundleTypeExtensions</key>

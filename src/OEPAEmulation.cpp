@@ -102,24 +102,24 @@ void OEPAEmulation::postNotification(string ref, int notification, void *data)
 		component->postNotification(notification, data);
 	else
 	{
-		oepaLog("could not post notification to " << ref <<
+		oepaLog("could not post notification to " + ref +
 				" (ref not found)");
 	}
 	
 	unlock();
 }
 
-int OEPAEmulation::ioctl(string ref, int message, void *data)
+int OEPAEmulation::postEvent(string ref, int message, void *data)
 {
 	lock();
 	
 	OEComponent *component = getComponent(ref);
 	int status = 0;
 	if (component)
-		status = component->ioctl(message, data);
+		status = component->postEvent(component, message, data);
 	else
 	{
-		oepaLog("could not ioctl " << ref <<
+		oepaLog("could not post event to " + ref +
 				" (ref not found)");
 	}
 	
@@ -128,22 +128,22 @@ int OEPAEmulation::ioctl(string ref, int message, void *data)
 	return status;
 }
 
-bool OEPAEmulation::addDML(string path, OEConnections connections)
+bool OEPAEmulation::add(string path, OEConnections &connections)
 {
 	lock();
 	
-	bool status = OEEmulation::addDML(path, connections);
+	bool status = OEEmulation::add(path, connections);
 	
 	unlock();
 	
 	return status;
 }
 
-bool OEPAEmulation::removeDevice(string ref)
+bool OEPAEmulation::removeDevice(string deviceName)
 {
 	lock();
 	
-	bool status = OEEmulation::removeDevice(ref);
+	bool status = OEDML::removeDevice(deviceName);
 	
 	unlock();
 	

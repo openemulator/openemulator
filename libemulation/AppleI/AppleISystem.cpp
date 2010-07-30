@@ -63,7 +63,7 @@ bool AppleISystem::connect(const string &name, OEComponent *component)
 	return true;
 }
 
-void AppleISystem::notify(int notification, OEComponent *component, void *data)
+void AppleISystem::notify(OEComponent *component, int notification, void *data)
 {
 //	if (notification == HOSTAUDIO_RENDER_DID_START)
 	HostAudioBuffer *buffer = (HostAudioBuffer *) data;

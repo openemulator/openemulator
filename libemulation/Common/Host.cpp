@@ -17,7 +17,7 @@ bool Host::setProperty(const string &name, const string &value)
 	else if (name == "powerState")
 	{
 		powerState = getInt(value);
-		postNotification(HOST_POWERSTATE_DID_CHANGE, &powerState);
+		postNotification(HOST_POWERSTATE_CHANGED, &powerState);
 	}
 	else if (name == "videoWindow")
 		videoWindow = value;
@@ -68,14 +68,14 @@ bool Host::removeScreen(HostVideoScreen *screen)
 	return found;
 }
 
-int Host::ioctl(int message, void *data)
+bool Host::postEvent(OEComponent *component, int event, void *data)
 {
-	switch(message)
+	switch(event)
 	{
-		case HOST_REGISTER_SCREENS_UPDATE:
+		case HOST_REGISTER_VIDEO_CALLBACK:
 			break;
 			
-		case HOST_REGISTER_KEYBOARD_LEDS_UPDATE:
+		case HOST_REGISTER_HID_CALLBACK:
 			break;
 			
 		case HOST_ADD_SCREEN:
@@ -85,13 +85,7 @@ int Host::ioctl(int message, void *data)
 		case HOST_REMOVE_SCREEN:
 			videoUpdated = true;
 			return removeScreen((HostVideoScreen *) data);
-			
-		case HOST_IS_COPYABLE:
-			return (observerMap[HOST_CLIPBOARD_COPY_EVENT].size() != 0);
-			
-		case HOST_IS_PASTEABLE:
-			return (observerMap[HOST_CLIPBOARD_PASTE_EVENT].size() != 0);
 	}
 	
-	return false;
+	return OEComponent::postEvent(component, event, data);
 }

@@ -21,6 +21,9 @@
 #define OE_PACKAGE_EXTENSION "emulation"
 #define OE_PACKAGE_DML_FILENAME "info.xml"
 
+#define OE_DEVICE_SEPARATOR ":"
+#define OE_CONNECTION_SEPARATOR "."
+
 typedef map<string, string> OEConnections;
 
 class OEDML
@@ -36,16 +39,24 @@ public:
 	void close();
 	
 	bool add(string path, OEConnections &connections);
-	bool remove(string address);
+	bool removeDevice(string deviceName);
 	
 protected:
 	OEPackage *package;
 	xmlDocPtr doc;
 	
 	virtual void update();
-	virtual bool remove(xmlNodePtr node);
+	virtual void removeDevice(xmlNodePtr deviceNode);
 	
-	xmlNodePtr getNode(string address);
+	xmlNodePtr getDeviceNode(string deviceName);
+	xmlNodePtr getConnectionNode(xmlNodePtr deviceNode, string ref);
+	
+	string getName(xmlNodePtr node);
+	string getRef(xmlNodePtr node);
+	
+	string getDeviceName(string ref);
+	string getComponentName(string ref);
+	string getConnectionName(string ref);
 	
 	string getString(int value);
 	string getPathExtension(string path);
@@ -53,8 +64,8 @@ protected:
 	bool readFile(string path, OEData *data);
 	bool writeFile(string path, OEData *data);
 	
-	string getXMLProperty(xmlNodePtr node, string name);
-	void setXMLProperty(xmlNodePtr node, string name, string value);
+	string getNodeProperty(xmlNodePtr node, string name);
+	void setNodeProperty(xmlNodePtr node, string name, string value);
 	
 private:
 	bool is_open;
@@ -63,6 +74,11 @@ private:
 	
 	bool validate();
 	bool dump(OEData *data);
+	
+	xmlNodePtr getChildNode(xmlNodePtr node, string tag, string name);
+	
+	string filterName(string name);
+	string filterRef(string name);
 };
 
 #endif

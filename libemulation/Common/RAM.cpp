@@ -91,16 +91,16 @@ bool RAM::connect(const string &name, OEComponent *component)
 	{
 		if (host)
 		{
-			host->removeObserver(this, HOST_POWERSTATE_DID_CHANGE);
-			host->removeObserver(this, HOST_HID_SYSTEM_EVENT);
+			host->removeObserver(this, HOST_POWERSTATE_CHANGED);
+			host->removeObserver(this, HOST_HID_SYSTEM_CHANGED);
 		}
 		
 		host = component;
 		
 		if (host)
 		{
-			host->addObserver(this, HOST_POWERSTATE_DID_CHANGE);
-			host->addObserver(this, HOST_HID_SYSTEM_EVENT);
+			host->addObserver(this, HOST_POWERSTATE_CHANGED);
+			host->addObserver(this, HOST_HID_SYSTEM_CHANGED);
 		}
 	}
 	else
@@ -109,17 +109,17 @@ bool RAM::connect(const string &name, OEComponent *component)
 	return true;
 }
 
-void RAM::notify(int notification, OEComponent *component, void *data)
+void RAM::notify(OEComponent *component, int notification, void *data)
 {
 	switch (notification)
 	{
-		case HOST_POWERSTATE_DID_CHANGE:
+		case HOST_POWERSTATE_CHANGED:
 		{
 			int powerState = *((int *) data);
 			
 			powered = (powerState <= HOST_POWERSTATE_STANDBY);
 		}
-		case HOST_HID_SYSTEM_EVENT:
+		case HOST_HID_SYSTEM_CHANGED:
 		{
 			HostHIDEvent *event = (HostHIDEvent *)data;
 			if (event->usageId == HOST_HID_S_COLDRESTART)

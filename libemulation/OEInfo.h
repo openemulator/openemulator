@@ -25,7 +25,7 @@ typedef vector<OESetting *> OESettings;
 
 typedef struct
 {
-	string ref;
+	string name;
 	string type;
 	string options;
 	string label;
@@ -60,10 +60,9 @@ public:
 	~OEInfo();
 	
 	bool open(string path);
-	bool isOpen();
 	
 	bool add(string path, OEConnections &connections);
-	bool remove(string ref);
+	bool removeDevice(string deviceName);
 	
 	string getLabel();
 	string getImage();

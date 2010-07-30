@@ -153,7 +153,7 @@ bool MC6821::connect(const string &name, OEComponent *component)
 	return true;
 }
 
-void MC6821::notify(int notification, OEComponent *component, void *data)
+bool MC6821::notify(int notification, OEComponent *component, void *data)
 {
 	setControlRegisterA(0);
 	dataDirectionRegisterA = 0;
@@ -166,6 +166,8 @@ void MC6821::notify(int notification, OEComponent *component, void *data)
 	ca2 = false;
 	cb1 = false;
 	cb2 = false;
+	
+	return false;
 }
 
 int MC6821::ioctl(int message, void *data)

@@ -16,8 +16,8 @@
 {
 	void *emulation;
 	
-	NSImage *image;
 	NSString *label;
+	NSImage *image;
 	NSString *notes;
 	NSString *modificationDate;
 	NSString *powerState;

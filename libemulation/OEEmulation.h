@@ -14,7 +14,10 @@
 #include "OEInfo.h"
 #include "OEComponent.h"
 
-typedef map<string, OEComponent *> OEComponents;
+#define OE_REPLACE_REF_STRING "${REF}"
+#define OE_DEFAULT_RESOURCE_PATH "resources"
+
+typedef map<string, OEComponent *> OEComponentsMap;
 
 class OEEmulation : public OEInfo
 {
@@ -29,43 +32,42 @@ public:
 	
 	OEComponent *getComponent(string ref);
 	
-	bool add(string path, OEConnections &connections);
-	bool remove(string ref);
-	
 protected:
 	
 private:
 	string resourcePath;
-	OEComponents components;
+	OEComponentsMap componentsMap;
 	
 	bool setComponent(string ref, OEComponent *component);
 	
-	bool construct();
-	bool constructDevice(xmlNodePtr node);
-	bool constructComponent(xmlNodePtr node, string deviceRef);
+	bool build();
+	bool buildDevice(xmlNodePtr deviceNode);
+	bool buildComponent(xmlNodePtr componentNode, string deviceName);
 	
 	bool init();
-	bool initDevice(xmlNodePtr node);
-	bool initComponent(xmlNodePtr node, string deviceRef);
+	bool initDevice(xmlNodePtr deviceNode);
+	bool initComponent(xmlNodePtr componentNode, string deviceName);
 	
 	bool connect();
-	bool connectDevice(xmlNodePtr node);
-	bool connectComponent(xmlNodePtr node, string deviceRef);
+	bool connectDevice(xmlNodePtr deviceNode);
+	bool connectComponent(xmlNodePtr componentNode, string deviceName);
 	
 	void update();
-	bool updateDevice(xmlNodePtr node);
-	bool updateComponent(xmlNodePtr node, string deviceRef);
+	void updateDevice(xmlNodePtr deviceNode);
+	void updateComponent(xmlNodePtr componentNode, string deviceName);
 	
-	void destroy();
-	bool destroyDevice(xmlNodePtr node);
-	void destroyComponent(xmlNodePtr node, string deviceRef);
+	void remove();
+	void removeDevice(xmlNodePtr deviceNode);
+	void removeComponent(xmlNodePtr componentNode, string deviceName);
 	
-	bool setProperty(xmlNodePtr node, OEComponent *component);
-	bool getProperty(xmlNodePtr node, OEComponent *component);
-	bool setData(xmlNodePtr node, OEComponent *component, string ref);
-	bool getData(xmlNodePtr node, OEComponent *component, string ref);
-	bool setResource(xmlNodePtr node, OEComponent *component);
-	bool connect(xmlNodePtr node, OEComponent *component, string ref);
+	bool setProperty(xmlNodePtr componentNode, OEComponent *component, string ref);
+	void getProperty(xmlNodePtr componentNode, OEComponent *component, string ref);
+	bool setData(xmlNodePtr componentNode, OEComponent *component, string ref);
+	void getData(xmlNodePtr componentNode, OEComponent *component, string ref);
+	bool setResource(xmlNodePtr componentNode, OEComponent *component, string ref);
+	bool connect(xmlNodePtr componentNode, OEComponent *component, string ref);
+	
+	string replaceRef(string src, string ref);
 };
 
 #endif

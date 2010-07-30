@@ -15,8 +15,6 @@
 
 #include "OEInfo.h"
 
-#include "OEAddress.h"
-
 OEInfo::OEInfo() : OEDML()
 {
 }
@@ -58,9 +56,9 @@ bool OEInfo::add(string path, OEConnections &connections)
 	return analyze();
 }
 
-bool OEInfo::remove(string ref)
+bool OEInfo::removeDevice(string deviceName)
 {
-	if (!OEDML::remove(ref))
+	if (!OEDML::removeDevice(deviceName))
 		return false;
 	
 	return analyze();
@@ -115,10 +113,10 @@ bool OEInfo::analyze()
 
 void OEInfo::analyzeHeader(xmlNodePtr node)
 {
-	label = getXMLProperty(node, "label");
-	image = getXMLProperty(node, "image");
-	description = getXMLProperty(node, "description");
-	group = getXMLProperty(node, "group");
+	label = getNodeProperty(node, "label");
+	image = getNodeProperty(node, "image");
+	description = getNodeProperty(node, "description");
+	group = getNodeProperty(node, "group");
 }
 
 void OEInfo::analyzeDevices(xmlNodePtr node)
@@ -136,11 +134,11 @@ void OEInfo::addDevice(xmlNodePtr node)
 	if (!device)
 		return;
 	
-	device->ref = OEAddress(getXMLProperty(node, "name") + OE_DEVICE_SEP).address();
-	device->type = getXMLProperty(node, "type");
-	device->options = getXMLProperty(node, "options");
-	device->label = getXMLProperty(node, "label");
-	device->image = getXMLProperty(node, "image");
+	device->name = getName(node);
+	device->type = getNodeProperty(node, "type");
+	device->options = getNodeProperty(node, "options");
+	device->label = getNodeProperty(node, "label");
+	device->image = getNodeProperty(node, "image");
 	
 	device->connectionLabel = "";
 	
@@ -165,12 +163,10 @@ void OEInfo::addSetting(xmlNodePtr node, OEDevice *device)
 	if (!setting)
 		return;
 	
-	OEAddress address(device->ref);
-	
-	setting->ref = address.ref(getXMLProperty(node, "ref"));
-	setting->type = getXMLProperty(node, "type");
-	setting->options = getXMLProperty(node, "options");
-	setting->label = getXMLProperty(node, "label");
+	setting->ref = getRef(node);
+	setting->type = getNodeProperty(node, "type");
+	setting->options = getNodeProperty(node, "options");
+	setting->label = getNodeProperty(node, "label");
 	
 	device->settings.push_back(setting);
 }
@@ -181,11 +177,10 @@ void OEInfo::addPort(xmlNodePtr node, OEDevice *device, OEPorts &ports)
 	if (!port)
 		return;
 	
-	OEAddress address(device->ref);
-	port->ref = address.ref(getXMLProperty(node, "ref"));
-	port->type = getXMLProperty(node, "type");
-	port->label = getXMLProperty(node, "label");
-	port->image = getXMLProperty(node, "image");
+	port->ref = getNodeProperty(node, "ref");
+	port->type = getNodeProperty(node, "type");
+	port->label = getNodeProperty(node, "label");
+	port->image = getNodeProperty(node, "image");
 	
 	if (port->label == "")
 		port->label = device->label;
@@ -228,34 +223,35 @@ void OEInfo::removePorts(OEPorts &ports)
 
 bool OEInfo::analyzeConnections()
 {
-	// Analyze inlets
+	// Analyze connected inlets
 	for (OEPorts::iterator inlet = inlets.begin();
 		 inlet != inlets.end();
 		 inlet++)
 	{
-		// Follow inlet ref to connection
-		OEAddress address((*inlet)->ref);
-		xmlNodePtr connectionNode = getNode(address.ref());
+		// Follow connection
+		string deviceName = (*inlet)->device->name;
+		xmlNodePtr deviceNode = getDeviceNode(deviceName);
+		if (!deviceNode)
+			return false;
+		
+		xmlNodePtr connectionNode = getConnectionNode(deviceNode, (*inlet)->ref);
 		if (!connectionNode)
 			return false;
 		
-		string connectionRef = getXMLProperty(connectionNode, "ref");
+		string connectionRef = getRef(connectionNode);
 		if (connectionRef == "")
 			continue;
-		
-		string ref = address.ref(connectionRef);
 		
 		// Search outlet
 		for (OEPorts::iterator outlet = outlets.begin();
 			 outlet != outlets.end();
 			 outlet++)
 		{
-			if (ref == (*outlet)->ref)
+			if ((*outlet)->ref == connectionRef)
 			{
 				if ((*outlet)->connection)
 				{
-					OELog(string("reconnection of inlet '") +
-						  address.ref() + "'");
+					OELog("reconnection of inlet '" + (*inlet)->ref + "'");
 					
 					return false;
 				}
@@ -267,7 +263,7 @@ bool OEInfo::analyzeConnections()
 		
 		if (!(*inlet)->connection)
 		{
-			OELog(string("could not find '") + ref + "'");
+			OELog("could not find '" + (*inlet)->ref + "'");
 			
 			return false;
 		}
@@ -279,8 +275,7 @@ bool OEInfo::analyzeConnections()
 		 outlet++)
 		if (!(*outlet)->connection)
 		{
-			OELog(string("outlet '") +
-				  (*outlet)->ref + "' is not connected");
+			OELog("outlet '" + (*outlet)->ref + "' is not connected");
 			
 			return false;
 		}
@@ -289,12 +284,12 @@ bool OEInfo::analyzeConnections()
 	for (OEDevices::iterator device = devices.begin();
 		 device != devices.end();
 		 device++)
-		(*device)->connectionLabel = buildConnectionLabel((*device)->ref);
+		(*device)->connectionLabel = buildConnectionLabel((*device)->name);
 	
 	return true;
 }
 
-string OEInfo::buildConnectionLabel(string ref)
+string OEInfo::buildConnectionLabel(string deviceName)
 {
 	string label;
 	
@@ -303,8 +298,7 @@ string OEInfo::buildConnectionLabel(string ref)
 		 outlet != outlets.end();
 		 outlet++)
 	{
-		OEAddress address((*outlet)->ref);
-		if (address.getDevice() == ref)
+		if (getDeviceName((*outlet)->ref) == deviceName)
 		{
 			vector<string> visitedRefs;
 			
@@ -319,32 +313,31 @@ string OEInfo::buildConnectionLabel(string ref)
 
 string OEInfo::buildConnectionLabel(OEPort *outlet, vector<string> &visitedRefs)
 {
-	string label = outlet->device->label;
+	string deviceLabel = outlet->device->label;
 	
-	// Get the connected inlet to this outlet
+	// Get the connected inlet for this outlet
 	OEPort *inlet = outlet->connection;
 	if (!inlet)
-		return label;
+		return deviceLabel;
 	
-	string device = OEAddress(inlet->ref).getDevice();
+	string deviceName = getDeviceName(inlet->ref);
 	
 	// Find first outlet of the inlet's device
 	for (OEPorts::iterator outlet = outlets.begin();
 		 outlet != outlets.end();
 		 outlet++)
 	{
-		OEAddress address((*outlet)->ref);
-		if (address.getDevice() == device)
+		if (getDeviceName((*outlet)->ref) == deviceName)
 		{
 			if (findCircularConnection((*outlet)->ref, visitedRefs))
-				return label;
+				return deviceLabel;
 			
 			return buildConnectionLabel(*outlet, visitedRefs) + " " + inlet->label;
 		}
 	}
 	
-	// The device has no outlets. Return device's label
-	return label;
+	// The device has no outlets
+	return deviceLabel;
 }
 
 bool OEInfo::findCircularConnection(string ref, vector<string> &visitedRefs)

@@ -21,7 +21,7 @@ public:
 	bool getData(const string &name, OEData **data);
 	bool connect(const string &name, OEComponent *component);
 	
-	void notify(int notification, OEComponent *component, void *data);
+	void notify(OEComponent *component, int notification, void *data);
 	
 	bool getMemoryMap(string &value);
 	

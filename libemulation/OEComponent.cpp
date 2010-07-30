@@ -51,44 +51,66 @@ bool OEComponent::connect(const string &name, OEComponent *component)
 	return false;
 }
 
-bool OEComponent::addObserver(OEComponent *component,
-							  int notification)
+bool OEComponent::addObserver(OEComponent *component, int notification)
 {
-	observerMap[notification].push_back(component);
+	observers[notification].push_back(component);
 	
 	return true;
 }
 
-bool OEComponent::removeObserver(OEComponent *component,
-								 int notification)
+bool OEComponent::removeObserver(OEComponent *component, int notification)
 {
-	OEObservers::iterator first = observerMap[notification].begin();
-	OEObservers::iterator last = observerMap[notification].end();
-	OEObservers::iterator i = remove(first, last, component);
+	OEComponents::iterator first = observers[notification].begin();
+	OEComponents::iterator last = observers[notification].end();
+	OEComponents::iterator i = remove(first, last, component);
 	
 	if (i != last)
-		observerMap[notification].erase(i, last);
+		observers[notification].erase(i, last);
 	
 	return (i != last);
 }
 
 void OEComponent::postNotification(int notification, void *data)
 {
-	OEObservers::iterator i;
-	for (i = observerMap[notification].begin();
-		 i != observerMap[notification].end();
+	OEComponents::iterator i;
+	for (i = observers[notification].begin();
+		 i != observers[notification].end();
 		 i++)
-		(*i)->notify(notification, this, data);
+		notify(this, notification, data);
 }
 
-void OEComponent::notify(int notification,
-						 OEComponent *component,
-						 void *data)
+void OEComponent::notify(OEComponent *component, int notification, void *data)
 {
 }
 
-int OEComponent::ioctl(int command, void *data)
+bool OEComponent::addDelegate(OEComponent *component, int event)
 {
+	delegates[event].push_back(component);
+	
+	return true;
+}
+
+bool OEComponent::removeDelegate(OEComponent *component, int event)
+{
+	OEComponents::iterator first = delegates[event].begin();
+	OEComponents::iterator last = delegates[event].end();
+	OEComponents::iterator i = remove(first, last, component);
+	
+	if (i != last)
+		delegates[event].erase(i, last);
+	
+	return (i != last);
+}
+
+bool OEComponent::postEvent(OEComponent *component, int event, void *data)
+{
+	OEComponents::iterator i;
+	for (i = delegates[event].begin();
+		 i != delegates[event].end();
+		 i++)
+		if ((*i)->postEvent(component, event, data))
+			return true;
+	
 	return false;
 }
 

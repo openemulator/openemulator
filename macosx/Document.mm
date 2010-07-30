@@ -16,6 +16,16 @@
 #import "OEPAEmulation.h"
 #import "Host.h"
 
+NSString *getNSString(string s)
+{
+	return [NSString stringWithUTF8String:s.c_str()];
+}
+
+string getString(NSString *s)
+{
+	return string([s UTF8String]);
+}
+
 @implementation Document
 
 - (id)init
@@ -77,8 +87,8 @@
 	
 	OEPA *oepa = (OEPA *)[documentController oepa];
 	
-	string path = string([[url path] UTF8String]);
-	string resourcePath = string([[[NSBundle mainBundle] resourcePath] UTF8String]);
+	string path = getString([url path]);
+	string resourcePath = getString([[NSBundle mainBundle] resourcePath]);
 	
 	emulation = new OEPAEmulation(oepa, path, resourcePath);
 	
@@ -109,8 +119,8 @@
 		return false;
 	
 	return ((OEPAEmulation *)emulation)->setProperty(HOST_DEVICE,
-													 string([name UTF8String]),
-													 string([value UTF8String]));
+													 getString(name),
+													 getString(value));
 }
 
 - (NSString *)getHostProperty:(NSString *)name
@@ -120,9 +130,9 @@
 	
 	string value;
 	if (((OEPAEmulation *)emulation)->getProperty(HOST_DEVICE,
-												  string([name UTF8String]),
+												  getString(name),
 												  value))
-		return [NSString stringWithUTF8String:value.c_str()];
+		return getNSString(value);
 	
 	return @"";
 }
@@ -132,9 +142,9 @@
 	((OEPAEmulation *)emulation)->postNotification(HOST_DEVICE, notification, data);
 }
 
-- (int)hostIoctl:(int)message data:(void *)data
+- (int)postHostEvent:(int)message data:(void *)data
 {
-	return ((OEPAEmulation *)emulation)->ioctl(HOST_DEVICE, message, data);
+	return ((OEPAEmulation *)emulation)->postEvent(HOST_DEVICE, message, data);
 }
 
 - (NSImage *)getResourceImage:(NSString *)imagePath
@@ -230,6 +240,7 @@
 {
 	int count;
 	
+	// Clean up
 	[freeInlets removeAllObjects];
 	
 	count = [expansions count];
@@ -243,28 +254,24 @@
 		[self removeObjectFromPeripheralsAtIndex:0];
 	
 	// Process inlets
-	OEDevices *devices = ((OEPAEmulation *)emulation)->getDevices();
-	for (OEDevices::iterator device = devices->begin();
-		 device != devices->end();
-		 device++)
+	OEPorts *inlets = ((OEPAEmulation *)emulation)->getInlets();
+	for (OEPorts::iterator inlet = inlets->begin();
+		 inlet != inlets->end();
+		 inlet++)
 	{
-		if ((*device)->type.size())
+		if ((*inlet)->type.size())
 			continue;
 		
-		string stringRef = i->ref.getStringRef();
-		
-		NSString *portRef = [NSString stringWithUTF8String:stringRef.c_str()];
-		NSString *portType = [NSString stringWithUTF8String:i->type.c_str()];
-		NSString *portCategory = [NSString stringWithUTF8String:i->category.c_str()];
-		NSString *portLabel = [NSString stringWithUTF8String:i->connectionLabel.c_str()];
-		NSString *portImage = [NSString stringWithUTF8String:i->image.c_str()];
+		NSString *ref = getNSString((*inlet)->ref);
+		NSString *type = getNSString((*inlet)->type);
+		NSString *labelName = getNSString((*inlet)->label);
+		NSString *imageName = getNSString((*inlet)->image);
 		
 		NSMutableDictionary *dict = [[[NSMutableDictionary alloc] init] autorelease];
-		[dict setObject:portRef forKey:@"ref"];
-		[dict setObject:portType forKey:@"type"];
-		[dict setObject:portCategory forKey:@"category"];
-		[dict setObject:portLabel forKey:@"label"];
-		[dict setObject:portImage forKey:@"image"];
+		[dict setObject:ref forKey:@"ref"];
+		[dict setObject:type forKey:@"type"];
+		[dict setObject:labelName forKey:@"label"];
+		[dict setObject:imageName forKey:@"image"];
 		
 		[freeInlets addObject:dict];
 	}
@@ -273,39 +280,39 @@
 	int expansionIndex = 0;
 	int storageIndex = 0;
 	int peripheralIndex = 0;
-	OEPorts *outlets = info.getOutlets();
-	for (OEPorts::iterator o = outlets->begin();
-		 o != outlets->end();
-		 o++)
+	OEDevices *devices = ((OEPAEmulation *)emulation)->getDevices();
+	for (OEDevices::iterator device = devices->begin();
+		 device != devices->end();
+		 device++)
 	{
-		if (!o->connectionPort)
-			continue;
-		
-		NSString *deviceImage = [NSString stringWithUTF8String:o->image.c_str()];
-		NSString *deviceLabel = [NSString stringWithUTF8String:o->label.c_str()];
-		NSString *deviceRef = [NSString stringWithUTF8String:o->ref.getStringRef().
-							   c_str()];
+		NSString *deviceName = getNSString((*device)->name);
+		NSString *deviceLabel = getNSString((*device)->label);
+		NSString *deviceImage = getNSString((*device)->image);
+		NSString *connectionLabel = getNSString((*device)->connectionLabel);
 		
 		NSImage *theImage = [self getResourceImage:deviceImage];
+		
 		NSString *text = [NSString localizedStringWithFormat:@"\n(on %@)",
-						  [NSString stringWithUTF8String:
-						   o->connectionLabel.c_str()]];
+						  connectionLabel];
 		NSAttributedString *theTitle = [self formatDeviceLabel:deviceLabel
 										   withInformativeText:text];
+		
+		BOOL isRemovable = ((*device)->label == "static");
+		NSNumber *removable = [NSNumber numberWithBool:isRemovable];
 		
 		NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
 							  theTitle, @"title",
 							  theImage, @"image",
 							  deviceLabel, @"label",
-							  deviceRef, @"ref",
+							  deviceName, @"name",
+							  removable, @"removable",
 							  nil];
 		
-		string category = o->connectionPort->category;
-		if (category == "expansion")
+		if ((*device)->type == "expansion")
 			[self insertObject:dict inExpansionsAtIndex:expansionIndex++];
-		else if (category == "storage")
+		else if ((*device)->type == "storage")
 			[self insertObject:dict inStorageAtIndex:storageIndex++];
-		else if (category == "peripheral")
+		else if ((*device)->type == "peripheral")
 			[self insertObject:dict inPeripheralsAtIndex:peripheralIndex++];
 	}
 	
@@ -326,12 +333,12 @@
 			string value;
 			
 			value = ((OEPAEmulation *)emulation)->getLabel();
-			[self setLabel:[NSString stringWithUTF8String:label.c_str()]];
-			value = ((OEPAEmulation *)emulation)->getNotes();
-			[self setNotes:[NSString stringWithUTF8String:label.c_str()]];
+			[self setLabel:getNSString(value)];
+//			value = ((OEPAEmulation *)emulation)->getNotes();
+//			[self setNotes:getNSString(value)];
 			[self updatePowerState];
 			value = ((OEPAEmulation *)emulation)->getImage();
-			[self setImage:[self getResourceImage:[NSString stringWithUTF8String:value.c_str()]]];
+			[self setImage:[self getResourceImage:getNSString(value)]];
 			
 			[self updateDevices];
 			
@@ -436,7 +443,7 @@
 		connectionsMap[inletRefString] = outletRefString;
 	}
 	
-	if (!((OEPAEmulation *)emulation)->addDML(pathString, connectionsMap))
+	if (!((OEPAEmulation *)emulation)->add(pathString, connectionsMap))
 	{
 		NSString *messageText = @"The device could not be added.";
 		
@@ -457,7 +464,7 @@
 	
 	string refString = [deviceRef UTF8String];
 	
-	if (!((OEPAEmulation *)emulation)->isDeviceTerminal(refString))
+/*	if (!((OEPAEmulation *)emulation)->isDeviceTerminal(refString))
 	{
 		NSString *messageText = @"Do you want to remove the device \u201C%@\u201D?";
 		NSString *informativeText = @"There is one or more devices connected to it, "
@@ -472,7 +479,7 @@
 		[alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"Cancel")];
 		if ([alert runModal] != NSAlertDefaultReturn)
 			return;
-	}
+	}*/
 	
 	if (!((OEPAEmulation *)emulation)->removeDevice(refString))
 	{
@@ -616,65 +623,31 @@
     [peripherals removeObjectAtIndex:index];
 }
 
-- (BOOL)isCopyable
-{
-	return [self hostIoctl:HOST_IS_COPYABLE data:NULL] ? YES : NO;
-}
-
-- (BOOL)isPasteable
-{
-	if (![self hostIoctl:HOST_IS_PASTEABLE data:NULL])
-		return NO;
-	
-	NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
-	NSArray *pasteboardTypes = [NSArray arrayWithObjects:NSStringPboardType, nil];
-	
-	return [pasteboard availableTypeFromArray:pasteboardTypes] != nil;
-}
-
-- (BOOL)validateUserInterfaceItem:(id)item
-{
-	if ([item action] == @selector(copy:))
-		return [self isCopyable];
-	else if ([item action] == @selector(paste:))
-		return [self isPasteable];
-	else if ([item action] == @selector(startSpeaking:))
-		return [self isCopyable];
-	
-	return YES;
-}
-
 - (NSString *)documentText
 {
 	string characterString;
-	[self postHostNotification:HOST_CLIPBOARD_COPY_EVENT data:&characterString];
-
+	[self postHostNotification:HOST_COPY data:&characterString];
+	
 	return [NSString stringWithUTF8String:characterString.c_str()];
 }
 
 - (void)copy:(id)sender
 {
-	if ([self isCopyable])
-	{
-		NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
-		NSArray *pasteboardTypes = [NSArray arrayWithObjects:NSStringPboardType, nil];
-		
-		[pasteboard declareTypes:pasteboardTypes owner:self];
-		[pasteboard setString:[self documentText] forType:NSStringPboardType];
-	}
+	NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
+	NSArray *pasteboardTypes = [NSArray arrayWithObjects:NSStringPboardType, nil];
+	
+	[pasteboard declareTypes:pasteboardTypes owner:self];
+	[pasteboard setString:[self documentText] forType:NSStringPboardType];
 }
 
 - (void)paste:(id)sender
 {
-	if ([self isPasteable])
-	{
-		NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
-		
-		NSString *characters = [pasteboard stringForType:NSStringPboardType];
-		string characterString([characters UTF8String]);
-		
-		[self postHostNotification:HOST_CLIPBOARD_PASTE_EVENT data:&characterString];
-	}
+	NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
+	
+	NSString *characters = [pasteboard stringForType:NSStringPboardType];
+	string characterString([characters UTF8String]);
+	
+	[self postHostNotification:HOST_PASTE data:&characterString];
 }
 
 - (void)startSpeaking:(id)sender

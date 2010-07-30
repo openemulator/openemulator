@@ -40,7 +40,7 @@ public:
 	bool getProperty(const string &name, string &value);
 	bool connect(const string &name, OEComponent *component);
 	
-	void notify(int notification, OEComponent *component, void *data);
+	void notify(OEComponent *component, int notification, void *data);
 	
 	int ioctl(int message, void *data);
 	

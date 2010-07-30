@@ -25,9 +25,9 @@ typedef struct
 typedef vector<OEMemoryRange> OEMemoryRanges;
 
 class OEComponent;
-
-typedef vector<OEComponent *> OEObservers;
-typedef map<int, OEObservers> OEObserverMap;
+typedef vector<OEComponent *> OEComponents;
+typedef map<int, OEComponents> OEObservers;
+typedef map<int, OEComponents> OEDelegates;
 
 class OEComponent
 {
@@ -35,6 +35,7 @@ public:
 	OEComponent();
 	virtual ~OEComponent();
 	
+	// Configuration
 	virtual bool setProperty(const string &name, const string &value);
 	virtual bool getProperty(const string &name, string &value);
 	virtual bool setData(const string &name, OEData *data);
@@ -42,13 +43,18 @@ public:
 	virtual bool setResource(const string &name, OEData *data);
 	virtual bool connect(const string &name, OEComponent *component);
 	
+	// Notifications
 	bool addObserver(OEComponent *component, int notification);
 	bool removeObserver(OEComponent *component, int notification);
 	void postNotification(int notification, void *data);
-	virtual void notify(int notification, OEComponent *component, void *data);
+	virtual void notify(OEComponent *component, int notification, void *data);
 	
-	virtual int ioctl(int message, void *data);
+	// Events and responder chain
+	bool addDelegate(OEComponent *component, int event);
+	bool removeDelegate(OEComponent *component, int event);
+	virtual bool postEvent(OEComponent *component, int event, void *data);
 	
+	// Memory access
 	virtual OEUInt8 read(OEUInt32 address);
 	virtual void write(OEUInt32 address, OEUInt8 value);
 	virtual OEUInt16 readw(OEUInt32 address);
@@ -58,12 +64,15 @@ public:
 	virtual bool readBlock(OEUInt32 address, OEData *value);
 	virtual bool writeBlock(OEUInt32 address, const OEData *value);
 	
+	// Memory mapping
 	virtual bool setMemoryMap(OEComponent *component, const string &value);
 	virtual bool getMemoryMap(string &value);
 	
 protected:
-	OEObserverMap observerMap;
+	OEObservers observers;
+	OEDelegates delegates;
 	
+	// Helpers
 	int getInt(const string &value);
 	double getFloat(const string &value);
 	string getString(int value);

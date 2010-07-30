@@ -29,10 +29,10 @@ public:
 	bool setProperty(string ref, string name, string value);
 	bool getProperty(string ref, string name, string &value);
 	void postNotification(string ref, int notification, void *data);
-	int ioctl(string ref, int message, void *data);
+	int postEvent(string ref, int message, void *data);
 	
 	bool add(string path, OEConnections &connections);
-	bool remove(string ref);
+	bool removeDevice(string deviceName);
 	
 private:
 	void *oepa;

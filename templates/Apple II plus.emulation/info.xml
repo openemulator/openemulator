@@ -56,26 +56,13 @@
         <connection name="map" ref="memoryMap" />
     </component>
     <component name="ram1" class="RAM">
-        <property name="map" value="0x0000-0x3fff" />
-        <property name="size" value="0x4000" />
-        <data name="image" src="${REF}.bin" />
-        <connection name="map" ref="memoryMap" />
-    </component>
-    <component name="ram2" class="RAM">
-        <property name="map" value="0x4000-0x7fff" />
-        <property name="size" value="0x4000" />
-        <data name="image" src="${REF}.bin" />
-        <connection name="map" ref="memoryMap" />
-    </component>
-    <component name="ram3" class="RAM">
-        <property name="map" value="0x8000-0xbfff" />
-        <property name="size" value="0x4000" />
+        <property name="map" value="0x0000-0xbfff" />
+        <property name="size" value="0xc000" />
         <data name="image" src="${REF}.bin" />
         <connection name="map" ref="memoryMap" />
     </component>
     <component name="ioMap" class="MemoryMap8bit">
         <property name="map" value="0xc000-0xcfff" />
-        <connection name="" ref="floatingBus" />
         <connection name="" ref="keyboard" />
         <connection name="" ref="speaker" />
         <connection name="" ref="video" />
