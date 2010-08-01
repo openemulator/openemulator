@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dml PUBLIC "-//OPENEMULATOR//DTD DML 1.0//EN" "http://www.openemulator.org/DTDs/dml-1.0.dtd">
+<dml version="1.0" label="Rockwell AIM-65" image="Rockwell AIM-65.png" description="" group="Early microcomputers">
+<device name="host">
+    <component name="host" class="Host">
+        <property name="notes" value="" />
+        <property name="powerState" value="0" />
+        <property name="videoWindow" value="-1 -1 768 576" />
+        <property name="hidMouseCapture" value="1" />
+    </component>
+</device>
+
+<device name="dev0" label="Apple I">
+    <inlet ref="video.monitor" type="CompositeVideo" label="Video Connector" image="Video Connector.png" />
+    <inlet ref="system.slot1" type="AppleISlot" label="Slot 1" image="Apple I Slot.png" />
+    <inlet ref="system.slot2" type="AppleISlot" label="Slot 2" image="Apple I Slot.png" />
+    <component name="system" class="AppleISystem">
+        <property name="isCPUExternal" value="0" />
+        <connection name="host" ref="host:host" />
+        <connection name="cpu" ref="cpu" />
+        <connection name="memoryMap" ref="" />
+        <connection name="floatingBus" ref="" />
+        <connection name="slot1" ref="" />
+        <connection name="slot2" ref="" />
+    </component>
+    <component name="cpu" class="MOS6502">
+        <property name="a" value="0" />
+        <property name="x" value="0" />
+        <property name="y" value="0" />
+        <property name="s" value="0" />
+        <property name="p" value="0" />
+        <property name="pc" value="0" />
+        <connection name="memoryMap" ref="memoryMap" />
+    </component>
+    <component name="memoryMap" class="MemoryMap16Bit">
+        <connection name="" ref="floatingBus" />
+        <connection name="" ref="ram1" />
+        <connection name="" ref="ram2" />
+        <connection name="" ref="io" />
+        <connection name="" ref="rom" />
+    </component>
+    <component name="floatingBus" class="AppleIFloatingBus">
+        <connection name="system" ref="system" />
+        <connection name="ram1" ref="ram1" />
+        <connection name="ram2" ref="ram2" />
+    </component>
+    <component name="ram1" class="RAM">
+        <data name="image" src="${REF}.bin" />
+        <property name="map" value="0x0000-0x0fff" />
+        <property name="size" value="0x1000" />
+        <connection name="host" ref="host:host" />
+    </component>
+    <component name="ram2" class="RAM">
+        <data name="image" src="${REF}.bin" />
+        <property name="map" value="0xe000-0xefff" />
+        <property name="size" value="0x1000" />
+        <connection name="host" ref="host:host" />
+    </component>
+    <component name="video" class="AppleIVideo">
+        <resource name="image" src="roms/Signetics 2513 Video ROM.bin" />
+        <connection name="host" ref="host:host" />
+        <connection name="system" ref="system" />
+        <connection name="pia" ref="pia" />
+        <connection name="monitor" ref="dev1:monitor" />
+    </component>
+    <component name="keyboard" class="AppleIKeyboard">
+        <connection name="host" ref="host:host" />
+        <connection name="pia" ref="pia" />
+    </component>
+    <component name="pia" class="MC6821">
+        <property name="controlRegisterA" value="0" />
+        <property name="dataDirectionRegisterA" value="0" />
+        <property name="dataRegisterA" value="0" />
+        <property name="controlRegisterB" value="0" />
+        <property name="dataDirectionRegisterB" value="0" />
+        <property name="dataRegisterB" value="0" />
+        <property name="ca1" value="0" />
+        <property name="ca2" value="0" />
+        <property name="cb1" value="0" />
+        <property name="cb2" value="0" />
+        <connection name="interfaceA" ref="keyboard" />
+        <connection name="interfaceB" ref="video" />
+        <property name="irqANotification" value="0" />
+        <connection name="irqA" ref="" />
+        <property name="irqBNotification" value="0" />
+        <connection name="irqB" ref="" />
+    </component>
+    <component name="io" class="AppleIIO">
+        <property name="map" value="0xd000-0xdfff" />
+        <connection name="pia" ref="pia" />
+        <connection name="floatingBus" ref="floatingBus" />
+    </component>
+    <component name="rom" class="ROM">
+        <property name="map" value="0xf000-0xffff" />
+        <resource name="image" src="roms/Apple I Monitor ROM.bin" />
+    </component>
+</device>
+
+<device name="dev1" type="peripheral" label="Composite Monitor" image="CompositeMonitor.png">
+    <outlet ref="monitor" type="CompositeVideo" />
+    <component name="monitor" class="CompositeMonitor">
+        <connection name="host" ref="host:host" />
+    </component>
+</device>
+
+</dml>

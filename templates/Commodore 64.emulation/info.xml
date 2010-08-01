@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dml PUBLIC "-//OPENEMULATOR//DTD DML 1.0//EN" "http://www.openemulator.org/DTDs/dml-1.0.dtd">
-<dml version="1.0" label="Commodore 64" image="Commodore 64.png" description="" group="Commodore (8 bit)">
+<dml version="1.0" label="Commodore 64" image="Commodore 64.png" description="" group="Commodore (8-bit)">
 <device name="host">
     <component name="host" class="Host">
         <property name="notes" value="" />

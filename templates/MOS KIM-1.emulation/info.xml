@@ -6,22 +6,14 @@
         <property name="notes" value="" />
         <property name="powerState" value="0" />
         <property name="videoWindow" value="-1 -1 768 576" />
-        <property name="hidMouseCapture" value="1" />
+        <property name="hidMouseCapture" value="0" />
     </component>
 </device>
 
-<device name="dev0" label="Apple I">
-    <inlet ref="video.monitor" type="CompositeVideo" label="Video Connector" image="Video Connector.png" />
-    <inlet ref="system.slot1" type="AppleISlot" label="Slot 1" image="Apple I Slot.png" />
-    <inlet ref="system.slot2" type="AppleISlot" label="Slot 2" image="Apple I Slot.png" />
-    <component name="system" class="AppleISystem">
-        <property name="isCPUExternal" value="0" />
+<device name="dev0" label="KIM-1">
+    <component name="system" class="KIM1System">
         <connection name="host" ref="host:host" />
         <connection name="cpu" ref="cpu" />
-        <connection name="memoryMap" ref="" />
-        <connection name="floatingBus" ref="" />
-        <connection name="slot1" ref="" />
-        <connection name="slot2" ref="" />
     </component>
     <component name="cpu" class="MOS6502">
         <property name="a" value="0" />
@@ -30,76 +22,78 @@
         <property name="s" value="0" />
         <property name="p" value="0" />
         <property name="pc" value="0" />
-        <connection name="memoryMap" ref="memoryMap" />
+        <connection name="memory" ref="mmu" />
+        <connection name="reset" ref="system" />
+        <property name="resetNotification" value="0" />
+        <connection name="irq" ref="system" />
+        <property name="irqNotification" value="1" />
+        <connection name="nmi" ref="system" />
+        <property name="nmiNotification" value="2" />
     </component>
-    <component name="memoryMap" class="MemoryMap16Bit">
-        <connection name="" ref="floatingBus" />
-        <connection name="" ref="ram1" />
-        <connection name="" ref="ram2" />
-        <connection name="" ref="io" />
-        <connection name="" ref="rom" />
+    <component name="mmu" class="MemoryMap">
+        <property name="mask" value="0x1fff" />
+        <property name="shift" value="6" />
+        <connection name="floatingBus" value="floatingBus" />
     </component>
-    <component name="floatingBus" class="AppleIFloatingBus">
-        <connection name="system" ref="system" />
-        <connection name="ram1" ref="ram1" />
-        <connection name="ram2" ref="ram2" />
-    </component>
-    <component name="ram1" class="RAM">
+    <component name="floatingBus" class="FloatingBus" />
+    <component name="ram" class="RAM">
         <data name="image" src="${REF}.bin" />
-        <property name="map" value="0x0000-0x0fff" />
-        <property name="size" value="0x1000" />
+        <property name="size" value="0x0400" />
         <connection name="host" ref="host:host" />
+        <connection name="mmu" ref="mmu" />
+        <property name="mmuMap" value="0x0000-0x03ff" />
     </component>
-    <component name="ram2" class="RAM">
+    <component name="rriot1" class="MOS6530">
+        <connection name="portA" ref="keyboard" />
+        <property name="ddrA" value="0" />
+        <property name="dataA" value="0" />
+        <connection name="portB" ref="video" />
+        <property name="ddrB" value="0" />
+        <property name="dataB" value="0" />
+        <connection name="reset" ref="host:host" />
+        <property name="resetNotification" value="0" />
+        <connection name="irq" ref="" />
+        <property name="irqMessage" value="0" />
+        <connection name="mmu" ref="mmu" />
+        <property name="mmuMap" value="0x1700-0x173f" />
+    </component>
+    <component name="rriot2" class="MOS6530">
+        <connection name="portA" ref="keyboard" />
+        <property name="ddrA" value="0" />
+        <property name="dataA" value="0" />
+        <connection name="portB" ref="video" />
+        <property name="ddrB" value="0" />
+        <property name="dataB" value="0" /> 
+        <connection name="reset" ref="host:host" />
+        <property name="resetNotification" value="0" />
+        <connection name="irq" ref="" />
+        <property name="irqMessage" value="0" />
+        <connection name="mmu" ref="mmu" />
+        <property name="mmuMap" value="0x1740-0x177f" />
+    </component>
+    <component name="rriot1ram" class="RAM">
         <data name="image" src="${REF}.bin" />
-        <property name="map" value="0xe000-0xefff" />
-        <property name="size" value="0x1000" />
+        <property name="size" value="0x0040" />
         <connection name="host" ref="host:host" />
+        <connection name="mmu" ref="mmu" />
+        <property name="mmuMap" value="0x1780-0x17bf" />
     </component>
-    <component name="video" class="AppleIVideo">
-        <resource name="image" src="roms/Signetics 2513 Video ROM.bin" />
+    <component name="rriot2ram" class="RAM">
+        <data name="image" src="${REF}.bin" />
+        <property name="size" value="0x0040" />
         <connection name="host" ref="host:host" />
-        <connection name="system" ref="system" />
-        <connection name="pia" ref="pia" />
-        <connection name="monitor" ref="dev1:monitor" />
+        <connection name="mmu" ref="mmu" />
+        <property name="mmuMap" value="0x17c0-0x17ff" />
     </component>
-    <component name="keyboard" class="AppleIKeyboard">
-        <connection name="host" ref="host:host" />
-        <connection name="pia" ref="pia" />
+    <component name="rriot1rom" class="ROM">
+        <resource name="image" src="roms/MOS KIM-1 6530-002 ROM.bin" />
+        <connection name="mmu" ref="mmu" />
+        <property name="mmuMap" value="0x1800-0x1bff" />
     </component>
-    <component name="pia" class="MC6821">
-        <property name="controlRegisterA" value="0" />
-        <property name="dataDirectionRegisterA" value="0" />
-        <property name="dataRegisterA" value="0" />
-        <property name="controlRegisterB" value="0" />
-        <property name="dataDirectionRegisterB" value="0" />
-        <property name="dataRegisterB" value="0" />
-        <property name="ca1" value="0" />
-        <property name="ca2" value="0" />
-        <property name="cb1" value="0" />
-        <property name="cb2" value="0" />
-        <connection name="interfaceA" ref="keyboard" />
-        <connection name="interfaceB" ref="video" />
-        <property name="irqANotification" value="0" />
-        <connection name="irqA" ref="" />
-        <property name="irqBNotification" value="0" />
-        <connection name="irqB" ref="" />
-    </component>
-    <component name="io" class="AppleIIO">
-        <property name="map" value="0xd000-0xdfff" />
-        <connection name="pia" ref="pia" />
-        <connection name="floatingBus" ref="floatingBus" />
-    </component>
-    <component name="rom" class="ROM">
-        <property name="map" value="0xf000-0xffff" />
-        <resource name="image" src="roms/Apple I Monitor ROM.bin" />
-    </component>
-</device>
-
-<device name="dev1" type="peripheral" label="Composite Monitor" image="CompositeMonitor.png">
-    <outlet ref="monitor" type="CompositeVideo" />
-    <component name="monitor" class="CompositeMonitor">
-        <connection name="host" ref="host:host" />
+    <component name="rriot2rom" class="ROM">
+        <resource name="image" src="roms/MOS KIM-1 6530-003 ROM.bin" />
+        <connection name="mmu" ref="mmu" />
+        <property name="mmuMap" value="0x1c00-0x1fff" />
     </component>
 </device>
 
