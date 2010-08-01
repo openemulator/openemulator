@@ -135,6 +135,8 @@ bool OEPA::open()
 	
 	if (openEmulations())
 	{
+		return true;
+		
 		if (openAudio())
 			return true;
 		

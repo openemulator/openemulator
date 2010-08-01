@@ -12,7 +12,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="106"/>
+			<integer value="57"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -647,8 +647,7 @@
 								<object class="NSMenuItem" id="58928646">
 									<reference key="NSMenu" ref="361438485"/>
 									<string key="NSTitle">Power Down</string>
-									<string key="NSKeyEquiv">p</string>
-									<int key="NSKeyEquivModMask">1572864</int>
+									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="1033313550"/>
 									<reference key="NSMixedImage" ref="310636482"/>
@@ -656,8 +655,7 @@
 								<object class="NSMenuItem" id="932460877">
 									<reference key="NSMenu" ref="361438485"/>
 									<string key="NSTitle">Sleep</string>
-									<string key="NSKeyEquiv">s</string>
-									<int key="NSKeyEquivModMask">1572864</int>
+									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="1033313550"/>
 									<reference key="NSMixedImage" ref="310636482"/>
@@ -665,8 +663,7 @@
 								<object class="NSMenuItem" id="302083824">
 									<reference key="NSMenu" ref="361438485"/>
 									<string key="NSTitle">Wake Up</string>
-									<string key="NSKeyEquiv">w</string>
-									<int key="NSKeyEquivModMask">1572864</int>
+									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="1033313550"/>
 									<reference key="NSMixedImage" ref="310636482"/>
@@ -683,18 +680,24 @@
 								</object>
 								<object class="NSMenuItem" id="231350452">
 									<reference key="NSMenu" ref="361438485"/>
-									<string key="NSTitle">Restart</string>
-									<string key="NSKeyEquiv">r</string>
-									<int key="NSKeyEquivModMask">1572864</int>
+									<string key="NSTitle">Cold Restart</string>
+									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="1033313550"/>
 									<reference key="NSMixedImage" ref="310636482"/>
 								</object>
-								<object class="NSMenuItem" id="273033769">
+								<object class="NSMenuItem" id="417495872">
+									<reference key="NSMenu" ref="361438485"/>
+									<string key="NSTitle">Warm Restart</string>
+									<string key="NSKeyEquiv"/>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="1033313550"/>
+									<reference key="NSMixedImage" ref="310636482"/>
+								</object>
+								<object class="NSMenuItem" id="698486783">
 									<reference key="NSMenu" ref="361438485"/>
 									<string key="NSTitle">Debugger Break</string>
-									<string key="NSKeyEquiv">b</string>
-									<int key="NSKeyEquivModMask">1572864</int>
+									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="1033313550"/>
 									<reference key="NSMixedImage" ref="310636482"/>
@@ -1310,14 +1313,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
-						<string key="label">debuggerBreak:</string>
-						<reference key="source" ref="1014"/>
-						<reference key="destination" ref="273033769"/>
-					</object>
-					<int key="connectionID">895</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
 						<string key="label">toggleInspector:</string>
 						<reference key="source" ref="1014"/>
 						<reference key="destination" ref="672306149"/>
@@ -1355,6 +1350,22 @@
 						<reference key="destination" ref="238522557"/>
 					</object>
 					<int key="connectionID">900</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">debuggerBreak:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="698486783"/>
+					</object>
+					<int key="connectionID">902</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">restart:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="417495872"/>
+					</object>
+					<int key="connectionID">904</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -1891,24 +1902,15 @@
 						<reference key="object" ref="361438485"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="231350452"/>
 							<reference ref="676833672"/>
-							<reference ref="273033769"/>
 							<reference ref="932460877"/>
 							<reference ref="302083824"/>
 							<reference ref="58928646"/>
+							<reference ref="698486783"/>
+							<reference ref="417495872"/>
+							<reference ref="231350452"/>
 						</object>
 						<reference key="parent" ref="942780802"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">611</int>
-						<reference key="object" ref="273033769"/>
-						<reference key="parent" ref="361438485"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">612</int>
-						<reference key="object" ref="231350452"/>
-						<reference key="parent" ref="361438485"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">82</int>
@@ -2048,6 +2050,21 @@
 						<reference key="object" ref="58928646"/>
 						<reference key="parent" ref="361438485"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">901</int>
+						<reference key="object" ref="698486783"/>
+						<reference key="parent" ref="361438485"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">903</int>
+						<reference key="object" ref="417495872"/>
+						<reference key="parent" ref="361438485"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">612</int>
+						<reference key="object" ref="231350452"/>
+						<reference key="parent" ref="361438485"/>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -2185,7 +2202,6 @@
 					<string>609.IBEditorWindowLastContentRect</string>
 					<string>609.IBPluginDependency</string>
 					<string>609.editorWindowContentRectSynchronizationRect</string>
-					<string>611.IBPluginDependency</string>
 					<string>612.IBPluginDependency</string>
 					<string>613.IBPluginDependency</string>
 					<string>711.IBPluginDependency</string>
@@ -2232,6 +2248,8 @@
 					<string>871.IBPluginDependency</string>
 					<string>882.IBPluginDependency</string>
 					<string>884.IBPluginDependency</string>
+					<string>901.IBPluginDependency</string>
+					<string>903.IBPluginDependency</string>
 				</object>
 				<object class="NSMutableArray" key="dict.values">
 					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -2363,10 +2381,9 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{362, 474}, {200, 113}}</string>
+					<string>{{362, 454}, {161, 133}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{475, 832}, {234, 43}}</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -2413,6 +2430,8 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="unlocalizedProperties">
@@ -2431,7 +2450,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">900</int>
+			<int key="maxID">904</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -2709,6 +2728,17 @@
 								<string key="name">wakeUp:</string>
 								<string key="candidateClassName">id</string>
 							</object>
+						</object>
+					</object>
+					<object class="NSMutableDictionary" key="outlets">
+						<string key="NS.key.0">fDocumentWindowController</string>
+						<string key="NS.object.0">id</string>
+					</object>
+					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<string key="NS.key.0">fDocumentWindowController</string>
+						<object class="IBToOneOutletInfo" key="NS.object.0">
+							<string key="name">fDocumentWindowController</string>
+							<string key="candidateClassName">id</string>
 						</object>
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">

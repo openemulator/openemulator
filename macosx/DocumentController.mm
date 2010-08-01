@@ -35,9 +35,10 @@
 							  @"dsk", @"do", @"d13", @"po", @"cpm", @"nib", @"v2d",
 							  @"vdsk",
 							  @"2mg", @"2img",
-							  @"t64", @"tap", @"prg",
+							  @"t64", @"tap", @"prg", @"p00",
 							  @"d64", @"d71", @"d80", @"d81", @"d82", @"x64", @"g64",
 							  @"crt",
+							  @"uef",
 							  @"fdi",
 							  @"img", @"dmg", @"hdv", @"hfv",
 							  @"iso", @"cdr",
@@ -104,7 +105,7 @@
 	((OEPA *)oepa)->setPlayThrough([defaults floatForKey:@"OEPlayThrough"]);
 	((OEPA *)oepa)->setVolume([defaults floatForKey:@"OEVolume"]);
 	
-	((OEPA *)oepa)->open();
+//	((OEPA *)oepa)->open();
 	
 	[defaults addObserver:self
 			   forKeyPath:@"OEFullDuplex"

@@ -181,11 +181,12 @@
 				<string>t64</string>
 				<string>tap</string>
 				<string>prg</string>
+				<string>p00</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
 			<string>DiskImage525.icns</string>
 			<key>CFBundleTypeName</key>
-			<string>Commodore 64 Program</string>
+			<string>Commodore Program</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 		</dict>
@@ -203,7 +204,7 @@
 			<key>CFBundleTypeIconFile</key>
 			<string>DiskImage525.icns</string>
 			<key>CFBundleTypeName</key>
-			<string>Commodore 64 Disk Image</string>
+			<string>Commodore Disk Image</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 		</dict>
@@ -215,7 +216,19 @@
 			<key>CFBundleTypeIconFile</key>
 			<string>DiskImage.icns</string>
 			<key>CFBundleTypeName</key>
-			<string>Commodore 64 Cartridge</string>
+			<string>Commodore Cartridge</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>uef</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>DiskImage.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>Unified Emulator Format Archive</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 		</dict>
@@ -263,9 +276,9 @@
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleHelpBookFolder</key>
-	<string>OpenEmulatorHelp</string>
+	<string>OpenEmulator.help</string>
 	<key>CFBundleHelpBookName</key>
-	<string>OpenEmulator Help</string>
+	<string>org.openemulator.help</string>
 	<key>CFBundleIconFile</key>
 	<string>OpenEmulator.icns</string>
 	<key>CFBundleIdentifier</key>
@@ -283,7 +296,7 @@
 	<key>CFBundleVersion</key>
 	<string>${BUILD_NUMBER}</string>
 	<key>LSMinimumSystemVersion</key>
-	<string>10.4.0</string>
+	<string>10.4</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2009-2010, The OpenEmulator Team</string>
 	<key>NSMainNibFile</key>

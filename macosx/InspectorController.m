@@ -206,7 +206,7 @@ NSString *itemIdentifiers[] =
 {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	if ([defaults boolForKey:@"OEInspectorIsVisible"])
-		[self showWindow:self];	
+		[self showWindow:self];
 }
 
 - (void)storeWindowState:(id)sender
@@ -262,11 +262,11 @@ NSString *itemIdentifiers[] =
 - (NSString *)formatSize:(long long)size
 {
 	if (size < 1e6)
-		return [NSString stringWithFormat:@"%3.0f kB", size / 1000.0];
+		return [NSString stringWithFormat:@"%3.0f kB", size / 1E3];
 	else if (size < 1e9)
-		return [NSString stringWithFormat:@"%3.1f MB", size / 1000000.0];
+		return [NSString stringWithFormat:@"%3.1f MB", size / 1E6];
 	else
-		return [NSString stringWithFormat:@"%3.1f GB", size / 1000000000.0];
+		return [NSString stringWithFormat:@"%3.1f GB", size / 1E9];
 }
 
 - (void)updatePlay
@@ -289,15 +289,15 @@ NSString *itemIdentifiers[] =
 		[fPlayTimeLabel setStringValue:timeLabel];
 		[fPlayDurationLabel setStringValue:durationLabel];
 	}
-
+	
 	BOOL isPlaying = [fDocumentController playing];
 	[fOpenPlayButton setEnabled:!isPlaying];
 	[fTogglePlayButton setEnabled:url ? YES : NO];
 	[fTogglePlayButton setImage:(isPlaying ?
-									 [NSImage imageNamed:@"IPAudioStop.png"] :
-									 [NSImage imageNamed:@"IPAudioPlay.png"]
-									 )];
-}	
+								 [NSImage imageNamed:@"IPAudioStop.png"] :
+								 [NSImage imageNamed:@"IPAudioPlay.png"]
+								 )];
+}
 
 - (IBAction)openPlay:(id)sender
 {
@@ -359,7 +359,7 @@ NSString *itemIdentifiers[] =
 {
 	NSSavePanel *panel = [NSSavePanel savePanel];
 	[panel setAllowedFileTypes:[NSArray arrayWithObject:@"wav"]];
-	[panel setAllowsOtherFileTypes:NO];	
+	[panel setAllowsOtherFileTypes:NO];
 	
 	if ([panel runModal] == NSOKButton)
 	{
