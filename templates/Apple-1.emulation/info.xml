@@ -11,17 +11,17 @@
 </device>
 
 <device name="dev0" label="Apple-1">
-    <inlet ref="video.monitor" type="CompositeVideo" label="Video Connector" image="Video Connector.png" />
+    <inlet ref="terminal.monitor" type="CompositeVideo" label="Video Connector" image="Video Connector.png" />
     <inlet ref="system.slot1" type="Apple1Slot" label="Slot 1" image="Apple I Slot.png" />
     <inlet ref="system.slot2" type="Apple1Slot" label="Slot 2" image="Apple I Slot.png" />
-    <component name="system" class="Apple1System">
-        <property name="isCPUExternal" value="0" />
+    <component name="bus" class="Bus">
+        <property name="crystal" value="14.31818MHz" />
         <connection name="host" ref="host:host" />
         <connection name="cpu" ref="cpu" />
-        <connection name="memoryMap" ref="" />
-        <connection name="floatingBus" ref="" />
+        <connection name="mmu" ref="" />
         <connection name="slot1" ref="" />
         <connection name="slot2" ref="" />
+        <connection name="floatingBus" ref="" />
     </component>
     <component name="cpu" class="MOS6502">
         <property name="a" value="0" />
@@ -30,60 +30,55 @@
         <property name="s" value="0" />
         <property name="p" value="0" />
         <property name="pc" value="0" />
-        <connection name="memoryMap" ref="memoryMap" />
+        <connection name="memory" ref="mmu" />
+        <connection name="bus" ref="bus" />
     </component>
-    <component name="memoryMap" class="MemoryMap16Bit">
-        <connection name="" ref="floatingBus" />
-        <connection name="" ref="ram1" />
-        <connection name="" ref="ram2" />
-        <connection name="" ref="io" />
-        <connection name="" ref="rom" />
+    <component name="mmu" class="MemoryMap">
+        <property name="mask" value="0xffff" />
+        <property name="shift" value="8" />
+        <connection name="floatingBus" value="floatingBus" />
     </component>
     <component name="floatingBus" class="Apple1FloatingBus">
-        <connection name="system" ref="system" />
+        <connection name="bus" ref="bus" />
         <connection name="ram1" ref="ram1" />
         <connection name="ram2" ref="ram2" />
     </component>
     <component name="ram1" class="RAM">
         <data name="image" src="${REF}.bin" />
-        <property name="map" value="0x0000-0x0fff" />
         <property name="size" value="0x1000" />
+        <connection name="mmu" ref="mmu" />
+        <property name="mmuMap" value="0x0000-0x0fff" />
         <connection name="host" ref="host:host" />
     </component>
     <component name="ram2" class="RAM">
         <data name="image" src="${REF}.bin" />
-        <property name="map" value="0xe000-0xefff" />
         <property name="size" value="0x1000" />
+        <connection name="mmu" ref="mmu" />
+        <property name="mmuMap" value="0xe000-0xefff" />
         <connection name="host" ref="host:host" />
     </component>
     <component name="video" class="Apple1Video">
-        <resource name="image" src="roms/Signetics 2513 Video ROM.bin" />
+        <resource name="charset" src="roms/Signetics 2513 Video ROM.bin" />
         <connection name="host" ref="host:host" />
         <connection name="system" ref="system" />
         <connection name="pia" ref="pia" />
         <connection name="monitor" ref="dev1:monitor" />
     </component>
-    <component name="keyboard" class="Apple1Keyboard">
-        <connection name="host" ref="host:host" />
-        <connection name="pia" ref="pia" />
-    </component>
     <component name="pia" class="MC6821">
-        <property name="controlRegisterA" value="0" />
-        <property name="dataDirectionRegisterA" value="0" />
-        <property name="dataRegisterA" value="0" />
-        <property name="controlRegisterB" value="0" />
-        <property name="dataDirectionRegisterB" value="0" />
-        <property name="dataRegisterB" value="0" />
+        <connection name="portA" ref="keyboard" />
+        <property name="controlA" value="0" />
+        <property name="ddrA" value="0" />
+        <property name="dataA" value="0" />
         <property name="ca1" value="0" />
         <property name="ca2" value="0" />
+        <connection name="busA" ref="" />
+        <connection name="portB" ref="video" />
+        <property name="controlB" value="0" />
+        <property name="ddrB" value="0" />
+        <property name="dataB" value="0" />
         <property name="cb1" value="0" />
         <property name="cb2" value="0" />
-        <connection name="interfaceA" ref="keyboard" />
-        <connection name="interfaceB" ref="video" />
-        <property name="irqANotification" value="0" />
-        <connection name="irqA" ref="" />
-        <property name="irqBNotification" value="0" />
-        <connection name="irqB" ref="" />
+        <connection name="busB" ref="" />
     </component>
     <component name="io" class="Apple1IO">
         <property name="map" value="0xd000-0xdfff" />

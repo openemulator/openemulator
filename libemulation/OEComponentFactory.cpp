@@ -18,11 +18,14 @@
 #include "MemoryOffset.h"
 #include "FloatingBus.h"
 #include "CompositeMonitor.h"
-#include "AudioDAC1Bit.h"
+#include "Audio1Bit.h"
+#include "AudioPLL.h"
+
 #include "MC6821.h"
 #include "MC6845.h"
 
 #include "MOS6502.h"
+#include "MOS6530.h"
 
 #include "Apple1System.h"
 #include "Apple1FloatingBus.h"
@@ -44,11 +47,14 @@ OEComponent *OEComponentFactory::build(string className)
 	matchComponent(MemoryOffset);
 	matchComponent(FloatingBus);
 	matchComponent(CompositeMonitor);
-	matchComponent(AudioDAC1Bit);
+	matchComponent(Audio1Bit);
+	matchComponent(AudioPLL);
+	
 	matchComponent(MC6821);
 	matchComponent(MC6845);
 	
 	matchComponent(MOS6502);
+	matchComponent(MOS6530);
 	
 	matchComponent(Apple1System);
 	matchComponent(Apple1FloatingBus);
