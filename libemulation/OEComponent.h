@@ -13,17 +13,6 @@
 
 #include "OETypes.h"
 
-typedef struct
-{	
-	bool read;
-	bool write;
-	
-	OEUInt32 start;
-	OEUInt32 end;
-} OEMemoryRange;
-
-typedef vector<OEMemoryRange> OEMemoryRanges;
-
 class OEComponent;
 typedef vector<OEComponent *> OEComponents;
 typedef map<int, OEComponents> OEObservers;
@@ -64,10 +53,6 @@ public:
 	virtual bool readBlock(OEUInt32 address, OEData *value);
 	virtual bool writeBlock(OEUInt32 address, const OEData *value);
 	
-	// Memory mapping
-	virtual bool setMemoryMap(OEComponent *component, const string &value);
-	virtual bool getMemoryMap(string &value);
-	
 protected:
 	OEObservers observers;
 	OEDelegates delegates;
@@ -79,8 +64,6 @@ protected:
 	string getHex(int value);
 	OEData getCharVector(const string &value);
 	int getNextPowerOf2(int value);
-	bool getRange(OEMemoryRange &range, const string &value);
-	bool getRanges(OEMemoryRanges &ranges, const string &value);
 };
 
 #endif

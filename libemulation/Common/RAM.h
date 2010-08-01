@@ -23,25 +23,22 @@ public:
 	
 	void notify(OEComponent *component, int notification, void *data);
 	
-	bool getMemoryMap(string &value);
-	
 	OEUInt8 read(int address);
 	void write(int address, OEUInt8 value);
 	
 private:
 	OEComponent *host;
+	string mmuMap;
 	
-	string mappedRange;
-	
-	bool powered;
-	
-	int size;
+	bool isPowered;
 	
 	OEData *memory;
-	int mask;
-	char *data;
-	
 	OEData resetPattern;
 	
-	void updateMemory(int size);
+	int size;
+	int mask;
+	char *datap;
+	
+	void setSize(int size);
+	void setMemory(OEData *data);
 };

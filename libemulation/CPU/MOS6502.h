@@ -10,6 +10,14 @@
 
 #include "OEComponent.h"
 
+// Events
+enum
+{
+	CPU_ASSERT_RESET,
+	CPU_ASSERT_IRQ,
+	CPU_ASSERT_NMI,
+};
+
 class MOS6502 : public OEComponent
 {
 public:

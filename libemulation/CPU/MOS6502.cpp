@@ -19,24 +19,18 @@ MOS6502::MOS6502()
 
 bool MOS6502::setProperty(const string &name, const string &value)
 {
-	if (name == "pc")
-		pc.w.l = getInt(value);
-	else if (name == "s")
-		sp.b.l = getInt(value);
-	else if (name == "p")
-		p = getInt(value);
-	else if (name == "a")
+	if (name == "a")
 		a = getInt(value);
 	else if (name == "x")
 		x = getInt(value);
 	else if (name == "y")
 		y = getInt(value);
-	else if (name == "pendingIRQ")
-		pendingIRQ = getInt(value);
-	else if (name == "afterCLI")
-		afterCLI = getInt(value);
-	else if (name == "irqCount")
-		irqCount = getInt(value);
+	else if (name == "s")
+		sp.b.l = getInt(value);
+	else if (name == "p")
+		p = getInt(value);
+	else if (name == "pc")
+		pc.w.l = getInt(value);
 	else
 		return false;
 	
@@ -45,24 +39,18 @@ bool MOS6502::setProperty(const string &name, const string &value)
 
 bool MOS6502::getProperty(const string &name, string &value)
 {
-	if (name == "pc")
-		value = getHex(pc.w.l);
-	else if (name == "s")
-		value = getHex(sp.b.l);
-	else if (name == "p")
-		value = getHex(p);
-	else if (name == "a")
+	if (name == "a")
 		value = getHex(a);
 	else if (name == "x")
 		value = getHex(x);
 	else if (name == "y")
 		value = getHex(y);
-	else if (name == "pendingIRQ")
-		value = pendingIRQ;
-	else if (name == "afterCLI")
-		value = afterCLI;
-	else if (name == "irqCount")
-		value = irqCount;
+	else if (name == "s")
+		value = getHex(sp.b.l);
+	else if (name == "p")
+		value = getHex(p);
+	else if (name == "pc")
+		value = getHex(pc.w.l);
 	else
 		return false;
 	
@@ -71,11 +59,8 @@ bool MOS6502::getProperty(const string &name, string &value)
 
 bool MOS6502::connect(const string &name, OEComponent *component)
 {
-	if (name == "memoryMap")
+	if (name == "memory")
 		memory = component;
-	else if (name == "hostSystem")
-	// component->addObserver(this);
-		;
 	else
 		return false;
 	

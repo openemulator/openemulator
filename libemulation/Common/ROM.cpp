@@ -10,10 +10,13 @@
 
 #include "ROM.h"
 
+#include "MemoryMap.h"
+
 ROM::ROM()
 {
-	memory = new OEData();
-	updateMemory(1);
+	memory = NULL;
+	
+	setMemory(new OEData());
 }
 
 ROM::~ROM()
@@ -21,20 +24,25 @@ ROM::~ROM()
 	delete memory;
 }
 
-void ROM::updateMemory(int size)
+void ROM::setMemory(OEData *data)
 {
-	size = getNextPowerOf2(size);
+	delete memory;
+	memory = data;
+	
+	int size = getNextPowerOf2(memory->size());
 	if (size < 1)
 		size = 1;
-	memory->resize(size);
+	
 	mask = size - 1;
-	data = &memory->front();
+	
+	memory->resize(size);
+	datap = &memory->front();
 }
 
 bool ROM::setProperty(const string &name, const string &value)
 {
-	if (name == "map")
-		mappedRange = value;
+	if (name == "mmuMap")
+		mmuMap = value;
 	else
 		return false;
 	
@@ -44,26 +52,24 @@ bool ROM::setProperty(const string &name, const string &value)
 bool ROM::setResource(const string &name, OEData *data)
 {
 	if (name == "image")
-	{
-		delete memory;
-		memory = data;
-		
-		updateMemory(memory->size());
-	}
+		setMemory(data);
 	else
 		return false;
 	
 	return true;
 }
 
-bool ROM::getMemoryMap(string &range)
+bool ROM::connect(const string &name, OEComponent *component)
 {
-	range = mappedRange;
+	if (name == "mmu")
+		component->postEvent(this, MEMORYMAP_MAP, &mmuMap);
+	else
+		return false;
 	
 	return true;
 }
 
 OEUInt8 ROM::read(int address)
 {
-	return data[address & mask];
+	return datap[address & mask];
 }

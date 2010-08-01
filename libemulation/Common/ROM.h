@@ -18,17 +18,17 @@ public:
 	
 	bool setProperty(const string &name, const string &value);
 	bool setResource(const string &name, OEData *data);
-	
-	bool getMemoryMap(string &range);
+	bool connect(const string &name, OEComponent *component);
 	
 	OEUInt8 read(int address);
 	
 private:
-	string mappedRange;
+	string mmuMap;
 	
 	OEData *memory;
-	int mask;
-	char *data;
 	
-	void updateMemory(int size);
+	int mask;
+	char *datap;
+	
+	void setMemory(OEData *data);
 };

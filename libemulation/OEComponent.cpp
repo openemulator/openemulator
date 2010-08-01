@@ -151,16 +151,6 @@ bool OEComponent::writeBlock(OEUInt32 address, const OEData *value)
 	return false;
 }
 
-bool OEComponent::setMemoryMap(OEComponent *component, const string &value)
-{
-	return false;
-}
-
-bool OEComponent::getMemoryMap(string &value)
-{
-	return false;
-}
-
 int OEComponent::getInt(const string &value)
 {
 	if (value.substr(0, 2) == "0x")
@@ -216,65 +206,4 @@ OEData OEComponent::getCharVector(const string &value)
 int OEComponent::getNextPowerOf2(int value)
 {
 	return (int) pow(2, ceil(log2(value)));
-}
-
-bool OEComponent::getRange(OEMemoryRange &range, const string &value)
-{
-	range.read = false;
-	range.write = false;
-	
-	size_t pos = 0;
-	
-	while(1)
-	{
-		if (pos == value.size())
-			return false;
-		else if ((value[pos] == 'R') || (value[pos] == 'r'))
-			range.read = true;
-		else if ((value[pos] == 'W') || (value[pos] == 'w'))
-			range.write = true;
-		else
-			break;
-	}
-	
-	if (!range.read && !range.write)
-		range.read = range.write = true;
-	
-	size_t separatorPos = value.find_first_of('-', pos);
-	if (separatorPos == string::npos)
-		range.end = range.start = getInt(value.substr(pos));
-	else
-	{
-		range.start = getInt(value.substr(pos, separatorPos));
-		range.end = getInt(value.substr(separatorPos + 1));
-	}
-	
-	if (range.start > range.end)
-		return false;
-	
-	return true;
-}
-
-bool OEComponent::getRanges(OEMemoryRanges &ranges, const string &value)
-{
-	size_t startPos = value.find_first_not_of(',', 0);
-	size_t endPos = value.find_first_of(',', startPos);
-	
-	while ((startPos != string::npos) || (endPos != string::npos))
-	{
-		OEMemoryRange range;
-		
-		if (!getRange(range, value.substr(startPos, endPos - startPos)))
-		{
-			OELog("memory range '" + value + "' invalid");
-			return false;
-		}
-		
-		ranges.push_back(range);
-		
-		startPos = value.find_first_not_of(',', endPos);
-		endPos = value.find_first_of(',', startPos);
-	}
-	
-	return true;
 }
