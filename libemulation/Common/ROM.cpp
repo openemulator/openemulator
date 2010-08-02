@@ -10,7 +10,7 @@
 
 #include "ROM.h"
 
-#include "MemoryMap.h"
+#include "AddressDecoder.h"
 
 ROM::ROM()
 {
@@ -62,7 +62,13 @@ bool ROM::setResource(const string &name, OEData *data)
 bool ROM::connect(const string &name, OEComponent *component)
 {
 	if (name == "mmu")
-		component->postEvent(this, MEMORYMAP_MAP, &mmuMap);
+	{
+		if (mmu)
+			component->postEvent(NULL, ADDRESSDECODER_MAP, &mmuMap);
+		mmu = component;
+		if (mmu)
+			component->postEvent(this, ADDRESSDECODER_MAP, &mmuMap);
+	}
 	else
 		return false;
 	

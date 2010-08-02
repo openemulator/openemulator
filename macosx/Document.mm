@@ -137,9 +137,9 @@ string getString(NSString *s)
 	return @"";
 }
 
-- (void)postHostNotification:(int)notification data:(void *)data
+- (void)notifyHost:(int)notification data:(void *)data
 {
-	((OEPAEmulation *)emulation)->postNotification(HOST_DEVICE, notification, data);
+	((OEPAEmulation *)emulation)->notify(HOST_DEVICE, notification, data);
 }
 
 - (int)postHostEvent:(int)message data:(void *)data
@@ -626,7 +626,7 @@ string getString(NSString *s)
 - (NSString *)documentText
 {
 	string characterString;
-	[self postHostNotification:HOST_COPY data:&characterString];
+	[self notifyHost:HOST_CLIPBOARD_IS_COPYING data:&characterString];
 	
 	return [NSString stringWithUTF8String:characterString.c_str()];
 }
@@ -647,7 +647,7 @@ string getString(NSString *s)
 	NSString *characters = [pasteboard stringForType:NSStringPboardType];
 	string characterString([characters UTF8String]);
 	
-	[self postHostNotification:HOST_PASTE data:&characterString];
+	[self notifyHost:HOST_CLIPBOARD_IS_PASTING data:&characterString];
 }
 
 - (void)startSpeaking:(id)sender

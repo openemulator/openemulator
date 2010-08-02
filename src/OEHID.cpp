@@ -32,7 +32,7 @@ void OEHID::sendHIDEvent(int notification, int usageId, float value)
 	hidEvent.value = value;
 	
 	if (emulation)
-		emulation->postNotification(HOST_DEVICE, notification, &hidEvent);
+		emulation->notify(HOST_DEVICE, notification, &hidEvent);
 	
 	printf("%d %d %f\n", notification, usageId, value);
 }

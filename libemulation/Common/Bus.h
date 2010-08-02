@@ -15,6 +15,7 @@ enum
 {
 	BUS_RESET_ASSERTED,
 	BUS_IRQ_ASSERTED,
+	BUS_IRQ_CLEARED,
 	BUS_NMI_ASSERTED,
 };
 
@@ -40,4 +41,26 @@ typedef struct
 
 class Bus : public OEComponent
 {
+public:
+	Bus();
+	
+	bool setProperty(const string &name, const string &value);
+	bool connect(const string &name, OEComponent *component);
+	
+	void notify(OEComponent *component, int notification, void *data);
+	
+	bool postEvent(OEComponent *component, int message, void *data);
+	
+	OEUInt8 read(int address);
+	
+private:
+	OEComponent *host;
+	OEComponent *cpu;
+	OEComponent *mmu;
+	
+	float crystal;
+	float divider;
+	int floatingBus;
+	
+	double phase;
 };

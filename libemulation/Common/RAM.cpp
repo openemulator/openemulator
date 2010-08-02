@@ -11,7 +11,7 @@
 #include "RAM.h"
 
 #include "Host.h"
-#include "MemoryMap.h"
+#include "AddressDecoder.h"
 
 RAM::RAM()
 {
@@ -22,7 +22,7 @@ RAM::RAM()
 	setSize(1);
 	setMemory(new OEData());
 	
-	resetPattern.resize(1);
+	powerOnPattern.resize(1);
 }
 
 RAM::~RAM()
@@ -53,8 +53,8 @@ bool RAM::setProperty(const string &name, const string &value)
 {
 	if (name == "size")
 		setSize(getInt(value));
-	else if (name == "resetPattern")
-		resetPattern = getCharVector(value);
+	else if (name == "powerOnPattern")
+		powerOnPattern = getCharVector(value);
 	else if (name == "mmuMap")
 		mmuMap = value;
 	else
@@ -90,7 +90,15 @@ bool RAM::getData(const string &name, OEData **data)
 
 bool RAM::connect(const string &name, OEComponent *component)
 {
-	if (name == "host")
+	if (name == "mmu")
+	{
+		if (mmu)
+			component->postEvent(NULL, ADDRESSDECODER_MAP, &mmuMap);
+		mmu = component;
+		if (mmu)
+			component->postEvent(this, ADDRESSDECODER_MAP, &mmuMap);
+	}
+	else if (name == "host")
 	{
 		if (host)
 			host->removeObserver(this, HOST_POWERSTATE_CHANGED);
@@ -98,8 +106,6 @@ bool RAM::connect(const string &name, OEComponent *component)
 		if (host)
 			host->addObserver(this, HOST_POWERSTATE_CHANGED);
 	}
-	else if (name == "mmu")
-		component->postEvent(this, MEMORYMAP_MAP, &mmuMap);
 	else
 		return false;
 	
@@ -114,7 +120,9 @@ void RAM::notify(OEComponent *component, int notification, void *data)
 	if (!isPowered && willBePowered)
 	{
 		for (int i = 0; i < memory->size(); i++)
-			(*memory)[i] = resetPattern[i % resetPattern.size()];
+			(*memory)[i] = powerOnPattern[i % powerOnPattern.size()];
+		
+		isPowered = willBePowered;
 	}
 }
 

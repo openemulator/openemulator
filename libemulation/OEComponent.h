@@ -35,7 +35,6 @@ public:
 	// Notifications
 	bool addObserver(OEComponent *component, int notification);
 	bool removeObserver(OEComponent *component, int notification);
-	void postNotification(int notification, void *data);
 	virtual void notify(OEComponent *component, int notification, void *data);
 	
 	// Events and responder chain

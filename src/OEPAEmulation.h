@@ -28,7 +28,9 @@ public:
 	
 	bool setProperty(string ref, string name, string value);
 	bool getProperty(string ref, string name, string &value);
-	void postNotification(string ref, int notification, void *data);
+	
+	void notify(string ref, int notification, void *data);
+	
 	int postEvent(string ref, int message, void *data);
 	
 	bool add(string path, OEConnections &connections);

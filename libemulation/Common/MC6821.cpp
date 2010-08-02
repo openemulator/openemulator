@@ -10,91 +10,76 @@
 
 #include "MC6821.h"
 
+#include "Bus.h"
+#include "AddressDecoder.h"
+
 MC6821::MC6821()
 {
-	interfaceA = NULL;
-	interfaceB = NULL;
+	mmu = NULL;
 	
-	irqANotification = 0;
-	irqA = NULL;
-
-	irqBNotification = 0;
-	irqB = NULL;
+	bus = NULL;
 	
-	resetNotification = 0;
-	reset = NULL;
+	portA = NULL;
+	busA = NULL;
+	
+	portB = NULL;
+	busB = NULL;
 }
 
-void MC6821::setControlRegisterA(int value)
+void MC6821::setControlA(int value)
 {
-	bool wasIRQ = controlRegisterA & (MC6821_CR_IRQ1FLAG | MC6821_CR_IRQ2FLAG);
-	controlRegisterA = value;
-	bool isIRQ = controlRegisterA & (MC6821_CR_IRQ1FLAG | MC6821_CR_IRQ2FLAG);
+	bool wasIRQ = controlA & MC6821_CR_IRQFLAGS;
+	controlA = value;
+	bool isIRQ = controlA & MC6821_CR_IRQFLAGS;
 	
-	if (irqA)
+	if (busA)
 	{
 		if (wasIRQ && !isIRQ)
-		{
-			bool value = false;
-			irqA->postNotification(irqANotification, &value);
-		}
+			busA->notify(this, BUS_ASSERT_IRQ, &value);
 		else if (!wasIRQ && isIRQ)
-		{
-			bool value = true;
-			irqA->postNotification(irqANotification, &value);
-		}
+			busA->notify(this, BUS_CLEAR_IRQ, &value);
 	}
 }
 
-void MC6821::setControlRegisterB(int value)
+void MC6821::setControlB(int value)
 {
-	bool wasIRQ = controlRegisterB & (MC6821_CR_IRQ1FLAG | MC6821_CR_IRQ2FLAG);
-	controlRegisterB = value;
-	bool isIRQ = controlRegisterB & (MC6821_CR_IRQ1FLAG | MC6821_CR_IRQ2FLAG);
+	bool wasIRQ = controlB & MC6821_CR_IRQFLAGS;
+	controlB = value;
+	bool isIRQ = controlB & MC6821_CR_IRQFLAGS;
 	
-	if (irqB)
+	if (busB)
 	{
 		if (wasIRQ && !isIRQ)
-		{
-			bool value = false;
-			irqB->postNotification(irqBNotification, &value);
-		}
+			busB->notify(this, BUS_ASSERT_IRQ, &value);
 		else if (!wasIRQ && isIRQ)
-		{
-			bool value = true;
-			irqB->postNotification(irqBNotification, &value);
-		}
+			busB->notify(this, BUS_CLEAR_IRQ, &value);
 	}
 }
 
 bool MC6821::setProperty(const string &name, const string &value)
 {
-	if (name == "controlRegisterA")
-		setControlRegisterA(getInt(value));
-	else if (name == "dataDirectionRegisterA")
-		dataDirectionRegisterA = getInt(value);
-	else if (name == "dataRegisterA")
-		dataRegisterA = getInt(value);
-	else if (name == "controlRegisterB")
-		setControlRegisterB(getInt(value));
-	else if (name == "dataDirectionRegisterB")
-		dataDirectionRegisterB = getInt(value);
-	else if (name == "dataRegisterB")
-		dataRegisterB = getInt(value);
+	if (name == "mmuMap")
+		mmuMap = value;
+	else if (name == "controlA")
+		setControlA(getInt(value));
+	else if (name == "directionA")
+		directionA = getInt(value);
+	else if (name == "dataA")
+		dataA = getInt(value);
 	else if (name == "ca1")
 		ca1 = getInt(value);
 	else if (name == "ca2")
 		ca2 = getInt(value);
+	else if (name == "controlB")
+		setControlB(getInt(value));
+	else if (name == "directionB")
+		directionB = getInt(value);
+	else if (name == "dataB")
+		dataB = getInt(value);
 	else if (name == "cb1")
 		cb1 = getInt(value);
 	else if (name == "cb2")
 		cb2 = getInt(value);
-	else if (name == "irqANotification")
-		irqANotification = getInt(value);
-	else if (name == "irqBNotification")
-		irqBNotification = getInt(value);
-	else if (name == "resetNotification")
-		resetNotification = getInt(value);
 	else
 		return false;
 	
@@ -103,26 +88,26 @@ bool MC6821::setProperty(const string &name, const string &value)
 
 bool MC6821::getProperty(const string &name, string &value)
 {
-	if (name == "controlRegisterA")
-		value = getHex(controlRegisterA);
-	else if (name == "dataDirectionRegisterA")
-		value = getHex(dataDirectionRegisterA);
-	else if (name == "dataRegisterA")
-		value = getHex(dataRegisterA);
-	else if (name == "controlRegisterB")
-		value = getHex(controlRegisterB);
-	else if (name == "dataDirectionRegisterB")
-		value = getHex(dataDirectionRegisterB);
-	else if (name == "dataRegisterB")
-		value = getHex(dataRegisterB);
+	if (name == "controlA")
+		value = getHex(controlA);
+	else if (name == "directionA")
+		value = getHex(directionA);
+	else if (name == "dataA")
+		value = getHex(dataA);
 	else if (name == "ca1")
-		value = getString(ca1);
+		value = getHex(ca1);
 	else if (name == "ca2")
-		value = getString(ca2);
+		value = getHex(ca2);
+	else if (name == "controlB")
+		value = getHex(controlB);
+	else if (name == "directionB")
+		value = getHex(directionB);
+	else if (name == "dataB")
+		value = getHex(dataB);
 	else if (name == "cb1")
-		value = getString(cb1);
+		value = getHex(cb1);
 	else if (name == "cb2")
-		value = getString(cb2);
+		value = getHex(cb2);
 	else
 		return false;
 	
@@ -131,64 +116,70 @@ bool MC6821::getProperty(const string &name, string &value)
 
 bool MC6821::connect(const string &name, OEComponent *component)
 {
-	if (name == "interfaceA")
-		interfaceA = component;
-	else if (name == "interfaceB")
-		interfaceB = component;
-	else if (name == "irqA")
-		irqA = component;
-	else if (name == "irqB")
-		irqB = component;
-	else if (name == "reset")
+	if (name == "mmu")
 	{
-		if (reset)
-			reset->removeObserver(this, resetNotification);
-		reset = component;
-		if (reset)
-			reset->addObserver(this, resetNotification);
+		if (mmu)
+			component->postEvent(NULL, ADDRESSDECODER_MAP, &mmuMap);
+		mmu = component;
+		if (mmu)
+			component->postEvent(this, ADDRESSDECODER_MAP, &mmuMap);
 	}
+	else if (name == "bus")
+	{
+		if (bus)
+			bus->removeObserver(this, BUS_RESET_ASSERTED);
+		bus = component;
+		if (bus)
+			bus->addObserver(this, BUS_RESET_ASSERTED);
+	}
+	else if (name == "portA")
+		portA = component;
+	else if (name == "busA")
+		busA = component;
+	else if (name == "portB")
+		portB = component;
+	else if (name == "busB")
+		busB = component;
 	else
 		return false;
 	
 	return true;
 }
 
-bool MC6821::notify(int notification, OEComponent *component, void *data)
+void MC6821::notify(OEComponent *component, int notification, void *data)
 {
-	setControlRegisterA(0);
-	dataDirectionRegisterA = 0;
-	dataRegisterA = 0;
-	setControlRegisterB(0);
-	dataDirectionRegisterB = 0;
-	dataRegisterB = 0;
+	setControlA(0);
+	directionA = 0;
+	dataA = 0;
+	ca1 = 0;
+	ca2 = 0;
 	
-	ca1 = false;
-	ca2 = false;
-	cb1 = false;
-	cb2 = false;
-	
-	return false;
+	setControlB(0);
+	directionB = 0;
+	dataB = 0;
+	cb1 = 0;
+	cb2 = 0;
 }
 
-int MC6821::ioctl(int message, void *data)
+bool MC6821::postEvent(OEComponent *component, int message, void *data)
 {
 	switch (message)
 	{
 		case MC6821_SET_CA1:
 		{
 			bool value = *((int *) data);
-			bool isLowToHigh = (controlRegisterA & MC6821_CR_C1LOWTOHIGH);
+			bool isLowToHigh = (controlA & MC6821_CR_C1LOWTOHIGH);
 			if ((!isLowToHigh && ca1 && !value) ||
 				(isLowToHigh && !ca1 && value))
 			{
-				if (controlRegisterA & MC6821_CR_C1ENABLEIRQ)
-					setControlRegisterA(controlRegisterA | MC6821_CR_IRQ1FLAG);
-				if ((controlRegisterA & 
+				if (controlA & MC6821_CR_C1ENABLEIRQ)
+					setControlA(controlA | MC6821_CR_IRQ1FLAG);
+				if ((controlA & 
 					(MC6821_CR_C2OUTPUT | MC6821_CR_C2DIRECT | MC6821_CR_C2ERESTORE))
 					== MC6821_CR_C2OUTPUT)
 				{
 					int value = 1;
-					ioctl(MC6821_SET_CA2, &value);
+					postEvent(this, MC6821_SET_CA2, &value);
 				}
 			}
 			ca1 = value;
@@ -198,16 +189,16 @@ int MC6821::ioctl(int message, void *data)
 		case MC6821_SET_CA2:
 		{
 			bool value = *((int *) data);
-			bool isLowToHigh = (controlRegisterA & MC6821_CR_C2LOWTOHIGH);
+			bool isLowToHigh = (controlA & MC6821_CR_C2LOWTOHIGH);
 			if ((!isLowToHigh && ca2 && !value) ||
 				(isLowToHigh && !ca2 && value))
 			{
-				if ((controlRegisterA & (MC6821_CR_C2OUTPUT && MC6821_CR_C2ENABLEIRQ))
+				if ((controlA & (MC6821_CR_C2OUTPUT && MC6821_CR_C2ENABLEIRQ))
 					== MC6821_CR_C2ENABLEIRQ)
-					setControlRegisterA(controlRegisterA | MC6821_CR_IRQ2FLAG);
+					setControlA(controlA | MC6821_CR_IRQ2FLAG);
 			}
-			if ((controlRegisterA & MC6821_CR_C2OUTPUT) && (ca2 != value))
-				postNotification(MC6821_CA2_CHANGED, NULL);
+			if ((controlA & MC6821_CR_C2OUTPUT) && (ca2 != value))
+				OEComponent::notify(this, MC6821_CA2_CHANGED, NULL);
 			ca2 = value;
 			
 			return true;
@@ -222,18 +213,18 @@ int MC6821::ioctl(int message, void *data)
 		case MC6821_SET_CB1:
 		{
 			bool value = *((int *) data);
-			bool isLowToHigh = (controlRegisterB & MC6821_CR_C1LOWTOHIGH);
+			bool isLowToHigh = (controlB & MC6821_CR_C1LOWTOHIGH);
 			if ((!isLowToHigh && cb1 && !value) ||
 				(isLowToHigh && !cb1 && value))
 			{
-				if (controlRegisterB & MC6821_CR_C1ENABLEIRQ)
-					setControlRegisterB(controlRegisterB | MC6821_CR_IRQ1FLAG);
-				if ((controlRegisterB & 
+				if (controlB & MC6821_CR_C1ENABLEIRQ)
+					setControlB(controlB | MC6821_CR_IRQ1FLAG);
+				if ((controlB & 
 					 (MC6821_CR_C2OUTPUT | MC6821_CR_C2DIRECT | MC6821_CR_C2ERESTORE))
 					 == MC6821_CR_C2OUTPUT)
 				{
 					int value = 0;
-					ioctl(MC6821_SET_CB2, &value);
+					postEvent(this, MC6821_SET_CB2, &value);
 				}
 			}
 			cb1 = value;
@@ -243,16 +234,16 @@ int MC6821::ioctl(int message, void *data)
 		case MC6821_SET_CB2:
 		{
 			bool value = *((int *) data);
-			bool isLowToHigh = (controlRegisterB & MC6821_CR_C1LOWTOHIGH);
+			bool isLowToHigh = (controlB & MC6821_CR_C1LOWTOHIGH);
 			if ((!isLowToHigh && cb1 && !value) ||
 				(isLowToHigh && !cb1 && value))
 			{
-				if ((controlRegisterB & (MC6821_CR_C2OUTPUT && MC6821_CR_C2ENABLEIRQ))
+				if ((controlB & (MC6821_CR_C2OUTPUT && MC6821_CR_C2ENABLEIRQ))
 					== MC6821_CR_C1ENABLEIRQ)
-					setControlRegisterB(controlRegisterB | MC6821_CR_IRQ2FLAG);
+					setControlB(controlB | MC6821_CR_IRQ2FLAG);
 			}
 			if (cb2 != value)
-				postNotification(MC6821_CB2_CHANGED, NULL);
+				OEComponent::notify(this, MC6821_CB2_CHANGED, NULL);
 			cb2 = value;
 			
 			return true;
@@ -274,42 +265,42 @@ OEUInt8 MC6821::read(int address)
 	switch(address & 0x3)
 	{
 		case MC6821_RS_DATAREGISTERA:
-			if (controlRegisterA & MC6821_CR_DATAREGISTER)
+			if (controlA & MC6821_CR_DATAREGISTER)
 			{
-				if (controlRegisterA & (MC6821_CR_C2OUTPUT | MC6821_CR_C2DIRECT)
+				if (controlA & (MC6821_CR_C2OUTPUT | MC6821_CR_C2DIRECT)
 					== MC6821_CR_C2OUTPUT)
 				{
 					int ca2 = 0;
-					ioctl(MC6821_SET_CA2, &ca2);
-					if (controlRegisterA & MC6821_CR_C2ERESTORE)
+					postEvent(this, MC6821_SET_CA2, &ca2);
+					if (controlA & MC6821_CR_C2ERESTORE)
 					{
 						ca2 = 1;
-						ioctl(MC6821_SET_CA2, &ca2);
+						postEvent(this, MC6821_SET_CA2, &ca2);
 					}
 				}
-				setControlRegisterA(controlRegisterA & 
+				setControlA(controlA & 
 									~(MC6821_CR_IRQ1FLAG | MC6821_CR_IRQ2FLAG));
-				dataRegisterA &= dataDirectionRegisterA;
-				dataRegisterA |= interfaceA->read(0) & ~dataDirectionRegisterA;
-				return dataRegisterA;
+				dataA &= directionA;
+				dataA |= portA->read(0) & ~directionA;
+				return dataA;
 			}
 			else
-				return dataDirectionRegisterA;
+				return directionA;
 		case MC6821_RS_CONTROLREGISTERA:
-			return controlRegisterA;
+			return controlA;
 		case MC6821_RS_DATAREGISTERB:
-			if (controlRegisterB & MC6821_CR_DATAREGISTER)
+			if (controlB & MC6821_CR_DATAREGISTER)
 			{
-				setControlRegisterB(controlRegisterB & 
+				setControlB(controlB & 
 									~(MC6821_CR_IRQ1FLAG | MC6821_CR_IRQ2FLAG));
-				dataRegisterB &= dataDirectionRegisterB;
-				dataRegisterB |= interfaceA->read(0) & ~dataDirectionRegisterB;
-				return dataRegisterB;
+				dataB &= directionB;
+				dataB |= portA->read(0) & ~directionB;
+				return dataB;
 			}
 			else
-				return dataDirectionRegisterB;
+				return directionB;
 		case MC6821_RS_CONTROLREGISTERB:
-			return controlRegisterB;
+			return controlB;
 	}
 	
 	return 0;
@@ -320,50 +311,50 @@ void MC6821::write(int address, OEUInt8 value)
 	switch(address & 0x3)
 	{
 		case MC6821_RS_DATAREGISTERA:
-			if (controlRegisterA & MC6821_CR_DATAREGISTER)
+			if (controlA & MC6821_CR_DATAREGISTER)
 			{
-				dataRegisterA = value;
-				interfaceA->write(0, value);
+				dataA = value;
+				portA->write(0, value);
 			}
 			else
-				dataDirectionRegisterA = value;
+				directionA = value;
 			break;
 		case MC6821_RS_CONTROLREGISTERA:
-			setControlRegisterA(value);
+			setControlA(value);
 			if (value & (MC6821_CR_C2OUTPUT | MC6821_CR_C2DIRECT) ==
 				(MC6821_CR_C2OUTPUT | MC6821_CR_C2DIRECT))
 			{
 				int ca2 = value & MC6821_CR_C2SET;
-				ioctl(MC6821_SET_CA2, &ca2);
+				postEvent(this, MC6821_SET_CA2, &ca2);
 			}
 			break;
 		case MC6821_RS_DATAREGISTERB:
-			if (controlRegisterB & MC6821_CR_DATAREGISTER)
+			if (controlB & MC6821_CR_DATAREGISTER)
 			{
-				if (controlRegisterB & (MC6821_CR_C2OUTPUT | MC6821_CR_C2DIRECT)
+				if (controlB & (MC6821_CR_C2OUTPUT | MC6821_CR_C2DIRECT)
 					== MC6821_CR_C2OUTPUT)
 				{
 					int cb2 = 0;
-					ioctl(MC6821_SET_CB2, &cb2);
-					if (controlRegisterB & MC6821_CR_C2ERESTORE)
+					postEvent(this, MC6821_SET_CB2, &cb2);
+					if (controlB & MC6821_CR_C2ERESTORE)
 					{
 						cb2 = 1;
-						ioctl(MC6821_SET_CB2, &cb2);
+						postEvent(this, MC6821_SET_CB2, &cb2);
 					}
 				}
-				dataRegisterB = value;
-				interfaceB->write(0, value);
+				dataB = value;
+				portB->write(0, value);
 			}
 			else
-				dataDirectionRegisterB = value;
+				directionB = value;
 			break;
 		case MC6821_RS_CONTROLREGISTERB:
-			setControlRegisterB(value);
+			setControlB(value);
 			if (value & (MC6821_CR_C2OUTPUT | MC6821_CR_C2DIRECT)
 				== (MC6821_CR_C2OUTPUT | MC6821_CR_C2DIRECT))
 			{
 				int cb2 = value & MC6821_CR_C2SET;
-				ioctl(MC6821_SET_CB2, &cb2);
+				postEvent(this, MC6821_SET_CB2, &cb2);
 			}
 			break;
 	}

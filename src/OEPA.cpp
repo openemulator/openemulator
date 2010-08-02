@@ -580,14 +580,14 @@ void OEPA::runEmulations()
 			if (!component)
 				continue;
 			
-			component->postNotification(HOST_AUDIO_RENDER_WILL_BEGIN,
-										&hostAudioBuffer);
-			component->postNotification(HOST_AUDIO_RENDER_DID_BEGIN,
-										&hostAudioBuffer);
-			component->postNotification(HOST_AUDIO_RENDER_WILL_END,
-										&hostAudioBuffer);
-			component->postNotification(HOST_AUDIO_RENDER_DID_END,
-										&hostAudioBuffer);
+			component->notify(NULL, HOST_AUDIO_RENDER_WILL_BEGIN,
+							  &hostAudioBuffer);
+			component->notify(NULL, HOST_AUDIO_RENDER_DID_BEGIN,
+							  &hostAudioBuffer);
+			component->notify(NULL, HOST_AUDIO_RENDER_WILL_END,
+							  &hostAudioBuffer);
+			component->notify(NULL, HOST_AUDIO_RENDER_DID_END,
+							  &hostAudioBuffer);
 		}
 		
 		memcpy(buffer,

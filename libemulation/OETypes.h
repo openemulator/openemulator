@@ -24,6 +24,11 @@ inline void OELog(string text)
 	cerr << "libemulator: " << text << endl;
 }
 
+#define OEGetBit(x,m) ((x)&(m))
+#define OESetBit(x,m) ((x)|=(m))
+#define OEClearBit(x,m) ((x)&=~(m))
+#define OEToggleBit(x,m) ((x)^=(m))
+
 typedef unsigned char OEUInt8;
 typedef char OEInt8;
 typedef unsigned short OEUInt16;

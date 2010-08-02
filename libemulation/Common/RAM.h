@@ -27,13 +27,15 @@ public:
 	void write(int address, OEUInt8 value);
 	
 private:
-	OEComponent *host;
+	OEComponent *mmu;
 	string mmuMap;
 	
 	bool isPowered;
 	
 	OEData *memory;
-	OEData resetPattern;
+	OEData powerOnPattern;
+	
+	OEComponent *host;
 	
 	int size;
 	int mask;

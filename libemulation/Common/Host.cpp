@@ -15,10 +15,7 @@ bool Host::setProperty(const string &name, const string &value)
 	if (name == "notes")
 		notes = value;
 	else if (name == "powerState")
-	{
 		powerState = getInt(value);
-		postNotification(HOST_POWERSTATE_CHANGED, &powerState);
-	}
 	else if (name == "videoWindow")
 		videoWindow = value;
 	else if (name == "hidMouseCapture")
@@ -72,6 +69,13 @@ bool Host::postEvent(OEComponent *component, int event, void *data)
 {
 	switch(event)
 	{
+		case HOST_SET_POWERSTATE:
+		{
+			powerState = *((int *) data);
+			
+			notify(this, HOST_POWERSTATE_CHANGED, &powerState);
+			break;
+		}
 		case HOST_REGISTER_VIDEO_CALLBACK:
 			break;
 			

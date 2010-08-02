@@ -12,11 +12,11 @@
 
 // FACTORY_INCLUDE_START - Do not modify this section
 #include "Host.h"
+#include "Bus.h"
+#include "AddressDecoder.h"
+#include "AddressOffset.h"
 #include "RAM.h"
 #include "ROM.h"
-#include "MemoryMap.h"
-#include "MemoryOffset.h"
-#include "FloatingBus.h"
 #include "CompositeMonitor.h"
 #include "Audio1Bit.h"
 #include "AudioPLL.h"
@@ -27,11 +27,8 @@
 #include "MOS6502.h"
 #include "MOS6530.h"
 
-#include "Apple1System.h"
-#include "Apple1FloatingBus.h"
 #include "Apple1Video.h"
 #include "Apple1Keyboard.h"
-#include "Apple1IO.h"
 #include "Apple1CassetteInterface.h"
 // FACTORY_INCLUDE_END - Do not modify this section
 
@@ -41,11 +38,11 @@ OEComponent *OEComponentFactory::build(string className)
 {
 // FACTORY_CODE_START - Do not modify this section
 	matchComponent(Host);
+	matchComponent(Bus);
+	matchComponent(AddressDecoder);
+	matchComponent(AddressOffset);
 	matchComponent(RAM);
 	matchComponent(ROM);
-	matchComponent(MemoryMap);
-	matchComponent(MemoryOffset);
-	matchComponent(FloatingBus);
 	matchComponent(CompositeMonitor);
 	matchComponent(Audio1Bit);
 	matchComponent(AudioPLL);
@@ -56,11 +53,8 @@ OEComponent *OEComponentFactory::build(string className)
 	matchComponent(MOS6502);
 	matchComponent(MOS6530);
 	
-	matchComponent(Apple1System);
-	matchComponent(Apple1FloatingBus);
 	matchComponent(Apple1Video);
 	matchComponent(Apple1Keyboard);
-	matchComponent(Apple1IO);
 	matchComponent(Apple1CassetteInterface);
 // FACTORY_CODE_END - Do not modify this section
 	

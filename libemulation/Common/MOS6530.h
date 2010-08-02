@@ -23,19 +23,17 @@ public:
 	void write(int address, OEUInt8 value);
 	
 private:
-	OEComponent *reset;
-	int resetNotification;
-	
-	OEComponent *irq;
-	int irqEvent;
-	
+	OEComponent *mmu;
 	string mmuMap;
 	
+	OEComponent *bus;
+	
 	OEComponent *portA;
-	int ddrA;
+	int directionA;
 	int dataA;
 	
 	OEComponent *portB;
-	int ddrB;
+	int directionB;
 	int dataB;
+	OEComponent *busB;
 };

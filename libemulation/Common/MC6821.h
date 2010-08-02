@@ -44,6 +44,8 @@ enum {
 #define MC6821_CR_IRQ2FLAG			0x40
 #define MC6821_CR_IRQ1FLAG			0x80
 
+#define MC6821_CR_IRQFLAGS			(MC6821_CR_IRQ2FLAG | MC6821_CR_IRQ1FLAG)
+
 class MC6821 : public OEComponent
 {
 public:
@@ -53,37 +55,35 @@ public:
 	bool getProperty(const string &name, string &value);
 	bool connect(const string &name, OEComponent *component);
 	
-	bool notify(int notification, OEComponent *component, void *data);
+	void notify(OEComponent *component, int notification, void *data);
 	
-	int ioctl(int message, void *data);
+	bool postEvent(OEComponent *component, int message, void *data);
 
 	OEUInt8 read(int address);
 	void write(int address, OEUInt8 value);
 	
 private:
-	int resetNotification;
-	OEComponent *reset;
+	string mmuMap;
+	OEComponent *mmu;
 	
-	OEComponent *interfaceA;
-	int irqANotification;
-	OEComponent *irqA;
+	OEComponent *bus;
+	
+	OEComponent *portA;
+	int controlA;
+	int directionA;
+	int dataA;
+	int ca1;
+	int ca2;
+	OEComponent *busA;
 
-	OEComponent *interfaceB;
-	int irqBNotification;
-	OEComponent *irqB;
+	OEComponent *portB;
+	int controlB;
+	int directionB;
+	int dataB;
+	int cb1;
+	int cb2;
+	OEComponent *busB;
 	
-	int controlRegisterA;
-	int dataDirectionRegisterA;
-	int dataRegisterA;
-	int controlRegisterB;
-	int dataDirectionRegisterB;
-	int dataRegisterB;
-	
-	bool ca1;
-	bool ca2;
-	bool cb1;
-	bool cb2;
-	
-	void setControlRegisterA(int value);
-	void setControlRegisterB(int value);
+	void setControlA(int value);
+	void setControlB(int value);
 };

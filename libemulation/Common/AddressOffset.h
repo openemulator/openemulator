@@ -1,28 +1,31 @@
 
 /**
  * libemulation
- * Apple I IO
+ * Address offset
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls the Apple I Input Output range
+ * Controls an address offset
  */
 
 #include "OEComponent.h"
 
-class AppleIIO : public OEComponent
+class AddressOffset : public OEComponent
 {
+public:
+	AddressOffset();
+	
 	bool setProperty(const string &name, const string &value);
 	bool connect(const string &name, OEComponent *component);
-	
-	bool getMemoryMap(string &range);
 	
 	OEUInt8 read(int address);
 	void write(int address, OEUInt8 value);
 	
 private:
-	string mappedRange;
+	OEComponent *mmu;
+	string mmuMap;
 	
-	OEComponent *pia;
-	OEComponent *floatingBus;
+	int offset;
+	
+	OEComponent *component;
 };

@@ -16,12 +16,13 @@
     <inlet ref="system.slot2" type="Apple1Slot" label="Slot 2" image="Apple I Slot.png" />
     <component name="bus" class="Bus">
         <property name="crystal" value="14.31818MHz" />
+        <property name="divider" value="14" />
+        <property name="floatingBus" value="0xff" />
         <connection name="host" ref="host:host" />
         <connection name="cpu" ref="cpu" />
         <connection name="mmu" ref="" />
         <connection name="slot1" ref="" />
         <connection name="slot2" ref="" />
-        <connection name="floatingBus" ref="" />
     </component>
     <component name="cpu" class="MOS6502">
         <property name="a" value="0" />
@@ -33,60 +34,65 @@
         <connection name="memory" ref="mmu" />
         <connection name="bus" ref="bus" />
     </component>
-    <component name="mmu" class="MemoryMap">
-        <property name="mask" value="0xffff" />
-        <property name="shift" value="8" />
-        <connection name="floatingBus" value="floatingBus" />
-    </component>
-    <component name="floatingBus" class="Apple1FloatingBus">
-        <connection name="bus" ref="bus" />
-        <connection name="ram1" ref="ram1" />
-        <connection name="ram2" ref="ram2" />
+    <component name="mmu" class="AddressDecoder">
+        <property name="addressSize" value="16" />
+        <property name="blockSize" value="8" />
+        <connection name="bus" value="bus" />
     </component>
     <component name="ram1" class="RAM">
-        <data name="image" src="${REF}.bin" />
-        <property name="size" value="0x1000" />
         <connection name="mmu" ref="mmu" />
         <property name="mmuMap" value="0x0000-0x0fff" />
-        <connection name="host" ref="host:host" />
-    </component>
-    <component name="ram2" class="RAM">
         <data name="image" src="${REF}.bin" />
         <property name="size" value="0x1000" />
-        <connection name="mmu" ref="mmu" />
-        <property name="mmuMap" value="0xe000-0xefff" />
         <connection name="host" ref="host:host" />
     </component>
-    <component name="video" class="Apple1Video">
-        <resource name="charset" src="roms/Signetics 2513 Video ROM.bin" />
-        <connection name="host" ref="host:host" />
-        <connection name="system" ref="system" />
-        <connection name="pia" ref="pia" />
-        <connection name="monitor" ref="dev1:monitor" />
+    <component name="io" class="AddressDecoder">
+        <connection name="mmu" ref="mmu" />
+        <property name="mmuMap" value="0xc000-0xcfff" />
+        <property name="addressSize" value="5" />
+        <property name="blockSize" value="4" />
+        <connection name="bus" value="bus" />
     </component>
     <component name="pia" class="MC6821">
-        <connection name="portA" ref="keyboard" />
+        <connection name="mmu" ref="io" />
+        <property name="mmuMap" value="0x10-0x1f" />
+        <connection name="bus" ref="bus" />
+        <connection name="portA" ref="" />
         <property name="controlA" value="0" />
-        <property name="ddrA" value="0" />
+        <property name="directionA" value="0" />
         <property name="dataA" value="0" />
         <property name="ca1" value="0" />
         <property name="ca2" value="0" />
         <connection name="busA" ref="" />
         <connection name="portB" ref="video" />
         <property name="controlB" value="0" />
-        <property name="ddrB" value="0" />
+        <property name="directionB" value="0" />
         <property name="dataB" value="0" />
         <property name="cb1" value="0" />
         <property name="cb2" value="0" />
         <connection name="busB" ref="" />
     </component>
-    <component name="io" class="Apple1IO">
-        <property name="map" value="0xd000-0xdfff" />
+    <component name="keyboard" class="Apple1Video">
+        <connection name="host" ref="host:host" />
         <connection name="pia" ref="pia" />
-        <connection name="floatingBus" ref="floatingBus" />
+    </component>
+    <component name="video" class="Apple1Video">
+        <resource name="charset" src="roms/Signetics 2513 Video ROM.bin" />
+        <connection name="host" ref="host:host" />
+        <connection name="bus" ref="bus" />
+        <connection name="pia" ref="pia" />
+        <connection name="monitor" ref="dev1:monitor" />
+    </component>
+    <component name="ram2" class="RAM">
+        <connection name="mmu" ref="mmu" />
+        <property name="mmuMap" value="0xe000-0xefff" />
+        <data name="image" src="${REF}.bin" />
+        <property name="size" value="0x1000" />
+        <connection name="host" ref="host:host" />
     </component>
     <component name="rom" class="ROM">
-        <property name="map" value="0xf000-0xffff" />
+        <connection name="mmu" ref="mmu" />
+        <property name="mmuMap" value="R0xf000-0xffff" />
         <resource name="image" src="roms/Apple I Monitor ROM.bin" />
     </component>
 </device>

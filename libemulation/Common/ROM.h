@@ -23,6 +23,7 @@ public:
 	OEUInt8 read(int address);
 	
 private:
+	OEComponent *mmu;
 	string mmuMap;
 	
 	OEData *memory;

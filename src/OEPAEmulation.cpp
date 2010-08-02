@@ -93,16 +93,16 @@ bool OEPAEmulation::getProperty(string ref, string name, string &value)
 	return status;
 }
 
-void OEPAEmulation::postNotification(string ref, int notification, void *data)
+void OEPAEmulation::notify(string ref, int notification, void *data)
 {
 	lock();
 	
 	OEComponent *component = getComponent(ref);
 	if (component)
-		component->postNotification(notification, data);
+		component->notify(NULL, notification, data);
 	else
 	{
-		oepaLog("could not post notification to " + ref +
+		oepaLog("could not notify " + ref +
 				" (ref not found)");
 	}
 	

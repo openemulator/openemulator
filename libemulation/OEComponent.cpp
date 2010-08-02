@@ -70,17 +70,13 @@ bool OEComponent::removeObserver(OEComponent *component, int notification)
 	return (i != last);
 }
 
-void OEComponent::postNotification(int notification, void *data)
+void OEComponent::notify(OEComponent *component, int notification, void *data)
 {
 	OEComponents::iterator i;
 	for (i = observers[notification].begin();
 		 i != observers[notification].end();
 		 i++)
 		notify(this, notification, data);
-}
-
-void OEComponent::notify(OEComponent *component, int notification, void *data)
-{
 }
 
 bool OEComponent::addDelegate(OEComponent *component, int event)
