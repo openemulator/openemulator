@@ -1,11 +1,11 @@
 
 /**
  * libemulation
- * Generic RAM
+ * RAM
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls a generic RAM segment
+ * Controls random access memory
  */
 
 #include "RAM.h"
@@ -15,9 +15,14 @@
 
 RAM::RAM()
 {
+	mmu = NULL;
+	
 	host = NULL;
 	
 	isPowered = 0;
+	
+	memory = NULL;
+	datap = NULL;
 	
 	setSize(1);
 	setMemory(new OEData());

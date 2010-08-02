@@ -1,11 +1,11 @@
 
 /**
  * libemulation
- * Generic RAM
+ * RAM
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls a generic RAM segment
+ * Controls random access memory
  */
 
 #include "OEComponent.h"

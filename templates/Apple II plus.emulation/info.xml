@@ -89,8 +89,7 @@
         <property name="map" value="0x50-0x57" />
         <property name="inh" value="0" />
         <connection name="host" ref="host:host" />
-        <connection name="memoryMap" ref="memoryMap" />
-        <connection name="floatingBus" ref="floatingBus" />
+        <connection name="ram" ref="ram" />
         <resource name="image" src="roms/Signetics 2513 Video ROM.bin" />
         <connection name="mmu" ref="mmu" />
         <connection name="monitor" ref="" />

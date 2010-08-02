@@ -1,11 +1,11 @@
 
 /**
  * libemulation
- * Generic ROM
+ * ROM
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls a generic ROM segment
+ * Controls read only memory
  */
 
 #include "ROM.h"
@@ -14,7 +14,10 @@
 
 ROM::ROM()
 {
+	mmu = NULL;
+	
 	memory = NULL;
+	datap = NULL;
 	
 	setMemory(new OEData());
 }
