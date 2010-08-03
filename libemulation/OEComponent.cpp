@@ -110,30 +110,30 @@ bool OEComponent::postEvent(OEComponent *component, int event, void *data)
 	return false;
 }
 
-OEUInt8 OEComponent::read(OEUInt32 address)
+int OEComponent::read(OEUInt32 address)
 {
 	return 0;
 }
 
-void OEComponent::write(OEUInt32 address, OEUInt8 value)
+void OEComponent::write(OEUInt32 address, int value)
 {
 }
 
-OEUInt16 OEComponent::readw(OEUInt32 address)
-{
-	return 0;
-}
-
-void OEComponent::writew(OEUInt32 address, OEUInt16 value)
-{
-}
-
-OEUInt32 OEComponent::readd(OEUInt32 address)
+int OEComponent::readw(OEUInt32 address)
 {
 	return 0;
 }
 
-void OEComponent::writed(OEUInt32 address, OEUInt32 value)
+void OEComponent::writew(OEUInt32 address, int value)
+{
+}
+
+int OEComponent::readd(OEUInt32 address)
+{
+	return 0;
+}
+
+void OEComponent::writed(OEUInt32 address, int value)
 {
 }
 

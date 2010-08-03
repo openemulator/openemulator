@@ -60,32 +60,33 @@
         <connection name="bus" value="bus" />
     </component>
     <component name="ram" class="RAM">
-        <connection name="mmu" ref="mmu" />
-        <property name="mmuMap" value="0x0000-0xbfff" />
+        <connection name="memoryMap" ref="mmu" />
+        <property name="map" value="0x0000-0xbfff" />
         <property name="size" value="0xc000" />
         <data name="image" src="${REF}.bin" />
         <connection name="host" ref="host:host" />
     </component>
     <component name="iou" class="AddressDecoder">
-        <connection name="mmu" ref="mmu" />
-        <property name="mmuMap" value="0xc000-0xc0ff" />
+        <connection name="memoryMap" ref="mmu" />
+        <property name="map" value="0xc000-0xc0ff" />
         <property name="addressSize" value="8" />
         <property name="blockSize" value="3" />
         <connection name="bus" value="bus" />
     </component>
     <component name="keyboard" class="AppleIIKeyboard">
-        <connection name="mmu" ref="iou" />
-        <property name="mmuMap" value="0x00-0x1f" />
+        <connection name="memoryMap" ref="iou" />
+        <property name="map" value="0x00-0x1f" />
         <connection name="host" ref="host:host" />
     </component>
     <component name="audioOut" class="AppleIIAudioOut">
-        <connection name="mmu" ref="iou" />
+        <connection name="memoryMap" ref="iou" />
         <property name="map" value="0x20-0x3f" />
         <connection name="host" ref="host:host" />
         <connection name="bus" ref="bus" />
         <connection name="audio" ref="audio" />
     </component>
     <component name="video" class="AppleIIVideo">
+        <connection name="memoryMap" ref="iou" />
         <property name="map" value="0x50-0x57" />
         <property name="inh" value="0" />
         <connection name="host" ref="host:host" />
@@ -96,7 +97,7 @@
         <connection name="romSocket" ref="" />
     </component>
     <component name="game" class="AppleIIGamePort">
-        <connection name="mmu" ref="iou" />
+        <connection name="memoryMap" ref="iou" />
         <property name="map" value="0x58-0x6f" />
         <property name="an0" value="0" />
         <property name="an1" value="0" />
@@ -106,8 +107,8 @@
         <connection name="joystick" ref="" />
     </component>
     <component name="slotMemory" class="AppleIISlotMemory">
-        <connection name="mmu" ref="mmu" />
-        <property name="mmuMap" value="0xc100-0xc7ff" />
+        <connection name="memoryMap" ref="mmu" />
+        <property name="map" value="0xc100-0xc7ff" />
         <connection name="slotExpansionMemory" ref="slotExpansionMemory" />
         <connection name="slot0" ref="" />
         <connection name="slot1" ref="" />
@@ -121,11 +122,13 @@
         <connection name="mmuControl" ref="mmuControl" />
     </component>
     <component name="slotExpansionMemory" class="AppleIISlotExpansionMemory">
-        <connection name="mmu" ref="mmu" />
-        <property name="mmuMap" value="0xc800-0xcfff" />
+        <connection name="memoryMap" ref="mmu" />
+        <property name="map" value="0xc800-0xcfff" />
         <connection name="bus" ref="bus" />
     </component>
     <component name="romD0" class="ROM">
+        <connection name="memoryMap" ref="mmu" />
+        <property name="map" value="0xd000-0xd800" />
         <resource name="image" src="roms/Apple II plus D0 ROM.bin" />
     </component>
     <component name="romD8" class="ROM">

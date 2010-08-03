@@ -19,8 +19,8 @@ public:
 	bool getProperty(const string &name, string &value);
 	bool connect(const string &name, OEComponent *component);
 
-	OEUInt8 read(int address);
-	void write(int address, OEUInt8 value);
+	int read(int address);
+	void write(int address, int value);
 	
 private:
 	OEComponent *mmu;

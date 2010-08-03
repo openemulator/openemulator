@@ -43,12 +43,12 @@ public:
 	virtual bool postEvent(OEComponent *component, int event, void *data);
 	
 	// Memory access
-	virtual OEUInt8 read(OEUInt32 address);
-	virtual void write(OEUInt32 address, OEUInt8 value);
-	virtual OEUInt16 readw(OEUInt32 address);
-	virtual void writew(OEUInt32 address, OEUInt16 value);
-	virtual OEUInt32 readd(OEUInt32 address);
-	virtual void writed(OEUInt32 address, OEUInt32 value);
+	virtual int read(OEUInt32 address);
+	virtual void write(OEUInt32 address, int value);
+	virtual int readw(OEUInt32 address);
+	virtual void writew(OEUInt32 address, int value);
+	virtual int readd(OEUInt32 address);
+	virtual void writed(OEUInt32 address, int value);
 	virtual bool readBlock(OEUInt32 address, OEData *value);
 	virtual bool writeBlock(OEUInt32 address, const OEData *value);
 	

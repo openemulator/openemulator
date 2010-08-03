@@ -40,22 +40,22 @@
         <connection name="bus" value="bus" />
     </component>
     <component name="ram1" class="RAM">
-        <connection name="mmu" ref="mmu" />
-        <property name="mmuMap" value="0x0000-0x0fff" />
+        <connection name="memoryMap" ref="mmu" />
+        <property name="map" value="0x0000-0x0fff" />
         <data name="image" src="${REF}.bin" />
         <property name="size" value="0x1000" />
         <connection name="host" ref="host:host" />
     </component>
     <component name="io" class="AddressDecoder">
-        <connection name="mmu" ref="mmu" />
-        <property name="mmuMap" value="0xc000-0xcfff" />
+        <connection name="memoryMap" ref="mmu" />
+        <property name="map" value="0xc000-0xcfff" />
         <property name="addressSize" value="5" />
         <property name="blockSize" value="4" />
         <connection name="bus" value="bus" />
     </component>
     <component name="pia" class="MC6821">
-        <connection name="mmu" ref="io" />
-        <property name="mmuMap" value="0x10-0x1f" />
+        <connection name="memoryMap" ref="io" />
+        <property name="map" value="0x10-0x1f" />
         <connection name="bus" ref="bus" />
         <connection name="portA" ref="" />
         <property name="controlA" value="0" />
@@ -84,15 +84,15 @@
         <connection name="monitor" ref="dev1:monitor" />
     </component>
     <component name="ram2" class="RAM">
-        <connection name="mmu" ref="mmu" />
-        <property name="mmuMap" value="0xe000-0xefff" />
+        <connection name="memoryMap" ref="mmu" />
+        <property name="map" value="0xe000-0xefff" />
         <data name="image" src="${REF}.bin" />
         <property name="size" value="0x1000" />
         <connection name="host" ref="host:host" />
     </component>
     <component name="rom" class="ROM">
-        <connection name="mmu" ref="mmu" />
-        <property name="mmuMap" value="R0xf000-0xffff" />
+        <connection name="memoryMap" ref="mmu" />
+        <property name="map" value="R0xf000-0xffff" />
         <resource name="image" src="roms/Apple I Monitor ROM.bin" />
     </component>
 </device>

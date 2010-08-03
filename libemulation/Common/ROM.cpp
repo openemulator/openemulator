@@ -78,7 +78,7 @@ bool ROM::connect(const string &name, OEComponent *component)
 	return true;
 }
 
-OEUInt8 ROM::read(int address)
+int ROM::read(int address)
 {
 	return datap[address & mask];
 }

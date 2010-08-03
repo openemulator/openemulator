@@ -23,8 +23,8 @@ public:
 	
 	void notify(OEComponent *component, int notification, void *data);
 	
-	OEUInt8 read(int address);
-	void write(int address, OEUInt8 value);
+	int read(int address);
+	void write(int address, int value);
 	
 private:
 	OEComponent *mmu;

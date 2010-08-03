@@ -89,7 +89,7 @@ bool MOS6530::connect(const string &name, OEComponent *component)
 	return true;
 }
 
-OEUInt8 MOS6530::read(int address)
+int MOS6530::read(int address)
 {
 	switch (address & 0xf)
 	{
@@ -125,7 +125,7 @@ OEUInt8 MOS6530::read(int address)
 	return 0;
 }
 
-void MOS6530::write(int address, OEUInt8 value)
+void MOS6530::write(int address, int value)
 {
 	switch (address & 0xf)
 	{

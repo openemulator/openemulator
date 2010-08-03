@@ -131,12 +131,12 @@ void RAM::notify(OEComponent *component, int notification, void *data)
 	}
 }
 
-OEUInt8 RAM::read(int address)
+int RAM::read(int address)
 {
 	return datap[address & mask];
 }
 
-void RAM::write(int address, OEUInt8 value)
+void RAM::write(int address, int value)
 {
 	datap[address & mask] = value;
 }

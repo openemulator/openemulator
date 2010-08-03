@@ -260,7 +260,7 @@ bool MC6821::postEvent(OEComponent *component, int message, void *data)
 	return false;
 }
 
-OEUInt8 MC6821::read(int address)
+int MC6821::read(int address)
 {
 	switch(address & 0x3)
 	{
@@ -306,7 +306,7 @@ OEUInt8 MC6821::read(int address)
 	return 0;
 }
 
-void MC6821::write(int address, OEUInt8 value)
+void MC6821::write(int address, int value)
 {
 	switch(address & 0x3)
 	{

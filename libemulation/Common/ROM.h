@@ -20,7 +20,7 @@ public:
 	bool setResource(const string &name, OEData *data);
 	bool connect(const string &name, OEComponent *component);
 	
-	OEUInt8 read(int address);
+	int read(int address);
 	
 private:
 	OEComponent *mmu;
