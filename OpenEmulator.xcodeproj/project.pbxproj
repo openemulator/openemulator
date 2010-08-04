@@ -74,6 +74,7 @@
 		008E3E5E11B0E725008621B7 /* compositeSignalProcessing.c in Sources */ = {isa = PBXBuildFile; fileRef = 008E3E5611B0E725008621B7 /* compositeSignalProcessing.c */; };
 		0095DF8F1209D0B700C127F5 /* TBColdRestart.png in Resources */ = {isa = PBXBuildFile; fileRef = 0095DF8D1209D0B700C127F5 /* TBColdRestart.png */; };
 		0095DF901209D0B700C127F5 /* TBWarmRestart.png in Resources */ = {isa = PBXBuildFile; fileRef = 0095DF8E1209D0B700C127F5 /* TBWarmRestart.png */; };
+		0095E0661209DAF900C127F5 /* KIM1Terminal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0095E0651209DAF900C127F5 /* KIM1Terminal.cpp */; };
 		009B4F2711639D7700E9A6F9 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009B4F2611639D7700E9A6F9 /* GLUT.framework */; };
 		00A0B8041069761A007930A5 /* Document.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00A0B8031069761A007930A5 /* Document.mm */; };
 		00A1F31411EAEB76001511D0 /* Tablet.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00A1F31211EAEB76001511D0 /* Tablet.xib */; };
@@ -289,6 +290,8 @@
 		008E3E5711B0E725008621B7 /* compositeSignalProcessing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = compositeSignalProcessing.h; sourceTree = "<group>"; };
 		0095DF8D1209D0B700C127F5 /* TBColdRestart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = TBColdRestart.png; path = macosx/Images/TBColdRestart.png; sourceTree = "<group>"; };
 		0095DF8E1209D0B700C127F5 /* TBWarmRestart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = TBWarmRestart.png; path = macosx/Images/TBWarmRestart.png; sourceTree = "<group>"; };
+		0095E0641209DAF900C127F5 /* KIM1Terminal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KIM1Terminal.h; sourceTree = "<group>"; };
+		0095E0651209DAF900C127F5 /* KIM1Terminal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = KIM1Terminal.cpp; sourceTree = "<group>"; };
 		00984D9711A73B1000B9C0B5 /* CompositeMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompositeMonitor.h; sourceTree = "<group>"; };
 		00984D9811A73B1000B9C0B5 /* CompositeMonitor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CompositeMonitor.cpp; sourceTree = "<group>"; };
 		009B4F2611639D7700E9A6F9 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = /System/Library/Frameworks/GLUT.framework; sourceTree = "<absolute>"; };
@@ -539,6 +542,8 @@
 		003135201203A70600913149 /* KIM1 */ = {
 			isa = PBXGroup;
 			children = (
+				0095E0641209DAF900C127F5 /* KIM1Terminal.h */,
+				0095E0651209DAF900C127F5 /* KIM1Terminal.cpp */,
 			);
 			path = KIM1;
 			sourceTree = "<group>";
@@ -1049,6 +1054,7 @@
 				00C3D0D911F5584B00EA2453 /* OEPA.cpp in Sources */,
 				00C3D0DA11F5584C00EA2453 /* OEPAEmulation.cpp in Sources */,
 				00D81D0C12034A20004068EB /* OEDebugger.cpp in Sources */,
+				0095E0661209DAF900C127F5 /* KIM1Terminal.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -18,7 +18,6 @@
         <property name="resetOnPowerOn" value="0" />
         <connection name="host" ref="host:host" />
         <connection name="cpu" ref="cpu" />
-        <connection name="mmu" ref="" />
     </component>
     <component name="cpu" class="MOS6502">
         <property name="a" value="0" />
@@ -56,13 +55,13 @@
     </component>
     <component name="rriot1" class="MOS6530">
         <connection name="bus" ref="bus" />
-        <connection name="portA" ref="keyboard" />
+        <connection name="portA" ref="kim1Terminal" />
         <property name="directionA" value="0" />
         <property name="dataA" value="0" />
-        <connection name="portB" ref="video" />
+        <connection name="portB" ref="kim1Terminal" />
         <property name="directionB" value="0" />
         <property name="dataB" value="0" />
-        <connection name="busB" ref="bus" />
+        <connection name="busB" ref="" />
     </component>
     <component name="rriot2" class="MOS6530">
         <connection name="bus" ref="bus" />
@@ -88,6 +87,8 @@
     </component>
     <component name="rriot2ROM" class="ROM">
         <resource name="image" src="roms/MOS KIM-1 6530-003 ROM.bin" />
+    </component>
+    <component name="kim1Terminal" class="KIM1Terminal">
     </component>
 </device>
 

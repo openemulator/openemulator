@@ -122,8 +122,8 @@ bool OEEmulation::buildComponent(xmlNodePtr componentNode, string deviceName)
 	OEComponent *component = OEComponentFactory::build(className);
 	if (!component)
 	{
-		OELog("could not build '" + ref + "' ('" + className +
-			  "' has not been declared)");
+		OELog("could not build '" + ref + "', class '" + className +
+			  "' was not declared");
 		
 		return false;
 	}
@@ -204,7 +204,7 @@ bool OEEmulation::connectDevice(xmlNodePtr deviceNode)
 		node;
 		node = node->next)
 		if (!xmlStrcmp(node->name, BAD_CAST "component"))
-			if (!initComponent(node, deviceName))
+			if (!connectComponent(node, deviceName))
 				return false;
 	
 	return true;
@@ -311,7 +311,7 @@ bool OEEmulation::setProperty(xmlNodePtr componentNode, OEComponent *component, 
 	if (component->setProperty(name, value))
 		return true;
 	
-	OELog("could not set property '" + name + "' for '" + ref + "'");
+	OELog("could not set property '" + name + "' of '" + ref + "'");
 	
 	return false;
 }
@@ -343,7 +343,7 @@ bool OEEmulation::setData(xmlNodePtr componentNode, OEComponent *component, stri
 	if (component->setData(name, data))
 		return true;
 	
-	OELog("could not set data '" + name + "' for '" + ref + "'");
+	OELog("could not set data '" + name + "' of '" + ref + "'");
 	delete data;
 	
 	return false;
@@ -377,7 +377,7 @@ bool OEEmulation::setResource(xmlNodePtr componentNode, OEComponent *component, 
 	
 	if (!readFile(path, data))
 	{
-		OELog("could not read resource '" + path + "' for '" + ref + "'");
+		OELog("could not read resource '" + path + "' of '" + ref + "'");
 		
 		return false;
 	}
@@ -386,7 +386,7 @@ bool OEEmulation::setResource(xmlNodePtr componentNode, OEComponent *component, 
 		return true;
 	
 	delete data;
-	OELog("could not set resource '" + name + "' for '" + ref + "'");
+	OELog("could not set resource '" + name + "' of '" + ref + "'");
 	
 	return false;
 }
@@ -396,20 +396,26 @@ bool OEEmulation::connect(xmlNodePtr componentNode, OEComponent *component, stri
 	string name = getName(componentNode);
 	string connectionRef = getRef(componentNode);
 	
-	if (getDeviceName(connectionRef) == "")
-		connectionRef = getDeviceName(ref) + OE_DEVICE_SEPARATOR + connectionRef;
-	
 	OEComponent *connection = NULL;
 	if (connectionRef != "")
 	{
+		if (getDeviceName(connectionRef) == "")
+			connectionRef = getDeviceName(ref) + OE_DEVICE_SEPARATOR + connectionRef;
+	
 		connection = getComponent(connectionRef);
 		
 		if (!connection)
-			OELog("could not connect '" + connectionRef + "' for '" + ref +
-				  "', it was not declared");
+			OELog("could not connect '" + name + "' of '" + ref +
+				  "', reference was not declared");
 	}
 	
-	return component->connect(name, connection);
+	if (component->connect(name, connection))
+		return true;
+	
+	OELog("could not connect '" + name + "' of '" + ref +
+		  "'");
+	
+	return false;
 }
 
 string OEEmulation::replaceRef(string src, string ref)

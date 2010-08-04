@@ -266,8 +266,8 @@ int MC6821::read(int address)
 						postEvent(this, MC6821_SET_CA2, &ca2);
 					}
 				}
-				setControlA(controlA & 
-									~(MC6821_CR_IRQ1FLAG | MC6821_CR_IRQ2FLAG));
+				setControlA(controlA &
+							~(MC6821_CR_IRQ1FLAG | MC6821_CR_IRQ2FLAG));
 				dataA &= directionA;
 				dataA |= portA->read(0) & ~directionA;
 				return dataA;
@@ -279,10 +279,10 @@ int MC6821::read(int address)
 		case MC6821_RS_DATAREGISTERB:
 			if (controlB & MC6821_CR_DATAREGISTER)
 			{
-				setControlB(controlB & 
-									~(MC6821_CR_IRQ1FLAG | MC6821_CR_IRQ2FLAG));
+				setControlB(controlB &
+							~(MC6821_CR_IRQ1FLAG | MC6821_CR_IRQ2FLAG));
 				dataB &= directionB;
-				dataB |= portA->read(0) & ~directionB;
+				dataB |= portB->read(1) & ~directionB;
 				return dataB;
 			}
 			else
@@ -331,7 +331,7 @@ void MC6821::write(int address, int value)
 					}
 				}
 				dataB = value;
-				portB->write(0, value);
+				portB->write(1, value);
 			}
 			else
 				directionB = value;

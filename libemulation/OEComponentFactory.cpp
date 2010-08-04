@@ -27,6 +27,8 @@
 #include "MOS6502.h"
 #include "MOS6530.h"
 
+#include "KIM1Terminal.h"
+
 #include "Apple1Video.h"
 #include "Apple1Keyboard.h"
 #include "Apple1CassetteInterface.h"
@@ -36,7 +38,7 @@
 
 OEComponent *OEComponentFactory::build(string className)
 {
-// FACTORY_CODE_START - Do not modify this section
+	// FACTORY_CODE_START - Do not modify this section
 	matchComponent(Host);
 	matchComponent(Bus);
 	matchComponent(AddressDecoder);
@@ -53,10 +55,12 @@ OEComponent *OEComponentFactory::build(string className)
 	matchComponent(MOS6502);
 	matchComponent(MOS6530);
 	
+	matchComponent(KIM1Terminal);
+	
 	matchComponent(Apple1Video);
 	matchComponent(Apple1Keyboard);
 	matchComponent(Apple1CassetteInterface);
-// FACTORY_CODE_END - Do not modify this section
+	// FACTORY_CODE_END - Do not modify this section
 	
 	return NULL;
 }

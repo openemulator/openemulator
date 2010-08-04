@@ -94,7 +94,7 @@ int MOS6530::read(int address)
 		case 0x6:
 			dataB &= directionB;
 			if (portB)
-				dataB |= portB->read(0) & ~directionB;
+				dataB |= portB->read(1) & ~directionB;
 			return dataB;
 		case 0x3:
 		case 0x7:
@@ -131,7 +131,7 @@ void MOS6530::write(int address, int value)
 		case 0x6:
 			dataB = value;
 			if (portB)
-				portB->write(0, value);
+				portB->write(1, value);
 			break;
 		case 0x3:
 		case 0x7:

@@ -51,11 +51,11 @@ bool AddressDecoder::mapComponent(OEComponent *component, const string &value)
 		 i != ranges.end();
 		 i++)
 	{
-		if ((i->end >= mask) ||
+		if ((i->end > mask) ||
 			(i->start & shiftMask) ||
 			((i->end & shiftMask) != shiftMask))
 		{
-			OELog("address range " + value + "invalid");
+			OELog("address range " + value + " invalid");
 			return false;
 		}
 		

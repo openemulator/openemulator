@@ -64,7 +64,7 @@ bool MOS6502::connect(const string &name, OEComponent *component)
 {
 	if (name == "memory")
 		memory = component;
-	if (name == "bus")
+	else if (name == "bus")
 	{
 		if (bus)
 		{
