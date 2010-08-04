@@ -1,12 +1,12 @@
 
 /**
  * libemulation
- * KIM-1 Terminal
+ * KIM-1 I/O
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements a KIM-1 terminal
+ * Implements the KIM-1 input/output
  */
 
-#include "KIM1Terminal.h"
+#include "KIM1IO.h"
 

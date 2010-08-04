@@ -10,10 +10,10 @@
 
 #include "OEComponent.h"
 
-class Apple1Keyboard : public OEComponent
+class Apple1IO : public OEComponent
 {
 public:
-	Apple1Keyboard();
+	Apple1IO();
 	
 	bool connect(const string &name, OEComponent *component);
 	void notify(int notification, OEComponent *component, void *data);

@@ -13,10 +13,10 @@
 #define APPLE1VIDEO_TERM_WIDTH 40
 #define APPLE1VIDEO_TERM_HEIGHT 24
 
-class Apple1Video : public OEComponent
+class Apple1Terminal : public OEComponent
 {
 public:
-	Apple1Video();
+	Apple1Terminal();
 	
 	bool setResource(const string &name, const OEData *data);
 	bool connect(const string &name, OEComponent *component);

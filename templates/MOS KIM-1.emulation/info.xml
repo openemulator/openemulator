@@ -11,6 +11,7 @@
 </device>
 
 <device name="dev0" label="KIM-1">
+    <inlet ref="kim1io.terminal" type="Terminal" label="Terminal connector" image="Terminal connector.png" />
     <component name="bus" class="Bus">
         <property name="crystal" value="1.0MHz" />
         <property name="divider" value="1" />
@@ -50,15 +51,15 @@
     </component>
     <component name="ram" class="RAM">
         <data name="image" src="${REF}.bin" />
-        <property name="size" value="0x0400" />
+        <property name="size" value="0x400" />
         <connection name="host" ref="host:host" />
     </component>
     <component name="rriot1" class="MOS6530">
         <connection name="bus" ref="bus" />
-        <connection name="portA" ref="kim1Terminal" />
+        <connection name="portA" ref="kim1IO" />
         <property name="directionA" value="0" />
         <property name="dataA" value="0" />
-        <connection name="portB" ref="kim1Terminal" />
+        <connection name="portB" ref="kim1IO" />
         <property name="directionB" value="0" />
         <property name="dataB" value="0" />
         <connection name="busB" ref="" />
@@ -74,12 +75,12 @@
     </component>
     <component name="rriot1RAM" class="RAM">
         <data name="image" src="${REF}.bin" />
-        <property name="size" value="0x0040" />
+        <property name="size" value="0x40" />
         <connection name="host" ref="host:host" />
     </component>
     <component name="rriot2RAM" class="RAM">
         <data name="image" src="${REF}.bin" />
-        <property name="size" value="0x0040" />
+        <property name="size" value="0x40" />
         <connection name="host" ref="host:host" />
     </component>
     <component name="rriot1ROM" class="ROM">
@@ -88,7 +89,19 @@
     <component name="rriot2ROM" class="ROM">
         <resource name="image" src="roms/MOS KIM-1 6530-003 ROM.bin" />
     </component>
-    <component name="kim1Terminal" class="KIM1Terminal">
+    <component name="kim1IO" class="KIM1IO">
+        <connection name="host" ref="host:host" />
+        <connection name="audioOut" ref="audioOut" />
+        <connection name="audioIn" ref="audioOut" />
+        <connection name="terminal" ref="" />
+        <resource name="kim1" src="images/MOS KIM-1 View.png" />
+    </component>
+    <component name="audioOut" class="Audio1Bit">
+        <connection name="host" ref="host:host" />
+    </component>
+    <component name="audioIn" class="AudioPLL">
+        <connection name="host" ref="host:host" />
+        <property name="frequency" value="3400" />
     </component>
 </device>
 

@@ -8,20 +8,20 @@
  * Controls the Apple I Keyboard
  */
 
-#include "Apple1Keyboard.h"
+#include "Apple1IO.h"
 
 #include "Host.h"
 #include "MC6821.h"
 
 #define APPLE1KEYBOARD_MASK	0x40
 
-Apple1Keyboard::Apple1Keyboard()
+Apple1IO::Apple1IO()
 {
 	host = NULL;
 	pia = NULL;
 }
 
-bool Apple1Keyboard::connect(const string &name, OEComponent *component)
+bool Apple1IO::connect(const string &name, OEComponent *component)
 {
 	if (name == "host")
 	{
@@ -39,7 +39,7 @@ bool Apple1Keyboard::connect(const string &name, OEComponent *component)
 	return true;
 }
 
-void Apple1Keyboard::notify(int notification, OEComponent *component, void *data)
+void Apple1IO::notify(int notification, OEComponent *component, void *data)
 {
 	HostHIDEvent *event = (HostHIDEvent *) data;
 	
@@ -49,7 +49,7 @@ void Apple1Keyboard::notify(int notification, OEComponent *component, void *data
 	pia->postEvent(pia, MC6821_SET_CA1, &value);
 }
 
-OEUInt8 Apple1Keyboard::read(int address)
+OEUInt8 Apple1IO::read(int address)
 {
 	bool value = false;
 	pia->postEvent(pia, MC6821_SET_CA1, &value);

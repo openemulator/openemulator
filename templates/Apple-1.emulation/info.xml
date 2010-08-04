@@ -69,7 +69,7 @@
         <property name="ca1" value="0" />
         <property name="ca2" value="0" />
         <connection name="busA" ref="" />
-        <connection name="portB" ref="video" />
+        <connection name="portB" ref="apple1IO" />
         <property name="controlB" value="0" />
         <property name="directionB" value="0" />
         <property name="dataB" value="0" />
@@ -77,15 +77,14 @@
         <property name="cb2" value="0" />
         <connection name="busB" ref="" />
     </component>
-    <component name="keyboard" class="Apple1Video">
-        <connection name="host" ref="host:host" />
+    <component name="apple1IO" class="Apple1IO">
         <connection name="pia" ref="pia" />
+        <connection name="bus" ref="bus" />
+        <connection name="terminal" ref="terminal" />
     </component>
-    <component name="video" class="Apple1Video">
+    <component name="terminal" class="Apple1Terminal">
         <connection name="host" ref="host:host" />
         <resource name="charset" src="roms/Signetics 2513 Video ROM.bin" />
-        <connection name="bus" ref="bus" />
-        <connection name="pia" ref="pia" />
         <connection name="monitor" ref="dev1:monitor" />
     </component>
     <component name="ram2" class="RAM">

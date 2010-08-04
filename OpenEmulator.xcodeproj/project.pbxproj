@@ -34,10 +34,6 @@
 		0031347C12036F6E00913149 /* MOS6530.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0031347A12036F6E00913149 /* MOS6530.cpp */; };
 		003134FD12039FFC00913149 /* Apple1CassetteInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 003134F112039FFC00913149 /* Apple1CassetteInterface.cpp */; };
 		003134FE12039FFC00913149 /* Apple1CassetteInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 003134F212039FFC00913149 /* Apple1CassetteInterface.h */; };
-		0031350312039FFC00913149 /* Apple1Keyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 003134F712039FFC00913149 /* Apple1Keyboard.cpp */; };
-		0031350412039FFC00913149 /* Apple1Keyboard.h in Headers */ = {isa = PBXBuildFile; fileRef = 003134F812039FFC00913149 /* Apple1Keyboard.h */; };
-		0031350712039FFC00913149 /* Apple1Video.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 003134FB12039FFC00913149 /* Apple1Video.cpp */; };
-		0031350812039FFC00913149 /* Apple1Video.h in Headers */ = {isa = PBXBuildFile; fileRef = 003134FC12039FFC00913149 /* Apple1Video.h */; };
 		0031359B1203D3A100913149 /* AudioPLL.h in Headers */ = {isa = PBXBuildFile; fileRef = 003135991203D3A100913149 /* AudioPLL.h */; };
 		0031359C1203D3A100913149 /* AudioPLL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0031359A1203D3A100913149 /* AudioPLL.cpp */; };
 		0032967711C5A7B5003FD49A /* IPMount.png in Resources */ = {isa = PBXBuildFile; fileRef = 0032967011C5A7B5003FD49A /* IPMount.png */; };
@@ -74,7 +70,14 @@
 		008E3E5E11B0E725008621B7 /* compositeSignalProcessing.c in Sources */ = {isa = PBXBuildFile; fileRef = 008E3E5611B0E725008621B7 /* compositeSignalProcessing.c */; };
 		0095DF8F1209D0B700C127F5 /* TBColdRestart.png in Resources */ = {isa = PBXBuildFile; fileRef = 0095DF8D1209D0B700C127F5 /* TBColdRestart.png */; };
 		0095DF901209D0B700C127F5 /* TBWarmRestart.png in Resources */ = {isa = PBXBuildFile; fileRef = 0095DF8E1209D0B700C127F5 /* TBWarmRestart.png */; };
-		0095E0661209DAF900C127F5 /* KIM1Terminal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0095E0651209DAF900C127F5 /* KIM1Terminal.cpp */; };
+		0095E09E1209DDB500C127F5 /* KIM1IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0095E09C1209DDB500C127F5 /* KIM1IO.cpp */; };
+		0095E09F1209DDB500C127F5 /* KIM1IO.h in Headers */ = {isa = PBXBuildFile; fileRef = 0095E09D1209DDB500C127F5 /* KIM1IO.h */; };
+		0095E0B51209E14800C127F5 /* Apple1IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0095E0B11209E14700C127F5 /* Apple1IO.cpp */; };
+		0095E0B61209E14800C127F5 /* Apple1IO.h in Headers */ = {isa = PBXBuildFile; fileRef = 0095E0B21209E14700C127F5 /* Apple1IO.h */; };
+		0095E0B71209E14800C127F5 /* Apple1Terminal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0095E0B31209E14700C127F5 /* Apple1Terminal.cpp */; };
+		0095E0B81209E14800C127F5 /* Apple1Terminal.h in Headers */ = {isa = PBXBuildFile; fileRef = 0095E0B41209E14700C127F5 /* Apple1Terminal.h */; };
+		0095E0D21209E2C300C127F5 /* Debugger.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0095E0D11209E2C300C127F5 /* Debugger.xib */; };
+		0095E0D61209E3E200C127F5 /* DebuggerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0095E0D51209E3E200C127F5 /* DebuggerController.m */; };
 		009B4F2711639D7700E9A6F9 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009B4F2611639D7700E9A6F9 /* GLUT.framework */; };
 		00A0B8041069761A007930A5 /* Document.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00A0B8031069761A007930A5 /* Document.mm */; };
 		00A1F31411EAEB76001511D0 /* Tablet.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00A1F31211EAEB76001511D0 /* Tablet.xib */; };
@@ -237,10 +240,6 @@
 		0031347A12036F6E00913149 /* MOS6530.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MOS6530.cpp; sourceTree = "<group>"; };
 		003134F112039FFC00913149 /* Apple1CassetteInterface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Apple1CassetteInterface.cpp; sourceTree = "<group>"; };
 		003134F212039FFC00913149 /* Apple1CassetteInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Apple1CassetteInterface.h; sourceTree = "<group>"; };
-		003134F712039FFC00913149 /* Apple1Keyboard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Apple1Keyboard.cpp; sourceTree = "<group>"; };
-		003134F812039FFC00913149 /* Apple1Keyboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Apple1Keyboard.h; sourceTree = "<group>"; };
-		003134FB12039FFC00913149 /* Apple1Video.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Apple1Video.cpp; sourceTree = "<group>"; };
-		003134FC12039FFC00913149 /* Apple1Video.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Apple1Video.h; sourceTree = "<group>"; };
 		003135991203D3A100913149 /* AudioPLL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioPLL.h; sourceTree = "<group>"; };
 		0031359A1203D3A100913149 /* AudioPLL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioPLL.cpp; sourceTree = "<group>"; };
 		00317E380FD31D1A007F2B00 /* AppleGraphicsTablet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppleGraphicsTablet.png; sourceTree = "<group>"; };
@@ -290,8 +289,15 @@
 		008E3E5711B0E725008621B7 /* compositeSignalProcessing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = compositeSignalProcessing.h; sourceTree = "<group>"; };
 		0095DF8D1209D0B700C127F5 /* TBColdRestart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = TBColdRestart.png; path = macosx/Images/TBColdRestart.png; sourceTree = "<group>"; };
 		0095DF8E1209D0B700C127F5 /* TBWarmRestart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = TBWarmRestart.png; path = macosx/Images/TBWarmRestart.png; sourceTree = "<group>"; };
-		0095E0641209DAF900C127F5 /* KIM1Terminal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KIM1Terminal.h; sourceTree = "<group>"; };
-		0095E0651209DAF900C127F5 /* KIM1Terminal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = KIM1Terminal.cpp; sourceTree = "<group>"; };
+		0095E09C1209DDB500C127F5 /* KIM1IO.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = KIM1IO.cpp; sourceTree = "<group>"; };
+		0095E09D1209DDB500C127F5 /* KIM1IO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KIM1IO.h; sourceTree = "<group>"; };
+		0095E0B11209E14700C127F5 /* Apple1IO.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Apple1IO.cpp; sourceTree = "<group>"; };
+		0095E0B21209E14700C127F5 /* Apple1IO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Apple1IO.h; sourceTree = "<group>"; };
+		0095E0B31209E14700C127F5 /* Apple1Terminal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Apple1Terminal.cpp; sourceTree = "<group>"; };
+		0095E0B41209E14700C127F5 /* Apple1Terminal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Apple1Terminal.h; sourceTree = "<group>"; };
+		0095E0D11209E2C300C127F5 /* Debugger.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Debugger.xib; sourceTree = "<group>"; };
+		0095E0D41209E3E200C127F5 /* DebuggerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DebuggerController.h; sourceTree = "<group>"; };
+		0095E0D51209E3E200C127F5 /* DebuggerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DebuggerController.m; sourceTree = "<group>"; };
 		00984D9711A73B1000B9C0B5 /* CompositeMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompositeMonitor.h; sourceTree = "<group>"; };
 		00984D9811A73B1000B9C0B5 /* CompositeMonitor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CompositeMonitor.cpp; sourceTree = "<group>"; };
 		009B4F2611639D7700E9A6F9 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = /System/Library/Frameworks/GLUT.framework; sourceTree = "<absolute>"; };
@@ -529,12 +535,12 @@
 		003134D812039FD500913149 /* Apple1 */ = {
 			isa = PBXGroup;
 			children = (
+				0095E0B11209E14700C127F5 /* Apple1IO.cpp */,
+				0095E0B21209E14700C127F5 /* Apple1IO.h */,
+				0095E0B31209E14700C127F5 /* Apple1Terminal.cpp */,
+				0095E0B41209E14700C127F5 /* Apple1Terminal.h */,
 				003134F112039FFC00913149 /* Apple1CassetteInterface.cpp */,
 				003134F212039FFC00913149 /* Apple1CassetteInterface.h */,
-				003134F712039FFC00913149 /* Apple1Keyboard.cpp */,
-				003134F812039FFC00913149 /* Apple1Keyboard.h */,
-				003134FB12039FFC00913149 /* Apple1Video.cpp */,
-				003134FC12039FFC00913149 /* Apple1Video.h */,
 			);
 			path = Apple1;
 			sourceTree = "<group>";
@@ -542,8 +548,8 @@
 		003135201203A70600913149 /* KIM1 */ = {
 			isa = PBXGroup;
 			children = (
-				0095E0641209DAF900C127F5 /* KIM1Terminal.h */,
-				0095E0651209DAF900C127F5 /* KIM1Terminal.cpp */,
+				0095E09C1209DDB500C127F5 /* KIM1IO.cpp */,
+				0095E09D1209DDB500C127F5 /* KIM1IO.h */,
 			);
 			path = KIM1;
 			sourceTree = "<group>";
@@ -722,6 +728,8 @@
 				00BADD451100BE8300EB0344 /* ConnectorViewController.m */,
 				006115C011DD0347008AA3EE /* Application.h */,
 				006115C111DD0347008AA3EE /* Application.m */,
+				0095E0D41209E3E200C127F5 /* DebuggerController.h */,
+				0095E0D51209E3E200C127F5 /* DebuggerController.m */,
 			);
 			path = macosx;
 			sourceTree = "<group>";
@@ -760,6 +768,7 @@
 				0008FCD80FBA5D72005E876E /* Info.plist */,
 				000A79520FBA4A8400A0F12E /* OpenEmulatorHelp */,
 				000A79070FBA49C500A0F12E /* Images */,
+				0095E0D11209E2C300C127F5 /* Debugger.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -794,13 +803,14 @@
 			files = (
 				0031347B12036F6E00913149 /* MOS6530.h in Headers */,
 				003134FE12039FFC00913149 /* Apple1CassetteInterface.h in Headers */,
-				0031350412039FFC00913149 /* Apple1Keyboard.h in Headers */,
-				0031350812039FFC00913149 /* Apple1Video.h in Headers */,
 				0031359B1203D3A100913149 /* AudioPLL.h in Headers */,
 				00E407881205D29D008C2289 /* Bus.h in Headers */,
 				00E4078E1205D4A2008C2289 /* CPU.h in Headers */,
 				00E407971205D56C008C2289 /* Audio1Bit.h in Headers */,
 				0016DA30120674D00043AFA6 /* AddressOffset.h in Headers */,
+				0095E09F1209DDB500C127F5 /* KIM1IO.h in Headers */,
+				0095E0B61209E14800C127F5 /* Apple1IO.h in Headers */,
+				0095E0B81209E14800C127F5 /* Apple1Terminal.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -965,6 +975,7 @@
 				00A1F31411EAEB76001511D0 /* Tablet.xib in Resources */,
 				0095DF8F1209D0B700C127F5 /* TBColdRestart.png in Resources */,
 				0095DF901209D0B700C127F5 /* TBWarmRestart.png in Resources */,
+				0095E0D21209E2C300C127F5 /* Debugger.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1003,14 +1014,15 @@
 				0030C51711FBA4D9009DF0DD /* OEDML.cpp in Sources */,
 				0031347C12036F6E00913149 /* MOS6530.cpp in Sources */,
 				003134FD12039FFC00913149 /* Apple1CassetteInterface.cpp in Sources */,
-				0031350312039FFC00913149 /* Apple1Keyboard.cpp in Sources */,
-				0031350712039FFC00913149 /* Apple1Video.cpp in Sources */,
 				0031359C1203D3A100913149 /* AudioPLL.cpp in Sources */,
 				00E407891205D29D008C2289 /* Bus.cpp in Sources */,
 				00E4078F1205D4A2008C2289 /* CPU.cpp in Sources */,
 				00E407981205D56C008C2289 /* Audio1Bit.cpp in Sources */,
 				0016DA31120674D00043AFA6 /* AddressOffset.cpp in Sources */,
 				0016DA32120674DC0043AFA6 /* AddressDecoder.cpp in Sources */,
+				0095E09E1209DDB500C127F5 /* KIM1IO.cpp in Sources */,
+				0095E0B51209E14800C127F5 /* Apple1IO.cpp in Sources */,
+				0095E0B71209E14800C127F5 /* Apple1Terminal.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1054,7 +1066,7 @@
 				00C3D0D911F5584B00EA2453 /* OEPA.cpp in Sources */,
 				00C3D0DA11F5584C00EA2453 /* OEPAEmulation.cpp in Sources */,
 				00D81D0C12034A20004068EB /* OEDebugger.cpp in Sources */,
-				0095E0661209DAF900C127F5 /* KIM1Terminal.cpp in Sources */,
+				0095E0D61209E3E200C127F5 /* DebuggerController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

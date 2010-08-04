@@ -8,14 +8,14 @@
  * Controls the Apple I Video
  */
 
-#include "Apple1Video.h"
+#include "Apple1Terminal.h"
 
-Apple1Video::Apple1Video()
+Apple1Terminal::Apple1Terminal()
 {
 	memset(screen, 0, APPLE1VIDEO_TERM_HEIGHT * APPLE1VIDEO_TERM_HEIGHT);
 }
 
-bool Apple1Video::setResource(const string &name, const OEData *data)
+bool Apple1Terminal::setResource(const string &name, const OEData *data)
 {
 	if (name == "image")
 		characterSet = *data;
@@ -25,7 +25,7 @@ bool Apple1Video::setResource(const string &name, const OEData *data)
 	return true;
 }
 
-bool Apple1Video::connect(const string &name, OEComponent *component)
+bool Apple1Terminal::connect(const string &name, OEComponent *component)
 {
 	if (name == "host")
 		host = component;
@@ -43,6 +43,6 @@ bool Apple1Video::connect(const string &name, OEComponent *component)
 	return true;
 }
 
-void Apple1Video::write(int address, int value)
+void Apple1Terminal::write(int address, int value)
 {
 }

@@ -311,7 +311,7 @@ bool OEEmulation::setProperty(xmlNodePtr componentNode, OEComponent *component, 
 	if (component->setProperty(name, value))
 		return true;
 	
-	OELog("could not set property '" + name + "' of '" + ref + "'");
+	OELog("could not set property '" + ref + "." + name + "'");
 	
 	return false;
 }
@@ -343,7 +343,7 @@ bool OEEmulation::setData(xmlNodePtr componentNode, OEComponent *component, stri
 	if (component->setData(name, data))
 		return true;
 	
-	OELog("could not set data '" + name + "' of '" + ref + "'");
+	OELog("could not set data '" + ref + "." + name + "'");
 	delete data;
 	
 	return false;
@@ -377,7 +377,7 @@ bool OEEmulation::setResource(xmlNodePtr componentNode, OEComponent *component, 
 	
 	if (!readFile(path, data))
 	{
-		OELog("could not read resource '" + path + "' of '" + ref + "'");
+		OELog("could not read resource '" + path + "'");
 		
 		return false;
 	}
@@ -386,7 +386,7 @@ bool OEEmulation::setResource(xmlNodePtr componentNode, OEComponent *component, 
 		return true;
 	
 	delete data;
-	OELog("could not set resource '" + name + "' of '" + ref + "'");
+	OELog("could not set resource '" + ref + "." + name + "'");
 	
 	return false;
 }
@@ -405,15 +405,14 @@ bool OEEmulation::connect(xmlNodePtr componentNode, OEComponent *component, stri
 		connection = getComponent(connectionRef);
 		
 		if (!connection)
-			OELog("could not connect '" + name + "' of '" + ref +
+			OELog("could not connect '" + ref + "." + name +
 				  "', reference was not declared");
 	}
 	
 	if (component->connect(name, connection))
 		return true;
 	
-	OELog("could not connect '" + name + "' of '" + ref +
-		  "'");
+	OELog("could not connect '" + ref + "." + name + "'");
 	
 	return false;
 }

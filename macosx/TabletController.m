@@ -15,7 +15,9 @@
 
 - (id)init
 {
-	return [super initWithWindowNibName:@"Tablet"];
+	self = [super initWithWindowNibName:@"Tablet"];
+	
+	return self;
 }
 
 - (void)windowDidLoad
