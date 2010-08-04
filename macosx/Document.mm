@@ -626,7 +626,7 @@ string getString(NSString *s)
 - (NSString *)documentText
 {
 	string characterString;
-	[self notifyHost:HOST_CLIPBOARD_IS_COPYING data:&characterString];
+	[self notifyHost:HOST_CLIPBOARD_WILL_COPY data:&characterString];
 	
 	return [NSString stringWithUTF8String:characterString.c_str()];
 }
@@ -647,7 +647,7 @@ string getString(NSString *s)
 	NSString *characters = [pasteboard stringForType:NSStringPboardType];
 	string characterString([characters UTF8String]);
 	
-	[self notifyHost:HOST_CLIPBOARD_IS_PASTING data:&characterString];
+	[self notifyHost:HOST_CLIPBOARD_WILL_PASTE data:&characterString];
 }
 
 - (void)startSpeaking:(id)sender

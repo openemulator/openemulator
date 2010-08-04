@@ -15,6 +15,7 @@
         <property name="crystal" value="1.0MHz" />
         <property name="divider" value="1" />
         <property name="floatingBus" value="0xff" />
+        <property name="resetOnPowerOn" value="0" />
         <connection name="host" ref="host:host" />
         <connection name="cpu" ref="cpu" />
         <connection name="mmu" ref="" />
@@ -33,17 +34,27 @@
         <property name="addressSize" value="13" />
         <property name="blockSize" value="6" />
         <connection name="bus" value="bus" />
+        <connection name="component1" ref="ram" />
+        <property name="map1" value="0x0000-0x03ff" />
+        <connection name="component2" ref="rriot1" />
+        <property name="map2" value="0x1700-0x173f" />
+        <connection name="component3" ref="rriot2" />
+        <property name="map3" value="0x1740-0x177f" />
+        <connection name="component4" ref="rriot1RAM" />
+        <property name="map4" value="0x1780-0x17bf" />
+        <connection name="component5" ref="rriot2RAM" />
+        <property name="map5" value="0x17c0-0x17ff" />
+        <connection name="component6" ref="rriot1ROM" />
+        <property name="map6" value="0x1800-0x1bff" />
+        <connection name="component7" ref="rriot2ROM" />
+        <property name="map7" value="0x1c00-0x1fff" />
     </component>
     <component name="ram" class="RAM">
-        <connection name="memoryMap" ref="mmu" />
-        <property name="map" value="0x0000-0x03ff" />
         <data name="image" src="${REF}.bin" />
         <property name="size" value="0x0400" />
         <connection name="host" ref="host:host" />
     </component>
     <component name="rriot1" class="MOS6530">
-        <connection name="memoryMap" ref="mmu" />
-        <property name="map" value="0x1700-0x173f" />
         <connection name="bus" ref="bus" />
         <connection name="portA" ref="keyboard" />
         <property name="directionA" value="0" />
@@ -54,8 +65,6 @@
         <connection name="busB" ref="bus" />
     </component>
     <component name="rriot2" class="MOS6530">
-        <connection name="memoryMap" ref="mmu" />
-        <property name="map" value="0x1740-0x177f" />
         <connection name="bus" ref="bus" />
         <connection name="portA" ref="" />
         <property name="directionA" value="0" />
@@ -64,28 +73,20 @@
         <property name="directionB" value="0" />
         <property name="dataB" value="0" />
     </component>
-    <component name="rriot1ram" class="RAM">
-        <connection name="memoryMap" ref="mmu" />
-        <property name="map" value="0x1780-0x17bf" />
+    <component name="rriot1RAM" class="RAM">
         <data name="image" src="${REF}.bin" />
         <property name="size" value="0x0040" />
         <connection name="host" ref="host:host" />
     </component>
-    <component name="rriot2ram" class="RAM">
-        <connection name="memoryMap" ref="mmu" />
-        <property name="map" value="0x17c0-0x17ff" />
+    <component name="rriot2RAM" class="RAM">
         <data name="image" src="${REF}.bin" />
         <property name="size" value="0x0040" />
         <connection name="host" ref="host:host" />
     </component>
-    <component name="rriot1rom" class="ROM">
-        <connection name="memoryMap" ref="mmu" />
-        <property name="map" value="0x1800-0x1bff" />
+    <component name="rriot1ROM" class="ROM">
         <resource name="image" src="roms/MOS KIM-1 6530-002 ROM.bin" />
     </component>
-    <component name="rriot2rom" class="ROM">
-        <connection name="memoryMap" ref="mmu" />
-        <property name="map" value="0x1c00-0x1fff" />
+    <component name="rriot2ROM" class="ROM">
         <resource name="image" src="roms/MOS KIM-1 6530-003 ROM.bin" />
     </component>
 </device>

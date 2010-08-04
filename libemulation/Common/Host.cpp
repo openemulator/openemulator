@@ -48,6 +48,8 @@ bool Host::getProperty(const string &name, string &value)
 
 bool Host::addScreen(HostVideoScreen *screen)
 {
+	videoUpdated = true;
+	
 	videoScreens.push_back(screen);
 	
 	return true;
@@ -55,6 +57,8 @@ bool Host::addScreen(HostVideoScreen *screen)
 
 bool Host::removeScreen(HostVideoScreen *screen)
 {
+	videoUpdated = true;
+	
 	HostVideoScreens::iterator first = videoScreens.begin();
 	HostVideoScreens::iterator last = videoScreens.end();
 	HostVideoScreens::iterator i = remove(first, last, screen);
@@ -71,11 +75,16 @@ bool Host::postEvent(OEComponent *component, int event, void *data)
 	{
 		case HOST_SET_POWERSTATE:
 		{
-			powerState = *((int *) data);
+			int newPowerState = *((int *) data);
 			
 			notify(this, HOST_POWERSTATE_CHANGED, &powerState);
 			break;
 		}
+			
+		case HOST_GET_POWERSTATE:
+			*((int *) data) = powerState;
+			break;
+			
 		case HOST_REGISTER_VIDEO_CALLBACK:
 			break;
 			
@@ -83,11 +92,9 @@ bool Host::postEvent(OEComponent *component, int event, void *data)
 			break;
 			
 		case HOST_ADD_SCREEN:
-			videoUpdated = true;
 			return addScreen((HostVideoScreen *) data);
 			
 		case HOST_REMOVE_SCREEN:
-			videoUpdated = true;
 			return removeScreen((HostVideoScreen *) data);
 	}
 	

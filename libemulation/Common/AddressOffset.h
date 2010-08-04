@@ -22,9 +22,6 @@ public:
 	void write(int address, OEUInt8 value);
 	
 private:
-	OEComponent *mmu;
-	string mmuMap;
-	
 	int offset;
 	
 	OEComponent *component;

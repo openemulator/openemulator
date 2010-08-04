@@ -15,8 +15,6 @@
 
 MC6821::MC6821()
 {
-	mmu = NULL;
-	
 	bus = NULL;
 	
 	portA = NULL;
@@ -58,9 +56,7 @@ void MC6821::setControlB(int value)
 
 bool MC6821::setProperty(const string &name, const string &value)
 {
-	if (name == "mmuMap")
-		mmuMap = value;
-	else if (name == "controlA")
+	if (name == "controlA")
 		setControlA(getInt(value));
 	else if (name == "directionA")
 		directionA = getInt(value);
@@ -116,15 +112,7 @@ bool MC6821::getProperty(const string &name, string &value)
 
 bool MC6821::connect(const string &name, OEComponent *component)
 {
-	if (name == "mmu")
-	{
-		if (mmu)
-			component->postEvent(NULL, ADDRESSDECODER_MAP, &mmuMap);
-		mmu = component;
-		if (mmu)
-			component->postEvent(this, ADDRESSDECODER_MAP, &mmuMap);
-	}
-	else if (name == "bus")
+	if (name == "bus")
 	{
 		if (bus)
 			bus->removeObserver(this, BUS_RESET_ASSERTED);
@@ -161,9 +149,9 @@ void MC6821::notify(OEComponent *component, int notification, void *data)
 	cb2 = 0;
 }
 
-bool MC6821::postEvent(OEComponent *component, int message, void *data)
+bool MC6821::postEvent(OEComponent *component, int event, void *data)
 {
-	switch (message)
+	switch (event)
 	{
 		case MC6821_SET_CA1:
 		{

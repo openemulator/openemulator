@@ -289,7 +289,7 @@ void OEEmulation::removeDevice(xmlNodePtr deviceNode)
 		if (!xmlStrcmp(node->name, BAD_CAST "component"))
 			removeComponent(node, deviceName);
 	
-	OEDML::removeDevice(deviceNode);
+//	OEDML::removeDevice(deviceNode);
 }
 
 void OEEmulation::removeComponent(xmlNodePtr componentNode, string deviceName)

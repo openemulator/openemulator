@@ -23,9 +23,6 @@ public:
 	void write(int address, int value);
 	
 private:
-	OEComponent *mmu;
-	string mmuMap;
-	
 	OEComponent *bus;
 	
 	OEComponent *portA;

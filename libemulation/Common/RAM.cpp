@@ -15,14 +15,10 @@
 
 RAM::RAM()
 {
-	mmu = NULL;
-	
-	host = NULL;
-	
-	isPowered = 0;
-	
 	memory = NULL;
 	datap = NULL;
+	
+	host = NULL;
 	
 	setSize(1);
 	setMemory(new OEData());
@@ -60,8 +56,6 @@ bool RAM::setProperty(const string &name, const string &value)
 		setSize(getInt(value));
 	else if (name == "powerOnPattern")
 		powerOnPattern = getCharVector(value);
-	else if (name == "mmuMap")
-		mmuMap = value;
 	else
 		return false;
 	 
@@ -82,7 +76,10 @@ bool RAM::getData(const string &name, OEData **data)
 {
 	if (name == "image")
 	{
-		if (!isPowered)
+		int powerState;
+		
+		host->postEvent(this, HOST_GET_POWERSTATE, &powerState);
+		if (powerState <= HOST_POWERSTATE_HIBERNATE)
 			return false;
 		
 		*data = memory;
@@ -95,21 +92,13 @@ bool RAM::getData(const string &name, OEData **data)
 
 bool RAM::connect(const string &name, OEComponent *component)
 {
-	if (name == "mmu")
-	{
-		if (mmu)
-			component->postEvent(NULL, ADDRESSDECODER_MAP, &mmuMap);
-		mmu = component;
-		if (mmu)
-			component->postEvent(this, ADDRESSDECODER_MAP, &mmuMap);
-	}
-	else if (name == "host")
+	if (name == "host")
 	{
 		if (host)
-			host->removeObserver(this, HOST_POWERSTATE_CHANGED);
+			host->removeObserver(this, HOST_POWERED_ON);
 		host = component;
 		if (host)
-			host->addObserver(this, HOST_POWERSTATE_CHANGED);
+			host->addObserver(this, HOST_POWERED_ON);
 	}
 	else
 		return false;
@@ -119,16 +108,27 @@ bool RAM::connect(const string &name, OEComponent *component)
 
 void RAM::notify(OEComponent *component, int notification, void *data)
 {
-	int powerState = *((int *) data);
-	
-	bool willBePowered = (powerState <= HOST_POWERSTATE_STANDBY);
-	if (!isPowered && willBePowered)
+	switch (notification)
 	{
-		for (int i = 0; i < memory->size(); i++)
-			(*memory)[i] = powerOnPattern[i % powerOnPattern.size()];
-		
-		isPowered = willBePowered;
+		case HOST_POWERED_ON:
+			for (int i = 0; i < memory->size(); i++)
+				(*memory)[i] = powerOnPattern[i % powerOnPattern.size()];
+			break;
 	}
+	
+	return;
+}
+
+bool RAM::postEvent(OEComponent *component, int event, void *data)
+{
+	switch (event)
+	{
+		case RAM_GET_MEMORY:
+			*((OEData **) data) = (OEData *) memory;
+			return true;
+	}
+	
+	return false;
 }
 
 int RAM::read(int address)

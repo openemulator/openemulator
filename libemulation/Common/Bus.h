@@ -8,6 +8,9 @@
  * Implements a bus with clock control and reset/IRQ/NMI lines
  */
 
+#ifndef _BUS_H
+#define _BUS_H
+
 #include "OEComponent.h"
 
 // Notifications
@@ -19,7 +22,7 @@ enum
 	BUS_NMI_ASSERTED,
 };
 
-// Messages
+// Events
 enum
 {
 	BUS_ASSERT_RESET,
@@ -49,18 +52,29 @@ public:
 	
 	void notify(OEComponent *component, int notification, void *data);
 	
-	bool postEvent(OEComponent *component, int message, void *data);
+	bool postEvent(OEComponent *component, int event, void *data);
 	
 	OEUInt8 read(int address);
 	
 private:
 	OEComponent *host;
 	OEComponent *cpu;
-	OEComponent *mmu;
+	OEComponent *cpuSocket;
+	
+	OEComponent *cpuSel;
+	
+	int floatingBus;
 	
 	float crystal;
 	float divider;
-	int floatingBus;
+	float frequency;
+	
+	bool resetOnPowerOn;
+	int irqCount;
 	
 	double phase;
+	
+	void updateFrequency();
 };
+
+#endif

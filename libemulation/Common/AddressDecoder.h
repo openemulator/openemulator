@@ -33,16 +33,14 @@ public:
 	bool setProperty(const string &name, const string &value);
 	bool connect(const string &name, OEComponent *component);
 	
-	bool postEvent(OEComponent *component, int message, void *data);
+	bool postEvent(OEComponent *component, int event, void *data);
 	
 	OEUInt8 read(int address);
 	void write(int address, OEUInt8 value);
 	
 private:
-	OEComponent *mmu;
-	string mmuMap;
-	
 	OEComponent *bus;
+	map<string, string> componentMap;
 	
 	int mask;
 	int shift;
@@ -50,8 +48,9 @@ private:
 	OEComponents readMap;
 	OEComponents writeMap;
 	
-	void setBus(OEComponent *bus);
+	void mapBus(OEComponent *bus);
+	bool mapComponent(OEComponent *component, const string &value);
 	
-	bool getRange(OEAddressRange &range, const string &value);
-	bool getRanges(OEAddressRanges &ranges, const string &value);
+	bool getAddressRange(OEAddressRange &range, const string &value);
+	bool getAddressRanges(OEAddressRanges &ranges, const string &value);
 };

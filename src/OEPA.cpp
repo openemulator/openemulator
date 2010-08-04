@@ -135,8 +135,6 @@ bool OEPA::open()
 	
 	if (openEmulations())
 	{
-		return true;
-		
 		if (openAudio())
 			return true;
 		
@@ -175,8 +173,6 @@ void OEPA::removeEmulation(OEPAEmulation *emulation)
 		emulations.erase(i, last);
 	
 	unlockEmulations();
-	
-	delete emulation;
 }
 
 //

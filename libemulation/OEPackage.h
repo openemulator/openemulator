@@ -40,7 +40,7 @@ public:
 	bool remove();
 	
 private:
-	bool openState;
+	bool is_open;
 	
 	string path;
 	struct zip *zip;

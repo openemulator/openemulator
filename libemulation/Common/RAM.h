@@ -10,6 +10,12 @@
 
 #include "OEComponent.h"
 
+// Events
+enum
+{
+	RAM_GET_MEMORY,
+};
+
 class RAM : public OEComponent
 {
 public:
@@ -23,15 +29,12 @@ public:
 	
 	void notify(OEComponent *component, int notification, void *data);
 	
+	bool postEvent(OEComponent *component, int event, void *data);
+	
 	int read(int address);
 	void write(int address, int value);
 	
 private:
-	OEComponent *mmu;
-	string mmuMap;
-	
-	bool isPowered;
-	
 	OEData *memory;
 	OEData powerOnPattern;
 	

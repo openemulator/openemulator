@@ -73,7 +73,7 @@
 		OEInfo info(string([templatePath UTF8String]));
 		if (info.isOpen())
 		{
-			NSString *label = [templateFilename stringByDeletingPathExtension];
+			NSString *label = [NSString stringWithUTF8String:info.getLabel().c_str()];
 			NSString *imageName = [NSString stringWithUTF8String:info.getImage().c_str()];
 			NSString *description = [NSString stringWithUTF8String:info.getDescription().
 									 c_str()];

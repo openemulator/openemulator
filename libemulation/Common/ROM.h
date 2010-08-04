@@ -16,16 +16,11 @@ public:
 	ROM();
 	~ROM();
 	
-	bool setProperty(const string &name, const string &value);
 	bool setResource(const string &name, OEData *data);
-	bool connect(const string &name, OEComponent *component);
 	
 	int read(int address);
 	
 private:
-	OEComponent *mmu;
-	string mmuMap;
-	
 	OEData *memory;
 	
 	int mask;

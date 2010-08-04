@@ -32,7 +32,8 @@
 - (void) powerDown:(id) sender;
 - (void) sleep:(id) sender;
 - (void) wakeUp:(id) sender;
-- (void) restart:(id) sender;
+- (void) coldRestart:(id) sender;
+- (void) warmRestart:(id) sender;
 - (void) debuggerBreak:(id) sender;
 
 @end

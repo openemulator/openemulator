@@ -54,7 +54,6 @@
 		[item setToolTip:NSLocalizedString(@"Initiate power-down.",
 										   "Document toolbar item label")];
 		[item setImage:[NSImage imageNamed:@"TBPowerDown.png"]];
-		[item setTarget:document];
 		[item setAction:@selector(powerDown:)];
 	}
 	else if ([ident isEqualToString:@"Sleep"])
@@ -66,7 +65,6 @@
 		[item setToolTip:NSLocalizedString(@"Initiate low power mode.",
 										   "Document toolbar item label")];
 		[item setImage:[NSImage imageNamed:@"TBSleep.png"]];
-		[item setTarget:document];
 		[item setAction:@selector(sleep:)];
 	}
 	else if ([ident isEqualToString:@"Wake Up"])
@@ -78,21 +76,30 @@
 		[item setToolTip:NSLocalizedString(@"Initiate full power state.",
 										   "Document toolbar item label")];
 		[item setImage:[NSImage imageNamed:@"TBWakeUp.png"]];
-		[item setTarget:document];
 		[item setAction:@selector(wakeUp:)];
 	}
-	else if ([ident isEqualToString:@"Restart"])
+	else if ([ident isEqualToString:@"Cold Restart"])
 	{
-		[item setLabel:NSLocalizedString(@"Restart",
+		[item setLabel:NSLocalizedString(@"Cold Restart",
 										 "Document toolbar item label")];
-		[item setPaletteLabel:NSLocalizedString(@"Restart",
+		[item setPaletteLabel:NSLocalizedString(@"Cold Restart",
 												"Document toolbar item label")];
 		[item setToolTip:NSLocalizedString(@"Restart the system at the most "
 										   " primitive level.",
 										   "Document toolbar item label")];
-		[item setImage:[NSImage imageNamed:@"TBRestart.png"]];
-		[item setTarget:document];
-		[item setAction:@selector(restart:)];
+		[item setImage:[NSImage imageNamed:@"TBColdRestart.png"]];
+		[item setAction:@selector(coldRestart:)];
+	}
+	else if ([ident isEqualToString:@"Warm Restart"])
+	{
+		[item setLabel:NSLocalizedString(@"Warm Restart",
+										 "Document toolbar item label")];
+		[item setPaletteLabel:NSLocalizedString(@"Warm Restart",
+												"Document toolbar item label")];
+		[item setToolTip:NSLocalizedString(@"Restart the operating system.",
+										   "Document toolbar item label")];
+		[item setImage:[NSImage imageNamed:@"TBWarmRestart.png"]];
+		[item setAction:@selector(warmRestart:)];
 	}
 	else if ([ident isEqualToString:@"Debugger Break"])
 	{
@@ -103,7 +110,6 @@
 		[item setToolTip:NSLocalizedString(@"Break into the operating system debugger.",
 										   "Document toolbar item label")];
 		[item setImage:[NSImage imageNamed:@"TBDebuggerBreak.png"]];
-		[item setTarget:document];
 		[item setAction:@selector(debuggerBreak:)];
 	}
 	else if ([ident isEqualToString:@"Info"])
@@ -139,7 +145,8 @@
 			@"Power Down",
 			@"Sleep",
 			@"Wake Up",
-			@"Restart",
+			@"Cold Restart",
+			@"Warm Restart",
 			@"Debugger Break",
 			@"Info",
 			NSToolbarSeparatorItemIdentifier,

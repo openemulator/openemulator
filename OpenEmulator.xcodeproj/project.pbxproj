@@ -72,6 +72,8 @@
 		008E3E5A11B0E725008621B7 /* composite1Bit.c in Sources */ = {isa = PBXBuildFile; fileRef = 008E3E5211B0E725008621B7 /* composite1Bit.c */; };
 		008E3E5C11B0E725008621B7 /* compositeCGA.c in Sources */ = {isa = PBXBuildFile; fileRef = 008E3E5411B0E725008621B7 /* compositeCGA.c */; };
 		008E3E5E11B0E725008621B7 /* compositeSignalProcessing.c in Sources */ = {isa = PBXBuildFile; fileRef = 008E3E5611B0E725008621B7 /* compositeSignalProcessing.c */; };
+		0095DF8F1209D0B700C127F5 /* TBColdRestart.png in Resources */ = {isa = PBXBuildFile; fileRef = 0095DF8D1209D0B700C127F5 /* TBColdRestart.png */; };
+		0095DF901209D0B700C127F5 /* TBWarmRestart.png in Resources */ = {isa = PBXBuildFile; fileRef = 0095DF8E1209D0B700C127F5 /* TBWarmRestart.png */; };
 		009B4F2711639D7700E9A6F9 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009B4F2611639D7700E9A6F9 /* GLUT.framework */; };
 		00A0B8041069761A007930A5 /* Document.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00A0B8031069761A007930A5 /* Document.mm */; };
 		00A1F31411EAEB76001511D0 /* Tablet.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00A1F31211EAEB76001511D0 /* Tablet.xib */; };
@@ -89,7 +91,6 @@
 		00B7038E1135ACAD005E4B65 /* OEPackage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B7037B1135AC91005E4B65 /* OEPackage.cpp */; };
 		00B974B410701DDA00BD1402 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = 00B974AD10701DCD00BD1402 /* sounds */; };
 		00BADDC51100EDC600EB0344 /* ConnectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00BADD451100BE8300EB0344 /* ConnectorViewController.m */; };
-		00BB4D591086C1160071B584 /* TBRestart.png in Resources */ = {isa = PBXBuildFile; fileRef = 00BB4D561086C1160071B584 /* TBRestart.png */; };
 		00BB4D5B1086C1160071B584 /* TBSleep.png in Resources */ = {isa = PBXBuildFile; fileRef = 00BB4D581086C1160071B584 /* TBSleep.png */; };
 		00C3CF9011F557A000EA2453 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00C3CF8D11F557A000EA2453 /* main.cpp */; };
 		00C3CF9111F557A000EA2453 /* SDLMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 00C3CF8F11F557A000EA2453 /* SDLMain.m */; };
@@ -286,6 +287,8 @@
 		008E3E5511B0E725008621B7 /* compositeCGA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = compositeCGA.h; sourceTree = "<group>"; };
 		008E3E5611B0E725008621B7 /* compositeSignalProcessing.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = compositeSignalProcessing.c; sourceTree = "<group>"; };
 		008E3E5711B0E725008621B7 /* compositeSignalProcessing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = compositeSignalProcessing.h; sourceTree = "<group>"; };
+		0095DF8D1209D0B700C127F5 /* TBColdRestart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = TBColdRestart.png; path = macosx/Images/TBColdRestart.png; sourceTree = "<group>"; };
+		0095DF8E1209D0B700C127F5 /* TBWarmRestart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = TBWarmRestart.png; path = macosx/Images/TBWarmRestart.png; sourceTree = "<group>"; };
 		00984D9711A73B1000B9C0B5 /* CompositeMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompositeMonitor.h; sourceTree = "<group>"; };
 		00984D9811A73B1000B9C0B5 /* CompositeMonitor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CompositeMonitor.cpp; sourceTree = "<group>"; };
 		009B4F2611639D7700E9A6F9 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = /System/Library/Frameworks/GLUT.framework; sourceTree = "<absolute>"; };
@@ -318,7 +321,6 @@
 		00B974AD10701DCD00BD1402 /* sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; path = sounds; sourceTree = "<group>"; };
 		00BADD441100BE8300EB0344 /* ConnectorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConnectorViewController.h; sourceTree = "<group>"; };
 		00BADD451100BE8300EB0344 /* ConnectorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConnectorViewController.m; sourceTree = "<group>"; };
-		00BB4D561086C1160071B584 /* TBRestart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TBRestart.png; sourceTree = "<group>"; };
 		00BB4D581086C1160071B584 /* TBSleep.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TBSleep.png; sourceTree = "<group>"; };
 		00C07E350FD27CCF004E0D3D /* PRGeneral.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PRGeneral.png; sourceTree = "<group>"; };
 		00C3CF8D11F557A000EA2453 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
@@ -463,7 +465,6 @@
 			isa = PBXGroup;
 			children = (
 				00C8AA0610103D6A006A5734 /* OSDPause.png */,
-				00BB4D561086C1160071B584 /* TBRestart.png */,
 				00BB4D581086C1160071B584 /* TBSleep.png */,
 				00C8AA0710103D6A006A5734 /* OSDPower.png */,
 				00F86BE1100FD4F60016867D /* IPSoundMax.png */,
@@ -723,6 +724,8 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				0095DF8D1209D0B700C127F5 /* TBColdRestart.png */,
+				0095DF8E1209D0B700C127F5 /* TBWarmRestart.png */,
 				00A1F31211EAEB76001511D0 /* Tablet.xib */,
 				0032969C11C5AEA7003FD49A /* TBDebuggerBreak.png */,
 				0032967011C5A7B5003FD49A /* IPMount.png */,
@@ -940,7 +943,6 @@
 				00C8AA0C10103D6A006A5734 /* OSDPower.png in Resources */,
 				00C6C0C110602151004D084B /* roms in Resources */,
 				005E5F771086B16C00E573D4 /* Inspector.xib in Resources */,
-				00BB4D591086C1160071B584 /* TBRestart.png in Resources */,
 				00BB4D5B1086C1160071B584 /* TBSleep.png in Resources */,
 				00D1958D1093712E008FB014 /* Chooser.xib in Resources */,
 				0011696510E7CC59007A5EFB /* IPStorageSel.png in Resources */,
@@ -956,6 +958,8 @@
 				0032967D11C5A7B5003FD49A /* TBWakeUp.png in Resources */,
 				0032969D11C5AEA7003FD49A /* TBDebuggerBreak.png in Resources */,
 				00A1F31411EAEB76001511D0 /* Tablet.xib in Resources */,
+				0095DF8F1209D0B700C127F5 /* TBColdRestart.png in Resources */,
+				0095DF901209D0B700C127F5 /* TBWarmRestart.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

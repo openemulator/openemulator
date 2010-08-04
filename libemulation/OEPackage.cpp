@@ -37,7 +37,7 @@ OEPackage::~OEPackage()
 
 void OEPackage::init()
 {
-	openState = false;
+	is_open = false;
 	
 	zip = NULL;
 }
@@ -57,25 +57,25 @@ bool OEPackage::open(string path)
 	if (isPackage)
 	{
 		makeDirectory(path);
-		openState = isPathValid(path);
+		is_open = isPathValid(path);
 	}
 	else
 	{
 		zip = zip_open(path.c_str(), ZIP_CREATE, NULL);
-		openState = (zip != NULL);
+		is_open = (zip != NULL);
 	}
 	
-	return openState;
+	return is_open;
 }
 
 bool OEPackage::isOpen()
 {
-	return openState;
+	return is_open;
 }
 
 void OEPackage::close()
 {
-	openState = false;
+	is_open = false;
 	
 	if (zip)
 		zip_close(zip);
@@ -86,7 +86,7 @@ bool OEPackage::readFile(string localPath, OEData *data)
 {
 	bool error = true;
 	
-	if (!openState)
+	if (!is_open)
 		return false;
 	
 	if (zip)
@@ -132,7 +132,7 @@ bool OEPackage::writeFile(string localPath, OEData *data)
 {
 	bool error = true;
 	
-	if (!openState)
+	if (!is_open)
 		return false;
 	
 	if (zip)

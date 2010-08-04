@@ -14,8 +14,6 @@
 
 ROM::ROM()
 {
-	mmu = NULL;
-	
 	memory = NULL;
 	datap = NULL;
 	
@@ -42,36 +40,10 @@ void ROM::setMemory(OEData *data)
 	datap = &memory->front();
 }
 
-bool ROM::setProperty(const string &name, const string &value)
-{
-	if (name == "mmuMap")
-		mmuMap = value;
-	else
-		return false;
-	
-	return true;
-}
-
 bool ROM::setResource(const string &name, OEData *data)
 {
 	if (name == "image")
 		setMemory(data);
-	else
-		return false;
-	
-	return true;
-}
-
-bool ROM::connect(const string &name, OEComponent *component)
-{
-	if (name == "mmu")
-	{
-		if (mmu)
-			component->postEvent(NULL, ADDRESSDECODER_MAP, &mmuMap);
-		mmu = component;
-		if (mmu)
-			component->postEvent(this, ADDRESSDECODER_MAP, &mmuMap);
-	}
 	else
 		return false;
 	

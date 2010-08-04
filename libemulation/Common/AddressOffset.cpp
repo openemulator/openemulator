@@ -18,9 +18,7 @@ AddressOffset::AddressOffset()
 
 bool AddressOffset::setProperty(const string &name, const string &value)
 {
-	if (name == "mmuMap")
-		mmuMap = value;
-	else if (name == "offset")
+	if (name == "offset")
 		offset = getInt(value);
 	else
 		return false;
@@ -30,15 +28,7 @@ bool AddressOffset::setProperty(const string &name, const string &value)
 
 bool AddressOffset::connect(const string &name, OEComponent *component)
 {
-	if (name == "mmu")
-	{
-		if (mmu)
-			component->postEvent(NULL, ADDRESSDECODER_MAP, &mmuMap);
-		mmu = component;
-		if (mmu)
-			component->postEvent(this, ADDRESSDECODER_MAP, &mmuMap);
-	}
-	else if (name == "component")
+if (name == "component")
 		this->component = component;
 	else
 		return false;

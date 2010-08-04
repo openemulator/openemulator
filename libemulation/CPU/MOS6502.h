@@ -9,14 +9,7 @@
  */
 
 #include "OEComponent.h"
-
-// Events
-enum
-{
-	CPU_ASSERT_RESET,
-	CPU_ASSERT_IRQ,
-	CPU_ASSERT_NMI,
-};
+#include "Bus.h"
 
 class MOS6502 : public OEComponent
 {
@@ -27,8 +20,11 @@ public:
 	bool getProperty(const string &name, string &value);
 	bool connect(const string &name, OEComponent *component);
 	
+	void notify(OEComponent *component, int notification, void *data);
+	
 private:
 	OEComponent *memory;
+	OEComponent *bus;
 	
 	OEPair ppc;
 	OEPair pc;

@@ -105,7 +105,7 @@
 	((OEPA *)oepa)->setPlayThrough([defaults floatForKey:@"OEPlayThrough"]);
 	((OEPA *)oepa)->setVolume([defaults floatForKey:@"OEVolume"]);
 	
-//	((OEPA *)oepa)->open();
+	((OEPA *)oepa)->open();
 	
 	[defaults addObserver:self
 			   forKeyPath:@"OEFullDuplex"

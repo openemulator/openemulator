@@ -6,7 +6,7 @@
         <property name="notes" value="" />
         <property name="powerState" value="0" />
         <property name="videoWindow" value="-1 -1 768 576" />
-        <property name="hidMouseCapture" value="1" />
+        <property name="hidMouseCapture" value="0" />
     </component>
 </device>
 
@@ -18,9 +18,10 @@
         <property name="crystal" value="14.31818MHz" />
         <property name="divider" value="14" />
         <property name="floatingBus" value="0xff" />
+        <property name="resetOnPowerOn" value="0" />
         <connection name="host" ref="host:host" />
         <connection name="cpu" ref="cpu" />
-        <connection name="mmu" ref="" />
+        <connection name="mmu" ref="mmu" />
         <connection name="slot1" ref="" />
         <connection name="slot2" ref="" />
     </component>
@@ -38,24 +39,28 @@
         <property name="addressSize" value="16" />
         <property name="blockSize" value="8" />
         <connection name="bus" value="bus" />
+        <connection name="component1" ref="ram1" />
+        <property name="map1" value="0x0000-0x0fff" />
+        <connection name="component2" ref="io" />
+        <property name="map2" value="0xc000-0xcfff" />
+        <connection name="component1" ref="ram2" />
+        <property name="map3" value="0xe000-0xefff" />
+        <connection name="component2" ref="rom" />
+        <property name="map4" value="0xf000-0xffff" />
     </component>
     <component name="ram1" class="RAM">
-        <connection name="memoryMap" ref="mmu" />
-        <property name="map" value="0x0000-0x0fff" />
         <data name="image" src="${REF}.bin" />
         <property name="size" value="0x1000" />
         <connection name="host" ref="host:host" />
     </component>
     <component name="io" class="AddressDecoder">
-        <connection name="memoryMap" ref="mmu" />
-        <property name="map" value="0xc000-0xcfff" />
         <property name="addressSize" value="5" />
         <property name="blockSize" value="4" />
         <connection name="bus" value="bus" />
+        <connection name="component1" ref="pia" />
+        <property name="map1" value="0x10-0x1f" />
     </component>
     <component name="pia" class="MC6821">
-        <connection name="memoryMap" ref="io" />
-        <property name="map" value="0x10-0x1f" />
         <connection name="bus" ref="bus" />
         <connection name="portA" ref="" />
         <property name="controlA" value="0" />
@@ -77,22 +82,18 @@
         <connection name="pia" ref="pia" />
     </component>
     <component name="video" class="Apple1Video">
-        <resource name="charset" src="roms/Signetics 2513 Video ROM.bin" />
         <connection name="host" ref="host:host" />
+        <resource name="charset" src="roms/Signetics 2513 Video ROM.bin" />
         <connection name="bus" ref="bus" />
         <connection name="pia" ref="pia" />
         <connection name="monitor" ref="dev1:monitor" />
     </component>
     <component name="ram2" class="RAM">
-        <connection name="memoryMap" ref="mmu" />
-        <property name="map" value="0xe000-0xefff" />
         <data name="image" src="${REF}.bin" />
         <property name="size" value="0x1000" />
         <connection name="host" ref="host:host" />
     </component>
     <component name="rom" class="ROM">
-        <connection name="memoryMap" ref="mmu" />
-        <property name="map" value="R0xf000-0xffff" />
         <resource name="image" src="roms/Apple I Monitor ROM.bin" />
     </component>
 </device>

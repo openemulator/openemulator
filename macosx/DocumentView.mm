@@ -416,9 +416,14 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	((OEHID *)oehid)->sendSystemEvent(HOST_HID_S_WAKEUP);
 }
 
-- (void)restart:(id)sender
+- (void)coldRestart:(id)sender
 {
 	((OEHID *)oehid)->sendSystemEvent(HOST_HID_S_COLDRESTART);
+}
+
+- (void)warmRestart:(id)sender
+{
+	((OEHID *)oehid)->sendSystemEvent(HOST_HID_S_WARMRESTART);
 }
 
 - (void)debuggerBreak:(id)sender

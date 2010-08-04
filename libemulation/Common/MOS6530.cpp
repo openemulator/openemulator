@@ -15,8 +15,6 @@
 
 MOS6530::MOS6530()
 {
-	mmu = NULL;
-	
 	bus = NULL;
 	
 	portA = NULL;
@@ -27,9 +25,7 @@ MOS6530::MOS6530()
 
 bool MOS6530::setProperty(const string &name, const string &value)
 {
-	if (name == "mmuMap")
-		mmuMap = getInt(value);
-	else if (name == "directionA")
+	if (name == "directionA")
 		directionA = getInt(value);
 	else if (name == "dataA")
 		dataA = getInt(value);
@@ -61,15 +57,7 @@ bool MOS6530::getProperty(const string &name, string &value)
 
 bool MOS6530::connect(const string &name, OEComponent *component)
 {
-	if (name == "mmu")
-	{
-		if (mmu)
-			component->postEvent(NULL, ADDRESSDECODER_MAP, &mmuMap);
-		mmu = component;
-		if (mmu)
-			component->postEvent(this, ADDRESSDECODER_MAP, &mmuMap);
-	}
-	else if (name == "bus")
+	if (name == "bus")
 	{
 		if (bus)
 			bus->removeObserver(this, BUS_RESET_ASSERTED);

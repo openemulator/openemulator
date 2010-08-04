@@ -15,6 +15,9 @@ MOS6502::MOS6502()
 {
 	sp.b.h = 0x01;
 	zp.d = 0;
+	
+	memory = NULL;
+	bus = NULL;
 }
 
 bool MOS6502::setProperty(const string &name, const string &value)
@@ -61,12 +64,50 @@ bool MOS6502::connect(const string &name, OEComponent *component)
 {
 	if (name == "memory")
 		memory = component;
+	if (name == "bus")
+	{
+		if (bus)
+		{
+			bus->removeObserver(this, BUS_RESET_ASSERTED);
+			bus->removeObserver(this, BUS_IRQ_ASSERTED);
+			bus->removeObserver(this, BUS_IRQ_CLEARED);
+			bus->removeObserver(this, BUS_NMI_ASSERTED);
+		}
+		bus = component;
+		if (bus)
+		{
+			bus->addObserver(this, BUS_RESET_ASSERTED);
+			bus->addObserver(this, BUS_IRQ_ASSERTED);
+			bus->addObserver(this, BUS_IRQ_CLEARED);
+			bus->addObserver(this, BUS_NMI_ASSERTED);
+		}
+	}
 	else
 		return false;
 	
 	return true;
 }
 
+void MOS6502::notify(OEComponent *component, int notification, void *data)
+{
+	switch (notification)
+	{
+		case BUS_RESET_ASSERTED:
+			reset();
+			break;
+		case BUS_IRQ_ASSERTED:
+			reset();
+			break;
+		case BUS_IRQ_CLEARED:
+			reset();
+			break;
+		case BUS_NMI_ASSERTED:
+			reset();
+			break;
+	}
+}
+	
+	
 void MOS6502::reset()
 {
 	sp.b.l = 0xff;
@@ -74,20 +115,6 @@ void MOS6502::reset()
 	pendingIRQ = 0;
 	afterCLI = 0;
 	irqCount = 0;
-}
-
-void MOS6502::assertNMI()
-{
-//	OELog("M6502 set_nmi_line(ASSERT)\n");
-	EAD = MOS6502_NMI_VEC;
-	icount -= 2;
-	PUSH(PCH);
-	PUSH(PCL);
-	PUSH(P & ~F_B);
-	P |= F_I;		/* set I flag */
-	PCL = RDMEM(EAD);
-	PCH = RDMEM(EAD+1);
-//	OELog("M6502 takes NMI (" + PCD + ")\n");
 }
 
 void MOS6502::assertIRQ()
@@ -110,6 +137,20 @@ void MOS6502::assertIRQ()
 		//          cpustate->pending_irq = 2;
 		//cpustate->int_occured = icount;
 	}*/
+}
+
+void MOS6502::assertNMI()
+{
+	//	OELog("M6502 set_nmi_line(ASSERT)\n");
+	EAD = MOS6502_NMI_VEC;
+	icount -= 2;
+	PUSH(PCH);
+	PUSH(PCL);
+	PUSH(P & ~F_B);
+	P |= F_I;		/* set I flag */
+	PCL = RDMEM(EAD);
+	PCH = RDMEM(EAD+1);
+	//	OELog("M6502 takes NMI (" + PCD + ")\n");
 }
 
 void MOS6502::execute()
