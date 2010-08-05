@@ -9,3 +9,13 @@
  */
 
 #include "Audio1Bit.h"
+
+bool Audio1Bit::connect(const string &name, OEComponent *component)
+{
+	if (name == "host")
+		host = component;
+	else
+		return false;
+	
+	return true;
+}

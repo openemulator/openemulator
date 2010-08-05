@@ -12,4 +12,12 @@
 
 class AudioPLL : public OEComponent
 {
+public:
+	bool setProperty(const string &name, const string &value);
+	bool connect(const string &name, OEComponent *component);
+
+private:
+	OEComponent *host;
+	
+	float frequency;
 };

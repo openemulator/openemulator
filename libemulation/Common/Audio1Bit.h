@@ -12,4 +12,9 @@
 
 class Audio1Bit : public OEComponent
 {
+public:
+	bool connect(const string &name, OEComponent *component);
+
+private:
+	OEComponent *host;
 };

@@ -8,7 +8,7 @@
  * Controls the Apple I Video
  */
 
-#include "OEComponent.h"
+#include "Terminal.h"
 
 #define APPLE1VIDEO_TERM_WIDTH 40
 #define APPLE1VIDEO_TERM_HEIGHT 24

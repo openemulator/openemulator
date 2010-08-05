@@ -70,6 +70,8 @@ bool AddressDecoder::mapComponent(OEComponent *component, const string &value)
 				writeMap[j] = component;
 		}
 	}
+	
+	return true;
 }
 
 bool AddressDecoder::getAddressRange(OEAddressRange &range, const string &value)
