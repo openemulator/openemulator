@@ -13,7 +13,7 @@
 #define APPLE1VIDEO_TERM_WIDTH 40
 #define APPLE1VIDEO_TERM_HEIGHT 24
 
-class Apple1Terminal : public OEComponent
+class Apple1Terminal : public Terminal
 {
 public:
 	Apple1Terminal();

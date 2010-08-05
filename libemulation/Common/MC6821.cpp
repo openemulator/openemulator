@@ -231,7 +231,7 @@ bool MC6821::postEvent(OEComponent *component, int event, void *data)
 					setControlB(controlB | MC6821_CR_IRQ2FLAG);
 			}
 			if (cb2 != value)
-				OEComponent::notify(this, MC6821_CB2_CHANGED, NULL);
+				OEComponent::notify(this, MC6821_CB2_CHANGED, &value);
 			cb2 = value;
 			
 			return true;

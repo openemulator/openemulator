@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dml PUBLIC "-//OPENEMULATOR//DTD DML 1.0//EN" "http://www.openemulator.org/DTDs/dml-1.0.dtd">
-<dml version="1.0" label="MOS KIM-1" image="MOS KIM-1.png" description="" group="Early microcomputers">
+<dml version="1.0" label="Microtan65" image="Tangerine Microtan65.png" description="" group="Early microcomputers">
 <device name="host">
     <component name="host" class="Host">
         <property name="notes" value="" />
@@ -10,8 +10,7 @@
     </component>
 </device>
 
-<device name="dev0" label="KIM-1">
-    <inlet ref="kim1io.terminal" type="Terminal" label="Terminal connector" image="Terminal connector.png" />
+<device name="dev0" label="Microtan65">
     <component name="bus" class="Bus">
         <property name="crystal" value="1.0MHz" />
         <property name="divider" value="1" />
@@ -19,6 +18,7 @@
         <property name="resetOnPowerOn" value="0" />
         <connection name="host" ref="host:host" />
         <connection name="cpu" ref="cpu" />
+        <connection name="mmu" ref="" />
     </component>
     <component name="cpu" class="MOS6502">
         <property name="a" value="0" />
@@ -51,18 +51,18 @@
     </component>
     <component name="ram" class="RAM">
         <data name="image" src="${REF}.bin" />
-        <property name="size" value="0x400" />
+        <property name="size" value="0x0400" />
         <connection name="host" ref="host:host" />
     </component>
     <component name="rriot1" class="MOS6530">
         <connection name="bus" ref="bus" />
-        <connection name="portA" ref="kim1IO" />
+        <connection name="portA" ref="keyboard" />
         <property name="directionA" value="0" />
         <property name="dataA" value="0" />
-        <connection name="portB" ref="kim1IO" />
+        <connection name="portB" ref="video" />
         <property name="directionB" value="0" />
         <property name="dataB" value="0" />
-        <connection name="busB" ref="" />
+        <connection name="busB" ref="bus" />
     </component>
     <component name="rriot2" class="MOS6530">
         <connection name="bus" ref="bus" />
@@ -75,12 +75,12 @@
     </component>
     <component name="rriot1RAM" class="RAM">
         <data name="image" src="${REF}.bin" />
-        <property name="size" value="0x40" />
+        <property name="size" value="0x0040" />
         <connection name="host" ref="host:host" />
     </component>
     <component name="rriot2RAM" class="RAM">
         <data name="image" src="${REF}.bin" />
-        <property name="size" value="0x40" />
+        <property name="size" value="0x0040" />
         <connection name="host" ref="host:host" />
     </component>
     <component name="rriot1ROM" class="ROM">
@@ -88,20 +88,6 @@
     </component>
     <component name="rriot2ROM" class="ROM">
         <resource name="image" src="roms/MOS KIM-1 6530-003 ROM.bin" />
-    </component>
-    <component name="kim1IO" class="KIM1IO">
-        <connection name="host" ref="host:host" />
-        <connection name="terminal" ref="" />
-        <connection name="audioOut" ref="audioOut" />
-        <connection name="audioIn" ref="audioOut" />
-        <resource name="view" src="images/MOS KIM-1 View.png" />
-    </component>
-    <component name="audioOut" class="Audio1Bit">
-        <connection name="host" ref="host:host" />
-    </component>
-    <component name="audioIn" class="AudioPLL">
-        <connection name="host" ref="host:host" />
-        <property name="frequency" value="3400" />
     </component>
 </device>
 

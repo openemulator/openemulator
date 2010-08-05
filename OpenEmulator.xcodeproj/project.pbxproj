@@ -46,6 +46,8 @@
 		003FB21410BA3D5D00D3697B /* devices in Resources */ = {isa = PBXBuildFile; fileRef = 00E8A393108CCAA200D0A137 /* devices */; };
 		0041614011E82D7300986586 /* DocumentView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0041613F11E82D7300986586 /* DocumentView.mm */; };
 		0048673B11C4478200ECD52C /* Host.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0048673911C4478200ECD52C /* Host.cpp */; };
+		005256BF120A63B300A6BC75 /* Debugger.xib in Resources */ = {isa = PBXBuildFile; fileRef = 005256BD120A63B300A6BC75 /* Debugger.xib */; };
+		005256E6120A841200A6BC75 /* Terminal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 005256E5120A841200A6BC75 /* Terminal.cpp */; };
 		005398DB113A00CA00CA7CE4 /* ROM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 005397E31139EC1F00CA7CE4 /* ROM.cpp */; };
 		005398DC113A00CA00CA7CE4 /* RAM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 005397E01139EC1800CA7CE4 /* RAM.cpp */; };
 		005486CA0FDC84E500DBCFA8 /* Sparkle.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 001F56F80FD1E8E500EA246A /* Sparkle.framework */; };
@@ -76,7 +78,6 @@
 		0095E0B61209E14800C127F5 /* Apple1IO.h in Headers */ = {isa = PBXBuildFile; fileRef = 0095E0B21209E14700C127F5 /* Apple1IO.h */; };
 		0095E0B71209E14800C127F5 /* Apple1Terminal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0095E0B31209E14700C127F5 /* Apple1Terminal.cpp */; };
 		0095E0B81209E14800C127F5 /* Apple1Terminal.h in Headers */ = {isa = PBXBuildFile; fileRef = 0095E0B41209E14700C127F5 /* Apple1Terminal.h */; };
-		0095E0D21209E2C300C127F5 /* Debugger.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0095E0D11209E2C300C127F5 /* Debugger.xib */; };
 		0095E0D61209E3E200C127F5 /* DebuggerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0095E0D51209E3E200C127F5 /* DebuggerController.m */; };
 		009B4F2711639D7700E9A6F9 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009B4F2611639D7700E9A6F9 /* GLUT.framework */; };
 		00A0B8041069761A007930A5 /* Document.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00A0B8031069761A007930A5 /* Document.mm */; };
@@ -253,6 +254,9 @@
 		0041613F11E82D7300986586 /* DocumentView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DocumentView.mm; sourceTree = "<group>"; };
 		0048673811C4478200ECD52C /* Host.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Host.h; sourceTree = "<group>"; };
 		0048673911C4478200ECD52C /* Host.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Host.cpp; sourceTree = "<group>"; };
+		005256BE120A63B300A6BC75 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Debugger.xib; sourceTree = "<group>"; };
+		005256E4120A841200A6BC75 /* Terminal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Terminal.h; sourceTree = "<group>"; };
+		005256E5120A841200A6BC75 /* Terminal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Terminal.cpp; sourceTree = "<group>"; };
 		005397DF1139EC1800CA7CE4 /* RAM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RAM.h; sourceTree = "<group>"; };
 		005397E01139EC1800CA7CE4 /* RAM.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RAM.cpp; sourceTree = "<group>"; };
 		005397E21139EC1F00CA7CE4 /* ROM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ROM.h; sourceTree = "<group>"; };
@@ -295,7 +299,6 @@
 		0095E0B21209E14700C127F5 /* Apple1IO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Apple1IO.h; sourceTree = "<group>"; };
 		0095E0B31209E14700C127F5 /* Apple1Terminal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Apple1Terminal.cpp; sourceTree = "<group>"; };
 		0095E0B41209E14700C127F5 /* Apple1Terminal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Apple1Terminal.h; sourceTree = "<group>"; };
-		0095E0D11209E2C300C127F5 /* Debugger.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Debugger.xib; sourceTree = "<group>"; };
 		0095E0D41209E3E200C127F5 /* DebuggerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DebuggerController.h; sourceTree = "<group>"; };
 		0095E0D51209E3E200C127F5 /* DebuggerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DebuggerController.m; sourceTree = "<group>"; };
 		00984D9711A73B1000B9C0B5 /* CompositeMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompositeMonitor.h; sourceTree = "<group>"; };
@@ -615,6 +618,8 @@
 				0016DA2B120674460043AFA6 /* AddressDecoder.cpp */,
 				0016DA2E120674D00043AFA6 /* AddressOffset.h */,
 				0016DA2F120674D00043AFA6 /* AddressOffset.cpp */,
+				005256E4120A841200A6BC75 /* Terminal.h */,
+				005256E5120A841200A6BC75 /* Terminal.cpp */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -737,6 +742,7 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				005256BD120A63B300A6BC75 /* Debugger.xib */,
 				0095DF8D1209D0B700C127F5 /* TBColdRestart.png */,
 				0095DF8E1209D0B700C127F5 /* TBWarmRestart.png */,
 				00A1F31211EAEB76001511D0 /* Tablet.xib */,
@@ -768,7 +774,6 @@
 				0008FCD80FBA5D72005E876E /* Info.plist */,
 				000A79520FBA4A8400A0F12E /* OpenEmulatorHelp */,
 				000A79070FBA49C500A0F12E /* Images */,
-				0095E0D11209E2C300C127F5 /* Debugger.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -975,7 +980,7 @@
 				00A1F31411EAEB76001511D0 /* Tablet.xib in Resources */,
 				0095DF8F1209D0B700C127F5 /* TBColdRestart.png in Resources */,
 				0095DF901209D0B700C127F5 /* TBWarmRestart.png in Resources */,
-				0095E0D21209E2C300C127F5 /* Debugger.xib in Resources */,
+				005256BF120A63B300A6BC75 /* Debugger.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1067,6 +1072,7 @@
 				00C3D0DA11F5584C00EA2453 /* OEPAEmulation.cpp in Sources */,
 				00D81D0C12034A20004068EB /* OEDebugger.cpp in Sources */,
 				0095E0D61209E3E200C127F5 /* DebuggerController.m in Sources */,
+				005256E6120A841200A6BC75 /* Terminal.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1097,6 +1103,14 @@
 				003318AE1101492B00CC1782 /* English */,
 			);
 			name = Connector.xib;
+			sourceTree = "<group>";
+		};
+		005256BD120A63B300A6BC75 /* Debugger.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				005256BE120A63B300A6BC75 /* English */,
+			);
+			name = Debugger.xib;
 			sourceTree = "<group>";
 		};
 		005E5F751086B16C00E573D4 /* Inspector.xib */ = {

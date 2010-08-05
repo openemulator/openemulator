@@ -10,3 +10,24 @@
 
 #include "AudioPLL.h"
 
+bool AudioPLL::setProperty(const string &name, const string &value)
+{
+	if (name == "floatingBus")
+		floatingBus = getInt(value);
+	else if (name == "crystal")
+	{
+		crystal = getInt(value);
+		updateFrequency();
+	}
+	else if (name == "divider")
+	{
+		divider = getInt(value);
+		updateFrequency();
+	}
+	else if (name == "resetOnPowerOn")
+		resetOnPowerOn = getInt(value);
+	else
+		return false;
+	
+	return true;
+}

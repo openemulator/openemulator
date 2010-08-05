@@ -12,4 +12,18 @@
 
 class KIM1IO : public OEComponent
 {
+public:
+	KIM1IO();
+	~KIM1IO();
+	
+	bool setResource(const string &name, OEData *data);
+	bool connect(const string &name, OEComponent *component);
+
+private:
+	OEComponent *host;
+	OEComponent *audioOut;
+	OEComponent *audioIn;
+	OEComponent *terminal;
+	
+	OEData *view;
 };
