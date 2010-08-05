@@ -14,9 +14,9 @@
 			<bool key="EncodedWithXMLCoder">YES</bool>
 			<integer value="186"/>
 			<integer value="746"/>
-			<integer value="1392"/>
 			<integer value="679"/>
 			<integer value="185"/>
+			<integer value="1392"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -446,22 +446,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				<int key="NSvFlags">274</int>
 				<object class="NSMutableArray" key="NSSubviews">
 					<bool key="EncodedWithXMLCoder">YES</bool>
-					<object class="NSTextField" id="1052427329">
-						<reference key="NSNextResponder" ref="881392825"/>
-						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{59, 12}, {187, 14}}</string>
-						<reference key="NSSuperview" ref="881392825"/>
-						<bool key="NSEnabled">YES</bool>
-						<object class="NSTextFieldCell" key="NSCell" id="846866621">
-							<int key="NSCellFlags">67239424</int>
-							<int key="NSCellFlags2">4325376</int>
-							<string key="NSContents">To modify, turn power off.</string>
-							<reference key="NSSupport" ref="26"/>
-							<reference key="NSControlView" ref="1052427329"/>
-							<reference key="NSBackgroundColor" ref="88397357"/>
-							<reference key="NSTextColor" ref="267004834"/>
-						</object>
-					</object>
 					<object class="NSScrollView" id="23208232">
 						<reference key="NSNextResponder" ref="881392825"/>
 						<int key="NSvFlags">4370</int>
@@ -696,22 +680,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				<int key="NSvFlags">274</int>
 				<object class="NSMutableArray" key="NSSubviews">
 					<bool key="EncodedWithXMLCoder">YES</bool>
-					<object class="NSTextField" id="285052788">
-						<reference key="NSNextResponder" ref="742328531"/>
-						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{59, 12}, {187, 14}}</string>
-						<reference key="NSSuperview" ref="742328531"/>
-						<bool key="NSEnabled">YES</bool>
-						<object class="NSTextFieldCell" key="NSCell" id="499468504">
-							<int key="NSCellFlags">67239424</int>
-							<int key="NSCellFlags2">4325376</int>
-							<string key="NSContents">To modify, turn power off.</string>
-							<reference key="NSSupport" ref="26"/>
-							<reference key="NSControlView" ref="285052788"/>
-							<reference key="NSBackgroundColor" ref="88397357"/>
-							<reference key="NSTextColor" ref="267004834"/>
-						</object>
-					</object>
 					<object class="NSButton" id="691035560">
 						<reference key="NSNextResponder" ref="742328531"/>
 						<int key="NSvFlags">292</int>
@@ -2280,7 +2248,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 							<reference ref="526259183"/>
 							<reference ref="1035444867"/>
 							<reference ref="23208232"/>
-							<reference ref="1052427329"/>
 						</object>
 						<reference key="parent" ref="0"/>
 						<string key="objectName">Expansions</string>
@@ -2317,20 +2284,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<int key="objectID">524</int>
 						<reference key="object" ref="933187327"/>
 						<reference key="parent" ref="1046620586"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">566</int>
-						<reference key="object" ref="1052427329"/>
-						<object class="NSMutableArray" key="children">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="846866621"/>
-						</object>
-						<reference key="parent" ref="881392825"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">567</int>
-						<reference key="object" ref="846866621"/>
-						<reference key="parent" ref="1052427329"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">568</int>
@@ -2482,7 +2435,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 							<reference ref="691035560"/>
 							<reference ref="246679973"/>
 							<reference ref="192795591"/>
-							<reference ref="285052788"/>
 						</object>
 						<reference key="parent" ref="0"/>
 						<string key="objectName">Storage</string>
@@ -2599,15 +2551,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<reference key="parent" ref="1035444867"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">1122</int>
-						<reference key="object" ref="285052788"/>
-						<object class="NSMutableArray" key="children">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="499468504"/>
-						</object>
-						<reference key="parent" ref="742328531"/>
-					</object>
-					<object class="IBObjectRecord">
 						<int key="objectID">1123</int>
 						<reference key="object" ref="691035560"/>
 						<object class="NSMutableArray" key="children">
@@ -2634,11 +2577,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<int key="objectID">1126</int>
 						<reference key="object" ref="353795783"/>
 						<reference key="parent" ref="691035560"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">1127</int>
-						<reference key="object" ref="499468504"/>
-						<reference key="parent" ref="285052788"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">1129</int>
@@ -3073,15 +3011,12 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<string>1107.IBAttributePlaceholdersKey</string>
 					<string>1107.IBPluginDependency</string>
 					<string>1108.IBPluginDependency</string>
-					<string>1122.IBPluginDependency</string>
-					<string>1122.ImportedFromIB2</string>
 					<string>1123.IBAttributePlaceholdersKey</string>
 					<string>1123.IBPluginDependency</string>
 					<string>1124.IBAttributePlaceholdersKey</string>
 					<string>1124.IBPluginDependency</string>
 					<string>1125.IBPluginDependency</string>
 					<string>1126.IBPluginDependency</string>
-					<string>1127.IBPluginDependency</string>
 					<string>1129.IBAttributePlaceholdersKey</string>
 					<string>1129.IBPluginDependency</string>
 					<string>1130.IBAttributePlaceholdersKey</string>
@@ -3176,9 +3111,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<string>508.ImportedFromIB2</string>
 					<string>521.IBPluginDependency</string>
 					<string>524.IBPluginDependency</string>
-					<string>566.IBPluginDependency</string>
-					<string>566.ImportedFromIB2</string>
-					<string>567.IBPluginDependency</string>
 					<string>568.IBPluginDependency</string>
 					<string>569.IBPluginDependency</string>
 					<string>569.ImportedFromIB2</string>
@@ -3243,8 +3175,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<object class="NSMutableDictionary">
 						<string key="NS.key.0">ToolTip</string>
 						<object class="IBToolTipAttribute" key="NS.object.0">
@@ -3262,7 +3192,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 							<string key="toolTip">Remove the selected disk drive.</string>
 						</object>
 					</object>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3413,7 +3342,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{284, 464}, {255, 260}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{60, 287}, {255, 299}}</string>
+					<string>{{73, 283}, {255, 299}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
@@ -3421,9 +3350,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3483,7 +3409,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{493, 26}, {255, 299}}</string>
+					<string>{{559, 133}, {255, 299}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<object class="NSMutableDictionary">
 						<string key="NS.key.0">ToolTip</string>
@@ -3494,7 +3420,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						</object>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{394, 174}, {255, 299}}</string>
+					<string>{{355, 284}, {255, 299}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 				</object>
