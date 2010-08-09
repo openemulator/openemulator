@@ -10,6 +10,41 @@
 
 #include "Host.h"
 
+void Host::setPowerState(int powerState)
+{
+	bool wasPoweredOn = (powerState >= HOST_POWERSTATE_SLEEP);
+	bool isPoweredOn = (this->powerState >= HOST_POWERSTATE_SLEEP);
+	
+	if (wasPoweredOn != isPoweredOn)
+		notify(this, isPoweredOn ? HOST_POWERED_ON : HOST_POWERED_OFF, NULL);
+	
+	this->powerState = powerState;
+	notify(this, HOST_POWERSTATE_CHANGED, &powerState);
+}
+
+bool Host::addScreen(HostVideoScreen *screen)
+{
+	videoUpdated = true;
+	
+	videoScreens.push_back(screen);
+	
+	return true;
+}
+
+bool Host::removeScreen(HostVideoScreen *screen)
+{
+	videoUpdated = true;
+	
+	HostVideoScreens::iterator first = videoScreens.begin();
+	HostVideoScreens::iterator last = videoScreens.end();
+	HostVideoScreens::iterator i = remove(first, last, screen);
+	bool found = (i != last);
+	if (found)
+		videoScreens.erase(i, last);
+	
+	return found;
+}
+
 bool Host::setProperty(const string &name, const string &value)
 {
 	if (name == "notes")
@@ -46,40 +81,13 @@ bool Host::getProperty(const string &name, string &value)
 	return true;
 }
 
-bool Host::addScreen(HostVideoScreen *screen)
-{
-	videoUpdated = true;
-	
-	videoScreens.push_back(screen);
-	
-	return true;
-}
-
-bool Host::removeScreen(HostVideoScreen *screen)
-{
-	videoUpdated = true;
-	
-	HostVideoScreens::iterator first = videoScreens.begin();
-	HostVideoScreens::iterator last = videoScreens.end();
-	HostVideoScreens::iterator i = remove(first, last, screen);
-	bool found = (i != last);
-	if (found)
-		videoScreens.erase(i, last);
-	
-	return found;
-}
-
 bool Host::postEvent(OEComponent *component, int event, void *data)
 {
 	switch(event)
 	{
 		case HOST_SET_POWERSTATE:
-		{
-			int newPowerState = *((int *) data);
-			
-			notify(this, HOST_POWERSTATE_CHANGED, &powerState);
+			setPowerState(*((int *) data));
 			break;
-		}
 			
 		case HOST_GET_POWERSTATE:
 			*((int *) data) = powerState;

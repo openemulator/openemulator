@@ -524,6 +524,8 @@ private:
 	bool hidMouseCapture;
 	int hidKeyboardLEDs;
 	
+	void setPowerState(int powerState);
+	
 	bool addScreen(HostVideoScreen *screen);
 	bool removeScreen(HostVideoScreen *screen);
 };
