@@ -23,6 +23,11 @@ OEHID::OEHID(OEPAEmulation *emulation,
 	memset(mouseButtonDown, sizeof(mouseButtonDown), 0);
 	memset(joystickButtonDown, sizeof(joystickButtonDown), 0);
 	memset(tabletButtonDown, sizeof(tabletButtonDown), 0);
+
+	string value;
+//	emulation->getProperty(HOST_DEVICE, "hidMouseCapture", value);
+	mouseCapture = (value == "1");
+	mouseCaptured = false;
 }
 
 void OEHID::sendHIDEvent(int notification, int usageId, float value)
@@ -34,7 +39,7 @@ void OEHID::sendHIDEvent(int notification, int usageId, float value)
 	if (emulation)
 		emulation->notify(HOST_DEVICE, notification, &hidEvent);
 	
-	printf("%d %d %f\n", notification, usageId, value);
+	printf("HID event: %d %d %f\n", notification, usageId, value);
 }
 
 void OEHID::sendSystemEvent(int usageId)
@@ -73,7 +78,10 @@ void OEHID::sendUnicode(int unicode)
 	if (unicode == 127)
 		unicode = 8;
 	
-	if ((unicode < 0xf700) || (unicode >= 0xf900))
+	// Discard private usage areas
+	if (((unicode < 0xe000) || (unicode > 0xf8ff)) &&
+		((unicode < 0xf0000) || (unicode > 0xffffd)) &&
+		((unicode < 0x100000) || (unicode > 0x10fffd)))
 		sendHIDEvent(HOST_HID_UNICODEKEYBOARD_CHANGED, unicode, 0);
 }
 
@@ -91,7 +99,7 @@ void OEHID::setMouseButton(int index, bool value)
 		sendHIDEvent(HOST_HID_MOUSE_CHANGED,
 					 HOST_HID_M_BUTTON1 + index,
 					 value);
-	else if (!mouseCaptured && (index == 0))
+	else if (!mouseCaptured && mouseCapture && (index == 0))
 	{
 		mouseCaptured = true;
 		setMouseCapture(emulation, true);

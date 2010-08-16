@@ -1,11 +1,11 @@
 
 /**
  * libemulation
- * Terminal
+ * Generic serial port
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls a terminal
+ * Implements a generic serial port
  */
 
 #include "OEComponent.h"
@@ -13,15 +13,16 @@
 // Notifications
 enum
 {
-	TERMINAL_RECEIVED_CHAR,
+	SERIAL_PORT_DATA_RECEIVED,
+	SERIAL_PORT_BREAK_RECEIVED,
 };
 
 // Messages
 enum
 {
+	SERIAL_PORT_BREAK,
 };
 
-class Terminal : public OEComponent
+class SerialPort : public OEComponent
 {
-	
 };

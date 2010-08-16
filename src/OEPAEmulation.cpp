@@ -128,11 +128,11 @@ int OEPAEmulation::postEvent(string ref, int message, void *data)
 	return status;
 }
 
-bool OEPAEmulation::add(string path, OEConnections &connections)
+bool OEPAEmulation::addDML(string path, OEConnections &connections)
 {
 	lock();
 	
-	bool status = OEEmulation::add(path, connections);
+	bool status = OEEmulation::addDML(path, connections);
 	
 	unlock();
 	

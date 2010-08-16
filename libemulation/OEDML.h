@@ -38,7 +38,7 @@ public:
 	bool save(string path);
 	void close();
 	
-	bool add(string path, OEConnections &connections);
+	bool addDML(string path, OEConnections &connections);
 	bool removeDevice(string deviceName);
 	
 protected:
@@ -51,8 +51,8 @@ protected:
 	xmlNodePtr getDeviceNode(string deviceName);
 	xmlNodePtr getConnectionNode(xmlNodePtr deviceNode, string ref);
 	
-	string getName(xmlNodePtr node);
-	string getRef(xmlNodePtr node);
+	string getNodeName(xmlNodePtr node);
+	string getNodeRef(xmlNodePtr node, string deviceName);
 	
 	string getDeviceName(string ref);
 	string getComponentName(string ref);
@@ -75,7 +75,7 @@ private:
 	bool validate();
 	bool dump(OEData *data);
 	
-	xmlNodePtr getChildNode(xmlNodePtr node, string tag, string name);
+	xmlNodePtr getChildNodeWithName(xmlNodePtr node, string elementName, string name);
 	
 	string filterName(string name);
 	string filterRef(string name);

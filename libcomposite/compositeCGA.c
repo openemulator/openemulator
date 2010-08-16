@@ -154,13 +154,13 @@ void compositeCGAInit(CompositeCGA convolutionTable,
 
 void compositeCGABlit(CompositeCGA convolutionTable,
 					  unsigned char *input, int width, int height,
-					  int *output, int outputPitch, int doubleScanlines)
+					  int *output, int outputPitch)
 {
 	int inputWidth = (width + 1) / 2;
 	int inputHeight = height;
 	
 	int outputNum = width / COMPOSITE_CGA_OUTPUTSIZE;
-	int outputWidth = doubleScanlines ? (width + outputPitch) * 2 : width + outputPitch;
+	int outputWidth = width + outputPitch;
 	int *frameBuffer = output;
 	
 	while (inputHeight--)
@@ -189,9 +189,6 @@ void compositeCGABlit(CompositeCGA convolutionTable,
 		input += inputWidth;
 		output += outputWidth;
 	}
-	
-	if (doubleScanlines)
-		interpolateScanlines(frameBuffer, width, height, outputPitch);
 	
 	return;
 }

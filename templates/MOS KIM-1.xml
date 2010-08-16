@@ -11,7 +11,7 @@
 </device>
 
 <device name="dev0" label="KIM-1">
-    <inlet ref="kim1io.terminal" type="Terminal" label="Terminal connector" image="Terminal connector.png" />
+    <inlet ref="kim1IO.serialPort" type="SerialPort" label="Serial Port" image="Serial Port.png" />
     <component name="bus" class="Bus">
         <property name="crystal" value="1.0MHz" />
         <property name="divider" value="1" />
@@ -91,9 +91,9 @@
     </component>
     <component name="kim1IO" class="KIM1IO">
         <connection name="host" ref="host:host" />
-        <connection name="terminal" ref="" />
+        <connection name="serialPort" ref="" />
         <connection name="audioOut" ref="audioOut" />
-        <connection name="audioIn" ref="audioOut" />
+        <connection name="audioIn" ref="audioIn" />
         <resource name="view" src="images/MOS KIM-1 View.png" />
     </component>
     <component name="audioOut" class="Audio1Bit">

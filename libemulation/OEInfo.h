@@ -38,14 +38,14 @@ typedef struct
 
 typedef vector<OEDevice *> OEDevices;
 
-typedef struct _OEPort
+typedef struct OEPortStruct
 {
 	string ref;
 	string type;
 	string label;
 	string image;
 	
-	struct _OEPort *connection;
+	struct OEPortStruct *connection;
 	
 	OEDevice *device;
 } OEPort;
@@ -61,7 +61,7 @@ public:
 	
 	bool open(string path);
 	
-	bool add(string path, OEConnections &connections);
+	bool addDML(string path, OEConnections &connections);
 	bool removeDevice(string deviceName);
 	
 	string getLabel();

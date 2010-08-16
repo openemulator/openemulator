@@ -138,28 +138,3 @@ void applyOffsetAndGain(float *rgb, float offset, float gain)
 	*rgb++ = offset + *rgb * gain;
 	*rgb++ = offset + *rgb * gain;
 }
-
-//
-// Efficient RGB mixing based on:
-// http://www.fly.net/~ant/info/rgb_mixing.html
-//
-void interpolateScanlines(int *buffer, int width, int height, int pitch)
-{
-	int line = width + pitch;
-	height--;
-	
-	while (height--)
-	{
-		int *p = buffer + line;
-		
-		for (int n = width; n; n--)
-		{
-			int x = *(p - line);
-			int y = *(p + line);
-			int m = (x + y - ((x ^ y) & 0x010101)) >> 1;
-			*p++ = m - ((m & 0xf0f0f0) >> 4);
-		}
-		
-		buffer += 2 * line;
-	}
-}

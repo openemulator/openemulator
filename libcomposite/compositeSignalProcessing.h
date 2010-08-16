@@ -52,6 +52,3 @@ void copyDecoderMatrix(float *to, const float *from);
 void transformDecoderMatrix(float *m, float saturation, float hue);
 void applyDecoderMatrix(float *rgb, float *yuv, float *m);
 void applyOffsetAndGain(float *rgb, float offset, float gain);
-
-// Pixel functions
-void interpolateScanlines(int *buffer, int width, int height, int pitch);

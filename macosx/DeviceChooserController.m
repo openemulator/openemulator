@@ -43,15 +43,15 @@
 	if (selectedItemInlets)
 		[selectedItemInlets release];
 	
-	if (category)
-		[category release];
+	if (type)
+		[type release];
 }
 
-- (void)runModal:(id)sender forCategory:(NSString *)theCategory
+- (void)runModal:(id)sender forType:(NSString *)theType
 {
-	if (category)
-		[category release];
-	category = [theCategory copy];
+	if (type)
+		[type release];
+	type = [theType copy];
 	
 	[self loadWindow];
 	
@@ -59,8 +59,8 @@
 	[self setDeviceChooserView];
 	
 	NSArray *freeInlets = [[fDocumentController currentDocument] freeInlets];
-	[deviceChooserViewController updateWithInlets:freeInlets
-									  andCategory:category];
+	[deviceChooserViewController updateForDeviceType:type
+									  withFreeInlets:freeInlets];
 	
 	[fNextButton setEnabled:([deviceChooserViewController selectedItemPath] != nil)];
 	

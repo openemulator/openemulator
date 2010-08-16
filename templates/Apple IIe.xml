@@ -32,14 +32,14 @@
 <device name="dev0" label="Apple IIe">
     <inlet ref="video.monitor" type="AppleIICompositeVideo" category="peripheral" label="Video Connector" image="Apple II Video Connector.png" />
     <inlet ref="game.port" type="AppleIIGame" category="peripheral" label="Game Port" image="Apple II Game Port.png" />
-    <inlet ref="slot.auxslot" type="AppleIIAuxSlot" category="expansion" label="Aux Slot" image="Apple II Aux Slot.png" />
-    <inlet ref="slot.slot1" type="AppleIISlot" category="expansion" label="Slot 1" image="Apple II Slot.png" />
-    <inlet ref="slot.slot2" type="AppleIISlot" category="expansion" label="Slot 2" image="Apple II Slot.png" />
-    <inlet ref="slot.slot3" type="AppleIISlot" category="expansion" label="Slot 3" image="Apple II Slot.png" />
-    <inlet ref="slot.slot4" type="AppleIISlot" category="expansion" label="Slot 4" image="Apple II Slot.png" />
-    <inlet ref="slot.slot5" type="AppleIISlot" category="expansion" label="Slot 5" image="Apple II Slot.png" />
-    <inlet ref="slot.slot6" type="AppleIISlot" category="expansion" label="Slot 6" image="Apple II Slot.png" />
-    <inlet ref="slot.slot7" type="AppleIISlot" category="expansion" label="Slot 7" image="Apple II Slot.png" />
+    <inlet ref="slotMemory.auxSlot" type="AppleIIAuxSlot" category="expansion" label="Aux Slot" image="Apple II Aux Slot.png" />
+    <inlet ref="slotMemory.slot1" type="AppleIISlot" category="expansion" label="Slot 1" image="Apple II Slot.png" />
+    <inlet ref="slotMemory.slot2" type="AppleIISlot" category="expansion" label="Slot 2" image="Apple II Slot.png" />
+    <inlet ref="slotMemory.slot3" type="AppleIISlot" category="expansion" label="Slot 3" image="Apple II Slot.png" />
+    <inlet ref="slotMemory.slot4" type="AppleIISlot" category="expansion" label="Slot 4" image="Apple II Slot.png" />
+    <inlet ref="slotMemory.slot5" type="AppleIISlot" category="expansion" label="Slot 5" image="Apple II Slot.png" />
+    <inlet ref="slotMemory.slot6" type="AppleIISlot" category="expansion" label="Slot 6" image="Apple II Slot.png" />
+    <inlet ref="slotMemory.slot7" type="AppleIISlot" category="expansion" label="Slot 7" image="Apple II Slot.png" />
     <inlet ref="video.romSocket" type="AppleIIVideoROM" category="expansion" label="Video ROM Socket" image="Apple II Video ROM Socket.png" />
     <inlet ref="system.cpuSocket" type="AppleIICPU" category="expansion" label="CPU Socket" image="Apple II CPU Chip Socket.png" />
     <inlet ref="mmu.romSocket" type="AppleIIROM" category="expansion" label="ROM Socket" image="Apple II ROM Socket.png" />

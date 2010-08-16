@@ -21,10 +21,13 @@
 	{
 		if (theTitle)
 			title = [theTitle copy];
+		
 		if (theSubtitle)
 			subtitle = [theSubtitle copy];
+		
 		if (theImagePath)
 			imagePath = [theImagePath copy];
+		
 		if (theData)
 			data = [theData copy];
 	}

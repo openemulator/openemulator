@@ -14,11 +14,11 @@
 
 @interface DeviceChooserViewController : ChooserViewController
 {
-	NSMutableArray *deviceInfos;
+	NSMutableArray *infos;
 }
 
-- (void)updateWithInlets:(NSArray *)freeInlets
-			 andCategory:(NSString *)viewType;
+- (void)updateForDeviceType:(NSString *)deviceType
+			 withFreeInlets:(NSArray *)freeInlets;
 - (NSMutableArray *)selectedItemOutlets;
 
 @end

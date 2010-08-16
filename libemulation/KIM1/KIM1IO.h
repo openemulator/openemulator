@@ -10,6 +10,8 @@
 
 #include "OEComponent.h"
 
+#include "Host.h"
+
 class KIM1IO : public OEComponent
 {
 public:
@@ -18,12 +20,15 @@ public:
 	
 	bool setResource(const string &name, OEData *data);
 	bool connect(const string &name, OEComponent *component);
-
+	
+	void notify(OEComponent *component, int notification, void *data);
+	
 private:
 	OEComponent *host;
+	OEComponent *serialPort;
 	OEComponent *audioOut;
 	OEComponent *audioIn;
-	OEComponent *terminal;
 	
 	OEData *view;
+	HostVideoScreen *screen;
 };

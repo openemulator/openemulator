@@ -30,6 +30,6 @@ void compositeCGAInit(CompositeCGA convolutionTable,
 					  CompositeConfiguration *config);
 void compositeCGABlit(CompositeCGA convolutionTable,
 					  unsigned char *input, int width, int height,
-					  int *output, int outputPitch, int doubleScanlines);
+					  int *output, int outputPitch);
 
 #endif

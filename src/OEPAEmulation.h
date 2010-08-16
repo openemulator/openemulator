@@ -33,7 +33,7 @@ public:
 	
 	int postEvent(string ref, int message, void *data);
 	
-	bool add(string path, OEConnections &connections);
+	bool addDML(string path, OEConnections &connections);
 	bool removeDevice(string deviceName);
 	
 private:

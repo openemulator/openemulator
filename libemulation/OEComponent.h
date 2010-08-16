@@ -52,6 +52,9 @@ public:
 	virtual bool readBlock(OEUInt32 address, OEData *value);
 	virtual bool writeBlock(OEUInt32 address, const OEData *value);
 	
+	// Debugging
+	virtual bool sendDebugCommand(char *command);
+	
 protected:
 	OEObservers observers;
 	OEDelegates delegates;

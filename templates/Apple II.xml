@@ -14,15 +14,15 @@
     <inlet ref="bus.cpuSocket" type="AppleIICPU" label="CPU Socket" image="CPU Socket.png" />
     <inlet ref="video.charsetSocket" type="AppleIICharsetROM" label="Character Set ROM Socket" image="ROM Socket.png" />
     <inlet ref="video.monitor" type="CompositeVideo" label="Video Connector" image="Video Connector.png" />
-    <inlet ref="gamePort.port" type="AppleIIGamePort" label="Game Port" image="Apple II Game Port.png" />
-    <inlet ref="slot.slot0" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png" />
-    <inlet ref="slot.slot1" type="AppleIISlot" label="Slot 1" image="Apple II Slot.png" />
-    <inlet ref="slot.slot2" type="AppleIISlot" label="Slot 2" image="Apple II Slot.png" />
-    <inlet ref="slot.slot3" type="AppleIISlot" label="Slot 3" image="Apple II Slot.png" />
-    <inlet ref="slot.slot4" type="AppleIISlot" label="Slot 4" image="Apple II Slot.png" />
-    <inlet ref="slot.slot5" type="AppleIISlot" label="Slot 5" image="Apple II Slot.png" />
-    <inlet ref="slot.slot6" type="AppleIISlot" label="Slot 6" image="Apple II Slot.png" />
-    <inlet ref="slot.slot7" type="AppleIISlot" label="Slot 7" image="Apple II Slot.png" />
+    <inlet ref="game.port" type="AppleIIGamePort" label="Game Port" image="Apple II Game Port.png" />
+    <inlet ref="slotMemory.slot0" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png" />
+    <inlet ref="slotMemory.slot1" type="AppleIISlot" label="Slot 1" image="Apple II Slot.png" />
+    <inlet ref="slotMemory.slot2" type="AppleIISlot" label="Slot 2" image="Apple II Slot.png" />
+    <inlet ref="slotMemory.slot3" type="AppleIISlot" label="Slot 3" image="Apple II Slot.png" />
+    <inlet ref="slotMemory.slot4" type="AppleIISlot" label="Slot 4" image="Apple II Slot.png" />
+    <inlet ref="slotMemory.slot5" type="AppleIISlot" label="Slot 5" image="Apple II Slot.png" />
+    <inlet ref="slotMemory.slot6" type="AppleIISlot" label="Slot 6" image="Apple II Slot.png" />
+    <inlet ref="slotMemory.slot7" type="AppleIISlot" label="Slot 7" image="Apple II Slot.png" />
     <inlet ref="mmu.romF8Socket" type="AppleIIROM" label="ROM F8 Socket" image="ROM Socket.png" />
     <component name="bus" class="AppleIIBus">
         <property name="frequency" value="14.31818MHz" />
@@ -96,14 +96,14 @@
         <resource name="image" src="roms/Signetics 2513 Video ROM.bin" />
         <connection name="mmu" ref="mmu" />
         <connection name="monitor" ref="" />
-        <connection name="romSocket" ref="" />
+        <connection name="charsetSocket" ref="" />
     </component>
-    <component name="gamePort" class="AppleIIGamePort">
-        <connection name="port" ref="" />
+    <component name="game" class="AppleIIGamePort">
         <property name="an0" value="0" />
         <property name="an1" value="0" />
         <property name="an2" value="0" />
         <property name="an3" value="0" />
+        <connection name="port" ref="" />
     </component>
     <component name="audioIn" class="AppleIIAudioIn">
         <connection name="bus" value="bus" />

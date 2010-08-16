@@ -53,6 +53,7 @@ private:
 	bool joystickButtonDown[HOST_HID_JOYSTICK_NUM][HOST_HID_JOYSTICK_BUTTON_NUM];
 	bool tabletButtonDown[HOST_HID_TABLET_BUTTON_NUM];
 	
+	bool mouseCapture;
 	bool mouseCaptured;
 	bool mouseCaptureRelease;
 	

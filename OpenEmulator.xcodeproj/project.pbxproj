@@ -27,6 +27,7 @@
 		001F916411925BBE005383B3 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0054E4A61131BE8A006D32D9 /* OpenGL.framework */; };
 		001F916911925BE8005383B3 /* SDL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 001F916811925BE8005383B3 /* SDL.framework */; };
 		00247F6E120F98620067755C /* Terminal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 005256E5120A841200A6BC75 /* Terminal.cpp */; };
+		00257B41121901FC00206E56 /* SerialPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00257B40121901FC00206E56 /* SerialPort.cpp */; };
 		0030C51711FBA4D9009DF0DD /* OEDML.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00FA328611F76255000B9574 /* OEDML.cpp */; };
 		0030C52911FBA518009DF0DD /* libcomposite.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00FF25F2115C385000C82CA0 /* libcomposite.a */; };
 		0030C52A11FBA523009DF0DD /* OEPA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00C3CF9711F557AC00EA2453 /* OEPA.cpp */; };
@@ -106,8 +107,6 @@
 		00C7F1DA100BC5B500AD0812 /* IPMinusSel.png in Resources */ = {isa = PBXBuildFile; fileRef = 00C7F1D6100BC5B400AD0812 /* IPMinusSel.png */; };
 		00C7F1DB100BC5B500AD0812 /* IPPlus.png in Resources */ = {isa = PBXBuildFile; fileRef = 00C7F1D7100BC5B400AD0812 /* IPPlus.png */; };
 		00C7F1DC100BC5B500AD0812 /* IPPlusSel.png in Resources */ = {isa = PBXBuildFile; fileRef = 00C7F1D8100BC5B400AD0812 /* IPPlusSel.png */; };
-		00C8AA0B10103D6A006A5734 /* OSDPause.png in Resources */ = {isa = PBXBuildFile; fileRef = 00C8AA0610103D6A006A5734 /* OSDPause.png */; };
-		00C8AA0C10103D6A006A5734 /* OSDPower.png in Resources */ = {isa = PBXBuildFile; fileRef = 00C8AA0710103D6A006A5734 /* OSDPower.png */; };
 		00D1958D1093712E008FB014 /* Chooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00D1958B1093712E008FB014 /* Chooser.xib */; };
 		00D5D13C11B73F8400C77A67 /* CompositeMonitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00984D9811A73B1000B9C0B5 /* CompositeMonitor.cpp */; };
 		00D81D0C12034A20004068EB /* OEDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00D81D0B12034A20004068EB /* OEDebugger.cpp */; };
@@ -224,6 +223,9 @@
 		001F915711925B56005383B3 /* libsndfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsndfile.a; path = /opt/local/lib/libsndfile.a; sourceTree = "<absolute>"; };
 		001F915A11925B74005383B3 /* libsamplerate.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsamplerate.a; path = /opt/local/lib/libsamplerate.a; sourceTree = "<absolute>"; };
 		001F916811925BE8005383B3 /* SDL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL.framework; path = /Library/Frameworks/SDL.framework; sourceTree = "<absolute>"; };
+		002579FB1218A83400206E56 /* StringConversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StringConversion.h; sourceTree = "<group>"; };
+		00257B3F121901FC00206E56 /* SerialPort.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SerialPort.h; sourceTree = "<group>"; };
+		00257B40121901FC00206E56 /* SerialPort.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SerialPort.cpp; sourceTree = "<group>"; };
 		002F77701162EB6A00B0ECF1 /* MOS6502Operations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOS6502Operations.h; sourceTree = "<group>"; };
 		002F77721162EB7400B0ECF1 /* MOS6502IllegalOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOS6502IllegalOperations.h; sourceTree = "<group>"; };
 		002F77851162EBB200B0ECF1 /* MOS6502Opcodes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOS6502Opcodes.h; sourceTree = "<group>"; };
@@ -344,8 +346,6 @@
 		00C7F1D6100BC5B400AD0812 /* IPMinusSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPMinusSel.png; sourceTree = "<group>"; };
 		00C7F1D7100BC5B400AD0812 /* IPPlus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPPlus.png; sourceTree = "<group>"; };
 		00C7F1D8100BC5B400AD0812 /* IPPlusSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPPlusSel.png; sourceTree = "<group>"; };
-		00C8AA0610103D6A006A5734 /* OSDPause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = OSDPause.png; sourceTree = "<group>"; };
-		00C8AA0710103D6A006A5734 /* OSDPower.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = OSDPower.png; sourceTree = "<group>"; };
 		00D1958C1093712E008FB014 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Chooser.xib; sourceTree = "<group>"; };
 		00D81D0A12034A20004068EB /* OEDebugger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEDebugger.h; sourceTree = "<group>"; };
 		00D81D0B12034A20004068EB /* OEDebugger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEDebugger.cpp; sourceTree = "<group>"; };
@@ -466,9 +466,7 @@
 		000A79070FBA49C500A0F12E /* Images */ = {
 			isa = PBXGroup;
 			children = (
-				00C8AA0610103D6A006A5734 /* OSDPause.png */,
 				00BB4D581086C1160071B584 /* TBSleep.png */,
-				00C8AA0710103D6A006A5734 /* OSDPower.png */,
 				00F86BE1100FD4F60016867D /* IPSoundMax.png */,
 				00F86BE2100FD4F60016867D /* IPSoundMin.png */,
 				00C7F1D5100BC5B400AD0812 /* IPMinus.png */,
@@ -610,6 +608,8 @@
 				0016DA2F120674D00043AFA6 /* AddressOffset.cpp */,
 				005256E4120A841200A6BC75 /* Terminal.h */,
 				005256E5120A841200A6BC75 /* Terminal.cpp */,
+				00257B3F121901FC00206E56 /* SerialPort.h */,
+				00257B40121901FC00206E56 /* SerialPort.cpp */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -725,6 +725,7 @@
 				006115C111DD0347008AA3EE /* Application.m */,
 				0095E0D41209E3E200C127F5 /* DebuggerController.h */,
 				0095E0D51209E3E200C127F5 /* DebuggerController.m */,
+				002579FB1218A83400206E56 /* StringConversion.h */,
 			);
 			path = macosx;
 			sourceTree = "<group>";
@@ -939,8 +940,6 @@
 				00C7F1DC100BC5B500AD0812 /* IPPlusSel.png in Resources */,
 				00F86BE3100FD4F60016867D /* IPSoundMax.png in Resources */,
 				00F86BE4100FD4F60016867D /* IPSoundMin.png in Resources */,
-				00C8AA0B10103D6A006A5734 /* OSDPause.png in Resources */,
-				00C8AA0C10103D6A006A5734 /* OSDPower.png in Resources */,
 				00C6C0C110602151004D084B /* roms in Resources */,
 				005E5F771086B16C00E573D4 /* Inspector.xib in Resources */,
 				00BB4D5B1086C1160071B584 /* TBSleep.png in Resources */,
@@ -1053,6 +1052,7 @@
 				00C3D0DA11F5584C00EA2453 /* OEPAEmulation.cpp in Sources */,
 				00D81D0C12034A20004068EB /* OEDebugger.cpp in Sources */,
 				0095E0D61209E3E200C127F5 /* DebuggerController.m in Sources */,
+				00257B41121901FC00206E56 /* SerialPort.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

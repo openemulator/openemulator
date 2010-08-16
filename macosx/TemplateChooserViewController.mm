@@ -17,6 +17,8 @@
 #import "ChooserItem.h"
 #import "Document.h"
 
+#import "StringConversion.h"
+
 @implementation TemplateChooserViewController
 
 - (void)awakeFromNib
@@ -70,14 +72,13 @@
 	{
 		NSString *templateFilename = [templateFilenames objectAtIndex:i];
 		NSString *templatePath = [path stringByAppendingPathComponent:templateFilename];
-		OEInfo info(string([templatePath UTF8String]));
+		OEInfo info(getString(templatePath));
 		if (info.isOpen())
 		{
-			NSString *label = [NSString stringWithUTF8String:info.getLabel().c_str()];
-			NSString *imageName = [NSString stringWithUTF8String:info.getImage().c_str()];
-			NSString *description = [NSString stringWithUTF8String:info.getDescription().
-									 c_str()];
-			NSString *groupName = [NSString stringWithUTF8String:info.getGroup().c_str()];
+			NSString *label = getNSString(info.getLabel());
+			NSString *imageName = getNSString(info.getImage());
+			NSString *description = getNSString(info.getDescription());
+			NSString *groupName = getNSString(info.getGroup());
 			
 			if (theGroupName)
 				groupName = theGroupName;
@@ -87,6 +88,7 @@
 				NSMutableArray *group = [[[NSMutableArray alloc] init] autorelease];
 				[groups setObject:group forKey:groupName];
 			}
+			
 			NSString *imagePath = [imagesPath stringByAppendingPathComponent:imageName];
 			ChooserItem *item = [[ChooserItem alloc] initWithTitle:label
 														  subtitle:description

@@ -16,15 +16,7 @@
 #import "OEPAEmulation.h"
 #import "Host.h"
 
-NSString *getNSString(string s)
-{
-	return [NSString stringWithUTF8String:s.c_str()];
-}
-
-string getString(NSString *s)
-{
-	return string([s UTF8String]);
-}
+#import "StringConversion.h"
 
 @implementation Document
 
@@ -259,7 +251,7 @@ string getString(NSString *s)
 		 inlet != inlets->end();
 		 inlet++)
 	{
-		if ((*inlet)->type.size())
+		if ((*inlet)->connection)
 			continue;
 		
 		NSString *ref = getNSString((*inlet)->ref);
@@ -276,7 +268,7 @@ string getString(NSString *s)
 		[freeInlets addObject:dict];
 	}
 	
-	// Process outlets
+	// Process devices
 	int expansionIndex = 0;
 	int storageIndex = 0;
 	int peripheralIndex = 0;
@@ -292,10 +284,12 @@ string getString(NSString *s)
 		
 		NSImage *theImage = [self getResourceImage:deviceImage];
 		
-		NSString *text = [NSString localizedStringWithFormat:@"\n(on %@)",
-						  connectionLabel];
+		NSString *informativeText = @"";
+		if ([connectionLabel length] > 0)
+			informativeText = [NSString localizedStringWithFormat:@"\n(on %@)",
+							   connectionLabel];
 		NSAttributedString *theTitle = [self formatDeviceLabel:deviceLabel
-										   withInformativeText:text];
+										   withInformativeText:informativeText];
 		
 		BOOL isRemovable = ((*device)->label == "static");
 		NSNumber *removable = [NSNumber numberWithBool:isRemovable];
@@ -358,13 +352,14 @@ string getString(NSString *s)
 			ofType:(NSString *)typeName
 			 error:(NSError **)outError
 {
-	const char *emulationPath = [[[absoluteURL path] stringByAppendingString:@"/"]
-								 UTF8String];
 	if (emulation)
 	{
+		string emulationPath = getString([[absoluteURL path]
+										  stringByAppendingString:@"/"]);
+		
 		[self setHostProperty:@"notes" value:[self notes]];
 		
-		if (((OEPAEmulation *)emulation)->save(string(emulationPath)))
+		if (((OEPAEmulation *)emulation)->save(emulationPath))
 			return YES;
 	}
 	
@@ -427,7 +422,7 @@ string getString(NSString *s)
 - (void)addDevices:(NSString *)path
 	   connections:(NSDictionary *)connections
 {
-	string pathString = [path UTF8String];
+	string pathString = getString(path);
 	map<string, string> connectionsMap;
 	
 	NSEnumerator *i = [connections keyEnumerator];
@@ -437,13 +432,13 @@ string getString(NSString *s)
 	{
 		NSString *outletRef = [connections objectForKey:inletRef];
 		
-		string inletRefString = [inletRef UTF8String];
-		string outletRefString = [outletRef UTF8String];
+		string inletRefString = getString(inletRef);
+		string outletRefString = getString(outletRef);
 		
 		connectionsMap[inletRefString] = outletRefString;
 	}
 	
-	if (!((OEPAEmulation *)emulation)->add(pathString, connectionsMap))
+	if (!((OEPAEmulation *)emulation)->addDML(pathString, connectionsMap))
 	{
 		NSString *messageText = @"The device could not be added.";
 		
@@ -462,7 +457,7 @@ string getString(NSString *s)
 	NSString *deviceRef = [dict objectForKey:@"ref"];
 	NSString *deviceLabel = [dict objectForKey:@"label"];
 	
-	string refString = [deviceRef UTF8String];
+	string refString = getString(deviceRef);
 	
 /*	if (!((OEPAEmulation *)emulation)->isDeviceTerminal(refString))
 	{
@@ -628,7 +623,7 @@ string getString(NSString *s)
 	string characterString;
 	[self notifyHost:HOST_CLIPBOARD_WILL_COPY data:&characterString];
 	
-	return [NSString stringWithUTF8String:characterString.c_str()];
+	return getNSString(characterString);
 }
 
 - (void)copy:(id)sender
@@ -644,8 +639,7 @@ string getString(NSString *s)
 {
 	NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
 	
-	NSString *characters = [pasteboard stringForType:NSStringPboardType];
-	string characterString([characters UTF8String]);
+	string characterString = getString([pasteboard stringForType:NSStringPboardType]);
 	
 	[self notifyHost:HOST_CLIPBOARD_WILL_PASTE data:&characterString];
 }

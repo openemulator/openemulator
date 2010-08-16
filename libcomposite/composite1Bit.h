@@ -30,6 +30,6 @@ void composite1BitInit(Composite1Bit convolutionTable,
 					   CompositeConfiguration *config);
 void composite1BitBlit(Composite1Bit convolutionTable,
 					   unsigned char *input, int width, int height,
-					   int *output, int outputPitch, int doubleScanlines);
+					   int *output, int outputPitch);
 
 #endif

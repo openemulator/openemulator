@@ -95,7 +95,7 @@ bool OEEmulation::build()
 
 bool OEEmulation::buildDevice(xmlNodePtr deviceNode)
 {
-	string deviceName = getName(deviceNode);
+	string deviceName = getNodeName(deviceNode);
 	
 	for(xmlNodePtr node = deviceNode->children;
 		node;
@@ -110,7 +110,7 @@ bool OEEmulation::buildDevice(xmlNodePtr deviceNode)
 bool OEEmulation::buildComponent(xmlNodePtr componentNode, string deviceName)
 {
 	string className = getNodeProperty(componentNode, "class");
-	string ref = deviceName + OE_DEVICE_SEPARATOR + getName(componentNode);
+	string ref = deviceName + OE_DEVICE_SEPARATOR + getNodeName(componentNode);
 	
 	if (getComponent(ref))
 	{
@@ -147,7 +147,7 @@ bool OEEmulation::init()
 
 bool OEEmulation::initDevice(xmlNodePtr deviceNode)
 {
-	string deviceName = getName(deviceNode);
+	string deviceName = getNodeName(deviceNode);
 	
 	for(xmlNodePtr node = deviceNode->children;
 		node;
@@ -161,7 +161,7 @@ bool OEEmulation::initDevice(xmlNodePtr deviceNode)
 
 bool OEEmulation::initComponent(xmlNodePtr componentNode, string deviceName)
 {
-	string ref = deviceName + OE_DEVICE_SEPARATOR + getName(componentNode);
+	string ref = deviceName + OE_DEVICE_SEPARATOR + getNodeName(componentNode);
 	OEComponent *component = getComponent(ref);
 	
 	for(xmlNodePtr node = componentNode->children;
@@ -198,7 +198,7 @@ bool OEEmulation::connect()
 
 bool OEEmulation::connectDevice(xmlNodePtr deviceNode)
 {
-	string deviceName = getName(deviceNode);
+	string deviceName = getNodeName(deviceNode);
 	
 	for(xmlNodePtr node = deviceNode->children;
 		node;
@@ -212,7 +212,7 @@ bool OEEmulation::connectDevice(xmlNodePtr deviceNode)
 
 bool OEEmulation::connectComponent(xmlNodePtr componentNode, string deviceName)
 {
-	string ref = deviceName + OE_DEVICE_SEPARATOR + getName(componentNode);
+	string ref = deviceName + OE_DEVICE_SEPARATOR + getNodeName(componentNode);
 	OEComponent *component = getComponent(ref);
 	
 	for(xmlNodePtr node = componentNode->children;
@@ -240,7 +240,7 @@ void OEEmulation::update()
 
 void OEEmulation::updateDevice(xmlNodePtr deviceNode)
 {
-	string deviceName = getName(deviceNode);
+	string deviceName = getNodeName(deviceNode);
 	
 	for(xmlNodePtr node = deviceNode->children;
 		node;
@@ -251,7 +251,7 @@ void OEEmulation::updateDevice(xmlNodePtr deviceNode)
 
 void OEEmulation::updateComponent(xmlNodePtr componentNode, string deviceName)
 {
-	string ref = deviceName + OE_DEVICE_SEPARATOR + getName(componentNode);
+	string ref = deviceName + OE_DEVICE_SEPARATOR + getNodeName(componentNode);
 	OEComponent *component = getComponent(ref);
 	
 	for(xmlNodePtr node = componentNode->children;
@@ -281,7 +281,7 @@ void OEEmulation::remove()
 
 void OEEmulation::removeDevice(xmlNodePtr deviceNode)
 {
-	string deviceName = getName(deviceNode);
+	string deviceName = getNodeName(deviceNode);
 	
 	for(xmlNodePtr node = deviceNode->children;
 		node;
@@ -294,7 +294,7 @@ void OEEmulation::removeDevice(xmlNodePtr deviceNode)
 
 void OEEmulation::removeComponent(xmlNodePtr componentNode, string deviceName)
 {
-	string ref = deviceName + OE_DEVICE_SEPARATOR + getName(componentNode);
+	string ref = deviceName + OE_DEVICE_SEPARATOR + getNodeName(componentNode);
 	
 	delete getComponent(ref);
 	setComponent(ref, NULL);
@@ -305,7 +305,7 @@ void OEEmulation::removeComponent(xmlNodePtr componentNode, string deviceName)
 //
 bool OEEmulation::setProperty(xmlNodePtr componentNode, OEComponent *component, string ref)
 {
-	string name = getName(componentNode);
+	string name = getNodeName(componentNode);
 	string value = getNodeProperty(componentNode, "value");
 	
 	if (component->setProperty(name, value))
@@ -318,7 +318,7 @@ bool OEEmulation::setProperty(xmlNodePtr componentNode, OEComponent *component, 
 
 void OEEmulation::getProperty(xmlNodePtr componentNode, OEComponent *component, string ref)
 {
-	string name = getName(componentNode);
+	string name = getNodeName(componentNode);
 	string value;
 	
 	if (component->getProperty(name, value))
@@ -327,23 +327,24 @@ void OEEmulation::getProperty(xmlNodePtr componentNode, OEComponent *component, 
 
 bool OEEmulation::setData(xmlNodePtr componentNode, OEComponent *component, string ref)
 {
-	string name = getName(componentNode);
+	string name = getNodeName(componentNode);
 	string src = replaceRef(getNodeProperty(componentNode, "src"), ref);
 	
 	if (!package)
-		return false;
+		return true;
 	
 	OEData *data = new OEData;
-	if (!data)
-		return false;
-	
-	if (!package->readFile(src, data))
+	if (data)
+	{
+		if (package->readFile(src, data))
+			if (!component->setData(name, data))
+				delete data;
+		
 		return true;
+	}
+	else
+		OELog("could not set data '" + ref + "." + name + "'");
 	
-	if (component->setData(name, data))
-		return true;
-	
-	OELog("could not set data '" + ref + "." + name + "'");
 	delete data;
 	
 	return false;
@@ -351,7 +352,7 @@ bool OEEmulation::setData(xmlNodePtr componentNode, OEComponent *component, stri
 
 void OEEmulation::getData(xmlNodePtr componentNode, OEComponent *component, string ref)
 {
-	string name = getName(componentNode);
+	string name = getNodeName(componentNode);
 	string src = replaceRef(getNodeProperty(componentNode, "src"), ref);
 	
 	OEData *data;
@@ -367,45 +368,46 @@ void OEEmulation::getData(xmlNodePtr componentNode, OEComponent *component, stri
 
 bool OEEmulation::setResource(xmlNodePtr componentNode, OEComponent *component, string ref)
 {
-	string name = getName(componentNode);
+	string name = getNodeName(componentNode);
 	string path = (resourcePath + OE_PATH_SEPARATOR +
 				   getNodeProperty(componentNode, "src"));
 	
 	OEData *data = new OEData;
-	if (!data)
-		return false;
-	
-	if (!readFile(path, data))
+	if (data)
 	{
-		OELog("could not read resource '" + path + "'");
-		
-		return false;
+		if (readFile(path, data))
+		{
+			if (component->setResource(name, data))
+				return true;
+			else
+				OELog("could not set resource '" + ref + "." + name + "'");
+		}
+		else
+			OELog("could not read resource '" + path + "'");
+	
+		delete data;
 	}
-	
-	if (component->setResource(name, data))
-		return true;
-	
-	delete data;
-	OELog("could not set resource '" + ref + "." + name + "'");
 	
 	return false;
 }
 
 bool OEEmulation::connect(xmlNodePtr componentNode, OEComponent *component, string ref)
 {
-	string name = getName(componentNode);
-	string connectionRef = getRef(componentNode);
+	string deviceName = getDeviceName(ref);
+	
+	string name = getNodeName(componentNode);
+	string connectionRef = getNodeRef(componentNode, deviceName);
 	
 	OEComponent *connection = NULL;
 	if (connectionRef != "")
 	{
 		if (getDeviceName(connectionRef) == "")
-			connectionRef = getDeviceName(ref) + OE_DEVICE_SEPARATOR + connectionRef;
+			connectionRef = deviceName + OE_DEVICE_SEPARATOR + connectionRef;
 	
 		connection = getComponent(connectionRef);
 		
 		if (!connection)
-			OELog("could not connect '" + ref + "." + name +
+			OELog("could not set connection '" + ref + "." + name +
 				  "', reference was not declared");
 	}
 	

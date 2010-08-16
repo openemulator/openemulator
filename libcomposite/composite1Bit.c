@@ -102,13 +102,13 @@ void composite1BitInit(Composite1Bit convolutionTable,
 
 void composite1BitBlit(Composite1Bit convolutionTable,
 					   unsigned char *input, int width, int height,
-					   int *output, int outputPitch, int doubleScanlines)
+					   int *output, int outputPitch)
 {
 	int inputWidth = (width + 7) / 8;
 	int inputHeight = height;
 	
 	int outputNum = width / COMPOSITE_1BIT_OUTPUTSIZE;
-	int outputWidth = doubleScanlines ? (width + outputPitch) * 2 : width + outputPitch;
+	int outputWidth = width + outputPitch;
 	int *frameBuffer = output;
 	
 	while (inputHeight--)
@@ -131,9 +131,6 @@ void composite1BitBlit(Composite1Bit convolutionTable,
 		input += inputWidth;
 		output += outputWidth;
 	}
-	
-	if (doubleScanlines)
-		interpolateScanlines(frameBuffer, width, height, outputPitch);
 	
 	return;
 }

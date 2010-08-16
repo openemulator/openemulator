@@ -28,7 +28,7 @@
 	NSArray *selectedItemOutlets;
 	NSMutableArray *selectedItemInlets;
 	
-	NSString *category;
+	NSString *type;
 	
 	id currentView;
 	int currentStep;
@@ -36,7 +36,7 @@
 	BOOL isWindowSetup;
 }
 
-- (void)runModal:(id)sender forCategory:(NSString *)theCategory;
+- (void)runModal:(id)sender forType:(NSString *)theType;
 
 - (void)setDeviceChooserView;
 - (void)setConnectorViewAtIndex:(int)index;

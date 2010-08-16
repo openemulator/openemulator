@@ -9,13 +9,14 @@
  */
 
 #include "KIM1IO.h"
-#include "Terminal.h"
+
+#include "SerialPort.h"
 
 KIM1IO::KIM1IO()
 {
-	terminal = NULL;
+	serialPort = NULL;
 	audioOut = NULL;
-	audioIn	= NULL;
+	audioIn = NULL;
 }
 
 KIM1IO::~KIM1IO()
@@ -36,14 +37,26 @@ bool KIM1IO::setResource(const string &name, OEData *data)
 bool KIM1IO::connect(const string &name, OEComponent *component)
 {
 	if (name == "host")
-		host = component;
-	else if (name == "terminal")
 	{
-		if (terminal)
-			terminal->removeObserver(this, TERMINAL_RECEIVED_CHAR);
-		terminal = component;
-		if (terminal)
-			terminal->addObserver(this, TERMINAL_RECEIVED_CHAR);
+		if (host)
+		{
+			host->postEvent(this, HOST_REMOVE_SCREEN, screen);
+			host->removeObserver(this, HOST_HID_SYSTEM_CHANGED);
+		}
+		host = component;
+		if (host)
+		{
+			host->postEvent(this, HOST_ADD_SCREEN, screen);
+			host->addObserver(this, HOST_HID_SYSTEM_CHANGED);
+		}
+	}
+	else if (name == "serialPort")
+	{
+		if (serialPort)
+			serialPort->removeObserver(this, SERIAL_PORT_DATA_RECEIVED);
+		serialPort = component;
+		if (serialPort)
+			serialPort->addObserver(this, SERIAL_PORT_DATA_RECEIVED);
 	}
 	else if (name == "audioOut")
 		audioOut = component;
@@ -53,4 +66,9 @@ bool KIM1IO::connect(const string &name, OEComponent *component)
 		return false;
 	
 	return true;
+}
+
+void KIM1IO::notify(OEComponent *component, int notification, void *data)
+{
+
 }

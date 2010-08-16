@@ -147,6 +147,11 @@ bool OEComponent::writeBlock(OEUInt32 address, const OEData *value)
 	return false;
 }
 
+bool OEComponent::sendDebugCommand(char *command)
+{
+	return false;
+}
+
 int OEComponent::getInt(const string &value)
 {
 	if (value.substr(0, 2) == "0x")

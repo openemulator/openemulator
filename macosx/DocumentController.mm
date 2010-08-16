@@ -18,6 +18,8 @@
 
 #import "OEPA.h"
 
+#import "StringConversion.h"
+
 #define LINK_HOMEPAGE	@"http://www.openemulator.org"
 #define LINK_FORUMSURL	@"http://groups.google.com/group/openemulator"
 #define LINK_DEVURL		@"http://code.google.com/p/openemulator"
@@ -105,7 +107,7 @@
 	((OEPA *)oepa)->setPlayThrough([defaults floatForKey:@"OEPlayThrough"]);
 	((OEPA *)oepa)->setVolume([defaults floatForKey:@"OEVolume"]);
 	
-	((OEPA *)oepa)->open();
+//	((OEPA *)oepa)->open();
 	
 	[defaults addObserver:self
 			   forKeyPath:@"OEFullDuplex"
@@ -325,13 +327,13 @@
 	
 	audioPlayURL = [theURL copy];
 	if (audioPlayURL)
-		((OEPA *)oepa)->startPlaying([[audioPlayURL path] UTF8String]);
+		((OEPA *)oepa)->startPlaying(getString([audioPlayURL path]));
 }
 
 - (void)togglePlay
 {
 	if (!((OEPA *)oepa)->isPlaying())
-		((OEPA *)oepa)->startPlaying([[audioPlayURL path] UTF8String]);
+		((OEPA *)oepa)->startPlaying(getString([audioPlayURL path]));
 	else
 		((OEPA *)oepa)->stopPlaying();
 }
@@ -367,7 +369,7 @@
 							 stringByAppendingPathComponent:@"oerecording"];
 		audioRecordingURL = [[NSURL alloc] initFileURLWithPath:thePath];
 		
-		((OEPA *)oepa)->startRecording([[audioRecordingURL path] UTF8String]);
+		((OEPA *)oepa)->startRecording(getString([audioRecordingURL path]));
 	}
 	else
 		((OEPA *)oepa)->stopRecording();

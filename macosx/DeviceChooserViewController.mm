@@ -15,7 +15,9 @@
 #import "ChooserItem.h"
 #import "Document.h"
 
-@interface DeviceInfo : NSObject
+#import "StringConversion.h"
+
+@interface InfoWrapper : NSObject
 {
 	OEInfo *info;
 	NSString *path;
@@ -27,7 +29,7 @@
 
 @end
 
-@implementation DeviceInfo
+@implementation InfoWrapper
 
 - initWithPath:(NSString *)thePath;
 {
@@ -67,14 +69,14 @@
 	self = [super init];
 	
 	if (self)
-		deviceInfos = [[NSMutableArray alloc] init];
+		infos = [[NSMutableArray alloc] init];
 	
 	return self;
 }
 
 - (void)dealloc
 {
-	[deviceInfos release];
+	[infos release];
 	
 	[super dealloc];
 }
@@ -84,47 +86,45 @@
 	[super awakeFromNib];
 	
 	NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
-	NSString *templatesPath = [resourcePath
-							   stringByAppendingPathComponent:@"devices"];
-	NSArray *deviceFilenames = [[NSFileManager defaultManager]
-								contentsOfDirectoryAtPath:templatesPath
-								error:nil];
+	NSString *devicesPath = [resourcePath stringByAppendingPathComponent:@"devices"];
+	NSArray *devicesFilenames = [[NSFileManager defaultManager]
+								 contentsOfDirectoryAtPath:devicesPath
+								 error:nil];
 	
-	int deviceFilenamesCount = [deviceFilenames count];
-	for (int i = 0; i < deviceFilenamesCount; i++)
+	for (int i = 0; i < [devicesFilenames count]; i++)
 	{
-		NSString *deviceFilename = [deviceFilenames objectAtIndex:i];
-		NSString *devicePath = [templatesPath
-								stringByAppendingPathComponent:deviceFilename];
-		DeviceInfo *deviceInfo = [[DeviceInfo alloc] initWithPath:devicePath];
-		if (deviceInfo)
+		NSString *path = [devicesFilenames objectAtIndex:i];
+		path = [devicesPath stringByAppendingPathComponent:path];
+		InfoWrapper *info = [[InfoWrapper alloc] initWithPath:path];
+		
+		if (info)
 		{
-			[deviceInfo autorelease];
-			[deviceInfos addObject:deviceInfo];
+			[info autorelease];
+			[infos addObject:info];
 		}
 	}
 }
 
-- (void)updateWithInlets:(NSArray *)freeInlets
-			 andCategory:(NSString *)category
+- (void)updateForDeviceType:(NSString *)deviceType
+			 withFreeInlets:(NSArray *)freeInlets
 {
 	NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
-	NSString *imagesPath = [resourcePath
-							stringByAppendingPathComponent:@"images"];
+	NSString *imagesPath = [resourcePath stringByAppendingPathComponent:@"images"];
 	
 	[groups removeAllObjects];
 	[groupNames removeAllObjects];
 	
-	for (int i = 0; i < [deviceInfos count]; i++)
+	for (int i = 0; i < [infos count]; i++)
 	{
-		DeviceInfo *deviceInfo = [deviceInfos objectAtIndex:i];
-		OEInfo *info = [deviceInfo info];
+		// Check if the required inlets are available
+		OEInfo *info = [[infos objectAtIndex:i] info];
+		NSString *infoPath = [[infos objectAtIndex:i] path];
 		
-		// Check if device's outlets match emulation inlets
 		NSMutableArray *inlets = [NSMutableArray arrayWithArray:freeInlets];
 		OEPorts *outlets = info->getOutlets();
-		BOOL isInletsFound = YES;
-		BOOL isCategoryFound = NO;
+		
+		BOOL foundInlets = YES;
+		
 		for (OEPorts::iterator outlet = outlets->begin();
 			 outlet != outlets->end();
 			 outlet++)
@@ -132,53 +132,68 @@
 			if ((*outlet)->connection)
 				continue;
 			
-			NSString *type = [NSString stringWithUTF8String:(*outlet)->type.c_str()];
-			BOOL isInletFound = NO;
+			NSString *outletType = getNSString((*outlet)->type);
+			BOOL foundInlet = NO;
+			
 			for (int j = 0; j < [inlets count]; j++)
 			{
 				NSMutableDictionary *dict = [inlets objectAtIndex:j];
 				NSString *inletType = [dict objectForKey:@"type"];
 				
-				if ([inletType compare:type] == NSOrderedSame)
+				if ([inletType compare:outletType] == NSOrderedSame)
 				{
 					[inlets removeObjectAtIndex:j];
-					isInletFound = YES;
 					
-					NSString *inletCategory = [dict objectForKey:@"category"];
-					if ([inletCategory compare:category] == NSOrderedSame)
-						isCategoryFound = YES;
+					foundInlet = YES;
+					
+					break;
 				}
 			}
 			
-			if (!isInletFound)
+			if (!foundInlet)
 			{
-				isInletsFound = NO;
+				foundInlets = NO;
 				break;
 			}
 		}
 		
-		if (!isInletsFound)
+		if (!foundInlets)
 			continue;
-		if (!isCategoryFound)
+		
+		// Check if there are devices of requested type
+		OEDevices *devices = info->getDevices();
+		bool foundType = NO;
+		
+		for (OEDevices::iterator device = devices->begin();
+			 device != devices->end();
+			 device++)
+		{
+			NSString *thisDeviceType = getNSString((*device)->type);
+			if ([deviceType compare:thisDeviceType] == NSOrderedSame)
+				foundType = YES;
+		}
+		
+		if (!foundType)
 			continue;
 		
 		// Add device
-		NSString *label = [NSString stringWithUTF8String:info->getLabel().c_str()];
-		NSString *imageName = [NSString stringWithUTF8String:info->getImage().c_str()];
-		NSString *description = [NSString stringWithUTF8String:info->getDescription().
-								 c_str()];
-		NSString *groupName = [NSString stringWithUTF8String:info->getGroup().c_str()];
+		NSString *label = getNSString(info->getLabel());
+		NSString *imageName = getNSString(info->getImage());
+		NSString *description = getNSString(info->getDescription());
+		NSString *groupName = getNSString(info->getGroup());
 		
 		if (![groups objectForKey:groupName])
 		{
 			NSMutableArray *group = [[[NSMutableArray alloc] init] autorelease];
 			[groups setObject:group forKey:groupName];
 		}
+		
 		NSString *imagePath = [imagesPath stringByAppendingPathComponent:imageName];
 		ChooserItem *item = [[ChooserItem alloc] initWithTitle:label
 													  subtitle:description
 													 imagePath:imagePath
-														  data:[deviceInfo path]];
+														  data:infoPath];
+		
 		if (!item)
 			continue;
 		
@@ -200,12 +215,12 @@
 		return NULL;
 	
 	OEInfo *info = NULL;
-	for (int i = 0; i < [deviceInfos count]; i++)
+	for (int i = 0; i < [infos count]; i++)
 	{
-		DeviceInfo *deviceInfo = [deviceInfos objectAtIndex:i];
-		if ([[deviceInfo path] compare:itemPath] == NSOrderedSame)
+		NSString *path = [[infos objectAtIndex:i] path];
+		if ([path compare:itemPath] == NSOrderedSame)
 		{
-			info = [deviceInfo info];
+			info = [[infos objectAtIndex:i] info];
 			break;
 		}
 	}
@@ -213,7 +228,7 @@
 	if (!info)
 		return NULL;
 	
-	// List unconnected outlets
+	// Get unconnected outlets
 	NSMutableArray *freeOutlets = [[NSMutableArray alloc] init];
 	if (!freeOutlets)
 		return NULL;
@@ -227,18 +242,11 @@
 		if ((*outlet)->connection)
 			continue;
 		
-		string stringRef = (*outlet)->ref;
-		
-		NSString *portType = [NSString stringWithUTF8String:(*outlet)->type.c_str()];
-		NSString *portLabel = [NSString stringWithUTF8String:(*outlet)->label.c_str()];
-		NSString *portImage = [NSString stringWithUTF8String:(*outlet)->image.c_str()];
-		NSString *portRef = [NSString stringWithUTF8String:stringRef.c_str()];
-		
 		NSMutableDictionary *dict = [[[NSMutableDictionary alloc] init] autorelease];
-		[dict setObject:portType forKey:@"type"];
-		[dict setObject:portLabel forKey:@"label"];
-		[dict setObject:portImage forKey:@"image"];
-		[dict setObject:portRef forKey:@"ref"];
+		[dict setObject:getNSString((*outlet)->type) forKey:@"type"];
+		[dict setObject:getNSString((*outlet)->label) forKey:@"label"];
+		[dict setObject:getNSString((*outlet)->image) forKey:@"image"];
+		[dict setObject:getNSString((*outlet)->ref) forKey:@"ref"];
 		
 		[freeOutlets addObject:dict];
 	}
