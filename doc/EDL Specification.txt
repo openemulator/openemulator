@@ -1,5 +1,5 @@
-=Device Markup Language 1.0=
-DML (Device Markup Language) is a language for describing software emulations of generic computer systems.
+=Emulation Description Language 1.0=
+EDL (Emulation Description Language) is a language for describing software emulations of generic computer systems.
 
 An emulation is described in terms of devices. Each device represents a distinct physical entity, for example a floppy disk drive, a memory expansion, or a printer.
 
