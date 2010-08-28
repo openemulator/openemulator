@@ -1,0 +1,50 @@
+<!ELEMENT dml (component*,device*)>
+<!ATTLIST dml version CDATA "1.0">
+<!ATTLIST dml label CDATA #IMPLIED>
+<!ATTLIST dml image CDATA #IMPLIED>
+<!ATTLIST dml description CDATA #IMPLIED>
+<!ATTLIST dml group CDATA #IMPLIED>
+
+<!ELEMENT component (property*)>
+<!ATTLIST component id ID #REQUIRED>
+<!ATTLIST component class CDATA #REQUIRED>
+
+<!ELEMENT property EMPTY>
+<!ATTLIST property name CDATA #REQUIRED>
+<!ATTLIST property value CDATA #IMPLIED>
+<!ATTLIST property ref IDREF #IMPLIED>
+<!ATTLIST property data CDATA #IMPLIED>
+<!ATTLIST property resource CDATA #IMPLIED>
+
+<!ELEMENT device (port*,connector*,setting*)>
+<!ATTLIST device id ID #REQUIRED>
+<!ATTLIST device type CDATA #IMPLIED>
+<!ATTLIST device options CDATA #IMPLIED>
+<!ATTLIST device label CDATA #IMPLIED>
+<!ATTLIST device image CDATA #IMPLIED>
+
+<!ELEMENT port (inlet*,outlet*)>
+<!ATTLIST port name CDATA #REQUIRED>
+<!ATTLIST port label CDATA #IMPLIED>
+<!ATTLIST port image CDATA #IMPLIED>
+
+<!ELEMENT connector (inlet*,outlet*)>
+<!ATTLIST connector name CDATA #REQUIRED>
+<!ATTLIST connector label CDATA #IMPLIED>
+<!ATTLIST connector image CDATA #IMPLIED>
+
+<!ELEMENT inlet EMPTY>
+<!ATTLIST inlet name CDATA #REQUIRED>
+<!ATTLIST inlet ref IDREF #REQUIRED>
+<!ATTLIST inlet property CDATA #REQUIRED>
+
+<!ELEMENT outlet EMPTY>
+<!ATTLIST outlet name CDATA #REQUIRED>
+<!ATTLIST outlet ref IDREF #REQUIRED>
+
+<!ELEMENT setting EMPTY>
+<!ATTLIST setting type CDATA #REQUIRED>
+<!ATTLIST setting options CDATA #IMPLIED>
+<!ATTLIST setting label CDATA #IMPLIED>
+<!ATTLIST setting ref IDREF #REQUIRED>
+<!ATTLIST setting property IDREF #REQUIRED>

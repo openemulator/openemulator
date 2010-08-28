@@ -25,8 +25,7 @@ Bus::Bus()
 	irqCount = 0;
 	
 	host = NULL;
-	cpu = NULL;
-	cpuSocket = NULL;
+	busMaster = NULL;
 }
 
 void Bus::updateFrequency()
@@ -43,7 +42,7 @@ bool Bus::setProperty(const string &name, const string &value)
 		crystal = getInt(value);
 		updateFrequency();
 	}
-	else if (name == "divider")
+	else if (name == "frequencyDivider")
 	{
 		divider = getInt(value);
 		updateFrequency();
@@ -51,7 +50,7 @@ bool Bus::setProperty(const string &name, const string &value)
 	else if (name == "resetOnPowerOn")
 		resetOnPowerOn = getInt(value);
 	else
-		return false;
+		return AddressDecoder::setProperty(name, value);
 	
 	return true;
 }
@@ -74,12 +73,10 @@ bool Bus::connect(const string &name, OEComponent *component)
 			host->addObserver(this, HOST_HID_SYSTEM_CHANGED);
 		}
 	}
-	else if (name == "cpu")
-		cpu = component;
-	else if (name == "cpuSocket")
-		cpuSocket = component;
+	else if (name == "busMaster")
+		busMaster = component;
 	else
-		return false;
+		return AddressDecoder::connect(name, component);
 	
 	return true;
 }
@@ -179,10 +176,5 @@ bool Bus::postEvent(OEComponent *component, int event, void *data)
 			return true;
 	}
 	
-	return false;
-}
-
-OEUInt8 Bus::read(int address)
-{
-	return floatingBus;
+	return AddressDecoder::postEvent(component, event, data);
 }

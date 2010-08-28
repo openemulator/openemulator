@@ -11,7 +11,7 @@
 #ifndef _BUS_H
 #define _BUS_H
 
-#include "OEComponent.h"
+#include "AddressDecoder.h"
 
 // Notifications
 enum
@@ -25,7 +25,7 @@ enum
 // Events
 enum
 {
-	BUS_ASSERT_RESET,
+	BUS_ASSERT_RESET = ADDRESSDECODER_EVENT_END,
 	BUS_ASSERT_IRQ,
 	BUS_CLEAR_IRQ,
 	BUS_ASSERT_NMI,
@@ -33,6 +33,8 @@ enum
 	BUS_REMOVE_TIMER,
 	BUS_GET_CYCLE,
 	BUS_GET_AUDIO_BUFFER_INDEX,
+	BUS_REQUEST_BUS,
+	BUS_RELEASE_BUS,
 };
 
 typedef struct
@@ -42,7 +44,7 @@ typedef struct
 	int event;
 } BusTimer;
 
-class Bus : public OEComponent
+class Bus : public AddressDecoder
 {
 public:
 	Bus();
@@ -58,8 +60,7 @@ public:
 	
 private:
 	OEComponent *host;
-	OEComponent *cpu;
-	OEComponent *cpuSocket;
+	OEComponent *busMaster;
 	
 	OEComponent *cpuSel;
 	

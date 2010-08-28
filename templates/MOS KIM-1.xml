@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE dml PUBLIC "-//OPENEMULATOR//DTD DML 1.0//EN" "http://www.openemulator.org/DTDs/dml-1.0.dtd">
-<dml version="1.0" label="MOS KIM-1" image="MOS KIM-1.png" description="" group="Early microcomputers">
+<!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTDs/edl-1.0.dtd">
+<edl version="1.0" label="MOS KIM-1" image="MOS KIM-1.png" description="" group="Early microcomputers">
 
 <component id="host" class="Host">
     <property name="notes" value="" />
@@ -9,29 +9,22 @@
     <property name="hidMouseCapture" value="0" />
 </component>
 
-<device ref="kim1" label="KIM-1">
-    <inlet type="SerialPort" label="Serial Port" image="Serial Port.png">
-        <ref 
-    </inlet>
+<device id="kim1" type="Motherboard" label="KIM-1" image="MOS KIM-1.png">
+    <port name="SerialPort" label="Serial Port" image="Serial Port.png">
+        <inlet name="serialPort" ref="kim1.io" property="serialPort" />
+    </port>
+    <port name="Kim1Slot" label="Slot 1" image="Kim-1 Slot.png">
+        <outlet name="controlBus" ref="kim1.controlBus" />
+        <outlet name="memoryBus" ref="kim1.memoryBus" />
+    </port>
 </device>
 
 <component id="kim1.controlBus" class="ControlBus">
     <property name="crystal" value="1.0MHz" />
-    <property name="divider" value="1" />
-    <property name="floatingBus" value="0xff" />
+    <property name="frequencyDivider" value="1" />
     <property name="resetOnPowerOn" value="0" />
-    <property name="host" ref="host:host" />
+    <property name="host" ref="host" />
     <property name="cpu" ref="cpu" />
-</component>
-<component name="kim1.cpu" class="MOS6502">
-    <property name="a" value="0" />
-    <property name="x" value="0" />
-    <property name="y" value="0" />
-    <property name="s" value="0" />
-    <property name="p" value="0" />
-    <property name="pc" value="0" />
-    <property name="memoryBus" ref="kim1.memoryBus" />
-    <property name="controlBus" ref="kim1.controlBus" />
 </component>
 <component name="kim1.memoryBus" class="AddressDecoder">
     <property name="addressSize" value="16" />
@@ -52,8 +45,18 @@
     <property name="component7" ref="kim1.rriot2ROM" />
     <property name="map7" value="0x1c00-0x1fff,0x3c00-0x3fff,0x5c00-0x5fff,0x7c00-0x7fff,0x9c00-0x9fff,0xbc00-0xbfff,0xdc00-0xdfff,0xfc00-0xffff" />
 </component>
+<component name="kim1.cpu" class="MOS6502">
+    <property name="a" value="0" />
+    <property name="x" value="0" />
+    <property name="y" value="0" />
+    <property name="s" value="0" />
+    <property name="p" value="0" />
+    <property name="pc" value="0" />
+    <property name="memoryBus" ref="kim1.memoryBus" />
+    <property name="controlBus" ref="kim1.controlBus" />
+</component>
 <component name="kim1.ram" class="RAM">
-    <property name="image" data="${REF}.bin" />
+    <property name="image" data="{$ID}.bin" />
     <property name="size" value="0x400" />
     <property name="host" ref="host:host" />
 </component>
@@ -76,12 +79,12 @@
     <property name="dataB" value="0" />
 </component>
 <component name="kim1.rriot1RAM" class="RAM">
-    <property name="image" data="${REF}.bin" />
+    <property name="image" data="{$ID}.bin" />
     <property name="size" value="0x40" />
     <property name="host" ref="host" />
 </component>
 <component name="kim1.rriot2RAM" class="RAM">
-    <property name="image" data="${REF}.bin" />
+    <property name="image" data="{$ID}.bin" />
     <property name="size" value="0x40" />
     <property name="host" ref="host" />
 </component>
@@ -106,4 +109,4 @@
     <property name="frequency" value="3400" />
 </component>
 
-</dml>
+</edl>

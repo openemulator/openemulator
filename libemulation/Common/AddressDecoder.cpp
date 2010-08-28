@@ -23,7 +23,7 @@ AddressDecoder::AddressDecoder()
 	writeMap.resize(1);
 }
 
-void AddressDecoder::mapBus(OEComponent *bus)
+void AddressDecoder::mapFloatingBus(OEComponent *floatingBus)
 {
 	for (OEComponents::iterator i = readMap.begin();
 		 i != readMap.end();
@@ -141,14 +141,14 @@ bool AddressDecoder::getAddressRanges(OEAddressRanges &ranges, const string &val
 
 bool AddressDecoder::setProperty(const string &name, const string &value)
 {
-	if (name == "addressSize")
+	if (name == "addressLines")
 	{
 		int size = 1 << getInt(value);
 		mask = size - 1;
 		readMap.resize(size);
 		writeMap.resize(size);
 	}
-	else if (name == "blockSize")
+	else if (name == "addressPage")
 		shift = getInt(value);
 	else if (name.substr(0, 3) == "map")
 		componentMap[name.substr(3)] = value;
@@ -160,8 +160,8 @@ bool AddressDecoder::setProperty(const string &name, const string &value)
 
 bool AddressDecoder::connect(const string &name, OEComponent *component)
 {
-	if (name == "bus")
-		mapBus(component);
+	if (name == "floatingBus")
+		mapFloatingBus(component);
 	else if (name.substr(0, 9) == "component")
 		mapComponent(component, componentMap[name.substr(9)]);
 	else

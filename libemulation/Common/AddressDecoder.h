@@ -8,10 +8,15 @@
  * Controls an address decoder
  */
 
+#ifndef _ADDRESSDECODER_H
+#define _ADDRESSDECODER_H
+
 #include "OEComponent.h"
 
+// Events
 enum {
 	ADDRESSDECODER_MAP,
+	ADDRESSDECODER_EVENT_END,
 };
 
 typedef struct
@@ -48,9 +53,11 @@ private:
 	OEComponents readMap;
 	OEComponents writeMap;
 	
-	void mapBus(OEComponent *bus);
+	void mapFloatingBus(OEComponent *bus);
 	bool mapComponent(OEComponent *component, const string &value);
 	
 	bool getAddressRange(OEAddressRange &range, const string &value);
 	bool getAddressRanges(OEAddressRanges &ranges, const string &value);
 };
+
+#endif

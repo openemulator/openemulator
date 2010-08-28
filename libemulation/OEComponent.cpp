@@ -119,30 +119,48 @@ void OEComponent::write(OEUInt32 address, int value)
 {
 }
 
-int OEComponent::readw(OEUInt32 address)
+int OEComponent::read16(OEUInt32 address)
 {
 	return 0;
 }
 
-void OEComponent::writew(OEUInt32 address, int value)
+void OEComponent::write16(OEUInt32 address, int value)
 {
 }
 
-int OEComponent::readd(OEUInt32 address)
+int OEComponent::read32(OEUInt32 address)
 {
 	return 0;
 }
 
-void OEComponent::writed(OEUInt32 address, int value)
+void OEComponent::write32(OEUInt32 address, int value)
 {
 }
 
-bool OEComponent::readBlock(OEUInt32 address, OEData *value)
+int OEComponent::ioRead(OEUInt32 address)
+{
+	return 0;
+}
+
+void OEComponent::ioWrite(OEUInt32 address, int value)
+{
+}
+
+int OEComponent::ioRead16(OEUInt32 address)
+{
+	return 0;
+}
+
+void OEComponent::ioWrite16(OEUInt32 address, int value)
+{
+}
+
+bool OEComponent::ioReadBlock(OEUInt32 address, OEData *value)
 {
 	return false;
 }
 
-bool OEComponent::writeBlock(OEUInt32 address, const OEData *value)
+bool OEComponent::ioWriteBlock(OEUInt32 address, const OEData *value)
 {
 	return false;
 }

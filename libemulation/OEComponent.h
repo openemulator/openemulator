@@ -45,12 +45,18 @@ public:
 	// Memory access
 	virtual int read(OEUInt32 address);
 	virtual void write(OEUInt32 address, int value);
-	virtual int readw(OEUInt32 address);
-	virtual void writew(OEUInt32 address, int value);
-	virtual int readd(OEUInt32 address);
-	virtual void writed(OEUInt32 address, int value);
-	virtual bool readBlock(OEUInt32 address, OEData *value);
-	virtual bool writeBlock(OEUInt32 address, const OEData *value);
+	virtual int read16(OEUInt32 address);
+	virtual void write16(OEUInt32 address, int value);
+	virtual int read32(OEUInt32 address);
+	virtual void write32(OEUInt32 address, int value);
+	
+	// IO Access
+	virtual int ioRead(OEUInt32 address);
+	virtual void ioWrite(OEUInt32 address, int value);
+	virtual int ioRead16(OEUInt32 address);
+	virtual void ioWrite16(OEUInt32 address, int value);
+	virtual bool ioReadBlock(OEUInt32 address, OEData *value);
+	virtual bool ioWriteBlock(OEUInt32 address, const OEData *value);
 	
 	// Debugging
 	virtual bool sendDebugCommand(char *command);

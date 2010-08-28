@@ -1,107 +1,115 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE dml PUBLIC "-//OPENEMULATOR//DTD DML 1.0//EN" "http://www.openemulator.org/DTDs/dml-1.0.dtd">
-<dml version="1.0" label="Apple-1" image="Apple-1.png" description="" group="Early microcomputers">
-<device name="host">
-    <component name="host" class="Host">
-        <property name="notes" value="" />
-        <property name="powerState" value="0" />
-        <property name="videoWindow" value="-1 -1 768 576" />
-        <property name="hidMouseCapture" value="0" />
-    </component>
+<!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTDs/edl-1.0.dtd">
+<edl version="1.0" label="Apple-1" image="Apple-1.png" description="" group="Early microcomputers">
+
+<component id="host" class="Host">
+    <property name="notes" value="" />
+    <property name="powerState" value="0" />
+    <property name="videoWindow" value="-1 -1 768 576" />
+    <property name="hidMouseCapture" value="0" />
+</component>
+
+<device id="apple1" type="Motherboard" label="Apple-1" image="Apple-1.png">
+    <port name="CompositeVideo" label="Video Connector" image="Video Connector.png">
+        <inlet name="monitor" ref="apple1.terminal" property="monitor" />
+    </port>
+    <port name="Apple1Slot" label="Slot 1" image="Apple-1 Slot.png">
+        <outlet name="controlBus" ref="apple1.controlBus" />
+        <outlet name="memoryBus" ref="apple1.memoryBus" />
+    </port>
+    <port name="Apple2Slot" label="Slot 2" image="Apple-1 Slot.png">
+        <outlet name="controlBus" ref="apple1.controlBus" />
+        <outlet name="memoryBus" ref="apple1.memoryBus" />
+    </port>
 </device>
 
-<device name="dev0" label="Apple-1">
-    <inlet ref="terminal.monitor" type="CompositeVideo" label="Video Connector" image="Video Connector.png" />
-    <inlet ref="bus.slot1" type="Apple1Slot" label="Slot 1" image="Apple I Slot.png" />
-    <inlet ref="bus.slot2" type="Apple1Slot" label="Slot 2" image="Apple I Slot.png" />
-    <component name="bus" class="Bus">
-        <property name="crystal" value="14.31818MHz" />
-        <property name="divider" value="14" />
-        <property name="floatingBus" value="0xff" />
-        <property name="resetOnPowerOn" value="0" />
-        <connection name="host" ref="host:host" />
-        <connection name="cpu" ref="cpu" />
-        <connection name="mmu" ref="mmu" />
-        <connection name="slot1" ref="" />
-        <connection name="slot2" ref="" />
-    </component>
-    <component name="cpu" class="MOS6502">
-        <property name="a" value="0" />
-        <property name="x" value="0" />
-        <property name="y" value="0" />
-        <property name="s" value="0" />
-        <property name="p" value="0" />
-        <property name="pc" value="0" />
-        <connection name="memory" ref="mmu" />
-        <connection name="bus" ref="bus" />
-    </component>
-    <component name="mmu" class="AddressDecoder">
-        <property name="addressSize" value="16" />
-        <property name="blockSize" value="8" />
-        <connection name="bus" value="bus" />
-        <connection name="component1" ref="ram1" />
-        <property name="map1" value="0x0000-0x0fff" />
-        <connection name="component2" ref="io" />
-        <property name="map2" value="0xc000-0xcfff" />
-        <connection name="component1" ref="ram2" />
-        <property name="map3" value="0xe000-0xefff" />
-        <connection name="component2" ref="rom" />
-        <property name="map4" value="0xf000-0xffff" />
-    </component>
-    <component name="ram1" class="RAM">
-        <data name="image" src="${REF}.bin" />
-        <property name="size" value="0x1000" />
-        <connection name="host" ref="host:host" />
-    </component>
-    <component name="io" class="AddressDecoder">
-        <property name="addressSize" value="5" />
-        <property name="blockSize" value="4" />
-        <connection name="bus" value="bus" />
-        <connection name="component1" ref="pia" />
-        <property name="map1" value="0x10-0x1f" />
-    </component>
-    <component name="pia" class="MC6821">
-        <connection name="bus" ref="bus" />
-        <connection name="portA" ref="" />
-        <property name="controlA" value="0" />
-        <property name="directionA" value="0" />
-        <property name="dataA" value="0" />
-        <property name="ca1" value="0" />
-        <property name="ca2" value="0" />
-        <connection name="busA" ref="" />
-        <connection name="portB" ref="apple1IO" />
-        <property name="controlB" value="0" />
-        <property name="directionB" value="0" />
-        <property name="dataB" value="0" />
-        <property name="cb1" value="0" />
-        <property name="cb2" value="0" />
-        <connection name="busB" ref="" />
-    </component>
-    <component name="apple1IO" class="Apple1IO">
-        <connection name="pia" ref="pia" />
-        <connection name="bus" ref="bus" />
-        <connection name="terminal" ref="terminal" />
-    </component>
-    <component name="terminal" class="Apple1Terminal">
-        <connection name="host" ref="host:host" />
-        <resource name="charset" src="roms/Signetics 2513 Video ROM.bin" />
-        <connection name="monitor" ref="dev1:monitor" />
-    </component>
-    <component name="ram2" class="RAM">
-        <data name="image" src="${REF}.bin" />
-        <property name="size" value="0x1000" />
-        <connection name="host" ref="host:host" />
-    </component>
-    <component name="rom" class="ROM">
-        <resource name="image" src="roms/Apple I Monitor ROM.bin" />
-    </component>
+<component id="apple1.controlBus" class="Bus">
+    <property name="crystal" value="14.31818MHz" />
+    <property name="frequencyDivider" value="14" />
+    <property name="resetOnPowerOn" value="0" />
+    <property name="host" ref="host" />
+    <property name="cpu" ref="cpu" />
+    <property name="mmu" ref="mmu" />
+</component>
+<component id="apple1.memoryBus" class="AddressDecoder">
+    <property name="addressSize" value="16" />
+    <property name="blockSize" value="8" />
+    <property name="bus" value="bus" />
+    <property name="component1" ref="apple1.ram1" />
+    <property name="map1" value="0x0000-0x0fff" />
+    <property name="component2" ref="apple1.io" />
+    <property name="map2" value="0xc000-0xcfff" />
+    <property name="component1" ref="apple1.ram2" />
+    <property name="map3" value="0xe000-0xefff" />
+    <property name="component2" ref="apple1.rom" />
+    <property name="map4" value="0xf000-0xffff" />
+</component>
+<component id="apple1.cpu" class="MOS6502">
+    <property name="a" value="0" />
+    <property name="x" value="0" />
+    <property name="y" value="0" />
+    <property name="s" value="0" />
+    <property name="p" value="0" />
+    <property name="pc" value="0" />
+    <property name="memory" ref="mmu" />
+    <property name="bus" ref="bus" />
+</component>
+<component id="apple1.ram1" class="RAM">
+    <property name="image" data="${ID}.bin" />
+    <property name="size" value="0x1000" />
+    <property name="host" ref="host" />
+</component>
+<component id="apple1.io" class="AddressDecoder">
+    <property name="addressSize" value="5" />
+    <property name="blockSize" value="4" />
+    <property name="controlBus" value="apple1.controlBus" />
+    <property name="component1" ref="apple1.pia" />
+    <property name="map1" value="0x10-0x1f" />
+</component>
+<component id="apple1.pia" class="MC6821">
+    <property name="controlBus" ref="apple1.controlBus" />
+    <property name="portA" ref="" />
+    <property name="controlA" value="0" />
+    <property name="directionA" value="0" />
+    <property name="dataA" value="0" />
+    <property name="ca1" value="0" />
+    <property name="ca2" value="0" />
+    <property name="busA" ref="" />
+    <property name="portB" ref="apple1IO" />
+    <property name="controlB" value="0" />
+    <property name="directionB" value="0" />
+    <property name="dataB" value="0" />
+    <property name="cb1" value="0" />
+    <property name="cb2" value="0" />
+    <property name="busB" ref="" />
+</component>
+<component id="apple1.io" class="Apple1IO">
+    <property name="pia" ref="pia" />
+    <property name="bus" ref="bus" />
+    <property name="terminal" ref="terminal" />
+</component>
+<component id="apple1.terminal" class="Apple1Terminal">
+    <property name="host" ref="host" />
+    <resource name="charset" src="roms/Signetics 2513 Video ROM.bin" />
+    <property name="monitor" ref="monitor.monitor" />
+</component>
+<component id="apple1.ram2" class="RAM">
+    <property name="image" data="{$ID}.bin" />
+    <property name="size" value="0x1000" />
+    <property name="host" ref="host" />
+</component>
+<component id="apple1.rom" class="ROM">
+    <property name="image" resource="roms/Apple I Monitor ROM.bin" />
+</component>
+
+<device id="compositeMonitor" type="Peripheral" label="Composite Monitor" image="CompositeMonitor.png">
+    <connector type="CompositeVideo" label="CompositeVideo" image="" />
+        <outlet ref="monitor" type="CompositeVideo" />
+    </connector>
 </device>
 
-<device name="dev1" type="peripheral" label="Composite Monitor" image="CompositeMonitor.png">
-    <outlet ref="monitor" type="CompositeVideo" />
-    <component name="monitor" class="CompositeMonitor">
-        <connection name="host" ref="host:host" />
-    </component>
-</device>
+<component id="monitor" class="CompositeMonitor">
+    <property name="host" ref="host:host" />
+</component>
 
-</dml>
+</edl>
