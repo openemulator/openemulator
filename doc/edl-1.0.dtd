@@ -1,9 +1,9 @@
-<!ELEMENT dml (component*,device*)>
-<!ATTLIST dml version CDATA "1.0">
-<!ATTLIST dml label CDATA #IMPLIED>
-<!ATTLIST dml image CDATA #IMPLIED>
-<!ATTLIST dml description CDATA #IMPLIED>
-<!ATTLIST dml group CDATA #IMPLIED>
+<!ELEMENT edl (component*,device*)>
+<!ATTLIST edl version CDATA "1.0">
+<!ATTLIST edl label CDATA #IMPLIED>
+<!ATTLIST edl image CDATA #IMPLIED>
+<!ATTLIST edl description CDATA #IMPLIED>
+<!ATTLIST edl group CDATA #IMPLIED>
 
 <!ELEMENT component (property*)>
 <!ATTLIST component id ID #REQUIRED>
@@ -43,8 +43,8 @@
 <!ATTLIST outlet ref IDREF #REQUIRED>
 
 <!ELEMENT setting EMPTY>
+<!ATTLIST setting ref IDREF #REQUIRED>
+<!ATTLIST setting property IDREF #REQUIRED>
 <!ATTLIST setting type CDATA #REQUIRED>
 <!ATTLIST setting options CDATA #IMPLIED>
 <!ATTLIST setting label CDATA #IMPLIED>
-<!ATTLIST setting ref IDREF #REQUIRED>
-<!ATTLIST setting property IDREF #REQUIRED>
