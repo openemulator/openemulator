@@ -1,20 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dml PUBLIC "-//OPENEMULATOR//DTD DML 1.0//EN" "http://www.openemulator.org/DTDs/dml-1.0.dtd">
-<dml version="1.0" label="Composite Video Monitor" image="Composite Video Monitor.png" group="Monitors">
+<edl version="1.0" label="Composite Video Monitor" image="Composite Video Monitor.png" group="Monitors">
 
-<device name="dev0" type="peripheral" label="Composite Video Monitor" image="Composite Video Monitor.png">
-    <outlet ref="monitor" type="CompositeVideo" />
+<device id="compositeMonitor" type="Peripheral" label="Composite Video Monitor" image="Composite Video Monitor.png">
+    <connector name="VideoConnector" label="Video Connector" image="">
+        <outlet name="CompositeVideo" ref="compositeMonitor.monitor" />
+    </connector>
     <setting ref="monitor.brightness" type="value" options="0.0,2.0" label="Brightness" />
     <setting ref="monitor.contrast" type="value" options="0.0,2.0" label="Contrast" />
-    <setting ref="monitor.saturation" type="value" options="0.0,2.0" label="Contrast" />
+    <setting ref="monitor.saturation" type="value" options="0.0,2.0" label="Saturation" />
     <setting ref="monitor.hue" type="value" options="0.0,2.0" label="Hue" />
-    <component name="monitor" class="CompositeMonitor">
-        <property name="brightness" value="1.0" />
-        <property name="contrast" value="1.0" />
-        <property name="saturation" value="1.0" />
-        <property name="hue" value="0.08333" />
-        <property name="colorize" value="0" />
-        <property name="lumaBandwidth" value="0.3" />
-        <property name="chromaBandwidth" value="0.06" />
-    </component>
-</device></dml>
+</device>
+
+<component name="monitor" class="CompositeMonitor">
+    <property name="brightness" value="1.0" />
+    <property name="contrast" value="1.0" />
+    <property name="saturation" value="1.0" />
+    <property name="hue" value="0.08333" />
+    <property name="colorize" value="0" />
+    <property name="lumaBandwidth" value="0.3" />
+    <property name="chromaBandwidth" value="0.06" />
+</component>
+
+</edl>

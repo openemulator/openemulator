@@ -14,8 +14,8 @@
         <inlet name="serialPort" ref="kim1.io" property="serialPort" />
     </port>
     <port name="Kim1Slot" label="Slot 1" image="Kim-1 Slot.png">
-        <outlet name="controlBus" ref="kim1.controlBus" />
-        <outlet name="memoryBus" ref="kim1.memoryBus" />
+        <outlet name="ControlBus" ref="kim1.controlBus" />
+        <outlet name="MemoryBus" ref="kim1.memoryBus" />
     </port>
 </device>
 

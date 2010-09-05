@@ -1,145 +1,198 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE dml PUBLIC "-//OPENEMULATOR//DTD DML 1.0//EN" "http://www.openemulator.org/DTDs/dml-1.0.dtd">
-<dml version="1.0" label="Apple II" image="Apple II.png" description="The Apple II was the first highly successful mass produced microprocessor product. The Apple II had color and high-resolution graphics modes, sound capabilities and one of two built-in BASIC programming languages." group="Apple II">
-<device name="host">
-    <component name="host" class="Host">
-        <property name="notes" value="" />
-        <property name="powerState" value="0" />
-        <property name="videoWindow" value="-1 -1 768 576" />
-        <property name="hidMouseCapture" value="1" />
-    </component>
-</device>
+<!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTDs/edl-1.0.dtd">
+<edl version="1.0" label="Apple II" image="Apple II.png" description="The Apple II was the first highly successful mass produced microprocessor product. The Apple II had color and high-resolution graphics modes, sound capabilities and one of two built-in BASIC programming languages." group="Apple II">
+<component id="host" class="Host">
+    <property name="notes" value="" />
+    <property name="powerState" value="0" />
+    <property name="videoWindow" value="-1 -1 768 576" />
+    <property name="hidMouseCapture" value="1" />
+</component>
 
-<device name="dev0" label="Apple II">
+<device id="apple2" label="Apple II">
+    <port name="Apple2Slot0" label="Slot 0" image="Apple II Slot.png">
+        <inlet name="IOMemory" ref="apple2.iou" property="slot0" />
+        <inlet name="SlotMemory" ref="apple2.slotMemory" property="slot0" />
+        <inlet name="ExpSlotMemory" ref="apple2.slot" property="slot0" />
+        <outlet name="ControlBus" ref="apple2.controlBus" />
+        <outlet name="MMU" ref="apple2.mmu" />
+    </port>
+    <port name="Apple2Slot1" label="Slot 1" image="Apple II Slot.png">
+        <inlet name="IOMemory" ref="apple2.iou" property="slot1" />
+        <inlet name="SlotMemory" ref="apple2.slotMemory" property="slot1" />
+        <inlet name="ExpSlotMemory" ref="apple2.slot" property="slot1" />
+        <outlet name="ControlBus" ref="apple2.controlBus" />
+        <outlet name="MMU" ref="apple2.mmu" />
+    </port>
+    <port name="Apple2Slot2" label="Slot 2" image="Apple II Slot.png">
+        <inlet name="IOMemory" ref="apple2.iou" property="slot2" />
+        <inlet name="SlotMemory" ref="apple2.slotMemory" property="slot2" />
+        <inlet name="ExpSlotMemory" ref="apple2.slot" property="slot2" />
+        <outlet name="ControlBus" ref="apple2.controlBus" />
+        <outlet name="MMU" ref="apple2.mmu" />
+    </port>
+    <port name="Apple2Slot3" label="Slot 3" image="Apple II Slot.png">
+        <inlet name="IOMemory" ref="apple2.iou" property="slot3" />
+        <inlet name="SlotMemory" ref="apple2.slotMemory" property="slot3" />
+        <inlet name="ExpSlotMemory" ref="apple2.slot" property="slot3" />
+        <outlet name="ControlBus" ref="apple2.controlBus" />
+        <outlet name="MMU" ref="apple2.mmu" />
+    </port>
+    <port name="Apple2Slot4" label="Slot 4" image="Apple II Slot.png">
+        <inlet name="IOMemory" ref="apple2.iou" property="slot4" />
+        <inlet name="SlotMemory" ref="apple2.slotMemory" property="slot4" />
+        <inlet name="ExpSlotMemory" ref="apple2.slot" property="slot4" />
+        <outlet name="ControlBus" ref="apple2.controlBus" />
+        <outlet name="MMU" ref="apple2.mmu" />
+    </port>
+    <port name="Apple2Slot5" label="Slot 5" image="Apple II Slot.png">
+        <inlet name="IOMemory" ref="apple2.iou" property="slot5" />
+        <inlet name="SlotMemory" ref="apple2.slotMemory" property="slot5" />
+        <inlet name="ExpSlotMemory" ref="apple2.slot" property="slot5" />
+        <outlet name="ControlBus" ref="apple2.controlBus" />
+        <outlet name="MMU" ref="apple2.mmu" />
+    </port>
+    <port name="Apple2Slot6" label="Slot 6" image="Apple II Slot.png">
+        <inlet name="IOMemory" ref="apple2.iou" property="slot6" />
+        <inlet name="SlotMemory" ref="apple2.slotMemory" property="slot6" />
+        <inlet name="ExpSlotMemory" ref="apple2.slot" property="slot6" />
+        <outlet name="ControlBus" ref="apple2.controlBus" />
+        <outlet name="MMU" ref="apple2.mmu" />
+    </port>
+    <port name="Apple2Slot7" label="Slot 7" image="Apple II Slot.png">
+        <inlet name="IOMemory" ref="apple2.iou" property="slot7" />
+        <inlet name="SlotMemory" ref="apple2.slotMemory" property="slot7" />
+        <inlet name="ExpSlotMemory" ref="apple2.slot" property="slot7" />
+        <outlet name="ControlBus" ref="apple2.controlBus" />
+        <outlet name="MMU" ref="apple2.mmu" />
+    </port>
+    <port name="Apple2GamePort" label="Game Port" image="Apple II Game Port.png">
+        <inlet name="GamePort" ref="apple2.game" property="port" />
+    </port>
+    <port name="Apple2Monitor" label="Game Port" image="Apple II Game Port.png">
+        <inlet name="GamePort" ref="apple2.game" property="port" />
+    </port>
+    
     <inlet ref="bus.cpuSocket" type="AppleIICPU" label="CPU Socket" image="CPU Socket.png" />
     <inlet ref="video.charsetSocket" type="AppleIICharsetROM" label="Character Set ROM Socket" image="ROM Socket.png" />
     <inlet ref="video.monitor" type="CompositeVideo" label="Video Connector" image="Video Connector.png" />
-    <inlet ref="game.port" type="AppleIIGamePort" label="Game Port" image="Apple II Game Port.png" />
-    <inlet ref="slotMemory.slot0" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png" />
-    <inlet ref="slotMemory.slot1" type="AppleIISlot" label="Slot 1" image="Apple II Slot.png" />
-    <inlet ref="slotMemory.slot2" type="AppleIISlot" label="Slot 2" image="Apple II Slot.png" />
-    <inlet ref="slotMemory.slot3" type="AppleIISlot" label="Slot 3" image="Apple II Slot.png" />
-    <inlet ref="slotMemory.slot4" type="AppleIISlot" label="Slot 4" image="Apple II Slot.png" />
-    <inlet ref="slotMemory.slot5" type="AppleIISlot" label="Slot 5" image="Apple II Slot.png" />
-    <inlet ref="slotMemory.slot6" type="AppleIISlot" label="Slot 6" image="Apple II Slot.png" />
-    <inlet ref="slotMemory.slot7" type="AppleIISlot" label="Slot 7" image="Apple II Slot.png" />
     <inlet ref="mmu.romF8Socket" type="AppleIIROM" label="ROM F8 Socket" image="ROM Socket.png" />
-    <component name="bus" class="AppleIIBus">
-        <property name="frequency" value="14.31818MHz" />
-        <property name="divider" value="14" />
-        <property name="scanlineClockDelay" value="2" />
-        <property name="resetOnPowerOn" value="0" />
-        <connection name="host" ref="host:host" />
-        <connection name="cpu" ref="cpu" />
-        <connection name="cpuSocket" ref="" />
-    </component>
-    <component name="cpu" class="MOS6502">
-        <property name="a" value="0" />
-        <property name="x" value="0" />
-        <property name="y" value="0" />
-        <property name="s" value="0" />
-        <property name="p" value="0" />
-        <property name="pc" value="0" />
-        <connection name="memory" ref="mmu" />
-        <connection name="bus" ref="bus" />
-    </component>
-    <component name="mmu" class="AppleIIMMU">
-        <property name="addressSize" value="16" />
-        <property name="blockSize" value="8" />
-        <connection name="bus" value="bus" />
-        <connection name="component1" ref="ram" />
-        <property name="map1" value="0x0000-0xbfff" />
-        <connection name="component2" ref="io" />
-        <property name="map2" value="0xc000-0xc0ff" />
-        <connection name="component3" ref="slotMemory" />
-        <property name="map3" value="0xc100-0xc7ff" />
-        <connection name="component4" ref="slotExpansionMemory" />
-        <property name="map4" value="0xc800-0xcfff" />
-        <property name="inh" value="0" />
-        <connection name="romD0" ref="romD0" />
-        <connection name="romD8" ref="bus" />
-        <connection name="romE0" ref="romE0" />
-        <connection name="romE8" ref="romE8" />
-        <connection name="romF0" ref="romF0" />
-        <connection name="romF8" ref="romF8" />
-        <connection name="romF8Socket" ref="" />
-    </component>
-    <component name="ram" class="RAM">
-        <property name="size" value="0xc000" />
-        <data name="image" src="${REF}.bin" />
-        <connection name="host" ref="host:host" />
-    </component>
-    <component name="io" class="AddressDecoder">
-        <property name="addressSize" value="8" />
-        <property name="blockSize" value="3" />
-        <connection name="bus" value="bus" />
-        <connection name="component1" ref="keyboard" />
-        <property name="map1" value="0x00-0x1f" />
-        <connection name="component2" ref="audioOut" />
-        <property name="map2" value="0x20-0x3f" />
-        <connection name="component3" ref="video" />
-        <property name="map3" value="0x50-0x57" />
-        <connection name="component4" ref="gamePort" />
-        <property name="map4" value="0x58-0x5f,0x61-0x6f" />
-        <connection name="component5" ref="audioIn" />
-        <property name="map5" value="0x61" />
-    </component>
-    <component name="keyboard" class="AppleIIKeyboard">
-        <connection name="host" ref="host:host" />
-    </component>
-    <component name="audioOut" class="AppleIIAudioOut">
-        <connection name="bus" value="bus" />
-    </component>
-    <component name="video" class="AppleIIVideo">
-        <connection name="host" ref="host:host" />
-        <connection name="ram" ref="ram" />
-        <resource name="image" src="roms/Signetics 2513 Video ROM.bin" />
-        <connection name="mmu" ref="mmu" />
-        <connection name="monitor" ref="" />
-        <connection name="charsetSocket" ref="" />
-    </component>
-    <component name="game" class="AppleIIGamePort">
-        <property name="an0" value="0" />
-        <property name="an1" value="0" />
-        <property name="an2" value="0" />
-        <property name="an3" value="0" />
-        <connection name="port" ref="" />
-    </component>
-    <component name="audioIn" class="AppleIIAudioIn">
-        <connection name="bus" value="bus" />
-    </component>
-    <component name="slotMemory" class="AppleIISlotMemory">
-        <connection name="bus" ref="bus" />
-        <connection name="mmu" ref="mmu" />
-        <connection name="io" ref="io" />
-        <connection name="slotExpansionMemory" ref="slotExpansionMemory" />
-        <connection name="slot0" ref="" />
-        <connection name="slot1" ref="" />
-        <connection name="slot2" ref="" />
-        <connection name="slot3" ref="" />
-        <connection name="slot4" ref="" />
-        <connection name="slot5" ref="" />
-        <connection name="slot6" ref="" />
-        <connection name="slot7" ref="" />
-        <property name="slotSel" value="0" />
-    </component>
-    <component name="slotExpansionMemory" class="AppleIISlotExpansionMemory">
-    </component>
-    <component name="romD0" class="ROM">
-        <resource name="image" src="roms/Apple II Programmers Aid ROM.bin" />
-    </component>
-    <component name="romE0" class="ROM">
-        <resource name="image" src="roms/Apple II E0 ROM.bin" />
-    </component>
-    <component name="romE8" class="ROM">
-        <resource name="image" src="roms/Apple II E8 ROM.bin" />
-    </component>
-    <component name="romF0" class="ROM">
-        <resource name="image" src="roms/Apple II F0 ROM.bin" />
-    </component>
-    <component name="romF8" class="ROM">
-        <resource name="image" src="roms/Apple II F8 ROM.bin" />
-    </component>
 </device>
 
-</dml>
+<component id="apple2.controlBus" class="AppleIIBus">
+    <property name="crystal" value="14.31818MHz" />
+    <property name="frequencyDivider" value="14" />
+    <property name="scanlineClockDelay" value="2" />
+    <property name="resetOnPowerOn" value="0" />
+    <property name="host" ref="host" />
+    <property name="cpu" ref="cpu" />
+    <property name="cpuSocket" ref="" />
+</component>
+<component id="apple2.memoryBus" class="MemoryBus">
+    <property name="addressSize" value="16" />
+    <property name="blockSize" value="8" />
+    <property name="bus" ref="bus" />
+    <property name="component1" ref="ram" />
+    <property name="map1" value="0x0000-0xbfff" />
+    <property name="component2" ref="io" />
+    <property name="map2" value="0xc000-0xc0ff" />
+    <property name="component3" ref="slotMemory" />
+    <property name="map3" value="0xc100-0xc7ff" />
+    <property name="component4" ref="slotExpansionMemory" />
+    <property name="map4" value="0xc800-0xcfff" />
+    <property name="inh" value="0" />
+    <property name="romD0" ref="romD0" />
+    <property name="romD8" ref="bus" />
+    <property name="romE0" ref="romE0" />
+    <property name="romE8" ref="romE8" />
+    <property name="romF0" ref="romF0" />
+    <property name="romF8" ref="romF8" />
+    <property name="romF8Socket" ref="" />
+</component>
+<component id="apple2.cpu" class="MOS6502">
+    <property name="a" value="0" />
+    <property name="x" value="0" />
+    <property name="y" value="0" />
+    <property name="s" value="0" />
+    <property name="p" value="0" />
+    <property name="pc" value="0" />
+    <property name="memoryBus" ref="apple2.memoryBus" />
+    <property name="controlBus" ref="apple2.controlBus" />
+</component>
+<component id="apple2.ram" class="RAM">
+    <property name="size" value="0xc000" />
+    <property name="image" data="${REF}.bin" />
+    <property name="host" ref="host:host" />
+</component>
+<component id="apple2.io" class="AddressDecoder">
+    <property name="addressSize" value="8" />
+    <property name="blockSize" value="3" />
+    <property name="bus" value="bus" />
+    <property name="component1" ref="keyboard" />
+    <property name="map1" value="0x00-0x1f" />
+    <property name="component2" ref="audioOut" />
+    <property name="map2" value="0x20-0x3f" />
+    <property name="component3" ref="video" />
+    <property name="map3" value="0x50-0x57" />
+    <property name="component4" ref="gamePort" />
+    <property name="map4" value="0x58-0x5f,0x61-0x6f" />
+    <property name="component5" ref="audioIn" />
+    <property name="map5" value="0x61" />
+</component>
+<component id="apple2.keyboard" class="AppleIIKeyboard">
+    <property name="host" ref="host:host" />
+</component>
+<component id="apple2.audioOut" class="AppleIIAudioOut">
+    <property name="bus" value="bus" />
+</component>
+<component id="apple2.video" class="AppleIIVideo">
+    <property name="host" ref="host:host" />
+    <property name="ram" ref="ram" />
+    <property name="image" resource="roms/Signetics 2513 Video ROM.bin" />
+    <property name="mmu" ref="mmu" />
+    <property name="monitor" ref="" />
+    <property name="charsetSocket" ref="" />
+</component>
+<component id="apple2.game" class="AppleIIGamePort">
+    <property name="an0" value="0" />
+    <property name="an1" value="0" />
+    <property name="an2" value="0" />
+    <property name="an3" value="0" />
+    <property name="port" ref="" />
+</component>
+<component id="apple2.audioIn" class="AppleIIAudioIn">
+    <property name="bus" value="bus" />
+</component>
+<component id="apple2.slotMemory" class="AppleIISlotMemory">
+    <property name="bus" ref="bus" />
+    <property name="mmu" ref="mmu" />
+    <property name="io" ref="io" />
+    <property name="slotExpansionMemory" ref="slotExpansionMemory" />
+    <property name="slot0" ref="" />
+    <property name="slot1" ref="" />
+    <property name="slot2" ref="" />
+    <property name="slot3" ref="" />
+    <property name="slot4" ref="" />
+    <property name="slot5" ref="" />
+    <property name="slot6" ref="" />
+    <property name="slot7" ref="" />
+    <property name="slotSel" value="0" />
+</component>
+<component id="apple2.slotExpansionMemory" class="AppleIISlotExpansionMemory">
+</component>
+<component id="apple2.romD0" class="ROM">
+    <property name="image" resource="roms/Apple II Programmers Aid ROM.bin" />
+</component>
+<component id="apple2.romE0" class="ROM">
+    <property name="image" resource="roms/Apple II E0 ROM.bin" />
+</component>
+<component id="apple2.romE8" class="ROM">
+    <property name="image" resource="roms/Apple II E8 ROM.bin" />
+</component>
+<component id="apple2.romF0" class="ROM">
+    <property name="image" resource="roms/Apple II F0 ROM.bin" />
+</component>
+<component id="apple2.romF8" class="ROM">
+    <property name="image" resource="roms/Apple II F8 ROM.bin" />
+</component>
+
+</edl>
