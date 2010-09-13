@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
+<edl version="1.0" type="Disk Drives" label="Disk II Drive 1" image="Apple Disk II Drive.png">
+
+<device id="diskII" type="Storage" label="Apple Disk II" image="images/apple2/Apple Disk II Drive.png" />
+<connector id="diskII.connector" type="AppleIIDisk" label="Apple Disk II Slot Connector" />
+<setting ref="diskII.drive" property="lock" type="checkbox" label="Lock Disk Drive" />
+<component id="diskII.drive" class="AppleDiskII">
+    <property name="image" value=" /Users/mressl/test2.dsk" />
+    <property name="lock" value="0" />
+    <property name="rpm" value="300.0" />
+    <property name="rpmVariance" value="1.0" />
+    <property name="soundSpin" data="${resourcePath}/sounds/Apple Disk II Spin.wav" />
+    <property name="soundArm" data="${resourcePath}/sounds/Apple Disk II Arm.wav" />
+    <property name="soundStop" data="${resourcePath}/sounds/Apple Disk II Stop.wav" />
+    <property name="soundShake" data="${resourcePath}/sounds/Apple Disk II Shake.wav" />
+</component>
+
+</edl>

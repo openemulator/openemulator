@@ -1,9 +1,26 @@
-<!ELEMENT edl (component*,device*)>
+<!--
+   Emulation Description Language version 1.0 DTD
+
+   For further information, see: http://www.openemulator.org
+
+   Copyright (c) 2010 Marc S. Ressl,
+   All Rights Reserved. 
+
+   This DTD module is identified by the PUBLIC and SYSTEM identifiers:
+
+   PUBLIC "-//W3C//DTD EDL 1.0//EN"
+   SYSTEM "http://www.openemulator.org/DTD/edl-1.dtd"
+
+   $Revision: 1.0 $
+   $Date: 2010/09/11 $
+-->
+
+<!ELEMENT edl (component*|device*|connector*|port*|setting*)>
 <!ATTLIST edl version CDATA "1.0">
+<!ATTLIST edl type CDATA #IMPLIED>
 <!ATTLIST edl label CDATA #IMPLIED>
 <!ATTLIST edl image CDATA #IMPLIED>
 <!ATTLIST edl description CDATA #IMPLIED>
-<!ATTLIST edl group CDATA #IMPLIED>
 
 <!ELEMENT component (property*)>
 <!ATTLIST component id ID #REQUIRED>
@@ -12,39 +29,37 @@
 <!ELEMENT property EMPTY>
 <!ATTLIST property name CDATA #REQUIRED>
 <!ATTLIST property value CDATA #IMPLIED>
-<!ATTLIST property ref IDREF #IMPLIED>
+<!ATTLIST property ref CDATA #IMPLIED>
 <!ATTLIST property data CDATA #IMPLIED>
-<!ATTLIST property resource CDATA #IMPLIED>
 
-<!ELEMENT device (port*,connector*,setting*)>
+<!ELEMENT device EMPTY>
 <!ATTLIST device id ID #REQUIRED>
-<!ATTLIST device type CDATA #IMPLIED>
+<!ATTLIST device type CDATA #REQUIRED>
 <!ATTLIST device options CDATA #IMPLIED>
-<!ATTLIST device label CDATA #IMPLIED>
-<!ATTLIST device image CDATA #IMPLIED>
+<!ATTLIST device label CDATA #REQUIRED>
+<!ATTLIST device image CDATA #REQUIRED>
 
-<!ELEMENT port (inlet*,outlet*)>
-<!ATTLIST port name CDATA #REQUIRED>
-<!ATTLIST port label CDATA #IMPLIED>
-<!ATTLIST port image CDATA #IMPLIED>
+<!ELEMENT connector (inlet*)>
+<!ATTLIST connector id ID #REQUIRED>
+<!ATTLIST connector type CDATA #REQUIRED>
+<!ATTLIST connector label CDATA #REQUIRED>
+<!ATTLIST connector image CDATA #REQUIRED>
 
-<!ELEMENT connector (inlet*,outlet*)>
-<!ATTLIST connector name CDATA #REQUIRED>
-<!ATTLIST connector label CDATA #IMPLIED>
-<!ATTLIST connector image CDATA #IMPLIED>
+<!ELEMENT port (inlet*)>
+<!ATTLIST port id ID #REQUIRED>
+<!ATTLIST port ref CDATA #REQUIRED>
+<!ATTLIST port type CDATA #REQUIRED>
+<!ATTLIST port label CDATA #REQUIRED>
+<!ATTLIST port image CDATA #REQUIRED>
 
 <!ELEMENT inlet EMPTY>
-<!ATTLIST inlet name CDATA #REQUIRED>
 <!ATTLIST inlet ref IDREF #REQUIRED>
 <!ATTLIST inlet property CDATA #REQUIRED>
-
-<!ELEMENT outlet EMPTY>
-<!ATTLIST outlet name CDATA #REQUIRED>
-<!ATTLIST outlet ref IDREF #REQUIRED>
+<!ATTLIST inlet remoteRef CDATA #REQUIRED>
 
 <!ELEMENT setting EMPTY>
 <!ATTLIST setting ref IDREF #REQUIRED>
-<!ATTLIST setting property IDREF #REQUIRED>
+<!ATTLIST setting property CDATA #REQUIRED>
 <!ATTLIST setting type CDATA #REQUIRED>
 <!ATTLIST setting options CDATA #IMPLIED>
-<!ATTLIST setting label CDATA #IMPLIED>
+<!ATTLIST setting label CDATA #REQUIRED>

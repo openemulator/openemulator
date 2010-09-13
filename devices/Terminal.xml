@@ -2,11 +2,13 @@
 <!DOCTYPE dml PUBLIC "-//OPENEMULATOR//DTD DML 1.0//EN" "http://www.openemulator.org/DTDs/dml-1.0.dtd">
 <dml version="1.0" label="Terminal" image="Terminal.png" group="Terminals">
 
-<device name="dev0" type="peripheral" label="Terminal" image="Terminal.png">
-    <outlet ref="terminal" type="SerialPort" />
-    <component name="terminal" class="Terminal">
-        <property name="width" value="24" />
-        <property name="height" value="40" />
-        <resource name="charset" src="roms/Signetics 2513 Video ROM.bin" />
-    </component>
-</device></dml>
+<device id="terminal" type="Peripheral" label="Terminal" image="Terminal.png">
+<connector id="terminal.connector" type="Serial" label="Connector" image="Serial Port Connector.png" />
+<component id="terminal.terminal" class="Terminal">
+    <property name="host" ref="host" />
+    <property name="width" value="24" />
+    <property name="height" value="40" />
+    <property name="charset" data="${resourcePath}/roms/Signetics 2513 Video ROM.bin" />
+</component>
+
+</edl>
