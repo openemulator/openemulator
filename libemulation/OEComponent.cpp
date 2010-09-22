@@ -21,7 +21,7 @@ OEComponent::~OEComponent()
 {
 }
 
-bool OEComponent::setValue(const string &name, string &value)
+bool OEComponent::setValue(const string &name, const string &value)
 {
 	return false;
 }

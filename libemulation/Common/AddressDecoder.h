@@ -35,8 +35,8 @@ class AddressDecoder : public OEComponent
 public:
 	AddressDecoder();
 	
-	bool setProperty(const string &name, const string &value);
-	bool connect(const string &name, OEComponent *component);
+	bool setValue(const string &name, const string &value);
+	bool setComponent(const string &name, OEComponent *component);
 	
 	bool postEvent(OEComponent *component, int event, void *data);
 	

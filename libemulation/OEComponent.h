@@ -25,7 +25,7 @@ public:
 	virtual ~OEComponent();
 	
 	// Configuration
-	virtual bool setValue(const string &name, string &value);
+	virtual bool setValue(const string &name, const string &value);
 	virtual bool getValue(const string &name, string &value);
 	virtual bool setComponent(const string &name, OEComponent *component);
 	virtual bool setData(const string &name, OEData *data);

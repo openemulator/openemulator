@@ -45,7 +45,7 @@ bool Host::removeScreen(HostVideoScreen *screen)
 	return found;
 }
 
-bool Host::setValue(const string &name, string &value)
+bool Host::setValue(const string &name, const string &value)
 {
 	if (name == "notes")
 		notes = value;
