@@ -4,7 +4,6 @@
 
 <device id="mousePaddles" type="Peripheral" label="Game Paddles (Mouse)" image="Apple II Game Paddles.png">
     <setting ref="mousePaddles.port" property="invertAxis" type="checkbox" label="Invert axis" />
-    
     <component id="mousePaddles.port" class="AppleIIGamePaddles">
         <property name="host" ref="host" />
         <property name="invertAxis" value="0" />

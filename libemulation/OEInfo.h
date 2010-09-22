@@ -5,13 +5,13 @@
  * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Parses a DML file.
+ * Parses a EDL file.
  */
 
 #ifndef _OEINFO_H
 #define _OEINFO_H
 
-#include "OEDML.h"
+#include "OEEDL.h"
 
 typedef struct
 {
@@ -52,7 +52,7 @@ typedef struct OEPortStruct
 
 typedef vector<OEPort *> OEPorts;
 
-class OEInfo : public OEDML
+class OEInfo : public OEEDL
 {
 public:
 	OEInfo();
@@ -61,7 +61,7 @@ public:
 	
 	bool open(string path);
 	
-	bool addDML(string path, OEConnections &connections);
+	bool addEDL(string path, OEConnections &connections);
 	bool removeDevice(string deviceName);
 	
 	string getLabel();

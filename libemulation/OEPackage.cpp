@@ -82,7 +82,7 @@ void OEPackage::close()
 	zip = NULL;
 }
 
-bool OEPackage::readFile(string localPath, OEData *data)
+bool OEPackage::readFile(string packagePath, OEData *data)
 {
 	bool error = true;
 	
@@ -94,9 +94,9 @@ bool OEPackage::readFile(string localPath, OEData *data)
 		struct zip_stat zipStat;
 		struct zip_file *zipFile;
 		
-		if (zip_stat(zip, (const char *) localPath.c_str(), 0, &zipStat) == 0)
+		if (zip_stat(zip, (const char *) packagePath.c_str(), 0, &zipStat) == 0)
 		{
-			if ((zipFile = zip_fopen(zip, localPath.c_str(), 0)) != NULL)
+			if ((zipFile = zip_fopen(zip, packagePath.c_str(), 0)) != NULL)
 			{
 				data->resize(zipStat.size);
 				error = (zip_fread(zipFile,
@@ -108,7 +108,7 @@ bool OEPackage::readFile(string localPath, OEData *data)
 	}
 	else
 	{
-		ifstream file((path + OE_PATH_SEPARATOR + localPath).c_str());
+		ifstream file((path + OE_PATH_SEPARATOR + packagePath).c_str());
 		
 		if (file.is_open())
 		{
@@ -128,7 +128,7 @@ bool OEPackage::readFile(string localPath, OEData *data)
 	return !error;
 }
 
-bool OEPackage::writeFile(string localPath, OEData *data)
+bool OEPackage::writeFile(string packagePath, OEData *data)
 {
 	bool error = true;
 	
@@ -144,8 +144,8 @@ bool OEPackage::writeFile(string localPath, OEData *data)
 										   0)) != NULL)
 		{
 			int index;
-			if ((index = zip_name_locate(zip, localPath.c_str(), 0)) == -1)
-				error = (zip_add(zip, localPath.c_str(), zipSource) == -1);
+			if ((index = zip_name_locate(zip, packagePath.c_str(), 0)) == -1)
+				error = (zip_add(zip, packagePath.c_str(), zipSource) == -1);
 			else
 				error = (zip_replace(zip, index, zipSource) == -1);
 			
@@ -154,7 +154,7 @@ bool OEPackage::writeFile(string localPath, OEData *data)
 	}
 	else
 	{
-		ofstream file((path + OE_PATH_SEPARATOR + localPath).c_str());
+		ofstream file((path + OE_PATH_SEPARATOR + packagePath).c_str());
 		
 		if (file.is_open())
 		{

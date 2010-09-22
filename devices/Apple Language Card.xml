@@ -14,7 +14,7 @@
     <component id="languageCard.memory" class="RAM">
         <property name="host" ref="host" />
         <property name="size" value="16384" />
-        <property name="memory" data="${id}.bin" />
+        <property name="memory" src="${id}.bin" />
     </component>
 </device>
 

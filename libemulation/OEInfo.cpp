@@ -5,7 +5,7 @@
  * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Parses a DML file.
+ * Parses an EDL file.
  */
 
 #include <fstream>
@@ -15,11 +15,11 @@
 
 #include "OEInfo.h"
 
-OEInfo::OEInfo() : OEDML()
+OEInfo::OEInfo() : OEEDL()
 {
 }
 
-OEInfo::OEInfo(string path) : OEDML()
+OEInfo::OEInfo(string path) : OEEDL()
 {
 	open(path);
 }
@@ -33,7 +33,7 @@ OEInfo::~OEInfo()
 
 bool OEInfo::open(string path)
 {
-	if (!OEDML::open(path))
+	if (!OEEDL::open(path))
 		return false;
 	
 	if (analyze())
@@ -46,9 +46,9 @@ bool OEInfo::open(string path)
 	return false;
 }
 
-bool OEInfo::addDML(string path, OEConnections &connections)
+bool OEInfo::addEDL(string path, OEConnections &connections)
 {
-	if (!OEDML::addDML(path, connections))
+	if (!OEEDL::addEDL(path, connections))
 		return false;
 	
 	return analyze();
@@ -56,7 +56,7 @@ bool OEInfo::addDML(string path, OEConnections &connections)
 
 bool OEInfo::removeDevice(string deviceName)
 {
-	if (!OEDML::removeDevice(deviceName))
+	if (!OEEDL::removeDevice(deviceName))
 		return false;
 	
 	return analyze();

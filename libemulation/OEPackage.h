@@ -34,8 +34,8 @@ public:
 	bool isOpen();
 	void close();
 	
-	bool readFile(string localPath, OEData *data);
-	bool writeFile(string localPath, OEData *data);
+	bool readFile(string packagePath, OEData *data);
+	bool writeFile(string packagePath, OEData *data);
 	
 	bool remove();
 	

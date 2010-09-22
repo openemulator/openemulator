@@ -53,19 +53,19 @@ bool OEPAEmulation::save(string path)
 	return status;
 }
 
-bool OEPAEmulation::setProperty(string ref, string name, string value)
+bool OEPAEmulation::setValue(const string &ref, const string &name, string &value)
 {
 	lock();
 	
 	OEComponent *component = getComponent(ref);
 	bool status;
 	if (component)
-		status = component->setProperty(name, value);
+		status = component->setValue(name, value);
 	else
 	{
 		status = false;
-		oepaLog("could not set property " << ref << "." << name <<
-				" (ref not found)");
+		oepaLog("could not set property " << name <<
+				" (ref " << ref << " not found)");
 	}
 	
 	unlock();
@@ -73,19 +73,19 @@ bool OEPAEmulation::setProperty(string ref, string name, string value)
 	return status;
 }
 
-bool OEPAEmulation::getProperty(string ref, string name, string &value)
+bool OEPAEmulation::getValue(const string &ref, const string &name, string &value)
 {
 	lock();
 	
 	OEComponent *component = getComponent(ref);
 	bool status;
 	if (component)
-		status = component->getProperty(name, value);
+		status = component->getValue(name, value);
 	else
 	{
 		status = false;
-		oepaLog("could not get property " << ref << "." << name << 
-				" (ref not found)");
+		oepaLog("could not get property " << name <<
+				" (ref " << ref << " not found)");
 	}
 	
 	unlock();
@@ -128,11 +128,11 @@ int OEPAEmulation::postEvent(string ref, int message, void *data)
 	return status;
 }
 
-bool OEPAEmulation::addDML(string path, OEConnections &connections)
+bool OEPAEmulation::addEDL(string path, OEConnections &connections)
 {
 	lock();
 	
-	bool status = OEEmulation::addDML(path, connections);
+	bool status = OEEmulation::addEDL(path, connections);
 	
 	unlock();
 	
@@ -143,7 +143,7 @@ bool OEPAEmulation::removeDevice(string deviceName)
 {
 	lock();
 	
-	bool status = OEDML::removeDevice(deviceName);
+	bool status = OEEDL::removeDevice(deviceName);
 	
 	unlock();
 	

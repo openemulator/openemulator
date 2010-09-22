@@ -21,12 +21,17 @@ OEComponent::~OEComponent()
 {
 }
 
-bool OEComponent::setProperty(const string &name, const string &value)
+bool OEComponent::setValue(const string &name, string &value)
 {
 	return false;
 }
 
-bool OEComponent::getProperty(const string &name, string &value)
+bool OEComponent::getValue(const string &name, string &value)
+{
+	return false;
+}
+
+bool OEComponent::setComponent(const string &name, OEComponent *component)
 {
 	return false;
 }
@@ -41,14 +46,9 @@ bool OEComponent::getData(const string &name, OEData **data)
 	return false;
 }
 
-bool OEComponent::setResource(const string &name, OEData *data)
+bool OEComponent::init()
 {
-	return false;
-}
-
-bool OEComponent::connect(const string &name, OEComponent *component)
-{
-	return false;
+	return true;
 }
 
 bool OEComponent::addObserver(OEComponent *component, int notification)
@@ -76,7 +76,7 @@ void OEComponent::notify(OEComponent *component, int notification, void *data)
 	for (i = observers[notification].begin();
 		 i != observers[notification].end();
 		 i++)
-		notify(this, notification, data);
+		notify(component, notification, data);
 }
 
 bool OEComponent::addDelegate(OEComponent *component, int event)
@@ -137,35 +137,17 @@ void OEComponent::write32(OEUInt32 address, int value)
 {
 }
 
-int OEComponent::ioRead(OEUInt32 address)
-{
-	return 0;
-}
-
-void OEComponent::ioWrite(OEUInt32 address, int value)
-{
-}
-
-int OEComponent::ioRead16(OEUInt32 address)
-{
-	return 0;
-}
-
-void OEComponent::ioWrite16(OEUInt32 address, int value)
-{
-}
-
-bool OEComponent::ioReadBlock(OEUInt32 address, OEData *value)
+bool OEComponent::readBlock(OEUInt32 address, OEData *value)
 {
 	return false;
 }
 
-bool OEComponent::ioWriteBlock(OEUInt32 address, const OEData *value)
+bool OEComponent::writeBlock(OEUInt32 address, OEData *value)
 {
 	return false;
 }
 
-bool OEComponent::sendDebugCommand(char *command)
+bool OEComponent::sendDebugCommand(const string &command)
 {
 	return false;
 }

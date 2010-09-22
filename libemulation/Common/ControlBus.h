@@ -1,40 +1,40 @@
 
 /**
  * libemulation
- * Bus
+ * Control bus
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements a bus with clock control and reset/IRQ/NMI lines
+ * Implements a control bus with clock control and reset/IRQ/NMI lines
  */
 
-#ifndef _BUS_H
-#define _BUS_H
+#ifndef _CONTROLBUS_H
+#define _CONTROLBUS_H
 
-#include "AddressDecoder.h"
+#include "OEComponent.h"
 
 // Notifications
 enum
 {
-	BUS_RESET_ASSERTED,
-	BUS_IRQ_ASSERTED,
-	BUS_IRQ_CLEARED,
-	BUS_NMI_ASSERTED,
+	CONTROLBUS_RESET_ASSERTED,
+	CONTROLBUS_IRQ_ASSERTED,
+	CONTROLBUS_IRQ_CLEARED,
+	CONTROLBUS_NMI_ASSERTED,
 };
 
 // Events
 enum
 {
-	BUS_ASSERT_RESET = ADDRESSDECODER_EVENT_END,
-	BUS_ASSERT_IRQ,
-	BUS_CLEAR_IRQ,
-	BUS_ASSERT_NMI,
-	BUS_ADD_TIMER,
-	BUS_REMOVE_TIMER,
-	BUS_GET_CYCLE,
-	BUS_GET_AUDIO_BUFFER_INDEX,
-	BUS_REQUEST_BUS,
-	BUS_RELEASE_BUS,
+	CONTROLBUS_ASSERT_RESET,
+	CONTROLBUS_ASSERT_IRQ,
+	CONTROLBUS_CLEAR_IRQ,
+	CONTROLBUS_ASSERT_NMI,
+	CONTROLBUS_ADD_TIMER,
+	CONTROLBUS_REMOVE_TIMER,
+	CONTROLBUS_GET_CYCLE,
+	CONTROLBUS_GET_AUDIO_BUFFER_INDEX,
+	CONTROLBUS_REQUEST_BUS,
+	CONTROLBUS_RELEASE_BUS,
 };
 
 typedef struct
@@ -42,12 +42,12 @@ typedef struct
 	int cyclesLeft;
 	OEComponent *component;
 	int event;
-} BusTimer;
+} ControlBusTimer;
 
-class Bus : public AddressDecoder
+class ControlBus : public OEComponent
 {
 public:
-	Bus();
+	ControlBus();
 	
 	bool setProperty(const string &name, const string &value);
 	bool connect(const string &name, OEComponent *component);
@@ -56,18 +56,14 @@ public:
 	
 	bool postEvent(OEComponent *component, int event, void *data);
 	
-	OEUInt8 read(int address);
-	
 private:
 	OEComponent *host;
-	OEComponent *busMaster;
+	OEComponent *master;
 	
 	OEComponent *cpuSel;
 	
-	int floatingBus;
-	
 	float crystal;
-	float divider;
+	float frequencyDivider;
 	float frequency;
 	
 	bool resetOnPowerOn;

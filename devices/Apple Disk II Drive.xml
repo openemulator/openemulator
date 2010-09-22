@@ -10,10 +10,10 @@
     <property name="lock" value="0" />
     <property name="rpm" value="300.0" />
     <property name="rpmVariance" value="1.0" />
-    <property name="soundSpin" data="${resourcePath}/sounds/Apple Disk II Spin.wav" />
-    <property name="soundArm" data="${resourcePath}/sounds/Apple Disk II Arm.wav" />
-    <property name="soundStop" data="${resourcePath}/sounds/Apple Disk II Stop.wav" />
-    <property name="soundShake" data="${resourcePath}/sounds/Apple Disk II Shake.wav" />
+    <property name="soundSpin" src="${resourcePath}/sounds/Apple Disk II Spin.wav" />
+    <property name="soundArm" src="${resourcePath}/sounds/Apple Disk II Arm.wav" />
+    <property name="soundStop" src="${resourcePath}/sounds/Apple Disk II Stop.wav" />
+    <property name="soundShake" src="${resourcePath}/sounds/Apple Disk II Shake.wav" />
 </component>
 
 </edl>

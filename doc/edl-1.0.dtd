@@ -30,7 +30,7 @@
 <!ATTLIST property name CDATA #REQUIRED>
 <!ATTLIST property value CDATA #IMPLIED>
 <!ATTLIST property ref CDATA #IMPLIED>
-<!ATTLIST property data CDATA #IMPLIED>
+<!ATTLIST property src CDATA #IMPLIED>
 
 <!ELEMENT device EMPTY>
 <!ATTLIST device id ID #REQUIRED>
@@ -55,7 +55,7 @@
 <!ELEMENT inlet EMPTY>
 <!ATTLIST inlet ref IDREF #REQUIRED>
 <!ATTLIST inlet property CDATA #REQUIRED>
-<!ATTLIST inlet remoteRef CDATA #REQUIRED>
+<!ATTLIST inlet outletRef CDATA #REQUIRED>
 
 <!ELEMENT setting EMPTY>
 <!ATTLIST setting ref IDREF #REQUIRED>

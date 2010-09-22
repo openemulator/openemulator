@@ -15,7 +15,7 @@
     <property name="drive2" ref="" />
 </component>
 <component id="diskIIInterface.memory" class="AppleIIInterfaceROM">
-    <property name="image" data="${resourcePath}/roms/Apple Disk II Interface Card ROM.bin" />
+    <property name="image" src="${resourcePath}/roms/Apple Disk II Interface Card ROM.bin" />
 </component>
 
 </edl>

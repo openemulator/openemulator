@@ -9,7 +9,7 @@
  */
 
 #include "OEComponent.h"
-#include "Bus.h"
+#include "ControlBus.h"
 
 class MOS6502 : public OEComponent
 {

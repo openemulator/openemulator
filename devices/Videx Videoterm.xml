@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE dml PUBLIC "-//OPENEMULATOR//DTD DML 1.0//EN" "http://www.openemulator.org/DTDs/dml-1.0.dtd">
-<dml version="1.0" label="Videx Videoterm" image="Videx Videoterm.png" group="80 Column Cards">
+<!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
+<edl version="1.0" type="80 Column Cards" label="Videx Videoterm" image="Videx Videoterm.png">
 
-<device name="dev0" type="expansion" label="Videx Videoterm" image="Videx Videoterm.png">
-    <outlet ref="card" type="AppleIISlot" />
-    <component name="card" class="VidexVideoterm">
-        <connection name="host" ref="host:host" />
-        <connection name="rom" ref="rom" />
-    </component>
-	<component name="rom" class="ROM">
-        <resource name="image" src="roms/Videx Videoterm 2.4 ROM.bin" />
-    </component>
-</device></dml>
+<device id="videoterm" type="Expansion" label="Videx Videoterm" image="images/apple2/Videx Videoterm.png">
+<connector id="videoterm.connector" type="AppleIISlot" label="Videx Videoterm" image="images/apple2/Videx Videoterm.png" />
+<component id="videoterm.io" class="VidexVideoterm">
+</component>
+<component name="videoterm.memory" class="AppleIIInterfaceROM">
+    <property name="image" src="${resourcePath}/roms/Videx Videoterm 2.4 ROM.bin" />
+</component>
+
+</edl>

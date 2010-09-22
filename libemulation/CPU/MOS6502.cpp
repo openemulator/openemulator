@@ -68,18 +68,18 @@ bool MOS6502::connect(const string &name, OEComponent *component)
 	{
 		if (bus)
 		{
-			bus->removeObserver(this, BUS_RESET_ASSERTED);
-			bus->removeObserver(this, BUS_IRQ_ASSERTED);
-			bus->removeObserver(this, BUS_IRQ_CLEARED);
-			bus->removeObserver(this, BUS_NMI_ASSERTED);
+			bus->removeObserver(this, CONTROLBUS_RESET_ASSERTED);
+			bus->removeObserver(this, CONTROLBUS_IRQ_ASSERTED);
+			bus->removeObserver(this, CONTROLBUS_IRQ_CLEARED);
+			bus->removeObserver(this, CONTROLBUS_NMI_ASSERTED);
 		}
 		bus = component;
 		if (bus)
 		{
-			bus->addObserver(this, BUS_RESET_ASSERTED);
-			bus->addObserver(this, BUS_IRQ_ASSERTED);
-			bus->addObserver(this, BUS_IRQ_CLEARED);
-			bus->addObserver(this, BUS_NMI_ASSERTED);
+			bus->addObserver(this, CONTROLBUS_RESET_ASSERTED);
+			bus->addObserver(this, CONTROLBUS_IRQ_ASSERTED);
+			bus->addObserver(this, CONTROLBUS_IRQ_CLEARED);
+			bus->addObserver(this, CONTROLBUS_NMI_ASSERTED);
 		}
 	}
 	else
@@ -92,16 +92,16 @@ void MOS6502::notify(OEComponent *component, int notification, void *data)
 {
 	switch (notification)
 	{
-		case BUS_RESET_ASSERTED:
+		case CONTROLBUS_RESET_ASSERTED:
 			reset();
 			break;
-		case BUS_IRQ_ASSERTED:
+		case CONTROLBUS_IRQ_ASSERTED:
 			reset();
 			break;
-		case BUS_IRQ_CLEARED:
+		case CONTROLBUS_IRQ_CLEARED:
 			reset();
 			break;
-		case BUS_NMI_ASSERTED:
+		case CONTROLBUS_NMI_ASSERTED:
 			reset();
 			break;
 	}

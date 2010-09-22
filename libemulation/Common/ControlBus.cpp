@@ -1,96 +1,88 @@
 
 /**
  * libemulation
- * Bus
+ * Control bus
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements a bus with clock control and reset/IRQ/NMI lines
+ * Implements a control bus with clock control and reset/IRQ/NMI lines
  */
 
 #include <math.h>
 
-#include "Bus.h"
+#include "ControlBus.h"
 #include "Host.h"
 
-Bus::Bus()
+ControlBus::ControlBus()
 {
-	floatingBus = 0;
-	
-	crystal = 1.0;
-	divider = 1.0;
+	crystal = 1E6;
+	frequencyDivider = 1.0;
 	updateFrequency();
 	
 	resetOnPowerOn = false;
 	irqCount = 0;
 	
 	host = NULL;
-	busMaster = NULL;
+	master = NULL;
 }
 
-void Bus::updateFrequency()
+void ControlBus::updateFrequency()
 {
-	frequency = crystal / divider;
+	frequency = crystal / frequencyDivider;
 }
 
-bool Bus::setProperty(const string &name, const string &value)
+bool ControlBus::setProperty(const string &name, const string &value)
 {
-	if (name == "floatingBus")
-		floatingBus = getInt(value);
-	else if (name == "crystal")
+	if (name == "crystal")
 	{
 		crystal = getInt(value);
 		updateFrequency();
 	}
 	else if (name == "frequencyDivider")
 	{
-		divider = getInt(value);
+		frequencyDivider = getInt(value);
 		updateFrequency();
 	}
 	else if (name == "resetOnPowerOn")
 		resetOnPowerOn = getInt(value);
-	else
-		return AddressDecoder::setProperty(name, value);
 	
 	return true;
 }
 
-bool Bus::connect(const string &name, OEComponent *component)
+bool ControlBus::connect(const string &name, OEComponent *component)
 {
 	if (name == "host")
 	{
 		if (host)
 		{
 			host->removeObserver(this, HOST_POWERED_ON);
-			host->removeObserver(this, HOST_AUDIO_RENDER_DID_BEGIN);
+			host->removeObserver(this, HOST_AUDIO_FRAME_WILL_RENDER);
 			host->removeObserver(this, HOST_HID_SYSTEM_CHANGED);
 		}
 		host = component;
 		if (host)
 		{
 			host->addObserver(this, HOST_POWERED_ON );
-			host->addObserver(this, HOST_AUDIO_RENDER_DID_BEGIN);
+			host->addObserver(this, HOST_AUDIO_FRAME_WILL_RENDER);
 			host->addObserver(this, HOST_HID_SYSTEM_CHANGED);
 		}
 	}
-	else if (name == "busMaster")
-		busMaster = component;
-	else
-		return AddressDecoder::connect(name, component);
+	else if (name == "master")
+		master = component;
 	
 	return true;
 }
 
-void Bus::notify(OEComponent *component, int notification, void *data)
+void ControlBus::notify(OEComponent *component, int notification, void *data)
 {
 	switch (notification)
 	{
 		case HOST_POWERED_ON:
 			if (resetOnPowerOn)
-				postEvent(this, BUS_ASSERT_RESET, NULL);
+				postEvent(this, CONTROLBUS_ASSERT_RESET, NULL);
 			break;
 			
-		case HOST_AUDIO_RENDER_DID_BEGIN:
+		case HOST_AUDIO_FRAME_WILL_RENDER:
 		{
 			HostAudioBuffer *buffer = (HostAudioBuffer *) data;
 			float *out = buffer->output;
@@ -128,7 +120,7 @@ void Bus::notify(OEComponent *component, int notification, void *data)
 					break;
 					
 				case HOST_HID_S_DEBUGGERBREAK:
-					postEvent(this, BUS_ASSERT_NMI, NULL);
+					postEvent(this, CONTROLBUS_ASSERT_NMI, NULL);
 					break;
 			}
 			break;
@@ -136,45 +128,45 @@ void Bus::notify(OEComponent *component, int notification, void *data)
 	}
 }
 
-bool Bus::postEvent(OEComponent *component, int event, void *data)
+bool ControlBus::postEvent(OEComponent *component, int event, void *data)
 {
 	switch (event)
 	{
-		case BUS_ASSERT_RESET:
-			OEComponent::notify(this, BUS_RESET_ASSERTED, NULL);
+		case CONTROLBUS_ASSERT_RESET:
+			OEComponent::notify(this, CONTROLBUS_RESET_ASSERTED, NULL);
 			return true;
 			
-		case BUS_ASSERT_IRQ:
+		case CONTROLBUS_ASSERT_IRQ:
 			if (!irqCount)
-				OEComponent::notify(this, BUS_IRQ_ASSERTED, NULL);
+				OEComponent::notify(this, CONTROLBUS_IRQ_ASSERTED, NULL);
 			irqCount++;
 			return true;
 			
-		case BUS_CLEAR_IRQ:
+		case CONTROLBUS_CLEAR_IRQ:
 			if (irqCount > 0)
 			{
 				irqCount--;
 				if (!irqCount)
-					OEComponent::notify(this, BUS_IRQ_CLEARED, NULL);
+					OEComponent::notify(this, CONTROLBUS_IRQ_CLEARED, NULL);
 			}
 			return true;
 			
-		case BUS_ASSERT_NMI:
-			OEComponent::notify(this, BUS_NMI_ASSERTED, NULL);
+		case CONTROLBUS_ASSERT_NMI:
+			OEComponent::notify(this, CONTROLBUS_NMI_ASSERTED, NULL);
 			return true;
 			
-		case BUS_ADD_TIMER:
+		case CONTROLBUS_ADD_TIMER:
 			return true;
 			
-		case BUS_REMOVE_TIMER:
+		case CONTROLBUS_REMOVE_TIMER:
 			return true;
 			
-		case BUS_GET_CYCLE:
+		case CONTROLBUS_GET_CYCLE:
 			return true;
 			
-		case BUS_GET_AUDIO_BUFFER_INDEX:
+		case CONTROLBUS_GET_AUDIO_BUFFER_INDEX:
 			return true;
 	}
 	
-	return AddressDecoder::postEvent(component, event, data);
+	return false;
 }

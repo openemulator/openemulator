@@ -4,8 +4,8 @@
 
 <device id="ssc" type="Expansion" label="Apple II Super Serial Card" image="Apple II Super Serial Card.png">
     <connector id="ssc.connector" type="AppleIISlot" label="Apple II Super Serial Card" image="Apple II Super Serial Card.png" />
-    <port id="ssc.port" connectorRef="" type="Serial" label="Serial Port" image="Serial Port.png">
-        <inlet ref="ssc.io" property="port" componentRef="connector" />
+    <port id="ssc.port" ref="" type="Serial" label="Serial Port" image="Serial Port.png">
+        <inlet ref="ssc.io" property="port" outletRef="connector" />
     </port>
     <setting ref="ssc.io" property="mode" type="select" options="Communications Mode,Printer Mode" label="Mode" />
     <setting ref="ssc.io" property="baudRate" type="select" options="50,75,110,135,150,300,600,1200,1800,2400,3600,4800,7200,9600,19200" label="Baud Rate" />
@@ -16,7 +16,6 @@
     <setting ref="ssc.io" property="interrupts" type="checkbox" label="Enable interrupt" />
     <setting ref="ssc.io" property="charactersPerLine" type="select" options="40,72,80,132" label="Characters Per Line" />
     <setting ref="ssc.io" property="delayAfterCR" type="checkbox" label="Delay after CR" />
-    
     <component id="ssc.io" class="AppleIISuperSerialCard">
 		<property name="host" ref="host" />
         <property name="port" ref="" />
@@ -31,7 +30,7 @@
 		<property name="delayAfterCR" value="0" />
     </component>
 	<component id="ssc.memory" class="ROM">
-        <property name="memoryImage" data="${resourcePath}/roms/Apple II Super Serial Card ROM.bin" />
+        <property name="memoryImage" src="${resourcePath}/roms/Apple II Super Serial Card ROM.bin" />
     </component>
 </device>
 

@@ -58,7 +58,7 @@
 </component>
 <component id="kim1.ram" class="RAM">
     <property name="host" ref="host" />
-    <property name="image" data="${id}.bin" />
+    <property name="image" src="${id}.bin" />
     <property name="size" value="0x400" />
 </component>
 <component id="kim1.rriot1" class="MOS6530">
@@ -80,24 +80,24 @@
     <property name="dataB" value="0" />
 </component>
 <component id="kim1.rriot1.ram" class="RAM">
-    <property name="image" data="${id}.bin" />
+    <property name="image" src="${id}.bin" />
     <property name="size" value="0x40" />
     <property name="host" ref="host" />
 </component>
 <component id="kim1.rriot2.ram" class="RAM">
-    <property name="image" data="${id}.bin" />
+    <property name="image" src="${id}.bin" />
     <property name="size" value="0x40" />
     <property name="host" ref="host" />
 </component>
 <component id="kim1.rriot1.rom" class="ROM">
-    <property name="image" data="${resourcePath}/roms/MOS KIM-1 6530-002 ROM.bin" />
+    <property name="image" src="${resourcePath}/roms/MOS KIM-1 6530-002 ROM.bin" />
 </component>
 <component id="kim1.rriot2.rom" class="ROM">
-    <property name="image" data="${resourcePath}/roms/MOS KIM-1 6530-003 ROM.bin" />
+    <property name="image" src="${resourcePath}/roms/MOS KIM-1 6530-003 ROM.bin" />
 </component>
 <component id="kim1.io" class="KIM1IO">
     <property name="host" ref="host" />
-    <property name="view" data="${resourcePath}/images/MOS KIM-1 View.png" />
+    <property name="view" src="${resourcePath}/images/MOS KIM-1 View.png" />
     <property name="serial" ref="" />
     <property name="audioOut" ref="kim1.audioOut" />
     <property name="audioIn" ref="kim1.audioIn" />
@@ -116,7 +116,7 @@
     <property name="host" ref="host" />
     <property name="width" value="24" />
     <property name="height" value="40" />
-    <property name="charset" data="${resourcePath}/roms/Signetics 2513 Video ROM.bin" />
+    <property name="charset" src="${resourcePath}/roms/Signetics 2513 Video ROM.bin" />
 </component>
 
 </edl>

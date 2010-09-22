@@ -10,7 +10,7 @@
 
 #include "MC6821.h"
 
-#include "Bus.h"
+#include "ControlBus.h"
 #include "AddressDecoder.h"
 
 MC6821::MC6821()
@@ -33,9 +33,9 @@ void MC6821::setControlA(int value)
 	if (busA)
 	{
 		if (wasIRQ && !isIRQ)
-			busA->notify(this, BUS_ASSERT_IRQ, &value);
+			busA->notify(this, CONTROLBUS_ASSERT_IRQ, &value);
 		else if (!wasIRQ && isIRQ)
-			busA->notify(this, BUS_CLEAR_IRQ, &value);
+			busA->notify(this, CONTROLBUS_CLEAR_IRQ, &value);
 	}
 }
 
@@ -48,9 +48,9 @@ void MC6821::setControlB(int value)
 	if (busB)
 	{
 		if (wasIRQ && !isIRQ)
-			busB->notify(this, BUS_ASSERT_IRQ, &value);
+			busB->notify(this, CONTROLBUS_ASSERT_IRQ, &value);
 		else if (!wasIRQ && isIRQ)
-			busB->notify(this, BUS_CLEAR_IRQ, &value);
+			busB->notify(this, CONTROLBUS_CLEAR_IRQ, &value);
 	}
 }
 
@@ -115,10 +115,10 @@ bool MC6821::connect(const string &name, OEComponent *component)
 	if (name == "bus")
 	{
 		if (bus)
-			bus->removeObserver(this, BUS_RESET_ASSERTED);
+			bus->removeObserver(this, CONTROLBUS_RESET_ASSERTED);
 		bus = component;
 		if (bus)
-			bus->addObserver(this, BUS_RESET_ASSERTED);
+			bus->addObserver(this, CONTROLBUS_RESET_ASSERTED);
 	}
 	else if (name == "portA")
 		portA = component;

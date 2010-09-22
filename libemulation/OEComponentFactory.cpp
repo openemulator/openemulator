@@ -12,7 +12,7 @@
 
 // FACTORY_INCLUDE_START - Do not modify this section
 #include "Host.h"
-#include "Bus.h"
+#include "ControlBus.h"
 #include "AddressDecoder.h"
 #include "AddressOffset.h"
 #include "RAM.h"
@@ -40,7 +40,7 @@ OEComponent *OEComponentFactory::build(string className)
 {
 	// FACTORY_CODE_START - Do not modify this section
 	matchComponent(Host);
-	matchComponent(Bus);
+	matchComponent(ControlBus);
 	matchComponent(AddressDecoder);
 	matchComponent(AddressOffset);
 	matchComponent(RAM);

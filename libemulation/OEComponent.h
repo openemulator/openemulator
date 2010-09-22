@@ -25,12 +25,13 @@ public:
 	virtual ~OEComponent();
 	
 	// Configuration
-	virtual bool setProperty(const string &name, const string &value);
-	virtual bool getProperty(const string &name, string &value);
+	virtual bool setValue(const string &name, string &value);
+	virtual bool getValue(const string &name, string &value);
+	virtual bool setComponent(const string &name, OEComponent *component);
 	virtual bool setData(const string &name, OEData *data);
 	virtual bool getData(const string &name, OEData **data);
-	virtual bool setResource(const string &name, OEData *data);
-	virtual bool connect(const string &name, OEComponent *component);
+	
+	virtual bool init();
 	
 	// Notifications
 	bool addObserver(OEComponent *component, int notification);
@@ -49,17 +50,11 @@ public:
 	virtual void write16(OEUInt32 address, int value);
 	virtual int read32(OEUInt32 address);
 	virtual void write32(OEUInt32 address, int value);
-	
-	// IO Access
-	virtual int ioRead(OEUInt32 address);
-	virtual void ioWrite(OEUInt32 address, int value);
-	virtual int ioRead16(OEUInt32 address);
-	virtual void ioWrite16(OEUInt32 address, int value);
-	virtual bool ioReadBlock(OEUInt32 address, OEData *value);
-	virtual bool ioWriteBlock(OEUInt32 address, const OEData *value);
+	virtual bool readBlock(OEUInt32 address, OEData *value);
+	virtual bool writeBlock(OEUInt32 address, OEData *value);
 	
 	// Debugging
-	virtual bool sendDebugCommand(char *command);
+	virtual bool sendDebugCommand(const string &command);
 	
 protected:
 	OEObservers observers;

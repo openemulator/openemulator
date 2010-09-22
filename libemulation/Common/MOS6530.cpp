@@ -10,7 +10,7 @@
 
 #include "MOS6530.h"
 
-#include "Bus.h"
+#include "ControlBus.h"
 #include "AddressDecoder.h"
 
 MOS6530::MOS6530()
@@ -60,10 +60,10 @@ bool MOS6530::connect(const string &name, OEComponent *component)
 	if (name == "bus")
 	{
 		if (bus)
-			bus->removeObserver(this, BUS_RESET_ASSERTED);
+			bus->removeObserver(this, CONTROLBUS_RESET_ASSERTED);
 		bus = component;
 		if (bus)
-			bus->addObserver(this, BUS_RESET_ASSERTED);
+			bus->addObserver(this, CONTROLBUS_RESET_ASSERTED);
 	}
 	else if (name == "portA")
 		portA = component;

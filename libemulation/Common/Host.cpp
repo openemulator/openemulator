@@ -45,7 +45,7 @@ bool Host::removeScreen(HostVideoScreen *screen)
 	return found;
 }
 
-bool Host::setProperty(const string &name, const string &value)
+bool Host::setValue(const string &name, string &value)
 {
 	if (name == "notes")
 		notes = value;
@@ -63,7 +63,7 @@ bool Host::setProperty(const string &name, const string &value)
 	return true;
 }
 
-bool Host::getProperty(const string &name, string &value)
+bool Host::getValue(const string &name, string &value)
 {
 	if (name == "notes")
 		value = notes;

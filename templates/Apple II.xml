@@ -71,7 +71,6 @@
 <port id="appleII.romF8Socket" ref="" type="AppleIIROM" label="ROM F8 Socket" image="ROM Socket.png">
     <inlet ref="appleII.mmu" property="romF8Socket" outletRef="rom" />
 </port>
-
 <component id="appleII.controlBus" class="AppleIIBus">
     <property name="host" ref="host" />
     <property name="crystal" value="14.31818MHz" />
@@ -126,7 +125,7 @@
 <component id="appleII.ram" class="RAM">
     <property name="host" ref="host" />
     <property name="size" value="0xc000" />
-    <property name="image" data="${id}.bin" />
+    <property name="image" src="${id}.bin" />
 </component>
 <component id="appleII.io" class="AddressDecoder">
     <property name="addressSize" value="8" />
@@ -163,7 +162,7 @@
     <property name="host" ref="host" />
 </component>
 <component id="appleII.charset" class="AppleIICharset">
-    <property name="image" data="${resourcePath}/roms/Signetics 2513 Video ROM.bin" />
+    <property name="image" src="${resourcePath}/roms/Signetics 2513 Video ROM.bin" />
     <property name="format" value="appleII" />
 </component>
 <component id="appleII.video" class="AppleIIVideo">
@@ -203,16 +202,16 @@
     <property name="floatingBus" ref="appleII.floatingBus" />
 </component>
 <component id="appleII.romE0" class="ROM">
-    <property name="image" data="${resourcePath}/roms/Apple II E0 ROM.bin" />
+    <property name="image" src="${resourcePath}/roms/Apple II E0 ROM.bin" />
 </component>
 <component id="appleII.romE8" class="ROM">
-    <property name="image" data="${resourcePath}/roms/Apple II E8 ROM.bin" />
+    <property name="image" src="${resourcePath}/roms/Apple II E8 ROM.bin" />
 </component>
 <component id="appleII.romF0" class="ROM">
-    <property name="image" data="${resourcePath}/roms/Apple II F0 ROM.bin" />
+    <property name="image" src="${resourcePath}/roms/Apple II F0 ROM.bin" />
 </component>
 <component id="appleII.romF8" class="ROM">
-    <property name="image" data="${resourcePath}/roms/Apple II F8 ROM.bin" />
+    <property name="image" src="${resourcePath}/roms/Apple II F8 ROM.bin" />
 </component>
 
 </edl>

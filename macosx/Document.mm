@@ -110,9 +110,11 @@
 	if (!emulation)
 		return false;
 	
-	return ((OEPAEmulation *)emulation)->setProperty(HOST_DEVICE,
-													 getString(name),
-													 getString(value));
+	string stlValue = getString(value);
+	
+	return ((OEPAEmulation *)emulation)->setValue(HOST_DEVICE,
+												  getString(name),
+												  stlValue);
 }
 
 - (NSString *)getHostProperty:(NSString *)name
@@ -121,9 +123,9 @@
 		return nil;
 	
 	string value;
-	if (((OEPAEmulation *)emulation)->getProperty(HOST_DEVICE,
-												  getString(name),
-												  value))
+	if (((OEPAEmulation *)emulation)->getValue(HOST_DEVICE,
+											   getString(name),
+											   value))
 		return getNSString(value);
 	
 	return @"";
@@ -438,7 +440,7 @@
 		connectionsMap[inletRefString] = outletRefString;
 	}
 	
-	if (!((OEPAEmulation *)emulation)->addDML(pathString, connectionsMap))
+	if (!((OEPAEmulation *)emulation)->addEDL(pathString, connectionsMap))
 	{
 		NSString *messageText = @"The device could not be added.";
 		

@@ -576,13 +576,11 @@ void OEPA::runEmulations()
 			if (!component)
 				continue;
 			
-			component->notify(NULL, HOST_AUDIO_RENDER_WILL_BEGIN,
+			component->notify(NULL, HOST_AUDIO_FRAME_WILL_BEGIN,
 							  &hostAudioBuffer);
-			component->notify(NULL, HOST_AUDIO_RENDER_DID_BEGIN,
+			component->notify(NULL, HOST_AUDIO_FRAME_WILL_RENDER,
 							  &hostAudioBuffer);
-			component->notify(NULL, HOST_AUDIO_RENDER_WILL_END,
-							  &hostAudioBuffer);
-			component->notify(NULL, HOST_AUDIO_RENDER_DID_END,
+			component->notify(NULL, HOST_AUDIO_FRAME_WILL_END,
 							  &hostAudioBuffer);
 		}
 		

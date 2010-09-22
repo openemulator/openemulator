@@ -34,10 +34,9 @@ enum
 	HOST_POWERED_ON,
 	HOST_POWERED_OFF,
 	
-	HOST_AUDIO_RENDER_WILL_BEGIN,
-	HOST_AUDIO_RENDER_DID_BEGIN,
-	HOST_AUDIO_RENDER_WILL_END,
-	HOST_AUDIO_RENDER_DID_END,
+	HOST_AUDIO_FRAME_WILL_BEGIN,
+	HOST_AUDIO_FRAME_WILL_RENDER,
+	HOST_AUDIO_FRAME_WILL_END,
 	
 	HOST_HID_SYSTEM_CHANGED,
 	HOST_HID_KEYBOARD_CHANGED,
@@ -109,6 +108,13 @@ typedef struct
 	float paddingRight;
 	float paddingBottom;
 	float paddingLeft;
+	
+	float videoPersistance;
+	float videoLumaResolution;
+	float videoChromaResolution;
+	float videoScanlines;
+	
+	
 } HostVideoConfiguration;
 
 typedef struct
@@ -510,8 +516,8 @@ enum
 class Host : public OEComponent
 {
 public:
-	bool setProperty(const string &name, const string &value);
-	bool getProperty(const string &name, string &value);
+	bool setValue(const string &name, string &value);
+	bool getValue(const string &name, string &value);
 	
 	bool postEvent(OEComponent *component, int event, void *data);
 	
