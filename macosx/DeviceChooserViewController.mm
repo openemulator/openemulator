@@ -177,10 +177,10 @@
 			continue;
 		
 		// Add device
+		NSString *groupName = getNSString(info->getType());
 		NSString *label = getNSString(info->getLabel());
 		NSString *imageName = getNSString(info->getImage());
 		NSString *description = getNSString(info->getDescription());
-		NSString *groupName = getNSString(info->getGroup());
 		
 		if (![groups objectForKey:groupName])
 		{

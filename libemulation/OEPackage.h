@@ -27,15 +27,15 @@ class OEPackage
 {
 public:
 	OEPackage();
-	OEPackage(string path);
+	OEPackage(const string &path);
 	~OEPackage();
 	
-	bool open(string path);
+	bool open(const string &path);
 	bool isOpen();
 	void close();
 	
-	bool readFile(string packagePath, OEData *data);
-	bool writeFile(string packagePath, OEData *data);
+	bool readFile(const string &packagePath, OEData *data);
+	bool writeFile(const string &packagePath, OEData *data);
 	
 	bool remove();
 	
@@ -47,10 +47,10 @@ private:
 	
 	void init();
 	
-	bool isPathValid(string path);
-	bool isFolder(string path);
-	bool makeDirectory(string path);
-	bool removePath(string path);
+	bool isPathValid(const string &path);
+	bool isFolder(const string &path);
+	bool makeDirectory(const string &path);
+	bool removePath(const string &path);
 };
 
 #endif

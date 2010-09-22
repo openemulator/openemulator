@@ -19,7 +19,7 @@ OEInfo::OEInfo() : OEEDL()
 {
 }
 
-OEInfo::OEInfo(string path) : OEEDL()
+OEInfo::OEInfo(const string &path) : OEEDL()
 {
 	open(path);
 }
@@ -31,7 +31,7 @@ OEInfo::~OEInfo()
 	removePorts(outlets);
 }
 
-bool OEInfo::open(string path)
+bool OEInfo::open(const string &path)
 {
 	if (!OEEDL::open(path))
 		return false;
@@ -46,7 +46,7 @@ bool OEInfo::open(string path)
 	return false;
 }
 
-bool OEInfo::addEDL(string path, OEConnections &connections)
+bool OEInfo::addEDL(const string &path, OEConnections &connections)
 {
 	if (!OEEDL::addEDL(path, connections))
 		return false;
@@ -54,7 +54,7 @@ bool OEInfo::addEDL(string path, OEConnections &connections)
 	return analyze();
 }
 
-bool OEInfo::removeDevice(string deviceName)
+bool OEInfo::removeDevice(const string &deviceName)
 {
 	if (!OEEDL::removeDevice(deviceName))
 		return false;
@@ -77,9 +77,9 @@ string OEInfo::getDescription()
 	return description;
 }
 
-string OEInfo::getGroup()
+string OEInfo::getType()
 {
-	return group;
+	return type;
 }
 
 OEDevices *OEInfo::getDevices()
@@ -115,10 +115,10 @@ bool OEInfo::analyze()
 
 void OEInfo::analyzeHeader(xmlNodePtr node)
 {
+	type = getNodeProperty(node, "type");
 	label = getNodeProperty(node, "label");
 	image = getNodeProperty(node, "image");
 	description = getNodeProperty(node, "description");
-	group = getNodeProperty(node, "group");
 }
 
 void OEInfo::analyzeDevices(xmlNodePtr node)

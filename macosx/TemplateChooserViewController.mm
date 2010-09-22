@@ -60,8 +60,6 @@
 				setGroupName:(NSString *)theGroupName
 {
 	NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
-	NSString *imagesPath = [resourcePath
-							stringByAppendingPathComponent:@"images"];
 	
 	NSArray *templateFilenames = [[NSFileManager defaultManager]
 								  contentsOfDirectoryAtPath:path
@@ -75,10 +73,10 @@
 		OEInfo info(getString(templatePath));
 		if (info.isOpen())
 		{
+			NSString *groupName = getNSString(info.getType());
 			NSString *label = getNSString(info.getLabel());
 			NSString *imageName = getNSString(info.getImage());
 			NSString *description = getNSString(info.getDescription());
-			NSString *groupName = getNSString(info.getGroup());
 			
 			if (theGroupName)
 				groupName = theGroupName;
@@ -89,7 +87,7 @@
 				[groups setObject:group forKey:groupName];
 			}
 			
-			NSString *imagePath = [imagesPath stringByAppendingPathComponent:imageName];
+			NSString *imagePath = [resourcePath stringByAppendingPathComponent:imageName];
 			ChooserItem *item = [[ChooserItem alloc] initWithTitle:label
 														  subtitle:description
 														 imagePath:imagePath

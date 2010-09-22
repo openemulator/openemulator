@@ -21,8 +21,8 @@
 #define OE_PACKAGE_EXTENSION "emulation"
 #define OE_PACKAGE_EDL_FILENAME "info.xml"
 
-#define OE_DEVICE_SEPARATOR ":"
 #define OE_CONNECTION_SEPARATOR "."
+#define OE_DEVICE_SEPARATOR ":"
 
 typedef map<string, string> OEConnections;
 
@@ -30,16 +30,16 @@ class OEEDL
 {
 public:
 	OEEDL();
-	OEEDL(string path);
+	OEEDL(const string &path);
 	~OEEDL();
 	
-	bool open(string path);
+	bool open(const string &path);
 	bool isOpen();
-	bool save(string path);
+	bool save(const string &path);
 	void close();
 	
-	bool addEDL(string path, OEConnections &connections);
-	bool removeDevice(string deviceName);
+	bool addEDL(const string &path, OEConnections &connections);
+	bool removeDevice(const string &deviceName);
 	
 protected:
 	OEPackage *package;

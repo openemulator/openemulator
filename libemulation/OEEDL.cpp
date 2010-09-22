@@ -18,7 +18,7 @@ OEEDL::OEEDL()
 	init();
 }
 
-OEEDL::OEEDL(string path)
+OEEDL::OEEDL(const string &path)
 {
 	init();
 	
@@ -41,7 +41,7 @@ void OEEDL::init()
 	doc = NULL;
 }
 
-bool OEEDL::open(string path)
+bool OEEDL::open(const string &path)
 {
 	close();
 	
@@ -104,7 +104,7 @@ bool OEEDL::isOpen()
 	return is_open;
 }
 
-bool OEEDL::save(string path)
+bool OEEDL::save(const string &path)
 {
 	close();
 	
@@ -171,7 +171,7 @@ void OEEDL::close()
 	package = NULL;
 }
 
-bool OEEDL::addEDL(string path, OEConnections &connections)
+bool OEEDL::addEDL(const string &path, OEConnections &connections)
 {
 	OEEDL edl(path);
 	
@@ -186,7 +186,7 @@ bool OEEDL::addEDL(string path, OEConnections &connections)
 	return true;
 }
 
-bool OEEDL::removeDevice(string deviceName)
+bool OEEDL::removeDevice(const string &deviceName)
 {
 	xmlNodePtr deviceNode = getDeviceNode(deviceName);
 	if (!deviceNode)
@@ -252,6 +252,7 @@ bool OEEDL::dump(OEData *data)
 
 bool OEEDL::update()
 {
+	return true;
 }
 
 //

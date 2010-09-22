@@ -20,11 +20,11 @@ OEEmulation::OEEmulation() : OEInfo()
 {
 }
 
-OEEmulation::OEEmulation(string path) : OEInfo()
+OEEmulation::OEEmulation(const string &path) : OEInfo()
 {
 }
 
-OEEmulation::OEEmulation(string path, string resourcePath) : OEInfo()
+OEEmulation::OEEmulation(const string &path, const string &resourcePath) : OEInfo()
 {
 	this->resourcePath = resourcePath;
 	
@@ -36,7 +36,7 @@ OEEmulation::~OEEmulation()
 	close();
 }
 
-bool OEEmulation::open(string path)
+bool OEEmulation::open(const string &path)
 {
 	if (!OEInfo::open(path))
 		return false;
@@ -58,7 +58,7 @@ void OEEmulation::close()
 	OEInfo::close();
 }
 
-OEComponent *OEEmulation::getComponent(string id)
+OEComponent *OEEmulation::getComponent(const string &id)
 {
 	if (!componentsMap.count(id))
 		return NULL;
@@ -66,7 +66,7 @@ OEComponent *OEEmulation::getComponent(string id)
 	return componentsMap[id];
 }
 
-bool OEEmulation::setComponent(string id, OEComponent *component)
+bool OEEmulation::setComponent(const string &id, OEComponent *component)
 {
 	if (component)
 		componentsMap[id] = component;
@@ -76,17 +76,33 @@ bool OEEmulation::setComponent(string id, OEComponent *component)
 	return true;
 }
 
-string OEEmulation::parseProperties(string value, string id)
+string OEEmulation::parseProperties(string value, const string &id)
 {
-/*
- for (int i = 0; i < id.size(); i++)
-		if (id[i] == OE_DEVICE_SEPARATOR[0])
-			id[i] = '_';
+	int startIndex;
 	
-	int index = value.find(OE_REPLACE_REF_STRING);
-	if (index != string::npos)
-		value.replace(index, sizeof(OE_REPLACE_REF_STRING) - 1, ref);
-*/	
+	while ((startIndex = value.find("${")) != string::npos)
+	{
+		int endIndex = value.find("}", startIndex);
+		if (endIndex == string::npos)
+		{
+			value = value.substr(0, startIndex);
+			break;
+		}
+		
+		string propertyName = value.substr(startIndex + 2,
+										   endIndex - startIndex - 3);
+		string replacement;
+		
+		if (propertyName == "id")
+			replacement = id;
+		else if (propertyName == "resourcePath")
+			replacement = resourcePath;
+		
+		value = value.replace(startIndex,
+							  endIndex - startIndex + 1,
+							  replacement);
+	}
+	
 	return value;
 }
 
@@ -112,7 +128,7 @@ bool OEEmulation::build()
 	return true;
 }
 
-bool OEEmulation::buildComponent(string id, string className)
+bool OEEmulation::buildComponent(const string &id, const string &className)
 {
 	if (getComponent(id))
 	{
@@ -150,7 +166,7 @@ bool OEEmulation::configure()
 	return true;
 }
 
-bool OEEmulation::configureComponent(string id, xmlNodePtr children)
+bool OEEmulation::configureComponent(const string &id, xmlNodePtr children)
 {
 	OEComponent *component = getComponent(id);
 	if (!component)
@@ -234,7 +250,7 @@ bool OEEmulation::init()
 	return true;
 }
 
-bool OEEmulation::initComponent(string id)
+bool OEEmulation::initComponent(const string &id)
 {
 	OEComponent *component = getComponent(id);
 	if (!component)
@@ -269,7 +285,7 @@ bool OEEmulation::update()
 	return true;
 }
 
-bool OEEmulation::updateComponent(string id, xmlNodePtr children)
+bool OEEmulation::updateComponent(const string &id, xmlNodePtr children)
 {
 	OEComponent *component = getComponent(id);
 	if (!component)
@@ -334,7 +350,7 @@ void OEEmulation::remove()
 	}
 }
 
-void OEEmulation::removeComponent(string id, xmlNodePtr children)
+void OEEmulation::removeComponent(const string &id, xmlNodePtr children)
 {
 	OEComponent *component = getComponent(id);
 	if (!component)

@@ -36,7 +36,7 @@
 
 #define matchComponent(name) if (className == #name) return new name()
 
-OEComponent *OEComponentFactory::build(string className)
+OEComponent *OEComponentFactory::build(const string &className)
 {
 	// FACTORY_CODE_START - Do not modify this section
 	matchComponent(Host);

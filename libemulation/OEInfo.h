@@ -56,28 +56,28 @@ class OEInfo : public OEEDL
 {
 public:
 	OEInfo();
-	OEInfo(string path);
+	OEInfo(const string &path);
 	~OEInfo();
 	
-	bool open(string path);
+	bool open(const string &path);
 	
-	bool addEDL(string path, OEConnections &connections);
-	bool removeDevice(string deviceName);
+	bool addEDL(const string &path, OEConnections &connections);
+	bool removeDevice(const string &deviceName);
 	
+	string getType();
 	string getLabel();
 	string getImage();
 	string getDescription();
-	string getGroup();
 	
 	OEDevices *getDevices();
 	OEPorts *getInlets();
 	OEPorts *getOutlets();
 	
 private:
+	string type;
 	string label;
 	string image;
 	string description;
-	string group;
 	
 	OEDevices devices;
 	OEPorts inlets;
