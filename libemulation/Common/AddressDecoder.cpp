@@ -14,44 +14,141 @@
 
 AddressDecoder::AddressDecoder()
 {
-	bus = NULL;
+	addressSize = 16;
+	blockSize = 8;
+	floatingBus = NULL;
 	
-	mask = 0;
-	shift = 0;
+	addressMask = 0;
 	
 	readMap.resize(1);
 	writeMap.resize(1);
 }
 
-void AddressDecoder::mapFloatingBus(OEComponent *floatingBus)
+bool AddressDecoder::setValue(const string &name, const string &value)
+{
+	if (name == "addressSize")
+		addressSize = getInt(value);
+	else if (name == "blockSize")
+		blockSize = getInt(value);
+	else if (name.substr(0, 3) == "map")
+		addressMap[name.substr(3)] = value;
+	else
+		return false;
+	
+	return true;
+}
+
+bool AddressDecoder::setComponent(const string &name, OEComponent *component)
+{
+	if (name == "floatingBus")
+		floatingBus = component;
+	else if (name.substr(0, 3) == "ref")
+		addressRef[name.substr(3)] = component;
+	else
+		return false;
+	
+	return true;
+}
+
+bool AddressDecoder::init()
+{
+	if (!floatingBus)
+	{
+		OELog("undefined floating bus");
+		return false;
+	}
+	
+	int addressSpace = (1 << addressSize);
+	addressMask = addressSpace - 1;
+	
+	int blockNum = 1 << (addressSize - blockSize);
+	readMap.resize(blockNum);
+	writeMap.resize(blockNum);
+	
+	initMap(floatingBus);
+	
+	for (AddressMap::iterator i = addressMap.begin();
+		 i != addressMap.end();
+		 i++)
+	{
+		if (!addressRef.count(i->first))
+		{
+			OELog("unmatched address map '" + i->first + "'");
+			return false;
+		}
+		
+		mapComponent(addressRef[i->first], i->second);
+	}
+	
+	return true;
+}
+
+bool AddressDecoder::postEvent(OEComponent *component, int notification, void *data)
+{
+	if (notification == ADDRESSDECODER_MAP)
+	{
+		if (component == NULL)
+			component = floatingBus;
+		
+		mapComponent(component, *((string *) data));
+	}
+	else
+		return false;
+	
+	return true;
+}
+
+OEUInt8 AddressDecoder::read(int address)
+{
+	return readMap[(address & addressMask) >> blockSize]->read(address);
+}
+
+void AddressDecoder::write(int address, OEUInt8 value)
+{
+	writeMap[(address & addressMask) >> blockSize]->write(address, value);
+}
+
+void AddressDecoder::initMap(OEComponent *component)
 {
 	for (OEComponents::iterator i = readMap.begin();
 		 i != readMap.end();
 		 i++)
-		if (!*i)
-			*i = bus;
+		*i = component;
 	
 	for (OEComponents::iterator i = writeMap.begin();
 		 i != writeMap.end();
 		 i++)
-		if (!*i)
-			*i = bus;
+		*i = component;
+}
+
+void AddressDecoder::mapComponent(AddressRange *range)
+{
+	int startBlock = range->start >> blockSize;
+	int endBlock = range->end >> blockSize;
+	
+	if (range->read)
+		for (int j = startBlock; j < endBlock; j++)
+			readMap[j] = range->component;
+
+	if (range->write)
+		for (int j = startBlock; j < endBlock; j++)
+			writeMap[j] = range->component;
 }
 
 bool AddressDecoder::mapComponent(OEComponent *component, const string &value)
 {
-	OEAddressRanges ranges;
+	AddressRanges ranges;
 	
 	if (!getAddressRanges(ranges, value))
 		return false;
 	
-	int shiftMask = (1 << shift) - 1;
+	int shiftMask = (1 << addressSize) - 1;
 	
-	for (OEAddressRanges::iterator i = ranges.begin();
+	for (AddressRanges::iterator i = ranges.begin();
 		 i != ranges.end();
 		 i++)
 	{
-		if ((i->end > mask) ||
+		if ((i->end > addressMask) ||
 			(i->start & shiftMask) ||
 			((i->end & shiftMask) != shiftMask))
 		{
@@ -59,22 +156,13 @@ bool AddressDecoder::mapComponent(OEComponent *component, const string &value)
 			return false;
 		}
 		
-		int startPage = i->start >> shift;
-		int endPage = i->end >> shift;
-		
-		for (int j = startPage; j < endPage; j++)
-		{
-			if (i->read)
-				readMap[j] = component;
-			if (i->write)
-				writeMap[j] = component;
-		}
+		mapComponent(&(*i));
 	}
 	
 	return true;
 }
 
-bool AddressDecoder::getAddressRange(OEAddressRange &range, const string &value)
+bool AddressDecoder::getAddressRange(AddressRange &range, const string &value)
 {
 	range.read = false;
 	range.write = false;
@@ -115,14 +203,14 @@ bool AddressDecoder::getAddressRange(OEAddressRange &range, const string &value)
 	return true;
 }
 
-bool AddressDecoder::getAddressRanges(OEAddressRanges &ranges, const string &value)
+bool AddressDecoder::getAddressDecoderMaps(AddressDecoderMaps &theMaps, const string &value)
 {
 	size_t startPos = value.find_first_not_of(',', 0);
 	size_t endPos = value.find_first_of(',', startPos);
 	
 	while ((startPos != string::npos) || (endPos != string::npos))
 	{
-		OEAddressRange range;
+		AddressDecoderMap theMap;
 		
 		if (!getAddressRange(range, value.substr(startPos, endPos - startPos)))
 		{
@@ -137,60 +225,4 @@ bool AddressDecoder::getAddressRanges(OEAddressRanges &ranges, const string &val
 	}
 	
 	return true;
-}
-
-bool AddressDecoder::setValue(const string &name, const string &value)
-{
-	if (name == "addressLines")
-	{
-		int size = 1 << getInt(value);
-		mask = size - 1;
-		readMap.resize(size);
-		writeMap.resize(size);
-	}
-	else if (name == "addressPage")
-		shift = getInt(value);
-	else if (name.substr(0, 3) == "map")
-		componentMap[name.substr(3)] = value;
-	else
-		return false;
-	
-	return true;
-}
-
-bool AddressDecoder::setComponent(const string &name, OEComponent *component)
-{
-	if (name == "floatingBus")
-		mapFloatingBus(component);
-	else if (name.substr(0, 9) == "ref")
-		mapComponent(component, componentMap[name.substr(9)]);
-	else
-		return false;
-	
-	return true;
-}
-
-bool AddressDecoder::postEvent(OEComponent *component, int notification, void *data)
-{
-	if (notification == ADDRESSDECODER_MAP)
-	{
-		if (component == NULL)
-			component = bus;
-		
-		mapComponent(component, *((string *) data));
-	}
-	else
-		return false;
-	
-	return true;
-}
-
-OEUInt8 AddressDecoder::read(int address)
-{
-	return readMap[(address & mask) >> shift]->read(address);
-}
-
-void AddressDecoder::write(int address, OEUInt8 value)
-{
-	writeMap[(address & mask) >> shift]->write(address, value);
 }

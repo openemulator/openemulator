@@ -16,19 +16,22 @@
 // Events
 enum {
 	ADDRESSDECODER_MAP,
-	ADDRESSDECODER_EVENT_END,
 };
 
 typedef struct
 {	
+	OEComponent *component;
+	
+	OEUInt32 startAddress;
+	OEUInt32 endAddress;
+	
 	bool read;
 	bool write;
-	
-	OEUInt32 start;
-	OEUInt32 end;
-} OEAddressRange;
+} AddressDecoderMap;
 
-typedef vector<OEAddressRange> OEAddressRanges;
+typedef vector<AddressDecoderMap> AddressDecoderMaps;
+typedef map<string, string> AddressDecoderRangeMap;
+typedef map<string, OEComponent *> AddressDecoderRefMap;
 
 class AddressDecoder : public OEComponent
 {
@@ -38,26 +41,31 @@ public:
 	bool setValue(const string &name, const string &value);
 	bool setComponent(const string &name, OEComponent *component);
 	
+	bool init();
+	
 	bool postEvent(OEComponent *component, int event, void *data);
 	
 	OEUInt8 read(int address);
 	void write(int address, OEUInt8 value);
 	
 private:
-	OEComponent *bus;
-	map<string, string> componentMap;
+	int addressSize;
+	int blockSize;
+	OEComponent *floatingBus;
 	
-	int mask;
-	int shift;
+	AddressRangeMap rangeMap;
+	AddressRefMap refMap;
 	
+	int addressMask;
 	OEComponents readMap;
 	OEComponents writeMap;
 	
-	void mapFloatingBus(OEComponent *bus);
+	void initMap(OEComponent *component);
+	void mapComponent(AddressDecoderMap *theMap);
 	bool mapComponent(OEComponent *component, const string &value);
 	
-	bool getAddressRange(OEAddressRange &range, const string &value);
-	bool getAddressRanges(OEAddressRanges &ranges, const string &value);
+	bool getAddressDecoderMap(AddressDecoderMap &theMap, const string &value);
+	bool getAddressDecoderMaps(AddressDecoderMaps &theMaps, const string &value);
 };
 
 #endif
