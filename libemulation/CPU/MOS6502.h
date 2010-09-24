@@ -16,15 +16,15 @@ class MOS6502 : public OEComponent
 public:
 	MOS6502();
 	
-	bool setProperty(const string &name, const string &value);
-	bool getProperty(const string &name, string &value);
-	bool connect(const string &name, OEComponent *component);
+	bool setValue(string name, string value);
+	bool getValue(string name, string &value);
+	bool setComponent(string name, OEComponent *component);
 	
 	void notify(OEComponent *component, int notification, void *data);
 	
 private:
-	OEComponent *memory;
-	OEComponent *bus;
+	OEComponent *memoryBus;
+	OEComponent *controlBus;
 	
 	OEPair ppc;
 	OEPair pc;

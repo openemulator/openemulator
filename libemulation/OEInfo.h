@@ -68,7 +68,6 @@ public:
 	string getLabel();
 	string getImage();
 	string getDescription();
-	
 	OEDevices *getDevices();
 	OEPorts *getInlets();
 	OEPorts *getOutlets();
@@ -78,7 +77,6 @@ private:
 	string label;
 	string image;
 	string description;
-	
 	OEDevices devices;
 	OEPorts inlets;
 	OEPorts outlets;
@@ -86,7 +84,6 @@ private:
 	void init();
 	
 	bool analyze();
-	
 	void analyzeHeader(xmlNodePtr node);
 	void analyzeDevices(xmlNodePtr node);
 	

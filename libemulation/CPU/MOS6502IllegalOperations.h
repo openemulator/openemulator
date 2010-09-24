@@ -240,7 +240,7 @@ tmp = S & (EAH+1)
 #if 0
 #define SSH													\
 tmp = S = A & X;											\
-tmp &= (OEUInt8)(memory->read((PCW + 1) & 0xffff) + 1)
+tmp &= (OEUInt8)(memoryBus->read((PCW + 1) & 0xffff) + 1)
 #endif
 
 /***************************************************************

@@ -10,42 +10,7 @@
 
 #include "Host.h"
 
-void Host::setPowerState(int powerState)
-{
-	bool wasPoweredOn = (powerState >= HOST_POWERSTATE_SLEEP);
-	bool isPoweredOn = (this->powerState >= HOST_POWERSTATE_SLEEP);
-	
-	if (wasPoweredOn != isPoweredOn)
-		notify(this, isPoweredOn ? HOST_POWERED_ON : HOST_POWERED_OFF, NULL);
-	
-	this->powerState = powerState;
-	notify(this, HOST_POWERSTATE_CHANGED, &powerState);
-}
-
-bool Host::addScreen(HostVideoScreen *screen)
-{
-	videoUpdated = true;
-	
-	videoScreens.push_back(screen);
-	
-	return true;
-}
-
-bool Host::removeScreen(HostVideoScreen *screen)
-{
-	videoUpdated = true;
-	
-	HostVideoScreens::iterator first = videoScreens.begin();
-	HostVideoScreens::iterator last = videoScreens.end();
-	HostVideoScreens::iterator i = remove(first, last, screen);
-	bool found = (i != last);
-	if (found)
-		videoScreens.erase(i, last);
-	
-	return found;
-}
-
-bool Host::setValue(const string &name, const string &value)
+bool Host::setValue(string name, string value)
 {
 	if (name == "notes")
 		notes = value;
@@ -63,7 +28,7 @@ bool Host::setValue(const string &name, const string &value)
 	return true;
 }
 
-bool Host::getValue(const string &name, string &value)
+bool Host::getValue(string name, string &value)
 {
 	if (name == "notes")
 		value = notes;
@@ -107,4 +72,39 @@ bool Host::postEvent(OEComponent *component, int event, void *data)
 	}
 	
 	return OEComponent::postEvent(component, event, data);
+}
+
+void Host::setPowerState(int powerState)
+{
+	bool wasPoweredOn = (powerState >= HOST_POWERSTATE_SLEEP);
+	bool isPoweredOn = (this->powerState >= HOST_POWERSTATE_SLEEP);
+	
+	if (wasPoweredOn != isPoweredOn)
+		notify(this, isPoweredOn ? HOST_POWERED_ON : HOST_POWERED_OFF, NULL);
+	
+	this->powerState = powerState;
+	notify(this, HOST_POWERSTATE_CHANGED, &powerState);
+}
+
+bool Host::addScreen(HostVideoScreen *screen)
+{
+	videoUpdated = true;
+	
+	videoScreens.push_back(screen);
+	
+	return true;
+}
+
+bool Host::removeScreen(HostVideoScreen *screen)
+{
+	videoUpdated = true;
+	
+	HostVideoScreens::iterator first = videoScreens.begin();
+	HostVideoScreens::iterator last = videoScreens.end();
+	HostVideoScreens::iterator i = remove(first, last, screen);
+	bool found = (i != last);
+	if (found)
+		videoScreens.erase(i, last);
+	
+	return found;
 }

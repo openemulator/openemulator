@@ -136,7 +136,7 @@ void OEInfo::addDevice(xmlNodePtr node)
 	if (!device)
 		return;
 	
-	device->name = getNodeName(node);
+	device->name = getNodeProperty(node, "name");
 	device->type = getNodeProperty(node, "type");
 	device->options = getNodeProperty(node, "options");
 	device->label = getNodeProperty(node, "label");
@@ -165,7 +165,7 @@ void OEInfo::addSetting(xmlNodePtr node, OEDevice *device)
 	if (!setting)
 		return;
 	
-	setting->ref = getNodeRef(node, device->name);
+	setting->ref = getNodeProperty(node, "ref");
 	setting->type = getNodeProperty(node, "type");
 	setting->options = getNodeProperty(node, "options");
 	setting->label = getNodeProperty(node, "label");
@@ -179,7 +179,7 @@ void OEInfo::addPort(xmlNodePtr node, OEDevice *device, OEPorts &ports)
 	if (!port)
 		return;
 	
-	port->ref = getNodeRef(node, device->name);
+	port->ref = getNodeProperty(node, "ref");
 	port->type = getNodeProperty(node, "type");
 	port->label = getNodeProperty(node, "label");
 	port->image = getNodeProperty(node, "image");
@@ -225,7 +225,7 @@ void OEInfo::removePorts(OEPorts &ports)
 
 bool OEInfo::analyzeConnections()
 {
-	// Check inlets
+/*	// Check inlets
 	for (OEPorts::iterator inlet = inlets.begin();
 		 inlet != inlets.end();
 		 inlet++)
@@ -276,7 +276,7 @@ bool OEInfo::analyzeConnections()
 		 device != devices.end();
 		 device++)
 		(*device)->connectionLabel = buildConnectionLabel((*device)->name);
-	
+	*/
 	return true;
 }
 
@@ -284,7 +284,7 @@ string OEInfo::buildConnectionLabel(string deviceName)
 {
 	string label;
 	
-	// Find all outlets
+/*	// Find all outlets
 	for (OEPorts::iterator outlet = outlets.begin();
 		 outlet != outlets.end();
 		 outlet++)
@@ -298,14 +298,14 @@ string OEInfo::buildConnectionLabel(string deviceName)
 			label += buildConnectionLabel(*outlet, visitedRefs);
 		}
 	}
-	
+	*/
 	return label;
 }
 
 string OEInfo::buildConnectionLabel(OEPort *outlet, vector<string> &visitedRefs)
 {
 	string deviceLabel = outlet->device->label;
-	
+/*	
 	// Get the connected inlet for this outlet
 	OEPort *inlet = outlet->connection;
 	if (!inlet)
@@ -326,7 +326,7 @@ string OEInfo::buildConnectionLabel(OEPort *outlet, vector<string> &visitedRefs)
 			return buildConnectionLabel(*outlet, visitedRefs) + " " + inlet->label;
 		}
 	}
-	
+	*/
 	// The device has no outlets
 	return deviceLabel;
 }

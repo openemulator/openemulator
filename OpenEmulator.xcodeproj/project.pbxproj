@@ -68,6 +68,8 @@
 		008E3E5A11B0E725008621B7 /* composite1Bit.c in Sources */ = {isa = PBXBuildFile; fileRef = 008E3E5211B0E725008621B7 /* composite1Bit.c */; };
 		008E3E5C11B0E725008621B7 /* compositeCGA.c in Sources */ = {isa = PBXBuildFile; fileRef = 008E3E5411B0E725008621B7 /* compositeCGA.c */; };
 		008E3E5E11B0E725008621B7 /* compositeSignalProcessing.c in Sources */ = {isa = PBXBuildFile; fileRef = 008E3E5611B0E725008621B7 /* compositeSignalProcessing.c */; };
+		008F01F6124D138100C69D97 /* FloatingBus.h in Headers */ = {isa = PBXBuildFile; fileRef = 008F01F4124D138100C69D97 /* FloatingBus.h */; };
+		008F01F7124D138100C69D97 /* FloatingBus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 008F01F5124D138100C69D97 /* FloatingBus.cpp */; };
 		0095DF8F1209D0B700C127F5 /* TBColdRestart.png in Resources */ = {isa = PBXBuildFile; fileRef = 0095DF8D1209D0B700C127F5 /* TBColdRestart.png */; };
 		0095DF901209D0B700C127F5 /* TBWarmRestart.png in Resources */ = {isa = PBXBuildFile; fileRef = 0095DF8E1209D0B700C127F5 /* TBWarmRestart.png */; };
 		0095E09E1209DDB500C127F5 /* KIM1IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0095E09C1209DDB500C127F5 /* KIM1IO.cpp */; };
@@ -286,6 +288,8 @@
 		008E3E5511B0E725008621B7 /* compositeCGA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = compositeCGA.h; sourceTree = "<group>"; };
 		008E3E5611B0E725008621B7 /* compositeSignalProcessing.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = compositeSignalProcessing.c; sourceTree = "<group>"; };
 		008E3E5711B0E725008621B7 /* compositeSignalProcessing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = compositeSignalProcessing.h; sourceTree = "<group>"; };
+		008F01F4124D138100C69D97 /* FloatingBus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FloatingBus.h; sourceTree = "<group>"; };
+		008F01F5124D138100C69D97 /* FloatingBus.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FloatingBus.cpp; sourceTree = "<group>"; };
 		0095DF8D1209D0B700C127F5 /* TBColdRestart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = TBColdRestart.png; path = macosx/Images/TBColdRestart.png; sourceTree = "<group>"; };
 		0095DF8E1209D0B700C127F5 /* TBWarmRestart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = TBWarmRestart.png; path = macosx/Images/TBWarmRestart.png; sourceTree = "<group>"; };
 		0095E09C1209DDB500C127F5 /* KIM1IO.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = KIM1IO.cpp; sourceTree = "<group>"; };
@@ -611,6 +615,8 @@
 				00257B40121901FC00206E56 /* SerialPort.cpp */,
 				009899BB1243F4E30077CE17 /* ControlBus.h */,
 				009899BC1243F4E30077CE17 /* ControlBus.cpp */,
+				008F01F4124D138100C69D97 /* FloatingBus.h */,
+				008F01F5124D138100C69D97 /* FloatingBus.cpp */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -799,6 +805,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				005D61B0124ABC4400C29F35 /* OEEDL.h in Headers */,
+				008F01F6124D138100C69D97 /* FloatingBus.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1010,6 +1017,7 @@
 				00247F6E120F98620067755C /* Terminal.cpp in Sources */,
 				009899E61243F7530077CE17 /* ControlBus.cpp in Sources */,
 				005D61B1124ABC4400C29F35 /* OEEDL.cpp in Sources */,
+				008F01F7124D138100C69D97 /* FloatingBus.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

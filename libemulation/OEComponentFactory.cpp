@@ -17,6 +17,7 @@
 #include "AddressOffset.h"
 #include "RAM.h"
 #include "ROM.h"
+#include "FloatingBus.h"
 #include "CompositeMonitor.h"
 #include "Audio1Bit.h"
 #include "AudioPLL.h"
@@ -36,7 +37,7 @@
 
 #define matchComponent(name) if (className == #name) return new name()
 
-OEComponent *OEComponentFactory::build(const string &className)
+OEComponent *OEComponentFactory::create(const string &className)
 {
 	// FACTORY_CODE_START - Do not modify this section
 	matchComponent(Host);
@@ -45,6 +46,7 @@ OEComponent *OEComponentFactory::build(const string &className)
 	matchComponent(AddressOffset);
 	matchComponent(RAM);
 	matchComponent(ROM);
+	matchComponent(FloatingBus);
 	matchComponent(CompositeMonitor);
 	matchComponent(Audio1Bit);
 	matchComponent(AudioPLL);

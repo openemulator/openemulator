@@ -21,27 +21,27 @@ OEComponent::~OEComponent()
 {
 }
 
-bool OEComponent::setValue(const string &name, const string &value)
+bool OEComponent::setValue(string name, string value)
 {
 	return false;
 }
 
-bool OEComponent::getValue(const string &name, string &value)
+bool OEComponent::getValue(string name, string &value)
 {
 	return false;
 }
 
-bool OEComponent::setComponent(const string &name, OEComponent *component)
+bool OEComponent::setComponent(string name, OEComponent *component)
 {
 	return false;
 }
 
-bool OEComponent::setData(const string &name, OEData *data)
+bool OEComponent::setData(string name, OEData *data)
 {
 	return false;
 }
 
-bool OEComponent::getData(const string &name, OEData **data)
+bool OEComponent::getData(string name, OEData **data)
 {
 	return false;
 }
@@ -147,7 +147,7 @@ bool OEComponent::writeBlock(OEUInt32 address, OEData *value)
 	return false;
 }
 
-bool OEComponent::sendDebugCommand(const string &command)
+bool OEComponent::sendDebugCommand(string command)
 {
 	return false;
 }

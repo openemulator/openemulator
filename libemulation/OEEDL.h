@@ -21,51 +21,38 @@
 #define OE_PACKAGE_EXTENSION "emulation"
 #define OE_PACKAGE_EDL_FILENAME "info.xml"
 
-#define OE_CONNECTION_SEPARATOR "."
-#define OE_DEVICE_SEPARATOR ":"
-
 typedef map<string, string> OEConnections;
 
 class OEEDL
 {
 public:
 	OEEDL();
-	OEEDL(const string &path);
+	OEEDL(string path);
 	~OEEDL();
 	
-	bool open(const string &path);
+	bool open(string path);
 	bool isOpen();
-	bool save(const string &path);
+	bool save(string path);
 	void close();
 	
-	bool addEDL(const string &path, OEConnections &connections);
-	bool removeDevice(const string &deviceName);
+	bool addEDL(string path, OEConnections connections);
+	bool removeDevice(string id);
 	
 protected:
 	OEPackage *package;
 	xmlDocPtr doc;
 	
-	virtual bool update();
-	virtual void removeDevice(xmlNodePtr deviceNode);
-	
-	xmlNodePtr getDeviceNode(string deviceName);
-	xmlNodePtr getConnectionNode(xmlNodePtr deviceNode, string ref);
-	
-	string getNodeName(xmlNodePtr node);
-	string getNodeRef(xmlNodePtr node, string deviceName);
-	
-	string getDeviceName(string ref);
-	string getComponentName(string ref);
-	string getConnectionName(string ref);
-	
 	string getString(int value);
-	string getPathExtension(string path);
 	
-	bool readFile(string path, OEData *data);
-	bool writeFile(string path, OEData *data);
-	
-	string getNodeProperty(xmlNodePtr node, string name);
 	void setNodeProperty(xmlNodePtr node, string name, string value);
+	string getNodeProperty(xmlNodePtr node, string name);
+	bool hasNodeProperty(xmlNodePtr node, string name);
+	
+	string getPathExtension(string path);
+	bool writeFile(string path, OEData *data);
+	bool readFile(string path, OEData *data);
+	
+	virtual bool update();
 	
 private:
 	bool is_open;
@@ -74,11 +61,6 @@ private:
 	
 	bool validate();
 	bool dump(OEData *data);
-	
-	xmlNodePtr getChildNodeWithName(xmlNodePtr node, string elementName, string name);
-	
-	string filterName(string name);
-	string filterRef(string name);
 };
 
 #endif

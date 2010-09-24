@@ -78,29 +78,29 @@
 
 #define PPC ppc.d
 
-#define RDMEM_ID(a)		memory->read(a)
-#define WRMEM_ID(a,d)	memory->write(a, d)
+#define RDMEM_ID(a)		memoryBus->read(a)
+#define WRMEM_ID(a,d)	memoryBus->write(a, d)
 
 /***************************************************************
  *  RDOP    read an opcode
  ***************************************************************/
-#define RDOP() memory->read(PCW++); icount -= 1
-#define PEEKOP() memory->read(PCW)
+#define RDOP() memoryBus->read(PCW++); icount -= 1
+#define PEEKOP() memoryBus->read(PCW)
 
 /***************************************************************
  *  RDOPARG read an opcode argument
  ***************************************************************/
-#define RDOPARG() memory->read(PCW++); icount -= 1
+#define RDOPARG() memoryBus->read(PCW++); icount -= 1
 
 /***************************************************************
  *  RDMEM   read memory
  ***************************************************************/
-#define RDMEM(addr) memory->read(addr); icount -= 1
+#define RDMEM(addr) memoryBus->read(addr); icount -= 1
 
 /***************************************************************
  *  WRMEM   write memory
  ***************************************************************/
-#define WRMEM(addr,data) memory->write(addr, data); icount -= 1
+#define WRMEM(addr,data) memoryBus->write(addr, data); icount -= 1
 
 /***************************************************************
  *  BRA  branch relative
@@ -521,7 +521,7 @@
  ***************************************************************/
 #define ILL 													\
 	OELog("M6502 illegal opcode %04x: %02x\n",					\
-		(PCW-1) & 0xffff, memory->read((PCW - 1) & 0xffff))
+		(PCW-1) & 0xffff, memoryBus->read((PCW - 1) & 0xffff))
 
 /* 6502 ********************************************************
  *  INC Increment memory

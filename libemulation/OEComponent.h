@@ -25,11 +25,11 @@ public:
 	virtual ~OEComponent();
 	
 	// Configuration
-	virtual bool setValue(const string &name, const string &value);
-	virtual bool getValue(const string &name, string &value);
-	virtual bool setComponent(const string &name, OEComponent *component);
-	virtual bool setData(const string &name, OEData *data);
-	virtual bool getData(const string &name, OEData **data);
+	virtual bool setValue(string name, string value);
+	virtual bool getValue(string name, string &value);
+	virtual bool setComponent(string name, OEComponent *component);
+	virtual bool setData(string name, OEData *data);
+	virtual bool getData(string name, OEData **data);
 	
 	virtual bool init();
 	
@@ -54,7 +54,7 @@ public:
 	virtual bool writeBlock(OEUInt32 address, OEData *value);
 	
 	// Debugging
-	virtual bool sendDebugCommand(const string &command);
+	virtual bool sendDebugCommand(string command);
 	
 protected:
 	OEObservers observers;

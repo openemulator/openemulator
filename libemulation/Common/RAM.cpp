@@ -31,26 +31,7 @@ RAM::~RAM()
 	delete memory;
 }
 
-void RAM::setSize(int value)
-{
-	value = getNextPowerOf2(value);
-	if (value < 1)
-		value = 1;
-	
-	size = value;
-	mask = value - 1;
-}
-
-void RAM::setMemory(OEData *data)
-{
-	delete memory;
-	memory = data;
-	
-	memory->resize(size);
-	datap = &memory->front();
-}
-
-bool RAM::setProperty(const string &name, const string &value)
+bool RAM::setValue(string name, string value)
 {
 	if (name == "size")
 		setSize(getInt(value));
@@ -62,7 +43,23 @@ bool RAM::setProperty(const string &name, const string &value)
 	return true;
 }
 
-bool RAM::setData(const string &name, OEData *data)
+bool RAM::setComponent(string name, OEComponent *component)
+{
+	if (name == "host")
+	{
+		if (host)
+			host->removeObserver(this, HOST_POWERED_ON);
+		host = component;
+		if (host)
+			host->addObserver(this, HOST_POWERED_ON);
+	}
+	else
+		return false;
+	
+	return true;
+}
+
+bool RAM::setData(string name, OEData *data)
 {
 	if (name == "image")
 		setMemory(data);
@@ -72,7 +69,7 @@ bool RAM::setData(const string &name, OEData *data)
 	return true;
 }
 
-bool RAM::getData(const string &name, OEData **data)
+bool RAM::getData(string name, OEData **data)
 {
 	if (name == "image")
 	{
@@ -83,22 +80,6 @@ bool RAM::getData(const string &name, OEData **data)
 			return false;
 		
 		*data = memory;
-	}
-	else
-		return false;
-	
-	return true;
-}
-
-bool RAM::connect(const string &name, OEComponent *component)
-{
-	if (name == "host")
-	{
-		if (host)
-			host->removeObserver(this, HOST_POWERED_ON);
-		host = component;
-		if (host)
-			host->addObserver(this, HOST_POWERED_ON);
 	}
 	else
 		return false;
@@ -140,3 +121,24 @@ void RAM::write(int address, int value)
 {
 	datap[address & mask] = value;
 }
+
+void RAM::setSize(int value)
+{
+	value = getNextPowerOf2(value);
+	if (value < 1)
+		value = 1;
+	
+	size = value;
+	mask = value - 1;
+}
+
+void RAM::setMemory(OEData *data)
+{
+	delete memory;
+	memory = data;
+	
+	memory->resize(size);
+	datap = &memory->front();
+}
+
+

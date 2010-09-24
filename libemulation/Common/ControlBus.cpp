@@ -31,7 +31,7 @@ void ControlBus::updateFrequency()
 	frequency = crystal / frequencyDivider;
 }
 
-bool ControlBus::setProperty(const string &name, const string &value)
+bool ControlBus::setValue(string name, string value)
 {
 	if (name == "crystal")
 	{
@@ -49,7 +49,7 @@ bool ControlBus::setProperty(const string &name, const string &value)
 	return true;
 }
 
-bool ControlBus::connect(const string &name, OEComponent *component)
+bool ControlBus::setComponent(string name, OEComponent *component)
 {
 	if (name == "host")
 	{
@@ -69,6 +69,8 @@ bool ControlBus::connect(const string &name, OEComponent *component)
 	}
 	else if (name == "master")
 		master = component;
+	else if (name == "masterSocket")
+		masterSocket = component;
 	
 	return true;
 }

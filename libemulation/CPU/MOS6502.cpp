@@ -16,11 +16,11 @@ MOS6502::MOS6502()
 	sp.b.h = 0x01;
 	zp.d = 0;
 	
-	memory = NULL;
-	bus = NULL;
+	memoryBus = NULL;
+	controlBus = NULL;
 }
 
-bool MOS6502::setProperty(const string &name, const string &value)
+bool MOS6502::setValue(string name, string value)
 {
 	if (name == "a")
 		a = getInt(value);
@@ -40,7 +40,7 @@ bool MOS6502::setProperty(const string &name, const string &value)
 	return true;
 }
 
-bool MOS6502::getProperty(const string &name, string &value)
+bool MOS6502::getValue(string name, string &value)
 {
 	if (name == "a")
 		value = getHex(a);
@@ -60,26 +60,26 @@ bool MOS6502::getProperty(const string &name, string &value)
 	return true;
 }
 
-bool MOS6502::connect(const string &name, OEComponent *component)
+bool MOS6502::setComponent(string name, OEComponent *component)
 {
-	if (name == "memory")
-		memory = component;
-	else if (name == "bus")
+	if (name == "memoryBus")
+		memoryBus = component;
+	else if (name == "controlBus")
 	{
-		if (bus)
+		if (controlBus)
 		{
-			bus->removeObserver(this, CONTROLBUS_RESET_ASSERTED);
-			bus->removeObserver(this, CONTROLBUS_IRQ_ASSERTED);
-			bus->removeObserver(this, CONTROLBUS_IRQ_CLEARED);
-			bus->removeObserver(this, CONTROLBUS_NMI_ASSERTED);
+			controlBus->removeObserver(this, CONTROLBUS_RESET_ASSERTED);
+			controlBus->removeObserver(this, CONTROLBUS_IRQ_ASSERTED);
+			controlBus->removeObserver(this, CONTROLBUS_IRQ_CLEARED);
+			controlBus->removeObserver(this, CONTROLBUS_NMI_ASSERTED);
 		}
-		bus = component;
-		if (bus)
+		controlBus = component;
+		if (controlBus)
 		{
-			bus->addObserver(this, CONTROLBUS_RESET_ASSERTED);
-			bus->addObserver(this, CONTROLBUS_IRQ_ASSERTED);
-			bus->addObserver(this, CONTROLBUS_IRQ_CLEARED);
-			bus->addObserver(this, CONTROLBUS_NMI_ASSERTED);
+			controlBus->addObserver(this, CONTROLBUS_RESET_ASSERTED);
+			controlBus->addObserver(this, CONTROLBUS_IRQ_ASSERTED);
+			controlBus->addObserver(this, CONTROLBUS_IRQ_CLEARED);
+			controlBus->addObserver(this, CONTROLBUS_NMI_ASSERTED);
 		}
 	}
 	else

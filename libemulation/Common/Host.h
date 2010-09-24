@@ -516,8 +516,8 @@ enum
 class Host : public OEComponent
 {
 public:
-	bool setValue(const string &name, const string &value);
-	bool getValue(const string &name, string &value);
+	bool setValue(string name, string value);
+	bool getValue(string name, string &value);
 	
 	bool postEvent(OEComponent *component, int event, void *data);
 	

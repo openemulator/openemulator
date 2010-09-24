@@ -29,10 +29,10 @@
 <component id="apple1.memoryBus" class="AddressDecoder">
     <property name="addressSize" value="16" />
     <property name="blockSize" value="8" />
-    <property name="floatingBus" value="" />
+    <property name="floatingBus" ref="" />
     <property name="refRAM1" ref="apple1.ram1" />
     <property name="mapRAM1" value="0x0000-0x0fff" />
-    <property name="refIO" ref="apple1.io" />
+    <property name="refIO" ref="apple1.ioMemory" />
     <property name="mapIO" value="0xc000-0xcfff" />
     <property name="refRAM2" ref="apple1.ram2" />
     <property name="mapRAM2" value="0xe000-0xefff" />
@@ -54,7 +54,7 @@
     <property name="image" src="${id}.bin" />
     <property name="size" value="0x1000" />
 </component>
-<component id="apple1.io" class="AddressDecoder">
+<component id="apple1.ioMemory" class="AddressDecoder">
     <property name="addressSize" value="5" />
     <property name="blockSize" value="4" />
     <property name="floatingBus" ref="" />

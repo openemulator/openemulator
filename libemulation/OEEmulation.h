@@ -40,16 +40,16 @@ private:
 	bool hasProperty(string value, string property);
 	string parseProperties(string value, string id);
 	
-	bool build();
-	bool buildComponent(string id, string className);
+	bool create();
+	bool createComponent(string id, string className);
 	bool configure();
 	bool configureComponent(string id, xmlNodePtr children);
 	bool init();
 	bool initComponent(string id);
 	bool update();
 	bool updateComponent(string id, xmlNodePtr children);
-	void remove();
-	void removeComponent(string id, xmlNodePtr children);
+	void destroy();
+	void destroyComponent(string id, xmlNodePtr children);
 };
 
 #endif

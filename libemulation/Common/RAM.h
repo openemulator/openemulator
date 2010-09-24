@@ -22,10 +22,10 @@ public:
 	RAM();
 	~RAM();
 	
-	bool setProperty(const string &name, const string &value);
-	bool setData(const string &name, OEData *data);
-	bool getData(const string &name, OEData **data);
-	bool connect(const string &name, OEComponent *component);
+	bool setValue(string name, string value);
+	bool setComponent(string name, OEComponent *component);
+	bool setData(string name, OEData *data);
+	bool getData(string name, OEData **data);
 	
 	void notify(OEComponent *component, int notification, void *data);
 	
