@@ -28,10 +28,10 @@ typedef struct
 	bool read;
 	bool write;
 } AddressDecoderMap;
-
 typedef vector<AddressDecoderMap> AddressDecoderMaps;
-typedef map<string, string> AddressDecoderRangeMap;
-typedef map<string, OEComponent *> AddressDecoderRefMap;
+
+typedef map<string, string> AddressDecoderConf;
+typedef map<string, OEComponent *> AddressDecoderRef;
 
 class AddressDecoder : public OEComponent
 {
@@ -53,19 +53,19 @@ private:
 	int blockSize;
 	OEComponent *floatingBus;
 	
-	AddressRangeMap rangeMap;
-	AddressRefMap refMap;
+	AddressDecoderConf conf;
+	AddressDecoderRef ref;
 	
 	int addressMask;
 	OEComponents readMap;
 	OEComponents writeMap;
 	
 	void initMap(OEComponent *component);
-	void mapComponent(AddressDecoderMap *theMap);
-	bool mapComponent(OEComponent *component, const string &value);
+	void map(AddressDecoderMap *theMap);
+	bool map(OEComponent *component, string value);
 	
-	bool getAddressDecoderMap(AddressDecoderMap &theMap, const string &value);
-	bool getAddressDecoderMaps(AddressDecoderMaps &theMaps, const string &value);
+	bool getMap(AddressDecoderMap &theMap, string value);
+	bool getMaps(AddressDecoderMaps &theMaps, string value);
 };
 
 #endif

@@ -31,7 +31,7 @@ bool AddressDecoder::setValue(const string &name, const string &value)
 	else if (name == "blockSize")
 		blockSize = getInt(value);
 	else if (name.substr(0, 3) == "map")
-		addressMap[name.substr(3)] = value;
+		conf[name.substr(3)] = value;
 	else
 		return false;
 	
@@ -43,7 +43,7 @@ bool AddressDecoder::setComponent(const string &name, OEComponent *component)
 	if (name == "floatingBus")
 		floatingBus = component;
 	else if (name.substr(0, 3) == "ref")
-		addressRef[name.substr(3)] = component;
+		ref[name.substr(3)] = component;
 	else
 		return false;
 	
@@ -65,19 +65,23 @@ bool AddressDecoder::init()
 	readMap.resize(blockNum);
 	writeMap.resize(blockNum);
 	
-	initMap(floatingBus);
+	for (int i = 0; i < blockNum; i++)
+	{
+		readMap[i] = floatingBus;
+		writeMap[i] = floatingBus;
+	}
 	
-	for (AddressMap::iterator i = addressMap.begin();
-		 i != addressMap.end();
+	for (AddressDecoderConf::iterator i = conf.begin();
+		 i != conf.end();
 		 i++)
 	{
-		if (!addressRef.count(i->first))
+		if (!ref.count(i->first))
 		{
-			OELog("unmatched address map '" + i->first + "'");
+			OELog("unmatched address conf '" + i->first + "'");
 			return false;
 		}
 		
-		mapComponent(addressRef[i->first], i->second);
+		map(ref[i->first], i->second);
 	}
 	
 	return true;
@@ -86,12 +90,7 @@ bool AddressDecoder::init()
 bool AddressDecoder::postEvent(OEComponent *component, int notification, void *data)
 {
 	if (notification == ADDRESSDECODER_MAP)
-	{
-		if (component == NULL)
-			component = floatingBus;
-		
-		mapComponent(component, *((string *) data));
-	}
+		map(component, *((string *) data));
 	else
 		return false;
 	
@@ -108,64 +107,77 @@ void AddressDecoder::write(int address, OEUInt8 value)
 	writeMap[(address & addressMask) >> blockSize]->write(address, value);
 }
 
-void AddressDecoder::initMap(OEComponent *component)
+void AddressDecoder::map(AddressDecoderMap *map)
 {
-	for (OEComponents::iterator i = readMap.begin();
-		 i != readMap.end();
-		 i++)
-		*i = component;
+	int startBlock = map->startAddress >> blockSize;
+	int endBlock = map->endAddress >> blockSize;
 	
-	for (OEComponents::iterator i = writeMap.begin();
-		 i != writeMap.end();
-		 i++)
-		*i = component;
+	if (map->read)
+		for (int j = startBlock; j < endBlock; j++)
+			readMap[j] = map->component;
+
+	if (map->write)
+		for (int j = startBlock; j < endBlock; j++)
+			writeMap[j] = map->component;
 }
 
-void AddressDecoder::mapComponent(AddressRange *range)
+bool AddressDecoder::map(OEComponent *component, string value)
 {
-	int startBlock = range->start >> blockSize;
-	int endBlock = range->end >> blockSize;
+	AddressDecoderMaps maps;
 	
-	if (range->read)
-		for (int j = startBlock; j < endBlock; j++)
-			readMap[j] = range->component;
-
-	if (range->write)
-		for (int j = startBlock; j < endBlock; j++)
-			writeMap[j] = range->component;
-}
-
-bool AddressDecoder::mapComponent(OEComponent *component, const string &value)
-{
-	AddressRanges ranges;
-	
-	if (!getAddressRanges(ranges, value))
+	if (!getMaps(maps, value))
 		return false;
 	
 	int shiftMask = (1 << addressSize) - 1;
 	
-	for (AddressRanges::iterator i = ranges.begin();
-		 i != ranges.end();
+	for (AddressDecoderMaps::iterator i = maps.begin();
+		 i != maps.end();
 		 i++)
 	{
-		if ((i->end > addressMask) ||
-			(i->start & shiftMask) ||
-			((i->end & shiftMask) != shiftMask))
+		if ((i->endAddress > addressMask) ||
+			(i->startAddress & shiftMask) ||
+			((i->endAddress & shiftMask) != shiftMask))
 		{
 			OELog("address range " + value + " invalid");
 			return false;
 		}
 		
-		mapComponent(&(*i));
+		map(&(*i));
 	}
 	
 	return true;
 }
 
-bool AddressDecoder::getAddressRange(AddressRange &range, const string &value)
+bool AddressDecoder::getMaps(AddressDecoderMaps &maps, string value)
 {
-	range.read = false;
-	range.write = false;
+	size_t startPos = value.find_first_not_of(',', 0);
+	size_t endPos = value.find_first_of(',', startPos);
+	
+	while ((startPos != string::npos) || (endPos != string::npos))
+	{
+		AddressDecoderMap map;
+		
+		if (!getMap(map, value.substr(startPos, endPos - startPos)))
+		{
+			OELog("address range '" + value + "' invalid");
+			return false;
+		}
+		
+		maps.push_back(map);
+		
+		startPos = value.find_first_not_of(',', endPos);
+		endPos = value.find_first_of(',', startPos);
+	}
+	
+	return true;
+}
+
+bool AddressDecoder::getMap(AddressDecoderMap &map, OEComponent *component, string value)
+{
+	map.component = component;
+	
+	map.read = false;
+	map.write = false;
 	
 	size_t pos = 0;
 	
@@ -174,55 +186,31 @@ bool AddressDecoder::getAddressRange(AddressRange &range, const string &value)
 		if (pos == value.size())
 			return false;
 		else if ((value[pos] == 'R') || (value[pos] == 'r'))
-			range.read = true;
+			map.read = true;
 		else if ((value[pos] == 'W') || (value[pos] == 'w'))
-			range.write = true;
+			map.write = true;
 		else
 			break;
 	}
 	
-	if (!range.read && !range.write)
-		range.read = range.write = true;
+	if (!map.read && !map.write)
+		map.read = map.write = true;
 	
 	size_t separatorPos = value.find_first_of('-', pos);
 	if (separatorPos == string::npos)
-		range.end = range.start = getInt(value.substr(pos));
+		map.end = map.start = getInt(value.substr(pos));
 	else if (separatorPos == pos)
 		return false;
 	else if (separatorPos == value.size())
 		return false;
 	else
 	{
-		range.start = getInt(value.substr(pos, separatorPos));
-		range.end = getInt(value.substr(separatorPos + 1));
+		map.start = getInt(value.substr(pos, separatorPos));
+		map.end = getInt(value.substr(separatorPos + 1));
 	}
 	
-	if (range.start > range.end)
+	if (map.start > map.end)
 		return false;
-	
-	return true;
-}
-
-bool AddressDecoder::getAddressDecoderMaps(AddressDecoderMaps &theMaps, const string &value)
-{
-	size_t startPos = value.find_first_not_of(',', 0);
-	size_t endPos = value.find_first_of(',', startPos);
-	
-	while ((startPos != string::npos) || (endPos != string::npos))
-	{
-		AddressDecoderMap theMap;
-		
-		if (!getAddressRange(range, value.substr(startPos, endPos - startPos)))
-		{
-			OELog("address range '" + value + "' invalid");
-			return false;
-		}
-		
-		ranges.push_back(range);
-		
-		startPos = value.find_first_not_of(',', endPos);
-		endPos = value.find_first_of(',', startPos);
-	}
 	
 	return true;
 }

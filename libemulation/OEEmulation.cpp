@@ -20,11 +20,11 @@ OEEmulation::OEEmulation() : OEInfo()
 {
 }
 
-OEEmulation::OEEmulation(const string &path) : OEInfo()
+OEEmulation::OEEmulation(string path) : OEInfo()
 {
 }
 
-OEEmulation::OEEmulation(const string &path, const string &resourcePath) : OEInfo()
+OEEmulation::OEEmulation(string path, string resourcePath) : OEInfo()
 {
 	this->resourcePath = resourcePath;
 	
@@ -36,7 +36,7 @@ OEEmulation::~OEEmulation()
 	close();
 }
 
-bool OEEmulation::open(const string &path)
+bool OEEmulation::open(string path)
 {
 	if (!OEInfo::open(path))
 		return false;
@@ -58,7 +58,7 @@ void OEEmulation::close()
 	OEInfo::close();
 }
 
-OEComponent *OEEmulation::getComponent(const string &id)
+OEComponent *OEEmulation::getComponent(string id)
 {
 	if (!componentsMap.count(id))
 		return NULL;
@@ -66,7 +66,7 @@ OEComponent *OEEmulation::getComponent(const string &id)
 	return componentsMap[id];
 }
 
-bool OEEmulation::setComponent(const string &id, OEComponent *component)
+bool OEEmulation::setComponent(string id, OEComponent *component)
 {
 	if (component)
 		componentsMap[id] = component;
@@ -76,7 +76,12 @@ bool OEEmulation::setComponent(const string &id, OEComponent *component)
 	return true;
 }
 
-string OEEmulation::parseProperties(string value, const string &id)
+bool OEEmulation::hasProperty(string value, string property)
+{
+	return (value.find("${" + property + "$}") != string::npos);
+}
+
+string OEEmulation::parseProperties(string value, string id)
 {
 	int startIndex;
 	
@@ -128,7 +133,7 @@ bool OEEmulation::build()
 	return true;
 }
 
-bool OEEmulation::buildComponent(const string &id, const string &className)
+bool OEEmulation::buildComponent(string id, string className)
 {
 	if (getComponent(id))
 	{
@@ -166,7 +171,7 @@ bool OEEmulation::configure()
 	return true;
 }
 
-bool OEEmulation::configureComponent(const string &id, xmlNodePtr children)
+bool OEEmulation::configureComponent(string id, xmlNodePtr children)
 {
 	OEComponent *component = getComponent(id);
 	if (!component)
@@ -250,7 +255,7 @@ bool OEEmulation::init()
 	return true;
 }
 
-bool OEEmulation::initComponent(const string &id)
+bool OEEmulation::initComponent(string id)
 {
 	OEComponent *component = getComponent(id);
 	if (!component)
@@ -285,7 +290,7 @@ bool OEEmulation::update()
 	return true;
 }
 
-bool OEEmulation::updateComponent(const string &id, xmlNodePtr children)
+bool OEEmulation::updateComponent(string id, xmlNodePtr children)
 {
 	OEComponent *component = getComponent(id);
 	if (!component)
@@ -310,6 +315,9 @@ bool OEEmulation::updateComponent(const string &id, xmlNodePtr children)
 			}
 			else if ((src = getNodeProperty(node, "src")) != "")
 			{
+				if (hasProperty(src, "resourcePath"))
+					continue;
+				
 				src = parseProperties(src, id);
 				OEData *data;
 				
@@ -333,8 +341,6 @@ bool OEEmulation::updateComponent(const string &id, xmlNodePtr children)
 
 void OEEmulation::remove()
 {
-	// To-Do: Fix deletion for floating memory access
-	
 	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
 	
 	for(xmlNodePtr node = rootNode->children;
@@ -350,7 +356,7 @@ void OEEmulation::remove()
 	}
 }
 
-void OEEmulation::removeComponent(const string &id, xmlNodePtr children)
+void OEEmulation::removeComponent(string id, xmlNodePtr children)
 {
 	OEComponent *component = getComponent(id);
 	if (!component)

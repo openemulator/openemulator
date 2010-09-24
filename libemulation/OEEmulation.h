@@ -20,14 +20,14 @@ class OEEmulation : public OEInfo
 {
 public:
 	OEEmulation();
-	OEEmulation(const string &path);
-	OEEmulation(const string &path, const string &resourcePath);
+	OEEmulation(string path);
+	OEEmulation(string path, string resourcePath);
 	~OEEmulation();
 	
-	bool open(const string &path);
+	bool open(string path);
 	void close();
 	
-	OEComponent *getComponent(const string &id);
+	OEComponent *getComponent(string id);
 	
 protected:
 	
@@ -35,20 +35,21 @@ private:
 	string resourcePath;
 	OEComponentsMap componentsMap;
 	
-	bool setComponent(const string &id, OEComponent *component);
+	bool setComponent(string id, OEComponent *component);
 	
-	string parseProperties(string value, const string &id);
+	bool hasProperty(string value, string property);
+	string parseProperties(string value, string id);
 	
 	bool build();
-	bool buildComponent(const string &id, const string &className);
+	bool buildComponent(string id, string className);
 	bool configure();
-	bool configureComponent(const string &id, xmlNodePtr children);
+	bool configureComponent(string id, xmlNodePtr children);
 	bool init();
-	bool initComponent(const string &id);
+	bool initComponent(string id);
 	bool update();
-	bool updateComponent(const string &id, xmlNodePtr children);
+	bool updateComponent(string id, xmlNodePtr children);
 	void remove();
-	void removeComponent(const string &id, xmlNodePtr children);
+	void removeComponent(string id, xmlNodePtr children);
 };
 
 #endif
