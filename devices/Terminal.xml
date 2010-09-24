@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
-<edl version="1.0" type="Terminals" label="Terminal" image="Terminal.png">
+<edl version="1.0" type="Terminals" label="Terminal" imageSrc="Terminal.png">
 
-<device id="terminal" type="Peripheral" label="Terminal" image="Terminal.png">
-<connector id="terminal.connector" type="Serial" label="Connector" image="Serial Port Connector.png" />
+<device id="terminal" type="Peripheral" label="Terminal" imageSrc="Terminal.png">
+<connector id="terminal.connector" type="Serial" label="Connector" imageSrc="Serial Port Connector.png" />
 <component id="terminal.terminal" class="Terminal">
     <property name="host" ref="host" />
     <property name="width" value="24" />
     <property name="height" value="40" />
-    <property name="charset" data="${resourcePath}/roms/Signetics 2513 Video ROM.bin" />
+    <property name="charset" data="roms/Signetics 2513 Video ROM.bin" />
 </component>
 
 </edl>

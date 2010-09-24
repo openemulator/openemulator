@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
-<edl version="1.0" label="Composite Video Monitor" image="Composite Video Monitor.png" group="Monitors">
+<edl version="1.0" label="Composite Video Monitor" imageSrc="Composite Video Monitor.png" group="Monitors">
 
-<device id="monitor" type="Peripheral" label="Composite Video Monitor" image="Composite Video Monitor.png" />
-<connector id="monitor.connector" label="Video Connector" image="Composite Video Connector.png" />
-<setting ref="monitor.monitor" property="brightness" type="value" options="0.0,2.0" label="Brightness" />
-<setting ref="monitor.monitor" property="contrast" type="value" options="0.0,2.0" label="Contrast" />
-<setting ref="monitor.monitor" property="saturation" type="value" options="0.0,2.0" label="Saturation" />
-<setting ref="monitor.monitor" property="hue" type="value" options="0.0,2.0" label="Hue" />
-
+<device id="monitor" type="Peripheral" label="Composite Video Monitor" imageSrc="Composite Video Monitor.png" />
+<connector id="monitor.connector" label="Video Connector" imageSrc="Composite Video Connector.png" />
+<setting id="monitor.brightness" ref="monitor.monitor" property="brightness" type="value" options="0.0,2.0" label="Brightness" />
+<setting id="monitor.contrast" ref="monitor.monitor" property="contrast" type="value" options="0.0,2.0" label="Contrast" />
+<setting id="monitor.saturation" ref="monitor.monitor" property="saturation" type="value" options="0.0,2.0" label="Saturation" />
+<setting id="monitor.hue" ref="monitor.monitor" property="hue" type="value" options="0.0,2.0" label="Hue" />
 <component id="monitor.monitor" class="CompositeMonitor">
     <property name="host" ref="host" />
     <property name="lumaBandwidth" value="0.3" />

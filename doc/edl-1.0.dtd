@@ -19,7 +19,7 @@
 <!ATTLIST edl version CDATA "1.0">
 <!ATTLIST edl type CDATA #IMPLIED>
 <!ATTLIST edl label CDATA #IMPLIED>
-<!ATTLIST edl image CDATA #IMPLIED>
+<!ATTLIST edl imageSrc CDATA #IMPLIED>
 <!ATTLIST edl description CDATA #IMPLIED>
 
 <!ELEMENT component (property*)>
@@ -37,20 +37,20 @@
 <!ATTLIST device type CDATA #REQUIRED>
 <!ATTLIST device options CDATA #IMPLIED>
 <!ATTLIST device label CDATA #REQUIRED>
-<!ATTLIST device image CDATA #REQUIRED>
+<!ATTLIST device imageSrc CDATA #REQUIRED>
 
 <!ELEMENT connector (inlet*)>
 <!ATTLIST connector id ID #REQUIRED>
 <!ATTLIST connector type CDATA #REQUIRED>
 <!ATTLIST connector label CDATA #REQUIRED>
-<!ATTLIST connector image CDATA #REQUIRED>
+<!ATTLIST connector imageSrc CDATA #REQUIRED>
 
 <!ELEMENT port (inlet*)>
 <!ATTLIST port id ID #REQUIRED>
 <!ATTLIST port ref CDATA #REQUIRED>
 <!ATTLIST port type CDATA #REQUIRED>
 <!ATTLIST port label CDATA #REQUIRED>
-<!ATTLIST port image CDATA #REQUIRED>
+<!ATTLIST port imageSrc CDATA #REQUIRED>
 
 <!ELEMENT inlet EMPTY>
 <!ATTLIST inlet ref IDREF #REQUIRED>
@@ -58,6 +58,7 @@
 <!ATTLIST inlet outletRef CDATA #REQUIRED>
 
 <!ELEMENT setting EMPTY>
+<!ATTLIST setting id ID #REQUIRED>
 <!ATTLIST setting ref IDREF #REQUIRED>
 <!ATTLIST setting property CDATA #REQUIRED>
 <!ATTLIST setting type CDATA #REQUIRED>
