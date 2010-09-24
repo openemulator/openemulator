@@ -41,7 +41,7 @@ bool OEInfo::open(const string &path)
 	
 	close();
 	
-	OELog("could not analyze '" + path + "'");
+	OELog("in '" + path + "'");
 	
 	return false;
 }

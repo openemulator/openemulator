@@ -24,7 +24,7 @@ typedef struct
 	
 	OEUInt32 startAddress;
 	OEUInt32 endAddress;
-	
+
 	bool read;
 	bool write;
 } AddressDecoderMap;
@@ -38,8 +38,8 @@ class AddressDecoder : public OEComponent
 public:
 	AddressDecoder();
 	
-	bool setValue(const string &name, const string &value);
-	bool setComponent(const string &name, OEComponent *component);
+	bool setValue(string name, string value);
+	bool setComponent(string name, OEComponent *component);
 	
 	bool init();
 	
@@ -64,8 +64,8 @@ private:
 	void map(AddressDecoderMap *theMap);
 	bool map(OEComponent *component, string value);
 	
-	bool getMap(AddressDecoderMap &theMap, string value);
-	bool getMaps(AddressDecoderMaps &theMaps, string value);
+	bool getMaps(AddressDecoderMaps &maps, OEComponent *component, string value);
+	bool getMap(AddressDecoderMap &map, OEComponent *component, string value);
 };
 
 #endif

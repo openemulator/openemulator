@@ -5,7 +5,7 @@
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Encapsulates an EDL document.
+ * Controls an EDL document
  */
 
 #ifndef _OEEDL_H

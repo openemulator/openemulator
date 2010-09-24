@@ -5,7 +5,7 @@
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Encapsulates an EDL document.
+ * Controls an EDL document
  */
 
 #include <sstream>
@@ -82,7 +82,7 @@ bool OEEDL::open(const string &path)
 		if (!doc)
 		{
 			is_open = false;
-			OELog("could not parse EDL of '" + path + "'");
+			OELog("could not parse EDL, path '" + path + "'");
 		}
 	}
 	
@@ -122,7 +122,7 @@ bool OEEDL::save(const string &path)
 					OELog("could not open '" + path + "'");
 			}
 			else
-				OELog("could not dump EDL for '" + path + "'");
+				OELog("could not dump EDL, path '" + path + "'");
 		}
 		else
 			OELog("could not update '" + path + "'");
@@ -143,7 +143,7 @@ bool OEEDL::save(const string &path)
 							  " in '" + path + "'");
 				}
 				else
-					OELog("could not dump EDL for '" + path + "'");
+					OELog("could not dump EDL, path '" + path + "'");
 			}
 			
 			delete package;

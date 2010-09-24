@@ -81,7 +81,7 @@
     <property name="reset" value="0" />
     <property name="resetOnPowerOn" value="0" />
 </component>
-<component id="appleII.floatingBus" class="FloatingBus" />
+<component id="appleII.floatingBus" class="AppleIIFloatingBus" />
 <component id="appleII.memoryBus" class="AddressDecoder">
     <property name="addressSize" value="16" />
     <property name="blockSize" value="8" />

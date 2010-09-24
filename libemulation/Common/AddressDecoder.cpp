@@ -24,7 +24,7 @@ AddressDecoder::AddressDecoder()
 	writeMap.resize(1);
 }
 
-bool AddressDecoder::setValue(const string &name, const string &value)
+bool AddressDecoder::setValue(string name, string value)
 {
 	if (name == "addressSize")
 		addressSize = getInt(value);
@@ -38,7 +38,7 @@ bool AddressDecoder::setValue(const string &name, const string &value)
 	return true;
 }
 
-bool AddressDecoder::setComponent(const string &name, OEComponent *component)
+bool AddressDecoder::setComponent(string name, OEComponent *component)
 {
 	if (name == "floatingBus")
 		floatingBus = component;
@@ -125,7 +125,7 @@ bool AddressDecoder::map(OEComponent *component, string value)
 {
 	AddressDecoderMaps maps;
 	
-	if (!getMaps(maps, value))
+	if (!getMaps(maps, component, value))
 		return false;
 	
 	int shiftMask = (1 << addressSize) - 1;
@@ -148,7 +148,8 @@ bool AddressDecoder::map(OEComponent *component, string value)
 	return true;
 }
 
-bool AddressDecoder::getMaps(AddressDecoderMaps &maps, string value)
+bool AddressDecoder::getMaps(AddressDecoderMaps &maps, OEComponent *component,
+							 string value)
 {
 	size_t startPos = value.find_first_not_of(',', 0);
 	size_t endPos = value.find_first_of(',', startPos);
@@ -157,7 +158,7 @@ bool AddressDecoder::getMaps(AddressDecoderMaps &maps, string value)
 	{
 		AddressDecoderMap map;
 		
-		if (!getMap(map, value.substr(startPos, endPos - startPos)))
+		if (!getMap(map, component, value.substr(startPos, endPos - startPos)))
 		{
 			OELog("address range '" + value + "' invalid");
 			return false;
@@ -172,7 +173,8 @@ bool AddressDecoder::getMaps(AddressDecoderMaps &maps, string value)
 	return true;
 }
 
-bool AddressDecoder::getMap(AddressDecoderMap &map, OEComponent *component, string value)
+bool AddressDecoder::getMap(AddressDecoderMap &map, OEComponent *component,
+							string value)
 {
 	map.component = component;
 	
@@ -198,18 +200,18 @@ bool AddressDecoder::getMap(AddressDecoderMap &map, OEComponent *component, stri
 	
 	size_t separatorPos = value.find_first_of('-', pos);
 	if (separatorPos == string::npos)
-		map.end = map.start = getInt(value.substr(pos));
+		map.endAddress = map.startAddress = getInt(value.substr(pos));
 	else if (separatorPos == pos)
 		return false;
 	else if (separatorPos == value.size())
 		return false;
 	else
 	{
-		map.start = getInt(value.substr(pos, separatorPos));
-		map.end = getInt(value.substr(separatorPos + 1));
+		map.startAddress = getInt(value.substr(pos, separatorPos));
+		map.endAddress = getInt(value.substr(separatorPos + 1));
 	}
 	
-	if (map.start > map.end)
+	if (map.startAddress > map.endAddress)
 		return false;
 	
 	return true;
