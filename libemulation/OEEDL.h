@@ -36,7 +36,7 @@ public:
 	bool save(string path);
 	void close();
 	
-	bool addEDL(string path, OEIdMap deviceIdMap);
+	bool addEDL(string path, OEIdMap connectionMap);
 	bool removeDevice(string id);
 	
 protected:
@@ -46,16 +46,12 @@ protected:
 	virtual bool update();
 	
 	string getString(int value);
-	
 	void setNodeProperty(xmlNodePtr node, string name, string value);
 	bool hasNodeProperty(xmlNodePtr node, string name);
 	string getNodeProperty(xmlNodePtr node, string name);
-	
 	string getPathExtension(string path);
 	bool writeFile(string path, OEData *data);
 	bool readFile(string path, OEData *data);
-	
-	OEIdList getDeviceIds();
 	
 private:
 	bool is_open;
@@ -65,11 +61,19 @@ private:
 	bool validate();
 	bool dump(OEData *data);
 	
-	OEIdMap getIdMap(OEIdList deviceIds, OEIdList newDeviceIds);
-	void rename(xmlNodePtr rootNode, OEIdMap deviceIdMap);
-	void rename(xmlNodePtr node, OEIdMap deviceIdMap, string property);
-	string getDeviceId(string id);
+	OEIdMap buildNameMap(OEIdList deviceIds, OEIdList newDeviceIds);
+	void rename(OEIdMap nameMap);
+	void rename(OEIdMap nameMap, xmlNodePtr node, string property);
+	bool renameConnectionMap(OEIdMap &connectionMap, OEIdMap nameMap);
+
+	bool removeConnectedDevices(string deviceId);
+	void removeRefs(string deviceId);
+	void removeElements(string deviceId);
+
+	bool hasDevice(string deviceId);
+	OEIdList getDeviceIds();
 	void setDeviceId(string &id, string deviceId);
+	string getDeviceId(string id);
 };
 
 #endif

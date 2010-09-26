@@ -10,7 +10,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-#define TEMPLATE_FOLDER @"~/Library/Application Support/Open Emulator/Templates"
+#define TEMPLATE_FOLDER @"~/Library/Application Support/OpenEmulator/Templates"
 
 @interface Document : NSDocument
 {

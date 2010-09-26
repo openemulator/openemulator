@@ -100,7 +100,7 @@
 <component id="kim1.io" class="KIM1IO">
     <property name="host" ref="host" />
     <property name="view" src="${resourcesPath}/images/Early microcomputers/MOS KIM-1 View.png" />
-    <property name="serial" ref="" />
+    <property name="serialPort" ref="" />
     <property name="audioOut" ref="kim1.audioOut" />
     <property name="audioIn" ref="kim1.audioIn" />
 </component>
