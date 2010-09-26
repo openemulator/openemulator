@@ -33,9 +33,9 @@ void MC6821::setControlA(int value)
 	if (controlBusA)
 	{
 		if (wasIRQ && !isIRQ)
-			controlBusA->notify(this, CONTROLBUS_ASSERT_IRQ, &value);
+			controlBusA->postEvent(this, CONTROLBUS_ASSERT_IRQ, &value);
 		else if (!wasIRQ && isIRQ)
-			controlBusA->notify(this, CONTROLBUS_CLEAR_IRQ, &value);
+			controlBusA->postEvent(this, CONTROLBUS_CLEAR_IRQ, &value);
 	}
 }
 
@@ -48,9 +48,9 @@ void MC6821::setControlB(int value)
 	if (controlBusB)
 	{
 		if (wasIRQ && !isIRQ)
-			controlBusB->notify(this, CONTROLBUS_ASSERT_IRQ, &value);
+			controlBusB->postEvent(this, CONTROLBUS_ASSERT_IRQ, &value);
 		else if (!wasIRQ && isIRQ)
-			controlBusB->notify(this, CONTROLBUS_CLEAR_IRQ, &value);
+			controlBusB->postEvent(this, CONTROLBUS_CLEAR_IRQ, &value);
 	}
 }
 
