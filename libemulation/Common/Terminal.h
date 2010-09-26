@@ -8,6 +8,9 @@
  * Controls a terminal
  */
 
+#ifndef _TERMINAL_H
+#define _TERMINAL_H
+
 #include "OEComponent.h"
 
 // Notifications
@@ -23,5 +26,14 @@ enum
 
 class Terminal : public OEComponent
 {
+public:
+	bool setValue(string name, string value);
+	bool setComponent(string name, OEComponent *component);
 	
+private:
+	OEComponent *host;
+	int width;
+	int height;
 };
+
+#endif

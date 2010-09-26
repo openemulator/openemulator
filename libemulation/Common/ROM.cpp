@@ -37,10 +37,10 @@ void ROM::setMemory(OEData *data)
 	mask = size - 1;
 	
 	memory->resize(size);
-	datap = &memory->front();
+	datap = (OEUInt8 *) &memory->front();
 }
 
-bool ROM::setResource(const string &name, OEData *data)
+bool ROM::setData(string name, OEData *data)
 {
 	if (name == "image")
 		setMemory(data);
@@ -50,7 +50,7 @@ bool ROM::setResource(const string &name, OEData *data)
 	return true;
 }
 
-int ROM::read(int address)
+OEUInt8 ROM::read(OEAddress address)
 {
 	return datap[address & mask];
 }

@@ -18,8 +18,8 @@ public:
 	KIM1IO();
 	~KIM1IO();
 	
-	bool setResource(const string &name, OEData *data);
-	bool connect(const string &name, OEComponent *component);
+	bool setComponent(string name, OEComponent *component);
+	bool setData(string name, OEData *data);
 	
 	void notify(OEComponent *component, int notification, void *data);
 	

@@ -259,7 +259,7 @@
 		NSString *ref = getNSString((*inlet)->ref);
 		NSString *type = getNSString((*inlet)->type);
 		NSString *labelName = getNSString((*inlet)->label);
-		NSString *imageName = getNSString((*inlet)->image);
+		NSString *imageName = getNSString((*inlet)->imageSrc);
 		
 		NSMutableDictionary *dict = [[[NSMutableDictionary alloc] init] autorelease];
 		[dict setObject:ref forKey:@"ref"];
@@ -281,7 +281,7 @@
 	{
 		NSString *deviceName = getNSString((*device)->name);
 		NSString *deviceLabel = getNSString((*device)->label);
-		NSString *deviceImage = getNSString((*device)->image);
+		NSString *deviceImage = getNSString((*device)->imageSrc);
 		NSString *connectionLabel = getNSString((*device)->connectionLabel);
 		
 		NSImage *theImage = [self getResourceImage:deviceImage];
@@ -333,7 +333,7 @@
 //			value = ((OEPAEmulation *)emulation)->getNotes();
 //			[self setNotes:getNSString(value)];
 			[self updatePowerState];
-			value = ((OEPAEmulation *)emulation)->getImage();
+			value = ((OEPAEmulation *)emulation)->getImageSrc();
 			[self setImage:[self getResourceImage:getNSString(value)]];
 			
 			[self updateDevices];

@@ -22,9 +22,9 @@ typedef struct
 {	
 	OEComponent *component;
 	
-	OEUInt32 startAddress;
-	OEUInt32 endAddress;
-
+	OEAddress startAddress;
+	OEAddress endAddress;
+	
 	bool read;
 	bool write;
 } AddressDecoderMap;
@@ -45,8 +45,8 @@ public:
 	
 	bool postEvent(OEComponent *component, int event, void *data);
 	
-	OEUInt8 read(int address);
-	void write(int address, OEUInt8 value);
+	OEUInt8 read(OEAddress address);
+	void write(OEAddress address, OEUInt8 value);
 	
 private:
 	int addressSize;
@@ -56,7 +56,7 @@ private:
 	AddressDecoderConf conf;
 	AddressDecoderRef ref;
 	
-	int addressMask;
+	OEAddress addressMask;
 	OEComponents readMap;
 	OEComponents writeMap;
 	

@@ -44,14 +44,14 @@ public:
 	virtual bool postEvent(OEComponent *component, int event, void *data);
 	
 	// Memory access
-	virtual int read(OEUInt32 address);
-	virtual void write(OEUInt32 address, int value);
-	virtual int read16(OEUInt32 address);
-	virtual void write16(OEUInt32 address, int value);
-	virtual int read32(OEUInt32 address);
-	virtual void write32(OEUInt32 address, int value);
-	virtual bool readBlock(OEUInt32 address, OEData *value);
-	virtual bool writeBlock(OEUInt32 address, OEData *value);
+	virtual OEUInt8 read(OEAddress address);
+	virtual void write(OEAddress address, OEUInt8 value);
+	virtual OEUInt16 read16(OEAddress address);
+	virtual void write16(OEAddress address, OEUInt16 value);
+	virtual OEUInt32 read32(OEAddress address);
+	virtual void write32(OEAddress address, OEUInt32 value);
+	virtual bool readBlock(OEAddress address, OEData *value);
+	virtual bool writeBlock(OEAddress address, OEData *value);
 	
 	// Debugging
 	virtual bool sendDebugCommand(string command);

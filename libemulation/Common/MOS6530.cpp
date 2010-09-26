@@ -15,15 +15,15 @@
 
 MOS6530::MOS6530()
 {
-	bus = NULL;
+	controlBus = NULL;
 	
 	portA = NULL;
 	
 	portB = NULL;
-	busB = NULL;
+	controlBusB = NULL;
 }
 
-bool MOS6530::setProperty(const string &name, const string &value)
+bool MOS6530::setValue(string name, string value)
 {
 	if (name == "directionA")
 		directionA = getInt(value);
@@ -39,7 +39,7 @@ bool MOS6530::setProperty(const string &name, const string &value)
 	return true;
 }
 
-bool MOS6530::getProperty(const string &name, string &value)
+bool MOS6530::getValue(string name, string &value)
 {
 	if (name == "directionA")
 		value = getHex(directionA);
@@ -55,29 +55,29 @@ bool MOS6530::getProperty(const string &name, string &value)
 	return true;
 }
 
-bool MOS6530::connect(const string &name, OEComponent *component)
+bool MOS6530::setComponent(string name, OEComponent *component)
 {
-	if (name == "bus")
+	if (name == "controlBus")
 	{
-		if (bus)
-			bus->removeObserver(this, CONTROLBUS_RESET_ASSERTED);
-		bus = component;
-		if (bus)
-			bus->addObserver(this, CONTROLBUS_RESET_ASSERTED);
+		if (controlBus)
+			controlBus->removeObserver(this, CONTROLBUS_RESET_ASSERTED);
+		controlBus = component;
+		if (controlBus)
+			controlBus->addObserver(this, CONTROLBUS_RESET_ASSERTED);
 	}
 	else if (name == "portA")
 		portA = component;
 	else if (name == "portB")
 		portB = component;
-	else if (name == "busB")
-		busB = component;
+	else if (name == "controlBusB")
+		controlBusB = component;
 	else
 		return false;
 	
 	return true;
 }
 
-int MOS6530::read(int address)
+OEUInt8 MOS6530::read(OEAddress address)
 {
 	switch (address & 0xf)
 	{
@@ -113,7 +113,7 @@ int MOS6530::read(int address)
 	return 0;
 }
 
-void MOS6530::write(int address, int value)
+void MOS6530::write(OEAddress address, OEUInt8 value)
 {
 	switch (address & 0xf)
 	{

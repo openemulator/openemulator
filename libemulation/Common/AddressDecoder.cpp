@@ -58,7 +58,7 @@ bool AddressDecoder::init()
 		return false;
 	}
 	
-	int addressSpace = (1 << addressSize);
+	OEAddress addressSpace = (1 << addressSize);
 	addressMask = addressSpace - 1;
 	
 	int blockNum = 1 << (addressSize - blockSize);
@@ -81,7 +81,8 @@ bool AddressDecoder::init()
 			return false;
 		}
 		
-		map(ref[i->first], i->second);
+		if (!map(ref[i->first], i->second))
+			return false;
 	}
 	
 	return true;
@@ -90,19 +91,19 @@ bool AddressDecoder::init()
 bool AddressDecoder::postEvent(OEComponent *component, int notification, void *data)
 {
 	if (notification == ADDRESSDECODER_MAP)
-		map(component, *((string *) data));
+		return map(component, *((string *) data));
 	else
 		return false;
 	
 	return true;
 }
 
-OEUInt8 AddressDecoder::read(int address)
+OEUInt8 AddressDecoder::read(OEAddress address)
 {
 	return readMap[(address & addressMask) >> blockSize]->read(address);
 }
 
-void AddressDecoder::write(int address, OEUInt8 value)
+void AddressDecoder::write(OEAddress address, OEUInt8 value)
 {
 	writeMap[(address & addressMask) >> blockSize]->write(address, value);
 }
@@ -128,15 +129,16 @@ bool AddressDecoder::map(OEComponent *component, string value)
 	if (!getMaps(maps, component, value))
 		return false;
 	
-	int shiftMask = (1 << addressSize) - 1;
+	OEAddress blockMask = (1 << blockSize) - 1;
 	
 	for (AddressDecoderMaps::iterator i = maps.begin();
 		 i != maps.end();
 		 i++)
 	{
-		if ((i->endAddress > addressMask) ||
-			(i->startAddress & shiftMask) ||
-			((i->endAddress & shiftMask) != shiftMask))
+		if ((i->startAddress > i->endAddress) ||
+			(i->endAddress > addressMask) ||
+			(i->startAddress & blockMask) ||
+			((i->endAddress & blockMask) != blockMask))
 		{
 			OELog("address range " + value + " invalid");
 			return false;
@@ -187,9 +189,9 @@ bool AddressDecoder::getMap(AddressDecoderMap &map, OEComponent *component,
 	{
 		if (pos == value.size())
 			return false;
-		else if ((value[pos] == 'R') || (value[pos] == 'r'))
+		else if (tolower(value[pos]) == 'r')
 			map.read = true;
-		else if ((value[pos] == 'W') || (value[pos] == 'w'))
+		else if (tolower(value[pos]) == 'w')
 			map.write = true;
 		else
 			break;
@@ -210,9 +212,6 @@ bool AddressDecoder::getMap(AddressDecoderMap &map, OEComponent *component,
 		map.startAddress = getInt(value.substr(pos, separatorPos));
 		map.endAddress = getInt(value.substr(separatorPos + 1));
 	}
-	
-	if (map.startAddress > map.endAddress)
-		return false;
 	
 	return true;
 }

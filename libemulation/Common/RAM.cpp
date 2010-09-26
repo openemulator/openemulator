@@ -112,17 +112,17 @@ bool RAM::postEvent(OEComponent *component, int event, void *data)
 	return false;
 }
 
-int RAM::read(int address)
+OEUInt8 RAM::read(OEAddress address)
 {
 	return datap[address & mask];
 }
 
-void RAM::write(int address, int value)
+void RAM::write(OEAddress address, OEUInt8 value)
 {
 	datap[address & mask] = value;
 }
 
-void RAM::setSize(int value)
+void RAM::setSize(OEAddress value)
 {
 	value = getNextPowerOf2(value);
 	if (value < 1)
@@ -138,7 +138,5 @@ void RAM::setMemory(OEData *data)
 	memory = data;
 	
 	memory->resize(size);
-	datap = &memory->front();
+	datap = (OEUInt8 *) &memory->front();
 }
-
-

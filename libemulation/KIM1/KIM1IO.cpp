@@ -14,9 +14,12 @@
 
 KIM1IO::KIM1IO()
 {
+	host = NULL;
 	serialPort = NULL;
 	audioOut = NULL;
 	audioIn = NULL;
+	
+	view = NULL;
 }
 
 KIM1IO::~KIM1IO()
@@ -24,17 +27,7 @@ KIM1IO::~KIM1IO()
 	delete view;
 }
 
-bool KIM1IO::setResource(const string &name, OEData *data)
-{
-	if (name == "view")
-		view = data;
-	else
-		return false;
-	
-	return true;
-}
-
-bool KIM1IO::connect(const string &name, OEComponent *component)
+bool KIM1IO::setComponent(string name, OEComponent *component)
 {
 	if (name == "host")
 	{
@@ -62,6 +55,16 @@ bool KIM1IO::connect(const string &name, OEComponent *component)
 		audioOut = component;
 	else if (name == "audioIn")
 		audioIn = component;
+	else
+		return false;
+	
+	return true;
+}
+
+bool KIM1IO::setData(string name, OEData *data)
+{
+	if (name == "view")
+		view = data;
 	else
 		return false;
 	

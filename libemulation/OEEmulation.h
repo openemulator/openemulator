@@ -21,7 +21,7 @@ class OEEmulation : public OEInfo
 public:
 	OEEmulation();
 	OEEmulation(string path);
-	OEEmulation(string path, string resourcePath);
+	OEEmulation(string path, string resourcesPath);
 	~OEEmulation();
 	
 	bool open(string path);
@@ -32,13 +32,10 @@ public:
 protected:
 	
 private:
-	string resourcePath;
+	string resourcesPath;
 	OEComponentsMap componentsMap;
 	
 	bool setComponent(string id, OEComponent *component);
-	
-	bool hasProperty(string value, string property);
-	string parseProperties(string value, string id);
 	
 	bool create();
 	bool createComponent(string id, string className);
@@ -50,6 +47,9 @@ private:
 	bool updateComponent(string id, xmlNodePtr children);
 	void destroy();
 	void destroyComponent(string id, xmlNodePtr children);
+
+	bool hasSrcProperty(string value, string property);
+	string parseSrc(string value, string id);
 };
 
 #endif

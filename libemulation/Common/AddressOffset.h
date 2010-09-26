@@ -18,11 +18,11 @@ public:
 	bool setProperty(const string &name, const string &value);
 	bool connect(const string &name, OEComponent *component);
 	
-	OEUInt8 read(int address);
-	void write(int address, OEUInt8 value);
+	OEUInt8 read(OEAddress address);
+	void write(OEAddress address, OEUInt8 value);
 	
 private:
-	int offset;
+	OEAddress offset;
 	
 	OEComponent *component;
 };

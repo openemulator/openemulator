@@ -46,9 +46,9 @@ bool OEInfo::open(const string &path)
 	return false;
 }
 
-bool OEInfo::addEDL(const string &path, OEConnections &connections)
+bool OEInfo::addEDL(const string &path, OEIdMap &deviceIdMap)
 {
-	if (!OEEDL::addEDL(path, connections))
+	if (!OEEDL::addEDL(path, deviceIdMap))
 		return false;
 	
 	return analyze();
@@ -67,9 +67,9 @@ string OEInfo::getLabel()
 	return label;
 }
 
-string OEInfo::getImage()
+string OEInfo::getImageSrc()
 {
-	return image;
+	return imageSrc;
 }
 
 string OEInfo::getDescription()
@@ -117,7 +117,7 @@ void OEInfo::analyzeHeader(xmlNodePtr node)
 {
 	type = getNodeProperty(node, "type");
 	label = getNodeProperty(node, "label");
-	image = getNodeProperty(node, "image");
+	imageSrc = getNodeProperty(node, "imageSrc");
 	description = getNodeProperty(node, "description");
 }
 
@@ -140,7 +140,7 @@ void OEInfo::addDevice(xmlNodePtr node)
 	device->type = getNodeProperty(node, "type");
 	device->options = getNodeProperty(node, "options");
 	device->label = getNodeProperty(node, "label");
-	device->image = getNodeProperty(node, "image");
+	device->imageSrc = getNodeProperty(node, "imageSrc");
 	
 	device->connectionLabel = "";
 	
@@ -182,12 +182,12 @@ void OEInfo::addPort(xmlNodePtr node, OEDevice *device, OEPorts &ports)
 	port->ref = getNodeProperty(node, "ref");
 	port->type = getNodeProperty(node, "type");
 	port->label = getNodeProperty(node, "label");
-	port->image = getNodeProperty(node, "image");
+	port->imageSrc = getNodeProperty(node, "imageSrc");
 	
 	if (port->label == "")
 		port->label = device->label;
-	if (port->image == "")
-		port->image = device->image;
+	if (port->imageSrc == "")
+		port->imageSrc = device->imageSrc;
 	
 	port->connection = NULL;
 	port->device = device;

@@ -15,15 +15,15 @@ class MOS6530 : public OEComponent
 public:
 	MOS6530();
 	
-	bool setProperty(const string &name, const string &value);
-	bool getProperty(const string &name, string &value);
-	bool connect(const string &name, OEComponent *component);
-
-	int read(int address);
-	void write(int address, int value);
+	bool setValue(string name, string value);
+	bool getValue(string name, string &value);
+	bool setComponent(string name, OEComponent *component);
+	
+	OEUInt8 read(OEAddress address);
+	void write(OEAddress address, OEUInt8 value);
 	
 private:
-	OEComponent *bus;
+	OEComponent *controlBus;
 	
 	OEComponent *portA;
 	int directionA;
@@ -32,5 +32,5 @@ private:
 	OEComponent *portB;
 	int directionB;
 	int dataB;
-	OEComponent *busB;
+	OEComponent *controlBusB;
 };

@@ -28,7 +28,7 @@ bool AddressOffset::setProperty(const string &name, const string &value)
 
 bool AddressOffset::connect(const string &name, OEComponent *component)
 {
-if (name == "component")
+	if (name == "component")
 		this->component = component;
 	else
 		return false;
@@ -36,12 +36,12 @@ if (name == "component")
 	return true;
 }
 
-OEUInt8 AddressOffset::read(int address)
+OEUInt8 AddressOffset::read(OEAddress address)
 {
 	return component->read(address + offset);
 }
 
-void AddressOffset::write(int address, OEUInt8 value)
+void AddressOffset::write(OEAddress address, OEUInt8 value)
 {
 	component->write(address + offset, value);
 }

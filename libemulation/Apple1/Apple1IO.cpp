@@ -1,11 +1,11 @@
 
 /**
  * libemulation
- * Apple I Keyboard
+ * Apple I input/output
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls the Apple I Keyboard
+ * Controls Apple I input/output
  */
 
 #include "Apple1IO.h"
@@ -17,22 +17,13 @@
 
 Apple1IO::Apple1IO()
 {
-	host = NULL;
-	pia = NULL;
+	terminal = NULL;
 }
 
-bool Apple1IO::connect(const string &name, OEComponent *component)
+bool Apple1IO::setComponent(string name, OEComponent *component)
 {
-	if (name == "host")
-	{
-		if (host)
-			host->removeObserver(this, HOST_HID_UNICODEKEYBOARD_CHANGED);
-		host = component;
-		if (host)
-			host->addObserver(this, HOST_HID_UNICODEKEYBOARD_CHANGED);
-	}
-	else if (name == "pia")
-		pia = component;
+	if (name == "terminal")
+		terminal = component;
 	else
 		return false;
 	
@@ -41,18 +32,20 @@ bool Apple1IO::connect(const string &name, OEComponent *component)
 
 void Apple1IO::notify(int notification, OEComponent *component, void *data)
 {
-	HostHIDEvent *event = (HostHIDEvent *) data;
+/*	HostHIDEvent *event = (HostHIDEvent *) data;
 	
 	key = event->usageId;
 	
 	bool value = true;
 	pia->postEvent(pia, MC6821_SET_CA1, &value);
+ */
 }
 
 OEUInt8 Apple1IO::read(int address)
 {
+	/*
 	bool value = false;
 	pia->postEvent(pia, MC6821_SET_CA1, &value);
-	
+	*/
 	return key | APPLE1KEYBOARD_MASK;
 }

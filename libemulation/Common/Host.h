@@ -13,7 +13,7 @@
 
 #include "OEComponent.h"
 
-#define HOST_DEVICE "host:host"
+#define HOST_DEVICE "host"
 
 #define HOST_HID_KEY_NUM				256
 #define HOST_HID_POINTER_BUTTON_NUM		8

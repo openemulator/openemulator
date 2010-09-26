@@ -10,17 +10,17 @@
 
 #include "AudioPLL.h"
 
-bool AudioPLL::setProperty(const string &name, const string &value)
+bool AudioPLL::setValue(string name, string value)
 {
-	if (name == "frequency")
-		frequency = getInt(value);
+	if (name == "decisionFrequency")
+		decisionFrequency = getFloat(value);
 	else
 		return false;
 	
 	return true;
 }
 
-bool AudioPLL::connect(const string &name, OEComponent *component)
+bool AudioPLL::setComponent(string name, OEComponent *component)
 {
 	if (name == "host")
 		host = component;

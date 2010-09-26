@@ -18,9 +18,11 @@
 #include "RAM.h"
 #include "ROM.h"
 #include "FloatingBus.h"
-#include "CompositeMonitor.h"
-#include "Audio1Bit.h"
+#include "AudioSampleConverter.h"
 #include "AudioPLL.h"
+#include "CharsetLoader.h"
+#include "CompositeMonitor.h"
+#include "Terminal.h"
 
 #include "MC6821.h"
 #include "MC6845.h"
@@ -33,6 +35,17 @@
 #include "Apple1IO.h"
 #include "Apple1Terminal.h"
 #include "Apple1CassetteInterface.h"
+
+#include "AppleIIControlBus.h"
+#include "AppleIIMMU.h"
+#include "AppleIIFloatingBus.h"
+#include "AppleIIKeyboard.h"
+#include "AppleIIVideo.h"
+#include "AppleIIAudioOut.h"
+#include "AppleIIAudioIn.h"
+#include "AppleIIGamePort.h"
+#include "AppleIISlotMemory.h"
+#include "AppleIISlotExpansionMemory.h"
 // FACTORY_INCLUDE_END - Do not modify this section
 
 #define matchComponent(name) if (className == #name) return new name()
@@ -47,9 +60,11 @@ OEComponent *OEComponentFactory::create(const string &className)
 	matchComponent(RAM);
 	matchComponent(ROM);
 	matchComponent(FloatingBus);
-	matchComponent(CompositeMonitor);
-	matchComponent(Audio1Bit);
+	matchComponent(AudioSampleConverter);
 	matchComponent(AudioPLL);
+	matchComponent(CharsetLoader);
+	matchComponent(CompositeMonitor);
+	matchComponent(Terminal);
 	
 	matchComponent(MC6821);
 	matchComponent(MC6845);
@@ -62,6 +77,17 @@ OEComponent *OEComponentFactory::create(const string &className)
 	matchComponent(Apple1IO);
 	matchComponent(Apple1Terminal);
 	matchComponent(Apple1CassetteInterface);
+	
+	matchComponent(AppleIIControlBus);
+	matchComponent(AppleIIMMU);
+	matchComponent(AppleIIFloatingBus);
+	matchComponent(AppleIIKeyboard);
+	matchComponent(AppleIIVideo);
+	matchComponent(AppleIIAudioOut);
+	matchComponent(AppleIIAudioIn);
+	matchComponent(AppleIIGamePort);
+	matchComponent(AppleIISlotMemory);
+	matchComponent(AppleIISlotExpansionMemory);
 	// FACTORY_CODE_END - Do not modify this section
 	
 	return NULL;

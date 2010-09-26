@@ -36,6 +36,8 @@ typedef short OEInt16;
 typedef unsigned int OEUInt32;
 typedef int OEInt32;
 
+typedef unsigned int OEAddress;
+
 typedef union
 {
 #ifndef OE_LSB_FIRST

@@ -5,30 +5,24 @@
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Provides the Apple II floating bus
+ * Controls an Apple II floating bus.
  */
-
-#include "stdlib.h"
 
 #include "AppleIIFloatingBus.h"
 
-int AppleIIFloatingBus::ioctl(int message, void *data)
+bool AppleIIFloatingBus::setComponent(string name, OEComponent *component)
 {
-	switch(message)
-	{
-		case OE_GET_MEMORYMAP:
-		{
-			OEMemoryMap *memoryMap = (OEMemoryMap *) data;
-			memoryMap->component = this;
-			memoryMap->range.push_back("0x0-0xffffffff");
-			break;
-		}
-	}
+	if (name == "controlBus")
+		controlBus = component;
+	else if (name == "ram")
+		ram = component;
+	else
+		return false;
 	
-	return 0;
+	return true;
 }
 
-int AppleIIFloatingBus::read(int address)
+OEUInt8 AppleIIFloatingBus::read(OEAddress address)
 {
 	return 0;
 }

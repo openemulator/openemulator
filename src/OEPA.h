@@ -25,7 +25,10 @@
 
 #define OEPA_VOLUMEFILTERFREQ	20.0
 
-#define oepaLog(text) cerr << "oepa: " << text << endl
+inline void OEPALog(string text)
+{
+	cerr << "oepa: " << text << endl;
+}
 
 typedef vector<OEPAEmulation *> OEPAEmulations;
 

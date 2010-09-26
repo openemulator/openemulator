@@ -30,8 +30,6 @@ OEEmulation(path, resourcePath)
 	this->oepa = oepa;
 }
 
-
-
 void OEPAEmulation::lock()
 {
 	((OEPA *)oepa)->lockEmulations();
@@ -53,7 +51,7 @@ bool OEPAEmulation::save(string path)
 	return status;
 }
 
-bool OEPAEmulation::setValue(const string &ref, const string &name, string &value)
+bool OEPAEmulation::setValue(string ref, string name, string value)
 {
 	lock();
 	
@@ -64,8 +62,7 @@ bool OEPAEmulation::setValue(const string &ref, const string &name, string &valu
 	else
 	{
 		status = false;
-		oepaLog("could not set property " << name <<
-				" (ref " << ref << " not found)");
+		OEPALog("could not set property '" + name + "' for '" + ref + "'");
 	}
 	
 	unlock();
@@ -73,7 +70,7 @@ bool OEPAEmulation::setValue(const string &ref, const string &name, string &valu
 	return status;
 }
 
-bool OEPAEmulation::getValue(const string &ref, const string &name, string &value)
+bool OEPAEmulation::getValue(string ref, string name, string &value)
 {
 	lock();
 	
@@ -84,8 +81,7 @@ bool OEPAEmulation::getValue(const string &ref, const string &name, string &valu
 	else
 	{
 		status = false;
-		oepaLog("could not get property " << name <<
-				" (ref " << ref << " not found)");
+		OEPALog("could not get property '" + name + "' for '" + ref + "'");
 	}
 	
 	unlock();
@@ -101,49 +97,43 @@ void OEPAEmulation::notify(string ref, int notification, void *data)
 	if (component)
 		component->notify(NULL, notification, data);
 	else
-	{
-		oepaLog("could not notify " + ref +
-				" (ref not found)");
-	}
+		OEPALog("could not send notification to '" + ref + "'");
 	
 	unlock();
 }
 
-int OEPAEmulation::postEvent(string ref, int message, void *data)
+int OEPAEmulation::postEvent(string ref, int event, void *data)
 {
 	lock();
 	
 	OEComponent *component = getComponent(ref);
 	int status = 0;
 	if (component)
-		status = component->postEvent(component, message, data);
+		status = component->postEvent(component, event, data);
 	else
-	{
-		oepaLog("could not post event to " + ref +
-				" (ref not found)");
-	}
+		OEPALog("could not post event to '" + ref + "'");
 	
 	unlock();
 	
 	return status;
 }
 
-bool OEPAEmulation::addEDL(string path, OEConnections &connections)
+bool OEPAEmulation::addEDL(string path, OEIdMap deviceIdMap)
 {
 	lock();
 	
-	bool status = OEEmulation::addEDL(path, connections);
+	bool status = OEEmulation::addEDL(path, deviceIdMap);
 	
 	unlock();
 	
 	return status;
 }
 
-bool OEPAEmulation::removeDevice(string deviceName)
+bool OEPAEmulation::removeDevice(string id)
 {
 	lock();
 	
-	bool status = OEEDL::removeDevice(deviceName);
+	bool status = OEEDL::removeDevice(id);
 	
 	unlock();
 	

@@ -31,8 +31,8 @@ public:
 	
 	bool postEvent(OEComponent *component, int event, void *data);
 	
-	int read(int address);
-	void write(int address, int value);
+	OEUInt8 read(OEAddress address);
+	void write(OEAddress address, OEUInt8 value);
 	
 private:
 	OEData *memory;
@@ -40,10 +40,10 @@ private:
 	
 	OEComponent *host;
 	
-	int size;
-	int mask;
-	char *datap;
+	OEAddress size;
+	OEAddress mask;
+	OEUInt8 *datap;
 	
-	void setSize(int size);
+	void setSize(OEAddress size);
 	void setMemory(OEData *data);
 };

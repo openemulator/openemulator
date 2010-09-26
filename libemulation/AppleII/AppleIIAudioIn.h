@@ -1,16 +1,16 @@
 
 /**
  * libemulator
- * Apple II Floating Bus
+ * Apple II Audio Input
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls an Apple II floating bus.
+ * Controls Apple II audio input.
  */
 
 #include "OEComponent.h"
 
-class AppleIIFloatingBus : public OEComponent
+class AppleIIAudioIn : public OEComponent
 {
 public:
 	bool setComponent(string name, OEComponent *component);
@@ -18,6 +18,6 @@ public:
 	OEUInt8 read(OEAddress address);
 	
 private:
-	OEComponent *controlBus;
-	OEComponent *ram;
+	OEComponent *sampleConverter;
+	OEComponent *floatingBus;
 };

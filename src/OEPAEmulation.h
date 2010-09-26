@@ -26,14 +26,14 @@ public:
 	bool open(string path);
 	bool save(string path);
 	
-	bool setValue(const string &ref, const string &name, string &value);
-	bool getValue(const string &ref, const string &name, string &value);
+	bool setValue(string ref, string name, string value);
+	bool getValue(string ref, string name, string &value);
 	
 	void notify(string ref, int notification, void *data);
 	
-	int postEvent(string ref, int message, void *data);
+	int postEvent(string ref, int event, void *data);
 	
-	bool addEDL(string path, OEConnections &connections);
+	bool addEDL(string path, OEIdMap deviceIdMap);
 	bool removeDevice(string deviceName);
 	
 private:

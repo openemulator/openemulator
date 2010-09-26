@@ -1,30 +1,27 @@
 
 /**
  * libemulator
- * Apple II Slot Expansion Memory
+ * Apple II Audio Output
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls Apple II's slot expansion memory range ($C800-$CFFF).
+ * Controls Apple II audio output.
  */
 
 #include "OEComponent.h"
 
-// Events
-enum
-{
-	APPLEIISLOTEXPANSIONMEMORY_SET_SLOT,
-};
-
-class AppleIISlotExpansionMemory : public OEComponent
+class AppleIIAudioOut : public OEComponent
 {
 public:
+	bool setValue(string name, string value);
 	bool setComponent(string name, OEComponent *component);
 	
 	OEUInt8 read(OEAddress address);
 	void write(OEAddress address, OEUInt8 value);
 	
 private:
+	OEComponent *sampleConverter;
 	OEComponent *floatingBus;
-	OEComponent *slot;
+	
+	bool state;
 };

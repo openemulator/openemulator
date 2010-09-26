@@ -14,16 +14,11 @@ class AppleIIMMU : public OEComponent
 {
 public:
 	AppleIIMMU();
-	~AppleIIMMU();
 	
-	int ioctl(int message, void *data);
-	void onNotification(OEComponent *component, int message, void *data);
+	bool setComponent(string name, OEComponent *component);	
 	
 private:
-	vector<string> mappedRange;
-	
-	OEComponent *hostSystem;
-	OEComponent *memoryMap;
+	OEComponent *memoryBus;
 	OEComponent *floatingBus;
 	
 	OEComponent *romD0;
@@ -33,10 +28,10 @@ private:
 	OEComponent *romF0;
 	OEComponent *romF8;
 	
-	bool romEnable;
-	
-	void mapComponent(OEComponent *component);
-	void mapFloatingBus();
-	void updateRomEnable();
-	void setRomEnable(bool value);
+	OEComponent *romD0Socket;
+	OEComponent *romD8Socket;
+	OEComponent *romE0Socket;
+	OEComponent *romE8Socket;
+	OEComponent *romF0Socket;
+	OEComponent *romF8Socket;
 };

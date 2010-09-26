@@ -147,7 +147,6 @@ bool OEEDL::save(string path)
 			}
 			
 			delete package;
-			
 			package = NULL;
 		}
 		else
@@ -171,9 +170,56 @@ void OEEDL::close()
 	package = NULL;
 }
 
-bool OEEDL::addEDL(string path, OEConnections connections)
+bool OEEDL::validate()
 {
+	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+	
+	return (getNodeProperty(rootNode, "version") == "1.0");
+}
+
+bool OEEDL::dump(OEData *data)
+{
+	xmlChar *p;
+	int size;
+	
+	xmlDocDumpMemory(doc, &p, &size);
+	if (!p)
+		return false;
+	
+	data->resize(size);
+	memcpy(&data->front(), p, size);
+	
+	return true;
+}
+
+bool OEEDL::update()
+{
+	return true;
+}
+
+bool OEEDL::addEDL(string path, OEIdMap map)
+{
+	/* Idea
+	 
+	 - Connections tiene la lista de conexiones port->connector
+	 (con id's antes de que sean cambiados)
+	 - Cargar el EDL nuevo
+	 - Hacer una lista de devices en el nuevo EDL
+	 - Hacer una lista de devices del EDL viejo
+	 - Producir nombres nuevos para los devices del EDL nuevo
+	 - Renombrar todos los id's y ref's del EDL nuevo
+	 - Fijarse en el device del primer port, e insertar antes del próximo device
+	 */
+	
 	OEEDL edl(path);
+	if (!edl.isOpen())
+		return false;
+	
+	OEIdList deviceIds = getDeviceIds();
+	OEIdList edlDeviceIds = edl.getDeviceIds();
+	
+	OEIdMap idMap = getIdMap(deviceIds, edlDeviceIds);
+	edl.rename(xmlDocGetRootElement(doc), idMap);
 	
 	//	OEConnections nameMap = buildNameMap(path);
 	//	if (!rename(edl, nameMap))
@@ -182,13 +228,13 @@ bool OEEDL::addEDL(string path, OEConnections connections)
 	//	xmlDocPtr insertionNode = getInsertPoint(edl);
 	
 	//	return insert(insertionNode, edl);
-	
 	return true;
 }
 
 bool OEEDL::removeDevice(string id)
 {
 	/* Idea
+	 
 	 - Determinar los dispositivos conectados a los ports del dispositivo, 
 	   y borrar recursivamente
 	 - Borrar todas las referencias al dispositivo
@@ -236,6 +282,12 @@ void OEEDL::setNodeProperty(xmlNodePtr node, string name, string value)
 	xmlSetProp(node, BAD_CAST name.c_str(), BAD_CAST value.c_str());
 }
 
+bool OEEDL::hasNodeProperty(xmlNodePtr node, string name)
+{
+	char *value = (char *) xmlGetProp(node, BAD_CAST name.c_str());
+	return (value != NULL);
+}
+
 string OEEDL::getNodeProperty(xmlNodePtr node, string name)
 {
 	char *value = (char *) xmlGetProp(node, BAD_CAST name.c_str());
@@ -243,12 +295,6 @@ string OEEDL::getNodeProperty(xmlNodePtr node, string name)
 	xmlFree(value);
 	
 	return valueString;
-}
-
-bool OEEDL::hasNodeProperty(xmlNodePtr node, string name)
-{
-	char *value = (char *) xmlGetProp(node, BAD_CAST name.c_str());
-	return (value != NULL);
 }
 
 string OEEDL::getPathExtension(string path)
@@ -297,29 +343,85 @@ bool OEEDL::readFile(string path, OEData *data)
 	return success;
 }
 
-bool OEEDL::validate()
+OEIdList OEEDL::getDeviceIds()
 {
+	OEIdList deviceIds;
 	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
 	
-	return (getNodeProperty(rootNode, "version") == "1.0");
+	for(xmlNodePtr node = rootNode->children;
+		node;
+		node = node->next)
+		if (!xmlStrcmp(node->name, BAD_CAST "device"))
+		{
+			string id = getNodeProperty(node, "id");
+			
+			deviceIds.push_back(id);
+		}
+	
+	return deviceIds;
 }
 
-bool OEEDL::dump(OEData *data)
+OEIdMap OEEDL::getIdMap(OEIdList deviceIds, OEIdList newDeviceIds)
 {
-	xmlChar *p;
-	int size;
-	
-	xmlDocDumpMemory(doc, &p, &size);
-	if (!p)
-		return false;
-	
-	data->resize(size);
-	memcpy(&data->front(), p, size);
-	
-	return true;
+	for (OEIdList::iterator i = newDeviceIds.begin();
+		 i != newDeviceIds.end();
+		 i++)
+	{
+	}
 }
 
-bool OEEDL::update()
+void OEEDL::rename(xmlNodePtr rootNode, OEIdMap map)
 {
-	return true;
+	for(xmlNodePtr node = rootNode->children;
+		node;
+		node = node->next)
+	{
+		rename(node, map, "id");
+		rename(node, map, "ref");
+		
+		if (node->children)
+			rename(node->children, map);
+	}
+}
+
+void OEEDL::rename(xmlNodePtr node, OEIdMap map, string property)
+{
+	string nodeProperty;
+	
+	if (hasNodeProperty(node, "id"))
+		nodeProperty = "id";
+	else if (hasNodeProperty(node, "ref"))
+		nodeProperty = "ref";
+	
+	if (nodeProperty != "")
+	{
+		string id = getNodeProperty(node, nodeProperty);
+		
+		string deviceId = getDeviceId(id);
+		if (map.count(deviceId))
+		{
+			setDeviceId(id, map[deviceId]);
+			setNodeProperty(node, nodeProperty, id);
+		}
+	}
+}
+
+string OEEDL::getDeviceId(string id)
+{
+	int dotIndex = id.find_first_of('.');
+	
+	if (dotIndex == string::npos)
+		return id;
+	
+	return id.substr(0, dotIndex - 1);
+}
+
+void OEEDL::setDeviceId(string &id, string deviceId)
+{
+	int dotIndex = id.find_first_of('.');
+	
+	if (dotIndex == string::npos)
+		id = deviceId;
+	else
+		id = deviceId + "." + id.substr(0, dotIndex + 1);
 }

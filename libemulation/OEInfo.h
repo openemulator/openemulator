@@ -29,7 +29,7 @@ typedef struct
 	string type;
 	string options;
 	string label;
-	string image;
+	string imageSrc;
 	
 	string connectionLabel;
 	
@@ -43,7 +43,7 @@ typedef struct OEPortStruct
 	string ref;
 	string type;
 	string label;
-	string image;
+	string imageSrc;
 	
 	struct OEPortStruct *connection;
 	
@@ -61,12 +61,12 @@ public:
 	
 	bool open(const string &path);
 	
-	bool addEDL(const string &path, OEConnections &connections);
+	bool addEDL(const string &path, OEIdMap &deviceIdMap);
 	bool removeDevice(const string &deviceName);
 	
 	string getType();
 	string getLabel();
-	string getImage();
+	string getImageSrc();
 	string getDescription();
 	OEDevices *getDevices();
 	OEPorts *getInlets();
@@ -75,7 +75,7 @@ public:
 private:
 	string type;
 	string label;
-	string image;
+	string imageSrc;
 	string description;
 	OEDevices devices;
 	OEPorts inlets;

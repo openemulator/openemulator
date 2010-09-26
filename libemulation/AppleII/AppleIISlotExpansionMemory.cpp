@@ -5,60 +5,35 @@
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls the Apple II C800-CFFF range.
+ * Controls Apple II's slot expansion memory range ($C800-$CFFF).
  */
 
 #include "AppleIISlotExpansionMemory.h"
 
-int AppleIISlotExpansionMemory::ioctl(int message, void *data)
+#define APPLEIISLOTEXPANSIONMEMORY_MASK	0x7ff
+
+bool AppleIISlotExpansionMemory::setComponent(string name, OEComponent *component)
 {
-	switch(message)
-	{
-		case OE_SET_PROPERTY:
-		{
-			OEProperty *property = (OEProperty *) data;
-			if (property->name == "map")
-				mappedRange.push_back(property->value);
-			break;
-		}
-		case OE_CONNECT:
-		{
-			OEConnection *connection = (OEConnection *) data;
-			if (connection->name == "floatingBus")
-				floatingBus = connection->component;
-			break;
-		}
-		case OE_GET_MEMORYMAP:
-		{
-			OEMemoryMap *memoryMap = (OEMemoryMap *) data;
-			memoryMap->component = this;
-			memoryMap->range = mappedRange;
-			break;
-		}
-		case APPLEIISLOTEXPANSIONMEMORY_SET_SLOT:
-		{
-			expandedSlotMemory = (OEComponent *) data;
-			break;
-		}
-	}
+	if (name == "floatingBus")
+		floatingBus = component;
+	else
+		return false;
 	
-	return 0;
+	return true;
 }
 
-int AppleIISlotExpansionMemory::read(int address)
+OEUInt8 AppleIISlotExpansionMemory::read(OEAddress address)
 {
-	if ((address & APPLEIISLOTEXPANSIONMEMORY_MASK) ==
-		APPLEIISLOTEXPANSIONMEMORY_MASK)
-		expandedSlotMemory = floatingBus;
+	if (!((~address) & APPLEIISLOTEXPANSIONMEMORY_MASK))
+		slot = floatingBus;
 	
-	return expandedSlotMemory->read(address);
+	return slot->read(address);
 }
 
-void AppleIISlotExpansionMemory::write(int address, int value)
+void AppleIISlotExpansionMemory::write(OEAddress address, OEUInt8 value)
 {
-	if ((address & (APPLEIISLOTEXPANSIONMEMORY_MASK)) ==
-		APPLEIISLOTEXPANSIONMEMORY_MASK)
-		expandedSlotMemory = floatingBus;
+	if (!((~address) & APPLEIISLOTEXPANSIONMEMORY_MASK))
+		slot = floatingBus;
 	
-	expandedSlotMemory->write(address, value);
+	slot->write(address, value);
 }

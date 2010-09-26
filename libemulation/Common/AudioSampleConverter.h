@@ -1,23 +1,21 @@
 
 /**
- * libemulator
- * Apple II Floating Bus
+ * libemulation
+ * Audio sample converter
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls an Apple II floating bus.
+ * Controls an audio sample converter (8 and 16 bit)
  */
 
 #include "OEComponent.h"
 
-class AppleIIFloatingBus : public OEComponent
+class AudioSampleConverter : public OEComponent
 {
 public:
 	bool setComponent(string name, OEComponent *component);
-	
-	OEUInt8 read(OEAddress address);
-	
+
 private:
+	OEComponent *host;
 	OEComponent *controlBus;
-	OEComponent *ram;
 };

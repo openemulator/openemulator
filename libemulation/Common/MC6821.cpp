@@ -15,13 +15,13 @@
 
 MC6821::MC6821()
 {
-	bus = NULL;
+	controlBus = NULL;
 	
 	portA = NULL;
-	busA = NULL;
+	controlBusA = NULL;
 	
 	portB = NULL;
-	busB = NULL;
+	controlBusB = NULL;
 }
 
 void MC6821::setControlA(int value)
@@ -30,12 +30,12 @@ void MC6821::setControlA(int value)
 	controlA = value;
 	bool isIRQ = controlA & MC6821_CR_IRQFLAGS;
 	
-	if (busA)
+	if (controlBusA)
 	{
 		if (wasIRQ && !isIRQ)
-			busA->notify(this, CONTROLBUS_ASSERT_IRQ, &value);
+			controlBusA->notify(this, CONTROLBUS_ASSERT_IRQ, &value);
 		else if (!wasIRQ && isIRQ)
-			busA->notify(this, CONTROLBUS_CLEAR_IRQ, &value);
+			controlBusA->notify(this, CONTROLBUS_CLEAR_IRQ, &value);
 	}
 }
 
@@ -45,16 +45,16 @@ void MC6821::setControlB(int value)
 	controlB = value;
 	bool isIRQ = controlB & MC6821_CR_IRQFLAGS;
 	
-	if (busB)
+	if (controlBusB)
 	{
 		if (wasIRQ && !isIRQ)
-			busB->notify(this, CONTROLBUS_ASSERT_IRQ, &value);
+			controlBusB->notify(this, CONTROLBUS_ASSERT_IRQ, &value);
 		else if (!wasIRQ && isIRQ)
-			busB->notify(this, CONTROLBUS_CLEAR_IRQ, &value);
+			controlBusB->notify(this, CONTROLBUS_CLEAR_IRQ, &value);
 	}
 }
 
-bool MC6821::setProperty(const string &name, const string &value)
+bool MC6821::setValue(string name, string value)
 {
 	if (name == "controlA")
 		setControlA(getInt(value));
@@ -82,7 +82,7 @@ bool MC6821::setProperty(const string &name, const string &value)
 	return true;
 }
 
-bool MC6821::getProperty(const string &name, string &value)
+bool MC6821::getValue(string name, string &value)
 {
 	if (name == "controlA")
 		value = getHex(controlA);
@@ -110,24 +110,24 @@ bool MC6821::getProperty(const string &name, string &value)
 	return true;
 }
 
-bool MC6821::connect(const string &name, OEComponent *component)
+bool MC6821::setComponent(string name, OEComponent *component)
 {
-	if (name == "bus")
+	if (name == "controlBus")
 	{
-		if (bus)
-			bus->removeObserver(this, CONTROLBUS_RESET_ASSERTED);
-		bus = component;
-		if (bus)
-			bus->addObserver(this, CONTROLBUS_RESET_ASSERTED);
+		if (controlBus)
+			controlBus->removeObserver(this, CONTROLBUS_RESET_ASSERTED);
+		controlBus = component;
+		if (controlBus)
+			controlBus->addObserver(this, CONTROLBUS_RESET_ASSERTED);
 	}
 	else if (name == "portA")
 		portA = component;
-	else if (name == "busA")
-		busA = component;
+	else if (name == "controlBusA")
+		controlBusA = component;
 	else if (name == "portB")
 		portB = component;
-	else if (name == "busB")
-		busB = component;
+	else if (name == "controlBusB")
+		controlBusB = component;
 	else
 		return false;
 	
@@ -248,7 +248,7 @@ bool MC6821::postEvent(OEComponent *component, int event, void *data)
 	return false;
 }
 
-int MC6821::read(int address)
+OEUInt8 MC6821::read(OEAddress address)
 {
 	switch(address & 0x3)
 	{
@@ -294,7 +294,7 @@ int MC6821::read(int address)
 	return 0;
 }
 
-void MC6821::write(int address, int value)
+void MC6821::write(OEAddress address, OEUInt8 value)
 {
 	switch(address & 0x3)
 	{

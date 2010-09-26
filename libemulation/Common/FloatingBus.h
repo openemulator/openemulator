@@ -17,9 +17,11 @@ public:
 	
 	bool setValue(string name, string value);
 	
-	OEUInt8 read(int address);
+	OEUInt8 read(OEAddress address);
 
 private:
-	bool randomValue;
+	bool randomMode;
 	OEUInt8 busValue;
+
+	void setMode(string mode);
 };

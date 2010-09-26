@@ -24,9 +24,9 @@ OEEmulation::OEEmulation(string path) : OEInfo()
 {
 }
 
-OEEmulation::OEEmulation(string path, string resourcePath) : OEInfo()
+OEEmulation::OEEmulation(string path, string resourcesPath) : OEInfo()
 {
-	this->resourcePath = resourcePath;
+	this->resourcesPath = resourcesPath;
 	
 	open(path);
 }
@@ -76,41 +76,6 @@ bool OEEmulation::setComponent(string id, OEComponent *component)
 	return true;
 }
 
-bool OEEmulation::hasProperty(string value, string property)
-{
-	return (value.find("${" + property + "$}") != string::npos);
-}
-
-string OEEmulation::parseProperties(string value, string id)
-{
-	int startIndex;
-	
-	while ((startIndex = value.find("${")) != string::npos)
-	{
-		int endIndex = value.find("}", startIndex);
-		if (endIndex == string::npos)
-		{
-			value = value.substr(0, startIndex);
-			break;
-		}
-		
-		string propertyName = value.substr(startIndex + 2,
-										   endIndex - startIndex - 3);
-		string replacement;
-		
-		if (propertyName == "id")
-			replacement = id;
-		else if (propertyName == "resourcePath")
-			replacement = resourcePath;
-		
-		value = value.replace(startIndex,
-							  endIndex - startIndex + 1,
-							  replacement);
-	}
-	
-	return value;
-}
-
 bool OEEmulation::create()
 {
 	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
@@ -132,22 +97,18 @@ bool OEEmulation::create()
 
 bool OEEmulation::createComponent(string id, string className)
 {
-	if (getComponent(id))
+	if (!getComponent(id))
 	{
+		OEComponent *component = OEComponentFactory::create(className);
+		if (component)
+			return setComponent(id, component);
+		else
+			OELog("could not create '" + id + "', class '" + className + "' undefined");
+	}
+	else
 		OELog("redefinition of '" + id + "'");
-		
-		return false;
-	}
 	
-	OEComponent *component = OEComponentFactory::create(className);
-	if (!component)
-	{
-		OELog("could not create '" + id + "', class '" + className + "'");
-		
-		return false;
-	}
-	
-	return setComponent(id, component);
+	return false;
 }
 
 bool OEEmulation::configure()
@@ -173,7 +134,7 @@ bool OEEmulation::configureComponent(string id, xmlNodePtr children)
 	OEComponent *component = getComponent(id);
 	if (!component)
 	{
-		OELog("could not configure '" + id + "', it was not defined");
+		OELog("could not configure '" + id + "', it was not created");
 		return false;
 	}
 	
@@ -191,51 +152,68 @@ bool OEEmulation::configureComponent(string id, xmlNodePtr children)
 				
 				if (component->setValue(name, value))
 					continue;
+				else
+					OELog("invalid property '" + name + "' for '" + id + "'");
 			}
 			else if (hasNodeProperty(node, "ref"))
 			{
 				string ref = getNodeProperty(node, "ref");
-				if (ref == "")
-					continue;
+				OEComponent *refComponent = NULL;
 				
-				OEComponent *refComponent = getComponent(ref);
-				if (!refComponent)
+				if (ref != "")
 				{
-					OELog("could not set property '" + name + "' for '" +
-						  id + "', ref not found");
-					return false;
+					refComponent = getComponent(ref);
+					if (!refComponent)
+					{
+						OELog("could not set property '" + name + "' for '" +
+							  id + "', ref '" + ref + "' not found");
+						return false;
+					}
 				}
 				
 				if (component->setComponent(name, refComponent))
 					continue;
+				else
+					OELog("invalid property '" + name + "' for '" + id + "'");
 			}
 			else if (hasNodeProperty(node, "src"))
 			{
 				string src = getNodeProperty(node, "src");
-				src = parseProperties(src, id);
-				
-				// Something is missing here to separate data contained in
-				// package to data contained in resources
 				
 				OEData *data = new OEData;
 				if (data)
 				{
-					if (package->readFile(src, data))
+					string parsedSrc = parseSrc(src, id);
+					bool dataRead = false;
+					
+					if (hasSrcProperty(src, "packagePath"))
+					{
+						if (!package)
+							continue;
+						
+						dataRead = package->readFile(parsedSrc, data);
+					}
+					else
+						dataRead = readFile(parsedSrc, data);
+					
+					if (dataRead)
 					{
 						if (component->setData(name, data))
 							continue;
+						else
+							OELog("invalid property '" + name + "' for '" + id + "'");
 					}
 					else
-						OELog("could not find '" + src + "'");
+						OELog("could not read '" + src + "'");
+					
+					delete data;
 				}
 				else
 					OELog("could not create OEData");
-				
-				delete data;
 			}
-			
-			OELog("could not set property '" + name + "' for '" + id +
-				  "', invalid property");
+			else
+				OELog("invalid property '" + name + "' for '" + id +
+					  "', unrecognized type");
 			
 			return false;
 		}
@@ -267,14 +245,14 @@ bool OEEmulation::initComponent(string id)
 	OEComponent *component = getComponent(id);
 	if (!component)
 	{
-		OELog("could not init '" + id + "', it was not defined");
+		OELog("could not init '" + id + "', it was not created");
 		return false;
 	}
 	
 	if (component->init())
 		return true;
-	
-	OELog("could not init '" + id + "'");
+	else
+		OELog("could not init '" + id + "'");
 	
 	return false;
 }
@@ -302,7 +280,7 @@ bool OEEmulation::updateComponent(string id, xmlNodePtr children)
 	OEComponent *component = getComponent(id);
 	if (!component)
 	{
-		OELog("could not update '" + id + "', it was not defined");
+		OELog("could not update '" + id + "', it was not created");
 		return false;
 	}
 	
@@ -313,29 +291,32 @@ bool OEEmulation::updateComponent(string id, xmlNodePtr children)
 		if (!xmlStrcmp(node->name, BAD_CAST "property"))
 		{
 			string name = getNodeProperty(node, "name");
-			string value, ref, src;
 			
-			if ((value = getNodeProperty(node, "value")) != "")
+			if (hasNodeProperty(node, "value"))
 			{
+				string value;
+				
 				if (component->getValue(name, value))
 					setNodeProperty(node, name, value);
 			}
-			else if ((src = getNodeProperty(node, "src")) != "")
+			else if (hasNodeProperty(node, "src"))
 			{
-				if (hasProperty(src, "resourcePath"))
+				string src = getNodeProperty(node, "src");
+				
+				if (hasSrcProperty(src, "resourcesPath"))
 					continue;
 				
-				src = parseProperties(src, id);
 				OEData *data;
+				string parsedSrc = parseSrc(src, id);
 				
 				if (component->getData(name, &data))
 				{
 					if (data)
 					{
-						if (package->writeFile(src, data))
+						if (package->writeFile(parsedSrc, data))
 							continue;
-						
-						OELog("could not write '" + src + "'");
+						else
+							OELog("could not write '" + src + "'");
 						return false;
 					}
 				}
@@ -368,11 +349,46 @@ void OEEmulation::destroyComponent(string id, xmlNodePtr children)
 	OEComponent *component = getComponent(id);
 	if (!component)
 	{
-		OELog("could not destroy '" + id + "', it was not created");
+//		OELog("could not destroy '" + id + "', it was not created");
 		return;
 	}
 	
 	delete component;
 	
 	setComponent(id, NULL);
+}
+
+bool OEEmulation::hasSrcProperty(string value, string property)
+{
+	return (value.find("${" + property + "}") != string::npos);
+}
+
+string OEEmulation::parseSrc(string src, string id)
+{
+	int startIndex;
+	
+	while ((startIndex = src.find("${")) != string::npos)
+	{
+		int endIndex = src.find("}", startIndex);
+		if (endIndex == string::npos)
+		{
+			src = src.substr(0, startIndex);
+			break;
+		}
+		
+		string propertyName = src.substr(startIndex + 2,
+										 endIndex - startIndex - 2);
+		string replacement;
+		
+		if (propertyName == "id")
+			replacement = id;
+		else if (propertyName == "resourcesPath")
+			replacement = resourcesPath;
+		
+		src = src.replace(startIndex,
+						  endIndex - startIndex + 1,
+						  replacement);
+	}
+	
+	return src;
 }

@@ -16,15 +16,15 @@ public:
 	ROM();
 	~ROM();
 	
-	bool setResource(const string &name, OEData *data);
+	bool setData(string name, OEData *data);
 	
-	int read(int address);
+	OEUInt8 read(OEAddress address);
 	
 private:
 	OEData *memory;
 	
 	int mask;
-	char *datap;
+	OEUInt8 *datap;
 	
 	void setMemory(OEData *data);
 };

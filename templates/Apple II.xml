@@ -71,7 +71,7 @@
 <port id="appleII.romF8Socket" ref="" type="AppleIIROM" label="ROM F8 Socket" imageSrc="ROM Socket.png">
     <inlet ref="appleII.mmu" property="romF8Socket" outletRef="rom" />
 </port>
-<component id="appleII.controlBus" class="AppleIIBus">
+<component id="appleII.controlBus" class="AppleIIControlBus">
     <property name="host" ref="host" />
     <property name="crystal" value="14.31818MHz" />
     <property name="frequencyDivider" value="14" />
@@ -81,7 +81,6 @@
     <property name="reset" value="0" />
     <property name="resetOnPowerOn" value="0" />
 </component>
-<component id="appleII.floatingBus" class="AppleIIFloatingBus" />
 <component id="appleII.memoryBus" class="AddressDecoder">
     <property name="addressSize" value="16" />
     <property name="blockSize" value="8" />
@@ -97,8 +96,6 @@
 </component>
 <component id="appleII.mmu" class="AppleIIMMU">
     <property name="memoryBus" ref="appleII.memoryBus" />
-    <property name="floatingBus" ref="appleII.floatingBus" />
-    <property name="inh" value="0" />
     <property name="romD0" ref="" />
     <property name="romD8" ref="" />
     <property name="romE0" ref="appleII.romE0" />
@@ -122,6 +119,10 @@
     <property name="memoryBus" ref="appleII.memoryBus" />
     <property name="controlBus" ref="appleII.controlBus" />
 </component>
+<component id="appleII.floatingBus" class="AppleIIFloatingBus">
+    <property name="controlBus" ref="appleII.controlBus" />
+    <property name="ram" ref="appleII.ram" />
+</component>
 <component id="appleII.ram" class="RAM">
     <property name="host" ref="host" />
     <property name="size" value="0xc000" />
@@ -130,7 +131,7 @@
 <component id="appleII.io" class="AddressDecoder">
     <property name="addressSize" value="8" />
     <property name="blockSize" value="0" />
-    <property name="floatingBus" value="appleII.floatingBus" />
+    <property name="floatingBus" ref="appleII.floatingBus" />
     <property name="refKeyboard" ref="appleII.keyboard" />
     <property name="mapKeyboard" value="0x00-0x1f" />
     <property name="refSpeaker" ref="appleII.audioOut" />
@@ -140,7 +141,7 @@
     <property name="refGame" ref="appleII.game" />
     <property name="mapGame" value="0x58-0x5f,0x61-0x6f" />
     <property name="refAudioIn" ref="appleII.audioIn" />
-    <property name="mapAudioIn" value="0x61" />
+    <property name="mapAudioIn" value="0x60" />
     <property name="refSlot0" ref="" />
     <property name="mapSlot0" value="0x80-0x8f" />
     <property name="refSlot1" ref="" />
@@ -161,9 +162,9 @@
 <component id="appleII.keyboard" class="AppleIIKeyboard">
     <property name="host" ref="host" />
 </component>
-<component id="appleII.charset" class="AppleIICharset">
-    <property name="image" src="roms/Signetics/Signetics 2513 Video ROM.bin" />
-    <property name="format" value="appleII" />
+<component id="appleII.charset" class="CharsetLoader">
+    <property name="image" src="${resourcesPath}/roms/Signetics/Signetics 2513 Video ROM.bin" />
+    <property name="format" value="Signetics" />
 </component>
 <component id="appleII.video" class="AppleIIVideo">
     <property name="host" ref="host" />
@@ -173,23 +174,29 @@
     <property name="monitor" ref="" />
 </component>
 <component id="appleII.audioOut" class="AppleIIAudioOut">
-    <property name="host" ref="host" />
-    <property name="floatingBus" value="appleII.floatingBus" />
+    <property name="sampleConverter" ref="appleII.sampleConverter" />
+    <property name="floatingBus" ref="appleII.floatingBus" />
+    <property name="state" value="0" />
 </component>
 <component id="appleII.audioIn" class="AppleIIAudioIn">
-    <property name="host" value="host" />
+    <property name="sampleConverter" ref="appleII.sampleConverter" />
+    <property name="floatingBus" ref="appleII.floatingBus" />
+</component>
+<component id="appleII.sampleConverter" class="AudioSampleConverter">
+    <property name="host" ref="host" />
+    <property name="controlBus" ref="appleII.controlBus" />
 </component>
 <component id="appleII.game" class="AppleIIGamePort">
+    <property name="floatingBus" ref="appleII.floatingBus" />
+    <property name="port" ref="" />
     <property name="an0" value="0" />
     <property name="an1" value="0" />
     <property name="an2" value="0" />
     <property name="an3" value="0" />
-    <property name="port" ref="" />
 </component>
 <component id="appleII.slotMemory" class="AppleIISlotMemory">
     <property name="floatingBus" ref="appleII.floatingBus" />
     <property name="slotExpansionMemory" ref="appleII.slotExpansionMemory" />
-    <property name="slotSel" value="0" />
     <property name="slot1" ref="" />
     <property name="slot2" ref="" />
     <property name="slot3" ref="" />
@@ -197,21 +204,22 @@
     <property name="slot5" ref="" />
     <property name="slot6" ref="" />
     <property name="slot7" ref="" />
+    <property name="slotSel" value="0" />
 </component>
 <component id="appleII.slotExpansionMemory" class="AppleIISlotExpansionMemory">
     <property name="floatingBus" ref="appleII.floatingBus" />
 </component>
 <component id="appleII.romE0" class="ROM">
-    <property name="image" src="roms/Apple II/Apple II E0 ROM.bin" />
+    <property name="image" src="${resourcesPath}/roms/Apple II/Apple II E0 ROM.bin" />
 </component>
 <component id="appleII.romE8" class="ROM">
-    <property name="image" src="roms/Apple II/Apple II E8 ROM.bin" />
+    <property name="image" src="${resourcesPath}/roms/Apple II/Apple II E8 ROM.bin" />
 </component>
 <component id="appleII.romF0" class="ROM">
-    <property name="image" src="roms/Apple II/Apple II F0 ROM.bin" />
+    <property name="image" src="${resourcesPath}/roms/Apple II/Apple II F0 ROM.bin" />
 </component>
 <component id="appleII.romF8" class="ROM">
-    <property name="image" src="roms/Apple II/Apple II F8 ROM.bin" />
+    <property name="image" src="${resourcesPath}/roms/Apple II/Apple II F8 ROM.bin" />
 </component>
 
 </edl>

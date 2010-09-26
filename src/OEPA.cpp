@@ -253,8 +253,8 @@ bool OEPA::openAudio()
 									  this);
 		if ((status != paNoError) && fullDuplex)
 		{
-			oepaLog("couldn't open audio stream (error " << status <<
-					"), attempting half-duplex");
+			OEPALog("could not open audio stream, error " + status);
+			OEPALog("attempting half-duplex");
 			
 			status = Pa_OpenDefaultStream(&audioStream,
 										  0,
@@ -275,15 +275,15 @@ bool OEPA::openAudio()
 				return true;
 			}
 			else
-				oepaLog("couldn't start audio stream (error " << status << ")");
+				OEPALog("could not start audio stream, error " + status);
 			
 			Pa_CloseStream(audioStream);
 		}
 		else
-			oepaLog("couldn't open audio stream (error " << status << ")");
+			OEPALog("could not open audio stream, error " + status);
 	}
 	else
-		oepaLog("couldn't init portaudio (error " << status << ")");
+		OEPALog("could not init portaudio, error " + status);
 	
 	int error;
 	pthread_attr_t attr;
@@ -301,18 +301,18 @@ bool OEPA::openAudio()
 								   this);
 			if (!error)
 			{
-				oepaLog("started silent timer thread");
+				OEPALog("started silent timer thread");
 				audioOpen = true;
 				return true;
 			}
 			else
-				oepaLog("couldn't create timer thread (error " << error << ")");
+				OEPALog("could not create timer thread, error " + error);
 		}
 		else
-			oepaLog("couldn't attr timer thread (error " << error << ")");
+			OEPALog("could not attr timer thread, error " + error);
 	}
 	else
-		oepaLog("couldn't init timer thread (error " << error << ")");
+		OEPALog("could not init timer thread, error " + error);
 	
 	return false;
 }
@@ -461,20 +461,16 @@ bool OEPA::openEmulations()
 				if (!error)
 					return true;
 				else
-					oepaLog("couldn't create eulations thread (error " <<
-							error << ")");
+					OEPALog("could not create eulations thread, error " + error);
 			}
 			else
-				oepaLog("couldn't attr emulations thread (error " <<
-						error << ")");
+				OEPALog("could not attr emulations thread, error " + error);
 		}
 		else
-			oepaLog("couldn't init emulations attr (error " <<
-					error << ")");
+			OEPALog("could not init emulations attr, error " + error);
 	}
 	else
-		oepaLog("couldn't init emulations mutex (error " <<
-				error << ")");
+		OEPALog("could not init emulations mutex, error " + error);
 	
 	return false;
 }
@@ -572,7 +568,7 @@ void OEPA::runEmulations()
 			 i != emulations.end();
 			 i++)
 		{
-			OEComponent *component = (*i)->getComponent("host::host");
+			OEComponent *component = (*i)->getComponent(HOST_DEVICE);
 			if (!component)
 				continue;
 			
@@ -646,13 +642,12 @@ bool OEPA::startPlaying(string path)
 		}
 		else
 		{
-			oepaLog("couldn't init sample rate converter (error " <<
-					error << ")");
+			OEPALog("could not init sample rate converter, error " + error);
 			sf_close(playFile);
 		}
 	}
 	else
-		oepaLog("couldn't open file " << path);
+		OEPALog("could not open file " + path);
 	
 	unlockEmulations();
 	
@@ -709,7 +704,7 @@ bool OEPA::startRecording(string path)
 	if (recordingFile)
 		recording = true;
 	else
-		oepaLog("couldn't open temporary file " << path);
+		OEPALog("could not open temporary file " + path);
 	
 	unlockEmulations();
 	

@@ -15,8 +15,7 @@
 
 AppleIIMMU::AppleIIMMU()
 {
-	hostSystem = NULL;
-	memoryMap = NULL;
+	memoryBus = NULL;
 	floatingBus = NULL;
 	
 	romD0 = NULL;
@@ -25,140 +24,45 @@ AppleIIMMU::AppleIIMMU()
 	romE8 = NULL;
 	romF0 = NULL;
 	romF8 = NULL;
+
+	romD0Socket = NULL;
+	romD8Socket = NULL;
+	romE0Socket = NULL;
+	romE8Socket = NULL;
+	romF0Socket = NULL;
+	romF8Socket = NULL;
 }
 
-AppleIIMMU::~AppleIIMMU()
+bool AppleIIMMU::setComponent(string name, OEComponent *component)
 {
-//	if (hostSystem)
-	//	hostSystem->removeObserver(this);
-}
-
-void AppleIIMMU::mapComponent(OEComponent *component)
-{
-	if (!component)
-		return;
-	
-	OEMemoryMap componentMemoryMap;
-	
-	component->ioctl(OE_GET_MEMORYMAP, &componentMemoryMap);
-	memoryMap->ioctl(OE_SET_MEMORYMAP, &componentMemoryMap);
-}
-
-void AppleIIMMU::mapFloatingBus()
-{
-	if (!floatingBus)
-		return;
-	
-	OEMemoryMap componentMemoryMap;
-	componentMemoryMap.component = floatingBus;
-	componentMemoryMap.range = mappedRange;
-	memoryMap->ioctl(OE_SET_MEMORYMAP, &componentMemoryMap);
-}
-
-void AppleIIMMU::updateRomEnable()
-{
-	if (romEnable)
-	{
-		mapComponent(romD0);
-		mapComponent(romD8);
-		mapComponent(romE0);
-		mapComponent(romE8);
-		mapComponent(romF0);
-		mapComponent(romF8);
-	}
+	if (name == "memoryBus")
+		memoryBus = component;
+	else if (name == "romD0")
+		romD0 = component;
+	else if (name == "romD8")
+		romD8 = component;
+	else if (name == "romE0")
+		romE0 = component;
+	else if (name == "romE8")
+		romE8 = component;
+	else if (name == "romF0")
+		romF0 = component;
+	else if (name == "romF8")
+		romF8 = component;
+	else if (name == "romD0Socket")
+		romD0Socket = component;
+	else if (name == "romD8Socket")
+		romD8Socket = component;
+	else if (name == "romE0Socket")
+		romE0Socket = component;
+	else if (name == "romE8Socket")
+		romE8Socket = component;
+	else if (name == "romF0Socket")
+		romF0Socket = component;
+	else if (name == "romF8Socket")
+		romF8Socket = component;
 	else
-		mapFloatingBus();
-}
-
-void AppleIIMMU::setRomEnable(bool value)
-{
-	if (value == romEnable)
-		return;
+		return false;
 	
-	romEnable = value;
-	updateRomEnable();
-}
-
-int AppleIIMMU::ioctl(int message, void *data)
-{
-	switch(message)
-	{
-		case OE_CONNECT:
-		{
-			OEConnection *connection = (OEConnection *) data;
-			if (connection->name == "hostSystem")
-			{
-				hostSystem = connection->component;
-//				hostSystem->addObserver(this);
-			}
-			else if (connection->name == "floatingBus")
-			{
-				floatingBus = connection->component;
-				romD0 = romD8 = romE0 = romE8 = romF0 = romF8 = floatingBus;
-			}
-			else if (connection->name == "memoryMap")
-				memoryMap = connection->component;
-			else if (connection->name == "romD0")
-			{
-				romD0 = connection->component;
-				updateRomEnable();
-			}
-			else if (connection->name == "romD8")
-			{
-				romD8 = connection->component;
-				updateRomEnable();
-			}
-			else if (connection->name == "romE0")
-			{
-				romE0 = connection->component;
-				updateRomEnable();
-			}
-			else if (connection->name == "romE8")
-			{
-				romE8 = connection->component;
-				updateRomEnable();
-			}
-			else if (connection->name == "romF0")
-			{
-				romF0 = connection->component;
-				updateRomEnable();
-			}
-			else if (connection->name == "romF8")
-			{
-				romF8 = connection->component;
-				updateRomEnable();
-			}
-			break;
-		}
-		case OE_SET_PROPERTY:
-		{
-			OEProperty *property = (OEProperty *) data;
-			if (property->name == "romEnable")
-				setRomEnable(getInt(property->value));
-			break;
-		}
-		case OE_GET_PROPERTY:
-		{
-			OEProperty *property = (OEProperty *) data;
-			if (property->name == "romEnable")
-				property->value = romEnable;
-			else
-				return false;
-			
-			return true;
-		}
-	}
-	
-	return false;
-}
-
-void AppleIIMMU::onNotification(OEComponent *component, int message, void *data)
-{
-/*	switch(message)
-	{
-		case HID_S_COLDRESTART:
-		case HID_S_WARMRESTART:
-			setRomEnable(true);
-			break;
-	}*/
+	return true;
 }

@@ -51,19 +51,19 @@ class MC6821 : public OEComponent
 public:
 	MC6821();
 	
-	bool setProperty(const string &name, const string &value);
-	bool getProperty(const string &name, string &value);
-	bool connect(const string &name, OEComponent *component);
+	bool setValue(string name, string value);
+	bool getValue(string name, string &value);
+	bool setComponent(string name, OEComponent *component);
 	
 	void notify(OEComponent *component, int notification, void *data);
 	
 	bool postEvent(OEComponent *component, int message, void *data);
 
-	int read(int address);
-	void write(int address, int value);
+	OEUInt8 read(OEAddress address);
+	void write(OEAddress address, OEUInt8 value);
 	
 private:
-	OEComponent *bus;
+	OEComponent *controlBus;
 	
 	OEComponent *portA;
 	int controlA;
@@ -71,7 +71,7 @@ private:
 	int dataA;
 	int ca1;
 	int ca2;
-	OEComponent *busA;
+	OEComponent *controlBusA;
 
 	OEComponent *portB;
 	int controlB;
@@ -79,7 +79,7 @@ private:
 	int dataB;
 	int cb1;
 	int cb2;
-	OEComponent *busB;
+	OEComponent *controlBusB;
 	
 	void setControlA(int value);
 	void setControlB(int value);

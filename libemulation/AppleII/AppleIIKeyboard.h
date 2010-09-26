@@ -1,9 +1,23 @@
-/*
- *  AppleIIKeyboard.h
- *  OpenEmulator
+
+/**
+ * libemulator
+ * Apple II Keyboard
+ * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
+ * Released under the GPL
  *
- *  Created by Marc S. Reßl on 26/02/10.
- *  Copyright 2010 ITBA. All rights reserved.
- *
+ * Controls an Apple II keyboard.
  */
 
+#include "OEComponent.h"
+
+class AppleIIKeyboard : public OEComponent
+{
+public:
+	bool setComponent(string name, OEComponent *component);
+	
+	OEUInt8 read(OEAddress address);
+	void write(OEAddress address, OEUInt8 value);
+	
+private:
+	OEComponent *host;
+};
