@@ -63,7 +63,7 @@ bool OEEDL::open(string path)
 			
 			if (!is_open)
 				OELog("could not read '" OE_PACKAGE_EDL_FILENAME
-					  "', path '" + path + "'");
+					  "' in '" + path + "'");
 		}
 		else
 			OELog("could not open package '" + path + "'");
@@ -82,7 +82,7 @@ bool OEEDL::open(string path)
 		if (!doc)
 		{
 			is_open = false;
-			OELog("could not parse EDL, path '" + path + "'");
+			OELog("could not parse EDL in '" + path + "'");
 		}
 	}
 	
@@ -122,10 +122,10 @@ bool OEEDL::save(string path)
 					OELog("could not open '" + path + "'");
 			}
 			else
-				OELog("could not dump EDL, path '" + path + "'");
+				OELog("could not dump EDL for '" + path + "'");
 		}
 		else
-			OELog("could not update '" + path + "'");
+			OELog("could not update the configuration for '" + path + "'");
 	}
 	else if (pathExtension == OE_PACKAGE_EXTENSION)
 	{
@@ -140,10 +140,10 @@ bool OEEDL::save(string path)
 					is_open = package->writeFile(OE_PACKAGE_EDL_FILENAME, &data);
 					if (!is_open)
 						OELog("could not write '" OE_PACKAGE_EDL_FILENAME
-							  "', path '" + path + "'");
+							  "' in '" + path + "'");
 				}
 				else
-					OELog("could not dump EDL, path '" + path + "'");
+					OELog("could not dump EDL for '" + path + "'");
 			}
 			
 			delete package;
@@ -199,36 +199,32 @@ bool OEEDL::update()
 
 bool OEEDL::addEDL(string path, OEIdMap connectionMap)
 {
-	/* Idea
-	 
-	 - Connections tiene la lista de conexiones port->connector
-	 (con id's antes de que sean cambiados)
-	 - Cargar el EDL nuevo
-	 - Hacer una lista de devices en el nuevo EDL
-	 - Hacer una lista de devices del EDL viejo
-	 - Producir nombres nuevos para los devices del EDL nuevo
-	 - Renombrar todos los id's y ref's del EDL nuevo
-	 - Renombrar el mapa de conexiones
-	 - Buscar el punto de inserción (buscar el device del primer port,
-	   y seleccionar el punto antes del proximo device
-	 - Insertar los elementos que matcheen con algun device conectado
-	 - Iterar sobre los ports, luego sobre los inlets, y definir referencias
-	 - Iterar sobre los conectores, luego sobre los inlets, y definir referencias
-	 */
+	// connectionMap is a portId->connectorId map
 	
+	// Load new EDL
 	OEEDL edl(path);
 	if (!edl.isOpen())
 		return false;
 	
+	// Generate device lists of current and new EDL
 	OEIdList deviceIds = getDeviceIds();
 	OEIdList newDeviceIds = edl.getDeviceIds();
 	
+	// Build name map for new EDL
 	OEIdMap nameMap = buildNameMap(deviceIds, newDeviceIds);
 	
+	// Rename id's and ref's of the new EDL
 	edl.rename(nameMap);
+	
+	// Rename the connection map
 	renameConnectionMap(connectionMap, nameMap);
 	
-//	merge(edl);
+	// Insert EDL
+	insert(&edl);
+	
+	// Connect port inlets
+	connect();
+	
 	return true;
 }
 
@@ -323,20 +319,38 @@ bool OEEDL::renameConnectionMap(OEIdMap &connectionMap, OEIdMap nameMap)
 	return true;
 }
 
+void OEEDL::insert(OEEDL *edl)
+{
+	/* Idea
+	 - Buscar el punto de inserción (buscar el device del primer port,
+	 y seleccionar el punto antes del proximo device
+	 - Insertar los elementos que matcheen con algun device conectado
+	 - Iterar sobre los ports, luego sobre los inlets, y definir referencias
+	 - Iterar sobre los conectores, luego sobre los inlets, y definir referencias
+	 */
+}
+
+void OEEDL::connect()
+{
+	
+	
+}
+
 bool OEEDL::removeDevice(string deviceId)
 {
+	// Verify device exists
 	if (!hasDevice(deviceId))
 	{
-		OELog("could not remove device '" + deviceId + "', it was not found");
+		OELog("could not find '" + deviceId + "'");
 		return false;
 	}
 	
-	// Remove recursively devices connected to this device
+	// Recursively remove devices connected to this device
 	if (!removeConnectedDevices(deviceId))
 		return false;
 	
 	// Remove references to this device
-	removeRefs(deviceId);
+	disconnect(deviceId);
 	
 	// Remove elements matching this device
 	removeElements(deviceId);
@@ -368,7 +382,7 @@ bool OEEDL::removeConnectedDevices(string deviceId)
 	return true;
 }
 
-void OEEDL::removeRefs(string deviceId)
+void OEEDL::disconnect(string deviceId)
 {
 	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
 	

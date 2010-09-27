@@ -65,9 +65,11 @@ private:
 	void rename(OEIdMap nameMap);
 	void rename(OEIdMap nameMap, xmlNodePtr node, string property);
 	bool renameConnectionMap(OEIdMap &connectionMap, OEIdMap nameMap);
+	void insert(OEEDL *edl);
+	void connect();
 
 	bool removeConnectedDevices(string deviceId);
-	void removeRefs(string deviceId);
+	void disconnect(string deviceId);
 	void removeElements(string deviceId);
 
 	bool hasDevice(string deviceId);
