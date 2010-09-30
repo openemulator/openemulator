@@ -197,31 +197,27 @@ bool OEEDL::update()
 	return true;
 }
 
+// connectionMap is a portId->connectorId map
 bool OEEDL::addEDL(string path, OEIdMap connectionMap)
 {
-	// connectionMap is a portId->connectorId map
-	
 	// Load new EDL
 	OEEDL edl(path);
 	if (!edl.isOpen())
 		return false;
 	
-	// Generate device lists of current and new EDL
+	// Build name map for new EDL
 	OEIdList deviceIds = getDeviceIds();
 	OEIdList newDeviceIds = edl.getDeviceIds();
-	
-	// Build name map for new EDL
 	OEIdMap nameMap = buildNameMap(deviceIds, newDeviceIds);
 	
-	// Rename id's and ref's of the new EDL
+	// Rename EDL id's, and rename connection map
 	edl.rename(nameMap);
-	
-	// Rename the connection map
 	renameConnectionMap(connectionMap, nameMap);
 	
 	// Insert EDL
-	insert(&edl);
-	
+	xmlNodePtr insertionNode = findInsertionPoint(connectionMap.begin()->first)
+	insert(insertionNode, &edl);
+
 	// Connect port inlets
 	connect();
 	
@@ -319,7 +315,9 @@ bool OEEDL::renameConnectionMap(OEIdMap &connectionMap, OEIdMap nameMap)
 	return true;
 }
 
-void OEEDL::insert(OEEDL *edl)
+void OEEDL
+
+void OEEDL::insert(OEEDL *edl, string deviceId)
 {
 	/* Idea
 	 - Buscar el punto de inserción (buscar el device del primer port,
@@ -328,6 +326,31 @@ void OEEDL::insert(OEEDL *edl)
 	 - Iterar sobre los ports, luego sobre los inlets, y definir referencias
 	 - Iterar sobre los conectores, luego sobre los inlets, y definir referencias
 	 */
+	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+	
+	for(xmlNodePtr node = rootNode->children;
+		node;
+		node = node->next)
+	{
+		if (!xmlStrcmp(node->name, BAD_CAST "device"))
+		{
+			string id = getNodeProperty(node, "id");
+			if (getDeviceId(ref) == deviceId)
+				setNodeProperty(node, "ref", "");
+			
+		}
+		for(xmlNodePtr propertyNode = node->children;
+			propertyNode;
+			propertyNode = propertyNode->next)
+		{
+			string ref = getNodeProperty(propertyNode, "ref");
+			
+			if (getDeviceId(ref) == deviceId)
+				setNodeProperty(propertyNode, "ref", "");
+		}
+	}
+	
+	
 }
 
 void OEEDL::connect()
