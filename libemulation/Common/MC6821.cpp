@@ -33,9 +33,9 @@ void MC6821::setControlA(int value)
 	if (controlBusA)
 	{
 		if (wasIRQ && !isIRQ)
-			controlBusA->postEvent(this, CONTROLBUS_ASSERT_IRQ, &value);
+			controlBusA->postEvent(this, CONTROLBUS_SET_IRQ, &isIRQ);
 		else if (!wasIRQ && isIRQ)
-			controlBusA->postEvent(this, CONTROLBUS_CLEAR_IRQ, &value);
+			controlBusA->postEvent(this, CONTROLBUS_SET_IRQ, &isIRQ);
 	}
 }
 
@@ -48,9 +48,9 @@ void MC6821::setControlB(int value)
 	if (controlBusB)
 	{
 		if (wasIRQ && !isIRQ)
-			controlBusB->postEvent(this, CONTROLBUS_ASSERT_IRQ, &value);
+			controlBusB->postEvent(this, CONTROLBUS_SET_IRQ, &isIRQ);
 		else if (!wasIRQ && isIRQ)
-			controlBusB->postEvent(this, CONTROLBUS_CLEAR_IRQ, &value);
+			controlBusB->postEvent(this, CONTROLBUS_SET_IRQ, &isIRQ);
 	}
 }
 
@@ -115,10 +115,10 @@ bool MC6821::setComponent(string name, OEComponent *component)
 	if (name == "controlBus")
 	{
 		if (controlBus)
-			controlBus->removeObserver(this, CONTROLBUS_RESET_ASSERTED);
+			controlBus->removeObserver(this, CONTROLBUS_RESET_CHANGED);
 		controlBus = component;
 		if (controlBus)
-			controlBus->addObserver(this, CONTROLBUS_RESET_ASSERTED);
+			controlBus->addObserver(this, CONTROLBUS_RESET_CHANGED);
 	}
 	else if (name == "portA")
 		portA = component;

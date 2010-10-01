@@ -10,7 +10,7 @@
 
 #include "KIM1IO.h"
 
-#include "SerialPort.h"
+#include "RS232Interface.h"
 
 KIM1IO::KIM1IO()
 {
@@ -46,10 +46,10 @@ bool KIM1IO::setComponent(string name, OEComponent *component)
 	else if (name == "serialPort")
 	{
 		if (serialPort)
-			serialPort->removeObserver(this, SERIAL_PORT_DATA_RECEIVED);
+			serialPort->removeObserver(this, RS232_DATA_RECEIVED);
 		serialPort = component;
 		if (serialPort)
-			serialPort->addObserver(this, SERIAL_PORT_DATA_RECEIVED);
+			serialPort->addObserver(this, RS232_DATA_RECEIVED);
 	}
 	else if (name == "audioOut")
 		audioOut = component;

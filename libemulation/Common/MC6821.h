@@ -10,12 +10,6 @@
 
 #include "OEComponent.h"
 
-// Notifications
-enum {
-	MC6821_CA2_CHANGED,
-	MC6821_CB2_CHANGED,
-};
-
 // Events
 enum
 {
@@ -25,6 +19,12 @@ enum
 	MC6821_SET_CB1,
 	MC6821_SET_CB2,
 	MC6821_GET_CB2,
+};
+
+// Notifications
+enum {
+	MC6821_CA2_CHANGED,
+	MC6821_CB2_CHANGED,
 };
 
 #define MC6821_RS_DATAREGISTERA		0x00

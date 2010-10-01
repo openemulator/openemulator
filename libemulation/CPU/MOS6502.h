@@ -9,7 +9,6 @@
  */
 
 #include "OEComponent.h"
-#include "ControlBus.h"
 
 class MOS6502 : public OEComponent
 {
@@ -27,15 +26,16 @@ private:
 	OEComponent *controlBus;
 	
 	OEPair ppc;
+	
+	OEUInt8 a;
+	OEUInt8 x;
+	OEUInt8 y;
+	OEUInt8 p;
+	
 	OEPair pc;
 	OEPair sp;
 	OEPair zp;
 	OEPair ea;
-	
-	OEUInt8 p;
-	OEUInt8 a;
-	OEUInt8 x;
-	OEUInt8 y;
 	
 	OEUInt8 pendingIRQ;
 	OEUInt8 afterCLI;

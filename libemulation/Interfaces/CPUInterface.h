@@ -1,11 +1,11 @@
 
 /**
  * libemulation
- * Generic CPU
+ * CPU Interface
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements a generic CPU
+ * Defines the CPU interface
  */
 
 #include "OEComponent.h"
@@ -14,9 +14,8 @@
 enum
 {
 	CPU_RUN,
-	CPU_SEND_DEBUG_COMMAND,
-	CPU_GET_CYCLES_LEFT,
 	CPU_SET_CYCLES_LEFT,
+	CPU_GET_CYCLES_LEFT,
 };
 
 class CPU : public OEComponent

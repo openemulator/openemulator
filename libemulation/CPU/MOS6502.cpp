@@ -8,13 +8,22 @@
  * Emulates a MOS6502 microprocessor.
  */
 
+#include "CPUInterface.h"
+#include "ControlBusInterface.h"
+
 #include "MOS6502.h"
 #include "MOS6502Opcodes.h"
 
 MOS6502::MOS6502()
 {
-	sp.b.h = 0x01;
-	zp.d = 0;
+	a = 0;
+	x = 0;
+	y = 0;
+	p = 0;
+	pc = 0;
+	sp = 0x100;
+	zp = 0;
+	ea = 0;
 	
 	memoryBus = NULL;
 	controlBus = NULL;
@@ -68,18 +77,16 @@ bool MOS6502::setComponent(string name, OEComponent *component)
 	{
 		if (controlBus)
 		{
-			controlBus->removeObserver(this, CONTROLBUS_RESET_ASSERTED);
-			controlBus->removeObserver(this, CONTROLBUS_IRQ_ASSERTED);
-			controlBus->removeObserver(this, CONTROLBUS_IRQ_CLEARED);
-			controlBus->removeObserver(this, CONTROLBUS_NMI_ASSERTED);
+			controlBus->removeObserver(this, CONTROLBUS_RESET_CHANGED);
+			controlBus->removeObserver(this, CONTROLBUS_IRQ_CHANGED);
+			controlBus->removeObserver(this, CONTROLBUS_NMI_CHANGED);
 		}
 		controlBus = component;
 		if (controlBus)
 		{
-			controlBus->addObserver(this, CONTROLBUS_RESET_ASSERTED);
-			controlBus->addObserver(this, CONTROLBUS_IRQ_ASSERTED);
-			controlBus->addObserver(this, CONTROLBUS_IRQ_CLEARED);
-			controlBus->addObserver(this, CONTROLBUS_NMI_ASSERTED);
+			controlBus->addObserver(this, CONTROLBUS_RESET_CHANGED);
+			controlBus->addObserver(this, CONTROLBUS_IRQ_CHANGED);
+			controlBus->addObserver(this, CONTROLBUS_NMI_CHANGED);
 		}
 	}
 	else
@@ -92,22 +99,19 @@ void MOS6502::notify(OEComponent *component, int notification, void *data)
 {
 	switch (notification)
 	{
-		case CONTROLBUS_RESET_ASSERTED:
-			reset();
+		case CONTROLBUS_RESET_CHANGED:
+			if (*((bool *) data))
+				reset();
 			break;
-		case CONTROLBUS_IRQ_ASSERTED:
-			reset();
+			
+		case CONTROLBUS_IRQ_CHANGED:
 			break;
-		case CONTROLBUS_IRQ_CLEARED:
-			reset();
-			break;
-		case CONTROLBUS_NMI_ASSERTED:
-			reset();
+			
+		case CONTROLBUS_NMI_CHANGED:
 			break;
 	}
 }
-	
-	
+
 void MOS6502::reset()
 {
 	sp.b.l = 0xff;

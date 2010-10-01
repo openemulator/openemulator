@@ -33,15 +33,15 @@ public:
 	
 	virtual bool init();
 	
-	// Notifications
-	bool addObserver(OEComponent *component, int notification);
-	bool removeObserver(OEComponent *component, int notification);
-	virtual void notify(OEComponent *component, int notification, void *data);
-	
 	// Events and responder chain
 	bool addDelegate(OEComponent *component, int event);
 	bool removeDelegate(OEComponent *component, int event);
 	virtual bool postEvent(OEComponent *component, int event, void *data);
+	
+	// Notifications
+	bool addObserver(OEComponent *component, int notification);
+	bool removeObserver(OEComponent *component, int notification);
+	virtual void notify(OEComponent *component, int notification, void *data);
 	
 	// Memory access
 	virtual OEUInt8 read(OEAddress address);

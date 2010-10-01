@@ -60,10 +60,10 @@ bool MOS6530::setComponent(string name, OEComponent *component)
 	if (name == "controlBus")
 	{
 		if (controlBus)
-			controlBus->removeObserver(this, CONTROLBUS_RESET_ASSERTED);
+			controlBus->removeObserver(this, CONTROLBUS_RESET_CHANGED);
 		controlBus = component;
 		if (controlBus)
-			controlBus->addObserver(this, CONTROLBUS_RESET_ASSERTED);
+			controlBus->addObserver(this, CONTROLBUS_RESET_CHANGED);
 	}
 	else if (name == "portA")
 		portA = component;

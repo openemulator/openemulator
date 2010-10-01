@@ -81,7 +81,10 @@ void ControlBus::notify(OEComponent *component, int notification, void *data)
 	{
 		case HOST_POWERED_ON:
 			if (resetOnPowerOn)
-				postEvent(this, CONTROLBUS_ASSERT_RESET, NULL);
+			{
+				bool value = true;
+				postEvent(this, CONTROLBUS_SET_RESET, &value);
+			}
 			break;
 			
 		case HOST_AUDIO_FRAME_WILL_RENDER:
@@ -122,8 +125,14 @@ void ControlBus::notify(OEComponent *component, int notification, void *data)
 					break;
 					
 				case HOST_HID_S_DEBUGGERBREAK:
-					postEvent(this, CONTROLBUS_ASSERT_NMI, NULL);
+				{
+					bool value = true;
+					postEvent(this, CONTROLBUS_SET_NMI, &value);
+					
+					value = false;
+					postEvent(this, CONTROLBUS_SET_NMI, &value);
 					break;
+				}
 			}
 			break;
 		}
@@ -134,27 +143,21 @@ bool ControlBus::postEvent(OEComponent *component, int event, void *data)
 {
 	switch (event)
 	{
-		case CONTROLBUS_ASSERT_RESET:
-			OEComponent::notify(this, CONTROLBUS_RESET_ASSERTED, NULL);
+		case CONTROLBUS_SET_RESET:
+		{
+			bool value = *((bool *) data);
+			resetCount += value ? 1 : -1;
+			OEComponent::notify(this, CONTROLBUS_RESET_CHANGED, NULL);
 			return true;
-			
-		case CONTROLBUS_ASSERT_IRQ:
+		}
+		case CONTROLBUS_SET_IRQ:
 			if (!irqCount)
-				OEComponent::notify(this, CONTROLBUS_IRQ_ASSERTED, NULL);
+				OEComponent::notify(this, CONTROLBUS_IRQ_CHANGED, NULL);
 			irqCount++;
 			return true;
 			
-		case CONTROLBUS_CLEAR_IRQ:
-			if (irqCount > 0)
-			{
-				irqCount--;
-				if (!irqCount)
-					OEComponent::notify(this, CONTROLBUS_IRQ_CLEARED, NULL);
-			}
-			return true;
-			
-		case CONTROLBUS_ASSERT_NMI:
-			OEComponent::notify(this, CONTROLBUS_NMI_ASSERTED, NULL);
+		case CONTROLBUS_SET_NMI:
+			OEComponent::notify(this, CONTROLBUS_NMI_CHANGED, NULL);
 			return true;
 			
 		case CONTROLBUS_ADD_TIMER:

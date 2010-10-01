@@ -51,34 +51,6 @@ bool OEComponent::init()
 	return true;
 }
 
-bool OEComponent::addObserver(OEComponent *component, int notification)
-{
-	observers[notification].push_back(component);
-	
-	return true;
-}
-
-bool OEComponent::removeObserver(OEComponent *component, int notification)
-{
-	OEComponents::iterator first = observers[notification].begin();
-	OEComponents::iterator last = observers[notification].end();
-	OEComponents::iterator i = remove(first, last, component);
-	
-	if (i != last)
-		observers[notification].erase(i, last);
-	
-	return (i != last);
-}
-
-void OEComponent::notify(OEComponent *component, int notification, void *data)
-{
-	OEComponents::iterator i;
-	for (i = observers[notification].begin();
-		 i != observers[notification].end();
-		 i++)
-		notify(component, notification, data);
-}
-
 bool OEComponent::addDelegate(OEComponent *component, int event)
 {
 	delegates[event].push_back(component);
@@ -108,6 +80,34 @@ bool OEComponent::postEvent(OEComponent *component, int event, void *data)
 			return true;
 	
 	return false;
+}
+
+bool OEComponent::addObserver(OEComponent *component, int notification)
+{
+	observers[notification].push_back(component);
+	
+	return true;
+}
+
+bool OEComponent::removeObserver(OEComponent *component, int notification)
+{
+	OEComponents::iterator first = observers[notification].begin();
+	OEComponents::iterator last = observers[notification].end();
+	OEComponents::iterator i = remove(first, last, component);
+	
+	if (i != last)
+		observers[notification].erase(i, last);
+	
+	return (i != last);
+}
+
+void OEComponent::notify(OEComponent *component, int notification, void *data)
+{
+	OEComponents::iterator i;
+	for (i = observers[notification].begin();
+		 i != observers[notification].end();
+		 i++)
+		notify(component, notification, data);
 }
 
 OEUInt8 OEComponent::read(OEUInt32 address)

@@ -12,39 +12,7 @@
 #define _CONTROLBUS_H
 
 #include "OEComponent.h"
-
-// Notifications
-enum
-{
-	CONTROLBUS_RESET_ASSERTED,
-	CONTROLBUS_IRQ_ASSERTED,
-	CONTROLBUS_IRQ_CLEARED,
-	CONTROLBUS_NMI_ASSERTED,
-};
-
-// Events
-enum
-{
-	CONTROLBUS_ASSERT_RESET,
-	CONTROLBUS_CLEAR_RESET,
-	CONTROLBUS_ASSERT_IRQ,
-	CONTROLBUS_CLEAR_IRQ,
-	CONTROLBUS_ASSERT_NMI,
-	CONTROLBUS_CLEAR_NMI,
-	CONTROLBUS_ADD_TIMER,
-	CONTROLBUS_REMOVE_TIMER,
-	CONTROLBUS_GET_CYCLE,
-	CONTROLBUS_GET_AUDIO_BUFFER_INDEX,
-	CONTROLBUS_REQUEST_BUS,
-	CONTROLBUS_RELEASE_BUS,
-};
-
-typedef struct
-{
-	int cyclesLeft;
-	OEComponent *component;
-	int event;
-} ControlBusTimer;
+#include "ControlBusInterface.h"
 
 class ControlBus : public OEComponent
 {
@@ -70,7 +38,9 @@ private:
 	float frequency;
 	
 	bool resetOnPowerOn;
+	int resetCount;
 	int irqCount;
+	int nmiCount;
 	
 	double phase;
 	

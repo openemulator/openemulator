@@ -28,8 +28,8 @@ typedef struct
 	bool read;
 	bool write;
 } AddressDecoderMap;
-typedef vector<AddressDecoderMap> AddressDecoderMaps;
 
+typedef vector<AddressDecoderMap> AddressDecoderMaps;
 typedef map<string, string> AddressDecoderConf;
 typedef map<string, OEComponent *> AddressDecoderRef;
 
