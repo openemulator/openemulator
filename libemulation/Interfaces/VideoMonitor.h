@@ -1,11 +1,11 @@
 
 /**
  * libemulation
- * Control bus
+ * Video Monitor Interface
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Defines the serial port interface
+ * Defines the video monitor interface
  */
 
 // Events
@@ -17,20 +17,42 @@ enum
 
 typedef enum
 {
-	VIDEOMONITOR_FORMAT_1BIT,
-	VIDEOMONITOR_FORMAT_4BIT,
-	VIDEOMONITOR_FORMAT_8BIT,
-	VIDEOMONITOR_FORMAT_16BIT,
-	VIDEOMONITOR_FORMAT_32BIT,
+	VIDEO_FORMAT_COMPOSITE,
+	VIDEO_FORMAT_RGB,
 } VideoMonitorFrameFormat;
 
 typedef struct
 {
-	char *framebuffer;
-	int framebufferWidth;
-	int framebufferHeight;
-	VideoMonitorFrameFormat framebufferFormat;
+	VideoFrameFormat frameFormat;
+	int frameWidth;
+	int frameHeight;
+	char *frameData;
 	
-	bool color;
-	int *palette;
-} VideoMonitorFrame;
+	float videoHorizTotal;
+	float videoHorizStart;
+	float videoHorizDisplayed;
+	float videoVertTotal;
+	float videoVertStart;
+	float videoVertDisplayed;
+	
+	float compositeSubcarrier;
+	bool compositeScanline;
+} VideoFrame;
+
+typedef struct
+{
+	int screenWidth;
+	int screenHeight;
+	
+	float screenBrigthness;
+	float screenContrast;
+	float screenSaturation;
+	
+	float screenPersistance;
+	float screen;
+	
+	float compositeLumaBandwidth;
+	float compositeChromaBandwidth;
+	float compositeScanlineAlpha;
+	float compositeDecoderMatrix[9];
+} MonitorSetting;

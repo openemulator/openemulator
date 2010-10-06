@@ -134,6 +134,7 @@
 		00C7F1DA100BC5B500AD0812 /* IPMinusSel.png in Resources */ = {isa = PBXBuildFile; fileRef = 00C7F1D6100BC5B400AD0812 /* IPMinusSel.png */; };
 		00C7F1DB100BC5B500AD0812 /* IPPlus.png in Resources */ = {isa = PBXBuildFile; fileRef = 00C7F1D7100BC5B400AD0812 /* IPPlus.png */; };
 		00C7F1DC100BC5B500AD0812 /* IPPlusSel.png in Resources */ = {isa = PBXBuildFile; fileRef = 00C7F1D8100BC5B400AD0812 /* IPPlusSel.png */; };
+		00C92F6B1256B21600026B72 /* AppleIIMMUInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 00C92F6A1256B21600026B72 /* AppleIIMMUInterface.h */; };
 		00D1958D1093712E008FB014 /* Chooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00D1958B1093712E008FB014 /* Chooser.xib */; };
 		00D5D13C11B73F8400C77A67 /* CompositeMonitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00984D9811A73B1000B9C0B5 /* CompositeMonitor.cpp */; };
 		00D81D0C12034A20004068EB /* OEDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00D81D0B12034A20004068EB /* OEDebugger.cpp */; };
@@ -403,6 +404,7 @@
 		00C7F1D6100BC5B400AD0812 /* IPMinusSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPMinusSel.png; sourceTree = "<group>"; };
 		00C7F1D7100BC5B400AD0812 /* IPPlus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPPlus.png; sourceTree = "<group>"; };
 		00C7F1D8100BC5B400AD0812 /* IPPlusSel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPPlusSel.png; sourceTree = "<group>"; };
+		00C92F6A1256B21600026B72 /* AppleIIMMUInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleIIMMUInterface.h; sourceTree = "<group>"; };
 		00D1958C1093712E008FB014 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Chooser.xib; sourceTree = "<group>"; };
 		00D81D0A12034A20004068EB /* OEDebugger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEDebugger.h; sourceTree = "<group>"; };
 		00D81D0B12034A20004068EB /* OEDebugger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEDebugger.cpp; sourceTree = "<group>"; };
@@ -724,6 +726,7 @@
 				00F95F32125546C1002B548B /* VideoMonitor.h */,
 				00F95F44125554A9002B548B /* CPUInterface.h */,
 				00F95F8D12555A88002B548B /* IEEE1284Interface.h */,
+				00C92F6A1256B21600026B72 /* AppleIIMMUInterface.h */,
 			);
 			path = Interfaces;
 			sourceTree = "<group>";
@@ -903,6 +906,7 @@
 				00F95F33125546C1002B548B /* VideoMonitor.h in Headers */,
 				00F95F45125554A9002B548B /* CPUInterface.h in Headers */,
 				00F95F8E12555A88002B548B /* IEEE1284Interface.h in Headers */,
+				00C92F6B1256B21600026B72 /* AppleIIMMUInterface.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -138,7 +138,7 @@
     <property name="mapSpeaker" value="0x20-0x3f" />
     <property name="refVideoControl" ref="appleII.video" />
     <property name="mapVideoControl" value="0x50-0x57" />
-    <property name="refGame" ref="appleII.game" />
+    <property name="refGame" ref="" />
     <property name="mapGame" value="0x58-0x5f,0x61-0x6f" />
     <property name="refAudioIn" ref="appleII.audioIn" />
     <property name="mapAudioIn" value="0x60" />
