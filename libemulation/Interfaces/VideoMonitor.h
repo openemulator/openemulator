@@ -11,6 +11,7 @@
 // Events
 enum
 {
+	VIDEOMONITOR_GET_FRAME,
 	VIDEOMONITOR_RENDER_FRAME,
 	VIDEOMONITOR_SET_CAPTURE_ON_MOUSE_OVER,
 };
@@ -28,15 +29,13 @@ typedef struct
 	int frameHeight;
 	char *frameData;
 	
-	float videoHorizTotal;
 	float videoHorizStart;
-	float videoHorizDisplayed;
-	float videoVertTotal;
+	float videoHorizEnde;
 	float videoVertStart;
-	float videoVertDisplayed;
+	float videoVertEnd;
 	
 	float compositeSubcarrier;
-	bool compositeScanline;
+	bool compositeNonInterleaving;
 } VideoFrame;
 
 typedef struct
@@ -47,12 +46,19 @@ typedef struct
 	float screenBrigthness;
 	float screenContrast;
 	float screenSaturation;
+	bool screenColorize;
 	
+	float screenHorizStart;
+	float screenHorizEnd;
+	float screenVertStart;
+	float screenVertEnd;
 	float screenPersistance;
-	float screen;
+	float screenFlicker;
 	
 	float compositeLumaBandwidth;
 	float compositeChromaBandwidth;
-	float compositeScanlineAlpha;
 	float compositeDecoderMatrix[9];
+	float compositeScanlineAlpha;
+	
+	float componentBandwidth;
 } MonitorSetting;
