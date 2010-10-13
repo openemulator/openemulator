@@ -11,13 +11,15 @@ uniform float fsc;
 uniform float flicker;
 uniform float time;
 
-vec3 filter(vec2 q, vec2 qn, float i, float cy, float cc)
+vec3 filter(vec2 q, float i, float cy, float cc)
 {
-		vec3 p = texture2D(texture, vec2(qn.x + i / 512.0, qn.y)).xyz;
-		p.x *= cy;
-		p.y *= cc * sin(2.0 * 3.1415926535 * ((q.x + i) * fsc + hue)) * sqrt(2.0) * saturation;
-		p.z *= cc * cos(2.0 * 3.1415926535 * ((q.x + i) * fsc + hue)) * sqrt(2.0) * saturation;
-		return p;
+	vec2 qn = q / 512.0;
+	qn.y = 1.0 - qn.y;
+	vec3 p = texture2D(texture, vec2(qn.x + i / 512.0, qn.y)).xyz;
+	p.x *= cy;
+	p.y *= cc * sin(2.0 * 3.1415926535 * ((q.x + i) * fsc + hue)) * sqrt(2.0) * saturation;
+	p.z *= cc * cos(2.0 * 3.1415926535 * ((q.x + i) * fsc + hue)) * sqrt(2.0) * saturation;
+	return p;
 }
 
 // x, y, z is used as Y'UV
@@ -26,26 +28,24 @@ void main(void)
 	mat3 decoderMatrix = mat3(1.0, 1.0, 1.0, 0.0, -0.394642, 2.032062, 1.139883,-0.580622, 0.0);
 
 	vec2 q = gl_FragCoord.xy;
-	vec2 qn = q / 512.0;
-	qn.y = 1.0 - qn.y;
 	vec3 col = vec3(0.0, 0.0, 0.0);
-	col += filter(q, qn, -8.0, 0.000000238419, 0.0);
-	col += filter(q, qn, -7.0, 0.000000043104, 0.0);
-	col += filter(q, qn, -6.0, 0.000000024426, 0.0);
-	col += filter(q, qn, -5.0, 0.000000021192, 0.0);
-	col += filter(q, qn, -4.0, 0.000000055881, 0.0);
-	col += filter(q, qn, -3.0, 0.000000024810, 0.0);
-	col += filter(q, qn, -2.0, 0.100000077592, 0.0);
-	col += filter(q, qn, -1.0, 0.200000037292, 0.0);
-	col += filter(q, qn, 0.0, 0.500000000000, 0.0);
-	col += filter(q, qn, -1.0, 0.200000037292, 0.0);
-	col += filter(q, qn, -2.0, 0.100000077592, 0.0);
-	col += filter(q, qn, -3.0, 0.000000024810, 0.0);
-	col += filter(q, qn, -4.0, 0.000000055881, 0.0);
-	col += filter(q, qn, -5.0, 0.000000021192, 0.0);
-	col += filter(q, qn, -6.0, 0.000000024426, 0.0);
-	col += filter(q, qn, -7.0, 0.000000043104, 0.0);
-	col += filter(q, qn, -8.0, 0.000000238419, 0.0);
+	col += filter(q, -8.0, 0.001834, 0.005171);
+	col += filter(q, -7.0, 0.001595, 0.012393);
+	col += filter(q, -6.0, -0.006908, 0.024668);
+	col += filter(q, -5.0, -0.023328, 0.041486);
+	col += filter(q, -4.0, -0.025079, 0.061527);
+	col += filter(q, -3.0, 0.023269, 0.082293);
+	col += filter(q, -2.0, 0.130295, 0.100559);
+	col += filter(q, -1.0, 0.248233, 0.113111);
+	col += filter(q, 0.0, 0.300177, 0.117585);
+	col += filter(q, -1.0, 0.248233, 0.113111);
+	col += filter(q, -2.0, 0.130295, 0.100559);
+	col += filter(q, -3.0, 0.023269, 0.082293);
+	col += filter(q, -4.0, -0.025079, 0.061527);
+	col += filter(q, -5.0, -0.023328, 0.041486);
+	col += filter(q, -6.0, -0.006908, 0.024668);
+	col += filter(q, -7.0, 0.001595, 0.012393);
+	col += filter(q, -8.0, 0.001834, 0.005171);
 	col = decoderMatrix * col;
 	col = col * contrast + brightness;
 
