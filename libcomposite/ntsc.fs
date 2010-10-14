@@ -8,20 +8,19 @@ uniform float brightness;
 uniform float saturation;
 uniform float hue;
 uniform float fsc;
-uniform float flicker;
 uniform float time;
 
 vec3 filter(vec2 q, float i, float cy, float cc)
 {
-	float phase = 2.0 * 3.1415926535 * ((512.0 * q.x + i) * fsc + hue);
+	float phase = 2.0 * 3.1415926535 * ((512.0 * q.x + i) * fsc);
 	vec3 p1 = texture2D(texture, vec2(q.x + i / 512.0, q.y)).xyz;
-	p1.y *= sin(phase) * sqrt(2.0) * saturation;
-	p1.z *= cos(phase) * sqrt(2.0) * saturation;
+	p1.y *= sin(phase);
+	p1.z *= cos(phase);
 	
-	float phase2 = 2.0 * 3.1415926535 * ((512.0 * q.x - i) * fsc + hue);
+	float phase2 = 2.0 * 3.1415926535 * ((512.0 * q.x - i) * fsc);
 	vec3 p2 = texture2D(texture, vec2(q.x - i / 512.0, q.y)).xyz;
-	p2.y *= sin(phase2) * sqrt(2.0) * saturation;
-	p2.z *= cos(phase2) * sqrt(2.0) * saturation;
+	p2.y *= sin(phase2);
+	p2.z *= cos(phase2);
 	
 	vec3 c = vec3(cy, cc, cc);
 	return (p1 + p2) * c;
@@ -30,11 +29,28 @@ vec3 filter(vec2 q, float i, float cy, float cc)
 // x, y, z is used as Y'UV
 void main(void)
 {
+	float hueangle = hue * 2.0 * 3.1415926535;
 	mat3 decoderMatrix = mat3(1.0, 1.0, 1.0, 0.0, -0.394642, 2.032062, 1.139883,-0.580622, 0.0);
+	decoderMatrix *= mat3(
+		1.0, 0.0, 0.0,
+		0.0, cos(hueangle), -sin(hueangle),
+		0.0, sin(hueangle), cos(hueangle));
+	decoderMatrix *= mat3(
+		1.0, 0.0, 0.0,
+		0.0, saturation, 0.0,
+		0.0, 0.0, saturation);
+	decoderMatrix *= mat3(
+		1.0, 0.0, 0.0,
+		0.0, sqrt(2.0), 0.0,
+		0.0, 0.0, sqrt(2.0));
+	decoderMatrix *= contrast;
+	
+	vec2 q = gl_TexCoord[0].xy;
+//	vec2 q = gl_FragCoord.xy / 512.0;
+//	q.y = 1.0 - q.y;
 
-//	vec2 q = gl_TexCoord[0].xy;
-	vec2 q = gl_FragCoord.xy / 512.0;
-	q.y = 1.0 - q.y;
+	q.x = q.x + 1.0 - q.x * q.x;
+
 	vec3 col = filter(q, 8.0, 0.001834, 0.005608678704129);
 	col += filter(q, 7.0, 0.001595, 0.013136133246966);
 	col += filter(q, 6.0, -0.006908, 0.025634921259280);
@@ -44,9 +60,8 @@ void main(void)
 	col += filter(q, 2.0, 0.130295, 0.099609418890150);
 	col += filter(q, 1.0, 0.248233, 0.111545537317893);
 	col += filter(q, 0.0, 0.300177 / 2.0, 0.115785831621067 / 2.0);
-	col = decoderMatrix * col;
-	col = col * contrast + brightness;
-
+	col = decoderMatrix * col + brightness;
+	
 //	 Non-linearity
 //    col = col*0.0+1.0*col*col;
 
