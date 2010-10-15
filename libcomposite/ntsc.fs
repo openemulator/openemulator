@@ -5,7 +5,7 @@
  * Takes as input a raw NTSC frame
  *
  * Parameters:
- * size_*          - size of rectangular input texture
+ * size_*          - texture size
  * comp_fsc        - subcarrier to sampling ratio
  *                   (Apple II uses 0.25)
  * comp_black      - composite black level
@@ -41,29 +41,26 @@ uniform float vid_contrast;
 uniform float vid_brightness;
 uniform float vid_barrel;
 
-vec3 filter(vec2 q, float i, float cy, float cc)
+vec3 demodulate(vec2 q, float i)
 {
 	float phase1 = 2.0 * 3.1415926535 * comp_fsc * (q.x + i);
-	vec3 p1 = texture2DRect(texture, vec2(q.x + i, q.y)).xyz;
-	p1 -= comp_black;
-	p1.y *= sin(phase1);
-	p1.z *= cos(phase1);
-	
-	float phase2 = 2.0 * 3.1415926535 * comp_fsc * (q.x - i);
-	vec3 p2 = texture2DRect(texture, vec2(q.x - i, q.y)).xyz;
-	p2 -= comp_black;
-	p2.y *= sin(phase2);
-	p2.z *= cos(phase2);
-	
-	vec3 c = vec3(cy, cc, cc);
-	return (p1 + p2) * c;
+	vec3 p = texture2DRect(texture, vec2(q.x + i, q.y)).xyz;
+	p -= comp_black;
+	p.y *= sin(phase1);
+	p.z *= cos(phase1);
+	return p;
+}
+
+vec3 filter(vec2 q, float i, float cy, float cc)
+{
+	return (demodulate(q, i) + demodulate(q, -i)) * vec3(cy, cc, cc);
 }
 
 // x, y, z is used as Y'UV
 void main(void)
 {
 	float hue = 2.0 * 3.1415926535 * comp_hue;
-
+	
 	// Decoder matrix
 	mat3 decoderMatrix = mat3(
 		1.0, 0.0, 0.0,
@@ -98,13 +95,13 @@ void main(void)
 		0.0, 0.0, sqrt(2.0));
 	// Dynamic range gain
 	decoderMatrix /= (comp_white - comp_black);
-
+	
 	// Barrel effect
 	vec2 q = gl_TexCoord[0].xy;
 	q = (q / vec2(size_x, size_y)) - vec2(0.5, 0.5);
 	q += vid_barrel * q * (q.x * q.x + q.y * q.y);
 	q = (q + vec2(0.5, 0.5)) * vec2(size_x, size_y);
-
+	
 	// FIR filter
 	vec3 col = filter(q, 8.0, 0.001834, 0.005608678704129);
 	col += filter(q, 7.0, 0.001595, 0.013136133246966);
@@ -116,6 +113,6 @@ void main(void)
 	col += filter(q, 1.0, 0.248233, 0.111545537317893);
 	col += filter(q, 0.0, 0.300177 / 2.0, 0.115785831621067 / 2.0);
 	col = decoderMatrix * col + vid_brightness;
-
+	
 	gl_FragColor = vec4(col, 1.0);
 }
