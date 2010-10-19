@@ -24,7 +24,7 @@ typedef enum
 
 typedef struct
 {
-	VideoFrameFormat frameFormat;
+	VideoMonitorFrameFormat frameFormat;
 	int frameWidth;
 	int frameHeight;
 	char *frameData;

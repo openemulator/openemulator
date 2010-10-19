@@ -72,20 +72,27 @@
 		[item setTarget:self];
 		[item setAction:@selector(selectView:)];
 	}
-	else if ([ident isEqualToString:@"Sound"])
+	else if ([ident isEqualToString:@"Audio"])
 	{
-		[item setLabel:NSLocalizedString(@"Sound", "Preferences toolbar item label")];
-		[item setImage:[NSImage imageNamed:@"PRSound.png"]];
+		[item setLabel:NSLocalizedString(@"Audio", "Preferences toolbar item label")];
+		[item setImage:[NSImage imageNamed:@"PRAudio.png"]];
 		[item setTarget:self];
 		[item setAction:@selector(selectView:)];
 	}
-	
+	else if ([ident isEqualToString:@"Video"])
+	{
+		[item setLabel:NSLocalizedString(@"Video", "Preferences toolbar item label")];
+		[item setImage:[NSImage imageNamed:@"PRVideo.png"]];
+		[item setTarget:self];
+		[item setAction:@selector(selectView:)];
+	}
+
 	return item;
 }
 
 - (NSArray *)toolbarSelectableItemIdentifiers:(NSToolbar *)toolbar
 {
-	return [NSArray arrayWithObjects:@"General", @"Sound", nil];
+	return [NSArray arrayWithObjects:@"General", @"Audio", @"Video", nil];
 }
 
 - (NSArray *)toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar
@@ -108,8 +115,10 @@
 	NSView *view;
 	if ([itemIdentifier isEqualToString:@"General"])
 		view = fGeneralView;
-	if ([itemIdentifier isEqualToString:@"Sound"])
-		view = fSoundView;
+	else if ([itemIdentifier isEqualToString:@"Audio"])
+		view = fAudioView;
+	else if ([itemIdentifier isEqualToString:@"Video"])
+		view = fVideoView;
 	else
 		view = fGeneralView;
 	

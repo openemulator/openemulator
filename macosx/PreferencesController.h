@@ -15,7 +15,8 @@
 @interface PreferencesController : NSWindowController
 {
 	IBOutlet id fGeneralView;
-	IBOutlet id fSoundView;
+	IBOutlet id fAudioView;
+	IBOutlet id fVideoView;
 	
 	IBOutlet id fShowTemplateChooserRadio;
 	IBOutlet id fUseTemplateRadio;

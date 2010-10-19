@@ -20,10 +20,10 @@ MOS6502::MOS6502()
 	x = 0;
 	y = 0;
 	p = 0;
-	pc = 0;
-	sp = 0x100;
-	zp = 0;
-	ea = 0;
+	pc.d = 0;
+	sp.d = 0x100;
+	zp.d = 0;
+	ea.d = 0;
 	
 	memoryBus = NULL;
 	controlBus = NULL;

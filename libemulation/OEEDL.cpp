@@ -215,8 +215,8 @@ bool OEEDL::addEDL(string path, OEIdMap connectionMap)
 	renameConnectionMap(connectionMap, nameMap);
 	
 	// Insert EDL
-	xmlNodePtr insertionNode = findInsertionPoint(connectionMap.begin()->first)
-	insert(insertionNode, &edl);
+//	xmlNodePtr insertionNode = findInsertionPoint(connectionMap.begin()->first)
+//	insert(insertionNode, &edl);
 
 	// Connect port inlets
 	connect();
@@ -315,8 +315,6 @@ bool OEEDL::renameConnectionMap(OEIdMap &connectionMap, OEIdMap nameMap)
 	return true;
 }
 
-void OEEDL
-
 void OEEDL::insert(OEEDL *edl, string deviceId)
 {
 	/* Idea
@@ -335,7 +333,7 @@ void OEEDL::insert(OEEDL *edl, string deviceId)
 		if (!xmlStrcmp(node->name, BAD_CAST "device"))
 		{
 			string id = getNodeProperty(node, "id");
-			if (getDeviceId(ref) == deviceId)
+			if (getDeviceId(id) == deviceId)
 				setNodeProperty(node, "ref", "");
 			
 		}
