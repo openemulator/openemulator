@@ -12,9 +12,9 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="1865"/>
 			<integer value="2095"/>
 			<integer value="1769"/>
+			<integer value="1865"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -547,8 +547,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 			<object class="NSUserDefaultsController" id="356871564">
 				<object class="NSMutableArray" key="NSDeclaredKeys">
 					<bool key="EncodedWithXMLCoder">YES</bool>
-					<string>OEVideoGPUProcessing</string>
-					<string>OEAudioFullDuplex</string>
+					<string>OEFullDuplex</string>
+					<string>OEGPUProcessing</string>
 				</object>
 				<bool key="NSSharedInstance">YES</bool>
 			</object>
@@ -727,35 +727,15 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: values.OEVideoGPUProcessing</string>
-						<reference key="source" ref="1019521745"/>
-						<reference key="destination" ref="356871564"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="1019521745"/>
-							<reference key="NSDestination" ref="356871564"/>
-							<string key="NSLabel">value: values.OEVideoGPUProcessing</string>
-							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">values.OEVideoGPUProcessing</string>
-							<object class="NSDictionary" key="NSOptions">
-								<string key="NS.key.0">NSNullPlaceholder</string>
-								<integer value="1" key="NS.object.0"/>
-							</object>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">2101</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: values.OEAudioFullDuplex</string>
+						<string key="label">value: values.OEFullDuplex</string>
 						<reference key="source" ref="857452095"/>
 						<reference key="destination" ref="356871564"/>
 						<object class="NSNibBindingConnector" key="connector">
 							<reference key="NSSource" ref="857452095"/>
 							<reference key="NSDestination" ref="356871564"/>
-							<string key="NSLabel">value: values.OEAudioFullDuplex</string>
+							<string key="NSLabel">value: values.OEFullDuplex</string>
 							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">values.OEAudioFullDuplex</string>
+							<string key="NSKeyPath">values.OEFullDuplex</string>
 							<object class="NSDictionary" key="NSOptions">
 								<string key="NS.key.0">NSNullPlaceholder</string>
 								<integer value="1" key="NS.object.0"/>
@@ -763,7 +743,27 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
 					</object>
-					<int key="connectionID">2102</int>
+					<int key="connectionID">2103</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: values.OEGPUProcessing</string>
+						<reference key="source" ref="1019521745"/>
+						<reference key="destination" ref="356871564"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="1019521745"/>
+							<reference key="NSDestination" ref="356871564"/>
+							<string key="NSLabel">value: values.OEGPUProcessing</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">values.OEGPUProcessing</string>
+							<object class="NSDictionary" key="NSOptions">
+								<string key="NS.key.0">NSNullPlaceholder</string>
+								<integer value="1" key="NS.object.0"/>
+							</object>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">2104</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -1192,7 +1192,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">2102</int>
+			<int key="maxID">2104</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
