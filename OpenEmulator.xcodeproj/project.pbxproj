@@ -103,7 +103,6 @@
 		0098B02B124EC44000A4EB26 /* AppleIISlotMemory.h in Headers */ = {isa = PBXBuildFile; fileRef = 0098B027124EC43F00A4EB26 /* AppleIISlotMemory.h */; };
 		009B4F2711639D7700E9A6F9 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009B4F2611639D7700E9A6F9 /* GLUT.framework */; };
 		00A0B8041069761A007930A5 /* Document.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00A0B8031069761A007930A5 /* Document.mm */; };
-		00A1F31A11EAEBE4001511D0 /* TabletController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00A1F31911EAEBE4001511D0 /* TabletController.m */; };
 		00A62FFD11415DF0005E8500 /* MC6821.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A62FFB11415DF0005E8500 /* MC6821.cpp */; };
 		00A6300211415E3C005E8500 /* MC6845.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A6300011415E3C005E8500 /* MC6845.cpp */; };
 		00A8C3FC1080064900D98FE0 /* InspectorDeviceCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00A8C3FB1080064900D98FE0 /* InspectorDeviceCell.m */; };
@@ -164,7 +163,6 @@
 		00D844CC0FFF0505005802F0 /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00D844C30FFF0505005802F0 /* Preferences.xib */; };
 		00D845800FFF0FD2005802F0 /* DocumentWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D8456E0FFF0FD2005802F0 /* DocumentWindowController.m */; };
 		00D845830FFF0FD2005802F0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D845730FFF0FD2005802F0 /* main.m */; };
-		00D845850FFF0FD2005802F0 /* PaperFeedController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D845780FFF0FD2005802F0 /* PaperFeedController.m */; };
 		00D845860FFF0FD2005802F0 /* PreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D8457A0FFF0FD2005802F0 /* PreferencesController.m */; };
 		00E2299611768DF4004E71F7 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009B4F2611639D7700E9A6F9 /* GLUT.framework */; };
 		00EF028D107D9EFB00FE378D /* VerticallyCenteredCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00EF028C107D9EFB00FE378D /* VerticallyCenteredCell.m */; };
@@ -358,8 +356,6 @@
 		009B4F2611639D7700E9A6F9 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = /System/Library/Frameworks/GLUT.framework; sourceTree = "<absolute>"; };
 		00A0B7B81068949D007930A5 /* Document.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Document.h; sourceTree = "<group>"; };
 		00A0B8031069761A007930A5 /* Document.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Document.mm; sourceTree = "<group>"; };
-		00A1F31811EAEBE4001511D0 /* TabletController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TabletController.h; sourceTree = "<group>"; };
-		00A1F31911EAEBE4001511D0 /* TabletController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TabletController.m; sourceTree = "<group>"; };
 		00A62FFA11415DF0005E8500 /* MC6821.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MC6821.h; sourceTree = "<group>"; };
 		00A62FFB11415DF0005E8500 /* MC6821.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MC6821.cpp; sourceTree = "<group>"; };
 		00A62FFF11415E3C005E8500 /* MC6845.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MC6845.h; sourceTree = "<group>"; };
@@ -421,8 +417,6 @@
 		00D8456E0FFF0FD2005802F0 /* DocumentWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DocumentWindowController.m; sourceTree = "<group>"; };
 		00D845730FFF0FD2005802F0 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		00D845760FFF0FD2005802F0 /* OpenEmulator_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenEmulator_Prefix.pch; sourceTree = "<group>"; };
-		00D845770FFF0FD2005802F0 /* PaperFeedController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaperFeedController.h; sourceTree = "<group>"; };
-		00D845780FFF0FD2005802F0 /* PaperFeedController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PaperFeedController.m; sourceTree = "<group>"; };
 		00D845790FFF0FD2005802F0 /* PreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferencesController.h; sourceTree = "<group>"; };
 		00D8457A0FFF0FD2005802F0 /* PreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferencesController.m; sourceTree = "<group>"; };
 		00E2A84D1053290200910B53 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = /usr/lib/libxml2.dylib; sourceTree = "<absolute>"; };
@@ -773,8 +767,6 @@
 			isa = PBXGroup;
 			children = (
 				0077069A11EB638500535F6D /* DocumentWindow.m */,
-				00A1F31811EAEBE4001511D0 /* TabletController.h */,
-				00A1F31911EAEBE4001511D0 /* TabletController.m */,
 				0041613F11E82D7300986586 /* DocumentView.mm */,
 				000DAA5511D95A05006360A2 /* DocumentView.h */,
 				00AD746811A2F10E00BAC29C /* DocumentController.mm */,
@@ -788,8 +780,6 @@
 				00D8456E0FFF0FD2005802F0 /* DocumentWindowController.m */,
 				00D845730FFF0FD2005802F0 /* main.m */,
 				00D845760FFF0FD2005802F0 /* OpenEmulator_Prefix.pch */,
-				00D845770FFF0FD2005802F0 /* PaperFeedController.h */,
-				00D845780FFF0FD2005802F0 /* PaperFeedController.m */,
 				00D845790FFF0FD2005802F0 /* PreferencesController.h */,
 				00D8457A0FFF0FD2005802F0 /* PreferencesController.m */,
 				00EF028B107D9EFB00FE378D /* VerticallyCenteredCell.h */,
@@ -1158,7 +1148,6 @@
 			files = (
 				00D845800FFF0FD2005802F0 /* DocumentWindowController.m in Sources */,
 				00D845830FFF0FD2005802F0 /* main.m in Sources */,
-				00D845850FFF0FD2005802F0 /* PaperFeedController.m in Sources */,
 				00D845860FFF0FD2005802F0 /* PreferencesController.m in Sources */,
 				00A0B8041069761A007930A5 /* Document.mm in Sources */,
 				00EF028D107D9EFB00FE378D /* VerticallyCenteredCell.m in Sources */,
@@ -1174,7 +1163,6 @@
 				00AD746911A2F10E00BAC29C /* DocumentController.mm in Sources */,
 				006115C211DD0347008AA3EE /* Application.m in Sources */,
 				0041614011E82D7300986586 /* DocumentView.mm in Sources */,
-				00A1F31A11EAEBE4001511D0 /* TabletController.m in Sources */,
 				0077069B11EB638500535F6D /* DocumentWindow.m in Sources */,
 				00C3D0D711F5584900EA2453 /* OEGL.cpp in Sources */,
 				00C3D0D811F5584A00EA2453 /* OEHID.cpp in Sources */,
