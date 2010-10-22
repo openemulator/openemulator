@@ -41,6 +41,8 @@
 		003FB21410BA3D5D00D3697B /* devices in Resources */ = {isa = PBXBuildFile; fileRef = 00E8A393108CCAA200D0A137 /* devices */; };
 		0041614011E82D7300986586 /* DocumentView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0041613F11E82D7300986586 /* DocumentView.mm */; };
 		0048673B11C4478200ECD52C /* Host.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0048673911C4478200ECD52C /* Host.cpp */; };
+		004C9DFC1271CDDC00203FA7 /* AudioRecorder.xib in Resources */ = {isa = PBXBuildFile; fileRef = 004C9DF81271CDDC00203FA7 /* AudioRecorder.xib */; };
+		004C9DFD1271CDDC00203FA7 /* Info.xib in Resources */ = {isa = PBXBuildFile; fileRef = 004C9DFA1271CDDC00203FA7 /* Info.xib */; };
 		005256BF120A63B300A6BC75 /* Debugger.xib in Resources */ = {isa = PBXBuildFile; fileRef = 005256BD120A63B300A6BC75 /* Debugger.xib */; };
 		005398DB113A00CA00CA7CE4 /* ROM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 005397E31139EC1F00CA7CE4 /* ROM.cpp */; };
 		005398DC113A00CA00CA7CE4 /* RAM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 005397E01139EC1800CA7CE4 /* RAM.cpp */; };
@@ -101,7 +103,6 @@
 		0098B02B124EC44000A4EB26 /* AppleIISlotMemory.h in Headers */ = {isa = PBXBuildFile; fileRef = 0098B027124EC43F00A4EB26 /* AppleIISlotMemory.h */; };
 		009B4F2711639D7700E9A6F9 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009B4F2611639D7700E9A6F9 /* GLUT.framework */; };
 		00A0B8041069761A007930A5 /* Document.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00A0B8031069761A007930A5 /* Document.mm */; };
-		00A1F31411EAEB76001511D0 /* Tablet.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00A1F31211EAEB76001511D0 /* Tablet.xib */; };
 		00A1F31A11EAEBE4001511D0 /* TabletController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00A1F31911EAEBE4001511D0 /* TabletController.m */; };
 		00A62FFD11415DF0005E8500 /* MC6821.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A62FFB11415DF0005E8500 /* MC6821.cpp */; };
 		00A6300211415E3C005E8500 /* MC6845.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A6300011415E3C005E8500 /* MC6845.cpp */; };
@@ -160,7 +161,6 @@
 		00D844C50FFF0505005802F0 /* Document.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00D844B50FFF0505005802F0 /* Document.xib */; };
 		00D844C70FFF0505005802F0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 00D844B90FFF0505005802F0 /* InfoPlist.strings */; };
 		00D844C90FFF0505005802F0 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00D844BD0FFF0505005802F0 /* MainMenu.xib */; };
-		00D844CB0FFF0505005802F0 /* PaperFeed.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00D844C10FFF0505005802F0 /* PaperFeed.xib */; };
 		00D844CC0FFF0505005802F0 /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00D844C30FFF0505005802F0 /* Preferences.xib */; };
 		00D845800FFF0FD2005802F0 /* DocumentWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D8456E0FFF0FD2005802F0 /* DocumentWindowController.m */; };
 		00D845830FFF0FD2005802F0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D845730FFF0FD2005802F0 /* main.m */; };
@@ -274,6 +274,8 @@
 		0041613F11E82D7300986586 /* DocumentView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DocumentView.mm; sourceTree = "<group>"; };
 		0048673811C4478200ECD52C /* Host.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Host.h; sourceTree = "<group>"; };
 		0048673911C4478200ECD52C /* Host.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Host.cpp; sourceTree = "<group>"; };
+		004C9DF91271CDDC00203FA7 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/AudioRecorder.xib; sourceTree = "<group>"; };
+		004C9DFB1271CDDC00203FA7 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Info.xib; sourceTree = "<group>"; };
 		005256BE120A63B300A6BC75 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Debugger.xib; sourceTree = "<group>"; };
 		005256E4120A841200A6BC75 /* Terminal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Terminal.h; sourceTree = "<group>"; };
 		005256E5120A841200A6BC75 /* Terminal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Terminal.cpp; sourceTree = "<group>"; };
@@ -356,7 +358,6 @@
 		009B4F2611639D7700E9A6F9 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = /System/Library/Frameworks/GLUT.framework; sourceTree = "<absolute>"; };
 		00A0B7B81068949D007930A5 /* Document.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Document.h; sourceTree = "<group>"; };
 		00A0B8031069761A007930A5 /* Document.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Document.mm; sourceTree = "<group>"; };
-		00A1F31311EAEB76001511D0 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Tablet.xib; sourceTree = "<group>"; };
 		00A1F31811EAEBE4001511D0 /* TabletController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TabletController.h; sourceTree = "<group>"; };
 		00A1F31911EAEBE4001511D0 /* TabletController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TabletController.m; sourceTree = "<group>"; };
 		00A62FFA11415DF0005E8500 /* MC6821.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MC6821.h; sourceTree = "<group>"; };
@@ -413,7 +414,6 @@
 		00D844B60FFF0505005802F0 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Document.xib; sourceTree = "<group>"; };
 		00D844BA0FFF0505005802F0 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = macosx/English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		00D844BE0FFF0505005802F0 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/MainMenu.xib; sourceTree = "<group>"; };
-		00D844C20FFF0505005802F0 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/PaperFeed.xib; sourceTree = "<group>"; };
 		00D844C40FFF0505005802F0 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Preferences.xib; sourceTree = "<group>"; };
 		00D845670FFF0FD2005802F0 /* DocumentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DocumentController.h; sourceTree = "<group>"; };
 		00D8456B0FFF0FD2005802F0 /* DocumentWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DocumentWindow.h; sourceTree = "<group>"; };
@@ -822,12 +822,13 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				004C9DF81271CDDC00203FA7 /* AudioRecorder.xib */,
+				004C9DFA1271CDDC00203FA7 /* Info.xib */,
 				00C0E544126D8AA7001CAE49 /* PRAudio.png */,
 				00C0E545126D8AA7001CAE49 /* PRVideo.png */,
 				005256BD120A63B300A6BC75 /* Debugger.xib */,
 				0095DF8D1209D0B700C127F5 /* TBColdRestart.png */,
 				0095DF8E1209D0B700C127F5 /* TBWarmRestart.png */,
-				00A1F31211EAEB76001511D0 /* Tablet.xib */,
 				0032969C11C5AEA7003FD49A /* TBDebuggerBreak.png */,
 				0032967011C5A7B5003FD49A /* IPMount.png */,
 				0032967111C5A7B5003FD49A /* IPUnmount.png */,
@@ -850,7 +851,6 @@
 				00D844B50FFF0505005802F0 /* Document.xib */,
 				00D844B90FFF0505005802F0 /* InfoPlist.strings */,
 				00D844BD0FFF0505005802F0 /* MainMenu.xib */,
-				00D844C10FFF0505005802F0 /* PaperFeed.xib */,
 				00D844C30FFF0505005802F0 /* Preferences.xib */,
 				005928540FFC94E200F24A57 /* templates */,
 				0008FCD80FBA5D72005E876E /* Info.plist */,
@@ -999,6 +999,7 @@
 			isa = PBXProject;
 			buildConfigurationList = C05733CB08A9546B00998B17 /* Build configuration list for PBXProject "OpenEmulator" */;
 			compatibilityVersion = "Xcode 3.1";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
 				English,
@@ -1046,7 +1047,6 @@
 				00D844C50FFF0505005802F0 /* Document.xib in Resources */,
 				00D844C70FFF0505005802F0 /* InfoPlist.strings in Resources */,
 				00D844C90FFF0505005802F0 /* MainMenu.xib in Resources */,
-				00D844CB0FFF0505005802F0 /* PaperFeed.xib in Resources */,
 				00D844CC0FFF0505005802F0 /* Preferences.xib in Resources */,
 				00679D08100817F700B38748 /* DeviceChooser.xib in Resources */,
 				00679D09100817F700B38748 /* TemplateChooser.xib in Resources */,
@@ -1071,13 +1071,14 @@
 				0032967B11C5A7B5003FD49A /* TBPowerDown.png in Resources */,
 				0032967D11C5A7B5003FD49A /* TBWakeUp.png in Resources */,
 				0032969D11C5AEA7003FD49A /* TBDebuggerBreak.png in Resources */,
-				00A1F31411EAEB76001511D0 /* Tablet.xib in Resources */,
 				0095DF8F1209D0B700C127F5 /* TBColdRestart.png in Resources */,
 				0095DF901209D0B700C127F5 /* TBWarmRestart.png in Resources */,
 				005256BF120A63B300A6BC75 /* Debugger.xib in Resources */,
 				00C0E518126D879A001CAE49 /* IPMinus.png in Resources */,
 				00C0E546126D8AA7001CAE49 /* PRAudio.png in Resources */,
 				00C0E547126D8AA7001CAE49 /* PRVideo.png in Resources */,
+				004C9DFC1271CDDC00203FA7 /* AudioRecorder.xib in Resources */,
+				004C9DFD1271CDDC00203FA7 /* Info.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1213,6 +1214,22 @@
 			name = Connector.xib;
 			sourceTree = "<group>";
 		};
+		004C9DF81271CDDC00203FA7 /* AudioRecorder.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				004C9DF91271CDDC00203FA7 /* English */,
+			);
+			name = AudioRecorder.xib;
+			sourceTree = "<group>";
+		};
+		004C9DFA1271CDDC00203FA7 /* Info.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				004C9DFB1271CDDC00203FA7 /* English */,
+			);
+			name = Info.xib;
+			sourceTree = "<group>";
+		};
 		005256BD120A63B300A6BC75 /* Debugger.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1245,14 +1262,6 @@
 			name = TemplateChooser.xib;
 			sourceTree = "<group>";
 		};
-		00A1F31211EAEB76001511D0 /* Tablet.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				00A1F31311EAEB76001511D0 /* English */,
-			);
-			name = Tablet.xib;
-			sourceTree = "<group>";
-		};
 		00D1958B1093712E008FB014 /* Chooser.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1283,14 +1292,6 @@
 				00D844BE0FFF0505005802F0 /* English */,
 			);
 			name = MainMenu.xib;
-			sourceTree = "<group>";
-		};
-		00D844C10FFF0505005802F0 /* PaperFeed.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				00D844C20FFF0505005802F0 /* English */,
-			);
-			name = PaperFeed.xib;
 			sourceTree = "<group>";
 		};
 		00D844C30FFF0505005802F0 /* Preferences.xib */ = {
