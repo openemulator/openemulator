@@ -25,12 +25,30 @@ The latest version can always be found there.
 
 Mail suggestions and bug reports to <mressl@umich.edu>.
 
+Linux
+=====
+
+  Installation of libraries depends on the Linux distribution.
+
+  If you have a Debian-compatible distribution, try the following
+commands:
+
+  sudo apt-get install libxml2-dev
+  sudo apt-get install libzip-dev
+  sudo apt-get install portaudio-dev
+  sudo apt-get install libsndfile-dev
+  sudo apt-get install libsamplerate-dev
+
 Mac OS X
 ========
 
   In order to compile the OpenEmulator XCode project under Mac OS X, you
 need some external libraries not available on a default Mac OS X
-installation. The easiest way to install them is through MacPorts.
+installation. The easiest way to install them is through MacPorts:
+
+  http://www.macports.org/
+
+  Download and install.
 
   If you want to build universal binaries, edit the file
 /opt/local/etc/macports/macports.conf, and change the "universal_archs"

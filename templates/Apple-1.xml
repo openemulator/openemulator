@@ -2,12 +2,6 @@
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTDs/edl-1.0.dtd">
 <edl version="1.0" type="Early microcomputers" label="Apple-1" imageSrc="images/Early microcomputers/Apple-1.png" description="">
 
-<component id="host" class="Host">
-    <property name="notes" value="" />
-    <property name="powerState" value="0" />
-    <property name="videoWindow" value="-1 -1 768 576" />
-</component>
-
 <device id="apple1" type="Motherboard" label="Apple-1" imageSrc="images/Early microcomputers/Apple-1.png" />
 <port id="apple1.videoPort" ref="" type="CompositeVideo" label="Video Out" imageSrc="Video Connector.png">
     <inlet ref="apple1.terminal" property="monitor" outletRef="connector" />
@@ -17,8 +11,8 @@
 </port>
 <port id="apple1.slot1" label="Slot 1" imageSrc="Apple-1 Slot.png" />
 <port id="apple1.slot2" label="Slot 2" imageSrc="Apple-1 Slot.png" />
+<hostconnection type="audio" ref="apple1.controlBus" />
 <component id="apple1.controlBus" class="ControlBus">
-    <property name="host" ref="host" />
     <property name="crystal" value="14.31818MHz" />
     <property name="frequencyDivider" value="14" />
     <property name="master" ref="apple1.cpu" />
@@ -53,7 +47,7 @@
     <property name="mode" value="ground" />
 </component>
 <component id="apple1.ram1" class="RAM">
-    <property name="host" ref="host" />
+    <property name="controlBus" ref="apple1.controlBus" />
     <property name="image" src="${packagePath}/${id}.bin" />
     <property name="size" value="0x1000" />
 </component>
@@ -94,7 +88,7 @@
     <property name="image" src="${resourcesPath}/roms/Signetics/Signetics 2513 Video ROM.bin" />
 </component>
 <component id="apple1.ram2" class="RAM">
-    <property name="host" ref="host" />
+    <property name="controlBus" ref="appl1.controlBus" />
     <property name="image" src="${packagePath}/{$id}.bin" />
     <property name="size" value="0x1000" />
 </component>

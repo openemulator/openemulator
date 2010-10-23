@@ -41,7 +41,6 @@
 		003FB21410BA3D5D00D3697B /* devices in Resources */ = {isa = PBXBuildFile; fileRef = 00E8A393108CCAA200D0A137 /* devices */; };
 		0041614011E82D7300986586 /* DocumentView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0041613F11E82D7300986586 /* DocumentView.mm */; };
 		0048673B11C4478200ECD52C /* Host.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0048673911C4478200ECD52C /* Host.cpp */; };
-		004C9DFC1271CDDC00203FA7 /* AudioRecorder.xib in Resources */ = {isa = PBXBuildFile; fileRef = 004C9DF81271CDDC00203FA7 /* AudioRecorder.xib */; };
 		004C9DFD1271CDDC00203FA7 /* Info.xib in Resources */ = {isa = PBXBuildFile; fileRef = 004C9DFA1271CDDC00203FA7 /* Info.xib */; };
 		005256BF120A63B300A6BC75 /* Debugger.xib in Resources */ = {isa = PBXBuildFile; fileRef = 005256BD120A63B300A6BC75 /* Debugger.xib */; };
 		005398DB113A00CA00CA7CE4 /* ROM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 005397E31139EC1F00CA7CE4 /* ROM.cpp */; };
@@ -60,6 +59,18 @@
 		00679D09100817F700B38748 /* TemplateChooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00679D06100817F700B38748 /* TemplateChooser.xib */; };
 		0071E3BA10803F7300F2D54F /* ChooserItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 0071E3B910803F7300F2D54F /* ChooserItem.m */; };
 		0077069B11EB638500535F6D /* DocumentWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 0077069A11EB638500535F6D /* DocumentWindow.m */; };
+		0078F655127348ED0042577E /* AudioControls.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0078F653127348ED0042577E /* AudioControls.xib */; };
+		0078F65F127349740042577E /* AudioController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0078F65E127349740042577E /* AudioController.m */; };
+		0078F67B127358E40042577E /* InfoAction.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 0078F671127358E40042577E /* InfoAction.tiff */; };
+		0078F67C127358E40042577E /* InfoActionPressed.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 0078F672127358E40042577E /* InfoActionPressed.tiff */; };
+		0078F67D127358E40042577E /* InfoGreen.tif in Resources */ = {isa = PBXBuildFile; fileRef = 0078F673127358E40042577E /* InfoGreen.tif */; };
+		0078F67E127358E40042577E /* InfoMinus.tif in Resources */ = {isa = PBXBuildFile; fileRef = 0078F674127358E40042577E /* InfoMinus.tif */; };
+		0078F67F127358E40042577E /* InfoMinusPressed.tif in Resources */ = {isa = PBXBuildFile; fileRef = 0078F675127358E40042577E /* InfoMinusPressed.tif */; };
+		0078F680127358E40042577E /* InfoPlus.tif in Resources */ = {isa = PBXBuildFile; fileRef = 0078F676127358E40042577E /* InfoPlus.tif */; };
+		0078F681127358E40042577E /* InfoPlusPressed.tif in Resources */ = {isa = PBXBuildFile; fileRef = 0078F677127358E40042577E /* InfoPlusPressed.tif */; };
+		0078F682127358E40042577E /* InfoRed.tif in Resources */ = {isa = PBXBuildFile; fileRef = 0078F678127358E40042577E /* InfoRed.tif */; };
+		0078F683127358E40042577E /* InfoSpace.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 0078F679127358E40042577E /* InfoSpace.tiff */; };
+		0078F684127358E40042577E /* InfoYellow.tif in Resources */ = {isa = PBXBuildFile; fileRef = 0078F67A127358E40042577E /* InfoYellow.tif */; };
 		008107DE1120C57600D744FB /* TemplateChooserViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00FE0C051095353B00B92AB7 /* TemplateChooserViewController.mm */; };
 		008283F011A35D3A00B2B530 /* IPAudioPlay.png in Resources */ = {isa = PBXBuildFile; fileRef = 008283EF11A35D3A00B2B530 /* IPAudioPlay.png */; };
 		0082840411A3603800B2B530 /* IPAudioRecord.png in Resources */ = {isa = PBXBuildFile; fileRef = 0082840211A3603800B2B530 /* IPAudioRecord.png */; };
@@ -165,6 +176,7 @@
 		00D845830FFF0FD2005802F0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D845730FFF0FD2005802F0 /* main.m */; };
 		00D845860FFF0FD2005802F0 /* PreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D8457A0FFF0FD2005802F0 /* PreferencesController.m */; };
 		00E2299611768DF4004E71F7 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009B4F2611639D7700E9A6F9 /* GLUT.framework */; };
+		00EDFC6712729D9700795FFA /* InfoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00EDFC6612729D9700795FFA /* InfoController.m */; };
 		00EF028D107D9EFB00FE378D /* VerticallyCenteredCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00EF028C107D9EFB00FE378D /* VerticallyCenteredCell.m */; };
 		00F0ED6711028C8800208090 /* DiskImage525.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000F66390FF8368F00C8AF23 /* DiskImage525.icns */; };
 		00F86BE3100FD4F60016867D /* IPSoundMax.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F86BE1100FD4F60016867D /* IPSoundMax.png */; };
@@ -272,7 +284,6 @@
 		0041613F11E82D7300986586 /* DocumentView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DocumentView.mm; sourceTree = "<group>"; };
 		0048673811C4478200ECD52C /* Host.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Host.h; sourceTree = "<group>"; };
 		0048673911C4478200ECD52C /* Host.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Host.cpp; sourceTree = "<group>"; };
-		004C9DF91271CDDC00203FA7 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/AudioRecorder.xib; sourceTree = "<group>"; };
 		004C9DFB1271CDDC00203FA7 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Info.xib; sourceTree = "<group>"; };
 		005256BE120A63B300A6BC75 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Debugger.xib; sourceTree = "<group>"; };
 		005256E4120A841200A6BC75 /* Terminal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Terminal.h; sourceTree = "<group>"; };
@@ -302,6 +313,19 @@
 		0071E3B810803F7300F2D54F /* ChooserItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChooserItem.h; sourceTree = "<group>"; };
 		0071E3B910803F7300F2D54F /* ChooserItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChooserItem.m; sourceTree = "<group>"; };
 		0077069A11EB638500535F6D /* DocumentWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DocumentWindow.m; sourceTree = "<group>"; };
+		0078F654127348ED0042577E /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/AudioControls.xib; sourceTree = "<group>"; };
+		0078F65D127349740042577E /* AudioController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioController.h; sourceTree = "<group>"; };
+		0078F65E127349740042577E /* AudioController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioController.m; sourceTree = "<group>"; };
+		0078F671127358E40042577E /* InfoAction.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = InfoAction.tiff; path = macosx/Images/InfoAction.tiff; sourceTree = "<group>"; };
+		0078F672127358E40042577E /* InfoActionPressed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = InfoActionPressed.tiff; path = macosx/Images/InfoActionPressed.tiff; sourceTree = "<group>"; };
+		0078F673127358E40042577E /* InfoGreen.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = InfoGreen.tif; path = macosx/Images/InfoGreen.tif; sourceTree = "<group>"; };
+		0078F674127358E40042577E /* InfoMinus.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = InfoMinus.tif; path = macosx/Images/InfoMinus.tif; sourceTree = "<group>"; };
+		0078F675127358E40042577E /* InfoMinusPressed.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = InfoMinusPressed.tif; path = macosx/Images/InfoMinusPressed.tif; sourceTree = "<group>"; };
+		0078F676127358E40042577E /* InfoPlus.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = InfoPlus.tif; path = macosx/Images/InfoPlus.tif; sourceTree = "<group>"; };
+		0078F677127358E40042577E /* InfoPlusPressed.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = InfoPlusPressed.tif; path = macosx/Images/InfoPlusPressed.tif; sourceTree = "<group>"; };
+		0078F678127358E40042577E /* InfoRed.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = InfoRed.tif; path = macosx/Images/InfoRed.tif; sourceTree = "<group>"; };
+		0078F679127358E40042577E /* InfoSpace.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = InfoSpace.tiff; path = macosx/Images/InfoSpace.tiff; sourceTree = "<group>"; };
+		0078F67A127358E40042577E /* InfoYellow.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = InfoYellow.tif; path = macosx/Images/InfoYellow.tif; sourceTree = "<group>"; };
 		008283EF11A35D3A00B2B530 /* IPAudioPlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPAudioPlay.png; path = macosx/Images/IPAudioPlay.png; sourceTree = "<group>"; };
 		0082840211A3603800B2B530 /* IPAudioRecord.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPAudioRecord.png; path = macosx/Images/IPAudioRecord.png; sourceTree = "<group>"; };
 		0082847B11A422C700B2B530 /* IPAudioStop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IPAudioStop.png; path = macosx/Images/IPAudioStop.png; sourceTree = "<group>"; };
@@ -421,6 +445,8 @@
 		00D8457A0FFF0FD2005802F0 /* PreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferencesController.m; sourceTree = "<group>"; };
 		00E2A84D1053290200910B53 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = /usr/lib/libxml2.dylib; sourceTree = "<absolute>"; };
 		00E8A393108CCAA200D0A137 /* devices */ = {isa = PBXFileReference; lastKnownFileType = folder; path = devices; sourceTree = "<group>"; };
+		00EDFC6512729D9700795FFA /* InfoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoController.h; sourceTree = "<group>"; };
+		00EDFC6612729D9700795FFA /* InfoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfoController.m; sourceTree = "<group>"; };
 		00EF028B107D9EFB00FE378D /* VerticallyCenteredCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VerticallyCenteredCell.h; sourceTree = "<group>"; };
 		00EF028C107D9EFB00FE378D /* VerticallyCenteredCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VerticallyCenteredCell.m; sourceTree = "<group>"; };
 		00F009F90FD5838D00C506AD /* IPAudio.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IPAudio.png; sourceTree = "<group>"; };
@@ -805,6 +831,10 @@
 				0095E0D41209E3E200C127F5 /* DebuggerController.h */,
 				0095E0D51209E3E200C127F5 /* DebuggerController.m */,
 				002579FB1218A83400206E56 /* StringConversion.h */,
+				00EDFC6512729D9700795FFA /* InfoController.h */,
+				00EDFC6612729D9700795FFA /* InfoController.m */,
+				0078F65D127349740042577E /* AudioController.h */,
+				0078F65E127349740042577E /* AudioController.m */,
 			);
 			path = macosx;
 			sourceTree = "<group>";
@@ -812,7 +842,17 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				004C9DF81271CDDC00203FA7 /* AudioRecorder.xib */,
+				0078F671127358E40042577E /* InfoAction.tiff */,
+				0078F672127358E40042577E /* InfoActionPressed.tiff */,
+				0078F673127358E40042577E /* InfoGreen.tif */,
+				0078F674127358E40042577E /* InfoMinus.tif */,
+				0078F675127358E40042577E /* InfoMinusPressed.tif */,
+				0078F676127358E40042577E /* InfoPlus.tif */,
+				0078F677127358E40042577E /* InfoPlusPressed.tif */,
+				0078F678127358E40042577E /* InfoRed.tif */,
+				0078F679127358E40042577E /* InfoSpace.tiff */,
+				0078F67A127358E40042577E /* InfoYellow.tif */,
+				0078F653127348ED0042577E /* AudioControls.xib */,
 				004C9DFA1271CDDC00203FA7 /* Info.xib */,
 				00C0E544126D8AA7001CAE49 /* PRAudio.png */,
 				00C0E545126D8AA7001CAE49 /* PRVideo.png */,
@@ -1067,8 +1107,18 @@
 				00C0E518126D879A001CAE49 /* IPMinus.png in Resources */,
 				00C0E546126D8AA7001CAE49 /* PRAudio.png in Resources */,
 				00C0E547126D8AA7001CAE49 /* PRVideo.png in Resources */,
-				004C9DFC1271CDDC00203FA7 /* AudioRecorder.xib in Resources */,
 				004C9DFD1271CDDC00203FA7 /* Info.xib in Resources */,
+				0078F655127348ED0042577E /* AudioControls.xib in Resources */,
+				0078F67B127358E40042577E /* InfoAction.tiff in Resources */,
+				0078F67C127358E40042577E /* InfoActionPressed.tiff in Resources */,
+				0078F67D127358E40042577E /* InfoGreen.tif in Resources */,
+				0078F67E127358E40042577E /* InfoMinus.tif in Resources */,
+				0078F67F127358E40042577E /* InfoMinusPressed.tif in Resources */,
+				0078F680127358E40042577E /* InfoPlus.tif in Resources */,
+				0078F681127358E40042577E /* InfoPlusPressed.tif in Resources */,
+				0078F682127358E40042577E /* InfoRed.tif in Resources */,
+				0078F683127358E40042577E /* InfoSpace.tiff in Resources */,
+				0078F684127358E40042577E /* InfoYellow.tif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1170,6 +1220,8 @@
 				00C3D0DA11F5584C00EA2453 /* OEPAEmulation.cpp in Sources */,
 				00D81D0C12034A20004068EB /* OEDebugger.cpp in Sources */,
 				0095E0D61209E3E200C127F5 /* DebuggerController.m in Sources */,
+				00EDFC6712729D9700795FFA /* InfoController.m in Sources */,
+				0078F65F127349740042577E /* AudioController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1200,14 +1252,6 @@
 				003318AE1101492B00CC1782 /* English */,
 			);
 			name = Connector.xib;
-			sourceTree = "<group>";
-		};
-		004C9DF81271CDDC00203FA7 /* AudioRecorder.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				004C9DF91271CDDC00203FA7 /* English */,
-			);
-			name = AudioRecorder.xib;
 			sourceTree = "<group>";
 		};
 		004C9DFA1271CDDC00203FA7 /* Info.xib */ = {
@@ -1248,6 +1292,14 @@
 				00679D07100817F700B38748 /* English */,
 			);
 			name = TemplateChooser.xib;
+			sourceTree = "<group>";
+		};
+		0078F653127348ED0042577E /* AudioControls.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0078F654127348ED0042577E /* English */,
+			);
+			name = AudioControls.xib;
 			sourceTree = "<group>";
 		};
 		00D1958B1093712E008FB014 /* Chooser.xib */ = {
