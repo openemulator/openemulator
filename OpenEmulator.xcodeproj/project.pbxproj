@@ -113,6 +113,9 @@
 		0098B02A124EC44000A4EB26 /* AppleIISlotMemory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0098B026124EC43F00A4EB26 /* AppleIISlotMemory.cpp */; };
 		0098B02B124EC44000A4EB26 /* AppleIISlotMemory.h in Headers */ = {isa = PBXBuildFile; fileRef = 0098B027124EC43F00A4EB26 /* AppleIISlotMemory.h */; };
 		009B4F2711639D7700E9A6F9 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009B4F2611639D7700E9A6F9 /* GLUT.framework */; };
+		009BA0EC1276476B00F483A2 /* Devices.xib in Resources */ = {isa = PBXBuildFile; fileRef = 009BA0EA1276476B00F483A2 /* Devices.xib */; };
+		009BA0F7127647EB00F483A2 /* TBDevices.png in Resources */ = {isa = PBXBuildFile; fileRef = 009BA0F6127647EB00F483A2 /* TBDevices.png */; };
+		009BA1001276485700F483A2 /* TBInfo.png in Resources */ = {isa = PBXBuildFile; fileRef = 009BA0FF1276485700F483A2 /* TBInfo.png */; };
 		00A0B8041069761A007930A5 /* Document.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00A0B8031069761A007930A5 /* Document.mm */; };
 		00A62FFD11415DF0005E8500 /* MC6821.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A62FFB11415DF0005E8500 /* MC6821.cpp */; };
 		00A6300211415E3C005E8500 /* MC6845.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A6300011415E3C005E8500 /* MC6845.cpp */; };
@@ -378,6 +381,9 @@
 		0098B026124EC43F00A4EB26 /* AppleIISlotMemory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleIISlotMemory.cpp; sourceTree = "<group>"; };
 		0098B027124EC43F00A4EB26 /* AppleIISlotMemory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleIISlotMemory.h; sourceTree = "<group>"; };
 		009B4F2611639D7700E9A6F9 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = /System/Library/Frameworks/GLUT.framework; sourceTree = "<absolute>"; };
+		009BA0EB1276476B00F483A2 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Devices.xib; sourceTree = "<group>"; };
+		009BA0F6127647EB00F483A2 /* TBDevices.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = TBDevices.png; path = Images/TBDevices.png; sourceTree = "<group>"; };
+		009BA0FF1276485700F483A2 /* TBInfo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = TBInfo.png; path = Images/TBInfo.png; sourceTree = "<group>"; };
 		00A0B7B81068949D007930A5 /* Document.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Document.h; sourceTree = "<group>"; };
 		00A0B8031069761A007930A5 /* Document.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Document.mm; sourceTree = "<group>"; };
 		00A62FFA11415DF0005E8500 /* MC6821.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MC6821.h; sourceTree = "<group>"; };
@@ -792,6 +798,8 @@
 		2A37F4ABFDCFA73011CA2CEA /* macosx */ = {
 			isa = PBXGroup;
 			children = (
+				009BA0FF1276485700F483A2 /* TBInfo.png */,
+				009BA0F6127647EB00F483A2 /* TBDevices.png */,
 				0077069A11EB638500535F6D /* DocumentWindow.m */,
 				0041613F11E82D7300986586 /* DocumentView.mm */,
 				000DAA5511D95A05006360A2 /* DocumentView.h */,
@@ -842,6 +850,7 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				009BA0EA1276476B00F483A2 /* Devices.xib */,
 				0078F671127358E40042577E /* InfoAction.tiff */,
 				0078F672127358E40042577E /* InfoActionPressed.tiff */,
 				0078F673127358E40042577E /* InfoGreen.tif */,
@@ -1119,6 +1128,9 @@
 				0078F682127358E40042577E /* InfoRed.tif in Resources */,
 				0078F683127358E40042577E /* InfoSpace.tiff in Resources */,
 				0078F684127358E40042577E /* InfoYellow.tif in Resources */,
+				009BA0EC1276476B00F483A2 /* Devices.xib in Resources */,
+				009BA0F7127647EB00F483A2 /* TBDevices.png in Resources */,
+				009BA1001276485700F483A2 /* TBInfo.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1300,6 +1312,14 @@
 				0078F654127348ED0042577E /* English */,
 			);
 			name = AudioControls.xib;
+			sourceTree = "<group>";
+		};
+		009BA0EA1276476B00F483A2 /* Devices.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				009BA0EB1276476B00F483A2 /* English */,
+			);
+			name = Devices.xib;
 			sourceTree = "<group>";
 		};
 		00D1958B1093712E008FB014 /* Chooser.xib */ = {

@@ -85,7 +85,7 @@
 		[item setPaletteLabel:NSLocalizedString(@"Cold Restart",
 												"Document toolbar item label")];
 		[item setToolTip:NSLocalizedString(@"Restart the system at the most "
-										   " primitive level.",
+										   "primitive level.",
 										   "Document toolbar item label")];
 		[item setImage:[NSImage imageNamed:@"TBColdRestart.png"]];
 		[item setAction:@selector(coldRestart:)];
@@ -120,7 +120,7 @@
 												"Document toolbar item label")];
 		[item setToolTip:NSLocalizedString(@"Get Info.",
 										   "Document toolbar item label")];
-		[item setImage:[NSImage imageNamed:@"TBInspector.png"]];
+		[item setImage:[NSImage imageNamed:@"TBInfo.png"]];
 		[item setTarget:self];
 		[item setAction:@selector(toggleInspector:)];
 	}

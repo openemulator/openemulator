@@ -57,10 +57,10 @@
 <!ATTLIST inlet property CDATA #REQUIRED>
 <!ATTLIST inlet outletRef CDATA #REQUIRED>
 
-<!ELEMENT setting EMPTY>
-<!ATTLIST setting id ID #REQUIRED>
-<!ATTLIST setting ref IDREF #REQUIRED>
-<!ATTLIST setting property CDATA #REQUIRED>
-<!ATTLIST setting type CDATA #REQUIRED>
-<!ATTLIST setting options CDATA #IMPLIED>
-<!ATTLIST setting label CDATA #REQUIRED>
+<!ELEMENT host EMPTY>
+<!ATTLIST host id ID #REQUIRED>
+<!ATTLIST host ref IDREF #REQUIRED>
+<!ATTLIST host property CDATA #REQUIRED>
+<!ATTLIST host type CDATA #REQUIRED>
+<!ATTLIST host options CDATA #IMPLIED>
+<!ATTLIST host label CDATA #REQUIRED>
