@@ -13,8 +13,7 @@
 #import "DocumentController.h"
 
 #import "Document.h"
-#import "InspectorController.h"
-#import "TemplateChooserController.h"
+#import "TemplateChooserWindowController.h"
 
 #import "OEPA.h"
 
@@ -92,8 +91,6 @@
 
 - (void)applicationWillFinishLaunching:(NSNotification *)notification
 {
-	[fInspectorController restoreWindowState:self];
-	
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	
 	if (![defaults valueForKey:@"OEFullDuplex"])
@@ -179,8 +176,6 @@
 - (void)applicationWillTerminate:(NSNotification *)notification
 {
 	((OEPA *)oepa)->close();
-	
-	[fInspectorController storeWindowState:self];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath
