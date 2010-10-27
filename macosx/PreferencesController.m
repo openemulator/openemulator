@@ -68,21 +68,21 @@
 	if ([ident isEqualToString:@"General"])
 	{
 		[item setLabel:NSLocalizedString(@"General", "Preferences toolbar item label")];
-		[item setImage:[NSImage imageNamed:@"PRGeneral.png"]];
+		[item setImage:[NSImage imageNamed:@"IconGeneral.png"]];
 		[item setTarget:self];
 		[item setAction:@selector(selectView:)];
 	}
 	else if ([ident isEqualToString:@"Audio"])
 	{
 		[item setLabel:NSLocalizedString(@"Audio", "Preferences toolbar item label")];
-		[item setImage:[NSImage imageNamed:@"PRAudio.png"]];
+		[item setImage:[NSImage imageNamed:@"IconAudio.png"]];
 		[item setTarget:self];
 		[item setAction:@selector(selectView:)];
 	}
 	else if ([ident isEqualToString:@"Video"])
 	{
 		[item setLabel:NSLocalizedString(@"Video", "Preferences toolbar item label")];
-		[item setImage:[NSImage imageNamed:@"PRVideo.png"]];
+		[item setImage:[NSImage imageNamed:@"IconVideo.png"]];
 		[item setTarget:self];
 		[item setAction:@selector(selectView:)];
 	}
