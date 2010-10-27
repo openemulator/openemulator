@@ -38,11 +38,11 @@
 				<int key="NSWindowBacking">2</int>
 				<string key="NSWindowRect">{{196, 157}, {256, 373}}</string>
 				<int key="NSWTFlags">611844096</int>
-				<string key="NSWindowTitle">Hardware</string>
+				<string key="NSWindowTitle">Devices</string>
 				<string key="NSWindowClass">NSWindow</string>
 				<nil key="NSViewClass"/>
-				<string key="NSWindowContentMaxSize">{256, 2048}</string>
-				<string key="NSWindowContentMinSize">{256, 311}</string>
+				<string key="NSWindowContentMaxSize">{3.40282e+38, 3.40282e+38}</string>
+				<string key="NSWindowContentMinSize">{256, 123}</string>
 				<object class="NSView" key="NSWindowView" id="697045175">
 					<reference key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
@@ -50,7 +50,7 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSScrollView" id="236988201">
 							<reference key="NSNextResponder" ref="697045175"/>
-							<int key="NSvFlags">4372</int>
+							<int key="NSvFlags">4370</int>
 							<object class="NSMutableArray" key="NSSubviews">
 								<bool key="EncodedWithXMLCoder">YES</bool>
 								<object class="NSClipView" id="870796731">
@@ -126,7 +126,7 @@
 															<int key="NSColorSpace">6</int>
 															<string key="NSCatalogName">System</string>
 															<string key="NSColorName">headerColor</string>
-															<object class="NSColor" key="NSColor" id="588956889">
+															<object class="NSColor" key="NSColor">
 																<int key="NSColorSpace">3</int>
 																<bytes key="NSWhite">MQA</bytes>
 															</object>
@@ -270,7 +270,7 @@
 						</object>
 						<object class="NSButton" id="1005311744">
 							<reference key="NSNextResponder" ref="697045175"/>
-							<int key="NSvFlags">268</int>
+							<int key="NSvFlags">292</int>
 							<string key="NSFrame">{{-1, 0}, {26, 23}}</string>
 							<reference key="NSSuperview" ref="697045175"/>
 							<bool key="NSEnabled">YES</bool>
@@ -302,7 +302,7 @@
 						</object>
 						<object class="NSButton" id="894865330">
 							<reference key="NSNextResponder" ref="697045175"/>
-							<int key="NSvFlags">268</int>
+							<int key="NSvFlags">292</int>
 							<string key="NSFrame">{{24, 0}, {26, 23}}</string>
 							<reference key="NSSuperview" ref="697045175"/>
 							<bool key="NSEnabled">YES</bool>
@@ -330,7 +330,7 @@
 						</object>
 						<object class="NSButton" id="511943975">
 							<reference key="NSNextResponder" ref="697045175"/>
-							<int key="NSvFlags">268</int>
+							<int key="NSvFlags">290</int>
 							<string key="NSFrame">{{80, 0}, {177, 23}}</string>
 							<reference key="NSSuperview" ref="697045175"/>
 							<bool key="NSEnabled">YES</bool>
@@ -354,7 +354,7 @@
 						</object>
 						<object class="NSButton" id="215124451">
 							<reference key="NSNextResponder" ref="697045175"/>
-							<int key="NSvFlags">268</int>
+							<int key="NSvFlags">292</int>
 							<string key="NSFrame">{{49, 0}, {32, 23}}</string>
 							<reference key="NSSuperview" ref="697045175"/>
 							<bool key="NSEnabled">YES</bool>
@@ -380,41 +380,13 @@
 								<int key="NSPeriodicInterval">25</int>
 							</object>
 						</object>
-						<object class="NSBox" id="334381590">
-							<reference key="NSNextResponder" ref="697045175"/>
-							<int key="NSvFlags">12</int>
-							<string key="NSFrame">{{254, 23}, {5, 350}}</string>
-							<string key="NSBounds">{{0, 0.71875}, {5, 350}}</string>
-							<reference key="NSSuperview" ref="697045175"/>
-							<string key="NSOffsets">{0, 0}</string>
-							<object class="NSTextFieldCell" key="NSTitleCell">
-								<int key="NSCellFlags">67239424</int>
-								<int key="NSCellFlags2">0</int>
-								<string key="NSContents">Box</string>
-								<reference key="NSSupport" ref="911500604"/>
-								<object class="NSColor" key="NSBackgroundColor">
-									<int key="NSColorSpace">6</int>
-									<string key="NSCatalogName">System</string>
-									<string key="NSColorName">textBackgroundColor</string>
-									<reference key="NSColor" ref="588956889"/>
-								</object>
-								<object class="NSColor" key="NSTextColor">
-									<int key="NSColorSpace">3</int>
-									<bytes key="NSWhite">MCAwLjgwMDAwMDAxMTkAA</bytes>
-								</object>
-							</object>
-							<int key="NSBorderType">3</int>
-							<int key="NSBoxType">2</int>
-							<int key="NSTitlePosition">0</int>
-							<bool key="NSTransparent">NO</bool>
-						</object>
 					</object>
 					<string key="NSFrameSize">{256, 373}</string>
 					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1360, 746}}</string>
-				<string key="NSMinSize">{256, 333}</string>
-				<string key="NSMaxSize">{256, 2070}</string>
+				<string key="NSMinSize">{256, 145}</string>
+				<string key="NSMaxSize">{3.40282e+38, 3.40282e+38}</string>
 			</object>
 		</object>
 		<object class="IBObjectContainer" key="IBDocument.Objects">
@@ -469,7 +441,6 @@
 							<reference ref="894865330"/>
 							<reference ref="1005311744"/>
 							<reference ref="236988201"/>
-							<reference ref="334381590"/>
 						</object>
 						<reference key="parent" ref="266599386"/>
 					</object>
@@ -603,11 +574,6 @@
 						<reference key="object" ref="30184947"/>
 						<reference key="parent" ref="511943975"/>
 					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">1765</int>
-						<reference key="object" ref="334381590"/>
-						<reference key="parent" ref="697045175"/>
-					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -649,21 +615,19 @@
 					<string>1757.IBPluginDependency</string>
 					<string>1758.IBPluginDependency</string>
 					<string>1759.IBPluginDependency</string>
-					<string>1765.IBPluginDependency</string>
-					<string>1765.IBViewBoundsToFrameTransform</string>
 				</object>
 				<object class="NSMutableArray" key="dict.values">
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>{{82, 162}, {256, 373}}</string>
+					<string>{{83, 162}, {256, 373}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{82, 162}, {256, 373}}</string>
+					<string>{{83, 162}, {256, 373}}</string>
 					<boolean value="YES"/>
-					<boolean value="YES"/>
+					<boolean value="NO"/>
 					<boolean value="YES"/>
 					<string>{256, 2048}</string>
-					<string>{256, 311}</string>
+					<string>{256, 123}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<object class="NSAffineTransform">
@@ -699,10 +663,6 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<object class="NSAffineTransform">
-						<bytes key="NSTransformStruct">AUCAAAC/OAAAA</bytes>
-					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="unlocalizedProperties">
@@ -726,303 +686,6 @@
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
 				<bool key="EncodedWithXMLCoder">YES</bool>
-				<object class="IBPartialClassDescription">
-					<string key="className">InspectorController</string>
-					<string key="superclassName">NSWindowController</string>
-					<object class="NSMutableDictionary" key="actions">
-						<bool key="EncodedWithXMLCoder">YES</bool>
-						<object class="NSArray" key="dict.sortedKeys">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>addExpansion:</string>
-							<string>addPeripheral:</string>
-							<string>addStorage:</string>
-							<string>openPlay:</string>
-							<string>removeExpansion:</string>
-							<string>removePeripheral:</string>
-							<string>removeStorage:</string>
-							<string>restoreWindowState:</string>
-							<string>saveRecording:</string>
-							<string>selectView:</string>
-							<string>storeWindowState:</string>
-							<string>toggleInspector:</string>
-							<string>togglePlay:</string>
-							<string>toggleRecording:</string>
-						</object>
-						<object class="NSMutableArray" key="dict.values">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-						</object>
-					</object>
-					<object class="NSMutableDictionary" key="actionInfosByName">
-						<bool key="EncodedWithXMLCoder">YES</bool>
-						<object class="NSArray" key="dict.sortedKeys">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>addExpansion:</string>
-							<string>addPeripheral:</string>
-							<string>addStorage:</string>
-							<string>openPlay:</string>
-							<string>removeExpansion:</string>
-							<string>removePeripheral:</string>
-							<string>removeStorage:</string>
-							<string>restoreWindowState:</string>
-							<string>saveRecording:</string>
-							<string>selectView:</string>
-							<string>storeWindowState:</string>
-							<string>toggleInspector:</string>
-							<string>togglePlay:</string>
-							<string>toggleRecording:</string>
-						</object>
-						<object class="NSMutableArray" key="dict.values">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<object class="IBActionInfo">
-								<string key="name">addExpansion:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">addPeripheral:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">addStorage:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">openPlay:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">removeExpansion:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">removePeripheral:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">removeStorage:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">restoreWindowState:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">saveRecording:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">selectView:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">storeWindowState:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">toggleInspector:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">togglePlay:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">toggleRecording:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-						</object>
-					</object>
-					<object class="NSMutableDictionary" key="outlets">
-						<bool key="EncodedWithXMLCoder">YES</bool>
-						<object class="NSArray" key="dict.sortedKeys">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>fAudioView</string>
-							<string>fDeviceChooserController</string>
-							<string>fDocumentController</string>
-							<string>fDocumentObjectController</string>
-							<string>fEmulationView</string>
-							<string>fExpansionsController</string>
-							<string>fExpansionsView</string>
-							<string>fOpenPlayButton</string>
-							<string>fPeripheralsController</string>
-							<string>fPeripheralsView</string>
-							<string>fPlayDurationLabel</string>
-							<string>fPlayNameLabel</string>
-							<string>fPlayTimeLabel</string>
-							<string>fRecordingSizeLabel</string>
-							<string>fRecordingTimeLabel</string>
-							<string>fSaveRecordingAsButton</string>
-							<string>fStorageController</string>
-							<string>fStorageView</string>
-							<string>fTabMatrix</string>
-							<string>fTogglePlayButton</string>
-							<string>fToggleRecordingButton</string>
-						</object>
-						<object class="NSMutableArray" key="dict.values">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>NSView</string>
-							<string>id</string>
-							<string>id</string>
-							<string>NSObjectController</string>
-							<string>NSView</string>
-							<string>NSArrayController</string>
-							<string>NSView</string>
-							<string>NSButton</string>
-							<string>NSArrayController</string>
-							<string>NSView</string>
-							<string>NSTextField</string>
-							<string>NSTextField</string>
-							<string>NSTextField</string>
-							<string>NSTextField</string>
-							<string>NSTextField</string>
-							<string>NSButton</string>
-							<string>NSArrayController</string>
-							<string>NSView</string>
-							<string>NSMatrix</string>
-							<string>NSButton</string>
-							<string>NSButton</string>
-						</object>
-					</object>
-					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<bool key="EncodedWithXMLCoder">YES</bool>
-						<object class="NSArray" key="dict.sortedKeys">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>fAudioView</string>
-							<string>fDeviceChooserController</string>
-							<string>fDocumentController</string>
-							<string>fDocumentObjectController</string>
-							<string>fEmulationView</string>
-							<string>fExpansionsController</string>
-							<string>fExpansionsView</string>
-							<string>fOpenPlayButton</string>
-							<string>fPeripheralsController</string>
-							<string>fPeripheralsView</string>
-							<string>fPlayDurationLabel</string>
-							<string>fPlayNameLabel</string>
-							<string>fPlayTimeLabel</string>
-							<string>fRecordingSizeLabel</string>
-							<string>fRecordingTimeLabel</string>
-							<string>fSaveRecordingAsButton</string>
-							<string>fStorageController</string>
-							<string>fStorageView</string>
-							<string>fTabMatrix</string>
-							<string>fTogglePlayButton</string>
-							<string>fToggleRecordingButton</string>
-						</object>
-						<object class="NSMutableArray" key="dict.values">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<object class="IBToOneOutletInfo">
-								<string key="name">fAudioView</string>
-								<string key="candidateClassName">NSView</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">fDeviceChooserController</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">fDocumentController</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">fDocumentObjectController</string>
-								<string key="candidateClassName">NSObjectController</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">fEmulationView</string>
-								<string key="candidateClassName">NSView</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">fExpansionsController</string>
-								<string key="candidateClassName">NSArrayController</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">fExpansionsView</string>
-								<string key="candidateClassName">NSView</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">fOpenPlayButton</string>
-								<string key="candidateClassName">NSButton</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">fPeripheralsController</string>
-								<string key="candidateClassName">NSArrayController</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">fPeripheralsView</string>
-								<string key="candidateClassName">NSView</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">fPlayDurationLabel</string>
-								<string key="candidateClassName">NSTextField</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">fPlayNameLabel</string>
-								<string key="candidateClassName">NSTextField</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">fPlayTimeLabel</string>
-								<string key="candidateClassName">NSTextField</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">fRecordingSizeLabel</string>
-								<string key="candidateClassName">NSTextField</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">fRecordingTimeLabel</string>
-								<string key="candidateClassName">NSTextField</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">fSaveRecordingAsButton</string>
-								<string key="candidateClassName">NSButton</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">fStorageController</string>
-								<string key="candidateClassName">NSArrayController</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">fStorageView</string>
-								<string key="candidateClassName">NSView</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">fTabMatrix</string>
-								<string key="candidateClassName">NSMatrix</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">fTogglePlayButton</string>
-								<string key="candidateClassName">NSButton</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">fToggleRecordingButton</string>
-								<string key="candidateClassName">NSButton</string>
-							</object>
-						</object>
-					</object>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">macosx/InspectorController.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">InspectorDeviceCell</string>
-					<string key="superclassName">NSTextFieldCell</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">macosx/InspectorDeviceCell.h</string>
-					</object>
-				</object>
 				<object class="IBPartialClassDescription">
 					<string key="className">NSView</string>
 					<string key="superclassName">NSResponder</string>

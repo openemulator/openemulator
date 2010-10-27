@@ -138,6 +138,8 @@
 		00D845830FFF0FD2005802F0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D845730FFF0FD2005802F0 /* main.m */; };
 		00D845860FFF0FD2005802F0 /* PreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D8457A0FFF0FD2005802F0 /* PreferencesController.m */; };
 		00E2299611768DF4004E71F7 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009B4F2611639D7700E9A6F9 /* GLUT.framework */; };
+		00E442921278726B00713A05 /* IconDevices.png in Resources */ = {isa = PBXBuildFile; fileRef = 00E442911278726B00713A05 /* IconDevices.png */; };
+		00E442941278727600713A05 /* DevicesReveal.png in Resources */ = {isa = PBXBuildFile; fileRef = 00E442931278727600713A05 /* DevicesReveal.png */; };
 		00ED379C12779AD100BEF6BD /* AudioMax.png in Resources */ = {isa = PBXBuildFile; fileRef = 00ED379712779AD000BEF6BD /* AudioMax.png */; };
 		00ED379D12779AD100BEF6BD /* AudioMin.png in Resources */ = {isa = PBXBuildFile; fileRef = 00ED379812779AD000BEF6BD /* AudioMin.png */; };
 		00ED379E12779AD100BEF6BD /* AudioPlay.png in Resources */ = {isa = PBXBuildFile; fileRef = 00ED379912779AD000BEF6BD /* AudioPlay.png */; };
@@ -385,6 +387,8 @@
 		00D845790FFF0FD2005802F0 /* PreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferencesController.h; sourceTree = "<group>"; };
 		00D8457A0FFF0FD2005802F0 /* PreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferencesController.m; sourceTree = "<group>"; };
 		00E2A84D1053290200910B53 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = /usr/lib/libxml2.dylib; sourceTree = "<absolute>"; };
+		00E442911278726B00713A05 /* IconDevices.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IconDevices.png; path = macosx/Images/IconDevices.png; sourceTree = "<group>"; };
+		00E442931278727600713A05 /* DevicesReveal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = DevicesReveal.png; path = macosx/Images/DevicesReveal.png; sourceTree = "<group>"; };
 		00E8A393108CCAA200D0A137 /* devices */ = {isa = PBXFileReference; lastKnownFileType = folder; path = devices; sourceTree = "<group>"; };
 		00ED379712779AD000BEF6BD /* AudioMax.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = AudioMax.png; path = macosx/Images/AudioMax.png; sourceTree = "<group>"; };
 		00ED379812779AD000BEF6BD /* AudioMin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = AudioMin.png; path = macosx/Images/AudioMin.png; sourceTree = "<group>"; };
@@ -764,6 +768,8 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				00E442931278727600713A05 /* DevicesReveal.png */,
+				00E442911278726B00713A05 /* IconDevices.png */,
 				00954F591277CC8800C17203 /* Device.xib */,
 				00954E641277B68A00C17203 /* DevicesMount.png */,
 				00954E651277B68A00C17203 /* DevicesUnmount.png */,
@@ -1020,6 +1026,8 @@
 				00954E661277B68A00C17203 /* DevicesMount.png in Resources */,
 				00954E671277B68A00C17203 /* DevicesUnmount.png in Resources */,
 				00954F5B1277CC8800C17203 /* Device.xib in Resources */,
+				00E442921278726B00713A05 /* IconDevices.png in Resources */,
+				00E442941278727600713A05 /* DevicesReveal.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

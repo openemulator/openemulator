@@ -12,8 +12,16 @@
 
 @implementation InspectorWindowController
 
+- (id)init
+{
+	self = [self initWithWindowNibName:@"Inspector"];
+	
+	return self;
+}
+
 - (void)windowDidLoad
 {
 	[self setWindowFrameAutosaveName:@"Inspector"];
 }
 
+@end

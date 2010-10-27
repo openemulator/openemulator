@@ -10,7 +10,9 @@
 
 #import "Document.h"
 #import "DocumentController.h"
+
 #import "DeviceWindowController.h"
+#import "DevicesWindowController.h"
 
 #import "OEInfo.h"
 #import "OEPAEmulation.h"
@@ -496,6 +498,10 @@
 	NSWindowController *windowController;
 	
 	windowController = [[DeviceWindowController alloc] init];
+	[self addWindowController:windowController];
+	[windowController release];
+
+	windowController = [[DevicesWindowController alloc] init];
 	[self addWindowController:windowController];
 	[windowController release];
 }

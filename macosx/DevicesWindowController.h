@@ -1,16 +1,17 @@
-//
-//  DevicesWindowController.h
-//  OpenEmulator
-//
-//  Created by Marc S. Reßl on 26/10/10.
-//  Copyright 2010 ITBA. All rights reserved.
-//
+
+/**
+ * OpenEmulator
+ * Mac OS X Devices Window Controller
+ * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
+ * Released under the GPL
+ *
+ * Controls a devices window.
+ */
 
 #import <Cocoa/Cocoa.h>
 
-
-@interface DevicesWindowController : NSObject {
-
+@interface DevicesWindowController : NSWindowController
+{
 }
 
 @end

@@ -22,7 +22,7 @@
 - (void)windowDidLoad
 {
 	NSToolbar *toolbar;
-	toolbar = [[NSToolbar alloc] initWithIdentifier:@"Document Toolbar"];
+	toolbar = [[NSToolbar alloc] initWithIdentifier:@"Device Toolbar"];
 	[toolbar setDelegate:self];
 	[toolbar setAllowsUserCustomization:YES];
 	[toolbar setAutosavesConfiguration:YES];
@@ -130,7 +130,7 @@
 			@"Sleep",
 			@"Wake Up",
 			NSToolbarFlexibleSpaceItemIdentifier,
-			@"Info",
+			@"Devices",
 			nil];
 }
 
@@ -143,7 +143,7 @@
 			@"Cold Restart",
 			@"Warm Restart",
 			@"Debugger Break",
-			@"Info",
+			@"Devices",
 			NSToolbarSeparatorItemIdentifier,
 			NSToolbarSpaceItemIdentifier,
 			NSToolbarFlexibleSpaceItemIdentifier,
@@ -152,8 +152,8 @@
 
 - (void)showDevices:(id)sender
 {
-	[[NSNotificationCenter defaultCenter] postNotificationName:@"showDevices"
-														object:self];
+//	[[NSNotificationCenter defaultCenter] postNotificationName:@"showDevices"
+//														object:self];
 }
 
 @end
