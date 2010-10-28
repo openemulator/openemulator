@@ -10,24 +10,22 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "DevicesWindowController.h"
+
 #define TEMPLATE_FOLDER @"~/Library/Application Support/OpenEmulator/Templates"
 
 @interface Document : NSDocument
 {
 	void *emulation;
 	
-	NSString *label;
-	NSImage *image;
-	NSString *notes;
-	NSString *modificationDate;
-	NSString *powerState;
-	
 	NSMutableArray *freeInlets;
 	
-	NSMutableArray *expansions;
-	NSMutableArray *storage;
-	NSMutableArray *peripherals;
+	NSMutableArray *devices;
+	
+	DevicesWindowController *devicesWindowController;
 }
+
+- (void)showDevices:(id)sender;
 
 - (void)constructEmulation:(NSURL *)url;
 - (void)deleteEmulation;
@@ -36,32 +34,13 @@
 - (id)initWithTemplateURL:(NSURL *)templateURL error:(NSError **)outError;
 - (IBAction)saveDocumentAsTemplate:(id)sender;
 
-- (void)addDevices:(NSString *)path connections:(NSDictionary *)connections;
+- (void)addEDL:(NSString *)path connections:(NSDictionary *)connections;
 - (void)removeDevice:(NSDictionary *)dict;
-
-- (NSImage *)image;
-- (void)setImage:(NSImage *)value;
-- (NSString *)label;
-- (void)setLabel:(NSString *)value;
-- (NSString *)notes;
-- (void)setNotes:(NSString *)value;
-- (NSString *)modificationDate;
-- (void)setModificationDate:(NSString *)value;
-- (NSString *)powerState;
-- (void)setPowerState:(NSString *)value;
 
 - (NSMutableArray *)freeInlets;
 
-- (NSMutableArray *)expansions;
-- (void)insertObject:(id)value inExpansionsAtIndex:(NSUInteger)index;
-- (void)removeObjectFromExpansionsAtIndex:(NSUInteger)index;
-
-- (NSMutableArray *)storage;
-- (void)insertObject:(id)value inStorageAtIndex:(NSUInteger)index;
-- (void)removeObjectFromStorageAtIndex:(NSUInteger)index;
-
-- (NSMutableArray *)peripherals;
-- (void)insertObject:(id)value inPeripheralsAtIndex:(NSUInteger)index;
-- (void)removeObjectFromPeripheralsAtIndex:(NSUInteger)index;
+- (NSMutableArray *)devices;
+- (void)insertObject:(id)value inDevicesAtIndex:(NSUInteger)index;
+- (void)removeObjectFromDevicesAtIndex:(NSUInteger)index;
 
 @end

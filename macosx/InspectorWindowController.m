@@ -24,4 +24,29 @@
 	[self setWindowFrameAutosaveName:@"Inspector"];
 }
 
+- (BOOL)validateUserInterfaceItem:(id)item
+{
+    if ([item action] == @selector(toggleInspector:))
+	{  
+		NSString *menuTitle;
+		if (![[self window] isVisible])
+			menuTitle = NSLocalizedString(@"Show Inspector",
+										  @"Title for menu item to show the Inspector.");
+		else
+			menuTitle = NSLocalizedString(@"Hide Inspector",
+										  @"Title for menu item to hide the Inspector.");
+		[item setTitleWithMnemonic:menuTitle];
+    }
+	
+    return YES;
+}
+
+- (IBAction)toggleInspector:(id)sender
+{
+	if ([[self window] isVisible])
+		[[self window] orderOut:self];
+	else
+		[[self window] orderFront:self];
+}
+
 @end

@@ -12,7 +12,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="164"/>
+			<integer value="163"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -36,13 +36,12 @@
 			<object class="NSWindowTemplate" id="763262381">
 				<int key="NSWindowStyleMask">19</int>
 				<int key="NSWindowBacking">2</int>
-				<string key="NSWindowRect">{{1024, 391}, {255, 260}}</string>
+				<string key="NSWindowRect">{{984, 265}, {255, 260}}</string>
 				<int key="NSWTFlags">-461897728</int>
 				<string key="NSWindowTitle">Audio Controls</string>
 				<string key="NSWindowClass">NSPanel</string>
 				<nil key="NSViewClass"/>
 				<string key="NSWindowContentMaxSize">{3.40282e+38, 3.40282e+38}</string>
-				<string key="NSWindowContentMinSize">{252, 24}</string>
 				<object class="NSView" key="NSWindowView" id="330288021">
 					<reference key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
@@ -468,7 +467,6 @@
 					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1440, 878}}</string>
-				<string key="NSMinSize">{252, 40}</string>
 				<string key="NSMaxSize">{3.40282e+38, 3.40282e+38}</string>
 				<string key="NSFrameAutosaveName"/>
 			</object>
@@ -1137,12 +1135,12 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{281, 393}, {255, 260}}</string>
+					<string>{{851, 319}, {255, 260}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{281, 393}, {255, 260}}</string>
+					<string>{{851, 319}, {255, 260}}</string>
 					<boolean value="NO"/>
 					<boolean value="NO"/>
-					<boolean value="YES"/>
+					<boolean value="NO"/>
 					<string>{252, 512}</string>
 					<string>{252, 24}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>

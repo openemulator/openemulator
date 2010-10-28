@@ -12,7 +12,6 @@
 #import "DocumentController.h"
 
 #import "DeviceWindowController.h"
-#import "DevicesWindowController.h"
 
 #import "OEInfo.h"
 #import "OEPAEmulation.h"
@@ -28,17 +27,11 @@
 	{
 		emulation = nil;
 		
-		image = nil;
-		label = nil;
-		notes = nil;
-		modificationDate = nil;
-		powerState = nil;
-		
 		freeInlets = [[NSMutableArray alloc] init];
 		
-		expansions = [[NSMutableArray alloc] init];
-		storage = [[NSMutableArray alloc] init];
-		peripherals = [[NSMutableArray alloc] init];
+		devices = [[NSMutableArray alloc] init];
+		
+		devicesWindowController = nil;
 	}
 	
 	return self;
@@ -67,11 +60,16 @@
 	
 	[freeInlets release];
 	
-	[expansions release];
-	[storage release];
-	[peripherals release];
+	[devices release];
+	
+	[devicesWindowController release];
 	
 	[super dealloc];
+}
+
+- (void)showDevices:(id)sender
+{
+	[devicesWindowController showWindow:sender];
 }
 
 - (void)constructEmulation:(NSURL *)url
@@ -194,44 +192,6 @@
 	return aString;
 }
 
-- (void)updatePowerState
-{
-	NSString *property = [self getHostProperty:@"powerState"];
-	int value = [property intValue];
-	
-	switch (value)
-	{
-		case HOST_POWERSTATE_ON:
-			[self setPowerState:
-			 NSLocalizedString(@"Powered on", @"Powered on")];
-			break;
-		case HOST_POWERSTATE_PAUSE:
-			[self setPowerState:
-			 NSLocalizedString(@"Paused", @"Paused")];
-			break;
-		case HOST_POWERSTATE_STANDBY:
-			[self setPowerState:
-			 NSLocalizedString(@"Standby", @"Standby")];
-			break;
-		case HOST_POWERSTATE_SLEEP:
-			[self setPowerState:
-			 NSLocalizedString(@"Suspended", @"Suspended")];
-			break;
-		case HOST_POWERSTATE_HIBERNATE:
-			[self setPowerState:
-			 NSLocalizedString(@"Hibernated", @"Hibernated")];
-			break;
-		case HOST_POWERSTATE_OFF:
-			[self setPowerState:
-			 NSLocalizedString(@"Powered off", @"Powered off")];
-			break;
-		default:
-			[self setPowerState:
-			 NSLocalizedString(@"Unknown", @"Unknown power state")];
-			break;
-	}
-}
-
 - (void)updateDevices
 {
 	int count;
@@ -239,15 +199,9 @@
 	// Clean up
 	[freeInlets removeAllObjects];
 	
-	count = [expansions count];
+	count = [devices count];
 	for (int i = 0; i < count; i++)
-		[self removeObjectFromExpansionsAtIndex:0];
-	count = [storage count];
-	for (int i = 0; i < count; i++)
-		[self removeObjectFromStorageAtIndex:0];
-	count = [peripherals count];
-	for (int i = 0; i < count; i++)
-		[self removeObjectFromPeripheralsAtIndex:0];
+		[self removeObjectFromDevicesAtIndex:0];
 	
 	// Process inlets
 	OEPorts *inlets = ((OEPAEmulation *)emulation)->getInlets();
@@ -273,12 +227,10 @@
 	}
 	
 	// Process devices
-	int expansionIndex = 0;
-	int storageIndex = 0;
-	int peripheralIndex = 0;
-	OEDevices *devices = ((OEPAEmulation *)emulation)->getDevices();
-	for (OEDevices::iterator device = devices->begin();
-		 device != devices->end();
+	int deviceIndex = 0;
+	OEDevices *oeDevices = ((OEPAEmulation *)emulation)->getDevices();
+	for (OEDevices::iterator device = oeDevices->begin();
+		 device != oeDevices->end();
 		 device++)
 	{
 		NSString *deviceName = getNSString((*device)->name);
@@ -306,12 +258,7 @@
 							  removable, @"removable",
 							  nil];
 		
-		if ((*device)->type == "expansion")
-			[self insertObject:dict inExpansionsAtIndex:expansionIndex++];
-		else if ((*device)->type == "storage")
-			[self insertObject:dict inStorageAtIndex:storageIndex++];
-		else if ((*device)->type == "peripheral")
-			[self insertObject:dict inPeripheralsAtIndex:peripheralIndex++];
+		[self insertObject:dict inDevicesAtIndex:deviceIndex++];
 	}
 	
 	return;
@@ -328,16 +275,6 @@
 	{
 		if (((OEPAEmulation *)emulation)->isOpen())
 		{
-			string value;
-			
-			value = ((OEPAEmulation *)emulation)->getLabel();
-			[self setLabel:getNSString(value)];
-//			value = ((OEPAEmulation *)emulation)->getNotes();
-//			[self setNotes:getNSString(value)];
-			[self updatePowerState];
-			value = ((OEPAEmulation *)emulation)->getImageSrc();
-			[self setImage:[self getResourceImage:getNSString(value)]];
-			
 			[self updateDevices];
 			
 			return YES;
@@ -361,8 +298,6 @@
 		string emulationPath = getString([[absoluteURL path]
 										  stringByAppendingString:@"/"]);
 		
-		[self setHostProperty:@"notes" value:[self notes]];
-		
 		if (((OEPAEmulation *)emulation)->save(emulationPath))
 			return YES;
 	}
@@ -371,20 +306,6 @@
 									code:NSFileWriteUnknownError
 								userInfo:nil];
 	return NO;
-}
-
-- (void)setFileModificationDate:(NSDate *)date
-{
-	[super setFileModificationDate:date];
-	
-	NSString *value;
-	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-	[dateFormatter setDateStyle:NSDateFormatterMediumStyle];
-	[dateFormatter setTimeStyle:NSDateFormatterMediumStyle];
-	value = [dateFormatter stringFromDate:date];
-	[dateFormatter release];
-	
-	[self setModificationDate:value];
 }
 
 - (IBAction)saveDocumentAsTemplate:(id)sender
@@ -423,8 +344,8 @@
 		[[NSAlert alertWithError:error] runModal];
 }
 
-- (void)addDevices:(NSString *)path
-	   connections:(NSDictionary *)connections
+- (void)addEDL:(NSString *)path
+   connections:(NSDictionary *)connections
 {
 	string pathString = getString(path);
 	map<string, string> connectionsMap;
@@ -495,85 +416,13 @@
 
 - (void)makeWindowControllers
 {
-	NSWindowController *windowController;
+	devicesWindowController = [[DevicesWindowController alloc] init];
+	[self addWindowController:devicesWindowController];
 	
+	NSWindowController *windowController;
 	windowController = [[DeviceWindowController alloc] init];
 	[self addWindowController:windowController];
 	[windowController release];
-
-	windowController = [[DevicesWindowController alloc] init];
-	[self addWindowController:windowController];
-	[windowController release];
-}
-
-- (NSImage *)image
-{
-	return [[image retain] autorelease];
-}
-
-- (void)setImage:(NSImage *)value
-{
-    if (image != value)
-	{
-        [image release];
-        image = [value copy];
-    }
-}
-
-- (NSString *)label
-{
-	return [[label retain] autorelease];
-}
-
-- (void)setLabel:(NSString *)value
-{
-    if (label != value)
-	{
-        [label release];
-        label = [value copy];
-    }
-}
-
-- (NSString *)notes
-{
-	return [[notes retain] autorelease];
-}
-
-- (void)setNotes:(NSString *)value
-{
-    if (notes != value)
-	{
-        [notes release];
-        notes = [value copy];
-    }
-}
-
-- (NSString *)modificationDate
-{
-	return modificationDate;
-}
-
-- (void)setModificationDate:(NSString *)value
-{
-    if (modificationDate != value)
-	{
-        [modificationDate release];
-        modificationDate = [value copy];
-    }
-}
-
-- (NSString *)powerState
-{
-	return powerState;
-}
-
-- (void)setPowerState:(NSString *)value
-{
-    if (powerState != value)
-	{
-        [powerState release];
-        powerState = [value copy];
-    }
 }
 
 - (NSMutableArray *)freeInlets
@@ -581,82 +430,19 @@
 	return freeInlets;
 }
 
-- (NSMutableArray *)expansions
+- (NSMutableArray *)devices
 {
-	return [[expansions retain] autorelease];
+	return [[devices retain] autorelease];
 }
 
-- (void)insertObject:(id)value inExpansionsAtIndex:(NSUInteger)index
+- (void)insertObject:(id)value inDevicesAtIndex:(NSUInteger)index
 {
-    [expansions insertObject:value atIndex:index];
+    [devices insertObject:value atIndex:index];
 }
 
-- (void)removeObjectFromExpansionsAtIndex:(NSUInteger)index
+- (void)removeObjectFromDevicesAtIndex:(NSUInteger)index
 {
-    [expansions removeObjectAtIndex:index];
-}
-
-- (NSMutableArray *)storage
-{
-	return [[storage retain] autorelease];
-}
-
-- (void)insertObject:(id)value inStorageAtIndex:(NSUInteger)index
-{
-    [storage insertObject:value atIndex:index];
-}
-
-- (void)removeObjectFromStorageAtIndex:(NSUInteger)index
-{
-    [storage removeObjectAtIndex:index];
-}
-
-- (NSMutableArray *)peripherals
-{
-	return [[peripherals retain] autorelease];
-}
-
-- (void)insertObject:(id)value inPeripheralsAtIndex:(NSUInteger)index
-{
-    [peripherals insertObject:value atIndex:index];
-}
-
-- (void)removeObjectFromPeripheralsAtIndex:(NSUInteger)index
-{
-    [peripherals removeObjectAtIndex:index];
-}
-
-- (NSString *)documentText
-{
-	string characterString;
-	[self notifyHost:HOST_CLIPBOARD_WILL_COPY data:&characterString];
-	
-	return getNSString(characterString);
-}
-
-- (void)copy:(id)sender
-{
-	NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
-	NSArray *pasteboardTypes = [NSArray arrayWithObjects:NSStringPboardType, nil];
-	
-	[pasteboard declareTypes:pasteboardTypes owner:self];
-	[pasteboard setString:[self documentText] forType:NSStringPboardType];
-}
-
-- (void)paste:(id)sender
-{
-	NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
-	
-	string characterString = getString([pasteboard stringForType:NSStringPboardType]);
-	
-	[self notifyHost:HOST_CLIPBOARD_WILL_PASTE data:&characterString];
-}
-
-- (void)startSpeaking:(id)sender
-{
-	NSTextView *dummy = [[[NSTextView alloc] init] autorelease];
-	[dummy insertText:[self documentText]];
-	[dummy startSpeaking:self];
+    [devices removeObjectAtIndex:index];
 }
 
 @end

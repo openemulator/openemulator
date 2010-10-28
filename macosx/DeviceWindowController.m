@@ -30,6 +30,11 @@
 	[toolbar release];
 }
 
+- (NSString *)windowTitleForDocumentDisplayName:(NSString *)displayName
+{
+	return [displayName stringByAppendingString:@" - Monitor"];
+}
+
 - (NSToolbarItem *)toolbar:(NSToolbar *)toolbar
 	 itemForItemIdentifier:(NSString *)ident
  willBeInsertedIntoToolbar:(BOOL)flag
@@ -107,6 +112,30 @@
 		[item setImage:[NSImage imageNamed:@"IconDebuggerBreak.png"]];
 		[item setAction:@selector(debuggerBreak:)];
 	}
+	else if ([ident isEqualToString:@"Inspector"])
+	{
+		[item setLabel:NSLocalizedString(@"Inspector",
+										 "Device window toolbar item")];
+		[item setPaletteLabel:NSLocalizedString(@"Info",
+												"Device window toolbar item")];
+		[item setToolTip:NSLocalizedString(@"Show or hide the inspector window.",
+										   "Device window toolbar item")];
+		[item setImage:[NSImage imageNamed:@"IconInspector.png"]];
+//		[item setTarget:self];
+		[item setAction:@selector(toggleInspector:)];
+	}
+	else if ([ident isEqualToString:@"Audio"])
+	{
+		[item setLabel:NSLocalizedString(@"Audio Controls",
+										 "Device window toolbar item")];
+		[item setPaletteLabel:NSLocalizedString(@"Audio Controls",
+												"Device window toolbar item")];
+		[item setToolTip:NSLocalizedString(@"Show or hide audio controls.",
+										   "Device window toolbar item")];
+		[item setImage:[NSImage imageNamed:@"IconAudio.png"]];
+//		[item setTarget:self];
+		[item setAction:@selector(toggleAudioControls:)];
+	}
 	else if ([ident isEqualToString:@"Devices"])
 	{
 		[item setLabel:NSLocalizedString(@"Devices",
@@ -116,7 +145,7 @@
 		[item setToolTip:NSLocalizedString(@"Show devices.",
 										   "Device window toolbar item")];
 		[item setImage:[NSImage imageNamed:@"IconDevices.png"]];
-		[item setTarget:self];
+		//		[item setTarget:self];
 		[item setAction:@selector(showDevices:)];
 	}
 	
@@ -143,17 +172,13 @@
 			@"Cold Restart",
 			@"Warm Restart",
 			@"Debugger Break",
+			@"Inspector",
+			@"Audio",
 			@"Devices",
 			NSToolbarSeparatorItemIdentifier,
 			NSToolbarSpaceItemIdentifier,
 			NSToolbarFlexibleSpaceItemIdentifier,
 			nil];
-}
-
-- (void)showDevices:(id)sender
-{
-//	[[NSNotificationCenter defaultCenter] postNotificationName:@"showDevices"
-//														object:self];
 }
 
 @end

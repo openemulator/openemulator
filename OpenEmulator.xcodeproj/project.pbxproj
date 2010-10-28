@@ -136,7 +136,7 @@
 		00D844C90FFF0505005802F0 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00D844BD0FFF0505005802F0 /* MainMenu.xib */; };
 		00D844CC0FFF0505005802F0 /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00D844C30FFF0505005802F0 /* Preferences.xib */; };
 		00D845830FFF0FD2005802F0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D845730FFF0FD2005802F0 /* main.m */; };
-		00D845860FFF0FD2005802F0 /* PreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D8457A0FFF0FD2005802F0 /* PreferencesController.m */; };
+		00D845860FFF0FD2005802F0 /* PreferencesWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D8457A0FFF0FD2005802F0 /* PreferencesWindowController.m */; };
 		00E2299611768DF4004E71F7 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009B4F2611639D7700E9A6F9 /* GLUT.framework */; };
 		00E442921278726B00713A05 /* IconDevices.png in Resources */ = {isa = PBXBuildFile; fileRef = 00E442911278726B00713A05 /* IconDevices.png */; };
 		00E442941278727600713A05 /* DevicesReveal.png in Resources */ = {isa = PBXBuildFile; fileRef = 00E442931278727600713A05 /* DevicesReveal.png */; };
@@ -384,8 +384,8 @@
 		00D845670FFF0FD2005802F0 /* DocumentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DocumentController.h; sourceTree = "<group>"; };
 		00D845730FFF0FD2005802F0 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		00D845760FFF0FD2005802F0 /* OpenEmulator_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenEmulator_Prefix.pch; sourceTree = "<group>"; };
-		00D845790FFF0FD2005802F0 /* PreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferencesController.h; sourceTree = "<group>"; };
-		00D8457A0FFF0FD2005802F0 /* PreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferencesController.m; sourceTree = "<group>"; };
+		00D845790FFF0FD2005802F0 /* PreferencesWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferencesWindowController.h; sourceTree = "<group>"; };
+		00D8457A0FFF0FD2005802F0 /* PreferencesWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferencesWindowController.m; sourceTree = "<group>"; };
 		00E2A84D1053290200910B53 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = /usr/lib/libxml2.dylib; sourceTree = "<absolute>"; };
 		00E442911278726B00713A05 /* IconDevices.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IconDevices.png; path = macosx/Images/IconDevices.png; sourceTree = "<group>"; };
 		00E442931278727600713A05 /* DevicesReveal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = DevicesReveal.png; path = macosx/Images/DevicesReveal.png; sourceTree = "<group>"; };
@@ -726,8 +726,8 @@
 				00D845670FFF0FD2005802F0 /* DocumentController.h */,
 				00D845730FFF0FD2005802F0 /* main.m */,
 				00D845760FFF0FD2005802F0 /* OpenEmulator_Prefix.pch */,
-				00D845790FFF0FD2005802F0 /* PreferencesController.h */,
-				00D8457A0FFF0FD2005802F0 /* PreferencesController.m */,
+				00D845790FFF0FD2005802F0 /* PreferencesWindowController.h */,
+				00D8457A0FFF0FD2005802F0 /* PreferencesWindowController.m */,
 				00EF028B107D9EFB00FE378D /* VerticallyCenteredCell.h */,
 				00EF028C107D9EFB00FE378D /* VerticallyCenteredCell.m */,
 				0071E3B810803F7300F2D54F /* ChooserItem.h */,
@@ -1106,7 +1106,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				00D845830FFF0FD2005802F0 /* main.m in Sources */,
-				00D845860FFF0FD2005802F0 /* PreferencesController.m in Sources */,
+				00D845860FFF0FD2005802F0 /* PreferencesWindowController.m in Sources */,
 				00A0B8041069761A007930A5 /* Document.mm in Sources */,
 				00EF028D107D9EFB00FE378D /* VerticallyCenteredCell.m in Sources */,
 				0071E3BA10803F7300F2D54F /* ChooserItem.m in Sources */,

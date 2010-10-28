@@ -84,6 +84,16 @@
 	[super dealloc];
 }
 
+- (void)toggleInspector:(id)sender
+{
+	[fInspectorWindowController toggleInspector:sender];
+}
+
+- (void)toggleAudioControls:(id)sender
+{
+	[fAudioControlsWindowController toggleAudioControls:sender];
+}
+
 - (void *)oepa
 {
 	return oepa;
@@ -206,16 +216,16 @@
 - (BOOL)validateUserInterfaceItem:(id)item
 {
 	if ([item action] == @selector(newDocument:))
-		return ![[fTemplateChooserController window] isVisible];
+		return ![[fTemplateChooserWindowController window] isVisible];
 	else if ([item action] == @selector(newDocumentFromTemplateChooser:))
-		return ![[fTemplateChooserController window] isVisible];
+		return ![[fTemplateChooserWindowController window] isVisible];
 	else
 		return YES;
 }
 
 - (IBAction)newDocumentFromTemplateChooser:(id)sender
 {
-	[fTemplateChooserController run];
+	[fTemplateChooserWindowController run];
 }
 
 - (IBAction)openDocument:(id)sender

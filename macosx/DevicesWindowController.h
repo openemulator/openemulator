@@ -14,4 +14,6 @@
 {
 }
 
+- (void)showDevices:(id)sender;
+
 @end

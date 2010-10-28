@@ -14,6 +14,8 @@
 #import "OEGL.h"
 #import "OEHID.h"
 
+#import "StringConversion.h"
+
 #define COCOA_LCTRL				(1 << 0)
 #define COCOA_LSHIFT			(1 << 1)
 #define COCOA_LALT				(1 << 3)
@@ -429,6 +431,39 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 - (void)debuggerBreak:(id)sender
 {
 	((OEHID *)oehid)->sendSystemEvent(HOST_HID_S_DEBUGGERBREAK);
+}
+
+- (NSString *)documentText
+{
+	string characterString;
+//	[self notifyHost:HOST_CLIPBOARD_WILL_COPY data:&characterString];
+	
+	return getNSString(characterString);
+}
+
+- (void)copy:(id)sender
+{
+	NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
+	NSArray *pasteboardTypes = [NSArray arrayWithObjects:NSStringPboardType, nil];
+	
+	[pasteboard declareTypes:pasteboardTypes owner:self];
+	[pasteboard setString:[self documentText] forType:NSStringPboardType];
+}
+
+- (void)paste:(id)sender
+{
+	NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
+	
+	string characterString = getString([pasteboard stringForType:NSStringPboardType]);
+	
+//	[self notifyHost:HOST_CLIPBOARD_WILL_PASTE data:&characterString];
+}
+
+- (void)startSpeaking:(id)sender
+{
+	NSTextView *dummy = [[[NSTextView alloc] init] autorelease];
+	[dummy insertText:[self documentText]];
+	[dummy startSpeaking:self];
 }
 
 @end

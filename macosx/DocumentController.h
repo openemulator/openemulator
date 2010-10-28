@@ -11,8 +11,9 @@
 #import <Cocoa/Cocoa.h>
 
 @interface DocumentController : NSDocumentController {
-	IBOutlet id fTemplateChooserController;
-	IBOutlet id fInspectorController;
+	IBOutlet id fInspectorWindowController;
+	IBOutlet id fAudioControlsWindowController;
+	IBOutlet id fTemplateChooserWindowController;
 	
 	void *oepa;
 	
@@ -24,6 +25,9 @@
 	
 	int disableMenuBarCount;
 }
+
+- (void)toggleInspector:(id)sender;
+- (void)toggleAudioControls:(id)sender;
 
 - (void *)oepa;
 

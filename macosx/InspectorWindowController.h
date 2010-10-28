@@ -12,7 +12,8 @@
 
 @interface InspectorWindowController : NSWindowController
 {
-
 }
+
+- (IBAction)toggleInspector:(id)sender;
 
 @end

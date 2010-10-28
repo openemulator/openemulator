@@ -12,7 +12,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="570"/>
+			<integer value="81"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -257,26 +257,6 @@
 									</object>
 								</object>
 								<object class="NSMenuItem" id="947468709">
-									<reference key="NSMenu" ref="720053764"/>
-									<bool key="NSIsDisabled">YES</bool>
-									<bool key="NSIsSeparator">YES</bool>
-									<string key="NSTitle"/>
-									<string key="NSKeyEquiv"/>
-									<int key="NSKeyEquivModMask">1048576</int>
-									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="1033313550"/>
-									<reference key="NSMixedImage" ref="310636482"/>
-								</object>
-								<object class="NSMenuItem" id="672306149">
-									<reference key="NSMenu" ref="720053764"/>
-									<string key="NSTitle">Get Info</string>
-									<string key="NSKeyEquiv">i</string>
-									<int key="NSKeyEquivModMask">1048576</int>
-									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="1033313550"/>
-									<reference key="NSMixedImage" ref="310636482"/>
-								</object>
-								<object class="NSMenuItem" id="425164168">
 									<reference key="NSMenu" ref="720053764"/>
 									<bool key="NSIsDisabled">YES</bool>
 									<bool key="NSIsSeparator">YES</bool>
@@ -627,7 +607,8 @@
 								<object class="NSMenuItem" id="1037272463">
 									<reference key="NSMenu" ref="444160175"/>
 									<string key="NSTitle">Show Audio Controls</string>
-									<string key="NSKeyEquiv"/>
+									<string key="NSKeyEquiv">j</string>
+									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="1033313550"/>
 									<reference key="NSMixedImage" ref="310636482"/>
@@ -645,8 +626,7 @@
 								<object class="NSMenuItem" id="379560557">
 									<reference key="NSMenu" ref="444160175"/>
 									<string key="NSTitle">Show Toolbar</string>
-									<string key="NSKeyEquiv">t</string>
-									<int key="NSKeyEquivModMask">1572864</int>
+									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="1033313550"/>
 									<reference key="NSMixedImage" ref="310636482"/>
@@ -782,15 +762,8 @@
 								<object class="NSMenuItem" id="876045870">
 									<reference key="NSMenu" ref="436197858"/>
 									<string key="NSTitle">Devices</string>
-									<string key="NSKeyEquiv"/>
-									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="1033313550"/>
-									<reference key="NSMixedImage" ref="310636482"/>
-								</object>
-								<object class="NSMenuItem" id="555680983">
-									<reference key="NSMenu" ref="436197858"/>
-									<string key="NSTitle">Debugger Console</string>
-									<string key="NSKeyEquiv"/>
+									<string key="NSKeyEquiv">d</string>
+									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="1033313550"/>
 									<reference key="NSMixedImage" ref="310636482"/>
@@ -897,6 +870,9 @@
 			</object>
 			<object class="NSCustomObject" id="78716432">
 				<string key="NSClassName">DeviceChooserWindowController</string>
+			</object>
+			<object class="NSCustomObject" id="87818583">
+				<string key="NSClassName">PreferencesWindowController</string>
 			</object>
 			<object class="NSCustomObject" id="18129797">
 				<string key="NSClassName">SUUpdater</string>
@@ -1155,14 +1131,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
-						<string key="label">fTemplateChooserController</string>
-						<reference key="source" ref="670222506"/>
-						<reference key="destination" ref="976629"/>
-					</object>
-					<int key="connectionID">832</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
 						<string key="label">fDocumentController</string>
 						<reference key="source" ref="976629"/>
 						<reference key="destination" ref="670222506"/>
@@ -1176,22 +1144,6 @@
 						<reference key="destination" ref="670222506"/>
 					</object>
 					<int key="connectionID">845</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">fInspectorController</string>
-						<reference key="source" ref="670222506"/>
-						<reference key="destination" ref="406189837"/>
-					</object>
-					<int key="connectionID">855</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">newDocumentFromTemplateChooser:</string>
-						<reference key="source" ref="670222506"/>
-						<reference key="destination" ref="98643607"/>
-					</object>
-					<int key="connectionID">864</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
@@ -1219,30 +1171,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
-						<string key="label">openDevelopment:</string>
-						<reference key="source" ref="670222506"/>
-						<reference key="destination" ref="845487344"/>
-					</object>
-					<int key="connectionID">879</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">openForums:</string>
-						<reference key="source" ref="670222506"/>
-						<reference key="destination" ref="54602484"/>
-					</object>
-					<int key="connectionID">880</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">openHomepage:</string>
-						<reference key="source" ref="670222506"/>
-						<reference key="destination" ref="169253820"/>
-					</object>
-					<int key="connectionID">881</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
 						<string key="label">powerDown:</string>
 						<reference key="source" ref="1014"/>
 						<reference key="destination" ref="58928646"/>
@@ -1264,22 +1192,6 @@
 						<reference key="destination" ref="302083824"/>
 					</object>
 					<int key="connectionID">894</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">newDocument:</string>
-						<reference key="source" ref="1014"/>
-						<reference key="destination" ref="705341025"/>
-					</object>
-					<int key="connectionID">897</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">openDocument:</string>
-						<reference key="source" ref="1014"/>
-						<reference key="destination" ref="722745758"/>
-					</object>
-					<int key="connectionID">898</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
@@ -1322,14 +1234,6 @@
 					<int key="connectionID">907</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">performClose:</string>
-						<reference key="source" ref="1014"/>
-						<reference key="destination" ref="208167319"/>
-					</object>
-					<int key="connectionID">914</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">fDocumentController</string>
 						<reference key="source" ref="203105187"/>
@@ -1340,10 +1244,10 @@
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
 						<string key="label">showWindow:</string>
-						<reference key="source" ref="513384532"/>
-						<reference key="destination" ref="555680983"/>
+						<reference key="source" ref="87818583"/>
+						<reference key="destination" ref="609285721"/>
 					</object>
-					<int key="connectionID">925</int>
+					<int key="connectionID">937</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
@@ -1351,23 +1255,103 @@
 						<reference key="source" ref="670222506"/>
 						<reference key="destination" ref="19178915"/>
 					</object>
-					<int key="connectionID">929</int>
+					<int key="connectionID">948</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
-						<string key="label">showWindow:</string>
-						<reference key="source" ref="203105187"/>
+						<string key="label">openDevelopment:</string>
+						<reference key="source" ref="670222506"/>
+						<reference key="destination" ref="845487344"/>
+					</object>
+					<int key="connectionID">949</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">openForums:</string>
+						<reference key="source" ref="670222506"/>
+						<reference key="destination" ref="54602484"/>
+					</object>
+					<int key="connectionID">950</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">openHomepage:</string>
+						<reference key="source" ref="670222506"/>
+						<reference key="destination" ref="169253820"/>
+					</object>
+					<int key="connectionID">951</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">newDocument:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="705341025"/>
+					</object>
+					<int key="connectionID">954</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">newDocumentFromTemplateChooser:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="98643607"/>
+					</object>
+					<int key="connectionID">955</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">openDocument:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="722745758"/>
+					</object>
+					<int key="connectionID">956</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">fInspectorWindowController</string>
+						<reference key="source" ref="670222506"/>
+						<reference key="destination" ref="406189837"/>
+					</object>
+					<int key="connectionID">957</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">fAudioControlsWindowController</string>
+						<reference key="source" ref="670222506"/>
+						<reference key="destination" ref="203105187"/>
+					</object>
+					<int key="connectionID">958</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">fTemplateChooserWindowController</string>
+						<reference key="source" ref="670222506"/>
+						<reference key="destination" ref="976629"/>
+					</object>
+					<int key="connectionID">959</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">toggleAudioControls:</string>
+						<reference key="source" ref="1014"/>
 						<reference key="destination" ref="1037272463"/>
 					</object>
-					<int key="connectionID">933</int>
+					<int key="connectionID">960</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
-						<string key="label">showWindow:</string>
-						<reference key="source" ref="406189837"/>
+						<string key="label">toggleInspector:</string>
+						<reference key="source" ref="1014"/>
 						<reference key="destination" ref="212636117"/>
 					</object>
-					<int key="connectionID">934</int>
+					<int key="connectionID">961</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">showDevices:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="876045870"/>
+					</object>
+					<int key="connectionID">962</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -1470,9 +1454,7 @@
 							<reference ref="1010469920"/>
 							<reference ref="896704457"/>
 							<reference ref="98643607"/>
-							<reference ref="672306149"/>
 							<reference ref="947468709"/>
-							<reference ref="425164168"/>
 							<reference ref="208167319"/>
 						</object>
 						<reference key="parent" ref="379814623"/>
@@ -1514,12 +1496,6 @@
 						<reference key="object" ref="776162233"/>
 						<reference key="parent" ref="720053764"/>
 						<string key="objectName">1</string>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">79</int>
-						<reference key="object" ref="425164168"/>
-						<reference key="parent" ref="720053764"/>
-						<string key="objectName">7</string>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">74</int>
@@ -1768,7 +1744,6 @@
 							<reference ref="97192315"/>
 							<reference ref="1065497554"/>
 							<reference ref="150085761"/>
-							<reference ref="555680983"/>
 							<reference ref="958457775"/>
 							<reference ref="876045870"/>
 						</object>
@@ -1918,11 +1893,6 @@
 						<string key="objectName">6</string>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">753</int>
-						<reference key="object" ref="555680983"/>
-						<reference key="parent" ref="436197858"/>
-					</object>
-					<object class="IBObjectRecord">
 						<int key="objectID">754</int>
 						<reference key="object" ref="958457775"/>
 						<reference key="parent" ref="436197858"/>
@@ -2021,11 +1991,6 @@
 						<reference key="parent" ref="361438485"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">581</int>
-						<reference key="object" ref="672306149"/>
-						<reference key="parent" ref="720053764"/>
-					</object>
-					<object class="IBObjectRecord">
 						<int key="objectID">912</int>
 						<reference key="object" ref="947468709"/>
 						<reference key="parent" ref="720053764"/>
@@ -2076,6 +2041,11 @@
 						<int key="objectID">930</int>
 						<reference key="object" ref="1037272463"/>
 						<reference key="parent" ref="444160175"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">935</int>
+						<reference key="object" ref="87818583"/>
+						<reference key="parent" ref="0"/>
 					</object>
 				</object>
 			</object>
@@ -2205,7 +2175,6 @@
 					<string>579.IBPluginDependency</string>
 					<string>58.IBPluginDependency</string>
 					<string>58.ImportedFromIB2</string>
-					<string>581.IBPluginDependency</string>
 					<string>582.IBPluginDependency</string>
 					<string>609.IBEditorWindowLastContentRect</string>
 					<string>609.IBPluginDependency</string>
@@ -2224,7 +2193,6 @@
 					<string>747.ImportedFromIB2</string>
 					<string>75.IBPluginDependency</string>
 					<string>75.ImportedFromIB2</string>
-					<string>753.IBPluginDependency</string>
 					<string>754.IBPluginDependency</string>
 					<string>757.IBPluginDependency</string>
 					<string>757.ImportedFromIB2</string>
@@ -2233,8 +2201,6 @@
 					<string>78.IBPluginDependency</string>
 					<string>78.ImportedFromIB2</string>
 					<string>783.IBPluginDependency</string>
-					<string>79.IBPluginDependency</string>
-					<string>79.ImportedFromIB2</string>
 					<string>798.IBPluginDependency</string>
 					<string>798.ImportedFromIB2</string>
 					<string>799.IBPluginDependency</string>
@@ -2272,7 +2238,7 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>{{510, 553}, {262, 93}}</string>
+					<string>{{513, 383}, {262, 93}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>{{596, 852}, {216, 23}}</string>
@@ -2344,7 +2310,7 @@
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>{{93, 646}, {478, 20}}</string>
+					<string>{{96, 476}, {478, 20}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>{74, 862}</string>
@@ -2354,7 +2320,7 @@
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>{{439, 523}, {204, 123}}</string>
+					<string>{{442, 373}, {194, 103}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>{{525, 802}, {197, 73}}</string>
@@ -2375,11 +2341,11 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>{{105, 423}, {233, 223}}</string>
+					<string>{{96, 207}, {233, 223}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>{{23, 794}, {245, 183}}</string>
-					<string>{{313, 433}, {231, 213}}</string>
+					<string>{{316, 263}, {217, 213}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{475, 832}, {234, 43}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -2392,8 +2358,7 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{382, 494}, {161, 133}}</string>
+					<string>{{366, 343}, {161, 133}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{475, 832}, {234, 43}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -2412,7 +2377,6 @@
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -2427,9 +2391,7 @@
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
-					<string>{{227, 343}, {299, 303}}</string>
+					<string>{{230, 203}, {299, 273}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>{{155, 774}, {199, 203}}</string>
@@ -2470,7 +2432,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">934</int>
+			<int key="maxID">962</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -2484,11 +2446,13 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>openPlay:</string>
 							<string>saveRecording:</string>
+							<string>toggleAudioControls:</string>
 							<string>togglePlay:</string>
 							<string>toggleRecording:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -2501,6 +2465,7 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>openPlay:</string>
 							<string>saveRecording:</string>
+							<string>toggleAudioControls:</string>
 							<string>togglePlay:</string>
 							<string>toggleRecording:</string>
 						</object>
@@ -2512,6 +2477,10 @@
 							</object>
 							<object class="IBActionInfo">
 								<string key="name">saveRecording:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">toggleAudioControls:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
@@ -2873,17 +2842,57 @@
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
-					<string key="className">Document</string>
-					<string key="superclassName">NSDocument</string>
+					<string key="className">DevicesWindowController</string>
+					<string key="superclassName">NSWindowController</string>
 					<object class="NSMutableDictionary" key="actions">
-						<string key="NS.key.0">saveDocumentAsTemplate:</string>
+						<string key="NS.key.0">showDevices:</string>
 						<string key="NS.object.0">id</string>
 					</object>
 					<object class="NSMutableDictionary" key="actionInfosByName">
-						<string key="NS.key.0">saveDocumentAsTemplate:</string>
+						<string key="NS.key.0">showDevices:</string>
 						<object class="IBActionInfo" key="NS.object.0">
-							<string key="name">saveDocumentAsTemplate:</string>
+							<string key="name">showDevices:</string>
 							<string key="candidateClassName">id</string>
+						</object>
+					</object>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">macosx/DevicesWindowController.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">Document</string>
+					<string key="superclassName">NSDocument</string>
+					<object class="NSMutableDictionary" key="actions">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>saveDocumentAsTemplate:</string>
+							<string>showDevices:</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
+							<string>id</string>
+						</object>
+					</object>
+					<object class="NSMutableDictionary" key="actionInfosByName">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>saveDocumentAsTemplate:</string>
+							<string>showDevices:</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<object class="IBActionInfo">
+								<string key="name">saveDocumentAsTemplate:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">showDevices:</string>
+								<string key="candidateClassName">id</string>
+							</object>
 						</object>
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
@@ -2903,9 +2912,13 @@
 							<string>openDonate:</string>
 							<string>openForums:</string>
 							<string>openHomepage:</string>
+							<string>toggleAudioControls:</string>
+							<string>toggleInspector:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -2922,6 +2935,8 @@
 							<string>openDonate:</string>
 							<string>openForums:</string>
 							<string>openHomepage:</string>
+							<string>toggleAudioControls:</string>
+							<string>toggleInspector:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
@@ -2945,17 +2960,27 @@
 								<string key="name">openHomepage:</string>
 								<string key="candidateClassName">id</string>
 							</object>
+							<object class="IBActionInfo">
+								<string key="name">toggleAudioControls:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">toggleInspector:</string>
+								<string key="candidateClassName">id</string>
+							</object>
 						</object>
 					</object>
 					<object class="NSMutableDictionary" key="outlets">
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>fInspectorController</string>
-							<string>fTemplateChooserController</string>
+							<string>fAudioControlsWindowController</string>
+							<string>fInspectorWindowController</string>
+							<string>fTemplateChooserWindowController</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 						</object>
@@ -2964,17 +2989,22 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>fInspectorController</string>
-							<string>fTemplateChooserController</string>
+							<string>fAudioControlsWindowController</string>
+							<string>fInspectorWindowController</string>
+							<string>fTemplateChooserWindowController</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<object class="IBToOneOutletInfo">
-								<string key="name">fInspectorController</string>
+								<string key="name">fAudioControlsWindowController</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBToOneOutletInfo">
-								<string key="name">fTemplateChooserController</string>
+								<string key="name">fInspectorWindowController</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">fTemplateChooserWindowController</string>
 								<string key="candidateClassName">id</string>
 							</object>
 						</object>
@@ -2987,9 +3017,155 @@
 				<object class="IBPartialClassDescription">
 					<string key="className">InspectorWindowController</string>
 					<string key="superclassName">NSWindowController</string>
+					<object class="NSMutableDictionary" key="actions">
+						<string key="NS.key.0">toggleInspector:</string>
+						<string key="NS.object.0">id</string>
+					</object>
+					<object class="NSMutableDictionary" key="actionInfosByName">
+						<string key="NS.key.0">toggleInspector:</string>
+						<object class="IBActionInfo" key="NS.object.0">
+							<string key="name">toggleInspector:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">macosx/InspectorWindowController.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">PreferencesWindowController</string>
+					<string key="superclassName">NSWindowController</string>
+					<object class="NSMutableDictionary" key="actions">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>chooseDefaultTemplate:</string>
+							<string>chooseTemplateInSheet:</string>
+							<string>closeTemplateSheet:</string>
+							<string>selectUseDefaultTemplate:</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+						</object>
+					</object>
+					<object class="NSMutableDictionary" key="actionInfosByName">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>chooseDefaultTemplate:</string>
+							<string>chooseTemplateInSheet:</string>
+							<string>closeTemplateSheet:</string>
+							<string>selectUseDefaultTemplate:</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<object class="IBActionInfo">
+								<string key="name">chooseDefaultTemplate:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">chooseTemplateInSheet:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">closeTemplateSheet:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">selectUseDefaultTemplate:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+						</object>
+					</object>
+					<object class="NSMutableDictionary" key="outlets">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>fAudioView</string>
+							<string>fChooseTemplateButton</string>
+							<string>fGeneralView</string>
+							<string>fShowTemplateChooserRadio</string>
+							<string>fTemplateChooserChooseButton</string>
+							<string>fTemplateChooserSheet</string>
+							<string>fTemplateChooserView</string>
+							<string>fUseTemplateRadio</string>
+							<string>fVideoView</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+						</object>
+					</object>
+					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>fAudioView</string>
+							<string>fChooseTemplateButton</string>
+							<string>fGeneralView</string>
+							<string>fShowTemplateChooserRadio</string>
+							<string>fTemplateChooserChooseButton</string>
+							<string>fTemplateChooserSheet</string>
+							<string>fTemplateChooserView</string>
+							<string>fUseTemplateRadio</string>
+							<string>fVideoView</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<object class="IBToOneOutletInfo">
+								<string key="name">fAudioView</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">fChooseTemplateButton</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">fGeneralView</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">fShowTemplateChooserRadio</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">fTemplateChooserChooseButton</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">fTemplateChooserSheet</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">fTemplateChooserView</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">fUseTemplateRadio</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">fVideoView</string>
+								<string key="candidateClassName">id</string>
+							</object>
+						</object>
+					</object>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">macosx/PreferencesWindowController.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">

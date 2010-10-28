@@ -37,13 +37,38 @@
 	[timer release];
 }
 
+- (BOOL)validateUserInterfaceItem:(id)item
+{
+    if ([item action] == @selector(toggleAudioControls:))
+	{  
+		NSString *menuTitle;
+		if (![[self window] isVisible])
+			menuTitle = NSLocalizedString(@"Show Audio Controls",
+										  @"Title for menu item to show Audio Controls.");
+		else
+			menuTitle = NSLocalizedString(@"Hide Audio Controls",
+										  @"Title for menu item to hide Audio Controls.");
+		[item setTitleWithMnemonic:menuTitle];
+    }
+	
+    return YES;
+}
+
+- (void)toggleAudioControls:(id)sender
+{
+	if ([[self window] isVisible])
+		[[self window] orderOut:self];
+	else
+		[[self window] orderFront:self];
+}
+
 - (void)timerDidExpire:(NSTimer *)theTimer
 {
 	[self updatePlay];
 	[self updateRecording];
 }
 
-- (void)showAudioControls:(id)sender
+- (IBAction)showAudioControls:(id)sender
 {
     NSWindow *window = [self window];
 	[window orderFront:sender];
