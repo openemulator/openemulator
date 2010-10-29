@@ -43,13 +43,13 @@ bool RAM::setValue(string name, string value)
 	return true;
 }
 
-bool RAM::setComponent(string name, OEComponent *component)
+bool RAM::setRef(string name, OEComponent *ref)
 {
 	if (name == "host")
 	{
 		if (host)
 			host->removeObserver(this, HOST_POWERED_ON);
-		host = component;
+		host = ref;
 		if (host)
 			host->addObserver(this, HOST_POWERED_ON);
 	}
@@ -75,7 +75,7 @@ bool RAM::getData(string name, OEData **data)
 	{
 		int powerState;
 		
-		host->postEvent(this, HOST_GET_POWERSTATE, &powerState);
+		host->postMessage(this, HOST_GET_POWERSTATE, &powerState);
 		if (powerState <= HOST_POWERSTATE_HIBERNATE)
 			return false;
 		
@@ -87,7 +87,7 @@ bool RAM::getData(string name, OEData **data)
 	return true;
 }
 
-void RAM::notify(OEComponent *component, int notification, void *data)
+void RAM::notify(OEComponent *sender, int notification, void *data)
 {
 	switch (notification)
 	{
@@ -100,9 +100,9 @@ void RAM::notify(OEComponent *component, int notification, void *data)
 	return;
 }
 
-bool RAM::postEvent(OEComponent *component, int event, void *data)
+bool RAM::postMessage(OEComponent *sender, int message, void *data)
 {
-	switch (event)
+	switch (message)
 	{
 		case RAM_GET_MEMORY:
 			*((OEData **) data) = (OEData *) memory;

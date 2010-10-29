@@ -27,19 +27,19 @@ KIM1IO::~KIM1IO()
 	delete view;
 }
 
-bool KIM1IO::setComponent(string name, OEComponent *component)
+bool KIM1IO::setRef(string name, OEComponent *ref)
 {
 	if (name == "host")
 	{
 		if (host)
 		{
-			host->postEvent(this, HOST_REMOVE_SCREEN, screen);
+			host->postMessage(this, HOST_REMOVE_SCREEN, screen);
 			host->removeObserver(this, HOST_HID_SYSTEM_CHANGED);
 		}
-		host = component;
+		host = ref;
 		if (host)
 		{
-			host->postEvent(this, HOST_ADD_SCREEN, screen);
+			host->postMessage(this, HOST_ADD_SCREEN, screen);
 			host->addObserver(this, HOST_HID_SYSTEM_CHANGED);
 		}
 	}
@@ -47,14 +47,14 @@ bool KIM1IO::setComponent(string name, OEComponent *component)
 	{
 		if (serialPort)
 			serialPort->removeObserver(this, RS232_DATA_RECEIVED);
-		serialPort = component;
+		serialPort = ref;
 		if (serialPort)
 			serialPort->addObserver(this, RS232_DATA_RECEIVED);
 	}
 	else if (name == "audioOut")
-		audioOut = component;
+		audioOut = ref;
 	else if (name == "audioIn")
-		audioIn = component;
+		audioIn = ref;
 	else
 		return false;
 	
@@ -71,7 +71,7 @@ bool KIM1IO::setData(string name, OEData *data)
 	return true;
 }
 
-void KIM1IO::notify(OEComponent *component, int notification, void *data)
+void KIM1IO::notify(OEComponent *sender, int notification, void *data)
 {
 
 }

@@ -20,11 +20,11 @@ public:
 	ControlBus();
 	
 	bool setValue(string name, string value);
-	bool setComponent(string name, OEComponent *component);
+	bool setRef(string name, OEComponent *ref);
 	
-	void notify(OEComponent *component, int notification, void *data);
+	void notify(OEComponent *sender, int notification, void *data);
 	
-	bool postEvent(OEComponent *component, int event, void *data);
+	bool postMessage(OEComponent *sender, int event, void *data);
 	
 private:
 	OEComponent *host;

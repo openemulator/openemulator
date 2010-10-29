@@ -57,7 +57,7 @@ public:
 	
 	void notify(OEComponent *component, int notification, void *data);
 	
-	bool postEvent(OEComponent *component, int message, void *data);
+	bool postMessage(OEComponent *component, int message, void *data);
 
 	OEUInt8 read(OEAddress address);
 	void write(OEAddress address, OEUInt8 value);

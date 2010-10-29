@@ -31,7 +31,7 @@ public:
 	
 	void notify(string ref, int notification, void *data);
 	
-	int postEvent(string ref, int event, void *data);
+	int postMessage(string ref, int event, void *data);
 	
 	bool addEDL(string path, OEIdMap deviceIdMap);
 	bool removeDevice(string deviceName);

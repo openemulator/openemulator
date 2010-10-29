@@ -39,11 +39,11 @@ public:
 	AddressDecoder();
 	
 	bool setValue(string name, string value);
-	bool setComponent(string name, OEComponent *component);
+	bool setRef(string name, OEComponent *ref);
 	
 	bool init();
 	
-	bool postEvent(OEComponent *component, int event, void *data);
+	bool postMessage(OEComponent *sender, int event, void *data);
 	
 	OEUInt8 read(OEAddress address);
 	void write(OEAddress address, OEUInt8 value);

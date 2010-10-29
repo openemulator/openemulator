@@ -18,10 +18,10 @@ public:
 	KIM1IO();
 	~KIM1IO();
 	
-	bool setComponent(string name, OEComponent *component);
+	bool setRef(string name, OEComponent *ref);
 	bool setData(string name, OEData *data);
 	
-	void notify(OEComponent *component, int notification, void *data);
+	void notify(OEComponent *sender, int notification, void *data);
 	
 private:
 	OEComponent *host;

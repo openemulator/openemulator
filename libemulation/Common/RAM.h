@@ -23,13 +23,13 @@ public:
 	~RAM();
 	
 	bool setValue(string name, string value);
-	bool setComponent(string name, OEComponent *component);
+	bool setRef(string name, OEComponent *ref);
 	bool setData(string name, OEData *data);
 	bool getData(string name, OEData **data);
 	
-	void notify(OEComponent *component, int notification, void *data);
+	void notify(OEComponent *sender, int notification, void *data);
 	
-	bool postEvent(OEComponent *component, int event, void *data);
+	bool postMessage(OEComponent *sender, int message, void *data);
 	
 	OEUInt8 read(OEAddress address);
 	void write(OEAddress address, OEUInt8 value);

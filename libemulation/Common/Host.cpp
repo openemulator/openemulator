@@ -46,7 +46,7 @@ bool Host::getValue(string name, string &value)
 	return true;
 }
 
-bool Host::postEvent(OEComponent *component, int event, void *data)
+bool Host::postMessage(OEComponent *component, int event, void *data)
 {
 	switch(event)
 	{
@@ -71,7 +71,7 @@ bool Host::postEvent(OEComponent *component, int event, void *data)
 			return removeScreen((HostVideoScreen *) data);
 	}
 	
-	return OEComponent::postEvent(component, event, data);
+	return OEComponent::postMessage(component, event, data);
 }
 
 void Host::setPowerState(int powerState)

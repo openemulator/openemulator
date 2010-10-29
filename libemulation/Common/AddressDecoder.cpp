@@ -38,12 +38,12 @@ bool AddressDecoder::setValue(string name, string value)
 	return true;
 }
 
-bool AddressDecoder::setComponent(string name, OEComponent *component)
+bool AddressDecoder::setRef(string name, OEComponent *ref)
 {
 	if (name == "floatingBus")
-		floatingBus = component;
+		floatingBus = ref;
 	else if (name.substr(0, 3) == "ref")
-		ref[name.substr(3)] = component;
+		this->ref[name.substr(3)] = ref;
 	else
 		return false;
 	
@@ -88,10 +88,10 @@ bool AddressDecoder::init()
 	return true;
 }
 
-bool AddressDecoder::postEvent(OEComponent *component, int notification, void *data)
+bool AddressDecoder::postMessage(OEComponent *sender, int message, void *data)
 {
-	if (notification == ADDRESSDECODER_MAP)
-		return map(component, *((string *) data));
+	if (message == ADDRESSDECODER_MAP)
+		return map(sender, *((string *) data));
 	else
 		return false;
 	

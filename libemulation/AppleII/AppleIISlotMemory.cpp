@@ -50,13 +50,13 @@ bool AppleIISlotMemory::setComponent(string name, OEComponent *component)
 OEUInt8 AppleIISlotMemory::read(OEAddress address)
 {
 	OEComponent *component = slot[(address >> 12) & 0x7];
-	slotExpansionMemory->postEvent(this, APPLEIISLOTEXPANSIONMEMORY_SET_SLOT, component);
+	slotExpansionMemory->postMessage(this, APPLEIISLOTEXPANSIONMEMORY_SET_SLOT, component);
 	return component->read(address);
 }
 
 void AppleIISlotMemory::write(OEAddress address, OEUInt8 value)
 {
 	OEComponent *component = slot[(address >> 12) & 0x7];
-	slotExpansionMemory->postEvent(this, APPLEIISLOTEXPANSIONMEMORY_SET_SLOT, component);
+	slotExpansionMemory->postMessage(this, APPLEIISLOTEXPANSIONMEMORY_SET_SLOT, component);
 	component->write(address, value);
 }

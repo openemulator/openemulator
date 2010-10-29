@@ -138,7 +138,7 @@
 
 - (int)postHostEvent:(int)message data:(void *)data
 {
-	return ((OEPAEmulation *)emulation)->postEvent(HOST_DEVICE, message, data);
+	return ((OEPAEmulation *)emulation)->postMessage(HOST_DEVICE, message, data);
 }
 
 - (NSImage *)getResourceImage:(NSString *)imagePath

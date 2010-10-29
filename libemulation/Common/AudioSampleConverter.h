@@ -13,7 +13,7 @@
 class AudioSampleConverter : public OEComponent
 {
 public:
-	bool setComponent(string name, OEComponent *component);
+	bool setRef(string name, OEComponent *ref);
 
 private:
 	OEComponent *host;

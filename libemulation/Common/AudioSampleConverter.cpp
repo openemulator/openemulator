@@ -10,12 +10,12 @@
 
 #include "AudioSampleConverter.h"
 
-bool AudioSampleConverter::setComponent(string name, OEComponent *component)
+bool AudioSampleConverter::setRef(string name, OEComponent *ref)
 {
 	if (name == "host")
-		host = component;
+		host = ref;
 	else if (name == "controlBus")
-		controlBus = component;
+		controlBus = ref;
 	else
 		return false;
 	

@@ -17,9 +17,9 @@ public:
 	
 	bool setValue(string name, string value);
 	bool getValue(string name, string &value);
-	bool setComponent(string name, OEComponent *component);
+	bool setRef(string name, OEComponent *ref);
 	
-	void notify(OEComponent *component, int notification, void *data);
+	void notify(OEComponent *sender, int notification, void *data);
 	
 private:
 	OEComponent *memoryBus;

@@ -33,9 +33,9 @@ void MC6821::setControlA(int value)
 	if (controlBusA)
 	{
 		if (wasIRQ && !isIRQ)
-			controlBusA->postEvent(this, CONTROLBUS_SET_IRQ, &isIRQ);
+			controlBusA->postMessage(this, CONTROLBUS_SET_IRQ, &isIRQ);
 		else if (!wasIRQ && isIRQ)
-			controlBusA->postEvent(this, CONTROLBUS_SET_IRQ, &isIRQ);
+			controlBusA->postMessage(this, CONTROLBUS_SET_IRQ, &isIRQ);
 	}
 }
 
@@ -48,9 +48,9 @@ void MC6821::setControlB(int value)
 	if (controlBusB)
 	{
 		if (wasIRQ && !isIRQ)
-			controlBusB->postEvent(this, CONTROLBUS_SET_IRQ, &isIRQ);
+			controlBusB->postMessage(this, CONTROLBUS_SET_IRQ, &isIRQ);
 		else if (!wasIRQ && isIRQ)
-			controlBusB->postEvent(this, CONTROLBUS_SET_IRQ, &isIRQ);
+			controlBusB->postMessage(this, CONTROLBUS_SET_IRQ, &isIRQ);
 	}
 }
 
@@ -149,7 +149,7 @@ void MC6821::notify(OEComponent *component, int notification, void *data)
 	cb2 = 0;
 }
 
-bool MC6821::postEvent(OEComponent *component, int event, void *data)
+bool MC6821::postMessage(OEComponent *component, int event, void *data)
 {
 	switch (event)
 	{
@@ -167,7 +167,7 @@ bool MC6821::postEvent(OEComponent *component, int event, void *data)
 					== MC6821_CR_C2OUTPUT)
 				{
 					int value = 1;
-					postEvent(this, MC6821_SET_CA2, &value);
+					postMessage(this, MC6821_SET_CA2, &value);
 				}
 			}
 			ca1 = value;
@@ -212,7 +212,7 @@ bool MC6821::postEvent(OEComponent *component, int event, void *data)
 					 == MC6821_CR_C2OUTPUT)
 				{
 					int value = 0;
-					postEvent(this, MC6821_SET_CB2, &value);
+					postMessage(this, MC6821_SET_CB2, &value);
 				}
 			}
 			cb1 = value;
@@ -259,11 +259,11 @@ OEUInt8 MC6821::read(OEAddress address)
 					== MC6821_CR_C2OUTPUT)
 				{
 					int ca2 = 0;
-					postEvent(this, MC6821_SET_CA2, &ca2);
+					postMessage(this, MC6821_SET_CA2, &ca2);
 					if (controlA & MC6821_CR_C2ERESTORE)
 					{
 						ca2 = 1;
-						postEvent(this, MC6821_SET_CA2, &ca2);
+						postMessage(this, MC6821_SET_CA2, &ca2);
 					}
 				}
 				setControlA(controlA &
@@ -313,7 +313,7 @@ void MC6821::write(OEAddress address, OEUInt8 value)
 				(MC6821_CR_C2OUTPUT | MC6821_CR_C2DIRECT))
 			{
 				int ca2 = value & MC6821_CR_C2SET;
-				postEvent(this, MC6821_SET_CA2, &ca2);
+				postMessage(this, MC6821_SET_CA2, &ca2);
 			}
 			break;
 		case MC6821_RS_DATAREGISTERB:
@@ -323,11 +323,11 @@ void MC6821::write(OEAddress address, OEUInt8 value)
 					== MC6821_CR_C2OUTPUT)
 				{
 					int cb2 = 0;
-					postEvent(this, MC6821_SET_CB2, &cb2);
+					postMessage(this, MC6821_SET_CB2, &cb2);
 					if (controlB & MC6821_CR_C2ERESTORE)
 					{
 						cb2 = 1;
-						postEvent(this, MC6821_SET_CB2, &cb2);
+						postMessage(this, MC6821_SET_CB2, &cb2);
 					}
 				}
 				dataB = value;
@@ -342,7 +342,7 @@ void MC6821::write(OEAddress address, OEUInt8 value)
 				== (MC6821_CR_C2OUTPUT | MC6821_CR_C2DIRECT))
 			{
 				int cb2 = value & MC6821_CR_C2SET;
-				postEvent(this, MC6821_SET_CB2, &cb2);
+				postMessage(this, MC6821_SET_CB2, &cb2);
 			}
 			break;
 	}

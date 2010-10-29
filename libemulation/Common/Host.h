@@ -519,7 +519,7 @@ public:
 	bool setValue(string name, string value);
 	bool getValue(string name, string &value);
 	
-	bool postEvent(OEComponent *component, int event, void *data);
+	bool postMessage(OEComponent *sender, int event, void *data);
 	
 private:
 	string notes;

@@ -49,7 +49,7 @@ bool ControlBus::setValue(string name, string value)
 	return true;
 }
 
-bool ControlBus::setComponent(string name, OEComponent *component)
+bool ControlBus::setRef(string name, OEComponent *ref)
 {
 	if (name == "host")
 	{
@@ -59,7 +59,7 @@ bool ControlBus::setComponent(string name, OEComponent *component)
 			host->removeObserver(this, HOST_AUDIO_FRAME_WILL_RENDER);
 			host->removeObserver(this, HOST_HID_SYSTEM_CHANGED);
 		}
-		host = component;
+		host = ref;
 		if (host)
 		{
 			host->addObserver(this, HOST_POWERED_ON );
@@ -68,9 +68,9 @@ bool ControlBus::setComponent(string name, OEComponent *component)
 		}
 	}
 	else if (name == "master")
-		master = component;
+		master = ref;
 	else if (name == "masterSocket")
-		masterSocket = component;
+		masterSocket = ref;
 	
 	return true;
 }
@@ -83,7 +83,7 @@ void ControlBus::notify(OEComponent *component, int notification, void *data)
 			if (resetOnPowerOn)
 			{
 				bool value = true;
-				postEvent(this, CONTROLBUS_SET_RESET, &value);
+				postMessage(this, CONTROLBUS_SET_RESET, &value);
 			}
 			break;
 			
@@ -111,26 +111,26 @@ void ControlBus::notify(OEComponent *component, int notification, void *data)
 			{
 				case HOST_HID_S_POWERDOWN:
 					value = HOST_POWERSTATE_OFF;
-					host->postEvent(this, HOST_SET_POWERSTATE, &value);
+					host->postMessage(this, HOST_SET_POWERSTATE, &value);
 					break;
 					
 				case HOST_HID_S_SLEEP:
 					value = HOST_POWERSTATE_PAUSE;
-					host->postEvent(this, HOST_SET_POWERSTATE, &value);
+					host->postMessage(this, HOST_SET_POWERSTATE, &value);
 					break;
 					
 				case HOST_HID_S_WAKEUP:
 					value = HOST_POWERSTATE_ON;
-					host->postEvent(this, HOST_SET_POWERSTATE, &value);
+					host->postMessage(this, HOST_SET_POWERSTATE, &value);
 					break;
 					
 				case HOST_HID_S_DEBUGGERBREAK:
 				{
 					bool value = true;
-					postEvent(this, CONTROLBUS_SET_NMI, &value);
+					postMessage(this, CONTROLBUS_SET_NMI, &value);
 					
 					value = false;
-					postEvent(this, CONTROLBUS_SET_NMI, &value);
+					postMessage(this, CONTROLBUS_SET_NMI, &value);
 					break;
 				}
 			}
@@ -139,7 +139,7 @@ void ControlBus::notify(OEComponent *component, int notification, void *data)
 	}
 }
 
-bool ControlBus::postEvent(OEComponent *component, int event, void *data)
+bool ControlBus::postMessage(OEComponent *component, int event, void *data)
 {
 	switch (event)
 	{

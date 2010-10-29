@@ -102,14 +102,14 @@ void OEPAEmulation::notify(string ref, int notification, void *data)
 	unlock();
 }
 
-int OEPAEmulation::postEvent(string ref, int event, void *data)
+int OEPAEmulation::postMessage(string ref, int event, void *data)
 {
 	lock();
 	
 	OEComponent *component = getComponent(ref);
 	int status = 0;
 	if (component)
-		status = component->postEvent(component, event, data);
+		status = component->postMessage(component, event, data);
 	else
 		OEPALog("could not post event to '" + ref + "'");
 	
