@@ -31,7 +31,7 @@ bool OEComponent::getValue(string name, string &value)
 	return false;
 }
 
-bool OEComponent::setComponent(string name, OEComponent *component)
+bool OEComponent::setRef(string name, OEComponent *component)
 {
 	return false;
 }
@@ -70,13 +70,13 @@ bool OEComponent::removeDelegate(OEComponent *component, int event)
 	return (i != last);
 }
 
-bool OEComponent::postEvent(OEComponent *component, int event, void *data)
+bool OEComponent::postMessage(OEComponent *component, int event, void *data)
 {
 	OEComponents::iterator i;
 	for (i = delegates[event].begin();
 		 i != delegates[event].end();
 		 i++)
-		if ((*i)->postEvent(component, event, data))
+		if ((*i)->postMessage(component, event, data))
 			return true;
 	
 	return false;

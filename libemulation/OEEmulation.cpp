@@ -171,7 +171,7 @@ bool OEEmulation::configureComponent(string id, xmlNodePtr children)
 					}
 				}
 				
-				if (component->setComponent(name, refComponent))
+				if (component->setRef(name, refComponent))
 					continue;
 				else
 					OELog("invalid property '" + name + "' for '" + id + "'");

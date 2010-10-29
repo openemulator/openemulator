@@ -27,21 +27,21 @@ public:
 	// Configuration
 	virtual bool setValue(string name, string value);
 	virtual bool getValue(string name, string &value);
-	virtual bool setComponent(string name, OEComponent *component);
+	virtual bool setRef(string name, OEComponent *ref);
 	virtual bool setData(string name, OEData *data);
 	virtual bool getData(string name, OEData **data);
 	
 	virtual bool init();
 	
-	// Events and responder chain
-	bool addDelegate(OEComponent *component, int event);
-	bool removeDelegate(OEComponent *component, int event);
-	virtual bool postEvent(OEComponent *component, int event, void *data);
+	// Message chain
+	virtual bool postMessage(OEComponent *sender, int event, void *data);
+	bool addDelegate(OEComponent *delegate, int event);
+	bool removeDelegate(OEComponent *delegate, int event);
 	
 	// Notifications
-	bool addObserver(OEComponent *component, int notification);
-	bool removeObserver(OEComponent *component, int notification);
-	virtual void notify(OEComponent *component, int notification, void *data);
+	virtual void notify(OEComponent *sender, int notification, void *data);
+	bool addObserver(OEComponent *observer, int notification);
+	bool removeObserver(OEComponent *observer, int notification);
 	
 	// Memory access
 	virtual OEUInt8 read(OEAddress address);
@@ -52,9 +52,6 @@ public:
 	virtual void write32(OEAddress address, OEUInt32 value);
 	virtual bool readBlock(OEAddress address, OEData *value);
 	virtual bool writeBlock(OEAddress address, OEData *value);
-	
-	// Debugging
-	virtual bool sendDebugCommand(string command);
 	
 protected:
 	OEObservers observers;
