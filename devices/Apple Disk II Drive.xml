@@ -2,7 +2,7 @@
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
 <edl version="1.0" type="Disk Drives" label="Disk II Drive 1" imageSrc="Apple Disk II Drive.png">
 
-<device id="diskII" type="Storage" label="Apple Disk II" imageSrc="images/apple2/Apple Disk II Drive.png" />
+<device id="diskII" label="Apple Disk II" imageSrc="images/apple2/Apple Disk II Drive.png" />
 <connector id="diskII.connector" type="AppleIIDisk" label="Apple Disk II Slot Connector" />
 <setting id="diskII.lock" ref="diskII.drive" property="lock" type="checkbox" label="Lock Disk Drive" />
 <component id="diskII.drive" class="AppleDiskII">

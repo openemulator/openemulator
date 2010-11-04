@@ -1,78 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
+<edl version="1.0" type="Apple II" label="Apple II" image="images/Apple II/Apple II.png" description="The Apple II was the first highly successful mass produced microprocessor product. The Apple II had color and high-resolution graphics modes, sound capabilities and one of two built-in BASIC programming languages.">
 
-<edl version="1.0" type="Apple II" label="Apple II" imageSrc="images/Apple II/Apple II.png" description="The Apple II was the first highly successful mass produced microprocessor product. The Apple II had color and high-resolution graphics modes, sound capabilities and one of two built-in BASIC programming languages.">
-
-<component id="host" class="Host">
-    <property name="notes" value="" />
-    <property name="powerState" value="0" />
-    <property name="videoWindow" value="-1 -1 768 576" />
-</component>
-
-<device id="appleII" type="Motherboard" label="Apple II" imageSrc="images/Apple II/Apple II.png" />
-<port id="appleII.slot0" ref="" type="AppleIISlot" label="Slot 0" imageSrc="Apple II Slot.png">
+<device id="appleII" label="Apple II" image="images/Apple II/Apple II.png">
+    <audio ref="appleII.controlBus" />
+    <audio ref="appleII.sampleConverter" />
+</device>
+<port id="appleII.slot0" ref="" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png">
     <inlet ref="appleII.io" property="refSlot0" outletRef="io" />
 </port>
-<port id="appleII.slot1" ref="" type="AppleIISlot" label="Slot 1" imageSrc="Apple II Slot.png">
+<port id="appleII.slot1" ref="" type="AppleIISlot" label="Slot 1" image="Apple II Slot.png">
     <inlet ref="appleII.io" property="refSlot1" outletRef="io" />
     <inlet ref="appleII.slotMemory" property="slot1" outletRef="memory" />
 </port>
-<port id="appleII.slot2" ref="" type="AppleIISlot" label="Slot 2" imageSrc="Apple II Slot.png">
+<port id="appleII.slot2" ref="" type="AppleIISlot" label="Slot 2" image="Apple II Slot.png">
     <inlet ref="appleII.io" property="refSlot2" outletRef="io" />
     <inlet ref="appleII.slotMemory" property="slot2" outletRef="memory" />
 </port>
-<port id="appleII.slot3" ref="" type="AppleIISlot" label="Slot 3" imageSrc="Apple II Slot.png">
+<port id="appleII.slot3" ref="" type="AppleIISlot" label="Slot 3" image="Apple II Slot.png">
     <inlet ref="appleII.io" property="refSlot3" outletRef="io" />
     <inlet ref="appleII.slotMemory" property="slot3" outletRef="memory" />
 </port>
-<port id="appleII.slot4" ref="" type="AppleIISlot" label="Slot 4" imageSrc="Apple II Slot.png">
+<port id="appleII.slot4" ref="" type="AppleIISlot" label="Slot 4" image="Apple II Slot.png">
     <inlet ref="appleII.io" property="refSlot4" outletRef="io" />
     <inlet ref="appleII.slotMemory" property="slot4" outletRef="memory" />
 </port>
-<port id="appleII.slot5" ref="" type="AppleIISlot" label="Slot 5" imageSrc="Apple II Slot.png">
+<port id="appleII.slot5" ref="" type="AppleIISlot" label="Slot 5" image="Apple II Slot.png">
     <inlet ref="appleII.io" property="refSlot5" outletRef="io" />
     <inlet ref="appleII.slotMemory" property="slot5" outletRef="memory" />
 </port>
-<port id="appleII.slot6" ref="" type="AppleIISlot" label="Slot 6" imageSrc="Apple II Slot.png">
+<port id="appleII.slot6" ref="" type="AppleIISlot" label="Slot 6" image="Apple II Slot.png">
     <inlet ref="appleII.io" property="refSlot6" outletRef="io" />
     <inlet ref="appleII.slotMemory" property="slot6" outletRef="memory" />
 </port>
-<port id="appleII.slot7" ref="" type="AppleIISlot" label="Slot 7" imageSrc="Apple II Slot.png">
+<port id="appleII.slot7" ref="" type="AppleIISlot" label="Slot 7" image="Apple II Slot.png">
     <inlet ref="appleII.io" property="refSlot7" outletRef="io" />
     <inlet ref="appleII.slotMemory" property="slot7" outletRef="memory" />
 </port>
-<port id="appleII.gamePort" ref="" type="AppleIIGame" label="Game Port" imageSrc="Apple II Game Port.png">
+<port id="appleII.gamePort" ref="" type="AppleIIGame" label="Game Port" image="Apple II Game Port.png">
     <inlet ref="appleII.game" property="port" outletRef="port" />
 </port>
-<port id="appleII.cpuSocket" ref="" type="CPU6502Socket" label="CPU Socket" imageSrc="CPU 6502 Socket.png">
+<port id="appleII.cpuSocket" ref="" type="CPU6502Socket" label="CPU Socket" image="CPU 6502 Socket.png">
     <inlet ref="appleII.controlBus" property="masterSocket" outletRef="master" />
 </port>
-<port id="appleII.videoPort" ref="" type="CompositeVideo" label="Video Output" imageSrc="Composite Video Port.png">
-    <inlet ref="appleII.video" property="compositeVideoPort" outletRef="compositeVideo" />
+<port id="appleII.videoPort" ref="" type="CompositeVideo" label="Video Output" image="Composite Video Port.png">
+    <inlet ref="appleII.video" property="monitor" outletRef="monitor" />
 </port>
-<port id="appleII.charsetSocket" ref="" type="AppleIICharset" label="Charset ROM Socket" imageSrc="ROM Socket.png">
+<port id="appleII.charsetSocket" ref="" type="AppleIICharset" label="Charset ROM Socket" image="ROM Socket.png">
     <inlet ref="appleII.video" property="charsetSocket" outletRef="charset" />
 </port>
-<port id="appleII.romD0Socket" ref="" type="AppleIIROM" label="ROM D0 Socket" imageSrc="ROM Socket.png">
+<port id="appleII.romD0Socket" ref="" type="AppleIIROM" label="ROM D0 Socket" image="ROM Socket.png">
     <inlet ref="appleII.mmu" property="romD0Socket" outletRef="rom" />
 </port>
-<port id="appleII.romD8Socket" ref="" type="AppleIIROM" label="ROM D8 Socket" imageSrc="ROM Socket.png">
+<port id="appleII.romD8Socket" ref="" type="AppleIIROM" label="ROM D8 Socket" image="ROM Socket.png">
     <inlet ref="appleII.mmu" property="romD8Socket" outletRef="rom" />
 </port>
-<port id="appleII.romE0Socket" ref="" type="AppleIIROM" label="ROM E0 Socket" imageSrc="ROM Socket.png">
+<port id="appleII.romE0Socket" ref="" type="AppleIIROM" label="ROM E0 Socket" image="ROM Socket.png">
     <inlet ref="appleII.mmu" property="romE0Socket" outletRef="rom" />
 </port>
-<port id="appleII.romE8Socket" ref="" type="AppleIIROM" label="ROM E8 Socket" imageSrc="ROM Socket.png">
+<port id="appleII.romE8Socket" ref="" type="AppleIIROM" label="ROM E8 Socket" image="ROM Socket.png">
     <inlet ref="appleII.mmu" property="romE8Socket" outletRef="rom" />
 </port>
-<port id="appleII.romF0Socket" ref="" type="AppleIIROM" label="ROM F0 Socket" imageSrc="ROM Socket.png">
+<port id="appleII.romF0Socket" ref="" type="AppleIIROM" label="ROM F0 Socket" image="ROM Socket.png">
     <inlet ref="appleII.mmu" property="romF0Socket" outletRef="rom" />
 </port>
-<port id="appleII.romF8Socket" ref="" type="AppleIIROM" label="ROM F8 Socket" imageSrc="ROM Socket.png">
+<port id="appleII.romF8Socket" ref="" type="AppleIIROM" label="ROM F8 Socket" image="ROM Socket.png">
     <inlet ref="appleII.mmu" property="romF8Socket" outletRef="rom" />
 </port>
 <component id="appleII.controlBus" class="AppleIIControlBus">
-    <property name="host" ref="host" />
     <property name="crystal" value="14.31818MHz" />
     <property name="frequencyDivider" value="14" />
     <property name="scanlineClockDelay" value="2" />
@@ -124,7 +119,7 @@
     <property name="ram" ref="appleII.ram" />
 </component>
 <component id="appleII.ram" class="RAM">
-    <property name="host" ref="host" />
+    <property name="controlBus" ref="controlBus" />
     <property name="size" value="0xc000" />
     <property name="image" src="${packagePath}/${id}.bin" />
 </component>
@@ -160,7 +155,7 @@
     <property name="mapSlot7" value="0xf0-0xff" />
 </component>
 <component id="appleII.keyboard" class="AppleIIKeyboard">
-    <property name="host" ref="host" />
+    <property name="monitor" ref="appleII.monitor" />
 </component>
 <component id="appleII.charset" class="CharsetLoader">
     <property name="image" src="${resourcesPath}/roms/Signetics/Signetics 2513 Video ROM.bin" />
@@ -183,7 +178,6 @@
     <property name="floatingBus" ref="appleII.floatingBus" />
 </component>
 <component id="appleII.sampleConverter" class="AudioSampleConverter">
-    <property name="host" ref="host" />
     <property name="controlBus" ref="appleII.controlBus" />
 </component>
 <component id="appleII.game" class="AppleIIGamePort">
