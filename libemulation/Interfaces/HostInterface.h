@@ -84,6 +84,12 @@ typedef struct
 // Host Canvas
 typedef string *HostCanvasWindow;
 
+enum
+{
+	HOST_CANVAS_FRAME_FORMAT_LUMINANCE,
+	HOST_CANVAS_FRAME_FORMAT_RGB,
+};
+
 typedef struct
 {
 	int frameFormat;
@@ -102,7 +108,7 @@ typedef struct
 	float compositeChromaCutoff;
 	float compositeHue;
 	float compositeSaturation;
-	float compositeColorize;
+	bool compositeColorize;
 	float *compositeDecoderMatrix;
 	float rgbSharpness;
 	float screenBrightness;

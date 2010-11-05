@@ -37,7 +37,7 @@ public:
 	void close();
 	
 	bool addEDL(string path, OEIdMap connectionMap);
-	bool removeDevice(string id);
+	bool removeDevice(string ref);
 	
 protected:
 	OEPackage *package;
@@ -67,15 +67,15 @@ private:
 	bool renameConnectionMap(OEIdMap &connectionMap, OEIdMap nameMap);
 	void insert(OEEDL *edl, string deviceId);
 	void connect();
-
+	
 	bool removeConnectedDevices(string deviceId);
 	void disconnect(string deviceId);
 	void removeElements(string deviceId);
-
+	
 	bool hasDevice(string deviceId);
 	OEIdList getDeviceIds();
-	void setDeviceId(string &id, string deviceId);
-	string getDeviceId(string id);
+	void setDeviceId(string &ref, string deviceId);
+	string getDeviceId(string ref);
 };
 
 #endif

@@ -10,15 +10,23 @@
 </device>
 <connector id="monitor.connector" label="Video Connector" image="Composite Video Connector.png" />
 <component id="monitor.monitor" class="CompositeMonitor">
-    <property name="host" ref="host" />
-    <property name="lumaBandwidth" value="0.3" />
-    <property name="brightness" value="1.0" />
-    <property name="contrast" value="1.0" />
-    <property name="chromaBandwidth" value="0.06" />
-    <property name="colorize" value="0" />
-    <property name="saturation" value="1.0" />
-    <property name="hue" value="0.08333" />
-    <property name="decoderMatrix" value="standard" />
+    <property name="compositeLumaCutoff" value="0.3" />
+    <property name="compositeChromaCutoff" value="0.06" />
+    <property name="compositeHue" value="0.06" />
+    <property name="compositeBrightness" value="0.06" />
+    <property name="compositeColorize" value="0" />
+    <property name="compositeDecoderMatrix" value="standard" />
+    <property name="screenBrightness" value="0.0" />
+    <property name="screenContrast" value="1.0" />
+    <property name="screenRedGain" value="1.0" />
+    <property name="screenGreenGain" value="1.0" />
+    <property name="screenBlueGain" value="1.0" />
+    <property name="screenBarrel" value="0.05" />
+    <property name="screenPersistance" value="0.0" />
+    <property name="screenHorizCenter" value="0.5" />
+    <property name="screenHorizSize" value="1.0" />
+    <property name="screenVertCenter" value="0.5" />
+    <property name="screenVertSize" value="1.0" />
 </component>
 
 </edl>

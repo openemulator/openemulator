@@ -486,24 +486,24 @@ OEIdList OEEDL::getDeviceIds()
 	return deviceIds;
 }
 
-void OEEDL::setDeviceId(string &id, string deviceId)
+void OEEDL::setDeviceId(string &ref, string deviceId)
 {
-	int dotIndex = id.find_first_of('.');
+	int dotIndex = ref.find_first_of('.');
 	
 	if (dotIndex == string::npos)
-		id = deviceId;
+		ref = deviceId;
 	else
-		id = deviceId + "." + id.substr(0, dotIndex + 1);
+		ref = deviceId + "." + ref.substr(0, dotIndex + 1);
 }
 
-string OEEDL::getDeviceId(string id)
+string OEEDL::getDeviceId(string ref)
 {
-	int dotIndex = id.find_first_of('.');
+	int dotIndex = ref.find_first_of('.');
 	
 	if (dotIndex == string::npos)
-		return id;
+		return ref;
 	
-	return id.substr(0, dotIndex - 1);
+	return ref.substr(0, dotIndex - 1);
 }
 
 string OEEDL::getString(int value)
