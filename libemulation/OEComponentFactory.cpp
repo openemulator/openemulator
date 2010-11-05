@@ -11,7 +11,6 @@
 #include "OEComponentFactory.h"
 
 // FACTORY_INCLUDE_START - Do not modify this section
-#include "Host.h"
 #include "ControlBus.h"
 #include "AddressDecoder.h"
 #include "AddressOffset.h"
@@ -19,7 +18,6 @@
 #include "ROM.h"
 #include "FloatingBus.h"
 #include "AudioSampleConverter.h"
-#include "AudioPLL.h"
 #include "CharsetLoader.h"
 #include "CompositeMonitor.h"
 #include "Terminal.h"
@@ -31,6 +29,7 @@
 #include "MOS6530.h"
 
 #include "KIM1IO.h"
+#include "KIM1PLL.h"
 
 #include "Apple1IO.h"
 #include "Apple1Terminal.h"
@@ -60,7 +59,6 @@ OEComponent *OEComponentFactory::create(const string &className)
 	matchComponent(ROM);
 	matchComponent(FloatingBus);
 	matchComponent(AudioSampleConverter);
-	matchComponent(AudioPLL);
 	matchComponent(CharsetLoader);
 	matchComponent(CompositeMonitor);
 	matchComponent(Terminal);
@@ -72,6 +70,7 @@ OEComponent *OEComponentFactory::create(const string &className)
 	matchComponent(MOS6530);
 	
 	matchComponent(KIM1IO);
+	matchComponent(KIM1PLL);
 	
 	matchComponent(Apple1IO);
 	matchComponent(Apple1Terminal);

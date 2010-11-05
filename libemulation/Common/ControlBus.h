@@ -22,21 +22,19 @@ public:
 	bool setValue(string name, string value);
 	bool setRef(string name, OEComponent *ref);
 	
+	bool init();
+	bool postMessage(OEComponent *sender, int event, void *data);
 	void notify(OEComponent *sender, int notification, void *data);
 	
-	bool postMessage(OEComponent *sender, int event, void *data);
-	
 private:
-	OEComponent *master;
-	OEComponent *masterSocket;
-	
-	OEComponent *cpuSel;
-	
 	float crystal;
 	float frequencyDivider;
-	float frequency;
-	
+	OEComponent *master;
+	OEComponent *masterSocket;
 	bool resetOnPowerOn;
+	
+	int powerState;
+	float frequency;
 	int resetCount;
 	int irqCount;
 	int nmiCount;
@@ -44,6 +42,7 @@ private:
 	double phase;
 	
 	void updateFrequency();
+	bool isPoweredOn(int powerState);
 };
 
 #endif

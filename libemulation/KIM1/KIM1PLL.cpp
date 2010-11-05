@@ -1,16 +1,16 @@
 
 /**
  * libemulation
- * Audio PLL
+ * KIM-1 PLL
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements an audio phase locked loop
+ * Implements the KIM-1 audio phase locked loop
  */
 
-#include "AudioPLL.h"
+#include "KIM1PLL.h"
 
-bool AudioPLL::setValue(string name, string value)
+bool KIM1PLL::setValue(string name, string value)
 {
 	if (name == "decisionFrequency")
 		decisionFrequency = getFloat(value);
@@ -20,7 +20,7 @@ bool AudioPLL::setValue(string name, string value)
 	return true;
 }
 
-bool AudioPLL::setComponent(string name, OEComponent *component)
+bool KIM1PLL::setComponent(string name, OEComponent *component)
 {
 	if (name == "host")
 		host = component;

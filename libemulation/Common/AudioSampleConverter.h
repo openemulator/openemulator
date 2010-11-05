@@ -16,6 +16,5 @@ public:
 	bool setRef(string name, OEComponent *ref);
 
 private:
-	OEComponent *host;
 	OEComponent *controlBus;
 };

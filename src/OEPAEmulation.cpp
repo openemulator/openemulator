@@ -17,27 +17,29 @@ OEEmulation()
 	oepa = NULL;
 }
 
-OEPAEmulation::OEPAEmulation(string path, string resourcePath) :
-OEEmulation(path, resourcePath)
+OEPAEmulation::OEPAEmulation(string path, string resourcesPath) :
+OEEmulation(path, resourcesPath)
 {
 	oepa = NULL;
 }
 
 OEPAEmulation::OEPAEmulation(OEPA *oepa,
-							 string path, string resourcePath) :
-OEEmulation(path, resourcePath)
+							 string path, string resourcesPath) :
+OEEmulation(path, resourcesPath)
 {
 	this->oepa = oepa;
 }
 
 void OEPAEmulation::lock()
 {
-	((OEPA *)oepa)->lockEmulations();
+	if (oepa)
+		((OEPA *)oepa)->lockEmulations();
 }
 
 void OEPAEmulation::unlock()
 {
-	((OEPA *)oepa)->unlockEmulations();
+	if (oepa)
+		((OEPA *)oepa)->unlockEmulations();
 }
 
 bool OEPAEmulation::save(string path)
@@ -51,38 +53,16 @@ bool OEPAEmulation::save(string path)
 	return status;
 }
 
-bool OEPAEmulation::setValue(string ref, string name, string value)
+int OEPAEmulation::postMessage(string ref, int event, void *data)
 {
 	lock();
 	
 	OEComponent *component = getComponent(ref);
-	bool status;
+	int status = 0;
 	if (component)
-		status = component->setValue(name, value);
+		status = component->postMessage(component, event, data);
 	else
-	{
-		status = false;
-		OEPALog("could not set property '" + name + "' for '" + ref + "'");
-	}
-	
-	unlock();
-	
-	return status;
-}
-
-bool OEPAEmulation::getValue(string ref, string name, string &value)
-{
-	lock();
-	
-	OEComponent *component = getComponent(ref);
-	bool status;
-	if (component)
-		status = component->getValue(name, value);
-	else
-	{
-		status = false;
-		OEPALog("could not get property '" + name + "' for '" + ref + "'");
-	}
+		OEPALog("could not post event to '" + ref + "'");
 	
 	unlock();
 	
@@ -100,22 +80,6 @@ void OEPAEmulation::notify(string ref, int notification, void *data)
 		OEPALog("could not send notification to '" + ref + "'");
 	
 	unlock();
-}
-
-int OEPAEmulation::postMessage(string ref, int event, void *data)
-{
-	lock();
-	
-	OEComponent *component = getComponent(ref);
-	int status = 0;
-	if (component)
-		status = component->postMessage(component, event, data);
-	else
-		OEPALog("could not post event to '" + ref + "'");
-	
-	unlock();
-	
-	return status;
 }
 
 bool OEPAEmulation::addEDL(string path, OEIdMap deviceIdMap)

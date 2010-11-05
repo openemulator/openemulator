@@ -16,7 +16,7 @@ AddressOffset::AddressOffset()
 	offset = 0;
 }
 
-bool AddressOffset::setProperty(const string &name, const string &value)
+bool AddressOffset::setValue(string name, string value)
 {
 	if (name == "offset")
 		offset = getInt(value);
@@ -26,14 +26,19 @@ bool AddressOffset::setProperty(const string &name, const string &value)
 	return true;
 }
 
-bool AddressOffset::connect(const string &name, OEComponent *component)
+bool AddressOffset::setRef(string name, OEComponent *ref)
 {
 	if (name == "component")
-		this->component = component;
+		component = ref;
 	else
 		return false;
 	
 	return true;
+}
+
+bool AddressOffset::init()
+{
+	return !component;
 }
 
 OEUInt8 AddressOffset::read(OEAddress address)

@@ -20,18 +20,14 @@ class OEPAEmulation : public OEEmulation
 public:
 	OEPAEmulation();
 	OEPAEmulation(string path);
-	OEPAEmulation(string path, string resourcePath);
-	OEPAEmulation(OEPA *oepa, string path, string resourcePath);
+	OEPAEmulation(string path, string resourcesPath);
+	OEPAEmulation(OEPA *oepa, string path, string resourcesPath);
 	
 	bool open(string path);
 	bool save(string path);
 	
-	bool setValue(string ref, string name, string value);
-	bool getValue(string ref, string name, string &value);
-	
-	void notify(string ref, int notification, void *data);
-	
 	int postMessage(string ref, int event, void *data);
+	void notify(string ref, int notification, void *data);
 	
 	bool addEDL(string path, OEIdMap deviceIdMap);
 	bool removeDevice(string deviceName);

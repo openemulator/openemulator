@@ -13,7 +13,7 @@
 
 #include "OEPA.h"
 
-#include "Host.h"
+#include "HostInterface.h"
 
 using namespace std;
 
@@ -555,7 +555,7 @@ void OEPA::runEmulations()
 		}
 		
 		// Output
-		HostAudioBuffer hostAudioBuffer =
+		HostAudioNotification hostAudioBuffer =
 		{
 			sampleRate,
 			channelNum,
@@ -568,7 +568,7 @@ void OEPA::runEmulations()
 			 i != emulations.end();
 			 i++)
 		{
-			OEComponent *component = (*i)->getComponent(HOST_DEVICE);
+			OEComponent *component = (*i)->getComponent("");
 			if (!component)
 				continue;
 			

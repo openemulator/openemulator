@@ -22,10 +22,10 @@ bool Terminal::setValue(string name, string value)
 	return true;
 }
 
-bool Terminal::setComponent(string name, OEComponent *component)
+bool Terminal::setRef(string name, OEComponent *ref)
 {
-	if (name == "host")
-		host = component;
+	if (name == "charset")
+		charset = ref;
 	else
 		return false;
 	

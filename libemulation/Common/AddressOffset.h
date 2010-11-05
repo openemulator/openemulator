@@ -15,8 +15,10 @@ class AddressOffset : public OEComponent
 public:
 	AddressOffset();
 	
-	bool setProperty(const string &name, const string &value);
-	bool connect(const string &name, OEComponent *component);
+	bool setValue(string name, string value);
+	bool setRef(string name, OEComponent *ref);
+	
+	bool init();
 	
 	OEUInt8 read(OEAddress address);
 	void write(OEAddress address, OEUInt8 value);

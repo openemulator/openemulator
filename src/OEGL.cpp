@@ -98,7 +98,7 @@ OEGL::~OEGL()
 	pthread_mutex_destroy(&glMutex);
 }
 
-void OEGL::update(HostVideoScreens *screens)
+/*void OEGL::update(HostVideoScreens *screens)
 {
 	pthread_mutex_lock(&glMutex);
 	
@@ -110,10 +110,10 @@ void OEGL::update(HostVideoScreens *screens)
 	
 	pthread_mutex_unlock(&glMutex);
 }
-
+*/
 void OEGL::draw(int width, int height)
 {
-	pthread_mutex_lock(&glMutex);
+/*	pthread_mutex_lock(&glMutex);
 	
 	glViewport(0, 0, width, height);
 	
@@ -123,10 +123,10 @@ void OEGL::draw(int width, int height)
 		windowAspectRatio = OERatio(windowSize);
 		windowRedraw = true;
 	}
-	
-	if (windowRedraw)
+*/	
+//	if (windowRedraw)
 		glClear(GL_COLOR_BUFFER_BIT);
-	
+/*
 	int screenIndex = 0;
 	for (HostVideoScreens::iterator i = screens.begin();
 		 i != screens.end();
@@ -138,9 +138,9 @@ void OEGL::draw(int width, int height)
 	
 	windowRedraw = false;
 	
-	pthread_mutex_unlock(&glMutex);
+	pthread_mutex_unlock(&glMutex);*/
 }
-
+/*
 OESize OEGL::getScreenSize(HostVideoConfiguration *conf)
 {
 	return OEMakeSize(conf->paddingLeft +	conf->contentWidth +
@@ -243,3 +243,4 @@ void OEGL::renderScreen(OEUInt32 *framebuffer, OESize framebufferSize, OERect fr
 	glVertex2f(OEMinX(frame), OEMinY(frame));
 	glEnd();
 }
+*/

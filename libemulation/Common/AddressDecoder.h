@@ -13,7 +13,7 @@
 
 #include "OEComponent.h"
 
-// Events
+// Messages
 enum {
 	ADDRESSDECODER_MAP,
 };

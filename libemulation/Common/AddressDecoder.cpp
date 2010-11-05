@@ -54,7 +54,7 @@ bool AddressDecoder::init()
 {
 	if (!floatingBus)
 	{
-		OELog("undefined floating bus");
+		OELog("floating bus undefined");
 		return false;
 	}
 	
@@ -91,7 +91,7 @@ bool AddressDecoder::init()
 bool AddressDecoder::postMessage(OEComponent *sender, int message, void *data)
 {
 	if (message == ADDRESSDECODER_MAP)
-		return map(sender, *((string *) data));
+		map((AddressDecoderMap *) data);
 	else
 		return false;
 	

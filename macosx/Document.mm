@@ -15,7 +15,7 @@
 
 #import "OEInfo.h"
 #import "OEPAEmulation.h"
-#import "Host.h"
+#import "HostInterface.h"
 
 #import "StringConversion.h"
 
@@ -104,41 +104,22 @@
 	return emulation;
 }
 
-- (BOOL)setHostProperty:(NSString *)name
-				  value:(NSString *)value
+- (int)postMessage:(NSString *)device
+		   message:(int)message
+			  data:(void *)data
 {
-	if (!emulation)
-		return false;
-	
-	string stlValue = getString(value);
-	
-	return ((OEPAEmulation *)emulation)->setValue(HOST_DEVICE,
-												  getString(name),
-												  stlValue);
+	return ((OEPAEmulation *)emulation)->postMessage(getString(device), 
+													 message,
+													 data);
 }
 
-- (NSString *)getHostProperty:(NSString *)name
+- (void)notify:(NSString *)device
+  notification:(int)notification
+		  data:(void *)data
 {
-	if (!emulation)
-		return nil;
-	
-	string value;
-	if (((OEPAEmulation *)emulation)->getValue(HOST_DEVICE,
-											   getString(name),
-											   value))
-		return getNSString(value);
-	
-	return @"";
-}
-
-- (void)notifyHost:(int)notification data:(void *)data
-{
-	((OEPAEmulation *)emulation)->notify(HOST_DEVICE, notification, data);
-}
-
-- (int)postHostEvent:(int)message data:(void *)data
-{
-	return ((OEPAEmulation *)emulation)->postMessage(HOST_DEVICE, message, data);
+	((OEPAEmulation *)emulation)->notify(getString(device),
+										 notification,
+										 data);
 }
 
 - (NSImage *)getResourceImage:(NSString *)imagePath

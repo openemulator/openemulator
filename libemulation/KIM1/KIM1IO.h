@@ -10,7 +10,7 @@
 
 #include "OEComponent.h"
 
-#include "Host.h"
+#include "HostInterface.h"
 
 class KIM1IO : public OEComponent
 {

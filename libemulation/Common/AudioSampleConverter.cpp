@@ -12,9 +12,7 @@
 
 bool AudioSampleConverter::setRef(string name, OEComponent *ref)
 {
-	if (name == "host")
-		host = ref;
-	else if (name == "controlBus")
+	if (name == "controlBus")
 		controlBus = ref;
 	else
 		return false;

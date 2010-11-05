@@ -10,7 +10,7 @@
 
 #include "OEComponent.h"
 
-// Events
+// Messages
 enum
 {
 	RAM_GET_MEMORY,
@@ -27,22 +27,20 @@ public:
 	bool setData(string name, OEData *data);
 	bool getData(string name, OEData **data);
 	
-	void notify(OEComponent *sender, int notification, void *data);
+	bool init();
 	
 	bool postMessage(OEComponent *sender, int message, void *data);
+	void notify(OEComponent *sender, int notification, void *data);
 	
 	OEUInt8 read(OEAddress address);
 	void write(OEAddress address, OEUInt8 value);
 	
 private:
-	OEData *memory;
 	OEData powerOnPattern;
 	OEComponent *controlBus;
 	
 	OEAddress size;
 	OEAddress mask;
+	OEData *data;
 	OEUInt8 *datap;
-	
-	void setSize(OEAddress size);
-	void setMemory(OEData *data);
 };

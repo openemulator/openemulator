@@ -15,26 +15,23 @@
 
 RAM::RAM()
 {
-	memory = NULL;
-	datap = NULL;
-	
 	controlBus = NULL;
 	
-	setSize(1);
-	setMemory(new OEData());
-	
-	powerOnPattern.resize(1);
+	size = 0;
+	mask = 0;
+	data = NULL;
+	datap = NULL;
 }
 
 RAM::~RAM()
 {
-	delete memory;
+	delete data;
 }
 
 bool RAM::setValue(string name, string value)
 {
 	if (name == "size")
-		setSize(getInt(value));
+		size = getInt(value);
 	else if (name == "powerOnPattern")
 		powerOnPattern = getCharVector(value);
 	else
@@ -62,7 +59,7 @@ bool RAM::setRef(string name, OEComponent *ref)
 bool RAM::setData(string name, OEData *data)
 {
 	if (name == "image")
-		setMemory(data);
+		this->data = data;
 	else
 		return false;
 	
@@ -79,7 +76,7 @@ bool RAM::getData(string name, OEData **data)
 		if (powerState <= CONTROLBUS_POWERSTATE_HIBERNATE)
 			return false;
 		
-		*data = memory;
+		*data = this->data;
 	}
 	else
 		return false;
@@ -87,17 +84,27 @@ bool RAM::getData(string name, OEData **data)
 	return true;
 }
 
-void RAM::notify(OEComponent *sender, int notification, void *data)
+bool RAM::init()
 {
-	switch (notification)
+	if (size <= 0)
 	{
-		case CONTROLBUS_POWERSTATE_CHANGED:
-			for (int i = 0; i < memory->size(); i++)
-				(*memory)[i] = powerOnPattern[i % powerOnPattern.size()];
-			break;
+		OELog("invalid RAM size");
+		return false;
 	}
 	
-	return;
+	if (!data)
+		data = new OEData();
+	
+	if (!powerOnPattern.size())
+		powerOnPattern.resize(1);
+	
+	size = getNextPowerOf2(size);
+	mask = size - 1;
+	
+	data->resize(size);
+	datap = (OEUInt8 *) &data->front();
+	
+	return true;
 }
 
 bool RAM::postMessage(OEComponent *sender, int message, void *data)
@@ -105,11 +112,26 @@ bool RAM::postMessage(OEComponent *sender, int message, void *data)
 	switch (message)
 	{
 		case RAM_GET_MEMORY:
-			*((OEData **) data) = (OEData *) memory;
+			*((OEData **) data) = this->data;
 			return true;
 	}
 	
 	return false;
+}
+
+void RAM::notify(OEComponent *sender, int notification, void *data)
+{
+	switch (notification)
+	{
+		case CONTROLBUS_POWERSTATE_CHANGED:
+		{
+			for (int i = 0; i < this->data->size(); i++)
+				(*this->data)[i] = powerOnPattern[i % powerOnPattern.size()];
+			break;
+		}
+	}
+	
+	return;
 }
 
 OEUInt8 RAM::read(OEAddress address)
@@ -120,23 +142,4 @@ OEUInt8 RAM::read(OEAddress address)
 void RAM::write(OEAddress address, OEUInt8 value)
 {
 	datap[address & mask] = value;
-}
-
-void RAM::setSize(OEAddress value)
-{
-	value = getNextPowerOf2(value);
-	if (value < 1)
-		value = 1;
-	
-	size = value;
-	mask = value - 1;
-}
-
-void RAM::setMemory(OEData *data)
-{
-	delete memory;
-	memory = data;
-	
-	memory->resize(size);
-	datap = (OEUInt8 *) &memory->front();
 }

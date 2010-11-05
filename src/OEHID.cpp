@@ -22,8 +22,7 @@ OEHID::OEHID(OEPAEmulation *emulation,
 	memset(keyDown, sizeof(keyDown), 0);
 	memset(mouseButtonDown, sizeof(mouseButtonDown), 0);
 	memset(joystickButtonDown, sizeof(joystickButtonDown), 0);
-	memset(tabletButtonDown, sizeof(tabletButtonDown), 0);
-
+	
 	string value;
 //	emulation->getProperty(HOST_DEVICE, "hidMouseCapture", value);
 	mouseCapture = (value == "1");
@@ -32,19 +31,19 @@ OEHID::OEHID(OEPAEmulation *emulation,
 
 void OEHID::sendHIDEvent(int notification, int usageId, float value)
 {
-	HostHIDEvent hidEvent;
-	hidEvent.usageId = usageId;
-	hidEvent.value = value;
+	HostCanvasNotification notificationInfo;
+	notificationInfo.usageId = usageId;
+	notificationInfo.value = value;
 	
 	if (emulation)
-		emulation->notify(HOST_DEVICE, notification, &hidEvent);
+		emulation->notify("", notification, &notificationInfo);
 	
 	printf("HID event: %d %d %f\n", notification, usageId, value);
 }
 
 void OEHID::sendSystemEvent(int usageId)
 {
-	sendHIDEvent(HOST_CANVAS_SYSTEM_CHANGED, usageId, 0);
+	sendHIDEvent(HOST_CANVAS_SYSTEMKEYBOARD_CHANGED, usageId, 0);
 }
 
 void OEHID::setKey(int usageId, bool value)
@@ -205,37 +204,5 @@ void OEHID::moveJoystickBall(int deviceIndex, int index, float value)
 	
 	sendHIDEvent(HOST_CANVAS_JOYSTICK1_CHANGED + deviceIndex,
 				 HOST_CANVAS_J_AXIS1 + index,
-				 value);
-}
-
-void OEHID::setTabletButton(int index, bool value)
-{
-	if (index >= HOST_CANVAS_TABLET_BUTTON_NUM)
-		return;
-	
-	if (tabletButtonDown[index] == value)
-		return;
-	
-	tabletButtonDown[index] = value;
-	
-	sendHIDEvent(HOST_CANVAS_TABLET_CHANGED,
-				 HOST_CANVAS_J_BUTTON1 + index,
-				 value);
-}
-
-void OEHID::setTabletPosition(float x, float y)
-{
-	sendHIDEvent(HOST_CANVAS_TABLET_CHANGED,
-				 HOST_CANVAS_T_X,
-				 x);
-	sendHIDEvent(HOST_CANVAS_TABLET_CHANGED,
-				 HOST_CANVAS_T_Y,
-				 y);
-}
-
-void OEHID::setTabletProximity(bool value)
-{
-	sendHIDEvent(HOST_CANVAS_TABLET_CHANGED,
-				 HOST_CANVAS_T_PROXIMITY,
 				 value);
 }

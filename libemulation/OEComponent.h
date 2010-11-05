@@ -33,7 +33,7 @@ public:
 	
 	virtual bool init();
 	
-	// Message chain
+	// Messages
 	virtual bool postMessage(OEComponent *sender, int event, void *data);
 	bool addDelegate(OEComponent *delegate, int event);
 	bool removeDelegate(OEComponent *delegate, int event);

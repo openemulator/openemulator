@@ -4,8 +4,9 @@
 
 <device id="apple1" label="Apple-1" image="images/Early microcomputers/Apple-1.png">
     <audio ref="apple1.controlBus" />
-    <hotplug ref="" />
     <loader ref="apple1.memoryBus" />
+    <canvas ref="apple1.terminal" />
+    <status ref="apple1.controlBus" />
 </device>
 <port id="apple1.videoPort" ref="" type="CompositeVideo" label="Video Out" image="Video Connector.png">
     <inlet ref="apple1.terminal" property="monitor" outletRef="connector" />
@@ -21,7 +22,6 @@
     <property name="frequencyDivider" value="14" />
     <property name="master" ref="apple1.cpu" />
     <property name="masterSocket" ref="" />
-    <property name="reset" value="0" />
     <property name="resetOnPowerOn" value="0" />
 </component>
 <component id="apple1.memoryBus" class="AddressDecoder">

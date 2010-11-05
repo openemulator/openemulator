@@ -28,12 +28,12 @@ class Terminal : public OEComponent
 {
 public:
 	bool setValue(string name, string value);
-	bool setComponent(string name, OEComponent *component);
+	bool setRef(string name, OEComponent *ref);
 	
 private:
-	OEComponent *host;
 	int width;
 	int height;
+	OEComponent *charset;
 };
 
 #endif

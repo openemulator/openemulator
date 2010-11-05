@@ -18,13 +18,13 @@ public:
 	
 	bool setData(string name, OEData *data);
 	
+	bool init();
+	
 	OEUInt8 read(OEAddress address);
 	
 private:
-	OEData *memory;
-	
+	int size;
 	int mask;
+	OEData *data;
 	OEUInt8 *datap;
-	
-	void setMemory(OEData *data);
 };

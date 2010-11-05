@@ -12,7 +12,12 @@
 #define _OEHID_H
 
 #include "OEPAEmulation.h"
-#include "Host.h"
+#include "HostInterface.h"
+
+#define OEHID_KEY_NUM				256
+#define OEHID_MOUSEBUTTON_NUM		8
+#define OEHID_JOYSTICK_NUM			4
+#define OEHID_JOYSTICKBUTTON_NUM	8
 
 typedef void (*OEHIDCallback)(void *userData, int value);
 
@@ -37,9 +42,7 @@ public:
 	void sendJoystickHatEvent(int deviceIndex, int index, float value);
 	void moveJoystickBall(int deviceIndex, int index, float value);
 	
-	void setTabletButton(int index, bool value);
-	void setTabletPosition(float x, float y);
-	void setTabletProximity(bool value);
+	void reset();
 	
 private:
 	OEPAEmulation *emulation;
@@ -48,10 +51,9 @@ private:
 	OEHIDCallback setKeyboardLEDs;
 	
 	int keyDownCount;
-	bool keyDown[HOST_HID_KEY_NUM];
-	bool mouseButtonDown[HOST_HID_MOUSE_BUTTON_NUM];
-	bool joystickButtonDown[HOST_HID_JOYSTICK_NUM][HOST_HID_JOYSTICK_BUTTON_NUM];
-	bool tabletButtonDown[HOST_HID_TABLET_BUTTON_NUM];
+	bool keyDown[OEHID_KEY_NUM];
+	bool mouseButtonDown[OEHID_MOUSEBUTTON_NUM];
+	bool joystickButtonDown[OEHID_JOYSTICK_NUM][OEHID_JOYSTICKBUTTON_NUM];
 	
 	bool mouseCapture;
 	bool mouseCaptured;

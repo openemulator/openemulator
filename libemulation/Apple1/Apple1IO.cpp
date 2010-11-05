@@ -10,7 +10,7 @@
 
 #include "Apple1IO.h"
 
-#include "Host.h"
+#include "HostInterface.h"
 #include "MC6821.h"
 
 #define APPLE1KEYBOARD_MASK	0x40

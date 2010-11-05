@@ -11,38 +11,28 @@
 #include <math.h>
 
 #include "ControlBus.h"
-#include "Host.h"
+#include "HostInterface.h"
 
 ControlBus::ControlBus()
 {
 	crystal = 1E6;
 	frequencyDivider = 1.0;
-	updateFrequency();
-	
-	resetOnPowerOn = false;
-	irqCount = 0;
-	
-	host = NULL;
 	master = NULL;
-}
-
-void ControlBus::updateFrequency()
-{
-	frequency = crystal / frequencyDivider;
+	masterSocket = NULL;
+	resetOnPowerOn = false;
+	
+	powerState = CONTROLBUS_POWERSTATE_ON;
+	resetCount = 0;
+	irqCount = 0;
+	nmiCount = 0;
 }
 
 bool ControlBus::setValue(string name, string value)
 {
 	if (name == "crystal")
-	{
 		crystal = getInt(value);
-		updateFrequency();
-	}
 	else if (name == "frequencyDivider")
-	{
-		frequencyDivider = getInt(value);
 		updateFrequency();
-	}
 	else if (name == "resetOnPowerOn")
 		resetOnPowerOn = getInt(value);
 	
@@ -51,15 +41,7 @@ bool ControlBus::setValue(string name, string value)
 
 bool ControlBus::setRef(string name, OEComponent *ref)
 {
-	if (name == "host")
-	{
-		if (host)
-			host->removeObserver(this, HOST_AUDIO_FRAME_WILL_RENDER);
-		host = ref;
-		if (host)
-			host->addObserver(this, HOST_AUDIO_FRAME_WILL_RENDER);
-	}
-	else if (name == "master")
+	if (name == "master")
 		master = ref;
 	else if (name == "masterSocket")
 		masterSocket = ref;
@@ -67,60 +49,11 @@ bool ControlBus::setRef(string name, OEComponent *ref)
 	return true;
 }
 
-void ControlBus::notify(OEComponent *component, int notification, void *data)
+bool ControlBus::init()
 {
-	switch (notification)
-	{
-		case HOST_AUDIO_FRAME_WILL_RENDER:
-		{
-			HostAudioBuffer *buffer = (HostAudioBuffer *) data;
-			float *out = buffer->output;
-			int sampleNum = buffer->channelNum * buffer->frameNum;
-			
-			for(int i = 0; i < sampleNum; i++)
-			{
-				*out++ += 0.05 * sin(phase);
-				phase += 2 * M_PI * 220 / buffer->sampleRate;
-			}
-			// Implement simulation
-			break;
-		}
-			
-		case HOST_HID_SYSTEM_CHANGED:
-		{
-			HostHIDEvent *event = (HostHIDEvent *) data;
-			int value;
-			
-			switch (event->usageId)
-			{
-				case HOST_HID_S_POWERDOWN:
-					value = HOST_POWERSTATE_OFF;
-					host->postMessage(this, HOST_SET_POWERSTATE, &value);
-					break;
-					
-				case HOST_HID_S_SLEEP:
-					value = HOST_POWERSTATE_PAUSE;
-					host->postMessage(this, HOST_SET_POWERSTATE, &value);
-					break;
-					
-				case HOST_HID_S_WAKEUP:
-					value = HOST_POWERSTATE_ON;
-					host->postMessage(this, HOST_SET_POWERSTATE, &value);
-					break;
-					
-				case HOST_HID_S_DEBUGGERBREAK:
-				{
-					bool value = true;
-					postMessage(this, CONTROLBUS_SET_NMI, &value);
-					
-					value = false;
-					postMessage(this, CONTROLBUS_SET_NMI, &value);
-					break;
-				}
-			}
-			break;
-		}
-	}
+	updateFrequency();
+	
+	return true;
 }
 
 bool ControlBus::postMessage(OEComponent *component, int event, void *data)
@@ -129,29 +62,48 @@ bool ControlBus::postMessage(OEComponent *component, int event, void *data)
 	{
 		case CONTROLBUS_SET_POWERSTATE:
 		{
-			if (resetOnPowerOn)
+			int oldPowerState = powerState;
+			powerState = *((int *)data);
+			if (!isPoweredOn(oldPowerState) &&
+				isPoweredOn(powerState) &&
+				resetOnPowerOn)
 			{
 				bool value = true;
 				postMessage(this, CONTROLBUS_SET_RESET, &value);
+				value = false;
+				postMessage(this, CONTROLBUS_SET_RESET, &value);
 			}
+			return true;
+		}
+		case CONTROLBUS_GET_POWERSTATE:
+		{
+			*((int *)data) = powerState;
+			return true;
 		}
 		case CONTROLBUS_SET_RESET:
 		{
-			bool value = *((bool *) data);
-			resetCount += value ? 1 : -1;
-			OEComponent::notify(this, CONTROLBUS_RESET_CHANGED, NULL);
+			int oldResetCount = resetCount;
+			resetCount += *((bool *) data) ? 1 : -1;
+			if (!oldResetCount != !resetCount)
+				OEComponent::notify(this, CONTROLBUS_RESET_CHANGED, &resetCount);
 			return true;
 		}
 		case CONTROLBUS_SET_IRQ:
-			if (!irqCount)
-				OEComponent::notify(this, CONTROLBUS_IRQ_CHANGED, NULL);
-			irqCount++;
+		{
+			int oldIRQCount = irqCount;
+			irqCount += *((bool *) data) ? 1 : -1;
+			if (!oldIRQCount != !irqCount)
+				OEComponent::notify(this, CONTROLBUS_IRQ_CHANGED, &irqCount);
 			return true;
-			
+		}			
 		case CONTROLBUS_SET_NMI:
-			OEComponent::notify(this, CONTROLBUS_NMI_CHANGED, NULL);
+		{
+			int oldNMICount = nmiCount;
+			nmiCount += *((bool *) data) ? 1 : -1;
+			if (!oldNMICount != !nmiCount)
+				OEComponent::notify(this, CONTROLBUS_NMI_CHANGED, &nmiCount);
 			return true;
-			
+		}			
 		case CONTROLBUS_ADD_TIMER:
 			return true;
 			
@@ -166,4 +118,36 @@ bool ControlBus::postMessage(OEComponent *component, int event, void *data)
 	}
 	
 	return false;
+}
+
+void ControlBus::notify(OEComponent *component, int notification, void *data)
+{
+	switch (notification)
+	{
+		case HOST_AUDIO_FRAME_WILL_RENDER:
+		{
+			HostAudioNotification *buffer = (HostAudioNotification *) data;
+			float *out = buffer->output;
+			int sampleNum = buffer->channelNum * buffer->frameNum;
+			
+			for(int i = 0; i < sampleNum; i++)
+			{
+				*out++ += 0.05 * sin(phase);
+				phase += 2 * M_PI * 220 / buffer->sampleRate;
+			}
+			
+			// Implement simulation
+			break;
+		}
+	}
+}
+
+void ControlBus::updateFrequency()
+{
+	frequency = crystal / frequencyDivider;
+}
+
+bool ControlBus::isPoweredOn(int powerState)
+{
+	return (powerState >= CONTROLBUS_POWERSTATE_HIBERNATE);
 }

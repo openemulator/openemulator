@@ -73,7 +73,6 @@
     <property name="scanlineClockDelay" value="2" />
     <property name="master" ref="appleII.cpu" />
     <property name="masterSocket" ref="" />
-    <property name="reset" value="0" />
     <property name="resetOnPowerOn" value="0" />
 </component>
 <component id="appleII.memoryBus" class="AddressDecoder">

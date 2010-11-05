@@ -13,8 +13,6 @@
 
 #include <pthread.h>
 
-#include "Host.h"
-
 enum 
 {
 	OEGL_TEX_FRAME,
@@ -48,7 +46,7 @@ public:
 	OEGL();
 	~OEGL();
 	
-	void update(HostVideoScreens *screens);
+//	void update(HostVideoScreens *screens);
 	void draw(int width, int height);
 	
 private:
@@ -59,21 +57,21 @@ private:
 	float windowAspectRatio;
 	bool windowRedraw;
 	
-	HostVideoScreens screens;
+//	HostVideoScreens screens;
 	
 	int columnNum;
 	int rowNum;
 	OESize cellSize;
 	
-	OESize getScreenSize(HostVideoConfiguration *conf);
+//	OESize getScreenSize(HostVideoConfiguration *conf);
 	
 	void updateCellSize();
 	void updateScreenMatrix();
 	
-	void drawScreen(HostVideoScreen *screen, int index);
+//	void drawScreen(HostVideoScreen *screen, int index);
 	
-	void renderScreen(OEUInt32 *framebuffer, OESize framebufferSize,
-					  OERect frame);
+//	void renderScreen(OEUInt32 *framebuffer, OESize framebufferSize,
+//					  OERect frame);
 };
 
 #endif

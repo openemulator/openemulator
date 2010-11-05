@@ -22,7 +22,6 @@
     <property name="frequencyDivider" value="1" />
     <property name="master" ref="kim1.cpu" />
     <property name="masterSocket" ref="" />
-    <property name="reset" value="0" />
     <property name="resetOnPowerOn" value="0" />
 </component>
 <component id="kim1.memoryBus" class="AddressDecoder">
@@ -58,7 +57,7 @@
     <property name="mode" value="ground" />
 </component>
 <component id="kim1.ram" class="RAM">
-    <property name="controlBus" ref="controlBus" />
+    <property name="controlBus" ref="kim1.controlBus" />
     <property name="image" src="${packagePath}/${id}.bin" />
     <property name="size" value="0x400" />
 </component>
@@ -81,12 +80,12 @@
     <property name="dataB" value="0" />
 </component>
 <component id="kim1.rriot1.ram" class="RAM">
-    <property name="controlBus" ref="controlBus" />
+    <property name="controlBus" ref="kim1.controlBus" />
     <property name="image" src="${packagePath}/${id}.bin" />
     <property name="size" value="0x40" />
 </component>
 <component id="kim1.rriot2.ram" class="RAM">
-    <property name="controlBus" ref="controlBus" />
+    <property name="controlBus" ref="kim1.controlBus" />
     <property name="image" src="${packagePath}/${id}.bin" />
     <property name="size" value="0x40" />
 </component>
@@ -105,7 +104,7 @@
 <component id="kim1.audioOut" class="AudioSampleConverter">
     <property name="controlBus" ref="kim1.controlBus" />
 </component>
-<component id="kim1.audioIn" class="KIM1AudioPLL">
+<component id="kim1.audioIn" class="KIM1PLL">
     <property name="decisionFrequency" value="3400" />
 </component>
 

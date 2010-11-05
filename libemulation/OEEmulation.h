@@ -29,8 +29,6 @@ public:
 	
 	OEComponent *getComponent(string id);
 	
-protected:
-	
 private:
 	string resourcesPath;
 	OEComponentsMap componentsMap;

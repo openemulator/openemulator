@@ -14,38 +14,40 @@
 
 ROM::ROM()
 {
-	memory = NULL;
+	size = 0;
+	mask = 0;
+	data = NULL;
 	datap = NULL;
-	
-	setMemory(new OEData());
 }
 
 ROM::~ROM()
 {
-	delete memory;
-}
-
-void ROM::setMemory(OEData *data)
-{
-	delete memory;
-	memory = data;
-	
-	int size = getNextPowerOf2(memory->size());
-	if (size < 1)
-		size = 1;
-	
-	mask = size - 1;
-	
-	memory->resize(size);
-	datap = (OEUInt8 *) &memory->front();
+	delete data;
 }
 
 bool ROM::setData(string name, OEData *data)
 {
 	if (name == "image")
-		setMemory(data);
+		this->data = data;
 	else
 		return false;
+	
+	return true;
+}
+
+bool ROM::init()
+{
+	if (!data)
+	{
+		OELog("missing ROM");
+		return false;
+	}
+	
+	size = getNextPowerOf2(size);
+	mask = size - 1;
+	
+	data->resize(size);
+	datap = (OEUInt8 *) &data->front();
 	
 	return true;
 }
