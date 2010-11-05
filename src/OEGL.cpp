@@ -10,6 +10,8 @@
 
 #include <math.h>
 
+#include <OpenGL/OpenGL.h>
+
 #include "OEGL.h"
 
 inline OEPoint OEMakePoint(float x, float y)

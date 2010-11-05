@@ -37,8 +37,7 @@ public:
 private:
 	OEData *memory;
 	OEData powerOnPattern;
-	
-	OEComponent *host;
+	OEComponent *controlBus;
 	
 	OEAddress size;
 	OEAddress mask;

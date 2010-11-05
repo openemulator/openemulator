@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
-<edl version="1.0" type="80 Column Cards" label="Videx Videoterm" imageSrc="Videx Videoterm.png">
+<edl version="1.0" type="80 Column Cards" label="Videx Videoterm" image="Videx Videoterm.png">
 
-<device id="videoterm" type="Expansion" label="Videx Videoterm" imageSrc="images/apple2/Videx Videoterm.png">
-<connector id="videoterm.connector" type="AppleIISlot" label="Videx Videoterm" imageSrc="images/apple2/Videx Videoterm.png" />
+<device id="videoterm" type="Expansion" label="Videx Videoterm" image="images/apple2/Videx Videoterm.png">
+    <hotpluggable
+</device>
+<connector id="videoterm.connector" type="AppleIISlot" label="Videx Videoterm" image="images/apple2/Videx Videoterm.png" />
 <component id="videoterm.io" class="VidexVideoterm">
 </component>
 <component name="videoterm.memory" class="AppleIIInterfaceROM">

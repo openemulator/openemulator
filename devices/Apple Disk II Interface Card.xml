@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
-<edl version="1.0" type="Disk Drive Controllers" label="Disk II Interface" imageSrc="Apple Disk II Interface Card.png">
+<edl version="1.0" type="Disk Drive Controllers" label="Disk II Interface" image="Apple Disk II Interface Card.png">
 
-<device id="diskIIInterface" type="Expansion" label="Apple Disk II Interface Card" imageSrc="Apple Disk II Interface Card.png" />
-<connector id="diskIIInterface.connector" type="AppleIISlot" label="Apple Disk II Interface Card" imageSrc="Apple Disk II Interface Card.png" />
-<port id="diskIIInterface.drive1" ref="" type="AppleIIDisk" label="Drive 1" imageSrc="Apple Disk II Socket.png">
+<device id="diskIIInterface" type="Expansion" label="Apple Disk II Interface Card" image="Apple Disk II Interface Card.png">
+    <hotpluggable ref="0" />
+</device>
+<connector id="diskIIInterface.connector" type="AppleIISlot" label="Apple Disk II Interface Card" image="Apple Disk II Interface Card.png" />
+<port id="diskIIInterface.drive1" ref="" type="AppleIIDisk" label="Drive 1" image="Apple Disk II Socket.png">
     <inlet ref="diskIIInterface.io" property="drive1" outletRef="drive" />
 </port>
-<port id="diskIIInterface.drive2" ref="" type="AppleIIDisk" label="Drive 2" imageSrc="Apple Disk II Socket.png">
+<port id="diskIIInterface.drive2" ref="" type="AppleIIDisk" label="Drive 2" image="Apple Disk II Socket.png">
     <inlet ref="diskIIInterface.io" property="drive2" outletRef="drive" />
 </port>
 <component id="diskIIInterface.io" class="AppleDiskIIInterfaceCard">

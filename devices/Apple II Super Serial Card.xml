@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
-<edl version="1.0" type="Serial Port Controllers" label="Super Serial Card" imageSrc="images/Apple II/Apple II Super Serial Card.png">
+<edl version="1.0" type="Serial Port Controllers" label="Super Serial Card" image="images/Apple II/Apple II Super Serial Card.png">
 
-<device id="ssc" type="Expansion" label="Apple II Super Serial Card" imageSrc="images/Apple II/Apple II Super Serial Card.png" />
-<connector id="ssc.connector" type="AppleIISlot" label="Apple II Super Serial Card" imageSrc="Apple II Super Serial Card.png" />
-<port id="ssc.port" ref="" type="Serial" label="Serial Port" imageSrc="Serial Port.png">
+<device id="ssc" label="Apple II Super Serial Card" image="images/Apple II/Apple II Super Serial Card.png">
+    <setting ref="ssc.io" name="mode" type="select" options="Communications Mode,Printer Mode" label="Mode" />
+    <setting ref="ssc.io" name="baudRate" type="select" options="50,75,110,135,150,300,600,1200,1800,2400,3600,4800,7200,9600,19200" label="Baud Rate" />
+    <setting ref="ssc.io" name="dataBits" type="select" options="7,8" label="Data Bits" />
+    <setting ref="ssc.io" name="stopBits" type="select" options="1,2" label="Stop Bits" />
+    <setting ref="ssc.io" name="parity" type="select" options="None,Even,Odd" label="Parity" />
+    <setting ref="ssc.io" name="autoLFAfterCR" type="checkbox" label="Auto LF after CR" />
+    <setting ref="ssc.io" name="interrupts" type="checkbox" label="Enable interrupt" />
+    <setting ref="ssc.io" name="charactersPerLine" type="select" options="40,72,80,132" label="Characters Per Line" />
+    <setting ref="ssc.io" name="delayAfterCR" type="checkbox" label="Delay after CR" />
+</device>
+<connector id="ssc.connector" type="AppleIISlot" label="Apple II Super Serial Card" image="Apple II Super Serial Card.png" />
+<port id="ssc.port" ref="" type="Serial" label="Serial Port" image="Serial Port.png">
     <inlet ref="ssc.io" property="port" outletRef="connector" />
 </port>
-<setting id="ssc.mode" ref="ssc.io" property="mode" type="select" options="Communications Mode,Printer Mode" label="Mode" />
-<setting id="ssc.baudRate" ref="ssc.io" property="baudRate" type="select" options="50,75,110,135,150,300,600,1200,1800,2400,3600,4800,7200,9600,19200" label="Baud Rate" />
-<setting id="ssc.dataBits" ref="ssc.io" property="dataBits" type="select" options="7,8" label="Data Bits" />
-<setting id="ssc.stopBits" ref="ssc.io" property="stopBits" type="select" options="1,2" label="Stop Bits" />
-<setting id="ssc.parity" ref="ssc.io" property="parity" type="select" options="None,Even,Odd" label="Parity" />
-<setting id="ssc.autoLFAfterCR" ref="ssc.io" property="autoLFAfterCR" type="checkbox" label="Auto LF after CR" />
-<setting id="ssc.interrupts" ref="ssc.io" property="interrupts" type="checkbox" label="Enable interrupt" />
-<setting id="ssc.charactersPerLine" ref="ssc.io" property="charactersPerLine" type="select" options="40,72,80,132" label="Characters Per Line" />
-<setting id="ssc.delayAfterCR" ref="ssc.io" property="delayAfterCR" type="checkbox" label="Delay after CR" />
 <component id="ssc.io" class="AppleIISuperSerialCard">
-    <property name="host" ref="host" />
     <property name="port" ref="" />
     <property name="mode" value="0" />
     <property name="baudRate" value="9600" />

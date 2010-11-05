@@ -14,7 +14,7 @@
 
 KIM1IO::KIM1IO()
 {
-	host = NULL;
+	controlBus = NULL;
 	serialPort = NULL;
 	audioOut = NULL;
 	audioIn = NULL;
@@ -29,21 +29,7 @@ KIM1IO::~KIM1IO()
 
 bool KIM1IO::setRef(string name, OEComponent *ref)
 {
-	if (name == "host")
-	{
-		if (host)
-		{
-			host->postMessage(this, HOST_REMOVE_SCREEN, screen);
-			host->removeObserver(this, HOST_HID_SYSTEM_CHANGED);
-		}
-		host = ref;
-		if (host)
-		{
-			host->postMessage(this, HOST_ADD_SCREEN, screen);
-			host->addObserver(this, HOST_HID_SYSTEM_CHANGED);
-		}
-	}
-	else if (name == "serialPort")
+	if (name == "serialPort")
 	{
 		if (serialPort)
 			serialPort->removeObserver(this, RS232_DATA_RECEIVED);

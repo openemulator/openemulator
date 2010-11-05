@@ -12,7 +12,6 @@
 #define _OEGL_H
 
 #include <pthread.h>
-#include <OpenGL/OpenGL.h>
 
 #include "Host.h"
 

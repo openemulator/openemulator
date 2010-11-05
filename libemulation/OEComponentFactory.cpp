@@ -53,7 +53,6 @@
 OEComponent *OEComponentFactory::create(const string &className)
 {
 	// FACTORY_CODE_START - Do not modify this section
-	matchComponent(Host);
 	matchComponent(ControlBus);
 	matchComponent(AddressDecoder);
 	matchComponent(AddressOffset);

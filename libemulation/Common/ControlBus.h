@@ -27,7 +27,6 @@ public:
 	bool postMessage(OEComponent *sender, int event, void *data);
 	
 private:
-	OEComponent *host;
 	OEComponent *master;
 	OEComponent *masterSocket;
 	

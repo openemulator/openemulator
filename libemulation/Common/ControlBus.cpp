@@ -54,18 +54,10 @@ bool ControlBus::setRef(string name, OEComponent *ref)
 	if (name == "host")
 	{
 		if (host)
-		{
-			host->removeObserver(this, HOST_POWERED_ON);
 			host->removeObserver(this, HOST_AUDIO_FRAME_WILL_RENDER);
-			host->removeObserver(this, HOST_HID_SYSTEM_CHANGED);
-		}
 		host = ref;
 		if (host)
-		{
-			host->addObserver(this, HOST_POWERED_ON );
 			host->addObserver(this, HOST_AUDIO_FRAME_WILL_RENDER);
-			host->addObserver(this, HOST_HID_SYSTEM_CHANGED);
-		}
 	}
 	else if (name == "master")
 		master = ref;
@@ -79,14 +71,6 @@ void ControlBus::notify(OEComponent *component, int notification, void *data)
 {
 	switch (notification)
 	{
-		case HOST_POWERED_ON:
-			if (resetOnPowerOn)
-			{
-				bool value = true;
-				postMessage(this, CONTROLBUS_SET_RESET, &value);
-			}
-			break;
-			
 		case HOST_AUDIO_FRAME_WILL_RENDER:
 		{
 			HostAudioBuffer *buffer = (HostAudioBuffer *) data;
@@ -143,6 +127,14 @@ bool ControlBus::postMessage(OEComponent *component, int event, void *data)
 {
 	switch (event)
 	{
+		case CONTROLBUS_SET_POWERSTATE:
+		{
+			if (resetOnPowerOn)
+			{
+				bool value = true;
+				postMessage(this, CONTROLBUS_SET_RESET, &value);
+			}
+		}
 		case CONTROLBUS_SET_RESET:
 		{
 			bool value = *((bool *) data);

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
-<edl version="1.0" type="Game Controllers" label="Game Paddles (Mouse)" imageSrc="Apple II Game Paddles.png">
+<edl version="1.0" type="Game Controllers" label="Game Paddles (Mouse)" image="Apple II Game Paddles.png">
 
-<device id="mousePaddles" type="Peripheral" label="Game Paddles (Mouse)" imageSrc="Apple II Game Paddles.png" />
+<device id="mousePaddles" type="Peripheral" label="Game Paddles (Mouse)" image="Apple II Game Paddles.png" />
 <setting id="mousePaddles.invert" ref="mousePaddles.port" property="invertAxis" type="checkbox" label="Invert axis" />
 <component id="mousePaddles.port" class="AppleIIGamePaddles">
     <property name="host" ref="host" />

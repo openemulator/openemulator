@@ -44,7 +44,7 @@ void OEHID::sendHIDEvent(int notification, int usageId, float value)
 
 void OEHID::sendSystemEvent(int usageId)
 {
-	sendHIDEvent(HOST_HID_SYSTEM_CHANGED, usageId, 0);
+	sendHIDEvent(HOST_CANVAS_SYSTEM_CHANGED, usageId, 0);
 }
 
 void OEHID::setKey(int usageId, bool value)
@@ -54,15 +54,15 @@ void OEHID::setKey(int usageId, bool value)
 	
 	keyDown[usageId] = value;
 	
-	sendHIDEvent(HOST_HID_KEYBOARD_CHANGED, usageId, value);
+	sendHIDEvent(HOST_CANVAS_KEYBOARD_CHANGED, usageId, value);
 	
 	int count = keyDownCount + (value ? 1 : -1);
 	keyDownCount = count < 0 ? 0 : count;
 	
-	if ((keyDown[HOST_HID_K_LEFTCONTROL] ||
-		 keyDown[HOST_HID_K_RIGHTCONTROL]) &&
-		(keyDown[HOST_HID_K_LEFTALT] ||
-		 keyDown[HOST_HID_K_RIGHTALT]))
+	if ((keyDown[HOST_CANVAS_K_LEFTCONTROL] ||
+		 keyDown[HOST_CANVAS_K_RIGHTCONTROL]) &&
+		(keyDown[HOST_CANVAS_K_LEFTALT] ||
+		 keyDown[HOST_CANVAS_K_RIGHTALT]))
 		mouseCaptureRelease = true;
 	
 	if (mouseCaptureRelease && !keyDownCount)
@@ -82,12 +82,12 @@ void OEHID::sendUnicode(int unicode)
 	if (((unicode < 0xe000) || (unicode > 0xf8ff)) &&
 		((unicode < 0xf0000) || (unicode > 0xffffd)) &&
 		((unicode < 0x100000) || (unicode > 0x10fffd)))
-		sendHIDEvent(HOST_HID_UNICODEKEYBOARD_CHANGED, unicode, 0);
+		sendHIDEvent(HOST_CANVAS_UNICODEKEYBOARD_CHANGED, unicode, 0);
 }
 
 void OEHID::setMouseButton(int index, bool value)
 {
-	if (index >= HOST_HID_MOUSE_BUTTON_NUM)
+	if (index >= HOST_CANVAS_MOUSE_BUTTON_NUM)
 		return;
 	
 	if (mouseButtonDown[index] == value)
@@ -96,8 +96,8 @@ void OEHID::setMouseButton(int index, bool value)
 	mouseButtonDown[index] = value;
 	
 	if (mouseCaptured)
-		sendHIDEvent(HOST_HID_MOUSE_CHANGED,
-					 HOST_HID_M_BUTTON1 + index,
+		sendHIDEvent(HOST_CANVAS_MOUSE_CHANGED,
+					 HOST_CANVAS_M_BUTTON1 + index,
 					 value);
 	else if (!mouseCaptured && mouseCapture && (index == 0))
 	{
@@ -105,8 +105,8 @@ void OEHID::setMouseButton(int index, bool value)
 		setMouseCapture(emulation, true);
 	}
 	else
-		sendHIDEvent(HOST_HID_POINTER_CHANGED,
-					 HOST_HID_P_BUTTON1 + index,
+		sendHIDEvent(HOST_CANVAS_POINTER_CHANGED,
+					 HOST_CANVAS_P_BUTTON1 + index,
 					 value);
 }
 
@@ -115,11 +115,11 @@ void OEHID::setMousePosition(float x, float y)
 	if (mouseCaptured)
 		return;
 	
-	sendHIDEvent(HOST_HID_POINTER_CHANGED,
-				 HOST_HID_P_X,
+	sendHIDEvent(HOST_CANVAS_POINTER_CHANGED,
+				 HOST_CANVAS_P_X,
 				 x);
-	sendHIDEvent(HOST_HID_POINTER_CHANGED,
-				 HOST_HID_P_Y,
+	sendHIDEvent(HOST_CANVAS_POINTER_CHANGED,
+				 HOST_CANVAS_P_Y,
 				 y);
 }
 
@@ -128,11 +128,11 @@ void OEHID::moveMouse(float rx, float ry)
 	if (!mouseCaptured)
 		return;
 	
-	sendHIDEvent(HOST_HID_MOUSE_CHANGED,
-				 HOST_HID_M_RX,
+	sendHIDEvent(HOST_CANVAS_MOUSE_CHANGED,
+				 HOST_CANVAS_M_RX,
 				 rx);
-	sendHIDEvent(HOST_HID_MOUSE_CHANGED,
-				 HOST_HID_M_RY,
+	sendHIDEvent(HOST_CANVAS_MOUSE_CHANGED,
+				 HOST_CANVAS_M_RY,
 				 ry);
 }
 
@@ -142,21 +142,21 @@ void OEHID::sendMouseWheelEvent(int index, float value)
 		return;
 	
 	if (mouseCaptured)
-		sendHIDEvent(HOST_HID_MOUSE_CHANGED,
-					 HOST_HID_M_WX + index,
+		sendHIDEvent(HOST_CANVAS_MOUSE_CHANGED,
+					 HOST_CANVAS_M_WX + index,
 					 value);
 	else
-		sendHIDEvent(HOST_HID_POINTER_CHANGED,
-					 HOST_HID_P_WX + index,
+		sendHIDEvent(HOST_CANVAS_POINTER_CHANGED,
+					 HOST_CANVAS_P_WX + index,
 					 value);
 }
 
 void OEHID::setJoystickButton(int deviceIndex, int index, bool value)
 {
-	if (deviceIndex >= HOST_HID_JOYSTICK_NUM)
+	if (deviceIndex >= HOST_CANVAS_JOYSTICK_NUM)
 		return;
 	
-	if (index >= HOST_HID_JOYSTICK_BUTTON_NUM)
+	if (index >= HOST_CANVAS_JOYSTICK_BUTTON_NUM)
 		return;
 	
 	if (joystickButtonDown[deviceIndex][index] == value)
@@ -164,53 +164,53 @@ void OEHID::setJoystickButton(int deviceIndex, int index, bool value)
 	
 	joystickButtonDown[deviceIndex][index] = value;
 	
-	sendHIDEvent(HOST_HID_JOYSTICK1_CHANGED + deviceIndex,
-				 HOST_HID_J_BUTTON1 + index,
+	sendHIDEvent(HOST_CANVAS_JOYSTICK1_CHANGED + deviceIndex,
+				 HOST_CANVAS_J_BUTTON1 + index,
 				 value);
 }
 
 void OEHID::setJoystickPosition(int deviceIndex, int index, float value)
 {
-	if (deviceIndex >= HOST_HID_JOYSTICK_NUM)
+	if (deviceIndex >= HOST_CANVAS_JOYSTICK_NUM)
 		return;
 	
-	if (index >= HOST_HID_JOYSTICK_AXIS_NUM)
+	if (index >= HOST_CANVAS_JOYSTICK_AXIS_NUM)
 		return;
 	
-	sendHIDEvent(HOST_HID_JOYSTICK1_CHANGED + deviceIndex,
-				 HOST_HID_J_AXIS1 + index,
+	sendHIDEvent(HOST_CANVAS_JOYSTICK1_CHANGED + deviceIndex,
+				 HOST_CANVAS_J_AXIS1 + index,
 				 value);
 }
 
 void OEHID::sendJoystickHatEvent(int deviceIndex, int index, float value)
 {
-	if (deviceIndex >= HOST_HID_JOYSTICK_NUM)
+	if (deviceIndex >= HOST_CANVAS_JOYSTICK_NUM)
 		return;
 	
-	if (index >= HOST_HID_JOYSTICK_HAT_NUM)
+	if (index >= HOST_CANVAS_JOYSTICK_HAT_NUM)
 		return;
 	
-	sendHIDEvent(HOST_HID_JOYSTICK1_CHANGED + deviceIndex,
-				 HOST_HID_J_AXIS1 + index,
+	sendHIDEvent(HOST_CANVAS_JOYSTICK1_CHANGED + deviceIndex,
+				 HOST_CANVAS_J_AXIS1 + index,
 				 value);
 }
 
 void OEHID::moveJoystickBall(int deviceIndex, int index, float value)
 {
-	if (deviceIndex >= HOST_HID_JOYSTICK_NUM)
+	if (deviceIndex >= HOST_CANVAS_JOYSTICK_NUM)
 		return;
 	
-	if (index >= HOST_HID_JOYSTICK_RAXIS_NUM)
+	if (index >= HOST_CANVAS_JOYSTICK_RAXIS_NUM)
 		return;
 	
-	sendHIDEvent(HOST_HID_JOYSTICK1_CHANGED + deviceIndex,
-				 HOST_HID_J_AXIS1 + index,
+	sendHIDEvent(HOST_CANVAS_JOYSTICK1_CHANGED + deviceIndex,
+				 HOST_CANVAS_J_AXIS1 + index,
 				 value);
 }
 
 void OEHID::setTabletButton(int index, bool value)
 {
-	if (index >= HOST_HID_TABLET_BUTTON_NUM)
+	if (index >= HOST_CANVAS_TABLET_BUTTON_NUM)
 		return;
 	
 	if (tabletButtonDown[index] == value)
@@ -218,24 +218,24 @@ void OEHID::setTabletButton(int index, bool value)
 	
 	tabletButtonDown[index] = value;
 	
-	sendHIDEvent(HOST_HID_TABLET_CHANGED,
-				 HOST_HID_J_BUTTON1 + index,
+	sendHIDEvent(HOST_CANVAS_TABLET_CHANGED,
+				 HOST_CANVAS_J_BUTTON1 + index,
 				 value);
 }
 
 void OEHID::setTabletPosition(float x, float y)
 {
-	sendHIDEvent(HOST_HID_TABLET_CHANGED,
-				 HOST_HID_T_X,
+	sendHIDEvent(HOST_CANVAS_TABLET_CHANGED,
+				 HOST_CANVAS_T_X,
 				 x);
-	sendHIDEvent(HOST_HID_TABLET_CHANGED,
-				 HOST_HID_T_Y,
+	sendHIDEvent(HOST_CANVAS_TABLET_CHANGED,
+				 HOST_CANVAS_T_Y,
 				 y);
 }
 
 void OEHID::setTabletProximity(bool value)
 {
-	sendHIDEvent(HOST_HID_TABLET_CHANGED,
-				 HOST_HID_T_PROXIMITY,
+	sendHIDEvent(HOST_CANVAS_TABLET_CHANGED,
+				 HOST_CANVAS_T_PROXIMITY,
 				 value);
 }

@@ -10,7 +10,7 @@
 
 #include "RAM.h"
 
-#include "Host.h"
+#include "ControlBusInterface.h"
 #include "AddressDecoder.h"
 
 RAM::RAM()
@@ -18,7 +18,7 @@ RAM::RAM()
 	memory = NULL;
 	datap = NULL;
 	
-	host = NULL;
+	controlBus = NULL;
 	
 	setSize(1);
 	setMemory(new OEData());
@@ -45,13 +45,13 @@ bool RAM::setValue(string name, string value)
 
 bool RAM::setRef(string name, OEComponent *ref)
 {
-	if (name == "host")
+	if (name == "controlBus")
 	{
-		if (host)
-			host->removeObserver(this, HOST_POWERED_ON);
-		host = ref;
-		if (host)
-			host->addObserver(this, HOST_POWERED_ON);
+		if (controlBus)
+			controlBus->removeObserver(this, CONTROLBUS_POWERSTATE_CHANGED);
+		controlBus = ref;
+		if (controlBus)
+			controlBus->addObserver(this, CONTROLBUS_POWERSTATE_CHANGED);
 	}
 	else
 		return false;
@@ -75,8 +75,8 @@ bool RAM::getData(string name, OEData **data)
 	{
 		int powerState;
 		
-		host->postMessage(this, HOST_GET_POWERSTATE, &powerState);
-		if (powerState <= HOST_POWERSTATE_HIBERNATE)
+		controlBus->postMessage(this, CONTROLBUS_GET_POWERSTATE, &powerState);
+		if (powerState <= CONTROLBUS_POWERSTATE_HIBERNATE)
 			return false;
 		
 		*data = memory;
@@ -91,7 +91,7 @@ void RAM::notify(OEComponent *sender, int notification, void *data)
 {
 	switch (notification)
 	{
-		case HOST_POWERED_ON:
+		case CONTROLBUS_POWERSTATE_CHANGED:
 			for (int i = 0; i < memory->size(); i++)
 				(*memory)[i] = powerOnPattern[i % powerOnPattern.size()];
 			break;

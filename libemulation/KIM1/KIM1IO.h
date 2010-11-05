@@ -24,11 +24,10 @@ public:
 	void notify(OEComponent *sender, int notification, void *data);
 	
 private:
-	OEComponent *host;
+	OEComponent *controlBus;
 	OEComponent *serialPort;
 	OEComponent *audioOut;
 	OEComponent *audioIn;
 	
 	OEData *view;
-	HostVideoScreen *screen;
 };
