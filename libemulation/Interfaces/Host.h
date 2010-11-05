@@ -35,7 +35,7 @@ enum
 	
 	HOST_CAMERA_SET_CALLBACK,
 	
-	HOST_STATUS_SET_CALLBACK,
+	HOST_STATUS_CONFIGURE,
 	HOST_STATUS_GET_INFOLINE,
 	HOST_STATUS_IS_REMOVABLE,
 	
@@ -478,7 +478,7 @@ typedef struct
 	void *userData;
 	HostEthernetSend send;
 	HostEthernetReceive receive;
-} HostEthernetCallbackInfo;
+} HostEthernetConfiguration;
 
 // Host Camera
 typedef bool HostCameraGet(int *buffer, int bufferSize, int *x, int *y);
@@ -492,7 +492,7 @@ typedef struct
 {
 	void *userData;
 	HostStatusCallback callback;
-} HostStatusCallbackInfo;
+} HostStatusConfiguration;
 
 // Host Setting
 typedef struct
