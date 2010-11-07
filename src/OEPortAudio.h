@@ -8,34 +8,32 @@
  * OpenEmulator portaudio interface.
  */
 
-#ifndef _OEPA_H
-#define _OEPA_H
+#ifndef _OEPORTAUDIO_H
+#define _OEPORTAUDIO_H
 
 #include <pthread.h>
 #include "portaudio.h"
 #include "sndfile.h"
 #include "samplerate.h"
 
-#include "OEPAEmulation.h"
+#include "OEPortAudioEmulation.h"
 
-#define OEPA_SAMPLERATE			48000.0
-#define OEPA_CHANNELNUM			2
-#define OEPA_FRAMESPERBUFFER	512
-#define OEPA_BUFFERNUM			3
+#define OEPORTAUDIO_SAMPLERATE			48000.0
+#define OEPORTAUDIO_CHANNELNUM			2
+#define OEPORTAUDIO_FRAMESPERBUFFER		512
+#define OEPORTAUDIO_BUFFERNUM			3
 
-#define OEPA_VOLUMEFILTERFREQ	20.0
+#define OEPORTAUDIO_VOLUMEFILTERFREQ	20.0
 
-inline void OEPALog(string text)
+inline void OEPortAudioLog(string text)
 {
-	cerr << "oepa: " << text << endl;
+	cerr << "oeportaudio: " << text << endl;
 }
 
-typedef vector<OEPAEmulation *> OEPAEmulations;
-
-class OEPA
+class OEPortAudio
 {
 public:
-	OEPA();
+	OEPortAudio();
 	
 	void setFullDuplex(bool value);
 	void setSampleRate(double value);
@@ -48,8 +46,8 @@ public:
 	
 	bool open();
 	void close();
-	bool addEmulation(OEPAEmulation *emulation);
-	void removeEmulation(OEPAEmulation *emulation);
+	bool addEmulation(OEPortAudioEmulation *emulation);
+	void removeEmulation(OEPortAudioEmulation *emulation);
 	
 	void runAudio(const void *inputBuffer,
 				  void *outputBuffer,
@@ -95,7 +93,7 @@ private:
 	bool emulationsThreadShouldRun;
 	pthread_t emulationsThread;
 	pthread_mutex_t emulationsMutex;
-	OEPAEmulations emulations;
+	OEPortAudioEmulations emulations;
 	
 	bool playing;
 	SNDFILE *playFile;

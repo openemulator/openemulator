@@ -11,34 +11,36 @@
 #include <math.h>
 #include <iostream>
 
-#include "OEPA.h"
+#include "OEPortAudio.h"
 
 #include "HostInterface.h"
 
 using namespace std;
 
-static int oepaRunAudio(const void *inputBuffer,
-						void *outputBuffer,
-						unsigned long framesPerBuffer,
-						const PaStreamCallbackTimeInfo* timeInfo,
-						PaStreamCallbackFlags statusFlags,
-						void *userData)
+static int oePortAudioRun(const void *inputBuffer,
+						  void *outputBuffer,
+						  unsigned long framesPerBuffer,
+						  const PaStreamCallbackTimeInfo* timeInfo,
+						  PaStreamCallbackFlags statusFlags,
+						  void *userData)
 {
-	((OEPA *) userData)->runAudio(inputBuffer, outputBuffer, framesPerBuffer);
+	((OEPortAudio *) userData)->runAudio(inputBuffer,
+										 outputBuffer,
+										 framesPerBuffer);
 	
 	return paContinue;
 }
 
-void *oepaRunAudioTimer(void *arg)
+void *oePortAudioRunAudioTimer(void *arg)
 {
-	((OEPA *) arg)->runAudioTimer();
+	((OEPortAudio *) arg)->runAudioTimer();
 	
 	return NULL;
 }
 
 void *oepaRunEmulations(void *arg)
 {
-	((OEPA *) arg)->runEmulations();
+	((OEPortAudio *) arg)->runEmulations();
 	
 	return NULL;
 }
