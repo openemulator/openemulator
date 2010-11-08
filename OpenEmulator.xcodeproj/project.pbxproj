@@ -30,7 +30,6 @@
 		003E25E71070796700185260 /* images in Resources */ = {isa = PBXBuildFile; fileRef = 003E2597107075D900185260 /* images */; };
 		003FB21410BA3D5D00D3697B /* devices in Resources */ = {isa = PBXBuildFile; fileRef = 00E8A393108CCAA200D0A137 /* devices */; };
 		0049F9231277CFDA00553860 /* DocumentController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00AD746811A2F10E00BAC29C /* DocumentController.mm */; };
-		005256BF120A63B300A6BC75 /* Debugger.xib in Resources */ = {isa = PBXBuildFile; fileRef = 005256BD120A63B300A6BC75 /* Debugger.xib */; };
 		005398DB113A00CA00CA7CE4 /* ROM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 005397E31139EC1F00CA7CE4 /* ROM.cpp */; };
 		005398DC113A00CA00CA7CE4 /* RAM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 005397E01139EC1800CA7CE4 /* RAM.cpp */; };
 		005486CA0FDC84E500DBCFA8 /* Sparkle.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 001F56F80FD1E8E500EA246A /* Sparkle.framework */; };
@@ -65,7 +64,6 @@
 		00954EAE1277BC3B00C17203 /* InspectorWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00954EAD1277BC3B00C17203 /* InspectorWindowController.m */; };
 		0095E0B51209E14800C127F5 /* Apple1IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0095E0B11209E14700C127F5 /* Apple1IO.cpp */; };
 		0095E0B71209E14800C127F5 /* Apple1Terminal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0095E0B31209E14700C127F5 /* Apple1Terminal.cpp */; };
-		0095E0D61209E3E200C127F5 /* DebuggerWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0095E0D51209E3E200C127F5 /* DebuggerWindowController.m */; };
 		009899E61243F7530077CE17 /* ControlBus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 009899BC1243F4E30077CE17 /* ControlBus.cpp */; };
 		0098AE6F124E98AC00A4EB26 /* CharsetLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0098AE6D124E98AC00A4EB26 /* CharsetLoader.cpp */; };
 		0098AF96124EACE200A4EB26 /* AppleIIControlBus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0098AF94124EACE200A4EB26 /* AppleIIControlBus.cpp */; };
@@ -205,7 +203,6 @@
 		003134F212039FFC00913149 /* Apple1CassetteInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Apple1CassetteInterface.h; sourceTree = "<group>"; };
 		003318AE1101492B00CC1782 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Connector.xib; sourceTree = "<group>"; };
 		003E2597107075D900185260 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
-		005256BE120A63B300A6BC75 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Debugger.xib; sourceTree = "<group>"; };
 		005256E4120A841200A6BC75 /* Terminal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Terminal.h; sourceTree = "<group>"; };
 		005256E5120A841200A6BC75 /* Terminal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Terminal.cpp; sourceTree = "<group>"; };
 		005397DF1139EC1800CA7CE4 /* RAM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RAM.h; sourceTree = "<group>"; };
@@ -257,8 +254,6 @@
 		0095E0B21209E14700C127F5 /* Apple1IO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Apple1IO.h; sourceTree = "<group>"; };
 		0095E0B31209E14700C127F5 /* Apple1Terminal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Apple1Terminal.cpp; sourceTree = "<group>"; };
 		0095E0B41209E14700C127F5 /* Apple1Terminal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Apple1Terminal.h; sourceTree = "<group>"; };
-		0095E0D41209E3E200C127F5 /* DebuggerWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DebuggerWindowController.h; sourceTree = "<group>"; };
-		0095E0D51209E3E200C127F5 /* DebuggerWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DebuggerWindowController.m; sourceTree = "<group>"; };
 		00984D9711A73B1000B9C0B5 /* CompositeMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompositeMonitor.h; sourceTree = "<group>"; };
 		00984D9811A73B1000B9C0B5 /* CompositeMonitor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CompositeMonitor.cpp; sourceTree = "<group>"; };
 		009899BB1243F4E30077CE17 /* ControlBus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ControlBus.h; sourceTree = "<group>"; };
@@ -662,8 +657,6 @@
 				00BADD451100BE8300EB0344 /* ConnectorViewController.m */,
 				006115C011DD0347008AA3EE /* Application.h */,
 				006115C111DD0347008AA3EE /* Application.m */,
-				0095E0D41209E3E200C127F5 /* DebuggerWindowController.h */,
-				0095E0D51209E3E200C127F5 /* DebuggerWindowController.m */,
 				002579FB1218A83400206E56 /* StringConversion.h */,
 				00954E761277B79E00C17203 /* DeviceCell.h */,
 				00954E771277B79E00C17203 /* DeviceCell.m */,
@@ -717,7 +710,6 @@
 				00ED379B12779AD000BEF6BD /* AudioStop.png */,
 				009BA0EA1276476B00F483A2 /* Devices.xib */,
 				0078F653127348ED0042577E /* AudioControls.xib */,
-				005256BD120A63B300A6BC75 /* Debugger.xib */,
 				003318AD1101492B00CC1782 /* Connector.xib */,
 				00D1958B1093712E008FB014 /* Chooser.xib */,
 				00E8A393108CCAA200D0A137 /* devices */,
@@ -872,7 +864,6 @@
 				00D1958D1093712E008FB014 /* Chooser.xib in Resources */,
 				003318AF1101492B00CC1782 /* Connector.xib in Resources */,
 				00F0ED6711028C8800208090 /* DiskImage525.icns in Resources */,
-				005256BF120A63B300A6BC75 /* Debugger.xib in Resources */,
 				0078F655127348ED0042577E /* AudioControls.xib in Resources */,
 				009BA0EC1276476B00F483A2 /* Devices.xib in Resources */,
 				00ED379C12779AD100BEF6BD /* AudioMax.png in Resources */,
@@ -977,7 +968,6 @@
 				00BADDC51100EDC600EB0344 /* ConnectorViewController.m in Sources */,
 				008107DE1120C57600D744FB /* TemplateChooserViewController.mm in Sources */,
 				006115C211DD0347008AA3EE /* Application.m in Sources */,
-				0095E0D61209E3E200C127F5 /* DebuggerWindowController.m in Sources */,
 				00954E781277B79E00C17203 /* DeviceCell.m in Sources */,
 				00954E991277BB8E00C17203 /* DevicesWindowController.m in Sources */,
 				00954E9E1277BBB400C17203 /* DeviceChooserWindowController.m in Sources */,
@@ -1015,14 +1005,6 @@
 				003318AE1101492B00CC1782 /* English */,
 			);
 			name = Connector.xib;
-			sourceTree = "<group>";
-		};
-		005256BD120A63B300A6BC75 /* Debugger.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				005256BE120A63B300A6BC75 /* English */,
-			);
-			name = Debugger.xib;
 			sourceTree = "<group>";
 		};
 		005E5F751086B16C00E573D4 /* Inspector.xib */ = {
