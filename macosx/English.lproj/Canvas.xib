@@ -12,7 +12,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="5"/>
+			<integer value="100103"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -39,7 +39,7 @@
 				<string key="NSWindowRect">{{32, 338}, {640, 480}}</string>
 				<int key="NSWTFlags">539492352</int>
 				<string key="NSWindowTitle"/>
-				<string key="NSWindowClass">DeviceWindow</string>
+				<string key="NSWindowClass">CanvasWindow</string>
 				<nil key="NSViewClass"/>
 				<string key="NSWindowContentMaxSize">{3.40282e+38, 3.40282e+38}</string>
 				<string key="NSWindowContentMinSize">{320, 240}</string>
@@ -53,7 +53,7 @@
 							<int key="NSvFlags">274</int>
 							<string key="NSFrameSize">{640, 480}</string>
 							<reference key="NSSuperview" ref="568628114"/>
-							<string key="NSClassName">DeviceViewController</string>
+							<string key="NSClassName">CanvasViewController</string>
 						</object>
 					</object>
 					<string key="NSFrameSize">{640, 480}</string>
@@ -197,7 +197,7 @@
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
 				<bool key="EncodedWithXMLCoder">YES</bool>
 				<object class="IBPartialClassDescription">
-					<string key="className">DeviceViewController</string>
+					<string key="className">CanvasViewController</string>
 					<string key="superclassName">NSOpenGLView</string>
 					<object class="NSMutableDictionary" key="actions">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -272,11 +272,11 @@
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">macosx/DeviceViewController.h</string>
+						<string key="minorKey">macosx/CanvasViewController.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
-					<string key="className">DeviceWindow</string>
+					<string key="className">CanvasWindow</string>
 					<string key="superclassName">NSWindow</string>
 					<object class="NSMutableDictionary" key="actions">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -333,15 +333,7 @@
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">macosx/DeviceWindow.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">DeviceWindowController</string>
-					<string key="superclassName">NSWindowController</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">macosx/DeviceWindowController.h</string>
+						<string key="minorKey">macosx/CanvasWindow.h</string>
 					</object>
 				</object>
 			</object>

@@ -23,7 +23,7 @@ OEEmulation(path, resourcesPath)
 	oeportaudio = NULL;
 }
 
-OEPortAudioEmulation::OEPortAudioEmulation(OEPA *oeportaudio,
+OEPortAudioEmulation::OEPortAudioEmulation(OEPortAudio *oeportaudio,
 										   string path, string resourcesPath) :
 OEEmulation(path, resourcesPath)
 {

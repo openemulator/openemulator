@@ -1,100 +1,51 @@
 
 /**
  * OpenEmulator
- * OpenEmulator HID interface
+ * OpenEmulator OpenGL canvas
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * OpenEmulator HID interface.
+ * Implements an OpenEmulator OpenGL canvas.
  */
 
-#ifndef _OEHID_H
-#define _OEHID_H
-
-#include "OEPAEmulation.h"
-#include "HostInterface.h"
-
+#ifndef _OEOPENGLCANVAS_H
+#define _OEOPENGLCANVAS_H
 
 #include <pthread.h>
 
+#include <OpenGL/gl.h>
+
+#include "OEPortAudioEmulation.h"
+
+#include "HostInterface.h"
+
 enum 
 {
+	OEGL_TEX_POWER,
+	OEGL_TEX_PAUSE,
+	OEGL_TEX_CAPTURE,
 	OEGL_TEX_FRAME,
-	OEGL_TEX_BEZELPOWER,
-	OEGL_TEX_BEZELPAUSE,
-	OEGL_TEX_BEZELCAPTURE,
 	OEGL_TEX_NUM,
 };
 
-typedef struct
+inline void OEOpenGLCanvasLog(string text)
 {
-	float x;
-	float y;
-} OEPoint;
+	cerr << "oeopenglcanvas: " << text << endl;
+}
 
-typedef struct
-{
-	float width;
-	float height;
-} OESize;
-
-typedef struct
-{
-	OEPoint origin;
-	OESize size;
-} OERect;
-
-class OEGL
+class OEOpenGLCanvas
 {
 public:
-	OEGL();
-	~OEGL();
+	OEOpenGLCanvas(OEPortAudioEmulation *emulation,
+				   OEComponent *canvas);
+	~OEOpenGLCanvas();
 	
-	//	void update(HostVideoScreens *screens);
+	void load();
 	void draw(int width, int height);
 	
-private:
-	GLuint texture[OEGL_TEX_NUM];
-	pthread_mutex_t glMutex;
-	
-	OESize windowSize;
-	float windowAspectRatio;
-	bool windowRedraw;
-	
-	//	HostVideoScreens screens;
-	
-	int columnNum;
-	int rowNum;
-	OESize cellSize;
-	
-	//	OESize getScreenSize(HostVideoConfiguration *conf);
-	
-	void updateCellSize();
-	void updateScreenMatrix();
-	
-	//	void drawScreen(HostVideoScreen *screen, int index);
-	
-	//	void renderScreen(OEUInt32 *framebuffer, OESize framebufferSize,
-	//					  OERect frame);
-};
-
-#define OEHID_KEY_NUM				256
-#define OEHID_MOUSEBUTTON_NUM		8
-#define OEHID_JOYSTICK_NUM			4
-#define OEHID_JOYSTICKBUTTON_NUM	8
-
-typedef void (*OEHIDCallback)(void *userData, int value);
-
-class OEHID
-{
-public:
-	OEHID(OEPAEmulation *emulation,
-		  OEHIDCallback setMouseCapture,
-		  OEHIDCallback setKeyboardLEDs);
-	
-	void sendSystemEvent(int usageId);
+	void setSystemKey(int usageId);
 	void setKey(int usageId, bool value);
-	void sendUnicode(int unicode);
+	void setUnicodeKey(int unicode);
 	
 	void setMouseButton(int index, bool value);
 	void setMousePosition(float x, float y);
@@ -106,24 +57,22 @@ public:
 	void sendJoystickHatEvent(int deviceIndex, int index, float value);
 	void moveJoystickBall(int deviceIndex, int index, float value);
 	
-	void reset();
+	void resetKeysAndButtons();
 	
 private:
-	OEPAEmulation *emulation;
+	GLuint textures[OEGL_TEX_NUM];
 	
-	OEHIDCallback setMouseCapture;
-	OEHIDCallback setKeyboardLEDs;
+	OEPortAudioEmulation *emulation;
 	
+	bool keyDown[HOST_CANVAS_KEYBOARD_KEY_NUM];
 	int keyDownCount;
-	bool keyDown[OEHID_KEY_NUM];
-	bool mouseButtonDown[OEHID_MOUSEBUTTON_NUM];
-	bool joystickButtonDown[OEHID_JOYSTICK_NUM][OEHID_JOYSTICKBUTTON_NUM];
+	bool mouseButtonDown[HOST_CANVAS_MOUSE_BUTTON_NUM];
+	bool joystickButtonDown[HOST_CANVAS_JOYSTICK_NUM][HOST_CANVAS_JOYSTICK_BUTTON_NUM];
 	
-	bool mouseCapture;
 	bool mouseCaptured;
 	bool mouseCaptureRelease;
 	
-	void sendHIDEvent(int notification, int usageId, float value);
+	void notify(int notification, int usageId, bool value);
 };
 
 #endif

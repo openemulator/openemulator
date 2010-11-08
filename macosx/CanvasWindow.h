@@ -1,16 +1,16 @@
 
 /**
  * OpenEmulator
- * Mac OS X Device Window
- * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
+ * Mac OS X Canvas Window
+ * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Handles device window messages.
+ * Handles canvas window messages.
  */
 
 #import <Cocoa/Cocoa.h>
 
-@interface DeviceWindow : NSWindow
+@interface CanvasWindow : NSWindow
 {
 	BOOL fullscreen;
 	NSRect windowRect;

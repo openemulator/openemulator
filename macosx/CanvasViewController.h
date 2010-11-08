@@ -1,11 +1,11 @@
 
 /**
  * OpenEmulator
- * Mac OS X Document View Controller
- * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
+ * Mac OS X Canvas View Controller
+ * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls an emulation view.
+ * Controls a canvas view.
  */
 
 #import <Cocoa/Cocoa.h>
@@ -14,12 +14,11 @@
 #define DEVICE_KEYMAP_SIZE		256
 #define DEVICE_MOUSE_BUTTONNUM	8
 
-@interface DeviceViewController : NSOpenGLView
+@interface CanvasViewController : NSOpenGLView
 {
 	IBOutlet id fDocumentWindowController;
 	
-	void *oegl;
-	void *oehid;
+	void *oeOpenGLCanvas;
 	
 	CVDisplayLinkRef displayLink;
 	

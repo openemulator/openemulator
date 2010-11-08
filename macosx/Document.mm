@@ -11,10 +11,10 @@
 #import "Document.h"
 #import "DocumentController.h"
 
-#import "DeviceWindowController.h"
+#import "CanvasWindowController.h"
 
 #import "OEInfo.h"
-#import "OEPAEmulation.h"
+#import "OEPortAudioEmulation.h"
 #import "HostInterface.h"
 
 #import "StringConversion.h"
@@ -77,12 +77,12 @@
 	DocumentController *documentController;
 	documentController = [NSDocumentController sharedDocumentController];
 	
-	OEPA *oepa = (OEPA *)[documentController oepa];
+	OEPortAudio *oePortAudio = (OEPortAudio *)[documentController getOEPortAudio];
 	
 	string path = getString([url path]);
 	string resourcePath = getString([[NSBundle mainBundle] resourcePath]);
 	
-	emulation = new OEPAEmulation(oepa, path, resourcePath);
+	emulation = new OEPortAudioEmulation(oePortAudio, path, resourcePath);
 	
 	[documentController addEmulation:emulation];
 }
@@ -94,7 +94,7 @@
 	
 	[documentController removeEmulation:emulation];
 	
-	delete (OEPAEmulation *)emulation;
+	delete (OEPortAudioEmulation *)emulation;
 	
 	emulation = nil;
 }
@@ -108,18 +108,18 @@
 		   message:(int)message
 			  data:(void *)data
 {
-	return ((OEPAEmulation *)emulation)->postMessage(getString(device), 
-													 message,
-													 data);
+	return ((OEPortAudioEmulation *)emulation)->postMessage(getString(device),
+															message,
+															data);
 }
 
 - (void)notify:(NSString *)device
   notification:(int)notification
 		  data:(void *)data
 {
-	((OEPAEmulation *)emulation)->notify(getString(device),
-										 notification,
-										 data);
+	((OEPortAudioEmulation *)emulation)->notify(getString(device),
+												notification,
+												data);
 }
 
 - (NSImage *)getResourceImage:(NSString *)imagePath
@@ -185,7 +185,7 @@
 		[self removeObjectFromDevicesAtIndex:0];
 	
 	// Process inlets
-	OEPorts *inlets = ((OEPAEmulation *)emulation)->getInlets();
+	OEPorts *inlets = ((OEPortAudioEmulation *)emulation)->getInlets();
 	for (OEPorts::iterator inlet = inlets->begin();
 		 inlet != inlets->end();
 		 inlet++)
@@ -196,7 +196,7 @@
 		NSString *ref = getNSString((*inlet)->ref);
 		NSString *type = getNSString((*inlet)->type);
 		NSString *labelName = getNSString((*inlet)->label);
-		NSString *imageName = getNSString((*inlet)->imageSrc);
+		NSString *imageName = getNSString((*inlet)->image);
 		
 		NSMutableDictionary *dict = [[[NSMutableDictionary alloc] init] autorelease];
 		[dict setObject:ref forKey:@"ref"];
@@ -209,14 +209,14 @@
 	
 	// Process devices
 	int deviceIndex = 0;
-	OEDevices *oeDevices = ((OEPAEmulation *)emulation)->getDevices();
+	OEDevices *oeDevices = ((OEPortAudioEmulation *)emulation)->getDevices();
 	for (OEDevices::iterator device = oeDevices->begin();
 		 device != oeDevices->end();
 		 device++)
 	{
 		NSString *deviceName = getNSString((*device)->name);
 		NSString *deviceLabel = getNSString((*device)->label);
-		NSString *deviceImage = getNSString((*device)->imageSrc);
+		NSString *deviceImage = getNSString((*device)->image);
 		NSString *connectionLabel = getNSString((*device)->connectionLabel);
 		
 		NSImage *theImage = [self getResourceImage:deviceImage];
@@ -254,7 +254,7 @@
 	
 	if (emulation)
 	{
-		if (((OEPAEmulation *)emulation)->isOpen())
+		if (((OEPortAudioEmulation *)emulation)->isOpen())
 		{
 			[self updateDevices];
 			
@@ -279,7 +279,7 @@
 		string emulationPath = getString([[absoluteURL path]
 										  stringByAppendingString:@"/"]);
 		
-		if (((OEPAEmulation *)emulation)->save(emulationPath))
+		if (((OEPortAudioEmulation *)emulation)->save(emulationPath))
 			return YES;
 	}
 	
@@ -344,7 +344,7 @@
 		connectionsMap[inletRefString] = outletRefString;
 	}
 	
-	if (!((OEPAEmulation *)emulation)->addEDL(pathString, connectionsMap))
+	if (!((OEPortAudioEmulation *)emulation)->addEDL(pathString, connectionsMap))
 	{
 		NSString *messageText = @"The device could not be added.";
 		
@@ -382,7 +382,7 @@
 			return;
 	}*/
 	
-	if (!((OEPAEmulation *)emulation)->removeDevice(refString))
+	if (!((OEPortAudioEmulation *)emulation)->removeDevice(refString))
 	{
 		NSString *messageText = @"The device could not be removed.";
 		
@@ -401,7 +401,7 @@
 	[self addWindowController:devicesWindowController];
 	
 	NSWindowController *windowController;
-	windowController = [[DeviceWindowController alloc] init];
+	windowController = [[CanvasWindowController alloc] init];
 	[self addWindowController:windowController];
 	[windowController release];
 }

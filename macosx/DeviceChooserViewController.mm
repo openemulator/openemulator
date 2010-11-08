@@ -179,7 +179,7 @@
 		// Add device
 		NSString *groupName = getNSString(info->getType());
 		NSString *label = getNSString(info->getLabel());
-		NSString *imageName = getNSString(info->getImageSrc());
+		NSString *imageName = getNSString(info->getImage());
 		NSString *description = getNSString(info->getDescription());
 		
 		if (![groups objectForKey:groupName])
@@ -245,7 +245,7 @@
 		NSMutableDictionary *dict = [[[NSMutableDictionary alloc] init] autorelease];
 		[dict setObject:getNSString((*outlet)->type) forKey:@"type"];
 		[dict setObject:getNSString((*outlet)->label) forKey:@"label"];
-		[dict setObject:getNSString((*outlet)->imageSrc) forKey:@"image"];
+		[dict setObject:getNSString((*outlet)->image) forKey:@"image"];
 		[dict setObject:getNSString((*outlet)->ref) forKey:@"ref"];
 		
 		[freeOutlets addObject:dict];

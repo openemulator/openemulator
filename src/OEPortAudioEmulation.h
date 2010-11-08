@@ -15,7 +15,7 @@
 
 class OEPortAudio;
 
-class OEPortAudioEmulation : protected OEEmulation
+class OEPortAudioEmulation : public OEEmulation
 {
 public:
 	OEPortAudioEmulation();

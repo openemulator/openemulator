@@ -21,6 +21,7 @@
 <!ATTLIST edl label CDATA #IMPLIED>
 <!ATTLIST edl image CDATA #IMPLIED>
 <!ATTLIST edl description CDATA #IMPLIED>
+<!ATTLIST edl window CDATA #IMPLIED>
 
 <!ELEMENT device (audio*|canvas*|storage*|loader*|ethernet*|camera*|status*|setting*>
 <!ATTLIST device id ID #REQUIRED>

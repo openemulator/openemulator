@@ -5,8 +5,10 @@
  * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls emulations.
+ * Controls all emulations.
  */
+
+#import "AudioControlsWindowController.h"
 
 #import <Cocoa/Cocoa.h>
 
@@ -15,13 +17,10 @@
 	IBOutlet id fAudioControlsWindowController;
 	IBOutlet id fTemplateChooserWindowController;
 	
-	void *oepa;
+	void *oePortAudio;
 	
 	NSArray *diskImageFileTypes;
 	NSArray *audioFileTypes;
-	
-	NSURL *audioPlayURL;
-	NSURL *audioRecordingURL;
 	
 	int disableMenuBarCount;
 }
@@ -29,7 +28,7 @@
 - (void)toggleInspector:(id)sender;
 - (void)toggleAudioControls:(id)sender;
 
-- (void *)oepa;
+- (void *)getOEPortAudio;
 
 - (IBAction)newDocumentFromTemplateChooser:(id)sender;
 - (id)openUntitledDocumentWithTemplateURL:(NSURL *)absoluteURL
@@ -40,20 +39,6 @@
 
 - (BOOL)addEmulation:(void *)emulation;
 - (void)removeEmulation:(void *)emulation;
-
-- (void)setPlayURL:(NSURL *)theURL;
-- (void)togglePlay;
-- (BOOL)playing;
-- (float)playTime;
-- (float)playDuration;
-- (NSURL *)playURL;
-
-- (void)toggleRecording;
-- (void)saveRecordingAs:(NSURL *)theURL;
-- (BOOL)recording;
-- (float)recordingTime;
-- (long long)recordingSize;
-- (NSURL *)recordingURL;
 
 - (void)disableMenuBar;
 - (void)enableMenuBar;

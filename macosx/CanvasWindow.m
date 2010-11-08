@@ -1,20 +1,20 @@
 
 /**
  * OpenEmulator
- * Mac OS X Device Window
+ * Mac OS X Canvas Window
  * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Handles device window messages.
+ * Handles canvas window messages.
  */
 
-#import "DeviceWindow.h"
+#import "CanvasWindow.h"
 #import "DocumentController.h"
 
-#define DEVICE_DEFAULT_WIDTH	768
-#define DEVICE_DEFAULT_HEIGHT	576
+#define CANVAS_DEFAULT_WIDTH	768
+#define CANVAS_DEFAULT_HEIGHT	576
 
-@implementation DeviceWindow
+@implementation CanvasWindow
 
 - (id)initWithContentRect:(NSRect)contentRect
 				styleMask:(NSUInteger)windowStyle
@@ -122,8 +122,8 @@
 	
 	frameRect.origin.x = NSMidX(frameRect);
 	frameRect.origin.y = NSMaxY(frameRect);
-	frameRect.size.width = scale * proportion * DEVICE_DEFAULT_WIDTH + deltaWidth;
-	frameRect.size.height = scale * proportion * DEVICE_DEFAULT_HEIGHT + deltaHeight;
+	frameRect.size.width = scale * proportion * CANVAS_DEFAULT_WIDTH + deltaWidth;
+	frameRect.size.height = scale * proportion * CANVAS_DEFAULT_HEIGHT + deltaHeight;
 	frameRect.origin.x -= NSWidth(frameRect) / 2;
 	frameRect.origin.y -= NSHeight(frameRect);
 	

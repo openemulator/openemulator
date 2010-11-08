@@ -75,7 +75,7 @@
 		{
 			NSString *groupName = getNSString(info.getType());
 			NSString *label = getNSString(info.getLabel());
-			NSString *imageName = getNSString(info.getImageSrc());
+			NSString *imageName = getNSString(info.getImage());
 			NSString *description = getNSString(info.getDescription());
 			
 			if (theGroupName)

@@ -14,30 +14,38 @@
 
 @interface AudioControlsWindowController : NSWindowController
 {
-	IBOutlet DocumentController *fDocumentController;
+	IBOutlet id fDocumentController;
 	
-	IBOutlet NSTextField *fPlayNameLabel;
-	IBOutlet NSTextField *fPlayTimeLabel;
-	IBOutlet NSTextField *fPlayDurationLabel;
-	IBOutlet NSButton *fOpenPlayButton;
-	IBOutlet NSButton *fTogglePlayButton;
+	IBOutlet id fPlayNameLabel;
+	IBOutlet id fPlayTimeLabel;
+	IBOutlet id fPlayDurationLabel;
+	IBOutlet id fOpenPlayButton;
+	IBOutlet id fTogglePlayButton;
 	
-	IBOutlet NSTextField *fRecordingTimeLabel;
-	IBOutlet NSTextField *fRecordingSizeLabel;
-	IBOutlet NSButton *fToggleRecordingButton;
-	IBOutlet NSButton *fSaveRecordingAsButton;
+	IBOutlet id fRecordingTimeLabel;
+	IBOutlet id fRecordingSizeLabel;
+	IBOutlet id fToggleRecordingButton;
+	IBOutlet id fSaveRecordingAsButton;
 	
 	NSTimer *timer;
+	
+	void *oePortAudio;
+	
+	NSURL *playURL;
+	NSURL *recordingURL;
 }
 
 - (IBAction)toggleAudioControls:(id)sender;
 
-- (void)updatePlay;
+- (void) updatePlay;
 - (IBAction)openPlay:(id)sender;
 - (IBAction)togglePlay:(id)sender;
 
-- (void)updateRecording;
+- (void) updateRecording;
 - (IBAction)toggleRecording:(id)sender;
 - (IBAction)saveRecording:(id)sender;
+
+- (void)readFromURL:(NSURL *)theURL;
+- (void)writeToURL:(NSURL *)theURL;
 
 @end

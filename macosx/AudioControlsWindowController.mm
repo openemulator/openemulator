@@ -9,12 +9,18 @@
  */
 
 #import "AudioControlsWindowController.h"
+#import "OEPortAudio.h"
+#import "StringConversion.h"
 
 @implementation AudioControlsWindowController
 
 - (id)init
 {
-	self = [self initWithWindowNibName:@"AudioControls"];
+	if (self = [self initWithWindowNibName:@"AudioControls"])
+	{
+		playURL = nil;
+		recordingURL = nil;
+	}
 	
 	return self;
 }
@@ -22,6 +28,8 @@
 - (void)windowDidLoad
 {
 	[self setWindowFrameAutosaveName:@"AudioControls"];
+	
+	oePortAudio = [fDocumentController getOEPortAudio];
 	
 	timer = [NSTimer scheduledTimerWithTimeInterval:0.25
 											 target:self
@@ -32,9 +40,23 @@
 
 - (void)dealloc
 {
-	[super dealloc];
-
+	if (playURL)
+		[playURL release];
+	
+	if (recordingURL)
+	{
+		NSFileManager *fileManager = [NSFileManager defaultManager];
+		NSError *error;
+		
+		[fileManager removeItemAtPath:[recordingURL path]
+								error:&error];
+		
+		[recordingURL release];
+	}
+	
 	[timer release];
+	
+	[super dealloc];
 }
 
 - (BOOL)validateUserInterfaceItem:(id)item
@@ -68,12 +90,6 @@
 	[self updateRecording];
 }
 
-- (IBAction)showAudioControls:(id)sender
-{
-    NSWindow *window = [self window];
-	[window orderFront:sender];
-}
-
 - (NSString *)formatTime:(int)time
 {
 	return [NSString stringWithFormat:@"%02d:%02d:%02d",
@@ -94,8 +110,7 @@
 
 - (void)updatePlay
 {
-	NSURL *url = [fDocumentController playURL];
-	if (!url)
+	if (!playURL)
 	{
 		[fPlayNameLabel setStringValue:@""];
 		[fPlayTimeLabel setToolTip:@"--:--:--"];
@@ -103,19 +118,21 @@
 	}
 	else
 	{
-		NSString *path = [[url path] lastPathComponent];
-		NSString *timeLabel = [self formatTime:[fDocumentController playTime]];
-		NSString *durationLabel = [self formatTime:
-								   [fDocumentController playDuration]];
+		NSString *path = [[playURL path] lastPathComponent];
 		[fPlayNameLabel setStringValue:path];
 		[fPlayNameLabel setToolTip:path];
+		
+		float playTime = ((OEPortAudio *)oePortAudio)->getPlayTime();
+		float playDuration = ((OEPortAudio *)oePortAudio)->getPlayDuration();
+		NSString *timeLabel = [self formatTime:playTime];
+		NSString *durationLabel = [self formatTime:playDuration];
 		[fPlayTimeLabel setStringValue:timeLabel];
 		[fPlayDurationLabel setStringValue:durationLabel];
 	}
 	
-	BOOL isPlaying = [fDocumentController playing];
+	BOOL isPlaying = ((OEPortAudio *)oePortAudio)->isPlaying();
 	[fOpenPlayButton setEnabled:!isPlaying];
-	[fTogglePlayButton setEnabled:url ? YES : NO];
+	[fTogglePlayButton setEnabled:playURL ? YES : NO];
 	[fTogglePlayButton setImage:(isPlaying ?
 								 [NSImage imageNamed:@"AudioStop.png"] :
 								 [NSImage imageNamed:@"AudioPlay.png"]
@@ -137,7 +154,7 @@
 	if ([panel runModalForTypes:fileTypes] == NSOKButton)
 	{
 		NSURL *url = [panel URL];
-		[fDocumentController setPlayURL:url];
+		[self readFromURL:url];
 		
 		[self updatePlay];
 	}
@@ -145,13 +162,15 @@
 
 - (IBAction)togglePlay:(id)sender
 {
-	[fDocumentController togglePlay];
+	if (!((OEPortAudio *)oePortAudio)->isPlaying())
+		((OEPortAudio *)oePortAudio)->startPlaying(getString([playURL path]));
+	else
+		((OEPortAudio *)oePortAudio)->stopPlaying();
 }
 
 - (void)updateRecording
 {
-	NSURL *url = [fDocumentController recordingURL];
-	if (!url)
+	if (!recordingURL)
 	{
 		[fRecordingTimeLabel setStringValue:@"--:--:--"];
 		[fRecordingSizeLabel setStringValue:@"- kB"];
@@ -159,23 +178,34 @@
 	}
 	else
 	{
-		NSString *timeLabel = [self formatTime:[fDocumentController recordingTime]];
-		NSString *sizeLabel = [self formatSize:[fDocumentController recordingSize]];
+		float recordingTime = ((OEPortAudio *)oePortAudio)->getRecordingTime();
+		long long recordingSize = ((OEPortAudio *)oePortAudio)->getRecordingSize();
+		NSString *timeLabel = [self formatTime:recordingTime];
+		NSString *sizeLabel = [self formatSize:recordingSize];
 		[fRecordingTimeLabel setStringValue:timeLabel];
 		[fRecordingSizeLabel setStringValue:sizeLabel];
 	}
 	
-	BOOL isRecording = [fDocumentController recording];
+	BOOL isRecording = ((OEPortAudio *)oePortAudio)->isRecording();
 	[fToggleRecordingButton setImage:(isRecording ?
 									  [NSImage imageNamed:@"AudioStop.png"] :
 									  [NSImage imageNamed:@"AudioRecord.png"]
 									  )];
-	[fSaveRecordingAsButton setEnabled:(url && !isRecording)];
+	[fSaveRecordingAsButton setEnabled:(recordingURL && !isRecording)];
 }
 
 - (IBAction)toggleRecording:(id)sender
 {
-	[fDocumentController toggleRecording];
+	if (!((OEPortAudio *)oePortAudio)->isRecording())
+	{
+		NSString *thePath = [NSTemporaryDirectory()
+							 stringByAppendingPathComponent:@"oerecording"];
+		recordingURL = [[NSURL alloc] initFileURLWithPath:thePath];
+		
+		((OEPortAudio *)oePortAudio)->startRecording(getString([recordingURL path]));
+	}
+	else
+		((OEPortAudio *)oePortAudio)->stopRecording();
 }
 
 - (IBAction)saveRecording:(id)sender
@@ -187,10 +217,37 @@
 	if ([panel runModal] == NSOKButton)
 	{
 		NSURL *url = [panel URL];
-		[fDocumentController saveRecordingAs:url];
+		[self writeToURL:url];
 		
 		[self updateRecording];
 	}
+}
+
+- (void)readFromURL:(NSURL *)theURL
+{
+	if (playURL)
+		[playURL release];
+	
+	playURL = [theURL copy];
+	if (playURL)
+		((OEPortAudio *)oePortAudio)->startPlaying(getString([playURL path]));
+}
+
+- (void)writeToURL:(NSURL *)theURL
+{
+	if (!recordingURL)
+		return;
+	
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	NSError *error;
+	
+	[fileManager moveItemAtPath:[recordingURL path]
+						 toPath:[theURL path]
+						  error:&error];
+	
+	[recordingURL release];
+	
+	recordingURL = nil;
 }
 
 @end

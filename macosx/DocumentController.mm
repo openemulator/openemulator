@@ -15,7 +15,7 @@
 #import "Document.h"
 #import "TemplateChooserWindowController.h"
 
-#import "OEPA.h"
+#import "OEPortAudio.h"
 
 #import "StringConversion.h"
 
@@ -30,7 +30,7 @@
 {
 	if (self = [super init])
 	{
-		oepa = new OEPA();
+		oePortAudio = new OEPortAudio();
 		
 		diskImageFileTypes = [[NSArray alloc] initWithObjects:
 							  @"dsk", @"do", @"d13", @"po", @"cpm", @"nib", @"v2d",
@@ -54,9 +54,6 @@
 						  @"ogg", @"oga",
 						  nil];
 		
-		audioPlayURL = nil;
-		audioRecordingURL = nil;
-		
 		disableMenuBarCount = 0;
 	}
 	
@@ -65,21 +62,10 @@
 
 - (void)dealloc
 {
-	if (audioRecordingURL)
-	{
-		NSFileManager *fileManager = [NSFileManager defaultManager];
-		NSError *error;
-		
-		[fileManager removeItemAtPath:[audioRecordingURL path]
-								error:&error];
-		
-		[audioRecordingURL release];
-	}
-	
 	[diskImageFileTypes release];
 	[audioFileTypes release];
 	
-	delete (OEPA *)oepa;
+	delete (OEPortAudio *)oePortAudio;
 	
 	[super dealloc];
 }
@@ -94,9 +80,9 @@
 	[fAudioControlsWindowController toggleAudioControls:sender];
 }
 
-- (void *)oepa
+- (void *)getOEPortAudio
 {
-	return oepa;
+	return oePortAudio;
 }
 
 - (void)applicationWillFinishLaunching:(NSNotification *)notification
@@ -110,11 +96,11 @@
 	if (![defaults valueForKey:@"OEVolume"])
 		[defaults setFloat:1.0 forKey:@"OEVolume"];
 	
-	((OEPA *)oepa)->setFullDuplex([defaults boolForKey:@"OEFullDuplex"]);
-	((OEPA *)oepa)->setPlayThrough([defaults floatForKey:@"OEPlayThrough"]);
-	((OEPA *)oepa)->setVolume([defaults floatForKey:@"OEVolume"]);
+	((OEPortAudio *)oePortAudio)->setFullDuplex([defaults boolForKey:@"OEFullDuplex"]);
+	((OEPortAudio *)oePortAudio)->setPlayThrough([defaults boolForKey:@"OEPlayThrough"]);
+	((OEPortAudio *)oePortAudio)->setVolume([defaults floatForKey:@"OEVolume"]);
 	
-//	((OEPA *)oepa)->open();
+//	((OEPortAudio *)oePortAudio)->open();
 	
 	[defaults addObserver:self
 			   forKeyPath:@"OEFullDuplex"
@@ -142,7 +128,7 @@
 	// Open audio files
 	if ([audioFileTypes containsObject:extension])
 	{
-		[self setPlayURL:[NSURL fileURLWithPath:filename]];
+		[fAudioControlsWindowController readFromURL:[NSURL fileURLWithPath:filename]];
 		return YES;
 	}
 	
@@ -185,7 +171,7 @@
 
 - (void)applicationWillTerminate:(NSNotification *)notification
 {
-	((OEPA *)oepa)->close();
+	((OEPortAudio *)oePortAudio)->close();
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath
@@ -196,20 +182,20 @@
 	if ([keyPath isEqualToString:@"OEFullDuplex"])
 	{
 		id object = [change objectForKey:NSKeyValueChangeNewKey];
-		int value = [object intValue];
-		((OEPA *)oepa)->setFullDuplex(value);
+		BOOL value = [object intValue];
+		((OEPortAudio *)oePortAudio)->setFullDuplex(value);
 	}
 	else if ([keyPath isEqualToString:@"OEPlayThrough"])
 	{
 		id object = [change objectForKey:NSKeyValueChangeNewKey];
-		int value = [object intValue];
-		((OEPA *)oepa)->setPlayThrough(value);
+		BOOL value = [object intValue];
+		((OEPortAudio *)oePortAudio)->setPlayThrough(value);
 	}
 	else if ([keyPath isEqualToString:@"OEVolume"])
 	{
 		id object = [change objectForKey:NSKeyValueChangeNewKey];
 		float value = [object floatValue];
-		((OEPA *)oepa)->setVolume(value);
+		((OEPortAudio *)oePortAudio)->setVolume(value);
 	}
 }
 
@@ -317,107 +303,12 @@
 
 - (BOOL)addEmulation:(void *)emulation
 {
-	return ((OEPA *)oepa)->addEmulation((OEPAEmulation *)emulation);
+	return ((OEPortAudio *)oePortAudio)->addEmulation((OEPortAudioEmulation *)emulation);
 }
 
 - (void)removeEmulation:(void *)emulation
 {
-	((OEPA *)oepa)->removeEmulation((OEPAEmulation *)emulation);
-}
-
-- (void)setPlayURL:(NSURL *)theURL
-{
-	if (audioPlayURL)
-		[audioPlayURL release];
-	
-	audioPlayURL = [theURL copy];
-	if (audioPlayURL)
-		((OEPA *)oepa)->startPlaying(getString([audioPlayURL path]));
-}
-
-- (void)togglePlay
-{
-	if (!((OEPA *)oepa)->isPlaying())
-		((OEPA *)oepa)->startPlaying(getString([audioPlayURL path]));
-	else
-		((OEPA *)oepa)->stopPlaying();
-}
-
-- (BOOL)playing
-{
-	return ((OEPA *)oepa)->isPlaying();
-}
-
-- (float)playTime
-{
-	return ((OEPA *)oepa)->getPlayTime();
-}
-
-- (float)playDuration
-{
-	return ((OEPA *)oepa)->getPlayDuration();
-}
-
-- (NSURL *)playURL
-{
-	if (audioPlayURL)
-		return [[audioPlayURL copy] autorelease];
-	else
-		return nil;
-}
-
-- (void)toggleRecording
-{
-	if (!((OEPA *)oepa)->isRecording())
-	{
-		NSString *thePath = [NSTemporaryDirectory()
-							 stringByAppendingPathComponent:@"oerecording"];
-		audioRecordingURL = [[NSURL alloc] initFileURLWithPath:thePath];
-		
-		((OEPA *)oepa)->startRecording(getString([audioRecordingURL path]));
-	}
-	else
-		((OEPA *)oepa)->stopRecording();
-}
-
-- (void)saveRecordingAs:(NSURL *)theURL
-{
-	if (!audioRecordingURL)
-		return;
-	
-	NSFileManager *fileManager = [NSFileManager defaultManager];
-	NSError *error;
-	
-	[fileManager moveItemAtPath:[audioRecordingURL path]
-						 toPath:[theURL path]
-						  error:&error];
-	
-	[audioRecordingURL release];
-	
-	audioRecordingURL = nil;
-}
-
-- (BOOL)recording
-{
-	return ((OEPA *)oepa)->isRecording();
-}
-
-- (float)recordingTime
-{
-	return ((OEPA *)oepa)->getRecordingTime();
-}
-
-- (long long)recordingSize
-{
-	return ((OEPA *)oepa)->getRecordingSize();
-}
-
-- (NSURL *)recordingURL
-{
-	if (audioRecordingURL)
-		return [[audioRecordingURL copy] autorelease];
-	else
-		return nil;
+	((OEPortAudio *)oePortAudio)->removeEmulation((OEPortAudioEmulation *)emulation);
 }
 
 - (void)disableMenuBar

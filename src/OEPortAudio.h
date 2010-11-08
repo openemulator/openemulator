@@ -5,7 +5,7 @@
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * OpenEmulator portaudio interface.
+ * Implements the OpenEmulator portaudio interface.
  */
 
 #ifndef _OEPORTAUDIO_H

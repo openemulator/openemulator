@@ -1,18 +1,17 @@
 
 /**
  * OpenEmulator
- * Mac OS X Device View Controller
- * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
+ * Mac OS X Canvas View Controller
+ * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls a device view.
+ * Controls a canvas view.
  */
 
-#import "DeviceViewController.h"
+#import "CanvasViewController.h"
 #import "Document.h"
 
-#import "OEGL.h"
-#import "OEHID.h"
+#import "OEOpenGLCanvas.h"
 
 #import "StringConversion.h"
 
@@ -29,12 +28,12 @@ typedef struct
 {
 	int keyCode;
 	int usageId;
-} DeviceKeyMapInverseEntry;
+} CanvasKeyMapInverseEntry;
 
 // From:
 // http://stuff.mit.edu/afs/sipb/project/darwin/src/
 // modules/AppleADBKeyboard/AppleADBKeyboard.cpp
-DeviceKeyMapInverseEntry deviceKeyMapInverse[] = 
+CanvasKeyMapInverseEntry canvasKeyMapInverse[] = 
 {
 	{0x00, HOST_CANVAS_K_A},
 	{0x0b, HOST_CANVAS_K_B},
@@ -149,7 +148,7 @@ DeviceKeyMapInverseEntry deviceKeyMapInverse[] =
 	{0x36, HOST_CANVAS_K_RIGHTGUI},
 };
 
-@implementation DeviceViewController
+@implementation CanvasViewController
 
 static void setCapture(void *userData, int value)
 {
@@ -161,6 +160,18 @@ static void setCapture(void *userData, int value)
 
 static void setKeyboardLEDs(void *userData, int value)
 {
+}
+
+static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
+									const CVTimeStamp *now,
+									const CVTimeStamp *outputTime,
+									CVOptionFlags flagsIn,
+									CVOptionFlags *flagsOut,
+									void *displayLinkContext)
+{
+    [(CanvasViewController *)displayLinkContext drawFrame];
+	
+    return kCVReturnSuccess;
 }
 
 - (id)initWithFrame:(NSRect)rect
@@ -190,18 +201,17 @@ static void setKeyboardLEDs(void *userData, int value)
 	if (self = [super initWithFrame:rect pixelFormat:pixelFormat])
 	{
 		Document *document = [fDocumentWindowController document];
-		OEPAEmulation *emulation = (OEPAEmulation *)[document emulation];
+		OEPortAudioEmulation *emulation = (OEPortAudioEmulation *)[document emulation];
 		
-		oegl = new OEGL();
-		oehid = new OEHID(emulation, setCapture, setKeyboardLEDs);
+		oeOpenGLCanvas = new OEOpenGLCanvas(NULL, NULL);
 		
 		memset(keyMap, sizeof(keyMap), 0);
 		for (int i = 0;
-			 i < sizeof(deviceKeyMapInverse) / sizeof(DeviceKeyMapInverseEntry);
+			 i < sizeof(canvasKeyMapInverse) / sizeof(CanvasKeyMapInverseEntry);
 			 i++)
 		{
-			int keyCode = deviceKeyMapInverse[i].keyCode;
-			int usageId = deviceKeyMapInverse[i].usageId;
+			int keyCode = canvasKeyMapInverse[i].keyCode;
+			int usageId = canvasKeyMapInverse[i].usageId;
 			keyMap[keyCode] = usageId;
 		}
 		
@@ -213,8 +223,7 @@ static void setKeyboardLEDs(void *userData, int value)
 
 - (void)dealloc
 {
-	delete (OEHID *)oehid;
-	delete (OEGL *)oegl;
+	delete (OEOpenGLCanvas *)oeOpenGLCanvas;
 	
     CVDisplayLinkRelease(displayLink);
 	
@@ -224,18 +233,6 @@ static void setKeyboardLEDs(void *userData, int value)
 - (BOOL)acceptsFirstResponder
 {
 	return YES;
-}
-
-static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
-									const CVTimeStamp *now,
-									const CVTimeStamp *outputTime,
-									CVOptionFlags flagsIn,
-									CVOptionFlags *flagsOut,
-									void *displayLinkContext)
-{
-    [(DeviceViewController *)displayLinkContext drawFrame];
-	
-    return kCVReturnSuccess;
 }
 
 - (void)prepareOpenGL
@@ -282,7 +279,8 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	CGLLockContext((CGLContextObj)[currentContext CGLContextObj]);
 	
 	NSRect frame = [self bounds];
-	((OEGL *)oegl)->draw(NSWidth(frame), NSHeight(frame));
+	((OEOpenGLCanvas *)oeOpenGLCanvas)->draw(NSWidth(frame),
+											 NSHeight(frame));
 	
 	[currentContext flushBuffer];
 	
@@ -299,6 +297,28 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	return usageId;
 }
 
+- (void)keyDown:(NSEvent *)theEvent
+{
+	NSString *characters = [theEvent characters];
+	for (int i = 0; i < [characters length]; i++)
+	{
+		int unicode = [characters characterAtIndex:i];
+		((OEOpenGLCanvas *)oeOpenGLCanvas)->setUnicodeKey(unicode);
+	}
+	
+	if (![theEvent isARepeat])
+	{
+		int usageId = [self getUsageId:[theEvent keyCode]];
+		((OEOpenGLCanvas *)oeOpenGLCanvas)->setKey(usageId, true);
+	}
+}
+
+- (void)keyUp:(NSEvent *)theEvent
+{
+	int usageId = [self getUsageId:[theEvent keyCode]];
+	((OEOpenGLCanvas *)oeOpenGLCanvas)->setKey(usageId, false);
+}
+
 - (void)updateFlags:(int)flags
 			forMask:(int)mask
 			usageId:(int)usageId
@@ -308,22 +328,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	
 	BOOL value = ((flags & mask) != 0);
 	
-	((OEHID *)oehid)->setKey(usageId, value);
-}
-
-- (void)keyDown:(NSEvent *)theEvent
-{
-	NSString *characters = [theEvent characters];
-	for (int i = 0; i < [characters length]; i++)
-		((OEHID *)oehid)->sendUnicode([characters characterAtIndex:i]);
-	
-	if (![theEvent isARepeat])
-		((OEHID *)oehid)->setKey([self getUsageId:[theEvent keyCode]], true);
-}
-
-- (void)keyUp:(NSEvent *)theEvent
-{
-	((OEHID *)oehid)->setKey([self getUsageId:[theEvent keyCode]], false);
+	((OEOpenGLCanvas *)oeOpenGLCanvas)->setKey(usageId, value);
 }
 
 - (void)flagsChanged:(NSEvent *)theEvent
@@ -348,8 +353,10 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 {
 	NSPoint position = [NSEvent mouseLocation];
 	
-	((OEHID *)oehid)->setMousePosition(position.x, position.y);
-	((OEHID *)oehid)->moveMouse([theEvent deltaX], [theEvent deltaY]);
+	((OEOpenGLCanvas *)oeOpenGLCanvas)->setMousePosition(position.x,
+														 position.y);
+	((OEOpenGLCanvas *)oeOpenGLCanvas)->moveMouse([theEvent deltaX],
+												  [theEvent deltaY]);
 }
 
 - (void)mouseDragged:(NSEvent *)theEvent
@@ -369,74 +376,74 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (void)mouseDown:(NSEvent *)theEvent
 {
-	((OEHID *)oehid)->setMouseButton(0, true);
+	((OEOpenGLCanvas *)oeOpenGLCanvas)->setMouseButton(0, true);
 }
 
 - (void)mouseUp:(NSEvent *)theEvent
 {
-	((OEHID *)oehid)->setMouseButton(0, false);
+	((OEOpenGLCanvas *)oeOpenGLCanvas)->setMouseButton(0, false);
 }
 
 - (void)rightMouseDown:(NSEvent *)theEvent
 {
-	((OEHID *)oehid)->setMouseButton(1, true);
+	((OEOpenGLCanvas *)oeOpenGLCanvas)->setMouseButton(1, true);
 }
 
 - (void)rightMouseUp:(NSEvent *)theEvent
 {
-	((OEHID *)oehid)->setMouseButton(1, false);
+	((OEOpenGLCanvas *)oeOpenGLCanvas)->setMouseButton(1, false);
 }
 
 - (void)otherMouseDown:(NSEvent *)theEvent
 {
-	((OEHID *)oehid)->setMouseButton([theEvent buttonNumber], true);
+	((OEOpenGLCanvas *)oeOpenGLCanvas)->setMouseButton([theEvent buttonNumber], true);
 }
 
 - (void)otherMouseUp:(NSEvent *)theEvent
 {
-	((OEHID *)oehid)->setMouseButton([theEvent buttonNumber], false);
+	((OEOpenGLCanvas *)oeOpenGLCanvas)->setMouseButton([theEvent buttonNumber], false);
 }
 
 - (void)scrollWheel:(NSEvent *)theEvent
 {
-	((OEHID *)oehid)->sendMouseWheelEvent(0, [theEvent deltaX]);
-	((OEHID *)oehid)->sendMouseWheelEvent(1, [theEvent deltaY]);
+	((OEOpenGLCanvas *)oeOpenGLCanvas)->sendMouseWheelEvent(0, [theEvent deltaX]);
+	((OEOpenGLCanvas *)oeOpenGLCanvas)->sendMouseWheelEvent(1, [theEvent deltaY]);
 }
 
 - (void)powerDown:(id)sender
 {
-	((OEHID *)oehid)->sendSystemEvent(HOST_CANVAS_S_POWERDOWN);
+	((OEOpenGLCanvas *)oeOpenGLCanvas)->setSystemKey(HOST_CANVAS_S_POWERDOWN);
 }
 
 - (void)sleep:(id)sender
 {
-	((OEHID *)oehid)->sendSystemEvent(HOST_CANVAS_S_SLEEP);
+	((OEOpenGLCanvas *)oeOpenGLCanvas)->setSystemKey(HOST_CANVAS_S_SLEEP);
 }
 
 - (void)wakeUp:(id)sender
 {
-	((OEHID *)oehid)->sendSystemEvent(HOST_CANVAS_S_WAKEUP);
+	((OEOpenGLCanvas *)oeOpenGLCanvas)->setSystemKey(HOST_CANVAS_S_WAKEUP);
 }
 
 - (void)coldRestart:(id)sender
 {
-	((OEHID *)oehid)->sendSystemEvent(HOST_CANVAS_S_COLDRESTART);
+	((OEOpenGLCanvas *)oeOpenGLCanvas)->setSystemKey(HOST_CANVAS_S_COLDRESTART);
 }
 
 - (void)warmRestart:(id)sender
 {
-	((OEHID *)oehid)->sendSystemEvent(HOST_CANVAS_S_WARMRESTART);
+	((OEOpenGLCanvas *)oeOpenGLCanvas)->setSystemKey(HOST_CANVAS_S_WARMRESTART);
 }
 
 - (void)debuggerBreak:(id)sender
 {
-	((OEHID *)oehid)->sendSystemEvent(HOST_CANVAS_S_DEBUGGERBREAK);
+	((OEOpenGLCanvas *)oeOpenGLCanvas)->setSystemKey(HOST_CANVAS_S_DEBUGGERBREAK);
 }
 
 - (NSString *)documentText
 {
 	string characterString;
-//	[self notifyHost:HOST_CLIPBOARD_WILL_COPY data:&characterString];
+	//	[self notifyHost:HOST_CLIPBOARD_WILL_COPY data:&characterString];
 	
 	return getNSString(characterString);
 }
@@ -448,15 +455,17 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	
 	[pasteboard declareTypes:pasteboardTypes owner:self];
 	[pasteboard setString:[self documentText] forType:NSStringPboardType];
+	
+	// To-Do: If copy fails, copy the canvas
 }
 
 - (void)paste:(id)sender
 {
 	NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
 	
-	string characterString = getString([pasteboard stringForType:NSStringPboardType]);
+	//	string characterString = getString([pasteboard stringForType:NSStringPboardType]);
 	
-//	[self notifyHost:HOST_CLIPBOARD_WILL_PASTE data:&characterString];
+	//	[self notifyHost:HOST_CLIPBOARD_WILL_PASTE data:&characterString];
 }
 
 - (void)startSpeaking:(id)sender

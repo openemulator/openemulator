@@ -10,16 +10,17 @@ oecli(3).
   For generic installation instructions, see file 'INSTALL'. OpenEmulator
 requires these external libraries:
  
-* libxml2 (http://www.xmlsoft.org)
-* libzip (http://www.nih.at/libzip)
-* portaudio (http://www.portaudio.com)
-* libsndfile (http://www.mega-nerd.com/libsndfile)
-* libsamplerate (http://www.mega-nerd.com/SRC)
+* libxml2 (http://www.xmlsoft.org/)
+* libzip (http://www.nih.at/libzip/)
+* portaudio (http://www.portaudio.com/)
+* libsndfile (http://www.mega-nerd.com/libsndfile/)
+* libsamplerate (http://www.mega-nerd.com/SRC/)
+* libpng (http://www.libpng.org/)
 
-  If you make a binary distribution, please include a pointer to the
+  If you make a binary distribution, include a pointer to the official
 distribution site:
 
-	http://www.openemulator.org
+	http://www.openemulator.org/
 
 The latest version can always be found there.
 
@@ -35,20 +36,21 @@ commands:
 
   sudo apt-get install libxml2-dev
   sudo apt-get install libzip-dev
-  sudo apt-get install portaudio-dev
-  sudo apt-get install libsndfile-dev
-  sudo apt-get install libsamplerate-dev
+  sudo apt-get install portaudio19-dev
+  sudo apt-get install libsndfile1-dev
+  sudo apt-get install libsamplerate1-dev
+  sudo apt-get install libpng12-dev
 
 Mac OS X
 ========
 
-  In order to compile the OpenEmulator XCode project under Mac OS X, you
+  In order to compile the OpenEmulator XCode project under Mac OS X you
 need some external libraries not available on a default Mac OS X
 installation. The easiest way to install them is through MacPorts:
 
   http://www.macports.org/
 
-  Download and install.
+  First, download and install.
 
   If you want to build universal binaries, edit the file
 /opt/local/etc/macports/macports.conf, and change the "universal_archs"
@@ -56,12 +58,13 @@ entry to the following:
 
 universal_archs		x86_64 i386 ppc
 
-  The next step is installing the required libraries:
+  The next step is to install these libraries:
 
   sudo port install libzip +universal
   sudo port install portaudio +universal
   sudo port install libsndfile +universal
   sudo port install libsamplerate +universal
+  sudo port install libpng +universal
 
 Windows
 =======

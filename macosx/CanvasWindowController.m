@@ -1,20 +1,20 @@
 
 /**
  * OpenEmulator
- * Mac OS X Device Window Controller
- * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
+ * Mac OS X Canvas Window Controller
+ * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls a device window.
+ * Controls a canvas window.
  */
 
-#import "DeviceWindowController.h"
+#import "CanvasWindowController.h"
 
-@implementation DeviceWindowController
+@implementation CanvasWindowController
 
 - (id)init
 {
-	self = [self initWithWindowNibName:@"Device"];
+	self = [self initWithWindowNibName:@"Canvas"];
 	
 	return self;
 }
@@ -22,7 +22,7 @@
 - (void)windowDidLoad
 {
 	NSToolbar *toolbar;
-	toolbar = [[NSToolbar alloc] initWithIdentifier:@"Device Toolbar"];
+	toolbar = [[NSToolbar alloc] initWithIdentifier:@"Canvas Toolbar"];
 	[toolbar setDelegate:self];
 	[toolbar setAllowsUserCustomization:YES];
 	[toolbar setAutosavesConfiguration:YES];
@@ -48,102 +48,102 @@
 	if ([ident isEqualToString:@"Power Down"])
 	{
 		[item setLabel:NSLocalizedString(@"Power Down",
-										 "Device window toolbar item")];
+										 "Canvas window toolbar item")];
 		[item setPaletteLabel:NSLocalizedString(@"Power Down",
-												"Device window toolbar item")];
+												"Canvas window toolbar item")];
 		[item setToolTip:NSLocalizedString(@"Initiate power-down.",
-										   "Device window toolbar item")];
+										   "Canvas window toolbar item")];
 		[item setImage:[NSImage imageNamed:@"IconPowerDown.png"]];
 		[item setAction:@selector(powerDown:)];
 	}
 	else if ([ident isEqualToString:@"Sleep"])
 	{
 		[item setLabel:NSLocalizedString(@"Sleep",
-										 "Device window toolbar item")];
+										 "Canvas window toolbar item")];
 		[item setPaletteLabel:NSLocalizedString(@"Sleep",
-												"Device window toolbar item")];
+												"Canvas window toolbar item")];
 		[item setToolTip:NSLocalizedString(@"Initiate low power mode.",
-										   "Device window toolbar item")];
+										   "Canvas window toolbar item")];
 		[item setImage:[NSImage imageNamed:@"IconSleep.png"]];
 		[item setAction:@selector(sleep:)];
 	}
 	else if ([ident isEqualToString:@"Wake Up"])
 	{
 		[item setLabel:NSLocalizedString(@"Wake Up",
-										 "Device window toolbar item")];
+										 "Canvas window toolbar item")];
 		[item setPaletteLabel:NSLocalizedString(@"Wake Up",
-												"Device window toolbar item")];
+												"Canvas window toolbar item")];
 		[item setToolTip:NSLocalizedString(@"Initiate full power state.",
-										   "Device window toolbar item")];
+										   "Canvas window toolbar item")];
 		[item setImage:[NSImage imageNamed:@"IconWakeUp.png"]];
 		[item setAction:@selector(wakeUp:)];
 	}
 	else if ([ident isEqualToString:@"Cold Restart"])
 	{
 		[item setLabel:NSLocalizedString(@"Cold Restart",
-										 "Device window toolbar item")];
+										 "Canvas window toolbar item")];
 		[item setPaletteLabel:NSLocalizedString(@"Cold Restart",
-												"Device window toolbar item")];
+												"Canvas window toolbar item")];
 		[item setToolTip:NSLocalizedString(@"Restart the system at the most "
 										   "primitive level.",
-										   "Device window toolbar item")];
+										   "Canvas window toolbar item")];
 		[item setImage:[NSImage imageNamed:@"IconColdRestart.png"]];
 		[item setAction:@selector(coldRestart:)];
 	}
 	else if ([ident isEqualToString:@"Warm Restart"])
 	{
 		[item setLabel:NSLocalizedString(@"Warm Restart",
-										 "Device window toolbar item")];
+										 "Canvas window toolbar item")];
 		[item setPaletteLabel:NSLocalizedString(@"Warm Restart",
-												"Device window toolbar item")];
+												"Canvas window toolbar item")];
 		[item setToolTip:NSLocalizedString(@"Restart the operating system.",
-										   "Device window toolbar item")];
+										   "Canvas window toolbar item")];
 		[item setImage:[NSImage imageNamed:@"IconWarmRestart.png"]];
 		[item setAction:@selector(warmRestart:)];
 	}
 	else if ([ident isEqualToString:@"Debugger Break"])
 	{
 		[item setLabel:NSLocalizedString(@"Debugger Break",
-										 "Device window toolbar item")];
+										 "Canvas window toolbar item")];
 		[item setPaletteLabel:NSLocalizedString(@"Debugger Break",
-												"Device window toolbar item")];
+												"Canvas window toolbar item")];
 		[item setToolTip:NSLocalizedString(@"Break into the operating system debugger.",
-										   "Device window toolbar item")];
+										   "Canvas window toolbar item")];
 		[item setImage:[NSImage imageNamed:@"IconDebuggerBreak.png"]];
 		[item setAction:@selector(debuggerBreak:)];
 	}
 	else if ([ident isEqualToString:@"Inspector"])
 	{
 		[item setLabel:NSLocalizedString(@"Inspector",
-										 "Device window toolbar item")];
+										 "Canvas window toolbar item")];
 		[item setPaletteLabel:NSLocalizedString(@"Info",
-												"Device window toolbar item")];
+												"Canvas window toolbar item")];
 		[item setToolTip:NSLocalizedString(@"Show or hide the inspector window.",
-										   "Device window toolbar item")];
+										   "Canvas window toolbar item")];
 		[item setImage:[NSImage imageNamed:@"IconInspector.png"]];
-//		[item setTarget:self];
+		//		[item setTarget:self];
 		[item setAction:@selector(toggleInspector:)];
 	}
 	else if ([ident isEqualToString:@"Audio"])
 	{
 		[item setLabel:NSLocalizedString(@"Audio Controls",
-										 "Device window toolbar item")];
+										 "Canvas window toolbar item")];
 		[item setPaletteLabel:NSLocalizedString(@"Audio Controls",
-												"Device window toolbar item")];
+												"Canvas window toolbar item")];
 		[item setToolTip:NSLocalizedString(@"Show or hide audio controls.",
-										   "Device window toolbar item")];
+										   "Canvas window toolbar item")];
 		[item setImage:[NSImage imageNamed:@"IconAudio.png"]];
-//		[item setTarget:self];
+		//		[item setTarget:self];
 		[item setAction:@selector(toggleAudioControls:)];
 	}
 	else if ([ident isEqualToString:@"Devices"])
 	{
 		[item setLabel:NSLocalizedString(@"Devices",
-										 "Device window toolbar item")];
+										 "Canvas window toolbar item")];
 		[item setPaletteLabel:NSLocalizedString(@"Devices",
-												"Device window toolbar item")];
+												"Canvas window toolbar item")];
 		[item setToolTip:NSLocalizedString(@"Show devices.",
-										   "Device window toolbar item")];
+										   "Canvas window toolbar item")];
 		[item setImage:[NSImage imageNamed:@"IconDevices.png"]];
 		//		[item setTarget:self];
 		[item setAction:@selector(showDevices:)];

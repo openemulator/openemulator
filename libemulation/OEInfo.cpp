@@ -19,7 +19,7 @@ OEInfo::OEInfo() : OEEDL()
 {
 }
 
-OEInfo::OEInfo(const string &path) : OEEDL()
+OEInfo::OEInfo(string path) : OEEDL()
 {
 	open(path);
 }
@@ -31,7 +31,7 @@ OEInfo::~OEInfo()
 	removePorts(outlets);
 }
 
-bool OEInfo::open(const string &path)
+bool OEInfo::open(string path)
 {
 	if (!OEEDL::open(path))
 		return false;
@@ -46,7 +46,7 @@ bool OEInfo::open(const string &path)
 	return false;
 }
 
-bool OEInfo::addEDL(const string &path, OEIdMap &deviceIdMap)
+bool OEInfo::addEDL(string path, OEIdMap &deviceIdMap)
 {
 	if (!OEEDL::addEDL(path, deviceIdMap))
 		return false;
@@ -54,7 +54,7 @@ bool OEInfo::addEDL(const string &path, OEIdMap &deviceIdMap)
 	return analyze();
 }
 
-bool OEInfo::removeDevice(const string &deviceName)
+bool OEInfo::removeDevice(string deviceName)
 {
 	if (!OEEDL::removeDevice(deviceName))
 		return false;
@@ -67,9 +67,9 @@ string OEInfo::getLabel()
 	return label;
 }
 
-string OEInfo::getImageSrc()
+string OEInfo::getImage()
 {
-	return imageSrc;
+	return image;
 }
 
 string OEInfo::getDescription()
@@ -117,7 +117,7 @@ void OEInfo::analyzeHeader(xmlNodePtr node)
 {
 	type = getNodeProperty(node, "type");
 	label = getNodeProperty(node, "label");
-	imageSrc = getNodeProperty(node, "imageSrc");
+	image = getNodeProperty(node, "image");
 	description = getNodeProperty(node, "description");
 }
 
@@ -138,9 +138,8 @@ void OEInfo::addDevice(xmlNodePtr node)
 	
 	device->name = getNodeProperty(node, "name");
 	device->type = getNodeProperty(node, "type");
-	device->options = getNodeProperty(node, "options");
 	device->label = getNodeProperty(node, "label");
-	device->imageSrc = getNodeProperty(node, "imageSrc");
+	device->image = getNodeProperty(node, "image");
 	
 	device->connectionLabel = "";
 	
@@ -182,12 +181,12 @@ void OEInfo::addPort(xmlNodePtr node, OEDevice *device, OEPorts &ports)
 	port->ref = getNodeProperty(node, "ref");
 	port->type = getNodeProperty(node, "type");
 	port->label = getNodeProperty(node, "label");
-	port->imageSrc = getNodeProperty(node, "imageSrc");
+	port->image = getNodeProperty(node, "image");
 	
 	if (port->label == "")
 		port->label = device->label;
-	if (port->imageSrc == "")
-		port->imageSrc = device->imageSrc;
+	if (port->image == "")
+		port->image = device->image;
 	
 	port->connection = NULL;
 	port->device = device;

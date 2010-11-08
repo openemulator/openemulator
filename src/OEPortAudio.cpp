@@ -17,12 +17,12 @@
 
 using namespace std;
 
-static int oePortAudioRun(const void *inputBuffer,
-						  void *outputBuffer,
-						  unsigned long framesPerBuffer,
-						  const PaStreamCallbackTimeInfo* timeInfo,
-						  PaStreamCallbackFlags statusFlags,
-						  void *userData)
+static int oePortAudioRunAudio(const void *inputBuffer,
+							   void *outputBuffer,
+							   unsigned long framesPerBuffer,
+							   const PaStreamCallbackTimeInfo* timeInfo,
+							   PaStreamCallbackFlags statusFlags,
+							   void *userData)
 {
 	((OEPortAudio *) userData)->runAudio(inputBuffer,
 										 outputBuffer,
@@ -38,21 +38,21 @@ void *oePortAudioRunAudioTimer(void *arg)
 	return NULL;
 }
 
-void *oepaRunEmulations(void *arg)
+void *oePortAudioRunEmulations(void *arg)
 {
 	((OEPortAudio *) arg)->runEmulations();
 	
 	return NULL;
 }
 
-OEPA::OEPA()
+OEPortAudio::OEPortAudio()
 {
 	fullDuplex = false;
 	playThrough = false;
-	sampleRate = OEPA_SAMPLERATE;
-	channelNum = OEPA_CHANNELNUM;
-	framesPerBuffer = OEPA_FRAMESPERBUFFER;
-	bufferNum = OEPA_BUFFERNUM;
+	sampleRate = OEPORTAUDIO_SAMPLERATE;
+	channelNum = OEPORTAUDIO_CHANNELNUM;
+	framesPerBuffer = OEPORTAUDIO_FRAMESPERBUFFER;
+	bufferNum = OEPORTAUDIO_BUFFERNUM;
 	
 	bufferInputIndex = 0;
 	bufferOutputIndex = 0;
@@ -70,7 +70,7 @@ OEPA::OEPA()
 	recording = false;
 }
 
-void OEPA::setFullDuplex(bool value)
+void OEPortAudio::setFullDuplex(bool value)
 {
 	bool state = disableAudio();
 	
@@ -79,7 +79,7 @@ void OEPA::setFullDuplex(bool value)
 	enableAudio(state);
 }
 
-void OEPA::setSampleRate(double value)
+void OEPortAudio::setSampleRate(double value)
 {
 	stopPlaying();
 	stopRecording();
@@ -91,7 +91,7 @@ void OEPA::setSampleRate(double value)
 	enableAudio(state);
 }
 
-void OEPA::setChannelNum(int value)
+void OEPortAudio::setChannelNum(int value)
 {
 	stopPlaying();
 	stopRecording();
@@ -103,7 +103,7 @@ void OEPA::setChannelNum(int value)
 	enableAudio(state);
 }
 
-void OEPA::setFramesPerBuffer(int value)
+void OEPortAudio::setFramesPerBuffer(int value)
 {
 	bool state = disableAudio();
 	
@@ -112,7 +112,7 @@ void OEPA::setFramesPerBuffer(int value)
 	enableAudio(state);
 }
 
-void OEPA::setBufferNum(int value)
+void OEPortAudio::setBufferNum(int value)
 {
 	bool state = disableAudio();
 	
@@ -121,17 +121,17 @@ void OEPA::setBufferNum(int value)
 	enableAudio(state);
 }
 
-void OEPA::setVolume(float value)
+void OEPortAudio::setVolume(float value)
 {
 	volume = value;
 }
 
-void OEPA::setPlayThrough(bool value)
+void OEPortAudio::setPlayThrough(bool value)
 {
 	playThrough = value;
 }
 
-bool OEPA::open()
+bool OEPortAudio::open()
 {
 	initBuffer();
 	
@@ -146,13 +146,13 @@ bool OEPA::open()
 	return false;
 }
 
-void OEPA::close()
+void OEPortAudio::close()
 {
 	closeAudio();
 	closeEmulations();
 }
 
-bool OEPA::addEmulation(OEPAEmulation *emulation)
+bool OEPortAudio::addEmulation(OEPortAudioEmulation *emulation)
 {
 	lockEmulations();
 	
@@ -163,13 +163,13 @@ bool OEPA::addEmulation(OEPAEmulation *emulation)
 	return true;
 }
 
-void OEPA::removeEmulation(OEPAEmulation *emulation)
+void OEPortAudio::removeEmulation(OEPortAudioEmulation *emulation)
 {
 	lockEmulations();
 	
-	OEPAEmulations::iterator first = emulations.begin();
-	OEPAEmulations::iterator last = emulations.end();
-	OEPAEmulations::iterator i = remove(first, last, emulation);
+	OEPortAudioEmulations::iterator first = emulations.begin();
+	OEPortAudioEmulations::iterator last = emulations.end();
+	OEPortAudioEmulations::iterator i = remove(first, last, emulation);
 	
 	if (i != last)
 		emulations.erase(i, last);
@@ -180,47 +180,47 @@ void OEPA::removeEmulation(OEPAEmulation *emulation)
 //
 // Audio buffering
 //
-int OEPA::getBufferInputSize()
+int OEPortAudio::getBufferInputSize()
 {
 	int stateNum = 2 * bufferNum;
 	int index = (bufferOutputIndex - bufferInputIndex + stateNum) % stateNum;
 	return bufferNum - index;
 }
 
-int OEPA::getBufferOutputSize()
+int OEPortAudio::getBufferOutputSize()
 {
 	int stateNum = 2 * bufferNum;
 	int index = (bufferOutputIndex - bufferInputIndex + stateNum) % stateNum;
 	return index;
 }
 
-float *OEPA::getBufferInput()
+float *OEPortAudio::getBufferInput()
 {
  	int index = bufferInputIndex % bufferNum;
 	int samplesPerBuffer = framesPerBuffer * channelNum;
 	return &buffer[index * samplesPerBuffer];
 }
 
-float *OEPA::getBufferOutput()
+float *OEPortAudio::getBufferOutput()
 {
  	int index = bufferOutputIndex % bufferNum;
 	int samplesPerBuffer = framesPerBuffer * channelNum;
 	return &buffer[index * samplesPerBuffer];
 }
 
-void OEPA::incrementBufferInputIndex()
+void OEPortAudio::incrementBufferInputIndex()
 {
 	int stateNum = 2 * bufferNum;
 	bufferInputIndex = (bufferInputIndex + 1) % stateNum;
 }
 
-void OEPA::incrementBufferOutputIndex()
+void OEPortAudio::incrementBufferOutputIndex()
 {
 	int stateNum = 2 * bufferNum;
 	bufferOutputIndex = (bufferOutputIndex + 1) % stateNum;
 }
 
-void OEPA::initBuffer()
+void OEPortAudio::initBuffer()
 {
 	int bufferSize = bufferNum * framesPerBuffer * channelNum;
 	buffer.resize(bufferSize);
@@ -232,13 +232,13 @@ void OEPA::initBuffer()
 //
 // Audio
 //
-bool OEPA::openAudio()
+bool OEPortAudio::openAudio()
 {
 	if (audioOpen)
 		closeAudio();
 	
 	float t = 1.0 / sampleRate;
-	float rc = 1 / 2.0 / M_PI / OEPA_VOLUMEFILTERFREQ;
+	float rc = 1 / 2.0 / M_PI / OEPORTAUDIO_VOLUMEFILTERFREQ;
 	volumeAlpha = t / (rc + t);
 	instantVolume = volume;
 	
@@ -251,12 +251,12 @@ bool OEPA::openAudio()
 									  paFloat32,
 									  sampleRate,
 									  framesPerBuffer,
-									  oepaRunAudio,
+									  oePortAudioRunAudio,
 									  this);
 		if ((status != paNoError) && fullDuplex)
 		{
-			OEPALog("could not open audio stream, error " + status);
-			OEPALog("attempting half-duplex");
+			OEPortAudioLog("could not open audio stream, error " + status);
+			OEPortAudioLog("attempting half-duplex");
 			
 			status = Pa_OpenDefaultStream(&audioStream,
 										  0,
@@ -264,7 +264,7 @@ bool OEPA::openAudio()
 										  paFloat32,
 										  sampleRate,
 										  framesPerBuffer,
-										  oepaRunAudio,
+										  oePortAudioRunAudio,
 										  this);
 		}
 		
@@ -277,15 +277,15 @@ bool OEPA::openAudio()
 				return true;
 			}
 			else
-				OEPALog("could not start audio stream, error " + status);
+				OEPortAudioLog("could not start audio stream, error " + status);
 			
 			Pa_CloseStream(audioStream);
 		}
 		else
-			OEPALog("could not open audio stream, error " + status);
+			OEPortAudioLog("could not open audio stream, error " + status);
 	}
 	else
-		OEPALog("could not init portaudio, error " + status);
+		OEPortAudioLog("could not init portaudio, error " + status);
 	
 	int error;
 	pthread_attr_t attr;
@@ -299,27 +299,27 @@ bool OEPA::openAudio()
 			timerThreadShouldRun = true;
 			error = pthread_create(&timerThread,
 								   &attr,
-								   oepaRunAudioTimer,
+								   oePortAudioRunAudioTimer,
 								   this);
 			if (!error)
 			{
-				OEPALog("started silent timer thread");
+				OEPortAudioLog("started silent timer thread");
 				audioOpen = true;
 				return true;
 			}
 			else
-				OEPALog("could not create timer thread, error " + error);
+				OEPortAudioLog("could not create timer thread, error " + error);
 		}
 		else
-			OEPALog("could not attr timer thread, error " + error);
+			OEPortAudioLog("could not attr timer thread, error " + error);
 	}
 	else
-		OEPALog("could not init timer thread, error " + error);
+		OEPortAudioLog("could not init timer thread, error " + error);
 	
 	return false;
 }
 
-void OEPA::closeAudio()
+void OEPortAudio::closeAudio()
 {
 	if (!audioOpen)
 		return;
@@ -343,7 +343,7 @@ void OEPA::closeAudio()
 	audioOpen = false;
 }
 
-bool OEPA::disableAudio()
+bool OEPortAudio::disableAudio()
 {
 	bool state = audioOpen;
 	
@@ -355,7 +355,7 @@ bool OEPA::disableAudio()
 	return state;
 }
 
-void OEPA::enableAudio(bool state)
+void OEPortAudio::enableAudio(bool state)
 {
 	initBuffer();
 	
@@ -365,7 +365,7 @@ void OEPA::enableAudio(bool state)
 		openAudio();
 }
 
-void OEPA::runAudio(const void *inputBuffer,
+void OEPortAudio::runAudio(const void *inputBuffer,
 					void *outputBuffer,
 					int frameNum)
 {
@@ -412,7 +412,7 @@ void OEPA::runAudio(const void *inputBuffer,
 	return;
 }
 
-void OEPA::runAudioTimer()
+void OEPortAudio::runAudioTimer()
 {
 	while (timerThreadShouldRun)
 	{
@@ -426,7 +426,7 @@ void OEPA::runAudioTimer()
 //
 // Emulations
 //
-bool OEPA::openEmulations()
+bool OEPortAudio::openEmulations()
 {
 	int error;
 	
@@ -458,26 +458,26 @@ bool OEPA::openEmulations()
 				emulationsThreadShouldRun = true;
 				error = pthread_create(&emulationsThread,
 									   &attr,
-									   oepaRunEmulations,
+									   oePortAudioRunEmulations,
 									   this);
 				if (!error)
 					return true;
 				else
-					OEPALog("could not create eulations thread, error " + error);
+					OEPortAudioLog("could not create eulations thread, error " + error);
 			}
 			else
-				OEPALog("could not attr emulations thread, error " + error);
+				OEPortAudioLog("could not attr emulations thread, error " + error);
 		}
 		else
-			OEPALog("could not init emulations attr, error " + error);
+			OEPortAudioLog("could not init emulations attr, error " + error);
 	}
 	else
-		OEPALog("could not init emulations mutex, error " + error);
+		OEPortAudioLog("could not init emulations mutex, error " + error);
 	
 	return false;
 }
 
-void OEPA::closeEmulations()
+void OEPortAudio::closeEmulations()
 {
 	if (!emulationsThreadShouldRun)
 		return;
@@ -489,17 +489,17 @@ void OEPA::closeEmulations()
 	pthread_mutex_destroy(&emulationsMutex);
 }
 
-void OEPA::lockEmulations()
+void OEPortAudio::lockEmulations()
 {
 	pthread_mutex_lock(&emulationsMutex);
 }
 
-void OEPA::unlockEmulations()
+void OEPortAudio::unlockEmulations()
 {
 	pthread_mutex_unlock(&emulationsMutex);
 }
 
-void OEPA::runEmulations()
+void OEPortAudio::runEmulations()
 {
 	vector<float> inputBuffer;
 	vector<float> outputBuffer;
@@ -566,7 +566,7 @@ void OEPA::runEmulations()
 			&outputBuffer[0],
 		};
 		
-		for (OEPAEmulations::iterator i = emulations.begin();
+		for (OEPortAudioEmulations::iterator i = emulations.begin();
 			 i != emulations.end();
 			 i++)
 		{
@@ -601,7 +601,7 @@ void OEPA::runEmulations()
 //
 // Play/Recording
 //
-bool OEPA::startPlaying(string path)
+bool OEPortAudio::startPlaying(string path)
 {
 	stopPlaying();
 	
@@ -644,19 +644,19 @@ bool OEPA::startPlaying(string path)
 		}
 		else
 		{
-			OEPALog("could not init sample rate converter, error " + error);
+			OEPortAudioLog("could not init sample rate converter, error " + error);
 			sf_close(playFile);
 		}
 	}
 	else
-		OEPALog("could not open file " + path);
+		OEPortAudioLog("could not open file " + path);
 	
 	unlockEmulations();
 	
 	return playing;
 }
 
-void OEPA::stopPlaying()
+void OEPortAudio::stopPlaying()
 {
 	if (!playing)
 		return;
@@ -669,22 +669,22 @@ void OEPA::stopPlaying()
 	unlockEmulations();
 }
 
-bool OEPA::isPlaying()
+bool OEPortAudio::isPlaying()
 {
 	return playing;
 }
 
-float OEPA::getPlayTime()
+float OEPortAudio::getPlayTime()
 {
 	return (float) playFrameIndex / sampleRate;
 }
 
-float OEPA::getPlayDuration()
+float OEPortAudio::getPlayDuration()
 {
 	return (float) playFrameNum / sampleRate;
 }
 
-bool OEPA::startRecording(string path)
+bool OEPortAudio::startRecording(string path)
 {
 	stopRecording();
 	
@@ -706,14 +706,14 @@ bool OEPA::startRecording(string path)
 	if (recordingFile)
 		recording = true;
 	else
-		OEPALog("could not open temporary file " + path);
+		OEPortAudioLog("could not open temporary file " + path);
 	
 	unlockEmulations();
 	
 	return recording;
 }
 
-void OEPA::stopRecording()
+void OEPortAudio::stopRecording()
 {
 	if (!recording)
 		return;
@@ -726,22 +726,22 @@ void OEPA::stopRecording()
 	unlockEmulations();
 }
 
-bool OEPA::isRecording()
+bool OEPortAudio::isRecording()
 {
 	return recording;
 }
 
-float OEPA::getRecordingTime()
+float OEPortAudio::getRecordingTime()
 {
 	return (float) recordingFrameNum / sampleRate;
 }
 
-long long OEPA::getRecordingSize()
+long long OEPortAudio::getRecordingSize()
 {
 	return (long long) recordingFrameNum * channelNum * sizeof(short);
 }
 
-void OEPA::playAudio(float *buffer, int frameNum, int channelNum)
+void OEPortAudio::playAudio(float *buffer, int frameNum, int channelNum)
 {
 	vector<float> srcBuffer;
 	srcBuffer.resize(frameNum * playChannelNum);
@@ -805,7 +805,7 @@ void OEPA::playAudio(float *buffer, int frameNum, int channelNum)
 	} while (frameNum > 0);
 }
 
-void OEPA::recordAudio(float *buffer, int frameNum, int channelNum)
+void OEPortAudio::recordAudio(float *buffer, int frameNum, int channelNum)
 {
 	int n = sf_writef_float(recordingFile, buffer, frameNum);
 	recordingFrameNum += n;
