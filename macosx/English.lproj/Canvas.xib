@@ -12,7 +12,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="100103"/>
+			<integer value="5"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -37,7 +37,7 @@
 				<int key="NSWindowStyleMask">15</int>
 				<int key="NSWindowBacking">2</int>
 				<string key="NSWindowRect">{{32, 338}, {640, 480}}</string>
-				<int key="NSWTFlags">539492352</int>
+				<int key="NSWTFlags">1613234176</int>
 				<string key="NSWindowTitle"/>
 				<string key="NSWindowClass">CanvasWindow</string>
 				<nil key="NSViewClass"/>
@@ -203,15 +203,23 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>coldRestart:</string>
-							<string>debuggerBreak:</string>
-							<string>powerDown:</string>
-							<string>sleep:</string>
-							<string>wakeUp:</string>
-							<string>warmRestart:</string>
+							<string>applicationBreak:</string>
+							<string>applicationDebuggerBreak:</string>
+							<string>systemBreak:</string>
+							<string>systemColdRestart:</string>
+							<string>systemDebuggerBreak:</string>
+							<string>systemHibernate:</string>
+							<string>systemPowerDown:</string>
+							<string>systemSleep:</string>
+							<string>systemWakeUp:</string>
+							<string>systemWarmRestart:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -224,37 +232,57 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>coldRestart:</string>
-							<string>debuggerBreak:</string>
-							<string>powerDown:</string>
-							<string>sleep:</string>
-							<string>wakeUp:</string>
-							<string>warmRestart:</string>
+							<string>applicationBreak:</string>
+							<string>applicationDebuggerBreak:</string>
+							<string>systemBreak:</string>
+							<string>systemColdRestart:</string>
+							<string>systemDebuggerBreak:</string>
+							<string>systemHibernate:</string>
+							<string>systemPowerDown:</string>
+							<string>systemSleep:</string>
+							<string>systemWakeUp:</string>
+							<string>systemWarmRestart:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<object class="IBActionInfo">
-								<string key="name">coldRestart:</string>
+								<string key="name">applicationBreak:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
-								<string key="name">debuggerBreak:</string>
+								<string key="name">applicationDebuggerBreak:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
-								<string key="name">powerDown:</string>
+								<string key="name">systemBreak:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
-								<string key="name">sleep:</string>
+								<string key="name">systemColdRestart:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
-								<string key="name">wakeUp:</string>
+								<string key="name">systemDebuggerBreak:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
-								<string key="name">warmRestart:</string>
+								<string key="name">systemHibernate:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">systemPowerDown:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">systemSleep:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">systemWakeUp:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">systemWarmRestart:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 						</object>

@@ -15,25 +15,25 @@
 
 #import "StringConversion.h"
 
-#define COCOA_LCTRL				(1 << 0)
-#define COCOA_LSHIFT			(1 << 1)
-#define COCOA_LALT				(1 << 3)
-#define COCOA_LGUI				(1 << 5)
-#define COCOA_RCTRL				(1 << 13)
-#define COCOA_RSHIFT			(1 << 2)
-#define COCOA_RALT				(1 << 6)
-#define COCOA_RGUI				(1 << 4)
+#define NSLeftControlKeyMask	(1 << 0)
+#define NSLeftShiftKeyMask		(1 << 1)
+#define NSRightShiftKeyMask		(1 << 2)
+#define NSLeftAlternateKeyMask	(1 << 3)
+#define NSRightCommandKeyMask	(1 << 4)
+#define NSLeftCommandKeyMask	(1 << 5)
+#define NSRightAlternateKeyMask	(1 << 6)
+#define NSRightControlKeyMask	(1 << 13)
 
 typedef struct
 {
 	int keyCode;
 	int usageId;
-} CanvasKeyMapInverseEntry;
+} CanvasKeyMapEntry;
 
 // From:
 // http://stuff.mit.edu/afs/sipb/project/darwin/src/
 // modules/AppleADBKeyboard/AppleADBKeyboard.cpp
-CanvasKeyMapInverseEntry canvasKeyMapInverse[] = 
+CanvasKeyMapEntry canvasKeyMap[] = 
 {
 	{0x00, HOST_CANVAS_K_A},
 	{0x0b, HOST_CANVAS_K_B},
@@ -150,12 +150,19 @@ CanvasKeyMapInverseEntry canvasKeyMapInverse[] =
 
 @implementation CanvasViewController
 
-static void setCapture(void *userData, int value)
+static void captureKeyboardAndMouse()
 {
-	if (value)
-		CGDisplayHideCursor(kCGDirectMainDisplay);
-	else
-		CGDisplayShowCursor(kCGDirectMainDisplay);
+	CGDisplayHideCursor(kCGDirectMainDisplay);
+}
+
+static void captureKeyboard()
+{
+	CGDisplayHideCursor(kCGDirectMainDisplay);
+}
+
+static void releaseKeyboard()
+{
+	CGDisplayShowCursor(kCGDirectMainDisplay);
 }
 
 static void setKeyboardLEDs(void *userData, int value)
@@ -203,17 +210,13 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 		Document *document = [fDocumentWindowController document];
 		OEPortAudioEmulation *emulation = (OEPortAudioEmulation *)[document emulation];
 		
-		oeOpenGLCanvas = new OEOpenGLCanvas(NULL, NULL);
+		oeOpenGLCanvas = new OEOpenGLCanvas(emulation, "");
 		
 		memset(keyMap, sizeof(keyMap), 0);
 		for (int i = 0;
-			 i < sizeof(canvasKeyMapInverse) / sizeof(CanvasKeyMapInverseEntry);
+			 i < sizeof(canvasKeyMap) / sizeof(CanvasKeyMapEntry);
 			 i++)
-		{
-			int keyCode = canvasKeyMapInverse[i].keyCode;
-			int usageId = canvasKeyMapInverse[i].usageId;
-			keyMap[keyCode] = usageId;
-		}
+			keyMap[canvasKeyMap[i].keyCode] = canvasKeyMap[i].usageId;
 		
 		keyModifierFlags = 0;
 	}
@@ -235,22 +238,30 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	return YES;
 }
 
+- (BOOL)resignFirstResponder
+{
+	((OEOpenGLCanvas *)oeOpenGLCanvas)->resetKeysAndButtons();
+	
+	NSLog(@"Lost focus");
+	
+	return YES;
+}
+
 - (void)prepareOpenGL
 {
 	GLint value = 1;
 	[[self openGLContext] setValues:&value forParameter:NSOpenGLCPSwapInterval]; 
 	
+	((OEOpenGLCanvas *)oeOpenGLCanvas)->init();
+	
 	CVDisplayLinkCreateWithActiveCGDisplays(&displayLink);
-	
 	CVDisplayLinkSetOutputCallback(displayLink, &displayLinkCallback, self);
-	
 	CGLContextObj cglContext = (CGLContextObj)[[self openGLContext] CGLContextObj];
 	CGLPixelFormatObj cglPixelFormat = (CGLPixelFormatObj)[[self pixelFormat] 
 														   CGLPixelFormatObj];
 	CVDisplayLinkSetCurrentCGDisplayFromOpenGLContext(displayLink,
 													  cglContext,
 													  cglPixelFormat);
-	
 	CVDisplayLinkStart(displayLink);
 }
 
@@ -335,18 +346,30 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 {
 	int flags = [theEvent modifierFlags];
 	
-	[self updateFlags:flags forMask:COCOA_LCTRL usageId:HOST_CANVAS_K_LEFTCONTROL];
-	[self updateFlags:flags forMask:COCOA_LSHIFT usageId:HOST_CANVAS_K_LEFTSHIFT];
-	[self updateFlags:flags forMask:COCOA_LALT usageId:HOST_CANVAS_K_LEFTALT];
-	[self updateFlags:flags forMask:COCOA_LGUI usageId:HOST_CANVAS_K_LEFTGUI];
-	[self updateFlags:flags forMask:COCOA_RCTRL usageId:HOST_CANVAS_K_RIGHTCONTROL];
-	[self updateFlags:flags forMask:COCOA_RSHIFT usageId:HOST_CANVAS_K_RIGHTSHIFT];
-	[self updateFlags:flags forMask:COCOA_RALT usageId:HOST_CANVAS_K_RIGHTALT];
-	[self updateFlags:flags forMask:COCOA_RGUI usageId:HOST_CANVAS_K_RIGHTGUI];
+	[self updateFlags:flags forMask:NSLeftControlKeyMask
+			  usageId:HOST_CANVAS_K_LEFTCONTROL];
+	[self updateFlags:flags forMask:NSLeftShiftKeyMask
+			  usageId:HOST_CANVAS_K_LEFTSHIFT];
+	[self updateFlags:flags forMask:NSLeftAlternateKeyMask
+			  usageId:HOST_CANVAS_K_LEFTALT];
+	[self updateFlags:flags forMask:NSLeftCommandKeyMask
+			  usageId:HOST_CANVAS_K_LEFTGUI];
+	[self updateFlags:flags forMask:NSRightControlKeyMask
+			  usageId:HOST_CANVAS_K_RIGHTCONTROL];
+	[self updateFlags:flags forMask:NSRightShiftKeyMask
+			  usageId:HOST_CANVAS_K_RIGHTSHIFT];
+	[self updateFlags:flags forMask:NSRightAlternateKeyMask
+			  usageId:HOST_CANVAS_K_RIGHTALT];
+	[self updateFlags:flags forMask:NSRightCommandKeyMask
+			  usageId:HOST_CANVAS_K_RIGHTGUI];
+	keyModifierFlags = flags;	
 	
 	// To-Do: NSAlphaShiftKeyMask
+	// To-Do: NSNumericPadKeyMask
 	
-	keyModifierFlags = flags;	
+	// To-Do: See if NSShiftKeyMask, NSControlKeyMask,
+	// NSAlternateKeyMask, NSCommandKeyMask is set but not the others
+	// Act accordingly with a left key message
 }
 
 - (void)mouseMoved:(NSEvent *)theEvent
@@ -410,40 +433,61 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	((OEOpenGLCanvas *)oeOpenGLCanvas)->sendMouseWheelEvent(1, [theEvent deltaY]);
 }
 
-- (void)powerDown:(id)sender
+- (void)systemPowerDown:(id)sender
 {
 	((OEOpenGLCanvas *)oeOpenGLCanvas)->setSystemKey(HOST_CANVAS_S_POWERDOWN);
 }
 
-- (void)sleep:(id)sender
+- (void)systemSleep:(id)sender
 {
 	((OEOpenGLCanvas *)oeOpenGLCanvas)->setSystemKey(HOST_CANVAS_S_SLEEP);
 }
 
-- (void)wakeUp:(id)sender
+- (void)systemWakeUp:(id)sender
 {
 	((OEOpenGLCanvas *)oeOpenGLCanvas)->setSystemKey(HOST_CANVAS_S_WAKEUP);
 }
 
-- (void)coldRestart:(id)sender
+- (void)systemColdRestart:(id)sender
 {
 	((OEOpenGLCanvas *)oeOpenGLCanvas)->setSystemKey(HOST_CANVAS_S_COLDRESTART);
 }
 
-- (void)warmRestart:(id)sender
+- (void)systemWarmRestart:(id)sender
 {
 	((OEOpenGLCanvas *)oeOpenGLCanvas)->setSystemKey(HOST_CANVAS_S_WARMRESTART);
 }
 
-- (void)debuggerBreak:(id)sender
+- (void)systemBreak:(id)sender
+{
+	((OEOpenGLCanvas *)oeOpenGLCanvas)->setSystemKey(HOST_CANVAS_S_BREAK);
+}
+
+- (void)systemDebuggerBreak:(id)sender
 {
 	((OEOpenGLCanvas *)oeOpenGLCanvas)->setSystemKey(HOST_CANVAS_S_DEBUGGERBREAK);
+}
+
+- (void)applicationBreak:(id)sender
+{
+	((OEOpenGLCanvas *)oeOpenGLCanvas)->setSystemKey(HOST_CANVAS_S_APPLICATIONBREAK);
+}
+
+- (void)applicationDebuggerBreak:(id)sender
+{
+	((OEOpenGLCanvas *)oeOpenGLCanvas)->setSystemKey(HOST_CANVAS_S_APPLICATIONDEBUGGERBREAK);
+}
+
+- (void)systemHibernate:(id)sender
+{
+	((OEOpenGLCanvas *)oeOpenGLCanvas)->setSystemKey(HOST_CANVAS_S_HIBERNATE);
 }
 
 - (NSString *)documentText
 {
 	string characterString;
-	//	[self notifyHost:HOST_CLIPBOARD_WILL_COPY data:&characterString];
+//	((OEOpenGLCanvas *)oeOpenGLCanvas)->notify(HOST_CLIPBOARD_WILL_COPY,
+//											   &characterString];
 	
 	return getNSString(characterString);
 }

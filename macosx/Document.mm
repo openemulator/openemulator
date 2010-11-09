@@ -401,7 +401,7 @@
 	[self addWindowController:devicesWindowController];
 	
 	NSWindowController *windowController;
-	windowController = [[CanvasWindowController alloc] init];
+	windowController = [[CanvasWindowController alloc] initWithCanvasComponent:NULL];
 	[self addWindowController:windowController];
 	[windowController release];
 }

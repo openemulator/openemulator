@@ -16,6 +16,8 @@
 	NSRect windowRect;
 }
 
+- (void *)canvasComponent;
+
 - (void) toggleFullscreen:(id) sender;
 - (void) setHalfSize:(id) sender;
 - (void) setActualSize:(id) sender;

@@ -12,11 +12,17 @@
 
 @implementation CanvasWindowController
 
-- (id)init
+- (id)initWithCanvasComponent:(void *)theCanvasComponent
 {
-	self = [self initWithWindowNibName:@"Canvas"];
+	if (self = [self initWithWindowNibName:@"Canvas"])
+		canvasComponent = canvasComponent;
 	
 	return self;
+}
+
+- (void *)canvasComponent
+{
+	return canvasComponent;
 }
 
 - (void)windowDidLoad
@@ -54,7 +60,7 @@
 		[item setToolTip:NSLocalizedString(@"Initiate power-down.",
 										   "Canvas window toolbar item")];
 		[item setImage:[NSImage imageNamed:@"IconPowerDown.png"]];
-		[item setAction:@selector(powerDown:)];
+		[item setAction:@selector(systemPowerDown:)];
 	}
 	else if ([ident isEqualToString:@"Sleep"])
 	{
@@ -65,7 +71,7 @@
 		[item setToolTip:NSLocalizedString(@"Initiate low power mode.",
 										   "Canvas window toolbar item")];
 		[item setImage:[NSImage imageNamed:@"IconSleep.png"]];
-		[item setAction:@selector(sleep:)];
+		[item setAction:@selector(systemSleep:)];
 	}
 	else if ([ident isEqualToString:@"Wake Up"])
 	{
@@ -76,7 +82,7 @@
 		[item setToolTip:NSLocalizedString(@"Initiate full power state.",
 										   "Canvas window toolbar item")];
 		[item setImage:[NSImage imageNamed:@"IconWakeUp.png"]];
-		[item setAction:@selector(wakeUp:)];
+		[item setAction:@selector(systemWakeUp:)];
 	}
 	else if ([ident isEqualToString:@"Cold Restart"])
 	{
@@ -88,7 +94,7 @@
 										   "primitive level.",
 										   "Canvas window toolbar item")];
 		[item setImage:[NSImage imageNamed:@"IconColdRestart.png"]];
-		[item setAction:@selector(coldRestart:)];
+		[item setAction:@selector(systemColdRestart:)];
 	}
 	else if ([ident isEqualToString:@"Warm Restart"])
 	{
@@ -99,7 +105,7 @@
 		[item setToolTip:NSLocalizedString(@"Restart the operating system.",
 										   "Canvas window toolbar item")];
 		[item setImage:[NSImage imageNamed:@"IconWarmRestart.png"]];
-		[item setAction:@selector(warmRestart:)];
+		[item setAction:@selector(systemWarmRestart:)];
 	}
 	else if ([ident isEqualToString:@"Debugger Break"])
 	{
@@ -110,7 +116,7 @@
 		[item setToolTip:NSLocalizedString(@"Break into the operating system debugger.",
 										   "Canvas window toolbar item")];
 		[item setImage:[NSImage imageNamed:@"IconDebuggerBreak.png"]];
-		[item setAction:@selector(debuggerBreak:)];
+		[item setAction:@selector(systemDebuggerBreak:)];
 	}
 	else if ([ident isEqualToString:@"Inspector"])
 	{

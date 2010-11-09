@@ -25,6 +25,7 @@ enum
 	OEGL_TEX_PAUSE,
 	OEGL_TEX_CAPTURE,
 	OEGL_TEX_FRAME,
+	OEGL_TEX_INTERLACE,
 	OEGL_TEX_NUM,
 };
 
@@ -37,10 +38,10 @@ class OEOpenGLCanvas
 {
 public:
 	OEOpenGLCanvas(OEPortAudioEmulation *emulation,
-				   OEComponent *canvas);
+				   string canvasRef);
 	~OEOpenGLCanvas();
 	
-	void load();
+	void init();
 	void draw(int width, int height);
 	
 	void setSystemKey(int usageId);

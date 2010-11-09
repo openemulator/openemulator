@@ -29,25 +29,9 @@ typedef struct
 } OERect;
 
 OEOpenGLCanvas::OEOpenGLCanvas(OEPortAudioEmulation *emulation,
-							   OEComponent *canvas)
+							   string canvasRef)
 {
 	this->emulation = emulation;
-	
-	// Init OpenGL
-	glDisable(GL_ALPHA_TEST);
-	glDisable(GL_CULL_FACE);
-	glDisable(GL_DEPTH_TEST);
-	glDisable(GL_LIGHTING);
-	glDisable(GL_STENCIL_TEST);
-	
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	
-	glEnable(GL_TEXTURE_RECTANGLE_EXT);
-	
-	glClearColor(0.0, 0.0, 0.0, 0.5);
-	
-	glGenTextures(OEGL_TEX_NUM, textures);
 	
 	// Init structures
 //	pthread_mutex_init(&glMutex, NULL);
@@ -60,7 +44,25 @@ OEOpenGLCanvas::OEOpenGLCanvas(OEPortAudioEmulation *emulation,
 
 OEOpenGLCanvas::~OEOpenGLCanvas()
 {
-//	glDeleteTextures(OEGL_TEX_END, textures);
+//	glDeleteTextures(OEGL_TEX_NUM, textures);
+}
+
+void OEOpenGLCanvas::init()
+{
+	glDisable(GL_ALPHA_TEST);
+	glDisable(GL_CULL_FACE);
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_LIGHTING);
+	glDisable(GL_STENCIL_TEST);
+	
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	
+	glEnable(GL_TEXTURE_RECTANGLE_EXT);
+	
+	glClearColor(0.0, 0.0, 0.0, 0.0);
+	
+	glGenTextures(OEGL_TEX_NUM, textures);
 }
 
 void OEOpenGLCanvas::draw(int width, int height)
@@ -239,6 +241,15 @@ void OEOpenGLCanvas::moveJoystickBall(int deviceIndex, int index, float value)
 	notify(HOST_CANVAS_JOYSTICK1_CHANGED + deviceIndex,
 					 HOST_CANVAS_J_AXIS1 + index,
 					 value);
+}
+
+void OEOpenGLCanvas::resetKeysAndButtons()
+{
+	for (int i = 0; i < sizeof(keyDown); i++)
+	{
+		
+	}
+	
 }
 
 

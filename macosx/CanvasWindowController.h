@@ -12,6 +12,7 @@
 
 @interface CanvasWindowController : NSWindowController
 {
+	void *canvasComponent;
 }
 
 @end

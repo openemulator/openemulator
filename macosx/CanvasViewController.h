@@ -26,13 +26,17 @@
 	int keyModifierFlags;
 }
 
-- (void) drawFrame;
+- (void)drawFrame;
 
-- (void) powerDown:(id) sender;
-- (void) sleep:(id) sender;
-- (void) wakeUp:(id) sender;
-- (void) coldRestart:(id) sender;
-- (void) warmRestart:(id) sender;
-- (void) debuggerBreak:(id) sender;
+- (void)systemPowerDown:(id)sender;
+- (void)systemSleep:(id)sender;
+- (void)systemWakeUp:(id)sender;
+- (void)systemColdRestart:(id)sender;
+- (void)systemWarmRestart:(id)sender;
+- (void)systemBreak:(id)sender;
+- (void)systemDebuggerBreak:(id)sender;
+- (void)applicationBreak:(id)sender;
+- (void)applicationDebuggerBreak:(id)sender;
+- (void)systemHibernate:(id)sender;
 
 @end

@@ -10,9 +10,7 @@
 
 #import "CanvasWindow.h"
 #import "DocumentController.h"
-
-#define CANVAS_DEFAULT_WIDTH	768
-#define CANVAS_DEFAULT_HEIGHT	576
+#import "OEComponent.h"
 
 @implementation CanvasWindow
 
@@ -40,6 +38,11 @@
 		[self toggleFullscreen:self];
 	
 	[super dealloc];
+}
+
+- (void *)canvasComponent
+{
+	return [[self windowController] canvasComponent];
 }
 
 - (NSRect)constrainFrameRect:(NSRect)frameRect toScreen:(NSScreen *)screen
@@ -107,6 +110,17 @@
 
 - (void)setFrameSize:(double)proportion
 {
+	int canvasDefaultWidth = 640;
+	int canvasDefaultHeight = 480;
+	
+	OEComponent *canvasComponent = (OEComponent *)[self canvasComponent];
+	if (canvasComponent)
+	{
+		// Update canvasDefaultWidth and height
+	}
+	
+	// To-Do: Ask canvas for default size
+	
 	NSRect frameRect = [self frame];
 	NSView *content = [self contentView];
 	NSRect contentRect = [content frame];
@@ -122,8 +136,8 @@
 	
 	frameRect.origin.x = NSMidX(frameRect);
 	frameRect.origin.y = NSMaxY(frameRect);
-	frameRect.size.width = scale * proportion * CANVAS_DEFAULT_WIDTH + deltaWidth;
-	frameRect.size.height = scale * proportion * CANVAS_DEFAULT_HEIGHT + deltaHeight;
+	frameRect.size.width = scale * proportion * canvasDefaultWidth + deltaWidth;
+	frameRect.size.height = scale * proportion * canvasDefaultHeight + deltaHeight;
 	frameRect.origin.x -= NSWidth(frameRect) / 2;
 	frameRect.origin.y -= NSHeight(frameRect);
 	
