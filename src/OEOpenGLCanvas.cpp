@@ -44,7 +44,7 @@ OEOpenGLCanvas::OEOpenGLCanvas(OEPortAudioEmulation *emulation,
 
 OEOpenGLCanvas::~OEOpenGLCanvas()
 {
-//	glDeleteTextures(OEGL_TEX_NUM, textures);
+	glDeleteTextures(OEGL_TEX_NUM, textures);
 }
 
 void OEOpenGLCanvas::init()

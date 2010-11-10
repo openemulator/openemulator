@@ -229,9 +229,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (void)dealloc
 {
-	delete (OEOpenGLCanvas *)oeOpenGLCanvas;
-	
     CVDisplayLinkRelease(displayLink);
+	
+	delete (OEOpenGLCanvas *)oeOpenGLCanvas;
 	
 	[super dealloc];
 }
