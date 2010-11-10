@@ -19,6 +19,13 @@
 
 #include "HostInterface.h"
 
+enum
+{
+	OEGL_CAPTURE_NONE,
+	OEGL_CAPTURE_KEYBOARD_AND_MOUSE,
+	OEGL_CAPTURE_KEYBOARD,
+};
+
 enum 
 {
 	OEGL_TEX_POWER,

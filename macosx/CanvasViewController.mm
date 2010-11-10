@@ -150,19 +150,22 @@ CanvasKeyMapEntry canvasKeyMap[] =
 
 @implementation CanvasViewController
 
-static void captureKeyboardAndMouse()
+static void setCaptureMode(int captureMode)
 {
-	CGDisplayHideCursor(kCGDirectMainDisplay);
-}
-
-static void captureKeyboard()
-{
-	CGDisplayHideCursor(kCGDirectMainDisplay);
-}
-
-static void releaseKeyboard()
-{
-	CGDisplayShowCursor(kCGDirectMainDisplay);
+	switch (captureMode)
+	{
+		case 0:
+			CGDisplayShowCursor(kCGDirectMainDisplay);
+			break;
+			
+		case 1:
+			CGDisplayHideCursor(kCGDirectMainDisplay);
+			break;
+			
+		case 2:
+			CGDisplayHideCursor(kCGDirectMainDisplay);
+			break;
+	}
 }
 
 static void setKeyboardLEDs(void *userData, int value)
