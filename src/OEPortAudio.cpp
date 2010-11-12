@@ -31,9 +31,9 @@ static int oePortAudioRunAudio(const void *inputBuffer,
 	return paContinue;
 }
 
-void *oePortAudioRunAudioTimer(void *arg)
+void *oePortAudioRunTimer(void *arg)
 {
-	((OEPortAudio *) arg)->runAudioTimer();
+	((OEPortAudio *) arg)->runTimer();
 	
 	return NULL;
 }
@@ -54,8 +54,8 @@ OEPortAudio::OEPortAudio()
 	framesPerBuffer = OEPORTAUDIO_FRAMESPERBUFFER;
 	bufferNum = OEPORTAUDIO_BUFFERNUM;
 	
-	bufferInputIndex = 0;
-	bufferOutputIndex = 0;
+	bufferAudioIndex = 0;
+	bufferEmulationIndex = 0;
 	
 	audioOpen = false;
 	audioStream = NULL;
@@ -180,53 +180,54 @@ void OEPortAudio::removeEmulation(OEPortAudioEmulation *emulation)
 //
 // Audio buffering
 //
-int OEPortAudio::getBufferInputSize()
+int OEPortAudio::getBufferAudioSize()
 {
 	int stateNum = 2 * bufferNum;
-	int index = (bufferOutputIndex - bufferInputIndex + stateNum) % stateNum;
+	int index = (stateNum + bufferEmulationIndex - bufferAudioIndex) % stateNum;
 	return bufferNum - index;
 }
 
-int OEPortAudio::getBufferOutputSize()
+int OEPortAudio::getBufferEmulationSize()
 {
 	int stateNum = 2 * bufferNum;
-	int index = (bufferOutputIndex - bufferInputIndex + stateNum) % stateNum;
+	int index = (stateNum + bufferEmulationIndex - bufferAudioIndex) % stateNum;
 	return index;
 }
 
-float *OEPortAudio::getBufferInput()
+float *OEPortAudio::getBufferEmulation()
 {
- 	int index = bufferInputIndex % bufferNum;
+ 	int index = bufferAudioIndex % bufferNum;
 	int samplesPerBuffer = framesPerBuffer * channelNum;
 	return &buffer[index * samplesPerBuffer];
 }
 
-float *OEPortAudio::getBufferOutput()
+float *OEPortAudio::getBufferAudio()
 {
- 	int index = bufferOutputIndex % bufferNum;
+ 	int index = bufferEmulationIndex % bufferNum;
 	int samplesPerBuffer = framesPerBuffer * channelNum;
 	return &buffer[index * samplesPerBuffer];
 }
 
-void OEPortAudio::incrementBufferInputIndex()
+void OEPortAudio::incrementBufferAudioIndex()
 {
 	int stateNum = 2 * bufferNum;
-	bufferInputIndex = (bufferInputIndex + 1) % stateNum;
+	bufferAudioIndex = (bufferAudioIndex + 1) % stateNum;
 }
 
-void OEPortAudio::incrementBufferOutputIndex()
+void OEPortAudio::incrementBufferEmulationIndex()
 {
 	int stateNum = 2 * bufferNum;
-	bufferOutputIndex = (bufferOutputIndex + 1) % stateNum;
+	bufferEmulationIndex = (bufferEmulationIndex + 1) % stateNum;
 }
 
 void OEPortAudio::initBuffer()
 {
 	int bufferSize = bufferNum * framesPerBuffer * channelNum;
-	buffer.resize(bufferSize);
+	bufferInput.resize(bufferSize);
+	bufferOutput.resize(bufferSize);
 	
-	bufferInputIndex = 0;
-	bufferOutputIndex = bufferNum;
+	bufferAudioIndex = 0;
+	bufferEmulationIndex = bufferNum;
 }
 
 //
@@ -299,11 +300,11 @@ bool OEPortAudio::openAudio()
 			timerThreadShouldRun = true;
 			error = pthread_create(&timerThread,
 								   &attr,
-								   oePortAudioRunAudioTimer,
+								   oePortAudioRunTimer,
 								   this);
 			if (!error)
 			{
-				OEPortAudioLog("started silent timer thread");
+				OEPortAudioLog("started timer thread");
 				audioOpen = true;
 				return true;
 			}
@@ -369,7 +370,7 @@ void OEPortAudio::runAudio(const void *inputBuffer,
 					void *outputBuffer,
 					int frameNum)
 {
-	if ((getBufferOutputSize() <= 0) ||
+	if ((getBufferEmulationSize() <= 0) ||
 		(frameNum != framesPerBuffer))
 	{
 		int samplesPerBuffer = frameNum * channelNum;
@@ -385,7 +386,7 @@ void OEPortAudio::runAudio(const void *inputBuffer,
 	
 	int samplesPerBuffer = frameNum * channelNum;
 	int bytesPerBuffer = samplesPerBuffer * sizeof(float);
-	float *buffer = getBufferInput();
+	float *buffer = getBufferAudio();
 	
 	// Output
 	{
@@ -407,19 +408,19 @@ void OEPortAudio::runAudio(const void *inputBuffer,
 	else
 		memset(buffer, 0, bytesPerBuffer);
 	
-	incrementBufferInputIndex();
+	incrementBufferAudioIndex();
 	
 	return;
 }
 
-void OEPortAudio::runAudioTimer()
+void OEPortAudio::runTimer()
 {
 	while (timerThreadShouldRun)
 	{
 		usleep(1E6 * framesPerBuffer / sampleRate);
 		
-		if (getBufferOutputSize() > 0)
-			incrementBufferInputIndex();
+		if (getBufferEmulationSize() > 0)
+			incrementBufferAudioIndex();
 	}
 }
 
@@ -501,9 +502,6 @@ void OEPortAudio::unlockEmulations()
 
 void OEPortAudio::runEmulations()
 {
-	vector<float> inputBuffer;
-	vector<float> outputBuffer;
-	
 	int cachedFramesPerBuffer = 0;
 	int cachedChannelNum = 0;
 	
@@ -512,7 +510,8 @@ void OEPortAudio::runEmulations()
 	
 	while (emulationsThreadShouldRun)
 	{
-		if (getBufferInputSize() <= 0)
+		// To-Do: use a signal
+		if (getBufferAudioSize() <= 0)
 		{
 			usleep(1000);
 			continue;
@@ -536,7 +535,7 @@ void OEPortAudio::runEmulations()
 			memset(&outputBuffer[0], 0, 2 * bytesPerBuffer);
 		}
 		
-		float *buffer = getBufferOutput();
+		float *buffer = getBufferInput();
 		
 		// Input
 		if (playing)
@@ -594,7 +593,7 @@ void OEPortAudio::runEmulations()
 		
 		unlockEmulations();
 		
-		incrementBufferOutputIndex();
+		incrementBufferEmulationIndex();
 	}
 }
 

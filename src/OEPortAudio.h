@@ -52,7 +52,7 @@ public:
 	void runAudio(const void *inputBuffer,
 				  void *outputBuffer,
 				  int frameNum);
-	void runAudioTimer();
+	void runTimer();
 	
 	void lockEmulations();
 	void unlockEmulations();
@@ -78,9 +78,10 @@ private:
 	int framesPerBuffer;
 	int bufferNum;
 	
-	volatile int bufferInputIndex;
-	volatile int bufferOutputIndex;
-	vector<float> buffer;
+	volatile int bufferAudioIndex;
+	volatile int bufferEmulationIndex;
+	vector<float> bufferInput;
+	vector<float> bufferOutput;
 	
 	bool audioOpen;
 	PaStream *audioStream;
@@ -111,12 +112,12 @@ private:
 	SNDFILE *recordingFile;
 	long long recordingFrameNum;
 	
-	int getBufferInputSize();
-	int getBufferOutputSize();
-	float *getBufferInput();
-	float *getBufferOutput();
-	void incrementBufferInputIndex();
-	void incrementBufferOutputIndex();
+	int getBufferAudioSize();
+	int getBufferEmulationSize();
+	float *getBufferAudio();
+	float *getBufferEmulation();
+	void incrementBufferAudioIndex();
+	void incrementBufferEmulationIndex();
 	void initBuffer();
 	
 	bool openAudio();

@@ -179,7 +179,13 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 									CVOptionFlags *flagsOut,
 									void *displayLinkContext)
 {
+	// There is no autorelease pool when this method is called because
+	// it is called from a background thread
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	
     [(CanvasViewController *)displayLinkContext drawFrame];
+	
+	[pool release];
 	
     return kCVReturnSuccess;
 }
@@ -194,7 +200,6 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 		NSOpenGLPFADepthSize, 0,
 		NSOpenGLPFAStencilSize, 0,
 		NSOpenGLPFAAccumSize, 0,
-		NSOpenGLPFAWindow,
 		0
 	};
 	
