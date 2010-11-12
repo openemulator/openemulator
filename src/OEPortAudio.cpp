@@ -24,9 +24,14 @@ static int oePortAudioRunAudio(const void *input,
 							   PaStreamCallbackFlags statusFlags,
 							   void *userData)
 {
-	((OEPortAudio *) userData)->runAudio((const float *)input,
+/*	((OEPortAudio *) userData)->runAudio((const float *)input,
 										 (float *)output,
 										 frameCount);
+*/
+	if (input)
+		memcpy(output, input, frameCount * 2 * 4);
+	else
+		memset(output, frameCount * 2 * 4, 0);
 	
 	return paContinue;
 }

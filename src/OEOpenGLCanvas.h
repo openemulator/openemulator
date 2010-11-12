@@ -71,6 +71,8 @@ private:
 	GLuint textures[OEGL_TEX_NUM];
 	
 	OEPortAudioEmulation *emulation;
+
+	pthread_mutex_t frameMutex;
 	
 	bool keyDown[HOST_CANVAS_KEYBOARD_KEY_NUM];
 	int keyDownCount;

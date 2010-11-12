@@ -34,7 +34,7 @@ OEOpenGLCanvas::OEOpenGLCanvas(OEPortAudioEmulation *emulation,
 	this->emulation = emulation;
 	
 	// Init structures
-//	pthread_mutex_init(&glMutex, NULL);
+	//	pthread_mutex_init(&glMutex, NULL);
 	memset(keyDown, sizeof(keyDown), 0);
 	memset(mouseButtonDown, sizeof(mouseButtonDown), 0);
 	memset(joystickButtonDown, sizeof(joystickButtonDown), 0);

@@ -25,11 +25,10 @@
 // Host Messages
 enum
 {
+	HOST_CANVAS_CONFIGURE,
 	HOST_CANVAS_SET_WINDOW,
 	HOST_CANVAS_GET_WINDOW,
 	HOST_CANVAS_GET_DEFAULTSIZE,
-	HOST_CANVAS_GET_FRAME,
-	HOST_CANVAS_SET_CALLBACK,
 	HOST_CANVAS_COPY,
 	HOST_CANVAS_PASTE,
 	
@@ -41,9 +40,11 @@ enum
 	HOST_LOADER_IS_LOADABLE,
 	HOST_LOADER_LOAD,
 	
-	HOST_ETHERNET_SET_CALLBACK,
+	HOST_ETHERNET_CONFIGURE,
 	
-	HOST_CAMERA_SET_CALLBACK,
+	HOST_MIDI_CONFIGURE,
+	
+	HOST_CAMERA_CONFIGURE,
 	
 	HOST_STATUS_CONFIGURE,
 	HOST_STATUS_GET_INFOLINE,
@@ -83,17 +84,15 @@ typedef struct
 } HostAudioNotification;
 
 // Host Canvas
-typedef string *HostCanvasWindow;
-
-enum
+typedef enum
 {
 	HOST_CANVAS_FRAME_FORMAT_LUMINANCE,
 	HOST_CANVAS_FRAME_FORMAT_RGB,
-};
+} HostCanvasFrameFormat;
 
 typedef struct
 {
-	int frameFormat;
+	HostCanvasFrameFormat frameFormat;
 	void *frameData;
 	int frameWidth;
 	int frameHeight;
@@ -129,7 +128,25 @@ typedef struct
 #define HOST_CANVAS_L_POWER			(1 << 5)
 #define HOST_CANVAS_L_SHIFT			(1 << 6)
 
-typedef void *HostCanvasCallback(int ledState);
+#define HOST_CANVAS_B_POWER			(1 << 0)
+#define HOST_CANVAS_B_PAUSE			(1 << 1)
+
+typedef void (*HostCanvasSetKeyboardFlags)(void *userData, int ledFlags);
+typedef void (*HostCanvasSetBadgeFlags)(void *userData, int badgeFlags);
+typedef HostCanvasFrame * (*HostCanvasGetFrame)(void *userData, 
+												HostCanvasFrameFormat format,
+												int width,
+												int height);
+typedef void (*HostCanvasPostFrame)(void *userData, HostCanvasFrame *frame);
+
+typedef struct
+{
+	void *userData;
+	HostCanvasSetKeyboardFlags setKeyboardFlags;
+	HostCanvasSetBadgeFlags setBadgeFlags;
+	HostCanvasGetFrame *getFrame;
+	HostCanvasPostFrame *postFrame;
+} HostCanvasConfiguration;
 
 typedef string *HostCanvasText;
 
@@ -480,14 +497,14 @@ enum
 };
 
 // Host Storage
-typedef string *HostStorageImage;
+typedef string *HostStoragePath;
 
 // Host Loader
-typedef string *HostLoaderImage;
+typedef string *HostLoaderPath;
 
 // Host Ethernet
-typedef int HostEthernetSend(void *userData, char *buffer, int bufferSize);
-typedef int HostEthernetReceive(void *userData, char *buffer, int bufferSize);
+typedef int (*HostEthernetSend)(void *userData, char *buffer, int bufferSize);
+typedef int (*HostEthernetReceive)(void *userData, char *buffer, int bufferSize);
 
 typedef struct
 {
@@ -496,18 +513,42 @@ typedef struct
 	HostEthernetReceive receive;
 } HostEthernetConfiguration;
 
-// Host Camera
-typedef bool HostCameraGet(int *buffer, int bufferSize, int *x, int *y);
-
-// Host Status
-typedef string *HostStatusLine;
-
-typedef void HostStatusCallback(void *userData);
+// Host MIDI
+typedef int (*HostMIDISend)(void *userData, char *buffer, int bufferSize);
+typedef int (*HostMIDIReceive)(void *userData, char *buffer, int bufferSize);
 
 typedef struct
 {
 	void *userData;
-	HostStatusCallback callback;
+	HostMIDISend send;
+	HostMIDIReceive receive;
+} HostMIDIConfiguration;
+
+// Host Camera
+typedef struct
+{
+	int *frameData;
+	int frameWidth;
+	int frameHeight;
+} HostCameraFrame;
+
+typedef HostCameraFrame *(*HostCameraGetFrame)(void *userData);
+
+typedef struct
+{
+	void *userData;
+	HostCameraGetFrame getFrame;
+} HostCameraConfiguration;
+
+// Host Status
+typedef string *HostStatusLine;
+
+typedef void (*HostStatusNotifyChange)(void *userData);
+
+typedef struct
+{
+	void *userData;
+	HostStatusNotifyChange notifyChange;
 } HostStatusConfiguration;
 
 // Host Setting

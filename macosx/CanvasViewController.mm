@@ -168,7 +168,7 @@ static void setCaptureMode(int captureMode)
 	}
 }
 
-static void setKeyboardLEDs(void *userData, int value)
+static void setKeyboardFlags(void *userData, int ledFlags)
 {
 }
 
