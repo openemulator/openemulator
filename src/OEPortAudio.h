@@ -49,9 +49,9 @@ public:
 	bool addEmulation(OEPortAudioEmulation *emulation);
 	void removeEmulation(OEPortAudioEmulation *emulation);
 	
-	void runAudio(const void *inputBuffer,
-				  void *outputBuffer,
-				  int frameNum);
+	void runAudio(const float *input,
+				  float *output,
+				  int frameCount);
 	void runTimer();
 	
 	void lockEmulations();
@@ -112,13 +112,15 @@ private:
 	SNDFILE *recordingFile;
 	long long recordingFrameNum;
 	
-	int getBufferAudioSize();
-	int getBufferEmulationSize();
-	float *getBufferAudio();
-	float *getBufferEmulation();
-	void incrementBufferAudioIndex();
-	void incrementBufferEmulationIndex();
 	void initBuffer();
+	bool isAudioBufferEmpty();
+	float *getAudioInputBuffer();
+	float *getAudioOutputBuffer();
+	void advanceAudioBuffer();
+	bool isEmulationsBufferEmpty();
+	float *getEmulationsInputBuffer();
+	float *getEmulationsOutputBuffer();
+	void advanceEmulationsBuffer();
 	
 	bool openAudio();
 	void closeAudio();

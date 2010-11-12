@@ -50,6 +50,8 @@ public:
 	virtual void write16(OEAddress address, OEUInt16 value);
 	virtual OEUInt32 read32(OEAddress address);
 	virtual void write32(OEAddress address, OEUInt32 value);
+	virtual OEUInt64 read64(OEAddress address);
+	virtual void write64(OEAddress address, OEUInt64 value);
 	virtual bool readBlock(OEAddress address, OEData *value);
 	virtual bool writeBlock(OEAddress address, OEData *value);
 	

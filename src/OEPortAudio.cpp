@@ -17,16 +17,16 @@
 
 using namespace std;
 
-static int oePortAudioRunAudio(const void *inputBuffer,
-							   void *outputBuffer,
-							   unsigned long framesPerBuffer,
+static int oePortAudioRunAudio(const void *input,
+							   void *output,
+							   unsigned long frameCount,
 							   const PaStreamCallbackTimeInfo* timeInfo,
 							   PaStreamCallbackFlags statusFlags,
 							   void *userData)
 {
-	((OEPortAudio *) userData)->runAudio(inputBuffer,
-										 outputBuffer,
-										 framesPerBuffer);
+	((OEPortAudio *) userData)->runAudio((const float *)input,
+										 (float *)output,
+										 frameCount);
 	
 	return paContinue;
 }
@@ -53,9 +53,6 @@ OEPortAudio::OEPortAudio()
 	channelNum = OEPORTAUDIO_CHANNELNUM;
 	framesPerBuffer = OEPORTAUDIO_FRAMESPERBUFFER;
 	bufferNum = OEPORTAUDIO_BUFFERNUM;
-	
-	bufferAudioIndex = 0;
-	bufferEmulationIndex = 0;
 	
 	audioOpen = false;
 	audioStream = NULL;
@@ -180,46 +177,6 @@ void OEPortAudio::removeEmulation(OEPortAudioEmulation *emulation)
 //
 // Audio buffering
 //
-int OEPortAudio::getBufferAudioSize()
-{
-	int stateNum = 2 * bufferNum;
-	int index = (stateNum + bufferEmulationIndex - bufferAudioIndex) % stateNum;
-	return bufferNum - index;
-}
-
-int OEPortAudio::getBufferEmulationSize()
-{
-	int stateNum = 2 * bufferNum;
-	int index = (stateNum + bufferEmulationIndex - bufferAudioIndex) % stateNum;
-	return index;
-}
-
-float *OEPortAudio::getBufferEmulation()
-{
- 	int index = bufferAudioIndex % bufferNum;
-	int samplesPerBuffer = framesPerBuffer * channelNum;
-	return &buffer[index * samplesPerBuffer];
-}
-
-float *OEPortAudio::getBufferAudio()
-{
- 	int index = bufferEmulationIndex % bufferNum;
-	int samplesPerBuffer = framesPerBuffer * channelNum;
-	return &buffer[index * samplesPerBuffer];
-}
-
-void OEPortAudio::incrementBufferAudioIndex()
-{
-	int stateNum = 2 * bufferNum;
-	bufferAudioIndex = (bufferAudioIndex + 1) % stateNum;
-}
-
-void OEPortAudio::incrementBufferEmulationIndex()
-{
-	int stateNum = 2 * bufferNum;
-	bufferEmulationIndex = (bufferEmulationIndex + 1) % stateNum;
-}
-
 void OEPortAudio::initBuffer()
 {
 	int bufferSize = bufferNum * framesPerBuffer * channelNum;
@@ -228,6 +185,60 @@ void OEPortAudio::initBuffer()
 	
 	bufferAudioIndex = 0;
 	bufferEmulationIndex = bufferNum;
+}
+
+bool OEPortAudio::isAudioBufferEmpty()
+{
+	int stateNum = 2 * bufferNum;
+	int index = (stateNum + bufferEmulationIndex - bufferAudioIndex) % stateNum;
+	return (bufferNum - index) <= 0;
+}
+
+float *OEPortAudio::getAudioInputBuffer()
+{
+ 	int index = bufferAudioIndex % bufferNum;
+	int samplesPerBuffer = framesPerBuffer * channelNum;
+	return &bufferInput[index * samplesPerBuffer];
+}
+
+float *OEPortAudio::getAudioOutputBuffer()
+{
+ 	int index = bufferAudioIndex % bufferNum;
+	int samplesPerBuffer = framesPerBuffer * channelNum;
+	return &bufferOutput[index * samplesPerBuffer];
+}
+
+void OEPortAudio::advanceAudioBuffer()
+{
+	int stateNum = 2 * bufferNum;
+	bufferAudioIndex = (bufferAudioIndex + 1) % stateNum;
+}
+
+bool OEPortAudio::isEmulationsBufferEmpty()
+{
+	int stateNum = 2 * bufferNum;
+	int index = (stateNum + bufferEmulationIndex - bufferAudioIndex) % stateNum;
+	return index <= 0;
+}
+
+float *OEPortAudio::getEmulationsInputBuffer()
+{
+ 	int index = bufferEmulationIndex % bufferNum;
+	int samplesPerBuffer = framesPerBuffer * channelNum;
+	return &bufferInput[index * samplesPerBuffer];
+}
+
+float *OEPortAudio::getEmulationsOutputBuffer()
+{
+ 	int index = bufferEmulationIndex % bufferNum;
+	int samplesPerBuffer = framesPerBuffer * channelNum;
+	return &bufferOutput[index * samplesPerBuffer];
+}
+
+void OEPortAudio::advanceEmulationsBuffer()
+{
+	int stateNum = 2 * bufferNum;
+	bufferEmulationIndex = (bufferEmulationIndex + 1) % stateNum;
 }
 
 //
@@ -366,49 +377,53 @@ void OEPortAudio::enableAudio(bool state)
 		openAudio();
 }
 
-void OEPortAudio::runAudio(const void *inputBuffer,
-					void *outputBuffer,
-					int frameNum)
+void OEPortAudio::runAudio(const float *input,
+					float *output,
+					int frameCount)
 {
-	if ((getBufferEmulationSize() <= 0) ||
-		(frameNum != framesPerBuffer))
+	int samplesPerBuffer = frameCount * channelNum;
+	int bytesPerBuffer = samplesPerBuffer * sizeof(float);
+	
+	if (isAudioBufferEmpty() ||
+		(frameCount != framesPerBuffer))
 	{
-		int samplesPerBuffer = frameNum * channelNum;
-		float *out = (float *) outputBuffer;
-		
 		// To-Do: Replace volume with last energy average
-		
+		// Decrease volume
 		for (int i = 0; i < samplesPerBuffer; i++)
-			*out++ = rand() * (0.1 / RAND_MAX);
+			*output++ = rand() * (0.1 / RAND_MAX);
 		
 		return;
 	}
 	
-	int samplesPerBuffer = frameNum * channelNum;
-	int bytesPerBuffer = samplesPerBuffer * sizeof(float);
-	float *buffer = getBufferAudio();
+	float *inputBuffer = getAudioInputBuffer();
+	float *outputBuffer = getAudioOutputBuffer();
+	
+	// Input
+	if (input)
+		memcpy(inputBuffer, input, bytesPerBuffer);
+	else
+		memset(inputBuffer, 0, bytesPerBuffer);
 	
 	// Output
 	{
-		float *in = buffer;
-		float *out = (float *) outputBuffer;
+		float volumeDifference = (volume - instantVolume);
 		
-		for (int i = 0; i < frameNum; i++)
+		if ((volumeDifference < -0.0001) || (volumeDifference > 0.0001))
 		{
-			for (int c = 0; c < channelNum; c++)
-				*out++ = *in++ * instantVolume;
-			
-			instantVolume += (volume - instantVolume) * volumeAlpha;
+			for (int i = 0; i < frameCount; i++)
+			{
+				for (int c = 0; c < channelNum; c++)
+					*output++ = *outputBuffer++ * instantVolume;
+				
+				instantVolume += volumeDifference * volumeAlpha;
+			}
 		}
+		else
+			for (int i = 0; i < samplesPerBuffer; i++)
+				*output++ = *outputBuffer++ * instantVolume;
 	}
 	
-	// Input
-	if (inputBuffer)
-		memcpy(buffer, inputBuffer, bytesPerBuffer);
-	else
-		memset(buffer, 0, bytesPerBuffer);
-	
-	incrementBufferAudioIndex();
+	advanceAudioBuffer();
 	
 	return;
 }
@@ -419,8 +434,8 @@ void OEPortAudio::runTimer()
 	{
 		usleep(1E6 * framesPerBuffer / sampleRate);
 		
-		if (getBufferEmulationSize() > 0)
-			incrementBufferAudioIndex();
+		if (!isAudioBufferEmpty())
+			advanceAudioBuffer();
 	}
 }
 
@@ -502,16 +517,10 @@ void OEPortAudio::unlockEmulations()
 
 void OEPortAudio::runEmulations()
 {
-	int cachedFramesPerBuffer = 0;
-	int cachedChannelNum = 0;
-	
-	int samplesPerBuffer;
-	int bytesPerBuffer;
-	
 	while (emulationsThreadShouldRun)
 	{
-		// To-Do: use a signal
-		if (getBufferAudioSize() <= 0)
+		// To-Do: use a condition
+		if (isEmulationsBufferEmpty())
 		{
 			usleep(1000);
 			continue;
@@ -519,41 +528,12 @@ void OEPortAudio::runEmulations()
 		
 		lockEmulations();
 		
-		// Update audio format
-		if ((framesPerBuffer != cachedFramesPerBuffer) ||
-			(channelNum != cachedChannelNum))
-		{
-			cachedFramesPerBuffer = framesPerBuffer;
-			cachedChannelNum = channelNum;
-			
-			samplesPerBuffer = framesPerBuffer * channelNum;
-			bytesPerBuffer = samplesPerBuffer * sizeof(float);
-			
-			inputBuffer.resize(2 * samplesPerBuffer);
-			memset(&inputBuffer[0], 0, 2 * bytesPerBuffer);
-			outputBuffer.resize(2 * samplesPerBuffer);
-			memset(&outputBuffer[0], 0, 2 * bytesPerBuffer);
-		}
+		float *inputBuffer = getEmulationsInputBuffer();
+		float *outputBuffer = getEmulationsOutputBuffer();
 		
-		float *buffer = getBufferInput();
-		
-		// Input
+		// Audio play
 		if (playing)
-			playAudio(buffer, framesPerBuffer, channelNum);
-		
-		memcpy(&inputBuffer[0],
-			   &inputBuffer[samplesPerBuffer],
-			   bytesPerBuffer);
-		memcpy(&inputBuffer[samplesPerBuffer],
-			   buffer,
-			   bytesPerBuffer);
-		
-		// Play through
-		if (playThrough)
-		{
-			for (int i = 0; i < samplesPerBuffer; i++)
-				outputBuffer[i] += inputBuffer[i];
-		}
+			playAudio(inputBuffer, framesPerBuffer, channelNum);
 		
 		// Output
 		HostAudioNotification hostAudioBuffer =
@@ -561,14 +541,15 @@ void OEPortAudio::runEmulations()
 			sampleRate,
 			channelNum,
 			framesPerBuffer,
-			&inputBuffer[0],
-			&outputBuffer[0],
+			inputBuffer,
+			outputBuffer,
 		};
 		
 		for (OEPortAudioEmulations::iterator i = emulations.begin();
 			 i != emulations.end();
 			 i++)
 		{
+			// To-Do: Request audio components and iterate
 			OEComponent *component = (*i)->getComponent("");
 			if (!component)
 				continue;
@@ -581,19 +562,22 @@ void OEPortAudio::runEmulations()
 							  &hostAudioBuffer);
 		}
 		
-		memcpy(buffer,
-			   &outputBuffer[0],
-			   bytesPerBuffer);
-		memcpy(&outputBuffer[0],
-			   &outputBuffer[samplesPerBuffer],
-			   bytesPerBuffer);
-		
+		// Audio recording
 		if (recording)
-			recordAudio(buffer, framesPerBuffer, channelNum);
+			recordAudio(outputBuffer, framesPerBuffer, channelNum);
+		
+		// Audio play through
+		if (playThrough)
+		{
+			int samplesPerBuffer = framesPerBuffer * channelNum;
+			
+			for (int i = 0; i < samplesPerBuffer; i++)
+				outputBuffer[i] += inputBuffer[i];
+		}
 		
 		unlockEmulations();
 		
-		incrementBufferEmulationIndex();
+		advanceEmulationsBuffer();
 	}
 }
 

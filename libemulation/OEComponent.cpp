@@ -110,39 +110,48 @@ bool OEComponent::removeObserver(OEComponent *component, int notification)
 	return (i != last);
 }
 
-OEUInt8 OEComponent::read(OEUInt32 address)
+OEUInt8 OEComponent::read(OEAddress address)
 {
 	return 0;
 }
 
-void OEComponent::write(OEUInt32 address, OEUInt8 value)
+void OEComponent::write(OEAddress address, OEUInt8 value)
 {
 }
 
-OEUInt16 OEComponent::read16(OEUInt32 address)
-{
-	return 0;
-}
-
-void OEComponent::write16(OEUInt32 address, OEUInt16 value)
-{
-}
-
-OEUInt32 OEComponent::read32(OEUInt32 address)
+OEUInt16 OEComponent::read16(OEAddress address)
 {
 	return 0;
 }
 
-void OEComponent::write32(OEUInt32 address, OEUInt32 value)
+void OEComponent::write16(OEAddress address, OEUInt16 value)
 {
 }
 
-bool OEComponent::readBlock(OEUInt32 address, OEData *value)
+OEUInt32 OEComponent::read32(OEAddress address)
+{
+	return 0;
+}
+
+void OEComponent::write32(OEAddress address, OEUInt32 value)
+{
+}
+
+OEUInt64 OEComponent::read64(OEAddress address)
+{
+	return 0;
+}
+
+void OEComponent::write64(OEAddress address, OEUInt64 value)
+{
+}
+
+bool OEComponent::readBlock(OEAddress address, OEData *value)
 {
 	return false;
 }
 
-bool OEComponent::writeBlock(OEUInt32 address, OEData *value)
+bool OEComponent::writeBlock(OEAddress address, OEData *value)
 {
 	return false;
 }

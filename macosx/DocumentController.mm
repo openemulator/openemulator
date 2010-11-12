@@ -100,7 +100,7 @@
 	((OEPortAudio *)oePortAudio)->setPlayThrough([defaults boolForKey:@"OEPlayThrough"]);
 	((OEPortAudio *)oePortAudio)->setVolume([defaults floatForKey:@"OEVolume"]);
 	
-//	((OEPortAudio *)oePortAudio)->open();
+	((OEPortAudio *)oePortAudio)->open();
 	
 	[defaults addObserver:self
 			   forKeyPath:@"OEFullDuplex"

@@ -30,11 +30,13 @@ inline void OELog(string text)
 #define OEToggleBit(x,m) ((x)^=(m))
 
 typedef unsigned char OEUInt8;
-typedef char OEInt8;
-typedef unsigned short OEUInt16;
-typedef short OEInt16;
+typedef signed char OEInt8;
+typedef unsigned short int OEUInt16;
+typedef signed short int OEInt16;
 typedef unsigned int OEUInt32;
-typedef int OEInt32;
+typedef signed int OEInt32;
+typedef unsigned long long OEUInt64;
+typedef signed long long OEInt64;
 
 typedef unsigned int OEAddress;
 
