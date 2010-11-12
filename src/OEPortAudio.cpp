@@ -418,6 +418,7 @@ void OEPortAudio::runAudio(const float *input,
 			*output++ = *outputBuffer++ * instantVolume;
 	
 	advanceAudioBuffer();
+	
 	pthread_cond_signal(&emulationsCond);
 	
 	return;
@@ -429,8 +430,12 @@ void OEPortAudio::runTimer()
 	{
 		usleep(1E6 * framesPerBuffer / sampleRate);
 		
-		if (!isAudioBufferEmpty())
-			advanceAudioBuffer();
+		if (isAudioBufferEmpty())
+			continue;
+		
+		advanceAudioBuffer();
+		
+		pthread_cond_signal(&emulationsCond);
 	}
 }
 
@@ -494,6 +499,9 @@ void OEPortAudio::closeEmulations()
 		return;
 	
 	emulationsThreadShouldRun = false;
+	
+	pthread_cond_signal(&emulationsCond);
+	
 	void *status;
 	pthread_join(emulationsThread, &status);
 	
