@@ -79,7 +79,7 @@ typedef struct
 	int channelNum;
 	int frameNum;
 	
-	float *input;
+	const float *input;
 	float *output;
 } HostAudioNotification;
 

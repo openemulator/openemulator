@@ -24,14 +24,9 @@ static int oePortAudioRunAudio(const void *input,
 							   PaStreamCallbackFlags statusFlags,
 							   void *userData)
 {
-/*	((OEPortAudio *) userData)->runAudio((const float *)input,
+	((OEPortAudio *) userData)->runAudio((const float *)input,
 										 (float *)output,
 										 frameCount);
-*/
-	if (input)
-		memcpy(output, input, frameCount * 2 * 4);
-	else
-		memset(output, frameCount * 2 * 4, 0);
 	
 	return paContinue;
 }
@@ -58,12 +53,10 @@ OEPortAudio::OEPortAudio()
 	channelNum = OEPORTAUDIO_CHANNELNUM;
 	framesPerBuffer = OEPORTAUDIO_FRAMESPERBUFFER;
 	bufferNum = OEPORTAUDIO_BUFFERNUM;
+	volume = 1.0F;
 	
 	audioOpen = false;
-	audioStream = NULL;
-	volume = 1.0F;
-	instantVolume = 1.0F;
-	volumeAlpha = 0.0F;
+	pthread_cond_init(&emulationsCond, NULL);
 	timerThreadShouldRun = false;
 	
 	emulationsThreadShouldRun = false;
@@ -195,8 +188,8 @@ void OEPortAudio::initBuffer()
 bool OEPortAudio::isAudioBufferEmpty()
 {
 	int stateNum = 2 * bufferNum;
-	int index = (stateNum + bufferEmulationIndex - bufferAudioIndex) % stateNum;
-	return (bufferNum - index) <= 0;
+	int delta = (stateNum + bufferEmulationIndex - bufferAudioIndex) % stateNum;
+	return delta <= 0;
 }
 
 float *OEPortAudio::getAudioInputBuffer()
@@ -222,8 +215,8 @@ void OEPortAudio::advanceAudioBuffer()
 bool OEPortAudio::isEmulationsBufferEmpty()
 {
 	int stateNum = 2 * bufferNum;
-	int index = (stateNum + bufferEmulationIndex - bufferAudioIndex) % stateNum;
-	return index <= 0;
+	int delta = (stateNum + bufferEmulationIndex - bufferAudioIndex) % stateNum;
+	return (bufferNum - delta) <= 0;
 }
 
 float *OEPortAudio::getEmulationsInputBuffer()
@@ -254,10 +247,7 @@ bool OEPortAudio::openAudio()
 	if (audioOpen)
 		closeAudio();
 	
-	float t = 1.0 / sampleRate;
-	float rc = 1 / 2.0 / M_PI / OEPORTAUDIO_VOLUMEFILTERFREQ;
-	volumeAlpha = t / (rc + t);
-	instantVolume = volume;
+	instantVolume = 0.0F;
 	
 	int status = Pa_Initialize();
 	if (status == paNoError)
@@ -345,8 +335,6 @@ void OEPortAudio::closeAudio()
 	{
 		Pa_StopStream(audioStream);
 		Pa_CloseStream(audioStream);
-		
-		audioStream = NULL;
 	}
 	
 	if (timerThreadShouldRun)
@@ -389,46 +377,48 @@ void OEPortAudio::runAudio(const float *input,
 	int samplesPerBuffer = frameCount * channelNum;
 	int bytesPerBuffer = samplesPerBuffer * sizeof(float);
 	
-	if (isAudioBufferEmpty() ||
-		(frameCount != framesPerBuffer))
+	if (isAudioBufferEmpty() || (frameCount != framesPerBuffer))
 	{
-		// To-Do: Replace volume with last energy average
-		// Decrease volume
+		// Render comfort noise
+		float k = 0.1 / RAND_MAX;
+		
 		for (int i = 0; i < samplesPerBuffer; i++)
-			*output++ = rand() * (0.1 / RAND_MAX);
+			*output++ = k * rand();
 		
 		return;
 	}
 	
+	// Copy input buffer
 	float *inputBuffer = getAudioInputBuffer();
-	float *outputBuffer = getAudioOutputBuffer();
-	
-	// Input
 	if (input)
 		memcpy(inputBuffer, input, bytesPerBuffer);
 	else
 		memset(inputBuffer, 0, bytesPerBuffer);
 	
-	// Output
+	// Copy output buffer
+	float *outputBuffer = getAudioOutputBuffer();
+	float volumeDifference = (volume - instantVolume);
+	if ((volumeDifference < -0.00003) || (volumeDifference > 0.00003))
 	{
-		float volumeDifference = (volume - instantVolume);
+		// Update volume
+		float t = 1.0 / sampleRate;
+		float rc = 1 / 2.0 / M_PI / OEPORTAUDIO_VOLUMEFILTERFREQ;
+		float alpha = t / (rc + t);
 		
-		if ((volumeDifference < -0.0001) || (volumeDifference > 0.0001))
+		for (int i = 0; i < frameCount; i++)
 		{
-			for (int i = 0; i < frameCount; i++)
-			{
-				for (int c = 0; c < channelNum; c++)
-					*output++ = *outputBuffer++ * instantVolume;
-				
-				instantVolume += volumeDifference * volumeAlpha;
-			}
-		}
-		else
-			for (int i = 0; i < samplesPerBuffer; i++)
+			for (int c = 0; c < channelNum; c++)
 				*output++ = *outputBuffer++ * instantVolume;
+			
+			instantVolume += volumeDifference * alpha;
+		}
 	}
+	else
+		for (int i = 0; i < samplesPerBuffer; i++)
+			*output++ = *outputBuffer++ * instantVolume;
 	
 	advanceAudioBuffer();
+	pthread_cond_signal(&emulationsCond);
 	
 	return;
 }
@@ -524,17 +514,19 @@ void OEPortAudio::runEmulations()
 {
 	while (emulationsThreadShouldRun)
 	{
-		// To-Do: use a condition
-		if (isEmulationsBufferEmpty())
-		{
-			usleep(1000);
-			continue;
-		}
-		
 		lockEmulations();
+		
+		if (isEmulationsBufferEmpty())
+			pthread_cond_wait(&emulationsCond, &emulationsMutex);
+		
+		int samplesPerBuffer = framesPerBuffer * channelNum;
+		int bytesPerBuffer = samplesPerBuffer * sizeof(float);
 		
 		float *inputBuffer = getEmulationsInputBuffer();
 		float *outputBuffer = getEmulationsOutputBuffer();
+		
+		// Init output
+		memset(outputBuffer, 0, bytesPerBuffer);
 		
 		// Audio play
 		if (playing)
@@ -574,8 +566,6 @@ void OEPortAudio::runEmulations()
 		// Audio play through
 		if (playThrough)
 		{
-			int samplesPerBuffer = framesPerBuffer * channelNum;
-			
 			for (int i = 0; i < samplesPerBuffer; i++)
 				outputBuffer[i] += inputBuffer[i];
 		}
@@ -587,7 +577,7 @@ void OEPortAudio::runEmulations()
 }
 
 //
-// Play/Recording
+// Play
 //
 bool OEPortAudio::startPlaying(string path)
 {
@@ -672,63 +662,6 @@ float OEPortAudio::getPlayDuration()
 	return (float) playFrameNum / sampleRate;
 }
 
-bool OEPortAudio::startRecording(string path)
-{
-	stopRecording();
-	
-	SF_INFO sfInfo = 
-	{
-		0,
-		sampleRate,
-		channelNum,
-		SF_FORMAT_WAV | SF_FORMAT_PCM_16,
-		0,
-		0,
-	};
-	
-	lockEmulations();
-	
-	recordingFrameNum = 0;
-	recordingFile = sf_open(path.c_str(), SFM_WRITE, &sfInfo);
-	
-	if (recordingFile)
-		recording = true;
-	else
-		OEPortAudioLog("could not open temporary file " + path);
-	
-	unlockEmulations();
-	
-	return recording;
-}
-
-void OEPortAudio::stopRecording()
-{
-	if (!recording)
-		return;
-	
-	lockEmulations();
-	
-	sf_close(recordingFile);
-	recording = false;
-	
-	unlockEmulations();
-}
-
-bool OEPortAudio::isRecording()
-{
-	return recording;
-}
-
-float OEPortAudio::getRecordingTime()
-{
-	return (float) recordingFrameNum / sampleRate;
-}
-
-long long OEPortAudio::getRecordingSize()
-{
-	return (long long) recordingFrameNum * channelNum * sizeof(short);
-}
-
 void OEPortAudio::playAudio(float *buffer, int frameNum, int channelNum)
 {
 	vector<float> srcBuffer;
@@ -791,6 +724,66 @@ void OEPortAudio::playAudio(float *buffer, int frameNum, int channelNum)
 		playBufferFrameBegin += srcData.input_frames_used;
 		frameNum -= srcData.output_frames_gen;
 	} while (frameNum > 0);
+}
+
+//
+// Recording
+//
+bool OEPortAudio::startRecording(string path)
+{
+	stopRecording();
+	
+	SF_INFO sfInfo = 
+	{
+		0,
+		sampleRate,
+		channelNum,
+		SF_FORMAT_WAV | SF_FORMAT_PCM_16,
+		0,
+		0,
+	};
+	
+	lockEmulations();
+	
+	recordingFrameNum = 0;
+	recordingFile = sf_open(path.c_str(), SFM_WRITE, &sfInfo);
+	
+	if (recordingFile)
+		recording = true;
+	else
+		OEPortAudioLog("could not open temporary file " + path);
+	
+	unlockEmulations();
+	
+	return recording;
+}
+
+void OEPortAudio::stopRecording()
+{
+	if (!recording)
+		return;
+	
+	lockEmulations();
+	
+	sf_close(recordingFile);
+	recording = false;
+	
+	unlockEmulations();
+}
+
+bool OEPortAudio::isRecording()
+{
+	return recording;
+}
+
+float OEPortAudio::getRecordingTime()
+{
+	return (float) recordingFrameNum / sampleRate;
+}
+
+long long OEPortAudio::getRecordingSize()
+{
+	return (long long) recordingFrameNum * channelNum * sizeof(short);
 }
 
 void OEPortAudio::recordAudio(float *buffer, int frameNum, int channelNum)

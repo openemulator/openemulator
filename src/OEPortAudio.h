@@ -21,9 +21,9 @@
 #define OEPORTAUDIO_SAMPLERATE			48000.0
 #define OEPORTAUDIO_CHANNELNUM			2
 #define OEPORTAUDIO_FRAMESPERBUFFER		512
-#define OEPORTAUDIO_BUFFERNUM			3
+#define OEPORTAUDIO_BUFFERNUM			2
 
-#define OEPORTAUDIO_VOLUMEFILTERFREQ	20.0
+#define OEPORTAUDIO_VOLUMEFILTERFREQ	0.20
 
 inline void OEPortAudioLog(string text)
 {
@@ -40,7 +40,6 @@ public:
 	void setChannelNum(int value);
 	void setFramesPerBuffer(int value);
 	void setBufferNum(int value);
-	
 	void setVolume(float value);
 	void setPlayThrough(bool value);
 	
@@ -77,6 +76,7 @@ private:
 	int channelNum;
 	int framesPerBuffer;
 	int bufferNum;
+	float volume;
 	
 	volatile int bufferAudioIndex;
 	volatile int bufferEmulationIndex;
@@ -85,15 +85,14 @@ private:
 	
 	bool audioOpen;
 	PaStream *audioStream;
-	float volume;
 	float instantVolume;
-	float volumeAlpha;
 	bool timerThreadShouldRun;
 	pthread_t timerThread;
 	
 	bool emulationsThreadShouldRun;
 	pthread_t emulationsThread;
 	pthread_mutex_t emulationsMutex;
+	pthread_cond_t emulationsCond;
 	OEPortAudioEmulations emulations;
 	
 	bool playing;
