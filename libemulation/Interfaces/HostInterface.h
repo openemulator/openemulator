@@ -25,7 +25,7 @@
 // Host Messages
 enum
 {
-	HOST_CANVAS_CONFIGURE,
+	HOST_CANVAS,
 	HOST_CANVAS_SET_WINDOW,
 	HOST_CANVAS_GET_WINDOW,
 	HOST_CANVAS_GET_DEFAULTSIZE,
@@ -40,7 +40,7 @@ enum
 	HOST_LOADER_IS_LOADABLE,
 	HOST_LOADER_LOAD,
 	
-	HOST_ETHERNET_CONFIGURE,
+	HOST_ETHERNET_SET_OBJECT,
 	
 	HOST_MIDI_CONFIGURE,
 	
@@ -86,13 +86,13 @@ typedef struct
 // Host Canvas
 typedef enum
 {
-	HOST_CANVAS_FRAME_FORMAT_LUMINANCE,
-	HOST_CANVAS_FRAME_FORMAT_RGB,
-} HostCanvasFrameFormat;
+	HOST_CANVAS_FORMAT_COMPOSITE,
+	HOST_CANVAS_FORMAT_RGB,
+} HostCanvasFormat;
 
 typedef struct
 {
-	HostCanvasFrameFormat frameFormat;
+	HostCanvasFormat frameFormat;
 	void *frameData;
 	int frameWidth;
 	int frameHeight;
@@ -119,34 +119,6 @@ typedef struct
 	float screenBarrel;
 	float screenPersistance;
 } HostCanvasFrame;
-
-#define HOST_CANVAS_L_NUMLOCK		(1 << 0)
-#define HOST_CANVAS_L_CAPSLOCK		(1 << 1)
-#define HOST_CANVAS_L_SCROLLLOCK	(1 << 2)
-#define HOST_CANVAS_L_COMPOSE		(1 << 3)
-#define HOST_CANVAS_L_KANA			(1 << 4)
-#define HOST_CANVAS_L_POWER			(1 << 5)
-#define HOST_CANVAS_L_SHIFT			(1 << 6)
-
-#define HOST_CANVAS_B_POWER			(1 << 0)
-#define HOST_CANVAS_B_PAUSE			(1 << 1)
-
-typedef void (*HostCanvasSetKeyboardFlags)(void *userData, int ledFlags);
-typedef void (*HostCanvasSetBadgeFlags)(void *userData, int badgeFlags);
-typedef HostCanvasFrame * (*HostCanvasGetFrame)(void *userData, 
-												HostCanvasFrameFormat format,
-												int width,
-												int height);
-typedef void (*HostCanvasPostFrame)(void *userData, HostCanvasFrame *frame);
-
-typedef struct
-{
-	void *userData;
-	HostCanvasSetKeyboardFlags setKeyboardFlags;
-	HostCanvasSetBadgeFlags setBadgeFlags;
-	HostCanvasGetFrame *getFrame;
-	HostCanvasPostFrame *postFrame;
-} HostCanvasConfiguration;
 
 typedef string *HostCanvasText;
 
@@ -501,44 +473,6 @@ typedef string *HostStoragePath;
 
 // Host Loader
 typedef string *HostLoaderPath;
-
-// Host Ethernet
-typedef int (*HostEthernetSend)(void *userData, char *buffer, int bufferSize);
-typedef int (*HostEthernetReceive)(void *userData, char *buffer, int bufferSize);
-
-typedef struct
-{
-	void *userData;
-	HostEthernetSend send;
-	HostEthernetReceive receive;
-} HostEthernetConfiguration;
-
-// Host MIDI
-typedef int (*HostMIDISend)(void *userData, char *buffer, int bufferSize);
-typedef int (*HostMIDIReceive)(void *userData, char *buffer, int bufferSize);
-
-typedef struct
-{
-	void *userData;
-	HostMIDISend send;
-	HostMIDIReceive receive;
-} HostMIDIConfiguration;
-
-// Host Camera
-typedef struct
-{
-	int *frameData;
-	int frameWidth;
-	int frameHeight;
-} HostCameraFrame;
-
-typedef HostCameraFrame *(*HostCameraGetFrame)(void *userData);
-
-typedef struct
-{
-	void *userData;
-	HostCameraGetFrame getFrame;
-} HostCameraConfiguration;
 
 // Host Status
 typedef string *HostStatusLine;

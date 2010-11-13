@@ -179,6 +179,10 @@
 		000A79090FBA49C500A0F12E /* DiskImage525.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = DiskImage525.icns; sourceTree = "<group>"; };
 		000A79190FBA49C500A0F12E /* OpenEmulator.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = OpenEmulator.icns; sourceTree = "<group>"; };
 		000A79520FBA4A8400A0F12E /* OpenEmulatorHelp */ = {isa = PBXFileReference; lastKnownFileType = folder; name = OpenEmulatorHelp; path = macosx/OpenEmulatorHelp; sourceTree = "<group>"; };
+		000DEB07128E3D4D0045BF8B /* OECanvas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OECanvas.h; sourceTree = "<group>"; };
+		000DEB0A128E3D640045BF8B /* OEEthernet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEEthernet.h; sourceTree = "<group>"; };
+		000DEB0B128E3D6D0045BF8B /* OEMIDI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEMIDI.h; sourceTree = "<group>"; };
+		000DEB0C128E3D870045BF8B /* OEVideo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEVideo.h; sourceTree = "<group>"; };
 		000F66370FF8368F00C8AF23 /* DiskImage.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = DiskImage.icns; sourceTree = "<group>"; };
 		000F66380FF8368F00C8AF23 /* DiskImage35.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = DiskImage35.icns; sourceTree = "<group>"; };
 		000F66390FF8368F00C8AF23 /* DiskImage525.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = DiskImage525.icns; sourceTree = "<group>"; };
@@ -604,6 +608,10 @@
 				00F95F44125554A9002B548B /* CPUInterface.h */,
 				00F95F8D12555A88002B548B /* IEEE1284Interface.h */,
 				00C92F6A1256B21600026B72 /* AppleIIMMUInterface.h */,
+				000DEB07128E3D4D0045BF8B /* OECanvas.h */,
+				000DEB0A128E3D640045BF8B /* OEEthernet.h */,
+				000DEB0B128E3D6D0045BF8B /* OEMIDI.h */,
+				000DEB0C128E3D870045BF8B /* OEVideo.h */,
 			);
 			path = Interfaces;
 			sourceTree = "<group>";
