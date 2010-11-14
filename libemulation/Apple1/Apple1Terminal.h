@@ -18,7 +18,7 @@ class Apple1Terminal : public Terminal
 public:
 	Apple1Terminal();
 	
-	bool setComponent(string name, OEComponent *component);
+	bool setRef(string name, OEComponent *id);
 	
 	void write(int address, int value);
 	

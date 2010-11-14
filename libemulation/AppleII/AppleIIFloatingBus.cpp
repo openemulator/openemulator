@@ -10,12 +10,12 @@
 
 #include "AppleIIFloatingBus.h"
 
-bool AppleIIFloatingBus::setComponent(string name, OEComponent *component)
+bool AppleIIFloatingBus::setRef(string name, OEComponent *id)
 {
 	if (name == "controlBus")
-		controlBus = component;
+		controlBus = id;
 	else if (name == "ram")
-		ram = component;
+		ram = id;
 	else
 		return false;
 	

@@ -15,15 +15,6 @@
 
 #include "OEInfo.h"
 
-OEInfo::OEInfo() : OEEDL()
-{
-}
-
-OEInfo::OEInfo(string path) : OEEDL()
-{
-	open(path);
-}
-
 OEInfo::~OEInfo()
 {
 	removeDevices();
@@ -41,7 +32,7 @@ bool OEInfo::open(string path)
 	
 	close();
 	
-	OELog("in '" + path + "'");
+	log("in '" + path + "'");
 	
 	return false;
 }
@@ -252,7 +243,7 @@ bool OEInfo::analyzeConnections()
 			{
 				if ((*outlet)->connection)
 				{
-					OELog("reconnection of inlet '" + (*inlet)->ref + "'");
+					log("reconnection of inlet '" + (*inlet)->ref + "'");
 					
 					return false;
 				}
@@ -264,7 +255,7 @@ bool OEInfo::analyzeConnections()
 		
 		if (!(*inlet)->connection)
 		{
-			OELog("could not find '" + (*inlet)->ref + "'");
+			log("could not find '" + (*inlet)->ref + "'");
 			
 			return false;
 		}

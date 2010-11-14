@@ -13,7 +13,7 @@
 
 #include "OEPortAudio.h"
 
-#include "HostInterface.h"
+#include "HostAudioInterface.h"
 
 using namespace std;
 
@@ -262,8 +262,8 @@ bool OEPortAudio::openAudio()
 									  this);
 		if ((status != paNoError) && fullDuplex)
 		{
-			OEPortAudioLog("could not open audio stream, error " + status);
-			OEPortAudioLog("attempting half-duplex");
+			log("could not open audio stream, error " + getString(status));
+			log("attempting half-duplex");
 			
 			status = Pa_OpenDefaultStream(&audioStream,
 										  0,
@@ -284,15 +284,15 @@ bool OEPortAudio::openAudio()
 				return true;
 			}
 			else
-				OEPortAudioLog("could not start audio stream, error " + status);
+				log("could not start audio stream, error " + getString(status));
 			
 			Pa_CloseStream(audioStream);
 		}
 		else
-			OEPortAudioLog("could not open audio stream, error " + status);
+			log("could not open audio stream, error " + getString(status));
 	}
 	else
-		OEPortAudioLog("could not init portaudio, error " + status);
+		log("could not init portaudio, error " + getString(status));
 	
 	int error;
 	pthread_attr_t attr;
@@ -310,18 +310,18 @@ bool OEPortAudio::openAudio()
 								   this);
 			if (!error)
 			{
-				OEPortAudioLog("started timer thread");
+				log("started timer thread");
 				audioOpen = true;
 				return true;
 			}
 			else
-				OEPortAudioLog("could not create timer thread, error " + error);
+				log("could not create timer thread, error " + getString(error));
 		}
 		else
-			OEPortAudioLog("could not attr timer thread, error " + error);
+			log("could not attr timer thread, error " + getString(error));
 	}
 	else
-		OEPortAudioLog("could not init timer thread, error " + error);
+		log("could not init timer thread, error " + getString(error));
 	
 	return false;
 }
@@ -377,9 +377,9 @@ void OEPortAudio::runAudio(const float *input,
 	int samplesPerBuffer = frameCount * channelNum;
 	int bytesPerBuffer = samplesPerBuffer * sizeof(float);
 	
+	// Render comfort noise when no data is available
 	if (isAudioBufferEmpty() || (frameCount != framesPerBuffer))
 	{
-		// Render comfort noise
 		float k = 0.1 / RAND_MAX;
 		
 		for (int i = 0; i < samplesPerBuffer; i++)
@@ -410,7 +410,7 @@ void OEPortAudio::runAudio(const float *input,
 			for (int c = 0; c < channelNum; c++)
 				*output++ = *outputBuffer++ * instantVolume;
 			
-			instantVolume += volumeDifference * alpha;
+			instantVolume += (volume - instantVolume) * alpha;
 		}
 	}
 	else
@@ -479,16 +479,16 @@ bool OEPortAudio::openEmulations()
 				if (!error)
 					return true;
 				else
-					OEPortAudioLog("could not create eulations thread, error " + error);
+					log("could not create eulations thread, error " + getString(error));
 			}
 			else
-				OEPortAudioLog("could not attr emulations thread, error " + error);
+				log("could not attr emulations thread, error " + getString(error));
 		}
 		else
-			OEPortAudioLog("could not init emulations attr, error " + error);
+			log("could not init emulations attr, error " + getString(error));
 	}
 	else
-		OEPortAudioLog("could not init emulations mutex, error " + error);
+		log("could not init emulations mutex, error " + getString(error));
 	
 	return false;
 }
@@ -541,7 +541,7 @@ void OEPortAudio::runEmulations()
 			playAudio(inputBuffer, framesPerBuffer, channelNum);
 		
 		// Output
-		HostAudioNotification hostAudioBuffer =
+		HostAudioBuffer buffer =
 		{
 			sampleRate,
 			channelNum,
@@ -554,17 +554,33 @@ void OEPortAudio::runEmulations()
 			 i != emulations.end();
 			 i++)
 		{
-			// To-Do: Request audio components and iterate
-			OEComponent *component = (*i)->getComponent("");
+			OEComponent *component = (*i)->getComponentById("hostAudio");
 			if (!component)
 				continue;
 			
-			component->notify(NULL, HOST_AUDIO_FRAME_WILL_BEGIN,
-							  &hostAudioBuffer);
-			component->notify(NULL, HOST_AUDIO_FRAME_WILL_RENDER,
-							  &hostAudioBuffer);
-			component->notify(NULL, HOST_AUDIO_FRAME_WILL_END,
-							  &hostAudioBuffer);
+			component->notify(this, HOST_AUDIO_FRAME_WILL_BEGIN, &buffer);
+		}
+		
+		for (OEPortAudioEmulations::iterator i = emulations.begin();
+			 i != emulations.end();
+			 i++)
+		{
+			OEComponent *component = (*i)->getComponentById("hostAudio");
+			if (!component)
+				continue;
+			
+			component->notify(this, HOST_AUDIO_FRAME_WILL_RENDER, &buffer);
+		}
+		
+		for (OEPortAudioEmulations::iterator i = emulations.begin();
+			 i != emulations.end();
+			 i++)
+		{
+			OEComponent *component = (*i)->getComponentById("hostAudio");
+			if (!component)
+				continue;
+			
+			component->notify(this, HOST_AUDIO_FRAME_WILL_END, &buffer);
 		}
 		
 		// Audio recording
@@ -630,12 +646,12 @@ bool OEPortAudio::startPlaying(string path)
 		}
 		else
 		{
-			OEPortAudioLog("could not init sample rate converter, error " + error);
+			log("could not init sample rate converter, error " + getString(error));
 			sf_close(playFile);
 		}
 	}
 	else
-		OEPortAudioLog("could not open file " + path);
+		log("could not open file " + path);
 	
 	unlockEmulations();
 	
@@ -759,7 +775,7 @@ bool OEPortAudio::startRecording(string path)
 	if (recordingFile)
 		recording = true;
 	else
-		OEPortAudioLog("could not open temporary file " + path);
+		log("could not open temporary file " + path);
 	
 	unlockEmulations();
 	

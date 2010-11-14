@@ -8,16 +8,14 @@
  * Defines the RS-232 interface
  */
 
-// Events
-enum
+typedef enum
 {
 	RS232_SET_DTR,
 	RS232_SET_RTS,
 	RS232_SEND_BREAK,
-};
+} RS232Messages;
 
-// Notifications
-enum
+typedef enum
 {
 	RS232_DATA_RECEIVED,
 	RS232_BREAK_ASSERTED,
@@ -25,4 +23,4 @@ enum
 	RS232_CTS_CHANGED,
 	RS232_DCD_CHANGED,
 	RS232_RI_CHANGED,
-};
+} RS232Notifications;

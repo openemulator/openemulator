@@ -13,7 +13,7 @@
 class AppleIIKeyboard : public OEComponent
 {
 public:
-	bool setComponent(string name, OEComponent *component);
+	bool setRef(string name, OEComponent *id);
 	
 	OEUInt8 read(OEAddress address);
 	void write(OEAddress address, OEUInt8 value);

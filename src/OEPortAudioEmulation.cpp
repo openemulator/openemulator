@@ -11,35 +11,37 @@
 #include "OEPortAudioEmulation.h"
 #include "OEPortAudio.h"
 
-OEPortAudioEmulation::OEPortAudioEmulation(string path) :
-OEEmulation()
+OEPortAudioEmulation::OEPortAudioEmulation() : OEEmulation()
 {
-	oeportaudio = NULL;
+	oePortAudio = NULL;
 }
 
-OEPortAudioEmulation::OEPortAudioEmulation(string path, string resourcesPath) :
-OEEmulation(path, resourcesPath)
+void OEPortAudioEmulation::setOEPortAudio(OEPortAudio *oePortAudio)
 {
-	oeportaudio = NULL;
-}
-
-OEPortAudioEmulation::OEPortAudioEmulation(OEPortAudio *oeportaudio,
-										   string path, string resourcesPath) :
-OEEmulation(path, resourcesPath)
-{
-	this->oeportaudio = oeportaudio;
+	this->oePortAudio = oePortAudio;
 }
 
 void OEPortAudioEmulation::lock()
 {
-	if (oeportaudio)
-		oeportaudio->lockEmulations();
+	if (oePortAudio)
+		oePortAudio->lockEmulations();
 }
 
 void OEPortAudioEmulation::unlock()
 {
-	if (oeportaudio)
-		oeportaudio->unlockEmulations();
+	if (oePortAudio)
+		oePortAudio->unlockEmulations();
+}
+
+bool OEPortAudioEmulation::open(string path)
+{
+	lock();
+	
+	bool status = OEEmulation::open(path);
+	
+	unlock();
+	
+	return status;
 }
 
 bool OEPortAudioEmulation::save(string path)
@@ -51,35 +53,6 @@ bool OEPortAudioEmulation::save(string path)
 	unlock();
 	
 	return status;
-}
-
-int OEPortAudioEmulation::postMessage(string ref, int message, void *data)
-{
-	lock();
-	
-	OEComponent *component = getComponent(ref);
-	int status = 0;
-	if (component)
-		status = component->postMessage(component, message, data);
-	else
-		OEPortAudioLog("could not post event to '" + ref + "'");
-	
-	unlock();
-	
-	return status;
-}
-
-void OEPortAudioEmulation::notify(string ref, int notification, void *data)
-{
-	lock();
-	
-	OEComponent *component = getComponent(ref);
-	if (component)
-		component->notify(NULL, notification, data);
-	else
-		OEPortAudioLog("could not send notification to '" + ref + "'");
-	
-	unlock();
 }
 
 bool OEPortAudioEmulation::addEDL(string path, OEIdMap deviceIdMap)

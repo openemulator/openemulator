@@ -20,12 +20,12 @@ bool AppleIIAudioOut::setValue(string name, string value)
 	return true;
 }
 
-bool AppleIIAudioOut::setComponent(string name, OEComponent *component)
+bool AppleIIAudioOut::setRef(string name, OEComponent *id)
 {
 	if (name == "sampleConverter")
-		sampleConverter = component;
+		sampleConverter = id;
 	else if (name == "floatingBus")
-		floatingBus = component;
+		floatingBus = id;
 	else
 		return false;
 	

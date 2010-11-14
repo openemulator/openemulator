@@ -9,6 +9,12 @@
  */
 
 #include "KIM1PLL.h"
+#include "HostAudioInterface.h"
+
+KIM1PLL::KIM1PLL()
+{
+	hostAudio = NULL;
+}
 
 bool KIM1PLL::setValue(string name, string value)
 {
@@ -20,10 +26,13 @@ bool KIM1PLL::setValue(string name, string value)
 	return true;
 }
 
-bool KIM1PLL::setComponent(string name, OEComponent *component)
+bool KIM1PLL::setRef(string name, OEComponent *id)
 {
-	if (name == "host")
-		host = component;
+	if (name == "hostAudio")
+	{
+//		replaceObserver(hostAudio, id, HOST_AUDIO_FRAME_WILL_RENDER);
+		hostAudio = id;
+	}
 	else
 		return false;
 	

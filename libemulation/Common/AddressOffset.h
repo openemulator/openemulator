@@ -16,7 +16,7 @@ public:
 	AddressOffset();
 	
 	bool setValue(string name, string value);
-	bool setRef(string name, OEComponent *ref);
+	bool setRef(string name, OEComponent *id);
 	
 	bool init();
 	

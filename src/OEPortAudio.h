@@ -21,16 +21,11 @@
 #define OEPORTAUDIO_SAMPLERATE			48000.0
 #define OEPORTAUDIO_CHANNELNUM			2
 #define OEPORTAUDIO_FRAMESPERBUFFER		512
-#define OEPORTAUDIO_BUFFERNUM			2
+#define OEPORTAUDIO_BUFFERNUM			3
 
-#define OEPORTAUDIO_VOLUMEFILTERFREQ	0.20
+#define OEPORTAUDIO_VOLUMEFILTERFREQ	20.0
 
-inline void OEPortAudioLog(string text)
-{
-	cerr << "oeportaudio: " << text << endl;
-}
-
-class OEPortAudio
+class OEPortAudio : public OEComponent
 {
 public:
 	OEPortAudio();

@@ -45,11 +45,10 @@
 	
 	if (recordingURL)
 	{
-		NSFileManager *fileManager = [NSFileManager defaultManager];
 		NSError *error;
 		
-		[fileManager removeItemAtPath:[recordingURL path]
-								error:&error];
+		[[NSFileManager defaultManager] removeItemAtPath:[recordingURL path]
+												   error:&error];
 		
 		[recordingURL release];
 	}
@@ -238,12 +237,26 @@
 	if (!recordingURL)
 		return;
 	
-	NSFileManager *fileManager = [NSFileManager defaultManager];
 	NSError *error;
 	
-	[fileManager moveItemAtPath:[recordingURL path]
-						 toPath:[theURL path]
-						  error:&error];
+	[[NSFileManager defaultManager] removeItemAtPath:[theURL path]
+											   error:&error];
+	if (![[NSFileManager defaultManager] moveItemAtPath:[recordingURL path]
+												 toPath:[theURL path]
+												  error:&error])
+	{
+		NSAlert *alert = [[NSAlert alloc] init];
+		
+		[alert setMessageText:NSLocalizedString(@"The document could not be saved.",
+												@"The document could not be saved.")];
+		[alert setInformativeText:NSLocalizedString(@"Try saving the file to another volume.",
+													@"Try saving the file to another volume.")];
+		[alert runModal];
+		
+		[alert release];
+		
+		return;
+	}
 	
 	[recordingURL release];
 	

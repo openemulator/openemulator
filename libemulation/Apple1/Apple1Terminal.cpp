@@ -15,14 +15,14 @@ Apple1Terminal::Apple1Terminal()
 	memset(screen, 0, APPLE1TERMINAL_DEFAULT_HEIGHT * APPLE1TERMINAL_DEFAULT_WIDTH);
 }
 
-bool Apple1Terminal::setComponent(string name, OEComponent *component)
+bool Apple1Terminal::setRef(string name, OEComponent *id)
 {
 	if (name == "host")
-		host = component;
+		host = id;
 	else if (name == "charset")
-		charset = component;
+		charset = id;
 	else if (name == "monitor")
-		monitor = component;
+		monitor = id;
 	else
 		return false;
 	

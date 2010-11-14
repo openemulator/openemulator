@@ -110,24 +110,21 @@ bool MC6821::getValue(string name, string &value)
 	return true;
 }
 
-bool MC6821::setComponent(string name, OEComponent *component)
+bool MC6821::setRef(string name, OEComponent *id)
 {
 	if (name == "controlBus")
 	{
-		if (controlBus)
-			controlBus->removeObserver(this, CONTROLBUS_RESET_CHANGED);
-		controlBus = component;
-		if (controlBus)
-			controlBus->addObserver(this, CONTROLBUS_RESET_CHANGED);
+		replaceObserver(controlBus, id, CONTROLBUS_RESET_CHANGED);
+		controlBus = id;
 	}
 	else if (name == "portA")
-		portA = component;
+		portA = id;
 	else if (name == "controlBusA")
-		controlBusA = component;
+		controlBusA = id;
 	else if (name == "portB")
-		portB = component;
+		portB = id;
 	else if (name == "controlBusB")
-		controlBusB = component;
+		controlBusB = id;
 	else
 		return false;
 	

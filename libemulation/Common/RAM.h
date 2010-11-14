@@ -23,7 +23,7 @@ public:
 	~RAM();
 	
 	bool setValue(string name, string value);
-	bool setRef(string name, OEComponent *ref);
+	bool setRef(string name, OEComponent *id);
 	bool setData(string name, OEData *data);
 	bool getData(string name, OEData **data);
 	

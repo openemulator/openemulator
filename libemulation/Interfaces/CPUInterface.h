@@ -10,14 +10,9 @@
 
 #include "OEComponent.h"
 
-// Messages
-enum
+typedef enum
 {
 	CPU_RUN,
 	CPU_SET_CYCLES_LEFT,
 	CPU_GET_CYCLES_LEFT,
-};
-
-class CPU : public OEComponent
-{
-};
+} CPUMessages;

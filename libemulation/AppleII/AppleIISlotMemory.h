@@ -14,7 +14,7 @@ class AppleIISlotMemory : public OEComponent
 {
 public:
 	bool setValue(string name, string value);
-	bool setComponent(string name, OEComponent *component);
+	bool setRef(string name, OEComponent *id);
 	
 	OEUInt8 read(OEAddress address);
 	void write(OEAddress address, OEUInt8 value);

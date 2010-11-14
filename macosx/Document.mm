@@ -15,7 +15,6 @@
 
 #import "OEInfo.h"
 #import "OEPortAudioEmulation.h"
-#import "HostInterface.h"
 
 #import "StringConversion.h"
 
@@ -82,7 +81,19 @@
 	string path = getString([url path]);
 	string resourcePath = getString([[NSBundle mainBundle] resourcePath]);
 	
-	emulation = new OEPortAudioEmulation(oePortAudio, path, resourcePath);
+	emulation = new OEPortAudioEmulation();
+	
+	((OEPortAudioEmulation *)emulation)->setResourcePath(resourcePath);
+	((OEPortAudioEmulation *)emulation)->setOEPortAudio(oePortAudio);
+	
+	((OEPortAudioEmulation *)emulation)->setComponent("hostAudio",
+													  (OEComponent *)oePortAudio);
+	((OEPortAudioEmulation *)emulation)->setComponent("hostStorage",
+													  (OEComponent *)oePortAudio);
+	((OEPortAudioEmulation *)emulation)->setComponent("hostCanvas",
+													  (OEComponent *)oePortAudio);
+	
+	((OEPortAudioEmulation *)emulation)->open(path);
 	
 	[documentController addEmulation:emulation];
 }
@@ -108,18 +119,21 @@
 		   message:(int)message
 			  data:(void *)data
 {
-	return ((OEPortAudioEmulation *)emulation)->postMessage(getString(device),
+/*	return ((OEPortAudioEmulation *)emulation)->postMessage(getString(device),
 															message,
 															data);
+ */
 }
 
 - (void)notify:(NSString *)device
   notification:(int)notification
 		  data:(void *)data
 {
-	((OEPortAudioEmulation *)emulation)->notify(getString(device),
+/*
+ ((OEPortAudioEmulation *)emulation)->notify(getString(device),
 												notification,
 												data);
+ */
 }
 
 - (NSImage *)getResourceImage:(NSString *)imagePath

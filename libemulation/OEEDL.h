@@ -53,6 +53,9 @@ protected:
 	bool writeFile(string path, OEData *data);
 	bool readFile(string path, OEData *data);
 	
+	// Helpers
+	void log(string message);
+	
 private:
 	bool is_open;
 	

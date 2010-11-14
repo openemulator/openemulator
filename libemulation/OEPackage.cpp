@@ -5,7 +5,7 @@
  * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Type for accessing DML packages (zip and directory type)
+ * Type for accessing EDL packages (zip and directory type)
  */
 
 #include <fstream>

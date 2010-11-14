@@ -12,10 +12,10 @@
 
 #define APPLEIISLOTEXPANSIONMEMORY_MASK	0x7ff
 
-bool AppleIISlotExpansionMemory::setComponent(string name, OEComponent *component)
+bool AppleIISlotExpansionMemory::setRef(string name, OEComponent *id)
 {
 	if (name == "floatingBus")
-		floatingBus = component;
+		floatingBus = id;
 	else
 		return false;
 	

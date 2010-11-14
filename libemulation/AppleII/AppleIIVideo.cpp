@@ -10,18 +10,18 @@
 
 #include "AppleIIVideo.h"
 
-bool AppleIIVideo::setComponent(string name, OEComponent *component)
+bool AppleIIVideo::setRef(string name, OEComponent *id)
 {
 	if (name == "host")
-		host = component;
+		host = id;
 	else if (name == "ram")
-		ram = component;
+		ram = id;
 	else if (name == "charset")
-		charset = component;
+		charset = id;
 	else if (name == "charsetSocket")
-		charsetSocket = component;
+		charsetSocket = id;
 	else if (name == "monitor")
-		monitor = component;
+		monitor = id;
 	else
 		return false;
 	

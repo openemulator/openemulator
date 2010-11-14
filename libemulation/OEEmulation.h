@@ -19,21 +19,21 @@ typedef map<string, OEComponent *> OEComponentsMap;
 class OEEmulation : public OEInfo
 {
 public:
-	OEEmulation();
-	OEEmulation(string path);
-	OEEmulation(string path, string resourcesPath);
 	~OEEmulation();
+
+	void setResourcePath(string path);
 	
 	bool open(string path);
 	void close();
 	
-	OEComponent *getComponent(string id);
+	bool setComponent(string id, OEComponent *component);
+	OEComponent *getComponentById(string id);
+	string getIdByComponent(OEComponent *component);
+	string getDeviceByComponent(OEComponent *component);
 	
 private:
-	string resourcesPath;
-	OEComponentsMap componentsMap;
-	
-	bool setComponent(string id, OEComponent *component);
+	string resourcePath;
+	OEComponentsMap components;
 	
 	bool create();
 	bool createComponent(string id, string className);
@@ -43,6 +43,8 @@ private:
 	bool initComponent(string id);
 	bool update();
 	bool updateComponent(string id, xmlNodePtr children);
+	void deconfigure();
+	void deconfigureComponent(string id, xmlNodePtr children);
 	void destroy();
 	void destroyComponent(string id, xmlNodePtr children);
 

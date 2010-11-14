@@ -10,7 +10,7 @@
 
 #include "OEComponent.h"
 
-#include "HostInterface.h"
+#include "HostCanvasInterface.h"
 
 class KIM1IO : public OEComponent
 {
@@ -18,12 +18,13 @@ public:
 	KIM1IO();
 	~KIM1IO();
 	
-	bool setRef(string name, OEComponent *ref);
+	bool setRef(string name, OEComponent *id);
 	bool setData(string name, OEData *data);
 	
 	void notify(OEComponent *sender, int notification, void *data);
 	
 private:
+	OEComponent *hostCanvasController;
 	OEComponent *controlBus;
 	OEComponent *serialPort;
 	OEComponent *audioOut;

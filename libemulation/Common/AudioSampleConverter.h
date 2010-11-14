@@ -13,8 +13,14 @@
 class AudioSampleConverter : public OEComponent
 {
 public:
-	bool setRef(string name, OEComponent *ref);
+	AudioSampleConverter();
+	
+	bool setRef(string name, OEComponent *id);
+	void notify(OEComponent *sender, int notification, void *data);
 
 private:
+	OEComponent *hostAudio;
 	OEComponent *controlBus;
+	
+	double phase;
 };

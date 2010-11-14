@@ -26,10 +26,10 @@ bool AddressOffset::setValue(string name, string value)
 	return true;
 }
 
-bool AddressOffset::setRef(string name, OEComponent *ref)
+bool AddressOffset::setRef(string name, OEComponent *id)
 {
 	if (name == "component")
-		component = ref;
+		component = id;
 	else
 		return false;
 	
@@ -38,7 +38,13 @@ bool AddressOffset::setRef(string name, OEComponent *ref)
 
 bool AddressOffset::init()
 {
-	return !component;
+	if (!component)
+	{
+		log("component undefined");
+		return false;
+	}
+	
+	return true;
 }
 
 OEUInt8 AddressOffset::read(OEAddress address)

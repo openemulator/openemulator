@@ -15,10 +15,10 @@ class Apple1IO : public OEComponent
 public:
 	Apple1IO();
 	
-	bool setComponent(string name, OEComponent *component);
-	void notify(int notification, OEComponent *component, void *data);
+	bool setRef(string name, OEComponent *id);
+	void notify(OEComponent *sender, int notification, void *data);
 	
-	OEUInt8 read(int address);
+	OEUInt8 read(OEAddress address);
 	
 private:
 	OEComponent *terminal;

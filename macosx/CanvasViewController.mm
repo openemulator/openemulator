@@ -260,7 +260,11 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	GLint value = 1;
 	[[self openGLContext] setValues:&value forParameter:NSOpenGLCPSwapInterval]; 
 	
-	((OEOpenGLCanvas *)oeOpenGLCanvas)->init();
+	CGLLockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
+	
+	((OEOpenGLCanvas *)oeOpenGLCanvas)->initOpenGL();
+	
+	CGLUnlockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
 	
 	CVDisplayLinkCreateWithActiveCGDisplays(&displayLink);
 	CVDisplayLinkSetOutputCallback(displayLink, &displayLinkCallback, self);
@@ -275,14 +279,13 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (void)reshape
 {
-	NSOpenGLContext	*currentContext = [self openGLContext];
-	[currentContext makeCurrentContext];
+	[[self openGLContext] makeCurrentContext];
 	
-	CGLLockContext((CGLContextObj)[currentContext CGLContextObj]);
+	CGLLockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
 	
 	[[self openGLContext] update];
 	
-	CGLUnlockContext((CGLContextObj)[currentContext CGLContextObj]);
+	CGLUnlockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
 }
 
 - (void)drawRect:(NSRect)theRect
@@ -292,18 +295,17 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (void)drawFrame
 {
-	NSOpenGLContext	*currentContext = [self openGLContext];
-	[currentContext makeCurrentContext];
+	[[self openGLContext] makeCurrentContext];
 	
-	CGLLockContext((CGLContextObj)[currentContext CGLContextObj]);
+	CGLLockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
 	
 	NSRect frame = [self bounds];
 	((OEOpenGLCanvas *)oeOpenGLCanvas)->draw(NSWidth(frame),
 											 NSHeight(frame));
 	
-	[currentContext flushBuffer];
+	[[self openGLContext] flushBuffer];
 	
-	CGLUnlockContext((CGLContextObj)[currentContext CGLContextObj]);
+	CGLUnlockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
 }
 
 - (int)getUsageId:(int)keyCode

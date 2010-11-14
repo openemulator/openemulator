@@ -8,8 +8,7 @@
  * Defines the control bus interface
  */
 
-// Messages
-enum
+typedef enum
 {
 	CONTROLBUS_SET_POWERSTATE,
 	CONTROLBUS_GET_POWERSTATE,
@@ -22,16 +21,15 @@ enum
 	CONTROLBUS_GET_AUDIO_BUFFER_INDEX,
 	CONTROLBUS_REQUEST_BUS,
 	CONTROLBUS_RELEASE_BUS,
-};
+} ControlBusMessages;
 
-// Notifications
-enum
+typedef enum
 {
 	CONTROLBUS_POWERSTATE_CHANGED,
 	CONTROLBUS_RESET_CHANGED,
 	CONTROLBUS_IRQ_CHANGED,
 	CONTROLBUS_NMI_CHANGED,
-};
+} ControlBusNotifications;
 
 // Power states
 enum

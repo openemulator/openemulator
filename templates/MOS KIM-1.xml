@@ -2,13 +2,7 @@
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
 <edl version="1.0" type="Early microcomputers" label="MOS KIM-1" image="images/Early microcomputers/MOS KIM-1.png" description="">
 
-<device id="kim1" label="KIM-1" image="images/Early microcomputers/MOS KIM-1.png">
-    <audio ref="kim1.controlBus" />
-    <audio ref="kim1.audioOut" />
-    <audio ref="kim1.audioIn" />
-    <canvas ref="kim1.io" />
-    <loader ref="kim1.memoryBus" />
-</device>
+<device id="kim1" label="KIM-1" image="images/Early microcomputers/MOS KIM-1.png" />
 <port id="kim1.serialPort" ref="term.connector" type="Serial" label="Serial Port" image="Serial Port.png">
     <inlet ref="kim1.io" property="serial" outletRef="io" />
 </port>
@@ -18,6 +12,7 @@
 <port id="kim1.slot1" ref="" type="Kim1Slot" label="Slot 1" image="Kim-1 Slot.png" />
 <port id="kim1.slot2" ref="" type="Kim1Slot" label="Slot 2" image="Kim-1 Slot.png" />
 <component id="kim1.controlBus" class="ControlBus">
+    <property name="hostAudio" ref="hostAudio" />
     <property name="crystal" value="1.0MHz" />
     <property name="frequencyDivider" value="1" />
     <property name="master" ref="kim1.cpu" />
@@ -25,6 +20,7 @@
     <property name="resetOnPowerOn" value="0" />
 </component>
 <component id="kim1.memoryBus" class="AddressDecoder">
+    <property name="hostStorage" ref="hostStorage" />
     <property name="addressSize" value="16" />
     <property name="blockSize" value="6" />
     <property name="floatingBus" ref="kim1.floatingBus" />
@@ -90,21 +86,24 @@
     <property name="size" value="0x40" />
 </component>
 <component id="kim1.rriot1.rom" class="ROM">
-    <property name="image" src="${resourcesPath}/roms/Early microcomputers/MOS KIM-1 6530-002 ROM.bin" />
+    <property name="image" src="${resourcePath}/roms/Early microcomputers/MOS KIM-1 6530-002 ROM.bin" />
 </component>
 <component id="kim1.rriot2.rom" class="ROM">
-    <property name="image" src="${resourcesPath}/roms/Early microcomputers/MOS KIM-1 6530-003 ROM.bin" />
+    <property name="image" src="${resourcePath}/roms/Early microcomputers/MOS KIM-1 6530-003 ROM.bin" />
 </component>
 <component id="kim1.io" class="KIM1IO">
-    <property name="view" src="${resourcesPath}/images/Early microcomputers/MOS KIM-1 View.png" />
+    <property name="hostCanvasController" ref="hostCanvasController" />
+    <property name="view" src="${resourcePath}/images/Early microcomputers/MOS KIM-1 View.png" />
     <property name="serialPort" ref="" />
     <property name="audioOut" ref="kim1.audioOut" />
     <property name="audioIn" ref="kim1.audioIn" />
 </component>
 <component id="kim1.audioOut" class="AudioSampleConverter">
+    <property name="hostAudio" ref="hostAudio" />
     <property name="controlBus" ref="kim1.controlBus" />
 </component>
 <component id="kim1.audioIn" class="KIM1PLL">
+    <property name="hostAudio" ref="hostAudio" />
     <property name="decisionFrequency" value="3400" />
 </component>
 
@@ -119,7 +118,7 @@
 </component>
 <component id="term.charset" class="CharsetLoader">
     <property name="format" value="Signetics" />
-    <property name="image" src="${resourcesPath}/roms/Signetics/Signetics 2513 Video ROM.bin" />
+    <property name="image" src="${resourcePath}/roms/Signetics/Signetics 2513 Video ROM.bin" />
 </component>
 
 </edl>

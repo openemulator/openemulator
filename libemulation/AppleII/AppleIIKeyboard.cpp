@@ -10,10 +10,10 @@
 
 #include "AppleIIKeyboard.h"
 
-bool AppleIIKeyboard::setComponent(string name, OEComponent *component)
+bool AppleIIKeyboard::setRef(string name, OEComponent *id)
 {
 	if (name == "host")
-		host = component;
+		host = id;
 	else
 		return false;
 	

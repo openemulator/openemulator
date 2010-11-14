@@ -52,7 +52,7 @@ bool OEEDL::open(string path)
 		is_open = readFile(path, &data);
 		
 		if (!is_open)
-			OELog("could not open '" + path + "'");
+			log("could not open '" + path + "'");
 	}
 	else if (pathExtension == OE_PACKAGE_EXTENSION)
 	{
@@ -62,14 +62,14 @@ bool OEEDL::open(string path)
 			is_open = package->readFile(OE_PACKAGE_EDL_FILENAME, &data);
 			
 			if (!is_open)
-				OELog("could not read '" OE_PACKAGE_EDL_FILENAME
+				log("could not read '" OE_PACKAGE_EDL_FILENAME
 					  "' in '" + path + "'");
 		}
 		else
-			OELog("could not open package '" + path + "'");
+			log("could not open package '" + path + "'");
 	}
 	else
-		OELog("could not identify type of '" + path + "'");
+		log("could not identify type of '" + path + "'");
 	
 	if (is_open)
 	{
@@ -82,7 +82,7 @@ bool OEEDL::open(string path)
 		if (!doc)
 		{
 			is_open = false;
-			OELog("could not parse EDL in '" + path + "'");
+			log("could not parse EDL in '" + path + "'");
 		}
 	}
 	
@@ -90,7 +90,7 @@ bool OEEDL::open(string path)
 	{
 		is_open = validate();
 		if (!is_open)
-			OELog("unknown EDL version");
+			log("unknown EDL version");
 	}
 	
 	if (!is_open)
@@ -119,13 +119,13 @@ bool OEEDL::save(string path)
 				is_open = writeFile(path, &data);
 				
 				if (!is_open)
-					OELog("could not open '" + path + "'");
+					log("could not open '" + path + "'");
 			}
 			else
-				OELog("could not dump EDL for '" + path + "'");
+				log("could not dump EDL for '" + path + "'");
 		}
 		else
-			OELog("could not update the configuration for '" + path + "'");
+			log("could not update the configuration for '" + path + "'");
 	}
 	else if (pathExtension == OE_PACKAGE_EXTENSION)
 	{
@@ -139,21 +139,21 @@ bool OEEDL::save(string path)
 				{
 					is_open = package->writeFile(OE_PACKAGE_EDL_FILENAME, &data);
 					if (!is_open)
-						OELog("could not write '" OE_PACKAGE_EDL_FILENAME
+						log("could not write '" OE_PACKAGE_EDL_FILENAME
 							  "' in '" + path + "'");
 				}
 				else
-					OELog("could not dump EDL for '" + path + "'");
+					log("could not dump EDL for '" + path + "'");
 			}
 			
 			delete package;
 			package = NULL;
 		}
 		else
-			OELog("could not open '" + path + "'");
+			log("could not open '" + path + "'");
 	}
 	else
-		OELog("could not identify type of '" + path + "'");
+		log("could not identify type of '" + path + "'");
 	
 	if (!is_open)
 		close();
@@ -362,7 +362,7 @@ bool OEEDL::removeDevice(string deviceId)
 	// Verify device exists
 	if (!hasDevice(deviceId))
 	{
-		OELog("could not find '" + deviceId + "'");
+		log("could not find '" + deviceId + "'");
 		return false;
 	}
 	
@@ -577,4 +577,9 @@ bool OEEDL::readFile(string path, OEData *data)
 	}
 	
 	return success;
+}
+
+void OEEDL::log(string message)
+{
+	cerr << "libemulation: " << message << endl;
 }

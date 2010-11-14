@@ -11,9 +11,12 @@
 #include <iostream>
 
 #include "AddressDecoder.h"
+#include "HostStorageInterface.h"
 
 AddressDecoder::AddressDecoder()
 {
+	hostStorage = NULL;
+	
 	addressSize = 16;
 	blockSize = 8;
 	floatingBus = NULL;
@@ -38,12 +41,17 @@ bool AddressDecoder::setValue(string name, string value)
 	return true;
 }
 
-bool AddressDecoder::setRef(string name, OEComponent *ref)
+bool AddressDecoder::setRef(string name, OEComponent *id)
 {
-	if (name == "floatingBus")
-		floatingBus = ref;
+	if (name == "hostStorage")
+	{
+		replaceObserver(hostStorage, id, HOST_STORAGE_MOUNT_REQUESTED);
+		hostStorage = id;
+	}
+	else if (name == "floatingBus")
+		floatingBus = id;
 	else if (name.substr(0, 3) == "ref")
-		this->ref[name.substr(3)] = ref;
+		this->ref[name.substr(3)] = id;
 	else
 		return false;
 	
@@ -54,7 +62,7 @@ bool AddressDecoder::init()
 {
 	if (!floatingBus)
 	{
-		OELog("floating bus undefined");
+		log("floating bus undefined");
 		return false;
 	}
 	
@@ -77,7 +85,7 @@ bool AddressDecoder::init()
 	{
 		if (!ref.count(i->first))
 		{
-			OELog("unmatched address conf '" + i->first + "'");
+			log("unmatched address conf '" + i->first + "'");
 			return false;
 		}
 		
@@ -140,7 +148,7 @@ bool AddressDecoder::map(OEComponent *component, string value)
 			(i->startAddress & blockMask) ||
 			((i->endAddress & blockMask) != blockMask))
 		{
-			OELog("address range " + value + " invalid");
+			log("address range " + value + " invalid");
 			return false;
 		}
 		
@@ -162,7 +170,7 @@ bool AddressDecoder::getMaps(AddressDecoderMaps &maps, OEComponent *component,
 		
 		if (!getMap(map, component, value.substr(startPos, endPos - startPos)))
 		{
-			OELog("address range '" + value + "' invalid");
+			log("address range '" + value + "' invalid");
 			return false;
 		}
 		

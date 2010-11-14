@@ -8,59 +8,36 @@
  * Defines the host interface
  */
 
-#ifndef _HOST_H
-#define _HOST_H
+//
+// * A component should first request a canvas from the canvas controller.
+//   Then it should subscribe to canvas events.
+// * Axes are in [-1.0 .. 1.0] coordinates.
+//
+#ifndef _HOSTCANVASINTERFACE_H
+#define _HOSTCANVASINTERFACE_H
 
-#include <string>
-
-#define HOST_CANVAS_KEYBOARD_KEY_NUM	256
-#define HOST_CANVAS_POINTER_BUTTON_NUM	8
-#define HOST_CANVAS_MOUSE_BUTTON_NUM	8
-#define HOST_CANVAS_JOYSTICK_NUM		4
-#define HOST_CANVAS_JOYSTICK_AXIS_NUM	16
-#define HOST_CANVAS_JOYSTICK_BUTTON_NUM	16
-#define HOST_CANVAS_JOYSTICK_HAT_NUM	4
-#define HOST_CANVAS_JOYSTICK_RAXIS_NUM	4
-
-// Host Messages
-enum
+typedef enum
 {
-	HOST_CANVAS,
-	HOST_CANVAS_SET_WINDOW,
-	HOST_CANVAS_GET_WINDOW,
-	HOST_CANVAS_GET_DEFAULTSIZE,
-	HOST_CANVAS_COPY,
-	HOST_CANVAS_PASTE,
-	
-	HOST_STORAGE_IS_MOUNTABLE,
-	HOST_STORAGE_IS_MOUNTED,
-	HOST_STORAGE_MOUNT,
-	HOST_STORAGE_UNMOUNT,
-	
-	HOST_LOADER_IS_LOADABLE,
-	HOST_LOADER_LOAD,
-	
-	HOST_ETHERNET_SET_OBJECT,
-	
-	HOST_MIDI_CONFIGURE,
-	
-	HOST_CAMERA_CONFIGURE,
-	
-	HOST_STATUS_CONFIGURE,
-	HOST_STATUS_GET_INFOLINE,
-	HOST_STATUS_IS_REMOVABLE,
-	
-	HOST_SETTING_SET,
-	HOST_SETTING_GET,
-};
+	HOST_CANVAS_ADD_CANVAS,
+	HOST_CANVAS_REMOVE_CANVAS,
+} HostCanvasControllerMessages;
 
-// Host Notifications
-enum
+typedef enum
 {
-	HOST_AUDIO_FRAME_WILL_BEGIN,
-	HOST_AUDIO_FRAME_WILL_RENDER,
-	HOST_AUDIO_FRAME_WILL_END,
-	
+	HOST_CANVAS_SET_CAPTUREMODE,
+	HOST_CANVAS_SET_WINDOWFRAME,
+	HOST_CANVAS_GET_WINDOWFRAME,
+	HOST_CANVAS_SET_WINDOWVISIBLE,
+	HOST_CANVAS_GET_WINDOWVISIBLE,
+	HOST_CANVAS_SET_DEFAULTWINDOWSIZE,
+	HOST_CANVAS_GET_VIDEOFRAME,
+	HOST_CANVAS_POST_VIDEOFRAME,
+	HOST_CANVAS_SET_KEYBOARD_FLAGS,
+	HOST_CANVAS_SET_BADGE_FLAGS,
+} HostCanvasMessages;
+
+typedef enum
+{
 	HOST_CANVAS_SYSTEMKEYBOARD_CHANGED,
 	HOST_CANVAS_KEYBOARD_CHANGED,
 	HOST_CANVAS_UNICODEKEYBOARD_CHANGED,
@@ -70,29 +47,35 @@ enum
 	HOST_CANVAS_JOYSTICK2_CHANGED,
 	HOST_CANVAS_JOYSTICK3_CHANGED,
 	HOST_CANVAS_JOYSTICK4_CHANGED,
-};
+	HOST_CANVAS_COPY_REQUESTED,
+	HOST_CANVAS_PASTE_REQUESTED,
+} HostCanvasNotifications;
 
-// Host Audio
-typedef struct
-{
-	float sampleRate;
-	int channelNum;
-	int frameNum;
-	
-	const float *input;
-	float *output;
-} HostAudioNotification;
-
-// Host Canvas
 typedef enum
 {
-	HOST_CANVAS_FORMAT_COMPOSITE,
-	HOST_CANVAS_FORMAT_RGB,
-} HostCanvasFormat;
+	HOST_CANVAS_CAPTURE_NONE,
+	HOST_CANVAS_CAPTURE_KEYBOARD_AND_MOUSE,
+	HOST_CANVAS_CAPTURE_KEYBOARD,
+} HostCanvasCaptureModes;
+
+// SET_WINDOWFRAME and GET_WINDOWFRAME use a C++ string in the following format:
+// [originX] [originY] [width] [height]
+// The coordinate system's origin is lower left
+
+// SET_WINDOWVISIBLE and GET_WINDOWVISIBLE use a C++ bool
+
+// SET_DEFAULTWINDOWSIZE use a C++ string in the following format:
+// [width] [height]
+
+typedef enum
+{
+	HOST_CANVAS_FRAME_FORMAT_COMPOSITE,
+	HOST_CANVAS_FRAME_FORMAT_RGB,
+} HostCanvasVideoFrameFormat;
 
 typedef struct
 {
-	HostCanvasFormat frameFormat;
+	HostCanvasVideoFrameFormat frameFormat;
 	void *frameData;
 	int frameWidth;
 	int frameHeight;
@@ -118,17 +101,39 @@ typedef struct
 	float screenBlueGain;
 	float screenBarrel;
 	float screenPersistance;
-} HostCanvasFrame;
+} HostCanvasVideoFrame;
 
-typedef string *HostCanvasText;
+// Canvas keyboard flags use a C int
+#define HOST_CANVAS_L_NUMLOCK		(1 << 0)
+#define HOST_CANVAS_L_CAPSLOCK		(1 << 1)
+#define HOST_CANVAS_L_SCROLLLOCK	(1 << 2)
+#define HOST_CANVAS_L_COMPOSE		(1 << 3)
+#define HOST_CANVAS_L_KANA			(1 << 4)
+#define HOST_CANVAS_L_POWER			(1 << 5)
+#define HOST_CANVAS_L_SHIFT			(1 << 6)
 
+// Canvas badge flags use a C int
+#define HOST_CANVAS_B_POWER			(1 << 0)
+#define HOST_CANVAS_B_PAUSE			(1 << 1)
+
+// Canvas human-interface device notifications use this format:
 typedef struct
 {
 	int usageId;
 	float value;
-} HostCanvasNotification;
+} HostCanvasHIDNotification;
 
-enum
+// Canvas human-interface device definitions follow
+#define HOST_CANVAS_KEYBOARD_KEY_NUM	256
+#define HOST_CANVAS_POINTER_BUTTON_NUM	8
+#define HOST_CANVAS_MOUSE_BUTTON_NUM	8
+#define HOST_CANVAS_JOYSTICK_NUM		4
+#define HOST_CANVAS_JOYSTICK_AXIS_NUM	16
+#define HOST_CANVAS_JOYSTICK_BUTTON_NUM	16
+#define HOST_CANVAS_JOYSTICK_HAT_NUM	4
+#define HOST_CANVAS_JOYSTICK_RAXIS_NUM	4
+
+typedef enum
 {
 	HOST_CANVAS_S_POWERDOWN = 0x81,
 	HOST_CANVAS_S_SLEEP,
@@ -168,9 +173,9 @@ enum
 	HOST_CANVAS_S_DISPLAYTOGGLEINTEXT,
 	HOST_CANVAS_S_DISPLAYSWAPPRIMARYSECONDARY,
 	HOST_CANVAS_S_DISPLAYLCDAUTOSCALE,
-};
+} HostCanvasSystemUsageIds;
 
-enum {
+typedef enum {
 	HOST_CANVAS_K_A = 0x04,
 	HOST_CANVAS_K_B,
 	HOST_CANVAS_K_C,
@@ -388,10 +393,9 @@ enum {
 	HOST_CANVAS_K_RIGHTSHIFT,
 	HOST_CANVAS_K_RIGHTALT,
 	HOST_CANVAS_K_RIGHTGUI,
-};
+} HostCanvasKeyboardUsageIds;
 
-// Position in frame coordinates
-enum
+typedef enum
 {
 	HOST_CANVAS_P_X,
 	HOST_CANVAS_P_Y,
@@ -403,14 +407,14 @@ enum
 	HOST_CANVAS_P_BUTTON6,
 	HOST_CANVAS_P_BUTTON7,
 	HOST_CANVAS_P_BUTTON8,
-	HOST_CANVAS_P_WX,
-	HOST_CANVAS_P_WY,
-};
+	HOST_CANVAS_P_WHEELX,
+	HOST_CANVAS_P_WHEELY,
+} HostCanvasPointerUsageIds;
 
-enum
+typedef enum
 {
-	HOST_CANVAS_M_RX,
-	HOST_CANVAS_M_RY,
+	HOST_CANVAS_M_RELX,
+	HOST_CANVAS_M_RELY,
 	HOST_CANVAS_M_BUTTON1,
 	HOST_CANVAS_M_BUTTON2,
 	HOST_CANVAS_M_BUTTON3,
@@ -419,12 +423,11 @@ enum
 	HOST_CANVAS_M_BUTTON6,
 	HOST_CANVAS_M_BUTTON7,
 	HOST_CANVAS_M_BUTTON8,
-	HOST_CANVAS_M_WX,
-	HOST_CANVAS_M_WY,
-};
+	HOST_CANVAS_M_WHEELX,
+	HOST_CANVAS_M_WHEELY,
+} HostCanvasMouseUsageIds;
 
-// Axes in [-1.0 .. 1.0] coordinates
-enum
+typedef enum
 {
 	HOST_CANVAS_J_AXIS1,
 	HOST_CANVAS_J_AXIS2,
@@ -462,34 +465,12 @@ enum
 	HOST_CANVAS_J_HAT2,
 	HOST_CANVAS_J_HAT3,
 	HOST_CANVAS_J_HAT4,
-	HOST_CANVAS_J_RAXIS1,
-	HOST_CANVAS_J_RAXIS2,
-	HOST_CANVAS_J_RAXIS3,
-	HOST_CANVAS_J_RAXIS4,
-};
+	HOST_CANVAS_J_RELAXIS1,
+	HOST_CANVAS_J_RELAXIS2,
+	HOST_CANVAS_J_RELAXIS3,
+	HOST_CANVAS_J_RELAXIS4,
+} HostCanvasJoystickUsageIds;
 
-// Host Storage
-typedef string *HostStoragePath;
-
-// Host Loader
-typedef string *HostLoaderPath;
-
-// Host Status
-typedef string *HostStatusLine;
-
-typedef void (*HostStatusNotifyChange)(void *userData);
-
-typedef struct
-{
-	void *userData;
-	HostStatusNotifyChange notifyChange;
-} HostStatusConfiguration;
-
-// Host Setting
-typedef struct
-{
-	string name;
-	string value;
-} HostSetting;
+// Copy and paste requests use a C++ string
 
 #endif

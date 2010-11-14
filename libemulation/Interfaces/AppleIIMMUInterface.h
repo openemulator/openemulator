@@ -8,9 +8,8 @@
  * Defines the Apple II MMU interface
  */
 
-// Events
-enum
+typedef enum
 {
 	APPLEIIMMU_SET_INH,
 	APPLEIIMMU_SET_AUX_MEMORY,
-};
+} AppleIIMMUMessages;

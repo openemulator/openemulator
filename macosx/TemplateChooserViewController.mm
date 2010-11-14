@@ -70,7 +70,8 @@
 	{
 		NSString *templateFilename = [templateFilenames objectAtIndex:i];
 		NSString *templatePath = [path stringByAppendingPathComponent:templateFilename];
-		OEInfo info(getString(templatePath));
+		OEInfo info;
+		info.open(getString(templatePath));
 		if (info.isOpen())
 		{
 			NSString *groupName = getNSString(info.getType());

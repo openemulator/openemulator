@@ -13,11 +13,12 @@
 class KIM1PLL : public OEComponent
 {
 public:
+	KIM1PLL();
 	bool setValue(string name, string value);
-	bool setComponent(string name, OEComponent *component);
+	bool setRef(string name, OEComponent *id);
 
 private:
-	OEComponent *host;
+	OEComponent *hostAudio;
 	
 	float decisionFrequency;
 };

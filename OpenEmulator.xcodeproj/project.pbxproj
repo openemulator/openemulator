@@ -174,15 +174,19 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		000457DE128FBFA200B72EB6 /* HostAudioInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostAudioInterface.h; sourceTree = "<group>"; };
+		000457DF128FBFCA00B72EB6 /* HostCanvasInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostCanvasInterface.h; sourceTree = "<group>"; };
+		000457E3128FC2FB00B72EB6 /* HostStorageInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostStorageInterface.h; sourceTree = "<group>"; };
+		000457E4128FC31A00B72EB6 /* HostMIDIInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostMIDIInterface.h; sourceTree = "<group>"; };
+		000457E9128FC35300B72EB6 /* HostEthernetInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostEthernetInterface.h; sourceTree = "<group>"; };
+		000457EA128FC37400B72EB6 /* HostCameraInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostCameraInterface.h; sourceTree = "<group>"; };
+		000457F5128FC46100B72EB6 /* HostDeviceStatusInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostDeviceStatusInterface.h; sourceTree = "<group>"; };
+		000457F6128FC49900B72EB6 /* HostUSBInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostUSBInterface.h; sourceTree = "<group>"; };
 		0008FCD80FBA5D72005E876E /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = macosx/Info.plist; sourceTree = "<group>"; };
 		000A79080FBA49C500A0F12E /* DiskImage35.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = DiskImage35.icns; sourceTree = "<group>"; };
 		000A79090FBA49C500A0F12E /* DiskImage525.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = DiskImage525.icns; sourceTree = "<group>"; };
 		000A79190FBA49C500A0F12E /* OpenEmulator.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = OpenEmulator.icns; sourceTree = "<group>"; };
 		000A79520FBA4A8400A0F12E /* OpenEmulatorHelp */ = {isa = PBXFileReference; lastKnownFileType = folder; name = OpenEmulatorHelp; path = macosx/OpenEmulatorHelp; sourceTree = "<group>"; };
-		000DEB07128E3D4D0045BF8B /* OECanvas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OECanvas.h; sourceTree = "<group>"; };
-		000DEB0A128E3D640045BF8B /* OEEthernet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEEthernet.h; sourceTree = "<group>"; };
-		000DEB0B128E3D6D0045BF8B /* OEMIDI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEMIDI.h; sourceTree = "<group>"; };
-		000DEB0C128E3D870045BF8B /* OEVideo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEVideo.h; sourceTree = "<group>"; };
 		000F66370FF8368F00C8AF23 /* DiskImage.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = DiskImage.icns; sourceTree = "<group>"; };
 		000F66380FF8368F00C8AF23 /* DiskImage35.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = DiskImage35.icns; sourceTree = "<group>"; };
 		000F66390FF8368F00C8AF23 /* DiskImage525.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = DiskImage525.icns; sourceTree = "<group>"; };
@@ -337,7 +341,6 @@
 		00E442911278726B00713A05 /* IconDevices.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IconDevices.png; path = macosx/Images/IconDevices.png; sourceTree = "<group>"; };
 		00E442931278727600713A05 /* DevicesReveal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = DevicesReveal.png; path = macosx/Images/DevicesReveal.png; sourceTree = "<group>"; };
 		00E8A393108CCAA200D0A137 /* devices */ = {isa = PBXFileReference; lastKnownFileType = folder; path = devices; sourceTree = "<group>"; };
-		00EAC48F12839F7200CA42EB /* HostInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostInterface.h; sourceTree = "<group>"; };
 		00EAC5451283B9A400CA42EB /* KIM1PLL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = KIM1PLL.cpp; sourceTree = "<group>"; };
 		00EAC5461283B9A400CA42EB /* KIM1PLL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KIM1PLL.h; sourceTree = "<group>"; };
 		00ED379712779AD000BEF6BD /* AudioMax.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = AudioMax.png; path = macosx/Images/AudioMax.png; sourceTree = "<group>"; };
@@ -366,7 +369,6 @@
 		00EF028C107D9EFB00FE378D /* VerticallyCenteredCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VerticallyCenteredCell.m; sourceTree = "<group>"; };
 		00F95F1F12554172002B548B /* ControlBusInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ControlBusInterface.h; sourceTree = "<group>"; };
 		00F95F2A125543E2002B548B /* RS232Interface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RS232Interface.h; sourceTree = "<group>"; };
-		00F95F32125546C1002B548B /* VideoMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoMonitor.h; sourceTree = "<group>"; };
 		00F95F44125554A9002B548B /* CPUInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CPUInterface.h; sourceTree = "<group>"; };
 		00F95F8D12555A88002B548B /* IEEE1284Interface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IEEE1284Interface.h; sourceTree = "<group>"; };
 		00FA328C11F7647E000B9574 /* OETypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OETypes.h; sourceTree = "<group>"; };
@@ -601,17 +603,19 @@
 		00F95F1B1255414C002B548B /* Interfaces */ = {
 			isa = PBXGroup;
 			children = (
-				00EAC48F12839F7200CA42EB /* HostInterface.h */,
 				00F95F1F12554172002B548B /* ControlBusInterface.h */,
 				00F95F2A125543E2002B548B /* RS232Interface.h */,
-				00F95F32125546C1002B548B /* VideoMonitor.h */,
 				00F95F44125554A9002B548B /* CPUInterface.h */,
 				00F95F8D12555A88002B548B /* IEEE1284Interface.h */,
 				00C92F6A1256B21600026B72 /* AppleIIMMUInterface.h */,
-				000DEB07128E3D4D0045BF8B /* OECanvas.h */,
-				000DEB0A128E3D640045BF8B /* OEEthernet.h */,
-				000DEB0B128E3D6D0045BF8B /* OEMIDI.h */,
-				000DEB0C128E3D870045BF8B /* OEVideo.h */,
+				000457DE128FBFA200B72EB6 /* HostAudioInterface.h */,
+				000457DF128FBFCA00B72EB6 /* HostCanvasInterface.h */,
+				000457E3128FC2FB00B72EB6 /* HostStorageInterface.h */,
+				000457E4128FC31A00B72EB6 /* HostMIDIInterface.h */,
+				000457E9128FC35300B72EB6 /* HostEthernetInterface.h */,
+				000457EA128FC37400B72EB6 /* HostCameraInterface.h */,
+				000457F5128FC46100B72EB6 /* HostDeviceStatusInterface.h */,
+				000457F6128FC49900B72EB6 /* HostUSBInterface.h */,
 			);
 			path = Interfaces;
 			sourceTree = "<group>";

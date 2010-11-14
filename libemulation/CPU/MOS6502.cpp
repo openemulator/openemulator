@@ -69,25 +69,16 @@ bool MOS6502::getValue(string name, string &value)
 	return true;
 }
 
-bool MOS6502::setRef(string name, OEComponent *ref)
+bool MOS6502::setRef(string name, OEComponent *id)
 {
 	if (name == "memoryBus")
-		memoryBus = ref;
+		memoryBus = id;
 	else if (name == "controlBus")
 	{
-		if (controlBus)
-		{
-			controlBus->removeObserver(this, CONTROLBUS_RESET_CHANGED);
-			controlBus->removeObserver(this, CONTROLBUS_IRQ_CHANGED);
-			controlBus->removeObserver(this, CONTROLBUS_NMI_CHANGED);
-		}
-		controlBus = ref;
-		if (controlBus)
-		{
-			controlBus->addObserver(this, CONTROLBUS_RESET_CHANGED);
-			controlBus->addObserver(this, CONTROLBUS_IRQ_CHANGED);
-			controlBus->addObserver(this, CONTROLBUS_NMI_CHANGED);
-		}
+		replaceObserver(controlBus, id, CONTROLBUS_RESET_CHANGED);
+		replaceObserver(controlBus, id, CONTROLBUS_IRQ_CHANGED);
+		replaceObserver(controlBus, id, CONTROLBUS_NMI_CHANGED);
+		controlBus = id;
 	}
 	else
 		return false;

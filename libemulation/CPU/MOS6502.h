@@ -17,7 +17,7 @@ public:
 	
 	bool setValue(string name, string value);
 	bool getValue(string name, string &value);
-	bool setRef(string name, OEComponent *ref);
+	bool setRef(string name, OEComponent *id);
 	
 	void notify(OEComponent *sender, int notification, void *data);
 	

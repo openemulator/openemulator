@@ -10,12 +10,12 @@
 
 #include "AppleIIAudioIn.h"
 
-bool AppleIIAudioIn::setComponent(string name, OEComponent *component)
+bool AppleIIAudioIn::setRef(string name, OEComponent *id)
 {
 	if (name == "sampleConverter")
-		sampleConverter = component;
+		sampleConverter = id;
 	else if (name == "floatingBus")
-		floatingBus = component;
+		floatingBus = id;
 	else
 		return false;
 	

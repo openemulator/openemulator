@@ -54,8 +54,6 @@ typedef vector<OEPort *> OEPorts;
 class OEInfo : public OEEDL
 {
 public:
-	OEInfo();
-	OEInfo(string path);
 	~OEInfo();
 	
 	bool open(string path);

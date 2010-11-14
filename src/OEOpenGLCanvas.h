@@ -17,14 +17,7 @@
 
 #include "OEPortAudioEmulation.h"
 
-#include "HostInterface.h"
-
-enum
-{
-	OEGL_CAPTURE_NONE,
-	OEGL_CAPTURE_KEYBOARD_AND_MOUSE,
-	OEGL_CAPTURE_KEYBOARD,
-};
+#include "HostCanvasInterface.h"
 
 enum 
 {
@@ -41,14 +34,14 @@ inline void OEOpenGLCanvasLog(string text)
 	cerr << "oeopenglcanvas: " << text << endl;
 }
 
-class OEOpenGLCanvas
+class OEOpenGLCanvas : public OEComponent
 {
 public:
 	OEOpenGLCanvas(OEPortAudioEmulation *emulation,
 				   string canvasRef);
 	~OEOpenGLCanvas();
 	
-	void init();
+	void initOpenGL();
 	void draw(int width, int height);
 	
 	void setSystemKey(int usageId);
@@ -82,7 +75,7 @@ private:
 	bool mouseCaptured;
 	bool mouseCaptureRelease;
 	
-	void notify(int notification, int usageId, bool value);
+	void postHIDNotification(int notification, int usageId, float value);
 };
 
 #endif

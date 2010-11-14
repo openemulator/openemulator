@@ -11,10 +11,12 @@
 #include <math.h>
 
 #include "ControlBus.h"
-#include "HostInterface.h"
+#include "HostAudioInterface.h"
 
 ControlBus::ControlBus()
 {
+	hostAudio = NULL;
+	
 	crystal = 1E6;
 	frequencyDivider = 1.0;
 	master = NULL;
@@ -25,6 +27,8 @@ ControlBus::ControlBus()
 	resetCount = 0;
 	irqCount = 0;
 	nmiCount = 0;
+	
+	phase = 0;
 }
 
 bool ControlBus::setValue(string name, string value)
@@ -35,22 +39,37 @@ bool ControlBus::setValue(string name, string value)
 		updateFrequency();
 	else if (name == "resetOnPowerOn")
 		resetOnPowerOn = getInt(value);
+	else
+		return false;
 	
 	return true;
 }
 
-bool ControlBus::setRef(string name, OEComponent *ref)
+bool ControlBus::setRef(string name, OEComponent *id)
 {
-	if (name == "master")
-		master = ref;
+	if (name == "hostAudio")
+	{
+//		replaceObserver(hostAudio, id, HOST_AUDIO_FRAME_WILL_RENDER);
+		hostAudio = id;
+	}
+	else if (name == "master")
+		master = id;
 	else if (name == "masterSocket")
-		masterSocket = ref;
+		masterSocket = id;
+	else
+		return false;
 	
 	return true;
 }
 
 bool ControlBus::init()
 {
+	if (!hostAudio)
+	{
+		log("hostAudio undefined");
+		return false;
+	}
+	
 	updateFrequency();
 	
 	return true;
@@ -95,7 +114,7 @@ bool ControlBus::postMessage(OEComponent *component, int event, void *data)
 			if (!oldIRQCount != !irqCount)
 				OEComponent::notify(this, CONTROLBUS_IRQ_CHANGED, &irqCount);
 			return true;
-		}			
+		}
 		case CONTROLBUS_SET_NMI:
 		{
 			int oldNMICount = nmiCount;
@@ -103,7 +122,7 @@ bool ControlBus::postMessage(OEComponent *component, int event, void *data)
 			if (!oldNMICount != !nmiCount)
 				OEComponent::notify(this, CONTROLBUS_NMI_CHANGED, &nmiCount);
 			return true;
-		}			
+		}
 		case CONTROLBUS_ADD_TIMER:
 			return true;
 			
@@ -122,24 +141,6 @@ bool ControlBus::postMessage(OEComponent *component, int event, void *data)
 
 void ControlBus::notify(OEComponent *component, int notification, void *data)
 {
-	switch (notification)
-	{
-		case HOST_AUDIO_FRAME_WILL_RENDER:
-		{
-			HostAudioNotification *buffer = (HostAudioNotification *) data;
-			float *out = buffer->output;
-			int sampleNum = buffer->channelNum * buffer->frameNum;
-			
-			for(int i = 0; i < sampleNum; i++)
-			{
-				*out++ += 0.05 * sin(phase);
-				phase += 2 * M_PI * 220 / buffer->sampleRate;
-			}
-			
-			// Implement simulation
-			break;
-		}
-	}
 }
 
 void ControlBus::updateFrequency()

@@ -10,7 +10,7 @@
 
 #include "Apple1IO.h"
 
-#include "HostInterface.h"
+#include "HostCanvasInterface.h"
 #include "MC6821.h"
 
 #define APPLE1KEYBOARD_MASK	0x40
@@ -20,17 +20,17 @@ Apple1IO::Apple1IO()
 	terminal = NULL;
 }
 
-bool Apple1IO::setComponent(string name, OEComponent *component)
+bool Apple1IO::setRef(string name, OEComponent *id)
 {
 	if (name == "terminal")
-		terminal = component;
+		terminal = id;
 	else
 		return false;
 	
 	return true;
 }
 
-void Apple1IO::notify(int notification, OEComponent *component, void *data)
+void Apple1IO::notify(OEComponent *sender, int notification, void *data)
 {
 /*	HostHIDEvent *event = (HostHIDEvent *) data;
 	
@@ -41,7 +41,7 @@ void Apple1IO::notify(int notification, OEComponent *component, void *data)
  */
 }
 
-OEUInt8 Apple1IO::read(int address)
+OEUInt8 Apple1IO::read(OEAddress address)
 {
 	/*
 	bool value = false;

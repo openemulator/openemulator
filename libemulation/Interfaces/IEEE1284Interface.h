@@ -8,17 +8,15 @@
  * Defines the IEEE 1284 interface
  */
 
-// Events
-enum
+typedef enum
 {
 	IEEE1284_SET_STROBE,
 	IEEE1284_SET_LF,
 	IEEE1284_SET_INIT,
 	IEEE1284_SET_SELECTIN,
-};
+} IEEE1284Messages;
 
-// Notifications
-enum
+typedef enum
 {
 	IEEE1284_DATA_SENT,
 	IEEE1284_ACK_CHANGED,
@@ -26,4 +24,4 @@ enum
 	IEEE1284_PE_CHANGED,
 	IEEE1284_SELECT_CHANGED,
 	IEEE1284_FAULT_CHANGED,
-};
+} IEEE1284Notifications;

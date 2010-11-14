@@ -39,7 +39,7 @@ bool ROM::init()
 {
 	if (!data)
 	{
-		OELog("missing ROM");
+		log("missing ROM");
 		return false;
 	}
 	

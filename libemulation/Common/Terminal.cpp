@@ -22,10 +22,10 @@ bool Terminal::setValue(string name, string value)
 	return true;
 }
 
-bool Terminal::setRef(string name, OEComponent *ref)
+bool Terminal::setRef(string name, OEComponent *id)
 {
 	if (name == "charset")
-		charset = ref;
+		charset = id;
 	else
 		return false;
 	

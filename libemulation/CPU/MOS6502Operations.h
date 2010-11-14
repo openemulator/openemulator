@@ -520,7 +520,7 @@
  *  ILL Illegal opcode
  ***************************************************************/
 #define ILL 													\
-	OELog("M6502 illegal opcode %04x: %02x\n",					\
+	log("M6502 illegal opcode %04x: %02x\n",					\
 		(PCW-1) & 0xffff, memoryBus->read((PCW - 1) & 0xffff))
 
 /* 6502 ********************************************************
@@ -637,7 +637,7 @@
 	if ( P & F_I ) {											\
 		PULL(P);												\
 		if (irqCount && !(P & F_I)) {							\
-			OELog("M6502 PLP sets afterCLI");					\
+			log("M6502 PLP sets afterCLI");					\
 			afterCLI = 1;										\
 		}														\
 	} else {													\
@@ -679,7 +679,7 @@
 	P |= F_T | F_B; 											\
 	if(irqCount && !(P & F_I) )									\
 	{															\
-		OELog("M6502 RTI sets afterCLI");						\
+		log("M6502 RTI sets afterCLI");						\
 		afterCLI = 1;											\
 	}
 

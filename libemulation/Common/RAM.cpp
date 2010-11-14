@@ -36,19 +36,16 @@ bool RAM::setValue(string name, string value)
 		powerOnPattern = getCharVector(value);
 	else
 		return false;
-	 
+	
 	return true;
 }
 
-bool RAM::setRef(string name, OEComponent *ref)
+bool RAM::setRef(string name, OEComponent *id)
 {
 	if (name == "controlBus")
 	{
-		if (controlBus)
-			controlBus->removeObserver(this, CONTROLBUS_POWERSTATE_CHANGED);
-		controlBus = ref;
-		if (controlBus)
-			controlBus->addObserver(this, CONTROLBUS_POWERSTATE_CHANGED);
+		replaceObserver(controlBus, id, CONTROLBUS_POWERSTATE_CHANGED);
+		controlBus = id;
 	}
 	else
 		return false;
@@ -88,7 +85,7 @@ bool RAM::init()
 {
 	if (size <= 0)
 	{
-		OELog("invalid RAM size");
+		log("invalid RAM size");
 		return false;
 	}
 	

@@ -27,20 +27,19 @@ KIM1IO::~KIM1IO()
 	delete view;
 }
 
-bool KIM1IO::setRef(string name, OEComponent *ref)
+bool KIM1IO::setRef(string name, OEComponent *id)
 {
-	if (name == "serialPort")
+	if (name == "hostCanvasController")
+		hostCanvasController = id;
+	else if (name == "serialPort")
 	{
-		if (serialPort)
-			serialPort->removeObserver(this, RS232_DATA_RECEIVED);
-		serialPort = ref;
-		if (serialPort)
-			serialPort->addObserver(this, RS232_DATA_RECEIVED);
+		replaceObserver(serialPort, id, RS232_DATA_RECEIVED);
+		serialPort = id;
 	}
 	else if (name == "audioOut")
-		audioOut = ref;
+		audioOut = id;
 	else if (name == "audioIn")
-		audioIn = ref;
+		audioIn = id;
 	else
 		return false;
 	
@@ -59,5 +58,4 @@ bool KIM1IO::setData(string name, OEData *data)
 
 void KIM1IO::notify(OEComponent *sender, int notification, void *data)
 {
-
 }

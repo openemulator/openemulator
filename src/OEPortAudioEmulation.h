@@ -19,22 +19,17 @@ class OEPortAudioEmulation : public OEEmulation
 {
 public:
 	OEPortAudioEmulation();
-	OEPortAudioEmulation(string path);
-	OEPortAudioEmulation(string path, string resourcesPath);
-	OEPortAudioEmulation(OEPortAudio *oeportaudio,
-						 string path, string resourcesPath);
+	
+	void setOEPortAudio(OEPortAudio *oePortAudio);
 	
 	bool open(string path);
 	bool save(string path);
-	
-	int postMessage(string ref, int event, void *data);
-	void notify(string ref, int notification, void *data);
 	
 	bool addEDL(string path, OEIdMap deviceIdMap);
 	bool removeDevice(string deviceName);
 	
 private:
-	OEPortAudio *oeportaudio;
+	OEPortAudio *oePortAudio;
 	
 	void lock();
 	void unlock();

@@ -26,12 +26,12 @@ bool AppleIIGamePort::setValue(string name, string value)
 	return true;
 }
 
-bool AppleIIGamePort::setComponent(string name, OEComponent *component)
+bool AppleIIGamePort::setRef(string name, OEComponent *id)
 {
 	if (name == "floatingBus")
-		floatingBus = component;
+		floatingBus = id;
 	else if (name == "port")
-		port = component;
+		port = id;
 	else
 		return false;
 	

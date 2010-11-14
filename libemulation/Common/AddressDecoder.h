@@ -39,7 +39,7 @@ public:
 	AddressDecoder();
 	
 	bool setValue(string name, string value);
-	bool setRef(string name, OEComponent *ref);
+	bool setRef(string name, OEComponent *id);
 	
 	bool init();
 	
@@ -49,6 +49,8 @@ public:
 	void write(OEAddress address, OEUInt8 value);
 	
 private:
+	OEComponent *hostStorage;
+	
 	int addressSize;
 	int blockSize;
 	OEComponent *floatingBus;

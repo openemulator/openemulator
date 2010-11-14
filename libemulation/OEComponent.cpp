@@ -13,10 +13,6 @@
 
 #include "OEComponent.h"
 
-OEComponent::OEComponent()
-{
-}
-
 OEComponent::~OEComponent()
 {
 }
@@ -31,13 +27,15 @@ bool OEComponent::getValue(string name, string &value)
 	return false;
 }
 
-bool OEComponent::setRef(string name, OEComponent *component)
+bool OEComponent::setRef(string name, OEComponent *id)
 {
 	return false;
 }
 
 bool OEComponent::setData(string name, OEData *data)
 {
+	delete data;
+	
 	return false;
 }
 
@@ -51,30 +49,29 @@ bool OEComponent::init()
 	return true;
 }
 
-bool OEComponent::postMessage(OEComponent *component, int event, void *data)
+bool OEComponent::postMessage(OEComponent *sender, int event, void *data)
 {
-	OEComponents::iterator i;
-	for (i = delegates[event].begin();
+	for (OEComponents::iterator i = delegates[event].begin();
 		 i != delegates[event].end();
 		 i++)
-		if ((*i)->postMessage(component, event, data))
+		if ((*i)->postMessage(sender, event, data))
 			return true;
 	
 	return false;
 }
 
-bool OEComponent::addDelegate(OEComponent *component, int event)
+bool OEComponent::addDelegate(OEComponent *delegate, int event)
 {
-	delegates[event].push_back(component);
+	delegates[event].push_back(delegate);
 	
 	return true;
 }
 
-bool OEComponent::removeDelegate(OEComponent *component, int event)
+bool OEComponent::removeDelegate(OEComponent *delegate, int event)
 {
 	OEComponents::iterator first = delegates[event].begin();
 	OEComponents::iterator last = delegates[event].end();
-	OEComponents::iterator i = remove(first, last, component);
+	OEComponents::iterator i = remove(first, last, delegate);
 	
 	if (i != last)
 		delegates[event].erase(i, last);
@@ -82,32 +79,45 @@ bool OEComponent::removeDelegate(OEComponent *component, int event)
 	return (i != last);
 }
 
-void OEComponent::notify(OEComponent *component, int notification, void *data)
+void OEComponent::notify(OEComponent *sender, int notification, void *data)
 {
-	OEComponents::iterator i;
-	for (i = observers[notification].begin();
+	for (OEComponents::iterator i = observers[notification].begin();
 		 i != observers[notification].end();
 		 i++)
-		notify(component, notification, data);
+		(*i)->notify(sender, notification, data);
 }
 
-bool OEComponent::addObserver(OEComponent *component, int notification)
+bool OEComponent::addObserver(OEComponent *observer, int notification)
 {
-	observers[notification].push_back(component);
+	observers[notification].push_back(observer);
+	
+	log("add not " + getString(notification) + " size " + getString(observers[notification].size()));
 	
 	return true;
 }
 
-bool OEComponent::removeObserver(OEComponent *component, int notification)
+bool OEComponent::removeObserver(OEComponent *observer, int notification)
 {
 	OEComponents::iterator first = observers[notification].begin();
 	OEComponents::iterator last = observers[notification].end();
-	OEComponents::iterator i = remove(first, last, component);
+	OEComponents::iterator i = remove(first, last, observer);
 	
 	if (i != last)
 		observers[notification].erase(i, last);
 	
+	log("rem not " + getString(notification) + " size " + getString(observers[notification].size()));
+	
 	return (i != last);
+}
+
+void OEComponent::replaceObserver(OEComponent *oldObserver,
+								  OEComponent *newObserver,
+								  int notification)
+{
+	if (oldObserver)
+		oldObserver->removeObserver(this, notification);
+	if (newObserver)
+		newObserver->addObserver(this, notification);
 }
 
 OEUInt8 OEComponent::read(OEAddress address)
@@ -154,6 +164,11 @@ bool OEComponent::readBlock(OEAddress address, OEData *value)
 bool OEComponent::writeBlock(OEAddress address, OEData *value)
 {
 	return false;
+}
+
+void OEComponent::log(string message)
+{
+	cerr << "libemulation: " << message << endl;
 }
 
 int OEComponent::getInt(const string &value)

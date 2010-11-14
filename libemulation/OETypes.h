@@ -19,11 +19,6 @@
 
 using namespace std;
 
-inline void OELog(string text)
-{
-	cerr << "libemulator: " << text << endl;
-}
-
 #define OEGetBit(x,m) ((x)&(m))
 #define OESetBit(x,m) ((x)|=(m))
 #define OEClearBit(x,m) ((x)&=~(m))

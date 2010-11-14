@@ -35,7 +35,10 @@
 {
 	if (self = [super init])
 	{
-		info = new OEInfo(string([thePath UTF8String]));
+		info = new OEInfo();
+		
+		info->open(getString(path));
+		
 		path = [thePath copy];
 	}
 	
