@@ -33,34 +33,34 @@ AppleIIMMU::AppleIIMMU()
 	romF8Socket = NULL;
 }
 
-bool AppleIIMMU::setRef(string name, OEComponent *id)
+bool AppleIIMMU::setRef(string name, OEComponent *ref)
 {
 	if (name == "memoryBus")
-		memoryBus = id;
+		memoryBus = ref;
 	else if (name == "romD0")
-		romD0 = id;
+		romD0 = ref;
 	else if (name == "romD8")
-		romD8 = id;
+		romD8 = ref;
 	else if (name == "romE0")
-		romE0 = id;
+		romE0 = ref;
 	else if (name == "romE8")
-		romE8 = id;
+		romE8 = ref;
 	else if (name == "romF0")
-		romF0 = id;
+		romF0 = ref;
 	else if (name == "romF8")
-		romF8 = id;
+		romF8 = ref;
 	else if (name == "romD0Socket")
-		romD0Socket = id;
+		romD0Socket = ref;
 	else if (name == "romD8Socket")
-		romD8Socket = id;
+		romD8Socket = ref;
 	else if (name == "romE0Socket")
-		romE0Socket = id;
+		romE0Socket = ref;
 	else if (name == "romE8Socket")
-		romE8Socket = id;
+		romE8Socket = ref;
 	else if (name == "romF0Socket")
-		romF0Socket = id;
+		romF0Socket = ref;
 	else if (name == "romF8Socket")
-		romF8Socket = id;
+		romF8Socket = ref;
 	else
 		return false;
 	

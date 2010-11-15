@@ -550,38 +550,9 @@ void OEPortAudio::runEmulations()
 			outputBuffer,
 		};
 		
-		for (OEPortAudioEmulations::iterator i = emulations.begin();
-			 i != emulations.end();
-			 i++)
-		{
-			OEComponent *component = (*i)->getComponentById("hostAudio");
-			if (!component)
-				continue;
-			
-			component->notify(this, HOST_AUDIO_FRAME_WILL_BEGIN, &buffer);
-		}
-		
-		for (OEPortAudioEmulations::iterator i = emulations.begin();
-			 i != emulations.end();
-			 i++)
-		{
-			OEComponent *component = (*i)->getComponentById("hostAudio");
-			if (!component)
-				continue;
-			
-			component->notify(this, HOST_AUDIO_FRAME_WILL_RENDER, &buffer);
-		}
-		
-		for (OEPortAudioEmulations::iterator i = emulations.begin();
-			 i != emulations.end();
-			 i++)
-		{
-			OEComponent *component = (*i)->getComponentById("hostAudio");
-			if (!component)
-				continue;
-			
-			component->notify(this, HOST_AUDIO_FRAME_WILL_END, &buffer);
-		}
+		notify(this, HOST_AUDIO_FRAME_WILL_BEGIN, &buffer);
+		notify(this, HOST_AUDIO_FRAME_WILL_RENDER, &buffer);
+		notify(this, HOST_AUDIO_FRAME_WILL_END, &buffer);
 		
 		// Audio recording
 		if (recording)

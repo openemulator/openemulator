@@ -53,7 +53,7 @@ public:
 	
 	bool setValue(string name, string value);
 	bool getValue(string name, string &value);
-	bool setRef(string name, OEComponent *id);
+	bool setRef(string name, OEComponent *ref);
 	
 	void notify(OEComponent *component, int notification, void *data);
 	

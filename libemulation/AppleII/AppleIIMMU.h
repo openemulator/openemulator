@@ -15,7 +15,7 @@ class AppleIIMMU : public OEComponent
 public:
 	AppleIIMMU();
 	
-	bool setRef(string name, OEComponent *id);	
+	bool setRef(string name, OEComponent *ref);	
 	
 private:
 	OEComponent *memoryBus;

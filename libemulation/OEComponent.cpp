@@ -27,7 +27,7 @@ bool OEComponent::getValue(string name, string &value)
 	return false;
 }
 
-bool OEComponent::setRef(string name, OEComponent *id)
+bool OEComponent::setRef(string name, OEComponent *ref)
 {
 	return false;
 }
@@ -49,34 +49,9 @@ bool OEComponent::init()
 	return true;
 }
 
-bool OEComponent::postMessage(OEComponent *sender, int event, void *data)
+bool OEComponent::postMessage(OEComponent *sender, int message, void *data)
 {
-	for (OEComponents::iterator i = delegates[event].begin();
-		 i != delegates[event].end();
-		 i++)
-		if ((*i)->postMessage(sender, event, data))
-			return true;
-	
 	return false;
-}
-
-bool OEComponent::addDelegate(OEComponent *delegate, int event)
-{
-	delegates[event].push_back(delegate);
-	
-	return true;
-}
-
-bool OEComponent::removeDelegate(OEComponent *delegate, int event)
-{
-	OEComponents::iterator first = delegates[event].begin();
-	OEComponents::iterator last = delegates[event].end();
-	OEComponents::iterator i = remove(first, last, delegate);
-	
-	if (i != last)
-		delegates[event].erase(i, last);
-	
-	return (i != last);
 }
 
 void OEComponent::notify(OEComponent *sender, int notification, void *data)
@@ -118,6 +93,33 @@ void OEComponent::replaceObserver(OEComponent *oldObserver,
 		oldObserver->removeObserver(this, notification);
 	if (newObserver)
 		newObserver->addObserver(this, notification);
+}
+
+void OEComponent::delegate(OEComponent *sender, int delegation, void *data)
+{
+	for (OEComponents::iterator i = delegates[delegation].begin();
+		 i != delegates[delegation].end();
+		 i++)
+		(*i)->notify(sender, delegation, data);
+}
+
+bool OEComponent::addDelegate(OEComponent *delegate, int delegation)
+{
+	delegates[delegation].push_back(delegate);
+	
+	return true;
+}
+
+bool OEComponent::removeDelegate(OEComponent *delegate, int delegation)
+{
+	OEComponents::iterator first = delegates[delegation].begin();
+	OEComponents::iterator last = delegates[delegation].end();
+	OEComponents::iterator i = remove(first, last, delegate);
+	
+	if (i != last)
+		delegates[delegation].erase(i, last);
+	
+	return (i != last);
 }
 
 OEUInt8 OEComponent::read(OEAddress address)

@@ -19,15 +19,15 @@ AudioSampleConverter::AudioSampleConverter()
 	controlBus = NULL;
 }
 
-bool AudioSampleConverter::setRef(string name, OEComponent *id)
+bool AudioSampleConverter::setRef(string name, OEComponent *ref)
 {
 	if (name == "hostAudio")
 	{
-		replaceObserver(hostAudio, id, HOST_AUDIO_FRAME_WILL_RENDER);
-		hostAudio = id;
+		replaceObserver(hostAudio, ref, HOST_AUDIO_FRAME_WILL_RENDER);
+		hostAudio = ref;
 	}
 	else if (name == "controlBus")
-		controlBus = id;
+		controlBus = ref;
 	else
 		return false;
 	

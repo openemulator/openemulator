@@ -26,12 +26,12 @@ bool KIM1PLL::setValue(string name, string value)
 	return true;
 }
 
-bool KIM1PLL::setRef(string name, OEComponent *id)
+bool KIM1PLL::setRef(string name, OEComponent *ref)
 {
 	if (name == "hostAudio")
 	{
-//		replaceObserver(hostAudio, id, HOST_AUDIO_FRAME_WILL_RENDER);
-		hostAudio = id;
+		replaceObserver(hostAudio, ref, HOST_AUDIO_FRAME_WILL_RENDER);
+		hostAudio = ref;
 	}
 	else
 		return false;

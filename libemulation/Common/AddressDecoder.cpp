@@ -41,17 +41,17 @@ bool AddressDecoder::setValue(string name, string value)
 	return true;
 }
 
-bool AddressDecoder::setRef(string name, OEComponent *id)
+bool AddressDecoder::setRef(string name, OEComponent *ref)
 {
 	if (name == "hostStorage")
 	{
-		replaceObserver(hostStorage, id, HOST_STORAGE_MOUNT_REQUESTED);
-		hostStorage = id;
+		replaceObserver(hostStorage, ref, HOST_STORAGE_MOUNT_REQUESTED);
+		hostStorage = ref;
 	}
 	else if (name == "floatingBus")
-		floatingBus = id;
+		floatingBus = ref;
 	else if (name.substr(0, 3) == "ref")
-		this->ref[name.substr(3)] = id;
+		this->ref[name.substr(3)] = ref;
 	else
 		return false;
 	

@@ -40,12 +40,12 @@ bool RAM::setValue(string name, string value)
 	return true;
 }
 
-bool RAM::setRef(string name, OEComponent *id)
+bool RAM::setRef(string name, OEComponent *ref)
 {
 	if (name == "controlBus")
 	{
-		replaceObserver(controlBus, id, CONTROLBUS_POWERSTATE_CHANGED);
-		controlBus = id;
+		replaceObserver(controlBus, ref, CONTROLBUS_POWERSTATE_CHANGED);
+		controlBus = ref;
 	}
 	else
 		return false;
@@ -58,7 +58,7 @@ bool RAM::setData(string name, OEData *data)
 	if (name == "image")
 		this->data = data;
 	else
-		return false;
+		return OEComponent::setData(name, data);
 	
 	return true;
 }

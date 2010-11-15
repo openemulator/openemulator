@@ -26,16 +26,19 @@ public:
 	// Configuration
 	virtual bool setValue(string name, string value);
 	virtual bool getValue(string name, string &value);
-	virtual bool setRef(string name, OEComponent *id);
+	virtual bool setRef(string name, OEComponent *ref);
 	virtual bool setData(string name, OEData *data);
 	virtual bool getData(string name, OEData **data);
 	
 	virtual bool init();
 	
 	// Messages
-	virtual bool postMessage(OEComponent *sender, int event, void *data);
-	bool addDelegate(OEComponent *delegate, int event);
-	bool removeDelegate(OEComponent *delegate, int event);
+	virtual bool postMessage(OEComponent *sender, int message, void *data);
+	
+	// Delegate
+	virtual void delegate(OEComponent *sender, int delegation, void *data);
+	bool addDelegate(OEComponent *delegate, int delegation);
+	bool removeDelegate(OEComponent *delegate, int delegation);
 	
 	// Notifications
 	virtual void notify(OEComponent *sender, int notification, void *data);

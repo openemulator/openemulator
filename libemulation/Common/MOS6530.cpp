@@ -55,19 +55,19 @@ bool MOS6530::getValue(string name, string &value)
 	return true;
 }
 
-bool MOS6530::setRef(string name, OEComponent *id)
+bool MOS6530::setRef(string name, OEComponent *ref)
 {
 	if (name == "controlBus")
 	{
-		replaceObserver(controlBus, id, CONTROLBUS_RESET_CHANGED);
-		controlBus = id;
+		replaceObserver(controlBus, ref, CONTROLBUS_RESET_CHANGED);
+		controlBus = ref;
 	}
 	else if (name == "portA")
-		portA = id;
+		portA = ref;
 	else if (name == "portB")
-		portB = id;
+		portB = ref;
 	else if (name == "controlBusB")
-		controlBusB = id;
+		controlBusB = ref;
 	else
 		return false;
 	

@@ -26,10 +26,10 @@ bool AddressOffset::setValue(string name, string value)
 	return true;
 }
 
-bool AddressOffset::setRef(string name, OEComponent *id)
+bool AddressOffset::setRef(string name, OEComponent *ref)
 {
 	if (name == "component")
-		component = id;
+		component = ref;
 	else
 		return false;
 	

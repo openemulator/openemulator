@@ -15,6 +15,7 @@
 #include "OEComponent.h"
 
 typedef map<string, OEComponent *> OEComponentsMap;
+typedef map<string, string> OEPropertiesMap;
 
 class OEEmulation : public OEInfo
 {
@@ -27,13 +28,13 @@ public:
 	void close();
 	
 	bool setComponent(string id, OEComponent *component);
-	OEComponent *getComponentById(string id);
-	string getIdByComponent(OEComponent *component);
-	string getDeviceByComponent(OEComponent *component);
 	
 private:
 	string resourcePath;
 	OEComponentsMap components;
+	
+	OEComponent *getComponentById(string id);
+	string getDeviceById(string id);
 	
 	bool create();
 	bool createComponent(string id, string className);
@@ -48,8 +49,8 @@ private:
 	void destroy();
 	void destroyComponent(string id, xmlNodePtr children);
 
-	bool hasSrcProperty(string value, string property);
-	string parseSrc(string value, string id);
+	bool hasProperty(string value, string propertyName);
+	string parseProperties(string value, OEPropertiesMap &propertiesMap);
 };
 
 #endif

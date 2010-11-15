@@ -20,10 +20,10 @@ Apple1IO::Apple1IO()
 	terminal = NULL;
 }
 
-bool Apple1IO::setRef(string name, OEComponent *id)
+bool Apple1IO::setRef(string name, OEComponent *ref)
 {
 	if (name == "terminal")
-		terminal = id;
+		terminal = ref;
 	else
 		return false;
 	

@@ -18,7 +18,7 @@ public:
 	KIM1IO();
 	~KIM1IO();
 	
-	bool setRef(string name, OEComponent *id);
+	bool setRef(string name, OEComponent *ref);
 	bool setData(string name, OEData *data);
 	
 	void notify(OEComponent *sender, int notification, void *data);

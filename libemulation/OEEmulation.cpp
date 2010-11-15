@@ -69,22 +69,8 @@ OEComponent *OEEmulation::getComponentById(string id)
 	return components[id];
 }
 
-string OEEmulation::getIdByComponent(OEComponent *component)
+string OEEmulation::getDeviceById(string id)
 {
-	OEComponentsMap::iterator i;
-	for (i = components.begin();
-		 i != components.end();
-		 i++)
-		if (i->second == component)
-			return i->first;
-
-	return "";
-}
-
-string OEEmulation::getDeviceByComponent(OEComponent *component)
-{
-	string id = getIdByComponent(component);
-	
 	size_t index = id.find_last_of('.');
 	if (index == string::npos)
 		return "";
@@ -154,6 +140,11 @@ bool OEEmulation::configureComponent(string id, xmlNodePtr children)
 		return false;
 	}
 	
+	OEPropertiesMap propertiesMap;
+	propertiesMap["id"] = id;
+	propertiesMap["device"] = getDeviceById(id);
+	propertiesMap["resourcePath"] = resourcePath;
+	
 	for(xmlNodePtr node = children;
 		node;
 		node = node->next)
@@ -165,6 +156,7 @@ bool OEEmulation::configureComponent(string id, xmlNodePtr children)
 			if (hasNodeProperty(node, "value"))
 			{
 				string value = getNodeProperty(node, "value");
+				value = parseProperties(value, propertiesMap);
 				
 				if (component->setValue(name, value))
 					continue;
@@ -187,10 +179,10 @@ bool OEEmulation::configureComponent(string id, xmlNodePtr children)
 				OEData *data = new OEData;
 				if (data)
 				{
-					string parsedSrc = parseSrc(src, id);
+					string parsedSrc = parseProperties(src, propertiesMap);
 					bool dataRead = false;
 					
-					if (hasSrcProperty(src, "packagePath"))
+					if (hasProperty(src, "packagePath"))
 					{
 						if (!package)
 							continue;
@@ -288,6 +280,11 @@ bool OEEmulation::updateComponent(string id, xmlNodePtr children)
 		return false;
 	}
 	
+	OEPropertiesMap propertiesMap;
+	propertiesMap["id"] = id;
+	propertiesMap["device"] = getDeviceById(id);
+	propertiesMap["resourcePath"] = resourcePath;
+	
 	for(xmlNodePtr node = children;
 		node;
 		node = node->next)
@@ -307,11 +304,11 @@ bool OEEmulation::updateComponent(string id, xmlNodePtr children)
 			{
 				string src = getNodeProperty(node, "src");
 				
-				if (hasSrcProperty(src, "resourcePath"))
+				if (hasProperty(src, "resourcePath"))
 					continue;
 				
 				OEData *data;
-				string parsedSrc = parseSrc(src, id);
+				string parsedSrc = parseProperties(src, propertiesMap);
 				
 				if (component->getData(name, &data))
 				{
@@ -408,37 +405,41 @@ void OEEmulation::destroyComponent(string id, xmlNodePtr children)
 	setComponent(id, NULL);
 }
 
-bool OEEmulation::hasSrcProperty(string value, string property)
+bool OEEmulation::hasProperty(string value, string propertyName)
 {
-	return (value.find("${" + property + "}") != string::npos);
+	return (value.find("${" + propertyName + "}") != string::npos);
 }
 
-string OEEmulation::parseSrc(string src, string id)
+string OEEmulation::parseProperties(string value,
+									OEPropertiesMap &propertiesMap)
 {
 	int startIndex;
 	
-	while ((startIndex = src.find("${")) != string::npos)
+	while ((startIndex = value.find("${")) != string::npos)
 	{
-		int endIndex = src.find("}", startIndex);
+		int endIndex = value.find("}", startIndex);
 		if (endIndex == string::npos)
 		{
-			src = src.substr(0, startIndex);
+			value = value.substr(0, startIndex);
 			break;
 		}
 		
-		string propertyName = src.substr(startIndex + 2,
-										 endIndex - startIndex - 2);
+		string propertyName = value.substr(startIndex + 2,
+											  endIndex - startIndex - 2);
 		string replacement;
 		
-		if (propertyName == "id")
-			replacement = id;
-		else if (propertyName == "resourcePath")
-			replacement = resourcePath;
+		for (OEPropertiesMap::iterator i = propertiesMap.begin();
+			 i != propertiesMap.end();
+			 i++)
+		{
+			if (i->first == propertyName)
+				replacement = i->second;
+		}
 		
-		src = src.replace(startIndex,
-						  endIndex - startIndex + 1,
-						  replacement);
+		value = value.replace(startIndex,
+							  endIndex - startIndex + 1,
+							  replacement);
 	}
 	
-	return src;
+	return value;
 }

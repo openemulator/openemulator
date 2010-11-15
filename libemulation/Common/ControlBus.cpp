@@ -45,17 +45,17 @@ bool ControlBus::setValue(string name, string value)
 	return true;
 }
 
-bool ControlBus::setRef(string name, OEComponent *id)
+bool ControlBus::setRef(string name, OEComponent *ref)
 {
 	if (name == "hostAudio")
 	{
-//		replaceObserver(hostAudio, id, HOST_AUDIO_FRAME_WILL_RENDER);
-		hostAudio = id;
+		replaceObserver(hostAudio, ref, HOST_AUDIO_FRAME_WILL_RENDER);
+		hostAudio = ref;
 	}
 	else if (name == "master")
-		master = id;
+		master = ref;
 	else if (name == "masterSocket")
-		masterSocket = id;
+		masterSocket = ref;
 	else
 		return false;
 	

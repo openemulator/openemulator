@@ -13,7 +13,7 @@
 class AppleIIAudioIn : public OEComponent
 {
 public:
-	bool setRef(string name, OEComponent *id);
+	bool setRef(string name, OEComponent *ref);
 	
 	OEUInt8 read(OEAddress address);
 	

@@ -30,7 +30,7 @@ bool ROM::setData(string name, OEData *data)
 	if (name == "image")
 		this->data = data;
 	else
-		return false;
+		return OEComponent::setData(name, data);
 	
 	return true;
 }

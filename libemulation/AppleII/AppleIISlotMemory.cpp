@@ -21,26 +21,26 @@ bool AppleIISlotMemory::setValue(string name, string value)
 	return true;
 }
 
-bool AppleIISlotMemory::setRef(string name, OEComponent *id)
+bool AppleIISlotMemory::setRef(string name, OEComponent *ref)
 {
 	if (name == "floatingBus")
-		floatingBus = id;
+		floatingBus = ref;
 	else if (name == "slotExpansionMemory")
-		slotExpansionMemory = id;
+		slotExpansionMemory = ref;
 	else if (name == "slot1")
-		slot[3] = id;
+		slot[3] = ref;
 	else if (name == "slot2")
-		slot[3] = id;
+		slot[3] = ref;
 	else if (name == "slot3")
-		slot[3] = id;
+		slot[3] = ref;
 	else if (name == "slot4")
-		slot[4] = id;
+		slot[4] = ref;
 	else if (name == "slot5")
-		slot[5] = id;
+		slot[5] = ref;
 	else if (name == "slot6")
-		slot[6] = id;
+		slot[6] = ref;
 	else if (name == "slot7")
-		slot[7] = id;
+		slot[7] = ref;
 	else
 		return false;
 	

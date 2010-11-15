@@ -20,7 +20,7 @@ bool CharsetLoader::setData(string name, OEData *data)
 	if (name == "image")
 		;
 	else
-		return false;
+		return OEComponent::setData(name, data);
 	
 	return true;
 }
