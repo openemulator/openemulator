@@ -14,7 +14,6 @@
 #include <libxml/tree.h>
 
 #include "OETypes.h"
-
 #include "OEPackage.h"
 
 #define OE_STANDALONE_EXTENSION "xml"
@@ -23,6 +22,40 @@
 
 typedef map<string, string> OEIdMap;
 typedef vector<string> OEIdList;
+
+struct OEEDLInfo
+{
+	string label;
+	string image;
+	string description;
+	string windowFrame;
+};
+
+struct OEDeviceInfo
+{
+	string id;
+	string type;
+	string label;
+	string image;
+	
+	string connectionLabel;
+};
+
+typedef vector<OEDeviceInfo> OEDevicesInfo;
+
+struct OEPortInfo
+{
+	string id;
+	string ref;
+	string type;
+	string label;
+	string image;
+};
+
+typedef vector<OEPortInfo> OEPortsInfo;
+
+typedef OEPortInfo OEConnectorInfo;
+typedef OEPortsInfo OEConnectorsInfo;
 
 class OEEDL
 {
@@ -36,8 +69,14 @@ public:
 	bool save(string path);
 	void close();
 	
-	bool addEDL(string path, OEIdMap connectionMap);
-	bool removeDevice(string ref);
+	OEEDLInfo getEDLInfo();
+	bool setEDLInfo(OEEDLInfo edlInfo);
+	OEDevicesInfo getDevicesInfo();
+	OEPortsInfo getPortsInfo();
+	OEConnectorsInfo getConnectorsInfo();
+	
+	bool addEDL(string path, OEIdMap idMap);
+	bool removeDevice(string id);
 	
 protected:
 	OEPackage *package;
@@ -54,6 +93,8 @@ protected:
 	bool readFile(string path, OEData *data);
 	
 	// Helpers
+	void setDeviceId(string &id, string deviceId);
+	string getDeviceId(string id);
 	void log(string message);
 	
 private:
@@ -75,10 +116,8 @@ private:
 	void disconnect(string deviceId);
 	void removeElements(string deviceId);
 	
-	bool hasDevice(string deviceId);
+	bool isDevice(string deviceId);
 	OEIdList getDeviceIds();
-	void setDeviceId(string &ref, string deviceId);
-	string getDeviceId(string ref);
 };
 
 #endif

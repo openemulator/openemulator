@@ -11,18 +11,16 @@
 #import <Carbon/Carbon.h>
 
 #import "DocumentController.h"
-
 #import "Document.h"
 #import "TemplateChooserWindowController.h"
+#import "StringConversion.h"
 
 #import "OEPortAudio.h"
-
-#import "StringConversion.h"
 
 #define LINK_HOMEPAGE	@"http://www.openemulator.org"
 #define LINK_FORUMSURL	@"http://groups.google.com/group/openemulator"
 #define LINK_DEVURL		@"http://code.google.com/p/openemulator"
-#define LINK_DONATEURL	@"http://www.openemulator.org/donate.html"
+#define LINK_DONATEURL	@"http://www.openemulator.org/donate"
 
 @implementation DocumentController
 
@@ -83,6 +81,16 @@
 - (void *)getOEPortAudio
 {
 	return oePortAudio;
+}
+
+- (NSArray *)getDiskImageFileTypes
+{
+	return diskImageFileTypes;
+}
+
+- (NSArray *)getAudioFileTypes
+{
+	return audioFileTypes;
 }
 
 - (void)applicationWillFinishLaunching:(NSNotification *)notification

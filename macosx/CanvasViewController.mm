@@ -9,11 +9,9 @@
  */
 
 #import "CanvasViewController.h"
-#import "Document.h"
+#import "StringConversion.h"
 
 #import "OEOpenGLCanvas.h"
-
-#import "StringConversion.h"
 
 #define NSLeftControlKeyMask	(1 << 0)
 #define NSLeftShiftKeyMask		(1 << 1)
@@ -215,10 +213,10 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	[pixelFormat autorelease];
 	if (self = [super initWithFrame:rect pixelFormat:pixelFormat])
 	{
-		Document *document = [fDocumentWindowController document];
+/*		Document *document = [fDocumentWindowController document];
 		OEPortAudioEmulation *emulation = (OEPortAudioEmulation *)[document emulation];
-		
-		oeOpenGLCanvas = new OEOpenGLCanvas(emulation, "");
+*/		
+		oeOpenGLCanvas = new OEOpenGLCanvas(NULL, "");
 		
 		memset(keyMap, sizeof(keyMap), 0);
 		for (int i = 0;

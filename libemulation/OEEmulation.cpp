@@ -30,7 +30,7 @@ bool OEEmulation::open(string path)
 {
 	close();
 	
-	if (!OEInfo::open(path))
+	if (!OEEDL::open(path))
 		return false;
 	
 	if (create())
@@ -48,7 +48,7 @@ void OEEmulation::close()
 	deconfigure();
 	destroy();
 	
-	OEInfo::close();
+	OEEDL::close();
 }
 
 bool OEEmulation::setComponent(string id, OEComponent *component)
@@ -61,21 +61,12 @@ bool OEEmulation::setComponent(string id, OEComponent *component)
 	return true;
 }
 
-OEComponent *OEEmulation::getComponentById(string id)
+OEComponent *OEEmulation::getComponent(string id)
 {
 	if (!components.count(id))
 		return NULL;
 	
 	return components[id];
-}
-
-string OEEmulation::getDeviceById(string id)
-{
-	size_t index = id.find_last_of('.');
-	if (index == string::npos)
-		return "";
-	else
-		return id.substr(1, index - 1);
 }
 
 bool OEEmulation::create()
@@ -99,7 +90,7 @@ bool OEEmulation::create()
 
 bool OEEmulation::createComponent(string id, string className)
 {
-	if (!getComponentById(id))
+	if (!getComponent(id))
 	{
 		OEComponent *component = OEComponentFactory::create(className);
 		if (component)
@@ -133,7 +124,7 @@ bool OEEmulation::configure()
 
 bool OEEmulation::configureComponent(string id, xmlNodePtr children)
 {
-	OEComponent *component = getComponentById(id);
+	OEComponent *component = getComponent(id);
 	if (!component)
 	{
 		log("could not configure '" + id + "', it was not created");
@@ -142,7 +133,7 @@ bool OEEmulation::configureComponent(string id, xmlNodePtr children)
 	
 	OEPropertiesMap propertiesMap;
 	propertiesMap["id"] = id;
-	propertiesMap["device"] = getDeviceById(id);
+	propertiesMap["device"] = getDeviceId(id);
 	propertiesMap["resourcePath"] = resourcePath;
 	
 	for(xmlNodePtr node = children;
@@ -165,9 +156,9 @@ bool OEEmulation::configureComponent(string id, xmlNodePtr children)
 			}
 			else if (hasNodeProperty(node, "ref"))
 			{
-				string ref = getNodeProperty(node, "ref");
-				OEComponent *refComponent = getComponentById(ref);
-				if (component->setRef(name, refComponent))
+				string refId = getNodeProperty(node, "ref");
+				OEComponent *ref = getComponent(refId);
+				if (component->setRef(name, ref))
 					continue;
 				else
 					log("invalid property '" + name + "' for '" + id + "'");
@@ -238,7 +229,7 @@ bool OEEmulation::init()
 
 bool OEEmulation::initComponent(string id)
 {
-	OEComponent *component = getComponentById(id);
+	OEComponent *component = getComponent(id);
 	if (!component)
 	{
 		log("could not init '" + id + "', it was not created");
@@ -273,7 +264,7 @@ bool OEEmulation::update()
 
 bool OEEmulation::updateComponent(string id, xmlNodePtr children)
 {
-	OEComponent *component = getComponentById(id);
+	OEComponent *component = getComponent(id);
 	if (!component)
 	{
 		log("could not update '" + id + "', it was not created");
@@ -282,7 +273,7 @@ bool OEEmulation::updateComponent(string id, xmlNodePtr children)
 	
 	OEPropertiesMap propertiesMap;
 	propertiesMap["id"] = id;
-	propertiesMap["device"] = getDeviceById(id);
+	propertiesMap["device"] = getDeviceId(id);
 	propertiesMap["resourcePath"] = resourcePath;
 	
 	for(xmlNodePtr node = children;
@@ -350,7 +341,7 @@ void OEEmulation::deconfigure()
 
 void OEEmulation::deconfigureComponent(string id, xmlNodePtr children)
 {
-	OEComponent *component = getComponentById(id);
+	OEComponent *component = getComponent(id);
 	if (!component)
 	{
 		log("could not deconfigure '" + id + "', it was not created");
@@ -393,7 +384,7 @@ void OEEmulation::destroy()
 
 void OEEmulation::destroyComponent(string id, xmlNodePtr children)
 {
-	OEComponent *component = getComponentById(id);
+	OEComponent *component = getComponent(id);
 	if (!component)
 	{
 		log("could not destroy '" + id + "', it was not created");

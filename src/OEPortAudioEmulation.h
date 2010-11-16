@@ -25,7 +25,7 @@ public:
 	bool open(string path);
 	bool save(string path);
 	
-	bool addEDL(string path, OEIdMap deviceIdMap);
+	bool addEDL(string path, OEIdMap connectionMap);
 	bool removeDevice(string deviceName);
 	
 private:
@@ -34,7 +34,5 @@ private:
 	void lock();
 	void unlock();
 };
-
-typedef vector<OEPortAudioEmulation *> OEPortAudioEmulations;
 
 #endif

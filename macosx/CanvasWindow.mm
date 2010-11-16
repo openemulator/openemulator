@@ -10,7 +10,6 @@
 
 #import "CanvasWindow.h"
 #import "DocumentController.h"
-#import "OEComponent.h"
 
 @implementation CanvasWindow
 
@@ -113,12 +112,12 @@
 	int canvasDefaultWidth = 640;
 	int canvasDefaultHeight = 480;
 	
-	OEComponent *canvasComponent = (OEComponent *)[self canvasComponent];
+/*	OEComponent *canvasComponent = (OEComponent *)[self canvasComponent];
 	if (canvasComponent)
 	{
 		// Update canvasDefaultWidth and height
 	}
-	
+*/	
 	// To-Do: Ask canvas for default size
 	
 	NSRect frameRect = [self frame];

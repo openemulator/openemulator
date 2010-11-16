@@ -45,7 +45,7 @@ bool AddressDecoder::setRef(string name, OEComponent *ref)
 {
 	if (name == "hostStorage")
 	{
-		replaceObserver(hostStorage, ref, HOST_STORAGE_MOUNT_REQUESTED);
+		replaceDelegate(hostStorage, ref, HOST_STORAGE_MOUNT);
 		hostStorage = ref;
 	}
 	else if (name == "floatingBus")

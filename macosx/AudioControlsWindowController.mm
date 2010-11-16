@@ -8,9 +8,12 @@
  * Controls the audio controls window.
  */
 
+// To-Do: move everything related to OEPortAudio to DocumentController
+
 #import "AudioControlsWindowController.h"
-#import "OEPortAudio.h"
 #import "StringConversion.h"
+
+#import "OEPortAudio.h"
 
 @implementation AudioControlsWindowController
 
@@ -162,7 +165,7 @@
 - (IBAction)togglePlay:(id)sender
 {
 	if (!((OEPortAudio *)oePortAudio)->isPlaying())
-		((OEPortAudio *)oePortAudio)->startPlaying(getString([playURL path]));
+		((OEPortAudio *)oePortAudio)->startPlaying(getCString([playURL path]));
 	else
 		((OEPortAudio *)oePortAudio)->stopPlaying();
 }
@@ -201,7 +204,7 @@
 							 stringByAppendingPathComponent:@"oerecording"];
 		recordingURL = [[NSURL alloc] initFileURLWithPath:thePath];
 		
-		((OEPortAudio *)oePortAudio)->startRecording(getString([recordingURL path]));
+		((OEPortAudio *)oePortAudio)->startRecording(getCString([recordingURL path]));
 	}
 	else
 		((OEPortAudio *)oePortAudio)->stopRecording();
@@ -229,7 +232,7 @@
 	
 	playURL = [theURL copy];
 	if (playURL)
-		((OEPortAudio *)oePortAudio)->startPlaying(getString([playURL path]));
+		((OEPortAudio *)oePortAudio)->startPlaying(getCString([playURL path]));
 }
 
 - (void)writeToURL:(NSURL *)theURL

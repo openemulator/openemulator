@@ -8,6 +8,9 @@
  * Defines the host storage interface
  */
 
+#ifndef _HOSTSTORAGEINTERFACE_H
+#define _HOSTSTORAGEINTERFACE_H
+
 //
 // * The framework first tries to mount on all available devices.
 // * If the mount failed, it tries to check whether a drive is capable of processing
@@ -21,18 +24,15 @@
 // * To update mount status, use the device status interface
 //
 
-#ifndef _HOSTSTORAGEINTERFACE_H
-#define _HOSTSTORAGEINTERFACE_H
-
 typedef enum
 {
-	HOST_STORAGE_RUN_ALERT,
+	HOST_STORAGE_RUNALERT,
 } HostStorageMessages;
 
 typedef enum
 {
-	HOST_STORAGE_MOUNT_REQUESTED,
-	HOST_STORAGE_VALIDATE_REQUESTED,
-} HostStorageNotifications;
+	HOST_STORAGE_MOUNT,
+	HOST_STORAGE_VALIDATE,
+} HostStorageDelegations;
 
 #endif

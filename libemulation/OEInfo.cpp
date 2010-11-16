@@ -8,14 +8,7 @@
  * Parses an EDL file.
  */
 
-#include <fstream>
-#include <sstream>
-
-#include <libxml/parser.h>
-
-#include "OEInfo.h"
-
-OEInfo::~OEInfo()
+/*OEInfo::~OEInfo()
 {
 	removeDevices();
 	removePorts(inlets);
@@ -106,10 +99,6 @@ bool OEInfo::analyze()
 
 void OEInfo::analyzeHeader(xmlNodePtr node)
 {
-	type = getNodeProperty(node, "type");
-	label = getNodeProperty(node, "label");
-	image = getNodeProperty(node, "image");
-	description = getNodeProperty(node, "description");
 }
 
 void OEInfo::analyzeDevices(xmlNodePtr node)
@@ -215,7 +204,7 @@ void OEInfo::removePorts(OEPorts &ports)
 
 bool OEInfo::analyzeConnections()
 {
-/*	// Check inlets
+	// Check inlets
 	for (OEPorts::iterator inlet = inlets.begin();
 		 inlet != inlets.end();
 		 inlet++)
@@ -266,7 +255,7 @@ bool OEInfo::analyzeConnections()
 		 device != devices.end();
 		 device++)
 		(*device)->connectionLabel = buildConnectionLabel((*device)->name);
-	*/
+	
 	return true;
 }
 
@@ -274,7 +263,7 @@ string OEInfo::buildConnectionLabel(string deviceName)
 {
 	string label;
 	
-/*	// Find all outlets
+	// Find all outlets
 	for (OEPorts::iterator outlet = outlets.begin();
 		 outlet != outlets.end();
 		 outlet++)
@@ -288,7 +277,7 @@ string OEInfo::buildConnectionLabel(string deviceName)
 			label += buildConnectionLabel(*outlet, visitedRefs);
 		}
 	}
-	*/
+	
 	return label;
 }
 
@@ -316,7 +305,7 @@ string OEInfo::buildConnectionLabel(OEPort *outlet, vector<string> &visitedRefs)
 			return buildConnectionLabel(*outlet, visitedRefs) + " " + inlet->label;
 		}
 	}
-	*/
+	
 	// The device has no outlets
 	return deviceLabel;
 }
@@ -335,3 +324,4 @@ bool OEInfo::findCircularConnection(string ref, vector<string> &visitedRefs)
 	
 	return false;
 }
+*/

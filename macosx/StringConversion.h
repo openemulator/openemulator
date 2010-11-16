@@ -9,5 +9,4 @@
  */
 
 #define getNSString(s) ([NSString stringWithUTF8String:(s).c_str()])
-#define getString(s) (string([(s) UTF8String]))
-
+#define getCString(s) (string([(s) UTF8String]))

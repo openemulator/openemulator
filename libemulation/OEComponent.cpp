@@ -95,12 +95,17 @@ void OEComponent::replaceObserver(OEComponent *oldObserver,
 		newObserver->addObserver(this, notification);
 }
 
-void OEComponent::delegate(OEComponent *sender, int delegation, void *data)
+bool OEComponent::delegate(OEComponent *sender, int delegation, void *data)
 {
 	for (OEComponents::iterator i = delegates[delegation].begin();
 		 i != delegates[delegation].end();
 		 i++)
-		(*i)->notify(sender, delegation, data);
+	{
+		if ((*i)->delegate(sender, delegation, data))
+			return true;
+	}
+	
+	return false;
 }
 
 bool OEComponent::addDelegate(OEComponent *delegate, int delegation)
@@ -120,6 +125,16 @@ bool OEComponent::removeDelegate(OEComponent *delegate, int delegation)
 		delegates[delegation].erase(i, last);
 	
 	return (i != last);
+}
+
+void OEComponent::replaceDelegate(OEComponent *oldDelegate,
+								  OEComponent *newDelegate,
+								  int delegation)
+{
+	if (oldDelegate)
+		oldDelegate->removeObserver(this, delegation);
+	if (newDelegate)
+		newDelegate->addObserver(this, delegation);
 }
 
 OEUInt8 OEComponent::read(OEAddress address)
@@ -158,14 +173,14 @@ void OEComponent::write64(OEAddress address, OEUInt64 value)
 {
 }
 
-bool OEComponent::readBlock(OEAddress address, OEData *value)
+int OEComponent::readBlock(OEAddress address, OEData *value)
 {
-	return false;
+	return 0;
 }
 
-bool OEComponent::writeBlock(OEAddress address, OEData *value)
+int OEComponent::writeBlock(OEAddress address, OEData *value)
 {
-	return false;
+	return 0;
 }
 
 void OEComponent::log(string message)

@@ -12,6 +12,7 @@
 #define _OEPORTAUDIO_H
 
 #include <pthread.h>
+
 #include "portaudio.h"
 #include "sndfile.h"
 #include "samplerate.h"
@@ -24,6 +25,8 @@
 #define OEPORTAUDIO_BUFFERNUM			3
 
 #define OEPORTAUDIO_VOLUMEFILTERFREQ	20.0
+
+typedef vector<OEPortAudioEmulation *> OEPortAudioEmulations;
 
 class OEPortAudio : public OEComponent
 {
@@ -40,17 +43,18 @@ public:
 	
 	bool open();
 	void close();
+	
 	bool addEmulation(OEPortAudioEmulation *emulation);
 	void removeEmulation(OEPortAudioEmulation *emulation);
+	
+	void lockEmulations();
+	void unlockEmulations();
+	void runEmulations();
 	
 	void runAudio(const float *input,
 				  float *output,
 				  int frameCount);
 	void runTimer();
-	
-	void lockEmulations();
-	void unlockEmulations();
-	void runEmulations();
 	
 	bool startPlaying(string path);
 	void stopPlaying();

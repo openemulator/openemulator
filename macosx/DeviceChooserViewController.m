@@ -9,15 +9,11 @@
  */
 
 #import "DeviceChooserViewController.h"
-
-#import "OEInfo.h"
-
 #import "ChooserItem.h"
 #import "Document.h"
-
 #import "StringConversion.h"
 
-@interface InfoWrapper : NSObject
+/*@interface InfoWrapper : NSObject
 {
 	OEInfo *info;
 	NSString *path;
@@ -63,7 +59,7 @@
 	return path;
 }
 
-@end
+@end*/
 
 @implementation DeviceChooserViewController
 
@@ -96,7 +92,7 @@
 	
 	for (int i = 0; i < [devicesFilenames count]; i++)
 	{
-		NSString *path = [devicesFilenames objectAtIndex:i];
+/*		NSString *path = [devicesFilenames objectAtIndex:i];
 		path = [devicesPath stringByAppendingPathComponent:path];
 		InfoWrapper *info = [[InfoWrapper alloc] initWithPath:path];
 		
@@ -104,7 +100,7 @@
 		{
 			[info autorelease];
 			[infos addObject:info];
-		}
+		}*/
 	}
 }
 
@@ -119,7 +115,7 @@
 	
 	for (int i = 0; i < [infos count]; i++)
 	{
-		// Check if the required inlets are available
+/*		// Check if the required inlets are available
 		OEInfo *info = [[infos objectAtIndex:i] info];
 		NSString *infoPath = [[infos objectAtIndex:i] path];
 		
@@ -201,7 +197,7 @@
 			continue;
 		
 		[item autorelease];
-		[[groups objectForKey:groupName] addObject:item];
+		[[groups objectForKey:groupName] addObject:item];*/
 	}
 	
 	[groupNames addObjectsFromArray:[[groups allKeys]
@@ -213,7 +209,7 @@
 - (NSMutableArray *)selectedItemOutlets
 {
 	// Find selected device
-	NSString *itemPath = [self selectedItemPath];
+/*	NSString *itemPath = [self selectedItemPath];
 	if (!itemPath)
 		return NULL;
 	
@@ -230,13 +226,13 @@
 	
 	if (!info)
 		return NULL;
-	
+	*/
 	// Get unconnected outlets
 	NSMutableArray *freeOutlets = [[NSMutableArray alloc] init];
 	if (!freeOutlets)
 		return NULL;
 	[freeOutlets autorelease];
-	
+	/*
 	OEPorts *outlets = info->getOutlets();
 	for (OEPorts::iterator outlet = outlets->begin();
 		 outlet != outlets->end();
@@ -253,7 +249,7 @@
 		
 		[freeOutlets addObject:dict];
 	}
-	
+	*/
 	return freeOutlets;
 }
 

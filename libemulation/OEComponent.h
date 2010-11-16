@@ -29,18 +29,20 @@ public:
 	virtual bool setRef(string name, OEComponent *ref);
 	virtual bool setData(string name, OEData *data);
 	virtual bool getData(string name, OEData **data);
-	
 	virtual bool init();
 	
-	// Messages
+	// Messaging
 	virtual bool postMessage(OEComponent *sender, int message, void *data);
 	
-	// Delegate
-	virtual void delegate(OEComponent *sender, int delegation, void *data);
+	// Delegation
+	virtual bool delegate(OEComponent *sender, int delegation, void *data);
 	bool addDelegate(OEComponent *delegate, int delegation);
 	bool removeDelegate(OEComponent *delegate, int delegation);
+	void replaceDelegate(OEComponent *oldDelegate,
+						 OEComponent *newDelegate,
+						 int delegation);
 	
-	// Notifications
+	// Notification
 	virtual void notify(OEComponent *sender, int notification, void *data);
 	bool addObserver(OEComponent *observer, int notification);
 	bool removeObserver(OEComponent *observer, int notification);
@@ -57,13 +59,10 @@ public:
 	virtual void write32(OEAddress address, OEUInt32 value);
 	virtual OEUInt64 read64(OEAddress address);
 	virtual void write64(OEAddress address, OEUInt64 value);
-	virtual bool readBlock(OEAddress address, OEData *value);
-	virtual bool writeBlock(OEAddress address, OEData *value);
+	virtual int readBlock(OEAddress address, OEData *value);
+	virtual int writeBlock(OEAddress address, OEData *value);
 	
 protected:
-	OEObservers observers;
-	OEDelegates delegates;
-
 	// Helpers
 	void log(string message);	
 	int getInt(const string &value);
@@ -72,6 +71,10 @@ protected:
 	string getHex(int value);
 	OEData getCharVector(const string &value);
 	int getNextPowerOf2(int value);
+
+private:
+	OEObservers observers;
+	OEDelegates delegates;
 };
 
 #endif

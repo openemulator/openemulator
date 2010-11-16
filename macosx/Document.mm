@@ -10,13 +10,9 @@
 
 #import "Document.h"
 #import "DocumentController.h"
-
-#import "CanvasWindowController.h"
-
-#import "OEInfo.h"
-#import "OEPortAudioEmulation.h"
-
 #import "StringConversion.h"
+
+#import "OEPortAudioEmulation.h"
 
 @implementation Document
 
@@ -78,8 +74,8 @@
 	
 	OEPortAudio *oePortAudio = (OEPortAudio *)[documentController getOEPortAudio];
 	
-	string path = getString([url path]);
-	string resourcePath = getString([[NSBundle mainBundle] resourcePath]);
+	string path = getCString([url path]);
+	string resourcePath = getCString([[NSBundle mainBundle] resourcePath]);
 	
 	emulation = new OEPortAudioEmulation();
 	
@@ -199,7 +195,7 @@
 		[self removeObjectFromDevicesAtIndex:0];
 	
 	// Process inlets
-	OEPorts *inlets = ((OEPortAudioEmulation *)emulation)->getInlets();
+/*	OEPorts *inlets = ((OEPortAudioEmulation *)emulation)->getInlets();
 	for (OEPorts::iterator inlet = inlets->begin();
 		 inlet != inlets->end();
 		 inlet++)
@@ -254,7 +250,7 @@
 							  nil];
 		
 		[self insertObject:dict inDevicesAtIndex:deviceIndex++];
-	}
+	}*/
 	
 	return;
 }
@@ -290,8 +286,8 @@
 {
 	if (emulation)
 	{
-		string emulationPath = getString([[absoluteURL path]
-										  stringByAppendingString:@"/"]);
+		string emulationPath = getCString([[absoluteURL path]
+										   stringByAppendingString:@"/"]);
 		
 		if (((OEPortAudioEmulation *)emulation)->save(emulationPath))
 			return YES;
@@ -342,7 +338,7 @@
 - (void)addEDL:(NSString *)path
    connections:(NSDictionary *)connections
 {
-	string pathString = getString(path);
+	string pathString = getCString(path);
 	map<string, string> connectionsMap;
 	
 	NSEnumerator *i = [connections keyEnumerator];
@@ -352,8 +348,8 @@
 	{
 		NSString *outletRef = [connections objectForKey:inletRef];
 		
-		string inletRefString = getString(inletRef);
-		string outletRefString = getString(outletRef);
+		string inletRefString = getCString(inletRef);
+		string outletRefString = getCString(outletRef);
 		
 		connectionsMap[inletRefString] = outletRefString;
 	}
@@ -377,7 +373,7 @@
 	NSString *deviceRef = [dict objectForKey:@"ref"];
 	NSString *deviceLabel = [dict objectForKey:@"label"];
 	
-	string refString = getString(deviceRef);
+	string refString = getCString(deviceRef);
 	
 /*	if (!((OEPAEmulation *)emulation)->isDeviceTerminal(refString))
 	{
@@ -414,10 +410,10 @@
 	devicesWindowController = [[DevicesWindowController alloc] init];
 	[self addWindowController:devicesWindowController];
 	
-	NSWindowController *windowController;
+/*	NSWindowController *windowController;
 	windowController = [[CanvasWindowController alloc] initWithCanvasComponent:NULL];
 	[self addWindowController:windowController];
-	[windowController release];
+	[windowController release];*/
 }
 
 - (NSMutableArray *)freeInlets

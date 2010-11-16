@@ -10,8 +10,6 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "DocumentController.h"
-
 @interface AudioControlsWindowController : NSWindowController
 {
 	IBOutlet id fDocumentController;

@@ -19,7 +19,7 @@
 
 #include "HostCanvasInterface.h"
 
-enum 
+typedef enum
 {
 	OEGL_TEX_POWER,
 	OEGL_TEX_PAUSE,
@@ -27,7 +27,7 @@ enum
 	OEGL_TEX_FRAME,
 	OEGL_TEX_INTERLACE,
 	OEGL_TEX_NUM,
-};
+} OEOpenGLTextureIndex;
 
 inline void OEOpenGLCanvasLog(string text)
 {

@@ -8,13 +8,14 @@
  * Defines the host interface
  */
 
+#ifndef _HOSTCANVASINTERFACE_H
+#define _HOSTCANVASINTERFACE_H
+
 //
 // * A component should first request a canvas from the canvas controller.
 //   Then it should subscribe to canvas events.
 // * Axes are in [-1.0 .. 1.0] coordinates.
 //
-#ifndef _HOSTCANVASINTERFACE_H
-#define _HOSTCANVASINTERFACE_H
 
 typedef enum
 {
@@ -32,9 +33,15 @@ typedef enum
 	HOST_CANVAS_SET_DEFAULTWINDOWSIZE,
 	HOST_CANVAS_GET_VIDEOFRAME,
 	HOST_CANVAS_POST_VIDEOFRAME,
-	HOST_CANVAS_SET_KEYBOARD_FLAGS,
-	HOST_CANVAS_SET_BADGE_FLAGS,
+	HOST_CANVAS_SET_KEYBOARDFLAGS,
+	HOST_CANVAS_SET_BADGEFLAGS,
 } HostCanvasMessages;
+
+typedef enum
+{
+	HOST_CANVAS_COPY,
+	HOST_CANVAS_PASTE,
+} HostCanvasDelegations;
 
 typedef enum
 {
@@ -47,24 +54,24 @@ typedef enum
 	HOST_CANVAS_JOYSTICK2_CHANGED,
 	HOST_CANVAS_JOYSTICK3_CHANGED,
 	HOST_CANVAS_JOYSTICK4_CHANGED,
-	HOST_CANVAS_COPY_REQUESTED,
-	HOST_CANVAS_PASTE_REQUESTED,
 } HostCanvasNotifications;
 
+// HOST_CANVAS_SET_CAPTUREMODE uses int
 typedef enum
 {
 	HOST_CANVAS_CAPTURE_NONE,
-	HOST_CANVAS_CAPTURE_KEYBOARD_AND_MOUSE,
+	HOST_CANVAS_CAPTURE_KEYBOARDANDMOUSE,
 	HOST_CANVAS_CAPTURE_KEYBOARD,
 } HostCanvasCaptureModes;
 
-// SET_WINDOWFRAME and GET_WINDOWFRAME use a C++ string in the following format:
+//
+// SET_WINDOWFRAME and GET_WINDOWFRAME use an STL string, in the format:
 // [originX] [originY] [width] [height]
 // The coordinate system's origin is lower left
 
-// SET_WINDOWVISIBLE and GET_WINDOWVISIBLE use a C++ bool
+// SET_WINDOWVISIBLE and GET_WINDOWVISIBLE use bool
 
-// SET_DEFAULTWINDOWSIZE use a C++ string in the following format:
+// SET_DEFAULTWINDOWSIZE uses an STL string in the format:
 // [width] [height]
 
 typedef enum
@@ -103,7 +110,7 @@ typedef struct
 	float screenPersistance;
 } HostCanvasVideoFrame;
 
-// Canvas keyboard flags use a C int
+// Canvas keyboard flags use int
 #define HOST_CANVAS_L_NUMLOCK		(1 << 0)
 #define HOST_CANVAS_L_CAPSLOCK		(1 << 1)
 #define HOST_CANVAS_L_SCROLLLOCK	(1 << 2)
@@ -112,11 +119,13 @@ typedef struct
 #define HOST_CANVAS_L_POWER			(1 << 5)
 #define HOST_CANVAS_L_SHIFT			(1 << 6)
 
-// Canvas badge flags use a C int
+// Canvas badge flags use int
 #define HOST_CANVAS_B_POWER			(1 << 0)
 #define HOST_CANVAS_B_PAUSE			(1 << 1)
 
-// Canvas human-interface device notifications use this format:
+// Copy and paste use an STL string
+
+// Canvas human-interface device notifications use this structure
 typedef struct
 {
 	int usageId;
@@ -470,7 +479,5 @@ typedef enum
 	HOST_CANVAS_J_RELAXIS3,
 	HOST_CANVAS_J_RELAXIS4,
 } HostCanvasJoystickUsageIds;
-
-// Copy and paste requests use a C++ string
 
 #endif

@@ -29,6 +29,8 @@
 - (void)toggleAudioControls:(id)sender;
 
 - (void *)getOEPortAudio;
+- (NSArray *)getDiskImageFileTypes;
+- (NSArray *)getAudioFileTypes;
 
 - (IBAction)newDocumentFromTemplateChooser:(id)sender;
 - (id)openUntitledDocumentWithTemplateURL:(NSURL *)absoluteURL

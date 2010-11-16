@@ -11,17 +11,6 @@
 #ifndef _HOSTETHERNETINTERFACE_H
 #define _HOSTETHERNETINTERFACE_H
 
-typedef enum
-{
-	HOST_ETHERNET_SEND,
-	HOST_ETHERNET_RECEIVE,
-} HostEthernetMessages;
-
-typedef struct
-{
-	char *buffer;
-	int bufferSize;
-	int bufferUsed;
-} HostEthernetBuffer;
+// Data is sent and received with the readBlock and writeBlock interface
 
 #endif

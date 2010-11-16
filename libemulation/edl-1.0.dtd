@@ -17,37 +17,15 @@
 
 <!ELEMENT edl (device*|connector*|port*|component*)>
 <!ATTLIST edl version CDATA "1.0">
-<!ATTLIST edl type CDATA #IMPLIED>
 <!ATTLIST edl label CDATA #IMPLIED>
 <!ATTLIST edl image CDATA #IMPLIED>
 <!ATTLIST edl description CDATA #IMPLIED>
-<!ATTLIST edl window CDATA #IMPLIED>
+<!ATTLIST edl windowFrame CDATA #IMPLIED>
 
-<!ELEMENT device (audio*|canvas*|storage*|loader*|ethernet*|camera*|status*|setting*>
+<!ELEMENT device (setting*)>
 <!ATTLIST device id ID #REQUIRED>
 <!ATTLIST device label CDATA #REQUIRED>
 <!ATTLIST device image CDATA #REQUIRED>
-
-<!ELEMENT audio EMPTY>
-<!ATTLIST audio ref IDREF #REQUIRED>
-
-<!ELEMENT canvas EMPTY>
-<!ATTLIST canvas ref IDREF #REQUIRED>
-
-<!ELEMENT storage EMPTY>
-<!ATTLIST storage ref IDREF #REQUIRED>
-
-<!ELEMENT loader EMPTY>
-<!ATTLIST loader ref IDREF #REQUIRED>
-
-<!ELEMENT ethernet EMPTY>
-<!ATTLIST ethernet ref IDREF #REQUIRED>
-
-<!ELEMENT camera EMPTY>
-<!ATTLIST camera ref IDREF #REQUIRED>
-
-<!ELEMENT status EMPTY>
-<!ATTLIST status ref IDREF #REQUIRED>
 
 <!ELEMENT setting EMPTY>
 <!ATTLIST setting ref IDREF #REQUIRED>
@@ -78,7 +56,7 @@
 <!ATTLIST component id ID #REQUIRED>
 <!ATTLIST component class CDATA #REQUIRED>
 
-<!ELEMENT property EMPTY>
+<!ELEMENT property (setting*)>
 <!ATTLIST property name CDATA #REQUIRED>
 <!ATTLIST property value CDATA #IMPLIED>
 <!ATTLIST property ref CDATA #IMPLIED>

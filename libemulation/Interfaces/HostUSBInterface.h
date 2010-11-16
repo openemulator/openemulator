@@ -11,17 +11,6 @@
 #ifndef _HOSTUSBINTERFACE_H
 #define _HOSTUSBINTERFACE_H
 
-typedef enum
-{
-	HOST_USB_SEND,
-	HOST_USB_RECEIVE,
-} HostUSBMessages;
-
-typedef struct
-{
-	char *buffer;
-	int bufferSize;
-	int bufferUsed;
-} HostUSBBuffer;
+// Data is sent and received with the readBlock and writeBlock interface
 
 #endif

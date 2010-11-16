@@ -11,17 +11,17 @@
 #ifndef _OEEMULATION_H
 #define _OEEMULATION_H
 
-#include "OEInfo.h"
+#include "OEEDL.h"
 #include "OEComponent.h"
 
 typedef map<string, OEComponent *> OEComponentsMap;
 typedef map<string, string> OEPropertiesMap;
 
-class OEEmulation : public OEInfo
+class OEEmulation : public OEEDL
 {
 public:
 	~OEEmulation();
-
+	
 	void setResourcePath(string path);
 	
 	bool open(string path);
@@ -33,8 +33,7 @@ private:
 	string resourcePath;
 	OEComponentsMap components;
 	
-	OEComponent *getComponentById(string id);
-	string getDeviceById(string id);
+	OEComponent *getComponent(string id);
 	
 	bool create();
 	bool createComponent(string id, string className);

@@ -8,16 +8,9 @@
  * Controls a template chooser view.
  */
 
-#import <string>
-
 #import "TemplateChooserViewController.h"
-
-#import "OEInfo.h"
-
 #import "ChooserItem.h"
 #import "Document.h"
-
-#import "StringConversion.h"
 
 @implementation TemplateChooserViewController
 
@@ -65,7 +58,7 @@
 								  contentsOfDirectoryAtPath:path
 								  error:nil];
 	
-	int templateFilenamesCount = [templateFilenames count];
+/*	int templateFilenamesCount = [templateFilenames count];
 	for (int i = 0; i < templateFilenamesCount; i++)
 	{
 		NSString *templateFilename = [templateFilenames objectAtIndex:i];
@@ -99,7 +92,7 @@
 				[[groups objectForKey:groupName] addObject:item];
 			}
 		}
-	}
+	}*/
 }
 
 @end

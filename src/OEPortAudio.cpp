@@ -240,6 +240,138 @@ void OEPortAudio::advanceEmulationsBuffer()
 }
 
 //
+// Emulations
+//
+bool OEPortAudio::openEmulations()
+{
+	int error;
+	
+	playing = false;
+	recording = false;
+	
+	error = pthread_mutex_init(&emulationsMutex, NULL);
+	if (!error)
+	{
+		pthread_attr_t attr;
+		error = pthread_attr_init(&attr);
+		if (!error)
+		{
+			sched_param param;
+			
+			error = pthread_attr_getschedparam(&attr, &param);
+			if (!error)
+			{
+				int curr = param.sched_priority;
+				int max = sched_get_priority_max(SCHED_RR);
+				
+				param.sched_priority += (max - curr) / 2;
+				pthread_attr_setschedparam(&attr, &param);
+			}
+			
+			error = pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
+			if (!error)
+			{
+				emulationsThreadShouldRun = true;
+				error = pthread_create(&emulationsThread,
+									   &attr,
+									   oePortAudioRunEmulations,
+									   this);
+				if (!error)
+					return true;
+				else
+					log("could not create eulations thread, error " + getString(error));
+			}
+			else
+				log("could not attr emulations thread, error " + getString(error));
+		}
+		else
+			log("could not init emulations attr, error " + getString(error));
+	}
+	else
+		log("could not init emulations mutex, error " + getString(error));
+	
+	return false;
+}
+
+void OEPortAudio::closeEmulations()
+{
+	if (!emulationsThreadShouldRun)
+		return;
+	
+	emulationsThreadShouldRun = false;
+	
+	pthread_cond_signal(&emulationsCond);
+	
+	void *status;
+	pthread_join(emulationsThread, &status);
+	
+	pthread_mutex_destroy(&emulationsMutex);
+}
+
+void OEPortAudio::lockEmulations()
+{
+	pthread_mutex_lock(&emulationsMutex);
+}
+
+void OEPortAudio::unlockEmulations()
+{
+	pthread_mutex_unlock(&emulationsMutex);
+}
+
+void OEPortAudio::runEmulations()
+{
+	while (emulationsThreadShouldRun)
+	{
+		lockEmulations();
+		
+		if (isEmulationsBufferEmpty())
+			pthread_cond_wait(&emulationsCond, &emulationsMutex);
+		
+		int samplesPerBuffer = framesPerBuffer * channelNum;
+		int bytesPerBuffer = samplesPerBuffer * sizeof(float);
+		
+		float *inputBuffer = getEmulationsInputBuffer();
+		float *outputBuffer = getEmulationsOutputBuffer();
+		
+		// Init output
+		memset(outputBuffer, 0, bytesPerBuffer);
+		
+		// Audio play
+		if (playing)
+			playAudio(inputBuffer, framesPerBuffer, channelNum);
+		
+		// Output
+		HostAudioBuffer buffer =
+		{
+			sampleRate,
+			channelNum,
+			framesPerBuffer,
+			inputBuffer,
+			outputBuffer,
+		};
+		
+		notify(this, HOST_AUDIO_FRAME_WILL_BEGIN, &buffer);
+		notify(this, HOST_AUDIO_FRAME_WILL_RENDER, &buffer);
+		notify(this, HOST_AUDIO_FRAME_WILL_END, &buffer);
+		
+		// Audio recording
+		if (recording)
+			recordAudio(outputBuffer, framesPerBuffer, channelNum);
+		
+		// Audio play through
+		if (playThrough)
+		{
+			for (int i = 0; i < samplesPerBuffer; i++)
+				outputBuffer[i] += inputBuffer[i];
+		}
+		
+		unlockEmulations();
+		
+		advanceEmulationsBuffer();
+	}
+}
+
+//
 // Audio
 //
 bool OEPortAudio::openAudio()
@@ -436,138 +568,6 @@ void OEPortAudio::runTimer()
 		advanceAudioBuffer();
 		
 		pthread_cond_signal(&emulationsCond);
-	}
-}
-
-//
-// Emulations
-//
-bool OEPortAudio::openEmulations()
-{
-	int error;
-	
-	playing = false;
-	recording = false;
-	
-	error = pthread_mutex_init(&emulationsMutex, NULL);
-	if (!error)
-	{
-		pthread_attr_t attr;
-		error = pthread_attr_init(&attr);
-		if (!error)
-		{
-			sched_param param;
-			
-			error = pthread_attr_getschedparam(&attr, &param);
-			if (!error)
-			{
-				int curr = param.sched_priority;
-				int max = sched_get_priority_max(SCHED_RR);
-				
-				param.sched_priority += (max - curr) / 2;
-				pthread_attr_setschedparam(&attr, &param);
-			}
-			
-			error = pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
-			if (!error)
-			{
-				emulationsThreadShouldRun = true;
-				error = pthread_create(&emulationsThread,
-									   &attr,
-									   oePortAudioRunEmulations,
-									   this);
-				if (!error)
-					return true;
-				else
-					log("could not create eulations thread, error " + getString(error));
-			}
-			else
-				log("could not attr emulations thread, error " + getString(error));
-		}
-		else
-			log("could not init emulations attr, error " + getString(error));
-	}
-	else
-		log("could not init emulations mutex, error " + getString(error));
-	
-	return false;
-}
-
-void OEPortAudio::closeEmulations()
-{
-	if (!emulationsThreadShouldRun)
-		return;
-	
-	emulationsThreadShouldRun = false;
-	
-	pthread_cond_signal(&emulationsCond);
-	
-	void *status;
-	pthread_join(emulationsThread, &status);
-	
-	pthread_mutex_destroy(&emulationsMutex);
-}
-
-void OEPortAudio::lockEmulations()
-{
-	pthread_mutex_lock(&emulationsMutex);
-}
-
-void OEPortAudio::unlockEmulations()
-{
-	pthread_mutex_unlock(&emulationsMutex);
-}
-
-void OEPortAudio::runEmulations()
-{
-	while (emulationsThreadShouldRun)
-	{
-		lockEmulations();
-		
-		if (isEmulationsBufferEmpty())
-			pthread_cond_wait(&emulationsCond, &emulationsMutex);
-		
-		int samplesPerBuffer = framesPerBuffer * channelNum;
-		int bytesPerBuffer = samplesPerBuffer * sizeof(float);
-		
-		float *inputBuffer = getEmulationsInputBuffer();
-		float *outputBuffer = getEmulationsOutputBuffer();
-		
-		// Init output
-		memset(outputBuffer, 0, bytesPerBuffer);
-		
-		// Audio play
-		if (playing)
-			playAudio(inputBuffer, framesPerBuffer, channelNum);
-		
-		// Output
-		HostAudioBuffer buffer =
-		{
-			sampleRate,
-			channelNum,
-			framesPerBuffer,
-			inputBuffer,
-			outputBuffer,
-		};
-		
-		notify(this, HOST_AUDIO_FRAME_WILL_BEGIN, &buffer);
-		notify(this, HOST_AUDIO_FRAME_WILL_RENDER, &buffer);
-		notify(this, HOST_AUDIO_FRAME_WILL_END, &buffer);
-		
-		// Audio recording
-		if (recording)
-			recordAudio(outputBuffer, framesPerBuffer, channelNum);
-		
-		// Audio play through
-		if (playThrough)
-		{
-			for (int i = 0; i < samplesPerBuffer; i++)
-				outputBuffer[i] += inputBuffer[i];
-		}
-		
-		unlockEmulations();
-		
-		advanceEmulationsBuffer();
 	}
 }
 

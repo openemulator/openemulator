@@ -123,16 +123,16 @@ bool ControlBus::postMessage(OEComponent *component, int event, void *data)
 				OEComponent::notify(this, CONTROLBUS_NMI_CHANGED, &nmiCount);
 			return true;
 		}
-		case CONTROLBUS_ADD_TIMER:
+		case CONTROLBUS_SCHEDULE:
 			return true;
 			
-		case CONTROLBUS_REMOVE_TIMER:
+		case CONTROLBUS_DESCHEDULE:
 			return true;
 			
-		case CONTROLBUS_GET_CYCLE:
+		case CONTROLBUS_GET_CLOCKCYCLE:
 			return true;
 			
-		case CONTROLBUS_GET_AUDIO_BUFFER_INDEX:
+		case CONTROLBUS_GET_AUDIOBUFFERINDEX:
 			return true;
 	}
 	
