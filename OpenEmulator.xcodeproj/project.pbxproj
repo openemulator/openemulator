@@ -65,7 +65,7 @@
 		00954E781277B79E00C17203 /* DeviceCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00954E771277B79E00C17203 /* DeviceCell.m */; };
 		00954E991277BB8E00C17203 /* DevicesWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00954E981277BB8E00C17203 /* DevicesWindowController.m */; };
 		00954E9E1277BBB400C17203 /* DeviceChooserWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00954E9D1277BBB400C17203 /* DeviceChooserWindowController.m */; };
-		00954EA71277BC1200C17203 /* AudioControlsWindowController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00954EA61277BC1200C17203 /* AudioControlsWindowController.mm */; };
+		00954EA71277BC1200C17203 /* AudioControlsWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00954EA61277BC1200C17203 /* AudioControlsWindowController.m */; };
 		00954EAE1277BC3B00C17203 /* InspectorWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00954EAD1277BC3B00C17203 /* InspectorWindowController.m */; };
 		0095E0B51209E14800C127F5 /* Apple1IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0095E0B11209E14700C127F5 /* Apple1IO.cpp */; };
 		0095E0B71209E14800C127F5 /* Apple1Terminal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0095E0B31209E14700C127F5 /* Apple1Terminal.cpp */; };
@@ -87,7 +87,7 @@
 		00A6300211415E3C005E8500 /* MC6845.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A6300011415E3C005E8500 /* MC6845.cpp */; };
 		00A72B6F12879F650083C6A7 /* CanvasViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00A72B6E12879F650083C6A7 /* CanvasViewController.mm */; };
 		00A72B7012879F690083C6A7 /* CanvasWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00A72B6A12879F530083C6A7 /* CanvasWindowController.m */; };
-		00A72B7312879F800083C6A7 /* CanvasWindow.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00A72B7212879F800083C6A7 /* CanvasWindow.mm */; };
+		00A72B7312879F800083C6A7 /* CanvasWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 00A72B7212879F800083C6A7 /* CanvasWindow.m */; };
 		00A72B951287A0F10083C6A7 /* Canvas.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00A72B931287A0F10083C6A7 /* Canvas.xib */; };
 		00B5709E10863C2A00CDE4A7 /* TemplateChooserWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B5709D10863C2A00CDE4A7 /* TemplateChooserWindowController.m */; };
 		00B703851135ACA5005E4B65 /* OEComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B703731135AC91005E4B65 /* OEComponent.cpp */; };
@@ -264,7 +264,7 @@
 		00954E9C1277BBB400C17203 /* DeviceChooserWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceChooserWindowController.h; sourceTree = "<group>"; };
 		00954E9D1277BBB400C17203 /* DeviceChooserWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceChooserWindowController.m; sourceTree = "<group>"; };
 		00954EA51277BC1200C17203 /* AudioControlsWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioControlsWindowController.h; sourceTree = "<group>"; };
-		00954EA61277BC1200C17203 /* AudioControlsWindowController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AudioControlsWindowController.mm; sourceTree = "<group>"; };
+		00954EA61277BC1200C17203 /* AudioControlsWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioControlsWindowController.m; sourceTree = "<group>"; };
 		00954EAC1277BC3B00C17203 /* InspectorWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InspectorWindowController.h; sourceTree = "<group>"; };
 		00954EAD1277BC3B00C17203 /* InspectorWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InspectorWindowController.m; sourceTree = "<group>"; };
 		0095E09C1209DDB500C127F5 /* KIM1IO.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = KIM1IO.cpp; sourceTree = "<group>"; };
@@ -314,7 +314,7 @@
 		00A72B6D12879F650083C6A7 /* CanvasViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanvasViewController.h; sourceTree = "<group>"; };
 		00A72B6E12879F650083C6A7 /* CanvasViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CanvasViewController.mm; sourceTree = "<group>"; };
 		00A72B7112879F800083C6A7 /* CanvasWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanvasWindow.h; sourceTree = "<group>"; };
-		00A72B7212879F800083C6A7 /* CanvasWindow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CanvasWindow.mm; sourceTree = "<group>"; };
+		00A72B7212879F800083C6A7 /* CanvasWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CanvasWindow.m; sourceTree = "<group>"; };
 		00A72B941287A0F10083C6A7 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Canvas.xib; sourceTree = "<group>"; };
 		00AD746811A2F10E00BAC29C /* DocumentController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DocumentController.mm; sourceTree = "<group>"; };
 		00B5709C10863C2A00CDE4A7 /* TemplateChooserWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TemplateChooserWindowController.h; sourceTree = "<group>"; };
@@ -692,7 +692,7 @@
 				00954E9C1277BBB400C17203 /* DeviceChooserWindowController.h */,
 				00954E9D1277BBB400C17203 /* DeviceChooserWindowController.m */,
 				00954EA51277BC1200C17203 /* AudioControlsWindowController.h */,
-				00954EA61277BC1200C17203 /* AudioControlsWindowController.mm */,
+				00954EA61277BC1200C17203 /* AudioControlsWindowController.m */,
 				00954EAC1277BC3B00C17203 /* InspectorWindowController.h */,
 				00954EAD1277BC3B00C17203 /* InspectorWindowController.m */,
 				00A72B6912879F530083C6A7 /* CanvasWindowController.h */,
@@ -700,7 +700,7 @@
 				00A72B6D12879F650083C6A7 /* CanvasViewController.h */,
 				00A72B6E12879F650083C6A7 /* CanvasViewController.mm */,
 				00A72B7112879F800083C6A7 /* CanvasWindow.h */,
-				00A72B7212879F800083C6A7 /* CanvasWindow.mm */,
+				00A72B7212879F800083C6A7 /* CanvasWindow.m */,
 			);
 			path = macosx;
 			sourceTree = "<group>";
@@ -1001,7 +1001,7 @@
 				00954E781277B79E00C17203 /* DeviceCell.m in Sources */,
 				00954E991277BB8E00C17203 /* DevicesWindowController.m in Sources */,
 				00954E9E1277BBB400C17203 /* DeviceChooserWindowController.m in Sources */,
-				00954EA71277BC1200C17203 /* AudioControlsWindowController.mm in Sources */,
+				00954EA71277BC1200C17203 /* AudioControlsWindowController.m in Sources */,
 				00954EAE1277BC3B00C17203 /* InspectorWindowController.m in Sources */,
 				0049F9231277CFDA00553860 /* DocumentController.mm in Sources */,
 				0067749B1286E721000E843B /* OEOpenGLCanvas.cpp in Sources */,
@@ -1009,7 +1009,7 @@
 				0067749E1286E725000E843B /* OEPortAudioEmulation.cpp in Sources */,
 				00A72B6F12879F650083C6A7 /* CanvasViewController.mm in Sources */,
 				00A72B7012879F690083C6A7 /* CanvasWindowController.m in Sources */,
-				00A72B7312879F800083C6A7 /* CanvasWindow.mm in Sources */,
+				00A72B7312879F800083C6A7 /* CanvasWindow.m in Sources */,
 				0031ECAB1292DA9F005BA276 /* OEOpenGLCanvasController.cpp in Sources */,
 				0031ED871292EBF8005BA276 /* OEDeviceState.cpp in Sources */,
 				0031EDA31292EF98005BA276 /* OEStorage.cpp in Sources */,

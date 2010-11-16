@@ -11,8 +11,6 @@
 #import <Carbon/Carbon.h>
 
 #import "DocumentController.h"
-#import "Document.h"
-#import "TemplateChooserWindowController.h"
 #import "StringConversion.h"
 
 #import "OEPortAudio.h"
@@ -76,11 +74,6 @@
 - (void)toggleAudioControls:(id)sender
 {
 	[fAudioControlsWindowController toggleAudioControls:sender];
-}
-
-- (void *)getOEPortAudio
-{
-	return oePortAudio;
 }
 
 - (NSArray *)getDiskImageFileTypes
@@ -309,14 +302,66 @@
 	return nil;
 }
 
-- (BOOL)addEmulation:(void *)emulation
+- (void)addEmulation:(void *)emulation
 {
+	((OEPortAudio *)oePortAudio)emulation->setOEPortAudio(oePortAudio);
+	
 	return ((OEPortAudio *)oePortAudio)->addEmulation((OEPortAudioEmulation *)emulation);
 }
 
 - (void)removeEmulation:(void *)emulation
 {
 	((OEPortAudio *)oePortAudio)->removeEmulation((OEPortAudioEmulation *)emulation);
+}
+
+- (void)startPlaying:(NSURL *)url
+{
+	((OEPortAudio *)oePortAudio)->startPlaying(getCString([url path]));
+}
+
+- (void)stopPlaying
+{
+	((OEPortAudio *)oePortAudio)->stopPlaying();
+}
+
+- (BOOL)isPlaying
+{
+	return ((OEPortAudio *)oePortAudio)->isPlaying();
+}
+
+- (float)getPlayTime
+{
+	return ((OEPortAudio *)oePortAudio)->getPlayTime();
+}
+
+- (float)getPlayDuration
+{
+	return ((OEPortAudio *)oePortAudio)->getPlayDuration();
+}
+
+- (void)startRecording:(NSURL *)url
+{
+	((OEPortAudio *)oePortAudio)->startRecording(getCString([url path]));
+}
+
+- (void)stopRecording
+{
+	return ((OEPortAudio *)oePortAudio)->stopRecording();
+}
+
+- (BOOL)isRecording
+{
+	return ((OEPortAudio *)oePortAudio)->isRecording();
+}
+
+- (float)getRecordingTime
+{
+	return ((OEPortAudio *)oePortAudio)->getRecordingTime();
+}
+
+- (long long)getRecordingSize
+{
+	return ((OEPortAudio *)oePortAudio)->getRecordingSize();
 }
 
 - (void)disableMenuBar

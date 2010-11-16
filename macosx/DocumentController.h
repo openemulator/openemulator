@@ -8,14 +8,19 @@
  * Controls all emulations.
  */
 
-#import "AudioControlsWindowController.h"
-
 #import <Cocoa/Cocoa.h>
 
+#import "InspectorWindowController.h"
+#import "AudioControlsWindowController.h"
+#import "TemplateChooserWindowController.h"
+
+@class AudioControlsWindowController;
+@class TemplateChooserWindowController;
+
 @interface DocumentController : NSDocumentController {
-	IBOutlet id fInspectorWindowController;
-	IBOutlet id fAudioControlsWindowController;
-	IBOutlet id fTemplateChooserWindowController;
+	IBOutlet InspectorWindowController *fInspectorWindowController;
+	IBOutlet AudioControlsWindowController *fAudioControlsWindowController;
+	IBOutlet TemplateChooserWindowController *fTemplateChooserWindowController;
 	
 	void *oePortAudio;
 	
@@ -28,7 +33,6 @@
 - (void)toggleInspector:(id)sender;
 - (void)toggleAudioControls:(id)sender;
 
-- (void *)getOEPortAudio;
 - (NSArray *)getDiskImageFileTypes;
 - (NSArray *)getAudioFileTypes;
 
@@ -41,6 +45,17 @@
 
 - (BOOL)addEmulation:(void *)emulation;
 - (void)removeEmulation:(void *)emulation;
+
+- (void)startPlaying:(NSURL *)url;
+- (void)stopPlaying;
+- (BOOL)isPlaying;
+- (float)getPlayTime;
+- (float)getPlayDuration;
+- (void)startRecording:(NSURL *)url;
+- (void)stopRecording;
+- (BOOL)isRecording;
+- (float)getRecordingTime;
+- (long long)getRecordingSize;
 
 - (void)disableMenuBar;
 - (void)enableMenuBar;

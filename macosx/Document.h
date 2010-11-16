@@ -10,17 +10,16 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "DevicesWindowController.h"
-
 #define TEMPLATE_FOLDER @"~/Library/Application Support/OpenEmulator/Templates"
+
+@class DevicesWindowController;
 
 @interface Document : NSDocument
 {
 	void *emulation;
 	
-	NSMutableArray *freeInlets;
-	
 	NSMutableArray *devices;
+	NSMutableArray *freePorts;
 	
 	DevicesWindowController *devicesWindowController;
 }

@@ -61,7 +61,6 @@ public:
 	bool isPlaying();
 	float getPlayTime();
 	float getPlayDuration();
-	
 	bool startRecording(string path);
 	void stopRecording();
 	bool isRecording();

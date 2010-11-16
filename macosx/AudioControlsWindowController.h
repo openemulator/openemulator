@@ -10,9 +10,13 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "DocumentController.h"
+
+@class DocumentController;
+
 @interface AudioControlsWindowController : NSWindowController
 {
-	IBOutlet id fDocumentController;
+	IBOutlet DocumentController *fDocumentController;
 	
 	IBOutlet id fPlayNameLabel;
 	IBOutlet id fPlayTimeLabel;
@@ -26,8 +30,6 @@
 	IBOutlet id fSaveRecordingAsButton;
 	
 	NSTimer *timer;
-	
-	void *oePortAudio;
 	
 	NSURL *playURL;
 	NSURL *recordingURL;

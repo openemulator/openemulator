@@ -10,6 +10,7 @@
 
 #import "Document.h"
 #import "DocumentController.h"
+#import "DevicesWindowController.h"
 #import "StringConversion.h"
 
 #import "OEPortAudioEmulation.h"
@@ -22,7 +23,7 @@
 	{
 		emulation = nil;
 		
-		freeInlets = [[NSMutableArray alloc] init];
+		freePorts = [[NSMutableArray alloc] init];
 		
 		devices = [[NSMutableArray alloc] init];
 		
@@ -53,7 +54,7 @@
 {
 	[self deleteEmulation];
 	
-	[freeInlets release];
+	[freePorts release];
 	
 	[devices release];
 	
@@ -72,24 +73,13 @@
 	DocumentController *documentController;
 	documentController = [NSDocumentController sharedDocumentController];
 	
-	OEPortAudio *oePortAudio = (OEPortAudio *)[documentController getOEPortAudio];
+	OEPortAudioEmulation *theEmulation = new OEPortAudioEmulation();
 	
-	string path = getCString([url path]);
-	string resourcePath = getCString([[NSBundle mainBundle] resourcePath]);
+	theEmulation->setResourcePath(getCString([[NSBundle mainBundle] resourcePath]));
+	theEmulation->setComponent("hostAudio", (OEComponent *)oePortAudio);
+	theEmulation->setComponent("hostStorage", (OEComponent *)oePortAudio);
 	
-	emulation = new OEPortAudioEmulation();
-	
-	((OEPortAudioEmulation *)emulation)->setResourcePath(resourcePath);
-	((OEPortAudioEmulation *)emulation)->setOEPortAudio(oePortAudio);
-	
-	((OEPortAudioEmulation *)emulation)->setComponent("hostAudio",
-													  (OEComponent *)oePortAudio);
-	((OEPortAudioEmulation *)emulation)->setComponent("hostStorage",
-													  (OEComponent *)oePortAudio);
-	((OEPortAudioEmulation *)emulation)->setComponent("hostCanvas",
-													  (OEComponent *)oePortAudio);
-	
-	((OEPortAudioEmulation *)emulation)->open(path);
+	theEmulation->open(getCString([url path]));
 	
 	[documentController addEmulation:emulation];
 }
@@ -109,27 +99,6 @@
 - (void *)emulation
 {
 	return emulation;
-}
-
-- (int)postMessage:(NSString *)device
-		   message:(int)message
-			  data:(void *)data
-{
-/*	return ((OEPortAudioEmulation *)emulation)->postMessage(getString(device),
-															message,
-															data);
- */
-}
-
-- (void)notify:(NSString *)device
-  notification:(int)notification
-		  data:(void *)data
-{
-/*
- ((OEPortAudioEmulation *)emulation)->notify(getString(device),
-												notification,
-												data);
- */
 }
 
 - (NSImage *)getResourceImage:(NSString *)imagePath
@@ -188,7 +157,7 @@
 	int count;
 	
 	// Clean up
-	[freeInlets removeAllObjects];
+	[freePorts removeAllObjects];
 	
 	count = [devices count];
 	for (int i = 0; i < count; i++)
@@ -416,9 +385,9 @@
 	[windowController release];*/
 }
 
-- (NSMutableArray *)freeInlets
+- (NSMutableArray *)freePorts
 {
-	return freeInlets;
+	return freePorts;
 }
 
 - (NSMutableArray *)devices
