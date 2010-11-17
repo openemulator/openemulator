@@ -147,31 +147,6 @@ void OEPortAudio::close()
 	closeEmulations();
 }
 
-bool OEPortAudio::addEmulation(OEPortAudioEmulation *emulation)
-{
-	lockEmulations();
-	
-	emulations.push_back(emulation);
-	
-	unlockEmulations();
-	
-	return true;
-}
-
-void OEPortAudio::removeEmulation(OEPortAudioEmulation *emulation)
-{
-	lockEmulations();
-	
-	OEPortAudioEmulations::iterator first = emulations.begin();
-	OEPortAudioEmulations::iterator last = emulations.end();
-	OEPortAudioEmulations::iterator i = remove(first, last, emulation);
-	
-	if (i != last)
-		emulations.erase(i, last);
-	
-	unlockEmulations();
-}
-
 //
 // Audio buffering
 //
@@ -369,6 +344,31 @@ void OEPortAudio::runEmulations()
 		
 		advanceEmulationsBuffer();
 	}
+}
+
+bool OEPortAudio::addEmulation(OEPortAudioEmulation *emulation)
+{
+	lockEmulations();
+	
+	emulations.push_back(emulation);
+	
+	unlockEmulations();
+	
+	return true;
+}
+
+void OEPortAudio::removeEmulation(OEPortAudioEmulation *emulation)
+{
+	lockEmulations();
+	
+	OEPortAudioEmulations::iterator first = emulations.begin();
+	OEPortAudioEmulations::iterator last = emulations.end();
+	OEPortAudioEmulations::iterator i = remove(first, last, emulation);
+	
+	if (i != last)
+		emulations.erase(i, last);
+	
+	unlockEmulations();
 }
 
 //

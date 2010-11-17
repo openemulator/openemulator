@@ -23,15 +23,26 @@
 typedef map<string, string> OEIdMap;
 typedef vector<string> OEIdList;
 
-struct OEEDLInfo
+typedef struct
 {
+	string type;
 	string label;
 	string image;
 	string description;
-	string windowFrame;
-};
+} OEEDLInfo;
 
-struct OEDeviceInfo
+typedef struct
+{
+	string ref;
+	string property;
+	string type;
+	string options;
+	string label;
+} OESettingInfo;
+
+typedef vector<OESettingInfo> OESettingsInfo;
+
+typedef struct
 {
 	string id;
 	string type;
@@ -39,18 +50,19 @@ struct OEDeviceInfo
 	string image;
 	
 	string connectionLabel;
-};
+	
+	OESettingsInfo settingsInfo;
+} OEDeviceInfo;
 
 typedef vector<OEDeviceInfo> OEDevicesInfo;
 
-struct OEPortInfo
+typedef struct
 {
 	string id;
-	string ref;
 	string type;
 	string label;
 	string image;
-};
+} OEPortInfo;
 
 typedef vector<OEPortInfo> OEPortsInfo;
 
@@ -70,9 +82,10 @@ public:
 	void close();
 	
 	OEEDLInfo getEDLInfo();
-	bool setEDLInfo(OEEDLInfo edlInfo);
+	void setWindowFrame(string windowFrame);
+	string getWindowFrame();
 	OEDevicesInfo getDevicesInfo();
-	OEPortsInfo getPortsInfo();
+	OEPortsInfo getFreePortsInfo();
 	OEConnectorsInfo getConnectorsInfo();
 	
 	bool addEDL(string path, OEIdMap idMap);

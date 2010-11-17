@@ -22,10 +22,10 @@
 	IBOutlet AudioControlsWindowController *fAudioControlsWindowController;
 	IBOutlet TemplateChooserWindowController *fTemplateChooserWindowController;
 	
-	void *oePortAudio;
-	
 	NSArray *diskImageFileTypes;
 	NSArray *audioFileTypes;
+	
+	void *oePortAudio;
 	
 	int disableMenuBarCount;
 }
@@ -35,6 +35,7 @@
 
 - (NSArray *)getDiskImageFileTypes;
 - (NSArray *)getAudioFileTypes;
+- (void *)getOEPortAudio;
 
 - (IBAction)newDocumentFromTemplateChooser:(id)sender;
 - (id)openUntitledDocumentWithTemplateURL:(NSURL *)absoluteURL

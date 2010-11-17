@@ -58,11 +58,11 @@
 		00679D09100817F700B38748 /* TemplateChooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00679D06100817F700B38748 /* TemplateChooser.xib */; };
 		0071E3BA10803F7300F2D54F /* ChooserItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 0071E3B910803F7300F2D54F /* ChooserItem.m */; };
 		0078F655127348ED0042577E /* AudioControls.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0078F653127348ED0042577E /* AudioControls.xib */; };
-		008107DE1120C57600D744FB /* TemplateChooserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00FE0C051095353B00B92AB7 /* TemplateChooserViewController.m */; };
+		008107DE1120C57600D744FB /* TemplateChooserViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00FE0C051095353B00B92AB7 /* TemplateChooserViewController.mm */; };
 		008F01F7124D138100C69D97 /* FloatingBus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 008F01F5124D138100C69D97 /* FloatingBus.cpp */; };
 		00954E661277B68A00C17203 /* DevicesMount.png in Resources */ = {isa = PBXBuildFile; fileRef = 00954E641277B68A00C17203 /* DevicesMount.png */; };
 		00954E671277B68A00C17203 /* DevicesUnmount.png in Resources */ = {isa = PBXBuildFile; fileRef = 00954E651277B68A00C17203 /* DevicesUnmount.png */; };
-		00954E781277B79E00C17203 /* DeviceCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00954E771277B79E00C17203 /* DeviceCell.m */; };
+		00954E781277B79E00C17203 /* DevicesCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00954E771277B79E00C17203 /* DevicesCell.m */; };
 		00954E991277BB8E00C17203 /* DevicesWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00954E981277BB8E00C17203 /* DevicesWindowController.m */; };
 		00954E9E1277BBB400C17203 /* DeviceChooserWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00954E9D1277BBB400C17203 /* DeviceChooserWindowController.m */; };
 		00954EA71277BC1200C17203 /* AudioControlsWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00954EA61277BC1200C17203 /* AudioControlsWindowController.m */; };
@@ -98,7 +98,6 @@
 		00BADDC51100EDC600EB0344 /* ConnectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00BADD451100BE8300EB0344 /* ConnectorViewController.m */; };
 		00C3CF9011F557A000EA2453 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00C3CF8D11F557A000EA2453 /* main.cpp */; };
 		00C3CF9111F557A000EA2453 /* SDLMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 00C3CF8F11F557A000EA2453 /* SDLMain.m */; };
-		00C4808C128789BA0002DF1C /* OEInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B703791135AC91005E4B65 /* OEInfo.cpp */; };
 		00C5805F109A3DDF00B00626 /* libportaudio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C5805D109A3DDF00B00626 /* libportaudio.a */; };
 		00C58060109A3DDF00B00626 /* libzip.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C5805E109A3DDF00B00626 /* libzip.a */; };
 		00C58073109A3E9D00B00626 /* libz.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C58072109A3E9D00B00626 /* libz.a */; };
@@ -144,7 +143,7 @@
 		00EF028D107D9EFB00FE378D /* VerticallyCenteredCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00EF028C107D9EFB00FE378D /* VerticallyCenteredCell.m */; };
 		00F0ED6711028C8800208090 /* DiskImage525.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000F66390FF8368F00C8AF23 /* DiskImage525.icns */; };
 		00FE0C171095371B00B92AB7 /* ChooserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00FE0C161095371B00B92AB7 /* ChooserViewController.m */; };
-		00FE0C6310953F7000B92AB7 /* DeviceChooserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00FE0C6210953F7000B92AB7 /* DeviceChooserViewController.m */; };
+		00FE0C6310953F7000B92AB7 /* DeviceChooserViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00FE0C6210953F7000B92AB7 /* DeviceChooserViewController.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -257,8 +256,8 @@
 		008F01F5124D138100C69D97 /* FloatingBus.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FloatingBus.cpp; sourceTree = "<group>"; };
 		00954E641277B68A00C17203 /* DevicesMount.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = DevicesMount.png; path = macosx/Images/DevicesMount.png; sourceTree = "<group>"; };
 		00954E651277B68A00C17203 /* DevicesUnmount.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = DevicesUnmount.png; path = macosx/Images/DevicesUnmount.png; sourceTree = "<group>"; };
-		00954E761277B79E00C17203 /* DeviceCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceCell.h; sourceTree = "<group>"; };
-		00954E771277B79E00C17203 /* DeviceCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceCell.m; sourceTree = "<group>"; };
+		00954E761277B79E00C17203 /* DevicesCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DevicesCell.h; sourceTree = "<group>"; };
+		00954E771277B79E00C17203 /* DevicesCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DevicesCell.m; sourceTree = "<group>"; };
 		00954E971277BB8E00C17203 /* DevicesWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DevicesWindowController.h; sourceTree = "<group>"; };
 		00954E981277BB8E00C17203 /* DevicesWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DevicesWindowController.m; sourceTree = "<group>"; };
 		00954E9C1277BBB400C17203 /* DeviceChooserWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceChooserWindowController.h; sourceTree = "<group>"; };
@@ -325,7 +324,6 @@
 		00B703761135AC91005E4B65 /* OEComponentFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEComponentFactory.h; sourceTree = "<group>"; };
 		00B703771135AC91005E4B65 /* OEEmulation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEEmulation.cpp; sourceTree = "<group>"; };
 		00B703781135AC91005E4B65 /* OEEmulation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEEmulation.h; sourceTree = "<group>"; };
-		00B703791135AC91005E4B65 /* OEInfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEInfo.cpp; sourceTree = "<group>"; };
 		00B7037B1135AC91005E4B65 /* OEPackage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEPackage.cpp; sourceTree = "<group>"; };
 		00B7037C1135AC91005E4B65 /* OEPackage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEPackage.h; sourceTree = "<group>"; };
 		00B974AD10701DCD00BD1402 /* sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; path = sounds; sourceTree = "<group>"; };
@@ -384,10 +382,10 @@
 		00FA328C11F7647E000B9574 /* OETypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OETypes.h; sourceTree = "<group>"; };
 		00FE0C00109534CE00B92AB7 /* ChooserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChooserViewController.h; sourceTree = "<group>"; };
 		00FE0C041095353B00B92AB7 /* TemplateChooserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TemplateChooserViewController.h; sourceTree = "<group>"; };
-		00FE0C051095353B00B92AB7 /* TemplateChooserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TemplateChooserViewController.m; sourceTree = "<group>"; };
+		00FE0C051095353B00B92AB7 /* TemplateChooserViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TemplateChooserViewController.mm; sourceTree = "<group>"; };
 		00FE0C071095354300B92AB7 /* DeviceChooserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceChooserViewController.h; sourceTree = "<group>"; };
 		00FE0C161095371B00B92AB7 /* ChooserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChooserViewController.m; sourceTree = "<group>"; };
-		00FE0C6210953F7000B92AB7 /* DeviceChooserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceChooserViewController.m; sourceTree = "<group>"; };
+		00FE0C6210953F7000B92AB7 /* DeviceChooserViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DeviceChooserViewController.mm; sourceTree = "<group>"; };
 		8D15AC370486D014006FF6A4 /* OpenEmulator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenEmulator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -516,7 +514,6 @@
 				00B703761135AC91005E4B65 /* OEComponentFactory.h */,
 				00B703771135AC91005E4B65 /* OEEmulation.cpp */,
 				00B703781135AC91005E4B65 /* OEEmulation.h */,
-				00B703791135AC91005E4B65 /* OEInfo.cpp */,
 				00B7037B1135AC91005E4B65 /* OEPackage.cpp */,
 				00B7037C1135AC91005E4B65 /* OEPackage.h */,
 				00FA328C11F7647E000B9574 /* OETypes.h */,
@@ -661,7 +658,7 @@
 			isa = PBXGroup;
 			children = (
 				00AD746811A2F10E00BAC29C /* DocumentController.mm */,
-				00FE0C6210953F7000B92AB7 /* DeviceChooserViewController.m */,
+				00FE0C6210953F7000B92AB7 /* DeviceChooserViewController.mm */,
 				00FE0C161095371B00B92AB7 /* ChooserViewController.m */,
 				00A0B8031069761A007930A5 /* Document.mm */,
 				00A0B7B81068949D007930A5 /* Document.h */,
@@ -678,15 +675,15 @@
 				00B5709D10863C2A00CDE4A7 /* TemplateChooserWindowController.m */,
 				00FE0C00109534CE00B92AB7 /* ChooserViewController.h */,
 				00FE0C041095353B00B92AB7 /* TemplateChooserViewController.h */,
-				00FE0C051095353B00B92AB7 /* TemplateChooserViewController.m */,
+				00FE0C051095353B00B92AB7 /* TemplateChooserViewController.mm */,
 				00FE0C071095354300B92AB7 /* DeviceChooserViewController.h */,
 				00BADD441100BE8300EB0344 /* ConnectorViewController.h */,
 				00BADD451100BE8300EB0344 /* ConnectorViewController.m */,
 				006115C011DD0347008AA3EE /* Application.h */,
 				006115C111DD0347008AA3EE /* Application.m */,
 				002579FB1218A83400206E56 /* StringConversion.h */,
-				00954E761277B79E00C17203 /* DeviceCell.h */,
-				00954E771277B79E00C17203 /* DeviceCell.m */,
+				00954E761277B79E00C17203 /* DevicesCell.h */,
+				00954E771277B79E00C17203 /* DevicesCell.m */,
 				00954E971277BB8E00C17203 /* DevicesWindowController.h */,
 				00954E981277BB8E00C17203 /* DevicesWindowController.m */,
 				00954E9C1277BBB400C17203 /* DeviceChooserWindowController.h */,
@@ -850,7 +847,6 @@
 			isa = PBXProject;
 			buildConfigurationList = C05733CB08A9546B00998B17 /* Build configuration list for PBXProject "OpenEmulator" */;
 			compatibilityVersion = "Xcode 3.1";
-			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
 				English,
@@ -979,7 +975,6 @@
 				006774A41286E764000E843B /* AppleIISlotMemory.cpp in Sources */,
 				006774A51286E765000E843B /* AppleIISlotExpansionMemory.cpp in Sources */,
 				006774A61286E772000E843B /* KIM1IO.cpp in Sources */,
-				00C4808C128789BA0002DF1C /* OEInfo.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -994,11 +989,11 @@
 				0071E3BA10803F7300F2D54F /* ChooserItem.m in Sources */,
 				00B5709E10863C2A00CDE4A7 /* TemplateChooserWindowController.m in Sources */,
 				00FE0C171095371B00B92AB7 /* ChooserViewController.m in Sources */,
-				00FE0C6310953F7000B92AB7 /* DeviceChooserViewController.m in Sources */,
+				00FE0C6310953F7000B92AB7 /* DeviceChooserViewController.mm in Sources */,
 				00BADDC51100EDC600EB0344 /* ConnectorViewController.m in Sources */,
-				008107DE1120C57600D744FB /* TemplateChooserViewController.m in Sources */,
+				008107DE1120C57600D744FB /* TemplateChooserViewController.mm in Sources */,
 				006115C211DD0347008AA3EE /* Application.m in Sources */,
-				00954E781277B79E00C17203 /* DeviceCell.m in Sources */,
+				00954E781277B79E00C17203 /* DevicesCell.m in Sources */,
 				00954E991277BB8E00C17203 /* DevicesWindowController.m in Sources */,
 				00954E9E1277BBB400C17203 /* DeviceChooserWindowController.m in Sources */,
 				00954EA71277BC1200C17203 /* AudioControlsWindowController.m in Sources */,

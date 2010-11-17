@@ -66,8 +66,6 @@ bool OEComponent::addObserver(OEComponent *observer, int notification)
 {
 	observers[notification].push_back(observer);
 	
-	log("add not " + getString(notification) + " size " + getString(observers[notification].size()));
-	
 	return true;
 }
 
@@ -79,8 +77,6 @@ bool OEComponent::removeObserver(OEComponent *observer, int notification)
 	
 	if (i != last)
 		observers[notification].erase(i, last);
-	
-	log("rem not " + getString(notification) + " size " + getString(observers[notification].size()));
 	
 	return (i != last);
 }

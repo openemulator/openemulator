@@ -1,16 +1,16 @@
 
 /**
  * OpenEmulator
- * Mac OS X Device Cell
- * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
+ * Mac OS X Devices Cell
+ * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls an device cell.
+ * Controls a devices cell.
  */
 
-#import "DeviceCell.h"
+#import "DevicesCell.h"
 
-@implementation DeviceCell
+@implementation DevicesCell
 
 - (void)drawInteriorWithFrame:(NSRect)cellFrame inView:(NSView *)controlView
 {

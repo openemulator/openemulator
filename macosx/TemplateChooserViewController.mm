@@ -9,8 +9,11 @@
  */
 
 #import "TemplateChooserViewController.h"
-#import "ChooserItem.h"
 #import "Document.h"
+#import "ChooserItem.h"
+#import "StringConversion.h"
+
+#import "OEEDL.h"
 
 @implementation TemplateChooserViewController
 
@@ -58,19 +61,21 @@
 								  contentsOfDirectoryAtPath:path
 								  error:nil];
 	
-/*	int templateFilenamesCount = [templateFilenames count];
+	int templateFilenamesCount = [templateFilenames count];
 	for (int i = 0; i < templateFilenamesCount; i++)
 	{
 		NSString *templateFilename = [templateFilenames objectAtIndex:i];
 		NSString *templatePath = [path stringByAppendingPathComponent:templateFilename];
-		OEInfo info;
-		info.open(getString(templatePath));
-		if (info.isOpen())
+		
+		OEEDL edl;
+		edl.open(getCString(templatePath));
+		if (edl.isOpen())
 		{
-			NSString *groupName = getNSString(info.getType());
-			NSString *label = getNSString(info.getLabel());
-			NSString *imageName = getNSString(info.getImage());
-			NSString *description = getNSString(info.getDescription());
+			OEEDLInfo edlInfo = edl.getEDLInfo();
+			NSString *groupName = getNSString(edlInfo.type);
+			NSString *label = getNSString(edlInfo.label);
+			NSString *imageName = getNSString(edlInfo.image);
+			NSString *description = getNSString(edlInfo.description);
 			
 			if (theGroupName)
 				groupName = theGroupName;
@@ -92,7 +97,7 @@
 				[[groups objectForKey:groupName] addObject:item];
 			}
 		}
-	}*/
+	}
 }
 
 @end

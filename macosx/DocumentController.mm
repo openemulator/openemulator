@@ -11,6 +11,7 @@
 #import <Carbon/Carbon.h>
 
 #import "DocumentController.h"
+#import "Document.h"
 #import "StringConversion.h"
 
 #import "OEPortAudio.h"
@@ -84,6 +85,11 @@
 - (NSArray *)getAudioFileTypes
 {
 	return audioFileTypes;
+}
+
+- (void *)getOEPortAudio
+{
+	return oePortAudio;
 }
 
 - (void)applicationWillFinishLaunching:(NSNotification *)notification
@@ -302,10 +308,8 @@
 	return nil;
 }
 
-- (void)addEmulation:(void *)emulation
+- (BOOL)addEmulation:(void *)emulation
 {
-	((OEPortAudio *)oePortAudio)emulation->setOEPortAudio(oePortAudio);
-	
 	return ((OEPortAudio *)oePortAudio)->addEmulation((OEPortAudioEmulation *)emulation);
 }
 

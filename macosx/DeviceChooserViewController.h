@@ -17,8 +17,7 @@
 	NSMutableArray *infos;
 }
 
-- (void)updateForDeviceType:(NSString *)deviceType
-			 withFreeInlets:(NSArray *)freeInlets;
+- (void)updateForPorts:(NSArray *)ports;
 - (NSMutableArray *)selectedItemOutlets;
 
 @end

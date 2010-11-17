@@ -55,9 +55,7 @@
 	[self deleteEmulation];
 	
 	[freePorts release];
-	
 	[devices release];
-	
 	[devicesWindowController release];
 	
 	[super dealloc];
@@ -72,16 +70,19 @@
 {
 	DocumentController *documentController;
 	documentController = [NSDocumentController sharedDocumentController];
+	OEPortAudio *oePortAudio = (OEPortAudio *)[documentController getOEPortAudio];
 	
 	OEPortAudioEmulation *theEmulation = new OEPortAudioEmulation();
-	
 	theEmulation->setResourcePath(getCString([[NSBundle mainBundle] resourcePath]));
+	theEmulation->setOEPortAudio(oePortAudio);
 	theEmulation->setComponent("hostAudio", (OEComponent *)oePortAudio);
 	theEmulation->setComponent("hostStorage", (OEComponent *)oePortAudio);
 	
 	theEmulation->open(getCString([url path]));
 	
-	[documentController addEmulation:emulation];
+	[documentController addEmulation:theEmulation];
+	
+	emulation = theEmulation;
 }
 
 - (void)deleteEmulation

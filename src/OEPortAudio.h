@@ -44,12 +44,11 @@ public:
 	bool open();
 	void close();
 	
-	bool addEmulation(OEPortAudioEmulation *emulation);
-	void removeEmulation(OEPortAudioEmulation *emulation);
-	
 	void lockEmulations();
 	void unlockEmulations();
 	void runEmulations();
+	bool addEmulation(OEPortAudioEmulation *emulation);
+	void removeEmulation(OEPortAudioEmulation *emulation);
 	
 	void runAudio(const float *input,
 				  float *output,

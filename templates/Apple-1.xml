@@ -88,7 +88,7 @@
 </component>
 <component id="apple1.charset" class="CharsetLoader">
     <property name="format" value="Signetics" />
-    <property name="image" src="${resourcesPath}/roms/Signetics/Signetics 2513 Video ROM.bin" />
+    <property name="image" src="${resourcePath}/roms/Signetics/Signetics 2513 Video ROM.bin" />
 </component>
 <component id="apple1.ram2" class="RAM">
     <property name="controlBus" ref="appl1.controlBus" />
@@ -96,7 +96,7 @@
     <property name="size" value="0x1000" />
 </component>
 <component id="apple1.rom" class="ROM">
-    <property name="image" src="${resourcesPath}/roms/Early microcomputers/Apple I Monitor ROM.bin" />
+    <property name="image" src="${resourcePath}/roms/Early microcomputers/Apple I Monitor ROM.bin" />
 </component>
 
 </edl>
