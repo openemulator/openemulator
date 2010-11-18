@@ -29,7 +29,7 @@ typedef struct
 	string label;
 	string image;
 	string description;
-} OEEDLInfo;
+} OEHeaderInfo;
 
 typedef struct
 {
@@ -81,12 +81,12 @@ public:
 	bool save(string path);
 	void close();
 	
-	OEEDLInfo getEDLInfo();
+	OEHeaderInfo getHeaderInfo();
 	void setWindowFrame(string windowFrame);
 	string getWindowFrame();
 	OEDevicesInfo getDevicesInfo();
 	OEPortsInfo getFreePortsInfo();
-	OEConnectorsInfo getConnectorsInfo();
+	OEConnectorsInfo getFreeConnectorsInfo();
 	
 	bool addEDL(string path, OEIdMap idMap);
 	bool removeDevice(string id);

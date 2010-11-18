@@ -14,10 +14,10 @@
 
 @interface DeviceChooserViewController : ChooserViewController
 {
-	NSMutableArray *infos;
+	NSMutableArray *edlInfos;
 }
 
 - (void)updateForPorts:(NSArray *)ports;
-- (NSMutableArray *)selectedItemOutlets;
+- (NSMutableArray *)selectedItemConnectors;
 
 @end

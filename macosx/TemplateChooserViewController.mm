@@ -21,8 +21,7 @@
 {
 	[super awakeFromNib];
 	
-	NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
-	NSString *templatesPath = [resourcePath
+	NSString *templatesPath = [[[NSBundle mainBundle] resourcePath]
 							   stringByAppendingPathComponent:@"templates"];
 	
 	[self addTemplatesFromPath:templatesPath
@@ -55,27 +54,24 @@
 - (void)addTemplatesFromPath:(NSString *)path
 				setGroupName:(NSString *)theGroupName
 {
-	NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
+	NSArray *edlFilenames = [[NSFileManager defaultManager]
+							 contentsOfDirectoryAtPath:path
+							 error:nil];
 	
-	NSArray *templateFilenames = [[NSFileManager defaultManager]
-								  contentsOfDirectoryAtPath:path
-								  error:nil];
-	
-	int templateFilenamesCount = [templateFilenames count];
-	for (int i = 0; i < templateFilenamesCount; i++)
+	for (int i = 0; i < [edlFilenames count]; i++)
 	{
-		NSString *templateFilename = [templateFilenames objectAtIndex:i];
-		NSString *templatePath = [path stringByAppendingPathComponent:templateFilename];
+		NSString *edlFilename = [edlFilenames objectAtIndex:i];
+		NSString *edlPath = [path stringByAppendingPathComponent:edlFilename];
 		
 		OEEDL edl;
-		edl.open(getCString(templatePath));
+		edl.open(getCString(edlPath));
 		if (edl.isOpen())
 		{
-			OEEDLInfo edlInfo = edl.getEDLInfo();
-			NSString *groupName = getNSString(edlInfo.type);
-			NSString *label = getNSString(edlInfo.label);
-			NSString *imageName = getNSString(edlInfo.image);
-			NSString *description = getNSString(edlInfo.description);
+			OEHeaderInfo headerInfo = edl.getHeaderInfo();
+			NSString *groupName = getNSString(headerInfo.type);
+			NSString *label = getNSString(headerInfo.label);
+			NSString *imageName = getNSString(headerInfo.image);
+			NSString *description = getNSString(headerInfo.description);
 			
 			if (theGroupName)
 				groupName = theGroupName;
@@ -86,11 +82,13 @@
 				[groups setObject:group forKey:groupName];
 			}
 			
+			NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
 			NSString *imagePath = [resourcePath stringByAppendingPathComponent:imageName];
 			ChooserItem *item = [[ChooserItem alloc] initWithTitle:label
 														  subtitle:description
 														 imagePath:imagePath
-															  data:templatePath];
+														   edlPath:edlPath
+															  data:nil];
 			if (item)
 			{
 				[item autorelease];

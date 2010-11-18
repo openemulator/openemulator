@@ -15,7 +15,8 @@
 - (id)initWithTitle:(NSString *)theTitle
 		   subtitle:(NSString *)theSubtitle
 		  imagePath:(NSString *)theImagePath
-			   data:(NSString *)theData
+			edlPath:(NSString *)theEDLPath
+			   data:(void *)theData
 {
 	if (self = [super init])
 	{
@@ -28,8 +29,10 @@
 		if (theImagePath)
 			imagePath = [theImagePath copy];
 		
-		if (theData)
-			data = [theData copy];
+		if (theEDLPath)
+			edlPath = [theEDLPath copy];
+		
+		data = theData;
 	}
 	
 	return self;
@@ -40,7 +43,7 @@
     [title release];
     [subtitle release];
     [imagePath release];
-    [data release];
+    [edlPath release];
 	
     [super dealloc];
 }
@@ -67,12 +70,17 @@
 
 - (NSString *)imageUID
 {
-    return [[data retain] autorelease];
+    return [[edlPath retain] autorelease];
 }
 
-- (NSString *)data
+- (NSString *)edlPath
 {
-	return [[data retain] autorelease];
+	return edlPath;
+}
+
+- (void *)data
+{
+	return data;
 }
 
 @end

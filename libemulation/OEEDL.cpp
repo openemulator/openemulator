@@ -170,20 +170,20 @@ void OEEDL::close()
 	package = NULL;
 }
 
-OEEDLInfo OEEDL::getEDLInfo()
+OEHeaderInfo OEEDL::getHeaderInfo()
 {
-	OEEDLInfo edlInfo;
+	OEHeaderInfo headerInfo;
 	
 	if (doc)
 	{
 		xmlNodePtr node = xmlDocGetRootElement(doc);
-		edlInfo.type = getNodeProperty(node, "type");
-		edlInfo.label = getNodeProperty(node, "label");
-		edlInfo.image = getNodeProperty(node, "image");
-		edlInfo.description = getNodeProperty(node, "description");
+		headerInfo.type = getNodeProperty(node, "type");
+		headerInfo.label = getNodeProperty(node, "label");
+		headerInfo.image = getNodeProperty(node, "image");
+		headerInfo.description = getNodeProperty(node, "description");
 	}
 	
-	return edlInfo;
+	return headerInfo;
 }
 
 void OEEDL::setWindowFrame(string windowFrame)
@@ -232,7 +232,7 @@ OEPortsInfo OEEDL::getFreePortsInfo()
 	return freePortsInfo;
 }
 
-OEConnectorsInfo OEEDL::getConnectorsInfo()
+OEConnectorsInfo OEEDL::getFreeConnectorsInfo()
 {
 	OEConnectorsInfo connectorsInfo;
 	

@@ -36,9 +36,9 @@
 - (void)addEDL:(NSString *)path connections:(NSDictionary *)connections;
 - (void)removeDevice:(NSDictionary *)dict;
 
-- (NSMutableArray *)freeInlets;
+- (NSArray *)freePorts;
 
-- (NSMutableArray *)devices;
+- (NSArray *)devices;
 - (void)insertObject:(id)value inDevicesAtIndex:(NSUInteger)index;
 - (void)removeObjectFromDevicesAtIndex:(NSUInteger)index;
 

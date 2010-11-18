@@ -16,13 +16,16 @@
     NSString *title;
     NSString *subtitle;
     NSString *imagePath;
-    NSString *data;
+    NSString *edlPath;
+	void *data;
 }
 
 - (id)initWithTitle:(NSString *)theTitle
 		   subtitle:(NSString *)theSubtitle
 		  imagePath:(NSString *)theImagePath
-			   data:(NSString *)theData;
-- (NSString *)data;
+			edlPath:(NSString *)theEDLPath
+			   data:(void *)theData;
+- (NSString *)edlPath;
+- (void *)data;
 
 @end

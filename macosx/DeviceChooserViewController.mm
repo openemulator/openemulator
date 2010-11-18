@@ -18,14 +18,14 @@
 @interface EDLInfo : NSObject
 {
 	NSString *path;
-	OEEDLInfo edlInfo;
-	OEConnectorsInfo connectorsInfo;
+	OEHeaderInfo headerInfo;
+	OEConnectorsInfo freeConnectorsInfo;
 }
 
 - (id)initWithPath:(NSString *)path;
 - (NSString *)path;
-- (OEEDLInfo *)edlInfo;
-- (OEConnectorsInfo *)connectorsInfo;
+- (OEHeaderInfo *)headerInfo;
+- (OEConnectorsInfo *)freeConnectorsInfo;
 
 @end
 
@@ -39,8 +39,9 @@
 		
 		OEEDL edl;
 		edl.open(getCString(thePath));
-		edlInfo = edl.getEDLInfo();
-		connectorsInfo = edl.getConnectorsInfo();
+		
+		headerInfo = edl.getHeaderInfo();
+		freeConnectorsInfo = edl.getFreeConnectorsInfo();
 	}
 	
 	return self;
@@ -58,14 +59,14 @@
 	return path;
 }
 
-- (OEEDLInfo *)edlInfo
+- (OEHeaderInfo *)headerInfo
 {
-	return &edlInfo;
+	return &headerInfo;
 }
 
-- (OEConnectorsInfo *)connectorsInfo
+- (OEConnectorsInfo *)freeConnectorsInfo
 {
-	return &connectorsInfo;
+	return &freeConnectorsInfo;
 }
 
 @end
@@ -77,14 +78,14 @@
 	self = [super init];
 	
 	if (self)
-		infos = [[NSMutableArray alloc] init];
+		edlInfos = [[NSMutableArray alloc] init];
 	
 	return self;
 }
 
 - (void)dealloc
 {
-	[infos release];
+	[edlInfos release];
 	
 	[super dealloc];
 }
@@ -93,23 +94,23 @@
 {
 	[super awakeFromNib];
 	
-	NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
-	NSString *devicesPath = [resourcePath stringByAppendingPathComponent:@"devices"];
+	NSString *devicesPath = [[[NSBundle mainBundle] resourcePath]
+							 stringByAppendingPathComponent:@"devices"];
 	NSArray *devicesFilenames = [[NSFileManager defaultManager]
 								 contentsOfDirectoryAtPath:devicesPath
 								 error:nil];
 	
-	// Load EDL infos from devices
+	// Load info from devices
 	for (int i = 0; i < [devicesFilenames count]; i++)
 	{
 		NSString *path = [devicesFilenames objectAtIndex:i];
 		path = [devicesPath stringByAppendingPathComponent:path];
-		EDLInfo *info = [[EDLInfo alloc] initWithPath:path];
+		EDLInfo *edlInfo = [[EDLInfo alloc] initWithPath:path];
 		
-		if (info)
+		if (edlInfo)
 		{
-			[info autorelease];
-			[infos addObject:info];
+			[edlInfo autorelease];
+			[edlInfos addObject:edlInfo];
 		}
 	}
 }
@@ -119,50 +120,46 @@
 	[groups removeAllObjects];
 	[groupNames removeAllObjects];
 	
-	// Find devices for current port configuration
-	for (int i = 0; i < [infos count]; i++)
+	// Find devices matching available ports
+	for (int i = 0; i < [edlInfos count]; i++)
 	{
-		OEConnectorsInfo *connectorsInfo = [[infos objectAtIndex:i] connectorsInfo];
-		NSMutableArray *availablePorts = [NSMutableArray arrayWithArray:ports];
+		NSString *edlPath = [[edlInfos objectAtIndex:i] path];
 		
-		BOOL foundInlets = YES;
-		for (OEPortsInfo::iterator connectorInfo = connectorsInfo->begin();
-			 connectorInfo != connectorsInfo->end();
-			 connectorInfo++)
+		OEConnectorsInfo *connectors = [[edlInfos objectAtIndex:i] freeConnectorsInfo];
+		NSMutableArray *portsLeft = [NSMutableArray arrayWithArray:ports];
+		bool isMatch = YES;
+		for (OEPortsInfo::iterator connector = connectors->begin();
+			 connector != connectors->end();
+			 connector++)
 		{
-			NSString *connectorType = getNSString((*connectorInfo).type);
-			BOOL foundInlet = NO;
-			
-			for (int j = 0; j < [availablePorts count]; j++)
+			NSString *connectorType = getNSString(connector->type);
+			BOOL portFound = NO;
+			for (int j = 0; j < [portsLeft count]; j++)
 			{
-				NSString *portType = [availablePorts objectAtIndex:j];
+				NSString *portType = [portsLeft objectAtIndex:j];
 				
 				if ([portType compare:connectorType] == NSOrderedSame)
 				{
-					[availablePorts removeObjectAtIndex:j];
-					
-					foundInlet = YES;
+					[portsLeft removeObjectAtIndex:j];
+					portFound = YES;
 					break;
 				}
 			}
-			if (!foundInlet)
+			if (!portFound)
 			{
-				foundInlets = NO;
+				isMatch = NO;
 				break;
 			}
 		}
-		
-		if (!foundInlets)
+		if (!isMatch)
 			continue;
 		
-		// We found a device
-		NSString *edlPath = [[infos objectAtIndex:i] path];
-		OEEDLInfo *edlInfo = [[infos objectAtIndex:i] edlInfo];
-		
-		NSString *groupName = getNSString(edlInfo->type);
-		NSString *label = getNSString(edlInfo->label);
-		NSString *imageName = getNSString(edlInfo->image);
-		NSString *description = getNSString(edlInfo->description);
+		// Add a device and its group if necessary
+		OEHeaderInfo *headerInfo = [[edlInfos objectAtIndex:i] headerInfo];
+		NSString *groupName = getNSString(headerInfo->type);
+		NSString *label = getNSString(headerInfo->label);
+		NSString *imageName = getNSString(headerInfo->image);
+		NSString *description = getNSString(headerInfo->description);
 		
 		if (![groups objectForKey:groupName])
 		{
@@ -172,16 +169,18 @@
 		
 		NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
 		NSString *imagePath = [resourcePath stringByAppendingPathComponent:imageName];
+		EDLInfo *edlInfo = [edlInfos objectAtIndex:i];
 		ChooserItem *item = [[ChooserItem alloc] initWithTitle:label
 													  subtitle:description
 													 imagePath:imagePath
-														  data:edlPath];
+													   edlPath:edlPath
+														  data:edlInfo];
 		
-		if (!item)
-			continue;
-		
-		[item autorelease];
-		[[groups objectForKey:groupName] addObject:item];
+		if (item)
+		{
+			[item autorelease];
+			[[groups objectForKey:groupName] addObject:item];
+		}
 	}
 	
 	[groupNames addObjectsFromArray:[[groups allKeys]
@@ -190,53 +189,42 @@
 	[self selectItemWithPath:nil];
 }
 
-- (NSMutableArray *)selectedItemOutlets
+- (NSMutableArray *)selectedItemConnectors
 {
-	// Find selected device
-/*	NSString *itemPath = [self selectedItemPath];
-	if (!itemPath)
-		return NULL;
-	
-	OEInfo *info = NULL;
-	for (int i = 0; i < [infos count]; i++)
+	NSString *itemPath = [self selectedItemPath];
+	OEConnectorsInfo *connectors = nil;
+	for (int i = 0; i < [edlInfos count]; i++)
 	{
-		NSString *path = [[infos objectAtIndex:i] path];
+		NSString *path = [[edlInfos objectAtIndex:i] path];
 		if ([path compare:itemPath] == NSOrderedSame)
 		{
-			info = [[infos objectAtIndex:i] info];
+			connectors = [[edlInfos objectAtIndex:i] freeConnectorsInfo];
 			break;
 		}
 	}
+	if (!connectors)
+		return nil;
 	
-	if (!info)
-		return NULL;
+	// Get connectors
+	NSMutableArray *ports = [[NSMutableArray alloc] init];
+	if (!ports)
+		return nil;
+	[ports autorelease];
 	
-	// Get unconnected outlets
-	NSMutableArray *freeOutlets = [[NSMutableArray alloc] init];
-	if (!freeOutlets)
-		return NULL;
-	[freeOutlets autorelease];
-	
-	OEPorts *outlets = info->getOutlets();
-	for (OEPorts::iterator outlet = outlets->begin();
-		 outlet != outlets->end();
-		 outlet++)
+	for (OEConnectorsInfo::iterator connector = connectors->begin();
+		 connector != connectors->end();
+		 connector++)
 	{
-		if ((*outlet)->connection)
-			continue;
-		
 		NSMutableDictionary *dict = [[[NSMutableDictionary alloc] init] autorelease];
-		[dict setObject:getNSString((*outlet)->type) forKey:@"type"];
-		[dict setObject:getNSString((*outlet)->label) forKey:@"label"];
-		[dict setObject:getNSString((*outlet)->image) forKey:@"image"];
-		[dict setObject:getNSString((*outlet)->ref) forKey:@"ref"];
+		[dict setObject:getNSString(connector->id) forKey:@"id"];
+		[dict setObject:getNSString(connector->type) forKey:@"type"];
+		[dict setObject:getNSString(connector->label) forKey:@"label"];
+		[dict setObject:getNSString(connector->image) forKey:@"image"];
 		
-		[freeOutlets addObject:dict];
+		[ports addObject:dict];
 	}
 	
-	return freeOutlets;*/
-	
-	return nil;
+	return ports;
 }
 
 @end

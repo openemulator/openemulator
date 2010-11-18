@@ -58,21 +58,18 @@
 	currentStep = 0;
 	[self setDeviceChooserView];
 	
-	NSArray *freeInlets = [[fDocumentController currentDocument] freeInlets];
-	[deviceChooserViewController updateForDeviceType:type
-									  withFreeInlets:freeInlets];
+	NSArray *freePorts = [[fDocumentController currentDocument] freePorts];
+	[deviceChooserViewController updateForPorts:freePorts];
 	
 	[fNextButton setEnabled:([deviceChooserViewController selectedItemPath] != nil)];
 	
 	if (![deviceChooserViewController selectedItemPath])
 	{
-		NSString *messageText = @"No devices of this kind can be added.";
-		NSString *informativeText = @"There are no available devices for "
+		NSString *messageText = @"No devices can be added for "
 		"the current configuration.";
 		
 		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
 		[alert setMessageText:NSLocalizedString(messageText, messageText)];
-		[alert setInformativeText:NSLocalizedString(informativeText, informativeText)];
 		[alert runModal];
 	}
 	else
@@ -110,18 +107,18 @@
 	NSMutableDictionary *outlet = [selectedItemOutlets objectAtIndex:index];
 	NSString *outletType = [outlet objectForKey:@"type"];
 	
-	NSArray *freeInlets = [[fDocumentController currentDocument] freeInlets];
-	NSMutableArray *inlets = [NSMutableArray array];
+	NSArray *freePorts = [[fDocumentController currentDocument] freePorts];
+	NSMutableArray *ports = [NSMutableArray array];
 	
-	for (int i = 0; i < [freeInlets count]; i++)
+	for (int i = 0; i < [freePorts count]; i++)
 	{
-		NSMutableDictionary *inlet = [freeInlets objectAtIndex:i];
-		NSString *inletType = [inlet objectForKey:@"type"];
+		NSMutableDictionary *port = [freePorts objectAtIndex:i];
+		NSString *inletType = [port objectForKey:@"type"];
 		
 		if ([inletType compare:outletType] != NSOrderedSame)
 			continue;
 		
-		NSString *inletRef = [inlet objectForKey:@"ref"];
+		NSString *inletRef = [port objectForKey:@"ref"];
 		BOOL isAvailable = YES;
 		for (int j = 0; j < [selectedItemInlets count]; j++)
 		{
@@ -137,10 +134,10 @@
 		if (!isAvailable)
 			continue;
 		
-		[inlets addObject:inlet];
+		[ports addObject:port];
 	}
 	
-	[connectorViewController updateWithInlets:inlets];
+	[connectorViewController updateWithInlets:ports];
 }
 
 - (void)updateView:(id)view
