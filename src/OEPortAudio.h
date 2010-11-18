@@ -80,17 +80,17 @@ private:
 	vector<float> bufferInput;
 	vector<float> bufferOutput;
 	
-	bool audioOpen;
-	PaStream *audioStream;
-	float instantVolume;
-	bool timerThreadShouldRun;
-	pthread_t timerThread;
-	
 	bool emulationsThreadShouldRun;
 	pthread_t emulationsThread;
 	pthread_mutex_t emulationsMutex;
 	pthread_cond_t emulationsCond;
 	OEPortAudioEmulations emulations;
+	
+	bool audioOpen;
+	PaStream *audioStream;
+	float instantVolume;
+	bool timerThreadShouldRun;
+	pthread_t timerThread;
 	
 	bool playing;
 	SNDFILE *playFile;
