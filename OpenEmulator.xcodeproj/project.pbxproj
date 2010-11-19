@@ -220,6 +220,8 @@
 		0031EDA11292EF98005BA276 /* OEStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEStorage.h; sourceTree = "<group>"; };
 		0031EDA21292EF98005BA276 /* OEStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEStorage.cpp; sourceTree = "<group>"; };
 		003318AE1101492B00CC1782 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Connector.xib; sourceTree = "<group>"; };
+		003D50401295F58500364169 /* HostEmulationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostEmulationController.h; sourceTree = "<group>"; };
+		003D50431295F5A700364169 /* HostEmulationControllerInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostEmulationControllerInterface.h; sourceTree = "<group>"; };
 		003E2597107075D900185260 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
 		005256E4120A841200A6BC75 /* Terminal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Terminal.h; sourceTree = "<group>"; };
 		005256E5120A841200A6BC75 /* Terminal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Terminal.cpp; sourceTree = "<group>"; };
@@ -628,6 +630,8 @@
 				000457EA128FC37400B72EB6 /* HostCameraInterface.h */,
 				000457F5128FC46100B72EB6 /* HostDeviceStateInterface.h */,
 				000457F6128FC49900B72EB6 /* HostUSBInterface.h */,
+				003D50401295F58500364169 /* HostEmulationController.h */,
+				003D50431295F5A700364169 /* HostEmulationControllerInterface.h */,
 			);
 			path = Interfaces;
 			sourceTree = "<group>";

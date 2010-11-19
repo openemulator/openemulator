@@ -11,6 +11,4 @@
 #ifndef _HOSTUSBINTERFACE_H
 #define _HOSTUSBINTERFACE_H
 
-// Data is sent and received with the readBlock and writeBlock interface
-
 #endif

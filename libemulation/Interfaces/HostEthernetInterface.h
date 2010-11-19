@@ -11,6 +11,14 @@
 #ifndef _HOSTETHERNETINTERFACE_H
 #define _HOSTETHERNETINTERFACE_H
 
-// Data is sent and received with the readBlock and writeBlock interface
+typedef enum
+{
+	HOST_ETHERNET_SEND,
+} HostEthernetMessages;
+
+typedef enum
+{
+	HOST_ETHERNET_DATA_WAS_RECEIVED,
+} HostEthernetNotifications;
 
 #endif

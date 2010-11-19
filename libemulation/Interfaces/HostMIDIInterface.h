@@ -11,6 +11,14 @@
 #ifndef _HOSTMIDIINTERFACE_H
 #define _HOSTMIDIINTERFACE_H
 
-// Data is sent and received with the readBlock and writeBlock interface
+typedef enum
+{
+	HOST_MIDI_SEND,
+} HostMIDIMessages;
+
+typedef enum
+{
+	HOST_MIDI_DATA_WAS_RECEIVED,
+} HostMIDINotifications;
 
 #endif

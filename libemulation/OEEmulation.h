@@ -47,7 +47,7 @@ private:
 	void deconfigureComponent(string id, xmlNodePtr children);
 	void destroy();
 	void destroyComponent(string id, xmlNodePtr children);
-
+	
 	bool hasProperty(string value, string propertyName);
 	string parseProperties(string value, OEPropertiesMap &propertiesMap);
 };
