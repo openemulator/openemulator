@@ -24,36 +24,6 @@ MC6821::MC6821()
 	controlBusB = NULL;
 }
 
-void MC6821::setControlA(int value)
-{
-	bool wasIRQ = controlA & MC6821_CR_IRQFLAGS;
-	controlA = value;
-	bool isIRQ = controlA & MC6821_CR_IRQFLAGS;
-	
-	if (controlBusA)
-	{
-		if (wasIRQ && !isIRQ)
-			controlBusA->postMessage(this, CONTROLBUS_SET_IRQ, &isIRQ);
-		else if (!wasIRQ && isIRQ)
-			controlBusA->postMessage(this, CONTROLBUS_SET_IRQ, &isIRQ);
-	}
-}
-
-void MC6821::setControlB(int value)
-{
-	bool wasIRQ = controlB & MC6821_CR_IRQFLAGS;
-	controlB = value;
-	bool isIRQ = controlB & MC6821_CR_IRQFLAGS;
-	
-	if (controlBusB)
-	{
-		if (wasIRQ && !isIRQ)
-			controlBusB->postMessage(this, CONTROLBUS_SET_IRQ, &isIRQ);
-		else if (!wasIRQ && isIRQ)
-			controlBusB->postMessage(this, CONTROLBUS_SET_IRQ, &isIRQ);
-	}
-}
-
 bool MC6821::setValue(string name, string value)
 {
 	if (name == "controlA")
@@ -129,21 +99,6 @@ bool MC6821::setRef(string name, OEComponent *ref)
 		return false;
 	
 	return true;
-}
-
-void MC6821::notify(OEComponent *component, int notification, void *data)
-{
-	setControlA(0);
-	directionA = 0;
-	dataA = 0;
-	ca1 = 0;
-	ca2 = 0;
-	
-	setControlB(0);
-	directionB = 0;
-	dataB = 0;
-	cb1 = 0;
-	cb2 = 0;
 }
 
 bool MC6821::postMessage(OEComponent *component, int event, void *data)
@@ -245,6 +200,21 @@ bool MC6821::postMessage(OEComponent *component, int event, void *data)
 	return false;
 }
 
+void MC6821::notify(OEComponent *component, int notification, void *data)
+{
+	setControlA(0);
+	directionA = 0;
+	dataA = 0;
+	ca1 = 0;
+	ca2 = 0;
+	
+	setControlB(0);
+	directionB = 0;
+	dataB = 0;
+	cb1 = 0;
+	cb2 = 0;
+}
+
 OEUInt8 MC6821::read(OEAddress address)
 {
 	switch(address & 0x3)
@@ -342,5 +312,35 @@ void MC6821::write(OEAddress address, OEUInt8 value)
 				postMessage(this, MC6821_SET_CB2, &cb2);
 			}
 			break;
+	}
+}
+
+void MC6821::setControlA(int value)
+{
+	bool wasIRQ = controlA & MC6821_CR_IRQFLAGS;
+	controlA = value;
+	bool isIRQ = controlA & MC6821_CR_IRQFLAGS;
+	
+	if (controlBusA)
+	{
+		if (wasIRQ && !isIRQ)
+			controlBusA->postMessage(this, CONTROLBUS_SET_IRQ, &isIRQ);
+		else if (!wasIRQ && isIRQ)
+			controlBusA->postMessage(this, CONTROLBUS_SET_IRQ, &isIRQ);
+	}
+}
+
+void MC6821::setControlB(int value)
+{
+	bool wasIRQ = controlB & MC6821_CR_IRQFLAGS;
+	controlB = value;
+	bool isIRQ = controlB & MC6821_CR_IRQFLAGS;
+	
+	if (controlBusB)
+	{
+		if (wasIRQ && !isIRQ)
+			controlBusB->postMessage(this, CONTROLBUS_SET_IRQ, &isIRQ);
+		else if (!wasIRQ && isIRQ)
+			controlBusB->postMessage(this, CONTROLBUS_SET_IRQ, &isIRQ);
 	}
 }

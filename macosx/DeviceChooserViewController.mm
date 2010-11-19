@@ -133,19 +133,11 @@
 			 connector++)
 		{
 			NSString *connectorType = getNSString(connector->type);
-			BOOL portFound = NO;
-			for (int j = 0; j < [portsLeft count]; j++)
-			{
-				NSString *portType = [portsLeft objectAtIndex:j];
-				
-				if ([portType compare:connectorType] == NSOrderedSame)
-				{
-					[portsLeft removeObjectAtIndex:j];
-					portFound = YES;
-					break;
-				}
-			}
-			if (!portFound)
+			
+			int index = [portsLeft indexOfObject:connectorType];
+			if (index != NSNotFound)
+				[portsLeft removeObjectAtIndex:index];
+			else
 			{
 				isMatch = NO;
 				break;

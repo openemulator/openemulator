@@ -10,8 +10,8 @@
 
 #include "OEComponent.h"
 
-// Events
-enum
+// Messages
+typedef enum
 {
 	MC6821_SET_CA1,
 	MC6821_SET_CA2,
@@ -19,13 +19,13 @@ enum
 	MC6821_SET_CB1,
 	MC6821_SET_CB2,
 	MC6821_GET_CB2,
-};
+} MC6821Messages;
 
 // Notifications
-enum {
+typedef enum {
 	MC6821_CA2_CHANGED,
 	MC6821_CB2_CHANGED,
-};
+} MC6821Notifications;
 
 #define MC6821_RS_DATAREGISTERA		0x00
 #define MC6821_RS_CONTROLREGISTERA	0x01
@@ -55,10 +55,10 @@ public:
 	bool getValue(string name, string &value);
 	bool setRef(string name, OEComponent *ref);
 	
+	bool postMessage(OEComponent *component, int message, void *data);
+	
 	void notify(OEComponent *component, int notification, void *data);
 	
-	bool postMessage(OEComponent *component, int message, void *data);
-
 	OEUInt8 read(OEAddress address);
 	void write(OEAddress address, OEUInt8 value);
 	

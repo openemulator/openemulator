@@ -29,27 +29,27 @@
 	{
 		oePortAudio = new OEPortAudio();
 		
-		diskImageFileTypes = [[NSArray alloc] initWithObjects:
-							  @"dsk", @"do", @"d13", @"po", @"cpm", @"nib", @"v2d",
-							  @"vdsk",
-							  @"2mg", @"2img",
-							  @"t64", @"tap", @"prg", @"p00",
-							  @"d64", @"d71", @"d80", @"d81", @"d82", @"x64", @"g64",
-							  @"crt",
-							  @"uef",
-							  @"fdi",
-							  @"img", @"dmg", @"hdv", @"hfv",
-							  @"iso", @"cdr",
-							  nil];
+		diskImagePathExtensions = [[NSArray alloc] initWithObjects:
+								   @"dsk", @"do", @"d13", @"po", @"cpm", @"nib", @"v2d",
+								   @"vdsk",
+								   @"2mg", @"2img",
+								   @"t64", @"tap", @"prg", @"p00",
+								   @"d64", @"d71", @"d80", @"d81", @"d82", @"x64", @"g64",
+								   @"crt",
+								   @"uef",
+								   @"fdi",
+								   @"img", @"dmg", @"hdv", @"hfv",
+								   @"iso", @"cdr",
+								   nil];
 		
-		audioFileTypes = [[NSArray alloc] initWithObjects:
-						  @"wav",
-						  @"aiff", @"aif", @"aifc",
-						  @"au",
-						  @"flac",
-						  @"caf",
-						  @"ogg", @"oga",
-						  nil];
+		audioPathExtensions = [[NSArray alloc] initWithObjects:
+							   @"wav",
+							   @"aiff", @"aif", @"aifc",
+							   @"au",
+							   @"flac",
+							   @"caf",
+							   @"ogg", @"oga",
+							   nil];
 		
 		disableMenuBarCount = 0;
 	}
@@ -59,8 +59,8 @@
 
 - (void)dealloc
 {
-	[diskImageFileTypes release];
-	[audioFileTypes release];
+	[diskImagePathExtensions release];
+	[audioPathExtensions release];
 	
 	delete (OEPortAudio *)oePortAudio;
 	
@@ -77,17 +77,17 @@
 	[fAudioControlsWindowController toggleAudioControls:sender];
 }
 
-- (NSArray *)getDiskImageFileTypes
+- (NSArray *)diskImagePathExtensions
 {
-	return diskImageFileTypes;
+	return diskImagePathExtensions;
 }
 
-- (NSArray *)getAudioFileTypes
+- (NSArray *)audioPathExtensions
 {
-	return audioFileTypes;
+	return audioPathExtensions;
 }
 
-- (void *)getOEPortAudio
+- (void *)oePortAudio
 {
 	return oePortAudio;
 }
@@ -133,7 +133,7 @@
 		return NO;
 	
 	// Open audio files
-	if ([audioFileTypes containsObject:extension])
+	if ([audioPathExtensions containsObject:extension])
 	{
 		[fAudioControlsWindowController readFromURL:[NSURL fileURLWithPath:filename]];
 		return YES;
@@ -155,7 +155,7 @@
 	}
 	
 	// Mount disk images
-	if ([diskImageFileTypes containsObject:extension])
+	if ([diskImagePathExtensions containsObject:extension])
 	{
 		
 	}
@@ -226,8 +226,8 @@
 	NSOpenPanel *panel = [NSOpenPanel openPanel];
 	NSMutableArray *fileTypes = [NSMutableArray array];
 	[fileTypes addObject:@OE_PACKAGE_EXTENSION];
-	[fileTypes addObjectsFromArray:audioFileTypes];
-	[fileTypes addObjectsFromArray:diskImageFileTypes];
+	[fileTypes addObjectsFromArray:audioPathExtensions];
+	[fileTypes addObjectsFromArray:diskImagePathExtensions];
 	
 	if ([panel runModalForTypes:fileTypes] == NSOKButton)
 	{

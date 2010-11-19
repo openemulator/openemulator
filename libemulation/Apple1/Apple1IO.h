@@ -16,6 +16,7 @@ public:
 	Apple1IO();
 	
 	bool setRef(string name, OEComponent *ref);
+	
 	void notify(OEComponent *sender, int notification, void *data);
 	
 	OEUInt8 read(OEAddress address);

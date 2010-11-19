@@ -1,26 +1,26 @@
 
 /**
  * libemulation
- * Host camera interface
+ * Host video interface
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Defines the host camera interface
+ * Defines the host video interface
  */
 
-#ifndef _HOSTCAMERAINTERFACE_H
-#define _HOSTCAMERAINTERFACE_H
+#ifndef _HOSTVIDEOINTERFACE_H
+#define _HOSTVIDEOINTERFACE_H
 
 typedef enum
 {
-	HOST_CAMERA_GET_FRAME,
-} HostCameraMessages;
+	HOST_VIDEO_GET_FRAME,
+} HostVideoMessages;
 
 typedef struct
 {
 	char *frameData;
 	int frameWidth;
 	int frameHeight;
-} HostCameraFrame;
+} HostVideoFrame;
 
 #endif

@@ -13,17 +13,6 @@
 
 #include "OEComponent.h"
 
-// Notifications
-enum
-{
-	TERMINAL_RECEIVED_CHAR,
-};
-
-// Messages
-enum
-{
-};
-
 class Terminal : public OEComponent
 {
 public:

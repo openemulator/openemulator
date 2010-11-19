@@ -11,12 +11,9 @@
 #include <iostream>
 
 #include "AddressDecoder.h"
-#include "HostStorageInterface.h"
 
 AddressDecoder::AddressDecoder()
 {
-	hostStorage = NULL;
-	
 	addressSize = 16;
 	blockSize = 8;
 	floatingBus = NULL;
@@ -43,12 +40,7 @@ bool AddressDecoder::setValue(string name, string value)
 
 bool AddressDecoder::setRef(string name, OEComponent *ref)
 {
-	if (name == "hostStorage")
-	{
-		replaceDelegate(hostStorage, ref, HOST_STORAGE_MOUNT);
-		hostStorage = ref;
-	}
-	else if (name == "floatingBus")
+	if (name == "floatingBus")
 		floatingBus = ref;
 	else if (name.substr(0, 3) == "ref")
 		this->ref[name.substr(3)] = ref;
@@ -98,10 +90,15 @@ bool AddressDecoder::init()
 
 bool AddressDecoder::postMessage(OEComponent *sender, int message, void *data)
 {
-	if (message == ADDRESSDECODER_MAP)
-		map((AddressDecoderMap *) data);
-	else
-		return false;
+	switch(message)
+	{
+		case ADDRESSDECODER_MAP:
+			map((AddressDecoderMap *) data);
+			break;
+			
+		default:
+			return false;
+	}
 	
 	return true;
 }

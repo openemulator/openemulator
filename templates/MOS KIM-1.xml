@@ -20,7 +20,6 @@
     <property name="resetOnPowerOn" value="0" />
 </component>
 <component id="kim1.memoryBus" class="AddressDecoder">
-    <property name="hostStorage" ref="hostStorage" />
     <property name="addressSize" value="16" />
     <property name="blockSize" value="6" />
     <property name="floatingBus" ref="kim1.floatingBus" />

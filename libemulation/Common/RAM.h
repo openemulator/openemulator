@@ -26,10 +26,10 @@ public:
 	bool setRef(string name, OEComponent *ref);
 	bool setData(string name, OEData *data);
 	bool getData(string name, OEData **data);
-	
 	bool init();
 	
 	bool postMessage(OEComponent *sender, int message, void *data);
+	
 	void notify(OEComponent *sender, int notification, void *data);
 	
 	OEUInt8 read(OEAddress address);

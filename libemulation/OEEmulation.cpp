@@ -111,6 +111,7 @@ bool OEEmulation::configure()
 	for(xmlNodePtr node = rootNode->children;
 		node;
 		node = node->next)
+	{
 		if (!xmlStrcmp(node->name, BAD_CAST "component"))
 		{
 			string id = getNodeProperty(node, "id");
@@ -118,6 +119,7 @@ bool OEEmulation::configure()
 			if (!configureComponent(id, node->children))
 				return false;
 		}
+	}
 	
 	return true;
 }
@@ -149,18 +151,14 @@ bool OEEmulation::configureComponent(string id, xmlNodePtr children)
 				string value = getNodeProperty(node, "value");
 				value = parseProperties(value, propertiesMap);
 				
-				if (component->setValue(name, value))
-					continue;
-				else
+				if (!component->setValue(name, value))
 					log("invalid property '" + name + "' for '" + id + "'");
 			}
 			else if (hasNodeProperty(node, "ref"))
 			{
 				string refId = getNodeProperty(node, "ref");
 				OEComponent *ref = getComponent(refId);
-				if (component->setRef(name, ref))
-					continue;
-				else
+				if (!component->setRef(name, ref))
 					log("invalid property '" + name + "' for '" + id + "'");
 			}
 			else if (hasNodeProperty(node, "src"))
@@ -168,41 +166,31 @@ bool OEEmulation::configureComponent(string id, xmlNodePtr children)
 				string src = getNodeProperty(node, "src");
 				
 				OEData *data = new OEData;
-				if (data)
+				string parsedSrc = parseProperties(src, propertiesMap);
+				bool dataRead = false;
+				if (hasProperty(src, "packagePath"))
 				{
-					string parsedSrc = parseProperties(src, propertiesMap);
-					bool dataRead = false;
-					
-					if (hasProperty(src, "packagePath"))
-					{
-						if (!package)
-							continue;
-						
+					if (package)
 						dataRead = package->readFile(parsedSrc, data);
-					}
-					else
-						dataRead = readFile(parsedSrc, data);
-					
-					if (dataRead)
-					{
-						if (!component->setData(name, data))
-							log("invalid property '" + name + "' for '" + id + "'");
-						
-						continue;
-					}
-					else
-						log("could not read '" + src + "'");
-					
-					delete data;
 				}
 				else
-					log("could not create OEData");
+					dataRead = readFile(parsedSrc, data);
+				
+				if (dataRead)
+				{
+					if (!component->setData(name, data))
+						log("invalid property '" + name + "' for '" + id + "'");
+				}
+				else
+					log("could not read '" + src + "'");
+				
+				delete data;
 			}
 			else
+			{
 				log("invalid property '" + name + "' for '" + id +
 					  "', unrecognized type");
-			
-			return false;
+			}
 		}
 	}
 	

@@ -22,8 +22,8 @@
 	IBOutlet AudioControlsWindowController *fAudioControlsWindowController;
 	IBOutlet TemplateChooserWindowController *fTemplateChooserWindowController;
 	
-	NSArray *diskImageFileTypes;
-	NSArray *audioFileTypes;
+	NSArray *diskImagePathExtensions;
+	NSArray *audioPathExtensions;
 	
 	void *oePortAudio;
 	
@@ -33,9 +33,9 @@
 - (void)toggleInspector:(id)sender;
 - (void)toggleAudioControls:(id)sender;
 
-- (NSArray *)getDiskImageFileTypes;
-- (NSArray *)getAudioFileTypes;
-- (void *)getOEPortAudio;
+- (NSArray *)diskImagePathExtensions;
+- (NSArray *)audioPathExtensions;
+- (void *)oePortAudio;
 
 - (IBAction)newDocumentFromTemplateChooser:(id)sender;
 - (id)openUntitledDocumentWithTemplateURL:(NSURL *)absoluteURL

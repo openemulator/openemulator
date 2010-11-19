@@ -14,6 +14,7 @@ class KIM1PLL : public OEComponent
 {
 public:
 	KIM1PLL();
+	
 	bool setValue(string name, string value);
 	bool setRef(string name, OEComponent *ref);
 

@@ -180,7 +180,7 @@
 		000457DF128FBFCA00B72EB6 /* HostCanvasInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostCanvasInterface.h; sourceTree = "<group>"; };
 		000457E4128FC31A00B72EB6 /* HostMIDIInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostMIDIInterface.h; sourceTree = "<group>"; };
 		000457E9128FC35300B72EB6 /* HostEthernetInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostEthernetInterface.h; sourceTree = "<group>"; };
-		000457EA128FC37400B72EB6 /* HostCameraInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostCameraInterface.h; sourceTree = "<group>"; };
+		000457EA128FC37400B72EB6 /* HostVideoInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostVideoInterface.h; sourceTree = "<group>"; };
 		000457F6128FC49900B72EB6 /* HostUSBInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostUSBInterface.h; sourceTree = "<group>"; };
 		0008FCD80FBA5D72005E876E /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = macosx/Info.plist; sourceTree = "<group>"; };
 		000A79080FBA49C500A0F12E /* DiskImage35.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = DiskImage35.icns; sourceTree = "<group>"; };
@@ -617,7 +617,7 @@
 				000457DF128FBFCA00B72EB6 /* HostCanvasInterface.h */,
 				000457E4128FC31A00B72EB6 /* HostMIDIInterface.h */,
 				000457E9128FC35300B72EB6 /* HostEthernetInterface.h */,
-				000457EA128FC37400B72EB6 /* HostCameraInterface.h */,
+				000457EA128FC37400B72EB6 /* HostVideoInterface.h */,
 				000457F6128FC49900B72EB6 /* HostUSBInterface.h */,
 				003D50431295F5A700364169 /* HostEmulationControllerInterface.h */,
 			);
@@ -839,6 +839,7 @@
 			isa = PBXProject;
 			buildConfigurationList = C05733CB08A9546B00998B17 /* Build configuration list for PBXProject "OpenEmulator" */;
 			compatibilityVersion = "Xcode 3.1";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
 				English,

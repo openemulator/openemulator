@@ -35,6 +35,9 @@
 	
 	[[self window] setToolbar:toolbar];
 	
+	[[self window] registerForDraggedTypes:[NSArray arrayWithObjects:
+											NSFilenamesPboardType, nil]];
+	
 	[toolbar release];
 }
 

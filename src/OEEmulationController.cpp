@@ -17,21 +17,6 @@ OEEmulationController::OEEmulationController()
 	alertCallback = NULL;
 }
 
-bool OEEmulationController::postMessage(OEComponent *sender, int message, void *data)
-{
-	if (message == HOST_EMULATIONCONTROLLER_RUN_ALERT)
-	{
-		if (alertCallback)
-			alertCallback();
-		else
-			return false;
-	}
-	else
-		return false;
-	
-	return true;
-}
-
 void OEEmulationController::setAlertCallback(OERunAlertCallback alertCallback)
 {
 	this->alertCallback = alertCallback;
@@ -45,4 +30,29 @@ bool OEEmulationController::mount(string path)
 bool OEEmulationController::validate(string path)
 {
 	return delegate(this, HOST_EMULATIONCONTROLLER_VALIDATE, &path);
+}
+
+bool OEEmulationController::postMessage(OEComponent *sender, int message, void *data)
+{
+	if (message == HOST_EMULATIONCONTROLLER_SET_DEVICEINFO)
+	{
+	}
+	else if (message == HOST_EMULATIONCONTROLLER_ADD_CANVAS)
+	{
+		
+	}
+	else if (message == HOST_EMULATIONCONTROLLER_REMOVE_CANVAS)
+	{
+	}
+	else if (message == HOST_EMULATIONCONTROLLER_RUN_ALERT)
+	{
+		if (alertCallback)
+			alertCallback();
+		else
+			return false;
+	}
+	else
+		return false;
+	
+	return true;
 }

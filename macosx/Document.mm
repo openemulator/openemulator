@@ -15,6 +15,8 @@
 
 #import "OEPortAudioEmulation.h"
 
+#import "CanvasWindowController.h"
+
 @implementation Document
 
 - (id)init
@@ -70,7 +72,7 @@
 {
 	DocumentController *documentController;
 	documentController = [NSDocumentController sharedDocumentController];
-	OEPortAudio *oePortAudio = (OEPortAudio *)[documentController getOEPortAudio];
+	OEPortAudio *oePortAudio = (OEPortAudio *)[documentController oePortAudio];
 	
 	OEPortAudioEmulation *theEmulation = new OEPortAudioEmulation();
 	theEmulation->setResourcePath(getCString([[NSBundle mainBundle] resourcePath]));
@@ -380,18 +382,18 @@
 	devicesWindowController = [[DevicesWindowController alloc] init];
 	[self addWindowController:devicesWindowController];
 	
-/*	NSWindowController *windowController;
+	NSWindowController *windowController;
 	windowController = [[CanvasWindowController alloc] initWithCanvasComponent:NULL];
 	[self addWindowController:windowController];
-	[windowController release];*/
+	[windowController release];
 }
 
-- (NSMutableArray *)freePorts
+- (NSArray *)freePorts
 {
 	return freePorts;
 }
 
-- (NSMutableArray *)devices
+- (NSArray *)devices
 {
 	return [[devices retain] autorelease];
 }

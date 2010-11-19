@@ -57,3 +57,21 @@ void AudioSampleConverter::notify(OEComponent *sender, int notification, void *d
 		}
 	}
 }
+
+OEUInt8 AudioSampleConverter::read(OEAddress address)
+{
+	return 0;
+}
+
+void AudioSampleConverter::write(OEAddress address, OEUInt8 value)
+{
+}
+
+OEUInt16 AudioSampleConverter::read16(OEAddress address)
+{
+	return 0;
+}
+
+void AudioSampleConverter::write16(OEAddress address, OEUInt16 value)
+{
+}

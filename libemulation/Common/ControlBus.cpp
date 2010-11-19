@@ -139,10 +139,6 @@ bool ControlBus::postMessage(OEComponent *component, int event, void *data)
 	return false;
 }
 
-void ControlBus::notify(OEComponent *component, int notification, void *data)
-{
-}
-
 void ControlBus::updateFrequency()
 {
 	frequency = crystal / frequencyDivider;

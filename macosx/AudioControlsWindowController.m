@@ -27,6 +27,10 @@
 {
 	[self setWindowFrameAutosaveName:@"AudioControls"];
 	
+	[[self window] registerForDraggedTypes:[NSArray arrayWithObjects:
+											NSFilenamesPboardType,
+											nil]];
+	
 	timer = [NSTimer scheduledTimerWithTimeInterval:0.25
 											 target:self
 										   selector:@selector(timerDidExpire:)
@@ -50,6 +54,8 @@
 	}
 	
 	[timer release];
+	
+	[[self window] unregisterDraggedTypes];
 	
 	[super dealloc];
 }
@@ -77,6 +83,42 @@
 		[[self window] orderOut:self];
 	else
 		[[self window] orderFront:self];
+}
+
+- (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender
+{
+    NSPasteboard *pasteboard = [sender draggingPasteboard];
+	
+	if ([[pasteboard types] containsObject:NSFilenamesPboardType])
+	{
+		NSString *path = [[pasteboard propertyListForType:NSFilenamesPboardType]
+						  objectAtIndex:0];
+		NSString *pathExtension = [[path pathExtension] lowercaseString];
+		
+		if ([[fDocumentController audioPathExtensions] containsObject:pathExtension])
+			return NSDragOperationCopy;
+	}
+	return NSDragOperationNone;
+}
+
+- (BOOL)performDragOperation:(id <NSDraggingInfo>)sender
+{
+	NSPasteboard *pasteboard = [sender draggingPasteboard];
+	if ([[pasteboard types] containsObject:NSFilenamesPboardType])
+	{
+		NSString *path = [[pasteboard propertyListForType:NSFilenamesPboardType]
+						  objectAtIndex:0];
+		NSString *pathExtension = [[path pathExtension] lowercaseString];
+		
+		if ([[fDocumentController audioPathExtensions] containsObject:pathExtension])
+		{
+			[self readFromURL:[NSURL fileURLWithPath:path]];
+			
+			return YES;
+		}
+	}
+	
+	return NO;
 }
 
 - (void)timerDidExpire:(NSTimer *)theTimer
@@ -163,6 +205,16 @@
 		[fDocumentController stopPlaying];
 }
 
+- (void)readFromURL:(NSURL *)theURL
+{
+	if (playURL)
+		[playURL release];
+	
+	playURL = [theURL copy];
+	if (playURL)
+		[fDocumentController startPlaying:playURL];
+}
+
 - (void)updateRecording
 {
 	if (!recordingURL)
@@ -216,16 +268,6 @@
 		
 		[self updateRecording];
 	}
-}
-
-- (void)readFromURL:(NSURL *)theURL
-{
-	if (playURL)
-		[playURL release];
-	
-	playURL = [theURL copy];
-	if (playURL)
-		[fDocumentController startPlaying:playURL];
 }
 
 - (void)writeToURL:(NSURL *)theURL

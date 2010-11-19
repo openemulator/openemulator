@@ -17,7 +17,6 @@ public:
 	~ROM();
 	
 	bool setData(string name, OEData *data);
-	
 	bool init();
 	
 	OEUInt8 read(OEAddress address);
