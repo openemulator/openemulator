@@ -18,7 +18,6 @@ typedef enum
 	HOST_AUDIO_FRAME_WILL_END,
 } HostAudioNotifications;
 
-// Data buffers send on audio notifications:
 typedef struct
 {
 	float sampleRate;

@@ -27,8 +27,7 @@
 
 typedef enum
 {
-	HOST_EMULATIONCONTROLLER_SET_INFO,
-	HOST_EMULATIONCONTROLLER_GET_INFOS,
+	HOST_EMULATIONCONTROLLER_SET_DEVICEINFO,
 	HOST_EMULATIONCONTROLLER_ADD_CANVAS,
 	HOST_EMULATIONCONTROLLER_REMOVE_CANVAS,
 	HOST_EMULATIONCONTROLLER_RUN_ALERT,
@@ -45,9 +44,9 @@ typedef struct
 	string deviceId;
 	string informativeText;
 	OEComponent *canvas;
-	HostEmulationController isStorageMounted;
-} HostEmulationControllerInfo;
+	OEComponent *storage;
+} HostEmulationControllerDeviceInfo;
 
-typedef vector<HostEmulationControllerInfo> HostEmulationControllerInfos;
+typedef vector<HostEmulationControllerDeviceInfo> HostEmulationControllerDevicesInfo;
 
 #endif
