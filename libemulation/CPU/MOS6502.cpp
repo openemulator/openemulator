@@ -75,9 +75,9 @@ bool MOS6502::setRef(string name, OEComponent *ref)
 		memoryBus = ref;
 	else if (name == "controlBus")
 	{
-		replaceObserver(controlBus, ref, CONTROLBUS_RESET_CHANGED);
-		replaceObserver(controlBus, ref, CONTROLBUS_IRQ_CHANGED);
-		replaceObserver(controlBus, ref, CONTROLBUS_NMI_CHANGED);
+		replaceObserver(controlBus, ref, CONTROLBUS_RESET_DID_CHANGE);
+		replaceObserver(controlBus, ref, CONTROLBUS_IRQ_DID_CHANGE);
+		replaceObserver(controlBus, ref, CONTROLBUS_NMI_DID_CHANGE);
 		controlBus = ref;
 	}
 	else
@@ -90,15 +90,15 @@ void MOS6502::notify(OEComponent *sender, int notification, void *data)
 {
 	switch (notification)
 	{
-		case CONTROLBUS_RESET_CHANGED:
+		case CONTROLBUS_RESET_DID_CHANGE:
 			if (*((bool *) data))
 				reset();
 			break;
 			
-		case CONTROLBUS_IRQ_CHANGED:
+		case CONTROLBUS_IRQ_DID_CHANGE:
 			break;
 			
-		case CONTROLBUS_NMI_CHANGED:
+		case CONTROLBUS_NMI_DID_CHANGE:
 			break;
 	}
 }

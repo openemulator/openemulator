@@ -62,7 +62,10 @@ OEPortAudio::OEPortAudio()
 	emulationsThreadShouldRun = false;
 	
 	playing = false;
+	playFrameIndex = 0;
+	playFrameNum = 0;
 	recording = false;
+	recordingFrameNum = 0;
 }
 
 void OEPortAudio::setFullDuplex(bool value)
@@ -325,9 +328,10 @@ void OEPortAudio::runEmulations()
 			outputBuffer,
 		};
 		
-		notify(this, HOST_AUDIO_FRAME_WILL_BEGIN, &buffer);
-		notify(this, HOST_AUDIO_FRAME_WILL_RENDER, &buffer);
-		notify(this, HOST_AUDIO_FRAME_WILL_END, &buffer);
+		notify(this, HOST_AUDIO_FRAME_WILL_BEGIN_RENDER, &buffer);
+		notify(this, HOST_AUDIO_FRAME_DID_BEGIN_RENDER, &buffer);
+		notify(this, HOST_AUDIO_FRAME_WILL_END_RENDER, &buffer);
+		notify(this, HOST_AUDIO_FRAME_DID_END_RENDER, &buffer);
 		
 		// Audio recording
 		if (recording)
@@ -591,6 +595,8 @@ bool OEPortAudio::startPlaying(string path)
 	lockEmulations();
 	
 	playFrameIndex = 0;
+	playFrameNum = 0;
+	
 	playFile = sf_open(path.c_str(), SFM_READ, &sfInfo);
 	if (playFile)
 	{

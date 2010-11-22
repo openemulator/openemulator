@@ -20,15 +20,17 @@ public:
 	
 	bool setRef(string name, OEComponent *ref);
 	bool setData(string name, OEData *data);
+	bool init();
 	
 	void notify(OEComponent *sender, int notification, void *data);
 	
 private:
-	OEComponent *hostCanvasController;
-	OEComponent *controlBus;
+	OEComponent *hostEmulationController;
 	OEComponent *serialPort;
 	OEComponent *audioOut;
 	OEComponent *audioIn;
 	
 	OEData *view;
+	
+	OEComponent *canvas;
 };

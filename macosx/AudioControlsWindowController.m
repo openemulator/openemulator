@@ -16,8 +16,8 @@
 {
 	if (self = [self initWithWindowNibName:@"AudioControls"])
 	{
-		playURL = nil;
-		recordingURL = nil;
+		playPath = nil;
+		recordingPath = nil;
 	}
 	
 	return self;
@@ -40,17 +40,17 @@
 
 - (void)dealloc
 {
-	if (playURL)
-		[playURL release];
+	if (playPath)
+		[playPath release];
 	
-	if (recordingURL)
+	if (recordingPath)
 	{
 		NSError *error;
 		
-		[[NSFileManager defaultManager] removeItemAtPath:[recordingURL path]
+		[[NSFileManager defaultManager] removeItemAtPath:recordingPath
 												   error:&error];
 		
-		[recordingURL release];
+		[recordingPath release];
 	}
 	
 	[timer release];
@@ -112,7 +112,7 @@
 		
 		if ([[fDocumentController audioPathExtensions] containsObject:pathExtension])
 		{
-			[self readFromURL:[NSURL fileURLWithPath:path]];
+			[self readFromPath:path];
 			
 			return YES;
 		}
@@ -147,15 +147,15 @@
 
 - (void)updatePlay
 {
-	if (!playURL)
+	if (!playPath)
 	{
 		[fPlayNameLabel setStringValue:@""];
-		[fPlayTimeLabel setToolTip:@"--:--:--"];
-		[fPlayDurationLabel setToolTip:@"--:--:--"];
+		[fPlayTimeLabel setStringValue:@"--:--:--"];
+		[fPlayDurationLabel setStringValue:@"--:--:--"];
 	}
 	else
 	{
-		NSString *path = [[playURL path] lastPathComponent];
+		NSString *path = [playPath lastPathComponent];
 		[fPlayNameLabel setStringValue:path];
 		[fPlayNameLabel setToolTip:path];
 		
@@ -169,7 +169,7 @@
 	
 	BOOL isPlaying = [fDocumentController isPlaying];
 	[fOpenPlayButton setEnabled:!isPlaying];
-	[fTogglePlayButton setEnabled:playURL ? YES : NO];
+	[fTogglePlayButton setEnabled:playPath ? YES : NO];
 	[fTogglePlayButton setImage:(isPlaying ?
 								 [NSImage imageNamed:@"AudioStop.png"] :
 								 [NSImage imageNamed:@"AudioPlay.png"]
@@ -179,45 +179,46 @@
 - (IBAction)openPlay:(id)sender
 {
 	NSOpenPanel *panel = [NSOpenPanel openPanel];
-	NSArray *fileTypes = [[NSArray alloc] initWithObjects:
-						  @"wav",
-						  @"aiff", @"aif", @"aifc",
-						  @"au",
-						  @"flac",
-						  @"caf",
-						  @"ogg", @"oga",
-						  nil];
 	
-	if ([panel runModalForTypes:fileTypes] == NSOKButton)
+	if ([panel runModalForTypes:[fDocumentController audioPathExtensions]] ==
+		NSOKButton)
 	{
-		NSURL *url = [panel URL];
-		[self readFromURL:url];
-		
-		[self updatePlay];
+		NSString *path = [[panel URL] path];
+		[self readFromPath:path];
 	}
 }
 
 - (IBAction)togglePlay:(id)sender
 {
 	if (![fDocumentController isPlaying])
-		[fDocumentController startPlaying:playURL];
+		[fDocumentController startPlaying:playPath];
 	else
 		[fDocumentController stopPlaying];
 }
 
-- (void)readFromURL:(NSURL *)theURL
+- (void)readFromPath:(NSString *)path
 {
-	if (playURL)
-		[playURL release];
+	if (playPath)
+		[playPath release];
 	
-	playURL = [theURL copy];
-	if (playURL)
-		[fDocumentController startPlaying:playURL];
+	playPath = [path copy];
+	if (playPath)
+	{
+		[fDocumentController startPlaying:playPath];
+		
+		if (![fDocumentController getPlayDuration])
+		{
+			[playPath release];
+			playPath = nil;
+		}
+	}
+	
+	[self updatePlay];
 }
 
 - (void)updateRecording
 {
-	if (!recordingURL)
+	if (!recordingPath)
 	{
 		[fRecordingTimeLabel setStringValue:@"--:--:--"];
 		[fRecordingSizeLabel setStringValue:@"- kB"];
@@ -238,18 +239,18 @@
 									  [NSImage imageNamed:@"AudioStop.png"] :
 									  [NSImage imageNamed:@"AudioRecord.png"]
 									  )];
-	[fSaveRecordingAsButton setEnabled:(recordingURL && !isRecording)];
+	[fSaveRecordingAsButton setEnabled:(recordingPath && !isRecording)];
 }
 
 - (IBAction)toggleRecording:(id)sender
 {
 	if (![fDocumentController isRecording])
 	{
-		NSString *thePath = [NSTemporaryDirectory()
-							 stringByAppendingPathComponent:@"oerecording"];
-		recordingURL = [[NSURL alloc] initFileURLWithPath:thePath];
+		NSString *path = [NSTemporaryDirectory()
+						  stringByAppendingPathComponent:@"oerecording"];
+		recordingPath = [path copy];
 		
-		[fDocumentController startRecording:recordingURL];
+		[fDocumentController startRecording:recordingPath];
 	}
 	else
 		[fDocumentController stopRecording];
@@ -263,42 +264,40 @@
 	
 	if ([panel runModal] == NSOKButton)
 	{
-		NSURL *url = [panel URL];
-		[self writeToURL:url];
-		
-		[self updateRecording];
+		NSString *path = [[panel URL] path];
+		[self writeToPath:path];
 	}
 }
 
-- (void)writeToURL:(NSURL *)theURL
+- (void)writeToPath:(NSString *)path
 {
-	if (!recordingURL)
+	if (!recordingPath)
 		return;
 	
 	NSError *error;
 	
-	[[NSFileManager defaultManager] removeItemAtPath:[theURL path]
+	[[NSFileManager defaultManager] removeItemAtPath:path
 											   error:&error];
-	if (![[NSFileManager defaultManager] moveItemAtPath:[recordingURL path]
-												 toPath:[theURL path]
+	if (![[NSFileManager defaultManager] moveItemAtPath:recordingPath
+												 toPath:path
 												  error:&error])
 	{
-		NSAlert *alert = [[NSAlert alloc] init];
-		
-		[alert setMessageText:NSLocalizedString(@"The document could not be saved.",
-												@"The document could not be saved.")];
-		[alert setInformativeText:NSLocalizedString(@"Try saving the file to another volume.",
-													@"Try saving the file to another volume.")];
+		NSString *messageText = NSLocalizedString(@"The document could not be saved.",
+												  @"The document could not be saved.");
+		NSString *informativeText = NSLocalizedString(@"Try saving the file to another volume.",
+													  @"Try saving the file to another volume.");
+		NSAlert *alert = [NSAlert alertWithMessageText:messageText
+										 defaultButton:nil
+									   alternateButton:nil
+										   otherButton:nil
+							 informativeTextWithFormat:informativeText];
 		[alert runModal];
-		
-		[alert release];
 		
 		return;
 	}
 	
-	[recordingURL release];
-	
-	recordingURL = nil;
+	[recordingPath release];
+	recordingPath = nil;
 }
 
 @end

@@ -28,11 +28,8 @@ typedef struct
 	OESize size;
 } OERect;
 
-OEOpenGLCanvas::OEOpenGLCanvas(OEPortAudioEmulation *emulation,
-							   string canvasRef)
+OEOpenGLCanvas::OEOpenGLCanvas()
 {
-	this->emulation = emulation;
-	
 	// Init structures
 	//	pthread_mutex_init(&glMutex, NULL);
 	memset(keyDown, sizeof(keyDown), 0);
@@ -82,7 +79,7 @@ void OEOpenGLCanvas::postHIDNotification(int notification, int usageId, float va
 
 void OEOpenGLCanvas::setSystemKey(int usageId)
 {
-	postHIDNotification(HOST_CANVAS_SYSTEMKEYBOARD_CHANGED, usageId, 0);
+	postHIDNotification(HOST_CANVAS_SYSTEMKEYBOARD_DID_CHANGE, usageId, 0);
 }
 
 void OEOpenGLCanvas::setKey(int usageId, bool value)
@@ -91,7 +88,7 @@ void OEOpenGLCanvas::setKey(int usageId, bool value)
 		return;
 	keyDown[usageId] = value;
 	
-	postHIDNotification(HOST_CANVAS_KEYBOARD_CHANGED, usageId, value);
+	postHIDNotification(HOST_CANVAS_KEYBOARD_DID_CHANGE, usageId, value);
 	
 	if ((keyDown[HOST_CANVAS_K_LEFTCONTROL] ||
 		 keyDown[HOST_CANVAS_K_RIGHTCONTROL]) &&
@@ -116,7 +113,7 @@ void OEOpenGLCanvas::setUnicodeKey(int unicode)
 	if (((unicode < 0xe000) || (unicode > 0xf8ff)) &&
 		((unicode < 0xf0000) || (unicode > 0xffffd)) &&
 		((unicode < 0x100000) || (unicode > 0x10fffd)))
-		postHIDNotification(HOST_CANVAS_UNICODEKEYBOARD_CHANGED, unicode, 0);
+		postHIDNotification(HOST_CANVAS_UNICODEKEYBOARD_DID_CHANGE, unicode, 0);
 }
 
 void OEOpenGLCanvas::setMouseButton(int index, bool value)
@@ -130,7 +127,7 @@ void OEOpenGLCanvas::setMouseButton(int index, bool value)
 	mouseButtonDown[index] = value;
 	
 	if (mouseCaptured)
-		postHIDNotification(HOST_CANVAS_MOUSE_CHANGED,
+		postHIDNotification(HOST_CANVAS_MOUSE_DID_CHANGE,
 							HOST_CANVAS_M_BUTTON1 + index,
 							value);
 	/*	else if (!mouseCaptured && mouseCapture && (index == 0))
@@ -139,7 +136,7 @@ void OEOpenGLCanvas::setMouseButton(int index, bool value)
 	 setMouseCapture(emulation, true);
 	 }
 	 */	else
-		 postHIDNotification(HOST_CANVAS_POINTER_CHANGED,
+		 postHIDNotification(HOST_CANVAS_POINTER_DID_CHANGE,
 							 HOST_CANVAS_P_BUTTON1 + index,
 							 value);
 }
@@ -149,10 +146,10 @@ void OEOpenGLCanvas::setMousePosition(float x, float y)
 	if (mouseCaptured)
 		return;
 	
-	postHIDNotification(HOST_CANVAS_POINTER_CHANGED,
+	postHIDNotification(HOST_CANVAS_POINTER_DID_CHANGE,
 						HOST_CANVAS_P_X,
 						x);
-	postHIDNotification(HOST_CANVAS_POINTER_CHANGED,
+	postHIDNotification(HOST_CANVAS_POINTER_DID_CHANGE,
 						HOST_CANVAS_P_Y,
 						y);
 }
@@ -162,10 +159,10 @@ void OEOpenGLCanvas::moveMouse(float rx, float ry)
 	if (!mouseCaptured)
 		return;
 	
-	postHIDNotification(HOST_CANVAS_MOUSE_CHANGED,
+	postHIDNotification(HOST_CANVAS_MOUSE_DID_CHANGE,
 						HOST_CANVAS_M_RELX,
 						rx);
-	postHIDNotification(HOST_CANVAS_MOUSE_CHANGED,
+	postHIDNotification(HOST_CANVAS_MOUSE_DID_CHANGE,
 						HOST_CANVAS_M_RELY,
 						ry);
 }
@@ -176,11 +173,11 @@ void OEOpenGLCanvas::sendMouseWheelEvent(int index, float value)
 		return;
 	
 	if (mouseCaptured)
-		postHIDNotification(HOST_CANVAS_MOUSE_CHANGED,
+		postHIDNotification(HOST_CANVAS_MOUSE_DID_CHANGE,
 							HOST_CANVAS_M_WHEELX + index,
 							value);
 	else
-		postHIDNotification(HOST_CANVAS_POINTER_CHANGED,
+		postHIDNotification(HOST_CANVAS_POINTER_DID_CHANGE,
 							HOST_CANVAS_P_WHEELX + index,
 							value);
 }
@@ -198,7 +195,7 @@ void OEOpenGLCanvas::setJoystickButton(int deviceIndex, int index, bool value)
 	
 	joystickButtonDown[deviceIndex][index] = value;
 	
-	postHIDNotification(HOST_CANVAS_JOYSTICK1_CHANGED + deviceIndex,
+	postHIDNotification(HOST_CANVAS_JOYSTICK1_DID_CHANGE + deviceIndex,
 						HOST_CANVAS_J_BUTTON1 + index,
 						value);
 }
@@ -211,7 +208,7 @@ void OEOpenGLCanvas::setJoystickPosition(int deviceIndex, int index, float value
 	if (index >= HOST_CANVAS_JOYSTICK_AXIS_NUM)
 		return;
 	
-	postHIDNotification(HOST_CANVAS_JOYSTICK1_CHANGED + deviceIndex,
+	postHIDNotification(HOST_CANVAS_JOYSTICK1_DID_CHANGE + deviceIndex,
 						HOST_CANVAS_J_AXIS1 + index,
 						value);
 }
@@ -224,7 +221,7 @@ void OEOpenGLCanvas::sendJoystickHatEvent(int deviceIndex, int index, float valu
 	if (index >= HOST_CANVAS_JOYSTICK_HAT_NUM)
 		return;
 	
-	postHIDNotification(HOST_CANVAS_JOYSTICK1_CHANGED + deviceIndex,
+	postHIDNotification(HOST_CANVAS_JOYSTICK1_DID_CHANGE + deviceIndex,
 						HOST_CANVAS_J_AXIS1 + index,
 						value);
 }
@@ -237,7 +234,7 @@ void OEOpenGLCanvas::moveJoystickBall(int deviceIndex, int index, float value)
 	if (index >= HOST_CANVAS_JOYSTICK_RAXIS_NUM)
 		return;
 	
-	postHIDNotification(HOST_CANVAS_JOYSTICK1_CHANGED + deviceIndex,
+	postHIDNotification(HOST_CANVAS_JOYSTICK1_DID_CHANGE + deviceIndex,
 						HOST_CANVAS_J_AXIS1 + index,
 						value);
 }

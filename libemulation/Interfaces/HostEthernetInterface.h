@@ -18,7 +18,7 @@ typedef enum
 
 typedef enum
 {
-	HOST_ETHERNET_DATA_WAS_RECEIVED,
+	HOST_ETHERNET_DID_RECEIVE_DATA,
 } HostEthernetNotifications;
 
 #endif

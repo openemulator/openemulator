@@ -47,22 +47,22 @@ bool OEEDL::open(string path)
 	
 	OEData data;
 	string pathExtension = getPathExtension(path);
-	if (pathExtension == OE_STANDALONE_EXTENSION)
+	if (pathExtension == OE_FILE_PATH_EXTENSION)
 	{
 		is_open = readFile(path, &data);
 		
 		if (!is_open)
 			log("could not open '" + path + "'");
 	}
-	else if (pathExtension == OE_PACKAGE_EXTENSION)
+	else if (pathExtension == OE_PACKAGE_PATH_EXTENSION)
 	{
 		package = new OEPackage(path);
 		if (package && package->isOpen())
 		{
-			is_open = package->readFile(OE_PACKAGE_EDL_FILENAME, &data);
+			is_open = package->readFile(OE_PACKAGE_EDL_PATH, &data);
 			
 			if (!is_open)
-				log("could not read '" OE_PACKAGE_EDL_FILENAME
+				log("could not read '" OE_PACKAGE_EDL_PATH
 					  "' in '" + path + "'");
 		}
 		else
@@ -75,7 +75,7 @@ bool OEEDL::open(string path)
 	{
 		doc = xmlReadMemory(&data[0],
 							data.size(),
-							OE_PACKAGE_EDL_FILENAME,
+							OE_PACKAGE_EDL_PATH,
 							NULL,
 							0);
 		
@@ -110,7 +110,7 @@ bool OEEDL::save(string path)
 	
 	OEData data;
 	string pathExtension = getPathExtension(path);
-	if (pathExtension == OE_STANDALONE_EXTENSION)
+	if (pathExtension == OE_FILE_PATH_EXTENSION)
 	{
 		if (update())
 		{
@@ -127,7 +127,7 @@ bool OEEDL::save(string path)
 		else
 			log("could not update the configuration for '" + path + "'");
 	}
-	else if (pathExtension == OE_PACKAGE_EXTENSION)
+	else if (pathExtension == OE_PACKAGE_PATH_EXTENSION)
 	{
 		package = new OEPackage(path);
 		
@@ -137,9 +137,9 @@ bool OEEDL::save(string path)
 			{
 				if (dump(&data))
 				{
-					is_open = package->writeFile(OE_PACKAGE_EDL_FILENAME, &data);
+					is_open = package->writeFile(OE_PACKAGE_EDL_PATH, &data);
 					if (!is_open)
-						log("could not write '" OE_PACKAGE_EDL_FILENAME
+						log("could not write '" OE_PACKAGE_EDL_PATH
 							  "' in '" + path + "'");
 				}
 				else

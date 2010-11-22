@@ -26,7 +26,7 @@
 
 - (void)showDevices:(id)sender;
 
-- (void)constructEmulation:(NSURL *)url;
+- (void)newEmulation:(NSURL *)url;
 - (void)deleteEmulation;
 - (void *)emulation;
 

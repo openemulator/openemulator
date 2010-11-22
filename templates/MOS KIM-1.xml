@@ -85,13 +85,13 @@
     <property name="size" value="0x40" />
 </component>
 <component id="kim1.rriot1.rom" class="ROM">
-    <property name="image" src="${resourcePath}/roms/Early microcomputers/MOS KIM-1 6530-002 ROM.bin" />
+    <property name="image" src="${resourcePath}/roms/MOS/MOS KIM-1 6530-002 ROM.bin" />
 </component>
 <component id="kim1.rriot2.rom" class="ROM">
-    <property name="image" src="${resourcePath}/roms/Early microcomputers/MOS KIM-1 6530-003 ROM.bin" />
+    <property name="image" src="${resourcePath}/roms/MOS/MOS KIM-1 6530-003 ROM.bin" />
 </component>
 <component id="kim1.io" class="KIM1IO">
-    <property name="hostCanvasController" ref="hostCanvasController" />
+    <property name="hostEmulationController" ref="hostEmulationController" />
     <property name="view" src="${resourcePath}/images/Early microcomputers/MOS KIM-1 View.png" />
     <property name="serialPort" ref="" />
     <property name="audioOut" ref="kim1.audioOut" />
@@ -104,20 +104,6 @@
 <component id="kim1.audioIn" class="KIM1PLL">
     <property name="hostAudio" ref="hostAudio" />
     <property name="decisionFrequency" value="3400" />
-</component>
-
-<device id="term" label="Terminal" image="Terminal.png">
-    <canvas ref="term.io" />
-</device>
-<connector id="term.connector" type="Serial" label="Connector" image="Serial Port Connector.png" />
-<component id="term.io" class="Terminal">
-    <property name="width" value="24" />
-    <property name="height" value="40" />
-    <property name="charset" ref="term.charset" />
-</component>
-<component id="term.charset" class="CharsetLoader">
-    <property name="format" value="Signetics" />
-    <property name="image" src="${resourcePath}/roms/Signetics/Signetics 2513 Video ROM.bin" />
 </component>
 
 </edl>

@@ -14,8 +14,7 @@
 
 ROM::ROM()
 {
-	size = 0;
-	mask = 0;
+	size = 1;
 	data = NULL;
 	datap = NULL;
 }

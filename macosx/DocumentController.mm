@@ -67,32 +67,7 @@
 	[super dealloc];
 }
 
-- (void)toggleInspector:(id)sender
-{
-	[fInspectorWindowController toggleInspector:sender];
-}
-
-- (void)toggleAudioControls:(id)sender
-{
-	[fAudioControlsWindowController toggleAudioControls:sender];
-}
-
-- (NSArray *)diskImagePathExtensions
-{
-	return diskImagePathExtensions;
-}
-
-- (NSArray *)audioPathExtensions
-{
-	return audioPathExtensions;
-}
-
-- (void *)oePortAudio
-{
-	return oePortAudio;
-}
-
-- (void)applicationWillFinishLaunching:(NSNotification *)notification
+- (void)applicationDidFinishLaunching:(NSNotification *)notification
 {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	
@@ -123,23 +98,43 @@
 				  context:nil];
 }
 
-- (BOOL)application:(NSApplication *)theApplication
-		   openFile:(NSString *)filename
+- (void)applicationDidTerminate:(NSNotification *)notification
 {
-	NSString *extension = [[filename pathExtension] lowercaseString];
+	((OEPortAudio *)oePortAudio)->close();
+}
+
+- (void)applicationDidBecomeActive:(NSNotification *)notification
+{
+}
+
+- (void)applicationDidResignActive:(NSNotification *)notification
+{
+}
+
+- (BOOL)application:(NSApplication *)theApplication
+		   openFile:(NSString *)path
+{
+	NSString *pathExtension = [[path pathExtension] lowercaseString];
 	
-	// Open an emulation through standard interface
-	if ([extension compare:@OE_PACKAGE_EXTENSION] == NSOrderedSame)
+	// Open an emulation through the standard Cocoa interface
+	if ([pathExtension compare:@OE_PACKAGE_PATH_EXTENSION] == NSOrderedSame)
 		return NO;
 	
 	// Open audio files
-	if ([audioPathExtensions containsObject:extension])
+	if ([audioPathExtensions containsObject:pathExtension])
 	{
-		[fAudioControlsWindowController readFromURL:[NSURL fileURLWithPath:filename]];
+		[fAudioControlsWindowController readFromPath:path];
 		return YES;
 	}
 	
-	// Open default document if other filetype
+	if ([pathExtension compare:@"txt"] == NSOrderedSame)
+	{
+		// Find current canvas
+		// Paste
+		return YES;
+	}
+	
+	// Open a default document if other filetype
 	if (![self currentDocument])
 	{
 		NSError *error;
@@ -155,7 +150,7 @@
 	}
 	
 	// Mount disk images
-	if ([diskImagePathExtensions containsObject:extension])
+	if ([diskImagePathExtensions containsObject:pathExtension])
 	{
 		
 	}
@@ -165,20 +160,11 @@
 	[alert setMessageText:[NSString localizedStringWithFormat:
 						   @"The document \u201C%@\u201D could not be opened. "
 						   "This emulation cannot open files in this format.",
-						   [filename lastPathComponent]]];
+						   [path lastPathComponent]]];
 	[alert setAlertStyle:NSCriticalAlertStyle];
 	[alert runModal];
 	
 	return YES;
-}
-
-- (void)applicationDidFinishLaunching:(NSNotification *)notification
-{
-}
-
-- (void)applicationWillTerminate:(NSNotification *)notification
-{
-	((OEPortAudio *)oePortAudio)->close();
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath
@@ -216,6 +202,31 @@
 		return YES;
 }
 
+- (NSArray *)diskImagePathExtensions
+{
+	return diskImagePathExtensions;
+}
+
+- (NSArray *)audioPathExtensions
+{
+	return audioPathExtensions;
+}
+
+- (void *)oePortAudio
+{
+	return oePortAudio;
+}
+
+- (void)toggleInspector:(id)sender
+{
+	[fInspectorWindowController toggleInspector:sender];
+}
+
+- (void)toggleAudioControls:(id)sender
+{
+	[fAudioControlsWindowController toggleAudioControls:sender];
+}
+
 - (IBAction)newDocumentFromTemplateChooser:(id)sender
 {
 	[fTemplateChooserWindowController run];
@@ -225,9 +236,10 @@
 {
 	NSOpenPanel *panel = [NSOpenPanel openPanel];
 	NSMutableArray *fileTypes = [NSMutableArray array];
-	[fileTypes addObject:@OE_PACKAGE_EXTENSION];
+	[fileTypes addObject:@OE_PACKAGE_PATH_EXTENSION];
 	[fileTypes addObjectsFromArray:audioPathExtensions];
 	[fileTypes addObjectsFromArray:diskImagePathExtensions];
+	[fileTypes addObject:@"txt"];
 	
 	if ([panel runModalForTypes:fileTypes] == NSOKButton)
 	{
@@ -318,9 +330,9 @@
 	((OEPortAudio *)oePortAudio)->removeEmulation((OEPortAudioEmulation *)emulation);
 }
 
-- (void)startPlaying:(NSURL *)url
+- (void)startPlaying:(NSString *)path
 {
-	((OEPortAudio *)oePortAudio)->startPlaying(getCString([url path]));
+	((OEPortAudio *)oePortAudio)->startPlaying(getCString(path));
 }
 
 - (void)stopPlaying
@@ -343,9 +355,9 @@
 	return ((OEPortAudio *)oePortAudio)->getPlayDuration();
 }
 
-- (void)startRecording:(NSURL *)url
+- (void)startRecording:(NSString *)path
 {
-	((OEPortAudio *)oePortAudio)->startRecording(getCString([url path]));
+	((OEPortAudio *)oePortAudio)->startRecording(getCString(path));
 }
 
 - (void)stopRecording

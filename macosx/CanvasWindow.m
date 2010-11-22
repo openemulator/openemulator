@@ -26,11 +26,6 @@
 		fullscreen = NO;
 		
 		[self setAcceptsMouseMovedEvents:YES];
-		
-		[self registerForDraggedTypes:[NSArray arrayWithObjects:
-									   NSStringPboardType,
-									   NSFilenamesPboardType, 
-									   nil]];
 	}
 	
 	return self;
@@ -40,60 +35,8 @@
 {
 	if (fullscreen)
 		[self toggleFullscreen:self];
-
-	[self unregisterDraggedTypes];
 	
 	[super dealloc];
-}
-
-- (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender
-{
-    NSPasteboard *pasteboard = [sender draggingPasteboard];
-	
-	if ([[pasteboard types] containsObject:NSFilenamesPboardType])
-	{
-		DocumentController *documentController;
-		documentController = [NSDocumentController sharedDocumentController];
-	
-		NSString *path = [[pasteboard propertyListForType:NSFilenamesPboardType]
-						  objectAtIndex:0];
-		NSString *pathExtension = [[path pathExtension] lowercaseString];
-	
-		if (([[documentController diskImagePathExtensions] containsObject:pathExtension])
-			|| ([[documentController audioPathExtensions] containsObject:pathExtension]))
-			return NSDragOperationCopy;
-	}
-	
-	return NSDragOperationNone;
-}
-
-- (BOOL)performDragOperation:(id <NSDraggingInfo>)sender
-{
-    NSPasteboard *pasteboard = [sender draggingPasteboard];
-	
-	if ([[pasteboard types] containsObject:NSFilenamesPboardType])
-	{
-		DocumentController *documentController;
-		documentController = [NSDocumentController sharedDocumentController];
-		
-		NSPasteboard *pasteboard = [sender draggingPasteboard];
-		NSString *path = [[pasteboard propertyListForType:NSFilenamesPboardType]
-						  objectAtIndex:0];
-		NSString *pathExtension = [[path pathExtension] lowercaseString];
-		
-		if (([[documentController diskImagePathExtensions] containsObject:pathExtension])
-			|| ([[documentController audioPathExtensions] containsObject:pathExtension]))
-		{
-			return YES;
-		}
-    }
-	else if ([[pasteboard types] containsObject:NSStringPboardType])
-	{
-		// Paste here
-		return YES;
-	}
-	
-    return NO;
 }
 
 - (void *)canvasComponent

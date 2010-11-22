@@ -23,7 +23,7 @@ bool AudioSampleConverter::setRef(string name, OEComponent *ref)
 {
 	if (name == "hostAudio")
 	{
-		replaceObserver(hostAudio, ref, HOST_AUDIO_FRAME_WILL_RENDER);
+		replaceObserver(hostAudio, ref, HOST_AUDIO_FRAME_WILL_BEGIN_RENDER);
 		hostAudio = ref;
 	}
 	else if (name == "controlBus")
@@ -38,7 +38,7 @@ void AudioSampleConverter::notify(OEComponent *sender, int notification, void *d
 {
 	switch(notification)
 	{
-		case HOST_AUDIO_FRAME_WILL_RENDER:
+		case HOST_AUDIO_FRAME_WILL_BEGIN_RENDER:
 		{
 			HostAudioBuffer *buffer = (HostAudioBuffer *) data;
 			float *out = buffer->output;

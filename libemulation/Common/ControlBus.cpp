@@ -49,7 +49,7 @@ bool ControlBus::setRef(string name, OEComponent *ref)
 {
 	if (name == "hostAudio")
 	{
-		replaceObserver(hostAudio, ref, HOST_AUDIO_FRAME_WILL_RENDER);
+		replaceObserver(hostAudio, ref, HOST_AUDIO_FRAME_DID_BEGIN_RENDER);
 		hostAudio = ref;
 	}
 	else if (name == "master")
@@ -104,7 +104,7 @@ bool ControlBus::postMessage(OEComponent *component, int event, void *data)
 			int oldResetCount = resetCount;
 			resetCount += *((bool *) data) ? 1 : -1;
 			if (!oldResetCount != !resetCount)
-				OEComponent::notify(this, CONTROLBUS_RESET_CHANGED, &resetCount);
+				OEComponent::notify(this, CONTROLBUS_RESET_DID_CHANGE, &resetCount);
 			return true;
 		}
 		case CONTROLBUS_SET_IRQ:
@@ -112,7 +112,7 @@ bool ControlBus::postMessage(OEComponent *component, int event, void *data)
 			int oldIRQCount = irqCount;
 			irqCount += *((bool *) data) ? 1 : -1;
 			if (!oldIRQCount != !irqCount)
-				OEComponent::notify(this, CONTROLBUS_IRQ_CHANGED, &irqCount);
+				OEComponent::notify(this, CONTROLBUS_IRQ_DID_CHANGE, &irqCount);
 			return true;
 		}
 		case CONTROLBUS_SET_NMI:
@@ -120,13 +120,13 @@ bool ControlBus::postMessage(OEComponent *component, int event, void *data)
 			int oldNMICount = nmiCount;
 			nmiCount += *((bool *) data) ? 1 : -1;
 			if (!oldNMICount != !nmiCount)
-				OEComponent::notify(this, CONTROLBUS_NMI_CHANGED, &nmiCount);
+				OEComponent::notify(this, CONTROLBUS_NMI_DID_CHANGE, &nmiCount);
 			return true;
 		}
-		case CONTROLBUS_SCHEDULE:
+		case CONTROLBUS_SCHEDULE_TIMER:
 			return true;
 			
-		case CONTROLBUS_DESCHEDULE:
+		case CONTROLBUS_INVALIDATE_TIMER:
 			return true;
 			
 		case CONTROLBUS_GET_CLOCKCYCLE:

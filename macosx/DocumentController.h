@@ -30,14 +30,14 @@
 	int disableMenuBarCount;
 }
 
-- (void)toggleInspector:(id)sender;
-- (void)toggleAudioControls:(id)sender;
-
 - (NSArray *)diskImagePathExtensions;
 - (NSArray *)audioPathExtensions;
 - (void *)oePortAudio;
 
+- (void)toggleInspector:(id)sender;
+- (void)toggleAudioControls:(id)sender;
 - (IBAction)newDocumentFromTemplateChooser:(id)sender;
+
 - (id)openUntitledDocumentWithTemplateURL:(NSURL *)absoluteURL
 								  display:(BOOL)displayDocument
 									error:(NSError **)outError;
@@ -47,12 +47,12 @@
 - (BOOL)addEmulation:(void *)emulation;
 - (void)removeEmulation:(void *)emulation;
 
-- (void)startPlaying:(NSURL *)url;
+- (void)startPlaying:(NSString *)path;
 - (void)stopPlaying;
 - (BOOL)isPlaying;
 - (float)getPlayTime;
 - (float)getPlayDuration;
-- (void)startRecording:(NSURL *)url;
+- (void)startRecording:(NSString *)path;
 - (void)stopRecording;
 - (BOOL)isRecording;
 - (float)getRecordingTime;

@@ -14,8 +14,7 @@
 #import "StringConversion.h"
 
 #import "OEPortAudioEmulation.h"
-
-#import "CanvasWindowController.h"
+#import "OEEmulationController.h"
 
 @implementation Document
 
@@ -68,17 +67,19 @@
 	[devicesWindowController showWindow:sender];
 }
 
-- (void)constructEmulation:(NSURL *)url
+- (void)newEmulation:(NSURL *)url
 {
 	DocumentController *documentController;
 	documentController = [NSDocumentController sharedDocumentController];
 	OEPortAudio *oePortAudio = (OEPortAudio *)[documentController oePortAudio];
 	
+	OEComponent *hostEmulationController = new OEEmulationController();
+	
 	OEPortAudioEmulation *theEmulation = new OEPortAudioEmulation();
 	theEmulation->setResourcePath(getCString([[NSBundle mainBundle] resourcePath]));
 	theEmulation->setOEPortAudio(oePortAudio);
 	theEmulation->setComponent("hostAudio", (OEComponent *)oePortAudio);
-	theEmulation->setComponent("hostStorage", (OEComponent *)oePortAudio);
+	theEmulation->setComponent("hostEmulationController", hostEmulationController);
 	
 	theEmulation->open(getCString([url path]));
 	
@@ -232,7 +233,7 @@
 			  error:(NSError **)outError
 {
 	[self deleteEmulation];
-	[self constructEmulation:absoluteURL];
+	[self newEmulation:absoluteURL];
 	
 	if (emulation)
 	{
@@ -343,7 +344,7 @@
 - (void)removeDevice:(NSDictionary *)dict
 {
 	NSString *deviceRef = [dict objectForKey:@"ref"];
-	NSString *deviceLabel = [dict objectForKey:@"label"];
+//	NSString *deviceLabel = [dict objectForKey:@"label"];
 	
 	string refString = getCString(deviceRef);
 	
@@ -382,10 +383,10 @@
 	devicesWindowController = [[DevicesWindowController alloc] init];
 	[self addWindowController:devicesWindowController];
 	
-	NSWindowController *windowController;
+/*	NSWindowController *windowController;
 	windowController = [[CanvasWindowController alloc] initWithCanvasComponent:NULL];
 	[self addWindowController:windowController];
-	[windowController release];
+	[windowController release];*/
 }
 
 - (NSArray *)freePorts

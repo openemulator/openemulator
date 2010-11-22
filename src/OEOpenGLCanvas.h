@@ -15,7 +15,7 @@
 
 #include <OpenGL/gl.h>
 
-#include "OEPortAudioEmulation.h"
+#include "OEComponent.h"
 
 #include "HostCanvasInterface.h"
 
@@ -29,16 +29,10 @@ typedef enum
 	OEGL_TEX_NUM,
 } OEOpenGLTextureIndex;
 
-inline void OEOpenGLCanvasLog(string text)
-{
-	cerr << "oeopenglcanvas: " << text << endl;
-}
-
 class OEOpenGLCanvas : public OEComponent
 {
 public:
-	OEOpenGLCanvas(OEPortAudioEmulation *emulation,
-				   string canvasRef);
+	OEOpenGLCanvas();
 	~OEOpenGLCanvas();
 	
 	void initOpenGL();
@@ -63,8 +57,6 @@ public:
 private:
 	GLuint textures[OEGL_TEX_NUM];
 	
-	OEPortAudioEmulation *emulation;
-
 	pthread_mutex_t frameMutex;
 	
 	bool keyDown[HOST_CANVAS_KEYBOARD_KEY_NUM];

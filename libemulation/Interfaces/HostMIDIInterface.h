@@ -18,7 +18,7 @@ typedef enum
 
 typedef enum
 {
-	HOST_MIDI_DATA_WAS_RECEIVED,
+	HOST_MIDI_DID_RECEIVE_DATA,
 } HostMIDINotifications;
 
 #endif

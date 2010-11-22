@@ -8,7 +8,9 @@
  * Implements an OpenEmulator storage object.
  */
 
+#include "OEPortAudioEmulation.h"
 #include "OEEmulationController.h"
+#include "OEOpenGLCanvas.h"
 
 #include "HostEmulationControllerInterface.h"
 
@@ -39,10 +41,16 @@ bool OEEmulationController::postMessage(OEComponent *sender, int message, void *
 	}
 	else if (message == HOST_EMULATIONCONTROLLER_ADD_CANVAS)
 	{
+		OEComponent **ref = (OEComponent **)data;
+		*ref = new OEOpenGLCanvas();
 		
+		// To-Do: Create the (hidden) canvas window
 	}
 	else if (message == HOST_EMULATIONCONTROLLER_REMOVE_CANVAS)
 	{
+		// To-Do: Delete the canvas window
+		
+		delete (OEComponent *)data;
 	}
 	else if (message == HOST_EMULATIONCONTROLLER_RUN_ALERT)
 	{

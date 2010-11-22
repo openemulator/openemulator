@@ -30,7 +30,7 @@ bool KIM1PLL::setRef(string name, OEComponent *ref)
 {
 	if (name == "hostAudio")
 	{
-		replaceObserver(hostAudio, ref, HOST_AUDIO_FRAME_WILL_RENDER);
+		replaceObserver(hostAudio, ref, HOST_AUDIO_FRAME_WILL_BEGIN_RENDER);
 		hostAudio = ref;
 	}
 	else

@@ -11,6 +11,8 @@
 #ifndef _HOSTEMULATIONCONTROLLERINTERFACE_H
 #define _HOSTEMULATIONCONTROLLERINTERFACE_H
 
+#include "OEComponent.h"
+
 //
 // Storage:
 // * The framework first tries to mount on all available devices.

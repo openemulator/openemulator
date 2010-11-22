@@ -31,8 +31,8 @@
 	
 	NSTimer *timer;
 	
-	NSURL *playURL;
-	NSURL *recordingURL;
+	NSString *playPath;
+	NSString *recordingPath;
 }
 
 - (IBAction)toggleAudioControls:(id)sender;
@@ -40,12 +40,11 @@
 - (void) updatePlay;
 - (IBAction)openPlay:(id)sender;
 - (IBAction)togglePlay:(id)sender;
+- (void)readFromPath:(NSString *)path;
 
 - (void) updateRecording;
 - (IBAction)toggleRecording:(id)sender;
 - (IBAction)saveRecording:(id)sender;
-
-- (void)readFromURL:(NSURL *)theURL;
-- (void)writeToURL:(NSURL *)theURL;
+- (void)writeToPath:(NSString *)path;
 
 @end

@@ -176,15 +176,14 @@ bool OEEmulation::configureComponent(string id, xmlNodePtr children)
 				else
 					dataRead = readFile(parsedSrc, data);
 				
-				if (dataRead)
+				if (!dataRead)
 				{
-					if (!component->setData(name, data))
-						log("invalid property '" + name + "' for '" + id + "'");
+					delete data;
+					data = NULL;
 				}
-				else
-					log("could not read '" + src + "'");
 				
-				delete data;
+				if (!component->setData(name, data))
+					log("invalid property '" + name + "' for '" + id + "'");
 			}
 			else
 			{
@@ -331,10 +330,7 @@ void OEEmulation::deconfigureComponent(string id, xmlNodePtr children)
 {
 	OEComponent *component = getComponent(id);
 	if (!component)
-	{
-		log("could not deconfigure '" + id + "', it was not created");
 		return;
-	}
 	
 	for(xmlNodePtr node = children;
 		node;
@@ -374,10 +370,7 @@ void OEEmulation::destroyComponent(string id, xmlNodePtr children)
 {
 	OEComponent *component = getComponent(id);
 	if (!component)
-	{
-		log("could not destroy '" + id + "', it was not created");
 		return;
-	}
 	
 	delete component;
 	

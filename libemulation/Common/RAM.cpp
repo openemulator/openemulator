@@ -44,7 +44,7 @@ bool RAM::setRef(string name, OEComponent *ref)
 {
 	if (name == "controlBus")
 	{
-		replaceObserver(controlBus, ref, CONTROLBUS_POWERSTATE_CHANGED);
+		replaceObserver(controlBus, ref, CONTROLBUS_POWERSTATE_DID_CHANGE);
 		controlBus = ref;
 	}
 	else
@@ -120,7 +120,7 @@ void RAM::notify(OEComponent *sender, int notification, void *data)
 {
 	switch (notification)
 	{
-		case CONTROLBUS_POWERSTATE_CHANGED:
+		case CONTROLBUS_POWERSTATE_DID_CHANGE:
 		{
 			for (int i = 0; i < this->data->size(); i++)
 				(*this->data)[i] = powerOnPattern[i % powerOnPattern.size()];

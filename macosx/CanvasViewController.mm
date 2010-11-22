@@ -9,6 +9,7 @@
  */
 
 #import "CanvasViewController.h"
+#import "DocumentController.h"
 #import "StringConversion.h"
 
 #import "OEOpenGLCanvas.h"
@@ -213,10 +214,15 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	[pixelFormat autorelease];
 	if (self = [super initWithFrame:rect pixelFormat:pixelFormat])
 	{
-/*		Document *document = [fDocumentWindowController document];
+		[self registerForDraggedTypes:[NSArray arrayWithObjects:
+									   NSStringPboardType,
+									   NSFilenamesPboardType, 
+									   nil]];
+		
+		/*		Document *document = [fDocumentWindowController document];
 		OEPortAudioEmulation *emulation = (OEPortAudioEmulation *)[document emulation];
 */		
-		oeOpenGLCanvas = new OEOpenGLCanvas(NULL, "");
+		oeOpenGLCanvas = new OEOpenGLCanvas();
 		
 		memset(keyMap, sizeof(keyMap), 0);
 		for (int i = 0;
@@ -236,7 +242,59 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	
 	delete (OEOpenGLCanvas *)oeOpenGLCanvas;
 	
+	[self unregisterDraggedTypes];
+	
 	[super dealloc];
+}
+
+- (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender
+{
+    NSPasteboard *pasteboard = [sender draggingPasteboard];
+	
+	if ([[pasteboard types] containsObject:NSFilenamesPboardType])
+	{
+		DocumentController *documentController;
+		documentController = [NSDocumentController sharedDocumentController];
+		
+		NSString *path = [[pasteboard propertyListForType:NSFilenamesPboardType]
+						  objectAtIndex:0];
+		NSString *pathExtension = [[path pathExtension] lowercaseString];
+		
+		if (([[documentController diskImagePathExtensions] containsObject:pathExtension])
+			|| ([[documentController audioPathExtensions] containsObject:pathExtension])
+			|| ([pathExtension compare:@"txt"] == NSOrderedSame))
+			return NSDragOperationCopy;
+	}
+	else if ([[pasteboard types] containsObject:NSStringPboardType])
+		return NSDragOperationCopy;
+	
+	return NSDragOperationNone;
+}
+
+- (BOOL)performDragOperation:(id <NSDraggingInfo>)sender
+{
+    NSPasteboard *pasteboard = [sender draggingPasteboard];
+	
+	if ([[pasteboard types] containsObject:NSFilenamesPboardType])
+	{
+		DocumentController *documentController;
+		documentController = [NSDocumentController sharedDocumentController];
+		
+		NSPasteboard *pasteboard = [sender draggingPasteboard];
+		NSString *path = [[pasteboard propertyListForType:NSFilenamesPboardType]
+						  objectAtIndex:0];
+		
+		[documentController application:NSApp openFile:path];
+		
+		return YES;
+	}
+	else if ([[pasteboard types] containsObject:NSStringPboardType])
+	{
+		// Paste here
+		return YES;
+	}
+	
+    return NO;
 }
 
 - (BOOL)acceptsFirstResponder

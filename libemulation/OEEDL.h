@@ -16,9 +16,9 @@
 #include "OETypes.h"
 #include "OEPackage.h"
 
-#define OE_STANDALONE_EXTENSION "xml"
-#define OE_PACKAGE_EXTENSION "emulation"
-#define OE_PACKAGE_EDL_FILENAME "info.xml"
+#define OE_FILE_PATH_EXTENSION "xml"
+#define OE_PACKAGE_PATH_EXTENSION "emulation"
+#define OE_PACKAGE_EDL_PATH "info.xml"
 
 typedef map<string, string> OEIdMap;
 typedef vector<string> OEIdList;

@@ -26,8 +26,6 @@
 		00247F6E120F98620067755C /* Terminal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 005256E5120A841200A6BC75 /* Terminal.cpp */; };
 		0031347C12036F6E00913149 /* MOS6530.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0031347A12036F6E00913149 /* MOS6530.cpp */; };
 		003134FD12039FFC00913149 /* Apple1CassetteInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 003134F112039FFC00913149 /* Apple1CassetteInterface.cpp */; };
-		0031ECAB1292DA9F005BA276 /* OEOpenGLCanvasController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0031ECAA1292DA9F005BA276 /* OEOpenGLCanvasController.cpp */; };
-		0031ED811292EAB2005BA276 /* OEOpenGLCanvasController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0031ECAA1292DA9F005BA276 /* OEOpenGLCanvasController.cpp */; };
 		0031EDA31292EF98005BA276 /* OEEmulationController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0031EDA21292EF98005BA276 /* OEEmulationController.cpp */; };
 		003318AF1101492B00CC1782 /* Connector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 003318AD1101492B00CC1782 /* Connector.xib */; };
 		003E25E71070796700185260 /* images in Resources */ = {isa = PBXBuildFile; fileRef = 003E2597107075D900185260 /* images */; };
@@ -209,8 +207,6 @@
 		0031347A12036F6E00913149 /* MOS6530.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MOS6530.cpp; sourceTree = "<group>"; };
 		003134F112039FFC00913149 /* Apple1CassetteInterface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Apple1CassetteInterface.cpp; sourceTree = "<group>"; };
 		003134F212039FFC00913149 /* Apple1CassetteInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Apple1CassetteInterface.h; sourceTree = "<group>"; };
-		0031ECA91292DA9F005BA276 /* OEOpenGLCanvasController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEOpenGLCanvasController.h; sourceTree = "<group>"; };
-		0031ECAA1292DA9F005BA276 /* OEOpenGLCanvasController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEOpenGLCanvasController.cpp; sourceTree = "<group>"; };
 		0031EDA11292EF98005BA276 /* OEEmulationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEEmulationController.h; sourceTree = "<group>"; };
 		0031EDA21292EF98005BA276 /* OEEmulationController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEEmulationController.cpp; sourceTree = "<group>"; };
 		003318AE1101492B00CC1782 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Connector.xib; sourceTree = "<group>"; };
@@ -597,8 +593,6 @@
 				006774641286DAF4000E843B /* OEPortAudioEmulation.cpp */,
 				006774671286DB06000E843B /* OEOpenGLCanvas.h */,
 				006774681286DB06000E843B /* OEOpenGLCanvas.cpp */,
-				0031ECA91292DA9F005BA276 /* OEOpenGLCanvasController.h */,
-				0031ECAA1292DA9F005BA276 /* OEOpenGLCanvasController.cpp */,
 				0031EDA11292EF98005BA276 /* OEEmulationController.h */,
 				0031EDA21292EF98005BA276 /* OEEmulationController.cpp */,
 			);
@@ -839,7 +833,6 @@
 			isa = PBXProject;
 			buildConfigurationList = C05733CB08A9546B00998B17 /* Build configuration list for PBXProject "OpenEmulator" */;
 			compatibilityVersion = "Xcode 3.1";
-			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
 				English,
@@ -925,7 +918,6 @@
 				0067749F1286E72B000E843B /* OEOpenGLCanvas.cpp in Sources */,
 				006774A01286E72C000E843B /* OEPortAudio.cpp in Sources */,
 				006774A11286E72D000E843B /* OEPortAudioEmulation.cpp in Sources */,
-				0031ED811292EAB2005BA276 /* OEOpenGLCanvasController.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -997,7 +989,6 @@
 				00A72B6F12879F650083C6A7 /* CanvasViewController.mm in Sources */,
 				00A72B7012879F690083C6A7 /* CanvasWindowController.m in Sources */,
 				00A72B7312879F800083C6A7 /* CanvasWindow.m in Sources */,
-				0031ECAB1292DA9F005BA276 /* OEOpenGLCanvasController.cpp in Sources */,
 				0031EDA31292EF98005BA276 /* OEEmulationController.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
