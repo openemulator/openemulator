@@ -48,9 +48,11 @@ bool OEEmulationController::postMessage(OEComponent *sender, int message, void *
 	}
 	else if (message == HOST_EMULATIONCONTROLLER_REMOVE_CANVAS)
 	{
+		OEComponent **ref = (OEComponent **)data;
 		// To-Do: Delete the canvas window
 		
-		delete (OEComponent *)data;
+		delete *ref;
+		*ref = NULL;
 	}
 	else if (message == HOST_EMULATIONCONTROLLER_RUN_ALERT)
 	{

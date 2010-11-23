@@ -39,9 +39,12 @@ bool KIM1IO::setValue(string name, string value)
 bool KIM1IO::getValue(string name, string &value)
 {
 	if (name == "windowFrame")
-		canvas->postMessage(this,
-							HOST_CANVAS_GET_WINDOWFRAME,
-							&value);
+	{
+		if (canvas)
+			canvas->postMessage(this,
+								HOST_CANVAS_GET_WINDOWFRAME,
+								&windowFrame);
+	}
 	else
 		return false;
 	
@@ -52,18 +55,14 @@ bool KIM1IO::setRef(string name, OEComponent *ref)
 {
 	if (name == "hostEmulationController")
 	{
-		if (canvas)
-		{
-			string value;
-			canvas->postMessage(this,
-								HOST_CANVAS_GET_WINDOWFRAME,
-								&windowFrame);
-			canvas = NULL;
-		}
 		if (hostEmulationController)
 			hostEmulationController->postMessage(this,
 												 HOST_EMULATIONCONTROLLER_REMOVE_CANVAS,
-												 canvas);
+												 &canvas);
+		if (ref)
+			ref->postMessage(this,
+							 HOST_EMULATIONCONTROLLER_ADD_CANVAS,
+							 &canvas);
 		hostEmulationController = ref;
 	}
 	else if (name == "serialPort")
@@ -93,11 +92,6 @@ bool KIM1IO::setData(string name, OEData *data)
 
 bool KIM1IO::init()
 {
-	if (hostEmulationController)
-		hostEmulationController->postMessage(this,
-											 HOST_EMULATIONCONTROLLER_ADD_CANVAS,
-											 &canvas);
-	
 	if (canvas)
 	{
 		canvas->postMessage(this,

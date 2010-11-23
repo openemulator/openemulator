@@ -75,33 +75,16 @@ bool MOS6502::setRef(string name, OEComponent *ref)
 	if (name == "memoryBus")
 		memoryBus = ref;
 	else if (name == "controlBus")
+	{
+		replaceObserver(controlBus, ref, CONTROLBUS_RESET_DID_ASSERT);
+		replaceObserver(controlBus, ref, CONTROLBUS_IRQ_DID_ASSERT);
+		replaceObserver(controlBus, ref, CONTROLBUS_NMI_DID_ASSERT);
 		controlBus = ref;
+	}
 	else
 		return false;
 	
 	return true;
-}
-
-bool MOS6502::init()
-{
-	if (controlBus)
-	{
-		controlBus->addObserver(this, CONTROLBUS_RESET_DID_ASSERT);
-		controlBus->addObserver(this, CONTROLBUS_IRQ_DID_ASSERT);
-		controlBus->addObserver(this, CONTROLBUS_NMI_DID_ASSERT);
-	}
-	
-	return true;
-}
-
-void MOS6502::terminate()
-{
-	if (controlBus)
-	{
-		controlBus->removeObserver(this, CONTROLBUS_RESET_DID_ASSERT);
-		controlBus->removeObserver(this, CONTROLBUS_IRQ_DID_ASSERT);
-		controlBus->removeObserver(this, CONTROLBUS_NMI_DID_ASSERT);
-	}
 }
 
 void MOS6502::notify(OEComponent *sender, int notification, void *data)
