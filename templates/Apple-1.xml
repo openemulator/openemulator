@@ -2,12 +2,7 @@
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTDs/edl-1.0.dtd">
 <edl version="1.0" type="Early microcomputers" label="Apple-1" image="images/Early microcomputers/Apple-1.png" description="">
 
-<device id="apple1" label="Apple-1" image="images/Early microcomputers/Apple-1.png">
-    <audio ref="apple1.controlBus" />
-    <loader ref="apple1.memoryBus" />
-    <canvas ref="apple1.terminal" />
-    <status ref="apple1.controlBus" />
-</device>
+<device id="apple1" label="Apple-1" image="images/Early microcomputers/Apple-1.png" />
 <port id="apple1.videoPort" ref="" type="CompositeVideo" label="Video Out" image="Video Connector.png">
     <inlet ref="apple1.terminal" property="monitor" outletRef="connector" />
 </port>
@@ -18,6 +13,7 @@
 <port id="apple1.slot2" label="Slot 2" image="Apple-1 Slot.png" />
 <hostconnection type="audio" ref="apple1.controlBus" />
 <component id="apple1.controlBus" class="ControlBus">
+    <property name="hostAudio" ref="hostAudio" />
     <property name="crystal" value="14.31818MHz" />
     <property name="frequencyDivider" value="14" />
     <property name="master" ref="apple1.cpu" />
@@ -96,7 +92,7 @@
     <property name="size" value="0x1000" />
 </component>
 <component id="apple1.rom" class="ROM">
-    <property name="image" src="${resourcePath}/roms/Early microcomputers/Apple I Monitor ROM.bin" />
+    <property name="image" src="${resourcePath}/roms/Apple/Apple-1 Monitor ROM.bin" />
 </component>
 
 </edl>

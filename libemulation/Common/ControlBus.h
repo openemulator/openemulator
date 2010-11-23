@@ -12,7 +12,47 @@
 #define _CONTROLBUS_H
 
 #include "OEComponent.h"
-#include "ControlBusInterface.h"
+
+typedef enum
+{
+	CONTROLBUS_SET_POWERSTATE,
+	CONTROLBUS_GET_POWERSTATE,
+	CONTROLBUS_ASSERT_RESET,
+	CONTROLBUS_CLEAR_RESET,
+	CONTROLBUS_ASSERT_IRQ,
+	CONTROLBUS_CLEAR_IRQ,
+	CONTROLBUS_ASSERT_NMI,
+	CONTROLBUS_CLEAR_NMI,
+	CONTROLBUS_SCHEDULE_TIMER,
+	CONTROLBUS_INVALIDATE_TIMER,
+	CONTROLBUS_GET_CLOCKCYCLE,
+	CONTROLBUS_ADD_CLOCKCYCLE,
+	CONTROLBUS_GET_AUDIOBUFFERINDEX,
+	CONTROLBUS_REQUEST_BUS,
+	CONTROLBUS_RELEASE_BUS,
+} ControlBusMessages;
+
+typedef enum
+{
+	CONTROLBUS_POWERSTATE_DID_CHANGE,
+	CONTROLBUS_RESET_DID_ASSERT,
+	CONTROLBUS_RESET_DID_CLEAR,
+	CONTROLBUS_IRQ_DID_ASSERT,
+	CONTROLBUS_IRQ_DID_CLEAR,
+	CONTROLBUS_NMI_DID_ASSERT,
+	CONTROLBUS_NMI_DID_CLEAR,
+	CONTROLBUS_TIMER_DID_FIRE,
+} ControlBusNotifications;
+
+typedef enum
+{
+	CONTROLBUS_POWERSTATE_ON,
+	CONTROLBUS_POWERSTATE_PAUSE,
+	CONTROLBUS_POWERSTATE_STANDBY,
+	CONTROLBUS_POWERSTATE_SLEEP,
+	CONTROLBUS_POWERSTATE_HIBERNATE,
+	CONTROLBUS_POWERSTATE_OFF,
+} ControlBusPowerStates;
 
 class ControlBus : public OEComponent
 {
@@ -25,13 +65,14 @@ public:
 	
 	bool postMessage(OEComponent *sender, int event, void *data);
 	
+	void notify(OEComponent *sender, int notification, void *data);
+	
 private:
 	OEComponent *hostAudio;
-	
+	OEComponent *cpu;
+	OEComponent *cpuSocket;
 	float crystal;
 	float frequencyDivider;
-	OEComponent *master;
-	OEComponent *masterSocket;
 	bool resetOnPowerOn;
 	
 	int powerState;

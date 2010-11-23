@@ -9,8 +9,7 @@
  */
 
 #include "RAM.h"
-
-#include "ControlBusInterface.h"
+#include "ControlBus.h"
 #include "AddressDecoder.h"
 
 RAM::RAM()
@@ -43,10 +42,7 @@ bool RAM::setValue(string name, string value)
 bool RAM::setRef(string name, OEComponent *ref)
 {
 	if (name == "controlBus")
-	{
-		replaceObserver(controlBus, ref, CONTROLBUS_POWERSTATE_DID_CHANGE);
 		controlBus = ref;
-	}
 	else
 		return false;
 	
@@ -68,12 +64,12 @@ bool RAM::getData(string name, OEData **data)
 	if (name == "image")
 	{
 		int powerState;
-		
 		controlBus->postMessage(this, CONTROLBUS_GET_POWERSTATE, &powerState);
-		if (powerState <= CONTROLBUS_POWERSTATE_HIBERNATE)
-			return false;
 		
-		*data = this->data;
+		if (powerState <= CONTROLBUS_POWERSTATE_HIBERNATE)
+			*data = NULL;
+		else
+			*data = this->data;
 	}
 	else
 		return false;
@@ -97,7 +93,6 @@ bool RAM::init()
 	
 	size = getNextPowerOf2(size);
 	mask = size - 1;
-	
 	data->resize(size);
 	datap = (OEUInt8 *) &data->front();
 	
@@ -118,17 +113,7 @@ bool RAM::postMessage(OEComponent *sender, int message, void *data)
 
 void RAM::notify(OEComponent *sender, int notification, void *data)
 {
-	switch (notification)
-	{
-		case CONTROLBUS_POWERSTATE_DID_CHANGE:
-		{
-			for (int i = 0; i < this->data->size(); i++)
-				(*this->data)[i] = powerOnPattern[i % powerOnPattern.size()];
-			break;
-		}
-	}
-	
-	return;
+	powerState = *((int *)data);
 }
 
 OEUInt8 RAM::read(OEAddress address)

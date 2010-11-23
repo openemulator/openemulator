@@ -45,7 +45,7 @@ bool OEEmulation::open(string path)
 
 void OEEmulation::close()
 {
-	deconfigure();
+	disconnect();
 	destroy();
 	
 	OEEDL::close();
@@ -306,7 +306,7 @@ bool OEEmulation::updateComponent(string id, xmlNodePtr children)
 	return true;
 }
 
-void OEEmulation::deconfigure()
+void OEEmulation::disconnect()
 {
 	if (!doc)
 		return;
@@ -321,12 +321,12 @@ void OEEmulation::deconfigure()
 		{
 			string id = getNodeProperty(node, "id");
 			
-			deconfigureComponent(id, node->children);
+			disconnectComponent(id, node->children);
 		}
 	}
 }
 
-void OEEmulation::deconfigureComponent(string id, xmlNodePtr children)
+void OEEmulation::disconnectComponent(string id, xmlNodePtr children)
 {
 	OEComponent *component = getComponent(id);
 	if (!component)

@@ -16,10 +16,8 @@
 MC6821::MC6821()
 {
 	controlBus = NULL;
-	
 	portA = NULL;
 	controlBusA = NULL;
-	
 	portB = NULL;
 	controlBusB = NULL;
 }
@@ -84,7 +82,7 @@ bool MC6821::setRef(string name, OEComponent *ref)
 {
 	if (name == "controlBus")
 	{
-		replaceObserver(controlBus, ref, CONTROLBUS_RESET_DID_CHANGE);
+		replaceObserver(controlBus, ref, CONTROLBUS_RESET_DID_ASSERT);
 		controlBus = ref;
 	}
 	else if (name == "portA")
@@ -202,6 +200,7 @@ bool MC6821::postMessage(OEComponent *component, int event, void *data)
 
 void MC6821::notify(OEComponent *component, int notification, void *data)
 {
+	// Reset did assert
 	setControlA(0);
 	directionA = 0;
 	dataA = 0;
@@ -324,9 +323,9 @@ void MC6821::setControlA(int value)
 	if (controlBusA)
 	{
 		if (wasIRQ && !isIRQ)
-			controlBusA->postMessage(this, CONTROLBUS_SET_IRQ, &isIRQ);
+			controlBusA->postMessage(this, CONTROLBUS_ASSERT_IRQ, NULL);
 		else if (!wasIRQ && isIRQ)
-			controlBusA->postMessage(this, CONTROLBUS_SET_IRQ, &isIRQ);
+			controlBusA->postMessage(this, CONTROLBUS_CLEAR_IRQ, NULL);
 	}
 }
 
@@ -339,8 +338,8 @@ void MC6821::setControlB(int value)
 	if (controlBusB)
 	{
 		if (wasIRQ && !isIRQ)
-			controlBusB->postMessage(this, CONTROLBUS_SET_IRQ, &isIRQ);
+			controlBusB->postMessage(this, CONTROLBUS_ASSERT_IRQ, NULL);
 		else if (!wasIRQ && isIRQ)
-			controlBusB->postMessage(this, CONTROLBUS_SET_IRQ, &isIRQ);
+			controlBusB->postMessage(this, CONTROLBUS_CLEAR_IRQ, NULL);
 	}
 }

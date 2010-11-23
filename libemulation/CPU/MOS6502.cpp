@@ -9,24 +9,25 @@
  */
 
 #include "CPUInterface.h"
-#include "ControlBusInterface.h"
+#include "ControlBus.h"
 
 #include "MOS6502.h"
 #include "MOS6502Opcodes.h"
 
 MOS6502::MOS6502()
 {
+	controlBus = NULL;
+	memoryBus = NULL;
+	
 	a = 0;
 	x = 0;
 	y = 0;
 	p = 0;
+	
 	pc.d = 0;
 	sp.d = 0x100;
 	zp.d = 0;
 	ea.d = 0;
-	
-	memoryBus = NULL;
-	controlBus = NULL;
 }
 
 bool MOS6502::setValue(string name, string value)
@@ -74,31 +75,47 @@ bool MOS6502::setRef(string name, OEComponent *ref)
 	if (name == "memoryBus")
 		memoryBus = ref;
 	else if (name == "controlBus")
-	{
-		replaceObserver(controlBus, ref, CONTROLBUS_RESET_DID_CHANGE);
-		replaceObserver(controlBus, ref, CONTROLBUS_IRQ_DID_CHANGE);
-		replaceObserver(controlBus, ref, CONTROLBUS_NMI_DID_CHANGE);
 		controlBus = ref;
-	}
 	else
 		return false;
 	
 	return true;
 }
 
+bool MOS6502::init()
+{
+	if (controlBus)
+	{
+		controlBus->addObserver(this, CONTROLBUS_RESET_DID_ASSERT);
+		controlBus->addObserver(this, CONTROLBUS_IRQ_DID_ASSERT);
+		controlBus->addObserver(this, CONTROLBUS_NMI_DID_ASSERT);
+	}
+	
+	return true;
+}
+
+void MOS6502::terminate()
+{
+	if (controlBus)
+	{
+		controlBus->removeObserver(this, CONTROLBUS_RESET_DID_ASSERT);
+		controlBus->removeObserver(this, CONTROLBUS_IRQ_DID_ASSERT);
+		controlBus->removeObserver(this, CONTROLBUS_NMI_DID_ASSERT);
+	}
+}
+
 void MOS6502::notify(OEComponent *sender, int notification, void *data)
 {
 	switch (notification)
 	{
-		case CONTROLBUS_RESET_DID_CHANGE:
-			if (*((bool *) data))
-				reset();
+		case CONTROLBUS_RESET_DID_ASSERT:
+			reset();
 			break;
 			
-		case CONTROLBUS_IRQ_DID_CHANGE:
+		case CONTROLBUS_IRQ_DID_ASSERT:
 			break;
 			
-		case CONTROLBUS_NMI_DID_CHANGE:
+		case CONTROLBUS_NMI_DID_ASSERT:
 			break;
 	}
 }

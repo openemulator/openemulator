@@ -43,4 +43,6 @@ private:
 	OEAddress mask;
 	OEData *data;
 	OEUInt8 *datap;
+	
+	int powerState;
 };

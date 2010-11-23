@@ -18,7 +18,7 @@ public:
 	bool setRef(string name, OEComponent *ref);
 	
 	void notify(OEComponent *sender, int notification, void *data);
-
+	
 	OEUInt8 read(OEAddress address);
 	void write(OEAddress address, OEUInt8 value);
 	OEUInt16 read16(OEAddress address);

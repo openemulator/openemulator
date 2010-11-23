@@ -612,11 +612,14 @@ string OEEDL::getNodeProperty(xmlNodePtr node, string name)
 
 string OEEDL::getPathExtension(string path)
 {
+	if (path.rfind(OE_PATH_SEPARATOR) == (path.length() - 1))
+		path = path.substr(0, path.length() - 1);
+	
 	int extensionIndex = path.rfind('.');
 	if (extensionIndex == string::npos)
 		return "";
-	
-	return path.substr(extensionIndex + 1);
+	else
+		return path.substr(extensionIndex + 1);
 }
 
 bool OEEDL::writeFile(string path, OEData *data)

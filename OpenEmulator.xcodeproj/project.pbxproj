@@ -366,7 +366,6 @@
 		00ED37C91277A0F300BEF6BD /* DevicesSpace.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = DevicesSpace.tiff; path = macosx/Images/DevicesSpace.tiff; sourceTree = "<group>"; };
 		00EF028B107D9EFB00FE378D /* VerticallyCenteredCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VerticallyCenteredCell.h; sourceTree = "<group>"; };
 		00EF028C107D9EFB00FE378D /* VerticallyCenteredCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VerticallyCenteredCell.m; sourceTree = "<group>"; };
-		00F95F1F12554172002B548B /* ControlBusInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ControlBusInterface.h; sourceTree = "<group>"; };
 		00F95F2A125543E2002B548B /* RS232Interface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RS232Interface.h; sourceTree = "<group>"; };
 		00F95F44125554A9002B548B /* CPUInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CPUInterface.h; sourceTree = "<group>"; };
 		00F95F8D12555A88002B548B /* IEEE1284Interface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IEEE1284Interface.h; sourceTree = "<group>"; };
@@ -602,7 +601,6 @@
 		00F95F1B1255414C002B548B /* Interfaces */ = {
 			isa = PBXGroup;
 			children = (
-				00F95F1F12554172002B548B /* ControlBusInterface.h */,
 				00F95F2A125543E2002B548B /* RS232Interface.h */,
 				00F95F44125554A9002B548B /* CPUInterface.h */,
 				00F95F8D12555A88002B548B /* IEEE1284Interface.h */,

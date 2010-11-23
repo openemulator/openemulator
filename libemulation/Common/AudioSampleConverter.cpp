@@ -36,26 +36,7 @@ bool AudioSampleConverter::setRef(string name, OEComponent *ref)
 
 void AudioSampleConverter::notify(OEComponent *sender, int notification, void *data)
 {
-	switch(notification)
-	{
-		case HOST_AUDIO_FRAME_WILL_BEGIN_RENDER:
-		{
-			HostAudioBuffer *buffer = (HostAudioBuffer *) data;
-			float *out = buffer->output;
-			
-			for(int i = 0; i < buffer->frameNum; i++)
-			{
-				float x = 0.1 * sin(phase);
-				phase += 2 * M_PI * 500.0 / buffer->sampleRate;
-				
-				for (int ch = 0; ch < buffer->channelNum; ch++)
-					*out++ += x;
-			}
-			
-			// To-Do: Implement simulation
-			break;
-		}
-	}
+	// To-Do: Implement simulation
 }
 
 OEUInt8 AudioSampleConverter::read(OEAddress address)

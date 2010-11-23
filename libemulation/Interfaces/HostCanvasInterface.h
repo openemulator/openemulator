@@ -16,14 +16,11 @@
 //   Then it should subscribe to canvas events.
 // * Axes are in [-1.0 .. 1.0] coordinates.
 //
-
 typedef enum
 {
 	HOST_CANVAS_SET_CAPTUREMODE,
 	HOST_CANVAS_SET_WINDOWFRAME,
 	HOST_CANVAS_GET_WINDOWFRAME,
-	HOST_CANVAS_SET_WINDOWVISIBLE,
-	HOST_CANVAS_GET_WINDOWVISIBLE,
 	HOST_CANVAS_SET_DEFAULTWINDOWSIZE,
 	HOST_CANVAS_GET_VIDEOFRAME,
 	HOST_CANVAS_POST_VIDEOFRAME,
@@ -50,7 +47,9 @@ typedef enum
 	HOST_CANVAS_JOYSTICK4_DID_CHANGE,
 } HostCanvasNotifications;
 
+//
 // HOST_CANVAS_SET_CAPTUREMODE uses int
+//
 typedef enum
 {
 	HOST_CANVAS_CAPTURE_NONE,
@@ -60,14 +59,13 @@ typedef enum
 
 //
 // SET_WINDOWFRAME and GET_WINDOWFRAME use an STL string, in the format:
-// [originX] [originY] [width] [height]
+// [originX] [originY] [width] [height] [visible]
 // The coordinate system's origin is lower left
-
-// SET_WINDOWVISIBLE and GET_WINDOWVISIBLE use bool
-
+// [visible] is "0" or "1"
+//
 // SET_DEFAULTWINDOWSIZE uses an STL string in the format:
 // [width] [height]
-
+//
 typedef enum
 {
 	HOST_CANVAS_FRAME_FORMAT_COMPOSITE,

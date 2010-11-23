@@ -29,12 +29,23 @@ bool KIM1PLL::setValue(string name, string value)
 bool KIM1PLL::setRef(string name, OEComponent *ref)
 {
 	if (name == "hostAudio")
-	{
-		replaceObserver(hostAudio, ref, HOST_AUDIO_FRAME_WILL_BEGIN_RENDER);
 		hostAudio = ref;
-	}
 	else
 		return false;
 	
 	return true;
+}
+
+bool KIM1PLL::init()
+{
+	if (hostAudio)
+		hostAudio->addObserver(this, HOST_AUDIO_FRAME_WILL_BEGIN_RENDER);
+	
+	return true;
+}
+
+void KIM1PLL::terminate()
+{
+	if (hostAudio)
+		hostAudio->removeObserver(this, HOST_AUDIO_FRAME_WILL_BEGIN_RENDER);
 }

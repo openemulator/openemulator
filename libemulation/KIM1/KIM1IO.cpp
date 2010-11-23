@@ -5,7 +5,7 @@
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements the KIM-1 input/output
+ * Implements KIM-1 input/output
  */
 
 #include "KIM1IO.h"
@@ -31,15 +31,39 @@ KIM1IO::~KIM1IO()
 	delete view;
 }
 
+bool KIM1IO::setValue(string name, string value)
+{
+	return false;
+}
+
+bool KIM1IO::getValue(string name, string &value)
+{
+	if (name == "windowFrame")
+		canvas->postMessage(this,
+							HOST_CANVAS_GET_WINDOWFRAME,
+							&value);
+	else
+		return false;
+	
+	return true;
+}
+
 bool KIM1IO::setRef(string name, OEComponent *ref)
 {
 	if (name == "hostEmulationController")
 	{
-		if (!ref && canvas)
+		if (canvas)
+		{
+			string value;
+			canvas->postMessage(this,
+								HOST_CANVAS_GET_WINDOWFRAME,
+								&windowFrame);
+			canvas = NULL;
+		}
+		if (hostEmulationController)
 			hostEmulationController->postMessage(this,
 												 HOST_EMULATIONCONTROLLER_REMOVE_CANVAS,
 												 canvas);
-		
 		hostEmulationController = ref;
 	}
 	else if (name == "serialPort")
@@ -69,15 +93,20 @@ bool KIM1IO::setData(string name, OEData *data)
 
 bool KIM1IO::init()
 {
-	if (!hostEmulationController)
-	{
-		log("No hostEmulationController");
-		return false;
-	}
+	if (hostEmulationController)
+		hostEmulationController->postMessage(this,
+											 HOST_EMULATIONCONTROLLER_ADD_CANVAS,
+											 &canvas);
 	
-	hostEmulationController->postMessage(this,
-										 HOST_EMULATIONCONTROLLER_ADD_CANVAS,
-										 &canvas);
+	if (canvas)
+	{
+		canvas->postMessage(this,
+							HOST_CANVAS_SET_WINDOWFRAME,
+							&windowFrame);
+		canvas->postMessage(this,
+							HOST_CANVAS_SET_DEFAULTWINDOWSIZE,
+							&defaultWindowSize);
+	}
 	
 	return true;
 }

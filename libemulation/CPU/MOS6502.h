@@ -18,12 +18,14 @@ public:
 	bool setValue(string name, string value);
 	bool getValue(string name, string &value);
 	bool setRef(string name, OEComponent *ref);
+	bool init();
+	void terminate();
 	
 	void notify(OEComponent *sender, int notification, void *data);
 	
 private:
-	OEComponent *memoryBus;
 	OEComponent *controlBus;
+	OEComponent *memoryBus;
 	
 	OEPair ppc;
 	

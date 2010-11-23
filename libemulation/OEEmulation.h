@@ -43,8 +43,8 @@ private:
 	bool initComponent(string id);
 	bool update();
 	bool updateComponent(string id, xmlNodePtr children);
-	void deconfigure();
-	void deconfigureComponent(string id, xmlNodePtr children);
+	void disconnect();
+	void disconnectComponent(string id, xmlNodePtr children);
 	void destroy();
 	void destroyComponent(string id, xmlNodePtr children);
 	

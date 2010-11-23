@@ -24,13 +24,12 @@ public:
 	
 private:
 	OEComponent *controlBus;
-	
 	OEComponent *portA;
+	OEComponent *portB;
+	OEComponent *controlBusB;
+	
 	int directionA;
 	int dataA;
-	
-	OEComponent *portB;
 	int directionB;
 	int dataB;
-	OEComponent *controlBusB;
 };
