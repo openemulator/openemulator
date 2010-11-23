@@ -43,12 +43,15 @@ typedef enum
 
 typedef struct
 {
-	string deviceId;
 	string informativeText;
 	OEComponent *canvas;
 	OEComponent *storage;
 } HostEmulationControllerDeviceInfo;
 
-typedef vector<HostEmulationControllerDeviceInfo> HostEmulationControllerDevicesInfo;
+typedef struct
+{
+	string deviceId;
+	HostEmulationControllerDeviceInfo deviceInfo;
+} HostEmulationControllerSetDeviceInfo;
 
 #endif

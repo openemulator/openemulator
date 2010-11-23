@@ -14,6 +14,8 @@ bool AppleIIKeyboard::setRef(string name, OEComponent *ref)
 {
 	if (name == "host")
 		host = ref;
+	else if (name == "monitor")
+		;
 	else
 		return false;
 	

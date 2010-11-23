@@ -17,6 +17,8 @@
 OEEmulationController::OEEmulationController()
 {
 	alertCallback = NULL;
+	addCanvasCallback = NULL;
+	removeCanvasCallback = NULL;
 }
 
 void OEEmulationController::setAlertCallback(OERunAlertCallback alertCallback)
@@ -24,9 +26,37 @@ void OEEmulationController::setAlertCallback(OERunAlertCallback alertCallback)
 	this->alertCallback = alertCallback;
 }
 
+void OEEmulationController::setAddCanvasCallback(OEAddCanvasCallback addCanvasCallback,
+						  void *userData)
+{
+	this->addCanvasCallback = addCanvasCallback;
+	addCanvasCallbackUserData = userData;
+}
+
+void OEEmulationController::setRemoveCanvasCallback(OERemoveCanvasCallback
+													removeCanvasCallback,
+							 void *userData)
+{
+	this->addCanvasCallback = addCanvasCallback;
+	addCanvasCallbackUserData = userData;
+}
+
 bool OEEmulationController::mount(string path)
 {
 	return delegate(this, HOST_EMULATIONCONTROLLER_MOUNT, &path);
+}
+
+bool OEEmulationController::mount(string deviceId, string path)
+{
+	if (!devicesInfo.count(deviceId))
+		return false;
+	
+	OEComponent *storage = devicesInfo[deviceId].storage;
+	
+	if (!storage)
+		return false;
+	
+	return storage->delegate(this, HOST_EMULATIONCONTROLLER_MOUNT, &path);
 }
 
 bool OEEmulationController::validate(string path)
@@ -38,6 +68,11 @@ bool OEEmulationController::postMessage(OEComponent *sender, int message, void *
 {
 	if (message == HOST_EMULATIONCONTROLLER_SET_DEVICEINFO)
 	{
+		HostEmulationControllerSetDeviceInfo *setDeviceInfo;
+		setDeviceInfo = (HostEmulationControllerSetDeviceInfo *)data;
+		
+		string deviceId = setDeviceInfo->deviceId;
+		devicesInfo[deviceId] = setDeviceInfo->deviceInfo;
 	}
 	else if (message == HOST_EMULATIONCONTROLLER_ADD_CANVAS)
 	{
@@ -57,7 +92,10 @@ bool OEEmulationController::postMessage(OEComponent *sender, int message, void *
 	else if (message == HOST_EMULATIONCONTROLLER_RUN_ALERT)
 	{
 		if (alertCallback)
-			alertCallback();
+		{
+			string *message = (string *)data;
+			alertCallback(*message);
+		}
 		else
 			return false;
 	}

@@ -17,8 +17,8 @@ ControlBus::ControlBus()
 {
 	hostAudio = NULL;
 	
-	frequency = 1E6;
-	frequencyDivider = 1.0;
+	crystalFrequency = 1E6;
+	cpuFrequencyDivider = 1.0;
 	cpu = NULL;
 	cpuSocket = NULL;
 	resetOnPowerOn = false;
@@ -33,10 +33,10 @@ ControlBus::ControlBus()
 
 bool ControlBus::setValue(string name, string value)
 {
-	if (name == "frequency")
-		frequency = getInt(value);
-	else if (name == "frequencyDivider")
-		frequencyDivider = getInt(value);
+	if (name == "crystalFrequency")
+		crystalFrequency = getInt(value);
+	else if (name == "cpuFrequencyDivider")
+		cpuFrequencyDivider = getInt(value);
 	else if (name == "resetOnPowerOn")
 		resetOnPowerOn = getInt(value);
 	else
@@ -70,7 +70,7 @@ bool ControlBus::init()
 		return false;
 	}
 	
-	updateFrequency();
+	updateCPUFrequency();
 	
 	return true;
 }
@@ -165,9 +165,9 @@ void ControlBus::notify(OEComponent *sender, int notification, void *data)
 	}
 }
 
-void ControlBus::updateFrequency()
+void ControlBus::updateCPUFrequency()
 {
-	frequency = crystal / frequencyDivider;
+	cpuFrequency = crystalFrequency / cpuFrequencyDivider;
 }
 
 bool ControlBus::isPoweredOn(int powerState)

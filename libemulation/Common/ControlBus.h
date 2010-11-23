@@ -71,19 +71,19 @@ private:
 	OEComponent *hostAudio;
 	OEComponent *cpu;
 	OEComponent *cpuSocket;
-	float crystal;
-	float frequencyDivider;
+	float crystalFrequency;
+	float cpuFrequencyDivider;
 	bool resetOnPowerOn;
 	
 	int powerState;
-	float frequency;
+	float cpuFrequency;
 	int resetCount;
 	int irqCount;
 	int nmiCount;
 	
 	double phase;
 	
-	void updateFrequency();
+	void updateCPUFrequency();
 	bool isPoweredOn(int powerState);
 };
 

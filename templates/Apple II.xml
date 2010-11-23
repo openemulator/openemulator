@@ -2,10 +2,7 @@
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
 <edl version="1.0" type="Apple II" label="Apple II" image="images/Apple II/Apple II.png" description="The Apple II was the first highly successful mass produced microprocessor product. The Apple II had color and high-resolution graphics modes, sound capabilities and one of two built-in BASIC programming languages.">
 
-<device id="appleII" label="Apple II" image="images/Apple II/Apple II.png">
-    <audio ref="appleII.controlBus" />
-    <audio ref="appleII.sampleConverter" />
-</device>
+<device id="appleII" label="Apple II" image="images/Apple II/Apple II.png" />
 <port id="appleII.slot0" ref="" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png">
     <inlet ref="appleII.io" property="refSlot0" outletRef="io" />
 </port>
@@ -67,12 +64,12 @@
 <port id="appleII.romF8Socket" ref="" type="AppleIIROM" label="ROM F8 Socket" image="ROM Socket.png">
     <inlet ref="appleII.mmu" property="romF8Socket" outletRef="rom" />
 </port>
-<component id="appleII.controlBus" class="AppleIIControlBus">
-    <property name="crystal" value="14.31818MHz" />
-    <property name="frequencyDivider" value="14" />
-    <property name="scanlineClockDelay" value="2" />
-    <property name="master" ref="appleII.cpu" />
-    <property name="masterSocket" ref="" />
+<component id="appleII.controlBus" class="ControlBus">
+    <property name="hostAudio" ref="hostAudio" />
+    <property name="crystalFrequency" value="14.31818MHz" />
+    <property name="cpuFrequencyDivider" value="14" />
+    <property name="cpu" ref="appleII.cpu" />
+    <property name="cpuSocket" ref="" />
     <property name="resetOnPowerOn" value="0" />
 </component>
 <component id="appleII.memoryBus" class="AddressDecoder">
@@ -157,7 +154,7 @@
     <property name="monitor" ref="appleII.monitor" />
 </component>
 <component id="appleII.charset" class="CharsetLoader">
-    <property name="image" src="${resourcesPath}/roms/Signetics/Signetics 2513 Video ROM.bin" />
+    <property name="image" src="${resourcePath}/roms/Signetics/Signetics 2513 Video ROM.bin" />
     <property name="format" value="Signetics" />
 </component>
 <component id="appleII.video" class="AppleIIVideo">
@@ -203,16 +200,16 @@
     <property name="floatingBus" ref="appleII.floatingBus" />
 </component>
 <component id="appleII.romE0" class="ROM">
-    <property name="image" src="${resourcesPath}/roms/Apple II/Apple II E0 ROM.bin" />
+    <property name="image" src="${resourcePath}/roms/Apple/341-0001-00.bin" />
 </component>
 <component id="appleII.romE8" class="ROM">
-    <property name="image" src="${resourcesPath}/roms/Apple II/Apple II E8 ROM.bin" />
+    <property name="image" src="${resourcePath}/roms/Apple/341-0002-00.bin" />
 </component>
 <component id="appleII.romF0" class="ROM">
-    <property name="image" src="${resourcesPath}/roms/Apple II/Apple II F0 ROM.bin" />
+    <property name="image" src="${resourcePath}/roms/Apple/341-0003-00.bin" />
 </component>
 <component id="appleII.romF8" class="ROM">
-    <property name="image" src="${resourcesPath}/roms/Apple II/Apple II F8 ROM.bin" />
+    <property name="image" src="${resourcePath}/roms/Apple/341-0004-00.bin" />
 </component>
 
 </edl>
