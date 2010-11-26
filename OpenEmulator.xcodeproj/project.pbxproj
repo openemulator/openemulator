@@ -1237,7 +1237,6 @@
 				GCC_PREFIX_HEADER = macosx/OpenEmulator_Prefix.pch;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				HEADER_SEARCH_PATHS = (
-					macosx/include,
 					/usr/local/include,
 					/opt/local/include,
 					/usr/include/libxml2,
@@ -1245,7 +1244,6 @@
 				INFOPLIST_FILE = macosx/Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = (
-					macosx/lib,
 					/usr/local/lib,
 					/opt/local/lib,
 				);
