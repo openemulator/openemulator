@@ -10,7 +10,7 @@
 
 #include "KIM1IO.h"
 
-#include "HostEmulationControllerInterface.h"
+#include "OEEmulation.h"
 #include "HostCanvasInterface.h"
 #include "RS232Interface.h"
 
@@ -57,11 +57,11 @@ bool KIM1IO::setRef(string name, OEComponent *ref)
 	{
 		if (hostEmulationController)
 			hostEmulationController->postMessage(this,
-												 HOST_EMULATIONCONTROLLER_REMOVE_CANVAS,
+												 EMULATION_REMOVE_CANVAS,
 												 &canvas);
 		if (ref)
 			ref->postMessage(this,
-							 HOST_EMULATIONCONTROLLER_ADD_CANVAS,
+							 EMULATION_ADD_CANVAS,
 							 &canvas);
 		hostEmulationController = ref;
 	}

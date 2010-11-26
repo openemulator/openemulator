@@ -1,20 +1,20 @@
 
 /**
  * OpenEmulator
- * Mac OS X Devices Window Controller
+ * Mac OS X Emulation Window Controller
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls a devices window.
+ * Controls an emulation window.
  */
 
-#import "DevicesWindowController.h"
+#import "EmulationWindowController.h"
 
-@implementation DevicesWindowController
+@implementation EmulationWindowController
 
 - (id)init
 {
-	self = [self initWithWindowNibName:@"Devices"];
+	self = [self initWithWindowNibName:@"Emulation"];
 	
 	return self;
 }
@@ -22,7 +22,7 @@
 - (void)windowDidLoad
 {
 	NSToolbar *toolbar;
-	toolbar = [[NSToolbar alloc] initWithIdentifier:@"Devices Toolbar"];
+	toolbar = [[NSToolbar alloc] initWithIdentifier:@"Emulation Toolbar"];
 	[toolbar setSizeMode:NSToolbarSizeModeSmall];
 	[toolbar setDelegate:self];
 	[toolbar setAllowsUserCustomization:YES];
@@ -31,11 +31,6 @@
 	[[self window] setToolbar:toolbar];
 	
 	[toolbar release];
-}
-
-- (NSString *)windowTitleForDocumentDisplayName:(NSString *)displayName
-{
-	return [displayName stringByAppendingString:@" - Devices"];
 }
 
 - (NSToolbarItem *)toolbar:(NSToolbar *)toolbar
@@ -51,11 +46,11 @@
 	if ([ident isEqualToString:@"Inspector"])
 	{
 		[item setLabel:NSLocalizedString(@"Inspector",
-										 "Device window toolbar item")];
+										 "Emulation window toolbar item")];
 		[item setPaletteLabel:NSLocalizedString(@"Inspector",
-												"Device window toolbar item")];
+												"Emulation window toolbar item")];
 		[item setToolTip:NSLocalizedString(@"Show or hide the inspector window.",
-										   "Device window toolbar item")];
+										   "Emulation window toolbar item")];
 		[item setImage:[NSImage imageNamed:@"IconInspector.png"]];
 		[item setTarget:nil];
 		[item setAction:@selector(toggleInspector:)];
@@ -80,11 +75,6 @@
 			NSToolbarSpaceItemIdentifier,
 			NSToolbarFlexibleSpaceItemIdentifier,
 			nil];
-}
-
-- (void)showDevices:(id)sender
-{
-	[self showWindow:sender];
 }
 
 @end

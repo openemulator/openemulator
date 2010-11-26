@@ -10,7 +10,7 @@
 
 #import "Document.h"
 #import "DocumentController.h"
-#import "DevicesWindowController.h"
+#import "EmulationWindowController.h"
 #import "StringConversion.h"
 
 #import "OEPortAudioEmulation.h"
@@ -27,7 +27,7 @@
 		
 		devices = [[NSMutableArray alloc] init];
 		
-		devicesWindowController = nil;
+		emulationWindowController = nil;
 	}
 	
 	return self;
@@ -56,14 +56,14 @@
 	
 	[freePorts release];
 	[devices release];
-	[devicesWindowController release];
+	[emulationWindowController release];
 	
 	[super dealloc];
 }
 
-- (void)showDevices:(id)sender
+- (void)showEmulation:(id)sender
 {
-	[devicesWindowController showWindow:sender];
+	[emulationWindowController showWindow:sender];
 }
 
 - (void)newEmulation:(NSURL *)url
@@ -375,8 +375,8 @@
 
 - (void)makeWindowControllers
 {
-	devicesWindowController = [[DevicesWindowController alloc] init];
-	[self addWindowController:devicesWindowController];
+	emulationWindowController = [[EmulationWindowController alloc] init];
+	[self addWindowController:emulationWindowController];
 	
 /*	NSWindowController *windowController;
 	windowController = [[CanvasWindowController alloc] initWithCanvasComponent:NULL];

@@ -1,16 +1,16 @@
 
 /**
  * OpenEmulator
- * Mac OS X Devices Cell
+ * Mac OS X Emulation Cell
  * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls a devices cell.
+ * Controls an emulation cell.
  */
 
 #import <Cocoa/Cocoa.h>
 
-@interface DevicesCell : NSTextFieldCell
+@interface EmulationCell : NSTextFieldCell
 {
 }
 

@@ -12,7 +12,7 @@
 
 #define TEMPLATE_FOLDER @"~/Library/Application Support/OpenEmulator/Templates"
 
-@class DevicesWindowController;
+@class EmulationWindowController;
 
 @interface Document : NSDocument
 {
@@ -21,10 +21,10 @@
 	NSMutableArray *devices;
 	NSMutableArray *freePorts;
 	
-	DevicesWindowController *devicesWindowController;
+	EmulationWindowController *emulationWindowController;
 }
 
-- (void)showDevices:(id)sender;
+- (void)showEmulation:(id)sender;
 
 - (void)newEmulation:(NSURL *)url;
 - (void)deleteEmulation;
