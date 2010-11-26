@@ -14,7 +14,6 @@
 #import "StringConversion.h"
 
 #import "OEPortAudioEmulation.h"
-#import "OEEmulationController.h"
 
 @implementation Document
 
@@ -73,13 +72,9 @@
 	documentController = [NSDocumentController sharedDocumentController];
 	OEPortAudio *oePortAudio = (OEPortAudio *)[documentController oePortAudio];
 	
-	OEComponent *hostEmulationController = new OEEmulationController();
-	
 	OEPortAudioEmulation *theEmulation = new OEPortAudioEmulation();
 	theEmulation->setResourcePath(getCString([[NSBundle mainBundle] resourcePath]));
 	theEmulation->setOEPortAudio(oePortAudio);
-	theEmulation->setComponent("hostAudio", (OEComponent *)oePortAudio);
-	theEmulation->setComponent("hostEmulationController", hostEmulationController);
 	
 	theEmulation->open(getCString([url path]));
 	

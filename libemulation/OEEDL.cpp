@@ -18,13 +18,6 @@ OEEDL::OEEDL()
 	init();
 }
 
-OEEDL::OEEDL(string path)
-{
-	init();
-	
-	open(path);
-}
-
 OEEDL::~OEEDL()
 {
 	close();
@@ -52,7 +45,7 @@ bool OEEDL::open(string path)
 		is_open = readFile(path, &data);
 		
 		if (!is_open)
-			log("could not open '" + path + "'");
+			edlLog("could not open '" + path + "'");
 	}
 	else if (pathExtension == OE_PACKAGE_PATH_EXTENSION)
 	{
@@ -62,14 +55,14 @@ bool OEEDL::open(string path)
 			is_open = package->readFile(OE_PACKAGE_EDL_PATH, &data);
 			
 			if (!is_open)
-				log("could not read '" OE_PACKAGE_EDL_PATH
+				edlLog("could not read '" OE_PACKAGE_EDL_PATH
 					  "' in '" + path + "'");
 		}
 		else
-			log("could not open package '" + path + "'");
+			edlLog("could not open package '" + path + "'");
 	}
 	else
-		log("could not identify type of '" + path + "'");
+		edlLog("could not identify type of '" + path + "'");
 	
 	if (is_open)
 	{
@@ -82,7 +75,7 @@ bool OEEDL::open(string path)
 		if (!doc)
 		{
 			is_open = false;
-			log("could not parse EDL in '" + path + "'");
+			edlLog("could not parse EDL in '" + path + "'");
 		}
 	}
 	
@@ -90,7 +83,7 @@ bool OEEDL::open(string path)
 	{
 		is_open = validate();
 		if (!is_open)
-			log("unknown EDL version");
+			edlLog("unknown EDL version");
 	}
 	
 	if (!is_open)
@@ -119,13 +112,13 @@ bool OEEDL::save(string path)
 				is_open = writeFile(path, &data);
 				
 				if (!is_open)
-					log("could not open '" + path + "'");
+					edlLog("could not open '" + path + "'");
 			}
 			else
-				log("could not dump EDL for '" + path + "'");
+				edlLog("could not dump EDL for '" + path + "'");
 		}
 		else
-			log("could not update the configuration for '" + path + "'");
+			edlLog("could not update the configuration for '" + path + "'");
 	}
 	else if (pathExtension == OE_PACKAGE_PATH_EXTENSION)
 	{
@@ -139,21 +132,21 @@ bool OEEDL::save(string path)
 				{
 					is_open = package->writeFile(OE_PACKAGE_EDL_PATH, &data);
 					if (!is_open)
-						log("could not write '" OE_PACKAGE_EDL_PATH
+						edlLog("could not write '" OE_PACKAGE_EDL_PATH
 							  "' in '" + path + "'");
 				}
 				else
-					log("could not dump EDL for '" + path + "'");
+					edlLog("could not dump EDL for '" + path + "'");
 			}
 			
 			delete package;
 			package = NULL;
 		}
 		else
-			log("could not open '" + path + "'");
+			edlLog("could not open '" + path + "'");
 	}
 	else
-		log("could not identify type of '" + path + "'");
+		edlLog("could not identify type of '" + path + "'");
 	
 	if (!is_open)
 		close();
@@ -250,7 +243,8 @@ bool OEEDL::addEDL(string path, OEIdMap connectionMap)
 		return false;
 	
 	// Load new EDL
-	OEEDL edl(path);
+	OEEDL edl;
+	edl.open(path);
 	if (!edl.isOpen())
 		return false;
 	
@@ -278,7 +272,7 @@ bool OEEDL::removeDevice(string deviceId)
 	// Verify device exists
 	if (!isDevice(deviceId))
 	{
-		log("could not find '" + deviceId + "'");
+		edlLog("could not find '" + deviceId + "'");
 		return false;
 	}
 	
@@ -659,7 +653,7 @@ bool OEEDL::readFile(string path, OEData *data)
 	return success;
 }
 
-void OEEDL::log(string message)
+void OEEDL::edlLog(string message)
 {
 	cerr << "libemulation: " << message << endl;
 }
@@ -693,7 +687,7 @@ void OEEDL::log(string message)
  
  close();
  
- log("in '" + path + "'");
+ edlLog("in '" + path + "'");
  
  return false;
  }
@@ -900,7 +894,7 @@ void OEEDL::log(string message)
  {
  if ((*outlet)->connection)
  {
- log("reconnection of inlet '" + (*inlet)->ref + "'");
+ edlLog("reconnection of inlet '" + (*inlet)->ref + "'");
  
  return false;
  }
@@ -912,7 +906,7 @@ void OEEDL::log(string message)
  
  if (!(*inlet)->connection)
  {
- log("could not find '" + (*inlet)->ref + "'");
+ edlLog("could not find '" + (*inlet)->ref + "'");
  
  return false;
  }

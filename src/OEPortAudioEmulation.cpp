@@ -14,11 +14,14 @@
 OEPortAudioEmulation::OEPortAudioEmulation() : OEEmulation()
 {
 	oePortAudio = NULL;
+	
+	setComponent("emulation", this);
 }
 
 void OEPortAudioEmulation::setOEPortAudio(OEPortAudio *oePortAudio)
 {
 	this->oePortAudio = oePortAudio;
+	setComponent("hostAudio", oePortAudio);
 }
 
 void OEPortAudioEmulation::lock()

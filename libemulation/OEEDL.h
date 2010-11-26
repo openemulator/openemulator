@@ -73,7 +73,6 @@ class OEEDL
 {
 public:
 	OEEDL();
-	OEEDL(string path);
 	~OEEDL();
 	
 	bool open(string path);
@@ -108,7 +107,7 @@ protected:
 	// Helpers
 	void setDeviceId(string &id, string deviceId);
 	string getDeviceId(string id);
-	void log(string message);
+	void edlLog(string message);
 	
 private:
 	bool is_open;

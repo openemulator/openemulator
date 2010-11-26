@@ -26,7 +26,6 @@
 		00247F6E120F98620067755C /* Terminal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 005256E5120A841200A6BC75 /* Terminal.cpp */; };
 		0031347C12036F6E00913149 /* MOS6530.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0031347A12036F6E00913149 /* MOS6530.cpp */; };
 		003134FD12039FFC00913149 /* Apple1CassetteInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 003134F112039FFC00913149 /* Apple1CassetteInterface.cpp */; };
-		0031EDA31292EF98005BA276 /* OEEmulationController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0031EDA21292EF98005BA276 /* OEEmulationController.cpp */; };
 		003318AF1101492B00CC1782 /* Connector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 003318AD1101492B00CC1782 /* Connector.xib */; };
 		003E25E71070796700185260 /* images in Resources */ = {isa = PBXBuildFile; fileRef = 003E2597107075D900185260 /* images */; };
 		003FB21410BA3D5D00D3697B /* devices in Resources */ = {isa = PBXBuildFile; fileRef = 00E8A393108CCAA200D0A137 /* devices */; };
@@ -207,10 +206,7 @@
 		0031347A12036F6E00913149 /* MOS6530.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MOS6530.cpp; sourceTree = "<group>"; };
 		003134F112039FFC00913149 /* Apple1CassetteInterface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Apple1CassetteInterface.cpp; sourceTree = "<group>"; };
 		003134F212039FFC00913149 /* Apple1CassetteInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Apple1CassetteInterface.h; sourceTree = "<group>"; };
-		0031EDA11292EF98005BA276 /* OEEmulationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEEmulationController.h; sourceTree = "<group>"; };
-		0031EDA21292EF98005BA276 /* OEEmulationController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEEmulationController.cpp; sourceTree = "<group>"; };
 		003318AE1101492B00CC1782 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Connector.xib; sourceTree = "<group>"; };
-		003D50431295F5A700364169 /* HostEmulationControllerInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HostEmulationControllerInterface.h; sourceTree = "<group>"; };
 		003E2597107075D900185260 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
 		005256E4120A841200A6BC75 /* Terminal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Terminal.h; sourceTree = "<group>"; };
 		005256E5120A841200A6BC75 /* Terminal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Terminal.cpp; sourceTree = "<group>"; };
@@ -592,8 +588,6 @@
 				006774641286DAF4000E843B /* OEPortAudioEmulation.cpp */,
 				006774671286DB06000E843B /* OEOpenGLCanvas.h */,
 				006774681286DB06000E843B /* OEOpenGLCanvas.cpp */,
-				0031EDA11292EF98005BA276 /* OEEmulationController.h */,
-				0031EDA21292EF98005BA276 /* OEEmulationController.cpp */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -611,7 +605,6 @@
 				000457E9128FC35300B72EB6 /* HostEthernetInterface.h */,
 				000457EA128FC37400B72EB6 /* HostVideoInterface.h */,
 				000457F6128FC49900B72EB6 /* HostUSBInterface.h */,
-				003D50431295F5A700364169 /* HostEmulationControllerInterface.h */,
 			);
 			path = Interfaces;
 			sourceTree = "<group>";
@@ -831,7 +824,6 @@
 			isa = PBXProject;
 			buildConfigurationList = C05733CB08A9546B00998B17 /* Build configuration list for PBXProject "OpenEmulator" */;
 			compatibilityVersion = "Xcode 3.1";
-			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
 				English,
@@ -988,7 +980,6 @@
 				00A72B6F12879F650083C6A7 /* CanvasViewController.mm in Sources */,
 				00A72B7012879F690083C6A7 /* CanvasWindowController.m in Sources */,
 				00A72B7312879F800083C6A7 /* CanvasWindow.m in Sources */,
-				0031EDA31292EF98005BA276 /* OEEmulationController.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

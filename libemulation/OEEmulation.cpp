@@ -16,6 +16,13 @@
 #include "OEEmulation.h"
 #include "OEComponentFactory.h"
 
+OEEmulation::OEEmulation() : OEEDL()
+{
+	alertCallback = NULL;
+	addCanvasCallback = NULL;
+	removeCanvasCallback = NULL;
+}
+
 OEEmulation::~OEEmulation()
 {
 	close();
@@ -26,6 +33,26 @@ void OEEmulation::setResourcePath(string path)
 	resourcePath = path;
 }
 
+void OEEmulation::setAlertCallback(OERunAlertCallback alertCallback)
+{
+	this->alertCallback = alertCallback;
+}
+
+void OEEmulation::setAddCanvasCallback(OEAddCanvasCallback addCanvasCallback,
+									   void *userData)
+{
+	this->addCanvasCallback = addCanvasCallback;
+	addCanvasCallbackUserData = userData;
+}
+
+void OEEmulation::setRemoveCanvasCallback(OERemoveCanvasCallback
+										  removeCanvasCallback,
+										  void *userData)
+{
+	this->addCanvasCallback = addCanvasCallback;
+	addCanvasCallbackUserData = userData;
+}
+
 bool OEEmulation::open(string path)
 {
 	close();
@@ -33,10 +60,12 @@ bool OEEmulation::open(string path)
 	if (!OEEDL::open(path))
 		return false;
 	
-	if (create())
-		if (configure())
-			if (init())
+	if (createEmulation())
+		if (configureEmulation())
+		{
+			if (initEmulation())
 				return true;
+		}
 	
 	close();
 	
@@ -45,8 +74,8 @@ bool OEEmulation::open(string path)
 
 void OEEmulation::close()
 {
-	disconnect();
-	destroy();
+	disconnectEmulation();
+	destroyEmulation();
 	
 	OEEDL::close();
 }
@@ -69,7 +98,7 @@ OEComponent *OEEmulation::getComponent(string id)
 	return components[id];
 }
 
-bool OEEmulation::create()
+bool OEEmulation::createEmulation()
 {
 	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
 	
@@ -104,7 +133,7 @@ bool OEEmulation::createComponent(string id, string className)
 	return false;
 }
 
-bool OEEmulation::configure()
+bool OEEmulation::configureEmulation()
 {
 	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
 	
@@ -196,7 +225,7 @@ bool OEEmulation::configureComponent(string id, xmlNodePtr children)
 	return true;
 }
 
-bool OEEmulation::init()
+bool OEEmulation::initEmulation()
 {
 	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
 	
@@ -231,7 +260,7 @@ bool OEEmulation::initComponent(string id)
 	return false;
 }
 
-bool OEEmulation::update()
+bool OEEmulation::updateEmulation()
 {
 	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
 	
@@ -306,7 +335,7 @@ bool OEEmulation::updateComponent(string id, xmlNodePtr children)
 	return true;
 }
 
-void OEEmulation::disconnect()
+void OEEmulation::disconnectEmulation()
 {
 	if (!doc)
 		return;
@@ -346,7 +375,7 @@ void OEEmulation::disconnectComponent(string id, xmlNodePtr children)
 	}
 }
 
-void OEEmulation::destroy()
+void OEEmulation::destroyEmulation()
 {
 	if (!doc)
 		return;
@@ -414,4 +443,64 @@ string OEEmulation::parseProperties(string value,
 	}
 	
 	return value;
+}
+
+bool OEEmulation::mount(string path)
+{
+	return delegate(this, EMULATION_MOUNT, &path);
+}
+
+bool OEEmulation::mount(string deviceId, string path)
+{
+	if (!devicesInfo.count(deviceId))
+		return false;
+	
+	OEComponent *storage = devicesInfo[deviceId].storage;
+	
+	if (!storage)
+		return false;
+	
+	return storage->delegate(this, EMULATION_MOUNT, &path);
+}
+
+bool OEEmulation::validate(string path)
+{
+	return delegate(this, EMULATION_VALIDATE, &path);
+}
+
+bool OEEmulation::postMessage(OEComponent *sender, int message, void *data)
+{
+	if (message == EMULATION_SET_DEVICEINFO)
+	{
+		OEEmulationSetDeviceInfo *setDeviceInfo;
+		setDeviceInfo = (OEEmulationSetDeviceInfo *)data;
+		
+		string deviceId = setDeviceInfo->deviceId;
+		devicesInfo[deviceId] = setDeviceInfo->deviceInfo;
+	}
+	else if (message == EMULATION_ADD_CANVAS)
+	{
+		OEComponent **ref = (OEComponent **)data;
+		*ref = addCanvasCallback(addCanvasCallbackUserData);
+	}
+	else if (message == EMULATION_REMOVE_CANVAS)
+	{
+		OEComponent **ref = (OEComponent **)data;
+		removeCanvasCallback(*ref, removeCanvasCallbackUserData);
+		*ref = NULL;
+	}
+	else if (message == EMULATION_RUN_ALERT)
+	{
+		if (alertCallback)
+		{
+			string *message = (string *)data;
+			alertCallback(*message);
+		}
+		else
+			return false;
+	}
+	else
+		return false;
+	
+	return true;
 }
