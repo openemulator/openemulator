@@ -64,7 +64,7 @@ typedef map<string, OEEmulationDeviceInfo> OEEmulationDevicesInfo;
 typedef map<string, OEComponent *> OEComponentsMap;
 typedef map<string, string> OEPropertiesMap;
 
-class OEEmulation : public OEComponent, OEEDL
+class OEEmulation : public OEComponent, public OEEDL
 {
 public:
 	OEEmulation();

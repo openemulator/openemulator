@@ -21,6 +21,8 @@ OEEmulation::OEEmulation() : OEEDL()
 	alertCallback = NULL;
 	addCanvasCallback = NULL;
 	removeCanvasCallback = NULL;
+	
+	setComponent("emulation", this);
 }
 
 OEEmulation::~OEEmulation()
@@ -62,10 +64,8 @@ bool OEEmulation::open(string path)
 	
 	if (createEmulation())
 		if (configureEmulation())
-		{
 			if (initEmulation())
 				return true;
-		}
 	
 	close();
 	

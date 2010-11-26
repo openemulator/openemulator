@@ -14,8 +14,6 @@
 OEPortAudioEmulation::OEPortAudioEmulation() : OEEmulation()
 {
 	oePortAudio = NULL;
-	
-	setComponent("emulation", this);
 }
 
 void OEPortAudioEmulation::setOEPortAudio(OEPortAudio *oePortAudio)
