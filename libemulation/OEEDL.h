@@ -94,7 +94,7 @@ protected:
 	OEPackage *package;
 	xmlDocPtr doc;
 	
-	virtual bool update();
+	virtual bool updateEmulation();
 	
 	string getString(int value);
 	void setNodeProperty(xmlNodePtr node, string name, string value);

@@ -105,7 +105,7 @@ bool OEEDL::save(string path)
 	string pathExtension = getPathExtension(path);
 	if (pathExtension == OE_FILE_PATH_EXTENSION)
 	{
-		if (update())
+		if (updateEmulation())
 		{
 			if (dump(&data))
 			{
@@ -126,7 +126,7 @@ bool OEEDL::save(string path)
 		
 		if (package && package->isOpen())
 		{
-			if (update())
+			if (updateEmulation())
 			{
 				if (dump(&data))
 				{
@@ -312,7 +312,7 @@ bool OEEDL::dump(OEData *data)
 	return true;
 }
 
-bool OEEDL::update()
+bool OEEDL::updateEmulation()
 {
 	return true;
 }
