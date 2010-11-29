@@ -36,6 +36,7 @@ public:
 	
 	void initOpenGL();
 	void draw(int width, int height);
+	string getDefaultCanvasSize();
 	
 	void setSystemKey(int usageId);
 	void setKey(int usageId, bool value);

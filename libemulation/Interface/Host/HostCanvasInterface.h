@@ -11,11 +11,10 @@
 #ifndef _HOSTCANVASINTERFACE_H
 #define _HOSTCANVASINTERFACE_H
 
-//
+// Comments
 // * A component should first request a canvas from the canvas controller.
 //   Then it should subscribe to canvas events.
 // * Axes are in [-1.0 .. 1.0] coordinates.
-//
 typedef enum
 {
 	HOST_CANVAS_SET_CAPTUREMODE,
@@ -24,6 +23,8 @@ typedef enum
 	HOST_CANVAS_SET_DEFAULTWINDOWSIZE,
 	HOST_CANVAS_GET_VIDEOFRAME,
 	HOST_CANVAS_POST_VIDEOFRAME,
+	HOST_CANVAS_LOCK_OPENGL_CONTEXT,
+	HOST_CANVAS_UNLOCK_OPENGL_CONTEXT,
 	HOST_CANVAS_SET_KEYBOARDFLAGS,
 	HOST_CANVAS_SET_BADGEFLAGS,
 } HostCanvasMessages;

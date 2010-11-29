@@ -22,6 +22,41 @@
 * A–adir descripciones en el template chooser/EDL chooser
 * Pensar en interfaz para graficar OpenGL en clientes
 
+==Ideas==
+* Debugging con JTAG
+* TCP AT Modem emulation
+* Debugger: run/step/break/readRegister/writeRegister/readMemory/writeMemory/addTrap/removeTrap/listTraps
+
+==Apple-1==
+* DA: Data Available
+* RDA: Ready Data Accept
+* ~W = ~RDA | ~(~RDA | RD6 | RD7)
+* W = RDA & (RD6 | RD7)
+
+==Apple-1 Cassette Interface==
+* La ROM se ve en $C000-$C1FF
+* De $C000 a $C0FF hace click
+* De $C080 a $C0FF ponemos A0 en 0, si se detecto se–al
+* A &= ~((A >> 7) & 1 | DET)
+* O: if (DET) address &= ~1;
+
+
+==Apple II==
+* Hay un flag en MMU para el espacio de memoria Apple II de INH
+* En Apple II, INH es $D000-$FFFF, en IIe todo
+* Una placa puede modificar ese flan, para inhibir la MMU
+* Video obtiene memoria main y aux de MMU
+* La memoria aux se registra en la MMU
+* La MMU responde a $C001-$C00F, $C011-$C01F, $C050-$C057, $C080-$C08F.
+* La placa de video permite delegar $C050-$C057
+* La language card usa memory offset
+* El game port permite delegar operaciones
+* Video: Rev.0 tiene 4 colores sin color killer, rev. 1 tiene 6 con
+* Apple III: Tiene 2k a SYNC, 2k a GND, 6.2k a X1 X2 X4 X8, y 5.1k a NA NB
+* Que se pueda hacer chaining de video (80 column card).
+* Apple II permite inhibir el video
+
+
 ==Hecho==
 * Arreglar ${id} en save de Apple II
 * Arreglar que getData() en RAM no deba ser mœltiplo de dos
