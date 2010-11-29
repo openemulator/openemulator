@@ -11,30 +11,28 @@
 #include "OEComponentFactory.h"
 
 // FACTORY_INCLUDE_START - Do not modify this section
-#include "ControlBus.h"
 #include "AddressDecoder.h"
 #include "AddressOffset.h"
-#include "RAM.h"
-#include "ROM.h"
-#include "FloatingBus.h"
 #include "AudioSampleConverter.h"
 #include "CharsetLoader.h"
 #include "CompositeMonitor.h"
+#include "ControlBus.h"
+#include "FloatingBus.h"
+#include "RAM.h"
+#include "ROM.h"
 #include "Terminal.h"
+
+#include "MOS6502.h"
+#include "MOS6530.h"
+#include "MOSKIM1IO.h"
+#include "MOSKIM1PLL.h"
 
 #include "MC6821.h"
 #include "MC6845.h"
 
-#include "MOS6502.h"
-#include "MOS6530.h"
-
-#include "KIM1IO.h"
-#include "KIM1PLL.h"
-
 #include "Apple1IO.h"
 #include "Apple1Terminal.h"
 #include "Apple1CassetteInterface.h"
-
 #include "AppleIIControlBus.h"
 #include "AppleIIMMU.h"
 #include "AppleIIFloatingBus.h"

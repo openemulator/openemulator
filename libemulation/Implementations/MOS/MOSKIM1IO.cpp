@@ -1,20 +1,20 @@
 
 /**
  * libemulation
- * KIM-1 I/O
+ * MOS KIM-1 I/O
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements KIM-1 input/output
+ * Implements MOS KIM-1 input/output
  */
 
-#include "KIM1IO.h"
+#include "MOSKIM1IO.h"
 
 #include "OEEmulation.h"
 #include "HostCanvasInterface.h"
 #include "RS232Interface.h"
 
-KIM1IO::KIM1IO()
+MOSKIM1IO::MOSKIM1IO()
 {
 	hostEmulationController = NULL;
 	serialPort = NULL;
@@ -26,17 +26,17 @@ KIM1IO::KIM1IO()
 	canvas = NULL;
 }
 
-KIM1IO::~KIM1IO()
+MOSKIM1IO::~MOSKIM1IO()
 {
 	delete view;
 }
 
-bool KIM1IO::setValue(string name, string value)
+bool MOSKIM1IO::setValue(string name, string value)
 {
 	return false;
 }
 
-bool KIM1IO::getValue(string name, string &value)
+bool MOSKIM1IO::getValue(string name, string &value)
 {
 	if (name == "windowFrame")
 	{
@@ -51,7 +51,7 @@ bool KIM1IO::getValue(string name, string &value)
 	return true;
 }
 
-bool KIM1IO::setRef(string name, OEComponent *ref)
+bool MOSKIM1IO::setRef(string name, OEComponent *ref)
 {
 	if (name == "hostEmulationController")
 	{
@@ -80,7 +80,7 @@ bool KIM1IO::setRef(string name, OEComponent *ref)
 	return true;
 }
 
-bool KIM1IO::setData(string name, OEData *data)
+bool MOSKIM1IO::setData(string name, OEData *data)
 {
 	if (name == "view")
 		view = data;
@@ -90,7 +90,7 @@ bool KIM1IO::setData(string name, OEData *data)
 	return true;
 }
 
-bool KIM1IO::init()
+bool MOSKIM1IO::init()
 {
 	if (canvas)
 	{
@@ -105,6 +105,6 @@ bool KIM1IO::init()
 	return true;
 }
 
-void KIM1IO::notify(OEComponent *sender, int notification, void *data)
+void MOSKIM1IO::notify(OEComponent *sender, int notification, void *data)
 {
 }

@@ -1,22 +1,21 @@
 
 /**
  * libemulation
- * KIM-1 I/O
+ * MOS KIM-1 I/O
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements KIM-1 input/output
+ * Implements MOS KIM-1 input/output
  */
 
 #include "OEComponent.h"
-
 #include "HostCanvasInterface.h"
 
-class KIM1IO : public OEComponent
+class MOSKIM1IO : public OEComponent
 {
 public:
-	KIM1IO();
-	~KIM1IO();
+	MOSKIM1IO();
+	~MOSKIM1IO();
 	
 	bool setValue(string name, string value);
 	bool getValue(string name, string &value);
