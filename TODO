@@ -1,4 +1,374 @@
+==To-Do==
+* Encontrar una manera para que OEEmulation integre los resultados de SET_DEVICEINFO con el EDL
+* Implementar addEDL
+* Implementar removeDevice
+* Persistencia de la posición de ventana principal
+* Implementar la lista de la ventana principal
+* Implementar el menú desplegable
+* Implementar la acción de montar
+* Implementar la acción de revelar
+* Implementar la acción de añadir EDL
+* Implementar la acción de eliminar dispositivo
+* Implementar las acciones de systemKeyboard, si el canvas de un device está definido
+* Implementar addCanvas y removeCanvas -> que generen un windowController y haga addWindowController. Que genere OEOpenGLCanvas, y los conecte
+* Implementar el mecanismo de comunicación de frames del canvas
+* Implementar la entrada de teclado al canvas
+* Implementar captura de teclado y mouse
+* Implementar persistencia de la ventana del canvas
+* Implementar [Document updateChangeCount]
+* Implementar el código de unión de shaders OpenGL 2.0
+* Implementar la opción de desactivar los shaders
+* Implementar el inspector
+* Añadir descripciones en el template chooser/EDL chooser
+* Pensar en interfaz para graficar OpenGL en clientes
+
+==Hecho==
+* Arreglar ${id} en save de Apple II
+* Arreglar que getData() en RAM no deba ser múltiplo de dos
+* Modificar AudioControls, para que el volumen sea el volumen de entrada, no el de salida total. 
+* Añadir control para hacer control de posición de playback.
+* Arreglar AudioControl player cuando se termina un wav
+* Considerar que RAM sólo admita tamaños de memoria múltiplos de 2. Sería más lógico.
+* Renombrar DeviceChooser a HardwareChooser
+* Implementar persistencia de visibilidad/ocultación de las ventanas Audio Controls e Inspector
+* Arreglar Audio Controls. Hago pause, muevo y se escucha un poquito de lo de antes
+* Audio Controls usa volumen logarítmico 0 a -100 dB
+
+==oecli==
+* Implement video connection with framebuffers and timer
+* Implement Power/Pause/"Press CTRL-ALT to release mouse" overlays in OpenGL
+* Implement inspector audio playback/recording (libsndfile for wav file access, secret rabbit code for sample rate conversion)
+* How should sample rate conversion be applied to .wav resources?
+
+==OpenEmulator Mac==
+* Implement NSDocumentWindow toolbar with level-aware buttons
+* Implement OpenGL display link
+* When application looses focus, all full -screen windows should be de-zoomed
+* Implement device settings. Replace minus with a configuration button. Show "Delete", "Edit Settings…", "Unmount disk image". Allowed settings types are select and checkbox. Retrieve and set settings with ioctl.
+* Implement disk image drag and drop to document
+* Implement disk image drag and drop to inspector
+* Remember document window position and sizes
+* Implement character palette (NSTextView?)
+* Implement CPU Load
+
+==libemulator==
+* Implement event connection
+* implement keyboard events to host (standard USB scancodes+UNICODE chars), option for CTRL-ALT mouse release
+* Implement power-off, pause support (video overlay)
+* Implement Apple II 
+* Implement Apple II+
+* Implement audio connection
+* Implement mouse connection with support for capture/release
+* Implement joystick connection
+* Implement Paper Feed with PostScript generated in libemulator
+* Implement tablet connection
+* When mounting, there should be two messages: one for asking if a disk image is recognized, and another if it can be mounted.
+
+==Later==
+* Fix template chooser width problem, when scroll bars show and hide
+* Fix template chooser problem when the first line of items is not selected
+
+==Done==
+* Implementado full-screen (con nuevas ventanas de vista)
+* Implementado portaudio
+* Implementado OpenGL
+* Implementado preferencias
+* Implementado auto-choose cuando no hay template seleccionado
+* Implementado diálogo para seleccionar la plantilla
+* Implementado user space scale independence
+* Implementado cambios en el documento
+* Conectado el inspector con las propiedades del documento
+* Implementados presets de video (inspector)
+* Implementadas listas en el inspector
+* Implementado montar/desmontar imagenes de disco (inspector)
+* Implementado pantallas de overlay de power off, y de pause
+* Mejorado fullscreen
+* Implementado diálogo para nueva expansión, nueva unidad de disco, o nuevo puerto
+* Implementadas celdas de texto de inspector centradas verticalmente con estilo adecuado
+* Implementado lector de emulaciones y dispositivos en libemulator
+* Conectado listas de emulaciones al selector de plantillas
+* Conectado listas de emulaciones al selector de dispositivos
+* Conectado listas de emulaciones y dispositivos con el inspector
+* Connected dml to properties
+* Implemented OEInfo
+* Implemented inspector
+* Implemented inspector settings
+* Implemented template chooser
+* Implemented default template chooser
+* Improved template chooser
+* Improved inspector
+* Fixed problem: use default template is selected, CMD-N opens the template browser. Why? Auto-visibility was on.
+* Center template chooser window when reopening. horiz: 1x 1x, vert: 1x 2x
+* Implemented template chooser update of user templates
+* Implemented device chooser available device list
+* Implement device chooser connections
+* Implemented addDevices. Iterate through inlets. If inlet found, recurse. If not found, recurse on last used inlet. If no inlet is used, return itself. Protect against circularity. 
+* Implemented isDeviceTerminal. Iterate through inlets. If inlet used, return false.
+* Implemented removeDevices. Iterate through inlets. If inlet used, recurse. Disconnect outlets and Remove all components of device.
+* Moved settings to device.
+* Split device chooser into expansions, storage and peripherals.
+* When no devices are available for adding, show an alert telling so.
+
+==Ideas para gráficos==
+* Cuando escribo en la memoria de video, actualizo el video hasta donde está el CRT scan
+* Cuando cambio el modo de video, actualizo el video hasta donde está el CRT scan (si es SHGR, guarda los bytes RGB)
+* La actualización tiene que escribir sólo los bits a un buffer, no renderizarlo en NTSC (si es SHGR, guarda los bytes RGB)
+* Debe haber algo que cambie la función de writeMemory en función del modo de video
+* Renderizamos NTSC o RGB al final de un cuadro de video (si algo cambió).
+* Tiene que haber eventos de tipo: CPU clock, Video scanline (byte 40), Video frame (linea 192), Video frame (linea 200 para SHGR)
+* Debemos convertir el CPU clock a horizontal clock (para cuando hay aceleración)... ¿o no? directamente convierto uno en el otro
+* Sería interesante emular los cambios de velocidad de un Apple IIGS cuando accede a memoria normal (2.5 MHz), ROM (2.8 MHz) y a la memoria de E0 y E1 (1.0 MHz).
+* Idea: usar una latencia de 256 (187.5 Hz), 512 (93.75 Hz) muestras así el usuario no ve una diferencia audio <> imagen de más de 50 Hz.
+* Idea: Implementar un shader para  hacer el procesamiento NTSC (!)
+* Idea: Que la función de audio callback active un timer para imprimir el frame cuando corresponda
+
+==Apple II Video Timing==
+==Frames==
+* viewFrame: The window frame
+* screenFrame: The screen frame (in screen frame coordinates, 720x576 or 720x480)
+* renderFrame: The frame where our data is rendered (in screen frame coordinates)
+* bufferFrame: The frame where our data is obtained from (in video buffer coordinates) 
+
+==Video Frames==
+NTSC:
+* Vertical blanking: 19 scanlines
+* Visible: 243.5 scanlines
+* Usually 240 scanlines are used
+
+PAL:
+* Vertical blanking: 25 scanlines
+* Visible: 287.5 scanlines
+* Usually 288 scanlines are used
+
+==Video Scanlines==
+NTSC:
+* Color carrier  = 3.579545 MHz
+* Horizontal frequency = (2 / 455) * Color carrier
+* Horizontal period H = 1 / (3579545 * 2 / 455) = 63.556µs
+
+* Front porch: 1.5µs
+* Horizontal sync: 4.7µs
+* Breezeway: 0.6µs
+* Color burst: 2.50µs
+* Back porch: 1.6µs
+
+* Visible: 52.6556µs
+
+PAL:
+* Horziontal period: 64µs
+
+* Front porch: 1.5µs
+* Horizontal sync: 4.7µs
+* Breezeway: 0.9µs
+* Color burst: 2.25µs
+* Back porch: 2.65µs
+
+* Visible nominal: 52µs
+
+==Visibility==
+Usually 92% of total image
+
+==VBL==
+60 Hz	32 cycles before, 4 cycles VSYNC (33, 34, 35, 36), 34 later
+50 Hz	72 cycles before, 4 cycles VSYNC (73, 74, 75, 76), 44 later
+
+==HIRES==
 Apple II:
+	At the far left, the last video scanner dot is inserted
+	At the far right, the last video scanner dot is always cut off
+Apple IIe HIRES:
+	At the far left, black is always inserted
+	At the far right, the last video dot thing is always cut off
+
+==Aspect ratio calculations==
+Apple IIgs aspect ratio:
+200mm x 150mm active video area
+292mm diagonal (viewable): sqrt(x * x + x * x * 1.33 * 1.33) = x * sqrt(1 + 1.33^2)
+233mm x 175mm
+Video bandwidth: 1.5 dB at 6.5 MHz, 3 dB at 8 MHz
+
+200 mm -> 532 pixels
+233 mm -> 620 pixels
+
+150 mm -> 400 pixels
+175 mm -> 466 pixels
+
+==Timing ideas==
+OpenEmulator function prototypes:
+
+AppleIIEventController
+* onEvent()
+{
+	while (clockIndex < clockEnd)
+	{
+		if (clockIndex >= clockNextScanline)
+		{
+			clockNextScanline += 912;// 64*14 + 16;
+			clockIndex += clockScanlineInc;
+			scanlineCallback();
+		}
+		clockIndex += clockCycleInc;
+		cpuCallback();
+	}
+}
+
+For Apple II: clockCycleInc = 14, clockScanlineInc = 2
+For Apple IIGS: clockCycleInc = 5, clockScanlineInc = 0
+For Z80: clockCycleInc = 7, clockScanlineInc = 2
+
+Optimize this, by having a function that computes the next event (be it a next scanline, or the end of this cycle
+
+* selectCPU()
+* setCPU(Component *)
+* setCPUSpeed(double speed, bool isLongCycle)
+* delay(double clockCount)
+* getHorizontalClock()
+* getHorizontalCount()
+* getVerticalCount()
+* getQ3()
+* double getTime()
+
+AudioController
+* callback()
+get(float **bufferIn, float **bufferOut, int *bufferSampleNum, int * bufferChannelNum, int *sampleRate)
+* play(char *file, float volume, double time, bool isLooped)
+* stop(double time);
+* getTime()
+
+VideoController
+
+Hay 50 o 59,97 cuadros por segundo
+
+Si uso 512 samples/buffer, hay 93.75 frames/seg
+Si uso 1024, hay 46,875
+Si uso 2048, hay 23,4375
+
+Por cada audio buffer, renderizo N frames
+
+Cada frame tiene estas propiedades:
+* Tiempo (en el futuro)
+* El puntero al framebuffer (en RGB)
+* El tamaño del framebuffer, x e y
+* Las proporciones del framebuffer
+
+==Apple IIGS Timing==
+| | | | | | | | | | | | | | | |
+F         F         R         F
+S                           S 
+
+Master clock: 14 MHz (70ns)
+Fast clock: 2.857 MHz
+Slot clock: 1.020 MHz
+1 out of every 10 fast clocks is refresh (thus the next is used up)
+
+* Master clock: 70 ns = 14 MHz (!)
+* Fast Apple IIGS cycle: 350 ns = 2.857142 MHz
+* RAM Apple IIGS cycle: 700 ns = 1.428571 MHz
+* Isolated Apple II cycle: 1330 ns = 0.751879 MHz
+* Slow Apple II cycle: 980 ns = 1.020408 MHz
+
+* The time required for the refresh cycles reduces the effective processor speed for programs in RAM by 8 percent (there is a refresh cycle approximately every 3.5 µs, or 10 IIGS cycles).
+* Programs in ROM run at the full 2.8 MHz speed.
+* FPI to MEGA II synchronization consists of at least 0.350 µs (a single Mega II cycle), average 0.5µs, worst case 1µs.
+* Memory refresh might take up 10% more time
+
+* /M2SEL goes low when:
+** Accesses to shadowed video writes
+** Accesses to internal I/O (Except RW $C035, RW $C036, RW $C037, R $C02D, R $C068, R $C071 - $C07F) or expansion card slots
+** Accesses to banks $E0 and $E1
+
+Rules to read or write from slow memory:
+* 8-bit access requires at least 2 more fast cycles
+* 16-bit access requires at least 4 more fast cycles
+* Synchronization can take up to 3 extra cycles
+* RAM refresh delays can take
+
+Resumen:
+* La referencia de tiempo son ciclos de 14M
+* Para Apple II, hay un ciclo de reloj cada 14 ciclos de 14M, y uno de 16 cada 65-avo ciclo
+* Para Apple IIGS, hay un ciclo de reloj cada 5 ciclos de 14M. Si intento leer la memoria, y el ciclo es uno de cada 10, espero otro ciclo
+* Para Apple IIGS, cuando estoy en modo rápidos y accedo a la memoria lenta, espero hasta que pase el próximo ciclo de 1M. Cuando pasó, esper
+
+==Apple II Accelerators==
+* TransWarp GS, 2.8, 5.6 MHz
+* ZipGSX
+* AE TransWarp, 1.79 MHz or 3.58 MHz, 256kB on board
+* AE TransWarp II, 3.58 MHz or 7.16 MHz
+* McT SpeeDemon, 3.58 MHz, 65C02, primera con caching
+* Saturn Accelerator II, 3.58 MHz, MOS6502, 64kB RAM on board
+* Saturn Accelerator IIe, 3.58 MHz, 65C02, 64kB RAM on board
+* ZIP Chip, 4 MHz, 8 MHz, caching (it also supports these factors: 1x, 2/3x, 3/4x, 4/5x, 5/6x, 1/2x, y muchos más
+* Rocket Chip, 5 MHz, 10 MHz
+
+Resumen: los aceleradores pueden proveer cualquier velocidad
+
+* Cuando simulamos aceleradores con caché, hacemos lo siguiente: obtenemos un número equivalente de ciclos por scanline, y ejecutamos esta cantidad de ciclos. Ignoramos la regla del IIGS de esperar un scanline
+
+==Apple-1 cursor timing==
+Frequency 1.924 Hz
+Duty cycle 66.6%
+0.173 ms low (@ sign)
+0.346 ms high (normal space)
+
+==Signals and events==
+SIGNAL_RESET_SET
+SIGNAL_RESET_CLEAR
+SIGNAL_IRQ_SET
+SIGNAL_IRQ_CLEAR
+SIGNAL_NMI_SET
+SIGNAL_AN_SET						INDICATOR
+SIGNAL_AN_CLEAR						INDICATOR
+SIGNAL_VIDEO_SCANLINE
+SIGNAL_VIDEO_FRAME
+
+EVENT_KEYBOARD_SEND				BUFFER
+EVENT_MEMORYZONE_SET				ZONE
+EVENT_MEMORYHANDLER_SET			ADDRESSP
+EVENT_VIDEO_TEXTBUFFER_GET		BUFFER
+EVENT_VIDEO_SCANLINEADDRESS_GET	ADDRESSP
+EVENT_VIDEO_VERTICALCOUNT_GET		ADDRESSP
+EVENT_VIDEO_FLOATINGBUS_READ		ADDRESSP
+
+==Memory Zones==
+$0000	$01FF		Main/aux ZP
+$0200	$03FF		Main/aux
+$0400	$07FF		Main/aux - Shadowable
+$0800	$0BFF		Main/aux - Shadowable
+$0C00	$1FFF		Main/aux
+$2000	$3FFF		Main/aux - Shadowable
+$4000	$5FFF		Main/aux - Shadowable
+$6000	$BFFF		Main/aux
+$C000	..$C07F
+$C080	..$C08F	Directly to slot
+$C090	..$C09F
+$C0A0	..$C0AF
+$C0B0	..$C0BF
+$C0C0	..$C0CF
+$C0D0	..$C0DF
+$C0E0	..$C0EF
+$C0F0	..$C0FF
+$C100	$C1FF	Directly to slot (slot should also update C800 space)
+$C200	$C2FF
+$C300	$C3FF
+$C400	$C4FF
+$C500	$C5FF
+$C600	$C6FF
+$C700	$C7FF
+$C800	$CFFE	Directly to slot
+$CFFF			Read slot 0
+$D000	$DFFF	Main/aux LC, ROM
+$E000	$FFFF	Main/aux LC, ROM
+
+==Notes==
+* C000-CFFF should be replicable in bank $00, $01, $E0, $E1
+* Only bank 0 has main/aux selectivity
+* Usually only bank 0 and 1 allow for shadowed memory
+
+==Mapping idea==
+* First bank mapping: Map 0 for bank $00, map 1 for bank $01, map 2 for bank $02-$7f, map 3 for bank $E0, map 4 for bank $E1, map 5 for bank $E2-$FF
+* Second zone mapping: 16 bit address to memory zone
+
+==Apple II==
 * Replace second thread with a user SDL call. When buffers are not filled, fill with zeroes.
 * Add support for SDL audio buffers that are not exactly a video frame in size
 * Audio base class should tell (as a float) when a given event happens in sample time
@@ -21,7 +391,7 @@ Apple II:
 * Trap not very often used soft switches (C000-C0FF) to check for unknown I/O access
 * There has to be some provision for loading certain devices only once
 
-GUI:
+==GUI==
 * Replace artwork .xcf files with something that supports layers but isn't limited to GIMP
 * Use wxWidgets. For now, wxWidgets should generate its own interface window and SDL a separate video window. Later we get the wxWidgets window ID, and tell SDL to use that one
 * Persistency (when OpenEmulator is reopened, state should be preserved). When the computer is changed, the new computer should be reset (to avoid simultaneous usage of resources). Three kind of variables exist: initialized at program load, at machine restart, and at CPU reset
@@ -38,17 +408,17 @@ GUI:
 * Implement preferences menu
 * Implement print tape, A/V preferences, graphics tablet windows
 
-Apple IIe:
+==Apple IIe==
 * Test Apple 3.5" Floppy Disk Drive Interface Card against all evil SmartPort scenarios
 * Implement mouse card
 * Fix RamWorks Basic and RamWorks III piggy-back memories (they don't work)
 
-Apple IIc:
+==Apple IIc==
 * Implement mouse
 * Implement ACIA's
 * The external slots should not be configurable
 
-Disk:
+==Disk==
 * Fix 3.5" Disk Drive
 * Add SmartPort isReady() call, to signal when a packet is finished processing
 * Add format emulation to UniDisk 3.5" (with isReady())
@@ -61,7 +431,7 @@ Disk:
 * Fix Wasteland, Alkemstone, Crusader in Europe, Decision in the Desert, Decisive Battles of the World, Earth Orbit Stations, Europe Ablaze, Hacker's Challenge, Halls of Montezuma, The Last Gladiator, LBSCharDisk, MacArthur's War
 * Fix Sherlock Forest
 
-Apple IIGS:
+==Apple IIGS==
 * W65C816S
 * Implement RGB non-linear NTSC converter
 * Implement scanline interrupts
@@ -73,14 +443,14 @@ Apple IIGS:
 * Define an abstract SCC serial communications class. It should be common to all serial devices, being able to: list host serial devices, providing access, protecting against reopening a device
 * Implement Apple IIGS
 
-Apple IIc plus:
+==Apple IIc plus==
 * Implement IIc plus ZIP Chip
 
-Clones:
+==Clones==
 * Implement MicroprofessorIII
 * Implement Laser128 and Laser128EX
 
-Optimization:
+==Optimization==
 * Optimize MMU mapping calls (they are being repeated uselessly now)
 * Try inlines (for speed)
 * Fix SDL leaks
@@ -89,7 +459,7 @@ Optimization:
 * CPU: implement readMemory and writeMemory in CPU class. Does it bring any gains?
 * CPU: optimize readMemory8 and writeMemory8 zero-page access in CPU class
 
-iPhone:
+==iPhone==
 * Portrait view: (top) <= [Computer Name] (center) Monitor (bottom) Keyboard
 * Landscape view: (top) <= [Computer name] (center) Monitor
 * Swipes are the cursor keys
@@ -99,7 +469,7 @@ iPhone:
 * When you tap on a disk image, you can choose the disk drive (it comes from below). If it is already mounted, you can eject it
 * Settings: Computer, Memory expansion, self-centering joystick, text encoding, reset, restart
 
-Future:
+==Future==
 * Slow down IIGS when IO is accessed
 * Speed up IIGS when ROM is accessed
 * Fix original Apple II HIRES left border issue, e.g. a write to $2027 should modify both pixel $2027 and pixel $2028
@@ -110,7 +480,7 @@ Future:
 * Do something like Apple DOS FS
 * NTSC color blurring between lines (like in Karateka) could be emulated
 
-Done:
+==Done==
 * Implemented FileDiskImage class (for direct disk image I/O)
 * Implemented Apple 3.5" Disk Drive eject on command signal falling edge
 * Improved disk drive selection logic
