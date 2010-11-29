@@ -170,7 +170,6 @@ OEHeaderInfo OEEDL::getHeaderInfo()
 	if (doc)
 	{
 		xmlNodePtr node = xmlDocGetRootElement(doc);
-		headerInfo.type = getNodeProperty(node, "type");
 		headerInfo.label = getNodeProperty(node, "label");
 		headerInfo.image = getNodeProperty(node, "image");
 		headerInfo.description = getNodeProperty(node, "description");

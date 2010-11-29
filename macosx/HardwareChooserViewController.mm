@@ -148,7 +148,7 @@
 		
 		// Add a device and its group if necessary
 		OEHeaderInfo *headerInfo = [[edlInfos objectAtIndex:i] headerInfo];
-		NSString *groupName = getNSString(headerInfo->type);
+		NSString *groupName = @"";//getNSString(headerInfo->type);
 		NSString *label = getNSString(headerInfo->label);
 		NSString *imageName = getNSString(headerInfo->image);
 		NSString *description = getNSString(headerInfo->description);

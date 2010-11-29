@@ -68,7 +68,7 @@
 		if (edl.isOpen())
 		{
 			OEHeaderInfo headerInfo = edl.getHeaderInfo();
-			NSString *groupName = getNSString(headerInfo.type);
+			NSString *groupName = @"";//getNSString(headerInfo.type);
 			NSString *label = getNSString(headerInfo.label);
 			NSString *imageName = getNSString(headerInfo.image);
 			NSString *description = getNSString(headerInfo.description);

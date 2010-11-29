@@ -25,7 +25,6 @@ typedef vector<string> OEIdList;
 
 typedef struct
 {
-	string type;
 	string label;
 	string image;
 	string description;
@@ -45,7 +44,6 @@ typedef vector<OESettingInfo> OESettingsInfo;
 typedef struct
 {
 	string id;
-	string type;
 	string label;
 	string image;
 	
