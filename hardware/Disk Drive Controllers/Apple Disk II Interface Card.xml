@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
-<edl version="1.0" type="Disk Drive Controllers" label="Disk II Interface" image="Apple Disk II Interface Card.png">
+<edl version="1.0" label="Disk II Interface" image="Apple Disk II Interface Card.png">
 
-<device id="diskIIInterface" type="Expansion" label="Apple Disk II Interface Card" image="Apple Disk II Interface Card.png">
-    <status ref="diskIIInterface.io" />
-</device>
+<device id="diskIIInterface" label="Apple Disk II Interface Card" image="Apple Disk II Interface Card.png" />
 <connector id="diskIIInterface.connector" type="AppleIISlot" label="Apple Disk II Interface Card" image="Apple Disk II Interface Card.png">
     <inlet ref="diskIIInterface.io" property="controlBus" outletRef="controlBus" />
 </connector>

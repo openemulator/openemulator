@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
-<edl version="1.0" label="Composite Video Monitor" image="Composite Video Monitor.png" group="Monitors">
+<edl version="1.0" label="Composite Video Monitor" image="Composite Video Monitor.png">
 
-<device id="monitor" type="Peripheral" label="Composite Video Monitor" image="Composite Video Monitor.png">
-    <setting ref="monitor.monitor" name="brightness" type="value" options="0.0,2.0" label="Brightness" />
+<device id="monitor" label="Composite Video Monitor" image="Composite Video Monitor.png">
+    <setting ref="monitor.monitor" name="brightness" type="value" options="-1.0,1.0" label="Brightness" />
     <setting ref="monitor.monitor" name="contrast" type="value" options="0.0,2.0" label="Contrast" />
     <setting ref="monitor.monitor" name="saturation" type="value" options="0.0,2.0" label="Saturation" />
-    <setting ref="monitor.monitor" name="hue" type="value" options="0.0,2.0" label="Hue" />
+    <setting ref="monitor.monitor" name="hue" type="value" options="0.0,1.0" label="Hue" />
 </device>
 <connector id="monitor.connector" label="Video Connector" image="Composite Video Connector.png" />
 <component id="monitor.monitor" class="CompositeMonitor">

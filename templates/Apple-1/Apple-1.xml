@@ -11,7 +11,6 @@
 </port>
 <port id="apple1.slot1" label="Slot 1" image="Apple-1 Slot.png" />
 <port id="apple1.slot2" label="Slot 2" image="Apple-1 Slot.png" />
-<hostconnection type="audio" ref="apple1.controlBus" />
 <component id="apple1.controlBus" class="ControlBus">
     <property name="hostAudio" ref="hostAudio" />
     <property name="crystal" value="14.31818MHz" />

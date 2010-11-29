@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
-<edl version="1.0" type="Serial Port Controllers" label="Super Serial Card" image="images/Apple II/Apple II Super Serial Card.png">
+<edl version="1.0" label="Super Serial Card" image="images/Apple II/Apple II Super Serial Card.png">
 
 <device id="ssc" label="Apple II Super Serial Card" image="images/Apple II/Apple II Super Serial Card.png">
     <setting ref="ssc.io" name="mode" type="select" options="Communications Mode,Printer Mode" label="Mode" />
@@ -30,7 +30,7 @@
     <property name="delayAfterCR" value="0" />
 </component>
 <component id="ssc.memory" class="ROM">
-    <property name="memoryImage" src="roms/Apple II/Apple II Super Serial Card ROM.bin" />
+    <property name="image" src="roms/Apple II/Apple II Super Serial Card ROM.bin" />
 </component>
 
 </edl>

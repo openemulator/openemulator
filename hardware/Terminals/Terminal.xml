@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
-<edl version="1.0" type="Terminals" label="Terminal" imageSrc="Terminal.png">
+<edl version="1.0" label="Terminal" image="Terminal.png">
 
-<device id="terminal" label="Terminal" imageSrc="Terminal.png" />
-<connector id="terminal.connector" type="Serial" label="Connector" imageSrc="Serial Port Connector.png" />
+<device id="terminal" label="Terminal" image="Terminal.png" />
+<connector id="terminal.connector" type="Serial" label="Connector" image="Serial Port Connector.png" />
 <component id="terminal.io" class="Terminal">
     <property name="host" ref="hostEmulationController" />
     <property name="charset" ref="terminal.charset" />

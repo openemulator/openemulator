@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
-<edl version="1.0" type="Memory" label="16kB Language Card" imageSrc="images/Apple II/Apple Language Card.png">
+<edl version="1.0" label="16kB Language Card" image="images/Apple II/Apple Language Card.png">
 
-<device id="languageCard" type="Expansion" label="images/Apple II/Apple 16kB Language Card" imageSrc="Apple Language Card.png" />
-<connector id="languageCard.connector" type="AppleIISlot" label="Apple 16kB Language Card" imageSrc="Apple Language Card.png">
+<device id="languageCard" label="images/Apple II/Apple 16kB Language Card" image="Apple Language Card.png" />
+<connector id="languageCard.connector" type="AppleIISlot" label="Apple 16kB Language Card" image="Apple Language Card.png">
     <inlet ref="languageCard.io" property="mmu" outletRef="mmu" />
 </connector>
 <component id="languageCard.io" class="AppleLanguageCard">
     <property name="mmu" ref="" />
 </component>
 <component id="languageCard.memoryOffset" class="MemoryOffset">
-    <property name="memory" ref="languageCard.memory" />
+    <property name="component" ref="languageCard.memory" />
 </component>
 <component id="languageCard.memory" class="RAM">
     <property name="host" ref="host" />
     <property name="size" value="16384" />
-    <property name="memory" src="${packagePath}/${id}.bin" />
+    <property name="image" src="${packagePath}/${id}.bin" />
 </component>
 
 </edl>
