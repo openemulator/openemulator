@@ -50,5 +50,5 @@ bool ROM::init()
 
 OEUInt8 ROM::read(OEAddress address)
 {
-	return datap[address & dataMask];
+	return datap[address & mask];
 }

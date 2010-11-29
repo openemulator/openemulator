@@ -67,8 +67,8 @@ OEComponent *OEComponentFactory::create(const string &className)
 	matchComponent(MOS6502);
 	matchComponent(MOS6530);
 	
-	matchComponent(KIM1IO);
-	matchComponent(KIM1PLL);
+	matchComponent(MOSKIM1IO);
+	matchComponent(MOSKIM1PLL);
 	
 	matchComponent(Apple1IO);
 	matchComponent(Apple1Terminal);

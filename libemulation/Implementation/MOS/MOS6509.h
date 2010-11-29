@@ -26,10 +26,10 @@ private:
 	OEPair zp;
 	OEPair ea;
 	
-	UINT8 a;
-	UINT8 x;
-	UINT8 y;
-	UINT8 p;
+	OEUInt8 a;
+	OEUInt8 x;
+	OEUInt8 y;
+	OEUInt8 p;
 	
 	// 4 bits, addressed over address 0
 	OEPair pcBank;	
