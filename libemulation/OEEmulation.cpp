@@ -80,6 +80,18 @@ void OEEmulation::close()
 	OEEDL::close();
 }
 
+OEDevicesInfo OEEmulation::getDevicesInfo()
+{
+	OEDevicesInfo devicesInfo;
+	
+	if (doc)
+	{
+		xmlNodePtr node = xmlDocGetRootElement(doc);
+	}
+	
+	return devicesInfo;
+}
+
 bool OEEmulation::setComponent(string id, OEComponent *component)
 {
 	if (component)

@@ -32,30 +32,6 @@ typedef struct
 
 typedef struct
 {
-	string ref;
-	string property;
-	string type;
-	string options;
-	string label;
-} OESettingInfo;
-
-typedef vector<OESettingInfo> OESettingsInfo;
-
-typedef struct
-{
-	string id;
-	string label;
-	string image;
-	
-	string connectionLabel;
-	
-	OESettingsInfo settingsInfo;
-} OEDeviceInfo;
-
-typedef vector<OEDeviceInfo> OEDevicesInfo;
-
-typedef struct
-{
 	string id;
 	string type;
 	string label;
@@ -81,7 +57,6 @@ public:
 	OEHeaderInfo getHeaderInfo();
 	void setWindowFrame(string windowFrame);
 	string getWindowFrame();
-	OEDevicesInfo getDevicesInfo();
 	OEPortsInfo getFreePortsInfo();
 	OEConnectorsInfo getFreeConnectorsInfo();
 	

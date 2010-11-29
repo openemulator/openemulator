@@ -14,8 +14,7 @@
 #include "OEEDL.h"
 #include "OEComponent.h"
 
-//
-// Storage:
+// Storage
 // * The framework first tries to mount on all available devices.
 // * If the mount failed, it tries to check whether a drive is capable of processing
 //   the image (validation), for displaying an appropriate error message
@@ -26,8 +25,6 @@
 // * It is up to the mounter to automatically eject a disk image
 // * To unmount, an empty string is used
 // * To update mount status, use the device info interface
-//
-
 
 typedef void (*OERunAlertCallback)(string message);
 typedef OEComponent *(*OEAddCanvasCallback)(void *userData);
@@ -46,6 +43,33 @@ typedef enum
 	EMULATION_MOUNT,
 	EMULATION_VALIDATE,
 } OEEmulationDelegations;
+
+typedef struct
+{
+	string ref;
+	string property;
+	string type;
+	string options;
+	string label;
+} OESettingInfo;
+
+typedef vector<OESettingInfo> OESettingsInfo;
+
+typedef struct
+{
+	string id;
+	string label;
+	string image;
+	
+	string connectionLabel;
+	string informativeText;
+	OEComponent *canvas;
+	OEComponent *storage;
+	
+	OESettingsInfo settingsInfo;
+} OEDeviceInfo;
+
+typedef vector<OEDeviceInfo> OEDevicesInfo;
 
 typedef struct
 {
@@ -80,6 +104,8 @@ public:
 	
 	bool open(string path);
 	void close();
+	
+	OEDevicesInfo getDevicesInfo();
 	
 	bool setComponent(string id, OEComponent *component);
 	

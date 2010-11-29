@@ -200,18 +200,6 @@ string OEEDL::getWindowFrame()
 	return windowFrame;
 }
 
-OEDevicesInfo OEEDL::getDevicesInfo()
-{
-	OEDevicesInfo devicesInfo;
-	
-	if (doc)
-	{
-		xmlNodePtr node = xmlDocGetRootElement(doc);
-	}
-	
-	return devicesInfo;
-}
-
 OEPortsInfo OEEDL::getFreePortsInfo()
 {
 	OEPortsInfo freePortsInfo;

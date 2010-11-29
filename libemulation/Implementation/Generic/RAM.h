@@ -16,11 +16,10 @@
 // * powerOnPattern is the byte pattern used when power is applied.
 // * image is the RAM image.
 
-// Messages
-enum
+typedef enum
 {
 	RAM_GET_MEMORY,
-};
+} RAMMessages;
 
 class RAM : public OEComponent
 {
