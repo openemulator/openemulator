@@ -1,0 +1,34 @@
+
+/**
+ * libemulation
+ * RS-232 Interface
+ * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
+ * Released under the GPL
+ *
+ * Defines the RS-232 interface
+ */
+
+typedef enum
+{
+	RS232_SEND_DATA,
+	RS232_ASSERT_DTR,
+	RS232_CLEAR_DTR,
+	RS232_ASSERT_RTS,
+	RS232_CLEAR_RTS,
+	RS232_SEND_BREAK,
+} RS232Messages;
+
+typedef enum
+{
+	RS232_DID_RECEIVE_DATA,
+	RS232_DSR_DID_ASSERT,
+	RS232_DSR_DID_CLEAR,
+	RS232_CTS_DID_ASSERT,
+	RS232_CTS_DID_CLEAR,
+	RS232_DCD_DID_ASSERT,
+	RS232_DCD_DID_CLEAR,
+	RS232_RI_DID_ASSERT,
+	RS232_RI_DID_CLEAR,
+	RS232_BREAK_DID_ASSERT,
+	RS232_BREAK_DID_CLEAR,
+} RS232Notifications;
