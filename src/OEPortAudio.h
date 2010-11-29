@@ -17,16 +17,14 @@
 #include "sndfile.h"
 #include "samplerate.h"
 
-#include "OEPortAudioEmulation.h"
+#include "OEEmulation.h"
 
 #define OEPORTAUDIO_SAMPLERATE			48000.0
 #define OEPORTAUDIO_CHANNELNUM			2
 #define OEPORTAUDIO_FRAMESPERBUFFER		512
 #define OEPORTAUDIO_BUFFERNUM			3
 
-#define OEPORTAUDIO_VOLUMEFILTERFREQ	20.0
-
-typedef vector<OEPortAudioEmulation *> OEPortAudioEmulations;
+typedef vector<OEEmulation *> OEEmulations;
 
 class OEPortAudio : public OEComponent
 {
@@ -38,8 +36,6 @@ public:
 	void setChannelNum(int value);
 	void setFramesPerBuffer(int value);
 	void setBufferNum(int value);
-	void setVolume(float value);
-	void setPlayThrough(bool value);
 	
 	bool open();
 	void close();
@@ -47,33 +43,39 @@ public:
 	void lockEmulations();
 	void unlockEmulations();
 	void runEmulations();
-	bool addEmulation(OEPortAudioEmulation *emulation);
-	void removeEmulation(OEPortAudioEmulation *emulation);
+	bool addEmulation(OEEmulation *emulation);
+	void removeEmulation(OEEmulation *emulation);
 	
 	void runAudio(const float *input,
 				  float *output,
 				  int frameCount);
 	void runTimer();
 	
-	bool startPlaying(string path);
-	void stopPlaying();
+	void setPlayVolume(float value);
+	void setPlayThrough(bool value);
+	void openPlayer(string path);
+	void closePlayer();
+	void setPlayPosition(float time);
+	void play();
+	void pause();
 	bool isPlaying();
 	float getPlayTime();
 	float getPlayDuration();
-	bool startRecording(string path);
-	void stopRecording();
+	
+	void openRecorder(string path);
+	void closeRecorder();
+	void record();
+	void stop();
 	bool isRecording();
 	float getRecordingTime();
 	long long getRecordingSize();
 	
 private:
 	bool fullDuplex;
-	bool playThrough;
 	double sampleRate;
 	int channelNum;
 	int framesPerBuffer;
 	int bufferNum;
-	float volume;
 	
 	volatile int bufferAudioIndex;
 	volatile int bufferEmulationIndex;
@@ -84,28 +86,28 @@ private:
 	pthread_t emulationsThread;
 	pthread_mutex_t emulationsMutex;
 	pthread_cond_t emulationsCond;
-	OEPortAudioEmulations emulations;
+	OEEmulations emulations;
 	
 	bool audioOpen;
 	PaStream *audioStream;
-	float instantVolume;
 	bool timerThreadShouldRun;
 	pthread_t timerThread;
 	
+	float playVolume;
+	bool playThrough;
+	SNDFILE *playSNDFILE;
 	bool playing;
-	SNDFILE *playFile;
 	long long playFrameIndex;
 	long long playFrameNum;
 	int playChannelNum;
 	double playSRCRatio;
 	SRC_STATE *playSRC;
-	bool playEnd;
-	vector<float> playBuffer;
-	int playBufferFrameBegin;
-	int playBufferFrameEnd;
+	vector<float> playSRCBuffer;
+	int playSRCBufferFrameBegin;
+	int playSRCBufferFrameEnd;
 	
+	SNDFILE *recordingSNDFILE;
 	bool recording;
-	SNDFILE *recordingFile;
 	long long recordingFrameNum;
 	
 	void initBuffer();
@@ -126,8 +128,10 @@ private:
 	bool openEmulations();
 	void closeEmulations();
 	
-	void playAudio(float *buffer, int frameNum, int channelNum);
-	void recordAudio(float *buffer, int frameNum, int channelNum);
+	void playAudio(float *outputBuffer,
+				   float *inputBuffer, int frameNum, int channelNum);
+	
+	void recordAudio(float *outputBuffer, int frameNum, int channelNum);
 };
 
 #endif

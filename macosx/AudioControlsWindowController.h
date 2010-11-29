@@ -19,15 +19,15 @@
 	IBOutlet DocumentController *fDocumentController;
 	
 	IBOutlet id fPlayNameLabel;
-	IBOutlet id fPlayTimeLabel;
-	IBOutlet id fPlayDurationLabel;
-	IBOutlet id fOpenPlayButton;
 	IBOutlet id fTogglePlayButton;
+	IBOutlet id fPlayTimeLabel;
+	IBOutlet id	fPlayPosition;
+	IBOutlet id fPlayDurationLabel;
 	
+	IBOutlet id fSaveRecordingAsButton;
+	IBOutlet id fToggleRecordingButton;
 	IBOutlet id fRecordingTimeLabel;
 	IBOutlet id fRecordingSizeLabel;
-	IBOutlet id fToggleRecordingButton;
-	IBOutlet id fSaveRecordingAsButton;
 	
 	NSTimer *timer;
 	
@@ -40,6 +40,7 @@
 - (void) updatePlay;
 - (IBAction)openPlay:(id)sender;
 - (IBAction)togglePlay:(id)sender;
+- (IBAction)playPositionDidChange:(id)sender;
 - (void)readFromPath:(NSString *)path;
 
 - (void) updateRecording;

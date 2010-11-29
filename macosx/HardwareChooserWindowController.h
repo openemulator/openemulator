@@ -1,19 +1,19 @@
 
 /**
  * OpenEmulator
- * Mac OS X Device Chooser Window Controller
+ * Mac OS X Hardware Chooser Window Controller
  * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls the device chooser window.
+ * Controls the hardware chooser window.
  */
 
 #import <Cocoa/Cocoa.h>
 
-#import "DeviceChooserViewController.h"
+#import "HardwareChooserViewController.h"
 #import "ConnectorViewController.h"
 
-@interface DeviceChooserWindowController : NSWindowController
+@interface HardwareChooserWindowController : NSWindowController
 {
 	IBOutlet id fMessage;
 	IBOutlet id fView;
@@ -22,7 +22,7 @@
 	
 	IBOutlet id fDocumentController;
 	
-	DeviceChooserViewController *deviceChooserViewController;
+	HardwareChooserViewController *hardwareChooserViewController;
 	ConnectorViewController *connectorViewController;
 	
 	NSArray *selectedItemOutlets;

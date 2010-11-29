@@ -13,7 +13,8 @@
 #import "EmulationWindowController.h"
 #import "StringConversion.h"
 
-#import "OEPortAudioEmulation.h"
+#import "OEPortAudio.h"
+#import "OEEmulation.h"
 
 @implementation Document
 
@@ -24,7 +25,6 @@
 		emulation = nil;
 		
 		freePorts = [[NSMutableArray alloc] init];
-		
 		devices = [[NSMutableArray alloc] init];
 		
 		emulationWindowController = nil;
@@ -70,11 +70,13 @@
 {
 	DocumentController *documentController;
 	documentController = [NSDocumentController sharedDocumentController];
-	OEPortAudio *oePortAudio = (OEPortAudio *)[documentController oePortAudio];
 	
-	OEPortAudioEmulation *theEmulation = new OEPortAudioEmulation();
+	OEEmulation *theEmulation = new OEEmulation();
 	theEmulation->setResourcePath(getCString([[NSBundle mainBundle] resourcePath]));
-	theEmulation->setOEPortAudio(oePortAudio);
+	
+	OEPortAudio *oePortAudio = (OEPortAudio *)
+	[[NSDocumentController sharedDocumentController] oePortAudio];
+	theEmulation->setComponent("hostAudio", oePortAudio);
 	
 	theEmulation->open(getCString([url path]));
 	
@@ -85,13 +87,9 @@
 
 - (void)deleteEmulation
 {
-	DocumentController *documentController;
-	documentController = [NSDocumentController sharedDocumentController];
+	[[NSDocumentController sharedDocumentController] removeEmulation:emulation];
 	
-	[documentController removeEmulation:emulation];
-	
-	delete (OEPortAudioEmulation *)emulation;
-	
+	delete (OEEmulation *)emulation;
 	emulation = nil;
 }
 
@@ -232,7 +230,7 @@
 	
 	if (emulation)
 	{
-		if (((OEPortAudioEmulation *)emulation)->isOpen())
+		if (((OEEmulation *)emulation)->isOpen())
 		{
 			[self updateDevices];
 			
@@ -257,7 +255,13 @@
 		string emulationPath = getCString([[absoluteURL path]
 										   stringByAppendingString:@"/"]);
 		
-		if (((OEPortAudioEmulation *)emulation)->save(emulationPath))
+		OEPortAudio *oePortAudio = (OEPortAudio *)
+		[[NSDocumentController sharedDocumentController] oePortAudio];
+		((OEPortAudio *)oePortAudio)->lockEmulations();
+		bool isSaved = ((OEEmulation *)emulation)->save(emulationPath);
+		((OEPortAudio *)oePortAudio)->unlockEmulations();
+		
+		if (isSaved)
 			return YES;
 	}
 	
@@ -322,7 +326,12 @@
 		connectionsMap[inletRefString] = outletRefString;
 	}
 	
-	if (!((OEPortAudioEmulation *)emulation)->addEDL(pathString, connectionsMap))
+	OEPortAudio *oePortAudio = (OEPortAudio *)
+	[[NSDocumentController sharedDocumentController] oePortAudio];
+	((OEPortAudio *)oePortAudio)->lockEmulations();
+	bool isAdded = ((OEEmulation *)emulation)->addEDL(pathString, connectionsMap);
+	((OEPortAudio *)oePortAudio)->unlockEmulations();
+	if (!isAdded)
 	{
 		NSString *messageText = @"The device could not be added.";
 		
@@ -360,7 +369,12 @@
 			return;
 	}*/
 	
-	if (!((OEPortAudioEmulation *)emulation)->removeDevice(refString))
+	OEPortAudio *oePortAudio = (OEPortAudio *)
+	[[NSDocumentController sharedDocumentController] oePortAudio];
+	((OEPortAudio *)oePortAudio)->lockEmulations();
+	bool isRemoved = ((OEEmulation *)emulation)->removeDevice(refString);
+	((OEPortAudio *)oePortAudio)->unlockEmulations();
+	if (!isRemoved)
 	{
 		NSString *messageText = @"The device could not be removed.";
 		

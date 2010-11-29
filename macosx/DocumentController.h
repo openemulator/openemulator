@@ -47,13 +47,19 @@
 - (BOOL)addEmulation:(void *)emulation;
 - (void)removeEmulation:(void *)emulation;
 
-- (void)startPlaying:(NSString *)path;
-- (void)stopPlaying;
+- (void)openPlayer:(NSString *)path;
+- (void)closePlayer;
+- (void)setPlayPosition:(float)time;
+- (void)play;
+- (void)pause;
 - (BOOL)isPlaying;
 - (float)getPlayTime;
 - (float)getPlayDuration;
-- (void)startRecording:(NSString *)path;
-- (void)stopRecording;
+
+- (void)openRecorder:(NSString *)path;
+- (void)closeRecorder;
+- (void)record;
+- (void)stop;
 - (BOOL)isRecording;
 - (float)getRecordingTime;
 - (long long)getRecordingSize;

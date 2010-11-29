@@ -7,16 +7,16 @@
     <inlet ref="kim1.io" property="serial" outletRef="io" />
 </port>
 <port id="kim1.cpuSocket" ref="" type="CPU6502Socket" label="CPU Socket" image="CPU 6502 Socket.png">
-    <inlet ref="kim1.controlBus" property="masterSocket" outletRef="master" />
+    <inlet ref="kim1.controlBus" property="cpuSocket" outletRef="cpu" />
 </port>
 <port id="kim1.slot1" ref="" type="Kim1Slot" label="Slot 1" image="Kim-1 Slot.png" />
 <port id="kim1.slot2" ref="" type="Kim1Slot" label="Slot 2" image="Kim-1 Slot.png" />
 <component id="kim1.controlBus" class="ControlBus">
     <property name="hostAudio" ref="hostAudio" />
-    <property name="crystal" value="1.0MHz" />
+    <property name="crystalFrequency" value="1.0MHz" />
     <property name="frequencyDivider" value="1" />
-    <property name="master" ref="kim1.cpu" />
-    <property name="masterSocket" ref="" />
+    <property name="cpu" ref="kim1.cpu" />
+    <property name="cpuSocket" ref="" />
     <property name="resetOnPowerOn" value="0" />
 </component>
 <component id="kim1.memoryBus" class="AddressDecoder">
@@ -91,7 +91,7 @@
     <property name="image" src="${resourcePath}/roms/MOS/MOS KIM-1 6530-003 ROM.bin" />
 </component>
 <component id="kim1.io" class="KIM1IO">
-    <property name="hostEmulationController" ref="hostEmulationController" />
+    <property name="emulation" ref="emulation" />
     <property name="view" src="${resourcePath}/images/MOS/MOS KIM-1 View.png" />
     <property name="serialPort" ref="" />
     <property name="audioOut" ref="kim1.audioOut" />

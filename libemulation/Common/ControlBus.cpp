@@ -155,10 +155,12 @@ void ControlBus::notify(OEComponent *sender, int notification, void *data)
 	HostAudioBuffer *buffer = (HostAudioBuffer *) data;
 	float *out = buffer->output;
 	
+	float freq = rand() * 4000.0 / RAND_MAX;
+	
 	for(int i = 0; i < buffer->frameNum; i++)
 	{
 		float x = 0.1 * sin(phase);
-		phase += 2 * M_PI * 500.0 / buffer->sampleRate;
+		phase += 2 * M_PI * freq / buffer->sampleRate;
 		
 		for (int ch = 0; ch < buffer->channelNum; ch++)
 			*out++ += x;

@@ -16,7 +16,6 @@
 #include <OpenGL/gl.h>
 
 #include "OEComponent.h"
-
 #include "HostCanvasInterface.h"
 
 typedef enum

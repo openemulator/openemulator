@@ -1,26 +1,26 @@
 
 /**
  * OpenEmulator
- * Mac OS X Device Chooser Window Controller
+ * Mac OS X Hardware Chooser Window Controller
  * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls the device chooser window.
+ * Controls the hardware chooser window.
  */
 
-#import "DeviceChooserWindowController.h"
+#import "HardwareChooserWindowController.h"
 #import "Document.h"
 
-@implementation DeviceChooserWindowController
+@implementation HardwareChooserWindowController
 
 - (id)init
 {
-	self = [super initWithWindowNibName:@"DeviceChooser"];
+	self = [super initWithWindowNibName:@"HardwareChooser"];
 	
 	if (self)
 	{
-		deviceChooserViewController = [[DeviceChooserViewController alloc] init];
-		[deviceChooserViewController setDelegate:self];
+		hardwareChooserViewController = [[HardwareChooserViewController alloc] init];
+		[hardwareChooserViewController setDelegate:self];
 		
 		connectorViewController = [[ConnectorViewController alloc] init];
 		[connectorViewController setDelegate:self];
@@ -35,7 +35,7 @@
 {
 	[super dealloc];
 	
-	[deviceChooserViewController release];
+	[hardwareChooserViewController release];
 	[connectorViewController release];
 	
 	if (selectedItemOutlets)
@@ -59,13 +59,13 @@
 	[self setDeviceChooserView];
 	
 	NSArray *freePorts = [[fDocumentController currentDocument] freePorts];
-	[deviceChooserViewController updateForPorts:freePorts];
+	[hardwareChooserViewController updateForPorts:freePorts];
 	
-	[fNextButton setEnabled:([deviceChooserViewController selectedItemPath] != nil)];
+	[fNextButton setEnabled:([hardwareChooserViewController selectedItemPath] != nil)];
 	
-	if (![deviceChooserViewController selectedItemPath])
+	if (![hardwareChooserViewController selectedItemPath])
 	{
-		NSString *messageText = @"No devices can be added for "
+		NSString *messageText = @"No hardware can be added to "
 		"the current configuration.";
 		
 		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
@@ -83,9 +83,9 @@
 
 - (void)setDeviceChooserView
 {
-	[self updateView:[deviceChooserViewController view]
-			   title:NSLocalizedString(@"Choose a template for your new device:",
-									   @"Choose a template for your new device:")
+	[self updateView:[hardwareChooserViewController view]
+			   title:NSLocalizedString(@"Choose a template for your new hardware:",
+									   @"Choose a template for your new hardware:")
 	 previousEnabled:NO
 			lastStep:NO
 	 ];
@@ -208,7 +208,7 @@
 	{
 		if (selectedItemOutlets)
 			[selectedItemOutlets release];
-		selectedItemOutlets = [deviceChooserViewController selectedItemOutlets];
+		selectedItemOutlets = [hardwareChooserViewController selectedItemOutlets];
 		[selectedItemOutlets retain];
 		
 		if (selectedItemInlets)
@@ -234,7 +234,7 @@
 	{
 		[self performCancel:sender];
 		
-		NSString *dmlPath = [deviceChooserViewController selectedItemPath];
+		NSString *dmlPath = [hardwareChooserViewController selectedItemPath];
 		NSMutableDictionary *connections = [NSMutableDictionary dictionary];
 		for (int i = 0; i < [selectedItemOutlets count]; i++)
 		{

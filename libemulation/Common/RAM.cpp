@@ -14,12 +14,11 @@
 
 RAM::RAM()
 {
-	controlBus = NULL;
-	
 	size = 0;
-	mask = 0;
 	data = NULL;
-	datap = NULL;
+	
+	controlBus = NULL;
+	powerState = CONTROLBUS_POWERSTATE_ON;
 }
 
 RAM::~RAM()
@@ -42,7 +41,10 @@ bool RAM::setValue(string name, string value)
 bool RAM::setRef(string name, OEComponent *ref)
 {
 	if (name == "controlBus")
+	{
+		replaceObserver(controlBus, ref, CONTROLBUS_POWERSTATE_DID_CHANGE);
 		controlBus = ref;
+	}
 	else
 		return false;
 	
@@ -63,10 +65,7 @@ bool RAM::getData(string name, OEData **data)
 {
 	if (name == "image")
 	{
-		int powerState;
-		controlBus->postMessage(this, CONTROLBUS_GET_POWERSTATE, &powerState);
-		
-		if (powerState <= CONTROLBUS_POWERSTATE_HIBERNATE)
+		if (controlBus && (powerState <= CONTROLBUS_POWERSTATE_HIBERNATE))
 			*data = NULL;
 		else
 			*data = this->data;
@@ -90,11 +89,16 @@ bool RAM::init()
 	
 	if (!powerOnPattern.size())
 		powerOnPattern.resize(1);
+	else
+		powerOnPattern.resize(getNextPowerOf2(powerOnPattern.size()));
+	
+	if (controlBus)
+		controlBus->postMessage(this, CONTROLBUS_GET_POWERSTATE, &powerState);
 	
 	size = getNextPowerOf2(size);
-	mask = size - 1;
 	data->resize(size);
 	datap = (OEUInt8 *) &data->front();
+	mask = size - 1;
 	
 	return true;
 }
@@ -113,7 +117,15 @@ bool RAM::postMessage(OEComponent *sender, int message, void *data)
 
 void RAM::notify(OEComponent *sender, int notification, void *data)
 {
-	powerState = *((int *)data);
+	bool newPowerState = *((int *)data);
+	if ((powerState <= CONTROLBUS_POWERSTATE_HIBERNATE) &&
+		(newPowerState > CONTROLBUS_POWERSTATE_HIBERNATE))
+	{
+		int mask = powerOnPattern.size() - 1;
+		for (int i = 0; i < this->data->size(); i++)
+			datap[i] = powerOnPattern[i & mask];
+	}
+	powerState = newPowerState;
 }
 
 OEUInt8 RAM::read(OEAddress address)

@@ -38,7 +38,7 @@
     <inlet ref="appleII.game" property="port" outletRef="port" />
 </port>
 <port id="appleII.cpuSocket" ref="" type="CPU6502Socket" label="CPU Socket" image="CPU 6502 Socket.png">
-    <inlet ref="appleII.controlBus" property="masterSocket" outletRef="master" />
+    <inlet ref="appleII.controlBus" property="cpuSocket" outletRef="cpu" />
 </port>
 <port id="appleII.videoPort" ref="" type="CompositeVideo" label="Video Output" image="Composite Video Port.png">
     <inlet ref="appleII.video" property="monitor" outletRef="monitor" />
@@ -76,8 +76,12 @@
     <property name="addressSize" value="16" />
     <property name="blockSize" value="8" />
     <property name="floatingBus" ref="appleII.floatingBus" />
-    <property name="refRAM" ref="appleII.ram" />
-    <property name="mapRAM" value="0x0000-0xbfff" />
+    <property name="refRAM00" ref="appleII.ram" />
+    <property name="mapRAM00" value="0x0000-0x3fff" />
+    <property name="refRAM40" ref="appleII.ram" />
+    <property name="mapRAM40" value="0x4000-0x7fff" />
+    <property name="refRAM80" ref="appleII.ram" />
+    <property name="mapRAM80" value="0x8000-0xbfff" />
     <property name="refIO" ref="appleII.io" />
     <property name="mapIO" value="0xc000-0xc0ff" />
     <property name="refSlotMemory" ref="appleII.slotMemory" />
@@ -114,9 +118,19 @@
     <property name="controlBus" ref="appleII.controlBus" />
     <property name="ram" ref="appleII.ram" />
 </component>
-<component id="appleII.ram" class="RAM">
+<component id="appleII.ram1" class="RAM">
     <property name="controlBus" ref="controlBus" />
-    <property name="size" value="0xc000" />
+    <property name="size" value="0x4000" />
+    <property name="image" src="${packagePath}/${id}.bin" />
+</component>
+<component id="appleII.ram2" class="RAM">
+    <property name="controlBus" ref="controlBus" />
+    <property name="size" value="0x4000" />
+    <property name="image" src="${packagePath}/${id}.bin" />
+</component>
+<component id="appleII.ram3" class="RAM">
+    <property name="controlBus" ref="controlBus" />
+    <property name="size" value="0x4000" />
     <property name="image" src="${packagePath}/${id}.bin" />
 </component>
 <component id="appleII.io" class="AddressDecoder">

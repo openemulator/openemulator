@@ -96,6 +96,7 @@ protected:
 	
 	virtual bool updateEmulation();
 	
+	// Helpers
 	string getString(int value);
 	void setNodeProperty(xmlNodePtr node, string name, string value);
 	bool hasNodeProperty(xmlNodePtr node, string name);
@@ -104,7 +105,6 @@ protected:
 	bool writeFile(string path, OEData *data);
 	bool readFile(string path, OEData *data);
 	
-	// Helpers
 	void setDeviceId(string &id, string deviceId);
 	string getDeviceId(string id);
 	void edlLog(string message);

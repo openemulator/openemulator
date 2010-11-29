@@ -10,6 +10,9 @@
 
 #include "OEComponent.h"
 
+// Parameters:
+// * image is the ROM image.
+
 class ROM : public OEComponent
 {
 public:
@@ -22,8 +25,7 @@ public:
 	OEUInt8 read(OEAddress address);
 	
 private:
-	int size;
-	int mask;
 	OEData *data;
 	OEUInt8 *datap;
+	int mask;
 };

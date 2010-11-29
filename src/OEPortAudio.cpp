@@ -48,12 +48,10 @@ void *oePortAudioRunEmulations(void *arg)
 OEPortAudio::OEPortAudio()
 {
 	fullDuplex = false;
-	playThrough = false;
 	sampleRate = OEPORTAUDIO_SAMPLERATE;
 	channelNum = OEPORTAUDIO_CHANNELNUM;
 	framesPerBuffer = OEPORTAUDIO_FRAMESPERBUFFER;
 	bufferNum = OEPORTAUDIO_BUFFERNUM;
-	volume = 1.0F;
 	
 	audioOpen = false;
 	pthread_cond_init(&emulationsCond, NULL);
@@ -61,11 +59,12 @@ OEPortAudio::OEPortAudio()
 	
 	emulationsThreadShouldRun = false;
 	
+	playVolume = 1.0F;
+	playThrough = false;
+	playSNDFILE = NULL;
 	playing = false;
-	playFrameIndex = 0;
-	playFrameNum = 0;
+	recordingSNDFILE = NULL;
 	recording = false;
-	recordingFrameNum = 0;
 }
 
 void OEPortAudio::setFullDuplex(bool value)
@@ -79,8 +78,8 @@ void OEPortAudio::setFullDuplex(bool value)
 
 void OEPortAudio::setSampleRate(double value)
 {
-	stopPlaying();
-	stopRecording();
+	closePlayer();
+	closeRecorder();
 	
 	bool state = disableAudio();
 	
@@ -91,8 +90,8 @@ void OEPortAudio::setSampleRate(double value)
 
 void OEPortAudio::setChannelNum(int value)
 {
-	stopPlaying();
-	stopRecording();
+	closePlayer();
+	closeRecorder();
 	
 	bool state = disableAudio();
 	
@@ -117,16 +116,6 @@ void OEPortAudio::setBufferNum(int value)
 	bufferNum = value;
 	
 	enableAudio(state);
-}
-
-void OEPortAudio::setVolume(float value)
-{
-	volume = value;
-}
-
-void OEPortAudio::setPlayThrough(bool value)
-{
-	playThrough = value;
 }
 
 bool OEPortAudio::open()
@@ -224,9 +213,6 @@ bool OEPortAudio::openEmulations()
 {
 	int error;
 	
-	playing = false;
-	recording = false;
-	
 	error = pthread_mutex_init(&emulationsMutex, NULL);
 	if (!error)
 	{
@@ -315,8 +301,7 @@ void OEPortAudio::runEmulations()
 		memset(outputBuffer, 0, bytesPerBuffer);
 		
 		// Audio play
-		if (playing)
-			playAudio(inputBuffer, framesPerBuffer, channelNum);
+		playAudio(outputBuffer, inputBuffer, framesPerBuffer, channelNum);
 		
 		// Output
 		HostAudioBuffer buffer =
@@ -334,15 +319,7 @@ void OEPortAudio::runEmulations()
 		notify(this, HOST_AUDIO_FRAME_DID_END_RENDER, &buffer);
 		
 		// Audio recording
-		if (recording)
-			recordAudio(outputBuffer, framesPerBuffer, channelNum);
-		
-		// Audio play through
-		if (playThrough)
-		{
-			for (int i = 0; i < samplesPerBuffer; i++)
-				outputBuffer[i] += inputBuffer[i];
-		}
+		recordAudio(outputBuffer, framesPerBuffer, channelNum);
 		
 		unlockEmulations();
 		
@@ -350,7 +327,7 @@ void OEPortAudio::runEmulations()
 	}
 }
 
-bool OEPortAudio::addEmulation(OEPortAudioEmulation *emulation)
+bool OEPortAudio::addEmulation(OEEmulation *emulation)
 {
 	lockEmulations();
 	
@@ -361,13 +338,13 @@ bool OEPortAudio::addEmulation(OEPortAudioEmulation *emulation)
 	return true;
 }
 
-void OEPortAudio::removeEmulation(OEPortAudioEmulation *emulation)
+void OEPortAudio::removeEmulation(OEEmulation *emulation)
 {
 	lockEmulations();
 	
-	OEPortAudioEmulations::iterator first = emulations.begin();
-	OEPortAudioEmulations::iterator last = emulations.end();
-	OEPortAudioEmulations::iterator i = remove(first, last, emulation);
+	OEEmulations::iterator first = emulations.begin();
+	OEEmulations::iterator last = emulations.end();
+	OEEmulations::iterator i = remove(first, last, emulation);
 	
 	if (i != last)
 		emulations.erase(i, last);
@@ -382,8 +359,6 @@ bool OEPortAudio::openAudio()
 {
 	if (audioOpen)
 		closeAudio();
-	
-	instantVolume = 0.0F;
 	
 	int status = Pa_Initialize();
 	if (status == paNoError)
@@ -533,25 +508,7 @@ void OEPortAudio::runAudio(const float *input,
 	
 	// Copy output buffer
 	float *outputBuffer = getAudioOutputBuffer();
-	float volumeDifference = (volume - instantVolume);
-	if ((volumeDifference < -0.00003) || (volumeDifference > 0.00003))
-	{
-		// Update volume
-		float t = 1.0 / sampleRate;
-		float rc = 1 / 2.0 / M_PI / OEPORTAUDIO_VOLUMEFILTERFREQ;
-		float alpha = t / (rc + t);
-		
-		for (int i = 0; i < frameCount; i++)
-		{
-			for (int c = 0; c < channelNum; c++)
-				*output++ = *outputBuffer++ * instantVolume;
-			
-			instantVolume += (volume - instantVolume) * alpha;
-		}
-	}
-	else
-		for (int i = 0; i < samplesPerBuffer; i++)
-			*output++ = *outputBuffer++ * instantVolume;
+	memcpy(output, outputBuffer, bytesPerBuffer);
 	
 	advanceAudioBuffer();
 	
@@ -578,9 +535,19 @@ void OEPortAudio::runTimer()
 //
 // Play
 //
-bool OEPortAudio::startPlaying(string path)
+void OEPortAudio::setPlayVolume(float value)
 {
-	stopPlaying();
+	playVolume = value;
+}
+
+void OEPortAudio::setPlayThrough(bool value)
+{
+	playThrough = value;
+}
+
+void OEPortAudio::openPlayer(string path)
+{
+	closePlayer();
 	
 	SF_INFO sfInfo = 
 	{
@@ -594,11 +561,8 @@ bool OEPortAudio::startPlaying(string path)
 	
 	lockEmulations();
 	
-	playFrameIndex = 0;
-	playFrameNum = 0;
-	
-	playFile = sf_open(path.c_str(), SFM_READ, &sfInfo);
-	if (playFile)
+	playSNDFILE = sf_open(path.c_str(), SFM_READ, &sfInfo);
+	if (playSNDFILE)
 	{
 		playChannelNum = sfInfo.channels;
 		
@@ -610,42 +574,75 @@ bool OEPortAudio::startPlaying(string path)
 		
 		if (playSRC)
 		{
-			playEnd = false;
-			playBufferFrameBegin = 0;
-			playBufferFrameEnd = 0;
+			playSRCBufferFrameBegin = 0;
+			playSRCBufferFrameEnd = 0;
 			
 			int frameNum = 2 * playSRCRatio * framesPerBuffer;
-			playBuffer.resize(frameNum * playChannelNum);
+			playSRCBuffer.resize(frameNum * playChannelNum);
 			
+			playFrameIndex = 0;
 			playFrameNum = sfInfo.frames * playSRCRatio;
-			
-			playing = true;
 		}
 		else
 		{
 			log("could not init sample rate converter, error " + getString(error));
-			sf_close(playFile);
+			sf_close(playSNDFILE);
 		}
 	}
 	else
 		log("could not open file " + path);
 	
 	unlockEmulations();
-	
-	return playing;
 }
 
-void OEPortAudio::stopPlaying()
+void OEPortAudio::closePlayer()
 {
-	if (!playing)
+	if (!playSNDFILE)
 		return;
 	
 	lockEmulations();
 	
-	sf_close(playFile);
+	sf_close(playSNDFILE);
+	playSNDFILE = NULL;
 	playing = false;
+	playFrameIndex = 0;
+	playFrameNum = 0;
 	
 	unlockEmulations();
+}
+
+void OEPortAudio::setPlayPosition(float time)
+{
+	if (!playSNDFILE)
+		return;
+	
+	lockEmulations();
+	
+	playFrameIndex = time * sampleRate;
+	sf_seek(playSNDFILE, playFrameIndex / playSRCRatio, SEEK_SET);
+
+	if (!playing)
+	{
+		playSRCBufferFrameBegin = 0;
+		playSRCBufferFrameEnd = 0;
+	}
+	
+	unlockEmulations();
+}
+
+void OEPortAudio::play()
+{
+	if (playSNDFILE)
+		playing = true;
+	
+	if ((getPlayTime() + 0.1) >= getPlayDuration())
+		setPlayPosition(0.0);
+}
+
+void OEPortAudio::pause()
+{
+	if (playSNDFILE)
+		playing = false;
 }
 
 bool OEPortAudio::isPlaying()
@@ -663,66 +660,81 @@ float OEPortAudio::getPlayDuration()
 	return (float) playFrameNum / sampleRate;
 }
 
-void OEPortAudio::playAudio(float *buffer, int frameNum, int channelNum)
+void OEPortAudio::playAudio(float *outputBuffer,
+							float *inputBuffer, int frameNum, int channelNum)
 {
+	if (!playing)
+		return;
+	
 	vector<float> srcBuffer;
 	srcBuffer.resize(frameNum * playChannelNum);
 	
-	int playBufferFrameNum = playBuffer.size() / playChannelNum;
+	int playSRCBufferFrameNum = playSRCBuffer.size() / playChannelNum;
 	
 	do
 	{
-		if (playBufferFrameBegin >= playBufferFrameEnd)
+		if (playSRCBufferFrameBegin >= playSRCBufferFrameEnd)
 		{
-			int n = sf_readf_float(playFile,
-								   &playBuffer[0],
-								   playBufferFrameNum);
+			int n = sf_readf_float(playSNDFILE,
+								   &playSRCBuffer.front(),
+								   playSRCBufferFrameNum);
 			
-			playBufferFrameBegin = 0;
-			playBufferFrameEnd = n;
+			playSRCBufferFrameBegin = 0;
+			playSRCBufferFrameEnd = n;
 			
-			if (n != playBufferFrameNum)
-				playEnd = true;
+			if (n != playSRCBufferFrameNum)
+				playing = false;
 		}
 		
-		int index = playBufferFrameBegin * playChannelNum;
-		int inputFrameNum = (playBufferFrameEnd - 
-							 playBufferFrameBegin);
+		int index = playSRCBufferFrameBegin * playChannelNum;
+		int inputFrameNum = (playSRCBufferFrameEnd - 
+							 playSRCBufferFrameBegin);
 		SRC_DATA srcData =
 		{
-			&playBuffer[index],
-			&srcBuffer[0],
+			&playSRCBuffer[index],
+			&srcBuffer.front(),
 			inputFrameNum,
 			frameNum,
 			0,
 			0,
-			playEnd,
+			0,
 			playSRCRatio,
 		};
 		src_process(playSRC, &srcData);
 		
 		if (!srcData.output_frames_gen)
 		{
-			sf_close(playFile);
-			src_delete(playSRC);
-			
 			playing = false;
-			
 			return;
 		}
 		
-		float *in = &srcBuffer[0];
+		float *in = &srcBuffer.front();
+		float linearVolume = 20.0 * pow(10.0, (playVolume - 1.0) * 100.0 / 20.0);
 		for (int i = 0; i < srcData.output_frames_gen; i++)
 		{
 			for (int ch = 0; ch < channelNum; ch++)
-				buffer[ch] += in[ch % playChannelNum];
+				inputBuffer[ch] += in[ch % playChannelNum] * linearVolume;
 			
 			in += playChannelNum;
-			buffer += channelNum;
+			inputBuffer += channelNum;
+		}
+
+		if (playThrough)
+		{
+			float *in = &srcBuffer.front();
+			for (int i = 0; i < srcData.output_frames_gen; i++)
+			{
+				for (int ch = 0; ch < channelNum; ch++)
+					outputBuffer[ch] += in[ch % playChannelNum] * playVolume;
+				
+				in += playChannelNum;
+				outputBuffer += channelNum;
+			}
 		}
 		
 		playFrameIndex += srcData.output_frames_gen;
-		playBufferFrameBegin += srcData.input_frames_used;
+		playSRCBufferFrameBegin += srcData.input_frames_used;
+		
 		frameNum -= srcData.output_frames_gen;
 	} while (frameNum > 0);
 }
@@ -730,9 +742,9 @@ void OEPortAudio::playAudio(float *buffer, int frameNum, int channelNum)
 //
 // Recording
 //
-bool OEPortAudio::startRecording(string path)
+void OEPortAudio::openRecorder(string path)
 {
-	stopRecording();
+	closeRecorder();
 	
 	SF_INFO sfInfo = 
 	{
@@ -746,30 +758,37 @@ bool OEPortAudio::startRecording(string path)
 	
 	lockEmulations();
 	
-	recordingFrameNum = 0;
-	recordingFile = sf_open(path.c_str(), SFM_WRITE, &sfInfo);
-	
-	if (recordingFile)
-		recording = true;
-	else
+	if (!(recordingSNDFILE = sf_open(path.c_str(), SFM_WRITE, &sfInfo)))
 		log("could not open temporary file " + path);
+	recordingFrameNum = 0;
 	
 	unlockEmulations();
-	
-	return recording;
 }
 
-void OEPortAudio::stopRecording()
+void OEPortAudio::closeRecorder()
 {
-	if (!recording)
+	if (!recordingSNDFILE)
 		return;
 	
 	lockEmulations();
 	
-	sf_close(recordingFile);
+	sf_close(recordingSNDFILE);
+	recordingSNDFILE = NULL;
 	recording = false;
 	
 	unlockEmulations();
+}
+
+void OEPortAudio::record()
+{
+	if (recordingSNDFILE)
+		recording = true;
+}
+
+void OEPortAudio::stop()
+{
+	if (recordingSNDFILE)
+		recording = false;
 }
 
 bool OEPortAudio::isRecording()
@@ -787,15 +806,19 @@ long long OEPortAudio::getRecordingSize()
 	return (long long) recordingFrameNum * channelNum * sizeof(short);
 }
 
-void OEPortAudio::recordAudio(float *buffer, int frameNum, int channelNum)
+void OEPortAudio::recordAudio(float *outputBuffer, int frameNum, int channelNum)
 {
-	int n = sf_writef_float(recordingFile, buffer, frameNum);
+	if (!recording)
+		return;
+	
+	int n = sf_writef_float(recordingSNDFILE, outputBuffer, frameNum);
 	recordingFrameNum += n;
 	
 	if (frameNum != n)
 	{
-		sf_close(recordingFile);
-		
+		sf_close(recordingSNDFILE);
 		recording = false;
+		recordingSNDFILE = NULL;
+		recordingFrameNum = 0;
 	}
 }

@@ -311,7 +311,7 @@ bool OEEmulation::updateComponent(string id, xmlNodePtr children)
 			{
 				string src = getNodeProperty(node, "src");
 				
-				if (hasProperty(src, "resourcePath"))
+				if (!hasProperty(src, "packagePath") || !package)
 					continue;
 				
 				OEData *data;
@@ -321,11 +321,8 @@ bool OEEmulation::updateComponent(string id, xmlNodePtr children)
 				{
 					if (data)
 					{
-						if (package->writeFile(parsedSrc, data))
-							continue;
-						else
+						if (!package->writeFile(parsedSrc, data))
 							log("could not write '" + src + "'");
-						return false;
 					}
 				}
 			}
@@ -448,19 +445,6 @@ string OEEmulation::parseProperties(string value,
 bool OEEmulation::mount(string path)
 {
 	return delegate(this, EMULATION_MOUNT, &path);
-}
-
-bool OEEmulation::mount(string deviceId, string path)
-{
-	if (!devicesInfo.count(deviceId))
-		return false;
-	
-	OEComponent *storage = devicesInfo[deviceId].storage;
-	
-	if (!storage)
-		return false;
-	
-	return storage->delegate(this, EMULATION_MOUNT, &path);
 }
 
 bool OEEmulation::validate(string path)

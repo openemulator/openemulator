@@ -150,6 +150,7 @@
 	if (!playPath)
 	{
 		[fPlayNameLabel setStringValue:@""];
+		[fPlayPosition setFloatValue:0.0];
 		[fPlayTimeLabel setStringValue:@"--:--:--"];
 		[fPlayDurationLabel setStringValue:@"--:--:--"];
 	}
@@ -163,15 +164,15 @@
 		float playDuration = [fDocumentController getPlayDuration];
 		NSString *timeLabel = [self formatTime:playTime];
 		NSString *durationLabel = [self formatTime:playDuration];
+		[fPlayPosition setFloatValue:playTime / playDuration];
 		[fPlayTimeLabel setStringValue:timeLabel];
 		[fPlayDurationLabel setStringValue:durationLabel];
 	}
 	
 	BOOL isPlaying = [fDocumentController isPlaying];
-	[fOpenPlayButton setEnabled:!isPlaying];
 	[fTogglePlayButton setEnabled:playPath ? YES : NO];
 	[fTogglePlayButton setImage:(isPlaying ?
-								 [NSImage imageNamed:@"AudioStop.png"] :
+								 [NSImage imageNamed:@"AudioPause.png"] :
 								 [NSImage imageNamed:@"AudioPlay.png"]
 								 )];
 }
@@ -191,9 +192,18 @@
 - (IBAction)togglePlay:(id)sender
 {
 	if (![fDocumentController isPlaying])
-		[fDocumentController startPlaying:playPath];
+		[fDocumentController play];
 	else
-		[fDocumentController stopPlaying];
+		[fDocumentController pause];
+}
+
+- (IBAction)playPositionDidChange:(id)sender
+{
+	if (!playPath)
+		return;
+	
+	float time = [sender floatValue] * [fDocumentController getPlayDuration];
+	[fDocumentController setPlayPosition:time];
 }
 
 - (void)readFromPath:(NSString *)path
@@ -204,10 +214,13 @@
 	playPath = [path copy];
 	if (playPath)
 	{
-		[fDocumentController startPlaying:playPath];
+		[fDocumentController openPlayer:playPath];
+		[fDocumentController play];
 		
 		if (![fDocumentController getPlayDuration])
 		{
+			[fDocumentController closePlayer];
+			
 			[playPath release];
 			playPath = nil;
 		}
@@ -250,10 +263,11 @@
 						  stringByAppendingPathComponent:@"oerecording"];
 		recordingPath = [path copy];
 		
-		[fDocumentController startRecording:recordingPath];
+		[fDocumentController openRecorder:recordingPath];
+		[fDocumentController record];
 	}
 	else
-		[fDocumentController stopRecording];
+		[fDocumentController closeRecorder];
 }
 
 - (IBAction)saveRecording:(id)sender

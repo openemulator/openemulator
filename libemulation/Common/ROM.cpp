@@ -14,9 +14,7 @@
 
 ROM::ROM()
 {
-	size = 1;
 	data = NULL;
-	datap = NULL;
 }
 
 ROM::~ROM()
@@ -42,16 +40,15 @@ bool ROM::init()
 		return false;
 	}
 	
-	size = getNextPowerOf2(size);
-	mask = size - 1;
-	
+	int size = getNextPowerOf2(data->size());
 	data->resize(size);
 	datap = (OEUInt8 *) &data->front();
+	mask = size - 1;
 	
 	return true;
 }
 
 OEUInt8 ROM::read(OEAddress address)
 {
-	return datap[address & mask];
+	return datap[address & dataMask];
 }

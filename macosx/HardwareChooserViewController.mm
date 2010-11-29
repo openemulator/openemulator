@@ -1,14 +1,14 @@
 
 /**
  * OpenEmulator
- * Mac OS X Device Chooser View Controller
+ * Mac OS X Hardware Chooser View Controller
  * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls a device chooser view.
+ * Controls a hardware chooser view.
  */
 
-#import "DeviceChooserViewController.h"
+#import "HardwareChooserViewController.h"
 #import "ChooserItem.h"
 #import "Document.h"
 #import "StringConversion.h"
@@ -71,7 +71,7 @@
 
 @end
 
-@implementation DeviceChooserViewController
+@implementation HardwareChooserViewController
 
 - (id)init
 {

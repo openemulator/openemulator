@@ -2,18 +2,18 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="7.10">
 	<data>
 		<int key="IBDocument.SystemTarget">1050</int>
-		<string key="IBDocument.SystemVersion">10F569</string>
-		<string key="IBDocument.InterfaceBuilderVersion">804</string>
-		<string key="IBDocument.AppKitVersion">1038.29</string>
+		<string key="IBDocument.SystemVersion">10H574</string>
+		<string key="IBDocument.InterfaceBuilderVersion">788</string>
+		<string key="IBDocument.AppKitVersion">1038.35</string>
 		<string key="IBDocument.HIToolboxVersion">461.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
-			<string key="NS.object.0">804</string>
+			<string key="NS.object.0">788</string>
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="1740"/>
 			<integer value="1808"/>
+			<integer value="1740"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -42,7 +42,7 @@
 				<string key="NSWindowTitle"/>
 				<string key="NSWindowClass">NSWindow</string>
 				<nil key="NSViewClass"/>
-				<string key="NSWindowContentMaxSize">{1.79769e+308, 1.79769e+308}</string>
+				<string key="NSWindowContentMaxSize">{3.40282e+38, 3.40282e+38}</string>
 				<string key="NSWindowContentMinSize">{256, 123}</string>
 				<object class="NSView" key="NSWindowView" id="697045175">
 					<reference key="NSNextResponder"/>
@@ -62,7 +62,7 @@
 										<object class="NSTableView" id="1027958689">
 											<reference key="NSNextResponder" ref="870796731"/>
 											<int key="NSvFlags">4352</int>
-											<string key="NSFrameSize">{257, 350}</string>
+											<string key="NSFrameSize">{256, 350}</string>
 											<reference key="NSSuperview" ref="870796731"/>
 											<bool key="NSEnabled">YES</bool>
 											<object class="_NSCornerView" key="NSCornerView">
@@ -115,7 +115,7 @@
 													</object>
 												</object>
 												<object class="NSTableColumn" id="813993110">
-													<double key="NSWidth">165</double>
+													<double key="NSWidth">155</double>
 													<double key="NSMinWidth">10</double>
 													<double key="NSMaxWidth">3.4028230607370965e+38</double>
 													<object class="NSTableHeaderCell" key="NSHeaderCell">
@@ -151,7 +151,7 @@
 															<string key="NSColorName">controlBackgroundColor</string>
 															<object class="NSColor" key="NSColor">
 																<int key="NSColorSpace">3</int>
-																<bytes key="NSWhite">MC42NjY2NjY2NjY3AA</bytes>
+																<bytes key="NSWhite">MC42NjY2NjY2ODY1AA</bytes>
 															</object>
 														</object>
 														<object class="NSColor" key="NSTextColor">
@@ -166,7 +166,7 @@
 													<reference key="NSTableView" ref="1027958689"/>
 												</object>
 												<object class="NSTableColumn" id="681443988">
-													<double key="NSWidth">16</double>
+													<double key="NSWidth">20</double>
 													<double key="NSMinWidth">10</double>
 													<double key="NSMaxWidth">3.4028234663852886e+38</double>
 													<object class="NSTableHeaderCell" key="NSHeaderCell">
@@ -200,7 +200,7 @@
 													<reference key="NSTableView" ref="1027958689"/>
 												</object>
 												<object class="NSTableColumn" id="842509763">
-													<double key="NSWidth">16</double>
+													<double key="NSWidth">20</double>
 													<double key="NSMinWidth">10</double>
 													<double key="NSMaxWidth">3.4028234663852886e+38</double>
 													<object class="NSTableHeaderCell" key="NSHeaderCell">
@@ -225,7 +225,7 @@
 														<int key="NSButtonFlags2">6</int>
 														<object class="NSCustomResource" key="NSNormalImage">
 															<string key="NSClassName">NSImage</string>
-															<string key="NSResourceName">EmulationUnmount</string>
+															<string key="NSResourceName">EmulationEject</string>
 														</object>
 														<string key="NSAlternateContents"/>
 														<string key="NSKeyEquivalent"/>
@@ -292,7 +292,6 @@
 									<int key="NSvFlags">-2147483392</int>
 									<string key="NSFrame">{{-100, -100}, {239, 15}}</string>
 									<reference key="NSSuperview" ref="236988201"/>
-									<bool key="NSEnabled">YES</bool>
 									<int key="NSsFlags">1</int>
 									<reference key="NSTarget" ref="236988201"/>
 									<string key="NSAction">_doScroller:</string>
@@ -302,7 +301,7 @@
 							<string key="NSFrame">{{0, 23}, {256, 350}}</string>
 							<reference key="NSSuperview" ref="697045175"/>
 							<reference key="NSNextKeyView" ref="870796731"/>
-							<int key="NSsFlags">656</int>
+							<int key="NSsFlags">528</int>
 							<reference key="NSVScroller" ref="832422757"/>
 							<reference key="NSHScroller" ref="991330819"/>
 							<reference key="NSContentView" ref="870796731"/>
@@ -422,7 +421,7 @@
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1440, 878}}</string>
 				<string key="NSMinSize">{256, 145}</string>
-				<string key="NSMaxSize">{1.79769e+308, 1.79769e+308}</string>
+				<string key="NSMaxSize">{3.40282e+38, 3.40282e+38}</string>
 			</object>
 			<object class="NSMenu" id="719851724">
 				<string key="NSTitle"/>
@@ -442,19 +441,19 @@
 							<string key="NSResourceName">NSMenuMixedState</string>
 						</object>
 					</object>
-					<object class="NSMenuItem" id="186807216">
+					<object class="NSMenuItem" id="847601756">
 						<reference key="NSMenu" ref="719851724"/>
-						<bool key="NSIsDisabled">YES</bool>
-						<bool key="NSIsSeparator">YES</bool>
-						<string key="NSTitle"/>
+						<string key="NSTitle">Reveal in Finder</string>
 						<string key="NSKeyEquiv"/>
 						<int key="NSMnemonicLoc">2147483647</int>
 						<reference key="NSOnImage" ref="95722596"/>
 						<reference key="NSMixedImage" ref="599170601"/>
 					</object>
-					<object class="NSMenuItem" id="847601756">
+					<object class="NSMenuItem" id="186807216">
 						<reference key="NSMenu" ref="719851724"/>
-						<string key="NSTitle">Reveal in Finder</string>
+						<bool key="NSIsDisabled">YES</bool>
+						<bool key="NSIsSeparator">YES</bool>
+						<string key="NSTitle"/>
 						<string key="NSKeyEquiv"/>
 						<int key="NSMnemonicLoc">2147483647</int>
 						<reference key="NSOnImage" ref="95722596"/>
@@ -545,8 +544,8 @@
 							<reference ref="215124451"/>
 							<reference ref="894865330"/>
 							<reference ref="1005311744"/>
-							<reference ref="236988201"/>
 							<reference ref="511943975"/>
+							<reference ref="236988201"/>
 						</object>
 						<reference key="parent" ref="266599386"/>
 					</object>
@@ -787,9 +786,9 @@
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>{{440, 104}, {256, 373}}</string>
+					<string>{{369, 152}, {256, 373}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{440, 104}, {256, 373}}</string>
+					<string>{{369, 152}, {256, 373}}</string>
 					<boolean value="YES"/>
 					<boolean value="NO"/>
 					<boolean value="YES"/>
@@ -823,14 +822,14 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>DevicesCell</string>
+					<string>EmulationCell</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{298, 265}, {160, 93}}</string>
+					<string>{{147, 324}, {160, 93}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -856,11 +855,19 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">1836</int>
+			<int key="maxID">1837</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
 				<bool key="EncodedWithXMLCoder">YES</bool>
+				<object class="IBPartialClassDescription">
+					<string key="className">EmulationCell</string>
+					<string key="superclassName">NSTextFieldCell</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">macosx/EmulationCell.h</string>
+					</object>
+				</object>
 				<object class="IBPartialClassDescription">
 					<string key="className">InspectorWindowController</string>
 					<string key="superclassName">NSWindowController</string>
@@ -986,13 +993,13 @@
 				<bool key="EncodedWithXMLCoder">YES</bool>
 				<string>EmulationAction</string>
 				<string>EmulationActionPressed</string>
+				<string>EmulationEject</string>
 				<string>EmulationMinus</string>
 				<string>EmulationMinusPressed</string>
 				<string>EmulationPlus</string>
 				<string>EmulationPlusPressed</string>
 				<string>EmulationReveal</string>
 				<string>EmulationSpace</string>
-				<string>EmulationUnmount</string>
 				<string>NSMenuCheckmark</string>
 				<string>NSMenuMixedState</string>
 			</object>
@@ -1000,13 +1007,13 @@
 				<bool key="EncodedWithXMLCoder">YES</bool>
 				<string>{32, 23}</string>
 				<string>{32, 23}</string>
+				<string>{18, 18}</string>
 				<string>{26, 23}</string>
 				<string>{26, 23}</string>
 				<string>{26, 23}</string>
 				<string>{26, 23}</string>
-				<string>{14, 14}</string>
+				<string>{18, 18}</string>
 				<string>{10, 23}</string>
-				<string>{14, 14}</string>
 				<string>{9, 8}</string>
 				<string>{7, 2}</string>
 			</object>

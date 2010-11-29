@@ -10,6 +10,12 @@
 
 #include "OEComponent.h"
 
+// Parameters:
+// * size is the RAM size. It must be a power of two.
+// * controlBus can be used to determine power state.
+// * powerOnPattern is the byte pattern used when power is applied.
+// * image is the RAM image.
+
 // Messages
 enum
 {
@@ -36,13 +42,12 @@ public:
 	void write(OEAddress address, OEUInt8 value);
 	
 private:
-	OEData powerOnPattern;
-	OEComponent *controlBus;
-	
 	OEAddress size;
-	OEAddress mask;
 	OEData *data;
 	OEUInt8 *datap;
+	OEAddress mask;
 	
+	OEComponent *controlBus;
+	OEData powerOnPattern;
 	int powerState;
 };

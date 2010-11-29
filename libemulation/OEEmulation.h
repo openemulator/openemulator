@@ -24,9 +24,14 @@
 // * A mounter is a component that is capable of holding the information while mounted
 //   (e.g. disk drives, cartridges)
 // * It is up to the mounter to automatically eject a disk image
-// * To unmount, the framework sends an empty string
-// * To update mount status, use the device status interface
+// * To unmount, an empty string is used
+// * To update mount status, use the device info interface
 //
+
+
+typedef void (*OERunAlertCallback)(string message);
+typedef OEComponent *(*OEAddCanvasCallback)(void *userData);
+typedef void (*OERemoveCanvasCallback)(OEComponent *canvas, void *userData);
 
 typedef enum
 {
@@ -49,17 +54,13 @@ typedef struct
 	OEComponent *storage;
 } OEEmulationDeviceInfo;
 
+typedef map<string, OEEmulationDeviceInfo> OEEmulationDevicesInfo;
+
 typedef struct
 {
 	string deviceId;
 	OEEmulationDeviceInfo deviceInfo;
 } OEEmulationSetDeviceInfo;
-
-typedef void (*OERunAlertCallback)(string message);
-typedef OEComponent *(*OEAddCanvasCallback)(void *userData);
-typedef void (*OERemoveCanvasCallback)(OEComponent *canvas, void *userData);
-
-typedef map<string, OEEmulationDeviceInfo> OEEmulationDevicesInfo;
 
 typedef map<string, OEComponent *> OEComponentsMap;
 typedef map<string, string> OEPropertiesMap;
@@ -83,7 +84,6 @@ public:
 	bool setComponent(string id, OEComponent *component);
 	
 	bool mount(string path);
-	bool mount(string deviceId, string path);
 	bool validate(string path);
 	
 	bool postMessage(OEComponent *sender, int message, void *data);
