@@ -12,7 +12,6 @@
 #include <iostream>
 
 #include "OEPortAudio.h"
-
 #include "HostAudioInterface.h"
 
 using namespace std;

@@ -32,7 +32,7 @@
 
 #include "Apple1IO.h"
 #include "Apple1Terminal.h"
-#include "Apple1CassetteInterface.h"
+#include "Apple1CassetteInterfaceCard.h"
 #include "AppleIIControlBus.h"
 #include "AppleIIMMU.h"
 #include "AppleIIFloatingBus.h"
@@ -72,7 +72,7 @@ OEComponent *OEComponentFactory::create(const string &className)
 	
 	matchComponent(Apple1IO);
 	matchComponent(Apple1Terminal);
-	matchComponent(Apple1CassetteInterface);
+	matchComponent(Apple1CassetteInterfaceCard);
 	
 	matchComponent(AppleIIControlBus);
 	matchComponent(AppleIIMMU);

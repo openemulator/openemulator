@@ -1,5 +1,5 @@
 /*
- *  AppleICassetteInterface.cpp
+ *  AppleICassetteInterface.h
  *  OpenEmulator
  *
  *  Created by Marc S. Reßl on 17/03/10.
@@ -7,5 +7,8 @@
  *
  */
 
-#include "Apple1CassetteInterface.h"
+#include "OEComponent.h"
 
+class Apple1CassetteInterfaceCard : public OEComponent
+{
+};

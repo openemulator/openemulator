@@ -28,7 +28,6 @@
 		0054E4A71131BE8A006D32D9 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0054E4A61131BE8A006D32D9 /* OpenGL.framework */; };
 		0054E6311131BEE7006D32D9 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0054E6301131BEE7006D32D9 /* Carbon.framework */; };
 		0054E66C1131BF58006D32D9 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0054E66B1131BF58006D32D9 /* Quartz.framework */; };
-		005D61B1124ABC4400C29F35 /* OEEDL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 005D61AF124ABC4400C29F35 /* OEEDL.cpp */; };
 		005E5F771086B16C00E573D4 /* Inspector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 005E5F751086B16C00E573D4 /* Inspector.xib */; };
 		006115C211DD0347008AA3EE /* Application.m in Sources */ = {isa = PBXBuildFile; fileRef = 006115C111DD0347008AA3EE /* Application.m */; };
 		0067749B1286E721000E843B /* OEOpenGLCanvas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 006774681286DB06000E843B /* OEOpenGLCanvas.cpp */; };
@@ -56,12 +55,40 @@
 		00A72B7312879F800083C6A7 /* CanvasWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 00A72B7212879F800083C6A7 /* CanvasWindow.m */; };
 		00A72B951287A0F10083C6A7 /* Canvas.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00A72B931287A0F10083C6A7 /* Canvas.xib */; };
 		00B5709E10863C2A00CDE4A7 /* TemplateChooserWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B5709D10863C2A00CDE4A7 /* TemplateChooserWindowController.m */; };
-		00B703851135ACA5005E4B65 /* OEComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B703731135AC91005E4B65 /* OEComponent.cpp */; };
-		00B703861135ACA6005E4B65 /* OEComponentFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B703751135AC91005E4B65 /* OEComponentFactory.cpp */; };
-		00B703871135ACA7005E4B65 /* OEEmulation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B703771135AC91005E4B65 /* OEEmulation.cpp */; };
-		00B7038E1135ACAD005E4B65 /* OEPackage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B7037B1135AC91005E4B65 /* OEPackage.cpp */; };
-		00B8844F12A38DF70052B7A4 /* Implementations in Resources */ = {isa = PBXBuildFile; fileRef = 00B883E512A38DF70052B7A4 /* Implementations */; };
-		00B8845012A38DF70052B7A4 /* Interfaces in Resources */ = {isa = PBXBuildFile; fileRef = 00B8844312A38DF70052B7A4 /* Interfaces */; };
+		00B888D412A396970052B7A4 /* AddressDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8882E12A393990052B7A4 /* AddressDecoder.cpp */; };
+		00B888D512A3969C0052B7A4 /* AddressOffset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8883012A393990052B7A4 /* AddressOffset.cpp */; };
+		00B888D612A396A00052B7A4 /* Apple1CassetteInterfaceCard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881312A393990052B7A4 /* Apple1CassetteInterfaceCard.cpp */; };
+		00B888D712A396A30052B7A4 /* Apple1IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881512A393990052B7A4 /* Apple1IO.cpp */; };
+		00B888D812A396A70052B7A4 /* Apple1Terminal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881712A393990052B7A4 /* Apple1Terminal.cpp */; };
+		00B888D912A396AA0052B7A4 /* AppleIIAudioIn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881912A393990052B7A4 /* AppleIIAudioIn.cpp */; };
+		00B888DA12A396AD0052B7A4 /* AppleIIAudioOut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881B12A393990052B7A4 /* AppleIIAudioOut.cpp */; };
+		00B888DB12A396B00052B7A4 /* AppleIIControlBus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881D12A393990052B7A4 /* AppleIIControlBus.cpp */; };
+		00B888DC12A396B20052B7A4 /* AppleIIFloatingBus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881F12A393990052B7A4 /* AppleIIFloatingBus.cpp */; };
+		00B888DD12A396B60052B7A4 /* AppleIIGamePort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8882112A393990052B7A4 /* AppleIIGamePort.cpp */; };
+		00B888DE12A396BA0052B7A4 /* AppleIIKeyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8882312A393990052B7A4 /* AppleIIKeyboard.cpp */; };
+		00B888DF12A396BD0052B7A4 /* AppleIIMMU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8882512A393990052B7A4 /* AppleIIMMU.cpp */; };
+		00B888E012A396C00052B7A4 /* AppleIISlotExpansionMemory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8882712A393990052B7A4 /* AppleIISlotExpansionMemory.cpp */; };
+		00B888E112A396C40052B7A4 /* AppleIISlotMemory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8882912A393990052B7A4 /* AppleIISlotMemory.cpp */; };
+		00B888E212A396E20052B7A4 /* MOS6502.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8884312A393990052B7A4 /* MOS6502.cpp */; };
+		00B888E312A396E20052B7A4 /* RAM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8883C12A393990052B7A4 /* RAM.cpp */; };
+		00B888E412A396E20052B7A4 /* OEComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B886C312A3923D0052B7A4 /* OEComponent.cpp */; };
+		00B888E512A396E20052B7A4 /* OEEmulation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B886C912A3923D0052B7A4 /* OEEmulation.cpp */; };
+		00B888E612A396E20052B7A4 /* MC6821.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8885312A393990052B7A4 /* MC6821.cpp */; };
+		00B888E712A396E20052B7A4 /* CharsetLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8883412A393990052B7A4 /* CharsetLoader.cpp */; };
+		00B888E812A396E20052B7A4 /* MC6845.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8885512A393990052B7A4 /* MC6845.cpp */; };
+		00B888E912A396E20052B7A4 /* OEComponentFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B886C512A3923D0052B7A4 /* OEComponentFactory.cpp */; };
+		00B888EA12A396E20052B7A4 /* FloatingBus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8883A12A393990052B7A4 /* FloatingBus.cpp */; };
+		00B888EB12A396E20052B7A4 /* ControlBus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8883812A393990052B7A4 /* ControlBus.cpp */; };
+		00B888EC12A396E20052B7A4 /* MOS6530.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8884C12A393990052B7A4 /* MOS6530.cpp */; };
+		00B888ED12A396E20052B7A4 /* AppleIIVideo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8882B12A393990052B7A4 /* AppleIIVideo.cpp */; };
+		00B888EE12A396E20052B7A4 /* MOSKIM1PLL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8885012A393990052B7A4 /* MOSKIM1PLL.cpp */; };
+		00B888EF12A396E20052B7A4 /* MOSKIM1IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8884E12A393990052B7A4 /* MOSKIM1IO.cpp */; };
+		00B888F012A396E20052B7A4 /* AudioSampleConverter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8883212A393990052B7A4 /* AudioSampleConverter.cpp */; };
+		00B888F112A396E20052B7A4 /* OEPackage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B886CB12A3923D0052B7A4 /* OEPackage.cpp */; };
+		00B888F212A396E20052B7A4 /* ROM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8883E12A393990052B7A4 /* ROM.cpp */; };
+		00B888F312A396E20052B7A4 /* OEEDL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B886C712A3923D0052B7A4 /* OEEDL.cpp */; };
+		00B888F412A396E20052B7A4 /* CompositeMonitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8883612A393990052B7A4 /* CompositeMonitor.cpp */; };
+		00B888F512A396E20052B7A4 /* Terminal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8884012A393990052B7A4 /* Terminal.cpp */; };
 		00B974B410701DDA00BD1402 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = 00B974AD10701DCD00BD1402 /* sounds */; };
 		00BADDC51100EDC600EB0344 /* ConnectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00BADD451100BE8300EB0344 /* ConnectorViewController.m */; };
 		00C3CF9011F557A000EA2453 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00C3CF8D11F557A000EA2453 /* main.cpp */; };
@@ -168,8 +195,6 @@
 		0054E6301131BEE7006D32D9 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		0054E66B1131BF58006D32D9 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
 		005928540FFC94E200F24A57 /* templates */ = {isa = PBXFileReference; lastKnownFileType = folder; path = templates; sourceTree = "<group>"; };
-		005D61AE124ABC4400C29F35 /* OEEDL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEEDL.h; sourceTree = "<group>"; };
-		005D61AF124ABC4400C29F35 /* OEEDL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEEDL.cpp; sourceTree = "<group>"; };
 		005E5F761086B16C00E573D4 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Inspector.xib; sourceTree = "<group>"; };
 		006115C011DD0347008AA3EE /* Application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Application.h; sourceTree = "<group>"; };
 		006115C111DD0347008AA3EE /* Application.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Application.m; sourceTree = "<group>"; };
@@ -211,16 +236,89 @@
 		00AD746811A2F10E00BAC29C /* DocumentController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DocumentController.mm; sourceTree = "<group>"; };
 		00B5709C10863C2A00CDE4A7 /* TemplateChooserWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TemplateChooserWindowController.h; sourceTree = "<group>"; };
 		00B5709D10863C2A00CDE4A7 /* TemplateChooserWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TemplateChooserWindowController.m; sourceTree = "<group>"; };
-		00B703731135AC91005E4B65 /* OEComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEComponent.cpp; sourceTree = "<group>"; };
-		00B703741135AC91005E4B65 /* OEComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEComponent.h; sourceTree = "<group>"; };
-		00B703751135AC91005E4B65 /* OEComponentFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEComponentFactory.cpp; sourceTree = "<group>"; };
-		00B703761135AC91005E4B65 /* OEComponentFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEComponentFactory.h; sourceTree = "<group>"; };
-		00B703771135AC91005E4B65 /* OEEmulation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEEmulation.cpp; sourceTree = "<group>"; };
-		00B703781135AC91005E4B65 /* OEEmulation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEEmulation.h; sourceTree = "<group>"; };
-		00B7037B1135AC91005E4B65 /* OEPackage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEPackage.cpp; sourceTree = "<group>"; };
-		00B7037C1135AC91005E4B65 /* OEPackage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEPackage.h; sourceTree = "<group>"; };
-		00B883E512A38DF70052B7A4 /* Implementations */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Implementations; sourceTree = "<group>"; };
-		00B8844312A38DF70052B7A4 /* Interfaces */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Interfaces; sourceTree = "<group>"; };
+		00B8864612A3923D0052B7A4 /* edl-1.0.dtd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "edl-1.0.dtd"; sourceTree = "<group>"; };
+		00B886C312A3923D0052B7A4 /* OEComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEComponent.cpp; sourceTree = "<group>"; };
+		00B886C412A3923D0052B7A4 /* OEComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEComponent.h; sourceTree = "<group>"; };
+		00B886C512A3923D0052B7A4 /* OEComponentFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEComponentFactory.cpp; sourceTree = "<group>"; };
+		00B886C612A3923D0052B7A4 /* OEComponentFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEComponentFactory.h; sourceTree = "<group>"; };
+		00B886C712A3923D0052B7A4 /* OEEDL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEEDL.cpp; sourceTree = "<group>"; };
+		00B886C812A3923D0052B7A4 /* OEEDL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEEDL.h; sourceTree = "<group>"; };
+		00B886C912A3923D0052B7A4 /* OEEmulation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEEmulation.cpp; sourceTree = "<group>"; };
+		00B886CA12A3923D0052B7A4 /* OEEmulation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEEmulation.h; sourceTree = "<group>"; };
+		00B886CB12A3923D0052B7A4 /* OEPackage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEPackage.cpp; sourceTree = "<group>"; };
+		00B886CC12A3923D0052B7A4 /* OEPackage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEPackage.h; sourceTree = "<group>"; };
+		00B886CD12A3923D0052B7A4 /* OETypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OETypes.h; sourceTree = "<group>"; };
+		00B8881312A393990052B7A4 /* Apple1CassetteInterfaceCard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Apple1CassetteInterfaceCard.cpp; path = libemulation/Implementation/Apple/Apple1CassetteInterfaceCard.cpp; sourceTree = SOURCE_ROOT; };
+		00B8881412A393990052B7A4 /* Apple1CassetteInterfaceCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Apple1CassetteInterfaceCard.h; path = libemulation/Implementation/Apple/Apple1CassetteInterfaceCard.h; sourceTree = SOURCE_ROOT; };
+		00B8881512A393990052B7A4 /* Apple1IO.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Apple1IO.cpp; path = libemulation/Implementation/Apple/Apple1IO.cpp; sourceTree = SOURCE_ROOT; };
+		00B8881612A393990052B7A4 /* Apple1IO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Apple1IO.h; path = libemulation/Implementation/Apple/Apple1IO.h; sourceTree = SOURCE_ROOT; };
+		00B8881712A393990052B7A4 /* Apple1Terminal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Apple1Terminal.cpp; path = libemulation/Implementation/Apple/Apple1Terminal.cpp; sourceTree = SOURCE_ROOT; };
+		00B8881812A393990052B7A4 /* Apple1Terminal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Apple1Terminal.h; path = libemulation/Implementation/Apple/Apple1Terminal.h; sourceTree = SOURCE_ROOT; };
+		00B8881912A393990052B7A4 /* AppleIIAudioIn.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AppleIIAudioIn.cpp; path = libemulation/Implementation/Apple/AppleIIAudioIn.cpp; sourceTree = SOURCE_ROOT; };
+		00B8881A12A393990052B7A4 /* AppleIIAudioIn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppleIIAudioIn.h; path = libemulation/Implementation/Apple/AppleIIAudioIn.h; sourceTree = SOURCE_ROOT; };
+		00B8881B12A393990052B7A4 /* AppleIIAudioOut.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AppleIIAudioOut.cpp; path = libemulation/Implementation/Apple/AppleIIAudioOut.cpp; sourceTree = SOURCE_ROOT; };
+		00B8881C12A393990052B7A4 /* AppleIIAudioOut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppleIIAudioOut.h; path = libemulation/Implementation/Apple/AppleIIAudioOut.h; sourceTree = SOURCE_ROOT; };
+		00B8881D12A393990052B7A4 /* AppleIIControlBus.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AppleIIControlBus.cpp; path = libemulation/Implementation/Apple/AppleIIControlBus.cpp; sourceTree = SOURCE_ROOT; };
+		00B8881E12A393990052B7A4 /* AppleIIControlBus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppleIIControlBus.h; path = libemulation/Implementation/Apple/AppleIIControlBus.h; sourceTree = SOURCE_ROOT; };
+		00B8881F12A393990052B7A4 /* AppleIIFloatingBus.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AppleIIFloatingBus.cpp; path = libemulation/Implementation/Apple/AppleIIFloatingBus.cpp; sourceTree = SOURCE_ROOT; };
+		00B8882012A393990052B7A4 /* AppleIIFloatingBus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppleIIFloatingBus.h; path = libemulation/Implementation/Apple/AppleIIFloatingBus.h; sourceTree = SOURCE_ROOT; };
+		00B8882112A393990052B7A4 /* AppleIIGamePort.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AppleIIGamePort.cpp; path = libemulation/Implementation/Apple/AppleIIGamePort.cpp; sourceTree = SOURCE_ROOT; };
+		00B8882212A393990052B7A4 /* AppleIIGamePort.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppleIIGamePort.h; path = libemulation/Implementation/Apple/AppleIIGamePort.h; sourceTree = SOURCE_ROOT; };
+		00B8882312A393990052B7A4 /* AppleIIKeyboard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AppleIIKeyboard.cpp; path = libemulation/Implementation/Apple/AppleIIKeyboard.cpp; sourceTree = SOURCE_ROOT; };
+		00B8882412A393990052B7A4 /* AppleIIKeyboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppleIIKeyboard.h; path = libemulation/Implementation/Apple/AppleIIKeyboard.h; sourceTree = SOURCE_ROOT; };
+		00B8882512A393990052B7A4 /* AppleIIMMU.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AppleIIMMU.cpp; path = libemulation/Implementation/Apple/AppleIIMMU.cpp; sourceTree = SOURCE_ROOT; };
+		00B8882612A393990052B7A4 /* AppleIIMMU.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppleIIMMU.h; path = libemulation/Implementation/Apple/AppleIIMMU.h; sourceTree = SOURCE_ROOT; };
+		00B8882712A393990052B7A4 /* AppleIISlotExpansionMemory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AppleIISlotExpansionMemory.cpp; path = libemulation/Implementation/Apple/AppleIISlotExpansionMemory.cpp; sourceTree = SOURCE_ROOT; };
+		00B8882812A393990052B7A4 /* AppleIISlotExpansionMemory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppleIISlotExpansionMemory.h; path = libemulation/Implementation/Apple/AppleIISlotExpansionMemory.h; sourceTree = SOURCE_ROOT; };
+		00B8882912A393990052B7A4 /* AppleIISlotMemory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AppleIISlotMemory.cpp; path = libemulation/Implementation/Apple/AppleIISlotMemory.cpp; sourceTree = SOURCE_ROOT; };
+		00B8882A12A393990052B7A4 /* AppleIISlotMemory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppleIISlotMemory.h; path = libemulation/Implementation/Apple/AppleIISlotMemory.h; sourceTree = SOURCE_ROOT; };
+		00B8882B12A393990052B7A4 /* AppleIIVideo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AppleIIVideo.cpp; path = libemulation/Implementation/Apple/AppleIIVideo.cpp; sourceTree = SOURCE_ROOT; };
+		00B8882C12A393990052B7A4 /* AppleIIVideo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppleIIVideo.h; path = libemulation/Implementation/Apple/AppleIIVideo.h; sourceTree = SOURCE_ROOT; };
+		00B8882E12A393990052B7A4 /* AddressDecoder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AddressDecoder.cpp; path = libemulation/Implementation/Generic/AddressDecoder.cpp; sourceTree = SOURCE_ROOT; };
+		00B8882F12A393990052B7A4 /* AddressDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AddressDecoder.h; path = libemulation/Implementation/Generic/AddressDecoder.h; sourceTree = SOURCE_ROOT; };
+		00B8883012A393990052B7A4 /* AddressOffset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AddressOffset.cpp; path = libemulation/Implementation/Generic/AddressOffset.cpp; sourceTree = SOURCE_ROOT; };
+		00B8883112A393990052B7A4 /* AddressOffset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AddressOffset.h; path = libemulation/Implementation/Generic/AddressOffset.h; sourceTree = SOURCE_ROOT; };
+		00B8883212A393990052B7A4 /* AudioSampleConverter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AudioSampleConverter.cpp; path = libemulation/Implementation/Generic/AudioSampleConverter.cpp; sourceTree = SOURCE_ROOT; };
+		00B8883312A393990052B7A4 /* AudioSampleConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioSampleConverter.h; path = libemulation/Implementation/Generic/AudioSampleConverter.h; sourceTree = SOURCE_ROOT; };
+		00B8883412A393990052B7A4 /* CharsetLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CharsetLoader.cpp; path = libemulation/Implementation/Generic/CharsetLoader.cpp; sourceTree = SOURCE_ROOT; };
+		00B8883512A393990052B7A4 /* CharsetLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CharsetLoader.h; path = libemulation/Implementation/Generic/CharsetLoader.h; sourceTree = SOURCE_ROOT; };
+		00B8883612A393990052B7A4 /* CompositeMonitor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CompositeMonitor.cpp; path = libemulation/Implementation/Generic/CompositeMonitor.cpp; sourceTree = SOURCE_ROOT; };
+		00B8883712A393990052B7A4 /* CompositeMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CompositeMonitor.h; path = libemulation/Implementation/Generic/CompositeMonitor.h; sourceTree = SOURCE_ROOT; };
+		00B8883812A393990052B7A4 /* ControlBus.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ControlBus.cpp; path = libemulation/Implementation/Generic/ControlBus.cpp; sourceTree = SOURCE_ROOT; };
+		00B8883912A393990052B7A4 /* ControlBus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ControlBus.h; path = libemulation/Implementation/Generic/ControlBus.h; sourceTree = SOURCE_ROOT; };
+		00B8883A12A393990052B7A4 /* FloatingBus.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FloatingBus.cpp; path = libemulation/Implementation/Generic/FloatingBus.cpp; sourceTree = SOURCE_ROOT; };
+		00B8883B12A393990052B7A4 /* FloatingBus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FloatingBus.h; path = libemulation/Implementation/Generic/FloatingBus.h; sourceTree = SOURCE_ROOT; };
+		00B8883C12A393990052B7A4 /* RAM.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RAM.cpp; path = libemulation/Implementation/Generic/RAM.cpp; sourceTree = SOURCE_ROOT; };
+		00B8883D12A393990052B7A4 /* RAM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RAM.h; path = libemulation/Implementation/Generic/RAM.h; sourceTree = SOURCE_ROOT; };
+		00B8883E12A393990052B7A4 /* ROM.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ROM.cpp; path = libemulation/Implementation/Generic/ROM.cpp; sourceTree = SOURCE_ROOT; };
+		00B8883F12A393990052B7A4 /* ROM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ROM.h; path = libemulation/Implementation/Generic/ROM.h; sourceTree = SOURCE_ROOT; };
+		00B8884012A393990052B7A4 /* Terminal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Terminal.cpp; path = libemulation/Implementation/Generic/Terminal.cpp; sourceTree = SOURCE_ROOT; };
+		00B8884112A393990052B7A4 /* Terminal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Terminal.h; path = libemulation/Implementation/Generic/Terminal.h; sourceTree = SOURCE_ROOT; };
+		00B8884312A393990052B7A4 /* MOS6502.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MOS6502.cpp; path = libemulation/Implementation/MOS/MOS6502.cpp; sourceTree = SOURCE_ROOT; };
+		00B8884412A393990052B7A4 /* MOS6502.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MOS6502.h; path = libemulation/Implementation/MOS/MOS6502.h; sourceTree = SOURCE_ROOT; };
+		00B8884512A393990052B7A4 /* MOS6502IllegalOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MOS6502IllegalOperations.h; path = libemulation/Implementation/MOS/MOS6502IllegalOperations.h; sourceTree = SOURCE_ROOT; };
+		00B8884612A393990052B7A4 /* MOS6502Opcodes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MOS6502Opcodes.h; path = libemulation/Implementation/MOS/MOS6502Opcodes.h; sourceTree = SOURCE_ROOT; };
+		00B8884712A393990052B7A4 /* MOS6502Operations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MOS6502Operations.h; path = libemulation/Implementation/MOS/MOS6502Operations.h; sourceTree = SOURCE_ROOT; };
+		00B8884C12A393990052B7A4 /* MOS6530.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MOS6530.cpp; path = libemulation/Implementation/MOS/MOS6530.cpp; sourceTree = SOURCE_ROOT; };
+		00B8884D12A393990052B7A4 /* MOS6530.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MOS6530.h; path = libemulation/Implementation/MOS/MOS6530.h; sourceTree = SOURCE_ROOT; };
+		00B8884E12A393990052B7A4 /* MOSKIM1IO.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MOSKIM1IO.cpp; path = libemulation/Implementation/MOS/MOSKIM1IO.cpp; sourceTree = SOURCE_ROOT; };
+		00B8884F12A393990052B7A4 /* MOSKIM1IO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MOSKIM1IO.h; path = libemulation/Implementation/MOS/MOSKIM1IO.h; sourceTree = SOURCE_ROOT; };
+		00B8885012A393990052B7A4 /* MOSKIM1PLL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MOSKIM1PLL.cpp; path = libemulation/Implementation/MOS/MOSKIM1PLL.cpp; sourceTree = SOURCE_ROOT; };
+		00B8885112A393990052B7A4 /* MOSKIM1PLL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MOSKIM1PLL.h; path = libemulation/Implementation/MOS/MOSKIM1PLL.h; sourceTree = SOURCE_ROOT; };
+		00B8885312A393990052B7A4 /* MC6821.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MC6821.cpp; path = libemulation/Implementation/Motorola/MC6821.cpp; sourceTree = SOURCE_ROOT; };
+		00B8885412A393990052B7A4 /* MC6821.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MC6821.h; path = libemulation/Implementation/Motorola/MC6821.h; sourceTree = SOURCE_ROOT; };
+		00B8885512A393990052B7A4 /* MC6845.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MC6845.cpp; path = libemulation/Implementation/Motorola/MC6845.cpp; sourceTree = SOURCE_ROOT; };
+		00B8885612A393990052B7A4 /* MC6845.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MC6845.h; path = libemulation/Implementation/Motorola/MC6845.h; sourceTree = SOURCE_ROOT; };
+		00B8886B12A393990052B7A4 /* AppleIIMMUInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppleIIMMUInterface.h; path = libemulation/Interface/Apple/AppleIIMMUInterface.h; sourceTree = SOURCE_ROOT; };
+		00B8886D12A393990052B7A4 /* RS232Interface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RS232Interface.h; path = libemulation/Interface/EIA/RS232Interface.h; sourceTree = SOURCE_ROOT; };
+		00B8886F12A393990052B7A4 /* CPUInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CPUInterface.h; path = libemulation/Interface/Generic/CPUInterface.h; sourceTree = SOURCE_ROOT; };
+		00B8887312A393990052B7A4 /* HostAudioInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HostAudioInterface.h; path = libemulation/Interface/Host/HostAudioInterface.h; sourceTree = SOURCE_ROOT; };
+		00B8887412A393990052B7A4 /* HostCanvasInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HostCanvasInterface.h; path = libemulation/Interface/Host/HostCanvasInterface.h; sourceTree = SOURCE_ROOT; };
+		00B8887512A393990052B7A4 /* HostEthernetInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HostEthernetInterface.h; path = libemulation/Interface/Host/HostEthernetInterface.h; sourceTree = SOURCE_ROOT; };
+		00B8887612A393990052B7A4 /* HostMIDIInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HostMIDIInterface.h; path = libemulation/Interface/Host/HostMIDIInterface.h; sourceTree = SOURCE_ROOT; };
+		00B8887712A393990052B7A4 /* HostUSBInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HostUSBInterface.h; path = libemulation/Interface/Host/HostUSBInterface.h; sourceTree = SOURCE_ROOT; };
+		00B8887812A393990052B7A4 /* HostVideoInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HostVideoInterface.h; path = libemulation/Interface/Host/HostVideoInterface.h; sourceTree = SOURCE_ROOT; };
+		00B8887F12A393990052B7A4 /* IEEE1284Interface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IEEE1284Interface.h; path = libemulation/Interface/IEEE/IEEE1284Interface.h; sourceTree = SOURCE_ROOT; };
 		00B974AD10701DCD00BD1402 /* sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; path = sounds; sourceTree = "<group>"; };
 		00BADD441100BE8300EB0344 /* ConnectorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConnectorViewController.h; sourceTree = "<group>"; };
 		00BADD451100BE8300EB0344 /* ConnectorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConnectorViewController.m; sourceTree = "<group>"; };
@@ -268,7 +366,6 @@
 		00EF028B107D9EFB00FE378D /* VerticallyCenteredCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VerticallyCenteredCell.h; sourceTree = "<group>"; };
 		00EF028C107D9EFB00FE378D /* VerticallyCenteredCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VerticallyCenteredCell.m; sourceTree = "<group>"; };
 		00F01B4612A0D6EC000527CA /* EmulationEject.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = EmulationEject.png; path = macosx/Images/EmulationEject.png; sourceTree = "<group>"; };
-		00FA328C11F7647E000B9574 /* OETypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OETypes.h; sourceTree = "<group>"; };
 		00FE0C00109534CE00B92AB7 /* ChooserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChooserViewController.h; sourceTree = "<group>"; };
 		00FE0C041095353B00B92AB7 /* TemplateChooserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TemplateChooserViewController.h; sourceTree = "<group>"; };
 		00FE0C051095353B00B92AB7 /* TemplateChooserViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TemplateChooserViewController.mm; sourceTree = "<group>"; };
@@ -352,25 +449,221 @@
 			path = macosx/Images;
 			sourceTree = "<group>";
 		};
-		006EEC9A0FCA5BEA003D2C8D /* libemulation */ = {
+		00B8864512A3923D0052B7A4 /* libemulation */ = {
 			isa = PBXGroup;
 			children = (
-				00B883E512A38DF70052B7A4 /* Implementations */,
-				00B8844312A38DF70052B7A4 /* Interfaces */,
-				00B703731135AC91005E4B65 /* OEComponent.cpp */,
-				00B703741135AC91005E4B65 /* OEComponent.h */,
-				00B703751135AC91005E4B65 /* OEComponentFactory.cpp */,
-				00B703761135AC91005E4B65 /* OEComponentFactory.h */,
-				00B703771135AC91005E4B65 /* OEEmulation.cpp */,
-				00B703781135AC91005E4B65 /* OEEmulation.h */,
-				00B7037B1135AC91005E4B65 /* OEPackage.cpp */,
-				00B7037C1135AC91005E4B65 /* OEPackage.h */,
-				00FA328C11F7647E000B9574 /* OETypes.h */,
-				005D61AE124ABC4400C29F35 /* OEEDL.h */,
-				005D61AF124ABC4400C29F35 /* OEEDL.cpp */,
+				00B8880F12A393990052B7A4 /* Implementation */,
+				00B8886912A393990052B7A4 /* Interface */,
+				00B8864612A3923D0052B7A4 /* edl-1.0.dtd */,
+				00B886C312A3923D0052B7A4 /* OEComponent.cpp */,
+				00B886C412A3923D0052B7A4 /* OEComponent.h */,
+				00B886C512A3923D0052B7A4 /* OEComponentFactory.cpp */,
+				00B886C612A3923D0052B7A4 /* OEComponentFactory.h */,
+				00B886C712A3923D0052B7A4 /* OEEDL.cpp */,
+				00B886C812A3923D0052B7A4 /* OEEDL.h */,
+				00B886C912A3923D0052B7A4 /* OEEmulation.cpp */,
+				00B886CA12A3923D0052B7A4 /* OEEmulation.h */,
+				00B886CB12A3923D0052B7A4 /* OEPackage.cpp */,
+				00B886CC12A3923D0052B7A4 /* OEPackage.h */,
+				00B886CD12A3923D0052B7A4 /* OETypes.h */,
 			);
 			path = libemulation;
 			sourceTree = "<group>";
+		};
+		00B8880F12A393990052B7A4 /* Implementation */ = {
+			isa = PBXGroup;
+			children = (
+				00B8881012A393990052B7A4 /* Apple */,
+				00B8882D12A393990052B7A4 /* Generic */,
+				00B8884212A393990052B7A4 /* MOS */,
+				00B8885212A393990052B7A4 /* Motorola */,
+				00B8885712A393990052B7A4 /* Ricoh */,
+				00B8885D12A393990052B7A4 /* WDC */,
+				00B8886412A393990052B7A4 /* Zilog */,
+			);
+			name = Implementation;
+			path = libemulation/Implementation;
+			sourceTree = SOURCE_ROOT;
+		};
+		00B8881012A393990052B7A4 /* Apple */ = {
+			isa = PBXGroup;
+			children = (
+				00B8881312A393990052B7A4 /* Apple1CassetteInterfaceCard.cpp */,
+				00B8881412A393990052B7A4 /* Apple1CassetteInterfaceCard.h */,
+				00B8881512A393990052B7A4 /* Apple1IO.cpp */,
+				00B8881612A393990052B7A4 /* Apple1IO.h */,
+				00B8881712A393990052B7A4 /* Apple1Terminal.cpp */,
+				00B8881812A393990052B7A4 /* Apple1Terminal.h */,
+				00B8881912A393990052B7A4 /* AppleIIAudioIn.cpp */,
+				00B8881A12A393990052B7A4 /* AppleIIAudioIn.h */,
+				00B8881B12A393990052B7A4 /* AppleIIAudioOut.cpp */,
+				00B8881C12A393990052B7A4 /* AppleIIAudioOut.h */,
+				00B8881D12A393990052B7A4 /* AppleIIControlBus.cpp */,
+				00B8881E12A393990052B7A4 /* AppleIIControlBus.h */,
+				00B8881F12A393990052B7A4 /* AppleIIFloatingBus.cpp */,
+				00B8882012A393990052B7A4 /* AppleIIFloatingBus.h */,
+				00B8882112A393990052B7A4 /* AppleIIGamePort.cpp */,
+				00B8882212A393990052B7A4 /* AppleIIGamePort.h */,
+				00B8882312A393990052B7A4 /* AppleIIKeyboard.cpp */,
+				00B8882412A393990052B7A4 /* AppleIIKeyboard.h */,
+				00B8882512A393990052B7A4 /* AppleIIMMU.cpp */,
+				00B8882612A393990052B7A4 /* AppleIIMMU.h */,
+				00B8882712A393990052B7A4 /* AppleIISlotExpansionMemory.cpp */,
+				00B8882812A393990052B7A4 /* AppleIISlotExpansionMemory.h */,
+				00B8882912A393990052B7A4 /* AppleIISlotMemory.cpp */,
+				00B8882A12A393990052B7A4 /* AppleIISlotMemory.h */,
+				00B8882B12A393990052B7A4 /* AppleIIVideo.cpp */,
+				00B8882C12A393990052B7A4 /* AppleIIVideo.h */,
+			);
+			name = Apple;
+			path = libemulation/Implementation/Apple;
+			sourceTree = SOURCE_ROOT;
+		};
+		00B8882D12A393990052B7A4 /* Generic */ = {
+			isa = PBXGroup;
+			children = (
+				00B8882E12A393990052B7A4 /* AddressDecoder.cpp */,
+				00B8882F12A393990052B7A4 /* AddressDecoder.h */,
+				00B8883012A393990052B7A4 /* AddressOffset.cpp */,
+				00B8883112A393990052B7A4 /* AddressOffset.h */,
+				00B8883212A393990052B7A4 /* AudioSampleConverter.cpp */,
+				00B8883312A393990052B7A4 /* AudioSampleConverter.h */,
+				00B8883412A393990052B7A4 /* CharsetLoader.cpp */,
+				00B8883512A393990052B7A4 /* CharsetLoader.h */,
+				00B8883612A393990052B7A4 /* CompositeMonitor.cpp */,
+				00B8883712A393990052B7A4 /* CompositeMonitor.h */,
+				00B8883812A393990052B7A4 /* ControlBus.cpp */,
+				00B8883912A393990052B7A4 /* ControlBus.h */,
+				00B8883A12A393990052B7A4 /* FloatingBus.cpp */,
+				00B8883B12A393990052B7A4 /* FloatingBus.h */,
+				00B8883C12A393990052B7A4 /* RAM.cpp */,
+				00B8883D12A393990052B7A4 /* RAM.h */,
+				00B8883E12A393990052B7A4 /* ROM.cpp */,
+				00B8883F12A393990052B7A4 /* ROM.h */,
+				00B8884012A393990052B7A4 /* Terminal.cpp */,
+				00B8884112A393990052B7A4 /* Terminal.h */,
+			);
+			name = Generic;
+			path = libemulation/Implementation/Generic;
+			sourceTree = SOURCE_ROOT;
+		};
+		00B8884212A393990052B7A4 /* MOS */ = {
+			isa = PBXGroup;
+			children = (
+				00B8884312A393990052B7A4 /* MOS6502.cpp */,
+				00B8884412A393990052B7A4 /* MOS6502.h */,
+				00B8884512A393990052B7A4 /* MOS6502IllegalOperations.h */,
+				00B8884612A393990052B7A4 /* MOS6502Opcodes.h */,
+				00B8884712A393990052B7A4 /* MOS6502Operations.h */,
+				00B8884C12A393990052B7A4 /* MOS6530.cpp */,
+				00B8884D12A393990052B7A4 /* MOS6530.h */,
+				00B8884E12A393990052B7A4 /* MOSKIM1IO.cpp */,
+				00B8884F12A393990052B7A4 /* MOSKIM1IO.h */,
+				00B8885012A393990052B7A4 /* MOSKIM1PLL.cpp */,
+				00B8885112A393990052B7A4 /* MOSKIM1PLL.h */,
+			);
+			name = MOS;
+			path = libemulation/Implementation/MOS;
+			sourceTree = SOURCE_ROOT;
+		};
+		00B8885212A393990052B7A4 /* Motorola */ = {
+			isa = PBXGroup;
+			children = (
+				00B8885312A393990052B7A4 /* MC6821.cpp */,
+				00B8885412A393990052B7A4 /* MC6821.h */,
+				00B8885512A393990052B7A4 /* MC6845.cpp */,
+				00B8885612A393990052B7A4 /* MC6845.h */,
+			);
+			name = Motorola;
+			path = libemulation/Implementation/Motorola;
+			sourceTree = SOURCE_ROOT;
+		};
+		00B8885712A393990052B7A4 /* Ricoh */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Ricoh;
+			path = libemulation/Implementation/Ricoh;
+			sourceTree = SOURCE_ROOT;
+		};
+		00B8885D12A393990052B7A4 /* WDC */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = WDC;
+			path = libemulation/Implementation/WDC;
+			sourceTree = SOURCE_ROOT;
+		};
+		00B8886412A393990052B7A4 /* Zilog */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Zilog;
+			path = libemulation/Implementation/Zilog;
+			sourceTree = SOURCE_ROOT;
+		};
+		00B8886912A393990052B7A4 /* Interface */ = {
+			isa = PBXGroup;
+			children = (
+				00B8886A12A393990052B7A4 /* Apple */,
+				00B8886C12A393990052B7A4 /* EIA */,
+				00B8886E12A393990052B7A4 /* Generic */,
+				00B8887212A393990052B7A4 /* Host */,
+				00B8887E12A393990052B7A4 /* IEEE */,
+			);
+			name = Interface;
+			path = libemulation/Interface;
+			sourceTree = SOURCE_ROOT;
+		};
+		00B8886A12A393990052B7A4 /* Apple */ = {
+			isa = PBXGroup;
+			children = (
+				00B8886B12A393990052B7A4 /* AppleIIMMUInterface.h */,
+			);
+			name = Apple;
+			path = libemulation/Interface/Apple;
+			sourceTree = SOURCE_ROOT;
+		};
+		00B8886C12A393990052B7A4 /* EIA */ = {
+			isa = PBXGroup;
+			children = (
+				00B8886D12A393990052B7A4 /* RS232Interface.h */,
+			);
+			name = EIA;
+			path = libemulation/Interface/EIA;
+			sourceTree = SOURCE_ROOT;
+		};
+		00B8886E12A393990052B7A4 /* Generic */ = {
+			isa = PBXGroup;
+			children = (
+				00B8886F12A393990052B7A4 /* CPUInterface.h */,
+			);
+			name = Generic;
+			path = libemulation/Interface/Generic;
+			sourceTree = SOURCE_ROOT;
+		};
+		00B8887212A393990052B7A4 /* Host */ = {
+			isa = PBXGroup;
+			children = (
+				00B8887312A393990052B7A4 /* HostAudioInterface.h */,
+				00B8887412A393990052B7A4 /* HostCanvasInterface.h */,
+				00B8887512A393990052B7A4 /* HostEthernetInterface.h */,
+				00B8887612A393990052B7A4 /* HostMIDIInterface.h */,
+				00B8887712A393990052B7A4 /* HostUSBInterface.h */,
+				00B8887812A393990052B7A4 /* HostVideoInterface.h */,
+			);
+			name = Host;
+			path = libemulation/Interface/Host;
+			sourceTree = SOURCE_ROOT;
+		};
+		00B8887E12A393990052B7A4 /* IEEE */ = {
+			isa = PBXGroup;
+			children = (
+				00B8887F12A393990052B7A4 /* IEEE1284Interface.h */,
+			);
+			name = IEEE;
+			path = libemulation/Interface/IEEE;
+			sourceTree = SOURCE_ROOT;
 		};
 		00C3CF8C11F557A000EA2453 /* SDL */ = {
 			isa = PBXGroup;
@@ -406,9 +699,9 @@
 			isa = PBXGroup;
 			children = (
 				000A78A50FBA464600A0F12E /* OpenEmulator */,
-				00C3CF8C11F557A000EA2453 /* SDL */,
 				00C3CF9211F557AC00EA2453 /* src */,
-				006EEC9A0FCA5BEA003D2C8D /* libemulation */,
+				00C3CF8C11F557A000EA2453 /* SDL */,
+				00B8864512A3923D0052B7A4 /* libemulation */,
 				2A37F4C3FDCFA73011CA2CEA /* Frameworks */,
 				19C28FB0FE9D524F11CA2CBB /* Products */,
 			);
@@ -681,8 +974,6 @@
 				0076FD6512A1ED8C00A3FEC7 /* AudioPause.png in Resources */,
 				0076FEDA12A21E2B00A3FEC7 /* hardware in Resources */,
 				0076FEDD12A21E4900A3FEC7 /* HardwareChooser.xib in Resources */,
-				00B8844F12A38DF70052B7A4 /* Implementations in Resources */,
-				00B8845012A38DF70052B7A4 /* Interfaces in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -704,11 +995,40 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00B703851135ACA5005E4B65 /* OEComponent.cpp in Sources */,
-				00B703861135ACA6005E4B65 /* OEComponentFactory.cpp in Sources */,
-				00B703871135ACA7005E4B65 /* OEEmulation.cpp in Sources */,
-				00B7038E1135ACAD005E4B65 /* OEPackage.cpp in Sources */,
-				005D61B1124ABC4400C29F35 /* OEEDL.cpp in Sources */,
+				00B888D412A396970052B7A4 /* AddressDecoder.cpp in Sources */,
+				00B888D512A3969C0052B7A4 /* AddressOffset.cpp in Sources */,
+				00B888D612A396A00052B7A4 /* Apple1CassetteInterfaceCard.cpp in Sources */,
+				00B888D712A396A30052B7A4 /* Apple1IO.cpp in Sources */,
+				00B888D812A396A70052B7A4 /* Apple1Terminal.cpp in Sources */,
+				00B888D912A396AA0052B7A4 /* AppleIIAudioIn.cpp in Sources */,
+				00B888DA12A396AD0052B7A4 /* AppleIIAudioOut.cpp in Sources */,
+				00B888DB12A396B00052B7A4 /* AppleIIControlBus.cpp in Sources */,
+				00B888DC12A396B20052B7A4 /* AppleIIFloatingBus.cpp in Sources */,
+				00B888DD12A396B60052B7A4 /* AppleIIGamePort.cpp in Sources */,
+				00B888DE12A396BA0052B7A4 /* AppleIIKeyboard.cpp in Sources */,
+				00B888DF12A396BD0052B7A4 /* AppleIIMMU.cpp in Sources */,
+				00B888E012A396C00052B7A4 /* AppleIISlotExpansionMemory.cpp in Sources */,
+				00B888E112A396C40052B7A4 /* AppleIISlotMemory.cpp in Sources */,
+				00B888E212A396E20052B7A4 /* MOS6502.cpp in Sources */,
+				00B888E312A396E20052B7A4 /* RAM.cpp in Sources */,
+				00B888E412A396E20052B7A4 /* OEComponent.cpp in Sources */,
+				00B888E512A396E20052B7A4 /* OEEmulation.cpp in Sources */,
+				00B888E612A396E20052B7A4 /* MC6821.cpp in Sources */,
+				00B888E712A396E20052B7A4 /* CharsetLoader.cpp in Sources */,
+				00B888E812A396E20052B7A4 /* MC6845.cpp in Sources */,
+				00B888E912A396E20052B7A4 /* OEComponentFactory.cpp in Sources */,
+				00B888EA12A396E20052B7A4 /* FloatingBus.cpp in Sources */,
+				00B888EB12A396E20052B7A4 /* ControlBus.cpp in Sources */,
+				00B888EC12A396E20052B7A4 /* MOS6530.cpp in Sources */,
+				00B888ED12A396E20052B7A4 /* AppleIIVideo.cpp in Sources */,
+				00B888EE12A396E20052B7A4 /* MOSKIM1PLL.cpp in Sources */,
+				00B888EF12A396E20052B7A4 /* MOSKIM1IO.cpp in Sources */,
+				00B888F012A396E20052B7A4 /* AudioSampleConverter.cpp in Sources */,
+				00B888F112A396E20052B7A4 /* OEPackage.cpp in Sources */,
+				00B888F212A396E20052B7A4 /* ROM.cpp in Sources */,
+				00B888F312A396E20052B7A4 /* OEEDL.cpp in Sources */,
+				00B888F412A396E20052B7A4 /* CompositeMonitor.cpp in Sources */,
+				00B888F512A396E20052B7A4 /* Terminal.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
