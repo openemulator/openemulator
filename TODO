@@ -485,3 +485,46 @@ $E000	$FFFF	Main/aux LC, ROM
 * Implemented Apple 3.5" Disk Drive eject on command signal falling edge
 * Improved disk drive selection logic
 * Fixed Apple 3.5" Disk Drive GCR
+
+==Done==
+OpenEmulator done
+* Implementado full-screen (con nuevas ventanas de vista)
+* Implementado portaudio
+* OpenGL
+* Implementado preferencias
+* Implementado auto-choose cuando no hay template seleccionado
+* Implementado di‡logo para seleccionar la plantilla
+* Implementado user space scale independence
+* Implementado cambios en el documento
+* Conectado el inspector con las propiedades del documento
+* Implementadas listas en el inspector
+* Implementado pantallas de overlay de power off, y de pause
+* Implementado di‡logo para nueva expansi—n, nueva unidad de disco, o nuevo puerto
+* Implementadas celdas de texto de inspector centradas verticalmente con estilo adecuado
+* Implementado lector de emulaciones y dispositivos en libemulator
+* Conectado listas de emulaciones al selector de plantillas
+* Conectado listas de emulaciones al selector de dispositivos
+* Conectado listas de emulaciones y dispositivos con el inspector
+* Connected dml to properties
+* Implemented OEInfo
+* Implemented inspector
+* Implemented template chooser
+* Implemented default template chooser
+* Improved template chooser
+* Improved inspector
+* Fixed problem: use default template is selected, CMD-N opens the template browser. Why? Auto-visibility was on.
+* Center template chooser window when reopening. horiz: 1x 1x, vert: 1x 2x
+* Implemented template chooser update of user templates
+* Implemented device chooser available device list
+* Implement device chooser connections
+* addDevices. Iterate through inlets. If inlet found, recurse. If not found, recurse on last used inlet. If no inlet is used, return itself. Protect against circularity. 
+* isDeviceTerminal. Iterate through inlets. If inlet used, return false.
+* removeDevices. Iterate through inlets. If inlet used, recurse. Disconnect outlets and Remove all components of device.
+* Move settings to device.
+* Make all refs absolute.
+* Divide device chooser into expansions, storage and peripherals.
+* When no devices are available for adding, show a sheet telling so.
+* Implement oepa emulation. Add oegl with sdl
+* Implemented inspector audio playback/recording (libsndfile for wav file access, secret rabbit code for samplerate conversion)
+* Implemented UI timer and update playback, recording and disk images
+* Implemented playback recording UI
