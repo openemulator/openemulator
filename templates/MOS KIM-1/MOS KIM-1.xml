@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
-<edl version="1.0" type="Early microcomputers" label="MOS KIM-1" image="images/Early microcomputers/MOS KIM-1.png" description="">
+<edl version="1.0" label="MOS KIM-1" image="images/Early microcomputers/MOS KIM-1.png" description="">
 
 <device id="kim1" label="KIM-1" image="images/Early microcomputers/MOS KIM-1.png" />
 <port id="kim1.serialPort" ref="term.connector" type="Serial" label="Serial Port" image="Serial Port.png">

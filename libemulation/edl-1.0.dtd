@@ -17,7 +17,6 @@
 
 <!ELEMENT edl (device*|connector*|port*|component*)>
 <!ATTLIST edl version CDATA "1.0">
-<!ATTLIST edl type CDATA #IMPLIED>
 <!ATTLIST edl label CDATA #IMPLIED>
 <!ATTLIST edl image CDATA #IMPLIED>
 <!ATTLIST edl description CDATA #IMPLIED>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
-<edl version="1.0" type="Apple II" label="Apple II" image="images/Apple II/Apple II.png" description="The Apple II was the first highly successful mass produced microprocessor product. The Apple II had color and high-resolution graphics modes, sound capabilities and one of two built-in BASIC programming languages.">
+<edl version="1.0" label="Apple II" image="images/Apple II/Apple II.png" description="The Apple II was the first highly successful mass produced microprocessor product. The Apple II had color and high-resolution graphics modes, sound capabilities and one of two built-in BASIC programming languages.">
 
 <device id="appleII" label="Apple II" image="images/Apple II/Apple II.png" />
 <port id="appleII.slot0" ref="" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png">
