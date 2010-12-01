@@ -1,73 +1,63 @@
-==To-Do==
-* Encontrar una manera para que OEEmulation integre los resultados de SET_DEVICEINFO con el EDL
-* Implementar addEDL
-* Implementar removeDevice
-* Persistencia de la posici—n de ventana principal
-* Implementar la lista de la ventana principal
-* Implementar el menœ desplegable
-* Implementar la acci—n de montar
-* Implementar la acci—n de revelar
-* Implementar la acci—n de a–adir EDL
-* Implementar la acci—n de eliminar dispositivo
-* Implementar las acciones de systemKeyboard, si el canvas de un device est‡ definido
-* Implementar addCanvas y removeCanvas -> que generen un windowController y haga addWindowController. Que genere OEOpenGLCanvas, y los conecte
-* Implementar el mecanismo de comunicaci—n de frames del canvas
-* Implementar la entrada de teclado al canvas
-* Implementar captura de teclado y mouse
-* Implementar persistencia de la ventana del canvas
-* Implementar [Document updateChangeCount]
-* Implementar el c—digo de uni—n de shaders OpenGL 2.0
-* Implementar la opci—n de desactivar los shaders
-* Implementar el inspector
-* A–adir descripciones en el template chooser/EDL chooser
-* Pensar en interfaz para graficar OpenGL en clientes
+==Things to do these days==
+* Find a way to integrate OEEmulation device info results with the EDL
+* Implement addEDL
+* Implement removeDevice
+* Persistency of the main emulation window
+* Implement the main emulation window list
+* Implement main emulation window context menu
+* Implement main emulation window mount/unmount
+* Implement main emulation window reveal
+* Implement main emulation window add EDL
+* Implement main emulation window delete device
+* Enable main emulation window system keyboard actions, when a device has a canvas
+* Implement addCanvas and removeCanvas -> this should create a windowController and an OEOpenGLCanvas. The window controller should be added to the document, and the canvas returned.
+* Implement frame communication to the canvas
+* Implement canvas keyboard entry/mouse events
+* Implement mouse and keyboard capture
+* Implement canvas window persistency
+* Implement [Document updateChangeCount]
+* Implement OpenGL 2.0 shader code
+* Implement the option to deactivate shaders
+* Implement the inspector
+* Add descriptions in template/hardware chooser
+* Devise an interface to allow native OpenGL commands in emulations
 
-==Ideas==
-* Debugging con JTAG
+==Future ideas==
+* Debugging with JTAG
 * TCP AT Modem emulation
-* Debugger: run/step/break/readRegister/writeRegister/readMemory/writeMemory/addTrap/removeTrap/listTraps
+* Debugger commands: run/step/break/readRegister/writeRegister/readMemory/writeMemory/addTrap/removeTrap/listTraps
 
-==Apple-1==
+==Apple-1 ideas==
 * DA: Data Available
 * RDA: Ready Data Accept
 * ~W = ~RDA | ~(~RDA | RD6 | RD7)
 * W = RDA & (RD6 | RD7)
 
-==Apple-1 Cassette Interface==
-* La ROM se ve en $C000-$C1FF
-* De $C000 a $C0FF hace click
-* De $C080 a $C0FF ponemos A0 en 0, si se detecto se–al
+==Apple-1 Cassette Interface ideas==
+* ROM is visible at $C000-$C1FF
+* $C000 to $C0FF generate a click
+* $C080 to $C0FF puts A0 to 0, if a signal is detected
 * A &= ~((A >> 7) & 1 | DET)
 * O: if (DET) address &= ~1;
 
+==Apple II ideas==
+* There should be an MMU flag to inhibit Apple II memory space
+* Apple II INH is $D000-$FFFF, Apple IIe $0000-$FFFF
+* An interface is capable of modifying this flag, in order to inhibit the MMU
+* Video obtains main and aux memory from MMU
+* aux memory registers in the MMU
+* MMU responds to $C001-$C00F, $C011-$C01F, $C050-$C057, $C080-$C08F.
+* Apple II video is capable of delegating $C050-$C057
+* The language card uses memory offset
+* Game port allows delegations
+* Video: Rev.0 has 4 colores with no color killer, rev. 1 has 6 with ck 
+* Apple III resistors: 2k to SYNC, 2k to GND, 6.2k to X1 X2 X4 X8, 5.1k to NA NB
+* Video chaining should be possible (for 80 column cards)
+* Do this through video inhibition?
 
-==Apple II==
-* Hay un flag en MMU para el espacio de memoria Apple II de INH
-* En Apple II, INH es $D000-$FFFF, en IIe todo
-* Una placa puede modificar ese flan, para inhibir la MMU
-* Video obtiene memoria main y aux de MMU
-* La memoria aux se registra en la MMU
-* La MMU responde a $C001-$C00F, $C011-$C01F, $C050-$C057, $C080-$C08F.
-* La placa de video permite delegar $C050-$C057
-* La language card usa memory offset
-* El game port permite delegar operaciones
-* Video: Rev.0 tiene 4 colores sin color killer, rev. 1 tiene 6 con
-* Apple III: Tiene 2k a SYNC, 2k a GND, 6.2k a X1 X2 X4 X8, y 5.1k a NA NB
-* Que se pueda hacer chaining de video (80 column card).
-* Apple II permite inhibir el video
 
 
-==Hecho==
-* Arreglar ${id} en save de Apple II
-* Arreglar que getData() en RAM no deba ser mœltiplo de dos
-* Modificar AudioControls, para que el volumen sea el volumen de entrada, no el de salida total. 
-* A–adir control para hacer control de posici—n de playback.
-* Arreglar AudioControl player cuando se termina un wav
-* Considerar que RAM s—lo admita tama–os de memoria mœltiplos de 2. Ser’a m‡s l—gico.
-* Renombrar DeviceChooser a HardwareChooser
-* Implementar persistencia de visibilidad/ocultaci—n de las ventanas Audio Controls e Inspector
-* Arreglar Audio Controls. Hago pause, muevo y se escucha un poquito de lo de antes
-* Audio Controls usa volumen logar’tmico 0 a -100 dB
+What follows is the compendium of old ideas (sorry about any spanish):
 
 ==oecli==
 * Implement video connection with framebuffers and timer
@@ -102,47 +92,6 @@
 ==Later==
 * Fix template chooser width problem, when scroll bars show and hide
 * Fix template chooser problem when the first line of items is not selected
-
-==Done==
-* Implementado full-screen (con nuevas ventanas de vista)
-* Implementado portaudio
-* Implementado OpenGL
-* Implementado preferencias
-* Implementado auto-choose cuando no hay template seleccionado
-* Implementado di‡logo para seleccionar la plantilla
-* Implementado user space scale independence
-* Implementado cambios en el documento
-* Conectado el inspector con las propiedades del documento
-* Implementados presets de video (inspector)
-* Implementadas listas en el inspector
-* Implementado montar/desmontar imagenes de disco (inspector)
-* Implementado pantallas de overlay de power off, y de pause
-* Mejorado fullscreen
-* Implementado di‡logo para nueva expansi—n, nueva unidad de disco, o nuevo puerto
-* Implementadas celdas de texto de inspector centradas verticalmente con estilo adecuado
-* Implementado lector de emulaciones y dispositivos en libemulator
-* Conectado listas de emulaciones al selector de plantillas
-* Conectado listas de emulaciones al selector de dispositivos
-* Conectado listas de emulaciones y dispositivos con el inspector
-* Connected dml to properties
-* Implemented OEInfo
-* Implemented inspector
-* Implemented inspector settings
-* Implemented template chooser
-* Implemented default template chooser
-* Improved template chooser
-* Improved inspector
-* Fixed problem: use default template is selected, CMD-N opens the template browser. Why? Auto-visibility was on.
-* Center template chooser window when reopening. horiz: 1x 1x, vert: 1x 2x
-* Implemented template chooser update of user templates
-* Implemented device chooser available device list
-* Implement device chooser connections
-* Implemented addDevices. Iterate through inlets. If inlet found, recurse. If not found, recurse on last used inlet. If no inlet is used, return itself. Protect against circularity. 
-* Implemented isDeviceTerminal. Iterate through inlets. If inlet used, return false.
-* Implemented removeDevices. Iterate through inlets. If inlet used, recurse. Disconnect outlets and Remove all components of device.
-* Moved settings to device.
-* Split device chooser into expansions, storage and peripherals.
-* When no devices are available for adding, show an alert telling so.
 
 ==Ideas para gr‡ficos==
 * Cuando escribo en la memoria de video, actualizo el video hasta donde est‡ el CRT scan
@@ -520,46 +469,3 @@ $E000	$FFFF	Main/aux LC, ROM
 * Implemented Apple 3.5" Disk Drive eject on command signal falling edge
 * Improved disk drive selection logic
 * Fixed Apple 3.5" Disk Drive GCR
-
-==Done==
-OpenEmulator done
-* Implementado full-screen (con nuevas ventanas de vista)
-* Implementado portaudio
-* OpenGL
-* Implementado preferencias
-* Implementado auto-choose cuando no hay template seleccionado
-* Implementado di‡logo para seleccionar la plantilla
-* Implementado user space scale independence
-* Implementado cambios en el documento
-* Conectado el inspector con las propiedades del documento
-* Implementadas listas en el inspector
-* Implementado pantallas de overlay de power off, y de pause
-* Implementado di‡logo para nueva expansi—n, nueva unidad de disco, o nuevo puerto
-* Implementadas celdas de texto de inspector centradas verticalmente con estilo adecuado
-* Implementado lector de emulaciones y dispositivos en libemulator
-* Conectado listas de emulaciones al selector de plantillas
-* Conectado listas de emulaciones al selector de dispositivos
-* Conectado listas de emulaciones y dispositivos con el inspector
-* Connected dml to properties
-* Implemented OEInfo
-* Implemented inspector
-* Implemented template chooser
-* Implemented default template chooser
-* Improved template chooser
-* Improved inspector
-* Fixed problem: use default template is selected, CMD-N opens the template browser. Why? Auto-visibility was on.
-* Center template chooser window when reopening. horiz: 1x 1x, vert: 1x 2x
-* Implemented template chooser update of user templates
-* Implemented device chooser available device list
-* Implement device chooser connections
-* addDevices. Iterate through inlets. If inlet found, recurse. If not found, recurse on last used inlet. If no inlet is used, return itself. Protect against circularity. 
-* isDeviceTerminal. Iterate through inlets. If inlet used, return false.
-* removeDevices. Iterate through inlets. If inlet used, recurse. Disconnect outlets and Remove all components of device.
-* Move settings to device.
-* Make all refs absolute.
-* Divide device chooser into expansions, storage and peripherals.
-* When no devices are available for adding, show a sheet telling so.
-* Implement oepa emulation. Add oegl with sdl
-* Implemented inspector audio playback/recording (libsndfile for wav file access, secret rabbit code for samplerate conversion)
-* Implemented UI timer and update playback, recording and disk images
-* Implemented playback recording UI

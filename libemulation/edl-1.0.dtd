@@ -36,6 +36,7 @@
 
 <!ELEMENT connector (inlet*)>
 <!ATTLIST connector id ID #REQUIRED>
+<!ATTLIST connector ref CDATA #REQUIRED>
 <!ATTLIST connector type CDATA #REQUIRED>
 <!ATTLIST connector label CDATA #REQUIRED>
 <!ATTLIST connector image CDATA #REQUIRED>
