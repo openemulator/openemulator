@@ -3,7 +3,7 @@
 <edl version="1.0" label="Disk II Drive 1" image="Apple Disk II Drive.png">
 
 <device id="diskII" label="Apple Disk II" image="images/apple2/Apple Disk II Drive.png" />
-<connector id="diskII.connector" type="AppleIIDisk" label="Apple Disk II Slot Connector" />
+<connector id="diskII.connector" ref="" type="AppleIIDisk" label="Apple Disk II Slot Connector" />
 <setting id="diskII.lock" ref="diskII.drive" property="lock" type="checkbox" label="Lock Disk Drive" />
 <component id="diskII.drive" class="AppleDiskII">
     <property name="image" value="/Users/mressl/test2.dsk" />

@@ -8,7 +8,7 @@
     <setting ref="monitor.monitor" name="saturation" type="value" options="0.0,2.0" label="Saturation" />
     <setting ref="monitor.monitor" name="hue" type="value" options="0.0,1.0" label="Hue" />
 </device>
-<connector id="monitor.connector" label="Video Connector" image="Composite Video Connector.png" />
+<connector id="monitor.connector" ref="" type="CompositeMonitor" label="Video Connector" image="Composite Video Connector.png" />
 <component id="monitor.monitor" class="CompositeMonitor">
     <property name="compositeLumaCutoff" value="0.3" />
     <property name="compositeChromaCutoff" value="0.06" />

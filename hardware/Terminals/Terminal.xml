@@ -3,7 +3,7 @@
 <edl version="1.0" label="Terminal" image="Terminal.png">
 
 <device id="terminal" label="Terminal" image="Terminal.png" />
-<connector id="terminal.connector" type="Serial" label="Connector" image="Serial Port Connector.png" />
+<connector id="terminal.connector" ref="" type="RS232" label="Connector" image="Serial Port Connector.png" />
 <component id="terminal.io" class="Terminal">
     <property name="host" ref="hostEmulationController" />
     <property name="charset" ref="terminal.charset" />

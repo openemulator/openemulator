@@ -3,7 +3,7 @@
 <edl version="1.0" label="Disk II Interface" image="Apple Disk II Interface Card.png">
 
 <device id="diskIIInterface" label="Apple Disk II Interface Card" image="Apple Disk II Interface Card.png" />
-<connector id="diskIIInterface.connector" type="AppleIISlot" label="Apple Disk II Interface Card" image="Apple Disk II Interface Card.png">
+<connector id="diskIIInterface.connector" ref="" type="AppleIISlot" label="Apple Disk II Interface Card" image="Apple Disk II Interface Card.png">
     <inlet ref="diskIIInterface.io" property="controlBus" outletRef="controlBus" />
 </connector>
 <port id="diskIIInterface.drive1" ref="" type="AppleIIDisk" label="Drive 1" image="Apple Disk II Socket.png">
