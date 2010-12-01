@@ -37,9 +37,7 @@
 <port id="appleII.gamePort" ref="" type="AppleIIGame" label="Game Port" image="Apple II Game Port.png">
     <inlet ref="appleII.game" property="port" outletRef="port" />
 </port>
-<port id="appleII.cpuSocket" ref="" type="CPU6502Socket" label="CPU Socket" image="CPU 6502 Socket.png">
-    <inlet ref="appleII.controlBus" property="cpuSocket" outletRef="cpu" />
-</port>
+<port id="appleII.cpuSocket" ref="" type="CPU6502" label="CPU Socket" image="CPU 6502 Socket.png" />
 <port id="appleII.videoPort" ref="" type="CompositeVideo" label="Video Output" image="Composite Video Port.png">
     <inlet ref="appleII.video" property="monitor" outletRef="monitor" />
 </port>
@@ -47,29 +45,28 @@
     <inlet ref="appleII.video" property="charsetSocket" outletRef="charset" />
 </port>
 <port id="appleII.romD0Socket" ref="" type="AppleIIROM" label="ROM D0 Socket" image="ROM Socket.png">
-    <inlet ref="appleII.mmu" property="romD0Socket" outletRef="rom" />
+    <inlet ref="appleII.mmu" property="romD0Socket" outletRef="memory" />
 </port>
 <port id="appleII.romD8Socket" ref="" type="AppleIIROM" label="ROM D8 Socket" image="ROM Socket.png">
-    <inlet ref="appleII.mmu" property="romD8Socket" outletRef="rom" />
+    <inlet ref="appleII.mmu" property="romD8Socket" outletRef="memory" />
 </port>
 <port id="appleII.romE0Socket" ref="" type="AppleIIROM" label="ROM E0 Socket" image="ROM Socket.png">
-    <inlet ref="appleII.mmu" property="romE0Socket" outletRef="rom" />
+    <inlet ref="appleII.mmu" property="romE0Socket" outletRef="memory" />
 </port>
 <port id="appleII.romE8Socket" ref="" type="AppleIIROM" label="ROM E8 Socket" image="ROM Socket.png">
-    <inlet ref="appleII.mmu" property="romE8Socket" outletRef="rom" />
+    <inlet ref="appleII.mmu" property="romE8Socket" outletRef="memory" />
 </port>
 <port id="appleII.romF0Socket" ref="" type="AppleIIROM" label="ROM F0 Socket" image="ROM Socket.png">
-    <inlet ref="appleII.mmu" property="romF0Socket" outletRef="rom" />
+    <inlet ref="appleII.mmu" property="romF0Socket" outletRef="memory" />
 </port>
 <port id="appleII.romF8Socket" ref="" type="AppleIIROM" label="ROM F8 Socket" image="ROM Socket.png">
-    <inlet ref="appleII.mmu" property="romF8Socket" outletRef="rom" />
+    <inlet ref="appleII.mmu" property="romF8Socket" outletRef="memory" />
 </port>
 <component id="appleII.controlBus" class="ControlBus">
     <property name="hostAudio" ref="hostAudio" />
     <property name="crystalFrequency" value="14.31818MHz" />
     <property name="cpuFrequencyDivider" value="14" />
     <property name="cpu" ref="appleII.cpu" />
-    <property name="cpuSocket" ref="" />
     <property name="resetOnPowerOn" value="0" />
 </component>
 <component id="appleII.memoryBus" class="AddressDecoder">
