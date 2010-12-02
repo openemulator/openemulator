@@ -103,12 +103,13 @@ public:
 								 void *userData);
 	
 	bool open(string path);
+	bool save(string path);
 	void close();
 	
 	OEDevicesInfo getDevicesInfo();
-	
 	bool setComponent(string id, OEComponent *component);
-	
+	bool addEDL(string path, OEIdMap idMap);
+	bool removeDevice(string id);
 	bool mount(string path);
 	bool validate(string path);
 	
@@ -128,6 +129,8 @@ private:
 	
 	OEComponent *getComponent(string id);
 	
+	bool dumpEmulation(OEData *data);
+	
 	bool createEmulation();
 	bool createComponent(string id, string className);
 	bool configureEmulation();
@@ -141,8 +144,8 @@ private:
 	void destroyEmulation();
 	void destroyComponent(string id, xmlNodePtr children);
 	
-	bool hasProperty(string value, string propertyName);
-	string parseProperties(string value, OEPropertiesMap &propertiesMap);
+	bool hasXMLProperty(string value, string propertyName);
+	string parseXMLProperties(string value, OEPropertiesMap &propertiesMap);
 };
 
 #endif

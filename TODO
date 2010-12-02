@@ -1,5 +1,5 @@
 ==Things to do these days==
-* Find a way to integrate OEEmulation device info results with the EDL
+* Implement OEEmulation device infos
 * Implement addEDL
 * Implement removeDevice
 * Persistency of the main emulation window

@@ -51,7 +51,6 @@ public:
 	
 	bool open(string path);
 	bool isOpen();
-	bool save(string path);
 	void close();
 	
 	OEHeaderInfo getHeaderInfo();
@@ -60,49 +59,27 @@ public:
 	OEPortsInfo getFreePortsInfo();
 	OEConnectorsInfo getFreeConnectorsInfo();
 	
-	bool addEDL(string path, OEIdMap idMap);
-	bool removeDevice(string id);
-	
 protected:
+	bool is_open;
 	OEPackage *package;
 	xmlDocPtr doc;
 	
-	virtual bool updateEmulation();
-	
-	// Helpers
-	string getString(int value);
 	void setNodeProperty(xmlNodePtr node, string name, string value);
 	bool hasNodeProperty(xmlNodePtr node, string name);
 	string getNodeProperty(xmlNodePtr node, string name);
-	string getPathExtension(string path);
+
 	bool writeFile(string path, OEData *data);
 	bool readFile(string path, OEData *data);
 	
-	void setDeviceId(string &id, string deviceId);
-	string getDeviceId(string id);
-	void edlLog(string message);
+	string getPathExtension(string path);
 	
 private:
-	bool is_open;
-	
 	void init();
 	
 	bool validate();
 	bool dump(OEData *data);
 	
-	OEIdMap buildNameMap(OEIdList deviceIds, OEIdList newDeviceIds);
-	void rename(OEIdMap nameMap);
-	void rename(OEIdMap nameMap, xmlNodePtr node, string property);
-	bool renameConnectionMap(OEIdMap &connectionMap, OEIdMap nameMap);
-	void insert(OEEDL *edl, string deviceId);
-	void connect();
-	
-	bool removeConnectedDevices(string deviceId);
-	void disconnect(string deviceId);
-	void removeElements(string deviceId);
-	
-	bool isDevice(string deviceId);
-	OEIdList getDeviceIds();
+	void edlLog(string message);
 };
 
 #endif
