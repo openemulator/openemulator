@@ -123,8 +123,8 @@ private:
 	
 	OERunAlertCallback alertCallback;
 	OEAddCanvasCallback addCanvasCallback;
-	OERemoveCanvasCallback removeCanvasCallback;
 	void *addCanvasCallbackUserData;
+	OERemoveCanvasCallback removeCanvasCallback;
 	void *removeCanvasCallbackUserData;
 	
 	OEComponent *getComponent(string id);
@@ -144,8 +144,8 @@ private:
 	void destroyEmulation();
 	void destroyComponent(string id, xmlNodePtr children);
 	
-	bool hasXMLProperty(string value, string propertyName);
-	string parseXMLProperties(string value, OEPropertiesMap &propertiesMap);
+	bool hasValueProperty(string value, string propertyName);
+	string parseValueProperties(string value, OEPropertiesMap &propertiesMap);
 };
 
 #endif

@@ -77,7 +77,6 @@ private:
 	void init();
 	
 	bool validate();
-	bool dump(OEData *data);
 	
 	void edlLog(string message);
 };
