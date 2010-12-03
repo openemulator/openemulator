@@ -19,8 +19,12 @@
 	
 	if (self)
 	{
-		groups = [[NSMutableDictionary alloc] init];
-		groupNames = [[NSMutableArray alloc] init];
+		chooserDelegate = nil;
+		
+		groups = [[NSMutableArray alloc] init];
+		selectedGroup = nil;
+		
+		items = [[NSMutableDictionary alloc] init];
 	}
 	
 	return self;
@@ -29,10 +33,8 @@
 - (void)dealloc
 {
 	[groups release];
-	[groupNames release];
 	
-	if (selectedGroup)
-		[selectedGroup release];
+	[items release];
 	
 	[super dealloc];
 }
@@ -76,7 +78,7 @@
 - (NSInteger)outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(id)item
 {
 	if (!item)
-		return [groupNames count];
+		return [groups count];
 	
 	return 0;
 }
@@ -96,26 +98,20 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 - (id)outlineView:(NSOutlineView *)outlineView child:(NSInteger)index ofItem:(id)item
 {
 	if (!item)
-		return [groupNames objectAtIndex:index];
+		return [groups objectAtIndex:index];
 	
 	return nil;
 }
 
 - (void)outlineViewSelectionDidChange:(NSNotification *)notification
 {
-	if (selectedGroup)
-	{
-		[selectedGroup release];
+	int selectedRow = [fOutlineView selectedRow];
+	if (selectedRow != -1)
+		selectedGroup = [groups objectAtIndex:selectedRow];
+	else
 		selectedGroup = nil;
-	}
 	
-	int row = [fOutlineView selectedRow];
-	if (row != -1)
-	{
-		selectedGroup = [groupNames objectAtIndex:row];
-		[selectedGroup retain];
-	}
-	
+	[populateGroup selectedGroup];
 	[fImageBrowserView reloadData];
 	[fImageBrowserView setSelectionIndexes:[NSIndexSet indexSetWithIndex:0]
 					  byExtendingSelection:NO];
@@ -125,6 +121,9 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 {
 	if (!selectedGroup)
 		return 0;
+	
+	if ([groups objectForKey:selectedGroup] == nil)
+		[self populateGroup:selectedGroup];
 	
 	return [[groups objectForKey:selectedGroup] count];
 }
@@ -140,9 +139,12 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 - (void)imageBrowser:(IKImageBrowserView *)aBrowser
 cellWasDoubleClickedAtIndex:(NSUInteger)index
 {
-	if ([chooserDelegate respondsToSelector:
-		 @selector(chooserWasDoubleClicked:)])
+	if ([chooserDelegate respondsToSelector:@selector(chooserWasDoubleClicked:)])
 		[chooserDelegate chooserWasDoubleClicked:self];
+}
+
+- (void)populateGroup:(NSString *)selectedGroup
+{
 }
 
 - (void)selectItemWithPath:(NSString *)itemPath

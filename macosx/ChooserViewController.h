@@ -24,10 +24,10 @@
 	
 	id<ChooserDelegate> chooserDelegate;
 	
-	NSMutableDictionary *groups;
-	NSMutableArray *groupNames;
-	
+	NSMutableArray *groups;
 	NSString *selectedGroup;
+	
+	NSMutableDictionary *items;
 }
 
 - (void)setDelegate:(id)theDelegate;

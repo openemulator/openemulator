@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
-<edl version="1.0" label="MOS KIM-1" image="images/Early microcomputers/MOS KIM-1.png" description="">
+<edl version="1.0" label="MOS KIM-1" image="images/MOS/MOS KIM-1.png" description="">
 
-<device id="kim1" label="KIM-1" image="images/Early microcomputers/MOS KIM-1.png" />
+<device id="kim1" label="KIM-1" image="images/MOS/MOS KIM-1.png" />
 <port id="kim1.serialPort" ref="" type="RS232" label="Serial Port" image="Serial Port.png">
     <inlet ref="kim1.io" property="serialPort" outletRef="io" />
 </port>
@@ -87,7 +87,7 @@
 <component id="kim1.rriot2.rom" class="ROM">
     <property name="image" src="${resourcePath}/roms/MOS/MOS KIM-1 6530-003 ROM.bin" />
 </component>
-<component id="kim1.io" class="KIM1IO">
+<component id="kim1.io" class="MOSKIM1IO">
     <property name="emulation" ref="emulation" />
     <property name="view" src="${resourcePath}/images/MOS/MOS KIM-1 View.png" />
     <property name="serialPort" ref="" />
@@ -98,7 +98,7 @@
     <property name="hostAudio" ref="hostAudio" />
     <property name="controlBus" ref="kim1.controlBus" />
 </component>
-<component id="kim1.audioIn" class="KIM1PLL">
+<component id="kim1.audioIn" class="MOSKIM1PLL">
     <property name="hostAudio" ref="hostAudio" />
     <property name="decisionFrequency" value="3400" />
 </component>

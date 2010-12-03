@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTDs/edl-1.0.dtd">
-<edl version="1.0" label="Apple-1" image="images/Early microcomputers/Apple-1.png" description="">
+<edl version="1.0" label="Apple-1" image="images/Apple/Apple-1.png" description="">
 
-<device id="apple1" label="Apple-1" image="images/Early microcomputers/Apple-1.png" />
+<device id="apple1" label="Apple-1" image="images/Apple/Apple-1.png" />
 <port id="apple1.videoPort" ref="" type="CompositeVideo" label="Video Out" image="Video Connector.png">
     <inlet ref="apple1.terminal" property="monitor" outletRef="connector" />
 </port>

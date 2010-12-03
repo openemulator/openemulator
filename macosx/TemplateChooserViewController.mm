@@ -2,7 +2,7 @@
 /**
  * OpenEmulator
  * Mac OS X Chooser View Controller
- * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Controls a template chooser view.
@@ -15,6 +15,8 @@
 
 #import "OEEDL.h"
 
+#define MY_TEMPLATES @"My Templates"
+
 @implementation TemplateChooserViewController
 
 - (void)awakeFromNib
@@ -24,43 +26,55 @@
 	NSString *templatesPath = [[[NSBundle mainBundle] resourcePath]
 							   stringByAppendingPathComponent:@"templates"];
 	
-	[self addTemplatesFromPath:templatesPath
-				  setGroupName:nil];
-	[groupNames addObjectsFromArray:[[groups allKeys]
-									 sortedArrayUsingSelector:@selector(compare:)]];
+	NSArray *templatesSubpaths = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:templatesPath
+																					   error:nil];
+	for (int i = 0; i < [templatesSubpaths count]; i++)
+	{
+		NSString *pathComponent = [templatesSubpaths objectAtIndex:i];
+		NSString *groupPath = [templatesPath stringByAppendingPathComponent:pathComponent];
+		NSArray *groupSubpaths = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:groupPath
+																					 error:nil];
+		if ([groupSubpaths count])
+			[groupNames addObject:pathComponent];
+	}
+	
+	[groupNames addObjectsFromArray:[groupNames sortedArrayUsingSelector:@selector(compare:)]];
 }
 
 - (void)updateUserTemplates
 {
-	NSString *userTemplatesGroupName = NSLocalizedString(@"My Templates",
-														 @"My Templates");
-	
 	NSString *selectedItemPath = [self selectedItemPath];
-	if ([groups objectForKey:userTemplatesGroupName])
-	{
-		[groups removeObjectForKey:userTemplatesGroupName];
-		[groupNames removeLastObject];
-	}
 	
-	NSString *userTemplatesPath = [TEMPLATE_FOLDER stringByExpandingTildeInPath];
-	[self addTemplatesFromPath:userTemplatesPath
-				  setGroupName:userTemplatesGroupName];
+	NSString *group = NSLocalizedString(MY_TEMPLATES, MY_TEMPLATES);
+	[self removeGroup:group];
+	if (![groupNames containsObject:group])
+		[groupNames addObject:group];
 	
-	if ([groups objectForKey:userTemplatesGroupName])
-		[groupNames addObject:userTemplatesGroupName];
 	[self selectItemWithPath:selectedItemPath];
 }
 
-- (void)addTemplatesFromPath:(NSString *)path
-				setGroupName:(NSString *)theGroupName
+- (void)populateGroup:(NSString *)selectedGroup
 {
-	NSArray *edlFilenames = [[NSFileManager defaultManager]
+	if ([groups objectForKey:selectedGroup] == nil)
+		return;
+	
+	NSString *group = NSLocalizedString(MY_TEMPLATES, MY_TEMPLATES);
+//	if ([selectedGroup compare:group] == NSOrderedSame)
+//		[self addTemplatesFromPath:a
+//						   toGroup:b];
+}
+
+- (void)addTemplatesFromPath:(NSString *)path
+					 toGroup:(NSString *)group
+{
+	NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
+	
+	NSArray *pathContents = [[NSFileManager defaultManager]
 							 contentsOfDirectoryAtPath:path
 							 error:nil];
-	
-	for (int i = 0; i < [edlFilenames count]; i++)
+	for (int i = 0; i < [pathContents count]; i++)
 	{
-		NSString *edlFilename = [edlFilenames objectAtIndex:i];
+		NSString *edlFilename = [pathContents objectAtIndex:i];
 		NSString *edlPath = [path stringByAppendingPathComponent:edlFilename];
 		
 		OEEDL edl;
@@ -68,33 +82,40 @@
 		if (edl.isOpen())
 		{
 			OEHeaderInfo headerInfo = edl.getHeaderInfo();
-			NSString *groupName = @"";//getNSString(headerInfo.type);
-			NSString *label = getNSString(headerInfo.label);
-			NSString *imageName = getNSString(headerInfo.image);
-			NSString *description = getNSString(headerInfo.description);
+			NSString *edlLabel = getNSString(headerInfo.label);
+			NSString *edlImage = [resourcePath stringByAppendingPathComponent:
+								  getNSString(headerInfo.image)];
+			NSString *edlDescription = getNSString(headerInfo.description);
 			
-			if (theGroupName)
-				groupName = theGroupName;
-			
-			if (![groups objectForKey:groupName])
-			{
-				NSMutableArray *group = [[[NSMutableArray alloc] init] autorelease];
-				[groups setObject:group forKey:groupName];
-			}
-			
-			NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
-			NSString *imagePath = [resourcePath stringByAppendingPathComponent:imageName];
-			ChooserItem *item = [[ChooserItem alloc] initWithTitle:label
-														  subtitle:description
-														 imagePath:imagePath
+			ChooserItem *item = [[ChooserItem alloc] initWithTitle:edlLabel
+														  subtitle:edlDescription
+														 imagePath:edlImage
 														   edlPath:edlPath
 															  data:nil];
 			if (item)
 			{
-				[item autorelease];
-				[[groups objectForKey:groupName] addObject:item];
+				NSMutableArray *groupsItem;
+				if (![groups objectForKey:group])
+				{
+					groupsItem = [[[NSMutableArray alloc] init] autorelease];
+					[groups setObject:groupsItem forKey:group];
+				}
+				else
+					groupsItem = [groups objectForKey:group];
+				
+				[groupsItem addObject:item];
+				[item release];
 			}
 		}
+	}
+}
+
+- (void)removeGroup:(NSString *)group
+{
+	if ([groups objectForKey:group])
+	{
+		[groups removeObjectForKey:group];
+		[groupNames removeLastObject];
 	}
 }
 
