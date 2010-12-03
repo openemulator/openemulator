@@ -67,7 +67,7 @@ protected:
 	void setNodeProperty(xmlNodePtr node, string name, string value);
 	bool hasNodeProperty(xmlNodePtr node, string name);
 	string getNodeProperty(xmlNodePtr node, string name);
-
+	
 	bool writeFile(string path, OEData *data);
 	bool readFile(string path, OEData *data);
 	

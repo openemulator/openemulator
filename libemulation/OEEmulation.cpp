@@ -623,7 +623,7 @@ bool OEEmulation::postMessage(OEComponent *sender, int message, void *data)
 	return true;
 }
 
-bool OEEDL::isDevice(string deviceId)
+bool OEEmulation::isDevice(string deviceId)
 {
 	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
 	
@@ -641,7 +641,7 @@ bool OEEDL::isDevice(string deviceId)
 	return false;
 }
 
-OEIdList OEEDL::getDeviceIds()
+OEIdList OEEmulation::getDeviceIds()
 {
 	OEIdList deviceIds;
 	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
@@ -659,7 +659,7 @@ OEIdList OEEDL::getDeviceIds()
 	return deviceIds;
 }
 
-void OEEDL::setDeviceId(string &id, string deviceId)
+void OEEmulation::setDeviceId(string &id, string deviceId)
 {
 	int dotIndex = id.find_first_of('.');
 	
@@ -669,7 +669,7 @@ void OEEDL::setDeviceId(string &id, string deviceId)
 		id = deviceId + "." + id.substr(0, dotIndex + 1);
 }
 
-string OEEDL::getDeviceId(string id)
+string OEEmulation::getDeviceId(string id)
 {
 	int dotIndex = id.find_first_of('.');
 	
@@ -1143,3 +1143,4 @@ bool OEInfo::findCircularConnection(string ref, vector<string> &visitedRefs)
 	
 	return false;
 }
+*/

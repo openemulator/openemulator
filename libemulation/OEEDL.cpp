@@ -161,7 +161,6 @@ OEPortsInfo OEEDL::getFreePortsInfo()
 			if (ref != "")
 			{
 				OEPortInfo portInfo;
-				
 				portInfo.id = getNodeProperty(node, "id");
 				portInfo.type = getNodeProperty(node, "type");
 				portInfo.label = getNodeProperty(node, "label");
@@ -180,7 +179,7 @@ OEConnectorsInfo OEEDL::getFreeConnectorsInfo()
 	
 	if (!doc)
 		return freeConnectorsInfo;
-
+	
 	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
 	
 	for(xmlNodePtr node = rootNode->children;
