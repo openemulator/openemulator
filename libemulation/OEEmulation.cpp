@@ -176,7 +176,7 @@ bool OEEmulation::addEDL(string path, OEIdMap connectionMap)
 	if (!edl.isOpen())
 		return false;
 	
-	// Build name map for new EDL
+/*	// Build name map for new EDL
 	OEIdList deviceIds = getDeviceIds();
 	OEIdList newDeviceIds = edl.getDeviceIds();
 	OEIdMap nameMap = buildNameMap(deviceIds, newDeviceIds);
@@ -191,14 +191,14 @@ bool OEEmulation::addEDL(string path, OEIdMap connectionMap)
 	
 	// Connect port inlets
 	connectEmulation();
-	
+	*/
 	return true;
 }
 
 bool OEEmulation::removeDevice(string deviceId)
 {
 	// Verify device exists
-	if (!isDevice(deviceId))
+/*	if (!isDevice(deviceId))
 	{
 		log("could not find '" + deviceId + "'");
 		return false;
@@ -213,7 +213,7 @@ bool OEEmulation::removeDevice(string deviceId)
 	
 	// Remove elements matching this device
 	removeElements(deviceId);
-	
+	*/
 	return true;
 }
 
@@ -623,6 +623,27 @@ bool OEEmulation::postMessage(OEComponent *sender, int message, void *data)
 	return true;
 }
 
+void OEEmulation::setDeviceId(string &id, string deviceId)
+{
+	int dotIndex = id.find_first_of('.');
+	
+	if (dotIndex == string::npos)
+		id = deviceId;
+	else
+		id = deviceId + "." + id.substr(0, dotIndex + 1);
+}
+
+string OEEmulation::getDeviceId(string id)
+{
+	int dotIndex = id.find_first_of('.');
+	
+	if (dotIndex == string::npos)
+		return id;
+	
+	return id.substr(0, dotIndex - 1);
+}
+
+/*
 bool OEEmulation::isDevice(string deviceId)
 {
 	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
@@ -659,27 +680,6 @@ OEIdList OEEmulation::getDeviceIds()
 	return deviceIds;
 }
 
-void OEEmulation::setDeviceId(string &id, string deviceId)
-{
-	int dotIndex = id.find_first_of('.');
-	
-	if (dotIndex == string::npos)
-		id = deviceId;
-	else
-		id = deviceId + "." + id.substr(0, dotIndex + 1);
-}
-
-string OEEmulation::getDeviceId(string id)
-{
-	int dotIndex = id.find_first_of('.');
-	
-	if (dotIndex == string::npos)
-		return id;
-	
-	return id.substr(0, dotIndex - 1);
-}
-
-/*
 OEIdMap OEEDL::buildNameMap(OEIdList deviceIds, OEIdList newDeviceIds)
 {
 	OEIdMap nameMap;

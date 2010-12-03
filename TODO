@@ -1,5 +1,6 @@
 ==Things to do these days==
 * Implement OEEmulation device infos
+* Implement hardware and template groups
 * Implement addEDL
 * Implement removeDevice
 * Persistency of the main emulation window

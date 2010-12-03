@@ -147,9 +147,6 @@ private:
 	bool hasValueProperty(string value, string propertyName);
 	string parseValueProperties(string value, OEPropertiesMap &propertiesMap);
 	
-	bool isDevice(string deviceId);
-	OEIdList getDeviceIds();
-	
 	void setDeviceId(string &id, string deviceId);
 	string getDeviceId(string id);
 };
