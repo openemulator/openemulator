@@ -33,6 +33,7 @@
 - (void)dealloc
 {
 	[groups release];
+	[selectedGroup release];
 	
 	[items release];
 	
@@ -78,7 +79,10 @@
 - (NSInteger)outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(id)item
 {
 	if (!item)
+	{
+		[self loadGroups];
 		return [groups count];
+	}
 	
 	return 0;
 }
@@ -105,16 +109,22 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 
 - (void)outlineViewSelectionDidChange:(NSNotification *)notification
 {
-	int selectedRow = [fOutlineView selectedRow];
-	if (selectedRow != -1)
-		selectedGroup = [groups objectAtIndex:selectedRow];
+	int groupIndex = [fOutlineView selectedRow];
+	if (groupIndex != -1)
+		selectedGroup = [[groups objectAtIndex:groupIndex] copy];
 	else
+	{
+		[selectedGroup release];
 		selectedGroup = nil;
+	}
 	
-	[populateGroup selectedGroup];
 	[fImageBrowserView reloadData];
 	[fImageBrowserView setSelectionIndexes:[NSIndexSet indexSetWithIndex:0]
 					  byExtendingSelection:NO];
+}
+
+- (void)loadGroups
+{
 }
 
 - (NSUInteger)numberOfItemsInImageBrowser:(IKImageBrowserView *)aBrowser
@@ -122,10 +132,10 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	if (!selectedGroup)
 		return 0;
 	
-	if ([groups objectForKey:selectedGroup] == nil)
-		[self populateGroup:selectedGroup];
+	if (![items objectForKey:selectedGroup])
+		[self loadItems];
 	
-	return [[groups objectForKey:selectedGroup] count];
+	return [[items objectForKey:selectedGroup] count];
 }
 
 - (id)imageBrowser:(IKImageBrowserView *)aBrowser itemAtIndex:(NSUInteger)index
@@ -133,41 +143,41 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	if (!selectedGroup)
 		return nil;
 	
-	return [[groups objectForKey:selectedGroup] objectAtIndex:index];
+	return [[items objectForKey:selectedGroup] objectAtIndex:index];
+}
+
+- (void)imageBrowserSelectionDidChange:(IKImageBrowserView *) aBrowser
+{
+	if ([chooserDelegate respondsToSelector:@selector(chooserSelectionDidChange:)])
+		[chooserDelegate chooserSelectionDidChange:self];
 }
 
 - (void)imageBrowser:(IKImageBrowserView *)aBrowser
 cellWasDoubleClickedAtIndex:(NSUInteger)index
 {
-	if ([chooserDelegate respondsToSelector:@selector(chooserWasDoubleClicked:)])
-		[chooserDelegate chooserWasDoubleClicked:self];
+	if ([chooserDelegate respondsToSelector:@selector(chooserItemWasDoubleClicked:)])
+		[chooserDelegate chooserItemWasDoubleClicked:self];
 }
 
-- (void)populateGroup:(NSString *)selectedGroup
+- (void)loadItems
 {
 }
 
-- (void)selectItemWithPath:(NSString *)itemPath
+- (void)selectItemWithPath:(NSString *)path
+				   inGroup:(NSString *)group
 {
 	int groupIndex = 0;
-	int chooserIndex = 0;
+	int itemIndex = 0;
 	
-	int groupsCount = [groupNames count];
-	for (int i = 0; i < groupsCount; i++)
+	if ([groups containsObject:group])
+		groupIndex = [groups indexOfObject:group];
+	
+	NSArray *groupItems = [items objectForKey:group];
+	for (int i = 0; i < [groupItems count]; i++)
 	{
-		NSString *groupName = [groupNames objectAtIndex:i];
-		NSArray *templates = [groups objectForKey:groupName];
-		
-		int templatesCount = [templates count]; 
-		for (int j = 0; j < templatesCount; j++)
-		{
-			ChooserItem *item = [templates objectAtIndex:j];
-			if ([[item edlPath] compare:itemPath] == NSOrderedSame)
-			{
-				groupIndex = i;
-				chooserIndex = j;
-			}
-		}
+		ChooserItem *item = [groupItems objectAtIndex:i];
+		if ([[item edlPath] compare:path] == NSOrderedSame)
+			itemIndex = i;
 	}
 	
 	[fOutlineView reloadData];
@@ -177,9 +187,17 @@ cellWasDoubleClickedAtIndex:(NSUInteger)index
 			  byExtendingSelection:NO];
 	
 	[fImageBrowserView reloadData];
-	[fImageBrowserView setSelectionIndexes:[NSIndexSet indexSetWithIndex:chooserIndex]
+	[fImageBrowserView setSelectionIndexes:[NSIndexSet indexSetWithIndex:itemIndex]
 					  byExtendingSelection:NO];
-	[fImageBrowserView scrollIndexToVisible:chooserIndex];
+	[fImageBrowserView scrollIndexToVisible:itemIndex];
+}
+
+- (NSString *)selectedGroup
+{
+	if (selectedGroup)
+		return [NSString stringWithString:selectedGroup];
+	else
+		return nil;
 }
 
 - (NSString *)selectedItemPath

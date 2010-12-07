@@ -17,7 +17,7 @@
 	NSMutableArray *edlInfos;
 }
 
-- (void)updateForPorts:(NSArray *)ports;
+- (void)updateForFreePorts:(NSArray *)freePorts;
 - (NSMutableArray *)selectedItemConnectors;
 
 @end

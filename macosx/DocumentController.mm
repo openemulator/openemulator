@@ -75,30 +75,30 @@
 		[fInspectorWindowController showWindow:self];
 	if ([defaults boolForKey:@"OEAudioControlsVisible"])
 		[fAudioControlsWindowController showWindow:self];
-
-	if (![defaults valueForKey:@"OEFullDuplex"])
-		[defaults setBool:YES forKey:@"OEFullDuplex"];
-	if (![defaults valueForKey:@"OEPlayVolume"])
-		[defaults setFloat:1.0 forKey:@"OEPlayVolume"];
-	if (![defaults valueForKey:@"OEPlayThrough"])
-		[defaults setBool:YES forKey:@"OEPlayThrough"];
+	
+	if (![defaults valueForKey:@"OEAudioFullDuplex"])
+		[defaults setBool:NO forKey:@"OEAudioFullDuplex"];
+	if (![defaults valueForKey:@"OEAudioPlayVolume"])
+		[defaults setFloat:1.0 forKey:@"OEAudioPlayVolume"];
+	if (![defaults valueForKey:@"OEAudioPlayThrough"])
+		[defaults setBool:YES forKey:@"OEAudioPlayThrough"];
 	
 	[defaults addObserver:self
-			   forKeyPath:@"OEFullDuplex"
+			   forKeyPath:@"OEAudioFullDuplex"
 				  options:NSKeyValueObservingOptionNew
 				  context:nil];
 	[defaults addObserver:self
-			   forKeyPath:@"OEPlayVolume"
+			   forKeyPath:@"OEAudioPlayVolume"
 				  options:NSKeyValueObservingOptionNew
 				  context:nil];
 	[defaults addObserver:self
-			   forKeyPath:@"OEPlayThrough"
+			   forKeyPath:@"OEAudioPlayThrough"
 				  options:NSKeyValueObservingOptionNew
 				  context:nil];
 	
-	((OEPortAudio *)oePortAudio)->setFullDuplex([defaults boolForKey:@"OEFullDuplex"]);
-	((OEPortAudio *)oePortAudio)->setPlayVolume([defaults floatForKey:@"OEPlayVolume"]);
-	((OEPortAudio *)oePortAudio)->setPlayThrough([defaults boolForKey:@"OEPlayThrough"]);
+	((OEPortAudio *)oePortAudio)->setFullDuplex([defaults boolForKey:@"OEAudioFullDuplex"]);
+	((OEPortAudio *)oePortAudio)->setPlayVolume([defaults floatForKey:@"OEAudioPlayVolume"]);
+	((OEPortAudio *)oePortAudio)->setPlayThrough([defaults boolForKey:@"OEAudioPlayThrough"]);
 	
 	((OEPortAudio *)oePortAudio)->open();
 }
@@ -138,19 +138,19 @@
 						change:(NSDictionary *)change
                        context:(void *)context
 {
-	if ([keyPath isEqualToString:@"OEFullDuplex"])
+	if ([keyPath isEqualToString:@"OEAudioFullDuplex"])
 	{
 		id object = [change objectForKey:NSKeyValueChangeNewKey];
 		BOOL value = [object intValue];
 		((OEPortAudio *)oePortAudio)->setFullDuplex(value);
 	}
-	else if ([keyPath isEqualToString:@"OEPlayVolume"])
+	else if ([keyPath isEqualToString:@"OEAudioPlayVolume"])
 	{
 		id object = [change objectForKey:NSKeyValueChangeNewKey];
 		float value = [object floatValue];
 		((OEPortAudio *)oePortAudio)->setPlayVolume(value);
 	}
-	else if ([keyPath isEqualToString:@"OEPlayThrough"])
+	else if ([keyPath isEqualToString:@"OEAudioPlayThrough"])
 	{
 		id object = [change objectForKey:NSKeyValueChangeNewKey];
 		BOOL value = [object intValue];
@@ -280,7 +280,7 @@
 							   error:(NSError **)outError
 {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	if (![defaults boolForKey:@"OEUseDefaultTemplate"])
+	if (![defaults boolForKey:@"OEDefaultTemplateEnabled"])
 	{
 		[self newDocumentFromTemplateChooser:self];
 		
@@ -291,10 +291,10 @@
 	}
 	else
 	{
-		NSString *defaultTemplate = [defaults stringForKey:@"OEDefaultTemplate"];
+		NSString *path = [defaults stringForKey:@"OEDefaultTemplatePath"];
 		id document = nil;
 		
-		if (!defaultTemplate)
+		if (!path)
 		{
 			*outError = [NSError errorWithDomain:@"libemulator"
 											code:0
@@ -302,8 +302,8 @@
 			return nil;
 		}
 		
-		NSURL *absoluteURL = [NSURL fileURLWithPath:defaultTemplate];
-		document = [self openUntitledDocumentWithTemplateURL:absoluteURL
+		NSURL *url = [NSURL fileURLWithPath:path];
+		document = [self openUntitledDocumentWithTemplateURL:url
 													 display:displayDocument
 													   error:outError];
 		return document;

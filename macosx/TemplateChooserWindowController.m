@@ -2,7 +2,7 @@
 /**
  * OpenEmulator
  * Mac OS X Template Chooser Controller
- * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Controls the template chooser window.
@@ -36,16 +36,19 @@
 {
 	[self showWindow:self];
 	
-	[templateChooserViewController updateUserTemplates];
-	
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	NSString *itemPath = [defaults stringForKey:@"OELastTemplate"];
-	[templateChooserViewController selectItemWithPath:itemPath];
-	
 	[[self window] center];
 	
-	[fChooseButton setEnabled:([templateChooserViewController selectedItemPath]
-							   != nil)];
+	NSString *group = [templateChooserViewController selectedGroup];
+	NSString *path = [templateChooserViewController selectedItemPath];
+	if (!path)
+	{
+		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+		group = [defaults stringForKey:@"OELastTemplateGroup"];
+		path = [defaults stringForKey:@"OELastTemplatePath"];
+	}
+	[templateChooserViewController selectItemWithPath:path inGroup:group];
+	
+	[fChooseButton setEnabled:([templateChooserViewController selectedItemPath] != nil)];
 }
 
 - (void)windowDidLoad
@@ -57,25 +60,30 @@
 	[view setFrameSize:[fTemplateChooserView frame].size];
 }
 
-- (void)chooserWasDoubleClicked:(id)sender
+- (void)chooserSelectionDidChange:(id)sender
+{
+	[fChooseButton setEnabled:([templateChooserViewController selectedItemPath] != nil)];
+}
+
+- (void)chooserItemWasDoubleClicked:(id)sender
 {
 	[self chooseTemplate:sender];
 }
 
 - (IBAction)chooseTemplate:(id)sender
 {
-	NSString *templatePath = [templateChooserViewController selectedItemPath];
-	NSURL *url = nil;
-	if (templatePath)
+	NSString *group = [templateChooserViewController selectedGroup];
+	NSString *path = [templateChooserViewController selectedItemPath];
+	if (path)
 	{
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-		[defaults setObject:templatePath
-					 forKey:@"OELastTemplate"];
-		url = [NSURL fileURLWithPath:templatePath];
+		[defaults setObject:group forKey:@"OELastTemplateGroup"];
+		[defaults setObject:path forKey:@"OELastTemplatePath"];
 	}
 	
 	[[self window] orderOut:self];
 	
+	NSURL *url = [NSURL fileURLWithPath:path];
 	if (url)
 	{
 		NSError *error;

@@ -14,7 +14,10 @@
 
 OEEDL::OEEDL()
 {
-	init();
+	is_open = false;
+	
+	package = NULL;
+	doc = NULL;
 }
 
 OEEDL::~OEEDL()
@@ -23,14 +26,6 @@ OEEDL::~OEEDL()
 	
 	if (doc)
 		xmlFreeDoc(doc);
-}
-
-void OEEDL::init()
-{
-	is_open = false;
-	
-	package = NULL;
-	doc = NULL;
 }
 
 bool OEEDL::open(string path)
@@ -48,8 +43,8 @@ bool OEEDL::open(string path)
 	}
 	else if (pathExtension == OE_PACKAGE_PATH_EXTENSION)
 	{
-		package = new OEPackage(path);
-		if (package && package->isOpen())
+		package = new OEPackage();
+		if (package && package->open(path))
 		{
 			is_open = package->readFile(OE_PACKAGE_EDL_PATH, &data);
 			
@@ -78,11 +73,25 @@ bool OEEDL::open(string path)
 		}
 	}
 	
-	if (is_open)
+/*	if (is_open)
 	{
-		is_open = validate();
-		if (!is_open)
-			edlLog("unknown EDL version");
+		xmlValidCtxtPtr validCtxt = xmlNewValidCtxt();
+		xmlDtdPtr dtd = xmlNewDtd(doc,
+								  <#const xmlChar *name#>, <#const xmlChar *ExternalID#>, <#const xmlChar *SystemID#>)
+		
+		if (!xmlValidateDocumentFinal(validCtxt, doc))
+		{
+			is_open = false;
+			edlLog("could not validate DTD of EDL in '" + path + "'");
+		}
+		
+		xmlFreeValidCtxt(validCtxt);
+	}*/
+	
+	if (is_open && !validateEmulation())
+	{
+		is_open = false;
+		edlLog("unknown EDL version");
 	}
 	
 	if (!is_open)
@@ -205,7 +214,7 @@ OEConnectorsInfo OEEDL::getFreeConnectorsInfo()
 	return freeConnectorsInfo;
 }
 
-bool OEEDL::validate()
+bool OEEDL::validateEmulation()
 {
 	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
 	
@@ -271,14 +280,20 @@ bool OEEDL::readFile(string path, OEData *data)
 
 string OEEDL::getPathExtension(string path)
 {
+	// Remove tailing path separator
 	if (path.rfind(OE_PATH_SEPARATOR) == (path.length() - 1))
 		path = path.substr(0, path.length() - 1);
 	
+	// Find extension
 	int extensionIndex = path.rfind('.');
 	if (extensionIndex == string::npos)
 		return "";
-	else
-		return path.substr(extensionIndex + 1);
+	
+	// Convert to lower case
+	for (int i = 0; i < path.size(); i++)
+		path[i] = tolower(path[i]);
+	
+	return path.substr(extensionIndex + 1);
 }
 
 void OEEDL::edlLog(string message)

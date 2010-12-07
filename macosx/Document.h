@@ -10,7 +10,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-#define TEMPLATE_FOLDER @"~/Library/Application Support/OpenEmulator/Templates"
+#define MY_TEMPLATES_FOLDER @"~/Library/Application Support/OpenEmulator/Templates"
 
 @class EmulationWindowController;
 

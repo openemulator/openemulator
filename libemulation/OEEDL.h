@@ -74,9 +74,7 @@ protected:
 	string getPathExtension(string path);
 	
 private:
-	void init();
-	
-	bool validate();
+	bool validateEmulation();
 	
 	void edlLog(string message);
 };

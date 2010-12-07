@@ -59,7 +59,7 @@
 	[self setDeviceChooserView];
 	
 	NSArray *freePorts = [[fDocumentController currentDocument] freePorts];
-	[hardwareChooserViewController updateForPorts:freePorts];
+	[hardwareChooserViewController updateForFreePorts:freePorts];
 	
 	[fNextButton setEnabled:([hardwareChooserViewController selectedItemPath] != nil)];
 	

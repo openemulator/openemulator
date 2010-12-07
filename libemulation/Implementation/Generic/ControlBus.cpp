@@ -75,9 +75,9 @@ bool ControlBus::init()
 	return true;
 }
 
-bool ControlBus::postMessage(OEComponent *component, int event, void *data)
+bool ControlBus::postMessage(OEComponent *component, int message, void *data)
 {
-	switch (event)
+	switch (message)
 	{
 		case CONTROLBUS_SET_POWERSTATE:
 		{

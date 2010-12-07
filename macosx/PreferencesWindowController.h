@@ -2,7 +2,7 @@
 /**
  * OpenEmulator
  * Mac OS X Preferences Window Controller
- * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Controls the preferences window.
@@ -30,12 +30,12 @@
 
 - (void)setView:(NSString *)itemIdentifier;
 
-- (void)updateUseDefaultTemplate;
-- (void)setUseDefaultTemplate:(BOOL)useDefaultTemplate;
-- (IBAction)selectUseDefaultTemplate:(id)sender;
-- (IBAction)chooseDefaultTemplate:(id)sender;
+- (void)updateGeneralView;
+- (void)setUseTemplate:(BOOL)useTemplate;
+- (IBAction)useTemplateDidChange:(id)sender;
 
-- (IBAction)chooseTemplateInSheet:(id)sender;
-- (IBAction)closeTemplateSheet:(id)sender;
+- (IBAction)openTemplateChooser:(id)sender;
+- (IBAction)chooseTemplate:(id)sender;
+- (IBAction)closeTemplateChooser:(id)sender;
 
 @end

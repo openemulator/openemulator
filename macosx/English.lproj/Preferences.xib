@@ -2,9 +2,9 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="7.10">
 	<data>
 		<int key="IBDocument.SystemTarget">1050</int>
-		<string key="IBDocument.SystemVersion">10F569</string>
+		<string key="IBDocument.SystemVersion">10H574</string>
 		<string key="IBDocument.InterfaceBuilderVersion">788</string>
-		<string key="IBDocument.AppKitVersion">1038.29</string>
+		<string key="IBDocument.AppKitVersion">1038.35</string>
 		<string key="IBDocument.HIToolboxVersion">461.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -14,8 +14,8 @@
 			<bool key="EncodedWithXMLCoder">YES</bool>
 			<integer value="2095"/>
 			<integer value="23"/>
-			<integer value="1865"/>
 			<integer value="28"/>
+			<integer value="1865"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -622,14 +622,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<int key="connectionID">1928</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">closeTemplateSheet:</string>
-						<reference key="source" ref="511492310"/>
-						<reference key="destination" ref="859841711"/>
-					</object>
-					<int key="connectionID">2075</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">fTemplateChooserSheet</string>
 						<reference key="source" ref="511492310"/>
@@ -652,38 +644,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<reference key="destination" ref="882976568"/>
 					</object>
 					<int key="connectionID">2081</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">chooseDefaultTemplate:</string>
-						<reference key="source" ref="511492310"/>
-						<reference key="destination" ref="995131843"/>
-					</object>
-					<int key="connectionID">2085</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">chooseTemplateInSheet:</string>
-						<reference key="source" ref="511492310"/>
-						<reference key="destination" ref="28376548"/>
-					</object>
-					<int key="connectionID">2086</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">selectUseDefaultTemplate:</string>
-						<reference key="source" ref="511492310"/>
-						<reference key="destination" ref="272061744"/>
-					</object>
-					<int key="connectionID">2087</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">selectUseDefaultTemplate:</string>
-						<reference key="source" ref="511492310"/>
-						<reference key="destination" ref="11741413"/>
-					</object>
-					<int key="connectionID">2088</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
@@ -756,6 +716,38 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						</object>
 					</object>
 					<int key="connectionID">2104</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">closeTemplateChooser:</string>
+						<reference key="source" ref="511492310"/>
+						<reference key="destination" ref="859841711"/>
+					</object>
+					<int key="connectionID">2106</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">chooseTemplate:</string>
+						<reference key="source" ref="511492310"/>
+						<reference key="destination" ref="28376548"/>
+					</object>
+					<int key="connectionID">2107</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">openTemplateChooser:</string>
+						<reference key="source" ref="511492310"/>
+						<reference key="destination" ref="995131843"/>
+					</object>
+					<int key="connectionID">2108</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">useTemplateDidChange:</string>
+						<reference key="source" ref="511492310"/>
+						<reference key="destination" ref="11741413"/>
+					</object>
+					<int key="connectionID">2110</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -1119,16 +1111,16 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{180, 340}, {512, 91}}</string>
+					<string>{{224, 178}, {512, 91}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<real value="1"/>
 					<string>{{0, 701}, {539, 272}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<real value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{122, 109}, {600, 400}}</string>
+					<string>{{99, 185}, {600, 400}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{122, 109}, {600, 400}}</string>
+					<string>{{99, 185}, {600, 400}}</string>
 					<boolean value="NO"/>
 					<boolean value="YES"/>
 					<string>{600, 400}</string>
@@ -1158,7 +1150,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<string>{1, -21}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<real value="1"/>
-					<string>{{84, 457}, {512, 188}}</string>
+					<string>{{44, 315}, {512, 188}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<real value="1"/>
 					<string>{{0, 701}, {539, 272}}</string>
@@ -1186,7 +1178,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">2104</int>
+			<int key="maxID">2110</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -1229,10 +1221,10 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>chooseDefaultTemplate:</string>
-							<string>chooseTemplateInSheet:</string>
-							<string>closeTemplateSheet:</string>
-							<string>selectUseDefaultTemplate:</string>
+							<string>chooseTemplate:</string>
+							<string>closeTemplateChooser:</string>
+							<string>openTemplateChooser:</string>
+							<string>useTemplateDidChange:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1246,27 +1238,27 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>chooseDefaultTemplate:</string>
-							<string>chooseTemplateInSheet:</string>
-							<string>closeTemplateSheet:</string>
-							<string>selectUseDefaultTemplate:</string>
+							<string>chooseTemplate:</string>
+							<string>closeTemplateChooser:</string>
+							<string>openTemplateChooser:</string>
+							<string>useTemplateDidChange:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<object class="IBActionInfo">
-								<string key="name">chooseDefaultTemplate:</string>
+								<string key="name">chooseTemplate:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
-								<string key="name">chooseTemplateInSheet:</string>
+								<string key="name">closeTemplateChooser:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
-								<string key="name">closeTemplateSheet:</string>
+								<string key="name">openTemplateChooser:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
-								<string key="name">selectUseDefaultTemplate:</string>
+								<string key="name">useTemplateDidChange:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 						</object>

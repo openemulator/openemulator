@@ -115,12 +115,12 @@
 	}
 }
 
-- (void)updateForPorts:(NSArray *)ports
+- (void)updateForFreePorts:(NSArray *)freePorts
 {
 	[groups removeAllObjects];
-	[groupNames removeAllObjects];
+	[items removeAllObjects];
 	
-	// Find devices matching available ports
+/*	// Find devices matching available ports
 	for (int i = 0; i < [edlInfos count]; i++)
 	{
 		NSString *edlPath = [[edlInfos objectAtIndex:i] path];
@@ -178,7 +178,7 @@
 	[groupNames addObjectsFromArray:[[groups allKeys]
 									 sortedArrayUsingSelector:@selector(compare:)]];
 	
-	[self selectItemWithPath:nil];
+	[self selectItemWithPath:nil];*/
 }
 
 - (NSMutableArray *)selectedItemConnectors

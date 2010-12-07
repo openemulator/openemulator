@@ -11,9 +11,9 @@
 <port id="apple1.slot2" ref="" type="Apple1Slot" label="Slot 2" image="Apple-1 Slot.png" />
 <component id="apple1.controlBus" class="ControlBus">
     <property name="hostAudio" ref="hostAudio" />
-    <property name="crystal" value="14.31818MHz" />
-    <property name="frequencyDivider" value="14" />
-    <property name="master" ref="apple1.cpu" />
+    <property name="crystalFrequency" value="14.31818MHz" />
+    <property name="cpuFrequencyDivider" value="14" />
+    <property name="cpu" ref="apple1.cpu" />
     <property name="resetOnPowerOn" value="0" />
 </component>
 <component id="apple1.memoryBus" class="AddressDecoder">

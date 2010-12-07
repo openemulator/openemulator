@@ -2,7 +2,7 @@
 /**
  * OpenEmulator
  * Mac OS X Preferences Window Controller
- * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Controls the preferences window.
@@ -45,13 +45,13 @@
 	[[self window] setToolbar:toolbar];
 	[toolbar release];
 	
-    [self setView:selectedItemIdentifier];
-	
 	NSView *view = [templateChooserViewController view];
 	[fTemplateChooserView addSubview:view];
 	[view setFrameSize:[fTemplateChooserView frame].size];
 	
-	[self updateUseDefaultTemplate];
+	[self updateGeneralView];
+	
+    [self setView:selectedItemIdentifier];
 }
 
 - (NSToolbarItem *)toolbar:(NSToolbar *)toolbar
@@ -67,21 +67,21 @@
 	
 	if ([ident isEqualToString:@"General"])
 	{
-		[item setLabel:NSLocalizedString(@"General", "Preferences toolbar item label")];
+		[item setLabel:NSLocalizedString(@"General", @"Preferences toolbar item label")];
 		[item setImage:[NSImage imageNamed:@"IconGeneral.png"]];
 		[item setTarget:self];
 		[item setAction:@selector(selectView:)];
 	}
 	else if ([ident isEqualToString:@"Audio"])
 	{
-		[item setLabel:NSLocalizedString(@"Audio", "Preferences toolbar item label")];
+		[item setLabel:NSLocalizedString(@"Audio", @"Preferences toolbar item label")];
 		[item setImage:[NSImage imageNamed:@"IconAudio.png"]];
 		[item setTarget:self];
 		[item setAction:@selector(selectView:)];
 	}
 	else if ([ident isEqualToString:@"Video"])
 	{
-		[item setLabel:NSLocalizedString(@"Video", "Preferences toolbar item label")];
+		[item setLabel:NSLocalizedString(@"Video", @"Preferences toolbar item label")];
 		[item setImage:[NSImage imageNamed:@"IconVideo.png"]];
 		[item setTarget:self];
 		[item setAction:@selector(selectView:)];
@@ -139,51 +139,53 @@
     [window setFrame:windowRect display:YES animate:YES];
     [view setHidden:NO];
     
-	[window setTitle:NSLocalizedString(itemIdentifier, "Preferences view")];
+	[window setTitle:NSLocalizedString(itemIdentifier, @"Preferences view")];
 }
 
-- (void)updateUseDefaultTemplate
+- (void)updateGeneralView
 {
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	[self setUseDefaultTemplate:[defaults boolForKey:@"OEUseDefaultTemplate"]];
+	[self setUseTemplate:[[NSUserDefaults standardUserDefaults]
+									 boolForKey:@"OEDefaultTemplateEnabled"]];
 }
 
-- (void)setUseDefaultTemplate:(BOOL)useDefaultTemplate
+- (void)setUseTemplate:(BOOL)useTemplate
 {
+	NSString *useTemplateTitle = NSLocalizedString(@"Use template: ",
+												   @"Use template: ");
+	
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	NSString *useTemplateString = NSLocalizedString(@"Use template: ", "Use template: ");
-	NSString *defaultTemplate = [defaults stringForKey:@"OEDefaultTemplate"];
-	if (defaultTemplate)
+	NSString *defaultTemplatePath = [defaults stringForKey:@"OEDefaultTemplatePath"];
+	
+	if (defaultTemplatePath)
 	{
-		NSString *defaultTemplateName = [[defaultTemplate lastPathComponent]
+		NSString *defaultTemplateName = [[defaultTemplatePath lastPathComponent]
 										 stringByDeletingPathExtension];
-		useTemplateString = [useTemplateString stringByAppendingString:defaultTemplateName];
+		useTemplateTitle = [useTemplateTitle stringByAppendingString:defaultTemplateName];
 	}
 	
-	[fShowTemplateChooserRadio setIntValue:!useDefaultTemplate];
-	[fUseTemplateRadio setIntValue:useDefaultTemplate];
-	[fUseTemplateRadio setTitle:useTemplateString];
-	[fChooseTemplateButton setEnabled:useDefaultTemplate];
+	[fShowTemplateChooserRadio setIntValue:!useTemplate];
+	[fUseTemplateRadio setIntValue:useTemplate];
+	[fUseTemplateRadio setTitle:useTemplateTitle];
+	[fChooseTemplateButton setEnabled:useTemplate];
 	
-	if ((defaultTemplate == nil) && useDefaultTemplate)
-		[self chooseDefaultTemplate:self];
+	if ((defaultTemplatePath == nil) && useTemplate)
+		[self openTemplateChooser:self];
 	else
-		[defaults setBool:useDefaultTemplate
-				   forKey:@"OEUseDefaultTemplate"];
+		[defaults setBool:useTemplate
+				   forKey:@"OEDefaultTemplateEnabled"];
 }
 
-- (IBAction)selectUseDefaultTemplate:(id)sender
+- (IBAction)useTemplateDidChange:(id)sender
 {
-	[self setUseDefaultTemplate:[[sender selectedCell] tag]];
+	[self setUseTemplate:[[sender selectedCell] tag]];
 }
 
-- (IBAction)chooseDefaultTemplate:(id)sender
+- (IBAction)openTemplateChooser:(id)sender
 {
-	[templateChooserViewController updateUserTemplates];
-	
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	NSString *path = [defaults stringForKey:@"OEDefaultTemplate"];
-	[templateChooserViewController selectItemWithPath:path];
+	NSString *group = [defaults stringForKey:@"OEDefaultTemplateGroup"];
+	NSString *path = [defaults stringForKey:@"OEDefaultTemplatePath"];
+	[templateChooserViewController selectItemWithPath:path inGroup:group];
 	
 	[fTemplateChooserChooseButton setEnabled:
 	 ([templateChooserViewController selectedItemPath] != nil)];
@@ -195,23 +197,31 @@
 		  contextInfo:nil];
 }
 
-- (void)chooserWasDoubleClicked:(id)sender
+- (void)chooserSelectionDidChange:(id)sender
 {
-	[self chooseTemplateInSheet:sender];
+	[fTemplateChooserChooseButton setEnabled:
+	 ([templateChooserViewController selectedItemPath] != nil)];
 }
 
-- (IBAction)chooseTemplateInSheet:(id)sender
+- (void)chooserItemWasDoubleClicked:(id)sender
+{
+	[self chooseTemplate:sender];
+}
+
+- (IBAction)chooseTemplate:(id)sender
 {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	[defaults setObject:[templateChooserViewController selectedGroup]
+				 forKey:@"OEDefaultTemplateGroup"];
 	[defaults setObject:[templateChooserViewController selectedItemPath]
-				 forKey:@"OEDefaultTemplate"];
+				 forKey:@"OEDefaultTemplatePath"];
 	[defaults setBool:YES
-			   forKey:@"OEUseDefaultTemplate"];
+			   forKey:@"OEDefaultTemplateEnabled"];
 	
-	[self closeTemplateSheet:sender];
+	[self closeTemplateChooser:sender];
 }
 
-- (IBAction)closeTemplateSheet:(id)sender
+- (IBAction)closeTemplateChooser:(id)sender
 {
 	[NSApp endSheet:fTemplateChooserSheet];
 }
@@ -222,7 +232,7 @@
 { 
     [sheet orderOut:self];
 	
-	[self updateUseDefaultTemplate];
+	[self updateGeneralView];
 }
 
 @end

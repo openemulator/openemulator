@@ -28,6 +28,7 @@
 		0054E4A71131BE8A006D32D9 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0054E4A61131BE8A006D32D9 /* OpenGL.framework */; };
 		0054E6311131BEE7006D32D9 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0054E6301131BEE7006D32D9 /* Carbon.framework */; };
 		0054E66C1131BF58006D32D9 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0054E66B1131BF58006D32D9 /* Quartz.framework */; };
+		005A143D12ACD13000B1ABF4 /* EmulationActionPressed.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 00ED37C41277A0F300BEF6BD /* EmulationActionPressed.tiff */; };
 		005E5F771086B16C00E573D4 /* Inspector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 005E5F751086B16C00E573D4 /* Inspector.xib */; };
 		006115C211DD0347008AA3EE /* Application.m in Sources */ = {isa = PBXBuildFile; fileRef = 006115C111DD0347008AA3EE /* Application.m */; };
 		0067749B1286E721000E843B /* OEOpenGLCanvas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 006774681286DB06000E843B /* OEOpenGLCanvas.cpp */; };
@@ -974,6 +975,7 @@
 				0076FD6512A1ED8C00A3FEC7 /* AudioPause.png in Resources */,
 				0076FEDA12A21E2B00A3FEC7 /* hardware in Resources */,
 				0076FEDD12A21E4900A3FEC7 /* HardwareChooser.xib in Resources */,
+				005A143D12ACD13000B1ABF4 /* EmulationActionPressed.tiff in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

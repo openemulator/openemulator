@@ -27,7 +27,6 @@ class OEPackage
 {
 public:
 	OEPackage();
-	OEPackage(const string &path);
 	~OEPackage();
 	
 	bool open(const string &path);
@@ -45,12 +44,10 @@ private:
 	string path;
 	struct zip *zip;
 	
-	void init();
-	
-	bool isPathValid(const string &path);
-	bool isFolder(const string &path);
-	bool makeDirectory(const string &path);
-	bool removePath(const string &path);
+	bool pathExists(const string &path);
+	bool isDirectory(const string &path);
+	bool createDirectory(const string &path);
+	bool removeItemAtPath(const string &path);
 };
 
 #endif

@@ -16,7 +16,7 @@
 
 MOSKIM1IO::MOSKIM1IO()
 {
-	hostEmulationController = NULL;
+	emulation = NULL;
 	serialPort = NULL;
 	audioOut = NULL;
 	audioIn = NULL;
@@ -53,17 +53,17 @@ bool MOSKIM1IO::getValue(string name, string &value)
 
 bool MOSKIM1IO::setRef(string name, OEComponent *ref)
 {
-	if (name == "hostEmulationController")
+	if (name == "emulation")
 	{
-		if (hostEmulationController)
-			hostEmulationController->postMessage(this,
-												 EMULATION_REMOVE_CANVAS,
-												 &canvas);
+		if (emulation)
+			emulation->postMessage(this,
+								   EMULATION_REMOVE_CANVAS,
+								   &canvas);
 		if (ref)
 			ref->postMessage(this,
 							 EMULATION_ADD_CANVAS,
 							 &canvas);
-		hostEmulationController = ref;
+		emulation = ref;
 	}
 	else if (name == "serialPort")
 	{

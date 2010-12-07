@@ -12,7 +12,7 @@
 <component id="kim1.controlBus" class="ControlBus">
     <property name="hostAudio" ref="hostAudio" />
     <property name="crystalFrequency" value="1.0MHz" />
-    <property name="frequencyDivider" value="1" />
+    <property name="cpuFrequencyDivider" value="1" />
     <property name="cpu" ref="kim1.cpu" />
     <property name="resetOnPowerOn" value="0" />
 </component>

@@ -22,14 +22,6 @@
 #include "ROM.h"
 #include "Terminal.h"
 
-#include "MOS6502.h"
-#include "MOS6530.h"
-#include "MOSKIM1IO.h"
-#include "MOSKIM1PLL.h"
-
-#include "MC6821.h"
-#include "MC6845.h"
-
 #include "Apple1IO.h"
 #include "Apple1Terminal.h"
 #include "Apple1CassetteInterfaceCard.h"
@@ -43,37 +35,35 @@
 #include "AppleIIGamePort.h"
 #include "AppleIISlotMemory.h"
 #include "AppleIISlotExpansionMemory.h"
+
+#include "MC6821.h"
+#include "MC6845.h"
+
+#include "MOS6502.h"
+#include "MOS6530.h"
+#include "MOSKIM1IO.h"
+#include "MOSKIM1PLL.h"
 // FACTORY_INCLUDE_END - Do not modify this section
 
 #define matchComponent(name) if (className == #name) return new name()
 
 OEComponent *OEComponentFactory::create(const string &className)
 {
-	// FACTORY_CODE_START - Do not modify this section
-	matchComponent(ControlBus);
+// FACTORY_CODE_START - Do not modify this section
 	matchComponent(AddressDecoder);
 	matchComponent(AddressOffset);
-	matchComponent(RAM);
-	matchComponent(ROM);
-	matchComponent(FloatingBus);
 	matchComponent(AudioSampleConverter);
 	matchComponent(CharsetLoader);
 	matchComponent(CompositeMonitor);
+	matchComponent(ControlBus);
+	matchComponent(FloatingBus);
+	matchComponent(RAM);
+	matchComponent(ROM);
 	matchComponent(Terminal);
-	
-	matchComponent(MC6821);
-	matchComponent(MC6845);
-	
-	matchComponent(MOS6502);
-	matchComponent(MOS6530);
-	
-	matchComponent(MOSKIM1IO);
-	matchComponent(MOSKIM1PLL);
 	
 	matchComponent(Apple1IO);
 	matchComponent(Apple1Terminal);
 	matchComponent(Apple1CassetteInterfaceCard);
-	
 	matchComponent(AppleIIControlBus);
 	matchComponent(AppleIIMMU);
 	matchComponent(AppleIIFloatingBus);
@@ -84,7 +74,15 @@ OEComponent *OEComponentFactory::create(const string &className)
 	matchComponent(AppleIIGamePort);
 	matchComponent(AppleIISlotMemory);
 	matchComponent(AppleIISlotExpansionMemory);
-	// FACTORY_CODE_END - Do not modify this section
+	
+	matchComponent(MC6821);
+	matchComponent(MC6845);
+	
+	matchComponent(MOS6502);
+	matchComponent(MOS6530);
+	matchComponent(MOSKIM1IO);
+	matchComponent(MOSKIM1PLL);
+// FACTORY_CODE_END - Do not modify this section
 	
 	return NULL;
 }

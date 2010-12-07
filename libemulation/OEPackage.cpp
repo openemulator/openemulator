@@ -5,7 +5,7 @@
  * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Type for accessing EDL packages (zip and directory type)
+ * Implements an EDL package interface (both in zip file and package format)
  */
 
 #include <fstream>
@@ -21,25 +21,14 @@
 
 OEPackage::OEPackage()
 {
-	init();
-}
-
-OEPackage::OEPackage(const string &path)
-{
-	init();
-	open(path);
+	is_open = false;
+	
+	zip = NULL;
 }
 
 OEPackage::~OEPackage()
 {
 	close();
-}
-
-void OEPackage::init()
-{
-	is_open = false;
-	
-	zip = NULL;
 }
 
 bool OEPackage::open(const string &path)
@@ -48,16 +37,15 @@ bool OEPackage::open(const string &path)
 	this->path = path;
 	
 	bool isPackage;
-	if (isPathValid(path))
-		isPackage = isFolder(path);
+	if (pathExists(path))
+		isPackage = isDirectory(path);
 	else
-		isPackage = (path.substr(path.size() - 1, 1) == 
-					 OE_PATH_SEPARATOR);
+		isPackage = (path.substr(path.size() - 1, 1) == OE_PATH_SEPARATOR);
 	
 	if (isPackage)
 	{
-		makeDirectory(path);
-		is_open = isPathValid(path);
+		createDirectory(path);
+		is_open = pathExists(path);
 	}
 	else
 	{
@@ -171,10 +159,10 @@ bool OEPackage::remove()
 {
 	close();
 	
-	return removePath(path);
+	return removeItemAtPath(path);
 }
 
-bool OEPackage::isPathValid(const string &path)
+bool OEPackage::pathExists(const string &path)
 {
 #ifdef _WIN32
 	return (GetFileAttributes(path.c_str()) != INVALID_FILE_ATTRIBUTES);
@@ -184,7 +172,7 @@ bool OEPackage::isPathValid(const string &path)
 #endif
 }
 
-bool OEPackage::isFolder(const string &path)
+bool OEPackage::isDirectory(const string &path)
 {
 #ifdef _WIN32
 	return (GetFileAttributes(path.c_str()) & FILE_ATTRIBUTE_DIRECTORY);
@@ -192,11 +180,12 @@ bool OEPackage::isFolder(const string &path)
 	struct stat statbuf;
 	if (stat(path.c_str(), &statbuf) != 0)
 		return false;
+	
 	return (statbuf.st_mode & S_IFDIR);
 #endif
 }
 
-bool OEPackage::makeDirectory(const string &path)
+bool OEPackage::createDirectory(const string &path)
 {
 #ifdef _WIN32
 	return CreateDirectory(path.c_str())
@@ -205,10 +194,10 @@ bool OEPackage::makeDirectory(const string &path)
 #endif
 }
 
-bool OEPackage::removePath(const string &path)
+bool OEPackage::removeItemAtPath(const string &path)
 {
 #ifdef _WIN32
-	if (!isFolder(path))
+	if (!isDirectory(path))
 		return DeleteFile(path.c_str());
 	
 	string dirPath = path + OE_PATH_SEPARATOR + "*";
@@ -223,14 +212,14 @@ bool OEPackage::removePath(const string &path)
 		if ((fileName == ".") || (fileName == ".."))
 			continue;
 		
-		removePath(path + OE_PATH_SEPARATOR + fileName);
+		removeItemAtPath(path + OE_PATH_SEPARATOR + fileName);
 	}
 	
 	FindClose(hFind);
 	
 	return RemoveDirectory(path);
 #else
-	if (!isFolder(path))
+	if (!isDirectory(path))
 		return (unlink(path.c_str()) == 0);
 	
 	DIR *dir;
@@ -244,7 +233,7 @@ bool OEPackage::removePath(const string &path)
 		if ((fileName == ".") || (fileName == ".."))
 			continue;
 		
-		removePath(path + OE_PATH_SEPARATOR + fileName);
+		removeItemAtPath(path + OE_PATH_SEPARATOR + fileName);
 	}
 	
 	closedir(dir);

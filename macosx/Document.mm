@@ -273,7 +273,7 @@
 
 - (IBAction)saveDocumentAsTemplate:(id)sender
 {
-	NSString *path = [TEMPLATE_FOLDER stringByExpandingTildeInPath];
+	NSString *path = [MY_TEMPLATES_FOLDER stringByExpandingTildeInPath];
 	
 	NSFileManager *fileManager = [NSFileManager defaultManager];
 	if (![fileManager fileExistsAtPath:path])

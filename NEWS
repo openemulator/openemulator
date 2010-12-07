@@ -1,6 +1,7 @@
 ==2010-12-01==
 * Find a way to integrate OEEmulation device info results with the EDL
 * Implemented OEEDL free ports and connector infos
+* Improved chooser view (template chooser) with lazy initialization
 
 ==2010-11-01==
 * Fixed ${id} when saving emulation data

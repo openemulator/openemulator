@@ -26,22 +26,20 @@
 // * To unmount, an empty string is used
 // * To update mount status, use the device info interface
 
-typedef void (*OERunAlertCallback)(string message);
-typedef OEComponent *(*OEAddCanvasCallback)(void *userData);
-typedef void (*OERemoveCanvasCallback)(OEComponent *canvas, void *userData);
-
 typedef enum
 {
-	EMULATION_SET_DEVICEINFO,
+	EMULATION_SET_DEVICESTATE,
 	EMULATION_ADD_CANVAS,
 	EMULATION_REMOVE_CANVAS,
+	EMULATION_ADD_STORAGE,
+	EMULATION_REMOVE_STORAGE,
 	EMULATION_RUN_ALERT,
 } OEEmulationMessages;
 
 typedef enum
 {
 	EMULATION_MOUNT,
-	EMULATION_VALIDATE,
+	EMULATION_MOUNTABLE,
 } OEEmulationDelegations;
 
 typedef struct
@@ -51,43 +49,31 @@ typedef struct
 	string type;
 	string options;
 	string label;
-} OESettingInfo;
-
-typedef vector<OESettingInfo> OESettingsInfo;
+} OESetting;
+typedef vector<OESetting> OESettings;
 
 typedef struct
 {
-	string id;
 	string label;
 	string image;
+	OESettings settings;
 	
-	string connectionLabel;
-	string informativeText;
-	OEComponent *canvas;
-	OEComponent *storage;
+	string location;
 	
-	OESettingsInfo settingsInfo;
+	string state;
+	OEComponents canvases;
+	OEComponents storages;
 } OEDeviceInfo;
-
-typedef vector<OEDeviceInfo> OEDevicesInfo;
-
-typedef struct
-{
-	string informativeText;
-	OEComponent *canvas;
-	OEComponent *storage;
-} OEEmulationDeviceInfo;
-
-typedef map<string, OEEmulationDeviceInfo> OEEmulationDevicesInfo;
-
-typedef struct
-{
-	string deviceId;
-	OEEmulationDeviceInfo deviceInfo;
-} OEEmulationSetDeviceInfo;
+typedef map<string, OEDeviceInfo> OEDevicesInfoMap;
 
 typedef map<string, OEComponent *> OEComponentsMap;
+
 typedef map<string, string> OEPropertiesMap;
+
+typedef void (*OEDevicesInfoMapDidUpdateCallback)();
+typedef void (*OERunAlertCallback)(string message);
+typedef OEComponent *(*OEAddCanvasCallback)(void *userData);
+typedef void (*OERemoveCanvasCallback)(OEComponent *canvas, void *userData);
 
 class OEEmulation : public OEComponent, public OEEDL
 {
@@ -96,40 +82,46 @@ public:
 	~OEEmulation();
 	
 	void setResourcePath(string path);
-	void setAlertCallback(OERunAlertCallback alertCallback);
-	void setAddCanvasCallback(OEAddCanvasCallback addCanvasCallback,
+	void setDevicesInfoMapDidUpdateCallback(OEDevicesInfoMapDidUpdateCallback
+											devicesInfoDidUpdate);
+	void setAlertCallback(OERunAlertCallback runAlert);
+	void setAddCanvasCallback(OEAddCanvasCallback addCanvas,
 							  void *userData);
-	void setRemoveCanvasCallback(OERemoveCanvasCallback removeCanvasCallback,
+	void setRemoveCanvasCallback(OERemoveCanvasCallback removeCanvas,
 								 void *userData);
 	
 	bool open(string path);
 	bool save(string path);
-	void close();
 	
-	OEDevicesInfo getDevicesInfo();
 	bool setComponent(string id, OEComponent *component);
+	
+	OEDevicesInfoMap getDevicesInfoMap();
 	bool addEDL(string path, OEIdMap idMap);
 	bool removeDevice(string id);
+	
 	bool mount(string path);
-	bool validate(string path);
+	bool mountable(string path);
 	
 	bool postMessage(OEComponent *sender, int message, void *data);
 	
 private:
 	string resourcePath;
-	OEComponentsMap components;
+	OEComponentsMap componentsMap;
+	OEDevicesInfoMap devicesInfoMap;
 	
-	OEEmulationDevicesInfo devicesInfo;
-	
-	OERunAlertCallback alertCallback;
-	OEAddCanvasCallback addCanvasCallback;
-	void *addCanvasCallbackUserData;
-	OERemoveCanvasCallback removeCanvasCallback;
-	void *removeCanvasCallbackUserData;
+	OEDevicesInfoMapDidUpdateCallback devicesInfoMapDidUpdate;
+	OERunAlertCallback runAlert;
+	OEAddCanvasCallback addCanvas;
+	void *addCanvasUserData;
+	OERemoveCanvasCallback removeCanvas;
+	void *removeCanvasUserData;
 	
 	OEComponent *getComponent(string id);
+	string getDeviceId(OEComponent *component);
 	
 	bool dumpEmulation(OEData *data);
+	void parseEmulation();
+	OESettings parseDevice(xmlNodePtr children);
 	
 	bool createEmulation();
 	bool createComponent(string id, string className);

@@ -16,9 +16,7 @@
 {
 }
 
-- (void)updateUserTemplates;
-- (void)addTemplatesFromPath:(NSString *)path
-					 toGroup:(NSString *)groupName;
-- (void)removeGroup:(NSString *)groupName;
+- (void)addItemsFromPath:(NSString *)path
+				 toGroup:(NSString *)group;
 
 @end

@@ -13,7 +13,8 @@
 @protocol ChooserDelegate <NSObject>
 
 @optional
-- (void)chooserWasDoubleClicked:(id)sender;
+- (void)chooserSelectionDidChange:(id)sender;
+- (void)chooserItemWasDoubleClicked:(id)sender;
 
 @end
 
@@ -32,7 +33,13 @@
 
 - (void)setDelegate:(id)theDelegate;
 
-- (void)selectItemWithPath:(NSString *)itemPath;
+- (void)loadGroups;
+- (void)loadItems;
+
+- (void)selectItemWithPath:(NSString *)path
+				   inGroup:(NSString *)group;
+
+- (NSString *)selectedGroup;
 - (NSString *)selectedItemPath;
 
 @end
