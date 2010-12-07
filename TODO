@@ -1,5 +1,4 @@
 ==To-Do==
-* Implement OEEmulation getDevicesInfoMap
 * Persistency of the main emulation window
 * Implement the main emulation window list
 * Implement addCanvas and removeCanvas -> this should create a windowController and an OEOpenGLCanvas. The window controller should be added to the document, and the canvas returned.

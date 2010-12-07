@@ -45,7 +45,7 @@ typedef enum
 typedef struct
 {
 	string ref;
-	string property;
+	string name;
 	string type;
 	string options;
 	string label;
@@ -122,6 +122,7 @@ private:
 	bool dumpEmulation(OEData *data);
 	void parseEmulation();
 	OESettings parseDevice(xmlNodePtr children);
+	string parseLocation(string deviceId, vector<string> &visitedDevices);
 	
 	bool createEmulation();
 	bool createComponent(string id, string className);

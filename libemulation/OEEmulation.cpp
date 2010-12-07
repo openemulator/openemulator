@@ -261,16 +261,17 @@ void OEEmulation::parseEmulation()
 	{
 		if (!xmlStrcmp(node->name, BAD_CAST "device"))
 		{
-			string id = getNodeProperty(node, "id");
+			string deviceId = getNodeProperty(node, "id");
 			
 			OEDeviceInfo deviceInfo;
 			deviceInfo.label = getNodeProperty(node, "label");
 			deviceInfo.image = getNodeProperty(node, "image");
 			deviceInfo.settings = parseDevice(node->children);
 			
-			deviceInfo.location = parseLocation(id);
+			vector<string> visitedDevices;
+			deviceInfo.location = parseLocation(deviceId, visitedDevices);
 			
-			devicesInfoMap[id] = deviceInfo;
+			devicesInfoMap[deviceId] = deviceInfo;
 		}
 	}
 }
@@ -287,11 +288,11 @@ OESettings OEEmulation::parseDevice(xmlNodePtr children)
 		{
 			OESetting setting;
 			
-			setting.ref = getNodeProperty(node, "id");
-			setting.property = getNodeProperty(node, "label");
-			setting.type = getNodeProperty(node, "image");
-			setting.options = getNodeProperty(node, "image");
-			setting.label = getNodeProperty(node, "image");
+			setting.ref = getNodeProperty(node, "ref");
+			setting.name = getNodeProperty(node, "name");
+			setting.type = getNodeProperty(node, "type");
+			setting.options = getNodeProperty(node, "options");
+			setting.label = getNodeProperty(node, "label");
 			
 			settings.push_back(setting);
 		}
@@ -300,135 +301,53 @@ OESettings OEEmulation::parseDevice(xmlNodePtr children)
 	return settings;
 }
 
-bool OEEmulation::parseLocation()
+string OEEmulation::parseLocation(string deviceId, vector<string> &visitedDevices)
 {
-	// Check inlets
-	for (OEPorts::iterator inlet = inlets.begin();
-		 inlet != inlets.end();
-		 inlet++)
+	if (!doc)
+		return "";
+	
+	// Circularity check
+	if (find(visitedDevices.begin(), visitedDevices.end(), deviceId) !=
+		visitedDevices.end())
+		return "*";
+	visitedDevices.push_back(deviceId);
+	
+	// Find connected port
+	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+	
+	for(xmlNodePtr node = rootNode->children;
+		node;
+		node = node->next)
 	{
-		// Follow inlet connection
-		string deviceName = (*inlet)->device->name;
-		xmlNodePtr deviceNode = getDeviceNode(deviceName);
-		if (!deviceNode)
-			return false;
-		
-		xmlNodePtr connectionNode = getConnectionNode(deviceNode, (*inlet)->ref);
-		if (!connectionNode)
-			return false;
-		
-		string connectionRef = getNodeRef(connectionNode, deviceName);
-		if (connectionRef == "")
-			continue;
-		
-		// Search outlet
-		for (OEPorts::iterator outlet = outlets.begin();
-			 outlet != outlets.end();
-			 outlet++)
+		if (!xmlStrcmp(node->name, BAD_CAST "port"))
 		{
-			if ((*outlet)->ref == connectionRef)
-			{
-				if ((*outlet)->connection)
-				{
-					edlLog("reconnection of inlet '" + (*inlet)->ref + "'");
-					
-					return false;
-				}
-				
-				(*inlet)->connection = *outlet;
-				(*outlet)->connection = *inlet;
-			}
-		}
-		
-		if (!(*inlet)->connection)
-		{
-			edlLog("could not find '" + (*inlet)->ref + "'");
+			string id = getNodeProperty(node, "id");
+			string ref = getNodeProperty(node, "ref");
+			string label = getNodeProperty(node, "label");
 			
-			return false;
+			if (getDeviceId(ref) == deviceId)
+				return parseLocation(getDeviceId(id), visitedDevices) + " " + label;
 		}
 	}
 	
-	// Analyze connection labels
-	for (OEDevices::iterator device = devices.begin();
-		 device != devices.end();
-		 device++)
-		(*device)->connectionLabel = buildConnectionLabel((*device)->name);
-	
-	return true;
-}
-
-string OEEmulation::buildConnectionLabel(string deviceName)
-{
-	string label;
-	
-	// Find all outlets
-	for (OEPorts::iterator outlet = outlets.begin();
-		 outlet != outlets.end();
-		 outlet++)
+	// Find device label
+	for(xmlNodePtr node = rootNode->children;
+		node;
+		node = node->next)
 	{
-		if (getDeviceName((*outlet)->ref) == deviceName)
+		if (!xmlStrcmp(node->name, BAD_CAST "device"))
 		{
-			vector<string> visitedRefs;
+			string id = getNodeProperty(node, "id");
+			string label = getNodeProperty(node, "label");
 			
-			if (label != "")
-				label += ", ";
-			label += buildConnectionLabel(*outlet, visitedRefs);
+			if (deviceId == id)
+				return label;
 		}
 	}
 	
-	return label;
+	// Device not found
+	return "?";
 }
-
-string OEEmulation::buildConnectionLabel(OEPort *outlet, vector<string> &visitedRefs)
-{
-	string deviceLabel = outlet->device->label;
-	
-	// Get the connected inlet for this outlet
-	OEPort *inlet = outlet->connection;
-	if (!inlet)
-		return deviceLabel;
-	
-	string deviceName = getDeviceName(inlet->ref);
-	
-	// Find first outlet of the inlet's device
-	for (OEPorts::iterator outlet = outlets.begin();
-		 outlet != outlets.end();
-		 outlet++)
-	{
-		if (getDeviceName((*outlet)->ref) == deviceName)
-		{
-			if (findCircularConnection((*outlet)->ref, visitedRefs))
-				return deviceLabel;
-			
-			return buildConnectionLabel(*outlet, visitedRefs) + " " + inlet->label;
-		}
-	}
-	
-	// The device has no outlets
-	return deviceLabel;
-}
-
-bool OEEmulation::findCircularConnection(string ref, vector<string> &visitedRefs)
-{
-	for (vector<string>::iterator visitedRef = visitedRefs.begin();
-		 visitedRef != visitedRefs.end();
-		 visitedRef++)
-	{
-		if (ref == *visitedRef)
-			return true;
-	}
-	
-	visitedRefs.push_back(ref);
-	
-	return false;
-}
-
-
-
-
-
-
-
 
 bool OEEmulation::createEmulation()
 {
@@ -1187,157 +1106,5 @@ bool OEInfo::removeDevice(string deviceName)
 		return false;
 	
 	return analyze();
-}
-
-//
-// Analysis
-//
-bool OEInfo::analyze()
-{
-	removeDevices();
-	removePorts(inlets);
-	removePorts(outlets);
-	
-	xmlNodePtr node = xmlDocGetRootElement(doc);
-	
-	analyzeHeader(node);
-	analyzeDevices(node);
-	return analyzeConnections();
-}
-
-void OEInfo::analyzeHeader(xmlNodePtr node)
-{
-}
-
-void OEInfo::analyzeDevices(xmlNodePtr node)
-{
-	for(xmlNodePtr childNode = node->children;
-		childNode;
-		childNode = childNode->next)
-		if (!xmlStrcmp(childNode->name, BAD_CAST "device"))
-			addDevice(childNode);
-}
-
-bool OEInfo::analyzeConnections()
-{
-	// Check inlets
-	for (OEPorts::iterator inlet = inlets.begin();
-		 inlet != inlets.end();
-		 inlet++)
-	{
-		// Follow inlet connection
-		string deviceName = (*inlet)->device->name;
-		xmlNodePtr deviceNode = getDeviceNode(deviceName);
-		if (!deviceNode)
-			return false;
-		
-		xmlNodePtr connectionNode = getConnectionNode(deviceNode, (*inlet)->ref);
-		if (!connectionNode)
-			return false;
-		
-		string connectionRef = getNodeRef(connectionNode, deviceName);
-		if (connectionRef == "")
-			continue;
-		
-		// Search outlet
-		for (OEPorts::iterator outlet = outlets.begin();
-			 outlet != outlets.end();
-			 outlet++)
-		{
-			if ((*outlet)->ref == connectionRef)
-			{
-				if ((*outlet)->connection)
-				{
-					edlLog("reconnection of inlet '" + (*inlet)->ref + "'");
-					
-					return false;
-				}
-				
-				(*inlet)->connection = *outlet;
-				(*outlet)->connection = *inlet;
-			}
-		}
-		
-		if (!(*inlet)->connection)
-		{
-			edlLog("could not find '" + (*inlet)->ref + "'");
-			
-			return false;
-		}
-	}
-	
-	// Analyze connection labels
-	for (OEDevices::iterator device = devices.begin();
-		 device != devices.end();
-		 device++)
-		(*device)->connectionLabel = buildConnectionLabel((*device)->name);
-	
-	return true;
-}
-
-string OEInfo::buildConnectionLabel(string deviceName)
-{
-	string label;
-	
-	// Find all outlets
-	for (OEPorts::iterator outlet = outlets.begin();
-		 outlet != outlets.end();
-		 outlet++)
-	{
-		if (getDeviceName((*outlet)->ref) == deviceName)
-		{
-			vector<string> visitedRefs;
-			
-			if (label != "")
-				label += ", ";
-			label += buildConnectionLabel(*outlet, visitedRefs);
-		}
-	}
-	
-	return label;
-}
-
-string OEInfo::buildConnectionLabel(OEPort *outlet, vector<string> &visitedRefs)
-{
-	string deviceLabel = outlet->device->label;
-	
-	// Get the connected inlet for this outlet
-	OEPort *inlet = outlet->connection;
-	if (!inlet)
-		return deviceLabel;
-	
-	string deviceName = getDeviceName(inlet->ref);
-	
-	// Find first outlet of the inlet's device
-	for (OEPorts::iterator outlet = outlets.begin();
-		 outlet != outlets.end();
-		 outlet++)
-	{
-		if (getDeviceName((*outlet)->ref) == deviceName)
-		{
-			if (findCircularConnection((*outlet)->ref, visitedRefs))
-				return deviceLabel;
-			
-			return buildConnectionLabel(*outlet, visitedRefs) + " " + inlet->label;
-		}
-	}
-	
-	// The device has no outlets
-	return deviceLabel;
-}
-
-bool OEInfo::findCircularConnection(string ref, vector<string> &visitedRefs)
-{
-	for (vector<string>::iterator visitedRef = visitedRefs.begin();
-		 visitedRef != visitedRefs.end();
-		 visitedRef++)
-	{
-		if (ref == *visitedRef)
-			return true;
-	}
-	
-	visitedRefs.push_back(ref);
-	
-	return false;
 }
 */

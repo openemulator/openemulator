@@ -2,6 +2,7 @@
 * Find a way to integrate OEEmulation device info results with the EDL
 * Implemented OEEDL free ports and connector infos
 * Improved chooser view (template chooser) with lazy initialization
+* Implemented OEEmulation getDevicesInfoMap
 
 ==2010-11-01==
 * Fixed ${id} when saving emulation data
