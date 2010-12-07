@@ -1,6 +1,6 @@
 ==To-Do==
-* Persistency of the main emulation window
 * Implement the main emulation window list
+* Persistency of the main emulation window
 * Implement addCanvas and removeCanvas -> this should create a windowController and an OEOpenGLCanvas. The window controller should be added to the document, and the canvas returned.
 * Implement frame communication to the canvas
 * Implement canvas keyboard entry/mouse events

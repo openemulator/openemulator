@@ -77,4 +77,16 @@
 			nil];
 }
 
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
+{
+	return 4;
+}
+
+- (id)tableView:(NSTableView *)tableView
+objectValueForTableColumn:(NSTableColumn *)tableColumn
+			row:(NSInteger)rowIndex
+{
+	return nil;
+}
+
 @end

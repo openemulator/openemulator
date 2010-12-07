@@ -3,16 +3,16 @@
 	<data>
 		<int key="IBDocument.SystemTarget">1050</int>
 		<string key="IBDocument.SystemVersion">10H574</string>
-		<string key="IBDocument.InterfaceBuilderVersion">788</string>
+		<string key="IBDocument.InterfaceBuilderVersion">804</string>
 		<string key="IBDocument.AppKitVersion">1038.35</string>
 		<string key="IBDocument.HIToolboxVersion">461.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
-			<string key="NS.object.0">788</string>
+			<string key="NS.object.0">804</string>
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="1741"/>
+			<integer value="1740"/>
 			<integer value="1808"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
@@ -26,7 +26,7 @@
 		<object class="NSMutableArray" key="IBDocument.RootObjects" id="110858478">
 			<bool key="EncodedWithXMLCoder">YES</bool>
 			<object class="NSCustomObject" id="762632889">
-				<string key="NSClassName">InspectorWindowController</string>
+				<string key="NSClassName">EmulationWindowController</string>
 			</object>
 			<object class="NSCustomObject" id="932410077">
 				<string key="NSClassName">FirstResponder</string>
@@ -42,7 +42,7 @@
 				<string key="NSWindowTitle"/>
 				<string key="NSWindowClass">NSWindow</string>
 				<nil key="NSViewClass"/>
-				<string key="NSWindowContentMaxSize">{3.40282e+38, 3.40282e+38}</string>
+				<string key="NSWindowContentMaxSize">{1.79769e+308, 1.79769e+308}</string>
 				<string key="NSWindowContentMinSize">{256, 123}</string>
 				<object class="NSView" key="NSWindowView" id="697045175">
 					<reference key="NSNextResponder"/>
@@ -74,8 +74,8 @@
 												<bool key="EncodedWithXMLCoder">YES</bool>
 												<object class="NSTableColumn" id="272250863">
 													<double key="NSWidth">48</double>
-													<double key="NSMinWidth">40</double>
-													<double key="NSMaxWidth">1000</double>
+													<double key="NSMinWidth">48</double>
+													<double key="NSMaxWidth">48</double>
 													<object class="NSTableHeaderCell" key="NSHeaderCell">
 														<int key="NSCellFlags">75628096</int>
 														<int key="NSCellFlags2">2048</int>
@@ -101,8 +101,12 @@
 													</object>
 													<object class="NSImageCell" key="NSDataCell" id="107487546">
 														<int key="NSCellFlags">67239424</int>
-														<int key="NSCellFlags2">33685504</int>
-														<reference key="NSSupport" ref="26"/>
+														<int key="NSCellFlags2">33554432</int>
+														<object class="NSFont" key="NSSupport" id="911500604">
+															<string key="NSName">LucidaGrande</string>
+															<double key="NSSize">13</double>
+															<int key="NSfFlags">1044</int>
+														</object>
 														<int key="NSAlign">0</int>
 														<int key="NSScale">3</int>
 														<int key="NSStyle">0</int>
@@ -115,7 +119,7 @@
 													</object>
 												</object>
 												<object class="NSTableColumn" id="813993110">
-													<double key="NSWidth">155</double>
+													<double key="NSWidth">160</double>
 													<double key="NSMinWidth">10</double>
 													<double key="NSMaxWidth">3.4028230607370965e+38</double>
 													<object class="NSTableHeaderCell" key="NSHeaderCell">
@@ -151,7 +155,7 @@
 															<string key="NSColorName">controlBackgroundColor</string>
 															<object class="NSColor" key="NSColor">
 																<int key="NSColorSpace">3</int>
-																<bytes key="NSWhite">MC42NjY2NjY2ODY1AA</bytes>
+																<bytes key="NSWhite">MC42NjY2NjY2NjY3AA</bytes>
 															</object>
 														</object>
 														<object class="NSColor" key="NSTextColor">
@@ -166,9 +170,8 @@
 													<reference key="NSTableView" ref="1027958689"/>
 												</object>
 												<object class="NSTableColumn" id="681443988">
-													<double key="NSWidth">20</double>
-													<double key="NSMinWidth">10</double>
-													<double key="NSMaxWidth">3.4028234663852886e+38</double>
+													<double key="NSWidth">18</double>
+													<double key="NSMaxWidth">18</double>
 													<object class="NSTableHeaderCell" key="NSHeaderCell">
 														<int key="NSCellFlags">75628096</int>
 														<int key="NSCellFlags2">2048</int>
@@ -179,30 +182,27 @@
 													</object>
 													<object class="NSButtonCell" key="NSDataCell" id="440122922">
 														<int key="NSCellFlags">67239424</int>
-														<int key="NSCellFlags2">131072</int>
+														<int key="NSCellFlags2">0</int>
 														<string key="NSContents">Check</string>
-														<reference key="NSSupport" ref="26"/>
+														<reference key="NSSupport" ref="911500604"/>
 														<reference key="NSControlView" ref="1027958689"/>
-														<int key="NSButtonFlags">1211912447</int>
-														<int key="NSButtonFlags2">2</int>
-														<object class="NSCustomResource" key="NSNormalImage">
+														<int key="NSButtonFlags">-2042871553</int>
+														<int key="NSButtonFlags2">6</int>
+														<object class="NSCustomResource" key="NSNormalImage" id="655295073">
 															<string key="NSClassName">NSImage</string>
 															<string key="NSResourceName">EmulationReveal</string>
 														</object>
+														<reference key="NSAlternateImage" ref="655295073"/>
 														<string key="NSAlternateContents"/>
 														<string key="NSKeyEquivalent"/>
 														<int key="NSPeriodicDelay">200</int>
 														<int key="NSPeriodicInterval">25</int>
 													</object>
-													<int key="NSResizingMask">3</int>
-													<bool key="NSIsResizeable">YES</bool>
-													<bool key="NSIsEditable">YES</bool>
 													<reference key="NSTableView" ref="1027958689"/>
 												</object>
 												<object class="NSTableColumn" id="842509763">
-													<double key="NSWidth">20</double>
-													<double key="NSMinWidth">10</double>
-													<double key="NSMaxWidth">3.4028234663852886e+38</double>
+													<double key="NSWidth">18</double>
+													<double key="NSMaxWidth">18</double>
 													<object class="NSTableHeaderCell" key="NSHeaderCell">
 														<int key="NSCellFlags">75628096</int>
 														<int key="NSCellFlags2">2048</int>
@@ -215,11 +215,7 @@
 														<int key="NSCellFlags">67239424</int>
 														<int key="NSCellFlags2">0</int>
 														<string key="NSContents">Check</string>
-														<object class="NSFont" key="NSSupport" id="911500604">
-															<string key="NSName">LucidaGrande</string>
-															<double key="NSSize">13</double>
-															<int key="NSfFlags">1044</int>
-														</object>
+														<reference key="NSSupport" ref="911500604"/>
 														<reference key="NSControlView" ref="1027958689"/>
 														<int key="NSButtonFlags">-2042871553</int>
 														<int key="NSButtonFlags2">6</int>
@@ -232,9 +228,6 @@
 														<int key="NSPeriodicDelay">200</int>
 														<int key="NSPeriodicInterval">25</int>
 													</object>
-													<int key="NSResizingMask">3</int>
-													<bool key="NSIsResizeable">YES</bool>
-													<bool key="NSIsEditable">YES</bool>
 													<reference key="NSTableView" ref="1027958689"/>
 												</object>
 											</object>
@@ -421,7 +414,7 @@
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1440, 878}}</string>
 				<string key="NSMinSize">{256, 145}</string>
-				<string key="NSMaxSize">{3.40282e+38, 3.40282e+38}</string>
+				<string key="NSMaxSize">{1.79769e+308, 1.79769e+308}</string>
 			</object>
 			<object class="NSMenu" id="719851724">
 				<string key="NSTitle"/>
@@ -496,6 +489,14 @@
 						<reference key="destination" ref="719851724"/>
 					</object>
 					<int key="connectionID">1824</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">dataSource</string>
+						<reference key="source" ref="1027958689"/>
+						<reference key="destination" ref="762632889"/>
+					</object>
+					<int key="connectionID">1838</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -786,9 +787,9 @@
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>{{366, 160}, {256, 373}}</string>
+					<string>{{360, 140}, {256, 373}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{366, 160}, {256, 373}}</string>
+					<string>{{360, 140}, {256, 373}}</string>
 					<boolean value="YES"/>
 					<boolean value="NO"/>
 					<boolean value="YES"/>
@@ -855,7 +856,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">1837</int>
+			<int key="maxID">1838</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -869,22 +870,11 @@
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
-					<string key="className">InspectorWindowController</string>
+					<string key="className">EmulationWindowController</string>
 					<string key="superclassName">NSWindowController</string>
-					<object class="NSMutableDictionary" key="actions">
-						<string key="NS.key.0">toggleInspector:</string>
-						<string key="NS.object.0">id</string>
-					</object>
-					<object class="NSMutableDictionary" key="actionInfosByName">
-						<string key="NS.key.0">toggleInspector:</string>
-						<object class="IBActionInfo" key="NS.object.0">
-							<string key="name">toggleInspector:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">macosx/InspectorWindowController.h</string>
+						<string key="minorKey">macosx/EmulationWindowController.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
