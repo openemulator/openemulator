@@ -14,7 +14,7 @@
 #include "OEEDL.h"
 #include "OEComponent.h"
 
-// Storage
+// Notes:
 // * The framework first tries to mount on all available devices.
 // * If the mount failed, it tries to check whether a drive is capable of processing
 //   the image (validation), for displaying an appropriate error message

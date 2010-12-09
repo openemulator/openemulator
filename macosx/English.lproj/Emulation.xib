@@ -13,6 +13,7 @@
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
 			<integer value="1741"/>
+			<integer value="1808"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -805,8 +806,10 @@
 					<string>1741.IBPluginDependency</string>
 					<string>1742.IBPluginDependency</string>
 					<string>1742.IBViewBoundsToFrameTransform</string>
+					<string>1744.IBAttributePlaceholdersKey</string>
 					<string>1744.IBPluginDependency</string>
 					<string>1744.IBViewBoundsToFrameTransform</string>
+					<string>1745.IBAttributePlaceholdersKey</string>
 					<string>1745.IBPluginDependency</string>
 					<string>1745.IBViewBoundsToFrameTransform</string>
 					<string>1746.IBPluginDependency</string>
@@ -855,9 +858,25 @@
 					<object class="NSAffineTransform">
 						<bytes key="NSTransformStruct">P4AAAL+AAABCoAAAwagAAA</bytes>
 					</object>
+					<object class="NSMutableDictionary">
+						<string key="NS.key.0">ToolTip</string>
+						<object class="IBToolTipAttribute" key="NS.object.0">
+							<string key="name">ToolTip</string>
+							<reference key="object" ref="894865330"/>
+							<string key="toolTip">Delete the selected device.</string>
+						</object>
+					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<object class="NSAffineTransform">
 						<bytes key="NSTransformStruct">P4AAAL+AAABBwAAAwagAAA</bytes>
+					</object>
+					<object class="NSMutableDictionary">
+						<string key="NS.key.0">ToolTip</string>
+						<object class="IBToolTipAttribute" key="NS.object.0">
+							<string key="name">ToolTip</string>
+							<reference key="object" ref="1005311744"/>
+							<string key="toolTip">Create a new device.</string>
+						</object>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<object class="NSAffineTransform">
