@@ -20,8 +20,8 @@
 
 @interface ChooserViewController : NSViewController
 {
-	id fOutlineView;
-	id fImageBrowserView;
+	IBOutlet id fOutlineView;
+	IBOutlet id fImageBrowserView;
 	
 	id<ChooserDelegate> chooserDelegate;
 	

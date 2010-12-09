@@ -1,11 +1,11 @@
 
 /**
  * libemulation
- * Package class
+ * Package
  * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements an EDL package interface (both in zip file and package format)
+ * Implements a package (zip and directory type)
  */
 
 #include <fstream>

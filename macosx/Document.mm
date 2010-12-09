@@ -16,6 +16,8 @@
 #import "OEPortAudio.h"
 #import "OEEmulation.h"
 
+#import <sstream>
+
 @implementation Document
 
 - (id)init
@@ -23,6 +25,7 @@
 	if (self = [super init])
 	{
 		emulation = nil;
+		devicesInfo = nil;
 		
 		emulationWindowController = nil;
 	}
@@ -72,6 +75,10 @@
 	theEmulation->setComponent("hostAudio", oePortAudio);
 	theEmulation->open(getCString([url path]));
 	
+	OEDevicesInfo *theDevicesInfo = new OEDevicesInfo();
+	*theDevicesInfo = theEmulation->getDevicesInfo();
+	devicesInfo = theDevicesInfo;
+	
 	oePortAudio->addEmulation((OEEmulation *)emulation);
 	
 	emulation = theEmulation;
@@ -85,9 +92,26 @@
 	OEPortAudio *oePortAudio = (OEPortAudio *)[documentController oePortAudio];
 	oePortAudio->removeEmulation((OEEmulation *)emulation);
 	
+	delete (OEDevicesInfo *)devicesInfo;
 	delete (OEEmulation *)emulation;
 	
 	emulation = nil;
+}
+
+- (void)lockEmulation
+{
+	DocumentController *documentController;
+	documentController = [NSDocumentController sharedDocumentController];
+	OEPortAudio *oePortAudio = (OEPortAudio *)[documentController oePortAudio];
+	oePortAudio->lockEmulations();
+}
+
+- (void)unlockEmulation
+{
+	DocumentController *documentController;
+	documentController = [NSDocumentController sharedDocumentController];
+	OEPortAudio *oePortAudio = (OEPortAudio *)[documentController oePortAudio];
+	oePortAudio->unlockEmulations();
 }
 
 - (void *)emulation
@@ -176,13 +200,11 @@
 		string emulationPath = getCString([[absoluteURL path]
 										   stringByAppendingString:@"/"]);
 		
-		DocumentController *documentController;
-		documentController = [NSDocumentController sharedDocumentController];
+		[emulationWindowController updateOptions];
 		
-		OEPortAudio *oePortAudio = (OEPortAudio *)[documentController oePortAudio];
-		oePortAudio->lockEmulations();
+		[self lockEmulation];
 		bool isSaved = ((OEEmulation *)emulation)->save(emulationPath);
-		oePortAudio->unlockEmulations();
+		[self unlockEmulation];
 		
 		if (isSaved)
 			return YES;
@@ -236,9 +258,33 @@
 	[self addWindowController:emulationWindowController];
 }
 
-- (void *)devicesInfoMap
+- (void *)devicesInfo
 {
-	return ((OEEmulation *)emulation)->getDevicesInfoMap();
+	return devicesInfo;
+}
+
+- (NSString *)getEDLOptions
+{
+	string value;
+	
+	if (emulation)
+	{
+		[self lockEmulation];
+		value = ((OEEmulation *)emulation)->getOptions();
+		[self unlockEmulation];
+	}
+	
+	return getNSString(value);
+}
+
+- (void)setEDLOptions:(NSString *)value
+{
+	if (!emulation)
+		return;
+	
+	[self lockEmulation];
+	((OEEmulation *)emulation)->setOptions(getCString(value));
+	[self unlockEmulation];
 }
 
 - (void)addEDL:(NSString *)path
@@ -246,10 +292,6 @@
 {
 	if (!emulation)
 		return;
-	
-	DocumentController *documentController;
-	documentController = [NSDocumentController sharedDocumentController];
-	OEPortAudio *oePortAudio = (OEPortAudio *)[documentController oePortAudio];
 	
 	string pathString = getCString(path);
 	map<string, string> connectionsMap;
@@ -267,9 +309,10 @@
 		connectionsMap[inletRefString] = outletRefString;
 	}
 	
-	oePortAudio->lockEmulations();
+	[self lockEmulation];
 	bool isAdded = ((OEEmulation *)emulation)->addEDL(pathString, connectionsMap);
-	oePortAudio->unlockEmulations();
+	[self unlockEmulation];
+	
 	if (!isAdded)
 	{
 		NSString *messageText = @"The device could not be added.";
@@ -310,11 +353,10 @@
 			return;
 	}*/
 	
-	OEPortAudio *oePortAudio = (OEPortAudio *)
-	[[NSDocumentController sharedDocumentController] oePortAudio];
-	((OEPortAudio *)oePortAudio)->lockEmulations();
+	[self lockEmulation];
 	bool isRemoved = ((OEEmulation *)emulation)->removeDevice(refString);
-	((OEPortAudio *)oePortAudio)->unlockEmulations();
+	[self unlockEmulation];
+	
 	if (!isRemoved)
 	{
 		NSString *messageText = @"The device could not be removed.";
@@ -332,7 +374,9 @@
 	if (!emulation)
 		return NO;
 	
+	[self lockEmulation];
 	return ((OEEmulation *)emulation)->mount(getCString(path));
+	[self unlockEmulation];
 }
 
 - (BOOL)mountable:(NSString *)path
@@ -340,7 +384,9 @@
 	if (!emulation)
 		return NO;
 	
+	[self lockEmulation];
 	return ((OEEmulation *)emulation)->mountable(getCString(path));
+	[self unlockEmulation];
 }
 
 @end

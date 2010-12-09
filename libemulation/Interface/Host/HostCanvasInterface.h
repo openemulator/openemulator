@@ -11,10 +11,11 @@
 #ifndef _HOSTCANVASINTERFACE_H
 #define _HOSTCANVASINTERFACE_H
 
-// Comments
+// Notes
 // * A component should first request a canvas from the canvas controller.
 //   Then it should subscribe to canvas events.
 // * Axes are in [-1.0 .. 1.0] coordinates.
+
 typedef enum
 {
 	HOST_CANVAS_SET_CAPTUREMODE,
@@ -59,7 +60,7 @@ typedef enum
 } HostCanvasCaptureModes;
 
 //
-// SET_WINDOWFRAME and GET_WINDOWFRAME use an STL string, in the format:
+// SET_WINDOWFRAME and GET_WINDOWFRAME use an STL string in the format:
 // [originX] [originY] [width] [height] [visible]
 // The coordinate system's origin is lower left
 // [visible] is "0" or "1"

@@ -129,26 +129,26 @@ OEHeaderInfo OEEDL::getHeaderInfo()
 	return headerInfo;
 }
 
-void OEEDL::setWindowFrame(string windowFrame)
+string OEEDL::getOptions()
 {
+	string value;
+	
 	if (doc)
 	{
 		xmlNodePtr rootNode = xmlDocGetRootElement(doc);
-		setNodeProperty(rootNode, "windowFrame", windowFrame);
+		value = getNodeProperty(rootNode, "windowFrame");
 	}
+	
+	return value;
 }
 
-string OEEDL::getWindowFrame()
+void OEEDL::setOptions(string value)
 {
-	string windowFrame;
-	
 	if (doc)
 	{
 		xmlNodePtr rootNode = xmlDocGetRootElement(doc);
-		windowFrame = getNodeProperty(rootNode, "windowFrame");
+		setNodeProperty(rootNode, "windowFrame", value);
 	}
-	
-	return windowFrame;
 }
 
 OEPortsInfo OEEDL::getFreePortsInfo()
@@ -221,17 +221,6 @@ bool OEEDL::validateEmulation()
 	return (getNodeProperty(rootNode, "version") == "1.0");
 }
 
-void OEEDL::setNodeProperty(xmlNodePtr node, string name, string value)
-{
-	xmlSetProp(node, BAD_CAST name.c_str(), BAD_CAST value.c_str());
-}
-
-bool OEEDL::hasNodeProperty(xmlNodePtr node, string name)
-{
-	char *value = (char *) xmlGetProp(node, BAD_CAST name.c_str());
-	return (value != NULL);
-}
-
 string OEEDL::getNodeProperty(xmlNodePtr node, string name)
 {
 	char *value = (char *) xmlGetProp(node, BAD_CAST name.c_str());
@@ -241,20 +230,15 @@ string OEEDL::getNodeProperty(xmlNodePtr node, string name)
 	return valueString;
 }
 
-bool OEEDL::writeFile(string path, OEData *data)
+bool OEEDL::hasNodeProperty(xmlNodePtr node, string name)
 {
-	bool success = false;
-	
-	ofstream file(path.c_str());
-	
-	if (file.is_open())
-	{
-		file.write(&data->front(), data->size());
-		success = file.good();
-		file.close();
-	}
-	
-	return success;
+	char *value = (char *) xmlGetProp(node, BAD_CAST name.c_str());
+	return (value != NULL);
+}
+
+void OEEDL::setNodeProperty(xmlNodePtr node, string name, string value)
+{
+	xmlSetProp(node, BAD_CAST name.c_str(), BAD_CAST value.c_str());
 }
 
 bool OEEDL::readFile(string path, OEData *data)
@@ -271,6 +255,22 @@ bool OEEDL::readFile(string path, OEData *data)
 		
 		data->resize(size);
 		file.read(&data->front(), size);
+		success = file.good();
+		file.close();
+	}
+	
+	return success;
+}
+
+bool OEEDL::writeFile(string path, OEData *data)
+{
+	bool success = false;
+	
+	ofstream file(path.c_str());
+	
+	if (file.is_open())
+	{
+		file.write(&data->front(), data->size());
 		success = file.good();
 		file.close();
 	}

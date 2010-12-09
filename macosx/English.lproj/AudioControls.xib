@@ -454,6 +454,10 @@
 				<string key="NSFrameAutosaveName"/>
 			</object>
 			<object class="NSUserDefaultsController" id="517465799">
+				<object class="NSMutableArray" key="NSDeclaredKeys">
+					<bool key="EncodedWithXMLCoder">YES</bool>
+					<string>OEAudioPlayThrough</string>
+				</object>
 				<bool key="NSSharedInstance">YES</bool>
 			</object>
 		</object>
@@ -467,22 +471,6 @@
 						<reference key="destination" ref="763262381"/>
 					</object>
 					<int key="connectionID">1381</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: values.OEPlayThrough</string>
-						<reference key="source" ref="49332116"/>
-						<reference key="destination" ref="517465799"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="49332116"/>
-							<reference key="NSDestination" ref="517465799"/>
-							<string key="NSLabel">value: values.OEPlayThrough</string>
-							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">values.OEPlayThrough</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">1640</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
@@ -597,26 +585,6 @@
 					<int key="connectionID">1656</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: values.OEPlayVolume</string>
-						<reference key="source" ref="810346905"/>
-						<reference key="destination" ref="517465799"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="810346905"/>
-							<reference key="NSDestination" ref="517465799"/>
-							<string key="NSLabel">value: values.OEPlayVolume</string>
-							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">values.OEPlayVolume</string>
-							<object class="NSDictionary" key="NSOptions">
-								<string key="NS.key.0">NSNullPlaceholder</string>
-								<real value="1" key="NS.object.0"/>
-							</object>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">1789</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">fPlayPosition</string>
 						<reference key="source" ref="762632889"/>
@@ -631,6 +599,42 @@
 						<reference key="destination" ref="825813023"/>
 					</object>
 					<int key="connectionID">1792</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: values.OEAudioPlayVolume</string>
+						<reference key="source" ref="810346905"/>
+						<reference key="destination" ref="517465799"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="810346905"/>
+							<reference key="NSDestination" ref="517465799"/>
+							<string key="NSLabel">value: values.OEAudioPlayVolume</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">values.OEAudioPlayVolume</string>
+							<object class="NSDictionary" key="NSOptions">
+								<string key="NS.key.0">NSNullPlaceholder</string>
+								<real value="1" key="NS.object.0"/>
+							</object>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">1794</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: values.OEAudioPlayThrough</string>
+						<reference key="source" ref="49332116"/>
+						<reference key="destination" ref="517465799"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="49332116"/>
+							<reference key="NSDestination" ref="517465799"/>
+							<string key="NSLabel">value: values.OEAudioPlayThrough</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">values.OEAudioPlayThrough</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">1795</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -1133,9 +1137,9 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{88, 67}, {255, 250}}</string>
+					<string>{{248, 207}, {255, 250}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{88, 67}, {255, 250}}</string>
+					<string>{{248, 207}, {255, 250}}</string>
 					<boolean value="NO"/>
 					<boolean value="NO"/>
 					<boolean value="NO"/>
@@ -1190,7 +1194,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">1792</int>
+			<int key="maxID">1795</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -1263,7 +1267,6 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>fDocumentController</string>
-							<string>fOpenPlayButton</string>
 							<string>fPlayDurationLabel</string>
 							<string>fPlayNameLabel</string>
 							<string>fPlayPosition</string>
@@ -1286,7 +1289,6 @@
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
-							<string>id</string>
 						</object>
 					</object>
 					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
@@ -1294,7 +1296,6 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>fDocumentController</string>
-							<string>fOpenPlayButton</string>
 							<string>fPlayDurationLabel</string>
 							<string>fPlayNameLabel</string>
 							<string>fPlayPosition</string>
@@ -1310,10 +1311,6 @@
 							<object class="IBToOneOutletInfo">
 								<string key="name">fDocumentController</string>
 								<string key="candidateClassName">DocumentController</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">fOpenPlayButton</string>
-								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">fPlayDurationLabel</string>

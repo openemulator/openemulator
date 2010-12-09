@@ -78,6 +78,7 @@
 							  [NSNumber numberWithBool:NO], @"OEAudioFullDuplex",
 							  [NSNumber numberWithFloat:1.0], @"OEAudioPlayVolume",
 							  [NSNumber numberWithBool:YES], @"OEAudioPlayThrough",
+							  [NSNumber numberWithBool:YES], @"OEVideoUseGPU",
 							  nil
 							  ];
 	[userDefaults registerDefaults:defaults]; 
@@ -207,8 +208,8 @@
 									   @"Try ejecting a disk image in the emulation."]];
 			[alert setAlertStyle:NSCriticalAlertStyle];
 			[alert runModal];
-			 
-			 return YES;
+			
+			return YES;
 		}
 	}
 	

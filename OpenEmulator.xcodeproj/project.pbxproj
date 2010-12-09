@@ -222,7 +222,7 @@
 		003318AE1101492B00CC1782 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Connector.xib; sourceTree = "<group>"; };
 		003E2597107075D900185260 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
 		0054868F0FDC817900DBCFA8 /* Emulation.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Emulation.icns; sourceTree = "<group>"; };
-		0054E2E41131B9EF006D32D9 /* oecli */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = oecli; sourceTree = BUILT_PRODUCTS_DIR; };
+		0054E2E41131B9EF006D32D9 /* openemulator */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = openemulator; sourceTree = BUILT_PRODUCTS_DIR; };
 		0054E4A01131BE7A006D32D9 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		0054E4A61131BE8A006D32D9 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		0054E6301131BEE7006D32D9 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
@@ -717,7 +717,7 @@
 			isa = PBXGroup;
 			children = (
 				8D15AC370486D014006FF6A4 /* OpenEmulator.app */,
-				0054E2E41131B9EF006D32D9 /* oecli */,
+				0054E2E41131B9EF006D32D9 /* openemulator */,
 				00039E7C12B03F660025D374 /* libemulation-hal.a */,
 				00039EFE12B04E910025D374 /* libemulation.a */,
 			);
@@ -912,7 +912,7 @@
 			);
 			name = openemulator;
 			productName = oecli;
-			productReference = 0054E2E41131B9EF006D32D9 /* oecli */;
+			productReference = 0054E2E41131B9EF006D32D9 /* openemulator */;
 			productType = "com.apple.product-type.tool";
 		};
 		006EECA30FCA5C31003D2C8D /* emulation */ = {
@@ -1322,7 +1322,7 @@
 					AppKit,
 				);
 				PREBINDING = NO;
-				PRODUCT_NAME = oecli;
+				PRODUCT_NAME = openemulator;
 			};
 			name = Debug;
 		};
@@ -1350,7 +1350,7 @@
 					AppKit,
 				);
 				PREBINDING = NO;
-				PRODUCT_NAME = oecli;
+				PRODUCT_NAME = openemulator;
 				ZERO_LINK = NO;
 			};
 			name = Release;

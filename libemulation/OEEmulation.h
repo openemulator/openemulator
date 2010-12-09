@@ -54,6 +54,7 @@ typedef vector<OESetting> OESettings;
 
 typedef struct
 {
+	string id;
 	string label;
 	string image;
 	OESettings settings;
@@ -64,13 +65,13 @@ typedef struct
 	OEComponents canvases;
 	OEComponents storages;
 } OEDeviceInfo;
-typedef map<string, OEDeviceInfo> OEDevicesInfoMap;
+typedef vector<OEDeviceInfo> OEDevicesInfo;
 
 typedef map<string, OEComponent *> OEComponentsMap;
 
 typedef map<string, string> OEPropertiesMap;
 
-typedef void (*OEDevicesInfoMapDidUpdateCallback)();
+typedef void (*OEDevicesInfoDidUpdateCallback)();
 typedef void (*OERunAlertCallback)(string message);
 typedef OEComponent *(*OEAddCanvasCallback)(void *userData);
 typedef void (*OERemoveCanvasCallback)(OEComponent *canvas, void *userData);
@@ -82,8 +83,8 @@ public:
 	~OEEmulation();
 	
 	void setResourcePath(string path);
-	void setDevicesInfoMapDidUpdateCallback(OEDevicesInfoMapDidUpdateCallback
-											devicesInfoDidUpdate);
+	void setDevicesInfoDidUpdateCallback(OEDevicesInfoDidUpdateCallback
+										 devicesInfoDidUpdate);
 	void setAlertCallback(OERunAlertCallback runAlert);
 	void setAddCanvasCallback(OEAddCanvasCallback addCanvas,
 							  void *userData);
@@ -95,7 +96,7 @@ public:
 	
 	bool setComponent(string id, OEComponent *component);
 	
-	OEDevicesInfoMap *getDevicesInfoMap();
+	OEDevicesInfo getDevicesInfo();
 	bool addEDL(string path, OEIdMap idMap);
 	bool removeDevice(string id);
 	
@@ -107,9 +108,9 @@ public:
 private:
 	string resourcePath;
 	OEComponentsMap componentsMap;
-	OEDevicesInfoMap devicesInfoMap;
+	OEDevicesInfo devicesInfo;
 	
-	OEDevicesInfoMapDidUpdateCallback devicesInfoMapDidUpdate;
+	OEDevicesInfoDidUpdateCallback devicesInfoDidUpdate;
 	OERunAlertCallback runAlert;
 	OEAddCanvasCallback addCanvas;
 	void *addCanvasUserData;
@@ -118,6 +119,7 @@ private:
 	
 	OEComponent *getComponent(string id);
 	string getDeviceId(OEComponent *component);
+	OEDeviceInfo *getDeviceInfo(string id);
 	
 	bool dumpEmulation(OEData *data);
 	void parseEmulation();

@@ -14,4 +14,6 @@
 {
 }
 
+- (void)updateOptions;
+
 @end

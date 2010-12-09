@@ -54,8 +54,8 @@ public:
 	void close();
 	
 	OEHeaderInfo getHeaderInfo();
-	void setWindowFrame(string windowFrame);
-	string getWindowFrame();
+	string getOptions();
+	void setOptions(string value);
 	OEPortsInfo getFreePortsInfo();
 	OEConnectorsInfo getFreeConnectorsInfo();
 	
@@ -64,12 +64,12 @@ protected:
 	OEPackage *package;
 	xmlDocPtr doc;
 	
-	void setNodeProperty(xmlNodePtr node, string name, string value);
-	bool hasNodeProperty(xmlNodePtr node, string name);
 	string getNodeProperty(xmlNodePtr node, string name);
+	bool hasNodeProperty(xmlNodePtr node, string name);
+	void setNodeProperty(xmlNodePtr node, string name, string value);
 	
-	bool writeFile(string path, OEData *data);
 	bool readFile(string path, OEData *data);
+	bool writeFile(string path, OEData *data);
 	
 	string getPathExtension(string path);
 	

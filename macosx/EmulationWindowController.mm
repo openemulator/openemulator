@@ -10,6 +10,7 @@
 
 #import "EmulationWindowController.h"
 #import "Document.h"
+#import "StringConversion.h"
 
 #import "OEEmulation.h"
 
@@ -34,6 +35,34 @@
 	[[self window] setToolbar:toolbar];
 	
 	[toolbar release];
+	
+	NSString *frameString = [[self document] getEDLOptions];
+	NSArray *components = [frameString componentsSeparatedByString:@" "];
+	if ([components count] == 9)
+	{
+		NSString *theString = [NSString string];
+		for (int i = 0; i < 8; i++)
+		{
+			theString = [theString stringByAppendingString:[components objectAtIndex:i]];
+			theString = [theString stringByAppendingString:@" "];
+		}
+		
+		NSString *isVisible = [components objectAtIndex:8];
+		
+		[[self window] setFrameFromString:theString];
+		if ([isVisible compare:@"0"] == NSOrderedSame)
+			[[self window] orderOut];
+	}
+}
+
+- (void)updateOptions
+{
+	int isVisible = [[self window] isVisible];
+	NSString *frameString = [[self window] stringWithSavedFrame];
+	
+	frameString = [frameString stringByAppendingFormat:@"%d", isVisible];
+	
+	[[self document] setEDLOptions:frameString];
 }
 
 - (NSToolbarItem *)toolbar:(NSToolbar *)toolbar
@@ -82,17 +111,19 @@
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
 {
-	void *devicesInfoMap = [(Document *)[self document] devicesInfoMap];
+	OEDevicesInfo *devicesInfo = (OEDevicesInfo *)[[self document] devicesInfo];
 	
-	return ((OEDevicesInfoMap *)devicesInfoMap)->size();
+	return (devicesInfo)->size();
 }
 
 - (id)tableView:(NSTableView *)tableView
 objectValueForTableColumn:(NSTableColumn *)tableColumn
 			row:(NSInteger)rowIndex
 {	
-	if ([[tableColumn identifier] compare:@"1"] == NSOrderedSame)
-		return @"Apple II\nNowhere";
+	OEDevicesInfo *devicesInfo = (OEDevicesInfo *)[[self document] devicesInfo];
+	
+	if (rowIndex < devicesInfo->size())
+		return getNSString((*devicesInfo)[rowIndex].label);
 	
 	return nil;
 }

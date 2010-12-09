@@ -1,8 +1,10 @@
 ==2010-12-01==
+* Persistency of the main emulation window
 * Find a way to integrate OEEmulation device info results with the EDL
 * Implemented OEEDL free ports and connector infos
 * Improved chooser view (template chooser) with lazy initialization
 * Implemented OEEmulation getDevicesInfoMap
+* Implemented main emulation window context menu
 
 ==2010-11-01==
 * Fixed ${id} when saving emulation data

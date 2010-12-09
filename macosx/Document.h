@@ -17,6 +17,7 @@
 @interface Document : NSDocument
 {
 	void *emulation;
+	void *devicesInfo;
 	
 	EmulationWindowController *emulationWindowController;
 }
@@ -25,12 +26,14 @@
 
 - (void)newEmulation:(NSURL *)url;
 - (void)deleteEmulation;
-- (void *)emulation;
 
 - (id)initWithTemplateURL:(NSURL *)templateURL error:(NSError **)outError;
 - (IBAction)saveDocumentAsTemplate:(id)sender;
 
-- (void *)devicesInfoMap;
+- (void *)devicesInfo;
+
+- (NSString *)getEDLOptions;
+- (void)setEDLOptions:(NSString *)value;
 
 - (void)addEDL:(NSString *)path connections:(NSDictionary *)connections;
 - (void)removeDevice:(NSDictionary *)dict;

@@ -20,7 +20,7 @@
 <!ATTLIST edl label CDATA #IMPLIED>
 <!ATTLIST edl image CDATA #IMPLIED>
 <!ATTLIST edl description CDATA #IMPLIED>
-<!ATTLIST edl windowFrame CDATA #IMPLIED>
+<!ATTLIST edl options CDATA #IMPLIED>
 
 <!ELEMENT device (setting*)>
 <!ATTLIST device id ID #REQUIRED>

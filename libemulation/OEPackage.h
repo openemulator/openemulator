@@ -1,11 +1,11 @@
 
 /**
  * libemulation
- * Package class
+ * Package
  * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Type for accessing EDL packages (zip and directory type)
+ * Implements a package (zip and directory type)
  */
 
 #ifndef _OEPACKAGE_H
