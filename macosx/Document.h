@@ -18,9 +18,6 @@
 {
 	void *emulation;
 	
-	NSMutableArray *devices;
-	NSMutableArray *freePorts;
-	
 	EmulationWindowController *emulationWindowController;
 }
 
@@ -33,13 +30,12 @@
 - (id)initWithTemplateURL:(NSURL *)templateURL error:(NSError **)outError;
 - (IBAction)saveDocumentAsTemplate:(id)sender;
 
+- (void *)devicesInfoMap;
+
 - (void)addEDL:(NSString *)path connections:(NSDictionary *)connections;
 - (void)removeDevice:(NSDictionary *)dict;
 
-- (NSArray *)freePorts;
-
-- (NSArray *)devices;
-- (void)insertObject:(id)value inDevicesAtIndex:(NSUInteger)index;
-- (void)removeObjectFromDevicesAtIndex:(NSUInteger)index;
+- (BOOL)mount:(NSString *)path;
+- (BOOL)mountable:(NSString *)path;
 
 @end

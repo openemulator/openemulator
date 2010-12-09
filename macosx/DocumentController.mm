@@ -30,6 +30,7 @@
 		oePortAudio = new OEPortAudio();
 		
 		diskImagePathExtensions = [[NSArray alloc] initWithObjects:
+								   @"bin",
 								   @"dsk", @"do", @"d13", @"po", @"cpm", @"nib", @"v2d",
 								   @"vdsk",
 								   @"2mg", @"2img",
@@ -69,36 +70,39 @@
 
 - (void)applicationWillFinishLaunching:(NSNotification *)notification
 {
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	
-	if ([defaults boolForKey:@"OEInspectorVisible"])
+	NSDictionary *defaults = [NSDictionary dictionaryWithObjectsAndKeys:
+							  [NSNumber numberWithBool:NO], @"OEInspectorVisible",
+							  [NSNumber numberWithBool:NO], @"OEAudioControlsVisible",
+							  [NSNumber numberWithBool:NO], @"OEAudioFullDuplex",
+							  [NSNumber numberWithFloat:1.0], @"OEAudioPlayVolume",
+							  [NSNumber numberWithBool:YES], @"OEAudioPlayThrough",
+							  nil
+							  ];
+	[userDefaults registerDefaults:defaults]; 
+	
+	if ([userDefaults boolForKey:@"OEInspectorVisible"])
 		[fInspectorWindowController showWindow:self];
-	if ([defaults boolForKey:@"OEAudioControlsVisible"])
+	if ([userDefaults boolForKey:@"OEAudioControlsVisible"])
 		[fAudioControlsWindowController showWindow:self];
 	
-	if (![defaults valueForKey:@"OEAudioFullDuplex"])
-		[defaults setBool:NO forKey:@"OEAudioFullDuplex"];
-	if (![defaults valueForKey:@"OEAudioPlayVolume"])
-		[defaults setFloat:1.0 forKey:@"OEAudioPlayVolume"];
-	if (![defaults valueForKey:@"OEAudioPlayThrough"])
-		[defaults setBool:YES forKey:@"OEAudioPlayThrough"];
+	[userDefaults addObserver:self
+				   forKeyPath:@"OEAudioFullDuplex"
+					  options:NSKeyValueObservingOptionNew
+					  context:nil];
+	[userDefaults addObserver:self
+				   forKeyPath:@"OEAudioPlayVolume"
+					  options:NSKeyValueObservingOptionNew
+					  context:nil];
+	[userDefaults addObserver:self
+				   forKeyPath:@"OEAudioPlayThrough"
+					  options:NSKeyValueObservingOptionNew
+					  context:nil];
 	
-	[defaults addObserver:self
-			   forKeyPath:@"OEAudioFullDuplex"
-				  options:NSKeyValueObservingOptionNew
-				  context:nil];
-	[defaults addObserver:self
-			   forKeyPath:@"OEAudioPlayVolume"
-				  options:NSKeyValueObservingOptionNew
-				  context:nil];
-	[defaults addObserver:self
-			   forKeyPath:@"OEAudioPlayThrough"
-				  options:NSKeyValueObservingOptionNew
-				  context:nil];
-	
-	((OEPortAudio *)oePortAudio)->setFullDuplex([defaults boolForKey:@"OEAudioFullDuplex"]);
-	((OEPortAudio *)oePortAudio)->setPlayVolume([defaults floatForKey:@"OEAudioPlayVolume"]);
-	((OEPortAudio *)oePortAudio)->setPlayThrough([defaults boolForKey:@"OEAudioPlayThrough"]);
+	((OEPortAudio *)oePortAudio)->setFullDuplex([userDefaults boolForKey:@"OEAudioFullDuplex"]);
+	((OEPortAudio *)oePortAudio)->setPlayVolume([userDefaults floatForKey:@"OEAudioPlayVolume"]);
+	((OEPortAudio *)oePortAudio)->setPlayThrough([userDefaults boolForKey:@"OEAudioPlayThrough"]);
 	
 	((OEPortAudio *)oePortAudio)->open();
 }
@@ -111,11 +115,11 @@
 {
 	((OEPortAudio *)oePortAudio)->close();
 	
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	[defaults setBool:[[fInspectorWindowController window] isVisible]
-			   forKey:@"OEInspectorVisible"];
-	[defaults setBool:[[fAudioControlsWindowController window] isVisible]
-			   forKey:@"OEAudioControlsVisible"];
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	[userDefaults setBool:[[fInspectorWindowController window] isVisible]
+				   forKey:@"OEInspectorVisible"];
+	[userDefaults setBool:[[fAudioControlsWindowController window] isVisible]
+				   forKey:@"OEAudioControlsVisible"];
 	
 	return NSTerminateNow;
 }
@@ -138,24 +142,14 @@
 						change:(NSDictionary *)change
                        context:(void *)context
 {
+	id theObject = [change objectForKey:NSKeyValueChangeNewKey];
+	
 	if ([keyPath isEqualToString:@"OEAudioFullDuplex"])
-	{
-		id object = [change objectForKey:NSKeyValueChangeNewKey];
-		BOOL value = [object intValue];
-		((OEPortAudio *)oePortAudio)->setFullDuplex(value);
-	}
+		((OEPortAudio *)oePortAudio)->setFullDuplex([theObject boolValue]);
 	else if ([keyPath isEqualToString:@"OEAudioPlayVolume"])
-	{
-		id object = [change objectForKey:NSKeyValueChangeNewKey];
-		float value = [object floatValue];
-		((OEPortAudio *)oePortAudio)->setPlayVolume(value);
-	}
+		((OEPortAudio *)oePortAudio)->setPlayVolume([theObject floatValue]);
 	else if ([keyPath isEqualToString:@"OEAudioPlayThrough"])
-	{
-		id object = [change objectForKey:NSKeyValueChangeNewKey];
-		BOOL value = [object intValue];
-		((OEPortAudio *)oePortAudio)->setPlayThrough(value);
-	}
+		((OEPortAudio *)oePortAudio)->setPlayThrough([theObject boolValue]);
 }
 
 - (BOOL)application:(NSApplication *)theApplication
@@ -177,8 +171,7 @@
 	// Paste text
 	if ([pathExtension compare:@"txt"] == NSOrderedSame)
 	{
-		// To-Do: Find current canvas
-		// To-Do: Paste
+		// To-Do: Paste to activeWindow
 		return YES;
 	}
 	
@@ -200,7 +193,23 @@
 	// Mount disk image
 	if ([diskImagePathExtensions containsObject:pathExtension])
 	{
-		// To-Do:
+		if ([[self currentDocument] mount:path])
+			return YES;
+		
+		if ([[self currentDocument] mountable:path])
+		{
+			NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+			[alert setMessageText:[NSString localizedStringWithFormat:
+								   @"The document \u201C%@\u201D could not be opened. "
+								   "All devices capable of opening this file are busy.",
+								   [path lastPathComponent]]];
+			[alert setInformativeText:[NSString localizedStringWithFormat:
+									   @"Try ejecting a disk image in the emulation."]];
+			[alert setAlertStyle:NSCriticalAlertStyle];
+			[alert runModal];
+			 
+			 return YES;
+		}
 	}
 	
 	// Display error
@@ -341,91 +350,6 @@
 		return [document autorelease];
 	
 	return nil;
-}
-
-- (BOOL)addEmulation:(void *)emulation
-{
-	return ((OEPortAudio *)oePortAudio)->addEmulation((OEEmulation *)emulation);
-}
-
-- (void)removeEmulation:(void *)emulation
-{
-	((OEPortAudio *)oePortAudio)->removeEmulation((OEEmulation *)emulation);
-}
-
-- (void)openPlayer:(NSString *)path
-{
-	((OEPortAudio *)oePortAudio)->openPlayer(getCString(path));
-}
-
-- (void)closePlayer
-{
-	return ((OEPortAudio *)oePortAudio)->closePlayer();
-}
-
-- (void)setPlayPosition:(float)time
-{
-	return ((OEPortAudio *)oePortAudio)->setPlayPosition(time);
-}
-
-- (void)play
-{
-	return ((OEPortAudio *)oePortAudio)->play();
-}
-
-- (void)pause
-{
-	return ((OEPortAudio *)oePortAudio)->pause();
-}
-
-- (BOOL)isPlaying
-{
-	return ((OEPortAudio *)oePortAudio)->isPlaying();
-}
-
-- (float)getPlayTime
-{
-	return ((OEPortAudio *)oePortAudio)->getPlayTime();
-}
-
-- (float)getPlayDuration
-{
-	return ((OEPortAudio *)oePortAudio)->getPlayDuration();
-}
-
-- (void)openRecorder:(NSString *)path
-{
-	((OEPortAudio *)oePortAudio)->openRecorder(getCString(path));
-}
-
-- (void)closeRecorder
-{
-	return ((OEPortAudio *)oePortAudio)->closeRecorder();
-}
-
-- (void)record
-{
-	return ((OEPortAudio *)oePortAudio)->record();
-}
-
-- (void)stop
-{
-	return ((OEPortAudio *)oePortAudio)->stop();
-}
-
-- (BOOL)isRecording
-{
-	return ((OEPortAudio *)oePortAudio)->isRecording();
-}
-
-- (float)getRecordingTime
-{
-	return ((OEPortAudio *)oePortAudio)->getRecordingTime();
-}
-
-- (long long)getRecordingSize
-{
-	return ((OEPortAudio *)oePortAudio)->getRecordingSize();
 }
 
 - (void)disableMenuBar

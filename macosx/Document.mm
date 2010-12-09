@@ -24,9 +24,6 @@
 	{
 		emulation = nil;
 		
-		freePorts = [[NSMutableArray alloc] init];
-		devices = [[NSMutableArray alloc] init];
-		
 		emulationWindowController = nil;
 	}
 	
@@ -54,8 +51,6 @@
 {
 	[self deleteEmulation];
 	
-	[freePorts release];
-	[devices release];
 	[emulationWindowController release];
 	
 	[super dealloc];
@@ -70,26 +65,28 @@
 {
 	DocumentController *documentController;
 	documentController = [NSDocumentController sharedDocumentController];
+	OEPortAudio *oePortAudio = (OEPortAudio *)[documentController oePortAudio];
 	
 	OEEmulation *theEmulation = new OEEmulation();
 	theEmulation->setResourcePath(getCString([[NSBundle mainBundle] resourcePath]));
-	
-	OEPortAudio *oePortAudio = (OEPortAudio *)
-	[[NSDocumentController sharedDocumentController] oePortAudio];
 	theEmulation->setComponent("hostAudio", oePortAudio);
-	
 	theEmulation->open(getCString([url path]));
 	
-	[documentController addEmulation:theEmulation];
+	oePortAudio->addEmulation((OEEmulation *)emulation);
 	
 	emulation = theEmulation;
 }
 
 - (void)deleteEmulation
 {
-	[[NSDocumentController sharedDocumentController] removeEmulation:emulation];
+	DocumentController *documentController;
+	documentController = [NSDocumentController sharedDocumentController];
+	
+	OEPortAudio *oePortAudio = (OEPortAudio *)[documentController oePortAudio];
+	oePortAudio->removeEmulation((OEEmulation *)emulation);
 	
 	delete (OEEmulation *)emulation;
+	
 	emulation = nil;
 }
 
@@ -149,78 +146,6 @@
 	return aString;
 }
 
-- (void)updateDevices
-{
-	int count;
-	
-	// Clean up
-	[freePorts removeAllObjects];
-	
-	count = [devices count];
-	for (int i = 0; i < count; i++)
-		[self removeObjectFromDevicesAtIndex:0];
-	
-	// Process inlets
-/*	OEPorts *inlets = ((OEPortAudioEmulation *)emulation)->getInlets();
-	for (OEPorts::iterator inlet = inlets->begin();
-		 inlet != inlets->end();
-		 inlet++)
-	{
-		if ((*inlet)->connection)
-			continue;
-		
-		NSString *ref = getNSString((*inlet)->ref);
-		NSString *type = getNSString((*inlet)->type);
-		NSString *labelName = getNSString((*inlet)->label);
-		NSString *imageName = getNSString((*inlet)->image);
-		
-		NSMutableDictionary *dict = [[[NSMutableDictionary alloc] init] autorelease];
-		[dict setObject:ref forKey:@"ref"];
-		[dict setObject:type forKey:@"type"];
-		[dict setObject:labelName forKey:@"label"];
-		[dict setObject:imageName forKey:@"image"];
-		
-		[freeInlets addObject:dict];
-	}
-	
-	// Process devices
-	int deviceIndex = 0;
-	OEDevices *oeDevices = ((OEPortAudioEmulation *)emulation)->getDevices();
-	for (OEDevices::iterator device = oeDevices->begin();
-		 device != oeDevices->end();
-		 device++)
-	{
-		NSString *deviceName = getNSString((*device)->name);
-		NSString *deviceLabel = getNSString((*device)->label);
-		NSString *deviceImage = getNSString((*device)->image);
-		NSString *connectionLabel = getNSString((*device)->connectionLabel);
-		
-		NSImage *theImage = [self getResourceImage:deviceImage];
-		
-		NSString *informativeText = @"";
-		if ([connectionLabel length] > 0)
-			informativeText = [NSString localizedStringWithFormat:@"\n(on %@)",
-							   connectionLabel];
-		NSAttributedString *theTitle = [self formatDeviceLabel:deviceLabel
-										   withInformativeText:informativeText];
-		
-		BOOL isRemovable = ((*device)->label == "static");
-		NSNumber *removable = [NSNumber numberWithBool:isRemovable];
-		
-		NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
-							  theTitle, @"title",
-							  theImage, @"image",
-							  deviceLabel, @"label",
-							  deviceName, @"name",
-							  removable, @"removable",
-							  nil];
-		
-		[self insertObject:dict inDevicesAtIndex:deviceIndex++];
-	}*/
-	
-	return;
-}
-
 - (BOOL)readFromURL:(NSURL *)absoluteURL
 			 ofType:(NSString *)typeName
 			  error:(NSError **)outError
@@ -231,11 +156,7 @@
 	if (emulation)
 	{
 		if (((OEEmulation *)emulation)->isOpen())
-		{
-			[self updateDevices];
-			
 			return YES;
-		}
 		
 		[self deleteEmulation];
 	}
@@ -255,11 +176,13 @@
 		string emulationPath = getCString([[absoluteURL path]
 										   stringByAppendingString:@"/"]);
 		
-		OEPortAudio *oePortAudio = (OEPortAudio *)
-		[[NSDocumentController sharedDocumentController] oePortAudio];
-		((OEPortAudio *)oePortAudio)->lockEmulations();
+		DocumentController *documentController;
+		documentController = [NSDocumentController sharedDocumentController];
+		
+		OEPortAudio *oePortAudio = (OEPortAudio *)[documentController oePortAudio];
+		oePortAudio->lockEmulations();
 		bool isSaved = ((OEEmulation *)emulation)->save(emulationPath);
-		((OEPortAudio *)oePortAudio)->unlockEmulations();
+		oePortAudio->unlockEmulations();
 		
 		if (isSaved)
 			return YES;
@@ -307,9 +230,27 @@
 		[[NSAlert alertWithError:error] runModal];
 }
 
+- (void)makeWindowControllers
+{
+	emulationWindowController = [[EmulationWindowController alloc] init];
+	[self addWindowController:emulationWindowController];
+}
+
+- (void *)devicesInfoMap
+{
+	return ((OEEmulation *)emulation)->getDevicesInfoMap();
+}
+
 - (void)addEDL:(NSString *)path
    connections:(NSDictionary *)connections
 {
+	if (!emulation)
+		return;
+	
+	DocumentController *documentController;
+	documentController = [NSDocumentController sharedDocumentController];
+	OEPortAudio *oePortAudio = (OEPortAudio *)[documentController oePortAudio];
+	
 	string pathString = getCString(path);
 	map<string, string> connectionsMap;
 	
@@ -326,11 +267,9 @@
 		connectionsMap[inletRefString] = outletRefString;
 	}
 	
-	OEPortAudio *oePortAudio = (OEPortAudio *)
-	[[NSDocumentController sharedDocumentController] oePortAudio];
-	((OEPortAudio *)oePortAudio)->lockEmulations();
+	oePortAudio->lockEmulations();
 	bool isAdded = ((OEEmulation *)emulation)->addEDL(pathString, connectionsMap);
-	((OEPortAudio *)oePortAudio)->unlockEmulations();
+	oePortAudio->unlockEmulations();
 	if (!isAdded)
 	{
 		NSString *messageText = @"The device could not be added.";
@@ -341,12 +280,14 @@
 		[alert runModal];
 	}
 	
-	[self updateDevices];
 	[self updateChangeCount:NSChangeDone];
 }
 
 - (void)removeDevice:(NSDictionary *)dict
 {
+	if (!emulation)
+		return;
+	
 	NSString *deviceRef = [dict objectForKey:@"ref"];
 //	NSString *deviceLabel = [dict objectForKey:@"label"];
 	
@@ -383,39 +324,23 @@
 		[alert runModal];
 	}
 	
-	[self updateDevices];
 	[self updateChangeCount:NSChangeDone];
 }
 
-- (void)makeWindowControllers
+- (BOOL)mount:(NSString *)path
 {
-	emulationWindowController = [[EmulationWindowController alloc] init];
-	[self addWindowController:emulationWindowController];
+	if (!emulation)
+		return NO;
 	
-/*	NSWindowController *windowController;
-	windowController = [[CanvasWindowController alloc] initWithCanvasComponent:NULL];
-	[self addWindowController:windowController];
-	[windowController release];*/
+	return ((OEEmulation *)emulation)->mount(getCString(path));
 }
 
-- (NSArray *)freePorts
+- (BOOL)mountable:(NSString *)path
 {
-	return freePorts;
-}
-
-- (NSArray *)devices
-{
-	return [[devices retain] autorelease];
-}
-
-- (void)insertObject:(id)value inDevicesAtIndex:(NSUInteger)index
-{
-    [devices insertObject:value atIndex:index];
-}
-
-- (void)removeObjectFromDevicesAtIndex:(NSUInteger)index
-{
-    [devices removeObjectAtIndex:index];
+	if (!emulation)
+		return NO;
+	
+	return ((OEEmulation *)emulation)->mountable(getCString(path));
 }
 
 @end

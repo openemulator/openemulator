@@ -168,9 +168,9 @@ string OEEmulation::getDeviceId(OEComponent *component)
 	return "";
 }
 
-OEDevicesInfoMap OEEmulation::getDevicesInfoMap()
+OEDevicesInfoMap *OEEmulation::getDevicesInfoMap()
 {
-	return devicesInfoMap;
+	return &devicesInfoMap;
 }
 
 bool OEEmulation::addEDL(string path, OEIdMap connectionMap)

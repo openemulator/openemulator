@@ -159,7 +159,7 @@ void ControlBus::notify(OEComponent *sender, int notification, void *data)
 	
 	for(int i = 0; i < buffer->frameNum; i++)
 	{
-		float x = 0.1 * sin(phase);
+		float x = 0.01 * sin(phase);
 		phase += 2 * M_PI * freq / buffer->sampleRate;
 		
 		for (int ch = 0; ch < buffer->channelNum; ch++)

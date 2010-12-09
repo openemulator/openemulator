@@ -9,6 +9,9 @@
  */
 
 #import "AudioControlsWindowController.h"
+#import "StringConversion.h"
+
+#import "OEPortAudio.h"
 
 @implementation AudioControlsWindowController
 
@@ -147,6 +150,8 @@
 
 - (void)updatePlay
 {
+	OEPortAudio *oePortAudio = (OEPortAudio *)[fDocumentController oePortAudio];
+	
 	if (!playPath)
 	{
 		[fPlayNameLabel setStringValue:@""];
@@ -160,8 +165,8 @@
 		[fPlayNameLabel setStringValue:path];
 		[fPlayNameLabel setToolTip:path];
 		
-		float playTime = [fDocumentController getPlayTime];
-		float playDuration = [fDocumentController getPlayDuration];
+		float playTime = oePortAudio->getPlayTime();
+		float playDuration = oePortAudio->getPlayDuration();
 		NSString *timeLabel = [self formatTime:playTime];
 		NSString *durationLabel = [self formatTime:playDuration];
 		[fPlayPosition setFloatValue:playTime / playDuration];
@@ -169,7 +174,7 @@
 		[fPlayDurationLabel setStringValue:durationLabel];
 	}
 	
-	BOOL isPlaying = [fDocumentController isPlaying];
+	BOOL isPlaying = oePortAudio->isPlaying();
 	[fTogglePlayButton setEnabled:playPath ? YES : NO];
 	[fTogglePlayButton setImage:(isPlaying ?
 								 [NSImage imageNamed:@"AudioPause.png"] :
@@ -191,10 +196,12 @@
 
 - (IBAction)togglePlay:(id)sender
 {
-	if (![fDocumentController isPlaying])
-		[fDocumentController play];
+	OEPortAudio *oePortAudio = (OEPortAudio *)[fDocumentController oePortAudio];
+	
+	if (!oePortAudio->isPlaying())
+		oePortAudio->play();
 	else
-		[fDocumentController pause];
+		oePortAudio->pause();
 }
 
 - (IBAction)playPositionDidChange:(id)sender
@@ -202,8 +209,10 @@
 	if (!playPath)
 		return;
 	
-	float time = [sender floatValue] * [fDocumentController getPlayDuration];
-	[fDocumentController setPlayPosition:time];
+	OEPortAudio *oePortAudio = (OEPortAudio *)[fDocumentController oePortAudio];
+	
+	float time = [sender floatValue] * oePortAudio->getPlayDuration();
+	oePortAudio->setPlayPosition(time);
 }
 
 - (void)readFromPath:(NSString *)path
@@ -211,15 +220,17 @@
 	if (playPath)
 		[playPath release];
 	
+	OEPortAudio *oePortAudio = (OEPortAudio *)[fDocumentController oePortAudio];
+	
 	playPath = [path copy];
 	if (playPath)
 	{
-		[fDocumentController openPlayer:playPath];
-		[fDocumentController play];
+		oePortAudio->openPlayer(getCString(playPath));
+		oePortAudio->play();
 		
-		if (![fDocumentController getPlayDuration])
+		if (!oePortAudio->getPlayDuration())
 		{
-			[fDocumentController closePlayer];
+			oePortAudio->closePlayer();
 			
 			[playPath release];
 			playPath = nil;
@@ -231,6 +242,8 @@
 
 - (void)updateRecording
 {
+	OEPortAudio *oePortAudio = (OEPortAudio *)[fDocumentController oePortAudio];
+	
 	if (!recordingPath)
 	{
 		[fRecordingTimeLabel setStringValue:@"--:--:--"];
@@ -239,15 +252,15 @@
 	}
 	else
 	{
-		float recordingTime = [fDocumentController getRecordingTime];
-		long long recordingSize = [fDocumentController getRecordingSize];
+		float recordingTime = oePortAudio->getRecordingTime();
+		long long recordingSize = oePortAudio->getRecordingSize();
 		NSString *timeLabel = [self formatTime:recordingTime];
 		NSString *sizeLabel = [self formatSize:recordingSize];
 		[fRecordingTimeLabel setStringValue:timeLabel];
 		[fRecordingSizeLabel setStringValue:sizeLabel];
 	}
 	
-	BOOL isRecording = [fDocumentController isRecording];
+	BOOL isRecording = oePortAudio->isRecording();
 	[fToggleRecordingButton setImage:(isRecording ?
 									  [NSImage imageNamed:@"AudioStop.png"] :
 									  [NSImage imageNamed:@"AudioRecord.png"]
@@ -257,17 +270,19 @@
 
 - (IBAction)toggleRecording:(id)sender
 {
-	if (![fDocumentController isRecording])
+	OEPortAudio *oePortAudio = (OEPortAudio *)[fDocumentController oePortAudio];
+	
+	if (!oePortAudio->isRecording())
 	{
 		NSString *path = [NSTemporaryDirectory()
 						  stringByAppendingPathComponent:@"oerecording"];
 		recordingPath = [path copy];
 		
-		[fDocumentController openRecorder:recordingPath];
-		[fDocumentController record];
+		oePortAudio->openRecorder(getCString(recordingPath));
+		oePortAudio->record();
 	}
 	else
-		[fDocumentController closeRecorder];
+		oePortAudio->closeRecorder();
 }
 
 - (IBAction)saveRecording:(id)sender

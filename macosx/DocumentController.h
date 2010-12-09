@@ -44,26 +44,6 @@
 - (id)makeUntitledDocumentWithTemplateURL:(NSURL *)absoluteURL
 									error:(NSError **)outError;
 
-- (BOOL)addEmulation:(void *)emulation;
-- (void)removeEmulation:(void *)emulation;
-
-- (void)openPlayer:(NSString *)path;
-- (void)closePlayer;
-- (void)setPlayPosition:(float)time;
-- (void)play;
-- (void)pause;
-- (BOOL)isPlaying;
-- (float)getPlayTime;
-- (float)getPlayDuration;
-
-- (void)openRecorder:(NSString *)path;
-- (void)closeRecorder;
-- (void)record;
-- (void)stop;
-- (BOOL)isRecording;
-- (float)getRecordingTime;
-- (long long)getRecordingSize;
-
 - (void)disableMenuBar;
 - (void)enableMenuBar;
 

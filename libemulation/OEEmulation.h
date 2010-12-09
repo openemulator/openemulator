@@ -95,7 +95,7 @@ public:
 	
 	bool setComponent(string id, OEComponent *component);
 	
-	OEDevicesInfoMap getDevicesInfoMap();
+	OEDevicesInfoMap *getDevicesInfoMap();
 	bool addEDL(string path, OEIdMap idMap);
 	bool removeDevice(string id);
 	

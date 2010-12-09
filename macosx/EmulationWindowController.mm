@@ -9,6 +9,9 @@
  */
 
 #import "EmulationWindowController.h"
+#import "Document.h"
+
+#import "OEEmulation.h"
 
 @implementation EmulationWindowController
 
@@ -79,13 +82,18 @@
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
 {
-	return 4;
+	void *devicesInfoMap = [(Document *)[self document] devicesInfoMap];
+	
+	return ((OEDevicesInfoMap *)devicesInfoMap)->size();
 }
 
 - (id)tableView:(NSTableView *)tableView
 objectValueForTableColumn:(NSTableColumn *)tableColumn
 			row:(NSInteger)rowIndex
-{
+{	
+	if ([[tableColumn identifier] compare:@"1"] == NSOrderedSame)
+		return @"Apple II\nNowhere";
+	
 	return nil;
 }
 

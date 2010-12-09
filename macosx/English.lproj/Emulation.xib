@@ -3,17 +3,17 @@
 	<data>
 		<int key="IBDocument.SystemTarget">1050</int>
 		<string key="IBDocument.SystemVersion">10H574</string>
-		<string key="IBDocument.InterfaceBuilderVersion">804</string>
+		<string key="IBDocument.InterfaceBuilderVersion">788</string>
 		<string key="IBDocument.AppKitVersion">1038.35</string>
 		<string key="IBDocument.HIToolboxVersion">461.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
-			<string key="NS.object.0">804</string>
+			<string key="NS.object.0">788</string>
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="1740"/>
 			<integer value="1808"/>
+			<integer value="1741"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -42,7 +42,7 @@
 				<string key="NSWindowTitle"/>
 				<string key="NSWindowClass">NSWindow</string>
 				<nil key="NSViewClass"/>
-				<string key="NSWindowContentMaxSize">{1.79769e+308, 1.79769e+308}</string>
+				<string key="NSWindowContentMaxSize">{3.40282e+38, 3.40282e+38}</string>
 				<string key="NSWindowContentMinSize">{256, 123}</string>
 				<object class="NSView" key="NSWindowView" id="697045175">
 					<reference key="NSNextResponder"/>
@@ -73,13 +73,14 @@
 											<object class="NSMutableArray" key="NSTableColumns">
 												<bool key="EncodedWithXMLCoder">YES</bool>
 												<object class="NSTableColumn" id="272250863">
+													<string key="NSIdentifier">0</string>
 													<double key="NSWidth">48</double>
 													<double key="NSMinWidth">48</double>
 													<double key="NSMaxWidth">48</double>
 													<object class="NSTableHeaderCell" key="NSHeaderCell">
 														<int key="NSCellFlags">75628096</int>
 														<int key="NSCellFlags2">2048</int>
-														<string key="NSContents">Expansion</string>
+														<string key="NSContents">Image</string>
 														<object class="NSFont" key="NSSupport" id="26">
 															<string key="NSName">LucidaGrande</string>
 															<double key="NSSize">11</double>
@@ -119,13 +120,14 @@
 													</object>
 												</object>
 												<object class="NSTableColumn" id="813993110">
+													<string key="NSIdentifier">1</string>
 													<double key="NSWidth">160</double>
 													<double key="NSMinWidth">10</double>
 													<double key="NSMaxWidth">3.4028230607370965e+38</double>
 													<object class="NSTableHeaderCell" key="NSHeaderCell">
 														<int key="NSCellFlags">75628096</int>
 														<int key="NSCellFlags2">2048</int>
-														<string key="NSContents"/>
+														<string key="NSContents">Text</string>
 														<reference key="NSSupport" ref="26"/>
 														<object class="NSColor" key="NSBackgroundColor" id="1012015967">
 															<int key="NSColorSpace">6</int>
@@ -140,7 +142,7 @@
 													</object>
 													<object class="NSTextFieldCell" key="NSDataCell" id="478165526">
 														<int key="NSCellFlags">67239488</int>
-														<int key="NSCellFlags2">1073743872</int>
+														<int key="NSCellFlags2">1073747968</int>
 														<string key="NSContents">test</string>
 														<object class="NSFont" key="NSSupport">
 															<string key="NSName">LucidaGrande</string>
@@ -155,7 +157,7 @@
 															<string key="NSColorName">controlBackgroundColor</string>
 															<object class="NSColor" key="NSColor">
 																<int key="NSColorSpace">3</int>
-																<bytes key="NSWhite">MC42NjY2NjY2NjY3AA</bytes>
+																<bytes key="NSWhite">MC42NjY2NjY2ODY1AA</bytes>
 															</object>
 														</object>
 														<object class="NSColor" key="NSTextColor">
@@ -170,29 +172,33 @@
 													<reference key="NSTableView" ref="1027958689"/>
 												</object>
 												<object class="NSTableColumn" id="681443988">
+													<string key="NSIdentifier">2</string>
 													<double key="NSWidth">18</double>
 													<double key="NSMaxWidth">18</double>
 													<object class="NSTableHeaderCell" key="NSHeaderCell">
 														<int key="NSCellFlags">75628096</int>
 														<int key="NSCellFlags2">2048</int>
-														<string key="NSContents"/>
+														<string key="NSContents">Reveal</string>
 														<reference key="NSSupport" ref="26"/>
 														<reference key="NSBackgroundColor" ref="1012015967"/>
 														<reference key="NSTextColor" ref="296852350"/>
 													</object>
 													<object class="NSButtonCell" key="NSDataCell" id="440122922">
 														<int key="NSCellFlags">67239424</int>
-														<int key="NSCellFlags2">0</int>
+														<int key="NSCellFlags2">134217728</int>
 														<string key="NSContents">Check</string>
 														<reference key="NSSupport" ref="911500604"/>
 														<reference key="NSControlView" ref="1027958689"/>
-														<int key="NSButtonFlags">-2042871553</int>
-														<int key="NSButtonFlags2">6</int>
-														<object class="NSCustomResource" key="NSNormalImage" id="655295073">
+														<int key="NSButtonFlags">141836543</int>
+														<int key="NSButtonFlags2">2</int>
+														<object class="NSCustomResource" key="NSNormalImage">
 															<string key="NSClassName">NSImage</string>
 															<string key="NSResourceName">EmulationReveal</string>
 														</object>
-														<reference key="NSAlternateImage" ref="655295073"/>
+														<object class="NSCustomResource" key="NSAlternateImage">
+															<string key="NSClassName">NSImage</string>
+															<string key="NSResourceName">EmulationRevealPressed</string>
+														</object>
 														<string key="NSAlternateContents"/>
 														<string key="NSKeyEquivalent"/>
 														<int key="NSPeriodicDelay">200</int>
@@ -201,12 +207,13 @@
 													<reference key="NSTableView" ref="1027958689"/>
 												</object>
 												<object class="NSTableColumn" id="842509763">
+													<string key="NSIdentifier">3</string>
 													<double key="NSWidth">18</double>
 													<double key="NSMaxWidth">18</double>
 													<object class="NSTableHeaderCell" key="NSHeaderCell">
 														<int key="NSCellFlags">75628096</int>
 														<int key="NSCellFlags2">2048</int>
-														<string key="NSContents"/>
+														<string key="NSContents">Eject</string>
 														<reference key="NSSupport" ref="26"/>
 														<reference key="NSBackgroundColor" ref="1012015967"/>
 														<reference key="NSTextColor" ref="296852350"/>
@@ -217,11 +224,15 @@
 														<string key="NSContents">Check</string>
 														<reference key="NSSupport" ref="911500604"/>
 														<reference key="NSControlView" ref="1027958689"/>
-														<int key="NSButtonFlags">-2042871553</int>
-														<int key="NSButtonFlags2">6</int>
+														<int key="NSButtonFlags">141836543</int>
+														<int key="NSButtonFlags2">2</int>
 														<object class="NSCustomResource" key="NSNormalImage">
 															<string key="NSClassName">NSImage</string>
 															<string key="NSResourceName">EmulationEject</string>
+														</object>
+														<object class="NSCustomResource" key="NSAlternateImage">
+															<string key="NSClassName">NSImage</string>
+															<string key="NSResourceName">EmulationEjectPressed</string>
 														</object>
 														<string key="NSAlternateContents"/>
 														<string key="NSKeyEquivalent"/>
@@ -414,7 +425,7 @@
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1440, 878}}</string>
 				<string key="NSMinSize">{256, 145}</string>
-				<string key="NSMaxSize">{1.79769e+308, 1.79769e+308}</string>
+				<string key="NSMaxSize">{3.40282e+38, 3.40282e+38}</string>
 			</object>
 			<object class="NSMenu" id="719851724">
 				<string key="NSTitle"/>
@@ -787,9 +798,9 @@
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>{{360, 140}, {256, 373}}</string>
+					<string>{{406, 78}, {256, 373}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{360, 140}, {256, 373}}</string>
+					<string>{{406, 78}, {256, 373}}</string>
 					<boolean value="YES"/>
 					<boolean value="NO"/>
 					<boolean value="YES"/>
@@ -984,11 +995,13 @@
 				<string>EmulationAction</string>
 				<string>EmulationActionPressed</string>
 				<string>EmulationEject</string>
+				<string>EmulationEjectPressed</string>
 				<string>EmulationMinus</string>
 				<string>EmulationMinusPressed</string>
 				<string>EmulationPlus</string>
 				<string>EmulationPlusPressed</string>
 				<string>EmulationReveal</string>
+				<string>EmulationRevealPressed</string>
 				<string>EmulationSpace</string>
 				<string>NSMenuCheckmark</string>
 				<string>NSMenuMixedState</string>
@@ -998,10 +1011,12 @@
 				<string>{32, 23}</string>
 				<string>{32, 23}</string>
 				<string>{18, 18}</string>
+				<string>{18, 18}</string>
 				<string>{26, 23}</string>
 				<string>{26, 23}</string>
 				<string>{26, 23}</string>
 				<string>{26, 23}</string>
+				<string>{18, 18}</string>
 				<string>{18, 18}</string>
 				<string>{10, 23}</string>
 				<string>{9, 8}</string>
