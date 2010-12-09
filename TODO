@@ -2,6 +2,7 @@
 * Implement the main emulation window list
 * Solve the problem of attempting to remove devices that can't be removed at the present time (e.g. power should be disconnected first) or never (e.g. core). Should a delegate in OEEmulation be used?
 * Solve the problem of attempting to add a device that can't be added safely at the current time.
+* Find a solution to the storage API problem. How is the mount state indicated? Should there be an additional EMULATION_SET_MOUNTED command?
 * Implement addCanvas and removeCanvas -> this should create a windowController and an OEOpenGLCanvas. The window controller should be added to the document, and the canvas returned.
 * Implement frame communication to the canvas
 * Implement canvas keyboard entry/mouse events
