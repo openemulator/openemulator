@@ -33,18 +33,15 @@
 
 - (void)dealloc
 {
-	[super dealloc];
-	
 	[hardwareChooserViewController release];
 	[connectorViewController release];
 	
-	if (selectedItemOutlets)
-		[selectedItemOutlets release];
-	if (selectedItemInlets)
-		[selectedItemInlets release];
+	[selectedItemOutlets release];
+	[selectedItemInlets release];
 	
-	if (type)
-		[type release];
+	[type release];
+	
+	[super dealloc];
 }
 
 - (void)runModal:(id)sender forType:(NSString *)theType

@@ -51,7 +51,7 @@
 		
 		[[self window] setFrameFromString:theString];
 		if ([isVisible compare:@"0"] == NSOrderedSame)
-			[[self window] orderOut];
+			[[self window] orderOut:self];
 	}
 }
 

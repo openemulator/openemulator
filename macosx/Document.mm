@@ -22,13 +22,7 @@
 
 - (id)init
 {
-	if (self = [super init])
-	{
-		emulation = nil;
-		devicesInfo = nil;
-		
-		emulationWindowController = nil;
-	}
+	self = [super init];
 	
 	return self;
 }

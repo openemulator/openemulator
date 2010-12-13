@@ -3,16 +3,16 @@
 	<data>
 		<int key="IBDocument.SystemTarget">1050</int>
 		<string key="IBDocument.SystemVersion">10H574</string>
-		<string key="IBDocument.InterfaceBuilderVersion">788</string>
+		<string key="IBDocument.InterfaceBuilderVersion">823</string>
 		<string key="IBDocument.AppKitVersion">1038.35</string>
 		<string key="IBDocument.HIToolboxVersion">461.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
-			<string key="NS.object.0">788</string>
+			<string key="NS.object.0">823</string>
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="5"/>
+			<integer value="6"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -45,17 +45,7 @@
 				<string key="NSWindowContentMinSize">{320, 240}</string>
 				<object class="NSView" key="NSWindowView" id="568628114">
 					<reference key="NSNextResponder"/>
-					<int key="NSvFlags">256</int>
-					<object class="NSMutableArray" key="NSSubviews">
-						<bool key="EncodedWithXMLCoder">YES</bool>
-						<object class="NSCustomView" id="373837997">
-							<reference key="NSNextResponder" ref="568628114"/>
-							<int key="NSvFlags">274</int>
-							<string key="NSFrameSize">{640, 480}</string>
-							<reference key="NSSuperview" ref="568628114"/>
-							<string key="NSClassName">CanvasViewController</string>
-						</object>
-					</object>
+					<int key="NSvFlags">274</int>
 					<string key="NSFrameSize">{640, 480}</string>
 					<reference key="NSSuperview"/>
 				</object>
@@ -67,14 +57,6 @@
 		<object class="IBObjectContainer" key="IBDocument.Objects">
 			<object class="NSMutableArray" key="connectionRecords">
 				<bool key="EncodedWithXMLCoder">YES</bool>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">fDocumentWindowController</string>
-						<reference key="source" ref="373837997"/>
-						<reference key="destination" ref="512844837"/>
-					</object>
-					<int key="connectionID">100105</int>
-				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">window</string>
@@ -121,7 +103,6 @@
 						<reference key="object" ref="568628114"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="373837997"/>
 						</object>
 						<reference key="parent" ref="275939982"/>
 					</object>
@@ -131,11 +112,6 @@
 						<reference key="parent" ref="0"/>
 						<string key="objectName">Application</string>
 					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">100103</int>
-						<reference key="object" ref="373837997"/>
-						<reference key="parent" ref="568628114"/>
-					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -143,7 +119,6 @@
 				<object class="NSArray" key="dict.sortedKeys">
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<string>-3.IBPluginDependency</string>
-					<string>100103.IBPluginDependency</string>
 					<string>5.IBEditorWindowLastContentRect</string>
 					<string>5.IBPluginDependency</string>
 					<string>5.IBWindowTemplateEditedContentRect</string>
@@ -154,16 +129,16 @@
 					<string>5.windowTemplate.hasMinSize</string>
 					<string>5.windowTemplate.maxSize</string>
 					<string>5.windowTemplate.minSize</string>
+					<string>6.CustomClassName</string>
 					<string>6.IBPluginDependency</string>
 					<string>6.ImportedFromIB2</string>
 				</object>
 				<object class="NSMutableArray" key="dict.values">
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>{{121, 146}, {640, 480}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{89, 63}, {640, 480}}</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{89, 63}, {640, 480}}</string>
+					<string>{{121, 146}, {640, 480}}</string>
 					<integer value="1"/>
 					<boolean value="NO"/>
 					<string>{{201, 387}, {507, 413}}</string>
@@ -171,6 +146,7 @@
 					<integer value="1"/>
 					<string>{640, 480}</string>
 					<string>{320, 240}</string>
+					<string>CanvasView</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 				</object>
@@ -191,13 +167,13 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">100107</int>
+			<int key="maxID">100109</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
 				<bool key="EncodedWithXMLCoder">YES</bool>
 				<object class="IBPartialClassDescription">
-					<string key="className">CanvasViewController</string>
+					<string key="className">CanvasView</string>
 					<string key="superclassName">NSOpenGLView</string>
 					<object class="NSMutableDictionary" key="actions">
 						<bool key="EncodedWithXMLCoder">YES</bool>

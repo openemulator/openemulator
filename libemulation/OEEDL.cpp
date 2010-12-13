@@ -233,6 +233,8 @@ string OEEDL::getNodeProperty(xmlNodePtr node, string name)
 bool OEEDL::hasNodeProperty(xmlNodePtr node, string name)
 {
 	char *value = (char *) xmlGetProp(node, BAD_CAST name.c_str());
+	xmlFree(value);
+	
 	return (value != NULL);
 }
 

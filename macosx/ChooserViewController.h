@@ -20,24 +20,30 @@
 
 @interface ChooserViewController : NSViewController
 {
+	IBOutlet id fVerticalSplitView;
+	IBOutlet id fHorizontalSplitView;
 	IBOutlet id fOutlineView;
 	IBOutlet id fImageBrowserView;
+	
+	IBOutlet id fSelectedItemImageView;
+	IBOutlet id fSelectedItemLabelView;
+	IBOutlet id fSelectedItemDescriptionView;
 	
 	id<ChooserDelegate> chooserDelegate;
 	
 	NSMutableArray *groups;
 	NSString *selectedGroup;
-	
 	NSMutableDictionary *items;
 }
 
 - (void)setDelegate:(id)theDelegate;
+- (void)reloadData;
 
 - (void)loadGroups;
 - (void)loadItems;
 
-- (void)selectItemWithPath:(NSString *)path
-				   inGroup:(NSString *)group;
+- (void)selectGroup:(NSString *)group
+	andItemWithPath:(NSString *)path;
 
 - (NSString *)selectedGroup;
 - (NSString *)selectedItemPath;

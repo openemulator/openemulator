@@ -2,7 +2,7 @@
 /**
  * OpenEmulator
  * Mac OS X Chooser Item
- * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Controls an item in a device or template chooser view.
@@ -13,18 +13,22 @@
 
 @interface ChooserItem : NSObject
 {
-    NSString *title;
-    NSString *subtitle;
+    NSString *label;
     NSString *imagePath;
+
+    NSString *description;
     NSString *edlPath;
 	void *data;
+	
+	NSImage *image;
 }
 
-- (id)initWithTitle:(NSString *)theTitle
-		   subtitle:(NSString *)theSubtitle
+- (id)initWithLabel:(NSString *)theLabel
 		  imagePath:(NSString *)theImagePath
+		description:(NSString *)theDescription
 			edlPath:(NSString *)theEDLPath
 			   data:(void *)theData;
+- (NSString *)description;
 - (NSString *)edlPath;
 - (void *)data;
 

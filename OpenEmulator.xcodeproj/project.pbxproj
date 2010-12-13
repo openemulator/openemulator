@@ -34,6 +34,7 @@
 		001F916411925BBE005383B3 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0054E4A61131BE8A006D32D9 /* OpenGL.framework */; };
 		003318AF1101492B00CC1782 /* Connector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 003318AD1101492B00CC1782 /* Connector.xib */; };
 		003E25E71070796700185260 /* images in Resources */ = {isa = PBXBuildFile; fileRef = 003E2597107075D900185260 /* images */; };
+		0040284212B44878001C2F73 /* ChooserBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0040284112B44878001C2F73 /* ChooserBackgroundView.m */; };
 		0049F9231277CFDA00553860 /* DocumentController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00AD746811A2F10E00BAC29C /* DocumentController.mm */; };
 		005486CA0FDC84E500DBCFA8 /* Sparkle.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 001F56F80FD1E8E500EA246A /* Sparkle.framework */; };
 		0054E4A11131BE7A006D32D9 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0054E4A01131BE7A006D32D9 /* Cocoa.framework */; };
@@ -56,7 +57,7 @@
 		00954EAE1277BC3B00C17203 /* InspectorWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00954EAD1277BC3B00C17203 /* InspectorWindowController.m */; };
 		009B4F2711639D7700E9A6F9 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009B4F2611639D7700E9A6F9 /* GLUT.framework */; };
 		00A0B8041069761A007930A5 /* Document.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00A0B8031069761A007930A5 /* Document.mm */; };
-		00A72B6F12879F650083C6A7 /* CanvasViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00A72B6E12879F650083C6A7 /* CanvasViewController.mm */; };
+		00A72B6F12879F650083C6A7 /* CanvasView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00A72B6E12879F650083C6A7 /* CanvasView.mm */; };
 		00A72B7012879F690083C6A7 /* CanvasWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00A72B6A12879F530083C6A7 /* CanvasWindowController.m */; };
 		00A72B7312879F800083C6A7 /* CanvasWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 00A72B7212879F800083C6A7 /* CanvasWindow.m */; };
 		00A72B951287A0F10083C6A7 /* Canvas.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00A72B931287A0F10083C6A7 /* Canvas.xib */; };
@@ -221,8 +222,10 @@
 		002579FB1218A83400206E56 /* StringConversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StringConversion.h; sourceTree = "<group>"; };
 		003318AE1101492B00CC1782 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Connector.xib; sourceTree = "<group>"; };
 		003E2597107075D900185260 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
+		0040284012B44878001C2F73 /* ChooserBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChooserBackgroundView.h; sourceTree = "<group>"; };
+		0040284112B44878001C2F73 /* ChooserBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChooserBackgroundView.m; sourceTree = "<group>"; };
 		0054868F0FDC817900DBCFA8 /* Emulation.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Emulation.icns; sourceTree = "<group>"; };
-		0054E2E41131B9EF006D32D9 /* openemulator */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = openemulator; sourceTree = BUILT_PRODUCTS_DIR; };
+		0054E2E41131B9EF006D32D9 /* openemulator-sdl */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "openemulator-sdl"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0054E4A01131BE7A006D32D9 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		0054E4A61131BE8A006D32D9 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		0054E6301131BEE7006D32D9 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
@@ -254,8 +257,8 @@
 		00A0B8031069761A007930A5 /* Document.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Document.mm; sourceTree = "<group>"; };
 		00A72B6912879F530083C6A7 /* CanvasWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanvasWindowController.h; sourceTree = "<group>"; };
 		00A72B6A12879F530083C6A7 /* CanvasWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CanvasWindowController.m; sourceTree = "<group>"; };
-		00A72B6D12879F650083C6A7 /* CanvasViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanvasViewController.h; sourceTree = "<group>"; };
-		00A72B6E12879F650083C6A7 /* CanvasViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CanvasViewController.mm; sourceTree = "<group>"; };
+		00A72B6D12879F650083C6A7 /* CanvasView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanvasView.h; sourceTree = "<group>"; };
+		00A72B6E12879F650083C6A7 /* CanvasView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CanvasView.mm; sourceTree = "<group>"; };
 		00A72B7112879F800083C6A7 /* CanvasWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanvasWindow.h; sourceTree = "<group>"; };
 		00A72B7212879F800083C6A7 /* CanvasWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CanvasWindow.m; sourceTree = "<group>"; };
 		00A72B941287A0F10083C6A7 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Canvas.xib; sourceTree = "<group>"; };
@@ -693,12 +696,12 @@
 			path = libemulation/Interface/IEEE;
 			sourceTree = SOURCE_ROOT;
 		};
-		00C3CF8C11F557A000EA2453 /* openemulator */ = {
+		00C3CF8C11F557A000EA2453 /* openemulator-sdl */ = {
 			isa = PBXGroup;
 			children = (
 				00C3CF9211F557AC00EA2453 /* src */,
 			);
-			name = openemulator;
+			name = "openemulator-sdl";
 			path = SDL;
 			sourceTree = "<group>";
 		};
@@ -717,7 +720,7 @@
 			isa = PBXGroup;
 			children = (
 				8D15AC370486D014006FF6A4 /* OpenEmulator.app */,
-				0054E2E41131B9EF006D32D9 /* openemulator */,
+				0054E2E41131B9EF006D32D9 /* openemulator-sdl */,
 				00039E7C12B03F660025D374 /* libemulation-hal.a */,
 				00039EFE12B04E910025D374 /* libemulation.a */,
 			);
@@ -728,7 +731,7 @@
 			isa = PBXGroup;
 			children = (
 				000A78A50FBA464600A0F12E /* OpenEmulator.app */,
-				00C3CF8C11F557A000EA2453 /* openemulator */,
+				00C3CF8C11F557A000EA2453 /* openemulator-sdl */,
 				00039E3C12B03BA90025D374 /* libemulation-hal */,
 				00B8864512A3923D0052B7A4 /* libemulation */,
 				19C28FB0FE9D524F11CA2CBB /* Products */,
@@ -776,10 +779,12 @@
 				00954EAD1277BC3B00C17203 /* InspectorWindowController.m */,
 				00A72B6912879F530083C6A7 /* CanvasWindowController.h */,
 				00A72B6A12879F530083C6A7 /* CanvasWindowController.m */,
-				00A72B6D12879F650083C6A7 /* CanvasViewController.h */,
-				00A72B6E12879F650083C6A7 /* CanvasViewController.mm */,
+				00A72B6D12879F650083C6A7 /* CanvasView.h */,
+				00A72B6E12879F650083C6A7 /* CanvasView.mm */,
 				00A72B7112879F800083C6A7 /* CanvasWindow.h */,
 				00A72B7212879F800083C6A7 /* CanvasWindow.m */,
+				0040284012B44878001C2F73 /* ChooserBackgroundView.h */,
+				0040284112B44878001C2F73 /* ChooserBackgroundView.m */,
 			);
 			name = Sources;
 			path = macosx;
@@ -897,9 +902,9 @@
 			productReference = 00039E7C12B03F660025D374 /* libemulation-hal.a */;
 			productType = "com.apple.product-type.library.static";
 		};
-		0054E2E31131B9EF006D32D9 /* openemulator */ = {
+		0054E2E31131B9EF006D32D9 /* openemulator-sdl */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 0054E2E81131BA0D006D32D9 /* Build configuration list for PBXNativeTarget "openemulator" */;
+			buildConfigurationList = 0054E2E81131BA0D006D32D9 /* Build configuration list for PBXNativeTarget "openemulator-sdl" */;
 			buildPhases = (
 				0054E2E11131B9EF006D32D9 /* Sources */,
 				0054E2E21131B9EF006D32D9 /* Frameworks */,
@@ -910,9 +915,9 @@
 				00E0B0601132DBA4004DB96D /* PBXTargetDependency */,
 				00039E9D12B042280025D374 /* PBXTargetDependency */,
 			);
-			name = openemulator;
+			name = "openemulator-sdl";
 			productName = oecli;
-			productReference = 0054E2E41131B9EF006D32D9 /* openemulator */;
+			productReference = 0054E2E41131B9EF006D32D9 /* openemulator-sdl */;
 			productType = "com.apple.product-type.tool";
 		};
 		006EECA30FCA5C31003D2C8D /* emulation */ = {
@@ -973,7 +978,7 @@
 			projectRoot = "";
 			targets = (
 				8D15AC270486D014006FF6A4 /* OpenEmulator */,
-				0054E2E31131B9EF006D32D9 /* openemulator */,
+				0054E2E31131B9EF006D32D9 /* openemulator-sdl */,
 				006EECA30FCA5C31003D2C8D /* emulation */,
 				00039E7B12B03F650025D374 /* emulation-hal */,
 			);
@@ -1124,9 +1129,10 @@
 				00954EA71277BC1200C17203 /* AudioControlsWindowController.mm in Sources */,
 				00954EAE1277BC3B00C17203 /* InspectorWindowController.m in Sources */,
 				0049F9231277CFDA00553860 /* DocumentController.mm in Sources */,
-				00A72B6F12879F650083C6A7 /* CanvasViewController.mm in Sources */,
+				00A72B6F12879F650083C6A7 /* CanvasView.mm in Sources */,
 				00A72B7012879F690083C6A7 /* CanvasWindowController.m in Sources */,
 				00A72B7312879F800083C6A7 /* CanvasWindow.m in Sources */,
+				0040284212B44878001C2F73 /* ChooserBackgroundView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1323,7 +1329,7 @@
 					AppKit,
 				);
 				PREBINDING = NO;
-				PRODUCT_NAME = openemulator;
+				PRODUCT_NAME = "openemulator-sdl";
 			};
 			name = Debug;
 		};
@@ -1351,7 +1357,7 @@
 					AppKit,
 				);
 				PREBINDING = NO;
-				PRODUCT_NAME = openemulator;
+				PRODUCT_NAME = "openemulator-sdl";
 				ZERO_LINK = NO;
 			};
 			name = Release;
@@ -1528,7 +1534,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		0054E2E81131BA0D006D32D9 /* Build configuration list for PBXNativeTarget "openemulator" */ = {
+		0054E2E81131BA0D006D32D9 /* Build configuration list for PBXNativeTarget "openemulator-sdl" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0054E2E61131B9EF006D32D9 /* Debug */,

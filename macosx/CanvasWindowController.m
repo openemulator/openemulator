@@ -15,7 +15,7 @@
 - (id)initWithCanvasComponent:(void *)theCanvasComponent
 {
 	if (self = [self initWithWindowNibName:@"Canvas"])
-		canvasComponent = canvasComponent;
+		canvasComponent = theCanvasComponent;
 	
 	return self;
 }

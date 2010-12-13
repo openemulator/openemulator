@@ -51,8 +51,6 @@
 							   @"caf",
 							   @"ogg", @"oga",
 							   nil];
-		
-		disableMenuBarCount = 0;
 	}
 	
 	return self;

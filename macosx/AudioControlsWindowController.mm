@@ -17,11 +17,7 @@
 
 - (id)init
 {
-	if (self = [self initWithWindowNibName:@"AudioControls"])
-	{
-		playPath = nil;
-		recordingPath = nil;
-	}
+	self = [self initWithWindowNibName:@"AudioControls"];
 	
 	return self;
 }
@@ -43,8 +39,7 @@
 
 - (void)dealloc
 {
-	if (playPath)
-		[playPath release];
+	[playPath release];
 	
 	if (recordingPath)
 	{
@@ -52,9 +47,8 @@
 		
 		[[NSFileManager defaultManager] removeItemAtPath:recordingPath
 												   error:&error];
-		
-		[recordingPath release];
 	}
+	[recordingPath release];
 	
 	[timer release];
 	
@@ -217,8 +211,7 @@
 
 - (void)readFromPath:(NSString *)path
 {
-	if (playPath)
-		[playPath release];
+	[playPath release];
 	
 	OEPortAudio *oePortAudio = (OEPortAudio *)[fDocumentController oePortAudio];
 	

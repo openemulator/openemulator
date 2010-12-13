@@ -19,30 +19,6 @@
 
 @implementation TemplateChooserViewController
 
-- (BOOL)validItemsInPath:(NSString *)path
-{
-	path = [path stringByExpandingTildeInPath];
-	NSFileManager *fileManager = [NSFileManager defaultManager];
-	BOOL isDirectory;
-	if (![fileManager fileExistsAtPath:path isDirectory:&isDirectory] ||
-		!isDirectory)
-		return NO;
-	
-	NSArray *subpaths = [fileManager contentsOfDirectoryAtPath:path
-														 error:nil];
-	for (int i = 0; i < [subpaths count]; i++)
-	{
-		NSString *path = [subpaths objectAtIndex:i];
-		NSString *pathExtension = [[path pathExtension] lowercaseString];
-		
-		if (([pathExtension compare:@OE_PACKAGE_PATH_EXTENSION] == NSOrderedSame) ||
-			([pathExtension compare:@OE_FILE_PATH_EXTENSION] == NSOrderedSame))
-			return YES;
-	}
-	
-	return NO;
-}
-
 - (void)loadGroups
 {
 	NSString *path = [[[NSBundle mainBundle] resourcePath]
@@ -58,7 +34,7 @@
 	{
 		NSString *groupName = [subpaths objectAtIndex:i];
 		NSString *groupPath = [path stringByAppendingPathComponent:groupName];
-		if ([self validItemsInPath:groupPath])
+		if ([self validateGroupAtPath:groupPath])
 			[groups addObject:groupName];
 	}
 	
@@ -67,7 +43,7 @@
 	
 	// Find my templates
 	[items removeObjectForKey:NSLocalizedString(MY_TEMPLATES, MY_TEMPLATES)];
-	if ([self validItemsInPath:MY_TEMPLATES_FOLDER])
+	if ([self validateGroupAtPath:MY_TEMPLATES_FOLDER])
 		[groups addObject:NSLocalizedString(MY_TEMPLATES, MY_TEMPLATES)];
 }
 
@@ -78,22 +54,44 @@
 	
 	NSString *group = NSLocalizedString(MY_TEMPLATES, MY_TEMPLATES);
 	if ([selectedGroup compare:group] == NSOrderedSame)
-	{
-		[self addItemsFromPath:MY_TEMPLATES_FOLDER
-					   toGroup:group];
-	}
+		[self addGroupAtPath:MY_TEMPLATES_FOLDER
+					 toGroup:group];
 	else
 	{
 		NSString *templatesPath = [[[NSBundle mainBundle] resourcePath]
 								   stringByAppendingPathComponent:@"templates"];
 		NSString *groupPath = [templatesPath stringByAppendingPathComponent:selectedGroup];
-		[self addItemsFromPath:groupPath
-					   toGroup:selectedGroup];
+		[self addGroupAtPath:groupPath
+					 toGroup:selectedGroup];
 	}
 }
 
-- (void)addItemsFromPath:(NSString *)path
-				 toGroup:(NSString *)group
+- (BOOL)validateGroupAtPath:(NSString *)groupPath
+{
+	groupPath = [groupPath stringByExpandingTildeInPath];
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	BOOL isDirectory;
+	if (![fileManager fileExistsAtPath:groupPath isDirectory:&isDirectory] ||
+		!isDirectory)
+		return NO;
+	
+	NSArray *subpaths = [fileManager contentsOfDirectoryAtPath:groupPath
+														 error:nil];
+	for (int i = 0; i < [subpaths count]; i++)
+	{
+		NSString *path = [subpaths objectAtIndex:i];
+		NSString *pathExtension = [[path pathExtension] lowercaseString];
+		
+		if (([pathExtension compare:@OE_PACKAGE_PATH_EXTENSION] == NSOrderedSame) ||
+			([pathExtension compare:@OE_FILE_PATH_EXTENSION] == NSOrderedSame))
+			return YES;
+	}
+	
+	return NO;
+}
+
+- (void)addGroupAtPath:(NSString *)path
+			   toGroup:(NSString *)group
 {
 	if (![items objectForKey:group])
 		[items setObject:[NSMutableArray array] forKey:group];
@@ -109,6 +107,11 @@
 		NSString *edlFilename = [pathContents objectAtIndex:i];
 		NSString *edlPath = [path stringByAppendingPathComponent:edlFilename];
 		
+		NSString *pathExtension = [[edlPath pathExtension] lowercaseString];
+		if (([pathExtension compare:@OE_PACKAGE_PATH_EXTENSION] != NSOrderedSame) &&
+			([pathExtension compare:@OE_FILE_PATH_EXTENSION] != NSOrderedSame))
+			continue;
+		
 		OEEDL edl;
 		edl.open(getCString(edlPath));
 		if (edl.isOpen())
@@ -119,9 +122,9 @@
 								  getNSString(headerInfo.image)];
 			NSString *edlDescription = getNSString(headerInfo.description);
 			
-			ChooserItem *chooserItem = [[ChooserItem alloc] initWithTitle:edlLabel
-																 subtitle:edlDescription
+			ChooserItem *chooserItem = [[ChooserItem alloc] initWithLabel:edlLabel
 																imagePath:edlImage
+															  description:edlDescription
 																  edlPath:edlPath
 																	 data:nil];
 			if (chooserItem)

@@ -16,12 +16,6 @@
 {
 	self = [super initWithWindowNibName:@"TemplateChooser"];
 	
-	if (self)
-	{
-		templateChooserViewController = [[TemplateChooserViewController alloc] init];
-		[templateChooserViewController setDelegate:self];
-	}
-	
 	return self;
 }
 
@@ -34,35 +28,35 @@
 
 - (void)run
 {
+	[templateChooserViewController reloadData];
+	
 	[self showWindow:self];
 	
 	[[self window] center];
-	
-	NSString *group = [templateChooserViewController selectedGroup];
-	NSString *path = [templateChooserViewController selectedItemPath];
-	if (!path)
-	{
-		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-		group = [defaults stringForKey:@"OELastTemplateGroup"];
-		path = [defaults stringForKey:@"OELastTemplatePath"];
-	}
-	[templateChooserViewController selectItemWithPath:path inGroup:group];
-	
-	[fChooseButton setEnabled:([templateChooserViewController selectedItemPath] != nil)];
 }
 
 - (void)windowDidLoad
 {
 	[self setWindowFrameAutosaveName:@"TemplateChooser"];
 	
+	templateChooserViewController = [[TemplateChooserViewController alloc] init];
+	[templateChooserViewController setDelegate:self];
+	
 	NSView *view = [templateChooserViewController view];
-	[fTemplateChooserView addSubview:view];
 	[view setFrameSize:[fTemplateChooserView frame].size];
+	[fTemplateChooserView addSubview:view];
+	
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	NSString *group = [defaults stringForKey:@"OELastTemplateGroup"];
+	NSString *path = [defaults stringForKey:@"OELastTemplatePath"];
+	[templateChooserViewController selectGroup:group andItemWithPath:path];
 }
 
 - (void)chooserSelectionDidChange:(id)sender
 {
-	[fChooseButton setEnabled:([templateChooserViewController selectedItemPath] != nil)];
+	NSString *path = [templateChooserViewController selectedItemPath];
+	
+	[fChooseButton setEnabled:(path != nil)];
 }
 
 - (void)chooserItemWasDoubleClicked:(id)sender
@@ -72,16 +66,13 @@
 
 - (IBAction)chooseTemplate:(id)sender
 {
+	[[self window] orderOut:self];
+	
 	NSString *group = [templateChooserViewController selectedGroup];
 	NSString *path = [templateChooserViewController selectedItemPath];
-	if (path)
-	{
-		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-		[defaults setObject:group forKey:@"OELastTemplateGroup"];
-		[defaults setObject:path forKey:@"OELastTemplatePath"];
-	}
-	
-	[[self window] orderOut:self];
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	[defaults setObject:group forKey:@"OELastTemplateGroup"];
+	[defaults setObject:path forKey:@"OELastTemplatePath"];
 	
 	NSURL *url = [NSURL fileURLWithPath:path];
 	if (url)

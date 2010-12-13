@@ -1,14 +1,14 @@
 
 /**
  * OpenEmulator
- * Mac OS X Canvas View Controller
+ * Mac OS X Canvas View
  * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Controls a canvas view.
  */
 
-#import "CanvasViewController.h"
+#import "CanvasView.h"
 #import "DocumentController.h"
 #import "StringConversion.h"
 
@@ -147,7 +147,7 @@ CanvasKeyMapEntry canvasKeyMap[] =
 	{0x36, HOST_CANVAS_K_RIGHTGUI},
 };
 
-@implementation CanvasViewController
+@implementation CanvasView
 
 static void setCaptureMode(int captureMode)
 {
@@ -178,11 +178,11 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 									CVOptionFlags *flagsOut,
 									void *displayLinkContext)
 {
-	// There is no autorelease pool when this method is called because
-	// it is called from a background thread
+	// There is no autorelease pool when this method is called
+	// (it is called from a background thread)
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
-    [(CanvasViewController *)displayLinkContext drawFrame];
+    [(CanvasView *)displayLinkContext drawFrame];
 	
 	[pool release];
 	

@@ -1,7 +1,7 @@
 
 /**
  * OpenEmulator
- * Mac OS X Canvas View Controller
+ * Mac OS X Canvas View
  * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
@@ -14,7 +14,7 @@
 #define DEVICE_KEYMAP_SIZE		256
 #define DEVICE_MOUSE_BUTTONNUM	8
 
-@interface CanvasViewController : NSOpenGLView
+@interface CanvasView : NSOpenGLView
 {
 	IBOutlet id fDocumentWindowController;
 	

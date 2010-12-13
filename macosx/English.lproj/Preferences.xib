@@ -3,19 +3,20 @@
 	<data>
 		<int key="IBDocument.SystemTarget">1050</int>
 		<string key="IBDocument.SystemVersion">10H574</string>
-		<string key="IBDocument.InterfaceBuilderVersion">788</string>
+		<string key="IBDocument.InterfaceBuilderVersion">823</string>
 		<string key="IBDocument.AppKitVersion">1038.35</string>
 		<string key="IBDocument.HIToolboxVersion">461.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
-			<string key="NS.object.0">788</string>
+			<string key="NS.object.0">823</string>
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
+			<integer value="2049"/>
 			<integer value="23"/>
-			<integer value="28"/>
-			<integer value="2095"/>
 			<integer value="1865"/>
+			<integer value="2095"/>
+			<integer value="28"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -155,8 +156,8 @@
 						<object class="NSMutableArray" key="NSCells">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<object class="NSButtonCell" id="272061744">
-								<int key="NSCellFlags">-2080244224</int>
-								<int key="NSCellFlags2">0</int>
+								<int key="NSCellFlags">-2080244160</int>
+								<int key="NSCellFlags2">2048</int>
 								<string key="NSContents">Show Template Chooser</string>
 								<reference key="NSSupport" ref="86725571"/>
 								<reference key="NSControlView" ref="11741413"/>
@@ -171,8 +172,8 @@
 								<int key="NSPeriodicInterval">25</int>
 							</object>
 							<object class="NSButtonCell" id="882976568">
-								<int key="NSCellFlags">67239424</int>
-								<int key="NSCellFlags2">0</int>
+								<int key="NSCellFlags">67239488</int>
+								<int key="NSCellFlags2">2048</int>
 								<string key="NSContents">Use template:</string>
 								<reference key="NSSupport" ref="86725571"/>
 								<reference key="NSControlView" ref="11741413"/>
@@ -336,7 +337,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 							<int key="NSPeriodicDelay">400</int>
 							<int key="NSPeriodicInterval">75</int>
 						</object>
-						<reference key="NSSelectedCell" ref="272061744"/>
+						<int key="NSSelectedRow">1</int>
+						<reference key="NSSelectedCell" ref="882976568"/>
 						<reference key="NSBackgroundColor" ref="380800835"/>
 						<object class="NSColor" key="NSCellBackgroundColor" id="182696606">
 							<int key="NSColorSpace">3</int>
@@ -433,15 +435,15 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 			<object class="NSWindowTemplate" id="495246826">
 				<int key="NSWindowStyleMask">15</int>
 				<int key="NSWindowBacking">2</int>
-				<string key="NSWindowRect">{{420, 356}, {600, 400}}</string>
+				<string key="NSWindowRect">{{420, 356}, {600, 460}}</string>
 				<int key="NSWTFlags">611844096</int>
 				<string key="NSWindowTitle">Template Chooser</string>
 				<string key="NSWindowClass">NSWindow</string>
 				<nil key="NSViewClass"/>
 				<string key="NSWindowContentMaxSize">{3.40282e+38, 3.40282e+38}</string>
-				<string key="NSWindowContentMinSize">{600, 400}</string>
+				<string key="NSWindowContentMinSize">{600, 460}</string>
 				<object class="NSView" key="NSWindowView" id="851795274">
-					<nil key="NSNextResponder"/>
+					<reference key="NSNextResponder"/>
 					<int key="NSvFlags">274</int>
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -488,7 +490,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<object class="NSTextField" id="257632565">
 							<reference key="NSNextResponder" ref="851795274"/>
 							<int key="NSvFlags">268</int>
-							<string key="NSFrame">{{17, 368}, {294, 17}}</string>
+							<string key="NSFrame">{{17, 428}, {294, 17}}</string>
 							<reference key="NSSuperview" ref="851795274"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="683970057">
@@ -530,15 +532,16 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<object class="NSCustomView" id="166163176">
 							<reference key="NSNextResponder" ref="851795274"/>
 							<int key="NSvFlags">274</int>
-							<string key="NSFrame">{{0, 61}, {600, 299}}</string>
+							<string key="NSFrame">{{0, 61}, {600, 359}}</string>
 							<reference key="NSSuperview" ref="851795274"/>
 							<string key="NSClassName">NSView</string>
 						</object>
 					</object>
-					<string key="NSFrameSize">{600, 400}</string>
+					<string key="NSFrameSize">{600, 460}</string>
+					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1440, 878}}</string>
-				<string key="NSMinSize">{600, 422}</string>
+				<string key="NSMinSize">{600, 482}</string>
 				<string key="NSMaxSize">{3.40282e+38, 3.40282e+38}</string>
 			</object>
 			<object class="NSUserDefaultsController" id="356871564">
@@ -1111,19 +1114,19 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{349, 161}, {512, 91}}</string>
+					<string>{{305, 161}, {512, 91}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<real value="1"/>
 					<string>{{0, 701}, {539, 272}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<real value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{99, 185}, {600, 400}}</string>
+					<string>{{99, 126}, {600, 460}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{99, 185}, {600, 400}}</string>
+					<string>{{99, 126}, {600, 460}}</string>
 					<boolean value="NO"/>
 					<boolean value="YES"/>
-					<string>{600, 400}</string>
+					<string>{600, 460}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>

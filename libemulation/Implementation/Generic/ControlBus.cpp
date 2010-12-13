@@ -155,7 +155,7 @@ void ControlBus::notify(OEComponent *sender, int notification, void *data)
 	HostAudioBuffer *buffer = (HostAudioBuffer *) data;
 	float *out = buffer->output;
 	
-	float freq = rand() * 4000.0 / RAND_MAX;
+	float freq = 440.0 + rand() * 2.0 / RAND_MAX;
 	
 	for(int i = 0; i < buffer->frameNum; i++)
 	{

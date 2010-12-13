@@ -16,12 +16,6 @@
 {
 	self = [super initWithWindowNibName:@"Preferences"];
 	
-	if (self)
-	{
-		templateChooserViewController = [[TemplateChooserViewController alloc] init];
-		[templateChooserViewController setDelegate:self];
-	}
-	
 	return self;
 }
 
@@ -45,13 +39,16 @@
 	[[self window] setToolbar:toolbar];
 	[toolbar release];
 	
-	NSView *view = [templateChooserViewController view];
-	[fTemplateChooserView addSubview:view];
-	[view setFrameSize:[fTemplateChooserView frame].size];
-	
 	[self updateGeneralView];
 	
     [self setView:selectedItemIdentifier];
+	
+	templateChooserViewController = [[TemplateChooserViewController alloc] init];
+	[templateChooserViewController setDelegate:self];
+	
+	NSView *view = [templateChooserViewController view];
+	[view setFrameSize:[fTemplateChooserView frame].size];
+	[fTemplateChooserView addSubview:view];
 }
 
 - (NSToolbarItem *)toolbar:(NSToolbar *)toolbar
@@ -182,13 +179,12 @@
 
 - (IBAction)openTemplateChooser:(id)sender
 {
+	[templateChooserViewController reloadData];
+	
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	NSString *group = [defaults stringForKey:@"OEDefaultTemplateGroup"];
 	NSString *path = [defaults stringForKey:@"OEDefaultTemplatePath"];
-	[templateChooserViewController selectItemWithPath:path inGroup:group];
-	
-	[fTemplateChooserChooseButton setEnabled:
-	 ([templateChooserViewController selectedItemPath] != nil)];
+	[templateChooserViewController selectGroup:group andItemWithPath:path];
 	
 	[NSApp beginSheet:fTemplateChooserSheet
 	   modalForWindow:[self window]

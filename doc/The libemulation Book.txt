@@ -3,7 +3,7 @@ EDL (Emulation Description Language) is a language for describing software emula
 
 An emulation is described in terms of devices. Each device represents a distinct physical entity, for example a floppy disk drive, a memory expansion, or a printer.
 
-At a lower level, each device is described as a collection of reusable software components, for example RAM, DMA controllers or CPUs. DML provides a way for interconnecting these software components, as well as for storing their states.
+At a lower level, each device is described as a collection of reusable software components, for example RAM, DMA controllers or CPUs. EDL provides a way for interconnecting these software components, as well as for storing their states.
 
 This document describes the version 1.0 of this specification.
 
@@ -17,40 +17,38 @@ This document describes the version 1.0 of this specification.
 * Sounds should be stored in WAV format or OGG/Vorbis format
 * Labels should be expressed in the native language of the device. If unclear, english should be used
 
-==DML Format==
-DML files can be stored stand-alone (for storing device descriptions only), or packaged (for storing both device descriptions and state).
+==EDL Format==
+EDL files can be stored stand-alone (for storing device descriptions only), or packaged (for storing both device descriptions and state).
 
-The standalone format consists of a file of extension ".xml". This file should store the DML description.
+The standalone format consists of a file of extension ".xml". This file should store the EDL description.
 
-The packaged format consists of a folder of extension ".emulation". This folder should contain an "info.xml" file for storing the DML description. The folder can also contain component state files (e.g. for storing RAM content).
+The packaged format consists of a folder of extension ".emulation". This folder should contain an "info.xml" file for storing the EDL description. The folder can also contain component state files (e.g. for storing RAM content).
 
 The packaged format can also be compressed using ZIP compression. All files in the archive (info.xml and component state files) should be stored at the ZIP root level, and the resulting file must be of extension ".emulation". 
 
-==DML Tags==
+==EDL Tags==
 
-==="dml"===
-The DML language is based on XML. The main XML element must be a "del" element. This element has the following tags:
+==="edl"===
+The EDL language is based on XML. The main XML element must be an "edl" element. This element has the following tags:
 
 * version: Should be "1.0"
 * label: The human-interface name of this emulation
 * image: A path to an image of this emulation (relative to the "resources" folder)
 * description: A human-interface description of this emulation (used in template/device selectors)
-* group: A name used for grouping this emulation in the template/device selector. For example: "Apple I", "PC", "Printers".
+* options: Additional options (carries the emulation window position)
 
-The "dml" element may only contain "device" elements.
+The "edl" element may only contain "device" elements.
 
 ==="device"===
-Each "device" element corresponds to a distinct physical device in the emulation.
+Each "device" element corresponds to a physical device in the emulation.
 
 The "device" element has the following tags:
 
-* name: The device name of this device. Usually in the form "dev[x]", with [x] being a positive integer
-* type: One of the following: "expansion" (for devices that are physically inside the main emulated computer), "storage" (for peripherals that provide persistent data storage, e.g. disk drives), "peripheral" (for devices that are physically outside of the main emulated computer)
-* options: A comma-separated list of options. The only option defined in this specification is "static", which signals that a device should not be removed.
+* id: The id name of this device.
 * label: The human-interface name of this device
 * image: A path to an image of this device (relative to the "resources" folder)
 
-The "device" element may contain "inlet", "outlet", "setting" or "component" elements.
+The "device" element may contain "setting" elements.
 
 ==="inlet"===
 An "inlet" element signals that a device's component is accepting an outlet.
@@ -111,34 +109,34 @@ I has the following tags:
 * name: The name of the resource
 * src: A filename in the resource folder.
 
-==DML Addresses==
-The "ref" tags in the DML description describes references to other components or properties with a DML address. This address is constructed as follows:
+==EDL Addresses==
+The "ref" tags in the EDL description describes references to other components or properties with a EDL address. This address is constructed as follows:
 
 [device{:}][component][.property]
 
 ==Architecture==
-* DML is inlet-centric. This means that it is the inlet component that is notified about a connected device. 
-* DML supports devices with more than one outlet.
+* EDL is inlet-centric. This means that it is the inlet component that is notified about a connected device. 
+* EDL supports devices with more than one outlet.
 * When deleting a device, a recursive deletion for all connected inlets should be performed first. Only then should the device's outlets be disconnected. A circularity check should be performed to avoid loop conditions.
 
 ==Event order==
-The order of events during instantiation and initialization of a DML is:
+The order of events during instantiation and initialization of an EDL is:
 
 * All components are instantiated
 * Device-centric setter notifications (properties, data and resources) are sent to all components
 * Connection notifications are sent to all components.
 
-The order of events when saving a DML file is:
-* Properties and data getter notifications are sent to all components to update the DML
-* The DML file is saved
+The order of events when saving an EDL file is:
+* Properties and data getter notifications are sent to all components to update the EDL
+* The EDL file is saved
 
-The order of events when adding a DML to a DML file is:
+The order of events when adding an EDL to an EDL file is:
 * The new components are instantiated
 * Device-centric setter notifications (properties, data and resources) are sent to new components
-* The DML files are merged. New device names are chosen uniquely.
+* The EDL files are merged. New device names are chosen uniquely.
 * Connection notifications are sent to the inlets that are connected to the new device.
 
-The order of events when removing a device from a DML file is:
+The order of events when removing a device from an EDL file is:
 * The devices connected to the device to be deleted are removed through recursion
 * The components of the inlets that refer to the device to be deleted are notified that the component is disconnected. This is done with a OEComponent.connect(, NULL) value.
 * The device's components are destroyed.

@@ -16,7 +16,8 @@
 {
 }
 
-- (void)addItemsFromPath:(NSString *)path
-				 toGroup:(NSString *)group;
+- (BOOL)validateGroupAtPath:(NSString *)groupPath;
+- (void)addGroupAtPath:(NSString *)groupPath
+			   toGroup:(NSString *)group;
 
 @end

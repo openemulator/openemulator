@@ -589,16 +589,13 @@ bool OEEmulation::updateComponent(string id, xmlNodePtr children)
 				if (!hasValueProperty(src, "packagePath") || !package)
 					continue;
 				
-				OEData *data;
+				OEData *data = NULL;
 				string parsedSrc = parseValueProperties(src, propertiesMap);
 				
-				if (component->getData(name, &data))
+				if (component->getData(name, &data) && data)
 				{
-					if (data)
-					{
-						if (!package->writeFile(parsedSrc, data))
-							log("could not write '" + src + "'");
-					}
+					if (!package->writeFile(parsedSrc, data))
+						log("could not write '" + src + "'");
 				}
 			}
 		}
@@ -797,9 +794,9 @@ bool OEEmulation::postMessage(OEComponent *sender, int message, void *data)
 		case EMULATION_ADD_STORAGE:
 			{
 				OEDeviceInfo *deviceInfo = getDeviceInfo(getDeviceId(sender));
-				if (deviceInfo)
+				if (deviceInfo && !deviceInfo->storage)
 				{
-					deviceInfo->storages.push_back(sender);
+					deviceInfo->storage = sender;
 					
 					if (devicesInfoDidUpdate)
 						devicesInfoDidUpdate();
@@ -812,20 +809,24 @@ bool OEEmulation::postMessage(OEComponent *sender, int message, void *data)
 		case EMULATION_REMOVE_STORAGE:
 			{
 				OEDeviceInfo *deviceInfo = getDeviceInfo(getDeviceId(sender));
-				if (deviceInfo)
+				if (deviceInfo && deviceInfo->storage)
 				{
-					OEComponents &storages = deviceInfo->storages;
-					OEComponents::iterator first = storages.begin();
-					OEComponents::iterator last = storages.end();
-					OEComponents::iterator i = remove(first, last, sender);
-					if (i != last)
-						storages.erase(i, last);
+					deviceInfo->storage = NULL;
 					
 					if (devicesInfoDidUpdate)
 						devicesInfoDidUpdate();
 					
 					return true;
 				}
+			}
+			break;
+			
+		case EMULATION_SET_STORAGEISMOUNTED:
+			{
+				OEDeviceInfo *deviceInfo = getDeviceInfo(getDeviceId(sender));
+				deviceInfo->storageIsMounted = *((bool *)data);
+				
+				return true;
 			}
 			break;
 			

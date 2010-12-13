@@ -5,6 +5,8 @@
 * Improved chooser view (template chooser) with lazy initialization
 * Implemented OEEmulation getDevicesInfoMap
 * Implemented main emulation window context menu
+* Added descriptions in ChooserViewController
+* Improved several issues with the ChooserViewController
 
 ==2010-11-01==
 * Fixed ${id} when saving emulation data

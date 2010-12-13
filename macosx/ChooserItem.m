@@ -2,7 +2,7 @@
 /**
  * OpenEmulator
  * Mac OS X Chooser Item
- * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Controls an item in a device or template chooser view.
@@ -12,26 +12,23 @@
 
 @implementation ChooserItem
 
-- (id)initWithTitle:(NSString *)theTitle
-		   subtitle:(NSString *)theSubtitle
+- (id)initWithLabel:(NSString *)theLabel
 		  imagePath:(NSString *)theImagePath
+		description:(NSString *)theDescription
 			edlPath:(NSString *)theEDLPath
 			   data:(void *)theData
 {
 	if (self = [super init])
 	{
-		if (theTitle)
-			title = [theTitle copy];
-		
-		if (theSubtitle)
-			subtitle = [theSubtitle copy];
-		
+		if (theLabel)
+			label = [theLabel copy];
 		if (theImagePath)
 			imagePath = [theImagePath copy];
 		
+		if (theDescription)
+			description = [theDescription copy];
 		if (theEDLPath)
 			edlPath = [theEDLPath copy];
-		
 		data = theData;
 	}
 	
@@ -40,37 +37,48 @@
 
 - (void)dealloc
 {
-    [title release];
-    [subtitle release];
+    [label release];
     [imagePath release];
+	
+    [description release];
     [edlPath release];
+	
+	[image release];
 	
     [super dealloc];
 }
 
 - (NSString *)imageRepresentationType
 {
-	return IKImageBrowserPathRepresentationType;
+	return IKImageBrowserNSImageRepresentationType;
 }
 
 - (id)imageRepresentation
 {
-	return imagePath;
+	if (!image)
+		image = [[NSImage alloc] initWithContentsOfFile:imagePath];	
+	
+	return image;
 }
 
 - (NSString *)imageTitle
 {
-	return title;
+	return label;
 }
 
 - (NSString *)imageSubtitle
 {
-	return subtitle;
+	return @"";
 }
 
 - (NSString *)imageUID
 {
-    return [[edlPath retain] autorelease];
+    return edlPath;
+}
+
+- (NSString *)description
+{
+	return description;
 }
 
 - (NSString *)edlPath

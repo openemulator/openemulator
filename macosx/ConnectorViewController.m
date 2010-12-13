@@ -25,9 +25,9 @@
 
 - (void)dealloc
 {
-	[super dealloc];
-	
 	[items release];
+
+	[super dealloc];
 }
 
 - (void)setDelegate:(id)theDelegate
@@ -101,9 +101,9 @@ cellWasDoubleClickedAtIndex:(NSUInteger)index
 		
 		ChooserItem *item = [[ChooserItem alloc]
 							 initWithTitle:[inlet objectForKey:@"label"]
-							 subtitle:@""
 							 imagePath:imagePath
-							 data:[inlet objectForKey:@"ref"]];
+							 edlDescription:@""
+							 edlData:[inlet objectForKey:@"ref"]];
 		
 		if (item)
 		{

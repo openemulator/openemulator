@@ -33,6 +33,7 @@ typedef enum
 	EMULATION_REMOVE_CANVAS,
 	EMULATION_ADD_STORAGE,
 	EMULATION_REMOVE_STORAGE,
+	EMULATION_SET_STORAGEISMOUNTED,
 	EMULATION_RUN_ALERT,
 } OEEmulationMessages;
 
@@ -63,7 +64,8 @@ typedef struct
 	
 	string state;
 	OEComponents canvases;
-	OEComponents storages;
+	OEComponent *storage;
+	bool storageIsMounted;
 } OEDeviceInfo;
 typedef vector<OEDeviceInfo> OEDevicesInfo;
 
