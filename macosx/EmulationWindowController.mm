@@ -87,6 +87,18 @@
 		[item setTarget:nil];
 		[item setAction:@selector(toggleInspector:)];
 	}
+	else if ([ident isEqualToString:@"AudioControls"])
+	{
+		[item setLabel:NSLocalizedString(@"Audio Controls",
+										 "Emulation window toolbar item")];
+		[item setPaletteLabel:NSLocalizedString(@"Audio Controls",
+												"Emulation window toolbar item")];
+		[item setToolTip:NSLocalizedString(@"Show or hide the audio controls window.",
+										   "Emulation window toolbar item")];
+		[item setImage:[NSImage imageNamed:@"IconAudio.png"]];
+		[item setTarget:nil];
+		[item setAction:@selector(toggleAudioControls:)];
+	}
 	
 	return item;
 }
@@ -103,6 +115,7 @@
 {
 	return [NSArray arrayWithObjects:
 			@"Inspector",
+			@"AudioControls",
 			NSToolbarSeparatorItemIdentifier,
 			NSToolbarSpaceItemIdentifier,
 			NSToolbarFlexibleSpaceItemIdentifier,
