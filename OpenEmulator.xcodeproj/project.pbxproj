@@ -702,7 +702,7 @@
 				00C3CF9211F557AC00EA2453 /* src */,
 			);
 			name = "openemulator-sdl";
-			path = SDL;
+			path = sdl;
 			sourceTree = "<group>";
 		};
 		00C3CF9211F557AC00EA2453 /* src */ = {
