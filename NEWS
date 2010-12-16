@@ -7,6 +7,8 @@
 * Implemented main emulation window context menu
 * Added descriptions in ChooserViewController
 * Improved several issues with the ChooserViewController
+* Found a solution to the storage API problem. Mount state is indicated by a new mount state.
+* Solved the problem of attempting to add/remove devices that are not hot-pluggable and have power applied. Added a new power state for each device, that is notified through emulation. Added "hotpluggable" options for ports, as well as a "static" option for devices.
 
 ==2010-11-01==
 * Fixed ${id} when saving emulation data

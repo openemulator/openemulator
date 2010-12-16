@@ -728,14 +728,44 @@ bool OEEmulation::postMessage(OEComponent *sender, int message, void *data)
 {
 	switch (message)
 	{
-		case EMULATION_SET_DEVICESTATE:
+		case EMULATION_SET_INFOLINE:
 			if (data)
 			{
 				OEDeviceInfo *deviceInfo = getDeviceInfo(getDeviceId(sender));
 				if (deviceInfo)
 				{
-					deviceInfo->state = *((string *) data);
+					deviceInfo->infoLine = *((string *) data);
 					
+					if (devicesInfoDidUpdate)
+						devicesInfoDidUpdate();
+					
+					return true;
+				}
+			}
+			break;
+			
+		case EMULATION_SET_POWERED:
+			{
+				OEDeviceInfo *deviceInfo = getDeviceInfo(getDeviceId(sender));
+				if (deviceInfo)
+				{
+					deviceInfo->powered = *((bool *)data);
+					
+					if (devicesInfoDidUpdate)
+						devicesInfoDidUpdate();
+					
+					return true;
+				}
+			}
+			break;
+			
+		case EMULATION_SET_MOUNTED:
+			{
+				OEDeviceInfo *deviceInfo = getDeviceInfo(getDeviceId(sender));
+				if (deviceInfo)
+				{
+					deviceInfo->mounted = *((bool *)data);
+				
 					if (devicesInfoDidUpdate)
 						devicesInfoDidUpdate();
 					
@@ -792,11 +822,14 @@ bool OEEmulation::postMessage(OEComponent *sender, int message, void *data)
 			break;
 			
 		case EMULATION_ADD_STORAGE:
+			if (data && addCanvas)
 			{
 				OEDeviceInfo *deviceInfo = getDeviceInfo(getDeviceId(sender));
-				if (deviceInfo && !deviceInfo->storage)
+				if (deviceInfo)
 				{
-					deviceInfo->storage = sender;
+					OEComponent **ref = (OEComponent **)data;
+					
+					deviceInfo->storages.push_back(*ref);
 					
 					if (devicesInfoDidUpdate)
 						devicesInfoDidUpdate();
@@ -807,26 +840,27 @@ bool OEEmulation::postMessage(OEComponent *sender, int message, void *data)
 			break;
 			
 		case EMULATION_REMOVE_STORAGE:
+			if (data && removeCanvas)
 			{
 				OEDeviceInfo *deviceInfo = getDeviceInfo(getDeviceId(sender));
-				if (deviceInfo && deviceInfo->storage)
+				if (deviceInfo)
 				{
-					deviceInfo->storage = NULL;
+					OEComponent **ref = (OEComponent **)data;
+					
+					OEComponents &storages = deviceInfo->storages;
+					OEComponents::iterator first = storages.begin();
+					OEComponents::iterator last = storages.end();
+					OEComponents::iterator i = remove(first, last, *ref);
+					if (i != last)
+						storages.erase(i, last);
+					
+					*ref = NULL;
 					
 					if (devicesInfoDidUpdate)
 						devicesInfoDidUpdate();
 					
 					return true;
 				}
-			}
-			break;
-			
-		case EMULATION_SET_STORAGEISMOUNTED:
-			{
-				OEDeviceInfo *deviceInfo = getDeviceInfo(getDeviceId(sender));
-				deviceInfo->storageIsMounted = *((bool *)data);
-				
-				return true;
 			}
 			break;
 			

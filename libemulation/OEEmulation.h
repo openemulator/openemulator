@@ -28,12 +28,13 @@
 
 typedef enum
 {
-	EMULATION_SET_DEVICESTATE,
+	EMULATION_SET_INFOLINE,
+	EMULATION_SET_POWERED,
+	EMULATION_SET_MOUNTED,
 	EMULATION_ADD_CANVAS,
 	EMULATION_REMOVE_CANVAS,
 	EMULATION_ADD_STORAGE,
 	EMULATION_REMOVE_STORAGE,
-	EMULATION_SET_STORAGEISMOUNTED,
 	EMULATION_RUN_ALERT,
 } OEEmulationMessages;
 
@@ -62,10 +63,11 @@ typedef struct
 	
 	string location;
 	
-	string state;
+	string infoLine;
+	bool powered;
+	bool mounted;
 	OEComponents canvases;
-	OEComponent *storage;
-	bool storageIsMounted;
+	OEComponents storages;
 } OEDeviceInfo;
 typedef vector<OEDeviceInfo> OEDevicesInfo;
 
