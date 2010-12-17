@@ -12,6 +12,9 @@
 
 @interface EmulationWindowController : NSWindowController
 {
+	id fEmulationTableView;
+	
+	NSCell *cell;
 }
 
 - (void)updateOptions;

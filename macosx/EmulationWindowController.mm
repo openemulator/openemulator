@@ -9,6 +9,7 @@
  */
 
 #import "EmulationWindowController.h"
+#import "EmulationTableCell.h"
 #import "Document.h"
 #import "StringConversion.h"
 
@@ -19,6 +20,11 @@
 - (id)init
 {
 	self = [self initWithWindowNibName:@"Emulation"];
+	
+	if (self)
+	{
+		cell = [[EmulationTableCell alloc] initTextCell:@"Hola"];
+	}
 	
 	return self;
 }
@@ -31,10 +37,12 @@
 	[toolbar setDelegate:self];
 	[toolbar setAllowsUserCustomization:YES];
 	[toolbar setAutosavesConfiguration:YES];
-	
 	[[self window] setToolbar:toolbar];
-	
 	[toolbar release];
+	
+	[fEmulationTableView setDataSource:self];
+	[fEmulationTableView setDelegate:self];
+	[fEmulationTableView setDoubleAction:@selector(emulationDoubleAction:)];
 	
 	NSString *frameString = [[self document] getEDLOptions];
 	NSArray *components = [frameString componentsSeparatedByString:@" "];
@@ -139,6 +147,18 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		return getNSString((*devicesInfo)[rowIndex].label);
 	
 	return nil;
+}
+
+- (NSCell *)tableView:(NSTableView *)tableView
+dataCellForTableColumn:(NSTableColumn *)tableColumn
+				  row:(NSInteger)row
+{
+	return cell;
+}
+
+- (void)emulationDoubleAction:(id)sender
+{
+	NSLog(@"doubleAction");
 }
 
 @end

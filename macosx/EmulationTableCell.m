@@ -1,16 +1,16 @@
 
 /**
  * OpenEmulator
- * Mac OS X Emulation Cell
+ * Mac OS X Emulation Table Cell
  * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements an emulation cell.
+ * Implements an emulation table cell.
  */
 
-#import "EmulationCell.h"
+#import "EmulationTableCell.h"
 
-@implementation EmulationCell
+@implementation EmulationTableCell
 
 - (void)drawInteriorWithFrame:(NSRect)cellFrame inView:(NSView *)controlView
 {

@@ -50,7 +50,7 @@
 		0076FEDD12A21E4900A3FEC7 /* HardwareChooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0076FEDB12A21E4900A3FEC7 /* HardwareChooser.xib */; };
 		0078F655127348ED0042577E /* AudioControls.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0078F653127348ED0042577E /* AudioControls.xib */; };
 		008107DE1120C57600D744FB /* TemplateChooserViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00FE0C051095353B00B92AB7 /* TemplateChooserViewController.mm */; };
-		00954E781277B79E00C17203 /* EmulationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00954E771277B79E00C17203 /* EmulationCell.m */; };
+		00954E781277B79E00C17203 /* EmulationTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00954E771277B79E00C17203 /* EmulationTableCell.m */; };
 		00954E991277BB8E00C17203 /* EmulationWindowController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00954E981277BB8E00C17203 /* EmulationWindowController.mm */; };
 		00954E9E1277BBB400C17203 /* HardwareChooserWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00954E9D1277BBB400C17203 /* HardwareChooserWindowController.m */; };
 		00954EA71277BC1200C17203 /* AudioControlsWindowController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00954EA61277BC1200C17203 /* AudioControlsWindowController.mm */; };
@@ -242,8 +242,8 @@
 		0076FED012A21E2B00A3FEC7 /* hardware */ = {isa = PBXFileReference; lastKnownFileType = folder; path = hardware; sourceTree = "<group>"; };
 		0076FEDC12A21E4900A3FEC7 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/HardwareChooser.xib; sourceTree = "<group>"; };
 		0078F654127348ED0042577E /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/AudioControls.xib; sourceTree = "<group>"; };
-		00954E761277B79E00C17203 /* EmulationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmulationCell.h; sourceTree = "<group>"; };
-		00954E771277B79E00C17203 /* EmulationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmulationCell.m; sourceTree = "<group>"; };
+		00954E761277B79E00C17203 /* EmulationTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmulationTableCell.h; sourceTree = "<group>"; };
+		00954E771277B79E00C17203 /* EmulationTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmulationTableCell.m; sourceTree = "<group>"; };
 		00954E971277BB8E00C17203 /* EmulationWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmulationWindowController.h; sourceTree = "<group>"; };
 		00954E981277BB8E00C17203 /* EmulationWindowController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EmulationWindowController.mm; sourceTree = "<group>"; };
 		00954E9C1277BBB400C17203 /* HardwareChooserWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HardwareChooserWindowController.h; sourceTree = "<group>"; };
@@ -767,8 +767,8 @@
 				006115C011DD0347008AA3EE /* Application.h */,
 				006115C111DD0347008AA3EE /* Application.m */,
 				002579FB1218A83400206E56 /* StringConversion.h */,
-				00954E761277B79E00C17203 /* EmulationCell.h */,
-				00954E771277B79E00C17203 /* EmulationCell.m */,
+				00954E761277B79E00C17203 /* EmulationTableCell.h */,
+				00954E771277B79E00C17203 /* EmulationTableCell.m */,
 				00954E971277BB8E00C17203 /* EmulationWindowController.h */,
 				00954E981277BB8E00C17203 /* EmulationWindowController.mm */,
 				00954E9C1277BBB400C17203 /* HardwareChooserWindowController.h */,
@@ -1123,7 +1123,7 @@
 				00BADDC51100EDC600EB0344 /* ConnectorViewController.m in Sources */,
 				008107DE1120C57600D744FB /* TemplateChooserViewController.mm in Sources */,
 				006115C211DD0347008AA3EE /* Application.m in Sources */,
-				00954E781277B79E00C17203 /* EmulationCell.m in Sources */,
+				00954E781277B79E00C17203 /* EmulationTableCell.m in Sources */,
 				00954E991277BB8E00C17203 /* EmulationWindowController.mm in Sources */,
 				00954E9E1277BBB400C17203 /* HardwareChooserWindowController.m in Sources */,
 				00954EA71277BC1200C17203 /* AudioControlsWindowController.mm in Sources */,
