@@ -10,13 +10,20 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "EmulationTableCell.h"
+
 @interface EmulationWindowController : NSWindowController
 {
 	id fEmulationTableView;
 	
-	NSCell *cell;
+	EmulationTableCell *emulationTableCell;
 }
 
 - (void)updateOptions;
+
+- (IBAction)showDevice:(id)sender;
+- (IBAction)revealInFinder:(id)sender;
+- (IBAction)mountDevice:(id)sender;
+- (IBAction)ejectDevice:(id)sender;
 
 @end

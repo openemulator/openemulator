@@ -183,7 +183,7 @@ OEDeviceInfo *OEEmulation::getDeviceInfo(string id)
 			return &(*i);
 	}
 	
-	return NULL;	
+	return NULL;
 }
 
 bool OEEmulation::addEDL(string path, OEIdMap connectionMap)

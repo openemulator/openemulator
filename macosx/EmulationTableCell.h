@@ -10,13 +10,8 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface EmulationTableCell : NSCell
+@interface EmulationTableCell : NSActionCell
 {
 }
-
-//- (IBAction)showDevice:(id)sender;
-//- (IBAction)revealDeviceInFinder:(id)sender;
-//- (IBAction)mountDevice:(id)sender;
-//- (IBAction)ejectDevice:(id)sender;
 
 @end

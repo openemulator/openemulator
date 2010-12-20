@@ -1,16 +1,16 @@
 
 /**
  * OpenEmulator
- * Vertically centered cell
+ * Chooser Outline Cell
  * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls a vertically centered cell.
+ * Implements a chooser outline cell.
  */
 
-#import "VerticallyCenteredCell.h"
+#import "ChooserOutlineCell.h"
 
-@implementation VerticallyCenteredCell
+@implementation ChooserOutlineCell
 
 - (void)drawInteriorWithFrame:(NSRect)cellFrame inView:(NSView *)controlView
 {

@@ -12,30 +12,116 @@
 
 @implementation EmulationTableCell
 
-- (void)drawInteriorWithFrame:(NSRect)cellFrame inView:(NSView *)controlView
+- (void)drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView
 {
- 	NSMutableAttributedString *aString;
-	aString = [[NSMutableAttributedString alloc] initWithAttributedString:
-			   [self attributedStringValue]];
-	if (aString)
-		[aString autorelease];
+	// Load data
+	NSString *id = [self stringValue];
 	
-	if ([self backgroundStyle] == NSBackgroundStyleDark)
+	NSImage *icon;
+	icon = [[NSWorkspace sharedWorkspace]
+			iconForFileType:NSFileTypeForHFSTypeCode(kGenericFolderIcon)];
+	NSString *titleString = [[id copy] autorelease];
+	NSString *subtitleString = @"(on Apple II Slot 6 Drive 1) /Volumes/Applications/Disk Images/My Bad/test.dmg";
+	NSString *statusString = @"";
+	
+	NSRect drawRect = cellFrame;
+	
+	// Draw icon
+	[[NSGraphicsContext currentContext] saveGraphicsState];
+	NSImageInterpolation interpolation = [[NSGraphicsContext currentContext]
+										  imageInterpolation];
+	[[NSGraphicsContext currentContext] setImageInterpolation:NSImageInterpolationHigh];
+	
+	NSRect iconRect = drawRect;
+	float iconBorder = 3.0;
+	if ([controlView isFlipped])
 	{
-		NSRange range;
-		range.location = 0;
-		range.length = [aString length];
-		[aString removeAttribute:NSForegroundColorAttributeName range:range];
-		[aString addAttribute:NSForegroundColorAttributeName
-						value:[NSColor whiteColor]
-						range:range];
+		NSAffineTransform *xform = [NSAffineTransform transform];
+		[xform translateXBy:0.0 yBy:cellFrame.size.height];
+		[xform scaleXBy:1.0 yBy:-1.0];
+		[xform concat];
+		iconRect.origin.y = -iconRect.origin.y;
 	}
+	iconRect = NSMakeRect(iconRect.origin.x + iconBorder,
+						  iconRect.origin.y + iconBorder,
+						  iconRect.size.height - 2.0 * iconBorder,
+						  iconRect.size.height - 2.0 * iconBorder);
+	[icon drawInRect:iconRect
+			fromRect:NSMakeRect(0, 0, [icon size].width, [icon size].height)
+		   operation:NSCompositeSourceOver
+			fraction:1.0];
 	
-    NSSize contentSize = [self cellSize];
-    cellFrame.origin.y += (cellFrame.size.height - contentSize.height) / 2.0;
-    cellFrame.size.height = contentSize.height;
+	[[NSGraphicsContext currentContext] setImageInterpolation:interpolation];
+	[[NSGraphicsContext currentContext] restoreGraphicsState];
+	drawRect.origin.x += drawRect.size.height;
+	drawRect.size.width -= drawRect.size.height;
 	
-	[aString drawInRect:cellFrame];
+	// Prepare text attributes
+	NSMutableParagraphStyle *paragraphStyle = [[[NSParagraphStyle
+												 defaultParagraphStyle] mutableCopy]
+											   autorelease];
+	[paragraphStyle setLineBreakMode:NSLineBreakByTruncatingTail];
+	NSColor *titleColor = ([self isHighlighted] ? [NSColor whiteColor] :
+						   [NSColor blackColor]);
+	NSColor *subtitleColor = ([self isHighlighted] ? [NSColor whiteColor] :
+							  [NSColor darkGrayColor]);
+	
+	NSMutableDictionary *titleAttributes;
+	titleAttributes = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
+					   [NSFont messageFontOfSize:12.0], NSFontAttributeName,
+					   titleColor, NSForegroundColorAttributeName,
+					   paragraphStyle, NSParagraphStyleAttributeName,
+					   nil];
+	
+	NSMutableDictionary *subtitleAttributes;
+	subtitleAttributes = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
+						  [NSFont messageFontOfSize:9.0], NSFontAttributeName,
+						  subtitleColor, NSForegroundColorAttributeName,
+						  paragraphStyle, NSParagraphStyleAttributeName,
+						  nil];
+	
+	// Prepare text
+	NSAttributedString *attrTitleString;
+	attrTitleString = [[NSAttributedString alloc] initWithString:titleString
+													  attributes:titleAttributes];
+	[attrTitleString autorelease];
+	NSSize titleSize = [attrTitleString size];
+	NSAttributedString *attrSubtitleString;
+	attrSubtitleString = [[NSAttributedString alloc] initWithString:subtitleString
+														 attributes:subtitleAttributes];
+	[attrSubtitleString autorelease];
+	NSSize subtitleSize = [attrSubtitleString size];
+	NSAttributedString *attrStatusString;
+	attrStatusString = [[NSAttributedString alloc] initWithString:statusString
+													   attributes:subtitleAttributes];
+	[attrStatusString autorelease];
+	NSSize statusSize = [attrStatusString size];
+	
+	if (titleSize.width > drawRect.size.width)
+		titleSize.width = drawRect.size.width;
+	if (subtitleSize.width > drawRect.size.width)
+		subtitleSize.width = drawRect.size.width;
+	if (statusSize.width > drawRect.size.width)
+		statusSize.width = drawRect.size.width;
+	
+	if (statusSize.width == 0.0)
+		statusSize.height = 0.0;
+	float textHeight = titleSize.height + subtitleSize.height + statusSize.height;
+	float textY = drawRect.origin.y + (drawRect.size.height - textHeight) / 2.0;
+	
+	NSRect titleRect = NSMakeRect(drawRect.origin.x, textY,
+								  titleSize.width, titleSize.height);
+	textY += titleSize.height;
+	NSRect subtitleRect = NSMakeRect(drawRect.origin.x, textY,
+									 subtitleSize.width, subtitleSize.height);
+	textY += subtitleSize.height;
+	NSRect statusRect = NSMakeRect(drawRect.origin.x, textY,
+								   statusSize.width, statusSize.height);
+	
+	// Draw text
+	[attrTitleString drawInRect:titleRect];
+	[attrSubtitleString drawInRect:subtitleRect];
+	[attrStatusString drawInRect:statusRect];
 }
 
 @end

@@ -131,7 +131,7 @@
 		00ED37C012779DD900BEF6BD /* IconVideo.png in Resources */ = {isa = PBXBuildFile; fileRef = 00ED37AF12779DD800BEF6BD /* IconVideo.png */; };
 		00ED37C112779DD900BEF6BD /* IconWakeUp.png in Resources */ = {isa = PBXBuildFile; fileRef = 00ED37B012779DD800BEF6BD /* IconWakeUp.png */; };
 		00ED37C212779DD900BEF6BD /* IconWarmRestart.png in Resources */ = {isa = PBXBuildFile; fileRef = 00ED37B112779DD800BEF6BD /* IconWarmRestart.png */; };
-		00EF028D107D9EFB00FE378D /* VerticallyCenteredCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00EF028C107D9EFB00FE378D /* VerticallyCenteredCell.m */; };
+		00EF028D107D9EFB00FE378D /* ChooserOutlineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00EF028C107D9EFB00FE378D /* ChooserOutlineCell.m */; };
 		00F01B4712A0D6EC000527CA /* EmulationEject.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F01B4612A0D6EC000527CA /* EmulationEject.png */; };
 		00F0ED6711028C8800208090 /* DiskImage525.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000F66390FF8368F00C8AF23 /* DiskImage525.icns */; };
 		00FE0C171095371B00B92AB7 /* ChooserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00FE0C161095371B00B92AB7 /* ChooserViewController.m */; };
@@ -381,8 +381,8 @@
 		00ED37AF12779DD800BEF6BD /* IconVideo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IconVideo.png; path = macosx/Images/IconVideo.png; sourceTree = "<group>"; };
 		00ED37B012779DD800BEF6BD /* IconWakeUp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IconWakeUp.png; path = macosx/Images/IconWakeUp.png; sourceTree = "<group>"; };
 		00ED37B112779DD800BEF6BD /* IconWarmRestart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IconWarmRestart.png; path = macosx/Images/IconWarmRestart.png; sourceTree = "<group>"; };
-		00EF028B107D9EFB00FE378D /* VerticallyCenteredCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VerticallyCenteredCell.h; sourceTree = "<group>"; };
-		00EF028C107D9EFB00FE378D /* VerticallyCenteredCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VerticallyCenteredCell.m; sourceTree = "<group>"; };
+		00EF028B107D9EFB00FE378D /* ChooserOutlineCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChooserOutlineCell.h; sourceTree = "<group>"; };
+		00EF028C107D9EFB00FE378D /* ChooserOutlineCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChooserOutlineCell.m; sourceTree = "<group>"; };
 		00F01B4612A0D6EC000527CA /* EmulationEject.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = EmulationEject.png; path = macosx/Images/EmulationEject.png; sourceTree = "<group>"; };
 		00FE0C00109534CE00B92AB7 /* ChooserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChooserViewController.h; sourceTree = "<group>"; };
 		00FE0C041095353B00B92AB7 /* TemplateChooserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TemplateChooserViewController.h; sourceTree = "<group>"; };
@@ -752,8 +752,8 @@
 				00D845760FFF0FD2005802F0 /* OpenEmulator_Prefix.pch */,
 				00D845790FFF0FD2005802F0 /* PreferencesWindowController.h */,
 				00D8457A0FFF0FD2005802F0 /* PreferencesWindowController.m */,
-				00EF028B107D9EFB00FE378D /* VerticallyCenteredCell.h */,
-				00EF028C107D9EFB00FE378D /* VerticallyCenteredCell.m */,
+				00EF028B107D9EFB00FE378D /* ChooserOutlineCell.h */,
+				00EF028C107D9EFB00FE378D /* ChooserOutlineCell.m */,
 				0071E3B810803F7300F2D54F /* ChooserItem.h */,
 				0071E3B910803F7300F2D54F /* ChooserItem.m */,
 				00B5709C10863C2A00CDE4A7 /* TemplateChooserWindowController.h */,
@@ -1115,7 +1115,7 @@
 				00D845830FFF0FD2005802F0 /* main.m in Sources */,
 				00D845860FFF0FD2005802F0 /* PreferencesWindowController.m in Sources */,
 				00A0B8041069761A007930A5 /* Document.mm in Sources */,
-				00EF028D107D9EFB00FE378D /* VerticallyCenteredCell.m in Sources */,
+				00EF028D107D9EFB00FE378D /* ChooserOutlineCell.m in Sources */,
 				0071E3BA10803F7300F2D54F /* ChooserItem.m in Sources */,
 				00B5709E10863C2A00CDE4A7 /* TemplateChooserWindowController.m in Sources */,
 				00FE0C171095371B00B92AB7 /* ChooserViewController.m in Sources */,

@@ -9,7 +9,6 @@
  */
 
 #import "EmulationWindowController.h"
-#import "EmulationTableCell.h"
 #import "Document.h"
 #import "StringConversion.h"
 
@@ -19,14 +18,26 @@
 
 - (id)init
 {
-	self = [self initWithWindowNibName:@"Emulation"];
-	
-	if (self)
+	if (self = [self initWithWindowNibName:@"Emulation"])
 	{
-		cell = [[EmulationTableCell alloc] initTextCell:@"Hola"];
+		emulationTableCell = [[EmulationTableCell alloc] init];
 	}
 	
 	return self;
+}
+
+- (void)dealloc
+{
+	[emulationTableCell release];
+	
+	[super dealloc];
+}
+
+- (BOOL)respondsToSelector:(SEL)aSelector
+{
+	// To-Do: Forward emulation messages accordingly
+	
+	return [super respondsToSelector:aSelector];
 }
 
 - (void)windowDidLoad
@@ -43,6 +54,9 @@
 	[fEmulationTableView setDataSource:self];
 	[fEmulationTableView setDelegate:self];
 	[fEmulationTableView setDoubleAction:@selector(emulationDoubleAction:)];
+	[fEmulationTableView registerForDraggedTypes:[NSArray arrayWithObjects:
+												  NSFilenamesPboardType,
+												  nil]];
 	
 	NSString *frameString = [[self document] getEDLOptions];
 	NSArray *components = [frameString componentsSeparatedByString:@" "];
@@ -130,11 +144,21 @@
 			nil];
 }
 
+- (NSCell *)tableView:(NSTableView *)tableView
+dataCellForTableColumn:(NSTableColumn *)tableColumn
+				  row:(NSInteger)row
+{
+	return emulationTableCell;
+}
+
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
 {
 	OEDevicesInfo *devicesInfo = (OEDevicesInfo *)[[self document] devicesInfo];
 	
-	return (devicesInfo)->size();
+	if (devicesInfo)
+		return (devicesInfo)->size();
+	
+	return 0;
 }
 
 - (id)tableView:(NSTableView *)tableView
@@ -143,22 +167,100 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 {	
 	OEDevicesInfo *devicesInfo = (OEDevicesInfo *)[[self document] devicesInfo];
 	
-	if (rowIndex < devicesInfo->size())
-		return getNSString((*devicesInfo)[rowIndex].label);
+	if (devicesInfo && (rowIndex < devicesInfo->size()))
+		return getNSString((*devicesInfo)[rowIndex].id);
 	
 	return nil;
 }
 
-- (NSCell *)tableView:(NSTableView *)tableView
-dataCellForTableColumn:(NSTableColumn *)tableColumn
-				  row:(NSInteger)row
+- (NSDragOperation)tableView:(NSTableView *)aTableView
+				validateDrop:(id < NSDraggingInfo >)info
+				 proposedRow:(NSInteger)row
+	   proposedDropOperation:(NSTableViewDropOperation)operation
 {
-	return cell;
+	if (operation == NSTableViewDropOn)
+		return NSDragOperationCopy;
+	
+	return NSDragOperationNone;
+}
+
+- (BOOL)tableView:(NSTableView *)aTableView
+	   acceptDrop:(id < NSDraggingInfo >)info
+			  row:(NSInteger)row
+	dropOperation:(NSTableViewDropOperation)operation
+{
+	return YES;
 }
 
 - (void)emulationDoubleAction:(id)sender
 {
-	NSLog(@"doubleAction");
+	// Get selected device
+	// If storage is present and disk is not mounted, call mountDevice()
+	// else if storage is present and disk is mounted, call revealInFinder()
+	// else if canvas is present, call showDevice()
+	// else open inspector
+}
+
+- (void)addEDL:(id)sender
+{
+	// Start hardware chooser
+}
+
+- (void)removeDevice:(id)sender
+{
+	// Remove device
+}
+
+- (void)systemPowerDown:(id)sender
+{
+	// Get selected device
+	// Forward to all canvases
+}
+
+- (void)systemSleep:(id)sender
+{
+}
+
+- (void)systemWakeUp:(id)sender
+{
+}
+
+- (void)systemColdRestart:(id)sender
+{
+}
+
+- (void)systemWarmRestart:(id)sender
+{
+}
+
+- (void)systemDebuggerBreak:(id)sender
+{
+}
+
+- (void)showDevice:(id)sender
+{
+	// Get selected device
+	// Show all associated windows
+}
+
+- (void)revealInFinder:(id)sender
+{
+	// Get selected device
+	// Get path to mounted disk image
+	// Open Finder at path
+}
+
+- (void)mountDevice:(id)sender
+{
+	// Get selected device
+	// Open disk image open dialog
+	// Attempt to mount disk image in device's storage components
+}
+
+- (void)ejectDevice:(id)sender
+{
+	// Get selected device
+	// Attempt to eject all device's storage components
 }
 
 @end
