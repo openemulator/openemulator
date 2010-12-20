@@ -12,6 +12,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
+			<integer value="1747"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -52,7 +53,6 @@
 							<int key="NSvFlags">292</int>
 							<string key="NSFrame">{{41, 0}, {43, 23}}</string>
 							<reference key="NSSuperview" ref="697045175"/>
-							<reference key="NSWindow"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSPopUpButtonCell" key="NSCell" id="783837694">
 								<int key="NSCellFlags">-2076049856</int>
@@ -159,7 +159,6 @@
 									</object>
 									<reference key="NSMenuFont" ref="911500604"/>
 								</object>
-								<int key="NSSelectedIndex">2</int>
 								<bool key="NSPullDown">YES</bool>
 								<int key="NSPreferredEdge">1</int>
 								<bool key="NSUsesItemFromMenu">YES</bool>
@@ -181,7 +180,6 @@
 											<int key="NSvFlags">4352</int>
 											<string key="NSFrameSize">{259, 350}</string>
 											<reference key="NSSuperview" ref="870796731"/>
-											<reference key="NSWindow"/>
 											<bool key="NSEnabled">YES</bool>
 											<object class="_NSCornerView" key="NSCornerView">
 												<nil key="NSNextResponder"/>
@@ -240,6 +238,8 @@
 															<reference key="NSColor" ref="967849198"/>
 														</object>
 													</object>
+													<int key="NSResizingMask">1</int>
+													<bool key="NSIsResizeable">YES</bool>
 													<reference key="NSTableView" ref="1027958689"/>
 													<object class="NSSortDescriptor" key="NSSortDescriptorPrototype" id="908980506">
 														<bool key="NSAscending">YES</bool>
@@ -287,7 +287,6 @@
 									</object>
 									<string key="NSFrameSize">{256, 350}</string>
 									<reference key="NSSuperview" ref="236988201"/>
-									<reference key="NSWindow"/>
 									<reference key="NSNextKeyView" ref="1027958689"/>
 									<reference key="NSDocView" ref="1027958689"/>
 									<reference key="NSBGColor" ref="962395363"/>
@@ -298,7 +297,6 @@
 									<int key="NSvFlags">-2147483392</int>
 									<string key="NSFrame">{{241, 0}, {15, 350.996}}</string>
 									<reference key="NSSuperview" ref="236988201"/>
-									<reference key="NSWindow"/>
 									<reference key="NSTarget" ref="236988201"/>
 									<string key="NSAction">_doScroller:</string>
 									<double key="NSCurValue">1</double>
@@ -309,7 +307,6 @@
 									<int key="NSvFlags">-2147483392</int>
 									<string key="NSFrame">{{-100, -100}, {239, 15}}</string>
 									<reference key="NSSuperview" ref="236988201"/>
-									<reference key="NSWindow"/>
 									<bool key="NSEnabled">YES</bool>
 									<int key="NSsFlags">1</int>
 									<reference key="NSTarget" ref="236988201"/>
@@ -319,7 +316,6 @@
 							</object>
 							<string key="NSFrame">{{0, 23}, {256, 350}}</string>
 							<reference key="NSSuperview" ref="697045175"/>
-							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="870796731"/>
 							<int key="NSsFlags">656</int>
 							<reference key="NSVScroller" ref="832422757"/>
@@ -332,7 +328,6 @@
 							<int key="NSvFlags">292</int>
 							<string key="NSFrame">{{-1, 0}, {26, 23}}</string>
 							<reference key="NSSuperview" ref="697045175"/>
-							<reference key="NSWindow"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSButtonCell" key="NSCell" id="727229122">
 								<int key="NSCellFlags">67239424</int>
@@ -361,7 +356,6 @@
 							<int key="NSvFlags">292</int>
 							<string key="NSFrame">{{24, 0}, {26, 23}}</string>
 							<reference key="NSSuperview" ref="697045175"/>
-							<reference key="NSWindow"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSButtonCell" key="NSCell" id="1016938204">
 								<int key="NSCellFlags">67239424</int>
@@ -390,7 +384,6 @@
 							<int key="NSvFlags">290</int>
 							<string key="NSFrame">{{81, 0}, {175, 23}}</string>
 							<reference key="NSSuperview" ref="697045175"/>
-							<reference key="NSWindow"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSButtonCell" key="NSCell" id="30184947">
 								<int key="NSCellFlags">604110336</int>
@@ -413,7 +406,6 @@
 					</object>
 					<string key="NSFrameSize">{256, 373}</string>
 					<reference key="NSSuperview"/>
-					<reference key="NSWindow"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1440, 878}}</string>
 				<string key="NSMinSize">{256, 145}</string>
@@ -952,15 +944,15 @@
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
 				<bool key="EncodedWithXMLCoder">YES</bool>
 				<object class="IBPartialClassDescription">
-					<string key="className">EmulationTableCell</string>
-					<string key="superclassName">NSActionCell</string>
+					<string key="className">EmulationWindowController</string>
+					<string key="superclassName">NSWindowController</string>
 					<object class="NSMutableDictionary" key="actions">
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>ejectDevice:</string>
 							<string>mountDevice:</string>
-							<string>revealDeviceInFinder:</string>
+							<string>revealInFinder:</string>
 							<string>showDevice:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
@@ -977,7 +969,7 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>ejectDevice:</string>
 							<string>mountDevice:</string>
-							<string>revealDeviceInFinder:</string>
+							<string>revealInFinder:</string>
 							<string>showDevice:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
@@ -991,32 +983,13 @@
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
-								<string key="name">revealDeviceInFinder:</string>
+								<string key="name">revealInFinder:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
 								<string key="name">showDevice:</string>
 								<string key="candidateClassName">id</string>
 							</object>
-						</object>
-					</object>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">macosx/EmulationTableCell.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">EmulationWindowController</string>
-					<string key="superclassName">NSWindowController</string>
-					<object class="NSMutableDictionary" key="actions">
-						<string key="NS.key.0">revealInFinder:</string>
-						<string key="NS.object.0">id</string>
-					</object>
-					<object class="NSMutableDictionary" key="actionInfosByName">
-						<string key="NS.key.0">revealInFinder:</string>
-						<object class="IBActionInfo" key="NS.object.0">
-							<string key="name">revealInFinder:</string>
-							<string key="candidateClassName">id</string>
 						</object>
 					</object>
 					<object class="NSMutableDictionary" key="outlets">

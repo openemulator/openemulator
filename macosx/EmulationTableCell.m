@@ -14,17 +14,24 @@
 
 - (void)drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView
 {
+	float border = 3.0;
+	
 	// Load data
 	NSString *id = [self stringValue];
 	
 	NSImage *icon;
 	icon = [[NSWorkspace sharedWorkspace]
 			iconForFileType:NSFileTypeForHFSTypeCode(kGenericFolderIcon)];
-	NSString *titleString = [[id copy] autorelease];
-	NSString *subtitleString = @"(on Apple II Slot 6 Drive 1) /Volumes/Applications/Disk Images/My Bad/test.dmg";
+	NSString *titleString = @"Disk Drive II";
+//	NSString *subtitleString = @"(on Apple II Slot 6 Drive 1)";
+//	NSString *statusString = @"/Volumes/Applications/Disk Images/My Bad/test.dmg";
+	NSString *subtitleString = @"/Volumes/Applications/Disk Images/My Bad/test.dmg";
 	NSString *statusString = @"";
 	
+	// Setup drawing rectangle
 	NSRect drawRect = cellFrame;
+	drawRect.origin.x += 0.0;
+	drawRect.size.width -= border;
 	
 	// Draw icon
 	[[NSGraphicsContext currentContext] saveGraphicsState];
@@ -33,7 +40,6 @@
 	[[NSGraphicsContext currentContext] setImageInterpolation:NSImageInterpolationHigh];
 	
 	NSRect iconRect = drawRect;
-	float iconBorder = 3.0;
 	if ([controlView isFlipped])
 	{
 		NSAffineTransform *xform = [NSAffineTransform transform];
@@ -42,10 +48,10 @@
 		[xform concat];
 		iconRect.origin.y = -iconRect.origin.y;
 	}
-	iconRect = NSMakeRect(iconRect.origin.x + iconBorder,
-						  iconRect.origin.y + iconBorder,
-						  iconRect.size.height - 2.0 * iconBorder,
-						  iconRect.size.height - 2.0 * iconBorder);
+	iconRect = NSMakeRect(iconRect.origin.x + border,
+						  iconRect.origin.y + border,
+						  iconRect.size.height - 2.0 * border,
+						  iconRect.size.height - 2.0 * border);
 	[icon drawInRect:iconRect
 			fromRect:NSMakeRect(0, 0, [icon size].width, [icon size].height)
 		   operation:NSCompositeSourceOver
