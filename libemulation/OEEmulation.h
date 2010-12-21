@@ -128,6 +128,7 @@ private:
 	bool dumpEmulation(OEData *data);
 	void parseEmulation();
 	OESettings parseDevice(xmlNodePtr children);
+	string parseLocation(string deviceId);
 	string parseLocation(string deviceId, vector<string> &visitedDevices);
 	
 	bool createEmulation();

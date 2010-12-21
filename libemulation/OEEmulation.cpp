@@ -317,26 +317,13 @@ string OEEmulation::parseLocation(string deviceId)
 	if (!doc)
 		return "";
 	
-	// Find connected port
 	vector<string> visitedDevices;
-	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+	string location = parseLocation(deviceId, visitedDevices);
 	
-	for(xmlNodePtr node = rootNode->children;
-		node;
-		node = node->next)
-	{
-		if (!xmlStrcmp(node->name, BAD_CAST "port"))
-		{
-			string id = getNodeProperty(node, "id");
-			string ref = getNodeProperty(node, "ref");
-			string label = getNodeProperty(node, "label");
-			
-			if (getDeviceId(ref) == deviceId)
-				return parseLocation(getDeviceId(id), visitedDevices) + " " + label;
-		}
-	}
-	
-	return "";
+	if (visitedDevices.size() == 1)
+		return "";
+	else
+		return location;
 }
 
 string OEEmulation::parseLocation(string deviceId, vector<string> &visitedDevices)
@@ -921,7 +908,7 @@ string OEEmulation::getDeviceId(string id)
 	if (dotIndex == string::npos)
 		return id;
 	
-	return id.substr(0, dotIndex - 1);
+	return id.substr(0, dotIndex);
 }
 
 /*

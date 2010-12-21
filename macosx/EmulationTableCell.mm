@@ -34,6 +34,31 @@
 	return [super copyWithZone:zone];
 }
 
+- (void)setDevicesInfo:(void *)theDevicesInfo
+{
+	devicesInfo = theDevicesInfo;
+}
+
+- (NSImage *)getImage:(NSString *)path
+{
+	NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
+	path = [resourcePath stringByAppendingPathComponent:path];
+	
+	return [[[NSImage alloc] initByReferencingFile:path] autorelease];
+}
+
+- (void)appendString:(NSString *)theString
+  toAttributedString:(NSMutableAttributedString *)attrString
+	  withAttributes:(NSDictionary *)attributes
+{
+	NSAttributedString *tempAttrString;
+	tempAttrString = [[[NSAttributedString alloc] initWithString:theString
+													  attributes:attributes]
+					  autorelease];
+	
+	[attrString appendAttributedString:tempAttrString];
+}
+
 - (void)drawImage:(NSImage *)image inRect:(NSRect)rect
 {
 	[[NSGraphicsContext currentContext] saveGraphicsState];
@@ -49,6 +74,7 @@
 //		[xform concat];
 //		rect.origin.y = -rect.origin.y;
 //	}
+	[image setFlipped:YES];
 	[image drawInRect:rect
 			 fromRect:NSMakeRect(0, 0, [image size].width, [image size].height)
 			operation:NSCompositeSourceOver
@@ -56,11 +82,6 @@
 	
 	[[NSGraphicsContext currentContext] setImageInterpolation:interpolation];
 	[[NSGraphicsContext currentContext] restoreGraphicsState];
-}
-
-- (void)setDevicesInfo:(void *)theDevicesInfo
-{
-	devicesInfo = theDevicesInfo;
 }
 
 - (void)drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView
@@ -76,9 +97,7 @@
 	NSString *locationString = @"";
 	NSString *statusString = @"";
 	BOOL showable = NO;
-	NSImage *showImage = nil;
 	BOOL ejectable = NO;
-	NSImage *ejectImage = nil;
 	
 	OEDevicesInfo *theDevicesInfo = (OEDevicesInfo *)devicesInfo;
 	string id = getCPPString([self stringValue]);
@@ -90,11 +109,10 @@
 		{
 			if (id == i->id)
 			{
+				icon = [self getImage:getNSString(i->image)];
 				titleString = getNSString(i->label);
-				if (i->location != "")
-					locationString = getNSString(i->location);
-				if (i->status != "")
-					statusString = getNSString(i->status);
+				locationString = getNSString(i->location);
+				statusString = getNSString(i->status);
 				showable = (i->canvases.size() != 0);
 				ejectable = i->mounted;
 				
@@ -103,7 +121,7 @@
 		}
 	}
 	
-	// Prepare text attributes
+	// Prepare attributes
 	NSMutableParagraphStyle *paragraphStyle = [[[NSParagraphStyle
 												 defaultParagraphStyle] mutableCopy]
 											   autorelease];
@@ -118,7 +136,6 @@
 					   titleColor, NSForegroundColorAttributeName,
 					   paragraphStyle, NSParagraphStyleAttributeName,
 					   nil];
-	
 	NSMutableDictionary *statusAttributes;
 	statusAttributes = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
 						[NSFont messageFontOfSize:9.0], NSFontAttributeName,
@@ -126,11 +143,17 @@
 						paragraphStyle, NSParagraphStyleAttributeName,
 						nil];
 	
+	NSImage *showImage = [NSImage imageNamed:(highlight ? @"EmulationRevealSelected.png" :
+											  @"EmulationReveal.png")];
+	NSImage *ejectImage = [NSImage imageNamed:(highlight ? @"EmulationEjectSelected.png" :
+											   @"EmulationEject.png")];
+	
 	// Set rectangles
 	int buttonY = (cellFrame.size.height - buttonSize) / 2.0;
 	
 	float ejectWidth = ejectable ? buttonSize : 0.0;
-	NSRect ejectRect = NSMakeRect(cellFrame.origin.x + cellFrame.size.width - ejectWidth,
+	NSRect ejectRect = NSMakeRect((cellFrame.origin.x + cellFrame.size.width -
+								   ejectWidth),
 								  cellFrame.origin.y + buttonY,
 								  ejectWidth,
 								  buttonSize);
@@ -143,57 +166,44 @@
 								 cellFrame.origin.y + iconBorder,
 								 cellFrame.size.height - 2.0 * iconBorder,
 								 cellFrame.size.height - 2.0 * iconBorder);
-	NSRect textRect = NSMakeRect(cellFrame.origin.x + cellFrame.size.height,
-								 cellFrame.origin.y,
-								 (showRect.origin.x - cellFrame.origin.x -
-								  cellFrame.size.height - textBorder),
-								 cellFrame.size.height);
+	NSRect attrStringRect = NSMakeRect(cellFrame.origin.x + cellFrame.size.height,
+									   cellFrame.origin.y,
+									   (showRect.origin.x - cellFrame.origin.x -
+										cellFrame.size.height - textBorder),
+									   cellFrame.size.height);
 	
 	// Prepare text
-	NSMutableAttributedString *attrTitleString;
-	attrTitleString = [[NSMutableAttributedString alloc] initWithString:titleString
-															 attributes:titleAttributes];
-	[attrTitleString autorelease];
-	NSString *fAttrLocationString = [NSString stringWithFormat:@" (on %@)",
-									 locationString];
-	NSAttributedString *attrLocationString;
-	attrLocationString = [[NSAttributedString alloc] initWithString:fAttrLocationString
-														 attributes:statusAttributes];
-	[attrTitleString autorelease];
-	[attrTitleString appendAttributedString:attrLocationString];
-	NSSize titleSize = [attrTitleString size];
+	NSMutableAttributedString *attrString;
+	attrString = [[[NSMutableAttributedString alloc] init] autorelease];
 	
-	NSAttributedString *attrStatusString;
-	attrStatusString = [[NSAttributedString alloc] initWithString:statusString
-													   attributes:statusAttributes];
-	[attrStatusString autorelease];
-	NSSize statusSize = [attrStatusString size];
+	if ([locationString length])
+	{
+		[self appendString:[NSString stringWithFormat:@"%@", locationString]
+		toAttributedString:attrString
+			withAttributes:titleAttributes];
+		[self appendString:[NSString localizedStringWithFormat:@" (%@)", titleString]
+		toAttributedString:attrString
+			withAttributes:statusAttributes];
+	}
+	else
+		[self appendString:[NSString localizedStringWithFormat:@"%@", titleString]
+		toAttributedString:attrString
+			withAttributes:titleAttributes];
 	
-	if (titleSize.width > textRect.size.width)
-		titleSize.width = textRect.size.width;
-	if (statusSize.width > textRect.size.width)
-		statusSize.width = textRect.size.width;
+	if ([statusString length])
+		[self appendString:[NSString localizedStringWithFormat:@"\n(%@)", statusString]
+		toAttributedString:attrString
+			withAttributes:statusAttributes];
 	
-	if (statusSize.width == 0.0)
-		statusSize.height = 0.0;
-	
-	float textHeight = titleSize.height + statusSize.height;
-	float textY = textRect.origin.y + (textRect.size.height - textHeight) / 2.0;
-	
-	NSRect titleRect = NSMakeRect(textRect.origin.x,
-								  textY,
-								  titleSize.width,
-								  titleSize.height);
-	textY += titleSize.height;
-	NSRect statusRect = NSMakeRect(textRect.origin.x,
-								   textY,
-								   statusSize.width,
-								   statusSize.height);
+	NSSize attrStringSize = [attrString size];
+	attrStringRect.origin.y += (attrStringRect.size.height - attrStringSize.height) / 2.0;
+	if (attrStringSize.width > attrStringRect.size.width)
+		attrStringSize.width = attrStringRect.size.width;
+	attrStringRect.size = attrStringSize;
 	
 	// Draw
 	[self drawImage:icon inRect:iconRect];
-	[attrTitleString drawInRect:titleRect];
-	[attrStatusString drawInRect:statusRect];
+	[attrString drawInRect:attrStringRect];
 	[self drawImage:showImage inRect:showRect];
 	[self drawImage:ejectImage inRect:ejectRect];
 }
