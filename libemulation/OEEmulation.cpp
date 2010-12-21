@@ -280,8 +280,7 @@ void OEEmulation::parseEmulation()
 			deviceInfo.image = getNodeProperty(node, "image");
 			deviceInfo.settings = parseDevice(node->children);
 			
-			vector<string> visitedDevices;
-			deviceInfo.location = parseLocation(deviceInfo.id, visitedDevices);
+			deviceInfo.location = parseLocation(deviceInfo.id);
 			
 			devicesInfo.push_back(deviceInfo);
 		}
@@ -311,6 +310,33 @@ OESettings OEEmulation::parseDevice(xmlNodePtr children)
 	}
 	
 	return settings;
+}
+
+string OEEmulation::parseLocation(string deviceId)
+{
+	if (!doc)
+		return "";
+	
+	// Find connected port
+	vector<string> visitedDevices;
+	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+	
+	for(xmlNodePtr node = rootNode->children;
+		node;
+		node = node->next)
+	{
+		if (!xmlStrcmp(node->name, BAD_CAST "port"))
+		{
+			string id = getNodeProperty(node, "id");
+			string ref = getNodeProperty(node, "ref");
+			string label = getNodeProperty(node, "label");
+			
+			if (getDeviceId(ref) == deviceId)
+				return parseLocation(getDeviceId(id), visitedDevices) + " " + label;
+		}
+	}
+	
+	return "";
 }
 
 string OEEmulation::parseLocation(string deviceId, vector<string> &visitedDevices)

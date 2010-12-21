@@ -67,11 +67,13 @@
 {
 	// Set configuration
 	float iconBorder = 3.0;
+	float textBorder = 3.0;
 	float buttonSize = 18.0;
 	
 	// Load data
 	NSImage *icon = nil;
 	NSString *titleString = [self stringValue];
+	NSString *locationString = @"";
 	NSString *statusString = @"";
 	BOOL showable = NO;
 	NSImage *showImage = nil;
@@ -89,26 +91,10 @@
 			if (id == i->id)
 			{
 				titleString = getNSString(i->label);
-				if (i->status != "")
-				{
-					if ([statusString length])
-						statusString = [statusString stringByAppendingString:@" "];
-					
-					NSString *theStatusString;
-					theStatusString = [NSString stringWithFormat:@"(%@)",
-									getNSString(i->status)];
-					
-					statusString = [statusString stringByAppendingString:theStatusString];
-				}
 				if (i->location != "")
-				{
-					NSString *locationString;
-					locationString = [NSString localizedStringWithFormat:@"on %@",
-									  getNSString(i->location)];
-					
-					statusString = [statusString stringByAppendingString:locationString];
-				}
- 				
+					locationString = getNSString(i->location);
+				if (i->status != "")
+					statusString = getNSString(i->status);
 				showable = (i->canvases.size() != 0);
 				ejectable = i->mounted;
 				
@@ -122,10 +108,9 @@
 												 defaultParagraphStyle] mutableCopy]
 											   autorelease];
 	[paragraphStyle setLineBreakMode:NSLineBreakByTruncatingTail];
-	NSColor *titleColor = ([self isHighlighted] ? [NSColor whiteColor] :
-						   [NSColor blackColor]);
-	NSColor *statusColor = ([self isHighlighted] ? [NSColor whiteColor] :
-							[NSColor darkGrayColor]);
+	BOOL highlight = ([self backgroundStyle] == NSBackgroundStyleDark);
+	NSColor *titleColor = (highlight ? [NSColor whiteColor] : [NSColor blackColor]);
+	NSColor *statusColor = (highlight ? [NSColor whiteColor] : [NSColor darkGrayColor]);
 	
 	NSMutableDictionary *titleAttributes;
 	titleAttributes = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
@@ -160,15 +145,24 @@
 								 cellFrame.size.height - 2.0 * iconBorder);
 	NSRect textRect = NSMakeRect(cellFrame.origin.x + cellFrame.size.height,
 								 cellFrame.origin.y,
-								 showRect.origin.x - cellFrame.origin.x - cellFrame.size.height,
+								 (showRect.origin.x - cellFrame.origin.x -
+								  cellFrame.size.height - textBorder),
 								 cellFrame.size.height);
 	
 	// Prepare text
-	NSAttributedString *attrTitleString;
-	attrTitleString = [[NSAttributedString alloc] initWithString:titleString
-													  attributes:titleAttributes];
+	NSMutableAttributedString *attrTitleString;
+	attrTitleString = [[NSMutableAttributedString alloc] initWithString:titleString
+															 attributes:titleAttributes];
 	[attrTitleString autorelease];
+	NSString *fAttrLocationString = [NSString stringWithFormat:@" (on %@)",
+									 locationString];
+	NSAttributedString *attrLocationString;
+	attrLocationString = [[NSAttributedString alloc] initWithString:fAttrLocationString
+														 attributes:statusAttributes];
+	[attrTitleString autorelease];
+	[attrTitleString appendAttributedString:attrLocationString];
 	NSSize titleSize = [attrTitleString size];
+	
 	NSAttributedString *attrStatusString;
 	attrStatusString = [[NSAttributedString alloc] initWithString:statusString
 													   attributes:statusAttributes];
