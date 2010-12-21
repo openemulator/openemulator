@@ -218,7 +218,7 @@
 	playPath = [path copy];
 	if (playPath)
 	{
-		oePortAudio->openPlayer(getCString(playPath));
+		oePortAudio->openPlayer(getCPPString(playPath));
 		oePortAudio->play();
 		
 		if (!oePortAudio->getPlayDuration())
@@ -271,7 +271,7 @@
 						  stringByAppendingPathComponent:@"oerecording"];
 		recordingPath = [path copy];
 		
-		oePortAudio->openRecorder(getCString(recordingPath));
+		oePortAudio->openRecorder(getCPPString(recordingPath));
 		oePortAudio->record();
 	}
 	else

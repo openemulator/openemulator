@@ -113,7 +113,7 @@
 			continue;
 		
 		OEEDL edl;
-		edl.open(getCString(edlPath));
+		edl.open(getCPPString(edlPath));
 		if (edl.isOpen())
 		{
 			OEHeaderInfo headerInfo = edl.getHeaderInfo();

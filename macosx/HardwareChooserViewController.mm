@@ -38,7 +38,7 @@
 		path = [thePath copy];
 		
 		OEEDL edl;
-		edl.open(getCString(thePath));
+		edl.open(getCPPString(thePath));
 		
 		headerInfo = edl.getHeaderInfo();
 		freeConnectorsInfo = edl.getFreeConnectorsInfo();

@@ -12,6 +12,9 @@
 
 @interface EmulationTableCell : NSActionCell
 {
+	void *devicesInfo;
 }
+
+- (void)setDevicesInfo:(void *)theDevicesInfo;
 
 @end

@@ -65,9 +65,9 @@
 	OEPortAudio *oePortAudio = (OEPortAudio *)[documentController oePortAudio];
 	
 	OEEmulation *theEmulation = new OEEmulation();
-	theEmulation->setResourcePath(getCString([[NSBundle mainBundle] resourcePath]));
+	theEmulation->setResourcePath(getCPPString([[NSBundle mainBundle] resourcePath]));
 	theEmulation->setComponent("hostAudio", oePortAudio);
-	theEmulation->open(getCString([url path]));
+	theEmulation->open(getCPPString([url path]));
 	
 	OEDevicesInfo *theDevicesInfo = new OEDevicesInfo();
 	*theDevicesInfo = theEmulation->getDevicesInfo();
@@ -191,7 +191,7 @@
 {
 	if (emulation)
 	{
-		string emulationPath = getCString([[absoluteURL path]
+		string emulationPath = getCPPString([[absoluteURL path]
 										   stringByAppendingString:@"/"]);
 		
 		[emulationWindowController updateOptions];
@@ -277,7 +277,7 @@
 		return;
 	
 	[self lockEmulation];
-	((OEEmulation *)emulation)->setOptions(getCString(value));
+	((OEEmulation *)emulation)->setOptions(getCPPString(value));
 	[self unlockEmulation];
 }
 
@@ -287,7 +287,7 @@
 	if (!emulation)
 		return;
 	
-	string pathString = getCString(path);
+	string pathString = getCPPString(path);
 	map<string, string> connectionsMap;
 	
 	NSEnumerator *i = [connections keyEnumerator];
@@ -297,8 +297,8 @@
 	{
 		NSString *outletRef = [connections objectForKey:inletRef];
 		
-		string inletRefString = getCString(inletRef);
-		string outletRefString = getCString(outletRef);
+		string inletRefString = getCPPString(inletRef);
+		string outletRefString = getCPPString(outletRef);
 		
 		connectionsMap[inletRefString] = outletRefString;
 	}
@@ -328,7 +328,7 @@
 	NSString *deviceRef = [dict objectForKey:@"ref"];
 //	NSString *deviceLabel = [dict objectForKey:@"label"];
 	
-	string refString = getCString(deviceRef);
+	string refString = getCPPString(deviceRef);
 	
 /*	if (!((OEPAEmulation *)emulation)->isDeviceTerminal(refString))
 	{
@@ -369,7 +369,7 @@
 		return NO;
 	
 	[self lockEmulation];
-	return ((OEEmulation *)emulation)->mount(getCString(path));
+	return ((OEEmulation *)emulation)->mount(getCPPString(path));
 	[self unlockEmulation];
 }
 
@@ -379,7 +379,7 @@
 		return NO;
 	
 	[self lockEmulation];
-	return ((OEEmulation *)emulation)->mountable(getCString(path));
+	return ((OEEmulation *)emulation)->mountable(getCPPString(path));
 	[self unlockEmulation];
 }
 

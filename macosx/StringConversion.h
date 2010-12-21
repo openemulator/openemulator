@@ -9,4 +9,4 @@
  */
 
 #define getNSString(s) ([NSString stringWithUTF8String:(s).c_str()])
-#define getCString(s) (string([(s) UTF8String]))
+#define getCPPString(s) (string([(s) UTF8String]))

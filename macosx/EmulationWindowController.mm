@@ -19,9 +19,7 @@
 - (id)init
 {
 	if (self = [self initWithWindowNibName:@"Emulation"])
-	{
 		emulationTableCell = [[EmulationTableCell alloc] init];
-	}
 	
 	return self;
 }
@@ -50,6 +48,8 @@
 	[toolbar setAutosavesConfiguration:YES];
 	[[self window] setToolbar:toolbar];
 	[toolbar release];
+	
+	[emulationTableCell setDevicesInfo:[[self document] devicesInfo]];
 	
 	[fEmulationTableView setDataSource:self];
 	[fEmulationTableView setDelegate:self];

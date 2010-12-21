@@ -728,13 +728,13 @@ bool OEEmulation::postMessage(OEComponent *sender, int message, void *data)
 {
 	switch (message)
 	{
-		case EMULATION_SET_INFOLINE:
+		case EMULATION_SET_STATUS:
 			if (data)
 			{
 				OEDeviceInfo *deviceInfo = getDeviceInfo(getDeviceId(sender));
 				if (deviceInfo)
 				{
-					deviceInfo->infoLine = *((string *) data);
+					deviceInfo->status = *((string *) data);
 					
 					if (devicesInfoDidUpdate)
 						devicesInfoDidUpdate();

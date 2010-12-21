@@ -28,7 +28,7 @@
 
 typedef enum
 {
-	EMULATION_SET_INFOLINE,
+	EMULATION_SET_STATUS,
 	EMULATION_SET_POWERED,
 	EMULATION_SET_MOUNTED,
 	EMULATION_ADD_CANVAS,
@@ -63,7 +63,7 @@ typedef struct
 	
 	string location;
 	
-	string infoLine;
+	string status;
 	bool powered;
 	bool mounted;
 	OEComponents canvases;
