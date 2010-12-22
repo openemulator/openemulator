@@ -3,43 +3,44 @@
 <edl version="1.0" label="Apple II" image="images/Apple/Apple II.png" description="The Apple II was the first highly successful mass produced microprocessor product. The Apple II had color and high-resolution graphics modes, sound capabilities and one of two built-in BASIC programming languages.">
 
 <device id="appleII" label="Apple II" image="images/Apple/Apple II.png" />
-<port id="appleII.slot0" ref="" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png">
+<port id="appleII.videoPort" ref="smon.monitor" type="CompositeVideo" label="Video" image="Composite Video Port.png">
+    <inlet ref="appleII.video" property="monitor" outletRef="monitor" />
+</port>
+<port id="appleII.slot0" ref="s0.conn" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png">
     <inlet ref="appleII.io" property="refSlot0" outletRef="io" />
 </port>
-<port id="appleII.slot1" ref="" type="AppleIISlot" label="Slot 1" image="Apple II Slot.png">
+<port id="appleII.slot1" ref="s1.conn" type="AppleIISlot" label="Slot 1" image="Apple II Slot.png">
     <inlet ref="appleII.io" property="refSlot1" outletRef="io" />
     <inlet ref="appleII.slotMemory" property="slot1" outletRef="memory" />
 </port>
-<port id="appleII.slot2" ref="" type="AppleIISlot" label="Slot 2" image="Apple II Slot.png">
+<port id="appleII.slot2" ref="s2.conn" type="AppleIISlot" label="Slot 2" image="Apple II Slot.png">
     <inlet ref="appleII.io" property="refSlot2" outletRef="io" />
     <inlet ref="appleII.slotMemory" property="slot2" outletRef="memory" />
 </port>
-<port id="appleII.slot3" ref="" type="AppleIISlot" label="Slot 3" image="Apple II Slot.png">
+<port id="appleII.slot3" ref="s3.conn" type="AppleIISlot" label="Slot 3" image="Apple II Slot.png">
     <inlet ref="appleII.io" property="refSlot3" outletRef="io" />
     <inlet ref="appleII.slotMemory" property="slot3" outletRef="memory" />
 </port>
-<port id="appleII.slot4" ref="" type="AppleIISlot" label="Slot 4" image="Apple II Slot.png">
+<port id="appleII.slot4" ref="s4.conn" type="AppleIISlot" label="Slot 4" image="Apple II Slot.png">
     <inlet ref="appleII.io" property="refSlot4" outletRef="io" />
     <inlet ref="appleII.slotMemory" property="slot4" outletRef="memory" />
 </port>
-<port id="appleII.slot5" ref="" type="AppleIISlot" label="Slot 5" image="Apple II Slot.png">
+<port id="appleII.slot5" ref="s5.conn" type="AppleIISlot" label="Slot 5" image="Apple II Slot.png">
     <inlet ref="appleII.io" property="refSlot5" outletRef="io" />
     <inlet ref="appleII.slotMemory" property="slot5" outletRef="memory" />
 </port>
-<port id="appleII.slot6" ref="" type="AppleIISlot" label="Slot 6" image="Apple II Slot.png">
+<port id="appleII.slot6" ref="s6.conn" type="AppleIISlot" label="Slot 6" image="Apple II Slot.png">
     <inlet ref="appleII.io" property="refSlot6" outletRef="io" />
     <inlet ref="appleII.slotMemory" property="slot6" outletRef="memory" />
 </port>
-<port id="appleII.slot7" ref="" type="AppleIISlot" label="Slot 7" image="Apple II Slot.png">
+<port id="appleII.slot7" ref="s7.conn" type="AppleIISlot" label="Slot 7" image="Apple II Slot.png">
     <inlet ref="appleII.io" property="refSlot7" outletRef="io" />
     <inlet ref="appleII.slotMemory" property="slot7" outletRef="memory" />
 </port>
-<port id="appleII.gamePort" ref="" type="AppleIIGame" label="Game Port" image="Apple II Game Port.png">
+<port id="appleII.gamePort" ref="sgp.conn" type="AppleIIGame" label="Game Port" image="Apple II Game Port.png">
     <inlet ref="appleII.game" property="port" outletRef="port" />
 </port>
-<port id="appleII.cpuSocket" ref="" type="CPU6502" label="CPU Socket" image="CPU 6502 Socket.png" />
-<port id="appleII.videoPort" ref="" type="CompositeVideo" label="Video Output" image="Composite Video Port.png">
-    <inlet ref="appleII.video" property="monitor" outletRef="monitor" />
+<port id="appleII.cpuSocket" ref="scpu.conn" type="CPU6502" label="CPU Socket" image="CPU 6502 Socket.png">
 </port>
 <port id="appleII.charsetSocket" ref="" type="AppleIICharset" label="Charset ROM Socket" image="ROM Socket.png">
     <inlet ref="appleII.video" property="charsetSocket" outletRef="charset" />
@@ -222,5 +223,46 @@
 <component id="appleII.romF8" class="ROM">
     <property name="image" src="${resourcePath}/roms/Apple/341-0004-00.bin" />
 </component>
+
+<device id="smon" label="Apple Monitor II" image="images/Apple/Apple Monitor II.png" />
+<connector id="smon.conn" ref="" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png" />
+
+<device id="s0" label="Apple Language Card" image="images/Apple/Apple Language Card.png" />
+<connector id="s1.conn" ref="" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png" />
+
+<device id="s1" label="Apple Silentype Interface Card" image="images/Apple/Apple II.png" />
+<connector id="s2.conn" ref="" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png" />
+
+<device id="s2" label="Apple Super Serial Card" image="images/Apple/Apple II Super Serial Card.png" />
+<connector id="s3.conn" ref="" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png" />
+
+<device id="s3" label="Videx VideoTerm" image="images/Videx/Videx Videoterm.png" />
+<connector id="s4.conn" ref="" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png" />
+
+<device id="s4" label="Mountain Computer Apple Clock" image="images/Apple/Apple II.png" />
+<connector id="s5.conn" ref="" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png" />
+
+<device id="s5" label="Apple Graphics Tablet" image="images/Apple/Apple Graphics Tablet.png" />
+<connector id="s5.conn" ref="" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png" />
+
+<device id="s6" label="Apple Disk II Interface Card" image="images/Apple/Apple Disk II Interface Card.png" />
+<connector id="s6.conn" ref="" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png" />
+<port id="s6.d1" ref="s6d1.conn" type="AppleIISlot" label="Drive 1" image="Apple II Slot.png" />
+<port id="s6.d2" ref="s6d2.conn" type="AppleIISlot" label="Drive 2" image="Apple II Slot.png" />
+
+<device id="s6d1" label="Apple Disk II Drive" image="images/Apple/Apple Disk II Drive.png" />
+<connector id="s6d1.conn" ref="" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png" />
+
+<device id="s6d2" label="Apple Disk II Drive" image="images/Apple/Apple Disk II Drive.png" />
+<connector id="s6d2.conn" ref="" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png" />
+
+<device id="s6" label="Apple Disk II Interface Card" image="images/Apple/Apple Disk II Interface Card.png" />
+<connector id="s6.conn" ref="" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png" />
+
+<device id="s7" label="Apple PAL Card" image="images/Apple/Apple II.png" />
+<connector id="s7.conn" ref="" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png" />
+
+<device id="sgp" label="Apple Paddles (Mouse)" image="images/Apple/Apple II.png" />
+<connector id="sgp.conn" ref="" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png" />
 
 </edl>

@@ -59,22 +59,14 @@
 	[attrString appendAttributedString:tempAttrString];
 }
 
-- (void)drawImage:(NSImage *)image inRect:(NSRect)rect
+- (void)drawImage:(NSImage *)image inRect:(NSRect)rect isFlipped:(BOOL)flipped
 {
 	[[NSGraphicsContext currentContext] saveGraphicsState];
 	NSImageInterpolation interpolation = [[NSGraphicsContext currentContext]
 										  imageInterpolation];
 	[[NSGraphicsContext currentContext] setImageInterpolation:NSImageInterpolationHigh];
 	
-//	if ([controlView isFlipped])
-//	{
-//		NSAffineTransform *xform = [NSAffineTransform transform];
-//		[xform translateXBy:0.0 yBy:cellFrame.size.height];
-//		[xform scaleXBy:1.0 yBy:-1.0];
-//		[xform concat];
-//		rect.origin.y = -rect.origin.y;
-//	}
-	[image setFlipped:YES];
+	[image setFlipped:flipped];
 	[image drawInRect:rect
 			 fromRect:NSMakeRect(0, 0, [image size].width, [image size].height)
 			operation:NSCompositeSourceOver
@@ -162,33 +154,28 @@
 								 cellFrame.origin.y + buttonY,
 								 showWidth,
 								 buttonSize);
-	NSRect iconRect = NSMakeRect(cellFrame.origin.x + iconBorder,
-								 cellFrame.origin.y + iconBorder,
-								 cellFrame.size.height - 2.0 * iconBorder,
-								 cellFrame.size.height - 2.0 * iconBorder);
 	NSRect attrStringRect = NSMakeRect(cellFrame.origin.x + cellFrame.size.height,
 									   cellFrame.origin.y,
 									   (showRect.origin.x - cellFrame.origin.x -
 										cellFrame.size.height - textBorder),
 									   cellFrame.size.height);
+	NSRect iconRect = NSMakeRect(cellFrame.origin.x + iconBorder,
+								 cellFrame.origin.y + iconBorder,
+								 cellFrame.size.height - 2.0 * iconBorder,
+								 cellFrame.size.height - 2.0 * iconBorder);
 	
 	// Prepare text
 	NSMutableAttributedString *attrString;
 	attrString = [[[NSMutableAttributedString alloc] init] autorelease];
 	
 	if ([locationString length])
-	{
-		[self appendString:[NSString stringWithFormat:@"%@", locationString]
-		toAttributedString:attrString
-			withAttributes:titleAttributes];
-		[self appendString:[NSString localizedStringWithFormat:@" (%@)", titleString]
+		[self appendString:[NSString stringWithFormat:@"%@\n", locationString]
 		toAttributedString:attrString
 			withAttributes:statusAttributes];
-	}
-	else
-		[self appendString:[NSString localizedStringWithFormat:@"%@", titleString]
-		toAttributedString:attrString
-			withAttributes:titleAttributes];
+	
+	[self appendString:[NSString localizedStringWithFormat:@"%@", titleString]
+	toAttributedString:attrString
+		withAttributes:titleAttributes];
 	
 	if ([statusString length])
 		[self appendString:[NSString localizedStringWithFormat:@"\n(%@)", statusString]
@@ -202,10 +189,10 @@
 	attrStringRect.size = attrStringSize;
 	
 	// Draw
-	[self drawImage:icon inRect:iconRect];
+	[self drawImage:icon inRect:iconRect isFlipped:[controlView isFlipped]];
 	[attrString drawInRect:attrStringRect];
-	[self drawImage:showImage inRect:showRect];
-	[self drawImage:ejectImage inRect:ejectRect];
+	[self drawImage:showImage inRect:showRect isFlipped:[controlView isFlipped]];
+	[self drawImage:ejectImage inRect:ejectRect isFlipped:[controlView isFlipped]];
 }
 
 @end

@@ -12,7 +12,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="1747"/>
+			<integer value="1740"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -41,7 +41,7 @@
 				<string key="NSWindowTitle"/>
 				<string key="NSWindowClass">NSWindow</string>
 				<nil key="NSViewClass"/>
-				<string key="NSWindowContentMaxSize">{3.40282e+38, 3.40282e+38}</string>
+				<string key="NSWindowContentMaxSize">{1.79769e+308, 1.79769e+308}</string>
 				<string key="NSWindowContentMinSize">{256, 123}</string>
 				<object class="NSView" key="NSWindowView" id="697045175">
 					<reference key="NSNextResponder"/>
@@ -177,7 +177,7 @@
 										<bool key="EncodedWithXMLCoder">YES</bool>
 										<object class="NSTableView" id="1027958689">
 											<reference key="NSNextResponder" ref="870796731"/>
-											<int key="NSvFlags">4352</int>
+											<int key="NSvFlags">4370</int>
 											<string key="NSFrameSize">{259, 350}</string>
 											<reference key="NSSuperview" ref="870796731"/>
 											<bool key="NSEnabled">YES</bool>
@@ -218,7 +218,7 @@
 													</object>
 													<object class="NSTextFieldCell" key="NSDataCell" id="745830582">
 														<int key="NSCellFlags">67239488</int>
-														<int key="NSCellFlags2">272630784</int>
+														<int key="NSCellFlags2">272631808</int>
 														<string key="NSContents">Text</string>
 														<reference key="NSSupport" ref="911500604"/>
 														<reference key="NSControlView" ref="1027958689"/>
@@ -228,7 +228,7 @@
 															<string key="NSColorName">controlColor</string>
 															<object class="NSColor" key="NSColor" id="190196362">
 																<int key="NSColorSpace">3</int>
-																<bytes key="NSWhite">MC42NjY2NjY2ODY1AA</bytes>
+																<bytes key="NSWhite">MC42NjY2NjY2NjY3AA</bytes>
 															</object>
 														</object>
 														<object class="NSColor" key="NSTextColor">
@@ -290,7 +290,7 @@
 									<reference key="NSNextKeyView" ref="1027958689"/>
 									<reference key="NSDocView" ref="1027958689"/>
 									<reference key="NSBGColor" ref="962395363"/>
-									<int key="NScvFlags">4</int>
+									<int key="NScvFlags">2</int>
 								</object>
 								<object class="NSScroller" id="832422757">
 									<reference key="NSNextResponder" ref="236988201"/>
@@ -409,7 +409,7 @@
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1440, 878}}</string>
 				<string key="NSMinSize">{256, 145}</string>
-				<string key="NSMaxSize">{3.40282e+38, 3.40282e+38}</string>
+				<string key="NSMaxSize">{1.79769e+308, 1.79769e+308}</string>
 			</object>
 			<object class="NSMenu" id="719851724">
 				<string key="NSTitle"/>
@@ -824,6 +824,7 @@
 					<string>1745.IBViewBoundsToFrameTransform</string>
 					<string>1746.IBPluginDependency</string>
 					<string>1746.IBViewBoundsToFrameTransform</string>
+					<string>1747.CustomClassName</string>
 					<string>1747.IBPluginDependency</string>
 					<string>1748.IBPluginDependency</string>
 					<string>1749.IBPluginDependency</string>
@@ -854,9 +855,9 @@
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>{{510, 151}, {256, 373}}</string>
+					<string>{{454, 59}, {256, 373}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{510, 151}, {256, 373}}</string>
+					<string>{{454, 59}, {256, 373}}</string>
 					<boolean value="NO"/>
 					<boolean value="NO"/>
 					<boolean value="YES"/>
@@ -895,6 +896,7 @@
 					<object class="NSAffineTransform">
 						<bytes key="NSTransformStruct">P4AAAL+AAAAAAAAAw7mAAA</bytes>
 					</object>
+					<string>NSOutlineView</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>

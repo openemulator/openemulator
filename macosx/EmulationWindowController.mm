@@ -144,15 +144,19 @@
 			nil];
 }
 
-- (NSCell *)tableView:(NSTableView *)tableView
-dataCellForTableColumn:(NSTableColumn *)tableColumn
-				  row:(NSInteger)row
+- (NSCell *)outlineView:(NSOutlineView *)outlineView
+ dataCellForTableColumn:(NSTableColumn *)tableColumn
+				   item:(id)item
 {
 	return emulationTableCell;
 }
 
-- (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
+- (NSInteger)outlineView:(NSOutlineView *)outlineView
+  numberOfChildrenOfItem:(id)item
 {
+	if (item)
+		return 0;
+	
 	OEDevicesInfo *devicesInfo = (OEDevicesInfo *)[[self document] devicesInfo];
 	
 	if (devicesInfo)
@@ -161,33 +165,50 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
 	return 0;
 }
 
-- (id)tableView:(NSTableView *)tableView
-objectValueForTableColumn:(NSTableColumn *)tableColumn
-			row:(NSInteger)rowIndex
-{	
+- (id)outlineView:(NSOutlineView *)outlineView
+			child:(NSInteger)index
+		   ofItem:(id)item
+{
+	if (item)
+		return nil;
+	
 	OEDevicesInfo *devicesInfo = (OEDevicesInfo *)[[self document] devicesInfo];
 	
-	if (devicesInfo && (rowIndex < devicesInfo->size()))
-		return getNSString((*devicesInfo)[rowIndex].id);
+	if (devicesInfo && (index < devicesInfo->size()))
+		return getNSString((*devicesInfo)[index].id);
 	
 	return nil;
 }
 
-- (NSDragOperation)tableView:(NSTableView *)aTableView
-				validateDrop:(id < NSDraggingInfo >)info
-				 proposedRow:(NSInteger)row
-	   proposedDropOperation:(NSTableViewDropOperation)operation
+- (BOOL)outlineView:(NSOutlineView *)outlineView
+   isItemExpandable:(id)item
 {
-	if (operation == NSTableViewDropOn)
-		return NSDragOperationCopy;
-	
-	return NSDragOperationNone;
+	return NO;
 }
 
-- (BOOL)tableView:(NSTableView *)aTableView
-	   acceptDrop:(id < NSDraggingInfo >)info
-			  row:(NSInteger)row
-	dropOperation:(NSTableViewDropOperation)operation
+- (id)outlineView:(NSOutlineView *)outlineView
+objectValueForTableColumn:(NSTableColumn *)tableColumn
+		   byItem:(id)item
+{
+	return nil;
+//	return [[item copy] autorelease];
+}
+
+- (NSDragOperation)outlineView:(NSOutlineView *)outlineView
+				  validateDrop:(id <NSDraggingInfo>)info
+				  proposedItem:(id)item
+			proposedChildIndex:(NSInteger)index
+{
+//	if (operation == NSTableViewDropOn)
+		return NSDragOperationCopy;
+	
+//	return NSDragOperationNone;
+}
+
+- (BOOL)outlineView:(NSOutlineView *)outlineView
+		 acceptDrop:(id <NSDraggingInfo>)info
+			   item:(id)item
+		 childIndex:(NSInteger)index
 {
 	return YES;
 }
@@ -261,6 +282,11 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 {
 	// Get selected device
 	// Attempt to eject all device's storage components
+}
+
+- (void)showSettings:(id)sender
+{
+	
 }
 
 @end
