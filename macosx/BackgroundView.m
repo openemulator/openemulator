@@ -1,16 +1,16 @@
 
 /**
  * OpenEmulator
- * Mac OS X Chooser Background view
+ * Mac OS X Background view
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls a chooser background view.
+ * Controls a background view.
  */
 
-#import "ChooserBackgroundView.h"
+#import "BackgroundView.h"
 
-@implementation ChooserBackgroundView
+@implementation BackgroundView
 
 - (void)drawRect:(NSRect)rect
 {

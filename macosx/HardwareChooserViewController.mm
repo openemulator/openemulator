@@ -31,7 +31,7 @@
 
 @implementation EDLInfo
 
-- initWithPath:(NSString *)thePath;
+- (id)initWithPath:(NSString *)thePath;
 {
 	if (self = [super init])
 	{

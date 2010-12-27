@@ -21,21 +21,20 @@
 
 - (void)loadGroups
 {
-	NSString *path = [[[NSBundle mainBundle] resourcePath]
-					  stringByAppendingPathComponent:@"templates"];
+	NSString *templatesPath = [[[NSBundle mainBundle] resourcePath]
+							   stringByAppendingPathComponent:@"templates"];
 	
 	[groups removeAllObjects];
 	
 	// Find application templates
 	NSFileManager *fileManager = [NSFileManager defaultManager];
-	NSArray *subpaths = [fileManager contentsOfDirectoryAtPath:path
+	NSArray *subpaths = [fileManager contentsOfDirectoryAtPath:templatesPath
 														 error:nil];
-	for (int i = 0; i < [subpaths count]; i++)
+	for (NSString *pathComponent in subpaths)
 	{
-		NSString *groupName = [subpaths objectAtIndex:i];
-		NSString *groupPath = [path stringByAppendingPathComponent:groupName];
+		NSString *groupPath = [templatesPath stringByAppendingPathComponent:pathComponent];
 		if ([self validateGroupAtPath:groupPath])
-			[groups addObject:groupName];
+			[groups addObject:pathComponent];
 	}
 	
 	// Sort alphabetically
@@ -77,10 +76,9 @@
 	
 	NSArray *subpaths = [fileManager contentsOfDirectoryAtPath:groupPath
 														 error:nil];
-	for (int i = 0; i < [subpaths count]; i++)
+	for (NSString *pathComponent in subpaths)
 	{
-		NSString *path = [subpaths objectAtIndex:i];
-		NSString *pathExtension = [[path pathExtension] lowercaseString];
+		NSString *pathExtension = [[pathComponent pathExtension] lowercaseString];
 		
 		if (([pathExtension compare:@OE_PACKAGE_PATH_EXTENSION] == NSOrderedSame) ||
 			([pathExtension compare:@OE_FILE_PATH_EXTENSION] == NSOrderedSame))
@@ -102,9 +100,8 @@
 	NSArray *pathContents = [[NSFileManager defaultManager]
 							 contentsOfDirectoryAtPath:path
 							 error:nil];
-	for (int i = 0; i < [pathContents count]; i++)
+	for (NSString *edlFilename in pathContents)
 	{
-		NSString *edlFilename = [pathContents objectAtIndex:i];
 		NSString *edlPath = [path stringByAppendingPathComponent:edlFilename];
 		
 		NSString *pathExtension = [[edlPath pathExtension] lowercaseString];

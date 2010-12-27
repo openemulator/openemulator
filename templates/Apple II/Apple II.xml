@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
-<edl version="1.0" label="Apple II" image="images/Apple/Apple II.png" description="The Apple II was the first highly successful mass produced microprocessor product. The Apple II had color and high-resolution graphics modes, sound capabilities and one of two built-in BASIC programming languages.">
+<edl version="1.0" label="Apple II" image="images/Apple/Apple II.png" description="The Apple II was an 8-bit home computer, one of the first highly successful mass-produced microcomputers. It had a MOS 6502 microprocessor running at 1 MHz, 4 kiB of RAM, an audio cassette interface for loading programs and storing data, and the Integer BASIC built into the ROMs.">
 
-<device id="appleII" label="Apple II" image="images/Apple/Apple II.png" />
+<device id="appleII" label="Apple II" image="images/Apple/Apple II.png" group="system">
+	<setting ref="appleII.controlBus" name="powerState" type="selectlabel" label="Power State" options="Powered Off,Hibernate,Sleep,Standby,Paused,Powered On" />
+	<setting ref="appleII.controlBus" name="notes" type="text" label="Notes" />
+</device>
 <port id="appleII.videoPort" ref="smon.monitor" type="CompositeVideo" label="Video" image="Composite Video Port.png">
     <inlet ref="appleII.video" property="monitor" outletRef="monitor" />
 </port>
@@ -69,6 +72,7 @@
     <property name="cpuFrequencyDivider" value="14" />
     <property name="cpu" ref="appleII.cpu" />
     <property name="resetOnPowerOn" value="0" />
+	<property name="notes" value="" />
 </component>
 <component id="appleII.memoryBus" class="AddressDecoder">
     <property name="addressSize" value="16" />
@@ -224,45 +228,42 @@
     <property name="image" src="${resourcePath}/roms/Apple/341-0004-00.bin" />
 </component>
 
-<device id="smon" label="Apple Monitor II" image="images/Apple/Apple Monitor II.png" />
+<device id="smon" label="Apple Monitor II" image="images/Apple/Apple Monitor II.png" group="peripherals" />
 <connector id="smon.conn" ref="" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png" />
 
-<device id="s0" label="Apple Language Card" image="images/Apple/Apple Language Card.png" />
+<device id="sgp" label="Apple Paddles" image="images/Apple/Apple II Game Paddles.png" group="peripherals" />
+<connector id="sgp.conn" ref="" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png" />
+
+<device id="s0" label="Apple Language Card" image="images/Apple/Apple Language Card.png" group="expansions" />
 <connector id="s1.conn" ref="" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png" />
 
-<device id="s1" label="Apple Silentype Interface Card" image="images/Apple/Apple II.png" />
+<device id="s1" label="Apple Silentype Interface Card" image="images/Apple/Apple II.png" group="expansions" />
 <connector id="s2.conn" ref="" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png" />
 
-<device id="s2" label="Apple Super Serial Card" image="images/Apple/Apple II Super Serial Card.png" />
+<device id="s2" label="Apple Super Serial Card" image="images/Apple/Apple II Super Serial Card.png" group="expansions" />
 <connector id="s3.conn" ref="" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png" />
 
-<device id="s3" label="Videx VideoTerm" image="images/Videx/Videx Videoterm.png" />
+<device id="s3" label="Videx VideoTerm" image="images/Videx/Videx Videoterm.png" group="expansions" />
 <connector id="s4.conn" ref="" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png" />
 
-<device id="s4" label="Mountain Computer Apple Clock" image="images/Apple/Apple II.png" />
+<device id="s4" label="Mountain Computer Apple Clock" image="images/Apple/Apple II.png" group="expansions" />
 <connector id="s5.conn" ref="" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png" />
 
-<device id="s5" label="Apple Graphics Tablet" image="images/Apple/Apple Graphics Tablet.png" />
+<device id="s5" label="Apple Graphics Tablet" image="images/Apple/Apple Graphics Tablet.png" group="expansions" />
 <connector id="s5.conn" ref="" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png" />
 
-<device id="s6" label="Apple Disk II Interface Card" image="images/Apple/Apple Disk II Interface Card.png" />
+<device id="s6" label="Apple Disk II Interface Card" image="images/Apple/Apple Disk II Interface Card.png" group="expansions" />
 <connector id="s6.conn" ref="" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png" />
 <port id="s6.d1" ref="s6d1.conn" type="AppleIISlot" label="Drive 1" image="Apple II Slot.png" />
 <port id="s6.d2" ref="s6d2.conn" type="AppleIISlot" label="Drive 2" image="Apple II Slot.png" />
 
-<device id="s6d1" label="Apple Disk II Drive" image="images/Apple/Apple Disk II Drive.png" />
+<device id="s6d1" label="Apple Disk II Drive" image="images/Apple/Apple Disk II Drive.png" group="peripherals" />
 <connector id="s6d1.conn" ref="" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png" />
 
-<device id="s6d2" label="Apple Disk II Drive" image="images/Apple/Apple Disk II Drive.png" />
+<device id="s6d2" label="Apple Disk II Drive" image="images/Apple/Apple Disk II Drive.png" group="peripherals" />
 <connector id="s6d2.conn" ref="" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png" />
 
-<device id="s6" label="Apple Disk II Interface Card" image="images/Apple/Apple Disk II Interface Card.png" />
-<connector id="s6.conn" ref="" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png" />
-
-<device id="s7" label="Apple PAL Card" image="images/Apple/Apple II.png" />
+<device id="s7" label="Apple PAL Card" image="images/Apple/Apple II.png" group="expansions" />
 <connector id="s7.conn" ref="" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png" />
-
-<device id="sgp" label="Apple Paddles (Mouse)" image="images/Apple/Apple II.png" />
-<connector id="sgp.conn" ref="" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png" />
 
 </edl>

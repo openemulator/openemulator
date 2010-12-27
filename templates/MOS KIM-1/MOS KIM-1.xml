@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
-<edl version="1.0" label="MOS KIM-1" image="images/MOS/MOS KIM-1.png" description="">
+<edl version="1.0" label="MOS KIM-1" image="images/MOS/MOS KIM-1.png" description="The KIM-1, short for Keyboard Input Monitor, was a small 6502-based single-board computer developed and produced by MOS Technology, Inc. and launched in 1976.">
 
-<device id="kim1" label="MOS KIM-1" image="images/MOS/MOS KIM-1.png" />
+<device id="kim1" label="MOS KIM-1" image="images/MOS/MOS KIM-1.png" group="system" />
 <port id="kim1.serialPort" ref="" type="RS232" label="Serial Port" image="Serial Port.png">
     <inlet ref="kim1.io" property="serialPort" outletRef="io" />
 </port>

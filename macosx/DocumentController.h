@@ -10,7 +10,6 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "InspectorWindowController.h"
 #import "AudioControlsWindowController.h"
 #import "TemplateChooserWindowController.h"
 
@@ -18,7 +17,6 @@
 @class TemplateChooserWindowController;
 
 @interface DocumentController : NSDocumentController {
-	IBOutlet InspectorWindowController *fInspectorWindowController;
 	IBOutlet AudioControlsWindowController *fAudioControlsWindowController;
 	IBOutlet TemplateChooserWindowController *fTemplateChooserWindowController;
 	
@@ -34,7 +32,6 @@
 - (NSArray *)audioPathExtensions;
 - (void *)oePortAudio;
 
-- (void)toggleInspector:(id)sender;
 - (void)toggleAudioControls:(id)sender;
 - (IBAction)newDocumentFromTemplateChooser:(id)sender;
 

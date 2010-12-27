@@ -10,16 +10,29 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "EmulationTableCell.h"
+#import "EmulationOutlineItem.h"
+#import "EmulationOutlineCell.h"
+#import "VerticallyCenteredTextFieldCell.h"
 
 @interface EmulationWindowController : NSWindowController
 {
-	id fEmulationTableView;
+	id fSplitView;
+	id fOutlineView;
+	id fTableView;
+	id fTableKeyColumn;
+	id fTableValueColumn;
 	
-	EmulationTableCell *emulationTableCell;
+	EmulationOutlineItem *contents;
+	
+	VerticallyCenteredTextFieldCell *textCell;
+	NSButtonCell *checkBoxCell;
+	NSPopUpButtonCell *popUpButtonCell;
+	NSSliderCell *sliderCell;
+	
+	NSMutableArray *info;
 }
 
-- (void)updateOptions;
+- (void)updateWindowPosition;
 
 - (IBAction)showDevice:(id)sender;
 - (IBAction)revealInFinder:(id)sender;

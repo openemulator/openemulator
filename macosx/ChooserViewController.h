@@ -22,7 +22,7 @@
 {
 	IBOutlet id fVerticalSplitView;
 	IBOutlet id fHorizontalSplitView;
-	IBOutlet id fOutlineView;
+	IBOutlet id fTableView;
 	IBOutlet id fImageBrowserView;
 	
 	IBOutlet id fSelectedItemImageView;

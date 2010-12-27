@@ -20,20 +20,20 @@
 <!ATTLIST edl label CDATA #IMPLIED>
 <!ATTLIST edl image CDATA #IMPLIED>
 <!ATTLIST edl description CDATA #IMPLIED>
-<!ATTLIST edl options CDATA #IMPLIED>
+<!ATTLIST edl window CDATA #IMPLIED>
 
 <!ELEMENT device (setting*)>
 <!ATTLIST device id ID #REQUIRED>
 <!ATTLIST device label CDATA #REQUIRED>
 <!ATTLIST device image CDATA #REQUIRED>
-<!ATTLIST device options CDATA #IMPLIED>
+<!ATTLIST device group CDATA #IMPLIED>
 
 <!ELEMENT setting EMPTY>
 <!ATTLIST setting ref IDREF #REQUIRED>
 <!ATTLIST setting name CDATA #REQUIRED>
 <!ATTLIST setting type CDATA #REQUIRED>
-<!ATTLIST setting label CDATA #REQUIRED>
 <!ATTLIST setting options CDATA #IMPLIED>
+<!ATTLIST setting label CDATA #REQUIRED>
 
 <!ELEMENT connector (inlet*)>
 <!ATTLIST connector id ID #REQUIRED>
@@ -41,7 +41,6 @@
 <!ATTLIST connector type CDATA #REQUIRED>
 <!ATTLIST connector label CDATA #REQUIRED>
 <!ATTLIST connector image CDATA #REQUIRED>
-<!ATTLIST connector options CDATA #IMPLIED>
 
 <!ELEMENT port (inlet*)>
 <!ATTLIST port id ID #REQUIRED>
@@ -49,7 +48,6 @@
 <!ATTLIST port type CDATA #REQUIRED>
 <!ATTLIST port label CDATA #REQUIRED>
 <!ATTLIST port image CDATA #REQUIRED>
-<!ATTLIST port options CDATA #IMPLIED>
 
 <!ELEMENT inlet EMPTY>
 <!ATTLIST inlet ref IDREF #REQUIRED>

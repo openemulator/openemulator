@@ -60,8 +60,6 @@
 	if (!item)
 		return nil;
 	
-	[item autorelease];
-	
 	if ([ident isEqualToString:@"General"])
 	{
 		[item setLabel:NSLocalizedString(@"General", @"Preferences toolbar item label")];
@@ -83,6 +81,8 @@
 		[item setTarget:self];
 		[item setAction:@selector(selectView:)];
 	}
+	
+	[item autorelease];
 	
 	return item;
 }

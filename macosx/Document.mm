@@ -113,6 +113,7 @@
 	return emulation;
 }
 
+/*
 - (NSImage *)getResourceImage:(NSString *)imagePath
 {
 	NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
@@ -130,10 +131,8 @@
 					  withInformativeText:(NSString *)informativeText
 {
 	NSMutableParagraphStyle *paragraphStyle;
-	paragraphStyle = [[[NSParagraphStyle defaultParagraphStyle] mutableCopy]
-					  autorelease];
+	paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
 	[paragraphStyle setLineBreakMode:NSLineBreakByTruncatingTail];
-	
 	NSDictionary *deviceLabelAttrs = [NSDictionary dictionaryWithObjectsAndKeys:
 									  [NSFont messageFontOfSize:12.0f],
 									  NSFontAttributeName,
@@ -142,10 +141,10 @@
 									  [NSColor controlTextColor],
 									  NSForegroundColorAttributeName,
 									  nil];
+	
 	NSMutableAttributedString *aString;
-	aString = [[[NSMutableAttributedString alloc] initWithString:deviceLabel
-													  attributes:deviceLabelAttrs]
-			   autorelease];
+	aString = [[NSMutableAttributedString alloc] initWithString:deviceLabel
+													 attributes:deviceLabelAttrs];
 	
 	NSDictionary *informativeTextAttrs = [NSDictionary dictionaryWithObjectsAndKeys:
 										  [NSFont messageFontOfSize:9.0f],
@@ -156,13 +155,17 @@
 										  NSForegroundColorAttributeName,
 										  nil];
 	NSAttributedString *aInformativeText;
-	aInformativeText = [[[NSAttributedString alloc] initWithString:informativeText
-														attributes:informativeTextAttrs]
-						autorelease];
+	aInformativeText = [[NSAttributedString alloc] initWithString:informativeText
+													   attributes:informativeTextAttrs];
 	[aString appendAttributedString:aInformativeText];
+	[aInformativeText release];
+	[paragraphStyle release];
+	
+	[aString autorelease];
 	
 	return aString;
 }
+*/
 
 - (BOOL)readFromURL:(NSURL *)absoluteURL
 			 ofType:(NSString *)typeName
@@ -194,7 +197,7 @@
 		string emulationPath = getCPPString([[absoluteURL path]
 										   stringByAppendingString:@"/"]);
 		
-		[emulationWindowController updateOptions];
+		[emulationWindowController updateWindowPosition];
 		
 		[self lockEmulation];
 		bool isSaved = ((OEEmulation *)emulation)->save(emulationPath);
@@ -311,10 +314,11 @@
 	{
 		NSString *messageText = @"The device could not be added.";
 		
-		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+		NSAlert *alert = [[NSAlert alloc] init];
 		[alert setMessageText:NSLocalizedString(messageText, messageText)];
 		[alert setAlertStyle:NSWarningAlertStyle];
 		[alert runModal];
+		[alert release];
 	}
 	
 	[self updateChangeCount:NSChangeDone];
@@ -355,9 +359,10 @@
 	{
 		NSString *messageText = @"The device could not be removed.";
 		
-		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+		NSAlert *alert = [[NSAlert alloc] init];
 		[alert setMessageText:NSLocalizedString(messageText, messageText)];
 		[alert runModal];
+		[alert release];
 	}
 	
 	[self updateChangeCount:NSChangeDone];

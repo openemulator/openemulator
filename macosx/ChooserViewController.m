@@ -46,14 +46,14 @@
 
 - (void)reloadData
 {
-	if (fOutlineView)
+	if (fTableView)
 	{
 		NSString *group = [self selectedGroup];
 		NSString *path = [self selectedItemPath];
 		
 		[self loadGroups];
 		
-		[fOutlineView reloadData];
+		[fTableView reloadData];
 		[fImageBrowserView reloadData];
 		
 		[self selectGroup:group andItemWithPath:path];
@@ -85,8 +85,8 @@
 	[fImageBrowserView setValue:subtitleAttributes
 						 forKey:IKImageBrowserCellsHighlightedTitleAttributesKey];
 	
-	[fOutlineView setDelegate:self];
-	[fOutlineView setDataSource:self];
+	[fTableView setDelegate:self];
+	[fTableView setDataSource:self];
 }
 
 - (void)splitView:(NSSplitView *)sender
@@ -157,36 +157,26 @@ constrainMaxCoordinate:(CGFloat)proposedMax
 	return proposedMax;
 }
 
-- (NSInteger)outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(id)item
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView
 {
 	return [groups count];
 }
 
-- (id)outlineView:(NSOutlineView *)outlineView
-objectValueForTableColumn:(NSTableColumn *)tableColumn
-		   byItem:(id)item
+- (id)tableView:(NSTableView *)aTableView
+objectValueForTableColumn:(NSTableColumn *)aTableColumn
+			row:(NSInteger)rowIndex
 {
-	return item;
+	return [groups objectAtIndex:rowIndex];
 }
 
-- (id)outlineView:(NSOutlineView *)outlineView child:(NSInteger)index ofItem:(id)item
-{
-	return item ? nil : [groups objectAtIndex:index];
-}
-
-- (BOOL)outlineView:(NSOutlineView *)outlineView isItemExpandable:(id)item
-{
-	return NO;
-}
-
-- (void)outlineViewSelectionDidChange:(NSNotification *)notification
+- (void)tableViewSelectionDidChange:(NSNotification *)aNotification
 {
 	if (selectedGroup)
 	{
 		[selectedGroup release];
 		selectedGroup = nil;
 	}
-	int groupIndex = [fOutlineView selectedRow];
+	int groupIndex = [fTableView selectedRow];
 	if (groupIndex != -1)
 		selectedGroup = [[groups objectAtIndex:groupIndex] copy];
 	
@@ -257,8 +247,8 @@ cellWasDoubleClickedAtIndex:(NSUInteger)index
 {
 	if (![groups count])
 	{
-		[fOutlineView selectRowIndexes:[NSIndexSet indexSet]
-				  byExtendingSelection:NO];
+		[fTableView selectRowIndexes:[NSIndexSet indexSet]
+				byExtendingSelection:NO];
 		
 		[chooserDelegate chooserSelectionDidChange:self];
 		return;
@@ -267,8 +257,8 @@ cellWasDoubleClickedAtIndex:(NSUInteger)index
 	int groupIndex = 0;
 	if ([groups containsObject:group])
 		groupIndex = [groups indexOfObject:group];
-	[fOutlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:groupIndex]
-			  byExtendingSelection:NO];
+	[fTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:groupIndex]
+			byExtendingSelection:NO];
 	
 	int itemIndex = 0;
 	NSArray *groupItems = [items objectForKey:group];

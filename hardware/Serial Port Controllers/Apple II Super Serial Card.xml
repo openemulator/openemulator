@@ -4,13 +4,13 @@
 
 <device id="ssc" label="Apple II Super Serial Card" image="images/Apple II/Apple II Super Serial Card.png">
     <setting ref="ssc.io" name="mode" type="select" options="Communications Mode,Printer Mode" label="Mode" />
-    <setting ref="ssc.io" name="baudRate" type="select" options="50,75,110,135,150,300,600,1200,1800,2400,3600,4800,7200,9600,19200" label="Baud Rate" />
-    <setting ref="ssc.io" name="dataBits" type="select" options="7,8" label="Data Bits" />
-    <setting ref="ssc.io" name="stopBits" type="select" options="1,2" label="Stop Bits" />
+    <setting ref="ssc.io" name="baudRate" type="select" options="50,75,110,135,150,300,600,1200,1800,2400,3600,4800,7200,9600,19200" label="Baud rate" />
+    <setting ref="ssc.io" name="dataBits" type="select" options="7,8" label="Data bits" />
+    <setting ref="ssc.io" name="stopBits" type="select" options="1,2" label="Stop bits" />
     <setting ref="ssc.io" name="parity" type="select" options="None,Even,Odd" label="Parity" />
     <setting ref="ssc.io" name="autoLFAfterCR" type="checkbox" label="Auto LF after CR" />
-    <setting ref="ssc.io" name="interrupts" type="checkbox" label="Enable interrupt" />
-    <setting ref="ssc.io" name="charactersPerLine" type="select" options="40,72,80,132" label="Characters Per Line" />
+    <setting ref="ssc.io" name="interrupts" type="checkbox" label="Enable interrupts" />
+    <setting ref="ssc.io" name="charactersPerLine" type="select" options="40,72,80,132" label="Chars per line" />
     <setting ref="ssc.io" name="delayAfterCR" type="checkbox" label="Delay after CR" />
 </device>
 <connector id="ssc.connector" ref="" type="AppleIISlot" label="Apple II Super Serial Card" image="Apple II Super Serial Card.png" />

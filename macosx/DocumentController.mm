@@ -71,7 +71,6 @@
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	
 	NSDictionary *defaults = [NSDictionary dictionaryWithObjectsAndKeys:
-							  [NSNumber numberWithBool:NO], @"OEInspectorVisible",
 							  [NSNumber numberWithBool:NO], @"OEAudioControlsVisible",
 							  [NSNumber numberWithBool:NO], @"OEAudioFullDuplex",
 							  [NSNumber numberWithFloat:1.0], @"OEAudioPlayVolume",
@@ -81,8 +80,6 @@
 							  ];
 	[userDefaults registerDefaults:defaults]; 
 	
-	if ([userDefaults boolForKey:@"OEInspectorVisible"])
-		[fInspectorWindowController showWindow:self];
 	if ([userDefaults boolForKey:@"OEAudioControlsVisible"])
 		[fAudioControlsWindowController showWindow:self];
 	
@@ -115,8 +112,6 @@
 	((OEPortAudio *)oePortAudio)->close();
 	
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-	[userDefaults setBool:[[fInspectorWindowController window] isVisible]
-				   forKey:@"OEInspectorVisible"];
 	[userDefaults setBool:[[fAudioControlsWindowController window] isVisible]
 				   forKey:@"OEAudioControlsVisible"];
 	
@@ -197,7 +192,7 @@
 		
 		if ([[self currentDocument] mountable:path])
 		{
-			NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+			NSAlert *alert = [[NSAlert alloc] init];
 			[alert setMessageText:[NSString localizedStringWithFormat:
 								   @"The document \u201C%@\u201D could not be opened. "
 								   "All devices capable of opening this file are busy.",
@@ -206,19 +201,21 @@
 									   @"Try ejecting a disk image in the emulation."]];
 			[alert setAlertStyle:NSCriticalAlertStyle];
 			[alert runModal];
+			[alert release];
 			
 			return YES;
 		}
 	}
 	
 	// Display error
-	NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+	NSAlert *alert = [[NSAlert alloc] init];
 	[alert setMessageText:[NSString localizedStringWithFormat:
 						   @"The document \u201C%@\u201D could not be opened. "
 						   "This emulation cannot open files in this format.",
 						   [path lastPathComponent]]];
 	[alert setAlertStyle:NSCriticalAlertStyle];
 	[alert runModal];
+	[alert release];
 	
 	return YES;
 }
@@ -246,11 +243,6 @@
 - (void *)oePortAudio
 {
 	return oePortAudio;
-}
-
-- (void)toggleInspector:(id)sender
-{
-	[fInspectorWindowController toggleInspector:sender];
 }
 
 - (void)toggleAudioControls:(id)sender

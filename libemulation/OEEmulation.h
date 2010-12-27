@@ -28,7 +28,7 @@
 
 typedef enum
 {
-	EMULATION_SET_STATUS,
+	EMULATION_SET_DEVICE_UPDATE,
 	EMULATION_SET_POWERED,
 	EMULATION_SET_MOUNTED,
 	EMULATION_ADD_CANVAS,
@@ -57,13 +57,13 @@ typedef vector<OESetting> OESettings;
 typedef struct
 {
 	string id;
+	string group;
 	string label;
 	string image;
 	OESettings settings;
 	
 	string location;
 	
-	string status;
 	bool powered;
 	bool mounted;
 	OEComponents canvases;
@@ -75,7 +75,7 @@ typedef map<string, OEComponent *> OEComponentsMap;
 
 typedef map<string, string> OEPropertiesMap;
 
-typedef void (*OEDevicesInfoDidUpdateCallback)();
+typedef void (*OEDevicesDidUpdateCallback)();
 typedef void (*OERunAlertCallback)(string message);
 typedef OEComponent *(*OEAddCanvasCallback)(void *userData);
 typedef void (*OERemoveCanvasCallback)(OEComponent *canvas, void *userData);
@@ -87,8 +87,8 @@ public:
 	~OEEmulation();
 	
 	void setResourcePath(string path);
-	void setDevicesInfoDidUpdateCallback(OEDevicesInfoDidUpdateCallback
-										 devicesInfoDidUpdate);
+	void setDevicesDidUpdateCallback(OEDevicesDidUpdateCallback
+									 devicesDidUpdate);
 	void setAlertCallback(OERunAlertCallback runAlert);
 	void setAddCanvasCallback(OEAddCanvasCallback addCanvas,
 							  void *userData);
@@ -114,7 +114,7 @@ private:
 	OEComponentsMap componentsMap;
 	OEDevicesInfo devicesInfo;
 	
-	OEDevicesInfoDidUpdateCallback devicesInfoDidUpdate;
+	OEDevicesDidUpdateCallback devicesDidUpdate;
 	OERunAlertCallback runAlert;
 	OEAddCanvasCallback addCanvas;
 	void *addCanvasUserData;
