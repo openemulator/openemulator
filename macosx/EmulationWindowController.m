@@ -10,7 +10,6 @@
 
 #import "EmulationWindowController.h"
 
-#import "Document.h"
 #import "EmulationOutlineCell.h"
 #import "VerticallyCenteredTextFieldCell.h"
 #import "StringConversion.h"
@@ -370,6 +369,17 @@ objectValueForTableColumn:(NSTableColumn *)aTableColumn
 	
 	return @"";
 }
+
+- (void)tableView:(NSTableView *)aTableView
+   setObjectValue:(id)anObject
+   forTableColumn:(NSTableColumn *)aTableColumn
+			  row:(NSInteger)rowIndex
+{
+	[selectedItem setValue:[anObject stringValue]
+		 forSettingAtIndex:rowIndex];
+}
+
+
 
 - (NSCell *)tableView:(NSTableView *)tableView
 dataCellForTableColumn:(NSTableColumn *)tableColumn

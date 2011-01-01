@@ -38,9 +38,13 @@
 - (void)addEDL:(NSString *)path connections:(NSDictionary *)connections;
 - (void)removeDevice:(NSString *)deviceId;
 
-- (NSString *)getValue:(NSString *)name forComponent:(NSString *)id;
+- (NSString *)getValueOfProperty:(NSString *)name
+					   component:(NSString *)theId;
+- (void)setValue:(NSString *)value
+	  ofProperty:(NSString *)theName
+	   component:(NSString *)theId;
 - (BOOL)mount:(NSString *)path;
-- (BOOL)mount:(NSString *)path inComponent:(NSString *)deviceId;
+- (BOOL)mount:(NSString *)path component:(NSString *)deviceId;
 - (BOOL)mountable:(NSString *)path;
 
 @end

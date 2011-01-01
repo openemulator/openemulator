@@ -9,7 +9,7 @@
  */
 
 #include "OEComponent.h"
-#include "HostCanvasInterface.h"
+#include "CanvasInterface.h"
 
 class CompositeMonitor : public OEComponent
 {

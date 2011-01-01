@@ -9,7 +9,6 @@
  */
 
 #include "OEComponent.h"
-#include "HostCanvasInterface.h"
 
 class MOSKIM1IO : public OEComponent
 {

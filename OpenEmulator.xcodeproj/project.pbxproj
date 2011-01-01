@@ -341,7 +341,7 @@
 		00B8886D12A393990052B7A4 /* RS232Interface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RS232Interface.h; path = libemulation/Interface/EIA/RS232Interface.h; sourceTree = SOURCE_ROOT; };
 		00B8886F12A393990052B7A4 /* CPUInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CPUInterface.h; path = libemulation/Interface/Generic/CPUInterface.h; sourceTree = SOURCE_ROOT; };
 		00B8887312A393990052B7A4 /* HostAudioInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HostAudioInterface.h; path = libemulation/Interface/Host/HostAudioInterface.h; sourceTree = SOURCE_ROOT; };
-		00B8887412A393990052B7A4 /* HostCanvasInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HostCanvasInterface.h; path = libemulation/Interface/Host/HostCanvasInterface.h; sourceTree = SOURCE_ROOT; };
+		00B8887412A393990052B7A4 /* CanvasInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanvasInterface.h; sourceTree = "<group>"; };
 		00B8887512A393990052B7A4 /* HostEthernetInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HostEthernetInterface.h; path = libemulation/Interface/Host/HostEthernetInterface.h; sourceTree = SOURCE_ROOT; };
 		00B8887612A393990052B7A4 /* HostMIDIInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HostMIDIInterface.h; path = libemulation/Interface/Host/HostMIDIInterface.h; sourceTree = SOURCE_ROOT; };
 		00B8887712A393990052B7A4 /* HostUSBInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HostUSBInterface.h; path = libemulation/Interface/Host/HostUSBInterface.h; sourceTree = SOURCE_ROOT; };
@@ -679,7 +679,7 @@
 			isa = PBXGroup;
 			children = (
 				00B8887312A393990052B7A4 /* HostAudioInterface.h */,
-				00B8887412A393990052B7A4 /* HostCanvasInterface.h */,
+				00B8887412A393990052B7A4 /* CanvasInterface.h */,
 				00B8887512A393990052B7A4 /* HostEthernetInterface.h */,
 				00B8887612A393990052B7A4 /* HostMIDIInterface.h */,
 				00B8887712A393990052B7A4 /* HostUSBInterface.h */,

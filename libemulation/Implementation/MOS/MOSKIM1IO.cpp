@@ -11,7 +11,7 @@
 #include "MOSKIM1IO.h"
 
 #include "OEEmulation.h"
-#include "HostCanvasInterface.h"
+#include "CanvasInterface.h"
 #include "RS232Interface.h"
 
 MOSKIM1IO::MOSKIM1IO()

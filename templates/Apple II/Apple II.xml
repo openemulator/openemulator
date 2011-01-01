@@ -3,7 +3,7 @@
 <edl version="1.0" label="Apple II" image="images/Apple/Apple II.png" description="The Apple II was an 8-bit home computer, one of the first highly successful mass-produced microcomputers. It had a MOS 6502 microprocessor running at 1 MHz, 4 kiB of RAM, an audio cassette interface for loading programs and storing data, and the Integer BASIC built into the ROMs.">
 
 <device id="appleII" label="Apple II" image="images/Apple/Apple II.png" group="system">
-    <setting ref="appleII.io" name="speed" label="TV System" type="select" options="NTSC,PAL" />
+    <setting ref="appleII.video" name="tvSystem" label="TV System" type="select" options="NTSC,PAL" />
 </device>
 <port id="appleII.videoPort" ref="appleMonitorII.monitor" type="CompositeVideo" label="Video" image="Composite Video Port.png">
     <inlet ref="appleII.video" property="monitor" outletRef="monitor" />
@@ -77,11 +77,11 @@
     <property name="addressSize" value="16" />
     <property name="blockSize" value="8" />
     <property name="floatingBus" ref="appleII.floatingBus" />
-    <property name="refRAM00" ref="appleII.ram" />
+    <property name="refRAM00" ref="appleII.ram00" />
     <property name="mapRAM00" value="0x0000-0x3fff" />
-    <property name="refRAM40" ref="appleII.ram" />
+    <property name="refRAM40" ref="appleII.ram40" />
     <property name="mapRAM40" value="0x4000-0x7fff" />
-    <property name="refRAM80" ref="appleII.ram" />
+    <property name="refRAM80" ref="appleII.ram80" />
     <property name="mapRAM80" value="0x8000-0xbfff" />
     <property name="refIO" ref="appleII.io" />
     <property name="mapIO" value="0xc000-0xc0ff" />
@@ -119,17 +119,17 @@
     <property name="controlBus" ref="appleII.controlBus" />
     <property name="ram" ref="appleII.ram" />
 </component>
-<component id="appleII.ram1" class="RAM">
+<component id="appleII.ram00" class="RAM">
     <property name="controlBus" ref="controlBus" />
     <property name="size" value="0x4000" />
     <property name="image" src="${packagePath}/${id}.bin" />
 </component>
-<component id="appleII.ram2" class="RAM">
+<component id="appleII.ram40" class="RAM">
     <property name="controlBus" ref="controlBus" />
     <property name="size" value="0x4000" />
     <property name="image" src="${packagePath}/${id}.bin" />
 </component>
-<component id="appleII.ram3" class="RAM">
+<component id="appleII.ram80" class="RAM">
     <property name="controlBus" ref="controlBus" />
     <property name="size" value="0x4000" />
     <property name="image" src="${packagePath}/${id}.bin" />
@@ -173,8 +173,11 @@
     <property name="format" value="Signetics" />
 </component>
 <component id="appleII.video" class="AppleIIVideo">
-    <property name="host" ref="host" />
-    <property name="ram" ref="appleII.ram" />
+    <property name="tvSystem" value="NTSC" />
+    <property name="ram00" ref="appleII.ram00" />
+    <property name="ram20" ref="appleII.ram00" />
+    <property name="ram40" ref="appleII.ram40" />
+    <property name="ram60" ref="appleII.ram40" />
     <property name="charset" ref="appleII.charset" />
     <property name="charsetSocket" ref="" />
     <property name="monitor" ref="" />
@@ -230,8 +233,8 @@
 <device id="appleMonitorII" label="Apple Monitor II" image="images/Apple/Apple Monitor II.png" group="peripherals">
     <setting ref="appleMonitorII.monitor" name="brightness" label="Brightness" type="slider" options="-1.0,1.0" />
     <setting ref="appleMonitorII.monitor" name="contrast" label="Contrast" type="slider" options="0.0,2.0" />
-    <setting ref="appleMonitorII.monitor" name="hue" label="Hue" type="slider" options="0.0,1.0" />
-    <setting ref="appleMonitorII.monitor" name="saturation" label="Saturation" type="slider" options="0.0,2.0" />
+<!--    <setting ref="appleMonitorII.monitor" name="hue" label="Hue" type="slider" options="0.0,1.0" />
+    <setting ref="appleMonitorII.monitor" name="saturation" label="Saturation" type="slider" options="0.0,2.0" />-->
     <setting ref="appleMonitorII.monitor" name="horizCenter" label="Horizontal Center" type="slider" options="-1.0,1.0" />
     <setting ref="appleMonitorII.monitor" name="horizSize" label="Horizontal Size" type="slider" options="0.0,1.0" />
     <setting ref="appleMonitorII.monitor" name="vertCenter" label="Vertical Center" type="slider" options="-1.0,1.0" />
@@ -275,8 +278,8 @@
     <setting ref="ssc.io" name="mode" label="Mode" type="select" options="Communications,Printer" />
     <setting ref="ssc.io" name="baudRate" label="Baud Rate" type="select" options="50,75,110,135,150,300,600,1200,1800,2400,3600,4800,7200,9600,19200" />
     <setting ref="ssc.io" name="dataBits" label="Data Bits" type="select" options="7,8" />
-    <setting ref="ssc.io" name="stopBits" label="Stop Bits" type="select" options="1,2" />
     <setting ref="ssc.io" name="parity" label="Parity" type="select" options="None,Even,Odd" />
+    <setting ref="ssc.io" name="stopBits" label="Stop Bits" type="select" options="1,2" />
     <setting ref="ssc.io" name="autoLFAfterCR" label="Auto LF After CR" type="checkbox" />
     <setting ref="ssc.io" name="interrupts" label="Enable Interrupts" type="checkbox" />
     <setting ref="ssc.io" name="charactersPerLine" label="Characters per Line" type="select" options="40,72,80,132" />
@@ -305,7 +308,7 @@
 <port id="s6.d2" ref="diskII2.conn" type="AppleDisk525" label="Drive 2" image="Apple II Slot.png" />
 
 <device id="diskII" label="Apple Disk II" image="images/Apple/Apple Disk II.png" group="peripherals">
-    <setting ref="diskII.io" name="lock" label="Force Write Protected" type="checkbox" />
+    <setting ref="diskII.drive" name="forceWriteProtected" label="Force Write Protected" type="checkbox" />
 </device>
 <connector id="diskII.connector" ref="" type="AppleDisk525" label="Apple Disk II Slot Connector" />
 <component id="diskII.drive" class="AppleDiskII">
@@ -320,7 +323,7 @@
 </component>
 
 <device id="diskII2" label="Apple Disk II" image="images/Apple/Apple Disk II.png" group="peripherals">
-    <setting ref="diskII2.io" name="lock" label="Force Write Protected" type="checkbox" />
+    <setting ref="diskII2.drive" name="forceWriteProtected" label="Force Write Protected" type="checkbox" />
 </device>
 <connector id="diskII2.connector" ref="" type="AppleDisk525" label="Apple Disk II Slot Connector" />
 <component id="diskII2.drive" class="AppleDiskII">

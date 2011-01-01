@@ -12,6 +12,26 @@
 
 #include "OEEmulation.h"
 
+bool AppleDiskII::setValue(string name, string value)
+{
+	if (name == "forceWriteProtected")
+		forceWriteProtected = getInt(value);
+	else
+		return false;
+	
+	return true;
+}
+
+bool AppleDiskII::getValue(string name, string &value)
+{
+	if (name == "forceWriteProtected")
+		value = getString(forceWriteProtected);
+	else
+		return false;
+	
+	return true;
+}
+
 bool AppleDiskII::setRef(string name, OEComponent *ref)
 {
 	if (name == "emulation")

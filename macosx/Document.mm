@@ -391,21 +391,46 @@ void removeCanvas(OEComponent *canvas, void *userData)
 	[self updateChangeCount:NSChangeDone];*/
 }
 
-- (NSString *)getValue:(NSString *)name forComponent:(NSString *)theId
+- (NSString *)getValueOfProperty:(NSString *)theName
+					   component:(NSString *)theId
 {
 	string value;
 	if (emulation)
 	{
 		OEEmulation *theEmulation = (OEEmulation *)emulation;
+		BOOL success = NO;
 		
 		[self lockEmulation];
 		OEComponent *component = theEmulation->getComponent(getCPPString(theId));
 		if (component)
-			component->getValue(getCPPString(name), value);
+			success = component->getValue(getCPPString(theName), value);
 		[self unlockEmulation];
+		
+		if (!success)
+			NSLog(@"invalid property '%@' for '%@'", theName, theId);
 	}
 	
 	return getNSString(value);
+}
+
+- (void)setValue:(NSString *)theValue
+	  ofProperty:(NSString *)theName
+	   component:(NSString *)theId
+{
+	if (emulation)
+	{
+		OEEmulation *theEmulation = (OEEmulation *)emulation;
+		BOOL success = NO;
+		
+		[self lockEmulation];
+		OEComponent *component = theEmulation->getComponent(getCPPString(theId));
+		if (component)
+			success = component->setValue(getCPPString(theName), getCPPString(theValue));
+		[self unlockEmulation];
+		
+		if (!success)
+			NSLog(@"could not set property '%@' for '%@'", theName, theId);
+	}
 }
 
 - (BOOL)mount:(NSString *)path
@@ -424,7 +449,7 @@ void removeCanvas(OEComponent *canvas, void *userData)
 	return result;
 }
 
-- (BOOL)mount:(NSString *)path inComponent:(NSString *)theId
+- (BOOL)mount:(NSString *)path component:(NSString *)theId
 {
 	BOOL result = NO;
 	if (emulation)

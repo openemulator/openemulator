@@ -14,6 +14,8 @@
 
 @interface EmulationItem : NSObject
 {
+	Document *document;
+	
 	NSString *uid;
 	NSString *label;
 	NSImage *image;
@@ -23,18 +25,19 @@
 	BOOL mountable;
 	BOOL mounted;
 	
+	NSMutableArray *settingsRefs;
+	NSMutableArray *settingsNames;
 	NSMutableArray *settingsLabels;
-	NSMutableArray *settingsValues;
 	NSMutableArray *settingsTypes;
 	NSMutableArray *settingsOptions;
 	
 	NSMutableArray *children;
 }
 
-- (id)initWithDocument:(Document *)document;
+- (id)initWithDocument:(Document *)theDocument;
 - (id)initWithLabel:(NSString *)theLabel;
 - (id)initWithDeviceInfo:(void *)theDeviceInfo
-			  inDocument:(Document *)document;
+			  inDocument:(Document *)theDocument;
 - (id)initWithDiskImageAtPath:(NSString *)thePath
 			 storageComponent:(void *)theStorageComponent
 					 location:(NSString *)theLocation
@@ -54,9 +57,10 @@
 
 - (NSInteger)numberOfSettings;
 - (NSString *)labelForSettingAtIndex:(NSInteger)index;
-- (NSString *)valueForSettingAtIndex:(NSInteger)index;
 - (NSString *)typeForSettingAtIndex:(NSInteger)index;
 - (NSArray *)optionsForSettingAtIndex:(NSInteger)index;
+- (NSString *)valueForSettingAtIndex:(NSInteger)index;
+- (void)setValue:(NSString *)value forSettingAtIndex:(NSInteger)index;
 
 - (NSMutableArray *)children;
 - (EmulationItem *)childWithUid:(NSString *)theUid;

@@ -15,13 +15,13 @@
 
 @implementation EmulationItem
 
-- (id)initWithDocument:(Document *)document
+- (id)initWithDocument:(Document *)theDocument
 {
 	if (self = [super init])
 	{
 		children = [[NSMutableArray alloc] init];
 		
-		OEDevicesInfo *devicesInfo = (OEDevicesInfo *)[document devicesInfo];
+		OEDevicesInfo *devicesInfo = (OEDevicesInfo *)[theDocument devicesInfo];
 		for (NSInteger i = 0; i < devicesInfo->size(); i++)
 		{
 			OEDeviceInfo &deviceInfo = devicesInfo->at(i);
@@ -37,7 +37,7 @@
 			
 			EmulationItem *deviceItem;
 			deviceItem = [[EmulationItem alloc] initWithDeviceInfo:&deviceInfo
-														inDocument:document];
+														inDocument:theDocument];
 			[[groupItem children] addObject:deviceItem];
 			[deviceItem release];
 		}
@@ -60,11 +60,13 @@
 }
 
 - (id)initWithDeviceInfo:(void *)theDeviceInfo
-			  inDocument:(Document *)document
+			  inDocument:(Document *)theDocument
 {
 	if (self = [super init])
 	{
 		OEDeviceInfo *deviceInfo = (OEDeviceInfo *)theDeviceInfo;
+		
+		document = theDocument;
 		
 		uid = [getNSString(deviceInfo->id) retain];
 		label = [getNSString(deviceInfo->label) retain];
@@ -74,8 +76,9 @@
 		showable = (deviceInfo->canvases.size() != 0);
 		mountable = (deviceInfo->storages.size() != 0);
 		
+		settingsRefs = [[NSMutableArray alloc] init];
+		settingsNames = [[NSMutableArray alloc] init];
 		settingsLabels = [[NSMutableArray alloc] init];
-		settingsValues = [[NSMutableArray alloc] init];
 		settingsTypes = [[NSMutableArray alloc] init];
 		settingsOptions = [[NSMutableArray alloc] init];
 		
@@ -83,15 +86,16 @@
 			 i != deviceInfo->settings.end();
 			 i++)
 		{
+			NSString *settingRef = getNSString(i->ref);
+			NSString *settingName = getNSString(i->name);
 			NSString *settingLabel = getNSString(i->label);
-			NSString *settingValue = [document getValue:getNSString(i->name)
-										   forComponent:getNSString(i->ref)];
 			NSString *settingType = getNSString(i->type);
 			NSArray *settingOptions = [getNSString(i->options)
 									   componentsSeparatedByString:@","];
 			
+			[settingsRefs addObject:settingRef];
+			[settingsNames addObject:settingName];
 			[settingsLabels addObject:settingLabel];
-			[settingsValues addObject:settingValue];
 			[settingsTypes addObject:settingType];
 			[settingsOptions addObject:settingOptions];
 		}
@@ -102,11 +106,7 @@
 			 i != deviceInfo->storages.end();
 			 i++)
 		{
-			
-		}
-		
-		if ([uid compare:@"s6d1"] == NSOrderedSame)
-		{
+			// To-Do: Recover mounted disk images
 			EmulationItem *diskImageItem;
 			NSString *path = @"Apple DOS 3.3.dsk";
 			diskImageItem = [[EmulationItem alloc] initWithDiskImageAtPath:path
@@ -150,8 +150,9 @@
 	[image release];
 	[location release];
 	
+	[settingsRefs release];
+	[settingsNames release];
 	[settingsLabels release];
-	[settingsValues release];
 	[settingsTypes release];
 	[settingsOptions release];
 	
@@ -210,17 +211,12 @@
 
 - (NSInteger)numberOfSettings
 {
-	return [settingsValues count];
+	return [settingsRefs count];
 }
 
 - (NSString *)labelForSettingAtIndex:(NSInteger)index
 {
 	return [settingsLabels objectAtIndex:index];
-}
-
-- (NSString *)valueForSettingAtIndex:(NSInteger)index
-{
-	return [settingsValues objectAtIndex:index];
 }
 
 - (NSString *)typeForSettingAtIndex:(NSInteger)index
@@ -231,6 +227,38 @@
 - (NSArray *)optionsForSettingAtIndex:(NSInteger)index
 {
 	return [settingsOptions objectAtIndex:index];
+}
+
+- (NSString *)valueForSettingAtIndex:(NSInteger)index
+{
+	NSString *ref = [settingsRefs objectAtIndex:index];
+	NSString *name = [settingsNames objectAtIndex:index];
+	
+	NSString *value = [document getValueOfProperty:name component:ref];
+	
+	NSString *type = [settingsTypes objectAtIndex:index];
+	if ([type compare:@"select"] == NSOrderedSame)
+	{
+		NSArray *options = [settingsOptions objectAtIndex:index];
+		value = [NSString stringWithFormat:@"%d", [options indexOfObject:value]];
+	}
+	
+	return value;
+}
+
+- (void)setValue:(NSString *)value forSettingAtIndex:(NSInteger)index;
+{
+	NSString *ref = [settingsRefs objectAtIndex:index];
+	NSString *name = [settingsNames objectAtIndex:index];
+	
+	NSString *type = [settingsTypes objectAtIndex:index];
+	if ([type compare:@"select"] == NSOrderedSame)
+	{
+		NSArray *options = [settingsOptions objectAtIndex:index];
+		value = [options objectAtIndex:[value integerValue]];
+	}
+	
+	[document setValue:value ofProperty:name component:ref];
 }
 
 - (NSMutableArray *)children

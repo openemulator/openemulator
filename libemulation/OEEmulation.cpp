@@ -227,6 +227,8 @@ void OEEmulation::buildDevicesInfo()
 			OEDeviceInfo deviceInfo;
 			deviceInfo.id = getNodeProperty(node, "id");
 			deviceInfo.group = getNodeProperty(node, "group");
+			if (deviceInfo.group == "")
+				deviceInfo.group = "system";
 			deviceInfo.label = getNodeProperty(node, "label");
 			deviceInfo.image = getNodeProperty(node, "image");
 			deviceInfo.settings = buildDeviceSettings(node->children);
@@ -587,7 +589,7 @@ bool OEEmulation::updateComponent(string id, xmlNodePtr children)
 				string value;
 				
 				if (component->getValue(name, value))
-					setNodeProperty(node, name, value);
+					setNodeProperty(node, "value", value);
 			}
 			else if (hasNodeProperty(node, "src"))
 			{
