@@ -15,6 +15,7 @@
 * Implemented the action menu button
 * Implemented emulation view show and eject roll-over button
 * Added mounted disk images as nodes in the outline view
+* Connected emulation view settings and contents
 
 ==2010-11-01==
 * Fixed ${id} when saving emulation data

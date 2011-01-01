@@ -293,11 +293,11 @@
 <connector id="s5.conn" ref="" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png" />
 
 <device id="s5" label="Apple Graphics Tablet Interface Card" image="images/Apple/Apple Graphics Tablet Interface Card.png" group="expansions" />
-<connector id="s5.conn" ref="" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png" />
-<port id="s5.port" ref="s5def" type="AppleGraphicsTablet" label="Port" image="Apple Graphics Tablet Interface Card.png" />
+<connector id="s5.conn" ref="s5dev" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png" />
+<port id="s5.port" ref="s5dev" type="AppleGraphicsTablet" label="Graphics Tablet Port" image="Apple Graphics Tablet Interface Card.png" />
 
 <device id="s5dev" label="Apple Graphics Tablet" image="images/Apple/Apple Graphics Tablet.png" group="peripherals" />
-<connector id="s5dev.conn" ref="" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png" />
+<connector id="s5dev.conn" ref="s5" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png" />
 
 <device id="s6" label="Apple Disk II Interface Card" image="images/Apple/Apple Disk II Interface Card.png" group="expansions" />
 <connector id="s6.conn" ref="" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png" />

@@ -16,6 +16,7 @@
 
 ControlBus::ControlBus()
 {
+	emulation = NULL;
 	hostAudio = NULL;
 	
 	crystalFrequency = 1E6;

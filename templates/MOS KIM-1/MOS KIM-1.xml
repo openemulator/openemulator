@@ -10,6 +10,7 @@
 <port id="kim1.slot1" ref="" type="MOSKIM1Slot" label="Slot 1" image="Kim-1 Slot.png" />
 <port id="kim1.slot2" ref="" type="MOSKIM1Slot" label="Slot 2" image="Kim-1 Slot.png" />
 <component id="kim1.controlBus" class="ControlBus">
+	<property name="emulation" ref="emulation" />
     <property name="hostAudio" ref="hostAudio" />
     <property name="crystalFrequency" value="1.0MHz" />
     <property name="cpuFrequencyDivider" value="1" />

@@ -2,7 +2,7 @@
 /**
  * OpenEmulator
  * Mac OS X Emulation Window Controller
- * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Controls an emulation window.
@@ -340,7 +340,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	NSInteger row = [fOutlineView selectedRow];
 	selectedItem = [fOutlineView itemAtRow:row];
 	
-	[fRemoveDevice setEnabled:selectedItem ? [selectedItem removable] : NO];
+	BOOL removable = selectedItem ? ([[selectedItem location] length] != 0) : NO;
+	[fRemoveDevice setEnabled:removable];
 	
 	[self updateDetail];
 }

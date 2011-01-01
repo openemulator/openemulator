@@ -2,7 +2,7 @@ OpenEmulator
 http://www.openemulator.org/
 
 Lead Developer
-  Marc S. Ressl <mressl@gmail.com> (Backend, Mac OS X client, wxWidgets client)
+  Marc S. Ressl <mressl@gmail.com> (libemulation, Mac OS X UI, wxWidgets UI)
 
 Previous Developers
 
@@ -16,6 +16,5 @@ Mac OS X Translators, current release:
 GTK+ Translators:
 
 Third-Party Resources:
-  The SDL development team for SDL. <http://www.libsdl.org/>
   The wxWidgets development team for wxWidgets. <http://www.wxwidgets.org/>
   Lee Thomason, Yves Berquin, Andrew Ellerton for tinyxml <http://www.grinninglizard.com/tinyxml/>

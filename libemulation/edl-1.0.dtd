@@ -31,9 +31,9 @@
 <!ELEMENT setting EMPTY>
 <!ATTLIST setting ref IDREF #REQUIRED>
 <!ATTLIST setting name CDATA #REQUIRED>
+<!ATTLIST setting label CDATA #REQUIRED>
 <!ATTLIST setting type CDATA #REQUIRED>
 <!ATTLIST setting options CDATA #IMPLIED>
-<!ATTLIST setting label CDATA #REQUIRED>
 
 <!ELEMENT connector (inlet*)>
 <!ATTLIST connector id ID #REQUIRED>

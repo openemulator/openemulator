@@ -1,5 +1,5 @@
 ==To-Do==
-* Connect emulation view settings and contents
+* Should adding a storage device create a storage component, or just mark the calling party as a storage device?
 * Devise a way to send system events to a device without a canvas
 * Storage devices have an eject command (CD's, 3.5" disk drives). Disk images have an unmount command. If a device is ejectable, it's mounts are not unmountable.
 

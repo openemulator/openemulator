@@ -2,7 +2,7 @@
 /**
  * OpenEmulator
  * Mac OS X Emulation Item
- * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Implements an emulation item.
@@ -73,7 +73,6 @@
 		state = [getNSString(deviceInfo->state) retain];
 		showable = (deviceInfo->canvases.size() != 0);
 		mountable = (deviceInfo->storages.size() != 0);
-		removable = deviceInfo->removable;
 		
 		settingsLabels = [[NSMutableArray alloc] init];
 		settingsValues = [[NSMutableArray alloc] init];
@@ -137,7 +136,6 @@
 		location = [theLocation copy];
 		state = @"Mounted";
 		mounted = YES;
-		removable = YES;
 		
 		children = [[NSMutableArray alloc] init];
 	}
@@ -208,11 +206,6 @@
 - (BOOL)mounted
 {
 	return mounted;
-}
-
-- (BOOL)removable
-{
-	return removable;
 }
 
 - (NSInteger)numberOfSettings
