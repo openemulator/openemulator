@@ -3,15 +3,15 @@
 <edl version="1.0" label="Super Serial Card" image="images/Apple II/Apple II Super Serial Card.png">
 
 <device id="ssc" label="Apple II Super Serial Card" image="images/Apple II/Apple II Super Serial Card.png">
-    <setting ref="ssc.io" name="mode" type="select" options="Communications Mode,Printer Mode" label="Mode" />
-    <setting ref="ssc.io" name="baudRate" type="select" options="50,75,110,135,150,300,600,1200,1800,2400,3600,4800,7200,9600,19200" label="Baud rate" />
-    <setting ref="ssc.io" name="dataBits" type="select" options="7,8" label="Data bits" />
-    <setting ref="ssc.io" name="stopBits" type="select" options="1,2" label="Stop bits" />
-    <setting ref="ssc.io" name="parity" type="select" options="None,Even,Odd" label="Parity" />
-    <setting ref="ssc.io" name="autoLFAfterCR" type="checkbox" label="Auto LF after CR" />
-    <setting ref="ssc.io" name="interrupts" type="checkbox" label="Enable interrupts" />
-    <setting ref="ssc.io" name="charactersPerLine" type="select" options="40,72,80,132" label="Chars per line" />
-    <setting ref="ssc.io" name="delayAfterCR" type="checkbox" label="Delay after CR" />
+    <setting ref="ssc.io" name="mode" label="Mode" type="select" options="Communications,Printer" />
+    <setting ref="ssc.io" name="baudRate" label="Baud Rate" type="select" options="50,75,110,135,150,300,600,1200,1800,2400,3600,4800,7200,9600,19200" />
+    <setting ref="ssc.io" name="dataBits" label="Data Bits" type="select" options="7,8" />
+    <setting ref="ssc.io" name="stopBits" label="Stop Bits" type="select" options="1,2" />
+    <setting ref="ssc.io" name="parity" label="Parity" type="select" options="None,Even,Odd" />
+    <setting ref="ssc.io" name="autoLFAfterCR" label="Auto LF After CR" type="checkbox" />
+    <setting ref="ssc.io" name="interrupts" label="Enable Interrupts" type="checkbox" />
+    <setting ref="ssc.io" name="charactersPerLine" label="Characters per Line" type="select" options="40,72,80,132" />
+    <setting ref="ssc.io" name="delayAfterCR" label="Delay After CR" type="checkbox" />
 </device>
 <connector id="ssc.connector" ref="" type="AppleIISlot" label="Apple II Super Serial Card" image="Apple II Super Serial Card.png" />
 <port id="ssc.port" ref="" type="RS232" label="Serial Port" image="Serial Port.png">

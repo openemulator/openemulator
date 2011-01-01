@@ -16,7 +16,7 @@
 {
 }
 
-- (BOOL)validateGroupAtPath:(NSString *)groupPath;
+- (BOOL)validTemplatesAtPath:(NSString *)groupPath;
 - (void)addGroupAtPath:(NSString *)groupPath
 			   toGroup:(NSString *)group;
 

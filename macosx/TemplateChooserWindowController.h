@@ -15,10 +15,10 @@
 
 @interface TemplateChooserWindowController : NSWindowController
 {
-	IBOutlet id fDocumentController;
+	id fDocumentController;
 	
-	IBOutlet id fTemplateChooserView;
-	IBOutlet id fChooseButton;
+	id fTemplateChooserView;
+	id fChooseButton;
 	TemplateChooserViewController *templateChooserViewController;
 }
 

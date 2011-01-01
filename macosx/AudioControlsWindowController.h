@@ -16,18 +16,18 @@
 
 @interface AudioControlsWindowController : NSWindowController
 {
-	IBOutlet DocumentController *fDocumentController;
+	DocumentController *fDocumentController;
 	
-	IBOutlet id fPlayNameLabel;
-	IBOutlet id fTogglePlayButton;
-	IBOutlet id fPlayTimeLabel;
-	IBOutlet id	fPlayPosition;
-	IBOutlet id fPlayDurationLabel;
+	id fPlayNameLabel;
+	id fTogglePlayButton;
+	id fPlayTimeLabel;
+	id	fPlayPosition;
+	id fPlayDurationLabel;
 	
-	IBOutlet id fSaveRecordingAsButton;
-	IBOutlet id fToggleRecordingButton;
-	IBOutlet id fRecordingTimeLabel;
-	IBOutlet id fRecordingSizeLabel;
+	id fSaveRecordingAsButton;
+	id fToggleRecordingButton;
+	id fRecordingTimeLabel;
+	id fRecordingSizeLabel;
 	
 	NSTimer *timer;
 	

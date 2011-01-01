@@ -10,6 +10,7 @@
 
 #include <math.h>
 
+#include "OEEmulation.h"
 #include "ControlBus.h"
 #include "HostAudioInterface.h"
 
@@ -47,7 +48,9 @@ bool ControlBus::setValue(string name, string value)
 
 bool ControlBus::setRef(string name, OEComponent *ref)
 {
-	if (name == "hostAudio")
+	if (name == "emulation")
+		emulation = ref;
+	else if (name == "hostAudio")
 	{
 		replaceObserver(hostAudio, ref, HOST_AUDIO_FRAME_DID_BEGIN_RENDER);
 		hostAudio = ref;
@@ -68,6 +71,12 @@ bool ControlBus::init()
 	{
 		log("hostAudio undefined");
 		return false;
+	}
+	
+	if (emulation)
+	{
+		string state = "Powered On";
+		emulation->postMessage(this, OEEMULATION_SET_STATE, &state);
 	}
 	
 	updateCPUFrequency();
@@ -152,7 +161,7 @@ bool ControlBus::postMessage(OEComponent *component, int message, void *data)
 
 void ControlBus::notify(OEComponent *sender, int notification, void *data)
 {
-	HostAudioBuffer *buffer = (HostAudioBuffer *) data;
+/*	HostAudioBuffer *buffer = (HostAudioBuffer *) data;
 	float *out = buffer->output;
 	
 	float freq = 440.0 + rand() * 2.0 / RAND_MAX;
@@ -164,7 +173,7 @@ void ControlBus::notify(OEComponent *sender, int notification, void *data)
 		
 		for (int ch = 0; ch < buffer->channelNum; ch++)
 			*out++ += x;
-	}
+	}*/
 }
 
 void ControlBus::updateCPUFrequency()

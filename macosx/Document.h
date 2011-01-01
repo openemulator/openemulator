@@ -10,7 +10,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-#define MY_TEMPLATES_FOLDER @"~/Library/Application Support/OpenEmulator/Templates"
+#define USER_TEMPLATES_FOLDER @"~/Library/Application Support/OpenEmulator/Templates"
 
 @class EmulationWindowController;
 
@@ -36,9 +36,11 @@
 - (void)setEDLOptions:(NSString *)value;
 
 - (void)addEDL:(NSString *)path connections:(NSDictionary *)connections;
-- (void)removeDevice:(NSDictionary *)dict;
+- (void)removeDevice:(NSString *)deviceId;
 
+- (NSString *)getValue:(NSString *)name forComponent:(NSString *)id;
 - (BOOL)mount:(NSString *)path;
+- (BOOL)mount:(NSString *)path inComponent:(NSString *)deviceId;
 - (BOOL)mountable:(NSString *)path;
 
 @end

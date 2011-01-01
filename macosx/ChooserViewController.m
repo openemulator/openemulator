@@ -32,6 +32,8 @@
 
 - (void)dealloc
 {
+	[tableCell release];
+	
 	[groups release];
 	[selectedGroup release];
 	[items release];
@@ -64,6 +66,11 @@
 {
 	[self loadGroups];
 	
+	tableCell = [[VerticallyCenteredTextFieldCell alloc] init];
+	[tableCell setControlSize:NSSmallControlSize];
+	[tableCell setFont:[NSFont labelFontOfSize:[NSFont smallSystemFontSize]]];
+	[tableCell setHorizontalInset:5.0];
+	
 	NSDictionary *titleAttributes;
 	titleAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
 					   [NSFont messageFontOfSize:11.0f], NSFontAttributeName,
@@ -89,6 +96,8 @@
 	[fTableView setDataSource:self];
 }
 
+
+
 - (void)splitView:(NSSplitView *)sender
 resizeSubviewsWithOldSize:(NSSize)oldSize
 {
@@ -98,7 +107,7 @@ resizeSubviewsWithOldSize:(NSSize)oldSize
 	float deltaWidth = newSize.width - oldSize.width;
 	float deltaHeight = newSize.height - oldSize.height;
 	
-	for (int i = 0; i < [subviews count]; i++)
+	for (NSInteger i = 0; i < [subviews count]; i++)
 	{
 		NSView *subview = [subviews objectAtIndex:i];
 		NSRect frame = subview.frame;
@@ -157,6 +166,8 @@ constrainMaxCoordinate:(CGFloat)proposedMax
 	return proposedMax;
 }
 
+
+
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView
 {
 	return [groups count];
@@ -169,6 +180,13 @@ objectValueForTableColumn:(NSTableColumn *)aTableColumn
 	return [groups objectAtIndex:rowIndex];
 }
 
+- (NSCell *)tableView:(NSTableView *)tableView
+dataCellForTableColumn:(NSTableColumn *)tableColumn
+				  row:(NSInteger)row
+{
+	return tableCell;
+}
+
 - (void)tableViewSelectionDidChange:(NSNotification *)aNotification
 {
 	if (selectedGroup)
@@ -176,14 +194,16 @@ objectValueForTableColumn:(NSTableColumn *)aTableColumn
 		[selectedGroup release];
 		selectedGroup = nil;
 	}
-	int groupIndex = [fTableView selectedRow];
-	if (groupIndex != -1)
-		selectedGroup = [[groups objectAtIndex:groupIndex] copy];
+	NSInteger rowIndex = [fTableView selectedRow];
+	if (rowIndex != -1)
+		selectedGroup = [[groups objectAtIndex:rowIndex] copy];
 	
 	[fImageBrowserView reloadData];
 	[fImageBrowserView setSelectionIndexes:[NSIndexSet indexSetWithIndex:0]
 					  byExtendingSelection:NO];
 }
+
+
 
 - (NSUInteger)numberOfItemsInImageBrowser:(IKImageBrowserView *)aBrowser
 {
@@ -234,6 +254,8 @@ cellWasDoubleClickedAtIndex:(NSUInteger)index
 		[chooserDelegate chooserItemWasDoubleClicked:self];
 }
 
+
+
 - (void)loadItems
 {
 }
@@ -254,15 +276,15 @@ cellWasDoubleClickedAtIndex:(NSUInteger)index
 		return;
 	}
 	
-	int groupIndex = 0;
+	NSInteger rowIndex = 0;
 	if ([groups containsObject:group])
-		groupIndex = [groups indexOfObject:group];
-	[fTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:groupIndex]
+		rowIndex = [groups indexOfObject:group];
+	[fTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:rowIndex]
 			byExtendingSelection:NO];
 	
-	int itemIndex = 0;
+	NSInteger itemIndex = 0;
 	NSArray *groupItems = [items objectForKey:group];
-	for (int i = 0; i < [groupItems count]; i++)
+	for (NSInteger i = 0; i < [groupItems count]; i++)
 	{
 		ChooserItem *item = [groupItems objectAtIndex:i];
 		if ([[item edlPath] compare:path] == NSOrderedSame)
@@ -283,12 +305,12 @@ cellWasDoubleClickedAtIndex:(NSUInteger)index
 
 - (NSString *)selectedItemPath
 {
-	NSUInteger index = [[fImageBrowserView selectionIndexes] firstIndex];
-	if (index == NSNotFound)
+	NSUInteger imageIndex = [[fImageBrowserView selectionIndexes] firstIndex];
+	if (imageIndex == NSNotFound)
 		return nil;
 	
 	ChooserItem *item = [self imageBrowser:fImageBrowserView
-							   itemAtIndex:index];
+							   itemAtIndex:imageIndex];
 	return [[[item edlPath] copy] autorelease];
 }
 

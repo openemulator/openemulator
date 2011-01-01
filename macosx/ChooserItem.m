@@ -37,15 +37,15 @@
 
 - (void)dealloc
 {
-    [label release];
-    [imagePath release];
+	[label release];
+	[imagePath release];
 	
-    [description release];
-    [edlPath release];
+	[description release];
+	[edlPath release];
 	
 	[image release];
 	
-    [super dealloc];
+	[super dealloc];
 }
 
 - (NSString *)imageRepresentationType
@@ -73,7 +73,7 @@
 
 - (NSString *)imageUID
 {
-    return edlPath;
+	return edlPath;
 }
 
 - (NSString *)description

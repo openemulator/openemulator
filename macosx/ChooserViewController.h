@@ -10,6 +10,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "VerticallyCenteredTextFieldCell.h"
+
 @protocol ChooserDelegate <NSObject>
 
 @optional
@@ -20,16 +22,18 @@
 
 @interface ChooserViewController : NSViewController
 {
-	IBOutlet id fVerticalSplitView;
-	IBOutlet id fHorizontalSplitView;
-	IBOutlet id fTableView;
-	IBOutlet id fImageBrowserView;
+	id fVerticalSplitView;
+	id fHorizontalSplitView;
+	id fTableView;
+	id fImageBrowserView;
 	
-	IBOutlet id fSelectedItemImageView;
-	IBOutlet id fSelectedItemLabelView;
-	IBOutlet id fSelectedItemDescriptionView;
+	id fSelectedItemImageView;
+	id fSelectedItemLabelView;
+	id fSelectedItemDescriptionView;
 	
 	id<ChooserDelegate> chooserDelegate;
+	
+	VerticallyCenteredTextFieldCell *tableCell;
 	
 	NSMutableArray *groups;
 	NSString *selectedGroup;

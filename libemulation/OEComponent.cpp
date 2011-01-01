@@ -51,8 +51,47 @@ bool OEComponent::init()
 
 bool OEComponent::postMessage(OEComponent *sender, int message, void *data)
 {
+	for (OEComponents::iterator i = delegates[message].begin();
+		 i != delegates[message].end();
+		 i++)
+	{
+		if ((*i)->postMessage(sender, message, data))
+			return true;
+	}
+	
 	return false;
 }
+
+bool OEComponent::addDelegate(OEComponent *delegate, int delegation)
+{
+	delegates[delegation].push_back(delegate);
+	
+	return true;
+}
+
+bool OEComponent::removeDelegate(OEComponent *delegate, int delegation)
+{
+	OEComponents::iterator first = delegates[delegation].begin();
+	OEComponents::iterator last = delegates[delegation].end();
+	OEComponents::iterator i = remove(first, last, delegate);
+	
+	if (i != last)
+		delegates[delegation].erase(i, last);
+	
+	return (i != last);
+}
+
+void OEComponent::replaceDelegate(OEComponent *oldDelegate,
+								  OEComponent *newDelegate,
+								  int delegation)
+{
+	if (oldDelegate)
+		oldDelegate->removeObserver(this, delegation);
+	if (newDelegate)
+		newDelegate->addObserver(this, delegation);
+}
+
+
 
 void OEComponent::notify(OEComponent *sender, int notification, void *data)
 {
@@ -91,47 +130,7 @@ void OEComponent::replaceObserver(OEComponent *oldObserver,
 		newObserver->addObserver(this, notification);
 }
 
-bool OEComponent::delegate(OEComponent *sender, int delegation, void *data)
-{
-	for (OEComponents::iterator i = delegates[delegation].begin();
-		 i != delegates[delegation].end();
-		 i++)
-	{
-		if ((*i)->delegate(sender, delegation, data))
-			return true;
-	}
-	
-	return false;
-}
 
-bool OEComponent::addDelegate(OEComponent *delegate, int delegation)
-{
-	delegates[delegation].push_back(delegate);
-	
-	return true;
-}
-
-bool OEComponent::removeDelegate(OEComponent *delegate, int delegation)
-{
-	OEComponents::iterator first = delegates[delegation].begin();
-	OEComponents::iterator last = delegates[delegation].end();
-	OEComponents::iterator i = remove(first, last, delegate);
-	
-	if (i != last)
-		delegates[delegation].erase(i, last);
-	
-	return (i != last);
-}
-
-void OEComponent::replaceDelegate(OEComponent *oldDelegate,
-								  OEComponent *newDelegate,
-								  int delegation)
-{
-	if (oldDelegate)
-		oldDelegate->removeObserver(this, delegation);
-	if (newDelegate)
-		newDelegate->addObserver(this, delegation);
-}
 
 OEUInt8 OEComponent::read(OEAddress address)
 {
@@ -178,6 +177,8 @@ int OEComponent::writeBlock(OEAddress address, OEData *value)
 {
 	return 0;
 }
+
+
 
 void OEComponent::log(string message)
 {

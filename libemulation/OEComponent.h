@@ -31,16 +31,13 @@ public:
 	virtual bool getData(string name, OEData **data);
 	virtual bool init();
 	
-	// Messaging
+	// Messaging and delegation
 	virtual bool postMessage(OEComponent *sender, int message, void *data);
-	
-	// Delegation
-	virtual bool delegate(OEComponent *sender, int delegation, void *data);
-	bool addDelegate(OEComponent *delegate, int delegation);
-	bool removeDelegate(OEComponent *delegate, int delegation);
+	bool addDelegate(OEComponent *delegate, int message);
+	bool removeDelegate(OEComponent *delegate, int message);
 	void replaceDelegate(OEComponent *oldDelegate,
 						 OEComponent *newDelegate,
-						 int delegation);
+						 int message);
 	
 	// Notification
 	virtual void notify(OEComponent *sender, int notification, void *data);
@@ -64,17 +61,17 @@ public:
 	
 protected:
 	// Helpers
-	void log(string message);	
+	void log(string message);
 	int getInt(const string &value);
 	double getFloat(const string &value);
 	string getString(int value);
 	string getHex(int value);
 	OEData getCharVector(const string &value);
 	int getNextPowerOf2(int value);
-
+	
 private:
-	OEObservers observers;
 	OEDelegates delegates;
+	OEObservers observers;
 };
 
 #endif

@@ -10,6 +10,35 @@
 
 #include "CompositeMonitor.h"
 
+#import "OEEmulation.h"
+
+CompositeMonitor::CompositeMonitor()
+{
+	emulation = NULL;
+	
+	canvas = NULL;
+}
+
+bool CompositeMonitor::setRef(string name, OEComponent *ref)
+{
+	if (name == "emulation")
+	{
+		if (emulation)
+			emulation->postMessage(this,
+								   OEEMULATION_REMOVE_CANVAS,
+								   &canvas);
+		emulation = ref;
+		if (emulation)
+			emulation->postMessage(this,
+								   OEEMULATION_ADD_CANVAS,
+								   &canvas);
+	}
+	else
+		return false;
+	
+	return true;
+}
+
 
 /*
  int *framebuffer = new int[framebufferWidth * framebufferHeight];

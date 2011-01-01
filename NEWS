@@ -1,14 +1,20 @@
+==2011-01-01==
+
 ==2010-12-01==
-* Persistency of the main emulation window
-* Find a way to integrate OEEmulation device info results with the EDL
+* Implemented window autosave of emulation view
+* Found a way to integrate OEEmulation device info results with the EDL
 * Implemented OEEDL free ports and connector infos
 * Improved chooser view (template chooser) with lazy initialization
-* Implemented OEEmulation getDevicesInfoMap
+* Implemented OEEmulation getDevicesInfo
 * Implemented main emulation window context menu
 * Added descriptions in ChooserViewController
 * Improved several issues with the ChooserViewController
 * Found a solution to the storage API problem. Mount state is indicated by a new mount state.
 * Solved the problem of attempting to add/remove devices that are not hot-pluggable and have power applied. Added a new power state for each device, that is notified through emulation. Added "hotpluggable" options for ports, as well as a "static" option for devices.
+* Implemented the emulation view
+* Implemented the action menu button
+* Implemented emulation view show and eject roll-over button
+* Added mounted disk images as nodes in the outline view
 
 ==2010-11-01==
 * Fixed ${id} when saving emulation data
@@ -49,7 +55,7 @@
 * Implemented default template chooser
 * Improved template chooser
 * Improved inspector
-* Fixed problem: use default template is selected, CMD-N opens the template browser. Why? Auto-visibility was on
+* Fixed problem: use default template is selected, CMD-N opens the template browser. Auto-visibility was enabled
 * Center template chooser window when reopening. horiz: 1x 1x, vert: 1x 2x
 * Implemented template chooser update of user templates
 * Implemented device chooser available device list

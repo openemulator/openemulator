@@ -182,11 +182,11 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	// (it is called from a background thread)
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
-    [(CanvasView *)displayLinkContext drawFrame];
+	[(CanvasView *)displayLinkContext drawFrame];
 	
 	[pool release];
 	
-    return kCVReturnSuccess;
+	return kCVReturnSuccess;
 }
 
 - (id)initWithFrame:(NSRect)rect
@@ -238,7 +238,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (void)dealloc
 {
-    CVDisplayLinkRelease(displayLink);
+	CVDisplayLinkRelease(displayLink);
 	
 	delete (OEOpenGLCanvas *)oeOpenGLCanvas;
 	
@@ -249,7 +249,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender
 {
-    NSPasteboard *pasteboard = [sender draggingPasteboard];
+	NSPasteboard *pasteboard = [sender draggingPasteboard];
 	
 	if ([[pasteboard types] containsObject:NSFilenamesPboardType])
 	{
@@ -273,7 +273,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (BOOL)performDragOperation:(id <NSDraggingInfo>)sender
 {
-    NSPasteboard *pasteboard = [sender draggingPasteboard];
+	NSPasteboard *pasteboard = [sender draggingPasteboard];
 	
 	if ([[pasteboard types] containsObject:NSFilenamesPboardType])
 	{
@@ -294,7 +294,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 		return YES;
 	}
 	
-    return NO;
+	return NO;
 }
 
 - (BOOL)acceptsFirstResponder

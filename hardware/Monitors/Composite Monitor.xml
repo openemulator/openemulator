@@ -3,10 +3,14 @@
 <edl version="1.0" label="Composite Video Monitor" image="Composite Video Monitor.png">
 
 <device id="monitor" label="Composite Video Monitor" image="Composite Video Monitor.png">
-    <setting ref="monitor.monitor" name="brightness" type="value" options="-1.0,1.0" label="Brightness" />
-    <setting ref="monitor.monitor" name="contrast" type="value" options="0.0,2.0" label="Contrast" />
-    <setting ref="monitor.monitor" name="saturation" type="value" options="0.0,2.0" label="Saturation" />
-    <setting ref="monitor.monitor" name="hue" type="value" options="0.0,1.0" label="Hue" />
+    <setting ref="monitor.monitor" name="brightness" label="Brightness" type="slider" options="-1.0,1.0" />
+    <setting ref="monitor.monitor" name="contrast" label="Contrast" type="slider" options="0.0,2.0" />
+    <setting ref="monitor.monitor" name="hue" label="Hue" type="slider" options="0.0,1.0" />
+    <setting ref="monitor.monitor" name="saturation" label="Saturation" type="slider" options="0.0,2.0" />
+    <setting ref="monitor.monitor" name="horizCenter" label="Horizontal Center" type="slider" options="-1.0,1.0" />
+    <setting ref="monitor.monitor" name="horizSize" label="Horizontal Size" type="slider" options="0.0,1.0" />
+    <setting ref="monitor.monitor" name="vertCenter" label="Vertical Center" type="slider" options="-1.0,1.0" />
+    <setting ref="monitor.monitor" name="vertSize" label="Vertical Size" type="slider" options="0.0,1.0" />
 </device>
 <connector id="monitor.connector" ref="" type="CompositeMonitor" label="Video Connector" image="Composite Video Connector.png" />
 <component id="monitor.monitor" class="CompositeMonitor">

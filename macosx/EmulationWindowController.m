@@ -9,10 +9,11 @@
  */
 
 #import "EmulationWindowController.h"
-#import "Document.h"
-#import "StringConversion.h"
 
-#import "OEEmulation.h"
+#import "Document.h"
+#import "EmulationOutlineCell.h"
+#import "VerticallyCenteredTextFieldCell.h"
+#import "StringConversion.h"
 
 #define SPLIT_VERT_MIN 128
 #define SPLIT_VERT_MAX 256
@@ -23,18 +24,6 @@
 {
 	if (self = [self initWithWindowNibName:@"Emulation"])
 	{
-		contents = [[EmulationOutlineItem alloc] initWithUid:nil
-													   label:nil
-													   image:nil
-													showable:NO
-												   ejectable:NO];
-		
-		textCell = [[VerticallyCenteredTextFieldCell alloc] initTextCell:@""];
-		[textCell setControlSize:NSSmallControlSize];
-		[textCell setFont:[NSFont labelFontOfSize:[NSFont smallSystemFontSize]]];
-		[textCell setLineBreakMode:NSLineBreakByTruncatingTail];
-		[textCell setHorizontalOffset:6.0];
-		
 		checkBoxCell = [[NSButtonCell alloc] initTextCell:@""];
 		[checkBoxCell setControlSize:NSSmallControlSize];
 		[checkBoxCell setFont:[NSFont labelFontOfSize:[NSFont smallSystemFontSize]]];
@@ -43,16 +32,11 @@
 		popUpButtonCell = [[NSPopUpButtonCell alloc] initTextCell:@""];
 		[popUpButtonCell setControlSize:NSSmallControlSize];
 		[popUpButtonCell setFont:[NSFont labelFontOfSize:[NSFont smallSystemFontSize]]];
-		[popUpButtonCell addItemWithTitle:@"hi there"];
-		[popUpButtonCell addItemWithTitle:@"hi again"];
 		[popUpButtonCell setBordered:NO];
 		
 		sliderCell = [[NSSliderCell alloc] initTextCell:@""];
 		[sliderCell setControlSize:NSSmallControlSize];
-		[sliderCell setMinValue:0.0];
-		[sliderCell setMaxValue:1.0];
-		[sliderCell	setNumberOfTickMarks:1];
-//		[sliderCell setAllowsTickMarkValuesOnly:YES];
+		[sliderCell	setNumberOfTickMarks:3];
 	}
 	
 	return self;
@@ -60,9 +44,8 @@
 
 - (void)dealloc
 {
-	[contents release];
+	[rootItem release];
 	
-	[textCell release];
 	[checkBoxCell release];
 	[popUpButtonCell release];
 	[sliderCell release];
@@ -70,59 +53,60 @@
 	[super dealloc];
 }
 
-- (NSImage *)getImage:(NSString *)path
+- (void)updateDetail
 {
-	NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
-	path = [resourcePath stringByAppendingPathComponent:path];
+	NSString *title = @"No Selection";
+	NSImage *image = nil;
+	NSString *locationLabel = @"";
+	NSString *stateLabel = @"";
+	BOOL showable = NO;
+	BOOL mountable = NO;
+	BOOL mounted = NO;
 	
-	return [[[NSImage alloc] initByReferencingFile:path] autorelease];
+	if (selectedItem)
+	{
+		title = [selectedItem label];
+		image = [selectedItem image];
+		locationLabel = [selectedItem location];
+		if (![locationLabel length])
+			locationLabel = NSLocalizedString(@"Built-in",
+											  @"Location Label");
+		stateLabel = NSLocalizedString([selectedItem state],
+									   @"State Label");
+		showable = [selectedItem showable];
+		mountable = [selectedItem mountable];
+		mounted = [selectedItem mounted];
+	}
+	
+	[fDeviceBox setTitle:title];
+	[fDeviceImage setImage:image];
+	[fDeviceLocationLabel setStringValue:locationLabel];
+	[fDeviceStateLabel setStringValue:stateLabel];
+	[fDeviceButton setHidden:!(showable || mountable || mounted)];
+	if (showable)
+		[fDeviceButton setTitle:NSLocalizedString(@"Show Device",
+												  @"Emulation Button Label")];
+	else if (mountable)
+		[fDeviceButton setTitle:NSLocalizedString(@"Open...",
+												  @"Emulation Button Label")];
+	else if (mounted)
+		[fDeviceButton setTitle:NSLocalizedString(@"Unmount",
+												  @"Emulation Button Label")];
+	
+	[fTableView reloadData];
 }
 
-- (void)updateContents
+- (void)updateSidebar
 {
-	OEDevicesInfo *devicesInfo = (OEDevicesInfo *)[[self document] devicesInfo];
+	[rootItem release];
+	rootItem = [[EmulationItem alloc] initWithDocument:[self document]];
 	
-	[[contents children] removeAllObjects];
-	
-	for (int i = 0; i < devicesInfo->size(); i++)
-	{
-		string uid = (*devicesInfo)[i].id;
-		string label = (*devicesInfo)[i].label;
-		string image = (*devicesInfo)[i].image;
-		BOOL showable = ((*devicesInfo)[i].canvases.size() != 0);
-		BOOL ejectable = (*devicesInfo)[i].mounted;
-		string group = (*devicesInfo)[i].group;
-		
-		NSString *groupName = getNSString(group);
-		EmulationOutlineItem *groupItem = [contents objectWithUid:groupName];
-		
-		if (!groupItem)
-		{
-			NSString *label = [groupName uppercaseString];
-			groupItem = [[EmulationOutlineItem alloc] initWithUid:groupName
-															label:label
-															image:nil
-														 showable:showable
-														ejectable:ejectable];
-			[[contents children] addObject:groupItem];
-			[groupItem release];
-		}
-		
-		EmulationOutlineItem *newItem;
-		NSImage *outlineImage = [self getImage:getNSString(image)];
-		newItem = [[EmulationOutlineItem alloc] initWithUid:getNSString(uid)
-													  label:getNSString(label)
-													  image:outlineImage
-												   showable:showable
-												  ejectable:ejectable];
-		[[groupItem children] addObject:newItem];
-		[newItem release];
-	}
+	[fOutlineView reloadData];
 }
 
 - (void)updateWindowPosition
 {
-	int isVisible = [[self window] isVisible];
+	BOOL isVisible = [[self window] isVisible];
 	NSString *frameString = [[self window] stringWithSavedFrame];
 	
 	frameString = [frameString stringByAppendingFormat:@"%d", isVisible];
@@ -141,7 +125,7 @@
 	[[self window] setToolbar:toolbar];
 	[toolbar release];
 	
-	[self updateContents];
+	[self updateSidebar];
 	
 	[fOutlineView setDelegate:self];
 	[fOutlineView setDataSource:self];
@@ -162,7 +146,7 @@
 	if ([components count] == 9)
 	{
 		NSString *theString = [NSString string];
-		for (int i = 0; i < 8; i++)
+		for (NSInteger i = 0; i < 8; i++)
 		{
 			theString = [theString stringByAppendingString:[components objectAtIndex:i]];
 			theString = [theString stringByAppendingString:@" "];
@@ -176,29 +160,29 @@
 	}
 }
 
+
+
 - (NSToolbarItem *)toolbar:(NSToolbar *)toolbar
 	 itemForItemIdentifier:(NSString *)ident
  willBeInsertedIntoToolbar:(BOOL)flag
 {
-	NSToolbarItem *item = [[NSToolbarItem alloc] initWithItemIdentifier:ident];
-	
+	NSToolbarItem *item;
+	item = [[NSToolbarItem alloc] initWithItemIdentifier:ident];
 	if (!item)
 		return nil;
 	
+	[item autorelease];
 	if ([ident isEqualToString:@"AudioControls"])
 	{
 		[item setLabel:NSLocalizedString(@"Audio Controls",
-										 "Emulation window toolbar item")];
+										 "Canvas window toolbar item")];
 		[item setPaletteLabel:NSLocalizedString(@"Audio Controls",
-												"Emulation window toolbar item")];
-		[item setToolTip:NSLocalizedString(@"Show or hide the audio controls window.",
-										   "Emulation window toolbar item")];
+												"Canvas window toolbar item")];
+		[item setToolTip:NSLocalizedString(@"Show or hide audio controls.",
+										   "Canvas window toolbar item")];
 		[item setImage:[NSImage imageNamed:@"IconAudio.png"]];
-		[item setTarget:nil];
 		[item setAction:@selector(toggleAudioControls:)];
 	}
-	
-	[item autorelease];
 	
 	return item;
 }
@@ -221,6 +205,8 @@
 			nil];
 }
 
+
+
 - (void)splitView:(NSSplitView *)sender
 resizeSubviewsWithOldSize:(NSSize)oldSize
 {
@@ -230,7 +216,7 @@ resizeSubviewsWithOldSize:(NSSize)oldSize
 	float deltaWidth = newSize.width - oldSize.width;
 	float deltaHeight = newSize.height - oldSize.height;
 	
-	for (int i = 0; i < [subviews count]; i++)
+	for (NSInteger i = 0; i < [subviews count]; i++)
 	{
 		NSView *subview = [subviews objectAtIndex:i];
 		NSRect frame = subview.frame;
@@ -260,20 +246,22 @@ constrainMaxCoordinate:(CGFloat)proposedMax
 	return SPLIT_VERT_MAX;
 }
 
+
+
 - (NSInteger)outlineView:(NSOutlineView *)outlineView
   numberOfChildrenOfItem:(id)item
 {
 	if (!item)
-		item = contents;
+		item = rootItem;
 	
-    return [[item children] count];
+	return [[item children] count];
 }
 
 - (BOOL)outlineView:(NSOutlineView *)outlineView
    isItemExpandable:(id)item
 {
 	if (!item)
-		item = contents;
+		item = rootItem;
 	
 	return ([[item children] count] > 0);
 }
@@ -283,7 +271,7 @@ constrainMaxCoordinate:(CGFloat)proposedMax
 		   ofItem:(id)item
 {
 	if (!item)
-        item = contents;
+		item = rootItem;
 	
 	return [[item children] objectAtIndex:index];
 }
@@ -300,6 +288,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				  proposedItem:(id)item
 			proposedChildIndex:(NSInteger)index
 {
+	// To-Do: validate file type
 	return [outlineView parentForItem:item] ? NSDragOperationCopy : NSDragOperationNone;
 }
 
@@ -311,21 +300,17 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	return YES;
 }
 
+
+
 - (void)outlineView:(NSOutlineView *)outlineView
 	willDisplayCell:(id)cell
 	 forTableColumn:(NSTableColumn *)tableColumn
 			   item:(id)item
 {
-	[cell setUid:[item uid]
-		   image:[item image]
-		showable:[item showable]
-	   ejectable:[item ejectable]];
-}
-
-- (BOOL)outlineView:(NSOutlineView *)outlineView
-   shouldSelectItem:(id)item
-{
-	return ([outlineView parentForItem:item] != nil);
+	[cell setRepresentedObject:item];
+	
+	NSInteger rowIndex = [fOutlineView rowForItem:item];
+	[cell setButtonRollover:(rowIndex == [fOutlineView trackedRow])];
 }
 
 - (BOOL)outlineView:(NSOutlineView *)outlineView
@@ -334,8 +319,39 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	return ![outlineView parentForItem:item];
 }
 
+- (BOOL)outlineView:(NSOutlineView *)outlineView
+   shouldSelectItem:(id)item
+{
+	return ([outlineView parentForItem:item] != nil);
+}
+
+- (void)outlineViewSelectionIsChanging:(NSNotification *)notification
+{
+	if ([fOutlineView forcedRow] != -1)
+	{
+		NSInteger row = [fOutlineView forcedRow];
+		[fOutlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:row]
+				  byExtendingSelection:NO];
+	}
+}
+
+- (void)outlineViewSelectionDidChange:(NSNotification *)notification
+{
+	NSInteger row = [fOutlineView selectedRow];
+	selectedItem = [fOutlineView itemAtRow:row];
+	
+	[fRemoveDevice setEnabled:selectedItem ? [selectedItem removable] : NO];
+	
+	[self updateDetail];
+}
+
+
+
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView
 {
+	if (selectedItem)
+		return [selectedItem numberOfSettings];
+	
 	return 0;
 }
 
@@ -343,10 +359,13 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 objectValueForTableColumn:(NSTableColumn *)aTableColumn
 			row:(NSInteger)rowIndex
 {
-	if (aTableColumn == fTableKeyColumn)
-		return @"Auto CR after LF";
-	else if (aTableColumn == fTableValueColumn)
-		return @"A Long Value";
+	if (selectedItem)
+	{
+		if (aTableColumn == fTableKeyColumn)
+			return [selectedItem labelForSettingAtIndex:rowIndex];
+		else if (aTableColumn == fTableValueColumn)
+			return [selectedItem valueForSettingAtIndex:rowIndex];
+	}
 	
 	return @"";
 }
@@ -355,24 +374,37 @@ objectValueForTableColumn:(NSTableColumn *)aTableColumn
 dataCellForTableColumn:(NSTableColumn *)tableColumn
 				  row:(NSInteger)row
 {
-	if (tableColumn == fTableKeyColumn)
-		return textCell;
-	
-	if (tableColumn == fTableValueColumn)
+	if (selectedItem)
 	{
-		switch (row)
+		if (tableColumn == fTableValueColumn)
 		{
-			case 1:
+			NSString *type = [selectedItem typeForSettingAtIndex:row];
+			if ([type compare:@"checkbox"] == NSOrderedSame)
 				return checkBoxCell;
-			case 2: 
+			else if ([type compare:@"select"] == NSOrderedSame)
+			{
+				[popUpButtonCell removeAllItems];
+				
+				NSArray *options = [selectedItem optionsForSettingAtIndex:row];
+				[popUpButtonCell addItemsWithTitles:options];
+				
 				return popUpButtonCell;
-			case 3:
+			}
+			else if ([type compare:@"slider"] == NSOrderedSame)
+			{
+				NSArray *options = [selectedItem optionsForSettingAtIndex:row];
+				[sliderCell setMinValue:[[options objectAtIndex:0] floatValue]];
+				[sliderCell setMaxValue:[[options objectAtIndex:1] floatValue]];
+				
 				return sliderCell;
+			}
 		}
 	}
 	
 	return nil;
 }
+
+
 
 - (void)emulationDoubleAction:(id)sender
 {
@@ -390,32 +422,6 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
 - (void)removeDevice:(id)sender
 {
 	// Remove device
-}
-
-- (void)systemPowerDown:(id)sender
-{
-	// Get selected device
-	// Forward to all canvases
-}
-
-- (void)systemSleep:(id)sender
-{
-}
-
-- (void)systemWakeUp:(id)sender
-{
-}
-
-- (void)systemColdRestart:(id)sender
-{
-}
-
-- (void)systemWarmRestart:(id)sender
-{
-}
-
-- (void)systemDebuggerBreak:(id)sender
-{
 }
 
 - (void)showDevice:(id)sender

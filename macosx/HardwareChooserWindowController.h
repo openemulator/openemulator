@@ -15,12 +15,12 @@
 
 @interface HardwareChooserWindowController : NSWindowController
 {
-	IBOutlet id fMessage;
-	IBOutlet id fView;
-	IBOutlet id fPreviousButton;
-	IBOutlet id fNextButton;
+	id fMessage;
+	id fView;
+	id fPreviousButton;
+	id fNextButton;
 	
-	IBOutlet id fDocumentController;
+	id fDocumentController;
 	
 	HardwareChooserViewController *hardwareChooserViewController;
 	ConnectorViewController *connectorViewController;

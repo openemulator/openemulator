@@ -13,11 +13,11 @@
 
 @interface ChooserItem : NSObject
 {
-    NSString *label;
-    NSString *imagePath;
+	NSString *label;
+	NSString *imagePath;
 
-    NSString *description;
-    NSString *edlPath;
+	NSString *description;
+	NSString *edlPath;
 	void *data;
 	
 	NSImage *image;

@@ -68,6 +68,7 @@ public:
 	void notify(OEComponent *sender, int notification, void *data);
 	
 private:
+	OEComponent *emulation;
 	OEComponent *hostAudio;
 	OEComponent *cpu;
 	OEComponent *cpuSocket;

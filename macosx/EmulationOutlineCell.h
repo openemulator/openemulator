@@ -12,15 +12,15 @@
 
 @interface EmulationOutlineCell : NSTextFieldCell
 {
-	NSString *uid;
-	NSImage *image;
-	BOOL showable;
-	BOOL ejectable;
+	BOOL buttonRollover;
+	BOOL buttonPressed;
 }
 
-- (void)setUid:(NSString *)theUid
-		 image:(NSImage *)theImage
-	  showable:(BOOL)isShowable
-	 ejectable:(BOOL)isEjectable;
+- (void)setButtonRollover:(BOOL)rollover;
+
+- (void)addTrackingAreasForView:(NSView *)controlView
+						 inRect:(NSRect)cellFrame
+				   withUserInfo:(NSDictionary *)userInfo
+				  mouseLocation:(NSPoint)mouseLocation;
 
 @end

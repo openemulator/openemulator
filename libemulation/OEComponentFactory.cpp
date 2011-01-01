@@ -35,6 +35,7 @@
 #include "AppleIIGamePort.h"
 #include "AppleIISlotMemory.h"
 #include "AppleIISlotExpansionMemory.h"
+#include "AppleDiskII.h"
 
 #include "MC6821.h"
 #include "MC6845.h"
@@ -74,6 +75,7 @@ OEComponent *OEComponentFactory::create(const string &className)
 	matchComponent(AppleIIGamePort);
 	matchComponent(AppleIISlotMemory);
 	matchComponent(AppleIISlotExpansionMemory);
+	matchComponent(AppleDiskII);
 	
 	matchComponent(MC6821);
 	matchComponent(MC6845);

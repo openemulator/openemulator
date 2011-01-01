@@ -57,13 +57,13 @@ bool MOSKIM1IO::setRef(string name, OEComponent *ref)
 	{
 		if (emulation)
 			emulation->postMessage(this,
-								   EMULATION_REMOVE_CANVAS,
+								   OEEMULATION_REMOVE_CANVAS,
 								   &canvas);
-		if (ref)
-			ref->postMessage(this,
-							 EMULATION_ADD_CANVAS,
-							 &canvas);
 		emulation = ref;
+		if (emulation)
+			emulation->postMessage(this,
+								   OEEMULATION_ADD_CANVAS,
+								   &canvas);
 	}
 	else if (name == "serialPort")
 	{

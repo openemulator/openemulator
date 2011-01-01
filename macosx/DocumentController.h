@@ -17,8 +17,8 @@
 @class TemplateChooserWindowController;
 
 @interface DocumentController : NSDocumentController {
-	IBOutlet AudioControlsWindowController *fAudioControlsWindowController;
-	IBOutlet TemplateChooserWindowController *fTemplateChooserWindowController;
+	AudioControlsWindowController *fAudioControlsWindowController;
+	TemplateChooserWindowController *fTemplateChooserWindowController;
 	
 	NSArray *diskImagePathExtensions;
 	NSArray *audioPathExtensions;

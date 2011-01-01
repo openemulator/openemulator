@@ -59,7 +59,7 @@
 
 - (BOOL)validateUserInterfaceItem:(id)item
 {
-    if ([item action] == @selector(toggleAudioControls:))
+	if ([item action] == @selector(toggleAudioControls:))
 	{  
 		NSString *menuTitle;
 		if (![[self window] isVisible])
@@ -69,9 +69,9 @@
 			menuTitle = NSLocalizedString(@"Hide Audio Controls",
 										  @"Title for menu item to hide Audio Controls.");
 		[item setTitleWithMnemonic:menuTitle];
-    }
+	}
 	
-    return YES;
+	return YES;
 }
 
 - (void)toggleAudioControls:(id)sender
@@ -84,7 +84,7 @@
 
 - (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender
 {
-    NSPasteboard *pasteboard = [sender draggingPasteboard];
+	NSPasteboard *pasteboard = [sender draggingPasteboard];
 	
 	if ([[pasteboard types] containsObject:NSFilenamesPboardType])
 	{
@@ -124,7 +124,7 @@
 	[self updateRecording];
 }
 
-- (NSString *)formatTime:(int)time
+- (NSString *)formatTime:(NSInteger)time
 {
 	return [NSString stringWithFormat:@"%02d:%02d:%02d",
 			time / 3600,

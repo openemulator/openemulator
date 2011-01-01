@@ -15,7 +15,7 @@
 
 #import "OEEDL.h"
 
-#define MY_TEMPLATES @"My Templates"
+#define USER_TEMPLATES_GROUP @"My Templates"
 
 @implementation TemplateChooserViewController
 
@@ -26,24 +26,26 @@
 	
 	[groups removeAllObjects];
 	
-	// Find application templates
+	// Find templates
 	NSFileManager *fileManager = [NSFileManager defaultManager];
 	NSArray *subpaths = [fileManager contentsOfDirectoryAtPath:templatesPath
 														 error:nil];
 	for (NSString *pathComponent in subpaths)
 	{
 		NSString *groupPath = [templatesPath stringByAppendingPathComponent:pathComponent];
-		if ([self validateGroupAtPath:groupPath])
+		if ([self validTemplatesAtPath:groupPath])
 			[groups addObject:pathComponent];
 	}
 	
 	// Sort alphabetically
 	[groups setArray:[groups sortedArrayUsingSelector:@selector(compare:)]];
 	
-	// Find my templates
-	[items removeObjectForKey:NSLocalizedString(MY_TEMPLATES, MY_TEMPLATES)];
-	if ([self validateGroupAtPath:MY_TEMPLATES_FOLDER])
-		[groups addObject:NSLocalizedString(MY_TEMPLATES, MY_TEMPLATES)];
+	// Find user templates
+	[items removeObjectForKey:NSLocalizedString(USER_TEMPLATES_GROUP,
+												USER_TEMPLATES_GROUP)];
+	if ([self validTemplatesAtPath:USER_TEMPLATES_FOLDER])
+		[groups addObject:NSLocalizedString(USER_TEMPLATES_GROUP,
+											USER_TEMPLATES_GROUP)];
 }
 
 - (void)loadItems
@@ -51,9 +53,10 @@
 	if ([items objectForKey:selectedGroup])
 		return;
 	
-	NSString *group = NSLocalizedString(MY_TEMPLATES, MY_TEMPLATES);
+	NSString *group = NSLocalizedString(USER_TEMPLATES_GROUP,
+										USER_TEMPLATES_GROUP);
 	if ([selectedGroup compare:group] == NSOrderedSame)
-		[self addGroupAtPath:MY_TEMPLATES_FOLDER
+		[self addGroupAtPath:USER_TEMPLATES_FOLDER
 					 toGroup:group];
 	else
 	{
@@ -65,7 +68,7 @@
 	}
 }
 
-- (BOOL)validateGroupAtPath:(NSString *)groupPath
+- (BOOL)validTemplatesAtPath:(NSString *)groupPath
 {
 	groupPath = [groupPath stringByExpandingTildeInPath];
 	NSFileManager *fileManager = [NSFileManager defaultManager];

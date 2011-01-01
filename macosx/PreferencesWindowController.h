@@ -14,17 +14,17 @@
 
 @interface PreferencesWindowController : NSWindowController
 {
-	IBOutlet id fGeneralView;
-	IBOutlet id fAudioView;
-	IBOutlet id fVideoView;
+	id fGeneralView;
+	id fAudioView;
+	id fVideoView;
 	
-	IBOutlet id fShowTemplateChooserRadio;
-	IBOutlet id fUseTemplateRadio;
-	IBOutlet id fChooseTemplateButton;
+	id fShowTemplateChooserRadio;
+	id fUseTemplateRadio;
+	id fChooseTemplateButton;
 	
-	IBOutlet id fTemplateChooserSheet;
-	IBOutlet id fTemplateChooserView;
-	IBOutlet id fTemplateChooserChooseButton;
+	id fTemplateChooserSheet;
+	id fTemplateChooserView;
+	id fTemplateChooserChooseButton;
 	TemplateChooserViewController *templateChooserViewController;
 }
 

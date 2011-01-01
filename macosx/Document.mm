@@ -15,22 +15,34 @@
 
 #import "OEPortAudio.h"
 #import "OEEmulation.h"
+#import "StorageInterface.h"
 
 #import <sstream>
 
-@implementation Document
-
-- (id)init
+void devicesDidUpdate()
 {
-	self = [super init];
-	
-	return self;
 }
+
+void runAlert(string message)
+{
+}
+
+OEComponent *addCanvas(void *userData)
+{
+	return new OEComponent();
+}
+
+void removeCanvas(OEComponent *canvas, void *userData)
+{
+	delete canvas;
+}
+
+@implementation Document
 
 - (id)initWithTemplateURL:(NSURL *)absoluteURL
 					error:(NSError **)outError
 {
-	if ([self init])
+	if (self = [super init])
 	{
 		if ([self readFromURL:absoluteURL
 					   ofType:nil
@@ -65,13 +77,20 @@
 	OEPortAudio *oePortAudio = (OEPortAudio *)[documentController oePortAudio];
 	
 	OEEmulation *theEmulation = new OEEmulation();
+	
 	theEmulation->setResourcePath(getCPPString([[NSBundle mainBundle] resourcePath]));
+	
 	theEmulation->setComponent("hostAudio", oePortAudio);
+	
+	theEmulation->setRunAlertCallback(runAlert);
+	theEmulation->setAddCanvasCallback(addCanvas, self);
+	theEmulation->setRemoveCanvasCallback(removeCanvas, self);
+	theEmulation->setDevicesDidUpdateCallback(devicesDidUpdate);
+	
 	theEmulation->open(getCPPString([url path]));
 	
-	OEDevicesInfo *theDevicesInfo = new OEDevicesInfo();
-	*theDevicesInfo = theEmulation->getDevicesInfo();
-	devicesInfo = theDevicesInfo;
+	devicesInfo = new OEDevicesInfo();
+	*((OEDevicesInfo *)devicesInfo) = theEmulation->getDevicesInfo();
 	
 	oePortAudio->addEmulation((OEEmulation *)emulation);
 	
@@ -86,10 +105,11 @@
 	OEPortAudio *oePortAudio = (OEPortAudio *)[documentController oePortAudio];
 	oePortAudio->removeEmulation((OEEmulation *)emulation);
 	
-	delete (OEDevicesInfo *)devicesInfo;
 	delete (OEEmulation *)emulation;
-	
 	emulation = nil;
+	
+	delete (OEDevicesInfo *)devicesInfo;
+	devicesInfo = nil;
 }
 
 - (void)lockEmulation
@@ -215,7 +235,7 @@
 
 - (IBAction)saveDocumentAsTemplate:(id)sender
 {
-	NSString *path = [MY_TEMPLATES_FOLDER stringByExpandingTildeInPath];
+	NSString *path = [USER_TEMPLATES_FOLDER stringByExpandingTildeInPath];
 	
 	NSFileManager *fileManager = [NSFileManager defaultManager];
 	if (![fileManager fileExistsAtPath:path])
@@ -262,6 +282,9 @@
 
 - (NSString *)getEDLOptions
 {
+	if (!emulation)
+		return @"";
+	
 	string value;
 	
 	if (emulation)
@@ -324,15 +347,15 @@
 	[self updateChangeCount:NSChangeDone];
 }
 
-- (void)removeDevice:(NSDictionary *)dict
+- (void)removeDevice:(NSString *)deviceId
 {
 	if (!emulation)
 		return;
 	
-	NSString *deviceRef = [dict objectForKey:@"ref"];
+//	NSString *deviceRef = [dict objectForKey:@"ref"];
 //	NSString *deviceLabel = [dict objectForKey:@"label"];
 	
-	string refString = getCPPString(deviceRef);
+//	string refString = getCPPString(deviceRef);
 	
 /*	if (!((OEPAEmulation *)emulation)->isDeviceTerminal(refString))
 	{
@@ -351,7 +374,7 @@
 			return;
 	}*/
 	
-	[self lockEmulation];
+/*	[self lockEmulation];
 	bool isRemoved = ((OEEmulation *)emulation)->removeDevice(refString);
 	[self unlockEmulation];
 	
@@ -365,27 +388,74 @@
 		[alert release];
 	}
 	
-	[self updateChangeCount:NSChangeDone];
+	[self updateChangeCount:NSChangeDone];*/
+}
+
+- (NSString *)getValue:(NSString *)name forComponent:(NSString *)theId
+{
+	string value;
+	if (emulation)
+	{
+		OEEmulation *theEmulation = (OEEmulation *)emulation;
+		
+		[self lockEmulation];
+		OEComponent *component = theEmulation->getComponent(getCPPString(theId));
+		if (component)
+			component->getValue(getCPPString(name), value);
+		[self unlockEmulation];
+	}
+	
+	return getNSString(value);
 }
 
 - (BOOL)mount:(NSString *)path
 {
-	if (!emulation)
-		return NO;
+	BOOL result = NO;
+	if (emulation)
+	{
+		OEEmulation *theEmulation = (OEEmulation *)emulation;
+		string thePath = getCPPString(path);
+		
+		[self lockEmulation];
+		result = theEmulation->postMessage(NULL, (int)OEEMULATION_MOUNT, &thePath);
+		[self unlockEmulation];
+	}
 	
-	[self lockEmulation];
-	return ((OEEmulation *)emulation)->mount(getCPPString(path));
-	[self unlockEmulation];
+	return result;
+}
+
+- (BOOL)mount:(NSString *)path inComponent:(NSString *)theId
+{
+	BOOL result = NO;
+	if (emulation)
+	{
+		OEEmulation *theEmulation = (OEEmulation *)emulation;
+		string thePath = getCPPString(path);
+		
+		[self lockEmulation];
+		OEComponent *component = theEmulation->getComponent(getCPPString(theId));
+		if (component)
+			result = component->postMessage(NULL, (int)STORAGE_MOUNT, &thePath);
+		[self unlockEmulation];
+	}
+	
+	return result;
 }
 
 - (BOOL)mountable:(NSString *)path
 {
-	if (!emulation)
-		return NO;
+	BOOL result = NO;
+	if (emulation)
+	{
+		OEComponent *component = (OEComponent *)emulation;
+		string thePath = getCPPString(path);
+		
+		[self lockEmulation];
+		result = component->postMessage(NULL, (int)OEEMULATION_IS_MOUNTABLE, &thePath);
+		[self unlockEmulation];
+	}
 	
-	[self lockEmulation];
-	return ((OEEmulation *)emulation)->mountable(getCPPString(path));
-	[self unlockEmulation];
+	return result;
 }
 
 @end

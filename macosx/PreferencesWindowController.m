@@ -41,7 +41,7 @@
 	
 	[self updateGeneralView];
 	
-    [self setView:selectedItemIdentifier];
+	[self setView:selectedItemIdentifier];
 	
 	templateChooserViewController = [[TemplateChooserViewController alloc] init];
 	[templateChooserViewController setDelegate:self];
@@ -50,6 +50,8 @@
 	[view setFrameSize:[fTemplateChooserView frame].size];
 	[fTemplateChooserView addSubview:view];
 }
+
+
 
 - (NSToolbarItem *)toolbar:(NSToolbar *)toolbar
 	 itemForItemIdentifier:(NSString *)ident
@@ -102,6 +104,8 @@
 	return [self toolbarSelectableItemIdentifiers:toolbar];
 }
 
+
+
 - (void)selectView:(id)sender
 {
 	[self setView:[sender itemIdentifier]];
@@ -119,23 +123,23 @@
 	else
 		view = fGeneralView;
 	
-    NSWindow *window = [self window];
-    if ([window contentView] == view)
-        return;
+	NSWindow *window = [self window];
+	if ([window contentView] == view)
+		return;
 	
 	[view setHidden:YES];
 	
-    NSRect windowRect = [window frame];
-    float difference = (([view frame].size.height - 
+	NSRect windowRect = [window frame];
+	float difference = (([view frame].size.height - 
 						 [[window contentView] frame].size.height) *
 						[window userSpaceScaleFactor]);
-    windowRect.origin.y -= difference;
-    windowRect.size.height += difference;
+	windowRect.origin.y -= difference;
+	windowRect.size.height += difference;
 	
-    [window setContentView:view];
-    [window setFrame:windowRect display:YES animate:YES];
-    [view setHidden:NO];
-    
+	[window setContentView:view];
+	[window setFrame:windowRect display:YES animate:YES];
+	[view setHidden:NO];
+	
 	[window setTitle:NSLocalizedString(itemIdentifier, @"Preferences view")];
 }
 
@@ -226,7 +230,7 @@
 		 returnCode:(int)returnCode
 		contextInfo:(void *)contextInfo
 { 
-    [sheet orderOut:self];
+	[sheet orderOut:self];
 	
 	[self updateGeneralView];
 }

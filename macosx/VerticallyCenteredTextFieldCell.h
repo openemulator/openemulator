@@ -12,9 +12,9 @@
 
 @interface VerticallyCenteredTextFieldCell : NSTextFieldCell
 {
-	float offset;
+	float horizontalInset;
 }
 
-- (void)setHorizontalOffset:(float)theOffset;
+- (void)setHorizontalInset:(float)theInset;
 
 @end

@@ -123,19 +123,7 @@
 		[item setImage:[NSImage imageNamed:@"IconDebuggerBreak.png"]];
 		[item setAction:@selector(systemDebuggerBreak:)];
 	}
-	else if ([ident isEqualToString:@"Inspector"])
-	{
-		[item setLabel:NSLocalizedString(@"Inspector",
-										 "Canvas window toolbar item")];
-		[item setPaletteLabel:NSLocalizedString(@"Info",
-												"Canvas window toolbar item")];
-		[item setToolTip:NSLocalizedString(@"Show or hide the inspector window.",
-										   "Canvas window toolbar item")];
-		[item setImage:[NSImage imageNamed:@"IconInspector.png"]];
-		//		[item setTarget:self];
-		[item setAction:@selector(toggleInspector:)];
-	}
-	else if ([ident isEqualToString:@"Audio"])
+	else if ([ident isEqualToString:@"AudioControls"])
 	{
 		[item setLabel:NSLocalizedString(@"Audio Controls",
 										 "Canvas window toolbar item")];
@@ -144,19 +132,17 @@
 		[item setToolTip:NSLocalizedString(@"Show or hide audio controls.",
 										   "Canvas window toolbar item")];
 		[item setImage:[NSImage imageNamed:@"IconAudio.png"]];
-		//		[item setTarget:self];
 		[item setAction:@selector(toggleAudioControls:)];
 	}
-	else if ([ident isEqualToString:@"Devices"])
+	else if ([ident isEqualToString:@"Info"])
 	{
-		[item setLabel:NSLocalizedString(@"Devices",
+		[item setLabel:NSLocalizedString(@"Info",
 										 "Canvas window toolbar item")];
-		[item setPaletteLabel:NSLocalizedString(@"Devices",
+		[item setPaletteLabel:NSLocalizedString(@"Info",
 												"Canvas window toolbar item")];
-		[item setToolTip:NSLocalizedString(@"Show devices.",
+		[item setToolTip:NSLocalizedString(@"Show info.",
 										   "Canvas window toolbar item")];
 		[item setImage:[NSImage imageNamed:@"IconDevices.png"]];
-		//		[item setTarget:self];
 		[item setAction:@selector(showDevices:)];
 	}
 	
@@ -170,7 +156,7 @@
 			@"Sleep",
 			@"Wake Up",
 			NSToolbarFlexibleSpaceItemIdentifier,
-			@"Devices",
+			@"Info",
 			nil];
 }
 
@@ -183,9 +169,8 @@
 			@"Cold Restart",
 			@"Warm Restart",
 			@"Debugger Break",
-			@"Inspector",
-			@"Audio",
-			@"Devices",
+			@"AudioControls",
+			@"Info",
 			NSToolbarSeparatorItemIdentifier,
 			NSToolbarSpaceItemIdentifier,
 			NSToolbarFlexibleSpaceItemIdentifier,
