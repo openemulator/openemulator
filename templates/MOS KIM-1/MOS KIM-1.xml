@@ -3,15 +3,16 @@
 <edl version="1.0" label="MOS KIM-1" image="images/MOS/MOS KIM-1.png" description="The KIM-1, short for Keyboard Input Monitor, was a small 6502-based single-board computer developed and produced by MOS Technology, Inc. and launched in 1976.">
 
 <device id="kim1" label="MOS KIM-1" image="images/MOS/MOS KIM-1.png" group="system" />
-<port id="kim1.serialPort" ref="" type="RS232" label="Serial Port" image="Serial Port.png">
+<port id="kim1.serialPort" ref="terminal.connector" type="RS232" label="Serial Port">
     <inlet ref="kim1.io" property="serialPort" outletRef="io" />
 </port>
-<port id="kim1.cpuSocket" ref="" type="CPU6502" label="CPU Socket" image="CPU 6502 Socket.png" />
-<port id="kim1.slot1" ref="" type="MOSKIM1Slot" label="Slot 1" image="Kim-1 Slot.png" />
-<port id="kim1.slot2" ref="" type="MOSKIM1Slot" label="Slot 2" image="Kim-1 Slot.png" />
+<port id="kim1.cpuSocket" ref="" type="CPU6502" label="CPU Socket"/>
+<port id="kim1.slot1" ref="" type="MOSKIM1Slot" label="Slot 1" />
+<port id="kim1.slot2" ref="" type="MOSKIM1Slot" label="Slot 2" />
+<port id="kim1.slot3" ref="" type="MOSKIM1Slot" label="Slot 3" />
 <component id="kim1.controlBus" class="ControlBus">
 	<property name="emulation" ref="emulation" />
-    <property name="hostAudio" ref="hostAudio" />
+    <property name="audio" ref="audio" />
     <property name="crystalFrequency" value="1.0MHz" />
     <property name="cpuFrequencyDivider" value="1" />
     <property name="cpu" ref="kim1.cpu" />
@@ -96,12 +97,18 @@
     <property name="audioIn" ref="kim1.audioIn" />
 </component>
 <component id="kim1.audioOut" class="AudioSampleConverter">
-    <property name="hostAudio" ref="hostAudio" />
+    <property name="audio" ref="audio" />
     <property name="controlBus" ref="kim1.controlBus" />
 </component>
 <component id="kim1.audioIn" class="MOSKIM1PLL">
-    <property name="hostAudio" ref="hostAudio" />
+    <property name="audio" ref="audio" />
     <property name="decisionFrequency" value="3400" />
+</component>
+
+<device id="terminal" label="Terminal" image="images/Generic/Terminal.png" group="peripherals" />
+<connector id="terminal.connector" ref="" type="RS232" label="Serial Port" />
+<component id="terminal.io" class="Terminal">
+	<property name="emulation" ref="emulation" />
 </component>
 
 </edl>

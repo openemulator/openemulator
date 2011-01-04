@@ -4,70 +4,68 @@
 
 <device id="appleII" label="Apple II" image="images/Apple/Apple II.png" group="system">
     <setting ref="appleII.video" name="tvSystem" label="TV System" type="select" options="NTSC,PAL" />
+    <setting ref="appleII.video" name="characterSet" label="Character Set" type="select" options="Standard,Lowercase,Pigfont" />
 </device>
-<port id="appleII.videoPort" ref="appleMonitorII.monitor" type="CompositeVideo" label="Video" image="Composite Video Port.png">
+<port id="appleII.videoPort" ref="appleMonitorII.connector" type="CompositeVideo" label="Video">
     <inlet ref="appleII.video" property="monitor" outletRef="monitor" />
 </port>
-<port id="appleII.slot0" ref="s0.conn" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png">
+<port id="appleII.slot0" ref="s0.conn" type="AppleIISlot" label="Slot 0">
     <inlet ref="appleII.io" property="refSlot0" outletRef="io" />
 </port>
-<port id="appleII.slot1" ref="s1.conn" type="AppleIISlot" label="Slot 1" image="Apple II Slot.png">
+<port id="appleII.slot1" ref="s1.conn" type="AppleIISlot" label="Slot 1">
     <inlet ref="appleII.io" property="refSlot1" outletRef="io" />
     <inlet ref="appleII.slotMemory" property="slot1" outletRef="memory" />
 </port>
-<port id="appleII.slot2" ref="s2.conn" type="AppleIISlot" label="Slot 2" image="Apple II Slot.png">
+<port id="appleII.slot2" ref="s2.conn" type="AppleIISlot" label="Slot 2">
     <inlet ref="appleII.io" property="refSlot2" outletRef="io" />
     <inlet ref="appleII.slotMemory" property="slot2" outletRef="memory" />
 </port>
-<port id="appleII.slot3" ref="s3.conn" type="AppleIISlot" label="Slot 3" image="Apple II Slot.png">
+<port id="appleII.slot3" ref="s3.conn" type="AppleIISlot" label="Slot 3">
     <inlet ref="appleII.io" property="refSlot3" outletRef="io" />
     <inlet ref="appleII.slotMemory" property="slot3" outletRef="memory" />
 </port>
-<port id="appleII.slot4" ref="s4.conn" type="AppleIISlot" label="Slot 4" image="Apple II Slot.png">
+<port id="appleII.slot4" ref="s4.conn" type="AppleIISlot" label="Slot 4">
     <inlet ref="appleII.io" property="refSlot4" outletRef="io" />
     <inlet ref="appleII.slotMemory" property="slot4" outletRef="memory" />
 </port>
-<port id="appleII.slot5" ref="s5.conn" type="AppleIISlot" label="Slot 5" image="Apple II Slot.png">
+<port id="appleII.slot5" ref="s5.conn" type="AppleIISlot" label="Slot 5">
     <inlet ref="appleII.io" property="refSlot5" outletRef="io" />
     <inlet ref="appleII.slotMemory" property="slot5" outletRef="memory" />
 </port>
-<port id="appleII.slot6" ref="s6.conn" type="AppleIISlot" label="Slot 6" image="Apple II Slot.png">
+<port id="appleII.slot6" ref="appleDiskIIInterface.connector" type="AppleIISlot" label="Slot 6">
     <inlet ref="appleII.io" property="refSlot6" outletRef="io" />
     <inlet ref="appleII.slotMemory" property="slot6" outletRef="memory" />
 </port>
-<port id="appleII.slot7" ref="" type="AppleIISlot" label="Slot 7" image="Apple II Slot.png">
+<port id="appleII.slot7" ref="" type="AppleIISlot" label="Slot 7">
     <inlet ref="appleII.io" property="refSlot7" outletRef="io" />
     <inlet ref="appleII.slotMemory" property="slot7" outletRef="memory" />
 </port>
-<port id="appleII.gamePort" ref="sgp.conn" type="AppleIIGame" label="Game Port" image="Apple II Game Port.png">
+<port id="appleII.gamePort" ref="sgp.conn" type="AppleIIGame" label="Game Port">
     <inlet ref="appleII.game" property="port" outletRef="port" />
 </port>
-<port id="appleII.cpuSocket" ref="scpu.conn" type="CPU6502" label="CPU Socket" image="CPU 6502 Socket.png">
+<port id="appleII.cpuSocket" ref="scpu.conn" type="CPU6502" label="CPU Socket">
 </port>
-<port id="appleII.charsetSocket" ref="" type="AppleIICharset" label="Charset ROM Socket" image="ROM Socket.png">
-    <inlet ref="appleII.video" property="charsetSocket" outletRef="charset" />
-</port>
-<port id="appleII.romD0Socket" ref="" type="AppleIIROM" label="ROM D0 Socket" image="ROM Socket.png">
+<port id="appleII.romD0Socket" ref="" type="AppleIIROM" label="ROM D0 Socket">
     <inlet ref="appleII.mmu" property="romD0Socket" outletRef="memory" />
 </port>
-<port id="appleII.romD8Socket" ref="" type="AppleIIROM" label="ROM D8 Socket" image="ROM Socket.png">
+<port id="appleII.romD8Socket" ref="" type="AppleIIROM" label="ROM D8 Socket">
     <inlet ref="appleII.mmu" property="romD8Socket" outletRef="memory" />
 </port>
-<port id="appleII.romE0Socket" ref="" type="AppleIIROM" label="ROM E0 Socket" image="ROM Socket.png">
+<port id="appleII.romE0Socket" ref="" type="AppleIIROM" label="ROM E0 Socket">
     <inlet ref="appleII.mmu" property="romE0Socket" outletRef="memory" />
 </port>
-<port id="appleII.romE8Socket" ref="" type="AppleIIROM" label="ROM E8 Socket" image="ROM Socket.png">
+<port id="appleII.romE8Socket" ref="" type="AppleIIROM" label="ROM E8 Socket">
     <inlet ref="appleII.mmu" property="romE8Socket" outletRef="memory" />
 </port>
-<port id="appleII.romF0Socket" ref="" type="AppleIIROM" label="ROM F0 Socket" image="ROM Socket.png">
+<port id="appleII.romF0Socket" ref="" type="AppleIIROM" label="ROM F0 Socket">
     <inlet ref="appleII.mmu" property="romF0Socket" outletRef="memory" />
 </port>
-<port id="appleII.romF8Socket" ref="" type="AppleIIROM" label="ROM F8 Socket" image="ROM Socket.png">
+<port id="appleII.romF8Socket" ref="" type="AppleIIROM" label="ROM F8 Socket">
     <inlet ref="appleII.mmu" property="romF8Socket" outletRef="memory" />
 </port>
 <component id="appleII.controlBus" class="ControlBus">
     <property name="emulation" ref="emulation" />
-    <property name="hostAudio" ref="hostAudio" />
+    <property name="audio" ref="audio" />
     <property name="crystalFrequency" value="14.31818MHz" />
     <property name="cpuFrequencyDivider" value="14" />
     <property name="cpu" ref="appleII.cpu" />
@@ -174,10 +172,12 @@
 </component>
 <component id="appleII.video" class="AppleIIVideo">
     <property name="tvSystem" value="NTSC" />
+    <property name="characterSet" value="Standard" />
     <property name="ram00" ref="appleII.ram00" />
     <property name="ram20" ref="appleII.ram00" />
+    <property name="ram30" ref="appleII.ram00" />
     <property name="ram40" ref="appleII.ram40" />
-    <property name="ram60" ref="appleII.ram40" />
+    <property name="ram50" ref="appleII.ram40" />
     <property name="charset" ref="appleII.charset" />
     <property name="charsetSocket" ref="" />
     <property name="monitor" ref="" />
@@ -230,49 +230,53 @@
     <property name="image" src="${resourcePath}/roms/Apple/341-0004-00.bin" />
 </component>
 
+
+
 <device id="appleMonitorII" label="Apple Monitor II" image="images/Apple/Apple Monitor II.png" group="peripherals">
-    <setting ref="appleMonitorII.monitor" name="brightness" label="Brightness" type="slider" options="-1.0,1.0" />
-    <setting ref="appleMonitorII.monitor" name="contrast" label="Contrast" type="slider" options="0.0,2.0" />
-<!--    <setting ref="appleMonitorII.monitor" name="hue" label="Hue" type="slider" options="0.0,1.0" />
+    <setting ref="appleMonitorII.monitor" name="screenBrightness" label="Brightness" type="slider" options="-1.0,1.0" />
+    <setting ref="appleMonitorII.monitor" name="screenContrast" label="Contrast" type="slider" options="0.0,2.0" />
+<!--    <setting ref="appleMonitorII.monitor" name="hue" label="Hue" type="slider" options="0.0,2.0" />
     <setting ref="appleMonitorII.monitor" name="saturation" label="Saturation" type="slider" options="0.0,2.0" />-->
-    <setting ref="appleMonitorII.monitor" name="horizCenter" label="Horizontal Center" type="slider" options="-1.0,1.0" />
-    <setting ref="appleMonitorII.monitor" name="horizSize" label="Horizontal Size" type="slider" options="0.0,1.0" />
-    <setting ref="appleMonitorII.monitor" name="vertCenter" label="Vertical Center" type="slider" options="-1.0,1.0" />
-    <setting ref="appleMonitorII.monitor" name="vertSize" label="Vertical Size" type="slider" options="0.0,1.0" />
+    <setting ref="appleMonitorII.monitor" name="screenHorizontalCenter" label="Horizontal Center" type="slider" options="-1.0,1.0" />
+    <setting ref="appleMonitorII.monitor" name="screenHorizontalSize" label="Horizontal Size" type="slider" options="0.0,2.0" />
+    <setting ref="appleMonitorII.monitor" name="screenVerticalCenter" label="Vertical Center" type="slider" options="-1.0,1.0" />
+    <setting ref="appleMonitorII.monitor" name="screenVerticalSize" label="Vertical Size" type="slider" options="0.0,2.0" />
 </device>
-<connector id="appleMonitorII.connector" ref="" type="CompositeMonitor" label="Video Connector" image="Composite Video Connector.png" />
+<connector id="appleMonitorII.connector" ref="" type="CompositeMonitor" label="Video Connector"/>
 <component id="appleMonitorII.monitor" class="CompositeMonitor">
     <property name="emulation" ref="emulation" />
     <property name="compositeLumaCutoff" value="0.3" />
     <property name="compositeChromaCutoff" value="0.06" />
-    <property name="compositeHue" value="0.06" />
-    <property name="compositeBrightness" value="0.06" />
-    <property name="compositeColorize" value="0" />
+    <property name="compositeHue" value="0.15" />
+    <property name="compositeSaturation" value="1" />
+    <property name="compositeColorize" value="1" />
     <property name="compositeDecoderMatrix" value="standard" />
     <property name="screenBrightness" value="0.0" />
-    <property name="screenContrast" value="1.0" />
-    <property name="screenRedGain" value="1.0" />
-    <property name="screenGreenGain" value="1.0" />
-    <property name="screenBlueGain" value="1.0" />
+    <property name="screenContrast" value="1" />
+    <property name="screenRedGain" value="1" />
+    <property name="screenGreenGain" value="1" />
+    <property name="screenBlueGain" value="1" />
     <property name="screenBarrel" value="0.05" />
-    <property name="screenPersistance" value="0.0" />
-    <property name="screenHorizCenter" value="0.5" />
-    <property name="screenHorizSize" value="1.0" />
-    <property name="screenVertCenter" value="0.5" />
-    <property name="screenVertSize" value="1.0" />
+    <property name="screenPersistance" value="0" />
+    <property name="screenHorizontalCenter" value="0" />
+    <property name="screenHorizontalSize" value="1.0" />
+    <property name="screenVerticalCenter" value="0" />
+    <property name="screenVerticalSize" value="1.0" />
 </component>
+
+
 
 <device id="sgp" label="Apple Hand Controllers" image="images/Apple/Apple Hand Controllers.png" group="peripherals">
     <setting ref="sgp.io" name="source" label="Source" type="select" options="Mouse,Joystick" />
-    <setting ref="sgp.io" name="invet" label="Invert Axes" type="checkbox" />
+    <setting ref="sgp.io" name="invertAxes" label="Invert Axes" type="checkbox" />
 </device>
-<connector id="sgp.conn" ref="" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png" />
+<connector id="sgp.conn" ref="" type="AppleIISlot" label="Slot 0" />
 
 <device id="s0" label="Apple Language Card" image="images/Apple/Apple Language Card.png" group="expansions" />
-<connector id="s1.conn" ref="" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png" />
+<connector id="s1.conn" ref="" type="AppleIISlot" label="Slot 0" />
 
 <device id="s1" label="Apple Silentype Interface Card" image="images/Apple/Apple Synch Printer Interface Card.png" group="expansions" />
-<connector id="s2.conn" ref="" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png" />
+<connector id="s2.conn" ref="" type="AppleIISlot" label="Slot 0" />
 
 <device id="s2" label="Apple Super Serial Card" image="images/Apple/Apple II Super Serial Card.png" group="expansions">
     <setting ref="ssc.io" name="mode" label="Mode" type="select" options="Communications,Printer" />
@@ -285,48 +289,81 @@
     <setting ref="ssc.io" name="charactersPerLine" label="Characters per Line" type="select" options="40,72,80,132" />
     <setting ref="ssc.io" name="delayAfterCR" label="Delay After CR" type="checkbox" />
 </device>
-<connector id="s3.conn" ref="" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png" />
+<connector id="s3.conn" ref="" type="AppleIISlot" label="Slot 0" />
 
 <device id="s3" label="Videx VideoTerm" image="images/Videx/Videx Videoterm.png" group="expansions">
     <setting ref="s3.io" name="mode" label="Character Set" type="select" options="Standard,Graphics,Inverse,German" />
 </device>
-<connector id="s4.conn" ref="" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png" />
+<connector id="s4.conn" ref="" type="AppleIISlot" label="Slot 0" />
 
 <device id="s4" label="Mountain Computer Apple Clock" image="images/Mountain Computer/Mountain Computer Apple Clock.png" group="expansions" />
-<connector id="s5.conn" ref="" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png" />
+<connector id="s5.conn" ref="" type="AppleIISlot" label="Slot 0" />
 
 <device id="s5" label="Apple Graphics Tablet Interface Card" image="images/Apple/Apple Graphics Tablet Interface Card.png" group="expansions" />
-<connector id="s5.conn" ref="s5dev" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png" />
-<port id="s5.port" ref="s5dev" type="AppleGraphicsTablet" label="Graphics Tablet Port" image="Apple Graphics Tablet Interface Card.png" />
+<connector id="s5.conn" ref="s5dev" type="AppleIISlot" label="Slot 0" />
+<port id="s5.port" ref="appleGraphicsTablet.connector" type="AppleGraphicsTablet" label="Interface" />
 
-<device id="s5dev" label="Apple Graphics Tablet" image="images/Apple/Apple Graphics Tablet.png" group="peripherals" />
-<connector id="s5dev.conn" ref="s5" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png" />
 
-<device id="s6" label="Apple Disk II Interface Card" image="images/Apple/Apple Disk II Interface Card.png" group="expansions" />
-<connector id="s6.conn" ref="" type="AppleIISlot" label="Slot 0" image="Apple II Slot.png" />
-<port id="s6.d1" ref="diskII.conn" type="AppleDisk525" label="Drive 1" image="Apple II Slot.png" />
-<port id="s6.d2" ref="diskII2.conn" type="AppleDisk525" label="Drive 2" image="Apple II Slot.png" />
 
-<device id="diskII" label="Apple Disk II" image="images/Apple/Apple Disk II.png" group="peripherals">
-    <setting ref="diskII.drive" name="forceWriteProtected" label="Force Write Protected" type="checkbox" />
+<device id="appleGraphicsTablet" label="Apple Graphics Tablet" image="images/Apple/Apple Graphics Tablet.png" group="peripherals" />
+<connector id="s5dev.connector" ref="s5" type="AppleIISlot" label="Slot 0" />
+<component id="appleGraphicsTablet.io" class="AppleGraphicsTablet">
+	<property name="emulation" ref="emulation" />
+</component>
+
+
+
+<device id="appleDiskIIInterface" label="Apple Disk II Interface Card" image="images/Apple/Apple Disk II Interface Card.png" group="expansions">
+    <setting ref="appleDiskIIInterface.io" name="controllerType" label="Controller Type" type="select" options="13 Sector Controller,16 Sector Controller" />
 </device>
-<connector id="diskII.connector" ref="" type="AppleDisk525" label="Apple Disk II Slot Connector" />
-<component id="diskII.drive" class="AppleDiskII">
+<connector id="appleDiskIIInterface.connector" ref="" type="AppleIISlot" label="Slot 0">
+	<inlet ref="appleDiskIIInterface.io" property="controlBus" outletRef="controlBus" />
+</connector>
+<port id="appleDiskIIInterface.drive1" ref="appleDiskII.connector" type="AppleDisk525" label="Drive 1">
+    <inlet ref="appleDiskIIInterface.io" property="drive1" outletRef="io" />
+</port>
+<port id="appleDiskIIInterface.drive2" ref="appleDiskII2.connector" type="AppleDisk525" label="Drive 2">
+    <inlet ref="appleDiskIIInterface.io" property="drive2" outletRef="io" />
+</port>
+<component id="appleDiskIIInterface.io" class="AppleDiskIIInterfaceCard">
+    <property name="controllerType" value="16 Sector Controller" />
+    <property name="controlBus" ref="appleII.controlBus" />
+    <property name="drive1" ref="" />
+    <property name="drive2" ref="" />
+</component>
+<component id="appleDiskIIInterface.rom13" class="ROM">
+    <property name="image" src="${resourcePath}/roms/Apple/341-0009.bin" />
+</component>
+<component id="appleDiskIIInterface.rom16" class="ROM">
+    <property name="image" src="${resourcePath}/roms/Apple/341-0027.bin" />
+</component>
+
+
+
+<device id="appleDiskII" label="Apple Disk II" image="images/Apple/Apple Disk II.png" group="peripherals">
+    <setting ref="appleDiskII.io" name="forceWriteProtected" label="Force Write Protected" type="checkbox" />
+</device>
+<connector id="appleDiskII.connector" ref="" type="AppleDisk525" label="Apple Disk II Slot Connector" />
+<component id="appleDiskII.io" class="AppleDiskII">
+    <property name="emulation" ref="emulation" />
+	<property name="controllerType" ref="13 Sector Controller" />
     <property name="image" value="/Users/mressl/test2.dsk" />
     <property name="forceWriteProtected" value="0" />
     <property name="rpm" value="300.0" />
-    <property name="rpmVariance" value="1.0" />
-    <property name="soundSpin" src="sounds/Apple Disk II Spin.wav" />
-    <property name="soundArm" src="sounds/Apple Disk II Arm.wav" />
-    <property name="soundStop" src="sounds/Apple Disk II Stop.wav" />
-    <property name="soundShake" src="sounds/Apple Disk II Shake.wav" />
+    <property name="soundSpin" src="${resourcePath}/sounds/Apple Disk II Spin.wav" />
+    <property name="soundArm" src="${resourcePath}/sounds/Apple Disk II Arm.wav" />
+    <property name="soundStop" src="${resourcePath}/sounds/Apple Disk II Stop.wav" />
+    <property name="soundShake" src="${resourcePath}/sounds/Apple Disk II Shake.wav" />
 </component>
 
-<device id="diskII2" label="Apple Disk II" image="images/Apple/Apple Disk II.png" group="peripherals">
-    <setting ref="diskII2.drive" name="forceWriteProtected" label="Force Write Protected" type="checkbox" />
+
+
+<device id="appleDiskII2" label="Apple Disk II" image="images/Apple/Apple Disk II.png" group="peripherals">
+    <setting ref="appleDiskII2.io" name="forceWriteProtected" label="Force Write Protected" type="checkbox" />
 </device>
-<connector id="diskII2.connector" ref="" type="AppleDisk525" label="Apple Disk II Slot Connector" />
-<component id="diskII2.drive" class="AppleDiskII">
+<connector id="appleDiskII2.connector" ref="" type="AppleDisk525" label="Apple Disk II Slot Connector" />
+<component id="appleDiskII2.io" class="AppleDiskII">
+    <property name="emulation" ref="emulation" />
     <property name="image" value="/Users/mressl/test2.dsk" />
     <property name="forceWriteProtected" value="0" />
     <property name="rpm" value="300.0" />

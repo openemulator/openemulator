@@ -1,15 +1,15 @@
 
 /**
  * OpenEmulator
- * OpenEmulator portaudio interface
- * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
+ * PortAudio HAL
+ * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements the OpenEmulator portaudio interface.
+ * Implements a PortAudio HAL.
  */
 
-#ifndef _OEPORTAUDIO_H
-#define _OEPORTAUDIO_H
+#ifndef _PORTAUDIOHAL_H
+#define _PORTAUDIOHAL_H
 
 #include <pthread.h>
 
@@ -17,19 +17,17 @@
 #include "sndfile.h"
 #include "samplerate.h"
 
-#include "OEEmulation.h"
+#include "Emulation.h"
 
 #define OEPORTAUDIO_SAMPLERATE			48000.0
 #define OEPORTAUDIO_CHANNELNUM			2
 #define OEPORTAUDIO_FRAMESPERBUFFER		512
 #define OEPORTAUDIO_BUFFERNUM			3
 
-typedef vector<OEEmulation *> OEEmulations;
-
-class OEPortAudio : public OEComponent
+class PortAudioHAL : public OEComponent
 {
 public:
-	OEPortAudio();
+	PortAudioHAL();
 	
 	void setFullDuplex(bool value);
 	void setSampleRate(double value);
@@ -43,8 +41,8 @@ public:
 	void lockEmulations();
 	void unlockEmulations();
 	void runEmulations();
-	bool addEmulation(OEEmulation *emulation);
-	void removeEmulation(OEEmulation *emulation);
+	bool addEmulation(Emulation *emulation);
+	void removeEmulation(Emulation *emulation);
 	
 	void runAudio(const float *input,
 				  float *output,
@@ -86,7 +84,7 @@ private:
 	pthread_t emulationsThread;
 	pthread_mutex_t emulationsMutex;
 	pthread_cond_t emulationsCond;
-	OEEmulations emulations;
+	vector<Emulation *> emulations;
 	
 	bool audioOpen;
 	PaStream *audioStream;

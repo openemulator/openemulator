@@ -1,7 +1,12 @@
-==2011-01-01==
+==2011-01==
 * Implemented change of settings
+* Implemented storage scheme
+* Implemented storage open button
+* Implemented storage open action
+* Implemented storage unmount action
+* Implemented storage reveal in finder action
 
-==2010-12-01==
+==2010-12==
 * Implemented window autosave of emulation view
 * Found a way to integrate OEEmulation device info results with the EDL
 * Implemented OEEDL free ports and connector infos
@@ -18,7 +23,7 @@
 * Added mounted disk images as nodes in the outline view
 * Connected emulation view settings and contents
 
-==2010-11-01==
+==2010-11==
 * Fixed ${id} when saving emulation data
 * Audio Controls volume is now playback volume, not global output volume
 * Added AudioControls position control
@@ -28,7 +33,7 @@
 * Fixed Audio Controls. When pausing and moving position, the last buffer was played
 * Improved Audio Controls, uses log volume from 0 to -100 dB
 
-==2010-10-01==
+==2010-10==
 * Implemented full-screen (with new window views)
 * Implemented portaudio
 * Implemented OpenGL
@@ -73,25 +78,23 @@
 * Implemented UI timer and update playback, recording and disk images
 * Implemented playback recording UI
 
-==2008-11-23==
+==2008-11==
 * Redesigned the AppleIIGo framework with components
 
-==2008-09-10==
+==2008-09==
 * Implemented IIc plus MIG emulation (ROMBANK2 @ $CC00-CFFF)
 * Fixed 3.5" disk Image Icon (the notch goes on the left)
 * Implemented IIc plus Disk 3.5" SEL line
 * Fixed 3.5" disk number of bits of each track
 * Implemented Apple II memory expansion
 
-==2008-08-22==
+==2008-08==
 * Implemented Apple 3.5 Disk Drive
 * Implemented IWM
 * Rewrote disk drive classes
 * Implemented Apple 3.5 Floppy Disk Drive Interface Card
 * Added CTRL-SPACE pause toggle
 * Implemented SmartPort interface
-
-==2008-08-10==
 * Improved FloppyDiskImage class data handling
 * Implemented NIB disk image reader
 * Improved NIB reader, scanning for sync bytes and skipping bytes without bit 7 set
@@ -112,7 +115,7 @@
 * Add disk drive head stepper motor inertial simulation (for Locksmith quarter tracks 0.25 and 0.75)
 * Redesigned disk image icons
 
-==2008-07-24==
+==2008-07==
 * Fixed Apple IIe internal ROM switch
 * Fixed shadow switched (PAGE2 and 80STORE)
 * Fixed LORES80 aux colors
@@ -149,7 +152,7 @@
 * Implemented GCR53 reader
 * Implemented F7 shortcut to NMI
 
-==2008-05-13==
+==2008-05==
 * Added pause function
 * Implemented video mode updates within scanlines
 * Implemented DHires monochrome mode
@@ -178,7 +181,7 @@
 * Moved key modifier events to keyboard class
 * Moved mouse events to mouse class
 
-==2008-04-24==
+==2008-04==
 * Moved microprocessor timing to VideoController class
 * Removed SpeedController
 * Added timing synchronization to hardware, scanline by scanline
@@ -187,7 +190,7 @@
 * Implemented 65C02 WAIT and STOP modes
 * Added CTRL-ALT-META-BACKSPACE shortcut for shutdown
 
-==2008-04-09==
+==2008-04==
 * Renamed Video class to VideoController, Monitor to VideoRenderer, Slot to SlotDevice, AuxSlot to AuxSlotDevice
 * Added Device class which handles connections, reset, persistency and audio
 * Designed VideoRenderer interface
@@ -196,7 +199,7 @@
 * Disabled AN3 graphics mode selection in non-enhanced IIe
 * Implemented SDL fullscreen update
 
-==2008-03-15==
+==2008-03==
 * Implemented video class that controls video timing, interrupts, blanking, registers and video scanner
 * Implemented floating bus
 * Improved interrupt handling with an Interrupt class
@@ -211,7 +214,7 @@
 * Implemented paddle buttons as counters, so multiple devices can push them
 * Emulated Option key with left Alt, Command key with left and right Meta and right Alt
 
-==2008-02-27==
+==2008-02==
 * Improved paddles' screen area
 * Fixed ALT key paddle button mapping
 * Fixed key repeat
@@ -226,8 +229,6 @@
 * Implemented Motherboard class. Acts as a concentrator that connects devices on connect()
 * Implemented default configuration for various Apple II computers
 * Fixed SDL fullscreen mode
-
-==2008-02-01==
 * Fixed and tested RamWorks
 * Implemented isAnyKeyDown
 * Implemented accurate Disk II blank simulation: random distribution is now 95% 0s, 5% 1s
@@ -235,7 +236,7 @@
 * Fixed Disk II sporadic bits. Maniac Mansion, Ultima V work now
 * Implemented accurate II+, IIe, IIc memory initialization
 
-==2008-01-28==
+==2008-01==
 * Optimized audio computations
 * Added charset loader function
 * Emulated Open and Closed Apple keys with ALT
@@ -245,20 +246,16 @@
 * Implemented accurate RamWorks basic and RamWorks III emulation
 * Implemented Saturn 128k emulation
 
-==2007-12-27==
+==2007-12==
 * Rewrote the Disk II logic state sequencer
 * Added emulation of Disk II spontaneous 1 bits after long runs of 0 bits
 * Implemented DSK disk image reader
 * Implemented DII format disk image reader and writer
 * Added audio downsampling filter and analog sound amplifier emulation
-
-==2007-12-16==
 * Added support for variable track size
 * Added donation button
 * Fixed missing Localizable.strings
 * Fixed driveIndex bug in Mac OS X Controller.m
-
-==2007-12-08==
 * Fixed IIe self test
 * Improved Disk II infrastructure
 * Implemented .dsk to nibble converter

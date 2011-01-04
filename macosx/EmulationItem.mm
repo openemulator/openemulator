@@ -11,7 +11,7 @@
 #import "EmulationItem.h"
 #import "StringConversion.h"
 
-#import "OEEmulation.h"
+#import "Emulation.h"
 
 @implementation EmulationItem
 
@@ -21,10 +21,10 @@
 	{
 		children = [[NSMutableArray alloc] init];
 		
-		OEDevicesInfo *devicesInfo = (OEDevicesInfo *)[theDocument devicesInfo];
-		for (NSInteger i = 0; i < devicesInfo->size(); i++)
+		EmulationInfo *emulationInfo = (EmulationInfo *)[theDocument emulationInfo];
+		for (NSInteger i = 0; i < emulationInfo->size(); i++)
 		{
-			OEDeviceInfo &deviceInfo = devicesInfo->at(i);
+			EmulationDeviceInfo &deviceInfo = emulationInfo->at(i);
 			
 			NSString *groupName = getNSString(deviceInfo.group);
 			EmulationItem *groupItem = [self childWithUid:groupName];
@@ -50,8 +50,9 @@
 {
 	if (self = [super init])
 	{
-		uid = [NSLocalizedString(theLabel, @"Group label") copy];
-		label = [[theLabel uppercaseString] retain];
+		uid = [theLabel copy];
+		label = [[NSLocalizedString(theLabel, @"Emulation Item Label.")
+				  uppercaseString] retain];
 		
 		children = [[NSMutableArray alloc] init];
 	}
@@ -64,7 +65,7 @@
 {
 	if (self = [super init])
 	{
-		OEDeviceInfo *deviceInfo = (OEDeviceInfo *)theDeviceInfo;
+		EmulationDeviceInfo *deviceInfo = (EmulationDeviceInfo *)theDeviceInfo;
 		
 		document = theDocument;
 		
@@ -73,8 +74,8 @@
 		image = [[self getImage:getNSString(deviceInfo->image)] retain];
 		location = [getNSString(deviceInfo->location) retain];
 		state = [getNSString(deviceInfo->state) retain];
-		showable = (deviceInfo->canvases.size() != 0);
-		mountable = (deviceInfo->storages.size() != 0);
+		canvas = (deviceInfo->canvases.size() != 0);
+		storage = (deviceInfo->storages.size() != 0);
 		
 		settingsRefs = [[NSMutableArray alloc] init];
 		settingsNames = [[NSMutableArray alloc] init];
@@ -82,7 +83,7 @@
 		settingsTypes = [[NSMutableArray alloc] init];
 		settingsOptions = [[NSMutableArray alloc] init];
 		
-		for (OESettings::iterator i = deviceInfo->settings.begin();
+		for (EmulationSettings::iterator i = deviceInfo->settings.begin();
 			 i != deviceInfo->settings.end();
 			 i++)
 		{
@@ -106,16 +107,20 @@
 			 i != deviceInfo->storages.end();
 			 i++)
 		{
-			// To-Do: Recover mounted disk images
-			EmulationItem *diskImageItem;
-			NSString *path = @"Apple DOS 3.3.dsk";
-			diskImageItem = [[EmulationItem alloc] initWithDiskImageAtPath:path
-														  storageComponent:nil
-																  location:location
-																  readOnly:NO
-																	locked:NO];
-			[children addObject:diskImageItem];
-			[diskImageItem release];
+			NSString *path = [[document pathOfImageInStorage:*i]
+							  lastPathComponent];
+			if ([path length])
+			{
+				EmulationItem *diskImageItem;
+				diskImageItem = [[EmulationItem alloc] initWithDiskImageAtPath:path
+																	   storage:*i
+																	  location:location
+																	inDocument:theDocument];
+				[children addObject:diskImageItem];
+				[diskImageItem release];
+			}
+			
+			storageComponent = *i;
 		}
 	}
 	
@@ -123,19 +128,24 @@
 }
 
 - (id)initWithDiskImageAtPath:(NSString *)thePath
-			 storageComponent:(void *)theStorageComponent
+					  storage:(void *)theComponent
 					 location:(NSString *)theLocation
-					 readOnly:(BOOL)isReadOnly
-					   locked:(BOOL)isLocked
+				   inDocument:(Document *)theDocument
 {
 	if (self = [super init])
 	{
+		document = theDocument;
+		
 		uid = @"";
-		label = [thePath copy];
+		label = [[thePath lastPathComponent] retain];
 		image = [[NSImage imageNamed:@"DiskImage"] retain];
 		location = [theLocation copy];
-		state = @"Mounted";
+		state = @"Mounted Read/Write";
+		
 		mounted = YES;
+		storage = NO;
+		diskImagePath = [thePath copy];
+		storageComponent = theComponent;
 		
 		children = [[NSMutableArray alloc] init];
 	}
@@ -146,9 +156,12 @@
 - (void)dealloc
 {
 	[uid release];
-	[label release];
 	[image release];
+	[label release];
 	[location release];
+	[state release];
+	
+	[diskImagePath release];
 	
 	[settingsRefs release];
 	[settingsNames release];
@@ -174,14 +187,14 @@
 	return uid;
 }
 
-- (NSString *)label
-{
-	return label;
-}
-
 - (NSImage *)image
 {
 	return image;
+}
+
+- (NSString *)label
+{
+	return label;
 }
 
 - (NSString *)location
@@ -194,19 +207,39 @@
 	return state;
 }
 
-- (BOOL)showable
+- (BOOL)canvas
 {
-	return showable;
+	return canvas;
 }
 
-- (BOOL)mountable
+- (BOOL)storage
 {
-	return mountable;
+	return storage;
 }
 
 - (BOOL)mounted
 {
 	return mounted;
+}
+
+- (BOOL)locked
+{
+	return NO;
+}
+
+- (NSString *)storagePath
+{
+	return diskImagePath;
+}
+
+- (BOOL)mount:(NSString *)path
+{
+	return [document mount:path inStorage:storageComponent];
+}
+
+- (void)unmount
+{
+	[document unmountStorage:storageComponent];
 }
 
 - (NSInteger)numberOfSettings
@@ -229,23 +262,6 @@
 	return [settingsOptions objectAtIndex:index];
 }
 
-- (NSString *)valueForSettingAtIndex:(NSInteger)index
-{
-	NSString *ref = [settingsRefs objectAtIndex:index];
-	NSString *name = [settingsNames objectAtIndex:index];
-	
-	NSString *value = [document getValueOfProperty:name component:ref];
-	
-	NSString *type = [settingsTypes objectAtIndex:index];
-	if ([type compare:@"select"] == NSOrderedSame)
-	{
-		NSArray *options = [settingsOptions objectAtIndex:index];
-		value = [NSString stringWithFormat:@"%d", [options indexOfObject:value]];
-	}
-	
-	return value;
-}
-
 - (void)setValue:(NSString *)value forSettingAtIndex:(NSInteger)index;
 {
 	NSString *ref = [settingsRefs objectAtIndex:index];
@@ -258,7 +274,24 @@
 		value = [options objectAtIndex:[value integerValue]];
 	}
 	
-	[document setValue:value ofProperty:name component:ref];
+	[document setValue:value ofProperty:name forComponent:ref];
+}
+
+- (NSString *)valueForSettingAtIndex:(NSInteger)index
+{
+	NSString *ref = [settingsRefs objectAtIndex:index];
+	NSString *name = [settingsNames objectAtIndex:index];
+	
+	NSString *value = [document valueOfProperty:name forComponent:ref];
+	
+	NSString *type = [settingsTypes objectAtIndex:index];
+	if ([type compare:@"select"] == NSOrderedSame)
+	{
+		NSArray *options = [settingsOptions objectAtIndex:index];
+		value = [NSString stringWithFormat:@"%d", [options indexOfObject:value]];
+	}
+	
+	return value;
 }
 
 - (NSMutableArray *)children

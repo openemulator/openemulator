@@ -22,16 +22,16 @@
 
 @interface ChooserViewController : NSViewController
 {
-	id fVerticalSplitView;
-	id fHorizontalSplitView;
-	id fTableView;
-	id fImageBrowserView;
+	IBOutlet id fVerticalSplitView;
+	IBOutlet id fHorizontalSplitView;
+	IBOutlet id fTableView;
+	IBOutlet id fImageBrowserView;
 	
-	id fSelectedItemImageView;
-	id fSelectedItemLabelView;
-	id fSelectedItemDescriptionView;
+	IBOutlet id fSelectedItemImageView;
+	IBOutlet id fSelectedItemLabelView;
+	IBOutlet id fSelectedItemDescriptionView;
 	
-	id<ChooserDelegate> chooserDelegate;
+	id < ChooserDelegate > chooserDelegate;
 	
 	VerticallyCenteredTextFieldCell *tableCell;
 	

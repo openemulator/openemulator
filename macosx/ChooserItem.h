@@ -15,7 +15,7 @@
 {
 	NSString *label;
 	NSString *imagePath;
-
+	
 	NSString *description;
 	NSString *edlPath;
 	void *data;

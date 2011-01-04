@@ -81,12 +81,10 @@
 		NSString *menuTitle;
 		if (!fullscreen)
 			menuTitle = NSLocalizedString(@"Enter Fullscreen",
-										  @"Title for menu item to enter fullscreen "
-										  "(should be the same as the initial menu "
-										  "item in the nib).");
+										  @"Main Menu.");
 		else
 			menuTitle = NSLocalizedString(@"Exit Fullscreen",
-										  @"Title for menu item to exit fullscreen.");
+										  @"Main Menu.");
 		[item setTitleWithMnemonic:menuTitle];
 		
 		return YES;

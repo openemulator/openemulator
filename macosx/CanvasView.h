@@ -16,9 +16,9 @@
 
 @interface CanvasView : NSOpenGLView
 {
-	id fDocumentWindowController;
+	IBOutlet id fDocumentWindowController;
 	
-	void *oeOpenGLCanvas;
+	void *openGLHAL;
 	
 	CVDisplayLinkRef displayLink;
 	

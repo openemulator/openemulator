@@ -19,9 +19,9 @@
 
 @interface ConnectorViewController : NSViewController
 {
-	id fImageBrowserView;
+	IBOutlet id fImageBrowserView;
 	
-	id<ConnectorDelegate> connectorDelegate;
+	id < ConnectorDelegate > connectorDelegate;
 	
 	NSMutableArray *items;
 }

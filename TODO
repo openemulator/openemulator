@@ -1,13 +1,11 @@
 ==To-Do==
-* Should adding a storage device create a storage component, or just mark the calling party as a storage device?
-* Implement disk drives open button
+* Implement emulation disk mounting.
+* Implement device disk mounting: all storage components of a device are tried for mounting. When unsuccessful, storage components are tried for unmounting
+* Attempt to move generic code from the OE.app to libemulation
+* Implement disk image file locking, if the disk image is writable
 * Enable correct items in emulation menu
-* Implement storage open action
-* Implement reveal in finder
-* Implement eject
 * Devise a way to send system events to a device without a canvas
-* Storage devices have an eject command (CD's, 3.5" disk drives). Disk images have an unmount command. If a device is ejectable, it's mounts are not unmountable.
-* Implement addCanvas and removeCanvas -> this should create a windowController and an OEOpenGLCanvas. The window controller should be added to the document, and the canvas returned.
+* Implement addCanvas and removeCanvas -> this should create a windowController and an OpenGLHAL. The window controller should be added to the document, and the canvas returned.
 * Implement show device action in emulation menu
 * Implement frame communication to the canvas
 * Implement canvas keyboard entry/mouse events
@@ -23,7 +21,8 @@
 * Implement OEEmulation removeDevice
 * Implement main emulation window add EDL
 * Implement main emulation window remove device
-* Implement hardware chooser
+* Implement hardware chooser with hardware library
+* Implement 
 
 * Integrate OpenGL 2.0 shader
 * Implement non-linear curves in the shader (for green monitors, changes the hue)

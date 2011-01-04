@@ -9,6 +9,8 @@
  */
 
 #import "TemplateChooserWindowController.h"
+#import "TemplateChooserViewController.h"
+#import "DocumentController.h"
 
 @implementation TemplateChooserWindowController
 

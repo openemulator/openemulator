@@ -1,22 +1,22 @@
 
 /**
  * OpenEmulator
- * OpenEmulator OpenGL canvas
+ * OpenGL canvas
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements an OpenEmulator OpenGL canvas.
+ * Implements an OpenGL canvas.
  */
 
-#ifndef _OEOPENGLCANVAS_H
-#define _OEOPENGLCANVAS_H
+#ifndef _OPENGLHAL_H
+#define _OPENGLHAL_H
 
 #include <pthread.h>
 
 #include <OpenGL/gl.h>
 
 #include "OEComponent.h"
-#include "HostCanvasInterface.h"
+#include "CanvasInterface.h"
 
 typedef enum
 {
@@ -28,11 +28,11 @@ typedef enum
 	OEGL_TEX_NUM,
 } OEOpenGLTextureIndex;
 
-class OEOpenGLCanvas : public OEComponent
+class OpenGLHAL : public OEComponent
 {
 public:
-	OEOpenGLCanvas();
-	~OEOpenGLCanvas();
+	OpenGLHAL();
+	~OpenGLHAL();
 	
 	void initOpenGL();
 	void draw(int width, int height);
@@ -59,10 +59,10 @@ private:
 	
 	pthread_mutex_t frameMutex;
 	
-	bool keyDown[HOST_CANVAS_KEYBOARD_KEY_NUM];
+	bool keyDown[CANVAS_KEYBOARD_KEY_NUM];
 	int keyDownCount;
-	bool mouseButtonDown[HOST_CANVAS_MOUSE_BUTTON_NUM];
-	bool joystickButtonDown[HOST_CANVAS_JOYSTICK_NUM][HOST_CANVAS_JOYSTICK_BUTTON_NUM];
+	bool mouseButtonDown[CANVAS_MOUSE_BUTTON_NUM];
+	bool joystickButtonDown[CANVAS_JOYSTICK_NUM][CANVAS_JOYSTICK_BUTTON_NUM];
 	
 	bool mouseCaptured;
 	bool mouseCaptureRelease;

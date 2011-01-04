@@ -2,23 +2,28 @@
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
 <edl version="1.0" label="Disk II Interface" image="Apple Disk II Interface Card.png">
 
-<device id="diskIIInterface" label="Apple Disk II Interface Card" image="Apple Disk II Interface Card.png" />
+<device id="diskIIInterface" label="Apple Disk II Interface Card" image="images/Apple/Apple Disk II Interface Card.png" group="expansions">
+    <setting ref="diskII.drive" name="romType" label="Controller Type" type="select" options="13 Sector Controller,16 Sector Controller" />
+</device>
 <connector id="diskIIInterface.connector" ref="" type="AppleIISlot" label="Apple Disk II Interface Card" image="Apple Disk II Interface Card.png">
     <inlet ref="diskIIInterface.io" property="controlBus" outletRef="controlBus" />
 </connector>
-<port id="diskIIInterface.drive1" ref="" type="AppleIIDisk" label="Drive 1" image="Apple Disk II Socket.png">
+<port id="diskIIInterface.drive1" ref="" type="AppleDisk525" label="Drive 1" image="Apple Disk II Socket.png">
     <inlet ref="diskIIInterface.io" property="drive1" outletRef="drive" />
 </port>
-<port id="diskIIInterface.drive2" ref="" type="AppleIIDisk" label="Drive 2" image="Apple Disk II Socket.png">
+<port id="diskIIInterface.drive2" ref="" type="AppleDisk525" label="Drive 2" image="Apple Disk II Socket.png">
     <inlet ref="diskIIInterface.io" property="drive2" outletRef="drive" />
 </port>
 <component id="diskIIInterface.io" class="AppleDiskIIInterfaceCard">
+    <property name="controlBus" ref="" />
     <property name="drive1" ref="" />
     <property name="drive2" ref="" />
-    <property name="controlBus" ref="" />
 </component>
-<component id="diskIIInterface.memory" class="AppleIIInterfaceROM">
-    <property name="image" src="roms/Apple II/Apple Disk II Interface Card ROM.bin" />
+<component id="diskIIInterface.rom13" class="ROM">
+    <property name="image" src="roms/Apple/341-0009.bin" />
+</component>
+<component id="diskIIInterface.rom16" class="ROM">
+    <property name="image" src="roms/Apple/341-0027.bin" />
 </component>
 
 </edl>

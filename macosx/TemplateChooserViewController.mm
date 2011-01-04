@@ -42,10 +42,10 @@
 	
 	// Find user templates
 	[items removeObjectForKey:NSLocalizedString(USER_TEMPLATES_GROUP,
-												USER_TEMPLATES_GROUP)];
+												"Template Chooser.")];
 	if ([self validTemplatesAtPath:USER_TEMPLATES_FOLDER])
 		[groups addObject:NSLocalizedString(USER_TEMPLATES_GROUP,
-											USER_TEMPLATES_GROUP)];
+											"Template Chooser.")];
 }
 
 - (void)loadItems
@@ -54,7 +54,7 @@
 		return;
 	
 	NSString *group = NSLocalizedString(USER_TEMPLATES_GROUP,
-										USER_TEMPLATES_GROUP);
+										"Template Chooser.");
 	if ([selectedGroup compare:group] == NSOrderedSame)
 		[self addGroupAtPath:USER_TEMPLATES_FOLDER
 					 toGroup:group];

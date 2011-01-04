@@ -10,21 +10,22 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "TemplateChooserViewController.h"
+@class TemplateChooserViewController;
 
 @interface PreferencesWindowController : NSWindowController
 {
-	id fGeneralView;
-	id fAudioView;
-	id fVideoView;
+	IBOutlet id fGeneralView;
+	IBOutlet id fAudioView;
+	IBOutlet id fVideoView;
 	
-	id fShowTemplateChooserRadio;
-	id fUseTemplateRadio;
-	id fChooseTemplateButton;
+	IBOutlet id fShowTemplateChooserRadio;
+	IBOutlet id fUseTemplateRadio;
+	IBOutlet id fChooseTemplateButton;
 	
-	id fTemplateChooserSheet;
-	id fTemplateChooserView;
-	id fTemplateChooserChooseButton;
+	IBOutlet id fTemplateChooserSheet;
+	IBOutlet id fTemplateChooserView;
+	IBOutlet id fTemplateChooserChooseButton;
+	
 	TemplateChooserViewController *templateChooserViewController;
 }
 

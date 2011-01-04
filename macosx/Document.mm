@@ -2,7 +2,7 @@
 /**
  * OpenEmulator
  * Mac OS X Document
- * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2009-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Handles an emulation.
@@ -13,8 +13,8 @@
 #import "EmulationWindowController.h"
 #import "StringConversion.h"
 
-#import "OEPortAudio.h"
-#import "OEEmulation.h"
+#import "PortAudioHAL.h"
+#import "Emulation.h"
 #import "StorageInterface.h"
 
 #import <sstream>
@@ -74,13 +74,13 @@ void removeCanvas(OEComponent *canvas, void *userData)
 {
 	DocumentController *documentController;
 	documentController = [NSDocumentController sharedDocumentController];
-	OEPortAudio *oePortAudio = (OEPortAudio *)[documentController oePortAudio];
+	PortAudioHAL *portAudioHAL = (PortAudioHAL *)[documentController portAudioHAL];
 	
-	OEEmulation *theEmulation = new OEEmulation();
+	Emulation *theEmulation = new Emulation();
 	
 	theEmulation->setResourcePath(getCPPString([[NSBundle mainBundle] resourcePath]));
 	
-	theEmulation->setComponent("hostAudio", oePortAudio);
+	theEmulation->setComponent("audio", portAudioHAL);
 	
 	theEmulation->setRunAlertCallback(runAlert);
 	theEmulation->setAddCanvasCallback(addCanvas, self);
@@ -89,10 +89,7 @@ void removeCanvas(OEComponent *canvas, void *userData)
 	
 	theEmulation->open(getCPPString([url path]));
 	
-	devicesInfo = new OEDevicesInfo();
-	*((OEDevicesInfo *)devicesInfo) = theEmulation->getDevicesInfo();
-	
-	oePortAudio->addEmulation((OEEmulation *)emulation);
+	portAudioHAL->addEmulation((Emulation *)emulation);
 	
 	emulation = theEmulation;
 }
@@ -101,91 +98,31 @@ void removeCanvas(OEComponent *canvas, void *userData)
 {
 	DocumentController *documentController;
 	documentController = [NSDocumentController sharedDocumentController];
+	PortAudioHAL *portAudioHAL = (PortAudioHAL *)[documentController portAudioHAL];
 	
-	OEPortAudio *oePortAudio = (OEPortAudio *)[documentController oePortAudio];
-	oePortAudio->removeEmulation((OEEmulation *)emulation);
+	portAudioHAL->removeEmulation((Emulation *)emulation);
 	
-	delete (OEEmulation *)emulation;
+	delete (Emulation *)emulation;
 	emulation = nil;
-	
-	delete (OEDevicesInfo *)devicesInfo;
-	devicesInfo = nil;
 }
 
 - (void)lockEmulation
 {
 	DocumentController *documentController;
 	documentController = [NSDocumentController sharedDocumentController];
-	OEPortAudio *oePortAudio = (OEPortAudio *)[documentController oePortAudio];
-	oePortAudio->lockEmulations();
+	PortAudioHAL *portAudioHAL = (PortAudioHAL *)[documentController portAudioHAL];
+	
+	portAudioHAL->lockEmulations();
 }
 
 - (void)unlockEmulation
 {
 	DocumentController *documentController;
 	documentController = [NSDocumentController sharedDocumentController];
-	OEPortAudio *oePortAudio = (OEPortAudio *)[documentController oePortAudio];
-	oePortAudio->unlockEmulations();
+	PortAudioHAL *portAudioHAL = (PortAudioHAL *)[documentController portAudioHAL];
+	
+	portAudioHAL->unlockEmulations();
 }
-
-- (void *)emulation
-{
-	return emulation;
-}
-
-/*
-- (NSImage *)getResourceImage:(NSString *)imagePath
-{
-	NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
-	NSString *path = [[resourcePath
-					   stringByAppendingString:@"/images/"]
-					  stringByAppendingString:imagePath];
-	NSImage *theImage = [[NSImage alloc] initWithContentsOfFile:path];
-	if (theImage)
-		[theImage autorelease];
-	
-	return theImage;
-}
-
-- (NSAttributedString *)formatDeviceLabel:(NSString *)deviceLabel
-					  withInformativeText:(NSString *)informativeText
-{
-	NSMutableParagraphStyle *paragraphStyle;
-	paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
-	[paragraphStyle setLineBreakMode:NSLineBreakByTruncatingTail];
-	NSDictionary *deviceLabelAttrs = [NSDictionary dictionaryWithObjectsAndKeys:
-									  [NSFont messageFontOfSize:12.0f],
-									  NSFontAttributeName,
-									  paragraphStyle,
-									  NSParagraphStyleAttributeName,
-									  [NSColor controlTextColor],
-									  NSForegroundColorAttributeName,
-									  nil];
-	
-	NSMutableAttributedString *aString;
-	aString = [[NSMutableAttributedString alloc] initWithString:deviceLabel
-													 attributes:deviceLabelAttrs];
-	
-	NSDictionary *informativeTextAttrs = [NSDictionary dictionaryWithObjectsAndKeys:
-										  [NSFont messageFontOfSize:9.0f],
-										  NSFontAttributeName,
-										  paragraphStyle,
-										  NSParagraphStyleAttributeName,
-										  [NSColor darkGrayColor],
-										  NSForegroundColorAttributeName,
-										  nil];
-	NSAttributedString *aInformativeText;
-	aInformativeText = [[NSAttributedString alloc] initWithString:informativeText
-													   attributes:informativeTextAttrs];
-	[aString appendAttributedString:aInformativeText];
-	[aInformativeText release];
-	[paragraphStyle release];
-	
-	[aString autorelease];
-	
-	return aString;
-}
-*/
 
 - (BOOL)readFromURL:(NSURL *)absoluteURL
 			 ofType:(NSString *)typeName
@@ -196,7 +133,7 @@ void removeCanvas(OEComponent *canvas, void *userData)
 	
 	if (emulation)
 	{
-		if (((OEEmulation *)emulation)->isOpen())
+		if (((Emulation *)emulation)->isOpen())
 			return YES;
 		
 		[self deleteEmulation];
@@ -220,7 +157,7 @@ void removeCanvas(OEComponent *canvas, void *userData)
 		[emulationWindowController updateWindowPosition];
 		
 		[self lockEmulation];
-		bool isSaved = ((OEEmulation *)emulation)->save(emulationPath);
+		bool isSaved = ((Emulation *)emulation)->save(emulationPath);
 		[self unlockEmulation];
 		
 		if (isSaved)
@@ -275,9 +212,10 @@ void removeCanvas(OEComponent *canvas, void *userData)
 	[self addWindowController:emulationWindowController];
 }
 
-- (void *)devicesInfo
+- (void *)emulationInfo
 {
-	return devicesInfo;
+	Emulation *theEmulation = (Emulation *)emulation;
+	return theEmulation->getEmulationInfo();
 }
 
 - (NSString *)getEDLOptions
@@ -285,14 +223,12 @@ void removeCanvas(OEComponent *canvas, void *userData)
 	if (!emulation)
 		return @"";
 	
+	Emulation *theEmulation = (Emulation *)emulation;
 	string value;
 	
-	if (emulation)
-	{
-		[self lockEmulation];
-		value = ((OEEmulation *)emulation)->getOptions();
-		[self unlockEmulation];
-	}
+	[self lockEmulation];
+	value = theEmulation->getOptions();
+	[self unlockEmulation];
 	
 	return getNSString(value);
 }
@@ -302,15 +238,17 @@ void removeCanvas(OEComponent *canvas, void *userData)
 	if (!emulation)
 		return;
 	
+	Emulation *theEmulation = (Emulation *)emulation;
+	
 	[self lockEmulation];
-	((OEEmulation *)emulation)->setOptions(getCPPString(value));
+	theEmulation->setOptions(getCPPString(value));
 	[self unlockEmulation];
 }
 
 - (void)addEDL:(NSString *)path
    connections:(NSDictionary *)connections
 {
-	if (!emulation)
+/*	if (!emulation)
 		return;
 	
 	string pathString = getCPPString(path);
@@ -330,7 +268,7 @@ void removeCanvas(OEComponent *canvas, void *userData)
 	}
 	
 	[self lockEmulation];
-	bool isAdded = ((OEEmulation *)emulation)->addEDL(pathString, connectionsMap);
+	bool isAdded = ((Emulation *)emulation)->addEDL(pathString, connectionsMap);
 	[self unlockEmulation];
 	
 	if (!isAdded)
@@ -344,12 +282,12 @@ void removeCanvas(OEComponent *canvas, void *userData)
 		[alert release];
 	}
 	
-	[self updateChangeCount:NSChangeDone];
+	[self updateChangeCount:NSChangeDone];*/
 }
 
 - (void)removeDevice:(NSString *)deviceId
 {
-	if (!emulation)
+/*	if (!emulation)
 		return;
 	
 //	NSString *deviceRef = [dict objectForKey:@"ref"];
@@ -372,9 +310,9 @@ void removeCanvas(OEComponent *canvas, void *userData)
 		[alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"Cancel")];
 		if ([alert runModal] != NSAlertDefaultReturn)
 			return;
-	}*/
+	}
 	
-/*	[self lockEmulation];
+	[self lockEmulation];
 	bool isRemoved = ((OEEmulation *)emulation)->removeDevice(refString);
 	[self unlockEmulation];
 	
@@ -391,94 +329,124 @@ void removeCanvas(OEComponent *canvas, void *userData)
 	[self updateChangeCount:NSChangeDone];*/
 }
 
-- (NSString *)getValueOfProperty:(NSString *)theName
-					   component:(NSString *)theId
+- (NSString *)valueOfProperty:(NSString *)theName
+				 forComponent:(NSString *)theId
 {
+	if (!emulation)
+		return @"";
+	
+	Emulation *theEmulation = (Emulation *)emulation;
+	BOOL success = NO;
 	string value;
-	if (emulation)
-	{
-		OEEmulation *theEmulation = (OEEmulation *)emulation;
-		BOOL success = NO;
 		
-		[self lockEmulation];
-		OEComponent *component = theEmulation->getComponent(getCPPString(theId));
-		if (component)
-			success = component->getValue(getCPPString(theName), value);
-		[self unlockEmulation];
+	[self lockEmulation];
+	OEComponent *component = theEmulation->getComponent(getCPPString(theId));
+	if (component)
+		success = component->getValue(getCPPString(theName), value);
+	[self unlockEmulation];
 		
-		if (!success)
-			NSLog(@"invalid property '%@' for '%@'", theName, theId);
-	}
+	if (!success)
+		NSLog(@"invalid property '%@' for '%@'", theName, theId);
 	
 	return getNSString(value);
 }
 
 - (void)setValue:(NSString *)theValue
 	  ofProperty:(NSString *)theName
-	   component:(NSString *)theId
+	forComponent:(NSString *)theId
 {
-	if (emulation)
-	{
-		OEEmulation *theEmulation = (OEEmulation *)emulation;
-		BOOL success = NO;
-		
-		[self lockEmulation];
-		OEComponent *component = theEmulation->getComponent(getCPPString(theId));
-		if (component)
-			success = component->setValue(getCPPString(theName), getCPPString(theValue));
-		[self unlockEmulation];
-		
-		if (!success)
-			NSLog(@"could not set property '%@' for '%@'", theName, theId);
-	}
+	if (!emulation)
+		return;
+	
+	Emulation *theEmulation = (Emulation *)emulation;
+	BOOL success = NO;
+	
+	[self lockEmulation];
+	OEComponent *component = theEmulation->getComponent(getCPPString(theId));
+	if (component)
+		success = component->setValue(getCPPString(theName), getCPPString(theValue));
+	[self unlockEmulation];
+	
+	if (!success)
+		NSLog(@"could not set property '%@' for '%@'", theName, theId);
 }
 
 - (BOOL)mount:(NSString *)path
 {
-	BOOL result = NO;
-	if (emulation)
-	{
-		OEEmulation *theEmulation = (OEEmulation *)emulation;
-		string thePath = getCPPString(path);
-		
-		[self lockEmulation];
-		result = theEmulation->postMessage(NULL, (int)OEEMULATION_MOUNT, &thePath);
-		[self unlockEmulation];
-	}
+	Emulation *theEmulation = (Emulation *)emulation;
 	
-	return result;
-}
-
-- (BOOL)mount:(NSString *)path component:(NSString *)theId
-{
-	BOOL result = NO;
-	if (emulation)
-	{
-		OEEmulation *theEmulation = (OEEmulation *)emulation;
-		string thePath = getCPPString(path);
-		
-		[self lockEmulation];
-		OEComponent *component = theEmulation->getComponent(getCPPString(theId));
-		if (component)
-			result = component->postMessage(NULL, (int)STORAGE_MOUNT, &thePath);
-		[self unlockEmulation];
-	}
+	[self lockEmulation];
+	BOOL result = theEmulation->mount(getCPPString(path));
+	[self unlockEmulation];
 	
 	return result;
 }
 
 - (BOOL)mountable:(NSString *)path
 {
-	BOOL result = NO;
-	if (emulation)
-	{
-		OEComponent *component = (OEComponent *)emulation;
-		string thePath = getCPPString(path);
-		
-		[self lockEmulation];
-		result = component->postMessage(NULL, (int)OEEMULATION_IS_MOUNTABLE, &thePath);
-		[self unlockEmulation];
-	}
+	Emulation *theEmulation = (Emulation *)emulation;
+	
+	[self lockEmulation];
+	BOOL result = theEmulation->isMountable(getCPPString(path));
+	[self unlockEmulation];
+	
+	return result;
+}
+
+- (BOOL)mount:(NSString *)path inStorage:(void *)component
+{
+	if (!component)
+		return NO;
+	
+	OEComponent *theComponent = (OEComponent *)component;
+	string thePath = getCPPString(path);
+	
+	[self lockEmulation];
+	BOOL result = theComponent->postMessage(NULL, (int)STORAGE_MOUNT_IMAGE, &thePath);
+	[self unlockEmulation];
+	
+	return result;
+}
+
+- (BOOL)unmountStorage:(void *)component
+{
+	if (!component)
+		return NO;
+	
+	OEComponent *theComponent = (OEComponent *)component;
+	
+	[self lockEmulation];
+	BOOL result = theComponent->postMessage(NULL, (int)STORAGE_UNMOUNT_IMAGE, NULL);
+	[self unlockEmulation];
+	
+	return result;
+}
+
+- (NSString *)pathOfImageInStorage:(void *)component
+{
+	if (!component)
+		return @"";
+	
+	OEComponent *theComponent = (OEComponent *)component;
+	string path;
+	
+	[self lockEmulation];
+	theComponent->postMessage(NULL, (int)STORAGE_GET_IMAGE_PATH, &path);
+	[self unlockEmulation];
+	
+	return getNSString(path);
+}
+
+- (BOOL)storageLocked:(void *)component
+{
+	if (!component)
+		return NO;
+	
+	OEComponent *theComponent = (OEComponent *)component;
+	
+	[self lockEmulation];
+	BOOL result = theComponent->postMessage(NULL, (int)STORAGE_IS_LOCKED, NULL);
+	[self unlockEmulation];
 	
 	return result;
 }

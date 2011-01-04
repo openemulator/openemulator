@@ -21,8 +21,8 @@
 		00039D2712B01EB40025D374 /* EmulationShowSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = 00039D2512B01EB40025D374 /* EmulationShowSelected.png */; };
 		00039E0C12B0365A0025D374 /* EmulationUnmountRollover.png in Resources */ = {isa = PBXBuildFile; fileRef = 00039E0A12B0365A0025D374 /* EmulationUnmountRollover.png */; };
 		00039E0D12B0365A0025D374 /* EmulationShowRollover.png in Resources */ = {isa = PBXBuildFile; fileRef = 00039E0B12B0365A0025D374 /* EmulationShowRollover.png */; };
-		00039E7F12B03F740025D374 /* OEOpenGLCanvas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00039E3F12B03C3C0025D374 /* OEOpenGLCanvas.cpp */; };
-		00039E8012B03F750025D374 /* OEPortAudio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00039E4112B03C3C0025D374 /* OEPortAudio.cpp */; };
+		00039E7F12B03F740025D374 /* OpenGLHAL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00039E3F12B03C3C0025D374 /* OpenGLHAL.cpp */; };
+		00039E8012B03F750025D374 /* PortAudioHAL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00039E4112B03C3C0025D374 /* PortAudioHAL.cpp */; };
 		00039E9B12B042210025D374 /* libemulation-hal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00039E7C12B03F660025D374 /* libemulation-hal.a */; };
 		00039EB112B042390025D374 /* libemulation-hal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00039E7C12B03F660025D374 /* libemulation-hal.a */; };
 		00039F0112B04EAA0025D374 /* libemulation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00039EFE12B04E910025D374 /* libemulation.a */; };
@@ -31,11 +31,12 @@
 		00039FCD12B04F540025D374 /* libsndfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00039FCC12B04F540025D374 /* libsndfile.a */; };
 		00039FD112B04F6C0025D374 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 00039FD012B04F6C0025D374 /* libxml2.dylib */; };
 		00039FD512B04F810025D374 /* libsamplerate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00039FD412B04F810025D374 /* libsamplerate.a */; };
-		00044CA312CE6FD400D26940 /* AppleDiskII.h in Headers */ = {isa = PBXBuildFile; fileRef = 00044CA112CE6FD400D26940 /* AppleDiskII.h */; };
-		00044CA412CE6FD400D26940 /* AppleDiskII.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00044CA212CE6FD400D26940 /* AppleDiskII.cpp */; };
 		001F56F90FD1E8E500EA246A /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 001F56F80FD1E8E500EA246A /* Sparkle.framework */; };
 		001F916411925BBE005383B3 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0054E4A61131BE8A006D32D9 /* OpenGL.framework */; };
 		003318AF1101492B00CC1782 /* Connector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 003318AD1101492B00CC1782 /* Connector.xib */; };
+		00391CB312D3A320002C5ABD /* LibraryWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00391CB212D3A320002C5ABD /* LibraryWindowController.m */; };
+		00391D6112D3B570002C5ABD /* IconLibrary.png in Resources */ = {isa = PBXBuildFile; fileRef = 00391D6012D3B570002C5ABD /* IconLibrary.png */; };
+		00391D6412D3B588002C5ABD /* Library.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00391D6212D3B588002C5ABD /* Library.xib */; };
 		003E25E71070796700185260 /* images in Resources */ = {isa = PBXBuildFile; fileRef = 003E2597107075D900185260 /* images */; };
 		0040284212B44878001C2F73 /* BackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0040284112B44878001C2F73 /* BackgroundView.m */; };
 		0049F9231277CFDA00553860 /* DocumentController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00AD746811A2F10E00BAC29C /* DocumentController.mm */; };
@@ -52,6 +53,10 @@
 		0076FEDD12A21E4900A3FEC7 /* HardwareChooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0076FEDB12A21E4900A3FEC7 /* HardwareChooser.xib */; };
 		0078F655127348ED0042577E /* AudioControls.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0078F653127348ED0042577E /* AudioControls.xib */; };
 		008107DE1120C57600D744FB /* TemplateChooserViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00FE0C051095353B00B92AB7 /* TemplateChooserViewController.mm */; };
+		00811DFF12D251E9009AD2F0 /* AppleDiskIIInterfaceCard.h in Headers */ = {isa = PBXBuildFile; fileRef = 00811DFD12D251E9009AD2F0 /* AppleDiskIIInterfaceCard.h */; };
+		00811E0012D251E9009AD2F0 /* AppleDiskIIInterfaceCard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00811DFE12D251E9009AD2F0 /* AppleDiskIIInterfaceCard.cpp */; };
+		00811F1212D2738B009AD2F0 /* AppleGraphicsTablet.h in Headers */ = {isa = PBXBuildFile; fileRef = 00811F1012D2738B009AD2F0 /* AppleGraphicsTablet.h */; };
+		00811F1312D2738B009AD2F0 /* AppleGraphicsTablet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00811F1112D2738B009AD2F0 /* AppleGraphicsTablet.cpp */; };
 		00954E781277B79E00C17203 /* EmulationOutlineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00954E771277B79E00C17203 /* EmulationOutlineCell.m */; };
 		00954E991277BB8E00C17203 /* EmulationWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00954E981277BB8E00C17203 /* EmulationWindowController.m */; };
 		00954E9E1277BBB400C17203 /* HardwareChooserWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00954E9D1277BBB400C17203 /* HardwareChooserWindowController.m */; };
@@ -63,40 +68,11 @@
 		00A72B7312879F800083C6A7 /* CanvasWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 00A72B7212879F800083C6A7 /* CanvasWindow.m */; };
 		00A72B951287A0F10083C6A7 /* Canvas.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00A72B931287A0F10083C6A7 /* Canvas.xib */; };
 		00B5709E10863C2A00CDE4A7 /* TemplateChooserWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B5709D10863C2A00CDE4A7 /* TemplateChooserWindowController.m */; };
-		00B888D412A396970052B7A4 /* AddressDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8882E12A393990052B7A4 /* AddressDecoder.cpp */; };
-		00B888D512A3969C0052B7A4 /* AddressOffset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8883012A393990052B7A4 /* AddressOffset.cpp */; };
-		00B888D612A396A00052B7A4 /* Apple1CassetteInterfaceCard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881312A393990052B7A4 /* Apple1CassetteInterfaceCard.cpp */; };
-		00B888D712A396A30052B7A4 /* Apple1IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881512A393990052B7A4 /* Apple1IO.cpp */; };
-		00B888D812A396A70052B7A4 /* Apple1Terminal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881712A393990052B7A4 /* Apple1Terminal.cpp */; };
-		00B888D912A396AA0052B7A4 /* AppleIIAudioIn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881912A393990052B7A4 /* AppleIIAudioIn.cpp */; };
-		00B888DA12A396AD0052B7A4 /* AppleIIAudioOut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881B12A393990052B7A4 /* AppleIIAudioOut.cpp */; };
-		00B888DB12A396B00052B7A4 /* AppleIIControlBus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881D12A393990052B7A4 /* AppleIIControlBus.cpp */; };
-		00B888DC12A396B20052B7A4 /* AppleIIFloatingBus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881F12A393990052B7A4 /* AppleIIFloatingBus.cpp */; };
-		00B888DD12A396B60052B7A4 /* AppleIIGamePort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8882112A393990052B7A4 /* AppleIIGamePort.cpp */; };
-		00B888DE12A396BA0052B7A4 /* AppleIIKeyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8882312A393990052B7A4 /* AppleIIKeyboard.cpp */; };
-		00B888DF12A396BD0052B7A4 /* AppleIIMMU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8882512A393990052B7A4 /* AppleIIMMU.cpp */; };
-		00B888E012A396C00052B7A4 /* AppleIISlotExpansionMemory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8882712A393990052B7A4 /* AppleIISlotExpansionMemory.cpp */; };
-		00B888E112A396C40052B7A4 /* AppleIISlotMemory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8882912A393990052B7A4 /* AppleIISlotMemory.cpp */; };
-		00B888E212A396E20052B7A4 /* MOS6502.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8884312A393990052B7A4 /* MOS6502.cpp */; };
-		00B888E312A396E20052B7A4 /* RAM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8883C12A393990052B7A4 /* RAM.cpp */; };
 		00B888E412A396E20052B7A4 /* OEComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B886C312A3923D0052B7A4 /* OEComponent.cpp */; };
-		00B888E512A396E20052B7A4 /* OEEmulation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B886C912A3923D0052B7A4 /* OEEmulation.cpp */; };
-		00B888E612A396E20052B7A4 /* MC6821.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8885312A393990052B7A4 /* MC6821.cpp */; };
-		00B888E712A396E20052B7A4 /* CharsetLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8883412A393990052B7A4 /* CharsetLoader.cpp */; };
-		00B888E812A396E20052B7A4 /* MC6845.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8885512A393990052B7A4 /* MC6845.cpp */; };
+		00B888E512A396E20052B7A4 /* Emulation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B886C912A3923D0052B7A4 /* Emulation.cpp */; };
 		00B888E912A396E20052B7A4 /* OEComponentFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B886C512A3923D0052B7A4 /* OEComponentFactory.cpp */; };
-		00B888EA12A396E20052B7A4 /* FloatingBus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8883A12A393990052B7A4 /* FloatingBus.cpp */; };
-		00B888EB12A396E20052B7A4 /* ControlBus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8883812A393990052B7A4 /* ControlBus.cpp */; };
-		00B888EC12A396E20052B7A4 /* MOS6530.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8884C12A393990052B7A4 /* MOS6530.cpp */; };
-		00B888ED12A396E20052B7A4 /* AppleIIVideo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8882B12A393990052B7A4 /* AppleIIVideo.cpp */; };
-		00B888EE12A396E20052B7A4 /* MOSKIM1PLL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8885012A393990052B7A4 /* MOSKIM1PLL.cpp */; };
-		00B888EF12A396E20052B7A4 /* MOSKIM1IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8884E12A393990052B7A4 /* MOSKIM1IO.cpp */; };
-		00B888F012A396E20052B7A4 /* AudioSampleConverter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8883212A393990052B7A4 /* AudioSampleConverter.cpp */; };
 		00B888F112A396E20052B7A4 /* OEPackage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B886CB12A3923D0052B7A4 /* OEPackage.cpp */; };
-		00B888F212A396E20052B7A4 /* ROM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8883E12A393990052B7A4 /* ROM.cpp */; };
 		00B888F312A396E20052B7A4 /* OEEDL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B886C712A3923D0052B7A4 /* OEEDL.cpp */; };
-		00B888F412A396E20052B7A4 /* CompositeMonitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8883612A393990052B7A4 /* CompositeMonitor.cpp */; };
-		00B888F512A396E20052B7A4 /* Terminal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8884012A393990052B7A4 /* Terminal.cpp */; };
 		00B974B410701DDA00BD1402 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = 00B974AD10701DCD00BD1402 /* sounds */; };
 		00BADDC51100EDC600EB0344 /* ConnectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00BADD451100BE8300EB0344 /* ConnectorViewController.m */; };
 		00BB34B412C5C5AE007332B5 /* EmulationItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00BB34B312C5C5AE007332B5 /* EmulationItem.mm */; };
@@ -134,6 +110,36 @@
 		00ED37C212779DD900BEF6BD /* IconWarmRestart.png in Resources */ = {isa = PBXBuildFile; fileRef = 00ED37B112779DD800BEF6BD /* IconWarmRestart.png */; };
 		00F01B4712A0D6EC000527CA /* EmulationUnmount.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F01B4612A0D6EC000527CA /* EmulationUnmount.png */; };
 		00F21CE712C7C7EE00A809EF /* VerticallyCenteredTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00F21CE612C7C7EE00A809EF /* VerticallyCenteredTextFieldCell.m */; };
+		00FC27D312D1070A0065E986 /* Apple1CassetteInterfaceCard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881312A393990052B7A4 /* Apple1CassetteInterfaceCard.cpp */; };
+		00FC27D512D1070A0065E986 /* Apple1IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881512A393990052B7A4 /* Apple1IO.cpp */; };
+		00FC27D712D1070A0065E986 /* Apple1Terminal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881712A393990052B7A4 /* Apple1Terminal.cpp */; };
+		00FC27D912D1070A0065E986 /* AppleIIAudioIn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881912A393990052B7A4 /* AppleIIAudioIn.cpp */; };
+		00FC27DB12D1070A0065E986 /* AppleIIAudioOut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881B12A393990052B7A4 /* AppleIIAudioOut.cpp */; };
+		00FC27DD12D1070A0065E986 /* AppleIIControlBus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881D12A393990052B7A4 /* AppleIIControlBus.cpp */; };
+		00FC27DF12D1070A0065E986 /* AppleIIFloatingBus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881F12A393990052B7A4 /* AppleIIFloatingBus.cpp */; };
+		00FC27E112D1070A0065E986 /* AppleIIGamePort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8882112A393990052B7A4 /* AppleIIGamePort.cpp */; };
+		00FC27E312D1070A0065E986 /* AppleIIKeyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8882312A393990052B7A4 /* AppleIIKeyboard.cpp */; };
+		00FC27E512D1070A0065E986 /* AppleIIMMU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8882512A393990052B7A4 /* AppleIIMMU.cpp */; };
+		00FC27E712D1070A0065E986 /* AppleIISlotExpansionMemory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8882712A393990052B7A4 /* AppleIISlotExpansionMemory.cpp */; };
+		00FC27E912D1070A0065E986 /* AppleIISlotMemory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8882912A393990052B7A4 /* AppleIISlotMemory.cpp */; };
+		00FC27EB12D1070A0065E986 /* AppleIIVideo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8882B12A393990052B7A4 /* AppleIIVideo.cpp */; };
+		00FC27EE12D1070A0065E986 /* AppleDiskII.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00044CA212CE6FD400D26940 /* AppleDiskII.cpp */; };
+		00FC27EF12D1070A0065E986 /* AddressDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8882E12A393990052B7A4 /* AddressDecoder.cpp */; };
+		00FC27F112D1070A0065E986 /* AddressOffset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8883012A393990052B7A4 /* AddressOffset.cpp */; };
+		00FC27F312D1070A0065E986 /* AudioSampleConverter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8883212A393990052B7A4 /* AudioSampleConverter.cpp */; };
+		00FC27F512D1070A0065E986 /* CharsetLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8883412A393990052B7A4 /* CharsetLoader.cpp */; };
+		00FC27F712D1070A0065E986 /* CompositeMonitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8883612A393990052B7A4 /* CompositeMonitor.cpp */; };
+		00FC27F912D1070A0065E986 /* ControlBus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8883812A393990052B7A4 /* ControlBus.cpp */; };
+		00FC27FB12D1070A0065E986 /* FloatingBus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8883A12A393990052B7A4 /* FloatingBus.cpp */; };
+		00FC27FD12D1070A0065E986 /* RAM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8883C12A393990052B7A4 /* RAM.cpp */; };
+		00FC27FF12D1070A0065E986 /* ROM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8883E12A393990052B7A4 /* ROM.cpp */; };
+		00FC280112D1070A0065E986 /* Terminal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8884012A393990052B7A4 /* Terminal.cpp */; };
+		00FC280312D1070A0065E986 /* MOS6502.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8884312A393990052B7A4 /* MOS6502.cpp */; };
+		00FC280812D1070A0065E986 /* MOS6530.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8884C12A393990052B7A4 /* MOS6530.cpp */; };
+		00FC280A12D1070A0065E986 /* MOSKIM1IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8884E12A393990052B7A4 /* MOSKIM1IO.cpp */; };
+		00FC280C12D1070A0065E986 /* MOSKIM1PLL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8885012A393990052B7A4 /* MOSKIM1PLL.cpp */; };
+		00FC280E12D1070A0065E986 /* MC6821.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8885312A393990052B7A4 /* MC6821.cpp */; };
+		00FC281012D1070A0065E986 /* MC6845.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8885512A393990052B7A4 /* MC6845.cpp */; };
 		00FE0C171095371B00B92AB7 /* ChooserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00FE0C161095371B00B92AB7 /* ChooserViewController.m */; };
 		00FE0C6310953F7000B92AB7 /* HardwareChooserViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00FE0C6210953F7000B92AB7 /* HardwareChooserViewController.mm */; };
 		00FE381B12CA6790002B47B1 /* EmulationOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 00FE381A12CA6790002B47B1 /* EmulationOutlineView.m */; };
@@ -200,10 +206,10 @@
 		00039D2512B01EB40025D374 /* EmulationShowSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = EmulationShowSelected.png; path = macosx/Images/EmulationShowSelected.png; sourceTree = "<group>"; };
 		00039E0A12B0365A0025D374 /* EmulationUnmountRollover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = EmulationUnmountRollover.png; path = macosx/Images/EmulationUnmountRollover.png; sourceTree = "<group>"; };
 		00039E0B12B0365A0025D374 /* EmulationShowRollover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = EmulationShowRollover.png; path = macosx/Images/EmulationShowRollover.png; sourceTree = "<group>"; };
-		00039E3F12B03C3C0025D374 /* OEOpenGLCanvas.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OEOpenGLCanvas.cpp; path = "libemulation-hal/OEOpenGLCanvas.cpp"; sourceTree = "<group>"; };
-		00039E4012B03C3C0025D374 /* OEOpenGLCanvas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OEOpenGLCanvas.h; path = "libemulation-hal/OEOpenGLCanvas.h"; sourceTree = "<group>"; };
-		00039E4112B03C3C0025D374 /* OEPortAudio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OEPortAudio.cpp; path = "libemulation-hal/OEPortAudio.cpp"; sourceTree = "<group>"; };
-		00039E4212B03C3C0025D374 /* OEPortAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OEPortAudio.h; path = "libemulation-hal/OEPortAudio.h"; sourceTree = "<group>"; };
+		00039E3F12B03C3C0025D374 /* OpenGLHAL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OpenGLHAL.cpp; path = "libemulation-hal/OpenGLHAL.cpp"; sourceTree = "<group>"; };
+		00039E4012B03C3C0025D374 /* OpenGLHAL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OpenGLHAL.h; path = "libemulation-hal/OpenGLHAL.h"; sourceTree = "<group>"; };
+		00039E4112B03C3C0025D374 /* PortAudioHAL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PortAudioHAL.cpp; path = "libemulation-hal/PortAudioHAL.cpp"; sourceTree = "<group>"; };
+		00039E4212B03C3C0025D374 /* PortAudioHAL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PortAudioHAL.h; path = "libemulation-hal/PortAudioHAL.h"; sourceTree = "<group>"; };
 		00039E7C12B03F660025D374 /* libemulation-hal.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libemulation-hal.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		00039EFE12B04E910025D374 /* libemulation.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libemulation.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		00039FC512B04F260025D374 /* libzip.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libzip.a; path = /opt/local/lib/libzip.a; sourceTree = "<absolute>"; };
@@ -223,6 +229,10 @@
 		002579FB1218A83400206E56 /* StringConversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StringConversion.h; sourceTree = "<group>"; };
 		003318AE1101492B00CC1782 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Connector.xib; sourceTree = "<group>"; };
 		003485FD12CDC0AF008774D6 /* StorageInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StorageInterface.h; sourceTree = "<group>"; };
+		00391CB112D3A320002C5ABD /* LibraryWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryWindowController.h; sourceTree = "<group>"; };
+		00391CB212D3A320002C5ABD /* LibraryWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryWindowController.m; sourceTree = "<group>"; };
+		00391D6012D3B570002C5ABD /* IconLibrary.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IconLibrary.png; path = macosx/Images/IconLibrary.png; sourceTree = "<group>"; };
+		00391D6312D3B588002C5ABD /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Library.xib; sourceTree = "<group>"; };
 		003E2597107075D900185260 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
 		0040284012B44878001C2F73 /* BackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BackgroundView.h; sourceTree = "<group>"; };
 		0040284112B44878001C2F73 /* BackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BackgroundView.m; sourceTree = "<group>"; };
@@ -243,6 +253,10 @@
 		0076FED012A21E2B00A3FEC7 /* hardware */ = {isa = PBXFileReference; lastKnownFileType = folder; path = hardware; sourceTree = "<group>"; };
 		0076FEDC12A21E4900A3FEC7 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/HardwareChooser.xib; sourceTree = "<group>"; };
 		0078F654127348ED0042577E /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/AudioControls.xib; sourceTree = "<group>"; };
+		00811DFD12D251E9009AD2F0 /* AppleDiskIIInterfaceCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleDiskIIInterfaceCard.h; sourceTree = "<group>"; };
+		00811DFE12D251E9009AD2F0 /* AppleDiskIIInterfaceCard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleDiskIIInterfaceCard.cpp; sourceTree = "<group>"; };
+		00811F1012D2738B009AD2F0 /* AppleGraphicsTablet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleGraphicsTablet.h; sourceTree = "<group>"; };
+		00811F1112D2738B009AD2F0 /* AppleGraphicsTablet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleGraphicsTablet.cpp; sourceTree = "<group>"; };
 		00954E761277B79E00C17203 /* EmulationOutlineCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmulationOutlineCell.h; sourceTree = "<group>"; };
 		00954E771277B79E00C17203 /* EmulationOutlineCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmulationOutlineCell.m; sourceTree = "<group>"; };
 		00954E971277BB8E00C17203 /* EmulationWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmulationWindowController.h; sourceTree = "<group>"; };
@@ -271,8 +285,8 @@
 		00B886C612A3923D0052B7A4 /* OEComponentFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEComponentFactory.h; sourceTree = "<group>"; };
 		00B886C712A3923D0052B7A4 /* OEEDL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEEDL.cpp; sourceTree = "<group>"; };
 		00B886C812A3923D0052B7A4 /* OEEDL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEEDL.h; sourceTree = "<group>"; };
-		00B886C912A3923D0052B7A4 /* OEEmulation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEEmulation.cpp; sourceTree = "<group>"; };
-		00B886CA12A3923D0052B7A4 /* OEEmulation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEEmulation.h; sourceTree = "<group>"; };
+		00B886C912A3923D0052B7A4 /* Emulation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Emulation.cpp; sourceTree = "<group>"; };
+		00B886CA12A3923D0052B7A4 /* Emulation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Emulation.h; sourceTree = "<group>"; };
 		00B886CB12A3923D0052B7A4 /* OEPackage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEPackage.cpp; sourceTree = "<group>"; };
 		00B886CC12A3923D0052B7A4 /* OEPackage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEPackage.h; sourceTree = "<group>"; };
 		00B886CD12A3923D0052B7A4 /* OETypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OETypes.h; sourceTree = "<group>"; };
@@ -340,12 +354,6 @@
 		00B8886B12A393990052B7A4 /* AppleIIMMUInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppleIIMMUInterface.h; path = libemulation/Interface/Apple/AppleIIMMUInterface.h; sourceTree = SOURCE_ROOT; };
 		00B8886D12A393990052B7A4 /* RS232Interface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RS232Interface.h; path = libemulation/Interface/EIA/RS232Interface.h; sourceTree = SOURCE_ROOT; };
 		00B8886F12A393990052B7A4 /* CPUInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CPUInterface.h; path = libemulation/Interface/Generic/CPUInterface.h; sourceTree = SOURCE_ROOT; };
-		00B8887312A393990052B7A4 /* HostAudioInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HostAudioInterface.h; path = libemulation/Interface/Host/HostAudioInterface.h; sourceTree = SOURCE_ROOT; };
-		00B8887412A393990052B7A4 /* CanvasInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanvasInterface.h; sourceTree = "<group>"; };
-		00B8887512A393990052B7A4 /* HostEthernetInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HostEthernetInterface.h; path = libemulation/Interface/Host/HostEthernetInterface.h; sourceTree = SOURCE_ROOT; };
-		00B8887612A393990052B7A4 /* HostMIDIInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HostMIDIInterface.h; path = libemulation/Interface/Host/HostMIDIInterface.h; sourceTree = SOURCE_ROOT; };
-		00B8887712A393990052B7A4 /* HostUSBInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HostUSBInterface.h; path = libemulation/Interface/Host/HostUSBInterface.h; sourceTree = SOURCE_ROOT; };
-		00B8887812A393990052B7A4 /* HostVideoInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HostVideoInterface.h; path = libemulation/Interface/Host/HostVideoInterface.h; sourceTree = SOURCE_ROOT; };
 		00B8887F12A393990052B7A4 /* IEEE1284Interface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IEEE1284Interface.h; path = libemulation/Interface/IEEE/IEEE1284Interface.h; sourceTree = SOURCE_ROOT; };
 		00B974AD10701DCD00BD1402 /* sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; path = sounds; sourceTree = "<group>"; };
 		00BADD441100BE8300EB0344 /* ConnectorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConnectorViewController.h; sourceTree = "<group>"; };
@@ -385,6 +393,12 @@
 		00F01B4612A0D6EC000527CA /* EmulationUnmount.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = EmulationUnmount.png; path = macosx/Images/EmulationUnmount.png; sourceTree = "<group>"; };
 		00F21CE512C7C7EE00A809EF /* VerticallyCenteredTextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VerticallyCenteredTextFieldCell.h; sourceTree = "<group>"; };
 		00F21CE612C7C7EE00A809EF /* VerticallyCenteredTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VerticallyCenteredTextFieldCell.m; sourceTree = "<group>"; };
+		00FC27A212D106B00065E986 /* AudioInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioInterface.h; sourceTree = "<group>"; };
+		00FC27A312D106B00065E986 /* CanvasInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanvasInterface.h; sourceTree = "<group>"; };
+		00FC27A412D106B00065E986 /* EthernetInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EthernetInterface.h; sourceTree = "<group>"; };
+		00FC27A512D106B00065E986 /* MIDIInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MIDIInterface.h; sourceTree = "<group>"; };
+		00FC27A612D106B00065E986 /* USBInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = USBInterface.h; sourceTree = "<group>"; };
+		00FC27A712D106B00065E986 /* VideoInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoInterface.h; sourceTree = "<group>"; };
 		00FE0C00109534CE00B92AB7 /* ChooserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChooserViewController.h; sourceTree = "<group>"; };
 		00FE0C041095353B00B92AB7 /* TemplateChooserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TemplateChooserViewController.h; sourceTree = "<group>"; };
 		00FE0C051095353B00B92AB7 /* TemplateChooserViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TemplateChooserViewController.mm; sourceTree = "<group>"; };
@@ -447,10 +461,10 @@
 		00039E3C12B03BA90025D374 /* libemulation-hal */ = {
 			isa = PBXGroup;
 			children = (
-				00039E3F12B03C3C0025D374 /* OEOpenGLCanvas.cpp */,
-				00039E4012B03C3C0025D374 /* OEOpenGLCanvas.h */,
-				00039E4112B03C3C0025D374 /* OEPortAudio.cpp */,
-				00039E4212B03C3C0025D374 /* OEPortAudio.h */,
+				00039E3F12B03C3C0025D374 /* OpenGLHAL.cpp */,
+				00039E4012B03C3C0025D374 /* OpenGLHAL.h */,
+				00039E4112B03C3C0025D374 /* PortAudioHAL.cpp */,
+				00039E4212B03C3C0025D374 /* PortAudioHAL.h */,
 			);
 			name = "libemulation-hal";
 			sourceTree = "<group>";
@@ -491,8 +505,8 @@
 				00B886C612A3923D0052B7A4 /* OEComponentFactory.h */,
 				00B886C712A3923D0052B7A4 /* OEEDL.cpp */,
 				00B886C812A3923D0052B7A4 /* OEEDL.h */,
-				00B886C912A3923D0052B7A4 /* OEEmulation.cpp */,
-				00B886CA12A3923D0052B7A4 /* OEEmulation.h */,
+				00B886C912A3923D0052B7A4 /* Emulation.cpp */,
+				00B886CA12A3923D0052B7A4 /* Emulation.h */,
 				00B886CB12A3923D0052B7A4 /* OEPackage.cpp */,
 				00B886CC12A3923D0052B7A4 /* OEPackage.h */,
 				00B886CD12A3923D0052B7A4 /* OETypes.h */,
@@ -546,6 +560,10 @@
 				00B8882C12A393990052B7A4 /* AppleIIVideo.h */,
 				00044CA112CE6FD400D26940 /* AppleDiskII.h */,
 				00044CA212CE6FD400D26940 /* AppleDiskII.cpp */,
+				00811DFD12D251E9009AD2F0 /* AppleDiskIIInterfaceCard.h */,
+				00811DFE12D251E9009AD2F0 /* AppleDiskIIInterfaceCard.cpp */,
+				00811F1012D2738B009AD2F0 /* AppleGraphicsTablet.h */,
+				00811F1112D2738B009AD2F0 /* AppleGraphicsTablet.cpp */,
 			);
 			name = Apple;
 			path = libemulation/Implementation/Apple;
@@ -640,7 +658,6 @@
 				00B8886A12A393990052B7A4 /* Apple */,
 				00B8886C12A393990052B7A4 /* EIA */,
 				00B8886E12A393990052B7A4 /* Generic */,
-				00B8887212A393990052B7A4 /* Host */,
 				00B8887E12A393990052B7A4 /* IEEE */,
 			);
 			name = Interface;
@@ -668,25 +685,17 @@
 		00B8886E12A393990052B7A4 /* Generic */ = {
 			isa = PBXGroup;
 			children = (
+				00FC27A212D106B00065E986 /* AudioInterface.h */,
+				00FC27A312D106B00065E986 /* CanvasInterface.h */,
+				00FC27A412D106B00065E986 /* EthernetInterface.h */,
+				00FC27A512D106B00065E986 /* MIDIInterface.h */,
+				00FC27A612D106B00065E986 /* USBInterface.h */,
+				00FC27A712D106B00065E986 /* VideoInterface.h */,
 				00B8886F12A393990052B7A4 /* CPUInterface.h */,
 				003485FD12CDC0AF008774D6 /* StorageInterface.h */,
 			);
 			name = Generic;
 			path = libemulation/Interface/Generic;
-			sourceTree = SOURCE_ROOT;
-		};
-		00B8887212A393990052B7A4 /* Host */ = {
-			isa = PBXGroup;
-			children = (
-				00B8887312A393990052B7A4 /* HostAudioInterface.h */,
-				00B8887412A393990052B7A4 /* CanvasInterface.h */,
-				00B8887512A393990052B7A4 /* HostEthernetInterface.h */,
-				00B8887612A393990052B7A4 /* HostMIDIInterface.h */,
-				00B8887712A393990052B7A4 /* HostUSBInterface.h */,
-				00B8887812A393990052B7A4 /* HostVideoInterface.h */,
-			);
-			name = Host;
-			path = libemulation/Interface/Host;
 			sourceTree = SOURCE_ROOT;
 		};
 		00B8887E12A393990052B7A4 /* IEEE */ = {
@@ -701,21 +710,20 @@
 		00C3CF8C11F557A000EA2453 /* openemulator-sdl */ = {
 			isa = PBXGroup;
 			children = (
-				00C3CF9211F557AC00EA2453 /* src */,
+				00C3CF9211F557AC00EA2453 /* sdl */,
 			);
 			name = "openemulator-sdl";
 			path = sdl;
 			sourceTree = "<group>";
 		};
-		00C3CF9211F557AC00EA2453 /* src */ = {
+		00C3CF9211F557AC00EA2453 /* sdl */ = {
 			isa = PBXGroup;
 			children = (
 				00C3CF8D11F557A000EA2453 /* main.cpp */,
 				00C3CF8E11F557A000EA2453 /* SDLMain.h */,
 				00C3CF8F11F557A000EA2453 /* SDLMain.m */,
 			);
-			name = src;
-			path = ../src;
+			name = sdl;
 			sourceTree = "<group>";
 		};
 		19C28FB0FE9D524F11CA2CBB /* Products */ = {
@@ -791,6 +799,8 @@
 				00002C2D12C922D900508957 /* ActionMenuButton.m */,
 				00FE381912CA6790002B47B1 /* EmulationOutlineView.h */,
 				00FE381A12CA6790002B47B1 /* EmulationOutlineView.m */,
+				00391CB112D3A320002C5ABD /* LibraryWindowController.h */,
+				00391CB212D3A320002C5ABD /* LibraryWindowController.m */,
 			);
 			name = Sources;
 			path = macosx;
@@ -799,6 +809,8 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				00391D6212D3B588002C5ABD /* Library.xib */,
+				00391D6012D3B570002C5ABD /* IconLibrary.png */,
 				00039E0A12B0365A0025D374 /* EmulationUnmountRollover.png */,
 				00039E0B12B0365A0025D374 /* EmulationShowRollover.png */,
 				00039D2412B01EB40025D374 /* EmulationUnmountSelected.png */,
@@ -884,7 +896,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00044CA312CE6FD400D26940 /* AppleDiskII.h in Headers */,
+				00811DFF12D251E9009AD2F0 /* AppleDiskIIInterfaceCard.h in Headers */,
+				00811F1212D2738B009AD2F0 /* AppleGraphicsTablet.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1046,6 +1059,8 @@
 				00039E0C12B0365A0025D374 /* EmulationUnmountRollover.png in Resources */,
 				00039E0D12B0365A0025D374 /* EmulationShowRollover.png in Resources */,
 				00D6729D12C9A256009F0D9E /* EmulationShow.png in Resources */,
+				00391D6112D3B570002C5ABD /* IconLibrary.png in Resources */,
+				00391D6412D3B588002C5ABD /* Library.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1056,8 +1071,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00039E7F12B03F740025D374 /* OEOpenGLCanvas.cpp in Sources */,
-				00039E8012B03F750025D374 /* OEPortAudio.cpp in Sources */,
+				00039E7F12B03F740025D374 /* OpenGLHAL.cpp in Sources */,
+				00039E8012B03F750025D374 /* PortAudioHAL.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1074,41 +1089,43 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00B888D412A396970052B7A4 /* AddressDecoder.cpp in Sources */,
-				00B888D512A3969C0052B7A4 /* AddressOffset.cpp in Sources */,
-				00B888D612A396A00052B7A4 /* Apple1CassetteInterfaceCard.cpp in Sources */,
-				00B888D712A396A30052B7A4 /* Apple1IO.cpp in Sources */,
-				00B888D812A396A70052B7A4 /* Apple1Terminal.cpp in Sources */,
-				00B888D912A396AA0052B7A4 /* AppleIIAudioIn.cpp in Sources */,
-				00B888DA12A396AD0052B7A4 /* AppleIIAudioOut.cpp in Sources */,
-				00B888DB12A396B00052B7A4 /* AppleIIControlBus.cpp in Sources */,
-				00B888DC12A396B20052B7A4 /* AppleIIFloatingBus.cpp in Sources */,
-				00B888DD12A396B60052B7A4 /* AppleIIGamePort.cpp in Sources */,
-				00B888DE12A396BA0052B7A4 /* AppleIIKeyboard.cpp in Sources */,
-				00B888DF12A396BD0052B7A4 /* AppleIIMMU.cpp in Sources */,
-				00B888E012A396C00052B7A4 /* AppleIISlotExpansionMemory.cpp in Sources */,
-				00B888E112A396C40052B7A4 /* AppleIISlotMemory.cpp in Sources */,
-				00B888E212A396E20052B7A4 /* MOS6502.cpp in Sources */,
-				00B888E312A396E20052B7A4 /* RAM.cpp in Sources */,
 				00B888E412A396E20052B7A4 /* OEComponent.cpp in Sources */,
-				00B888E512A396E20052B7A4 /* OEEmulation.cpp in Sources */,
-				00B888E612A396E20052B7A4 /* MC6821.cpp in Sources */,
-				00B888E712A396E20052B7A4 /* CharsetLoader.cpp in Sources */,
-				00B888E812A396E20052B7A4 /* MC6845.cpp in Sources */,
+				00B888E512A396E20052B7A4 /* Emulation.cpp in Sources */,
 				00B888E912A396E20052B7A4 /* OEComponentFactory.cpp in Sources */,
-				00B888EA12A396E20052B7A4 /* FloatingBus.cpp in Sources */,
-				00B888EB12A396E20052B7A4 /* ControlBus.cpp in Sources */,
-				00B888EC12A396E20052B7A4 /* MOS6530.cpp in Sources */,
-				00B888ED12A396E20052B7A4 /* AppleIIVideo.cpp in Sources */,
-				00B888EE12A396E20052B7A4 /* MOSKIM1PLL.cpp in Sources */,
-				00B888EF12A396E20052B7A4 /* MOSKIM1IO.cpp in Sources */,
-				00B888F012A396E20052B7A4 /* AudioSampleConverter.cpp in Sources */,
 				00B888F112A396E20052B7A4 /* OEPackage.cpp in Sources */,
-				00B888F212A396E20052B7A4 /* ROM.cpp in Sources */,
 				00B888F312A396E20052B7A4 /* OEEDL.cpp in Sources */,
-				00B888F412A396E20052B7A4 /* CompositeMonitor.cpp in Sources */,
-				00B888F512A396E20052B7A4 /* Terminal.cpp in Sources */,
-				00044CA412CE6FD400D26940 /* AppleDiskII.cpp in Sources */,
+				00FC27D312D1070A0065E986 /* Apple1CassetteInterfaceCard.cpp in Sources */,
+				00FC27D512D1070A0065E986 /* Apple1IO.cpp in Sources */,
+				00FC27D712D1070A0065E986 /* Apple1Terminal.cpp in Sources */,
+				00FC27D912D1070A0065E986 /* AppleIIAudioIn.cpp in Sources */,
+				00FC27DB12D1070A0065E986 /* AppleIIAudioOut.cpp in Sources */,
+				00FC27DD12D1070A0065E986 /* AppleIIControlBus.cpp in Sources */,
+				00FC27DF12D1070A0065E986 /* AppleIIFloatingBus.cpp in Sources */,
+				00FC27E112D1070A0065E986 /* AppleIIGamePort.cpp in Sources */,
+				00FC27E312D1070A0065E986 /* AppleIIKeyboard.cpp in Sources */,
+				00FC27E512D1070A0065E986 /* AppleIIMMU.cpp in Sources */,
+				00FC27E712D1070A0065E986 /* AppleIISlotExpansionMemory.cpp in Sources */,
+				00FC27E912D1070A0065E986 /* AppleIISlotMemory.cpp in Sources */,
+				00FC27EB12D1070A0065E986 /* AppleIIVideo.cpp in Sources */,
+				00FC27EE12D1070A0065E986 /* AppleDiskII.cpp in Sources */,
+				00FC27EF12D1070A0065E986 /* AddressDecoder.cpp in Sources */,
+				00FC27F112D1070A0065E986 /* AddressOffset.cpp in Sources */,
+				00FC27F312D1070A0065E986 /* AudioSampleConverter.cpp in Sources */,
+				00FC27F512D1070A0065E986 /* CharsetLoader.cpp in Sources */,
+				00FC27F712D1070A0065E986 /* CompositeMonitor.cpp in Sources */,
+				00FC27F912D1070A0065E986 /* ControlBus.cpp in Sources */,
+				00FC27FB12D1070A0065E986 /* FloatingBus.cpp in Sources */,
+				00FC27FD12D1070A0065E986 /* RAM.cpp in Sources */,
+				00FC27FF12D1070A0065E986 /* ROM.cpp in Sources */,
+				00FC280112D1070A0065E986 /* Terminal.cpp in Sources */,
+				00FC280312D1070A0065E986 /* MOS6502.cpp in Sources */,
+				00FC280812D1070A0065E986 /* MOS6530.cpp in Sources */,
+				00FC280A12D1070A0065E986 /* MOSKIM1IO.cpp in Sources */,
+				00FC280C12D1070A0065E986 /* MOSKIM1PLL.cpp in Sources */,
+				00FC280E12D1070A0065E986 /* MC6821.cpp in Sources */,
+				00FC281012D1070A0065E986 /* MC6845.cpp in Sources */,
+				00811E0012D251E9009AD2F0 /* AppleDiskIIInterfaceCard.cpp in Sources */,
+				00811F1312D2738B009AD2F0 /* AppleGraphicsTablet.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1139,6 +1156,7 @@
 				00F21CE712C7C7EE00A809EF /* VerticallyCenteredTextFieldCell.m in Sources */,
 				00002C2E12C922D900508957 /* ActionMenuButton.m in Sources */,
 				00FE381B12CA6790002B47B1 /* EmulationOutlineView.m in Sources */,
+				00391CB312D3A320002C5ABD /* LibraryWindowController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1174,6 +1192,14 @@
 				003318AE1101492B00CC1782 /* English */,
 			);
 			name = Connector.xib;
+			sourceTree = "<group>";
+		};
+		00391D6212D3B588002C5ABD /* Library.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				00391D6312D3B588002C5ABD /* English */,
+			);
+			name = Library.xib;
 			sourceTree = "<group>";
 		};
 		00679D06100817F700B38748 /* TemplateChooser.xib */ = {

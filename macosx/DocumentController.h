@@ -10,27 +10,30 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "AudioControlsWindowController.h"
-#import "TemplateChooserWindowController.h"
-
 @class AudioControlsWindowController;
 @class TemplateChooserWindowController;
+@class LibraryWindowController;
 
-@interface DocumentController : NSDocumentController {
-	AudioControlsWindowController *fAudioControlsWindowController;
-	TemplateChooserWindowController *fTemplateChooserWindowController;
+@interface DocumentController : NSDocumentController
+{
+	IBOutlet AudioControlsWindowController *fAudioControlsWindowController;
+	IBOutlet TemplateChooserWindowController *fTemplateChooserWindowController;
+	IBOutlet LibraryWindowController *fLibraryWindowController;
 	
 	NSArray *diskImagePathExtensions;
 	NSArray *audioPathExtensions;
+	NSArray *textPathExtensions;
 	
-	void *oePortAudio;
+	void *portAudioHAL;
 	
 	int disableMenuBarCount;
 }
 
 - (NSArray *)diskImagePathExtensions;
 - (NSArray *)audioPathExtensions;
-- (void *)oePortAudio;
+- (NSArray *)textPathExtensions;
+
+- (void *)portAudioHAL;
 
 - (void)toggleAudioControls:(id)sender;
 - (IBAction)newDocumentFromTemplateChooser:(id)sender;

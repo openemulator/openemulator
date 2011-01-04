@@ -99,11 +99,12 @@ cellWasDoubleClickedAtIndex:(NSUInteger)index
 		NSString *imagePath = [imagesPath
 							   stringByAppendingPathComponent:imageName];
 		
-		ChooserItem *item = [[ChooserItem alloc]
-							 initWithTitle:[inlet objectForKey:@"label"]
-							 imagePath:imagePath
-							 edlDescription:@""
-							 edlData:[inlet objectForKey:@"ref"]];
+		ChooserItem *item;
+		item = [[ChooserItem alloc] initWithLabel:[inlet objectForKey:@"label"]
+										imagePath:imagePath
+									  description:@""
+										  edlPath:nil
+										  data:[inlet objectForKey:@"ref"]];
 		
 		if (item)
 		{
@@ -126,7 +127,7 @@ cellWasDoubleClickedAtIndex:(NSUInteger)index
 	
 	ChooserItem *item = [self imageBrowser:fImageBrowserView
 							   itemAtIndex:index];
-	return [[[item data] copy] autorelease];
+	return [[(NSString *)[item data] copy] autorelease];
 }
 
 @end

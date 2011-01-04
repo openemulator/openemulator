@@ -112,4 +112,12 @@
 	}
 }
 
+- (NSRect)frameOfOutlineCellAtRow:(NSInteger)row
+{
+	if (!row)
+		return NSZeroRect;
+	
+	return [super frameOfOutlineCellAtRow:row];
+}
+
 @end

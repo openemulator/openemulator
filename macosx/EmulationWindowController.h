@@ -10,25 +10,33 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "EmulationItem.h"
-#import "EmulationOutlineView.h"
+@class EmulationOutlineView;
+@class EmulationItem;
 
 @interface EmulationWindowController : NSWindowController
 {
-	id fSplitView;
+	IBOutlet id fSplitView;
 	IBOutlet EmulationOutlineView *fOutlineView;
-	id fRemoveDevice;
-	id fDeviceBox;
-	id fDeviceImage;
-	id fDeviceLocationLabel;
-	id fDeviceStateLabel;
-	id fDeviceButton;
-	id fTableView;
-	id fTableKeyColumn;
-	id fTableValueColumn;
+	IBOutlet id fRemoveDevice;
+	IBOutlet id fDeviceBox;
+	IBOutlet id fDeviceImage;
+	IBOutlet id fDeviceLine1Key;
+	IBOutlet id fDeviceLine1Value;
+	IBOutlet id fDeviceLine2Key;
+	IBOutlet id fDeviceLine2Value;
+	IBOutlet id fDeviceLine3Key;
+	IBOutlet id fDeviceLine3Value;
+	IBOutlet id fDeviceLine4Key;
+	IBOutlet id fDeviceLine4Value;
+	IBOutlet id fDeviceButton;
+	IBOutlet id fTableView;
+	IBOutlet id fTableKeyColumn;
+	IBOutlet id fTableValueColumn;
 	
 	EmulationItem *rootItem;
+	
 	EmulationItem *selectedItem;
+	EmulationItem *clickedItem;
 	
 	NSButtonCell *checkBoxCell;
 	NSPopUpButtonCell *popUpButtonCell;
@@ -37,9 +45,13 @@
 
 - (void)updateWindowPosition;
 
+- (EmulationItem *)itemForSender:(id)sender;
+- (BOOL)mountImage:(NSString *)path inItem:(id)item;
+
+- (IBAction)buttonAction:(id)sender;
 - (IBAction)showDevice:(id)sender;
 - (IBAction)revealInFinder:(id)sender;
-- (IBAction)mountDevice:(id)sender;
-- (IBAction)ejectDevice:(id)sender;
+- (IBAction)openStorage:(id)sender;
+- (IBAction)unmountImage:(id)sender;
 
 @end

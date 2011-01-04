@@ -9,9 +9,11 @@
  */
 
 #import "EmulationWindowController.h"
-
+#import "EmulationItem.h"
+#import "EmulationOutlineView.h"
 #import "EmulationOutlineCell.h"
 #import "VerticallyCenteredTextFieldCell.h"
+#import "DocumentController.h"
 #import "StringConversion.h"
 
 #define SPLIT_VERT_MIN 128
@@ -58,8 +60,8 @@
 	NSImage *image = nil;
 	NSString *locationLabel = @"";
 	NSString *stateLabel = @"";
-	BOOL showable = NO;
-	BOOL mountable = NO;
+	BOOL canvas = NO;
+	BOOL storage = NO;
 	BOOL mounted = NO;
 	
 	if (selectedItem)
@@ -69,28 +71,32 @@
 		locationLabel = [selectedItem location];
 		if (![locationLabel length])
 			locationLabel = NSLocalizedString(@"Built-in",
-											  @"Location Label");
+											  @"Emulation Location Label.");
 		stateLabel = NSLocalizedString([selectedItem state],
-									   @"State Label");
-		showable = [selectedItem showable];
-		mountable = [selectedItem mountable];
+									   @"Emulation State Label.");
+		canvas = [selectedItem canvas];
+		storage = [selectedItem storage];
 		mounted = [selectedItem mounted];
 	}
 	
 	[fDeviceBox setTitle:title];
 	[fDeviceImage setImage:image];
-	[fDeviceLocationLabel setStringValue:locationLabel];
-	[fDeviceStateLabel setStringValue:stateLabel];
-	[fDeviceButton setHidden:!(showable || mountable || mounted)];
-	if (showable)
+	[fDeviceLine1Key setStringValue:@""];
+	[fDeviceLine2Key setStringValue:@"Location:"];
+	[fDeviceLine2Value setStringValue:locationLabel];
+	[fDeviceLine3Key setStringValue:@"State:"];
+	[fDeviceLine3Value setStringValue:stateLabel];
+	[fDeviceLine4Key setStringValue:@""];
+	[fDeviceButton setHidden:!(canvas || storage || mounted)];
+	if (canvas)
 		[fDeviceButton setTitle:NSLocalizedString(@"Show Device",
-												  @"Emulation Button Label")];
-	else if (mountable)
+												  @"Emulation Button Label.")];
+	else if (storage)
 		[fDeviceButton setTitle:NSLocalizedString(@"Open...",
-												  @"Emulation Button Label")];
+												  @"Emulation Button Label.")];
 	else if (mounted)
 		[fDeviceButton setTitle:NSLocalizedString(@"Unmount",
-												  @"Emulation Button Label")];
+												  @"Emulation Button Label.")];
 	
 	[fTableView reloadData];
 }
@@ -101,16 +107,18 @@
 	rootItem = [[EmulationItem alloc] initWithDocument:[self document]];
 	
 	[fOutlineView reloadData];
+	
+	[fOutlineView expandItem:nil expandChildren:YES];
 }
 
 - (void)updateWindowPosition
 {
-	BOOL isVisible = [[self window] isVisible];
+/*	BOOL isVisible = [[self window] isVisible];
 	NSString *frameString = [[self window] stringWithSavedFrame];
 	
 	frameString = [frameString stringByAppendingFormat:@"%d", isVisible];
 	
-	[[self document] setEDLOptions:frameString];
+	[[self document] setEDLOptions:frameString];*/
 }
 
 - (void)windowDidLoad
@@ -128,6 +136,7 @@
 	
 	[fOutlineView setDelegate:self];
 	[fOutlineView setDataSource:self];
+	[fOutlineView setDoubleAction:@selector(outlineDoubleAction:)];
 	[fOutlineView registerForDraggedTypes:[NSArray arrayWithObjects:
 										   NSFilenamesPboardType,
 										   nil]];
@@ -140,7 +149,7 @@
 			  byExtendingSelection:NO];
 	
 	// Parse window frame
-	NSString *frameString = [[self document] getEDLOptions];
+/*	NSString *frameString = [[self document] getEDLOptions];
 	NSArray *components = [frameString componentsSeparatedByString:@" "];
 	if ([components count] == 9)
 	{
@@ -156,7 +165,7 @@
 		[[self window] setFrameFromString:theString];
 		if ([isVisible compare:@"0"] == NSOrderedSame)
 			[[self window] orderOut:self];
-	}
+	}*/
 }
 
 
@@ -171,14 +180,25 @@
 		return nil;
 	
 	[item autorelease];
-	if ([ident isEqualToString:@"AudioControls"])
+	if ([ident isEqualToString:@"Library"])
+	{
+		[item setLabel:NSLocalizedString(@"Library",
+										 @"Emulation Toolbar Label.")];
+		[item setPaletteLabel:NSLocalizedString(@"Library",
+												@"Emulation Toolbar Palette Label.")];
+		[item setToolTip:NSLocalizedString(@"Show or hide library.",
+										   @"Emulation Toolbar Tool Tip.")];
+		[item setImage:[NSImage imageNamed:@"IconLibrary.png"]];
+		[item setAction:@selector(togglelibrary:)];
+	}
+	else if ([ident isEqualToString:@"AudioControls"])
 	{
 		[item setLabel:NSLocalizedString(@"Audio Controls",
-										 "Canvas window toolbar item")];
+										 @"Emulation Toolbar Label.")];
 		[item setPaletteLabel:NSLocalizedString(@"Audio Controls",
-												"Canvas window toolbar item")];
+												@"Emulation Toolbar Palette Label.")];
 		[item setToolTip:NSLocalizedString(@"Show or hide audio controls.",
-										   "Canvas window toolbar item")];
+										   @"Emulation Toolbar Tool Tip.")];
 		[item setImage:[NSImage imageNamed:@"IconAudio.png"]];
 		[item setAction:@selector(toggleAudioControls:)];
 	}
@@ -191,12 +211,14 @@
 	return [NSArray arrayWithObjects:
 			NSToolbarFlexibleSpaceItemIdentifier,
 			@"AudioControls",
+			@"Library",
 			nil];
 }
 
 - (NSArray *)toolbarAllowedItemIdentifiers:(NSToolbar *)toolbar
 {
 	return [NSArray arrayWithObjects:
+			@"Library",
 			@"AudioControls",
 			NSToolbarSeparatorItemIdentifier,
 			NSToolbarSpaceItemIdentifier,
@@ -287,8 +309,26 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				  proposedItem:(id)item
 			proposedChildIndex:(NSInteger)index
 {
-	// To-Do: validate file type
-	return [outlineView parentForItem:item] ? NSDragOperationCopy : NSDragOperationNone;
+	NSLog(@"%d", index);
+	if (![item uid] || (index != -1))
+		return NSDragOperationNone;
+	
+	NSPasteboard *pasteboard = [info draggingPasteboard];
+	
+	DocumentController *documentController;
+	documentController = [NSDocumentController sharedDocumentController];
+	
+	NSString *path = [[pasteboard propertyListForType:NSFilenamesPboardType]
+					  objectAtIndex:0];
+	NSString *pathExtension = [[path pathExtension] lowercaseString];
+	
+	if ([[documentController diskImagePathExtensions] containsObject:pathExtension])
+	{
+		if ([item storage])
+			return NSDragOperationCopy;
+	}
+	
+	return NSDragOperationNone;
 }
 
 - (BOOL)outlineView:(NSOutlineView *)outlineView
@@ -296,7 +336,11 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			   item:(id)item
 		 childIndex:(NSInteger)index
 {
-	return YES;
+	NSPasteboard *pasteboard = [info draggingPasteboard];
+	NSString *path = [[pasteboard propertyListForType:NSFilenamesPboardType]
+					  objectAtIndex:0];
+	
+	return [self mountImage:path inItem:item];
 }
 
 
@@ -417,13 +461,20 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
 
 
 
-- (void)emulationDoubleAction:(id)sender
+- (void)outlineDoubleAction:(id)sender
 {
-	// Get selected device
-	// If storage is present and disk is not mounted, mountDevice()
-	// else if storage is present and disk is mounted, revealInFinder()
-	// else if canvas is present, showDevice()
+	if ([fOutlineView clickedRow] == -1)
+		return;
+	
+	EmulationItem *item = [self itemForSender:sender];
+	
+	if ([item canvas])
+		[self showDevice:sender];
+	else if ([item storage])
+		[self openStorage:sender];
 }
+
+
 
 - (void)addEDL:(id)sender
 {
@@ -435,30 +486,100 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
 	// Remove device
 }
 
-- (void)showDevice:(id)sender
+- (EmulationItem *)itemForSender:(id)sender
 {
-	// Get selected device
-	// Show all associated windows
+	return selectedItem;
 }
 
-- (void)revealInFinder:(id)sender
+- (BOOL)mountImage:(NSString *)path inItem:(id)item
 {
-	// Get selected device
-	// Get path to mounted disk image
-	// Open Finder at path
+	if (![item mount:path])
+	{
+		
+		NSAlert *alert = [[NSAlert alloc] init];
+		[alert setMessageText:[NSString localizedStringWithFormat:
+							   @"The document \u201C%@\u201D could not be opened. "
+							   "The device \u201C%@\u201D cannot open files in this format.",
+							   [path lastPathComponent], [item label]]];
+		[alert setInformativeText:[NSString localizedStringWithFormat:
+								   @"Try opening the document with another emulation."]];
+		[alert beginSheetModalForWindow:[self window]
+						  modalDelegate:nil
+						 didEndSelector:nil
+							contextInfo:nil];
+		[alert release];
+		
+		return NO;
+	}
+	
+	[self updateSidebar];
+	
+	return YES;
 }
 
-- (void)mountDevice:(id)sender
+
+
+- (IBAction)buttonAction:(id)sender
 {
-	// Get selected device
-	// Open disk image open dialog
-	// Attempt to mount disk image in device's storage components
+	EmulationItem *item = [self itemForSender:sender];
+	
+	if ([item canvas])
+		[self showDevice:sender];
+	else if ([item storage])
+		[self openStorage:sender];
+	else if ([item mounted])
+		[self unmountImage:sender];
 }
 
-- (void)ejectDevice:(id)sender
+- (IBAction)showDevice:(id)sender
 {
 	// Get selected device
-	// Attempt to eject all device's storage components
+	// Show all windows
+}
+
+- (IBAction)revealInFinder:(id)sender
+{
+	EmulationItem *item = [self itemForSender:sender];
+	
+	[[NSWorkspace sharedWorkspace] openFile:[item storagePath]
+							withApplication:@"Finder"];
+}
+
+- (IBAction)openStorage:(id)sender
+{
+	NSOpenPanel *panel = [NSOpenPanel openPanel];
+	DocumentController *documentController;
+	documentController = [NSDocumentController sharedDocumentController];
+	NSArray *fileTypes = [documentController diskImagePathExtensions];
+	
+	[panel beginSheetForDirectory:nil
+							 file:nil
+							types:fileTypes
+				   modalForWindow:[self window]
+					modalDelegate:self
+				   didEndSelector:@selector(openPanelDidEnd:returnCode:contextInfo:)
+					  contextInfo:[self itemForSender:sender]];
+}
+
+- (void)openPanelDidEnd:(NSOpenPanel *)panel
+			 returnCode:(int)returnCode
+			contextInfo:(void *)contextInfo
+{
+	if (returnCode == NSOKButton)
+	{
+		NSString *path = [[panel URL] path];
+		[panel close];
+		
+		[self mountImage:path inItem:contextInfo];
+	}
+}
+
+- (IBAction)unmountImage:(id)sender
+{
+	EmulationItem *item = [self itemForSender:sender];
+	[item unmount];
+	
+	[self updateSidebar];
 }
 
 @end

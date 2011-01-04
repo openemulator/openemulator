@@ -2,7 +2,7 @@
 /**
  * OpenEmulator
  * Mac OS X Document
- * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2009-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Handles an emulation.
@@ -17,7 +17,6 @@
 @interface Document : NSDocument
 {
 	void *emulation;
-	void *devicesInfo;
 	
 	EmulationWindowController *emulationWindowController;
 }
@@ -30,21 +29,23 @@
 - (id)initWithTemplateURL:(NSURL *)templateURL error:(NSError **)outError;
 - (IBAction)saveDocumentAsTemplate:(id)sender;
 
-- (void *)devicesInfo;
-
-- (NSString *)getEDLOptions;
-- (void)setEDLOptions:(NSString *)value;
+- (void *)emulationInfo;
 
 - (void)addEDL:(NSString *)path connections:(NSDictionary *)connections;
 - (void)removeDevice:(NSString *)deviceId;
 
-- (NSString *)getValueOfProperty:(NSString *)name
-					   component:(NSString *)theId;
+- (NSString *)valueOfProperty:(NSString *)name
+				 forComponent:(NSString *)theId;
 - (void)setValue:(NSString *)value
 	  ofProperty:(NSString *)theName
-	   component:(NSString *)theId;
+	forComponent:(NSString *)theId;
+
 - (BOOL)mount:(NSString *)path;
-- (BOOL)mount:(NSString *)path component:(NSString *)deviceId;
 - (BOOL)mountable:(NSString *)path;
+
+- (BOOL)mount:(NSString *)path inStorage:(void *)component;
+- (BOOL)unmountStorage:(void *)component;
+- (NSString *)pathOfImageInStorage:(void *)component;
+- (BOOL)storageLocked:(void *)component;
 
 @end

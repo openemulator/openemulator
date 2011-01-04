@@ -2,7 +2,7 @@
 /**
  * OpenEmulator
  * Mac OS X Audio Controls Window Controller
- * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Controls the audio controls window.
@@ -10,24 +10,22 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "DocumentController.h"
-
 @class DocumentController;
 
 @interface AudioControlsWindowController : NSWindowController
 {
-	DocumentController *fDocumentController;
+	IBOutlet DocumentController *fDocumentController;
 	
-	id fPlayNameLabel;
-	id fTogglePlayButton;
-	id fPlayTimeLabel;
-	id	fPlayPosition;
-	id fPlayDurationLabel;
+	IBOutlet id fPlayNameLabel;
+	IBOutlet id fTogglePlayButton;
+	IBOutlet id fPlayTimeLabel;
+	IBOutlet id fPlayPosition;
+	IBOutlet id fPlayDurationLabel;
 	
-	id fSaveRecordingAsButton;
-	id fToggleRecordingButton;
-	id fRecordingTimeLabel;
-	id fRecordingSizeLabel;
+	IBOutlet id fSaveRecordingAsButton;
+	IBOutlet id fToggleRecordingButton;
+	IBOutlet id fRecordingTimeLabel;
+	IBOutlet id fRecordingSizeLabel;
 	
 	NSTimer *timer;
 	

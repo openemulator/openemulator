@@ -162,29 +162,7 @@
 				<string>cpm</string>
 				<string>nib</string>
 				<string>v2d</string>
-			</array>
-			<key>CFBundleTypeIconFile</key>
-			<string>DiskImage525.icns</string>
-			<key>CFBundleTypeName</key>
-			<string>Apple II 5.25&quot; Disk Image</string>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-		</dict>
-		<dict>
-			<key>CFBundleTypeExtensions</key>
-			<array>
 				<string>vdsk</string>
-			</array>
-			<key>CFBundleTypeIconFile</key>
-			<string>DiskImage35.icns</string>
-			<key>CFBundleTypeName</key>
-			<string>Apple II 3.5&quot; Disk Image</string>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-		</dict>
-		<dict>
-			<key>CFBundleTypeExtensions</key>
-			<array>
 				<string>2img</string>
 				<string>2mg</string>
 			</array>
@@ -204,7 +182,7 @@
 				<string>p00</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
-			<string>DiskImage525.icns</string>
+			<string>DiskImage.icns</string>
 			<key>CFBundleTypeName</key>
 			<string>Commodore Program</string>
 			<key>CFBundleTypeRole</key>
@@ -222,7 +200,7 @@
 				<string>g64</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
-			<string>DiskImage525.icns</string>
+			<string>DiskImage.icns</string>
 			<key>CFBundleTypeName</key>
 			<string>Commodore Disk Image</string>
 			<key>CFBundleTypeRole</key>

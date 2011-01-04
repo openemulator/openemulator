@@ -1,14 +1,14 @@
 
 /**
  * OpenEmulator
- * OpenEmulator OpenGL canvas
+ * OpenGL HAL
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements an OpenEmulator OpenGL canvas.
+ * Implements an OpenGL HAL.
  */
 
-#include "OEOpenGLCanvas.h"
+#include "OpenGLHAL.h"
 
 typedef struct
 {
@@ -152,7 +152,7 @@ void main(void)
 }
 */
 
-OEOpenGLCanvas::OEOpenGLCanvas()
+OpenGLHAL::OpenGLHAL()
 {
 	// Init structures
 	//	pthread_mutex_init(&glMutex, NULL);
@@ -163,12 +163,12 @@ OEOpenGLCanvas::OEOpenGLCanvas()
 	mouseCaptured = false;
 }
 
-OEOpenGLCanvas::~OEOpenGLCanvas()
+OpenGLHAL::~OpenGLHAL()
 {
 	glDeleteTextures(OEGL_TEX_NUM, textures);
 }
 
-void OEOpenGLCanvas::initOpenGL()
+void OpenGLHAL::initOpenGL()
 {
 	glDisable(GL_ALPHA_TEST);
 	glDisable(GL_CULL_FACE);
@@ -186,14 +186,14 @@ void OEOpenGLCanvas::initOpenGL()
 	glGenTextures(OEGL_TEX_NUM, textures);
 }
 
-void OEOpenGLCanvas::draw(int width, int height)
+void OpenGLHAL::draw(int width, int height)
 {
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void OEOpenGLCanvas::postHIDNotification(int notification, int usageId, float value)
+void OpenGLHAL::postHIDNotification(int notification, int usageId, float value)
 {
-	HostCanvasHIDNotification data;
+	CanvasHIDNotification data;
 	
 	data.usageId = usageId;
 	data.value = value;
@@ -201,23 +201,23 @@ void OEOpenGLCanvas::postHIDNotification(int notification, int usageId, float va
 	notify(this, notification, &data);
 }
 
-void OEOpenGLCanvas::setSystemKey(int usageId)
+void OpenGLHAL::setSystemKey(int usageId)
 {
-	postHIDNotification(HOST_CANVAS_SYSTEMKEYBOARD_DID_CHANGE, usageId, 0);
+	postHIDNotification(CANVAS_SYSTEMKEYBOARD_DID_CHANGE, usageId, 0);
 }
 
-void OEOpenGLCanvas::setKey(int usageId, bool value)
+void OpenGLHAL::setKey(int usageId, bool value)
 {
 	if (keyDown[usageId] == value)
 		return;
 	keyDown[usageId] = value;
 	
-	postHIDNotification(HOST_CANVAS_KEYBOARD_DID_CHANGE, usageId, value);
+	postHIDNotification(CANVAS_KEYBOARD_DID_CHANGE, usageId, value);
 	
-	if ((keyDown[HOST_CANVAS_K_LEFTCONTROL] ||
-		 keyDown[HOST_CANVAS_K_RIGHTCONTROL]) &&
-		(keyDown[HOST_CANVAS_K_LEFTALT] ||
-		 keyDown[HOST_CANVAS_K_RIGHTALT]))
+	if ((keyDown[CANVAS_K_LEFTCONTROL] ||
+		 keyDown[CANVAS_K_RIGHTCONTROL]) &&
+		(keyDown[CANVAS_K_LEFTALT] ||
+		 keyDown[CANVAS_K_RIGHTALT]))
 		mouseCaptureRelease = true;
 	
 	if (mouseCaptureRelease && !keyDownCount)
@@ -228,7 +228,7 @@ void OEOpenGLCanvas::setKey(int usageId, bool value)
 	}
 }
 
-void OEOpenGLCanvas::setUnicodeKey(int unicode)
+void OpenGLHAL::setUnicodeKey(int unicode)
 {
 	if (unicode == 127)
 		unicode = 8;
@@ -237,12 +237,12 @@ void OEOpenGLCanvas::setUnicodeKey(int unicode)
 	if (((unicode < 0xe000) || (unicode > 0xf8ff)) &&
 		((unicode < 0xf0000) || (unicode > 0xffffd)) &&
 		((unicode < 0x100000) || (unicode > 0x10fffd)))
-		postHIDNotification(HOST_CANVAS_UNICODEKEYBOARD_DID_CHANGE, unicode, 0);
+		postHIDNotification(CANVAS_UNICODEKEYBOARD_DID_CHANGE, unicode, 0);
 }
 
-void OEOpenGLCanvas::setMouseButton(int index, bool value)
+void OpenGLHAL::setMouseButton(int index, bool value)
 {
-	if (index >= HOST_CANVAS_MOUSE_BUTTON_NUM)
+	if (index >= CANVAS_MOUSE_BUTTON_NUM)
 		return;
 	
 	if (mouseButtonDown[index] == value)
@@ -251,8 +251,8 @@ void OEOpenGLCanvas::setMouseButton(int index, bool value)
 	mouseButtonDown[index] = value;
 	
 	if (mouseCaptured)
-		postHIDNotification(HOST_CANVAS_MOUSE_DID_CHANGE,
-							HOST_CANVAS_M_BUTTON1 + index,
+		postHIDNotification(CANVAS_MOUSE_DID_CHANGE,
+							CANVAS_M_BUTTON1 + index,
 							value);
 	/*	else if (!mouseCaptured && mouseCapture && (index == 0))
 	 {
@@ -260,58 +260,58 @@ void OEOpenGLCanvas::setMouseButton(int index, bool value)
 	 setMouseCapture(emulation, true);
 	 }
 	 */	else
-		 postHIDNotification(HOST_CANVAS_POINTER_DID_CHANGE,
-							 HOST_CANVAS_P_BUTTON1 + index,
+		 postHIDNotification(CANVAS_POINTER_DID_CHANGE,
+							 CANVAS_P_BUTTON1 + index,
 							 value);
 }
 
-void OEOpenGLCanvas::setMousePosition(float x, float y)
+void OpenGLHAL::setMousePosition(float x, float y)
 {
 	if (mouseCaptured)
 		return;
 	
-	postHIDNotification(HOST_CANVAS_POINTER_DID_CHANGE,
-						HOST_CANVAS_P_X,
+	postHIDNotification(CANVAS_POINTER_DID_CHANGE,
+						CANVAS_P_X,
 						x);
-	postHIDNotification(HOST_CANVAS_POINTER_DID_CHANGE,
-						HOST_CANVAS_P_Y,
+	postHIDNotification(CANVAS_POINTER_DID_CHANGE,
+						CANVAS_P_Y,
 						y);
 }
 
-void OEOpenGLCanvas::moveMouse(float rx, float ry)
+void OpenGLHAL::moveMouse(float rx, float ry)
 {
 	if (!mouseCaptured)
 		return;
 	
-	postHIDNotification(HOST_CANVAS_MOUSE_DID_CHANGE,
-						HOST_CANVAS_M_RELX,
+	postHIDNotification(CANVAS_MOUSE_DID_CHANGE,
+						CANVAS_M_RELX,
 						rx);
-	postHIDNotification(HOST_CANVAS_MOUSE_DID_CHANGE,
-						HOST_CANVAS_M_RELY,
+	postHIDNotification(CANVAS_MOUSE_DID_CHANGE,
+						CANVAS_M_RELY,
 						ry);
 }
 
-void OEOpenGLCanvas::sendMouseWheelEvent(int index, float value)
+void OpenGLHAL::sendMouseWheelEvent(int index, float value)
 {
 	if (!value)
 		return;
 	
 	if (mouseCaptured)
-		postHIDNotification(HOST_CANVAS_MOUSE_DID_CHANGE,
-							HOST_CANVAS_M_WHEELX + index,
+		postHIDNotification(CANVAS_MOUSE_DID_CHANGE,
+							CANVAS_M_WHEELX + index,
 							value);
 	else
-		postHIDNotification(HOST_CANVAS_POINTER_DID_CHANGE,
-							HOST_CANVAS_P_WHEELX + index,
+		postHIDNotification(CANVAS_POINTER_DID_CHANGE,
+							CANVAS_P_WHEELX + index,
 							value);
 }
 
-void OEOpenGLCanvas::setJoystickButton(int deviceIndex, int index, bool value)
+void OpenGLHAL::setJoystickButton(int deviceIndex, int index, bool value)
 {
-	if (deviceIndex >= HOST_CANVAS_JOYSTICK_NUM)
+	if (deviceIndex >= CANVAS_JOYSTICK_NUM)
 		return;
 	
-	if (index >= HOST_CANVAS_JOYSTICK_BUTTON_NUM)
+	if (index >= CANVAS_JOYSTICK_BUTTON_NUM)
 		return;
 	
 	if (joystickButtonDown[deviceIndex][index] == value)
@@ -319,51 +319,51 @@ void OEOpenGLCanvas::setJoystickButton(int deviceIndex, int index, bool value)
 	
 	joystickButtonDown[deviceIndex][index] = value;
 	
-	postHIDNotification(HOST_CANVAS_JOYSTICK1_DID_CHANGE + deviceIndex,
-						HOST_CANVAS_J_BUTTON1 + index,
+	postHIDNotification(CANVAS_JOYSTICK1_DID_CHANGE + deviceIndex,
+						CANVAS_J_BUTTON1 + index,
 						value);
 }
 
-void OEOpenGLCanvas::setJoystickPosition(int deviceIndex, int index, float value)
+void OpenGLHAL::setJoystickPosition(int deviceIndex, int index, float value)
 {
-	if (deviceIndex >= HOST_CANVAS_JOYSTICK_NUM)
+	if (deviceIndex >= CANVAS_JOYSTICK_NUM)
 		return;
 	
-	if (index >= HOST_CANVAS_JOYSTICK_AXIS_NUM)
+	if (index >= CANVAS_JOYSTICK_AXIS_NUM)
 		return;
 	
-	postHIDNotification(HOST_CANVAS_JOYSTICK1_DID_CHANGE + deviceIndex,
-						HOST_CANVAS_J_AXIS1 + index,
+	postHIDNotification(CANVAS_JOYSTICK1_DID_CHANGE + deviceIndex,
+						CANVAS_J_AXIS1 + index,
 						value);
 }
 
-void OEOpenGLCanvas::sendJoystickHatEvent(int deviceIndex, int index, float value)
+void OpenGLHAL::sendJoystickHatEvent(int deviceIndex, int index, float value)
 {
-	if (deviceIndex >= HOST_CANVAS_JOYSTICK_NUM)
+	if (deviceIndex >= CANVAS_JOYSTICK_NUM)
 		return;
 	
-	if (index >= HOST_CANVAS_JOYSTICK_HAT_NUM)
+	if (index >= CANVAS_JOYSTICK_HAT_NUM)
 		return;
 	
-	postHIDNotification(HOST_CANVAS_JOYSTICK1_DID_CHANGE + deviceIndex,
-						HOST_CANVAS_J_AXIS1 + index,
+	postHIDNotification(CANVAS_JOYSTICK1_DID_CHANGE + deviceIndex,
+						CANVAS_J_AXIS1 + index,
 						value);
 }
 
-void OEOpenGLCanvas::moveJoystickBall(int deviceIndex, int index, float value)
+void OpenGLHAL::moveJoystickBall(int deviceIndex, int index, float value)
 {
-	if (deviceIndex >= HOST_CANVAS_JOYSTICK_NUM)
+	if (deviceIndex >= CANVAS_JOYSTICK_NUM)
 		return;
 	
-	if (index >= HOST_CANVAS_JOYSTICK_RAXIS_NUM)
+	if (index >= CANVAS_JOYSTICK_RAXIS_NUM)
 		return;
 	
-	postHIDNotification(HOST_CANVAS_JOYSTICK1_DID_CHANGE + deviceIndex,
-						HOST_CANVAS_J_AXIS1 + index,
+	postHIDNotification(CANVAS_JOYSTICK1_DID_CHANGE + deviceIndex,
+						CANVAS_J_AXIS1 + index,
 						value);
 }
 
-void OEOpenGLCanvas::resetKeysAndButtons()
+void OpenGLHAL::resetKeysAndButtons()
 {
 	for (int i = 0; i < sizeof(keyDown); i++)
 	{

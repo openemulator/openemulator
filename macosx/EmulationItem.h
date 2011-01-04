@@ -12,18 +12,29 @@
 
 #import "Document.h"
 
+@interface EmulationStorage : NSObject
+{
+	void *storage;
+}
+
+@end
+
 @interface EmulationItem : NSObject
 {
 	Document *document;
 	
 	NSString *uid;
-	NSString *label;
 	NSImage *image;
+	NSString *label;
 	NSString *location;
 	NSString *state;
-	BOOL showable;
-	BOOL mountable;
+	
+	BOOL canvas;
+	
+	BOOL storage;
 	BOOL mounted;
+	NSString *diskImagePath;
+	void *storageComponent;
 	
 	NSMutableArray *settingsRefs;
 	NSMutableArray *settingsNames;
@@ -39,10 +50,9 @@
 - (id)initWithDeviceInfo:(void *)theDeviceInfo
 			  inDocument:(Document *)theDocument;
 - (id)initWithDiskImageAtPath:(NSString *)thePath
-			 storageComponent:(void *)theStorageComponent
+					  storage:(void *)theComponent
 					 location:(NSString *)theLocation
-					 readOnly:(BOOL)isReadOnly
-					   locked:(BOOL)isLocked;
+				   inDocument:(Document *)theDocument;
 
 - (NSImage *)getImage:(NSString *)path;
 
@@ -51,16 +61,22 @@
 - (NSString *)label;
 - (NSString *)location;
 - (NSString *)state;
-- (BOOL)showable;
-- (BOOL)mountable;
+
+- (BOOL)canvas;
+
+- (BOOL)storage;
 - (BOOL)mounted;
+- (BOOL)locked;
+- (NSString *)storagePath;
+- (BOOL)mount:(NSString *)path;
+- (void)unmount;
 
 - (NSInteger)numberOfSettings;
 - (NSString *)labelForSettingAtIndex:(NSInteger)index;
 - (NSString *)typeForSettingAtIndex:(NSInteger)index;
 - (NSArray *)optionsForSettingAtIndex:(NSInteger)index;
-- (NSString *)valueForSettingAtIndex:(NSInteger)index;
 - (void)setValue:(NSString *)value forSettingAtIndex:(NSInteger)index;
+- (NSString *)valueForSettingAtIndex:(NSInteger)index;
 
 - (NSMutableArray *)children;
 - (EmulationItem *)childWithUid:(NSString *)theUid;

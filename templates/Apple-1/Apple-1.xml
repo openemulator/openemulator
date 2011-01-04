@@ -11,7 +11,7 @@
 <port id="apple1.slot2" ref="" type="Apple1Slot" label="Slot 2" image="Apple-1 Slot.png" />
 <component id="apple1.controlBus" class="ControlBus">
 	<property name="emulation" ref="emulation" />
-    <property name="hostAudio" ref="hostAudio" />
+    <property name="audio" ref="audio" />
     <property name="crystalFrequency" value="14.31818MHz" />
     <property name="cpuFrequencyDivider" value="14" />
     <property name="cpu" ref="apple1.cpu" />

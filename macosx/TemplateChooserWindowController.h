@@ -10,15 +10,15 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "DocumentController.h"
-#import "TemplateChooserViewController.h"
+@class TemplateChooserViewController;
 
 @interface TemplateChooserWindowController : NSWindowController
 {
-	id fDocumentController;
+	IBOutlet id fDocumentController;
 	
-	id fTemplateChooserView;
-	id fChooseButton;
+	IBOutlet id fTemplateChooserView;
+	IBOutlet id fChooseButton;
+	
 	TemplateChooserViewController *templateChooserViewController;
 }
 

@@ -12,9 +12,12 @@
 
 #import "DocumentController.h"
 #import "Document.h"
+#import "AudioControlsWindowController.h"
+#import "TemplateChooserWindowController.h"
+#import "LibraryWindowController.h"
 #import "StringConversion.h"
 
-#import "OEPortAudio.h"
+#import "PortAudioHAL.h"
 
 #define LINK_HOMEPAGE	@"http://www.openemulator.org"
 #define LINK_FORUMSURL	@"http://groups.google.com/group/openemulator"
@@ -27,12 +30,11 @@
 {
 	if (self = [super init])
 	{
-		oePortAudio = new OEPortAudio();
+		portAudioHAL = new PortAudioHAL();
 		
 		diskImagePathExtensions = [[NSArray alloc] initWithObjects:
 								   @"bin",
-								   @"dsk", @"do", @"d13", @"po", @"cpm", @"nib", @"v2d",
-								   @"vdsk",
+								   @"dsk", @"do", @"d13", @"po", @"cpm", @"nib", @"v2d", @"vdsk",
 								   @"2mg", @"2img",
 								   @"t64", @"tap", @"prg", @"p00",
 								   @"d64", @"d71", @"d80", @"d81", @"d82", @"x64", @"g64",
@@ -51,6 +53,10 @@
 							   @"caf",
 							   @"ogg", @"oga",
 							   nil];
+		
+		textPathExtensions = [[NSArray alloc] initWithObjects:
+							  @"txt",
+							  nil];
 	}
 	
 	return self;
@@ -60,8 +66,9 @@
 {
 	[diskImagePathExtensions release];
 	[audioPathExtensions release];
+	[textPathExtensions release];
 	
-	delete (OEPortAudio *)oePortAudio;
+	delete (PortAudioHAL *)portAudioHAL;
 	
 	[super dealloc];
 }
@@ -82,6 +89,8 @@
 	
 	if ([userDefaults boolForKey:@"OEAudioControlsVisible"])
 		[fAudioControlsWindowController showWindow:self];
+	if ([userDefaults boolForKey:@"OELibraryVisible"])
+		[fLibraryWindowController showWindow:self];
 	
 	[userDefaults addObserver:self
 				   forKeyPath:@"OEAudioFullDuplex"
@@ -96,11 +105,11 @@
 					  options:NSKeyValueObservingOptionNew
 					  context:nil];
 	
-	((OEPortAudio *)oePortAudio)->setFullDuplex([userDefaults boolForKey:@"OEAudioFullDuplex"]);
-	((OEPortAudio *)oePortAudio)->setPlayVolume([userDefaults floatForKey:@"OEAudioPlayVolume"]);
-	((OEPortAudio *)oePortAudio)->setPlayThrough([userDefaults boolForKey:@"OEAudioPlayThrough"]);
+	((PortAudioHAL *)portAudioHAL)->setFullDuplex([userDefaults boolForKey:@"OEAudioFullDuplex"]);
+	((PortAudioHAL *)portAudioHAL)->setPlayVolume([userDefaults floatForKey:@"OEAudioPlayVolume"]);
+	((PortAudioHAL *)portAudioHAL)->setPlayThrough([userDefaults boolForKey:@"OEAudioPlayThrough"]);
 	
-	((OEPortAudio *)oePortAudio)->open();
+	((PortAudioHAL *)portAudioHAL)->open();
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)notification
@@ -109,11 +118,13 @@
 
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender
 {
-	((OEPortAudio *)oePortAudio)->close();
+	((PortAudioHAL *)portAudioHAL)->close();
 	
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	[userDefaults setBool:[[fAudioControlsWindowController window] isVisible]
 				   forKey:@"OEAudioControlsVisible"];
+	[userDefaults setBool:[[fLibraryWindowController window] isVisible]
+				   forKey:@"OELibraryVisible"];
 	
 	return NSTerminateNow;
 }
@@ -139,11 +150,11 @@
 	id theObject = [change objectForKey:NSKeyValueChangeNewKey];
 	
 	if ([keyPath isEqualToString:@"OEAudioFullDuplex"])
-		((OEPortAudio *)oePortAudio)->setFullDuplex([theObject boolValue]);
+		((PortAudioHAL *)portAudioHAL)->setFullDuplex([theObject boolValue]);
 	else if ([keyPath isEqualToString:@"OEAudioPlayVolume"])
-		((OEPortAudio *)oePortAudio)->setPlayVolume([theObject floatValue]);
+		((PortAudioHAL *)portAudioHAL)->setPlayVolume([theObject floatValue]);
 	else if ([keyPath isEqualToString:@"OEAudioPlayThrough"])
-		((OEPortAudio *)oePortAudio)->setPlayThrough([theObject boolValue]);
+		((PortAudioHAL *)portAudioHAL)->setPlayThrough([theObject boolValue]);
 }
 
 - (BOOL)application:(NSApplication *)theApplication
@@ -195,11 +206,10 @@
 			NSAlert *alert = [[NSAlert alloc] init];
 			[alert setMessageText:[NSString localizedStringWithFormat:
 								   @"The document \u201C%@\u201D could not be opened. "
-								   "All devices capable of opening this file are busy.",
+								   "There are no available devices for mounting the disk image.",
 								   [path lastPathComponent]]];
 			[alert setInformativeText:[NSString localizedStringWithFormat:
-									   @"Try ejecting a disk image in the emulation."]];
-			[alert setAlertStyle:NSCriticalAlertStyle];
+									   @"Try unmounting a disk image in the emulation."]];
 			[alert runModal];
 			[alert release];
 			
@@ -240,9 +250,14 @@
 	return audioPathExtensions;
 }
 
-- (void *)oePortAudio
+- (NSArray *)textPathExtensions
 {
-	return oePortAudio;
+	return textPathExtensions;
+}
+
+- (void *)portAudioHAL
+{
+	return portAudioHAL;
 }
 
 - (void)toggleAudioControls:(id)sender
@@ -262,7 +277,7 @@
 	[fileTypes addObject:@OE_PACKAGE_PATH_EXTENSION];
 	[fileTypes addObjectsFromArray:audioPathExtensions];
 	[fileTypes addObjectsFromArray:diskImagePathExtensions];
-	[fileTypes addObject:@"txt"];
+	[fileTypes addObjectsFromArray:textPathExtensions];
 	
 	if ([panel runModalForTypes:fileTypes] == NSOKButton)
 	{

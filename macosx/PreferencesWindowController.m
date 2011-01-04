@@ -9,6 +9,7 @@
  */
 
 #import "PreferencesWindowController.h"
+#import "TemplateChooserViewController.h"
 
 @implementation PreferencesWindowController
 
@@ -64,21 +65,21 @@
 	
 	if ([ident isEqualToString:@"General"])
 	{
-		[item setLabel:NSLocalizedString(@"General", @"Preferences toolbar item label")];
+		[item setLabel:NSLocalizedString(@"General", @"Preferences Toolbar.")];
 		[item setImage:[NSImage imageNamed:@"IconGeneral.png"]];
 		[item setTarget:self];
 		[item setAction:@selector(selectView:)];
 	}
 	else if ([ident isEqualToString:@"Audio"])
 	{
-		[item setLabel:NSLocalizedString(@"Audio", @"Preferences toolbar item label")];
+		[item setLabel:NSLocalizedString(@"Audio", @"Preferences Toolbar.")];
 		[item setImage:[NSImage imageNamed:@"IconAudio.png"]];
 		[item setTarget:self];
 		[item setAction:@selector(selectView:)];
 	}
 	else if ([ident isEqualToString:@"Video"])
 	{
-		[item setLabel:NSLocalizedString(@"Video", @"Preferences toolbar item label")];
+		[item setLabel:NSLocalizedString(@"Video", @"Preferences Toolbar.")];
 		[item setImage:[NSImage imageNamed:@"IconVideo.png"]];
 		[item setTarget:self];
 		[item setAction:@selector(selectView:)];
@@ -140,7 +141,7 @@
 	[window setFrame:windowRect display:YES animate:YES];
 	[view setHidden:NO];
 	
-	[window setTitle:NSLocalizedString(itemIdentifier, @"Preferences view")];
+	[window setTitle:NSLocalizedString(itemIdentifier, @"Preferences.")];
 }
 
 - (void)updateGeneralView
@@ -152,7 +153,7 @@
 - (void)setUseTemplate:(BOOL)useTemplate
 {
 	NSString *useTemplateTitle = NSLocalizedString(@"Use template: ",
-												   @"Use template: ");
+												   @"Preferences.");
 	
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	NSString *defaultTemplatePath = [defaults stringForKey:@"OEDefaultTemplatePath"];

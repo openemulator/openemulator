@@ -59,89 +59,89 @@
 	if ([ident isEqualToString:@"Power Down"])
 	{
 		[item setLabel:NSLocalizedString(@"Power Down",
-										 "Canvas window toolbar item")];
+										 @"Canvas Toolbar Label.")];
 		[item setPaletteLabel:NSLocalizedString(@"Power Down",
-												"Canvas window toolbar item")];
+												@"Canvas Toolbar Palette Label.")];
 		[item setToolTip:NSLocalizedString(@"Initiate power-down.",
-										   "Canvas window toolbar item")];
+										   @"Canvas Toolbar Tool Tip.")];
 		[item setImage:[NSImage imageNamed:@"IconPowerDown.png"]];
 		[item setAction:@selector(systemPowerDown:)];
 	}
 	else if ([ident isEqualToString:@"Sleep"])
 	{
 		[item setLabel:NSLocalizedString(@"Sleep",
-										 "Canvas window toolbar item")];
+										 @"Canvas Toolbar Label.")];
 		[item setPaletteLabel:NSLocalizedString(@"Sleep",
-												"Canvas window toolbar item")];
+												@"Canvas Toolbar Palette Label.")];
 		[item setToolTip:NSLocalizedString(@"Initiate low power mode.",
-										   "Canvas window toolbar item")];
+										   @"Canvas Toolbar Tool Tip.")];
 		[item setImage:[NSImage imageNamed:@"IconSleep.png"]];
 		[item setAction:@selector(systemSleep:)];
 	}
 	else if ([ident isEqualToString:@"Wake Up"])
 	{
 		[item setLabel:NSLocalizedString(@"Wake Up",
-										 "Canvas window toolbar item")];
+										 @"Canvas Toolbar Label.")];
 		[item setPaletteLabel:NSLocalizedString(@"Wake Up",
-												"Canvas window toolbar item")];
+												@"Canvas Toolbar Palette Label.")];
 		[item setToolTip:NSLocalizedString(@"Initiate full power state.",
-										   "Canvas window toolbar item")];
+										   @"Canvas Toolbar Tool Tip.")];
 		[item setImage:[NSImage imageNamed:@"IconWakeUp.png"]];
 		[item setAction:@selector(systemWakeUp:)];
 	}
 	else if ([ident isEqualToString:@"Cold Restart"])
 	{
 		[item setLabel:NSLocalizedString(@"Cold Restart",
-										 "Canvas window toolbar item")];
+										 @"Canvas Toolbar Label.")];
 		[item setPaletteLabel:NSLocalizedString(@"Cold Restart",
-												"Canvas window toolbar item")];
+												@"Canvas Toolbar Palette Label.")];
 		[item setToolTip:NSLocalizedString(@"Restart the system at the most "
 										   "primitive level.",
-										   "Canvas window toolbar item")];
+										   @"Canvas Toolbar Tool Tip.")];
 		[item setImage:[NSImage imageNamed:@"IconColdRestart.png"]];
 		[item setAction:@selector(systemColdRestart:)];
 	}
 	else if ([ident isEqualToString:@"Warm Restart"])
 	{
 		[item setLabel:NSLocalizedString(@"Warm Restart",
-										 "Canvas window toolbar item")];
+										 @"Canvas Toolbar Label.")];
 		[item setPaletteLabel:NSLocalizedString(@"Warm Restart",
-												"Canvas window toolbar item")];
+												@"Canvas Toolbar Palette Label.")];
 		[item setToolTip:NSLocalizedString(@"Restart the operating system.",
-										   "Canvas window toolbar item")];
+										   @"Canvas Toolbar Tool Tip.")];
 		[item setImage:[NSImage imageNamed:@"IconWarmRestart.png"]];
 		[item setAction:@selector(systemWarmRestart:)];
 	}
 	else if ([ident isEqualToString:@"Debugger Break"])
 	{
 		[item setLabel:NSLocalizedString(@"Debugger Break",
-										 "Canvas window toolbar item")];
+										 @"Canvas Toolbar Label.")];
 		[item setPaletteLabel:NSLocalizedString(@"Debugger Break",
-												"Canvas window toolbar item")];
+												@"Canvas Toolbar Palette Label.")];
 		[item setToolTip:NSLocalizedString(@"Break into the operating system debugger.",
-										   "Canvas window toolbar item")];
+										   @"Canvas Toolbar Tool Tip.")];
 		[item setImage:[NSImage imageNamed:@"IconDebuggerBreak.png"]];
 		[item setAction:@selector(systemDebuggerBreak:)];
 	}
 	else if ([ident isEqualToString:@"AudioControls"])
 	{
 		[item setLabel:NSLocalizedString(@"Audio Controls",
-										 "Canvas window toolbar item")];
+										 @"Canvas Toolbar Label.")];
 		[item setPaletteLabel:NSLocalizedString(@"Audio Controls",
-												"Canvas window toolbar item")];
+												@"Canvas Toolbar Palette Label.")];
 		[item setToolTip:NSLocalizedString(@"Show or hide audio controls.",
-										   "Canvas window toolbar item")];
+										   @"Canvas Toolbar Tool Tip.")];
 		[item setImage:[NSImage imageNamed:@"IconAudio.png"]];
 		[item setAction:@selector(toggleAudioControls:)];
 	}
 	else if ([ident isEqualToString:@"Info"])
 	{
 		[item setLabel:NSLocalizedString(@"Info",
-										 "Canvas window toolbar item")];
+										 @"Canvas Toolbar Label.")];
 		[item setPaletteLabel:NSLocalizedString(@"Info",
-												"Canvas window toolbar item")];
+												@"Canvas Toolbar Palette Label.")];
 		[item setToolTip:NSLocalizedString(@"Show info.",
-										   "Canvas window toolbar item")];
+										   @"Canvas Toolbar Tool Tip.")];
 		[item setImage:[NSImage imageNamed:@"IconDevices.png"]];
 		[item setAction:@selector(showDevices:)];
 	}
