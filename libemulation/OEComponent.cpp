@@ -81,9 +81,9 @@ bool OEComponent::removeDelegate(OEComponent *delegate, int delegation)
 	return (i != last);
 }
 
-void OEComponent::replaceDelegate(OEComponent *oldDelegate,
-								  OEComponent *newDelegate,
-								  int delegation)
+void OEComponent::setDelegate(OEComponent *oldDelegate,
+							  OEComponent *newDelegate,
+							  int delegation)
 {
 	if (oldDelegate)
 		oldDelegate->removeObserver(this, delegation);
@@ -120,9 +120,9 @@ bool OEComponent::removeObserver(OEComponent *observer, int notification)
 	return (i != last);
 }
 
-void OEComponent::replaceObserver(OEComponent *oldObserver,
-								  OEComponent *newObserver,
-								  int notification)
+void OEComponent::setObserver(OEComponent *oldObserver,
+							  OEComponent *newObserver,
+							  int notification)
 {
 	if (oldObserver)
 		oldObserver->removeObserver(this, notification);
@@ -211,7 +211,14 @@ string OEComponent::getString(int value)
 	return ss.str();
 }
 
-string OEComponent::getHex(int value)
+string OEComponent::getString(float value)
+{
+	stringstream ss;
+	ss << value;
+	return ss.str();
+}
+
+string OEComponent::getHexString(int value)
 {
 	stringstream ss;
 	ss << "0x" << hex << value;

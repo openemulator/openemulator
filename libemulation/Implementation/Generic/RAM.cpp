@@ -42,7 +42,7 @@ bool RAM::setRef(string name, OEComponent *ref)
 {
 	if (name == "controlBus")
 	{
-		replaceObserver(controlBus, ref, CONTROLBUS_POWERSTATE_DID_CHANGE);
+		setObserver(controlBus, ref, CONTROLBUS_POWERSTATE_DID_CHANGE);
 		controlBus = ref;
 	}
 	else
@@ -112,7 +112,7 @@ bool RAM::postMessage(OEComponent *sender, int message, void *data)
 			return true;
 	}
 	
-	return false;
+	return OEComponent::postMessage(sender, message, data);
 }
 
 void RAM::notify(OEComponent *sender, int notification, void *data)

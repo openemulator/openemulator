@@ -15,12 +15,16 @@
    $Date: 2010/11/04 $
 -->
 
-<!ELEMENT edl (device*|connector*|port*|component*)>
+<!ELEMENT edl (window*|device*|connector*|port*|component*)>
 <!ATTLIST edl version CDATA "1.0">
 <!ATTLIST edl label CDATA #IMPLIED>
 <!ATTLIST edl image CDATA #IMPLIED>
 <!ATTLIST edl description CDATA #IMPLIED>
-<!ATTLIST edl window CDATA #IMPLIED>
+
+<!ELEMENT window EMPTY>
+<!ATTLIST window id ID #REQUIRED>
+<!ATTLIST window frame CDATA #REQUIRED>
+<!ATTLIST window visible CDATA #REQUIRED>
 
 <!ELEMENT device (setting*)>
 <!ATTLIST device id ID #REQUIRED>
@@ -40,14 +44,12 @@
 <!ATTLIST connector ref CDATA #REQUIRED>
 <!ATTLIST connector type CDATA #REQUIRED>
 <!ATTLIST connector label CDATA #REQUIRED>
-<!ATTLIST connector image CDATA #REQUIRED>
 
 <!ELEMENT port (inlet*)>
 <!ATTLIST port id ID #REQUIRED>
 <!ATTLIST port ref CDATA #REQUIRED>
 <!ATTLIST port type CDATA #REQUIRED>
 <!ATTLIST port label CDATA #REQUIRED>
-<!ATTLIST port image CDATA #REQUIRED>
 
 <!ELEMENT inlet EMPTY>
 <!ATTLIST inlet ref IDREF #REQUIRED>

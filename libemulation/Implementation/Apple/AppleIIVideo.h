@@ -27,4 +27,5 @@ private:
 	OEComponent *monitor;
 	
 	bool palTiming;
+	string characterSet;
 };

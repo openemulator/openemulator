@@ -53,17 +53,17 @@ bool MOS6502::setValue(string name, string value)
 bool MOS6502::getValue(string name, string &value)
 {
 	if (name == "a")
-		value = getHex(a);
+		value = getHexString(a);
 	else if (name == "x")
-		value = getHex(x);
+		value = getHexString(x);
 	else if (name == "y")
-		value = getHex(y);
+		value = getHexString(y);
 	else if (name == "s")
-		value = getHex(sp.b.l);
+		value = getHexString(sp.b.l);
 	else if (name == "p")
-		value = getHex(p);
+		value = getHexString(p);
 	else if (name == "pc")
-		value = getHex(pc.w.l);
+		value = getHexString(pc.w.l);
 	else
 		return false;
 	
@@ -76,9 +76,9 @@ bool MOS6502::setRef(string name, OEComponent *ref)
 		memoryBus = ref;
 	else if (name == "controlBus")
 	{
-		replaceObserver(controlBus, ref, CONTROLBUS_RESET_DID_ASSERT);
-		replaceObserver(controlBus, ref, CONTROLBUS_IRQ_DID_ASSERT);
-		replaceObserver(controlBus, ref, CONTROLBUS_NMI_DID_ASSERT);
+		setObserver(controlBus, ref, CONTROLBUS_RESET_DID_ASSERT);
+		setObserver(controlBus, ref, CONTROLBUS_IRQ_DID_ASSERT);
+		setObserver(controlBus, ref, CONTROLBUS_NMI_DID_ASSERT);
 		controlBus = ref;
 	}
 	else
@@ -93,14 +93,16 @@ void MOS6502::notify(OEComponent *sender, int notification, void *data)
 	{
 		case CONTROLBUS_RESET_DID_ASSERT:
 			reset();
-			break;
+			return;
 			
 		case CONTROLBUS_IRQ_DID_ASSERT:
-			break;
+			return;
 			
 		case CONTROLBUS_NMI_DID_ASSERT:
-			break;
+			return;
 	}
+
+	return OEComponent::notify(sender, notification, data);
 }
 
 void MOS6502::reset()

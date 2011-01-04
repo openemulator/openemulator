@@ -10,14 +10,14 @@
 
 #include <math.h>
 
-#include "OEEmulation.h"
+#include "Emulation.h"
 #include "ControlBus.h"
-#include "HostAudioInterface.h"
+#include "AudioInterface.h"
 
 ControlBus::ControlBus()
 {
 	emulation = NULL;
-	hostAudio = NULL;
+	audio = NULL;
 	
 	crystalFrequency = 1E6;
 	cpuFrequencyDivider = 1.0;
@@ -51,10 +51,10 @@ bool ControlBus::setRef(string name, OEComponent *ref)
 {
 	if (name == "emulation")
 		emulation = ref;
-	else if (name == "hostAudio")
+	else if (name == "audio")
 	{
-		replaceObserver(hostAudio, ref, HOST_AUDIO_FRAME_DID_BEGIN_RENDER);
-		hostAudio = ref;
+		setObserver(audio, ref, AUDIO_FRAME_IS_RENDERING);
+		audio = ref;
 	}
 	else if (name == "cpu")
 		cpu = ref;
@@ -68,16 +68,16 @@ bool ControlBus::setRef(string name, OEComponent *ref)
 
 bool ControlBus::init()
 {
-	if (!hostAudio)
+	if (!audio)
 	{
-		log("hostAudio undefined");
+		log("audio undefined");
 		return false;
 	}
 	
 	if (emulation)
 	{
 		string state = "Powered On";
-		emulation->postMessage(this, OEEMULATION_SET_STATE, &state);
+		emulation->postMessage(this, EMULATION_SET_STATE, &state);
 	}
 	
 	updateCPUFrequency();
@@ -85,7 +85,7 @@ bool ControlBus::init()
 	return true;
 }
 
-bool ControlBus::postMessage(OEComponent *component, int message, void *data)
+bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
 {
 	switch (message)
 	{
@@ -157,7 +157,7 @@ bool ControlBus::postMessage(OEComponent *component, int message, void *data)
 			return true;
 	}
 	
-	return false;
+	return OEComponent::postMessage(sender, message, data);
 }
 
 void ControlBus::notify(OEComponent *sender, int notification, void *data)
@@ -175,6 +175,9 @@ void ControlBus::notify(OEComponent *sender, int notification, void *data)
 		for (int ch = 0; ch < buffer->channelNum; ch++)
 			*out++ += x;
 	}*/
+	
+	return OEComponent::notify(sender, notification, data);
+
 }
 
 void ControlBus::updateCPUFrequency()

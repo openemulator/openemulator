@@ -1,29 +1,24 @@
 
 /**
  * libemulation
- * Terminal
- * (C) 2011 by Marc S. Ressl (mressl@umich.edu)
+ * Apple Graphics Tablet
+ * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls a terminal.
+ * Controls an Apple Graphics Tablet.
  */
-
-#ifndef _TERMINAL_H
-#define _TERMINAL_H
 
 #include "OEComponent.h"
 
-class Terminal : public OEComponent
+class AppleGraphicsTablet : public OEComponent
 {
 public:
-	Terminal();
+	AppleGraphicsTablet();
 	
 	bool setRef(string name, OEComponent *ref);
 	
 private:
 	OEComponent *emulation;
-
+	
 	OEComponent *canvas;
 };
-
-#endif

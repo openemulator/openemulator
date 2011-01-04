@@ -9,11 +9,11 @@
  */
 
 #include "MOSKIM1PLL.h"
-#include "HostAudioInterface.h"
+#include "AudioInterface.h"
 
 MOSKIM1PLL::MOSKIM1PLL()
 {
-	hostAudio = NULL;
+	audio = NULL;
 }
 
 bool MOSKIM1PLL::setValue(string name, string value)
@@ -28,10 +28,10 @@ bool MOSKIM1PLL::setValue(string name, string value)
 
 bool MOSKIM1PLL::setRef(string name, OEComponent *ref)
 {
-	if (name == "hostAudio")
+	if (name == "audio")
 	{
-		replaceObserver(hostAudio, ref, HOST_AUDIO_FRAME_WILL_BEGIN_RENDER);
-		hostAudio = ref;
+		setObserver(audio, ref, AUDIO_FRAME_WILL_RENDER);
+		audio = ref;
 	}
 	else
 		return false;

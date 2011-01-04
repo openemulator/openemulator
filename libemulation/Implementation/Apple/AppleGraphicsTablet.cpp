@@ -1,25 +1,27 @@
 
 /**
  * libemulation
- * Terminal
- * (C) 2011 by Marc S. Ressl (mressl@umich.edu)
+ * Apple Graphics Tablet
+ * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls a terminal.
+ * Controls an Apple Graphics Tablet.
  */
 
-#include "Terminal.h"
+#include "AppleGraphicsTablet.h"
 
+#include "CompositeMonitor.h"
 #include "Emulation.h"
+#include "CanvasInterface.h"
 
-Terminal::Terminal()
+AppleGraphicsTablet::AppleGraphicsTablet()
 {
 	emulation = NULL;
 	
 	canvas = NULL;
 }
 
-bool Terminal::setRef(string name, OEComponent *ref)
+bool AppleGraphicsTablet::setRef(string name, OEComponent *ref)
 {
 	if (name == "emulation")
 	{

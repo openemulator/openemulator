@@ -8,8 +8,6 @@
  * Defines the CPU interface
  */
 
-#include "OEComponent.h"
-
 typedef enum
 {
 	CPU_RUN,

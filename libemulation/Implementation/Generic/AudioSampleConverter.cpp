@@ -11,20 +11,21 @@
 #include <math.h>
 
 #include "AudioSampleConverter.h"
-#include "HostAudioInterface.h"
+#include "AudioInterface.h"
 
 AudioSampleConverter::AudioSampleConverter()
 {
-	hostAudio = NULL;
+	audio = NULL;
 	controlBus = NULL;
 }
 
 bool AudioSampleConverter::setRef(string name, OEComponent *ref)
 {
-	if (name == "hostAudio")
+	if (name == "audio")
 	{
-		replaceObserver(hostAudio, ref, HOST_AUDIO_FRAME_WILL_BEGIN_RENDER);
-		hostAudio = ref;
+		setObserver(audio, ref, AUDIO_FRAME_WILL_RENDER);
+		setObserver(audio, ref, AUDIO_FRAME_DID_RENDER);
+		audio = ref;
 	}
 	else if (name == "controlBus")
 		controlBus = ref;

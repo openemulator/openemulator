@@ -9,8 +9,7 @@
  */
 
 #include "MOSKIM1IO.h"
-
-#include "OEEmulation.h"
+#include "Emulation.h"
 #include "CanvasInterface.h"
 #include "RS232Interface.h"
 
@@ -42,7 +41,7 @@ bool MOSKIM1IO::getValue(string name, string &value)
 	{
 		if (canvas)
 			canvas->postMessage(this,
-								HOST_CANVAS_GET_WINDOWFRAME,
+								CANVAS_GET_WINDOWFRAME,
 								&windowFrame);
 	}
 	else
@@ -57,17 +56,17 @@ bool MOSKIM1IO::setRef(string name, OEComponent *ref)
 	{
 		if (emulation)
 			emulation->postMessage(this,
-								   OEEMULATION_REMOVE_CANVAS,
+								   EMULATION_CREATE_CANVAS,
 								   &canvas);
 		emulation = ref;
 		if (emulation)
 			emulation->postMessage(this,
-								   OEEMULATION_ADD_CANVAS,
+								   EMULATION_DESTROY_CANVAS,
 								   &canvas);
 	}
 	else if (name == "serialPort")
 	{
-		replaceObserver(serialPort, ref, RS232_DID_RECEIVE_DATA);
+		setObserver(serialPort, ref, RS232_DID_RECEIVE_DATA);
 		serialPort = ref;
 	}
 	else if (name == "audioOut")
@@ -95,10 +94,10 @@ bool MOSKIM1IO::init()
 	if (canvas)
 	{
 		canvas->postMessage(this,
-							HOST_CANVAS_SET_WINDOWFRAME,
+							CANVAS_SET_WINDOWFRAME,
 							&windowFrame);
 		canvas->postMessage(this,
-							HOST_CANVAS_SET_DEFAULTWINDOWSIZE,
+							CANVAS_SET_DEFAULTWINDOWSIZE,
 							&defaultWindowSize);
 	}
 	

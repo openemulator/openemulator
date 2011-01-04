@@ -35,17 +35,17 @@ public:
 	virtual bool postMessage(OEComponent *sender, int message, void *data);
 	bool addDelegate(OEComponent *delegate, int message);
 	bool removeDelegate(OEComponent *delegate, int message);
-	void replaceDelegate(OEComponent *oldDelegate,
-						 OEComponent *newDelegate,
-						 int message);
+	void setDelegate(OEComponent *oldDelegate,
+					 OEComponent *newDelegate,
+					 int message);
 	
 	// Notification
 	virtual void notify(OEComponent *sender, int notification, void *data);
 	bool addObserver(OEComponent *observer, int notification);
 	bool removeObserver(OEComponent *observer, int notification);
-	void replaceObserver(OEComponent *oldObserver,
-						 OEComponent *newObserver,
-						 int notification);
+	void setObserver(OEComponent *oldObserver,
+					 OEComponent *newObserver,
+					 int notification);
 	
 	// Memory access
 	virtual OEUInt8 read(OEAddress address);
@@ -62,11 +62,15 @@ public:
 protected:
 	// Helpers
 	void log(string message);
+	
 	int getInt(const string &value);
 	double getFloat(const string &value);
-	string getString(int value);
-	string getHex(int value);
 	OEData getCharVector(const string &value);
+	
+	string getString(int value);
+	string getString(float value);
+	string getHexString(int value);
+	
 	int getNextPowerOf2(int value);
 	
 private:

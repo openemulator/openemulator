@@ -40,13 +40,13 @@ bool MOS6530::setValue(string name, string value)
 bool MOS6530::getValue(string name, string &value)
 {
 	if (name == "directionA")
-		value = getHex(directionA);
+		value = getHexString(directionA);
 	else if (name == "dataA")
-		value = getHex(dataA);
+		value = getHexString(dataA);
 	else if (name == "directionB")
-		value = getHex(directionB);
+		value = getHexString(directionB);
 	else if (name == "dataB")
-		value = getHex(dataB);
+		value = getHexString(dataB);
 	else
 		return false;
 	
@@ -57,7 +57,7 @@ bool MOS6530::setRef(string name, OEComponent *ref)
 {
 	if (name == "controlBus")
 	{
-		replaceObserver(controlBus, ref, CONTROLBUS_RESET_DID_ASSERT);
+		setObserver(controlBus, ref, CONTROLBUS_RESET_DID_ASSERT);
 		controlBus = ref;
 	}
 	else if (name == "portA")

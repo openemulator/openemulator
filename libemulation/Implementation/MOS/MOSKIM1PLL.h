@@ -19,7 +19,7 @@ public:
 	bool setRef(string name, OEComponent *ref);
 	
 private:
-	OEComponent *hostAudio;
+	OEComponent *audio;
 	
 	float decisionFrequency;
 };

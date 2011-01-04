@@ -94,13 +94,10 @@ bool AddressDecoder::postMessage(OEComponent *sender, int message, void *data)
 	{
 		case ADDRESSDECODER_MAP:
 			map((AddressDecoderMap *) data);
-			break;
-			
-		default:
-			return false;
+			return true;
 	}
 	
-	return true;
+	return OEComponent::postMessage(sender, message, data);
 }
 
 OEUInt8 AddressDecoder::read(OEAddress address)

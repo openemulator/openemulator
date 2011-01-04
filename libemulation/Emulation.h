@@ -8,8 +8,8 @@
  * Controls an emulation
  */
 
-#ifndef _OEEMULATION_H
-#define _OEEMULATION_H
+#ifndef _EMULATION_H
+#define _EMULATION_H
 
 #include "OEEDL.h"
 #include "OEComponent.h"
@@ -28,22 +28,17 @@
 
 typedef enum
 {
-	OEEMULATION_SET_STATE,
-	OEEMULATION_SET_IMAGE,
-	OEEMULATION_SET_POWERED,
-	OEEMULATION_ADD_CANVAS,
-	OEEMULATION_REMOVE_CANVAS,
-	OEEMULATION_ADD_STORAGE,
-	OEEMULATION_REMOVE_STORAGE,
+	EMULATION_SET_STATE,
+	EMULATION_SET_IMAGE,
+	EMULATION_SET_POWERED,
+	EMULATION_CREATE_CANVAS,
+	EMULATION_DESTROY_CANVAS,
+	EMULATION_ADD_STORAGE,
+	EMULATION_REMOVE_STORAGE,
 	
-	OEEMULATION_RUN_ALERT,
-	OEEMULATION_UPDATE_DEVICES,
-	
-	OEEMULATION_MOUNT,
-	OEEMULATION_IS_MOUNTABLE,
-	OEEMULATION_GET_MOUNT_PATH,
-	OEEMULATION_IS_LOCKED,
-} OEEmulationMessages;
+	EMULATION_RUN_ALERT,
+	EMULATION_UPDATE_DEVICES,
+} EmulationMessages;
 
 
 
@@ -54,54 +49,50 @@ typedef struct
 	string label;
 	string type;
 	string options;
-} OESetting;
-typedef vector<OESetting> OESettings;
+} EmulationSetting;
+
+typedef vector<EmulationSetting> EmulationSettings;
 
 typedef struct
 {
 	string id;
-	string group;
 	string label;
 	string image;
-	OESettings settings;
+	string group;
+	EmulationSettings settings;
+	
 	string location;
-	bool removable;
 	
 	string state;
 	bool powered;
 	OEComponents canvases;
 	OEComponents storages;
-} OEDeviceInfo;
-typedef vector<OEDeviceInfo> OEDevicesInfo;
+} EmulationDeviceInfo;
+
+typedef vector<EmulationDeviceInfo> EmulationInfo;
 
 
 
-typedef map<string, OEComponent *> OEComponentsMap;
-
-typedef map<string, string> OEPropertiesMap;
-
-
-
-typedef void (*OERunAlertCallback)(string message);
-typedef OEComponent *(*OEAddCanvasCallback)(void *userData);
-typedef void (*OERemoveCanvasCallback)(OEComponent *canvas, void *userData);
-typedef void (*OEDevicesDidUpdateCallback)();
+typedef void (*EmulationRunAlertCallback)(string message);
+typedef OEComponent *(*EmulationAddCanvasCallback)(void *userData);
+typedef void (*EmulationRemoveCanvasCallback)(OEComponent *canvas, void *userData);
+typedef void (*EmulationDevicesDidUpdateCallback)();
 
 
 
-class OEEmulation : public OEComponent, public OEEDL
+class Emulation : public OEComponent, public OEEDL
 {
 public:
-	OEEmulation();
-	~OEEmulation();
+	Emulation();
+	~Emulation();
 	
 	void setResourcePath(string path);
-	void setRunAlertCallback(OERunAlertCallback runAlert);
-	void setAddCanvasCallback(OEAddCanvasCallback addCanvas,
+	void setRunAlertCallback(EmulationRunAlertCallback runAlert);
+	void setAddCanvasCallback(EmulationAddCanvasCallback addCanvas,
 							  void *userData);
-	void setRemoveCanvasCallback(OERemoveCanvasCallback removeCanvas,
+	void setRemoveCanvasCallback(EmulationRemoveCanvasCallback removeCanvas,
 								 void *userData);
-	void setDevicesDidUpdateCallback(OEDevicesDidUpdateCallback
+	void setDevicesDidUpdateCallback(EmulationDevicesDidUpdateCallback
 									 devicesDidUpdate);
 	
 	bool open(string path);
@@ -110,29 +101,34 @@ public:
 	OEComponent *getComponent(string id);
 	bool setComponent(string id, OEComponent *component);
 	
-	OEDevicesInfo &getDevicesInfo();
-	bool addEDL(string path, OEIdMap idMap);
+	EmulationInfo *getEmulationInfo();
+	bool addEDL(string path, map<string, string> idMap);
 	bool removeDevice(string id);
+	
+	bool mount(string path);
+	bool isMountable(string path);
+	bool mount(string path, string id);
+	bool unmountFirst(string id);
 	
 	bool postMessage(OEComponent *sender, int message, void *data);
 	
 private:
 	string resourcePath;
-	OEComponentsMap componentsMap;
-	OEDevicesInfo devicesInfo;
+	map<string, OEComponent *> componentsMap;
+	EmulationInfo emulationInfo;
 	
-	OERunAlertCallback runAlert;
-	OEAddCanvasCallback addCanvas;
+	EmulationRunAlertCallback runAlert;
+	EmulationAddCanvasCallback addCanvas;
 	void *addCanvasUserData;
-	OERemoveCanvasCallback removeCanvas;
+	EmulationRemoveCanvasCallback removeCanvas;
 	void *removeCanvasUserData;
-	OEDevicesDidUpdateCallback devicesDidUpdate;
+	EmulationDevicesDidUpdateCallback devicesDidUpdate;
 	
-	void buildDevicesInfo();
-	OESettings buildDeviceSettings(xmlNodePtr children);
+	void buildEmulationInfo();
+	EmulationSettings buildDeviceSettings(xmlNodePtr children);
 	string buildDeviceLocation(string deviceId);
 	string buildDeviceLocation(string deviceId, vector<string> &visitedDevices);
-	OEDeviceInfo *getDeviceInfo(string id);
+	EmulationDeviceInfo *getDeviceInfo(string id);
 	
 	bool dumpEmulation(OEData *data);
 	bool createEmulation();
@@ -149,7 +145,7 @@ private:
 	void destroyComponent(string id, xmlNodePtr children);
 	
 	bool hasValueProperty(string value, string propertyName);
-	string parseValueProperties(string value, OEPropertiesMap &propertiesMap);
+	string parseValueProperties(string value, map<string, string> &propertiesMap);
 	
 	void setDeviceId(string &id, string deviceId);
 	string getDeviceId(string id);

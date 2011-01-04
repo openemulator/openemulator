@@ -8,19 +8,22 @@
  * Controls an Apple Disk II drive
  */
 
-#include "Terminal.h"
+#include "OEComponent.h"
 
-class AppleDiskII : public Terminal
+class AppleDiskII : public OEComponent
 {
 public:
+	AppleDiskII();
+	
 	bool setValue(string name, string value);
 	bool getValue(string name, string &value);
 	bool setRef(string name, OEComponent *ref);
+	bool postMessage(OEComponent *sender, int message, void *data);
 	
 private:
 	OEComponent *emulation;
 	
-	OEComponent *storage;
+	string image;
 	
 	bool forceWriteProtected;
 };

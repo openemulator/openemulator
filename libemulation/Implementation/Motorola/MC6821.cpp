@@ -53,25 +53,25 @@ bool MC6821::setValue(string name, string value)
 bool MC6821::getValue(string name, string &value)
 {
 	if (name == "controlA")
-		value = getHex(controlA);
+		value = getHexString(controlA);
 	else if (name == "directionA")
-		value = getHex(directionA);
+		value = getHexString(directionA);
 	else if (name == "dataA")
-		value = getHex(dataA);
+		value = getHexString(dataA);
 	else if (name == "ca1")
-		value = getHex(ca1);
+		value = getHexString(ca1);
 	else if (name == "ca2")
-		value = getHex(ca2);
+		value = getHexString(ca2);
 	else if (name == "controlB")
-		value = getHex(controlB);
+		value = getHexString(controlB);
 	else if (name == "directionB")
-		value = getHex(directionB);
+		value = getHexString(directionB);
 	else if (name == "dataB")
-		value = getHex(dataB);
+		value = getHexString(dataB);
 	else if (name == "cb1")
-		value = getHex(cb1);
+		value = getHexString(cb1);
 	else if (name == "cb2")
-		value = getHex(cb2);
+		value = getHexString(cb2);
 	else
 		return false;
 	
@@ -82,7 +82,7 @@ bool MC6821::setRef(string name, OEComponent *ref)
 {
 	if (name == "controlBus")
 	{
-		replaceObserver(controlBus, ref, CONTROLBUS_RESET_DID_ASSERT);
+		setObserver(controlBus, ref, CONTROLBUS_RESET_DID_ASSERT);
 		controlBus = ref;
 	}
 	else if (name == "portA")
@@ -99,9 +99,9 @@ bool MC6821::setRef(string name, OEComponent *ref)
 	return true;
 }
 
-bool MC6821::postMessage(OEComponent *component, int event, void *data)
+bool MC6821::postMessage(OEComponent *sender, int message, void *data)
 {
-	switch (event)
+	switch (message)
 	{
 		case MC6821_SET_CA1:
 		{
@@ -195,7 +195,7 @@ bool MC6821::postMessage(OEComponent *component, int event, void *data)
 		}
 	}
 	
-	return false;
+	return OEComponent::postMessage(sender, message, data);
 }
 
 void MC6821::notify(OEComponent *component, int notification, void *data)

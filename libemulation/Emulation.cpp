@@ -13,11 +13,11 @@
 
 #include <libxml/parser.h>
 
-#include "OEEmulation.h"
-#include "OEComponentFactory.h"
+#include "Emulation.h"
 #include "StorageInterface.h"
+#include "OEComponentFactory.h"
 
-OEEmulation::OEEmulation() : OEEDL()
+Emulation::Emulation() : OEEDL()
 {
 	runAlert = NULL;
 	addCanvas = NULL;
@@ -27,7 +27,7 @@ OEEmulation::OEEmulation() : OEEDL()
 	setComponent("emulation", this);
 }
 
-OEEmulation::~OEEmulation()
+Emulation::~Emulation()
 {
 	close();
 	
@@ -35,42 +35,42 @@ OEEmulation::~OEEmulation()
 	destroyEmulation();
 }
 
-void OEEmulation::setResourcePath(string path)
+void Emulation::setResourcePath(string path)
 {
 	resourcePath = path;
 }
 
-void OEEmulation::setRunAlertCallback(OERunAlertCallback runAlert)
+void Emulation::setRunAlertCallback(EmulationRunAlertCallback runAlert)
 {
 	this->runAlert = runAlert;
 }
 
-void OEEmulation::setAddCanvasCallback(OEAddCanvasCallback addCanvas,
+void Emulation::setAddCanvasCallback(EmulationAddCanvasCallback addCanvas,
 									   void *userData)
 {
 	this->addCanvas = addCanvas;
 	addCanvasUserData = userData;
 }
 
-void OEEmulation::setRemoveCanvasCallback(OERemoveCanvasCallback removeCanvas,
+void Emulation::setRemoveCanvasCallback(EmulationRemoveCanvasCallback removeCanvas,
 										  void *userData)
 {
 	this->addCanvas = addCanvas;
 	addCanvasUserData = userData;
 }
 
-void OEEmulation::setDevicesDidUpdateCallback(OEDevicesDidUpdateCallback
+void Emulation::setDevicesDidUpdateCallback(EmulationDevicesDidUpdateCallback
 											  devicesDidUpdate)
 {
 	this->devicesDidUpdate = devicesDidUpdate;
 }
 
-bool OEEmulation::open(string path)
+bool Emulation::open(string path)
 {
 	if (!OEEDL::open(path))
 		return false;
 	
-	buildDevicesInfo();
+	buildEmulationInfo();
 	
 	if (createEmulation())
 		if (configureEmulation())
@@ -82,7 +82,7 @@ bool OEEmulation::open(string path)
 	return false;
 }
 
-bool OEEmulation::save(string path)
+bool Emulation::save(string path)
 {
 	close();
 	
@@ -138,7 +138,7 @@ bool OEEmulation::save(string path)
 	return is_open;
 }
 
-bool OEEmulation::setComponent(string id, OEComponent *component)
+bool Emulation::setComponent(string id, OEComponent *component)
 {
 	if (component)
 		componentsMap[id] = component;
@@ -148,7 +148,7 @@ bool OEEmulation::setComponent(string id, OEComponent *component)
 	return true;
 }
 
-OEComponent *OEEmulation::getComponent(string id)
+OEComponent *Emulation::getComponent(string id)
 {
 	if (!componentsMap.count(id))
 		return NULL;
@@ -156,7 +156,7 @@ OEComponent *OEEmulation::getComponent(string id)
 	return componentsMap[id];
 }
 
-bool OEEmulation::addEDL(string path, OEIdMap connectionMap)
+bool Emulation::addEDL(string path, map<string, string> connectionMap)
 {
 	if (!doc)
 		return false;
@@ -185,7 +185,7 @@ bool OEEmulation::addEDL(string path, OEIdMap connectionMap)
 	return true;
 }
 
-bool OEEmulation::removeDevice(string deviceId)
+bool Emulation::removeDevice(string deviceId)
 {
 	// Verify device exists
 /*	if (!isDevice(deviceId))
@@ -209,9 +209,9 @@ bool OEEmulation::removeDevice(string deviceId)
 
 
 
-void OEEmulation::buildDevicesInfo()
+void Emulation::buildEmulationInfo()
 {
-	devicesInfo.clear();
+	emulationInfo.clear();
 	
 	if (!doc)
 		return;
@@ -224,26 +224,28 @@ void OEEmulation::buildDevicesInfo()
 	{
 		if (!xmlStrcmp(node->name, BAD_CAST "device"))
 		{
-			OEDeviceInfo deviceInfo;
+			EmulationDeviceInfo deviceInfo;
 			deviceInfo.id = getNodeProperty(node, "id");
+			deviceInfo.label = getNodeProperty(node, "label");
+			deviceInfo.image = getNodeProperty(node, "image");
 			deviceInfo.group = getNodeProperty(node, "group");
 			if (deviceInfo.group == "")
 				deviceInfo.group = "system";
-			deviceInfo.label = getNodeProperty(node, "label");
-			deviceInfo.image = getNodeProperty(node, "image");
-			deviceInfo.settings = buildDeviceSettings(node->children);
 			
 			deviceInfo.location = buildDeviceLocation(deviceInfo.id);
 			
 			deviceInfo.powered = false;
-			devicesInfo.push_back(deviceInfo);
+			
+			deviceInfo.settings = buildDeviceSettings(node->children);
+			
+			emulationInfo.push_back(deviceInfo);
 		}
 	}
 }
 
-OESettings OEEmulation::buildDeviceSettings(xmlNodePtr children)
+EmulationSettings Emulation::buildDeviceSettings(xmlNodePtr children)
 {
-	OESettings settings;
+	EmulationSettings settings;
 	
 	for(xmlNodePtr node = children;
 		node;
@@ -251,7 +253,7 @@ OESettings OEEmulation::buildDeviceSettings(xmlNodePtr children)
 	{
 		if (!xmlStrcmp(node->name, BAD_CAST "setting"))
 		{
-			OESetting setting;
+			EmulationSetting setting;
 			
 			setting.ref = getNodeProperty(node, "ref");
 			setting.name = getNodeProperty(node, "name");
@@ -266,7 +268,7 @@ OESettings OEEmulation::buildDeviceSettings(xmlNodePtr children)
 	return settings;
 }
 
-string OEEmulation::buildDeviceLocation(string deviceId)
+string Emulation::buildDeviceLocation(string deviceId)
 {
 	if (!doc)
 		return "";
@@ -278,7 +280,7 @@ string OEEmulation::buildDeviceLocation(string deviceId)
 	return depth ? location : "";
 }
 
-string OEEmulation::buildDeviceLocation(string deviceId,
+string Emulation::buildDeviceLocation(string deviceId,
 										vector<string> &visitedDevices)
 {
 	if (!doc)
@@ -328,15 +330,15 @@ string OEEmulation::buildDeviceLocation(string deviceId,
 	return "?";
 }
 
-OEDevicesInfo &OEEmulation::getDevicesInfo()
+EmulationInfo *Emulation::getEmulationInfo()
 {
-	return devicesInfo;
+	return &emulationInfo;
 }
 
-OEDeviceInfo *OEEmulation::getDeviceInfo(string id)
+EmulationDeviceInfo *Emulation::getDeviceInfo(string id)
 {
-	for (OEDevicesInfo::iterator i = devicesInfo.begin();
-		 i != devicesInfo.end();
+	for (EmulationInfo::iterator i = emulationInfo.begin();
+		 i != emulationInfo.end();
 		 i++)
 	{
 		if (i->id == id)
@@ -348,7 +350,7 @@ OEDeviceInfo *OEEmulation::getDeviceInfo(string id)
 
 
 
-bool OEEmulation::dumpEmulation(OEData *data)
+bool Emulation::dumpEmulation(OEData *data)
 {
 	if (!doc)
 		return false;
@@ -370,7 +372,7 @@ bool OEEmulation::dumpEmulation(OEData *data)
 	return false;
 }
 
-bool OEEmulation::createEmulation()
+bool Emulation::createEmulation()
 {
 	if (!doc)
 		return false;
@@ -392,7 +394,7 @@ bool OEEmulation::createEmulation()
 	return true;
 }
 
-bool OEEmulation::createComponent(string id, string className)
+bool Emulation::createComponent(string id, string className)
 {
 	if (!getComponent(id))
 	{
@@ -408,7 +410,7 @@ bool OEEmulation::createComponent(string id, string className)
 	return false;
 }
 
-bool OEEmulation::configureEmulation()
+bool Emulation::configureEmulation()
 {
 	if (!doc)
 		return false;
@@ -431,7 +433,7 @@ bool OEEmulation::configureEmulation()
 	return true;
 }
 
-bool OEEmulation::configureComponent(string id, xmlNodePtr children)
+bool Emulation::configureComponent(string id, xmlNodePtr children)
 {
 	OEComponent *component = getComponent(id);
 	if (!component)
@@ -440,7 +442,7 @@ bool OEEmulation::configureComponent(string id, xmlNodePtr children)
 		return false;
 	}
 	
-	OEPropertiesMap propertiesMap;
+	map<string, string> propertiesMap;
 	propertiesMap["id"] = id;
 	propertiesMap["deviceId"] = getDeviceId(id);
 	propertiesMap["resourcePath"] = resourcePath;
@@ -503,7 +505,7 @@ bool OEEmulation::configureComponent(string id, xmlNodePtr children)
 	return true;
 }
 
-bool OEEmulation::initEmulation()
+bool Emulation::initEmulation()
 {
 	if (!doc)
 		return false;
@@ -524,7 +526,7 @@ bool OEEmulation::initEmulation()
 	return true;
 }
 
-bool OEEmulation::initComponent(string id)
+bool Emulation::initComponent(string id)
 {
 	OEComponent *component = getComponent(id);
 	if (!component)
@@ -541,7 +543,7 @@ bool OEEmulation::initComponent(string id)
 	return false;
 }
 
-bool OEEmulation::updateEmulation()
+bool Emulation::updateEmulation()
 {
 	if (!doc)
 		return false;
@@ -562,7 +564,7 @@ bool OEEmulation::updateEmulation()
 	return true;
 }
 
-bool OEEmulation::updateComponent(string id, xmlNodePtr children)
+bool Emulation::updateComponent(string id, xmlNodePtr children)
 {
 	OEComponent *component = getComponent(id);
 	if (!component)
@@ -571,7 +573,7 @@ bool OEEmulation::updateComponent(string id, xmlNodePtr children)
 		return false;
 	}
 	
-	OEPropertiesMap propertiesMap;
+	map<string, string> propertiesMap;
 	propertiesMap["id"] = id;
 	propertiesMap["device"] = getDeviceId(id);
 	propertiesMap["resourcePath"] = resourcePath;
@@ -613,7 +615,7 @@ bool OEEmulation::updateComponent(string id, xmlNodePtr children)
 	return true;
 }
 
-void OEEmulation::disconnectEmulation()
+void Emulation::disconnectEmulation()
 {
 	if (!doc)
 		return;
@@ -633,7 +635,7 @@ void OEEmulation::disconnectEmulation()
 	}
 }
 
-void OEEmulation::disconnectComponent(string id, xmlNodePtr children)
+void Emulation::disconnectComponent(string id, xmlNodePtr children)
 {
 	OEComponent *component = getComponent(id);
 	if (!component)
@@ -653,7 +655,7 @@ void OEEmulation::disconnectComponent(string id, xmlNodePtr children)
 	}
 }
 
-void OEEmulation::destroyEmulation()
+void Emulation::destroyEmulation()
 {
 	if (!doc)
 		return;
@@ -673,7 +675,7 @@ void OEEmulation::destroyEmulation()
 	}
 }
 
-void OEEmulation::destroyComponent(string id, xmlNodePtr children)
+void Emulation::destroyComponent(string id, xmlNodePtr children)
 {
 	OEComponent *component = getComponent(id);
 	if (!component)
@@ -684,50 +686,63 @@ void OEEmulation::destroyComponent(string id, xmlNodePtr children)
 	setComponent(id, NULL);
 }
 
-bool OEEmulation::postMessage(OEComponent *sender, int message, void *data)
+bool Emulation::mount(string path)
+{
+// To-Do: Attempt to mount everywhere and in sequence.
+// Do not attempt to eject anything.
+	return false;
+}
+
+bool Emulation::isMountable(string path)
+{
+	// To-Do: Attempt to check if mountable everywhere and in sequence.
+	return false;
+}
+
+bool Emulation::postMessage(OEComponent *sender, int message, void *data)
 {
 	switch (message)
 	{
-		case OEEMULATION_SET_STATE:
+		case EMULATION_SET_STATE:
 			{
-				OEDeviceInfo *deviceInfo = getDeviceInfo(getDeviceId(sender));
+				EmulationDeviceInfo *deviceInfo = getDeviceInfo(getDeviceId(sender));
 				if (deviceInfo)
 				{
 					deviceInfo->state = *((string *)data);
 					
-					return postMessage(sender, OEEMULATION_UPDATE_DEVICES, NULL);
+					return postMessage(sender, EMULATION_UPDATE_DEVICES, NULL);
 				}
 			}
 			break;
 			
-		case OEEMULATION_SET_IMAGE:
+		case EMULATION_SET_IMAGE:
 			{
-				OEDeviceInfo *deviceInfo = getDeviceInfo(getDeviceId(sender));
+				EmulationDeviceInfo *deviceInfo = getDeviceInfo(getDeviceId(sender));
 				if (deviceInfo)
 				{
 					deviceInfo->image = *((string *)data);
 					
-					return postMessage(sender, OEEMULATION_UPDATE_DEVICES, NULL);
+					return postMessage(sender, EMULATION_UPDATE_DEVICES, NULL);
 				}
 			}
 			break;
 			
-		case OEEMULATION_SET_POWERED:
+		case EMULATION_SET_POWERED:
 			{
-				OEDeviceInfo *deviceInfo = getDeviceInfo(getDeviceId(sender));
+				EmulationDeviceInfo *deviceInfo = getDeviceInfo(getDeviceId(sender));
 				if (deviceInfo)
 				{
 					deviceInfo->powered = *((bool *)data);
 					
-					return postMessage(sender, OEEMULATION_UPDATE_DEVICES, NULL);
+					return postMessage(sender, EMULATION_UPDATE_DEVICES, NULL);
 				}
 			}
 			break;
 			
-		case OEEMULATION_ADD_CANVAS:
+		case EMULATION_CREATE_CANVAS:
 			if (data && addCanvas)
 			{
-				OEDeviceInfo *deviceInfo = getDeviceInfo(getDeviceId(sender));
+				EmulationDeviceInfo *deviceInfo = getDeviceInfo(getDeviceId(sender));
 				if (deviceInfo)
 				{
 					OEComponent **ref = (OEComponent **)data;
@@ -736,15 +751,15 @@ bool OEEmulation::postMessage(OEComponent *sender, int message, void *data)
 					
 					deviceInfo->canvases.push_back(*ref);
 					
-					return postMessage(sender, OEEMULATION_UPDATE_DEVICES, NULL);
+					return postMessage(sender, EMULATION_UPDATE_DEVICES, NULL);
 				}
 			}
 			break;
 			
-		case OEEMULATION_REMOVE_CANVAS:
+		case EMULATION_DESTROY_CANVAS:
 			if (data && removeCanvas)
 			{
-				OEDeviceInfo *deviceInfo = getDeviceInfo(getDeviceId(sender));
+				EmulationDeviceInfo *deviceInfo = getDeviceInfo(getDeviceId(sender));
 				if (deviceInfo)
 				{
 					OEComponent **ref = (OEComponent **)data;
@@ -760,49 +775,41 @@ bool OEEmulation::postMessage(OEComponent *sender, int message, void *data)
 					
 					*ref = NULL;
 					
-					return postMessage(sender, OEEMULATION_UPDATE_DEVICES, NULL);
+					return postMessage(sender, EMULATION_UPDATE_DEVICES, NULL);
 				}
 			}
 			break;
 			
-		case OEEMULATION_ADD_STORAGE:
-			if (data && addCanvas)
+		case EMULATION_ADD_STORAGE:
 			{
-				OEDeviceInfo *deviceInfo = getDeviceInfo(getDeviceId(sender));
+				EmulationDeviceInfo *deviceInfo = getDeviceInfo(getDeviceId(sender));
 				if (deviceInfo)
 				{
-					OEComponent **ref = (OEComponent **)data;
+					deviceInfo->storages.push_back(sender);
 					
-					deviceInfo->storages.push_back(*ref);
-					
-					return postMessage(sender, OEEMULATION_UPDATE_DEVICES, NULL);
+					return postMessage(sender, EMULATION_UPDATE_DEVICES, NULL);
 				}
 			}
 			break;
 			
-		case OEEMULATION_REMOVE_STORAGE:
-			if (data && removeCanvas)
+		case EMULATION_REMOVE_STORAGE:
 			{
-				OEDeviceInfo *deviceInfo = getDeviceInfo(getDeviceId(sender));
+				EmulationDeviceInfo *deviceInfo = getDeviceInfo(getDeviceId(sender));
 				if (deviceInfo)
 				{
-					OEComponent **ref = (OEComponent **)data;
-					
 					OEComponents &storages = deviceInfo->storages;
 					OEComponents::iterator first = storages.begin();
 					OEComponents::iterator last = storages.end();
-					OEComponents::iterator i = remove(first, last, *ref);
+					OEComponents::iterator i = remove(first, last, sender);
 					if (i != last)
 						storages.erase(i, last);
 					
-					*ref = NULL;
-					
-					return postMessage(sender, OEEMULATION_UPDATE_DEVICES, NULL);
+					return postMessage(sender, EMULATION_UPDATE_DEVICES, NULL);
 				}
 			}
 			break;
 			
-		case OEEMULATION_RUN_ALERT:
+		case EMULATION_RUN_ALERT:
 			if (data && runAlert)
 			{
 				string *message = (string *)data;
@@ -813,35 +820,22 @@ bool OEEmulation::postMessage(OEComponent *sender, int message, void *data)
 			}
 			break;
 			
-		case OEEMULATION_UPDATE_DEVICES:
+		case EMULATION_UPDATE_DEVICES:
 			if (devicesDidUpdate)
 				devicesDidUpdate();
 			
 			return true;
-			
-		case OEEMULATION_MOUNT:
-			return OEComponent::postMessage(sender, STORAGE_MOUNT, data);
-
-		case OEEMULATION_IS_MOUNTABLE:
-			return OEComponent::postMessage(sender, STORAGE_IS_MOUNTABLE, data);
-			
-		case OEEMULATION_GET_MOUNT_PATH:
-			return OEComponent::postMessage(sender, STORAGE_GET_MOUNT_PATH, data);
-			
-		case OEEMULATION_IS_LOCKED:
-			return OEComponent::postMessage(sender, STORAGE_IS_LOCKED, data);
 	}
 	
-	return false;
+	return OEComponent::postMessage(sender, message, data);
 }
 
-bool OEEmulation::hasValueProperty(string value, string propertyName)
+bool Emulation::hasValueProperty(string value, string propertyName)
 {
 	return (value.find("${" + propertyName + "}") != string::npos);
 }
 
-string OEEmulation::parseValueProperties(string value,
-										 OEPropertiesMap &propertiesMap)
+string Emulation::parseValueProperties(string value, map<string, string> &propertiesMap)
 {
 	int startIndex;
 	
@@ -858,7 +852,7 @@ string OEEmulation::parseValueProperties(string value,
 										   endIndex - startIndex - 2);
 		string replacement;
 		
-		for (OEPropertiesMap::iterator i = propertiesMap.begin();
+		for (map<string, string>::iterator i = propertiesMap.begin();
 			 i != propertiesMap.end();
 			 i++)
 		{
@@ -874,7 +868,7 @@ string OEEmulation::parseValueProperties(string value,
 	return value;
 }
 
-void OEEmulation::setDeviceId(string &id, string deviceId)
+void Emulation::setDeviceId(string &id, string deviceId)
 {
 	int dotIndex = id.find_first_of('.');
 	
@@ -884,7 +878,7 @@ void OEEmulation::setDeviceId(string &id, string deviceId)
 		id = deviceId + "." + id.substr(0, dotIndex + 1);
 }
 
-string OEEmulation::getDeviceId(string id)
+string Emulation::getDeviceId(string id)
 {
 	int dotIndex = id.find_first_of('.');
 	
@@ -894,9 +888,9 @@ string OEEmulation::getDeviceId(string id)
 	return id.substr(0, dotIndex);
 }
 
-string OEEmulation::getDeviceId(OEComponent *component)
+string Emulation::getDeviceId(OEComponent *component)
 {
-	for (OEComponentsMap::iterator i = componentsMap.begin();
+	for (map<string, OEComponent *>::iterator i = componentsMap.begin();
 		 i != componentsMap.end();
 		 i++)
 	{
@@ -908,7 +902,7 @@ string OEEmulation::getDeviceId(OEComponent *component)
 }
 
 /*
-bool OEEmulation::isDevice(string deviceId)
+bool Emulation::isDevice(string deviceId)
 {
 	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
 	
@@ -926,7 +920,7 @@ bool OEEmulation::isDevice(string deviceId)
 	return false;
 }
 
-OEIdList OEEmulation::getDeviceIds()
+OEIdList Emulation::getDeviceIds()
 {
 	OEIdList deviceIds;
 	xmlNodePtr rootNode = xmlDocGetRootElement(doc);

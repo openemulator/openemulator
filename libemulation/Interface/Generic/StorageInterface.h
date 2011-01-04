@@ -5,15 +5,16 @@
  * (C) 2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Defines the storage interface
+ * Defines the storage interface.
  */
-
-#include "OEComponent.h"
 
 typedef enum
 {
-	STORAGE_MOUNT,
-	STORAGE_IS_MOUNTABLE,
-	STORAGE_GET_MOUNT_PATH,
+	STORAGE_IS_IMAGE_MOUNTABLE,
+	STORAGE_MOUNT_IMAGE,
+	STORAGE_UNMOUNT_IMAGE,
 	STORAGE_IS_LOCKED,
+	STORAGE_GET_IMAGE_PATH,
+	STORAGE_GET_FORMAT,
+	STORAGE_GET_CAPACITY,
 } StorageMessages;

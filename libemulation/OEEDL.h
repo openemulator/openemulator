@@ -20,9 +20,6 @@
 #define OE_PACKAGE_PATH_EXTENSION "emulation"
 #define OE_PACKAGE_EDL_PATH "info.xml"
 
-typedef map<string, string> OEIdMap;
-typedef vector<string> OEIdList;
-
 typedef struct
 {
 	string label;

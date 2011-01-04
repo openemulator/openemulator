@@ -36,6 +36,8 @@
 #include "AppleIISlotMemory.h"
 #include "AppleIISlotExpansionMemory.h"
 #include "AppleDiskII.h"
+#include "AppleDiskIIInterfaceCard.h"
+#include "AppleGraphicsTablet.h"
 
 #include "MC6821.h"
 #include "MC6845.h"
@@ -76,6 +78,8 @@ OEComponent *OEComponentFactory::create(const string &className)
 	matchComponent(AppleIISlotMemory);
 	matchComponent(AppleIISlotExpansionMemory);
 	matchComponent(AppleDiskII);
+	matchComponent(AppleDiskIIInterfaceCard);
+	matchComponent(AppleGraphicsTablet);
 	
 	matchComponent(MC6821);
 	matchComponent(MC6845);

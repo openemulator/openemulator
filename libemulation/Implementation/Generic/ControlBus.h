@@ -69,7 +69,7 @@ public:
 	
 private:
 	OEComponent *emulation;
-	OEComponent *hostAudio;
+	OEComponent *audio;
 	OEComponent *cpu;
 	OEComponent *cpuSocket;
 	float crystalFrequency;

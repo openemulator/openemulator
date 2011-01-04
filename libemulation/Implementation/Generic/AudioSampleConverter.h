@@ -25,7 +25,7 @@ public:
 	void write16(OEAddress address, OEUInt16 value);
 	
 private:
-	OEComponent *hostAudio;
+	OEComponent *audio;
 	OEComponent *controlBus;
 	
 	double phase;
