@@ -10,14 +10,51 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "ChooserViewController.h"
+#import "VerticallyCenteredTextFieldCell.h"
 
-@interface TemplateChooserViewController : ChooserViewController
+@protocol TemplateChooserDelegate <NSObject>
+
+@optional
+
+- (void)templateChooserSelectionDidChange:(id)sender;
+- (void)templateChooserItemWasDoubleClicked:(id)sender;
+
+@end
+
+@interface TemplateChooserViewController : NSViewController
 {
+	IBOutlet id fVerticalSplitView;
+	IBOutlet id fHorizontalSplitView;
+	IBOutlet id fTableView;
+	IBOutlet id fImageBrowserView;
+	
+	IBOutlet id fSelectedItemImageView;
+	IBOutlet id fSelectedItemLabelView;
+	IBOutlet id fSelectedItemDescriptionView;
+	
+	id <TemplateChooserDelegate> delegate;
+	
+	VerticallyCenteredTextFieldCell *tableCell;
+	
+	NSMutableArray *groups;
+	NSString *selectedGroup;
+	NSMutableDictionary *items;
 }
 
-- (BOOL)validTemplatesAtPath:(NSString *)groupPath;
-- (void)addGroupAtPath:(NSString *)groupPath
-			   toGroup:(NSString *)group;
+- (void)setDelegate:(id)theDelegate;
+- (void)reloadData;
+
+- (void)loadGroups;
+- (void)loadItems;
+
+- (void)selectGroup:(NSString *)group
+	andItemWithPath:(NSString *)path;
+
+- (NSString *)selectedGroup;
+- (NSString *)selectedItemPath;
+
+- (BOOL)templatesAtPathValid:(NSString *)groupPath;
+- (void)addTemplatesAtPath:(NSString *)groupPath
+				   toGroup:(NSString *)group;
 
 @end

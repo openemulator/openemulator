@@ -8,7 +8,7 @@
  * Controls a hardware chooser view.
  */
 
-#import "HardwareChooserViewController.h"
+/*#import "HardwareChooserViewController.h"
 #import "ChooserItem.h"
 #import "Document.h"
 #import "StringConversion.h"
@@ -178,7 +178,7 @@
 	[groupNames addObjectsFromArray:[[groups allKeys]
 									 sortedArrayUsingSelector:@selector(compare:)]];
 	
-	[self selectItemWithPath:nil];*/
+	[self selectItemWithPath:nil];
 }
 
 - (NSMutableArray *)selectedItemConnectors
@@ -218,5 +218,6 @@
 	
 	return ports;
 }
-
+ 
 @end
+*/

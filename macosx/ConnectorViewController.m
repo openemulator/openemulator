@@ -8,8 +8,8 @@
  * Controls a connector view.
  */
 
+#import "Quartz/Quartz.h"
 #import "ConnectorViewController.h"
-#import "ChooserItem.h"
 
 @implementation ConnectorViewController
 
@@ -86,7 +86,7 @@ cellWasDoubleClickedAtIndex:(NSUInteger)index
 
 - (void)updateWithInlets:(NSArray *)inlets
 {
-	NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
+/*	NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
 	NSString *imagesPath = [resourcePath
 							stringByAppendingPathComponent:@"images"];
 	
@@ -103,7 +103,7 @@ cellWasDoubleClickedAtIndex:(NSUInteger)index
 		item = [[ChooserItem alloc] initWithLabel:[inlet objectForKey:@"label"]
 										imagePath:imagePath
 									  description:@""
-										  edlPath:nil
+										  edlPath:nil];
 										  data:[inlet objectForKey:@"ref"]];
 		
 		if (item)
@@ -116,18 +116,19 @@ cellWasDoubleClickedAtIndex:(NSUInteger)index
 	[fImageBrowserView reloadData];
 	[fImageBrowserView setSelectionIndexes:[NSIndexSet
 											indexSetWithIndex:0]
-					  byExtendingSelection:NO];
+					  byExtendingSelection:NO];*/
 }
 
 - (NSString *)selectedInletRef
 {
-	NSUInteger index = [[fImageBrowserView selectionIndexes] firstIndex];
+/*	NSUInteger index = [[fImageBrowserView selectionIndexes] firstIndex];
 	if (index == NSNotFound)
 		return nil;
 	
 	ChooserItem *item = [self imageBrowser:fImageBrowserView
 							   itemAtIndex:index];
-	return [[(NSString *)[item data] copy] autorelease];
+	return [[(NSString *)[item data] copy] autorelease];*/
+	return @"";
 }
 
 @end

@@ -12,11 +12,10 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="2049"/>
-			<integer value="28"/>
+			<integer value="2050"/>
 			<integer value="23"/>
+			<integer value="28"/>
 			<integer value="1865"/>
-			<integer value="2095"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -431,6 +430,38 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				<string key="NSClassName">NSView</string>
 				<string key="NSExtension">NSResponder</string>
 			</object>
+			<object class="NSCustomView" id="719483173">
+				<nil key="NSNextResponder"/>
+				<int key="NSvFlags">256</int>
+				<object class="NSMutableArray" key="NSSubviews">
+					<bool key="EncodedWithXMLCoder">YES</bool>
+					<object class="NSButton" id="1019521745">
+						<reference key="NSNextResponder" ref="719483173"/>
+						<int key="NSvFlags">256</int>
+						<string key="NSFrame">{{173, 35}, {321, 18}}</string>
+						<reference key="NSSuperview" ref="719483173"/>
+						<bool key="NSEnabled">YES</bool>
+						<object class="NSButtonCell" key="NSCell" id="946487041">
+							<int key="NSCellFlags">-2080244224</int>
+							<int key="NSCellFlags2">0</int>
+							<string key="NSContents">Enable GPU video processing</string>
+							<reference key="NSSupport" ref="86725571"/>
+							<reference key="NSControlView" ref="1019521745"/>
+							<int key="NSButtonFlags">1211912703</int>
+							<int key="NSButtonFlags2">2</int>
+							<reference key="NSNormalImage" ref="946852191"/>
+							<reference key="NSAlternateImage" ref="233681165"/>
+							<string key="NSAlternateContents"/>
+							<string key="NSKeyEquivalent"/>
+							<int key="NSPeriodicDelay">200</int>
+							<int key="NSPeriodicInterval">25</int>
+						</object>
+					</object>
+				</object>
+				<string key="NSFrameSize">{512, 91}</string>
+				<string key="NSClassName">NSView</string>
+				<string key="NSExtension">NSResponder</string>
+			</object>
 			<object class="NSWindowTemplate" id="495246826">
 				<int key="NSWindowStyleMask">15</int>
 				<int key="NSWindowBacking">2</int>
@@ -488,13 +519,13 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						</object>
 						<object class="NSTextField" id="257632565">
 							<reference key="NSNextResponder" ref="851795274"/>
-							<int key="NSvFlags">268</int>
-							<string key="NSFrame">{{17, 428}, {294, 17}}</string>
+							<int key="NSvFlags">266</int>
+							<string key="NSFrame">{{17, 428}, {566, 17}}</string>
 							<reference key="NSSuperview" ref="851795274"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="683970057">
-								<int key="NSCellFlags">68288064</int>
-								<int key="NSCellFlags2">272630784</int>
+								<int key="NSCellFlags">67239488</int>
+								<int key="NSCellFlags2">272631808</int>
 								<string key="NSContents">Choose a template for new emulations:</string>
 								<object class="NSFont" key="NSSupport">
 									<string key="NSName">LucidaGrande-Bold</string>
@@ -545,39 +576,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 			</object>
 			<object class="NSUserDefaultsController" id="356871564">
 				<bool key="NSSharedInstance">YES</bool>
-			</object>
-			<object class="NSCustomView" id="719483173">
-				<reference key="NSNextResponder"/>
-				<int key="NSvFlags">256</int>
-				<object class="NSMutableArray" key="NSSubviews">
-					<bool key="EncodedWithXMLCoder">YES</bool>
-					<object class="NSButton" id="1019521745">
-						<reference key="NSNextResponder" ref="719483173"/>
-						<int key="NSvFlags">256</int>
-						<string key="NSFrame">{{173, 35}, {321, 18}}</string>
-						<reference key="NSSuperview" ref="719483173"/>
-						<bool key="NSEnabled">YES</bool>
-						<object class="NSButtonCell" key="NSCell" id="946487041">
-							<int key="NSCellFlags">-2080244224</int>
-							<int key="NSCellFlags2">0</int>
-							<string key="NSContents">Enable GPU video processing</string>
-							<reference key="NSSupport" ref="86725571"/>
-							<reference key="NSControlView" ref="1019521745"/>
-							<int key="NSButtonFlags">1211912703</int>
-							<int key="NSButtonFlags2">2</int>
-							<reference key="NSNormalImage" ref="946852191"/>
-							<reference key="NSAlternateImage" ref="233681165"/>
-							<string key="NSAlternateContents"/>
-							<string key="NSKeyEquivalent"/>
-							<int key="NSPeriodicDelay">200</int>
-							<int key="NSPeriodicInterval">25</int>
-						</object>
-					</object>
-				</object>
-				<string key="NSFrameSize">{512, 91}</string>
-				<reference key="NSSuperview"/>
-				<string key="NSClassName">NSView</string>
-				<string key="NSExtension">NSResponder</string>
 			</object>
 		</object>
 		<object class="IBObjectContainer" key="IBDocument.Objects">
@@ -1071,6 +1069,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<string>2090.IBPluginDependency</string>
 					<string>2095.IBEditorWindowLastContentRect</string>
 					<string>2095.IBPluginDependency</string>
+					<string>2095.IBViewBoundsToFrameTransform</string>
 					<string>2095.ImportedFromIB2</string>
 					<string>2095.editorWindowContentRectSynchronizationRect</string>
 					<string>2096.IBPluginDependency</string>
@@ -1120,9 +1119,9 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<real value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{217, 257}, {600, 460}}</string>
+					<string>{{66, 226}, {600, 460}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{217, 257}, {600, 460}}</string>
+					<string>{{66, 226}, {600, 460}}</string>
 					<boolean value="NO"/>
 					<boolean value="YES"/>
 					<string>{600, 460}</string>
@@ -1137,6 +1136,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{36, 260}, {512, 91}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<object class="NSAffineTransform"/>
 					<real value="1"/>
 					<string>{{0, 701}, {539, 272}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>

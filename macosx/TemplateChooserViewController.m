@@ -2,24 +2,31 @@
 /**
  * OpenEmulator
  * Mac OS X Chooser View Controller
- * (C) 2009 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls a device or template chooser view.
+ * Controls a template chooser view.
  */
 
-#import "ChooserViewController.h"
-#import "ChooserItem.h"
+#import "Quartz/Quartz.h"
 
+#import "TemplateChooserViewController.h"
+#import "TemplateChooserItem.h"
+#import "Document.h"
+
+#define USER_TEMPLATES_GROUP @"My Templates"
 #define SPLIT_VERT_MIN 128
 #define SPLIT_VERT_MAX 256
 #define SPLIT_HORIZ_MIN 108
 
-@implementation ChooserViewController
+#define EMULATION_PACKAGE_PATH_EXTENSION	@"emulation"
+#define EMULATION_FILE_PATH_EXTENSION		@"xml"
+
+@implementation TemplateChooserViewController
 
 - (id)init
 {
-	self = [super initWithNibName:@"Chooser" bundle:nil];
+	self = [super initWithNibName:@"TemplateChooserView" bundle:nil];
 	
 	if (self)
 	{
@@ -32,8 +39,6 @@
 
 - (void)dealloc
 {
-	[tableCell release];
-	
 	[groups release];
 	[selectedGroup release];
 	[items release];
@@ -43,7 +48,7 @@
 
 - (void)setDelegate:(id)theDelegate
 {
-	chooserDelegate = theDelegate;
+	delegate = theDelegate;
 }
 
 - (void)reloadData
@@ -180,13 +185,6 @@ objectValueForTableColumn:(NSTableColumn *)aTableColumn
 	return [groups objectAtIndex:rowIndex];
 }
 
-- (NSCell *)tableView:(NSTableView *)tableView
-dataCellForTableColumn:(NSTableColumn *)tableColumn
-				  row:(NSInteger)row
-{
-	return tableCell;
-}
-
 - (void)tableViewSelectionDidChange:(NSNotification *)aNotification
 {
 	if (selectedGroup)
@@ -201,6 +199,13 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
 	[fImageBrowserView reloadData];
 	[fImageBrowserView setSelectionIndexes:[NSIndexSet indexSetWithIndex:0]
 					  byExtendingSelection:NO];
+}
+
+- (NSCell *)tableView:(NSTableView *)tableView
+dataCellForTableColumn:(NSTableColumn *)tableColumn
+				  row:(NSInteger)row
+{
+	return tableCell;
 }
 
 
@@ -233,7 +238,7 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
 	NSUInteger index = [[fImageBrowserView selectionIndexes] firstIndex];
 	if (index != NSNotFound)
 	{
-		ChooserItem *item = [self imageBrowser:fImageBrowserView
+		TemplateChooserItem *item = [self imageBrowser:fImageBrowserView
 								   itemAtIndex:index];
 		label = [item imageTitle];
 		image = [item imageRepresentation];
@@ -243,26 +248,18 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
 	[fSelectedItemImageView setImage:image];
 	[fSelectedItemDescriptionView setStringValue:description];
 	
-	if ([chooserDelegate respondsToSelector:@selector(chooserSelectionDidChange:)])
-		[chooserDelegate chooserSelectionDidChange:self];
+	if ([delegate respondsToSelector:@selector(templateChooserSelectionDidChange:)])
+		[delegate templateChooserSelectionDidChange:self];
 }
 
 - (void)imageBrowser:(IKImageBrowserView *)aBrowser
 cellWasDoubleClickedAtIndex:(NSUInteger)index
 {
-	if ([chooserDelegate respondsToSelector:@selector(chooserItemWasDoubleClicked:)])
-		[chooserDelegate chooserItemWasDoubleClicked:self];
+	if ([delegate respondsToSelector:@selector(templateChooserItemWasDoubleClicked:)])
+		[delegate templateChooserItemWasDoubleClicked:self];
 }
 
 
-
-- (void)loadItems
-{
-}
-
-- (void)loadGroups
-{
-}
 
 - (void)selectGroup:(NSString *)group
 	andItemWithPath:(NSString *)path
@@ -272,7 +269,7 @@ cellWasDoubleClickedAtIndex:(NSUInteger)index
 		[fTableView selectRowIndexes:[NSIndexSet indexSet]
 				byExtendingSelection:NO];
 		
-		[chooserDelegate chooserSelectionDidChange:self];
+		[delegate templateChooserSelectionDidChange:self];
 		return;
 	}
 	
@@ -286,7 +283,7 @@ cellWasDoubleClickedAtIndex:(NSUInteger)index
 	NSArray *groupItems = [items objectForKey:group];
 	for (NSInteger i = 0; i < [groupItems count]; i++)
 	{
-		ChooserItem *item = [groupItems objectAtIndex:i];
+		TemplateChooserItem *item = [groupItems objectAtIndex:i];
 		if ([[item edlPath] compare:path] == NSOrderedSame)
 			itemIndex = i;
 	}
@@ -309,9 +306,111 @@ cellWasDoubleClickedAtIndex:(NSUInteger)index
 	if (imageIndex == NSNotFound)
 		return nil;
 	
-	ChooserItem *item = [self imageBrowser:fImageBrowserView
-							   itemAtIndex:imageIndex];
+	TemplateChooserItem *item = [self imageBrowser:fImageBrowserView
+									   itemAtIndex:imageIndex];
 	return [[[item edlPath] copy] autorelease];
+}
+
+
+
+- (void)loadGroups
+{
+	NSString *templatesPath = [[[NSBundle mainBundle] resourcePath]
+							   stringByAppendingPathComponent:@"templates"];
+	
+	[groups removeAllObjects];
+	
+	// Find templates
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	NSArray *subpaths = [fileManager contentsOfDirectoryAtPath:templatesPath
+														 error:nil];
+	for (NSString *pathComponent in subpaths)
+	{
+		NSString *groupPath = [templatesPath stringByAppendingPathComponent:pathComponent];
+		if ([self templatesAtPathValid:groupPath])
+			[groups addObject:pathComponent];
+	}
+	
+	// Sort alphabetically
+	[groups setArray:[groups sortedArrayUsingSelector:@selector(compare:)]];
+	
+	// Find user templates
+	[items removeObjectForKey:NSLocalizedString(USER_TEMPLATES_GROUP,
+												"Template Chooser.")];
+	if ([self templatesAtPathValid:USER_TEMPLATES_FOLDER])
+		[groups addObject:NSLocalizedString(USER_TEMPLATES_GROUP,
+											"Template Chooser.")];
+}
+
+- (void)loadItems
+{
+	if ([items objectForKey:selectedGroup])
+		return;
+	
+	NSString *group = NSLocalizedString(USER_TEMPLATES_GROUP,
+										"Template Chooser.");
+	if ([selectedGroup compare:group] == NSOrderedSame)
+		[self addTemplatesAtPath:USER_TEMPLATES_FOLDER
+						 toGroup:group];
+	else
+	{
+		NSString *templatesPath = [[[NSBundle mainBundle] resourcePath]
+								   stringByAppendingPathComponent:@"templates"];
+		NSString *groupPath = [templatesPath stringByAppendingPathComponent:selectedGroup];
+		[self addTemplatesAtPath:groupPath
+						 toGroup:selectedGroup];
+	}
+}
+
+- (BOOL)templatesAtPathValid:(NSString *)groupPath
+{
+	groupPath = [groupPath stringByExpandingTildeInPath];
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	BOOL isDirectory;
+	if (![fileManager fileExistsAtPath:groupPath isDirectory:&isDirectory] ||
+		!isDirectory)
+		return NO;
+	
+	NSArray *subpaths = [fileManager contentsOfDirectoryAtPath:groupPath
+														 error:nil];
+	for (NSString *pathComponent in subpaths)
+	{
+		NSString *pathExtension = [[pathComponent pathExtension] lowercaseString];
+		
+		if (([pathExtension compare:EMULATION_PACKAGE_PATH_EXTENSION] == NSOrderedSame) ||
+			([pathExtension compare:EMULATION_FILE_PATH_EXTENSION] == NSOrderedSame))
+			return YES;
+	}
+	
+	return NO;
+}
+
+- (void)addTemplatesAtPath:(NSString *)path
+				   toGroup:(NSString *)group
+{
+	if (![items objectForKey:group])
+		[items setObject:[NSMutableArray array] forKey:group];
+	
+	path = [path stringByExpandingTildeInPath];
+	
+	NSArray *pathContents = [[NSFileManager defaultManager]
+							 contentsOfDirectoryAtPath:path
+							 error:nil];
+	for (NSString *edlFilename in pathContents)
+	{
+		NSString *edlPath = [path stringByAppendingPathComponent:edlFilename];
+		
+		NSString *pathExtension = [[edlPath pathExtension] lowercaseString];
+		if (([pathExtension compare:EMULATION_PACKAGE_PATH_EXTENSION] != NSOrderedSame) &&
+			([pathExtension compare:EMULATION_FILE_PATH_EXTENSION] != NSOrderedSame))
+			continue;
+		
+		TemplateChooserItem *item;
+		item = [[TemplateChooserItem alloc] initWithEDLPath:edlPath];
+		
+		if (item)
+			[[items objectForKey:group] addObject:item];
+	}
 }
 
 @end

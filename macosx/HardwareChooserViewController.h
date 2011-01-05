@@ -10,9 +10,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "ChooserViewController.h"
-
-@interface HardwareChooserViewController : ChooserViewController
+/*@interface HardwareChooserViewController : ChooserViewController
 {
 	NSMutableArray *edlInfos;
 }
@@ -21,3 +19,4 @@
 - (NSMutableArray *)selectedItemConnectors;
 
 @end
+*/

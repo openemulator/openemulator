@@ -8,6 +8,7 @@
  * Controls the hardware chooser window.
  */
 
+/*
 #import "HardwareChooserWindowController.h"
 #import "Document.h"
 
@@ -247,3 +248,4 @@
 }
 
 @end
+*/

@@ -20,6 +20,9 @@
 	IBOutlet TemplateChooserWindowController *fTemplateChooserWindowController;
 	IBOutlet LibraryWindowController *fLibraryWindowController;
 	
+	IBOutlet id fAudioControlsMenuItem;
+	IBOutlet id fLibraryMenuItem;
+	
 	NSArray *diskImagePathExtensions;
 	NSArray *audioPathExtensions;
 	NSArray *textPathExtensions;
@@ -32,12 +35,11 @@
 - (NSArray *)diskImagePathExtensions;
 - (NSArray *)audioPathExtensions;
 - (NSArray *)textPathExtensions;
-
 - (void *)portAudioHAL;
+- (IBAction)toggleAudioControls:(id)sender;
+- (IBAction)toggleLibrary:(id)sender;
 
-- (void)toggleAudioControls:(id)sender;
 - (IBAction)newDocumentFromTemplateChooser:(id)sender;
-
 - (id)openUntitledDocumentWithTemplateURL:(NSURL *)absoluteURL
 								  display:(BOOL)displayDocument
 									error:(NSError **)outError;

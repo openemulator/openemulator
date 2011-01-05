@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
+<edl version="1.0" label="Super Serial Card" image="images/Apple II/Apple II Super Serial Card.png">
+
+<device id="ssc" label="Apple II Super Serial Card" image="images/Apple II/Apple II Super Serial Card.png">
+    <setting ref="ssc.io" name="mode" label="Mode" type="select" options="Communications,Printer" />
+    <setting ref="ssc.io" name="baudRate" label="Baud Rate" type="select" options="50,75,110,135,150,300,600,1200,1800,2400,3600,4800,7200,9600,19200" />
+    <setting ref="ssc.io" name="dataBits" label="Data Bits" type="select" options="7,8" />
+    <setting ref="ssc.io" name="stopBits" label="Stop Bits" type="select" options="1,2" />
+    <setting ref="ssc.io" name="parity" label="Parity" type="select" options="None,Even,Odd" />
+    <setting ref="ssc.io" name="autoLFAfterCR" label="Auto LF After CR" type="checkbox" />
+    <setting ref="ssc.io" name="interrupts" label="Enable Interrupts" type="checkbox" />
+    <setting ref="ssc.io" name="charactersPerLine" label="Characters per Line" type="select" options="40,72,80,132" />
+    <setting ref="ssc.io" name="delayAfterCR" label="Delay After CR" type="checkbox" />
+</device>
+<connector id="ssc.connector" ref="" type="AppleIISlot" label="Apple II Super Serial Card" image="Apple II Super Serial Card.png" />
+<port id="ssc.port" ref="" type="RS232" label="Serial Port" image="Serial Port.png">
+    <inlet ref="ssc.io" property="port" outletRef="io" />
+</port>
+<component id="ssc.io" class="AppleIISuperSerialCard">
+    <property name="port" ref="" />
+    <property name="mode" value="0" />
+    <property name="baudRate" value="9600" />
+    <property name="dataBits" value="1" />
+    <property name="stopBits" value="1" />
+    <property name="parity" value="0" />
+    <property name="autoLFAfterCR" value="0" />
+    <property name="interrupts" value="0" />
+    <property name="charactersPerLine" value="0" />
+    <property name="delayAfterCR" value="0" />
+</component>
+<component id="ssc.memory" class="ROM">
+    <property name="image" src="roms/Apple II/Apple II Super Serial Card ROM.bin" />
+</component>
+
+</edl>

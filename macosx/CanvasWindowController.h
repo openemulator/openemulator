@@ -9,10 +9,13 @@
  */
 
 #import <Cocoa/Cocoa.h>
+#import <Quartz/Quartz.h>
 
 @interface CanvasWindowController : NSWindowController
 {
 	void *canvasComponent;
 }
+
+- (id)initWithCanvasComponent:(void *)theCanvasComponent;
 
 @end

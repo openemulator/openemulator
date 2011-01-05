@@ -12,28 +12,22 @@
 
 #import "Document.h"
 
-@interface EmulationStorage : NSObject
-{
-	void *storage;
-}
-
-@end
-
 @interface EmulationItem : NSObject
 {
+	NSMutableArray *children;
 	Document *document;
 	
 	NSString *uid;
-	NSImage *image;
+	NSString *imagePath;
 	NSString *label;
+	
 	NSString *location;
 	NSString *state;
+	BOOL isRemovable;
 	
-	BOOL canvas;
+	BOOL isCanvas;
 	
-	BOOL storage;
-	BOOL mounted;
-	NSString *diskImagePath;
+	BOOL isStorage;
 	void *storageComponent;
 	
 	NSMutableArray *settingsRefs;
@@ -42,32 +36,35 @@
 	NSMutableArray *settingsTypes;
 	NSMutableArray *settingsOptions;
 	
-	NSMutableArray *children;
+	NSImage *image;
 }
 
 - (id)initWithDocument:(Document *)theDocument;
 - (id)initWithLabel:(NSString *)theLabel;
 - (id)initWithDeviceInfo:(void *)theDeviceInfo
 			  inDocument:(Document *)theDocument;
-- (id)initWithDiskImageAtPath:(NSString *)thePath
-					  storage:(void *)theComponent
-					 location:(NSString *)theLocation
-				   inDocument:(Document *)theDocument;
+- (id)initWithStorage:(void *)theComponent
+		   deviceInfo:(void *)theDeviceInfo
+		   inDocument:(Document *)theDocument;
 
-- (NSImage *)getImage:(NSString *)path;
+- (NSMutableArray *)children;
+- (EmulationItem *)childWithUid:(NSString *)theUid;
 
 - (NSString *)uid;
 - (NSImage *)image;
 - (NSString *)label;
+
 - (NSString *)location;
 - (NSString *)state;
+- (BOOL)isRemovable;
 
-- (BOOL)canvas;
+- (BOOL)isCanvas;
 
-- (BOOL)storage;
-- (BOOL)mounted;
-- (BOOL)locked;
+- (BOOL)isStorage;
+- (BOOL)isStorageMounted;
 - (NSString *)storagePath;
+- (NSString *)storageFormat;
+- (NSString *)storageCapacity;
 - (BOOL)mount:(NSString *)path;
 - (void)unmount;
 
@@ -77,8 +74,5 @@
 - (NSArray *)optionsForSettingAtIndex:(NSInteger)index;
 - (void)setValue:(NSString *)value forSettingAtIndex:(NSInteger)index;
 - (NSString *)valueForSettingAtIndex:(NSInteger)index;
-
-- (NSMutableArray *)children;
-- (EmulationItem *)childWithUid:(NSString *)theUid;
 
 @end

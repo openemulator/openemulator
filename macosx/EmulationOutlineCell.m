@@ -48,7 +48,7 @@
 	if ([item image])
 		NSDivideRect(rect, &paddingRect, &rect,
 					 IMAGE_SIZE + IMAGE_PADDING, NSMinXEdge);
-	if ([item canvas] || [item mounted])
+	if ([item isCanvas] || [item isStorageMounted])
 		NSDivideRect(rect, &paddingRect, &rect, BUTTON_LEFT_PADDING + BUTTON_SIZE +
 					 BUTTON_RIGHT_PADDING, NSMaxXEdge);
 	
@@ -59,7 +59,7 @@
 {
 	EmulationItem *item = [self representedObject];
 	
-	if (![item canvas] && ![item mounted])
+	if (![item isCanvas] && ![item isStorageMounted])
 		return NSZeroRect;
 	
 	NSRect rect = bounds;
@@ -91,9 +91,9 @@
 		  isFlipped:[controlView isFlipped]];
 	
 	NSString *name = @"";
-	if ([item canvas])
+	if ([item isCanvas])
 		name = @"EmulationShow";
-	else if ([item mounted])
+	else if ([item isStorageMounted])
 		name = @"EmulationUnmount";
 	if (buttonPressed)
 		name = [name stringByAppendingString:@"Pressed"];

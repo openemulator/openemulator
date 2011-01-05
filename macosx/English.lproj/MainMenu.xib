@@ -606,7 +606,7 @@
 								</object>
 								<object class="NSMenuItem" id="893446269">
 									<reference key="NSMenu" ref="444160175"/>
-									<string key="NSTitle">Show Library</string>
+									<string key="NSTitle">Show Hardware Library</string>
 									<string key="NSKeyEquiv">L</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -1311,6 +1311,22 @@
 						<reference key="destination" ref="670222506"/>
 					</object>
 					<int key="connectionID">978</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">fLibraryMenuItem</string>
+						<reference key="source" ref="670222506"/>
+						<reference key="destination" ref="893446269"/>
+					</object>
+					<int key="connectionID">979</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">fAudioControlsMenuItem</string>
+						<reference key="source" ref="670222506"/>
+						<reference key="destination" ref="1037272463"/>
+					</object>
+					<int key="connectionID">980</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -2281,7 +2297,7 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>{{23, 794}, {245, 183}}</string>
-					<string>{{408, 429}, {231, 213}}</string>
+					<string>{{408, 429}, {244, 213}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{475, 832}, {234, 43}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -2367,7 +2383,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">978</int>
+			<int key="maxID">980</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -2803,13 +2819,17 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>fAudioControlsMenuItem</string>
 							<string>fAudioControlsWindowController</string>
+							<string>fLibraryMenuItem</string>
 							<string>fLibraryWindowController</string>
 							<string>fTemplateChooserWindowController</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
 							<string>AudioControlsWindowController</string>
+							<string>id</string>
 							<string>LibraryWindowController</string>
 							<string>TemplateChooserWindowController</string>
 						</object>
@@ -2818,15 +2838,25 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>fAudioControlsMenuItem</string>
 							<string>fAudioControlsWindowController</string>
+							<string>fLibraryMenuItem</string>
 							<string>fLibraryWindowController</string>
 							<string>fTemplateChooserWindowController</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<object class="IBToOneOutletInfo">
+								<string key="name">fAudioControlsMenuItem</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBToOneOutletInfo">
 								<string key="name">fAudioControlsWindowController</string>
 								<string key="candidateClassName">AudioControlsWindowController</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">fLibraryMenuItem</string>
+								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">fLibraryWindowController</string>

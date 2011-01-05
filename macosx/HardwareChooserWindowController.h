@@ -7,7 +7,7 @@
  *
  * Controls the hardware chooser window.
  */
-
+/*
 #import <Cocoa/Cocoa.h>
 
 #import "HardwareChooserViewController.h"
@@ -50,3 +50,4 @@
 - (IBAction)performNext:(id)sender;
 
 @end
+*/

@@ -108,7 +108,6 @@ public:
 	bool mount(string path);
 	bool isMountable(string path);
 	bool mount(string path, string id);
-	bool unmountFirst(string id);
 	
 	bool postMessage(OEComponent *sender, int message, void *data);
 	

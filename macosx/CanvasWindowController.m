@@ -43,7 +43,7 @@
 
 - (NSString *)windowTitleForDocumentDisplayName:(NSString *)displayName
 {
-	return [displayName stringByAppendingString:@" - Monitor"];
+	return [displayName stringByAppendingString:@" - Apple Monitor II"];
 }
 
 - (NSToolbarItem *)toolbar:(NSToolbar *)toolbar
@@ -156,6 +156,7 @@
 			@"Sleep",
 			@"Wake Up",
 			NSToolbarFlexibleSpaceItemIdentifier,
+			@"AudioControls",
 			@"Info",
 			nil];
 }

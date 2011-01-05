@@ -26,6 +26,7 @@
 		{
 			EmulationDeviceInfo &deviceInfo = emulationInfo->at(i);
 			
+			// Create group item
 			NSString *groupName = getNSString(deviceInfo.group);
 			EmulationItem *groupItem = [self childWithUid:groupName];
 			if (!groupItem)
@@ -35,6 +36,7 @@
 				[groupItem release];
 			}
 			
+			// Create device item
 			EmulationItem *deviceItem;
 			deviceItem = [[EmulationItem alloc] initWithDeviceInfo:&deviceInfo
 														inDocument:theDocument];
@@ -50,11 +52,11 @@
 {
 	if (self = [super init])
 	{
+		children = [[NSMutableArray alloc] init];
+		
 		uid = [theLabel copy];
 		label = [[NSLocalizedString(theLabel, @"Emulation Item Label.")
 				  uppercaseString] retain];
-		
-		children = [[NSMutableArray alloc] init];
 	}
 	
 	return self;
@@ -65,17 +67,24 @@
 {
 	if (self = [super init])
 	{
-		EmulationDeviceInfo *deviceInfo = (EmulationDeviceInfo *)theDeviceInfo;
-		
+		children = [[NSMutableArray alloc] init];
 		document = theDocument;
+		
+		NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
+		EmulationDeviceInfo *deviceInfo = (EmulationDeviceInfo *)theDeviceInfo;
 		
 		uid = [getNSString(deviceInfo->id) retain];
 		label = [getNSString(deviceInfo->label) retain];
-		image = [[self getImage:getNSString(deviceInfo->image)] retain];
+		imagePath = [[resourcePath stringByAppendingPathComponent:
+					  getNSString(deviceInfo->image)] retain];
+		
 		location = [getNSString(deviceInfo->location) retain];
 		state = [getNSString(deviceInfo->state) retain];
-		canvas = (deviceInfo->canvases.size() != 0);
-		storage = (deviceInfo->storages.size() != 0);
+		isRemovable = ([location length] != 0);
+		
+		isCanvas = (deviceInfo->canvases.size() != 0);
+		
+		isStorage = (deviceInfo->storages.size() != 0);
 		
 		settingsRefs = [[NSMutableArray alloc] init];
 		settingsNames = [[NSMutableArray alloc] init];
@@ -101,53 +110,44 @@
 			[settingsOptions addObject:settingOptions];
 		}
 		
-		children = [[NSMutableArray alloc] init];
-		
 		for (OEComponents::iterator i = deviceInfo->storages.begin();
 			 i != deviceInfo->storages.end();
 			 i++)
 		{
-			NSString *path = [[document pathOfImageInStorage:*i]
-							  lastPathComponent];
-			if ([path length])
+			if ([document storageMounted:*i])
 			{
-				EmulationItem *diskImageItem;
-				diskImageItem = [[EmulationItem alloc] initWithDiskImageAtPath:path
-																	   storage:*i
-																	  location:location
-																	inDocument:theDocument];
-				[children addObject:diskImageItem];
-				[diskImageItem release];
+				EmulationItem *storageItem;
+				storageItem = [[EmulationItem alloc] initWithStorage:*i
+														  deviceInfo:theDeviceInfo
+														  inDocument:theDocument];
+				[children addObject:storageItem];
+				[storageItem release];
 			}
-			
-			storageComponent = *i;
 		}
 	}
 	
 	return self;
 }
 
-- (id)initWithDiskImageAtPath:(NSString *)thePath
-					  storage:(void *)theComponent
-					 location:(NSString *)theLocation
-				   inDocument:(Document *)theDocument
+- (id)initWithStorage:(void *)theComponent
+		   deviceInfo:(void *)theDeviceInfo
+		   inDocument:(Document *)theDocument
 {
 	if (self = [super init])
 	{
+		children = [[NSMutableArray alloc] init];
 		document = theDocument;
 		
-		uid = @"";
-		label = [[thePath lastPathComponent] retain];
-		image = [[NSImage imageNamed:@"DiskImage"] retain];
-		location = [theLocation copy];
-		state = @"Mounted Read/Write";
+		EmulationDeviceInfo *deviceInfo = (EmulationDeviceInfo *)theDeviceInfo;
 		
-		mounted = YES;
-		storage = NO;
-		diskImagePath = [thePath copy];
+		location = [getNSString(deviceInfo->location) retain];
+		state = ([document storageWritable:theComponent] ?
+				 @"Mounted Read-Only" : @"Mounted Read/Write");
+		
 		storageComponent = theComponent;
 		
-		children = [[NSMutableArray alloc] init];
+		label = [[[self storagePath] lastPathComponent] retain];
+		image = [[NSImage imageNamed:@"DiskImage"] retain];
 	}
 	
 	return self;
@@ -155,13 +155,14 @@
 
 - (void)dealloc
 {
+	[children release];
+	
 	[uid release];
-	[image release];
+	[imagePath release];
 	[label release];
+	
 	[location release];
 	[state release];
-	
-	[diskImagePath release];
 	
 	[settingsRefs release];
 	[settingsNames release];
@@ -169,9 +170,25 @@
 	[settingsTypes release];
 	[settingsOptions release];
 	
-	[children release];
+	[image release];
 	
 	[super dealloc];
+}
+
+- (NSMutableArray *)children
+{
+	return children;
+}
+
+- (EmulationItem *)childWithUid:(NSString *)theUid
+{
+	for (EmulationItem *item in children)
+	{
+		if ([[item uid] compare:theUid] == NSOrderedSame)
+			return item;
+	}
+	
+	return nil;
 }
 
 - (NSImage *)getImage:(NSString *)path
@@ -189,6 +206,9 @@
 
 - (NSImage *)image
 {
+	if (!image)
+		image = [[NSImage alloc] initByReferencingFile:imagePath];
+	
 	return image;
 }
 
@@ -207,29 +227,39 @@
 	return state;
 }
 
-- (BOOL)canvas
+- (BOOL)isRemovable
 {
-	return canvas;
+	return isRemovable;
 }
 
-- (BOOL)storage
+- (BOOL)isCanvas
 {
-	return storage;
+	return isCanvas;
 }
 
-- (BOOL)mounted
+- (BOOL)isStorage
 {
-	return mounted;
+	return isStorage;
 }
 
-- (BOOL)locked
+- (BOOL)isStorageMounted
 {
-	return NO;
+	return (storageComponent != nil);
 }
 
 - (NSString *)storagePath
 {
-	return diskImagePath;
+	return [document storagePath:storageComponent];
+}
+
+- (NSString *)storageFormat
+{
+	return [document storageFormat:storageComponent];
+}
+
+- (NSString *)storageCapacity
+{
+	return [document storageCapacity:storageComponent];
 }
 
 - (BOOL)mount:(NSString *)path
@@ -292,22 +322,6 @@
 	}
 	
 	return value;
-}
-
-- (NSMutableArray *)children
-{
-	return children;
-}
-
-- (EmulationItem *)childWithUid:(NSString *)theUid
-{
-	for (EmulationItem *item in children)
-	{
-		if ([[item uid] compare:theUid] == NSOrderedSame)
-			return item;
-	}
-	
-	return nil;
 }
 
 @end

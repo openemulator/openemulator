@@ -14,34 +14,17 @@
 
 - (id)init
 {
-	self = [self initWithWindowNibName:@"Library"];
-	
+	self = [super initWithWindowNibName:@"Library"];
 	return self;
 }
 
 - (void)windowDidLoad
 {
 	[self setWindowFrameAutosaveName:@"Library"];
+	NSLog(@"Library!");
 }
 
-- (BOOL)validateUserInterfaceItem:(id)item
-{
-	if ([item action] == @selector(toggleLibrary:))
-	{  
-		NSString *menuTitle;
-		if (![[self window] isVisible])
-			menuTitle = NSLocalizedString(@"Show Hardware Library",
-										  @"Main Menu.");
-		else
-			menuTitle = NSLocalizedString(@"Hide Hardware Library",
-										  @"Main Menu.");
-		[item setTitleWithMnemonic:menuTitle];
-	}
-	
-	return YES;
-}
-
-- (void)toggleLibrary:(id)sender
+- (IBAction)toggleLibrary:(id)sender
 {
 	if ([[self window] isVisible])
 		[[self window] orderOut:self];

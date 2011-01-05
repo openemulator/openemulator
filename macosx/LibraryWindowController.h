@@ -12,7 +12,6 @@
 
 @interface LibraryWindowController : NSWindowController
 {
-
 }
 
 - (IBAction)toggleLibrary:(id)sender;

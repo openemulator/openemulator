@@ -73,6 +73,8 @@
 	[super dealloc];
 }
 
+
+
 - (void)applicationWillFinishLaunching:(NSNotification *)notification
 {
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -230,15 +232,41 @@
 	return YES;
 }
 
-- (BOOL)validateUserInterfaceItem:(id)item
+
+
+- (BOOL)validateUserInterfaceItem:(id <NSValidatedUserInterfaceItem>)anItem
 {
-	if ([item action] == @selector(newDocument:))
+    SEL action = [anItem action];
+    
+	if (action == @selector(newDocument:))
 		return ![[fTemplateChooserWindowController window] isVisible];
-	else if ([item action] == @selector(newDocumentFromTemplateChooser:))
+	else if (action == @selector(newDocumentFromTemplateChooser:))
 		return ![[fTemplateChooserWindowController window] isVisible];
-	else
+	else if (action == @selector(toggleAudioControls:))
+	{
+		NSString *title = ([[fAudioControlsWindowController window] isVisible] ?
+						   NSLocalizedString(@"Hide Audio Controls",
+											 @"Main Menu.") :
+						   NSLocalizedString(@"Show Audio Controls",
+											 @"Main Menu."));
+		[fAudioControlsMenuItem setTitle:title];
 		return YES;
+	}
+	else if (action == @selector(toggleLibrary:))
+	{  
+		NSString *title = ([[fLibraryWindowController window] isVisible] ?
+						   NSLocalizedString(@"Hide Hardware Library",
+											 @"Main Menu.") :
+						   NSLocalizedString(@"Show Hardware Library",
+											 @"Main Menu."));
+		[fLibraryMenuItem setTitle:title];
+		return YES;
+	}
+	
+    return [super validateUserInterfaceItem:anItem];
 }
+
+
 
 - (NSArray *)diskImagePathExtensions
 {
@@ -260,10 +288,17 @@
 	return portAudioHAL;
 }
 
-- (void)toggleAudioControls:(id)sender
+- (IBAction)toggleAudioControls:(id)sender
 {
 	[fAudioControlsWindowController toggleAudioControls:sender];
 }
+
+- (IBAction)toggleLibrary:(id)sender
+{
+	[fLibraryWindowController toggleLibrary:sender];
+}
+
+
 
 - (IBAction)newDocumentFromTemplateChooser:(id)sender
 {
@@ -357,6 +392,8 @@
 	
 	return nil;
 }
+
+
 
 - (void)disableMenuBar
 {

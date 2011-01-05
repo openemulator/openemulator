@@ -18,7 +18,7 @@
 
 - (id)init
 {
-	self = [self initWithWindowNibName:@"AudioControls"];
+	self = [super initWithWindowNibName:@"AudioControls"];
 	
 	return self;
 }
@@ -58,24 +58,7 @@
 	[super dealloc];
 }
 
-- (BOOL)validateUserInterfaceItem:(id)item
-{
-	if ([item action] == @selector(toggleAudioControls:))
-	{  
-		NSString *menuTitle;
-		if (![[self window] isVisible])
-			menuTitle = NSLocalizedString(@"Show Audio Controls",
-										  @"Main Menu.");
-		else
-			menuTitle = NSLocalizedString(@"Hide Audio Controls",
-										  @"Main Menu.");
-		[item setTitleWithMnemonic:menuTitle];
-	}
-	
-	return YES;
-}
-
-- (void)toggleAudioControls:(id)sender
+- (IBAction)toggleAudioControls:(id)sender
 {
 	if ([[self window] isVisible])
 		[[self window] orderOut:self];

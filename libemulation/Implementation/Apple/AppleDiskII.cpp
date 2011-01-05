@@ -67,17 +67,7 @@ bool AppleDiskII::postMessage(OEComponent *sender, int message, void *data)
 {
 	switch(message)
 	{
-		case STORAGE_IS_IMAGE_MOUNTABLE:
-			if (data)
-			{
-				bool *value = (bool *) data;
-				*value = true;
-				
-				return true;
-			}
-			break;
-			
-		case STORAGE_MOUNT_IMAGE:
+		case STORAGE_MOUNT:
 			if (data)
 			{
 				string *path = (string *)data;
@@ -87,9 +77,39 @@ bool AppleDiskII::postMessage(OEComponent *sender, int message, void *data)
 			}
 			break;
 			
-		case STORAGE_UNMOUNT_IMAGE:
+		case STORAGE_UNMOUNT:
 			image = "";
 			return true;
+			
+		case STORAGE_IS_MOUNTABLE:
+			if (data)
+			{
+				bool *value = (bool *) data;
+				*value = true;
+				
+				return true;
+			}
+			break;
+			
+		case STORAGE_IS_MOUNTED:
+			if (data)
+			{
+				bool *value = (bool *) data;
+				*value = (image != "");
+				
+				return true;
+			}
+			break;
+			
+		case STORAGE_IS_WRITABLE:
+			if (data)
+			{
+				bool *value = (bool *) data;
+				*value = true;
+				
+				return true;
+			}
+			break;
 			
 		case STORAGE_IS_LOCKED:
 			if (data)
@@ -101,7 +121,7 @@ bool AppleDiskII::postMessage(OEComponent *sender, int message, void *data)
 			}
 			break;
 			
-		case STORAGE_GET_IMAGE_PATH:
+		case STORAGE_GET_PATH:
 			if (data)
 			{
 				string *path = (string *)data;
@@ -111,11 +131,21 @@ bool AppleDiskII::postMessage(OEComponent *sender, int message, void *data)
 			}
 			break;
 			
+		case STORAGE_GET_FORMAT:
+			if (data)
+			{
+				string *value = (string *) data;
+				*value = "Apple 16-Sector";
+				
+				return true;
+			}
+			break;
+			
 		case STORAGE_GET_CAPACITY:
 			if (data)
 			{
 				OEUInt64 *value = (OEUInt64 *) data;
-				*value = 1024 * 1024;
+				*value = 35 * 16 * 256;
 				
 				return true;
 			}

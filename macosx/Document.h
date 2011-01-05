@@ -31,8 +31,17 @@
 
 - (void *)emulationInfo;
 
-- (void)addEDL:(NSString *)path connections:(NSDictionary *)connections;
-- (void)removeDevice:(NSString *)deviceId;
+- (BOOL)mount:(NSString *)path;
+- (BOOL)mount:(NSString *)path inDevice:(NSString *)device;
+- (BOOL)mount:(NSString *)path inStorage:(void *)component;
+- (BOOL)unmountStorage:(void *)component;
+- (BOOL)mountable:(NSString *)path;
+- (BOOL)storageMounted:(void *)component;
+- (BOOL)storageWritable:(void *)component;
+- (BOOL)storageLocked:(void *)component;
+- (NSString *)storagePath:(void *)component;
+- (NSString *)storageFormat:(void *)component;
+- (NSString *)storageCapacity:(void *)component;
 
 - (NSString *)valueOfProperty:(NSString *)name
 				 forComponent:(NSString *)theId;
@@ -40,12 +49,7 @@
 	  ofProperty:(NSString *)theName
 	forComponent:(NSString *)theId;
 
-- (BOOL)mount:(NSString *)path;
-- (BOOL)mountable:(NSString *)path;
-
-- (BOOL)mount:(NSString *)path inStorage:(void *)component;
-- (BOOL)unmountStorage:(void *)component;
-- (NSString *)pathOfImageInStorage:(void *)component;
-- (BOOL)storageLocked:(void *)component;
+- (void)addEDL:(NSString *)path connections:(NSDictionary *)connections;
+- (void)removeDevice:(NSString *)deviceId;
 
 @end

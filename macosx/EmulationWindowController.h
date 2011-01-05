@@ -17,17 +17,17 @@
 {
 	IBOutlet id fSplitView;
 	IBOutlet EmulationOutlineView *fOutlineView;
-	IBOutlet id fRemoveDevice;
+	
 	IBOutlet id fDeviceBox;
 	IBOutlet id fDeviceImage;
-	IBOutlet id fDeviceLine1Key;
-	IBOutlet id fDeviceLine1Value;
-	IBOutlet id fDeviceLine2Key;
-	IBOutlet id fDeviceLine2Value;
-	IBOutlet id fDeviceLine3Key;
-	IBOutlet id fDeviceLine3Value;
-	IBOutlet id fDeviceLine4Key;
-	IBOutlet id fDeviceLine4Value;
+	IBOutlet id fDeviceState1Label;
+	IBOutlet id fDeviceState1Value;
+	IBOutlet id fDeviceState2Label;
+	IBOutlet id fDeviceState2Value;
+	IBOutlet id fDeviceState3Label;
+	IBOutlet id fDeviceState3Value;
+	IBOutlet id fDeviceState4Label;
+	IBOutlet id fDeviceState4Value;
 	IBOutlet id fDeviceButton;
 	IBOutlet id fTableView;
 	IBOutlet id fTableKeyColumn;
@@ -43,6 +43,7 @@
 	NSSliderCell *sliderCell;
 }
 
+- (void)updateSidebar;
 - (void)updateWindowPosition;
 
 - (EmulationItem *)itemForSender:(id)sender;
@@ -53,5 +54,6 @@
 - (IBAction)revealInFinder:(id)sender;
 - (IBAction)openStorage:(id)sender;
 - (IBAction)unmountImage:(id)sender;
+- (IBAction)deleteDevice:(id)sender;
 
 @end

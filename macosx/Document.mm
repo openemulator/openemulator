@@ -11,6 +11,7 @@
 #import "Document.h"
 #import "DocumentController.h"
 #import "EmulationWindowController.h"
+#import "CanvasWindowController.h"
 #import "StringConversion.h"
 
 #import "PortAudioHAL.h"
@@ -210,7 +211,12 @@ void removeCanvas(OEComponent *canvas, void *userData)
 {
 	emulationWindowController = [[EmulationWindowController alloc] init];
 	[self addWindowController:emulationWindowController];
+
+	CanvasWindowController *canvasWindowController = [[CanvasWindowController alloc] initWithCanvasComponent:nil];
+	[self addWindowController:canvasWindowController];
 }
+
+
 
 - (void *)emulationInfo
 {
@@ -218,116 +224,164 @@ void removeCanvas(OEComponent *canvas, void *userData)
 	return theEmulation->getEmulationInfo();
 }
 
-- (NSString *)getEDLOptions
+- (BOOL)mount:(NSString *)path
 {
-	if (!emulation)
-		return @"";
-	
 	Emulation *theEmulation = (Emulation *)emulation;
+	
+	[self lockEmulation];
+	BOOL result = theEmulation->mount(getCPPString(path));
+	[self unlockEmulation];
+	
+	return result;
+}
+
+- (BOOL)mount:(NSString *)path inDevice:(NSString *)deviceId
+{
+	return NO;
+}
+
+- (BOOL)mount:(NSString *)path inStorage:(void *)component
+{
+	if (!component)
+		return NO;
+	
+	OEComponent *theComponent = (OEComponent *)component;
+	string thePath = getCPPString(path);
+	
+	[self lockEmulation];
+	BOOL result = theComponent->postMessage(NULL, (int)STORAGE_MOUNT, &thePath);
+	[self unlockEmulation];
+	
+	return result;
+}
+
+- (BOOL)unmountStorage:(void *)component
+{
+	if (!component)
+		return NO;
+	
+	OEComponent *theComponent = (OEComponent *)component;
+	
+	[self lockEmulation];
+	BOOL result = theComponent->postMessage(NULL, (int)STORAGE_UNMOUNT, NULL);
+	[self unlockEmulation];
+	
+	return result;
+}
+
+- (BOOL)mountable:(NSString *)path
+{
+	Emulation *theEmulation = (Emulation *)emulation;
+	
+	[self lockEmulation];
+	BOOL result = theEmulation->isMountable(getCPPString(path));
+	[self unlockEmulation];
+	
+	return result;
+}
+
+- (BOOL)getBoolForMessage:(int)message
+				component:(void *)component
+{
+	if (!component)
+		return NO;
+	
+	OEComponent *theComponent = (OEComponent *)component;
+	BOOL value = NO;
+	
+	[self lockEmulation];
+	theComponent->postMessage(NULL, message, &value);
+	[self unlockEmulation];
+	
+	return value;
+}
+
+- (NSString *)getStringForMessage:(int)message
+						component:(void *)component
+{
+	if (!component)
+		return NO;
+	
+	OEComponent *theComponent = (OEComponent *)component;
 	string value;
 	
 	[self lockEmulation];
-	value = theEmulation->getOptions();
+	theComponent->postMessage(NULL, message, &value);
 	[self unlockEmulation];
 	
 	return getNSString(value);
 }
 
-- (void)setEDLOptions:(NSString *)value
+- (BOOL)storageMounted:(void *)component
 {
-	if (!emulation)
-		return;
-	
-	Emulation *theEmulation = (Emulation *)emulation;
-	
-	[self lockEmulation];
-	theEmulation->setOptions(getCPPString(value));
-	[self unlockEmulation];
+	return [self getBoolForMessage:(int)STORAGE_IS_MOUNTED component:component];
 }
 
-- (void)addEDL:(NSString *)path
-   connections:(NSDictionary *)connections
+- (BOOL)storageWritable:(void *)component
 {
-/*	if (!emulation)
-		return;
-	
-	string pathString = getCPPString(path);
-	map<string, string> connectionsMap;
-	
-	NSEnumerator *i = [connections keyEnumerator];
-	NSString *inletRef;
-	
-	while (inletRef = [i nextObject])
-	{
-		NSString *outletRef = [connections objectForKey:inletRef];
-		
-		string inletRefString = getCPPString(inletRef);
-		string outletRefString = getCPPString(outletRef);
-		
-		connectionsMap[inletRefString] = outletRefString;
-	}
-	
-	[self lockEmulation];
-	bool isAdded = ((Emulation *)emulation)->addEDL(pathString, connectionsMap);
-	[self unlockEmulation];
-	
-	if (!isAdded)
-	{
-		NSString *messageText = @"The device could not be added.";
-		
-		NSAlert *alert = [[NSAlert alloc] init];
-		[alert setMessageText:NSLocalizedString(messageText, messageText)];
-		[alert setAlertStyle:NSWarningAlertStyle];
-		[alert runModal];
-		[alert release];
-	}
-	
-	[self updateChangeCount:NSChangeDone];*/
+	return [self getBoolForMessage:(int)STORAGE_IS_WRITABLE component:component];
 }
 
-- (void)removeDevice:(NSString *)deviceId
+- (BOOL)storageLocked:(void *)component
 {
-/*	if (!emulation)
-		return;
+	return [self getBoolForMessage:(int)STORAGE_IS_LOCKED component:component];
+}
+
+- (NSString *)storagePath:(void *)component
+{
+	return [self getStringForMessage:(int)STORAGE_GET_PATH component:component];
+}
+
+- (NSString *)storageFormat:(void *)component
+{
+	return [self getStringForMessage:(int)STORAGE_GET_FORMAT component:component];
+}
+
+- (NSString *)formatCapacity:(OEUInt64)value
+{
+	float mantissa;
+	NSString *unit;
 	
-//	NSString *deviceRef = [dict objectForKey:@"ref"];
-//	NSString *deviceLabel = [dict objectForKey:@"label"];
-	
-//	string refString = getCPPString(deviceRef);
-	
-/*	if (!((OEPAEmulation *)emulation)->isDeviceTerminal(refString))
+	if (value < 1E3)
 	{
-		NSString *messageText = @"Do you want to remove the device \u201C%@\u201D?";
-		NSString *informativeText = @"There is one or more devices connected to it, "
-		"which will be removed as well.";
-		
-		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
-		[alert setMessageText:[NSString localizedStringWithFormat:messageText,
-							   deviceLabel, messageText]];
-		[alert setInformativeText:NSLocalizedString(informativeText,
-													informativeText)];
-		[alert addButtonWithTitle:NSLocalizedString(@"OK", @"OK")];
-		[alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"Cancel")];
-		if ([alert runModal] != NSAlertDefaultReturn)
-			return;
+		mantissa = value / 1E0F;
+		unit = @"";
 	}
+	else if (value < 1E6)
+	{
+		mantissa = value / 1E3F;
+		unit = @"k";
+	}
+	else if (value < 1E9)
+	{
+		mantissa = value / 1E6F;
+		unit = @"M";
+	}
+	else
+	{
+		mantissa = value / 1E9F;
+		unit = @"G";
+	}
+	
+	return [NSString localizedStringWithFormat:@"%3.2f %@B", mantissa, unit, value];
+}
+
+- (NSString *)storageCapacity:(void *)component
+{
+	if (!component)
+		return NO;
+	
+	OEComponent *theComponent = (OEComponent *)component;
+	OEUInt64 value = 0;
 	
 	[self lockEmulation];
-	bool isRemoved = ((OEEmulation *)emulation)->removeDevice(refString);
+	theComponent->postMessage(NULL, STORAGE_GET_CAPACITY, &value);
 	[self unlockEmulation];
 	
-	if (!isRemoved)
-	{
-		NSString *messageText = @"The device could not be removed.";
-		
-		NSAlert *alert = [[NSAlert alloc] init];
-		[alert setMessageText:NSLocalizedString(messageText, messageText)];
-		[alert runModal];
-		[alert release];
-	}
-	
-	[self updateChangeCount:NSChangeDone];*/
+	return [self formatCapacity:value];
 }
+
+
 
 - (NSString *)valueOfProperty:(NSString *)theName
 				 forComponent:(NSString *)theId
@@ -371,84 +425,88 @@ void removeCanvas(OEComponent *canvas, void *userData)
 		NSLog(@"could not set property '%@' for '%@'", theName, theId);
 }
 
-- (BOOL)mount:(NSString *)path
+- (void)addEDL:(NSString *)path
+   connections:(NSDictionary *)connections
 {
-	Emulation *theEmulation = (Emulation *)emulation;
-	
-	[self lockEmulation];
-	BOOL result = theEmulation->mount(getCPPString(path));
-	[self unlockEmulation];
-	
-	return result;
+	/*	if (!emulation)
+	 return;
+	 
+	 string pathString = getCPPString(path);
+	 map<string, string> connectionsMap;
+	 
+	 NSEnumerator *i = [connections keyEnumerator];
+	 NSString *inletRef;
+	 
+	 while (inletRef = [i nextObject])
+	 {
+	 NSString *outletRef = [connections objectForKey:inletRef];
+	 
+	 string inletRefString = getCPPString(inletRef);
+	 string outletRefString = getCPPString(outletRef);
+	 
+	 connectionsMap[inletRefString] = outletRefString;
+	 }
+	 
+	 [self lockEmulation];
+	 bool isAdded = ((Emulation *)emulation)->addEDL(pathString, connectionsMap);
+	 [self unlockEmulation];
+	 
+	 if (!isAdded)
+	 {
+	 NSString *messageText = @"The device could not be added.";
+	 
+	 NSAlert *alert = [[NSAlert alloc] init];
+	 [alert setMessageText:NSLocalizedString(messageText, messageText)];
+	 [alert setAlertStyle:NSWarningAlertStyle];
+	 [alert runModal];
+	 [alert release];
+	 }
+	 
+	 [self updateChangeCount:NSChangeDone];*/
 }
 
-- (BOOL)mountable:(NSString *)path
+- (void)removeDevice:(NSString *)deviceId
 {
-	Emulation *theEmulation = (Emulation *)emulation;
-	
-	[self lockEmulation];
-	BOOL result = theEmulation->isMountable(getCPPString(path));
-	[self unlockEmulation];
-	
-	return result;
-}
-
-- (BOOL)mount:(NSString *)path inStorage:(void *)component
-{
-	if (!component)
-		return NO;
-	
-	OEComponent *theComponent = (OEComponent *)component;
-	string thePath = getCPPString(path);
-	
-	[self lockEmulation];
-	BOOL result = theComponent->postMessage(NULL, (int)STORAGE_MOUNT_IMAGE, &thePath);
-	[self unlockEmulation];
-	
-	return result;
-}
-
-- (BOOL)unmountStorage:(void *)component
-{
-	if (!component)
-		return NO;
-	
-	OEComponent *theComponent = (OEComponent *)component;
-	
-	[self lockEmulation];
-	BOOL result = theComponent->postMessage(NULL, (int)STORAGE_UNMOUNT_IMAGE, NULL);
-	[self unlockEmulation];
-	
-	return result;
-}
-
-- (NSString *)pathOfImageInStorage:(void *)component
-{
-	if (!component)
-		return @"";
-	
-	OEComponent *theComponent = (OEComponent *)component;
-	string path;
-	
-	[self lockEmulation];
-	theComponent->postMessage(NULL, (int)STORAGE_GET_IMAGE_PATH, &path);
-	[self unlockEmulation];
-	
-	return getNSString(path);
-}
-
-- (BOOL)storageLocked:(void *)component
-{
-	if (!component)
-		return NO;
-	
-	OEComponent *theComponent = (OEComponent *)component;
-	
-	[self lockEmulation];
-	BOOL result = theComponent->postMessage(NULL, (int)STORAGE_IS_LOCKED, NULL);
-	[self unlockEmulation];
-	
-	return result;
+	/*	if (!emulation)
+	 return;
+	 
+	 //	NSString *deviceRef = [dict objectForKey:@"ref"];
+	 //	NSString *deviceLabel = [dict objectForKey:@"label"];
+	 
+	 //	string refString = getCPPString(deviceRef);
+	 
+	 /*	if (!((OEPAEmulation *)emulation)->isDeviceTerminal(refString))
+	 {
+	 NSString *messageText = @"Do you want to remove the device \u201C%@\u201D?";
+	 NSString *informativeText = @"There is one or more devices connected to it, "
+	 "which will be removed as well.";
+	 
+	 NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+	 [alert setMessageText:[NSString localizedStringWithFormat:messageText,
+	 deviceLabel, messageText]];
+	 [alert setInformativeText:NSLocalizedString(informativeText,
+	 informativeText)];
+	 [alert addButtonWithTitle:NSLocalizedString(@"OK", @"OK")];
+	 [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"Cancel")];
+	 if ([alert runModal] != NSAlertDefaultReturn)
+	 return;
+	 }
+	 
+	 [self lockEmulation];
+	 bool isRemoved = ((OEEmulation *)emulation)->removeDevice(refString);
+	 [self unlockEmulation];
+	 
+	 if (!isRemoved)
+	 {
+	 NSString *messageText = @"The device could not be removed.";
+	 
+	 NSAlert *alert = [[NSAlert alloc] init];
+	 [alert setMessageText:NSLocalizedString(messageText, messageText)];
+	 [alert runModal];
+	 [alert release];
+	 }
+	 
+	 [self updateChangeCount:NSChangeDone];*/
 }
 
 @end
