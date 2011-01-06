@@ -75,6 +75,28 @@
 
 
 
+- (NSArray *)diskImagePathExtensions
+{
+	return diskImagePathExtensions;
+}
+
+- (NSArray *)audioPathExtensions
+{
+	return audioPathExtensions;
+}
+
+- (NSArray *)textPathExtensions
+{
+	return textPathExtensions;
+}
+
+- (void *)portAudioHAL
+{
+	return portAudioHAL;
+}
+
+
+
 - (void)applicationWillFinishLaunching:(NSNotification *)notification
 {
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -144,21 +166,6 @@
 	// To-Do: zoom fullscreen window
 }
 
-- (void)observeValueForKeyPath:(NSString *)keyPath
-					  ofObject:(id)object
-						change:(NSDictionary *)change
-					   context:(void *)context
-{
-	id theObject = [change objectForKey:NSKeyValueChangeNewKey];
-	
-	if ([keyPath isEqualToString:@"OEAudioFullDuplex"])
-		((PortAudioHAL *)portAudioHAL)->setFullDuplex([theObject boolValue]);
-	else if ([keyPath isEqualToString:@"OEAudioPlayVolume"])
-		((PortAudioHAL *)portAudioHAL)->setPlayVolume([theObject floatValue]);
-	else if ([keyPath isEqualToString:@"OEAudioPlayThrough"])
-		((PortAudioHAL *)portAudioHAL)->setPlayThrough([theObject boolValue]);
-}
-
 - (BOOL)application:(NSApplication *)theApplication
 		   openFile:(NSString *)path
 {
@@ -203,7 +210,7 @@
 		if ([[self currentDocument] mount:path])
 			return YES;
 		
-		if ([[self currentDocument] mountable:path])
+		if ([[self currentDocument] isMountable:path])
 		{
 			NSAlert *alert = [[NSAlert alloc] init];
 			[alert setMessageText:[NSString localizedStringWithFormat:
@@ -234,6 +241,21 @@
 
 
 
+- (void)observeValueForKeyPath:(NSString *)keyPath
+					  ofObject:(id)object
+						change:(NSDictionary *)change
+					   context:(void *)context
+{
+	id theObject = [change objectForKey:NSKeyValueChangeNewKey];
+	
+	if ([keyPath isEqualToString:@"OEAudioFullDuplex"])
+		((PortAudioHAL *)portAudioHAL)->setFullDuplex([theObject boolValue]);
+	else if ([keyPath isEqualToString:@"OEAudioPlayVolume"])
+		((PortAudioHAL *)portAudioHAL)->setPlayVolume([theObject floatValue]);
+	else if ([keyPath isEqualToString:@"OEAudioPlayThrough"])
+		((PortAudioHAL *)portAudioHAL)->setPlayThrough([theObject boolValue]);
+}
+
 - (BOOL)validateUserInterfaceItem:(id <NSValidatedUserInterfaceItem>)anItem
 {
     SEL action = [anItem action];
@@ -250,52 +272,38 @@
 						   NSLocalizedString(@"Show Audio Controls",
 											 @"Main Menu."));
 		[fAudioControlsMenuItem setTitle:title];
+		
 		return YES;
 	}
 	else if (action == @selector(toggleLibrary:))
-	{  
+	{
 		NSString *title = ([[fLibraryWindowController window] isVisible] ?
 						   NSLocalizedString(@"Hide Hardware Library",
 											 @"Main Menu.") :
 						   NSLocalizedString(@"Show Hardware Library",
 											 @"Main Menu."));
 		[fLibraryMenuItem setTitle:title];
+		
 		return YES;
 	}
 	
-    return [super validateUserInterfaceItem:anItem];
-}
-
-
-
-- (NSArray *)diskImagePathExtensions
-{
-	return diskImagePathExtensions;
-}
-
-- (NSArray *)audioPathExtensions
-{
-	return audioPathExtensions;
-}
-
-- (NSArray *)textPathExtensions
-{
-	return textPathExtensions;
-}
-
-- (void *)portAudioHAL
-{
-	return portAudioHAL;
+	return NO;
 }
 
 - (IBAction)toggleAudioControls:(id)sender
 {
-	[fAudioControlsWindowController toggleAudioControls:sender];
+	if ([[fAudioControlsWindowController window] isVisible])
+		[[fAudioControlsWindowController window] orderOut:self];
+	else
+		[[fAudioControlsWindowController window] orderFront:self];
 }
 
 - (IBAction)toggleLibrary:(id)sender
 {
-	[fLibraryWindowController toggleLibrary:sender];
+	if ([[fLibraryWindowController window] isVisible])
+		[[fLibraryWindowController window] orderOut:self];
+	else
+		[[fLibraryWindowController window] orderFront:self];
 }
 
 

@@ -70,7 +70,7 @@ bool ControlBus::init()
 {
 	if (!audio)
 	{
-		log("audio undefined");
+		log("property 'audio' undefined");
 		return false;
 	}
 	

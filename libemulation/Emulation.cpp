@@ -686,19 +686,6 @@ void Emulation::destroyComponent(string id, xmlNodePtr children)
 	setComponent(id, NULL);
 }
 
-bool Emulation::mount(string path)
-{
-// To-Do: Attempt to mount everywhere and in sequence.
-// Do not attempt to eject anything.
-	return false;
-}
-
-bool Emulation::isMountable(string path)
-{
-	// To-Do: Attempt to check if mountable everywhere and in sequence.
-	return false;
-}
-
 bool Emulation::postMessage(OEComponent *sender, int message, void *data)
 {
 	switch (message)
@@ -710,7 +697,7 @@ bool Emulation::postMessage(OEComponent *sender, int message, void *data)
 				{
 					deviceInfo->state = *((string *)data);
 					
-					return postMessage(sender, EMULATION_UPDATE_DEVICES, NULL);
+					return postMessage(sender, EMULATION_UPDATE_INFO, NULL);
 				}
 			}
 			break;
@@ -722,7 +709,7 @@ bool Emulation::postMessage(OEComponent *sender, int message, void *data)
 				{
 					deviceInfo->image = *((string *)data);
 					
-					return postMessage(sender, EMULATION_UPDATE_DEVICES, NULL);
+					return postMessage(sender, EMULATION_UPDATE_INFO, NULL);
 				}
 			}
 			break;
@@ -734,7 +721,7 @@ bool Emulation::postMessage(OEComponent *sender, int message, void *data)
 				{
 					deviceInfo->powered = *((bool *)data);
 					
-					return postMessage(sender, EMULATION_UPDATE_DEVICES, NULL);
+					return postMessage(sender, EMULATION_UPDATE_INFO, NULL);
 				}
 			}
 			break;
@@ -751,7 +738,7 @@ bool Emulation::postMessage(OEComponent *sender, int message, void *data)
 					
 					deviceInfo->canvases.push_back(*ref);
 					
-					return postMessage(sender, EMULATION_UPDATE_DEVICES, NULL);
+					return postMessage(sender, EMULATION_UPDATE_INFO, NULL);
 				}
 			}
 			break;
@@ -775,7 +762,7 @@ bool Emulation::postMessage(OEComponent *sender, int message, void *data)
 					
 					*ref = NULL;
 					
-					return postMessage(sender, EMULATION_UPDATE_DEVICES, NULL);
+					return postMessage(sender, EMULATION_UPDATE_INFO, NULL);
 				}
 			}
 			break;
@@ -787,7 +774,7 @@ bool Emulation::postMessage(OEComponent *sender, int message, void *data)
 				{
 					deviceInfo->storages.push_back(sender);
 					
-					return postMessage(sender, EMULATION_UPDATE_DEVICES, NULL);
+					return postMessage(sender, EMULATION_UPDATE_INFO, NULL);
 				}
 			}
 			break;
@@ -804,7 +791,7 @@ bool Emulation::postMessage(OEComponent *sender, int message, void *data)
 					if (i != last)
 						storages.erase(i, last);
 					
-					return postMessage(sender, EMULATION_UPDATE_DEVICES, NULL);
+					return postMessage(sender, EMULATION_UPDATE_INFO, NULL);
 				}
 			}
 			break;
@@ -820,7 +807,7 @@ bool Emulation::postMessage(OEComponent *sender, int message, void *data)
 			}
 			break;
 			
-		case EMULATION_UPDATE_DEVICES:
+		case EMULATION_UPDATE_INFO:
 			if (devicesDidUpdate)
 				devicesDidUpdate();
 			

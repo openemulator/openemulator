@@ -1,9 +1,6 @@
 ==To-Do==
-* Implement forgetting of visited templates in template chooser (so it requires less memory).
-* Implement emulation disk mounting.
-* Implement device disk mounting: all storage components of a device are tried for mounting. When unsuccessful, storage components are tried for unmounting
-* Enable correct items in emulation menu
-* Attempt to move generic code from the OE.app to libemulation
+* Fix 
+* Implement check for disk image lock
 * Implement disk image file locking, if the disk image is writable
 * Devise a way to send system events to a device without a canvas
 * Implement addCanvas and removeCanvas -> this should create a windowController and an OpenGLHAL. The window controller should be added to the document, and the canvas returned.

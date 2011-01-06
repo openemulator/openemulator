@@ -36,6 +36,7 @@
 - (NSArray *)audioPathExtensions;
 - (NSArray *)textPathExtensions;
 - (void *)portAudioHAL;
+
 - (IBAction)toggleAudioControls:(id)sender;
 - (IBAction)toggleLibrary:(id)sender;
 

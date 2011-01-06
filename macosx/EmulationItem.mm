@@ -19,6 +19,7 @@
 {
 	if (self = [super init])
 	{
+		itemType = EMULATION_ITEM_ROOT;
 		children = [[NSMutableArray alloc] init];
 		
 		EmulationInfo *emulationInfo = (EmulationInfo *)[theDocument emulationInfo];
@@ -31,7 +32,7 @@
 			EmulationItem *groupItem = [self childWithUid:groupName];
 			if (!groupItem)
 			{
-				groupItem = [[EmulationItem alloc] initWithLabel:groupName];
+				groupItem = [[EmulationItem alloc] initWithGroupName:groupName];
 				[children addObject:groupItem];
 				[groupItem release];
 			}
@@ -48,14 +49,15 @@
 	return self;
 }
 
-- (id)initWithLabel:(NSString *)theLabel
+- (id)initWithGroupName:(NSString *)theGroupName
 {
 	if (self = [super init])
 	{
+		itemType = EMULATION_ITEM_GROUP;
 		children = [[NSMutableArray alloc] init];
 		
-		uid = [theLabel copy];
-		label = [[NSLocalizedString(theLabel, @"Emulation Item Label.")
+		uid = [theGroupName copy];
+		label = [[NSLocalizedString(theGroupName, @"Emulation Item Label.")
 				  uppercaseString] retain];
 	}
 	
@@ -67,54 +69,38 @@
 {
 	if (self = [super init])
 	{
+		itemType = EMULATION_ITEM_DEVICE;
 		children = [[NSMutableArray alloc] init];
 		document = theDocument;
 		
-		NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
 		EmulationDeviceInfo *deviceInfo = (EmulationDeviceInfo *)theDeviceInfo;
 		
 		uid = [getNSString(deviceInfo->id) retain];
 		label = [getNSString(deviceInfo->label) retain];
-		imagePath = [[resourcePath stringByAppendingPathComponent:
-					  getNSString(deviceInfo->image)] retain];
+		NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
+		NSString *imagePath = [[resourcePath stringByAppendingPathComponent:
+								getNSString(deviceInfo->image)] retain];
+		image = [[NSImage alloc] initByReferencingFile:imagePath];
 		
 		location = [getNSString(deviceInfo->location) retain];
 		state = [getNSString(deviceInfo->state) retain];
-		isRemovable = ([location length] != 0);
 		
-		isCanvas = (deviceInfo->canvases.size() != 0);
+		canvasComponents = [[NSMutableArray alloc] init];
+		OEComponents &canvases = deviceInfo->canvases;
+		for (OEComponents::iterator i = canvases.begin();
+			 i < canvases.end();
+			 i++)
+			[canvasComponents addObject:[NSValue valueWithPointer:*i]];
 		
-		isStorage = (deviceInfo->storages.size() != 0);
-		
-		settingsRefs = [[NSMutableArray alloc] init];
-		settingsNames = [[NSMutableArray alloc] init];
-		settingsLabels = [[NSMutableArray alloc] init];
-		settingsTypes = [[NSMutableArray alloc] init];
-		settingsOptions = [[NSMutableArray alloc] init];
-		
-		for (EmulationSettings::iterator i = deviceInfo->settings.begin();
-			 i != deviceInfo->settings.end();
+		storageComponents = [[NSMutableArray alloc] init];
+		OEComponents &storages = deviceInfo->storages;
+		for (OEComponents::iterator i = storages.begin();
+			 i < storages.end();
 			 i++)
 		{
-			NSString *settingRef = getNSString(i->ref);
-			NSString *settingName = getNSString(i->name);
-			NSString *settingLabel = getNSString(i->label);
-			NSString *settingType = getNSString(i->type);
-			NSArray *settingOptions = [getNSString(i->options)
-									   componentsSeparatedByString:@","];
+			[storageComponents addObject:[NSValue valueWithPointer:*i]];
 			
-			[settingsRefs addObject:settingRef];
-			[settingsNames addObject:settingName];
-			[settingsLabels addObject:settingLabel];
-			[settingsTypes addObject:settingType];
-			[settingsOptions addObject:settingOptions];
-		}
-		
-		for (OEComponents::iterator i = deviceInfo->storages.begin();
-			 i != deviceInfo->storages.end();
-			 i++)
-		{
-			if ([document storageMounted:*i])
+			if ([document isStorageMounted:*i])
 			{
 				EmulationItem *storageItem;
 				storageItem = [[EmulationItem alloc] initWithStorage:*i
@@ -123,6 +109,23 @@
 				[children addObject:storageItem];
 				[storageItem release];
 			}
+		}
+		
+		settingsRefs = [[NSMutableArray alloc] init];
+		settingsNames = [[NSMutableArray alloc] init];
+		settingsLabels = [[NSMutableArray alloc] init];
+		settingsTypes = [[NSMutableArray alloc] init];
+		settingsOptions = [[NSMutableArray alloc] init];
+		for (EmulationSettings::iterator i = deviceInfo->settings.begin();
+			 i != deviceInfo->settings.end();
+			 i++)
+		{
+			[settingsRefs addObject:getNSString(i->ref)];
+			[settingsNames addObject:getNSString(i->name)];
+			[settingsLabels addObject:getNSString(i->label)];
+			[settingsTypes addObject:getNSString(i->type)];
+			[settingsOptions addObject:[getNSString(i->options)
+										componentsSeparatedByString:@","]];
 		}
 	}
 	
@@ -135,16 +138,19 @@
 {
 	if (self = [super init])
 	{
+		itemType = EMULATION_ITEM_STORAGE;
 		children = [[NSMutableArray alloc] init];
 		document = theDocument;
 		
 		EmulationDeviceInfo *deviceInfo = (EmulationDeviceInfo *)theDeviceInfo;
 		
 		location = [getNSString(deviceInfo->location) retain];
-		state = ([document storageWritable:theComponent] ?
+		state = ([document isStorageWritable:theComponent] ?
 				 @"Mounted Read-Only" : @"Mounted Read/Write");
 		
-		storageComponent = theComponent;
+		storageComponents = [[NSMutableArray alloc] initWithObjects:
+							 [NSValue valueWithPointer:theComponent], 
+							 nil];
 		
 		label = [[[self storagePath] lastPathComponent] retain];
 		image = [[NSImage imageNamed:@"DiskImage"] retain];
@@ -158,11 +164,15 @@
 	[children release];
 	
 	[uid release];
-	[imagePath release];
+	[image release];
 	[label release];
 	
 	[location release];
 	[state release];
+	
+	[canvasComponents release];
+	
+	[storageComponents release];
 	
 	[settingsRefs release];
 	[settingsNames release];
@@ -170,9 +180,12 @@
 	[settingsTypes release];
 	[settingsOptions release];
 	
-	[image release];
-	
 	[super dealloc];
+}
+
+- (EmulationItemType)type
+{
+	return itemType;
 }
 
 - (NSMutableArray *)children
@@ -191,14 +204,6 @@
 	return nil;
 }
 
-- (NSImage *)getImage:(NSString *)path
-{
-	NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
-	path = [resourcePath stringByAppendingPathComponent:path];
-	
-	return [[[NSImage alloc] initByReferencingFile:path] autorelease];
-}
-
 - (NSString *)uid
 {
 	return uid;
@@ -206,9 +211,6 @@
 
 - (NSImage *)image
 {
-	if (!image)
-		image = [[NSImage alloc] initByReferencingFile:imagePath];
-	
 	return image;
 }
 
@@ -227,50 +229,98 @@
 	return state;
 }
 
+- (BOOL)isGroup
+{
+	return (itemType == EMULATION_ITEM_GROUP);
+}
+
 - (BOOL)isRemovable
 {
-	return isRemovable;
+	return (itemType == EMULATION_ITEM_DEVICE) && [location length];
 }
+
+
 
 - (BOOL)isCanvas
 {
-	return isCanvas;
+	return ([canvasComponents count] != 0);
 }
 
-- (BOOL)isStorage
+
+
+- (BOOL)isMountable
 {
-	return isStorage;
+	return ([storageComponents count] != 0);
 }
 
-- (BOOL)isStorageMounted
+- (BOOL)isMounted
 {
-	return (storageComponent != nil);
+	return (itemType == EMULATION_ITEM_STORAGE);
 }
 
 - (NSString *)storagePath
 {
-	return [document storagePath:storageComponent];
+	if (![storageComponents count])
+		return @"";
+	void *component = [[storageComponents objectAtIndex:0] pointerValue];
+	return [document getStoragePath:component];
 }
 
 - (NSString *)storageFormat
 {
-	return [document storageFormat:storageComponent];
+	if (![storageComponents count])
+		return @"";
+	void *component = [[storageComponents objectAtIndex:0] pointerValue];
+	return [document getStorageFormat:component];
 }
 
 - (NSString *)storageCapacity
 {
-	return [document storageCapacity:storageComponent];
+	if (![storageComponents count])
+		return @"";
+	void *component = [[storageComponents objectAtIndex:0] pointerValue];
+	return [document getStorageCapacity:component];
 }
 
 - (BOOL)mount:(NSString *)path
 {
-	return [document mount:path inStorage:storageComponent];
+	for (int i = 0; i < [storageComponents count]; i++)
+	{
+		void *component = [[storageComponents objectAtIndex:i] pointerValue];
+		
+		if ([document mount:path inStorage:component])
+			return YES;
+	}
+	
+	if ([storageComponents count])
+	{
+		void *component = [[storageComponents objectAtIndex:0] pointerValue];
+		
+		[document unmountStorage:component];
+		return [document mount:path inStorage:component];
+	}
+	return NO;
 }
 
 - (void)unmount
 {
-	[document unmountStorage:storageComponent];
+	void *component = [[storageComponents objectAtIndex:0] pointerValue];
+	[document unmountStorage:component];
 }
+
+- (BOOL)isMountable:(NSString *)path
+{
+	for (int i = 0; i < [storageComponents count]; i++)
+	{
+		void *component = [[storageComponents objectAtIndex:i] pointerValue];
+		
+		if ([document isMountable:path inStorage:component])
+			return YES;
+	}
+	return NO;
+}
+
+
 
 - (NSInteger)numberOfSettings
 {

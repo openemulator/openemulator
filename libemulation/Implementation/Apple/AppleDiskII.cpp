@@ -73,12 +73,15 @@ bool AppleDiskII::postMessage(OEComponent *sender, int message, void *data)
 				string *path = (string *)data;
 				image = *path;
 				
+				emulation->postMessage(this, EMULATION_UPDATE_INFO, NULL);
+				
 				return true;
 			}
 			break;
 			
 		case STORAGE_UNMOUNT:
 			image = "";
+			emulation->postMessage(this, EMULATION_UPDATE_INFO, NULL);
 			return true;
 			
 		case STORAGE_IS_MOUNTABLE:
@@ -135,7 +138,7 @@ bool AppleDiskII::postMessage(OEComponent *sender, int message, void *data)
 			if (data)
 			{
 				string *value = (string *) data;
-				*value = "Apple 16-Sector";
+				*value = "Apple II 16 Sector";
 				
 				return true;
 			}

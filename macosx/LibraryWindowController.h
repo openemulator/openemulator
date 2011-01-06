@@ -14,6 +14,4 @@
 {
 }
 
-- (IBAction)toggleLibrary:(id)sender;
-
 @end

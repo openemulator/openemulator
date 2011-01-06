@@ -74,32 +74,30 @@
 		[super setFrameTopLeftPoint:point];
 }
 
-- (BOOL)validateUserInterfaceItem:(id)item
+- (BOOL)validateUserInterfaceItem:(id)anItem
 {
-	if ([item action] == @selector(toggleFullscreen:))
+	if ([anItem action] == @selector(toggleFullscreen:))
 	{
-		NSString *menuTitle;
-		if (!fullscreen)
-			menuTitle = NSLocalizedString(@"Enter Fullscreen",
-										  @"Main Menu.");
-		else
-			menuTitle = NSLocalizedString(@"Exit Fullscreen",
-										  @"Main Menu.");
-		[item setTitleWithMnemonic:menuTitle];
+		NSString *title = (fullscreen ?
+						   NSLocalizedString(@"Exit Fullscreen",
+											 @"Main Menu.") :
+						   NSLocalizedString(@"Enter Fullscreen",
+											 @"Main Menu."));
+		[anItem setTitle:title];
 		
 		return YES;
 	}
-	else if ([item action] == @selector(setHalfSize:))
+	else if ([anItem action] == @selector(setHalfSize:))
 		return !fullscreen;
-	else if ([item action] == @selector(setActualSize:))
+	else if ([anItem action] == @selector(setActualSize:))
 		return !fullscreen;
-	else if ([item action] == @selector(setDoubleSize:))
+	else if ([anItem action] == @selector(setDoubleSize:))
 		return !fullscreen;
-	else if ([item action] == @selector(fitToScreen:))
+	else if ([anItem action] == @selector(fitToScreen:))
 		return !fullscreen;
-	else if ([item action] == @selector(toggleToolbarShown:))
+	else if ([anItem action] == @selector(toggleToolbarShown:))
 		return !fullscreen;
-	else if ([item action] == @selector(runToolbarCustomizationPalette:))
+	else if ([anItem action] == @selector(runToolbarCustomizationPalette:))
 		return !fullscreen;
 	else
 		return YES;

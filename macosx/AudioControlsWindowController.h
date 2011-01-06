@@ -33,8 +33,6 @@
 	NSString *recordingPath;
 }
 
-- (IBAction)toggleAudioControls:(id)sender;
-
 - (void) updatePlay;
 - (IBAction)openPlay:(id)sender;
 - (IBAction)togglePlay:(id)sender;

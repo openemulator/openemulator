@@ -5,6 +5,14 @@
 * Implemented storage open action
 * Implemented storage unmount action
 * Implemented storage reveal in finder action
+* Implemented lazy initialization of TemplateChooserItem
+* Improved EmulationItem
+* Added format and capacity properties for storage components
+* Devised hardware library ground ideas
+* Fixed Show/Hide menu options
+* Implemented emulation disk mounting
+* Implemented device disk mounting
+* Implemented context menu options
 
 ==2010-12==
 * Implemented window autosave of emulation view
@@ -19,7 +27,7 @@
 * Solved the problem of attempting to add/remove devices that are not hot-pluggable and have power applied. Added a new power state for each device, that is notified through emulation. Added "hotpluggable" options for ports, as well as a "static" option for devices.
 * Implemented the emulation view
 * Implemented the action menu button
-* Implemented emulation view show and eject roll-over button
+* Implemented emulation view show and unmount roll-over button
 * Added mounted disk images as nodes in the outline view
 * Connected emulation view settings and contents
 

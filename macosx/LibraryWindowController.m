@@ -21,15 +21,6 @@
 - (void)windowDidLoad
 {
 	[self setWindowFrameAutosaveName:@"Library"];
-	NSLog(@"Library!");
-}
-
-- (IBAction)toggleLibrary:(id)sender
-{
-	if ([[self window] isVisible])
-		[[self window] orderOut:self];
-	else
-		[[self window] orderFront:self];
 }
 
 @end

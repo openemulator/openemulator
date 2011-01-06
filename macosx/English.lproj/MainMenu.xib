@@ -12,7 +12,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="570"/>
+			<integer value="460"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -759,6 +759,26 @@
 									<reference key="NSOnImage" ref="1033313550"/>
 									<reference key="NSMixedImage" ref="310636482"/>
 								</object>
+								<object class="NSMenuItem" id="276624790">
+									<reference key="NSMenu" ref="436197858"/>
+									<string key="NSTitle">Show Devices</string>
+									<string key="NSKeyEquiv">D</string>
+									<int key="NSKeyEquivModMask">1048576</int>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="1033313550"/>
+									<reference key="NSMixedImage" ref="310636482"/>
+								</object>
+								<object class="NSMenuItem" id="285615430">
+									<reference key="NSMenu" ref="436197858"/>
+									<bool key="NSIsDisabled">YES</bool>
+									<bool key="NSIsSeparator">YES</bool>
+									<string key="NSTitle"/>
+									<string key="NSKeyEquiv"/>
+									<int key="NSKeyEquivModMask">1048576</int>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="1033313550"/>
+									<reference key="NSMixedImage" ref="310636482"/>
+								</object>
 								<object class="NSMenuItem" id="1065497554">
 									<reference key="NSMenu" ref="436197858"/>
 									<string key="NSTitle">Bring All to Front</string>
@@ -1328,6 +1348,14 @@
 					</object>
 					<int key="connectionID">980</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">showEmulation:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="276624790"/>
+					</object>
+					<int key="connectionID">984</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -1718,6 +1746,8 @@
 							<reference ref="775578205"/>
 							<reference ref="97192315"/>
 							<reference ref="1065497554"/>
+							<reference ref="276624790"/>
+							<reference ref="285615430"/>
 							<reference ref="150085761"/>
 						</object>
 						<reference key="parent" ref="120629472"/>
@@ -2000,6 +2030,16 @@
 						<reference key="object" ref="960051204"/>
 						<reference key="parent" ref="0"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">981</int>
+						<reference key="object" ref="276624790"/>
+						<reference key="parent" ref="436197858"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">983</int>
+						<reference key="object" ref="285615430"/>
+						<reference key="parent" ref="436197858"/>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -2184,6 +2224,10 @@
 					<string>930.IBPluginDependency</string>
 					<string>971.IBPluginDependency</string>
 					<string>973.IBPluginDependency</string>
+					<string>981.IBPluginDependency</string>
+					<string>981.ImportedFromIB2</string>
+					<string>983.IBPluginDependency</string>
+					<string>983.ImportedFromIB2</string>
 				</object>
 				<object class="NSMutableArray" key="dict.values">
 					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -2272,7 +2316,7 @@
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>{{534, 569}, {194, 73}}</string>
+					<string>{{534, 539}, {208, 103}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>{{525, 802}, {197, 73}}</string>
@@ -2365,6 +2409,10 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<integer value="1"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<integer value="1"/>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="unlocalizedProperties">
@@ -2383,7 +2431,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">980</int>
+			<int key="maxID">984</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -2764,10 +2812,14 @@
 							<string>openDonate:</string>
 							<string>openForums:</string>
 							<string>openHomepage:</string>
+							<string>showEmulation:</string>
 							<string>toggleAudioControls:</string>
+							<string>toggleLibrary:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -2785,7 +2837,9 @@
 							<string>openDonate:</string>
 							<string>openForums:</string>
 							<string>openHomepage:</string>
+							<string>showEmulation:</string>
 							<string>toggleAudioControls:</string>
+							<string>toggleLibrary:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
@@ -2810,7 +2864,15 @@
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
+								<string key="name">showEmulation:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
 								<string key="name">toggleAudioControls:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">toggleLibrary:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 						</object>

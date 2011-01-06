@@ -32,20 +32,21 @@
 	IBOutlet id fSelectedItemLabelView;
 	IBOutlet id fSelectedItemDescriptionView;
 	
-	id <TemplateChooserDelegate> delegate;
+	id < TemplateChooserDelegate > delegate;
 	
 	VerticallyCenteredTextFieldCell *tableCell;
 	
 	NSMutableArray *groups;
-	NSString *selectedGroup;
 	NSMutableDictionary *items;
+	
+	NSString *selectedGroup;
 }
-
-- (void)setDelegate:(id)theDelegate;
-- (void)reloadData;
 
 - (void)loadGroups;
 - (void)loadItems;
+
+- (void)setDelegate:(id)theDelegate;
+- (void)reloadData;
 
 - (void)selectGroup:(NSString *)group
 	andItemWithPath:(NSString *)path;

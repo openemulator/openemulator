@@ -134,16 +134,16 @@
 		[item setImage:[NSImage imageNamed:@"IconAudio.png"]];
 		[item setAction:@selector(toggleAudioControls:)];
 	}
-	else if ([ident isEqualToString:@"Info"])
+	else if ([ident isEqualToString:@"Devices"])
 	{
-		[item setLabel:NSLocalizedString(@"Info",
+		[item setLabel:NSLocalizedString(@"Devices",
 										 @"Canvas Toolbar Label.")];
-		[item setPaletteLabel:NSLocalizedString(@"Info",
+		[item setPaletteLabel:NSLocalizedString(@"Devices",
 												@"Canvas Toolbar Palette Label.")];
-		[item setToolTip:NSLocalizedString(@"Show info.",
+		[item setToolTip:NSLocalizedString(@"Show devices.",
 										   @"Canvas Toolbar Tool Tip.")];
 		[item setImage:[NSImage imageNamed:@"IconDevices.png"]];
-		[item setAction:@selector(showDevices:)];
+		[item setAction:@selector(showEmulation:)];
 	}
 	
 	return item;
@@ -157,7 +157,7 @@
 			@"Wake Up",
 			NSToolbarFlexibleSpaceItemIdentifier,
 			@"AudioControls",
-			@"Info",
+			@"Devices",
 			nil];
 }
 
@@ -171,7 +171,7 @@
 			@"Warm Restart",
 			@"Debugger Break",
 			@"AudioControls",
-			@"Info",
+			@"Devices",
 			NSToolbarSeparatorItemIdentifier,
 			NSToolbarSpaceItemIdentifier,
 			NSToolbarFlexibleSpaceItemIdentifier,

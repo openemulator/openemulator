@@ -10,6 +10,7 @@
 
 #import "EmulationOutlineView.h"
 #import "EmulationOutlineCell.h"
+#import "EmulationItem.h"
 
 @implementation EmulationOutlineView
 
@@ -112,12 +113,24 @@
 	}
 }
 
+- (NSRect)frameOfCellAtColumn:(NSInteger)columnIndex
+						  row:(NSInteger)rowIndex
+{
+	EmulationItem *item = [self itemAtRow:rowIndex];
+	float indentation = 6.0;
+	if ([item type] == EMULATION_ITEM_DEVICE)
+		indentation = 18.0;
+	else if ([item type] == EMULATION_ITEM_STORAGE)
+		indentation = 32.0;
+	
+    NSRect frame = [super frameOfCellAtColumn:columnIndex row:rowIndex];
+	frame.origin.x = indentation;
+	frame.size.width = [self bounds].size.width - indentation;
+	return frame;
+}
 - (NSRect)frameOfOutlineCellAtRow:(NSInteger)row
 {
-	if (!row)
-		return NSZeroRect;
-	
-	return [super frameOfOutlineCellAtRow:row];
+	return NSZeroRect;
 }
 
 @end

@@ -16,10 +16,8 @@ public:
 	MOSKIM1IO();
 	~MOSKIM1IO();
 	
-	bool setValue(string name, string value);
-	bool getValue(string name, string &value);
-	bool setRef(string name, OEComponent *ref);
 	bool setData(string name, OEData *data);
+	bool setRef(string name, OEComponent *ref);
 	bool init();
 	
 	void notify(OEComponent *sender, int notification, void *data);

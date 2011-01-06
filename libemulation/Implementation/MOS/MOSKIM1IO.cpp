@@ -30,22 +30,12 @@ MOSKIM1IO::~MOSKIM1IO()
 	delete view;
 }
 
-bool MOSKIM1IO::setValue(string name, string value)
+bool MOSKIM1IO::setData(string name, OEData *data)
 {
-	return false;
-}
-
-bool MOSKIM1IO::getValue(string name, string &value)
-{
-	if (name == "windowFrame")
-	{
-		if (canvas)
-			canvas->postMessage(this,
-								CANVAS_GET_WINDOWFRAME,
-								&windowFrame);
-	}
+	if (name == "view")
+		view = data;
 	else
-		return false;
+		return OEComponent::setData(name, data);
 	
 	return true;
 }
@@ -79,23 +69,10 @@ bool MOSKIM1IO::setRef(string name, OEComponent *ref)
 	return true;
 }
 
-bool MOSKIM1IO::setData(string name, OEData *data)
-{
-	if (name == "view")
-		view = data;
-	else
-		return OEComponent::setData(name, data);
-	
-	return true;
-}
-
 bool MOSKIM1IO::init()
 {
 	if (canvas)
 	{
-		canvas->postMessage(this,
-							CANVAS_SET_WINDOWFRAME,
-							&windowFrame);
 		canvas->postMessage(this,
 							CANVAS_SET_DEFAULTWINDOWSIZE,
 							&defaultWindowSize);

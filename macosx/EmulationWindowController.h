@@ -36,24 +36,20 @@
 	EmulationItem *rootItem;
 	
 	EmulationItem *selectedItem;
-	EmulationItem *clickedItem;
 	
 	NSButtonCell *checkBoxCell;
 	NSPopUpButtonCell *popUpButtonCell;
 	NSSliderCell *sliderCell;
 }
 
-- (void)updateSidebar;
-- (void)updateWindowPosition;
-
 - (EmulationItem *)itemForSender:(id)sender;
-- (BOOL)mountImage:(NSString *)path inItem:(id)item;
+- (BOOL)mount:(NSString *)path inItem:(id)item;
 
 - (IBAction)buttonAction:(id)sender;
 - (IBAction)showDevice:(id)sender;
 - (IBAction)revealInFinder:(id)sender;
-- (IBAction)openStorage:(id)sender;
-- (IBAction)unmountImage:(id)sender;
-- (IBAction)deleteDevice:(id)sender;
+- (IBAction)openDiskImage:(id)sender;
+- (IBAction)unmount:(id)sender;
+- (IBAction)delete:(id)sender;
 
 @end

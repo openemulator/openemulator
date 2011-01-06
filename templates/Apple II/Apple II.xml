@@ -4,7 +4,7 @@
 
 <device id="appleII" label="Apple II" image="images/Apple/Apple II.png" group="system">
     <setting ref="appleII.video" name="tvSystem" label="TV System" type="select" options="NTSC,PAL" />
-    <setting ref="appleII.video" name="characterSet" label="Character Set" type="select" options="Standard,Lowercase,Pigfont" />
+    <setting ref="appleII.video" name="characterSet" label="Character Set" type="select" options="Standard,Videx Lowercase Chip,Pigfont" />
 </device>
 <port id="appleII.videoPort" ref="appleMonitorII.connector" type="CompositeVideo" label="Video">
     <inlet ref="appleII.video" property="monitor" outletRef="monitor" />
@@ -45,24 +45,6 @@
 </port>
 <port id="appleII.cpuSocket" ref="scpu.conn" type="CPU6502" label="CPU Socket">
 </port>
-<port id="appleII.romD0Socket" ref="" type="AppleIIROM" label="ROM D0 Socket">
-    <inlet ref="appleII.mmu" property="romD0Socket" outletRef="memory" />
-</port>
-<port id="appleII.romD8Socket" ref="" type="AppleIIROM" label="ROM D8 Socket">
-    <inlet ref="appleII.mmu" property="romD8Socket" outletRef="memory" />
-</port>
-<port id="appleII.romE0Socket" ref="" type="AppleIIROM" label="ROM E0 Socket">
-    <inlet ref="appleII.mmu" property="romE0Socket" outletRef="memory" />
-</port>
-<port id="appleII.romE8Socket" ref="" type="AppleIIROM" label="ROM E8 Socket">
-    <inlet ref="appleII.mmu" property="romE8Socket" outletRef="memory" />
-</port>
-<port id="appleII.romF0Socket" ref="" type="AppleIIROM" label="ROM F0 Socket">
-    <inlet ref="appleII.mmu" property="romF0Socket" outletRef="memory" />
-</port>
-<port id="appleII.romF8Socket" ref="" type="AppleIIROM" label="ROM F8 Socket">
-    <inlet ref="appleII.mmu" property="romF8Socket" outletRef="memory" />
-</port>
 <component id="appleII.controlBus" class="ControlBus">
     <property name="emulation" ref="emulation" />
     <property name="audio" ref="audio" />
@@ -90,18 +72,12 @@
 </component>
 <component id="appleII.mmu" class="AppleIIMMU">
     <property name="memoryBus" ref="appleII.memoryBus" />
-    <property name="romD0" ref="" />
+    <property name="romD0" ref="appleII.romD0" />
     <property name="romD8" ref="" />
     <property name="romE0" ref="appleII.romE0" />
     <property name="romE8" ref="appleII.romE8" />
     <property name="romF0" ref="appleII.romF0" />
     <property name="romF8" ref="appleII.romF8" />
-    <property name="romD0Socket" ref="" />
-    <property name="romD8Socket" ref="" />
-    <property name="romE0Socket" ref="" />
-    <property name="romE8Socket" ref="" />
-    <property name="romF0Socket" ref="" />
-    <property name="romF8Socket" ref="" />
 </component>
 <component id="appleII.cpu" class="MOS6502">
     <property name="a" value="0" />
@@ -216,6 +192,9 @@
 </component>
 <component id="appleII.slotExpansionMemory" class="AppleIISlotExpansionMemory">
     <property name="floatingBus" ref="appleII.floatingBus" />
+</component>
+<component id="appleII.romD0" class="ROM">
+    <property name="image" src="${resourcePath}/roms/Apple/341-0016-00.bin" />
 </component>
 <component id="appleII.romE0" class="ROM">
     <property name="image" src="${resourcePath}/roms/Apple/341-0001-00.bin" />

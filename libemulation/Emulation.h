@@ -37,7 +37,7 @@ typedef enum
 	EMULATION_REMOVE_STORAGE,
 	
 	EMULATION_RUN_ALERT,
-	EMULATION_UPDATE_DEVICES,
+	EMULATION_UPDATE_INFO,
 } EmulationMessages;
 
 
@@ -104,10 +104,6 @@ public:
 	EmulationInfo *getEmulationInfo();
 	bool addEDL(string path, map<string, string> idMap);
 	bool removeDevice(string id);
-	
-	bool mount(string path);
-	bool isMountable(string path);
-	bool mount(string path, string id);
 	
 	bool postMessage(OEComponent *sender, int message, void *data);
 	

@@ -58,13 +58,7 @@
 	[super dealloc];
 }
 
-- (IBAction)toggleAudioControls:(id)sender
-{
-	if ([[self window] isVisible])
-		[[self window] orderOut:self];
-	else
-		[[self window] orderFront:self];
-}
+
 
 - (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender
 {

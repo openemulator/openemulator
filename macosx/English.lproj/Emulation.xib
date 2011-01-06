@@ -12,8 +12,8 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
+			<integer value="1808"/>
 			<integer value="1740"/>
-			<integer value="1874"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1076,30 +1076,6 @@
 					<int key="connectionID">2419</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">unmountImage:</string>
-						<reference key="source" ref="932410077"/>
-						<reference key="destination" ref="697458669"/>
-					</object>
-					<int key="connectionID">2423</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">openStorage:</string>
-						<reference key="source" ref="932410077"/>
-						<reference key="destination" ref="756966555"/>
-					</object>
-					<int key="connectionID">2424</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">deleteDevice:</string>
-						<reference key="source" ref="932410077"/>
-						<reference key="destination" ref="958994306"/>
-					</object>
-					<int key="connectionID">2450</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">fDeviceState1Value</string>
 						<reference key="source" ref="762632889"/>
@@ -1163,6 +1139,38 @@
 					</object>
 					<int key="connectionID">2483</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">openDiskImage:</string>
+						<reference key="source" ref="932410077"/>
+						<reference key="destination" ref="756966555"/>
+					</object>
+					<int key="connectionID">2485</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">unmount:</string>
+						<reference key="source" ref="932410077"/>
+						<reference key="destination" ref="697458669"/>
+					</object>
+					<int key="connectionID">2486</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">delete:</string>
+						<reference key="source" ref="932410077"/>
+						<reference key="destination" ref="958994306"/>
+					</object>
+					<int key="connectionID">2526</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">delegate</string>
+						<reference key="source" ref="266599386"/>
+						<reference key="destination" ref="762632889"/>
+					</object>
+					<int key="connectionID">2527</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -1216,30 +1224,15 @@
 						<reference key="object" ref="719851724"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="756966555"/>
-							<reference ref="697458669"/>
 							<reference ref="528536739"/>
-							<reference ref="847601756"/>
-							<reference ref="64520586"/>
 							<reference ref="958994306"/>
 							<reference ref="986166763"/>
+							<reference ref="697458669"/>
+							<reference ref="847601756"/>
+							<reference ref="756966555"/>
+							<reference ref="64520586"/>
 						</object>
 						<reference key="parent" ref="0"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">1809</int>
-						<reference key="object" ref="756966555"/>
-						<reference key="parent" ref="719851724"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">1810</int>
-						<reference key="object" ref="697458669"/>
-						<reference key="parent" ref="719851724"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">1834</int>
-						<reference key="object" ref="847601756"/>
-						<reference key="parent" ref="719851724"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">1874</int>
@@ -1511,11 +1504,6 @@
 						<reference key="parent" ref="865542168"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">2394</int>
-						<reference key="object" ref="986166763"/>
-						<reference key="parent" ref="719851724"/>
-					</object>
-					<object class="IBObjectRecord">
 						<int key="objectID">2233</int>
 						<reference key="object" ref="246639627"/>
 						<object class="NSMutableArray" key="children">
@@ -1584,16 +1572,6 @@
 						<int key="objectID">2438</int>
 						<reference key="object" ref="439559622"/>
 						<reference key="parent" ref="83318514"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">2447</int>
-						<reference key="object" ref="64520586"/>
-						<reference key="parent" ref="719851724"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">2448</int>
-						<reference key="object" ref="958994306"/>
-						<reference key="parent" ref="719851724"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">2459</int>
@@ -1684,6 +1662,36 @@
 						<int key="objectID">2470</int>
 						<reference key="object" ref="777754916"/>
 						<reference key="parent" ref="628192974"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">2448</int>
+						<reference key="object" ref="958994306"/>
+						<reference key="parent" ref="719851724"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">2394</int>
+						<reference key="object" ref="986166763"/>
+						<reference key="parent" ref="719851724"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">1810</int>
+						<reference key="object" ref="697458669"/>
+						<reference key="parent" ref="719851724"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">1834</int>
+						<reference key="object" ref="847601756"/>
+						<reference key="parent" ref="719851724"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">1809</int>
+						<reference key="object" ref="756966555"/>
+						<reference key="parent" ref="719851724"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">2447</int>
+						<reference key="object" ref="64520586"/>
+						<reference key="parent" ref="719851724"/>
 					</object>
 				</object>
 			</object>
@@ -1797,9 +1805,9 @@
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>{{75, 158}, {640, 411}}</string>
+					<string>{{84, 158}, {640, 411}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{75, 158}, {640, 411}}</string>
+					<string>{{84, 158}, {640, 411}}</string>
 					<boolean value="NO"/>
 					<boolean value="NO"/>
 					<boolean value="YES"/>
@@ -1807,7 +1815,7 @@
 					<string>{604, 326}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<object class="NSAffineTransform"/>
-					<string>{{209, 116}, {160, 123}}</string>
+					<string>{{637, 159}, {160, 123}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -1948,7 +1956,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">2483</int>
+			<int key="maxID">2527</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -1985,11 +1993,11 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>buttonAction:</string>
-							<string>deleteDevice:</string>
-							<string>openStorage:</string>
+							<string>delete:</string>
+							<string>openDiskImage:</string>
 							<string>revealInFinder:</string>
 							<string>showDevice:</string>
-							<string>unmountImage:</string>
+							<string>unmount:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
@@ -2006,11 +2014,11 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>buttonAction:</string>
-							<string>deleteDevice:</string>
-							<string>openStorage:</string>
+							<string>delete:</string>
+							<string>openDiskImage:</string>
 							<string>revealInFinder:</string>
 							<string>showDevice:</string>
-							<string>unmountImage:</string>
+							<string>unmount:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
@@ -2019,11 +2027,11 @@
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
-								<string key="name">deleteDevice:</string>
+								<string key="name">delete:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
-								<string key="name">openStorage:</string>
+								<string key="name">openDiskImage:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
@@ -2035,7 +2043,7 @@
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
-								<string key="name">unmountImage:</string>
+								<string key="name">unmount:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 						</object>

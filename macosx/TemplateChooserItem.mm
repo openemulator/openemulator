@@ -30,10 +30,8 @@
 	[edlPath release];
 	
 	[label release];
-	[description release];
-	[edlPath release];
-	
 	[image release];
+	[description release];
 	
 	[super dealloc];
 }

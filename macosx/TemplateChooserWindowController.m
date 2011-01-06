@@ -54,14 +54,14 @@
 	[templateChooserViewController selectGroup:group andItemWithPath:path];
 }
 
-- (void)chooserSelectionDidChange:(id)sender
+- (void)templateChooserSelectionDidChange:(id)sender
 {
 	NSString *path = [templateChooserViewController selectedItemPath];
 	
 	[fChooseButton setEnabled:(path != nil)];
 }
 
-- (void)chooserItemWasDoubleClicked:(id)sender
+- (void)templateChooserItemWasDoubleClicked:(id)sender
 {
 	[self chooseTemplate:sender];
 }

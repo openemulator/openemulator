@@ -198,13 +198,13 @@
 		  contextInfo:nil];
 }
 
-- (void)chooserSelectionDidChange:(id)sender
+- (void)templateChooserSelectionDidChange:(id)sender
 {
 	[fTemplateChooserChooseButton setEnabled:
 	 ([templateChooserViewController selectedItemPath] != nil)];
 }
 
-- (void)chooserItemWasDoubleClicked:(id)sender
+- (void)templateChooserItemWasDoubleClicked:(id)sender
 {
 	[self chooseTemplate:sender];
 }

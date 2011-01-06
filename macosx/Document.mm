@@ -22,6 +22,7 @@
 
 void devicesDidUpdate()
 {
+	NSLog(@"It did update!");
 }
 
 void runAlert(string message)
@@ -66,7 +67,19 @@ void removeCanvas(OEComponent *canvas, void *userData)
 	[super dealloc];
 }
 
-- (void)showEmulation:(id)sender
+- (BOOL)validateUserInterfaceItem:(id <NSValidatedUserInterfaceItem>)anItem
+{
+    SEL action = [anItem action];
+    
+	if (action == @selector(showEmulation:))
+		return !([NSApp mainWindow] == [emulationWindowController window]);
+	
+	return NO;
+}
+
+
+
+- (IBAction)showEmulation:(id)sender
 {
 	[emulationWindowController showWindow:sender];
 }
@@ -86,9 +99,10 @@ void removeCanvas(OEComponent *canvas, void *userData)
 	theEmulation->setRunAlertCallback(runAlert);
 	theEmulation->setAddCanvasCallback(addCanvas, self);
 	theEmulation->setRemoveCanvasCallback(removeCanvas, self);
-	theEmulation->setDevicesDidUpdateCallback(devicesDidUpdate);
 	
 	theEmulation->open(getCPPString([url path]));
+	
+	theEmulation->setDevicesDidUpdateCallback(devicesDidUpdate);
 	
 	portAudioHAL->addEmulation((Emulation *)emulation);
 	
@@ -154,8 +168,6 @@ void removeCanvas(OEComponent *canvas, void *userData)
 	{
 		string emulationPath = getCPPString([[absoluteURL path]
 										   stringByAppendingString:@"/"]);
-		
-		[emulationWindowController updateWindowPosition];
 		
 		[self lockEmulation];
 		bool isSaved = ((Emulation *)emulation)->save(emulationPath);
@@ -224,68 +236,9 @@ void removeCanvas(OEComponent *canvas, void *userData)
 	return theEmulation->getEmulationInfo();
 }
 
-- (BOOL)mount:(NSString *)path
-{
-	Emulation *theEmulation = (Emulation *)emulation;
-	
-	[self lockEmulation];
-	BOOL result = theEmulation->mount(getCPPString(path));
-	[self unlockEmulation];
-	
-	return result;
-}
-
-- (BOOL)mount:(NSString *)path inDevice:(NSString *)deviceId
-{
-	return NO;
-}
-
-- (BOOL)mount:(NSString *)path inStorage:(void *)component
-{
-	if (!component)
-		return NO;
-	
-	OEComponent *theComponent = (OEComponent *)component;
-	string thePath = getCPPString(path);
-	
-	[self lockEmulation];
-	BOOL result = theComponent->postMessage(NULL, (int)STORAGE_MOUNT, &thePath);
-	[self unlockEmulation];
-	
-	return result;
-}
-
-- (BOOL)unmountStorage:(void *)component
-{
-	if (!component)
-		return NO;
-	
-	OEComponent *theComponent = (OEComponent *)component;
-	
-	[self lockEmulation];
-	BOOL result = theComponent->postMessage(NULL, (int)STORAGE_UNMOUNT, NULL);
-	[self unlockEmulation];
-	
-	return result;
-}
-
-- (BOOL)mountable:(NSString *)path
-{
-	Emulation *theEmulation = (Emulation *)emulation;
-	
-	[self lockEmulation];
-	BOOL result = theEmulation->isMountable(getCPPString(path));
-	[self unlockEmulation];
-	
-	return result;
-}
-
 - (BOOL)getBoolForMessage:(int)message
 				component:(void *)component
 {
-	if (!component)
-		return NO;
-	
 	OEComponent *theComponent = (OEComponent *)component;
 	BOOL value = NO;
 	
@@ -296,12 +249,36 @@ void removeCanvas(OEComponent *canvas, void *userData)
 	return value;
 }
 
+- (OEUInt64)getOEUInt64ForMessage:(int)message
+						component:(void *)component
+{
+	OEComponent *theComponent = (OEComponent *)component;
+	OEUInt64 value = 0;
+	
+	[self lockEmulation];
+	theComponent->postMessage(NULL, message, &value);
+	[self unlockEmulation];
+	
+	return value;
+}
+
+- (BOOL)postString:(NSString *)aString
+		   message:(int)message
+		 component:(void *)component
+{
+	OEComponent *theComponent = (OEComponent *)component;
+	string theString = getCPPString(aString);
+	
+	[self lockEmulation];
+	BOOL result = theComponent->postMessage(NULL, message, &theString);
+	[self unlockEmulation];
+	
+	return result;
+}
+
 - (NSString *)getStringForMessage:(int)message
 						component:(void *)component
 {
-	if (!component)
-		return NO;
-	
 	OEComponent *theComponent = (OEComponent *)component;
 	string value;
 	
@@ -312,76 +289,166 @@ void removeCanvas(OEComponent *canvas, void *userData)
 	return getNSString(value);
 }
 
-- (BOOL)storageMounted:(void *)component
-{
-	return [self getBoolForMessage:(int)STORAGE_IS_MOUNTED component:component];
-}
-
-- (BOOL)storageWritable:(void *)component
-{
-	return [self getBoolForMessage:(int)STORAGE_IS_WRITABLE component:component];
-}
-
-- (BOOL)storageLocked:(void *)component
-{
-	return [self getBoolForMessage:(int)STORAGE_IS_LOCKED component:component];
-}
-
-- (NSString *)storagePath:(void *)component
-{
-	return [self getStringForMessage:(int)STORAGE_GET_PATH component:component];
-}
-
-- (NSString *)storageFormat:(void *)component
-{
-	return [self getStringForMessage:(int)STORAGE_GET_FORMAT component:component];
-}
-
 - (NSString *)formatCapacity:(OEUInt64)value
 {
 	float mantissa;
 	NSString *unit;
 	
-	if (value < 1E3)
+	if (value < (1 << 10))
 	{
-		mantissa = value / 1E0F;
+		mantissa = value;
 		unit = @"";
 	}
-	else if (value < 1E6)
+	else if (value < (1 << 20))
 	{
-		mantissa = value / 1E3F;
-		unit = @"k";
+		mantissa = value / (1 << 10);
+		unit = @"ki";
 	}
-	else if (value < 1E9)
+	else if (value < (1 << 30))
 	{
-		mantissa = value / 1E6F;
-		unit = @"M";
+		mantissa = value / (1 << 20);
+		unit = @"Mi";
 	}
 	else
 	{
-		mantissa = value / 1E9F;
-		unit = @"G";
+		mantissa = value / (1 << 30);
+		unit = @"Gi";
 	}
 	
 	return [NSString localizedStringWithFormat:@"%3.2f %@B", mantissa, unit, value];
 }
 
-- (NSString *)storageCapacity:(void *)component
+- (BOOL)mount:(NSString *)path
 {
-	if (!component)
-		return NO;
+	Emulation *theEmulation = (Emulation *)emulation;
+	string thePath = getCPPString(path);
 	
-	OEComponent *theComponent = (OEComponent *)component;
-	OEUInt64 value = 0;
+	EmulationInfo *theEmulationInfo = theEmulation->getEmulationInfo();
+	BOOL result = NO;
+	for (EmulationInfo::iterator i = theEmulationInfo->begin();
+		 i != theEmulationInfo->end();
+		 i++)
+	{
+		OEComponents *storages = &i->storages;
+		for (OEComponents::iterator i = storages->begin();
+			 i != storages->end();
+			 i++)
+		{
+			result = [self postString:path
+							  message:(int)STORAGE_MOUNT
+							component:*i];
+			if (result)
+				break;
+		}
+		if (result)
+			break;
+	}
 	
-	[self lockEmulation];
-	theComponent->postMessage(NULL, STORAGE_GET_CAPACITY, &value);
-	[self unlockEmulation];
+	return result;
+}
+
+- (BOOL)mount:(NSString *)path inStorage:(void *)component
+{
+	return [self postString:path
+					message:(int)STORAGE_MOUNT
+				  component:component];
+}
+
+- (BOOL)unmountStorage:(void *)component
+{
+	return [self postString:@""
+					message:(int)STORAGE_UNMOUNT
+				  component:component];
+}
+
+- (BOOL)isMountable:(NSString *)path
+{
+	Emulation *theEmulation = (Emulation *)emulation;
+	string thePath = getCPPString(path);
 	
+	EmulationInfo *theEmulationInfo = theEmulation->getEmulationInfo();
+	for (EmulationInfo::iterator i = theEmulationInfo->begin();
+		 i != theEmulationInfo->end();
+		 i++)
+	{
+		OEComponents *storages = &i->storages;
+		for (OEComponents::iterator i = storages->begin();
+			 i != storages->end();
+			 i++)
+		{
+			if ([self getBoolForMessage:(int)STORAGE_IS_MOUNTABLE
+							  component:*i])
+				return YES;
+		}
+	}
+	
+	return NO;
+}
+
+- (BOOL)isMountable:(NSString *)path inStorage:(void *)component
+{
+	return [self getBoolForMessage:(int)STORAGE_IS_MOUNTABLE
+						 component:component];
+}
+
+- (BOOL)isStorageMounted:(void *)component
+{
+	return [self getBoolForMessage:(int)STORAGE_IS_MOUNTED
+						 component:component];
+}
+
+- (BOOL)isStorageWritable:(void *)component
+{
+	return [self getBoolForMessage:(int)STORAGE_IS_WRITABLE
+						 component:component];
+}
+
+- (BOOL)isStorageLocked:(void *)component
+{
+	return [self getBoolForMessage:(int)STORAGE_IS_LOCKED
+						 component:component];
+}
+
+- (NSString *)getStoragePath:(void *)component
+{
+	return [self getStringForMessage:(int)STORAGE_GET_PATH
+						   component:component];
+}
+
+- (NSString *)getStorageFormat:(void *)component
+{
+	return [self getStringForMessage:(int)STORAGE_GET_FORMAT
+						   component:component];
+}
+
+- (NSString *)getStorageCapacity:(void *)component
+{
+	OEUInt64 value = [self getOEUInt64ForMessage:(int)STORAGE_GET_CAPACITY
+									   component:component];
 	return [self formatCapacity:value];
 }
 
 
+
+- (void)setValue:(NSString *)theValue
+	  ofProperty:(NSString *)theName
+	forComponent:(NSString *)theId
+{
+	if (!emulation)
+		return;
+	
+	Emulation *theEmulation = (Emulation *)emulation;
+	BOOL success = NO;
+	
+	[self lockEmulation];
+	OEComponent *component = theEmulation->getComponent(getCPPString(theId));
+	if (component)
+		success = component->setValue(getCPPString(theName), getCPPString(theValue));
+	[self unlockEmulation];
+	
+	if (!success)
+		NSLog(@"could not set property '%@' for '%@'", theName, theId);
+}
 
 - (NSString *)valueOfProperty:(NSString *)theName
 				 forComponent:(NSString *)theId
@@ -405,25 +472,7 @@ void removeCanvas(OEComponent *canvas, void *userData)
 	return getNSString(value);
 }
 
-- (void)setValue:(NSString *)theValue
-	  ofProperty:(NSString *)theName
-	forComponent:(NSString *)theId
-{
-	if (!emulation)
-		return;
-	
-	Emulation *theEmulation = (Emulation *)emulation;
-	BOOL success = NO;
-	
-	[self lockEmulation];
-	OEComponent *component = theEmulation->getComponent(getCPPString(theId));
-	if (component)
-		success = component->setValue(getCPPString(theName), getCPPString(theValue));
-	[self unlockEmulation];
-	
-	if (!success)
-		NSLog(@"could not set property '%@' for '%@'", theName, theId);
-}
+
 
 - (void)addEDL:(NSString *)path
    connections:(NSDictionary *)connections

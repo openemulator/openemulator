@@ -17,7 +17,7 @@
 #define IMAGE_PADDING			3.0
 #define BUTTON_LEFT_PADDING		2.0
 #define BUTTON_SIZE				18.0
-#define BUTTON_RIGHT_PADDING	2.0
+#define BUTTON_RIGHT_PADDING	3.0
 
 @implementation EmulationOutlineCell
 
@@ -47,10 +47,12 @@
 	
 	if ([item image])
 		NSDivideRect(rect, &paddingRect, &rect,
-					 IMAGE_SIZE + IMAGE_PADDING, NSMinXEdge);
-	if ([item isCanvas] || [item isStorageMounted])
-		NSDivideRect(rect, &paddingRect, &rect, BUTTON_LEFT_PADDING + BUTTON_SIZE +
-					 BUTTON_RIGHT_PADDING, NSMaxXEdge);
+					 IMAGE_SIZE + IMAGE_PADDING,
+					 NSMinXEdge);
+	if ([item isCanvas] || [item isMounted])
+		NSDivideRect(rect, &paddingRect, &rect,
+					 BUTTON_LEFT_PADDING + BUTTON_SIZE + BUTTON_RIGHT_PADDING,
+					 NSMaxXEdge);
 	
 	return NSInsetRect(rect, 0, (NSHeight(bounds) - [self cellSize].height) / 2.0);
 }
@@ -59,7 +61,7 @@
 {
 	EmulationItem *item = [self representedObject];
 	
-	if (![item isCanvas] && ![item isStorageMounted])
+	if (![item isCanvas] && ![item isMounted])
 		return NSZeroRect;
 	
 	NSRect rect = bounds;
@@ -93,7 +95,7 @@
 	NSString *name = @"";
 	if ([item isCanvas])
 		name = @"EmulationShow";
-	else if ([item isStorageMounted])
+	else if ([item isMounted])
 		name = @"EmulationUnmount";
 	if (buttonPressed)
 		name = [name stringByAppendingString:@"Pressed"];
