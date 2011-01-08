@@ -22,7 +22,7 @@ Emulation::Emulation() : OEEDL()
 	runAlert = NULL;
 	addCanvas = NULL;
 	removeCanvas = NULL;
-	devicesDidUpdate = NULL;
+	didUpdate = NULL;
 	
 	setComponent("emulation", this);
 }
@@ -40,29 +40,29 @@ void Emulation::setResourcePath(string path)
 	resourcePath = path;
 }
 
-void Emulation::setRunAlertCallback(EmulationRunAlertCallback runAlert)
+void Emulation::setRunAlert(EmulationRunAlert runAlert)
 {
 	this->runAlert = runAlert;
 }
 
-void Emulation::setAddCanvasCallback(EmulationAddCanvasCallback addCanvas,
-									   void *userData)
+void Emulation::setAddCanvas(EmulationAddCanvas addCanvas)
 {
 	this->addCanvas = addCanvas;
-	addCanvasUserData = userData;
 }
 
-void Emulation::setRemoveCanvasCallback(EmulationRemoveCanvasCallback removeCanvas,
-										  void *userData)
+void Emulation::setRemoveCanvas(EmulationRemoveCanvas removeCanvas)
 {
 	this->addCanvas = addCanvas;
-	addCanvasUserData = userData;
 }
 
-void Emulation::setDevicesDidUpdateCallback(EmulationDevicesDidUpdateCallback
-											  devicesDidUpdate)
+void Emulation::setDidUpdate(EmulationDidUpdate didUpdate)
 {
-	this->devicesDidUpdate = devicesDidUpdate;
+	this->didUpdate = didUpdate;
+}
+
+void Emulation::setUserData(void *userData)
+{
+	this->userData = userData;
 }
 
 bool Emulation::open(string path)
@@ -697,7 +697,7 @@ bool Emulation::postMessage(OEComponent *sender, int message, void *data)
 				{
 					deviceInfo->state = *((string *)data);
 					
-					return postMessage(sender, EMULATION_UPDATE_INFO, NULL);
+					return postMessage(sender, EMULATION_UPDATE, NULL);
 				}
 			}
 			break;
@@ -709,7 +709,7 @@ bool Emulation::postMessage(OEComponent *sender, int message, void *data)
 				{
 					deviceInfo->image = *((string *)data);
 					
-					return postMessage(sender, EMULATION_UPDATE_INFO, NULL);
+					return postMessage(sender, EMULATION_UPDATE, NULL);
 				}
 			}
 			break;
@@ -721,7 +721,7 @@ bool Emulation::postMessage(OEComponent *sender, int message, void *data)
 				{
 					deviceInfo->powered = *((bool *)data);
 					
-					return postMessage(sender, EMULATION_UPDATE_INFO, NULL);
+					return postMessage(sender, EMULATION_UPDATE, NULL);
 				}
 			}
 			break;
@@ -734,11 +734,11 @@ bool Emulation::postMessage(OEComponent *sender, int message, void *data)
 				{
 					OEComponent **ref = (OEComponent **)data;
 					
-					*ref = addCanvas(addCanvasUserData);
+					*ref = addCanvas(userData);
 					
 					deviceInfo->canvases.push_back(*ref);
 					
-					return postMessage(sender, EMULATION_UPDATE_INFO, NULL);
+					return postMessage(sender, EMULATION_UPDATE, NULL);
 				}
 			}
 			break;
@@ -758,11 +758,11 @@ bool Emulation::postMessage(OEComponent *sender, int message, void *data)
 					if (i != last)
 						canvases.erase(i, last);
 					
-					removeCanvas(*ref, removeCanvasUserData);
+					removeCanvas(userData, *ref);
 					
 					*ref = NULL;
 					
-					return postMessage(sender, EMULATION_UPDATE_INFO, NULL);
+					return postMessage(sender, EMULATION_UPDATE, NULL);
 				}
 			}
 			break;
@@ -774,7 +774,7 @@ bool Emulation::postMessage(OEComponent *sender, int message, void *data)
 				{
 					deviceInfo->storages.push_back(sender);
 					
-					return postMessage(sender, EMULATION_UPDATE_INFO, NULL);
+					return postMessage(sender, EMULATION_UPDATE, NULL);
 				}
 			}
 			break;
@@ -791,7 +791,7 @@ bool Emulation::postMessage(OEComponent *sender, int message, void *data)
 					if (i != last)
 						storages.erase(i, last);
 					
-					return postMessage(sender, EMULATION_UPDATE_INFO, NULL);
+					return postMessage(sender, EMULATION_UPDATE, NULL);
 				}
 			}
 			break;
@@ -799,17 +799,16 @@ bool Emulation::postMessage(OEComponent *sender, int message, void *data)
 		case EMULATION_RUN_ALERT:
 			if (data && runAlert)
 			{
-				string *message = (string *)data;
 				if (runAlert)
-					runAlert(*message);
+					runAlert(userData, *((string *)data));
 				
 				return true;
 			}
 			break;
 			
-		case EMULATION_UPDATE_INFO:
-			if (devicesDidUpdate)
-				devicesDidUpdate();
+		case EMULATION_UPDATE:
+			if (didUpdate)
+				didUpdate(userData);
 			
 			return true;
 	}

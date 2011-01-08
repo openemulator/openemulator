@@ -47,10 +47,11 @@ typedef enum
 - (id)initWithDocument:(Document *)theDocument;
 - (id)initWithGroupName:(NSString *)theGroupName;
 - (id)initWithDeviceInfo:(void *)theDeviceInfo
-			  inDocument:(Document *)theDocument;
+				document:(Document *)theDocument;
 - (id)initWithStorage:(void *)theComponent
-		   deviceInfo:(void *)theDeviceInfo
-		   inDocument:(Document *)theDocument;
+				  uid:(NSString *)theUID
+			 location:(NSString *)theLocation
+			 document:(Document *)theDocument;
 
 - (EmulationItemType)type;
 - (NSMutableArray *)children;
@@ -65,14 +66,15 @@ typedef enum
 - (BOOL)isRemovable;
 - (BOOL)isCanvas;
 
-- (BOOL)isMountable;
+- (BOOL)isStorage;
 - (BOOL)isMounted;
-- (NSString *)storagePath;
-- (NSString *)storageFormat;
-- (NSString *)storageCapacity;
+- (BOOL)isLocked;
+- (NSString *)diskImagePath;
+- (NSString *)diskImageFormat;
+- (NSString *)diskImageCapacity;
 - (BOOL)mount:(NSString *)path;
 - (void)unmount;
-- (BOOL)isMountable:(NSString *)path;
+- (BOOL)canMount:(NSString *)path;
 
 - (NSInteger)numberOfSettings;
 - (NSString *)labelForSettingAtIndex:(NSInteger)index;

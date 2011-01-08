@@ -13,6 +13,11 @@
 * Implemented emulation disk mounting
 * Implemented device disk mounting
 * Implemented context menu options
+* Implemented emulationDidUpdate
+* Implemented emulation drag and drop
+* Implemented mount lock support
+* Implemented emulation did update selection
+* Improved document logic with mount, unmount, canMount, isImageSupported
 
 ==2010-12==
 * Implemented window autosave of emulation view

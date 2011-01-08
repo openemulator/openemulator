@@ -54,15 +54,6 @@
 	[super dealloc];
 }
 
-- (void)updateSidebar
-{
-	[rootItem release];
-	rootItem = [[EmulationItem alloc] initWithDocument:[self document]];
-	
-	[fOutlineView reloadData];
-	[fOutlineView expandItem:nil expandChildren:YES];
-}
-
 - (void)windowDidLoad
 {
 	NSToolbar *toolbar;
@@ -87,10 +78,24 @@
 	[fTableView setDelegate:self];
 	[fTableView setDataSource:self];
 	
-	[self updateSidebar];
+	[self updateEmulation:self];
+}
+
+- (void)updateEmulation:(id)sender
+{
+	[rootItem release];
+	rootItem = [[EmulationItem alloc] initWithDocument:[self document]];
 	
-	[fOutlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:1]
-			  byExtendingSelection:NO];
+	NSString *uid = [[selectedItem uid] copy];
+	
+	[fOutlineView reloadData];
+	[fOutlineView expandItem:nil expandChildren:YES];
+	
+	if (![self selectItem:rootItem withUid:uid])
+		[fOutlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:1]
+				  byExtendingSelection:NO];
+	
+	[uid release];
 }
 
 - (void)updateDetails
@@ -105,13 +110,15 @@
 	NSImage *image = nil;
 	NSString *location = @"";
 	NSString *state = @"";
+	BOOL isEnabled = YES;
 	
 	BOOL isCanvas = NO;
 	
-	BOOL isMountable = NO;
+	BOOL isStorage = NO;
 	BOOL isMounted = NO;
-	NSString *storageFormat = @"";
-	NSString *storageCapacity = @"";
+	BOOL isLocked = NO;
+	NSString *diskImageFormat = @"";
+	NSString *diskImageCapacity = @"";
 	
 	if (selectedItem)
 	{
@@ -123,10 +130,11 @@
 		state = NSLocalizedString([selectedItem state],
 								  @"Emulation Value.");
 		isCanvas = [selectedItem isCanvas];
-		isMountable = [selectedItem isMountable];
+		isStorage = [selectedItem isStorage];
 		isMounted = [selectedItem isMounted];
-		storageFormat = [selectedItem storageFormat];
-		storageCapacity = [selectedItem storageCapacity];
+		isLocked = [selectedItem isLocked];
+		diskImageFormat = [selectedItem diskImageFormat];
+		diskImageCapacity = [selectedItem diskImageCapacity];
 	}
 	
 	[fDeviceBox setTitle:title];
@@ -140,8 +148,8 @@
 		[fDeviceState4Label setStringValue:capacityLabel];
 		[fDeviceState1Value setStringValue:location];
 		[fDeviceState2Value setStringValue:state];
-		[fDeviceState3Value setStringValue:storageFormat];
-		[fDeviceState4Value setStringValue:storageCapacity];
+		[fDeviceState3Value setStringValue:diskImageFormat];
+		[fDeviceState4Value setStringValue:diskImageCapacity];
 	}
 	else
 	{
@@ -155,16 +163,21 @@
 		[fDeviceState4Value setStringValue:@""];
 	}
 	
-	[fDeviceButton setHidden:!(isCanvas || isMountable || isMounted)];
+	[fDeviceButton setHidden:!(isCanvas || isStorage || isMounted)];
 	if (isCanvas)
 		[fDeviceButton setTitle:NSLocalizedString(@"Show Device",
 												  @"Emulation Button Label.")];
 	else if (isMounted)
 		[fDeviceButton setTitle:NSLocalizedString(@"Unmount",
 												  @"Emulation Button Label.")];
-	else if (isMountable)
+	else if (isStorage)
+	{
 		[fDeviceButton setTitle:NSLocalizedString(@"Open...",
 												  @"Emulation Button Label.")];
+		isEnabled = !isLocked;
+	}
+	
+	[fDeviceButton setEnabled:isEnabled];
 	
 	[fTableView reloadData];
 }
@@ -181,6 +194,27 @@
 	return selectedItem;
 }
 
+- (BOOL)selectItem:(EmulationItem *)item withUid:(NSString *)uid
+{
+	NSString *otherUID = [item uid];
+	if (uid && otherUID && ([uid compare:otherUID] == NSOrderedSame))
+	{
+		NSInteger row = [fOutlineView rowForItem:item];
+		[fOutlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:row]
+				  byExtendingSelection:NO];
+		return YES;
+	}
+	
+	NSArray *children = [item children];
+	for (int i = 0; i < [children count]; i++)
+	{
+		if ([self selectItem:[children objectAtIndex:i] withUid:uid])
+			return YES;
+	}
+	
+	return NO;
+}
+
 - (BOOL)validateUserInterfaceItem:(id <NSValidatedUserInterfaceItem >)anItem
 {
 	SEL action = [anItem action];
@@ -189,7 +223,7 @@
 	if (action == @selector(showDevice:))
 		return [item isCanvas];
 	else if (action == @selector(openDiskImage:))
-		return [item isMountable];
+		return [item isStorage] && ![item isLocked];
 	else if (action == @selector(revealInFinder:))
 		return [item isMounted];
 	else if (action == @selector(unmount:))
@@ -340,7 +374,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				  proposedItem:(id)item
 			proposedChildIndex:(NSInteger)index
 {
-	if (!([item isMountable] || [item isMounted]) || (index != -1))
+	if (!([item isStorage] || [item isMounted]) || (index != -1))
 		return NSDragOperationNone;
 	
 	NSPasteboard *pasteboard = [info draggingPasteboard];
@@ -355,7 +389,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	if (![[documentController diskImagePathExtensions] containsObject:pathExtension])
 		return NSDragOperationNone;
 	
-	if (![item isMountable:path])
+	if (![item canMount:path])
 		return NSDragOperationNone;
 	
 	return NSDragOperationCopy;
@@ -370,7 +404,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	NSString *path = [[pasteboard propertyListForType:NSFilenamesPboardType]
 					  objectAtIndex:0];
 	
-	return [self mount:path inItem:item];
+	return [item mount:path];
 }
 
 
@@ -414,6 +448,25 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	selectedItem = [fOutlineView itemAtRow:row];
 	
 	[self updateDetails];
+}
+
+
+
+- (void)outlineDoubleAction:(id)sender
+{
+	if ([fOutlineView forcedRow] != -1)
+		return;
+	
+	NSInteger clickedRow = [fOutlineView clickedRow];
+	if (clickedRow != -1)
+	{
+		EmulationItem *item = [fOutlineView itemAtRow:clickedRow];
+		
+		if ([item isCanvas])
+			[self showDevice:sender];
+		else if ([item isStorage] && ![item isLocked])
+			[self openDiskImage:sender];
+	}
 }
 
 
@@ -488,42 +541,20 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
 
 
 
-- (void)outlineDoubleAction:(id)sender
-{
-	if ([fOutlineView forcedRow] != -1)
-		return;
-	
-	NSInteger clickedRow = [fOutlineView clickedRow];
-	if (clickedRow != -1)
-	{
-		EmulationItem *item = [fOutlineView itemAtRow:clickedRow];
-		
-		if ([item isCanvas])
-			[self showDevice:sender];
-		else if ([item isMountable])
-			[self openDiskImage:sender];
-	}
-}
-
-
-
-- (BOOL)mount:(NSString *)path inItem:(id)item
+- (BOOL)mount:(NSString *)path inItem:(EmulationItem *)item
 {
 	if (![item mount:path])
 	{
-		
-		NSAlert *alert = [[NSAlert alloc] init];
-		[alert setMessageText:[NSString localizedStringWithFormat:
-							   @"The document \u201C%@\u201D could not be opened. "
-							   "The device \u201C%@\u201D cannot open files in this format.",
-							   [path lastPathComponent], [item label]]];
-		[alert setInformativeText:[NSString localizedStringWithFormat:
-								   @"Try opening the document with another device or emulation."]];
-		[alert beginSheetModalForWindow:[self window]
-						  modalDelegate:nil
-						 didEndSelector:nil
-							contextInfo:nil];
-		[alert release];
+		NSBeginAlertSheet([NSString localizedStringWithFormat:
+						   @"The document \u201C%@\u201D can't be mounted "
+						   "in \u201C%@\u201D.",
+						   [path lastPathComponent], [item label]],
+						  nil, nil, nil,
+						  [self window],
+						  self, nil, nil, nil,
+						  [NSString localizedStringWithFormat:
+						   @"Try mounting the document in some other device "
+						   "or emulation."]);
 		
 		return NO;
 	}
@@ -539,7 +570,7 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
 		[self showDevice:sender];
 	else if ([item isMounted])
 		[self unmount:sender];
-	else if ([item isMountable])
+	else if ([item isStorage])
 		[self openDiskImage:sender];
 }
 
@@ -553,7 +584,7 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
 {
 	EmulationItem *item = [self itemForSender:sender];
 	
-	[[NSWorkspace sharedWorkspace] selectFile:[item storagePath]
+	[[NSWorkspace sharedWorkspace] selectFile:[item diskImagePath]
 					 inFileViewerRootedAtPath:@""];
 }
 
@@ -582,14 +613,56 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
 		NSString *path = [[panel URL] path];
 		[panel close];
 		
-		[self mount:path inItem:contextInfo];
+		EmulationItem *item = contextInfo;
+		if (![item mount:path])
+		{
+			NSBeginAlertSheet([NSString localizedStringWithFormat:
+							   @"The document \u201C%@\u201D can't be mounted "
+							   "in \u201C%@\u201D.",
+							   [path lastPathComponent], [item label]],
+							  nil, nil, nil,
+							  [self window],
+							  self, nil, nil, nil,
+							  [NSString localizedStringWithFormat:
+							   @"Try mounting the document in some other device "
+							   "or emulation."]);
+		}
 	}
 }
 
 - (IBAction)unmount:(id)sender
 {
 	EmulationItem *item = [self itemForSender:sender];
+	
+	if ([item isLocked])
+	{
+		NSBeginAlertSheet([NSString localizedStringWithFormat:
+						   @"Unmount the document \u201C%@\u201D?",
+						   [item label]],
+						  NSLocalizedString(@"Cancel", @"Emulation Alert"),
+						  NSLocalizedString(@"Unmount", @"Emulation Alert"),
+						  nil,
+						  [self window], self,
+						  @selector(unmountPanelDidEnd:returnCode:contextInfo:),
+						  nil, item,
+						  [NSString localizedStringWithFormat:
+						   @"The document is locked by the emulation. "
+						   "It is unsafe to force unmount the document."
+						   ]);
+		
+		return;
+	}
+	
 	[item unmount];
+}
+
+- (void)unmountPanelDidEnd:(NSWindow *)sheet
+				returnCode:(int)returnCode
+			   contextInfo:(void *)contextInfo
+{
+	EmulationItem *item = contextInfo;
+	if (returnCode == NSAlertAlternateReturn)
+		[item unmount];
 }
 
 - (IBAction)delete:(id)sender

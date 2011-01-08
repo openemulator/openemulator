@@ -1,14 +1,12 @@
 ==To-Do==
-* Fix 
-* Implement check for disk image lock
-* Implement disk image file locking, if the disk image is writable
+* Implement hardware library
+* Implement disk image file locking, if the disk image is writable (flock)
 * Devise a way to send system events to a device without a canvas
 * Implement addCanvas and removeCanvas -> this should create a windowController and an OpenGLHAL. The window controller should be added to the document, and the canvas returned.
 * Implement show device action in emulation menu
 * Implement frame communication to the canvas
 * Implement canvas keyboard entry/mouse events
 * Implement mouse and keyboard capture
-* Implement canvas window persistency
 * Implement [Document updateChangeCount]
 * Implement disk image drag and drop in canvas window
 * Implement disk image drag and drop in emulation window
@@ -19,13 +17,9 @@
 * Implement OEEmulation removeDevice
 * Implement main emulation window add EDL
 * Implement main emulation window remove device
-* Implement hardware chooser with hardware library
-* Implement 
-
 * Integrate OpenGL 2.0 shader
-* Implement non-linear curves in the shader (for green monitors, changes the hue)
+* Implement non-linear curves in the shader (change hue in monochrome monitors)
 * Implement the option to deactivate shaders
-* Implement the inspector
 * Devise an interface to allow native OpenGL commands in emulations
 
 ==Future to-do's==

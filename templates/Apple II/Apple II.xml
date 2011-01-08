@@ -5,6 +5,7 @@
 <device id="appleII" label="Apple II" image="images/Apple/Apple II.png" group="system">
     <setting ref="appleII.video" name="tvSystem" label="TV System" type="select" options="NTSC,PAL" />
     <setting ref="appleII.video" name="characterSet" label="Character Set" type="select" options="Standard,Videx Lowercase Chip,Pigfont" />
+    <setting ref="appleII.keyboard" name="type" label="Keyboard" type="select" options="Standard,Shift-Key Mod,Full ASCII" />
 </device>
 <port id="appleII.videoPort" ref="appleMonitorII.connector" type="CompositeVideo" label="Video">
     <inlet ref="appleII.video" property="monitor" outletRef="monitor" />
@@ -141,6 +142,7 @@
 </component>
 <component id="appleII.keyboard" class="AppleIIKeyboard">
     <property name="monitor" ref="appleII.monitor" />
+    <property name="type" value="Standard" />
 </component>
 <component id="appleII.charset" class="CharsetLoader">
     <property name="image" src="${resourcePath}/roms/Signetics/Signetics 2513 Video ROM.bin" />
@@ -246,7 +248,7 @@
 
 
 <device id="sgp" label="Apple Hand Controllers" image="images/Apple/Apple Hand Controllers.png" group="peripherals">
-    <setting ref="sgp.io" name="source" label="Source" type="select" options="Mouse,Joystick" />
+    <setting ref="sgp.io" name="inputDevice" label="Input Device" type="select" options="None,Mouse,Joystick" />
     <setting ref="sgp.io" name="invertAxes" label="Invert Axes" type="checkbox" />
 </device>
 <connector id="sgp.conn" ref="" type="AppleIISlot" label="Slot 0" />

@@ -20,23 +20,30 @@
 
 #import <sstream>
 
-void devicesDidUpdate()
+void runAlert(void *userData, string message)
 {
-	NSLog(@"It did update!");
-}
-
-void runAlert(string message)
-{
+	Document *document = (Document *)userData;
+	[document performSelectorOnMainThread:@selector(runalert:)
+							   withObject:getNSString(message)
+							waitUntilDone:NO];
 }
 
 OEComponent *addCanvas(void *userData)
 {
-	return new OEComponent();
+	return nil;
 }
 
-void removeCanvas(OEComponent *canvas, void *userData)
+void removeCanvas(void *userData, OEComponent *canvas)
 {
 	delete canvas;
+}
+
+void didUpdate(void *userData)
+{
+	Document *document = (Document *)userData;
+	[document performSelectorOnMainThread:@selector(updateEmulation:)
+							   withObject:nil
+							waitUntilDone:NO];
 }
 
 @implementation Document
@@ -79,11 +86,6 @@ void removeCanvas(OEComponent *canvas, void *userData)
 
 
 
-- (IBAction)showEmulation:(id)sender
-{
-	[emulationWindowController showWindow:sender];
-}
-
 - (void)newEmulation:(NSURL *)url
 {
 	DocumentController *documentController;
@@ -96,13 +98,14 @@ void removeCanvas(OEComponent *canvas, void *userData)
 	
 	theEmulation->setComponent("audio", portAudioHAL);
 	
-	theEmulation->setRunAlertCallback(runAlert);
-	theEmulation->setAddCanvasCallback(addCanvas, self);
-	theEmulation->setRemoveCanvasCallback(removeCanvas, self);
+	theEmulation->setRunAlert(runAlert);
+	theEmulation->setAddCanvas(addCanvas);
+	theEmulation->setRemoveCanvas(removeCanvas);
 	
 	theEmulation->open(getCPPString([url path]));
 	
-	theEmulation->setDevicesDidUpdateCallback(devicesDidUpdate);
+	theEmulation->setDidUpdate(didUpdate);
+	theEmulation->setUserData(self);
 	
 	portAudioHAL->addEmulation((Emulation *)emulation);
 	
@@ -137,6 +140,16 @@ void removeCanvas(OEComponent *canvas, void *userData)
 	PortAudioHAL *portAudioHAL = (PortAudioHAL *)[documentController portAudioHAL];
 	
 	portAudioHAL->unlockEmulations();
+}
+
+- (IBAction)showEmulation:(id)sender
+{
+	[emulationWindowController showWindow:sender];
+}
+
+- (IBAction)updateEmulation:(id)sender
+{
+	[emulationWindowController updateEmulation:sender];
 }
 
 - (BOOL)readFromURL:(NSURL *)absoluteURL
@@ -240,13 +253,12 @@ void removeCanvas(OEComponent *canvas, void *userData)
 				component:(void *)component
 {
 	OEComponent *theComponent = (OEComponent *)component;
-	BOOL value = NO;
 	
 	[self lockEmulation];
-	theComponent->postMessage(NULL, message, &value);
+	BOOL result = theComponent->postMessage(NULL, message, NULL);
 	[self unlockEmulation];
 	
-	return value;
+	return result;
 }
 
 - (OEUInt64)getOEUInt64ForMessage:(int)message
@@ -321,34 +333,28 @@ void removeCanvas(OEComponent *canvas, void *userData)
 - (BOOL)mount:(NSString *)path
 {
 	Emulation *theEmulation = (Emulation *)emulation;
-	string thePath = getCPPString(path);
-	
 	EmulationInfo *theEmulationInfo = theEmulation->getEmulationInfo();
-	BOOL result = NO;
-	for (EmulationInfo::iterator i = theEmulationInfo->begin();
-		 i != theEmulationInfo->end();
-		 i++)
+	for (int i = 0; i < theEmulationInfo->size(); i++)
 	{
-		OEComponents *storages = &i->storages;
-		for (OEComponents::iterator i = storages->begin();
-			 i != storages->end();
-			 i++)
+		EmulationDeviceInfo &deviceInfo = theEmulationInfo->at(i);
+		OEComponents &storages = deviceInfo.storages;
+		for (int j = 0; j < storages.size(); j++)
 		{
-			result = [self postString:path
-							  message:(int)STORAGE_MOUNT
-							component:*i];
-			if (result)
-				break;
+			OEComponent *component = storages.at(j);
+			if ([self mount:path inStorage:component])
+				return YES;
 		}
-		if (result)
-			break;
 	}
 	
-	return result;
+	return NO;
 }
 
 - (BOOL)mount:(NSString *)path inStorage:(void *)component
 {
+	if ([self getBoolForMessage:(int)STORAGE_IS_LOCKED
+					  component:component])
+		return NO;
+	
 	return [self postString:path
 					message:(int)STORAGE_MOUNT
 				  component:component];
@@ -361,23 +367,18 @@ void removeCanvas(OEComponent *canvas, void *userData)
 				  component:component];
 }
 
-- (BOOL)isMountable:(NSString *)path
+- (BOOL)canMount:(NSString *)path
 {
 	Emulation *theEmulation = (Emulation *)emulation;
-	string thePath = getCPPString(path);
-	
 	EmulationInfo *theEmulationInfo = theEmulation->getEmulationInfo();
-	for (EmulationInfo::iterator i = theEmulationInfo->begin();
-		 i != theEmulationInfo->end();
-		 i++)
+	for (int i = 0; i < theEmulationInfo->size(); i++)
 	{
-		OEComponents *storages = &i->storages;
-		for (OEComponents::iterator i = storages->begin();
-			 i != storages->end();
-			 i++)
+		EmulationDeviceInfo &deviceInfo = theEmulationInfo->at(i);
+		OEComponents &storages = deviceInfo.storages;
+		for (int j = 0; j < storages.size(); j++)
 		{
-			if ([self getBoolForMessage:(int)STORAGE_IS_MOUNTABLE
-							  component:*i])
+			OEComponent *component = storages.at(j);
+			if ([self canMount:path inStorage:component])
 				return YES;
 		}
 	}
@@ -385,10 +386,33 @@ void removeCanvas(OEComponent *canvas, void *userData)
 	return NO;
 }
 
-- (BOOL)isMountable:(NSString *)path inStorage:(void *)component
+- (BOOL)canMount:(NSString *)path inStorage:(void *)component
 {
-	return [self getBoolForMessage:(int)STORAGE_IS_MOUNTABLE
+	if ([self getBoolForMessage:(int)STORAGE_IS_LOCKED component:component])
+		return NO;
+	
+	return [self getBoolForMessage:(int)STORAGE_IS_IMAGE_SUPPORTED
 						 component:component];
+}
+
+- (BOOL)isImageSupported:(NSString *)path
+{
+	Emulation *theEmulation = (Emulation *)emulation;
+	EmulationInfo *theEmulationInfo = theEmulation->getEmulationInfo();
+	for (int i = 0; i < theEmulationInfo->size(); i++)
+	{
+		EmulationDeviceInfo &deviceInfo = theEmulationInfo->at(i);
+		OEComponents &storages = deviceInfo.storages;
+		for (int j = 0; j < storages.size(); j++)
+		{
+			OEComponent *component = storages.at(j);
+			if ([self getBoolForMessage:(int)STORAGE_IS_IMAGE_SUPPORTED
+							  component:component])
+				return YES;
+		}
+	}
+	
+	return NO;
 }
 
 - (BOOL)isStorageMounted:(void *)component
@@ -409,21 +433,21 @@ void removeCanvas(OEComponent *canvas, void *userData)
 						 component:component];
 }
 
-- (NSString *)getStoragePath:(void *)component
+- (NSString *)imagePathForStorage:(void *)component
 {
-	return [self getStringForMessage:(int)STORAGE_GET_PATH
+	return [self getStringForMessage:(int)STORAGE_GET_IMAGE_PATH
 						   component:component];
 }
 
-- (NSString *)getStorageFormat:(void *)component
+- (NSString *)imageFormatForStorage:(void *)component
 {
-	return [self getStringForMessage:(int)STORAGE_GET_FORMAT
+	return [self getStringForMessage:(int)STORAGE_GET_IMAGE_FORMAT
 						   component:component];
 }
 
-- (NSString *)getStorageCapacity:(void *)component
+- (NSString *)imageCapacityForStorage:(void *)component
 {
-	OEUInt64 value = [self getOEUInt64ForMessage:(int)STORAGE_GET_CAPACITY
+	OEUInt64 value = [self getOEUInt64ForMessage:(int)STORAGE_GET_IMAGE_CAPACITY
 									   component:component];
 	return [self formatCapacity:value];
 }

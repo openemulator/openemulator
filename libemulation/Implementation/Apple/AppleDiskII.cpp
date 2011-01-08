@@ -73,7 +73,7 @@ bool AppleDiskII::postMessage(OEComponent *sender, int message, void *data)
 				string *path = (string *)data;
 				image = *path;
 				
-				emulation->postMessage(this, EMULATION_UPDATE_INFO, NULL);
+				emulation->postMessage(this, EMULATION_UPDATE, NULL);
 				
 				return true;
 			}
@@ -81,50 +81,24 @@ bool AppleDiskII::postMessage(OEComponent *sender, int message, void *data)
 			
 		case STORAGE_UNMOUNT:
 			image = "";
-			emulation->postMessage(this, EMULATION_UPDATE_INFO, NULL);
+			
+			emulation->postMessage(this, EMULATION_UPDATE, NULL);
+			
 			return true;
 			
-		case STORAGE_IS_MOUNTABLE:
-			if (data)
-			{
-				bool *value = (bool *) data;
-				*value = true;
-				
-				return true;
-			}
-			break;
+		case STORAGE_IS_IMAGE_SUPPORTED:
+			return false;
 			
 		case STORAGE_IS_MOUNTED:
-			if (data)
-			{
-				bool *value = (bool *) data;
-				*value = (image != "");
-				
-				return true;
-			}
-			break;
+			return (image != "");
 			
 		case STORAGE_IS_WRITABLE:
-			if (data)
-			{
-				bool *value = (bool *) data;
-				*value = true;
-				
-				return true;
-			}
-			break;
+			return true;
 			
 		case STORAGE_IS_LOCKED:
-			if (data)
-			{
-				bool *value = (bool *) data;
-				*value = false;
-				
-				return true;
-			}
-			break;
+			return false;
 			
-		case STORAGE_GET_PATH:
+		case STORAGE_GET_IMAGE_PATH:
 			if (data)
 			{
 				string *path = (string *)data;
@@ -134,20 +108,20 @@ bool AppleDiskII::postMessage(OEComponent *sender, int message, void *data)
 			}
 			break;
 			
-		case STORAGE_GET_FORMAT:
+		case STORAGE_GET_IMAGE_FORMAT:
 			if (data)
 			{
-				string *value = (string *) data;
+				string *value = (string *)data;
 				*value = "Apple II 16 Sector";
 				
 				return true;
 			}
 			break;
 			
-		case STORAGE_GET_CAPACITY:
+		case STORAGE_GET_IMAGE_CAPACITY:
 			if (data)
 			{
-				OEUInt64 *value = (OEUInt64 *) data;
+				OEUInt64 *value = (OEUInt64 *)data;
 				*value = 35 * 16 * 256;
 				
 				return true;

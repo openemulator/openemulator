@@ -37,14 +37,15 @@
 - (BOOL)mount:(NSString *)path;
 - (BOOL)mount:(NSString *)path inStorage:(void *)component;
 - (BOOL)unmountStorage:(void *)component;
-- (BOOL)isMountable:(NSString *)path;
-- (BOOL)isMountable:(NSString *)path inStorage:(void *)component;
+- (BOOL)canMount:(NSString *)path;
+- (BOOL)canMount:(NSString *)path inStorage:(void *)component;
+- (BOOL)isImageSupported:(NSString *)path;
 - (BOOL)isStorageMounted:(void *)component;
 - (BOOL)isStorageWritable:(void *)component;
 - (BOOL)isStorageLocked:(void *)component;
-- (NSString *)getStoragePath:(void *)component;
-- (NSString *)getStorageFormat:(void *)component;
-- (NSString *)getStorageCapacity:(void *)component;
+- (NSString *)imagePathForStorage:(void *)component;
+- (NSString *)imageFormatForStorage:(void *)component;
+- (NSString *)imageCapacityForStorage:(void *)component;
 
 - (void)setValue:(NSString *)value
 	  ofProperty:(NSString *)theName

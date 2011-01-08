@@ -42,8 +42,10 @@
 	NSSliderCell *sliderCell;
 }
 
+- (void)updateEmulation:(id)sender;
+
 - (EmulationItem *)itemForSender:(id)sender;
-- (BOOL)mount:(NSString *)path inItem:(id)item;
+- (BOOL)selectItem:(EmulationItem *)item withUid:(NSString *)uid;
 
 - (IBAction)buttonAction:(id)sender;
 - (IBAction)showDevice:(id)sender;

@@ -10,12 +10,30 @@
 
 #include "AppleIIKeyboard.h"
 
+bool AppleIIKeyboard::setValue(string name, string value)
+{
+	if (name == "type")
+		type = value;
+	else
+		return false;
+	
+	return true;
+}
+
+bool AppleIIKeyboard::getValue(string name, string &value)
+{
+	if (name == "type")
+		value = type;
+	else
+		return false;
+	
+	return true;
+}
+
 bool AppleIIKeyboard::setRef(string name, OEComponent *ref)
 {
 	if (name == "host")
 		host = ref;
-	else if (name == "monitor")
-		;
 	else
 		return false;
 	

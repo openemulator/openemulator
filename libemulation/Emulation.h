@@ -37,7 +37,7 @@ typedef enum
 	EMULATION_REMOVE_STORAGE,
 	
 	EMULATION_RUN_ALERT,
-	EMULATION_UPDATE_INFO,
+	EMULATION_UPDATE,
 } EmulationMessages;
 
 
@@ -73,10 +73,10 @@ typedef vector<EmulationDeviceInfo> EmulationInfo;
 
 
 
-typedef void (*EmulationRunAlertCallback)(string message);
-typedef OEComponent *(*EmulationAddCanvasCallback)(void *userData);
-typedef void (*EmulationRemoveCanvasCallback)(OEComponent *canvas, void *userData);
-typedef void (*EmulationDevicesDidUpdateCallback)();
+typedef void (*EmulationRunAlert)(void *userData, string message);
+typedef OEComponent *(*EmulationAddCanvas)(void *userData);
+typedef void (*EmulationRemoveCanvas)(void *userData, OEComponent *canvas);
+typedef void (*EmulationDidUpdate)(void *userData);
 
 
 
@@ -87,13 +87,11 @@ public:
 	~Emulation();
 	
 	void setResourcePath(string path);
-	void setRunAlertCallback(EmulationRunAlertCallback runAlert);
-	void setAddCanvasCallback(EmulationAddCanvasCallback addCanvas,
-							  void *userData);
-	void setRemoveCanvasCallback(EmulationRemoveCanvasCallback removeCanvas,
-								 void *userData);
-	void setDevicesDidUpdateCallback(EmulationDevicesDidUpdateCallback
-									 devicesDidUpdate);
+	void setRunAlert(EmulationRunAlert runAlert);
+	void setAddCanvas(EmulationAddCanvas addCanvas);
+	void setRemoveCanvas(EmulationRemoveCanvas removeCanvas);
+	void setDidUpdate(EmulationDidUpdate didUpdate);
+	void setUserData(void *userData);
 	
 	bool open(string path);
 	bool save(string path);
@@ -112,12 +110,11 @@ private:
 	map<string, OEComponent *> componentsMap;
 	EmulationInfo emulationInfo;
 	
-	EmulationRunAlertCallback runAlert;
-	EmulationAddCanvasCallback addCanvas;
-	void *addCanvasUserData;
-	EmulationRemoveCanvasCallback removeCanvas;
-	void *removeCanvasUserData;
-	EmulationDevicesDidUpdateCallback devicesDidUpdate;
+	EmulationRunAlert runAlert;
+	EmulationAddCanvas addCanvas;
+	EmulationRemoveCanvas removeCanvas;
+	EmulationDidUpdate didUpdate;
+	void *userData;
 	
 	void buildEmulationInfo();
 	EmulationSettings buildDeviceSettings(xmlNodePtr children);

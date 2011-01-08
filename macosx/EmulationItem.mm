@@ -40,7 +40,7 @@
 			// Create device item
 			EmulationItem *deviceItem;
 			deviceItem = [[EmulationItem alloc] initWithDeviceInfo:&deviceInfo
-														inDocument:theDocument];
+														  document:theDocument];
 			[[groupItem children] addObject:deviceItem];
 			[deviceItem release];
 		}
@@ -65,7 +65,7 @@
 }
 
 - (id)initWithDeviceInfo:(void *)theDeviceInfo
-			  inDocument:(Document *)theDocument
+				document:(Document *)theDocument
 {
 	if (self = [super init])
 	{
@@ -87,25 +87,27 @@
 		
 		canvasComponents = [[NSMutableArray alloc] init];
 		OEComponents &canvases = deviceInfo->canvases;
-		for (OEComponents::iterator i = canvases.begin();
-			 i < canvases.end();
-			 i++)
-			[canvasComponents addObject:[NSValue valueWithPointer:*i]];
+		for (int i = 0; i < canvases.size(); i++)
+			[canvasComponents addObject:[NSValue valueWithPointer:canvases.at(i)]];
 		
 		storageComponents = [[NSMutableArray alloc] init];
 		OEComponents &storages = deviceInfo->storages;
-		for (OEComponents::iterator i = storages.begin();
-			 i < storages.end();
-			 i++)
+		for (int i = 0; i < storages.size(); i++)
 		{
-			[storageComponents addObject:[NSValue valueWithPointer:*i]];
+			OEComponent *storage = storages.at(i);
+			[storageComponents addObject:[NSValue valueWithPointer:storage]];
 			
-			if ([document isStorageMounted:*i])
+			if ([document isStorageMounted:storage])
 			{
+				NSString *theUID;
+				
+				theUID = [NSString stringWithFormat:@"%@.%d", uid, i];
+				
 				EmulationItem *storageItem;
-				storageItem = [[EmulationItem alloc] initWithStorage:*i
-														  deviceInfo:theDeviceInfo
-														  inDocument:theDocument];
+				storageItem = [[EmulationItem alloc] initWithStorage:storage
+																 uid:theUID 
+															location:location
+															document:theDocument];
 				[children addObject:storageItem];
 				[storageItem release];
 			}
@@ -116,15 +118,15 @@
 		settingsLabels = [[NSMutableArray alloc] init];
 		settingsTypes = [[NSMutableArray alloc] init];
 		settingsOptions = [[NSMutableArray alloc] init];
-		for (EmulationSettings::iterator i = deviceInfo->settings.begin();
-			 i != deviceInfo->settings.end();
-			 i++)
+		EmulationSettings &settings = deviceInfo->settings;
+		for (int i = 0; i < settings.size(); i++)
 		{
-			[settingsRefs addObject:getNSString(i->ref)];
-			[settingsNames addObject:getNSString(i->name)];
-			[settingsLabels addObject:getNSString(i->label)];
-			[settingsTypes addObject:getNSString(i->type)];
-			[settingsOptions addObject:[getNSString(i->options)
+			EmulationSetting &setting = settings.at(i);
+			[settingsRefs addObject:getNSString(setting.ref)];
+			[settingsNames addObject:getNSString(setting.name)];
+			[settingsLabels addObject:getNSString(setting.label)];
+			[settingsTypes addObject:getNSString(setting.type)];
+			[settingsOptions addObject:[getNSString(setting.options)
 										componentsSeparatedByString:@","]];
 		}
 	}
@@ -133,27 +135,25 @@
 }
 
 - (id)initWithStorage:(void *)theComponent
-		   deviceInfo:(void *)theDeviceInfo
-		   inDocument:(Document *)theDocument
+				  uid:(NSString *)theUid
+			 location:(NSString *)theLocation
+			 document:(Document *)theDocument
 {
 	if (self = [super init])
 	{
-		itemType = EMULATION_ITEM_STORAGE;
-		children = [[NSMutableArray alloc] init];
-		document = theDocument;
-		
-		EmulationDeviceInfo *deviceInfo = (EmulationDeviceInfo *)theDeviceInfo;
-		
-		location = [getNSString(deviceInfo->location) retain];
-		state = ([document isStorageWritable:theComponent] ?
-				 @"Mounted Read-Only" : @"Mounted Read/Write");
-		
 		storageComponents = [[NSMutableArray alloc] initWithObjects:
 							 [NSValue valueWithPointer:theComponent], 
 							 nil];
 		
-		label = [[[self storagePath] lastPathComponent] retain];
+		itemType = EMULATION_ITEM_STORAGE;
+		children = [[NSMutableArray alloc] init];
+		document = theDocument;
+		
+		uid = [theUid copy];
+		label = [[[self diskImagePath] lastPathComponent] retain];
 		image = [[NSImage imageNamed:@"DiskImage"] retain];
+		
+		location = [theLocation copy];
 	}
 	
 	return self;
@@ -226,12 +226,22 @@
 
 - (NSString *)state
 {
+	if (itemType == EMULATION_ITEM_STORAGE)
+	{
+		NSString *theState;
+		void *theComponent = [[storageComponents objectAtIndex:0] pointerValue];
+		
+		theState = ([document isStorageWritable:theComponent] ?
+					NSLocalizedString(@"Read/Write", @"Emulation Item.") : 
+					NSLocalizedString(@"Read-Only", @"Emulation Item."));
+		if ([document isStorageLocked:theComponent])
+			theState = [theState stringByAppendingString:
+						NSLocalizedString(@", Locked", @"Emulation Item.")];
+		
+		return theState;
+	}
+	
 	return state;
-}
-
-- (BOOL)isGroup
-{
-	return (itemType == EMULATION_ITEM_GROUP);
 }
 
 - (BOOL)isRemovable
@@ -248,9 +258,9 @@
 
 
 
-- (BOOL)isMountable
+- (BOOL)isStorage
 {
-	return ([storageComponents count] != 0);
+	return ([storageComponents count] != 0) || ![location length];
 }
 
 - (BOOL)isMounted
@@ -258,32 +268,53 @@
 	return (itemType == EMULATION_ITEM_STORAGE);
 }
 
-- (NSString *)storagePath
+- (BOOL)isLocked
 {
 	if (![storageComponents count])
-		return @"";
-	void *component = [[storageComponents objectAtIndex:0] pointerValue];
-	return [document getStoragePath:component];
+		return NO;
+	
+	for (int i = 0; i < [storageComponents count]; i++)
+	{
+		void *component = [[storageComponents objectAtIndex:i] pointerValue];
+		if (![document isStorageLocked:component])
+			return NO;
+	}
+	
+	return YES;
 }
 
-- (NSString *)storageFormat
+- (NSString *)diskImagePath
 {
 	if (![storageComponents count])
 		return @"";
+	
 	void *component = [[storageComponents objectAtIndex:0] pointerValue];
-	return [document getStorageFormat:component];
+	return [document imagePathForStorage:component];
 }
 
-- (NSString *)storageCapacity
+- (NSString *)diskImageFormat
 {
 	if (![storageComponents count])
 		return @"";
+	
 	void *component = [[storageComponents objectAtIndex:0] pointerValue];
-	return [document getStorageCapacity:component];
+	return [document imageFormatForStorage:component];
+}
+
+- (NSString *)diskImageCapacity
+{
+	if (![storageComponents count])
+		return @"";
+	
+	void *component = [[storageComponents objectAtIndex:0] pointerValue];
+	return [document imageCapacityForStorage:component];
 }
 
 - (BOOL)mount:(NSString *)path
 {
+	if (![location length])
+		return [document mount:path];
+	
 	for (int i = 0; i < [storageComponents count]; i++)
 	{
 		void *component = [[storageComponents objectAtIndex:i] pointerValue];
@@ -292,13 +323,6 @@
 			return YES;
 	}
 	
-	if ([storageComponents count])
-	{
-		void *component = [[storageComponents objectAtIndex:0] pointerValue];
-		
-		[document unmountStorage:component];
-		return [document mount:path inStorage:component];
-	}
 	return NO;
 }
 
@@ -308,15 +332,19 @@
 	[document unmountStorage:component];
 }
 
-- (BOOL)isMountable:(NSString *)path
+- (BOOL)canMount:(NSString *)path
 {
+	if (![location length])
+		return [document canMount:path];
+	
 	for (int i = 0; i < [storageComponents count]; i++)
 	{
 		void *component = [[storageComponents objectAtIndex:i] pointerValue];
 		
-		if ([document isMountable:path inStorage:component])
+		if ([document canMount:path inStorage:component])
 			return YES;
 	}
+	
 	return NO;
 }
 

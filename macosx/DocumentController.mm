@@ -183,7 +183,7 @@
 	}
 	
 	// Paste text
-	if ([pathExtension compare:@"txt"] == NSOrderedSame)
+	if ([textPathExtensions containsObject:pathExtension])
 	{
 		// To-Do: Paste to activeWindow
 		return YES;
@@ -210,15 +210,15 @@
 		if ([[self currentDocument] mount:path])
 			return YES;
 		
-		if ([[self currentDocument] isMountable:path])
+		if ([[self currentDocument] isImageSupported:path])
 		{
 			NSAlert *alert = [[NSAlert alloc] init];
 			[alert setMessageText:[NSString localizedStringWithFormat:
-								   @"The document \u201C%@\u201D could not be opened. "
-								   "There are no available devices for mounting the disk image.",
+								   @"The document \u201C%@\u201D could not be opened.",
 								   [path lastPathComponent]]];
 			[alert setInformativeText:[NSString localizedStringWithFormat:
-									   @"Try unmounting a disk image in the emulation."]];
+									   @"All compatible storage devices are locked. "
+									   "Try unmounting a storage device."]];
 			[alert runModal];
 			[alert release];
 			
@@ -229,9 +229,10 @@
 	// Display error
 	NSAlert *alert = [[NSAlert alloc] init];
 	[alert setMessageText:[NSString localizedStringWithFormat:
-						   @"The document \u201C%@\u201D could not be opened. "
-						   "This emulation cannot open files in this format.",
+						   @"The document \u201C%@\u201D could not be opened.",
 						   [path lastPathComponent]]];
+	[alert setInformativeText:[NSString localizedStringWithFormat:
+							   @"There are no compatibel storage devices."]];
 	[alert setAlertStyle:NSCriticalAlertStyle];
 	[alert runModal];
 	[alert release];
