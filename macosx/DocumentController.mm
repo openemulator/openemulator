@@ -232,8 +232,7 @@
 						   @"The document \u201C%@\u201D could not be opened.",
 						   [path lastPathComponent]]];
 	[alert setInformativeText:[NSString localizedStringWithFormat:
-							   @"There are no compatibel storage devices."]];
-	[alert setAlertStyle:NSCriticalAlertStyle];
+							   @"There are no compatible storage devices."]];
 	[alert runModal];
 	[alert release];
 	

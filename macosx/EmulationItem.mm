@@ -145,7 +145,7 @@
 							 [NSValue valueWithPointer:theComponent], 
 							 nil];
 		
-		itemType = EMULATION_ITEM_STORAGE;
+		itemType = EMULATION_ITEM_DISKIMAGE;
 		children = [[NSMutableArray alloc] init];
 		document = theDocument;
 		
@@ -226,7 +226,7 @@
 
 - (NSString *)state
 {
-	if (itemType == EMULATION_ITEM_STORAGE)
+	if (itemType == EMULATION_ITEM_DISKIMAGE)
 	{
 		NSString *theState;
 		void *theComponent = [[storageComponents objectAtIndex:0] pointerValue];
@@ -260,12 +260,12 @@
 
 - (BOOL)isStorage
 {
-	return ([storageComponents count] != 0) || ![location length];
+	return (itemType == EMULATION_ITEM_DEVICE) || ![location length];
 }
 
 - (BOOL)isMounted
 {
-	return (itemType == EMULATION_ITEM_STORAGE);
+	return (itemType == EMULATION_ITEM_DISKIMAGE);
 }
 
 - (BOOL)isLocked

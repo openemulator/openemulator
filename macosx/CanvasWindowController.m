@@ -12,17 +12,21 @@
 
 @implementation CanvasWindowController
 
-- (id)initWithCanvasComponent:(void *)theCanvasComponent
+- (id)initWithTitle:(NSString *)theTitle
+			 canvas:(void *)theCanvas
 {
 	if (self = [self initWithWindowNibName:@"Canvas"])
-		canvasComponent = theCanvasComponent;
+	{
+		title = [theTitle copy];
+		canvas = theCanvas;
+	}
 	
 	return self;
 }
 
-- (void *)canvasComponent
+- (void *)canvas
 {
-	return canvasComponent;
+	return canvas;
 }
 
 - (void)windowDidLoad
@@ -43,7 +47,7 @@
 
 - (NSString *)windowTitleForDocumentDisplayName:(NSString *)displayName
 {
-	return [displayName stringByAppendingString:@" - Apple Monitor II"];
+	return [NSString stringWithFormat:@"%@ - %@", displayName, title];
 }
 
 - (NSToolbarItem *)toolbar:(NSToolbar *)toolbar

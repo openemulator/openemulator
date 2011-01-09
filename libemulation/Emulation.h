@@ -28,6 +28,9 @@
 
 typedef enum
 {
+	EMULATION_UPDATE,
+	EMULATION_RUN_ALERT,
+	
 	EMULATION_SET_STATE,
 	EMULATION_SET_IMAGE,
 	EMULATION_SET_POWERED,
@@ -35,9 +38,6 @@ typedef enum
 	EMULATION_DESTROY_CANVAS,
 	EMULATION_ADD_STORAGE,
 	EMULATION_REMOVE_STORAGE,
-	
-	EMULATION_RUN_ALERT,
-	EMULATION_UPDATE,
 } EmulationMessages;
 
 
@@ -73,10 +73,10 @@ typedef vector<EmulationDeviceInfo> EmulationInfo;
 
 
 
-typedef void (*EmulationRunAlert)(void *userData, string message);
-typedef OEComponent *(*EmulationAddCanvas)(void *userData);
-typedef void (*EmulationRemoveCanvas)(void *userData, OEComponent *canvas);
 typedef void (*EmulationDidUpdate)(void *userData);
+typedef void (*EmulationRunAlert)(void *userData, string message);
+typedef OEComponent *(*EmulationCreateCanvas)(void *userData, string title);
+typedef void (*EmulationDestroyCanvas)(void *userData, OEComponent *canvas);
 
 
 
@@ -87,10 +87,10 @@ public:
 	~Emulation();
 	
 	void setResourcePath(string path);
-	void setRunAlert(EmulationRunAlert runAlert);
-	void setAddCanvas(EmulationAddCanvas addCanvas);
-	void setRemoveCanvas(EmulationRemoveCanvas removeCanvas);
 	void setDidUpdate(EmulationDidUpdate didUpdate);
+	void setRunAlert(EmulationRunAlert runAlert);
+	void setCreateCanvas(EmulationCreateCanvas createCanvas);
+	void setDestroyCanvas(EmulationDestroyCanvas destroyCanvas);
 	void setUserData(void *userData);
 	
 	bool open(string path);
@@ -110,10 +110,10 @@ private:
 	map<string, OEComponent *> componentsMap;
 	EmulationInfo emulationInfo;
 	
-	EmulationRunAlert runAlert;
-	EmulationAddCanvas addCanvas;
-	EmulationRemoveCanvas removeCanvas;
 	EmulationDidUpdate didUpdate;
+	EmulationRunAlert runAlert;
+	EmulationCreateCanvas createCanvas;
+	EmulationDestroyCanvas destroyCanvas;
 	void *userData;
 	
 	void buildEmulationInfo();

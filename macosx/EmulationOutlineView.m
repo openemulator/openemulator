@@ -120,7 +120,7 @@
 	float indentation = 6.0;
 	if ([item type] == EMULATION_ITEM_DEVICE)
 		indentation = 18.0;
-	else if ([item type] == EMULATION_ITEM_STORAGE)
+	else if ([item type] == EMULATION_ITEM_DISKIMAGE)
 		indentation = 32.0;
 	
     NSRect frame = [super frameOfCellAtColumn:columnIndex row:rowIndex];
@@ -128,6 +128,7 @@
 	frame.size.width = [self bounds].size.width - indentation;
 	return frame;
 }
+
 - (NSRect)frameOfOutlineCellAtRow:(NSInteger)row
 {
 	return NSZeroRect;

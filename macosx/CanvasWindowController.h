@@ -13,9 +13,11 @@
 
 @interface CanvasWindowController : NSWindowController
 {
-	void *canvasComponent;
+	NSString *title;
+	void *canvas;
 }
 
-- (id)initWithCanvasComponent:(void *)theCanvasComponent;
+- (id)initWithTitle:(NSString *)title
+			 canvas:(void *)theCanvas;
 
 @end

@@ -14,29 +14,12 @@
 #import "CanvasWindowController.h"
 #import "StringConversion.h"
 
-#import "PortAudioHAL.h"
 #import "Emulation.h"
 #import "StorageInterface.h"
+#import "PortAudioHAL.h"
+#import "OpenGLHAL.h"
 
 #import <sstream>
-
-void runAlert(void *userData, string message)
-{
-	Document *document = (Document *)userData;
-	[document performSelectorOnMainThread:@selector(runalert:)
-							   withObject:getNSString(message)
-							waitUntilDone:NO];
-}
-
-OEComponent *addCanvas(void *userData)
-{
-	return nil;
-}
-
-void removeCanvas(void *userData, OEComponent *canvas)
-{
-	delete canvas;
-}
 
 void didUpdate(void *userData)
 {
@@ -44,6 +27,41 @@ void didUpdate(void *userData)
 	[document performSelectorOnMainThread:@selector(updateEmulation:)
 							   withObject:nil
 							waitUntilDone:NO];
+}
+
+void runAlert(void *userData, string message)
+{
+	Document *document = (Document *)userData;
+	NSString *theMessage = getNSString(message);
+	[document performSelectorOnMainThread:@selector(runAlert:)
+							   withObject:theMessage
+							waitUntilDone:YES];
+}
+
+OEComponent *createCanvas(void *userData, string title)
+{
+	OEComponent *canvas = new OpenGLHAL();
+	NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
+						  [NSValue valueWithPointer:canvas], @"canvas",
+						  getNSString(title), @"title",
+						  nil];
+	
+	Document *document = (Document *)userData;
+	[document performSelectorOnMainThread:@selector(createCanvas:)
+							   withObject:dict
+							waitUntilDone:YES];
+	
+	return canvas;
+}
+
+void destroyCanvas(void *userData, OEComponent *canvas)
+{
+	Document *document = (Document *)userData;
+	[document performSelectorOnMainThread:@selector(destroyCanvas:)
+							   withObject:[NSValue valueWithPointer:canvas]
+							waitUntilDone:YES];
+	
+	delete canvas;
 }
 
 @implementation Document
@@ -74,16 +92,6 @@ void didUpdate(void *userData)
 	[super dealloc];
 }
 
-- (BOOL)validateUserInterfaceItem:(id <NSValidatedUserInterfaceItem>)anItem
-{
-    SEL action = [anItem action];
-    
-	if (action == @selector(showEmulation:))
-		return !([NSApp mainWindow] == [emulationWindowController window]);
-	
-	return NO;
-}
-
 
 
 - (void)newEmulation:(NSURL *)url
@@ -99,13 +107,13 @@ void didUpdate(void *userData)
 	theEmulation->setComponent("audio", portAudioHAL);
 	
 	theEmulation->setRunAlert(runAlert);
-	theEmulation->setAddCanvas(addCanvas);
-	theEmulation->setRemoveCanvas(removeCanvas);
+	theEmulation->setCreateCanvas(createCanvas);
+	theEmulation->setDestroyCanvas(destroyCanvas);
+	theEmulation->setUserData(self);
 	
 	theEmulation->open(getCPPString([url path]));
 	
 	theEmulation->setDidUpdate(didUpdate);
-	theEmulation->setUserData(self);
 	
 	portAudioHAL->addEmulation((Emulation *)emulation);
 	
@@ -150,6 +158,36 @@ void didUpdate(void *userData)
 - (IBAction)updateEmulation:(id)sender
 {
 	[emulationWindowController updateEmulation:sender];
+}
+
+- (void)runAlert:(NSString *)string
+{
+	NSArray *lines = [string componentsSeparatedByString:@"\n"];
+	NSString *messageText = [lines objectAtIndex:0];
+	NSString *informativeText = @"";
+	
+	if ([lines count] > 1)
+		informativeText = [lines objectAtIndex:1];
+	
+	NSRunAlertPanel(messageText, informativeText, nil, nil, nil);
+}
+
+- (void)createCanvas:(NSDictionary *)dict
+{
+	OpenGLHAL *theCanvas = (OpenGLHAL *)[[dict objectForKey:@"canvas"] pointerValue];
+	NSString *title = [dict objectForKey:@"title"];
+	
+	CanvasWindowController *canvasWindowController;
+	canvasWindowController = [[CanvasWindowController alloc] initWithTitle:title
+																	canvas:theCanvas];
+	[self addWindowController:canvasWindowController];
+}
+
+- (void)destroyCanvas:(NSValue *)canvas
+{
+	OpenGLHAL *theCanvas = (OpenGLHAL *)[canvas pointerValue];
+	
+	// To-Do: search for canvas, and release canvas window  
 }
 
 - (BOOL)readFromURL:(NSURL *)absoluteURL
@@ -237,8 +275,8 @@ void didUpdate(void *userData)
 	emulationWindowController = [[EmulationWindowController alloc] init];
 	[self addWindowController:emulationWindowController];
 
-	CanvasWindowController *canvasWindowController = [[CanvasWindowController alloc] initWithCanvasComponent:nil];
-	[self addWindowController:canvasWindowController];
+//	CanvasWindowController *canvasWindowController = [[CanvasWindowController alloc] initWithCanvasComponent:nil];
+//	[self addWindowController:canvasWindowController];
 }
 
 

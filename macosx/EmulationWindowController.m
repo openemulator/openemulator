@@ -374,7 +374,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				  proposedItem:(id)item
 			proposedChildIndex:(NSInteger)index
 {
-	if (!([item isStorage] || [item isMounted]) || (index != -1))
+	if (![item isStorage] || (index != -1))
 		return NSDragOperationNone;
 	
 	NSPasteboard *pasteboard = [info draggingPasteboard];

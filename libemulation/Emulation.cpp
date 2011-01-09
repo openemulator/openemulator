@@ -20,8 +20,8 @@
 Emulation::Emulation() : OEEDL()
 {
 	runAlert = NULL;
-	addCanvas = NULL;
-	removeCanvas = NULL;
+	createCanvas = NULL;
+	destroyCanvas = NULL;
 	didUpdate = NULL;
 	
 	setComponent("emulation", this);
@@ -45,14 +45,14 @@ void Emulation::setRunAlert(EmulationRunAlert runAlert)
 	this->runAlert = runAlert;
 }
 
-void Emulation::setAddCanvas(EmulationAddCanvas addCanvas)
+void Emulation::setCreateCanvas(EmulationCreateCanvas createCanvas)
 {
-	this->addCanvas = addCanvas;
+	this->createCanvas = createCanvas;
 }
 
-void Emulation::setRemoveCanvas(EmulationRemoveCanvas removeCanvas)
+void Emulation::setDestroyCanvas(EmulationDestroyCanvas destroyCanvas)
 {
-	this->addCanvas = addCanvas;
+	this->destroyCanvas = destroyCanvas;
 }
 
 void Emulation::setDidUpdate(EmulationDidUpdate didUpdate)
@@ -690,6 +690,22 @@ bool Emulation::postMessage(OEComponent *sender, int message, void *data)
 {
 	switch (message)
 	{
+		case EMULATION_UPDATE:
+			if (didUpdate)
+				didUpdate(userData);
+			
+			return true;
+			
+		case EMULATION_RUN_ALERT:
+			if (data && runAlert)
+			{
+				if (runAlert)
+					runAlert(userData, *((string *)data));
+				
+				return true;
+			}
+			break;
+			
 		case EMULATION_SET_STATE:
 			{
 				EmulationDeviceInfo *deviceInfo = getDeviceInfo(getDeviceId(sender));
@@ -727,14 +743,15 @@ bool Emulation::postMessage(OEComponent *sender, int message, void *data)
 			break;
 			
 		case EMULATION_CREATE_CANVAS:
-			if (data && addCanvas)
+			if (data && createCanvas)
 			{
 				EmulationDeviceInfo *deviceInfo = getDeviceInfo(getDeviceId(sender));
 				if (deviceInfo)
 				{
 					OEComponent **ref = (OEComponent **)data;
+					string title = deviceInfo->label;
 					
-					*ref = addCanvas(userData);
+					*ref = createCanvas(userData, title);
 					
 					deviceInfo->canvases.push_back(*ref);
 					
@@ -744,7 +761,7 @@ bool Emulation::postMessage(OEComponent *sender, int message, void *data)
 			break;
 			
 		case EMULATION_DESTROY_CANVAS:
-			if (data && removeCanvas)
+			if (data && destroyCanvas)
 			{
 				EmulationDeviceInfo *deviceInfo = getDeviceInfo(getDeviceId(sender));
 				if (deviceInfo)
@@ -758,7 +775,7 @@ bool Emulation::postMessage(OEComponent *sender, int message, void *data)
 					if (i != last)
 						canvases.erase(i, last);
 					
-					removeCanvas(userData, *ref);
+					destroyCanvas(userData, *ref);
 					
 					*ref = NULL;
 					
@@ -795,22 +812,6 @@ bool Emulation::postMessage(OEComponent *sender, int message, void *data)
 				}
 			}
 			break;
-			
-		case EMULATION_RUN_ALERT:
-			if (data && runAlert)
-			{
-				if (runAlert)
-					runAlert(userData, *((string *)data));
-				
-				return true;
-			}
-			break;
-			
-		case EMULATION_UPDATE:
-			if (didUpdate)
-				didUpdate(userData);
-			
-			return true;
 	}
 	
 	return OEComponent::postMessage(sender, message, data);

@@ -87,7 +87,7 @@ bool AppleDiskII::postMessage(OEComponent *sender, int message, void *data)
 			return true;
 			
 		case STORAGE_IS_IMAGE_SUPPORTED:
-			return false;
+			return true;
 			
 		case STORAGE_IS_MOUNTED:
 			return (image != "");
