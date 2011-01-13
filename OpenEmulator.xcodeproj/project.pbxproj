@@ -239,6 +239,7 @@
 		00811DFE12D251E9009AD2F0 /* AppleDiskIIInterfaceCard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleDiskIIInterfaceCard.cpp; sourceTree = "<group>"; };
 		00811F1012D2738B009AD2F0 /* AppleGraphicsTablet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleGraphicsTablet.h; sourceTree = "<group>"; };
 		00811F1112D2738B009AD2F0 /* AppleGraphicsTablet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleGraphicsTablet.cpp; sourceTree = "<group>"; };
+		0085D4ED12DD07FA00782201 /* IEEE844Interface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IEEE844Interface.h; sourceTree = "<group>"; };
 		00954E761277B79E00C17203 /* EmulationOutlineCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmulationOutlineCell.h; sourceTree = "<group>"; };
 		00954E771277B79E00C17203 /* EmulationOutlineCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmulationOutlineCell.m; sourceTree = "<group>"; };
 		00954E971277BB8E00C17203 /* EmulationWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmulationWindowController.h; sourceTree = "<group>"; };
@@ -681,6 +682,7 @@
 			isa = PBXGroup;
 			children = (
 				00B8887F12A393990052B7A4 /* IEEE1284Interface.h */,
+				0085D4ED12DD07FA00782201 /* IEEE844Interface.h */,
 			);
 			name = IEEE;
 			path = libemulation/Interface/IEEE;

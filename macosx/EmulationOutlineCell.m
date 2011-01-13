@@ -183,7 +183,7 @@
 	
 	NSTrackingAreaOptions options = (NSTrackingEnabledDuringMouseDrag |
 									 NSTrackingMouseEnteredAndExited |
-									 NSTrackingActiveInKeyWindow);
+									 NSTrackingActiveInActiveApp);
 	
 	if (NSMouseInRect(mouseLocation, buttonRect, [controlView isFlipped]))
 	{

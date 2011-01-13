@@ -19,7 +19,7 @@
 typedef enum
 {
 	RAM_GET_MEMORY,
-} RAMMessages;
+} RAMMessage;
 
 class RAM : public OEComponent
 {

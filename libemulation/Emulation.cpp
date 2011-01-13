@@ -2,7 +2,7 @@
 /**
  * libemulation
  * Emulation
- * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2009-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Controls an emulation
@@ -232,11 +232,12 @@ void Emulation::buildEmulationInfo()
 			if (deviceInfo.group == "")
 				deviceInfo.group = "system";
 			
+			deviceInfo.settings = buildDeviceSettings(node->children);
+			
 			deviceInfo.location = buildDeviceLocation(deviceInfo.id);
 			
-			deviceInfo.powered = false;
-			
-			deviceInfo.settings = buildDeviceSettings(node->children);
+			deviceInfo.hotPluggable = false;
+			deviceInfo.storage = NULL;
 			
 			emulationInfo.push_back(deviceInfo);
 		}
@@ -281,7 +282,7 @@ string Emulation::buildDeviceLocation(string deviceId)
 }
 
 string Emulation::buildDeviceLocation(string deviceId,
-										vector<string> &visitedDevices)
+									  vector<string> &visitedDevices)
 {
 	if (!doc)
 		return "";
@@ -470,14 +471,14 @@ bool Emulation::configureComponent(string id, xmlNodePtr children)
 				if (!component->setRef(name, ref))
 					log("invalid property '" + name + "' for '" + id + "'");
 			}
-			else if (hasNodeProperty(node, "src"))
+			else if (hasNodeProperty(node, "data"))
 			{
-				string src = getNodeProperty(node, "src");
+				string dataSrc = getNodeProperty(node, "data");
 				
 				OEData *data = new OEData;
-				string parsedSrc = parseValueProperties(src, propertiesMap);
+				string parsedSrc = parseValueProperties(dataSrc, propertiesMap);
 				bool dataRead = false;
-				if (hasValueProperty(src, "packagePath"))
+				if (hasValueProperty(dataSrc, "packagePath"))
 				{
 					if (package)
 						dataRead = package->readFile(parsedSrc, data);
@@ -593,20 +594,20 @@ bool Emulation::updateComponent(string id, xmlNodePtr children)
 				if (component->getValue(name, value))
 					setNodeProperty(node, "value", value);
 			}
-			else if (hasNodeProperty(node, "src"))
+			else if (hasNodeProperty(node, "data"))
 			{
-				string src = getNodeProperty(node, "src");
+				string dataSrc = getNodeProperty(node, "data");
 				
-				if (!hasValueProperty(src, "packagePath") || !package)
+				if (!hasValueProperty(dataSrc, "packagePath") || !package)
 					continue;
 				
 				OEData *data = NULL;
-				string parsedSrc = parseValueProperties(src, propertiesMap);
+				string parsedSrc = parseValueProperties(dataSrc, propertiesMap);
 				
 				if (component->getData(name, &data) && data)
 				{
 					if (!package->writeFile(parsedSrc, data))
-						log("could not write '" + src + "'");
+						log("could not write '" + dataSrc + "'");
 				}
 			}
 		}
@@ -730,12 +731,12 @@ bool Emulation::postMessage(OEComponent *sender, int message, void *data)
 			}
 			break;
 			
-		case EMULATION_SET_POWERED:
+		case EMULATION_SET_HOT_PLUGGABLE:
 			{
 				EmulationDeviceInfo *deviceInfo = getDeviceInfo(getDeviceId(sender));
 				if (deviceInfo)
 				{
-					deviceInfo->powered = *((bool *)data);
+					deviceInfo->hotPluggable = *((bool *)data);
 					
 					return postMessage(sender, EMULATION_UPDATE, NULL);
 				}
@@ -784,29 +785,14 @@ bool Emulation::postMessage(OEComponent *sender, int message, void *data)
 			}
 			break;
 			
-		case EMULATION_ADD_STORAGE:
+		case EMULATION_SET_STORAGE:
 			{
 				EmulationDeviceInfo *deviceInfo = getDeviceInfo(getDeviceId(sender));
 				if (deviceInfo)
 				{
-					deviceInfo->storages.push_back(sender);
+					OEComponent *ref = (OEComponent *)data;
 					
-					return postMessage(sender, EMULATION_UPDATE, NULL);
-				}
-			}
-			break;
-			
-		case EMULATION_REMOVE_STORAGE:
-			{
-				EmulationDeviceInfo *deviceInfo = getDeviceInfo(getDeviceId(sender));
-				if (deviceInfo)
-				{
-					OEComponents &storages = deviceInfo->storages;
-					OEComponents::iterator first = storages.begin();
-					OEComponents::iterator last = storages.end();
-					OEComponents::iterator i = remove(first, last, sender);
-					if (i != last)
-						storages.erase(i, last);
+					deviceInfo->storage = ref;
 					
 					return postMessage(sender, EMULATION_UPDATE, NULL);
 				}

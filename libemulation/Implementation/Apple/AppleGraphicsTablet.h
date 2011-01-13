@@ -16,9 +16,10 @@ public:
 	AppleGraphicsTablet();
 	
 	bool setRef(string name, OEComponent *ref);
+	bool setData(string name, OEData *data);
+	bool init();
 	
 private:
 	OEComponent *emulation;
-	
 	OEComponent *canvas;
 };

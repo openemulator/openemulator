@@ -46,12 +46,12 @@ bool MOSKIM1IO::setRef(string name, OEComponent *ref)
 	{
 		if (emulation)
 			emulation->postMessage(this,
-								   EMULATION_CREATE_CANVAS,
+								   EMULATION_DESTROY_CANVAS,
 								   &canvas);
 		emulation = ref;
 		if (emulation)
 			emulation->postMessage(this,
-								   EMULATION_DESTROY_CANVAS,
+								   EMULATION_CREATE_CANVAS,
 								   &canvas);
 	}
 	else if (name == "serialPort")
@@ -71,13 +71,6 @@ bool MOSKIM1IO::setRef(string name, OEComponent *ref)
 
 bool MOSKIM1IO::init()
 {
-	if (canvas)
-	{
-		canvas->postMessage(this,
-							CANVAS_SET_DEFAULTWINDOWSIZE,
-							&defaultWindowSize);
-	}
-	
 	return true;
 }
 

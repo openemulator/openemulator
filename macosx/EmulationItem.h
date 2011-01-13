@@ -27,21 +27,20 @@ typedef enum
 	Document *document;
 	
 	NSString *uid;
-	NSImage *image;
 	NSString *label;
-	
-	NSString *location;
-	NSString *state;
-	
-	NSMutableArray *canvasComponents;
-	
-	NSMutableArray *storageComponents;
+	NSImage *image;
 	
 	NSMutableArray *settingsRefs;
 	NSMutableArray *settingsNames;
 	NSMutableArray *settingsLabels;
 	NSMutableArray *settingsTypes;
 	NSMutableArray *settingsOptions;
+	
+	NSString *location;
+	NSString *state;
+	BOOL hotPluggable;
+	NSMutableArray *canvases;
+	void *storage;
 }
 
 - (id)initWithDocument:(Document *)theDocument;
@@ -64,7 +63,9 @@ typedef enum
 - (NSString *)location;
 - (NSString *)state;
 - (BOOL)isRemovable;
+
 - (BOOL)isCanvas;
+- (void)showCanvases;
 
 - (BOOL)isStorage;
 - (BOOL)isMounted;

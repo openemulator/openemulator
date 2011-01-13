@@ -2,7 +2,7 @@
 /**
  * OpenEmulator
  * OpenGL canvas
- * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Implements an OpenGL canvas.
@@ -28,22 +28,34 @@ typedef enum
 	OEGL_TEX_NUM,
 } OEOpenGLTextureIndex;
 
+
+
+typedef void (*CanvasSetCapture)(void *userData, CanvasCapture capture);
+typedef void (*CanvasSetKeyboardFlags)(void *userData, int flags);
+
+
+
 class OpenGLHAL : public OEComponent
 {
 public:
 	OpenGLHAL();
-	~OpenGLHAL();
 	
-	void initOpenGL();
+	void open(CanvasSetCapture setCapture,
+			  CanvasSetKeyboardFlags setKeyboardFlags,
+			  void *userData);
+	void close();
+	
+	OESize getSize();
 	void draw(int width, int height);
-	string getDefaultCanvasSize();
 	
-	void setSystemKey(int usageId);
+	void sendSystemEvent(int usageId);
 	void setKey(int usageId, bool value);
-	void setUnicodeKey(int unicode);
+	void sendUnicodeKeyEvent(int unicode);
 	
 	void setMouseButton(int index, bool value);
 	void setMousePosition(float x, float y);
+	void mouseEntered();
+	void mouseExited();
 	void moveMouse(float rx, float ry);
 	void sendMouseWheelEvent(int index, float value);
 	
@@ -54,20 +66,32 @@ public:
 	
 	void resetKeysAndButtons();
 	
+	bool copy(string &value);
+	bool paste(string value);
+	
+	bool postMessage(OEComponent *sender, int message, void *data);
+	
 private:
-	GLuint textures[OEGL_TEX_NUM];
+	OESize size;
+	CanvasSetCapture setCapture;
+	CanvasSetKeyboardFlags setKeyboardFlags;
+	void *userData;
+	
+	CanvasCaptureMode captureMode;
+	bool isMouseCaptured;
+	bool isMouseCaptureRelease;
 	
 	pthread_mutex_t frameMutex;
+	GLuint textures[OEGL_TEX_NUM];
 	
 	bool keyDown[CANVAS_KEYBOARD_KEY_NUM];
 	int keyDownCount;
 	bool mouseButtonDown[CANVAS_MOUSE_BUTTON_NUM];
 	bool joystickButtonDown[CANVAS_JOYSTICK_NUM][CANVAS_JOYSTICK_BUTTON_NUM];
 	
-	bool mouseCaptured;
-	bool mouseCaptureRelease;
-	
 	void postHIDNotification(int notification, int usageId, float value);
+	
+	bool getFrame(CanvasFrame *frame);
 };
 
 #endif

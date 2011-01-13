@@ -2,7 +2,7 @@
 /**
  * libemulation
  * Emulation
- * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2009-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Controls an emulation
@@ -33,11 +33,10 @@ typedef enum
 	
 	EMULATION_SET_STATE,
 	EMULATION_SET_IMAGE,
-	EMULATION_SET_POWERED,
+	EMULATION_SET_HOT_PLUGGABLE,
 	EMULATION_CREATE_CANVAS,
 	EMULATION_DESTROY_CANVAS,
-	EMULATION_ADD_STORAGE,
-	EMULATION_REMOVE_STORAGE,
+	EMULATION_SET_STORAGE,
 } EmulationMessages;
 
 
@@ -59,14 +58,15 @@ typedef struct
 	string label;
 	string image;
 	string group;
+	
 	EmulationSettings settings;
 	
 	string location;
 	
 	string state;
-	bool powered;
+	bool hotPluggable;
 	OEComponents canvases;
-	OEComponents storages;
+	OEComponent *storage;
 } EmulationDeviceInfo;
 
 typedef vector<EmulationDeviceInfo> EmulationInfo;

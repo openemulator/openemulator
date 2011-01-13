@@ -18,10 +18,18 @@
 	if (self = [self initWithWindowNibName:@"Canvas"])
 	{
 		title = [theTitle copy];
+		
 		canvas = theCanvas;
 	}
 	
 	return self;
+}
+
+- (void)dealloc
+{
+	[title release];
+	
+	[super dealloc];
 }
 
 - (void *)canvas
@@ -36,13 +44,13 @@
 	[toolbar setDelegate:self];
 	[toolbar setAllowsUserCustomization:YES];
 	[toolbar setAutosavesConfiguration:YES];
-	
 	[[self window] setToolbar:toolbar];
-	
-	[[self window] registerForDraggedTypes:[NSArray arrayWithObjects:
-											NSFilenamesPboardType, nil]];
-	
 	[toolbar release];
+	
+	NSRect windowFrame = [[self window] frame];
+	[[self window] setContentSize:[fCanvasView canvasSize]];
+	[[self window] setFrameTopLeftPoint:NSMakePoint(NSMinX(windowFrame),
+													NSMaxY(windowFrame))];
 }
 
 - (NSString *)windowTitleForDocumentDisplayName:(NSString *)displayName
@@ -59,7 +67,6 @@
 	if (!item)
 		return nil;
 	
-	[item autorelease];
 	if ([ident isEqualToString:@"Power Down"])
 	{
 		[item setLabel:NSLocalizedString(@"Power Down",
@@ -149,6 +156,7 @@
 		[item setImage:[NSImage imageNamed:@"IconDevices.png"]];
 		[item setAction:@selector(showEmulation:)];
 	}
+	[item autorelease];
 	
 	return item;
 }

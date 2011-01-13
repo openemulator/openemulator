@@ -13,20 +13,21 @@
 
 // Notes
 // * A component should first request a canvas from the canvas controller.
-//   Then it should subscribe to canvas events.
+//   Then it can subscribe to the canvas' events.
 // * Axes are in [-1.0:1.0] coordinates.
 
 typedef enum
 {
 	CANVAS_SET_CAPTUREMODE,
-	CANVAS_SET_DEFAULTWINDOWSIZE,
-	CANVAS_GET_VIDEOFRAME,
-	CANVAS_POST_VIDEOFRAME,
-	CANVAS_LOCK_OPENGL_CONTEXT,
-	CANVAS_UNLOCK_OPENGL_CONTEXT,
+	CANVAS_GET_FRAME,
+	CANVAS_RETURN_FRAME,
+	CANVAS_LOCK_OPENGL,
+	CANVAS_UNLOCK_OPENGL,
 	CANVAS_SET_KEYBOARDFLAGS,
 	CANVAS_SET_BADGEFLAGS,
-} CanvasMessages;
+	CANVAS_COPY,
+	CANVAS_PASTE,
+} CanvasMessage;
 
 typedef enum
 {
@@ -39,9 +40,17 @@ typedef enum
 	CANVAS_JOYSTICK2_DID_CHANGE,
 	CANVAS_JOYSTICK3_DID_CHANGE,
 	CANVAS_JOYSTICK4_DID_CHANGE,
-	CANVAS_IS_COPYING,
-	CANVAS_IS_PASTING,
-} CanvasNotifications;
+} CanvasNotification;
+
+//
+// CANVAS_SET_CAPTUREMODE uses int
+//
+typedef enum
+{
+	CANVAS_CAPTUREMODE_NO_CAPTURE,
+	CANVAS_CAPTUREMODE_MOUSE_CLICK,
+	CANVAS_CAPTUREMODE_MOUSE_ENTERED,
+} CanvasCaptureMode;
 
 //
 // CANVAS_SET_CAPTUREMODE uses int
@@ -49,9 +58,9 @@ typedef enum
 typedef enum
 {
 	CANVAS_CAPTURE_NONE,
-	CANVAS_CAPTURE_KEYBOARDANDMOUSE,
-	CANVAS_CAPTURE_KEYBOARD,
-} CanvasCaptureModes;
+	CANVAS_CAPTURE_KEYBOARD_AND_MOUSE,
+	CANVAS_CAPTURE_MOUSE,
+} CanvasCapture;
 
 //
 // SET_WINDOWFRAME and GET_WINDOWFRAME use an STL string in the format:
@@ -66,14 +75,13 @@ typedef enum
 {
 	CANVAS_FRAME_FORMAT_COMPOSITE,
 	CANVAS_FRAME_FORMAT_RGB,
-} CanvasVideoFrameFormat;
+} CanvasFrameFormat;
 
 typedef struct
 {
-	CanvasVideoFrameFormat frameFormat;
+	CanvasFrameFormat frameFormat;
+	OESize frameSize;
 	void *frameData;
-	int frameWidth;
-	int frameHeight;
 	bool compositeColorBurst;
 	bool copmositeColorSubcarrier;
 	bool compositeInterlaced;
@@ -89,6 +97,7 @@ typedef struct
 	bool compositeColorize;
 	float *compositeDecoderMatrix;
 	float rgbSharpness;
+	OESize screenSize;
 	float screenBrightness;
 	float screenContrast;
 	float screenRedGain;
@@ -96,20 +105,20 @@ typedef struct
 	float screenBlueGain;
 	float screenBarrel;
 	float screenPersistance;
-} CanvasVideoFrame;
+} CanvasFrame;
 
 // Canvas keyboard flags use int
-#define CANVAS_L_NUMLOCK		(1 << 0)
-#define CANVAS_L_CAPSLOCK		(1 << 1)
+#define CANVAS_L_NUMLOCK	(1 << 0)
+#define CANVAS_L_CAPSLOCK	(1 << 1)
 #define CANVAS_L_SCROLLLOCK	(1 << 2)
-#define CANVAS_L_COMPOSE		(1 << 3)
-#define CANVAS_L_KANA			(1 << 4)
-#define CANVAS_L_POWER			(1 << 5)
-#define CANVAS_L_SHIFT			(1 << 6)
+#define CANVAS_L_COMPOSE	(1 << 3)
+#define CANVAS_L_KANA		(1 << 4)
+#define CANVAS_L_POWER		(1 << 5)
+#define CANVAS_L_SHIFT		(1 << 6)
 
 // Canvas badge flags use int
-#define CANVAS_B_POWER			(1 << 0)
-#define CANVAS_B_PAUSE			(1 << 1)
+#define CANVAS_B_POWER		(1 << 0)
+#define CANVAS_B_PAUSE		(1 << 1)
 
 // Copy and paste use an STL string
 
@@ -121,13 +130,13 @@ typedef struct
 } CanvasHIDNotification;
 
 // Canvas human-interface device definitions follow
-#define CANVAS_KEYBOARD_KEY_NUM	256
+#define CANVAS_KEYBOARD_KEY_NUM		256
 #define CANVAS_POINTER_BUTTON_NUM	8
-#define CANVAS_MOUSE_BUTTON_NUM	8
-#define CANVAS_JOYSTICK_NUM		4
+#define CANVAS_MOUSE_BUTTON_NUM		8
+#define CANVAS_JOYSTICK_NUM			4
 #define CANVAS_JOYSTICK_AXIS_NUM	16
 #define CANVAS_JOYSTICK_BUTTON_NUM	16
-#define CANVAS_JOYSTICK_HAT_NUM	4
+#define CANVAS_JOYSTICK_HAT_NUM		4
 #define CANVAS_JOYSTICK_RAXIS_NUM	4
 
 typedef enum
@@ -396,6 +405,7 @@ typedef enum
 {
 	CANVAS_P_X,
 	CANVAS_P_Y,
+	CANVAS_P_PROXIMITY,
 	CANVAS_P_BUTTON1,
 	CANVAS_P_BUTTON2,
 	CANVAS_P_BUTTON3,

@@ -14,11 +14,11 @@
 typedef enum
 {
 	ETHERNET_SEND,
-} EthernetMessages;
+} EthernetMessage;
 
 typedef enum
 {
 	ETHERNET_DID_RECEIVE_DATA,
-} EthernetNotifications;
+} EthernetNotification;
 
 #endif

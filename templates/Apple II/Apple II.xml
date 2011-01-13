@@ -97,17 +97,17 @@
 <component id="appleII.ram00" class="RAM">
     <property name="controlBus" ref="controlBus" />
     <property name="size" value="0x4000" />
-    <property name="image" src="${packagePath}/${id}.bin" />
+    <property name="image" data="${packagePath}/${id}.bin" />
 </component>
 <component id="appleII.ram40" class="RAM">
     <property name="controlBus" ref="controlBus" />
     <property name="size" value="0x4000" />
-    <property name="image" src="${packagePath}/${id}.bin" />
+    <property name="image" data="${packagePath}/${id}.bin" />
 </component>
 <component id="appleII.ram80" class="RAM">
     <property name="controlBus" ref="controlBus" />
     <property name="size" value="0x4000" />
-    <property name="image" src="${packagePath}/${id}.bin" />
+    <property name="image" data="${packagePath}/${id}.bin" />
 </component>
 <component id="appleII.io" class="AddressDecoder">
     <property name="addressSize" value="8" />
@@ -145,7 +145,7 @@
     <property name="type" value="Standard" />
 </component>
 <component id="appleII.charset" class="CharsetLoader">
-    <property name="image" src="${resourcePath}/roms/Signetics/Signetics 2513 Video ROM.bin" />
+    <property name="image" data="${resourcePath}/roms/Signetics/Signetics 2513 Video ROM.bin" />
     <property name="format" value="Signetics" />
 </component>
 <component id="appleII.video" class="AppleIIVideo">
@@ -196,19 +196,19 @@
     <property name="floatingBus" ref="appleII.floatingBus" />
 </component>
 <component id="appleII.romD0" class="ROM">
-    <property name="image" src="${resourcePath}/roms/Apple/341-0016-00.bin" />
+    <property name="image" data="${resourcePath}/roms/Apple/341-0016-00.bin" />
 </component>
 <component id="appleII.romE0" class="ROM">
-    <property name="image" src="${resourcePath}/roms/Apple/341-0001-00.bin" />
+    <property name="image" data="${resourcePath}/roms/Apple/341-0001-00.bin" />
 </component>
 <component id="appleII.romE8" class="ROM">
-    <property name="image" src="${resourcePath}/roms/Apple/341-0002-00.bin" />
+    <property name="image" data="${resourcePath}/roms/Apple/341-0002-00.bin" />
 </component>
 <component id="appleII.romF0" class="ROM">
-    <property name="image" src="${resourcePath}/roms/Apple/341-0003-00.bin" />
+    <property name="image" data="${resourcePath}/roms/Apple/341-0003-00.bin" />
 </component>
 <component id="appleII.romF8" class="ROM">
-    <property name="image" src="${resourcePath}/roms/Apple/341-0004-00.bin" />
+    <property name="image" data="${resourcePath}/roms/Apple/341-0004-00.bin" />
 </component>
 
 
@@ -282,7 +282,7 @@
 
 <device id="s5" label="Apple Graphics Tablet Interface Card" image="images/Apple/Apple Graphics Tablet Interface Card.png" group="expansions" />
 <connector id="s5.conn" ref="s5dev" type="AppleIISlot" label="Slot 0" />
-<port id="s5.port" ref="appleGraphicsTablet.connector" type="AppleGraphicsTablet" label="Interface" />
+<port id="s5.port" ref="appleGraphicsTablet.connector" type="AppleGraphicsTablet" label="Interface Port" />
 
 
 
@@ -290,6 +290,7 @@
 <connector id="s5dev.connector" ref="s5" type="AppleIISlot" label="Slot 0" />
 <component id="appleGraphicsTablet.io" class="AppleGraphicsTablet">
 	<property name="emulation" ref="emulation" />
+	<property name="view" data="${resourcePath}/images/Apple/Apple Graphics Tablet View.png" />
 </component>
 
 
@@ -313,10 +314,10 @@
     <property name="drive2" ref="" />
 </component>
 <component id="appleDiskIIInterface.rom13" class="ROM">
-    <property name="image" src="${resourcePath}/roms/Apple/341-0009.bin" />
+    <property name="image" data="${resourcePath}/roms/Apple/341-0009.bin" />
 </component>
 <component id="appleDiskIIInterface.rom16" class="ROM">
-    <property name="image" src="${resourcePath}/roms/Apple/341-0027.bin" />
+    <property name="image" data="${resourcePath}/roms/Apple/341-0027.bin" />
 </component>
 
 
@@ -331,10 +332,10 @@
     <property name="forceWriteProtected" value="0" />
     <property name="rpm" value="300.0" />
     <property name="rpmVariance" value="1.0" />
-    <property name="soundSpin" src="${resourcePath}/sounds/Apple Disk II Spin.wav" />
-    <property name="soundArm" src="${resourcePath}/sounds/Apple Disk II Arm.wav" />
-    <property name="soundStop" src="${resourcePath}/sounds/Apple Disk II Stop.wav" />
-    <property name="soundShake" src="${resourcePath}/sounds/Apple Disk II Shake.wav" />
+    <property name="soundSpin" data="${resourcePath}/sounds/Apple Disk II Spin.wav" />
+    <property name="soundArm" data="${resourcePath}/sounds/Apple Disk II Arm.wav" />
+    <property name="soundStop" data="${resourcePath}/sounds/Apple Disk II Stop.wav" />
+    <property name="soundShake" data="${resourcePath}/sounds/Apple Disk II Shake.wav" />
 </component>
 
 
@@ -349,10 +350,10 @@
     <property name="forceWriteProtected" value="0" />
     <property name="rpm" value="300.0" />
     <property name="rpmVariance" value="1.0" />
-    <property name="soundSpin" src="sounds/Apple Disk II Spin.wav" />
-    <property name="soundArm" src="sounds/Apple Disk II Arm.wav" />
-    <property name="soundStop" src="sounds/Apple Disk II Stop.wav" />
-    <property name="soundShake" src="sounds/Apple Disk II Shake.wav" />
+    <property name="soundSpin" data="sounds/Apple Disk II Spin.wav" />
+    <property name="soundArm" data="sounds/Apple Disk II Arm.wav" />
+    <property name="soundStop" data="sounds/Apple Disk II Stop.wav" />
+    <property name="soundShake" data="sounds/Apple Disk II Shake.wav" />
 </component>
 
 </edl>

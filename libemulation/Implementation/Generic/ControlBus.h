@@ -30,7 +30,7 @@ typedef enum
 	CONTROLBUS_GET_AUDIOBUFFERINDEX,
 	CONTROLBUS_REQUEST_BUS,
 	CONTROLBUS_RELEASE_BUS,
-} ControlBusMessages;
+} ControlBusMessage;
 
 typedef enum
 {
@@ -42,7 +42,7 @@ typedef enum
 	CONTROLBUS_NMI_DID_ASSERT,
 	CONTROLBUS_NMI_DID_CLEAR,
 	CONTROLBUS_TIMER_DID_FIRE,
-} ControlBusNotifications;
+} ControlBusNotification;
 
 typedef enum
 {
@@ -52,7 +52,7 @@ typedef enum
 	CONTROLBUS_POWERSTATE_SLEEP,
 	CONTROLBUS_POWERSTATE_HIBERNATE,
 	CONTROLBUS_POWERSTATE_OFF,
-} ControlBusPowerStates;
+} ControlBusPowerState;
 
 class ControlBus : public OEComponent
 {

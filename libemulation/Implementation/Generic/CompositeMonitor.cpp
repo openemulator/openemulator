@@ -107,6 +107,7 @@ bool CompositeMonitor::setRef(string name, OEComponent *ref)
 {
 	if (name == "emulation")
 	{
+		OEComponent *oldCanvas = canvas;
 		if (emulation)
 			emulation->postMessage(this,
 								   EMULATION_DESTROY_CANVAS,
@@ -116,6 +117,14 @@ bool CompositeMonitor::setRef(string name, OEComponent *ref)
 			emulation->postMessage(this,
 								   EMULATION_CREATE_CANVAS,
 								   &canvas);
+		setObserver(oldCanvas, canvas, CANVAS_KEYBOARD_DID_CHANGE);
+		setObserver(oldCanvas, canvas, CANVAS_UNICODEKEYBOARD_DID_CHANGE);
+		setObserver(oldCanvas, canvas, CANVAS_POINTER_DID_CHANGE);
+		setObserver(oldCanvas, canvas, CANVAS_MOUSE_DID_CHANGE);
+		setObserver(oldCanvas, canvas, CANVAS_JOYSTICK1_DID_CHANGE);
+		setObserver(oldCanvas, canvas, CANVAS_JOYSTICK2_DID_CHANGE);
+		setObserver(oldCanvas, canvas, CANVAS_JOYSTICK3_DID_CHANGE);
+		setObserver(oldCanvas, canvas, CANVAS_JOYSTICK4_DID_CHANGE);
 	}
 	else
 		return false;
@@ -123,6 +132,41 @@ bool CompositeMonitor::setRef(string name, OEComponent *ref)
 	return true;
 }
 
+bool CompositeMonitor::init()
+{
+	if (!emulation)
+	{
+		log("property 'emulation' undefined");
+		return false;
+	}
+
+	if (!canvas)
+	{
+		log("canvas could not be created");
+		return false;
+	}
+	
+	if (canvas)
+	{
+		CanvasFrame frame;
+		frame.frameSize.width = 640;
+		frame.frameSize.height = 480;
+		frame.screenSize.width = 720;
+		frame.screenSize.height = 576;
+		
+		canvas->postMessage(this,
+							CANVAS_GET_FRAME,
+							&frame);
+		canvas->postMessage(this,
+							CANVAS_RETURN_FRAME,
+							&frame);
+		
+		CanvasCaptureMode captureMode = CANVAS_CAPTUREMODE_MOUSE_CLICK;
+		canvas->postMessage(this, CANVAS_SET_CAPTUREMODE, &captureMode);
+	}
+	
+	return true;
+}
 
 /*
  int *framebuffer = new int[framebufferWidth * framebufferHeight];

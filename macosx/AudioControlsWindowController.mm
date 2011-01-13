@@ -30,6 +30,7 @@
 	[[self window] registerForDraggedTypes:[NSArray arrayWithObjects:
 											NSFilenamesPboardType,
 											nil]];
+	[[self window] setDelegate:self];
 	
 	timer = [NSTimer scheduledTimerWithTimeInterval:0.25
 											 target:self

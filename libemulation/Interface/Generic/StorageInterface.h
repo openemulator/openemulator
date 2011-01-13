@@ -19,4 +19,4 @@ typedef enum
 	STORAGE_GET_IMAGE_PATH,
 	STORAGE_GET_IMAGE_FORMAT,
 	STORAGE_GET_IMAGE_CAPACITY,
-} StorageMessages;
+} StorageMessage;

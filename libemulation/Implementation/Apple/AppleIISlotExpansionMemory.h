@@ -10,11 +10,10 @@
 
 #include "OEComponent.h"
 
-// Events
-enum
+typedef enum
 {
 	APPLEIISLOTEXPANSIONMEMORY_SET_SLOT,
-};
+} AppleIISlotExpansionMemoryMessage;
 
 class AppleIISlotExpansionMemory : public OEComponent
 {

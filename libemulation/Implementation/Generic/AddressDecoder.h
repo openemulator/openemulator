@@ -13,10 +13,9 @@
 
 #include "OEComponent.h"
 
-// Messages
-enum {
+typedef enum {
 	ADDRESSDECODER_MAP,
-};
+} AddressDecoderMessages;
 
 typedef struct
 {	

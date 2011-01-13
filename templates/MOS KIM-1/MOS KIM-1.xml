@@ -52,7 +52,7 @@
 </component>
 <component id="kim1.ram" class="RAM">
     <property name="controlBus" ref="kim1.controlBus" />
-    <property name="image" src="${packagePath}/${id}.bin" />
+    <property name="image" data="${packagePath}/${id}.bin" />
     <property name="size" value="0x400" />
 </component>
 <component id="kim1.rriot1" class="MOS6530">
@@ -75,23 +75,23 @@
 </component>
 <component id="kim1.rriot1.ram" class="RAM">
     <property name="controlBus" ref="kim1.controlBus" />
-    <property name="image" src="${packagePath}/${id}.bin" />
+    <property name="image" data="${packagePath}/${id}.bin" />
     <property name="size" value="0x40" />
 </component>
 <component id="kim1.rriot2.ram" class="RAM">
     <property name="controlBus" ref="kim1.controlBus" />
-    <property name="image" src="${packagePath}/${id}.bin" />
+    <property name="image" data="${packagePath}/${id}.bin" />
     <property name="size" value="0x40" />
 </component>
 <component id="kim1.rriot1.rom" class="ROM">
-    <property name="image" src="${resourcePath}/roms/MOS/MOS KIM-1 6530-002 ROM.bin" />
+    <property name="image" data="${resourcePath}/roms/MOS/MOS KIM-1 6530-002 ROM.bin" />
 </component>
 <component id="kim1.rriot2.rom" class="ROM">
-    <property name="image" src="${resourcePath}/roms/MOS/MOS KIM-1 6530-003 ROM.bin" />
+    <property name="image" data="${resourcePath}/roms/MOS/MOS KIM-1 6530-003 ROM.bin" />
 </component>
 <component id="kim1.io" class="MOSKIM1IO">
     <property name="emulation" ref="emulation" />
-    <property name="view" src="${resourcePath}/images/MOS/MOS KIM-1 View.png" />
+    <property name="view" data="${resourcePath}/images/MOS/MOS KIM-1 View.png" />
     <property name="serialPort" ref="" />
     <property name="audioOut" ref="kim1.audioOut" />
     <property name="audioIn" ref="kim1.audioIn" />

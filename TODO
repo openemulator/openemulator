@@ -1,28 +1,27 @@
 ==To-Do==
-* Implement addCanvas and removeCanvas -> this should create a windowController and an OpenGLHAL. The window controller should be added to the document, and the canvas returned.
-* Fix full-screen problem when pressing CMD-W
-* Implement show device action in emulation menu
+* Check that mouse capture is correctly handled when mouse capture mode is changed
+* Check CGAssociateMouseAndMouseCursorPosition for CMD+ALT+ESC. Should we use the HID interface instead?
+* Think about how keyboard capture should work together with the keyboard LEDs
+* Should the UI lock the aspect ratio when not fullscreen?
 * Implement frame communication to the canvas
-* Implement canvas keyboard entry/mouse events
-* Implement mouse and keyboard capture
+* Think about a proxy interface so components can access libpng/libsndfile easily
+* Implement UI pointer proximity
+* Think about the interface to signal emulation changes
 * Implement [Document updateChangeCount]
 * Integrate OpenGL 2.0 shader
+* Devise a way to send system events to a device without a canvas
 * Implement non-linear curves in the shader (change hue in monochrome monitors)
 * Implement the option to deactivate shaders
 * Devise an interface to allow native OpenGL commands in emulations
-* Implement disk image drag and drop in canvas window
-* Implement disk image drag and drop in emulation window
-
-* Devise a way to send system events to a device without a canvas
-* Enable main emulation window system keyboard actions, when a device has a canvas
 
 * Implement hardware library
 * Implement OEEmulation addEDL
 * Implement OEEmulation removeDevice
+* Delete an emulation through Edit>Delete, or CMD+BACKSPACE
 * Implement main emulation window add EDL
 * Implement main emulation window remove device
 
-* Support daisy chaining of devices, when a device has a port and connector of the same type
+* Support daisy chaining of devices, when a device has a port and connector of the same type (when adding or removing a device)
 * Implement disk image file locking, if the disk image is writable (flock)
 
 ==Future to-do's==
@@ -182,9 +181,9 @@ For Z80: clockCycleInc = 7, clockScanlineInc = 2
 * double getTime()
 
 ==Apple IIGS Timing==
-| | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | 
-F         R         F         F         F         F         F         F         F         F         F         R         F
-S                           S                           S                           S                           S
+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| 
+F    R    F    F    F    F    F    F    F    F    F    R    F    F    F
+S             S             S             S             S             S
 
 Master clock: 14 MHz (70ns)
 Fast clock: 2.857 MHz
@@ -214,7 +213,7 @@ Rules to read or write from slow memory:
 * RAM refresh delays can take
 
 In short:
-* Time referente is 14M
+* Time reference is 14M
 * Apple II: 64 instruction cycles of 14 clock cycles each, and one instruction cycle of 16 clock cycles
 * Apple IIGS: one instruction cycle every 5 clock cycles. If memory is accessed, and we are on the refresh cycle, wait one cycle
 * Apple IIGS: when in fast mode and accessing slow memory, wait for the next 1M clock cycle.

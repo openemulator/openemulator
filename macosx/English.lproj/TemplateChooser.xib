@@ -2,10 +2,10 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="7.10">
 	<data>
 		<int key="IBDocument.SystemTarget">1050</int>
-		<string key="IBDocument.SystemVersion">10H574</string>
+		<string key="IBDocument.SystemVersion">10J567</string>
 		<string key="IBDocument.InterfaceBuilderVersion">823</string>
 		<string key="IBDocument.AppKitVersion">1038.35</string>
-		<string key="IBDocument.HIToolboxVersion">461.00</string>
+		<string key="IBDocument.HIToolboxVersion">462.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
 			<string key="NS.object.0">823</string>
@@ -41,7 +41,7 @@
 			<object class="NSWindowTemplate" id="249516031">
 				<int key="NSWindowStyleMask">15</int>
 				<int key="NSWindowBacking">2</int>
-				<string key="NSWindowRect">{{420, 356}, {600, 460}}</string>
+				<string key="NSWindowRect">{{420, 240}, {600, 460}}</string>
 				<int key="NSWTFlags">1685585920</int>
 				<string key="NSWindowTitle">Template Chooser</string>
 				<string key="NSWindowClass">NSWindow</string>
@@ -366,9 +366,9 @@
 					<object class="NSAffineTransform">
 						<bytes key="NSTransformStruct">AQAAAABCdAAAA</bytes>
 					</object>
-					<string>{{199, 239}, {600, 460}}</string>
+					<string>{{420, 240}, {600, 460}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{199, 239}, {600, 460}}</string>
+					<string>{{420, 240}, {600, 460}}</string>
 					<boolean value="NO"/>
 					<boolean value="YES"/>
 					<string>{600, 460}</string>

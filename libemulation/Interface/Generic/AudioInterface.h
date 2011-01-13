@@ -16,7 +16,7 @@ typedef enum
 	AUDIO_FRAME_WILL_RENDER,
 	AUDIO_FRAME_IS_RENDERING,
 	AUDIO_FRAME_DID_RENDER,
-} AudioNotifications;
+} AudioNotification;
 
 typedef struct
 {

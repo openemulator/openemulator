@@ -19,9 +19,10 @@
 	void *emulation;
 	
 	EmulationWindowController *emulationWindowController;
+	
+	NSMutableArray *canvases;
+	NSMutableArray *canvasWindowControllers;
 }
-
-- (void)showEmulation:(id)sender;
 
 - (void)newEmulation:(NSURL *)url;
 - (void)deleteEmulation;
@@ -33,6 +34,10 @@
 - (IBAction)saveDocumentAsTemplate:(id)sender;
 
 - (void *)emulationInfo;
+
+- (void)showEmulation:(id)sender;
+
+- (void)showCanvas:(void *)canvas;
 
 - (BOOL)mount:(NSString *)path;
 - (BOOL)mount:(NSString *)path inStorage:(void *)component;

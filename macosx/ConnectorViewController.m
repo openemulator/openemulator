@@ -35,7 +35,7 @@
 	connectorDelegate = theDelegate;
 }
 
-- (void)awakeFromNib
+- (void)windowDidLoad
 {
 	NSSize cellSize;
 	NSDictionary *titleAttributes;

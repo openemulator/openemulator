@@ -2,7 +2,7 @@
 /**
  * OpenEmulator
  * Mac OS X Canvas View
- * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Controls a canvas view.
@@ -16,15 +16,15 @@
 
 @interface CanvasView : NSOpenGLView
 {
-	IBOutlet id fDocumentWindowController;
-	
-	void *openGLHAL;
+	void *canvas;
 	
 	CVDisplayLinkRef displayLink;
 	
 	int keyMap[DEVICE_KEYMAP_SIZE];
 	int keyModifierFlags;
 }
+
+- (NSSize)canvasSize;
 
 - (void)drawFrame;
 

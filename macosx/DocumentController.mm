@@ -12,9 +12,10 @@
 
 #import "DocumentController.h"
 #import "Document.h"
-#import "AudioControlsWindowController.h"
 #import "TemplateChooserWindowController.h"
+#import "AudioControlsWindowController.h"
 #import "LibraryWindowController.h"
+#import "CanvasWindow.h"
 #import "StringConversion.h"
 
 #import "PortAudioHAL.h"
@@ -140,7 +141,7 @@
 {
 }
 
-- (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender
+- (void)applicationWillTerminate:(NSNotification *)sender
 {
 	((PortAudioHAL *)portAudioHAL)->close();
 	
@@ -149,12 +150,6 @@
 				   forKey:@"OEAudioControlsVisible"];
 	[userDefaults setBool:[[fLibraryWindowController window] isVisible]
 				   forKey:@"OELibraryVisible"];
-	
-	return NSTerminateNow;
-}
-
-- (void)applicationDidTerminate:(NSNotification *)notification
-{
 }
 
 - (void)applicationDidBecomeActive:(NSNotification *)notification
@@ -163,7 +158,7 @@
 
 - (void)applicationDidResignActive:(NSNotification *)notification
 {
-	// To-Do: zoom fullscreen window
+	// To-Do: dezoom fullscreen window?
 }
 
 - (BOOL)application:(NSApplication *)theApplication
@@ -171,7 +166,7 @@
 {
 	NSString *pathExtension = [[path pathExtension] lowercaseString];
 	
-	// Open emulation (through the Cocoa interface)
+	// Open emulation through the Cocoa interface
 	if ([pathExtension compare:@OE_PACKAGE_PATH_EXTENSION] == NSOrderedSame)
 		return NO;
 	
@@ -179,13 +174,20 @@
 	if ([audioPathExtensions containsObject:pathExtension])
 	{
 		[fAudioControlsWindowController readFromPath:path];
+		
 		return YES;
 	}
 	
 	// Paste text
 	if ([textPathExtensions containsObject:pathExtension])
 	{
-		// To-Do: Paste to activeWindow
+		NSString *clipboard = [NSString stringWithContentsOfFile:path
+													usedEncoding:nil
+														   error:nil];
+		
+		[[NSApp mainWindow] performSelector:@selector(pasteText:)
+								 withObject:clipboard];
+		
 		return YES;
 	}
 	
@@ -214,7 +216,7 @@
 		{
 			NSAlert *alert = [[NSAlert alloc] init];
 			[alert setMessageText:[NSString localizedStringWithFormat:
-								   @"The document \u201C%@\u201D could not be opened.",
+								   @"The document \u201C%@\u201D can't be mounted in this emulation.",
 								   [path lastPathComponent]]];
 			[alert setInformativeText:[NSString localizedStringWithFormat:
 									   @"All compatible storage devices are locked. "
@@ -224,17 +226,19 @@
 			
 			return YES;
 		}
+		
+		NSAlert *alert = [[NSAlert alloc] init];
+		[alert setMessageText:[NSString localizedStringWithFormat:
+							   @"The document \u201C%@\u201D can't be mounted in this emulation.",
+							   [path lastPathComponent]]];
+		[alert setInformativeText:[NSString localizedStringWithFormat:
+								   @"There are no compatible storage devices. "
+								   "Try mounting the document in some other emulation."]];
+		[alert runModal];
+		[alert release];
+		
+		return YES;
 	}
-	
-	// Display error
-	NSAlert *alert = [[NSAlert alloc] init];
-	[alert setMessageText:[NSString localizedStringWithFormat:
-						   @"The document \u201C%@\u201D could not be opened.",
-						   [path lastPathComponent]]];
-	[alert setInformativeText:[NSString localizedStringWithFormat:
-							   @"There are no compatible storage devices."]];
-	[alert runModal];
-	[alert release];
 	
 	return YES;
 }
@@ -287,7 +291,7 @@
 		return YES;
 	}
 	
-	return NO;
+	return [super validateUserInterfaceItem:anItem];
 }
 
 - (IBAction)toggleAudioControls:(id)sender
@@ -329,7 +333,9 @@
 			return;
 		
 		NSError *error;
-		if (![self openDocumentWithContentsOfURL:url display:YES error:&error])
+		if (![self openDocumentWithContentsOfURL:url
+										 display:YES
+										   error:&error])
 			[[NSAlert alertWithError:error] runModal];
 	}
 }

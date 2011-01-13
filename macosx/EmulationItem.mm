@@ -82,37 +82,6 @@
 								getNSString(deviceInfo->image)] retain];
 		image = [[NSImage alloc] initByReferencingFile:imagePath];
 		
-		location = [getNSString(deviceInfo->location) retain];
-		state = [getNSString(deviceInfo->state) retain];
-		
-		canvasComponents = [[NSMutableArray alloc] init];
-		OEComponents &canvases = deviceInfo->canvases;
-		for (int i = 0; i < canvases.size(); i++)
-			[canvasComponents addObject:[NSValue valueWithPointer:canvases.at(i)]];
-		
-		storageComponents = [[NSMutableArray alloc] init];
-		OEComponents &storages = deviceInfo->storages;
-		for (int i = 0; i < storages.size(); i++)
-		{
-			OEComponent *storage = storages.at(i);
-			[storageComponents addObject:[NSValue valueWithPointer:storage]];
-			
-			if ([document isStorageMounted:storage])
-			{
-				NSString *theUID;
-				
-				theUID = [NSString stringWithFormat:@"%@.%d", uid, i];
-				
-				EmulationItem *storageItem;
-				storageItem = [[EmulationItem alloc] initWithStorage:storage
-																 uid:theUID 
-															location:location
-															document:theDocument];
-				[children addObject:storageItem];
-				[storageItem release];
-			}
-		}
-		
 		settingsRefs = [[NSMutableArray alloc] init];
 		settingsNames = [[NSMutableArray alloc] init];
 		settingsLabels = [[NSMutableArray alloc] init];
@@ -129,6 +98,30 @@
 			[settingsOptions addObject:[getNSString(setting.options)
 										componentsSeparatedByString:@","]];
 		}
+
+		location = [getNSString(deviceInfo->location) retain];
+		
+		state = [getNSString(deviceInfo->state) retain];
+		canvases = [[NSMutableArray alloc] init];
+		OEComponents &theCanvases = deviceInfo->canvases;
+		for (int i = 0; i < theCanvases.size(); i++)
+			[canvases addObject:[NSValue valueWithPointer:theCanvases.at(i)]];
+		
+		storage = deviceInfo->storage;
+		if (storage && [document isStorageMounted:storage])
+		{
+			NSString *theUID;
+			
+			theUID = [NSString stringWithFormat:@"%@.storage", uid];
+			
+			EmulationItem *storageItem;
+			storageItem = [[EmulationItem alloc] initWithStorage:storage
+															 uid:theUID 
+														location:location
+														document:theDocument];
+			[children addObject:storageItem];
+			[storageItem release];
+		}
 	}
 	
 	return self;
@@ -141,19 +134,17 @@
 {
 	if (self = [super init])
 	{
-		storageComponents = [[NSMutableArray alloc] initWithObjects:
-							 [NSValue valueWithPointer:theComponent], 
-							 nil];
-		
 		itemType = EMULATION_ITEM_DISKIMAGE;
 		children = [[NSMutableArray alloc] init];
 		document = theDocument;
 		
 		uid = [theUid copy];
-		label = [[[self diskImagePath] lastPathComponent] retain];
+		label = [[[document imagePathForStorage:theComponent]
+				  lastPathComponent] retain];
 		image = [[NSImage imageNamed:@"DiskImage"] retain];
 		
 		location = [theLocation copy];
+		storage = theComponent;
 	}
 	
 	return self;
@@ -170,9 +161,7 @@
 	[location release];
 	[state release];
 	
-	[canvasComponents release];
-	
-	[storageComponents release];
+	[canvases release];
 	
 	[settingsRefs release];
 	[settingsNames release];
@@ -229,12 +218,10 @@
 	if (itemType == EMULATION_ITEM_DISKIMAGE)
 	{
 		NSString *theState;
-		void *theComponent = [[storageComponents objectAtIndex:0] pointerValue];
-		
-		theState = ([document isStorageWritable:theComponent] ?
+		theState = ([document isStorageWritable:storage] ?
 					NSLocalizedString(@"Read/Write", @"Emulation Item.") : 
 					NSLocalizedString(@"Read-Only", @"Emulation Item."));
-		if ([document isStorageLocked:theComponent])
+		if ([document isStorageLocked:storage])
 			theState = [theState stringByAppendingString:
 						NSLocalizedString(@", Locked", @"Emulation Item.")];
 		
@@ -253,14 +240,21 @@
 
 - (BOOL)isCanvas
 {
-	return ([canvasComponents count] != 0);
+	return ([canvases count] != 0);
+}
+
+- (void)showCanvases
+{
+	for (int i = 0; i < [canvases count]; i++)
+		[document showCanvas:[[canvases objectAtIndex:i] pointerValue]];
 }
 
 
 
 - (BOOL)isStorage
 {
-	return (itemType == EMULATION_ITEM_DEVICE) || ![location length];
+	return (((itemType == EMULATION_ITEM_DEVICE) && storage) ||
+			![location length]);
 }
 
 - (BOOL)isMounted
@@ -270,44 +264,22 @@
 
 - (BOOL)isLocked
 {
-	if (![storageComponents count])
-		return NO;
-	
-	for (int i = 0; i < [storageComponents count]; i++)
-	{
-		void *component = [[storageComponents objectAtIndex:i] pointerValue];
-		if (![document isStorageLocked:component])
-			return NO;
-	}
-	
-	return YES;
+	return [document isStorageLocked:storage];
 }
 
 - (NSString *)diskImagePath
 {
-	if (![storageComponents count])
-		return @"";
-	
-	void *component = [[storageComponents objectAtIndex:0] pointerValue];
-	return [document imagePathForStorage:component];
+	return [document imagePathForStorage:storage];
 }
 
 - (NSString *)diskImageFormat
 {
-	if (![storageComponents count])
-		return @"";
-	
-	void *component = [[storageComponents objectAtIndex:0] pointerValue];
-	return [document imageFormatForStorage:component];
+	return [document imageFormatForStorage:storage];
 }
 
 - (NSString *)diskImageCapacity
 {
-	if (![storageComponents count])
-		return @"";
-	
-	void *component = [[storageComponents objectAtIndex:0] pointerValue];
-	return [document imageCapacityForStorage:component];
+	return [document imageCapacityForStorage:storage];
 }
 
 - (BOOL)mount:(NSString *)path
@@ -315,21 +287,12 @@
 	if (![location length])
 		return [document mount:path];
 	
-	for (int i = 0; i < [storageComponents count]; i++)
-	{
-		void *component = [[storageComponents objectAtIndex:i] pointerValue];
-		
-		if ([document mount:path inStorage:component])
-			return YES;
-	}
-	
-	return NO;
+	return [document mount:path inStorage:storage];
 }
 
 - (void)unmount
 {
-	void *component = [[storageComponents objectAtIndex:0] pointerValue];
-	[document unmountStorage:component];
+	[document unmountStorage:storage];
 }
 
 - (BOOL)canMount:(NSString *)path
@@ -337,15 +300,7 @@
 	if (![location length])
 		return [document canMount:path];
 	
-	for (int i = 0; i < [storageComponents count]; i++)
-	{
-		void *component = [[storageComponents objectAtIndex:i] pointerValue];
-		
-		if ([document canMount:path inStorage:component])
-			return YES;
-	}
-	
-	return NO;
+	return [document canMount:path inStorage:storage];
 }
 
 

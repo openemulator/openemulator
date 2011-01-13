@@ -13,9 +13,9 @@ typedef enum
 	CPU_RUN,
 	CPU_SET_REMAINING_CLOCKCYCLES,
 	CPU_GET_REMAINING_CLOCKCYCLES,
-} CPUMessages;
+} CPUMessage;
 
 typedef enum
 {
 	CPU_INSTRUCTIONCYCLE_DID_END,
-} CPUNotifications;
+} CPUNotification;

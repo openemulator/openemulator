@@ -56,6 +56,9 @@
 
 - (void)windowDidLoad
 {
+	float thickness = NSMinY([fSplitView frame]);
+	[[self window] setContentBorderThickness:thickness forEdge:NSMinYEdge];
+	
 	NSToolbar *toolbar;
 	toolbar = [[NSToolbar alloc] initWithIdentifier:@"Emulation Toolbar"];
 	[toolbar setSizeMode:NSToolbarSizeModeSmall];
@@ -64,9 +67,6 @@
 	[toolbar setAutosavesConfiguration:YES];
 	[[self window] setToolbar:toolbar];
 	[toolbar release];
-	
-	float thickness = NSMinY([fSplitView frame]);
-	[[self window] setContentBorderThickness:thickness forEdge: NSMinYEdge];
 	
 	[fOutlineView setDelegate:self];
 	[fOutlineView setDataSource:self];
@@ -83,10 +83,10 @@
 
 - (void)updateEmulation:(id)sender
 {
+	NSString *uid = [[selectedItem uid] copy];
+	
 	[rootItem release];
 	rootItem = [[EmulationItem alloc] initWithDocument:[self document]];
-	
-	NSString *uid = [[selectedItem uid] copy];
 	
 	[fOutlineView reloadData];
 	[fOutlineView expandItem:nil expandChildren:YES];
@@ -94,7 +94,6 @@
 	if (![self selectItem:rootItem withUid:uid])
 		[fOutlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:1]
 				  byExtendingSelection:NO];
-	
 	[uid release];
 }
 
@@ -231,7 +230,7 @@
 	else if (action == @selector(delete:))
 		return [item isRemovable];
 	
-	return NO;
+	return YES;
 }
 
 
@@ -377,15 +376,14 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	if (![item isStorage] || (index != -1))
 		return NSDragOperationNone;
 	
-	NSPasteboard *pasteboard = [info draggingPasteboard];
-	
 	DocumentController *documentController;
 	documentController = [NSDocumentController sharedDocumentController];
 	
+	NSPasteboard *pasteboard = [info draggingPasteboard];
 	NSString *path = [[pasteboard propertyListForType:NSFilenamesPboardType]
 					  objectAtIndex:0];
-	NSString *pathExtension = [[path pathExtension] lowercaseString];
 	
+	NSString *pathExtension = [[path pathExtension] lowercaseString];
 	if (![[documentController diskImagePathExtensions] containsObject:pathExtension])
 		return NSDragOperationNone;
 	
@@ -576,8 +574,9 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
 
 - (IBAction)showDevice:(id)sender
 {
-	// Get selected device
-	// Show all windows
+	EmulationItem *item = [self itemForSender:sender];
+	
+	[item showCanvases];
 }
 
 - (IBAction)revealInFinder:(id)sender

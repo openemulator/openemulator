@@ -18,6 +18,14 @@
 * Implemented mount lock support
 * Implemented emulation did update selection
 * Improved document logic with mount, unmount, canMount, isImageSupported
+* Fixed full-screen problem when pressing CMD-W
+* Implemented addCanvas and removeCanvas
+* Implemented copy paste
+* Implemented canvas keyboard entry/mouse events
+* Implemented show device action in emulation menu
+* Implemented canvas drag and drop
+* Fixed document window controller problem
+* Implemented mouse and keyboard capture
 
 ==2010-12==
 * Implemented window autosave of emulation view

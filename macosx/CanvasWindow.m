@@ -2,7 +2,7 @@
 /**
  * OpenEmulator
  * Mac OS X Canvas Window
- * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2009-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Handles canvas window messages.
@@ -23,55 +23,11 @@
 								  backing:bufferingType
 									defer:deferCreation])
 	{
-		fullscreen = NO;
-		
 		[self setAcceptsMouseMovedEvents:YES];
+		fullscreen = NO;
 	}
 	
 	return self;
-}
-
-- (void)dealloc
-{
-	if (fullscreen)
-		[self toggleFullscreen:self];
-	
-	[super dealloc];
-}
-
-- (void *)canvasComponent
-{
-	return [[self windowController] canvasComponent];
-}
-
-- (NSRect)constrainFrameRect:(NSRect)frameRect toScreen:(NSScreen *)screen
-{
-	return frameRect;
-}
-
-- (NSSize)windowWillResize:(NSWindow *)window toSize:(NSSize)proposedFrameSize
-{
-	if (!fullscreen)
-		return proposedFrameSize;
-	else
-		return [window frame].size;
-}
-
-- (BOOL)windowShouldZoom:(NSWindow *)window toFrame:(NSRect)proposedFrame
-{
-	return !fullscreen;
-}
-
-- (void)setFrameOrigin:(NSPoint)point
-{
-	if (!fullscreen)
-		[super setFrameOrigin:point];
-}
-
-- (void)setFrameTopLeftPoint:(NSPoint)point
-{
-	if (!fullscreen)
-		[super setFrameTopLeftPoint:point];
 }
 
 - (BOOL)validateUserInterfaceItem:(id)anItem
@@ -95,26 +51,54 @@
 		return !fullscreen;
 	else if ([anItem action] == @selector(fitToScreen:))
 		return !fullscreen;
+	else if ([anItem action] == @selector(performZoom:))
+		return !fullscreen;
 	else if ([anItem action] == @selector(toggleToolbarShown:))
 		return !fullscreen;
 	else if ([anItem action] == @selector(runToolbarCustomizationPalette:))
 		return !fullscreen;
+	
+	return [super validateUserInterfaceItem:anItem];
+}
+
+- (NSRect)constrainFrameRect:(NSRect)frameRect toScreen:(NSScreen *)screen
+{
+	return frameRect;
+}
+
+- (NSSize)windowWillResize:(NSWindow *)window toSize:(NSSize)proposedFrameSize
+{
+	if (!fullscreen)
+		return proposedFrameSize;
 	else
-		return YES;
+		return [window frame].size;
+}
+
+- (BOOL)windowShouldClose:(id)sender
+{
+	if (fullscreen)
+		[self toggleFullscreen:self];
+	
+	return YES;
+}
+
+- (void)setFrameOrigin:(NSPoint)point
+{
+	NSLog(@"setFrameOrigin");
+	if (!fullscreen)
+		[super setFrameOrigin:point];
+}
+
+- (void)setFrameTopLeftPoint:(NSPoint)point
+{
+	NSLog(@"setFrameTopLeftPoint");
+	if (!fullscreen)
+		[super setFrameTopLeftPoint:point];
 }
 
 - (void)setFrameSize:(double)proportion
 {
-	int canvasDefaultWidth = 640;
-	int canvasDefaultHeight = 480;
-	
-/*	OEComponent *canvasComponent = (OEComponent *)[self canvasComponent];
-	if (canvasComponent)
-	{
-		// Update canvasDefaultWidth and height
-	}
-*/	
-	// To-Do: Ask canvas for default size
+	NSSize canvasSize = [fCanvasView canvasSize];
 	
 	NSRect frameRect = [self frame];
 	NSView *content = [self contentView];
@@ -131,8 +115,8 @@
 	
 	frameRect.origin.x = NSMidX(frameRect);
 	frameRect.origin.y = NSMaxY(frameRect);
-	frameRect.size.width = scale * proportion * canvasDefaultWidth + deltaWidth;
-	frameRect.size.height = scale * proportion * canvasDefaultHeight + deltaHeight;
+	frameRect.size.width = scale * proportion * canvasSize.width + deltaWidth;
+	frameRect.size.height = scale * proportion * canvasSize.height + deltaHeight;
 	frameRect.origin.x -= NSWidth(frameRect) / 2;
 	frameRect.origin.y -= NSHeight(frameRect);
 	
@@ -191,26 +175,22 @@
 
 - (void)setHalfSize:(id)sender
 {
-	if (!fullscreen)
-		[self setFrameSize:0.5];
+	[self setFrameSize:0.5];
 }
 
 - (void)setActualSize:(id)sender
 {
-	if (!fullscreen)
-		[self setFrameSize:1.0];
+	[self setFrameSize:1.0];
 }
 
 - (void)setDoubleSize:(id)sender
 {
-	if (!fullscreen)
-		[self setFrameSize:2.0];
+	[self setFrameSize:2.0];
 }
 
 - (void)fitToScreen:(id)sender
 {
-	if (!fullscreen)
-		[self setFrameSize:1000.0];
+	[self setFrameSize:1000.0];
 }
 
 @end

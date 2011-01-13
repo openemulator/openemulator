@@ -14,11 +14,11 @@
 typedef enum
 {
 	MIDI_SEND,
-} MIDIMessages;
+} MIDIMessage;
 
 typedef enum
 {
 	MIDI_DID_RECEIVE_DATA,
-} MIDINotifications;
+} MIDINotification;
 
 #endif

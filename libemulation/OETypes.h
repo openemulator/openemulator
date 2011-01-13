@@ -2,7 +2,7 @@
 /**
  * libemulation
  * Types
- * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * General OpenEmulator types
@@ -52,5 +52,23 @@ typedef union
 } OEPair;
 
 typedef vector<char> OEData;
+
+typedef struct
+{
+	float x;
+	float y;
+} OEPoint;
+
+typedef struct
+{
+	float width;
+	float height;
+} OESize;
+
+typedef struct
+{
+	OEPoint origin;
+	OESize size;
+} OERect;
 
 #endif

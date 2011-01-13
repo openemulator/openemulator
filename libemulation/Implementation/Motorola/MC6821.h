@@ -19,13 +19,13 @@ typedef enum
 	MC6821_SET_CB1,
 	MC6821_SET_CB2,
 	MC6821_GET_CB2,
-} MC6821Messages;
+} MC6821Message;
 
 // Notifications
 typedef enum {
 	MC6821_CA2_CHANGED,
 	MC6821_CB2_CHANGED,
-} MC6821Notifications;
+} MC6821Notification;
 
 #define MC6821_RS_DATAREGISTERA		0x00
 #define MC6821_RS_CONTROLREGISTERA	0x01

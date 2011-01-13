@@ -12,4 +12,4 @@ typedef enum
 {
 	APPLEIIMMU_SET_INH,
 	APPLEIIMMU_SET_AUX_MEMORY,
-} AppleIIMMUMessages;
+} AppleIIMMUMessage;

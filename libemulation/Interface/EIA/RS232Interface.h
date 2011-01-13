@@ -16,7 +16,7 @@ typedef enum
 	RS232_ASSERT_RTS,
 	RS232_CLEAR_RTS,
 	RS232_SEND_BREAK,
-} RS232Messages;
+} RS232Message;
 
 typedef enum
 {
@@ -31,4 +31,4 @@ typedef enum
 	RS232_RI_DID_CLEAR,
 	RS232_BREAK_DID_ASSERT,
 	RS232_BREAK_DID_CLEAR,
-} RS232Notifications;
+} RS232Notification;

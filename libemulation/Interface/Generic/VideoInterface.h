@@ -14,7 +14,7 @@
 typedef enum
 {
 	VIDEO_GET_FRAME,
-} VideoMessages;
+} VideoMessage;
 
 typedef struct
 {
