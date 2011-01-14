@@ -284,9 +284,9 @@
 												  error:&error])
 	{
 		NSString *messageText = NSLocalizedString(@"The document could not be saved.",
-												  @"Audio Controls Save Error Message Text.");
-		NSString *informativeText = NSLocalizedString(@"Try saving the file to another volume.",
-													  @"Audio Controls Save Error Informative Text.");
+												  @"Audio Controls.");
+		NSString *informativeText = NSLocalizedString(@"Try saving the document to another volume.",
+													  @"Audio Controls.");
 		NSAlert *alert = [NSAlert alertWithMessageText:messageText
 										 defaultButton:nil
 									   alternateButton:nil

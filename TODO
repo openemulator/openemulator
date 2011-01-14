@@ -1,15 +1,19 @@
 ==To-Do==
-* Check that mouse capture is correctly handled when mouse capture mode is changed
-* Check CGAssociateMouseAndMouseCursorPosition for CMD+ALT+ESC. Should we use the HID interface instead?
-* Think about how keyboard capture should work together with the keyboard LEDs
-* Should the UI lock the aspect ratio when not fullscreen?
+* Implemented locking in CanvasView
 * Implement frame communication to the canvas
 * Think about a proxy interface so components can access libpng/libsndfile easily
-* Implement UI pointer proximity
+
+* Think about how keyboard capture should work together with the keyboard LEDs
+* Keyboard operation: when keyboard is not captured, we send everything to the emulation, except GUI keys: CMD-TAB, ALT-TAB, CMD-SPACE, etc
+* Devise a way to send system events to a device without a canvas
+* Use the HID interface to set keyboard LEDs on the first keyboard
+
+* Should the UI lock the aspect ratio when not fullscreen? No
+
 * Think about the interface to signal emulation changes
 * Implement [Document updateChangeCount]
+
 * Integrate OpenGL 2.0 shader
-* Devise a way to send system events to a device without a canvas
 * Implement non-linear curves in the shader (change hue in monochrome monitors)
 * Implement the option to deactivate shaders
 * Devise an interface to allow native OpenGL commands in emulations

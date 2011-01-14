@@ -409,31 +409,12 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 
 - (NSString *)formatCapacity:(OEUInt64)value
 {
-	float mantissa;
-	NSString *unit;
-	
-	if (value < (1 << 10))
-	{
-		mantissa = value;
-		unit = @"";
-	}
-	else if (value < (1 << 20))
-	{
-		mantissa = value / (1 << 10);
-		unit = @"ki";
-	}
+	if (value < (1 << 20))
+		return [NSString stringWithFormat:@"%3.0f kiB", value / (1 << 10)];
 	else if (value < (1 << 30))
-	{
-		mantissa = value / (1 << 20);
-		unit = @"Mi";
-	}
+		return [NSString stringWithFormat:@"%3.2f MiB", value / (1 << 20)];
 	else
-	{
-		mantissa = value / (1 << 30);
-		unit = @"Gi";
-	}
-	
-	return [NSString localizedStringWithFormat:@"%3.2f %@B", mantissa, unit, value];
+		return [NSString stringWithFormat:@"%3.2f GiB", value / (1 << 30)];
 }
 
 - (BOOL)mount:(NSString *)path

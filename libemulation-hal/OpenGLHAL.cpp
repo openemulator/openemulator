@@ -79,6 +79,19 @@ void OpenGLHAL::postHIDNotification(int notification, int usageId, float value)
 	notify(this, notification, &data);
 }
 
+void OpenGLHAL::captureMouse()
+{
+	isMouseCaptured = true;
+	isMouseCaptureRelease = false;
+	setCapture(userData, CANVAS_CAPTURE_KEYBOARD_AND_MOUSE);
+}
+
+void OpenGLHAL::releaseCapture()
+{
+	isMouseCaptured = false;
+	setCapture(userData, CANVAS_CAPTURE_NONE);
+}
+
 void OpenGLHAL::sendSystemEvent(int usageId)
 {
 	postHIDNotification(CANVAS_SYSTEMKEYBOARD_DID_CHANGE, usageId, 0);
@@ -100,11 +113,7 @@ void OpenGLHAL::setKey(int usageId, bool value)
 		isMouseCaptureRelease = true;
 	
 	if (isMouseCaptureRelease && !keyDownCount)
-	{
-		isMouseCaptureRelease = false;
-		isMouseCaptured = false;
-		setCapture(userData, CANVAS_CAPTURE_NONE);
-	}
+		releaseCapture();
 }
 
 void OpenGLHAL::sendUnicodeKeyEvent(int unicode)
@@ -137,14 +146,11 @@ void OpenGLHAL::setMouseButton(int index, bool value)
 							value);
 	else if ((captureMode == CANVAS_CAPTUREMODE_MOUSE_CLICK) &&
 			 !isMouseCaptured && (index == 0))
-	{
-		isMouseCaptured = true;
-		setCapture(userData, CANVAS_CAPTURE_KEYBOARD_AND_MOUSE);
-	}
+		captureMouse();
 	else
-		 postHIDNotification(CANVAS_POINTER_DID_CHANGE,
-							 CANVAS_P_BUTTON1 + index,
-							 value);
+		postHIDNotification(CANVAS_POINTER_DID_CHANGE,
+							CANVAS_P_BUTTON1 + index,
+							value);
 }
 
 void OpenGLHAL::setMousePosition(float x, float y)
@@ -160,16 +166,20 @@ void OpenGLHAL::setMousePosition(float x, float y)
 						y);
 }
 
-void OpenGLHAL::mouseEntered()
+void OpenGLHAL::enterMouse()
 {
 	if (captureMode == CANVAS_CAPTUREMODE_MOUSE_ENTERED)
 		setCapture(userData, CANVAS_CAPTURE_KEYBOARD_AND_MOUSE);
 }
 
-void OpenGLHAL::mouseExited()
+void OpenGLHAL::exitMouse()
 {
 	if (captureMode == CANVAS_CAPTUREMODE_MOUSE_ENTERED)
+	{
 		setCapture(userData, CANVAS_CAPTURE_NONE);
+		
+		resetKeysAndButtons();
+	}
 }
 
 void OpenGLHAL::moveMouse(float rx, float ry)
@@ -290,7 +300,11 @@ bool OpenGLHAL::postMessage(OEComponent *sender, int message, void *data)
 		case CANVAS_SET_CAPTUREMODE:
 			if (data)
 			{
+				if (captureMode != CANVAS_CAPTUREMODE_NO_CAPTURE)
+					releaseCapture();
+				
 				captureMode = *((CanvasCaptureMode *)data);
+				
 				return true;
 			}
 			break;

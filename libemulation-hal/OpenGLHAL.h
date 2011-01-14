@@ -54,8 +54,8 @@ public:
 	
 	void setMouseButton(int index, bool value);
 	void setMousePosition(float x, float y);
-	void mouseEntered();
-	void mouseExited();
+	void enterMouse();
+	void exitMouse();
 	void moveMouse(float rx, float ry);
 	void sendMouseWheelEvent(int index, float value);
 	
@@ -90,6 +90,8 @@ private:
 	bool joystickButtonDown[CANVAS_JOYSTICK_NUM][CANVAS_JOYSTICK_BUTTON_NUM];
 	
 	void postHIDNotification(int notification, int usageId, float value);
+	void captureMouse();
+	void releaseCapture();
 	
 	bool getFrame(CanvasFrame *frame);
 };

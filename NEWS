@@ -26,6 +26,8 @@
 * Implemented canvas drag and drop
 * Fixed document window controller problem
 * Implemented mouse and keyboard capture
+* Verified that mouse capture is correctly handled when mouse capture mode is changed
+* Implemented UI pointer proximity, mouseEntered, mouseExited
 
 ==2010-12==
 * Implemented window autosave of emulation view

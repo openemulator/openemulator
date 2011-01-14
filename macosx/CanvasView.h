@@ -16,9 +16,10 @@
 
 @interface CanvasView : NSOpenGLView
 {
-	void *canvas;
-	
+	NSOpenGLContext *openGLContext;
 	CVDisplayLinkRef displayLink;
+	
+	void *canvas;
 	
 	int keyMap[DEVICE_KEYMAP_SIZE];
 	int keyModifierFlags;
@@ -26,7 +27,7 @@
 
 - (NSSize)canvasSize;
 
-- (void)drawFrame;
+- (void)drawView;
 
 - (void)systemPowerDown:(id)sender;
 - (void)systemSleep:(id)sender;

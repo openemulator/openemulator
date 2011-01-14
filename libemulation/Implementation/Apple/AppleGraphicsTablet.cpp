@@ -70,10 +70,10 @@ bool AppleGraphicsTablet::init()
 	if (canvas)
 	{
 		CanvasFrame frame;
-		frame.frameSize.width = 590;
-		frame.frameSize.height = 606;
-		frame.screenSize.width = 590;
-		frame.screenSize.height = 606;
+		frame.frameSize.width = 637;
+		frame.frameSize.height = 637;
+		frame.screenSize.width = 637;
+		frame.screenSize.height = 637;
 		
 		canvas->postMessage(this,
 							CANVAS_GET_FRAME,

@@ -22,10 +22,7 @@
 								styleMask:windowStyle
 								  backing:bufferingType
 									defer:deferCreation])
-	{
-		[self setAcceptsMouseMovedEvents:YES];
 		fullscreen = NO;
-	}
 	
 	return self;
 }
@@ -84,14 +81,12 @@
 
 - (void)setFrameOrigin:(NSPoint)point
 {
-	NSLog(@"setFrameOrigin");
 	if (!fullscreen)
 		[super setFrameOrigin:point];
 }
 
 - (void)setFrameTopLeftPoint:(NSPoint)point
 {
-	NSLog(@"setFrameTopLeftPoint");
 	if (!fullscreen)
 		[super setFrameTopLeftPoint:point];
 }

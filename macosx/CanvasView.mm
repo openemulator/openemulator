@@ -187,7 +187,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	// (it is called from a background thread)
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
-	[(CanvasView *)displayLinkContext drawFrame];
+	[(CanvasView *)displayLinkContext drawView];
 	
 	[pool release];
 	
@@ -215,8 +215,8 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 		NSLog(@"Cannot create NSOpenGLPixelFormat");
 		return nil;
 	}
-	
 	[pixelFormat autorelease];
+	
 	if (self = [super initWithFrame:rect pixelFormat:pixelFormat])
 	{
 		memset(keyMap, sizeof(keyMap), 0);
@@ -251,10 +251,46 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	return YES;
 }
 
+- (void)windowDidBecomeKey:(NSNotification *)notification
+{
+	NSLog(@"windowDidBecomeKey");
+	
+	NSPoint mouseLocation = [self convertPoint:[[self window] convertScreenToBase:
+												[NSEvent mouseLocation]]
+									  fromView:nil];
+	if (NSMouseInRect(mouseLocation, [self bounds], [self isFlipped]))
+		[self mouseEntered:nil];
+	
+	NSTrackingAreaOptions options = (NSTrackingMouseEnteredAndExited |
+									 NSTrackingMouseMoved |
+									 NSTrackingActiveInKeyWindow);
+	
+	NSTrackingArea *area = [[NSTrackingArea alloc] initWithRect:[self bounds]
+														options:options
+														  owner:self
+													   userInfo:nil];
+	[self addTrackingArea:area];
+	[area release];
+}
+
+- (void)windowDidResignKey:(NSNotification *)notification
+{
+	NSLog(@"windowDidResignKey");
+	
+	NSPoint mouseLocation = [self convertPoint:[[self window] convertScreenToBase:
+												[NSEvent mouseLocation]]
+									  fromView:nil];
+	if (NSMouseInRect(mouseLocation, [self bounds], [self isFlipped]))
+		[self mouseExited:nil];
+	
+	for (NSTrackingArea *area in [self trackingAreas])
+		if ([area owner] == self)
+			[self removeTrackingArea:area];
+}
+
 - (void)awakeFromNib
 {
 	CanvasWindowController *canvasWindowController = [[self window] windowController];
-	
 	canvas = [canvasWindowController canvas];
 }
 
@@ -271,7 +307,8 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 - (void)prepareOpenGL
 {
 	GLint value = 1;
-	[[self openGLContext] setValues:&value forParameter:NSOpenGLCPSwapInterval]; 
+	[[self openGLContext] setValues:&value
+					   forParameter:NSOpenGLCPSwapInterval]; 
 	
 	CanvasWindowController *canvasWindowController;
 	canvasWindowController = [[self window] windowController];
@@ -290,20 +327,11 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	CVDisplayLinkSetCurrentCGDisplayFromOpenGLContext(displayLink,
 													  cglContext,
 													  cglPixelFormat);
+	
 	CVDisplayLinkStart(displayLink);
 }
 
 
-
-- (void)mouseEntered:(NSEvent *)theEvent
-{
-	// To-Do: capture mouse if mouse capture on
-}
-
-- (void)mouseExited:(NSEvent *)theEvent
-{
-	((OpenGLHAL *)canvas)->resetKeysAndButtons();
-}
 
 - (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender
 {
@@ -372,10 +400,11 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (void)drawRect:(NSRect)theRect
 {
-	[self drawFrame];
+	if (!CVDisplayLinkIsRunning(displayLink))
+		[self drawView];
 }
 
-- (void)drawFrame
+- (void)drawView
 {
 	[[self openGLContext] makeCurrentContext];
 	
@@ -460,8 +489,23 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	// Act accordingly with a left key message
 }
 
+- (void)mouseEntered:(NSEvent *)theEvent
+{
+	NSLog(@"mouseEntered");
+	// This should be locked
+	((OpenGLHAL *)canvas)->enterMouse();
+}
+
+- (void)mouseExited:(NSEvent *)theEvent
+{
+	NSLog(@"mouseExited");
+	// This should be locked
+	((OpenGLHAL *)canvas)->enterMouse();
+}
+
 - (void)mouseMoved:(NSEvent *)theEvent
 {
+	NSLog(@"mouseMoved");
 	NSPoint position = [NSEvent mouseLocation];
 	
 	((OpenGLHAL *)canvas)->setMousePosition(position.x, position.y);
@@ -601,6 +645,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 {
 	string clipboard = getCPPString(text);
 	
+	// This should be locked
 	((OpenGLHAL *)canvas)->paste(clipboard);
 }
 
@@ -614,6 +659,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 {
 	string clipboard;
 	
+	// This should be locked
 	if (((OpenGLHAL *)canvas)->copy(clipboard))
 	{
 		NSTextView *dummy = [[[NSTextView alloc] init] autorelease];

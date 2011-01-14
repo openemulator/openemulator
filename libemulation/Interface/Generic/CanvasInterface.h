@@ -42,9 +42,6 @@ typedef enum
 	CANVAS_JOYSTICK4_DID_CHANGE,
 } CanvasNotification;
 
-//
-// CANVAS_SET_CAPTUREMODE uses int
-//
 typedef enum
 {
 	CANVAS_CAPTUREMODE_NO_CAPTURE,
@@ -52,9 +49,6 @@ typedef enum
 	CANVAS_CAPTUREMODE_MOUSE_ENTERED,
 } CanvasCaptureMode;
 
-//
-// CANVAS_SET_CAPTUREMODE uses int
-//
 typedef enum
 {
 	CANVAS_CAPTURE_NONE,
@@ -62,18 +56,9 @@ typedef enum
 	CANVAS_CAPTURE_MOUSE,
 } CanvasCapture;
 
-//
-// SET_WINDOWFRAME and GET_WINDOWFRAME use an STL string in the format:
-// [originX] [originY] [width] [height] [visible]
-// The coordinate system's origin is lower left
-// [visible] is "0" or "1"
-//
-// SET_DEFAULTWINDOWSIZE uses an STL string in the format:
-// [width] [height]
-//
 typedef enum
 {
-	CANVAS_FRAME_FORMAT_COMPOSITE,
+	CANVAS_FRAME_FORMAT_MONOCHROME,
 	CANVAS_FRAME_FORMAT_RGB,
 } CanvasFrameFormat;
 
@@ -83,7 +68,6 @@ typedef struct
 	OESize frameSize;
 	void *frameData;
 	bool compositeColorBurst;
-	bool copmositeColorSubcarrier;
 	bool compositeInterlaced;
 	float videoHorizBegin;
 	float videoHorizEnd;
