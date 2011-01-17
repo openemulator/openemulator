@@ -2,7 +2,7 @@
 /**
  * OpenEmulator
  * Mac OS X Canvas Window Controller
- * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2009-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Controls a canvas window.
@@ -27,6 +27,7 @@
 
 - (void)dealloc
 {
+	NSLog(@"CanvasWindowController dealloc");
 	[title release];
 	
 	[super dealloc];
@@ -39,6 +40,8 @@
 
 - (void)windowDidLoad
 {
+	NSLog(@"windowDidLoad");
+	
 	NSToolbar *toolbar;
 	toolbar = [[NSToolbar alloc] initWithIdentifier:@"Canvas Toolbar"];
 	[toolbar setDelegate:self];
@@ -48,15 +51,26 @@
 	[toolbar release];
 	
 	NSRect windowFrame = [[self window] frame];
-	[[self window] setContentSize:[fCanvasView canvasSize]];
+	[[self window] setContentSize:[fCanvasView defaultSize]];
 	[[self window] setFrameTopLeftPoint:NSMakePoint(NSMinX(windowFrame),
 													NSMaxY(windowFrame))];
+}
+
+- (void)showWindow:(id)sender
+{
+	NSLog(@"showWindow");
+	
+	[super showWindow:sender];
+	
+	[fCanvasView startDisplayLink];
 }
 
 - (NSString *)windowTitleForDocumentDisplayName:(NSString *)displayName
 {
 	return [NSString stringWithFormat:@"%@ - %@", displayName, title];
 }
+
+
 
 - (NSToolbarItem *)toolbar:(NSToolbar *)toolbar
 	 itemForItemIdentifier:(NSString *)ident

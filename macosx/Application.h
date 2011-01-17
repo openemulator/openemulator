@@ -12,8 +12,10 @@
 
 @interface Application : NSApplication
 {
+	BOOL capture;
 }
 
+- (void)setCapture:(BOOL)value;
 - (void)sendEvent:(NSEvent *)theEvent;
 
 @end

@@ -11,23 +11,33 @@
 #import <Cocoa/Cocoa.h>
 #import <Quartz/Quartz.h>
 
+#import "Document.h"
+
 #define DEVICE_KEYMAP_SIZE		256
 #define DEVICE_MOUSE_BUTTONNUM	8
 
-@interface CanvasView : NSOpenGLView
+@interface CanvasView : NSOpenGLView <NSTextInputClient>
 {
-	NSOpenGLContext *openGLContext;
 	CVDisplayLinkRef displayLink;
 	
+	Document *document;
 	void *canvas;
 	
-	int keyMap[DEVICE_KEYMAP_SIZE];
-	int keyModifierFlags;
+	NSUInteger keyMap[DEVICE_KEYMAP_SIZE];
+	NSUInteger keyModifierFlags;
+	NSUInteger keyboardFlags;
+	BOOL capsLockNotSynchronized;
 }
 
-- (NSSize)canvasSize;
+- (void)startDisplayLink;
+- (void)stopDisplayLink;
+
+- (NSSize)defaultSize;
 
 - (void)drawView;
+
+- (void)setKeyboardFlags:(NSInteger)theKeyboardFlags;
+- (void)synchronizeKeyboardFlags;
 
 - (void)systemPowerDown:(id)sender;
 - (void)systemSleep:(id)sender;

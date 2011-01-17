@@ -12,12 +12,24 @@
 
 @implementation Application
 
+- (void)setCapture:(BOOL)value
+{
+	capture = value;
+}
+
 - (void)sendEvent:(NSEvent *)theEvent
 {
 	if (([theEvent type] == NSKeyDown) ||
 		([theEvent type] == NSKeyUp))
 	{
-		// If keyboard is captured, send message directly to active window
+		// If HELP key was pressed, or capture is active
+		// send event directly to key window
+		if (([theEvent keyCode] == 0x72) || capture)
+		{
+			[[NSApp keyWindow] sendEvent:theEvent];
+			
+			return;
+		}
 	}
 	
 	[super sendEvent:theEvent];	

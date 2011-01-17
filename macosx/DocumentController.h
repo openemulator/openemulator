@@ -29,7 +29,7 @@
 	
 	void *portAudioHAL;
 	
-	int disableMenuBarCount;
+	NSInteger disableMenuBarCount;
 }
 
 - (NSArray *)diskImagePathExtensions;

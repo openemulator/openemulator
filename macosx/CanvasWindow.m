@@ -27,6 +27,12 @@
 	return self;
 }
 
+- (void)dealloc
+{
+	NSLog(@"CanvasWindow dealloc");
+	[super dealloc];
+}
+
 - (BOOL)validateUserInterfaceItem:(id)anItem
 {
 	if ([anItem action] == @selector(toggleFullscreen:))
@@ -93,7 +99,7 @@
 
 - (void)setFrameSize:(double)proportion
 {
-	NSSize canvasSize = [fCanvasView canvasSize];
+	NSSize defaultSize = [fCanvasView defaultSize];
 	
 	NSRect frameRect = [self frame];
 	NSView *content = [self contentView];
@@ -110,8 +116,8 @@
 	
 	frameRect.origin.x = NSMidX(frameRect);
 	frameRect.origin.y = NSMaxY(frameRect);
-	frameRect.size.width = scale * proportion * canvasSize.width + deltaWidth;
-	frameRect.size.height = scale * proportion * canvasSize.height + deltaHeight;
+	frameRect.size.width = scale * proportion * defaultSize.width + deltaWidth;
+	frameRect.size.height = scale * proportion * defaultSize.height + deltaHeight;
 	frameRect.origin.x -= NSWidth(frameRect) / 2;
 	frameRect.origin.y -= NSHeight(frameRect);
 	

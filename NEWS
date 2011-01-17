@@ -1,117 +1,172 @@
 ==2011-01==
-* Implemented change of settings
-* Implemented storage scheme
-* Implemented storage open button
-* Implemented storage open action
-* Implemented storage unmount action
-* Implemented storage reveal in finder action
-* Implemented lazy initialization of TemplateChooserItem
-* Improved EmulationItem
-* Added format and capacity properties for storage components
-* Devised hardware library ground ideas
-* Fixed Show/Hide menu options
-* Implemented emulation disk mounting
-* Implemented device disk mounting
-* Implemented context menu options
-* Implemented emulationDidUpdate
-* Implemented emulation drag and drop
-* Implemented mount lock support
-* Implemented emulation did update selection
-* Improved document logic with mount, unmount, canMount, isImageSupported
-* Fixed full-screen problem when pressing CMD-W
-* Implemented addCanvas and removeCanvas
-* Implemented copy paste
-* Implemented canvas keyboard entry/mouse events
-* Implemented show device action in emulation menu
-* Implemented canvas drag and drop
-* Fixed document window controller problem
-* Implemented mouse and keyboard capture
-* Verified that mouse capture is correctly handled when mouse capture mode is changed
+* Implemented OpenGL thread synchronization
+* Implemented character palette
+* Implemented disabling Mac OS X global keys. When installing or running, this should be executed:
+sudo touch /private/var/db/.AccessibilityAPIEnabled
+* Implemented keyboard fix for mapping the HELP key as the INSERT key.
+* Implemented keyboard capture in CanvasView. The emulation syncs to the CAPS LOCK state of the host. This is done by sending fake CAPS LOCK messages. NUM LOCK and SCROLL LOCK are not addressed in the Cocoa port.
 * Implemented UI pointer proximity, mouseEntered, mouseExited
+* Fixed mouse capture so it is correctly handled when mouse capture mode is changed
+* Implemented mouse and keyboard capture
+* Fixed document window controller problem
+* Implemented canvas drag and drop
+* Implemented show device action in emulation menu
+* Implemented canvas keyboard entry/mouse events
+* Implemented copy/paste
+* Implemented addCanvas and removeCanvas
+* Fixed full-screen problem when pressing CMD-W
+* Improved document logic with mount, unmount, canMount, isImageSupported
+* Implemented emulation did update selection
+* Implemented mount lock support
+* Implemented emulation drag and drop
+* Implemented emulationDidUpdate
+* Implemented context menu options
+* Implemented device disk mounting
+* Implemented emulation disk mounting
+* Fixed Show/Hide menu options
+* Devised hardware library ground ideas
+* Added format and capacity properties for storage components
+* Improved EmulationItem
+* Implemented lazy initialization of TemplateChooserItem
+* Implemented storage reveal in finder action
+* Implemented storage unmount action
+* Implemented storage open action
+* Implemented storage open button
+* Implemented storage scheme
+* Implemented change of settings
 
 ==2010-12==
-* Implemented window autosave of emulation view
-* Found a way to integrate OEEmulation device info results with the EDL
-* Implemented OEEDL free ports and connector infos
-* Improved chooser view (template chooser) with lazy initialization
-* Implemented OEEmulation getDevicesInfo
-* Implemented main emulation window context menu
-* Added descriptions in ChooserViewController
-* Improved several issues with the ChooserViewController
-* Found a solution to the storage API problem. Mount state is indicated by a new mount state.
-* Solved the problem of attempting to add/remove devices that are not hot-pluggable and have power applied. Added a new power state for each device, that is notified through emulation. Added "hotpluggable" options for ports, as well as a "static" option for devices.
-* Implemented the emulation view
-* Implemented the action menu button
-* Implemented emulation view show and unmount roll-over button
-* Added mounted disk images as nodes in the outline view
 * Connected emulation view settings and contents
+* Added mounted disk images as nodes in the outline view
+* Implemented emulation view show and unmount roll-over button
+* Implemented the action menu button
+* Implemented the emulation view
+* Solved the problem of attempting to add/remove devices that are not hot-pluggable and have power applied. Added a new power state for each device, that is notified through emulation. Added "hotpluggable" options for ports, as well as a "static" option for devices.
+* Found a solution to the storage API problem. Mount state is indicated by a new mount state.
+* Improved several issues with the ChooserViewController
+* Added descriptions in ChooserViewController
+* Implemented main emulation window context menu
+* Implemented OEEmulation getDevicesInfo
+* Improved chooser view (template chooser) with lazy initialization
+* Implemented OEEDL free ports and connector infos
+* Found a way to integrate OEEmulation device info results with the EDL
+* Implemented window autosave of emulation view
 
 ==2010-11==
-* Fixed ${id} when saving emulation data
-* Audio Controls volume is now playback volume, not global output volume
-* Added AudioControls position control
-* Fixed AudioControls when position is at the end
-* Renamed DeviceChooser to HardwareChooser
-* Implemented visible persistency in Audio Controls and Inspector windows
-* Fixed Audio Controls. When pausing and moving position, the last buffer was played
 * Improved Audio Controls, uses log volume from 0 to -100 dB
+* Fixed Audio Controls. When pausing and moving position, the last buffer was played
+* Implemented visible persistency in Audio Controls and Inspector windows
+* Renamed DeviceChooser to HardwareChooser
+* Fixed AudioControls when position is at the end
+* Added AudioControls position control
+* Audio Controls volume is now playback volume, not global output volume
+* Fixed ${id} when saving emulation data
 
 ==2010-10==
-* Implemented full-screen (with new window views)
-* Implemented portaudio
-* Implemented OpenGL
-* Implemented preferences
-* Implemented auto-choose when no template is selected
-* Implemented template chooser
-* Implemented user space scale independence
-* Implemented document changed
-* Connected the inspector to document properties
-* Implemented video presets in inspector
-* Implemented inspector lists
-* Implemented mount/unmount disk images in inspector
-* Implemented power off/pause bezels
-* Improved fullscreen
-* Implemented dialog foro adding expansions, disk drives or ports
-* Implemented centered text cells in inspector
-* Implemented emulation and device reader in libemulator
-* Connected emulation lists to the template selector
-* Connected emulation lists to the hardware selector
-* Connected emulation lists to the inspector
-* Connected dml to properties
-* Implemented OEInfo
-* Implemented inspector
-* Implemented inspector settings
-* Implemented template chooser
-* Implemented default template chooser
-* Improved template chooser
-* Improved inspector
-* Fixed problem: use default template is selected, CMD-N opens the template browser. Auto-visibility was enabled
-* Center template chooser window when reopening. horiz: 1x 1x, vert: 1x 2x
-* Implemented template chooser update of user templates
-* Implemented device chooser available device list
-* Implement device chooser connections
-* Implemented addDevices. Iterate through inlets. If inlet found, recurse. If not found, recurse on last used inlet. If no inlet is used, return itself. Protect against circularity
-* Implemented isDeviceTerminal. Iterate through inlets. If inlet used, return false
-* Implemented removeDevices. Iterate through inlets. If inlet used, recurse. Disconnect outlets and Remove all components of device
-* Moved settings to device
-* Divided device chooser into expansions, storage and peripherals
-* When no devices are available for adding, show an alert telling so
-* Implemented inspector audio playback/recording (libsndfile for wav file access, secret rabbit code for samplerate conversion)
-* Implemented UI timer and update playback, recording and disk images
-* Implemented UI timer and update playback, recording and disk images
 * Implemented playback recording UI
+* Implemented UI timer and update playback, recording and disk images
+* Implemented UI timer and update playback, recording and disk images
+* Implemented inspector audio playback/recording (libsndfile for wav file access, secret rabbit code for samplerate conversion)
+* When no devices are available for adding, show an alert telling so
+* Divided device chooser into expansions, storage and peripherals
+* Moved settings to device
+* Implemented removeDevices. Iterate through inlets. If inlet used, recurse. Disconnect outlets and Remove all components of device
+* Implemented isDeviceTerminal. Iterate through inlets. If inlet used, return false
+* Implemented addDevices. Iterate through inlets. If inlet found, recurse. If not found, recurse on last used inlet. If no inlet is used, return itself. Protect against circularity
+* Implement device chooser connections
+* Implemented device chooser available device list
+* Implemented template chooser update of user templates
+* Center template chooser window when reopening. horiz: 1x 1x, vert: 1x 2x
+* Fixed problem: use default template is selected, CMD-N opens the template browser. Auto-visibility was enabled
+* Improved inspector
 
-==2008-11==
+==2010-08==
+* Implemented KIM-1 foundations
+* Updated framework
+
+==2010-07==
+* Updated HID
+* Updated OpenGL
+* Fixed Mac key codes
+
+==2010-06==
+* Added copy/paste infrastructure
+* Fixed inspector
+* Improved menu
+* Updated framework
+
+==2010-05==
+* Renamed libntsc to libcomposite
+* Implemented HostVideo
+* Updated OEPA
+
+==2010-04==
+* Updated libntsc
+* Updated OEPA
+
+==2010-03==
+* Implemented more components
+* Implemented libntsc
+
+==2010-02== 
+* Implemented PIA components
+* Tested GLUT user interface
+* Updated framework
+
+==2010-01==
+* Updated framework
+
+==2009-11==
+* Implemented device chooser
+* Updated inspector
+
+==2009-10==
+* Improved template chooser
+* Implemented default template chooser
+* Implemented template chooser
+* Implemented inspector settings
+* Implemented inspector
+
+==2009-09==
+* Implemented OEInfo
+* Connected dml to properties
+* Connected emulation lists to the inspector
+* Connected emulation lists to the hardware selector
+* Connected emulation lists to the template selector
+* Implemented emulation and device reader in libemulator
+* Implemented centered text cells in inspector
+* Implemented dialog for adding expansions, disk drives or ports
+* Improved fullscreen
+* Implemented power off/pause bezels
+* Implemented mount/unmount disk images in inspector
+* Implemented inspector lists
+* Implemented video presets in inspector
+* Connected the inspector to document properties
+* Implemented document changed
+
+==2009-07==
+* Implemented user space scale independence
+* Implemented template chooser
+* Implemented auto-choose when no template is selected
+* Implemented preferences
+
+==2009-06==
+* Implemented OpenGL
+* Implemented portaudio
+* Implemented full-screen (with new window views)
+
+==2009-01==
+* Renamed AppleIIGo to OpenEmulator
 * Redesigned the AppleIIGo framework with components
 
-==2008-09==
+==2008-09 AppleIIGo==
 * Implemented IIc plus MIG emulation (ROMBANK2 @ $CC00-CFFF)
 * Fixed 3.5" disk Image Icon (the notch goes on the left)
 * Implemented IIc plus Disk 3.5" SEL line
 * Fixed 3.5" disk number of bits of each track
 * Implemented Apple II memory expansion
 
-==2008-08==
+==2008-08 AppleIIGo==
 * Implemented Apple 3.5 Disk Drive
 * Implemented IWM
 * Rewrote disk drive classes
@@ -138,7 +193,7 @@
 * Add disk drive head stepper motor inertial simulation (for Locksmith quarter tracks 0.25 and 0.75)
 * Redesigned disk image icons
 
-==2008-07==
+==2008-07 AppleIIGo==
 * Fixed Apple IIe internal ROM switch
 * Fixed shadow switched (PAGE2 and 80STORE)
 * Fixed LORES80 aux colors
@@ -175,7 +230,7 @@
 * Implemented GCR53 reader
 * Implemented F7 shortcut to NMI
 
-==2008-05==
+==2008-05 AppleIIGo==
 * Added pause function
 * Implemented video mode updates within scanlines
 * Implemented DHires monochrome mode
@@ -194,7 +249,7 @@
 * Implemented support for Apple II j-plus
 * Implemented language lard and internal language card
 
-==2008-04-30==
+==2008-04 AppleIIGo==
 * Disabled DHIRES on the original IIe
 * Implemented SDL mouse capture
 * Improved SDL keyboard and mouse event handling
@@ -222,7 +277,7 @@
 * Disabled AN3 graphics mode selection in non-enhanced IIe
 * Implemented SDL fullscreen update
 
-==2008-03==
+==2008-03 AppleIIGo==
 * Implemented video class that controls video timing, interrupts, blanking, registers and video scanner
 * Implemented floating bus
 * Improved interrupt handling with an Interrupt class
@@ -237,7 +292,7 @@
 * Implemented paddle buttons as counters, so multiple devices can push them
 * Emulated Option key with left Alt, Command key with left and right Meta and right Alt
 
-==2008-02==
+==2008-02 AppleIIGo==
 * Improved paddles' screen area
 * Fixed ALT key paddle button mapping
 * Fixed key repeat
@@ -259,7 +314,7 @@
 * Fixed Disk II sporadic bits. Maniac Mansion, Ultima V work now
 * Implemented accurate II+, IIe, IIc memory initialization
 
-==2008-01==
+==2008-01 AppleIIGo==
 * Optimized audio computations
 * Added charset loader function
 * Emulated Open and Closed Apple keys with ALT
@@ -269,7 +324,7 @@
 * Implemented accurate RamWorks basic and RamWorks III emulation
 * Implemented Saturn 128k emulation
 
-==2007-12==
+==2007-12 AppleIIGo==
 * Rewrote the Disk II logic state sequencer
 * Added emulation of Disk II spontaneous 1 bits after long runs of 0 bits
 * Implemented DSK disk image reader

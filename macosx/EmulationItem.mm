@@ -88,7 +88,7 @@
 		settingsTypes = [[NSMutableArray alloc] init];
 		settingsOptions = [[NSMutableArray alloc] init];
 		EmulationSettings &settings = deviceInfo->settings;
-		for (int i = 0; i < settings.size(); i++)
+		for (NSInteger i = 0; i < settings.size(); i++)
 		{
 			EmulationSetting &setting = settings.at(i);
 			[settingsRefs addObject:getNSString(setting.ref)];
@@ -104,7 +104,7 @@
 		state = [getNSString(deviceInfo->state) retain];
 		canvases = [[NSMutableArray alloc] init];
 		OEComponents &theCanvases = deviceInfo->canvases;
-		for (int i = 0; i < theCanvases.size(); i++)
+		for (NSInteger i = 0; i < theCanvases.size(); i++)
 			[canvases addObject:[NSValue valueWithPointer:theCanvases.at(i)]];
 		
 		storage = deviceInfo->storage;
@@ -245,7 +245,7 @@
 
 - (void)showCanvases
 {
-	for (int i = 0; i < [canvases count]; i++)
+	for (NSInteger i = 0; i < [canvases count]; i++)
 		[document showCanvas:[[canvases objectAtIndex:i] pointerValue]];
 }
 

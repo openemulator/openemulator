@@ -53,12 +53,12 @@ OEComponent *createCanvas(void *userData, string title)
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
 	OpenGLHAL *canvas = new OpenGLHAL();
+	
+	Document *document = (Document *)userData;
 	NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
 						  [NSValue valueWithPointer:canvas], @"canvas",
 						  getNSString(title), @"title",
 						  nil];
-	
-	Document *document = (Document *)userData;
 	[document performSelectorOnMainThread:@selector(createCanvas:)
 							   withObject:dict
 							waitUntilDone:YES];
@@ -91,8 +91,8 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 						error:outError])
 			return self;
 		
-		[canvases release];
 		[canvasWindowControllers release];
+		[canvases release];
 	}
 	
 	*outError = [NSError errorWithDomain:NSCocoaErrorDomain
@@ -103,13 +103,13 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 
 - (void)dealloc
 {
-	NSLog(@"Deleted document");
+	[emulationWindowController release];
+	[canvasWindowControllers release];
+	[canvases release];
+	
 	[self deleteEmulation];
 	
-	[emulationWindowController release];
-	
-	[canvases release];
-	[canvasWindowControllers release];
+	NSLog(@"Document dealloc");
 	
 	[super dealloc];
 }
@@ -263,6 +263,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 
 - (void)makeWindowControllers
 {
+	NSLog(@"makeWindowControllers");
 	emulationWindowController = [[EmulationWindowController alloc] init];
 	
 	if ([canvasWindowControllers count])
@@ -310,6 +311,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 
 - (void)createCanvas:(NSDictionary *)dict
 {
+	NSLog(@"createCanvas");
 	OpenGLHAL *canvas = (OpenGLHAL *)[[dict objectForKey:@"canvas"] pointerValue];
 	NSString *title = [dict objectForKey:@"title"];
 	
@@ -325,6 +327,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 
 - (void)destroyCanvas:(NSValue *)canvas
 {
+	NSLog(@"destroyCanvas");
 	NSInteger index = [canvases indexOfObject:[NSValue valueWithPointer:canvas]];
 	
 	[self removeWindowController:[canvasWindowControllers objectAtIndex:index]];
@@ -335,6 +338,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 
 - (void)showCanvas:(void *)canvas
 {
+	NSLog(@"showCanvas");
 	NSInteger index = [canvases indexOfObject:[NSValue valueWithPointer:canvas]];
 	CanvasWindowController *canvasWindowController;
 	canvasWindowController = [canvasWindowControllers objectAtIndex:index];
@@ -421,7 +425,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 {
 	Emulation *theEmulation = (Emulation *)emulation;
 	EmulationInfo *theEmulationInfo = theEmulation->getEmulationInfo();
-	for (int i = 0; i < theEmulationInfo->size(); i++)
+	for (NSInteger i = 0; i < theEmulationInfo->size(); i++)
 	{
 		EmulationDeviceInfo &deviceInfo = theEmulationInfo->at(i);
 		if (deviceInfo.storage)
@@ -456,7 +460,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 {
 	Emulation *theEmulation = (Emulation *)emulation;
 	EmulationInfo *theEmulationInfo = theEmulation->getEmulationInfo();
-	for (int i = 0; i < theEmulationInfo->size(); i++)
+	for (NSInteger i = 0; i < theEmulationInfo->size(); i++)
 	{
 		EmulationDeviceInfo &deviceInfo = theEmulationInfo->at(i);
 		if (deviceInfo.storage)

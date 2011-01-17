@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		00002C2E12C922D900508957 /* ActionMenuButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 00002C2D12C922D900508957 /* ActionMenuButton.m */; };
 		00039CF812B01D540025D374 /* EmulationUnmountPressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 00039CEB12B01D530025D374 /* EmulationUnmountPressed.png */; };
 		00039CFF12B01D540025D374 /* EmulationShowPressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 00039CF212B01D530025D374 /* EmulationShowPressed.png */; };
 		00039D2612B01EB40025D374 /* EmulationUnmountSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = 00039D2412B01EB40025D374 /* EmulationUnmountSelected.png */; };
@@ -101,6 +100,7 @@
 		00ED37C212779DD900BEF6BD /* IconWarmRestart.png in Resources */ = {isa = PBXBuildFile; fileRef = 00ED37B112779DD800BEF6BD /* IconWarmRestart.png */; };
 		00F01B4712A0D6EC000527CA /* EmulationUnmount.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F01B4612A0D6EC000527CA /* EmulationUnmount.png */; };
 		00F21CE712C7C7EE00A809EF /* VerticallyCenteredTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00F21CE612C7C7EE00A809EF /* VerticallyCenteredTextFieldCell.m */; };
+		00F4D0BF12E2E42F00B7F5E6 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00F4D0BE12E2E42F00B7F5E6 /* ApplicationServices.framework */; };
 		00FC27D312D1070A0065E986 /* Apple1CassetteInterfaceCard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881312A393990052B7A4 /* Apple1CassetteInterfaceCard.cpp */; };
 		00FC27D512D1070A0065E986 /* Apple1IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881512A393990052B7A4 /* Apple1IO.cpp */; };
 		00FC27D712D1070A0065E986 /* Apple1Terminal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881712A393990052B7A4 /* Apple1Terminal.cpp */; };
@@ -181,8 +181,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		00002C2C12C922D900508957 /* ActionMenuButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActionMenuButton.h; sourceTree = "<group>"; };
-		00002C2D12C922D900508957 /* ActionMenuButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActionMenuButton.m; sourceTree = "<group>"; };
 		00039CEB12B01D530025D374 /* EmulationUnmountPressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = EmulationUnmountPressed.png; path = macosx/Images/EmulationUnmountPressed.png; sourceTree = "<group>"; };
 		00039CF212B01D530025D374 /* EmulationShowPressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = EmulationShowPressed.png; path = macosx/Images/EmulationShowPressed.png; sourceTree = "<group>"; };
 		00039D2412B01EB40025D374 /* EmulationUnmountSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = EmulationUnmountSelected.png; path = macosx/Images/EmulationUnmountSelected.png; sourceTree = "<group>"; };
@@ -375,6 +373,7 @@
 		00F01B4612A0D6EC000527CA /* EmulationUnmount.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = EmulationUnmount.png; path = macosx/Images/EmulationUnmount.png; sourceTree = "<group>"; };
 		00F21CE512C7C7EE00A809EF /* VerticallyCenteredTextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VerticallyCenteredTextFieldCell.h; sourceTree = "<group>"; };
 		00F21CE612C7C7EE00A809EF /* VerticallyCenteredTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VerticallyCenteredTextFieldCell.m; sourceTree = "<group>"; };
+		00F4D0BE12E2E42F00B7F5E6 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
 		00FC27A212D106B00065E986 /* AudioInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioInterface.h; sourceTree = "<group>"; };
 		00FC27A312D106B00065E986 /* CanvasInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanvasInterface.h; sourceTree = "<group>"; };
 		00FC27A412D106B00065E986 /* EthernetInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EthernetInterface.h; sourceTree = "<group>"; };
@@ -432,6 +431,7 @@
 				00039FCD12B04F540025D374 /* libsndfile.a in Frameworks */,
 				00039FD112B04F6C0025D374 /* libxml2.dylib in Frameworks */,
 				00039FD512B04F810025D374 /* libsamplerate.a in Frameworks */,
+				00F4D0BF12E2E42F00B7F5E6 /* ApplicationServices.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -774,8 +774,6 @@
 				0040284112B44878001C2F73 /* BackgroundView.m */,
 				00BB34B212C5C5AE007332B5 /* EmulationItem.h */,
 				00BB34B312C5C5AE007332B5 /* EmulationItem.mm */,
-				00002C2C12C922D900508957 /* ActionMenuButton.h */,
-				00002C2D12C922D900508957 /* ActionMenuButton.m */,
 				00FE381912CA6790002B47B1 /* EmulationOutlineView.h */,
 				00FE381A12CA6790002B47B1 /* EmulationOutlineView.m */,
 				00391CB112D3A320002C5ABD /* LibraryWindowController.h */,
@@ -848,6 +846,7 @@
 				0054E4A61131BE8A006D32D9 /* OpenGL.framework */,
 				0054E66B1131BF58006D32D9 /* Quartz.framework */,
 				001F56F80FD1E8E500EA246A /* Sparkle.framework */,
+				00F4D0BE12E2E42F00B7F5E6 /* ApplicationServices.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1113,7 +1112,6 @@
 				00A72B7312879F800083C6A7 /* CanvasWindow.m in Sources */,
 				00BB34B412C5C5AE007332B5 /* EmulationItem.mm in Sources */,
 				00F21CE712C7C7EE00A809EF /* VerticallyCenteredTextFieldCell.m in Sources */,
-				00002C2E12C922D900508957 /* ActionMenuButton.m in Sources */,
 				00FE381B12CA6790002B47B1 /* EmulationOutlineView.m in Sources */,
 				00391CB312D3A320002C5ABD /* LibraryWindowController.m in Sources */,
 				0039211812D43448002C5ABD /* BackgroundView.m in Sources */,
@@ -1400,6 +1398,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/macosx\"",
 					"\"$(SYSTEM_LIBRARY_DIR)/Frameworks/Quartz.framework/Frameworks\"",
+					"\"$(SDKROOT)$(SYSTEM_LIBRARY_DIR)/Frameworks/ApplicationServices.framework/Frameworks\"",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
@@ -1438,6 +1437,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/macosx\"",
 					"\"$(SYSTEM_LIBRARY_DIR)/Frameworks/Quartz.framework/Frameworks\"",
+					"\"$(SDKROOT)$(SYSTEM_LIBRARY_DIR)/Frameworks/ApplicationServices.framework/Frameworks\"",
 				);
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;

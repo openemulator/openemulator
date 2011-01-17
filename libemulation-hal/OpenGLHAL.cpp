@@ -15,19 +15,32 @@
 
 OpenGLHAL::OpenGLHAL()
 {
-	size.width = DEFAULT_WIDTH;
-	size.height = DEFAULT_HEIGHT;
 	setCapture = NULL;
 	setKeyboardFlags = NULL;
 	
 	captureMode = CANVAS_CAPTUREMODE_NO_CAPTURE;
-	isMouseCaptured = false;
+	capture = CANVAS_CAPTURE_NONE;
 	
-	//	pthread_mutex_init(&glMutex, NULL);
-	memset(keyDown, sizeof(keyDown), 0);
+	for (int i = 0; i < CANVAS_KEYBOARD_KEY_NUM; i++)
+		keyDown[i] = false;
 	keyDownCount = 0;
-	memset(mouseButtonDown, sizeof(mouseButtonDown), 0);
-	memset(joystickButtonDown, sizeof(joystickButtonDown), 0);
+	ctrlAltWasPressed = false;
+	mouseEntered = false;
+	for (int i = 0; i < CANVAS_MOUSE_BUTTON_NUM; i++)
+		mouseButtonDown[i] = false;
+	for (int i = 0; i < CANVAS_JOYSTICK_NUM; i++)
+		for (int j = 0; j < CANVAS_JOYSTICK_BUTTON_NUM; j++)
+			joystickButtonDown[i][j] = false;
+	
+	defaultSize.width = DEFAULT_WIDTH;
+	defaultSize.height = DEFAULT_HEIGHT;
+	
+	{
+		int j = 0;
+		for (int i = 0; i < 255; i++)
+			j += keyDown[i];
+		log("OpenGLHAL " + getString(j));
+	}	
 }
 
 void OpenGLHAL::open(CanvasSetCapture setCapture,
@@ -51,17 +64,34 @@ void OpenGLHAL::open(CanvasSetCapture setCapture,
 	
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	
-	glGenTextures(OEGL_TEX_NUM, textures);
+//	glGenTextures(OEGL_TEX_NUM, textures);
 }
 
 void OpenGLHAL::close()
 {
-	glDeleteTextures(OEGL_TEX_NUM, textures);
+//	glDeleteTextures(OEGL_TEX_NUM, textures);
 }
 
-OESize OpenGLHAL::getSize()
+void OpenGLHAL::updateCapture(CanvasCapture capture)
 {
-	return size;
+	log("updateCapture");
+	if (this->capture == capture)
+		return;
+	this->capture = capture;
+	
+	if (setCapture)
+		setCapture(userData, capture);
+}
+
+void OpenGLHAL::postHIDNotification(int notification, int usageId, float value)
+{
+	CanvasHIDNotification data = {usageId, value};
+	notify(this, notification, &data);
+}
+
+OESize OpenGLHAL::getDefaultSize()
+{
+	return defaultSize;
 }
 
 void OpenGLHAL::draw(int width, int height)
@@ -69,27 +99,17 @@ void OpenGLHAL::draw(int width, int height)
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void OpenGLHAL::postHIDNotification(int notification, int usageId, float value)
+void OpenGLHAL::becomeKeyWindow()
 {
-	CanvasHIDNotification data;
-	
-	data.usageId = usageId;
-	data.value = value;
-	
-	notify(this, notification, &data);
 }
 
-void OpenGLHAL::captureMouse()
+void OpenGLHAL::resignKeyWindow()
 {
-	isMouseCaptured = true;
-	isMouseCaptureRelease = false;
-	setCapture(userData, CANVAS_CAPTURE_KEYBOARD_AND_MOUSE);
-}
-
-void OpenGLHAL::releaseCapture()
-{
-	isMouseCaptured = false;
-	setCapture(userData, CANVAS_CAPTURE_NONE);
+	releaseKeysAndButtons();
+	
+	ctrlAltWasPressed = false;
+	
+	updateCapture(CANVAS_CAPTURE_NONE);
 }
 
 void OpenGLHAL::sendSystemEvent(int usageId)
@@ -103,104 +123,107 @@ void OpenGLHAL::setKey(int usageId, bool value)
 		return;
 	keyDown[usageId] = value;
 	keyDownCount += value ? 1 : -1;
-	
-	postHIDNotification(CANVAS_KEYBOARD_DID_CHANGE, usageId, value);
-	
 	if ((keyDown[CANVAS_K_LEFTCONTROL] ||
 		 keyDown[CANVAS_K_RIGHTCONTROL]) &&
 		(keyDown[CANVAS_K_LEFTALT] ||
 		 keyDown[CANVAS_K_RIGHTALT]))
-		isMouseCaptureRelease = true;
+		ctrlAltWasPressed = true;
 	
-	if (isMouseCaptureRelease && !keyDownCount)
-		releaseCapture();
+	postHIDNotification(CANVAS_KEYBOARD_DID_CHANGE, usageId, value);
+	
+	if ((capture == CANVAS_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR) &&
+		!keyDownCount && ctrlAltWasPressed)
+	{
+		ctrlAltWasPressed = false;
+		
+		updateCapture(CANVAS_CAPTURE_NONE);
+	}
+	
+	log("key " + getHexString(usageId) + ": " + getString(value));
+	log("keyDownCount " + getString(keyDownCount));
 }
 
 void OpenGLHAL::sendUnicodeKeyEvent(int unicode)
 {
-	// Discard private usage areas
-	if (((unicode < 0xe000) || (unicode > 0xf8ff)) &&
-		((unicode < 0xf0000) || (unicode > 0xffffd)) &&
-		((unicode < 0x100000) || (unicode > 0x10fffd)))
-		return;
-	
-	if (unicode == 127)
-		unicode = 8;
-	
 	postHIDNotification(CANVAS_UNICODEKEYBOARD_DID_CHANGE, unicode, 0);
+	log("unicode " + getHexString(unicode));
+}
+
+void OpenGLHAL::enterMouse()
+{
+	mouseEntered = true;
+	
+	if (captureMode == CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_ENTER)
+		updateCapture(CANVAS_CAPTURE_KEYBOARD_AND_HIDE_MOUSE_CURSOR);
+	
+	postHIDNotification(CANVAS_POINTER_DID_CHANGE,
+						CANVAS_P_PROXIMITY,
+						1.0);
+}
+
+void OpenGLHAL::exitMouse()
+{
+	mouseEntered = false;
+	
+	if (captureMode == CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_ENTER)
+		updateCapture(CANVAS_CAPTURE_NONE);
+	
+	postHIDNotification(CANVAS_POINTER_DID_CHANGE,
+						CANVAS_P_PROXIMITY,
+						0.0);
+}
+
+void OpenGLHAL::setMousePosition(float x, float y)
+{
+	if (capture != CANVAS_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR)
+	{
+		postHIDNotification(CANVAS_POINTER_DID_CHANGE,
+							CANVAS_P_X,
+							x);
+		postHIDNotification(CANVAS_POINTER_DID_CHANGE,
+							CANVAS_P_Y,
+							y);
+	}
+}
+
+void OpenGLHAL::moveMouse(float rx, float ry)
+{
+	if (capture == CANVAS_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR)
+	{
+		postHIDNotification(CANVAS_MOUSE_DID_CHANGE,
+							CANVAS_M_RELX,
+							rx);
+		postHIDNotification(CANVAS_MOUSE_DID_CHANGE,
+							CANVAS_M_RELY,
+							ry);
+	}
 }
 
 void OpenGLHAL::setMouseButton(int index, bool value)
 {
 	if (index >= CANVAS_MOUSE_BUTTON_NUM)
 		return;
-	
 	if (mouseButtonDown[index] == value)
 		return;
-	
 	mouseButtonDown[index] = value;
 	
-	if (isMouseCaptured)
+	if (capture == CANVAS_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR)
 		postHIDNotification(CANVAS_MOUSE_DID_CHANGE,
 							CANVAS_M_BUTTON1 + index,
 							value);
-	else if ((captureMode == CANVAS_CAPTUREMODE_MOUSE_CLICK) &&
-			 !isMouseCaptured && (index == 0))
-		captureMouse();
+	else if ((captureMode == CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_CLICK) &&
+			 (capture == CANVAS_CAPTURE_NONE) &&
+			 (index == 0))
+		updateCapture(CANVAS_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR);
 	else
 		postHIDNotification(CANVAS_POINTER_DID_CHANGE,
 							CANVAS_P_BUTTON1 + index,
 							value);
 }
 
-void OpenGLHAL::setMousePosition(float x, float y)
-{
-	if (isMouseCaptured)
-		return;
-	
-	postHIDNotification(CANVAS_POINTER_DID_CHANGE,
-						CANVAS_P_X,
-						x);
-	postHIDNotification(CANVAS_POINTER_DID_CHANGE,
-						CANVAS_P_Y,
-						y);
-}
-
-void OpenGLHAL::enterMouse()
-{
-	if (captureMode == CANVAS_CAPTUREMODE_MOUSE_ENTERED)
-		setCapture(userData, CANVAS_CAPTURE_KEYBOARD_AND_MOUSE);
-}
-
-void OpenGLHAL::exitMouse()
-{
-	if (captureMode == CANVAS_CAPTUREMODE_MOUSE_ENTERED)
-	{
-		setCapture(userData, CANVAS_CAPTURE_NONE);
-		
-		resetKeysAndButtons();
-	}
-}
-
-void OpenGLHAL::moveMouse(float rx, float ry)
-{
-	if (!isMouseCaptured)
-		return;
-	
-	postHIDNotification(CANVAS_MOUSE_DID_CHANGE,
-						CANVAS_M_RELX,
-						rx);
-	postHIDNotification(CANVAS_MOUSE_DID_CHANGE,
-						CANVAS_M_RELY,
-						ry);
-}
-
 void OpenGLHAL::sendMouseWheelEvent(int index, float value)
 {
-	if (!value)
-		return;
-	
-	if (isMouseCaptured)
+	if (capture == CANVAS_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR)
 		postHIDNotification(CANVAS_MOUSE_DID_CHANGE,
 							CANVAS_M_WHEELX + index,
 							value);
@@ -214,13 +237,10 @@ void OpenGLHAL::setJoystickButton(int deviceIndex, int index, bool value)
 {
 	if (deviceIndex >= CANVAS_JOYSTICK_NUM)
 		return;
-	
 	if (index >= CANVAS_JOYSTICK_BUTTON_NUM)
 		return;
-	
 	if (joystickButtonDown[deviceIndex][index] == value)
 		return;
-	
 	joystickButtonDown[deviceIndex][index] = value;
 	
 	postHIDNotification(CANVAS_JOYSTICK1_DID_CHANGE + deviceIndex,
@@ -232,7 +252,6 @@ void OpenGLHAL::setJoystickPosition(int deviceIndex, int index, float value)
 {
 	if (deviceIndex >= CANVAS_JOYSTICK_NUM)
 		return;
-	
 	if (index >= CANVAS_JOYSTICK_AXIS_NUM)
 		return;
 	
@@ -245,7 +264,6 @@ void OpenGLHAL::sendJoystickHatEvent(int deviceIndex, int index, float value)
 {
 	if (deviceIndex >= CANVAS_JOYSTICK_NUM)
 		return;
-	
 	if (index >= CANVAS_JOYSTICK_HAT_NUM)
 		return;
 	
@@ -258,7 +276,6 @@ void OpenGLHAL::moveJoystickBall(int deviceIndex, int index, float value)
 {
 	if (deviceIndex >= CANVAS_JOYSTICK_NUM)
 		return;
-	
 	if (index >= CANVAS_JOYSTICK_RAXIS_NUM)
 		return;
 	
@@ -267,13 +284,17 @@ void OpenGLHAL::moveJoystickBall(int deviceIndex, int index, float value)
 						value);
 }
 
-void OpenGLHAL::resetKeysAndButtons()
+void OpenGLHAL::releaseKeysAndButtons()
 {
-	for (int i = 0; i < sizeof(keyDown); i++)
+	for (int i = 0; i < CANVAS_KEYBOARD_KEY_NUM; i++)
 		setKey(i, false);
 	
-	for (int i = 0; i < sizeof(mouseButtonDown); i++)
+	for (int i = 0; i < CANVAS_MOUSE_BUTTON_NUM; i++)
 		setMouseButton(i, false);
+	
+	for (int i = 0; i < CANVAS_JOYSTICK_NUM; i++)
+		for (int j = 0; j < CANVAS_JOYSTICK_BUTTON_NUM; j++)
+			setJoystickButton(i, j, false);
 }
 
 bool OpenGLHAL::copy(string &value)
@@ -288,8 +309,13 @@ bool OpenGLHAL::paste(string value)
 
 bool OpenGLHAL::getFrame(CanvasFrame *frame)
 {
-	size = frame->screenSize;
+	defaultSize = frame->screenSize;
 	
+	return true;
+}
+
+bool OpenGLHAL::returnFrame(CanvasFrame *frame)
+{
 	return true;
 }
 
@@ -300,12 +326,19 @@ bool OpenGLHAL::postMessage(OEComponent *sender, int message, void *data)
 		case CANVAS_SET_CAPTUREMODE:
 			if (data)
 			{
-				if (captureMode != CANVAS_CAPTUREMODE_NO_CAPTURE)
-					releaseCapture();
-				
-				captureMode = *((CanvasCaptureMode *)data);
-				
-				return true;
+				CanvasCaptureMode newCaptureMode = *((CanvasCaptureMode *)data);
+				if (newCaptureMode == captureMode)
+					return true;
+				captureMode = newCaptureMode;
+					
+				if (captureMode == CANVAS_CAPTUREMODE_NO_CAPTURE)
+					updateCapture(CANVAS_CAPTURE_NONE);
+				else if (captureMode == CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_CLICK)
+					updateCapture(CANVAS_CAPTURE_NONE);
+				else if (captureMode == CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_ENTER)
+					updateCapture(mouseEntered ? 
+								  CANVAS_CAPTURE_KEYBOARD_AND_HIDE_MOUSE_CURSOR : 
+								  CANVAS_CAPTURE_NONE);
 			}
 			break;
 			
@@ -313,7 +346,7 @@ bool OpenGLHAL::postMessage(OEComponent *sender, int message, void *data)
 			return getFrame((CanvasFrame *)data);
 			
 		case CANVAS_RETURN_FRAME:
-			break;
+			return returnFrame((CanvasFrame *)data);
 			
 		case CANVAS_LOCK_OPENGL:
 			break;
@@ -324,6 +357,8 @@ bool OpenGLHAL::postMessage(OEComponent *sender, int message, void *data)
 	
 	return OEComponent::postMessage(sender, message, data);
 }
+
+
 
 /*
  

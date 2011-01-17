@@ -8,27 +8,29 @@
  * Controls a canvas view.
  */
 
+#import "Carbon/Carbon.h"
+
 #import "CanvasView.h"
 #import "CanvasWindowController.h"
+#import "Application.h"
 #import "DocumentController.h"
-#import "Document.h"
 #import "StringConversion.h"
 
 #import "OpenGLHAL.h"
 
-#define NSLeftControlKeyMask	(1 << 0)
-#define NSLeftShiftKeyMask		(1 << 1)
-#define NSRightShiftKeyMask		(1 << 2)
-#define NSLeftAlternateKeyMask	(1 << 3)
-#define NSRightCommandKeyMask	(1 << 4)
-#define NSLeftCommandKeyMask	(1 << 5)
-#define NSRightAlternateKeyMask	(1 << 6)
-#define NSRightControlKeyMask	(1 << 13)
+#define NSLeftControlKeyMask	0x00000001
+#define NSLeftShiftKeyMask		0x00000002
+#define NSLeftAlternateKeyMask	0x00000020
+#define NSLeftCommandKeyMask	0x00000008
+#define NSRightControlKeyMask	0x00002000
+#define NSRightShiftKeyMask		0x00000004
+#define NSRightAlternateKeyMask	0x00000040
+#define NSRightCommandKeyMask	0x00000010
 
 typedef struct
 {
-	int keyCode;
-	int usageId;
+	NSInteger keyCode;
+	NSInteger usageId;
 } CanvasKeyMapEntry;
 
 // From:
@@ -153,27 +155,33 @@ CanvasKeyMapEntry canvasKeyMap[] =
 
 static void setCapture(void *userData, CanvasCapture capture)
 {
-	switch (capture)
-	{
-		case CANVAS_CAPTURE_NONE:
-			CGDisplayShowCursor(kCGDirectMainDisplay);
-			CGAssociateMouseAndMouseCursorPosition(YES);
-			break;
-			
-		case CANVAS_CAPTURE_KEYBOARD_AND_MOUSE:
-			CGDisplayHideCursor(kCGDirectMainDisplay);
-			CGAssociateMouseAndMouseCursorPosition(NO);
-			break;
-			
-		case CANVAS_CAPTURE_MOUSE:
-			CGDisplayHideCursor(kCGDirectMainDisplay);
-			CGAssociateMouseAndMouseCursorPosition(YES);
-			break;
-	}
+	BOOL isCapture = (capture != CANVAS_CAPTURE_NONE);
+	BOOL enableMouseCursor = (capture !=
+							  CANVAS_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR);
+	
+	[(Application *)NSApp setCapture:isCapture];
+	
+	if (isCapture)
+		CGDisplayHideCursor(kCGDirectMainDisplay);
+	else
+		CGDisplayShowCursor(kCGDirectMainDisplay);
+	
+	PushSymbolicHotKeyMode(isCapture ?
+						   kHIHotKeyModeAllDisabled : 
+						   kHIHotKeyModeAllEnabled);
+	
+	CGAssociateMouseAndMouseCursorPosition(enableMouseCursor);
 }
 
-static void setKeyboardFlags(void *userData, int flags)
+static void setKeyboardFlags(void *userData, NSInteger flags)
 {
+	// There is no autorelease pool when this method is called
+	// (it is called from a background thread)
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	
+	[(CanvasView *)userData setKeyboardFlags:flags];
+	
+	[pool release];
 }
 
 static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
@@ -220,13 +228,11 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	if (self = [super initWithFrame:rect pixelFormat:pixelFormat])
 	{
 		memset(keyMap, sizeof(keyMap), 0);
-		for (int i = 0;
+		for (NSInteger i = 0;
 			 i < sizeof(canvasKeyMap) / sizeof(CanvasKeyMapEntry);
 			 i++)
 			keyMap[canvasKeyMap[i].keyCode] = canvasKeyMap[i].usageId;
 		
-		keyModifierFlags = 0;
-
 		[self registerForDraggedTypes:[NSArray arrayWithObjects:
 									   NSStringPboardType,
 									   NSFilenamesPboardType, 
@@ -236,14 +242,13 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	return self;
 }
 
-- (void)dealloc
+- (void)awakeFromNib
 {
-	CVDisplayLinkRelease(displayLink);
+	NSLog(@"awakeFromNib");
 	
-	if (canvas)
-		((OpenGLHAL *)canvas)->close();
-	
-	[super dealloc];
+	CanvasWindowController *canvasWindowController = [[self window] windowController];
+	document = [canvasWindowController document];
+	canvas = [canvasWindowController canvas];
 }
 
 - (BOOL)acceptsFirstResponder
@@ -251,20 +256,39 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	return YES;
 }
 
+- (BOOL)isMouseInView
+{
+	NSPoint mouseLocation = [self convertPoint:[[self window] convertScreenToBase:
+												[NSEvent mouseLocation]]
+									  fromView:nil];
+	return NSMouseInRect(mouseLocation, [self bounds], [self isFlipped]);
+}
+
+- (void)windowWillClose:(NSNotification *)notification
+{
+	NSLog(@"windowWillClose");
+	
+	[self stopDisplayLink];
+}
+
 - (void)windowDidBecomeKey:(NSNotification *)notification
 {
 	NSLog(@"windowDidBecomeKey");
 	
-	NSPoint mouseLocation = [self convertPoint:[[self window] convertScreenToBase:
-												[NSEvent mouseLocation]]
-									  fromView:nil];
-	if (NSMouseInRect(mouseLocation, [self bounds], [self isFlipped]))
+	[document lockEmulation];
+	((OpenGLHAL *)canvas)->becomeKeyWindow();
+	[document unlockEmulation];
+	
+	if ([self isMouseInView])
 		[self mouseEntered:nil];
+	
+	[document lockEmulation];
+	[self synchronizeKeyboardFlags];
+	[document unlockEmulation];
 	
 	NSTrackingAreaOptions options = (NSTrackingMouseEnteredAndExited |
 									 NSTrackingMouseMoved |
 									 NSTrackingActiveInKeyWindow);
-	
 	NSTrackingArea *area = [[NSTrackingArea alloc] initWithRect:[self bounds]
 														options:options
 														  owner:self
@@ -275,63 +299,19 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (void)windowDidResignKey:(NSNotification *)notification
 {
-	NSLog(@"windowDidResignKey");
-	
-	NSPoint mouseLocation = [self convertPoint:[[self window] convertScreenToBase:
-												[NSEvent mouseLocation]]
-									  fromView:nil];
-	if (NSMouseInRect(mouseLocation, [self bounds], [self isFlipped]))
+	if ([self isMouseInView])
 		[self mouseExited:nil];
+	
+	[document lockEmulation];
+	((OpenGLHAL *)canvas)->resignKeyWindow();
+	[document unlockEmulation];
 	
 	for (NSTrackingArea *area in [self trackingAreas])
 		if ([area owner] == self)
 			[self removeTrackingArea:area];
+	
+	NSLog(@"windowDidResignKey");
 }
-
-- (void)awakeFromNib
-{
-	CanvasWindowController *canvasWindowController = [[self window] windowController];
-	canvas = [canvasWindowController canvas];
-}
-
-- (NSSize)canvasSize
-{
-	// This should be locked
-	OESize canvasSize = ((OpenGLHAL *)canvas)->getSize();
-	
-	return NSMakeSize(canvasSize.width, canvasSize.height);
-}
-
-
-
-- (void)prepareOpenGL
-{
-	GLint value = 1;
-	[[self openGLContext] setValues:&value
-					   forParameter:NSOpenGLCPSwapInterval]; 
-	
-	CanvasWindowController *canvasWindowController;
-	canvasWindowController = [[self window] windowController];
-	
-	CGLLockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
-	((OpenGLHAL *)canvas)->open(setCapture,
-								setKeyboardFlags,
-								NULL);
-	CGLUnlockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
-	
-	CVDisplayLinkCreateWithActiveCGDisplays(&displayLink);
-	CVDisplayLinkSetOutputCallback(displayLink, &displayLinkCallback, self);
-	CGLContextObj cglContext = (CGLContextObj)[[self openGLContext] CGLContextObj];
-	CGLPixelFormatObj cglPixelFormat = (CGLPixelFormatObj)[[self pixelFormat] 
-														   CGLPixelFormatObj];
-	CVDisplayLinkSetCurrentCGDisplayFromOpenGLContext(displayLink,
-													  cglContext,
-													  cglPixelFormat);
-	
-	CVDisplayLinkStart(displayLink);
-}
-
-
 
 - (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender
 {
@@ -347,7 +327,6 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 		
 		if ([[documentController diskImagePathExtensions] containsObject:pathExtension])
 		{
-			Document *document = [[[self window] windowController] document];
 			if ([document canMount:path])
 				return NSDragOperationCopy;
 		}
@@ -381,13 +360,75 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	{
 		string clipboard = getCPPString([pasteboard stringForType:NSStringPboardType]);
 		
+		[document lockEmulation];
 		((OpenGLHAL *)canvas)->paste(clipboard);
+		[document unlockEmulation];
 		
 		return YES;
 	}
 	
 	return NO;
 }
+
+// Drawing
+
+- (void)startDisplayLink
+{
+	NSLog(@"startDisplayLink");
+	
+	CGLLockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
+	[document lockEmulation];
+	((OpenGLHAL *)canvas)->open(setCapture,
+								setKeyboardFlags,
+								NULL);
+	[document unlockEmulation];
+	CGLUnlockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
+	
+	CVDisplayLinkCreateWithActiveCGDisplays(&displayLink);
+	CVDisplayLinkSetOutputCallback(displayLink, &displayLinkCallback, self);
+	CGLContextObj cglContext = (CGLContextObj)[[self openGLContext] CGLContextObj];
+	CGLPixelFormatObj cglPixelFormat = (CGLPixelFormatObj)[[self pixelFormat] 
+														   CGLPixelFormatObj];
+	CVDisplayLinkSetCurrentCGDisplayFromOpenGLContext(displayLink,
+													  cglContext,
+													  cglPixelFormat);
+	
+	CVDisplayLinkStart(displayLink);
+}
+
+- (void)stopDisplayLink
+{
+	NSLog(@"stopDisplayLink");
+	
+	CVDisplayLinkRelease(displayLink);
+	
+	if (canvas)
+	{
+		[document lockEmulation];
+		((OpenGLHAL *)canvas)->close();
+		[document unlockEmulation];
+	}
+}
+
+- (NSSize)defaultSize
+{
+	[document lockEmulation];
+	OESize defaultSize = ((OpenGLHAL *)canvas)->getDefaultSize();
+	[document unlockEmulation];
+	
+	return NSMakeSize(defaultSize.width, defaultSize.height);
+}
+
+- (void)prepareOpenGL
+{
+	NSLog(@"prepareOpenGL");
+	
+	GLint value = 1;
+	[[self openGLContext] setValues:&value
+					   forParameter:NSOpenGLCPSwapInterval]; 
+}
+
+// Drawing
 
 - (void)reshape
 {
@@ -400,24 +441,58 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (void)drawRect:(NSRect)theRect
 {
-	if (!CVDisplayLinkIsRunning(displayLink))
-		[self drawView];
+	[self drawView];
 }
 
 - (void)drawView
 {
 	[[self openGLContext] makeCurrentContext];
 	
-	CGLLockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
 	NSRect frame = [self bounds];
+	
+	CGLLockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
+	[document lockEmulation];
 	((OpenGLHAL *)canvas)->draw(NSWidth(frame), NSHeight(frame));
-	[[self openGLContext] flushBuffer];
+	[document unlockEmulation];
 	CGLUnlockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
+	
+	[[self openGLContext] flushBuffer];
+}
+
+// Keyboard
+
+- (void)setKeyboardFlags:(int)theKeyboardFlags
+{
+	keyboardFlags = theKeyboardFlags;
+	
+	[self synchronizeKeyboardFlags];
+}
+
+- (void)synchronizeKeyboardFlags
+{
+	CGEventRef event = CGEventCreate(NULL);
+	CGEventFlags modifierFlags = CGEventGetFlags(event);
+	CFRelease(event);
+	
+	bool hostCapsLock = modifierFlags & NSAlphaShiftKeyMask;
+	bool emulationCapsLock = keyboardFlags & CANVAS_L_CAPSLOCK;
+	if (hostCapsLock != emulationCapsLock)
+	{
+		if (!capsLockNotSynchronized)
+		{
+			capsLockNotSynchronized = true;
+			
+			((OpenGLHAL *)canvas)->setKey(CANVAS_K_CAPSLOCK, true);
+			((OpenGLHAL *)canvas)->setKey(CANVAS_K_CAPSLOCK, false);
+		}
+	}
+	else
+		capsLockNotSynchronized = false;
 }
 
 - (int)getUsageId:(int)keyCode
 {
-	int usageId = (keyCode < DEVICE_KEYMAP_SIZE) ? keyMap[keyCode] : 0;
+	NSInteger usageId = (keyCode < DEVICE_KEYMAP_SIZE) ? keyMap[keyCode] : 0;
 	
 	if (!usageId)
 		NSLog(@"Unknown key code %d", keyCode);
@@ -425,26 +500,43 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	return usageId;
 }
 
+- (void)sendUnicodeKeyEvent:(NSInteger)unicode
+{
+	// Discard private usage areas
+	if (((unicode >= 0xe000) && (unicode <= 0xf8ff)) ||
+		((unicode >= 0xf0000) && (unicode <= 0xffffd)) ||
+		((unicode >= 0x100000) && (unicode <= 0x10fffd)))
+		return;
+	
+	if (unicode == 127)
+		unicode = 8;
+	
+	[document lockEmulation];
+	((OpenGLHAL *)canvas)->sendUnicodeKeyEvent(unicode);
+	[document unlockEmulation];
+}
+
 - (void)keyDown:(NSEvent *)theEvent
 {
 	NSString *characters = [theEvent characters];
-	for (int i = 0; i < [characters length]; i++)
-	{
-		int unicode = [characters characterAtIndex:i];
-		((OpenGLHAL *)canvas)->sendUnicodeKeyEvent(unicode);
-	}
-	
+	for (NSInteger i = 0; i < [characters length]; i++)
+		[self sendUnicodeKeyEvent:[characters characterAtIndex:i]];
+		
 	if (![theEvent isARepeat])
 	{
-		int usageId = [self getUsageId:[theEvent keyCode]];
+		NSInteger usageId = [self getUsageId:[theEvent keyCode]];
+		[document lockEmulation];
 		((OpenGLHAL *)canvas)->setKey(usageId, true);
+		[document unlockEmulation];
 	}
 }
 
 - (void)keyUp:(NSEvent *)theEvent
 {
-	int usageId = [self getUsageId:[theEvent keyCode]];
+	NSInteger usageId = [self getUsageId:[theEvent keyCode]];
+	[document lockEmulation];
 	((OpenGLHAL *)canvas)->setKey(usageId, false);
+	[document unlockEmulation];
 }
 
 - (void)updateFlags:(int)flags
@@ -456,12 +548,14 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	
 	BOOL value = ((flags & mask) != 0);
 	
+	[document lockEmulation];
 	((OpenGLHAL *)canvas)->setKey(usageId, value);
+	[document unlockEmulation];
 }
 
 - (void)flagsChanged:(NSEvent *)theEvent
 {
-	int flags = [theEvent modifierFlags];
+	NSInteger flags = [theEvent modifierFlags];
 	
 	[self updateFlags:flags forMask:NSLeftControlKeyMask
 			  usageId:CANVAS_K_LEFTCONTROL];
@@ -479,37 +573,39 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 			  usageId:CANVAS_K_RIGHTALT];
 	[self updateFlags:flags forMask:NSRightCommandKeyMask
 			  usageId:CANVAS_K_RIGHTGUI];
-	keyModifierFlags = flags;	
+	keyModifierFlags = flags;
 	
-	// To-Do: NSAlphaShiftKeyMask
-	// To-Do: NSNumericPadKeyMask
-	
-	// To-Do: See if NSShiftKeyMask, NSControlKeyMask,
-	// NSAlternateKeyMask, NSCommandKeyMask is set but not the others
-	// Act accordingly with a left key message
+	[document lockEmulation];
+	[self synchronizeKeyboardFlags];
+	[document unlockEmulation];
 }
+
+// Mouse
 
 - (void)mouseEntered:(NSEvent *)theEvent
 {
 	NSLog(@"mouseEntered");
-	// This should be locked
+	[document lockEmulation];
 	((OpenGLHAL *)canvas)->enterMouse();
+	[document unlockEmulation];
 }
 
 - (void)mouseExited:(NSEvent *)theEvent
 {
 	NSLog(@"mouseExited");
-	// This should be locked
-	((OpenGLHAL *)canvas)->enterMouse();
+	[document lockEmulation];
+	((OpenGLHAL *)canvas)->exitMouse();
+	[document unlockEmulation];
 }
 
 - (void)mouseMoved:(NSEvent *)theEvent
 {
-	NSLog(@"mouseMoved");
 	NSPoint position = [NSEvent mouseLocation];
 	
+	[document lockEmulation];
 	((OpenGLHAL *)canvas)->setMousePosition(position.x, position.y);
 	((OpenGLHAL *)canvas)->moveMouse([theEvent deltaX], [theEvent deltaY]);
+	[document unlockEmulation];
 }
 
 - (void)mouseDragged:(NSEvent *)theEvent
@@ -529,101 +625,152 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (void)mouseDown:(NSEvent *)theEvent
 {
+	[document lockEmulation];
 	((OpenGLHAL *)canvas)->setMouseButton(0, true);
+	[document unlockEmulation];
 }
 
 - (void)mouseUp:(NSEvent *)theEvent
 {
+	[document lockEmulation];
 	((OpenGLHAL *)canvas)->setMouseButton(0, false);
+	[document unlockEmulation];
 }
 
 - (void)rightMouseDown:(NSEvent *)theEvent
 {
+	[document lockEmulation];
 	((OpenGLHAL *)canvas)->setMouseButton(1, true);
+	[document unlockEmulation];
 }
 
 - (void)rightMouseUp:(NSEvent *)theEvent
 {
+	[document lockEmulation];
 	((OpenGLHAL *)canvas)->setMouseButton(1, false);
+	[document unlockEmulation];
 }
 
 - (void)otherMouseDown:(NSEvent *)theEvent
 {
+	[document lockEmulation];
 	((OpenGLHAL *)canvas)->setMouseButton([theEvent buttonNumber], true);
+	[document unlockEmulation];
 }
 
 - (void)otherMouseUp:(NSEvent *)theEvent
 {
+	[document lockEmulation];
 	((OpenGLHAL *)canvas)->setMouseButton([theEvent buttonNumber], false);
+	[document unlockEmulation];
 }
 
 - (void)scrollWheel:(NSEvent *)theEvent
 {
-	((OpenGLHAL *)canvas)->sendMouseWheelEvent(0, [theEvent deltaX]);
-	((OpenGLHAL *)canvas)->sendMouseWheelEvent(1, [theEvent deltaY]);
+	[document lockEmulation];
+	if ([theEvent deltaX])
+		((OpenGLHAL *)canvas)->sendMouseWheelEvent(0, [theEvent deltaX]);
+	if ([theEvent deltaY])
+		((OpenGLHAL *)canvas)->sendMouseWheelEvent(1, [theEvent deltaY]);
+	[document unlockEmulation];
 }
+
+// System events
 
 - (void)systemPowerDown:(id)sender
 {
+	[document lockEmulation];
 	((OpenGLHAL *)canvas)->sendSystemEvent(CANVAS_S_POWERDOWN);
+	[document unlockEmulation];
 }
 
 - (void)systemSleep:(id)sender
 {
+	[document lockEmulation];
 	((OpenGLHAL *)canvas)->sendSystemEvent(CANVAS_S_SLEEP);
+	[document unlockEmulation];
 }
 
 - (void)systemWakeUp:(id)sender
 {
+	[document lockEmulation];
 	((OpenGLHAL *)canvas)->sendSystemEvent(CANVAS_S_WAKEUP);
+	[document unlockEmulation];
 }
 
 - (void)systemColdRestart:(id)sender
 {
+	[document lockEmulation];
 	((OpenGLHAL *)canvas)->sendSystemEvent(CANVAS_S_COLDRESTART);
+	[document unlockEmulation];
 }
 
 - (void)systemWarmRestart:(id)sender
 {
+	[document lockEmulation];
 	((OpenGLHAL *)canvas)->sendSystemEvent(CANVAS_S_WARMRESTART);
+	[document unlockEmulation];
 }
 
 - (void)systemBreak:(id)sender
 {
+	[document lockEmulation];
 	((OpenGLHAL *)canvas)->sendSystemEvent(CANVAS_S_BREAK);
+	[document unlockEmulation];
 }
 
 - (void)systemDebuggerBreak:(id)sender
 {
+	[document lockEmulation];
 	((OpenGLHAL *)canvas)->sendSystemEvent(CANVAS_S_DEBUGGERBREAK);
+	[document unlockEmulation];
 }
 
 - (void)applicationBreak:(id)sender
 {
+	[document lockEmulation];
 	((OpenGLHAL *)canvas)->sendSystemEvent(CANVAS_S_APPLICATIONBREAK);
+	[document unlockEmulation];
 }
 
 - (void)applicationDebuggerBreak:(id)sender
 {
+	[document lockEmulation];
 	((OpenGLHAL *)canvas)->sendSystemEvent(CANVAS_S_APPLICATIONDEBUGGERBREAK);
+	[document unlockEmulation];
 }
 
 - (void)systemHibernate:(id)sender
 {
+	[document lockEmulation];
 	((OpenGLHAL *)canvas)->sendSystemEvent(CANVAS_S_HIBERNATE);
+	[document unlockEmulation];
+}
+
+// Copy/paste
+
+- (NSString *)copyString
+{
+	string clipboard;
+	
+	[document lockEmulation];
+	bool result = ((OpenGLHAL *)canvas)->copy(clipboard);
+	[document unlockEmulation];
+	
+	return result ? getNSString(clipboard) : nil;
 }
 
 - (void)copy:(id)sender
 {
 	NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
-	string clipboard;
+	NSString *theString = [self copyString];
 	
-	if (((OpenGLHAL *)canvas)->copy(clipboard))
+	if (theString)
 	{
 		NSArray *pasteboardTypes = [NSArray arrayWithObjects:NSStringPboardType, nil];
 		[pasteboard declareTypes:pasteboardTypes owner:self];
 		
-		[pasteboard setString:getNSString(clipboard)
+		[pasteboard setString:theString
 					  forType:NSStringPboardType];
 	}
 	else
@@ -641,31 +788,93 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	}
 }
 
-- (void)pasteText:(NSString *)text
+- (void)pasteString:(NSString *)text
 {
-	string clipboard = getCPPString(text);
-	
-	// This should be locked
-	((OpenGLHAL *)canvas)->paste(clipboard);
+	[document lockEmulation];
+	((OpenGLHAL *)canvas)->paste(getCPPString(text));
+	[document unlockEmulation];
 }
 
 - (void)paste:(id)sender
 {
 	NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
-	[self pasteText:[pasteboard stringForType:NSStringPboardType]];
+	[self pasteString:[pasteboard stringForType:NSStringPboardType]];
 }
 
 - (void)startSpeaking:(id)sender
 {
-	string clipboard;
-	
-	// This should be locked
-	if (((OpenGLHAL *)canvas)->copy(clipboard))
+	NSString *theString = [self copyString];
+	if (theString)
 	{
 		NSTextView *dummy = [[[NSTextView alloc] init] autorelease];
-		[dummy insertText:getNSString(clipboard)];
+		[dummy insertText:theString];
 		[dummy startSpeaking:self];
 	}
+}
+
+// Support for the text system
+
+- (BOOL)hasMarkedText
+{
+	return NO;
+}
+
+- (NSRange)markedRange
+{
+	return NSMakeRange(NSNotFound, 0);
+}
+
+- (NSRange)selectedRange
+{
+	return NSMakeRange(NSNotFound, 0);
+}
+
+- (void)setMarkedText:(id)aString
+		selectedRange:(NSRange)selectedRange
+	 replacementRange:(NSRange)replacementRange
+{
+}
+
+- (void)unmarkText
+{
+}
+
+- (NSArray *)validAttributesForMarkedText
+{
+	return [NSArray array];
+}
+
+- (NSAttributedString *)attributedSubstringForProposedRange:(NSRange)aRange
+												actualRange:(NSRangePointer)actualRange
+{
+	return nil;
+}
+
+- (void)insertText:(id)aString
+  replacementRange:(NSRange)replacementRange
+{
+	for (NSInteger i = 0; i < [aString length]; i++)
+		[self sendUnicodeKeyEvent:[aString characterAtIndex:i]];
+}
+
+- (NSUInteger)characterIndexForPoint:(NSPoint)aPoint
+{
+	return NSNotFound;
+}
+
+- (NSRect)firstRectForCharacterRange:(NSRange)aRange
+						 actualRange:(NSRangePointer)actualRange
+{
+	return [self bounds];
+}
+
+- (void)doCommandBySelector:(SEL)aSelector
+{
+}
+
+- (BOOL)drawsVerticallyForCharacterAtIndex:(NSUInteger)charIndex
+{
+	return NO;
 }
 
 @end

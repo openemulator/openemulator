@@ -205,7 +205,7 @@
 	}
 	
 	NSArray *children = [item children];
-	for (int i = 0; i < [children count]; i++)
+	for (NSInteger i = 0; i < [children count]; i++)
 	{
 		if ([self selectItem:[children objectAtIndex:i] withUid:uid])
 			return YES;
@@ -219,7 +219,12 @@
 	SEL action = [anItem action];
 	EmulationItem *item = [self itemForSender:anItem];
 	
-	if (action == @selector(showDevice:))
+	if (action == @selector(paste:))
+	{
+		NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
+		return [[pasteboard types] containsObject:NSStringPboardType];
+	}
+	else if (action == @selector(showDevice:))
 		return [item isCanvas];
 	else if (action == @selector(openDiskImage:))
 		return [item isStorage] && ![item isLocked];

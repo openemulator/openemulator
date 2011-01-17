@@ -161,7 +161,7 @@ bool CompositeMonitor::init()
 							CANVAS_RETURN_FRAME,
 							&frame);
 		
-		CanvasCaptureMode captureMode = CANVAS_CAPTUREMODE_MOUSE_CLICK;
+		CanvasCaptureMode captureMode = CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_CLICK;
 		canvas->postMessage(this, CANVAS_SET_CAPTUREMODE, &captureMode);
 	}
 	

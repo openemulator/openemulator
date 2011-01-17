@@ -12,8 +12,8 @@
 
 @interface EmulationOutlineView : NSOutlineView
 {
-	int forcedRow;
-	int trackedRow;
+	NSInteger forcedRow;
+	NSInteger trackedRow;
 }
 
 - (NSInteger)forcedRow;
