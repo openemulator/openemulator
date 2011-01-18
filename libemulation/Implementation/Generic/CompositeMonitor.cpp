@@ -149,8 +149,6 @@ bool CompositeMonitor::init()
 	if (canvas)
 	{
 		CanvasFrame frame;
-		frame.frameSize.width = 640;
-		frame.frameSize.height = 480;
 		frame.screenSize.width = 720;
 		frame.screenSize.height = 576;
 		

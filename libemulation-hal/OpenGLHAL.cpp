@@ -64,12 +64,12 @@ void OpenGLHAL::open(CanvasSetCapture setCapture,
 	
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	
-//	glGenTextures(OEGL_TEX_NUM, textures);
+	glGenTextures(OEGL_TEX_NUM, textures);
 }
 
 void OpenGLHAL::close()
 {
-//	glDeleteTextures(OEGL_TEX_NUM, textures);
+	glDeleteTextures(OEGL_TEX_NUM, textures);
 }
 
 void OpenGLHAL::updateCapture(CanvasCapture capture)

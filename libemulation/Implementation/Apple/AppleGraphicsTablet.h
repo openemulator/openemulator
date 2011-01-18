@@ -9,17 +9,20 @@
  */
 
 #include "OEComponent.h"
+#include "OEImage.h"
 
 class AppleGraphicsTablet : public OEComponent
 {
 public:
 	AppleGraphicsTablet();
 	
+	bool setValue(string name, string value);
 	bool setRef(string name, OEComponent *ref);
-	bool setData(string name, OEData *data);
 	bool init();
 	
 private:
 	OEComponent *emulation;
 	OEComponent *canvas;
+	
+	string viewPath;
 };

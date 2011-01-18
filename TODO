@@ -2,8 +2,7 @@
 * Implement frame communication to the canvas
 * Implement capture badge, lasting 3 seconds, disappearing in 1 second
 * Devise a way to send system events to a device without a canvas
-* Think about the interface to signal emulation changes
-* Implement [Document updateChangeCount]
+* Implement printing
 * Integrate OpenGL 2.0 shader
 * Implement non-linear curves in the shader (change hue in monochrome monitors)
 * Implement the option to deactivate shaders

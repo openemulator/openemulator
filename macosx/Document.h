@@ -39,11 +39,11 @@
 
 - (void)showCanvas:(void *)canvas;
 
-- (BOOL)mount:(NSString *)path;
 - (BOOL)mount:(NSString *)path inStorage:(void *)component;
+- (BOOL)mount:(NSString *)path;
 - (BOOL)unmountStorage:(void *)component;
-- (BOOL)canMount:(NSString *)path;
 - (BOOL)canMount:(NSString *)path inStorage:(void *)component;
+- (BOOL)canMount:(NSString *)path;
 - (BOOL)isImageSupported:(NSString *)path;
 - (BOOL)isStorageMounted:(void *)component;
 - (BOOL)isStorageWritable:(void *)component;

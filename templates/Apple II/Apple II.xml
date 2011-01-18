@@ -290,7 +290,7 @@
 <connector id="s5dev.connector" ref="s5" type="AppleIISlot" label="Slot 0" />
 <component id="appleGraphicsTablet.io" class="AppleGraphicsTablet">
 	<property name="emulation" ref="emulation" />
-	<property name="view" data="${resourcePath}/images/Apple/Apple Graphics Tablet View.png" />
+	<property name="view" value="${resourcePath}/images/Apple/Apple Graphics Tablet View.png" />
 </component>
 
 

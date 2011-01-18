@@ -2,7 +2,7 @@
 /**
  * libemulation
  * Control bus
- * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Implements a control bus with clock control and reset/IRQ/NMI lines
@@ -50,7 +50,13 @@ bool ControlBus::setValue(string name, string value)
 bool ControlBus::setRef(string name, OEComponent *ref)
 {
 	if (name == "emulation")
+	{
+		if (emulation)
+			emulation->postMessage(this, EMULATION_CLEAR_ACTIVE, NULL);
 		emulation = ref;
+		if (emulation)
+			emulation->postMessage(this, EMULATION_ASSERT_ACTIVE, NULL);
+	}
 	else if (name == "audio")
 	{
 		setObserver(audio, ref, AUDIO_FRAME_IS_RENDERING);

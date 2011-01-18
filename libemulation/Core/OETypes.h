@@ -53,22 +53,4 @@ typedef union
 
 typedef vector<char> OEData;
 
-typedef struct
-{
-	float x;
-	float y;
-} OEPoint;
-
-typedef struct
-{
-	float width;
-	float height;
-} OESize;
-
-typedef struct
-{
-	OEPoint origin;
-	OESize size;
-} OERect;
-
 #endif

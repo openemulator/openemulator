@@ -1,4 +1,8 @@
 ==2011-01==
+* Implemented windowForSheet in Document
+* Implemented [Document updateChangeCount]
+* Implemented interface to signal an active emulation
+* Implemented OEImage for easily reading PNG files
 * Implemented OpenGL thread synchronization
 * Implemented character palette
 * Implemented disabling Mac OS X global keys. When installing or running, this should be executed:

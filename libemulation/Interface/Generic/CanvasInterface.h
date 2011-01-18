@@ -2,14 +2,16 @@
 /**
  * libemulation
  * Canvas interface
- * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Defines the canvas interface
+ * Defines the canvas interface.
  */
 
 #ifndef _CANVASINTERFACE_H
 #define _CANVASINTERFACE_H
+
+#include "OEImage.h"
 
 // Notes
 // * A component should first request a canvas from the canvas controller.
@@ -56,31 +58,33 @@ typedef enum
 	CANVAS_CAPTURE_KEYBOARD_AND_HIDE_MOUSE_CURSOR,
 } CanvasCapture;
 
-typedef enum
+typedef struct
 {
-	CANVAS_FRAME_FORMAT_MONOCHROME,
-	CANVAS_FRAME_FORMAT_RGB,
-} CanvasFrameFormat;
+	OEImage image;
+	
+} CanvasVideoFrame;
 
 typedef struct
 {
-	CanvasFrameFormat frameFormat;
-	OESize frameSize;
-	void *frameData;
+	CanvasVideoFrame video;
+	
 	bool compositeColorBurst;
 	bool compositeInterlaced;
+	
 	float videoHorizBegin;
 	float videoHorizEnd;
 	float videoVertBegin;
 	float videoVertEnd;
-	
+
 	float compositeLumaCutoff;
 	float compositeChromaCutoff;
 	float compositeHue;
 	float compositeSaturation;
 	bool compositeColorize;
 	float *compositeDecoderMatrix;
+	
 	float rgbSharpness;
+	
 	OESize screenSize;
 	float screenBrightness;
 	float screenContrast;

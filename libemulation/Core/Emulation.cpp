@@ -24,6 +24,8 @@ Emulation::Emulation() : OEEDL()
 	destroyCanvas = NULL;
 	didUpdate = NULL;
 	
+	activeCount = 0;
+	
 	setComponent("emulation", this);
 }
 
@@ -205,6 +207,11 @@ bool Emulation::removeDevice(string deviceId)
 	removeElements(deviceId);
 	*/
 	return true;
+}
+
+bool Emulation::isActive()
+{
+	return (activeCount != 0);
 }
 
 
@@ -706,6 +713,17 @@ bool Emulation::postMessage(OEComponent *sender, int message, void *data)
 				return true;
 			}
 			break;
+			
+		case EMULATION_ASSERT_ACTIVE:
+			activeCount++;
+			return true;
+			
+		case EMULATION_CLEAR_ACTIVE:
+			if (activeCount <= 0)
+				return false;
+			
+			activeCount--;
+			return true;
 			
 		case EMULATION_SET_STATE:
 			{

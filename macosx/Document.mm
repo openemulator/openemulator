@@ -137,9 +137,9 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	
 	theEmulation->setDidUpdate(didUpdate);
 	
-	portAudioHAL->addEmulation((Emulation *)emulation);
-	
 	emulation = theEmulation;
+	
+	portAudioHAL->addEmulation(theEmulation);
 }
 
 - (void)deleteEmulation
@@ -181,6 +181,13 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	portAudioHAL->unlockEmulations();
 }
 
+
+
+- (NSWindow *)windowForSheet
+{
+	return [NSApp mainWindow];
+}
+
 - (BOOL)readFromURL:(NSURL *)absoluteURL
 			 ofType:(NSString *)typeName
 			  error:(NSError **)outError
@@ -188,10 +195,16 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	[self deleteEmulation];
 	[self newEmulation:absoluteURL];
 	
-	if (emulation)
+	Emulation *theEmulation = (Emulation *)emulation;
+	if (theEmulation)
 	{
-		if (((Emulation *)emulation)->isOpen())
+		if (theEmulation->isOpen())
+		{
+			if (theEmulation->isActive())
+				[self updateChangeCount:NSChangeDone];
+			
 			return YES;
+		}
 		
 		[self deleteEmulation];
 	}
@@ -206,13 +219,14 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 			ofType:(NSString *)typeName
 			 error:(NSError **)outError
 {
-	if (emulation)
+	Emulation *theEmulation = (Emulation *)emulation;
+	if (theEmulation)
 	{
 		string emulationPath = getCPPString([[absoluteURL path]
 										   stringByAppendingString:@"/"]);
 		
 		[self lockEmulation];
-		bool isSaved = ((Emulation *)emulation)->save(emulationPath);
+		bool isSaved = theEmulation->save(emulationPath);
 		[self unlockEmulation];
 		
 		if (isSaved)
@@ -223,6 +237,23 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 									code:NSFileWriteUnknownError
 								userInfo:nil];
 	return NO;
+}
+
+- (BOOL)saveToURL:(NSURL *)absoluteURL
+		   ofType:(NSString *)typeName
+ forSaveOperation:(NSSaveOperationType)saveOperation
+			error:(NSError **)outError
+{
+	BOOL result = [super saveToURL:absoluteURL
+							ofType:typeName
+				  forSaveOperation:saveOperation
+							 error:outError];
+	
+	Emulation *theEmulation = (Emulation *)emulation;
+	if (theEmulation->isActive())
+		[self updateChangeCount:NSChangeDone];
+	
+	return result;
 }
 
 - (IBAction)saveDocumentAsTemplate:(id)sender
@@ -276,6 +307,12 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 		[self addWindowController:emulationWindowController];
 }
 
+- (NSPrintOperation *)printOperationWithSettings:(NSDictionary *)printSettings
+										   error:(NSError **)outError
+{
+	
+}
+
 
 
 - (void *)emulationInfo
@@ -294,6 +331,9 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 
 - (IBAction)didUpdate:(id)sender
 {
+	if (((Emulation *)emulation)->isActive())
+		[self updateChangeCount:NSChangeDone];
+	
 	[emulationWindowController updateEmulation:sender];
 }
 
@@ -421,6 +461,22 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 		return [NSString stringWithFormat:@"%3.2f GiB", value / (1 << 30)];
 }
 
+- (BOOL)mount:(NSString *)path inStorage:(void *)component
+{
+	if ([self getBoolForMessage:(int)STORAGE_IS_LOCKED
+					  component:component])
+		return NO;
+	
+	if (![self postString:path
+				  message:(int)STORAGE_MOUNT
+				component:component])
+		return NO;
+	
+	[self updateChangeCount:NSChangeDone];
+	
+	return YES;
+}
+
 - (BOOL)mount:(NSString *)path
 {
 	Emulation *theEmulation = (Emulation *)emulation;
@@ -438,22 +494,27 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	return NO;
 }
 
-- (BOOL)mount:(NSString *)path inStorage:(void *)component
-{
-	if ([self getBoolForMessage:(int)STORAGE_IS_LOCKED
-					  component:component])
-		return NO;
-	
-	return [self postString:path
-					message:(int)STORAGE_MOUNT
-				  component:component];
-}
-
 - (BOOL)unmountStorage:(void *)component
 {
-	return [self postString:@""
-					message:(int)STORAGE_UNMOUNT
-				  component:component];
+	[self updateChangeCount:NSChangeDone];
+	
+	if (![self postString:@""
+				  message:(int)STORAGE_UNMOUNT
+				component:component])
+		return NO;
+	
+	[self updateChangeCount:NSChangeDone];
+	
+	return YES;
+}
+
+- (BOOL)canMount:(NSString *)path inStorage:(void *)component
+{
+	if ([self getBoolForMessage:(int)STORAGE_IS_LOCKED component:component])
+		return NO;
+	
+	return [self getBoolForMessage:(int)STORAGE_IS_IMAGE_SUPPORTED
+						 component:component];
 }
 
 - (BOOL)canMount:(NSString *)path
@@ -471,15 +532,6 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	}
 	
 	return NO;
-}
-
-- (BOOL)canMount:(NSString *)path inStorage:(void *)component
-{
-	if ([self getBoolForMessage:(int)STORAGE_IS_LOCKED component:component])
-		return NO;
-	
-	return [self getBoolForMessage:(int)STORAGE_IS_IMAGE_SUPPORTED
-						 component:component];
 }
 
 - (BOOL)isImageSupported:(NSString *)path
@@ -557,6 +609,8 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	
 	if (!success)
 		NSLog(@"could not set property '%@' for '%@'", theName, theId);
+	else
+		[self updateChangeCount:NSChangeDone];
 }
 
 - (NSString *)valueOfProperty:(NSString *)theName

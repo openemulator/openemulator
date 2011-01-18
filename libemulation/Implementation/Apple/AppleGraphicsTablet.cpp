@@ -20,6 +20,16 @@ AppleGraphicsTablet::AppleGraphicsTablet()
 	canvas = NULL;
 }
 
+bool AppleGraphicsTablet::setValue(string name, string value)
+{
+	if (name == "viewPath")
+		viewPath = value;
+	else
+		return false;
+	
+	return true;
+}
+
 bool AppleGraphicsTablet::setRef(string name, OEComponent *ref)
 {
 	if (name == "emulation")
@@ -40,19 +50,6 @@ bool AppleGraphicsTablet::setRef(string name, OEComponent *ref)
 	return true;
 }
 
-bool AppleGraphicsTablet::setData(string name, OEData *data)
-{
-	if (name == "view")
-	{
-		
-		delete data;
-	}
-	else
-		return OEComponent::setData(name, data);
-	
-	return true;
-}
-
 bool AppleGraphicsTablet::init()
 {
 	if (!emulation)
@@ -69,18 +66,22 @@ bool AppleGraphicsTablet::init()
 	
 	if (canvas)
 	{
+		OEImage view;
+//		oeReadImage(viewPath, &view);
+		
 		CanvasFrame frame;
-		frame.frameSize.width = 637;
-		frame.frameSize.height = 637;
-		frame.screenSize.width = 637;
-		frame.screenSize.height = 637;
 		
 		canvas->postMessage(this,
 							CANVAS_GET_FRAME,
 							&frame);
+		frame.screenSize.width = 637;
+		frame.screenSize.height = 637;
+//		oeCopyImage(&frame->vi
 		canvas->postMessage(this,
 							CANVAS_RETURN_FRAME,
 							&frame);
+		
+//		oeFreeImage(&view);
 	}
 	
 	return true;

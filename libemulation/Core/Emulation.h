@@ -30,6 +30,8 @@ typedef enum
 {
 	EMULATION_UPDATE,
 	EMULATION_RUN_ALERT,
+	EMULATION_ASSERT_ACTIVE,
+	EMULATION_CLEAR_ACTIVE,
 	
 	EMULATION_SET_STATE,
 	EMULATION_SET_IMAGE,
@@ -103,6 +105,8 @@ public:
 	bool addEDL(string path, map<string, string> idMap);
 	bool removeDevice(string id);
 	
+	bool isActive();
+	
 	bool postMessage(OEComponent *sender, int message, void *data);
 	
 private:
@@ -115,6 +119,8 @@ private:
 	EmulationCreateCanvas createCanvas;
 	EmulationDestroyCanvas destroyCanvas;
 	void *userData;
+	
+	int activeCount;
 	
 	void buildEmulationInfo();
 	EmulationSettings buildDeviceSettings(xmlNodePtr children);
