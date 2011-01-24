@@ -1,4 +1,6 @@
 ==2011-01==
+* Fixed OpenGL context problem when closing an emulation.
+* Implemented frame communication to the canvas
 * Improved emulation window sizing
 * Fixed race condition with display link and closing documents
 * Implemented windowForSheet in Document

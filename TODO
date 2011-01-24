@@ -1,6 +1,4 @@
 ==To-Do==
-* Fix OpenGL context problem when closing an emulation. Lock condition in [CanvasView reshape]
-* Implement frame communication to the canvas
 * Implement capture badge, lasting 3 seconds, disappearing in 1 second
 * Devise a way to send system events to a device without a canvas
 * Implement printing

@@ -20,12 +20,12 @@
 
 typedef enum
 {
-	OEGL_TEX_POWER,
-	OEGL_TEX_PAUSE,
-	OEGL_TEX_CAPTURE,
-	OEGL_TEX_FRAME,
-	OEGL_TEX_INTERLACE,
-	OEGL_TEX_NUM,
+	OPENGLHAL_TEXTURE_POWER,
+	OPENGLHAL_TEXTURE_PAUSE,
+	OPENGLHAL_TEXTURE_CAPTURE,
+	OPENGLHAL_TEXTURE_FRAME,
+	OPENGLHAL_TEXTURE_INTERLACE,
+	OPENGLHAL_TEXTURE_END,
 } OEOpenGLTextureIndex;
 
 typedef enum
@@ -53,8 +53,8 @@ public:
 	void close();
 	
 	OESize getDefaultSize();
-	void draw(int width, int height, int offset);
-	void update(int width, int height, int offset);
+	void draw(float width, float height, float offset);
+	void update(float width, float height, float offset);
 	
 	void becomeKeyWindow();
 	void resignKeyWindow();
@@ -85,15 +85,16 @@ private:
 	CanvasSetKeyboardFlags setKeyboardFlags;
 	void *userData;
 	
-	OESize defaultSize;
+	CanvasConfiguration configuration;
 	
-	CanvasCaptureMode captureMode;
+	pthread_mutex_t frameMutex;
+	OEImage *frameCurrent;
+	OEImage *frameNext;
+	
+	GLuint glTextures[OPENGLHAL_TEXTURE_END];
+	OESize textureSize;
+	
 	OpenGLHALCapture capture;
-	
-	OEImage *glCurrentFrame;
-	OEImage *glNextFrame;
-	pthread_mutex_t glMutex;
-	GLuint glTextures[OEGL_TEX_NUM];
 	
 	bool keyDown[CANVAS_KEYBOARD_KEY_NUM];
 	int keyDownCount;

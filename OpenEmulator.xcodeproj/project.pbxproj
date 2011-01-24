@@ -948,6 +948,7 @@
 				8D15AC300486D014006FF6A4 /* Sources */,
 				8D15AC330486D014006FF6A4 /* Frameworks */,
 				005486C30FDC84A300DBCFA8 /* Copy Frameworks */,
+				003B149F12EE10D2003FB8F6 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1040,6 +1041,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		003B149F12EE10D2003FB8F6 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "REV=`svnversion -nc | /usr/bin/sed -e 's/^[^:]*://;s/[A-Za-z]//'`\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $REV\" \"${TARGET_BUILD_DIR}\"/${INFOPLIST_PATH}";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		00039E7912B03F650025D374 /* Sources */ = {
@@ -1315,6 +1332,7 @@
 					/usr/include/libxml2,
 					/opt/local/include,
 				);
+				INFOPLIST_FILE = macosx/Info.plist;
 				LIBRARY_SEARCH_PATHS = /opt/local/lib;
 				PREBINDING = NO;
 				SDKROOT = macosx10.5;

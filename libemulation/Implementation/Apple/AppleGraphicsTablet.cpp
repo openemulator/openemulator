@@ -66,16 +66,20 @@ bool AppleGraphicsTablet::init()
 	
 	if (canvas)
 	{
-		CanvasConfiguration configuration;
-		configuration.size = OEMakeSize(637, 637);
-		configuration.captureMode = CANVAS_CAPTUREMODE_NO_CAPTURE;
-		canvas->postMessage(this, CANVAS_CONFIGURE, &configuration);
-		
 		OEImage *frame = NULL;
+		OESize frameSize = OEMakeSize(640, 480);
 		canvas->postMessage(this, CANVAS_REQUEST_FRAME, &frame);
 		if (frame)
+		{
 			frame->readFile(viewPath);
+			frameSize = frame->getSize();
+		}
 		canvas->postMessage(this, CANVAS_RETURN_FRAME, &frame);
+		
+		CanvasConfiguration configuration;
+		configuration.size = frameSize;
+		configuration.captureMode = CANVAS_CAPTUREMODE_NO_CAPTURE;
+		canvas->postMessage(this, CANVAS_CONFIGURE, &configuration);
 	}
 	
 	return true;

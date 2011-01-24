@@ -138,6 +138,14 @@
 					</object>
 					<int key="connectionID">100137</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">fCanvasView</string>
+						<reference key="source" ref="275939982"/>
+						<reference key="destination" ref="1034993782"/>
+					</object>
+					<int key="connectionID">100139</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -273,7 +281,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">100138</int>
+			<int key="maxID">100139</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">

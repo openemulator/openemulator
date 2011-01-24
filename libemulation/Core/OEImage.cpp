@@ -44,9 +44,9 @@ OESize OEImage::getSize()
 	return size;
 }
 
-void *OEImage::getData()
+void *OEImage::getPixels()
 {
-	return &data.front();
+	return &pixels.front();
 }
 
 bool OEImage::readFile(string path)
@@ -98,12 +98,12 @@ bool OEImage::readFile(string path)
 											 3 : 4);
 						int rowByteNum = width * bytesPerPixel;
 						char **rows = (char **) png_get_rows(png, info);
-						char *datap = (char *) getData();
+						char *pixelsp = (char *) getPixels();
 						
 						for (int row = 0; row < height; row++)
 						{
-							memcpy(datap, rows[row], rowByteNum);
-							datap += rowByteNum;
+							memcpy(pixelsp, rows[row], rowByteNum);
+							pixelsp += rowByteNum;
 						}
 						
 						result = true;
@@ -142,5 +142,5 @@ void OEImage::update()
 	else if (format == OEIMAGE_FORMAT_RGBA)
 		bytesPerPixel = 4;
 	
-	data.resize(size.width * size.height * bytesPerPixel);
+	pixels.resize(size.width * size.height * bytesPerPixel);
 }
