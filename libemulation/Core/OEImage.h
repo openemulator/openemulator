@@ -1,17 +1,18 @@
 
 /**
  * libemulation
- * Image loading
+ * Image
  * (C) 2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Provides support for image loading.
+ * Implements an image type.
  */
 
 #ifndef _OEIMAGE_H
 #define _OEIMAGE_H
 
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -37,16 +38,39 @@ typedef enum
 {
 	OEIMAGE_FORMAT_MONOCHROME,
 	OEIMAGE_FORMAT_RGB,
+	OEIMAGE_FORMAT_RGBA,
 } OEImageFormat;
 
-typedef struct
+inline OESize OEMakeSize(float w, float h)
 {
-	OESize size;
-	OEImageFormat format;
-	char *data;
-} OEImage;
+	OESize s;
+	s.width = w;
+	s.height = h;
+	return s;
+}
 
-bool oeReadImage(string path, OEImage *image);
-void oeFreeImage(OEImage *image);
+class OEImage
+{
+public:
+	OEImage();
+	
+	void setFormat(OEImageFormat format);
+	OEImageFormat getFormat();
+	
+	void setSize(OESize size);
+	OESize getSize();
+	
+	void *getData();
+	
+	bool readFile(string path);
+	
+private:
+	OEImageFormat format;
+	OESize size;
+	vector<char> data;
+	
+	void update();
+	bool validatePNG(FILE *fp);
+};
 
 #endif

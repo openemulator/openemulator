@@ -8,6 +8,9 @@
  * Defines the IEEE 1284 interface
  */
 
+#ifndef _IEEE1284INTERFACE_H
+#define _IEEE1284INTERFACE_H
+
 typedef enum
 {
 	IEEE1284_SEND_DATA,
@@ -35,3 +38,5 @@ typedef enum
 	IEEE1284_FAULT_DID_ASSERT,
 	IEEE1284_FAULT_DID_CLEAR,
 } IEEE1284Notification;
+
+#endif

@@ -12,8 +12,8 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="1740"/>
 			<integer value="1808"/>
+			<integer value="1740"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -42,8 +42,8 @@
 				<string key="NSWindowTitle"/>
 				<string key="NSWindowClass">NSWindow</string>
 				<nil key="NSViewClass"/>
-				<string key="NSWindowContentMaxSize">{3.40282e+38, 3.40282e+38}</string>
-				<string key="NSWindowContentMinSize">{600, 326}</string>
+				<string key="NSWindowContentMaxSize">{1.79769e+308, 1.79769e+308}</string>
+				<string key="NSWindowContentMinSize">{532, 326}</string>
 				<object class="NSView" key="NSWindowView" id="697045175">
 					<reference key="NSNextResponder"/>
 					<int key="NSvFlags">274</int>
@@ -121,7 +121,7 @@
 																			<string key="NSColorName">controlBackgroundColor</string>
 																			<object class="NSColor" key="NSColor" id="947068643">
 																				<int key="NSColorSpace">3</int>
-																				<bytes key="NSWhite">MC42NjY2NjY2ODY1AA</bytes>
+																				<bytes key="NSWhite">MC42NjY2NjY2NjY3AA</bytes>
 																			</object>
 																		</object>
 																		<object class="NSColor" key="NSTextColor" id="757784584">
@@ -297,7 +297,7 @@
 																						</object>
 																						<object class="NSTableColumn" id="524950555">
 																							<string key="NSIdentifier">key</string>
-																							<double key="NSWidth">126</double>
+																							<double key="NSWidth">128</double>
 																							<double key="NSMinWidth">64</double>
 																							<double key="NSMaxWidth">1000</double>
 																							<object class="NSTableHeaderCell" key="NSHeaderCell">
@@ -328,7 +328,7 @@
 																						</object>
 																						<object class="NSTableColumn" id="773003339">
 																							<string key="NSIdentifier">value</string>
-																							<double key="NSWidth">126</double>
+																							<double key="NSWidth">128</double>
 																							<double key="NSMinWidth">64</double>
 																							<double key="NSMaxWidth">3.4028234663852886e+38</double>
 																							<object class="NSTableHeaderCell" key="NSHeaderCell">
@@ -742,8 +742,8 @@
 					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1440, 878}}</string>
-				<string key="NSMinSize">{600, 348}</string>
-				<string key="NSMaxSize">{3.40282e+38, 3.40282e+38}</string>
+				<string key="NSMinSize">{532, 348}</string>
+				<string key="NSMaxSize">{1.79769e+308, 1.79769e+308}</string>
 				<double key="NSContentBorderThicknessMinY">24</double>
 			</object>
 			<object class="NSMenu" id="719851724">
@@ -826,7 +826,7 @@
 				<string key="NSWindowTitle">Hardware Connector</string>
 				<string key="NSWindowClass">NSWindow</string>
 				<nil key="NSViewClass"/>
-				<string key="NSWindowContentMaxSize">{3.40282e+38, 3.40282e+38}</string>
+				<string key="NSWindowContentMaxSize">{1.79769e+308, 1.79769e+308}</string>
 				<string key="NSWindowContentMinSize">{600, 460}</string>
 				<object class="NSView" key="NSWindowView" id="519080584">
 					<nil key="NSNextResponder"/>
@@ -947,7 +947,7 @@
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1440, 878}}</string>
 				<string key="NSMinSize">{600, 482}</string>
-				<string key="NSMaxSize">{3.40282e+38, 3.40282e+38}</string>
+				<string key="NSMaxSize">{1.79769e+308, 1.79769e+308}</string>
 			</object>
 			<object class="NSUserDefaultsController" id="703401737">
 				<bool key="NSSharedInstance">YES</bool>
@@ -1806,14 +1806,14 @@
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>{{420, 300}, {600, 400}}</string>
+					<string>{{421, 301}, {600, 400}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{420, 300}, {600, 400}}</string>
+					<string>{{421, 301}, {600, 400}}</string>
 					<boolean value="NO"/>
 					<boolean value="NO"/>
 					<boolean value="YES"/>
 					<string>{610, 384}</string>
-					<string>{600, 326}</string>
+					<string>{532, 326}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<object class="NSAffineTransform"/>
 					<string>{{637, 159}, {160, 123}}</string>

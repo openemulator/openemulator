@@ -15,7 +15,6 @@
 CompositeMonitor::CompositeMonitor()
 {
 	emulation = NULL;
-	
 	canvas = NULL;
 }
 
@@ -107,24 +106,33 @@ bool CompositeMonitor::setRef(string name, OEComponent *ref)
 {
 	if (name == "emulation")
 	{
-		OEComponent *oldCanvas = canvas;
-		if (emulation)
+		if (emulation && canvas)
+		{
+			removeObserver(canvas, CANVAS_KEYBOARD_DID_CHANGE);
+			removeObserver(canvas, CANVAS_UNICODEKEYBOARD_DID_CHANGE);
+			removeObserver(canvas, CANVAS_POINTER_DID_CHANGE);
+			removeObserver(canvas, CANVAS_MOUSE_DID_CHANGE);
+			removeObserver(canvas, CANVAS_JOYSTICK1_DID_CHANGE);
+			removeObserver(canvas, CANVAS_JOYSTICK2_DID_CHANGE);
+			removeObserver(canvas, CANVAS_JOYSTICK3_DID_CHANGE);
+			removeObserver(canvas, CANVAS_JOYSTICK4_DID_CHANGE);
 			emulation->postMessage(this,
 								   EMULATION_DESTROY_CANVAS,
 								   &canvas);
+		}
 		emulation = ref;
 		if (emulation)
 			emulation->postMessage(this,
 								   EMULATION_CREATE_CANVAS,
 								   &canvas);
-		setObserver(oldCanvas, canvas, CANVAS_KEYBOARD_DID_CHANGE);
-		setObserver(oldCanvas, canvas, CANVAS_UNICODEKEYBOARD_DID_CHANGE);
-		setObserver(oldCanvas, canvas, CANVAS_POINTER_DID_CHANGE);
-		setObserver(oldCanvas, canvas, CANVAS_MOUSE_DID_CHANGE);
-		setObserver(oldCanvas, canvas, CANVAS_JOYSTICK1_DID_CHANGE);
-		setObserver(oldCanvas, canvas, CANVAS_JOYSTICK2_DID_CHANGE);
-		setObserver(oldCanvas, canvas, CANVAS_JOYSTICK3_DID_CHANGE);
-		setObserver(oldCanvas, canvas, CANVAS_JOYSTICK4_DID_CHANGE);
+		addObserver(canvas, CANVAS_KEYBOARD_DID_CHANGE);
+		addObserver(canvas, CANVAS_UNICODEKEYBOARD_DID_CHANGE);
+		addObserver(canvas, CANVAS_POINTER_DID_CHANGE);
+		addObserver(canvas, CANVAS_MOUSE_DID_CHANGE);
+		addObserver(canvas, CANVAS_JOYSTICK1_DID_CHANGE);
+		addObserver(canvas, CANVAS_JOYSTICK2_DID_CHANGE);
+		addObserver(canvas, CANVAS_JOYSTICK3_DID_CHANGE);
+		addObserver(canvas, CANVAS_JOYSTICK4_DID_CHANGE);
 	}
 	else
 		return false;
@@ -148,19 +156,16 @@ bool CompositeMonitor::init()
 	
 	if (canvas)
 	{
-		CanvasFrame frame;
-		frame.screenSize.width = 720;
-		frame.screenSize.height = 576;
+		CanvasConfiguration configuration;
+		configuration.size = OEMakeSize(720, 576);
+		configuration.captureMode = CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_CLICK;
+		canvas->postMessage(this, CANVAS_CONFIGURE, &configuration);
 		
-		canvas->postMessage(this,
-							CANVAS_GET_FRAME,
-							&frame);
-		canvas->postMessage(this,
-							CANVAS_RETURN_FRAME,
-							&frame);
-		
-		CanvasCaptureMode captureMode = CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_CLICK;
-		canvas->postMessage(this, CANVAS_SET_CAPTUREMODE, &captureMode);
+		OEImage *frame = NULL;
+		canvas->postMessage(this, CANVAS_REQUEST_FRAME, &frame);
+		if (frame)
+			frame->setSize(OEMakeSize(720, 576));
+		canvas->postMessage(this, CANVAS_RETURN_FRAME, &frame);
 	}
 	
 	return true;

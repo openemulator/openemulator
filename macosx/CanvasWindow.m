@@ -18,6 +18,8 @@
 				  backing:(NSBackingStoreType)bufferingType 
 					defer:(BOOL)deferCreation
 {
+	NSLog(@"CanvasWindow init");
+	
 	if (self = [super initWithContentRect:contentRect
 								styleMask:windowStyle
 								  backing:bufferingType
@@ -30,6 +32,7 @@
 - (void)dealloc
 {
 	NSLog(@"CanvasWindow dealloc");
+	
 	[super dealloc];
 }
 
@@ -66,11 +69,15 @@
 
 - (NSRect)constrainFrameRect:(NSRect)frameRect toScreen:(NSScreen *)screen
 {
+//	NSLog(@"CanvasWindow constrainFrameRect");
+	
 	return frameRect;
 }
 
 - (NSSize)windowWillResize:(NSWindow *)window toSize:(NSSize)proposedFrameSize
 {
+//	NSLog(@"CanvasWindow windowWillResize");
+	
 	if (!fullscreen)
 		return proposedFrameSize;
 	else
@@ -79,6 +86,8 @@
 
 - (BOOL)windowShouldClose:(id)sender
 {
+	NSLog(@"CanvasWindow windowShouldClose");
+	
 	if (fullscreen)
 		[self toggleFullscreen:self];
 	

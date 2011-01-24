@@ -8,6 +8,9 @@
  * Defines the RS-232 interface
  */
 
+#ifndef _RS232INTERFACE
+#define _RS232INTERFACE
+
 typedef enum
 {
 	RS232_SEND_DATA,
@@ -32,3 +35,5 @@ typedef enum
 	RS232_BREAK_DID_ASSERT,
 	RS232_BREAK_DID_CLEAR,
 } RS232Notification;
+
+#endif

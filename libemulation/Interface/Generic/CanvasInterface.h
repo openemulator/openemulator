@@ -13,15 +13,17 @@
 
 #include "OEImage.h"
 
-// Notes
-// * A component should first request a canvas from the canvas controller.
-//   Then it can subscribe to the canvas' events.
-// * Axes are in [-1.0:1.0] coordinates.
+//
+// Notes:
+//
+// * Screen coordinates are in [0:1,0:1] coordinates.
+// * HID axes are in [-1.0:1.0] coordinates.
+//
 
 typedef enum
 {
-	CANVAS_SET_CAPTUREMODE,
-	CANVAS_GET_FRAME,
+	CANVAS_CONFIGURE,
+	CANVAS_REQUEST_FRAME,
 	CANVAS_RETURN_FRAME,
 	CANVAS_LOCK_OPENGL,
 	CANVAS_UNLOCK_OPENGL,
@@ -51,49 +53,37 @@ typedef enum
 	CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_ENTER,
 } CanvasCaptureMode;
 
-typedef enum
-{
-	CANVAS_CAPTURE_NONE,
-	CANVAS_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR,
-	CANVAS_CAPTURE_KEYBOARD_AND_HIDE_MOUSE_CURSOR,
-} CanvasCapture;
+typedef float CanvasDecoderMatrix[3][3];
 
 typedef struct
 {
-	OEImage image;
-	
-} CanvasVideoFrame;
-
-typedef struct
-{
-	CanvasVideoFrame video;
+	OESize size;
+	float horizBegin;
+	float horizEnd;
+	float vertBegin;
+	float vertEnd;
+	bool zoomToFit;
+	CanvasCaptureMode captureMode;
 	
 	bool compositeColorBurst;
 	bool compositeInterlaced;
-	
-	float videoHorizBegin;
-	float videoHorizEnd;
-	float videoVertBegin;
-	float videoVertEnd;
-
-	float compositeLumaCutoff;
-	float compositeChromaCutoff;
+	float compositeLumaCutoffFrequency;
+	float compositeChromaCutoffFrequency;
 	float compositeHue;
 	float compositeSaturation;
 	bool compositeColorize;
-	float *compositeDecoderMatrix;
+	CanvasDecoderMatrix compositeDecoderMatrix;
 	
-	float rgbSharpness;
+	float rgbHorizontalSharpness;
 	
-	OESize screenSize;
-	float screenBrightness;
-	float screenContrast;
-	float screenRedGain;
-	float screenGreenGain;
-	float screenBlueGain;
-	float screenBarrel;
-	float screenPersistance;
-} CanvasFrame;
+	float videoBrightness;
+	float videoContrast;
+	float videoRedGain;
+	float videoGreenGain;
+	float videoBlueGain;
+	float videoBarrel;
+	float videoPersistance;
+} CanvasConfiguration;
 
 // Canvas keyboard flags use int
 #define CANVAS_L_NUMLOCK	(1 << 0)
@@ -108,16 +98,16 @@ typedef struct
 #define CANVAS_B_POWER		(1 << 0)
 #define CANVAS_B_PAUSE		(1 << 1)
 
-// Copy and paste use an STL string
+// Copy and paste use string
 
-// Canvas human-interface device notifications use this structure
+// Canvas HID notifications
 typedef struct
 {
 	int usageId;
 	float value;
 } CanvasHIDNotification;
 
-// Canvas human-interface device definitions follow
+// Canvas HID definitions
 #define CANVAS_KEYBOARD_KEY_NUM		256
 #define CANVAS_POINTER_BUTTON_NUM	8
 #define CANVAS_MOUSE_BUTTON_NUM		8

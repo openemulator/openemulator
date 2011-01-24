@@ -254,10 +254,22 @@
 <connector id="sgp.conn" ref="" type="AppleIISlot" label="Slot 0" />
 
 <device id="s0" label="Apple Language Card" image="images/Apple/Apple Language Card.png" group="expansions" />
-<connector id="s1.conn" ref="" type="AppleIISlot" label="Slot 0" />
+<connector id="s0.conn" ref="" type="AppleIISlot" label="Slot 0" />
+
+
 
 <device id="s1" label="Apple Silentype Interface Card" image="images/Apple/Apple Synch Printer Interface Card.png" group="expansions" />
-<connector id="s2.conn" ref="" type="AppleIISlot" label="Slot 0" />
+<connector id="s1.connector" ref="appleSilentype" type="AppleIISlot" label="Interface Port" />
+<port id="s1.port" ref="appleSilentype.connector" type="AppleSilentype" label="Interface Port" />
+
+<device id="appleSilentype" label="Apple Silentype" image="images/Apple/Apple Silentype.png" group="peripherals" />
+<connector id="appleSilentype.connector" ref="s1" type="AppleIISlot" label="Slot 0" />
+<component id="appleSilentype.io" class="AppleGraphicsTablet">
+	<property name="emulation" ref="emulation" />
+	<property name="viewPath" value="${resourcePath}/images/Apple/Apple Graphics Tablet View.png" />
+</component>
+
+
 
 <device id="s2" label="Apple Super Serial Card" image="images/Apple/Apple II Super Serial Card.png" group="expansions">
     <setting ref="ssc.io" name="mode" label="Mode" type="select" options="Communications,Printer" />
@@ -280,17 +292,17 @@
 <device id="s4" label="Mountain Computer Apple Clock" image="images/Mountain Computer/Mountain Computer Apple Clock.png" group="expansions" />
 <connector id="s5.conn" ref="" type="AppleIISlot" label="Slot 0" />
 
+
+
 <device id="s5" label="Apple Graphics Tablet Interface Card" image="images/Apple/Apple Graphics Tablet Interface Card.png" group="expansions" />
-<connector id="s5.conn" ref="s5dev" type="AppleIISlot" label="Slot 0" />
+<connector id="s5.connector" ref="appleGraphicsTablet" type="AppleIISlot" label="Slot 0" />
 <port id="s5.port" ref="appleGraphicsTablet.connector" type="AppleGraphicsTablet" label="Interface Port" />
 
-
-
 <device id="appleGraphicsTablet" label="Apple Graphics Tablet" image="images/Apple/Apple Graphics Tablet.png" group="peripherals" />
-<connector id="s5dev.connector" ref="s5" type="AppleIISlot" label="Slot 0" />
+<connector id="appleGraphicsTablet.connector" ref="s5" type="AppleIISlot" label="Slot 0" />
 <component id="appleGraphicsTablet.io" class="AppleGraphicsTablet">
 	<property name="emulation" ref="emulation" />
-	<property name="view" value="${resourcePath}/images/Apple/Apple Graphics Tablet View.png" />
+	<property name="viewPath" value="${resourcePath}/images/Apple/Apple Graphics Tablet View.png" />
 </component>
 
 

@@ -15,6 +15,8 @@
 - (id)initWithTitle:(NSString *)theTitle
 			 canvas:(void *)theCanvas
 {
+	NSLog(@"CanvasWindowController init");
+	
 	if (self = [self initWithWindowNibName:@"Canvas"])
 	{
 		title = [theTitle copy];
@@ -28,6 +30,7 @@
 - (void)dealloc
 {
 	NSLog(@"CanvasWindowController dealloc");
+	
 	[title release];
 	
 	[super dealloc];
@@ -38,9 +41,21 @@
 	return canvas;
 }
 
+- (void)destroyCanvas
+{
+	[fCanvasView stopOpenGL];
+}
+
+
+
+- (void)awakeFromNib
+{
+	NSLog(@"CanvasWindowController awakeFromNib");
+}
+
 - (void)windowDidLoad
 {
-	NSLog(@"windowDidLoad");
+	NSLog(@"CanvasWindowController windowDidLoad");
 	
 	NSToolbar *toolbar;
 	toolbar = [[NSToolbar alloc] initWithIdentifier:@"Canvas Toolbar"];
@@ -51,6 +66,7 @@
 	[toolbar release];
 	
 	NSRect windowFrame = [[self window] frame];
+	[[self window] setDelegate:fCanvasView];
 	[[self window] setContentSize:[fCanvasView defaultSize]];
 	[[self window] setFrameTopLeftPoint:NSMakePoint(NSMinX(windowFrame),
 													NSMaxY(windowFrame))];
@@ -58,7 +74,7 @@
 
 - (void)showWindow:(id)sender
 {
-	NSLog(@"showWindow");
+	NSLog(@"CanvasWindowController showWindow");
 	
 	[super showWindow:sender];
 	

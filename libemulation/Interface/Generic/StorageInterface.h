@@ -8,6 +8,18 @@
  * Defines the storage interface.
  */
 
+#ifndef _STORAGEINTERFACE
+#define _STORAGEINTERFACE
+
+//
+// Notes:
+//
+// * STORAGE_IS_* uses bool
+// * STORAGE_GET_IMAGE_PATH uses string
+// * STORAGE_GET_IMAGE_FORMAT uses string
+// * STORAGE_GET_IMAGE_CAPACITY uses OEUInt64
+//
+
 typedef enum
 {
 	STORAGE_MOUNT,
@@ -20,3 +32,5 @@ typedef enum
 	STORAGE_GET_IMAGE_FORMAT,
 	STORAGE_GET_IMAGE_CAPACITY,
 } StorageMessage;
+
+#endif

@@ -1,4 +1,5 @@
 ==To-Do==
+* Fix OpenGL context problem when closing an emulation. Lock condition in [CanvasView reshape]
 * Implement frame communication to the canvas
 * Implement capture badge, lasting 3 seconds, disappearing in 1 second
 * Devise a way to send system events to a device without a canvas
@@ -17,7 +18,6 @@
 * Implement disk image file locking, if the disk image is writable (flock)
 
 ==Future to-do's==
-* Should the UI lock the aspect ratio when not fullscreen? For now, no
 * Debugging with JTAG
 * TCP AT Modem emulation
 * Debugger commands: run/step/break/readRegister/writeRegister/readMemory/writeMemory/addTrap/removeTrap/listTraps

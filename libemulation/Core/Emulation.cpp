@@ -33,6 +33,8 @@ Emulation::~Emulation()
 {
 	close();
 	
+	didUpdate = NULL;
+	
 	disconnectEmulation();
 	destroyEmulation();
 }
@@ -446,7 +448,7 @@ bool Emulation::configureComponent(string id, xmlNodePtr children)
 	OEComponent *component = getComponent(id);
 	if (!component)
 	{
-		log("could not configure '" + id + "', it was not created");
+		log("could not configure '" + id + "', it is not created");
 		return false;
 	}
 	
@@ -469,14 +471,14 @@ bool Emulation::configureComponent(string id, xmlNodePtr children)
 				value = parseValueProperties(value, propertiesMap);
 				
 				if (!component->setValue(name, value))
-					log("invalid property '" + name + "' for '" + id + "'");
+					log("'" + id + "': invalid property '" + name + "'");
 			}
 			else if (hasNodeProperty(node, "ref"))
 			{
 				string refId = getNodeProperty(node, "ref");
 				OEComponent *ref = getComponent(refId);
 				if (!component->setRef(name, ref))
-					log("invalid property '" + name + "' for '" + id + "'");
+					log("'" + id + "': invalid property '" + name + "'");
 			}
 			else if (hasNodeProperty(node, "data"))
 			{
@@ -500,12 +502,12 @@ bool Emulation::configureComponent(string id, xmlNodePtr children)
 				}
 				
 				if (!component->setData(name, data))
-					log("invalid property '" + name + "' for '" + id + "'");
+					log("'" + id + "': invalid property '" + name + "'");
 			}
 			else
 			{
-				log("invalid property '" + name + "' for '" + id +
-					"', unrecognized type");
+				log("'" + id + "': invalid property '" + name + "', "
+					"unrecognized type");
 			}
 		}
 	}
@@ -539,7 +541,7 @@ bool Emulation::initComponent(string id)
 	OEComponent *component = getComponent(id);
 	if (!component)
 	{
-		log("could not init '" + id + "', it was not created");
+		log("could not init '" + id + "', it is not created");
 		return false;
 	}
 	
@@ -577,7 +579,7 @@ bool Emulation::updateComponent(string id, xmlNodePtr children)
 	OEComponent *component = getComponent(id);
 	if (!component)
 	{
-		log("could not update '" + id + "', it was not created");
+		log("could not update '" + id + "', it is not created");
 		return false;
 	}
 	

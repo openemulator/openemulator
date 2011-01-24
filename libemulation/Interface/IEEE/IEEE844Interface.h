@@ -8,6 +8,9 @@
  * Defines the IEEE 844 interface
  */
 
+#ifndef _IEEE844INTERFACE
+#define _IEEE844INTERFACE
+
 typedef enum
 {
 	IEEE844_SEND_DATA,
@@ -17,3 +20,5 @@ typedef enum
 {
 	IEEE844_DID_RECEIVE_DATA,
 } IEEE844Notification;
+
+#endif

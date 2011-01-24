@@ -29,12 +29,12 @@
 	BOOL capsLockNotSynchronized;
 }
 
+- (void)startOpenGL;
+- (void)stopOpenGL;
 - (void)startDisplayLink;
 - (void)stopDisplayLink;
-
 - (NSSize)defaultSize;
-
-- (void)drawView;
+- (void)updateView;
 
 - (void)setKeyboardFlags:(NSInteger)theKeyboardFlags;
 - (void)synchronizeKeyboardFlags;

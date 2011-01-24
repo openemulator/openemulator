@@ -22,7 +22,6 @@ public:
 	
 private:
 	OEComponent *emulation;
-	
 	OEComponent *canvas;
 	
 	float compositeLumaCutoff;

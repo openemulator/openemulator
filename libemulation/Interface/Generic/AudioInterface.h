@@ -11,6 +11,8 @@
 #ifndef _AUDIOINTERFACE_H
 #define _AUDIOINTERFACE_H
 
+// Notifications use AudioBuffer
+
 typedef enum
 {
 	AUDIO_FRAME_WILL_RENDER,

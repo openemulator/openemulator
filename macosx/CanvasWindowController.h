@@ -23,5 +23,6 @@
 - (id)initWithTitle:(NSString *)title
 		  canvas:(void *)theCanvas;
 - (void *)canvas;
+- (void)destroyCanvas;
 
 @end

@@ -1,11 +1,11 @@
 
 /**
  * libemulation
- * Image loading
+ * Image
  * (C) 2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Provides support for image loading.
+ * Implements an image type.
  */
 
 #include <png.h>
@@ -14,30 +14,56 @@
 
 #define OEIMAGE_PNGSIG_BYTENUM 4
 
-bool oeValidatePNG(FILE *fp)
+OEImage::OEImage()
 {
-	char pngHeader[OEIMAGE_PNGSIG_BYTENUM];
-	if (fread(pngHeader, 1, OEIMAGE_PNGSIG_BYTENUM, fp) !=
-		OEIMAGE_PNGSIG_BYTENUM)
-		return false;
-	
-	return !png_sig_cmp((png_byte *) pngHeader, 0, OEIMAGE_PNGSIG_BYTENUM);
+	format = OEIMAGE_FORMAT_RGBA;
+	size = OEMakeSize(0, 0);
 }
 
-bool oeReadImage(string path, OEImage *image)
+void OEImage::setFormat(OEImageFormat format)
+{
+	this->format = format;
+	
+	update();
+}
+
+OEImageFormat OEImage::getFormat()
+{
+	return format;
+}
+
+void OEImage::setSize(OESize size)
+{
+	this->size = size;
+	
+	update();
+}
+
+OESize OEImage::getSize()
+{
+	return size;
+}
+
+void *OEImage::getData()
+{
+	return &data.front();
+}
+
+bool OEImage::readFile(string path)
 {
 	bool result = false;
 	
 	FILE *fp = fopen(path.c_str(), "rb");
 	if (fp)
 	{
-		if (oeValidatePNG(fp))
+		if (validatePNG(fp))
 		{
 			png_structp png = NULL;
 			png_infop info = NULL;
 			int pngTransforms = (PNG_TRANSFORM_STRIP_16 |
 								 PNG_TRANSFORM_PACKING |
-								 PNG_TRANSFORM_EXPAND);
+								 PNG_TRANSFORM_EXPAND |
+								 PNG_TRANSFORM_GRAY_TO_RGB);
 			
 			png = png_create_read_struct(PNG_LIBPNG_VER_STRING,
 										 NULL,
@@ -50,24 +76,34 @@ bool oeReadImage(string path, OEImage *image)
 				{
 					if (setjmp(png_jmpbuf(png)) == 0)
 					{
+						png_uint_32 width, height;
+						int bit_depth, color_type;
+						
 						png_init_io(png, fp);
 						png_set_sig_bytes(png, OEIMAGE_PNGSIG_BYTENUM);
 						png_read_png(png, info, pngTransforms, NULL);
+						png_get_IHDR(png, info,
+									 &width, &height, &bit_depth, &color_type,
+									 NULL, NULL, NULL);
 						
-						image->size.width = info->width;
-						image->size.height = info->height;
-						image->format = OEIMAGE_FORMAT_RGB;
-						image->data = (char *) malloc(info->width * info->height * 4);
+						format = ((color_type == PNG_COLOR_TYPE_RGB) ? 
+								  OEIMAGE_FORMAT_RGB : OEIMAGE_FORMAT_RGBA);
+						size.width = width;
+						size.height = height;
+						
+						update();
 						
 						// Copy image
-						int rowByteNum = info->width * 4;
+						int bytesPerPixel = ((color_type == PNG_COLOR_TYPE_RGB) ? 
+											 3 : 4);
+						int rowByteNum = width * bytesPerPixel;
 						char **rows = (char **) png_get_rows(png, info);
-						char *data = image->data;
+						char *datap = (char *) getData();
 						
-						for (int row = 0; row < info->height; row++)
+						for (int row = 0; row < height; row++)
 						{
-							memcpy(data, rows[row], rowByteNum);
-							data += rowByteNum;
+							memcpy(datap, rows[row], rowByteNum);
+							datap += rowByteNum;
 						}
 						
 						result = true;
@@ -84,8 +120,27 @@ bool oeReadImage(string path, OEImage *image)
 	return result;
 }
 
-void oeFreeImage(OEImage *image)
+bool OEImage::validatePNG(FILE *fp)
 {
-	free(image->data);
-	image->data = NULL;
+	char pngHeader[OEIMAGE_PNGSIG_BYTENUM];
+	
+	if (fread(pngHeader, 1, OEIMAGE_PNGSIG_BYTENUM, fp) !=
+		OEIMAGE_PNGSIG_BYTENUM)
+		return false;
+	
+	return !png_sig_cmp((png_byte *) pngHeader, 0, OEIMAGE_PNGSIG_BYTENUM);
+}
+
+void OEImage::update()
+{
+	int bytesPerPixel = 0;
+	
+	if (format == OEIMAGE_FORMAT_MONOCHROME)
+		bytesPerPixel = 1;
+	else if (format == OEIMAGE_FORMAT_RGB)
+		bytesPerPixel = 3;
+	else if (format == OEIMAGE_FORMAT_RGBA)
+		bytesPerPixel = 4;
+	
+	data.resize(size.width * size.height * bytesPerPixel);
 }

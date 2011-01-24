@@ -982,8 +982,8 @@
 			targets = (
 				8D15AC270486D014006FF6A4 /* OpenEmulator */,
 				0054E2E31131B9EF006D32D9 /* openemulator-sdl */,
-				006EECA30FCA5C31003D2C8D /* emulation */,
 				00039E7B12B03F650025D374 /* emulation-hal */,
+				006EECA30FCA5C31003D2C8D /* emulation */,
 			);
 		};
 /* End PBXProject section */
@@ -1230,25 +1230,6 @@
 		00039E7D12B03F660025D374 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				HEADER_SEARCH_PATHS = (
-					/usr/local/include,
-					/opt/local/include,
-					/usr/include/libxml2,
-				);
-				INSTALL_PATH = /usr/local/lib;
-				LIBRARY_SEARCH_PATHS = (
-					/usr/local/lib,
-					/opt/local/lib,
-				);
-				PREBINDING = NO;
 				PRODUCT_NAME = "emulation-hal";
 			};
 			name = Debug;
@@ -1256,24 +1237,6 @@
 		00039E7E12B03F660025D374 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
-				GCC_MODEL_TUNING = G5;
-				HEADER_SEARCH_PATHS = (
-					/usr/local/include,
-					/opt/local/include,
-					/usr/include/libxml2,
-				);
-				INSTALL_PATH = /usr/local/lib;
-				LIBRARY_SEARCH_PATHS = (
-					/usr/local/lib,
-					/opt/local/lib,
-				);
-				PREBINDING = NO;
 				PRODUCT_NAME = "emulation-hal";
 			};
 			name = Release;
@@ -1281,36 +1244,6 @@
 		0054E2E61131B9EF006D32D9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				GCC_PREFIX_HEADER = "";
-				GCC_WARN_EFFECTIVE_CPLUSPLUS_VIOLATIONS = NO;
-				HEADER_SEARCH_PATHS = (
-					macosx/include,
-					/usr/local/include,
-					/opt/local/include,
-					/usr/include/libxml2,
-				);
-				INSTALL_PATH = /usr/local/bin;
-				LIBRARY_SEARCH_PATHS = (
-					macosx/lib,
-					/usr/local/lib,
-					/opt/local/lib,
-					"\"$(SRCROOT)/build/Debug\"",
-				);
-				OTHER_LDFLAGS = (
-					"-framework",
-					Foundation,
-					"-framework",
-					AppKit,
-				);
-				PREBINDING = NO;
 				PRODUCT_NAME = "openemulator-sdl";
 			};
 			name = Debug;
@@ -1318,177 +1251,53 @@
 		0054E2E71131B9EF006D32D9 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
-				INSTALL_PATH = /usr/local/bin;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					/opt/local/lib,
-					"\"$(SRCROOT)/build/Debug\"",
-				);
-				OTHER_LDFLAGS = (
-					"-framework",
-					Foundation,
-					"-framework",
-					AppKit,
-				);
-				PREBINDING = NO;
 				PRODUCT_NAME = "openemulator-sdl";
-				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
 		006EECA50FCA5C32003D2C8D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_ENABLE_SYMBOL_SEPARATION = NO;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GENERATE_MASTER_OBJECT_FILE = NO;
-				HEADER_SEARCH_PATHS = (
-					/usr/local/include,
-					/opt/local/include,
-					/usr/include/libxml2,
-				);
-				INSTALL_PATH = /usr/local/lib;
-				LIBRARY_SEARCH_PATHS = (
-					/usr/local/lib,
-					/opt/local/lib,
-				);
-				PREBINDING = NO;
 				PRODUCT_NAME = emulation;
-				SDKROOT = macosx10.5;
 			};
 			name = Debug;
 		};
 		006EECA60FCA5C32003D2C8D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_ENABLE_SYMBOL_SEPARATION = NO;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GENERATE_MASTER_OBJECT_FILE = NO;
-				HEADER_SEARCH_PATHS = (
-					/usr/local/include,
-					/opt/local/include,
-					/usr/include/libxml2,
-				);
-				INSTALL_PATH = /usr/local/lib;
-				LIBRARY_SEARCH_PATHS = (
-					/usr/local/lib,
-					/opt/local/lib,
-				);
-				PREBINDING = NO;
 				PRODUCT_NAME = emulation;
-				SDKROOT = macosx10.5;
 			};
 			name = Release;
 		};
 		C05733C808A9546B00998B17 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = "";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/macosx\"",
-					"\"$(SYSTEM_LIBRARY_DIR)/Frameworks/Quartz.framework/Frameworks\"",
-					"\"$(SDKROOT)$(SYSTEM_LIBRARY_DIR)/Frameworks/ApplicationServices.framework/Frameworks\"",
-				);
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_MODEL_PPC64 = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = macosx/OpenEmulator_Prefix.pch;
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				HEADER_SEARCH_PATHS = (
-					/usr/local/include,
-					/opt/local/include,
-					/usr/include/libxml2,
-				);
-				INFOPLIST_FILE = macosx/Info.plist;
-				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = (
-					/usr/local/lib,
-					/opt/local/lib,
-					"\"$(SRCROOT)/build/Debug\"",
-				);
 				PRODUCT_NAME = OpenEmulator;
-				SDKROOT = macosx10.5;
-				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
 			};
 			name = Debug;
 		};
 		C05733C908A9546B00998B17 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
-				CURRENT_PROJECT_VERSION = "";
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/macosx\"",
-					"\"$(SYSTEM_LIBRARY_DIR)/Frameworks/Quartz.framework/Frameworks\"",
-					"\"$(SDKROOT)$(SYSTEM_LIBRARY_DIR)/Frameworks/ApplicationServices.framework/Frameworks\"",
-				);
-				GCC_MODEL_TUNING = G5;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = macosx/OpenEmulator_Prefix.pch;
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				HEADER_SEARCH_PATHS = (
-					macosx/include,
-					/usr/local/include,
-					/opt/local/include,
-					/usr/include/libxml2,
-				);
-				INFOPLIST_FILE = macosx/Info.plist;
-				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = (
-					macosx/lib,
-					/usr/local/lib,
-					/opt/local/lib,
-					"\"$(SRCROOT)/../../../Desktop\"",
-					"\"$(SRCROOT)/build/Debug\"",
-				);
 				PRODUCT_NAME = OpenEmulator;
-				SDKROOT = macosx10.5;
-				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
 			};
 			name = Release;
 		};
 		C05733CC08A9546B00998B17 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				GCC_C_LANGUAGE_STANDARD = c99;
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				FRAMEWORK_SEARCH_PATHS = macosx;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IBC_PLUGIN_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = (
+					/usr/include/libxml2,
+					/opt/local/include,
+				);
+				LIBRARY_SEARCH_PATHS = /opt/local/lib;
 				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
 				SDKROOT = macosx10.5;
@@ -1499,10 +1308,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
-				GCC_C_LANGUAGE_STANDARD = c99;
+				FRAMEWORK_SEARCH_PATHS = macosx;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				IBC_PLUGIN_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = (
+					/usr/include/libxml2,
+					/opt/local/include,
+				);
+				LIBRARY_SEARCH_PATHS = /opt/local/lib;
 				PREBINDING = NO;
 				SDKROOT = macosx10.5;
 			};

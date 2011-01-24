@@ -18,8 +18,14 @@ OpenGLHAL::OpenGLHAL()
 	setCapture = NULL;
 	setKeyboardFlags = NULL;
 	
+	defaultSize.width = DEFAULT_WIDTH;
+	defaultSize.height = DEFAULT_HEIGHT;
+	
 	captureMode = CANVAS_CAPTUREMODE_NO_CAPTURE;
-	capture = CANVAS_CAPTURE_NONE;
+	capture = OPENGLHAL_CAPTURE_NONE;
+	
+	glCurrentFrame = NULL;
+	glNextFrame = NULL;
 	
 	for (int i = 0; i < CANVAS_KEYBOARD_KEY_NUM; i++)
 		keyDown[i] = false;
@@ -31,16 +37,6 @@ OpenGLHAL::OpenGLHAL()
 	for (int i = 0; i < CANVAS_JOYSTICK_NUM; i++)
 		for (int j = 0; j < CANVAS_JOYSTICK_BUTTON_NUM; j++)
 			joystickButtonDown[i][j] = false;
-	
-	defaultSize.width = DEFAULT_WIDTH;
-	defaultSize.height = DEFAULT_HEIGHT;
-	
-	{
-		int j = 0;
-		for (int i = 0; i < 255; i++)
-			j += keyDown[i];
-		log("OpenGLHAL " + getString(j));
-	}	
 }
 
 void OpenGLHAL::open(CanvasSetCapture setCapture,
@@ -64,17 +60,22 @@ void OpenGLHAL::open(CanvasSetCapture setCapture,
 	
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	
-	glGenTextures(OEGL_TEX_NUM, textures);
+	glGenTextures(OEGL_TEX_NUM, glTextures);
+	
+	pthread_mutex_init(&glMutex, NULL);
 }
 
 void OpenGLHAL::close()
 {
-	glDeleteTextures(OEGL_TEX_NUM, textures);
+	pthread_mutex_destroy(&glMutex);
+	
+	glDeleteTextures(OEGL_TEX_NUM, glTextures);
 }
 
-void OpenGLHAL::updateCapture(CanvasCapture capture)
+void OpenGLHAL::updateCapture(OpenGLHALCapture capture)
 {
-	log("updateCapture");
+//	log("updateCapture");
+	
 	if (this->capture == capture)
 		return;
 	this->capture = capture;
@@ -94,9 +95,32 @@ OESize OpenGLHAL::getDefaultSize()
 	return defaultSize;
 }
 
-void OpenGLHAL::draw(int width, int height)
+void OpenGLHAL::draw(int width, int height, int offset)
 {
+	// Draw frame
 	glClear(GL_COLOR_BUFFER_BIT);
+}
+
+void OpenGLHAL::update(int width, int height, int offset)
+{
+	// Get new frame
+	OEImage *glPreviousFrame = NULL;
+	
+	pthread_mutex_lock(&glMutex);
+	if (glNextFrame)
+	{
+		glPreviousFrame = glCurrentFrame;
+		glCurrentFrame = glNextFrame;
+		glNextFrame = NULL;
+	}
+	pthread_mutex_unlock(&glMutex);
+	
+	if (glPreviousFrame)
+	{
+		delete glPreviousFrame;
+	
+		draw(width, height, offset);
+	}
 }
 
 void OpenGLHAL::becomeKeyWindow()
@@ -105,11 +129,11 @@ void OpenGLHAL::becomeKeyWindow()
 
 void OpenGLHAL::resignKeyWindow()
 {
-	releaseKeysAndButtons();
+	resetKeysAndButtons();
 	
 	ctrlAltWasPressed = false;
 	
-	updateCapture(CANVAS_CAPTURE_NONE);
+	updateCapture(OPENGLHAL_CAPTURE_NONE);
 }
 
 void OpenGLHAL::sendSystemEvent(int usageId)
@@ -121,6 +145,10 @@ void OpenGLHAL::setKey(int usageId, bool value)
 {
 	if (keyDown[usageId] == value)
 		return;
+	
+//	log("key " + getHexString(usageId) + ": " + getString(value));
+//	log("keyDownCount " + getString(keyDownCount));
+	
 	keyDown[usageId] = value;
 	keyDownCount += value ? 1 : -1;
 	if ((keyDown[CANVAS_K_LEFTCONTROL] ||
@@ -131,22 +159,20 @@ void OpenGLHAL::setKey(int usageId, bool value)
 	
 	postHIDNotification(CANVAS_KEYBOARD_DID_CHANGE, usageId, value);
 	
-	if ((capture == CANVAS_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR) &&
+	if ((capture == OPENGLHAL_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR) &&
 		!keyDownCount && ctrlAltWasPressed)
 	{
 		ctrlAltWasPressed = false;
 		
-		updateCapture(CANVAS_CAPTURE_NONE);
+		updateCapture(OPENGLHAL_CAPTURE_NONE);
 	}
-	
-	log("key " + getHexString(usageId) + ": " + getString(value));
-	log("keyDownCount " + getString(keyDownCount));
 }
 
 void OpenGLHAL::sendUnicodeKeyEvent(int unicode)
 {
+//	log("unicode " + getHexString(unicode));
+	
 	postHIDNotification(CANVAS_UNICODEKEYBOARD_DID_CHANGE, unicode, 0);
-	log("unicode " + getHexString(unicode));
 }
 
 void OpenGLHAL::enterMouse()
@@ -154,7 +180,7 @@ void OpenGLHAL::enterMouse()
 	mouseEntered = true;
 	
 	if (captureMode == CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_ENTER)
-		updateCapture(CANVAS_CAPTURE_KEYBOARD_AND_HIDE_MOUSE_CURSOR);
+		updateCapture(OPENGLHAL_CAPTURE_KEYBOARD_AND_HIDE_MOUSE_CURSOR);
 	
 	postHIDNotification(CANVAS_POINTER_DID_CHANGE,
 						CANVAS_P_PROXIMITY,
@@ -166,7 +192,7 @@ void OpenGLHAL::exitMouse()
 	mouseEntered = false;
 	
 	if (captureMode == CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_ENTER)
-		updateCapture(CANVAS_CAPTURE_NONE);
+		updateCapture(OPENGLHAL_CAPTURE_NONE);
 	
 	postHIDNotification(CANVAS_POINTER_DID_CHANGE,
 						CANVAS_P_PROXIMITY,
@@ -175,7 +201,7 @@ void OpenGLHAL::exitMouse()
 
 void OpenGLHAL::setMousePosition(float x, float y)
 {
-	if (capture != CANVAS_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR)
+	if (capture != OPENGLHAL_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR)
 	{
 		postHIDNotification(CANVAS_POINTER_DID_CHANGE,
 							CANVAS_P_X,
@@ -188,7 +214,7 @@ void OpenGLHAL::setMousePosition(float x, float y)
 
 void OpenGLHAL::moveMouse(float rx, float ry)
 {
-	if (capture == CANVAS_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR)
+	if (capture == OPENGLHAL_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR)
 	{
 		postHIDNotification(CANVAS_MOUSE_DID_CHANGE,
 							CANVAS_M_RELX,
@@ -207,14 +233,14 @@ void OpenGLHAL::setMouseButton(int index, bool value)
 		return;
 	mouseButtonDown[index] = value;
 	
-	if (capture == CANVAS_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR)
+	if (capture == OPENGLHAL_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR)
 		postHIDNotification(CANVAS_MOUSE_DID_CHANGE,
 							CANVAS_M_BUTTON1 + index,
 							value);
 	else if ((captureMode == CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_CLICK) &&
-			 (capture == CANVAS_CAPTURE_NONE) &&
+			 (capture == OPENGLHAL_CAPTURE_NONE) &&
 			 (index == 0))
-		updateCapture(CANVAS_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR);
+		updateCapture(OPENGLHAL_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR);
 	else
 		postHIDNotification(CANVAS_POINTER_DID_CHANGE,
 							CANVAS_P_BUTTON1 + index,
@@ -223,7 +249,7 @@ void OpenGLHAL::setMouseButton(int index, bool value)
 
 void OpenGLHAL::sendMouseWheelEvent(int index, float value)
 {
-	if (capture == CANVAS_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR)
+	if (capture == OPENGLHAL_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR)
 		postHIDNotification(CANVAS_MOUSE_DID_CHANGE,
 							CANVAS_M_WHEELX + index,
 							value);
@@ -284,7 +310,7 @@ void OpenGLHAL::moveJoystickBall(int deviceIndex, int index, float value)
 						value);
 }
 
-void OpenGLHAL::releaseKeysAndButtons()
+void OpenGLHAL::resetKeysAndButtons()
 {
 	for (int i = 0; i < CANVAS_KEYBOARD_KEY_NUM; i++)
 		setKey(i, false);
@@ -307,15 +333,59 @@ bool OpenGLHAL::paste(string value)
 	return OEComponent::postMessage(this, CANVAS_PASTE, &value);
 }
 
-bool OpenGLHAL::getFrame(CanvasFrame *frame)
+bool OpenGLHAL::setConfiguration(CanvasConfiguration *configuration)
 {
-	defaultSize = frame->screenSize;
+	if (!configuration)
+		return false;
+	
+	defaultSize = configuration->size;
+	
+	if (captureMode != configuration->captureMode)
+	{
+		captureMode = configuration->captureMode;
+		
+		if (captureMode == CANVAS_CAPTUREMODE_NO_CAPTURE)
+			updateCapture(OPENGLHAL_CAPTURE_NONE);
+		else if (captureMode == CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_CLICK)
+			updateCapture(OPENGLHAL_CAPTURE_NONE);
+		else if (captureMode == CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_ENTER)
+			updateCapture(mouseEntered ? 
+						  OPENGLHAL_CAPTURE_KEYBOARD_AND_HIDE_MOUSE_CURSOR : 
+						  OPENGLHAL_CAPTURE_NONE);
+	}
 	
 	return true;
 }
 
-bool OpenGLHAL::returnFrame(CanvasFrame *frame)
+bool OpenGLHAL::requestFrame(OEImage **frame)
 {
+	if (!frame)
+		return false;
+	
+	*frame = new OEImage();
+	
+	return (*frame != NULL);
+}
+
+bool OpenGLHAL::returnFrame(OEImage **frame)
+{
+	if (!frame)
+		return false;
+	
+	// Post frame
+	OEImage *glDiscardedFrame = NULL;
+	
+	pthread_mutex_lock(&glMutex);
+	if (glNextFrame)
+		glDiscardedFrame = glNextFrame;
+	glNextFrame = *frame;
+	pthread_mutex_unlock(&glMutex);
+	
+	if (glDiscardedFrame)
+		delete glDiscardedFrame;
+	
+	*frame = NULL;
+	
 	return true;
 }
 
@@ -323,30 +393,14 @@ bool OpenGLHAL::postMessage(OEComponent *sender, int message, void *data)
 {
 	switch (message)
 	{
-		case CANVAS_SET_CAPTUREMODE:
-			if (data)
-			{
-				CanvasCaptureMode newCaptureMode = *((CanvasCaptureMode *)data);
-				if (newCaptureMode == captureMode)
-					return true;
-				captureMode = newCaptureMode;
-					
-				if (captureMode == CANVAS_CAPTUREMODE_NO_CAPTURE)
-					updateCapture(CANVAS_CAPTURE_NONE);
-				else if (captureMode == CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_CLICK)
-					updateCapture(CANVAS_CAPTURE_NONE);
-				else if (captureMode == CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_ENTER)
-					updateCapture(mouseEntered ? 
-								  CANVAS_CAPTURE_KEYBOARD_AND_HIDE_MOUSE_CURSOR : 
-								  CANVAS_CAPTURE_NONE);
-			}
-			break;
+		case CANVAS_CONFIGURE:
+			return setConfiguration((CanvasConfiguration *)data);
 			
-		case CANVAS_GET_FRAME:
-			return getFrame((CanvasFrame *)data);
+		case CANVAS_REQUEST_FRAME:
+			return requestFrame((OEImage **)data);
 			
 		case CANVAS_RETURN_FRAME:
-			return returnFrame((CanvasFrame *)data);
+			return returnFrame((OEImage **)data);
 			
 		case CANVAS_LOCK_OPENGL:
 			break;

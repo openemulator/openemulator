@@ -16,8 +16,8 @@
 #import "DocumentController.h"
 #import "StringConversion.h"
 
-#define SPLIT_VERT_MIN 128
-#define SPLIT_VERT_MAX 256
+#define SPLIT_VERT_LEFT_MIN 128
+#define SPLIT_VERT_RIGHT_MIN 351
 
 @implementation EmulationWindowController
 
@@ -311,11 +311,22 @@ resizeSubviewsWithOldSize:(NSSize)oldSize
 		NSView *subview = [subviews objectAtIndex:i];
 		NSRect frame = subview.frame;
 		
-		if ([sender isVertical])
+		frame.size.height += deltaHeight;
+		if (i == 0)
 		{
-			frame.size.height += deltaHeight;
-			if (i == 1)
-				frame.size.width += deltaWidth;
+			float rightWidth = (newSize.width - [sender dividerThickness] -
+								frame.size.width);
+			if (rightWidth < SPLIT_VERT_RIGHT_MIN)
+				frame.size.width += rightWidth - SPLIT_VERT_RIGHT_MIN;
+		}
+		else
+		{
+			frame.size.width += deltaWidth;
+			if (frame.size.width < SPLIT_VERT_RIGHT_MIN)
+			{
+				frame.origin.x = newSize.width - SPLIT_VERT_RIGHT_MIN;
+				frame.size.width = SPLIT_VERT_RIGHT_MIN;
+			}
 		}
 		
 		[subview setFrame:frame];
@@ -326,14 +337,15 @@ resizeSubviewsWithOldSize:(NSSize)oldSize
 constrainMinCoordinate:(CGFloat)proposedMin
 		 ofSubviewAt:(NSInteger)dividerIndex
 {
-	return SPLIT_VERT_MIN;
+	return SPLIT_VERT_LEFT_MIN;
 }
 
 - (CGFloat)splitView:(NSSplitView *)splitView
 constrainMaxCoordinate:(CGFloat)proposedMax
 		 ofSubviewAt:(NSInteger)dividerIndex
 {
-	return SPLIT_VERT_MAX;
+	return ([splitView bounds].size.width - SPLIT_VERT_RIGHT_MIN -
+			[splitView dividerThickness]);
 }
 
 

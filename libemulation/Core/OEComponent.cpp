@@ -103,7 +103,8 @@ void OEComponent::notify(OEComponent *sender, int notification, void *data)
 
 bool OEComponent::addObserver(OEComponent *observer, int notification)
 {
-	observers[notification].push_back(observer);
+	if (observer)
+		observers[notification].push_back(observer);
 	
 	return true;
 }

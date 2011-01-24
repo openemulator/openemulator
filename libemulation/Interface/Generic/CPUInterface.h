@@ -8,6 +8,9 @@
  * Defines the CPU interface
  */
 
+#ifndef _CPUINTERFACE_H
+#define _CPUINTERFACE_H
+
 typedef enum
 {
 	CPU_RUN,
@@ -19,3 +22,5 @@ typedef enum
 {
 	CPU_INSTRUCTIONCYCLE_DID_END,
 } CPUNotification;
+
+#endif

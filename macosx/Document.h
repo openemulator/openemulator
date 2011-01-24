@@ -24,20 +24,17 @@
 	NSMutableArray *canvasWindowControllers;
 }
 
-- (void)newEmulation:(NSURL *)url;
-- (void)deleteEmulation;
-
-- (void)lockEmulation;
-- (void)unlockEmulation;
-
 - (id)initWithTemplateURL:(NSURL *)templateURL error:(NSError **)outError;
 - (IBAction)saveDocumentAsTemplate:(id)sender;
 
 - (void *)emulationInfo;
-
 - (void)showEmulation:(id)sender;
-
 - (void)showCanvas:(void *)canvas;
+
+- (void)createEmulation:(NSURL *)url;
+- (void)destroyEmulation;
+- (void)lockEmulation;
+- (void)unlockEmulation;
 
 - (BOOL)mount:(NSString *)path inStorage:(void *)component;
 - (BOOL)mount:(NSString *)path;

@@ -153,11 +153,15 @@ CanvasKeyMapEntry canvasKeyMap[] =
 
 @implementation CanvasView
 
-static void setCapture(void *userData, CanvasCapture capture)
+// Callback methods
+
+static void setCapture(void *userData, OpenGLHALCapture capture)
 {
-	BOOL isCapture = (capture != CANVAS_CAPTURE_NONE);
+	NSLog(@"CanvasView setCapture");
+	
+	BOOL isCapture = (capture != OPENGLHAL_CAPTURE_NONE);
 	BOOL enableMouseCursor = (capture !=
-							  CANVAS_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR);
+							  OPENGLHAL_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR);
 	
 	[(Application *)NSApp setCapture:isCapture];
 	
@@ -173,15 +177,11 @@ static void setCapture(void *userData, CanvasCapture capture)
 	CGAssociateMouseAndMouseCursorPosition(enableMouseCursor);
 }
 
-static void setKeyboardFlags(void *userData, NSInteger flags)
+static void setKeyboardFlags(void *userData, int flags)
 {
-	// There is no autorelease pool when this method is called
-	// (it is called from a background thread)
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	// To-Do: see if we need performSelectorOnMainThread
 	
 	[(CanvasView *)userData setKeyboardFlags:flags];
-	
-	[pool release];
 }
 
 static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
@@ -191,19 +191,21 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 									CVOptionFlags *flagsOut,
 									void *displayLinkContext)
 {
-	// There is no autorelease pool when this method is called
-	// (it is called from a background thread)
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
-	[(CanvasView *)displayLinkContext drawView];
+	[(CanvasView *)displayLinkContext updateView];
 	
 	[pool release];
 	
 	return kCVReturnSuccess;
 }
 
+// Class
+
 - (id)initWithFrame:(NSRect)rect
 {
+	NSLog(@"CanvasView init");
+	
 	NSOpenGLPixelFormatAttribute pixelFormatAtrributes[] =
 	{
 		NSOpenGLPFADoubleBuffer,
@@ -242,13 +244,22 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	return self;
 }
 
+- (void)dealloc
+{
+	NSLog(@"CanvasView dealloc");
+	
+	[super dealloc];
+}
+
 - (void)awakeFromNib
 {
-	NSLog(@"awakeFromNib");
+	NSLog(@"CanvasView awakeFromNib");
 	
 	CanvasWindowController *canvasWindowController = [[self window] windowController];
 	document = [canvasWindowController document];
 	canvas = [canvasWindowController canvas];
+	
+	[self startOpenGL];
 }
 
 - (BOOL)acceptsFirstResponder
@@ -266,14 +277,20 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (void)windowWillClose:(NSNotification *)notification
 {
-	NSLog(@"windowWillClose");
+	NSLog(@"CanvasView windowWillClose");
 	
 	[self stopDisplayLink];
 }
 
 - (void)windowDidBecomeKey:(NSNotification *)notification
 {
-	NSLog(@"windowDidBecomeKey");
+	NSLog(@"CanvasView windowDidBecomeKey");
+	
+	if (!canvas)
+	{
+		NSLog(@"CanvasView windowDidBecomeKey abort");
+		return;
+	}
 	
 	[document lockEmulation];
 	((OpenGLHAL *)canvas)->becomeKeyWindow();
@@ -299,6 +316,14 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (void)windowDidResignKey:(NSNotification *)notification
 {
+	NSLog(@"CanvasView windowDidResignKey");
+	
+	if (!canvas)
+	{
+		NSLog(@"CanvasView windowDidResignKey abort");
+		return;
+	}
+	
 	if ([self isMouseInView])
 		[self mouseExited:nil];
 	
@@ -309,8 +334,6 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	for (NSTrackingArea *area in [self trackingAreas])
 		if ([area owner] == self)
 			[self removeTrackingArea:area];
-	
-	NSLog(@"windowDidResignKey");
 }
 
 - (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender
@@ -372,9 +395,13 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 // Drawing
 
-- (void)startDisplayLink
+- (void)startOpenGL
 {
-	NSLog(@"startDisplayLink");
+	NSLog(@"CanvasView startOpenGL");
+	
+	GLint value = 1;
+	[[self openGLContext] setValues:&value
+					   forParameter:NSOpenGLCPSwapInterval]; 
 	
 	CGLLockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
 	[document lockEmulation];
@@ -383,24 +410,11 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 								NULL);
 	[document unlockEmulation];
 	CGLUnlockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
-	
-	CVDisplayLinkCreateWithActiveCGDisplays(&displayLink);
-	CVDisplayLinkSetOutputCallback(displayLink, &displayLinkCallback, self);
-	CGLContextObj cglContext = (CGLContextObj)[[self openGLContext] CGLContextObj];
-	CGLPixelFormatObj cglPixelFormat = (CGLPixelFormatObj)[[self pixelFormat] 
-														   CGLPixelFormatObj];
-	CVDisplayLinkSetCurrentCGDisplayFromOpenGLContext(displayLink,
-													  cglContext,
-													  cglPixelFormat);
-	
-	CVDisplayLinkStart(displayLink);
 }
 
-- (void)stopDisplayLink
+- (void)stopOpenGL
 {
-	NSLog(@"stopDisplayLink");
-	
-	CVDisplayLinkRelease(displayLink);
+	NSLog(@"CanvasView stopOpenGL");
 	
 	if (canvas)
 	{
@@ -410,85 +424,87 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	}
 }
 
+- (void)startDisplayLink
+{
+	NSLog(@"CanvasView startDisplayLink");
+	
+	if (CVDisplayLinkCreateWithActiveCGDisplays(&displayLink) == kCVReturnSuccess)
+	{
+		CVDisplayLinkSetOutputCallback(displayLink, &displayLinkCallback, self);
+		CGLContextObj cglContext = (CGLContextObj)[[self openGLContext] CGLContextObj];
+		CGLPixelFormatObj cglPixelFormat = (CGLPixelFormatObj)[[self pixelFormat] 
+															   CGLPixelFormatObj];
+		CVDisplayLinkSetCurrentCGDisplayFromOpenGLContext(displayLink,
+														  cglContext,
+														  cglPixelFormat);
+	
+		CVDisplayLinkStart(displayLink);
+	}
+}
+
+- (void)stopDisplayLink
+{
+	NSLog(@"CanvasView stopDisplayLink");
+	
+	if (displayLink)
+	{
+		CVDisplayLinkStop(displayLink);
+		CVDisplayLinkRelease(displayLink);
+		
+		displayLink = NULL;
+	}
+}
+
 - (NSSize)defaultSize
 {
 	[document lockEmulation];
 	OESize defaultSize = ((OpenGLHAL *)canvas)->getDefaultSize();
 	[document unlockEmulation];
 	
-	return NSMakeSize(defaultSize.width, defaultSize.height);
-}
-
-- (void)prepareOpenGL
-{
-	NSLog(@"prepareOpenGL");
+	NSSize size;
+	size.width = (defaultSize.width < 128) ? 128 : defaultSize.width;
+	size.height = (defaultSize.height < 128) ? 128 : defaultSize.height;
 	
-	GLint value = 1;
-	[[self openGLContext] setValues:&value
-					   forParameter:NSOpenGLCPSwapInterval]; 
-}
-
-// Drawing
-
-- (void)reshape
-{
-	[[self openGLContext] makeCurrentContext];
-	
-	CGLLockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
-	[[self openGLContext] update];
-	CGLUnlockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
+	return size;
 }
 
 - (void)drawRect:(NSRect)theRect
 {
-	[self drawView];
-}
-
-- (void)drawView
-{
-	[[self openGLContext] makeCurrentContext];
+	NSLog(@"CanvasView drawRect");
 	
 	NSRect frame = [self bounds];
 	
 	CGLLockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
+	
+	[[self openGLContext] makeCurrentContext];
+	
 	[document lockEmulation];
-	((OpenGLHAL *)canvas)->draw(NSWidth(frame), NSHeight(frame));
+	((OpenGLHAL *)canvas)->draw(NSWidth(frame), NSHeight(frame), 0);
 	[document unlockEmulation];
-	CGLUnlockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
 	
 	[[self openGLContext] flushBuffer];
+	
+	CGLUnlockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
+}
+
+- (void)updateView
+{
+	NSRect frame = [self bounds];
+	
+	CGLLockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
+	
+	[[self openGLContext] makeCurrentContext];
+	
+	[document lockEmulation];
+	((OpenGLHAL *)canvas)->update(NSWidth(frame), NSHeight(frame), 0);
+	[document unlockEmulation];
+	
+	[[self openGLContext] flushBuffer];
+	
+	CGLUnlockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
 }
 
 // Keyboard
-
-- (void)setKeyboardFlags:(int)theKeyboardFlags
-{
-	keyboardFlags = theKeyboardFlags;
-	
-	[self synchronizeKeyboardFlags];
-}
-
-- (void)synchronizeKeyboardFlags
-{
-	CGEventRef event = CGEventCreate(NULL);
-	CGEventFlags modifierFlags = CGEventGetFlags(event);
-	CFRelease(event);
-	
-	bool hostCapsLock = modifierFlags & NSAlphaShiftKeyMask;
-	bool emulationCapsLock = keyboardFlags & CANVAS_L_CAPSLOCK;
-	if (hostCapsLock != emulationCapsLock)
-	{
-		if (!capsLockNotSynchronized)
-		{
-			capsLockNotSynchronized = true;
-			
-			((OpenGLHAL *)canvas)->setKey(CANVAS_K_CAPSLOCK, true);
-			((OpenGLHAL *)canvas)->setKey(CANVAS_K_CAPSLOCK, false);
-		}
-	}
-	else
-		capsLockNotSynchronized = false;
-}
 
 - (int)getUsageId:(int)keyCode
 {
@@ -516,6 +532,49 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	[document unlockEmulation];
 }
 
+- (void)updateFlags:(int)flags
+			forMask:(int)mask
+			usageId:(int)usageId
+{
+	if ((flags & mask) == (keyModifierFlags & mask))
+		return;
+	
+	BOOL value = ((flags & mask) != 0);
+	
+	[document lockEmulation];
+	((OpenGLHAL *)canvas)->setKey(usageId, value);
+	[document unlockEmulation];
+}
+
+- (void)synchronizeKeyboardFlags
+{
+	CGEventRef event = CGEventCreate(NULL);
+	CGEventFlags modifierFlags = CGEventGetFlags(event);
+	CFRelease(event);
+	
+	bool hostCapsLock = modifierFlags & NSAlphaShiftKeyMask;
+	bool emulationCapsLock = keyboardFlags & CANVAS_L_CAPSLOCK;
+	if (hostCapsLock != emulationCapsLock)
+	{
+		if (!capsLockNotSynchronized)
+		{
+			capsLockNotSynchronized = true;
+			
+			((OpenGLHAL *)canvas)->setKey(CANVAS_K_CAPSLOCK, true);
+			((OpenGLHAL *)canvas)->setKey(CANVAS_K_CAPSLOCK, false);
+		}
+	}
+	else
+		capsLockNotSynchronized = false;
+}
+
+- (void)setKeyboardFlags:(NSInteger)theKeyboardFlags
+{
+	keyboardFlags = theKeyboardFlags;
+	
+	[self synchronizeKeyboardFlags];
+}
+
 - (void)keyDown:(NSEvent *)theEvent
 {
 	NSString *characters = [theEvent characters];
@@ -536,20 +595,6 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	NSInteger usageId = [self getUsageId:[theEvent keyCode]];
 	[document lockEmulation];
 	((OpenGLHAL *)canvas)->setKey(usageId, false);
-	[document unlockEmulation];
-}
-
-- (void)updateFlags:(int)flags
-			forMask:(int)mask
-			usageId:(int)usageId
-{
-	if ((flags & mask) == (keyModifierFlags & mask))
-		return;
-	
-	BOOL value = ((flags & mask) != 0);
-	
-	[document lockEmulation];
-	((OpenGLHAL *)canvas)->setKey(usageId, value);
 	[document unlockEmulation];
 }
 
@@ -584,7 +629,8 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (void)mouseEntered:(NSEvent *)theEvent
 {
-	NSLog(@"mouseEntered");
+	NSLog(@"CanvasView mouseEntered");
+	
 	[document lockEmulation];
 	((OpenGLHAL *)canvas)->enterMouse();
 	[document unlockEmulation];
@@ -592,7 +638,8 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (void)mouseExited:(NSEvent *)theEvent
 {
-	NSLog(@"mouseExited");
+	NSLog(@"CanvasView mouseExited");
+	
 	[document lockEmulation];
 	((OpenGLHAL *)canvas)->exitMouse();
 	[document unlockEmulation];

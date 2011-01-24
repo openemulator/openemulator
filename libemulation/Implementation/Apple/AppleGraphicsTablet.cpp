@@ -66,22 +66,16 @@ bool AppleGraphicsTablet::init()
 	
 	if (canvas)
 	{
-		OEImage view;
-//		oeReadImage(viewPath, &view);
+		CanvasConfiguration configuration;
+		configuration.size = OEMakeSize(637, 637);
+		configuration.captureMode = CANVAS_CAPTUREMODE_NO_CAPTURE;
+		canvas->postMessage(this, CANVAS_CONFIGURE, &configuration);
 		
-		CanvasFrame frame;
-		
-		canvas->postMessage(this,
-							CANVAS_GET_FRAME,
-							&frame);
-		frame.screenSize.width = 637;
-		frame.screenSize.height = 637;
-//		oeCopyImage(&frame->vi
-		canvas->postMessage(this,
-							CANVAS_RETURN_FRAME,
-							&frame);
-		
-//		oeFreeImage(&view);
+		OEImage *frame = NULL;
+		canvas->postMessage(this, CANVAS_REQUEST_FRAME, &frame);
+		if (frame)
+			frame->readFile(viewPath);
+		canvas->postMessage(this, CANVAS_RETURN_FRAME, &frame);
 	}
 	
 	return true;

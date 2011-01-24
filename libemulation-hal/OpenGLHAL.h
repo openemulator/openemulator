@@ -28,9 +28,16 @@ typedef enum
 	OEGL_TEX_NUM,
 } OEOpenGLTextureIndex;
 
+typedef enum
+{
+	OPENGLHAL_CAPTURE_NONE,
+	OPENGLHAL_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR,
+	OPENGLHAL_CAPTURE_KEYBOARD_AND_HIDE_MOUSE_CURSOR,
+} OpenGLHALCapture;
 
 
-typedef void (*CanvasSetCapture)(void *userData, CanvasCapture capture);
+
+typedef void (*CanvasSetCapture)(void *userData, OpenGLHALCapture capture);
 typedef void (*CanvasSetKeyboardFlags)(void *userData, int flags);
 
 
@@ -46,7 +53,8 @@ public:
 	void close();
 	
 	OESize getDefaultSize();
-	void draw(int width, int height);
+	void draw(int width, int height, int offset);
+	void update(int width, int height, int offset);
 	
 	void becomeKeyWindow();
 	void resignKeyWindow();
@@ -77,10 +85,15 @@ private:
 	CanvasSetKeyboardFlags setKeyboardFlags;
 	void *userData;
 	
-	CanvasCaptureMode captureMode;
-	CanvasCapture capture;
+	OESize defaultSize;
 	
-	GLuint textures[OEGL_TEX_NUM];
+	CanvasCaptureMode captureMode;
+	OpenGLHALCapture capture;
+	
+	OEImage *glCurrentFrame;
+	OEImage *glNextFrame;
+	pthread_mutex_t glMutex;
+	GLuint glTextures[OEGL_TEX_NUM];
 	
 	bool keyDown[CANVAS_KEYBOARD_KEY_NUM];
 	int keyDownCount;
@@ -89,14 +102,14 @@ private:
 	bool mouseButtonDown[CANVAS_MOUSE_BUTTON_NUM];
 	bool joystickButtonDown[CANVAS_JOYSTICK_NUM][CANVAS_JOYSTICK_BUTTON_NUM];
 	
-	OESize defaultSize;
-	
 	void postHIDNotification(int notification, int usageId, float value);
-	void updateCapture(CanvasCapture capture);
-	void releaseKeysAndButtons();
+	void updateCapture(OpenGLHALCapture capture);
+	void resetKeysAndButtons();
 	
-	bool getFrame(CanvasFrame *frame);
-	bool returnFrame(CanvasFrame *frame);
+	bool setCaptureMode(CanvasCaptureMode *captureMode);
+	bool setConfiguration(CanvasConfiguration *configuration);
+	bool requestFrame(OEImage **frame);
+	bool returnFrame(OEImage **frame);
 };
 
 #endif

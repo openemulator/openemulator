@@ -23,9 +23,12 @@
 
 @implementation Document
 
+// Callback methods
+
 void didUpdate(void *userData)
 {
 	Document *document = (Document *)userData;
+	
 	[document performSelectorOnMainThread:@selector(didUpdate:)
 							   withObject:nil
 							waitUntilDone:NO];
@@ -33,23 +36,20 @@ void didUpdate(void *userData)
 
 void runAlert(void *userData, string message)
 {
-	// There is no autorelease pool when this method is called
-	// (it is called from a background thread)
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
 	Document *document = (Document *)userData;
 	NSString *theMessage = getNSString(message);
+	
 	[document performSelectorOnMainThread:@selector(runAlert:)
 							   withObject:theMessage
-							waitUntilDone:YES];
+							waitUntilDone:NO];
 	
 	[pool release];
 }
 
 OEComponent *createCanvas(void *userData, string title)
 {
-	// There is no autorelease pool when this method is called
-	// (it is called from a background thread)
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
 	OpenGLHAL *canvas = new OpenGLHAL();
@@ -59,6 +59,7 @@ OEComponent *createCanvas(void *userData, string title)
 						  [NSValue valueWithPointer:canvas], @"canvas",
 						  getNSString(title), @"title",
 						  nil];
+	
 	[document performSelectorOnMainThread:@selector(createCanvas:)
 							   withObject:dict
 							waitUntilDone:YES];
@@ -70,17 +71,27 @@ OEComponent *createCanvas(void *userData, string title)
 
 void destroyCanvas(void *userData, OEComponent *canvas)
 {
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	
 	Document *document = (Document *)userData;
+	NSValue *canvasValue = [NSValue valueWithPointer:canvas];
+	
 	[document performSelectorOnMainThread:@selector(destroyCanvas:)
-							   withObject:[NSValue valueWithPointer:canvas]
+							   withObject:canvasValue
 							waitUntilDone:YES];
 	
 	delete canvas;
+	
+	[pool release];
 }
+
+// Class
 
 - (id)initWithTemplateURL:(NSURL *)absoluteURL
 					error:(NSError **)outError
 {
+	NSLog(@"Document init");
+	
 	if (self = [super init])
 	{
 		canvases = [[NSMutableArray alloc] init];
@@ -103,85 +114,23 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 
 - (void)dealloc
 {
+	NSLog(@"Document dealloc");
+	
+	[self destroyEmulation];
+	
+	// To-Do: if somebody forgot to delete a canvas
+	// let's do it here with a warning
+	//	for (int i = 0; i < [canvasWindowControllers count]; i++)
+	//		[[canvasWindowControllers objectAtIndex:i] stopDisplayLink];
+	
 	[emulationWindowController release];
 	[canvasWindowControllers release];
 	[canvases release];
 	
-	[self deleteEmulation];
-	
-	NSLog(@"Document dealloc");
-	
 	[super dealloc];
 }
 
-
-
-- (void)newEmulation:(NSURL *)url
-{
-	DocumentController *documentController;
-	documentController = [NSDocumentController sharedDocumentController];
-	PortAudioHAL *portAudioHAL = (PortAudioHAL *)[documentController portAudioHAL];
-	
-	Emulation *theEmulation = new Emulation();
-	
-	theEmulation->setResourcePath(getCPPString([[NSBundle mainBundle] resourcePath]));
-	
-	theEmulation->setComponent("audio", portAudioHAL);
-	
-	theEmulation->setRunAlert(runAlert);
-	theEmulation->setCreateCanvas(createCanvas);
-	theEmulation->setDestroyCanvas(destroyCanvas);
-	theEmulation->setUserData(self);
-	
-	theEmulation->open(getCPPString([url path]));
-	
-	theEmulation->setDidUpdate(didUpdate);
-	
-	emulation = theEmulation;
-	
-	portAudioHAL->addEmulation(theEmulation);
-}
-
-- (void)deleteEmulation
-{
-	if (!emulation)
-		return;
-	
-	DocumentController *documentController;
-	documentController = [NSDocumentController sharedDocumentController];
-	PortAudioHAL *portAudioHAL = (PortAudioHAL *)[documentController portAudioHAL];
-	
-	Emulation *theEmulation = (Emulation *)emulation;
-	portAudioHAL->removeEmulation(theEmulation);
-	
-	theEmulation->setDidUpdate(NULL);
-	theEmulation->setRunAlert(NULL);
-	theEmulation->setCreateCanvas(NULL);
-	theEmulation->setDestroyCanvas(NULL);
-	
-	delete theEmulation;
-	emulation = nil;
-}
-
-- (void)lockEmulation
-{
-	DocumentController *documentController;
-	documentController = [NSDocumentController sharedDocumentController];
-	PortAudioHAL *portAudioHAL = (PortAudioHAL *)[documentController portAudioHAL];
-	
-	portAudioHAL->lockEmulations();
-}
-
-- (void)unlockEmulation
-{
-	DocumentController *documentController;
-	documentController = [NSDocumentController sharedDocumentController];
-	PortAudioHAL *portAudioHAL = (PortAudioHAL *)[documentController portAudioHAL];
-	
-	portAudioHAL->unlockEmulations();
-}
-
-
+// Document UI
 
 - (NSWindow *)windowForSheet
 {
@@ -192,8 +141,8 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 			 ofType:(NSString *)typeName
 			  error:(NSError **)outError
 {
-	[self deleteEmulation];
-	[self newEmulation:absoluteURL];
+	[self destroyEmulation];
+	[self createEmulation:absoluteURL];
 	
 	Emulation *theEmulation = (Emulation *)emulation;
 	if (theEmulation)
@@ -206,7 +155,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 			return YES;
 		}
 		
-		[self deleteEmulation];
+		[self destroyEmulation];
 	}
 	
 	*outError = [NSError errorWithDomain:NSCocoaErrorDomain
@@ -294,7 +243,8 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 
 - (void)makeWindowControllers
 {
-	NSLog(@"makeWindowControllers");
+	NSLog(@"Document makeWindowControllers");
+	
 	emulationWindowController = [[EmulationWindowController alloc] init];
 	
 	if ([canvasWindowControllers count])
@@ -307,20 +257,6 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 		[self addWindowController:emulationWindowController];
 }
 
-- (NSPrintOperation *)printOperationWithSettings:(NSDictionary *)printSettings
-										   error:(NSError **)outError
-{
-	
-}
-
-
-
-- (void *)emulationInfo
-{
-	Emulation *theEmulation = (Emulation *)emulation;
-	return theEmulation->getEmulationInfo();
-}
-
 - (IBAction)showEmulation:(id)sender
 {
 	if (![[self windowControllers] containsObject:emulationWindowController])
@@ -329,17 +265,18 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	[emulationWindowController showWindow:self];
 }
 
-- (IBAction)didUpdate:(id)sender
+- (void)didUpdate
 {
-	if (((Emulation *)emulation)->isActive())
+	if (emulation && ((Emulation *)emulation)->isActive())
 		[self updateChangeCount:NSChangeDone];
 	
-	[emulationWindowController updateEmulation:sender];
+	[emulationWindowController updateEmulation:self];
 }
 
 - (void)runAlert:(NSString *)string
 {
 	NSArray *lines = [string componentsSeparatedByString:@"\n"];
+	
 	NSString *messageText = [lines objectAtIndex:0];
 	NSString *informativeText = @"";
 	
@@ -351,7 +288,8 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 
 - (void)createCanvas:(NSDictionary *)dict
 {
-	NSLog(@"createCanvas");
+	NSLog(@"Document createCanvas");
+	
 	OpenGLHAL *canvas = (OpenGLHAL *)[[dict objectForKey:@"canvas"] pointerValue];
 	NSString *title = [dict objectForKey:@"title"];
 	
@@ -365,20 +303,26 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	[canvasWindowController release];
 }
 
-- (void)destroyCanvas:(NSValue *)canvas
+- (void)destroyCanvas:(NSValue *)canvasValue
 {
-	NSLog(@"destroyCanvas");
-	NSInteger index = [canvases indexOfObject:[NSValue valueWithPointer:canvas]];
+	NSLog(@"Document destroyCanvas");
 	
-	[self removeWindowController:[canvasWindowControllers objectAtIndex:index]];
+	NSInteger index = [canvases indexOfObject:canvasValue];
 	
+	CanvasWindowController *canvasWindowController;
+	canvasWindowController = [canvasWindowControllers objectAtIndex:index];
+	
+	[canvasWindowController destroyCanvas];
+	
+	[self removeWindowController:canvasWindowController];
 	[canvases removeObjectAtIndex:index];
 	[canvasWindowControllers removeObjectAtIndex:index];
 }
 
 - (void)showCanvas:(void *)canvas
 {
-	NSLog(@"showCanvas");
+	NSLog(@"Document showCanvas");
+	
 	NSInteger index = [canvases indexOfObject:[NSValue valueWithPointer:canvas]];
 	CanvasWindowController *canvasWindowController;
 	canvasWindowController = [canvasWindowControllers objectAtIndex:index];
@@ -387,6 +331,83 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 		[self addWindowController:canvasWindowController];
 	
 	[canvasWindowController showWindow:self];
+}
+
+- (NSPrintOperation *)printOperationWithSettings:(NSDictionary *)printSettings
+										   error:(NSError **)outError
+{
+	NSLog(@"Document printOperationWithSettings");
+	
+	return [super printOperationWithSettings:printSettings
+									   error:outError];
+}
+
+// Emulation
+
+- (void)createEmulation:(NSURL *)url
+{
+	DocumentController *documentController;
+	documentController = [NSDocumentController sharedDocumentController];
+	PortAudioHAL *portAudioHAL = (PortAudioHAL *)[documentController portAudioHAL];
+	
+	Emulation *theEmulation = new Emulation();
+	
+	theEmulation->setResourcePath(getCPPString([[NSBundle mainBundle] resourcePath]));
+	
+	theEmulation->setComponent("audio", portAudioHAL);
+	
+	theEmulation->setRunAlert(runAlert);
+	theEmulation->setCreateCanvas(createCanvas);
+	theEmulation->setDestroyCanvas(destroyCanvas);
+	theEmulation->setUserData(self);
+	
+	theEmulation->open(getCPPString([url path]));
+	
+	theEmulation->setDidUpdate(didUpdate);
+	
+	emulation = theEmulation;
+	
+	portAudioHAL->addEmulation(theEmulation);
+}
+
+- (void)destroyEmulation
+{
+	if (!emulation)
+		return;
+	
+	DocumentController *documentController;
+	documentController = [NSDocumentController sharedDocumentController];
+	PortAudioHAL *portAudioHAL = (PortAudioHAL *)[documentController portAudioHAL];
+	
+	Emulation *theEmulation = (Emulation *)emulation;
+	portAudioHAL->removeEmulation(theEmulation);
+	
+	delete theEmulation;
+	emulation = nil;
+}
+
+- (void)lockEmulation
+{
+	DocumentController *documentController;
+	documentController = [NSDocumentController sharedDocumentController];
+	PortAudioHAL *portAudioHAL = (PortAudioHAL *)[documentController portAudioHAL];
+	
+	portAudioHAL->lockEmulations();
+}
+
+- (void)unlockEmulation
+{
+	DocumentController *documentController;
+	documentController = [NSDocumentController sharedDocumentController];
+	PortAudioHAL *portAudioHAL = (PortAudioHAL *)[documentController portAudioHAL];
+	
+	portAudioHAL->unlockEmulations();
+}
+
+- (void *)emulationInfo
+{
+	Emulation *theEmulation = (Emulation *)emulation;
+	return theEmulation->getEmulationInfo();
 }
 
 - (BOOL)getBoolForMessage:(int)message
