@@ -13,6 +13,7 @@
 #import "CanvasView.h"
 
 @interface CanvasWindowController : NSWindowController
+<NSToolbarDelegate>
 {
 	void *canvas;
 	IBOutlet CanvasView *fCanvasView;

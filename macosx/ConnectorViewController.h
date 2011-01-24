@@ -18,6 +18,7 @@
 @end
 
 @interface ConnectorViewController : NSViewController
+<NSComboBoxDataSource>
 {
 	IBOutlet id fImageBrowserView;
 	

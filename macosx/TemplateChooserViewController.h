@@ -22,6 +22,7 @@
 @end
 
 @interface TemplateChooserViewController : NSViewController
+<NSComboBoxDataSource>
 {
 	IBOutlet id fVerticalSplitView;
 	IBOutlet id fHorizontalSplitView;

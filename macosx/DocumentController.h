@@ -15,6 +15,7 @@
 @class LibraryWindowController;
 
 @interface DocumentController : NSDocumentController
+<NSApplicationDelegate>
 {
 	IBOutlet AudioControlsWindowController *fAudioControlsWindowController;
 	IBOutlet TemplateChooserWindowController *fTemplateChooserWindowController;

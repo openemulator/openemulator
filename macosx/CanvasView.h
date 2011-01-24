@@ -16,7 +16,8 @@
 #define DEVICE_KEYMAP_SIZE		256
 #define DEVICE_MOUSE_BUTTONNUM	8
 
-@interface CanvasView : NSOpenGLView <NSTextInputClient>
+@interface CanvasView : NSOpenGLView
+<NSWindowDelegate, NSTextInputClient>
 {
 	CVDisplayLinkRef displayLink;
 	

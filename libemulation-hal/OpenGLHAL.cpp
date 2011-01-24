@@ -99,7 +99,7 @@ void OpenGLHAL::update(float width, float height, float offset)
 {
 	// Get new frame
 	OEImage *framePrevious = NULL;
-	bool frameNew = false;
+	bool redraw = false;
 	
 	pthread_mutex_lock(&frameMutex);
 	if (frameNext)
@@ -107,14 +107,14 @@ void OpenGLHAL::update(float width, float height, float offset)
 		framePrevious = frameCurrent;
 		frameCurrent = frameNext;
 		frameNext = NULL;
-		frameNew = true;
+		redraw = true;
 	}
 	pthread_mutex_unlock(&frameMutex);
 	
 	if (framePrevious)
 		delete framePrevious;
 	
-	if (frameNew)
+	if (redraw)
 	{
 		// Prepare OpenGL
 		GLint glFormat;

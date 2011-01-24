@@ -13,6 +13,7 @@
 @class DocumentController;
 
 @interface AudioControlsWindowController : NSWindowController
+<NSWindowDelegate>
 {
 	IBOutlet DocumentController *fDocumentController;
 	

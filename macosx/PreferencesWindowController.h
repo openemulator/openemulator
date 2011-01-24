@@ -12,7 +12,7 @@
 
 @class TemplateChooserViewController;
 
-@interface PreferencesWindowController : NSWindowController
+@interface PreferencesWindowController : NSWindowController <NSToolbarDelegate>
 {
 	IBOutlet id fGeneralView;
 	IBOutlet id fAudioView;
