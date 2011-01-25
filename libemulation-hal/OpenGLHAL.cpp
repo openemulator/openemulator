@@ -62,6 +62,9 @@ void OpenGLHAL::open(CanvasSetCapture setCapture,
 	
 	glGenTextures(OPENGLHAL_TEXTURE_END, glTextures);
 	
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	
 	pthread_mutex_init(&frameMutex, NULL);
 }
 
@@ -95,11 +98,11 @@ OESize OpenGLHAL::getDefaultSize()
 	return configuration.size;
 }
 
-void OpenGLHAL::update(float width, float height, float offset)
+void OpenGLHAL::draw(float width, float height, float offset, bool forceDraw)
 {
-	// Get new frame
+	// Process new frame
 	OEImage *framePrevious = NULL;
-	bool redraw = false;
+	bool frameNew = false;
 	
 	pthread_mutex_lock(&frameMutex);
 	if (frameNext)
@@ -107,16 +110,15 @@ void OpenGLHAL::update(float width, float height, float offset)
 		framePrevious = frameCurrent;
 		frameCurrent = frameNext;
 		frameNext = NULL;
-		redraw = true;
+		frameNew = true;
 	}
 	pthread_mutex_unlock(&frameMutex);
 	
 	if (framePrevious)
 		delete framePrevious;
 	
-	if (redraw)
+	if (frameNew)
 	{
-		// Prepare OpenGL
 		GLint glFormat;
 		GLvoid *glPixels;
 		
@@ -137,52 +139,64 @@ void OpenGLHAL::update(float width, float height, float offset)
 					 0, glFormat, GL_UNSIGNED_BYTE, glPixels
 					 );
 		
-		draw(width, height, offset);
+		forceDraw = true;
 	}
-}
-
-void OpenGLHAL::draw(float width, float height, float offset)
-{
-	// Reset
-	glViewport(0, 0, width, height);
-	glClear(GL_COLOR_BUFFER_BIT);
 	
-	if (!frameCurrent)
-		return;
-	
-	// Render canvas
-	OERect frame;
-	
-	float textureProportion = textureSize.width / textureSize.height;
-	float viewProportion = width / height;
-	
-	if (textureProportion > viewProportion)
+	// Draw frame
+	if (forceDraw)
 	{
-		float ratio = viewProportion / textureProportion;
-		frame.origin.x = -1.0;
-		frame.origin.y = -ratio;
-		frame.size.width = 2.0;
-		frame.size.height = 2.0 * ratio;
+		glViewport(0, 0, width, height);
+		
+		glClear(GL_COLOR_BUFFER_BIT);
+		
+		if (!frameCurrent)
+			return;
+		
+		float textureProportion = textureSize.width / textureSize.height;
+		float viewProportion = width / height;
+		OERect frame;
+		
+		if (configuration.zoomToFit)
+		{
+			frame.origin.x = -1.0;
+			frame.origin.y = -1.0;
+			frame.size.width = 2.0;
+			frame.size.height = 2.0;
+		}
+		else
+		{
+			if (textureProportion > viewProportion)
+			{
+				float ratio = viewProportion / textureProportion;
+				frame.origin.x = -1.0;
+				frame.origin.y = -ratio;
+				frame.size.width = 2.0;
+				frame.size.height = 2.0 * ratio;
+			}
+			else
+			{
+				float ratio = textureProportion / viewProportion;
+				frame.origin.x = -ratio;
+				frame.origin.y = -1.0;
+				frame.size.width = 2.0 * ratio;
+				frame.size.height = 2.0;
+			}
+		}
+		
+		glBindTexture(GL_TEXTURE_RECTANGLE_EXT,
+					  glTextures[OPENGLHAL_TEXTURE_FRAME]);
+		
+		glBegin(GL_QUADS);
+		glTexCoord2f(0, 0);
+		glVertex2f(OEMinX(frame), OEMaxY(frame));
+		glTexCoord2f(textureSize.width, 0);
+		glVertex2f(OEMaxX(frame), OEMaxY(frame));
+		glTexCoord2f(textureSize.width, textureSize.height);
+		glVertex2f(OEMaxX(frame), OEMinY(frame));
+		glTexCoord2f(0, textureSize.height);
+		glVertex2f(OEMinX(frame), OEMinY(frame));
+		glEnd();
 	}
-	else
-	{
-		float ratio = textureProportion / viewProportion;
-		frame.origin.x = -ratio;
-		frame.origin.y = -1.0;
-		frame.size.width = 2.0 * ratio;
-		frame.size.height = 2.0;
-	}
-	
-	glBegin(GL_QUADS);
-	glTexCoord2f(0, 0);
-	glVertex2f(OEMinX(frame), OEMaxY(frame));
-	glTexCoord2f(textureSize.width, 0);
-	glVertex2f(OEMaxX(frame), OEMaxY(frame));
-	glTexCoord2f(textureSize.width, textureSize.height);
-	glVertex2f(OEMaxX(frame), OEMinY(frame));
-	glTexCoord2f(0, textureSize.height);
-	glVertex2f(OEMinX(frame), OEMinY(frame));
-	glEnd();
 }
 
 void OpenGLHAL::becomeKeyWindow()

@@ -78,6 +78,7 @@ bool AppleGraphicsTablet::init()
 		
 		CanvasConfiguration configuration;
 		configuration.size = frameSize;
+		configuration.zoomToFit = false;
 		configuration.captureMode = CANVAS_CAPTUREMODE_NO_CAPTURE;
 		canvas->postMessage(this, CANVAS_CONFIGURE, &configuration);
 	}

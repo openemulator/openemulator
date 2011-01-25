@@ -239,6 +239,15 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 									   NSStringPboardType,
 									   NSFilenamesPboardType, 
 									   nil]];
+		
+		CVDisplayLinkCreateWithActiveCGDisplays(&displayLink);
+		CVDisplayLinkSetOutputCallback(displayLink, &displayLinkCallback, self);
+		CGLContextObj cglContext = (CGLContextObj)[[self openGLContext] CGLContextObj];
+		CGLPixelFormatObj cglPixelFormat = (CGLPixelFormatObj)[[self pixelFormat] 
+															   CGLPixelFormatObj];
+		CVDisplayLinkSetCurrentCGDisplayFromOpenGLContext(displayLink,
+														  cglContext,
+														  cglPixelFormat);
 	}
 	
 	return self;
@@ -247,6 +256,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 - (void)dealloc
 {
 	NSLog(@"CanvasView dealloc");
+	
+	CVDisplayLinkStop(displayLink);
+    CVDisplayLinkRelease(displayLink);
 	
 	[super dealloc];
 }
@@ -428,31 +440,14 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 {
 	NSLog(@"CanvasView startDisplayLink");
 	
-	if (CVDisplayLinkCreateWithActiveCGDisplays(&displayLink) == kCVReturnSuccess)
-	{
-		CVDisplayLinkSetOutputCallback(displayLink, &displayLinkCallback, self);
-		CGLContextObj cglContext = (CGLContextObj)[[self openGLContext] CGLContextObj];
-		CGLPixelFormatObj cglPixelFormat = (CGLPixelFormatObj)[[self pixelFormat] 
-															   CGLPixelFormatObj];
-		CVDisplayLinkSetCurrentCGDisplayFromOpenGLContext(displayLink,
-														  cglContext,
-														  cglPixelFormat);
-	
-		CVDisplayLinkStart(displayLink);
-	}
+	CVDisplayLinkStart(displayLink);
 }
 
 - (void)stopDisplayLink
 {
 	NSLog(@"CanvasView stopDisplayLink");
 	
-	if (displayLink)
-	{
-		CVDisplayLinkStop(displayLink);
-		CVDisplayLinkRelease(displayLink);
-		
-		displayLink = NULL;
-	}
+	CVDisplayLinkStop(displayLink);
 }
 
 - (NSSize)defaultSize
@@ -479,7 +474,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	[[self openGLContext] makeCurrentContext];
 	
 	[document lockEmulation];
-	((OpenGLHAL *)canvas)->draw(NSWidth(frame), NSHeight(frame), 0);
+	((OpenGLHAL *)canvas)->draw(NSWidth(frame), NSHeight(frame), 0, true);
 	[document unlockEmulation];
 	
 	[[self openGLContext] flushBuffer];
@@ -496,7 +491,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	[[self openGLContext] makeCurrentContext];
 	
 	[document lockEmulation];
-	((OpenGLHAL *)canvas)->update(NSWidth(frame), NSHeight(frame), 0);
+	((OpenGLHAL *)canvas)->draw(NSWidth(frame), NSHeight(frame), 0, true);
 	[document unlockEmulation];
 	
 	[[self openGLContext] flushBuffer];

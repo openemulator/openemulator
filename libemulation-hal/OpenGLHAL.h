@@ -53,8 +53,7 @@ public:
 	void close();
 	
 	OESize getDefaultSize();
-	void draw(float width, float height, float offset);
-	void update(float width, float height, float offset);
+	void draw(float width, float height, float offset, bool forceDraw);
 	
 	void becomeKeyWindow();
 	void resignKeyWindow();
