@@ -14,9 +14,8 @@ class MOSKIM1IO : public OEComponent
 {
 public:
 	MOSKIM1IO();
-	~MOSKIM1IO();
 	
-	bool setData(string name, OEData *data);
+	bool setValue(string name, string value);
 	bool setRef(string name, OEComponent *ref);
 	bool init();
 	
@@ -28,7 +27,7 @@ private:
 	OEComponent *audioOut;
 	OEComponent *audioIn;
 	
-	OEData *view;
+	string viewPath;
 	
 	OEComponent *canvas;
 	string windowFrame;

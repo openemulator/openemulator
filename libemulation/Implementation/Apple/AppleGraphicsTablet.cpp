@@ -67,13 +67,10 @@ bool AppleGraphicsTablet::init()
 	if (canvas)
 	{
 		OEImage *frame = NULL;
-		OESize frameSize = OEMakeSize(640, 480);
+		OESize frameSize;
 		canvas->postMessage(this, CANVAS_REQUEST_FRAME, &frame);
-		if (frame)
-		{
-			frame->readFile(viewPath);
-			frameSize = frame->getSize();
-		}
+		frame->readFile(viewPath);
+		frameSize = frame->getSize();
 		canvas->postMessage(this, CANVAS_RETURN_FRAME, &frame);
 		
 		CanvasConfiguration configuration;

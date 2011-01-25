@@ -457,8 +457,8 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	[document unlockEmulation];
 	
 	NSSize size;
-	size.width = (defaultSize.width < 128) ? 128 : defaultSize.width;
-	size.height = (defaultSize.height < 128) ? 128 : defaultSize.height;
+	size.width = (defaultSize.width < 192) ? 192 : defaultSize.width;
+	size.height = (defaultSize.height < 192) ? 192 : defaultSize.height;
 	
 	return size;
 }

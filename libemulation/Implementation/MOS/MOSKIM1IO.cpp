@@ -20,22 +20,15 @@ MOSKIM1IO::MOSKIM1IO()
 	audioOut = NULL;
 	audioIn = NULL;
 	
-	view = NULL;
-	
 	canvas = NULL;
 }
 
-MOSKIM1IO::~MOSKIM1IO()
+bool MOSKIM1IO::setValue(string name, string value)
 {
-	delete view;
-}
-
-bool MOSKIM1IO::setData(string name, OEData *data)
-{
-	if (name == "view")
-		view = data;
+	if (name == "viewPath")
+		viewPath = value;
 	else
-		return OEComponent::setData(name, data);
+		return false;
 	
 	return true;
 }
@@ -71,6 +64,34 @@ bool MOSKIM1IO::setRef(string name, OEComponent *ref)
 
 bool MOSKIM1IO::init()
 {
+	if (!emulation)
+	{
+		log("property 'emulation' undefined");
+		return false;
+	}
+	
+	if (!canvas)
+	{
+		log("canvas could not be created");
+		return false;
+	}
+	
+	if (canvas)
+	{
+		OEImage *frame = NULL;
+		OESize frameSize;
+		canvas->postMessage(this, CANVAS_REQUEST_FRAME, &frame);
+		frame->readFile(viewPath);
+		frameSize = frame->getSize();
+		canvas->postMessage(this, CANVAS_RETURN_FRAME, &frame);
+		
+		CanvasConfiguration configuration;
+		configuration.size = frameSize;
+		configuration.zoomToFit = false;
+		configuration.captureMode = CANVAS_CAPTUREMODE_NO_CAPTURE;
+		canvas->postMessage(this, CANVAS_CONFIGURE, &configuration);
+	}
+	
 	return true;
 }
 
