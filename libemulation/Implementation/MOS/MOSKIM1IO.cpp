@@ -78,17 +78,16 @@ bool MOSKIM1IO::init()
 	
 	if (canvas)
 	{
-		OEImage *frame = NULL;
-		OESize frameSize;
-		canvas->postMessage(this, CANVAS_REQUEST_FRAME, &frame);
-		frame->readFile(viewPath);
-		frameSize = frame->getSize();
-		canvas->postMessage(this, CANVAS_RETURN_FRAME, &frame);
+		OEImage frame;
+		frame.readFile(viewPath);
+		canvas->postMessage(this, CANVAS_POST_FRAME, &frame);
 		
 		CanvasConfiguration configuration;
-		configuration.size = frameSize;
-		configuration.zoomToFit = false;
+		configuration.viewMode = CANVAS_VIEWMODE_FIT_CANVAS;
 		configuration.captureMode = CANVAS_CAPTUREMODE_NO_CAPTURE;
+		configuration.defaultViewSize = frame.getSize();
+		configuration.canvasSize = frame.getSize();
+		configuration.contentRect = OEMakeRect(0, 0, 1, 1);
 		canvas->postMessage(this, CANVAS_CONFIGURE, &configuration);
 	}
 	

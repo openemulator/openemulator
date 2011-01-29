@@ -220,11 +220,14 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	NSOpenGLPixelFormat *pixelFormat;
 	pixelFormat = [[NSOpenGLPixelFormat alloc]
 				   initWithAttributes:pixelFormatAtrributes];
+	
 	if (!pixelFormat)
 	{
 		NSLog(@"Cannot create NSOpenGLPixelFormat");
+		
 		return nil;
 	}
+	
 	[pixelFormat autorelease];
 	
 	if (self = [super initWithFrame:rect pixelFormat:pixelFormat])
@@ -240,14 +243,18 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 									   NSFilenamesPboardType, 
 									   nil]];
 		
-		CVDisplayLinkCreateWithActiveCGDisplays(&displayLink);
-		CVDisplayLinkSetOutputCallback(displayLink, &displayLinkCallback, self);
-		CGLContextObj cglContext = (CGLContextObj)[[self openGLContext] CGLContextObj];
-		CGLPixelFormatObj cglPixelFormat = (CGLPixelFormatObj)[[self pixelFormat] 
-															   CGLPixelFormatObj];
-		CVDisplayLinkSetCurrentCGDisplayFromOpenGLContext(displayLink,
-														  cglContext,
-														  cglPixelFormat);
+		if (CVDisplayLinkCreateWithActiveCGDisplays(&displayLink) == kCVReturnSuccess)
+		{
+			CVDisplayLinkSetOutputCallback(displayLink, &displayLinkCallback, self);
+			CGLContextObj cglContext = (CGLContextObj)[[self openGLContext] CGLContextObj];
+			CGLPixelFormatObj cglPixelFormat = (CGLPixelFormatObj)[[self pixelFormat] 
+																   CGLPixelFormatObj];
+			CVDisplayLinkSetCurrentCGDisplayFromOpenGLContext(displayLink,
+															  cglContext,
+															  cglPixelFormat);
+		}
+		
+		lock = [NSRecursiveLock new];
 	}
 	
 	return self;
@@ -259,6 +266,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	
 	CVDisplayLinkStop(displayLink);
     CVDisplayLinkRelease(displayLink);
+	
+    if (lock)
+    	[lock release];
 	
 	[super dealloc];
 }
@@ -411,22 +421,24 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 {
 	NSLog(@"CanvasView startOpenGL");
 	
+	[[self openGLContext] makeCurrentContext];
+	
 	GLint value = 1;
 	[[self openGLContext] setValues:&value
 					   forParameter:NSOpenGLCPSwapInterval]; 
 	
-	CGLLockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
 	[document lockEmulation];
 	((OpenGLHAL *)canvas)->open(setCapture,
 								setKeyboardFlags,
 								NULL);
 	[document unlockEmulation];
-	CGLUnlockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
 }
 
 - (void)stopOpenGL
 {
 	NSLog(@"CanvasView stopOpenGL");
+	
+	[[self openGLContext] makeCurrentContext];
 	
 	if (canvas)
 	{
@@ -450,34 +462,29 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	CVDisplayLinkStop(displayLink);
 }
 
-- (NSSize)defaultSize
+- (NSSize)defaultViewSize
 {
 	[document lockEmulation];
-	OESize defaultSize = ((OpenGLHAL *)canvas)->getDefaultSize();
+	OESize size = ((OpenGLHAL *)canvas)->getDefaultViewSize();
 	[document unlockEmulation];
 	
-	NSSize size;
-	size.width = (defaultSize.width < 192) ? 192 : defaultSize.width;
-	size.height = (defaultSize.height < 192) ? 192 : defaultSize.height;
+	NSSize defaultViewSize;
+	defaultViewSize.width = (size.width < 128) ? 128 : size.width;
+	defaultViewSize.height = (size.height < 128) ? 128 : size.height;
 	
-	return size;
+	return defaultViewSize;
 }
 
 - (void)drawRect:(NSRect)theRect
 {
-	NSLog(@"CanvasView drawRect");
-	
 	NSRect frame = [self bounds];
 	
 	CGLLockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
 	
 	[[self openGLContext] makeCurrentContext];
 	
-	[document lockEmulation];
-	((OpenGLHAL *)canvas)->draw(NSWidth(frame), NSHeight(frame), 0, true);
-	[document unlockEmulation];
-	
-	[[self openGLContext] flushBuffer];
+	if (((OpenGLHAL *)canvas)->update(NSWidth(frame), NSHeight(frame), 0, true))
+		[[self openGLContext] flushBuffer];
 	
 	CGLUnlockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
 }
@@ -490,11 +497,8 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	
 	[[self openGLContext] makeCurrentContext];
 	
-	[document lockEmulation];
-	((OpenGLHAL *)canvas)->draw(NSWidth(frame), NSHeight(frame), 0, true);
-	[document unlockEmulation];
-	
-	[[self openGLContext] flushBuffer];
+	if (((OpenGLHAL *)canvas)->update(NSWidth(frame), NSHeight(frame), 0, false))
+		[[self openGLContext] flushBuffer];
 	
 	CGLUnlockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
 }

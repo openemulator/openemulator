@@ -52,8 +52,8 @@ public:
 			  void *userData);
 	void close();
 	
-	OESize getDefaultSize();
-	void draw(float width, float height, float offset, bool forceDraw);
+	OESize getDefaultViewSize();
+	bool update(float width, float height, float offset, bool update);
 	
 	void becomeKeyWindow();
 	void resignKeyWindow();
@@ -87,6 +87,8 @@ private:
 	CanvasConfiguration configuration;
 	
 	pthread_mutex_t frameMutex;
+	CanvasConfiguration frameConfiguration;
+	OESize frameSize;
 	OEImage *frameCurrent;
 	OEImage *frameNext;
 	
@@ -108,8 +110,7 @@ private:
 	
 	bool setCaptureMode(CanvasCaptureMode *captureMode);
 	bool setConfiguration(CanvasConfiguration *configuration);
-	bool requestFrame(OEImage **frame);
-	bool returnFrame(OEImage **frame);
+	bool postFrame(OEImage *frame);
 };
 
 #endif

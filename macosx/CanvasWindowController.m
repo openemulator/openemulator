@@ -67,7 +67,7 @@
 	
 	NSRect windowFrame = [[self window] frame];
 	[[self window] setDelegate:fCanvasView];
-	[[self window] setContentSize:[fCanvasView defaultSize]];
+	[[self window] setContentSize:[fCanvasView defaultViewSize]];
 	[[self window] setFrameTopLeftPoint:NSMakePoint(NSMinX(windowFrame),
 													NSMaxY(windowFrame))];
 }
@@ -185,6 +185,7 @@
 										   @"Canvas Toolbar Tool Tip.")];
 		[item setImage:[NSImage imageNamed:@"IconDevices.png"]];
 		[item setAction:@selector(showEmulation:)];
+		[item setVisibilityPriority:NSToolbarItemVisibilityPriorityHigh];
 	}
 	[item autorelease];
 	

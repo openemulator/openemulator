@@ -79,7 +79,39 @@
 //	NSLog(@"CanvasWindow windowWillResize");
 	
 	if (!fullscreen)
-		return proposedFrameSize;
+	{
+		NSSize defaultViewSize = [fCanvasView defaultViewSize];
+		NSSize frameSize = [self frame].size;
+		NSSize viewSize = [[self contentView] frame].size;
+		float scale = [self userSpaceScaleFactor];
+		
+		NSSize titleSize = NSMakeSize(frameSize.width - viewSize.width * scale,
+									  frameSize.height - viewSize.height * scale);
+		
+		float defaultViewRatio = defaultViewSize.width / defaultViewSize.height;
+		
+		NSSize proposedSize = NSMakeSize(proposedFrameSize.width - titleSize.width,
+										 proposedFrameSize.height - titleSize.height);
+		float proposedRatio = proposedSize.width / proposedSize.height;
+		
+		if (defaultViewRatio > proposedRatio)
+		{
+			float minWidth = 0.5 * defaultViewSize.width;
+			if (proposedSize.width < minWidth)
+				proposedSize.width = minWidth;
+			proposedSize.height = proposedSize.width / defaultViewRatio;
+		}
+		else
+		{
+			float minHeight = 0.5 * defaultViewSize.height;
+			if (proposedSize.height < minHeight)
+				proposedSize.height = minHeight;
+			proposedSize.width = proposedSize.height * defaultViewRatio;
+		}
+		
+		return NSMakeSize(proposedSize.width + titleSize.width,
+						  proposedSize.height + titleSize.height);
+	}
 	else
 		return [window frame].size;
 }
@@ -108,27 +140,40 @@
 
 - (void)setFrameSize:(double)proportion
 {
-	NSSize defaultSize = [fCanvasView defaultSize];
-	
+	NSSize defaultViewSize = [fCanvasView defaultViewSize];
 	NSRect frameRect = [self frame];
-	NSView *content = [self contentView];
-	NSRect contentRect = [content frame];
-	NSScreen *screen = [self screen];
-	NSRect screenRect = [screen visibleFrame];
+	NSSize viewSize = [[self contentView] frame].size;
+	NSRect screenRect = [[self screen] visibleFrame];
 	float scale = [self userSpaceScaleFactor];
 	
-	contentRect.size.width *= scale;
-	contentRect.size.height *= scale;
+	NSSize titleSize = NSMakeSize(frameRect.size.width - viewSize.width * scale,
+								  frameRect.size.height - viewSize.height * scale);
 	
-	double deltaWidth = NSWidth(frameRect) - NSWidth(contentRect);
-	double deltaHeight = NSHeight(frameRect) - NSHeight(contentRect);
+	float viewRatio = viewSize.width / viewSize.height;
 	
-	frameRect.origin.x = NSMidX(frameRect);
-	frameRect.origin.y = NSMaxY(frameRect);
-	frameRect.size.width = scale * proportion * defaultSize.width + deltaWidth;
-	frameRect.size.height = scale * proportion * defaultSize.height + deltaHeight;
-	frameRect.origin.x -= NSWidth(frameRect) / 2;
-	frameRect.origin.y -= NSHeight(frameRect);
+	NSSize proposedViewSize = NSMakeSize(proportion * scale * defaultViewSize.width,
+										 proportion * scale * defaultViewSize.height);
+	
+	NSSize maxSize = NSMakeSize(screenRect.size.width - titleSize.width,
+								screenRect.size.height - titleSize.height);
+	
+	if (proposedViewSize.width > maxSize.width)
+	{
+		proposedViewSize.width = maxSize.width;
+		proposedViewSize.height = proposedViewSize.width / viewRatio;
+	}
+	if (proposedViewSize.height > maxSize.height)
+	{
+		proposedViewSize.height = maxSize.height;
+		proposedViewSize.width = proposedViewSize.height * viewRatio;
+	}
+	
+	NSSize proposedFrameSize = NSMakeSize(titleSize.width + proposedViewSize.width,
+										  titleSize.height + proposedViewSize.height);
+	
+	frameRect.origin.x = (int) NSMidX(frameRect) - proposedFrameSize.width / 2;
+	frameRect.origin.y = NSMaxY(frameRect) - proposedFrameSize.height;
+	frameRect.size = proposedFrameSize;
 	
 	if (NSMaxX(frameRect) > NSMaxX(screenRect))
 		frameRect.origin.x = NSMaxX(screenRect) - NSWidth(frameRect);
@@ -138,11 +183,6 @@
 		frameRect.origin.x = NSMinX(screenRect);
 	if (NSMinY(frameRect) < NSMinY(screenRect))
 		frameRect.origin.y = NSMinY(screenRect);
-	
-	if (NSWidth(frameRect) > NSWidth(screenRect))
-		frameRect.size.width = NSWidth(screenRect);
-	if (NSHeight(frameRect) > NSHeight(screenRect))
-		frameRect.size.height = NSHeight(screenRect);
 	
 	[self setFrame:frameRect display:YES animate:YES];
 }

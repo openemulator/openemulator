@@ -54,6 +54,8 @@ bool CompositeMonitor::setValue(string name, string value)
 		screenVerticalCenter = getFloat(value);
 	else if (name == "screenVerticalSize")
 		screenVerticalSize = getFloat(value);
+	else if (name == "dummy")
+		dummyPath = value;
 	else
 		return false;
 	
@@ -156,16 +158,19 @@ bool CompositeMonitor::init()
 	
 	if (canvas)
 	{
+		OEImage frame;
+		frame.readFile(dummyPath);
+		
 		CanvasConfiguration configuration;
-		configuration.size = OEMakeSize(720, 576);
+		configuration.viewMode = CANVAS_VIEWMODE_FIT_CANVAS;
 		configuration.captureMode = CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_CLICK;
+		configuration.defaultViewSize = OEMakeSize(768, 512);
+		configuration.canvasSize = OEMakeSize(768, 512);
+		configuration.contentRect = OEMakeRect(96.0 / 768, 52.0 / 483,
+											   576.0 / 768, 192.0 * 2 / 483);
 		canvas->postMessage(this, CANVAS_CONFIGURE, &configuration);
 		
-		OEImage *frame = NULL;
-		canvas->postMessage(this, CANVAS_REQUEST_FRAME, &frame);
-		if (frame)
-			frame->setSize(OEMakeSize(720, 576));
-		canvas->postMessage(this, CANVAS_RETURN_FRAME, &frame);
+		canvas->postMessage(this, CANVAS_POST_FRAME, &frame);
 	}
 	
 	return true;

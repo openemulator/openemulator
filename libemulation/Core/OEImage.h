@@ -36,7 +36,7 @@ typedef struct
 
 typedef enum
 {
-	OEIMAGE_FORMAT_MONOCHROME,
+	OEIMAGE_FORMAT_LUMINANCE,
 	OEIMAGE_FORMAT_RGB,
 	OEIMAGE_FORMAT_RGBA,
 } OEImageFormat;
@@ -83,6 +83,8 @@ class OEImage
 {
 public:
 	OEImage();
+	OEImage(const OEImage &image);
+	OEImage &operator=(const OEImage &image);
 	
 	void setFormat(OEImageFormat format);
 	OEImageFormat getFormat();

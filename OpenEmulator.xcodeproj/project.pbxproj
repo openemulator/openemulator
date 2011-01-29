@@ -110,6 +110,7 @@
 		00ED37C212779DD900BEF6BD /* IconWarmRestart.png in Resources */ = {isa = PBXBuildFile; fileRef = 00ED37B112779DD800BEF6BD /* IconWarmRestart.png */; };
 		00F01B4712A0D6EC000527CA /* EmulationUnmount.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F01B4612A0D6EC000527CA /* EmulationUnmount.png */; };
 		00F21CE712C7C7EE00A809EF /* VerticallyCenteredTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00F21CE612C7C7EE00A809EF /* VerticallyCenteredTextFieldCell.m */; };
+		00F35D7312EF049B0027B9E4 /* EmulationOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 00FE381A12CA6790002B47B1 /* EmulationOutlineView.m */; };
 		00F4D0BF12E2E42F00B7F5E6 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00F4D0BE12E2E42F00B7F5E6 /* ApplicationServices.framework */; };
 		00FC27D312D1070A0065E986 /* Apple1CassetteInterfaceCard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881312A393990052B7A4 /* Apple1CassetteInterfaceCard.cpp */; };
 		00FC27D512D1070A0065E986 /* Apple1IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881512A393990052B7A4 /* Apple1IO.cpp */; };
@@ -142,7 +143,6 @@
 		00FC280E12D1070A0065E986 /* MC6821.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8885312A393990052B7A4 /* MC6821.cpp */; };
 		00FC281012D1070A0065E986 /* MC6845.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8885512A393990052B7A4 /* MC6845.cpp */; };
 		00FE0C6310953F7000B92AB7 /* HardwareChooserViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00FE0C6210953F7000B92AB7 /* HardwareChooserViewController.mm */; };
-		00FE381B12CA6790002B47B1 /* EmulationOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 00FE381A12CA6790002B47B1 /* EmulationOutlineView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1009,6 +1009,9 @@
 /* Begin PBXProject section */
 		2A37F4A9FDCFA73011CA2CEA /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+				ORGANIZATIONNAME = OpenEmulator;
+			};
 			buildConfigurationList = C05733CB08A9546B00998B17 /* Build configuration list for PBXProject "OpenEmulator" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
@@ -1187,9 +1190,9 @@
 				00A72B7312879F800083C6A7 /* CanvasWindow.m in Sources */,
 				00BB34B412C5C5AE007332B5 /* EmulationItem.mm in Sources */,
 				00F21CE712C7C7EE00A809EF /* VerticallyCenteredTextFieldCell.m in Sources */,
-				00FE381B12CA6790002B47B1 /* EmulationOutlineView.m in Sources */,
 				00391CB312D3A320002C5ABD /* LibraryWindowController.m in Sources */,
 				0039211812D43448002C5ABD /* BackgroundView.m in Sources */,
+				00F35D7312EF049B0027B9E4 /* EmulationOutlineView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1365,6 +1368,7 @@
 					/usr/include/libxml2,
 					/opt/local/include,
 				);
+				INFOPLIST_FILE = macosx/Info.plist;
 				LIBRARY_SEARCH_PATHS = /opt/local/lib;
 				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;

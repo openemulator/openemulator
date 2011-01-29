@@ -20,6 +20,7 @@
 <NSWindowDelegate, NSTextInputClient>
 {
 	CVDisplayLinkRef displayLink;
+	NSRecursiveLock *lock;
 	
 	Document *document;
 	void *canvas;
@@ -34,7 +35,7 @@
 - (void)stopOpenGL;
 - (void)startDisplayLink;
 - (void)stopDisplayLink;
-- (NSSize)defaultSize;
+- (NSSize)defaultViewSize;
 - (void)updateView;
 
 - (void)setKeyboardFlags:(NSInteger)theKeyboardFlags;

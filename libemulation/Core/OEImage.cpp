@@ -20,6 +20,25 @@ OEImage::OEImage()
 	size = OEMakeSize(0, 0);
 }
 
+OEImage::OEImage(const OEImage &image)
+{
+	format = image.format;
+	size = image.size;
+	pixels = image.pixels;
+}
+
+OEImage &OEImage::operator=(const OEImage &image)
+{
+	if (this != &image)
+	{
+		format = image.format;
+		size = image.size;
+		pixels = image.pixels;
+	}
+	
+	return *this;
+}
+
 void OEImage::setFormat(OEImageFormat format)
 {
 	this->format = format;
@@ -135,7 +154,7 @@ void OEImage::update()
 {
 	int bytesPerPixel = 0;
 	
-	if (format == OEIMAGE_FORMAT_MONOCHROME)
+	if (format == OEIMAGE_FORMAT_LUMINANCE)
 		bytesPerPixel = 1;
 	else if (format == OEIMAGE_FORMAT_RGB)
 		bytesPerPixel = 3;

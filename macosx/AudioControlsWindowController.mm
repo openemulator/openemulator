@@ -2,7 +2,7 @@
 /**
  * OpenEmulator
  * Mac OS X Audio Controls Window Controller
- * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2009-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Controls the audio controls window.
@@ -21,22 +21,6 @@
 	self = [super initWithWindowNibName:@"AudioControls"];
 	
 	return self;
-}
-
-- (void)windowDidLoad
-{
-	[self setWindowFrameAutosaveName:@"AudioControls"];
-	
-	[[self window] registerForDraggedTypes:[NSArray arrayWithObjects:
-											NSFilenamesPboardType,
-											nil]];
-	[[self window] setDelegate:self];
-	
-	timer = [NSTimer scheduledTimerWithTimeInterval:0.25
-											 target:self
-										   selector:@selector(timerDidExpire:)
-										   userInfo:nil
-											repeats:YES];
 }
 
 - (void)dealloc
@@ -60,6 +44,28 @@
 }
 
 
+
+- (void)windowDidLoad
+{
+	[self setWindowFrameAutosaveName:@"AudioControls"];
+	
+	[[self window] registerForDraggedTypes:[NSArray arrayWithObjects:
+											NSFilenamesPboardType,
+											nil]];
+	[[self window] setDelegate:self];
+	
+	timer = [NSTimer scheduledTimerWithTimeInterval:0.25
+											 target:self
+										   selector:@selector(timerDidExpire:)
+										   userInfo:nil
+											repeats:YES];
+}
+
+- (void)timerDidExpire:(NSTimer *)theTimer
+{
+	[self updatePlay];
+	[self updateRecording];
+}
 
 - (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender
 {
@@ -95,12 +101,6 @@
 	}
 	
 	return NO;
-}
-
-- (void)timerDidExpire:(NSTimer *)theTimer
-{
-	[self updatePlay];
-	[self updateRecording];
 }
 
 - (NSString *)formatTime:(NSInteger)time

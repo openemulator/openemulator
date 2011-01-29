@@ -243,6 +243,7 @@
     <property name="screenHorizontalSize" value="1.0" />
     <property name="screenVerticalCenter" value="0" />
     <property name="screenVerticalSize" value="1.0" />
+	<property name="dummy" value="${resourcePath}/images/Dummy.png" />
 </component>
 
 

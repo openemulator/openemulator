@@ -23,10 +23,9 @@
 typedef enum
 {
 	CANVAS_CONFIGURE,
-	CANVAS_REQUEST_FRAME,
-	CANVAS_RETURN_FRAME,
-	CANVAS_LOCK_OPENGL,
-	CANVAS_UNLOCK_OPENGL,
+	CANVAS_POST_FRAME,
+	CANVAS_LOCK_OPENGL_CONTEXT,
+	CANVAS_UNLOCK_OPENGL_CONTEXT,
 	CANVAS_SET_KEYBOARDFLAGS,
 	CANVAS_SET_BADGEFLAGS,
 	CANVAS_COPY,
@@ -48,6 +47,12 @@ typedef enum
 
 typedef enum
 {
+	CANVAS_VIEWMODE_FIT_CANVAS,
+	CANVAS_VIEWMODE_FIT_WIDTH,
+} CanvasViewMode;
+
+typedef enum
+{
 	CANVAS_CAPTUREMODE_NO_CAPTURE,
 	CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_CLICK,
 	CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_ENTER,
@@ -57,13 +62,11 @@ typedef float CanvasDecoderMatrix[3][3];
 
 typedef struct
 {
-	OESize size;
-	float horizBegin;
-	float horizEnd;
-	float vertBegin;
-	float vertEnd;
-	bool zoomToFit;
+	CanvasViewMode viewMode;
 	CanvasCaptureMode captureMode;
+	OESize defaultViewSize;
+	OESize canvasSize;
+	OERect contentRect;
 	
 	bool compositeColorBurst;
 	bool compositeInterlaced;

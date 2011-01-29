@@ -27,11 +27,15 @@
 
 void didUpdate(void *userData)
 {
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	
 	Document *document = (Document *)userData;
 	
 	[document performSelectorOnMainThread:@selector(didUpdate:)
 							   withObject:nil
 							waitUntilDone:NO];
+	
+	[pool release];
 }
 
 void runAlert(void *userData, string message)
@@ -265,7 +269,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	[emulationWindowController showWindow:self];
 }
 
-- (void)didUpdate
+- (void)didUpdate:(id)sender
 {
 	if (emulation && ((Emulation *)emulation)->isActive())
 		[self updateChangeCount:NSChangeDone];

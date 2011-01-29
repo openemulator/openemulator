@@ -18,9 +18,13 @@ OpenGLHAL::OpenGLHAL()
 	setCapture = NULL;
 	setKeyboardFlags = NULL;
 	
-	configuration.size.width = DEFAULT_WIDTH;
-	configuration.size.height = DEFAULT_HEIGHT;
+	configuration.viewMode = CANVAS_VIEWMODE_FIT_CANVAS;
 	configuration.captureMode = CANVAS_CAPTUREMODE_NO_CAPTURE;
+	configuration.defaultViewSize = OEMakeSize(DEFAULT_WIDTH,
+											   DEFAULT_HEIGHT);
+	configuration.canvasSize = OEMakeSize(DEFAULT_WIDTH,
+										  DEFAULT_HEIGHT);
+	configuration.contentRect = OEMakeRect(0, 0, 1, 1);
 	
 	capture = OPENGLHAL_CAPTURE_NONE;
 	
@@ -39,6 +43,8 @@ OpenGLHAL::OpenGLHAL()
 			joystickButtonDown[i][j] = false;
 }
 
+// Video
+
 void OpenGLHAL::open(CanvasSetCapture setCapture,
 					 CanvasSetKeyboardFlags setKeyboardFlags,
 					 void *userData)
@@ -47,25 +53,17 @@ void OpenGLHAL::open(CanvasSetCapture setCapture,
 	this->setKeyboardFlags = setKeyboardFlags;
 	this->userData = userData;
 	
-	glDisable(GL_ALPHA_TEST);
-	glDisable(GL_CULL_FACE);
-	glDisable(GL_DEPTH_TEST);
-	glDisable(GL_LIGHTING);
-	glDisable(GL_STENCIL_TEST);
-	
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
-	glEnable(GL_TEXTURE_RECTANGLE_EXT);
-	
-	glClearColor(0.0, 0.0, 0.0, 0.0);
+	glEnable(GL_TEXTURE_2D);
 	
 	glGenTextures(OPENGLHAL_TEXTURE_END, glTextures);
 	
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	
 	pthread_mutex_init(&frameMutex, NULL);
+	frameConfiguration = configuration;
+	
+	textureSize = OEMakeSize(0, 0);
 }
 
 void OpenGLHAL::close()
@@ -75,9 +73,158 @@ void OpenGLHAL::close()
 	glDeleteTextures(OPENGLHAL_TEXTURE_END, glTextures);
 }
 
+OESize OpenGLHAL::getDefaultViewSize()
+{
+	return configuration.defaultViewSize;
+}
+
+bool OpenGLHAL::update(float width, float height, float offset, bool draw)
+{
+	// Process new frame
+	OEImage *framePrevious = NULL;
+	bool uploadTexture = false;
+	
+	pthread_mutex_lock(&frameMutex);
+	if (frameNext)
+	{
+		frameConfiguration = configuration;
+		framePrevious = frameCurrent;
+		frameCurrent = frameNext;
+		frameNext = NULL;
+		
+		uploadTexture = true;
+	}
+	pthread_mutex_unlock(&frameMutex);
+	
+	if (framePrevious && (framePrevious != frameCurrent))
+		delete framePrevious;
+	
+	if (uploadTexture)
+	{
+		GLint format;
+		OESize size;
+		GLvoid *pixels;
+		
+		if (frameCurrent->getFormat() == OEIMAGE_FORMAT_LUMINANCE)
+			format = GL_LUMINANCE;
+		else if (frameCurrent->getFormat() == OEIMAGE_FORMAT_RGB)
+			format = GL_RGB;
+		else if (frameCurrent->getFormat() == OEIMAGE_FORMAT_RGBA)
+			format = GL_RGBA;
+		size = frameCurrent->getSize();
+		pixels = frameCurrent->getPixels();
+		
+		// Upload texture
+		glBindTexture(GL_TEXTURE_2D,
+					  glTextures[OPENGLHAL_TEXTURE_FRAME]);
+		
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		
+		OESize newTextureSize = OEMakeSize(getNextPowerOf2(size.width),
+										   getNextPowerOf2(size.height));
+		
+		if ((textureSize.width != newTextureSize.width) ||
+			(textureSize.height != newTextureSize.height))
+		{
+			textureSize = newTextureSize;
+			
+			vector<char> dummy;
+			dummy.resize(textureSize.width * textureSize.height);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
+						 textureSize.width, textureSize.height, 0,
+						 GL_LUMINANCE, GL_UNSIGNED_BYTE, &dummy.front());
+		}
+		
+		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0,
+						size.width, size.height,
+						format, GL_UNSIGNED_BYTE,
+						pixels);
+		
+		frameSize = size;
+		draw = true;
+	}
+	
+	// Draw frame
+	if (draw)
+	{
+		glViewport(0, 0, width, height);
+		
+		glClear(GL_COLOR_BUFFER_BIT);
+		
+		if (frameCurrent)
+		{
+			OERect textureFrame = OEMakeRect(0, 0,
+											 frameSize.width / textureSize.width, 
+											 frameSize.height / textureSize.height);
+			
+			float viewProportion = width / height;
+			OERect viewFrame = OEMakeRect(-1, -1, 2, 2);
+			
+			float canvasProportion = (frameConfiguration.canvasSize.width /
+									  frameConfiguration.canvasSize.height);
+			
+			// Apply view mode
+			if (frameConfiguration.viewMode == CANVAS_VIEWMODE_FIT_WIDTH)
+			{
+				float ratio = viewProportion / canvasProportion;
+				viewFrame.size.height = 2 * ratio;
+			}
+			else
+			{
+				if (canvasProportion > viewProportion)
+				{
+					float ratio = viewProportion / canvasProportion;
+					viewFrame.origin.y = -ratio;
+					viewFrame.size.height = 2 * ratio;
+				}
+				else
+				{
+					float ratio = canvasProportion / viewProportion;
+					viewFrame.origin.x = -ratio;
+					viewFrame.size.width = 2 * ratio;
+				}
+			}
+			
+			// Apply content rect
+			viewFrame.origin.x += frameConfiguration.contentRect.origin.x * 2.0;
+			viewFrame.origin.y += frameConfiguration.contentRect.origin.y * 2.0;
+			viewFrame.size.width *= frameConfiguration.contentRect.size.width;
+			viewFrame.size.height *= frameConfiguration.contentRect.size.height;
+			
+			// Display
+			glBindTexture(GL_TEXTURE_2D,
+						  glTextures[OPENGLHAL_TEXTURE_FRAME]);
+			
+			int viewFrameWidth = width * viewFrame.size.width / 2.0;
+			GLint param = GL_LINEAR;
+			if ((viewFrameWidth == (int) frameSize.width) &&
+				(viewFrame.origin.x == -1) && (viewFrame.origin.y == -1))
+				param = GL_NEAREST;
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, param);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, param);
+			
+			glBegin(GL_QUADS);
+			glTexCoord2f(OEMinX(textureFrame), OEMinY(textureFrame));
+			glVertex2f(OEMinX(viewFrame), OEMaxY(viewFrame));
+			glTexCoord2f(OEMaxX(textureFrame), OEMinY(textureFrame));
+			glVertex2f(OEMaxX(viewFrame), OEMaxY(viewFrame));
+			glTexCoord2f(OEMaxX(textureFrame), OEMaxY(textureFrame));
+			glVertex2f(OEMaxX(viewFrame), OEMinY(viewFrame));
+			glTexCoord2f(OEMinX(textureFrame), OEMaxY(textureFrame));
+			glVertex2f(OEMinX(viewFrame), OEMinY(viewFrame));
+			glEnd();
+		}
+	}
+	
+	return draw;
+}
+
+// HID
+
 void OpenGLHAL::updateCapture(OpenGLHALCapture capture)
 {
-//	log("updateCapture");
+	//	log("updateCapture");
 	
 	if (this->capture == capture)
 		return;
@@ -85,118 +232,6 @@ void OpenGLHAL::updateCapture(OpenGLHALCapture capture)
 	
 	if (setCapture)
 		setCapture(userData, capture);
-}
-
-void OpenGLHAL::postHIDNotification(int notification, int usageId, float value)
-{
-	CanvasHIDNotification data = {usageId, value};
-	notify(this, notification, &data);
-}
-
-OESize OpenGLHAL::getDefaultSize()
-{
-	return configuration.size;
-}
-
-void OpenGLHAL::draw(float width, float height, float offset, bool forceDraw)
-{
-	// Process new frame
-	OEImage *framePrevious = NULL;
-	bool frameNew = false;
-	
-	pthread_mutex_lock(&frameMutex);
-	if (frameNext)
-	{
-		framePrevious = frameCurrent;
-		frameCurrent = frameNext;
-		frameNext = NULL;
-		frameNew = true;
-	}
-	pthread_mutex_unlock(&frameMutex);
-	
-	if (framePrevious)
-		delete framePrevious;
-	
-	if (frameNew)
-	{
-		GLint glFormat;
-		GLvoid *glPixels;
-		
-		if (frameCurrent->getFormat() == OEIMAGE_FORMAT_MONOCHROME)
-			glFormat = GL_LUMINANCE;
-		else if (frameCurrent->getFormat() == OEIMAGE_FORMAT_RGB)
-			glFormat = GL_RGB;
-		else if (frameCurrent->getFormat() == OEIMAGE_FORMAT_RGBA)
-			glFormat = GL_RGBA;
-		textureSize = frameCurrent->getSize();
-		glPixels = frameCurrent->getPixels();
-		
-		// Upload texture
-		glBindTexture(GL_TEXTURE_RECTANGLE_EXT,
-					  glTextures[OPENGLHAL_TEXTURE_FRAME]);
-		glTexImage2D(GL_TEXTURE_RECTANGLE_EXT,
-					 0, glFormat, textureSize.width, textureSize.height,
-					 0, glFormat, GL_UNSIGNED_BYTE, glPixels
-					 );
-		
-		forceDraw = true;
-	}
-	
-	// Draw frame
-	if (forceDraw)
-	{
-		glViewport(0, 0, width, height);
-		
-		glClear(GL_COLOR_BUFFER_BIT);
-		
-		if (!frameCurrent)
-			return;
-		
-		float textureProportion = textureSize.width / textureSize.height;
-		float viewProportion = width / height;
-		OERect frame;
-		
-		if (configuration.zoomToFit)
-		{
-			frame.origin.x = -1.0;
-			frame.origin.y = -1.0;
-			frame.size.width = 2.0;
-			frame.size.height = 2.0;
-		}
-		else
-		{
-			if (textureProportion > viewProportion)
-			{
-				float ratio = viewProportion / textureProportion;
-				frame.origin.x = -1.0;
-				frame.origin.y = -ratio;
-				frame.size.width = 2.0;
-				frame.size.height = 2.0 * ratio;
-			}
-			else
-			{
-				float ratio = textureProportion / viewProportion;
-				frame.origin.x = -ratio;
-				frame.origin.y = -1.0;
-				frame.size.width = 2.0 * ratio;
-				frame.size.height = 2.0;
-			}
-		}
-		
-		glBindTexture(GL_TEXTURE_RECTANGLE_EXT,
-					  glTextures[OPENGLHAL_TEXTURE_FRAME]);
-		
-		glBegin(GL_QUADS);
-		glTexCoord2f(0, 0);
-		glVertex2f(OEMinX(frame), OEMaxY(frame));
-		glTexCoord2f(textureSize.width, 0);
-		glVertex2f(OEMaxX(frame), OEMaxY(frame));
-		glTexCoord2f(textureSize.width, textureSize.height);
-		glVertex2f(OEMaxX(frame), OEMinY(frame));
-		glTexCoord2f(0, textureSize.height);
-		glVertex2f(OEMinX(frame), OEMinY(frame));
-		glEnd();
-	}
 }
 
 void OpenGLHAL::becomeKeyWindow()
@@ -242,6 +277,12 @@ void OpenGLHAL::setKey(int usageId, bool value)
 		
 		updateCapture(OPENGLHAL_CAPTURE_NONE);
 	}
+}
+
+void OpenGLHAL::postHIDNotification(int notification, int usageId, float value)
+{
+	CanvasHIDNotification data = {usageId, value};
+	notify(this, notification, &data);
 }
 
 void OpenGLHAL::sendUnicodeKeyEvent(int unicode)
@@ -439,34 +480,23 @@ bool OpenGLHAL::setConfiguration(CanvasConfiguration *configuration)
 	return true;
 }
 
-bool OpenGLHAL::requestFrame(OEImage **frame)
-{
-	if (!frame)
-		return false;
-	
-	*frame = new OEImage();
-	
-	return (*frame != NULL);
-}
-
-bool OpenGLHAL::returnFrame(OEImage **frame)
+bool OpenGLHAL::postFrame(OEImage *frame)
 {
 	if (!frame)
 		return false;
 	
 	// Post frame
+	OEImage *frameCopy = new OEImage(*frame);
 	OEImage *frameDiscarded = NULL;
 	
 	pthread_mutex_lock(&frameMutex);
 	if (frameNext)
 		frameDiscarded = frameNext;
-	frameNext = *frame;
+	frameNext = frameCopy;
 	pthread_mutex_unlock(&frameMutex);
 	
 	if (frameDiscarded)
 		delete frameDiscarded;
-	
-	*frame = NULL;
 	
 	return true;
 }
@@ -478,16 +508,13 @@ bool OpenGLHAL::postMessage(OEComponent *sender, int message, void *data)
 		case CANVAS_CONFIGURE:
 			return setConfiguration((CanvasConfiguration *)data);
 			
-		case CANVAS_REQUEST_FRAME:
-			return requestFrame((OEImage **)data);
+		case CANVAS_POST_FRAME:
+			return postFrame((OEImage *)data);
 			
-		case CANVAS_RETURN_FRAME:
-			return returnFrame((OEImage **)data);
-			
-		case CANVAS_LOCK_OPENGL:
+		case CANVAS_LOCK_OPENGL_CONTEXT:
 			break;
 			
-		case CANVAS_UNLOCK_OPENGL:
+		case CANVAS_UNLOCK_OPENGL_CONTEXT:
 			break;
 	}
 	

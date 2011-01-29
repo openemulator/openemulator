@@ -41,4 +41,6 @@ private:
 	float screenHorizontalSize;
 	float screenVerticalCenter;
 	float screenVerticalSize;
+	
+	string dummyPath;
 };
