@@ -10,94 +10,132 @@
 
 #include "CompositeMonitor.h"
 #include "Emulation.h"
-#include "CanvasInterface.h"
 
 CompositeMonitor::CompositeMonitor()
 {
 	emulation = NULL;
 	canvas = NULL;
+	
+	configuration.zoomMode = CANVAS_ZOOMMODE_FIT_CANVAS;
+	configuration.processMode = CANVAS_PROCESSMODE_COMPOSITE;
+	configuration.captureMode = CANVAS_CAPTUREMODE_NO_CAPTURE;
+	configuration.defaultViewSize = OEMakeSize(720, 576);
+	configuration.canvasSize = OEMakeSize(720, 576);
+	configuration.contentRect = OEMakeRect(0, 0, 1, 1);
+	
+	configuration.compositeDecoder = CANVAS_COMPOSITEDECODER_NTSC_YUV;
+	configuration.compositeInterlaced = true;
+	configuration.compositeCarrierFrequency = 0.25;
+	configuration.compositeLumaCutoffFrequency = 0.3;
+	configuration.compositeChromaCutoffFrequency = 0.01;
+	configuration.compositeBlackLevel = 0;
+	configuration.compositeWhiteLevel = 1;
+	configuration.compositeHue = 0.15;
+	
+	configuration.brightness = 0;
+	configuration.contrast = 1;
+	configuration.saturation = 1;
+	configuration.barrel = 0.1;
+	configuration.persistance = 0;
+	
+	screenRect = OEMakeRect(0, 0, 1, 1);
 }
 
 bool CompositeMonitor::setValue(string name, string value)
 {
-	if (name == "compositeLumaCutoff")
-		compositeLumaCutoff = getFloat(value);
-	else if (name == "compositeChromaCutoff")
-		compositeChromaCutoff = getFloat(value);
+	if (name == "compositeDecoder")
+	{
+		if (value == "CXA2025AS")
+			 configuration.compositeDecoder = CANVAS_COMPOSITEDECODER_CXA2025AS;
+		else if (value == "NTSC Y'IQ")
+			configuration.compositeDecoder = CANVAS_COMPOSITEDECODER_NTSC_YIQ;
+		else
+			configuration.compositeDecoder = CANVAS_COMPOSITEDECODER_NTSC_YUV;
+	}
+	else if (name == "compositeCarrierFrequency")
+		configuration.compositeCarrierFrequency = getFloat(value);
+	else if (name == "compositeLumaCutoffFrequency")
+		configuration.compositeLumaCutoffFrequency = getFloat(value);
+	else if (name == "compositeChromaCutoffFrequency")
+		configuration.compositeChromaCutoffFrequency = getFloat(value);
+	else if (name == "compositeBlackLevel")
+		configuration.compositeBlackLevel = getFloat(value);
+	else if (name == "compositeWhiteLevel")
+		configuration.compositeWhiteLevel = getFloat(value);
 	else if (name == "compositeHue")
-		compositeHue = getFloat(value);
-	else if (name == "compositeSaturation")
-		compositeSaturation = getFloat(value);
-	else if (name == "compositeColorize")
-		compositeColorize = getInt(value);
-	else if (name == "compositeDecoderMatrix")
-		compositeDecoderMatrix = getInt(value);
-	else if (name == "screenBrightness")
-		screenBrightness = getFloat(value);
-	else if (name == "screenContrast")
-		screenContrast = getFloat(value);
-	else if (name == "screenRedGain")
-		screenRedGain = getFloat(value);
-	else if (name == "screenGreenGain")
-		screenGreenGain = getFloat(value);
-	else if (name == "screenBlueGain")
-		screenBlueGain = getFloat(value);
-	else if (name == "screenBarrel")
-		screenBarrel = getFloat(value);
-	else if (name == "screenPersistance")
-		screenPersistance = getFloat(value);
-	else if (name == "screenHorizontalCenter")
-		screenHorizontalCenter = getFloat(value);
-	else if (name == "screenHorizontalSize")
-		screenHorizontalSize = getFloat(value);
-	else if (name == "screenVerticalCenter")
-		screenVerticalCenter = getFloat(value);
-	else if (name == "screenVerticalSize")
-		screenVerticalSize = getFloat(value);
+		configuration.compositeHue = getFloat(value);
+	else if (name == "brightness")
+		configuration.brightness = getFloat(value);
+	else if (name == "contrast")
+		configuration.contrast = getFloat(value);
+	else if (name == "saturation")
+		configuration.saturation = getFloat(value);
+	else if (name == "barrel")
+		configuration.barrel = getFloat(value);
+	else if (name == "persistance")
+		configuration.persistance = getFloat(value);
+	else if (name == "horizontalCenter")
+		screenRect.origin.x = getFloat(value);
+	else if (name == "verticalCenter")
+		screenRect.origin.y = getFloat(value);
+	else if (name == "horizontalSize")
+		screenRect.size.width = getFloat(value);
+	else if (name == "verticalSize")
+		screenRect.size.height = getFloat(value);
 	else if (name == "dummy")
 		dummyPath = value;
 	else
 		return false;
 	
+	updateContentRect();
+	
+	if (canvas)
+		canvas->postMessage(this, CANVAS_CONFIGURE, &configuration);
+	
 	return true;
 }
 
-bool CompositeMonitor::getValue(string name, string &value)
+bool CompositeMonitor::getValue(string name, string& value)
 {
-	if (name == "compositeLumaCutoff")
-		value = getString(compositeLumaCutoff);
-	else if (name == "compositeChromaCutoff")
-		value = getString(compositeChromaCutoff);
+	if (name == "compositeDecoder")
+	{
+		if (configuration.compositeDecoder == CANVAS_COMPOSITEDECODER_CXA2025AS)
+			value = "CXA2025AS";
+		else if (configuration.compositeDecoder == CANVAS_COMPOSITEDECODER_NTSC_YIQ)
+			value = "NTSC Y'IQ";
+		else
+			value = "NTSC Y'UV";
+	}
+	else if (name == "compositeCarrierFrequency")
+		value = getString(configuration.compositeCarrierFrequency);
+	else if (name == "compositeLumaCutoffFrequency")
+		value = getString(configuration.compositeLumaCutoffFrequency);
+	else if (name == "compositeChromaCutoffFrequency")
+		value = getString(configuration.compositeChromaCutoffFrequency);
+	else if (name == "compositeBlackLevel")
+		value = getString(configuration.compositeBlackLevel);
+	else if (name == "compositeWhiteLevel")
+		value = getString(configuration.compositeWhiteLevel);
 	else if (name == "compositeHue")
-		value = getString(compositeHue);
-	else if (name == "compositeSaturation")
-		value = getString(compositeSaturation);
-	else if (name == "compositeColorize")
-		value = getString(compositeColorize);
-	else if (name == "compositeDecoderMatrix")
-		value = getString(compositeDecoderMatrix);
-	else if (name == "screenBrightness")
-		value = getString(screenBrightness);
-	else if (name == "screenContrast")
-		value = getString(screenContrast);
-	else if (name == "screenRedGain")
-		value = getString(screenRedGain);
-	else if (name == "screenGreenGain")
-		value = getString(screenGreenGain);
-	else if (name == "screenBlueGain")
-		value = getString(screenBlueGain);
-	else if (name == "screenBarrel")
-		value = getString(screenBarrel);
-	else if (name == "screenPersistance")
-		value = getString(screenPersistance);
-	else if (name == "screenHorizontalCenter")
-		value = getString(screenHorizontalCenter);
-	else if (name == "screenHorizontalSize")
-		value = getString(screenHorizontalSize);
-	else if (name == "screenVerticalCenter")
-		value = getString(screenVerticalCenter);
-	else if (name == "screenVerticalSize")
-		value = getString(screenVerticalSize);
+		value = getString(configuration.compositeHue);
+	else if (name == "brightness")
+		value = getString(configuration.brightness);
+	else if (name == "contrast")
+		value = getString(configuration.contrast);
+	else if (name == "saturation")
+		value = getString(configuration.saturation);
+	else if (name == "barrel")
+		value = getString(configuration.barrel);
+	else if (name == "persistance")
+		value = getString(configuration.persistance);
+	else if (name == "horizontalCenter")
+		value = getString(screenRect.origin.x);
+	else if (name == "verticalCenter")
+		value = getString(screenRect.origin.y);
+	else if (name == "horizontalSize")
+		value = getString(screenRect.size.width);
+	else if (name == "verticalSize")
+		value = getString(screenRect.size.height);
 	else
 		return false;
 	
@@ -158,22 +196,31 @@ bool CompositeMonitor::init()
 	
 	if (canvas)
 	{
-		OEImage frame;
-		frame.readFile(dummyPath);
-		
-		CanvasConfiguration configuration;
-		configuration.viewMode = CANVAS_VIEWMODE_FIT_CANVAS;
-		configuration.captureMode = CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_CLICK;
-		configuration.defaultViewSize = OEMakeSize(768, 512);
-		configuration.canvasSize = OEMakeSize(768, 512);
-		configuration.contentRect = OEMakeRect(96.0 / 768, 52.0 / 483,
-											   576.0 / 768, 192.0 * 2 / 483);
 		canvas->postMessage(this, CANVAS_CONFIGURE, &configuration);
 		
+		OEImage frame;
+		frame.readFile(dummyPath);
 		canvas->postMessage(this, CANVAS_POST_FRAME, &frame);
 	}
 	
 	return true;
+}
+
+void CompositeMonitor::updateContentRect()
+{
+	configuration.contentRect = OEMakeRect(96 * 1.0 / 768, 24 * 2.0 / 483,
+										   576 * 1.0 / 768, 192 * 2.0 / 483);
+	//		configuration.contentRect = OEMakeRect(96 * 1.0 / 768, 34 * 2.0 / 576,
+	//											   576 * 1.0 / 768, 192 * 2.0 / 576);
+	
+	float deltaOriginX = screenRect.origin.x + (1.0 - screenRect.size.width) * 0.5;
+	float deltaOriginY = -screenRect.origin.y + (1.0 - screenRect.size.height) * 0.5;
+	
+	configuration.contentRect.origin.x += deltaOriginX;
+	configuration.contentRect.origin.y += deltaOriginY;
+
+	configuration.contentRect.size.width *= screenRect.size.width;
+	configuration.contentRect.size.height *= screenRect.size.height;
 }
 
 /*

@@ -83,8 +83,8 @@ class OEImage
 {
 public:
 	OEImage();
-	OEImage(const OEImage &image);
-	OEImage &operator=(const OEImage &image);
+	OEImage(const OEImage& image);
+	OEImage& operator=(const OEImage& image);
 	
 	void setFormat(OEImageFormat format);
 	OEImageFormat getFormat();

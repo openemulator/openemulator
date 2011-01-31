@@ -37,7 +37,7 @@ bool MOS6530::setValue(string name, string value)
 	return true;
 }
 
-bool MOS6530::getValue(string name, string &value)
+bool MOS6530::getValue(string name, string& value)
 {
 	if (name == "directionA")
 		value = getHexString(directionA);

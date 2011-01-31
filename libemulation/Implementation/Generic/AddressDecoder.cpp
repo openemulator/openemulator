@@ -152,7 +152,7 @@ bool AddressDecoder::map(OEComponent *component, string value)
 	return true;
 }
 
-bool AddressDecoder::getMaps(AddressDecoderMaps &maps, OEComponent *component,
+bool AddressDecoder::getMaps(AddressDecoderMaps& maps, OEComponent *component,
 							 string value)
 {
 	size_t startPos = value.find_first_not_of(',', 0);
@@ -177,7 +177,7 @@ bool AddressDecoder::getMaps(AddressDecoderMaps &maps, OEComponent *component,
 	return true;
 }
 
-bool AddressDecoder::getMap(AddressDecoderMap &map, OEComponent *component,
+bool AddressDecoder::getMap(AddressDecoderMap& map, OEComponent *component,
 							string value)
 {
 	map.component = component;

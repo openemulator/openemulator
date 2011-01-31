@@ -22,7 +22,7 @@ bool AppleIIVideo::setValue(string name, string value)
 	return true;
 }
 
-bool AppleIIVideo::getValue(string name, string &value)
+bool AppleIIVideo::getValue(string name, string& value)
 {
 	if (name == "tvSystem")
 		value = palTiming ? "PAL" : "NTSC";

@@ -25,7 +25,7 @@ public:
 	
 	// Configuration
 	virtual bool setValue(string name, string value);
-	virtual bool getValue(string name, string &value);
+	virtual bool getValue(string name, string& value);
 	virtual bool setRef(string name, OEComponent *ref);
 	virtual bool setData(string name, OEData *data);
 	virtual bool getData(string name, OEData **data);
@@ -63,9 +63,9 @@ protected:
 	// Helpers
 	void log(string message);
 	
-	int getInt(const string &value);
-	double getFloat(const string &value);
-	OEData getCharVector(const string &value);
+	int getInt(const string& value);
+	double getFloat(const string& value);
+	OEData getCharVector(const string& value);
 	
 	string getString(int value);
 	string getString(float value);

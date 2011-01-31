@@ -50,7 +50,7 @@ bool MC6821::setValue(string name, string value)
 	return true;
 }
 
-bool MC6821::getValue(string name, string &value)
+bool MC6821::getValue(string name, string& value)
 {
 	if (name == "controlA")
 		value = getHexString(controlA);

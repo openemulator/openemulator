@@ -186,7 +186,7 @@ void OEComponent::log(string message)
 	cerr << "libemulation: " << message << endl;
 }
 
-int OEComponent::getInt(const string &value)
+int OEComponent::getInt(const string& value)
 {
 	if (value.substr(0, 2) == "0x")
 	{
@@ -200,7 +200,7 @@ int OEComponent::getInt(const string &value)
 		return atoi(value.c_str());
 }
 
-double OEComponent::getFloat(const string &value)
+double OEComponent::getFloat(const string& value)
 {
 	return atof(value.c_str());
 }
@@ -226,7 +226,7 @@ string OEComponent::getHexString(int value)
 	return ss.str();
 }
 
-OEData OEComponent::getCharVector(const string &value)
+OEData OEComponent::getCharVector(const string& value)
 {
 	OEData result;
 	int start = (value.substr(0, 2) == "0x") ? 2 : 0;

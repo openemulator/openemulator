@@ -31,7 +31,7 @@ bool AppleDiskII::setValue(string name, string value)
 	return true;
 }
 
-bool AppleDiskII::getValue(string name, string &value)
+bool AppleDiskII::getValue(string name, string& value)
 {
 	if (name == "forceWriteProtected")
 		value = getString(forceWriteProtected);

@@ -24,8 +24,6 @@ typedef enum
 {
 	CANVAS_CONFIGURE,
 	CANVAS_POST_FRAME,
-	CANVAS_LOCK_OPENGL_CONTEXT,
-	CANVAS_UNLOCK_OPENGL_CONTEXT,
 	CANVAS_SET_KEYBOARDFLAGS,
 	CANVAS_SET_BADGEFLAGS,
 	CANVAS_COPY,
@@ -47,9 +45,15 @@ typedef enum
 
 typedef enum
 {
-	CANVAS_VIEWMODE_FIT_CANVAS,
-	CANVAS_VIEWMODE_FIT_WIDTH,
-} CanvasViewMode;
+	CANVAS_ZOOMMODE_FIT_CANVAS,
+	CANVAS_ZOOMMODE_FIT_WIDTH,
+} CanvasZoomMode;
+
+typedef enum
+{
+	CANVAS_PROCESSMODE_COMPOSITE,
+	CANVAS_PROCESSMODE_RGB,
+} CanvasProcessMode;
 
 typedef enum
 {
@@ -58,34 +62,38 @@ typedef enum
 	CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_ENTER,
 } CanvasCaptureMode;
 
-typedef float CanvasDecoderMatrix[3][3];
+typedef enum
+{
+	CANVAS_COMPOSITEDECODER_NTSC_YUV,
+	CANVAS_COMPOSITEDECODER_NTSC_YIQ,
+	CANVAS_COMPOSITEDECODER_CXA2025AS,
+} CanvasCompositeDecoder;
 
 typedef struct
 {
-	CanvasViewMode viewMode;
+	CanvasZoomMode zoomMode;
+	CanvasProcessMode processMode;
 	CanvasCaptureMode captureMode;
 	OESize defaultViewSize;
 	OESize canvasSize;
 	OERect contentRect;
 	
-	bool compositeColorBurst;
+	CanvasCompositeDecoder compositeDecoder;
 	bool compositeInterlaced;
+	float compositeCarrierFrequency;
 	float compositeLumaCutoffFrequency;
 	float compositeChromaCutoffFrequency;
+	float compositeBlackLevel;
+	float compositeWhiteLevel;
 	float compositeHue;
-	float compositeSaturation;
-	bool compositeColorize;
-	CanvasDecoderMatrix compositeDecoderMatrix;
 	
-	float rgbHorizontalSharpness;
+	float rgbSharpness;
 	
-	float videoBrightness;
-	float videoContrast;
-	float videoRedGain;
-	float videoGreenGain;
-	float videoBlueGain;
-	float videoBarrel;
-	float videoPersistance;
+	float brightness;
+	float contrast;
+	float saturation;
+	float barrel;
+	float persistance;
 } CanvasConfiguration;
 
 // Canvas keyboard flags use int

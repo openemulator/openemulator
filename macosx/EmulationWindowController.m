@@ -520,6 +520,12 @@ objectValueForTableColumn:(NSTableColumn *)aTableColumn
 
 
 
+- (void)tableViewDataCellDidUpdate:(id)sender
+{
+	[selectedItem setValue:[sender stringValue]
+		 forSettingAtIndex:[fTableView clickedRow]];
+}
+
 - (NSCell *)tableView:(NSTableView *)tableView
 dataCellForTableColumn:(NSTableColumn *)tableColumn
 				  row:(NSInteger)row
@@ -545,6 +551,8 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
 				NSArray *options = [selectedItem optionsForSettingAtIndex:row];
 				[sliderCell setMinValue:[[options objectAtIndex:0] floatValue]];
 				[sliderCell setMaxValue:[[options objectAtIndex:1] floatValue]];
+				[sliderCell setContinuous:YES];
+				[sliderCell setAction:@selector(tableViewDataCellDidUpdate:)];
 				
 				return sliderCell;
 			}

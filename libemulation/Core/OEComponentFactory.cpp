@@ -50,7 +50,7 @@
 
 #define matchComponent(name) if (className == #name) return new name()
 
-OEComponent *OEComponentFactory::create(const string &className)
+OEComponent *OEComponentFactory::create(const string& className)
 {
 // FACTORY_CODE_START - Do not modify this section
 	matchComponent(AddressDecoder);

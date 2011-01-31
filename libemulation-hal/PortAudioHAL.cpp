@@ -1,6 +1,6 @@
 
 /**
- * OpenEmulator
+ * libemulation-hal
  * PortAudio HAL
  * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL

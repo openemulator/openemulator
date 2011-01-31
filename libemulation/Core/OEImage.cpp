@@ -20,14 +20,14 @@ OEImage::OEImage()
 	size = OEMakeSize(0, 0);
 }
 
-OEImage::OEImage(const OEImage &image)
+OEImage::OEImage(const OEImage& image)
 {
 	format = image.format;
 	size = image.size;
 	pixels = image.pixels;
 }
 
-OEImage &OEImage::operator=(const OEImage &image)
+OEImage& OEImage::operator=(const OEImage& image)
 {
 	if (this != &image)
 	{

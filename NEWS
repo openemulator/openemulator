@@ -1,4 +1,7 @@
+==2011-02==
+
 ==2011-01==
+* Implemented OpenGL 2.0 shader
 * Fixed OpenGL context problem when closing an emulation.
 * Implemented frame communication to the canvas
 * Improved emulation window sizing

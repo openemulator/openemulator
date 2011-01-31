@@ -31,7 +31,7 @@ OEPackage::~OEPackage()
 	close();
 }
 
-bool OEPackage::open(const string &path)
+bool OEPackage::open(const string& path)
 {
 	close();
 	this->path = path;
@@ -70,7 +70,7 @@ void OEPackage::close()
 	zip = NULL;
 }
 
-bool OEPackage::readFile(const string &packagePath, OEData *data)
+bool OEPackage::readFile(const string& packagePath, OEData *data)
 {
 	bool error = true;
 	
@@ -116,7 +116,7 @@ bool OEPackage::readFile(const string &packagePath, OEData *data)
 	return !error;
 }
 
-bool OEPackage::writeFile(const string &packagePath, OEData *data)
+bool OEPackage::writeFile(const string& packagePath, OEData *data)
 {
 	bool error = true;
 	
@@ -162,7 +162,7 @@ bool OEPackage::remove()
 	return removeItemAtPath(path);
 }
 
-bool OEPackage::pathExists(const string &path)
+bool OEPackage::pathExists(const string& path)
 {
 #ifdef _WIN32
 	return (GetFileAttributes(path.c_str()) != INVALID_FILE_ATTRIBUTES);
@@ -172,7 +172,7 @@ bool OEPackage::pathExists(const string &path)
 #endif
 }
 
-bool OEPackage::isDirectory(const string &path)
+bool OEPackage::isDirectory(const string& path)
 {
 #ifdef _WIN32
 	return (GetFileAttributes(path.c_str()) & FILE_ATTRIBUTE_DIRECTORY);
@@ -185,7 +185,7 @@ bool OEPackage::isDirectory(const string &path)
 #endif
 }
 
-bool OEPackage::createDirectory(const string &path)
+bool OEPackage::createDirectory(const string& path)
 {
 #ifdef _WIN32
 	return CreateDirectory(path.c_str())
@@ -194,7 +194,7 @@ bool OEPackage::createDirectory(const string &path)
 #endif
 }
 
-bool OEPackage::removeItemAtPath(const string &path)
+bool OEPackage::removeItemAtPath(const string& path)
 {
 #ifdef _WIN32
 	if (!isDirectory(path))

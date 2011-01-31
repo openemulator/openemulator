@@ -62,8 +62,8 @@ private:
 	void map(AddressDecoderMap *theMap);
 	bool map(OEComponent *component, string value);
 	
-	bool getMaps(AddressDecoderMaps &maps, OEComponent *component, string value);
-	bool getMap(AddressDecoderMap &map, OEComponent *component, string value);
+	bool getMaps(AddressDecoderMaps& maps, OEComponent *component, string value);
+	bool getMap(AddressDecoderMap& map, OEComponent *component, string value);
 };
 
 #endif

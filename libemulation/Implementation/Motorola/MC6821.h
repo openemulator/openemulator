@@ -52,7 +52,7 @@ public:
 	MC6821();
 	
 	bool setValue(string name, string value);
-	bool getValue(string name, string &value);
+	bool getValue(string name, string& value);
 	bool setRef(string name, OEComponent *ref);
 	
 	bool postMessage(OEComponent *component, int message, void *data);

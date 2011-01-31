@@ -20,7 +20,7 @@ bool AppleIIKeyboard::setValue(string name, string value)
 	return true;
 }
 
-bool AppleIIKeyboard::getValue(string name, string &value)
+bool AppleIIKeyboard::getValue(string name, string& value)
 {
 	if (name == "type")
 		value = type;

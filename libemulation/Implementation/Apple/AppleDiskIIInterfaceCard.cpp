@@ -27,7 +27,7 @@ bool AppleDiskIIInterfaceCard::setValue(string name, string value)
 	return true;
 }
 
-bool AppleDiskIIInterfaceCard::getValue(string name, string &value)
+bool AppleDiskIIInterfaceCard::getValue(string name, string& value)
 {
 	if (name == "controllerType")
 		value = controllerType ? "13 Sector Controller" : "16 Sector Controller";

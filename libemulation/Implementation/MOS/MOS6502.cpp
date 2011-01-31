@@ -50,7 +50,7 @@ bool MOS6502::setValue(string name, string value)
 	return true;
 }
 
-bool MOS6502::getValue(string name, string &value)
+bool MOS6502::getValue(string name, string& value)
 {
 	if (name == "a")
 		value = getHexString(a);

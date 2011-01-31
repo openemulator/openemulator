@@ -291,7 +291,7 @@ string Emulation::buildDeviceLocation(string deviceId)
 }
 
 string Emulation::buildDeviceLocation(string deviceId,
-									  vector<string> &visitedDevices)
+									  vector<string>& visitedDevices)
 {
 	if (!doc)
 		return "";
@@ -828,7 +828,7 @@ bool Emulation::hasValueProperty(string value, string propertyName)
 	return (value.find("${" + propertyName + "}") != string::npos);
 }
 
-string Emulation::parseValueProperties(string value, map<string, string> &propertiesMap)
+string Emulation::parseValueProperties(string value, map<string, string>& propertiesMap)
 {
 	int startIndex;
 	
@@ -861,7 +861,7 @@ string Emulation::parseValueProperties(string value, map<string, string> &proper
 	return value;
 }
 
-void Emulation::setDeviceId(string &id, string deviceId)
+void Emulation::setDeviceId(string& id, string deviceId)
 {
 	int dotIndex = id.find_first_of('.');
 	

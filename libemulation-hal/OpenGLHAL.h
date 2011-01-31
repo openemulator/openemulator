@@ -1,6 +1,6 @@
 
 /**
- * OpenEmulator
+ * libemulation-hal
  * OpenGL canvas
  * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
@@ -74,7 +74,7 @@ public:
 	void sendJoystickHatEvent(int deviceIndex, int index, float value);
 	void moveJoystickBall(int deviceIndex, int index, float value);
 	
-	bool copy(string &value);
+	bool copy(string& value);
 	bool paste(string value);
 	
 	bool postMessage(OEComponent *sender, int message, void *data);
@@ -84,16 +84,19 @@ private:
 	CanvasSetKeyboardFlags setKeyboardFlags;
 	void *userData;
 	
-	CanvasConfiguration configuration;
+	pthread_mutex_t drawMutex;
 	
-	pthread_mutex_t frameMutex;
+	CanvasConfiguration configuration;
 	CanvasConfiguration frameConfiguration;
-	OESize frameSize;
-	OEImage *frameCurrent;
-	OEImage *frameNext;
+	bool updateConfiguration;
+	
+	OEImage *nextFrame;
+	OEImage *frame;
 	
 	GLuint glTextures[OPENGLHAL_TEXTURE_END];
-	OESize textureSize;
+	OESize glTextureSize;
+	GLuint glFragmentShader;
+	GLuint glProgram;
 	
 	OpenGLHALCapture capture;
 	
@@ -103,6 +106,13 @@ private:
 	bool mouseEntered;
 	bool mouseButtonDown[CANVAS_MOUSE_BUTTON_NUM];
 	bool joystickButtonDown[CANVAS_JOYSTICK_NUM][CANVAS_JOYSTICK_BUTTON_NUM];
+	
+	bool initOpenGL();
+	void freeOpenGL();
+	bool updateTexture();
+	bool loadShader();
+	bool updateShader();
+	bool drawCanvas(float width, float height);
 	
 	void postHIDNotification(int notification, int usageId, float value);
 	void updateCapture(OpenGLHALCapture capture);

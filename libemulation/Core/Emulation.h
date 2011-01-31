@@ -125,7 +125,7 @@ private:
 	void buildEmulationInfo();
 	EmulationSettings buildDeviceSettings(xmlNodePtr children);
 	string buildDeviceLocation(string deviceId);
-	string buildDeviceLocation(string deviceId, vector<string> &visitedDevices);
+	string buildDeviceLocation(string deviceId, vector<string>& visitedDevices);
 	EmulationDeviceInfo *getDeviceInfo(string id);
 	
 	bool dumpEmulation(OEData *data);
@@ -143,9 +143,9 @@ private:
 	void destroyComponent(string id, xmlNodePtr children);
 	
 	bool hasValueProperty(string value, string propertyName);
-	string parseValueProperties(string value, map<string, string> &propertiesMap);
+	string parseValueProperties(string value, map<string, string>& propertiesMap);
 	
-	void setDeviceId(string &id, string deviceId);
+	void setDeviceId(string& id, string deviceId);
 	string getDeviceId(string id);
 	string getDeviceId(OEComponent *component);
 };

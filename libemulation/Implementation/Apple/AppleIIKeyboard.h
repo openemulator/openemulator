@@ -14,7 +14,7 @@ class AppleIIKeyboard : public OEComponent
 {
 public:
 	bool setValue(string name, string value);
-	bool getValue(string name, string &value);
+	bool getValue(string name, string& value);
 	bool setRef(string name, OEComponent *ref);
 	
 	OEUInt8 read(OEAddress address);

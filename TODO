@@ -1,11 +1,10 @@
 ==To-Do==
 * Implement capture badge, lasting 3 seconds, disappearing in 1 second
-* Devise a way to send system events to a device without a canvas
-* Implement printing
-* Integrate OpenGL 2.0 shader
 * Implement non-linear curves in the shader (change hue in monochrome monitors)
 * Implement the option to deactivate shaders
-* Devise an interface to allow native OpenGL commands in emulations
+
+* Devise a way to send system events to a device without a canvas
+* Implement printing
 * Implement hardware library
 * Implement OEEmulation addEDL
 * Implement OEEmulation removeDevice
@@ -50,16 +49,13 @@
 
 
 
-What follows is the compendium of old ideas…
+What follows is the compendium of old ideas.
 
 ==OpenEmulator==
 * When application looses focus, all fullscreen windows should be de-zoomed
 * Implement CPU Load
 * Fix template chooser width problem, when scroll bars show and hide
 * Fix template chooser problem when the first line of items is not selected
-
-==Composite monitor ==
-* Usually 92% of total image is visible
 
 ==Apple-1 Video==
 Cursor frequency 1.924 Hz
@@ -98,42 +94,6 @@ Video bandwidth: 1.5 dB at 6.5 MHz, 3 dB at 8 MHz
 * Apple IIe HIRES:
 ** At the far left, black is always inserted
 ** At the far right, the last video dot thing is always cut off
-
-===NTSC===
-* Vertical blanking: 19 scanlines
-* Visible: 243.5 scanlines
-* Usually 240 scanlines are used
-
-* Color carrier  = 3.579545 MHz
-* Horizontal frequency = (2 / 455) * Color carrier
-* Horizontal period H = 1 / (3579545 * 2 / 455) = 63.556µs
-
-* Front porch: 1.5µs
-* Horizontal sync: 4.7µs
-* Breezeway: 0.6µs
-* Color burst: 2.50µs
-* Back porch: 1.6µs
-
-* Visible: 52.6556µs
-
-* 60 Hz	32 cycles before, 4 cycles VSYNC (33, 34, 35, 36), 34 later
-
-===PAL===
-* Vertical blanking: 25 scanlines
-* Visible: 287.5 scanlines
-* Usually 288 scanlines are used
-
-* Horizontal period: 64µs
-
-* Front porch: 1.5µs
-* Horizontal sync: 4.7µs
-* Breezeway: 0.9µs
-* Color burst: 2.25µs
-* Back porch: 2.65µs
-
-* Visible nominal: 52µs
-
-* 50 Hz	72 cycles before, 4 cycles VSYNC (73, 74, 75, 76), 44 later
 
 ==Apple II Timing==
 OpenEmulator function prototypes:
