@@ -79,13 +79,13 @@ typedef struct
 	OERect contentRect;
 	
 	CanvasCompositeDecoder compositeDecoder;
-	bool compositeInterlaced;
 	float compositeCarrierFrequency;
 	float compositeLumaCutoffFrequency;
 	float compositeChromaCutoffFrequency;
 	float compositeBlackLevel;
 	float compositeWhiteLevel;
 	float compositeHue;
+	float compositeScanlineAlpha;
 	
 	float rgbSharpness;
 	

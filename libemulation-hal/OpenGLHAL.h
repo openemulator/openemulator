@@ -109,9 +109,10 @@ private:
 	
 	bool initOpenGL();
 	void freeOpenGL();
-	bool updateTexture();
 	bool loadShader();
 	bool updateShader();
+	bool updateTexture();
+	void updateFrame(float height);
 	bool drawCanvas(float width, float height);
 	
 	void postHIDNotification(int notification, int usageId, float value);

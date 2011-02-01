@@ -111,7 +111,10 @@ bool OpenGLHAL::update(float width, float height, float offset, bool draw)
 		updateTexture();
 	
 	if (draw)
+	{
+		updateFrame(height);
 		drawCanvas(width, height);
+	}
 	
 	return draw;
 }
@@ -128,6 +131,7 @@ bool OpenGLHAL::initOpenGL()
 	glGenTextures(OPENGLHAL_TEXTURE_END, glTextures);
 	
 	glTextureSize = OEMakeSize(0, 0);
+	glProgram = 0;
 	
 	loadShader();
 	
@@ -138,9 +142,9 @@ bool OpenGLHAL::loadShader()
 {
 	const GLchar *source = "\
 	uniform sampler2D texture;\
+	uniform vec2 texture_size;\
 	uniform float barrel;\
 	uniform vec2 barrel_center;\
-	uniform float size_x;\
 	uniform float comp_black;\
 	uniform float comp_fsc;\
 	uniform vec3 c0;\
@@ -155,6 +159,7 @@ bool OpenGLHAL::loadShader()
 	uniform vec3 decoderRow1;\
 	uniform vec3 decoderRow2;\
 	uniform vec3 decoderRow3;\
+	uniform float scanline;\
 	uniform float brightness;\
 	\
 	float PI = 3.14159265358979323846264;\
@@ -162,7 +167,7 @@ bool OpenGLHAL::loadShader()
 	vec3 demodulate(vec2 q)\
 	{\
 	vec3 p = texture2D(texture, q).xyz - comp_black;\
-	float phase = 2.0 * PI * comp_fsc * size_x * q.x;\
+	float phase = 2.0 * PI * comp_fsc * texture_size.x * q.x;\
 	p.y *= sin(phase);\
 	p.z *= cos(phase);\
 	return p;\
@@ -181,15 +186,18 @@ bool OpenGLHAL::loadShader()
 	q += barrel_center;\
 	\
 	vec3 p = demodulate(q) * c0;\
-	p += demodulate2(q, 1.0 / size_x) * c1;\
-	p += demodulate2(q, 2.0 / size_x) * c2;\
-	p += demodulate2(q, 3.0 / size_x) * c3;\
-	p += demodulate2(q, 4.0 / size_x) * c4;\
-	p += demodulate2(q, 5.0 / size_x) * c5;\
-	p += demodulate2(q, 6.0 / size_x) * c6;\
-	p += demodulate2(q, 7.0 / size_x) * c7;\
-	p += demodulate2(q, 8.0 / size_x) * c8;\
-	p = mat3(decoderRow1, decoderRow2, decoderRow3) * p + brightness;\
+	p += demodulate2(q, 1.0 / texture_size.x) * c1;\
+	p += demodulate2(q, 2.0 / texture_size.x) * c2;\
+	p += demodulate2(q, 3.0 / texture_size.x) * c3;\
+	p += demodulate2(q, 4.0 / texture_size.x) * c4;\
+	p += demodulate2(q, 5.0 / texture_size.x) * c5;\
+	p += demodulate2(q, 6.0 / texture_size.x) * c6;\
+	p += demodulate2(q, 7.0 / texture_size.x) * c7;\
+	p += demodulate2(q, 8.0 / texture_size.x) * c8;\
+	p = mat3(decoderRow1, decoderRow2, decoderRow3) * p;\
+	float s = sin(PI * q.y * texture_size.y);\
+	p *= (1.0 - scanline) + scanline * s * s;\
+	p += brightness;\
 	gl_FragColor = vec4(p, 1.0);\
 	}\
 	";
@@ -293,9 +301,9 @@ bool OpenGLHAL::updateShader()
 	// Contrast
 	m *= frameConfiguration.contrast;
 	// Y'UV or Y'IQ to RGB
+	// Matrices from "Digital Video and HDTV Algorithms and Interfaces"
 	switch (frameConfiguration.compositeDecoder)
 	{
-		// from "Digital Video and HDTV Algorithms and Interfaces"
 		case CANVAS_COMPOSITEDECODER_NTSC_YUV:
 			m *= Matrix3(1, 1, 1,
 						 0, -0.394642, 2.032062,
@@ -326,10 +334,6 @@ bool OpenGLHAL::updateShader()
 		  frameConfiguration.compositeBlackLevel);
 	
 	glUseProgram(glProgram);
-	
-	glBindTexture(GL_TEXTURE_2D, glTextures[OPENGLHAL_TEXTURE_FRAME]);
-	glUniform1i(glGetUniformLocation(glProgram, "texture"),
-				0);
 	
 	glUniform1f(glGetUniformLocation(glProgram, "barrel"),
 				frameConfiguration.barrel);
@@ -375,8 +379,6 @@ bool OpenGLHAL::updateShader()
 bool OpenGLHAL::updateTexture()
 {
 	GLint format;
-	OESize size;
-	GLvoid *pixels;
 	
 	if (frame->getFormat() == OEIMAGE_FORMAT_LUMINANCE)
 		format = GL_LUMINANCE;
@@ -384,16 +386,14 @@ bool OpenGLHAL::updateTexture()
 		format = GL_RGB;
 	else if (frame->getFormat() == OEIMAGE_FORMAT_RGBA)
 		format = GL_RGBA;
-	size = frame->getSize();
-	pixels = frame->getPixels();
 	
 	glBindTexture(GL_TEXTURE_2D, glTextures[OPENGLHAL_TEXTURE_FRAME]);
 	
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
 	
-	OESize newTextureSize = OEMakeSize(getNextPowerOf2(size.width),
-									   getNextPowerOf2(size.height));
+	OESize newTextureSize = OEMakeSize(getNextPowerOf2(frame->getSize().width),
+									   getNextPowerOf2(frame->getSize().height));
 	
 	if ((glTextureSize.width != newTextureSize.width) ||
 		(glTextureSize.height != newTextureSize.height))
@@ -407,31 +407,64 @@ bool OpenGLHAL::updateTexture()
 					 GL_LUMINANCE, GL_UNSIGNED_BYTE, &dummy.front());
 	}
 	
+	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0,
+					frame->getSize().width, frame->getSize().height,
+					format, GL_UNSIGNED_BYTE,
+					frame->getPixels());
+	
 	if (glProgram)
 	{
 		glUseProgram(glProgram);
 		
-		glUniform2f(glGetUniformLocation(glProgram, "barrel_center"),
-					0.5 * size.width / glTextureSize.width,
-					0.5 * size.height / glTextureSize.height);
-		glUniform1f(glGetUniformLocation(glProgram, "size_x"),
-					glTextureSize.width);
+		glBindTexture(GL_TEXTURE_2D, glTextures[OPENGLHAL_TEXTURE_FRAME]);
+		glUniform1i(glGetUniformLocation(glProgram, "texture"),
+					0);
+		
+		glUniform2f(glGetUniformLocation(glProgram, "texture_size"),
+					glTextureSize.width, glTextureSize.height);
 		
 		glUseProgram(0);
 	}
 	
-	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0,
-					size.width, size.height,
-					format, GL_UNSIGNED_BYTE,
-					pixels);
-	
 	return true;
+}
+
+void OpenGLHAL::updateFrame(float height)
+{
+	if (!glProgram)
+		return;
+	
+	glUseProgram(glProgram);
+	
+	OEPoint barrelCenter;
+	barrelCenter.x = ((0.5 - frameConfiguration.contentRect.origin.x) /
+					  frameConfiguration.contentRect.size.width *
+					  frame->getSize().width / glTextureSize.width);
+	barrelCenter.y = ((0.5 - frameConfiguration.contentRect.origin.y) /
+					  frameConfiguration.contentRect.size.height *
+					  frame->getSize().height / glTextureSize.height);
+	glUniform2f(glGetUniformLocation(glProgram, "barrel_center"),
+				barrelCenter.x,
+				barrelCenter.y);
+	
+	float scanlineHeight = (height / frame->getSize().height *
+							frameConfiguration.contentRect.size.height);
+	float scanline = ((scanlineHeight > 2.0) ? frameConfiguration.compositeScanlineAlpha :
+					  (scanlineHeight < 1.5) ? 0 :
+					  (scanlineHeight - 1.5) * 0.5 * 0.2);
+	glUniform1f(glGetUniformLocation(glProgram, "scanline"),
+				scanline);
+	
+	glUseProgram(0);
 }
 
 bool OpenGLHAL::drawCanvas(float width, float height)
 {
 	glViewport(0, 0, width, height);
 	
+	float clearColor = ((frameConfiguration.processMode == CANVAS_PROCESSMODE_COMPOSITE) ?
+						frameConfiguration.brightness : 0);
+	glClearColor(clearColor, clearColor, clearColor, 0);
 	glClear(GL_COLOR_BUFFER_BIT);
 	
 	if (!frame)
@@ -477,7 +510,7 @@ bool OpenGLHAL::drawCanvas(float width, float height)
 	viewFrame.size.width *= frameConfiguration.contentRect.size.width;
 	viewFrame.size.height *= frameConfiguration.contentRect.size.height;
 	
-	// Display
+	// Bind texture
 	glBindTexture(GL_TEXTURE_2D, glTextures[OPENGLHAL_TEXTURE_FRAME]);
 	
 	int viewFrameWidth = width * viewFrame.size.width / 2.0;
@@ -488,6 +521,7 @@ bool OpenGLHAL::drawCanvas(float width, float height)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, param);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, param);
 	
+	// Draw
 	if (frameConfiguration.processMode == CANVAS_PROCESSMODE_COMPOSITE)
 		glUseProgram(glProgram);
 	

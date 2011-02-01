@@ -18,19 +18,19 @@ CompositeMonitor::CompositeMonitor()
 	
 	configuration.zoomMode = CANVAS_ZOOMMODE_FIT_CANVAS;
 	configuration.processMode = CANVAS_PROCESSMODE_COMPOSITE;
-	configuration.captureMode = CANVAS_CAPTUREMODE_NO_CAPTURE;
+	configuration.captureMode = CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_CLICK;
 	configuration.defaultViewSize = OEMakeSize(720, 576);
 	configuration.canvasSize = OEMakeSize(720, 576);
 	configuration.contentRect = OEMakeRect(0, 0, 1, 1);
 	
 	configuration.compositeDecoder = CANVAS_COMPOSITEDECODER_NTSC_YUV;
-	configuration.compositeInterlaced = true;
 	configuration.compositeCarrierFrequency = 0.25;
 	configuration.compositeLumaCutoffFrequency = 0.3;
 	configuration.compositeChromaCutoffFrequency = 0.01;
 	configuration.compositeBlackLevel = 0;
 	configuration.compositeWhiteLevel = 1;
 	configuration.compositeHue = 0.15;
+	configuration.compositeScanlineAlpha = 0.2;
 	
 	configuration.brightness = 0;
 	configuration.contrast = 1;
@@ -208,17 +208,20 @@ bool CompositeMonitor::init()
 
 void CompositeMonitor::updateContentRect()
 {
-	configuration.contentRect = OEMakeRect(96 * 1.0 / 768, 24 * 2.0 / 483,
-										   576 * 1.0 / 768, 192 * 2.0 / 483);
-	//		configuration.contentRect = OEMakeRect(96 * 1.0 / 768, 34 * 2.0 / 576,
-	//											   576 * 1.0 / 768, 192 * 2.0 / 576);
+	bool pal = false;
+	if (pal)
+		configuration.contentRect = OEMakeRect(96 * 1.0 / 768, 34 * 2.0 / 576,
+											   576 * 1.0 / 768, 192 * 2.0 / 576);
+	else
+		configuration.contentRect = OEMakeRect(96 * 1.0 / 768, 24 * 2.0 / 483,
+											   576 * 1.0 / 768, 192 * 2.0 / 483);
 	
-	float deltaOriginX = screenRect.origin.x + (1.0 - screenRect.size.width) * 0.5;
-	float deltaOriginY = -screenRect.origin.y + (1.0 - screenRect.size.height) * 0.5;
-	
-	configuration.contentRect.origin.x += deltaOriginX;
-	configuration.contentRect.origin.y += deltaOriginY;
-
+	configuration.contentRect.origin.x += (screenRect.origin.x +
+										   configuration.contentRect.size.width *
+										   (1.0 - screenRect.size.width) * 0.5);
+	configuration.contentRect.origin.y += (screenRect.origin.y +
+										   configuration.contentRect.size.height *
+										   (1.0 - screenRect.size.height) * 0.5);
 	configuration.contentRect.size.width *= screenRect.size.width;
 	configuration.contentRect.size.height *= screenRect.size.height;
 }

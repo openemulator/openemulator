@@ -121,7 +121,14 @@
 	NSLog(@"CanvasWindow windowShouldClose");
 	
 	if (fullscreen)
-		[self toggleFullscreen:self];
+	{
+		DocumentController *documentController;
+		documentController = [NSDocumentController sharedDocumentController];
+		
+		[documentController enableMenuBar];
+		
+		fullscreen = NO;
+	}
 	
 	return YES;
 }

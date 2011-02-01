@@ -1,7 +1,8 @@
 ==To-Do==
-* Implement capture badge, lasting 3 seconds, disappearing in 1 second
-* Implement non-linear curves in the shader (change hue in monochrome monitors)
 * Implement the option to deactivate shaders
+* Implement interlaced scanlines
+* Implement non-linear curves in the shader (change hue in monochrome monitors)
+* Implement capture badge, lasting 3 seconds, disappearing in 1 second
 
 * Devise a way to send system events to a device without a canvas
 * Implement printing
