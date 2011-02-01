@@ -330,8 +330,11 @@ bool OpenGLHAL::updateShader()
 				 0.0, frameConfiguration.saturation, 0.0,
 				 0.0, 0.0, frameConfiguration.saturation);
 	// Dynamic range gain
-	m *= (frameConfiguration.compositeWhiteLevel -
-		  frameConfiguration.compositeBlackLevel);
+	float levelRange = (frameConfiguration.compositeWhiteLevel -
+						frameConfiguration.compositeBlackLevel);
+	if (fabs(levelRange) < 0.01)
+		levelRange = 0.01;
+	m *= 1.0 / levelRange;
 	
 	glUseProgram(glProgram);
 	

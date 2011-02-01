@@ -1,6 +1,7 @@
 ==2011-02==
 
 ==2011-01==
+* Fixed shader white IRE level
 * Added shader scanlines
 * Fixed vertical and horizontal centers
 * Moved barrel center from content center to canvas center

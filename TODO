@@ -1,12 +1,14 @@
 ==To-Do==
+* Opening an emulation with OpenÉ does not create canvas window controllers
 * Implement the option to deactivate shaders
-* Implement interlaced scanlines
 * Implement non-linear curves in the shader (change hue in monochrome monitors)
 * Implement capture badge, lasting 3 seconds, disappearing in 1 second
+* Should there be a power badge?
 
-* Devise a way to send system events to a device without a canvas
+* Devise a way to send system events to a device without a canvas. It should be: easy to implement, easy to follow. Probably should travel the connections path.
 * Implement printing
 * Implement hardware library
+* Implement OEEmulation canAddEDL
 * Implement OEEmulation addEDL
 * Implement OEEmulation removeDevice
 * Delete an emulation through Edit>Delete, or CMD+BACKSPACE

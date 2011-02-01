@@ -215,9 +215,9 @@
 
 <device id="appleMonitorII" label="Apple Monitor II" image="images/Apple/Apple Monitor II.png" group="peripherals">
     <setting ref="appleMonitorII.monitor" name="brightness" label="Brightness" type="slider" options="-1.0,1.0" />
-    <setting ref="appleMonitorII.monitor" name="contrast" label="Contrast" type="slider" options="0.0,2.0" />
-    <setting ref="appleMonitorII.monitor" name="saturation" label="Saturation" type="slider" options="0.0,2.0" />
-    <setting ref="appleMonitorII.monitor" name="compositeHue" label="Hue" type="slider" options="-0.35,0.65" />
+    <setting ref="appleMonitorII.monitor" name="contrast" label="Contrast" type="slider" options="0.0,2.0,1.0" />
+    <setting ref="appleMonitorII.monitor" name="saturation" label="Saturation" type="slider" options="0.0,2.0,1.0" />
+    <setting ref="appleMonitorII.monitor" name="compositeHue" label="Hue" type="slider" options="-0.35,0.65,1.0" />
     
     <setting ref="appleMonitorII.monitor" name="horizontalCenter" label="Horizontal Center" type="slider" options="-0.1,0.1" />
     <setting ref="appleMonitorII.monitor" name="horizontalSize" label="Horizontal Size" type="slider" options="0.8,1.2" />
