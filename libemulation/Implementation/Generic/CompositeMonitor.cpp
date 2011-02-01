@@ -64,6 +64,8 @@ bool CompositeMonitor::setValue(string name, string value)
 		configuration.compositeWhiteLevel = getFloat(value);
 	else if (name == "compositeHue")
 		configuration.compositeHue = getFloat(value);
+	else if (name == "compositeScanlineAlpha")
+		configuration.compositeScanlineAlpha = getFloat(value);
 	else if (name == "brightness")
 		configuration.brightness = getFloat(value);
 	else if (name == "contrast")
@@ -118,6 +120,8 @@ bool CompositeMonitor::getValue(string name, string& value)
 		value = getString(configuration.compositeWhiteLevel);
 	else if (name == "compositeHue")
 		value = getString(configuration.compositeHue);
+	else if (name == "compositeScanlineAlpha")
+		value = getString(configuration.compositeScanlineAlpha);
 	else if (name == "brightness")
 		value = getString(configuration.brightness);
 	else if (name == "contrast")

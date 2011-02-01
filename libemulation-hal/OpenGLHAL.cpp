@@ -449,9 +449,10 @@ void OpenGLHAL::updateFrame(float height)
 	
 	float scanlineHeight = (height / frame->getSize().height *
 							frameConfiguration.contentRect.size.height);
-	float scanline = ((scanlineHeight > 2.0) ? frameConfiguration.compositeScanlineAlpha :
+	float alpha = frameConfiguration.compositeScanlineAlpha;
+	float scanline = ((scanlineHeight > 2.0) ? alpha :
 					  (scanlineHeight < 1.5) ? 0 :
-					  (scanlineHeight - 1.5) * 0.5 * 0.2);
+					  (scanlineHeight - 1.5) * 2 * alpha);
 	glUniform1f(glGetUniformLocation(glProgram, "scanline"),
 				scanline);
 	

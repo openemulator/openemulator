@@ -232,6 +232,7 @@
     <setting ref="appleMonitorII.monitor" name="compositeChromaCutoffFrequency" label="Chroma Cutoff Frequency" type="slider" options="0.0,1.0" />
     <setting ref="appleMonitorII.monitor" name="compositeBlackLevel" label="IRE Black Level" type="slider" options="0.0,1.0" />
     <setting ref="appleMonitorII.monitor" name="compositeWhiteLevel" label="IRE White Level" type="slider" options="0.0,1.0" />
+    <setting ref="appleMonitorII.monitor" name="compositeScanlineAlpha" label="Scanline Alpha" type="slider" options="0.0,1.0" />
 </device>
 <connector id="appleMonitorII.connector" ref="" type="CompositeMonitor" label="Video Connector"/>
 <component id="appleMonitorII.monitor" class="CompositeMonitor">
@@ -243,6 +244,7 @@
     <property name="compositeBlackLevel" value="0" />
     <property name="compositeWhiteLevel" value="1" />
     <property name="compositeHue" value="0.15" />
+    <property name="compositeScanlineAlpha" value="0.2" />
     <property name="brightness" value="0" />
     <property name="contrast" value="1" />
     <property name="saturation" value="1" />
