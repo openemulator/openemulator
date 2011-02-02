@@ -25,11 +25,20 @@ OpenGLHAL::OpenGLHAL()
 	enableShader = true;
 	
 	configuration.zoomMode = CANVAS_ZOOMMODE_FIT_CANVAS;
-	configuration.processMode = CANVAS_PROCESSMODE_COMPOSITE;
 	configuration.captureMode = CANVAS_CAPTUREMODE_NO_CAPTURE;
 	configuration.defaultViewSize = OEMakeSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 	configuration.canvasSize = OEMakeSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 	configuration.contentRect = OEMakeRect(0, 0, 1, 1);
+	
+	configuration.decoder = CANVAS_DECODER_RGB;
+	configuration.lumaCutoffFrequency = 1.0;
+	configuration.scanlineAlpha = 0.0;
+	configuration.brightness = 0.0;
+	configuration.contrast = 1.0;
+	configuration.saturation = 1.0;
+	configuration.hue = 0.0;
+	configuration.barrel = 0.0;
+	configuration.persistance = 0.0;
 	updateConfiguration = true;
 	
 	nextFrame = NULL;
@@ -363,10 +372,21 @@ bool OpenGLHAL::updateShader()
 		return true;
 	}
 	
-	if (frameConfiguration.decoder == CANVAS_DECODER_RGB)
-		glProgram = glPrograms[OPENGLHAL_PROGRAM_RGB];
-	else
-		glProgram = glPrograms[OPENGLHAL_PROGRAM_COMPOSITE];
+	switch (frameConfiguration.decoder)
+	{
+		case CANVAS_DECODER_RGB:
+		case CANVAS_DECODER_MONOCHROME:
+			glProgram = glPrograms[OPENGLHAL_PROGRAM_RGB];
+			break;
+		case CANVAS_DECODER_NTSC_YUV:
+		case CANVAS_DECODER_NTSC_YIQ:
+		case CANVAS_DECODER_CXA2025AS:
+			glProgram = glPrograms[OPENGLHAL_PROGRAM_COMPOSITE];
+			break;
+		default:
+			glProgram = 0;
+			break;
+	}
 	
 	// Luminance and chrominance filters
 	Vector w = Vector::chebyshevWindow(17, 50);
@@ -377,12 +397,17 @@ bool OpenGLHAL::updateShader()
 	wy = wy.normalize();
 	
 	Vector wc;
-	if (frameConfiguration.decoder == CANVAS_DECODER_RGB)
-		wc = wy;
-	else
+	switch (frameConfiguration.decoder)
 	{
-		wc = w * Vector::lanczosWindow(17, frameConfiguration.compositeChromaCutoffFrequency);
-		wc = wc.normalize() * 2;
+		case CANVAS_DECODER_MONOCHROME:
+		case CANVAS_DECODER_RGB:
+			wc = wy;
+			break;
+		default:
+			wc = w * Vector::lanczosWindow(17, frameConfiguration.
+										   compositeChromaCutoffFrequency);
+			wc = wc.normalize() * 2;
+			break;
 	}
 	// Decoder matrix
 	Matrix3 m(1, 0, 0,
@@ -393,6 +418,7 @@ bool OpenGLHAL::updateShader()
 	// Decoder matrices from "Digital Video and HDTV Algorithms and Interfaces"
 	switch (frameConfiguration.decoder)
 	{
+		case CANVAS_DECODER_MONOCHROME:
 		case CANVAS_DECODER_RGB:
 		case CANVAS_DECODER_NTSC_YUV:
 			m *= Matrix3(1, 1, 1,
@@ -420,10 +446,18 @@ bool OpenGLHAL::updateShader()
 				 0, frameConfiguration.saturation, 0,
 				 0, 0, frameConfiguration.saturation);
 	// Convert RGB to YUV
-	if (frameConfiguration.decoder == CANVAS_DECODER_RGB)
-		m *= Matrix3(0.299000, -0.147141, 0.614975,
-					 0.587000, -0.288869, -0.514965,
-					 0.114000, 0.436010, -0.100010);
+	switch (frameConfiguration.decoder)
+	{
+		case CANVAS_DECODER_MONOCHROME:
+			m *= Matrix3(1, 0, -1,
+						 0, 0, 0,
+						 0,	0, 0);
+		case CANVAS_DECODER_RGB:
+			m *= Matrix3(0.299000, -0.147141, 0.614975,
+						 0.587000, -0.288869, -0.514965,
+						 0.114000, 0.436010, -0.100010);
+			break;
+	}
 	// Dynamic range gain
 	float levelRange = (frameConfiguration.compositeWhiteLevel -
 						frameConfiguration.compositeBlackLevel);
@@ -605,9 +639,9 @@ bool OpenGLHAL::drawCanvas(float width, float height)
 		float scanlineHeight = (height / frame->getSize().height *
 								frameConfiguration.contentRect.size.height);
 		float alpha = frameConfiguration.scanlineAlpha;
-		float scanlineAlpha = ((scanlineHeight > 2.25) ? alpha :
-							   (scanlineHeight < 1.75) ? 0 :
-							   (scanlineHeight - 1.75) / (2.25 - 1.75) * alpha);
+		float scanlineAlpha = ((scanlineHeight > 2.5) ? alpha :
+							   (scanlineHeight < 2) ? 0 :
+							   (scanlineHeight - 2) / (2.5 - 2) * alpha);
 		glUniform1f(glGetUniformLocation(glProgram, "scanline_alpha"),
 					scanlineAlpha);
 	}

@@ -72,7 +72,6 @@ bool AppleGraphicsTablet::init()
 		
 		CanvasConfiguration configuration;
 		configuration.zoomMode = CANVAS_ZOOMMODE_FIT_CANVAS;
-		configuration.processMode = CANVAS_PROCESSMODE_RGB;
 		configuration.captureMode = CANVAS_CAPTUREMODE_NO_CAPTURE;
 		configuration.defaultViewSize = frame.getSize();
 		configuration.canvasSize = frame.getSize();

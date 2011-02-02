@@ -226,7 +226,7 @@
     
     <setting ref="appleMonitorII.monitor" name="barrel" label="Barrel" type="slider" options="0.0,1.0" />
     
-    <setting ref="appleMonitorII.monitor" name="decoder" label="Decoder" type="select" options="RGB,NTSC Y'UV,NTSC Y'IQ,CXA2025AS" />
+    <setting ref="appleMonitorII.monitor" name="decoder" label="Decoder" type="select" options="Monochrome,RGB,NTSC Y'UV,NTSC Y'IQ,CXA2025AS" />
     <setting ref="appleMonitorII.monitor" name="lumaCutoffFrequency" label="Luma Cutoff Frequency" type="slider" options="0.0,1.0" />
     <setting ref="appleMonitorII.monitor" name="compositeCarrierFrequency" label="Chroma Carrier Frequency" type="slider" options="0.24,0.26" />
     <setting ref="appleMonitorII.monitor" name="compositeChromaCutoffFrequency" label="Chroma Cutoff Frequency" type="slider" options="0.0,1.0" />
@@ -235,9 +235,10 @@
     <setting ref="appleMonitorII.monitor" name="scanlineAlpha" label="Scanline Alpha" type="slider" options="0.0,1.0" />
 </device>
 <connector id="appleMonitorII.connector" ref="" type="CompositeMonitor" label="Video Connector"/>
-<component id="appleMonitorII.monitor" class="CompositeMonitor">
+<component id="appleMonitorII.monitor" class="Monitor">
     <property name="emulation" ref="emulation" />
     <property name="decoder" value="NTSC Y'UV" />
+    <property name="monochrome" value="0" />
     <property name="lumaCutoffFrequency" value="0.3" />
     <property name="scanlineAlpha" value="0.2" />
     <property name="brightness" value="0" />

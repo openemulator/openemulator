@@ -1,30 +1,29 @@
 
 /**
  * libemulation
- * Composite Monitor
+ * Monitor
  * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls a composite monitor.
+ * Controls a generic monitor.
  */
 
-#include "CompositeMonitor.h"
+#include "Monitor.h"
 #include "Emulation.h"
 
-CompositeMonitor::CompositeMonitor()
+Monitor::Monitor()
 {
 	emulation = NULL;
 	canvas = NULL;
 	
 	configuration.zoomMode = CANVAS_ZOOMMODE_FIT_CANVAS;
-	configuration.processMode = CANVAS_PROCESSMODE_COMPOSITE;
 	configuration.captureMode = CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_CLICK;
 	configuration.defaultViewSize = OEMakeSize(720, 576);
 	configuration.canvasSize = OEMakeSize(720, 576);
 	configuration.contentRect = OEMakeRect(0, 0, 1, 1);
 	
 	configuration.decoder = CANVAS_DECODER_NTSC_YUV;
-
+	
 	configuration.lumaCutoffFrequency = 0.3;
 	configuration.scanlineAlpha = 0.2;
 	
@@ -43,11 +42,13 @@ CompositeMonitor::CompositeMonitor()
 	screenRect = OEMakeRect(0, 0, 1, 1);
 }
 
-bool CompositeMonitor::setValue(string name, string value)
+bool Monitor::setValue(string name, string value)
 {
 	if (name == "decoder")
 	{
-		if (value == "NTSC Y'UV")
+		if (value == "Monochrome")
+			configuration.decoder = CANVAS_DECODER_MONOCHROME;
+		else if (value == "NTSC Y'UV")
 			configuration.decoder = CANVAS_DECODER_NTSC_YUV;
 		else if (value == "NTSC Y'IQ")
 			configuration.decoder = CANVAS_DECODER_NTSC_YIQ;
@@ -101,11 +102,13 @@ bool CompositeMonitor::setValue(string name, string value)
 	return true;
 }
 
-bool CompositeMonitor::getValue(string name, string& value)
+bool Monitor::getValue(string name, string& value)
 {
 	if (name == "decoder")
 	{
-		if (configuration.decoder == CANVAS_DECODER_NTSC_YUV)
+		if (configuration.decoder == CANVAS_DECODER_MONOCHROME)
+			value = "Monochrome";
+		else if (configuration.decoder == CANVAS_DECODER_NTSC_YUV)
 			value = "NTSC Y'UV";
 		else if (configuration.decoder == CANVAS_DECODER_NTSC_YIQ)
 			value = "NTSC Y'IQ";
@@ -152,7 +155,7 @@ bool CompositeMonitor::getValue(string name, string& value)
 	return true;
 }
 
-bool CompositeMonitor::setRef(string name, OEComponent *ref)
+bool Monitor::setRef(string name, OEComponent *ref)
 {
 	if (name == "emulation")
 	{
@@ -190,7 +193,7 @@ bool CompositeMonitor::setRef(string name, OEComponent *ref)
 	return true;
 }
 
-bool CompositeMonitor::init()
+bool Monitor::init()
 {
 	if (!emulation)
 	{
@@ -216,7 +219,7 @@ bool CompositeMonitor::init()
 	return true;
 }
 
-void CompositeMonitor::updateContentRect()
+void Monitor::updateContentRect()
 {
 	bool pal = false;
 	if (pal)
@@ -235,32 +238,3 @@ void CompositeMonitor::updateContentRect()
 	configuration.contentRect.size.width *= screenRect.size.width;
 	configuration.contentRect.size.height *= screenRect.size.height;
 }
-
-/*
- int *framebuffer = new int[framebufferWidth * framebufferHeight];
- int *p = framebuffer;
- 
- for (int y = 0; y < framebufferHeight; y++)
- {
- float kk = 1;
- 
- for (int x = 0; x < framebufferWidth; x++)
- {
- float l;
- //			float l = (((x >> 0) & 0x1) ^ ((y >> 1) & 0x1)) * 1.0;
- kk = 0.99 * kk;
- l = kk;
- 
- if (y % 2)
- l *= 0.5;
- 
- int r = l * 0x33;
- int g = l * 0xcc;
- int b = l * 0x44;
- *p++ = (b << 16) | (g << 8) | r;
- }
- }
- delete framebuffer;
- 
- 
- */

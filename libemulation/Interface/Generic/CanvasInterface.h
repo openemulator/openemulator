@@ -51,12 +51,6 @@ typedef enum
 
 typedef enum
 {
-	CANVAS_PROCESSMODE_COMPOSITE,
-	CANVAS_PROCESSMODE_RGB,
-} CanvasProcessMode;
-
-typedef enum
-{
 	CANVAS_CAPTUREMODE_NO_CAPTURE,
 	CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_CLICK,
 	CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_ENTER,
@@ -64,6 +58,7 @@ typedef enum
 
 typedef enum
 {
+	CANVAS_DECODER_MONOCHROME,
 	CANVAS_DECODER_RGB,
 	CANVAS_DECODER_NTSC_YUV,
 	CANVAS_DECODER_NTSC_YIQ,
@@ -73,7 +68,6 @@ typedef enum
 typedef struct
 {
 	CanvasZoomMode zoomMode;
-	CanvasProcessMode processMode;
 	CanvasCaptureMode captureMode;
 	OESize defaultViewSize;
 	OESize canvasSize;

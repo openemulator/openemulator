@@ -15,9 +15,9 @@
 #include "AddressOffset.h"
 #include "AudioSampleConverter.h"
 #include "CharsetLoader.h"
-#include "CompositeMonitor.h"
 #include "ControlBus.h"
 #include "FloatingBus.h"
+#include "Monitor.h"
 #include "RAM.h"
 #include "ROM.h"
 #include "Terminal.h"
@@ -57,9 +57,9 @@ OEComponent *OEComponentFactory::create(const string& className)
 	matchComponent(AddressOffset);
 	matchComponent(AudioSampleConverter);
 	matchComponent(CharsetLoader);
-	matchComponent(CompositeMonitor);
 	matchComponent(ControlBus);
 	matchComponent(FloatingBus);
+	matchComponent(Monitor);
 	matchComponent(RAM);
 	matchComponent(ROM);
 	matchComponent(Terminal);

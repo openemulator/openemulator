@@ -1,4 +1,5 @@
 ==2011-02==
+* Implemented monochrome option
 * Implemented RGB decoder
 * Improved canvas configuration
 * Optimized shader
