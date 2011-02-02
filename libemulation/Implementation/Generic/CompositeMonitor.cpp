@@ -23,59 +23,63 @@ CompositeMonitor::CompositeMonitor()
 	configuration.canvasSize = OEMakeSize(720, 576);
 	configuration.contentRect = OEMakeRect(0, 0, 1, 1);
 	
-	configuration.compositeDecoder = CANVAS_COMPOSITEDECODER_NTSC_YUV;
-	configuration.compositeCarrierFrequency = 0.25;
-	configuration.compositeLumaCutoffFrequency = 0.3;
-	configuration.compositeChromaCutoffFrequency = 0.01;
-	configuration.compositeBlackLevel = 0;
-	configuration.compositeWhiteLevel = 1;
-	configuration.compositeHue = 0.15;
-	configuration.compositeScanlineAlpha = 0.2;
+	configuration.decoder = CANVAS_DECODER_NTSC_YUV;
+
+	configuration.lumaCutoffFrequency = 0.3;
+	configuration.scanlineAlpha = 0.2;
 	
 	configuration.brightness = 0;
 	configuration.contrast = 1;
 	configuration.saturation = 1;
+	configuration.hue = 0.15;
 	configuration.barrel = 0.1;
 	configuration.persistance = 0;
+	
+	configuration.compositeBlackLevel = 0;
+	configuration.compositeWhiteLevel = 1;
+	configuration.compositeCarrierFrequency = 0.25;
+	configuration.compositeChromaCutoffFrequency = 0.01;
 	
 	screenRect = OEMakeRect(0, 0, 1, 1);
 }
 
 bool CompositeMonitor::setValue(string name, string value)
 {
-	if (name == "compositeDecoder")
+	if (name == "decoder")
 	{
-		if (value == "CXA2025AS")
-			 configuration.compositeDecoder = CANVAS_COMPOSITEDECODER_CXA2025AS;
+		if (value == "NTSC Y'UV")
+			configuration.decoder = CANVAS_DECODER_NTSC_YUV;
 		else if (value == "NTSC Y'IQ")
-			configuration.compositeDecoder = CANVAS_COMPOSITEDECODER_NTSC_YIQ;
+			configuration.decoder = CANVAS_DECODER_NTSC_YIQ;
+		else if (value == "CXA2025AS")
+			configuration.decoder = CANVAS_DECODER_CXA2025AS;
 		else
-			configuration.compositeDecoder = CANVAS_COMPOSITEDECODER_NTSC_YUV;
+			configuration.decoder = CANVAS_DECODER_RGB;
 	}
-	else if (name == "compositeCarrierFrequency")
-		configuration.compositeCarrierFrequency = getFloat(value);
-	else if (name == "compositeLumaCutoffFrequency")
-		configuration.compositeLumaCutoffFrequency = getFloat(value);
-	else if (name == "compositeChromaCutoffFrequency")
-		configuration.compositeChromaCutoffFrequency = getFloat(value);
-	else if (name == "compositeBlackLevel")
-		configuration.compositeBlackLevel = getFloat(value);
-	else if (name == "compositeWhiteLevel")
-		configuration.compositeWhiteLevel = getFloat(value);
-	else if (name == "compositeHue")
-		configuration.compositeHue = getFloat(value);
-	else if (name == "compositeScanlineAlpha")
-		configuration.compositeScanlineAlpha = getFloat(value);
+	else if (name == "lumaCutoffFrequency")
+		configuration.lumaCutoffFrequency = getFloat(value);
+	else if (name == "scanlineAlpha")
+		configuration.scanlineAlpha = getFloat(value);
 	else if (name == "brightness")
 		configuration.brightness = getFloat(value);
 	else if (name == "contrast")
 		configuration.contrast = getFloat(value);
 	else if (name == "saturation")
 		configuration.saturation = getFloat(value);
+	else if (name == "hue")
+		configuration.hue = getFloat(value);
 	else if (name == "barrel")
 		configuration.barrel = getFloat(value);
 	else if (name == "persistance")
 		configuration.persistance = getFloat(value);
+	else if (name == "compositeCarrierFrequency")
+		configuration.compositeCarrierFrequency = getFloat(value);
+	else if (name == "compositeChromaCutoffFrequency")
+		configuration.compositeChromaCutoffFrequency = getFloat(value);
+	else if (name == "compositeBlackLevel")
+		configuration.compositeBlackLevel = getFloat(value);
+	else if (name == "compositeWhiteLevel")
+		configuration.compositeWhiteLevel = getFloat(value);
 	else if (name == "horizontalCenter")
 		screenRect.origin.x = getFloat(value);
 	else if (name == "verticalCenter")
@@ -99,39 +103,41 @@ bool CompositeMonitor::setValue(string name, string value)
 
 bool CompositeMonitor::getValue(string name, string& value)
 {
-	if (name == "compositeDecoder")
+	if (name == "decoder")
 	{
-		if (configuration.compositeDecoder == CANVAS_COMPOSITEDECODER_CXA2025AS)
-			value = "CXA2025AS";
-		else if (configuration.compositeDecoder == CANVAS_COMPOSITEDECODER_NTSC_YIQ)
-			value = "NTSC Y'IQ";
-		else
+		if (configuration.decoder == CANVAS_DECODER_NTSC_YUV)
 			value = "NTSC Y'UV";
+		else if (configuration.decoder == CANVAS_DECODER_NTSC_YIQ)
+			value = "NTSC Y'IQ";
+		else if (configuration.decoder == CANVAS_DECODER_CXA2025AS)
+			value = "CXA2025AS";
+		else
+			value = "RGB";
 	}
-	else if (name == "compositeCarrierFrequency")
-		value = getString(configuration.compositeCarrierFrequency);
-	else if (name == "compositeLumaCutoffFrequency")
-		value = getString(configuration.compositeLumaCutoffFrequency);
-	else if (name == "compositeChromaCutoffFrequency")
-		value = getString(configuration.compositeChromaCutoffFrequency);
-	else if (name == "compositeBlackLevel")
-		value = getString(configuration.compositeBlackLevel);
-	else if (name == "compositeWhiteLevel")
-		value = getString(configuration.compositeWhiteLevel);
-	else if (name == "compositeHue")
-		value = getString(configuration.compositeHue);
-	else if (name == "compositeScanlineAlpha")
-		value = getString(configuration.compositeScanlineAlpha);
+	else if (name == "lumaCutoffFrequency")
+		value = getString(configuration.lumaCutoffFrequency);
+	else if (name == "scanlineAlpha")
+		value = getString(configuration.scanlineAlpha);
 	else if (name == "brightness")
 		value = getString(configuration.brightness);
 	else if (name == "contrast")
 		value = getString(configuration.contrast);
 	else if (name == "saturation")
 		value = getString(configuration.saturation);
+	else if (name == "hue")
+		value = getString(configuration.hue);
 	else if (name == "barrel")
 		value = getString(configuration.barrel);
 	else if (name == "persistance")
 		value = getString(configuration.persistance);
+	else if (name == "compositeBlackLevel")
+		value = getString(configuration.compositeBlackLevel);
+	else if (name == "compositeWhiteLevel")
+		value = getString(configuration.compositeWhiteLevel);
+	else if (name == "compositeCarrierFrequency")
+		value = getString(configuration.compositeCarrierFrequency);
+	else if (name == "compositeChromaCutoffFrequency")
+		value = getString(configuration.compositeChromaCutoffFrequency);
 	else if (name == "horizontalCenter")
 		value = getString(screenRect.origin.x);
 	else if (name == "verticalCenter")
@@ -188,13 +194,13 @@ bool CompositeMonitor::init()
 {
 	if (!emulation)
 	{
-		log("property 'emulation' undefined");
+		logMessage("property 'emulation' undefined");
 		return false;
 	}
 
 	if (!canvas)
 	{
-		log("canvas could not be created");
+		logMessage("canvas could not be created");
 		return false;
 	}
 	

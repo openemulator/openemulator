@@ -22,6 +22,8 @@ OpenGLHAL::OpenGLHAL()
 	setCapture = NULL;
 	setKeyboardFlags = NULL;
 	
+	enableShader = true;
+	
 	configuration.zoomMode = CANVAS_ZOOMMODE_FIT_CANVAS;
 	configuration.processMode = CANVAS_PROCESSMODE_COMPOSITE;
 	configuration.captureMode = CANVAS_CAPTUREMODE_NO_CAPTURE;
@@ -72,6 +74,15 @@ void OpenGLHAL::close()
 	delete frame;
 }
 
+void OpenGLHAL::setShader(bool value)
+{
+	if (enableShader == value)
+		return;
+	
+	enableShader = value;
+	updateConfiguration = true;
+}
+
 OESize OpenGLHAL::getDefaultViewSize()
 {
 	return configuration.defaultViewSize;
@@ -111,10 +122,7 @@ bool OpenGLHAL::update(float width, float height, float offset, bool draw)
 		updateTexture();
 	
 	if (draw)
-	{
-		updateFrame(height);
 		drawCanvas(width, height);
-	}
 	
 	return draw;
 }
@@ -129,18 +137,81 @@ bool OpenGLHAL::initOpenGL()
 	glEnable(GL_TEXTURE_2D);
 	
 	glGenTextures(OPENGLHAL_TEXTURE_END, glTextures);
-	
 	glTextureSize = OEMakeSize(0, 0);
-	glProgram = 0;
 	
-	loadShader();
+	loadShaders();
 	
 	return true;
 }
 
-bool OpenGLHAL::loadShader()
+void OpenGLHAL::freeOpenGL()
 {
-	const GLchar *source = "\
+	glDeleteTextures(OPENGLHAL_TEXTURE_END, glTextures);
+	
+	if (glPrograms[OPENGLHAL_PROGRAM_RGB])
+		glDeleteProgram(glPrograms[OPENGLHAL_PROGRAM_RGB]);
+	if (glPrograms[OPENGLHAL_PROGRAM_COMPOSITE])
+		glDeleteProgram(glPrograms[OPENGLHAL_PROGRAM_COMPOSITE]);
+}
+
+bool OpenGLHAL::loadShaders()
+{
+	glPrograms[OPENGLHAL_PROGRAM_RGB] = loadShader("\
+	uniform sampler2D texture;\
+	uniform vec2 texture_size;\
+	uniform float barrel;\
+	uniform vec2 barrel_center;\
+	uniform vec3 c0;\
+	uniform vec3 c1;\
+	uniform vec3 c2;\
+	uniform vec3 c3;\
+	uniform vec3 c4;\
+	uniform vec3 c5;\
+	uniform vec3 c6;\
+	uniform vec3 c7;\
+	uniform vec3 c8;\
+	uniform vec3 decoderRow1;\
+	uniform vec3 decoderRow2;\
+	uniform vec3 decoderRow3;\
+	uniform float scanline_alpha;\
+	uniform float brightness;\
+	\
+	float PI = 3.14159265358979323846264;\
+	\
+	vec3 pixel(vec2 q)\
+	{\
+	return texture2D(texture, q).xyz;\
+	}\
+	\
+	vec3 pixel2(vec2 q, float i)\
+	{\
+	return pixel(vec2(q.x + i, q.y)) + pixel(vec2(q.x - i, q.y));\
+	}\
+	\
+	void main(void)\
+	{\
+	vec2 q = gl_TexCoord[0].xy;\
+	q -= barrel_center;\
+	q += barrel * q * (q.x * q.x + q.y * q.y);\
+	q += barrel_center;\
+	\
+	vec3 p = pixel(q) * c0;\
+	p += pixel2(q, 1.0 / texture_size.x) * c1;\
+	p += pixel2(q, 2.0 / texture_size.x) * c2;\
+	p += pixel2(q, 3.0 / texture_size.x) * c3;\
+	p += pixel2(q, 4.0 / texture_size.x) * c4;\
+	p += pixel2(q, 5.0 / texture_size.x) * c5;\
+	p += pixel2(q, 6.0 / texture_size.x) * c6;\
+	p += pixel2(q, 7.0 / texture_size.x) * c7;\
+	p += pixel2(q, 8.0 / texture_size.x) * c8;\
+	p = mat3(decoderRow1, decoderRow2, decoderRow3) * p;\
+	float m = sin(PI * q.y * texture_size.y);\
+	p *= (1.0 - scanline_alpha) + scanline_alpha * m * m;\
+	p += brightness;\
+	gl_FragColor = vec4(p, 1.0);\
+	}");
+	
+	glPrograms[OPENGLHAL_PROGRAM_COMPOSITE] = loadShader("\
 	uniform sampler2D texture;\
 	uniform vec2 texture_size;\
 	uniform float barrel;\
@@ -159,12 +230,12 @@ bool OpenGLHAL::loadShader()
 	uniform vec3 decoderRow1;\
 	uniform vec3 decoderRow2;\
 	uniform vec3 decoderRow3;\
-	uniform float scanline;\
+	uniform float scanline_alpha;\
 	uniform float brightness;\
 	\
 	float PI = 3.14159265358979323846264;\
 	\
-	vec3 demodulate(vec2 q)\
+	vec3 pixel(vec2 q)\
 	{\
 	vec3 p = texture2D(texture, q).xyz - comp_black;\
 	float phase = 2.0 * PI * comp_fsc * texture_size.x * q.x;\
@@ -173,9 +244,9 @@ bool OpenGLHAL::loadShader()
 	return p;\
 	}\
 	\
-	vec3 demodulate2(vec2 q, float i)\
+	vec3 pixel2(vec2 q, float i)\
 	{\
-	return demodulate(vec2(q.x + i, q.y)) + demodulate(vec2(q.x - i, q.y));\
+	return pixel(vec2(q.x + i, q.y)) + pixel(vec2(q.x - i, q.y));\
 	}\
 	\
 	void main(void)\
@@ -185,26 +256,35 @@ bool OpenGLHAL::loadShader()
 	q += barrel * q * (q.x * q.x + q.y * q.y);\
 	q += barrel_center;\
 	\
-	vec3 p = demodulate(q) * c0;\
-	p += demodulate2(q, 1.0 / texture_size.x) * c1;\
-	p += demodulate2(q, 2.0 / texture_size.x) * c2;\
-	p += demodulate2(q, 3.0 / texture_size.x) * c3;\
-	p += demodulate2(q, 4.0 / texture_size.x) * c4;\
-	p += demodulate2(q, 5.0 / texture_size.x) * c5;\
-	p += demodulate2(q, 6.0 / texture_size.x) * c6;\
-	p += demodulate2(q, 7.0 / texture_size.x) * c7;\
-	p += demodulate2(q, 8.0 / texture_size.x) * c8;\
+	vec3 p = pixel(q) * c0;\
+	p += pixel2(q, 1.0 / texture_size.x) * c1;\
+	p += pixel2(q, 2.0 / texture_size.x) * c2;\
+	p += pixel2(q, 3.0 / texture_size.x) * c3;\
+	p += pixel2(q, 4.0 / texture_size.x) * c4;\
+	p += pixel2(q, 5.0 / texture_size.x) * c5;\
+	p += pixel2(q, 6.0 / texture_size.x) * c6;\
+	p += pixel2(q, 7.0 / texture_size.x) * c7;\
+	p += pixel2(q, 8.0 / texture_size.x) * c8;\
 	p = mat3(decoderRow1, decoderRow2, decoderRow3) * p;\
-	float s = sin(PI * q.y * texture_size.y);\
-	p *= (1.0 - scanline) + scanline * s * s;\
+	float m = sin(PI * q.y * texture_size.y);\
+	p *= (1.0 - scanline_alpha) + scanline_alpha * m * m;\
 	p += brightness;\
 	gl_FragColor = vec4(p, 1.0);\
-	}\
-	";
+	}");
+	
+	glProgram = 0;
+	
+	return true;
+}
+
+GLuint OpenGLHAL::loadShader(const char *source)
+{
+	const GLchar **sourcePointer = (const GLchar **) &source;
 	GLint sourceLength = strlen(source);
 	
+	GLuint glFragmentShader;
 	glFragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(glFragmentShader, 1, &source, &sourceLength);
+	glShaderSource(glFragmentShader, 1, sourcePointer, &sourceLength);
 	glCompileShader(glFragmentShader);
 	
 	GLint isCompiled;
@@ -231,14 +311,16 @@ bool OpenGLHAL::loadShader()
 			errorString += &infoLog.front();
 		}
 		
-		log(errorString);
+		logMessage(errorString);
 		
-		return false;
+		return 0;
 	}
 	
-	glProgram = glCreateProgram();
+	GLuint glProgram = glCreateProgram();
 	glAttachShader(glProgram, glFragmentShader);
 	glLinkProgram(glProgram);
+	
+	glDeleteShader(glFragmentShader);
 	
 	GLint isLinked;
 	glGetShaderiv(glProgram, GL_LINK_STATUS, &isLinked);
@@ -257,84 +339,97 @@ bool OpenGLHAL::loadShader()
 			vector<char> infoLog;
 			infoLog.resize(bufSize);
 			
-			glGetShaderInfoLog(glFragmentShader, bufSize,
-							   &infoLogLength, &infoLog.front());
+			glGetProgramInfoLog(glProgram, bufSize,
+								&infoLogLength, &infoLog.front());
 			
 			errorString += "\n";
 			errorString += &infoLog.front();
 		}
 		
-		log(errorString);
+		logMessage(errorString);
 		
-		return false;
+		return 0;
 	}
 	
-	return true;
-}
-
-void OpenGLHAL::freeOpenGL()
-{
-	glDeleteTextures(OPENGLHAL_TEXTURE_END, glTextures);
+	return glProgram;
 }
 
 bool OpenGLHAL::updateShader()
 {
-	if (!glProgram)
+	// Select program
+	if (!enableShader)
+	{
+		glProgram = 0;
 		return true;
+	}
+	
+	if (frameConfiguration.decoder == CANVAS_DECODER_RGB)
+		glProgram = glPrograms[OPENGLHAL_PROGRAM_RGB];
+	else
+		glProgram = glPrograms[OPENGLHAL_PROGRAM_COMPOSITE];
 	
 	// Luminance and chrominance filters
-	Vector w = Vector::chebyshevWindow(17, 50.0);
+	Vector w = Vector::chebyshevWindow(17, 50);
 	w = w.normalize();
 	
 	Vector wy;
-	wy = w * Vector::lanczosWindow(17, frameConfiguration.compositeLumaCutoffFrequency);
+	wy = w * Vector::lanczosWindow(17, frameConfiguration.lumaCutoffFrequency);
 	wy = wy.normalize();
 	
 	Vector wc;
-	wc = w * Vector::lanczosWindow(17, frameConfiguration.compositeChromaCutoffFrequency);
-	wc = wc.normalize() * 2.0;
-	
+	if (frameConfiguration.decoder == CANVAS_DECODER_RGB)
+		wc = wy;
+	else
+	{
+		wc = w * Vector::lanczosWindow(17, frameConfiguration.compositeChromaCutoffFrequency);
+		wc = wc.normalize() * 2;
+	}
 	// Decoder matrix
 	Matrix3 m(1, 0, 0,
 			  0, 1, 0,
 			  0, 0, 1);
 	// Contrast
 	m *= frameConfiguration.contrast;
-	// Y'UV or Y'IQ to RGB
-	// Matrices from "Digital Video and HDTV Algorithms and Interfaces"
-	switch (frameConfiguration.compositeDecoder)
+	// Decoder matrices from "Digital Video and HDTV Algorithms and Interfaces"
+	switch (frameConfiguration.decoder)
 	{
-		case CANVAS_COMPOSITEDECODER_NTSC_YUV:
+		case CANVAS_DECODER_RGB:
+		case CANVAS_DECODER_NTSC_YUV:
 			m *= Matrix3(1, 1, 1,
 						 0, -0.394642, 2.032062,
 						 1.139883,-0.580622, 0);
 			break;
-		case CANVAS_COMPOSITEDECODER_NTSC_YIQ:
+		case CANVAS_DECODER_NTSC_YIQ:
 			m *= Matrix3(1, 1, 1,
 						 0.955986, -0.272013, -1.106740,
 						 0.620825, -0.647204, 1.704230);
 			break;
-		case CANVAS_COMPOSITEDECODER_CXA2025AS:
+		case CANVAS_DECODER_CXA2025AS:
 			m *= Matrix3(1, 1, 1,
 						 1.630, -0.378, -1.089,
 						 0.317, -0.466, 1.677);
 			break;
 	}
 	// Hue
-	float hue = 2 * M_PI * frameConfiguration.compositeHue;
-	m *= Matrix3(1.0, 0.0, 0.0,
-				 0.0, cosf(hue), -sinf(hue),
-				 0.0, sinf(hue), cosf(hue));
+	float hue = 2 * M_PI * frameConfiguration.hue;
+	m *= Matrix3(1, 0, 0,
+				 0, cosf(hue), -sinf(hue),
+				 0, sinf(hue), cosf(hue));
 	// Saturation
-	m *= Matrix3(1.0, 0.0, 0.0,
-				 0.0, frameConfiguration.saturation, 0.0,
-				 0.0, 0.0, frameConfiguration.saturation);
+	m *= Matrix3(1, 0, 0,
+				 0, frameConfiguration.saturation, 0,
+				 0, 0, frameConfiguration.saturation);
+	// Convert RGB to YUV
+	if (frameConfiguration.decoder == CANVAS_DECODER_RGB)
+		m *= Matrix3(0.299000, -0.147141, 0.614975,
+					 0.587000, -0.288869, -0.514965,
+					 0.114000, 0.436010, -0.100010);
 	// Dynamic range gain
 	float levelRange = (frameConfiguration.compositeWhiteLevel -
 						frameConfiguration.compositeBlackLevel);
 	if (fabs(levelRange) < 0.01)
 		levelRange = 0.01;
-	m *= 1.0 / levelRange;
+	m *= 1 / levelRange;
 	
 	glUseProgram(glProgram);
 	
@@ -415,109 +510,75 @@ bool OpenGLHAL::updateTexture()
 					format, GL_UNSIGNED_BYTE,
 					frame->getPixels());
 	
-	if (glProgram)
-	{
-		glUseProgram(glProgram);
-		
-		glBindTexture(GL_TEXTURE_2D, glTextures[OPENGLHAL_TEXTURE_FRAME]);
-		glUniform1i(glGetUniformLocation(glProgram, "texture"),
-					0);
-		
-		glUniform2f(glGetUniformLocation(glProgram, "texture_size"),
-					glTextureSize.width, glTextureSize.height);
-		
-		glUseProgram(0);
-	}
+	GLuint program;
+	program = glPrograms[OPENGLHAL_PROGRAM_RGB];
+	glUseProgram(program);
+	glUniform1i(glGetUniformLocation(program, "texture"),
+				0);
+	glUniform2f(glGetUniformLocation(program, "texture_size"),
+				glTextureSize.width, glTextureSize.height);
+	program = glPrograms[OPENGLHAL_PROGRAM_COMPOSITE];
+	glUseProgram(program);
+	glUniform1i(glGetUniformLocation(program, "texture"),
+				0);
+	glUniform2f(glGetUniformLocation(program, "texture_size"),
+				glTextureSize.width, glTextureSize.height);
+	glUseProgram(0);
 	
 	return true;
-}
-
-void OpenGLHAL::updateFrame(float height)
-{
-	if (!glProgram)
-		return;
-	
-	glUseProgram(glProgram);
-	
-	OEPoint barrelCenter;
-	barrelCenter.x = ((0.5 - frameConfiguration.contentRect.origin.x) /
-					  frameConfiguration.contentRect.size.width *
-					  frame->getSize().width / glTextureSize.width);
-	barrelCenter.y = ((0.5 - frameConfiguration.contentRect.origin.y) /
-					  frameConfiguration.contentRect.size.height *
-					  frame->getSize().height / glTextureSize.height);
-	glUniform2f(glGetUniformLocation(glProgram, "barrel_center"),
-				barrelCenter.x,
-				barrelCenter.y);
-	
-	float scanlineHeight = (height / frame->getSize().height *
-							frameConfiguration.contentRect.size.height);
-	float alpha = frameConfiguration.compositeScanlineAlpha;
-	float scanline = ((scanlineHeight > 2.0) ? alpha :
-					  (scanlineHeight < 1.5) ? 0 :
-					  (scanlineHeight - 1.5) * 2 * alpha);
-	glUniform1f(glGetUniformLocation(glProgram, "scanline"),
-				scanline);
-	
-	glUseProgram(0);
 }
 
 bool OpenGLHAL::drawCanvas(float width, float height)
 {
 	glViewport(0, 0, width, height);
 	
-	float clearColor = ((frameConfiguration.processMode == CANVAS_PROCESSMODE_COMPOSITE) ?
-						frameConfiguration.brightness : 0);
+	// Clear with brightness color
+	float clearColor = glProgram ? frameConfiguration.brightness : 0;
 	glClearColor(clearColor, clearColor, clearColor, 0);
 	glClear(GL_COLOR_BUFFER_BIT);
 	
-	if (!frame)
+	if (!frame) 
 		return false;
 	
+	// Calculate proportions
 	OESize frameSize = frame->getSize();
 	OERect textureFrame = OEMakeRect(0, 0,
 									 frameSize.width / glTextureSize.width, 
 									 frameSize.height / glTextureSize.height);
 	
 	float viewAspectRatio = width / height;
-	OERect viewFrame = OEMakeRect(-1, -1, 2, 2);
-	
 	float canvasAspectRatio = (frameConfiguration.canvasSize.width /
 							   frameConfiguration.canvasSize.height);
 	
+	// Calculate view frame
+	OERect viewFrame = OEMakeRect(2 * frameConfiguration.contentRect.origin.x - 1,
+								  2 * frameConfiguration.contentRect.origin.y - 1,
+								  2 * frameConfiguration.contentRect.size.width,
+								  2 * frameConfiguration.contentRect.size.height);
+	
 	// Apply view mode
+	float ratio = viewAspectRatio / canvasAspectRatio;
+	
 	if (frameConfiguration.zoomMode == CANVAS_ZOOMMODE_FIT_WIDTH)
-	{
-		float ratio = viewAspectRatio / canvasAspectRatio;
-		viewFrame.size.height = 2 * ratio;
-	}
+		viewFrame.size.height *= ratio;
 	else
 	{
-		if (canvasAspectRatio > viewAspectRatio)
+		if (ratio > 1)
 		{
-			float ratio = viewAspectRatio / canvasAspectRatio;
-			viewFrame.origin.y = -ratio;
-			viewFrame.size.height = 2 * ratio;
+			viewFrame.origin.x /= ratio;
+			viewFrame.size.width /= ratio;
 		}
 		else
 		{
-			float ratio = canvasAspectRatio / viewAspectRatio;
-			viewFrame.origin.x = -ratio;
-			viewFrame.size.width = 2 * ratio;
+			viewFrame.origin.y *= ratio;
+			viewFrame.size.height *= ratio;
 		}
 	}
-	
-	// Apply content rect
-	viewFrame.origin.x += frameConfiguration.contentRect.origin.x * 2.0;
-	viewFrame.origin.y += (1.0 - frameConfiguration.contentRect.size.height - 
-						   frameConfiguration.contentRect.origin.y) * 2.0;
-	viewFrame.size.width *= frameConfiguration.contentRect.size.width;
-	viewFrame.size.height *= frameConfiguration.contentRect.size.height;
 	
 	// Bind texture
 	glBindTexture(GL_TEXTURE_2D, glTextures[OPENGLHAL_TEXTURE_FRAME]);
 	
-	int viewFrameWidth = width * viewFrame.size.width / 2.0;
+	int viewFrameWidth = width * viewFrame.size.width / 2;
 	GLint param = GL_LINEAR;
 	if ((viewFrameWidth == (int) frameSize.width) &&
 		(viewFrame.origin.x == -1) && (viewFrame.origin.y == -1))
@@ -525,9 +586,38 @@ bool OpenGLHAL::drawCanvas(float width, float height)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, param);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, param);
 	
-	// Draw
-	if (frameConfiguration.processMode == CANVAS_PROCESSMODE_COMPOSITE)
+	// Update barrel center and scanlines
+	if (glProgram)
+	{
 		glUseProgram(glProgram);
+	
+		OEPoint barrelCenter;
+		barrelCenter.x = ((0.5 - frameConfiguration.contentRect.origin.x) /
+						  frameConfiguration.contentRect.size.width *
+						  frame->getSize().width / glTextureSize.width);
+		barrelCenter.y = ((0.5 - frameConfiguration.contentRect.origin.y) /
+						  frameConfiguration.contentRect.size.height *
+						  frame->getSize().height / glTextureSize.height);
+		glUniform2f(glGetUniformLocation(glProgram, "barrel_center"),
+					barrelCenter.x,
+					barrelCenter.y);
+		
+		float scanlineHeight = (height / frame->getSize().height *
+								frameConfiguration.contentRect.size.height);
+		float alpha = frameConfiguration.scanlineAlpha;
+		float scanlineAlpha = ((scanlineHeight > 2.25) ? alpha :
+							   (scanlineHeight < 1.75) ? 0 :
+							   (scanlineHeight - 1.75) / (2.25 - 1.75) * alpha);
+		glUniform1f(glGetUniformLocation(glProgram, "scanline_alpha"),
+					scanlineAlpha);
+	}
+	
+	// Draw
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
 	
 	glBegin(GL_QUADS);
 	glTexCoord2f(OEMinX(textureFrame), OEMinY(textureFrame));
@@ -540,7 +630,8 @@ bool OpenGLHAL::drawCanvas(float width, float height)
 	glVertex2f(OEMinX(viewFrame), OEMinY(viewFrame));
 	glEnd();
 	
-	glUseProgram(0);
+	if (glProgram)
+		glUseProgram(0);
 	
 	return true;
 }
@@ -626,7 +717,7 @@ void OpenGLHAL::enterMouse()
 	
 	postHIDNotification(CANVAS_POINTER_DID_CHANGE,
 						CANVAS_P_PROXIMITY,
-						1.0);
+						1);
 }
 
 void OpenGLHAL::exitMouse()
@@ -638,7 +729,7 @@ void OpenGLHAL::exitMouse()
 	
 	postHIDNotification(CANVAS_POINTER_DID_CHANGE,
 						CANVAS_P_PROXIMITY,
-						0.0);
+						0);
 }
 
 void OpenGLHAL::setMousePosition(float x, float y)

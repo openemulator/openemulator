@@ -242,16 +242,16 @@ bool PortAudioHAL::openEmulations()
 				if (!error)
 					return true;
 				else
-					log("could not create eulations thread, error " + getString(error));
+					logMessage("could not create eulations thread, error " + getString(error));
 			}
 			else
-				log("could not attr emulations thread, error " + getString(error));
+				logMessage("could not attr emulations thread, error " + getString(error));
 		}
 		else
-			log("could not init emulations attr, error " + getString(error));
+			logMessage("could not init emulations attr, error " + getString(error));
 	}
 	else
-		log("could not init emulations mutex, error " + getString(error));
+		logMessage("could not init emulations mutex, error " + getString(error));
 	
 	return false;
 }
@@ -371,8 +371,8 @@ bool PortAudioHAL::openAudio()
 									  this);
 		if ((status != paNoError) && fullDuplex)
 		{
-			log("could not open audio stream, error " + getString(status));
-			log("attempting half-duplex");
+			logMessage("could not open audio stream, error " + getString(status));
+			logMessage("attempting half-duplex");
 			
 			status = Pa_OpenDefaultStream(&audioStream,
 										  0,
@@ -393,15 +393,15 @@ bool PortAudioHAL::openAudio()
 				return true;
 			}
 			else
-				log("could not start audio stream, error " + getString(status));
+				logMessage("could not start audio stream, error " + getString(status));
 			
 			Pa_CloseStream(audioStream);
 		}
 		else
-			log("could not open audio stream, error " + getString(status));
+			logMessage("could not open audio stream, error " + getString(status));
 	}
 	else
-		log("could not init portaudio, error " + getString(status));
+		logMessage("could not init portaudio, error " + getString(status));
 	
 	int error;
 	pthread_attr_t attr;
@@ -419,18 +419,18 @@ bool PortAudioHAL::openAudio()
 								   this);
 			if (!error)
 			{
-				log("started timer thread");
+				logMessage("started timer thread");
 				audioOpen = true;
 				return true;
 			}
 			else
-				log("could not create timer thread, error " + getString(error));
+				logMessage("could not create timer thread, error " + getString(error));
 		}
 		else
-			log("could not attr timer thread, error " + getString(error));
+			logMessage("could not attr timer thread, error " + getString(error));
 	}
 	else
-		log("could not init timer thread, error " + getString(error));
+		logMessage("could not init timer thread, error " + getString(error));
 	
 	return false;
 }
@@ -583,12 +583,12 @@ void PortAudioHAL::openPlayer(string path)
 		}
 		else
 		{
-			log("could not init sample rate converter, error " + getString(error));
+			logMessage("could not init sample rate converter, error " + getString(error));
 			sf_close(playSNDFILE);
 		}
 	}
 	else
-		log("could not open file " + path);
+		logMessage("could not open file " + path);
 	
 	unlockEmulations();
 }
@@ -757,7 +757,7 @@ void PortAudioHAL::openRecorder(string path)
 	lockEmulations();
 	
 	if (!(recordingSNDFILE = sf_open(path.c_str(), SFM_WRITE, &sfInfo)))
-		log("could not open temporary file " + path);
+		logMessage("could not open temporary file " + path);
 	recordingFrameNum = 0;
 	
 	unlockEmulations();

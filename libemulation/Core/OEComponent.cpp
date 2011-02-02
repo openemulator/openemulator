@@ -181,7 +181,7 @@ int OEComponent::writeBlock(OEAddress address, OEData *value)
 
 
 
-void OEComponent::log(string message)
+void OEComponent::logMessage(string message)
 {
 	cerr << "libemulation: " << message << endl;
 }

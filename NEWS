@@ -1,4 +1,7 @@
 ==2011-02==
+* Implemented RGB decoder
+* Improved canvas configuration
+* Optimized shader
 
 ==2011-01==
 * Fixed shader white IRE level

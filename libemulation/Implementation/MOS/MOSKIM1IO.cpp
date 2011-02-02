@@ -66,13 +66,13 @@ bool MOSKIM1IO::init()
 {
 	if (!emulation)
 	{
-		log("property 'emulation' undefined");
+		logMessage("property 'emulation' undefined");
 		return false;
 	}
 	
 	if (!canvas)
 	{
-		log("canvas could not be created");
+		logMessage("canvas could not be created");
 		return false;
 	}
 	

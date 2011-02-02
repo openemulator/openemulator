@@ -35,6 +35,13 @@ typedef enum
 	OPENGLHAL_CAPTURE_KEYBOARD_AND_HIDE_MOUSE_CURSOR,
 } OpenGLHALCapture;
 
+typedef enum
+{
+	OPENGLHAL_PROGRAM_RGB,
+	OPENGLHAL_PROGRAM_COMPOSITE,
+	OPENGLHAL_PROGRAM_END,
+} OpenGLHALProgram;
+
 
 
 typedef void (*CanvasSetCapture)(void *userData, OpenGLHALCapture capture);
@@ -51,6 +58,8 @@ public:
 			  CanvasSetKeyboardFlags setKeyboardFlags,
 			  void *userData);
 	void close();
+	
+	void setShader(bool value);
 	
 	OESize getDefaultViewSize();
 	bool update(float width, float height, float offset, bool update);
@@ -86,16 +95,18 @@ private:
 	
 	pthread_mutex_t drawMutex;
 	
+	bool enableShader;
+	
 	CanvasConfiguration configuration;
-	CanvasConfiguration frameConfiguration;
 	bool updateConfiguration;
 	
+	CanvasConfiguration frameConfiguration;
 	OEImage *nextFrame;
 	OEImage *frame;
 	
 	GLuint glTextures[OPENGLHAL_TEXTURE_END];
 	OESize glTextureSize;
-	GLuint glFragmentShader;
+	GLuint glPrograms[OPENGLHAL_PROGRAM_END];
 	GLuint glProgram;
 	
 	OpenGLHALCapture capture;
@@ -109,10 +120,10 @@ private:
 	
 	bool initOpenGL();
 	void freeOpenGL();
-	bool loadShader();
+	bool loadShaders();
+	GLuint loadShader(const char *source);
 	bool updateShader();
 	bool updateTexture();
-	void updateFrame(float height);
 	bool drawCanvas(float width, float height);
 	
 	void postHIDNotification(int notification, int usageId, float value);

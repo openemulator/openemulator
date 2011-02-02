@@ -61,7 +61,7 @@ public:
 	
 protected:
 	// Helpers
-	void log(string message);
+	void logMessage(string message);
 	
 	int getInt(const string& value);
 	double getFloat(const string& value);

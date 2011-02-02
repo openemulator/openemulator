@@ -101,13 +101,13 @@ bool Emulation::save(string path)
 				is_open = writeFile(path, &data);
 				
 				if (!is_open)
-					log("could not open '" + path + "'");
+					logMessage("could not open '" + path + "'");
 			}
 			else
-				log("could not dump EDL for '" + path + "'");
+				logMessage("could not dump EDL for '" + path + "'");
 		}
 		else
-			log("could not update the configuration for '" + path + "'");
+			logMessage("could not update the configuration for '" + path + "'");
 	}
 	else if (pathExtension == OE_PACKAGE_PATH_EXTENSION)
 	{
@@ -120,21 +120,21 @@ bool Emulation::save(string path)
 				{
 					is_open = package->writeFile(OE_PACKAGE_EDL_PATH, &data);
 					if (!is_open)
-						log("could not write '" OE_PACKAGE_EDL_PATH
-							"' in '" + path + "'");
+						logMessage("could not write '" OE_PACKAGE_EDL_PATH
+								   "' in '" + path + "'");
 				}
 				else
-					log("could not dump EDL for '" + path + "'");
+					logMessage("could not dump EDL for '" + path + "'");
 			}
 			
 			delete package;
 			package = NULL;
 		}
 		else
-			log("could not open '" + path + "'");
+			logMessage("could not open '" + path + "'");
 	}
 	else
-		log("could not identify type of '" + path + "'");
+		logMessage("could not identify type of '" + path + "'");
 	
 	if (!is_open)
 		close();
@@ -412,10 +412,11 @@ bool Emulation::createComponent(string id, string className)
 		if (component)
 			return setComponent(id, component);
 		else
-			log("could not create '" + id + "', class '" + className + "' undefined");
+			logMessage("could not create '" + id +
+					   "', class '" + className + "' undefined");
 	}
 	else
-		log("redefinition of '" + id + "'");
+		logMessage("redefinition of '" + id + "'");
 	
 	return false;
 }
@@ -448,7 +449,7 @@ bool Emulation::configureComponent(string id, xmlNodePtr children)
 	OEComponent *component = getComponent(id);
 	if (!component)
 	{
-		log("could not configure '" + id + "', it is not created");
+		logMessage("could not configure '" + id + "', it is not created");
 		return false;
 	}
 	
@@ -471,14 +472,14 @@ bool Emulation::configureComponent(string id, xmlNodePtr children)
 				value = parseValueProperties(value, propertiesMap);
 				
 				if (!component->setValue(name, value))
-					log("'" + id + "': invalid property '" + name + "'");
+					logMessage("'" + id + "': invalid property '" + name + "'");
 			}
 			else if (hasNodeProperty(node, "ref"))
 			{
 				string refId = getNodeProperty(node, "ref");
 				OEComponent *ref = getComponent(refId);
 				if (!component->setRef(name, ref))
-					log("'" + id + "': invalid property '" + name + "'");
+					logMessage("'" + id + "': invalid property '" + name + "'");
 			}
 			else if (hasNodeProperty(node, "data"))
 			{
@@ -502,12 +503,12 @@ bool Emulation::configureComponent(string id, xmlNodePtr children)
 				}
 				
 				if (!component->setData(name, data))
-					log("'" + id + "': invalid property '" + name + "'");
+					logMessage("'" + id + "': invalid property '" + name + "'");
 			}
 			else
 			{
-				log("'" + id + "': invalid property '" + name + "', "
-					"unrecognized type");
+				logMessage("'" + id + "': invalid property '" + name + "', "
+						   "unrecognized type");
 			}
 		}
 	}
@@ -541,14 +542,14 @@ bool Emulation::initComponent(string id)
 	OEComponent *component = getComponent(id);
 	if (!component)
 	{
-		log("could not init '" + id + "', it is not created");
+		logMessage("could not init '" + id + "', it is not created");
 		return false;
 	}
 	
 	if (component->init())
 		return true;
 	else
-		log("could not init '" + id + "'");
+		logMessage("could not init '" + id + "'");
 	
 	return false;
 }
@@ -579,7 +580,7 @@ bool Emulation::updateComponent(string id, xmlNodePtr children)
 	OEComponent *component = getComponent(id);
 	if (!component)
 	{
-		log("could not update '" + id + "', it is not created");
+		logMessage("could not update '" + id + "', it is not created");
 		return false;
 	}
 	
@@ -616,7 +617,7 @@ bool Emulation::updateComponent(string id, xmlNodePtr children)
 				if (component->getData(name, &data) && data)
 				{
 					if (!package->writeFile(parsedSrc, data))
-						log("could not write '" + dataSrc + "'");
+						logMessage("could not write '" + dataSrc + "'");
 				}
 			}
 		}

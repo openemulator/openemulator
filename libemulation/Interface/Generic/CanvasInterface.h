@@ -64,10 +64,11 @@ typedef enum
 
 typedef enum
 {
-	CANVAS_COMPOSITEDECODER_NTSC_YUV,
-	CANVAS_COMPOSITEDECODER_NTSC_YIQ,
-	CANVAS_COMPOSITEDECODER_CXA2025AS,
-} CanvasCompositeDecoder;
+	CANVAS_DECODER_RGB,
+	CANVAS_DECODER_NTSC_YUV,
+	CANVAS_DECODER_NTSC_YIQ,
+	CANVAS_DECODER_CXA2025AS,
+} CanvasDecoder;
 
 typedef struct
 {
@@ -78,22 +79,22 @@ typedef struct
 	OESize canvasSize;
 	OERect contentRect;
 	
-	CanvasCompositeDecoder compositeDecoder;
-	float compositeCarrierFrequency;
-	float compositeLumaCutoffFrequency;
-	float compositeChromaCutoffFrequency;
-	float compositeBlackLevel;
-	float compositeWhiteLevel;
-	float compositeHue;
-	float compositeScanlineAlpha;
+	CanvasDecoder decoder;
 	
-	float rgbSharpness;
+	float lumaCutoffFrequency;
+	float scanlineAlpha;
 	
 	float brightness;
 	float contrast;
 	float saturation;
+	float hue;
 	float barrel;
 	float persistance;
+	
+	float compositeBlackLevel;
+	float compositeWhiteLevel;
+	float compositeCarrierFrequency;
+	float compositeChromaCutoffFrequency;
 } CanvasConfiguration;
 
 // Canvas keyboard flags use int
