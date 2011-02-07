@@ -1,7 +1,7 @@
 ==To-Do==
-* Opening an emulation with Open… does not create canvas window controllers
 * Implement the option to deactivate shaders
 * Implement capture badge, lasting 3 seconds, disappearing in 1 second
+* Implement NTSC decoding through a frame buffer object
 
 * How should power be indicated? With a power badge?
 * Devise a way to send system events to a device without a canvas. It should be: easy to implement, easy to follow. Probably should travel the connections path.

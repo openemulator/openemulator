@@ -22,15 +22,16 @@ Monitor::Monitor()
 	configuration.canvasSize = OEMakeSize(720, 576);
 	configuration.contentRect = OEMakeRect(0, 0, 1, 1);
 	
-	configuration.decoder = CANVAS_DECODER_NTSC_YUV;
+	configuration.decoder = CANVAS_DECODER_RGB;
 	
 	configuration.lumaCutoffFrequency = 0.3;
 	configuration.scanlineAlpha = 0.2;
+	configuration.centerLighting = 0.8;
 	
 	configuration.brightness = 0;
 	configuration.contrast = 1;
 	configuration.saturation = 1;
-	configuration.hue = 0.15;
+	configuration.hue = 0;
 	configuration.barrel = 0.1;
 	configuration.persistance = 0;
 	
@@ -61,6 +62,8 @@ bool Monitor::setValue(string name, string value)
 		configuration.lumaCutoffFrequency = getFloat(value);
 	else if (name == "scanlineAlpha")
 		configuration.scanlineAlpha = getFloat(value);
+	else if (name == "centerLighting")
+		configuration.centerLighting = getFloat(value);
 	else if (name == "brightness")
 		configuration.brightness = getFloat(value);
 	else if (name == "contrast")
@@ -121,6 +124,8 @@ bool Monitor::getValue(string name, string& value)
 		value = getString(configuration.lumaCutoffFrequency);
 	else if (name == "scanlineAlpha")
 		value = getString(configuration.scanlineAlpha);
+	else if (name == "centerLighting")
+		value = getString(configuration.centerLighting);
 	else if (name == "brightness")
 		value = getString(configuration.brightness);
 	else if (name == "contrast")

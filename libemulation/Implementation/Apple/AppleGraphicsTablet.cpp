@@ -10,7 +10,6 @@
 
 #include "AppleGraphicsTablet.h"
 
-#include "CompositeMonitor.h"
 #include "Emulation.h"
 #include "CanvasInterface.h"
 

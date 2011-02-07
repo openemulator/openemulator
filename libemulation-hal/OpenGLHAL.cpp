@@ -147,6 +147,11 @@ bool OpenGLHAL::initOpenGL()
 	
 	glGenTextures(OPENGLHAL_TEXTURE_END, glTextures);
 	glTextureSize = OEMakeSize(0, 0);
+	glTextureUpdated = false;
+	
+	glBindTexture(GL_TEXTURE_2D, glTextures[OPENGLHAL_TEXTURE_PROCESSED_FRAME]);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
 	
 	loadShaders();
 	
@@ -157,10 +162,7 @@ void OpenGLHAL::freeOpenGL()
 {
 	glDeleteTextures(OPENGLHAL_TEXTURE_END, glTextures);
 	
-	if (glPrograms[OPENGLHAL_PROGRAM_RGB])
-		glDeleteProgram(glPrograms[OPENGLHAL_PROGRAM_RGB]);
-	if (glPrograms[OPENGLHAL_PROGRAM_COMPOSITE])
-		glDeleteProgram(glPrograms[OPENGLHAL_PROGRAM_COMPOSITE]);
+	freeShaders();
 }
 
 bool OpenGLHAL::loadShaders()
@@ -168,117 +170,103 @@ bool OpenGLHAL::loadShaders()
 	glPrograms[OPENGLHAL_PROGRAM_RGB] = loadShader("\
 	uniform sampler2D texture;\
 	uniform vec2 texture_size;\
-	uniform float barrel;\
-	uniform vec2 barrel_center;\
-	uniform vec3 c0;\
-	uniform vec3 c1;\
-	uniform vec3 c2;\
-	uniform vec3 c3;\
-	uniform vec3 c4;\
-	uniform vec3 c5;\
-	uniform vec3 c6;\
-	uniform vec3 c7;\
-	uniform vec3 c8;\
-	uniform vec3 decoderRow1;\
-	uniform vec3 decoderRow2;\
-	uniform vec3 decoderRow3;\
-	uniform float scanline_alpha;\
-	uniform float brightness;\
+	uniform vec3 c0, c1, c2, c3, c4, c5, c6, c7, c8;\
+	uniform mat3 decoder;\
 	\
 	float PI = 3.14159265358979323846264;\
 	\
 	vec3 pixel(vec2 q)\
 	{\
-	return texture2D(texture, q).xyz;\
+		return texture2D(texture, q).xyz;\
 	}\
 	\
 	vec3 pixel2(vec2 q, float i)\
 	{\
-	return pixel(vec2(q.x + i, q.y)) + pixel(vec2(q.x - i, q.y));\
+		return pixel(vec2(q.x + i, q.y)) + pixel(vec2(q.x - i, q.y));\
 	}\
 	\
 	void main(void)\
 	{\
-	vec2 q = gl_TexCoord[0].xy;\
-	q -= barrel_center;\
-	q += barrel * q * (q.x * q.x + q.y * q.y);\
-	q += barrel_center;\
-	\
-	vec3 p = pixel(q) * c0;\
-	p += pixel2(q, 1.0 / texture_size.x) * c1;\
-	p += pixel2(q, 2.0 / texture_size.x) * c2;\
-	p += pixel2(q, 3.0 / texture_size.x) * c3;\
-	p += pixel2(q, 4.0 / texture_size.x) * c4;\
-	p += pixel2(q, 5.0 / texture_size.x) * c5;\
-	p += pixel2(q, 6.0 / texture_size.x) * c6;\
-	p += pixel2(q, 7.0 / texture_size.x) * c7;\
-	p += pixel2(q, 8.0 / texture_size.x) * c8;\
-	p = mat3(decoderRow1, decoderRow2, decoderRow3) * p;\
-	float m = sin(PI * q.y * texture_size.y);\
-	p *= (1.0 - scanline_alpha) + scanline_alpha * m * m;\
-	p += brightness;\
-	gl_FragColor = vec4(p, 1.0);\
+		vec2 q = gl_TexCoord[0].xy;\
+		vec3 p = pixel(q) * c0;\
+		p += pixel2(q, 1.0 / texture_size.x) * c1;\
+		p += pixel2(q, 2.0 / texture_size.x) * c2;\
+		p += pixel2(q, 3.0 / texture_size.x) * c3;\
+		p += pixel2(q, 4.0 / texture_size.x) * c4;\
+		p += pixel2(q, 5.0 / texture_size.x) * c5;\
+		p += pixel2(q, 6.0 / texture_size.x) * c6;\
+		p += pixel2(q, 7.0 / texture_size.x) * c7;\
+		p += pixel2(q, 8.0 / texture_size.x) * c8;\
+		p = decoder * p;\
+		gl_FragColor = vec4(p, 1.0);\
 	}");
 	
 	glPrograms[OPENGLHAL_PROGRAM_COMPOSITE] = loadShader("\
 	uniform sampler2D texture;\
 	uniform vec2 texture_size;\
-	uniform float barrel;\
-	uniform vec2 barrel_center;\
 	uniform float comp_black;\
 	uniform float comp_fsc;\
-	uniform vec3 c0;\
-	uniform vec3 c1;\
-	uniform vec3 c2;\
-	uniform vec3 c3;\
-	uniform vec3 c4;\
-	uniform vec3 c5;\
-	uniform vec3 c6;\
-	uniform vec3 c7;\
-	uniform vec3 c8;\
-	uniform vec3 decoderRow1;\
-	uniform vec3 decoderRow2;\
-	uniform vec3 decoderRow3;\
-	uniform float scanline_alpha;\
-	uniform float brightness;\
+	uniform vec3 c0, c1, c2, c3, c4, c5, c6, c7, c8;\
+	uniform mat3 decoder;\
 	\
 	float PI = 3.14159265358979323846264;\
 	\
 	vec3 pixel(vec2 q)\
 	{\
-	vec3 p = texture2D(texture, q).xyz - comp_black;\
-	float phase = 2.0 * PI * comp_fsc * texture_size.x * q.x;\
-	p.y *= sin(phase);\
-	p.z *= cos(phase);\
-	return p;\
+		vec3 p = texture2D(texture, q).xyz - comp_black;\
+		float phase = 2.0 * PI * comp_fsc * texture_size.x * q.x;\
+		p.y *= sin(phase);\
+		p.z *= cos(phase);\
+		return p;\
 	}\
 	\
 	vec3 pixel2(vec2 q, float i)\
 	{\
-	return pixel(vec2(q.x + i, q.y)) + pixel(vec2(q.x - i, q.y));\
+		return pixel(vec2(q.x + i, q.y)) + pixel(vec2(q.x - i, q.y));\
 	}\
 	\
 	void main(void)\
 	{\
-	vec2 q = gl_TexCoord[0].xy;\
-	q -= barrel_center;\
-	q += barrel * q * (q.x * q.x + q.y * q.y);\
-	q += barrel_center;\
-	\
-	vec3 p = pixel(q) * c0;\
-	p += pixel2(q, 1.0 / texture_size.x) * c1;\
-	p += pixel2(q, 2.0 / texture_size.x) * c2;\
-	p += pixel2(q, 3.0 / texture_size.x) * c3;\
-	p += pixel2(q, 4.0 / texture_size.x) * c4;\
-	p += pixel2(q, 5.0 / texture_size.x) * c5;\
-	p += pixel2(q, 6.0 / texture_size.x) * c6;\
-	p += pixel2(q, 7.0 / texture_size.x) * c7;\
-	p += pixel2(q, 8.0 / texture_size.x) * c8;\
-	p = mat3(decoderRow1, decoderRow2, decoderRow3) * p;\
-	float m = sin(PI * q.y * texture_size.y);\
-	p *= (1.0 - scanline_alpha) + scanline_alpha * m * m;\
-	p += brightness;\
-	gl_FragColor = vec4(p, 1.0);\
+		vec2 q = gl_TexCoord[0].xy;\
+		vec3 p = pixel(q) * c0;\
+		p += pixel2(q, 1.0 / texture_size.x) * c1;\
+		p += pixel2(q, 2.0 / texture_size.x) * c2;\
+		p += pixel2(q, 3.0 / texture_size.x) * c3;\
+		p += pixel2(q, 4.0 / texture_size.x) * c4;\
+		p += pixel2(q, 5.0 / texture_size.x) * c5;\
+		p += pixel2(q, 6.0 / texture_size.x) * c6;\
+		p += pixel2(q, 7.0 / texture_size.x) * c7;\
+		p += pixel2(q, 8.0 / texture_size.x) * c8;\
+		p = decoder * p;\
+		gl_FragColor = vec4(p, 1.0);\
+	}");
+	
+	glPrograms[OPENGLHAL_PROGRAM_SCREEN] = loadShader("\
+		uniform sampler2D texture;\
+		uniform vec2 texture_size;\
+		uniform float barrel;\
+		uniform vec2 barrel_center;\
+		uniform float scanline_alpha;\
+		uniform float center_lighting;\
+		uniform float brightness;\
+		\
+		float PI = 3.14159265358979323846264;\
+		\
+		void main(void)\
+		{\
+		vec2 q = gl_TexCoord[0].xy;\
+		\
+		q -= barrel_center;\
+		q += barrel * q * (q.x * q.x + q.y * q.y);\
+		q += barrel_center;\
+		\
+		vec3 p = texture2D(texture, q).xyz;\
+		float s = sin(PI * q.y * texture_size.y);\
+		p *= (1.0 - scanline_alpha) + scanline_alpha * s * s;\
+		vec2 c = (q - barrel_center) / center_lighting;\
+		p *= 1.0 / exp(c.x * c.x + c.y * c.y);\
+		p += brightness;\
+		gl_FragColor = vec4(p, 1.0);\
 	}");
 	
 	glProgram = 0;
@@ -286,8 +274,21 @@ bool OpenGLHAL::loadShaders()
 	return true;
 }
 
+void OpenGLHAL::freeShaders()
+{
+#ifdef GL_VERSION_2_0
+	if (glPrograms[OPENGLHAL_PROGRAM_RGB])
+		glDeleteProgram(glPrograms[OPENGLHAL_PROGRAM_RGB]);
+	if (glPrograms[OPENGLHAL_PROGRAM_COMPOSITE])
+		glDeleteProgram(glPrograms[OPENGLHAL_PROGRAM_COMPOSITE]);
+	if (glPrograms[OPENGLHAL_PROGRAM_SCREEN])
+		glDeleteProgram(glPrograms[OPENGLHAL_PROGRAM_SCREEN]);
+#endif
+}
+
 GLuint OpenGLHAL::loadShader(const char *source)
 {
+#ifdef GL_VERSION_2_0
 	const GLchar **sourcePointer = (const GLchar **) &source;
 	GLint sourceLength = strlen(source);
 	
@@ -296,33 +297,25 @@ GLuint OpenGLHAL::loadShader(const char *source)
 	glShaderSource(glFragmentShader, 1, sourcePointer, &sourceLength);
 	glCompileShader(glFragmentShader);
 	
-	GLint isCompiled;
-	glGetShaderiv(glFragmentShader, GL_COMPILE_STATUS, &isCompiled);
+	GLint bufSize;
 	
-	if (!isCompiled)
+	bufSize = 0;
+	glGetShaderiv(glFragmentShader, GL_INFO_LOG_LENGTH, &bufSize);
+	
+	if (bufSize > 0)
 	{
-		string errorString = "could not compile OpenGL fragment shader";
+		GLsizei infoLogLength = 0;
 		
-		GLint bufSize = 0;
-		glGetShaderiv(glFragmentShader, GL_INFO_LOG_LENGTH, &bufSize);
+		vector<char> infoLog;
+		infoLog.resize(bufSize);
 		
-		if (bufSize > 0)
-		{
-			GLsizei infoLogLength = 0;
-			
-			vector<char> infoLog;
-			infoLog.resize(bufSize);
-			
-			glGetShaderInfoLog(glFragmentShader, bufSize,
-							   &infoLogLength, &infoLog.front());
-			
-			errorString += "\n";
-			errorString += &infoLog.front();
-		}
+		glGetShaderInfoLog(glFragmentShader, bufSize,
+						   &infoLogLength, &infoLog.front());
+		
+		string errorString = "could not compile OpenGL fragment shader\n";
+		errorString += &infoLog.front();
 		
 		logMessage(errorString);
-		
-		return 0;
 	}
 	
 	GLuint glProgram = glCreateProgram();
@@ -331,40 +324,31 @@ GLuint OpenGLHAL::loadShader(const char *source)
 	
 	glDeleteShader(glFragmentShader);
 	
-	GLint isLinked;
-	glGetShaderiv(glProgram, GL_LINK_STATUS, &isLinked);
+	bufSize = 0;
+	glGetProgramiv(glProgram, GL_INFO_LOG_LENGTH, &bufSize);
 	
-	if (!isLinked)
+	if (bufSize > 0)
 	{
-		string errorString = "could not link OpenGL program";
+		GLsizei infoLogLength = 0;
 		
-		GLint bufSize = 0;
-		glGetProgramiv(glProgram, GL_INFO_LOG_LENGTH, &bufSize);
+		vector<char> infoLog;
+		infoLog.resize(bufSize);
 		
-		if (bufSize > 0)
-		{
-			GLsizei infoLogLength = 0;
-			
-			vector<char> infoLog;
-			infoLog.resize(bufSize);
-			
-			glGetProgramInfoLog(glProgram, bufSize,
-								&infoLogLength, &infoLog.front());
-			
-			errorString += "\n";
-			errorString += &infoLog.front();
-		}
+		glGetProgramInfoLog(glProgram, bufSize,
+							&infoLogLength, &infoLog.front());
+		
+		string errorString = "could not link OpenGL program\n";
+		errorString += &infoLog.front();
 		
 		logMessage(errorString);
-		
-		return 0;
 	}
-	
+#endif
 	return glProgram;
 }
 
 bool OpenGLHAL::updateShader()
 {
+#ifdef GL_VERSION_2_0
 	// Select program
 	if (!enableShader)
 	{
@@ -451,7 +435,7 @@ bool OpenGLHAL::updateShader()
 		case CANVAS_DECODER_MONOCHROME:
 			m *= Matrix3(1, 0, -1,
 						 0, 0, 0,
-						 0,	0, 0);
+						 0, 0, 0);
 		case CANVAS_DECODER_RGB:
 			m *= Matrix3(0.299000, -0.147141, 0.614975,
 						 0.587000, -0.288869, -0.514965,
@@ -467,8 +451,6 @@ bool OpenGLHAL::updateShader()
 	
 	glUseProgram(glProgram);
 	
-	glUniform1f(glGetUniformLocation(glProgram, "barrel"),
-				frameConfiguration.barrel);
 	glUniform1f(glGetUniformLocation(glProgram, "comp_black"),
 				frameConfiguration.compositeBlackLevel);
 	glUniform1f(glGetUniformLocation(glProgram, "comp_fsc"),
@@ -493,18 +475,11 @@ bool OpenGLHAL::updateShader()
 	glUniform3f(glGetUniformLocation(glProgram, "c8"),
 				wy.getValue(0), wc.getValue(0), wc.getValue(0));
 	
-	glUniform3f(glGetUniformLocation(glProgram, "decoderRow1"),
-				m.getValue(0, 0), m.getValue(0, 1), m.getValue(0, 2));
-	glUniform3f(glGetUniformLocation(glProgram, "decoderRow2"),
-				m.getValue(1, 0), m.getValue(1, 1), m.getValue(1, 2));
-	glUniform3f(glGetUniformLocation(glProgram, "decoderRow3"),
-				m.getValue(2, 0), m.getValue(2, 1), m.getValue(2, 2));
-	
-	glUniform1f(glGetUniformLocation(glProgram, "brightness"),
-				frameConfiguration.brightness);
+	glUniformMatrix3fv(glGetUniformLocation(glProgram, "decoder"),
+					   9, false, m.getValues());
 	
 	glUseProgram(0);
-	
+#endif
 	return true;
 }
 
@@ -521,9 +496,6 @@ bool OpenGLHAL::updateTexture()
 	
 	glBindTexture(GL_TEXTURE_2D, glTextures[OPENGLHAL_TEXTURE_FRAME]);
 	
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-	
 	OESize newTextureSize = OEMakeSize(getNextPowerOf2(frame->getSize().width),
 									   getNextPowerOf2(frame->getSize().height));
 	
@@ -537,6 +509,13 @@ bool OpenGLHAL::updateTexture()
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
 					 glTextureSize.width, glTextureSize.height, 0,
 					 GL_LUMINANCE, GL_UNSIGNED_BYTE, &dummy.front());
+#ifdef GL_VERSION_2_0
+		glBindTexture(GL_TEXTURE_2D, glTextures[OPENGLHAL_TEXTURE_PROCESSED_FRAME]);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
+					 glTextureSize.width, glTextureSize.height, 0,
+					 GL_LUMINANCE, GL_UNSIGNED_BYTE, &dummy.front());
+		glBindTexture(GL_TEXTURE_2D, glTextures[OPENGLHAL_TEXTURE_FRAME]);
+#endif
 	}
 	
 	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0,
@@ -544,6 +523,7 @@ bool OpenGLHAL::updateTexture()
 					format, GL_UNSIGNED_BYTE,
 					frame->getPixels());
 	
+#ifdef GL_VERSION_2_0
 	GLuint program;
 	program = glPrograms[OPENGLHAL_PROGRAM_RGB];
 	glUseProgram(program);
@@ -557,21 +537,66 @@ bool OpenGLHAL::updateTexture()
 				0);
 	glUniform2f(glGetUniformLocation(program, "texture_size"),
 				glTextureSize.width, glTextureSize.height);
+	program = glPrograms[OPENGLHAL_PROGRAM_SCREEN];
+	glUseProgram(program);
+	glUniform1i(glGetUniformLocation(program, "texture"),
+				0);
+	glUniform2f(glGetUniformLocation(program, "texture_size"),
+				glTextureSize.width, glTextureSize.height);
 	glUseProgram(0);
-	
+#endif
 	return true;
 }
 
 bool OpenGLHAL::drawCanvas(float width, float height)
 {
+	if (frame && glProgram)
+	{
+		glClearColor(0, 0, 0, 0);
+		glClear(GL_COLOR_BUFFER_BIT);
+		
+		glViewport(0, 0, frame->getSize().width, frame->getSize().height);
+		
+		glClearColor(0, 0, 0, 0);
+		glClear(GL_COLOR_BUFFER_BIT);
+		glBindTexture(GL_TEXTURE_2D, glTextures[OPENGLHAL_TEXTURE_FRAME]);
+		
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		
+		glLoadIdentity();
+		
+		glUseProgram(glProgram);
+		
+		OESize viewSize = OEMakeSize(frame->getSize().width / glTextureSize.width,
+									 frame->getSize().height / glTextureSize.height);
+		glBegin(GL_QUADS);
+		glTexCoord2f(0, 0);
+		glVertex2f(-1, -1);
+		glTexCoord2f(viewSize.width, 0);
+		glVertex2f(1, -1);
+		glTexCoord2f(viewSize.width, viewSize.height);
+		glVertex2f(1, 1);
+		glTexCoord2f(0, viewSize.height);
+		glVertex2f(-1, 1);
+		glEnd();
+		
+		glUseProgram(0);
+		
+		glBindTexture(GL_TEXTURE_2D, glTextures[OPENGLHAL_TEXTURE_PROCESSED_FRAME]);
+		
+		glCopyTexSubImage2D(GL_TEXTURE_2D, 0,
+							0, 0, 0, 0, glTextureSize.width, glTextureSize.height);
+	}
+	
+	// Clear
 	glViewport(0, 0, width, height);
 	
-	// Clear with brightness color
 	float clearColor = glProgram ? frameConfiguration.brightness : 0;
 	glClearColor(clearColor, clearColor, clearColor, 0);
 	glClear(GL_COLOR_BUFFER_BIT);
 	
-	if (!frame) 
+	if (!frame)
 		return false;
 	
 	// Calculate proportions
@@ -609,9 +634,7 @@ bool OpenGLHAL::drawCanvas(float width, float height)
 		}
 	}
 	
-	// Bind texture
-	glBindTexture(GL_TEXTURE_2D, glTextures[OPENGLHAL_TEXTURE_FRAME]);
-	
+	// Fix problem when pixel size is unity
 	int viewFrameWidth = width * viewFrame.size.width / 2;
 	GLint param = GL_LINEAR;
 	if ((viewFrameWidth == (int) frameSize.width) &&
@@ -620,11 +643,16 @@ bool OpenGLHAL::drawCanvas(float width, float height)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, param);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, param);
 	
-	// Update barrel center and scanlines
+	// Update geometry program parameters
+#ifdef GL_VERSION_2_0
 	if (glProgram)
 	{
-		glUseProgram(glProgram);
-	
+		GLint screenProgram = glPrograms[OPENGLHAL_PROGRAM_SCREEN];
+		glUseProgram(screenProgram);
+		
+		glUniform1f(glGetUniformLocation(screenProgram, "barrel"),
+					frameConfiguration.barrel);
+		
 		OEPoint barrelCenter;
 		barrelCenter.x = ((0.5 - frameConfiguration.contentRect.origin.x) /
 						  frameConfiguration.contentRect.size.width *
@@ -632,7 +660,7 @@ bool OpenGLHAL::drawCanvas(float width, float height)
 		barrelCenter.y = ((0.5 - frameConfiguration.contentRect.origin.y) /
 						  frameConfiguration.contentRect.size.height *
 						  frame->getSize().height / glTextureSize.height);
-		glUniform2f(glGetUniformLocation(glProgram, "barrel_center"),
+		glUniform2f(glGetUniformLocation(screenProgram, "barrel_center"),
 					barrelCenter.x,
 					barrelCenter.y);
 		
@@ -642,31 +670,40 @@ bool OpenGLHAL::drawCanvas(float width, float height)
 		float scanlineAlpha = ((scanlineHeight > 2.5) ? alpha :
 							   (scanlineHeight < 2) ? 0 :
 							   (scanlineHeight - 2) / (2.5 - 2) * alpha);
-		glUniform1f(glGetUniformLocation(glProgram, "scanline_alpha"),
+		glUniform1f(glGetUniformLocation(screenProgram, "scanline_alpha"),
 					scanlineAlpha);
+
+		glUniform1f(glGetUniformLocation(screenProgram, "center_lighting"),
+					frameConfiguration.centerLighting);
+		
+		glUniform1f(glGetUniformLocation(screenProgram, "brightness"),
+					frameConfiguration.brightness);
 	}
+#endif
 	
 	// Draw
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
+	glBindTexture(GL_TEXTURE_2D, glTextures[glProgram ?
+											OPENGLHAL_TEXTURE_PROCESSED_FRAME :
+											OPENGLHAL_TEXTURE_FRAME]);
 	
-	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+	glRotatef(180.0, 1.0, 0.0, 0.0);
 	
 	glBegin(GL_QUADS);
 	glTexCoord2f(OEMinX(textureFrame), OEMinY(textureFrame));
-	glVertex2f(OEMinX(viewFrame), OEMaxY(viewFrame));
-	glTexCoord2f(OEMaxX(textureFrame), OEMinY(textureFrame));
-	glVertex2f(OEMaxX(viewFrame), OEMaxY(viewFrame));
-	glTexCoord2f(OEMaxX(textureFrame), OEMaxY(textureFrame));
-	glVertex2f(OEMaxX(viewFrame), OEMinY(viewFrame));
-	glTexCoord2f(OEMinX(textureFrame), OEMaxY(textureFrame));
 	glVertex2f(OEMinX(viewFrame), OEMinY(viewFrame));
+	glTexCoord2f(OEMaxX(textureFrame), OEMinY(textureFrame));
+	glVertex2f(OEMaxX(viewFrame), OEMinY(viewFrame));
+	glTexCoord2f(OEMaxX(textureFrame), OEMaxY(textureFrame));
+	glVertex2f(OEMaxX(viewFrame), OEMaxY(viewFrame));
+	glTexCoord2f(OEMinX(textureFrame), OEMaxY(textureFrame));
+	glVertex2f(OEMinX(viewFrame), OEMaxY(viewFrame));
 	glEnd();
 	
+#ifdef GL_VERSION_2_0
 	if (glProgram)
 		glUseProgram(0);
-	
+#endif	
 	return true;
 }
 

@@ -1,5 +1,6 @@
 ==2011-02==
-* Implemented monochrome option
+* Fixed Document initialization problem
+* Implemented monochrome shader decoder
 * Implemented RGB decoder
 * Improved canvas configuration
 * Optimized shader

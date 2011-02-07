@@ -98,16 +98,10 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	
 	if (self = [super init])
 	{
-		canvases = [[NSMutableArray alloc] init];
-		canvasWindowControllers = [[NSMutableArray alloc] init];
-		
 		if ([self readFromURL:absoluteURL
 					   ofType:nil
 						error:outError])
 			return self;
-		
-		[canvasWindowControllers release];
-		[canvases release];
 	}
 	
 	*outError = [NSError errorWithDomain:NSCocoaErrorDomain
@@ -121,11 +115,6 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	NSLog(@"Document dealloc");
 	
 	[self destroyEmulation];
-	
-	// To-Do: if somebody forgot to delete a canvas
-	// let's do it here with a warning
-	//	for (int i = 0; i < [canvasWindowControllers count]; i++)
-	//		[[canvasWindowControllers objectAtIndex:i] stopDisplayLink];
 	
 	[emulationWindowController release];
 	[canvasWindowControllers release];
@@ -350,6 +339,13 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 
 - (void)createEmulation:(NSURL *)url
 {
+	NSLog(@"Document createEmulation");
+	
+	if (!canvases)
+		canvases = [[NSMutableArray alloc] init];
+	if (!canvasWindowControllers)
+		canvasWindowControllers = [[NSMutableArray alloc] init];
+	
 	DocumentController *documentController;
 	documentController = [NSDocumentController sharedDocumentController];
 	PortAudioHAL *portAudioHAL = (PortAudioHAL *)[documentController portAudioHAL];
@@ -376,6 +372,8 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 
 - (void)destroyEmulation
 {
+	NSLog(@"Document destroyEmulation");
+	
 	if (!emulation)
 		return;
 	
@@ -388,6 +386,10 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	
 	delete theEmulation;
 	emulation = nil;
+	
+	// Just in case somebody forgot to delete a canvas
+	while ([canvases count])
+		[self destroyCanvas:[canvases lastObject]];
 }
 
 - (void)lockEmulation

@@ -20,11 +20,11 @@
 
 typedef enum
 {
+	OPENGLHAL_TEXTURE_FRAME,
+	OPENGLHAL_TEXTURE_PROCESSED_FRAME,
+	OPENGLHAL_TEXTURE_CAPTURE_RELEASE,
 	OPENGLHAL_TEXTURE_POWER,
 	OPENGLHAL_TEXTURE_PAUSE,
-	OPENGLHAL_TEXTURE_CAPTURE,
-	OPENGLHAL_TEXTURE_FRAME,
-	OPENGLHAL_TEXTURE_INTERLACE,
 	OPENGLHAL_TEXTURE_END,
 } OEOpenGLTextureIndex;
 
@@ -39,6 +39,7 @@ typedef enum
 {
 	OPENGLHAL_PROGRAM_RGB,
 	OPENGLHAL_PROGRAM_COMPOSITE,
+	OPENGLHAL_PROGRAM_SCREEN,
 	OPENGLHAL_PROGRAM_END,
 } OpenGLHALProgram;
 
@@ -106,6 +107,7 @@ private:
 	
 	GLuint glTextures[OPENGLHAL_TEXTURE_END];
 	OESize glTextureSize;
+	bool glTextureUpdated;
 	GLuint glPrograms[OPENGLHAL_PROGRAM_END];
 	GLuint glProgram;
 	
@@ -121,6 +123,7 @@ private:
 	bool initOpenGL();
 	void freeOpenGL();
 	bool loadShaders();
+	void freeShaders();
 	GLuint loadShader(const char *source);
 	bool updateShader();
 	bool updateTexture();

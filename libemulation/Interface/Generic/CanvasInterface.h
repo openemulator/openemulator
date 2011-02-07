@@ -77,6 +77,7 @@ typedef struct
 	
 	float lumaCutoffFrequency;
 	float scanlineAlpha;
+	float centerLighting;
 	
 	float brightness;
 	float contrast;

@@ -41,6 +41,7 @@ public:
 			float c20, float c21, float c22);
 	
 	float getValue(unsigned int i, unsigned int j);
+	float *getValues();
 	
 	Matrix3 operator*(float value);
 	Matrix3 operator*(const Matrix3& m);

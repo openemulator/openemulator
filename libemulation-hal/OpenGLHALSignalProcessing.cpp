@@ -175,6 +175,11 @@ float Matrix3::getValue(unsigned int i, unsigned int j)
 	return data[3 * i + j];
 }
 
+float *Matrix3::getValues()
+{
+	return &data.front();
+}
+
 Matrix3 Matrix3::operator*(const float value)
 {
 	Matrix3 m;
