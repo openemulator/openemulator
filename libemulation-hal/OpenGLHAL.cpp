@@ -263,7 +263,7 @@ bool OpenGLHAL::loadShaders()
 		vec3 p = texture2D(texture, q).xyz;\
 		float s = sin(PI * q.y * texture_size.y);\
 		p *= (1.0 - scanline_alpha) + scanline_alpha * s * s;\
-		vec2 c = (q - barrel_center) / center_lighting;\
+		vec2 c = (q - barrel_center) * center_lighting;\
 		p *= 1.0 / exp(c.x * c.x + c.y * c.y);\
 		p += brightness;\
 		gl_FragColor = vec4(p, 1.0);\
@@ -362,8 +362,8 @@ bool OpenGLHAL::updateShader()
 		case CANVAS_DECODER_MONOCHROME:
 			glProgram = glPrograms[OPENGLHAL_PROGRAM_RGB];
 			break;
-		case CANVAS_DECODER_NTSC_YUV:
-		case CANVAS_DECODER_NTSC_YIQ:
+		case CANVAS_DECODER_YUV:
+		case CANVAS_DECODER_YIQ:
 		case CANVAS_DECODER_CXA2025AS:
 			glProgram = glPrograms[OPENGLHAL_PROGRAM_COMPOSITE];
 			break;
@@ -404,12 +404,12 @@ bool OpenGLHAL::updateShader()
 	{
 		case CANVAS_DECODER_MONOCHROME:
 		case CANVAS_DECODER_RGB:
-		case CANVAS_DECODER_NTSC_YUV:
+		case CANVAS_DECODER_YUV:
 			m *= Matrix3(1, 1, 1,
 						 0, -0.394642, 2.032062,
 						 1.139883,-0.580622, 0);
 			break;
-		case CANVAS_DECODER_NTSC_YIQ:
+		case CANVAS_DECODER_YIQ:
 			m *= Matrix3(1, 1, 1,
 						 0.955986, -0.272013, -1.106740,
 						 0.620825, -0.647204, 1.704230);
@@ -443,12 +443,18 @@ bool OpenGLHAL::updateShader()
 			break;
 	}
 	// Dynamic range gain
-	float levelRange = (frameConfiguration.compositeWhiteLevel -
+	switch (frameConfiguration.decoder)
+	{
+		case CANVAS_DECODER_YUV:
+		case CANVAS_DECODER_YIQ:
+		case CANVAS_DECODER_CXA2025AS:
+			float levelRange = (frameConfiguration.compositeWhiteLevel -
 						frameConfiguration.compositeBlackLevel);
-	if (fabs(levelRange) < 0.01)
-		levelRange = 0.01;
-	m *= 1 / levelRange;
-	
+			if (fabs(levelRange) < 0.01)
+				levelRange = 0.01;
+			m *= 1 / levelRange;
+			break;
+	}
 	glUseProgram(glProgram);
 	
 	glUniform1f(glGetUniformLocation(glProgram, "comp_black"),
@@ -672,9 +678,12 @@ bool OpenGLHAL::drawCanvas(float width, float height)
 							   (scanlineHeight - 2) / (2.5 - 2) * alpha);
 		glUniform1f(glGetUniformLocation(screenProgram, "scanline_alpha"),
 					scanlineAlpha);
-
+		
+		float centerLighting = frameConfiguration.centerLighting;
+		if (fabs(centerLighting) < 0.001)
+			centerLighting = 0.001;
 		glUniform1f(glGetUniformLocation(screenProgram, "center_lighting"),
-					frameConfiguration.centerLighting);
+					1.0 / centerLighting - 1.0);
 		
 		glUniform1f(glGetUniformLocation(screenProgram, "brightness"),
 					frameConfiguration.brightness);
@@ -732,11 +741,6 @@ void OpenGLHAL::resignKeyWindow()
 	ctrlAltWasPressed = false;
 	
 	updateCapture(OPENGLHAL_CAPTURE_NONE);
-}
-
-void OpenGLHAL::sendSystemEvent(int usageId)
-{
-	postHIDNotification(CANVAS_SYSTEMKEYBOARD_DID_CHANGE, usageId, 0);
 }
 
 void OpenGLHAL::setKey(int usageId, bool value)

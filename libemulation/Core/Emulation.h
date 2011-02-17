@@ -105,6 +105,8 @@ public:
 	bool addEDL(string path, map<string, string> idMap);
 	bool removeDevice(string id);
 	
+	void sendSystemEvent(string id, int event);
+	
 	bool isActive();
 	
 	bool postMessage(OEComponent *sender, int message, void *data);

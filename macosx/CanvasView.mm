@@ -12,6 +12,7 @@
 
 #import "CanvasView.h"
 #import "CanvasWindowController.h"
+#import "SystemEventInterface.h"
 #import "Application.h"
 #import "DocumentController.h"
 #import "StringConversion.h"
@@ -726,70 +727,42 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 - (void)systemPowerDown:(id)sender
 {
 	[document lockEmulation];
-	((OpenGLHAL *)canvas)->sendSystemEvent(CANVAS_S_POWERDOWN);
+//	((OpenGLHAL *)canvas)->sendSystemEvent(SYSTEMEVENT_POWERDOWN);
 	[document unlockEmulation];
 }
 
 - (void)systemSleep:(id)sender
 {
 	[document lockEmulation];
-	((OpenGLHAL *)canvas)->sendSystemEvent(CANVAS_S_SLEEP);
+//	((OpenGLHAL *)canvas)->sendSystemEvent(SYSTEMEVENT_SLEEP);
 	[document unlockEmulation];
 }
 
 - (void)systemWakeUp:(id)sender
 {
 	[document lockEmulation];
-	((OpenGLHAL *)canvas)->sendSystemEvent(CANVAS_S_WAKEUP);
+//	((OpenGLHAL *)canvas)->sendSystemEvent(SYSTEMEVENT_WAKEUP);
 	[document unlockEmulation];
 }
 
 - (void)systemColdRestart:(id)sender
 {
 	[document lockEmulation];
-	((OpenGLHAL *)canvas)->sendSystemEvent(CANVAS_S_COLDRESTART);
+//	((OpenGLHAL *)canvas)->sendSystemEvent(SYSTEMEVENT_COLDRESTART);
 	[document unlockEmulation];
 }
 
 - (void)systemWarmRestart:(id)sender
 {
 	[document lockEmulation];
-	((OpenGLHAL *)canvas)->sendSystemEvent(CANVAS_S_WARMRESTART);
-	[document unlockEmulation];
-}
-
-- (void)systemBreak:(id)sender
-{
-	[document lockEmulation];
-	((OpenGLHAL *)canvas)->sendSystemEvent(CANVAS_S_BREAK);
+//	((OpenGLHAL *)canvas)->sendSystemEvent(SYSTEMEVENT_WARMRESTART);
 	[document unlockEmulation];
 }
 
 - (void)systemDebuggerBreak:(id)sender
 {
 	[document lockEmulation];
-	((OpenGLHAL *)canvas)->sendSystemEvent(CANVAS_S_DEBUGGERBREAK);
-	[document unlockEmulation];
-}
-
-- (void)applicationBreak:(id)sender
-{
-	[document lockEmulation];
-	((OpenGLHAL *)canvas)->sendSystemEvent(CANVAS_S_APPLICATIONBREAK);
-	[document unlockEmulation];
-}
-
-- (void)applicationDebuggerBreak:(id)sender
-{
-	[document lockEmulation];
-	((OpenGLHAL *)canvas)->sendSystemEvent(CANVAS_S_APPLICATIONDEBUGGERBREAK);
-	[document unlockEmulation];
-}
-
-- (void)systemHibernate:(id)sender
-{
-	[document lockEmulation];
-	((OpenGLHAL *)canvas)->sendSystemEvent(CANVAS_S_HIBERNATE);
+//	((OpenGLHAL *)canvas)->sendSystemEvent(SYSTEMEVENT_DEBUGGERBREAK);
 	[document unlockEmulation];
 }
 

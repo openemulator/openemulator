@@ -36,6 +36,8 @@
 - (void)lockEmulation;
 - (void)unlockEmulation;
 
+- (void)sendSystemEvent:(int)event toDevice:(NSString *)deviceId;
+
 - (BOOL)mount:(NSString *)path inStorage:(void *)component;
 - (BOOL)mount:(NSString *)path;
 - (BOOL)unmountStorage:(void *)component;

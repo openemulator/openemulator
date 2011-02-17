@@ -76,6 +76,7 @@
 		00A973B312E512F80084724F /* OEImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A973A612E512F80084724F /* OEImage.cpp */; };
 		00A973B512E512F80084724F /* OEPackage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A973A812E512F80084724F /* OEPackage.cpp */; };
 		00B5709E10863C2A00CDE4A7 /* TemplateChooserWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B5709D10863C2A00CDE4A7 /* TemplateChooserWindowController.m */; };
+		00B5F6F4130CAB53009C57CD /* SystemEventInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B5F6F3130CAB53009C57CD /* SystemEventInterface.h */; };
 		00B974B410701DDA00BD1402 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = 00B974AD10701DCD00BD1402 /* sounds */; };
 		00BADDC51100EDC600EB0344 /* ConnectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00BADD451100BE8300EB0344 /* ConnectorViewController.m */; };
 		00BB34B412C5C5AE007332B5 /* EmulationItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00BB34B312C5C5AE007332B5 /* EmulationItem.mm */; };
@@ -298,6 +299,7 @@
 		00AD746811A2F10E00BAC29C /* DocumentController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DocumentController.mm; sourceTree = "<group>"; };
 		00B5709C10863C2A00CDE4A7 /* TemplateChooserWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TemplateChooserWindowController.h; sourceTree = "<group>"; };
 		00B5709D10863C2A00CDE4A7 /* TemplateChooserWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TemplateChooserWindowController.m; sourceTree = "<group>"; };
+		00B5F6F3130CAB53009C57CD /* SystemEventInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemEventInterface.h; sourceTree = "<group>"; };
 		00B8864612A3923D0052B7A4 /* edl-1.0.dtd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "edl-1.0.dtd"; sourceTree = "<group>"; };
 		00B8881312A393990052B7A4 /* Apple1CassetteInterfaceCard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Apple1CassetteInterfaceCard.cpp; path = libemulation/Implementation/Apple/Apple1CassetteInterfaceCard.cpp; sourceTree = SOURCE_ROOT; };
 		00B8881412A393990052B7A4 /* Apple1CassetteInterfaceCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Apple1CassetteInterfaceCard.h; path = libemulation/Implementation/Apple/Apple1CassetteInterfaceCard.h; sourceTree = SOURCE_ROOT; };
@@ -716,6 +718,7 @@
 		00B8886E12A393990052B7A4 /* Generic */ = {
 			isa = PBXGroup;
 			children = (
+				00B5F6F3130CAB53009C57CD /* SystemEventInterface.h */,
 				00FC27A212D106B00065E986 /* AudioInterface.h */,
 				00FC27A312D106B00065E986 /* CanvasInterface.h */,
 				00FC27A412D106B00065E986 /* EthernetInterface.h */,
@@ -929,6 +932,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00B5F6F4130CAB53009C57CD /* SystemEventInterface.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

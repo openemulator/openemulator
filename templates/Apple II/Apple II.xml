@@ -226,7 +226,7 @@
     
     <setting ref="appleMonitorII.monitor" name="barrel" label="Barrel" type="slider" options="0.0,1.0" />
     
-    <setting ref="appleMonitorII.monitor" name="decoder" label="Decoder" type="select" options="Monochrome,RGB,NTSC Y'UV,NTSC Y'IQ,CXA2025AS" />
+    <setting ref="appleMonitorII.monitor" name="decoder" label="Decoder" type="select" options="Monochrome,RGB,Y'UV,Y'IQ,CXA2025AS" />
     <setting ref="appleMonitorII.monitor" name="lumaCutoffFrequency" label="Luma Cutoff Frequency" type="slider" options="0.0,1.0" />
     <setting ref="appleMonitorII.monitor" name="compositeCarrierFrequency" label="Chroma Carrier Frequency" type="slider" options="0.24,0.26" />
     <setting ref="appleMonitorII.monitor" name="compositeChromaCutoffFrequency" label="Chroma Cutoff Frequency" type="slider" options="0.0,1.0" />
@@ -241,7 +241,7 @@
     <property name="decoder" value="RGB" />
     <property name="lumaCutoffFrequency" value="0.8" />
     <property name="scanlineAlpha" value="0.2" />
-    <property name="centerLighting" value="0.75" />
+    <property name="centerLighting" value="0.5" />
     <property name="brightness" value="0" />
     <property name="contrast" value="1" />
     <property name="saturation" value="1" />

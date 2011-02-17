@@ -68,7 +68,6 @@ public:
 	void becomeKeyWindow();
 	void resignKeyWindow();
 	
-	void sendSystemEvent(int usageId);
 	void setKey(int usageId, bool value);
 	void sendUnicodeKeyEvent(int unicode);
 	

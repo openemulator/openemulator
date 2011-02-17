@@ -1,4 +1,5 @@
 ==2011-02==
+* Implemented shader center lighting 
 * Fixed Document initialization problem
 * Implemented monochrome shader decoder
 * Implemented RGB decoder

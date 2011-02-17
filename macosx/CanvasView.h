@@ -46,10 +46,6 @@
 - (void)systemWakeUp:(id)sender;
 - (void)systemColdRestart:(id)sender;
 - (void)systemWarmRestart:(id)sender;
-- (void)systemBreak:(id)sender;
 - (void)systemDebuggerBreak:(id)sender;
-- (void)applicationBreak:(id)sender;
-- (void)applicationDebuggerBreak:(id)sender;
-- (void)systemHibernate:(id)sender;
 
 @end

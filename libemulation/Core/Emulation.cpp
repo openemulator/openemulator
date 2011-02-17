@@ -216,6 +216,11 @@ bool Emulation::isActive()
 	return (activeCount != 0);
 }
 
+void sendSystemEvent(string id, int event)
+{
+	
+}
+
 
 
 void Emulation::buildEmulationInfo()

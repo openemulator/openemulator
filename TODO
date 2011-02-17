@@ -1,9 +1,12 @@
 ==To-Do==
+* Implement render to texture by parts
+* Separate demodulation? It should speed things up 19x
+* Implement shader shadow mask/aperture grille
+* Implement composite phase per scan-line for NTSC/PAL
 * Implement the option to deactivate shaders
 * Implement capture badge, lasting 3 seconds, disappearing in 1 second
-* Implement NTSC decoding through a frame buffer object
 
-* How should power be indicated? With a power badge?
+* Power is indicated with a power badge. Pause too.
 * Devise a way to send system events to a device without a canvas. It should be: easy to implement, easy to follow. Probably should travel the connections path.
 
 * Implement printing
@@ -16,6 +19,34 @@
 * Implement main emulation window remove device
 * Support daisy chaining of devices, when a device has a port and connector of the same type (when adding or removing a device)
 * Implement disk image file locking, if the disk image is writable (flock)
+
+==NTSC phases==
+227.5 cycles/line
+113.75 halfcycles/line
+
+Frame 1		Frame 2
+0		180
+ 270		 90
+180		0
+ 90		 270
+0		180
+ 270		 90
+180		0
+ 90		 270
+
+==PAL Phases==
+283.75 cycles/line
+141.875 halfcycles/line
+
+Frame 1		Frame 2		Frame 3		Frame 4
+0		270		180		90
+ 315
+90
+ 45
+180
+ 135
+270
+ 225
 
 ==Future to-do's==
 * Debugging with JTAG
@@ -46,9 +77,18 @@
 * The language card uses memory offset
 * Game port allows delegations
 * Video: Rev.0 has 4 colores with no color killer, rev. 1 has 6 with ck 
-* Apple III video resistors: 2k to SYNC, 2k to GND, 6.2k to X1 X2 X4 X8, 5.1k to NA NB
 * Video chaining should be possible (for 80 column cards)
 * Do this through video inhibition?
+
+==Apple III==
+* Apple III video resistors: 2k to SYNC, 2k to GND, 6.2k to X1 X2 X4 X8, 5.1k to NA NB
+* NTSC color weights:
+** X1, X2, X4, X8 contribute 0.1555
+** NA, NB contribute 0.189
+** X1 contributes 0.058262
+** X2 contributes 0.115242
+** X4 contributes 0.243884
+** X8 contributes 0.582612
 
 
 
