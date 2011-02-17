@@ -1,13 +1,13 @@
 ==To-Do==
+* Implement system events. This is registered in the device. emulation receives these events and delegates them.
 * Implement render to texture by parts
-* Separate demodulation? It should speed things up 19x
-* Implement shader shadow mask/aperture grille
 * Implement composite phase per scan-line for NTSC/PAL
-* Implement the option to deactivate shaders
+* Separate demodulation? It should speed things up 19x
+* Implement power/pause badge
 * Implement capture badge, lasting 3 seconds, disappearing in 1 second
-
-* Power is indicated with a power badge. Pause too.
-* Devise a way to send system events to a device without a canvas. It should be: easy to implement, easy to follow. Probably should travel the connections path.
+* Implement shader shadow mask/aperture grille
+* Implement the option to deactivate shaders
+* Implement removable device property
 
 * Implement printing
 * Implement hardware library
