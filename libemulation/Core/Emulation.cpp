@@ -216,11 +216,6 @@ bool Emulation::isActive()
 	return (activeCount != 0);
 }
 
-void sendSystemEvent(string id, int event)
-{
-	
-}
-
 
 
 void Emulation::buildEmulationInfo()
@@ -250,8 +245,9 @@ void Emulation::buildEmulationInfo()
 			
 			deviceInfo.location = buildDeviceLocation(deviceInfo.id);
 			
-			deviceInfo.hotPluggable = false;
+			deviceInfo.removable = false;
 			deviceInfo.storage = NULL;
+			deviceInfo.systemEvent = NULL;
 			
 			emulationInfo.push_back(deviceInfo);
 		}
@@ -361,6 +357,63 @@ EmulationDeviceInfo *Emulation::getDeviceInfo(string id)
 	}
 	
 	return NULL;
+}
+
+
+
+void Emulation::sendSystemEvent(string id, int event)
+{
+	logMessage("sendSystemEvent: " + id);
+	
+	vector<string> visitedDevices;
+	sendSystemEvent(id, event, visitedDevices);
+}
+
+void Emulation::sendSystemEvent(string id, int event,
+								vector<string>& visitedDevices)
+{
+	string deviceId = getDeviceId(id);
+	EmulationDeviceInfo *info = getDeviceInfo(deviceId);
+	
+	if (!info)
+		return;
+	
+	if (info->systemEvent)
+	{
+		info->systemEvent->postMessage(this, event, NULL);
+		return;
+	}
+	
+	// Circularity check
+	if (find(visitedDevices.begin(), visitedDevices.end(), deviceId) !=
+		visitedDevices.end())
+		return;
+	visitedDevices.push_back(deviceId);
+	
+	// Find connected port
+	if (!doc)
+		return;
+	
+	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+	
+	for(xmlNodePtr node = rootNode->children;
+		node;
+		node = node->next)
+	{
+		if (!xmlStrcmp(node->name, BAD_CAST "port"))
+		{
+			string id = getNodeProperty(node, "id");
+			string ref = getNodeProperty(node, "ref");
+			
+			if (getDeviceId(ref) == deviceId)
+			{
+				sendSystemEvent(id, event, visitedDevices);
+				return;
+			}
+		}
+	}
+	
+	return;
 }
 
 
@@ -757,12 +810,12 @@ bool Emulation::postMessage(OEComponent *sender, int message, void *data)
 			}
 			break;
 			
-		case EMULATION_SET_HOT_PLUGGABLE:
+		case EMULATION_SET_REMOVABLE:
 			{
 				EmulationDeviceInfo *deviceInfo = getDeviceInfo(getDeviceId(sender));
 				if (deviceInfo)
 				{
-					deviceInfo->hotPluggable = *((bool *)data);
+					deviceInfo->removable = *((bool *)data);
 					
 					return postMessage(sender, EMULATION_UPDATE, NULL);
 				}
@@ -776,9 +829,8 @@ bool Emulation::postMessage(OEComponent *sender, int message, void *data)
 				if (deviceInfo)
 				{
 					OEComponent **ref = (OEComponent **)data;
-					string title = deviceInfo->label;
 					
-					*ref = createCanvas(userData, title);
+					*ref = createCanvas(userData, deviceInfo->id, deviceInfo->label);
 					
 					deviceInfo->canvases.push_back(*ref);
 					
@@ -811,7 +863,7 @@ bool Emulation::postMessage(OEComponent *sender, int message, void *data)
 			}
 			break;
 			
-		case EMULATION_SET_STORAGE:
+		case EMULATION_SET_STORAGE_HANDLER:
 			{
 				EmulationDeviceInfo *deviceInfo = getDeviceInfo(getDeviceId(sender));
 				if (deviceInfo)
@@ -821,6 +873,20 @@ bool Emulation::postMessage(OEComponent *sender, int message, void *data)
 					deviceInfo->storage = ref;
 					
 					return postMessage(sender, EMULATION_UPDATE, NULL);
+				}
+			}
+			break;
+			
+		case EMULATION_SET_SYSTEM_EVENT_HANDLER:
+			{
+				EmulationDeviceInfo *deviceInfo = getDeviceInfo(getDeviceId(sender));
+				if (deviceInfo)
+				{
+					OEComponent *ref = (OEComponent *)data;
+					
+					deviceInfo->systemEvent = ref;
+					
+					return true;
 				}
 			}
 			break;

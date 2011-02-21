@@ -16,6 +16,8 @@
 #import "DocumentController.h"
 #import "StringConversion.h"
 
+#import "SystemEventInterface.h"
+
 #define SPLIT_VERT_LEFT_MIN 128
 #define SPLIT_VERT_RIGHT_MIN 351
 
@@ -346,9 +348,6 @@
 - (NSArray *)toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar
 {
 	return [NSArray arrayWithObjects:
-			@"Power Down",
-			@"Sleep",
-			@"Wake Up",
 			NSToolbarFlexibleSpaceItemIdentifier,
 			@"Library",
 			nil];
@@ -770,46 +769,48 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
 	// Remove device
 }
 
-// System events
+
 
 - (void)systemPowerDown:(id)sender
 {
-//	[[self document] sendSystemEvent:SYSTEMEVENT_POWERDOWN toDevice:];
+	if (selectedItem)
+		[[self document] sendSystemEvent:SYSTEMEVENT_POWERDOWN
+								toDevice:[selectedItem uid]];
 }
 
 - (void)systemSleep:(id)sender
 {
-	[[self document] lockEmulation];
-	//	((OpenGLHAL *)canvas)->sendSystemEvent(SYSTEMEVENT_SLEEP);
-	[[self document] unlockEmulation];
+	if (selectedItem)
+		[[self document] sendSystemEvent:SYSTEMEVENT_SLEEP
+								toDevice:[selectedItem uid]];
 }
 
 - (void)systemWakeUp:(id)sender
 {
-	[[self document] lockEmulation];
-	//	((OpenGLHAL *)canvas)->sendSystemEvent(SYSTEMEVENT_WAKEUP);
-	[[self document] unlockEmulation];
+	if (selectedItem)
+		[[self document] sendSystemEvent:SYSTEMEVENT_WAKEUP
+								toDevice:[selectedItem uid]];
 }
 
 - (void)systemColdRestart:(id)sender
 {
-	[[self document] lockEmulation];
-	//	((OpenGLHAL *)canvas)->sendSystemEvent(SYSTEMEVENT_COLDRESTART);
-	[[self document] unlockEmulation];
+	if (selectedItem)
+		[[self document] sendSystemEvent:SYSTEMEVENT_COLDRESTART
+								toDevice:[selectedItem uid]];
 }
 
 - (void)systemWarmRestart:(id)sender
 {
-	[[self document] lockEmulation];
-	//	((OpenGLHAL *)canvas)->sendSystemEvent(SYSTEMEVENT_WARMRESTART);
-	[[self document] unlockEmulation];
+	if (selectedItem)
+		[[self document] sendSystemEvent:SYSTEMEVENT_WARMRESTART
+								toDevice:[selectedItem uid]];
 }
 
 - (void)systemDebuggerBreak:(id)sender
 {
-	[[self document] lockEmulation];
-	//	((OpenGLHAL *)canvas)->sendSystemEvent(SYSTEMEVENT_DEBUGGERBREAK);
-	[[self document] unlockEmulation];
+	if (selectedItem)
+		[[self document] sendSystemEvent:SYSTEMEVENT_DEBUGGERBREAK
+								toDevice:[selectedItem uid]];
 }
 
 @end

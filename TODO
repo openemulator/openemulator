@@ -1,8 +1,8 @@
 ==To-Do==
-* Implement system events. This is registered in the device. emulation receives these events and delegates them.
-* Implement render to texture by parts
 * Implement composite phase per scan-line for NTSC/PAL
+* Implement render to texture by parts
 * Separate demodulation? It should speed things up 19x
+* Implement shader persistance
 * Implement power/pause badge
 * Implement capture badge, lasting 3 seconds, disappearing in 1 second
 * Implement shader shadow mask/aperture grille

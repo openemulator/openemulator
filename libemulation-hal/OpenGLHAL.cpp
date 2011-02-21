@@ -204,8 +204,7 @@ bool OpenGLHAL::loadShaders()
 	glPrograms[OPENGLHAL_PROGRAM_COMPOSITE] = loadShader("\
 	uniform sampler2D texture;\
 	uniform vec2 texture_size;\
-	uniform float comp_black;\
-	uniform float comp_fsc;\
+	uniform float comp_black, comp_fsc, comp_phase;\
 	uniform vec3 c0, c1, c2, c3, c4, c5, c6, c7, c8;\
 	uniform mat3 decoder;\
 	\
@@ -214,9 +213,10 @@ bool OpenGLHAL::loadShaders()
 	vec3 pixel(vec2 q)\
 	{\
 		vec3 p = texture2D(texture, q).xyz - comp_black;\
-		float phase = 2.0 * PI * comp_fsc * texture_size.x * q.x;\
+		float phase = 2.0 * PI * (comp_fsc * texture_size.x * q.x + \
+		                          comp_phase * texture_size.y * q.y);\
 		p.y *= sin(phase);\
-		p.z *= cos(phase);\
+		p.z *= cos(phase) * cos(2.0 * PI * 0.5 * texture_size.y * q.y);\
 		return p;\
 	}\
 	\
@@ -407,17 +407,25 @@ bool OpenGLHAL::updateShader()
 		case CANVAS_DECODER_YUV:
 			m *= Matrix3(1, 1, 1,
 						 0, -0.394642, 2.032062,
-						 1.139883,-0.580622, 0);
+						 1.139883, -0.580622, 0);
 			break;
 		case CANVAS_DECODER_YIQ:
 			m *= Matrix3(1, 1, 1,
 						 0.955986, -0.272013, -1.106740,
 						 0.620825, -0.647204, 1.704230);
+			// Burst inverter
+			m *= Matrix3(1, 0, 0,
+						 0, -1, 0,
+						 0, 0, 1);
 			break;
 		case CANVAS_DECODER_CXA2025AS:
 			m *= Matrix3(1, 1, 1,
 						 1.630, -0.378, -1.089,
 						 0.317, -0.466, 1.677);
+			// Burst inverter
+			m *= Matrix3(1, 0, 0,
+						 0, -1, 0,
+						 0, 0, 1);
 			break;
 	}
 	// Hue
@@ -461,6 +469,8 @@ bool OpenGLHAL::updateShader()
 				frameConfiguration.compositeBlackLevel);
 	glUniform1f(glGetUniformLocation(glProgram, "comp_fsc"),
 				frameConfiguration.compositeCarrierFrequency);
+	glUniform1f(glGetUniformLocation(glProgram, "comp_phase"),
+				frameConfiguration.compositeLinePhase);
 	
 	glUniform3f(glGetUniformLocation(glProgram, "c0"),
 				wy.getValue(8), wc.getValue(8), wc.getValue(8));

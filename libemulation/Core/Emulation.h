@@ -35,10 +35,11 @@ typedef enum
 	
 	EMULATION_SET_STATE,
 	EMULATION_SET_IMAGE,
-	EMULATION_SET_HOT_PLUGGABLE,
+	EMULATION_SET_REMOVABLE,
 	EMULATION_CREATE_CANVAS,
 	EMULATION_DESTROY_CANVAS,
-	EMULATION_SET_STORAGE,
+	EMULATION_SET_STORAGE_HANDLER,
+	EMULATION_SET_SYSTEM_EVENT_HANDLER,
 } EmulationMessages;
 
 
@@ -66,9 +67,10 @@ typedef struct
 	string location;
 	
 	string state;
-	bool hotPluggable;
+	bool removable;
 	OEComponents canvases;
 	OEComponent *storage;
+	OEComponent *systemEvent;
 } EmulationDeviceInfo;
 
 typedef vector<EmulationDeviceInfo> EmulationInfo;
@@ -77,7 +79,7 @@ typedef vector<EmulationDeviceInfo> EmulationInfo;
 
 typedef void (*EmulationDidUpdate)(void *userData);
 typedef void (*EmulationRunAlert)(void *userData, string message);
-typedef OEComponent *(*EmulationCreateCanvas)(void *userData, string title);
+typedef OEComponent *(*EmulationCreateCanvas)(void *userData, string id, string title);
 typedef void (*EmulationDestroyCanvas)(void *userData, OEComponent *canvas);
 
 
@@ -105,9 +107,9 @@ public:
 	bool addEDL(string path, map<string, string> idMap);
 	bool removeDevice(string id);
 	
-	void sendSystemEvent(string id, int event);
-	
 	bool isActive();
+	
+	void sendSystemEvent(string id, int event);
 	
 	bool postMessage(OEComponent *sender, int message, void *data);
 	
@@ -129,6 +131,8 @@ private:
 	string buildDeviceLocation(string deviceId);
 	string buildDeviceLocation(string deviceId, vector<string>& visitedDevices);
 	EmulationDeviceInfo *getDeviceInfo(string id);
+	
+	void sendSystemEvent(string id, int event, vector<string>& visitedDevices);
 	
 	bool dumpEmulation(OEData *data);
 	bool createEmulation();

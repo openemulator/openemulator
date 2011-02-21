@@ -233,7 +233,7 @@
 							   [path lastPathComponent]]];
 		[alert setInformativeText:[NSString localizedStringWithFormat:
 								   @"There are no compatible storage devices. "
-								   "Try mounting the document in some other emulation."]];
+								   "Try mounting the document in another emulation."]];
 		[alert runModal];
 		[alert release];
 		

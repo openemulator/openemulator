@@ -88,6 +88,7 @@ typedef struct
 	float compositeBlackLevel;
 	float compositeWhiteLevel;
 	float compositeCarrierFrequency;
+	float compositeLinePhase;
 	float compositeChromaCutoffFrequency;
 } CanvasConfiguration;
 

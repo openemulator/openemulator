@@ -36,7 +36,13 @@
 - (void)lockEmulation;
 - (void)unlockEmulation;
 
-- (void)sendSystemEvent:(int)event toDevice:(NSString *)deviceId;
+- (void)setValue:(NSString *)value
+	  ofProperty:(NSString *)theName
+	forComponent:(NSString *)theId;
+- (NSString *)valueOfProperty:(NSString *)name
+				 forComponent:(NSString *)theId;
+
+- (void)sendSystemEvent:(int)event toDevice:(NSString *)id;
 
 - (BOOL)mount:(NSString *)path inStorage:(void *)component;
 - (BOOL)mount:(NSString *)path;
@@ -50,12 +56,6 @@
 - (NSString *)imagePathForStorage:(void *)component;
 - (NSString *)imageFormatForStorage:(void *)component;
 - (NSString *)imageCapacityForStorage:(void *)component;
-
-- (void)setValue:(NSString *)value
-	  ofProperty:(NSString *)theName
-	forComponent:(NSString *)theId;
-- (NSString *)valueOfProperty:(NSString *)name
-				 forComponent:(NSString *)theId;
 
 - (void)addEDL:(NSString *)path connections:(NSDictionary *)connections;
 - (void)removeDevice:(NSString *)deviceId;

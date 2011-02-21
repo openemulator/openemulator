@@ -722,51 +722,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	[document unlockEmulation];
 }
 
-// System events
-
-- (void)systemPowerDown:(id)sender
-{
-	[document lockEmulation];
-//	((OpenGLHAL *)canvas)->sendSystemEvent(SYSTEMEVENT_POWERDOWN);
-	[document unlockEmulation];
-}
-
-- (void)systemSleep:(id)sender
-{
-	[document lockEmulation];
-//	((OpenGLHAL *)canvas)->sendSystemEvent(SYSTEMEVENT_SLEEP);
-	[document unlockEmulation];
-}
-
-- (void)systemWakeUp:(id)sender
-{
-	[document lockEmulation];
-//	((OpenGLHAL *)canvas)->sendSystemEvent(SYSTEMEVENT_WAKEUP);
-	[document unlockEmulation];
-}
-
-- (void)systemColdRestart:(id)sender
-{
-	[document lockEmulation];
-//	((OpenGLHAL *)canvas)->sendSystemEvent(SYSTEMEVENT_COLDRESTART);
-	[document unlockEmulation];
-}
-
-- (void)systemWarmRestart:(id)sender
-{
-	[document lockEmulation];
-//	((OpenGLHAL *)canvas)->sendSystemEvent(SYSTEMEVENT_WARMRESTART);
-	[document unlockEmulation];
-}
-
-- (void)systemDebuggerBreak:(id)sender
-{
-	[document lockEmulation];
-//	((OpenGLHAL *)canvas)->sendSystemEvent(SYSTEMEVENT_DEBUGGERBREAK);
-	[document unlockEmulation];
-}
-
-// Copy/paste
+// Copy / paste
 
 - (NSString *)copyString
 {

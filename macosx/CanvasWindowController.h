@@ -18,12 +18,21 @@
 	void *canvas;
 	IBOutlet CanvasView *fCanvasView;
 	
+	NSString *deviceId;
 	NSString *title;
 }
 
-- (id)initWithTitle:(NSString *)title
-		  canvas:(void *)theCanvas;
+- (id)initWithDeviceId:(NSString *)theDeviceId
+				 title:(NSString *)theTitle
+				canvas:(void *)theCanvas;
 - (void *)canvas;
 - (void)destroyCanvas;
+
+- (void)systemPowerDown:(id)sender;
+- (void)systemSleep:(id)sender;
+- (void)systemWakeUp:(id)sender;
+- (void)systemColdRestart:(id)sender;
+- (void)systemWarmRestart:(id)sender;
+- (void)systemDebuggerBreak:(id)sender;
 
 @end

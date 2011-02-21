@@ -52,10 +52,16 @@ bool ControlBus::setRef(string name, OEComponent *ref)
 	if (name == "emulation")
 	{
 		if (emulation)
+		{
 			emulation->postMessage(this, EMULATION_CLEAR_ACTIVE, NULL);
+			emulation->postMessage(this, EMULATION_SET_SYSTEM_EVENT_HANDLER, NULL);
+		}
 		emulation = ref;
 		if (emulation)
+		{
 			emulation->postMessage(this, EMULATION_ASSERT_ACTIVE, NULL);
+			emulation->postMessage(this, EMULATION_SET_SYSTEM_EVENT_HANDLER, this);
+		}
 	}
 	else if (name == "audio")
 	{
@@ -162,6 +168,8 @@ bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
 		case CONTROLBUS_GET_AUDIOBUFFERINDEX:
 			return true;
 	}
+	
+	logMessage("hi!");
 	
 	return OEComponent::postMessage(sender, message, data);
 }

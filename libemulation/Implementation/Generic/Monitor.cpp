@@ -78,6 +78,8 @@ bool Monitor::setValue(string name, string value)
 		configuration.persistance = getFloat(value);
 	else if (name == "compositeCarrierFrequency")
 		configuration.compositeCarrierFrequency = getFloat(value);
+	else if (name == "compositeLinePhase")
+		configuration.compositeLinePhase = getFloat(value);
 	else if (name == "compositeChromaCutoffFrequency")
 		configuration.compositeChromaCutoffFrequency = getFloat(value);
 	else if (name == "compositeBlackLevel")
@@ -144,6 +146,8 @@ bool Monitor::getValue(string name, string& value)
 		value = getString(configuration.compositeWhiteLevel);
 	else if (name == "compositeCarrierFrequency")
 		value = getString(configuration.compositeCarrierFrequency);
+	else if (name == "compositeLinePhase")
+		value = getString(configuration.compositeLinePhase);
 	else if (name == "compositeChromaCutoffFrequency")
 		value = getString(configuration.compositeChromaCutoffFrequency);
 	else if (name == "horizontalCenter")

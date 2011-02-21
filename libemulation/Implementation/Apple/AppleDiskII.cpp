@@ -47,11 +47,11 @@ bool AppleDiskII::setRef(string name, OEComponent *ref)
 {
 	if (name == "emulation")
 	{
+		if (emulation)
+			emulation->postMessage(this, EMULATION_SET_STORAGE_HANDLER, NULL);
 		emulation = ref;
 		if (emulation)
-			emulation->postMessage(this,
-								   EMULATION_SET_STORAGE,
-								   this);
+			emulation->postMessage(this, EMULATION_SET_STORAGE_HANDLER, this);
 	}
 	else
 		return false;

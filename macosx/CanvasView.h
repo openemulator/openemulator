@@ -41,11 +41,4 @@
 - (void)setKeyboardFlags:(NSInteger)theKeyboardFlags;
 - (void)synchronizeKeyboardFlags;
 
-- (void)systemPowerDown:(id)sender;
-- (void)systemSleep:(id)sender;
-- (void)systemWakeUp:(id)sender;
-- (void)systemColdRestart:(id)sender;
-- (void)systemWarmRestart:(id)sender;
-- (void)systemDebuggerBreak:(id)sender;
-
 @end

@@ -52,7 +52,7 @@ void runAlert(void *userData, string message)
 	[pool release];
 }
 
-OEComponent *createCanvas(void *userData, string title)
+OEComponent *createCanvas(void *userData, string id, string title)
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
@@ -60,8 +60,9 @@ OEComponent *createCanvas(void *userData, string title)
 	
 	Document *document = (Document *)userData;
 	NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
-						  [NSValue valueWithPointer:canvas], @"canvas",
+						  getNSString(id), @"id",
 						  getNSString(title), @"title",
+						  [NSValue valueWithPointer:canvas], @"canvas",
 						  nil];
 	
 	[document performSelectorOnMainThread:@selector(createCanvas:)
@@ -283,12 +284,14 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 {
 	NSLog(@"Document createCanvas");
 	
-	OpenGLHAL *canvas = (OpenGLHAL *)[[dict objectForKey:@"canvas"] pointerValue];
+	NSString *id = [dict objectForKey:@"id"];
 	NSString *title = [dict objectForKey:@"title"];
+	OpenGLHAL *canvas = (OpenGLHAL *)[[dict objectForKey:@"canvas"] pointerValue];
 	
 	CanvasWindowController *canvasWindowController;
-	canvasWindowController = [[CanvasWindowController alloc] initWithTitle:title
-																	canvas:canvas];
+	canvasWindowController = [[CanvasWindowController alloc] initWithDeviceId:id
+																		title:title
+																	   canvas:canvas];
 	
 	[canvases addObject:[NSValue valueWithPointer:canvas]];
 	[canvasWindowControllers addObject:canvasWindowController];
@@ -410,11 +413,62 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	portAudioHAL->unlockEmulations();
 }
 
+
+
 - (void *)emulationInfo
 {
 	Emulation *theEmulation = (Emulation *)emulation;
+	
 	return theEmulation->getEmulationInfo();
 }
+
+
+
+- (void)setValue:(NSString *)theValue
+	  ofProperty:(NSString *)theName
+	forComponent:(NSString *)theId
+{
+	if (!emulation)
+		return;
+	
+	Emulation *theEmulation = (Emulation *)emulation;
+	BOOL success = NO;
+	
+	[self lockEmulation];
+	OEComponent *component = theEmulation->getComponent(getCPPString(theId));
+	if (component)
+		success = component->setValue(getCPPString(theName), getCPPString(theValue));
+	[self unlockEmulation];
+	
+	if (!success)
+		NSLog(@"could not set property '%@' for '%@'", theName, theId);
+	else
+		[self updateChangeCount:NSChangeDone];
+}
+
+- (NSString *)valueOfProperty:(NSString *)theName
+				 forComponent:(NSString *)theId
+{
+	if (!emulation)
+		return @"";
+	
+	Emulation *theEmulation = (Emulation *)emulation;
+	BOOL success = NO;
+	string value;
+	
+	[self lockEmulation];
+	OEComponent *component = theEmulation->getComponent(getCPPString(theId));
+	if (component)
+		success = component->getValue(getCPPString(theName), value);
+	[self unlockEmulation];
+	
+	if (!success)
+		NSLog(@"invalid property '%@' for '%@'", theName, theId);
+	
+	return getNSString(value);
+}
+
+
 
 - (BOOL)getBoolForMessage:(int)message
 				component:(void *)component
@@ -446,6 +500,21 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	return value;
 }
 
+- (NSString *)getStringForMessage:(int)message
+						component:(void *)component
+{
+	string value;
+	
+	if (component)
+	{
+		[self lockEmulation];
+		((OEComponent *)component)->postMessage(NULL, message, &value);
+		[self unlockEmulation];
+	}
+	
+	return getNSString(value);
+}
+
 - (BOOL)postString:(NSString *)aString
 		   message:(int)message
 		 component:(void *)component
@@ -463,20 +532,16 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	return result;
 }
 
-- (NSString *)getStringForMessage:(int)message
-						component:(void *)component
+
+
+- (void)sendSystemEvent:(int)event toDevice:(NSString *)theId
 {
-	string value;
-	
-	if (component)
-	{
-		[self lockEmulation];
-		((OEComponent *)component)->postMessage(NULL, message, &value);
-		[self unlockEmulation];
-	}
-	
-	return getNSString(value);
+	[self lockEmulation];
+	((Emulation *)emulation)->sendSystemEvent(getCPPString(theId), event);
+	[self unlockEmulation];
 }
+
+
 
 - (NSString *)formatCapacity:(OEUInt64)value
 {
@@ -614,52 +679,6 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	OEUInt64 value = [self getOEUInt64ForMessage:(int)STORAGE_GET_IMAGE_CAPACITY
 									   component:component];
 	return [self formatCapacity:value];
-}
-
-
-
-- (void)setValue:(NSString *)theValue
-	  ofProperty:(NSString *)theName
-	forComponent:(NSString *)theId
-{
-	if (!emulation)
-		return;
-	
-	Emulation *theEmulation = (Emulation *)emulation;
-	BOOL success = NO;
-	
-	[self lockEmulation];
-	OEComponent *component = theEmulation->getComponent(getCPPString(theId));
-	if (component)
-		success = component->setValue(getCPPString(theName), getCPPString(theValue));
-	[self unlockEmulation];
-	
-	if (!success)
-		NSLog(@"could not set property '%@' for '%@'", theName, theId);
-	else
-		[self updateChangeCount:NSChangeDone];
-}
-
-- (NSString *)valueOfProperty:(NSString *)theName
-				 forComponent:(NSString *)theId
-{
-	if (!emulation)
-		return @"";
-	
-	Emulation *theEmulation = (Emulation *)emulation;
-	BOOL success = NO;
-	string value;
-	
-	[self lockEmulation];
-	OEComponent *component = theEmulation->getComponent(getCPPString(theId));
-	if (component)
-		success = component->getValue(getCPPString(theName), value);
-	[self unlockEmulation];
-	
-	if (!success)
-		NSLog(@"invalid property '%@' for '%@'", theName, theId);
-	
-	return getNSString(value);
 }
 
 

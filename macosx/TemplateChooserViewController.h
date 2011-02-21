@@ -29,7 +29,7 @@
 	IBOutlet id fTableView;
 	IBOutlet id fImageBrowserView;
 	
-	IBOutlet id fSelectedItemImageView;
+	IBOutlet NSImageView *fSelectedItemImageView;
 	IBOutlet id fSelectedItemLabelView;
 	IBOutlet id fSelectedItemDescriptionView;
 	
