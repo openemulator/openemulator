@@ -49,12 +49,14 @@ bool Monitor::setValue(string name, string value)
 	{
 		if (value == "Monochrome")
 			configuration.decoder = CANVAS_DECODER_MONOCHROME;
-		else if (value == "Y'UV")
-			configuration.decoder = CANVAS_DECODER_YUV;
-		else if (value == "Y'IQ")
-			configuration.decoder = CANVAS_DECODER_YIQ;
-		else if (value == "CXA2025AS")
-			configuration.decoder = CANVAS_DECODER_CXA2025AS;
+		else if (value == "NTSC Y'IQ")
+			configuration.decoder = CANVAS_DECODER_NTSC_YIQ;
+		else if (value == "NTSC CXA2025AS")
+			configuration.decoder = CANVAS_DECODER_NTSC_CXA2025AS;
+		else if (value == "NTSC Y'UV")
+			configuration.decoder = CANVAS_DECODER_NTSC_YUV;
+		else if (value == "PAL")
+			configuration.decoder = CANVAS_DECODER_PAL;
 		else
 			configuration.decoder = CANVAS_DECODER_RGB;
 	}
@@ -113,12 +115,14 @@ bool Monitor::getValue(string name, string& value)
 	{
 		if (configuration.decoder == CANVAS_DECODER_MONOCHROME)
 			value = "Monochrome";
-		else if (configuration.decoder == CANVAS_DECODER_YUV)
-			value = "Y'UV";
-		else if (configuration.decoder == CANVAS_DECODER_YIQ)
-			value = "Y'IQ";
-		else if (configuration.decoder == CANVAS_DECODER_CXA2025AS)
-			value = "CXA2025AS";
+		else if (configuration.decoder == CANVAS_DECODER_NTSC_YIQ)
+			value = "NTSC Y'IQ";
+		else if (configuration.decoder == CANVAS_DECODER_NTSC_CXA2025AS)
+			value = "NTSC CXA2025AS";
+		else if (configuration.decoder == CANVAS_DECODER_NTSC_YUV)
+			value = "NTSC Y'UV";
+		else if (configuration.decoder == CANVAS_DECODER_PAL)
+			value = "PAL";
 		else
 			value = "RGB";
 	}

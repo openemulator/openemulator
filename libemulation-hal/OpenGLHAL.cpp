@@ -204,7 +204,7 @@ bool OpenGLHAL::loadShaders()
 	glPrograms[OPENGLHAL_PROGRAM_COMPOSITE] = loadShader("\
 	uniform sampler2D texture;\
 	uniform vec2 texture_size;\
-	uniform float comp_black, comp_fsc, comp_phase;\
+	uniform float comp_black, comp_fsc, comp_phase, comp_pal;\
 	uniform vec3 c0, c1, c2, c3, c4, c5, c6, c7, c8;\
 	uniform mat3 decoder;\
 	\
@@ -216,7 +216,7 @@ bool OpenGLHAL::loadShaders()
 		float phase = 2.0 * PI * (comp_fsc * texture_size.x * q.x + \
 		                          comp_phase * texture_size.y * q.y);\
 		p.y *= sin(phase);\
-		p.z *= cos(phase) * cos(2.0 * PI * 0.5 * texture_size.y * q.y);\
+		p.z *= cos(phase) * cos(comp_pal * PI * texture_size.y * q.y);\
 		return p;\
 	}\
 	\
@@ -362,9 +362,10 @@ bool OpenGLHAL::updateShader()
 		case CANVAS_DECODER_MONOCHROME:
 			glProgram = glPrograms[OPENGLHAL_PROGRAM_RGB];
 			break;
-		case CANVAS_DECODER_YUV:
-		case CANVAS_DECODER_YIQ:
-		case CANVAS_DECODER_CXA2025AS:
+		case CANVAS_DECODER_NTSC_YIQ:
+		case CANVAS_DECODER_NTSC_CXA2025AS:
+		case CANVAS_DECODER_NTSC_YUV:
+		case CANVAS_DECODER_PAL:
 			glProgram = glPrograms[OPENGLHAL_PROGRAM_COMPOSITE];
 			break;
 		default:
@@ -402,14 +403,7 @@ bool OpenGLHAL::updateShader()
 	// Decoder matrices from "Digital Video and HDTV Algorithms and Interfaces"
 	switch (frameConfiguration.decoder)
 	{
-		case CANVAS_DECODER_MONOCHROME:
-		case CANVAS_DECODER_RGB:
-		case CANVAS_DECODER_YUV:
-			m *= Matrix3(1, 1, 1,
-						 0, -0.394642, 2.032062,
-						 1.139883, -0.580622, 0);
-			break;
-		case CANVAS_DECODER_YIQ:
+		case CANVAS_DECODER_NTSC_YIQ:
 			m *= Matrix3(1, 1, 1,
 						 0.955986, -0.272013, -1.106740,
 						 0.620825, -0.647204, 1.704230);
@@ -418,7 +412,7 @@ bool OpenGLHAL::updateShader()
 						 0, -1, 0,
 						 0, 0, 1);
 			break;
-		case CANVAS_DECODER_CXA2025AS:
+		case CANVAS_DECODER_NTSC_CXA2025AS:
 			m *= Matrix3(1, 1, 1,
 						 1.630, -0.378, -1.089,
 						 0.317, -0.466, 1.677);
@@ -426,6 +420,14 @@ bool OpenGLHAL::updateShader()
 			m *= Matrix3(1, 0, 0,
 						 0, -1, 0,
 						 0, 0, 1);
+			break;
+		case CANVAS_DECODER_MONOCHROME:
+		case CANVAS_DECODER_RGB:
+		case CANVAS_DECODER_NTSC_YUV:
+		case CANVAS_DECODER_PAL:
+			m *= Matrix3(1, 1, 1,
+						 0, -0.394642, 2.032062,
+						 1.139883, -0.580622, 0);
 			break;
 	}
 	// Hue
@@ -453,9 +455,10 @@ bool OpenGLHAL::updateShader()
 	// Dynamic range gain
 	switch (frameConfiguration.decoder)
 	{
-		case CANVAS_DECODER_YUV:
-		case CANVAS_DECODER_YIQ:
-		case CANVAS_DECODER_CXA2025AS:
+		case CANVAS_DECODER_NTSC_YIQ:
+		case CANVAS_DECODER_NTSC_CXA2025AS:
+		case CANVAS_DECODER_NTSC_YUV:
+		case CANVAS_DECODER_PAL:
 			float levelRange = (frameConfiguration.compositeWhiteLevel -
 						frameConfiguration.compositeBlackLevel);
 			if (fabs(levelRange) < 0.01)
@@ -471,6 +474,8 @@ bool OpenGLHAL::updateShader()
 				frameConfiguration.compositeCarrierFrequency);
 	glUniform1f(glGetUniformLocation(glProgram, "comp_phase"),
 				frameConfiguration.compositeLinePhase);
+	glUniform1f(glGetUniformLocation(glProgram, "comp_pal"),
+				(frameConfiguration.decoder == CANVAS_DECODER_PAL));
 	
 	glUniform3f(glGetUniformLocation(glProgram, "c0"),
 				wy.getValue(8), wc.getValue(8), wc.getValue(8));

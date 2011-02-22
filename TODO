@@ -1,13 +1,11 @@
 ==To-Do==
-* Implement composite phase per scan-line for NTSC/PAL
+* Implement shader shadow mask/aperture grille
 * Implement render to texture by parts
 * Separate demodulation? It should speed things up 19x
 * Implement shader persistance
 * Implement power/pause badge
 * Implement capture badge, lasting 3 seconds, disappearing in 1 second
-* Implement shader shadow mask/aperture grille
 * Implement the option to deactivate shaders
-* Implement removable device property
 
 * Implement printing
 * Implement hardware library
@@ -41,12 +39,12 @@ Frame 1		Frame 2
 Frame 1		Frame 2		Frame 3		Frame 4
 0		270		180		90
  315
-90
- 45
-180
- 135
 270
  225
+180
+ 135
+90
+ 45
 
 ==Future to-do's==
 * Debugging with JTAG

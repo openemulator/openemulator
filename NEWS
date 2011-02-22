@@ -1,4 +1,6 @@
 ==2011-02==
+* Implemented composite phase per scan-line for NTSC/PAL
+* Implemented removable device property
 * Implemented system events. Each devices registers itself. An emulation gets these events and delegates them.
 * Implemented shader center lighting 
 * Fixed Document initialization problem
