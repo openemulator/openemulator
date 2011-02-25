@@ -20,16 +20,6 @@
 
 typedef enum
 {
-	OPENGLHAL_TEXTURE_FRAME,
-	OPENGLHAL_TEXTURE_PROCESSED_FRAME,
-	OPENGLHAL_TEXTURE_CAPTURE_RELEASE,
-	OPENGLHAL_TEXTURE_POWER,
-	OPENGLHAL_TEXTURE_PAUSE,
-	OPENGLHAL_TEXTURE_END,
-} OEOpenGLTextureIndex;
-
-typedef enum
-{
 	OPENGLHAL_CAPTURE_NONE,
 	OPENGLHAL_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR,
 	OPENGLHAL_CAPTURE_KEYBOARD_AND_HIDE_MOUSE_CURSOR,
@@ -37,8 +27,19 @@ typedef enum
 
 typedef enum
 {
-	OPENGLHAL_PROGRAM_RGB,
-	OPENGLHAL_PROGRAM_COMPOSITE,
+	OPENGLHAL_TEXTURE_FRAME1,
+	OPENGLHAL_TEXTURE_FRAME2,
+	OPENGLHAL_TEXTURE_CAPTURE_BADGE,
+	OPENGLHAL_TEXTURE_POWER_BADGE,
+	OPENGLHAL_TEXTURE_PAUSE_BADGE,
+	OPENGLHAL_TEXTURE_END,
+} OEOpenGLTextureIndex;
+
+typedef enum
+{
+	OPENGLHAL_PROGRAM_NTSC,
+	OPENGLHAL_PROGRAM_PAL,
+	OPENGLHAL_PROGRAM_VIDEO,
 	OPENGLHAL_PROGRAM_SCREEN,
 	OPENGLHAL_PROGRAM_END,
 } OpenGLHALProgram;
@@ -95,20 +96,18 @@ private:
 	
 	pthread_mutex_t drawMutex;
 	
-	bool enableShader;
-	
-	CanvasConfiguration configuration;
-	bool updateConfiguration;
-	
-	CanvasConfiguration frameConfiguration;
+	CanvasConfiguration nextConfiguration;
 	OEImage *nextFrame;
-	OEImage *frame;
 	
+	bool isConfigurationValid;
+	CanvasConfiguration configuration;
+	
+	OESize glViewportSize;
 	GLuint glTextures[OPENGLHAL_TEXTURE_END];
 	OESize glTextureSize;
-	bool glTextureUpdated;
+	OESize glFrameSize;
+	int glActiveFrame;
 	GLuint glPrograms[OPENGLHAL_PROGRAM_END];
-	GLuint glProgram;
 	
 	OpenGLHALCapture capture;
 	
@@ -121,12 +120,16 @@ private:
 	
 	bool initOpenGL();
 	void freeOpenGL();
-	bool loadShaders();
-	void freeShaders();
-	GLuint loadShader(const char *source);
-	bool updateShader();
-	bool updateTexture();
-	bool drawCanvas(float width, float height);
+	void loadPrograms();
+	void deletePrograms();
+	void loadProgram(GLuint program, const char *source);
+	void deleteProgram(GLuint program);
+	void updateViewport();
+	void updateConfiguration();
+	void setTextureSize(GLuint glProgram);
+	void applyProgram(GLuint glProgram);
+	void updateFrame(OEImage *frame);
+	void drawCanvas();
 	
 	void postHIDNotification(int notification, int usageId, float value);
 	void updateCapture(OpenGLHALCapture capture);

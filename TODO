@@ -1,12 +1,11 @@
 ==To-Do==
 * Implement shader shadow mask/aperture grille
-* Implement render to texture by parts
-* Separate demodulation? It should speed things up 19x
 * Implement shader persistance
 * Implement power/pause badge
 * Implement capture badge, lasting 3 seconds, disappearing in 1 second
 * Implement the option to deactivate shaders
 
+* If a default emulation can't be opened, should we start the template chooser instead? Or use a better error message?
 * Implement printing
 * Implement hardware library
 * Implement OEEmulation canAddEDL
@@ -45,6 +44,17 @@ Frame 1		Frame 2		Frame 3		Frame 4
  135
 90
  45
+
+==Dot pitch==
+13" monitor: dot pitch 0,28 mm
+Horizontal dot pitch = 0,28 * 0,5 = 0,14
+Horizontal tridot pitch = 0,28 *1,5 = 0,42mm
+There are 10,4*25,4/0,42 = 628 horizontal elements
+
+* None
+* Shadow Mask
+* Aperture Grille
+* Slot Mask
 
 ==Future to-do's==
 * Debugging with JTAG
