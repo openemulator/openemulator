@@ -27,8 +27,8 @@ typedef enum
 
 typedef enum
 {
-	OPENGLHAL_TEXTURE_FRAME1,
-	OPENGLHAL_TEXTURE_FRAME2,
+	OPENGLHAL_TEXTURE_RAW_FRAME,
+	OPENGLHAL_TEXTURE_PROCESSED_FRAME,
 	OPENGLHAL_TEXTURE_CAPTURE_BADGE,
 	OPENGLHAL_TEXTURE_POWER_BADGE,
 	OPENGLHAL_TEXTURE_PAUSE_BADGE,
@@ -37,9 +37,9 @@ typedef enum
 
 typedef enum
 {
+	OPENGLHAL_PROGRAM_RGB,
 	OPENGLHAL_PROGRAM_NTSC,
 	OPENGLHAL_PROGRAM_PAL,
-	OPENGLHAL_PROGRAM_VIDEO,
 	OPENGLHAL_PROGRAM_SCREEN,
 	OPENGLHAL_PROGRAM_END,
 } OpenGLHALProgram;
@@ -61,7 +61,8 @@ public:
 			  void *userData);
 	void close();
 	
-	void setShader(bool value);
+	void enableGPU();
+	void disableGPU();
 	
 	OESize getDefaultViewSize();
 	bool update(float width, float height, float offset, bool update);
@@ -106,8 +107,8 @@ private:
 	GLuint glTextures[OPENGLHAL_TEXTURE_END];
 	OESize glTextureSize;
 	OESize glFrameSize;
-	int glActiveFrame;
 	GLuint glPrograms[OPENGLHAL_PROGRAM_END];
+	GLuint glProcessProgram;
 	
 	OpenGLHALCapture capture;
 	
@@ -127,9 +128,9 @@ private:
 	void updateViewport();
 	void updateConfiguration();
 	void setTextureSize(GLuint glProgram);
-	void applyProgram(GLuint glProgram);
-	void updateFrame(OEImage *frame);
-	void drawCanvas();
+	void uploadFrame(OEImage *frame);
+	void processFrame();
+	void drawFrame();
 	
 	void postHIDNotification(int notification, int usageId, float value);
 	void updateCapture(OpenGLHALCapture capture);

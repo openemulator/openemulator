@@ -59,6 +59,14 @@ typedef enum
 	OEIMAGE_FORMAT_PAL4B,
 } OEImageFormat;
 
+inline OEPoint OEMakePoint(float x, float y)
+{
+	OEPoint p;
+	p.x = x;
+	p.y = y;
+	return p;
+}
+
 inline OESize OEMakeSize(float w, float h)
 {
 	OESize s;

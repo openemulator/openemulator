@@ -74,18 +74,15 @@ typedef struct
 	OERect contentRect;
 	
 	CanvasDecoder decoder;
-	
 	float lumaCutoffFrequency;
 	float scanlineAlpha;
 	float centerLighting;
-	
 	float brightness;
 	float contrast;
 	float saturation;
 	float hue;
 	float barrel;
 	float persistance;
-	
 	float compositeBlackLevel;
 	float compositeWhiteLevel;
 	float compositeCarrierFrequency;

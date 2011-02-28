@@ -5,6 +5,7 @@
 * Implement capture badge, lasting 3 seconds, disappearing in 1 second
 * Implement the option to deactivate shaders
 
+* Add support for scrolling canvas
 * If a default emulation can't be opened, should we start the template chooser instead? Or use a better error message?
 * Implement printing
 * Implement hardware library

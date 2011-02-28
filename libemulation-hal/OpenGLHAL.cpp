@@ -29,18 +29,30 @@ OpenGLHAL::OpenGLHAL()
 	nextConfiguration.defaultViewSize = OEMakeSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 	nextConfiguration.canvasSize = OEMakeSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 	nextConfiguration.contentRect = OEMakeRect(0, 0, 1, 1);
+	
 	nextConfiguration.decoder = CANVAS_DECODER_RGB;
 	nextConfiguration.lumaCutoffFrequency = 1.0;
 	nextConfiguration.scanlineAlpha = 0.0;
+	nextConfiguration.centerLighting = 1.0;
 	nextConfiguration.brightness = 0.0;
 	nextConfiguration.contrast = 1.0;
 	nextConfiguration.saturation = 1.0;
 	nextConfiguration.hue = 0.0;
 	nextConfiguration.barrel = 0.0;
 	nextConfiguration.persistance = 0.0;
+	
 	nextFrame = NULL;
 	
 	isConfigurationValid = false;
+	
+	glViewportSize = OEMakeSize(0, 0);
+	for (int i = 0; i < OPENGLHAL_TEXTURE_END; i++)
+		glTextures[i] = 0;
+	glTextureSize = OEMakeSize(0, 0);
+	glFrameSize = OEMakeSize(0, 0);
+	for (int i = 0; i < OPENGLHAL_PROGRAM_END; i++)
+		glPrograms[i] = 0;
+	glProcessProgram = 0;
 	
 	capture = OPENGLHAL_CAPTURE_NONE;
 	
@@ -80,19 +92,23 @@ void OpenGLHAL::close()
 	delete nextFrame;
 }
 
-void OpenGLHAL::setShader(bool value)
+void OpenGLHAL::enableGPU()
 {
-	if (value)
-		loadPrograms();
-	else
-		deletePrograms();
+	loadPrograms();
+	
+	isConfigurationValid = false;
+}
+
+void OpenGLHAL::disableGPU()
+{
+	deletePrograms();
 	
 	isConfigurationValid = false;
 }
 
 OESize OpenGLHAL::getDefaultViewSize()
 {
-	return configuration.defaultViewSize;
+	return nextConfiguration.defaultViewSize;
 }
 
 bool OpenGLHAL::update(float width, float height, float offset, bool draw)
@@ -114,6 +130,9 @@ bool OpenGLHAL::update(float width, float height, float offset, bool draw)
 	}
 	pthread_mutex_unlock(&drawMutex);
 	
+	if (newConfiguration)
+		updateConfiguration();
+	
 	if ((width != glViewportSize.width) ||
 		(height != glViewportSize.height))
 	{
@@ -124,21 +143,20 @@ bool OpenGLHAL::update(float width, float height, float offset, bool draw)
 		draw = true;
 	}
 	
-	if (newConfiguration)
+	if (frame)
 	{
-		updateConfiguration();
-		draw = true;
+		uploadFrame(frame);
+		delete frame;
 	}
 	
-	if (nextFrame)
+	if (frame || newConfiguration)
 	{
-		updateFrame(frame);
-		delete frame;
+		processFrame();
 		draw = true;
 	}
 	
 	if (draw)
-		drawCanvas();
+		drawFrame();
 	
 	return draw;
 }
@@ -176,14 +194,36 @@ void OpenGLHAL::loadPrograms()
 		uniform vec2 texture_size;\
 		uniform vec2 comp_phase;\
 		uniform float comp_black;\
+		uniform vec3 c0, c1, c2, c3, c4, c5, c6, c7, c8;\
+		uniform mat3 decoder;\
 		\
 		float PI = 3.14159265358979323846264;\
 		\
-		void main(void)\
+		vec3 pixel(vec2 q)\
 		{\
 			vec3 p = texture2D(texture, q).xyz - comp_black;\
 			float phase = 2.0 * PI * dot(comp_phase * texture_size, q);\
-			gl_FragColor = vec4(p * vec3(1.0, sin(phase), cos(phase)), 1.0);\
+			return p * vec3(1.0, sin(phase), cos(phase));\
+		}\
+		\
+		vec3 pixels(vec2 q, float i)\
+		{\
+			return pixel(vec2(q.x + i, q.y)) + pixel(vec2(q.x - i, q.y));\
+		}\
+		\
+		void main(void)\
+		{\
+			vec2 q = gl_TexCoord[0].xy;\
+			vec3 p = pixel(q) * c0;\
+			p += pixels(q, 1.0 / texture_size.x) * c1;\
+			p += pixels(q, 2.0 / texture_size.x) * c2;\
+			p += pixels(q, 3.0 / texture_size.x) * c3;\
+			p += pixels(q, 4.0 / texture_size.x) * c4;\
+			p += pixels(q, 5.0 / texture_size.x) * c5;\
+			p += pixels(q, 6.0 / texture_size.x) * c6;\
+			p += pixels(q, 7.0 / texture_size.x) * c7;\
+			p += pixels(q, 8.0 / texture_size.x) * c8;\
+			gl_FragColor = vec4(decoder * p, 1.0);\
 		}");
 	
 	loadProgram(OPENGLHAL_PROGRAM_PAL, "\
@@ -191,18 +231,40 @@ void OpenGLHAL::loadPrograms()
 		uniform vec2 texture_size;\
 		uniform vec2 comp_phase;\
 		uniform float comp_black;\
+		uniform vec3 c0, c1, c2, c3, c4, c5, c6, c7, c8;\
+		uniform mat3 decoder;\
 		\
 		float PI = 3.14159265358979323846264;\
 		\
-		void main(void)\
+		vec3 pixel(vec2 q)\
 		{\
 			vec3 p = texture2D(texture, q).xyz - comp_black;\
 			float phase = 2.0 * PI * dot(comp_phase * texture_size, q);\
 			float pal = -sqrt(2.0) * sin(0.5 * PI * texture_size.y * q.y);\
-			gl_FragColor = vec4(p * vec3(1.0, sin(phase), cos(phase) * pal), 1.0);\
+			return p * vec3(1.0, sin(phase), cos(phase) * pal);\
+		}\
+		\
+		vec3 pixels(vec2 q, float i)\
+		{\
+			return pixel(vec2(q.x + i, q.y)) + pixel(vec2(q.x - i, q.y));\
+		}\
+		\
+		void main(void)\
+		{\
+			vec2 q = gl_TexCoord[0].xy;\
+			vec3 p = pixel(q) * c0;\
+			p += pixels(q, 1.0 / texture_size.x) * c1;\
+			p += pixels(q, 2.0 / texture_size.x) * c2;\
+			p += pixels(q, 3.0 / texture_size.x) * c3;\
+			p += pixels(q, 4.0 / texture_size.x) * c4;\
+			p += pixels(q, 5.0 / texture_size.x) * c5;\
+			p += pixels(q, 6.0 / texture_size.x) * c6;\
+			p += pixels(q, 7.0 / texture_size.x) * c7;\
+			p += pixels(q, 8.0 / texture_size.x) * c8;\
+			gl_FragColor = vec4(decoder * p, 1.0);\
 		}");
-	
-	loadProgram(OPENGLHAL_PROGRAM_VIDEO, "\
+				
+	loadProgram(OPENGLHAL_PROGRAM_RGB, "\
 		uniform sampler2D texture;\
 		uniform vec2 texture_size;\
 		uniform vec3 c0, c1, c2, c3, c4, c5, c6, c7, c8;\
@@ -265,7 +327,7 @@ void OpenGLHAL::deletePrograms()
 {
 	deleteProgram(OPENGLHAL_PROGRAM_NTSC);
 	deleteProgram(OPENGLHAL_PROGRAM_PAL);
-	deleteProgram(OPENGLHAL_PROGRAM_VIDEO);
+	deleteProgram(OPENGLHAL_PROGRAM_RGB);
 	deleteProgram(OPENGLHAL_PROGRAM_SCREEN);
 }
 
@@ -327,7 +389,7 @@ void OpenGLHAL::loadProgram(GLuint program, const char *source)
 		
 		logMessage(errorString);
 	}
-#endif
+#endif // GL_VERSION_2_0
 	
 	glPrograms[program] = glProgram;
 }
@@ -335,9 +397,10 @@ void OpenGLHAL::loadProgram(GLuint program, const char *source)
 void OpenGLHAL::deleteProgram(GLuint program)
 {
 #ifdef GL_VERSION_2_0
-	glDeleteProgram(glPrograms[program]);
+	if (glPrograms[program])
+		glDeleteProgram(glPrograms[program]);
 	glPrograms[program] = 0;
-#endif
+#endif // GL_VERSION_2_0
 }
 
 void OpenGLHAL::updateConfiguration()
@@ -457,54 +520,58 @@ void OpenGLHAL::updateConfiguration()
 			break;
 	}
 	
-	if (glPrograms[OPENGLHAL_PROGRAM_NTSC])
+	switch (configuration.decoder)
 	{
-		GLuint glProgram = glPrograms[OPENGLHAL_PROGRAM_NTSC];
-		glUniform2f(glGetUniformLocation(glProgram, "comp_phase"),
-					configuration.compositeCarrierFrequency,
-					configuration.compositeLinePhase);
-		glUniform1f(glGetUniformLocation(glProgram, "comp_black"),
-					configuration.compositeBlackLevel);
+		case CANVAS_DECODER_NTSC_YIQ:
+		case CANVAS_DECODER_NTSC_YUV:
+		case CANVAS_DECODER_NTSC_CXA2025AS:
+			glProcessProgram = glPrograms[OPENGLHAL_PROGRAM_NTSC];
+			break;
+		case CANVAS_DECODER_PAL:
+			glProcessProgram = glPrograms[OPENGLHAL_PROGRAM_PAL];
+			break;
+		default:
+			glProcessProgram = glPrograms[OPENGLHAL_PROGRAM_RGB];
+			break;
 	}
 	
-	if (glPrograms[OPENGLHAL_PROGRAM_PAL])
+	if (glProcessProgram)
 	{
-		GLuint glProgram = glPrograms[OPENGLHAL_PROGRAM_PAL];
-		glUniform2f(glGetUniformLocation(glProgram, "comp_phase"),
-					configuration.compositeCarrierFrequency,
-					configuration.compositeLinePhase);
-		glUniform1f(glGetUniformLocation(glProgram, "comp_black"),
-					configuration.compositeBlackLevel);
-	}
-	
-	if (glPrograms[OPENGLHAL_PROGRAM_VIDEO])
-	{
-		GLuint glProgram = glPrograms[OPENGLHAL_PROGRAM_VIDEO];
-		glUniform3f(glGetUniformLocation(glProgram, "c0"),
+		glUseProgram(glProcessProgram);
+		if (glProcessProgram != glPrograms[OPENGLHAL_PROGRAM_RGB])
+		{
+			glUniform2f(glGetUniformLocation(glProcessProgram, "comp_phase"),
+						configuration.compositeCarrierFrequency,
+						configuration.compositeLinePhase);
+			glUniform1f(glGetUniformLocation(glProcessProgram, "comp_black"),
+						configuration.compositeBlackLevel);
+		}
+		glUniform3f(glGetUniformLocation(glProcessProgram, "c0"),
 					wy.getValue(8), wu.getValue(8), wv.getValue(8));
-		glUniform3f(glGetUniformLocation(glProgram, "c1"),
+		glUniform3f(glGetUniformLocation(glProcessProgram, "c1"),
 					wy.getValue(7), wu.getValue(7), wv.getValue(7));
-		glUniform3f(glGetUniformLocation(glProgram, "c2"),
+		glUniform3f(glGetUniformLocation(glProcessProgram, "c2"),
 					wy.getValue(6), wu.getValue(6), wv.getValue(6));
-		glUniform3f(glGetUniformLocation(glProgram, "c3"),
+		glUniform3f(glGetUniformLocation(glProcessProgram, "c3"),
 					wy.getValue(5), wu.getValue(5), wv.getValue(5));
-		glUniform3f(glGetUniformLocation(glProgram, "c4"),
+		glUniform3f(glGetUniformLocation(glProcessProgram, "c4"),
 					wy.getValue(4), wu.getValue(4), wv.getValue(4));
-		glUniform3f(glGetUniformLocation(glProgram, "c5"),
+		glUniform3f(glGetUniformLocation(glProcessProgram, "c5"),
 					wy.getValue(3), wu.getValue(3), wv.getValue(3));
-		glUniform3f(glGetUniformLocation(glProgram, "c6"),
+		glUniform3f(glGetUniformLocation(glProcessProgram, "c6"),
 					wy.getValue(2), wu.getValue(2), wv.getValue(2));
-		glUniform3f(glGetUniformLocation(glProgram, "c7"),
+		glUniform3f(glGetUniformLocation(glProcessProgram, "c7"),
 					wy.getValue(1), wu.getValue(1), wv.getValue(1));
-		glUniform3f(glGetUniformLocation(glProgram, "c8"),
+		glUniform3f(glGetUniformLocation(glProcessProgram, "c8"),
 					wy.getValue(0), wu.getValue(0), wv.getValue(0));
-		glUniformMatrix3fv(glGetUniformLocation(glProgram, "decoder"),
+		glUniformMatrix3fv(glGetUniformLocation(glProcessProgram, "decoder"),
 						   9, false, m.getValues());
 	}
 	
 	if (glPrograms[OPENGLHAL_PROGRAM_SCREEN])
 	{
 		GLuint glProgram = glPrograms[OPENGLHAL_PROGRAM_SCREEN];
+		glUseProgram(glProgram);
 		glUniform1f(glGetUniformLocation(glProgram, "barrel"),
 					configuration.barrel);
 		float centerLighting = configuration.centerLighting;
@@ -517,7 +584,7 @@ void OpenGLHAL::updateConfiguration()
 	}
 	
 	glUseProgram(0);
-#endif
+#endif // GL_VERSION_2_0
 }
 
 void OpenGLHAL::updateViewport()
@@ -527,53 +594,18 @@ void OpenGLHAL::updateViewport()
 
 void OpenGLHAL::setTextureSize(GLuint glProgram)
 {
+#ifdef GL_VERSION_2_0
 	if (!glProgram)
 		return;
 	
+	glUseProgram(glProgram);
 	glUniform1i(glGetUniformLocation(glProgram, "texture"), 0);
 	glUniform2f(glGetUniformLocation(glProgram, "texture_size"),
 				glTextureSize.width, glTextureSize.height);
+#endif // GL_VERSION_2_0
 }
 
-void OpenGLHAL::applyProgram(GLuint glProgram)
-{
-	if (!glProgram)
-		return;
-	
-/*	if (frame && glPrograms[OPENGLHAL_PROGRAM_VIDEO])
-	{
-		glBindTexture(GL_TEXTURE_2D, glTextures[OPENGLHAL_TEXTURE_FRAME]);
-		
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		
-		glLoadIdentity();
-		
-		glUseProgram(glProgram);
-		
-		OESize viewSize = OEMakeSize(frame->getSize().width / glTextureSize.width,
-									 frame->getSize().height / glTextureSize.height);
-		glBegin(GL_QUADS);
-		glTexCoord2f(0, 0);
-		glVertex2f(-1, -1);
-		glTexCoord2f(viewSize.width, 0);
-		glVertex2f(1, -1);
-		glTexCoord2f(viewSize.width, viewSize.height);
-		glVertex2f(1, 1);
-		glTexCoord2f(0, viewSize.height);
-		glVertex2f(-1, 1);
-		glEnd();
-		
-		glUseProgram(0);
-		
-		glBindTexture(GL_TEXTURE_2D, glTextures[OPENGLHAL_TEXTURE_PROCESSED_FRAME]);
-		
-		glCopyTexSubImage2D(GL_TEXTURE_2D, 0,
-							0, 0, 0, 0, glTextureSize.width, glTextureSize.height);
-	}*/
-}
-
-void OpenGLHAL::updateFrame(OEImage *frame)
+void OpenGLHAL::uploadFrame(OEImage *frame)
 {
 	GLint format;
 	
@@ -584,66 +616,120 @@ void OpenGLHAL::updateFrame(OEImage *frame)
 	else if (frame->getFormat() == OEIMAGE_FORMAT_RGBA)
 		format = GL_RGBA;
 	
-	OESize newTextureSize = OEMakeSize(getNextPowerOf2(frame->getSize().width),
-									   getNextPowerOf2(frame->getSize().height));
-	
-	if ((glTextureSize.width != newTextureSize.width) ||
-		(glTextureSize.height != newTextureSize.height))
+	if ((glFrameSize.width != frame->getSize().width) ||
+		(glFrameSize.height != frame->getSize().height))
 	{
-		glTextureSize = newTextureSize;
+		glFrameSize = frame->getSize();
+		glTextureSize = OEMakeSize(getNextPowerOf2(frame->getSize().width),
+								   getNextPowerOf2(frame->getSize().height));
 		
 		vector<char> dummy;
 		dummy.resize(glTextureSize.width * glTextureSize.height);
-		glBindTexture(GL_TEXTURE_2D, glTextures[OPENGLHAL_TEXTURE_FRAME1]);
+		
+		glBindTexture(GL_TEXTURE_2D, glTextures[OPENGLHAL_TEXTURE_RAW_FRAME]);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
 					 glTextureSize.width, glTextureSize.height, 0,
 					 GL_LUMINANCE, GL_UNSIGNED_BYTE, &dummy.front());
-		glBindTexture(GL_TEXTURE_2D, glTextures[OPENGLHAL_TEXTURE_FRAME2]);
+		glBindTexture(GL_TEXTURE_2D, glTextures[OPENGLHAL_TEXTURE_PROCESSED_FRAME]);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
 					 glTextureSize.width, glTextureSize.height, 0,
 					 GL_LUMINANCE, GL_UNSIGNED_BYTE, &dummy.front());
 	}
 	
-	glBindTexture(GL_TEXTURE_2D, glTextures[OPENGLHAL_TEXTURE_FRAME1]);
+	glBindTexture(GL_TEXTURE_2D, glTextures[OPENGLHAL_TEXTURE_RAW_FRAME]);
 	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0,
 					frame->getSize().width, frame->getSize().height,
 					format, GL_UNSIGNED_BYTE,
 					frame->getPixels());
 	
-	glFrameSize = frame->getSize();
-	glActiveFrame = 0;
-	
 #ifdef GL_VERSION_2_0
+	setTextureSize(glPrograms[OPENGLHAL_PROGRAM_RGB]);
 	setTextureSize(glPrograms[OPENGLHAL_PROGRAM_NTSC]);
 	setTextureSize(glPrograms[OPENGLHAL_PROGRAM_PAL]);
-	setTextureSize(glPrograms[OPENGLHAL_PROGRAM_VIDEO]);
 	setTextureSize(glPrograms[OPENGLHAL_PROGRAM_SCREEN]);
-	
-	switch (configuration.decoder)
-	{
-		case CANVAS_DECODER_NTSC_YIQ:
-		case CANVAS_DECODER_NTSC_YUV:
-		case CANVAS_DECODER_NTSC_CXA2025AS:
-			applyProgram(glPrograms[OPENGLHAL_PROGRAM_NTSC]);
-			break;
-		case CANVAS_DECODER_PAL:
-			applyProgram(glPrograms[OPENGLHAL_PROGRAM_PAL]);
-			break;
-	}
-	
-	applyProgram(glPrograms[OPENGLHAL_PROGRAM_VIDEO]);
-#endif
+#endif // GL_VERSION_2_0
 }
 
-void OpenGLHAL::drawCanvas()
+void OpenGLHAL::processFrame()
+{
+#ifdef GL_VERSION_2_0
+	if (!glProcessProgram)
+		return;
+	
+	glUseProgram(glProcessProgram);
+	
+	glBindTexture(GL_TEXTURE_2D, glTextures[OPENGLHAL_TEXTURE_RAW_FRAME]);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	
+	for (int y = 0; y < glFrameSize.height; y += glViewportSize.height)
+		for (int x = 0; x < glFrameSize.width; x += glViewportSize.width)
+		{
+			// Bind raw frame
+			glBindTexture(GL_TEXTURE_2D, glTextures[OPENGLHAL_TEXTURE_RAW_FRAME]);
+			
+			// Calculate frames
+			OERect renderFrame = OEMakeRect(-1, -1, 2, 2);
+			if ((x + glViewportSize.width) > glFrameSize.width)
+				renderFrame.size.width = 2 * (glFrameSize.width - x) / glViewportSize.width;
+			if ((y + glViewportSize.height) > glFrameSize.height)
+				renderFrame.size.height = 2 * (glFrameSize.height - y) / glViewportSize.height;
+			
+			OERect textureFrame = OEMakeRect(x / glTextureSize.width,
+											 y / glTextureSize.height,
+											 glViewportSize.width / glTextureSize.width,
+											 glViewportSize.height / glTextureSize.height);
+			if ((x + glViewportSize.width) > glFrameSize.width)
+				textureFrame.size.width = (glFrameSize.width - x) / glTextureSize.width;
+			if ((y + glViewportSize.height) > glFrameSize.height)
+				textureFrame.size.height = (glFrameSize.height - y) / glTextureSize.height;
+			
+			// Render
+			glLoadIdentity();
+			
+			glBegin(GL_QUADS);
+			glTexCoord2f(OEMinX(textureFrame), OEMinY(textureFrame));
+			glVertex2f(OEMinX(renderFrame), OEMinY(renderFrame));
+			glTexCoord2f(OEMaxX(textureFrame), OEMinY(textureFrame));
+			glVertex2f(OEMaxX(renderFrame), OEMinY(renderFrame));
+			glTexCoord2f(OEMaxX(textureFrame), OEMaxY(textureFrame));
+			glVertex2f(OEMaxX(renderFrame), OEMaxY(renderFrame));
+			glTexCoord2f(OEMinX(textureFrame), OEMaxY(textureFrame));
+			glVertex2f(OEMinX(renderFrame), OEMaxY(renderFrame));
+			glEnd();
+			
+			// Copy framebuffer
+			glBindTexture(GL_TEXTURE_2D, glTextures[OPENGLHAL_TEXTURE_PROCESSED_FRAME]);
+			glCopyTexSubImage2D(GL_TEXTURE_2D, 0,
+								x,
+								y,
+								0, 0,
+								0.5 * renderFrame.size.width * glViewportSize.width,
+								0.5 * renderFrame.size.height * glViewportSize.height);
+		}
+	
+	glBindTexture(GL_TEXTURE_2D, 0);
+	
+	glUseProgram(0);
+#endif // GL_VERSION_2_0
+}
+
+void OpenGLHAL::drawFrame()
 {
 	// Clear
-	float clearColor = (glPrograms[OPENGLHAL_PROGRAM_VIDEO] ?
-						configuration.brightness : 0);
+	float clearColor = glProcessProgram ? configuration.brightness : 0;
 	glClearColor(clearColor, clearColor, clearColor, 0);
 	glClear(GL_COLOR_BUFFER_BIT);
 	
-	// Calculate proportions
+	if ((glTextureSize.width == 0) || (glTextureSize.height == 0))
+		return;
+	
+	// Calculate frames
+	OERect renderFrame = OEMakeRect(2 * configuration.contentRect.origin.x - 1,
+									2 * configuration.contentRect.origin.y - 1,
+									2 * configuration.contentRect.size.width,
+									2 * configuration.contentRect.size.height);
+	
 	OERect textureFrame = OEMakeRect(0, 0,
 									 glFrameSize.width / glTextureSize.width, 
 									 glFrameSize.height / glTextureSize.height);
@@ -652,45 +738,31 @@ void OpenGLHAL::drawCanvas()
 	float canvasAspectRatio = (configuration.canvasSize.width /
 							   configuration.canvasSize.height);
 	
-	// Calculate view frame
-	OERect viewFrame = OEMakeRect(2 * configuration.contentRect.origin.x - 1,
-								  2 * configuration.contentRect.origin.y - 1,
-								  2 * configuration.contentRect.size.width,
-								  2 * configuration.contentRect.size.height);
-	
 	// Apply view mode
 	float ratio = viewAspectRatio / canvasAspectRatio;
 	
 	if (configuration.zoomMode == CANVAS_ZOOMMODE_FIT_WIDTH)
-		viewFrame.size.height *= ratio;
+		renderFrame.size.height *= ratio;
 	else
 	{
 		if (ratio > 1)
 		{
-			viewFrame.origin.x /= ratio;
-			viewFrame.size.width /= ratio;
+			renderFrame.origin.x /= ratio;
+			renderFrame.size.width /= ratio;
 		}
 		else
 		{
-			viewFrame.origin.y *= ratio;
-			viewFrame.size.height *= ratio;
+			renderFrame.origin.y *= ratio;
+			renderFrame.size.height *= ratio;
 		}
 	}
 	
-	// Use nearest filter when canvas and screen pixel size match
-	int viewFrameWidth = glViewportSize.width * viewFrame.size.width / 2;
-	GLint param = GL_LINEAR;
-	if ((viewFrameWidth == (int) glFrameSize.width) &&
-		(viewFrame.origin.x == -1) && (viewFrame.origin.y == -1))
-		param = GL_NEAREST;
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, param);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, param);
-	
-	// Update geometry program parameters
+	// Set common shader variables
 #ifdef GL_VERSION_2_0
 	if (glPrograms[OPENGLHAL_PROGRAM_SCREEN])
 	{
 		GLuint glProgram = glPrograms[OPENGLHAL_PROGRAM_SCREEN];
+		glUseProgram(glProgram);
 		OEPoint barrelCenter;
 		barrelCenter.x = ((0.5 - configuration.contentRect.origin.x) /
 						  configuration.contentRect.size.width *
@@ -709,29 +781,42 @@ void OpenGLHAL::drawCanvas()
 		glUniform1f(glGetUniformLocation(glProgram, "scanline_alpha"),
 					scanlineAlpha);
 	}
-#endif
+#endif // GL_VERSION_2_0
 	
-	// Draw
-	glBindTexture(GL_TEXTURE_2D, (!glActiveFrame ?
-								  OPENGLHAL_TEXTURE_FRAME1 : OPENGLHAL_TEXTURE_FRAME2));
+	// Use nearest filter when canvas and screen pixel size match
+	glBindTexture(GL_TEXTURE_2D, (glProcessProgram ? 
+								  glTextures[OPENGLHAL_TEXTURE_PROCESSED_FRAME] : 
+								  glTextures[OPENGLHAL_TEXTURE_RAW_FRAME]));
 	
+	int renderFrameWidth = glViewportSize.width * renderFrame.size.width / 2;
+	GLint param = GL_LINEAR;
+	if ((renderFrameWidth == (int) glFrameSize.width) &&
+		(renderFrame.origin.x == -1) && (renderFrame.origin.y == -1))
+		param = GL_NEAREST;
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, param);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, param);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+	
+	// Render
 	glLoadIdentity();
-	glRotatef(180.0, 1.0, 0.0, 0.0);
+	glRotatef(180, 1, 0, 0);
 	
 	glBegin(GL_QUADS);
 	glTexCoord2f(OEMinX(textureFrame), OEMinY(textureFrame));
-	glVertex2f(OEMinX(viewFrame), OEMinY(viewFrame));
+	glVertex2f(OEMinX(renderFrame), OEMinY(renderFrame));
 	glTexCoord2f(OEMaxX(textureFrame), OEMinY(textureFrame));
-	glVertex2f(OEMaxX(viewFrame), OEMinY(viewFrame));
+	glVertex2f(OEMaxX(renderFrame), OEMinY(renderFrame));
 	glTexCoord2f(OEMaxX(textureFrame), OEMaxY(textureFrame));
-	glVertex2f(OEMaxX(viewFrame), OEMaxY(viewFrame));
+	glVertex2f(OEMaxX(renderFrame), OEMaxY(renderFrame));
 	glTexCoord2f(OEMinX(textureFrame), OEMaxY(textureFrame));
-	glVertex2f(OEMinX(viewFrame), OEMaxY(viewFrame));
+	glVertex2f(OEMinX(renderFrame), OEMaxY(renderFrame));
 	glEnd();
 	
+	glBindTexture(GL_TEXTURE_2D, 0);
 #ifdef GL_VERSION_2_0
 	glUseProgram(0);
-#endif
+#endif // GL_VERSION_2_0
 }
 
 // HID
@@ -964,7 +1049,7 @@ bool OpenGLHAL::setConfiguration(CanvasConfiguration *configuration)
 	if (!configuration)
 		return false;
 	
-	if (this->configuration.captureMode != configuration->captureMode)
+	if (nextConfiguration.captureMode != configuration->captureMode)
 	{
 		switch (configuration->captureMode)
 		{
@@ -985,7 +1070,7 @@ bool OpenGLHAL::setConfiguration(CanvasConfiguration *configuration)
 	}
 	
 	pthread_mutex_lock(&drawMutex);
-	this->configuration = *configuration;
+	nextConfiguration = *configuration;
 	isConfigurationValid = false;
 	pthread_mutex_unlock(&drawMutex);
 	
