@@ -65,6 +65,17 @@ bool Monitor::setValue(string name, string value)
 		configuration.lumaCutoffFrequency = getFloat(value);
 	else if (name == "scanlineAlpha")
 		configuration.scanlineAlpha = getFloat(value);
+	else if (name == "shadowMask")
+	{
+		if (value == "Triad")
+			configuration.shadowMask = CANVAS_SHADOWMASK_TRIAD;
+		else if (value == "Inline")
+			configuration.shadowMask = CANVAS_SHADOWMASK_INLINE;
+		else if (value == "Aperture")
+			configuration.shadowMask = CANVAS_SHADOWMASK_APERTURE;
+		else
+			configuration.shadowMask = CANVAS_SHADOWMASK_NONE;
+	}
 	else if (name == "shadowMaskAlpha")
 		configuration.shadowMaskAlpha = getFloat(value);
 	else if (name == "centerLighting")
@@ -133,6 +144,17 @@ bool Monitor::getValue(string name, string& value)
 		value = getString(configuration.lumaCutoffFrequency);
 	else if (name == "scanlineAlpha")
 		value = getString(configuration.scanlineAlpha);
+	else if (name == "shadowMask")
+	{
+		if (configuration.shadowMask == CANVAS_SHADOWMASK_TRIAD)
+			value = "Triad";
+		else if (configuration.shadowMask == CANVAS_SHADOWMASK_INLINE)
+			value = "Inline";
+		else if (configuration.shadowMask == CANVAS_SHADOWMASK_APERTURE)
+			value = "Aperture";
+		else
+			value = "None";
+	}
 	else if (name == "shadowMaskAlpha")
 		value = getString(configuration.shadowMaskAlpha);
 	else if (name == "centerLighting")

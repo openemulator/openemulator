@@ -175,21 +175,9 @@ bool OpenGLHAL::initOpenGL()
 	glGenTextures(OPENGLHAL_TEXTURE_END, glTextures);
 	glTextureSize = OEMakeSize(0, 0);
 	
-	loadPrograms();
+	loadShadowMasks();
 	
-	OEImage mask;
-	mask.readFile(resourcePath + "/images/Generic/Mask Shadow Mask Triad.png");
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, glTextures[OPENGLHAL_TEXTURE_MASK_TRIAD]);
-	gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB8,
-					  mask.getSize().width, mask.getSize().height,
-					  GL_RGBA, GL_UNSIGNED_BYTE, mask.getPixels());
-/*	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
-				 mask.getSize().width, mask.getSize().height, 0,
-				 GL_RGB, GL_UNSIGNED_BYTE, mask.getPixels());
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);*/
-	glActiveTexture(GL_TEXTURE0);
+	loadPrograms();
 	
 	return true;
 }
@@ -199,6 +187,32 @@ void OpenGLHAL::freeOpenGL()
 	glDeleteTextures(OPENGLHAL_TEXTURE_END, glTextures);
 	
 	deletePrograms();
+}
+
+void OpenGLHAL::loadShadowMasks()
+{
+	loadShadowMask("Shadow Mask Triad.png",
+				   glTextures[OPENGLHAL_TEXTURE_SHADOWMASK_TRIAD]);
+	loadShadowMask("Shadow Mask Inline.png",
+				   glTextures[OPENGLHAL_TEXTURE_SHADOWMASK_INLINE]);
+	loadShadowMask("Shadow Mask Aperture.png",
+				   glTextures[OPENGLHAL_TEXTURE_SHADOWMASK_APERTURE]);
+}
+
+void OpenGLHAL::loadShadowMask(string path, GLuint glTexture)
+{
+#ifdef GL_VERSION_2_0
+	OEImage shadowMask;
+	shadowMask.readFile(resourcePath + "/images/Generic/" + path);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, glTexture);
+	gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB8,
+					  shadowMask.getSize().width, shadowMask.getSize().height,
+					  ((shadowMask.getFormat() == OEIMAGE_FORMAT_RGB) ?
+					   GL_RGB : GL_RGBA),
+					  GL_UNSIGNED_BYTE, shadowMask.getPixels());
+	glActiveTexture(GL_TEXTURE0);
+#endif // GL_VERSION_2_0
 }
 
 void OpenGLHAL::loadPrograms()
@@ -314,10 +328,10 @@ void OpenGLHAL::loadPrograms()
 	loadProgram(OPENGLHAL_PROGRAM_SCREEN, "\
 		uniform sampler2D texture;\
 		uniform vec2 texture_size;\
-		uniform sampler2D mask;\
 		uniform float barrel;\
 		uniform vec2 barrel_center;\
 		uniform float scanline_alpha;\
+		uniform sampler2D shadowmask;\
 		uniform float shadowmask_alpha;\
 		uniform float center_lighting;\
 		uniform float brightness;\
@@ -332,13 +346,13 @@ void OpenGLHAL::loadPrograms()
 			q += barrel * qc * dot(qc, qc);\
 			\
 			vec3 p = texture2D(texture, q).xyz;\
-			float s;\
-			s = sin(PI * texture_size.y * q.y);\
+			float s = sin(PI * texture_size.y * q.y);\
 			p *= mix(1.0, s * s, scanline_alpha);\
 			vec2 c = qc * center_lighting;\
 			p *= exp(-dot(c, c));\
 			p += brightness;\
-			p *= mix(vec3(1.0, 1.0, 1.0), texture2D(mask, q * vec2(140, 160)).xyz, shadowmask_alpha);\
+			vec3 m = texture2D(shadowmask, q * vec2(140, 160)).xyz;\
+			p *= mix(vec3(1.0, 1.0, 1.0), m, shadowmask_alpha);\
 			gl_FragColor = vec4(p, 1.0);\
 		}");
 }
@@ -591,8 +605,27 @@ void OpenGLHAL::updateConfiguration()
 	if (glPrograms[OPENGLHAL_PROGRAM_SCREEN])
 	{
 		GLuint glProgram = glPrograms[OPENGLHAL_PROGRAM_SCREEN];
+		glActiveTexture(GL_TEXTURE1);
+		GLuint glTexture;
+		switch (configuration.shadowMask)
+		{
+			case CANVAS_SHADOWMASK_TRIAD:
+				glTexture = glTextures[OPENGLHAL_TEXTURE_SHADOWMASK_TRIAD];
+				break;
+			case CANVAS_SHADOWMASK_INLINE:
+				glTexture = glTextures[OPENGLHAL_TEXTURE_SHADOWMASK_INLINE];
+				break;
+			case CANVAS_SHADOWMASK_APERTURE:
+				glTexture = glTextures[OPENGLHAL_TEXTURE_SHADOWMASK_APERTURE];
+				break;
+			default:
+				glTexture = 0;
+				break;
+		}
+		glBindTexture(GL_TEXTURE_2D, glTexture);
+		glActiveTexture(GL_TEXTURE0);
 		glUseProgram(glProgram);
-		glUniform1i(glGetUniformLocation(glProgram, "mask"), 1);
+		glUniform1i(glGetUniformLocation(glProgram, "shadowmask"), 1);
 		glUniform1f(glGetUniformLocation(glProgram, "barrel"),
 					configuration.barrel);
 		float centerLighting = configuration.centerLighting;
