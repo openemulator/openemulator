@@ -26,6 +26,7 @@ Monitor::Monitor()
 	
 	configuration.lumaCutoffFrequency = 0.3;
 	configuration.scanlineAlpha = 0.2;
+	configuration.shadowMaskAlpha = 0.2;
 	configuration.centerLighting = 0.8;
 	
 	configuration.brightness = 0;
@@ -64,6 +65,8 @@ bool Monitor::setValue(string name, string value)
 		configuration.lumaCutoffFrequency = getFloat(value);
 	else if (name == "scanlineAlpha")
 		configuration.scanlineAlpha = getFloat(value);
+	else if (name == "shadowMaskAlpha")
+		configuration.shadowMaskAlpha = getFloat(value);
 	else if (name == "centerLighting")
 		configuration.centerLighting = getFloat(value);
 	else if (name == "brightness")
@@ -130,6 +133,8 @@ bool Monitor::getValue(string name, string& value)
 		value = getString(configuration.lumaCutoffFrequency);
 	else if (name == "scanlineAlpha")
 		value = getString(configuration.scanlineAlpha);
+	else if (name == "shadowMaskAlpha")
+		value = getString(configuration.shadowMaskAlpha);
 	else if (name == "centerLighting")
 		value = getString(configuration.centerLighting);
 	else if (name == "brightness")

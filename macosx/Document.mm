@@ -56,7 +56,7 @@ OEComponent *createCanvas(void *userData, string id, string title)
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
-	OpenGLHAL *canvas = new OpenGLHAL();
+	OpenGLHAL *canvas = new OpenGLHAL(getCPPString([[NSBundle mainBundle] resourcePath]));
 	
 	Document *document = (Document *)userData;
 	NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:

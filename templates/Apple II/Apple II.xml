@@ -234,6 +234,8 @@
     <setting ref="appleMonitorII.monitor" name="compositeBlackLevel" label="IRE Black Level" type="slider" options="0.0,1.0" />
     <setting ref="appleMonitorII.monitor" name="compositeWhiteLevel" label="IRE White Level" type="slider" options="0.0,1.0" />
     <setting ref="appleMonitorII.monitor" name="scanlineAlpha" label="Scanline Alpha" type="slider" options="0.0,1.0" />
+    <setting ref="appleMonitorII.monitor" name="shadowMask" label="Shadow Mask" type="select" options="None,Triad,Inline,Aperture" />
+    <setting ref="appleMonitorII.monitor" name="shadowMaskAlpha" label="Shadow Mask Alpha" type="slider" options="0.0,1.0" />
     <setting ref="appleMonitorII.monitor" name="centerLighting" label="Center Lighting" type="slider" options="0.0,1.0" />
 </device>
 <connector id="appleMonitorII.connector" ref="" type="CompositeMonitor" label="Video Connector"/>
@@ -242,6 +244,8 @@
     <property name="decoder" value="RGB" />
     <property name="lumaCutoffFrequency" value="0.8" />
     <property name="scanlineAlpha" value="0.2" />
+    <property name="shadowMask" value="1" />
+    <property name="shadowMaskAlpha" value="1" />
     <property name="centerLighting" value="0.5" />
     <property name="brightness" value="0" />
     <property name="contrast" value="1" />

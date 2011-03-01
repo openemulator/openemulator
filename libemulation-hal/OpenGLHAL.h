@@ -14,6 +14,7 @@
 #include <pthread.h>
 
 #include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
 
 #include "OEComponent.h"
 #include "CanvasInterface.h"
@@ -27,8 +28,11 @@ typedef enum
 
 typedef enum
 {
-	OPENGLHAL_TEXTURE_RAW_FRAME,
-	OPENGLHAL_TEXTURE_PROCESSED_FRAME,
+	OPENGLHAL_TEXTURE_FRAME_RAW,
+	OPENGLHAL_TEXTURE_FRAME_PROCESSED,
+	OPENGLHAL_TEXTURE_MASK_TRIAD,
+	OPENGLHAL_TEXTURE_MASK_INLINE,
+	OPENGLHAL_TEXTURE_MASK_APERTURE,
 	OPENGLHAL_TEXTURE_CAPTURE_BADGE,
 	OPENGLHAL_TEXTURE_POWER_BADGE,
 	OPENGLHAL_TEXTURE_PAUSE_BADGE,
@@ -54,7 +58,7 @@ typedef void (*CanvasSetKeyboardFlags)(void *userData, int flags);
 class OpenGLHAL : public OEComponent
 {
 public:
-	OpenGLHAL();
+	OpenGLHAL(string resourcePath);
 	
 	void open(CanvasSetCapture setCapture,
 			  CanvasSetKeyboardFlags setKeyboardFlags,
@@ -91,6 +95,8 @@ public:
 	bool postMessage(OEComponent *sender, int message, void *data);
 	
 private:
+	string resourcePath;
+	
 	CanvasSetCapture setCapture;
 	CanvasSetKeyboardFlags setKeyboardFlags;
 	void *userData;

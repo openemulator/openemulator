@@ -19,8 +19,10 @@
 
 #define NTSC_YIQ_I_SHIFT	(0.6 / (14.31818 / 4))
 
-OpenGLHAL::OpenGLHAL()
+OpenGLHAL::OpenGLHAL(string resourcePath)
 {
+	this->resourcePath = resourcePath;
+	
 	setCapture = NULL;
 	setKeyboardFlags = NULL;
 	
@@ -175,6 +177,20 @@ bool OpenGLHAL::initOpenGL()
 	
 	loadPrograms();
 	
+	OEImage mask;
+	mask.readFile(resourcePath + "/images/Generic/Mask Shadow Mask Triad.png");
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, glTextures[OPENGLHAL_TEXTURE_MASK_TRIAD]);
+	gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB8,
+					  mask.getSize().width, mask.getSize().height,
+					  GL_RGBA, GL_UNSIGNED_BYTE, mask.getPixels());
+/*	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
+				 mask.getSize().width, mask.getSize().height, 0,
+				 GL_RGB, GL_UNSIGNED_BYTE, mask.getPixels());
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);*/
+	glActiveTexture(GL_TEXTURE0);
+	
 	return true;
 }
 
@@ -298,9 +314,11 @@ void OpenGLHAL::loadPrograms()
 	loadProgram(OPENGLHAL_PROGRAM_SCREEN, "\
 		uniform sampler2D texture;\
 		uniform vec2 texture_size;\
+		uniform sampler2D mask;\
 		uniform float barrel;\
 		uniform vec2 barrel_center;\
 		uniform float scanline_alpha;\
+		uniform float shadowmask_alpha;\
 		uniform float center_lighting;\
 		uniform float brightness;\
 		\
@@ -314,11 +332,13 @@ void OpenGLHAL::loadPrograms()
 			q += barrel * qc * dot(qc, qc);\
 			\
 			vec3 p = texture2D(texture, q).xyz;\
-			float s = sin(PI * texture_size.y * q.y);\
+			float s;\
+			s = sin(PI * texture_size.y * q.y);\
 			p *= mix(1.0, s * s, scanline_alpha);\
 			vec2 c = qc * center_lighting;\
 			p *= exp(-dot(c, c));\
 			p += brightness;\
+			p *= mix(vec3(1.0, 1.0, 1.0), texture2D(mask, q * vec2(140, 160)).xyz, shadowmask_alpha);\
 			gl_FragColor = vec4(p, 1.0);\
 		}");
 }
@@ -572,6 +592,7 @@ void OpenGLHAL::updateConfiguration()
 	{
 		GLuint glProgram = glPrograms[OPENGLHAL_PROGRAM_SCREEN];
 		glUseProgram(glProgram);
+		glUniform1i(glGetUniformLocation(glProgram, "mask"), 1);
 		glUniform1f(glGetUniformLocation(glProgram, "barrel"),
 					configuration.barrel);
 		float centerLighting = configuration.centerLighting;
@@ -626,17 +647,17 @@ void OpenGLHAL::uploadFrame(OEImage *frame)
 		vector<char> dummy;
 		dummy.resize(glTextureSize.width * glTextureSize.height);
 		
-		glBindTexture(GL_TEXTURE_2D, glTextures[OPENGLHAL_TEXTURE_RAW_FRAME]);
+		glBindTexture(GL_TEXTURE_2D, glTextures[OPENGLHAL_TEXTURE_FRAME_RAW]);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
 					 glTextureSize.width, glTextureSize.height, 0,
 					 GL_LUMINANCE, GL_UNSIGNED_BYTE, &dummy.front());
-		glBindTexture(GL_TEXTURE_2D, glTextures[OPENGLHAL_TEXTURE_PROCESSED_FRAME]);
+		glBindTexture(GL_TEXTURE_2D, glTextures[OPENGLHAL_TEXTURE_FRAME_PROCESSED]);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
 					 glTextureSize.width, glTextureSize.height, 0,
 					 GL_LUMINANCE, GL_UNSIGNED_BYTE, &dummy.front());
 	}
 	
-	glBindTexture(GL_TEXTURE_2D, glTextures[OPENGLHAL_TEXTURE_RAW_FRAME]);
+	glBindTexture(GL_TEXTURE_2D, glTextures[OPENGLHAL_TEXTURE_FRAME_RAW]);
 	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0,
 					frame->getSize().width, frame->getSize().height,
 					format, GL_UNSIGNED_BYTE,
@@ -658,7 +679,7 @@ void OpenGLHAL::processFrame()
 	
 	glUseProgram(glProcessProgram);
 	
-	glBindTexture(GL_TEXTURE_2D, glTextures[OPENGLHAL_TEXTURE_RAW_FRAME]);
+	glBindTexture(GL_TEXTURE_2D, glTextures[OPENGLHAL_TEXTURE_FRAME_RAW]);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	
@@ -666,7 +687,7 @@ void OpenGLHAL::processFrame()
 		for (int x = 0; x < glFrameSize.width; x += glViewportSize.width)
 		{
 			// Bind raw frame
-			glBindTexture(GL_TEXTURE_2D, glTextures[OPENGLHAL_TEXTURE_RAW_FRAME]);
+			glBindTexture(GL_TEXTURE_2D, glTextures[OPENGLHAL_TEXTURE_FRAME_RAW]);
 			
 			// Calculate frames
 			OERect renderFrame = OEMakeRect(-1, -1, 2, 2);
@@ -699,7 +720,7 @@ void OpenGLHAL::processFrame()
 			glEnd();
 			
 			// Copy framebuffer
-			glBindTexture(GL_TEXTURE_2D, glTextures[OPENGLHAL_TEXTURE_PROCESSED_FRAME]);
+			glBindTexture(GL_TEXTURE_2D, glTextures[OPENGLHAL_TEXTURE_FRAME_PROCESSED]);
 			glCopyTexSubImage2D(GL_TEXTURE_2D, 0,
 								x,
 								y,
@@ -780,13 +801,16 @@ void OpenGLHAL::drawFrame()
 							   (scanlineHeight - 2) / (2.5 - 2) * alpha);
 		glUniform1f(glGetUniformLocation(glProgram, "scanline_alpha"),
 					scanlineAlpha);
+		float shadowMaskAlpha = configuration.shadowMaskAlpha;
+		glUniform1f(glGetUniformLocation(glProgram, "shadowmask_alpha"),
+					shadowMaskAlpha);
 	}
 #endif // GL_VERSION_2_0
 	
 	// Use nearest filter when canvas and screen pixel size match
 	glBindTexture(GL_TEXTURE_2D, (glProcessProgram ? 
-								  glTextures[OPENGLHAL_TEXTURE_PROCESSED_FRAME] : 
-								  glTextures[OPENGLHAL_TEXTURE_RAW_FRAME]));
+								  glTextures[OPENGLHAL_TEXTURE_FRAME_PROCESSED] : 
+								  glTextures[OPENGLHAL_TEXTURE_FRAME_RAW]));
 	
 	int renderFrameWidth = glViewportSize.width * renderFrame.size.width / 2;
 	GLint param = GL_LINEAR;

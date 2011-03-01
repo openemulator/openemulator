@@ -1,10 +1,10 @@
 ==To-Do==
-* Implement shader shadow mask/aperture grille
 * Implement shader persistance
 * Implement power/pause badge
 * Implement capture badge, lasting 3 seconds, disappearing in 1 second
 * Implement the option to deactivate shaders
 
+* Fix device property scroller so it is updated even if the window is not active
 * Add support for scrolling canvas
 * If a default emulation can't be opened, should we start the template chooser instead? Or use a better error message?
 * Implement printing

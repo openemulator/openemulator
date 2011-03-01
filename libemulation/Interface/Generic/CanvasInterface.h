@@ -65,6 +65,14 @@ typedef enum
 	CANVAS_DECODER_PAL,
 } CanvasDecoder;
 
+typedef enum
+{
+	CANVAS_SHADOWMASK_NONE,
+	CANVAS_SHADOWMASK_TRIAD,
+	CANVAS_SHADOWMASK_INLINE,
+	CANVAS_SHADOWMASK_APERTURE,
+} CanvasShadowMask;
+
 typedef struct
 {
 	CanvasZoomMode zoomMode;
@@ -76,6 +84,8 @@ typedef struct
 	CanvasDecoder decoder;
 	float lumaCutoffFrequency;
 	float scanlineAlpha;
+	CanvasShadowMask shadowMask;
+	float shadowMaskAlpha;
 	float centerLighting;
 	float brightness;
 	float contrast;
