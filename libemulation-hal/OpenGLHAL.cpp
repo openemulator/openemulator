@@ -427,7 +427,7 @@ void OpenGLHAL::updateConfiguration()
 	w = w.normalize();
 	
 	Vector wy;
-	wy = w * Vector::lanczosWindow(17, configuration.lumaCutoffFrequency);
+	wy = w * Vector::lanczosWindow(17, configuration.lumaBandwidth);
 	wy = wy.normalize();
 	
 	Vector wu, wv;
@@ -437,18 +437,20 @@ void OpenGLHAL::updateConfiguration()
 		case CANVAS_DECODER_MONOCHROME:
 			wu = wv = wy;
 			break;
+			
 		case CANVAS_DECODER_NTSC_YIQ:
 			wu = w * Vector::lanczosWindow(17, (configuration.
-												compositeChromaCutoffFrequency));
+												compositeChromaBandwidth));
 			wu = wu.normalize() * 2;
 			wv = w * Vector::lanczosWindow(17, (configuration.
-												compositeChromaCutoffFrequency +
+												compositeChromaBandwidth +
 												NTSC_YIQ_I_SHIFT));
 			wv = wv.normalize() * 2;
 			break;
+			
 		default:
 			wu = w * Vector::lanczosWindow(17, (configuration.
-												compositeChromaCutoffFrequency));
+												compositeChromaBandwidth));
 			wu = wv = wu.normalize() * 2;
 			break;
 	}
@@ -469,6 +471,7 @@ void OpenGLHAL::updateConfiguration()
 						 0, -0.344, 1.772,
 						 1.402, -0.714, 0);
 			break;
+			
 		case CANVAS_DECODER_NTSC_YUV:
 		case CANVAS_DECODER_NTSC_YIQ:
 			// Y'IQ decoder matrix
@@ -480,6 +483,7 @@ void OpenGLHAL::updateConfiguration()
 						 0, 0, 1,
 						 0, 1, 0);
 			break;
+			
 		case CANVAS_DECODER_NTSC_CXA2025AS:
 			// CXA2025AS decoder matrix
 			m *= Matrix3(1, 1, 1,
@@ -490,6 +494,7 @@ void OpenGLHAL::updateConfiguration()
 						 0, 0, 1,
 						 0, 1, 0);
 			break;
+			
 		case CANVAS_DECODER_PAL:
 			// Y'UV decoder matrix
 			m *= Matrix3(1, 1, 1,
@@ -515,6 +520,7 @@ void OpenGLHAL::updateConfiguration()
 						 0.587, -0.331, -0.419,
 						 0.114, 0.5, -0.081);
 			break;
+			
 		case CANVAS_DECODER_MONOCHROME:
 			// Set Y'PbPr maximum hue
 			m *= Matrix3(1, 0, -0.5,
@@ -809,6 +815,7 @@ void OpenGLHAL::drawFrame()
 						  glFrameSize.height / glTextureSize.height);
 		glUniform2f(glGetUniformLocation(glProgram, "barrel_center"),
 					barrelCenter.x, barrelCenter.y);
+		
 		float scanlineHeight = (glViewportSize.height / glFrameSize.height *
 								configuration.contentRect.size.height);
 		float alpha = configuration.scanlineAlpha;
@@ -817,15 +824,22 @@ void OpenGLHAL::drawFrame()
 							   (scanlineHeight - 2) / (2.5 - 2) * alpha);
 		glUniform1f(glGetUniformLocation(glProgram, "scanline_alpha"),
 					scanlineAlpha);
+		
 		float shadowMaskAlpha = configuration.shadowMaskAlpha;
 		glUniform1f(glGetUniformLocation(glProgram, "shadowmask_alpha"),
 					shadowMaskAlpha);
+		
+		float pitch = configuration.shadowMaskDotPitch;
+		float elemNumX = 10.4 * 25.4 / pitch / 2.0;
+		float elemNumY = 7.8 * 25.4 / pitch * (240.0 / 274.0);
 		glUniform2f(glGetUniformLocation(glProgram, "shadowmask_scale"),
-					glTextureSize.width / glFrameSize.width /
-					(configuration.shadowMaskDotPitch + 0.001),
-					glTextureSize.height / glFrameSize.height /
-					(configuration.shadowMaskDotPitch + 0.001));
-		glUniform2f(glGetUniformLocation(glProgram, "shadowmask_translate"), 0, 0);
+					glTextureSize.width / glFrameSize.width *
+					configuration.contentRect.size.width * elemNumX,
+					glTextureSize.height / glFrameSize.height *
+					configuration.contentRect.size.height * elemNumY);
+		glUniform2f(glGetUniformLocation(glProgram, "shadowmask_translate"),
+					configuration.contentRect.origin.x * elemNumX,
+					configuration.contentRect.origin.y * elemNumY);
 	}
 #endif // GL_VERSION_2_0
 	

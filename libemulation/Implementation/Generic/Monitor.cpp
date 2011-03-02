@@ -36,8 +36,8 @@ bool Monitor::setValue(string name, string value)
 		else if (value == "PAL")
 			configuration.decoder = CANVAS_DECODER_PAL;
 	}
-	else if (name == "lumaCutoffFrequency")
-		configuration.lumaCutoffFrequency = getFloat(value);
+	else if (name == "lumaBandwidth")
+		configuration.lumaBandwidth = getFloat(value);
 	else if (name == "brightness")
 		configuration.brightness = getFloat(value);
 	else if (name == "contrast")
@@ -71,8 +71,8 @@ bool Monitor::setValue(string name, string value)
 		configuration.compositeCarrierFrequency = getFloat(value);
 	else if (name == "compositeLinePhase")
 		configuration.compositeLinePhase = getFloat(value);
-	else if (name == "compositeChromaCutoffFrequency")
-		configuration.compositeChromaCutoffFrequency = getFloat(value);
+	else if (name == "compositeChromaBandwidth")
+		configuration.compositeChromaBandwidth = getFloat(value);
 	else if (name == "compositeBlackLevel")
 		configuration.compositeBlackLevel = getFloat(value);
 	else if (name == "compositeWhiteLevel")
@@ -117,8 +117,8 @@ bool Monitor::getValue(string name, string& value)
 		else
 			value = "";
 	}
-	else if (name == "lumaCutoffFrequency")
-		value = getString(configuration.lumaCutoffFrequency);
+	else if (name == "lumaBandwidth")
+		value = getString(configuration.lumaBandwidth);
 	else if (name == "brightness")
 		value = getString(configuration.brightness);
 	else if (name == "contrast")
@@ -158,8 +158,8 @@ bool Monitor::getValue(string name, string& value)
 		value = getString(configuration.compositeCarrierFrequency);
 	else if (name == "compositeLinePhase")
 		value = getString(configuration.compositeLinePhase);
-	else if (name == "compositeChromaCutoffFrequency")
-		value = getString(configuration.compositeChromaCutoffFrequency);
+	else if (name == "compositeChromaBandwidth")
+		value = getString(configuration.compositeChromaBandwidth);
 	else if (name == "horizontalCenter")
 		value = getString(screenRect.origin.x);
 	else if (name == "verticalCenter")

@@ -215,7 +215,7 @@
 
 <device id="appleMonitorII" label="Apple Monitor II" image="images/Apple/Apple Monitor II.png" group="peripherals">
     <setting ref="appleMonitorII.monitor" name="decoder" label="Decoder" type="select" options="RGB,Monochrome,NTSC Y'UV,NTSC Y'IQ,NTSC CXA2025AS,PAL" />
-    <setting ref="appleMonitorII.monitor" name="lumaCutoffFrequency" label="Luma Cutoff Frequency" type="slider" options="0.0,1.0" />
+    <setting ref="appleMonitorII.monitor" name="lumaBandwidth" label="Luma Bandwidth" type="slider" options="0.0,1.0" />
     <setting ref="appleMonitorII.monitor" name="brightness" label="Brightness" type="slider" options="-1.0,1.0" />
     <setting ref="appleMonitorII.monitor" name="contrast" label="Contrast" type="slider" options="0.0,2.0,1.0" />
     <setting ref="appleMonitorII.monitor" name="saturation" label="Saturation" type="slider" options="0.0,2.0,1.0" />
@@ -236,7 +236,7 @@
     
     <setting ref="appleMonitorII.monitor" name="compositeCarrierFrequency" label="Chroma Carrier Frequency" type="slider" options="0.24,0.3" />
     <setting ref="appleMonitorII.monitor" name="compositeLinePhase" label="Chroma Line Phase" type="slider" options="0.0,1.0" />
-    <setting ref="appleMonitorII.monitor" name="compositeChromaCutoffFrequency" label="Chroma Cutoff Frequency" type="slider" options="0.0,1.0" />
+    <setting ref="appleMonitorII.monitor" name="compositeChromaBandwidth" label="Chroma Bandwidth" type="slider" options="0.0,1.0" />
     <setting ref="appleMonitorII.monitor" name="compositeBlackLevel" label="IRE Black Level" type="slider" options="0.0,1.0" />
     <setting ref="appleMonitorII.monitor" name="compositeWhiteLevel" label="IRE White Level" type="slider" options="0.0,1.0" />
 </device>
@@ -244,7 +244,7 @@
 <component id="appleMonitorII.monitor" class="Monitor">
     <property name="emulation" ref="emulation" />
     <property name="decoder" value="RGB" />
-    <property name="lumaCutoffFrequency" value="0.36" />
+    <property name="lumaBandwidth" value="0.33" />
     <property name="brightness" value="0" />
     <property name="contrast" value="1" />
     <property name="saturation" value="1" />
@@ -260,7 +260,7 @@
     <property name="compositeWhiteLevel" value="1" />
     <property name="compositeCarrierFrequency" value="0.25" />
     <property name="compositeLinePhase" value="0" />
-    <property name="compositeChromaCutoffFrequency" value="0.01" />
+    <property name="compositeChromaBandwidth" value="0.01" />
     <property name="horizontalCenter" value="0" />
     <property name="verticalCenter" value="0" />
     <property name="horizontalSize" value="1" />

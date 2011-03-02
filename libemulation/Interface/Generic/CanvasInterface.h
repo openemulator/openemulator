@@ -91,7 +91,7 @@ public:
 		captureMode = CANVAS_CAPTUREMODE_NO_CAPTURE;
 		
 		decoder = CANVAS_DECODER_RGB;
-		lumaCutoffFrequency = 1;
+		lumaBandwidth = 1;
 		brightness = 0;
 		contrast = 1;
 		saturation = 1;
@@ -109,7 +109,7 @@ public:
 		compositeWhiteLevel = 1;
 		compositeCarrierFrequency = 0.25;
 		compositeLinePhase = 0;
-		compositeChromaCutoffFrequency = 0.01;
+		compositeChromaBandwidth = 0.01;
 	}
 	
 	CanvasUnits canvasUnits;
@@ -119,7 +119,7 @@ public:
 	CanvasCaptureMode captureMode;
 	
 	CanvasDecoder decoder;
-	float lumaCutoffFrequency;
+	float lumaBandwidth;
 	float brightness;
 	float contrast;
 	float saturation;
@@ -137,7 +137,7 @@ public:
 	float compositeWhiteLevel;
 	float compositeCarrierFrequency;
 	float compositeLinePhase;
-	float compositeChromaCutoffFrequency;
+	float compositeChromaBandwidth;
 };
 
 // Canvas keyboard flags use int
