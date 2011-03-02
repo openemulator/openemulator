@@ -14,9 +14,6 @@
 
 #include "OpenGLHALSignalProcessing.h"
 
-#define DEFAULT_WIDTH		640
-#define DEFAULT_HEIGHT		480
-
 #define NTSC_YIQ_I_SHIFT	(0.6 / (14.31818 / 4))
 
 OpenGLHAL::OpenGLHAL(string resourcePath)
@@ -25,23 +22,6 @@ OpenGLHAL::OpenGLHAL(string resourcePath)
 	
 	setCapture = NULL;
 	setKeyboardFlags = NULL;
-	
-	nextConfiguration.zoomMode = CANVAS_ZOOMMODE_FIT_CANVAS;
-	nextConfiguration.captureMode = CANVAS_CAPTUREMODE_NO_CAPTURE;
-	nextConfiguration.defaultViewSize = OEMakeSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-	nextConfiguration.canvasSize = OEMakeSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-	nextConfiguration.contentRect = OEMakeRect(0, 0, 1, 1);
-	
-	nextConfiguration.decoder = CANVAS_DECODER_RGB;
-	nextConfiguration.lumaCutoffFrequency = 1.0;
-	nextConfiguration.scanlineAlpha = 0.0;
-	nextConfiguration.centerLighting = 1.0;
-	nextConfiguration.brightness = 0.0;
-	nextConfiguration.contrast = 1.0;
-	nextConfiguration.saturation = 1.0;
-	nextConfiguration.hue = 0.0;
-	nextConfiguration.barrel = 0.0;
-	nextConfiguration.persistance = 0.0;
 	
 	nextFrame = NULL;
 	
@@ -110,7 +90,7 @@ void OpenGLHAL::disableGPU()
 
 OESize OpenGLHAL::getDefaultViewSize()
 {
-	return nextConfiguration.defaultViewSize;
+	return nextConfiguration.canvasSize;
 }
 
 bool OpenGLHAL::update(float width, float height, float offset, bool draw)
@@ -231,7 +211,7 @@ void OpenGLHAL::loadPrograms()
 		\
 		vec3 pixel(vec2 q)\
 		{\
-			vec3 p = texture2D(texture, q).xyz - comp_black;\
+			vec3 p = texture2D(texture, q).rgb - comp_black;\
 			float phase = 2.0 * PI * dot(comp_phase * texture_size, q);\
 			return p * vec3(1.0, sin(phase), cos(phase));\
 		}\
@@ -268,7 +248,7 @@ void OpenGLHAL::loadPrograms()
 		\
 		vec3 pixel(vec2 q)\
 		{\
-			vec3 p = texture2D(texture, q).xyz - comp_black;\
+			vec3 p = texture2D(texture, q).rgb - comp_black;\
 			float phase = 2.0 * PI * dot(comp_phase * texture_size, q);\
 			float pal = -sqrt(2.0) * sin(0.5 * PI * texture_size.y * q.y);\
 			return p * vec3(1.0, sin(phase), cos(phase) * pal);\
@@ -302,7 +282,7 @@ void OpenGLHAL::loadPrograms()
 		\
 		vec3 pixel(vec2 q)\
 		{\
-			return texture2D(texture, q).xyz;\
+			return texture2D(texture, q).rgb;\
 		}\
 		\
 		vec3 pixels(vec2 q, float i)\
@@ -331,9 +311,11 @@ void OpenGLHAL::loadPrograms()
 		uniform float barrel;\
 		uniform vec2 barrel_center;\
 		uniform float scanline_alpha;\
-		uniform sampler2D shadowmask;\
-		uniform float shadowmask_alpha;\
 		uniform float center_lighting;\
+		uniform sampler2D shadowmask;\
+		uniform vec2 shadowmask_scale;\
+		uniform vec2 shadowmask_translate;\
+		uniform float shadowmask_alpha;\
 		uniform float brightness;\
 		\
 		float PI = 3.14159265358979323846264;\
@@ -345,14 +327,14 @@ void OpenGLHAL::loadPrograms()
 			vec2 qc = q - barrel_center;\
 			q += barrel * qc * dot(qc, qc);\
 			\
-			vec3 p = texture2D(texture, q).xyz;\
+			vec3 p = texture2D(texture, q).rgb;\
 			float s = sin(PI * texture_size.y * q.y);\
 			p *= mix(1.0, s * s, scanline_alpha);\
 			vec2 c = qc * center_lighting;\
 			p *= exp(-dot(c, c));\
-			p += brightness;\
-			vec3 m = texture2D(shadowmask, q * vec2(140, 160)).xyz;\
+			vec3 m = texture2D(shadowmask, q * shadowmask_scale + shadowmask_translate).rgb;\
 			p *= mix(vec3(1.0, 1.0, 1.0), m, shadowmask_alpha);\
+			p += brightness;\
 			gl_FragColor = vec4(p, 1.0);\
 		}");
 }
@@ -451,8 +433,8 @@ void OpenGLHAL::updateConfiguration()
 	Vector wu, wv;
 	switch (configuration.decoder)
 	{
-		case CANVAS_DECODER_MONOCHROME:
 		case CANVAS_DECODER_RGB:
+		case CANVAS_DECODER_MONOCHROME:
 			wu = wv = wy;
 			break;
 		case CANVAS_DECODER_NTSC_YIQ:
@@ -480,8 +462,8 @@ void OpenGLHAL::updateConfiguration()
 	// Decoder matrices from "Digital Video and HDTV Algorithms and Interfaces"
 	switch (configuration.decoder)
 	{
-		case CANVAS_DECODER_MONOCHROME:
 		case CANVAS_DECODER_RGB:
+		case CANVAS_DECODER_MONOCHROME:
 			// Y'PbPr decoder matrix
 			m *= Matrix3(1, 1, 1,
 						 0, -0.344, 1.772,
@@ -527,16 +509,17 @@ void OpenGLHAL::updateConfiguration()
 	// Encoder matrices
 	switch (configuration.decoder)
 	{
-		case CANVAS_DECODER_MONOCHROME:
-			// Set Y'PbPr maximum hue
-			m *= Matrix3(1, 0, -0.5,
-						 0, 0, 0,
-						 0, 0, 0);
 		case CANVAS_DECODER_RGB:
 			// Y'PbPr encoding matrix
 			m *= Matrix3(0.299, -0.169, 0.5,
 						 0.587, -0.331, -0.419,
 						 0.114, 0.5, -0.081);
+			break;
+		case CANVAS_DECODER_MONOCHROME:
+			// Set Y'PbPr maximum hue
+			m *= Matrix3(1, 0, -0.5,
+						 0, 0, 0,
+						 0, 0, 0);
 			break;
 	}
 	// Dynamic range gain
@@ -795,7 +778,7 @@ void OpenGLHAL::drawFrame()
 	// Apply view mode
 	float ratio = viewAspectRatio / canvasAspectRatio;
 	
-	if (configuration.zoomMode == CANVAS_ZOOMMODE_FIT_WIDTH)
+	if (configuration.viewMode == CANVAS_VIEWMODE_FIT_WIDTH)
 		renderFrame.size.height *= ratio;
 	else
 	{
@@ -837,6 +820,12 @@ void OpenGLHAL::drawFrame()
 		float shadowMaskAlpha = configuration.shadowMaskAlpha;
 		glUniform1f(glGetUniformLocation(glProgram, "shadowmask_alpha"),
 					shadowMaskAlpha);
+		glUniform2f(glGetUniformLocation(glProgram, "shadowmask_scale"),
+					glTextureSize.width / glFrameSize.width /
+					(configuration.shadowMaskDotPitch + 0.001),
+					glTextureSize.height / glFrameSize.height /
+					(configuration.shadowMaskDotPitch + 0.001));
+		glUniform2f(glGetUniformLocation(glProgram, "shadowmask_translate"), 0, 0);
 	}
 #endif // GL_VERSION_2_0
 	

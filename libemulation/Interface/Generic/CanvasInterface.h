@@ -16,8 +16,9 @@
 //
 // Notes:
 //
-// * Screen coordinates are in [0:1,0:1] coordinates.
-// * HID axes are in [-1.0:1.0] coordinates.
+// * Content rect coordinates are in [0..1:0..1] coordinates
+//   (origin is lower left).
+// * HID axes are in [-1:1] coordinates.
 //
 
 typedef enum
@@ -44,9 +45,15 @@ typedef enum
 
 typedef enum
 {
-	CANVAS_ZOOMMODE_FIT_CANVAS,
-	CANVAS_ZOOMMODE_FIT_WIDTH,
-} CanvasZoomMode;
+	CANVAS_UNITS_INCHES,
+	CANVAS_UNITS_PIXELS,
+} CanvasUnits;
+
+typedef enum
+{
+	CANVAS_VIEWMODE_FIT_CANVAS,
+	CANVAS_VIEWMODE_FIT_WIDTH,
+} CanvasViewMode;
 
 typedef enum
 {
@@ -57,8 +64,8 @@ typedef enum
 
 typedef enum
 {
-	CANVAS_DECODER_MONOCHROME,
 	CANVAS_DECODER_RGB,
+	CANVAS_DECODER_MONOCHROME,
 	CANVAS_DECODER_NTSC_YIQ,
 	CANVAS_DECODER_NTSC_CXA2025AS,
 	CANVAS_DECODER_NTSC_YUV,
@@ -67,38 +74,71 @@ typedef enum
 
 typedef enum
 {
-	CANVAS_SHADOWMASK_NONE,
 	CANVAS_SHADOWMASK_TRIAD,
 	CANVAS_SHADOWMASK_INLINE,
 	CANVAS_SHADOWMASK_APERTURE,
 } CanvasShadowMask;
 
-typedef struct
+class CanvasConfiguration
 {
-	CanvasZoomMode zoomMode;
-	CanvasCaptureMode captureMode;
-	OESize defaultViewSize;
+public:
+	CanvasConfiguration()
+	{
+		canvasUnits = CANVAS_UNITS_PIXELS;
+		canvasSize = OEMakeSize(640, 480);
+		contentRect = OEMakeRect(0, 0, 1, 1);
+		viewMode = CANVAS_VIEWMODE_FIT_CANVAS;
+		captureMode = CANVAS_CAPTUREMODE_NO_CAPTURE;
+		
+		decoder = CANVAS_DECODER_RGB;
+		lumaCutoffFrequency = 1;
+		brightness = 0;
+		contrast = 1;
+		saturation = 1;
+		hue = 0;
+		
+		barrel = 0;
+		scanlineAlpha = 0;
+		shadowMask = CANVAS_SHADOWMASK_TRIAD;
+		shadowMaskDotPitch = 1;
+		shadowMaskAlpha = 0;
+		centerLighting = 1;
+		persistance = 0;
+		
+		compositeBlackLevel = 0;
+		compositeWhiteLevel = 1;
+		compositeCarrierFrequency = 0.25;
+		compositeLinePhase = 0;
+		compositeChromaCutoffFrequency = 0.01;
+	}
+	
+	CanvasUnits canvasUnits;
 	OESize canvasSize;
 	OERect contentRect;
+	CanvasViewMode viewMode;
+	CanvasCaptureMode captureMode;
 	
 	CanvasDecoder decoder;
 	float lumaCutoffFrequency;
-	float scanlineAlpha;
-	CanvasShadowMask shadowMask;
-	float shadowMaskAlpha;
-	float centerLighting;
 	float brightness;
 	float contrast;
 	float saturation;
 	float hue;
+	
 	float barrel;
+	float scanlineAlpha;
+	float centerLighting;
+	float shadowMaskAlpha;
+	float shadowMaskDotPitch;
+	CanvasShadowMask shadowMask;
 	float persistance;
+	
 	float compositeBlackLevel;
 	float compositeWhiteLevel;
 	float compositeCarrierFrequency;
 	float compositeLinePhase;
 	float compositeChromaCutoffFrequency;
-} CanvasConfiguration;
+};
 
 // Canvas keyboard flags use int
 #define CANVAS_L_NUMLOCK	(1 << 0)

@@ -83,11 +83,8 @@ bool MOSKIM1IO::init()
 		canvas->postMessage(this, CANVAS_POST_FRAME, &frame);
 		
 		CanvasConfiguration configuration;
-		configuration.zoomMode = CANVAS_ZOOMMODE_FIT_CANVAS;
-		configuration.captureMode = CANVAS_CAPTUREMODE_NO_CAPTURE;
-		configuration.defaultViewSize = frame.getSize();
+		configuration.viewMode = CANVAS_VIEWMODE_FIT_CANVAS;
 		configuration.canvasSize = frame.getSize();
-		configuration.contentRect = OEMakeRect(0, 0, 1, 1);
 		canvas->postMessage(this, CANVAS_CONFIGURE, &configuration);
 	}
 	

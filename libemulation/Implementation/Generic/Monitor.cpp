@@ -16,31 +16,6 @@ Monitor::Monitor()
 	emulation = NULL;
 	canvas = NULL;
 	
-	configuration.zoomMode = CANVAS_ZOOMMODE_FIT_CANVAS;
-	configuration.captureMode = CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_CLICK;
-	configuration.defaultViewSize = OEMakeSize(720, 576);
-	configuration.canvasSize = OEMakeSize(720, 576);
-	configuration.contentRect = OEMakeRect(0, 0, 1, 1);
-	
-	configuration.decoder = CANVAS_DECODER_RGB;
-	
-	configuration.lumaCutoffFrequency = 0.3;
-	configuration.scanlineAlpha = 0.2;
-	configuration.shadowMaskAlpha = 0.2;
-	configuration.centerLighting = 0.8;
-	
-	configuration.brightness = 0;
-	configuration.contrast = 1;
-	configuration.saturation = 1;
-	configuration.hue = 0;
-	configuration.barrel = 0.1;
-	configuration.persistance = 0;
-	
-	configuration.compositeBlackLevel = 0;
-	configuration.compositeWhiteLevel = 1;
-	configuration.compositeCarrierFrequency = 0.25;
-	configuration.compositeChromaCutoffFrequency = 0.01;
-	
 	screenRect = OEMakeRect(0, 0, 1, 1);
 }
 
@@ -48,7 +23,9 @@ bool Monitor::setValue(string name, string value)
 {
 	if (name == "decoder")
 	{
-		if (value == "Monochrome")
+		if (value == "RGB")
+			configuration.decoder = CANVAS_DECODER_RGB;
+		else if (value == "Monochrome")
 			configuration.decoder = CANVAS_DECODER_MONOCHROME;
 		else if (value == "NTSC Y'IQ")
 			configuration.decoder = CANVAS_DECODER_NTSC_YIQ;
@@ -58,28 +35,9 @@ bool Monitor::setValue(string name, string value)
 			configuration.decoder = CANVAS_DECODER_NTSC_YUV;
 		else if (value == "PAL")
 			configuration.decoder = CANVAS_DECODER_PAL;
-		else
-			configuration.decoder = CANVAS_DECODER_RGB;
 	}
 	else if (name == "lumaCutoffFrequency")
 		configuration.lumaCutoffFrequency = getFloat(value);
-	else if (name == "scanlineAlpha")
-		configuration.scanlineAlpha = getFloat(value);
-	else if (name == "shadowMask")
-	{
-		if (value == "Triad")
-			configuration.shadowMask = CANVAS_SHADOWMASK_TRIAD;
-		else if (value == "Inline")
-			configuration.shadowMask = CANVAS_SHADOWMASK_INLINE;
-		else if (value == "Aperture")
-			configuration.shadowMask = CANVAS_SHADOWMASK_APERTURE;
-		else
-			configuration.shadowMask = CANVAS_SHADOWMASK_NONE;
-	}
-	else if (name == "shadowMaskAlpha")
-		configuration.shadowMaskAlpha = getFloat(value);
-	else if (name == "centerLighting")
-		configuration.centerLighting = getFloat(value);
 	else if (name == "brightness")
 		configuration.brightness = getFloat(value);
 	else if (name == "contrast")
@@ -90,6 +48,23 @@ bool Monitor::setValue(string name, string value)
 		configuration.hue = getFloat(value);
 	else if (name == "barrel")
 		configuration.barrel = getFloat(value);
+	else if (name == "scanlineAlpha")
+		configuration.scanlineAlpha = getFloat(value);
+	else if (name == "shadowMaskAlpha")
+		configuration.shadowMaskAlpha = getFloat(value);
+	else if (name == "shadowMaskDotPitch")
+		configuration.shadowMaskDotPitch = getFloat(value);
+	else if (name == "shadowMask")
+	{
+		if (value == "Triad")
+			configuration.shadowMask = CANVAS_SHADOWMASK_TRIAD;
+		else if (value == "Inline")
+			configuration.shadowMask = CANVAS_SHADOWMASK_INLINE;
+		else if (value == "Aperture")
+			configuration.shadowMask = CANVAS_SHADOWMASK_APERTURE;
+	}
+	else if (name == "centerLighting")
+		configuration.centerLighting = getFloat(value);
 	else if (name == "persistance")
 		configuration.persistance = getFloat(value);
 	else if (name == "compositeCarrierFrequency")
@@ -127,7 +102,9 @@ bool Monitor::getValue(string name, string& value)
 {
 	if (name == "decoder")
 	{
-		if (configuration.decoder == CANVAS_DECODER_MONOCHROME)
+		if (configuration.decoder == CANVAS_DECODER_RGB)
+			value = "RGB";
+		else if (configuration.decoder == CANVAS_DECODER_MONOCHROME)
 			value = "Monochrome";
 		else if (configuration.decoder == CANVAS_DECODER_NTSC_YIQ)
 			value = "NTSC Y'IQ";
@@ -138,27 +115,10 @@ bool Monitor::getValue(string name, string& value)
 		else if (configuration.decoder == CANVAS_DECODER_PAL)
 			value = "PAL";
 		else
-			value = "RGB";
+			value = "";
 	}
 	else if (name == "lumaCutoffFrequency")
 		value = getString(configuration.lumaCutoffFrequency);
-	else if (name == "scanlineAlpha")
-		value = getString(configuration.scanlineAlpha);
-	else if (name == "shadowMask")
-	{
-		if (configuration.shadowMask == CANVAS_SHADOWMASK_TRIAD)
-			value = "Triad";
-		else if (configuration.shadowMask == CANVAS_SHADOWMASK_INLINE)
-			value = "Inline";
-		else if (configuration.shadowMask == CANVAS_SHADOWMASK_APERTURE)
-			value = "Aperture";
-		else
-			value = "None";
-	}
-	else if (name == "shadowMaskAlpha")
-		value = getString(configuration.shadowMaskAlpha);
-	else if (name == "centerLighting")
-		value = getString(configuration.centerLighting);
 	else if (name == "brightness")
 		value = getString(configuration.brightness);
 	else if (name == "contrast")
@@ -169,6 +129,25 @@ bool Monitor::getValue(string name, string& value)
 		value = getString(configuration.hue);
 	else if (name == "barrel")
 		value = getString(configuration.barrel);
+	else if (name == "scanlineAlpha")
+		value = getString(configuration.scanlineAlpha);
+	else if (name == "shadowMaskAlpha")
+		value = getString(configuration.shadowMaskAlpha);
+	else if (name == "shadowMaskDotPitch")
+		value = getString(configuration.shadowMaskDotPitch);
+	else if (name == "shadowMask")
+	{
+		if (configuration.shadowMask == CANVAS_SHADOWMASK_TRIAD)
+			value = "Triad";
+		else if (configuration.shadowMask == CANVAS_SHADOWMASK_INLINE)
+			value = "Inline";
+		else if (configuration.shadowMask == CANVAS_SHADOWMASK_APERTURE)
+			value = "Aperture";
+		else
+			value = "";
+	}
+	else if (name == "centerLighting")
+		value = getString(configuration.centerLighting);
 	else if (name == "persistance")
 		value = getString(configuration.persistance);
 	else if (name == "compositeBlackLevel")
