@@ -68,7 +68,7 @@ public:
 	void enableGPU();
 	void disableGPU();
 	
-	OESize getDefaultViewSize();
+	OESize getCanvasSize();
 	bool update(float width, float height, float offset, bool update);
 	
 	void becomeKeyWindow();

@@ -466,7 +466,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 - (NSSize)defaultViewSize
 {
 	[document lockEmulation];
-	OESize size = ((OpenGLHAL *)canvas)->getDefaultViewSize();
+	OESize size = ((OpenGLHAL *)canvas)->getCanvasSize();
 	[document unlockEmulation];
 	
 	NSSize defaultViewSize;

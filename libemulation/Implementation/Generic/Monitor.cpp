@@ -16,6 +16,7 @@ Monitor::Monitor()
 	emulation = NULL;
 	canvas = NULL;
 	
+	configuration.canvasSize = OEMakeSize(720, 576);
 	screenRect = OEMakeRect(0, 0, 1, 1);
 }
 

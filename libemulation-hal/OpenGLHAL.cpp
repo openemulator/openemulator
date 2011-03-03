@@ -88,7 +88,7 @@ void OpenGLHAL::disableGPU()
 	isConfigurationValid = false;
 }
 
-OESize OpenGLHAL::getDefaultViewSize()
+OESize OpenGLHAL::getCanvasSize()
 {
 	return nextConfiguration.canvasSize;
 }
@@ -829,9 +829,10 @@ void OpenGLHAL::drawFrame()
 		glUniform1f(glGetUniformLocation(glProgram, "shadowmask_alpha"),
 					shadowMaskAlpha);
 		
-		float pitch = configuration.shadowMaskDotPitch;
-		float elemNumX = 10.4 * 25.4 / pitch / 2.0;
-		float elemNumY = 7.8 * 25.4 / pitch * (240.0 / 274.0);
+		float elemNumX = (configuration.canvasSize.width / 75.0 * 25.4 /
+						  (configuration.shadowMaskDotPitch + 0.001) / 2.0);
+		float elemNumY = (configuration.canvasSize.height / 75.0 * 25.4 /
+						  (configuration.shadowMaskDotPitch + 0.001) * (240.0 / 274.0));
 		glUniform2f(glGetUniformLocation(glProgram, "shadowmask_scale"),
 					glTextureSize.width / glFrameSize.width *
 					configuration.contentRect.size.width * elemNumX,

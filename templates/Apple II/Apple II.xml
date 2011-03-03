@@ -230,7 +230,7 @@
     <setting ref="appleMonitorII.monitor" name="scanlineAlpha" label="Scanline Alpha" type="slider" options="0.0,1.0" />
     <setting ref="appleMonitorII.monitor" name="centerLighting" label="Center Lighting" type="slider" options="0.0,1.0" />
     <setting ref="appleMonitorII.monitor" name="shadowMaskAlpha" label="Shadow Mask Alpha" type="slider" options="0.0,1.0" />
-    <setting ref="appleMonitorII.monitor" name="shadowMaskDotPitch" label="Shadow Mask Dot Pitch" type="slider" options="0.0,1.0" />
+    <setting ref="appleMonitorII.monitor" name="shadowMaskDotPitch" label="Shadow Mask Dot Pitch" type="slider" options="0.0,2.0" />
     <setting ref="appleMonitorII.monitor" name="shadowMask" label="Shadow Mask" type="select" options="Triad,Inline,Aperture" />
     <setting ref="appleMonitorII.monitor" name="persistance" label="Persistance" type="slider" options="0.0,1.0" />
     

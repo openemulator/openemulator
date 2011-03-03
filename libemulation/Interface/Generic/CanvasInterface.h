@@ -16,8 +16,10 @@
 //
 // Notes:
 //
+// * Canvas size is in screen pixels
 // * Content rect coordinates are in [0..1:0..1] coordinates
 //   (origin is lower left).
+// * Shadow mask dot pitch is in millimeters and assumes 75 dpi.
 // * HID axes are in [-1:1] coordinates.
 //
 
@@ -42,12 +44,6 @@ typedef enum
 	CANVAS_JOYSTICK3_DID_CHANGE,
 	CANVAS_JOYSTICK4_DID_CHANGE,
 } CanvasNotification;
-
-typedef enum
-{
-	CANVAS_UNITS_INCHES,
-	CANVAS_UNITS_PIXELS,
-} CanvasUnits;
 
 typedef enum
 {
@@ -84,7 +80,6 @@ class CanvasConfiguration
 public:
 	CanvasConfiguration()
 	{
-		canvasUnits = CANVAS_UNITS_PIXELS;
 		canvasSize = OEMakeSize(640, 480);
 		contentRect = OEMakeRect(0, 0, 1, 1);
 		viewMode = CANVAS_VIEWMODE_FIT_CANVAS;
@@ -112,7 +107,6 @@ public:
 		compositeChromaBandwidth = 0.01;
 	}
 	
-	CanvasUnits canvasUnits;
 	OESize canvasSize;
 	OERect contentRect;
 	CanvasViewMode viewMode;
