@@ -878,6 +878,11 @@ void OpenGLHAL::drawFrame()
 #ifdef GL_VERSION_2_0
 	glUseProgram(0);
 #endif // GL_VERSION_2_0
+	
+	// Phosphor persistance
+/*	glAccum(GL_MULT, configuration.persistance);
+	glAccum(GL_ACCUM, (1 - configuration.persistance));
+	glAccum(GL_RETURN, 1.0);*/
 }
 
 // HID

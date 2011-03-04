@@ -214,7 +214,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 		NSOpenGLPFAAlphaSize, 8,
 		NSOpenGLPFADepthSize, 0,
 		NSOpenGLPFAStencilSize, 0,
-		NSOpenGLPFAAccumSize, 0,
+		NSOpenGLPFAAccumSize, 8,
 		0
 	};
 	
@@ -480,14 +480,14 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 {
 	NSRect frame = [self bounds];
 	
-	CGLLockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
+/*	CGLLockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
 	
 	[[self openGLContext] makeCurrentContext];
 	
 	if (((OpenGLHAL *)canvas)->update(NSWidth(frame), NSHeight(frame), 0, true))
 		[[self openGLContext] flushBuffer];
 	
-	CGLUnlockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
+	CGLUnlockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);*/
 }
 
 - (void)updateView

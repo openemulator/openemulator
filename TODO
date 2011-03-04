@@ -1,5 +1,6 @@
 ==To-Do==
 * Implement shader persistance
+* Fix multi-thread OpenGL access
 * Implement power/pause/capture badge. Capture badge lasts 3 seconds and disappears in 1 second
 * Implement the option to deactivate shaders
 * Add support for scrolling canvas. Think about printing
@@ -17,6 +18,8 @@
 * Implement main emulation window remove device
 * Support daisy chaining of devices, when a device has a port and connector of the same type (when adding or removing a device)
 * Implement disk image file locking, if the disk image is writable (flock)
+
+
 
 ==NTSC phases==
 227.5 cycles/line
@@ -45,17 +48,6 @@ Frame 1		Frame 2		Frame 3		Frame 4
  135
 90
  45
-
-==Dot pitch==
-13" monitor: dot pitch 0,28 mm
-Horizontal dot pitch = 0,28 * 0,5 = 0,14
-Horizontal tridot pitch = 0,28 *1,5 = 0,42mm
-There are 10,4*25,4/0,42 = 628 horizontal elements
-
-* None
-* Shadow Mask
-* Aperture Grille
-* Slot Mask
 
 ==Future to-do's==
 * Debugging with JTAG
@@ -104,7 +96,6 @@ There are 10,4*25,4/0,42 = 628 horizontal elements
 What follows is the compendium of old ideas.
 
 ==OpenEmulator==
-* When application looses focus, all fullscreen windows should be de-zoomed
 * Implement CPU Load
 * Fix template chooser width problem, when scroll bars show and hide
 * Fix template chooser problem when the first line of items is not selected

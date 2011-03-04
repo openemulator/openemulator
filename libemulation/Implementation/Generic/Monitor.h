@@ -21,6 +21,7 @@ public:
 	bool getValue(string name, string& value);
 	bool setRef(string name, OEComponent *ref);
 	bool init();
+	void notify(OEComponent *sender, int message, void *data);
 	
 private:
 	OEComponent *emulation;
@@ -30,6 +31,8 @@ private:
 	OERect screenRect;
 	
 	string dummyPath;
+	OEImage frame;
+	OEComponent *audio;
 	
 	void updateContentRect();
 };

@@ -11,6 +11,8 @@
 #include "Monitor.h"
 #include "Emulation.h"
 
+#include "AudioInterface.h"
+
 Monitor::Monitor()
 {
 	emulation = NULL;
@@ -18,6 +20,8 @@ Monitor::Monitor()
 	
 	configuration.canvasSize = OEMakeSize(720, 576);
 	screenRect = OEMakeRect(0, 0, 1, 1);
+	
+	audio = NULL;
 }
 
 bool Monitor::setValue(string name, string value)
@@ -207,6 +211,8 @@ bool Monitor::setRef(string name, OEComponent *ref)
 		addObserver(canvas, CANVAS_JOYSTICK3_DID_CHANGE);
 		addObserver(canvas, CANVAS_JOYSTICK4_DID_CHANGE);
 	}
+	else if (name == "audio")
+		setObserver(audio, ref, AUDIO_FRAME_WILL_RENDER);
 	else
 		return false;
 	
@@ -231,12 +237,17 @@ bool Monitor::init()
 	{
 		canvas->postMessage(this, CANVAS_CONFIGURE, &configuration);
 		
-		OEImage frame;
 		frame.readFile(dummyPath);
 		canvas->postMessage(this, CANVAS_POST_FRAME, &frame);
 	}
 	
 	return true;
+}
+
+void Monitor::notify(OEComponent *sender, int notification, void *data)
+{
+	if (canvas)
+		canvas->postMessage(this, CANVAS_POST_FRAME, &frame);
 }
 
 void Monitor::updateContentRect()
