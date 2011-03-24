@@ -13,8 +13,6 @@
 		00039D2712B01EB40025D374 /* EmulationShowSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = 00039D2512B01EB40025D374 /* EmulationShowSelected.png */; };
 		00039E0C12B0365A0025D374 /* EmulationUnmountRollover.png in Resources */ = {isa = PBXBuildFile; fileRef = 00039E0A12B0365A0025D374 /* EmulationUnmountRollover.png */; };
 		00039E0D12B0365A0025D374 /* EmulationShowRollover.png in Resources */ = {isa = PBXBuildFile; fileRef = 00039E0B12B0365A0025D374 /* EmulationShowRollover.png */; };
-		00039E7F12B03F740025D374 /* OpenGLHAL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00039E3F12B03C3C0025D374 /* OpenGLHAL.cpp */; };
-		00039E8012B03F750025D374 /* PortAudioHAL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00039E4112B03C3C0025D374 /* PortAudioHAL.cpp */; };
 		00039E9B12B042210025D374 /* libemulation-hal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00039E7C12B03F660025D374 /* libemulation-hal.a */; };
 		00039EB112B042390025D374 /* libemulation-hal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00039E7C12B03F660025D374 /* libemulation-hal.a */; };
 		00039F0112B04EAA0025D374 /* libemulation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00039EFE12B04E910025D374 /* libemulation.a */; };
@@ -59,7 +57,14 @@
 		008107DE1120C57600D744FB /* TemplateChooserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00FE0C051095353B00B92AB7 /* TemplateChooserViewController.m */; };
 		00811E0012D251E9009AD2F0 /* AppleDiskIIInterfaceCard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00811DFE12D251E9009AD2F0 /* AppleDiskIIInterfaceCard.cpp */; };
 		00811F1312D2738B009AD2F0 /* AppleGraphicsTablet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00811F1112D2738B009AD2F0 /* AppleGraphicsTablet.cpp */; };
-		008EF22012F5E79E006DCEDF /* OpenGLHALSignalProcessing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 008EF21D12F5E790006DCEDF /* OpenGLHALSignalProcessing.cpp */; };
+		0083630B1326C15300CB9A21 /* HALImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 008363031326C15300CB9A21 /* HALImage.cpp */; };
+		0083630C1326C15300CB9A21 /* HALImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 008363041326C15300CB9A21 /* HALImage.h */; };
+		0083630D1326C15300CB9A21 /* OpenGLHAL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 008363051326C15300CB9A21 /* OpenGLHAL.cpp */; };
+		0083630E1326C15300CB9A21 /* OpenGLHAL.h in Headers */ = {isa = PBXBuildFile; fileRef = 008363061326C15300CB9A21 /* OpenGLHAL.h */; };
+		0083630F1326C15300CB9A21 /* OpenGLHALSignalProcessing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 008363071326C15300CB9A21 /* OpenGLHALSignalProcessing.cpp */; };
+		008363101326C15300CB9A21 /* OpenGLHALSignalProcessing.h in Headers */ = {isa = PBXBuildFile; fileRef = 008363081326C15300CB9A21 /* OpenGLHALSignalProcessing.h */; };
+		008363111326C15300CB9A21 /* PortAudioHAL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 008363091326C15300CB9A21 /* PortAudioHAL.cpp */; };
+		008363121326C15300CB9A21 /* PortAudioHAL.h in Headers */ = {isa = PBXBuildFile; fileRef = 0083630A1326C15300CB9A21 /* PortAudioHAL.h */; };
 		00954E781277B79E00C17203 /* EmulationOutlineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00954E771277B79E00C17203 /* EmulationOutlineCell.m */; };
 		00954E991277BB8E00C17203 /* EmulationWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00954E981277BB8E00C17203 /* EmulationWindowController.m */; };
 		00954E9E1277BBB400C17203 /* HardwareChooserWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00954E9D1277BBB400C17203 /* HardwareChooserWindowController.m */; };
@@ -199,10 +204,6 @@
 		00039D2512B01EB40025D374 /* EmulationShowSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = EmulationShowSelected.png; path = macosx/Images/EmulationShowSelected.png; sourceTree = "<group>"; };
 		00039E0A12B0365A0025D374 /* EmulationUnmountRollover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = EmulationUnmountRollover.png; path = macosx/Images/EmulationUnmountRollover.png; sourceTree = "<group>"; };
 		00039E0B12B0365A0025D374 /* EmulationShowRollover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = EmulationShowRollover.png; path = macosx/Images/EmulationShowRollover.png; sourceTree = "<group>"; };
-		00039E3F12B03C3C0025D374 /* OpenGLHAL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OpenGLHAL.cpp; path = "libemulation-hal/OpenGLHAL.cpp"; sourceTree = "<group>"; };
-		00039E4012B03C3C0025D374 /* OpenGLHAL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OpenGLHAL.h; path = "libemulation-hal/OpenGLHAL.h"; sourceTree = "<group>"; };
-		00039E4112B03C3C0025D374 /* PortAudioHAL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PortAudioHAL.cpp; path = "libemulation-hal/PortAudioHAL.cpp"; sourceTree = "<group>"; };
-		00039E4212B03C3C0025D374 /* PortAudioHAL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PortAudioHAL.h; path = "libemulation-hal/PortAudioHAL.h"; sourceTree = "<group>"; };
 		00039E7C12B03F660025D374 /* libemulation-hal.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libemulation-hal.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		00039EFE12B04E910025D374 /* libemulation.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libemulation.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		00039FD012B04F6C0025D374 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = /usr/lib/libxml2.dylib; sourceTree = "<absolute>"; };
@@ -263,9 +264,15 @@
 		00811DFE12D251E9009AD2F0 /* AppleDiskIIInterfaceCard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleDiskIIInterfaceCard.cpp; sourceTree = "<group>"; };
 		00811F1012D2738B009AD2F0 /* AppleGraphicsTablet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleGraphicsTablet.h; sourceTree = "<group>"; };
 		00811F1112D2738B009AD2F0 /* AppleGraphicsTablet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleGraphicsTablet.cpp; sourceTree = "<group>"; };
+		008363031326C15300CB9A21 /* HALImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HALImage.cpp; sourceTree = "<group>"; };
+		008363041326C15300CB9A21 /* HALImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HALImage.h; sourceTree = "<group>"; };
+		008363051326C15300CB9A21 /* OpenGLHAL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenGLHAL.cpp; sourceTree = "<group>"; };
+		008363061326C15300CB9A21 /* OpenGLHAL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenGLHAL.h; sourceTree = "<group>"; };
+		008363071326C15300CB9A21 /* OpenGLHALSignalProcessing.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenGLHALSignalProcessing.cpp; sourceTree = "<group>"; };
+		008363081326C15300CB9A21 /* OpenGLHALSignalProcessing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenGLHALSignalProcessing.h; sourceTree = "<group>"; };
+		008363091326C15300CB9A21 /* PortAudioHAL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PortAudioHAL.cpp; sourceTree = "<group>"; };
+		0083630A1326C15300CB9A21 /* PortAudioHAL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PortAudioHAL.h; sourceTree = "<group>"; };
 		0085D4ED12DD07FA00782201 /* IEEE844Interface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IEEE844Interface.h; sourceTree = "<group>"; };
-		008EF21D12F5E790006DCEDF /* OpenGLHALSignalProcessing.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OpenGLHALSignalProcessing.cpp; path = "libemulation-hal/OpenGLHALSignalProcessing.cpp"; sourceTree = "<group>"; };
-		008EF21E12F5E790006DCEDF /* OpenGLHALSignalProcessing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OpenGLHALSignalProcessing.h; path = "libemulation-hal/OpenGLHALSignalProcessing.h"; sourceTree = "<group>"; };
 		00954E761277B79E00C17203 /* EmulationOutlineCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmulationOutlineCell.h; sourceTree = "<group>"; };
 		00954E771277B79E00C17203 /* EmulationOutlineCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmulationOutlineCell.m; sourceTree = "<group>"; };
 		00954E971277BB8E00C17203 /* EmulationWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmulationWindowController.h; sourceTree = "<group>"; };
@@ -482,14 +489,16 @@
 		00039E3C12B03BA90025D374 /* libemulation-hal */ = {
 			isa = PBXGroup;
 			children = (
-				008EF21D12F5E790006DCEDF /* OpenGLHALSignalProcessing.cpp */,
-				008EF21E12F5E790006DCEDF /* OpenGLHALSignalProcessing.h */,
-				00039E3F12B03C3C0025D374 /* OpenGLHAL.cpp */,
-				00039E4012B03C3C0025D374 /* OpenGLHAL.h */,
-				00039E4112B03C3C0025D374 /* PortAudioHAL.cpp */,
-				00039E4212B03C3C0025D374 /* PortAudioHAL.h */,
+				008363031326C15300CB9A21 /* HALImage.cpp */,
+				008363041326C15300CB9A21 /* HALImage.h */,
+				008363051326C15300CB9A21 /* OpenGLHAL.cpp */,
+				008363061326C15300CB9A21 /* OpenGLHAL.h */,
+				008363071326C15300CB9A21 /* OpenGLHALSignalProcessing.cpp */,
+				008363081326C15300CB9A21 /* OpenGLHALSignalProcessing.h */,
+				008363091326C15300CB9A21 /* PortAudioHAL.cpp */,
+				0083630A1326C15300CB9A21 /* PortAudioHAL.h */,
 			);
-			name = "libemulation-hal";
+			path = "libemulation-hal";
 			sourceTree = "<group>";
 		};
 		000A78A50FBA464600A0F12E /* OpenEmulator.app */ = {
@@ -925,6 +934,10 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0083630C1326C15300CB9A21 /* HALImage.h in Headers */,
+				0083630E1326C15300CB9A21 /* OpenGLHAL.h in Headers */,
+				008363101326C15300CB9A21 /* OpenGLHALSignalProcessing.h in Headers */,
+				008363121326C15300CB9A21 /* PortAudioHAL.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1117,9 +1130,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00039E7F12B03F740025D374 /* OpenGLHAL.cpp in Sources */,
-				00039E8012B03F750025D374 /* PortAudioHAL.cpp in Sources */,
-				008EF22012F5E79E006DCEDF /* OpenGLHALSignalProcessing.cpp in Sources */,
+				0083630B1326C15300CB9A21 /* HALImage.cpp in Sources */,
+				0083630D1326C15300CB9A21 /* OpenGLHAL.cpp in Sources */,
+				0083630F1326C15300CB9A21 /* OpenGLHALSignalProcessing.cpp in Sources */,
+				008363111326C15300CB9A21 /* PortAudioHAL.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

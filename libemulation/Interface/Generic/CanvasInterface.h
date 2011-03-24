@@ -17,16 +17,16 @@
 // Notes:
 //
 // * Canvas size is in screen pixels
-// * Content rect coordinates are in [0..1:0..1] coordinates
-//   (origin is lower left).
-// * Shadow mask dot pitch is in millimeters and assumes 75 dpi.
-// * HID axes are in [-1:1] coordinates.
+// * Content rect uses [0..1:0..1] coordinates (origin is lower left)
+// * Shadow mask dot pitch is in millimeters and assumes 75 dpi
+// * HID axes are in [-1:1] coordinates
 //
 
 typedef enum
 {
 	CANVAS_CONFIGURE,
-	CANVAS_POST_FRAME,
+	CANVAS_GET_FRAME,
+	CANVAS_UPDATE_FRAME,
 	CANVAS_SET_KEYBOARDFLAGS,
 	CANVAS_SET_BADGEFLAGS,
 	CANVAS_COPY,
@@ -47,9 +47,9 @@ typedef enum
 
 typedef enum
 {
-	CANVAS_VIEWMODE_FIT_CANVAS,
-	CANVAS_VIEWMODE_FIT_WIDTH,
-} CanvasViewMode;
+	CANVAS_MODE_VIDEO,
+	CANVAS_MODE_PAPER,
+} CanvasMode;
 
 typedef enum
 {
@@ -80,58 +80,62 @@ class CanvasConfiguration
 public:
 	CanvasConfiguration()
 	{
-		canvasSize = OEMakeSize(640, 480);
+		mode = CANVAS_MODE_VIDEO;
+		size = OEMakeSize(640, 480);
 		contentRect = OEMakeRect(0, 0, 1, 1);
-		viewMode = CANVAS_VIEWMODE_FIT_CANVAS;
 		captureMode = CANVAS_CAPTUREMODE_NO_CAPTURE;
 		
-		decoder = CANVAS_DECODER_RGB;
-		lumaBandwidth = 1;
-		brightness = 0;
-		contrast = 1;
-		saturation = 1;
-		hue = 0;
+		videoDecoder = CANVAS_DECODER_RGB;
+		videoBandwidth = 1;
+		videoBrightness = 0;
+		videoContrast = 1;
+		videoSaturation = 1;
+		videoHue = 0;
 		
-		barrel = 0;
-		scanlineAlpha = 0;
-		shadowMask = CANVAS_SHADOWMASK_TRIAD;
-		shadowMaskDotPitch = 1;
-		shadowMaskAlpha = 0;
-		centerLighting = 1;
-		persistance = 0;
+		screenBarrel = 0;
+		screenScanlineAlpha = 0;
+		screenCenterLighting = 1;
+		screenShadowMask = CANVAS_SHADOWMASK_TRIAD;
+		screenShadowMaskDotPitch = 1;
+		screenShadowMaskAlpha = 0;
+		screenPersistance = 0;
 		
 		compositeBlackLevel = 0;
 		compositeWhiteLevel = 1;
 		compositeCarrierFrequency = 0.25;
 		compositeLinePhase = 0;
 		compositeChromaBandwidth = 0.01;
+		
+		pageHeight = 0;
 	}
 	
-	OESize canvasSize;
+	CanvasMode mode;
+	OESize size;
 	OERect contentRect;
-	CanvasViewMode viewMode;
 	CanvasCaptureMode captureMode;
 	
-	CanvasDecoder decoder;
-	float lumaBandwidth;
-	float brightness;
-	float contrast;
-	float saturation;
-	float hue;
+	CanvasDecoder videoDecoder;
+	float videoBandwidth;
+	float videoBrightness;
+	float videoContrast;
+	float videoSaturation;
+	float videoHue;
 	
-	float barrel;
-	float scanlineAlpha;
-	float centerLighting;
-	float shadowMaskAlpha;
-	float shadowMaskDotPitch;
-	CanvasShadowMask shadowMask;
-	float persistance;
+	float screenBarrel;
+	float screenScanlineAlpha;
+	float screenCenterLighting;
+	float screenShadowMaskAlpha;
+	float screenShadowMaskDotPitch;
+	CanvasShadowMask screenShadowMask;
+	float screenPersistance;
 	
 	float compositeBlackLevel;
 	float compositeWhiteLevel;
 	float compositeCarrierFrequency;
 	float compositeLinePhase;
 	float compositeChromaBandwidth;
+	
+	float pageHeight;
 };
 
 // Canvas keyboard flags use int

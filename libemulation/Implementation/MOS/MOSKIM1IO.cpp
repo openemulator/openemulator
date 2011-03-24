@@ -80,11 +80,10 @@ bool MOSKIM1IO::init()
 	{
 		OEImage frame;
 		frame.readFile(viewPath);
-		canvas->postMessage(this, CANVAS_POST_FRAME, &frame);
+		canvas->postMessage(this, CANVAS_UPDATE_FRAME, &frame);
 		
 		CanvasConfiguration configuration;
-		configuration.viewMode = CANVAS_VIEWMODE_FIT_CANVAS;
-		configuration.canvasSize = frame.getSize();
+		configuration.size = frame.getSize();
 		canvas->postMessage(this, CANVAS_CONFIGURE, &configuration);
 	}
 	

@@ -156,6 +156,16 @@ CanvasKeyMapEntry canvasKeyMap[] =
 
 // Callback methods
 
+static void makeCurrentContext(void *userData)
+{
+	[(CanvasView *)userData makeCurrentContext];
+}
+
+static void clearCurrentContext(void *userData)
+{
+	[(CanvasView *)userData clearCurrentContext];
+}
+
 static void setCapture(void *userData, OpenGLHALCapture capture)
 {
 	NSLog(@"CanvasView setCapture");
@@ -255,7 +265,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 															  cglPixelFormat);
 		}
 		
-		lock = [NSRecursiveLock new];
+		openGLLock = [NSRecursiveLock new];
 	}
 	
 	return self;
@@ -268,8 +278,8 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	CVDisplayLinkStop(displayLink);
     CVDisplayLinkRelease(displayLink);
 	
-    if (lock)
-    	[lock release];
+    if (displayLinkLock)
+    	[displayLinkLock release];
 	
 	[super dealloc];
 }
@@ -429,7 +439,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 					   forParameter:NSOpenGLCPSwapInterval]; 
 	
 	[document lockEmulation];
-	((OpenGLHAL *)canvas)->open(setCapture,
+	((OpenGLHAL *)canvas)->open(makeCurrentContext,
+								clearCurrentContext,
+								setCapture,
 								setKeyboardFlags,
 								NULL);
 	[document unlockEmulation];
@@ -447,6 +459,18 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 		((OpenGLHAL *)canvas)->close();
 		[document unlockEmulation];
 	}
+}
+
+- (void)captureOpenGL
+{
+	[openGLLock lock];
+	
+	[[self openGLContext] makeCurrentContext];
+}
+
+- (void)releaseOpenGL
+{
+	[openGLLock unlock];
 }
 
 - (void)startDisplayLink
@@ -478,9 +502,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (void)drawRect:(NSRect)theRect
 {
-	NSRect frame = [self bounds];
+/*	NSRect frame = [self bounds];
 	
-/*	CGLLockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
+	CGLLockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
 	
 	[[self openGLContext] makeCurrentContext];
 	
@@ -493,15 +517,12 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 - (void)updateView
 {
 	NSRect frame = [self bounds];
-	
-	CGLLockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
-	
-	[[self openGLContext] makeCurrentContext];
-	
 	if (((OpenGLHAL *)canvas)->update(NSWidth(frame), NSHeight(frame), 0, false))
+	{
+		[openGLLock lock];
 		[[self openGLContext] flushBuffer];
-	
-	CGLUnlockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
+		[openGLLock unlock];
+	}
 }
 
 // Keyboard

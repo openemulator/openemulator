@@ -50,6 +50,8 @@ typedef enum
 
 
 
+typedef void (*CanvasCaptureOpenGL)(void *userData);
+typedef void (*CanvasReleaseOpenGL)(void *userData);
 typedef void (*CanvasSetCapture)(void *userData, OpenGLHALCapture capture);
 typedef void (*CanvasSetKeyboardFlags)(void *userData, int flags);
 
@@ -59,8 +61,11 @@ class OpenGLHAL : public OEComponent
 {
 public:
 	OpenGLHAL(string resourcePath);
+	~OpenGLHAL();
 	
-	void open(CanvasSetCapture setCapture,
+	void open(CanvasCaptureOpenGL captureOpenGL,
+			  CanvasReleaseOpenGL releaseOpenGL,
+			  CanvasSetCapture setCapture,
 			  CanvasSetKeyboardFlags setKeyboardFlags,
 			  void *userData);
 	void close();
@@ -69,6 +74,7 @@ public:
 	void disableGPU();
 	
 	OESize getCanvasSize();
+	CanvasMode getCanvasMode();
 	bool update(float width, float height, float offset, bool update);
 	
 	void becomeKeyWindow();
@@ -97,24 +103,27 @@ public:
 private:
 	string resourcePath;
 	
+	CanvasCaptureOpenGL captureOpenGL;
+	CanvasReleaseOpenGL releaseOpenGL;
 	CanvasSetCapture setCapture;
 	CanvasSetKeyboardFlags setKeyboardFlags;
 	void *userData;
 	
 	pthread_mutex_t drawMutex;
 	
-	CanvasConfiguration nextConfiguration;
-	OEImage *nextFrame;
+	bool isNewConfiguration;
+	CanvasConfiguration newConfiguration;
+	bool isNewFrame;
+	OEImage *frame;
 	
-	bool isConfigurationValid;
 	CanvasConfiguration configuration;
 	
-	OESize glViewportSize;
-	GLuint glTextures[OPENGLHAL_TEXTURE_END];
-	OESize glTextureSize;
-	OESize glFrameSize;
-	GLuint glPrograms[OPENGLHAL_PROGRAM_END];
-	GLuint glProcessProgram;
+	OESize viewportSize;
+	GLuint texture[OPENGLHAL_TEXTURE_END];
+	OESize textureSize;
+	OESize frameSize;
+	GLuint program[OPENGLHAL_PROGRAM_END];
+	GLuint processProgram;
 	
 	OpenGLHALCapture capture;
 	
@@ -131,11 +140,11 @@ private:
 	void loadShadowMask(string path, GLuint glTexture);
 	void loadPrograms();
 	void deletePrograms();
-	void loadProgram(GLuint program, const char *source);
-	void deleteProgram(GLuint program);
+	GLuint loadProgram(const char *source);
+	void deleteProgram(GLuint index);
 	void updateViewport();
 	void updateConfiguration();
-	void setTextureSize(GLuint glProgram);
+	void setTextureSize(GLuint program);
 	void uploadFrame(OEImage *frame);
 	void processFrame();
 	void drawFrame();
@@ -146,7 +155,8 @@ private:
 	
 	bool setCaptureMode(CanvasCaptureMode *captureMode);
 	bool setConfiguration(CanvasConfiguration *configuration);
-	bool postFrame(OEImage *frame);
+	bool getFrame(OEImage **frame);
+	bool updateFrame();
 };
 
 #endif

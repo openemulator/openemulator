@@ -31,7 +31,6 @@ private:
 	OERect screenRect;
 	
 	string dummyPath;
-	OEImage frame;
 	OEComponent *audio;
 	
 	void updateContentRect();

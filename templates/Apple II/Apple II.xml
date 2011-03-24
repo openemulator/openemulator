@@ -244,15 +244,15 @@
 <component id="appleMonitorII.monitor" class="Monitor">
     <property name="emulation" ref="emulation" />
     <property name="decoder" value="RGB" />
-    <property name="lumaBandwidth" value="0.33" />
+    <property name="lumaBandwidth" value="0.3" />
     <property name="brightness" value="0" />
     <property name="contrast" value="1" />
     <property name="saturation" value="1" />
     <property name="hue" value="0" />
     <property name="barrel" value="0.05" />
-    <property name="scanlineAlpha" value="0.1" />
+    <property name="scanlineAlpha" value="0.05" />
     <property name="centerLighting" value="1" />
-    <property name="shadowMaskAlpha" value="0" />
+    <property name="shadowMaskAlpha" value="0.2" />
     <property name="shadowMaskDotPitch" value="0.5" />
     <property name="shadowMask" value="1" />
     <property name="persistance" value="0" />
