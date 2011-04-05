@@ -356,13 +356,12 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	Emulation *theEmulation = new Emulation();
 	
 	theEmulation->setResourcePath(getCPPString([[NSBundle mainBundle] resourcePath]));
-	
-	theEmulation->setComponent("audio", portAudioHAL);
-	
 	theEmulation->setRunAlert(runAlert);
 	theEmulation->setCreateCanvas(createCanvas);
 	theEmulation->setDestroyCanvas(destroyCanvas);
 	theEmulation->setUserData(self);
+	
+	theEmulation->setComponent("audio", portAudioHAL);
 	
 	theEmulation->open(getCPPString([url path]));
 	

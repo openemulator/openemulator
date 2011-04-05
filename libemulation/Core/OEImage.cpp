@@ -16,7 +16,7 @@
 
 OEImage::OEImage()
 {
-	format = OEIMAGE_FORMAT_RGBA;
+	format = OEIMAGE_RGBA;
 	size = OEMakeSize(0, 0);
 }
 
@@ -106,7 +106,7 @@ bool OEImage::readFile(string path)
 									 NULL, NULL, NULL);
 						
 						format = ((color_type == PNG_COLOR_TYPE_RGB) ? 
-								  OEIMAGE_FORMAT_RGB : OEIMAGE_FORMAT_RGBA);
+								  OEIMAGE_RGB : OEIMAGE_RGBA);
 						size.width = width;
 						size.height = height;
 						
@@ -154,9 +154,9 @@ void OEImage::update()
 {
 	int bytesPerPixel = 1;
 	
-	if (format == OEIMAGE_FORMAT_RGB)
+	if (format == OEIMAGE_RGB)
 		bytesPerPixel = 3;
-	else if (format == OEIMAGE_FORMAT_RGBA)
+	else if (format == OEIMAGE_RGBA)
 		bytesPerPixel = 4;
 	
 	pixels.resize(size.width * size.height * bytesPerPixel);

@@ -21,8 +21,6 @@
 {
 	CVDisplayLinkRef displayLink;
 	
-	NSRecursiveLock *openGLLock;
-	
 	Document *document;
 	void *canvas;
 	
@@ -34,8 +32,6 @@
 
 - (void)startOpenGL;
 - (void)stopOpenGL;
-- (void)makeCurrentContext;
-- (void)clearCurrentContext;
 - (void)startDisplayLink;
 - (void)stopDisplayLink;
 - (NSSize)defaultViewSize;

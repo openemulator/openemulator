@@ -50,8 +50,6 @@ typedef enum
 
 
 
-typedef void (*CanvasCaptureOpenGL)(void *userData);
-typedef void (*CanvasReleaseOpenGL)(void *userData);
 typedef void (*CanvasSetCapture)(void *userData, OpenGLHALCapture capture);
 typedef void (*CanvasSetKeyboardFlags)(void *userData, int flags);
 
@@ -61,25 +59,20 @@ class OpenGLHAL : public OEComponent
 {
 public:
 	OpenGLHAL(string resourcePath);
-	~OpenGLHAL();
 	
-	void open(CanvasCaptureOpenGL captureOpenGL,
-			  CanvasReleaseOpenGL releaseOpenGL,
-			  CanvasSetCapture setCapture,
+	void open(CanvasSetCapture setCapture,
 			  CanvasSetKeyboardFlags setKeyboardFlags,
 			  void *userData);
 	void close();
 	
-	void enableGPU();
-	void disableGPU();
-	
 	OESize getCanvasSize();
 	CanvasMode getCanvasMode();
+	void enableGLSL();
+	void disableGLSL();
 	bool update(float width, float height, float offset, bool update);
 	
 	void becomeKeyWindow();
 	void resignKeyWindow();
-	
 	void setKey(int usageId, bool value);
 	void sendUnicodeKeyEvent(int unicode);
 	
@@ -103,24 +96,25 @@ public:
 private:
 	string resourcePath;
 	
-	CanvasCaptureOpenGL captureOpenGL;
-	CanvasReleaseOpenGL releaseOpenGL;
 	CanvasSetCapture setCapture;
 	CanvasSetKeyboardFlags setKeyboardFlags;
 	void *userData;
 	
-	pthread_mutex_t drawMutex;
+	bool isOpen;
+	bool isGLSL;
+	
+	pthread_mutex_t mutex;
 	
 	bool isNewConfiguration;
-	CanvasConfiguration newConfiguration;
-	bool isNewFrame;
-	OEImage *frame;
-	
 	CanvasConfiguration configuration;
+	CanvasConfiguration drawConfiguration;
+	bool isNewFrame;
+	OEImage frame;
+	OEImage drawFrame;
 	
 	OESize viewportSize;
 	GLuint texture[OPENGLHAL_TEXTURE_END];
-	OESize textureSize;
+	OESize frameTextureSize;
 	OESize frameSize;
 	GLuint program[OPENGLHAL_PROGRAM_END];
 	GLuint processProgram;
@@ -145,9 +139,9 @@ private:
 	void updateViewport();
 	void updateConfiguration();
 	void setTextureSize(GLuint program);
-	void uploadFrame(OEImage *frame);
+	bool uploadFrame();
 	void processFrame();
-	void drawFrame();
+	void drawCanvas();
 	
 	void postHIDNotification(int notification, int usageId, float value);
 	void updateCapture(OpenGLHALCapture capture);

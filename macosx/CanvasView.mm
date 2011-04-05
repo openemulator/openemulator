@@ -28,143 +28,9 @@
 #define NSRightAlternateKeyMask	0x00000040
 #define NSRightCommandKeyMask	0x00000010
 
-typedef struct
-{
-	NSInteger keyCode;
-	NSInteger usageId;
-} CanvasKeyMapEntry;
-
-// From:
-// http://stuff.mit.edu/afs/sipb/project/darwin/src/
-// modules/AppleADBKeyboard/AppleADBKeyboard.cpp
-CanvasKeyMapEntry canvasKeyMap[] = 
-{
-	{0x00, CANVAS_K_A},
-	{0x0b, CANVAS_K_B},
-	{0x08, CANVAS_K_C},
-	{0x02, CANVAS_K_D},
-	{0x0e, CANVAS_K_E},
-	{0x03, CANVAS_K_F},
-	{0x05, CANVAS_K_G},
-	{0x04, CANVAS_K_H},
-	{0x22, CANVAS_K_I},
-	{0x26, CANVAS_K_J},
-	{0x28, CANVAS_K_K},
-	{0x25, CANVAS_K_L},
-	{0x2e, CANVAS_K_M},
-	{0x2d, CANVAS_K_N},
-	{0x1f, CANVAS_K_O},
-	{0x23, CANVAS_K_P},
-	{0x0c, CANVAS_K_Q},
-	{0x0f, CANVAS_K_R},
-	{0x01, CANVAS_K_S},
-	{0x11, CANVAS_K_T},
-	{0x20, CANVAS_K_U},
-	{0x09, CANVAS_K_V},
-	{0x0d, CANVAS_K_W},
-	{0x07, CANVAS_K_X},
-	{0x10, CANVAS_K_Y},
-	{0x06, CANVAS_K_Z},
-	{0x12, CANVAS_K_1},
-	{0x13, CANVAS_K_2},
-	{0x14, CANVAS_K_3},
-	{0x15, CANVAS_K_4},
-	{0x17, CANVAS_K_5},
-	{0x16, CANVAS_K_6},
-	{0x1a, CANVAS_K_7},
-	{0x1c, CANVAS_K_8},
-	{0x19, CANVAS_K_9},
-	{0x1d, CANVAS_K_0},
-	{0x24, CANVAS_K_ENTER},
-	{0x35, CANVAS_K_ESCAPE},
-	{0x33, CANVAS_K_BACKSPACE},
-	{0x30, CANVAS_K_TAB},
-	{0x31, CANVAS_K_SPACE},
-	{0x1b, CANVAS_K_MINUS},
-	{0x18, CANVAS_K_EQUAL},
-	{0x21, CANVAS_K_LEFTBRACKET},
-	{0x1e, CANVAS_K_RIGHTBRACKET},
-	{0x2a, CANVAS_K_BACKSLASH},
-	{0x0a, CANVAS_K_NON_US1},
-	{0x29, CANVAS_K_SEMICOLON},
-	{0x27, CANVAS_K_QUOTE},
-	{0x32, CANVAS_K_GRAVEACCENT},
-	{0x2b, CANVAS_K_COMMA},
-	{0x2f, CANVAS_K_PERIOD},
-	{0x2c, CANVAS_K_SLASH},
-	{0x39, CANVAS_K_CAPSLOCK},
-	{0x7a, CANVAS_K_F1},
-	{0x78, CANVAS_K_F2},
-	{0x63, CANVAS_K_F3},
-	{0x76, CANVAS_K_F4},
-	{0x60, CANVAS_K_F5},
-	{0x61, CANVAS_K_F6},
-	{0x62, CANVAS_K_F7},
-	{0x64, CANVAS_K_F8},
-	{0x65, CANVAS_K_F9},
-	{0x6d, CANVAS_K_F10},
-	{0x67, CANVAS_K_F11},
-	{0x6f, CANVAS_K_F12},
-	{0x69, CANVAS_K_PRINTSCREEN},
-	{0x6b, CANVAS_K_SCROLLLOCK},
-	{0x71, CANVAS_K_PAUSE},
-	{0x72, CANVAS_K_INSERT},
-	{0x73, CANVAS_K_HOME},
-	{0x74, CANVAS_K_PAGEUP},
-	{0x75, CANVAS_K_DELETE},
-	{0x77, CANVAS_K_END},
-	{0x79, CANVAS_K_PAGEDOWN},
-	{0x7c, CANVAS_K_RIGHT},
-	{0x7b, CANVAS_K_LEFT},
-	{0x7d, CANVAS_K_DOWN},
-	{0x7e, CANVAS_K_UP},
-	{0x47, CANVAS_KP_NUMLOCK},
-	{0x4b, CANVAS_KP_SLASH},
-	{0x43, CANVAS_KP_STAR},
-	{0x4e, CANVAS_KP_MINUS},
-	{0x45, CANVAS_KP_PLUS},
-	{0x4c, CANVAS_KP_ENTER},
-	{0x53, CANVAS_KP_1},
-	{0x54, CANVAS_KP_2},
-	{0x55, CANVAS_KP_3},
-	{0x56, CANVAS_KP_4},
-	{0x57, CANVAS_KP_5},
-	{0x58, CANVAS_KP_6},
-	{0x59, CANVAS_KP_7},
-	{0x5b, CANVAS_KP_8},
-	{0x5c, CANVAS_KP_9},
-	{0x52, CANVAS_KP_0},
-	{0x41, CANVAS_KP_PERIOD},
-	{0x51, CANVAS_KP_EQUAL},
-	{0x6a, CANVAS_K_F16},
-	{0x40, CANVAS_K_F17},
-	{0x4f, CANVAS_K_F18},
-	{0x50, CANVAS_K_F19},
-	{0x7f, CANVAS_K_POWER},
-	
-	{0x3b, CANVAS_K_LEFTCONTROL},
-	{0x38, CANVAS_K_LEFTSHIFT},
-	{0x3a, CANVAS_K_LEFTALT},
-	{0x37, CANVAS_K_LEFTGUI},
-	{0x3e, CANVAS_K_RIGHTCONTROL},
-	{0x3c, CANVAS_K_RIGHTSHIFT},
-	{0x3d, CANVAS_K_RIGHTALT},
-	{0x36, CANVAS_K_RIGHTGUI},
-};
-
 @implementation CanvasView
 
 // Callback methods
-
-static void makeCurrentContext(void *userData)
-{
-	[(CanvasView *)userData makeCurrentContext];
-}
-
-static void clearCurrentContext(void *userData)
-{
-	[(CanvasView *)userData clearCurrentContext];
-}
 
 static void setCapture(void *userData, OpenGLHALCapture capture)
 {
@@ -190,7 +56,7 @@ static void setCapture(void *userData, OpenGLHALCapture capture)
 
 static void setKeyboardFlags(void *userData, int flags)
 {
-	// To-Do: see if we need performSelectorOnMainThread
+	// To-Do: check if performSelectorOnMainThread is needed
 	
 	[(CanvasView *)userData setKeyboardFlags:flags];
 }
@@ -243,12 +109,6 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	
 	if (self = [super initWithFrame:rect pixelFormat:pixelFormat])
 	{
-		memset(keyMap, sizeof(keyMap), 0);
-		for (NSInteger i = 0;
-			 i < sizeof(canvasKeyMap) / sizeof(CanvasKeyMapEntry);
-			 i++)
-			keyMap[canvasKeyMap[i].keyCode] = canvasKeyMap[i].usageId;
-		
 		[self registerForDraggedTypes:[NSArray arrayWithObjects:
 									   NSStringPboardType,
 									   NSFilenamesPboardType, 
@@ -265,7 +125,120 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 															  cglPixelFormat);
 		}
 		
-		openGLLock = [NSRecursiveLock new];
+		// From:
+		//   http://stuff.mit.edu/afs/sipb/project/darwin/src/
+		//   modules/AppleADBKeyboard/AppleADBKeyboard.cpp
+		keyMap[0x00] = CANVAS_K_A;
+		keyMap[0x0b] = CANVAS_K_B;
+		keyMap[0x08] = CANVAS_K_C;
+		keyMap[0x02] = CANVAS_K_D;
+		keyMap[0x0e] = CANVAS_K_E;
+		keyMap[0x03] = CANVAS_K_F;
+		keyMap[0x05] = CANVAS_K_G;
+		keyMap[0x04] = CANVAS_K_H;
+		keyMap[0x22] = CANVAS_K_I;
+		keyMap[0x26] = CANVAS_K_J;
+		keyMap[0x28] = CANVAS_K_K;
+		keyMap[0x25] = CANVAS_K_L;
+		keyMap[0x2e] = CANVAS_K_M;
+		keyMap[0x2d] = CANVAS_K_N;
+		keyMap[0x1f] = CANVAS_K_O;
+		keyMap[0x23] = CANVAS_K_P;
+		keyMap[0x0c] = CANVAS_K_Q;
+		keyMap[0x0f] = CANVAS_K_R;
+		keyMap[0x01] = CANVAS_K_S;
+		keyMap[0x11] = CANVAS_K_T;
+		keyMap[0x20] = CANVAS_K_U;
+		keyMap[0x09] = CANVAS_K_V;
+		keyMap[0x0d] = CANVAS_K_W;
+		keyMap[0x07] = CANVAS_K_X;
+		keyMap[0x10] = CANVAS_K_Y;
+		keyMap[0x06] = CANVAS_K_Z;
+		keyMap[0x12] = CANVAS_K_1;
+		keyMap[0x13] = CANVAS_K_2;
+		keyMap[0x14] = CANVAS_K_3;
+		keyMap[0x15] = CANVAS_K_4;
+		keyMap[0x17] = CANVAS_K_5;
+		keyMap[0x16] = CANVAS_K_6;
+		keyMap[0x1a] = CANVAS_K_7;
+		keyMap[0x1c] = CANVAS_K_8;
+		keyMap[0x19] = CANVAS_K_9;
+		keyMap[0x1d] = CANVAS_K_0;
+		keyMap[0x24] = CANVAS_K_ENTER;
+		keyMap[0x35] = CANVAS_K_ESCAPE;
+		keyMap[0x33] = CANVAS_K_BACKSPACE;
+		keyMap[0x30] = CANVAS_K_TAB;
+		keyMap[0x31] = CANVAS_K_SPACE;
+		keyMap[0x1b] = CANVAS_K_MINUS;
+		keyMap[0x18] = CANVAS_K_EQUAL;
+		keyMap[0x21] = CANVAS_K_LEFTBRACKET;
+		keyMap[0x1e] = CANVAS_K_RIGHTBRACKET;
+		keyMap[0x2a] = CANVAS_K_BACKSLASH;
+		keyMap[0x0a] = CANVAS_K_NON_US1;
+		keyMap[0x29] = CANVAS_K_SEMICOLON;
+		keyMap[0x27] = CANVAS_K_QUOTE;
+		keyMap[0x32] = CANVAS_K_GRAVEACCENT;
+		keyMap[0x2b] = CANVAS_K_COMMA;
+		keyMap[0x2f] = CANVAS_K_PERIOD;
+		keyMap[0x2c] = CANVAS_K_SLASH;
+		keyMap[0x39] = CANVAS_K_CAPSLOCK;
+		keyMap[0x7a] = CANVAS_K_F1;
+		keyMap[0x78] = CANVAS_K_F2;
+		keyMap[0x63] = CANVAS_K_F3;
+		keyMap[0x76] = CANVAS_K_F4;
+		keyMap[0x60] = CANVAS_K_F5;
+		keyMap[0x61] = CANVAS_K_F6;
+		keyMap[0x62] = CANVAS_K_F7;
+		keyMap[0x64] = CANVAS_K_F8;
+		keyMap[0x65] = CANVAS_K_F9;
+		keyMap[0x6d] = CANVAS_K_F10;
+		keyMap[0x67] = CANVAS_K_F11;
+		keyMap[0x6f] = CANVAS_K_F12;
+		keyMap[0x69] = CANVAS_K_PRINTSCREEN;
+		keyMap[0x6b] = CANVAS_K_SCROLLLOCK;
+		keyMap[0x71] = CANVAS_K_PAUSE;
+		keyMap[0x72] = CANVAS_K_INSERT;
+		keyMap[0x73] = CANVAS_K_HOME;
+		keyMap[0x74] = CANVAS_K_PAGEUP;
+		keyMap[0x75] = CANVAS_K_DELETE;
+		keyMap[0x77] = CANVAS_K_END;
+		keyMap[0x79] = CANVAS_K_PAGEDOWN;
+		keyMap[0x7c] = CANVAS_K_RIGHT;
+		keyMap[0x7b] = CANVAS_K_LEFT;
+		keyMap[0x7d] = CANVAS_K_DOWN;
+		keyMap[0x7e] = CANVAS_K_UP;
+		keyMap[0x47] = CANVAS_KP_NUMLOCK;
+		keyMap[0x4b] = CANVAS_KP_SLASH;
+		keyMap[0x43] = CANVAS_KP_STAR;
+		keyMap[0x4e] = CANVAS_KP_MINUS;
+		keyMap[0x45] = CANVAS_KP_PLUS;
+		keyMap[0x4c] = CANVAS_KP_ENTER;
+		keyMap[0x53] = CANVAS_KP_1;
+		keyMap[0x54] = CANVAS_KP_2;
+		keyMap[0x55] = CANVAS_KP_3;
+		keyMap[0x56] = CANVAS_KP_4;
+		keyMap[0x57] = CANVAS_KP_5;
+		keyMap[0x58] = CANVAS_KP_6;
+		keyMap[0x59] = CANVAS_KP_7;
+		keyMap[0x5b] = CANVAS_KP_8;
+		keyMap[0x5c] = CANVAS_KP_9;
+		keyMap[0x52] = CANVAS_KP_0;
+		keyMap[0x41] = CANVAS_KP_PERIOD;
+		keyMap[0x51] = CANVAS_KP_EQUAL;
+		keyMap[0x6a] = CANVAS_K_F16;
+		keyMap[0x40] = CANVAS_K_F17;
+		keyMap[0x4f] = CANVAS_K_F18;
+		keyMap[0x50] = CANVAS_K_F19;
+		keyMap[0x7f] = CANVAS_K_POWER;
+		
+		keyMap[0x3b] = CANVAS_K_LEFTCONTROL;
+		keyMap[0x38] = CANVAS_K_LEFTSHIFT;
+		keyMap[0x3a] = CANVAS_K_LEFTALT;
+		keyMap[0x37] = CANVAS_K_LEFTGUI;
+		keyMap[0x3e] = CANVAS_K_RIGHTCONTROL;
+		keyMap[0x3c] = CANVAS_K_RIGHTSHIFT;
+		keyMap[0x3d] = CANVAS_K_RIGHTALT;
+		keyMap[0x36] = CANVAS_K_RIGHTGUI;
 	}
 	
 	return self;
@@ -277,9 +250,6 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	
 	CVDisplayLinkStop(displayLink);
     CVDisplayLinkRelease(displayLink);
-	
-    if (displayLinkLock)
-    	[displayLinkLock release];
 	
 	[super dealloc];
 }
@@ -438,13 +408,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	[[self openGLContext] setValues:&value
 					   forParameter:NSOpenGLCPSwapInterval]; 
 	
-	[document lockEmulation];
-	((OpenGLHAL *)canvas)->open(makeCurrentContext,
-								clearCurrentContext,
-								setCapture,
+	((OpenGLHAL *)canvas)->open(setCapture,
 								setKeyboardFlags,
-								NULL);
-	[document unlockEmulation];
+								self);
 }
 
 - (void)stopOpenGL
@@ -454,23 +420,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	[[self openGLContext] makeCurrentContext];
 	
 	if (canvas)
-	{
-		[document lockEmulation];
 		((OpenGLHAL *)canvas)->close();
-		[document unlockEmulation];
-	}
-}
-
-- (void)captureOpenGL
-{
-	[openGLLock lock];
-	
-	[[self openGLContext] makeCurrentContext];
-}
-
-- (void)releaseOpenGL
-{
-	[openGLLock unlock];
 }
 
 - (void)startDisplayLink
@@ -516,13 +466,11 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (void)updateView
 {
+	[[self openGLContext] makeCurrentContext];
+	
 	NSRect frame = [self bounds];
 	if (((OpenGLHAL *)canvas)->update(NSWidth(frame), NSHeight(frame), 0, false))
-	{
-		[openGLLock lock];
 		[[self openGLContext] flushBuffer];
-		[openGLLock unlock];
-	}
 }
 
 // Keyboard

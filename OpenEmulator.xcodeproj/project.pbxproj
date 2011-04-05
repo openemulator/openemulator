@@ -57,8 +57,6 @@
 		008107DE1120C57600D744FB /* TemplateChooserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00FE0C051095353B00B92AB7 /* TemplateChooserViewController.m */; };
 		00811E0012D251E9009AD2F0 /* AppleDiskIIInterfaceCard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00811DFE12D251E9009AD2F0 /* AppleDiskIIInterfaceCard.cpp */; };
 		00811F1312D2738B009AD2F0 /* AppleGraphicsTablet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00811F1112D2738B009AD2F0 /* AppleGraphicsTablet.cpp */; };
-		0083630B1326C15300CB9A21 /* HALImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 008363031326C15300CB9A21 /* HALImage.cpp */; };
-		0083630C1326C15300CB9A21 /* HALImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 008363041326C15300CB9A21 /* HALImage.h */; };
 		0083630D1326C15300CB9A21 /* OpenGLHAL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 008363051326C15300CB9A21 /* OpenGLHAL.cpp */; };
 		0083630E1326C15300CB9A21 /* OpenGLHAL.h in Headers */ = {isa = PBXBuildFile; fileRef = 008363061326C15300CB9A21 /* OpenGLHAL.h */; };
 		0083630F1326C15300CB9A21 /* OpenGLHALSignalProcessing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 008363071326C15300CB9A21 /* OpenGLHALSignalProcessing.cpp */; };
@@ -264,8 +262,6 @@
 		00811DFE12D251E9009AD2F0 /* AppleDiskIIInterfaceCard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleDiskIIInterfaceCard.cpp; sourceTree = "<group>"; };
 		00811F1012D2738B009AD2F0 /* AppleGraphicsTablet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleGraphicsTablet.h; sourceTree = "<group>"; };
 		00811F1112D2738B009AD2F0 /* AppleGraphicsTablet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleGraphicsTablet.cpp; sourceTree = "<group>"; };
-		008363031326C15300CB9A21 /* HALImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HALImage.cpp; sourceTree = "<group>"; };
-		008363041326C15300CB9A21 /* HALImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HALImage.h; sourceTree = "<group>"; };
 		008363051326C15300CB9A21 /* OpenGLHAL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenGLHAL.cpp; sourceTree = "<group>"; };
 		008363061326C15300CB9A21 /* OpenGLHAL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenGLHAL.h; sourceTree = "<group>"; };
 		008363071326C15300CB9A21 /* OpenGLHALSignalProcessing.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenGLHALSignalProcessing.cpp; sourceTree = "<group>"; };
@@ -489,8 +485,6 @@
 		00039E3C12B03BA90025D374 /* libemulation-hal */ = {
 			isa = PBXGroup;
 			children = (
-				008363031326C15300CB9A21 /* HALImage.cpp */,
-				008363041326C15300CB9A21 /* HALImage.h */,
 				008363051326C15300CB9A21 /* OpenGLHAL.cpp */,
 				008363061326C15300CB9A21 /* OpenGLHAL.h */,
 				008363071326C15300CB9A21 /* OpenGLHALSignalProcessing.cpp */,
@@ -789,7 +783,6 @@
 				00039E3C12B03BA90025D374 /* libemulation-hal */,
 				00B8864512A3923D0052B7A4 /* libemulation */,
 				19C28FB0FE9D524F11CA2CBB /* Products */,
-				003B167B12EE27ED003FB8F6 /* CoreAudioKit.framework */,
 			);
 			name = OpenEmulator;
 			sourceTree = "<group>";
@@ -914,6 +907,7 @@
 				00039FD012B04F6C0025D374 /* libxml2.dylib */,
 				0054E6301131BEE7006D32D9 /* Carbon.framework */,
 				0054E4A01131BE7A006D32D9 /* Cocoa.framework */,
+				003B167B12EE27ED003FB8F6 /* CoreAudioKit.framework */,
 				0054E4A61131BE8A006D32D9 /* OpenGL.framework */,
 				0054E66B1131BF58006D32D9 /* Quartz.framework */,
 				001F56F80FD1E8E500EA246A /* Sparkle.framework */,
@@ -934,7 +928,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0083630C1326C15300CB9A21 /* HALImage.h in Headers */,
 				0083630E1326C15300CB9A21 /* OpenGLHAL.h in Headers */,
 				008363101326C15300CB9A21 /* OpenGLHALSignalProcessing.h in Headers */,
 				008363121326C15300CB9A21 /* PortAudioHAL.h in Headers */,
@@ -1130,7 +1123,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0083630B1326C15300CB9A21 /* HALImage.cpp in Sources */,
 				0083630D1326C15300CB9A21 /* OpenGLHAL.cpp in Sources */,
 				0083630F1326C15300CB9A21 /* OpenGLHALSignalProcessing.cpp in Sources */,
 				008363111326C15300CB9A21 /* PortAudioHAL.cpp in Sources */,

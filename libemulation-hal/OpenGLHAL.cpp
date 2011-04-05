@@ -14,7 +14,10 @@
 
 #include "OpenGLHALSignalProcessing.h"
 
-#define NTSC_YIQ_I_SHIFT	(0.6 / (14.31818 / 4))
+#define NTSC_CARRIER		(0.25 * 14.31818)
+#define NTSC_YIQ_CUTOFF		1.3
+#define NTSC_YUV_CUTOFF		0.6
+#define NTSC_YIQ_I_SHIFT	((NTSC_YUV_CUTOFF - NTSC_YIQ_CUTOFF) / NTSC_CARRIER)
 
 OpenGLHAL::OpenGLHAL(string resourcePath)
 {
@@ -23,110 +26,93 @@ OpenGLHAL::OpenGLHAL(string resourcePath)
 	setCapture = NULL;
 	setKeyboardFlags = NULL;
 	
+	isOpen = false;
+	isGLSL = true;
+	
 	isNewConfiguration = true;
 	isNewFrame = false;
 	
-	frame = new OEImage();
-	
-	viewportSize = OEMakeSize(0, 0);
 	for (int i = 0; i < OPENGLHAL_TEXTURE_END; i++)
 		texture[i] = 0;
-	textureSize = OEMakeSize(0, 0);
-	frameSize = OEMakeSize(0, 0);
 	for (int i = 0; i < OPENGLHAL_PROGRAM_END; i++)
 		program[i] = 0;
 	processProgram = 0;
 	
 	capture = OPENGLHAL_CAPTURE_NONE;
 	
-	for (int i = 0; i < CANVAS_KEYBOARD_KEY_NUM; i++)
-		keyDown[i] = false;
+	memset(keyDown, 0, sizeof(keyDown));
 	keyDownCount = 0;
 	ctrlAltWasPressed = false;
 	mouseEntered = false;
-	for (int i = 0; i < CANVAS_MOUSE_BUTTON_NUM; i++)
-		mouseButtonDown[i] = false;
-	for (int i = 0; i < CANVAS_JOYSTICK_NUM; i++)
-		for (int j = 0; j < CANVAS_JOYSTICK_BUTTON_NUM; j++)
-			joystickButtonDown[i][j] = false;
-}
-
-OpenGLHAL::~OpenGLHAL()
-{
-	delete frame;
+	memset(mouseButtonDown, 0, sizeof(mouseButtonDown));
+	memset(joystickButtonDown, 0, sizeof(joystickButtonDown));
 }
 
 // Video
 
-void OpenGLHAL::open(CanvasCaptureOpenGL captureOpenGL,
-					 CanvasReleaseOpenGL releaseOpenGL,
-					 CanvasSetCapture setCapture,
+void OpenGLHAL::open(CanvasSetCapture setCapture,
 					 CanvasSetKeyboardFlags setKeyboardFlags,
 					 void *userData)
 {
-	this->captureOpenGL = captureOpenGL;
-	this->releaseOpenGL = releaseOpenGL;
 	this->setCapture = setCapture;
 	this->setKeyboardFlags = setKeyboardFlags;
 	this->userData = userData;
 	
 	initOpenGL();
 	
-	pthread_mutex_init(&drawMutex, NULL);
+	pthread_mutex_init(&mutex, NULL);
 }
 
 void OpenGLHAL::close()
 {
-	pthread_mutex_destroy(&drawMutex);
+	pthread_mutex_destroy(&mutex);
 	
 	freeOpenGL();
 }
 
-void OpenGLHAL::enableGPU()
-{
-	loadPrograms();
-	
-	isNewConfiguration = true;
-}
-
-void OpenGLHAL::disableGPU()
-{
-	deletePrograms();
-	
-	isNewConfiguration = true;
-}
-
 OESize OpenGLHAL::getCanvasSize()
 {
-	return newConfiguration.size;
+	return configuration.size;
 }
 
 CanvasMode OpenGLHAL::getCanvasMode()
 {
-	return newConfiguration.mode;
+	return configuration.mode;
+}
+
+void OpenGLHAL::enableGLSL()
+{
+	if (isOpen)
+	{
+		loadPrograms();
+	
+		isNewConfiguration = true;
+	}
+	
+	isGLSL = true;
+}
+
+void OpenGLHAL::disableGLSL()
+{
+	if (isOpen)
+	{
+		deletePrograms();
+		
+		isNewConfiguration = true;
+	}
+	
+	isGLSL = false;
 }
 
 bool OpenGLHAL::update(float width, float height, float offset, bool draw)
 {
-	bool isUpdateConfiguration = false;
-	bool isUpdateFrame = false;
+	pthread_mutex_lock(&mutex);
 	
-	pthread_mutex_lock(&drawMutex);
 	if (isNewConfiguration)
 	{
-		configuration = newConfiguration;
-		isNewConfiguration = false;
-		isUpdateConfiguration = true;
-	}
-	if (isNewFrame)
-	{
-		isNewFrame = false;
-		isUpdateFrame = true;
-	}
-	pthread_mutex_unlock(&drawMutex);
-	
-	if (isUpdateConfiguration)
+		drawConfiguration = configuration;
 		updateConfiguration();
+	}
 	
 	if ((width != viewportSize.width) ||
 		(height != viewportSize.height))
@@ -138,14 +124,22 @@ bool OpenGLHAL::update(float width, float height, float offset, bool draw)
 		draw = true;
 	}
 	
-	if (isUpdateFrame || isUpdateConfiguration)
+	if (isNewFrame)
+		uploadFrame();
+	
+	if (isNewFrame || isNewConfiguration)
 	{
 		processFrame();
 		draw = true;
 	}
 	
 	if (draw)
-		drawFrame();
+		drawCanvas();
+	
+	isNewConfiguration = false;
+	isNewFrame = false;
+	
+	pthread_mutex_unlock(&mutex);
 	
 	return draw;
 }
@@ -154,17 +148,23 @@ bool OpenGLHAL::update(float width, float height, float offset, bool draw)
 
 bool OpenGLHAL::initOpenGL()
 {
+	viewportSize = OEMakeSize(0, 0);
+	frameSize = OEMakeSize(0, 0);
+	frameTextureSize = OEMakeSize(0, 0);
+	
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
 	glEnable(GL_TEXTURE_2D);
 	
 	glGenTextures(OPENGLHAL_TEXTURE_END, texture);
-	textureSize = OEMakeSize(0, 0);
 	
 	loadShadowMasks();
 	
-	loadPrograms();
+	if (isGLSL)
+		loadPrograms();
+	
+	isOpen = true;
 	
 	return true;
 }
@@ -174,6 +174,8 @@ void OpenGLHAL::freeOpenGL()
 	glDeleteTextures(OPENGLHAL_TEXTURE_END, texture);
 	
 	deletePrograms();
+	
+	isOpen = false;
 }
 
 void OpenGLHAL::loadShadowMasks()
@@ -195,11 +197,11 @@ void OpenGLHAL::loadShadowMask(string path, GLuint glTexture)
 	glBindTexture(GL_TEXTURE_2D, glTexture);
 	gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB8,
 					  shadowMask.getSize().width, shadowMask.getSize().height,
-					  ((shadowMask.getFormat() == OEIMAGE_FORMAT_RGB) ?
+					  ((shadowMask.getFormat() == OEIMAGE_RGB) ?
 					   GL_RGB : GL_RGBA),
 					  GL_UNSIGNED_BYTE, shadowMask.getPixels());
 	glActiveTexture(GL_TEXTURE0);
-#endif // GL_VERSION_2_0
+#endif
 }
 
 void OpenGLHAL::loadPrograms()
@@ -412,7 +414,7 @@ GLuint OpenGLHAL::loadProgram(const char *source)
 		
 		logMessage(errorString);
 	}
-#endif // GL_VERSION_2_0
+#endif
 	
 	return index;
 }
@@ -423,7 +425,7 @@ void OpenGLHAL::deleteProgram(GLuint index)
 	if (program[index])
 		glDeleteProgram(program[index]);
 	program[index] = 0;
-#endif // GL_VERSION_2_0
+#endif
 }
 
 void OpenGLHAL::updateConfiguration()
@@ -634,7 +636,7 @@ void OpenGLHAL::updateConfiguration()
 	}
 	
 	glUseProgram(0);
-#endif // GL_VERSION_2_0
+#endif
 }
 
 void OpenGLHAL::updateViewport()
@@ -651,53 +653,60 @@ void OpenGLHAL::setTextureSize(GLuint glProgram)
 	glUseProgram(glProgram);
 	glUniform1i(glGetUniformLocation(glProgram, "texture"), 0);
 	glUniform2f(glGetUniformLocation(glProgram, "texture_size"),
-				textureSize.width, textureSize.height);
-#endif // GL_VERSION_2_0
+				frameTextureSize.width, frameTextureSize.height);
+#endif
 }
 
-void OpenGLHAL::uploadFrame(OEImage *frame)
+bool OpenGLHAL::uploadFrame()
 {
-	GLint format;
+	if (!drawFrame.getSize().width || !drawFrame.getSize().height)
+	{
+		frameTextureSize = frameSize = OEMakeSize(0, 0);
+		return false;
+	}
 	
-	if (frame->getFormat() == OEIMAGE_FORMAT_LUMINANCE)
+	GLint format;
+	if (drawFrame.getFormat() == OEIMAGE_LUMINANCE)
 		format = GL_LUMINANCE;
-	else if (frame->getFormat() == OEIMAGE_FORMAT_RGB)
+	else if (drawFrame.getFormat() == OEIMAGE_RGB)
 		format = GL_RGB;
-	else if (frame->getFormat() == OEIMAGE_FORMAT_RGBA)
+	else if (drawFrame.getFormat() == OEIMAGE_RGBA)
 		format = GL_RGBA;
 	
-	if ((frameSize.width != frame->getSize().width) ||
-		(frameSize.height != frame->getSize().height))
+	if ((frameSize.width != drawFrame.getSize().width) ||
+		(frameSize.height != drawFrame.getSize().height))
 	{
-		frameSize = frame->getSize();
-		textureSize = OEMakeSize(getNextPowerOf2(frame->getSize().width),
-								 getNextPowerOf2(frame->getSize().height));
+		frameSize = drawFrame.getSize();
+		frameTextureSize = OEMakeSize(getNextPowerOf2(drawFrame.getSize().width),
+									  getNextPowerOf2(drawFrame.getSize().height));
 		
 		vector<char> dummy;
-		dummy.resize(textureSize.width * textureSize.height);
+		dummy.resize(frameTextureSize.width * frameTextureSize.height);
 		
 		glBindTexture(GL_TEXTURE_2D, texture[OPENGLHAL_TEXTURE_FRAME_RAW]);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
-					 textureSize.width, textureSize.height, 0,
+					 frameTextureSize.width, frameTextureSize.height, 0,
 					 GL_LUMINANCE, GL_UNSIGNED_BYTE, &dummy.front());
 		glBindTexture(GL_TEXTURE_2D, texture[OPENGLHAL_TEXTURE_FRAME_PROCESSED]);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
-					 textureSize.width, textureSize.height, 0,
+					 frameTextureSize.width, frameTextureSize.height, 0,
 					 GL_LUMINANCE, GL_UNSIGNED_BYTE, &dummy.front());
 	}
 	
 	glBindTexture(GL_TEXTURE_2D, texture[OPENGLHAL_TEXTURE_FRAME_RAW]);
 	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0,
-					frame->getSize().width, frame->getSize().height,
-					format, GL_UNSIGNED_BYTE,
-					frame->getPixels());
+					drawFrame.getSize().width, drawFrame.getSize().height,
+					format, GL_UNSIGNED_INT_8_8_8_8_REV,
+					drawFrame.getPixels());
 	
 #ifdef GL_VERSION_2_0
 	setTextureSize(program[OPENGLHAL_PROGRAM_RGB]);
 	setTextureSize(program[OPENGLHAL_PROGRAM_NTSC]);
 	setTextureSize(program[OPENGLHAL_PROGRAM_PAL]);
 	setTextureSize(program[OPENGLHAL_PROGRAM_SCREEN]);
-#endif // GL_VERSION_2_0
+#endif
+	
+	return true;
 }
 
 void OpenGLHAL::processFrame()
@@ -725,14 +734,14 @@ void OpenGLHAL::processFrame()
 			if ((y + viewportSize.height) > frameSize.height)
 				renderFrame.size.height = 2 * (frameSize.height - y) / viewportSize.height;
 			
-			OERect textureFrame = OEMakeRect(x / textureSize.width,
-											 y / textureSize.height,
-											 viewportSize.width / textureSize.width,
-											 viewportSize.height / textureSize.height);
+			OERect textureFrame = OEMakeRect(x / frameTextureSize.width,
+											 y / frameTextureSize.height,
+											 viewportSize.width / frameTextureSize.width,
+											 viewportSize.height / frameTextureSize.height);
 			if ((x + viewportSize.width) > frameSize.width)
-				textureFrame.size.width = (frameSize.width - x) / textureSize.width;
+				textureFrame.size.width = (frameSize.width - x) / frameTextureSize.width;
 			if ((y + viewportSize.height) > frameSize.height)
-				textureFrame.size.height = (frameSize.height - y) / textureSize.height;
+				textureFrame.size.height = (frameSize.height - y) / frameTextureSize.height;
 			
 			// Render
 			glLoadIdentity();
@@ -761,17 +770,21 @@ void OpenGLHAL::processFrame()
 	glBindTexture(GL_TEXTURE_2D, 0);
 	
 	glUseProgram(0);
-#endif // GL_VERSION_2_0
+#endif
 }
 
-void OpenGLHAL::drawFrame()
+void OpenGLHAL::drawCanvas()
 {
 	// Clear
-	float clearColor = processProgram ? configuration.videoBrightness : 0;
+	float clearColor;
+	if (configuration.mode == CANVAS_MODE_PAPER)
+		clearColor = 0x80;
+	else
+		clearColor = processProgram ? configuration.videoBrightness : 0;
 	glClearColor(clearColor, clearColor, clearColor, 0);
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
-	if ((textureSize.width == 0) || (textureSize.height == 0))
+	if ((frameTextureSize.width == 0) || (frameTextureSize.height == 0))
 		return;
 	
 	// Calculate frames
@@ -781,8 +794,8 @@ void OpenGLHAL::drawFrame()
 									2 * configuration.contentRect.size.height);
 	
 	OERect textureFrame = OEMakeRect(0, 0,
-									 frameSize.width / textureSize.width, 
-									 frameSize.height / textureSize.height);
+									 frameSize.width / frameTextureSize.width, 
+									 frameSize.height / frameTextureSize.height);
 	
 	float viewAspectRatio = viewportSize.width / viewportSize.height;
 	float canvasAspectRatio = (configuration.size.width /
@@ -816,10 +829,10 @@ void OpenGLHAL::drawFrame()
 		OEPoint barrelCenter;
 		barrelCenter.x = ((0.5 - configuration.contentRect.origin.x) /
 						  configuration.contentRect.size.width *
-						  frameSize.width / textureSize.width);
+						  frameSize.width / frameTextureSize.width);
 		barrelCenter.y = ((0.5 - configuration.contentRect.origin.y) /
 						  configuration.contentRect.size.height *
-						  frameSize.height / textureSize.height);
+						  frameSize.height / frameTextureSize.height);
 		glUniform2f(glGetUniformLocation(glProgram, "barrel_center"),
 					barrelCenter.x, barrelCenter.y);
 		
@@ -841,15 +854,15 @@ void OpenGLHAL::drawFrame()
 		float elemNumY = (configuration.size.height / 75.0 * 25.4 /
 						  (configuration.screenShadowMaskDotPitch + 0.001) * (240.0 / 274.0));
 		glUniform2f(glGetUniformLocation(glProgram, "shadowmask_scale"),
-					textureSize.width / frameSize.width *
+					frameTextureSize.width / frameSize.width *
 					configuration.contentRect.size.width * elemNumX,
-					textureSize.height / frameSize.height *
+					frameTextureSize.height / frameSize.height *
 					configuration.contentRect.size.height * elemNumY);
 		glUniform2f(glGetUniformLocation(glProgram, "shadowmask_translate"),
 					configuration.contentRect.origin.x * elemNumX,
 					configuration.contentRect.origin.y * elemNumY);
 	}
-#endif // GL_VERSION_2_0
+#endif
 	
 	// Use nearest filter when canvas and screen pixel size match
 	glBindTexture(GL_TEXTURE_2D, (processProgram ? 
@@ -884,7 +897,7 @@ void OpenGLHAL::drawFrame()
 	glBindTexture(GL_TEXTURE_2D, 0);
 #ifdef GL_VERSION_2_0
 	glUseProgram(0);
-#endif // GL_VERSION_2_0
+#endif
 	
 	// Phosphor persistance
 	/*	glAccum(GL_MULT, configuration.persistance);
@@ -1109,12 +1122,16 @@ void OpenGLHAL::resetKeysAndButtons()
 
 bool OpenGLHAL::copy(string& value)
 {
-	return OEComponent::postMessage(this, CANVAS_COPY, &value);
+	notify(this, CANVAS_WILL_COPY, &value);
+	
+	return true;
 }
 
 bool OpenGLHAL::paste(string value)
 {
-	return OEComponent::postMessage(this, CANVAS_PASTE, &value);
+	notify(this, CANVAS_WILL_PASTE, &value);
+	
+	return true;
 }
 
 bool OpenGLHAL::setConfiguration(CanvasConfiguration *configuration)
@@ -1122,7 +1139,7 @@ bool OpenGLHAL::setConfiguration(CanvasConfiguration *configuration)
 	if (!configuration)
 		return false;
 	
-	if (newConfiguration.captureMode != configuration->captureMode)
+	if (this->configuration.captureMode != configuration->captureMode)
 	{
 		switch (configuration->captureMode)
 		{
@@ -1142,10 +1159,10 @@ bool OpenGLHAL::setConfiguration(CanvasConfiguration *configuration)
 		}
 	}
 	
-	pthread_mutex_lock(&drawMutex);
-	newConfiguration = *configuration;
+	pthread_mutex_lock(&mutex);
+	this->configuration = *configuration;
 	isNewConfiguration = true;
-	pthread_mutex_unlock(&drawMutex);
+	pthread_mutex_unlock(&mutex);
 	
 	return true;
 }
@@ -1155,23 +1172,17 @@ bool OpenGLHAL::getFrame(OEImage **frame)
 	if (!frame)
 		return false;
 	
-	*frame = this->frame;
+	*frame = &this->frame;
 	
 	return true;
 }
 
 bool OpenGLHAL::updateFrame()
 {
-	if (captureOpenGL)
-		captureOpenGL(userData);
-	
+	pthread_mutex_lock(&mutex);
+	drawFrame = frame;
 	isNewFrame = true;
-	if ((frame->getSize().width != 0) &&
-		(frame->getSize().height != 0))
-		uploadFrame(frame);
-	
-	if (releaseOpenGL)
-		releaseOpenGL(userData);
+	pthread_mutex_unlock(&mutex);
 	
 	return true;
 }
@@ -1188,6 +1199,14 @@ bool OpenGLHAL::postMessage(OEComponent *sender, int message, void *data)
 			
 		case CANVAS_UPDATE_FRAME:
 			return updateFrame();
+			
+		case CANVAS_LOCK:
+			pthread_mutex_lock(&mutex);
+			return true;
+			
+		case CANVAS_UNLOCK:
+			pthread_mutex_unlock(&mutex);
+			return false;
 	}
 	
 	return OEComponent::postMessage(sender, message, data);

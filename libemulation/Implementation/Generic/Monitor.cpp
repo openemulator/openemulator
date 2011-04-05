@@ -26,7 +26,7 @@ Monitor::Monitor()
 
 bool Monitor::setValue(string name, string value)
 {
-	if (name == "decoder")
+	if (name == "videoDecoder")
 	{
 		if (value == "RGB")
 			configuration.videoDecoder = CANVAS_DECODER_RGB;
@@ -41,27 +41,35 @@ bool Monitor::setValue(string name, string value)
 		else if (value == "PAL")
 			configuration.videoDecoder = CANVAS_DECODER_PAL;
 	}
-	else if (name == "bandwidth")
+	else if (name == "videoBandwidth")
 		configuration.videoBandwidth = getFloat(value);
-	else if (name == "brightness")
+	else if (name == "videoBrightness")
 		configuration.videoBrightness = getFloat(value);
-	else if (name == "contrast")
+	else if (name == "videoContrast")
 		configuration.videoContrast = getFloat(value);
-	else if (name == "saturation")
+	else if (name == "videoSaturation")
 		configuration.videoSaturation = getFloat(value);
-	else if (name == "hue")
+	else if (name == "videoHue")
 		configuration.videoHue = getFloat(value);
-	else if (name == "barrel")
+	else if (name == "screenHorizontalCenter")
+		screenRect.origin.x = getFloat(value);
+	else if (name == "screenVerticalCenter")
+		screenRect.origin.y = getFloat(value);
+	else if (name == "screenHorizontalSize")
+		screenRect.size.width = getFloat(value);
+	else if (name == "screenVerticalSize")
+		screenRect.size.height = getFloat(value);
+	else if (name == "screenBarrel")
 		configuration.screenBarrel = getFloat(value);
-	else if (name == "scanlineAlpha")
+	else if (name == "screenScanlineAlpha")
 		configuration.screenScanlineAlpha = getFloat(value);
-	else if (name == "centerLighting")
+	else if (name == "screenCenterLighting")
 		configuration.screenCenterLighting = getFloat(value);
-	else if (name == "shadowMaskAlpha")
+	else if (name == "screenShadowMaskAlpha")
 		configuration.screenShadowMaskAlpha = getFloat(value);
-	else if (name == "shadowMaskDotPitch")
+	else if (name == "screenShadowMaskDotPitch")
 		configuration.screenShadowMaskDotPitch = getFloat(value);
-	else if (name == "shadowMask")
+	else if (name == "screenShadowMask")
 	{
 		if (value == "Triad")
 			configuration.screenShadowMask = CANVAS_SHADOWMASK_TRIAD;
@@ -70,7 +78,7 @@ bool Monitor::setValue(string name, string value)
 		else if (value == "Aperture")
 			configuration.screenShadowMask = CANVAS_SHADOWMASK_APERTURE;
 	}
-	else if (name == "persistance")
+	else if (name == "screenPersistance")
 		configuration.screenPersistance = getFloat(value);
 	else if (name == "compositeCarrierFrequency")
 		configuration.compositeCarrierFrequency = getFloat(value);
@@ -82,14 +90,6 @@ bool Monitor::setValue(string name, string value)
 		configuration.compositeBlackLevel = getFloat(value);
 	else if (name == "compositeWhiteLevel")
 		configuration.compositeWhiteLevel = getFloat(value);
-	else if (name == "horizontalCenter")
-		screenRect.origin.x = getFloat(value);
-	else if (name == "verticalCenter")
-		screenRect.origin.y = getFloat(value);
-	else if (name == "horizontalSize")
-		screenRect.size.width = getFloat(value);
-	else if (name == "verticalSize")
-		screenRect.size.height = getFloat(value);
 	else if (name == "dummy")
 		dummyPath = value;
 	else
@@ -105,7 +105,7 @@ bool Monitor::setValue(string name, string value)
 
 bool Monitor::getValue(string name, string& value)
 {
-	if (name == "decoder")
+	if (name == "videoDecoder")
 	{
 		if (configuration.videoDecoder == CANVAS_DECODER_RGB)
 			value = "RGB";
@@ -120,27 +120,35 @@ bool Monitor::getValue(string name, string& value)
 		else if (configuration.videoDecoder == CANVAS_DECODER_PAL)
 			value = "PAL";
 	}
-	else if (name == "lumaBandwidth")
+	else if (name == "videoBandwidth")
 		value = getString(configuration.videoBandwidth);
-	else if (name == "brightness")
+	else if (name == "videoBrightness")
 		value = getString(configuration.videoBrightness);
-	else if (name == "contrast")
+	else if (name == "videoContrast")
 		value = getString(configuration.videoContrast);
-	else if (name == "saturation")
+	else if (name == "videoSaturation")
 		value = getString(configuration.videoSaturation);
-	else if (name == "hue")
+	else if (name == "videoHue")
 		value = getString(configuration.videoHue);
-	else if (name == "barrel")
+	else if (name == "screenHorizontalCenter")
+		value = getString(screenRect.origin.x);
+	else if (name == "screenVerticalCenter")
+		value = getString(screenRect.origin.y);
+	else if (name == "screenHorizontalSize")
+		value = getString(screenRect.size.width);
+	else if (name == "screenVerticalSize")
+		value = getString(screenRect.size.height);
+	else if (name == "screenBarrel")
 		value = getString(configuration.screenBarrel);
-	else if (name == "scanlineAlpha")
+	else if (name == "screenScanlineAlpha")
 		value = getString(configuration.screenScanlineAlpha);
-	else if (name == "centerLighting")
+	else if (name == "screenCenterLighting")
 		value = getString(configuration.screenCenterLighting);
-	else if (name == "shadowMaskAlpha")
+	else if (name == "screenShadowMaskAlpha")
 		value = getString(configuration.screenShadowMaskAlpha);
-	else if (name == "shadowMaskDotPitch")
+	else if (name == "screenShadowMaskDotPitch")
 		value = getString(configuration.screenShadowMaskDotPitch);
-	else if (name == "shadowMask")
+	else if (name == "screenShadowMask")
 	{
 		if (configuration.screenShadowMask == CANVAS_SHADOWMASK_TRIAD)
 			value = "Triad";
@@ -149,7 +157,7 @@ bool Monitor::getValue(string name, string& value)
 		else if (configuration.screenShadowMask == CANVAS_SHADOWMASK_APERTURE)
 			value = "Aperture";
 	}
-	else if (name == "persistance")
+	else if (name == "screenPersistance")
 		value = getString(configuration.screenPersistance);
 	else if (name == "compositeBlackLevel")
 		value = getString(configuration.compositeBlackLevel);
@@ -161,14 +169,6 @@ bool Monitor::getValue(string name, string& value)
 		value = getString(configuration.compositeLinePhase);
 	else if (name == "compositeChromaBandwidth")
 		value = getString(configuration.compositeChromaBandwidth);
-	else if (name == "horizontalCenter")
-		value = getString(screenRect.origin.x);
-	else if (name == "verticalCenter")
-		value = getString(screenRect.origin.y);
-	else if (name == "horizontalSize")
-		value = getString(screenRect.size.width);
-	else if (name == "verticalSize")
-		value = getString(screenRect.size.height);
 	else
 		return false;
 	
@@ -234,9 +234,10 @@ bool Monitor::init()
 		logMessage("canvas could not be created");
 		return false;
 	}
-	
-	if (canvas)
+	else
 	{
+		canvas->postMessage(this, CANVAS_LOCK, NULL);
+		
 		canvas->postMessage(this, CANVAS_CONFIGURE, &configuration);
 		
 		OEImage *frame;
@@ -245,6 +246,8 @@ bool Monitor::init()
 			frame->readFile(dummyPath);
 			canvas->postMessage(this, CANVAS_UPDATE_FRAME, NULL);
 		}
+		
+		canvas->postMessage(this, CANVAS_UNLOCK, NULL);
 	}
 	
 	return true;

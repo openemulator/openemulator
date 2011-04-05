@@ -36,9 +36,9 @@ typedef struct
 
 typedef enum
 {
-	OEIMAGE_FORMAT_LUMINANCE,
-	OEIMAGE_FORMAT_RGB,
-	OEIMAGE_FORMAT_RGBA,
+	OEIMAGE_LUMINANCE,
+	OEIMAGE_RGB,
+	OEIMAGE_RGBA,
 } OEImageFormat;
 
 inline OEPoint OEMakePoint(float x, float y)
