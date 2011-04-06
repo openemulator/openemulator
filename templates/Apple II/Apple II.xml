@@ -256,7 +256,7 @@
     <property name="screenBarrel" value="0.05" />
     <property name="screenScanlineAlpha" value="0.05" />
     <property name="screenCenterLighting" value="1" />
-    <property name="screenShadowMaskAlpha" value="0.2" />
+    <property name="screenShadowMaskAlpha" value="0.05" />
     <property name="screenShadowMaskDotPitch" value="0.5" />
     <property name="screenShadowMask" value="1" />
     <property name="screenPersistance" value="0" />

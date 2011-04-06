@@ -130,6 +130,7 @@ private:
 	
 	bool initOpenGL();
 	void freeOpenGL();
+	GLuint getGLFormat(OEImageFormat format);
 	void loadShadowMasks();
 	void loadShadowMask(string path, GLuint glTexture);
 	void loadPrograms();

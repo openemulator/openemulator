@@ -106,8 +106,6 @@ void OpenGLHAL::disableGLSL()
 
 bool OpenGLHAL::update(float width, float height, float offset, bool draw)
 {
-	pthread_mutex_lock(&mutex);
-	
 	if (isNewConfiguration)
 	{
 		drawConfiguration = configuration;
@@ -138,8 +136,6 @@ bool OpenGLHAL::update(float width, float height, float offset, bool draw)
 	
 	isNewConfiguration = false;
 	isNewFrame = false;
-	
-	pthread_mutex_unlock(&mutex);
 	
 	return draw;
 }
@@ -178,6 +174,18 @@ void OpenGLHAL::freeOpenGL()
 	isOpen = false;
 }
 
+GLuint OpenGLHAL::getGLFormat(OEImageFormat format)
+{
+	if (drawFrame.getFormat() == OEIMAGE_LUMINANCE)
+		return GL_LUMINANCE;
+	else if (drawFrame.getFormat() == OEIMAGE_RGB)
+		return GL_RGB;
+	else if (drawFrame.getFormat() == OEIMAGE_RGBA)
+		return GL_RGBA;
+	
+	return 0;
+}
+
 void OpenGLHAL::loadShadowMasks()
 {
 	loadShadowMask("Shadow Mask Triad.png",
@@ -197,8 +205,7 @@ void OpenGLHAL::loadShadowMask(string path, GLuint glTexture)
 	glBindTexture(GL_TEXTURE_2D, glTexture);
 	gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB8,
 					  shadowMask.getSize().width, shadowMask.getSize().height,
-					  ((shadowMask.getFormat() == OEIMAGE_RGB) ?
-					   GL_RGB : GL_RGBA),
+					  getGLFormat(shadowMask.getFormat()),
 					  GL_UNSIGNED_BYTE, shadowMask.getPixels());
 	glActiveTexture(GL_TEXTURE0);
 #endif
@@ -665,14 +672,6 @@ bool OpenGLHAL::uploadFrame()
 		return false;
 	}
 	
-	GLint format;
-	if (drawFrame.getFormat() == OEIMAGE_LUMINANCE)
-		format = GL_LUMINANCE;
-	else if (drawFrame.getFormat() == OEIMAGE_RGB)
-		format = GL_RGB;
-	else if (drawFrame.getFormat() == OEIMAGE_RGBA)
-		format = GL_RGBA;
-	
 	if ((frameSize.width != drawFrame.getSize().width) ||
 		(frameSize.height != drawFrame.getSize().height))
 	{
@@ -696,7 +695,7 @@ bool OpenGLHAL::uploadFrame()
 	glBindTexture(GL_TEXTURE_2D, texture[OPENGLHAL_TEXTURE_FRAME_RAW]);
 	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0,
 					drawFrame.getSize().width, drawFrame.getSize().height,
-					format, GL_UNSIGNED_INT_8_8_8_8_REV,
+					getGLFormat(drawFrame.getFormat()), GL_UNSIGNED_BYTE,
 					drawFrame.getPixels());
 	
 #ifdef GL_VERSION_2_0

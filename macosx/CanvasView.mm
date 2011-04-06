@@ -450,27 +450,36 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	return defaultViewSize;
 }
 
-- (void)drawRect:(NSRect)theRect
+- (void)update
 {
-/*	NSRect frame = [self bounds];
-	
-	CGLLockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
+	if (canvas)
+		((OpenGLHAL *)canvas)->postMessage(NULL, CANVAS_LOCK, NULL);
 	
 	[[self openGLContext] makeCurrentContext];
+	[super update];
 	
-	if (((OpenGLHAL *)canvas)->update(NSWidth(frame), NSHeight(frame), 0, true))
-		[[self openGLContext] flushBuffer];
-	
-	CGLUnlockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);*/
+	if (canvas)
+		((OpenGLHAL *)canvas)->postMessage(NULL, CANVAS_UNLOCK, NULL);
+}
+
+- (void)drawRect:(NSRect)theRect
+{
+//	[self updateView];
 }
 
 - (void)updateView
 {
+	if (canvas)
+		((OpenGLHAL *)canvas)->postMessage(NULL, CANVAS_LOCK, NULL);
+	
 	[[self openGLContext] makeCurrentContext];
 	
 	NSRect frame = [self bounds];
 	if (((OpenGLHAL *)canvas)->update(NSWidth(frame), NSHeight(frame), 0, false))
 		[[self openGLContext] flushBuffer];
+	
+	if (canvas)
+		((OpenGLHAL *)canvas)->postMessage(NULL, CANVAS_UNLOCK, NULL);
 }
 
 // Keyboard

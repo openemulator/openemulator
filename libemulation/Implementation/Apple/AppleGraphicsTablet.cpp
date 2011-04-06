@@ -62,18 +62,18 @@ bool AppleGraphicsTablet::init()
 		logMessage("canvas could not be created");
 		return false;
 	}
-	
-	if (canvas)
+	else
 	{
+		CanvasConfiguration configuration;
+		
 		canvas->postMessage(this, CANVAS_LOCK, NULL);
 		
 		OEImage *frame;
-		CanvasConfiguration configuration;
 		if (canvas->postMessage(this, CANVAS_GET_FRAME, &frame))
 		{
 			frame->readFile(viewPath);
 			configuration.size = frame->getSize();
-			canvas->postMessage(this, CANVAS_UPDATE_FRAME, &frame);
+			canvas->postMessage(this, CANVAS_UPDATE_FRAME, NULL);
 		}
 		
 		canvas->postMessage(this, CANVAS_CONFIGURE, &configuration);
