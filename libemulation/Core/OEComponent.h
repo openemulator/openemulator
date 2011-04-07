@@ -30,6 +30,7 @@ public:
 	virtual bool setData(string name, OEData *data);
 	virtual bool getData(string name, OEData **data);
 	virtual bool init();
+	virtual void update();
 	
 	// Messaging and delegation
 	virtual bool postMessage(OEComponent *sender, int message, void *data);

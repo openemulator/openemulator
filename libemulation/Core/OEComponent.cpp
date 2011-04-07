@@ -34,8 +34,6 @@ bool OEComponent::setRef(string name, OEComponent *ref)
 
 bool OEComponent::setData(string name, OEData *data)
 {
-	delete data;
-	
 	return false;
 }
 
@@ -47,6 +45,11 @@ bool OEComponent::getData(string name, OEData **data)
 bool OEComponent::init()
 {
 	return true;
+}
+
+void OEComponent::update()
+{
+	return;
 }
 
 bool OEComponent::postMessage(OEComponent *sender, int message, void *data)

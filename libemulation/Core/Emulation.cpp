@@ -543,25 +543,22 @@ bool Emulation::configureComponent(string id, xmlNodePtr children)
 			{
 				string dataSrc = getNodeProperty(node, "data");
 				
-				OEData *data = new OEData;
+				OEData data;
 				string parsedSrc = parseValueProperties(dataSrc, propertiesMap);
 				bool dataRead = false;
 				if (hasValueProperty(dataSrc, "packagePath"))
 				{
 					if (package)
-						dataRead = package->readFile(parsedSrc, data);
+						dataRead = package->readFile(parsedSrc, &data);
 				}
 				else
-					dataRead = readFile(parsedSrc, data);
+					dataRead = readFile(parsedSrc, &data);
 				
-				if (!dataRead)
+				if (dataRead)
 				{
-					delete data;
-					data = NULL;
+					if (!component->setData(name, &data))
+						logMessage("'" + id + "': invalid property '" + name + "'");
 				}
-				
-				if (!component->setData(name, data))
-					logMessage("'" + id + "': invalid property '" + name + "'");
 			}
 			else
 			{

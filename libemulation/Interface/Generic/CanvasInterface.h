@@ -470,4 +470,11 @@ typedef enum
 	CANVAS_J_RELAXIS4,
 } CanvasJoystickUsageIds;
 
+typedef struct
+{
+	int width;
+	int height;
+	bool update;
+} CanvasDraw;
+
 #endif
