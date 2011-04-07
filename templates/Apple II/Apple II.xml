@@ -244,7 +244,7 @@
 <component id="appleMonitorII.monitor" class="Monitor">
     <property name="emulation" ref="emulation" />
     <property name="videoDecoder" value="RGB" />
-    <property name="videoBandwidth" value="0.3" />
+    <property name="videoBandwidth" value="0.28" />
     <property name="videoBrightness" value="0" />
     <property name="videoContrast" value="1" />
     <property name="videoSaturation" value="1" />
