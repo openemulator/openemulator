@@ -125,5 +125,5 @@ bool AppleDiskII::postMessage(OEComponent *sender, int message, void *data)
 			break;
 	}
 	
-	return OEComponent::postMessage(sender, message, data);
+	return false;
 }

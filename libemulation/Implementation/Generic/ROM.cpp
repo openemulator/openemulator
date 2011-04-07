@@ -14,35 +14,29 @@
 
 ROM::ROM()
 {
-	data = NULL;
-}
-
-ROM::~ROM()
-{
-	delete data;
 }
 
 bool ROM::setData(string name, OEData *data)
 {
 	if (name == "image")
-		this->data = data;
+		data->swap(this->data);
 	else
-		return OEComponent::setData(name, data);
+		return false;
 	
 	return true;
 }
 
 bool ROM::init()
 {
-	if (!data)
+	if (!data.size())
 	{
 		logMessage("missing ROM");
 		return false;
 	}
 	
-	int size = getNextPowerOf2(data->size());
-	data->resize(size);
-	datap = (OEUInt8 *) &data->front();
+	int size = getNextPowerOf2(data.size());
+	data.resize(size);
+	datap = (OEUInt8 *) &data.front();
 	mask = size - 1;
 	
 	return true;

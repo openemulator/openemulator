@@ -97,7 +97,7 @@ bool AddressDecoder::postMessage(OEComponent *sender, int message, void *data)
 			return true;
 	}
 	
-	return OEComponent::postMessage(sender, message, data);
+	return false;
 }
 
 OEUInt8 AddressDecoder::read(OEAddress address)

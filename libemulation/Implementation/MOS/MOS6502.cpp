@@ -101,8 +101,6 @@ void MOS6502::notify(OEComponent *sender, int notification, void *data)
 		case CONTROLBUS_NMI_DID_ASSERT:
 			return;
 	}
-
-	return OEComponent::notify(sender, notification, data);
 }
 
 void MOS6502::reset()

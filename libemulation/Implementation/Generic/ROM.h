@@ -17,7 +17,6 @@ class ROM : public OEComponent
 {
 public:
 	ROM();
-	~ROM();
 	
 	bool setData(string name, OEData *data);
 	bool init();
@@ -25,7 +24,7 @@ public:
 	OEUInt8 read(OEAddress address);
 	
 private:
-	OEData *data;
+	OEData data;
 	OEUInt8 *datap;
 	int mask;
 };

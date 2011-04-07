@@ -123,37 +123,37 @@ bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
 		case CONTROLBUS_ASSERT_RESET:
 			resetCount++;
 			if (resetCount == 1)
-				OEComponent::notify(this, CONTROLBUS_RESET_DID_ASSERT, NULL);
+				notify(this, CONTROLBUS_RESET_DID_ASSERT, NULL);
 			return true;
 			
 		case CONTROLBUS_CLEAR_RESET:
 			resetCount--;
 			if (resetCount == 0)
-				OEComponent::notify(this, CONTROLBUS_RESET_DID_CLEAR, NULL);
+				notify(this, CONTROLBUS_RESET_DID_CLEAR, NULL);
 			return true;
 			
 		case CONTROLBUS_ASSERT_IRQ:
 			irqCount++;
 			if (irqCount == 1)
-				OEComponent::notify(this, CONTROLBUS_IRQ_DID_ASSERT, NULL);
+				notify(this, CONTROLBUS_IRQ_DID_ASSERT, NULL);
 			return true;
 			
 		case CONTROLBUS_CLEAR_IRQ:
 			irqCount--;
 			if (irqCount == 0)
-				OEComponent::notify(this, CONTROLBUS_IRQ_DID_CLEAR, NULL);
+				notify(this, CONTROLBUS_IRQ_DID_CLEAR, NULL);
 			return true;
 			
 		case CONTROLBUS_ASSERT_NMI:
 			nmiCount++;
 			if (nmiCount == 1)
-				OEComponent::notify(this, CONTROLBUS_NMI_DID_ASSERT, NULL);
+				notify(this, CONTROLBUS_NMI_DID_ASSERT, NULL);
 			return true;
 			
 		case CONTROLBUS_CLEAR_NMI:
 			nmiCount--;
 			if (nmiCount == 0)
-				OEComponent::notify(this, CONTROLBUS_NMI_DID_ASSERT, NULL);
+				notify(this, CONTROLBUS_NMI_DID_ASSERT, NULL);
 			return true;
 			
 		case CONTROLBUS_SCHEDULE_TIMER:
@@ -171,7 +171,7 @@ bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
 	
 	logMessage("hi!");
 	
-	return OEComponent::postMessage(sender, message, data);
+	return false;
 }
 
 void ControlBus::notify(OEComponent *sender, int notification, void *data)

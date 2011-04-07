@@ -136,7 +136,7 @@ bool MC6821::postMessage(OEComponent *sender, int message, void *data)
 					setControlA(controlA | MC6821_CR_IRQ2FLAG);
 			}
 			if ((controlA & MC6821_CR_C2OUTPUT) && (ca2 != value))
-				OEComponent::notify(this, MC6821_CA2_CHANGED, NULL);
+				notify(this, MC6821_CA2_CHANGED, NULL);
 			ca2 = value;
 			
 			return true;
@@ -181,7 +181,7 @@ bool MC6821::postMessage(OEComponent *sender, int message, void *data)
 					setControlB(controlB | MC6821_CR_IRQ2FLAG);
 			}
 			if (cb2 != value)
-				OEComponent::notify(this, MC6821_CB2_CHANGED, &value);
+				notify(this, MC6821_CB2_CHANGED, &value);
 			cb2 = value;
 			
 			return true;
@@ -195,7 +195,7 @@ bool MC6821::postMessage(OEComponent *sender, int message, void *data)
 		}
 	}
 	
-	return OEComponent::postMessage(sender, message, data);
+	return false;
 }
 
 void MC6821::notify(OEComponent *component, int notification, void *data)

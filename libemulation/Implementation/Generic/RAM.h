@@ -25,7 +25,6 @@ class RAM : public OEComponent
 {
 public:
 	RAM();
-	~RAM();
 	
 	bool setValue(string name, string value);
 	bool setRef(string name, OEComponent *ref);
@@ -42,7 +41,7 @@ public:
 	
 private:
 	OEAddress size;
-	OEData *data;
+	OEData data;
 	OEUInt8 *datap;
 	OEAddress mask;
 	
