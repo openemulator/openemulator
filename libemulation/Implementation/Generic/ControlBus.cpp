@@ -65,8 +65,9 @@ bool ControlBus::setRef(string name, OEComponent *ref)
 	}
 	else if (name == "audio")
 	{
-		setObserver(audio, ref, AUDIO_FRAME_IS_RENDERING);
+		removeObserver(audio, AUDIO_FRAME_IS_RENDERING);
 		audio = ref;
+		addObserver(audio, AUDIO_FRAME_IS_RENDERING);
 	}
 	else if (name == "cpu")
 		cpu = ref;

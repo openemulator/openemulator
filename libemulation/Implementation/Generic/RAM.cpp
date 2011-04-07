@@ -36,8 +36,9 @@ bool RAM::setRef(string name, OEComponent *ref)
 {
 	if (name == "controlBus")
 	{
-		setObserver(controlBus, ref, CONTROLBUS_POWERSTATE_DID_CHANGE);
+		removeObserver(controlBus, CONTROLBUS_POWERSTATE_DID_CHANGE);
 		controlBus = ref;
+		addObserver(controlBus, CONTROLBUS_POWERSTATE_DID_CHANGE);
 	}
 	else
 		return false;

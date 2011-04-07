@@ -57,8 +57,9 @@ bool MOS6530::setRef(string name, OEComponent *ref)
 {
 	if (name == "controlBus")
 	{
-		setObserver(controlBus, ref, CONTROLBUS_RESET_DID_ASSERT);
+		removeObserver(controlBus, CONTROLBUS_RESET_DID_ASSERT);
 		controlBus = ref;
+		addObserver(controlBus, CONTROLBUS_RESET_DID_ASSERT);
 	}
 	else if (name == "portA")
 		portA = ref;

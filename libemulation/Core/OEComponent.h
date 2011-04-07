@@ -36,17 +36,11 @@ public:
 	virtual bool postMessage(OEComponent *sender, int message, void *data);
 	bool addDelegate(OEComponent *delegate, int message);
 	bool removeDelegate(OEComponent *delegate, int message);
-	void setDelegate(OEComponent *oldDelegate,
-					 OEComponent *newDelegate,
-					 int message);
 	
 	// Notification
 	virtual void notify(OEComponent *sender, int notification, void *data);
 	bool addObserver(OEComponent *observer, int notification);
 	bool removeObserver(OEComponent *observer, int notification);
-	void setObserver(OEComponent *oldObserver,
-					 OEComponent *newObserver,
-					 int notification);
 	
 	// Memory access
 	virtual OEUInt8 read(OEAddress address);

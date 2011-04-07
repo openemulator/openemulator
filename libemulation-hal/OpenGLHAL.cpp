@@ -134,10 +134,16 @@ bool OpenGLHAL::update(float width, float height, float offset, bool draw)
 	if (draw)
 		drawCanvas();
 	
+	CanvasDrawParameters drawParameters;
+	drawParameters.width = width;
+	drawParameters.height = height;
+	drawParameters.update = draw;
+	notify(this, CANVAS_DID_DRAW, &drawParameters);
+	
 	isNewConfiguration = false;
 	isNewFrame = false;
 	
-	return draw;
+	return drawParameters.update;
 }
 
 // OpenGL

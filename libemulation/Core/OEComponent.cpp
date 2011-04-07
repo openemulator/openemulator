@@ -84,16 +84,6 @@ bool OEComponent::removeDelegate(OEComponent *delegate, int delegation)
 	return (i != last);
 }
 
-void OEComponent::setDelegate(OEComponent *oldDelegate,
-							  OEComponent *newDelegate,
-							  int delegation)
-{
-	if (oldDelegate)
-		oldDelegate->removeObserver(this, delegation);
-	if (newDelegate)
-		newDelegate->addObserver(this, delegation);
-}
-
 
 
 void OEComponent::notify(OEComponent *sender, int notification, void *data)
@@ -122,16 +112,6 @@ bool OEComponent::removeObserver(OEComponent *observer, int notification)
 		observers[notification].erase(i, last);
 	
 	return (i != last);
-}
-
-void OEComponent::setObserver(OEComponent *oldObserver,
-							  OEComponent *newObserver,
-							  int notification)
-{
-	if (oldObserver)
-		oldObserver->removeObserver(this, notification);
-	if (newObserver)
-		newObserver->addObserver(this, notification);
 }
 
 

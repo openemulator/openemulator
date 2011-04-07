@@ -30,8 +30,9 @@ bool MOSKIM1PLL::setRef(string name, OEComponent *ref)
 {
 	if (name == "audio")
 	{
-		setObserver(audio, ref, AUDIO_FRAME_WILL_RENDER);
+		removeObserver(audio, AUDIO_FRAME_WILL_RENDER);
 		audio = ref;
+		addObserver(audio, AUDIO_FRAME_WILL_RENDER);
 	}
 	else
 		return false;

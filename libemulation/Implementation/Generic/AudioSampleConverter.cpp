@@ -23,9 +23,11 @@ bool AudioSampleConverter::setRef(string name, OEComponent *ref)
 {
 	if (name == "audio")
 	{
-		setObserver(audio, ref, AUDIO_FRAME_WILL_RENDER);
-		setObserver(audio, ref, AUDIO_FRAME_DID_RENDER);
+		removeObserver(audio, AUDIO_FRAME_WILL_RENDER);
+		removeObserver(audio, AUDIO_FRAME_DID_RENDER);
 		audio = ref;
+		addObserver(audio, AUDIO_FRAME_WILL_RENDER);
+		addObserver(audio, AUDIO_FRAME_DID_RENDER);
 	}
 	else if (name == "controlBus")
 		controlBus = ref;

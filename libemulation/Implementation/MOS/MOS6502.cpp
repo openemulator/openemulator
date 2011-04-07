@@ -76,10 +76,13 @@ bool MOS6502::setRef(string name, OEComponent *ref)
 		memoryBus = ref;
 	else if (name == "controlBus")
 	{
-		setObserver(controlBus, ref, CONTROLBUS_RESET_DID_ASSERT);
-		setObserver(controlBus, ref, CONTROLBUS_IRQ_DID_ASSERT);
-		setObserver(controlBus, ref, CONTROLBUS_NMI_DID_ASSERT);
+		removeObserver(controlBus, CONTROLBUS_RESET_DID_ASSERT);
+		removeObserver(controlBus, CONTROLBUS_IRQ_DID_ASSERT);
+		removeObserver(controlBus, CONTROLBUS_NMI_DID_ASSERT);
 		controlBus = ref;
+		addObserver(controlBus, CONTROLBUS_RESET_DID_ASSERT);
+		addObserver(controlBus, CONTROLBUS_IRQ_DID_ASSERT);
+		addObserver(controlBus, CONTROLBUS_NMI_DID_ASSERT);
 	}
 	else
 		return false;

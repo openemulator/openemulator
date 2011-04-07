@@ -436,7 +436,11 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	[self lockEmulation];
 	OEComponent *component = theEmulation->getComponent(getCPPString(theId));
 	if (component)
+	{
 		success = component->setValue(getCPPString(theName), getCPPString(theValue));
+		if (success)
+			component->update();
+	}
 	[self unlockEmulation];
 	
 	if (!success)
