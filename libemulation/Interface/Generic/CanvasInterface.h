@@ -1,4 +1,3 @@
-
 /**
  * libemulation
  * Canvas interface
@@ -45,7 +44,7 @@ typedef enum
 	CANVAS_JOYSTICK4_DID_CHANGE,
 	CANVAS_WILL_COPY,
 	CANVAS_WILL_PASTE,
-	CANVAS_DID_DRAW,
+	CANVAS_DID_UPDATE,
 } CanvasNotification;
 
 typedef enum
@@ -475,6 +474,6 @@ typedef struct
 	int width;
 	int height;
 	bool update;
-} CanvasDrawParameters;
+} CanvasUpdateParameters;
 
 #endif
