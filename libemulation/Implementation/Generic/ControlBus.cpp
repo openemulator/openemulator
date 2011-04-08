@@ -52,16 +52,10 @@ bool ControlBus::setRef(string name, OEComponent *ref)
 	if (name == "emulation")
 	{
 		if (emulation)
-		{
-			emulation->postMessage(this, EMULATION_CLEAR_ACTIVE, NULL);
 			emulation->postMessage(this, EMULATION_SET_SYSTEM_EVENT_HANDLER, NULL);
-		}
 		emulation = ref;
 		if (emulation)
-		{
-			emulation->postMessage(this, EMULATION_ASSERT_ACTIVE, NULL);
 			emulation->postMessage(this, EMULATION_SET_SYSTEM_EVENT_HANDLER, this);
-		}
 	}
 	else if (name == "audio")
 	{
@@ -83,15 +77,21 @@ bool ControlBus::init()
 {
 	if (!audio)
 	{
-		logMessage("property 'audio' undefined");
+		logMessage("ref to 'audio' undefined");
 		return false;
 	}
 	
-	if (emulation)
+	if (!emulation)
 	{
-		string state = "Powered On";
-		emulation->postMessage(this, EMULATION_SET_STATE, &state);
+		logMessage("ref to 'emulation' undefined");
+		return false;
 	}
+	
+	string state = "Powered On";
+	emulation->postMessage(this, EMULATION_SET_STATELABEL, &state);
+		
+	// Init running
+	emulation->postMessage(this, EMULATION_ASSERT_RUNNING, NULL);
 	
 	updateCPUFrequency();
 	
@@ -115,6 +115,9 @@ bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
 				value = false;
 				postMessage(this, CONTROLBUS_CLEAR_RESET, &value);
 			}
+			
+			// To-Do: Change RUNNING state in emulation
+			
 			return true;
 		}
 		case CONTROLBUS_GET_POWERSTATE:
@@ -169,8 +172,6 @@ bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
 		case CONTROLBUS_GET_AUDIOBUFFERINDEX:
 			return true;
 	}
-	
-	logMessage("hi!");
 	
 	return false;
 }

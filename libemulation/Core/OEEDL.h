@@ -51,8 +51,6 @@ public:
 	void close();
 	
 	OEHeaderInfo getHeaderInfo();
-	string getOptions();
-	void setOptions(string value);
 	OEPortsInfo getFreePortsInfo();
 	OEConnectorsInfo getFreeConnectorsInfo();
 	

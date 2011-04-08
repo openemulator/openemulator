@@ -30,12 +30,11 @@ typedef enum
 {
 	EMULATION_UPDATE,
 	EMULATION_RUN_ALERT,
-	EMULATION_ASSERT_ACTIVE,
-	EMULATION_CLEAR_ACTIVE,
+	EMULATION_ASSERT_RUNNING,
+	EMULATION_CLEAR_RUNNING,
 	
-	EMULATION_SET_STATE,
+	EMULATION_SET_STATELABEL,
 	EMULATION_SET_IMAGE,
-	EMULATION_SET_REMOVABLE,
 	EMULATION_CREATE_CANVAS,
 	EMULATION_DESTROY_CANVAS,
 	EMULATION_SET_STORAGE_HANDLER,
@@ -66,8 +65,7 @@ typedef struct
 	
 	string location;
 	
-	string state;
-	bool removable;
+	string stateLabel;
 	OEComponents canvases;
 	OEComponent *storage;
 	OEComponent *systemEvent;
@@ -107,7 +105,7 @@ public:
 	bool addEDL(string path, map<string, string> idMap);
 	bool removeDevice(string id);
 	
-	bool isActive();
+	bool isRunning();
 	
 	void sendSystemEvent(string id, int event);
 	
@@ -124,7 +122,7 @@ private:
 	EmulationDestroyCanvas destroyCanvas;
 	void *userData;
 	
-	int activeCount;
+	int runningCount;
 	
 	void buildEmulationInfo();
 	EmulationSettings buildDeviceSettings(xmlNodePtr children);

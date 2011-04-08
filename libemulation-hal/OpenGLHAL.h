@@ -67,9 +67,8 @@ public:
 	
 	OESize getCanvasSize();
 	CanvasMode getCanvasMode();
-	void enableGLSL();
-	void disableGLSL();
-	bool update(float width, float height, float offset, bool update);
+	void setEnableGLSL(bool value);
+	bool update(float width, float height, float offset, bool redraw);
 	
 	void becomeKeyWindow();
 	void resignKeyWindow();
@@ -110,7 +109,6 @@ private:
 	CanvasConfiguration drawConfiguration;
 	bool isNewFrame;
 	OEImage frame;
-	OEImage drawFrame;
 	
 	OESize viewportSize;
 	GLuint texture[OPENGLHAL_TEXTURE_END];
@@ -150,8 +148,7 @@ private:
 	
 	bool setCaptureMode(CanvasCaptureMode *captureMode);
 	bool setConfiguration(CanvasConfiguration *configuration);
-	bool getFrame(OEImage **frame);
-	bool updateFrame();
+	bool postFrame(OEImage *frame);
 };
 
 #endif

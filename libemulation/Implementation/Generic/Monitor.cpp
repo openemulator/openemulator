@@ -238,12 +238,9 @@ bool Monitor::init()
 	{
 		canvas->postMessage(this, CANVAS_LOCK, NULL);
 		
-		OEImage *frame;
-		if (canvas->postMessage(this, CANVAS_GET_FRAME, &frame))
-		{
-			frame->readFile(dummyPath);
-			canvas->postMessage(this, CANVAS_UPDATE_FRAME, NULL);
-		}
+		OEImage frame;
+		frame.readFile(dummyPath);
+		canvas->postMessage(this, CANVAS_POST_FRAME, &frame);
 		
 		canvas->postMessage(this, CANVAS_CONFIGURE, &configuration);
 		

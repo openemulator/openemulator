@@ -80,31 +80,22 @@ CanvasMode OpenGLHAL::getCanvasMode()
 	return configuration.mode;
 }
 
-void OpenGLHAL::enableGLSL()
+void OpenGLHAL::setEnableGLSL(bool value)
 {
 	if (isOpen)
 	{
-		loadPrograms();
-	
-		isNewConfiguration = true;
-	}
-	
-	isGLSL = true;
-}
-
-void OpenGLHAL::disableGLSL()
-{
-	if (isOpen)
-	{
-		deletePrograms();
+		if (value)
+			loadPrograms();
+		else
+			deletePrograms();
 		
 		isNewConfiguration = true;
 	}
 	
-	isGLSL = false;
+	isGLSL = value;
 }
 
-bool OpenGLHAL::update(float width, float height, float offset, bool draw)
+bool OpenGLHAL::update(float width, float height, float offset, bool redraw)
 {
 	if (isNewConfiguration)
 	{
@@ -119,7 +110,7 @@ bool OpenGLHAL::update(float width, float height, float offset, bool draw)
 		viewportSize.height = height;
 		
 		updateViewport();
-		draw = true;
+		redraw = true;
 	}
 	
 	if (isNewFrame)
@@ -128,22 +119,22 @@ bool OpenGLHAL::update(float width, float height, float offset, bool draw)
 	if (isNewFrame || isNewConfiguration)
 	{
 		processFrame();
-		draw = true;
+		redraw = true;
 	}
 	
-	if (draw)
+	if (redraw)
 		drawCanvas();
 	
-	CanvasDrawParameters drawParameters;
-	drawParameters.width = width;
-	drawParameters.height = height;
-	drawParameters.update = draw;
-	notify(this, CANVAS_DID_DRAW, &drawParameters);
+	CanvasUpdate update;
+	update.width = width;
+	update.height = height;
+	update.redraw = redraw;
+	notify(this, CANVAS_DID_UPDATE, &update);
 	
 	isNewConfiguration = false;
 	isNewFrame = false;
 	
-	return drawParameters.update;
+	return update.redraw;
 }
 
 // OpenGL
@@ -182,11 +173,11 @@ void OpenGLHAL::freeOpenGL()
 
 GLuint OpenGLHAL::getGLFormat(OEImageFormat format)
 {
-	if (drawFrame.getFormat() == OEIMAGE_LUMINANCE)
+	if (format == OEIMAGE_LUMINANCE)
 		return GL_LUMINANCE;
-	else if (drawFrame.getFormat() == OEIMAGE_RGB)
+	else if (format == OEIMAGE_RGB)
 		return GL_RGB;
-	else if (drawFrame.getFormat() == OEIMAGE_RGBA)
+	else if (format == OEIMAGE_RGBA)
 		return GL_RGBA;
 	
 	return 0;
@@ -672,18 +663,18 @@ void OpenGLHAL::setTextureSize(GLuint glProgram)
 
 bool OpenGLHAL::uploadFrame()
 {
-	if (!drawFrame.getSize().width || !drawFrame.getSize().height)
+	if (!frame.getSize().width || !frame.getSize().height)
 	{
 		frameTextureSize = frameSize = OEMakeSize(0, 0);
 		return false;
 	}
 	
-	if ((frameSize.width != drawFrame.getSize().width) ||
-		(frameSize.height != drawFrame.getSize().height))
+	if ((frameSize.width != frame.getSize().width) ||
+		(frameSize.height != frame.getSize().height))
 	{
-		frameSize = drawFrame.getSize();
-		frameTextureSize = OEMakeSize(getNextPowerOf2(drawFrame.getSize().width),
-									  getNextPowerOf2(drawFrame.getSize().height));
+		frameSize = frame.getSize();
+		frameTextureSize = OEMakeSize(getNextPowerOf2(frame.getSize().width),
+									  getNextPowerOf2(frame.getSize().height));
 		
 		vector<char> dummy;
 		dummy.resize(frameTextureSize.width * frameTextureSize.height);
@@ -700,9 +691,9 @@ bool OpenGLHAL::uploadFrame()
 	
 	glBindTexture(GL_TEXTURE_2D, texture[OPENGLHAL_TEXTURE_FRAME_RAW]);
 	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0,
-					drawFrame.getSize().width, drawFrame.getSize().height,
-					getGLFormat(drawFrame.getFormat()), GL_UNSIGNED_BYTE,
-					drawFrame.getPixels());
+					frame.getSize().width, frame.getSize().height,
+					getGLFormat(frame.getFormat()), GL_UNSIGNED_BYTE,
+					frame.getPixels());
 	
 #ifdef GL_VERSION_2_0
 	setTextureSize(program[OPENGLHAL_PROGRAM_RGB]);
@@ -854,6 +845,7 @@ void OpenGLHAL::drawCanvas()
 		glUniform1f(glGetUniformLocation(glProgram, "shadowmask_alpha"),
 					shadowMaskAlpha);
 		
+		// Dot pitch is in mm, at 75 DPI host resolution
 		float elemNumX = (configuration.size.width / 75.0 * 25.4 /
 						  (configuration.screenShadowMaskDotPitch + 0.001) / 2.0);
 		float elemNumY = (configuration.size.height / 75.0 * 25.4 /
@@ -1172,20 +1164,13 @@ bool OpenGLHAL::setConfiguration(CanvasConfiguration *configuration)
 	return true;
 }
 
-bool OpenGLHAL::getFrame(OEImage **frame)
+bool OpenGLHAL::postFrame(OEImage *frame)
 {
 	if (!frame)
 		return false;
 	
-	*frame = &this->frame;
-	
-	return true;
-}
-
-bool OpenGLHAL::updateFrame()
-{
 	pthread_mutex_lock(&mutex);
-	drawFrame = frame;
+	this->frame = *frame;
 	isNewFrame = true;
 	pthread_mutex_unlock(&mutex);
 	
@@ -1199,11 +1184,8 @@ bool OpenGLHAL::postMessage(OEComponent *sender, int message, void *data)
 		case CANVAS_CONFIGURE:
 			return setConfiguration((CanvasConfiguration *)data);
 			
-		case CANVAS_GET_FRAME:
-			return getFrame((OEImage **)data);
-			
-		case CANVAS_UPDATE_FRAME:
-			return updateFrame();
+		case CANVAS_POST_FRAME:
+			return postFrame((OEImage *)data);
 			
 		case CANVAS_LOCK:
 			pthread_mutex_lock(&mutex);

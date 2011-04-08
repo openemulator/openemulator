@@ -143,7 +143,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	{
 		if (theEmulation->isOpen())
 		{
-			if (theEmulation->isActive())
+			if (theEmulation->isRunning())
 				[self updateChangeCount:NSChangeDone];
 			
 			return YES;
@@ -193,7 +193,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 							 error:outError];
 	
 	Emulation *theEmulation = (Emulation *)emulation;
-	if (theEmulation->isActive())
+	if (theEmulation->isRunning())
 		[self updateChangeCount:NSChangeDone];
 	
 	return result;
@@ -261,7 +261,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 
 - (void)didUpdate:(id)sender
 {
-	if (emulation && ((Emulation *)emulation)->isActive())
+	if (emulation && ((Emulation *)emulation)->isRunning())
 		[self updateChangeCount:NSChangeDone];
 	
 	[emulationWindowController updateEmulation:self];

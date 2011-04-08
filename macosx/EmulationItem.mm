@@ -101,7 +101,7 @@
 
 		location = [getNSString(deviceInfo->location) retain];
 		
-		state = [getNSString(deviceInfo->state) retain];
+		state = [getNSString(deviceInfo->stateLabel) retain];
 		canvases = [[NSMutableArray alloc] init];
 		OEComponents &theCanvases = deviceInfo->canvases;
 		for (NSInteger i = 0; i < theCanvases.size(); i++)

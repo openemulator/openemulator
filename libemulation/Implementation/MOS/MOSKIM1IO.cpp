@@ -79,13 +79,17 @@ bool MOSKIM1IO::init()
 	
 	if (canvas)
 	{
+		canvas->postMessage(this, CANVAS_LOCK, NULL);
+		
 		OEImage frame;
 		frame.readFile(viewPath);
-		canvas->postMessage(this, CANVAS_UPDATE_FRAME, &frame);
+		canvas->postMessage(this, CANVAS_POST_FRAME, &frame);
 		
 		CanvasConfiguration configuration;
 		configuration.size = frame.getSize();
 		canvas->postMessage(this, CANVAS_CONFIGURE, &configuration);
+		
+		canvas->postMessage(this, CANVAS_UNLOCK, NULL);
 	}
 	
 	return true;

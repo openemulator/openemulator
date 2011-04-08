@@ -79,7 +79,6 @@ bool RAM::init()
 		return false;
 	}
 	
-	
 	if (!powerOnPattern.size())
 		powerOnPattern.resize(1);
 	else

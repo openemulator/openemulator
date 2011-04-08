@@ -24,7 +24,7 @@ Emulation::Emulation() : OEEDL()
 	destroyCanvas = NULL;
 	didUpdate = NULL;
 	
-	activeCount = 0;
+	runningCount = 0;
 	
 	setComponent("emulation", this);
 }
@@ -211,9 +211,9 @@ bool Emulation::removeDevice(string deviceId)
 	return true;
 }
 
-bool Emulation::isActive()
+bool Emulation::isRunning()
 {
-	return (activeCount != 0);
+	return (runningCount != 0);
 }
 
 
@@ -245,7 +245,6 @@ void Emulation::buildEmulationInfo()
 			
 			deviceInfo.location = buildDeviceLocation(deviceInfo.id);
 			
-			deviceInfo.removable = false;
 			deviceInfo.storage = NULL;
 			deviceInfo.systemEvent = NULL;
 			
@@ -772,23 +771,23 @@ bool Emulation::postMessage(OEComponent *sender, int message, void *data)
 			}
 			break;
 			
-		case EMULATION_ASSERT_ACTIVE:
-			activeCount++;
+		case EMULATION_ASSERT_RUNNING:
+			runningCount++;
 			return true;
 			
-		case EMULATION_CLEAR_ACTIVE:
-			if (activeCount <= 0)
+		case EMULATION_CLEAR_RUNNING:
+			if (runningCount <= 0)
 				return false;
 			
-			activeCount--;
+			runningCount--;
 			return true;
 			
-		case EMULATION_SET_STATE:
+		case EMULATION_SET_STATELABEL:
 			{
 				EmulationDeviceInfo *deviceInfo = getDeviceInfo(getDeviceId(sender));
 				if (deviceInfo)
 				{
-					deviceInfo->state = *((string *)data);
+					deviceInfo->stateLabel = *((string *)data);
 					
 					return postMessage(sender, EMULATION_UPDATE, NULL);
 				}
@@ -801,18 +800,6 @@ bool Emulation::postMessage(OEComponent *sender, int message, void *data)
 				if (deviceInfo)
 				{
 					deviceInfo->image = *((string *)data);
-					
-					return postMessage(sender, EMULATION_UPDATE, NULL);
-				}
-			}
-			break;
-			
-		case EMULATION_SET_REMOVABLE:
-			{
-				EmulationDeviceInfo *deviceInfo = getDeviceInfo(getDeviceId(sender));
-				if (deviceInfo)
-				{
-					deviceInfo->removable = *((bool *)data);
 					
 					return postMessage(sender, EMULATION_UPDATE, NULL);
 				}
@@ -889,7 +876,7 @@ bool Emulation::postMessage(OEComponent *sender, int message, void *data)
 			break;
 	}
 	
-	return OEComponent::postMessage(sender, message, data);
+	return false;
 }
 
 bool Emulation::hasValueProperty(string value, string propertyName)

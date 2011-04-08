@@ -24,8 +24,7 @@
 typedef enum
 {
 	CANVAS_CONFIGURE,
-	CANVAS_GET_FRAME,
-	CANVAS_UPDATE_FRAME,
+	CANVAS_POST_FRAME,
 	CANVAS_SET_KEYBOARDFLAGS,
 	CANVAS_SET_BADGEFLAGS,
 	CANVAS_LOCK,
@@ -473,7 +472,7 @@ typedef struct
 {
 	int width;
 	int height;
-	bool update;
-} CanvasUpdateParameters;
+	bool redraw;
+} CanvasUpdate;
 
 #endif

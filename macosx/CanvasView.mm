@@ -56,9 +56,11 @@ static void setCapture(void *userData, OpenGLHALCapture capture)
 
 static void setKeyboardFlags(void *userData, int flags)
 {
-	// To-Do: check if performSelectorOnMainThread is needed
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
 	[(CanvasView *)userData setKeyboardFlags:flags];
+	
+	[pool release];
 }
 
 static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
@@ -86,11 +88,6 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	NSOpenGLPixelFormatAttribute pixelFormatAtrributes[] =
 	{
 		NSOpenGLPFADoubleBuffer,
-		NSOpenGLPFAColorSize, 24,
-		NSOpenGLPFAAlphaSize, 8,
-		NSOpenGLPFADepthSize, 0,
-		NSOpenGLPFAStencilSize, 0,
-		NSOpenGLPFAAccumSize, 8,
 		0
 	};
 	

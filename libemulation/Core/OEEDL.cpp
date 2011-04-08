@@ -129,28 +129,6 @@ OEHeaderInfo OEEDL::getHeaderInfo()
 	return headerInfo;
 }
 
-string OEEDL::getOptions()
-{
-	string value;
-	
-	if (doc)
-	{
-		xmlNodePtr rootNode = xmlDocGetRootElement(doc);
-		value = getNodeProperty(rootNode, "windowFrame");
-	}
-	
-	return value;
-}
-
-void OEEDL::setOptions(string value)
-{
-	if (doc)
-	{
-		xmlNodePtr rootNode = xmlDocGetRootElement(doc);
-		setNodeProperty(rootNode, "windowFrame", value);
-	}
-}
-
 OEPortsInfo OEEDL::getFreePortsInfo()
 {
 	OEPortsInfo freePortsInfo;

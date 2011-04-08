@@ -64,18 +64,14 @@ bool AppleGraphicsTablet::init()
 	}
 	else
 	{
-		CanvasConfiguration configuration;
-		
 		canvas->postMessage(this, CANVAS_LOCK, NULL);
 		
-		OEImage *frame;
-		if (canvas->postMessage(this, CANVAS_GET_FRAME, &frame))
-		{
-			frame->readFile(viewPath);
-			configuration.size = frame->getSize();
-			canvas->postMessage(this, CANVAS_UPDATE_FRAME, NULL);
-		}
+		OEImage frame;
+		frame.readFile(viewPath);
+		canvas->postMessage(this, CANVAS_POST_FRAME, NULL);
 		
+		CanvasConfiguration configuration;
+		configuration.size = frame.getSize();
 		canvas->postMessage(this, CANVAS_CONFIGURE, &configuration);
 		
 		canvas->postMessage(this, CANVAS_UNLOCK, NULL);
