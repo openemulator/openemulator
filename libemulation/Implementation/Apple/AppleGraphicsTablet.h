@@ -21,7 +21,7 @@ public:
 	bool init();
 	
 private:
-	OEComponent *emulation;
+	OEComponent *device;
 	OEComponent *canvas;
 	
 	string viewPath;

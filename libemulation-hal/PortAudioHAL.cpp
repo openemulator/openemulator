@@ -242,16 +242,16 @@ bool PortAudioHAL::openEmulations()
 				if (!error)
 					return true;
 				else
-					logMessage("could not create eulations thread, error " + getString(error));
+					printLog("could not create eulations thread, error " + getString(error));
 			}
 			else
-				logMessage("could not attr emulations thread, error " + getString(error));
+				printLog("could not attr emulations thread, error " + getString(error));
 		}
 		else
-			logMessage("could not init emulations attr, error " + getString(error));
+			printLog("could not init emulations attr, error " + getString(error));
 	}
 	else
-		logMessage("could not init emulations mutex, error " + getString(error));
+		printLog("could not init emulations mutex, error " + getString(error));
 	
 	return false;
 }
@@ -325,7 +325,7 @@ void PortAudioHAL::runEmulations()
 	}
 }
 
-bool PortAudioHAL::addEmulation(Emulation *emulation)
+bool PortAudioHAL::addEmulation(OEEmulation *emulation)
 {
 	lockEmulations();
 	
@@ -336,13 +336,13 @@ bool PortAudioHAL::addEmulation(Emulation *emulation)
 	return true;
 }
 
-void PortAudioHAL::removeEmulation(Emulation *emulation)
+void PortAudioHAL::removeEmulation(OEEmulation *emulation)
 {
 	lockEmulations();
 	
-	vector<Emulation *>::iterator first = emulations.begin();
-	vector<Emulation *>::iterator last = emulations.end();
-	vector<Emulation *>::iterator i = remove(first, last, emulation);
+	vector<OEEmulation *>::iterator first = emulations.begin();
+	vector<OEEmulation *>::iterator last = emulations.end();
+	vector<OEEmulation *>::iterator i = remove(first, last, emulation);
 	
 	if (i != last)
 		emulations.erase(i, last);
@@ -371,8 +371,8 @@ bool PortAudioHAL::openAudio()
 									  this);
 		if ((status != paNoError) && fullDuplex)
 		{
-			logMessage("could not open audio stream, error " + getString(status));
-			logMessage("attempting half-duplex");
+			printLog("could not open audio stream, error " + getString(status));
+			printLog("attempting half-duplex");
 			
 			status = Pa_OpenDefaultStream(&audioStream,
 										  0,
@@ -393,15 +393,15 @@ bool PortAudioHAL::openAudio()
 				return true;
 			}
 			else
-				logMessage("could not start audio stream, error " + getString(status));
+				printLog("could not start audio stream, error " + getString(status));
 			
 			Pa_CloseStream(audioStream);
 		}
 		else
-			logMessage("could not open audio stream, error " + getString(status));
+			printLog("could not open audio stream, error " + getString(status));
 	}
 	else
-		logMessage("could not init portaudio, error " + getString(status));
+		printLog("could not init portaudio, error " + getString(status));
 	
 	int error;
 	pthread_attr_t attr;
@@ -419,18 +419,18 @@ bool PortAudioHAL::openAudio()
 								   this);
 			if (!error)
 			{
-				logMessage("started timer thread");
+				printLog("started timer thread");
 				audioOpen = true;
 				return true;
 			}
 			else
-				logMessage("could not create timer thread, error " + getString(error));
+				printLog("could not create timer thread, error " + getString(error));
 		}
 		else
-			logMessage("could not attr timer thread, error " + getString(error));
+			printLog("could not attr timer thread, error " + getString(error));
 	}
 	else
-		logMessage("could not init timer thread, error " + getString(error));
+		printLog("could not init timer thread, error " + getString(error));
 	
 	return false;
 }
@@ -583,12 +583,12 @@ void PortAudioHAL::openPlayer(string path)
 		}
 		else
 		{
-			logMessage("could not init sample rate converter, error " + getString(error));
+			printLog("could not init sample rate converter, error " + getString(error));
 			sf_close(playSNDFILE);
 		}
 	}
 	else
-		logMessage("could not open file " + path);
+		printLog("could not open file " + path);
 	
 	unlockEmulations();
 }
@@ -757,7 +757,7 @@ void PortAudioHAL::openRecorder(string path)
 	lockEmulations();
 	
 	if (!(recordingSNDFILE = sf_open(path.c_str(), SFM_WRITE, &sfInfo)))
-		logMessage("could not open temporary file " + path);
+		printLog("could not open temporary file " + path);
 	recordingFrameNum = 0;
 	
 	unlockEmulations();

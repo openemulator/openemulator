@@ -24,7 +24,7 @@ public:
 	void notify(OEComponent *sender, int message, void *data);
 	
 private:
-	OEComponent *emulation;
+	OEComponent *device;
 	OEComponent *canvas;
 	
 	CanvasConfiguration configuration;

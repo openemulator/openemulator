@@ -13,11 +13,9 @@
 
 #include "OEComponent.h"
 
-#include "SystemEventInterface.h"
-
 typedef enum
 {
-	CONTROLBUS_SET_POWERSTATE = SYSTEMEVENT_END,
+	CONTROLBUS_SET_POWERSTATE,
 	CONTROLBUS_GET_POWERSTATE,
 	CONTROLBUS_ASSERT_RESET,
 	CONTROLBUS_CLEAR_RESET,
@@ -71,6 +69,7 @@ public:
 	
 private:
 	OEComponent *emulation;
+	OEComponent *device;
 	OEComponent *audio;
 	OEComponent *cpu;
 	OEComponent *cpuSocket;

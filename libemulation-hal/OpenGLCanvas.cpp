@@ -10,16 +10,17 @@
 
 #include <math.h>
 
-#include "OpenGLHAL.h"
+#include "OpenGLCanvas.h"
 
-#include "OpenGLHALSignalProcessing.h"
+#include "OEVector.h"
+#include "OEMatrix3.h"
 
 #define NTSC_CARRIER		(0.25 * 14.31818)
 #define NTSC_YIQ_CUTOFF		1.3
 #define NTSC_YUV_CUTOFF		0.6
 #define NTSC_YIQ_I_SHIFT	((NTSC_YUV_CUTOFF - NTSC_YIQ_CUTOFF) / NTSC_CARRIER)
 
-OpenGLHAL::OpenGLHAL(string resourcePath)
+OpenGLCanvas::OpenGLCanvas(string resourcePath)
 {
 	this->resourcePath = resourcePath;
 	
@@ -32,13 +33,13 @@ OpenGLHAL::OpenGLHAL(string resourcePath)
 	isNewConfiguration = true;
 	isNewFrame = false;
 	
-	for (int i = 0; i < OPENGLHAL_TEXTURE_END; i++)
+	for (int i = 0; i < OPENGLCANVAS_TEXTURE_END; i++)
 		texture[i] = 0;
-	for (int i = 0; i < OPENGLHAL_PROGRAM_END; i++)
+	for (int i = 0; i < OPENGLCANVAS_PROGRAM_END; i++)
 		program[i] = 0;
 	processProgram = 0;
 	
-	capture = OPENGLHAL_CAPTURE_NONE;
+	capture = OPENGLCANVAS_CAPTURE_NONE;
 	
 	memset(keyDown, 0, sizeof(keyDown));
 	keyDownCount = 0;
@@ -50,7 +51,7 @@ OpenGLHAL::OpenGLHAL(string resourcePath)
 
 // Video
 
-void OpenGLHAL::open(CanvasSetCapture setCapture,
+void OpenGLCanvas::open(CanvasSetCapture setCapture,
 					 CanvasSetKeyboardFlags setKeyboardFlags,
 					 void *userData)
 {
@@ -63,24 +64,24 @@ void OpenGLHAL::open(CanvasSetCapture setCapture,
 	pthread_mutex_init(&mutex, NULL);
 }
 
-void OpenGLHAL::close()
+void OpenGLCanvas::close()
 {
 	pthread_mutex_destroy(&mutex);
 	
 	freeOpenGL();
 }
 
-OESize OpenGLHAL::getCanvasSize()
+OESize OpenGLCanvas::getCanvasSize()
 {
 	return configuration.size;
 }
 
-CanvasMode OpenGLHAL::getCanvasMode()
+CanvasMode OpenGLCanvas::getCanvasMode()
 {
 	return configuration.mode;
 }
 
-void OpenGLHAL::setEnableGLSL(bool value)
+void OpenGLCanvas::setEnableGLSL(bool value)
 {
 	if (isOpen)
 	{
@@ -95,7 +96,7 @@ void OpenGLHAL::setEnableGLSL(bool value)
 	isGLSL = value;
 }
 
-bool OpenGLHAL::update(float width, float height, float offset, bool redraw)
+bool OpenGLCanvas::update(float width, float height, float offset, bool redraw)
 {
 	if (isNewConfiguration)
 	{
@@ -139,7 +140,7 @@ bool OpenGLHAL::update(float width, float height, float offset, bool redraw)
 
 // OpenGL
 
-bool OpenGLHAL::initOpenGL()
+bool OpenGLCanvas::initOpenGL()
 {
 	viewportSize = OEMakeSize(0, 0);
 	frameSize = OEMakeSize(0, 0);
@@ -150,7 +151,7 @@ bool OpenGLHAL::initOpenGL()
 	
 	glEnable(GL_TEXTURE_2D);
 	
-	glGenTextures(OPENGLHAL_TEXTURE_END, texture);
+	glGenTextures(OPENGLCANVAS_TEXTURE_END, texture);
 	
 	loadShadowMasks();
 	
@@ -162,16 +163,16 @@ bool OpenGLHAL::initOpenGL()
 	return true;
 }
 
-void OpenGLHAL::freeOpenGL()
+void OpenGLCanvas::freeOpenGL()
 {
-	glDeleteTextures(OPENGLHAL_TEXTURE_END, texture);
+	glDeleteTextures(OPENGLCANVAS_TEXTURE_END, texture);
 	
 	deletePrograms();
 	
 	isOpen = false;
 }
 
-GLuint OpenGLHAL::getGLFormat(OEImageFormat format)
+GLuint OpenGLCanvas::getGLFormat(OEImageFormat format)
 {
 	if (format == OEIMAGE_LUMINANCE)
 		return GL_LUMINANCE;
@@ -183,17 +184,17 @@ GLuint OpenGLHAL::getGLFormat(OEImageFormat format)
 	return 0;
 }
 
-void OpenGLHAL::loadShadowMasks()
+void OpenGLCanvas::loadShadowMasks()
 {
 	loadShadowMask("Shadow Mask Triad.png",
-				   texture[OPENGLHAL_TEXTURE_SHADOWMASK_TRIAD]);
+				   texture[OPENGLCANVAS_TEXTURE_SHADOWMASK_TRIAD]);
 	loadShadowMask("Shadow Mask Inline.png",
-				   texture[OPENGLHAL_TEXTURE_SHADOWMASK_INLINE]);
+				   texture[OPENGLCANVAS_TEXTURE_SHADOWMASK_INLINE]);
 	loadShadowMask("Shadow Mask Aperture.png",
-				   texture[OPENGLHAL_TEXTURE_SHADOWMASK_APERTURE]);
+				   texture[OPENGLCANVAS_TEXTURE_SHADOWMASK_APERTURE]);
 }
 
-void OpenGLHAL::loadShadowMask(string path, GLuint glTexture)
+void OpenGLCanvas::loadShadowMask(string path, GLuint glTexture)
 {
 #ifdef GL_VERSION_2_0
 	OEImage shadowMask;
@@ -208,11 +209,11 @@ void OpenGLHAL::loadShadowMask(string path, GLuint glTexture)
 #endif
 }
 
-void OpenGLHAL::loadPrograms()
+void OpenGLCanvas::loadPrograms()
 {
 	deletePrograms();
 	
-	program[OPENGLHAL_PROGRAM_NTSC] = loadProgram("\
+	program[OPENGLCANVAS_PROGRAM_NTSC] = loadProgram("\
 		uniform sampler2D texture;\
 		uniform vec2 texture_size;\
 		uniform vec2 comp_phase;\
@@ -249,7 +250,7 @@ void OpenGLHAL::loadPrograms()
 			gl_FragColor = vec4(decoder * p, 1.0);\
 		}");
 	
-	program[OPENGLHAL_PROGRAM_PAL] = loadProgram("\
+	program[OPENGLCANVAS_PROGRAM_PAL] = loadProgram("\
 		uniform sampler2D texture;\
 		uniform vec2 texture_size;\
 		uniform vec2 comp_phase;\
@@ -287,7 +288,7 @@ void OpenGLHAL::loadPrograms()
 			gl_FragColor = vec4(decoder * p, 1.0);\
 		}");
 	
-	program[OPENGLHAL_PROGRAM_RGB] = loadProgram("\
+	program[OPENGLCANVAS_PROGRAM_RGB] = loadProgram("\
 		uniform sampler2D texture;\
 		uniform vec2 texture_size;\
 		uniform vec3 c0, c1, c2, c3, c4, c5, c6, c7, c8;\
@@ -318,7 +319,7 @@ void OpenGLHAL::loadPrograms()
 			gl_FragColor = vec4(decoder * p, 1.0);\
 		}");
 	
-	program[OPENGLHAL_PROGRAM_SCREEN] = loadProgram("\
+	program[OPENGLCANVAS_PROGRAM_SCREEN] = loadProgram("\
 		uniform sampler2D texture;\
 		uniform vec2 texture_size;\
 		uniform float barrel;\
@@ -352,15 +353,15 @@ void OpenGLHAL::loadPrograms()
 		}");
 }
 
-void OpenGLHAL::deletePrograms()
+void OpenGLCanvas::deletePrograms()
 {
-	deleteProgram(OPENGLHAL_PROGRAM_NTSC);
-	deleteProgram(OPENGLHAL_PROGRAM_PAL);
-	deleteProgram(OPENGLHAL_PROGRAM_RGB);
-	deleteProgram(OPENGLHAL_PROGRAM_SCREEN);
+	deleteProgram(OPENGLCANVAS_PROGRAM_NTSC);
+	deleteProgram(OPENGLCANVAS_PROGRAM_PAL);
+	deleteProgram(OPENGLCANVAS_PROGRAM_RGB);
+	deleteProgram(OPENGLCANVAS_PROGRAM_SCREEN);
 }
 
-GLuint OpenGLHAL::loadProgram(const char *source)
+GLuint OpenGLCanvas::loadProgram(const char *source)
 {
 	GLuint index = 0;
 	
@@ -391,7 +392,7 @@ GLuint OpenGLHAL::loadProgram(const char *source)
 		string errorString = "could not compile OpenGL fragment shader\n";
 		errorString += &infoLog.front();
 		
-		logMessage(errorString);
+		printLog(errorString);
 	}
 	
 	index = glCreateProgram();
@@ -416,14 +417,14 @@ GLuint OpenGLHAL::loadProgram(const char *source)
 		string errorString = "could not link OpenGL program\n";
 		errorString += &infoLog.front();
 		
-		logMessage(errorString);
+		printLog(errorString);
 	}
 #endif
 	
 	return index;
 }
 
-void OpenGLHAL::deleteProgram(GLuint index)
+void OpenGLCanvas::deleteProgram(GLuint index)
 {
 #ifdef GL_VERSION_2_0
 	if (program[index])
@@ -432,18 +433,18 @@ void OpenGLHAL::deleteProgram(GLuint index)
 #endif
 }
 
-void OpenGLHAL::updateConfiguration()
+void OpenGLCanvas::updateConfiguration()
 {
 #ifdef GL_VERSION_2_0
 	// Y'UV filters
-	Vector w = Vector::chebyshevWindow(17, 50);
+	OEVector w = OEVector::chebyshevWindow(17, 50);
 	w = w.normalize();
 	
-	Vector wy;
-	wy = w * Vector::lanczosWindow(17, configuration.videoBandwidth);
+	OEVector wy;
+	wy = w * OEVector::lanczosWindow(17, configuration.videoBandwidth);
 	wy = wy.normalize();
 	
-	Vector wu, wv;
+	OEVector wu, wv;
 	switch (configuration.videoDecoder)
 	{
 		case CANVAS_DECODER_RGB:
@@ -452,26 +453,26 @@ void OpenGLHAL::updateConfiguration()
 			break;
 			
 		case CANVAS_DECODER_NTSC_YIQ:
-			wu = w * Vector::lanczosWindow(17, (configuration.
-												compositeChromaBandwidth));
+			wu = w * OEVector::lanczosWindow(17, (configuration.
+												  compositeChromaBandwidth));
 			wu = wu.normalize() * 2;
-			wv = w * Vector::lanczosWindow(17, (configuration.
-												compositeChromaBandwidth +
-												NTSC_YIQ_I_SHIFT));
+			wv = w * OEVector::lanczosWindow(17, (configuration.
+												  compositeChromaBandwidth +
+												  NTSC_YIQ_I_SHIFT));
 			wv = wv.normalize() * 2;
 			break;
 			
 		default:
-			wu = w * Vector::lanczosWindow(17, (configuration.
-												compositeChromaBandwidth));
+			wu = w * OEVector::lanczosWindow(17, (configuration.
+												  compositeChromaBandwidth));
 			wu = wv = wu.normalize() * 2;
 			break;
 	}
 	
 	// Decoder matrix
-	Matrix3 m(1, 0, 0,
-			  0, 1, 0,
-			  0, 0, 1);
+	OEMatrix3 m(1, 0, 0,
+				0, 1, 0,
+				0, 0, 1);
 	// Contrast
 	m *= configuration.videoContrast;
 	// Decoder matrices from "Digital Video and HDTV Algorithms and Interfaces"
@@ -480,65 +481,65 @@ void OpenGLHAL::updateConfiguration()
 		case CANVAS_DECODER_RGB:
 		case CANVAS_DECODER_MONOCHROME:
 			// Y'PbPr decoder matrix
-			m *= Matrix3(1, 1, 1,
-						 0, -0.344, 1.772,
-						 1.402, -0.714, 0);
+			m *= OEMatrix3(1, 1, 1,
+						   0, -0.344, 1.772,
+						   1.402, -0.714, 0);
 			break;
 			
 		case CANVAS_DECODER_NTSC_YUV:
 		case CANVAS_DECODER_NTSC_YIQ:
 			// Y'IQ decoder matrix
-			m *= Matrix3(1, 1, 1,
-						 0.955986, -0.272013, -1.106740,
-						 0.620825, -0.647204, 1.704230);
+			m *= OEMatrix3(1, 1, 1,
+						   0.955986, -0.272013, -1.106740,
+						   0.620825, -0.647204, 1.704230);
 			// Invert IQ
-			m *= Matrix3(1, 0, 0,
-						 0, 0, 1,
-						 0, 1, 0);
+			m *= OEMatrix3(1, 0, 0,
+						   0, 0, 1,
+						   0, 1, 0);
 			break;
 			
 		case CANVAS_DECODER_NTSC_CXA2025AS:
 			// CXA2025AS decoder matrix
-			m *= Matrix3(1, 1, 1,
-						 1.630, -0.378, -1.089,
-						 0.317, -0.466, 1.677);
+			m *= OEMatrix3(1, 1, 1,
+						   1.630, -0.378, -1.089,
+						   0.317, -0.466, 1.677);
 			// Invert IQ
-			m *= Matrix3(1, 0, 0,
-						 0, 0, 1,
-						 0, 1, 0);
+			m *= OEMatrix3(1, 0, 0,
+						   0, 0, 1,
+						   0, 1, 0);
 			break;
 			
 		case CANVAS_DECODER_PAL:
 			// Y'UV decoder matrix
-			m *= Matrix3(1, 1, 1,
-						 0, -0.394642, 2.032062,
-						 1.139883, -0.580622, 0);
+			m *= OEMatrix3(1, 1, 1,
+						   0, -0.394642, 2.032062,
+						   1.139883, -0.580622, 0);
 			break;
 	}
 	// Hue
 	float hue = 2 * M_PI * configuration.videoHue;
-	m *= Matrix3(1, 0, 0,
-				 0, cosf(hue), -sinf(hue),
-				 0, sinf(hue), cosf(hue));
+	m *= OEMatrix3(1, 0, 0,
+				   0, cosf(hue), -sinf(hue),
+				   0, sinf(hue), cosf(hue));
 	// Saturation
-	m *= Matrix3(1, 0, 0,
-				 0, configuration.videoSaturation, 0,
-				 0, 0, configuration.videoSaturation);
+	m *= OEMatrix3(1, 0, 0,
+				   0, configuration.videoSaturation, 0,
+				   0, 0, configuration.videoSaturation);
 	// Encoder matrices
 	switch (configuration.videoDecoder)
 	{
 		case CANVAS_DECODER_RGB:
 			// Y'PbPr encoding matrix
-			m *= Matrix3(0.299, -0.169, 0.5,
-						 0.587, -0.331, -0.419,
-						 0.114, 0.5, -0.081);
+			m *= OEMatrix3(0.299, -0.169, 0.5,
+						   0.587, -0.331, -0.419,
+						   0.114, 0.5, -0.081);
 			break;
 			
 		case CANVAS_DECODER_MONOCHROME:
 			// Set Y'PbPr maximum hue
-			m *= Matrix3(1, 0, -0.5,
-						 0, 0, 0,
-						 0, 0, 0);
+			m *= OEMatrix3(1, 0, -0.5,
+						   0, 0, 0,
+						   0, 0, 0);
 			break;
 	}
 	// Dynamic range gain
@@ -561,20 +562,20 @@ void OpenGLHAL::updateConfiguration()
 		case CANVAS_DECODER_NTSC_YIQ:
 		case CANVAS_DECODER_NTSC_YUV:
 		case CANVAS_DECODER_NTSC_CXA2025AS:
-			processProgram = program[OPENGLHAL_PROGRAM_NTSC];
+			processProgram = program[OPENGLCANVAS_PROGRAM_NTSC];
 			break;
 		case CANVAS_DECODER_PAL:
-			processProgram = program[OPENGLHAL_PROGRAM_PAL];
+			processProgram = program[OPENGLCANVAS_PROGRAM_PAL];
 			break;
 		default:
-			processProgram = program[OPENGLHAL_PROGRAM_RGB];
+			processProgram = program[OPENGLCANVAS_PROGRAM_RGB];
 			break;
 	}
 	
 	if (processProgram)
 	{
 		glUseProgram(processProgram);
-		if (processProgram != program[OPENGLHAL_PROGRAM_RGB])
+		if (processProgram != program[OPENGLCANVAS_PROGRAM_RGB])
 		{
 			glUniform2f(glGetUniformLocation(processProgram, "comp_phase"),
 						configuration.compositeCarrierFrequency,
@@ -604,21 +605,21 @@ void OpenGLHAL::updateConfiguration()
 						   9, false, m.getValues());
 	}
 	
-	if (program[OPENGLHAL_PROGRAM_SCREEN])
+	if (program[OPENGLCANVAS_PROGRAM_SCREEN])
 	{
-		GLuint glProgram = program[OPENGLHAL_PROGRAM_SCREEN];
+		GLuint glProgram = program[OPENGLCANVAS_PROGRAM_SCREEN];
 		glActiveTexture(GL_TEXTURE1);
 		GLuint glTexture;
 		switch (configuration.screenShadowMask)
 		{
 			case CANVAS_SHADOWMASK_TRIAD:
-				glTexture = texture[OPENGLHAL_TEXTURE_SHADOWMASK_TRIAD];
+				glTexture = texture[OPENGLCANVAS_TEXTURE_SHADOWMASK_TRIAD];
 				break;
 			case CANVAS_SHADOWMASK_INLINE:
-				glTexture = texture[OPENGLHAL_TEXTURE_SHADOWMASK_INLINE];
+				glTexture = texture[OPENGLCANVAS_TEXTURE_SHADOWMASK_INLINE];
 				break;
 			case CANVAS_SHADOWMASK_APERTURE:
-				glTexture = texture[OPENGLHAL_TEXTURE_SHADOWMASK_APERTURE];
+				glTexture = texture[OPENGLCANVAS_TEXTURE_SHADOWMASK_APERTURE];
 				break;
 			default:
 				glTexture = 0;
@@ -643,12 +644,12 @@ void OpenGLHAL::updateConfiguration()
 #endif
 }
 
-void OpenGLHAL::updateViewport()
+void OpenGLCanvas::updateViewport()
 {
 	glViewport(0, 0, viewportSize.width, viewportSize.height);
 }
 
-void OpenGLHAL::setTextureSize(GLuint glProgram)
+void OpenGLCanvas::setTextureSize(GLuint glProgram)
 {
 #ifdef GL_VERSION_2_0
 	if (!glProgram)
@@ -661,7 +662,7 @@ void OpenGLHAL::setTextureSize(GLuint glProgram)
 #endif
 }
 
-bool OpenGLHAL::uploadFrame()
+bool OpenGLCanvas::uploadFrame()
 {
 	if (!frame.getSize().width || !frame.getSize().height)
 	{
@@ -679,33 +680,33 @@ bool OpenGLHAL::uploadFrame()
 		vector<char> dummy;
 		dummy.resize(frameTextureSize.width * frameTextureSize.height);
 		
-		glBindTexture(GL_TEXTURE_2D, texture[OPENGLHAL_TEXTURE_FRAME_RAW]);
+		glBindTexture(GL_TEXTURE_2D, texture[OPENGLCANVAS_TEXTURE_FRAME_RAW]);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
 					 frameTextureSize.width, frameTextureSize.height, 0,
 					 GL_LUMINANCE, GL_UNSIGNED_BYTE, &dummy.front());
-		glBindTexture(GL_TEXTURE_2D, texture[OPENGLHAL_TEXTURE_FRAME_PROCESSED]);
+		glBindTexture(GL_TEXTURE_2D, texture[OPENGLCANVAS_TEXTURE_FRAME_PROCESSED]);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
 					 frameTextureSize.width, frameTextureSize.height, 0,
 					 GL_LUMINANCE, GL_UNSIGNED_BYTE, &dummy.front());
 	}
 	
-	glBindTexture(GL_TEXTURE_2D, texture[OPENGLHAL_TEXTURE_FRAME_RAW]);
+	glBindTexture(GL_TEXTURE_2D, texture[OPENGLCANVAS_TEXTURE_FRAME_RAW]);
 	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0,
 					frame.getSize().width, frame.getSize().height,
 					getGLFormat(frame.getFormat()), GL_UNSIGNED_BYTE,
 					frame.getPixels());
 	
 #ifdef GL_VERSION_2_0
-	setTextureSize(program[OPENGLHAL_PROGRAM_RGB]);
-	setTextureSize(program[OPENGLHAL_PROGRAM_NTSC]);
-	setTextureSize(program[OPENGLHAL_PROGRAM_PAL]);
-	setTextureSize(program[OPENGLHAL_PROGRAM_SCREEN]);
+	setTextureSize(program[OPENGLCANVAS_PROGRAM_RGB]);
+	setTextureSize(program[OPENGLCANVAS_PROGRAM_NTSC]);
+	setTextureSize(program[OPENGLCANVAS_PROGRAM_PAL]);
+	setTextureSize(program[OPENGLCANVAS_PROGRAM_SCREEN]);
 #endif
 	
 	return true;
 }
 
-void OpenGLHAL::processFrame()
+void OpenGLCanvas::processFrame()
 {
 #ifdef GL_VERSION_2_0
 	if (!processProgram)
@@ -713,7 +714,7 @@ void OpenGLHAL::processFrame()
 	
 	glUseProgram(processProgram);
 	
-	glBindTexture(GL_TEXTURE_2D, texture[OPENGLHAL_TEXTURE_FRAME_RAW]);
+	glBindTexture(GL_TEXTURE_2D, texture[OPENGLCANVAS_TEXTURE_FRAME_RAW]);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	
@@ -721,7 +722,7 @@ void OpenGLHAL::processFrame()
 		for (int x = 0; x < frameSize.width; x += viewportSize.width)
 		{
 			// Bind raw frame
-			glBindTexture(GL_TEXTURE_2D, texture[OPENGLHAL_TEXTURE_FRAME_RAW]);
+			glBindTexture(GL_TEXTURE_2D, texture[OPENGLCANVAS_TEXTURE_FRAME_RAW]);
 			
 			// Calculate frames
 			OERect renderFrame = OEMakeRect(-1, -1, 2, 2);
@@ -754,7 +755,7 @@ void OpenGLHAL::processFrame()
 			glEnd();
 			
 			// Copy framebuffer
-			glBindTexture(GL_TEXTURE_2D, texture[OPENGLHAL_TEXTURE_FRAME_PROCESSED]);
+			glBindTexture(GL_TEXTURE_2D, texture[OPENGLCANVAS_TEXTURE_FRAME_PROCESSED]);
 			glCopyTexSubImage2D(GL_TEXTURE_2D, 0,
 								x,
 								y,
@@ -769,7 +770,7 @@ void OpenGLHAL::processFrame()
 #endif
 }
 
-void OpenGLHAL::drawCanvas()
+void OpenGLCanvas::drawCanvas()
 {
 	// Clear
 	float clearColor;
@@ -818,9 +819,9 @@ void OpenGLHAL::drawCanvas()
 	
 	// Set common shader variables
 #ifdef GL_VERSION_2_0
-	if (program[OPENGLHAL_PROGRAM_SCREEN])
+	if (program[OPENGLCANVAS_PROGRAM_SCREEN])
 	{
-		GLuint glProgram = program[OPENGLHAL_PROGRAM_SCREEN];
+		GLuint glProgram = program[OPENGLCANVAS_PROGRAM_SCREEN];
 		glUseProgram(glProgram);
 		OEPoint barrelCenter;
 		barrelCenter.x = ((0.5 - configuration.contentRect.origin.x) /
@@ -863,8 +864,8 @@ void OpenGLHAL::drawCanvas()
 	
 	// Use nearest filter when canvas and screen pixel size match
 	glBindTexture(GL_TEXTURE_2D, (processProgram ? 
-								  texture[OPENGLHAL_TEXTURE_FRAME_PROCESSED] : 
-								  texture[OPENGLHAL_TEXTURE_FRAME_RAW]));
+								  texture[OPENGLCANVAS_TEXTURE_FRAME_PROCESSED] : 
+								  texture[OPENGLCANVAS_TEXTURE_FRAME_RAW]));
 	
 	int renderFrameWidth = viewportSize.width * renderFrame.size.width / 2;
 	GLint param = GL_LINEAR;
@@ -904,7 +905,7 @@ void OpenGLHAL::drawCanvas()
 
 // HID
 
-void OpenGLHAL::updateCapture(OpenGLHALCapture capture)
+void OpenGLCanvas::updateCapture(OpenGLCanvasCapture capture)
 {
 	//	log("updateCapture");
 	
@@ -916,20 +917,20 @@ void OpenGLHAL::updateCapture(OpenGLHALCapture capture)
 		setCapture(userData, capture);
 }
 
-void OpenGLHAL::becomeKeyWindow()
+void OpenGLCanvas::becomeKeyWindow()
 {
 }
 
-void OpenGLHAL::resignKeyWindow()
+void OpenGLCanvas::resignKeyWindow()
 {
 	resetKeysAndButtons();
 	
 	ctrlAltWasPressed = false;
 	
-	updateCapture(OPENGLHAL_CAPTURE_NONE);
+	updateCapture(OPENGLCANVAS_CAPTURE_NONE);
 }
 
-void OpenGLHAL::setKey(int usageId, bool value)
+void OpenGLCanvas::setKey(int usageId, bool value)
 {
 	if (keyDown[usageId] == value)
 		return;
@@ -947,55 +948,55 @@ void OpenGLHAL::setKey(int usageId, bool value)
 	
 	postHIDNotification(CANVAS_KEYBOARD_DID_CHANGE, usageId, value);
 	
-	if ((capture == OPENGLHAL_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR) &&
+	if ((capture == OPENGLCANVAS_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR) &&
 		!keyDownCount && ctrlAltWasPressed)
 	{
 		ctrlAltWasPressed = false;
 		
-		updateCapture(OPENGLHAL_CAPTURE_NONE);
+		updateCapture(OPENGLCANVAS_CAPTURE_NONE);
 	}
 }
 
-void OpenGLHAL::postHIDNotification(int notification, int usageId, float value)
+void OpenGLCanvas::postHIDNotification(int notification, int usageId, float value)
 {
 	CanvasHIDNotification data = {usageId, value};
 	notify(this, notification, &data);
 }
 
-void OpenGLHAL::sendUnicodeKeyEvent(int unicode)
+void OpenGLCanvas::sendUnicodeKeyEvent(int unicode)
 {
 	//	log("unicode " + getHexString(unicode));
 	
 	postHIDNotification(CANVAS_UNICODEKEYBOARD_DID_CHANGE, unicode, 0);
 }
 
-void OpenGLHAL::enterMouse()
+void OpenGLCanvas::enterMouse()
 {
 	mouseEntered = true;
 	
 	if (configuration.captureMode == CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_ENTER)
-		updateCapture(OPENGLHAL_CAPTURE_KEYBOARD_AND_HIDE_MOUSE_CURSOR);
+		updateCapture(OPENGLCANVAS_CAPTURE_KEYBOARD_AND_HIDE_MOUSE_CURSOR);
 	
 	postHIDNotification(CANVAS_POINTER_DID_CHANGE,
 						CANVAS_P_PROXIMITY,
 						1);
 }
 
-void OpenGLHAL::exitMouse()
+void OpenGLCanvas::exitMouse()
 {
 	mouseEntered = false;
 	
 	if (configuration.captureMode == CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_ENTER)
-		updateCapture(OPENGLHAL_CAPTURE_NONE);
+		updateCapture(OPENGLCANVAS_CAPTURE_NONE);
 	
 	postHIDNotification(CANVAS_POINTER_DID_CHANGE,
 						CANVAS_P_PROXIMITY,
 						0);
 }
 
-void OpenGLHAL::setMousePosition(float x, float y)
+void OpenGLCanvas::setMousePosition(float x, float y)
 {
-	if (capture != OPENGLHAL_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR)
+	if (capture != OPENGLCANVAS_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR)
 	{
 		postHIDNotification(CANVAS_POINTER_DID_CHANGE,
 							CANVAS_P_X,
@@ -1006,9 +1007,9 @@ void OpenGLHAL::setMousePosition(float x, float y)
 	}
 }
 
-void OpenGLHAL::moveMouse(float rx, float ry)
+void OpenGLCanvas::moveMouse(float rx, float ry)
 {
-	if (capture == OPENGLHAL_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR)
+	if (capture == OPENGLCANVAS_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR)
 	{
 		postHIDNotification(CANVAS_MOUSE_DID_CHANGE,
 							CANVAS_M_RELX,
@@ -1019,7 +1020,7 @@ void OpenGLHAL::moveMouse(float rx, float ry)
 	}
 }
 
-void OpenGLHAL::setMouseButton(int index, bool value)
+void OpenGLCanvas::setMouseButton(int index, bool value)
 {
 	if (index >= CANVAS_MOUSE_BUTTON_NUM)
 		return;
@@ -1027,23 +1028,23 @@ void OpenGLHAL::setMouseButton(int index, bool value)
 		return;
 	mouseButtonDown[index] = value;
 	
-	if (capture == OPENGLHAL_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR)
+	if (capture == OPENGLCANVAS_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR)
 		postHIDNotification(CANVAS_MOUSE_DID_CHANGE,
 							CANVAS_M_BUTTON1 + index,
 							value);
 	else if ((configuration.captureMode == CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_CLICK) &&
-			 (capture == OPENGLHAL_CAPTURE_NONE) &&
+			 (capture == OPENGLCANVAS_CAPTURE_NONE) &&
 			 (index == 0))
-		updateCapture(OPENGLHAL_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR);
+		updateCapture(OPENGLCANVAS_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR);
 	else
 		postHIDNotification(CANVAS_POINTER_DID_CHANGE,
 							CANVAS_P_BUTTON1 + index,
 							value);
 }
 
-void OpenGLHAL::sendMouseWheelEvent(int index, float value)
+void OpenGLCanvas::sendMouseWheelEvent(int index, float value)
 {
-	if (capture == OPENGLHAL_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR)
+	if (capture == OPENGLCANVAS_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR)
 		postHIDNotification(CANVAS_MOUSE_DID_CHANGE,
 							CANVAS_M_WHEELX + index,
 							value);
@@ -1053,7 +1054,7 @@ void OpenGLHAL::sendMouseWheelEvent(int index, float value)
 							value);
 }
 
-void OpenGLHAL::setJoystickButton(int deviceIndex, int index, bool value)
+void OpenGLCanvas::setJoystickButton(int deviceIndex, int index, bool value)
 {
 	if (deviceIndex >= CANVAS_JOYSTICK_NUM)
 		return;
@@ -1068,7 +1069,7 @@ void OpenGLHAL::setJoystickButton(int deviceIndex, int index, bool value)
 						value);
 }
 
-void OpenGLHAL::setJoystickPosition(int deviceIndex, int index, float value)
+void OpenGLCanvas::setJoystickPosition(int deviceIndex, int index, float value)
 {
 	if (deviceIndex >= CANVAS_JOYSTICK_NUM)
 		return;
@@ -1080,7 +1081,7 @@ void OpenGLHAL::setJoystickPosition(int deviceIndex, int index, float value)
 						value);
 }
 
-void OpenGLHAL::sendJoystickHatEvent(int deviceIndex, int index, float value)
+void OpenGLCanvas::sendJoystickHatEvent(int deviceIndex, int index, float value)
 {
 	if (deviceIndex >= CANVAS_JOYSTICK_NUM)
 		return;
@@ -1092,7 +1093,7 @@ void OpenGLHAL::sendJoystickHatEvent(int deviceIndex, int index, float value)
 						value);
 }
 
-void OpenGLHAL::moveJoystickBall(int deviceIndex, int index, float value)
+void OpenGLCanvas::moveJoystickBall(int deviceIndex, int index, float value)
 {
 	if (deviceIndex >= CANVAS_JOYSTICK_NUM)
 		return;
@@ -1104,7 +1105,7 @@ void OpenGLHAL::moveJoystickBall(int deviceIndex, int index, float value)
 						value);
 }
 
-void OpenGLHAL::resetKeysAndButtons()
+void OpenGLCanvas::resetKeysAndButtons()
 {
 	for (int i = 0; i < CANVAS_KEYBOARD_KEY_NUM; i++)
 		setKey(i, false);
@@ -1117,21 +1118,17 @@ void OpenGLHAL::resetKeysAndButtons()
 			setJoystickButton(i, j, false);
 }
 
-bool OpenGLHAL::copy(string& value)
+void OpenGLCanvas::copy(string& value)
 {
-	notify(this, CANVAS_WILL_COPY, &value);
-	
-	return true;
+	notify(NULL, CANVAS_DID_COPY, &value);
 }
 
-bool OpenGLHAL::paste(string value)
+void OpenGLCanvas::paste(string value)
 {
-	notify(this, CANVAS_WILL_PASTE, &value);
-	
-	return true;
+	notify(NULL, CANVAS_DID_PASTE, &value);
 }
 
-bool OpenGLHAL::setConfiguration(CanvasConfiguration *configuration)
+bool OpenGLCanvas::setConfiguration(CanvasConfiguration *configuration)
 {
 	if (!configuration)
 		return false;
@@ -1141,17 +1138,17 @@ bool OpenGLHAL::setConfiguration(CanvasConfiguration *configuration)
 		switch (configuration->captureMode)
 		{
 			case CANVAS_CAPTUREMODE_NO_CAPTURE:
-				updateCapture(OPENGLHAL_CAPTURE_NONE);
+				updateCapture(OPENGLCANVAS_CAPTURE_NONE);
 				break;
 				
 			case CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_CLICK:
-				updateCapture(OPENGLHAL_CAPTURE_NONE);
+				updateCapture(OPENGLCANVAS_CAPTURE_NONE);
 				break;
 				
 			case CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_ENTER:
 				updateCapture(mouseEntered ? 
-							  OPENGLHAL_CAPTURE_KEYBOARD_AND_HIDE_MOUSE_CURSOR : 
-							  OPENGLHAL_CAPTURE_NONE);
+							  OPENGLCANVAS_CAPTURE_KEYBOARD_AND_HIDE_MOUSE_CURSOR : 
+							  OPENGLCANVAS_CAPTURE_NONE);
 				break;
 		}
 	}
@@ -1164,7 +1161,7 @@ bool OpenGLHAL::setConfiguration(CanvasConfiguration *configuration)
 	return true;
 }
 
-bool OpenGLHAL::postFrame(OEImage *frame)
+bool OpenGLCanvas::postFrame(OEImage *frame)
 {
 	if (!frame)
 		return false;
@@ -1177,7 +1174,7 @@ bool OpenGLHAL::postFrame(OEImage *frame)
 	return true;
 }
 
-bool OpenGLHAL::postMessage(OEComponent *sender, int message, void *data)
+bool OpenGLCanvas::postMessage(OEComponent *sender, int message, void *data)
 {
 	switch (message)
 	{

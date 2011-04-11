@@ -2,7 +2,7 @@
 /**
  * libemulation
  * OEComponent
- * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2009-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Component definition
@@ -16,7 +16,6 @@
 class OEComponent;
 typedef vector<OEComponent *> OEComponents;
 typedef map<int, OEComponents> OEObservers;
-typedef map<int, OEComponents> OEDelegates;
 
 class OEComponent
 {
@@ -32,10 +31,8 @@ public:
 	virtual bool init();
 	virtual void update();
 	
-	// Messaging and delegation
+	// Messaging
 	virtual bool postMessage(OEComponent *sender, int message, void *data);
-	bool addDelegate(OEComponent *delegate, int message);
-	bool removeDelegate(OEComponent *delegate, int message);
 	
 	// Notification
 	virtual void notify(OEComponent *sender, int notification, void *data);
@@ -56,7 +53,7 @@ public:
 	
 protected:
 	// Helpers
-	void logMessage(string message);
+	void printLog(string message);
 	
 	int getInt(const string& value);
 	double getFloat(const string& value);
@@ -69,7 +66,6 @@ protected:
 	int getNextPowerOf2(int value);
 	
 private:
-	OEDelegates delegates;
 	OEObservers observers;
 };
 

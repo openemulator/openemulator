@@ -9,14 +9,13 @@
  */
 
 #import "EmulationWindowController.h"
+
 #import "EmulationItem.h"
 #import "EmulationOutlineView.h"
 #import "EmulationOutlineCell.h"
 #import "VerticallyCenteredTextFieldCell.h"
 #import "DocumentController.h"
 #import "StringConversion.h"
-
-#import "SystemEventInterface.h"
 
 #define SPLIT_VERT_LEFT_MIN 128
 #define SPLIT_VERT_RIGHT_MIN 351
@@ -101,11 +100,6 @@
 
 - (void)updateDetails
 {
-	NSString *locationLabel = NSLocalizedString(@"Location:", "Emulation Label");
-	NSString *stateLabel = NSLocalizedString(@"State:", "Emulation Label");
-	NSString *formatLabel = NSLocalizedString(@"Format:", "Emulation Label");
-	NSString *capacityLabel = NSLocalizedString(@"Capacity:", "Emulation Label");
-	
 	NSString *title = @"No Selection";
 	
 	NSImage *image = nil;
@@ -118,8 +112,6 @@
 	BOOL isStorage = NO;
 	BOOL isMounted = NO;
 	BOOL isLocked = NO;
-	NSString *diskImageFormat = @"";
-	NSString *diskImageCapacity = @"";
 	
 	if (selectedItem)
 	{
@@ -134,35 +126,13 @@
 		isStorage = [selectedItem isStorage];
 		isMounted = [selectedItem isMounted];
 		isLocked = [selectedItem isLocked];
-		diskImageFormat = [selectedItem diskImageFormat];
-		diskImageCapacity = [selectedItem diskImageCapacity];
 	}
 	
 	[fDeviceBox setTitle:title];
 	
 	[fDeviceImage setImage:image];
-	if (isMounted)
-	{
-		[fDeviceState1Label setStringValue:locationLabel];
-		[fDeviceState2Label setStringValue:stateLabel];
-		[fDeviceState3Label setStringValue:formatLabel];
-		[fDeviceState4Label setStringValue:capacityLabel];
-		[fDeviceState1Value setStringValue:location];
-		[fDeviceState2Value setStringValue:state];
-		[fDeviceState3Value setStringValue:diskImageFormat];
-		[fDeviceState4Value setStringValue:diskImageCapacity];
-	}
-	else
-	{
-		[fDeviceState1Label setStringValue:@""];
-		[fDeviceState2Label setStringValue:locationLabel];
-		[fDeviceState3Label setStringValue:stateLabel];
-		[fDeviceState4Label setStringValue:@""];
-		[fDeviceState1Value setStringValue:@""];
-		[fDeviceState2Value setStringValue:location];
-		[fDeviceState3Value setStringValue:state];
-		[fDeviceState4Value setStringValue:@""];
-	}
+	[fDeviceLocationValue setStringValue:location];
+	[fDeviceStateValue setStringValue:state];
 	
 	[fDeviceButton setHidden:!(isCanvas || isStorage || isMounted)];
 	if (isCanvas)
@@ -774,43 +744,43 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
 - (void)systemPowerDown:(id)sender
 {
 	if (selectedItem)
-		[[self document] sendSystemEvent:SYSTEMEVENT_POWERDOWN
-								toDevice:[selectedItem uid]];
+		[[self document] sendSystemEvent:DOCUMENT_POWERDOWN
+								toDevice:[selectedItem component]];
 }
 
 - (void)systemSleep:(id)sender
 {
 	if (selectedItem)
-		[[self document] sendSystemEvent:SYSTEMEVENT_SLEEP
-								toDevice:[selectedItem uid]];
+		[[self document] sendSystemEvent:DOCUMENT_SLEEP
+								toDevice:[selectedItem component]];
 }
 
 - (void)systemWakeUp:(id)sender
 {
 	if (selectedItem)
-		[[self document] sendSystemEvent:SYSTEMEVENT_WAKEUP
-								toDevice:[selectedItem uid]];
+		[[self document] sendSystemEvent:DOCUMENT_WAKEUP
+								toDevice:[selectedItem component]];
 }
 
 - (void)systemColdRestart:(id)sender
 {
 	if (selectedItem)
-		[[self document] sendSystemEvent:SYSTEMEVENT_COLDRESTART
-								toDevice:[selectedItem uid]];
+		[[self document] sendSystemEvent:DOCUMENT_COLDRESTART
+								toDevice:[selectedItem component]];
 }
 
 - (void)systemWarmRestart:(id)sender
 {
 	if (selectedItem)
-		[[self document] sendSystemEvent:SYSTEMEVENT_WARMRESTART
-								toDevice:[selectedItem uid]];
+		[[self document] sendSystemEvent:DOCUMENT_WARMRESTART
+								toDevice:[selectedItem component]];
 }
 
 - (void)systemDebuggerBreak:(id)sender
 {
 	if (selectedItem)
-		[[self document] sendSystemEvent:SYSTEMEVENT_DEBUGGERBREAK
-								toDevice:[selectedItem uid]];
+		[[self document] sendSystemEvent:DOCUMENT_DEBUGGERBREAK
+								toDevice:[selectedItem component]];
 }
 
 @end

@@ -10,8 +10,10 @@
 
 #include <math.h>
 
-#include "Emulation.h"
 #include "ControlBus.h"
+
+#include "EmulationInterface.h"
+#include "DeviceInterface.h"
 #include "AudioInterface.h"
 
 ControlBus::ControlBus()
@@ -50,12 +52,14 @@ bool ControlBus::setValue(string name, string value)
 bool ControlBus::setRef(string name, OEComponent *ref)
 {
 	if (name == "emulation")
-	{
-		if (emulation)
-			emulation->postMessage(this, EMULATION_SET_SYSTEM_EVENT_HANDLER, NULL);
 		emulation = ref;
-		if (emulation)
-			emulation->postMessage(this, EMULATION_SET_SYSTEM_EVENT_HANDLER, this);
+	else if (name == "device")
+	{
+		if (device)
+			device->removeObserver(this, DEVICE_SYSTEMEVENT_DID_OCCUR);
+		device = ref;
+		if (device)
+			device->addObserver(this, DEVICE_SYSTEMEVENT_DID_OCCUR);
 	}
 	else if (name == "audio")
 	{
@@ -75,21 +79,27 @@ bool ControlBus::setRef(string name, OEComponent *ref)
 
 bool ControlBus::init()
 {
-	if (!audio)
-	{
-		logMessage("ref to 'audio' undefined");
-		return false;
-	}
-	
 	if (!emulation)
 	{
-		logMessage("ref to 'emulation' undefined");
+		printLog("ref to 'emulation' undefined");
 		return false;
 	}
 	
-	string state = "Powered On";
-	emulation->postMessage(this, EMULATION_SET_STATELABEL, &state);
-		
+	if (!device)
+	{
+		printLog("ref to 'device' undefined");
+		return false;
+	}
+	
+	if (!audio)
+	{
+		printLog("ref to 'audio' undefined");
+		return false;
+	}
+	
+	string stateLabel = "Powered On";
+	device->postMessage(this, DEVICE_SET_STATELABEL, &stateLabel);
+	
 	// Init running
 	emulation->postMessage(this, EMULATION_ASSERT_RUNNING, NULL);
 	
@@ -191,9 +201,6 @@ void ControlBus::notify(OEComponent *sender, int notification, void *data)
 		for (int ch = 0; ch < buffer->channelNum; ch++)
 			*out++ += x;
 	}*/
-	
-	return OEComponent::notify(sender, notification, data);
-
 }
 
 void ControlBus::updateCPUFrequency()

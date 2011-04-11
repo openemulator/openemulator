@@ -22,7 +22,7 @@ public:
 	void notify(OEComponent *sender, int notification, void *data);
 	
 private:
-	OEComponent *emulation;
+	OEComponent *device;
 	OEComponent *serialPort;
 	OEComponent *audioOut;
 	OEComponent *audioIn;

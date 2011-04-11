@@ -212,7 +212,7 @@
 		if ([[self currentDocument] mount:path])
 			return YES;
 		
-		if ([[self currentDocument] isImageSupported:path])
+		if ([[self currentDocument] isMountPossible:path])
 		{
 			NSAlert *alert = [[NSAlert alloc] init];
 			[alert setMessageText:[NSString localizedStringWithFormat:

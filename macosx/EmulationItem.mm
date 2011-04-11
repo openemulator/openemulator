@@ -11,7 +11,9 @@
 #import "EmulationItem.h"
 #import "StringConversion.h"
 
-#import "Emulation.h"
+#import "OEEmulation.h"
+
+#import "DeviceInterface.h"
 
 @implementation EmulationItem
 
@@ -22,13 +24,16 @@
 		itemType = EMULATION_ITEM_ROOT;
 		children = [[NSMutableArray alloc] init];
 		
-		EmulationInfo *emulationInfo = (EmulationInfo *)[theDocument emulationInfo];
-		for (NSInteger i = 0; i < emulationInfo->size(); i++)
+		OEComponents *devices = (OEComponents *)[theDocument getDevices];
+		for (NSInteger i = 0; i < devices->size(); i++)
 		{
-			EmulationDeviceInfo &deviceInfo = emulationInfo->at(i);
+			OEComponent *device = devices->at(i);
+			
+			string group;
+			device->postMessage(NULL, DEVICE_GET_GROUP, &group);
 			
 			// Create group item
-			NSString *groupName = getNSString(deviceInfo.group);
+			NSString *groupName = getNSString(group);
 			EmulationItem *groupItem = [self childWithUid:groupName];
 			if (!groupItem)
 			{
@@ -39,8 +44,8 @@
 			
 			// Create device item
 			EmulationItem *deviceItem;
-			deviceItem = [[EmulationItem alloc] initWithDeviceInfo:&deviceInfo
-														  document:theDocument];
+			deviceItem = [[EmulationItem alloc] initWithDevice:device
+													  document:theDocument];
 			[[groupItem children] addObject:deviceItem];
 			[deviceItem release];
 		}
@@ -56,7 +61,6 @@
 		itemType = EMULATION_ITEM_GROUP;
 		children = [[NSMutableArray alloc] init];
 		
-		uid = [theGroupName copy];
 		label = [[NSLocalizedString(theGroupName, @"Emulation Item Label.")
 				  uppercaseString] retain];
 	}
@@ -64,8 +68,8 @@
 	return self;
 }
 
-- (id)initWithDeviceInfo:(void *)theDeviceInfo
-				document:(Document *)theDocument
+- (id)initWithDevice:(void *)theDevice
+			document:(Document *)theDocument
 {
 	if (self = [super init])
 	{
@@ -73,42 +77,16 @@
 		children = [[NSMutableArray alloc] init];
 		document = theDocument;
 		
-		EmulationDeviceInfo *deviceInfo = (EmulationDeviceInfo *)theDeviceInfo;
+		OEComponent *device = (OEComponent *)theDevice;
 		
-		uid = [getNSString(deviceInfo->id) retain];
 		label = [getNSString(deviceInfo->label) retain];
 		NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
 		NSString *imagePath = [[resourcePath stringByAppendingPathComponent:
 								getNSString(deviceInfo->image)] retain];
 		image = [[NSImage alloc] initByReferencingFile:imagePath];
 		
-		settingsRefs = [[NSMutableArray alloc] init];
-		settingsNames = [[NSMutableArray alloc] init];
-		settingsLabels = [[NSMutableArray alloc] init];
-		settingsTypes = [[NSMutableArray alloc] init];
-		settingsOptions = [[NSMutableArray alloc] init];
-		EmulationSettings &settings = deviceInfo->settings;
-		for (NSInteger i = 0; i < settings.size(); i++)
-		{
-			EmulationSetting &setting = settings.at(i);
-			[settingsRefs addObject:getNSString(setting.ref)];
-			[settingsNames addObject:getNSString(setting.name)];
-			[settingsLabels addObject:getNSString(setting.label)];
-			[settingsTypes addObject:getNSString(setting.type)];
-			[settingsOptions addObject:[getNSString(setting.options)
-										componentsSeparatedByString:@","]];
-		}
-
-		location = [getNSString(deviceInfo->location) retain];
-		
-		state = [getNSString(deviceInfo->stateLabel) retain];
-		canvases = [[NSMutableArray alloc] init];
-		OEComponents &theCanvases = deviceInfo->canvases;
-		for (NSInteger i = 0; i < theCanvases.size(); i++)
-			[canvases addObject:[NSValue valueWithPointer:theCanvases.at(i)]];
-		
 		storage = deviceInfo->storage;
-		if (storage && [document isStorageMounted:storage])
+		if (storage && ([document imagePathForStorage:storage])
 		{
 			NSString *theUID;
 			
@@ -127,8 +105,7 @@
 	return self;
 }
 
-- (id)initWithStorage:(void *)theComponent
-				  uid:(NSString *)theUid
+- (id)initWithStorage:(void *)theStorage
 			 location:(NSString *)theLocation
 			 document:(Document *)theDocument
 {
@@ -138,13 +115,9 @@
 		children = [[NSMutableArray alloc] init];
 		document = theDocument;
 		
-		uid = [theUid copy];
-		label = [[[document imagePathForStorage:theComponent]
+		label = [[[document imagePathForStorage:theStorage]
 				  lastPathComponent] retain];
 		image = [[NSImage imageNamed:@"DiskImage"] retain];
-		
-		location = [theLocation copy];
-		storage = theComponent;
 	}
 	
 	return self;
@@ -154,20 +127,7 @@
 {
 	[children release];
 	
-	[uid release];
-	[image release];
 	[label release];
-	
-	[location release];
-	[state release];
-	
-	[canvases release];
-	
-	[settingsRefs release];
-	[settingsNames release];
-	[settingsLabels release];
-	[settingsTypes release];
-	[settingsOptions release];
 	
 	[super dealloc];
 }
@@ -191,11 +151,6 @@
 	}
 	
 	return nil;
-}
-
-- (NSString *)uid
-{
-	return uid;
 }
 
 - (NSImage *)image
@@ -272,16 +227,6 @@
 	return [document imagePathForStorage:storage];
 }
 
-- (NSString *)diskImageFormat
-{
-	return [document imageFormatForStorage:storage];
-}
-
-- (NSString *)diskImageCapacity
-{
-	return [document imageCapacityForStorage:storage];
-}
-
 - (BOOL)mount:(NSString *)path
 {
 	if (![location length])
@@ -292,7 +237,7 @@
 
 - (void)unmount
 {
-	[document unmountStorage:storage];
+	[document unmount:storage];
 }
 
 - (BOOL)canMount:(NSString *)path
@@ -307,6 +252,10 @@
 
 - (NSInteger)numberOfSettings
 {
+	DeviceSettings settings;
+	
+	component->postMessage(NULL, DEVICE_GET_SETTINGS, settings)
+	return 
 	return [settingsRefs count];
 }
 

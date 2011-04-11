@@ -54,7 +54,7 @@ bool AddressDecoder::init()
 {
 	if (!floatingBus)
 	{
-		logMessage("property 'floatingBus' undefined");
+		printLog("ref 'floatingBus' undefined");
 		return false;
 	}
 	
@@ -77,7 +77,7 @@ bool AddressDecoder::init()
 	{
 		if (!ref.count(i->first))
 		{
-			logMessage("invalid address range '" + i->first + "'");
+			printLog("invalid address range '" + i->first + "'");
 			return false;
 		}
 		
@@ -142,7 +142,7 @@ bool AddressDecoder::map(OEComponent *component, string value)
 			(i->startAddress & blockMask) ||
 			((i->endAddress & blockMask) != blockMask))
 		{
-			logMessage("invalid address range '" + value + "'");
+			printLog("invalid address range '" + value + "'");
 			return false;
 		}
 		
@@ -164,7 +164,7 @@ bool AddressDecoder::getMaps(AddressDecoderMaps& maps, OEComponent *component,
 		
 		if (!getMap(map, component, value.substr(startPos, endPos - startPos)))
 		{
-			logMessage("invalid address range '" + value + "'");
+			printLog("invalid address range '" + value + "'");
 			return false;
 		}
 		

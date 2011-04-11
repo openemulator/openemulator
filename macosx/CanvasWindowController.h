@@ -15,16 +15,16 @@
 @interface CanvasWindowController : NSWindowController
 <NSToolbarDelegate>
 {
-	void *canvas;
 	IBOutlet CanvasView *fCanvasView;
 	
-	NSString *deviceId;
+	void *device;
 	NSString *title;
+	void *canvas;
 }
 
-- (id)initWithDeviceId:(NSString *)theDeviceId
-				 title:(NSString *)theTitle
-				canvas:(void *)theCanvas;
+- (id)initWithDevice:(void *)theDevice
+			   title:(NSString *)theTitle
+			  canvas:(void *)theCanvas;
 - (void *)canvas;
 - (void)destroyCanvas;
 

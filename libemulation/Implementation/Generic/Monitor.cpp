@@ -9,13 +9,13 @@
  */
 
 #include "Monitor.h"
-#include "Emulation.h"
 
+#include "DeviceInterface.h"
 #include "AudioInterface.h"
 
 Monitor::Monitor()
 {
-	emulation = NULL;
+	device = NULL;
 	canvas = NULL;
 	
 	configuration.size = OEMakeSize(720, 576);
@@ -177,35 +177,39 @@ bool Monitor::getValue(string name, string& value)
 
 bool Monitor::setRef(string name, OEComponent *ref)
 {
-	if (name == "emulation")
+	if (name == "device")
 	{
-		if (emulation && canvas)
+		if (device)
 		{
-			removeObserver(canvas, CANVAS_KEYBOARD_DID_CHANGE);
-			removeObserver(canvas, CANVAS_UNICODEKEYBOARD_DID_CHANGE);
-			removeObserver(canvas, CANVAS_POINTER_DID_CHANGE);
-			removeObserver(canvas, CANVAS_MOUSE_DID_CHANGE);
-			removeObserver(canvas, CANVAS_JOYSTICK1_DID_CHANGE);
-			removeObserver(canvas, CANVAS_JOYSTICK2_DID_CHANGE);
-			removeObserver(canvas, CANVAS_JOYSTICK3_DID_CHANGE);
-			removeObserver(canvas, CANVAS_JOYSTICK4_DID_CHANGE);
-			emulation->postMessage(this,
-								   EMULATION_DESTROY_CANVAS,
-								   &canvas);
+			if (canvas)
+			{
+				canvas->removeObserver(this, CANVAS_KEYBOARD_DID_CHANGE);
+				canvas->removeObserver(this, CANVAS_UNICODEKEYBOARD_DID_CHANGE);
+				canvas->removeObserver(this, CANVAS_POINTER_DID_CHANGE);
+				canvas->removeObserver(this, CANVAS_MOUSE_DID_CHANGE);
+				canvas->removeObserver(this, CANVAS_JOYSTICK1_DID_CHANGE);
+				canvas->removeObserver(this, CANVAS_JOYSTICK2_DID_CHANGE);
+				canvas->removeObserver(this, CANVAS_JOYSTICK3_DID_CHANGE);
+				canvas->removeObserver(this, CANVAS_JOYSTICK4_DID_CHANGE);
+			}
+			device->postMessage(this, DEVICE_DESTROY_CANVAS, &canvas);
 		}
-		emulation = ref;
-		if (emulation)
-			emulation->postMessage(this,
-								   EMULATION_CREATE_CANVAS,
-								   &canvas);
-		addObserver(canvas, CANVAS_KEYBOARD_DID_CHANGE);
-		addObserver(canvas, CANVAS_UNICODEKEYBOARD_DID_CHANGE);
-		addObserver(canvas, CANVAS_POINTER_DID_CHANGE);
-		addObserver(canvas, CANVAS_MOUSE_DID_CHANGE);
-		addObserver(canvas, CANVAS_JOYSTICK1_DID_CHANGE);
-		addObserver(canvas, CANVAS_JOYSTICK2_DID_CHANGE);
-		addObserver(canvas, CANVAS_JOYSTICK3_DID_CHANGE);
-		addObserver(canvas, CANVAS_JOYSTICK4_DID_CHANGE);
+		device = ref;
+		if (device)
+		{
+			device->postMessage(this, DEVICE_CREATE_CANVAS, &canvas);
+			if (canvas)
+			{
+				canvas->addObserver(this, CANVAS_KEYBOARD_DID_CHANGE);
+				canvas->addObserver(this, CANVAS_UNICODEKEYBOARD_DID_CHANGE);
+				canvas->addObserver(this, CANVAS_POINTER_DID_CHANGE);
+				canvas->addObserver(this, CANVAS_MOUSE_DID_CHANGE);
+				canvas->addObserver(this, CANVAS_JOYSTICK1_DID_CHANGE);
+				canvas->addObserver(this, CANVAS_JOYSTICK2_DID_CHANGE);
+				canvas->addObserver(this, CANVAS_JOYSTICK3_DID_CHANGE);
+				canvas->addObserver(this, CANVAS_JOYSTICK4_DID_CHANGE);
+			}
+		}
 	}
 	else if (name == "audio")
 	{
@@ -223,15 +227,15 @@ bool Monitor::setRef(string name, OEComponent *ref)
 
 bool Monitor::init()
 {
-	if (!emulation)
+	if (!device)
 	{
-		logMessage("property 'emulation' undefined");
+		printLog("property 'device' undefined");
 		return false;
 	}
 	
 	if (!canvas)
 	{
-		logMessage("canvas could not be created");
+		printLog("canvas could not be created");
 		return false;
 	}
 	else
@@ -252,8 +256,8 @@ bool Monitor::init()
 
 void Monitor::notify(OEComponent *sender, int notification, void *data)
 {
-//	if (canvas)
-//		canvas->postMessage(this, CANVAS_UPDATE_FRAME, NULL);
+	//	if (canvas)
+	//		canvas->postMessage(this, CANVAS_UPDATE_FRAME, NULL);
 }
 
 void Monitor::updateContentRect()

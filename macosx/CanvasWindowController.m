@@ -10,20 +10,18 @@
 
 #import "CanvasWindowController.h"
 
-#import "SystemEventInterface.h"
-
 @implementation CanvasWindowController
 
-- (id)initWithDeviceId:(NSString *)theDeviceId
-				 title:(NSString *)theTitle
-				canvas:(void *)theCanvas
+- (id)initWithDevice:(void *)theDevice
+			   title:(NSString *)theTitle
+			  canvas:(void *)theCanvas
 {
 	NSLog(@"CanvasWindowController init");
 	
 	if (self = [self initWithWindowNibName:@"Canvas"])
 	{
+		device = theDevice;
 		title = [theTitle copy];
-		deviceId = [theDeviceId copy];
 		
 		canvas = theCanvas;
 	}
@@ -36,7 +34,6 @@
 	NSLog(@"CanvasWindowController dealloc");
 	
 	[title release];
-	[deviceId release];
 	
 	[super dealloc];
 }
@@ -230,38 +227,38 @@
 
 - (void)systemPowerDown:(id)sender
 {
-	[[self document] sendSystemEvent:SYSTEMEVENT_POWERDOWN
-							toDevice:deviceId];
+	[[self document] sendSystemEvent:DOCUMENT_POWERDOWN
+							toDevice:device];
 }
 
 - (void)systemSleep:(id)sender
 {
-	[[self document] sendSystemEvent:SYSTEMEVENT_SLEEP
-							toDevice:deviceId];
+	[[self document] sendSystemEvent:DOCUMENT_SLEEP
+							toDevice:device];
 }
 
 - (void)systemWakeUp:(id)sender
 {
-	[[self document] sendSystemEvent:SYSTEMEVENT_WAKEUP
-							toDevice:deviceId];
+	[[self document] sendSystemEvent:DOCUMENT_WAKEUP
+							toDevice:device];
 }
 
 - (void)systemColdRestart:(id)sender
 {
-	[[self document] sendSystemEvent:SYSTEMEVENT_COLDRESTART
-							toDevice:deviceId];
+	[[self document] sendSystemEvent:DOCUMENT_COLDRESTART
+							toDevice:device];
 }
 
 - (void)systemWarmRestart:(id)sender
 {
-	[[self document] sendSystemEvent:SYSTEMEVENT_WARMRESTART
-							toDevice:deviceId];
+	[[self document] sendSystemEvent:DOCUMENT_WARMRESTART
+							toDevice:device];
 }
 
 - (void)systemDebuggerBreak:(id)sender
 {
-	[[self document] sendSystemEvent:SYSTEMEVENT_DEBUGGERBREAK
-							toDevice:deviceId];
+	[[self document] sendSystemEvent:DOCUMENT_DEBUGGERBREAK
+							toDevice:device];
 }
 
 @end

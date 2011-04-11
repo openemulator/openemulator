@@ -9,13 +9,14 @@
  */
 
 #include "MOSKIM1IO.h"
-#include "Emulation.h"
+
+#include "DeviceInterface.h"
 #include "CanvasInterface.h"
 #include "RS232Interface.h"
 
 MOSKIM1IO::MOSKIM1IO()
 {
-	emulation = NULL;
+	device = NULL;
 	serialPort = NULL;
 	audioOut = NULL;
 	audioIn = NULL;
@@ -35,16 +36,16 @@ bool MOSKIM1IO::setValue(string name, string value)
 
 bool MOSKIM1IO::setRef(string name, OEComponent *ref)
 {
-	if (name == "emulation")
+	if (name == "device")
 	{
-		if (emulation)
-			emulation->postMessage(this,
-								   EMULATION_DESTROY_CANVAS,
+		if (device)
+			device->postMessage(this,
+								   DEVICE_DESTROY_CANVAS,
 								   &canvas);
-		emulation = ref;
-		if (emulation)
-			emulation->postMessage(this,
-								   EMULATION_CREATE_CANVAS,
+		device = ref;
+		if (device)
+			device->postMessage(this,
+								   DEVICE_CREATE_CANVAS,
 								   &canvas);
 	}
 	else if (name == "serialPort")
@@ -65,19 +66,18 @@ bool MOSKIM1IO::setRef(string name, OEComponent *ref)
 
 bool MOSKIM1IO::init()
 {
-	if (!emulation)
+	if (!device)
 	{
-		logMessage("property 'emulation' undefined");
+		printLog("property 'device' undefined");
 		return false;
 	}
 	
 	if (!canvas)
 	{
-		logMessage("canvas could not be created");
+		printLog("canvas could not be created");
 		return false;
 	}
-	
-	if (canvas)
+	else
 	{
 		canvas->postMessage(this, CANVAS_LOCK, NULL);
 		

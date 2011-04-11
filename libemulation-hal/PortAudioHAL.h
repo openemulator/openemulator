@@ -17,7 +17,7 @@
 #include "sndfile.h"
 #include "samplerate.h"
 
-#include "Emulation.h"
+#include "OEEmulation.h"
 
 #define OEPORTAUDIO_SAMPLERATE			48000.0
 #define OEPORTAUDIO_CHANNELNUM			2
@@ -41,8 +41,8 @@ public:
 	void lockEmulations();
 	void unlockEmulations();
 	void runEmulations();
-	bool addEmulation(Emulation *emulation);
-	void removeEmulation(Emulation *emulation);
+	bool addEmulation(OEEmulation *emulation);
+	void removeEmulation(OEEmulation *emulation);
 	
 	void runAudio(const float *input,
 				  float *output,
@@ -84,7 +84,7 @@ private:
 	pthread_t emulationsThread;
 	pthread_mutex_t emulationsMutex;
 	pthread_cond_t emulationsCond;
-	vector<Emulation *> emulations;
+	vector<OEEmulation *> emulations;
 	
 	bool audioOpen;
 	PaStream *audioStream;

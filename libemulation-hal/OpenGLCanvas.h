@@ -8,8 +8,8 @@
  * Implements an OpenGL canvas.
  */
 
-#ifndef _OPENGLHAL_H
-#define _OPENGLHAL_H
+#ifndef _OPENGLCANVAS_H
+#define _OPENGLCANVAS_H
 
 #include <pthread.h>
 
@@ -21,44 +21,44 @@
 
 typedef enum
 {
-	OPENGLHAL_CAPTURE_NONE,
-	OPENGLHAL_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR,
-	OPENGLHAL_CAPTURE_KEYBOARD_AND_HIDE_MOUSE_CURSOR,
-} OpenGLHALCapture;
+	OPENGLCANVAS_CAPTURE_NONE,
+	OPENGLCANVAS_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR,
+	OPENGLCANVAS_CAPTURE_KEYBOARD_AND_HIDE_MOUSE_CURSOR,
+} OpenGLCanvasCapture;
 
 typedef enum
 {
-	OPENGLHAL_TEXTURE_FRAME_RAW,
-	OPENGLHAL_TEXTURE_FRAME_PROCESSED,
-	OPENGLHAL_TEXTURE_SHADOWMASK_TRIAD,
-	OPENGLHAL_TEXTURE_SHADOWMASK_INLINE,
-	OPENGLHAL_TEXTURE_SHADOWMASK_APERTURE,
-	OPENGLHAL_TEXTURE_BADGE_CAPTURE,
-	OPENGLHAL_TEXTURE_BADGE_POWER,
-	OPENGLHAL_TEXTURE_BADGE_PAUSE,
-	OPENGLHAL_TEXTURE_END,
-} OEOpenGLTextureIndex;
+	OPENGLCANVAS_TEXTURE_FRAME_RAW,
+	OPENGLCANVAS_TEXTURE_FRAME_PROCESSED,
+	OPENGLCANVAS_TEXTURE_SHADOWMASK_TRIAD,
+	OPENGLCANVAS_TEXTURE_SHADOWMASK_INLINE,
+	OPENGLCANVAS_TEXTURE_SHADOWMASK_APERTURE,
+	OPENGLCANVAS_TEXTURE_BADGE_CAPTURE,
+	OPENGLCANVAS_TEXTURE_BADGE_POWER,
+	OPENGLCANVAS_TEXTURE_BADGE_PAUSE,
+	OPENGLCANVAS_TEXTURE_END,
+} OpenGLCanvasTextureIndex;
 
 typedef enum
 {
-	OPENGLHAL_PROGRAM_RGB,
-	OPENGLHAL_PROGRAM_NTSC,
-	OPENGLHAL_PROGRAM_PAL,
-	OPENGLHAL_PROGRAM_SCREEN,
-	OPENGLHAL_PROGRAM_END,
-} OpenGLHALProgram;
+	OPENGLCANVAS_PROGRAM_RGB,
+	OPENGLCANVAS_PROGRAM_NTSC,
+	OPENGLCANVAS_PROGRAM_PAL,
+	OPENGLCANVAS_PROGRAM_SCREEN,
+	OPENGLCANVAS_PROGRAM_END,
+} OpenGLCanvasProgram;
 
 
 
-typedef void (*CanvasSetCapture)(void *userData, OpenGLHALCapture capture);
+typedef void (*CanvasSetCapture)(void *userData, OpenGLCanvasCapture capture);
 typedef void (*CanvasSetKeyboardFlags)(void *userData, int flags);
 
 
 
-class OpenGLHAL : public OEComponent
+class OpenGLCanvas : public OEComponent
 {
 public:
-	OpenGLHAL(string resourcePath);
+	OpenGLCanvas(string resourcePath);
 	
 	void open(CanvasSetCapture setCapture,
 			  CanvasSetKeyboardFlags setKeyboardFlags,
@@ -87,8 +87,8 @@ public:
 	void sendJoystickHatEvent(int deviceIndex, int index, float value);
 	void moveJoystickBall(int deviceIndex, int index, float value);
 	
-	bool copy(string& value);
-	bool paste(string value);
+	void copy(string& value);
+	void paste(string value);
 	
 	bool postMessage(OEComponent *sender, int message, void *data);
 	
@@ -111,13 +111,13 @@ private:
 	OEImage frame;
 	
 	OESize viewportSize;
-	GLuint texture[OPENGLHAL_TEXTURE_END];
+	GLuint texture[OPENGLCANVAS_TEXTURE_END];
 	OESize frameTextureSize;
 	OESize frameSize;
-	GLuint program[OPENGLHAL_PROGRAM_END];
+	GLuint program[OPENGLCANVAS_PROGRAM_END];
 	GLuint processProgram;
 	
-	OpenGLHALCapture capture;
+	OpenGLCanvasCapture capture;
 	
 	bool keyDown[CANVAS_KEYBOARD_KEY_NUM];
 	int keyDownCount;
@@ -143,7 +143,7 @@ private:
 	void drawCanvas();
 	
 	void postHIDNotification(int notification, int usageId, float value);
-	void updateCapture(OpenGLHALCapture capture);
+	void updateCapture(OpenGLCanvasCapture capture);
 	void resetKeysAndButtons();
 	
 	bool setCaptureMode(CanvasCaptureMode *captureMode);

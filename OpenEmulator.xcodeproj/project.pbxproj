@@ -17,6 +17,7 @@
 		00039EB112B042390025D374 /* libemulation-hal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00039E7C12B03F660025D374 /* libemulation-hal.a */; };
 		00039F0112B04EAA0025D374 /* libemulation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00039EFE12B04E910025D374 /* libemulation.a */; };
 		00039FD112B04F6C0025D374 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 00039FD012B04F6C0025D374 /* libxml2.dylib */; };
+		000E8D1913515C6E00DBFB2C /* StorageInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 000E8D1813515C6E00DBFB2C /* StorageInterface.h */; };
 		001F56F90FD1E8E500EA246A /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 001F56F80FD1E8E500EA246A /* Sparkle.framework */; };
 		001F916411925BBE005383B3 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0054E4A61131BE8A006D32D9 /* OpenGL.framework */; };
 		00391CB312D3A320002C5ABD /* LibraryWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00391CB212D3A320002C5ABD /* LibraryWindowController.m */; };
@@ -58,10 +59,10 @@
 		008107DE1120C57600D744FB /* TemplateChooserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00FE0C051095353B00B92AB7 /* TemplateChooserViewController.m */; };
 		00811E0012D251E9009AD2F0 /* AppleDiskIIInterfaceCard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00811DFE12D251E9009AD2F0 /* AppleDiskIIInterfaceCard.cpp */; };
 		00811F1312D2738B009AD2F0 /* AppleGraphicsTablet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00811F1112D2738B009AD2F0 /* AppleGraphicsTablet.cpp */; };
-		0083630D1326C15300CB9A21 /* OpenGLHAL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 008363051326C15300CB9A21 /* OpenGLHAL.cpp */; };
-		0083630E1326C15300CB9A21 /* OpenGLHAL.h in Headers */ = {isa = PBXBuildFile; fileRef = 008363061326C15300CB9A21 /* OpenGLHAL.h */; };
-		0083630F1326C15300CB9A21 /* OpenGLHALSignalProcessing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 008363071326C15300CB9A21 /* OpenGLHALSignalProcessing.cpp */; };
-		008363101326C15300CB9A21 /* OpenGLHALSignalProcessing.h in Headers */ = {isa = PBXBuildFile; fileRef = 008363081326C15300CB9A21 /* OpenGLHALSignalProcessing.h */; };
+		0083630D1326C15300CB9A21 /* OpenGLCanvas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 008363051326C15300CB9A21 /* OpenGLCanvas.cpp */; };
+		0083630E1326C15300CB9A21 /* OpenGLCanvas.h in Headers */ = {isa = PBXBuildFile; fileRef = 008363061326C15300CB9A21 /* OpenGLCanvas.h */; };
+		0083630F1326C15300CB9A21 /* OEVector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 008363071326C15300CB9A21 /* OEVector.cpp */; };
+		008363101326C15300CB9A21 /* OEVector.h in Headers */ = {isa = PBXBuildFile; fileRef = 008363081326C15300CB9A21 /* OEVector.h */; };
 		008363111326C15300CB9A21 /* PortAudioHAL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 008363091326C15300CB9A21 /* PortAudioHAL.cpp */; };
 		008363121326C15300CB9A21 /* PortAudioHAL.h in Headers */ = {isa = PBXBuildFile; fileRef = 0083630A1326C15300CB9A21 /* PortAudioHAL.h */; };
 		00954E781277B79E00C17203 /* EmulationOutlineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00954E771277B79E00C17203 /* EmulationOutlineCell.m */; };
@@ -73,20 +74,32 @@
 		00A72B7012879F690083C6A7 /* CanvasWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00A72B6A12879F530083C6A7 /* CanvasWindowController.m */; };
 		00A72B7312879F800083C6A7 /* CanvasWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 00A72B7212879F800083C6A7 /* CanvasWindow.m */; };
 		00A72B951287A0F10083C6A7 /* Canvas.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00A72B931287A0F10083C6A7 /* Canvas.xib */; };
-		00A973AB12E512F80084724F /* Emulation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A9739E12E512F80084724F /* Emulation.cpp */; };
+		00A973AB12E512F80084724F /* OEEmulation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A9739E12E512F80084724F /* OEEmulation.cpp */; };
 		00A973AD12E512F80084724F /* OEComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A973A012E512F80084724F /* OEComponent.cpp */; };
 		00A973AF12E512F80084724F /* OEComponentFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A973A212E512F80084724F /* OEComponentFactory.cpp */; };
 		00A973B112E512F80084724F /* OEEDL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A973A412E512F80084724F /* OEEDL.cpp */; };
 		00A973B312E512F80084724F /* OEImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A973A612E512F80084724F /* OEImage.cpp */; };
 		00A973B512E512F80084724F /* OEPackage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A973A812E512F80084724F /* OEPackage.cpp */; };
+		00B019B413501507001E01BB /* OEDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B019B213501507001E01BB /* OEDevice.h */; };
+		00B019B513501507001E01BB /* OEDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B019B313501507001E01BB /* OEDevice.cpp */; };
 		00B5709E10863C2A00CDE4A7 /* TemplateChooserWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B5709D10863C2A00CDE4A7 /* TemplateChooserWindowController.m */; };
-		00B5F6F4130CAB53009C57CD /* SystemEventInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B5F6F3130CAB53009C57CD /* SystemEventInterface.h */; };
 		00B974B410701DDA00BD1402 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = 00B974AD10701DCD00BD1402 /* sounds */; };
 		00BB34B412C5C5AE007332B5 /* EmulationItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00BB34B312C5C5AE007332B5 /* EmulationItem.mm */; };
 		00C3CF9011F557A000EA2453 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00C3CF8D11F557A000EA2453 /* main.cpp */; };
 		00C3CF9111F557A000EA2453 /* SDLMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 00C3CF8F11F557A000EA2453 /* SDLMain.m */; };
 		00C6C0C110602151004D084B /* roms in Resources */ = {isa = PBXBuildFile; fileRef = 00C6C08810602151004D084B /* roms */; };
 		00CAD7D912A04C22002B92E5 /* Emulation.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00CAD7D712A04C22002B92E5 /* Emulation.xib */; };
+		00D226051350F9A100FC69B9 /* AudioInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D225FA1350F9A100FC69B9 /* AudioInterface.h */; };
+		00D226061350F9A100FC69B9 /* CanvasInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D225FB1350F9A100FC69B9 /* CanvasInterface.h */; };
+		00D226071350F9A100FC69B9 /* CPUInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D225FC1350F9A100FC69B9 /* CPUInterface.h */; };
+		00D226081350F9A100FC69B9 /* DeviceInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D225FD1350F9A100FC69B9 /* DeviceInterface.h */; };
+		00D226091350F9A100FC69B9 /* EmulationInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D225FE1350F9A100FC69B9 /* EmulationInterface.h */; };
+		00D2260A1350F9A100FC69B9 /* EthernetInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D225FF1350F9A100FC69B9 /* EthernetInterface.h */; };
+		00D2260B1350F9A100FC69B9 /* MIDIInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D226001350F9A100FC69B9 /* MIDIInterface.h */; };
+		00D2260E1350F9A100FC69B9 /* USBInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D226031350F9A100FC69B9 /* USBInterface.h */; };
+		00D2260F1350F9A100FC69B9 /* VideoInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D226041350F9A100FC69B9 /* VideoInterface.h */; };
+		00D226561350FF8B00FC69B9 /* OEMatrix3.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D226541350FF8B00FC69B9 /* OEMatrix3.h */; };
+		00D226571350FF8B00FC69B9 /* OEMatrix3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00D226551350FF8B00FC69B9 /* OEMatrix3.cpp */; };
 		00D6729D12C9A256009F0D9E /* EmulationShow.png in Resources */ = {isa = PBXBuildFile; fileRef = 00E442931278727600713A05 /* EmulationShow.png */; };
 		00D8448B0FFF04C0005802F0 /* DiskImage.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000F66370FF8368F00C8AF23 /* DiskImage.icns */; };
 		00D8448F0FFF04C0005802F0 /* Emulation.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000F663A0FF8368F00C8AF23 /* Emulation.icns */; };
@@ -210,12 +223,12 @@
 		0008FCD80FBA5D72005E876E /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = macosx/Info.plist; sourceTree = "<group>"; };
 		000A79190FBA49C500A0F12E /* OpenEmulator.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = OpenEmulator.icns; sourceTree = "<group>"; };
 		000A79520FBA4A8400A0F12E /* OpenEmulatorHelp */ = {isa = PBXFileReference; lastKnownFileType = folder; name = OpenEmulatorHelp; path = macosx/OpenEmulatorHelp; sourceTree = "<group>"; };
+		000E8D1813515C6E00DBFB2C /* StorageInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StorageInterface.h; sourceTree = "<group>"; };
 		000F66370FF8368F00C8AF23 /* DiskImage.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = DiskImage.icns; sourceTree = "<group>"; };
 		000F663A0FF8368F00C8AF23 /* Emulation.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Emulation.icns; sourceTree = "<group>"; };
 		000F66520FF8368F00C8AF23 /* OpenEmulator.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = OpenEmulator.icns; sourceTree = "<group>"; };
 		001F56F80FD1E8E500EA246A /* Sparkle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = Sparkle.framework; path = macosx/Sparkle.framework; sourceTree = "<group>"; };
 		002579FB1218A83400206E56 /* StringConversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StringConversion.h; sourceTree = "<group>"; };
-		003485FD12CDC0AF008774D6 /* StorageInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StorageInterface.h; sourceTree = "<group>"; };
 		00391CB112D3A320002C5ABD /* LibraryWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryWindowController.h; sourceTree = "<group>"; };
 		00391CB212D3A320002C5ABD /* LibraryWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryWindowController.m; sourceTree = "<group>"; };
 		00391D6012D3B570002C5ABD /* IconLibrary.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IconLibrary.png; path = macosx/Images/IconLibrary.png; sourceTree = "<group>"; };
@@ -263,10 +276,10 @@
 		00811DFE12D251E9009AD2F0 /* AppleDiskIIInterfaceCard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleDiskIIInterfaceCard.cpp; sourceTree = "<group>"; };
 		00811F1012D2738B009AD2F0 /* AppleGraphicsTablet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleGraphicsTablet.h; sourceTree = "<group>"; };
 		00811F1112D2738B009AD2F0 /* AppleGraphicsTablet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleGraphicsTablet.cpp; sourceTree = "<group>"; };
-		008363051326C15300CB9A21 /* OpenGLHAL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenGLHAL.cpp; sourceTree = "<group>"; };
-		008363061326C15300CB9A21 /* OpenGLHAL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenGLHAL.h; sourceTree = "<group>"; };
-		008363071326C15300CB9A21 /* OpenGLHALSignalProcessing.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenGLHALSignalProcessing.cpp; sourceTree = "<group>"; };
-		008363081326C15300CB9A21 /* OpenGLHALSignalProcessing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenGLHALSignalProcessing.h; sourceTree = "<group>"; };
+		008363051326C15300CB9A21 /* OpenGLCanvas.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenGLCanvas.cpp; sourceTree = "<group>"; };
+		008363061326C15300CB9A21 /* OpenGLCanvas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenGLCanvas.h; sourceTree = "<group>"; };
+		008363071326C15300CB9A21 /* OEVector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEVector.cpp; sourceTree = "<group>"; };
+		008363081326C15300CB9A21 /* OEVector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEVector.h; sourceTree = "<group>"; };
 		008363091326C15300CB9A21 /* PortAudioHAL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PortAudioHAL.cpp; sourceTree = "<group>"; };
 		0083630A1326C15300CB9A21 /* PortAudioHAL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PortAudioHAL.h; sourceTree = "<group>"; };
 		00954E761277B79E00C17203 /* EmulationOutlineCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmulationOutlineCell.h; sourceTree = "<group>"; };
@@ -286,8 +299,8 @@
 		00A72B7112879F800083C6A7 /* CanvasWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanvasWindow.h; sourceTree = "<group>"; };
 		00A72B7212879F800083C6A7 /* CanvasWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CanvasWindow.m; sourceTree = "<group>"; };
 		00A72B941287A0F10083C6A7 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Canvas.xib; sourceTree = "<group>"; };
-		00A9739E12E512F80084724F /* Emulation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Emulation.cpp; sourceTree = "<group>"; };
-		00A9739F12E512F80084724F /* Emulation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Emulation.h; sourceTree = "<group>"; };
+		00A9739E12E512F80084724F /* OEEmulation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEEmulation.cpp; sourceTree = "<group>"; };
+		00A9739F12E512F80084724F /* OEEmulation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEEmulation.h; sourceTree = "<group>"; };
 		00A973A012E512F80084724F /* OEComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEComponent.cpp; sourceTree = "<group>"; };
 		00A973A112E512F80084724F /* OEComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEComponent.h; sourceTree = "<group>"; };
 		00A973A212E512F80084724F /* OEComponentFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEComponentFactory.cpp; sourceTree = "<group>"; };
@@ -300,9 +313,10 @@
 		00A973A912E512F80084724F /* OEPackage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEPackage.h; sourceTree = "<group>"; };
 		00A973AA12E512F80084724F /* OETypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OETypes.h; sourceTree = "<group>"; };
 		00AD746811A2F10E00BAC29C /* DocumentController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DocumentController.mm; sourceTree = "<group>"; };
+		00B019B213501507001E01BB /* OEDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEDevice.h; sourceTree = "<group>"; };
+		00B019B313501507001E01BB /* OEDevice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEDevice.cpp; sourceTree = "<group>"; };
 		00B5709C10863C2A00CDE4A7 /* TemplateChooserWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TemplateChooserWindowController.h; sourceTree = "<group>"; };
 		00B5709D10863C2A00CDE4A7 /* TemplateChooserWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TemplateChooserWindowController.m; sourceTree = "<group>"; };
-		00B5F6F3130CAB53009C57CD /* SystemEventInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemEventInterface.h; sourceTree = "<group>"; };
 		00B8864612A3923D0052B7A4 /* edl-1.0.dtd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "edl-1.0.dtd"; sourceTree = "<group>"; };
 		00B8881312A393990052B7A4 /* Apple1CassetteInterfaceCard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Apple1CassetteInterfaceCard.cpp; path = libemulation/Implementation/Apple/Apple1CassetteInterfaceCard.cpp; sourceTree = SOURCE_ROOT; };
 		00B8881412A393990052B7A4 /* Apple1CassetteInterfaceCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Apple1CassetteInterfaceCard.h; path = libemulation/Implementation/Apple/Apple1CassetteInterfaceCard.h; sourceTree = SOURCE_ROOT; };
@@ -367,7 +381,6 @@
 		00B8885612A393990052B7A4 /* MC6845.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MC6845.h; path = libemulation/Implementation/Motorola/MC6845.h; sourceTree = SOURCE_ROOT; };
 		00B8886B12A393990052B7A4 /* AppleIIMMUInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppleIIMMUInterface.h; path = libemulation/Interface/Apple/AppleIIMMUInterface.h; sourceTree = SOURCE_ROOT; };
 		00B8886D12A393990052B7A4 /* RS232Interface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RS232Interface.h; path = libemulation/Interface/EIA/RS232Interface.h; sourceTree = SOURCE_ROOT; };
-		00B8886F12A393990052B7A4 /* CPUInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CPUInterface.h; path = libemulation/Interface/Generic/CPUInterface.h; sourceTree = SOURCE_ROOT; };
 		00B8887F12A393990052B7A4 /* IEEE1284Interface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IEEE1284Interface.h; path = libemulation/Interface/IEEE/IEEE1284Interface.h; sourceTree = SOURCE_ROOT; };
 		00B974AD10701DCD00BD1402 /* sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; path = sounds; sourceTree = "<group>"; };
 		00BADD441100BE8300EB0344 /* ConnectorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConnectorViewController.h; sourceTree = "<group>"; };
@@ -379,6 +392,17 @@
 		00C3CF8F11F557A000EA2453 /* SDLMain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SDLMain.m; path = ../SDL/SDLMain.m; sourceTree = "<group>"; };
 		00C6C08810602151004D084B /* roms */ = {isa = PBXFileReference; lastKnownFileType = folder; path = roms; sourceTree = "<group>"; };
 		00CAD7D812A04C22002B92E5 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Emulation.xib; sourceTree = "<group>"; };
+		00D225FA1350F9A100FC69B9 /* AudioInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioInterface.h; sourceTree = "<group>"; };
+		00D225FB1350F9A100FC69B9 /* CanvasInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanvasInterface.h; sourceTree = "<group>"; };
+		00D225FC1350F9A100FC69B9 /* CPUInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CPUInterface.h; sourceTree = "<group>"; };
+		00D225FD1350F9A100FC69B9 /* DeviceInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceInterface.h; sourceTree = "<group>"; };
+		00D225FE1350F9A100FC69B9 /* EmulationInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmulationInterface.h; sourceTree = "<group>"; };
+		00D225FF1350F9A100FC69B9 /* EthernetInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EthernetInterface.h; sourceTree = "<group>"; };
+		00D226001350F9A100FC69B9 /* MIDIInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MIDIInterface.h; sourceTree = "<group>"; };
+		00D226031350F9A100FC69B9 /* USBInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = USBInterface.h; sourceTree = "<group>"; };
+		00D226041350F9A100FC69B9 /* VideoInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoInterface.h; sourceTree = "<group>"; };
+		00D226541350FF8B00FC69B9 /* OEMatrix3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEMatrix3.h; sourceTree = "<group>"; };
+		00D226551350FF8B00FC69B9 /* OEMatrix3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEMatrix3.cpp; sourceTree = "<group>"; };
 		00D844BE0FFF0505005802F0 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		00D844C40FFF0505005802F0 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Preferences.xib; sourceTree = "<group>"; };
 		00D845670FFF0FD2005802F0 /* DocumentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DocumentController.h; sourceTree = "<group>"; };
@@ -407,12 +431,6 @@
 		00F21CE512C7C7EE00A809EF /* VerticallyCenteredTextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VerticallyCenteredTextFieldCell.h; sourceTree = "<group>"; };
 		00F21CE612C7C7EE00A809EF /* VerticallyCenteredTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VerticallyCenteredTextFieldCell.m; sourceTree = "<group>"; };
 		00F4D0BE12E2E42F00B7F5E6 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
-		00FC27A212D106B00065E986 /* AudioInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioInterface.h; sourceTree = "<group>"; };
-		00FC27A312D106B00065E986 /* CanvasInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanvasInterface.h; sourceTree = "<group>"; };
-		00FC27A412D106B00065E986 /* EthernetInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EthernetInterface.h; sourceTree = "<group>"; };
-		00FC27A512D106B00065E986 /* MIDIInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MIDIInterface.h; sourceTree = "<group>"; };
-		00FC27A612D106B00065E986 /* USBInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = USBInterface.h; sourceTree = "<group>"; };
-		00FC27A712D106B00065E986 /* VideoInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoInterface.h; sourceTree = "<group>"; };
 		00FE0C041095353B00B92AB7 /* TemplateChooserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TemplateChooserViewController.h; sourceTree = "<group>"; };
 		00FE0C051095353B00B92AB7 /* TemplateChooserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TemplateChooserViewController.m; sourceTree = "<group>"; };
 		00FE0C071095354300B92AB7 /* HardwareChooserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HardwareChooserViewController.h; sourceTree = "<group>"; };
@@ -485,12 +503,14 @@
 		00039E3C12B03BA90025D374 /* libemulation-hal */ = {
 			isa = PBXGroup;
 			children = (
-				008363051326C15300CB9A21 /* OpenGLHAL.cpp */,
-				008363061326C15300CB9A21 /* OpenGLHAL.h */,
-				008363071326C15300CB9A21 /* OpenGLHALSignalProcessing.cpp */,
-				008363081326C15300CB9A21 /* OpenGLHALSignalProcessing.h */,
+				008363051326C15300CB9A21 /* OpenGLCanvas.cpp */,
+				008363061326C15300CB9A21 /* OpenGLCanvas.h */,
+				008363071326C15300CB9A21 /* OEVector.cpp */,
+				008363081326C15300CB9A21 /* OEVector.h */,
 				008363091326C15300CB9A21 /* PortAudioHAL.cpp */,
 				0083630A1326C15300CB9A21 /* PortAudioHAL.h */,
+				00D226541350FF8B00FC69B9 /* OEMatrix3.h */,
+				00D226551350FF8B00FC69B9 /* OEMatrix3.cpp */,
 			);
 			path = "libemulation-hal";
 			sourceTree = "<group>";
@@ -522,8 +542,8 @@
 		00A9739D12E512F80084724F /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				00A9739E12E512F80084724F /* Emulation.cpp */,
-				00A9739F12E512F80084724F /* Emulation.h */,
+				00A9739E12E512F80084724F /* OEEmulation.cpp */,
+				00A9739F12E512F80084724F /* OEEmulation.h */,
 				00A973A012E512F80084724F /* OEComponent.cpp */,
 				00A973A112E512F80084724F /* OEComponent.h */,
 				00A973A212E512F80084724F /* OEComponentFactory.cpp */,
@@ -535,6 +555,8 @@
 				00A973A812E512F80084724F /* OEPackage.cpp */,
 				00A973A912E512F80084724F /* OEPackage.h */,
 				00A973AA12E512F80084724F /* OETypes.h */,
+				00B019B213501507001E01BB /* OEDevice.h */,
+				00B019B313501507001E01BB /* OEDevice.cpp */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -691,10 +713,10 @@
 		00B8886912A393990052B7A4 /* Interface */ = {
 			isa = PBXGroup;
 			children = (
-				00B8886A12A393990052B7A4 /* Apple */,
+				00D225F91350F9A100FC69B9 /* Host */,
 				00B8886C12A393990052B7A4 /* EIA */,
-				00B8886E12A393990052B7A4 /* Generic */,
 				00B8887E12A393990052B7A4 /* IEEE */,
+				00B8886A12A393990052B7A4 /* Apple */,
 			);
 			name = Interface;
 			path = libemulation/Interface;
@@ -716,23 +738,6 @@
 			);
 			name = EIA;
 			path = libemulation/Interface/EIA;
-			sourceTree = SOURCE_ROOT;
-		};
-		00B8886E12A393990052B7A4 /* Generic */ = {
-			isa = PBXGroup;
-			children = (
-				00B5F6F3130CAB53009C57CD /* SystemEventInterface.h */,
-				00FC27A212D106B00065E986 /* AudioInterface.h */,
-				00FC27A312D106B00065E986 /* CanvasInterface.h */,
-				00FC27A412D106B00065E986 /* EthernetInterface.h */,
-				00FC27A512D106B00065E986 /* MIDIInterface.h */,
-				00FC27A612D106B00065E986 /* USBInterface.h */,
-				00FC27A712D106B00065E986 /* VideoInterface.h */,
-				00B8886F12A393990052B7A4 /* CPUInterface.h */,
-				003485FD12CDC0AF008774D6 /* StorageInterface.h */,
-			);
-			name = Generic;
-			path = libemulation/Interface/Generic;
 			sourceTree = SOURCE_ROOT;
 		};
 		00B8887E12A393990052B7A4 /* IEEE */ = {
@@ -762,6 +767,23 @@
 				00C3CF8F11F557A000EA2453 /* SDLMain.m */,
 			);
 			name = sdl;
+			sourceTree = "<group>";
+		};
+		00D225F91350F9A100FC69B9 /* Host */ = {
+			isa = PBXGroup;
+			children = (
+				00D225FA1350F9A100FC69B9 /* AudioInterface.h */,
+				00D225FB1350F9A100FC69B9 /* CanvasInterface.h */,
+				00D225FC1350F9A100FC69B9 /* CPUInterface.h */,
+				00D225FD1350F9A100FC69B9 /* DeviceInterface.h */,
+				00D225FE1350F9A100FC69B9 /* EmulationInterface.h */,
+				00D225FF1350F9A100FC69B9 /* EthernetInterface.h */,
+				00D226001350F9A100FC69B9 /* MIDIInterface.h */,
+				00D226031350F9A100FC69B9 /* USBInterface.h */,
+				00D226041350F9A100FC69B9 /* VideoInterface.h */,
+				000E8D1813515C6E00DBFB2C /* StorageInterface.h */,
+			);
+			path = Host;
 			sourceTree = "<group>";
 		};
 		19C28FB0FE9D524F11CA2CBB /* Products */ = {
@@ -928,8 +950,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0083630E1326C15300CB9A21 /* OpenGLHAL.h in Headers */,
-				008363101326C15300CB9A21 /* OpenGLHALSignalProcessing.h in Headers */,
+				0083630E1326C15300CB9A21 /* OpenGLCanvas.h in Headers */,
+				008363101326C15300CB9A21 /* OEVector.h in Headers */,
 				008363121326C15300CB9A21 /* PortAudioHAL.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -938,8 +960,19 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00B5F6F4130CAB53009C57CD /* SystemEventInterface.h in Headers */,
 				006A4C5C134ED2F30033BE4D /* IEEE488Interface.h in Headers */,
+				00B019B413501507001E01BB /* OEDevice.h in Headers */,
+				00D226051350F9A100FC69B9 /* AudioInterface.h in Headers */,
+				00D226061350F9A100FC69B9 /* CanvasInterface.h in Headers */,
+				00D226071350F9A100FC69B9 /* CPUInterface.h in Headers */,
+				00D226081350F9A100FC69B9 /* DeviceInterface.h in Headers */,
+				00D226091350F9A100FC69B9 /* EmulationInterface.h in Headers */,
+				00D2260A1350F9A100FC69B9 /* EthernetInterface.h in Headers */,
+				00D2260B1350F9A100FC69B9 /* MIDIInterface.h in Headers */,
+				00D2260E1350F9A100FC69B9 /* USBInterface.h in Headers */,
+				00D2260F1350F9A100FC69B9 /* VideoInterface.h in Headers */,
+				00D226561350FF8B00FC69B9 /* OEMatrix3.h in Headers */,
+				000E8D1913515C6E00DBFB2C /* StorageInterface.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1124,8 +1157,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0083630D1326C15300CB9A21 /* OpenGLHAL.cpp in Sources */,
-				0083630F1326C15300CB9A21 /* OpenGLHALSignalProcessing.cpp in Sources */,
+				0083630D1326C15300CB9A21 /* OpenGLCanvas.cpp in Sources */,
+				0083630F1326C15300CB9A21 /* OEVector.cpp in Sources */,
 				008363111326C15300CB9A21 /* PortAudioHAL.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1175,12 +1208,14 @@
 				00FC281012D1070A0065E986 /* MC6845.cpp in Sources */,
 				00811E0012D251E9009AD2F0 /* AppleDiskIIInterfaceCard.cpp in Sources */,
 				00811F1312D2738B009AD2F0 /* AppleGraphicsTablet.cpp in Sources */,
-				00A973AB12E512F80084724F /* Emulation.cpp in Sources */,
+				00A973AB12E512F80084724F /* OEEmulation.cpp in Sources */,
 				00A973AD12E512F80084724F /* OEComponent.cpp in Sources */,
 				00A973AF12E512F80084724F /* OEComponentFactory.cpp in Sources */,
 				00A973B112E512F80084724F /* OEEDL.cpp in Sources */,
 				00A973B312E512F80084724F /* OEImage.cpp in Sources */,
 				00A973B512E512F80084724F /* OEPackage.cpp in Sources */,
+				00B019B513501507001E01BB /* OEDevice.cpp in Sources */,
+				00D226571350FF8B00FC69B9 /* OEMatrix3.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

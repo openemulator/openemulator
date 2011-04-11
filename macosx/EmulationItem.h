@@ -26,29 +26,16 @@ typedef enum
 	NSMutableArray *children;
 	Document *document;
 	
-	NSString *uid;
+	void *component;
 	NSString *label;
 	NSImage *image;
-	
-	NSMutableArray *settingsRefs;
-	NSMutableArray *settingsNames;
-	NSMutableArray *settingsLabels;
-	NSMutableArray *settingsTypes;
-	NSMutableArray *settingsOptions;
-	
-	NSString *location;
-	NSString *state;
-	BOOL hotPluggable;
-	NSMutableArray *canvases;
-	void *storage;
 }
 
 - (id)initWithDocument:(Document *)theDocument;
 - (id)initWithGroupName:(NSString *)theGroupName;
-- (id)initWithDeviceInfo:(void *)theDeviceInfo
-				document:(Document *)theDocument;
-- (id)initWithStorage:(void *)theComponent
-				  uid:(NSString *)theUID
+- (id)initWithDevice:(void *)theDevice
+			document:(Document *)theDocument;
+- (id)initWithStorage:(void *)theStorage
 			 location:(NSString *)theLocation
 			 document:(Document *)theDocument;
 
@@ -56,9 +43,9 @@ typedef enum
 - (NSMutableArray *)children;
 - (EmulationItem *)childWithUid:(NSString *)theUid;
 
-- (NSString *)uid;
-- (NSImage *)image;
+- (void *)component;
 - (NSString *)label;
+- (NSImage *)image;
 
 - (NSString *)location;
 - (NSString *)state;
@@ -71,8 +58,6 @@ typedef enum
 - (BOOL)isMounted;
 - (BOOL)isLocked;
 - (NSString *)diskImagePath;
-- (NSString *)diskImageFormat;
-- (NSString *)diskImageCapacity;
 - (BOOL)mount:(NSString *)path;
 - (void)unmount;
 - (BOOL)canMount:(NSString *)path;

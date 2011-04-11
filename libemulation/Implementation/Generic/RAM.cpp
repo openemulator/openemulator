@@ -75,7 +75,7 @@ bool RAM::init()
 {
 	if (size <= 0)
 	{
-		logMessage("invalid RAM size");
+		printLog("invalid RAM size");
 		return false;
 	}
 	

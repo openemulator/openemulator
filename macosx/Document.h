@@ -12,6 +12,16 @@
 
 #define USER_TEMPLATES_FOLDER @"~/Library/Application Support/OpenEmulator/Templates"
 
+typedef enum
+{
+	DOCUMENT_POWERDOWN,
+	DOCUMENT_SLEEP,
+	DOCUMENT_WAKEUP,
+	DOCUMENT_COLDRESTART,
+	DOCUMENT_WARMRESTART,
+	DOCUMENT_DEBUGGERBREAK,
+} DocumentSystemEvent;
+
 @class EmulationWindowController;
 
 @interface Document : NSDocument
@@ -27,7 +37,6 @@
 - (id)initWithTemplateURL:(NSURL *)templateURL error:(NSError **)outError;
 - (IBAction)saveDocumentAsTemplate:(id)sender;
 
-- (void *)emulationInfo;
 - (void)showEmulation:(id)sender;
 - (void)showCanvas:(void *)canvas;
 
@@ -42,22 +51,16 @@
 - (NSString *)valueOfProperty:(NSString *)name
 				 forComponent:(NSString *)theId;
 
-- (void)sendSystemEvent:(int)event toDevice:(NSString *)id;
+- (BOOL)sendSystemEvent:(DocumentSystemEvent)systemEvent toDevice:(void *)device;
 
-- (BOOL)mount:(NSString *)path inStorage:(void *)component;
+- (BOOL)isMountPermitted:(NSString *)path;
 - (BOOL)mount:(NSString *)path;
-- (BOOL)unmountStorage:(void *)component;
-- (BOOL)canMount:(NSString *)path inStorage:(void *)component;
-- (BOOL)canMount:(NSString *)path;
-- (BOOL)isImageSupported:(NSString *)path;
-- (BOOL)isStorageMounted:(void *)component;
-- (BOOL)isStorageWritable:(void *)component;
-- (BOOL)isStorageLocked:(void *)component;
-- (NSString *)imagePathForStorage:(void *)component;
-- (NSString *)imageFormatForStorage:(void *)component;
-- (NSString *)imageCapacityForStorage:(void *)component;
+- (BOOL)isMountPossible:(NSString *)path;
 
-- (void)addEDL:(NSString *)path connections:(NSDictionary *)connections;
-- (void)removeDevice:(NSString *)deviceId;
+- (BOOL)mount:(NSString *)path inStorage:(void *)storage;
+- (BOOL)isMountPossible:(NSString *)path inStorage:(void *)storage;
+- (BOOL)unmount:(void *)storage;
+- (NSString *)imagePathForStorage:(void *)storage;
+- (NSString *)stateLabelForStorage:(void *)storage;
 
 @end

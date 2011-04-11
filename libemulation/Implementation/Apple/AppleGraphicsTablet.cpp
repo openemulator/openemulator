@@ -10,12 +10,12 @@
 
 #include "AppleGraphicsTablet.h"
 
-#include "Emulation.h"
+#include "DeviceInterface.h"
 #include "CanvasInterface.h"
 
 AppleGraphicsTablet::AppleGraphicsTablet()
 {
-	emulation = NULL;
+	device = NULL;
 	canvas = NULL;
 }
 
@@ -31,16 +31,16 @@ bool AppleGraphicsTablet::setValue(string name, string value)
 
 bool AppleGraphicsTablet::setRef(string name, OEComponent *ref)
 {
-	if (name == "emulation")
+	if (name == "device")
 	{
-		if (emulation)
-			emulation->postMessage(this,
-								   EMULATION_DESTROY_CANVAS,
+		if (device)
+			device->postMessage(this,
+								   DEVICE_DESTROY_CANVAS,
 								   &canvas);
-		emulation = ref;
-		if (emulation)
-			emulation->postMessage(this,
-								   EMULATION_CREATE_CANVAS,
+		device = ref;
+		if (device)
+			device->postMessage(this,
+								   DEVICE_CREATE_CANVAS,
 								   &canvas);
 	}
 	else
@@ -51,15 +51,15 @@ bool AppleGraphicsTablet::setRef(string name, OEComponent *ref)
 
 bool AppleGraphicsTablet::init()
 {
-	if (!emulation)
+	if (!device)
 	{
-		logMessage("property 'emulation' undefined");
+		printLog("property 'device' undefined");
 		return false;
 	}
 	
 	if (!canvas)
 	{
-		logMessage("canvas could not be created");
+		printLog("canvas could not be created");
 		return false;
 	}
 	else

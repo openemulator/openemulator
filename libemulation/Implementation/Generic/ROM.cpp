@@ -30,7 +30,7 @@ bool ROM::init()
 {
 	if (!data.size())
 	{
-		logMessage("missing ROM");
+		printLog("missing ROM");
 		return false;
 	}
 	

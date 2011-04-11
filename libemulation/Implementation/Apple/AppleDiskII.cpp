@@ -9,12 +9,14 @@
  */
 
 #include "AppleDiskII.h"
-#include "Emulation.h"
+
+#include "EmulationInterface.h"
+#include "DeviceInterface.h"
 #include "StorageInterface.h"
 
 AppleDiskII::AppleDiskII()
 {
-	emulation = NULL;
+	device = NULL;
 	
 	forceWriteProtected = false;
 }
@@ -45,14 +47,8 @@ bool AppleDiskII::getValue(string name, string& value)
 
 bool AppleDiskII::setRef(string name, OEComponent *ref)
 {
-	if (name == "emulation")
-	{
-		if (emulation)
-			emulation->postMessage(this, EMULATION_SET_STORAGE_HANDLER, NULL);
-		emulation = ref;
-		if (emulation)
-			emulation->postMessage(this, EMULATION_SET_STORAGE_HANDLER, this);
-	}
+	if (name == "device")
+		device = ref;
 	else
 		return false;
 	
@@ -63,6 +59,12 @@ bool AppleDiskII::postMessage(OEComponent *sender, int message, void *data)
 {
 	switch(message)
 	{
+		case STORAGE_IS_MOUNT_PERMITTED:
+			return true;
+			
+		case STORAGE_IS_MOUNT_POSSIBLE:
+			return true;
+			
 		case STORAGE_MOUNT:
 			if (data)
 			{
@@ -82,19 +84,7 @@ bool AppleDiskII::postMessage(OEComponent *sender, int message, void *data)
 			
 			return true;
 			
-		case STORAGE_IS_IMAGE_SUPPORTED:
-			return true;
-			
-		case STORAGE_IS_MOUNTED:
-			return (image != "");
-			
-		case STORAGE_IS_WRITABLE:
-			return true;
-			
-		case STORAGE_IS_LOCKED:
-			return false;
-			
-		case STORAGE_GET_IMAGE_PATH:
+		case STORAGE_GET_MOUNTPATH:
 			if (data)
 			{
 				string *path = (string *)data;
@@ -104,25 +94,18 @@ bool AppleDiskII::postMessage(OEComponent *sender, int message, void *data)
 			}
 			break;
 			
-		case STORAGE_GET_IMAGE_FORMAT:
+		case STORAGE_GET_STATELABEL:
 			if (data)
 			{
 				string *value = (string *)data;
-				*value = "Apple II 16 Sector";
+				*value = "Apple II 16 Sector (140 kiB)";
 				
 				return true;
 			}
 			break;
 			
-		case STORAGE_GET_IMAGE_CAPACITY:
-			if (data)
-			{
-				OEUInt64 *value = (OEUInt64 *)data;
-				*value = 35 * 16 * 256;
-				
-				return true;
-			}
-			break;
+		case STORAGE_IS_LOCKED:
+			return false;
 	}
 	
 	return false;

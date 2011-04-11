@@ -10,27 +10,25 @@
 
 #include <math.h>
 
-#include "OpenGLHALSignalProcessing.h"
+#include "OEVector.h"
 
-// Vector processing
-
-Vector::Vector()
+OEVector::OEVector()
 {
 }
 
-Vector::Vector(vector<float> data)
+OEVector::OEVector(vector<float> data)
 {
 	this->data = data;
 }
 
-float Vector::getValue(unsigned int i)
+float OEVector::getValue(unsigned int i)
 {
 	return data[i];
 }
 
-Vector Vector::operator *(const float value)
+OEVector OEVector::operator *(const float value)
 {
-	Vector w(data);
+	OEVector w(data);
 	
 	for (int i = 0; i < data.size(); i++)
 		w.data[i] *= value;
@@ -38,12 +36,12 @@ Vector Vector::operator *(const float value)
 	return w;
 }
 
-Vector Vector::operator *(const Vector& v)
+OEVector OEVector::operator *(const OEVector& v)
 {
 	if (v.data.size() != data.size())
-		return Vector();
+		return OEVector();
 	
-	Vector w(data);
+	OEVector w(data);
 	
 	for (int i = 0; i < data.size(); i++)
 		w.data[i] *= v.data[i];
@@ -51,14 +49,14 @@ Vector Vector::operator *(const Vector& v)
 	return w;
 }
 
-Vector Vector::normalize()
+OEVector OEVector::normalize()
 {
 	float sum = 0.0;
 	
 	for (int i = 0; i < data.size(); i++)
 		sum += data[i];
 	
-	Vector w(data);
+	OEVector w(data);
 	float gain = 1.0 / sum;
 	
 	for (int i = 0; i < data.size(); i++)
@@ -67,9 +65,9 @@ Vector Vector::normalize()
 	return w;
 }
 
-Vector Vector::realIDFT()
+OEVector OEVector::realIDFT()
 {
-	Vector w;
+	OEVector w;
 	w.data.resize(data.size());
 	
 	for (int i = 0; i < data.size(); i++)
@@ -86,9 +84,9 @@ Vector Vector::realIDFT()
 	return w;
 }
 
-Vector Vector::lanczosWindow(unsigned int n, float fc)
+OEVector OEVector::lanczosWindow(unsigned int n, float fc)
 {
-	Vector v;
+	OEVector v;
 	v.data.resize(n);
 	
 	int n2 = n / 2;
@@ -110,11 +108,11 @@ Vector Vector::lanczosWindow(unsigned int n, float fc)
 // Based on ideas at:
 // http://www.dsprelated.com/showarticle/42.php
 //
-Vector Vector::chebyshevWindow(unsigned int n, float sidelobeDb)
+OEVector OEVector::chebyshevWindow(unsigned int n, float sidelobeDb)
 {
 	int m = n - 1;
 	
-	Vector w;
+	OEVector w;
 	w.data.resize(m);
 	
 	float alpha = coshf(acoshf(powf(10, sidelobeDb / 20.0)) / m);
@@ -144,79 +142,4 @@ Vector Vector::chebyshevWindow(unsigned int n, float sidelobeDb)
 		w.data[i] /= max;
 	
 	return w;
-}
-
-// Matrix processing
-
-Matrix3::Matrix3()
-{
-	data.resize(9);
-}
-
-Matrix3::Matrix3(float c00, float c01, float c02,
-				 float c10, float c11, float c12,
-				 float c20, float c21, float c22)
-{
-	data.resize(9);
-	
-	data[0] = c00;
-	data[1] = c01;
-	data[2] = c02;
-	data[3] = c10;
-	data[4] = c11;
-	data[5] = c12;
-	data[6] = c20;
-	data[7] = c21;
-	data[8] = c22;
-}
-
-float Matrix3::getValue(unsigned int i, unsigned int j)
-{
-	return data[3 * i + j];
-}
-
-float *Matrix3::getValues()
-{
-	return &data.front();
-}
-
-Matrix3 Matrix3::operator*(const float value)
-{
-	Matrix3 m;
-	
-	for (int i = 0; i < 9; i++)
-		m.data[i] = data[i] * value;
-	
-	return m;
-}
-
-Matrix3 Matrix3::operator*(const Matrix3& m)
-{
-	Matrix3 n;
-	
-	for (int i = 0; i < 3; i++)
-		for (int j = 0; j < 3; j++)
-			for (int k = 0; k < 3; k++)
-				n.data[i * 3 + j] += m.data[i * 3 + k] * data[k * 3 + j];
-	
-	return n;
-}
-
-
-Matrix3& Matrix3::operator*=(const float value)
-{
-	Matrix3 m = *this * value;
-	
-	data = m.data;
-	
-	return *this;
-}
-
-Matrix3& Matrix3::operator*=(const Matrix3& m)
-{
-	Matrix3 n = *this * m;
-	
-	data = n.data;
-	
-	return *this;
 }

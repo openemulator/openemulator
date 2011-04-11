@@ -14,10 +14,12 @@
 #import "CanvasWindowController.h"
 #import "StringConversion.h"
 
-#import "Emulation.h"
-#import "StorageInterface.h"
+#import "OEEmulation.h"
 #import "PortAudioHAL.h"
-#import "OpenGLHAL.h"
+#import "OpenGLCanvas.h"
+
+#import "DeviceInterface.h"
+#import "StorageInterface.h"
 
 #import <sstream>
 
@@ -52,16 +54,18 @@ void runAlert(void *userData, string message)
 	[pool release];
 }
 
-OEComponent *createCanvas(void *userData, string id, string title)
+OEComponent *createCanvas(void *userData, OEComponent *device)
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
-	OpenGLHAL *canvas = new OpenGLHAL(getCPPString([[NSBundle mainBundle] resourcePath]));
+	OpenGLCanvas *canvas = new OpenGLCanvas(getCPPString([[NSBundle mainBundle] resourcePath]));
+	string label;
+	device->postMessage(NULL, DEVICE_GET_LABEL, &label);
 	
 	Document *document = (Document *)userData;
 	NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
-						  getNSString(id), @"id",
-						  getNSString(title), @"title",
+						  [NSValue valueWithPointer:device], @"device",
+						  getNSString(label), @"label",
 						  [NSValue valueWithPointer:canvas], @"canvas",
 						  nil];
 	
@@ -138,7 +142,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	[self destroyEmulation];
 	[self createEmulation:absoluteURL];
 	
-	Emulation *theEmulation = (Emulation *)emulation;
+	OEEmulation *theEmulation = (OEEmulation *)emulation;
 	if (theEmulation)
 	{
 		if (theEmulation->isOpen())
@@ -162,7 +166,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 			ofType:(NSString *)typeName
 			 error:(NSError **)outError
 {
-	Emulation *theEmulation = (Emulation *)emulation;
+	OEEmulation *theEmulation = (OEEmulation *)emulation;
 	if (theEmulation)
 	{
 		string emulationPath = getCPPString([[absoluteURL path]
@@ -192,7 +196,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 				  forSaveOperation:saveOperation
 							 error:outError];
 	
-	Emulation *theEmulation = (Emulation *)emulation;
+	OEEmulation *theEmulation = (OEEmulation *)emulation;
 	if (theEmulation->isRunning())
 		[self updateChangeCount:NSChangeDone];
 	
@@ -261,7 +265,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 
 - (void)didUpdate:(id)sender
 {
-	if (emulation && ((Emulation *)emulation)->isRunning())
+	if (emulation && ((OEEmulation *)emulation)->isRunning())
 		[self updateChangeCount:NSChangeDone];
 	
 	[emulationWindowController updateEmulation:self];
@@ -284,14 +288,14 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 {
 	NSLog(@"Document createCanvas");
 	
-	NSString *id = [dict objectForKey:@"id"];
-	NSString *title = [dict objectForKey:@"title"];
-	OpenGLHAL *canvas = (OpenGLHAL *)[[dict objectForKey:@"canvas"] pointerValue];
+	void *device = [[dict objectForKey:@"device"] pointerValue];
+	NSString *label = [dict objectForKey:@"label"];
+	OpenGLCanvas *canvas = (OpenGLCanvas *)[[dict objectForKey:@"canvas"] pointerValue];
 	
 	CanvasWindowController *canvasWindowController;
-	canvasWindowController = [[CanvasWindowController alloc] initWithDeviceId:id
-																		title:title
-																	   canvas:canvas];
+	canvasWindowController = [[CanvasWindowController alloc] initWithDevice:device
+																	  title:label
+																	 canvas:canvas];
 	
 	[canvases addObject:[NSValue valueWithPointer:canvas]];
 	[canvasWindowControllers addObject:canvasWindowController];
@@ -353,7 +357,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	documentController = [NSDocumentController sharedDocumentController];
 	PortAudioHAL *portAudioHAL = (PortAudioHAL *)[documentController portAudioHAL];
 	
-	Emulation *theEmulation = new Emulation();
+	OEEmulation *theEmulation = new OEEmulation();
 	
 	theEmulation->setResourcePath(getCPPString([[NSBundle mainBundle] resourcePath]));
 	theEmulation->setRunAlert(runAlert);
@@ -361,7 +365,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	theEmulation->setDestroyCanvas(destroyCanvas);
 	theEmulation->setUserData(self);
 	
-	theEmulation->setComponent("audio", portAudioHAL);
+	theEmulation->addComponent("audio", portAudioHAL);
 	
 	theEmulation->open(getCPPString([url path]));
 	
@@ -383,7 +387,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	documentController = [NSDocumentController sharedDocumentController];
 	PortAudioHAL *portAudioHAL = (PortAudioHAL *)[documentController portAudioHAL];
 	
-	Emulation *theEmulation = (Emulation *)emulation;
+	OEEmulation *theEmulation = (OEEmulation *)emulation;
 	portAudioHAL->removeEmulation(theEmulation);
 	
 	delete theEmulation;
@@ -412,16 +416,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	portAudioHAL->unlockEmulations();
 }
 
-
-
-- (void *)emulationInfo
-{
-	Emulation *theEmulation = (Emulation *)emulation;
-	
-	return theEmulation->getEmulationInfo();
-}
-
-
+// Configuration
 
 - (void)setValue:(NSString *)theValue
 	  ofProperty:(NSString *)theName
@@ -430,7 +425,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	if (!emulation)
 		return;
 	
-	Emulation *theEmulation = (Emulation *)emulation;
+	OEEmulation *theEmulation = (OEEmulation *)emulation;
 	BOOL success = NO;
 	
 	[self lockEmulation];
@@ -455,7 +450,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	if (!emulation)
 		return @"";
 	
-	Emulation *theEmulation = (Emulation *)emulation;
+	OEEmulation *theEmulation = (OEEmulation *)emulation;
 	BOOL success = NO;
 	string value;
 	
@@ -471,37 +466,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	return getNSString(value);
 }
 
-
-
-- (BOOL)getBoolForMessage:(int)message
-				component:(void *)component
-{
-	BOOL result = NO;
-	
-	if (component)
-	{
-		[self lockEmulation];
-		result = ((OEComponent *)component)->postMessage(NULL, message, NULL);
-		[self unlockEmulation];
-	}
-	
-	return result;
-}
-
-- (OEUInt64)getOEUInt64ForMessage:(int)message
-						component:(void *)component
-{
-	OEUInt64 value = 0;
-	
-	if (component)
-	{
-		[self lockEmulation];
-		((OEComponent *)component)->postMessage(NULL, message, &value);
-		[self unlockEmulation];
-	}
-	
-	return value;
-}
+// Messaging
 
 - (NSString *)getStringForMessage:(int)message
 						component:(void *)component
@@ -519,7 +484,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 }
 
 - (BOOL)postString:(NSString *)aString
-		   message:(int)message
+		forMessage:(int)message
 		 component:(void *)component
 {
 	string theString = getCPPString(aString);
@@ -535,53 +500,58 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	return result;
 }
 
+// System events
 
-
-- (void)sendSystemEvent:(int)event toDevice:(NSString *)theId
+- (BOOL)sendSystemEvent:(DocumentSystemEvent)systemEvent toDevice:(void *)device
 {
-	[self lockEmulation];
-	((Emulation *)emulation)->sendSystemEvent(getCPPString(theId), event);
-	[self unlockEmulation];
-}
-
-
-
-- (NSString *)formatCapacity:(OEUInt64)value
-{
-	if (value < (1 << 20))
-		return [NSString stringWithFormat:@"%3.0f kiB", value / (1 << 10)];
-	else if (value < (1 << 30))
-		return [NSString stringWithFormat:@"%3.2f MiB", value / (1 << 20)];
-	else
-		return [NSString stringWithFormat:@"%3.2f GiB", value / (1 << 30)];
-}
-
-- (BOOL)mount:(NSString *)path inStorage:(void *)component
-{
-	if ([self getBoolForMessage:(int)STORAGE_IS_LOCKED
-					  component:component])
-		return NO;
-	
-	if (![self postString:path
-				  message:(int)STORAGE_MOUNT
-				component:component])
-		return NO;
-	
-	[self updateChangeCount:NSChangeDone];
-	
 	return YES;
+}
+
+// Storage
+
+- (BOOL)isMountPermitted:(NSString *)path
+{
+	OEEmulation *theEmulation = (OEEmulation *)emulation;
+	OEComponents *devices = theEmulation->getDevices();
+	
+	for (NSInteger i = 0; i < devices->size(); i++)
+	{
+		OEComponent *device = devices->at(i);
+		OEComponent *storage = NULL;
+		
+		if (device->postMessage(NULL, DEVICE_GET_STORAGE, &storage))
+		{
+			if ([self postString:@""
+					  forMessage:STORAGE_IS_MOUNT_PERMITTED
+					   component:storage])
+				continue;
+			
+			return YES;
+		}
+	}
+	
+	return NO;
 }
 
 - (BOOL)mount:(NSString *)path
 {
-	Emulation *theEmulation = (Emulation *)emulation;
-	EmulationInfo *theEmulationInfo = theEmulation->getEmulationInfo();
-	for (NSInteger i = 0; i < theEmulationInfo->size(); i++)
+	OEEmulation *theEmulation = (OEEmulation *)emulation;
+	OEComponents *devices = theEmulation->getDevices();
+	
+	for (NSInteger i = 0; i < devices->size(); i++)
 	{
-		EmulationDeviceInfo &deviceInfo = theEmulationInfo->at(i);
-		if (deviceInfo.storage)
+		OEComponent *device = devices->at(i);
+		OEComponent *storage = NULL;
+		
+		if (device->postMessage(NULL, DEVICE_GET_STORAGE, &storage))
 		{
-			if ([self mount:path inStorage:deviceInfo.storage])
+			if ([self postString:@""
+					  forMessage:STORAGE_IS_MOUNT_PERMITTED
+					   component:storage])
+				continue;
+			
+			if ([self mount:path
+				  inStorage:storage])
 				return YES;
 		}
 	}
@@ -589,13 +559,31 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	return NO;
 }
 
-- (BOOL)unmountStorage:(void *)component
+- (BOOL)isMountPossible:(NSString *)path
 {
-	[self updateChangeCount:NSChangeDone];
+	OEEmulation *theEmulation = (OEEmulation *)emulation;
+	OEComponents *devices = theEmulation->getDevices();
 	
-	if (![self postString:@""
-				  message:(int)STORAGE_UNMOUNT
-				component:component])
+	for (NSInteger i = 0; i < devices->size(); i++)
+	{
+		OEComponent *device = devices->at(i);
+		OEComponent *storage = NULL;
+		
+		if (device->postMessage(NULL, DEVICE_GET_STORAGE, &storage))
+		{
+			if ([self isMountPossible:path inStorage:storage])
+				return YES;
+		}
+	}
+	
+	return NO;
+}
+
+- (BOOL)mount:(NSString *)path inStorage:(void *)storage
+{
+	if (![self postString:path
+			   forMessage:STORAGE_MOUNT
+				component:storage])
 		return NO;
 	
 	[self updateChangeCount:NSChangeDone];
@@ -603,171 +591,42 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	return YES;
 }
 
-- (BOOL)canMount:(NSString *)path inStorage:(void *)component
+- (BOOL)unmount:(void *)storage
 {
-	if ([self getBoolForMessage:(int)STORAGE_IS_LOCKED component:component])
+	if (![self postString:@""
+			   forMessage:STORAGE_UNMOUNT
+				component:storage])
 		return NO;
 	
-	return [self getBoolForMessage:(int)STORAGE_IS_IMAGE_SUPPORTED
-						 component:component];
-}
-
-- (BOOL)canMount:(NSString *)path
-{
-	Emulation *theEmulation = (Emulation *)emulation;
-	EmulationInfo *theEmulationInfo = theEmulation->getEmulationInfo();
-	for (NSInteger i = 0; i < theEmulationInfo->size(); i++)
-	{
-		EmulationDeviceInfo &deviceInfo = theEmulationInfo->at(i);
-		if (deviceInfo.storage)
-		{
-			if ([self canMount:path inStorage:deviceInfo.storage])
-				return YES;
-		}
-	}
+	[self updateChangeCount:NSChangeDone];
 	
-	return NO;
+	return YES;
 }
 
-- (BOOL)isImageSupported:(NSString *)path
+- (BOOL)isMountPossible:(NSString *)path inStorage:(void *)storage
 {
-	Emulation *theEmulation = (Emulation *)emulation;
-	EmulationInfo *theEmulationInfo = theEmulation->getEmulationInfo();
-	for (int i = 0; i < theEmulationInfo->size(); i++)
-	{
-		EmulationDeviceInfo &deviceInfo = theEmulationInfo->at(i);
-		if (deviceInfo.storage)
-		{
-			if ([self getBoolForMessage:(int)STORAGE_IS_IMAGE_SUPPORTED
-							  component:deviceInfo.storage])
-				return YES;
-		}
-	}
-	
-	return NO;
+	return [self postString:@""
+				 forMessage:STORAGE_IS_MOUNT_POSSIBLE
+				  component:storage];
 }
 
-- (BOOL)isStorageMounted:(void *)component
+- (BOOL)isStorageLocked:(void *)storage
 {
-	return [self getBoolForMessage:(int)STORAGE_IS_MOUNTED
-						 component:component];
+	return [self postString:@""
+				 forMessage:STORAGE_IS_LOCKED
+				  component:storage];
 }
 
-- (BOOL)isStorageWritable:(void *)component
+- (NSString *)imagePathForStorage:(void *)storage
 {
-	return [self getBoolForMessage:(int)STORAGE_IS_WRITABLE
-						 component:component];
+	return [self getStringForMessage:(int)STORAGE_GET_MOUNTPATH
+						   component:storage];
 }
 
-- (BOOL)isStorageLocked:(void *)component
+- (NSString *)stateLabelForStorage:(void *)storage
 {
-	return [self getBoolForMessage:(int)STORAGE_IS_LOCKED
-						 component:component];
-}
-
-- (NSString *)imagePathForStorage:(void *)component
-{
-	return [self getStringForMessage:(int)STORAGE_GET_IMAGE_PATH
-						   component:component];
-}
-
-- (NSString *)imageFormatForStorage:(void *)component
-{
-	return [self getStringForMessage:(int)STORAGE_GET_IMAGE_FORMAT
-						   component:component];
-}
-
-- (NSString *)imageCapacityForStorage:(void *)component
-{
-	OEUInt64 value = [self getOEUInt64ForMessage:(int)STORAGE_GET_IMAGE_CAPACITY
-									   component:component];
-	return [self formatCapacity:value];
-}
-
-
-
-- (void)addEDL:(NSString *)path
-   connections:(NSDictionary *)connections
-{
-	/*	if (!emulation)
-	 return;
-	 
-	 string pathString = getCPPString(path);
-	 map<string, string> connectionsMap;
-	 
-	 NSEnumerator *i = [connections keyEnumerator];
-	 NSString *inletRef;
-	 
-	 while (inletRef = [i nextObject])
-	 {
-	 NSString *outletRef = [connections objectForKey:inletRef];
-	 
-	 string inletRefString = getCPPString(inletRef);
-	 string outletRefString = getCPPString(outletRef);
-	 
-	 connectionsMap[inletRefString] = outletRefString;
-	 }
-	 
-	 [self lockEmulation];
-	 bool isAdded = ((Emulation *)emulation)->addEDL(pathString, connectionsMap);
-	 [self unlockEmulation];
-	 
-	 if (!isAdded)
-	 {
-	 NSString *messageText = @"The device could not be added.";
-	 
-	 NSAlert *alert = [[NSAlert alloc] init];
-	 [alert setMessageText:NSLocalizedString(messageText, messageText)];
-	 [alert setAlertStyle:NSWarningAlertStyle];
-	 [alert runModal];
-	 [alert release];
-	 }
-	 
-	 [self updateChangeCount:NSChangeDone];*/
-}
-
-- (void)removeDevice:(NSString *)deviceId
-{
-	/*	if (!emulation)
-	 return;
-	 
-	 //	NSString *deviceRef = [dict objectForKey:@"ref"];
-	 //	NSString *deviceLabel = [dict objectForKey:@"label"];
-	 
-	 //	string refString = getCPPString(deviceRef);
-	 
-	 /*	if (!((OEPAEmulation *)emulation)->isDeviceTerminal(refString))
-	 {
-	 NSString *messageText = @"Do you want to remove the device \u201C%@\u201D?";
-	 NSString *informativeText = @"There is one or more devices connected to it, "
-	 "which will be removed as well.";
-	 
-	 NSAlert *alert = [[[NSAlert alloc] init] autorelease];
-	 [alert setMessageText:[NSString localizedStringWithFormat:messageText,
-	 deviceLabel, messageText]];
-	 [alert setInformativeText:NSLocalizedString(informativeText,
-	 informativeText)];
-	 [alert addButtonWithTitle:NSLocalizedString(@"OK", @"OK")];
-	 [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"Cancel")];
-	 if ([alert runModal] != NSAlertDefaultReturn)
-	 return;
-	 }
-	 
-	 [self lockEmulation];
-	 bool isRemoved = ((OEEmulation *)emulation)->removeDevice(refString);
-	 [self unlockEmulation];
-	 
-	 if (!isRemoved)
-	 {
-	 NSString *messageText = @"The device could not be removed.";
-	 
-	 NSAlert *alert = [[NSAlert alloc] init];
-	 [alert setMessageText:NSLocalizedString(messageText, messageText)];
-	 [alert runModal];
-	 [alert release];
-	 }
-	 
-	 [self updateChangeCount:NSChangeDone];*/
+	return [self getStringForMessage:(int)STORAGE_GET_STATELABEL
+						   component:storage];
 }
 
 @end

@@ -22,14 +22,8 @@ NSOutlineViewDataSource, NSComboBoxDataSource>
 	
 	IBOutlet id fDeviceBox;
 	IBOutlet id fDeviceImage;
-	IBOutlet id fDeviceState1Label;
-	IBOutlet id fDeviceState1Value;
-	IBOutlet id fDeviceState2Label;
-	IBOutlet id fDeviceState2Value;
-	IBOutlet id fDeviceState3Label;
-	IBOutlet id fDeviceState3Value;
-	IBOutlet id fDeviceState4Label;
-	IBOutlet id fDeviceState4Value;
+	IBOutlet id fDeviceLocationValue;
+	IBOutlet id fDeviceStateValue;
 	IBOutlet id fDeviceButton;
 	IBOutlet id fTableView;
 	IBOutlet id fTableKeyColumn;

@@ -21,7 +21,7 @@ public:
 	bool setRef(string name, OEComponent *ref);
 	
 private:
-	OEComponent *emulation;
+	OEComponent *device;
 
 	OEComponent *canvas;
 };

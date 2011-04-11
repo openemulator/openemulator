@@ -2,7 +2,7 @@
 /**
  * libemulation
  * OEComponent
- * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2009-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Component definition
@@ -52,36 +52,11 @@ void OEComponent::update()
 	return;
 }
 
+
+
 bool OEComponent::postMessage(OEComponent *sender, int message, void *data)
 {
-	for (OEComponents::iterator i = delegates[message].begin();
-		 i != delegates[message].end();
-		 i++)
-	{
-		if ((*i)->postMessage(sender, message, data))
-			return true;
-	}
-	
 	return false;
-}
-
-bool OEComponent::addDelegate(OEComponent *delegate, int delegation)
-{
-	delegates[delegation].push_back(delegate);
-	
-	return true;
-}
-
-bool OEComponent::removeDelegate(OEComponent *delegate, int delegation)
-{
-	OEComponents::iterator first = delegates[delegation].begin();
-	OEComponents::iterator last = delegates[delegation].end();
-	OEComponents::iterator i = remove(first, last, delegate);
-	
-	if (i != last)
-		delegates[delegation].erase(i, last);
-	
-	return (i != last);
 }
 
 
@@ -164,7 +139,7 @@ int OEComponent::writeBlock(OEAddress address, OEData *value)
 
 
 
-void OEComponent::logMessage(string message)
+void OEComponent::printLog(string message)
 {
 	cerr << "libemulation: " << message << endl;
 }
