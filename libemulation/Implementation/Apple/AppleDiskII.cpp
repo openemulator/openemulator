@@ -76,10 +76,12 @@ bool AppleDiskII::postMessage(OEComponent *sender, int message, void *data)
 	switch(message)
 	{
 		case STORAGE_IS_AVAILABLE:
-			return true;
-		case STORAGE_TEST:
+			return !image.size();
+		case STORAGE_TESTMOUNT:
 			return true;
 		case STORAGE_MOUNT:
+			if (image.size())
+				return false;
 			if (data)
 			{
 				string *path = (string *)data;
@@ -109,13 +111,13 @@ bool AppleDiskII::postMessage(OEComponent *sender, int message, void *data)
 			if (data)
 			{
 				string *value = (string *)data;
-				*value = "16 Sector (140 kiB) read-only";
+				*value = "16 sectors, 35 tracks, read-only";
 				
 				return true;
 			}
 			break;
 		case STORAGE_IS_LOCKED:
-			return false;
+			return true;
 	}
 	
 	return false;

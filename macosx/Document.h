@@ -35,8 +35,8 @@
 - (void)unlockEmulation;
 - (void *)emulation;
 
-- (BOOL)testMount:(NSString *)path;
-- (BOOL)mount:(NSString *)path;
 - (BOOL)isMountable:(NSString *)path;
+- (BOOL)mount:(NSString *)path;
+- (BOOL)testMount:(NSString *)path;
 
 @end

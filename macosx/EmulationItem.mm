@@ -375,7 +375,7 @@
 	string value = getCPPString(path);
 	bool success;
 	[document lockEmulation];
-	success = ((OEComponent *)storage)->postMessage(NULL, STORAGE_TEST, &value);
+	success = ((OEComponent *)storage)->postMessage(NULL, STORAGE_TESTMOUNT, &value);
 	[document unlockEmulation];
 	
 	return success;

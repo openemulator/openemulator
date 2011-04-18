@@ -468,7 +468,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	NSString *path = [[pasteboard propertyListForType:NSFilenamesPboardType]
 					  objectAtIndex:0];
 	
-	return [item mount:path];
+	return [self mount:path inItem:item];
 }
 
 
@@ -613,25 +613,72 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
 
 
 
-- (BOOL)mount:(NSString *)path inItem:(EmulationItem *)item
+- (BOOL)forceMount:(NSString *)path inItem:(EmulationItem *)item
 {
 	if (![item mount:path])
 	{
 		NSBeginAlertSheet([NSString localizedStringWithFormat:
-						   @"The document \u201C%@\u201D can't be mounted "
+						   @"The document \u201C%@\u201D couldn't be mounted "
 						   "in \u201C%@\u201D.",
 						   [path lastPathComponent], [item label]],
 						  nil, nil, nil,
 						  [self window],
 						  self, nil, nil, nil,
 						  [NSString localizedStringWithFormat:
-						   @"Try mounting the document in some other device "
-						   "or emulation."]);
+						   @"Try mounting the document in some other device."]);
 		
 		return NO;
 	}
 	
 	return YES;
+}
+
+- (BOOL)mount:(NSString *)path inItem:(EmulationItem *)item
+{
+	if ([item isLocked])
+	{
+		NSDictionary *dict = [[NSDictionary dictionaryWithObjectsAndKeys:
+							   item, @"item",
+							   path, @"path",
+							   nil] retain];
+		
+		NSBeginAlertSheet([NSString localizedStringWithFormat:
+						   @"Replace the document in \u201C%@\u201D with \u201C%@\u201D?",
+						   [item label], [path lastPathComponent]],
+						  NSLocalizedString(@"Cancel", @"Emulation Alert"),
+						  NSLocalizedString(@"Replace", @"Emulation Alert"),
+						  nil,
+						  [self window], self,
+						  @selector(remountPanelDidEnd:returnCode:contextInfo:),
+						  nil, dict,
+						  [NSString localizedStringWithFormat:
+						   @"The current document is locked by the emulation. "
+						   "It is safer to eject the document from the emulation."
+						   ]);
+		
+		return NO;
+	}
+	
+	return [self forceMount:path inItem:item];
+}
+
+- (void)remountPanelDidEnd:(NSWindow *)sheet
+				returnCode:(int)returnCode
+			   contextInfo:(void *)contextInfo
+{
+	NSDictionary *dict = contextInfo;
+	
+	if (returnCode == NSAlertAlternateReturn)
+	{
+		[sheet orderOut:self];
+		
+		EmulationItem *item = [dict objectForKey:@"item"];
+		NSString *path = [dict objectForKey:@"path"];
+		
+		[self forceMount:path inItem:item];
+	}
+	
+	[dict release];
 }
 
 - (IBAction)buttonAction:(id)sender
@@ -686,19 +733,7 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
 		[panel close];
 		
 		EmulationItem *item = contextInfo;
-		if (![item mount:path])
-		{
-			NSBeginAlertSheet([NSString localizedStringWithFormat:
-							   @"The document \u201C%@\u201D can't be mounted "
-							   "in \u201C%@\u201D.",
-							   [path lastPathComponent], [item label]],
-							  nil, nil, nil,
-							  [self window],
-							  self, nil, nil, nil,
-							  [NSString localizedStringWithFormat:
-							   @"Try mounting the document in some other device "
-							   "or emulation."]);
-		}
+		[self mount:path inItem:item];
 	}
 }
 
@@ -719,7 +754,7 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
 						  nil, item,
 						  [NSString localizedStringWithFormat:
 						   @"The document is locked by the emulation. "
-						   "It might be safer to eject the document from the emulation."
+						   "It is safer to eject the document from the emulation."
 						   ]);
 		
 		return;
@@ -744,7 +779,6 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
 
 - (void)systemPowerDown:(id)sender
 {
-	NSLog(@"systemPowerDown");
 }
 
 - (void)systemSleep:(id)sender

@@ -43,6 +43,8 @@ NSOutlineViewDataSource, NSComboBoxDataSource>
 - (EmulationItem *)itemForSender:(id)sender;
 - (BOOL)selectItem:(EmulationItem *)item withUid:(NSString *)uid;
 
+- (BOOL)forceMount:(NSString *)path inItem:(EmulationItem *)item;
+- (BOOL)mount:(NSString *)path inItem:(EmulationItem *)item;
 - (IBAction)buttonAction:(id)sender;
 - (IBAction)showDevice:(id)sender;
 - (IBAction)revealInFinder:(id)sender;

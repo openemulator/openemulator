@@ -1,4 +1,5 @@
 ==2011-04==
+* Implemented a warning message when replacing a disk image in a locked storage device
 * Finished storage refactoring
 * Added device component
 * Refactored storage framework

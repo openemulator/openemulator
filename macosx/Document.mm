@@ -423,7 +423,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 
 // Storage
 
-- (BOOL)testMount:(NSString *)path
+- (BOOL)isMountable:(NSString *)path
 {
 	BOOL success = NO;
 	
@@ -443,7 +443,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 			if (storage->postMessage(NULL, STORAGE_IS_AVAILABLE, NULL))
 			{
 				string thePath = getCPPString(path);
-				if (storage->postMessage(NULL, STORAGE_TEST, &thePath))
+				if (storage->postMessage(NULL, STORAGE_TESTMOUNT, &thePath))
 				{
 					[self updateChangeCount:NSChangeDone];
 					
@@ -495,7 +495,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	return success;
 }
 
-- (BOOL)isMountable:(NSString *)path
+- (BOOL)testMount:(NSString *)path
 {
 	BOOL success = NO;
 	
@@ -513,7 +513,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 		if (storage)
 		{
 			string thePath = getCPPString(path);
-			if (storage->postMessage(NULL, STORAGE_TEST, NULL))
+			if (storage->postMessage(NULL, STORAGE_TESTMOUNT, NULL))
 			{
 				success = YES;
 				break;

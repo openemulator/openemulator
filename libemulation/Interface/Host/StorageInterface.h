@@ -12,21 +12,21 @@
 #define _STORAGEINTERFACE_H
 
 // Notes:
-// * isAvailable() tests if the device is available for mounting images.
+// * isAvailable() determines if the device is available for mounting images.
 //   This is used when an emulation searches for a free device to mount an image.
-// * test() tests if an image is can be mounted in this device.
+// * testMount() tests if an image can be mounted in this device.
 // * mount() force-mounts. It should attempt to mount the image by all means.
 //   If an error occurs, a previously mounted image should remain mounted.
 // * unmount() force-unmounts. It should attempt to unmount the image by all means.
 // * getMountPath() returns the path of the mounted image.
 // * getStateLabel() returns a state label describing the mount.
-//   E.g.: "Apple II 16 sector, 35 track, volume 254, read/write".
+//   E.g.: "16 sectors, 35 track, read-only".
 // * isLocked() indicates if the disk is physically locked in the emulated device.
 
 typedef enum
 {
 	STORAGE_IS_AVAILABLE,
-	STORAGE_TEST,
+	STORAGE_TESTMOUNT,
 	STORAGE_MOUNT,
 	STORAGE_UNMOUNT,
 	STORAGE_GET_MOUNTPATH,

@@ -219,7 +219,7 @@
 								   @"The document \u201C%@\u201D can't be mounted in this emulation.",
 								   [path lastPathComponent]]];
 			[alert setInformativeText:[NSString localizedStringWithFormat:
-									   @"All compatible storage devices are busy. "
+									   @"The storage devices compatible with this document are busy. "
 									   "Try unmounting a storage device."]];
 			[alert runModal];
 			[alert release];
@@ -232,7 +232,8 @@
 							   @"The document \u201C%@\u201D can't be mounted in this emulation.",
 							   [path lastPathComponent]]];
 		[alert setInformativeText:[NSString localizedStringWithFormat:
-								   @"There are no compatible storage devices. "
+								   @"The document does not seem to be compatible with "
+								   "any storage device in this emulation. "
 								   "Try mounting the document in another emulation."]];
 		[alert runModal];
 		[alert release];

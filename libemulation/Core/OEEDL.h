@@ -34,7 +34,6 @@ typedef struct
 	string label;
 	string image;
 } OEPortInfo;
-
 typedef vector<OEPortInfo> OEPortsInfo;
 
 typedef OEPortInfo OEConnectorInfo;
