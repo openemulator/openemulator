@@ -117,11 +117,13 @@
 						  row:(NSInteger)rowIndex
 {
 	EmulationItem *item = [self itemAtRow:rowIndex];
-	float indentation = 6.0;
-	if ([item type] == EMULATION_ITEM_DEVICE)
-		indentation = 18.0;
-	else if ([item type] == EMULATION_ITEM_DISKIMAGE)
+	float indentation;
+	if ([item isGroup])
+		indentation = 6.0;
+	else if ([item isMount])
 		indentation = 32.0;
+	else
+		indentation = 18.0;
 	
     NSRect frame = [super frameOfCellAtColumn:columnIndex row:rowIndex];
 	frame.origin.x = indentation;

@@ -94,7 +94,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	[pool release];
 }
 
-// Class
+// Alloc/init/dealloc
 
 - (id)initWithTemplateURL:(NSURL *)absoluteURL
 					error:(NSError **)outError
@@ -147,7 +147,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	{
 		if (theEmulation->isOpen())
 		{
-			if (theEmulation->isRunning())
+			if (theEmulation->isActive())
 				[self updateChangeCount:NSChangeDone];
 			
 			return YES;
@@ -197,7 +197,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 							 error:outError];
 	
 	OEEmulation *theEmulation = (OEEmulation *)emulation;
-	if (theEmulation->isRunning())
+	if (theEmulation->isActive())
 		[self updateChangeCount:NSChangeDone];
 	
 	return result;
@@ -265,7 +265,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 
 - (void)didUpdate:(id)sender
 {
-	if (emulation && ((OEEmulation *)emulation)->isRunning())
+	if (emulation && ((OEEmulation *)emulation)->isActive())
 		[self updateChangeCount:NSChangeDone];
 	
 	[emulationWindowController updateEmulation:self];
@@ -416,217 +416,114 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	portAudioHAL->unlockEmulations();
 }
 
-// Configuration
-
-- (void)setValue:(NSString *)theValue
-	  ofProperty:(NSString *)theName
-	forComponent:(NSString *)theId
+- (void *)emulation
 {
-	if (!emulation)
-		return;
-	
-	OEEmulation *theEmulation = (OEEmulation *)emulation;
-	BOOL success = NO;
-	
-	[self lockEmulation];
-	OEComponent *component = theEmulation->getComponent(getCPPString(theId));
-	if (component)
-	{
-		success = component->setValue(getCPPString(theName), getCPPString(theValue));
-		if (success)
-			component->update();
-	}
-	[self unlockEmulation];
-	
-	if (!success)
-		NSLog(@"could not set property '%@' for '%@'", theName, theId);
-	else
-		[self updateChangeCount:NSChangeDone];
-}
-
-- (NSString *)valueOfProperty:(NSString *)theName
-				 forComponent:(NSString *)theId
-{
-	if (!emulation)
-		return @"";
-	
-	OEEmulation *theEmulation = (OEEmulation *)emulation;
-	BOOL success = NO;
-	string value;
-	
-	[self lockEmulation];
-	OEComponent *component = theEmulation->getComponent(getCPPString(theId));
-	if (component)
-		success = component->getValue(getCPPString(theName), value);
-	[self unlockEmulation];
-	
-	if (!success)
-		NSLog(@"invalid property '%@' for '%@'", theName, theId);
-	
-	return getNSString(value);
-}
-
-// Messaging
-
-- (NSString *)getStringForMessage:(int)message
-						component:(void *)component
-{
-	string value;
-	
-	if (component)
-	{
-		[self lockEmulation];
-		((OEComponent *)component)->postMessage(NULL, message, &value);
-		[self unlockEmulation];
-	}
-	
-	return getNSString(value);
-}
-
-- (BOOL)postString:(NSString *)aString
-		forMessage:(int)message
-		 component:(void *)component
-{
-	string theString = getCPPString(aString);
-	BOOL result = NO;
-	
-	if (component)
-	{
-		[self lockEmulation];
-		result = ((OEComponent *)component)->postMessage(NULL, message, &theString);
-		[self unlockEmulation];
-	}
-	
-	return result;
-}
-
-// System events
-
-- (BOOL)sendSystemEvent:(DocumentSystemEvent)systemEvent toDevice:(void *)device
-{
-	return YES;
+	return emulation;
 }
 
 // Storage
 
-- (BOOL)isMountPermitted:(NSString *)path
+- (BOOL)testMount:(NSString *)path
 {
-	OEEmulation *theEmulation = (OEEmulation *)emulation;
-	OEComponents *devices = theEmulation->getDevices();
+	BOOL success = NO;
 	
-	for (NSInteger i = 0; i < devices->size(); i++)
+	[self lockEmulation];
+	
+	OEIds *devices = (OEIds *)((OEEmulation *)emulation)->getDevices();
+	for (OEIds::iterator i = devices->begin();
+		 i != devices->end();
+		 i++)
 	{
-		OEComponent *device = devices->at(i);
+		OEComponent *device = ((OEEmulation *)emulation)->getComponent(*i);
 		OEComponent *storage = NULL;
 		
-		if (device->postMessage(NULL, DEVICE_GET_STORAGE, &storage))
+		device->postMessage(NULL, DEVICE_GET_STORAGE, &storage);
+		if (storage)
 		{
-			if ([self postString:@""
-					  forMessage:STORAGE_IS_MOUNT_PERMITTED
-					   component:storage])
-				continue;
-			
-			return YES;
+			if (storage->postMessage(NULL, STORAGE_IS_AVAILABLE, NULL))
+			{
+				string thePath = getCPPString(path);
+				if (storage->postMessage(NULL, STORAGE_TEST, &thePath))
+				{
+					[self updateChangeCount:NSChangeDone];
+					
+					success = YES;
+					break;
+				}
+			}
 		}
 	}
 	
-	return NO;
+	[self unlockEmulation];
+	
+	return success;
 }
 
 - (BOOL)mount:(NSString *)path
 {
-	OEEmulation *theEmulation = (OEEmulation *)emulation;
-	OEComponents *devices = theEmulation->getDevices();
+	BOOL success = NO;
 	
-	for (NSInteger i = 0; i < devices->size(); i++)
+	[self lockEmulation];
+	
+	OEIds *devices = (OEIds *)((OEEmulation *)emulation)->getDevices();
+	for (OEIds::iterator i = devices->begin();
+		 i != devices->end();
+		 i++)
 	{
-		OEComponent *device = devices->at(i);
+		OEComponent *device = ((OEEmulation *)emulation)->getComponent(*i);
 		OEComponent *storage = NULL;
 		
-		if (device->postMessage(NULL, DEVICE_GET_STORAGE, &storage))
+		device->postMessage(NULL, DEVICE_GET_STORAGE, &storage);
+		if (storage)
 		{
-			if ([self postString:@""
-					  forMessage:STORAGE_IS_MOUNT_PERMITTED
-					   component:storage])
-				continue;
-			
-			if ([self mount:path
-				  inStorage:storage])
-				return YES;
+			if (storage->postMessage(NULL, STORAGE_IS_AVAILABLE, NULL))
+			{
+				string thePath = getCPPString(path);
+				if (storage->postMessage(NULL, STORAGE_MOUNT, &thePath))
+				{
+					[self updateChangeCount:NSChangeDone];
+					
+					success = YES;
+					break;
+				}
+			}
 		}
 	}
 	
-	return NO;
+	[self unlockEmulation];
+	
+	return success;
 }
 
-- (BOOL)isMountPossible:(NSString *)path
+- (BOOL)isMountable:(NSString *)path
 {
-	OEEmulation *theEmulation = (OEEmulation *)emulation;
-	OEComponents *devices = theEmulation->getDevices();
+	BOOL success = NO;
 	
-	for (NSInteger i = 0; i < devices->size(); i++)
+	[self lockEmulation];
+	
+	OEIds *devices = (OEIds *)((OEEmulation *)emulation)->getDevices();
+	for (OEIds::iterator i = devices->begin();
+		 i != devices->end();
+		 i++)
 	{
-		OEComponent *device = devices->at(i);
+		OEComponent *device = ((OEEmulation *)emulation)->getComponent(*i);
 		OEComponent *storage = NULL;
 		
-		if (device->postMessage(NULL, DEVICE_GET_STORAGE, &storage))
+		device->postMessage(NULL, DEVICE_GET_STORAGE, &storage);
+		if (storage)
 		{
-			if ([self isMountPossible:path inStorage:storage])
-				return YES;
+			string thePath = getCPPString(path);
+			if (storage->postMessage(NULL, STORAGE_TEST, NULL))
+			{
+				success = YES;
+				break;
+			}
 		}
 	}
 	
-	return NO;
-}
-
-- (BOOL)mount:(NSString *)path inStorage:(void *)storage
-{
-	if (![self postString:path
-			   forMessage:STORAGE_MOUNT
-				component:storage])
-		return NO;
+	[self unlockEmulation];
 	
-	[self updateChangeCount:NSChangeDone];
-	
-	return YES;
-}
-
-- (BOOL)unmount:(void *)storage
-{
-	if (![self postString:@""
-			   forMessage:STORAGE_UNMOUNT
-				component:storage])
-		return NO;
-	
-	[self updateChangeCount:NSChangeDone];
-	
-	return YES;
-}
-
-- (BOOL)isMountPossible:(NSString *)path inStorage:(void *)storage
-{
-	return [self postString:@""
-				 forMessage:STORAGE_IS_MOUNT_POSSIBLE
-				  component:storage];
-}
-
-- (BOOL)isStorageLocked:(void *)storage
-{
-	return [self postString:@""
-				 forMessage:STORAGE_IS_LOCKED
-				  component:storage];
-}
-
-- (NSString *)imagePathForStorage:(void *)storage
-{
-	return [self getStringForMessage:(int)STORAGE_GET_MOUNTPATH
-						   component:storage];
-}
-
-- (NSString *)stateLabelForStorage:(void *)storage
-{
-	return [self getStringForMessage:(int)STORAGE_GET_STATELABEL
-						   component:storage];
+	return success;
 }
 
 @end

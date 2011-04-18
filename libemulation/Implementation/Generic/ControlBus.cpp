@@ -12,14 +12,15 @@
 
 #include "ControlBus.h"
 
-#include "EmulationInterface.h"
 #include "DeviceInterface.h"
 #include "AudioInterface.h"
 
 ControlBus::ControlBus()
 {
-	emulation = NULL;
+	device = NULL;
 	audio = NULL;
+	cpu = NULL;
+	cpuSocket = NULL;
 	
 	crystalFrequency = 1E6;
 	cpuFrequencyDivider = 1.0;
@@ -51,15 +52,19 @@ bool ControlBus::setValue(string name, string value)
 
 bool ControlBus::setRef(string name, OEComponent *ref)
 {
-	if (name == "emulation")
-		emulation = ref;
-	else if (name == "device")
+	if (name == "device")
 	{
 		if (device)
+		{
+			device->postMessage(this, DEVICE_CLEAR_ACTIVITY, NULL);
 			device->removeObserver(this, DEVICE_SYSTEMEVENT_DID_OCCUR);
+		}
 		device = ref;
 		if (device)
+		{
+			device->postMessage(this, DEVICE_ASSERT_ACTIVITY, NULL);
 			device->addObserver(this, DEVICE_SYSTEMEVENT_DID_OCCUR);
+		}
 	}
 	else if (name == "audio")
 	{
@@ -79,12 +84,6 @@ bool ControlBus::setRef(string name, OEComponent *ref)
 
 bool ControlBus::init()
 {
-	if (!emulation)
-	{
-		printLog("ref to 'emulation' undefined");
-		return false;
-	}
-	
 	if (!device)
 	{
 		printLog("ref to 'device' undefined");
@@ -99,9 +98,6 @@ bool ControlBus::init()
 	
 	string stateLabel = "Powered On";
 	device->postMessage(this, DEVICE_SET_STATELABEL, &stateLabel);
-	
-	// Init running
-	emulation->postMessage(this, EMULATION_ASSERT_RUNNING, NULL);
 	
 	updateCPUFrequency();
 	

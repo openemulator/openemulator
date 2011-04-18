@@ -12,25 +12,21 @@
 #define _STORAGEINTERFACE_H
 
 // Notes:
-// * isMountPermitted() checks if an image can be mounted now in this device.
-//   This is used when an emulation searches for an available device for mounting an image.
-// * isMountPossible() checks if an image can be mounted sometime in this device.
-//   This is used for determining the correct error message when an emulation attempted
-//   to mount an image somewhere but could not.
-// * mount() force-mounts. If there was an error and there was a previous image, the
-//   previous image should not be unmounted. Otherwise it should attempt to mount the image
-//   by all means.
+// * isAvailable() tests if the device is available for mounting images.
+//   This is used when an emulation searches for a free device to mount an image.
+// * test() tests if an image is can be mounted in this device.
+// * mount() force-mounts. It should attempt to mount the image by all means.
+//   If an error occurs, a previously mounted image should remain mounted.
 // * unmount() force-unmounts. It should attempt to unmount the image by all means.
 // * getMountPath() returns the path of the mounted image.
 // * getStateLabel() returns a state label describing the mount.
-//   For example: "Apple II 16 sector, 35 track, read-write".
-// * isLocked() indicates that a device is locking the image. This is used for displaying
-//   a warning message when unmounting.
+//   E.g.: "Apple II 16 sector, 35 track, volume 254, read/write".
+// * isLocked() indicates if the disk is physically locked in the emulated device.
 
 typedef enum
 {
-	STORAGE_IS_MOUNT_PERMITTED,
-	STORAGE_IS_MOUNT_POSSIBLE,
+	STORAGE_IS_AVAILABLE,
+	STORAGE_TEST,
 	STORAGE_MOUNT,
 	STORAGE_UNMOUNT,
 	STORAGE_GET_MOUNTPATH,

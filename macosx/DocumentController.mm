@@ -212,14 +212,14 @@
 		if ([[self currentDocument] mount:path])
 			return YES;
 		
-		if ([[self currentDocument] isMountPossible:path])
+		if ([[self currentDocument] testMount:path])
 		{
 			NSAlert *alert = [[NSAlert alloc] init];
 			[alert setMessageText:[NSString localizedStringWithFormat:
 								   @"The document \u201C%@\u201D can't be mounted in this emulation.",
 								   [path lastPathComponent]]];
 			[alert setInformativeText:[NSString localizedStringWithFormat:
-									   @"All compatible storage devices are locked. "
+									   @"All compatible storage devices are busy. "
 									   "Try unmounting a storage device."]];
 			[alert runModal];
 			[alert release];

@@ -1,24 +1,25 @@
 ==To-Do==
-* Fix problem when rendering on large screens (last line in processed frame is not updated)
-* Implement shader persistance
-* Fix multi-thread OpenGL access
-* Implement power/pause/capture badge. Capture badge lasts 3 seconds and disappears in 1 second
 * Implement the option to deactivate shaders
-* Add support for scrolling canvas. Think about printing
-* Implement printer canvas scrolling
-* Implement printing
+* Implement power/pause/capture badge. Capture badge lasts 3 seconds and disappears in 1 second
+* Implement OpenGL paper canvas
+* Implement CanvasWindow scroller for paper canvas
+* Implement shader persistance with 16 buffers
+* Implement printing with the raw canvas bitmap
+* Fix problem when rendering on large screens (last line in processed frame is not updated)
+* Test multiple port-audio instances instead of a single one
+* Store default emulation window size
 
-* Fix emulation device property scroller so it is updated even if the window is not active
+* Fix emulation window => settings => scrollers, so it is updated when the window is clicked-through
 * Add tooltips on property slider so the value can be seen
 * If a default emulation can't be opened, should we start the template chooser instead? Or just improve the error message?
 * Implement hardware library
-* Implement OEEmulation canAddEDL
+* Implement OEEmulation testAddEDL
 * Implement OEEmulation addEDL
 * Implement OEEmulation removeDevice
 * Delete an device in an emulation through Edit>Delete, or CMD+BACKSPACE
 * Implement main emulation window add EDL
 * Implement main emulation window remove device
-* Support daisy chaining of devices, when a device has a port and connector of the same type (when adding or removing a device)
+* Support removal of devices in a daisy chain (when a device has a single port and connector of the same type
 * Implement disk image file locking, if the disk image is writable (flock)
 
 

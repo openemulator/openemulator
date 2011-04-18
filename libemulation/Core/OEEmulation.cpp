@@ -14,9 +14,9 @@
 #include <libxml/parser.h>
 
 #include "OEEmulation.h"
+#include "OEDevice.h"
 
 #include "OEComponentFactory.h"
-#include "EmulationInterface.h"
 
 OEEmulation::OEEmulation() : OEEDL()
 {
@@ -25,7 +25,7 @@ OEEmulation::OEEmulation() : OEEDL()
 	destroyCanvas = NULL;
 	didUpdate = NULL;
 	
-	runningCount = 0;
+	activityCount = 0;
 	
 	addComponent("emulation", this);
 }
@@ -185,9 +185,9 @@ string OEEmulation::getId(OEComponent *component)
 	return "";
 }
 
-OEComponents *OEEmulation::getDevices()
+OEIds *OEEmulation::getDevices()
 {
-	return &devicesMap;
+	return &devices;
 }
 
 bool OEEmulation::addEDL(string path, map<string, string> connectionMap)
@@ -219,8 +219,20 @@ bool OEEmulation::addEDL(string path, map<string, string> connectionMap)
 	return true;
 }
 
-bool OEEmulation::removeDevice(string deviceId)
+bool OEEmulation::removeDevice(string id)
 {
+	for (OEIds::iterator i = devices.begin();
+		 i != devices.end();
+		 i++)
+	{
+		if (*i == id)
+		{
+			devices.erase(i);
+			return true;
+		}
+	}
+	
+	return false;
 	// Verify device exists
 /*	if (!isDevice(deviceId))
 	{
@@ -241,9 +253,9 @@ bool OEEmulation::removeDevice(string deviceId)
 	return true;
 }
 
-bool OEEmulation::isRunning()
+bool OEEmulation::isActive()
 {
-	return (runningCount != 0);
+	return (activityCount != 0);
 }
 
 
@@ -280,6 +292,14 @@ bool OEEmulation::createEmulation()
 	for(xmlNodePtr node = rootNode->children;
 		node;
 		node = node->next)
+	{
+		if (!xmlStrcmp(node->name, BAD_CAST "device"))
+		{
+			string id = getNodeProperty(node, "id");
+			
+			if (!createDevice(id))
+				return false;
+		}
 		if (!xmlStrcmp(node->name, BAD_CAST "component"))
 		{
 			string id = getNodeProperty(node, "id");
@@ -288,15 +308,42 @@ bool OEEmulation::createEmulation()
 			if (!createComponent(id, className))
 				return false;
 		}
+	}
 	
 	return true;
+}
+
+bool OEEmulation::createDevice(string id)
+{
+	if (!getComponent(id))
+	{
+		OEComponent *component;
+		component = new OEDevice(this);
+		
+		if (component)
+		{
+			if (addComponent(id, component))
+			{
+				devices.push_back(id);
+				return true;
+			}
+		}
+		else
+			printLog("could not create device '" + id + "'");
+	}
+	else
+		printLog("redefinition of '" + id + "'");
+	
+	return false;
 }
 
 bool OEEmulation::createComponent(string id, string className)
 {
 	if (!getComponent(id))
 	{
-		OEComponent *component = OEComponentFactory::create(className);
+		OEComponent *component;
+		component = OEComponentFactory::create(className);
+		
 		if (component)
 			return addComponent(id, component);
 		else
@@ -320,6 +367,16 @@ bool OEEmulation::configureEmulation()
 		node;
 		node = node->next)
 	{
+		if (!xmlStrcmp(node->name, BAD_CAST "device"))
+		{
+			string id = getNodeProperty(node, "id");
+			string label = getNodeProperty(node, "label");
+			string image = getNodeProperty(node, "image");
+			string group = getNodeProperty(node, "group");
+			
+			if (!configureDevice(id, label, image, group, node->children))
+				return false;
+		}
 		if (!xmlStrcmp(node->name, BAD_CAST "component"))
 		{
 			string id = getNodeProperty(node, "id");
@@ -328,6 +385,42 @@ bool OEEmulation::configureEmulation()
 				return false;
 		}
 	}
+	
+	return true;
+}
+
+bool OEEmulation::configureDevice(string id,
+								  string label, string image, string group, 
+								  xmlNodePtr children)
+{
+	OEComponent *device = getComponent(id);
+	string locationLabel = getLocationLabel(id);
+	
+	// Parse settings
+	DeviceSettings settings;
+	for(xmlNodePtr node = children;
+		node;
+		node = node->next)
+	{
+		if (!xmlStrcmp(node->name, BAD_CAST "setting"))
+		{
+			DeviceSetting setting;
+			
+			setting.ref = getNodeProperty(node, "ref");
+			setting.name = getNodeProperty(node, "name");
+			setting.type = getNodeProperty(node, "type");
+			setting.options = getNodeProperty(node, "options");
+			setting.label = getNodeProperty(node, "label");
+			
+			settings.push_back(setting);
+		}
+	}
+	
+	device->postMessage(this, DEVICE_SET_LABEL, &label);
+	device->postMessage(this, DEVICE_SET_IMAGEPATH, &image);
+	device->postMessage(this, DEVICE_SET_GROUP, &group);
+	device->postMessage(this, DEVICE_SET_LOCATIONLABEL, &locationLabel);
+	device->postMessage(this, DEVICE_SET_SETTINGS, &settings);
 	
 	return true;
 }
@@ -582,54 +675,6 @@ void OEEmulation::destroyComponent(string id, xmlNodePtr children)
 	removeComponent(id);
 }
 
-bool OEEmulation::postMessage(OEComponent *sender, int message, void *data)
-{
-	switch (message)
-	{
-		case EMULATION_UPDATE:
-			if (didUpdate)
-				didUpdate(userData);
-			
-			return true;
-		case EMULATION_RUN_ALERT:
-			if (runAlert)
-			{
-				runAlert(userData, *((string *)data));
-				
-				return true;
-			}
-			break;
-		case EMULATION_ASSERT_RUNNING:
-			runningCount++;
-			return true;
-		case EMULATION_CLEAR_RUNNING:
-			if (runningCount <= 0)
-				return false;
-			
-			runningCount--;
-			return true;
-		case EMULATION_CREATE_CANVAS:
-			if (createCanvas && data)
-			{
-				OEComponent **ref = (OEComponent **)data;
-				*ref = createCanvas(userData, sender);
-				return true;
-			}
-			break;
-		case EMULATION_DESTROY_CANVAS:
-			if (destroyCanvas)
-			{
-				OEComponent **ref = (OEComponent**)data;
-				destroyCanvas(userData, *ref);
-				*ref = NULL;
-				return true;
-			}
-			break;
-	}
-	
-	return false;
-}
-
 bool OEEmulation::hasValueProperty(string value, string propertyName)
 {
 	return (value.find("${" + propertyName + "}") != string::npos);
@@ -687,3 +732,69 @@ string OEEmulation::getDeviceId(string id)
 	
 	return id.substr(0, dotIndex);
 }
+
+string OEEmulation::getLocationLabel(string id)
+{
+	if (!doc)
+		return "";
+	
+	vector<string> visitedIds;
+	string location = getLocationLabel(id, visitedIds);
+	int depth = visitedIds.size();
+	
+	if (depth == 1)
+		return "";
+	else
+		return location;
+}
+
+string OEEmulation::getLocationLabel(string id,
+									 vector<string>& visitedIds)
+{
+	if (!doc)
+		return "";
+	
+	// Circularity check
+	if (find(visitedIds.begin(), visitedIds.end(), id) !=
+		visitedIds.end())
+		return "*";
+	visitedIds.push_back(id);
+	
+	// Find connected port
+	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+	
+	for(xmlNodePtr node = rootNode->children;
+		node;
+		node = node->next)
+	{
+		if (!xmlStrcmp(node->name, BAD_CAST "port"))
+		{
+			string portId = getNodeProperty(node, "id");
+			string portRef = getNodeProperty(node, "ref");
+			string portLabel = getNodeProperty(node, "label");
+			
+			if (getDeviceId(portRef) == id)
+				return (getLocationLabel(getDeviceId(portId), visitedIds) +
+						" " + portLabel);
+		}
+	}
+	
+	// Find device label
+	for(xmlNodePtr node = rootNode->children;
+		node;
+		node = node->next)
+	{
+		if (!xmlStrcmp(node->name, BAD_CAST "device"))
+		{
+			string deviceId = getNodeProperty(node, "id");
+			string deviceLabel = getNodeProperty(node, "label");
+			
+			if (deviceId == id)
+				return deviceLabel;
+		}
+	}
+	
+	// Device not found
+	return "?";
+}
+

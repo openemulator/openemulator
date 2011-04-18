@@ -15,18 +15,17 @@
 
 #include "DeviceInterface.h"
 
+class OEEmulation;
+
 class OEDevice : public OEComponent
 {
 public:
-	OEDevice();
-	
-	bool setRef(string name, OEComponent *ref);
-	bool init();
+	OEDevice(OEEmulation *emulation);
 	
 	bool postMessage(OEComponent *sender, int message, void *data);
 	
 private:
-	OEComponent *emulation;
+	OEEmulation *emulation;
 	
 	string label;
 	string imagePath;

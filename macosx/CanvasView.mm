@@ -352,7 +352,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 		
 		if ([[documentController diskImagePathExtensions] containsObject:pathExtension])
 		{
-			if ([document isMountPermitted:path])
+			if ([document testMount:path])
 				return NSDragOperationCopy;
 		}
 		else if ([[documentController audioPathExtensions] containsObject:pathExtension] ||

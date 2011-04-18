@@ -294,7 +294,7 @@
 	<key>CFBundleVersion</key>
 	<string>${BUILD_NUMBER}</string>
 	<key>LSMinimumSystemVersion</key>
-	<string>10.5</string>
+	<string>10.6</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2009-2011, The OpenEmulator Team</string>
 	<key>NSMainNibFile</key>

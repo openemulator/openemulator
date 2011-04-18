@@ -14,53 +14,58 @@
 
 typedef enum
 {
-	EMULATION_ITEM_ROOT,
-	EMULATION_ITEM_GROUP,
-	EMULATION_ITEM_DEVICE,
-	EMULATION_ITEM_DISKIMAGE,
+	EMULATIONITEM_ROOT,
+	EMULATIONITEM_GROUP,
+	EMULATIONITEM_DEVICE,
+	EMULATIONITEM_MOUNT,
 } EmulationItemType;
 
 @interface EmulationItem : NSObject
 {
-	EmulationItemType itemType;
+	EmulationItemType type;
+	NSString *uid;
 	NSMutableArray *children;
 	Document *document;
 	
-	void *component;
 	NSString *label;
 	NSImage *image;
+	
+	NSString *locationLabel;
+	NSString *stateLabel;
+	
+	void *device;
+	
+	NSMutableArray *settingsRef;
+	NSMutableArray *settingsName;
+	NSMutableArray *settingsLabel;
+	NSMutableArray *settingsType;
+	NSMutableArray *settingsOptions;
+	
+	NSMutableArray *canvases;
+	
+	void *storage;
 }
 
-- (id)initWithDocument:(Document *)theDocument;
-- (id)initWithGroupName:(NSString *)theGroupName;
-- (id)initWithDevice:(void *)theDevice
-			document:(Document *)theDocument;
-- (id)initWithStorage:(void *)theStorage
-			 location:(NSString *)theLocation
-			 document:(Document *)theDocument;
+- (id)initRootWithDocument:(Document *)theDocument;
+- (id)initGroup:(NSString *)theGroupName;
+- (id)initDevice:(void *)theDevice
+			 uid:(NSString *)theUID
+		document:(Document *)theDocument;
+- (id)initMountWithStorage:(void *)theStorage
+					   uid:(NSString *)theUID
+			 locationLabel:(NSString *)theLocationLabel
+				  document:(Document *)theDocument;
 
-- (EmulationItemType)type;
+- (BOOL)isGroup;
+- (NSString *)uid;
 - (NSMutableArray *)children;
-- (EmulationItem *)childWithUid:(NSString *)theUid;
+- (EmulationItem *)childWithUID:(NSString *)theUID;
 
-- (void *)component;
 - (NSString *)label;
 - (NSImage *)image;
 
-- (NSString *)location;
-- (NSString *)state;
-- (BOOL)isRemovable;
-
-- (BOOL)isCanvas;
-- (void)showCanvases;
-
-- (BOOL)isStorage;
-- (BOOL)isMounted;
-- (BOOL)isLocked;
-- (NSString *)diskImagePath;
-- (BOOL)mount:(NSString *)path;
-- (void)unmount;
-- (BOOL)canMount:(NSString *)path;
+- (NSString *)locationLabel;
+- (NSString *)stateLabel;
 
 - (NSInteger)numberOfSettings;
 - (NSString *)labelForSettingAtIndex:(NSInteger)index;
@@ -68,5 +73,17 @@ typedef enum
 - (NSArray *)optionsForSettingAtIndex:(NSInteger)index;
 - (void)setValue:(NSString *)value forSettingAtIndex:(NSInteger)index;
 - (NSString *)valueForSettingAtIndex:(NSInteger)index;
+
+- (BOOL)hasCanvases;
+- (void)showCanvases;
+
+- (BOOL)isStorageDevice;
+- (BOOL)mount:(NSString *)path;
+- (BOOL)testMount:(NSString *)path;
+
+- (BOOL)isMount;
+- (void)revealInFinder;
+- (BOOL)isLocked;
+- (void)unmount;
 
 @end

@@ -12,8 +12,8 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="1808"/>
 			<integer value="2349"/>
+			<integer value="1808"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -704,17 +704,17 @@
 						<reference key="NSOnImage" ref="495201820"/>
 						<reference key="NSMixedImage" ref="792067530"/>
 					</object>
-					<object class="NSMenuItem" id="697458669">
+					<object class="NSMenuItem" id="847601756">
 						<reference key="NSMenu" ref="719851724"/>
-						<string key="NSTitle">Unmount</string>
+						<string key="NSTitle">Reveal in Finder</string>
 						<string key="NSKeyEquiv"/>
 						<int key="NSMnemonicLoc">2147483647</int>
 						<reference key="NSOnImage" ref="495201820"/>
 						<reference key="NSMixedImage" ref="792067530"/>
 					</object>
-					<object class="NSMenuItem" id="847601756">
+					<object class="NSMenuItem" id="697458669">
 						<reference key="NSMenu" ref="719851724"/>
-						<string key="NSTitle">Reveal in Finder</string>
+						<string key="NSTitle">Unmount</string>
 						<string key="NSKeyEquiv"/>
 						<int key="NSMnemonicLoc">2147483647</int>
 						<reference key="NSOnImage" ref="495201820"/>

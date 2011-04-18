@@ -15,8 +15,12 @@
 
 #include "OEEDL.h"
 #include "OEComponent.h"
+#include "OEDevice.h"
 
 using namespace std;
+
+typedef map<string, OEComponent *> OEComponentsMap;
+typedef vector<string> OEIds;
 
 typedef void (*EmulationDidUpdate)(void *userData);
 typedef void (*EmulationRunAlert)(void *userData, string message);
@@ -44,18 +48,16 @@ public:
 	OEComponent *getComponent(string id);
 	string getId(OEComponent *component);
 	
-	OEComponents *getDevices();
+	OEIds *getDevices();
 	bool addEDL(string path, map<string, string> idMap);
 	bool removeDevice(string id);
 	
-	bool isRunning();
-	
-	bool postMessage(OEComponent *sender, int message, void *data);
+	bool isActive();
 	
 private:
 	string resourcePath;
-	OEComponents devicesMap;
-	map<string, OEComponent *> componentsMap;
+	OEComponentsMap componentsMap;
+	OEIds devices;
 	
 	EmulationDidUpdate didUpdate;
 	EmulationRunAlert runAlert;
@@ -63,12 +65,16 @@ private:
 	EmulationDestroyCanvas destroyCanvas;
 	void *userData;
 	
-	int runningCount;
+	int activityCount;
 	
 	bool dumpEmulation(OEData *data);
 	bool createEmulation();
+	bool createDevice(string id);
 	bool createComponent(string id, string className);
 	bool configureEmulation();
+	bool configureDevice(string id,
+						 string label, string image, string group,
+						 xmlNodePtr children);
 	bool configureComponent(string id, xmlNodePtr children);
 	bool initEmulation();
 	bool initComponent(string id);
@@ -84,6 +90,11 @@ private:
 	
 	void setDeviceId(string& id, string deviceId);
 	string getDeviceId(string id);
+	
+	string getLocationLabel(string id);
+	string getLocationLabel(string id, vector<string>& visitedIds);
+	
+	friend class OEDevice;
 };
 
 #endif

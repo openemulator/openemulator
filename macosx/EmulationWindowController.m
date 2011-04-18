@@ -87,7 +87,7 @@
 	NSString *uid = [[selectedItem uid] copy];
 	
 	[rootItem release];
-	rootItem = [[EmulationItem alloc] initWithDocument:[self document]];
+	rootItem = [[EmulationItem alloc] initRootWithDocument:[self document]];
 	
 	[fOutlineView reloadData];
 	[fOutlineView expandItem:nil expandChildren:YES];
@@ -103,50 +103,54 @@
 	NSString *title = @"No Selection";
 	
 	NSImage *image = nil;
-	NSString *location = @"";
-	NSString *state = @"";
+	NSString *locationLabel = @"";
+	NSString *stateLabel = @"";
 	BOOL isEnabled = YES;
 	
-	BOOL isCanvas = NO;
-	
-	BOOL isStorage = NO;
-	BOOL isMounted = NO;
-	BOOL isLocked = NO;
+	BOOL hasCanvases = NO;
+	BOOL isStorageDevice = NO;
+	BOOL isMount = NO;
 	
 	if (selectedItem)
 	{
 		title = [selectedItem label];
 		image = [selectedItem image];
-		location = [selectedItem location];
-		if (![location length])
-			location = NSLocalizedString(@"Built-in", @"Emulation Value.");
-		state = NSLocalizedString([selectedItem state],
-								  @"Emulation Value.");
-		isCanvas = [selectedItem isCanvas];
-		isStorage = [selectedItem isStorage];
-		isMounted = [selectedItem isMounted];
-		isLocked = [selectedItem isLocked];
+		locationLabel = [selectedItem locationLabel];
+		if (![locationLabel length])
+			locationLabel = NSLocalizedString(@"Built-in", @"Emulation Value.");
+		stateLabel = NSLocalizedString([selectedItem stateLabel],
+									   @"Emulation Value.");
+		hasCanvases = [selectedItem hasCanvases];
+		isStorageDevice = [selectedItem isStorageDevice];
+		isMount = [selectedItem isMount];
 	}
 	
 	[fDeviceBox setTitle:title];
 	
 	[fDeviceImage setImage:image];
-	[fDeviceLocationValue setStringValue:location];
-	[fDeviceStateValue setStringValue:state];
+	[fDeviceLocationValue setStringValue:locationLabel];
+	[fDeviceStateValue setStringValue:stateLabel];
 	
-	[fDeviceButton setHidden:!(isCanvas || isStorage || isMounted)];
-	if (isCanvas)
+	if (hasCanvases)
+	{
 		[fDeviceButton setTitle:NSLocalizedString(@"Show Device",
 												  @"Emulation Button Label.")];
-	else if (isMounted)
-		[fDeviceButton setTitle:NSLocalizedString(@"Unmount",
-												  @"Emulation Button Label.")];
-	else if (isStorage)
+		[fDeviceButton setHidden:NO];
+	}
+	else if (isStorageDevice)
 	{
 		[fDeviceButton setTitle:NSLocalizedString(@"Open...",
 												  @"Emulation Button Label.")];
-		isEnabled = !isLocked;
+		[fDeviceButton setHidden:NO];
 	}
+	else if (isMount)
+	{
+		[fDeviceButton setTitle:NSLocalizedString(@"Unmount",
+												  @"Emulation Button Label.")];
+		[fDeviceButton setHidden:NO];
+	}
+	else
+		[fDeviceButton setHidden:YES];
 	
 	[fDeviceButton setEnabled:isEnabled];
 	
@@ -197,15 +201,15 @@
 		return [[pasteboard types] containsObject:NSStringPboardType];
 	}
 	else if (action == @selector(showDevice:))
-		return [item isCanvas];
+		return [item hasCanvases];
 	else if (action == @selector(openDiskImage:))
-		return [item isStorage] && ![item isLocked];
-	else if (action == @selector(revealInFinder:))
-		return [item isMounted];
+		return [item isStorageDevice];
 	else if (action == @selector(unmount:))
-		return [item isMounted];
+		return [item isMount];
+	else if (action == @selector(revealInFinder:))
+		return [item isMount];
 	else if (action == @selector(delete:))
-		return [item isRemovable];
+		return NO;
 	
 	return YES;
 }
@@ -435,7 +439,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				  proposedItem:(id)item
 			proposedChildIndex:(NSInteger)index
 {
-	if (![item isStorage] || (index != -1))
+	if (![item isStorageDevice] || (index != -1))
 		return NSDragOperationNone;
 	
 	DocumentController *documentController;
@@ -449,7 +453,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	if (![[documentController diskImagePathExtensions] containsObject:pathExtension])
 		return NSDragOperationNone;
 	
-	if (![item canMount:path])
+	if (![item testMount:path])
 		return NSDragOperationNone;
 	
 	return NSDragOperationCopy;
@@ -522,9 +526,9 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	{
 		EmulationItem *item = [fOutlineView itemAtRow:clickedRow];
 		
-		if ([item isCanvas])
+		if ([item hasCanvases])
 			[self showDevice:sender];
-		else if ([item isStorage] && ![item isLocked])
+		else if ([item isStorageDevice])
 			[self openDiskImage:sender];
 	}
 }
@@ -634,12 +638,12 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
 {
 	EmulationItem *item = [self itemForSender:sender];
 	
-	if ([item isCanvas])
+	if ([item hasCanvases])
 		[self showDevice:sender];
-	else if ([item isMounted])
-		[self unmount:sender];
-	else if ([item isStorage])
+	else if ([item isStorageDevice])
 		[self openDiskImage:sender];
+	else if ([item isMount])
+		[self unmount:sender];
 }
 
 - (IBAction)showDevice:(id)sender
@@ -653,8 +657,7 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
 {
 	EmulationItem *item = [self itemForSender:sender];
 	
-	[[NSWorkspace sharedWorkspace] selectFile:[item diskImagePath]
-					 inFileViewerRootedAtPath:@""];
+	[item revealInFinder];
 }
 
 - (IBAction)openDiskImage:(id)sender
@@ -716,7 +719,7 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
 						  nil, item,
 						  [NSString localizedStringWithFormat:
 						   @"The document is locked by the emulation. "
-						   "It is unsafe to force unmount the document."
+						   "It might be safer to eject the document from the emulation."
 						   ]);
 		
 		return;
@@ -739,48 +742,29 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
 	// Remove device
 }
 
-
-
 - (void)systemPowerDown:(id)sender
 {
-	if (selectedItem)
-		[[self document] sendSystemEvent:DOCUMENT_POWERDOWN
-								toDevice:[selectedItem component]];
+	NSLog(@"systemPowerDown");
 }
 
 - (void)systemSleep:(id)sender
 {
-	if (selectedItem)
-		[[self document] sendSystemEvent:DOCUMENT_SLEEP
-								toDevice:[selectedItem component]];
 }
 
 - (void)systemWakeUp:(id)sender
 {
-	if (selectedItem)
-		[[self document] sendSystemEvent:DOCUMENT_WAKEUP
-								toDevice:[selectedItem component]];
 }
 
 - (void)systemColdRestart:(id)sender
 {
-	if (selectedItem)
-		[[self document] sendSystemEvent:DOCUMENT_COLDRESTART
-								toDevice:[selectedItem component]];
 }
 
 - (void)systemWarmRestart:(id)sender
 {
-	if (selectedItem)
-		[[self document] sendSystemEvent:DOCUMENT_WARMRESTART
-								toDevice:[selectedItem component]];
 }
 
 - (void)systemDebuggerBreak:(id)sender
 {
-	if (selectedItem)
-		[[self document] sendSystemEvent:DOCUMENT_DEBUGGERBREAK
-								toDevice:[selectedItem component]];
 }
 
 @end

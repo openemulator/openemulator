@@ -14,110 +14,171 @@
 #import "OEEmulation.h"
 
 #import "DeviceInterface.h"
+#import "StorageInterface.h"
 
 @implementation EmulationItem
 
-- (id)initWithDocument:(Document *)theDocument
+- (id)initRootWithDocument:(Document *)theDocument
 {
 	if (self = [super init])
 	{
-		itemType = EMULATION_ITEM_ROOT;
+		type = EMULATIONITEM_ROOT;
 		children = [[NSMutableArray alloc] init];
 		
-		OEComponents *devices = (OEComponents *)[theDocument getDevices];
-		for (NSInteger i = 0; i < devices->size(); i++)
+		document = theDocument;
+		
+		[document lockEmulation];
+		
+		OEEmulation *emulation = (OEEmulation *)[theDocument emulation];
+		OEIds *devices = (OEIds *)emulation->getDevices();
+		for (int i = 0; i < devices->size(); i++)
 		{
-			OEComponent *device = devices->at(i);
-			
-			string group;
-			device->postMessage(NULL, DEVICE_GET_GROUP, &group);
+			string deviceId = devices->at(i);
+			OEComponent *theDevice = emulation->getComponent(deviceId);
 			
 			// Create group item
-			NSString *groupName = getNSString(group);
-			EmulationItem *groupItem = [self childWithUid:groupName];
+			string value;
+			
+			theDevice->postMessage(NULL, DEVICE_GET_GROUP, &value);
+			NSString *group = getNSString(value);
+			EmulationItem *groupItem = [self childWithUID:group];
 			if (!groupItem)
 			{
-				groupItem = [[EmulationItem alloc] initWithGroupName:groupName];
+				groupItem = [[EmulationItem alloc] initGroup:group];
 				[children addObject:groupItem];
 				[groupItem release];
 			}
 			
 			// Create device item
 			EmulationItem *deviceItem;
-			deviceItem = [[EmulationItem alloc] initWithDevice:device
-													  document:theDocument];
+			deviceItem = [[EmulationItem alloc] initDevice:theDevice
+													   uid:getNSString(deviceId)
+												  document:theDocument];
 			[[groupItem children] addObject:deviceItem];
 			[deviceItem release];
 		}
+		
+		[document unlockEmulation];
 	}
 	
 	return self;
 }
 
-- (id)initWithGroupName:(NSString *)theGroupName
+- (id)initGroup:(NSString *)theGroup
 {
 	if (self = [super init])
 	{
-		itemType = EMULATION_ITEM_GROUP;
+		type = EMULATIONITEM_GROUP;
+		uid = [theGroup copy];
 		children = [[NSMutableArray alloc] init];
 		
-		label = [[NSLocalizedString(theGroupName, @"Emulation Item Label.")
+		label = [[NSLocalizedString(theGroup, @"Emulation Item Group Label.")
 				  uppercaseString] retain];
 	}
 	
 	return self;
 }
 
-- (id)initWithDevice:(void *)theDevice
-			document:(Document *)theDocument
+- (id)initDevice:(void *)theDevice
+			 uid:(NSString *)theUID
+		document:(Document *)theDocument
 {
 	if (self = [super init])
 	{
-		itemType = EMULATION_ITEM_DEVICE;
+		type = EMULATIONITEM_DEVICE;
+		uid = [theUID copy];
 		children = [[NSMutableArray alloc] init];
 		document = theDocument;
 		
-		OEComponent *device = (OEComponent *)theDevice;
+		device = (OEComponent *)theDevice;
+		string value;
 		
-		label = [getNSString(deviceInfo->label) retain];
+		// Read device values
+		((OEComponent *)device)->postMessage(NULL, DEVICE_GET_LABEL, &value);
+		label = [getNSString(value) retain];
 		NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
+		((OEComponent *)device)->postMessage(NULL, DEVICE_GET_IMAGEPATH, &value);
 		NSString *imagePath = [[resourcePath stringByAppendingPathComponent:
-								getNSString(deviceInfo->image)] retain];
+								getNSString(value)] retain];
 		image = [[NSImage alloc] initByReferencingFile:imagePath];
 		
-		storage = deviceInfo->storage;
-		if (storage && ([document imagePathForStorage:storage])
+		((OEComponent *)device)->postMessage(NULL, DEVICE_GET_LOCATIONLABEL, &value);
+		locationLabel = [getNSString(value) retain];
+		((OEComponent *)device)->postMessage(NULL, DEVICE_GET_STATELABEL, &value);
+		stateLabel = [getNSString(value) retain];
+		
+		// Read settings
+		settingsRef = [[NSMutableArray alloc] init];
+		settingsName = [[NSMutableArray alloc] init];
+		settingsLabel = [[NSMutableArray alloc] init];
+		settingsType = [[NSMutableArray alloc] init];
+		settingsOptions = [[NSMutableArray alloc] init];
+		DeviceSettings settings;
+		((OEComponent *)device)->postMessage(NULL, DEVICE_GET_SETTINGS, &settings);
+		for (int i = 0; i < settings.size(); i++)
 		{
-			NSString *theUID;
-			
-			theUID = [NSString stringWithFormat:@"%@.storage", uid];
-			
-			EmulationItem *storageItem;
-			storageItem = [[EmulationItem alloc] initWithStorage:storage
-															 uid:theUID 
-														location:location
-														document:theDocument];
-			[children addObject:storageItem];
-			[storageItem release];
+			DeviceSetting setting = settings[i];
+			[settingsRef addObject:getNSString(setting.ref)];
+			[settingsName addObject:getNSString(setting.name)];
+			[settingsLabel addObject:getNSString(setting.label)];
+			[settingsType addObject:getNSString(setting.type)];
+			[settingsOptions addObject:[getNSString(setting.options)
+										componentsSeparatedByString:@","]];
+		}
+		
+		// Read canvases
+		canvases = [[NSMutableArray alloc] init];
+		OEComponents theCanvases;
+		((OEComponent *)device)->postMessage(NULL, DEVICE_GET_CANVASES, &theCanvases);
+		for (int i = 0; i < theCanvases.size(); i++)
+			[canvases addObject:[NSValue valueWithPointer:theCanvases.at(i)]];
+		
+		// Update storage device
+		((OEComponent *)device)->postMessage(NULL, DEVICE_GET_STORAGE, &storage);
+		if (storage)
+		{
+			((OEComponent *)storage)->postMessage(NULL, STORAGE_GET_MOUNTPATH, &value);
+			if (value.size())
+			{
+				NSString *storageUID;
+				storageUID = [NSString stringWithFormat:@"%@.storage", uid];
+				
+				EmulationItem *storageItem;
+				storageItem = [[EmulationItem alloc] initMountWithStorage:storage
+																	  uid:storageUID 
+															locationLabel:locationLabel
+																 document:theDocument];
+				[children addObject:storageItem];
+				[storageItem release];
+			}
 		}
 	}
 	
 	return self;
 }
 
-- (id)initWithStorage:(void *)theStorage
-			 location:(NSString *)theLocation
-			 document:(Document *)theDocument
+- (id)initMountWithStorage:(void *)theStorage
+					   uid:(NSString *)theUID
+			 locationLabel:(NSString *)theLocationLabel
+				  document:(Document *)theDocument
 {
 	if (self = [super init])
 	{
-		itemType = EMULATION_ITEM_DISKIMAGE;
+		type = EMULATIONITEM_MOUNT;
 		children = [[NSMutableArray alloc] init];
 		document = theDocument;
 		
-		label = [[[document imagePathForStorage:theStorage]
-				  lastPathComponent] retain];
+		string value;
+		((OEComponent *)theStorage)->postMessage(NULL, STORAGE_GET_MOUNTPATH, &value);
+		label = [[getNSString(value) lastPathComponent] retain];
 		image = [[NSImage imageNamed:@"DiskImage"] retain];
+		
+		locationLabel = [theLocationLabel copy];
+		value = "";
+		((OEComponent *)theStorage)->postMessage(NULL, STORAGE_GET_STATELABEL, &value);
+		stateLabel = [getNSString(value) retain];
+		
+		storage = theStorage;
 	}
 	
 	return self;
@@ -125,16 +186,36 @@
 
 - (void)dealloc
 {
+	[uid release];
 	[children release];
 	
 	[label release];
+	[image release];
+	
+	[locationLabel release];
+	[stateLabel release];
+	
+	[settingsRef release];
+	[settingsName release];
+	[settingsLabel release];
+	[settingsType release];
+	[settingsOptions release];
+	
+	[canvases release];
 	
 	[super dealloc];
 }
 
-- (EmulationItemType)type
+
+
+- (BOOL)isGroup
 {
-	return itemType;
+	return (type == EMULATIONITEM_GROUP);
+}
+
+- (NSString *)uid
+{
+	return [[uid copy] autorelease];
 }
 
 - (NSMutableArray *)children
@@ -142,15 +223,22 @@
 	return children;
 }
 
-- (EmulationItem *)childWithUid:(NSString *)theUid
+- (EmulationItem *)childWithUID:(NSString *)theUID
 {
 	for (EmulationItem *item in children)
 	{
-		if ([[item uid] compare:theUid] == NSOrderedSame)
+		if ([[item uid] compare:theUID] == NSOrderedSame)
 			return item;
 	}
 	
 	return nil;
+}
+
+
+
+- (NSString *)label
+{
+	return label;
 }
 
 - (NSImage *)image
@@ -158,115 +246,33 @@
 	return image;
 }
 
-- (NSString *)label
+
+
+- (NSString *)locationLabel
 {
-	return label;
+	return locationLabel;
 }
 
-- (NSString *)location
+- (NSString *)stateLabel
 {
-	return location;
-}
-
-- (NSString *)state
-{
-	if (itemType == EMULATION_ITEM_DISKIMAGE)
-	{
-		NSString *theState;
-		theState = ([document isStorageWritable:storage] ?
-					NSLocalizedString(@"Read/Write", @"Emulation Item.") : 
-					NSLocalizedString(@"Read-Only", @"Emulation Item."));
-		if ([document isStorageLocked:storage])
-			theState = [theState stringByAppendingString:
-						NSLocalizedString(@", Locked", @"Emulation Item.")];
-		
-		return theState;
-	}
-	
-	return state;
-}
-
-- (BOOL)isRemovable
-{
-	return (itemType == EMULATION_ITEM_DEVICE) && [location length];
-}
-
-
-
-- (BOOL)isCanvas
-{
-	return ([canvases count] != 0);
-}
-
-- (void)showCanvases
-{
-	for (NSInteger i = 0; i < [canvases count]; i++)
-		[document showCanvas:[[canvases objectAtIndex:i] pointerValue]];
-}
-
-
-
-- (BOOL)isStorage
-{
-	return (((itemType == EMULATION_ITEM_DEVICE) && storage) ||
-			![location length]);
-}
-
-- (BOOL)isMounted
-{
-	return (itemType == EMULATION_ITEM_DISKIMAGE);
-}
-
-- (BOOL)isLocked
-{
-	return [document isStorageLocked:storage];
-}
-
-- (NSString *)diskImagePath
-{
-	return [document imagePathForStorage:storage];
-}
-
-- (BOOL)mount:(NSString *)path
-{
-	if (![location length])
-		return [document mount:path];
-	
-	return [document mount:path inStorage:storage];
-}
-
-- (void)unmount
-{
-	[document unmount:storage];
-}
-
-- (BOOL)canMount:(NSString *)path
-{
-	if (![location length])
-		return [document canMount:path];
-	
-	return [document canMount:path inStorage:storage];
+	return stateLabel;
 }
 
 
 
 - (NSInteger)numberOfSettings
 {
-	DeviceSettings settings;
-	
-	component->postMessage(NULL, DEVICE_GET_SETTINGS, settings)
-	return 
-	return [settingsRefs count];
+	return [settingsRef count];
 }
 
 - (NSString *)labelForSettingAtIndex:(NSInteger)index
 {
-	return [settingsLabels objectAtIndex:index];
+	return [settingsLabel objectAtIndex:index];
 }
 
 - (NSString *)typeForSettingAtIndex:(NSInteger)index
 {
-	return [settingsTypes objectAtIndex:index];
+	return [settingsType objectAtIndex:index];
 }
 
 - (NSArray *)optionsForSettingAtIndex:(NSInteger)index
@@ -276,34 +282,149 @@
 
 - (void)setValue:(NSString *)value forSettingAtIndex:(NSInteger)index;
 {
-	NSString *ref = [settingsRefs objectAtIndex:index];
-	NSString *name = [settingsNames objectAtIndex:index];
-	
-	NSString *type = [settingsTypes objectAtIndex:index];
-	if ([type compare:@"select"] == NSOrderedSame)
+	NSString *settingRef = [settingsRef objectAtIndex:index];
+	NSString *settingName = [settingsName objectAtIndex:index];
+	NSString *settingType = [settingsType objectAtIndex:index];
+	if ([settingType compare:@"select"] == NSOrderedSame)
 	{
-		NSArray *options = [settingsOptions objectAtIndex:index];
-		value = [options objectAtIndex:[value integerValue]];
+		NSArray *settingOptions = [settingsOptions objectAtIndex:index];
+		value = [settingOptions objectAtIndex:[value integerValue]];
 	}
 	
-	[document setValue:value ofProperty:name forComponent:ref];
+	[document lockEmulation];
+	OEEmulation *emulation = (OEEmulation *)[document emulation];
+	OEComponent *component = emulation->getComponent(getCPPString(settingRef));
+	if (component)
+	{
+		if (component->setValue(getCPPString(settingName), getCPPString(value)))
+			component->update();
+	}
+	[document unlockEmulation];
 }
 
 - (NSString *)valueForSettingAtIndex:(NSInteger)index
 {
-	NSString *ref = [settingsRefs objectAtIndex:index];
-	NSString *name = [settingsNames objectAtIndex:index];
+	NSString *settingRef = [settingsRef objectAtIndex:index];
+	NSString *settingName = [settingsName objectAtIndex:index];
+	NSString *value = @"";
 	
-	NSString *value = [document valueOfProperty:name forComponent:ref];
+	[document lockEmulation];
+	OEEmulation *emulation = (OEEmulation *)[document emulation];
+	OEComponent *component = emulation->getComponent(getCPPString(settingRef));
+	if (component)
+	{
+		string theValue;
+		component->getValue(getCPPString(settingName), theValue);
+		value = getNSString(theValue);
+	}
+	[document unlockEmulation];
 	
-	NSString *type = [settingsTypes objectAtIndex:index];
-	if ([type compare:@"select"] == NSOrderedSame)
+	NSString *settingType = [settingsType objectAtIndex:index];
+	if ([settingType compare:@"select"] == NSOrderedSame)
 	{
 		NSArray *options = [settingsOptions objectAtIndex:index];
 		value = [NSString stringWithFormat:@"%d", [options indexOfObject:value]];
 	}
 	
 	return value;
+}
+
+
+
+- (BOOL)hasCanvases
+{
+	if (canvases)
+		return [canvases count];
+	
+	return false;
+}
+
+- (void)showCanvases
+{
+	if (canvases)
+		for (int i = 0; i < [canvases count]; i++)
+			[document showCanvas:[[canvases objectAtIndex:i] pointerValue]];
+}
+
+
+
+- (BOOL)isStorageDevice
+{
+	return (type == EMULATIONITEM_DEVICE) && (storage != nil);
+}
+
+- (BOOL)mount:(NSString *)path
+{
+	if (!storage)
+		return NO;
+	
+	string value = getCPPString(path);
+	bool success;
+	[document lockEmulation];
+	success = ((OEComponent *)storage)->postMessage(NULL, STORAGE_MOUNT, &value);
+	[document unlockEmulation];
+	
+	return success;
+}
+
+- (BOOL)testMount:(NSString *)path
+{
+	if (!storage)
+		return NO;
+	
+	string value = getCPPString(path);
+	bool success;
+	[document lockEmulation];
+	success = ((OEComponent *)storage)->postMessage(NULL, STORAGE_TEST, &value);
+	[document unlockEmulation];
+	
+	return success;
+}
+
+
+
+- (BOOL)isMount
+{
+	return (type == EMULATIONITEM_MOUNT);
+}
+
+- (void)revealInFinder
+{
+	if (!storage)
+		return;
+	
+	string value;
+	[document lockEmulation];
+	((OEComponent *)storage)->postMessage(NULL, STORAGE_GET_MOUNTPATH, &value);
+	[document unlockEmulation];
+	
+	[[NSWorkspace sharedWorkspace] selectFile:getNSString(value)
+					 inFileViewerRootedAtPath:@""];
+}
+
+- (BOOL)isLocked
+{
+	if (!storage)
+		return NO;
+	
+	BOOL success;
+	[document lockEmulation];
+	success = ((OEComponent *)storage)->postMessage(NULL, STORAGE_IS_LOCKED, NULL);
+	[document unlockEmulation];
+	
+	return success;
+}
+
+- (void)unmount
+{
+	if (!storage)
+		return;
+	
+	[document lockEmulation];
+	((OEComponent *)storage)->postMessage(NULL, STORAGE_UNMOUNT, NULL);
+	[document unlockEmulation];
+	
+	return;
 }
 
 @end

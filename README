@@ -50,15 +50,7 @@ installation. The easiest way to install them is through MacPorts:
 
   http://www.macports.org/
 
-  First, download and install.
-
-  If you want to build PowerPC/x86/x86_64 universal binaries, edit the
-file /opt/local/etc/macports/macports.conf, and change the
-"universal_archs" entry to the following:
-
-universal_archs		x86_64 i386 ppc
-
-  The next step is to install these libraries:
+  Download and install, then install these libraries:
 
   sudo port install libzip +universal
   sudo port install portaudio +universal

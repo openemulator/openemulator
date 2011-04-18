@@ -93,7 +93,6 @@
 		00D226061350F9A100FC69B9 /* CanvasInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D225FB1350F9A100FC69B9 /* CanvasInterface.h */; };
 		00D226071350F9A100FC69B9 /* CPUInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D225FC1350F9A100FC69B9 /* CPUInterface.h */; };
 		00D226081350F9A100FC69B9 /* DeviceInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D225FD1350F9A100FC69B9 /* DeviceInterface.h */; };
-		00D226091350F9A100FC69B9 /* EmulationInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D225FE1350F9A100FC69B9 /* EmulationInterface.h */; };
 		00D2260A1350F9A100FC69B9 /* EthernetInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D225FF1350F9A100FC69B9 /* EthernetInterface.h */; };
 		00D2260B1350F9A100FC69B9 /* MIDIInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D226001350F9A100FC69B9 /* MIDIInterface.h */; };
 		00D2260E1350F9A100FC69B9 /* USBInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D226031350F9A100FC69B9 /* USBInterface.h */; };
@@ -396,7 +395,6 @@
 		00D225FB1350F9A100FC69B9 /* CanvasInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanvasInterface.h; sourceTree = "<group>"; };
 		00D225FC1350F9A100FC69B9 /* CPUInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CPUInterface.h; sourceTree = "<group>"; };
 		00D225FD1350F9A100FC69B9 /* DeviceInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceInterface.h; sourceTree = "<group>"; };
-		00D225FE1350F9A100FC69B9 /* EmulationInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmulationInterface.h; sourceTree = "<group>"; };
 		00D225FF1350F9A100FC69B9 /* EthernetInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EthernetInterface.h; sourceTree = "<group>"; };
 		00D226001350F9A100FC69B9 /* MIDIInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MIDIInterface.h; sourceTree = "<group>"; };
 		00D226031350F9A100FC69B9 /* USBInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = USBInterface.h; sourceTree = "<group>"; };
@@ -776,7 +774,6 @@
 				00D225FB1350F9A100FC69B9 /* CanvasInterface.h */,
 				00D225FC1350F9A100FC69B9 /* CPUInterface.h */,
 				00D225FD1350F9A100FC69B9 /* DeviceInterface.h */,
-				00D225FE1350F9A100FC69B9 /* EmulationInterface.h */,
 				00D225FF1350F9A100FC69B9 /* EthernetInterface.h */,
 				00D226001350F9A100FC69B9 /* MIDIInterface.h */,
 				00D226031350F9A100FC69B9 /* USBInterface.h */,
@@ -966,7 +963,6 @@
 				00D226061350F9A100FC69B9 /* CanvasInterface.h in Headers */,
 				00D226071350F9A100FC69B9 /* CPUInterface.h in Headers */,
 				00D226081350F9A100FC69B9 /* DeviceInterface.h in Headers */,
-				00D226091350F9A100FC69B9 /* EmulationInterface.h in Headers */,
 				00D2260A1350F9A100FC69B9 /* EthernetInterface.h in Headers */,
 				00D2260B1350F9A100FC69B9 /* MIDIInterface.h in Headers */,
 				00D2260E1350F9A100FC69B9 /* USBInterface.h in Headers */,
@@ -1440,6 +1436,7 @@
 				);
 				INFOPLIST_FILE = macosx/Info.plist;
 				LIBRARY_SEARCH_PATHS = /opt/local/lib;
+				ONLY_ACTIVE_ARCH = NO;
 				PREBINDING = NO;
 				SDKROOT = macosx10.6;
 			};

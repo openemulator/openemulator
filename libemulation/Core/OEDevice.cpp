@@ -10,32 +10,13 @@
 
 #include "OEDevice.h"
 
-#include "EmulationInterface.h"
+#include "OEEmulation.h"
 
-OEDevice::OEDevice()
+OEDevice::OEDevice(OEEmulation *emulation)
 {
+	this->emulation = emulation;
+	
 	storage = NULL;
-}
-
-bool OEDevice::setRef(string name, OEComponent *ref)
-{
-	if (name == "emulation")
-		emulation = (OEComponent *)ref;
-	else
-		return false;
-	
-	return true;
-}
-
-bool OEDevice::init()
-{
-	if (!emulation)
-	{
-		printLog("ref 'emulation' undefined");
-		return false;
-	}
-	
-	return true;
 }
 
 bool OEDevice::postMessage(OEComponent *sender, int message, void *data)
@@ -89,28 +70,23 @@ bool OEDevice::postMessage(OEComponent *sender, int message, void *data)
 			return true;
 		case DEVICE_GET_SETTINGS:
 			if (data)
-				*((DeviceSettings **)data) = &settings;
+				*((DeviceSettings *)data) = settings;
 			return true;
 			
-		case DEVICE_HAS_CANVASES:
-			if (data)
-				*((bool *)data) = canvases.size();
-			return true;
 		case DEVICE_CREATE_CANVAS:
-			if (data)
+			if (emulation->createCanvas && data)
 			{
 				OEComponent **ref = (OEComponent **)data;
 				
-				if (emulation->postMessage(this, EMULATION_CREATE_CANVAS, ref))
-				{
-					canvases.push_back(*ref);
-					
-					return true;
-				}
+				*ref = emulation->createCanvas(emulation->userData, this);
+				
+				canvases.push_back(*ref);
+				
+				return true;
 			}
-			return false;
+			break;
 		case DEVICE_DESTROY_CANVAS:
-			if (data)
+			if (emulation->destroyCanvas && data)
 			{
 				OEComponent **ref = (OEComponent **)data;
 				
@@ -120,10 +96,38 @@ bool OEDevice::postMessage(OEComponent *sender, int message, void *data)
 				if (i != last)
 					canvases.erase(i, last);
 				
-				return emulation->postMessage(this, EMULATION_DESTROY_CANVAS, ref);
+				emulation->destroyCanvas(emulation->userData, *ref);
+				*ref = NULL;
+				
+				return true;
 			}
 			break;
+		case DEVICE_GET_CANVASES:
+			if (data)
+				*((OEComponents *)data) = canvases;
+			return true;
 			
+		case DEVICE_SET_STORAGE:
+			if (data)
+				storage = (OEComponent *)data;
+			return true;			
+		case DEVICE_GET_STORAGE:
+			if (data)
+				*((OEComponent **)data) = storage;
+			return true;
+			
+		case DEVICE_UPDATE:
+			if (emulation->didUpdate)
+				emulation->didUpdate(emulation->userData);
+			return true;
+		case DEVICE_ASSERT_ACTIVITY:
+			emulation->activityCount++;
+			return true;
+		case DEVICE_CLEAR_ACTIVITY:
+			if (emulation->activityCount <= 0)
+				return false;
+			emulation->activityCount--;
+			return true;
 		case DEVICE_POST_SYSTEMEVENT:
 			notify(sender, DEVICE_SYSTEMEVENT_DID_OCCUR, data);
 			return true;

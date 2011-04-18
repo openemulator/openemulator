@@ -10,7 +10,6 @@
 
 #include "AppleDiskII.h"
 
-#include "EmulationInterface.h"
 #include "DeviceInterface.h"
 #include "StorageInterface.h"
 
@@ -48,9 +47,26 @@ bool AppleDiskII::getValue(string name, string& value)
 bool AppleDiskII::setRef(string name, OEComponent *ref)
 {
 	if (name == "device")
+	{
+		if (device)
+			device->postMessage(this, DEVICE_SET_STORAGE, NULL);
 		device = ref;
+		if (device)
+			device->postMessage(this, DEVICE_SET_STORAGE, this);
+	}
 	else
 		return false;
+	
+	return true;
+}
+
+bool AppleDiskII::init()
+{
+	if (!device)
+	{
+		printLog("ref to 'device' undefined");
+		return false;
+	}
 	
 	return true;
 }
@@ -59,31 +75,27 @@ bool AppleDiskII::postMessage(OEComponent *sender, int message, void *data)
 {
 	switch(message)
 	{
-		case STORAGE_IS_MOUNT_PERMITTED:
+		case STORAGE_IS_AVAILABLE:
 			return true;
-			
-		case STORAGE_IS_MOUNT_POSSIBLE:
+		case STORAGE_TEST:
 			return true;
-			
 		case STORAGE_MOUNT:
 			if (data)
 			{
 				string *path = (string *)data;
 				image = *path;
 				
-				emulation->postMessage(this, EMULATION_UPDATE, NULL);
+				device->postMessage(this, DEVICE_UPDATE, NULL);
 				
 				return true;
 			}
 			break;
-			
 		case STORAGE_UNMOUNT:
 			image = "";
 			
-			emulation->postMessage(this, EMULATION_UPDATE, NULL);
+			device->postMessage(this, DEVICE_UPDATE, NULL);
 			
 			return true;
-			
 		case STORAGE_GET_MOUNTPATH:
 			if (data)
 			{
@@ -93,17 +105,15 @@ bool AppleDiskII::postMessage(OEComponent *sender, int message, void *data)
 				return true;
 			}
 			break;
-			
 		case STORAGE_GET_STATELABEL:
 			if (data)
 			{
 				string *value = (string *)data;
-				*value = "Apple II 16 Sector (140 kiB)";
+				*value = "16 Sector (140 kiB) read-only";
 				
 				return true;
 			}
 			break;
-			
 		case STORAGE_IS_LOCKED:
 			return false;
 	}

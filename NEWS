@@ -1,3 +1,18 @@
+==2011-04==
+* Finished storage refactoring
+* Added device component
+* Refactored storage framework
+* Removed OEComponent delegate infrastructure
+* Added OEComponent update() call after re-configuration
+* Removed OEComponent observer helpers
+
+==2011-03==
+* Stabilized video API
+* Fixed variable names
+* Fixed OpenGL thread nastiness
+* Tested persistence with OpenGL accumulation buffer. No way.
+* Improved shadow mask
+
 ==2011-02==
 * Implemented shader shadow mask/aperture grille
 * Implemented render to texture by parts

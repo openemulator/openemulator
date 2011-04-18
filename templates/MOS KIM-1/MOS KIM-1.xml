@@ -11,7 +11,7 @@
 <port id="kim1.slot2" ref="" type="MOSKIM1Slot" label="Slot 2" />
 <port id="kim1.slot3" ref="" type="MOSKIM1Slot" label="Slot 3" />
 <component id="kim1.controlBus" class="ControlBus">
-	<property name="emulation" ref="emulation" />
+	<property name="device" ref="kim1" />
     <property name="audio" ref="audio" />
     <property name="crystalFrequency" value="1.0MHz" />
     <property name="cpuFrequencyDivider" value="1" />
@@ -90,7 +90,7 @@
     <property name="image" data="${resourcePath}/roms/MOS/MOS KIM-1 6530-003 ROM.bin" />
 </component>
 <component id="kim1.io" class="MOSKIM1IO">
-    <property name="emulation" ref="emulation" />
+    <property name="device" ref="kim1" />
     <property name="viewPath" value="${resourcePath}/images/MOS/MOS KIM-1 View.png" />
     <property name="serialPort" ref="" />
     <property name="audioOut" ref="kim1.audioOut" />
@@ -108,7 +108,7 @@
 <device id="terminal" label="Terminal" image="images/Generic/Terminal.png" group="peripherals" />
 <connector id="terminal.connector" ref="" type="RS232" label="Serial Port" />
 <component id="terminal.io" class="Terminal">
-	<property name="emulation" ref="emulation" />
+	<property name="device" ref="terminal" />
 </component>
 
 </edl>
