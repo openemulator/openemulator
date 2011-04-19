@@ -57,6 +57,8 @@
 
 - (void)windowDidLoad
 {
+	[self setWindowFrameAutosaveName:@"Emulation"];
+	
 	float thickness = NSMinY([fSplitView frame]);
 	[[self window] setContentBorderThickness:thickness forEdge:NSMinYEdge];
 	
@@ -618,7 +620,7 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
 	if (![item mount:path])
 	{
 		NSBeginAlertSheet([NSString localizedStringWithFormat:
-						   @"The document \u201C%@\u201D couldn't be mounted "
+						   @"The document \u201C%@\u201D can't be mounted "
 						   "in \u201C%@\u201D.",
 						   [path lastPathComponent], [item label]],
 						  nil, nil, nil,

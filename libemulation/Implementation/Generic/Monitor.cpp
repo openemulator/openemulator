@@ -19,6 +19,7 @@ Monitor::Monitor()
 	canvas = NULL;
 	
 	configuration.size = OEMakeSize(720, 576);
+	configuration.captureMode = CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_CLICK;
 	screenRect = OEMakeRect(0, 0, 1, 1);
 	
 	audio = NULL;
@@ -240,15 +241,13 @@ bool Monitor::init()
 	}
 	else
 	{
-		canvas->postMessage(this, CANVAS_LOCK, NULL);
-		
 		OEImage frame;
 		frame.readFile(dummyPath);
 		canvas->postMessage(this, CANVAS_POST_FRAME, &frame);
 		
 		canvas->postMessage(this, CANVAS_CONFIGURE, &configuration);
-		
-		canvas->postMessage(this, CANVAS_UNLOCK, NULL);
+int bezel = CANVAS_BEZEL_PAUSE;
+canvas->postMessage(this, CANVAS_SET_BEZEL, &bezel);
 	}
 	
 	return true;

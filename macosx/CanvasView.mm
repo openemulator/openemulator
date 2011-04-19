@@ -261,6 +261,13 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	document = [canvasWindowController document];
 	canvas = [canvasWindowController canvas];
 	
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	((OpenGLCanvas *)canvas)->setEnableGLSL([userDefaults boolForKey:@"OEVideoEnableGLSL"]);
+	[userDefaults addObserver:self
+				   forKeyPath:@"OEVideoEnableGLSL"
+					  options:NSKeyValueObservingOptionNew
+					  context:nil];
+	
 	[self startOpenGL];
 }
 
@@ -393,6 +400,17 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	}
 	
 	return NO;
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath
+					  ofObject:(id)object
+						change:(NSDictionary *)change
+					   context:(void *)context
+{
+	id theObject = [change objectForKey:NSKeyValueChangeNewKey];
+	
+	if ([keyPath isEqualToString:@"OEVideoEnableGLSL"])
+		((OpenGLCanvas *)canvas)->setEnableGLSL([theObject boolValue]);
 }
 
 // Drawing

@@ -107,14 +107,14 @@
 							  [NSNumber numberWithBool:NO], @"OEAudioFullDuplex",
 							  [NSNumber numberWithFloat:1.0], @"OEAudioPlayVolume",
 							  [NSNumber numberWithBool:YES], @"OEAudioPlayThrough",
-							  [NSNumber numberWithBool:YES], @"OEVideoUseGPU",
+							  [NSNumber numberWithBool:YES], @"OEVideoEnableGLSL",
 							  nil
 							  ];
 	[userDefaults registerDefaults:defaults]; 
 	
 	if ([userDefaults boolForKey:@"OEAudioControlsVisible"])
 		[fAudioControlsWindowController showWindow:self];
-	if ([userDefaults boolForKey:@"OELibraryVisible"])
+	if ([userDefaults boolForKey:@"OELibraryIsVisible"])
 		[fLibraryWindowController showWindow:self];
 	
 	[userDefaults addObserver:self
@@ -130,9 +130,12 @@
 					  options:NSKeyValueObservingOptionNew
 					  context:nil];
 	
-	((PortAudioHAL *)portAudioHAL)->setFullDuplex([userDefaults boolForKey:@"OEAudioFullDuplex"]);
-	((PortAudioHAL *)portAudioHAL)->setPlayVolume([userDefaults floatForKey:@"OEAudioPlayVolume"]);
-	((PortAudioHAL *)portAudioHAL)->setPlayThrough([userDefaults boolForKey:@"OEAudioPlayThrough"]);
+	((PortAudioHAL *)portAudioHAL)->setFullDuplex([userDefaults
+												   boolForKey:@"OEAudioFullDuplex"]);
+	((PortAudioHAL *)portAudioHAL)->setPlayVolume([userDefaults
+												   floatForKey:@"OEAudioPlayVolume"]);
+	((PortAudioHAL *)portAudioHAL)->setPlayThrough([userDefaults
+													boolForKey:@"OEAudioPlayThrough"]);
 	
 	((PortAudioHAL *)portAudioHAL)->open();
 }
@@ -149,7 +152,7 @@
 	[userDefaults setBool:[[fAudioControlsWindowController window] isVisible]
 				   forKey:@"OEAudioControlsVisible"];
 	[userDefaults setBool:[[fLibraryWindowController window] isVisible]
-				   forKey:@"OELibraryVisible"];
+				   forKey:@"OELibraryIsVisible"];
 }
 
 - (void)applicationDidBecomeActive:(NSNotification *)notification
@@ -216,10 +219,12 @@
 		{
 			NSAlert *alert = [[NSAlert alloc] init];
 			[alert setMessageText:[NSString localizedStringWithFormat:
-								   @"The document \u201C%@\u201D can't be mounted in this emulation.",
+								   @"The document \u201C%@\u201D can't be mounted "
+								   "in this emulation.",
 								   [path lastPathComponent]]];
 			[alert setInformativeText:[NSString localizedStringWithFormat:
-									   @"The storage devices compatible with this document are busy. "
+									   @"The storage devices compatible with this "
+									   "document are busy. "
 									   "Try unmounting a storage device."]];
 			[alert runModal];
 			[alert release];
@@ -229,10 +234,11 @@
 		
 		NSAlert *alert = [[NSAlert alloc] init];
 		[alert setMessageText:[NSString localizedStringWithFormat:
-							   @"The document \u201C%@\u201D can't be mounted in this emulation.",
+							   @"The document \u201C%@\u201D can't be mounted "
+							   "in this emulation.",
 							   [path lastPathComponent]]];
 		[alert setInformativeText:[NSString localizedStringWithFormat:
-								   @"The document does not seem to be compatible with "
+								   @"The document is not compatible with "
 								   "any storage device in this emulation. "
 								   "Try mounting the document in another emulation."]];
 		[alert runModal];

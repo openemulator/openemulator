@@ -64,8 +64,6 @@ bool AppleGraphicsTablet::init()
 	}
 	else
 	{
-		canvas->postMessage(this, CANVAS_LOCK, NULL);
-		
 		OEImage frame;
 		frame.readFile(viewPath);
 		canvas->postMessage(this, CANVAS_POST_FRAME, NULL);
@@ -73,8 +71,6 @@ bool AppleGraphicsTablet::init()
 		CanvasConfiguration configuration;
 		configuration.size = frame.getSize();
 		canvas->postMessage(this, CANVAS_CONFIGURE, &configuration);
-		
-		canvas->postMessage(this, CANVAS_UNLOCK, NULL);
 	}
 	
 	return true;

@@ -79,8 +79,6 @@ bool MOSKIM1IO::init()
 	}
 	else
 	{
-		canvas->postMessage(this, CANVAS_LOCK, NULL);
-		
 		OEImage frame;
 		frame.readFile(viewPath);
 		canvas->postMessage(this, CANVAS_POST_FRAME, &frame);
@@ -88,8 +86,6 @@ bool MOSKIM1IO::init()
 		CanvasConfiguration configuration;
 		configuration.size = frame.getSize();
 		canvas->postMessage(this, CANVAS_CONFIGURE, &configuration);
-		
-		canvas->postMessage(this, CANVAS_UNLOCK, NULL);
 	}
 	
 	return true;

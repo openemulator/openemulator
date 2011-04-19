@@ -23,7 +23,7 @@ typedef enum
 	CANVAS_CONFIGURE,
 	CANVAS_POST_FRAME,
 	CANVAS_SET_KEYBOARDFLAGS,
-	CANVAS_SET_BADGEFLAGS,
+	CANVAS_SET_BEZEL,
 	CANVAS_LOCK,
 	CANVAS_UNLOCK,
 } CanvasMessage;
@@ -40,6 +40,7 @@ typedef enum
 	CANVAS_JOYSTICK4_DID_CHANGE,
 	CANVAS_DID_COPY,
 	CANVAS_DID_PASTE,
+	CANVAS_WILL_UPDATE,
 	CANVAS_DID_UPDATE,
 } CanvasNotification;
 
@@ -147,9 +148,13 @@ public:
 #define CANVAS_L_POWER		(1 << 5)
 #define CANVAS_L_SHIFT		(1 << 6)
 
-// Canvas badge flags use int
-#define CANVAS_B_POWER		(1 << 0)
-#define CANVAS_B_PAUSE		(1 << 1)
+// Canvas bezels
+typedef enum
+{
+	CANVAS_BEZEL_NONE,
+	CANVAS_BEZEL_POWER,
+	CANVAS_BEZEL_PAUSE,
+} CanvasBezel;
 
 // Copy and paste use string
 

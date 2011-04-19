@@ -80,8 +80,6 @@ bool AppleDiskII::postMessage(OEComponent *sender, int message, void *data)
 		case STORAGE_TESTMOUNT:
 			return true;
 		case STORAGE_MOUNT:
-			if (image.size())
-				return false;
 			if (data)
 			{
 				string *path = (string *)data;
@@ -117,7 +115,7 @@ bool AppleDiskII::postMessage(OEComponent *sender, int message, void *data)
 			}
 			break;
 		case STORAGE_IS_LOCKED:
-			return true;
+			return false;
 	}
 	
 	return false;

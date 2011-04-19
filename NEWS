@@ -1,4 +1,6 @@
 ==2011-04==
+* Implement power/pause/capture bezel.
+* Implemented Enable OpenGL shader preferences setting
 * Implemented a warning message when replacing a disk image in a locked storage device
 * Finished storage refactoring
 * Added device component

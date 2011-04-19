@@ -1,18 +1,23 @@
 ==To-Do==
-* Implement the option to deactivate shaders
-* Implement power/pause/capture badge. Capture badge lasts 3 seconds and disappears in 1 second
+* Fix bezel times (try 2 seconds for showing, 0.5 for disappearing)
+* Draw better bezel images
+* Implement persistance with 6 images (maximum delay is 100 ms) buffers
+* Fix problem when rendering on large screens (last line in processed frame is not updated)
+
 * Implement OpenGL paper canvas
 * Implement CanvasWindow scroller for paper canvas
-* Implement shader persistance with 16 buffers
 * Implement printing with the raw canvas bitmap
-* Fix problem when rendering on large screens (last line in processed frame is not updated)
 * Test multiple port-audio instances instead of a single one
-* Store default emulation window size
 
+* Store default emulation window size
 * Fix emulation window => settings => scrollers, so it is updated when the window is clicked-through
 * Add tooltips on property slider so the value can be seen
+
 * If a default emulation can't be opened, should we start the template chooser instead? Or just improve the error message?
+
 * Implement hardware library
+* Think about ways of adding a device. Is it dragged directly to where it will be connected? This makes sense. For now, forget devices that form a connection graph.
+
 * Implement OEEmulation testAddEDL
 * Implement OEEmulation addEDL
 * Implement OEEmulation removeDevice
@@ -20,6 +25,7 @@
 * Implement main emulation window add EDL
 * Implement main emulation window remove device
 * Support removal of devices in a daisy chain (when a device has a single port and connector of the same type
+
 * Implement disk image file locking, if the disk image is writable (flock)
 
 

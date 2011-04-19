@@ -28,14 +28,19 @@ typedef enum
 
 typedef enum
 {
-	OPENGLCANVAS_TEXTURE_FRAME_RAW,
-	OPENGLCANVAS_TEXTURE_FRAME_PROCESSED,
 	OPENGLCANVAS_TEXTURE_SHADOWMASK_TRIAD,
 	OPENGLCANVAS_TEXTURE_SHADOWMASK_INLINE,
 	OPENGLCANVAS_TEXTURE_SHADOWMASK_APERTURE,
-	OPENGLCANVAS_TEXTURE_BADGE_CAPTURE,
-	OPENGLCANVAS_TEXTURE_BADGE_POWER,
-	OPENGLCANVAS_TEXTURE_BADGE_PAUSE,
+	OPENGLCANVAS_TEXTURE_BEZEL_POWER,
+	OPENGLCANVAS_TEXTURE_BEZEL_PAUSE,
+	OPENGLCANVAS_TEXTURE_BEZEL_CAPTURE,
+	OPENGLCANVAS_TEXTURE_FRAME_RAW,
+	OPENGLCANVAS_TEXTURE_FRAME_PROCESSED,
+	OPENGLCANVAS_TEXTURE_FRAME_PROCESSED_LAST1,
+	OPENGLCANVAS_TEXTURE_FRAME_PROCESSED_LAST2,
+	OPENGLCANVAS_TEXTURE_FRAME_PROCESSED_LAST3,
+	OPENGLCANVAS_TEXTURE_FRAME_PROCESSED_LAST4,
+	OPENGLCANVAS_TEXTURE_FRAME_PROCESSED_LAST5,
 	OPENGLCANVAS_TEXTURE_END,
 } OpenGLCanvasTextureIndex;
 
@@ -59,6 +64,7 @@ class OpenGLCanvas : public OEComponent
 {
 public:
 	OpenGLCanvas(string resourcePath);
+	~OpenGLCanvas();
 	
 	void open(CanvasSetCapture setCapture,
 			  CanvasSetKeyboardFlags setKeyboardFlags,
@@ -112,10 +118,14 @@ private:
 	
 	OESize viewportSize;
 	GLuint texture[OPENGLCANVAS_TEXTURE_END];
-	OESize frameTextureSize;
+	OESize textureSize[OPENGLCANVAS_TEXTURE_END];
 	OESize frameSize;
 	GLuint program[OPENGLCANVAS_PROGRAM_END];
 	GLuint processProgram;
+	
+	CanvasBezel bezel;
+	bool isBezelUpdated;
+	int captureBezelCount;
 	
 	OpenGLCanvasCapture capture;
 	
@@ -126,11 +136,14 @@ private:
 	bool mouseButtonDown[CANVAS_MOUSE_BUTTON_NUM];
 	bool joystickButtonDown[CANVAS_JOYSTICK_NUM][CANVAS_JOYSTICK_BUTTON_NUM];
 	
+	void lock();
+	void unlock();
+	
 	bool initOpenGL();
 	void freeOpenGL();
 	GLuint getGLFormat(OEImageFormat format);
-	void loadShadowMasks();
-	void loadShadowMask(string path, GLuint glTexture);
+	void loadTextures();
+	void loadTexture(string path, bool isMipmap, int textureIndex);
 	void loadPrograms();
 	void deletePrograms();
 	GLuint loadProgram(const char *source);
@@ -141,6 +154,8 @@ private:
 	bool uploadFrame();
 	void processFrame();
 	void drawCanvas();
+	
+	void drawBezel();
 	
 	void postHIDNotification(int notification, int usageId, float value);
 	void updateCapture(OpenGLCanvasCapture capture);
