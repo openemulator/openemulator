@@ -481,7 +481,17 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (void)drawRect:(NSRect)theRect
 {
-//	[self updateView];
+/*	if (canvas)
+		((OpenGLCanvas *)canvas)->postMessage(NULL, CANVAS_LOCK, NULL);
+	
+	[[self openGLContext] makeCurrentContext];
+	
+	NSRect frame = [self bounds];
+	if (((OpenGLCanvas *)canvas)->update(NSWidth(frame), NSHeight(frame), 0, true))
+		[[self openGLContext] flushBuffer];
+	
+	if (canvas)
+		((OpenGLCanvas *)canvas)->postMessage(NULL, CANVAS_UNLOCK, NULL);*/
 }
 
 - (void)updateView

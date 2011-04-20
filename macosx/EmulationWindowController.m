@@ -133,15 +133,15 @@
 	[fDeviceLocationValue setStringValue:locationLabel];
 	[fDeviceStateValue setStringValue:stateLabel];
 	
-	if (hasCanvases)
+	if (isStorageDevice)
 	{
-		[fDeviceButton setTitle:NSLocalizedString(@"Show Device",
+		[fDeviceButton setTitle:NSLocalizedString(@"Open...",
 												  @"Emulation Button Label.")];
 		[fDeviceButton setHidden:NO];
 	}
-	else if (isStorageDevice)
+	else if (hasCanvases)
 	{
-		[fDeviceButton setTitle:NSLocalizedString(@"Open...",
+		[fDeviceButton setTitle:NSLocalizedString(@"Show Device",
 												  @"Emulation Button Label.")];
 		[fDeviceButton setHidden:NO];
 	}
@@ -528,10 +528,10 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	{
 		EmulationItem *item = [fOutlineView itemAtRow:clickedRow];
 		
-		if ([item hasCanvases])
-			[self showDevice:sender];
-		else if ([item isStorageDevice])
+		if ([item isStorageDevice])
 			[self openDiskImage:sender];
+		else if ([item hasCanvases])
+			[self showDevice:sender];
 	}
 }
 

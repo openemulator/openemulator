@@ -77,16 +77,17 @@ bool MOSKIM1IO::init()
 		printLog("canvas could not be created");
 		return false;
 	}
-	else
-	{
-		OEImage frame;
-		frame.readFile(viewPath);
-		canvas->postMessage(this, CANVAS_POST_FRAME, &frame);
-		
-		CanvasConfiguration configuration;
-		configuration.size = frame.getSize();
-		canvas->postMessage(this, CANVAS_CONFIGURE, &configuration);
-	}
+	
+	OEImage frame;
+	frame.readFile(viewPath);
+	canvas->postMessage(this, CANVAS_POST_FRAME, &frame);
+	
+	CanvasConfiguration configuration;
+	configuration.size = frame.getSize();
+	canvas->postMessage(this, CANVAS_CONFIGURE, &configuration);
+	
+	int bezel = CANVAS_BEZEL_PAUSE;
+	canvas->postMessage(this, CANVAS_SET_BEZEL, &bezel);
 	
 	return true;
 }

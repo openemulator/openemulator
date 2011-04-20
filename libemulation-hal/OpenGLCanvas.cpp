@@ -9,6 +9,7 @@
  */
 
 #include <math.h>
+#include <sys/time.h>
 
 #include "OpenGLCanvas.h"
 
@@ -20,8 +21,8 @@
 #define NTSC_YUV_CUTOFF		0.6
 #define NTSC_YIQ_I_SHIFT	((NTSC_YUV_CUTOFF - NTSC_YIQ_CUTOFF) / NTSC_CARRIER)
 
-#define CAPTUREBEZELCOUNT_START	(2 * 60)
-#define CAPTUREBEZELCOUNT_FADEOUT (0.5 * 60)
+#define CAPTUREBEZELCOUNT_START	2.0
+#define CAPTUREBEZELCOUNT_FADEOUT 0.5
 
 OpenGLCanvas::OpenGLCanvas(string resourcePath)
 {
@@ -50,7 +51,7 @@ OpenGLCanvas::OpenGLCanvas(string resourcePath)
 	
 	bezel = CANVAS_BEZEL_NONE;
 	isBezelUpdated = false;
-	captureBezelCount = 0;
+	isBezelCapture = false;
 	
 	capture = OPENGLCANVAS_CAPTURE_NONE;
 	
@@ -258,7 +259,7 @@ void OpenGLCanvas::loadTexture(string path, bool isMipmap, int textureIndex)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
-					 image.getSize().width, image.getSize().width,
+					 image.getSize().width, image.getSize().height,
 					 0, getGLFormat(image.getFormat()),
 					 GL_UNSIGNED_BYTE, image.getPixels());
 	}
@@ -981,31 +982,46 @@ void OpenGLCanvas::drawCanvas()
 
 // Bezel
 
+double OpenGLCanvas::getCurrentTime()
+{
+	timeval time;
+	
+	gettimeofday(&time, NULL);
+	
+	return time.tv_sec + time.tv_usec * (1.0 / 1000000.0);
+}
+
 void OpenGLCanvas::drawBezel()
 {
 	GLuint textureIndex = 0;
 	GLfloat textureAlpha = 1;
 	GLfloat blackAlpha = 0;
 	
-	if (captureBezelCount)
+	if (isBezelCapture)
 	{
-		textureIndex = OPENGLCANVAS_TEXTURE_BEZEL_CAPTURE;
-		if (captureBezelCount < CAPTUREBEZELCOUNT_FADEOUT)
-			textureAlpha = 0.5 - 0.5 * cos(M_PI * captureBezelCount /
-										   CAPTUREBEZELCOUNT_FADEOUT);
+		double now = getCurrentTime();
+		double diff = now - bezelCaptureTime;
 		
-		isBezelUpdated = true;
-		captureBezelCount--;
+		textureIndex = OPENGLCANVAS_TEXTURE_BEZEL_CAPTURE;
+		if (diff > (CAPTUREBEZELCOUNT_START +
+					CAPTUREBEZELCOUNT_FADEOUT))
+		{
+			isBezelCapture = false;
+			textureAlpha = 0;
+		}
+		else if (diff > CAPTUREBEZELCOUNT_START)
+			textureAlpha = 0.5 + 0.5 * cos((diff - CAPTUREBEZELCOUNT_START) *
+										   M_PI / CAPTUREBEZELCOUNT_FADEOUT);
 	}
 	else if (bezel == CANVAS_BEZEL_POWER)
 	{
 		textureIndex = OPENGLCANVAS_TEXTURE_BEZEL_POWER;
-		blackAlpha = 1;
+		blackAlpha = 0.3;
 	}
 	else if (bezel == CANVAS_BEZEL_PAUSE)
 	{
 		textureIndex = OPENGLCANVAS_TEXTURE_BEZEL_PAUSE;
-		blackAlpha = 0.33;
+		blackAlpha = 0.3;
 	}
 	
 	if (!textureIndex)
@@ -1186,8 +1202,9 @@ void OpenGLCanvas::setMouseButton(int index, bool value)
 			 (bezel == CANVAS_BEZEL_NONE) &&
 			 (index == 0))
 	{
-		captureBezelCount = CAPTUREBEZELCOUNT_START;
 		isBezelUpdated = true;
+		isBezelCapture = true;
+		bezelCaptureTime = getCurrentTime();
 		updateCapture(OPENGLCANVAS_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR);
 	}
 	else

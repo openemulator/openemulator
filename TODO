@@ -1,8 +1,7 @@
 ==To-Do==
-* Fix bezel times (try 2 seconds for showing, 0.5 for disappearing)
-* Draw better bezel images
 * Implement persistance with 6 images (maximum delay is 100 ms) buffers
 * Fix problem when rendering on large screens (last line in processed frame is not updated)
+* Fix OpenGL thread sync (GUI thread vs. OpenGL thread). Disable display link when resizing
 
 * Implement OpenGL paper canvas
 * Implement CanvasWindow scroller for paper canvas

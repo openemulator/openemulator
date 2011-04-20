@@ -25,6 +25,8 @@ public:
 private:
 	OEComponent *device;
 	
+	OEComponent *canvas;
+	
 	string image;
 	
 	bool forceWriteProtected;

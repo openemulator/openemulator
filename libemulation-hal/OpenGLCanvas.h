@@ -125,7 +125,8 @@ private:
 	
 	CanvasBezel bezel;
 	bool isBezelUpdated;
-	int captureBezelCount;
+	bool isBezelCapture;
+	double bezelCaptureTime;
 	
 	OpenGLCanvasCapture capture;
 	
@@ -155,6 +156,7 @@ private:
 	void processFrame();
 	void drawCanvas();
 	
+	double getCurrentTime();
 	void drawBezel();
 	
 	void postHIDNotification(int notification, int usageId, float value);

@@ -33,5 +33,7 @@ private:
 	string dummyPath;
 	OEComponent *audio;
 	
+	OEImage frame;
+	
 	void updateContentRect();
 };
