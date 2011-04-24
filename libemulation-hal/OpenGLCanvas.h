@@ -19,6 +19,8 @@
 #include "OEComponent.h"
 #include "CanvasInterface.h"
 
+#define OPENGLCANVAS_PERSISTANCE_FRAME_NUM 6
+
 typedef enum
 {
 	OPENGLCANVAS_CAPTURE_NONE,
@@ -35,22 +37,19 @@ typedef enum
 	OPENGLCANVAS_TEXTURE_BEZEL_PAUSE,
 	OPENGLCANVAS_TEXTURE_BEZEL_CAPTURE,
 	OPENGLCANVAS_TEXTURE_FRAME_RAW,
-	OPENGLCANVAS_TEXTURE_FRAME_PROCESSED,
-	OPENGLCANVAS_TEXTURE_FRAME_PROCESSED_LAST1,
-	OPENGLCANVAS_TEXTURE_FRAME_PROCESSED_LAST2,
-	OPENGLCANVAS_TEXTURE_FRAME_PROCESSED_LAST3,
-	OPENGLCANVAS_TEXTURE_FRAME_PROCESSED_LAST4,
-	OPENGLCANVAS_TEXTURE_FRAME_PROCESSED_LAST5,
+	OPENGLCANVAS_TEXTURE_FRAME_RENDERED,
+	OPENGLCANVAS_TEXTURE_FRAME_RENDERED_END = (OPENGLCANVAS_TEXTURE_FRAME_RENDERED +
+												OPENGLCANVAS_PERSISTANCE_FRAME_NUM),
 	OPENGLCANVAS_TEXTURE_END,
 } OpenGLCanvasTextureIndex;
 
 typedef enum
 {
-	OPENGLCANVAS_PROGRAM_RGB,
-	OPENGLCANVAS_PROGRAM_NTSC,
-	OPENGLCANVAS_PROGRAM_PAL,
-	OPENGLCANVAS_PROGRAM_SCREEN,
-	OPENGLCANVAS_PROGRAM_END,
+	OPENGLCANVAS_SHADER_RGB,
+	OPENGLCANVAS_SHADER_NTSC,
+	OPENGLCANVAS_SHADER_PAL,
+	OPENGLCANVAS_SHADER_SCREEN,
+	OPENGLCANVAS_SHADER_END,
 } OpenGLCanvasProgram;
 
 
@@ -73,8 +72,8 @@ public:
 	
 	OESize getCanvasSize();
 	CanvasMode getCanvasMode();
-	void setEnableGLSL(bool value);
-	bool update(float width, float height, float offset, bool redraw);
+	void setEnableShader(bool value);
+	bool update(float width, float height, float offset, bool draw);
 	
 	void becomeKeyWindow();
 	void resignKeyWindow();
@@ -106,25 +105,28 @@ private:
 	void *userData;
 	
 	bool isOpen;
-	bool isGLSL;
+	bool isShaderEnabled;
 	
 	pthread_mutex_t mutex;
 	
 	bool isNewConfiguration;
 	CanvasConfiguration configuration;
-	CanvasConfiguration drawConfiguration;
 	bool isNewFrame;
 	OEImage frame;
 	
 	OESize viewportSize;
 	GLuint texture[OPENGLCANVAS_TEXTURE_END];
 	OESize textureSize[OPENGLCANVAS_TEXTURE_END];
-	OESize frameSize;
-	GLuint program[OPENGLCANVAS_PROGRAM_END];
-	GLuint processProgram;
+	bool isShaderActive;
+	GLuint shader[OPENGLCANVAS_SHADER_END];
+	
+	int renderIndex;
+	GLuint renderShader;
+	
+	int persistance[OPENGLCANVAS_PERSISTANCE_FRAME_NUM];
 	
 	CanvasBezel bezel;
-	bool isBezelUpdated;
+	bool isDrawBezel;
 	bool isBezelCapture;
 	double bezelCaptureTime;
 	
@@ -145,17 +147,17 @@ private:
 	GLuint getGLFormat(OEImageFormat format);
 	void loadTextures();
 	void loadTexture(string path, bool isMipmap, int textureIndex);
-	void loadPrograms();
-	void deletePrograms();
-	GLuint loadProgram(const char *source);
-	void deleteProgram(GLuint index);
-	void updateViewport();
-	void updateConfiguration();
-	void setTextureSize(GLuint program);
+	void updateTextureSize(int textureIndex, OESize size);
+	void loadShaders();
+	void deleteShaders();
+	GLuint loadShader(const char *source);
+	void deleteShader(GLuint glShader);
 	bool uploadFrame();
-	void processFrame();
+	void updateConfiguration();
+	void updateViewport();
+	void renderFrame();
 	void drawCanvas();
-	
+	void updatePersistance();
 	double getCurrentTime();
 	void drawBezel();
 	

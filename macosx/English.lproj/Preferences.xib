@@ -13,10 +13,10 @@
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
 			<integer value="1865"/>
+			<integer value="2095"/>
+			<integer value="2050"/>
 			<integer value="28"/>
 			<integer value="23"/>
-			<integer value="2050"/>
-			<integer value="2095"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -579,7 +579,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 			<object class="NSUserDefaultsController" id="356871564">
 				<object class="NSMutableArray" key="NSDeclaredKeys">
 					<bool key="EncodedWithXMLCoder">YES</bool>
-					<string>OEVideoEnableGLSL</string>
+					<string>OEVideoEnableShader</string>
 				</object>
 				<bool key="NSSharedInstance">YES</bool>
 			</object>
@@ -737,15 +737,15 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: values.OEVideoEnableGLSL</string>
+						<string key="label">value: values.OEVideoEnableShader</string>
 						<reference key="source" ref="1019521745"/>
 						<reference key="destination" ref="356871564"/>
 						<object class="NSNibBindingConnector" key="connector">
 							<reference key="NSSource" ref="1019521745"/>
 							<reference key="NSDestination" ref="356871564"/>
-							<string key="NSLabel">value: values.OEVideoEnableGLSL</string>
+							<string key="NSLabel">value: values.OEVideoEnableShader</string>
 							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">values.OEVideoEnableGLSL</string>
+							<string key="NSKeyPath">values.OEVideoEnableShader</string>
 							<object class="NSDictionary" key="NSOptions">
 								<string key="NS.key.0">NSNullPlaceholder</string>
 								<integer value="1" key="NS.object.0"/>
@@ -753,7 +753,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
 					</object>
-					<int key="connectionID">2114</int>
+					<int key="connectionID">2115</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -1186,7 +1186,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">2114</int>
+			<int key="maxID">2115</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">

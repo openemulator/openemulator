@@ -190,7 +190,9 @@ bool Monitor::setRef(string name, OEComponent *ref)
 			canvas->removeObserver(this, CANVAS_JOYSTICK2_DID_CHANGE);
 			canvas->removeObserver(this, CANVAS_JOYSTICK3_DID_CHANGE);
 			canvas->removeObserver(this, CANVAS_JOYSTICK4_DID_CHANGE);
-			
+
+//			canvas->removeObserver(this, CANVAS_WILL_UPDATE);
+
 			device->postMessage(this, DEVICE_DESTROY_CANVAS, &canvas);
 		}
 		device = ref;
@@ -206,6 +208,8 @@ bool Monitor::setRef(string name, OEComponent *ref)
 			canvas->addObserver(this, CANVAS_JOYSTICK2_DID_CHANGE);
 			canvas->addObserver(this, CANVAS_JOYSTICK3_DID_CHANGE);
 			canvas->addObserver(this, CANVAS_JOYSTICK4_DID_CHANGE);
+			
+//			canvas->addObserver(this, CANVAS_WILL_UPDATE);
 		}
 	}
 	else if (name == "audio")
@@ -235,21 +239,43 @@ bool Monitor::init()
 		printLog("canvas could not be created");
 		return false;
 	}
-	else
-	{
-		frame.readFile(dummyPath);
-		canvas->postMessage(this, CANVAS_POST_FRAME, &frame);
-		
-		canvas->postMessage(this, CANVAS_CONFIGURE, &configuration);
-	}
+	
+	frame.readFile(dummyPath);
+	canvas->postMessage(this, CANVAS_POST_FRAME, &frame);
+	canvas->postMessage(this, CANVAS_CONFIGURE, &configuration);
 	
 	return true;
 }
 
 void Monitor::notify(OEComponent *sender, int notification, void *data)
 {
-	if (canvas)
+	if (sender != audio)
+		return;
+	
+//	CanvasUpdate *update = (CanvasUpdate *)data;
+//	update->draw = true;
+	
+	static int po = 0;
+	po++;
+	po &= 0x3;
+	if (po)
+		return;
+	
+	int *p = (int *)frame.getPixels();
+	if (p)
+	{
+		int w = 576;
+		int h = 192;
+		static int da = 0;
+		for (int y = 0; y < h; y++)
+			for (int x = 0; x < 256; x++)
+				p[y * w + x] = ((x & 0xf2) == da) ? 0xffffffff : 0x00000000;
+		
+		da += 0x11;
+		da &= 0xf0;
+		
 		canvas->postMessage(this, CANVAS_POST_FRAME, &frame);
+	}
 }
 
 void Monitor::updateContentRect()

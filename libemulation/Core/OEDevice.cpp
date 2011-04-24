@@ -110,7 +110,7 @@ bool OEDevice::postMessage(OEComponent *sender, int message, void *data)
 		case DEVICE_SET_STORAGE:
 			if (data)
 				storage = (OEComponent *)data;
-			return true;			
+			return true;
 		case DEVICE_GET_STORAGE:
 			if (data)
 				*((OEComponent **)data) = storage;

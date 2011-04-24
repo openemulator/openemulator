@@ -476,7 +476,7 @@ typedef struct
 {
 	int width;
 	int height;
-	bool redraw;
+	bool draw;
 } CanvasUpdate;
 
 #endif

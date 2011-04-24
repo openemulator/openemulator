@@ -107,7 +107,7 @@
 							  [NSNumber numberWithBool:NO], @"OEAudioFullDuplex",
 							  [NSNumber numberWithFloat:1.0], @"OEAudioPlayVolume",
 							  [NSNumber numberWithBool:YES], @"OEAudioPlayThrough",
-							  [NSNumber numberWithBool:YES], @"OEVideoEnableGLSL",
+							  [NSNumber numberWithBool:YES], @"OEVideoEnableShader",
 							  nil
 							  ];
 	[userDefaults registerDefaults:defaults]; 

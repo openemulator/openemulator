@@ -1,6 +1,5 @@
 ==To-Do==
-* Implement persistance with 6 images (maximum delay is 100 ms) buffers
-* Fix problem when rendering on large screens (last line in processed frame is not updated)
+* Add a screen sync API
 * Fix OpenGL thread sync (GUI thread vs. OpenGL thread). Disable display link when resizing
 
 * Implement OpenGL paper canvas

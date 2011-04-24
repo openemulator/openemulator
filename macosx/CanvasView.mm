@@ -262,9 +262,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	canvas = [canvasWindowController canvas];
 	
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-	((OpenGLCanvas *)canvas)->setEnableGLSL([userDefaults boolForKey:@"OEVideoEnableGLSL"]);
+	((OpenGLCanvas *)canvas)->setEnableShader([userDefaults boolForKey:@"OEVideoEnableShader"]);
 	[userDefaults addObserver:self
-				   forKeyPath:@"OEVideoEnableGLSL"
+				   forKeyPath:@"OEVideoEnableShader"
 					  options:NSKeyValueObservingOptionNew
 					  context:nil];
 	
@@ -409,8 +409,8 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 {
 	id theObject = [change objectForKey:NSKeyValueChangeNewKey];
 	
-	if ([keyPath isEqualToString:@"OEVideoEnableGLSL"])
-		((OpenGLCanvas *)canvas)->setEnableGLSL([theObject boolValue]);
+	if ([keyPath isEqualToString:@"OEVideoEnableShader"])
+		((OpenGLCanvas *)canvas)->setEnableShader([theObject boolValue]);
 }
 
 // Drawing
@@ -496,6 +496,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (void)updateView
 {
+	NSLog(@"Here");
 	if (canvas)
 		((OpenGLCanvas *)canvas)->postMessage(NULL, CANVAS_LOCK, NULL);
 	

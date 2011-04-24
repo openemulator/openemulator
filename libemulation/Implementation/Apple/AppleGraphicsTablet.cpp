@@ -65,13 +65,12 @@ bool AppleGraphicsTablet::init()
 	
 	OEImage frame;
 	frame.readFile(viewPath);
-	canvas->postMessage(this, CANVAS_POST_FRAME, &frame);
-	
 	CanvasConfiguration configuration;
 	configuration.size = frame.getSize();
-	canvas->postMessage(this, CANVAS_CONFIGURE, &configuration);
-	
 	int bezel = CANVAS_BEZEL_POWER;
+	
+	canvas->postMessage(this, CANVAS_POST_FRAME, &frame);
+	canvas->postMessage(this, CANVAS_CONFIGURE, &configuration);
 	canvas->postMessage(this, CANVAS_SET_BEZEL, &bezel);
 	
 	return true;
