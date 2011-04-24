@@ -28,7 +28,7 @@
 	NSArray *audioPathExtensions;
 	NSArray *textPathExtensions;
 	
-	void *portAudioHAL;
+	void *paAudio;
 	
 	NSInteger disableMenuBarCount;
 }
@@ -36,7 +36,7 @@
 - (NSArray *)diskImagePathExtensions;
 - (NSArray *)audioPathExtensions;
 - (NSArray *)textPathExtensions;
-- (void *)portAudioHAL;
+- (void *)paAudio;
 
 - (IBAction)toggleAudioControls:(id)sender;
 - (IBAction)toggleLibrary:(id)sender;

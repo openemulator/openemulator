@@ -13,10 +13,18 @@
 #include "OEImage.h"
 
 // Notes:
-// * Canvas size is in screen pixels
-// * Content rect uses [0..1:0..1] coordinates (origin is lower left)
-// * Shadow mask dot pitch is in millimeters and assumes 75 dpi
+// * configure receives a CanvasConfigure
+// ** Canvas size is in screen pixels
+// ** Content rect uses [0..1:0..1] coordinates (origin is lower left)
+// ** Shadow mask dot pitch is in millimeters and assumes 75 dpi
+// * postFrame() receives an OEImage
+// * setKeyboardFlags() receives an OEUInt32
+// * setBezel() receives a CanvasBezel
+
+// * HID Notifications receive a CanvasHIDNotification
+// * DID_COPY and DID_PASTE receive a string
 // * HID axes are in [-1:1] coordinates
+// * Warning! WILL_UPDATE and DID_UPDATE run on the video thread!
 
 typedef enum
 {
@@ -40,6 +48,7 @@ typedef enum
 	CANVAS_JOYSTICK4_DID_CHANGE,
 	CANVAS_DID_COPY,
 	CANVAS_DID_PASTE,
+	
 	CANVAS_WILL_UPDATE,
 	CANVAS_DID_UPDATE,
 } CanvasNotification;

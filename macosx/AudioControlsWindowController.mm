@@ -12,7 +12,7 @@
 #import "DocumentController.h"
 #import "StringConversion.h"
 
-#import "PortAudioHAL.h"
+#import "PAAudio.h"
 
 @implementation AudioControlsWindowController
 
@@ -123,7 +123,7 @@
 
 - (void)updatePlay
 {
-	PortAudioHAL *portAudioHAL = (PortAudioHAL *)[fDocumentController portAudioHAL];
+	PAAudio *paAudio = (PAAudio *)[fDocumentController paAudio];
 	
 	if (!playPath)
 	{
@@ -138,8 +138,8 @@
 		[fPlayNameLabel setStringValue:path];
 		[fPlayNameLabel setToolTip:path];
 		
-		float playTime = portAudioHAL->getPlayTime();
-		float playDuration = portAudioHAL->getPlayDuration();
+		float playTime = paAudio->getPlayTime();
+		float playDuration = paAudio->getPlayDuration();
 		NSString *timeLabel = [self formatTime:playTime];
 		NSString *durationLabel = [self formatTime:playDuration];
 		[fPlayPosition setFloatValue:playTime / playDuration];
@@ -147,7 +147,7 @@
 		[fPlayDurationLabel setStringValue:durationLabel];
 	}
 	
-	BOOL isPlaying = portAudioHAL->isPlaying();
+	BOOL isPlaying = paAudio->isPlaying();
 	[fTogglePlayButton setEnabled:playPath ? YES : NO];
 	[fTogglePlayButton setImage:(isPlaying ?
 								 [NSImage imageNamed:@"AudioPause.png"] :
@@ -169,12 +169,12 @@
 
 - (IBAction)togglePlay:(id)sender
 {
-	PortAudioHAL *portAudioHAL = (PortAudioHAL *)[fDocumentController portAudioHAL];
+	PAAudio *paAudio = (PAAudio *)[fDocumentController paAudio];
 	
-	if (!portAudioHAL->isPlaying())
-		portAudioHAL->play();
+	if (!paAudio->isPlaying())
+		paAudio->play();
 	else
-		portAudioHAL->pause();
+		paAudio->pause();
 }
 
 - (IBAction)playPositionDidChange:(id)sender
@@ -182,27 +182,27 @@
 	if (!playPath)
 		return;
 	
-	PortAudioHAL *portAudioHAL = (PortAudioHAL *)[fDocumentController portAudioHAL];
+	PAAudio *paAudio = (PAAudio *)[fDocumentController paAudio];
 	
-	float time = [sender floatValue] * portAudioHAL->getPlayDuration();
-	portAudioHAL->setPlayPosition(time);
+	float time = [sender floatValue] * paAudio->getPlayDuration();
+	paAudio->setPlayPosition(time);
 }
 
 - (void)readFromPath:(NSString *)path
 {
 	[playPath release];
 	
-	PortAudioHAL *portAudioHAL = (PortAudioHAL *)[fDocumentController portAudioHAL];
+	PAAudio *paAudio = (PAAudio *)[fDocumentController paAudio];
 	
 	playPath = [path copy];
 	if (playPath)
 	{
-		portAudioHAL->openPlayer(getCPPString(playPath));
-		portAudioHAL->play();
+		paAudio->openPlayer(getCPPString(playPath));
+		paAudio->play();
 		
-		if (!portAudioHAL->getPlayDuration())
+		if (!paAudio->getPlayDuration())
 		{
-			portAudioHAL->closePlayer();
+			paAudio->closePlayer();
 			
 			[playPath release];
 			playPath = nil;
@@ -214,7 +214,7 @@
 
 - (void)updateRecording
 {
-	PortAudioHAL *portAudioHAL = (PortAudioHAL *)[fDocumentController portAudioHAL];
+	PAAudio *paAudio = (PAAudio *)[fDocumentController paAudio];
 	
 	if (!recordingPath)
 	{
@@ -224,15 +224,15 @@
 	}
 	else
 	{
-		float recordingTime = portAudioHAL->getRecordingTime();
-		long long recordingSize = portAudioHAL->getRecordingSize();
+		float recordingTime = paAudio->getRecordingTime();
+		long long recordingSize = paAudio->getRecordingSize();
 		NSString *timeLabel = [self formatTime:recordingTime];
 		NSString *sizeLabel = [self formatSize:recordingSize];
 		[fRecordingTimeLabel setStringValue:timeLabel];
 		[fRecordingSizeLabel setStringValue:sizeLabel];
 	}
 	
-	BOOL isRecording = portAudioHAL->isRecording();
+	BOOL isRecording = paAudio->isRecording();
 	[fToggleRecordingButton setImage:(isRecording ?
 									  [NSImage imageNamed:@"AudioStop.png"] :
 									  [NSImage imageNamed:@"AudioRecord.png"]
@@ -242,19 +242,19 @@
 
 - (IBAction)toggleRecording:(id)sender
 {
-	PortAudioHAL *portAudioHAL = (PortAudioHAL *)[fDocumentController portAudioHAL];
+	PAAudio *paAudio = (PAAudio *)[fDocumentController paAudio];
 	
-	if (!portAudioHAL->isRecording())
+	if (!paAudio->isRecording())
 	{
 		NSString *path = [NSTemporaryDirectory()
 						  stringByAppendingPathComponent:@"oerecording"];
 		recordingPath = [path copy];
 		
-		portAudioHAL->openRecorder(getCPPString(recordingPath));
-		portAudioHAL->record();
+		paAudio->openRecorder(getCPPString(recordingPath));
+		paAudio->record();
 	}
 	else
-		portAudioHAL->closeRecorder();
+		paAudio->closeRecorder();
 }
 
 - (IBAction)saveRecording:(id)sender

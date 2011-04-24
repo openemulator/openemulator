@@ -63,8 +63,8 @@
 		0083630E1326C15300CB9A21 /* OpenGLCanvas.h in Headers */ = {isa = PBXBuildFile; fileRef = 008363061326C15300CB9A21 /* OpenGLCanvas.h */; };
 		0083630F1326C15300CB9A21 /* OEVector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 008363071326C15300CB9A21 /* OEVector.cpp */; };
 		008363101326C15300CB9A21 /* OEVector.h in Headers */ = {isa = PBXBuildFile; fileRef = 008363081326C15300CB9A21 /* OEVector.h */; };
-		008363111326C15300CB9A21 /* PortAudioHAL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 008363091326C15300CB9A21 /* PortAudioHAL.cpp */; };
-		008363121326C15300CB9A21 /* PortAudioHAL.h in Headers */ = {isa = PBXBuildFile; fileRef = 0083630A1326C15300CB9A21 /* PortAudioHAL.h */; };
+		008363111326C15300CB9A21 /* PAAudio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 008363091326C15300CB9A21 /* PAAudio.cpp */; };
+		008363121326C15300CB9A21 /* PAAudio.h in Headers */ = {isa = PBXBuildFile; fileRef = 0083630A1326C15300CB9A21 /* PAAudio.h */; };
 		00954E781277B79E00C17203 /* EmulationOutlineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00954E771277B79E00C17203 /* EmulationOutlineCell.m */; };
 		00954E991277BB8E00C17203 /* EmulationWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00954E981277BB8E00C17203 /* EmulationWindowController.m */; };
 		00954E9E1277BBB400C17203 /* HardwareChooserWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00954E9D1277BBB400C17203 /* HardwareChooserWindowController.m */; };
@@ -279,8 +279,8 @@
 		008363061326C15300CB9A21 /* OpenGLCanvas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenGLCanvas.h; sourceTree = "<group>"; };
 		008363071326C15300CB9A21 /* OEVector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEVector.cpp; sourceTree = "<group>"; };
 		008363081326C15300CB9A21 /* OEVector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEVector.h; sourceTree = "<group>"; };
-		008363091326C15300CB9A21 /* PortAudioHAL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PortAudioHAL.cpp; sourceTree = "<group>"; };
-		0083630A1326C15300CB9A21 /* PortAudioHAL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PortAudioHAL.h; sourceTree = "<group>"; };
+		008363091326C15300CB9A21 /* PAAudio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PAAudio.cpp; sourceTree = "<group>"; };
+		0083630A1326C15300CB9A21 /* PAAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAAudio.h; sourceTree = "<group>"; };
 		00954E761277B79E00C17203 /* EmulationOutlineCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmulationOutlineCell.h; sourceTree = "<group>"; };
 		00954E771277B79E00C17203 /* EmulationOutlineCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmulationOutlineCell.m; sourceTree = "<group>"; };
 		00954E971277BB8E00C17203 /* EmulationWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmulationWindowController.h; sourceTree = "<group>"; };
@@ -503,8 +503,8 @@
 				008363061326C15300CB9A21 /* OpenGLCanvas.h */,
 				008363071326C15300CB9A21 /* OEVector.cpp */,
 				008363081326C15300CB9A21 /* OEVector.h */,
-				008363091326C15300CB9A21 /* PortAudioHAL.cpp */,
-				0083630A1326C15300CB9A21 /* PortAudioHAL.h */,
+				008363091326C15300CB9A21 /* PAAudio.cpp */,
+				0083630A1326C15300CB9A21 /* PAAudio.h */,
 				00D226541350FF8B00FC69B9 /* OEMatrix3.h */,
 				00D226551350FF8B00FC69B9 /* OEMatrix3.cpp */,
 			);
@@ -945,7 +945,7 @@
 			files = (
 				0083630E1326C15300CB9A21 /* OpenGLCanvas.h in Headers */,
 				008363101326C15300CB9A21 /* OEVector.h in Headers */,
-				008363121326C15300CB9A21 /* PortAudioHAL.h in Headers */,
+				008363121326C15300CB9A21 /* PAAudio.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1151,7 +1151,7 @@
 			files = (
 				0083630D1326C15300CB9A21 /* OpenGLCanvas.cpp in Sources */,
 				0083630F1326C15300CB9A21 /* OEVector.cpp in Sources */,
-				008363111326C15300CB9A21 /* PortAudioHAL.cpp in Sources */,
+				008363111326C15300CB9A21 /* PAAudio.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

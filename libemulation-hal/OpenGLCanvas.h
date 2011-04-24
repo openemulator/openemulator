@@ -152,12 +152,14 @@ private:
 	void deleteShaders();
 	GLuint loadShader(const char *source);
 	void deleteShader(GLuint glShader);
+	
 	bool uploadFrame();
 	void updateConfiguration();
 	void updateViewport();
 	void renderFrame();
 	void drawCanvas();
 	void updatePersistance();
+	
 	double getCurrentTime();
 	void drawBezel();
 	
@@ -165,9 +167,7 @@ private:
 	void updateCapture(OpenGLCanvasCapture capture);
 	void resetKeysAndButtons();
 	
-	bool setCaptureMode(CanvasCaptureMode *captureMode);
 	bool setConfiguration(CanvasConfiguration *configuration);
-	bool postFrame(OEImage *frame);
 };
 
 #endif

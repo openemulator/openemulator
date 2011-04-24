@@ -1,50 +1,50 @@
 
 /**
  * libemulation-hal
- * PortAudio HAL
+ * PortAudio Audio
  * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements a PortAudio HAL.
+ * Implements a PortAudio audio component.
  */
 
 #include <math.h>
 #include <iostream>
 
-#include "PortAudioHAL.h"
+#include "PAAudio.h"
 #include "AudioInterface.h"
 
 using namespace std;
 
-static int portAudioHALRunAudio(const void *input,
-								void *output,
-							    unsigned long frameCount,
-							    const PaStreamCallbackTimeInfo* timeInfo,
-							    PaStreamCallbackFlags statusFlags,
-							    void *userData)
+static int PAAudioRunAudio(const void *input,
+						   void *output,
+						   unsigned long frameCount,
+						   const PaStreamCallbackTimeInfo* timeInfo,
+						   PaStreamCallbackFlags statusFlags,
+						   void *userData)
 {
-	((PortAudioHAL *) userData)->runAudio((const float *)input,
-										 (float *)output,
-										 frameCount);
+	((PAAudio *) userData)->runAudio((const float *)input,
+									 (float *)output,
+									 frameCount);
 	
 	return paContinue;
 }
 
-void *portAudioHALRunTimer(void *arg)
+void *PAAudioRunTimer(void *arg)
 {
-	((PortAudioHAL *) arg)->runTimer();
+	((PAAudio *) arg)->runTimer();
 	
 	return NULL;
 }
 
-void *portAudioHALRunEmulations(void *arg)
+void *PAAudioRunEmulations(void *arg)
 {
-	((PortAudioHAL *) arg)->runEmulations();
+	((PAAudio *) arg)->runEmulations();
 	
 	return NULL;
 }
 
-PortAudioHAL::PortAudioHAL()
+PAAudio::PAAudio()
 {
 	fullDuplex = false;
 	sampleRate = OEPORTAUDIO_SAMPLERATE;
@@ -66,7 +66,7 @@ PortAudioHAL::PortAudioHAL()
 	recording = false;
 }
 
-void PortAudioHAL::setFullDuplex(bool value)
+void PAAudio::setFullDuplex(bool value)
 {
 	bool state = disableAudio();
 	
@@ -75,7 +75,7 @@ void PortAudioHAL::setFullDuplex(bool value)
 	enableAudio(state);
 }
 
-void PortAudioHAL::setSampleRate(double value)
+void PAAudio::setSampleRate(double value)
 {
 	closePlayer();
 	closeRecorder();
@@ -87,7 +87,7 @@ void PortAudioHAL::setSampleRate(double value)
 	enableAudio(state);
 }
 
-void PortAudioHAL::setChannelNum(int value)
+void PAAudio::setChannelNum(int value)
 {
 	closePlayer();
 	closeRecorder();
@@ -99,7 +99,7 @@ void PortAudioHAL::setChannelNum(int value)
 	enableAudio(state);
 }
 
-void PortAudioHAL::setFramesPerBuffer(int value)
+void PAAudio::setFramesPerBuffer(int value)
 {
 	bool state = disableAudio();
 	
@@ -108,7 +108,7 @@ void PortAudioHAL::setFramesPerBuffer(int value)
 	enableAudio(state);
 }
 
-void PortAudioHAL::setBufferNum(int value)
+void PAAudio::setBufferNum(int value)
 {
 	bool state = disableAudio();
 	
@@ -117,7 +117,7 @@ void PortAudioHAL::setBufferNum(int value)
 	enableAudio(state);
 }
 
-bool PortAudioHAL::open()
+bool PAAudio::open()
 {
 	initBuffer();
 	
@@ -132,7 +132,7 @@ bool PortAudioHAL::open()
 	return false;
 }
 
-void PortAudioHAL::close()
+void PAAudio::close()
 {
 	closeAudio();
 	closeEmulations();
@@ -141,7 +141,7 @@ void PortAudioHAL::close()
 //
 // Audio buffering
 //
-void PortAudioHAL::initBuffer()
+void PAAudio::initBuffer()
 {
 	int bufferSize = bufferNum * framesPerBuffer * channelNum;
 	bufferInput.resize(bufferSize);
@@ -151,55 +151,55 @@ void PortAudioHAL::initBuffer()
 	bufferEmulationIndex = bufferNum;
 }
 
-bool PortAudioHAL::isAudioBufferEmpty()
+bool PAAudio::isAudioBufferEmpty()
 {
 	int stateNum = 2 * bufferNum;
 	int delta = (stateNum + bufferEmulationIndex - bufferAudioIndex) % stateNum;
 	return delta <= 0;
 }
 
-float *PortAudioHAL::getAudioInputBuffer()
+float *PAAudio::getAudioInputBuffer()
 {
  	int index = bufferAudioIndex % bufferNum;
 	int samplesPerBuffer = framesPerBuffer * channelNum;
 	return &bufferInput[index * samplesPerBuffer];
 }
 
-float *PortAudioHAL::getAudioOutputBuffer()
+float *PAAudio::getAudioOutputBuffer()
 {
  	int index = bufferAudioIndex % bufferNum;
 	int samplesPerBuffer = framesPerBuffer * channelNum;
 	return &bufferOutput[index * samplesPerBuffer];
 }
 
-void PortAudioHAL::advanceAudioBuffer()
+void PAAudio::advanceAudioBuffer()
 {
 	int stateNum = 2 * bufferNum;
 	bufferAudioIndex = (bufferAudioIndex + 1) % stateNum;
 }
 
-bool PortAudioHAL::isEmulationsBufferEmpty()
+bool PAAudio::isEmulationsBufferEmpty()
 {
 	int stateNum = 2 * bufferNum;
 	int delta = (stateNum + bufferEmulationIndex - bufferAudioIndex) % stateNum;
 	return (bufferNum - delta) <= 0;
 }
 
-float *PortAudioHAL::getEmulationsInputBuffer()
+float *PAAudio::getEmulationsInputBuffer()
 {
  	int index = bufferEmulationIndex % bufferNum;
 	int samplesPerBuffer = framesPerBuffer * channelNum;
 	return &bufferInput[index * samplesPerBuffer];
 }
 
-float *PortAudioHAL::getEmulationsOutputBuffer()
+float *PAAudio::getEmulationsOutputBuffer()
 {
  	int index = bufferEmulationIndex % bufferNum;
 	int samplesPerBuffer = framesPerBuffer * channelNum;
 	return &bufferOutput[index * samplesPerBuffer];
 }
 
-void PortAudioHAL::advanceEmulationsBuffer()
+void PAAudio::advanceEmulationsBuffer()
 {
 	int stateNum = 2 * bufferNum;
 	bufferEmulationIndex = (bufferEmulationIndex + 1) % stateNum;
@@ -208,7 +208,7 @@ void PortAudioHAL::advanceEmulationsBuffer()
 //
 // Emulations
 //
-bool PortAudioHAL::openEmulations()
+bool PAAudio::openEmulations()
 {
 	int error;
 	
@@ -237,7 +237,7 @@ bool PortAudioHAL::openEmulations()
 				emulationsThreadShouldRun = true;
 				error = pthread_create(&emulationsThread,
 									   &attr,
-									   portAudioHALRunEmulations,
+									   PAAudioRunEmulations,
 									   this);
 				if (!error)
 					return true;
@@ -256,7 +256,7 @@ bool PortAudioHAL::openEmulations()
 	return false;
 }
 
-void PortAudioHAL::closeEmulations()
+void PAAudio::closeEmulations()
 {
 	if (!emulationsThreadShouldRun)
 		return;
@@ -271,17 +271,17 @@ void PortAudioHAL::closeEmulations()
 	pthread_mutex_destroy(&emulationsMutex);
 }
 
-void PortAudioHAL::lockEmulations()
+void PAAudio::lockEmulations()
 {
 	pthread_mutex_lock(&emulationsMutex);
 }
 
-void PortAudioHAL::unlockEmulations()
+void PAAudio::unlockEmulations()
 {
 	pthread_mutex_unlock(&emulationsMutex);
 }
 
-void PortAudioHAL::runEmulations()
+void PAAudio::runEmulations()
 {
 	while (emulationsThreadShouldRun)
 	{
@@ -325,7 +325,7 @@ void PortAudioHAL::runEmulations()
 	}
 }
 
-bool PortAudioHAL::addEmulation(OEEmulation *emulation)
+bool PAAudio::addEmulation(OEEmulation *emulation)
 {
 	lockEmulations();
 	
@@ -336,7 +336,7 @@ bool PortAudioHAL::addEmulation(OEEmulation *emulation)
 	return true;
 }
 
-void PortAudioHAL::removeEmulation(OEEmulation *emulation)
+void PAAudio::removeEmulation(OEEmulation *emulation)
 {
 	lockEmulations();
 	
@@ -353,7 +353,7 @@ void PortAudioHAL::removeEmulation(OEEmulation *emulation)
 //
 // Audio
 //
-bool PortAudioHAL::openAudio()
+bool PAAudio::openAudio()
 {
 	if (audioOpen)
 		closeAudio();
@@ -367,7 +367,7 @@ bool PortAudioHAL::openAudio()
 									  paFloat32,
 									  sampleRate,
 									  framesPerBuffer,
-									  portAudioHALRunAudio,
+									  PAAudioRunAudio,
 									  this);
 		if ((status != paNoError) && fullDuplex)
 		{
@@ -380,7 +380,7 @@ bool PortAudioHAL::openAudio()
 										  paFloat32,
 										  sampleRate,
 										  framesPerBuffer,
-										  portAudioHALRunAudio,
+										  PAAudioRunAudio,
 										  this);
 		}
 		
@@ -415,7 +415,7 @@ bool PortAudioHAL::openAudio()
 			timerThreadShouldRun = true;
 			error = pthread_create(&timerThread,
 								   &attr,
-								   portAudioHALRunTimer,
+								   PAAudioRunTimer,
 								   this);
 			if (!error)
 			{
@@ -435,7 +435,7 @@ bool PortAudioHAL::openAudio()
 	return false;
 }
 
-void PortAudioHAL::closeAudio()
+void PAAudio::closeAudio()
 {
 	if (!audioOpen)
 		return;
@@ -457,7 +457,7 @@ void PortAudioHAL::closeAudio()
 	audioOpen = false;
 }
 
-bool PortAudioHAL::disableAudio()
+bool PAAudio::disableAudio()
 {
 	bool state = audioOpen;
 	
@@ -469,7 +469,7 @@ bool PortAudioHAL::disableAudio()
 	return state;
 }
 
-void PortAudioHAL::enableAudio(bool state)
+void PAAudio::enableAudio(bool state)
 {
 	initBuffer();
 	
@@ -479,9 +479,9 @@ void PortAudioHAL::enableAudio(bool state)
 		openAudio();
 }
 
-void PortAudioHAL::runAudio(const float *input,
-					float *output,
-					int frameCount)
+void PAAudio::runAudio(const float *input,
+					   float *output,
+					   int frameCount)
 {
 	int samplesPerBuffer = frameCount * channelNum;
 	int bytesPerBuffer = samplesPerBuffer * sizeof(float);
@@ -515,7 +515,7 @@ void PortAudioHAL::runAudio(const float *input,
 	return;
 }
 
-void PortAudioHAL::runTimer()
+void PAAudio::runTimer()
 {
 	while (timerThreadShouldRun)
 	{
@@ -533,17 +533,17 @@ void PortAudioHAL::runTimer()
 //
 // Play
 //
-void PortAudioHAL::setPlayVolume(float value)
+void PAAudio::setPlayVolume(float value)
 {
 	playVolume = value;
 }
 
-void PortAudioHAL::setPlayThrough(bool value)
+void PAAudio::setPlayThrough(bool value)
 {
 	playThrough = value;
 }
 
-void PortAudioHAL::openPlayer(string path)
+void PAAudio::openPlayer(string path)
 {
 	closePlayer();
 	
@@ -593,7 +593,7 @@ void PortAudioHAL::openPlayer(string path)
 	unlockEmulations();
 }
 
-void PortAudioHAL::closePlayer()
+void PAAudio::closePlayer()
 {
 	if (!playSNDFILE)
 		return;
@@ -609,7 +609,7 @@ void PortAudioHAL::closePlayer()
 	unlockEmulations();
 }
 
-void PortAudioHAL::setPlayPosition(float time)
+void PAAudio::setPlayPosition(float time)
 {
 	if (!playSNDFILE)
 		return;
@@ -618,7 +618,7 @@ void PortAudioHAL::setPlayPosition(float time)
 	
 	playFrameIndex = time * sampleRate;
 	sf_seek(playSNDFILE, playFrameIndex / playSRCRatio, SEEK_SET);
-
+	
 	if (!playing)
 	{
 		playSRCBufferFrameBegin = 0;
@@ -628,7 +628,7 @@ void PortAudioHAL::setPlayPosition(float time)
 	unlockEmulations();
 }
 
-void PortAudioHAL::play()
+void PAAudio::play()
 {
 	if (playSNDFILE)
 		playing = true;
@@ -637,29 +637,29 @@ void PortAudioHAL::play()
 		setPlayPosition(0.0);
 }
 
-void PortAudioHAL::pause()
+void PAAudio::pause()
 {
 	if (playSNDFILE)
 		playing = false;
 }
 
-bool PortAudioHAL::isPlaying()
+bool PAAudio::isPlaying()
 {
 	return playing;
 }
 
-float PortAudioHAL::getPlayTime()
+float PAAudio::getPlayTime()
 {
 	return (float) playFrameIndex / sampleRate;
 }
 
-float PortAudioHAL::getPlayDuration()
+float PAAudio::getPlayDuration()
 {
 	return (float) playFrameNum / sampleRate;
 }
 
-void PortAudioHAL::playAudio(float *outputBuffer,
-							float *inputBuffer, int frameNum, int channelNum)
+void PAAudio::playAudio(float *outputBuffer,
+						float *inputBuffer, int frameNum, int channelNum)
 {
 	if (!playing)
 		return;
@@ -716,7 +716,7 @@ void PortAudioHAL::playAudio(float *outputBuffer,
 			in += playChannelNum;
 			inputBuffer += channelNum;
 		}
-
+		
 		if (playThrough)
 		{
 			float *in = &srcBuffer.front();
@@ -740,7 +740,7 @@ void PortAudioHAL::playAudio(float *outputBuffer,
 //
 // Recording
 //
-void PortAudioHAL::openRecorder(string path)
+void PAAudio::openRecorder(string path)
 {
 	closeRecorder();
 	
@@ -763,7 +763,7 @@ void PortAudioHAL::openRecorder(string path)
 	unlockEmulations();
 }
 
-void PortAudioHAL::closeRecorder()
+void PAAudio::closeRecorder()
 {
 	if (!recordingSNDFILE)
 		return;
@@ -777,34 +777,34 @@ void PortAudioHAL::closeRecorder()
 	unlockEmulations();
 }
 
-void PortAudioHAL::record()
+void PAAudio::record()
 {
 	if (recordingSNDFILE)
 		recording = true;
 }
 
-void PortAudioHAL::stop()
+void PAAudio::stop()
 {
 	if (recordingSNDFILE)
 		recording = false;
 }
 
-bool PortAudioHAL::isRecording()
+bool PAAudio::isRecording()
 {
 	return recording;
 }
 
-float PortAudioHAL::getRecordingTime()
+float PAAudio::getRecordingTime()
 {
 	return (float) recordingFrameNum / sampleRate;
 }
 
-long long PortAudioHAL::getRecordingSize()
+long long PAAudio::getRecordingSize()
 {
 	return (long long) recordingFrameNum * channelNum * sizeof(short);
 }
 
-void PortAudioHAL::recordAudio(float *outputBuffer, int frameNum, int channelNum)
+void PAAudio::recordAudio(float *outputBuffer, int frameNum, int channelNum)
 {
 	if (!recording)
 		return;

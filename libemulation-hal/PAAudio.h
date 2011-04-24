@@ -1,15 +1,15 @@
 
 /**
  * libemulation-hal
- * PortAudio HAL
+ * PortAudio Audio
  * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements a PortAudio HAL.
+ * Implements a PortAudio audio component.
  */
 
-#ifndef _PORTAUDIOHAL_H
-#define _PORTAUDIOHAL_H
+#ifndef _PAAUDIO_H
+#define _PAAUDIO_H
 
 #include <pthread.h>
 
@@ -24,10 +24,10 @@
 #define OEPORTAUDIO_FRAMESPERBUFFER		512
 #define OEPORTAUDIO_BUFFERNUM			3
 
-class PortAudioHAL : public OEComponent
+class PAAudio : public OEComponent
 {
 public:
-	PortAudioHAL();
+	PAAudio();
 	
 	void setFullDuplex(bool value);
 	void setSampleRate(double value);

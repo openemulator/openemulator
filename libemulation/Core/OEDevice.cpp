@@ -27,38 +27,47 @@ bool OEDevice::postMessage(OEComponent *sender, int message, void *data)
 			if (data)
 				label = *((string *)data);
 			return true;
+			
 		case DEVICE_GET_LABEL:
 			if (data)
 				*((string *)data) = label;
 			return true;
+			
 		case DEVICE_SET_IMAGEPATH:
 			if (data)
 				imagePath = *((string *)data);
 			return true;
+			
 		case DEVICE_GET_IMAGEPATH:
 			if (data)
 				*((string *)data) = imagePath;
 			return true;
+			
 		case DEVICE_SET_GROUP:
 			if (data)
 				group = *((string *)data);
 			return true;
+			
 		case DEVICE_GET_GROUP:
 			if (data)
 				*((string *)data) = group;
 			return true;
+			
 		case DEVICE_SET_LOCATIONLABEL:
 			if (data)
 				locationLabel = *((string *)data);
 			return true;
+			
 		case DEVICE_GET_LOCATIONLABEL:
 			if (data)
 				*((string *)data) = locationLabel;
 			return true;
+			
 		case DEVICE_SET_STATELABEL:
 			if (data)
 				stateLabel = *((string *)data);
 			return true;
+			
 		case DEVICE_GET_STATELABEL:
 			if (data)
 				*((string *)data) = stateLabel;
@@ -68,6 +77,7 @@ bool OEDevice::postMessage(OEComponent *sender, int message, void *data)
 			if (data)
 				settings = *((DeviceSettings *)data);
 			return true;
+			
 		case DEVICE_GET_SETTINGS:
 			if (data)
 				*((DeviceSettings *)data) = settings;
@@ -85,6 +95,7 @@ bool OEDevice::postMessage(OEComponent *sender, int message, void *data)
 				return true;
 			}
 			break;
+			
 		case DEVICE_DESTROY_CANVAS:
 			if (emulation->destroyCanvas && data)
 			{
@@ -102,6 +113,7 @@ bool OEDevice::postMessage(OEComponent *sender, int message, void *data)
 				return true;
 			}
 			break;
+			
 		case DEVICE_GET_CANVASES:
 			if (data)
 				*((OEComponents *)data) = canvases;
@@ -111,6 +123,7 @@ bool OEDevice::postMessage(OEComponent *sender, int message, void *data)
 			if (data)
 				storage = (OEComponent *)data;
 			return true;
+			
 		case DEVICE_GET_STORAGE:
 			if (data)
 				*((OEComponent **)data) = storage;
@@ -120,14 +133,17 @@ bool OEDevice::postMessage(OEComponent *sender, int message, void *data)
 			if (emulation->didUpdate)
 				emulation->didUpdate(emulation->userData);
 			return true;
+			
 		case DEVICE_ASSERT_ACTIVITY:
 			emulation->activityCount++;
 			return true;
+			
 		case DEVICE_CLEAR_ACTIVITY:
 			if (emulation->activityCount <= 0)
 				return false;
 			emulation->activityCount--;
 			return true;
+			
 		case DEVICE_POST_SYSTEMEVENT:
 			notify(sender, DEVICE_SYSTEMEVENT_DID_OCCUR, data);
 			return true;

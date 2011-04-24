@@ -15,7 +15,7 @@
 #import "StringConversion.h"
 
 #import "OEEmulation.h"
-#import "PortAudioHAL.h"
+#import "PAAudio.h"
 #import "OpenGLCanvas.h"
 
 #import "DeviceInterface.h"
@@ -170,7 +170,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	if (theEmulation)
 	{
 		string emulationPath = getCPPString([[absoluteURL path]
-										   stringByAppendingString:@"/"]);
+											 stringByAppendingString:@"/"]);
 		
 		[self lockEmulation];
 		bool isSaved = theEmulation->save(emulationPath);
@@ -355,7 +355,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	
 	DocumentController *documentController;
 	documentController = [NSDocumentController sharedDocumentController];
-	PortAudioHAL *portAudioHAL = (PortAudioHAL *)[documentController portAudioHAL];
+	PAAudio *paAudio = (PAAudio *)[documentController paAudio];
 	
 	OEEmulation *theEmulation = new OEEmulation();
 	
@@ -365,7 +365,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	theEmulation->setDestroyCanvas(destroyCanvas);
 	theEmulation->setUserData(self);
 	
-	theEmulation->addComponent("audio", portAudioHAL);
+	theEmulation->addComponent("audio", paAudio);
 	
 	theEmulation->open(getCPPString([url path]));
 	
@@ -373,7 +373,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	
 	emulation = theEmulation;
 	
-	portAudioHAL->addEmulation(theEmulation);
+	paAudio->addEmulation(theEmulation);
 }
 
 - (void)destroyEmulation
@@ -385,10 +385,10 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	
 	DocumentController *documentController;
 	documentController = [NSDocumentController sharedDocumentController];
-	PortAudioHAL *portAudioHAL = (PortAudioHAL *)[documentController portAudioHAL];
+	PAAudio *paAudio = (PAAudio *)[documentController paAudio];
 	
 	OEEmulation *theEmulation = (OEEmulation *)emulation;
-	portAudioHAL->removeEmulation(theEmulation);
+	paAudio->removeEmulation(theEmulation);
 	
 	delete theEmulation;
 	emulation = nil;
@@ -402,18 +402,18 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 {
 	DocumentController *documentController;
 	documentController = [NSDocumentController sharedDocumentController];
-	PortAudioHAL *portAudioHAL = (PortAudioHAL *)[documentController portAudioHAL];
+	PAAudio *paAudio = (PAAudio *)[documentController paAudio];
 	
-	portAudioHAL->lockEmulations();
+	paAudio->lockEmulations();
 }
 
 - (void)unlockEmulation
 {
 	DocumentController *documentController;
 	documentController = [NSDocumentController sharedDocumentController];
-	PortAudioHAL *portAudioHAL = (PortAudioHAL *)[documentController portAudioHAL];
+	PAAudio *paAudio = (PAAudio *)[documentController paAudio];
 	
-	portAudioHAL->unlockEmulations();
+	paAudio->unlockEmulations();
 }
 
 - (void *)emulation

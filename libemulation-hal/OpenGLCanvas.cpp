@@ -1153,6 +1153,7 @@ void OpenGLCanvas::setKey(int usageId, bool value)
 void OpenGLCanvas::postHIDNotification(int notification, int usageId, float value)
 {
 	CanvasHIDNotification data = {usageId, value};
+	
 	notify(this, notification, &data);
 }
 
@@ -1352,23 +1353,8 @@ bool OpenGLCanvas::setConfiguration(CanvasConfiguration *configuration)
 		}
 	}
 	
-	lock();
 	this->configuration = *configuration;
 	isNewConfiguration = true;
-	unlock();
-	
-	return true;
-}
-
-bool OpenGLCanvas::postFrame(OEImage *frame)
-{
-	if (!frame)
-		return false;
-	
-	pthread_mutex_lock(&mutex);
-	this->frame = *frame;
-	isNewFrame = true;
-	pthread_mutex_unlock(&mutex);
 	
 	return true;
 }
@@ -1381,7 +1367,12 @@ bool OpenGLCanvas::postMessage(OEComponent *sender, int message, void *data)
 			return setConfiguration((CanvasConfiguration *)data);
 			
 		case CANVAS_POST_FRAME:
-			return postFrame((OEImage *)data);
+			if (data)
+			{
+				this->frame = *((OEImage *)data);
+				isNewFrame = true;
+			}
+			break;
 			
 		case CANVAS_SET_KEYBOARDFLAGS:
 			if (setKeyboardFlags)

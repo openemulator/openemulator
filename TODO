@@ -1,5 +1,7 @@
 ==To-Do==
-* Add a screen sync API
+* Fix audio full-duplex
+* Fix system events in canvas and emulation windows
+
 * Fix OpenGL thread sync (GUI thread vs. OpenGL thread). Disable display link when resizing
 
 * Implement OpenGL paper canvas
@@ -7,7 +9,6 @@
 * Implement printing with the raw canvas bitmap
 * Test multiple port-audio instances instead of a single one
 
-* Store default emulation window size
 * Fix emulation window => settings => scrollers, so it is updated when the window is clicked-through
 * Add tooltips on property slider so the value can be seen
 

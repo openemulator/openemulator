@@ -191,7 +191,7 @@ bool Monitor::setRef(string name, OEComponent *ref)
 			canvas->removeObserver(this, CANVAS_JOYSTICK3_DID_CHANGE);
 			canvas->removeObserver(this, CANVAS_JOYSTICK4_DID_CHANGE);
 
-//			canvas->removeObserver(this, CANVAS_WILL_UPDATE);
+			canvas->removeObserver(this, CANVAS_WILL_UPDATE);
 
 			device->postMessage(this, DEVICE_DESTROY_CANVAS, &canvas);
 		}
@@ -209,16 +209,16 @@ bool Monitor::setRef(string name, OEComponent *ref)
 			canvas->addObserver(this, CANVAS_JOYSTICK3_DID_CHANGE);
 			canvas->addObserver(this, CANVAS_JOYSTICK4_DID_CHANGE);
 			
-//			canvas->addObserver(this, CANVAS_WILL_UPDATE);
+			canvas->addObserver(this, CANVAS_WILL_UPDATE);
 		}
 	}
 	else if (name == "audio")
 	{
-		if (audio)
-			audio->removeObserver(this, AUDIO_FRAME_WILL_RENDER);
+//		if (audio)
+//			audio->removeObserver(this, AUDIO_FRAME_WILL_RENDER);
 		audio = ref;
-		if (audio)
-			audio->addObserver(this, AUDIO_FRAME_WILL_RENDER);
+//		if (audio)
+//			audio->addObserver(this, AUDIO_FRAME_WILL_RENDER);
 	}
 	else
 		return false;
@@ -241,25 +241,25 @@ bool Monitor::init()
 	}
 	
 	frame.readFile(dummyPath);
+	
+	canvas->postMessage(this, CANVAS_LOCK, NULL);
 	canvas->postMessage(this, CANVAS_POST_FRAME, &frame);
 	canvas->postMessage(this, CANVAS_CONFIGURE, &configuration);
+	canvas->postMessage(this, CANVAS_UNLOCK, NULL);
 	
 	return true;
 }
 
 void Monitor::notify(OEComponent *sender, int notification, void *data)
 {
-	if (sender != audio)
+	if (sender != canvas)
 		return;
 	
-//	CanvasUpdate *update = (CanvasUpdate *)data;
-//	update->draw = true;
-	
-	static int po = 0;
-	po++;
-	po &= 0x3;
-	if (po)
+	if (notification != CANVAS_WILL_UPDATE)
 		return;
+	
+	CanvasUpdate *update = (CanvasUpdate *)data;
+	update->draw = true;
 	
 	int *p = (int *)frame.getPixels();
 	if (p)
@@ -268,11 +268,11 @@ void Monitor::notify(OEComponent *sender, int notification, void *data)
 		int h = 192;
 		static int da = 0;
 		for (int y = 0; y < h; y++)
-			for (int x = 0; x < 256; x++)
-				p[y * w + x] = ((x & 0xf2) == da) ? 0xffffffff : 0x00000000;
+			for (int x = 0; x < 512; x++)
+				p[y * w + x] = ((x & 0x1f2) == da) ? 0xffffffff : 0x00000000;
 		
 		da += 0x11;
-		da &= 0xf0;
+		da &= 0x1f0;
 		
 		canvas->postMessage(this, CANVAS_POST_FRAME, &frame);
 	}

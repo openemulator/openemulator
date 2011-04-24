@@ -18,7 +18,7 @@
 #import "CanvasWindow.h"
 #import "StringConversion.h"
 
-#import "PortAudioHAL.h"
+#import "PAAudio.h"
 
 #define LINK_HOMEPAGE	@"http://www.openemulator.org"
 #define LINK_FORUMSURL	@"http://groups.google.com/group/openemulator"
@@ -31,7 +31,7 @@
 {
 	if (self = [super init])
 	{
-		portAudioHAL = new PortAudioHAL();
+		paAudio = new PAAudio();
 		
 		diskImagePathExtensions = [[NSArray alloc] initWithObjects:
 								   @"bin",
@@ -69,7 +69,7 @@
 	[audioPathExtensions release];
 	[textPathExtensions release];
 	
-	delete (PortAudioHAL *)portAudioHAL;
+	delete (PAAudio *)paAudio;
 	
 	[super dealloc];
 }
@@ -91,9 +91,9 @@
 	return textPathExtensions;
 }
 
-- (void *)portAudioHAL
+- (void *)paAudio
 {
-	return portAudioHAL;
+	return paAudio;
 }
 
 
@@ -130,14 +130,14 @@
 					  options:NSKeyValueObservingOptionNew
 					  context:nil];
 	
-	((PortAudioHAL *)portAudioHAL)->setFullDuplex([userDefaults
+	((PAAudio *)paAudio)->setFullDuplex([userDefaults
 												   boolForKey:@"OEAudioFullDuplex"]);
-	((PortAudioHAL *)portAudioHAL)->setPlayVolume([userDefaults
+	((PAAudio *)paAudio)->setPlayVolume([userDefaults
 												   floatForKey:@"OEAudioPlayVolume"]);
-	((PortAudioHAL *)portAudioHAL)->setPlayThrough([userDefaults
+	((PAAudio *)paAudio)->setPlayThrough([userDefaults
 													boolForKey:@"OEAudioPlayThrough"]);
 	
-	((PortAudioHAL *)portAudioHAL)->open();
+	((PAAudio *)paAudio)->open();
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)notification
@@ -146,7 +146,7 @@
 
 - (void)applicationWillTerminate:(NSNotification *)sender
 {
-	((PortAudioHAL *)portAudioHAL)->close();
+	((PAAudio *)paAudio)->close();
 	
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	[userDefaults setBool:[[fAudioControlsWindowController window] isVisible]
@@ -260,11 +260,11 @@
 	id theObject = [change objectForKey:NSKeyValueChangeNewKey];
 	
 	if ([keyPath isEqualToString:@"OEAudioFullDuplex"])
-		((PortAudioHAL *)portAudioHAL)->setFullDuplex([theObject boolValue]);
+		((PAAudio *)paAudio)->setFullDuplex([theObject boolValue]);
 	else if ([keyPath isEqualToString:@"OEAudioPlayVolume"])
-		((PortAudioHAL *)portAudioHAL)->setPlayVolume([theObject floatValue]);
+		((PAAudio *)paAudio)->setPlayVolume([theObject floatValue]);
 	else if ([keyPath isEqualToString:@"OEAudioPlayThrough"])
-		((PortAudioHAL *)portAudioHAL)->setPlayThrough([theObject boolValue]);
+		((PAAudio *)paAudio)->setPlayThrough([theObject boolValue]);
 }
 
 - (BOOL)validateUserInterfaceItem:(id <NSValidatedUserInterfaceItem>)anItem

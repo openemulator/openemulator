@@ -250,6 +250,10 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	CVDisplayLinkStop(displayLink);
     CVDisplayLinkRelease(displayLink);
 	
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	[userDefaults removeObserver:self
+					  forKeyPath:@"OEVideoEnableShader"];
+	
 	[super dealloc];
 }
 
