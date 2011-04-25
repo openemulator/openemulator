@@ -227,26 +227,38 @@
 
 - (void)systemPowerDown:(id)sender
 {
+	[[self document] sendSystemEvent:DOCUMENT_POWERDOWN
+							toDevice:device];
 }
 
 - (void)systemSleep:(id)sender
 {
+	[[self document] sendSystemEvent:DOCUMENT_SLEEP
+							toDevice:device];
 }
 
 - (void)systemWakeUp:(id)sender
 {
+	[[self document] sendSystemEvent:DOCUMENT_WAKEUP
+							toDevice:device];
 }
 
 - (void)systemColdRestart:(id)sender
 {
+	[[self document] sendSystemEvent:DOCUMENT_COLDRESTART
+							toDevice:device];
 }
 
 - (void)systemWarmRestart:(id)sender
 {
+	[[self document] sendSystemEvent:DOCUMENT_WARMRESTART
+							toDevice:device];
 }
 
 - (void)systemDebuggerBreak:(id)sender
 {
+	[[self document] sendSystemEvent:DOCUMENT_DEBUGGERBREAK
+							toDevice:device];
 }
 
 @end

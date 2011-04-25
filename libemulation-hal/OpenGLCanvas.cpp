@@ -521,7 +521,10 @@ void OpenGLCanvas::deleteShader(GLuint index)
 
 bool OpenGLCanvas::uploadFrame()
 {
-	updateTextureSize(OPENGLCANVAS_TEXTURE_FRAME_RAW, frame.getSize());
+	lock();
+	
+	frameSize = frame.getSize();
+	updateTextureSize(OPENGLCANVAS_TEXTURE_FRAME_RAW, frameSize);
 	
 	glBindTexture(GL_TEXTURE_2D, texture[OPENGLCANVAS_TEXTURE_FRAME_RAW]);
 	
@@ -532,12 +535,19 @@ bool OpenGLCanvas::uploadFrame()
 	
 	glBindTexture(GL_TEXTURE_2D, 0);
 	
+	unlock();
+	
 	return true;
 }
 
 void OpenGLCanvas::updateConfiguration()
 {
+	lock();
+	configuration = newConfiguration;
+	unlock();
+	
 	isShaderActive = false;
+	
 #ifdef GL_VERSION_2_0
 	// Deactivate shader when needed
 	if (!isShaderEnabled)
@@ -1353,8 +1363,10 @@ bool OpenGLCanvas::setConfiguration(CanvasConfiguration *configuration)
 		}
 	}
 	
-	this->configuration = *configuration;
+	lock();
 	isNewConfiguration = true;
+	newConfiguration = *configuration;
+	unlock();
 	
 	return true;
 }
@@ -1369,8 +1381,10 @@ bool OpenGLCanvas::postMessage(OEComponent *sender, int message, void *data)
 		case CANVAS_POST_FRAME:
 			if (data)
 			{
+				lock();
 				this->frame = *((OEImage *)data);
 				isNewFrame = true;
+				unlock();
 			}
 			break;
 			
@@ -1389,14 +1403,6 @@ bool OpenGLCanvas::postMessage(OEComponent *sender, int message, void *data)
 				isDrawBezel = true;
 			}
 			return true;
-			
-		case CANVAS_LOCK:
-			lock();
-			return true;
-			
-		case CANVAS_UNLOCK:
-			unlock();
-			return false;
 	}
 	
 	return OEComponent::postMessage(sender, message, data);

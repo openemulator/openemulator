@@ -781,26 +781,44 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
 
 - (void)systemPowerDown:(id)sender
 {
+	if (selectedItem)
+		[[self document] sendSystemEvent:DOCUMENT_POWERDOWN
+								toDevice:[selectedItem device]];
 }
 
 - (void)systemSleep:(id)sender
 {
+	if (selectedItem)
+		[[self document] sendSystemEvent:DOCUMENT_SLEEP
+								toDevice:[selectedItem device]];
 }
 
 - (void)systemWakeUp:(id)sender
 {
+	if (selectedItem)
+		[[self document] sendSystemEvent:DOCUMENT_WAKEUP
+								toDevice:[selectedItem device]];
 }
 
 - (void)systemColdRestart:(id)sender
 {
+	if (selectedItem)
+		[[self document] sendSystemEvent:DOCUMENT_COLDRESTART
+								toDevice:[selectedItem device]];
 }
 
 - (void)systemWarmRestart:(id)sender
 {
+	if (selectedItem)
+		[[self document] sendSystemEvent:DOCUMENT_WARMRESTART
+								toDevice:[selectedItem device]];
 }
 
 - (void)systemDebuggerBreak:(id)sender
 {
+	if (selectedItem)
+		[[self document] sendSystemEvent:DOCUMENT_DEBUGGERBREAK
+								toDevice:[selectedItem device]];
 }
 
 @end

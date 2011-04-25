@@ -260,6 +260,13 @@
 
 
 
+- (void *)device
+{
+	return device;
+}
+
+
+
 - (NSInteger)numberOfSettings
 {
 	return [settingsRef count];

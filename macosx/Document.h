@@ -12,6 +12,16 @@
 
 #define USER_TEMPLATES_FOLDER @"~/Library/Application Support/OpenEmulator/Templates"
 
+typedef enum
+{
+	DOCUMENT_POWERDOWN,
+	DOCUMENT_SLEEP,
+	DOCUMENT_WAKEUP,
+	DOCUMENT_COLDRESTART,
+	DOCUMENT_WARMRESTART,
+	DOCUMENT_DEBUGGERBREAK,
+} DocumentSystemEvent;
+
 @class EmulationWindowController;
 
 @interface Document : NSDocument
@@ -38,5 +48,7 @@
 - (BOOL)isMountable:(NSString *)path;
 - (BOOL)mount:(NSString *)path;
 - (BOOL)testMount:(NSString *)path;
+
+- (void)sendSystemEvent:(DocumentSystemEvent)event toDevice:(void *)device;
 
 @end

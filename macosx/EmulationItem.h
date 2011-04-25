@@ -67,6 +67,8 @@ typedef enum
 - (NSString *)locationLabel;
 - (NSString *)stateLabel;
 
+- (void *)device;
+
 - (NSInteger)numberOfSettings;
 - (NSString *)labelForSettingAtIndex:(NSInteger)index;
 - (NSString *)typeForSettingAtIndex:(NSInteger)index;

@@ -12,8 +12,8 @@
 
 #include "OEImage.h"
 
-// Notes:
-// * configure receives a CanvasConfigure
+// Messages:
+// * configure receives a CanvasConfigure structure
 // ** Canvas size is in screen pixels
 // ** Content rect uses [0..1:0..1] coordinates (origin is lower left)
 // ** Shadow mask dot pitch is in millimeters and assumes 75 dpi
@@ -21,10 +21,16 @@
 // * setKeyboardFlags() receives an OEUInt32
 // * setBezel() receives a CanvasBezel
 
+// Notifications:
 // * HID Notifications receive a CanvasHIDNotification
-// * DID_COPY and DID_PASTE receive a string
+// * didCopy and didPaste receive a string
 // * HID axes are in [-1:1] coordinates
-// * Warning! WILL_UPDATE and DID_UPDATE run on the video thread!
+// * willUpdate and didUpdate receive a CanvasUpdate structure
+// ** Override draw to force drawing updates
+
+// Multithreading, beware!
+// * willUpdate and didUpdate notifications are sent from the drawing
+//   thread. Keep this in mind for synchronizing data.
 
 typedef enum
 {
@@ -32,8 +38,6 @@ typedef enum
 	CANVAS_POST_FRAME,
 	CANVAS_SET_KEYBOARDFLAGS,
 	CANVAS_SET_BEZEL,
-	CANVAS_LOCK,
-	CANVAS_UNLOCK,
 } CanvasMessage;
 
 typedef enum
@@ -46,6 +50,7 @@ typedef enum
 	CANVAS_JOYSTICK2_DID_CHANGE,
 	CANVAS_JOYSTICK3_DID_CHANGE,
 	CANVAS_JOYSTICK4_DID_CHANGE,
+	
 	CANVAS_DID_COPY,
 	CANVAS_DID_PASTE,
 	

@@ -20,6 +20,8 @@
 <NSWindowDelegate, NSTextInputClient>
 {
 	CVDisplayLinkRef displayLink;
+	CGLContextObj cglContextObj;
+	CGLPixelFormatObj cglPixelFormatObj;
 	
 	Document *document;
 	void *canvas;

@@ -526,4 +526,40 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	return success;
 }
 
+- (void)sendSystemEvent:(DocumentSystemEvent)event toDevice:(void *)device
+{
+	if (!device)
+		return;
+	
+	int message;
+	
+	switch (event)
+	{
+		case DOCUMENT_POWERDOWN:
+			message = DEVICE_POWERDOWN;
+			break;
+		case DOCUMENT_SLEEP:
+			message = DEVICE_SLEEP;
+			break;
+		case DOCUMENT_WAKEUP:
+			message = DEVICE_WAKEUP;
+			break;
+		case DOCUMENT_COLDRESTART:
+			message = DEVICE_COLDRESTART;
+			break;
+		case DOCUMENT_WARMRESTART:
+			message = DEVICE_WARMRESTART;
+			break;
+		case DOCUMENT_DEBUGGERBREAK:
+			message = DEVICE_DEBUGGERBREAK;
+			break;
+		default:
+			return;
+	}
+	
+	[self lockEmulation];
+	((OEComponent *)device)->postMessage(NULL, message, NULL);
+	[self unlockEmulation];
+}
+
 @end

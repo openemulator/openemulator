@@ -1,4 +1,6 @@
 ==2011-04==
+* Fixed OpenGL thread sync
+* Fixed system events in canvas and emulation windows
 * Fixed canvas API, so one can now post frames from the update callback
 * Added support for storing default emulation window size
 * Implemented persistance with render buffers

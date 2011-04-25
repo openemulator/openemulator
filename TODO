@@ -1,18 +1,12 @@
 ==To-Do==
-* Fix audio full-duplex
-* Fix system events in canvas and emulation windows
-
-* Fix OpenGL thread sync (GUI thread vs. OpenGL thread). Disable display link when resizing
+* Fix emulation window => settings => scrollers, so it is updated when the window is clicked-through
+* Add tooltips on property slider so the value can be seen
+* If a default emulation can't be opened, should we start the template chooser instead? Or just improve the error message?
 
 * Implement OpenGL paper canvas
 * Implement CanvasWindow scroller for paper canvas
 * Implement printing with the raw canvas bitmap
 * Test multiple port-audio instances instead of a single one
-
-* Fix emulation window => settings => scrollers, so it is updated when the window is clicked-through
-* Add tooltips on property slider so the value can be seen
-
-* If a default emulation can't be opened, should we start the template chooser instead? Or just improve the error message?
 
 * Implement hardware library
 * Think about ways of adding a device. Is it dragged directly to where it will be connected? This makes sense. For now, forget devices that form a connection graph.

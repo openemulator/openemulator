@@ -116,12 +116,11 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 		if (CVDisplayLinkCreateWithActiveCGDisplays(&displayLink) == kCVReturnSuccess)
 		{
 			CVDisplayLinkSetOutputCallback(displayLink, &displayLinkCallback, self);
-			CGLContextObj cglContext = (CGLContextObj)[[self openGLContext] CGLContextObj];
-			CGLPixelFormatObj cglPixelFormat = (CGLPixelFormatObj)[[self pixelFormat] 
-																   CGLPixelFormatObj];
+			cglContextObj = (CGLContextObj)[[self openGLContext] CGLContextObj];
+			cglPixelFormatObj = (CGLPixelFormatObj)[[self pixelFormat] CGLPixelFormatObj];
 			CVDisplayLinkSetCurrentCGDisplayFromOpenGLContext(displayLink,
-															  cglContext,
-															  cglPixelFormat);
+															  cglContextObj,
+															  cglPixelFormatObj);
 		}
 		
 		// From:
@@ -444,11 +443,23 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 		((OpenGLCanvas *)canvas)->close();
 }
 
+- (void)globalFrameDidChange:(NSNotification*)notification
+{
+    CVDisplayLinkSetCurrentCGDisplayFromOpenGLContext(displayLink,
+													  cglContextObj,
+													  cglPixelFormatObj);
+}
+
 - (void)startDisplayLink
 {
 	NSLog(@"CanvasView startDisplayLink");
 	
 	CVDisplayLinkStart(displayLink);
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(globalFrameDidChange:)
+												 name:NSViewGlobalFrameDidChangeNotification
+											   object:self];
 }
 
 - (void)stopDisplayLink
@@ -456,6 +467,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	NSLog(@"CanvasView stopDisplayLink");
 	
 	CVDisplayLinkStop(displayLink);
+
+	[[NSNotificationCenter defaultCenter] removeObserver:self
+											  forKeyPath:NSViewGlobalFrameDidChangeNotification];
 }
 
 - (NSSize)defaultViewSize
@@ -471,22 +485,19 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	return defaultViewSize;
 }
 
-- (void)update
+/*- (void)update
 {
-	if (canvas)
-		((OpenGLCanvas *)canvas)->postMessage(NULL, CANVAS_LOCK, NULL);
+    CGLLockContext(cglContextObj);
 	
 	[[self openGLContext] makeCurrentContext];
 	[super update];
 	
-	if (canvas)
-		((OpenGLCanvas *)canvas)->postMessage(NULL, CANVAS_UNLOCK, NULL);
-}
+    CGLUnlockContext(cglContextObj);
+}*/
 
 - (void)drawRect:(NSRect)theRect
 {
-/*	if (canvas)
-		((OpenGLCanvas *)canvas)->postMessage(NULL, CANVAS_LOCK, NULL);
+    CGLLockContext(cglContextObj);
 	
 	[[self openGLContext] makeCurrentContext];
 	
@@ -494,15 +505,12 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	if (((OpenGLCanvas *)canvas)->update(NSWidth(frame), NSHeight(frame), 0, true))
 		[[self openGLContext] flushBuffer];
 	
-	if (canvas)
-		((OpenGLCanvas *)canvas)->postMessage(NULL, CANVAS_UNLOCK, NULL);*/
+    CGLUnlockContext(cglContextObj);
 }
 
 - (void)updateView
 {
-	NSLog(@"Here");
-	if (canvas)
-		((OpenGLCanvas *)canvas)->postMessage(NULL, CANVAS_LOCK, NULL);
+    CGLLockContext(cglContextObj);
 	
 	[[self openGLContext] makeCurrentContext];
 	
@@ -510,8 +518,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	if (((OpenGLCanvas *)canvas)->update(NSWidth(frame), NSHeight(frame), 0, false))
 		[[self openGLContext] flushBuffer];
 	
-	if (canvas)
-		((OpenGLCanvas *)canvas)->postMessage(NULL, CANVAS_UNLOCK, NULL);
+    CGLUnlockContext(cglContextObj);
 }
 
 // Keyboard

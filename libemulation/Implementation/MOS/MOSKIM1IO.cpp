@@ -84,11 +84,9 @@ bool MOSKIM1IO::init()
 	configuration.size = frame.getSize();
 	int bezel = CANVAS_BEZEL_PAUSE;
 	
-	canvas->postMessage(this, CANVAS_LOCK, NULL);
 	canvas->postMessage(this, CANVAS_CONFIGURE, &configuration);
 	canvas->postMessage(this, CANVAS_POST_FRAME, &frame);
 	canvas->postMessage(this, CANVAS_SET_BEZEL, &bezel);
-	canvas->postMessage(this, CANVAS_UNLOCK, NULL);
 	
 	return true;
 }

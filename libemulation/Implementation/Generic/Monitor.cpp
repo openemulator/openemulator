@@ -242,10 +242,8 @@ bool Monitor::init()
 	
 	frame.readFile(dummyPath);
 	
-	canvas->postMessage(this, CANVAS_LOCK, NULL);
-	canvas->postMessage(this, CANVAS_POST_FRAME, &frame);
 	canvas->postMessage(this, CANVAS_CONFIGURE, &configuration);
-	canvas->postMessage(this, CANVAS_UNLOCK, NULL);
+	canvas->postMessage(this, CANVAS_POST_FRAME, &frame);
 	
 	return true;
 }

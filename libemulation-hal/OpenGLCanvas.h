@@ -110,9 +110,11 @@ private:
 	pthread_mutex_t mutex;
 	
 	bool isNewConfiguration;
+	CanvasConfiguration newConfiguration;
 	CanvasConfiguration configuration;
 	bool isNewFrame;
 	OEImage frame;
+	OESize frameSize;
 	
 	OESize viewportSize;
 	GLuint texture[OPENGLCANVAS_TEXTURE_END];
