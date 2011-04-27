@@ -56,13 +56,13 @@ static void setCapture(void *userData, OpenGLCanvasCapture capture)
 	CGAssociateMouseAndMouseCursorPosition(enableMouseCursor);
 }
 
-static void setKeyboardFlags(void *userData, int flags)
+static void setKeyboardFlags(void *userData, OEUInt32 flags)
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
 	[(CanvasView *)userData setKeyboardFlags:flags];
 	
-	[pool release];
+	[pool drain];
 }
 
 static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
@@ -76,7 +76,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	
 	[(CanvasView *)displayLinkContext updateView];
 	
-	[pool release];
+	[pool drain];
 	
 	return kCVReturnSuccess;
 }
@@ -108,21 +108,6 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	
 	if (self = [super initWithFrame:rect pixelFormat:pixelFormat])
 	{
-		[self registerForDraggedTypes:[NSArray arrayWithObjects:
-									   NSStringPboardType,
-									   NSFilenamesPboardType, 
-									   nil]];
-		
-		if (CVDisplayLinkCreateWithActiveCGDisplays(&displayLink) == kCVReturnSuccess)
-		{
-			CVDisplayLinkSetOutputCallback(displayLink, &displayLinkCallback, self);
-			cglContextObj = (CGLContextObj)[[self openGLContext] CGLContextObj];
-			cglPixelFormatObj = (CGLPixelFormatObj)[[self pixelFormat] CGLPixelFormatObj];
-			CVDisplayLinkSetCurrentCGDisplayFromOpenGLContext(displayLink,
-															  cglContextObj,
-															  cglPixelFormatObj);
-		}
-		
 		// From:
 		//   http://stuff.mit.edu/afs/sipb/project/darwin/src/
 		//   modules/AppleADBKeyboard/AppleADBKeyboard.cpp
@@ -246,9 +231,6 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 {
 	NSLog(@"CanvasView dealloc");
 	
-	CVDisplayLinkStop(displayLink);
-    CVDisplayLinkRelease(displayLink);
-	
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	[userDefaults removeObserver:self
 					  forKeyPath:@"OEVideoEnableShader"];
@@ -271,7 +253,12 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 					  options:NSKeyValueObservingOptionNew
 					  context:nil];
 	
-	[self startOpenGL];
+	[self registerForDraggedTypes:[NSArray arrayWithObjects:
+								   NSStringPboardType,
+								   NSFilenamesPboardType, 
+								   nil]];
+	
+	[self initOpenGL];
 }
 
 - (BOOL)acceptsFirstResponder
@@ -287,11 +274,13 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	return NSMouseInRect(mouseLocation, [self bounds], [self isFlipped]);
 }
 
-- (void)windowWillClose:(NSNotification *)notification
+- (BOOL)windowShouldClose:(id)sender
 {
-	NSLog(@"CanvasView windowWillClose");
+	NSLog(@"CanvasView windowShouldClose");
 	
 	[self stopDisplayLink];
+	
+	return YES;
 }
 
 - (void)windowDidBecomeKey:(NSNotification *)notification
@@ -418,9 +407,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 // Drawing
 
-- (void)startOpenGL
+- (void)initOpenGL
 {
-	NSLog(@"CanvasView startOpenGL");
+	NSLog(@"CanvasView initOpenGL");
 	
 	[[self openGLContext] makeCurrentContext];
 	
@@ -429,25 +418,30 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 					   forParameter:NSOpenGLCPSwapInterval]; 
 	
 	((OpenGLCanvas *)canvas)->open(setCapture,
-								setKeyboardFlags,
-								self);
+								   setKeyboardFlags,
+								   self);
+	
+	if (CVDisplayLinkCreateWithActiveCGDisplays(&displayLink) == kCVReturnSuccess)
+	{
+		CVDisplayLinkSetOutputCallback(displayLink, &displayLinkCallback, self);
+		cglContextObj = (CGLContextObj)[[self openGLContext] CGLContextObj];
+		cglPixelFormatObj = (CGLPixelFormatObj)[[self pixelFormat] CGLPixelFormatObj];
+		CVDisplayLinkSetCurrentCGDisplayFromOpenGLContext(displayLink,
+														  cglContextObj,
+														  cglPixelFormatObj);
+	}
 }
 
-- (void)stopOpenGL
+- (void)freeOpenGL
 {
-	NSLog(@"CanvasView stopOpenGL");
+	NSLog(@"CanvasView freeOpenGL");
 	
 	[[self openGLContext] makeCurrentContext];
 	
+    CVDisplayLinkRelease(displayLink);
+	
 	if (canvas)
 		((OpenGLCanvas *)canvas)->close();
-}
-
-- (void)globalFrameDidChange:(NSNotification*)notification
-{
-    CVDisplayLinkSetCurrentCGDisplayFromOpenGLContext(displayLink,
-													  cglContextObj,
-													  cglPixelFormatObj);
 }
 
 - (void)startDisplayLink
@@ -467,9 +461,15 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	NSLog(@"CanvasView stopDisplayLink");
 	
 	CVDisplayLinkStop(displayLink);
+	
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
-	[[NSNotificationCenter defaultCenter] removeObserver:self
-											  forKeyPath:NSViewGlobalFrameDidChangeNotification];
+- (void)globalFrameDidChange:(NSNotification*)notification
+{
+    CVDisplayLinkSetCurrentCGDisplayFromOpenGLContext(displayLink,
+													  cglContextObj,
+													  cglPixelFormatObj);
 }
 
 - (NSSize)defaultViewSize
@@ -486,14 +486,14 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 }
 
 /*- (void)update
-{
-    CGLLockContext(cglContextObj);
-	
-	[[self openGLContext] makeCurrentContext];
-	[super update];
-	
-    CGLUnlockContext(cglContextObj);
-}*/
+ {
+ CGLLockContext(cglContextObj);
+ 
+ [[self openGLContext] makeCurrentContext];
+ [super update];
+ 
+ CGLUnlockContext(cglContextObj);
+ }*/
 
 - (void)drawRect:(NSRect)theRect
 {
@@ -597,7 +597,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	NSString *characters = [theEvent characters];
 	for (NSInteger i = 0; i < [characters length]; i++)
 		[self sendUnicodeKeyEvent:[characters characterAtIndex:i]];
-		
+	
 	if (![theEvent isARepeat])
 	{
 		NSInteger usageId = [self getUsageId:[theEvent keyCode]];

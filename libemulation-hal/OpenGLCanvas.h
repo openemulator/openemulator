@@ -55,7 +55,7 @@ typedef enum
 
 
 typedef void (*CanvasSetCapture)(void *userData, OpenGLCanvasCapture capture);
-typedef void (*CanvasSetKeyboardFlags)(void *userData, int flags);
+typedef void (*CanvasSetKeyboardFlags)(void *userData, OEUInt32 flags);
 
 
 
@@ -170,6 +170,7 @@ private:
 	void resetKeysAndButtons();
 	
 	bool setConfiguration(CanvasConfiguration *configuration);
+	bool postFrame(OEImage *frame);
 };
 
 #endif

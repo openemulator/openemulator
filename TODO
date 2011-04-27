@@ -1,16 +1,17 @@
 ==To-Do==
+* Fix: A self-closing canvas is locking the paAudio object
+* Fix: OpenGL context is destroyed when closing a canvas
+* Fix: canvas update notification without locks
+
 * Fix emulation window => settings => scrollers, so it is updated when the window is clicked-through
-* Add tooltips on property slider so the value can be seen
-* If a default emulation can't be opened, should we start the template chooser instead? Or just improve the error message?
 
 * Implement OpenGL paper canvas
 * Implement CanvasWindow scroller for paper canvas
 * Implement printing with the raw canvas bitmap
-* Test multiple port-audio instances instead of a single one
 
 * Implement hardware library
-* Think about ways of adding a device. Is it dragged directly to where it will be connected? This makes sense. For now, forget devices that form a connection graph.
-
+* A device is added by dragging it to the device it is connected to.
+* We only allow for single connectors for now. testAddEDL should return false if more than one connector is present.
 * Implement OEEmulation testAddEDL
 * Implement OEEmulation addEDL
 * Implement OEEmulation removeDevice

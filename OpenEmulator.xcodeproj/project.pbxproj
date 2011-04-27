@@ -1409,10 +1409,14 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					/usr/include/libxml2,
+					/usr/local/include,
 					/opt/local/include,
 				);
 				INFOPLIST_FILE = macosx/Info.plist;
-				LIBRARY_SEARCH_PATHS = /opt/local/lib;
+				LIBRARY_SEARCH_PATHS = (
+					/usr/local/lib,
+					/opt/local/lib,
+				);
 				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
 				SDKROOT = macosx10.6;
@@ -1428,10 +1432,14 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				HEADER_SEARCH_PATHS = (
 					/usr/include/libxml2,
+					/usr/local/include,
 					/opt/local/include,
 				);
 				INFOPLIST_FILE = macosx/Info.plist;
-				LIBRARY_SEARCH_PATHS = /opt/local/lib;
+				LIBRARY_SEARCH_PATHS = (
+					/usr/local/lib,
+					/opt/local/lib,
+				);
 				ONLY_ACTIVE_ARCH = NO;
 				PREBINDING = NO;
 				SDKROOT = macosx10.6;

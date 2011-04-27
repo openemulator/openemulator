@@ -1,4 +1,8 @@
 ==2011-04==
+* Improved the default emulation fallback, the template chooser is now displayed
+* Fixed audio playback play position
+* Fixed canvas window orderOut
+* Fixed frame size initialization
 * Fixed OpenGL thread sync
 * Fixed system events in canvas and emulation windows
 * Fixed canvas API, so one can now post frames from the update callback

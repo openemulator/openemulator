@@ -23,7 +23,6 @@ typedef map<string, OEComponent *> OEComponentsMap;
 typedef vector<string> OEIds;
 
 typedef void (*EmulationDidUpdate)(void *userData);
-typedef void (*EmulationRunAlert)(void *userData, string message);
 typedef OEComponent *(*EmulationCreateCanvas)(void *userData, OEComponent *device);
 typedef void (*EmulationDestroyCanvas)(void *userData, OEComponent *canvas);
 
@@ -35,7 +34,6 @@ public:
 	
 	void setResourcePath(string path);
 	void setDidUpdate(EmulationDidUpdate didUpdate);
-	void setRunAlert(EmulationRunAlert runAlert);
 	void setCreateCanvas(EmulationCreateCanvas createCanvas);
 	void setDestroyCanvas(EmulationDestroyCanvas destroyCanvas);
 	void setUserData(void *userData);
@@ -60,7 +58,6 @@ private:
 	OEIds devices;
 	
 	EmulationDidUpdate didUpdate;
-	EmulationRunAlert runAlert;
 	EmulationCreateCanvas createCanvas;
 	EmulationDestroyCanvas destroyCanvas;
 	void *userData;

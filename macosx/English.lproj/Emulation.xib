@@ -12,8 +12,8 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="2349"/>
 			<integer value="1808"/>
+			<integer value="1740"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -43,7 +43,7 @@
 				<string key="NSWindowClass">NSWindow</string>
 				<nil key="NSViewClass"/>
 				<string key="NSWindowContentMaxSize">{1.79769e+308, 1.79769e+308}</string>
-				<string key="NSWindowContentMinSize">{532, 326}</string>
+				<string key="NSWindowContentMinSize">{532, 352}</string>
 				<object class="NSView" key="NSWindowView" id="697045175">
 					<reference key="NSNextResponder"/>
 					<int key="NSvFlags">274</int>
@@ -497,7 +497,7 @@
 																		<int key="NSCellFlags2">33554432</int>
 																		<object class="NSCustomResource" key="NSContents">
 																			<string key="NSClassName">NSImage</string>
-																			<string key="NSResourceName">DiskImage</string>
+																			<string key="NSResourceName">Emulation</string>
 																		</object>
 																		<int key="NSAlign">0</int>
 																		<int key="NSScale">3</int>
@@ -664,7 +664,7 @@
 					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1440, 878}}</string>
-				<string key="NSMinSize">{532, 348}</string>
+				<string key="NSMinSize">{532, 374}</string>
 				<string key="NSMaxSize">{1.79769e+308, 1.79769e+308}</string>
 				<double key="NSContentBorderThicknessMinY">24</double>
 			</object>
@@ -1615,7 +1615,7 @@
 					<boolean value="NO"/>
 					<boolean value="YES"/>
 					<string>{610, 384}</string>
-					<string>{532, 326}</string>
+					<string>{532, 352}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<object class="NSAffineTransform"/>
 					<string>{{637, 159}, {160, 123}}</string>
@@ -2064,7 +2064,7 @@
 			<bool key="EncodedWithXMLCoder">YES</bool>
 			<object class="NSArray" key="dict.sortedKeys">
 				<bool key="EncodedWithXMLCoder">YES</bool>
-				<string>DiskImage</string>
+				<string>Emulation</string>
 				<string>NSMenuCheckmark</string>
 				<string>NSMenuMixedState</string>
 			</object>

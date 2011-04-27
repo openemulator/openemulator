@@ -32,6 +32,20 @@ typedef enum
 	STORAGE_GET_MOUNTPATH,
 	STORAGE_GET_STATELABEL,
 	STORAGE_IS_LOCKED,
+	
+	STORAGE_SET_SETTINGS,
+	STORAGE_GET_SETTINGS,
 } StorageMessage;
+
+typedef struct
+{
+	string ref;
+	string name;
+	string label;
+	string type;
+	string options;
+} StorageSetting;
+
+typedef vector<StorageSetting> StorageSettings;
 
 #endif

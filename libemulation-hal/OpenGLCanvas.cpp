@@ -80,12 +80,12 @@ void OpenGLCanvas::close()
 
 OESize OpenGLCanvas::getCanvasSize()
 {
-	return configuration.size;
+	return newConfiguration.size;
 }
 
 CanvasMode OpenGLCanvas::getCanvasMode()
 {
-	return configuration.mode;
+	return newConfiguration.mode;
 }
 
 void OpenGLCanvas::setEnableShader(bool value)
@@ -661,8 +661,8 @@ void OpenGLCanvas::updateConfiguration()
 			
 		case CANVAS_DECODER_MONOCHROME:
 			// Set Y'PbPr maximum hue
-			m *= OEMatrix3(1, 0, -0.5,
-						   0, 0, 0,
+			m *= OEMatrix3(1, 0, 0,
+						   0, 0.5, 0,
 						   0, 0, 0);
 			break;
 	}
@@ -1371,6 +1371,19 @@ bool OpenGLCanvas::setConfiguration(CanvasConfiguration *configuration)
 	return true;
 }
 
+bool OpenGLCanvas::postFrame(OEImage *frame)
+{
+	if (!frame)
+		return false;
+	
+	lock();
+	this->frame = *frame;
+	isNewFrame = true;
+	unlock();
+	
+	return true;
+}
+
 bool OpenGLCanvas::postMessage(OEComponent *sender, int message, void *data)
 {
 	switch (message)
@@ -1379,20 +1392,13 @@ bool OpenGLCanvas::postMessage(OEComponent *sender, int message, void *data)
 			return setConfiguration((CanvasConfiguration *)data);
 			
 		case CANVAS_POST_FRAME:
-			if (data)
-			{
-				lock();
-				this->frame = *((OEImage *)data);
-				isNewFrame = true;
-				unlock();
-			}
-			break;
+			return postFrame((OEImage *)data);
 			
 		case CANVAS_SET_KEYBOARDFLAGS:
-			if (setKeyboardFlags)
+			if (data)
 			{
-				setKeyboardFlags(userData, *((int *)data));
-				return true;
+				setKeyboardFlags(userData, *((OEUInt32 *)data));
+				return false;
 			}
 			break;
 			

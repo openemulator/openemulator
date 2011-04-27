@@ -350,7 +350,7 @@
 {
 	if (canvases)
 		for (int i = 0; i < [canvases count]; i++)
-			[document showCanvas:[[canvases objectAtIndex:i] pointerValue]];
+			[document showCanvas:[canvases objectAtIndex:i]];
 }
 
 

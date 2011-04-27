@@ -88,7 +88,8 @@ bool OEDevice::postMessage(OEComponent *sender, int message, void *data)
 			{
 				OEComponent **ref = (OEComponent **)data;
 				
-				*ref = emulation->createCanvas(emulation->userData, this);
+				if (emulation->createCanvas)
+					*ref = emulation->createCanvas(emulation->userData, this);
 				
 				canvases.push_back(*ref);
 				
@@ -107,7 +108,8 @@ bool OEDevice::postMessage(OEComponent *sender, int message, void *data)
 				if (i != last)
 					canvases.erase(i, last);
 				
-				emulation->destroyCanvas(emulation->userData, *ref);
+				if (emulation->destroyCanvas)
+					emulation->destroyCanvas(emulation->userData, *ref);
 				*ref = NULL;
 				
 				return true;

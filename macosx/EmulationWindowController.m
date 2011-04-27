@@ -57,6 +57,8 @@
 
 - (void)windowDidLoad
 {
+	NSLog(@"EmulationWindowController windowDidLoad");
+	
 	[self setWindowFrameAutosaveName:@"Emulation"];
 	
 	float thickness = NSMinY([fSplitView frame]);
@@ -86,6 +88,11 @@
 
 - (void)updateEmulation:(id)sender
 {
+	if (![self document])
+		return;
+	
+	NSLog(@"EmulationWindowController updateEmulation");
+	
 	NSString *uid = [[selectedItem uid] copy];
 	
 	[rootItem release];
@@ -102,6 +109,8 @@
 
 - (void)updateDetails
 {
+	NSLog(@"EmulationWindowController updateDetails");
+	
 	NSString *title = @"No Selection";
 	
 	NSImage *image = nil;

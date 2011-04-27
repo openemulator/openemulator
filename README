@@ -44,13 +44,13 @@ commands:
 Mac OS X
 ========
 
-  In order to compile the OpenEmulator XCode project under Mac OS X you
-need some external libraries not available on a default Mac OS X
-installation. The easiest way to install them is through MacPorts:
+  To compile OpenEmulator for Mac OS X you need XCode, and several
+external libraries not available by default. The easiest way to install
+them is through MacPorts:
 
   http://www.macports.org/
 
-  Download and install, then install these libraries:
+  Download and install MacPorts, then try the following commands:
 
   sudo port install libzip +universal
   sudo port install portaudio +universal

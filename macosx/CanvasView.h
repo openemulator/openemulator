@@ -32,8 +32,8 @@
 	BOOL capsLockNotSynchronized;
 }
 
-- (void)startOpenGL;
-- (void)stopOpenGL;
+- (void)initOpenGL;
+- (void)freeOpenGL;
 - (void)startDisplayLink;
 - (void)stopDisplayLink;
 - (NSSize)defaultViewSize;

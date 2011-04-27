@@ -10,6 +10,7 @@
 
 #import "Document.h"
 #import "DocumentController.h"
+
 #import "EmulationWindowController.h"
 #import "CanvasWindowController.h"
 #import "StringConversion.h"
@@ -25,7 +26,7 @@
 
 @implementation Document
 
-// Callback methods
+// Callbacks
 
 void didUpdate(void *userData)
 {
@@ -37,21 +38,7 @@ void didUpdate(void *userData)
 							   withObject:nil
 							waitUntilDone:NO];
 	
-	[pool release];
-}
-
-void runAlert(void *userData, string message)
-{
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	
-	Document *document = (Document *)userData;
-	NSString *theMessage = getNSString(message);
-	
-	[document performSelectorOnMainThread:@selector(runAlert:)
-							   withObject:theMessage
-							waitUntilDone:NO];
-	
-	[pool release];
+	[pool drain];
 }
 
 OEComponent *createCanvas(void *userData, OEComponent *device)
@@ -71,9 +58,9 @@ OEComponent *createCanvas(void *userData, OEComponent *device)
 	
 	[document performSelectorOnMainThread:@selector(createCanvas:)
 							   withObject:dict
-							waitUntilDone:YES];
+							waitUntilDone:NO];
 	
-	[pool release];
+	[pool drain];
 	
 	return canvas;
 }
@@ -87,14 +74,14 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	
 	[document performSelectorOnMainThread:@selector(destroyCanvas:)
 							   withObject:canvasValue
-							waitUntilDone:YES];
+							waitUntilDone:NO];
 	
 	delete canvas;
 	
-	[pool release];
+	[pool drain];
 }
 
-// Alloc/init/dealloc
+// Init/dealloc
 
 - (id)initWithTemplateURL:(NSURL *)absoluteURL
 					error:(NSError **)outError
@@ -106,12 +93,16 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 		if ([self readFromURL:absoluteURL
 					   ofType:nil
 						error:outError])
+		{
 			return self;
+		}
 	}
 	
-	*outError = [NSError errorWithDomain:NSCocoaErrorDomain
-									code:NSFileReadUnknownError
-								userInfo:nil];
+	if (outError)
+		*outError = [NSError errorWithDomain:NSCocoaErrorDomain
+										code:NSFileReadUnknownError
+									userInfo:nil];
+	
 	return nil;
 }
 
@@ -123,12 +114,11 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	
 	[emulationWindowController release];
 	[canvasWindowControllers release];
-	[canvases release];
 	
 	[super dealloc];
 }
 
-// Document UI
+// Document
 
 - (NSWindow *)windowForSheet
 {
@@ -156,9 +146,11 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 		[self destroyEmulation];
 	}
 	
-	*outError = [NSError errorWithDomain:NSCocoaErrorDomain
-									code:NSFileReadUnknownError
-								userInfo:nil];
+	if (outError)
+		*outError = [NSError errorWithDomain:NSCocoaErrorDomain
+										code:NSFileReadUnknownError
+									userInfo:nil];
+	
 	return NO;
 }
 
@@ -180,9 +172,11 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 			return YES;
 	}
 	
-	*outError = [NSError errorWithDomain:NSCocoaErrorDomain
-									code:NSFileWriteUnknownError
-								userInfo:nil];
+	if (outError)
+		*outError = [NSError errorWithDomain:NSCocoaErrorDomain
+										code:NSFileWriteUnknownError
+									userInfo:nil];
+	
 	return NO;
 }
 
@@ -271,19 +265,6 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	[emulationWindowController updateEmulation:self];
 }
 
-- (void)runAlert:(NSString *)string
-{
-	NSArray *lines = [string componentsSeparatedByString:@"\n"];
-	
-	NSString *messageText = [lines objectAtIndex:0];
-	NSString *informativeText = @"";
-	
-	if ([lines count] > 1)
-		informativeText = [lines objectAtIndex:1];
-	
-	NSRunAlertPanel(messageText, informativeText, nil, nil, nil);
-}
-
 - (void)createCanvas:(NSDictionary *)dict
 {
 	NSLog(@"Document createCanvas");
@@ -296,10 +277,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	canvasWindowController = [[CanvasWindowController alloc] initWithDevice:device
 																	  title:label
 																	 canvas:canvas];
-	
-	[canvases addObject:[NSValue valueWithPointer:canvas]];
 	[canvasWindowControllers addObject:canvasWindowController];
-	
 	[canvasWindowController release];
 }
 
@@ -307,30 +285,42 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 {
 	NSLog(@"Document destroyCanvas");
 	
-	NSInteger index = [canvases indexOfObject:canvasValue];
-	
-	CanvasWindowController *canvasWindowController;
-	canvasWindowController = [canvasWindowControllers objectAtIndex:index];
-	
-	[canvasWindowController destroyCanvas];
-	
-	[self removeWindowController:canvasWindowController];
-	[canvases removeObjectAtIndex:index];
-	[canvasWindowControllers removeObjectAtIndex:index];
+	void *canvas = [canvasValue pointerValue];
+	for (int i = 0; i < [canvasWindowControllers count]; i++)
+	{
+		CanvasWindowController *canvasWindowController;
+		canvasWindowController = [canvasWindowControllers objectAtIndex:i];
+		if ([canvasWindowController canvas] == canvas)
+		{
+			[canvasWindowController freeOpenGL];
+			
+			[self removeWindowController:canvasWindowController];
+			[canvasWindowControllers removeObjectAtIndex:i];
+			
+			break;
+		}
+	}
 }
 
-- (void)showCanvas:(void *)canvas
+- (void)showCanvas:(NSValue *)canvasValue
 {
 	NSLog(@"Document showCanvas");
 	
-	NSInteger index = [canvases indexOfObject:[NSValue valueWithPointer:canvas]];
-	CanvasWindowController *canvasWindowController;
-	canvasWindowController = [canvasWindowControllers objectAtIndex:index];
-	
-	if (![[self windowControllers] containsObject:canvasWindowController])
-		[self addWindowController:canvasWindowController];
-	
-	[canvasWindowController showWindow:self];
+	void *canvas = [canvasValue pointerValue];
+	for (int i = 0; i < [canvasWindowControllers count]; i++)
+	{
+		CanvasWindowController *canvasWindowController;
+		canvasWindowController = [canvasWindowControllers objectAtIndex:i];
+		if ([canvasWindowController canvas] == canvas)
+		{
+			if (![[self windowControllers] containsObject:canvasWindowController])
+				[self addWindowController:canvasWindowController];
+			
+			[canvasWindowController showWindow:self];
+			
+			break;
+		}
+	}
 }
 
 - (NSPrintOperation *)printOperationWithSettings:(NSDictionary *)printSettings
@@ -348,8 +338,6 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 {
 	NSLog(@"Document createEmulation");
 	
-	if (!canvases)
-		canvases = [[NSMutableArray alloc] init];
 	if (!canvasWindowControllers)
 		canvasWindowControllers = [[NSMutableArray alloc] init];
 	
@@ -360,7 +348,6 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	OEEmulation *theEmulation = new OEEmulation();
 	
 	theEmulation->setResourcePath(getCPPString([[NSBundle mainBundle] resourcePath]));
-	theEmulation->setRunAlert(runAlert);
 	theEmulation->setCreateCanvas(createCanvas);
 	theEmulation->setDestroyCanvas(destroyCanvas);
 	theEmulation->setUserData(self);
@@ -391,29 +378,30 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	paAudio->removeEmulation(theEmulation);
 	
 	delete theEmulation;
-	emulation = nil;
 	
-	// Just in case somebody forgot to delete a canvas
-	while ([canvases count])
-		[self destroyCanvas:[canvases lastObject]];
+	emulation = nil;
 }
 
 - (void)lockEmulation
 {
+	NSLog(@"lockEmulation");
+	
 	DocumentController *documentController;
 	documentController = [NSDocumentController sharedDocumentController];
 	PAAudio *paAudio = (PAAudio *)[documentController paAudio];
 	
-	paAudio->lockEmulations();
+	paAudio->lock();
 }
 
 - (void)unlockEmulation
 {
+	NSLog(@"unlockEmulation");
+	
 	DocumentController *documentController;
 	documentController = [NSDocumentController sharedDocumentController];
 	PAAudio *paAudio = (PAAudio *)[documentController paAudio];
 	
-	paAudio->unlockEmulations();
+	paAudio->unlock();
 }
 
 - (void *)emulation

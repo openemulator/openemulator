@@ -63,10 +63,8 @@ bool OEComponent::postMessage(OEComponent *sender, int message, void *data)
 
 void OEComponent::notify(OEComponent *sender, int notification, void *data)
 {
-	for (OEComponents::iterator i = observers[notification].begin();
-		 i != observers[notification].end();
-		 i++)
-		(*i)->notify(sender, notification, data);
+	for (int i = 0; i < observers[notification].size(); i++)
+		observers[notification][i]->notify(sender, notification, data);
 }
 
 bool OEComponent::addObserver(OEComponent *observer, int notification)

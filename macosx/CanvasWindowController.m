@@ -22,7 +22,6 @@
 	{
 		device = theDevice;
 		title = [theTitle copy];
-		
 		canvas = theCanvas;
 	}
 	
@@ -43,9 +42,9 @@
 	return canvas;
 }
 
-- (void)destroyCanvas
+- (void)freeOpenGL
 {
-	[fCanvasView stopOpenGL];
+	[fCanvasView freeOpenGL];
 }
 
 

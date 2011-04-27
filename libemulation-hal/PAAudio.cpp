@@ -16,6 +16,8 @@
 
 using namespace std;
 
+// Callbacks
+
 static int PAAudioRunAudio(const void *input,
 						   void *output,
 						   unsigned long frameCount,
@@ -44,6 +46,8 @@ void *PAAudioRunEmulations(void *arg)
 	return NULL;
 }
 
+// Constructor/destructor
+
 PAAudio::PAAudio()
 {
 	fullDuplex = false;
@@ -65,6 +69,13 @@ PAAudio::PAAudio()
 	recordingSNDFILE = NULL;
 	recording = false;
 }
+
+PAAudio::~PAAudio()
+{
+	pthread_cond_destroy(&emulationsCond);
+}
+
+// Configuration
 
 void PAAudio::setFullDuplex(bool value)
 {
@@ -271,12 +282,12 @@ void PAAudio::closeEmulations()
 	pthread_mutex_destroy(&emulationsMutex);
 }
 
-void PAAudio::lockEmulations()
+void PAAudio::lock()
 {
 	pthread_mutex_lock(&emulationsMutex);
 }
 
-void PAAudio::unlockEmulations()
+void PAAudio::unlock()
 {
 	pthread_mutex_unlock(&emulationsMutex);
 }
@@ -285,7 +296,7 @@ void PAAudio::runEmulations()
 {
 	while (emulationsThreadShouldRun)
 	{
-		lockEmulations();
+		lock();
 		
 		if (isEmulationsBufferEmpty())
 			pthread_cond_wait(&emulationsCond, &emulationsMutex);
@@ -319,7 +330,7 @@ void PAAudio::runEmulations()
 		// Audio recording
 		recordAudio(outputBuffer, framesPerBuffer, channelNum);
 		
-		unlockEmulations();
+		unlock();
 		
 		advanceEmulationsBuffer();
 	}
@@ -327,18 +338,19 @@ void PAAudio::runEmulations()
 
 bool PAAudio::addEmulation(OEEmulation *emulation)
 {
-	lockEmulations();
+	lock();
 	
 	emulations.push_back(emulation);
 	
-	unlockEmulations();
+	unlock();
 	
 	return true;
 }
 
 void PAAudio::removeEmulation(OEEmulation *emulation)
 {
-	lockEmulations();
+	cout << "a" << endl;
+	lock();
 	
 	vector<OEEmulation *>::iterator first = emulations.begin();
 	vector<OEEmulation *>::iterator last = emulations.end();
@@ -347,7 +359,8 @@ void PAAudio::removeEmulation(OEEmulation *emulation)
 	if (i != last)
 		emulations.erase(i, last);
 	
-	unlockEmulations();
+	unlock();
+	cout << "b" << endl;
 }
 
 //
@@ -464,7 +477,7 @@ bool PAAudio::disableAudio()
 	if (state)
 		closeAudio();
 	
-	lockEmulations();
+//	lock();
 	
 	return state;
 }
@@ -473,7 +486,7 @@ void PAAudio::enableAudio(bool state)
 {
 	initBuffer();
 	
-	unlockEmulations();
+//	unlock();
 	
 	if (state)
 		openAudio();
@@ -557,7 +570,7 @@ void PAAudio::openPlayer(string path)
 		0,
 	};
 	
-	lockEmulations();
+	lock();
 	
 	playSNDFILE = sf_open(path.c_str(), SFM_READ, &sfInfo);
 	if (playSNDFILE)
@@ -590,7 +603,7 @@ void PAAudio::openPlayer(string path)
 	else
 		printLog("could not open file " + path);
 	
-	unlockEmulations();
+	unlock();
 }
 
 void PAAudio::closePlayer()
@@ -598,7 +611,7 @@ void PAAudio::closePlayer()
 	if (!playSNDFILE)
 		return;
 	
-	lockEmulations();
+	lock();
 	
 	sf_close(playSNDFILE);
 	playSNDFILE = NULL;
@@ -606,7 +619,7 @@ void PAAudio::closePlayer()
 	playFrameIndex = 0;
 	playFrameNum = 0;
 	
-	unlockEmulations();
+	unlock();
 }
 
 void PAAudio::setPlayPosition(float time)
@@ -614,7 +627,7 @@ void PAAudio::setPlayPosition(float time)
 	if (!playSNDFILE)
 		return;
 	
-	lockEmulations();
+	lock();
 	
 	playFrameIndex = time * sampleRate;
 	sf_seek(playSNDFILE, playFrameIndex / playSRCRatio, SEEK_SET);
@@ -625,7 +638,7 @@ void PAAudio::setPlayPosition(float time)
 		playSRCBufferFrameEnd = 0;
 	}
 	
-	unlockEmulations();
+	unlock();
 }
 
 void PAAudio::play()
@@ -679,9 +692,6 @@ void PAAudio::playAudio(float *outputBuffer,
 			
 			playSRCBufferFrameBegin = 0;
 			playSRCBufferFrameEnd = n;
-			
-			if (n != playSRCBufferFrameNum)
-				playing = false;
 		}
 		
 		int index = playSRCBufferFrameBegin * playChannelNum;
@@ -695,7 +705,7 @@ void PAAudio::playAudio(float *outputBuffer,
 			frameNum,
 			0,
 			0,
-			0,
+			inputFrameNum ? 0 : 1,
 			playSRCRatio,
 		};
 		src_process(playSRC, &srcData);
@@ -754,13 +764,13 @@ void PAAudio::openRecorder(string path)
 		0,
 	};
 	
-	lockEmulations();
+	lock();
 	
 	if (!(recordingSNDFILE = sf_open(path.c_str(), SFM_WRITE, &sfInfo)))
 		printLog("could not open temporary file " + path);
 	recordingFrameNum = 0;
 	
-	unlockEmulations();
+	unlock();
 }
 
 void PAAudio::closeRecorder()
@@ -768,13 +778,13 @@ void PAAudio::closeRecorder()
 	if (!recordingSNDFILE)
 		return;
 	
-	lockEmulations();
+	lock();
 	
 	sf_close(recordingSNDFILE);
 	recordingSNDFILE = NULL;
 	recording = false;
 	
-	unlockEmulations();
+	unlock();
 }
 
 void PAAudio::record()

@@ -131,11 +131,11 @@
 					  context:nil];
 	
 	((PAAudio *)paAudio)->setFullDuplex([userDefaults
-												   boolForKey:@"OEAudioFullDuplex"]);
+										 boolForKey:@"OEAudioFullDuplex"]);
 	((PAAudio *)paAudio)->setPlayVolume([userDefaults
-												   floatForKey:@"OEAudioPlayVolume"]);
+										 floatForKey:@"OEAudioPlayVolume"]);
 	((PAAudio *)paAudio)->setPlayThrough([userDefaults
-													boolForKey:@"OEAudioPlayThrough"]);
+										  boolForKey:@"OEAudioPlayThrough"]);
 	
 	((PAAudio *)paAudio)->open();
 }
@@ -351,16 +351,7 @@
 							   error:(NSError **)outError
 {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	if (![defaults boolForKey:@"OEDefaultTemplateEnabled"])
-	{
-		[self newDocumentFromTemplateChooser:self];
-		
-		*outError = [NSError errorWithDomain:NSCocoaErrorDomain
-										code:NSUserCancelledError
-									userInfo:nil];
-		return nil;
-	}
-	else
+	if ([defaults boolForKey:@"OEDefaultTemplateEnabled"])
 	{
 		NSString *path = [defaults stringForKey:@"OEDefaultTemplatePath"];
 		id document = nil;
@@ -376,9 +367,20 @@
 		NSURL *url = [NSURL fileURLWithPath:path];
 		document = [self openUntitledDocumentWithTemplateURL:url
 													 display:displayDocument
-													   error:outError];
-		return document;
+													   error:nil];
+		
+		if (document)
+			return document;
+		
+		[defaults setBool:NO forKey:@"OEDefaultTemplateEnabled"];
 	}
+	
+	[self newDocumentFromTemplateChooser:self];
+	
+	*outError = [NSError errorWithDomain:NSCocoaErrorDomain
+									code:NSUserCancelledError
+								userInfo:nil];
+	return nil;
 }
 
 - (id)openUntitledDocumentWithTemplateURL:(NSURL *)absoluteURL

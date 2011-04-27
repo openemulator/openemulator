@@ -28,6 +28,7 @@ class PAAudio : public OEComponent
 {
 public:
 	PAAudio();
+	~PAAudio();
 	
 	void setFullDuplex(bool value);
 	void setSampleRate(double value);
@@ -38,8 +39,9 @@ public:
 	bool open();
 	void close();
 	
-	void lockEmulations();
-	void unlockEmulations();
+	void lock();
+	void unlock();
+	
 	void runEmulations();
 	bool addEmulation(OEEmulation *emulation);
 	void removeEmulation(OEEmulation *emulation);

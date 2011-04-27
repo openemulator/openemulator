@@ -29,15 +29,13 @@ typedef enum
 	void *emulation;
 	
 	EmulationWindowController *emulationWindowController;
-	
-	NSMutableArray *canvases;
 	NSMutableArray *canvasWindowControllers;
 }
 
 - (id)initWithTemplateURL:(NSURL *)templateURL error:(NSError **)outError;
 - (IBAction)saveDocumentAsTemplate:(id)sender;
 - (void)showEmulation:(id)sender;
-- (void)showCanvas:(void *)canvas;
+- (void)showCanvas:(NSValue *)canvasValue;
 
 - (void)createEmulation:(NSURL *)url;
 - (void)destroyEmulation;

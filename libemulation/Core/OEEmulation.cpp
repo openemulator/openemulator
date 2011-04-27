@@ -20,7 +20,6 @@
 
 OEEmulation::OEEmulation() : OEEDL()
 {
-	runAlert = NULL;
 	createCanvas = NULL;
 	destroyCanvas = NULL;
 	didUpdate = NULL;
@@ -43,11 +42,6 @@ OEEmulation::~OEEmulation()
 void OEEmulation::setResourcePath(string path)
 {
 	resourcePath = path;
-}
-
-void OEEmulation::setRunAlert(EmulationRunAlert runAlert)
-{
-	this->runAlert = runAlert;
 }
 
 void OEEmulation::setCreateCanvas(EmulationCreateCanvas createCanvas)

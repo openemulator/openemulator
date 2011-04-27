@@ -116,7 +116,7 @@
 		return [window frame].size;
 }
 
-- (BOOL)windowShouldClose:(id)sender
+/*- (BOOL)windowShouldClose:(id)sender
 {
 	NSLog(@"CanvasWindow windowShouldClose");
 	
@@ -131,7 +131,7 @@
 	}
 	
 	return YES;
-}
+}*/
 
 - (void)setFrameOrigin:(NSPoint)point
 {

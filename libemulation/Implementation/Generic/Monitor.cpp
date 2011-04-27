@@ -182,16 +182,19 @@ bool Monitor::setRef(string name, OEComponent *ref)
 	{
 		if (device)
 		{
-			canvas->removeObserver(this, CANVAS_KEYBOARD_DID_CHANGE);
-			canvas->removeObserver(this, CANVAS_UNICODEKEYBOARD_DID_CHANGE);
-			canvas->removeObserver(this, CANVAS_POINTER_DID_CHANGE);
-			canvas->removeObserver(this, CANVAS_MOUSE_DID_CHANGE);
-			canvas->removeObserver(this, CANVAS_JOYSTICK1_DID_CHANGE);
-			canvas->removeObserver(this, CANVAS_JOYSTICK2_DID_CHANGE);
-			canvas->removeObserver(this, CANVAS_JOYSTICK3_DID_CHANGE);
-			canvas->removeObserver(this, CANVAS_JOYSTICK4_DID_CHANGE);
+			if (canvas)
+			{
+				canvas->removeObserver(this, CANVAS_KEYBOARD_DID_CHANGE);
+				canvas->removeObserver(this, CANVAS_UNICODEKEYBOARD_DID_CHANGE);
+				canvas->removeObserver(this, CANVAS_POINTER_DID_CHANGE);
+				canvas->removeObserver(this, CANVAS_MOUSE_DID_CHANGE);
+				canvas->removeObserver(this, CANVAS_JOYSTICK1_DID_CHANGE);
+				canvas->removeObserver(this, CANVAS_JOYSTICK2_DID_CHANGE);
+				canvas->removeObserver(this, CANVAS_JOYSTICK3_DID_CHANGE);
+				canvas->removeObserver(this, CANVAS_JOYSTICK4_DID_CHANGE);
 
-			canvas->removeObserver(this, CANVAS_WILL_UPDATE);
+//				canvas->removeObserver(this, CANVAS_WILL_UPDATE);
+			}
 
 			device->postMessage(this, DEVICE_DESTROY_CANVAS, &canvas);
 		}
@@ -200,25 +203,28 @@ bool Monitor::setRef(string name, OEComponent *ref)
 		{
 			device->postMessage(this, DEVICE_CREATE_CANVAS, &canvas);
 			
-			canvas->addObserver(this, CANVAS_KEYBOARD_DID_CHANGE);
-			canvas->addObserver(this, CANVAS_UNICODEKEYBOARD_DID_CHANGE);
-			canvas->addObserver(this, CANVAS_POINTER_DID_CHANGE);
-			canvas->addObserver(this, CANVAS_MOUSE_DID_CHANGE);
-			canvas->addObserver(this, CANVAS_JOYSTICK1_DID_CHANGE);
-			canvas->addObserver(this, CANVAS_JOYSTICK2_DID_CHANGE);
-			canvas->addObserver(this, CANVAS_JOYSTICK3_DID_CHANGE);
-			canvas->addObserver(this, CANVAS_JOYSTICK4_DID_CHANGE);
-			
-			canvas->addObserver(this, CANVAS_WILL_UPDATE);
+			if (canvas)
+			{
+				canvas->addObserver(this, CANVAS_KEYBOARD_DID_CHANGE);
+				canvas->addObserver(this, CANVAS_UNICODEKEYBOARD_DID_CHANGE);
+				canvas->addObserver(this, CANVAS_POINTER_DID_CHANGE);
+				canvas->addObserver(this, CANVAS_MOUSE_DID_CHANGE);
+				canvas->addObserver(this, CANVAS_JOYSTICK1_DID_CHANGE);
+				canvas->addObserver(this, CANVAS_JOYSTICK2_DID_CHANGE);
+				canvas->addObserver(this, CANVAS_JOYSTICK3_DID_CHANGE);
+				canvas->addObserver(this, CANVAS_JOYSTICK4_DID_CHANGE);
+				
+//				canvas->addObserver(this, CANVAS_WILL_UPDATE);
+			}
 		}
 	}
 	else if (name == "audio")
 	{
-//		if (audio)
-//			audio->removeObserver(this, AUDIO_FRAME_WILL_RENDER);
+		if (audio)
+			audio->removeObserver(this, AUDIO_FRAME_WILL_RENDER);
 		audio = ref;
-//		if (audio)
-//			audio->addObserver(this, AUDIO_FRAME_WILL_RENDER);
+		if (audio)
+			audio->addObserver(this, AUDIO_FRAME_WILL_RENDER);
 	}
 	else
 		return false;
@@ -250,8 +256,31 @@ bool Monitor::init()
 
 void Monitor::notify(OEComponent *sender, int notification, void *data)
 {
-	if (sender != canvas)
+	if (sender == audio)
+	{
+		static int i = 0;
+		
+		i++;
+		if (canvas && (i >= 48000 / 512 * 5))
+		{
+			canvas->removeObserver(this, CANVAS_KEYBOARD_DID_CHANGE);
+			canvas->removeObserver(this, CANVAS_UNICODEKEYBOARD_DID_CHANGE);
+			canvas->removeObserver(this, CANVAS_POINTER_DID_CHANGE);
+			canvas->removeObserver(this, CANVAS_MOUSE_DID_CHANGE);
+			canvas->removeObserver(this, CANVAS_JOYSTICK1_DID_CHANGE);
+			canvas->removeObserver(this, CANVAS_JOYSTICK2_DID_CHANGE);
+			canvas->removeObserver(this, CANVAS_JOYSTICK3_DID_CHANGE);
+			canvas->removeObserver(this, CANVAS_JOYSTICK4_DID_CHANGE);
+			
+			canvas->removeObserver(this, CANVAS_WILL_UPDATE);
+			
+			device->postMessage(this, DEVICE_DESTROY_CANVAS, &canvas);
+			
+			device->postMessage(this, DEVICE_UPDATE, NULL);
+		}
+		
 		return;
+	}
 	
 	if (notification != CANVAS_WILL_UPDATE)
 		return;
@@ -262,11 +291,10 @@ void Monitor::notify(OEComponent *sender, int notification, void *data)
 	int *p = (int *)frame.getPixels();
 	if (p)
 	{
-		int w = 576;
-		int h = 192;
-		static int da = 0;
+		int w = 640;
+		int h = 200;
 		for (int y = 0; y < h; y++)
-			for (int x = 0; x < 512; x++)
+			for (int x = 0; x < 256; x++)
 				p[y * w + x] = ((x & 0x1f2) == da) ? 0xffffffff : 0x00000000;
 		
 		da += 0x11;
