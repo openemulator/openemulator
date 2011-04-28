@@ -1,9 +1,6 @@
 ==To-Do==
-* Fix: A self-closing canvas is locking the paAudio object
 * Fix: OpenGL context is destroyed when closing a canvas
 * Fix: canvas update notification without locks
-
-* Fix emulation window => settings => scrollers, so it is updated when the window is clicked-through
 
 * Implement OpenGL paper canvas
 * Implement CanvasWindow scroller for paper canvas

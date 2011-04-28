@@ -338,29 +338,19 @@ void PAAudio::runEmulations()
 
 bool PAAudio::addEmulation(OEEmulation *emulation)
 {
-	lock();
-	
 	emulations.push_back(emulation);
-	
-	unlock();
 	
 	return true;
 }
 
 void PAAudio::removeEmulation(OEEmulation *emulation)
 {
-	cout << "a" << endl;
-	lock();
-	
 	vector<OEEmulation *>::iterator first = emulations.begin();
 	vector<OEEmulation *>::iterator last = emulations.end();
 	vector<OEEmulation *>::iterator i = remove(first, last, emulation);
 	
 	if (i != last)
 		emulations.erase(i, last);
-	
-	unlock();
-	cout << "b" << endl;
 }
 
 //
@@ -477,7 +467,7 @@ bool PAAudio::disableAudio()
 	if (state)
 		closeAudio();
 	
-//	lock();
+	lock();
 	
 	return state;
 }
@@ -486,7 +476,7 @@ void PAAudio::enableAudio(bool state)
 {
 	initBuffer();
 	
-//	unlock();
+	unlock();
 	
 	if (state)
 		openAudio();

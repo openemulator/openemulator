@@ -23,6 +23,9 @@ Monitor::Monitor()
 	screenRect = OEMakeRect(0, 0, 1, 1);
 	
 	audio = NULL;
+	
+	ta = 0;
+	da = 0;
 }
 
 bool Monitor::setValue(string name, string value)
@@ -258,10 +261,8 @@ void Monitor::notify(OEComponent *sender, int notification, void *data)
 {
 	if (sender == audio)
 	{
-		static int i = 0;
-		
-		i++;
-		if (canvas && (i >= 48000 / 512 * 5))
+		ta++;
+		if (canvas && (ta >= 48000 / 512 * 5))
 		{
 			canvas->removeObserver(this, CANVAS_KEYBOARD_DID_CHANGE);
 			canvas->removeObserver(this, CANVAS_UNICODEKEYBOARD_DID_CHANGE);
@@ -275,8 +276,6 @@ void Monitor::notify(OEComponent *sender, int notification, void *data)
 			canvas->removeObserver(this, CANVAS_WILL_UPDATE);
 			
 			device->postMessage(this, DEVICE_DESTROY_CANVAS, &canvas);
-			
-			device->postMessage(this, DEVICE_UPDATE, NULL);
 		}
 		
 		return;

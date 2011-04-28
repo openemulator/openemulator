@@ -35,6 +35,7 @@ private:
 	
 	OEImage frame;
 	
+	int ta;
 	int da;
 	
 	void updateContentRect();

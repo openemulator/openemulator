@@ -43,6 +43,9 @@ typedef enum
 - (void)unlockEmulation;
 - (void *)emulation;
 
+- (void)createCanvas:(NSDictionary *)dict;
+- (void)destroyCanvas:(NSValue *)canvasValue;
+
 - (BOOL)isMountable:(NSString *)path;
 - (BOOL)mount:(NSString *)path;
 - (BOOL)testMount:(NSString *)path;

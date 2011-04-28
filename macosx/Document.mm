@@ -56,9 +56,12 @@ OEComponent *createCanvas(void *userData, OEComponent *device)
 						  [NSValue valueWithPointer:canvas], @"canvas",
 						  nil];
 	
-	[document performSelectorOnMainThread:@selector(createCanvas:)
-							   withObject:dict
-							waitUntilDone:NO];
+	if ([NSThread isMainThread])
+		[document createCanvas:dict];
+	else
+		[document performSelectorOnMainThread:@selector(createCanvas:)
+								   withObject:dict
+								waitUntilDone:NO];
 	
 	[pool drain];
 	
@@ -72,11 +75,12 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	Document *document = (Document *)userData;
 	NSValue *canvasValue = [NSValue valueWithPointer:canvas];
 	
-	[document performSelectorOnMainThread:@selector(destroyCanvas:)
-							   withObject:canvasValue
-							waitUntilDone:NO];
-	
-	delete canvas;
+	if ([NSThread isMainThread])
+		[document destroyCanvas:canvasValue];
+	else
+		[document performSelectorOnMainThread:@selector(destroyCanvas:)
+								   withObject:canvasValue
+								waitUntilDone:NO];
 	
 	[pool drain];
 }
@@ -129,7 +133,9 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 			 ofType:(NSString *)typeName
 			  error:(NSError **)outError
 {
-	[self destroyEmulation];
+	if (emulation)
+		[self destroyEmulation];
+	
 	[self createEmulation:absoluteURL];
 	
 	OEEmulation *theEmulation = (OEEmulation *)emulation;
@@ -254,6 +260,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	if (![[self windowControllers] containsObject:emulationWindowController])
 		[self addWindowController:emulationWindowController];
 	
+	[emulationWindowController updateEmulation:self];
 	[emulationWindowController showWindow:self];
 }
 
@@ -279,13 +286,15 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 																	 canvas:canvas];
 	[canvasWindowControllers addObject:canvasWindowController];
 	[canvasWindowController release];
+	
+	[emulationWindowController updateEmulation:self];
 }
 
 - (void)destroyCanvas:(NSValue *)canvasValue
 {
 	NSLog(@"Document destroyCanvas");
 	
-	void *canvas = [canvasValue pointerValue];
+	OpenGLCanvas *canvas = (OpenGLCanvas *)[canvasValue pointerValue];
 	for (int i = 0; i < [canvasWindowControllers count]; i++)
 	{
 		CanvasWindowController *canvasWindowController;
@@ -296,6 +305,10 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 			
 			[self removeWindowController:canvasWindowController];
 			[canvasWindowControllers removeObjectAtIndex:i];
+			
+			[emulationWindowController updateEmulation:self];
+			
+			delete canvas;
 			
 			break;
 		}
@@ -354,13 +367,13 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	
 	theEmulation->addComponent("audio", paAudio);
 	
+	[self lockEmulation];
 	theEmulation->open(getCPPString([url path]));
-	
 	theEmulation->setDidUpdate(didUpdate);
+	paAudio->addEmulation(theEmulation);
+	[self unlockEmulation];
 	
 	emulation = theEmulation;
-	
-	paAudio->addEmulation(theEmulation);
 }
 
 - (void)destroyEmulation
@@ -374,10 +387,11 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	documentController = [NSDocumentController sharedDocumentController];
 	PAAudio *paAudio = (PAAudio *)[documentController paAudio];
 	
+	[self lockEmulation];
 	OEEmulation *theEmulation = (OEEmulation *)emulation;
 	paAudio->removeEmulation(theEmulation);
-	
 	delete theEmulation;
+	[self unlockEmulation];
 	
 	emulation = nil;
 }
