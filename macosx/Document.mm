@@ -398,7 +398,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 
 - (void)lockEmulation
 {
-	NSLog(@"lockEmulation");
+//	NSLog(@"lockEmulation");
 	
 	DocumentController *documentController;
 	documentController = [NSDocumentController sharedDocumentController];
@@ -409,7 +409,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 
 - (void)unlockEmulation
 {
-	NSLog(@"unlockEmulation");
+//	NSLog(@"unlockEmulation");
 	
 	DocumentController *documentController;
 	documentController = [NSDocumentController sharedDocumentController];

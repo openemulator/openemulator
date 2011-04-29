@@ -1,4 +1,5 @@
 ==2011-04==
+* Fixed OpenGL context loss when closing a canvas
 * Fixed GUI-Emulation-Canvas thread synchronization
 * Improved the default emulation fallback, the template chooser is now displayed
 * Fixed audio playback play position

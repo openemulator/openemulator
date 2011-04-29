@@ -195,8 +195,8 @@ bool Monitor::setRef(string name, OEComponent *ref)
 				canvas->removeObserver(this, CANVAS_JOYSTICK2_DID_CHANGE);
 				canvas->removeObserver(this, CANVAS_JOYSTICK3_DID_CHANGE);
 				canvas->removeObserver(this, CANVAS_JOYSTICK4_DID_CHANGE);
-
-//				canvas->removeObserver(this, CANVAS_WILL_UPDATE);
+				
+				canvas->removeObserver(this, CANVAS_WILL_UPDATE);
 			}
 
 			device->postMessage(this, DEVICE_DESTROY_CANVAS, &canvas);
@@ -217,7 +217,7 @@ bool Monitor::setRef(string name, OEComponent *ref)
 				canvas->addObserver(this, CANVAS_JOYSTICK3_DID_CHANGE);
 				canvas->addObserver(this, CANVAS_JOYSTICK4_DID_CHANGE);
 				
-//				canvas->addObserver(this, CANVAS_WILL_UPDATE);
+				canvas->addObserver(this, CANVAS_WILL_UPDATE);
 			}
 		}
 	}
@@ -261,7 +261,7 @@ void Monitor::notify(OEComponent *sender, int notification, void *data)
 {
 	if (sender == audio)
 	{
-		ta++;
+//		ta++;
 		if (canvas && (ta >= 48000 / 512 * 5))
 		{
 			canvas->removeObserver(this, CANVAS_KEYBOARD_DID_CHANGE);
@@ -283,10 +283,7 @@ void Monitor::notify(OEComponent *sender, int notification, void *data)
 	
 	if (notification != CANVAS_WILL_UPDATE)
 		return;
-	
-	CanvasUpdate *update = (CanvasUpdate *)data;
-	update->draw = true;
-	
+
 	int *p = (int *)frame.getPixels();
 	if (p)
 	{
@@ -299,7 +296,8 @@ void Monitor::notify(OEComponent *sender, int notification, void *data)
 		da += 0x11;
 		da &= 0x1f0;
 		
-		canvas->postMessage(this, CANVAS_POST_FRAME, &frame);
+		if (canvas)
+			canvas->postMessage(this, CANVAS_POST_FRAME, &frame);
 	}
 }
 

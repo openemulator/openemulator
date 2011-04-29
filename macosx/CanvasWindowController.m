@@ -47,7 +47,7 @@
 	[fCanvasView freeOpenGL];
 }
 
-
+// UI
 
 - (void)awakeFromNib
 {
@@ -222,7 +222,7 @@
 			nil];
 }
 
-
+// System events
 
 - (void)systemPowerDown:(id)sender
 {

@@ -1,6 +1,7 @@
 ==To-Do==
-* Fix: OpenGL context is destroyed when closing a canvas
 * Fix: canvas update notification without locks
+* Fix: Add video lock/unlock
+* Fix: canvas update() API. It is not always called on vertical refresh.
 
 * Implement OpenGL paper canvas
 * Implement CanvasWindow scroller for paper canvas
