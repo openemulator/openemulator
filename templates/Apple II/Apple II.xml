@@ -220,20 +220,17 @@
     <setting ref="appleMonitorII.monitor" name="videoContrast" label="Contrast" type="slider" options="0.0,2.0,1.0" />
     <setting ref="appleMonitorII.monitor" name="videoSaturation" label="Saturation" type="slider" options="0.0,2.0,1.0" />
     <setting ref="appleMonitorII.monitor" name="videoHue" label="Hue" type="slider" options="-0.5,0.5,0.0" />
-    
-    <setting ref="appleMonitorII.monitor" name="screenHorizontalCenter" label="Horizontal Center" type="slider" options="-0.1,0.1" />
-    <setting ref="appleMonitorII.monitor" name="screenHorizontalSize" label="Horizontal Size" type="slider" options="0.8,1.2" />
-    <setting ref="appleMonitorII.monitor" name="screenVerticalCenter" label="Vertical Center" type="slider" options="-0.1,0.1" />
-    <setting ref="appleMonitorII.monitor" name="screenVerticalSize" label="Vertical Size" type="slider" options="0.8,1.2" />
-    
-    <setting ref="appleMonitorII.monitor" name="screenBarrel" label="Barrel" type="slider" options="0.0,1.0" />
-    <setting ref="appleMonitorII.monitor" name="screenScanlineAlpha" label="Scanline Alpha" type="slider" options="0.0,1.0" />
-    <setting ref="appleMonitorII.monitor" name="screenCenterLighting" label="Center Lighting" type="slider" options="0.0,1.0" />
-    <setting ref="appleMonitorII.monitor" name="screenShadowMaskAlpha" label="Shadow Mask Alpha" type="slider" options="0.0,1.0" />
-    <setting ref="appleMonitorII.monitor" name="screenShadowMaskDotPitch" label="Shadow Mask Dot Pitch" type="slider" options="0.0,1.0" />
-    <setting ref="appleMonitorII.monitor" name="screenShadowMask" label="Shadow Mask" type="select" options="Triad,Inline,Aperture" />
-    <setting ref="appleMonitorII.monitor" name="screenPersistance" label="Persistance" type="slider" options="0.0,1.0" />
-    
+    <setting ref="appleMonitorII.monitor" name="videoHorizontalCenter" label="Horizontal Center" type="slider" options="-0.1,0.1" />
+    <setting ref="appleMonitorII.monitor" name="videoHorizontalSize" label="Horizontal Size" type="slider" options="0.8,1.2" />
+    <setting ref="appleMonitorII.monitor" name="videoVerticalCenter" label="Vertical Center" type="slider" options="-0.1,0.1" />
+    <setting ref="appleMonitorII.monitor" name="videoVerticalSize" label="Vertical Size" type="slider" options="0.8,1.2" />
+    <setting ref="appleMonitorII.monitor" name="displayBarrel" label="Barrel" type="slider" options="0.0,1.0" />
+    <setting ref="appleMonitorII.monitor" name="displayScanlineAlpha" label="Scanline Alpha" type="slider" options="0.0,1.0" />
+    <setting ref="appleMonitorII.monitor" name="displayCenterLighting" label="Center Lighting" type="slider" options="0.0,1.0" />
+    <setting ref="appleMonitorII.monitor" name="displayShadowMaskAlpha" label="Shadow Mask Alpha" type="slider" options="0.0,1.0" />
+    <setting ref="appleMonitorII.monitor" name="displayShadowMaskDotPitch" label="Shadow Mask Dot Pitch" type="slider" options="0.0,1.0" />
+    <setting ref="appleMonitorII.monitor" name="displayShadowMask" label="Shadow Mask" type="select" options="Triad,Inline,Aperture,LCD,Bayer" />
+    <setting ref="appleMonitorII.monitor" name="displayPersistance" label="Persistance" type="slider" options="0.0,1.0" />
     <setting ref="appleMonitorII.monitor" name="compositeCarrierFrequency" label="Chroma Carrier Frequency" type="slider" options="0.24,0.3" />
     <setting ref="appleMonitorII.monitor" name="compositeLinePhase" label="Chroma Line Phase" type="slider" options="0.0,1.0" />
     <setting ref="appleMonitorII.monitor" name="compositeChromaBandwidth" label="Chroma Bandwidth" type="slider" options="0.0,1.0" />
@@ -249,17 +246,17 @@
     <property name="videoContrast" value="1" />
     <property name="videoSaturation" value="1" />
     <property name="videoHue" value="0" />
-    <property name="screenHorizontalCenter" value="0" />
-    <property name="screenVerticalCenter" value="0" />
-    <property name="screenHorizontalSize" value="1" />
-    <property name="screenVerticalSize" value="1" />
-    <property name="screenBarrel" value="0.05" />
-    <property name="screenScanlineAlpha" value="0.05" />
-    <property name="screenCenterLighting" value="1" />
-    <property name="screenShadowMaskAlpha" value="0.05" />
-    <property name="screenShadowMaskDotPitch" value="0.5" />
-    <property name="screenShadowMask" value="1" />
-    <property name="screenPersistance" value="0" />
+    <property name="videoHorizontalCenter" value="0" />
+    <property name="videoVerticalCenter" value="0" />
+    <property name="videoHorizontalSize" value="1" />
+    <property name="videoVerticalSize" value="1" />
+    <property name="displayBarrel" value="0.05" />
+    <property name="displayScanlineAlpha" value="0.05" />
+    <property name="displayCenterLighting" value="1" />
+    <property name="displayShadowMaskAlpha" value="0.05" />
+    <property name="displayShadowMaskDotPitch" value="0.5" />
+    <property name="displayShadowMask" value="1" />
+    <property name="displayPersistance" value="0" />
     <property name="compositeBlackLevel" value="0" />
     <property name="compositeWhiteLevel" value="1" />
     <property name="compositeCarrierFrequency" value="0.25" />

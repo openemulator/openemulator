@@ -78,14 +78,14 @@ void OpenGLCanvas::close()
 	freeOpenGL();
 }
 
-OESize OpenGLCanvas::getCanvasSize()
+CanvasMode OpenGLCanvas::getMode()
 {
-	return newConfiguration.size;
+	return mode;
 }
 
-CanvasMode OpenGLCanvas::getCanvasMode()
+OESize OpenGLCanvas::getResolution()
 {
-	return newConfiguration.mode;
+	return newConfiguration.displayResolution;
 }
 
 void OpenGLCanvas::setEnableShader(bool value)
@@ -96,21 +96,25 @@ void OpenGLCanvas::setEnableShader(bool value)
 	unlock();
 }
 
-bool OpenGLCanvas::update(float width, float height, float offset, bool draw)
+bool OpenGLCanvas::update(float width, float height, float offset, bool isVSync)
 {
+	bool draw = !isVSync;
 	CanvasUpdate update;
 	
-	update.width = width;
-	update.height = height;
-	update.draw = draw;
-	notify(this, CANVAS_WILL_UPDATE, &update);
-	draw = update.draw;
-	
-	if (isNewFrame)
-		uploadFrame();
-	
-	if (isNewConfiguration)
-		updateConfiguration();
+	if (isVSync)
+	{
+		update.width = width;
+		update.height = height;
+		update.draw = draw;
+		notify(this, CANVAS_DID_VSYNC, &update);
+		draw = update.draw;
+		
+ 		if (isNewFrame)
+			uploadFrame();
+		
+		if (isNewConfiguration)
+			updateConfiguration();
+	}
 	
 	if ((width != viewportSize.width) ||
 		(height != viewportSize.height))
@@ -122,7 +126,7 @@ bool OpenGLCanvas::update(float width, float height, float offset, bool draw)
 		draw = true;
 	}
 	
-	if (isNewFrame || isNewConfiguration)
+	if (isVSync && (isNewFrame || isNewConfiguration))
 	{
 		renderFrame();
 		
@@ -135,11 +139,12 @@ bool OpenGLCanvas::update(float width, float height, float offset, bool draw)
 	if (isDrawBezel)
 		draw = true;
 	
-	updatePersistance();
+	if (isVSync)
+		updatePersistance();
 	
 	if (draw)
 	{
-		drawCanvas();
+		drawVideoCanvas();
 		drawBezel();
 	}
 	
@@ -227,6 +232,10 @@ void OpenGLCanvas::loadTextures()
 				OPENGLCANVAS_TEXTURE_SHADOWMASK_INLINE);
 	loadTexture("Shadow Mask Aperture.png", true,
 				OPENGLCANVAS_TEXTURE_SHADOWMASK_APERTURE);
+	loadTexture("Shadow Mask LCD.png", true,
+				OPENGLCANVAS_TEXTURE_SHADOWMASK_LCD);
+	loadTexture("Shadow Mask Bayer.png", true,
+				OPENGLCANVAS_TEXTURE_SHADOWMASK_BAYER);
 	loadTexture("Bezel Power.png", false,
 				OPENGLCANVAS_TEXTURE_BEZEL_POWER);
 	loadTexture("Bezel Pause.png", false,
@@ -404,7 +413,7 @@ void OpenGLCanvas::loadShaders()
 			gl_FragColor = vec4(decoder * p, 1.0);\
 		}");
 	
-	shader[OPENGLCANVAS_SHADER_SCREEN] = loadShader("\
+	shader[OPENGLCANVAS_SHADER_DISPLAY] = loadShader("\
 		uniform sampler2D texture;\
 		uniform vec2 texture_size;\
 		uniform float barrel;\
@@ -444,7 +453,7 @@ void OpenGLCanvas::deleteShaders()
 	deleteShader(OPENGLCANVAS_SHADER_NTSC);
 	deleteShader(OPENGLCANVAS_SHADER_PAL);
 	deleteShader(OPENGLCANVAS_SHADER_RGB);
-	deleteShader(OPENGLCANVAS_SHADER_SCREEN);
+	deleteShader(OPENGLCANVAS_SHADER_DISPLAY);
 }
 
 GLuint OpenGLCanvas::loadShader(const char *source)
@@ -552,7 +561,7 @@ void OpenGLCanvas::updateConfiguration()
 	// Deactivate shader when needed
 	if (!isShaderEnabled)
 		return;
-	if (configuration.mode == CANVAS_MODE_PAPER)
+	if (mode == CANVAS_MODE_PAPER)
 		return;
 	
 	// Y'UV filters
@@ -697,7 +706,7 @@ void OpenGLCanvas::updateConfiguration()
 			break;
 	}
 	
-	isShaderActive = renderShader && shader[OPENGLCANVAS_SHADER_SCREEN];
+	isShaderActive = renderShader && shader[OPENGLCANVAS_SHADER_DISPLAY];
 	if (!isShaderActive)
 		return;
 	
@@ -732,17 +741,17 @@ void OpenGLCanvas::updateConfiguration()
 	glUniformMatrix3fv(glGetUniformLocation(renderShader, "decoder"),
 					   9, false, m.getValues());
 	
-	GLuint screenShader = shader[OPENGLCANVAS_SHADER_SCREEN];
-	glUseProgram(screenShader);
-	glUniform1i(glGetUniformLocation(screenShader, "shadowmask"), 1);
-	glUniform1f(glGetUniformLocation(screenShader, "barrel"),
-				configuration.screenBarrel);
-	float centerLighting = configuration.screenCenterLighting;
+	GLuint displayShader = shader[OPENGLCANVAS_SHADER_DISPLAY];
+	glUseProgram(displayShader);
+	glUniform1i(glGetUniformLocation(displayShader, "shadowmask"), 1);
+	glUniform1f(glGetUniformLocation(displayShader, "barrel"),
+				configuration.displayBarrel);
+	float centerLighting = configuration.displayCenterLighting;
 	if (fabs(centerLighting) < 0.001)
 		centerLighting = 0.001;
-	glUniform1f(glGetUniformLocation(screenShader, "center_lighting"),
+	glUniform1f(glGetUniformLocation(displayShader, "center_lighting"),
 				1.0 / centerLighting - 1.0);
-	glUniform1f(glGetUniformLocation(screenShader, "brightness"),
+	glUniform1f(glGetUniformLocation(displayShader, "brightness"),
 				configuration.videoBrightness);
 	
 	glUseProgram(0);
@@ -827,14 +836,10 @@ void OpenGLCanvas::renderFrame()
 #endif
 }
 
-void OpenGLCanvas::drawCanvas()
+void OpenGLCanvas::drawVideoCanvas()
 {
 	// Clear
-	float clearColor;
-	if (configuration.mode == CANVAS_MODE_PAPER)
-		clearColor = 0x80;
-	else
-		clearColor = isShaderActive ? configuration.videoBrightness : 0;
+	float clearColor = isShaderActive ? configuration.videoBrightness : 0;
 	glClearColor(clearColor, clearColor, clearColor, 0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
@@ -845,65 +850,72 @@ void OpenGLCanvas::drawCanvas()
 	// Calculate rects
 	OESize frameSize = frame.getSize();
 	
-	OERect vertexRect = OEMakeRect(2 * configuration.contentRect.origin.x - 1,
-								   2 * configuration.contentRect.origin.y - 1,
-								   2 * configuration.contentRect.size.width,
-								   2 * configuration.contentRect.size.height);
+	OERect vertexRect = OEMakeRect(2 * configuration.videoRect.origin.x - 1,
+								   2 * configuration.videoRect.origin.y - 1,
+								   2 * configuration.videoRect.size.width,
+								   2 * configuration.videoRect.size.height);
 	
 	OERect textureRect = OEMakeRect(0, 0,
 									frameSize.width / size.width, 
 									frameSize.height / size.height);
 	
 	float viewAspectRatio = viewportSize.width / viewportSize.height;
-	float canvasAspectRatio = (configuration.size.width /
-							   configuration.size.height);
+	float displayAspectRatio = (configuration.displayResolution.width /
+							   configuration.displayResolution.height);
 	
-	float ratio = viewAspectRatio / canvasAspectRatio;
+	float ratio = viewAspectRatio / displayAspectRatio;
 	
-	if (configuration.mode == CANVAS_MODE_PAPER)
-		vertexRect.size.height *= ratio;
+	if (ratio > 1)
+	{
+		vertexRect.origin.x /= ratio;
+		vertexRect.size.width /= ratio;
+	}
 	else
 	{
-		if (ratio > 1)
-		{
-			vertexRect.origin.x /= ratio;
-			vertexRect.size.width /= ratio;
-		}
-		else
-		{
-			vertexRect.origin.y *= ratio;
-			vertexRect.size.height *= ratio;
-		}
+		vertexRect.origin.y *= ratio;
+		vertexRect.size.height *= ratio;
 	}
 	
 	// Set shader uniforms
 #ifdef GL_VERSION_2_0
 	if (isShaderActive)
 	{
-		GLuint screenShader = shader[OPENGLCANVAS_SHADER_SCREEN];
-		glUseProgram(screenShader);
+		GLuint displayShader = shader[OPENGLCANVAS_SHADER_DISPLAY];
+		glUseProgram(displayShader);
 		
 		OEPoint barrelCenter;
-		barrelCenter.x = ((0.5 - configuration.contentRect.origin.x) /
-						  configuration.contentRect.size.width *
+		barrelCenter.x = ((0.5 - configuration.videoRect.origin.x) /
+						  configuration.videoRect.size.width *
 						  frameSize.width / size.width);
-		barrelCenter.y = ((0.5 - configuration.contentRect.origin.y) /
-						  configuration.contentRect.size.height *
+		barrelCenter.y = ((0.5 - configuration.videoRect.origin.y) /
+						  configuration.videoRect.size.height *
 						  frameSize.height / size.height);
-		glUniform2f(glGetUniformLocation(screenShader, "barrel_center"),
+		glUniform2f(glGetUniformLocation(displayShader, "barrel_center"),
 					barrelCenter.x, barrelCenter.y);
 		
 		GLuint shadowMaskTexture = 0;
-		switch (configuration.screenShadowMask)
+		float shadowVerticalScale;
+		switch (configuration.displayShadowMask)
 		{
 			case CANVAS_SHADOWMASK_TRIAD:
 				shadowMaskTexture = OPENGLCANVAS_TEXTURE_SHADOWMASK_TRIAD;
+				shadowVerticalScale = (240.0 / 274.0);
 				break;
 			case CANVAS_SHADOWMASK_INLINE:
 				shadowMaskTexture = OPENGLCANVAS_TEXTURE_SHADOWMASK_INLINE;
+				shadowVerticalScale = 1;
 				break;
 			case CANVAS_SHADOWMASK_APERTURE:
 				shadowMaskTexture = OPENGLCANVAS_TEXTURE_SHADOWMASK_APERTURE;
+				shadowVerticalScale = 1;
+				break;
+			case CANVAS_SHADOWMASK_LCD:
+				shadowMaskTexture = OPENGLCANVAS_TEXTURE_SHADOWMASK_LCD;
+				shadowVerticalScale = 1;
+				break;
+			case CANVAS_SHADOWMASK_BAYER:
+				shadowMaskTexture = OPENGLCANVAS_TEXTURE_SHADOWMASK_BAYER;
+				shadowVerticalScale = 1;
 				break;
 		}
 		glActiveTexture(GL_TEXTURE1);
@@ -911,38 +923,42 @@ void OpenGLCanvas::drawCanvas()
 		glActiveTexture(GL_TEXTURE0);
 		
 		float scanlineHeight = (viewportSize.height / frameSize.height *
-								configuration.contentRect.size.height);
-		float alpha = configuration.screenScanlineAlpha;
+								configuration.videoRect.size.height);
+		float alpha = configuration.displayScanlineAlpha;
 		float scanlineAlpha = ((scanlineHeight > 2.5) ? alpha :
 							   (scanlineHeight < 2) ? 0 :
 							   (scanlineHeight - 2) / (2.5 - 2) * alpha);
-		glUniform1f(glGetUniformLocation(screenShader, "scanline_alpha"),
+		glUniform1f(glGetUniformLocation(displayShader, "scanline_alpha"),
 					scanlineAlpha);
 		
-		float shadowMaskAlpha = configuration.screenShadowMaskAlpha;
-		glUniform1f(glGetUniformLocation(screenShader, "shadowmask_alpha"),
+		float shadowMaskAlpha = configuration.displayShadowMaskAlpha;
+		glUniform1f(glGetUniformLocation(displayShader, "shadowmask_alpha"),
 					shadowMaskAlpha);
 		
-		// Dot pitch is in mm, at 75 DPI host resolution
-		float elemNumX = (configuration.size.width / 75.0 * 25.4 /
-						  (configuration.screenShadowMaskDotPitch + 0.001) * 0.5);
-		float elemNumY = (configuration.size.height / 75.0 * 25.4 /
-						  (configuration.screenShadowMaskDotPitch + 0.001) * (240.0 / 274.0));
-		glUniform2f(glGetUniformLocation(screenShader, "shadowmask_scale"),
+		float dotPitch = configuration.displayShadowMaskDotPitch;
+		if (dotPitch <= 0.001)
+			dotPitch = 0.001;
+		OESize elemNum = OEMakeSize(configuration.displayResolution.width /
+									configuration.displayPixelDensity.width * 25.4 /
+									dotPitch * 0.5,
+									configuration.displayResolution.height / 
+									configuration.displayPixelDensity.height * 25.4 /
+									dotPitch * shadowVerticalScale);
+		glUniform2f(glGetUniformLocation(displayShader, "shadowmask_scale"),
 					size.width / frameSize.width *
-					configuration.contentRect.size.width * elemNumX,
+					configuration.videoRect.size.width * elemNum.width,
 					size.height / frameSize.height *
-					configuration.contentRect.size.height * elemNumY);
-		glUniform2f(glGetUniformLocation(screenShader, "shadowmask_translate"),
-					configuration.contentRect.origin.x * elemNumX,
-					configuration.contentRect.origin.y * elemNumY);
+					configuration.videoRect.size.height * elemNum.height);
+		glUniform2f(glGetUniformLocation(displayShader, "shadowmask_translate"),
+					configuration.videoRect.origin.x * elemNum.width,
+					configuration.videoRect.origin.y * elemNum.height);
 	}
 #endif
 	
 	// Render
 	glBlendFunc(GL_ONE, GL_SRC_ALPHA);
 	
-	int startIndex = ((isShaderActive && configuration.screenPersistance) ? 
+	int startIndex = ((isShaderActive && (configuration.displayPersistance != 0)) ?
 					  (OPENGLCANVAS_PERSISTANCE_FRAME_NUM - 1) : 0);
 	for (int i = startIndex; i >= 0; i--)
 	{
@@ -959,17 +975,18 @@ void OpenGLCanvas::drawCanvas()
 #ifdef GL_VERSION_2_0
 		if (isShaderActive)
 		{
-			GLuint screenShader = shader[OPENGLCANVAS_SHADER_SCREEN];
+			GLuint displayShader = shader[OPENGLCANVAS_SHADER_DISPLAY];
 			OESize size = textureSize[textureIndex];
-			glUniform1i(glGetUniformLocation(screenShader, "texture"), 0);
-			glUniform2f(glGetUniformLocation(screenShader, "texture_size"),
+			glUseProgram(displayShader);
+			glUniform1i(glGetUniformLocation(displayShader, "texture"), 0);
+			glUniform2f(glGetUniformLocation(displayShader, "texture_size"),
 						size.width, size.height);
-			glUniform1f(glGetUniformLocation(screenShader, "alpha"),
-						configuration.screenPersistance);
+			glUniform1f(glGetUniformLocation(displayShader, "alpha"),
+						configuration.displayPersistance);
 		}
 #endif
 		
-		// Use nearest filter when canvas and screen pixel size match
+		// Use nearest filter when canvas and display pixel size match
 		int renderFrameWidth = viewportSize.width * vertexRect.size.width / 2;
 		GLint param = GL_LINEAR;
 		if ((renderFrameWidth == (int) frameSize.width) &&
@@ -1074,6 +1091,9 @@ void OpenGLCanvas::drawBezel()
 									2 * size.height);
 	
 	// Render
+	glLoadIdentity();
+	glRotatef(180, 1, 0, 0);
+	
 	glColor4f(0, 0, 0, blackAlpha);
 	
 	glBegin(GL_QUADS);
@@ -1178,7 +1198,7 @@ void OpenGLCanvas::enterMouse()
 {
 	mouseEntered = true;
 	
-	if (configuration.captureMode == CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_ENTER)
+	if (captureMode == CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_ENTER)
 		updateCapture(OPENGLCANVAS_CAPTURE_KEYBOARD_AND_HIDE_MOUSE_CURSOR);
 	
 	postHIDNotification(CANVAS_POINTER_DID_CHANGE,
@@ -1190,7 +1210,7 @@ void OpenGLCanvas::exitMouse()
 {
 	mouseEntered = false;
 	
-	if (configuration.captureMode == CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_ENTER)
+	if (captureMode == CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_ENTER)
 		updateCapture(OPENGLCANVAS_CAPTURE_NONE);
 	
 	postHIDNotification(CANVAS_POINTER_DID_CHANGE,
@@ -1236,7 +1256,7 @@ void OpenGLCanvas::setMouseButton(int index, bool value)
 		postHIDNotification(CANVAS_MOUSE_DID_CHANGE,
 							CANVAS_M_BUTTON1 + index,
 							value);
-	else if ((configuration.captureMode == CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_CLICK) &&
+	else if ((captureMode == CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_CLICK) &&
 			 (capture == OPENGLCANVAS_CAPTURE_NONE) &&
 			 (bezel == CANVAS_BEZEL_NONE) &&
 			 (index == 0))
@@ -1338,30 +1358,56 @@ void OpenGLCanvas::paste(string value)
 	notify(NULL, CANVAS_DID_PASTE, &value);
 }
 
-bool OpenGLCanvas::setConfiguration(CanvasConfiguration *configuration)
+bool OpenGLCanvas::setMode(CanvasMode *mode)
+{
+	if (!mode)
+		return false;
+	
+	if ((*mode != CANVAS_MODE_DISPLAY) &&
+		(*mode != CANVAS_MODE_PAPER))
+		return false;
+	
+	this->mode = *mode;
+	
+	return true;
+}
+
+bool OpenGLCanvas::setCaptureMode(CanvasCaptureMode *captureMode)
+{
+	if (!captureMode)
+		return false;
+	
+	if (this->captureMode == *captureMode)
+		return true;
+	
+	switch (*captureMode)
+	{
+		case CANVAS_CAPTUREMODE_NO_CAPTURE:
+			updateCapture(OPENGLCANVAS_CAPTURE_NONE);
+			break;
+			
+		case CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_CLICK:
+			updateCapture(OPENGLCANVAS_CAPTURE_NONE);
+			break;
+			
+		case CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_ENTER:
+			updateCapture(mouseEntered ? 
+						  OPENGLCANVAS_CAPTURE_KEYBOARD_AND_HIDE_MOUSE_CURSOR : 
+						  OPENGLCANVAS_CAPTURE_NONE);
+			break;
+		default:
+			return false;
+	}
+	
+	this->captureMode = *captureMode;
+	
+	return true;
+}
+
+bool OpenGLCanvas::setVideoConfiguration(CanvasVideoConfiguration *configuration)
 {
 	if (!configuration)
 		return false;
-	
-	if (this->configuration.captureMode != configuration->captureMode)
-	{
-		switch (configuration->captureMode)
-		{
-			case CANVAS_CAPTUREMODE_NO_CAPTURE:
-				updateCapture(OPENGLCANVAS_CAPTURE_NONE);
-				break;
-				
-			case CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_CLICK:
-				updateCapture(OPENGLCANVAS_CAPTURE_NONE);
-				break;
-				
-			case CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_ENTER:
-				updateCapture(mouseEntered ? 
-							  OPENGLCANVAS_CAPTURE_KEYBOARD_AND_HIDE_MOUSE_CURSOR : 
-							  OPENGLCANVAS_CAPTURE_NONE);
-				break;
-		}
-	}
 	
 	lock();
 	isNewConfiguration = true;
@@ -1371,7 +1417,7 @@ bool OpenGLCanvas::setConfiguration(CanvasConfiguration *configuration)
 	return true;
 }
 
-bool OpenGLCanvas::postFrame(OEImage *frame)
+bool OpenGLCanvas::postVideoFrame(OEImage *frame)
 {
 	if (!frame)
 		return false;
@@ -1384,32 +1430,75 @@ bool OpenGLCanvas::postFrame(OEImage *frame)
 	return true;
 }
 
+bool OpenGLCanvas::setBezel(CanvasBezel *bezel)
+{
+	if (!bezel)
+		return false;
+	
+	if (this->bezel == *bezel)
+		return true;
+	
+	this->bezel = *bezel;
+	isDrawBezel = true;
+	
+	return true;
+}
+
 bool OpenGLCanvas::postMessage(OEComponent *sender, int message, void *data)
 {
 	switch (message)
 	{
-		case CANVAS_CONFIGURE:
-			return setConfiguration((CanvasConfiguration *)data);
+		case CANVAS_SET_MODE:
+			return setMode((CanvasMode *)data);
 			
-		case CANVAS_POST_FRAME:
-			return postFrame((OEImage *)data);
+		case CANVAS_SET_CAPTUREMODE:
+			return setCaptureMode((CanvasCaptureMode *)data);
 			
 		case CANVAS_SET_KEYBOARDFLAGS:
-			if (data)
-			{
+			if (setKeyboardFlags)
 				setKeyboardFlags(userData, *((OEUInt32 *)data));
-				return false;
-			}
-			break;
+			
+			return true;
 			
 		case CANVAS_SET_BEZEL:
-			if (bezel != *((CanvasBezel *)data))
-			{
-				bezel = *((CanvasBezel *)data);
-				isDrawBezel = true;
-			}
-			return true;
+			return setBezel((CanvasBezel *)data);
+			
+		case CANVAS_CONFIGURE_DISPLAY:
+			return setVideoConfiguration((CanvasVideoConfiguration *)data);
+			
+		case CANVAS_POST_FRAME:
+			return postVideoFrame((OEImage *)data);
 	}
 	
-	return OEComponent::postMessage(sender, message, data);
+	return false;
+}
+
+void OpenGLCanvas::notify(OEComponent *sender, int notification, void *data)
+{
+	lock();
+	for (int i = 0; i < observers[notification].size(); i++)
+	{
+		unlock();
+		observers[notification][i]->notify(sender, notification, data);
+		lock();
+	}
+	unlock();
+}
+
+bool OpenGLCanvas::addObserver(OEComponent *observer, int notification)
+{
+	lock();
+	bool value = OEComponent::addObserver(observer, notification);
+	unlock();
+	
+	return value;
+}
+
+bool OpenGLCanvas::removeObserver(OEComponent *observer, int notification)
+{
+	lock();
+	bool value = OEComponent::removeObserver(observer, notification);
+	unlock();
+	
+	return value;
 }

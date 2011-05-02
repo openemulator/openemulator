@@ -100,6 +100,7 @@
 		00D226561350FF8B00FC69B9 /* OEMatrix3.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D226541350FF8B00FC69B9 /* OEMatrix3.h */; };
 		00D226571350FF8B00FC69B9 /* OEMatrix3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00D226551350FF8B00FC69B9 /* OEMatrix3.cpp */; };
 		00D6729D12C9A256009F0D9E /* EmulationShow.png in Resources */ = {isa = PBXBuildFile; fileRef = 00E442931278727600713A05 /* EmulationShow.png */; };
+		00D73D9D136CC9B300BD5465 /* IEEE1394Interface.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D73D9C136CC9B300BD5465 /* IEEE1394Interface.h */; };
 		00D8448B0FFF04C0005802F0 /* DiskImage.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000F66370FF8368F00C8AF23 /* DiskImage.icns */; };
 		00D8448F0FFF04C0005802F0 /* Emulation.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000F663A0FF8368F00C8AF23 /* Emulation.icns */; };
 		00D844A90FFF04C0005802F0 /* OpenEmulator.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000F66520FF8368F00C8AF23 /* OpenEmulator.icns */; };
@@ -399,6 +400,7 @@
 		00D226041350F9A100FC69B9 /* VideoInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoInterface.h; sourceTree = "<group>"; };
 		00D226541350FF8B00FC69B9 /* OEMatrix3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEMatrix3.h; sourceTree = "<group>"; };
 		00D226551350FF8B00FC69B9 /* OEMatrix3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEMatrix3.cpp; sourceTree = "<group>"; };
+		00D73D9C136CC9B300BD5465 /* IEEE1394Interface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IEEE1394Interface.h; sourceTree = "<group>"; };
 		00D844BE0FFF0505005802F0 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		00D844C40FFF0505005802F0 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Preferences.xib; sourceTree = "<group>"; };
 		00D845670FFF0FD2005802F0 /* DocumentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DocumentController.h; sourceTree = "<group>"; };
@@ -741,6 +743,7 @@
 			children = (
 				006A4C5B134ED2F30033BE4D /* IEEE488Interface.h */,
 				00B8887F12A393990052B7A4 /* IEEE1284Interface.h */,
+				00D73D9C136CC9B300BD5465 /* IEEE1394Interface.h */,
 			);
 			name = IEEE;
 			path = libemulation/Interface/IEEE;
@@ -965,6 +968,7 @@
 				00D2260F1350F9A100FC69B9 /* VideoInterface.h in Headers */,
 				00D226561350FF8B00FC69B9 /* OEMatrix3.h in Headers */,
 				000E8D1913515C6E00DBFB2C /* StorageInterface.h in Headers */,
+				00D73D9D136CC9B300BD5465 /* IEEE1394Interface.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

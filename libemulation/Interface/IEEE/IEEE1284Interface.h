@@ -1,11 +1,11 @@
 
 /**
  * libemulation
- * IEEE 1284 Interface
+ * IEEE 1284 (parallel port) Interface
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Defines the IEEE 1284 interface
+ * Defines the IEEE 1284 (parallel port) interface
  */
 
 #ifndef _IEEE1284INTERFACE_H

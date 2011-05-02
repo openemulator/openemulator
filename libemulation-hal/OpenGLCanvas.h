@@ -33,6 +33,8 @@ typedef enum
 	OPENGLCANVAS_TEXTURE_SHADOWMASK_TRIAD,
 	OPENGLCANVAS_TEXTURE_SHADOWMASK_INLINE,
 	OPENGLCANVAS_TEXTURE_SHADOWMASK_APERTURE,
+	OPENGLCANVAS_TEXTURE_SHADOWMASK_LCD,
+	OPENGLCANVAS_TEXTURE_SHADOWMASK_BAYER,
 	OPENGLCANVAS_TEXTURE_BEZEL_POWER,
 	OPENGLCANVAS_TEXTURE_BEZEL_PAUSE,
 	OPENGLCANVAS_TEXTURE_BEZEL_CAPTURE,
@@ -48,7 +50,7 @@ typedef enum
 	OPENGLCANVAS_SHADER_RGB,
 	OPENGLCANVAS_SHADER_NTSC,
 	OPENGLCANVAS_SHADER_PAL,
-	OPENGLCANVAS_SHADER_SCREEN,
+	OPENGLCANVAS_SHADER_DISPLAY,
 	OPENGLCANVAS_SHADER_END,
 } OpenGLCanvasProgram;
 
@@ -70,10 +72,11 @@ public:
 			  void *userData);
 	void close();
 	
-	OESize getCanvasSize();
-	CanvasMode getCanvasMode();
 	void setEnableShader(bool value);
-	bool update(float width, float height, float offset, bool draw);
+	CanvasMode getMode();
+	OESize getResolution();
+	OEImage getFrame();
+	bool update(float width, float height, float offset, bool isVSync);
 	
 	void becomeKeyWindow();
 	void resignKeyWindow();
@@ -96,6 +99,9 @@ public:
 	void paste(string value);
 	
 	bool postMessage(OEComponent *sender, int message, void *data);
+	void notify(OEComponent *sender, int notification, void *data);
+	bool addObserver(OEComponent *observer, int notification);
+	bool removeObserver(OEComponent *observer, int notification);
 	
 private:
 	string resourcePath;
@@ -109,9 +115,12 @@ private:
 	
 	pthread_mutex_t mutex;
 	
+	CanvasMode mode;
+	CanvasCaptureMode captureMode;
+	
 	bool isNewConfiguration;
-	CanvasConfiguration newConfiguration;
-	CanvasConfiguration configuration;
+	CanvasVideoConfiguration newConfiguration;
+	CanvasVideoConfiguration configuration;
 	bool isNewFrame;
 	OEImage frame;
 	OESize frameSize;
@@ -159,7 +168,7 @@ private:
 	void updateConfiguration();
 	void updateViewport();
 	void renderFrame();
-	void drawCanvas();
+	void drawVideoCanvas();
 	void updatePersistance();
 	
 	double getCurrentTime();
@@ -169,8 +178,11 @@ private:
 	void updateCapture(OpenGLCanvasCapture capture);
 	void resetKeysAndButtons();
 	
-	bool setConfiguration(CanvasConfiguration *configuration);
-	bool postFrame(OEImage *frame);
+	bool setMode(CanvasMode *mode);
+	bool setCaptureMode(CanvasCaptureMode *captureMode);
+	bool setVideoConfiguration(CanvasVideoConfiguration *configuration);
+	bool postVideoFrame(OEImage *frame);
+	bool setBezel(CanvasBezel *bezel);
 };
 
 #endif

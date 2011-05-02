@@ -21,14 +21,15 @@ public:
 	bool getValue(string name, string& value);
 	bool setRef(string name, OEComponent *ref);
 	bool init();
+	void update();
 	void notify(OEComponent *sender, int message, void *data);
 	
 private:
 	OEComponent *device;
 	OEComponent *canvas;
 	
-	CanvasConfiguration configuration;
-	OERect screenRect;
+	CanvasVideoConfiguration configuration;
+	OERect videoRect;
 	
 	string dummyPath;
 	OEComponent *audio;

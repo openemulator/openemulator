@@ -14,31 +14,42 @@
 #include "OEImage.h"
 
 // Messages:
-// * configure receives a CanvasConfigure structure
-// ** Canvas size is in screen pixels
-// ** Content rect uses [0..1:0..1] coordinates (origin is lower left)
-// ** Shadow mask dot pitch is in millimeters and assumes 75 dpi
-// * postFrame() receives an OEImage
-// * setKeyboardFlags() receives an OEUInt32
-// * setBezel() receives a CanvasBezel
+// * setMode sets the canvas mode: display (fast updates) or paper (large area)
+// * setCaptureMode describes how mouse and keyboard are captured
+// * setKeyboardFlags sets the keyboard LEDs with a CanvasKeyboardFlags
+// * setBezel sets the canvas' bezel with CanvasBezel
+
+// Display canvas options:
+// * configureDisplay configures using CanvasDisplayConfiguration structure
+// * postFrame() posts an OEImage frame
 
 // Notifications:
 // * HID Notifications receive a CanvasHIDNotification
 // * didCopy and didPaste receive a string
+// * didVSync is called from the video thread. It occurs after vertical sync
+// * didUpdate is called from the video thread. It occurs whenever the screen was updated
+//   (both after vertical sync, and when the user is resizing the window)
 // * HID axes are in [-1:1] coordinates
 // * willUpdate and didUpdate receive a CanvasUpdate structure
 // ** Override draw to force drawing updates
 
 // Multithreading, beware!
-// * willUpdate and didUpdate notifications are sent from the drawing
-//   thread. Keep this in mind for synchronizing data.
+// * didVSync and didUpdate are sent from the drawing thread. Keep this in mind
+//   for avoiding race conditions.
 
 typedef enum
 {
-	CANVAS_CONFIGURE,
-	CANVAS_POST_FRAME,
+	CANVAS_SET_MODE,
+	CANVAS_SET_CAPTUREMODE,
 	CANVAS_SET_KEYBOARDFLAGS,
 	CANVAS_SET_BEZEL,
+	
+	CANVAS_CONFIGURE_DISPLAY,
+	CANVAS_POST_FRAME,
+	
+	CANVAS_CONFIGURE_PAPER,
+	CANVAS_SET_PAPEROFFSET,
+	CANVAS_PRINT,
 } CanvasMessage;
 
 typedef enum
@@ -55,15 +66,15 @@ typedef enum
 	CANVAS_DID_COPY,
 	CANVAS_DID_PASTE,
 	
-	CANVAS_WILL_UPDATE,
+	CANVAS_DID_VSYNC,
 	CANVAS_DID_UPDATE,
 } CanvasNotification;
 
-// Configuration definitions
+// Definitions
 
 typedef enum
 {
-	CANVAS_MODE_VIDEO,
+	CANVAS_MODE_DISPLAY,
 	CANVAS_MODE_PAPER,
 } CanvasMode;
 
@@ -73,6 +84,19 @@ typedef enum
 	CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_CLICK,
 	CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_ENTER,
 } CanvasCaptureMode;
+
+typedef enum
+{
+	CANVAS_PIXELS,
+	CANVAS_INCHES,
+} CanvasUnit;
+
+// Display canvas configuration:
+// * The video rectangle uses (0..1, 0..1) coordinates (origin is lower left)
+// * The displayResolution is the number of resolved pixels on the host
+// * The displayPixelDensity is the number of resolved pixels per inch
+// * The shadow mask dot pitch measures the spacing of the pixels in mm
+// * Bandwidths are relative to the image sampling frequency
 
 typedef enum
 {
@@ -89,47 +113,41 @@ typedef enum
 	CANVAS_SHADOWMASK_TRIAD,
 	CANVAS_SHADOWMASK_INLINE,
 	CANVAS_SHADOWMASK_APERTURE,
+	CANVAS_SHADOWMASK_LCD,
+	CANVAS_SHADOWMASK_BAYER,
 } CanvasShadowMask;
 
-class CanvasConfiguration
+class CanvasVideoConfiguration
 {
 public:
-	CanvasConfiguration()
+	CanvasVideoConfiguration()
 	{
-		mode = CANVAS_MODE_VIDEO;
-		size = OEMakeSize(640, 480);
-		contentRect = OEMakeRect(0, 0, 1, 1);
-		captureMode = CANVAS_CAPTUREMODE_NO_CAPTURE;
-		
 		videoDecoder = CANVAS_DECODER_RGB;
 		videoBandwidth = 1;
 		videoBrightness = 0;
 		videoContrast = 1;
 		videoSaturation = 1;
 		videoHue = 0;
+		videoRect = OEMakeRect(0, 0, 1, 1);
 		
-		screenBarrel = 0;
-		screenScanlineAlpha = 0;
-		screenCenterLighting = 1;
-		screenShadowMask = CANVAS_SHADOWMASK_TRIAD;
-		screenShadowMaskDotPitch = 1;
-		screenShadowMaskAlpha = 0;
-		screenPersistance = 0;
+		displayResolution = OEMakeSize(640, 480);
+		displayPixelDensity = OEMakeSize(72, 72),
+		displayBarrel = 0;
+		displayScanlineAlpha = 0;
+		displayCenterLighting = 1;
+		displayShadowMask = CANVAS_SHADOWMASK_TRIAD;
+		displayShadowMaskDotPitch = 1;
+		displayShadowMaskAlpha = 0;
+		displayPersistance = 0;
 		
 		compositeBlackLevel = 0;
 		compositeWhiteLevel = 1;
 		compositeCarrierFrequency = 0.25;
 		compositeLinePhase = 0;
 		compositeChromaBandwidth = 0.01;
-		
-		pageHeight = 0;
 	}
 	
-	CanvasMode mode;
-	OESize size;
-	OERect contentRect;
-	CanvasCaptureMode captureMode;
-	
+	OERect videoRect;
 	CanvasDecoder videoDecoder;
 	float videoBandwidth;
 	float videoBrightness;
@@ -137,24 +155,40 @@ public:
 	float videoSaturation;
 	float videoHue;
 	
-	float screenBarrel;
-	float screenScanlineAlpha;
-	float screenCenterLighting;
-	float screenShadowMaskAlpha;
-	float screenShadowMaskDotPitch;
-	CanvasShadowMask screenShadowMask;
-	float screenPersistance;
+	OESize displayResolution;
+	OESize displayPixelDensity;
+	float displayBarrel;
+	float displayScanlineAlpha;
+	float displayCenterLighting;
+	float displayShadowMaskAlpha;
+	float displayShadowMaskDotPitch;
+	CanvasShadowMask displayShadowMask;
+	float displayPersistance;
 	
 	float compositeBlackLevel;
 	float compositeWhiteLevel;
 	float compositeCarrierFrequency;
 	float compositeLinePhase;
 	float compositeChromaBandwidth;
-	
-	float pageHeight;
 };
 
-// Canvas keyboard flags use int
+// Paper canvas configuration:
+// * The pageResolution is the number of pixels resolved on the host
+// * The displayPixelDensity is the number of resolved pixels per inch
+
+class CanvasPaperConfiguration
+{
+public:
+	CanvasPaperConfiguration()
+	{
+	}
+	
+	OESize pageResolution;
+	OESize pagePixelDensity;
+};
+
+// Canvas keyboard flags
+typedef OEUInt32 CanvasKeyboardFlags;
 #define CANVAS_L_NUMLOCK	(1 << 0)
 #define CANVAS_L_CAPSLOCK	(1 << 1)
 #define CANVAS_L_SCROLLLOCK	(1 << 2)

@@ -515,15 +515,20 @@ bool OEEmulation::initComponent(string id)
 	if (!component)
 	{
 		printLog("could not init '" + id + "', it is not created");
+		
 		return false;
 	}
 	
-	if (component->init())
-		return true;
-	else
+	if (!component->init())
+	{
 		printLog("could not init '" + id + "'");
+		
+		return false;
+	}
 	
-	return false;
+	component->update();
+	
+	return true;
 }
 
 bool OEEmulation::updateEmulation()

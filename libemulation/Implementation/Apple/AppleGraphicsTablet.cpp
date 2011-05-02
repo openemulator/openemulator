@@ -63,15 +63,15 @@ bool AppleGraphicsTablet::init()
 		return false;
 	}
 	
-	CanvasConfiguration configuration;
+	CanvasVideoConfiguration configuration;
 	OEImage frame;
 	frame.readFile(viewPath);
-	configuration.size = frame.getSize();
-	int bezel = CANVAS_BEZEL_POWER;
+	configuration.displayResolution = frame.getSize();
+	CanvasBezel bezel = CANVAS_BEZEL_POWER;
 	
-	canvas->postMessage(this, CANVAS_CONFIGURE, &configuration);
-	canvas->postMessage(this, CANVAS_POST_FRAME, &frame);
 	canvas->postMessage(this, CANVAS_SET_BEZEL, &bezel);
+	canvas->postMessage(this, CANVAS_CONFIGURE_DISPLAY, &configuration);
+	canvas->postMessage(this, CANVAS_POST_FRAME, &frame);
 	
 	return true;
 }

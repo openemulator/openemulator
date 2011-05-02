@@ -1,7 +1,5 @@
 ==To-Do==
-* Fix: canvas update notification without locks
-* Fix: Add video lock/unlock
-* Fix: canvas update() API. It is not always called on vertical refresh.
+* Fix: resizing produces flickering if the render thread is active at the same time. glTexImage2D conflict?
 
 * Implement OpenGL paper canvas
 * Implement CanvasWindow scroller for paper canvas

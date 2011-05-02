@@ -52,6 +52,8 @@ public:
 	virtual int writeBlock(OEAddress address, OEData *value);
 	
 protected:
+	OEObservers observers;
+	
 	// Helpers
 	void printLog(string message);
 	
@@ -64,9 +66,6 @@ protected:
 	string getHexString(int value);
 	
 	int getNextPowerOf2(int value);
-	
-private:
-	OEObservers observers;
 };
 
 #endif

@@ -18,9 +18,8 @@ Monitor::Monitor()
 	device = NULL;
 	canvas = NULL;
 	
-	configuration.size = OEMakeSize(720, 576);
-	configuration.captureMode = CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_CLICK;
-	screenRect = OEMakeRect(0, 0, 1, 1);
+	configuration.displayResolution = OEMakeSize(768, 576);
+	videoRect = OEMakeRect(0, 0, 1, 1);
 	
 	audio = NULL;
 	
@@ -55,35 +54,39 @@ bool Monitor::setValue(string name, string value)
 		configuration.videoSaturation = getFloat(value);
 	else if (name == "videoHue")
 		configuration.videoHue = getFloat(value);
-	else if (name == "screenHorizontalCenter")
-		screenRect.origin.x = getFloat(value);
-	else if (name == "screenVerticalCenter")
-		screenRect.origin.y = getFloat(value);
-	else if (name == "screenHorizontalSize")
-		screenRect.size.width = getFloat(value);
-	else if (name == "screenVerticalSize")
-		screenRect.size.height = getFloat(value);
-	else if (name == "screenBarrel")
-		configuration.screenBarrel = getFloat(value);
-	else if (name == "screenScanlineAlpha")
-		configuration.screenScanlineAlpha = getFloat(value);
-	else if (name == "screenCenterLighting")
-		configuration.screenCenterLighting = getFloat(value);
-	else if (name == "screenShadowMaskAlpha")
-		configuration.screenShadowMaskAlpha = getFloat(value);
-	else if (name == "screenShadowMaskDotPitch")
-		configuration.screenShadowMaskDotPitch = getFloat(value);
-	else if (name == "screenShadowMask")
+	else if (name == "videoHorizontalCenter")
+		videoRect.origin.x = getFloat(value);
+	else if (name == "videoVerticalCenter")
+		videoRect.origin.y = getFloat(value);
+	else if (name == "videoHorizontalSize")
+		videoRect.size.width = getFloat(value);
+	else if (name == "videoVerticalSize")
+		videoRect.size.height = getFloat(value);
+	else if (name == "displayBarrel")
+		configuration.displayBarrel = getFloat(value);
+	else if (name == "displayScanlineAlpha")
+		configuration.displayScanlineAlpha = getFloat(value);
+	else if (name == "displayCenterLighting")
+		configuration.displayCenterLighting = getFloat(value);
+	else if (name == "displayShadowMaskAlpha")
+		configuration.displayShadowMaskAlpha = getFloat(value);
+	else if (name == "displayShadowMaskDotPitch")
+		configuration.displayShadowMaskDotPitch = getFloat(value);
+	else if (name == "displayShadowMask")
 	{
 		if (value == "Triad")
-			configuration.screenShadowMask = CANVAS_SHADOWMASK_TRIAD;
+			configuration.displayShadowMask = CANVAS_SHADOWMASK_TRIAD;
 		else if (value == "Inline")
-			configuration.screenShadowMask = CANVAS_SHADOWMASK_INLINE;
+			configuration.displayShadowMask = CANVAS_SHADOWMASK_INLINE;
 		else if (value == "Aperture")
-			configuration.screenShadowMask = CANVAS_SHADOWMASK_APERTURE;
+			configuration.displayShadowMask = CANVAS_SHADOWMASK_APERTURE;
+		else if (value == "LCD")
+			configuration.displayShadowMask = CANVAS_SHADOWMASK_LCD;
+		else if (value == "Bayer")
+			configuration.displayShadowMask = CANVAS_SHADOWMASK_BAYER;
 	}
-	else if (name == "screenPersistance")
-		configuration.screenPersistance = getFloat(value);
+	else if (name == "displayPersistance")
+		configuration.displayPersistance = getFloat(value);
 	else if (name == "compositeCarrierFrequency")
 		configuration.compositeCarrierFrequency = getFloat(value);
 	else if (name == "compositeLinePhase")
@@ -98,11 +101,6 @@ bool Monitor::setValue(string name, string value)
 		dummyPath = value;
 	else
 		return false;
-	
-	updateContentRect();
-	
-	if (canvas)
-		canvas->postMessage(this, CANVAS_CONFIGURE, &configuration);
 	
 	return true;
 }
@@ -134,35 +132,39 @@ bool Monitor::getValue(string name, string& value)
 		value = getString(configuration.videoSaturation);
 	else if (name == "videoHue")
 		value = getString(configuration.videoHue);
-	else if (name == "screenHorizontalCenter")
-		value = getString(screenRect.origin.x);
-	else if (name == "screenVerticalCenter")
-		value = getString(screenRect.origin.y);
-	else if (name == "screenHorizontalSize")
-		value = getString(screenRect.size.width);
-	else if (name == "screenVerticalSize")
-		value = getString(screenRect.size.height);
-	else if (name == "screenBarrel")
-		value = getString(configuration.screenBarrel);
-	else if (name == "screenScanlineAlpha")
-		value = getString(configuration.screenScanlineAlpha);
-	else if (name == "screenCenterLighting")
-		value = getString(configuration.screenCenterLighting);
-	else if (name == "screenShadowMaskAlpha")
-		value = getString(configuration.screenShadowMaskAlpha);
-	else if (name == "screenShadowMaskDotPitch")
-		value = getString(configuration.screenShadowMaskDotPitch);
-	else if (name == "screenShadowMask")
+	else if (name == "videoHorizontalCenter")
+		value = getString(videoRect.origin.x);
+	else if (name == "videoVerticalCenter")
+		value = getString(videoRect.origin.y);
+	else if (name == "videoHorizontalSize")
+		value = getString(videoRect.size.width);
+	else if (name == "videoVerticalSize")
+		value = getString(videoRect.size.height);
+	else if (name == "displayBarrel")
+		value = getString(configuration.displayBarrel);
+	else if (name == "displayScanlineAlpha")
+		value = getString(configuration.displayScanlineAlpha);
+	else if (name == "displayCenterLighting")
+		value = getString(configuration.displayCenterLighting);
+	else if (name == "displayShadowMaskAlpha")
+		value = getString(configuration.displayShadowMaskAlpha);
+	else if (name == "displayShadowMaskDotPitch")
+		value = getString(configuration.displayShadowMaskDotPitch);
+	else if (name == "displayShadowMask")
 	{
-		if (configuration.screenShadowMask == CANVAS_SHADOWMASK_TRIAD)
+		if (configuration.displayShadowMask == CANVAS_SHADOWMASK_TRIAD)
 			value = "Triad";
-		else if (configuration.screenShadowMask == CANVAS_SHADOWMASK_INLINE)
+		else if (configuration.displayShadowMask == CANVAS_SHADOWMASK_INLINE)
 			value = "Inline";
-		else if (configuration.screenShadowMask == CANVAS_SHADOWMASK_APERTURE)
+		else if (configuration.displayShadowMask == CANVAS_SHADOWMASK_APERTURE)
 			value = "Aperture";
+		else if (configuration.displayShadowMask == CANVAS_SHADOWMASK_LCD)
+			value = "LCD";
+		else if (configuration.displayShadowMask == CANVAS_SHADOWMASK_BAYER)
+			value = "Bayer";
 	}
-	else if (name == "screenPersistance")
-		value = getString(configuration.screenPersistance);
+	else if (name == "displayPersistance")
+		value = getString(configuration.displayPersistance);
 	else if (name == "compositeBlackLevel")
 		value = getString(configuration.compositeBlackLevel);
 	else if (name == "compositeWhiteLevel")
@@ -196,9 +198,9 @@ bool Monitor::setRef(string name, OEComponent *ref)
 				canvas->removeObserver(this, CANVAS_JOYSTICK3_DID_CHANGE);
 				canvas->removeObserver(this, CANVAS_JOYSTICK4_DID_CHANGE);
 				
-				canvas->removeObserver(this, CANVAS_WILL_UPDATE);
+				canvas->removeObserver(this, CANVAS_DID_VSYNC);
 			}
-
+			
 			device->postMessage(this, DEVICE_DESTROY_CANVAS, &canvas);
 		}
 		device = ref;
@@ -217,7 +219,7 @@ bool Monitor::setRef(string name, OEComponent *ref)
 				canvas->addObserver(this, CANVAS_JOYSTICK3_DID_CHANGE);
 				canvas->addObserver(this, CANVAS_JOYSTICK4_DID_CHANGE);
 				
-				canvas->addObserver(this, CANVAS_WILL_UPDATE);
+				canvas->addObserver(this, CANVAS_DID_VSYNC);
 			}
 		}
 	}
@@ -249,74 +251,100 @@ bool Monitor::init()
 		return false;
 	}
 	
+	CanvasCaptureMode captureMode = CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_CLICK;
 	frame.readFile(dummyPath);
 	
-	canvas->postMessage(this, CANVAS_CONFIGURE, &configuration);
+	canvas->postMessage(this, CANVAS_SET_CAPTUREMODE, &captureMode);
 	canvas->postMessage(this, CANVAS_POST_FRAME, &frame);
 	
 	return true;
+}
+
+void Monitor::update()
+{
+	updateContentRect();
+	
+	if (canvas)
+		canvas->postMessage(this, CANVAS_CONFIGURE_DISPLAY, &configuration);
 }
 
 void Monitor::notify(OEComponent *sender, int notification, void *data)
 {
 	if (sender == audio)
 	{
-//		ta++;
-		if (canvas && (ta >= 48000 / 512 * 5))
-		{
-			canvas->removeObserver(this, CANVAS_KEYBOARD_DID_CHANGE);
-			canvas->removeObserver(this, CANVAS_UNICODEKEYBOARD_DID_CHANGE);
-			canvas->removeObserver(this, CANVAS_POINTER_DID_CHANGE);
-			canvas->removeObserver(this, CANVAS_MOUSE_DID_CHANGE);
-			canvas->removeObserver(this, CANVAS_JOYSTICK1_DID_CHANGE);
-			canvas->removeObserver(this, CANVAS_JOYSTICK2_DID_CHANGE);
-			canvas->removeObserver(this, CANVAS_JOYSTICK3_DID_CHANGE);
-			canvas->removeObserver(this, CANVAS_JOYSTICK4_DID_CHANGE);
-			
-			canvas->removeObserver(this, CANVAS_WILL_UPDATE);
-			
-			device->postMessage(this, DEVICE_DESTROY_CANVAS, &canvas);
-		}
+		/*		ta++;
+		 if (canvas && (ta >= 48000 / 512 * 5))
+		 {
+		 canvas->removeObserver(this, CANVAS_KEYBOARD_DID_CHANGE);
+		 canvas->removeObserver(this, CANVAS_UNICODEKEYBOARD_DID_CHANGE);
+		 canvas->removeObserver(this, CANVAS_POINTER_DID_CHANGE);
+		 canvas->removeObserver(this, CANVAS_MOUSE_DID_CHANGE);
+		 canvas->removeObserver(this, CANVAS_JOYSTICK1_DID_CHANGE);
+		 canvas->removeObserver(this, CANVAS_JOYSTICK2_DID_CHANGE);
+		 canvas->removeObserver(this, CANVAS_JOYSTICK3_DID_CHANGE);
+		 canvas->removeObserver(this, CANVAS_JOYSTICK4_DID_CHANGE);
+		 
+		 canvas->removeObserver(this, CANVAS_DID_VSYNC);
+		 
+		 device->postMessage(this, DEVICE_DESTROY_CANVAS, &canvas);
+		 }
+		 */
+		
+		/*		int *p = (int *)frame.getPixels();
+		 if (p)
+		 {
+		 int w = 576;
+		 int h = 192;
+		 for (int y = 0; y < h; y++)
+		 for (int x = 0; x < 256; x++)
+		 p[y * w + x] = ((x & 0x1f2) == da) ? 0xffffffff : 0x00000000;
+		 
+		 da += 0x11;
+		 da &= 0x1f0;
+		 
+		 if (canvas)
+		 canvas->postMessage(this, CANVAS_POST_VIDEOFRAME, &frame);
+		 }*/
 		
 		return;
 	}
 	
-	if (notification != CANVAS_WILL_UPDATE)
+	if (notification != CANVAS_DID_VSYNC)
 		return;
-
-	int *p = (int *)frame.getPixels();
-	if (p)
-	{
-		int w = 640;
-		int h = 200;
-		for (int y = 0; y < h; y++)
-			for (int x = 0; x < 256; x++)
-				p[y * w + x] = ((x & 0x1f2) == da) ? 0xffffffff : 0x00000000;
-		
-		da += 0x11;
-		da &= 0x1f0;
-		
-		if (canvas)
-			canvas->postMessage(this, CANVAS_POST_FRAME, &frame);
-	}
+	
+	/*	int *p = (int *)frame.getPixels();
+	 if (p)
+	 {
+	 int w = 576;
+	 int h = 192;
+	 for (int y = 0; y < h; y++)
+	 for (int x = 0; x < 256; x++)
+	 p[y * w + x] = ((x & 0x1f2) == da) ? 0xffffffff : 0xff000000;
+	 
+	 da += 0x11;
+	 da &= 0x1f0;
+	 
+	 if (canvas)
+	 canvas->postMessage(this, CANVAS_POST_VIDEOFRAME, &frame);
+	 }*/
 }
 
 void Monitor::updateContentRect()
 {
 	bool pal = false;
 	if (pal)
-		configuration.contentRect = OEMakeRect(96 * 1.0 / 768, 34 * 2.0 / 576,
-											   576 * 1.0 / 768, 192 * 2.0 / 576);
+		configuration.videoRect = OEMakeRect(96 * 1.0 / 768, 34 * 2.0 / 576,
+											 576 * 1.0 / 768, 192 * 2.0 / 576);
 	else
-		configuration.contentRect = OEMakeRect(96 * 1.0 / 768, 24 * 2.0 / 483,
-											   576 * 1.0 / 768, 192 * 2.0 / 483);
+		configuration.videoRect = OEMakeRect(96 * 1.0 / 768, 24 * 2.0 / 483,
+											 576 * 1.0 / 768, 192 * 2.0 / 483);
 	
-	configuration.contentRect.origin.x += (screenRect.origin.x +
-										   configuration.contentRect.size.width *
-										   (1.0 - screenRect.size.width) * 0.5);
-	configuration.contentRect.origin.y += (screenRect.origin.y +
-										   configuration.contentRect.size.height *
-										   (1.0 - screenRect.size.height) * 0.5);
-	configuration.contentRect.size.width *= screenRect.size.width;
-	configuration.contentRect.size.height *= screenRect.size.height;
+	configuration.videoRect.origin.x += (videoRect.origin.x +
+										 configuration.videoRect.size.width *
+										 (1.0 - videoRect.size.width) * 0.5);
+	configuration.videoRect.origin.y += (videoRect.origin.y +
+										 configuration.videoRect.size.height *
+										 (1.0 - videoRect.size.height) * 0.5);
+	configuration.videoRect.size.width *= videoRect.size.width;
+	configuration.videoRect.size.height *= videoRect.size.height;
 }

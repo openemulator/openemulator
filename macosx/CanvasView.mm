@@ -283,7 +283,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (void)windowDidBecomeKey:(NSNotification *)notification
 {
-//	NSLog(@"CanvasView windowDidBecomeKey");
+	//	NSLog(@"CanvasView windowDidBecomeKey");
 	
 	if (!canvas)
 	{
@@ -312,7 +312,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (void)windowDidResignKey:(NSNotification *)notification
 {
-//	NSLog(@"CanvasView windowDidResignKey");
+	//	NSLog(@"CanvasView windowDidResignKey");
 	
 	if (!canvas)
 	{
@@ -445,10 +445,10 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	
 	CVDisplayLinkStart(displayLink);
 	
-/*	[[NSNotificationCenter defaultCenter] addObserver:self
-											 selector:@selector(globalFrameDidChange:)
-												 name:NSViewGlobalFrameDidChangeNotification
-											   object:self];*/
+	/*	[[NSNotificationCenter defaultCenter] addObserver:self
+	 selector:@selector(globalFrameDidChange:)
+	 name:NSViewGlobalFrameDidChangeNotification
+	 object:self];*/
 }
 
 - (void)stopDisplayLink
@@ -457,7 +457,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	
 	CVDisplayLinkStop(displayLink);
 	
-//	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	//	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)globalFrameDidChange:(NSNotification*)notification
@@ -470,7 +470,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 - (NSSize)defaultViewSize
 {
 	[document lockEmulation];
-	OESize size = ((OpenGLCanvas *)canvas)->getCanvasSize();
+	OESize size = ((OpenGLCanvas *)canvas)->getResolution();
 	[document unlockEmulation];
 	
 	NSSize defaultViewSize;
@@ -480,20 +480,34 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	return defaultViewSize;
 }
 
-/*
 - (void)update
 {
 	CGLLockContext(cglContextObj);
+	NSLog(@"update enter");
 	
 	[[self openGLContext] makeCurrentContext];
 	[super update];
 	
+	NSLog(@"update exit");
 	CGLUnlockContext(cglContextObj);
-}*/
+}
 
-- (void)drawRect:(NSRect)theRect
+- (void)reshape
 {
 	CGLLockContext(cglContextObj);
+	NSLog(@"reshape enter");
+	
+	[[self openGLContext] makeCurrentContext];
+	glViewport(0, 0, [self bounds].size.width, [self bounds].size.height);
+	
+	NSLog(@"reshape exit");
+	CGLUnlockContext(cglContextObj);
+}
+
+- (void)updateView
+{
+    CGLLockContext(cglContextObj);
+	NSLog(@"updateView enter");
 	
 	[[self openGLContext] makeCurrentContext];
 	
@@ -501,12 +515,14 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	if (((OpenGLCanvas *)canvas)->update(NSWidth(frame), NSHeight(frame), 0, true))
 		[[self openGLContext] flushBuffer];
 	
-	CGLUnlockContext(cglContextObj);
+	NSLog(@"updateView exit");
+    CGLUnlockContext(cglContextObj);
 }
 
-- (void)updateView
+- (void)drawRect:(NSRect)theRect
 {
-    CGLLockContext(cglContextObj);
+	CGLLockContext(cglContextObj);
+	NSLog(@"drawRect enter");
 	
 	[[self openGLContext] makeCurrentContext];
 	
@@ -514,7 +530,8 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	if (((OpenGLCanvas *)canvas)->update(NSWidth(frame), NSHeight(frame), 0, false))
 		[[self openGLContext] flushBuffer];
 	
-    CGLUnlockContext(cglContextObj);
+	NSLog(@"drawRect exit");
+	CGLUnlockContext(cglContextObj);
 }
 
 // Keyboard
@@ -642,7 +659,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (void)mouseEntered:(NSEvent *)theEvent
 {
-//	NSLog(@"CanvasView mouseEntered");
+	//	NSLog(@"CanvasView mouseEntered");
 	
 	[document lockEmulation];
 	((OpenGLCanvas *)canvas)->enterMouse();
@@ -651,7 +668,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (void)mouseExited:(NSEvent *)theEvent
 {
-//	NSLog(@"CanvasView mouseExited");
+	//	NSLog(@"CanvasView mouseExited");
 	
 	[document lockEmulation];
 	((OpenGLCanvas *)canvas)->exitMouse();
