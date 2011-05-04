@@ -78,13 +78,11 @@ bool MOSKIM1IO::init()
 		return false;
 	}
 	
-	CanvasVideoConfiguration configuration;
+	CanvasDisplayConfiguration configuration;
 	OEImage frame;
 	frame.readFile(viewPath);
 	configuration.displayResolution = frame.getSize();
-	CanvasBezel bezel = CANVAS_BEZEL_POWER;
 	
-	canvas->postMessage(this, CANVAS_SET_BEZEL, &bezel);
 	canvas->postMessage(this, CANVAS_CONFIGURE_DISPLAY, &configuration);
 	canvas->postMessage(this, CANVAS_POST_FRAME, &frame);
 	

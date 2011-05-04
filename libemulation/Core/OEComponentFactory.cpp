@@ -22,6 +22,9 @@
 #include "ROM.h"
 #include "Terminal.h"
 
+#include "AppleDiskII.h"
+#include "AppleDiskIIInterfaceCard.h"
+#include "AppleGraphicsTablet.h"
 #include "Apple1IO.h"
 #include "Apple1Terminal.h"
 #include "Apple1CassetteInterfaceCard.h"
@@ -35,9 +38,7 @@
 #include "AppleIIGamePort.h"
 #include "AppleIISlotMemory.h"
 #include "AppleIISlotExpansionMemory.h"
-#include "AppleDiskII.h"
-#include "AppleDiskIIInterfaceCard.h"
-#include "AppleGraphicsTablet.h"
+#include "AppleSilentype.h"
 
 #include "MC6821.h"
 #include "MC6845.h"
@@ -80,6 +81,7 @@ OEComponent *OEComponentFactory::create(const string& className)
 	matchComponent(AppleDiskII);
 	matchComponent(AppleDiskIIInterfaceCard);
 	matchComponent(AppleGraphicsTablet);
+	matchComponent(AppleSilentype);
 	
 	matchComponent(MC6821);
 	matchComponent(MC6845);

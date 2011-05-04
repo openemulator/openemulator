@@ -290,43 +290,44 @@ void Monitor::notify(OEComponent *sender, int notification, void *data)
 		 }
 		 */
 		
-		/*		int *p = (int *)frame.getPixels();
-		 if (p)
-		 {
-		 int w = 576;
-		 int h = 192;
-		 for (int y = 0; y < h; y++)
-		 for (int x = 0; x < 256; x++)
-		 p[y * w + x] = ((x & 0x1f2) == da) ? 0xffffffff : 0x00000000;
-		 
-		 da += 0x11;
-		 da &= 0x1f0;
-		 
-		 if (canvas)
-		 canvas->postMessage(this, CANVAS_POST_VIDEOFRAME, &frame);
-		 }*/
-		
+/*
+		int *p = (int *)frame.getPixels();
+		if (p)
+		{
+			int w = 560;
+			int h = 192;
+			for (int y = 0; y < h; y++)
+				for (int x = 0; x < 128; x++)
+					p[y * w + x] = ((x & 0xfa) == da) ? 0xffffffff : 0x00000000;
+			
+			da += 0x9;
+			da &= 0xf8;
+			
+			if (canvas)
+				canvas->postMessage(this, CANVAS_POST_FRAME, &frame);
+		}
+		*/
 		return;
 	}
 	
 	if (notification != CANVAS_DID_VSYNC)
 		return;
 	
-	/*	int *p = (int *)frame.getPixels();
-	 if (p)
-	 {
-	 int w = 576;
-	 int h = 192;
-	 for (int y = 0; y < h; y++)
-	 for (int x = 0; x < 256; x++)
-	 p[y * w + x] = ((x & 0x1f2) == da) ? 0xffffffff : 0xff000000;
-	 
-	 da += 0x11;
-	 da &= 0x1f0;
-	 
-	 if (canvas)
-	 canvas->postMessage(this, CANVAS_POST_VIDEOFRAME, &frame);
-	 }*/
+	int *p = (int *)frame.getPixels();
+	if (p)
+	{
+		int w = 560;
+		int h = 192;
+		for (int y = 0; y < h; y++)
+			for (int x = 0; x < 128; x++)
+				p[y * w + x] = ((x & 0x0fa) == da) ? 0xffffffff : 0xff000000;
+		
+		da += 0x9;
+		da &= 0xf8;
+		
+		if (canvas)
+			canvas->postMessage(this, CANVAS_POST_FRAME, &frame);
+	}
 }
 
 void Monitor::updateContentRect()

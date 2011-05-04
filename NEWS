@@ -1,4 +1,9 @@
 ==2011-05==
+* Fixed bezel drawing
+* Fixed window resizing methods
+* Fixed display canvas updates, so persistency is correctly updated after a new frame
+* Implemented OpenGL paper canvas
+* Added paper canvas to CanvasWindowController and CanvasWindow
 * Refactored canvas API
 
 ==2011-04==

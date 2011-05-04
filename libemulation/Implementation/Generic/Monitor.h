@@ -28,7 +28,7 @@ private:
 	OEComponent *device;
 	OEComponent *canvas;
 	
-	CanvasVideoConfiguration configuration;
+	CanvasDisplayConfiguration configuration;
 	OERect videoRect;
 	
 	string dummyPath;

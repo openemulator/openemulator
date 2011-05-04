@@ -54,8 +54,6 @@ typedef enum
 	OPENGLCANVAS_SHADER_END,
 } OpenGLCanvasProgram;
 
-
-
 typedef void (*CanvasSetCapture)(void *userData, OpenGLCanvasCapture capture);
 typedef void (*CanvasSetKeyboardFlags)(void *userData, OEUInt32 flags);
 
@@ -118,26 +116,25 @@ private:
 	CanvasMode mode;
 	CanvasCaptureMode captureMode;
 	
-	bool isNewConfiguration;
-	CanvasVideoConfiguration newConfiguration;
-	CanvasVideoConfiguration configuration;
-	bool isNewFrame;
-	OEImage frame;
-	OESize frameSize;
-	
 	OESize viewportSize;
 	GLuint texture[OPENGLCANVAS_TEXTURE_END];
 	OESize textureSize[OPENGLCANVAS_TEXTURE_END];
+	
+	bool isDisplayConfigurationUpdated;
+	CanvasDisplayConfiguration displayConfiguration;
+	bool isFrameUpdated;
+	OEImage frame;
 	bool isShaderActive;
 	GLuint shader[OPENGLCANVAS_SHADER_END];
-	
 	int renderIndex;
 	GLuint renderShader;
-	
 	int persistance[OPENGLCANVAS_PERSISTANCE_FRAME_NUM];
 	
+	OEImage paper;
+	bool isPaperUpdated;
+	
 	CanvasBezel bezel;
-	bool isDrawBezel;
+	bool isBezelDrawRequired;
 	bool isBezelCapture;
 	double bezelCaptureTime;
 	
@@ -163,13 +160,16 @@ private:
 	void deleteShaders();
 	GLuint loadShader(const char *source);
 	void deleteShader(GLuint glShader);
+	void updateViewport();
 	
 	bool uploadFrame();
-	void updateConfiguration();
-	void updateViewport();
+	void updateDisplayConfiguration();
 	void renderFrame();
-	void drawVideoCanvas();
+	bool isDisplayDrawRequired();
+	void drawDisplayCanvas();
 	void updatePersistance();
+	
+	void drawPaperCanvas(float offset);
 	
 	double getCurrentTime();
 	void drawBezel();
@@ -180,9 +180,11 @@ private:
 	
 	bool setMode(CanvasMode *mode);
 	bool setCaptureMode(CanvasCaptureMode *captureMode);
-	bool setVideoConfiguration(CanvasVideoConfiguration *configuration);
-	bool postVideoFrame(OEImage *frame);
 	bool setBezel(CanvasBezel *bezel);
+	bool setDisplayConfiguration(CanvasDisplayConfiguration *configuration);
+	bool postFrame(OEImage *frame);
+	bool setPaperConfiguration(CanvasPaperConfiguration *configuration);
+	bool printImage(OEImage *image);
 };
 
 #endif

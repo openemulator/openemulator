@@ -1,25 +1,25 @@
 
 /**
  * libemulation
- * Apple Graphics Tablet
+ * Silentype
  * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls an Apple Graphics Tablet.
+ * Controls an Apple Silentype.
  */
 
-#include "AppleGraphicsTablet.h"
+#include "AppleSilentype.h"
 
 #include "DeviceInterface.h"
 #include "CanvasInterface.h"
 
-AppleGraphicsTablet::AppleGraphicsTablet()
+AppleSilentype::AppleSilentype()
 {
 	device = NULL;
 	canvas = NULL;
 }
 
-bool AppleGraphicsTablet::setValue(string name, string value)
+bool AppleSilentype::setValue(string name, string value)
 {
 	if (name == "viewPath")
 		viewPath = value;
@@ -29,7 +29,7 @@ bool AppleGraphicsTablet::setValue(string name, string value)
 	return true;
 }
 
-bool AppleGraphicsTablet::setRef(string name, OEComponent *ref)
+bool AppleSilentype::setRef(string name, OEComponent *ref)
 {
 	if (name == "device")
 	{
@@ -49,7 +49,7 @@ bool AppleGraphicsTablet::setRef(string name, OEComponent *ref)
 	return true;
 }
 
-bool AppleGraphicsTablet::init()
+bool AppleSilentype::init()
 {
 	if (!device)
 	{
@@ -63,16 +63,17 @@ bool AppleGraphicsTablet::init()
 		return false;
 	}
 	
-	CanvasDisplayConfiguration configuration;
-	OEImage frame;
-	frame.readFile(viewPath);
-	configuration.displayResolution = frame.getSize();
-	configuration.displayPixelDensity = OEMakeSize(50, 50);
-	CanvasBezel bezel = CANVAS_BEZEL_POWER;
+	OEImage image;
+	image.readFile(viewPath);
 	
-	canvas->postMessage(this, CANVAS_SET_BEZEL, &bezel);
-	canvas->postMessage(this, CANVAS_CONFIGURE_DISPLAY, &configuration);
-	canvas->postMessage(this, CANVAS_POST_FRAME, &frame);
+	CanvasMode mode = CANVAS_MODE_PAPER;
+	CanvasPaperConfiguration configuration;
+	configuration.pageResolution = OEMakeSize(612, 864);
+	configuration.pagePixelDensity = OEMakeSize(72, 72);
+	
+	canvas->postMessage(this, CANVAS_SET_MODE, &mode);
+	canvas->postMessage(this, CANVAS_CONFIGURE_PAPER, &configuration);
+	canvas->postMessage(this, CANVAS_PRINT_IMAGE, &image);
 	
 	return true;
 }

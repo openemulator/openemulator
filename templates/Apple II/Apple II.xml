@@ -285,9 +285,9 @@
 
 <device id="appleSilentype" label="Apple Silentype" image="images/Apple/Apple Silentype.png" group="peripherals" />
 <connector id="appleSilentype.connector" ref="s1" type="AppleIISlot" label="Slot 0" />
-<component id="appleSilentype.io" class="AppleGraphicsTablet">
+<component id="appleSilentype.io" class="AppleSilentype">
 	<property name="device" ref="appleSilentype" />
-	<property name="viewPath" value="${resourcePath}/images/Apple/Apple Graphics Tablet View.png" />
+	<property name="viewPath" value="${resourcePath}/images/print.png" />
 </component>
 
 

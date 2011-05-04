@@ -54,6 +54,8 @@
 		00679D09100817F700B38748 /* TemplateChooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00679D06100817F700B38748 /* TemplateChooser.xib */; };
 		006A4C5C134ED2F30033BE4D /* IEEE488Interface.h in Headers */ = {isa = PBXBuildFile; fileRef = 006A4C5B134ED2F30033BE4D /* IEEE488Interface.h */; };
 		0071E3BA10803F7300F2D54F /* TemplateChooserItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0071E3B910803F7300F2D54F /* TemplateChooserItem.mm */; };
+		0073DD9F136FCC1100087303 /* CanvasToolbarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0073DD8E136FCA1C00087303 /* CanvasToolbarView.m */; };
+		0073DDBF136FCCC900087303 /* ToolbarBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 0073DDBE136FCCC900087303 /* ToolbarBackground.png */; };
 		0076FD6512A1ED8C00A3FEC7 /* AudioPause.png in Resources */ = {isa = PBXBuildFile; fileRef = 0076FD6412A1ED8C00A3FEC7 /* AudioPause.png */; };
 		0078F655127348ED0042577E /* AudioControls.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0078F653127348ED0042577E /* AudioControls.xib */; };
 		008107DE1120C57600D744FB /* TemplateChooserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00FE0C051095353B00B92AB7 /* TemplateChooserViewController.m */; };
@@ -83,6 +85,8 @@
 		00B019B413501507001E01BB /* OEDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B019B213501507001E01BB /* OEDevice.h */; };
 		00B019B513501507001E01BB /* OEDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B019B313501507001E01BB /* OEDevice.cpp */; };
 		00B5709E10863C2A00CDE4A7 /* TemplateChooserWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B5709D10863C2A00CDE4A7 /* TemplateChooserWindowController.m */; };
+		00B5CB94136F0B6C007A7BED /* AppleSilentype.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B5CB92136F0B6C007A7BED /* AppleSilentype.cpp */; };
+		00B5CB95136F0B6D007A7BED /* AppleSilentype.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B5CB93136F0B6C007A7BED /* AppleSilentype.h */; };
 		00B974B410701DDA00BD1402 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = 00B974AD10701DCD00BD1402 /* sounds */; };
 		00BB34B412C5C5AE007332B5 /* EmulationItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00BB34B312C5C5AE007332B5 /* EmulationItem.mm */; };
 		00C3CF9011F557A000EA2453 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00C3CF8D11F557A000EA2453 /* main.cpp */; };
@@ -270,6 +274,9 @@
 		006EEE8F0FCA781C003D2C8D /* DiskImage.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = DiskImage.icns; sourceTree = "<group>"; };
 		0071E3B810803F7300F2D54F /* TemplateChooserItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TemplateChooserItem.h; sourceTree = "<group>"; };
 		0071E3B910803F7300F2D54F /* TemplateChooserItem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TemplateChooserItem.mm; sourceTree = "<group>"; };
+		0073DD8D136FCA1C00087303 /* CanvasToolbarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanvasToolbarView.h; sourceTree = "<group>"; };
+		0073DD8E136FCA1C00087303 /* CanvasToolbarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CanvasToolbarView.m; sourceTree = "<group>"; };
+		0073DDBE136FCCC900087303 /* ToolbarBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ToolbarBackground.png; path = macosx/Images/ToolbarBackground.png; sourceTree = "<group>"; };
 		0076FD6412A1ED8C00A3FEC7 /* AudioPause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = AudioPause.png; path = macosx/Images/AudioPause.png; sourceTree = "<group>"; };
 		0078F654127348ED0042577E /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/AudioControls.xib; sourceTree = "<group>"; };
 		00811DFD12D251E9009AD2F0 /* AppleDiskIIInterfaceCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleDiskIIInterfaceCard.h; sourceTree = "<group>"; };
@@ -317,6 +324,8 @@
 		00B019B313501507001E01BB /* OEDevice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEDevice.cpp; sourceTree = "<group>"; };
 		00B5709C10863C2A00CDE4A7 /* TemplateChooserWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TemplateChooserWindowController.h; sourceTree = "<group>"; };
 		00B5709D10863C2A00CDE4A7 /* TemplateChooserWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TemplateChooserWindowController.m; sourceTree = "<group>"; };
+		00B5CB92136F0B6C007A7BED /* AppleSilentype.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleSilentype.cpp; sourceTree = "<group>"; };
+		00B5CB93136F0B6C007A7BED /* AppleSilentype.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleSilentype.h; sourceTree = "<group>"; };
 		00B8864612A3923D0052B7A4 /* edl-1.0.dtd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "edl-1.0.dtd"; sourceTree = "<group>"; };
 		00B8881312A393990052B7A4 /* Apple1CassetteInterfaceCard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Apple1CassetteInterfaceCard.cpp; path = libemulation/Implementation/Apple/Apple1CassetteInterfaceCard.cpp; sourceTree = SOURCE_ROOT; };
 		00B8881412A393990052B7A4 /* Apple1CassetteInterfaceCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Apple1CassetteInterfaceCard.h; path = libemulation/Implementation/Apple/Apple1CassetteInterfaceCard.h; sourceTree = SOURCE_ROOT; };
@@ -588,6 +597,8 @@
 		00B8881012A393990052B7A4 /* Apple */ = {
 			isa = PBXGroup;
 			children = (
+				00B5CB92136F0B6C007A7BED /* AppleSilentype.cpp */,
+				00B5CB93136F0B6C007A7BED /* AppleSilentype.h */,
 				00B8881312A393990052B7A4 /* Apple1CassetteInterfaceCard.cpp */,
 				00B8881412A393990052B7A4 /* Apple1CassetteInterfaceCard.h */,
 				00B8881512A393990052B7A4 /* Apple1IO.cpp */,
@@ -853,6 +864,8 @@
 				00FE381A12CA6790002B47B1 /* EmulationOutlineView.m */,
 				00391CB112D3A320002C5ABD /* LibraryWindowController.h */,
 				00391CB212D3A320002C5ABD /* LibraryWindowController.m */,
+				0073DD8D136FCA1C00087303 /* CanvasToolbarView.h */,
+				0073DD8E136FCA1C00087303 /* CanvasToolbarView.m */,
 			);
 			name = Sources;
 			path = macosx;
@@ -861,6 +874,7 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				0073DDBE136FCCC900087303 /* ToolbarBackground.png */,
 				00391F6A12D3FFF3002C5ABD /* TemplateChooserView.xib */,
 				00391D9912D3B94F002C5ABD /* library */,
 				00391D6212D3B588002C5ABD /* Library.xib */,
@@ -969,6 +983,7 @@
 				00D226561350FF8B00FC69B9 /* OEMatrix3.h in Headers */,
 				000E8D1913515C6E00DBFB2C /* StorageInterface.h in Headers */,
 				00D73D9D136CC9B300BD5465 /* IEEE1394Interface.h in Headers */,
+				00B5CB95136F0B6D007A7BED /* AppleSilentype.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1127,6 +1142,7 @@
 				00391D6412D3B588002C5ABD /* Library.xib in Resources */,
 				00391DAC12D3B94F002C5ABD /* library in Resources */,
 				00391F6C12D3FFF3002C5ABD /* TemplateChooserView.xib in Resources */,
+				0073DDBF136FCCC900087303 /* ToolbarBackground.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1212,6 +1228,7 @@
 				00A973B512E512F80084724F /* OEPackage.cpp in Sources */,
 				00B019B513501507001E01BB /* OEDevice.cpp in Sources */,
 				00D226571350FF8B00FC69B9 /* OEMatrix3.cpp in Sources */,
+				00B5CB94136F0B6C007A7BED /* AppleSilentype.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1240,6 +1257,7 @@
 				00391CB312D3A320002C5ABD /* LibraryWindowController.m in Sources */,
 				0039211812D43448002C5ABD /* BackgroundView.m in Sources */,
 				00F35D7312EF049B0027B9E4 /* EmulationOutlineView.m in Sources */,
+				0073DD9F136FCC1100087303 /* CanvasToolbarView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
