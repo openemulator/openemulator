@@ -9,6 +9,7 @@
  */
 
 #import "CanvasWindowController.h"
+#import "CanvasWindow.h"
 
 @implementation CanvasWindowController
 
@@ -47,11 +48,17 @@
 	[fCanvasView freeOpenGL];
 }
 
-// UI
+// User Interface
 
 - (void)awakeFromNib
 {
 	NSLog(@"CanvasWindowController awakeFromNib");
+	
+	if ([fCanvasView isDisplayCanvas])
+	{
+		[fToolbarView removeFromSuperview];
+		[fScrollView setFrame:[[fScrollView superview] frame]];
+	}
 }
 
 - (void)windowDidLoad
@@ -66,11 +73,12 @@
 	[[self window] setToolbar:toolbar];
 	[toolbar release];
 	
-	NSRect windowFrame = [[self window] frame];
-	[[self window] setDelegate:fCanvasView];
-	[[self window] setContentSize:[fCanvasView defaultViewSize]];
-	[[self window] setFrameTopLeftPoint:NSMakePoint(NSMinX(windowFrame),
-													NSMaxY(windowFrame))];
+	CanvasWindow *window = (CanvasWindow *)[self window];
+	NSRect windowFrame = [window frame];
+	[window setDelegate:fCanvasView];
+	[window setFrameSize:1.0];
+	[window setFrameTopLeftPoint:NSMakePoint(NSMinX(windowFrame),
+											 NSMaxY(windowFrame))];
 }
 
 - (void)showWindow:(id)sender

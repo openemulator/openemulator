@@ -36,6 +36,7 @@
 - (void)freeOpenGL;
 - (void)startDisplayLink;
 - (void)stopDisplayLink;
+- (BOOL)isDisplayCanvas;
 - (NSSize)defaultViewSize;
 - (void)updateView;
 

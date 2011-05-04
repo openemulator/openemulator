@@ -238,6 +238,14 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	[super dealloc];
 }
 
+- (BOOL)validateUserInterfaceItem:(id)anItem
+{
+	if ([anItem action] == @selector(delete:))
+		return ![self isDisplayCanvas];
+	
+	return YES;
+}
+
 - (void)awakeFromNib
 {
 	NSLog(@"CanvasView awakeFromNib");
@@ -467,6 +475,15 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 													  cglPixelFormatObj);
 }
 
+- (BOOL)isDisplayCanvas
+{
+	[document lockEmulation];
+	CanvasMode mode = ((OpenGLCanvas *)canvas)->getMode();
+	[document unlockEmulation];
+	
+	return (mode == CANVAS_MODE_DISPLAY);
+}
+
 - (NSSize)defaultViewSize
 {
 	[document lockEmulation];
@@ -483,31 +500,26 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 - (void)update
 {
 	CGLLockContext(cglContextObj);
-	NSLog(@"update enter");
 	
-	[[self openGLContext] makeCurrentContext];
 	[super update];
 	
-	NSLog(@"update exit");
 	CGLUnlockContext(cglContextObj);
 }
 
-- (void)reshape
+- (void)drawRect:(NSRect)theRect
 {
 	CGLLockContext(cglContextObj);
-	NSLog(@"reshape enter");
 	
-	[[self openGLContext] makeCurrentContext];
-	glViewport(0, 0, [self bounds].size.width, [self bounds].size.height);
+	NSRect frame = [self bounds];
+	if (((OpenGLCanvas *)canvas)->update(NSWidth(frame), NSHeight(frame), 0, false))
+		[[self openGLContext] flushBuffer];
 	
-	NSLog(@"reshape exit");
 	CGLUnlockContext(cglContextObj);
 }
 
 - (void)updateView
 {
     CGLLockContext(cglContextObj);
-	NSLog(@"updateView enter");
 	
 	[[self openGLContext] makeCurrentContext];
 	
@@ -515,23 +527,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	if (((OpenGLCanvas *)canvas)->update(NSWidth(frame), NSHeight(frame), 0, true))
 		[[self openGLContext] flushBuffer];
 	
-	NSLog(@"updateView exit");
     CGLUnlockContext(cglContextObj);
-}
-
-- (void)drawRect:(NSRect)theRect
-{
-	CGLLockContext(cglContextObj);
-	NSLog(@"drawRect enter");
-	
-	[[self openGLContext] makeCurrentContext];
-	
-	NSRect frame = [self bounds];
-	if (((OpenGLCanvas *)canvas)->update(NSWidth(frame), NSHeight(frame), 0, false))
-		[[self openGLContext] flushBuffer];
-	
-	NSLog(@"drawRect exit");
-	CGLUnlockContext(cglContextObj);
 }
 
 // Keyboard
@@ -815,6 +811,11 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 		[dummy insertText:theString];
 		[dummy startSpeaking:self];
 	}
+}
+
+- (void)delete:(id)sender
+{
+	
 }
 
 // Support for the text system

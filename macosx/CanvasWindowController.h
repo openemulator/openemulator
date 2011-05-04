@@ -15,7 +15,9 @@
 @interface CanvasWindowController : NSWindowController
 <NSToolbarDelegate>
 {
+	IBOutlet id fScrollView;
 	IBOutlet CanvasView *fCanvasView;
+	IBOutlet id fToolbarView;
 	
 	void *device;
 	NSString *title;
