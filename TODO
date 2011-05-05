@@ -1,7 +1,9 @@
 ==To-Do==
-* Fix: resizing produces flickering if the render thread is active at the same time. glTexImage2D conflict?
+* Fix: resize flickering when rendering from the emulation thread
 
-* Finish OpenGL paper canvas
+* Implement coherent mouse pointer coordinates
+
+* Add OpenGL paper canvas page separator
 * Implement printing with the raw canvas bitmap
 * Implement copy with raw canvas bitmap
 

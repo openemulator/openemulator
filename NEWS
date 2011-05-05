@@ -1,4 +1,7 @@
 ==2011-05==
+* Finished OpenGL paper canvas
+* Fixed video update when shaders are off
+* Fixed resize flickering when using didVSync for drawing
 * Fixed bezel drawing
 * Fixed window resizing methods
 * Fixed display canvas updates, so persistency is correctly updated after a new frame

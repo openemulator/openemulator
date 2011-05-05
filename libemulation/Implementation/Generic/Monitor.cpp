@@ -290,11 +290,10 @@ void Monitor::notify(OEComponent *sender, int notification, void *data)
 		 }
 		 */
 		
-/*
 		int *p = (int *)frame.getPixels();
 		if (p)
 		{
-			int w = 560;
+			int w = 576;
 			int h = 192;
 			for (int y = 0; y < h; y++)
 				for (int x = 0; x < 128; x++)
@@ -306,17 +305,17 @@ void Monitor::notify(OEComponent *sender, int notification, void *data)
 			if (canvas)
 				canvas->postMessage(this, CANVAS_POST_FRAME, &frame);
 		}
-		*/
+		
 		return;
 	}
 	
 	if (notification != CANVAS_DID_VSYNC)
 		return;
-	
+/*	
 	int *p = (int *)frame.getPixels();
 	if (p)
 	{
-		int w = 560;
+		int w = 576;
 		int h = 192;
 		for (int y = 0; y < h; y++)
 			for (int x = 0; x < 128; x++)
@@ -328,6 +327,7 @@ void Monitor::notify(OEComponent *sender, int notification, void *data)
 		if (canvas)
 			canvas->postMessage(this, CANVAS_POST_FRAME, &frame);
 	}
+ */
 }
 
 void Monitor::updateContentRect()

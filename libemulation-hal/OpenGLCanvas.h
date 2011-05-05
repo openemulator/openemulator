@@ -74,7 +74,7 @@ public:
 	CanvasMode getMode();
 	OESize getResolution();
 	OEImage getFrame();
-	bool update(float width, float height, float offset, bool isVSync);
+	bool update(float width, float height, float origin, bool isVSync);
 	
 	void becomeKeyWindow();
 	void resignKeyWindow();
@@ -169,7 +169,7 @@ private:
 	void drawDisplayCanvas();
 	void updatePersistance();
 	
-	void drawPaperCanvas(float offset);
+	void drawPaperCanvas(float origin);
 	
 	double getCurrentTime();
 	void drawBezel();
