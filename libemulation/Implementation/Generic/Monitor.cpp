@@ -251,10 +251,10 @@ bool Monitor::init()
 		return false;
 	}
 	
-	CanvasCaptureMode captureMode = CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_CLICK;
+//	CanvasCaptureMode captureMode = CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_CLICK;
 	frame.readFile(dummyPath);
 	
-	canvas->postMessage(this, CANVAS_SET_CAPTUREMODE, &captureMode);
+//	canvas->postMessage(this, CANVAS_SET_CAPTUREMODE, &captureMode);
 	canvas->postMessage(this, CANVAS_POST_FRAME, &frame);
 	
 	return true;
@@ -290,7 +290,7 @@ void Monitor::notify(OEComponent *sender, int notification, void *data)
 		 }
 		 */
 		
-		int *p = (int *)frame.getPixels();
+/*		int *p = (int *)frame.getPixels();
 		if (p)
 		{
 			int w = 576;
@@ -305,7 +305,7 @@ void Monitor::notify(OEComponent *sender, int notification, void *data)
 			if (canvas)
 				canvas->postMessage(this, CANVAS_POST_FRAME, &frame);
 		}
-		
+*/		
 		return;
 	}
 	

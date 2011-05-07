@@ -12,8 +12,8 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="1808"/>
 			<integer value="1741"/>
+			<integer value="1808"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -668,7 +668,7 @@
 							<object class="NSTextFieldCell" key="NSCell" id="934293017">
 								<int key="NSCellFlags">68288064</int>
 								<int key="NSCellFlags2">138544128</int>
-								<string key="NSContents">13 devices</string>
+								<string key="NSContents">0 devices</string>
 								<reference key="NSSupport" ref="26"/>
 								<reference key="NSControlView" ref="144120296"/>
 								<reference key="NSBackgroundColor" ref="997325847"/>
@@ -1061,6 +1061,14 @@
 						<reference key="destination" ref="727025502"/>
 					</object>
 					<int key="connectionID">2531</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">fStatusLabelView</string>
+						<reference key="source" ref="762632889"/>
+						<reference key="destination" ref="144120296"/>
+					</object>
+					<int key="connectionID">2536</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -1778,7 +1786,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">2535</int>
+			<int key="maxID">2536</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -1888,6 +1896,7 @@
 							<string>fDeviceStateValue</string>
 							<string>fOutlineView</string>
 							<string>fSplitView</string>
+							<string>fStatusLabelView</string>
 							<string>fTableKeyColumn</string>
 							<string>fTableValueColumn</string>
 							<string>fTableView</string>
@@ -1900,6 +1909,7 @@
 							<string>id</string>
 							<string>id</string>
 							<string>EmulationOutlineView</string>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -1917,6 +1927,7 @@
 							<string>fDeviceStateValue</string>
 							<string>fOutlineView</string>
 							<string>fSplitView</string>
+							<string>fStatusLabelView</string>
 							<string>fTableKeyColumn</string>
 							<string>fTableValueColumn</string>
 							<string>fTableView</string>
@@ -1949,6 +1960,10 @@
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">fSplitView</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">fStatusLabelView</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBToOneOutletInfo">

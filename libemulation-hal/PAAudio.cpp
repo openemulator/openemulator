@@ -633,11 +633,11 @@ void PAAudio::setPlayPosition(float time)
 
 void PAAudio::play()
 {
-	if (playSNDFILE)
-		playing = true;
-	
 	if ((getPlayTime() + 0.1) >= getPlayDuration())
 		setPlayPosition(0.0);
+	
+	if (playSNDFILE)
+		playing = true;
 }
 
 void PAAudio::pause()
@@ -695,7 +695,7 @@ void PAAudio::playAudio(float *outputBuffer,
 			frameNum,
 			0,
 			0,
-			inputFrameNum ? 0 : 1,
+			0,
 			playSRCRatio,
 		};
 		src_process(playSRC, &srcData);
@@ -703,6 +703,7 @@ void PAAudio::playAudio(float *outputBuffer,
 		if (!srcData.output_frames_gen)
 		{
 			playing = false;
+			
 			return;
 		}
 		

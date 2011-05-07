@@ -1,11 +1,12 @@
 ==To-Do==
-* Fix: resize flickering when rendering from the emulation thread
+* Implement CanvasView paper scrolling
+* Implement printing with the raw canvas bitmap
+* Implement copy with raw canvas bitmap
 
 * Implement coherent mouse pointer coordinates
 
-* Add OpenGL paper canvas page separator
-* Implement printing with the raw canvas bitmap
-* Implement copy with raw canvas bitmap
+* Fix: resize flickering when rendering from the emulation thread
+* Optimize OpenGL thread locking
 
 * Implement hardware library
 * A device is added by dragging it to the device it is connected to.

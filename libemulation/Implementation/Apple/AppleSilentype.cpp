@@ -68,8 +68,8 @@ bool AppleSilentype::init()
 	
 	CanvasMode mode = CANVAS_MODE_PAPER;
 	CanvasPaperConfiguration configuration;
-	configuration.pageResolution = OEMakeSize(612, 864);
-	configuration.pagePixelDensity = OEMakeSize(72, 72);
+	configuration.pageResolution = OEMakeSize(612 * 2, 792 * 2);
+	configuration.pagePixelDensity = OEMakeSize(144, 144);
 	
 	canvas->postMessage(this, CANVAS_SET_MODE, &mode);
 	canvas->postMessage(this, CANVAS_CONFIGURE_PAPER, &configuration);

@@ -68,6 +68,11 @@ void *OEImage::getPixels()
 	return &pixels.front();
 }
 
+void *OEImage::getPixelsAtLine(int originY)
+{
+	return &pixels.front() + ((int) size.width) * originY * getPixelSize();
+}
+
 bool OEImage::readFile(string path)
 {
 	bool result = false;
@@ -150,14 +155,24 @@ bool OEImage::validatePNG(FILE *fp)
 	return !png_sig_cmp((png_byte *) pngHeader, 0, OEIMAGE_PNGSIG_BYTENUM);
 }
 
+int OEImage::getPixelSize()
+{
+	switch (format)
+	{
+		case OEIMAGE_LUMINANCE:
+			return 1;
+		case OEIMAGE_RGB:
+			return 3;
+		case OEIMAGE_RGBA:
+			return 4;
+	}
+	
+	return 0;
+}
+
 void OEImage::update()
 {
-	int bytesPerPixel = 1;
-	
-	if (format == OEIMAGE_RGB)
-		bytesPerPixel = 3;
-	else if (format == OEIMAGE_RGBA)
-		bytesPerPixel = 4;
-	
-	pixels.resize(size.width * size.height * bytesPerPixel);
+	pixels.resize(((int) size.width) *
+				  ((int) size.height) *
+				  getPixelSize());
 }

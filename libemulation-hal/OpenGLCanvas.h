@@ -74,6 +74,8 @@ public:
 	CanvasMode getMode();
 	OESize getResolution();
 	OEImage getFrame();
+	OEImage getPage(int index);
+	OEImage getPageTotal(int index);
 	bool update(float width, float height, float origin, bool isVSync);
 	
 	void becomeKeyWindow();
@@ -130,8 +132,9 @@ private:
 	GLuint renderShader;
 	int persistance[OPENGLCANVAS_PERSISTANCE_FRAME_NUM];
 	
-	OEImage paper;
+	CanvasPaperConfiguration paperConfiguration;
 	bool isPaperUpdated;
+	OEImage paper;
 	
 	CanvasBezel bezel;
 	bool isBezelDrawRequired;

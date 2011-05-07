@@ -101,6 +101,7 @@ public:
 	OESize getSize();
 	
 	void *getPixels();
+	void *getPixelsAtLine(int originY);
 	
 	bool readFile(string path);
 	
@@ -109,6 +110,7 @@ private:
 	OESize size;
 	vector<char> pixels;
 	
+	int getPixelSize();
 	void update();
 	bool validatePNG(FILE *fp);
 };

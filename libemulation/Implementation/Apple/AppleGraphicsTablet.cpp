@@ -68,7 +68,7 @@ bool AppleGraphicsTablet::init()
 	frame.readFile(viewPath);
 	configuration.displayResolution = frame.getSize();
 	configuration.displayPixelDensity = OEMakeSize(50, 50);
-	CanvasBezel bezel = CANVAS_BEZEL_POWER;
+	CanvasBezel bezel = CANVAS_BEZEL_PAUSE;
 	
 	canvas->postMessage(this, CANVAS_SET_BEZEL, &bezel);
 	canvas->postMessage(this, CANVAS_CONFIGURE_DISPLAY, &configuration);

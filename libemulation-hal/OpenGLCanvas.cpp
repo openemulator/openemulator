@@ -21,7 +21,6 @@
 #define NTSC_YUV_CUTOFF		0.6
 #define NTSC_YIQ_I_SHIFT	((NTSC_YUV_CUTOFF - NTSC_YIQ_CUTOFF) / NTSC_CARRIER)
 
-// This should be a power of 2:
 #define PAPER_SLICE			256
 
 #define BEZELCAPTURE_START	2.0
@@ -129,7 +128,8 @@ bool OpenGLCanvas::update(float width, float height, float origin, bool isVSync)
 	if (isDisplayConfigurationUpdated)
 		updateDisplayConfiguration();
 	
-	if (isFrameUpdated || isDisplayConfigurationUpdated)
+	if (isFrameUpdated ||
+		isDisplayConfigurationUpdated)
 	{
 		renderFrame();
 		
@@ -360,7 +360,7 @@ void OpenGLCanvas::loadShaders()
 		p += pixels(q, 8.0 / texture_size.x) * c8;\
 		gl_FragColor = vec4(decoder * p, 1.0);\
 		}");
-
+	
 	shader[OPENGLCANVAS_SHADER_NTSC] = loadShader("\
 		uniform sampler2D texture;\
 		uniform vec2 texture_size;\
@@ -1069,13 +1069,15 @@ void OpenGLCanvas::drawPaperCanvas(float origin)
 		return;
 	
 	// Render
+	float paperAspectRatio = (paperConfiguration.pagePixelDensity.width /
+							  paperConfiguration.pagePixelDensity.height);
 	OERect paperViewport = OEMakeRect(0, origin,
 									  paperSize.width,
 									  viewportSize.height * paperSize.width /
-									  viewportSize.width);
+									  viewportSize.width / paperAspectRatio);
 	
 	OESize texSize = OEMakeSize(getNextPowerOf2(paperSize.width),
-								PAPER_SLICE);
+								getNextPowerOf2(PAPER_SLICE));
 	updateTextureSize(OPENGLCANVAS_TEXTURE_FRAME_RAW, texSize);
 	
 	glLoadIdentity();
@@ -1087,45 +1089,28 @@ void OpenGLCanvas::drawPaperCanvas(float origin)
 	{
 		OERect slice = OEMakeRect(0, i * PAPER_SLICE,
 								  paperSize.width, PAPER_SLICE);
-		if (OEMaxY(slice) > paperViewport.size.height)
-			slice.size.height = paperViewport.size.height - slice.origin.y;
-		if (OEMaxY(slice) > paperSize.height)
-			slice.size.height = paperSize.height - slice.origin.y;
-		if (slice.size.height <= 0)
+		if (OEMinY(slice) >= paperSize.height)
 			break;
-		
-		char *pixels = (char *)paper.getPixels();
-		int pixelOffset = OEMinY(slice) * paper.getSize().width;
-		switch (paper.getFormat())
-		{
-			case OEIMAGE_LUMINANCE:
-				pixels += pixelOffset;
-				break;
-			case OEIMAGE_RGB:
-				pixels += 3 * pixelOffset;
-				break;
-			case OEIMAGE_RGBA:
-				pixels += 4 * pixelOffset;
-				break;
-		}
 		
 		glBindTexture(GL_TEXTURE_2D, texture[OPENGLCANVAS_TEXTURE_FRAME_RAW]);
 		
 		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0,
-						OEMaxX(slice), slice.size.height,
+						slice.size.width, slice.size.height,
 						getGLFormat(paper.getFormat()), GL_UNSIGNED_BYTE,
-						pixels);
+						paper.getPixelsAtLine(OEMinY(slice)));
 		
 		OERect textureRect = OEMakeRect(0, 0,
 										slice.size.width / texSize.width,
 										slice.size.height / texSize.height);
-		OERect vertexRect = OEMakeRect(-1,
-									   2 * (OEMinY(slice) - origin) /
+		OERect vertexRect = OEMakeRect(-1, 2 * (OEMinY(slice) - origin) /
 									   paperViewport.size.height - 1,
-									   2,
-									   2 * slice.size.height / paperViewport.size.height);
+									   2, 2 * slice.size.height /
+									   paperViewport.size.height);
+		
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		
 		glBegin(GL_QUADS);
 		glTexCoord2f(OEMinX(textureRect), OEMinY(textureRect));
@@ -1140,6 +1125,29 @@ void OpenGLCanvas::drawPaperCanvas(float origin)
 	}
 	
 	glBindTexture(GL_TEXTURE_2D, 0);
+	
+	// Render page separators
+	glColor4f(0.5, 0.5, 0.5, 1);
+	
+	int pageNum = ceil(paperSize.height / paperConfiguration.pageResolution.height);
+	for (int i = 0; i < pageNum; i++)
+	{
+		OERect line = OEMakeRect(-1, 2 * (paperConfiguration.pageResolution.height *
+										  (i + 1) - origin) /
+								 paperViewport.size.height - 1,
+								 2, 0);
+		if (line.origin.y < -1)
+			continue;
+		if (line.origin.y > 1)
+			break;
+		
+		glBegin(GL_LINES);
+		glVertex2f(OEMinX(line), OEMinY(line));
+		glVertex2f(OEMaxX(line), OEMaxY(line));
+		glEnd();
+	}
+	
+	glColor4f(1, 1, 1, 1);
 }
 
 // Bezel
@@ -1523,8 +1531,10 @@ bool OpenGLCanvas::setBezel(CanvasBezel *bezel)
 		return true;
 	
 	lock();
+	
 	this->bezel = *bezel;
 	isBezelDrawRequired = true;
+	
 	unlock();
 	
 	return true;
@@ -1536,8 +1546,10 @@ bool OpenGLCanvas::setDisplayConfiguration(CanvasDisplayConfiguration *displayCo
 		return false;
 	
 	lock();
+	
 	isDisplayConfigurationUpdated = true;
 	this->displayConfiguration = *displayConfiguration;
+	
 	unlock();
 	
 	return true;
@@ -1549,8 +1561,10 @@ bool OpenGLCanvas::postFrame(OEImage *frame)
 		return false;
 	
 	lock();
+	
 	this->frame = *frame;
 	isFrameUpdated = true;
+	
 	unlock();
 	
 	return true;
@@ -1558,6 +1572,15 @@ bool OpenGLCanvas::postFrame(OEImage *frame)
 
 bool OpenGLCanvas::setPaperConfiguration(CanvasPaperConfiguration *paperConfiguration)
 {
+	if (!paperConfiguration)
+		return false;
+	
+	lock();
+	
+	this->paperConfiguration = *paperConfiguration;
+	
+	unlock();
+	
 	return true;
 }
 
@@ -1567,8 +1590,15 @@ bool OpenGLCanvas::printImage(OEImage *image)
 		return false;
 	
 	lock();
+	
 	paper = *image;
+	OESize size = paper.getSize();
+	int sliceNum = (size.height + PAPER_SLICE - 1) / PAPER_SLICE;
+	size.height = sliceNum * PAPER_SLICE;
+	paper.setSize(size);
+	
 	isPaperUpdated = true;
+	
 	unlock();
 	
 	return true;

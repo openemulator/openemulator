@@ -29,6 +29,8 @@ NSOutlineViewDataSource, NSComboBoxDataSource>
 	IBOutlet id fTableKeyColumn;
 	IBOutlet id fTableValueColumn;
 	
+	IBOutlet id fStatusLabelView;
+	
 	EmulationItem *rootItem;
 	
 	EmulationItem *selectedItem;

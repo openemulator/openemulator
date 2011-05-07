@@ -105,6 +105,22 @@
 		[fOutlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:1]
 				  byExtendingSelection:NO];
 	[uid release];
+	
+	int deviceCount = 0;
+	NSMutableArray *children = [rootItem children];
+	for (int i = 0; i < [children count]; i++)
+	{
+		EmulationItem *groupItem = [children objectAtIndex:i];
+		NSMutableArray *devices = [groupItem children];
+		deviceCount += [devices count];
+	}
+	
+	NSString *label;
+	if (deviceCount == 1)
+		label = [NSString localizedStringWithFormat:@"1 device"];
+	else
+		label = [NSString localizedStringWithFormat: @"%d devices", deviceCount];
+	[fStatusLabelView setStringValue:label];
 }
 
 - (void)updateDetails
