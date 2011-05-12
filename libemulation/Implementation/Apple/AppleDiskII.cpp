@@ -115,7 +115,7 @@ bool AppleDiskII::postMessage(OEComponent *sender, int message, void *data)
 			}
 			break;
 		case STORAGE_IS_LOCKED:
-			return false;
+			return true;
 	}
 	
 	return false;

@@ -23,7 +23,7 @@
 #define LINK_HOMEPAGE	@"http://www.openemulator.org"
 #define LINK_FORUMSURL	@"http://groups.google.com/group/openemulator"
 #define LINK_DEVURL		@"http://code.google.com/p/openemulator"
-#define LINK_DONATEURL	@"http://www.openemulator.org/donate"
+#define LINK_DONATEURL	@"http://www.openemulator.org"
 
 @implementation DocumentController
 
@@ -365,14 +365,16 @@
 		}
 		
 		NSURL *url = [NSURL fileURLWithPath:path];
-		document = [self openUntitledDocumentWithTemplateURL:url
-													 display:displayDocument
-													   error:nil];
+		if (url)
+			document = [self openUntitledDocumentWithTemplateURL:url
+														 display:displayDocument
+														   error:nil];
 		
 		if (document)
 			return document;
 		
 		[defaults setBool:NO forKey:@"OEDefaultTemplateEnabled"];
+		[defaults setObject:@"" forKey:@"OEDefaultTemplatePath"];
 	}
 	
 	[self newDocumentFromTemplateChooser:self];

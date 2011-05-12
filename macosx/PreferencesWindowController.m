@@ -22,6 +22,10 @@
 
 - (void)dealloc
 {
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	[userDefaults removeObserver:self
+					  forKeyPath:@"OEDefaultTemplatePath"];
+	
 	[templateChooserViewController release];
 	
 	[super dealloc];
@@ -50,6 +54,21 @@
 	NSView *view = [templateChooserViewController view];
 	[view setFrameSize:[fTemplateChooserView frame].size];
 	[fTemplateChooserView addSubview:view];
+	
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	[userDefaults addObserver:self
+				   forKeyPath:@"OEDefaultTemplatePath"
+					  options:NSKeyValueObservingOptionNew
+					  context:nil];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath
+					  ofObject:(id)object
+						change:(NSDictionary *)change
+					   context:(void *)context
+{
+	if ([keyPath isEqualToString:@"OEDefaultTemplatePath"])
+		[self updateGeneralView];
 }
 
 

@@ -19,7 +19,7 @@
 #include "OEComponent.h"
 #include "CanvasInterface.h"
 
-#define OPENGLCANVAS_PERSISTANCE_FRAME_NUM 6
+#define OPENGLCANVAS_PERSISTANCE_IMAGE_NUM 6
 
 typedef enum
 {
@@ -38,10 +38,10 @@ typedef enum
 	OPENGLCANVAS_TEXTURE_BEZEL_POWER,
 	OPENGLCANVAS_TEXTURE_BEZEL_PAUSE,
 	OPENGLCANVAS_TEXTURE_BEZEL_CAPTURE,
-	OPENGLCANVAS_TEXTURE_FRAME_RAW,
-	OPENGLCANVAS_TEXTURE_FRAME_RENDERED,
-	OPENGLCANVAS_TEXTURE_FRAME_RENDERED_END = (OPENGLCANVAS_TEXTURE_FRAME_RENDERED +
-												OPENGLCANVAS_PERSISTANCE_FRAME_NUM),
+	OPENGLCANVAS_TEXTURE_IMAGE_RAW,
+	OPENGLCANVAS_TEXTURE_IMAGE_RENDERED,
+	OPENGLCANVAS_TEXTURE_IMAGE_RENDERED_END = (OPENGLCANVAS_TEXTURE_IMAGE_RENDERED +
+											   OPENGLCANVAS_PERSISTANCE_IMAGE_NUM),
 	OPENGLCANVAS_TEXTURE_END,
 } OpenGLCanvasTextureIndex;
 
@@ -71,12 +71,22 @@ public:
 	void close();
 	
 	void setEnableShader(bool value);
+	
 	CanvasMode getMode();
-	OESize getResolution();
-	OEImage getFrame();
+	
+	OESize getDefaultViewportSize();
+	void setViewportSize(OESize size);
+	
+	OERect getCanvasRect();
+	OERect getClipRect();
+	void scrollPoint(OEPoint aPoint);
+	
+	OESize getPagePixelDensity();
+	int getPageNumber();
 	OEImage getPage(int index);
-	OEImage getPageTotal(int index);
-	bool update(float width, float height, float origin, bool isVSync);
+	
+	bool vsync();
+	void draw();
 	
 	void becomeKeyWindow();
 	void resignKeyWindow();
@@ -119,22 +129,26 @@ private:
 	CanvasCaptureMode captureMode;
 	
 	OESize viewportSize;
+	OERect canvasRect;
+	OERect clipRect;
+	bool isImageUpdated;
+	OEImage image;
+	
 	GLuint texture[OPENGLCANVAS_TEXTURE_END];
 	OESize textureSize[OPENGLCANVAS_TEXTURE_END];
 	
 	bool isDisplayConfigurationUpdated;
+	CanvasDisplayConfiguration updatedDisplayConfiguration;
 	CanvasDisplayConfiguration displayConfiguration;
-	bool isFrameUpdated;
-	OEImage frame;
 	bool isShaderActive;
 	GLuint shader[OPENGLCANVAS_SHADER_END];
 	int renderIndex;
 	GLuint renderShader;
-	int persistance[OPENGLCANVAS_PERSISTANCE_FRAME_NUM];
+	int persistance[OPENGLCANVAS_PERSISTANCE_IMAGE_NUM];
 	
 	CanvasPaperConfiguration paperConfiguration;
-	bool isPaperUpdated;
-	OEImage paper;
+	
+	CanvasOpenGLConfiguration openGLConfiguration;
 	
 	CanvasBezel bezel;
 	bool isBezelDrawRequired;
@@ -163,16 +177,17 @@ private:
 	void deleteShaders();
 	GLuint loadShader(const char *source);
 	void deleteShader(GLuint glShader);
-	void updateViewport();
 	
-	bool uploadFrame();
+	void updateViewportSize(OESize size);
+	
+	bool uploadImage();
 	void updateDisplayConfiguration();
-	void renderFrame();
+	void renderImage();
 	bool isDisplayDrawRequired();
 	void drawDisplayCanvas();
 	void updatePersistance();
 	
-	void drawPaperCanvas(float origin);
+	void drawPaperCanvas();
 	
 	double getCurrentTime();
 	void drawBezel();
@@ -185,9 +200,10 @@ private:
 	bool setCaptureMode(CanvasCaptureMode *captureMode);
 	bool setBezel(CanvasBezel *bezel);
 	bool setDisplayConfiguration(CanvasDisplayConfiguration *configuration);
-	bool postFrame(OEImage *frame);
 	bool setPaperConfiguration(CanvasPaperConfiguration *configuration);
-	bool printImage(OEImage *image);
+	bool setOpenGLConfiguration(CanvasOpenGLConfiguration *configuration);
+	bool postImage(OEImage *frame);
+	bool movePrintHead(OEPoint *point);
 };
 
 #endif

@@ -134,9 +134,9 @@
 	NSString *stateLabel = @"";
 	BOOL isEnabled = YES;
 	
-	BOOL hasCanvases = NO;
 	BOOL isStorageDevice = NO;
 	BOOL isMount = NO;
+	BOOL hasCanvases = NO;
 	
 	if (selectedItem)
 	{
@@ -147,9 +147,9 @@
 			locationLabel = NSLocalizedString(@"Built-in", @"Emulation Value.");
 		stateLabel = NSLocalizedString([selectedItem stateLabel],
 									   @"Emulation Value.");
-		hasCanvases = [selectedItem hasCanvases];
 		isStorageDevice = [selectedItem isStorageDevice];
 		isMount = [selectedItem isMount];
+		hasCanvases = [selectedItem hasCanvases];
 	}
 	
 	[fDeviceBox setTitle:title];
@@ -164,15 +164,15 @@
 												  @"Emulation Button Label.")];
 		[fDeviceButton setHidden:NO];
 	}
-	else if (hasCanvases)
-	{
-		[fDeviceButton setTitle:NSLocalizedString(@"Show Device",
-												  @"Emulation Button Label.")];
-		[fDeviceButton setHidden:NO];
-	}
 	else if (isMount)
 	{
 		[fDeviceButton setTitle:NSLocalizedString(@"Unmount",
+												  @"Emulation Button Label.")];
+		[fDeviceButton setHidden:NO];
+	}
+	else if (hasCanvases)
+	{
+		[fDeviceButton setTitle:NSLocalizedString(@"Show Device",
 												  @"Emulation Button Label.")];
 		[fDeviceButton setHidden:NO];
 	}
@@ -712,12 +712,12 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
 {
 	EmulationItem *item = [self itemForSender:sender];
 	
-	if ([item hasCanvases])
-		[self showDevice:sender];
-	else if ([item isStorageDevice])
+	if ([item isStorageDevice])
 		[self openDiskImage:sender];
 	else if ([item isMount])
 		[self unmount:sender];
+	else if ([item hasCanvases])
+		[self showDevice:sender];
 }
 
 - (IBAction)showDevice:(id)sender

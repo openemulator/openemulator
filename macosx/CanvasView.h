@@ -26,6 +26,7 @@
 	Document *document;
 	void *canvas;
 	
+	NSSize canvasSize;
 	NSUInteger keyMap[DEVICE_KEYMAP_SIZE];
 	NSUInteger keyModifierFlags;
 	NSUInteger keyboardFlags;
@@ -37,8 +38,9 @@
 - (void)startDisplayLink;
 - (void)stopDisplayLink;
 - (BOOL)isDisplayCanvas;
+- (BOOL)isPaperCanvas;
 - (NSSize)defaultViewSize;
-- (void)updateView;
+- (void)vsync;
 
 - (void)setKeyboardFlags:(NSInteger)theKeyboardFlags;
 - (void)synchronizeKeyboardFlags;

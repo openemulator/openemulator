@@ -14,31 +14,33 @@
 #include "OEImage.h"
 
 // Messages:
-// * setMode sets the canvas mode: display (fast updates) or paper (large area)
-// * setCaptureMode describes how mouse and keyboard are captured
-// * setKeyboardFlags sets the keyboard LEDs with a CanvasKeyboardFlags
-// * setBezel sets the canvas' bezel with CanvasBezel
+// * setMode sets the canvas mode (CanvasMode):
+//   - display (fixed aspect ratio)
+//   - paper (large scrolling areas)
+//   - OpenGL (custom graphics)
+// * setCaptureMode describes how the mouse and keyboard are captured (CanvasCaptureMode)
+// * setKeyboardFlags sets the keyboard LEDs (CanvasKeyboardFlags)
+// * setBezel sets the canvas' bezel (CanvasBezel)
 
-// Display canvas options:
-// * configureDisplay configures using the CanvasDisplayConfiguration structure
-// * postFrame posts an OEImage frame
+// Configuration:
+// * configureDisplay configures a display canvas (CanvasDisplayConfiguration)
+// * configurePaper configures a display canvas (CanvasPaperConfiguration)
+// * configureOpenGL configures a display canvas (CanvasOpenGLConfiguration)
 
-// Paper canvas options:
-// * configurePaper configures using the CanvasPaperConfiguration structure
-// * print prints an OEImage on the current paper offset position
+// Drawing:
+// * postImage post an image to the canvas (OEImage)
+// * movePrintHead sets the print head position in paper mode (OEPoint)
 
 // Notifications:
-// * HID Notifications receive a CanvasHIDNotification
-// * Pointer coordinates are
-// * didCopy and didPaste receive a string
-// * didVSync is called from the video thread. It occurs after vertical sync
-// * didDraw is called from the video thread. It occurs after screen drawn
+// * HID notifications are sents as CanvasHIDNotification
+// * Pointer coordinates are in resolution coordinates
+// * didCopy, didPaste is sent when copying/pasting (string)
+// * didVSync is called from the video thread after vertical sync (CanvasVSync)
+// * willDraw is called from the video thread when the screen will be drawn (OESize)
 // * HID axes are in [-1:1] coordinates
-// * willUpdate and didUpdate receive a CanvasUpdate structure
-// ** Override draw to force drawing updates
 
 // Multithreading, beware!
-// * didVSync and didUpdate are sent from the drawing thread. Keep this in mind
+// * didVSync and didUpdate are sent from the drawing thread! Keep this in mind
 //   for synchronizing correctly.
 
 typedef enum
@@ -49,11 +51,11 @@ typedef enum
 	CANVAS_SET_BEZEL,
 	
 	CANVAS_CONFIGURE_DISPLAY,
-	CANVAS_POST_FRAME,
-	
 	CANVAS_CONFIGURE_PAPER,
-	CANVAS_POSITION_PRINTHEAD,
-	CANVAS_PRINT_IMAGE,
+	CANVAS_CONFIGURE_OPENGL,
+	
+	CANVAS_POST_IMAGE,
+	CANVAS_MOVE_PRINTHEAD,
 } CanvasMessage;
 
 typedef enum
@@ -71,7 +73,7 @@ typedef enum
 	CANVAS_DID_PASTE,
 	
 	CANVAS_DID_VSYNC,
-	CANVAS_DID_DRAW,
+	CANVAS_WILL_DRAW,
 } CanvasNotification;
 
 // Definitions
@@ -80,6 +82,7 @@ typedef enum
 {
 	CANVAS_MODE_DISPLAY,
 	CANVAS_MODE_PAPER,
+	CANVAS_MODE_OPENGL,
 } CanvasMode;
 
 typedef enum
@@ -110,14 +113,14 @@ typedef enum
 // Copy and paste use string
 
 // Display canvas configuration:
-// * displayResolution is the number of resolved pixels on the host
-// * displayPixelDensity is the number of resolved pixels on the host per inch
-// * The video frame is contained in the video rectangle. This uses (0..1, 0..1)
-//   coordinates (origin is lower left), relative to the display
-// * Note that for display canvases, displayPixelDensity is not necessarily
-//   related to the video frame sampling frequency
+// * displayResolution is the number of resolved pixels of the device (this
+//   is not necessarily the video frame resolution)
+// * displayPixelDensity is the number of resolved pixels of the device per inch
+// * The video rectangle sets the bounds of the video frame within the canvas
+//   (origin is upper left, coordinate system is [0..1, 0..1])
 // * The shadow mask dot pitch measures the spacing of the pixels in mm
-// * Video frame bandwidths are relative to the image sampling frequency
+// * Video bandwidths are relative to the image sampling frequency,
+//   not to the display resolution
 
 typedef enum
 {
@@ -143,14 +146,6 @@ class CanvasDisplayConfiguration
 public:
 	CanvasDisplayConfiguration()
 	{
-		videoDecoder = CANVAS_DECODER_RGB;
-		videoBandwidth = 1;
-		videoBrightness = 0;
-		videoContrast = 1;
-		videoSaturation = 1;
-		videoHue = 0;
-		videoRect = OEMakeRect(0, 0, 1, 1);
-		
 		displayResolution = OEMakeSize(640, 480);
 		displayPixelDensity = OEMakeSize(72, 72),
 		displayBarrel = 0;
@@ -161,20 +156,20 @@ public:
 		displayShadowMaskAlpha = 0;
 		displayPersistance = 0;
 		
+		videoDecoder = CANVAS_DECODER_RGB;
+		videoBandwidth = 1;
+		videoBrightness = 0;
+		videoContrast = 1;
+		videoSaturation = 1;
+		videoHue = 0;
+		videoRect = OEMakeRect(0, 0, 1, 1);
+		
 		compositeBlackLevel = 0;
 		compositeWhiteLevel = 1;
 		compositeCarrierFrequency = 0.25;
 		compositeLinePhase = 0;
 		compositeChromaBandwidth = 0.01;
 	}
-	
-	CanvasDecoder videoDecoder;
-	float videoBandwidth;
-	float videoBrightness;
-	float videoContrast;
-	float videoSaturation;
-	float videoHue;
-	OERect videoRect;
 	
 	OESize displayResolution;
 	OESize displayPixelDensity;
@@ -185,6 +180,14 @@ public:
 	float displayShadowMaskDotPitch;
 	CanvasShadowMask displayShadowMask;
 	float displayPersistance;
+	
+	CanvasDecoder videoDecoder;
+	float videoBandwidth;
+	float videoBrightness;
+	float videoContrast;
+	float videoSaturation;
+	float videoHue;
+	OERect videoRect;
 	
 	float compositeBlackLevel;
 	float compositeWhiteLevel;
@@ -209,6 +212,24 @@ public:
 	
 	OESize pageResolution;
 	OESize pagePixelDensity;
+};
+
+// OpenGL canvas configuration:
+// * pageResolution is the number of pixels resolved on a page
+// * pagePixelDensity is the number of resolved pixels on a page per inch
+// * Note that for paper canvases, pixel density is related to the image sampling frequency
+
+class CanvasOpenGLConfiguration
+{
+public:
+	CanvasOpenGLConfiguration()
+	{
+		viewportSize = OEMakeSize(612, 792);
+		viewportPixelDensity = OEMakeSize(72, 72);
+	}
+	
+	OESize viewportSize;
+	OESize viewportPixelDensity;
 };
 
 // Canvas HID notifications
@@ -528,9 +549,8 @@ typedef enum
 
 typedef struct
 {
-	int width;
-	int height;
-	bool draw;
-} CanvasDrawState;
+	OESize viewportSize;
+	bool shouldDraw;
+} CanvasVSync;
 
 #endif

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
+<edl version="1.0" label="Apple Macintosh 128k" image="images/Apple/Apple Macintosh.png" description="">
+
+<device id="appleMac128" label="Macintosh 128k" image="images/Apple/Apple Macintosh.png" group="system">
+</device>
+<component id="appleMac128.monitor" class="Monitor">
+    <property name="device" ref="appleMac128" />
+    <property name="dummy" value="${resourcePath}/images/mac.png" />
+    <property name="audio" ref="audio" />
+</component>
+<component id="appleMac128.disk" class="AppleDiskII">
+    <property name="device" ref="appleMac128" />
+    <property name="image" value="" />
+    <property name="forceWriteProtected" value="0" />
+</component>
+
+</edl>

@@ -63,17 +63,16 @@ bool AppleSilentype::init()
 		return false;
 	}
 	
-	OEImage image;
-	image.readFile(viewPath);
-	
 	CanvasMode mode = CANVAS_MODE_PAPER;
 	CanvasPaperConfiguration configuration;
 	configuration.pageResolution = OEMakeSize(612 * 2, 792 * 2);
 	configuration.pagePixelDensity = OEMakeSize(144, 144);
+	OEImage image;
+	image.readFile(viewPath);
 	
 	canvas->postMessage(this, CANVAS_SET_MODE, &mode);
 	canvas->postMessage(this, CANVAS_CONFIGURE_PAPER, &configuration);
-	canvas->postMessage(this, CANVAS_PRINT_IMAGE, &image);
+	canvas->postMessage(this, CANVAS_POST_IMAGE, &image);
 	
 	return true;
 }

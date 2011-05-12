@@ -81,7 +81,7 @@
 
 - (NSSize)windowWillResize:(NSWindow *)window toSize:(NSSize)proposedFrameSize
 {
-//	NSLog(@"CanvasWindow windowWillResize");
+	NSLog(@"CanvasWindow windowWillResize");
 	
 	if (fullscreen)
 		return proposedFrameSize;
@@ -93,9 +93,9 @@
 		
 		NSSize frameSize = [self frame].size;
 		NSSize viewSize = [[self contentView] frame].size;
-		float scale = [self userSpaceScaleFactor];
-		NSSize titleSize = NSMakeSize(frameSize.width - viewSize.width * scale,
-									  frameSize.height - viewSize.height * scale);
+		float userScale = [self userSpaceScaleFactor];
+		NSSize titleSize = NSMakeSize(frameSize.width - viewSize.width * userScale,
+									  frameSize.height - viewSize.height * userScale);
 		
 		NSSize proposedSize = NSMakeSize(proposedFrameSize.width - titleSize.width,
 										 proposedFrameSize.height - titleSize.height);
@@ -120,13 +120,7 @@
 						  (int) (proposedSize.height + titleSize.height));
 	}
 	else
-	{
-		if (proposedFrameSize.width < 512)
-			proposedFrameSize.width = 512;
-		if (proposedFrameSize.height < 384)
-			proposedFrameSize.height = 384;
 		return proposedFrameSize;
-	}
 }
 
 - (BOOL)windowShouldClose:(id)sender
@@ -152,19 +146,19 @@
 		[super setFrameOrigin:point];
 }
 
-- (void)setFrameSize:(double)proportion
+- (void)setFrameScale:(float)scale
 {
 	NSSize defaultViewSize = [fCanvasView defaultViewSize];
 	float defaultViewRatio = defaultViewSize.width / defaultViewSize.height;
 	
 	NSSize frameSize = [self frame].size;
 	NSSize viewSize = [[self contentView] frame].size;
-	float scale = [self userSpaceScaleFactor];
-	NSSize titleSize = NSMakeSize(frameSize.width - viewSize.width * scale,
-								  frameSize.height - viewSize.height * scale);
+	float userScale = [self userSpaceScaleFactor];
+	NSSize titleSize = NSMakeSize(frameSize.width - viewSize.width * userScale,
+								  frameSize.height - viewSize.height * userScale);
 	
-	NSSize proposedSize = NSMakeSize(proportion * scale * defaultViewSize.width,
-									 proportion * scale * defaultViewSize.height);
+	NSSize proposedSize = NSMakeSize(scale * userScale * defaultViewSize.width,
+									 scale * userScale * defaultViewSize.height);
 	float proposedRatio = proposedSize.width / proposedSize.height;
 	
 	NSRect screenRect = [[self screen] visibleFrame];
@@ -242,22 +236,22 @@
 
 - (void)setHalfSize:(id)sender
 {
-	[self setFrameSize:0.5];
+	[self setFrameScale:0.5];
 }
 
 - (void)setActualSize:(id)sender
 {
-	[self setFrameSize:1.0];
+	[self setFrameScale:1.0];
 }
 
 - (void)setDoubleSize:(id)sender
 {
-	[self setFrameSize:2.0];
+	[self setFrameScale:2.0];
 }
 
 - (void)fitToScreen:(id)sender
 {
-	[self setFrameSize:1000.0];
+	[self setFrameScale:10000.0];
 }
 
 @end

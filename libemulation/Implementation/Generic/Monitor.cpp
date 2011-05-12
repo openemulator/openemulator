@@ -251,18 +251,19 @@ bool Monitor::init()
 		return false;
 	}
 	
-//	CanvasCaptureMode captureMode = CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_CLICK;
-	frame.readFile(dummyPath);
+	CanvasCaptureMode captureMode = CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_CLICK;
+	image.readFile(dummyPath);
+	configuration.displayResolution = image.getSize();
 	
-//	canvas->postMessage(this, CANVAS_SET_CAPTUREMODE, &captureMode);
-	canvas->postMessage(this, CANVAS_POST_FRAME, &frame);
+	canvas->postMessage(this, CANVAS_SET_CAPTUREMODE, &captureMode);
+	canvas->postMessage(this, CANVAS_POST_IMAGE, &image);
 	
 	return true;
 }
 
 void Monitor::update()
 {
-	updateContentRect();
+	updateVideoRect();
 	
 	if (canvas)
 		canvas->postMessage(this, CANVAS_CONFIGURE_DISPLAY, &configuration);
@@ -290,7 +291,7 @@ void Monitor::notify(OEComponent *sender, int notification, void *data)
 		 }
 		 */
 		
-/*		int *p = (int *)frame.getPixels();
+/*		int *p = (int *)image.getPixels();
 		if (p)
 		{
 			int w = 576;
@@ -303,16 +304,16 @@ void Monitor::notify(OEComponent *sender, int notification, void *data)
 			da &= 0xf8;
 			
 			if (canvas)
-				canvas->postMessage(this, CANVAS_POST_FRAME, &frame);
+				canvas->postMessage(this, CANVAS_POST_IMAGE, &image);
 		}
-*/		
+		*/
 		return;
 	}
 	
 	if (notification != CANVAS_DID_VSYNC)
 		return;
-/*	
-	int *p = (int *)frame.getPixels();
+/*
+	int *p = (int *)image.getPixels();
 	if (p)
 	{
 		int w = 576;
@@ -325,15 +326,14 @@ void Monitor::notify(OEComponent *sender, int notification, void *data)
 		da &= 0xf8;
 		
 		if (canvas)
-			canvas->postMessage(this, CANVAS_POST_FRAME, &frame);
-	}
- */
+			canvas->postMessage(this, CANVAS_POST_IMAGE, &image);
+	}*/
 }
 
-void Monitor::updateContentRect()
+void Monitor::updateVideoRect()
 {
 	bool pal = false;
-	if (pal)
+/*	if (pal)
 		configuration.videoRect = OEMakeRect(96 * 1.0 / 768, 34 * 2.0 / 576,
 											 576 * 1.0 / 768, 192 * 2.0 / 576);
 	else
@@ -347,5 +347,5 @@ void Monitor::updateContentRect()
 										 configuration.videoRect.size.height *
 										 (1.0 - videoRect.size.height) * 0.5);
 	configuration.videoRect.size.width *= videoRect.size.width;
-	configuration.videoRect.size.height *= videoRect.size.height;
+	configuration.videoRect.size.height *= videoRect.size.height;*/
 }

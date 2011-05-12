@@ -54,7 +54,9 @@
 {
 	NSLog(@"CanvasWindowController awakeFromNib");
 	
-	if ([fCanvasView isDisplayCanvas])
+	if ([fCanvasView isPaperCanvas])
+		[fScrollView setHasVerticalScroller:YES];
+	else
 	{
 		[fToolbarView removeFromSuperview];
 		[fScrollView setFrame:[[fScrollView superview] frame]];
@@ -75,8 +77,7 @@
 	
 	CanvasWindow *window = (CanvasWindow *)[self window];
 	NSRect windowFrame = [window frame];
-	[window setDelegate:fCanvasView];
-	[window setFrameSize:1.0];
+	[window setFrameScale:1.0];
 	[window setFrameTopLeftPoint:NSMakePoint(NSMinX(windowFrame),
 											 NSMaxY(windowFrame))];
 }

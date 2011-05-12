@@ -37,18 +37,20 @@ OpenGLCanvas::OpenGLCanvas(string resourcePath)
 	isOpen = false;
 	isShaderEnabled = true;
 	
+	pthread_mutex_init(&mutex, NULL);
+	
 	mode = CANVAS_MODE_DISPLAY;
 	captureMode = CANVAS_CAPTUREMODE_NO_CAPTURE;
 	
-	pthread_mutex_init(&mutex, NULL);
-	
-	isFrameUpdated = false;
+	viewportSize = OEMakeSize(640, 480);
+	canvasRect = OEMakeRect(0, 0, 640, 480);
+	clipRect = OEMakeRect(0, 0, 640, 480);
+	isImageUpdated = false;
 	
 	bezel = CANVAS_BEZEL_NONE;
 	isBezelDrawRequired = false;
 	isBezelCapture = false;
 }
-
 
 OpenGLCanvas::~OpenGLCanvas()
 {
@@ -83,16 +85,6 @@ void OpenGLCanvas::close()
 	freeOpenGL();
 }
 
-CanvasMode OpenGLCanvas::getMode()
-{
-	return mode;
-}
-
-OESize OpenGLCanvas::getResolution()
-{
-	return displayConfiguration.displayResolution;
-}
-
 void OpenGLCanvas::setEnableShader(bool value)
 {
 	lock();
@@ -100,105 +92,180 @@ void OpenGLCanvas::setEnableShader(bool value)
 	isShaderEnabled = value;
 	isDisplayConfigurationUpdated = true;
 	
-	for (int i = 0; i < OPENGLCANVAS_PERSISTANCE_FRAME_NUM; i++)
+	for (int i = 0; i < OPENGLCANVAS_PERSISTANCE_IMAGE_NUM; i++)
 		persistance[i] = -1;
 	
 	unlock();
 }
 
-bool OpenGLCanvas::update(float width, float height, float origin, bool isVSync)
+CanvasMode OpenGLCanvas::getMode()
 {
-	bool draw = !isVSync;
+	// No lock needed, atomic operation
+	
+	return mode;
+}
+
+OESize OpenGLCanvas::getDefaultViewportSize()
+{
+	OESize size;
 	
 	lock();
 	
-	if ((width != viewportSize.width) ||
-		(height != viewportSize.height))
-	{
-		viewportSize.width = width;
-		viewportSize.height = height;
-		
-		updateViewport();
-		draw = true;
-	}
-	
-	if (isFrameUpdated)
-		uploadFrame();
-	
-	if (isDisplayConfigurationUpdated)
-		updateDisplayConfiguration();
-	
-	if (isFrameUpdated ||
-		isDisplayConfigurationUpdated)
-	{
-		renderFrame();
-		
-		isFrameUpdated = false;
-		isDisplayConfigurationUpdated = false;
-	}
-	
-	if (isDisplayDrawRequired())
-		draw = true;
-	
-	if (isBezelDrawRequired)
-		draw = true;
-	
-	if (draw)
-	{
-		if (mode == CANVAS_MODE_DISPLAY)
-			drawDisplayCanvas();
-		else if (mode == CANVAS_MODE_PAPER)
-			drawPaperCanvas(origin);
-	}
-	
-	if (isVSync)
-		updatePersistance();
+	if (mode == CANVAS_MODE_DISPLAY)
+		size = updatedDisplayConfiguration.displayResolution;
+	else if (mode == CANVAS_MODE_PAPER)
+		size = OEMakeSize(512, 384);
+	else if (mode == CANVAS_MODE_OPENGL)
+		size = openGLConfiguration.viewportSize;
 	
 	unlock();
 	
-	if (isVSync)
-	{
-		CanvasDrawState drawState;
-		drawState.width = width;
-		drawState.height = height;
-		drawState.draw = draw;
-		notify(this, CANVAS_DID_VSYNC, &drawState);
-		draw = drawState.draw;
-	}
+	return size;
+}
+
+void OpenGLCanvas::setViewportSize(OESize size)
+{
+	lock();
 	
-	if (draw)
+	updateViewportSize(size);
+	
+	unlock();
+}
+
+OERect OpenGLCanvas::getCanvasRect()
+{
+	OERect rect;
+	
+	lock();
+	
+	rect = canvasRect;
+	
+	unlock();
+	
+	return rect;
+}
+
+OERect OpenGLCanvas::getClipRect()
+{
+	OERect rect;
+	
+	lock();
+	
+	rect = clipRect;
+	
+	unlock();
+	
+	return rect;
+}
+
+void OpenGLCanvas::scrollPoint(OEPoint aPoint)
+{
+	lock();
+	
+	clipRect.origin = aPoint;
+	
+	unlock();
+}
+
+OESize OpenGLCanvas::getPagePixelDensity()
+{
+	OESize pixelDensity;
+	
+	lock();
+	
+	if (mode == CANVAS_MODE_DISPLAY)
+		pixelDensity = updatedDisplayConfiguration.displayPixelDensity;
+	else if (mode == CANVAS_MODE_PAPER)
+		pixelDensity = paperConfiguration.pagePixelDensity;
+	else if (mode == CANVAS_MODE_OPENGL)
+		pixelDensity = openGLConfiguration.viewportPixelDensity;
+	
+	unlock();
+	
+	return pixelDensity;
+}
+
+bool OpenGLCanvas::vsync()
+{
+	if (mode == CANVAS_MODE_DISPLAY)
 	{
-		CanvasDrawState drawState;
-		drawState.width = width;
-		drawState.height = height;
-		drawState.draw = draw;
-		notify(this, CANVAS_DID_DRAW, &drawState);
+		if (isImageUpdated)
+			uploadImage();
 		
-		drawBezel();
+		if (isDisplayConfigurationUpdated)
+			updateDisplayConfiguration();
+		
+		if (isImageUpdated || isDisplayConfigurationUpdated)
+		{
+			renderImage();
+			
+			isImageUpdated = false;
+			isDisplayConfigurationUpdated = false;
+		}
 	}
 	
-	return draw;
+	updatePersistance();
+	
+	CanvasVSync vSync;
+	vSync.viewportSize = viewportSize;
+	vSync.shouldDraw = false;
+	notify(this, CANVAS_DID_VSYNC, &viewportSize);
+	
+	bool didDraw = (isDisplayDrawRequired() ||
+					vSync.shouldDraw ||
+					isBezelDrawRequired);
+	
+	if (didDraw)
+		draw();
+	
+	return didDraw;
+}
+
+void OpenGLCanvas::draw()
+{
+	if (mode == CANVAS_MODE_DISPLAY)
+	{
+		lock();
+		
+		drawDisplayCanvas();
+		
+		unlock();
+	}
+	else if (mode == CANVAS_MODE_PAPER)
+	{
+		lock();
+		
+		drawPaperCanvas();
+		
+		unlock();
+	}
+	else
+		notify(this, CANVAS_WILL_DRAW, &viewportSize);
+	
+	lock();
+	
+	drawBezel();
+	
+	unlock();
 }
 
 // OpenGL
 
 bool OpenGLCanvas::initOpenGL()
 {
-	isDisplayConfigurationUpdated = true;
-	
-	viewportSize = OEMakeSize(0, 0);
 	for (int i = 0; i < OPENGLCANVAS_TEXTURE_END; i++)
 	{
 		texture[i] = 0;
 		textureSize[i] = OEMakeSize(0, 0);
 	}
+	
+	isDisplayConfigurationUpdated = true;
+	isShaderActive = false;
 	for (int i = 0; i < OPENGLCANVAS_SHADER_END; i++)
 		shader[i] = 0;
-	isShaderActive = false;
-	
 	renderIndex = 0;
-	
-	for (int i = 0; i < OPENGLCANVAS_PERSISTANCE_FRAME_NUM; i++)
+	renderShader = 0;
+	for (int i = 0; i < OPENGLCANVAS_PERSISTANCE_IMAGE_NUM; i++)
 		persistance[i] = -1;
 	
 	capture = OPENGLCANVAS_CAPTURE_NONE;
@@ -249,28 +316,28 @@ GLuint OpenGLCanvas::getGLFormat(OEImageFormat format)
 
 void OpenGLCanvas::loadTextures()
 {
-	loadTexture("Shadow Mask Triad.png", true,
+	loadTexture("images/Host/Shadow Mask Triad.png", true,
 				OPENGLCANVAS_TEXTURE_SHADOWMASK_TRIAD);
-	loadTexture("Shadow Mask Inline.png", true,
+	loadTexture("images/Host/Shadow Mask Inline.png", true,
 				OPENGLCANVAS_TEXTURE_SHADOWMASK_INLINE);
-	loadTexture("Shadow Mask Aperture.png", true,
+	loadTexture("images/Host/Shadow Mask Aperture.png", true,
 				OPENGLCANVAS_TEXTURE_SHADOWMASK_APERTURE);
-	loadTexture("Shadow Mask LCD.png", true,
+	loadTexture("images/Host/Shadow Mask LCD.png", true,
 				OPENGLCANVAS_TEXTURE_SHADOWMASK_LCD);
-	loadTexture("Shadow Mask Bayer.png", true,
+	loadTexture("images/Host/Shadow Mask Bayer.png", true,
 				OPENGLCANVAS_TEXTURE_SHADOWMASK_BAYER);
-	loadTexture("Bezel Power.png", false,
+	loadTexture("images/Host/Bezel Power.png", false,
 				OPENGLCANVAS_TEXTURE_BEZEL_POWER);
-	loadTexture("Bezel Pause.png", false,
+	loadTexture("images/Host/Bezel Pause.png", false,
 				OPENGLCANVAS_TEXTURE_BEZEL_PAUSE);
-	loadTexture("Bezel Capture.png", false,
+	loadTexture("images/Host/Bezel Capture.png", false,
 				OPENGLCANVAS_TEXTURE_BEZEL_CAPTURE);
 }
 
 void OpenGLCanvas::loadTexture(string path, bool isMipmap, int textureIndex)
 {
 	OEImage image;
-	image.readFile(resourcePath + "/images/Host/" + path);
+	image.readFile(resourcePath + "/" + path);
 	
 	if (isMipmap)
 	{
@@ -305,22 +372,22 @@ void OpenGLCanvas::updateTextureSize(int textureIndex, OESize size)
 	if (size.height < 1)
 		size.height = 1;
 	
-	OESize powerOf2Size = OEMakeSize(getNextPowerOf2(size.width),
-									 getNextPowerOf2(size.height));
+	OESize texSize = OEMakeSize(getNextPowerOf2(size.width),
+								getNextPowerOf2(size.height));
 	
-	if ((textureSize[textureIndex].width == powerOf2Size.width) &&
-		(textureSize[textureIndex].height == powerOf2Size.height))
+	if ((textureSize[textureIndex].width == texSize.width) &&
+		(textureSize[textureIndex].height == texSize.height))
 		return;
 	
-	textureSize[textureIndex] = powerOf2Size;
+	textureSize[textureIndex] = texSize;
 	
 	vector<char> dummy;
-	dummy.resize(powerOf2Size.width * powerOf2Size.height);
+	dummy.resize(texSize.width * texSize.height);
 	
 	glBindTexture(GL_TEXTURE_2D, texture[textureIndex]);
 	
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
-				 powerOf2Size.width, powerOf2Size.height, 0,
+				 texSize.width, texSize.height, 0,
 				 GL_LUMINANCE, GL_UNSIGNED_BYTE, &dummy.front());
 	
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -552,23 +619,31 @@ void OpenGLCanvas::deleteShader(GLuint index)
 #endif
 }
 
-void OpenGLCanvas::updateViewport()
+void OpenGLCanvas::updateViewportSize(OESize size)
 {
-	glViewport(0, 0, viewportSize.width, viewportSize.height);
+	this->viewportSize = size;
+	
+	glViewport(0, 0, size.width, size.height);
+	
+	// To-Do: update clipRect
 }
 
 // Display canvas
 
-bool OpenGLCanvas::uploadFrame()
+bool OpenGLCanvas::uploadImage()
 {
-	updateTextureSize(OPENGLCANVAS_TEXTURE_FRAME_RAW, frame.getSize());
+	lock();
 	
-	glBindTexture(GL_TEXTURE_2D, texture[OPENGLCANVAS_TEXTURE_FRAME_RAW]);
+	updateTextureSize(OPENGLCANVAS_TEXTURE_IMAGE_RAW, image.getSize());
+	
+	glBindTexture(GL_TEXTURE_2D, texture[OPENGLCANVAS_TEXTURE_IMAGE_RAW]);
 	
 	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0,
-					frame.getSize().width, frame.getSize().height,
-					getGLFormat(frame.getFormat()), GL_UNSIGNED_BYTE,
-					frame.getPixels());
+					image.getSize().width, image.getSize().height,
+					getGLFormat(image.getFormat()), GL_UNSIGNED_BYTE,
+					image.getPixels());
+	
+	unlock();
 	
 	glBindTexture(GL_TEXTURE_2D, 0);
 	
@@ -577,7 +652,14 @@ bool OpenGLCanvas::uploadFrame()
 
 void OpenGLCanvas::updateDisplayConfiguration()
 {
+	lock();
+	
 	isShaderActive = false;
+	
+	if (isDisplayConfigurationUpdated)
+		displayConfiguration = updatedDisplayConfiguration;
+	
+	unlock();
 	
 #ifdef GL_VERSION_2_0
 	// Deactivate shader when needed
@@ -780,19 +862,19 @@ void OpenGLCanvas::updateDisplayConfiguration()
 #endif
 }
 
-void OpenGLCanvas::renderFrame()
+void OpenGLCanvas::renderImage()
 {
 #ifdef GL_VERSION_2_0
 	renderIndex++;
-	if (renderIndex >= OPENGLCANVAS_PERSISTANCE_FRAME_NUM)
+	if (renderIndex >= OPENGLCANVAS_PERSISTANCE_IMAGE_NUM)
 		renderIndex = 0;
 	persistance[0] = renderIndex;
 	
 	if (!isShaderActive)
 		return;
 	
-	GLuint textureIndex = OPENGLCANVAS_TEXTURE_FRAME_RENDERED + renderIndex;
-	OESize texSize = textureSize[OPENGLCANVAS_TEXTURE_FRAME_RAW];
+	GLuint textureIndex = OPENGLCANVAS_TEXTURE_IMAGE_RENDERED + renderIndex;
+	OESize texSize = textureSize[OPENGLCANVAS_TEXTURE_IMAGE_RAW];
 	updateTextureSize(textureIndex, texSize);
 	
 	glUseProgram(renderShader);
@@ -800,27 +882,27 @@ void OpenGLCanvas::renderFrame()
 	glUniform2f(glGetUniformLocation(renderShader, "texture_size"),
 				texSize.width, texSize.height);
 	
-	OESize frameSize = frame.getSize();
-	for (float y = 0; y < frameSize.height; y += viewportSize.height)
-		for (float x = 0; x < frameSize.width; x += viewportSize.width)
+	for (float y = 0; y < canvasRect.size.height; y += viewportSize.height)
+		for (float x = 0; x < canvasRect.size.width; x += viewportSize.width)
 		{
 			// Calculate rects
 			OESize clipSize = viewportSize;
-			if (clipSize.width > frameSize.width)
-				clipSize.width = frameSize.width;
-			if (clipSize.height > frameSize.height)
-				clipSize.height = frameSize.height;
+			if (clipSize.width > canvasRect.size.width)
+				clipSize.width = canvasRect.size.width;
+			if (clipSize.height > canvasRect.size.height)
+				clipSize.height = canvasRect.size.height;
 			
 			OERect textureRect = OEMakeRect(x / texSize.width,
 											y / texSize.height,
 											clipSize.width / texSize.width,
 											clipSize.height / texSize.height);
-			OERect vertexRect = OEMakeRect(-1, -1,
+			OERect vertexRect = OEMakeRect(-1,
+										   -1,
 										   2 * clipSize.width / viewportSize.width, 
 										   2 * clipSize.height / viewportSize.height);
 			
 			// Render
-			glBindTexture(GL_TEXTURE_2D, texture[OPENGLCANVAS_TEXTURE_FRAME_RAW]);
+			glBindTexture(GL_TEXTURE_2D, texture[OPENGLCANVAS_TEXTURE_IMAGE_RAW]);
 			
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -843,7 +925,8 @@ void OpenGLCanvas::renderFrame()
 			glCopyTexSubImage2D(GL_TEXTURE_2D, 0,
 								x,
 								y,
-								0, 0,
+								0,
+								0,
 								clipSize.width,
 								clipSize.height);
 		}
@@ -856,7 +939,10 @@ void OpenGLCanvas::renderFrame()
 
 bool OpenGLCanvas::isDisplayDrawRequired()
 {
-	for (int i = 1; i < OPENGLCANVAS_PERSISTANCE_FRAME_NUM; i++)
+	if (mode != CANVAS_MODE_DISPLAY)
+		return false;
+	
+	for (int i = 1; i < OPENGLCANVAS_PERSISTANCE_IMAGE_NUM; i++)
 	{
 		if (persistance[i] != persistance[0])
 			return true;
@@ -872,26 +958,28 @@ void OpenGLCanvas::drawDisplayCanvas()
 	glClearColor(clearColor, clearColor, clearColor, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
-	OESize frameSize = frame.getSize();
-	if ((frameSize.width == 0) || (frameSize.height == 0))
+	OESize imageSize = image.getSize();
+	if ((imageSize.width == 0) || (imageSize.height == 0))
 		return;
 	
 	// Calculate rects
-	OESize texSize = textureSize[OPENGLCANVAS_TEXTURE_FRAME_RAW];
-	OERect vertexRect = OEMakeRect(2 * displayConfiguration.videoRect.origin.x - 1,
-								   2 * displayConfiguration.videoRect.origin.y - 1,
-								   2 * displayConfiguration.videoRect.size.width,
-								   2 * displayConfiguration.videoRect.size.height);
+	OESize texSize = textureSize[OPENGLCANVAS_TEXTURE_IMAGE_RAW];
+	OERect videoRect = displayConfiguration.videoRect;
 	
-	OERect textureRect = OEMakeRect(0, 0,
-									frameSize.width / texSize.width, 
-									frameSize.height / texSize.height);
+	OERect vertexRect = OEMakeRect(2 * videoRect.origin.x - 1,
+								   2 * videoRect.origin.y - 1,
+								   2 * videoRect.size.width,
+								   2 * videoRect.size.height);
+	OERect textureRect = OEMakeRect(0,
+									0,
+									canvasRect.size.width / texSize.width, 
+									canvasRect.size.height / texSize.height);
 	
-	float viewAspectRatio = viewportSize.width / viewportSize.height;
-	float displayAspectRatio = (displayConfiguration.displayResolution.width /
+	float viewportAspectRatio = viewportSize.width / viewportSize.height;
+	float canvasAspectRatio = (displayConfiguration.displayResolution.width /
 							   displayConfiguration.displayResolution.height);
 	
-	float ratio = viewAspectRatio / displayAspectRatio;
+	float ratio = viewportAspectRatio / canvasAspectRatio;
 	
 	if (ratio > 1)
 	{
@@ -914,10 +1002,10 @@ void OpenGLCanvas::drawDisplayCanvas()
 		OEPoint barrelCenter;
 		barrelCenter.x = ((0.5 - displayConfiguration.videoRect.origin.x) /
 						  displayConfiguration.videoRect.size.width *
-						  frameSize.width / texSize.width);
+						  canvasRect.size.width / texSize.width);
 		barrelCenter.y = ((0.5 - displayConfiguration.videoRect.origin.y) /
 						  displayConfiguration.videoRect.size.height *
-						  frameSize.height / texSize.height);
+						  canvasRect.size.height / texSize.height);
 		glUniform2f(glGetUniformLocation(displayShader, "barrel_center"),
 					barrelCenter.x, barrelCenter.y);
 		
@@ -950,7 +1038,7 @@ void OpenGLCanvas::drawDisplayCanvas()
 		glBindTexture(GL_TEXTURE_2D, texture[shadowMaskTexture]);
 		glActiveTexture(GL_TEXTURE0);
 		
-		float scanlineHeight = (viewportSize.height / frameSize.height *
+		float scanlineHeight = (viewportSize.height / imageSize.height *
 								displayConfiguration.videoRect.size.height);
 		float alpha = displayConfiguration.displayScanlineAlpha;
 		float scanlineAlpha = ((scanlineHeight > 2.5) ? alpha :
@@ -967,15 +1055,15 @@ void OpenGLCanvas::drawDisplayCanvas()
 		if (dotPitch <= 0.001)
 			dotPitch = 0.001;
 		OESize elemNum = OEMakeSize(displayConfiguration.displayResolution.width /
-									displayConfiguration.displayPixelDensity.width * 25.4 /
-									dotPitch * 0.5,
+									displayConfiguration.displayPixelDensity.width *
+									25.4 / dotPitch * 0.5,
 									displayConfiguration.displayResolution.height / 
-									displayConfiguration.displayPixelDensity.height * 25.4 /
-									dotPitch * shadowVerticalScale);
+									displayConfiguration.displayPixelDensity.height *
+									25.4 / dotPitch * shadowVerticalScale);
 		glUniform2f(glGetUniformLocation(displayShader, "shadowmask_scale"),
-					texSize.width / frameSize.width *
+					texSize.width / viewportSize.width *
 					displayConfiguration.videoRect.size.width * elemNum.width,
-					texSize.height / frameSize.height *
+					texSize.height / viewportSize.height *
 					displayConfiguration.videoRect.size.height * elemNum.height);
 		glUniform2f(glGetUniformLocation(displayShader, "shadowmask_translate"),
 					displayConfiguration.videoRect.origin.x * elemNum.width,
@@ -984,10 +1072,14 @@ void OpenGLCanvas::drawDisplayCanvas()
 #endif
 	
 	// Render
+	glLoadIdentity();
+	glRotatef(180, 1, 0, 0);
+	
 	glBlendFunc(GL_ONE, GL_SRC_ALPHA);
 	
-	int startIndex = ((isShaderActive && (displayConfiguration.displayPersistance != 0)) ?
-					  (OPENGLCANVAS_PERSISTANCE_FRAME_NUM - 1) : 0);
+	int startIndex = ((isShaderActive &&
+					   (displayConfiguration.displayPersistance != 0)) ?
+					  (OPENGLCANVAS_PERSISTANCE_IMAGE_NUM - 1) : 0);
 	for (int i = startIndex; i >= 0; i--)
 	{
 		if (persistance[i] < 0)
@@ -995,9 +1087,9 @@ void OpenGLCanvas::drawDisplayCanvas()
 		
 		int textureIndex;
 		if (isShaderActive)
-			textureIndex = OPENGLCANVAS_TEXTURE_FRAME_RENDERED + persistance[i];
+			textureIndex = OPENGLCANVAS_TEXTURE_IMAGE_RENDERED + persistance[i];
 		else
-			textureIndex = OPENGLCANVAS_TEXTURE_FRAME_RAW;
+			textureIndex = OPENGLCANVAS_TEXTURE_IMAGE_RAW;
 		glBindTexture(GL_TEXTURE_2D, texture[textureIndex]);
 		
 #ifdef GL_VERSION_2_0
@@ -1017,7 +1109,8 @@ void OpenGLCanvas::drawDisplayCanvas()
 		// Use nearest filter when canvas and display pixel size match
 		int renderFrameWidth = viewportSize.width * vertexRect.size.width / 2;
 		GLint param = GL_LINEAR;
-		if ((renderFrameWidth == (int) frameSize.width) &&
+		if ((displayConfiguration.displayBarrel == 0) &&
+			(renderFrameWidth == (int) viewportSize.width) &&
 			(vertexRect.origin.x == -1) && (vertexRect.origin.y == -1))
 			param = GL_NEAREST;
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, param);
@@ -1026,9 +1119,6 @@ void OpenGLCanvas::drawDisplayCanvas()
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
 		
 		// Render
-		glLoadIdentity();
-		glRotatef(180, 1, 0, 0);
-		
 		glBegin(GL_QUADS);
 		glTexCoord2f(OEMinX(textureRect), OEMinY(textureRect));
 		glVertex2f(OEMinX(vertexRect), OEMinY(vertexRect));
@@ -1052,33 +1142,34 @@ void OpenGLCanvas::drawDisplayCanvas()
 
 void OpenGLCanvas::updatePersistance()
 {
-	for (int i = (OPENGLCANVAS_PERSISTANCE_FRAME_NUM - 1); i > 0; i--)
+	for (int i = (OPENGLCANVAS_PERSISTANCE_IMAGE_NUM - 1); i > 0; i--)
 		persistance[i] = persistance[i - 1];
 }
 
 // Paper canvas
 
-void OpenGLCanvas::drawPaperCanvas(float origin)
+void OpenGLCanvas::drawPaperCanvas()
 {
 	// Clear
-	glClearColor(1, 1, 1, 1);
+/*	glClearColor(1, 1, 1, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
-	OESize paperSize = paper.getSize();
-	if ((paperSize.width == 0) || (paperSize.height == 0))
+	OESize imageSize = image.getSize();
+	if ((imageSize.width == 0) || (imageSize.height == 0))
 		return;
 	
 	// Render
 	float paperAspectRatio = (paperConfiguration.pagePixelDensity.width /
 							  paperConfiguration.pagePixelDensity.height);
-	OERect paperViewport = OEMakeRect(0, origin,
-									  paperSize.width,
-									  viewportSize.height * paperSize.width /
+	OERect paperViewport = OEMakeRect(0,
+									  originY / paperAspectRatio,
+									  imageSize.width,
+									  viewportSize.height * imageSize.width /
 									  viewportSize.width / paperAspectRatio);
 	
-	OESize texSize = OEMakeSize(getNextPowerOf2(paperSize.width),
+	OESize texSize = OEMakeSize(getNextPowerOf2(imageSize.width),
 								getNextPowerOf2(PAPER_SLICE));
-	updateTextureSize(OPENGLCANVAS_TEXTURE_FRAME_RAW, texSize);
+	updateTextureSize(OPENGLCANVAS_TEXTURE_IMAGE_RAW, texSize);
 	
 	glLoadIdentity();
 	glRotatef(180, 1, 0, 0);
@@ -1088,21 +1179,23 @@ void OpenGLCanvas::drawPaperCanvas(float origin)
 	for (int i = startIndex; i <= endIndex; i++)
 	{
 		OERect slice = OEMakeRect(0, i * PAPER_SLICE,
-								  paperSize.width, PAPER_SLICE);
-		if (OEMinY(slice) >= paperSize.height)
+								  imageSize.width, PAPER_SLICE);
+		if (OEMinY(slice) >= imageSize.height)
 			break;
 		
-		glBindTexture(GL_TEXTURE_2D, texture[OPENGLCANVAS_TEXTURE_FRAME_RAW]);
+		glBindTexture(GL_TEXTURE_2D, texture[OPENGLCANVAS_TEXTURE_IMAGE_RAW]);
 		
 		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0,
 						slice.size.width, slice.size.height,
-						getGLFormat(paper.getFormat()), GL_UNSIGNED_BYTE,
-						paper.getPixelsAtLine(OEMinY(slice)));
+						getGLFormat(image.getFormat()), GL_UNSIGNED_BYTE,
+						image.getPixels() + image.getBytesPerLine() *
+						(int)OEMinY(slice));
 		
 		OERect textureRect = OEMakeRect(0, 0,
 										slice.size.width / texSize.width,
 										slice.size.height / texSize.height);
-		OERect vertexRect = OEMakeRect(-1, 2 * (OEMinY(slice) - origin) /
+		OERect vertexRect = OEMakeRect(-1, 2 * (OEMinY(slice) -
+												OEMinY(paperViewport)) /
 									   paperViewport.size.height - 1,
 									   2, 2 * slice.size.height /
 									   paperViewport.size.height);
@@ -1127,13 +1220,13 @@ void OpenGLCanvas::drawPaperCanvas(float origin)
 	glBindTexture(GL_TEXTURE_2D, 0);
 	
 	// Render page separators
-	glColor4f(0.5, 0.5, 0.5, 1);
+	glColor4f(0.8, 0.8, 0.8, 1);
 	
-	int pageNum = ceil(paperSize.height / paperConfiguration.pageResolution.height);
+	int pageNum = ceil(imageSize.height / paperConfiguration.pageResolution.height);
 	for (int i = 0; i < pageNum; i++)
 	{
 		OERect line = OEMakeRect(-1, 2 * (paperConfiguration.pageResolution.height *
-										  (i + 1) - origin) /
+										  (i + 1) - OEMinY(paperViewport)) /
 								 paperViewport.size.height - 1,
 								 2, 0);
 		if (line.origin.y < -1)
@@ -1147,7 +1240,7 @@ void OpenGLCanvas::drawPaperCanvas(float origin)
 		glEnd();
 	}
 	
-	glColor4f(1, 1, 1, 1);
+	glColor4f(1, 1, 1, 1);*/
 }
 
 // Bezel
@@ -1481,10 +1574,6 @@ bool OpenGLCanvas::setMode(CanvasMode *mode)
 	if (!mode)
 		return false;
 	
-	if ((*mode != CANVAS_MODE_DISPLAY) &&
-		(*mode != CANVAS_MODE_PAPER))
-		return false;
-	
 	this->mode = *mode;
 	
 	return true;
@@ -1540,64 +1629,72 @@ bool OpenGLCanvas::setBezel(CanvasBezel *bezel)
 	return true;
 }
 
-bool OpenGLCanvas::setDisplayConfiguration(CanvasDisplayConfiguration *displayConfiguration)
+bool OpenGLCanvas::setDisplayConfiguration(CanvasDisplayConfiguration *configuration)
 {
-	if (!displayConfiguration)
+	if (!configuration)
 		return false;
 	
 	lock();
 	
 	isDisplayConfigurationUpdated = true;
-	this->displayConfiguration = *displayConfiguration;
+	updatedDisplayConfiguration = *configuration;
 	
 	unlock();
 	
 	return true;
 }
 
-bool OpenGLCanvas::postFrame(OEImage *frame)
+bool OpenGLCanvas::setPaperConfiguration(CanvasPaperConfiguration *configuration)
 {
-	if (!frame)
+	if (!configuration)
 		return false;
 	
 	lock();
 	
-	this->frame = *frame;
-	isFrameUpdated = true;
+	paperConfiguration = *configuration;
 	
 	unlock();
 	
 	return true;
 }
 
-bool OpenGLCanvas::setPaperConfiguration(CanvasPaperConfiguration *paperConfiguration)
+bool OpenGLCanvas::setOpenGLConfiguration(CanvasOpenGLConfiguration *configuration)
 {
-	if (!paperConfiguration)
+	if (!configuration)
 		return false;
 	
 	lock();
 	
-	this->paperConfiguration = *paperConfiguration;
+	openGLConfiguration = *configuration;
 	
 	unlock();
 	
 	return true;
 }
 
-bool OpenGLCanvas::printImage(OEImage *image)
+bool OpenGLCanvas::postImage(OEImage *image)
 {
 	if (!image)
 		return false;
 	
 	lock();
 	
-	paper = *image;
-	OESize size = paper.getSize();
-	int sliceNum = (size.height + PAPER_SLICE - 1) / PAPER_SLICE;
-	size.height = sliceNum * PAPER_SLICE;
-	paper.setSize(size);
+	this->image = *image;
+	isImageUpdated = true;
 	
-	isPaperUpdated = true;
+	canvasRect.size = image->getSize();
+	
+	unlock();
+	
+	return true;
+}
+
+bool OpenGLCanvas::movePrintHead(OEPoint *point)
+{
+	if (!point)
+		return false;
+	
+	lock();
 	
 	unlock();
 	
@@ -1626,14 +1723,17 @@ bool OpenGLCanvas::postMessage(OEComponent *sender, int message, void *data)
 		case CANVAS_CONFIGURE_DISPLAY:
 			return setDisplayConfiguration((CanvasDisplayConfiguration *)data);
 			
-		case CANVAS_POST_FRAME:
-			return postFrame((OEImage *)data);
-			
 		case CANVAS_CONFIGURE_PAPER:
 			return setPaperConfiguration((CanvasPaperConfiguration *)data);
 			
-		case CANVAS_PRINT_IMAGE:
-			return printImage((OEImage *)data);
+		case CANVAS_CONFIGURE_OPENGL:
+			return setOpenGLConfiguration((CanvasOpenGLConfiguration *)data);
+			
+		case CANVAS_POST_IMAGE:
+			return postImage((OEImage *)data);
+			
+		case CANVAS_MOVE_PRINTHEAD:
+			return movePrintHead((OEPoint *)data);
 	}
 	
 	return false;
@@ -1646,7 +1746,9 @@ void OpenGLCanvas::notify(OEComponent *sender, int notification, void *data)
 	for (int i = 0; i < observers[notification].size(); i++)
 	{
 		unlock();
+		
 		observers[notification][i]->notify(sender, notification, data);
+		
 		lock();
 	}
 	

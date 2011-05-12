@@ -34,10 +34,10 @@ private:
 	string dummyPath;
 	OEComponent *audio;
 	
-	OEImage frame;
+	OEImage image;
 	
 	int ta;
 	int da;
 	
-	void updateContentRect();
+	void updateVideoRect();
 };

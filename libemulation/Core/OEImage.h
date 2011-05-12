@@ -66,7 +66,17 @@ inline OERect OEMakeRect(float x, float y, float w, float h)
 	r.size.height = h;
 	return r;
 }
-						 
+
+inline float OEWidth(OERect aRect)
+{
+	return aRect.size.width;
+}
+
+inline float OEHeight(OERect aRect)
+{
+	return aRect.size.height;
+}
+
 inline float OEMaxX(OERect aRect)
 {
     return (aRect.origin.x + aRect.size.width);
@@ -96,21 +106,21 @@ public:
 	
 	void setFormat(OEImageFormat format);
 	OEImageFormat getFormat();
-	
 	void setSize(OESize size);
 	OESize getSize();
+	int getBytesPerPixel();
+	int getBytesPerLine();
+	char *getPixels();
 	
-	void *getPixels();
-	void *getPixelsAtLine(int originY);
-	
+	void overlay(OEPoint offset, OEImage& image);
 	bool readFile(string path);
+	OEImage getClippedImage(OERect rect);
 	
 private:
 	OEImageFormat format;
 	OESize size;
 	vector<char> pixels;
 	
-	int getPixelSize();
 	void update();
 	bool validatePNG(FILE *fp);
 };

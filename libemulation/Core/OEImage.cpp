@@ -53,7 +53,8 @@ OEImageFormat OEImage::getFormat()
 
 void OEImage::setSize(OESize size)
 {
-	this->size = size;
+	this->size.width = (int) size.width;
+	this->size.height = (int) size.height;
 	
 	update();
 }
@@ -63,14 +64,29 @@ OESize OEImage::getSize()
 	return size;
 }
 
-void *OEImage::getPixels()
+char *OEImage::getPixels()
 {
 	return &pixels.front();
 }
 
-void *OEImage::getPixelsAtLine(int originY)
+int OEImage::getBytesPerPixel()
 {
-	return &pixels.front() + ((int) size.width) * originY * getPixelSize();
+	switch (format)
+	{
+		case OEIMAGE_LUMINANCE:
+			return 1;
+		case OEIMAGE_RGB:
+			return 3;
+		case OEIMAGE_RGBA:
+			return 4;
+	}
+	
+	return 0;
+}
+
+int OEImage::getBytesPerLine()
+{
+	return getBytesPerPixel() * size.width;
 }
 
 bool OEImage::readFile(string path)
@@ -120,14 +136,14 @@ bool OEImage::readFile(string path)
 						// Copy image
 						int bytesPerPixel = ((color_type == PNG_COLOR_TYPE_RGB) ? 
 											 3 : 4);
-						int rowByteNum = width * bytesPerPixel;
+						int bytesPerLine = width * bytesPerPixel;
 						char **rows = (char **) png_get_rows(png, info);
 						char *pixelsp = (char *) getPixels();
 						
 						for (int row = 0; row < height; row++)
 						{
-							memcpy(pixelsp, rows[row], rowByteNum);
-							pixelsp += rowByteNum;
+							memcpy(pixelsp, rows[row], bytesPerLine);
+							pixelsp += bytesPerLine;
 						}
 						
 						result = true;
@@ -155,24 +171,12 @@ bool OEImage::validatePNG(FILE *fp)
 	return !png_sig_cmp((png_byte *) pngHeader, 0, OEIMAGE_PNGSIG_BYTENUM);
 }
 
-int OEImage::getPixelSize()
-{
-	switch (format)
-	{
-		case OEIMAGE_LUMINANCE:
-			return 1;
-		case OEIMAGE_RGB:
-			return 3;
-		case OEIMAGE_RGBA:
-			return 4;
-	}
-	
-	return 0;
-}
-
 void OEImage::update()
 {
-	pixels.resize(((int) size.width) *
-				  ((int) size.height) *
-				  getPixelSize());
+	int prevSize = pixels.size();
+	pixels.resize(getBytesPerLine() * size.height);
+	
+	int diff = pixels.size() - prevSize;
+	if (diff > 0)
+		memset(&pixels.front() + prevSize, 0xff, diff);
 }

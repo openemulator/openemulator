@@ -74,7 +74,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
-	[(CanvasView *)displayLinkContext updateView];
+	[(CanvasView *)displayLinkContext vsync];
 	
 	[pool drain];
 	
@@ -241,7 +241,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 - (BOOL)validateUserInterfaceItem:(id)anItem
 {
 	if ([anItem action] == @selector(delete:))
-		return ![self isDisplayCanvas];
+		return [self isPaperCanvas];
 	
 	return YES;
 }
@@ -267,6 +267,16 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 								   nil]];
 	
 	[self initOpenGL];
+}
+
+- (BOOL)isFlipped
+{
+    return YES;
+}
+
+- (BOOL)isOpaque
+{
+	return YES;
 }
 
 - (BOOL)acceptsFirstResponder
@@ -478,16 +488,31 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 - (BOOL)isDisplayCanvas
 {
 	[document lockEmulation];
-	CanvasMode mode = ((OpenGLCanvas *)canvas)->getMode();
+	
+	CanvasMode value = ((OpenGLCanvas *)canvas)->getMode();
+	
 	[document unlockEmulation];
 	
-	return (mode == CANVAS_MODE_DISPLAY);
+	return (value == CANVAS_MODE_DISPLAY);
+}
+
+- (BOOL)isPaperCanvas
+{
+	[document lockEmulation];
+	
+	CanvasMode value = ((OpenGLCanvas *)canvas)->getMode();
+	
+	[document unlockEmulation];
+	
+	return (value == CANVAS_MODE_PAPER);
 }
 
 - (NSSize)defaultViewSize
 {
 	[document lockEmulation];
-	OESize size = ((OpenGLCanvas *)canvas)->getResolution();
+	
+	OESize size = ((OpenGLCanvas *)canvas)->getDefaultViewportSize();
+	
 	[document unlockEmulation];
 	
 	NSSize defaultViewSize;
@@ -506,25 +531,53 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	CGLUnlockContext(cglContextObj);
 }
 
+- (void)reshape
+{
+	NSSize contentSize = [[self enclosingScrollView] contentSize];
+	OESize viewportSize = OEMakeSize(contentSize.width,
+									 contentSize.height);
+	
+	CGLLockContext(cglContextObj);
+	
+	((OpenGLCanvas *)canvas)->setViewportSize(viewportSize);
+	
+	CGLUnlockContext(cglContextObj);
+	
+/*	NSRect f;
+	NSSize s;
+	s = [[self enclosingScrollView] contentSize];
+	NSLog(@"enclosingScrollViewContentSize %f, %f",
+		  s.width, s.height);
+	f = [self frame];
+	NSLog(@"viewFrame %f, %f %f, %f", f.origin.x, f.origin.y,
+		  f.size.width, f.size.height);
+	f = [self visibleRect];
+	NSLog(@"visibleRect %f, %f %f, %f", f.origin.x, f.origin.y,
+		  f.size.width, f.size.height);*/
+}
+
+- (void)updateFrameSize:(NSSize)contentSize
+{
+	
+}
+
 - (void)drawRect:(NSRect)theRect
 {
 	CGLLockContext(cglContextObj);
 	
-	NSRect frame = [self bounds];
-	if (((OpenGLCanvas *)canvas)->update(NSWidth(frame), NSHeight(frame), 0, false))
-		[[self openGLContext] flushBuffer];
+	((OpenGLCanvas *)canvas)->draw();
+	[[self openGLContext] flushBuffer];
 	
 	CGLUnlockContext(cglContextObj);
 }
 
-- (void)updateView
+- (void)vsync
 {
     CGLLockContext(cglContextObj);
 	
 	[[self openGLContext] makeCurrentContext];
 	
-	NSRect frame = [self bounds];
-	if (((OpenGLCanvas *)canvas)->update(NSWidth(frame), NSHeight(frame), 0, true))
+	if (((OpenGLCanvas *)canvas)->vsync())
 		[[self openGLContext] flushBuffer];
 	
     CGLUnlockContext(cglContextObj);
