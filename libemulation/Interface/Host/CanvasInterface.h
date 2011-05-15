@@ -55,7 +55,7 @@ typedef enum
 	CANVAS_CONFIGURE_OPENGL,
 	
 	CANVAS_POST_IMAGE,
-	CANVAS_MOVE_PRINTHEAD,
+	CANVAS_SET_PRINTHEAD,
 } CanvasMessage;
 
 typedef enum
@@ -224,11 +224,11 @@ class CanvasOpenGLConfiguration
 public:
 	CanvasOpenGLConfiguration()
 	{
-		viewportSize = OEMakeSize(612, 792);
+		viewportDefaultSize = OEMakeSize(640, 480);
 		viewportPixelDensity = OEMakeSize(72, 72);
 	}
 	
-	OESize viewportSize;
+	OESize viewportDefaultSize;
 	OESize viewportPixelDensity;
 };
 

@@ -1,23 +1,18 @@
 ==To-Do==
-* Implement CanvasView paper scrolling
+* Fix: resize flickering
+
+* Fix: paper canvas size gets stuck sometimes
+* Fix: paper canvas is not re-displayed when paper size changes
 * Implement printing with the raw canvas bitmap
 * Implement copy with raw canvas bitmap
 
-* Implement coherent mouse pointer coordinates
-
-* Fix: resize flickering
-* Fix: scaling to half size with a B/W pattern produces moire
-
 * Implement hardware library
-* A device is added by dragging it to the device it is connected to.
-* We only allow for single connectors for now. testAddEDL should return false if more than one connector is present.
+* Implement device dragging to the emulation window by checking testAddEDL
 * Implement OEEmulation testAddEDL
 * Implement OEEmulation addEDL
 * Implement OEEmulation removeDevice
 * Delete an device in an emulation through Edit>Delete, or CMD+BACKSPACE
-* Implement main emulation window add EDL
-* Implement main emulation window remove device
-* Support removal of devices in a daisy chain (when a device has a single port and connector of the same type
+* Implement removal of devices in a daisy chain (when port and connector are of the same kind)
 
 * Implement disk image file locking, if the disk image is writable (flock)
 

@@ -49,10 +49,10 @@ bool AppleDiskII::setRef(string name, OEComponent *ref)
 	if (name == "device")
 	{
 		if (device)
-			device->postMessage(this, DEVICE_SET_STORAGE, NULL);
+			device->postMessage(this, DEVICE_REMOVE_STORAGE, this);
 		device = ref;
 		if (device)
-			device->postMessage(this, DEVICE_SET_STORAGE, this);
+			device->postMessage(this, DEVICE_ADD_STORAGE, this);
 	}
 	else
 		return false;

@@ -1,4 +1,6 @@
 ==2011-05==
+* Implemented CanvasView paper scrolling
+* Defined paper vertical clip region
 * Added OpenGL paper canvas page separator
 * Updated device count in emulation window
 * Fixed PAAudio when playing a sound twice

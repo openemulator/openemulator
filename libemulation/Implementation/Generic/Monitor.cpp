@@ -251,11 +251,10 @@ bool Monitor::init()
 		return false;
 	}
 	
-	CanvasCaptureMode captureMode = CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_CLICK;
+//	CanvasCaptureMode captureMode = CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_CLICK;
 	image.readFile(dummyPath);
-	configuration.displayResolution = image.getSize();
 	
-	canvas->postMessage(this, CANVAS_SET_CAPTUREMODE, &captureMode);
+//	canvas->postMessage(this, CANVAS_SET_CAPTUREMODE, &captureMode);
 	canvas->postMessage(this, CANVAS_POST_IMAGE, &image);
 	
 	return true;
@@ -294,8 +293,8 @@ void Monitor::notify(OEComponent *sender, int notification, void *data)
 /*		int *p = (int *)image.getPixels();
 		if (p)
 		{
-			int w = 576;
-			int h = 192;
+			int w = image.getSize().width;
+			int h = image.getSize().height;
 			for (int y = 0; y < h; y++)
 				for (int x = 0; x < 128; x++)
 					p[y * w + x] = ((x & 0xfa) == da) ? 0xffffffff : 0x00000000;
@@ -309,15 +308,15 @@ void Monitor::notify(OEComponent *sender, int notification, void *data)
 		*/
 		return;
 	}
-	
+/*	
 	if (notification != CANVAS_DID_VSYNC)
 		return;
-/*
+
 	int *p = (int *)image.getPixels();
 	if (p)
 	{
-		int w = 576;
-		int h = 192;
+		int w = image.getSize().width;
+		int h = image.getSize().height;
 		for (int y = 0; y < h; y++)
 			for (int x = 0; x < 128; x++)
 				p[y * w + x] = ((x & 0x0fa) == da) ? 0xffffffff : 0xff000000;
@@ -333,7 +332,7 @@ void Monitor::notify(OEComponent *sender, int notification, void *data)
 void Monitor::updateVideoRect()
 {
 	bool pal = false;
-/*	if (pal)
+	if (pal)
 		configuration.videoRect = OEMakeRect(96 * 1.0 / 768, 34 * 2.0 / 576,
 											 576 * 1.0 / 768, 192 * 2.0 / 576);
 	else
@@ -347,5 +346,5 @@ void Monitor::updateVideoRect()
 										 configuration.videoRect.size.height *
 										 (1.0 - videoRect.size.height) * 0.5);
 	configuration.videoRect.size.width *= videoRect.size.width;
-	configuration.videoRect.size.height *= videoRect.size.height;*/
+	configuration.videoRect.size.height *= videoRect.size.height;
 }

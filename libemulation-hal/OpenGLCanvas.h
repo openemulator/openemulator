@@ -77,9 +77,9 @@ public:
 	OESize getDefaultViewportSize();
 	void setViewportSize(OESize size);
 	
-	OERect getCanvasRect();
-	OERect getClipRect();
-	void scrollPoint(OEPoint aPoint);
+	float getClipOffset();
+	float getClipSize();
+	void scroll(float offset);
 	
 	OESize getPagePixelDensity();
 	int getPageNumber();
@@ -129,8 +129,7 @@ private:
 	CanvasCaptureMode captureMode;
 	
 	OESize viewportSize;
-	OERect canvasRect;
-	OERect clipRect;
+	float clipOffset;
 	bool isImageUpdated;
 	OEImage image;
 	
@@ -147,6 +146,7 @@ private:
 	int persistance[OPENGLCANVAS_PERSISTANCE_IMAGE_NUM];
 	
 	CanvasPaperConfiguration paperConfiguration;
+	OEPoint printHead;
 	
 	CanvasOpenGLConfiguration openGLConfiguration;
 	
@@ -203,7 +203,7 @@ private:
 	bool setPaperConfiguration(CanvasPaperConfiguration *configuration);
 	bool setOpenGLConfiguration(CanvasOpenGLConfiguration *configuration);
 	bool postImage(OEImage *frame);
-	bool movePrintHead(OEPoint *point);
+	bool setPrintHead(OEPoint *point);
 };
 
 #endif

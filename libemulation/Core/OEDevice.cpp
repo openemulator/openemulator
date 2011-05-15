@@ -15,8 +15,6 @@
 OEDevice::OEDevice(OEEmulation *emulation)
 {
 	this->emulation = emulation;
-	
-	storage = NULL;
 }
 
 bool OEDevice::postMessage(OEComponent *sender, int message, void *data)
@@ -105,6 +103,7 @@ bool OEDevice::postMessage(OEComponent *sender, int message, void *data)
 				OEComponents::iterator first = canvases.begin();
 				OEComponents::iterator last = canvases.end();
 				OEComponents::iterator i = remove(first, last, *ref);
+				
 				if (i != last)
 					canvases.erase(i, last);
 				
@@ -121,14 +120,26 @@ bool OEDevice::postMessage(OEComponent *sender, int message, void *data)
 				*((OEComponents *)data) = canvases;
 			return true;
 			
-		case DEVICE_SET_STORAGE:
+		case DEVICE_ADD_STORAGE:
 			if (data)
-				storage = (OEComponent *)data;
+				storages.push_back((OEComponent *)data);
 			return true;
 			
-		case DEVICE_GET_STORAGE:
+		case DEVICE_REMOVE_STORAGE:
 			if (data)
-				*((OEComponent **)data) = storage;
+			{
+				OEComponents::iterator first = storages.begin();
+				OEComponents::iterator last = storages.end();
+				OEComponents::iterator i = remove(first, last, (OEComponent *)data);
+				
+				if (i != last)
+					storages.erase(i, last);
+			}
+			return true;
+			
+		case DEVICE_GET_STORAGES:
+			if (data)
+				*((OEComponents *)data) = storages;
 			return true;
 			
 		case DEVICE_UPDATE:

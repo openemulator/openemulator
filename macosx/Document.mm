@@ -437,15 +437,17 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 		 i++)
 	{
 		OEComponent *device = ((OEEmulation *)emulation)->getComponent(*i);
-		OEComponent *storage = NULL;
+		OEComponents storages;
 		
-		device->postMessage(NULL, DEVICE_GET_STORAGE, &storage);
-		if (storage)
+		device->postMessage(NULL, DEVICE_GET_STORAGES, &storages);
+		for (OEComponents::iterator j = storages.begin(); 
+			 j != storages.end();
+			 j++)
 		{
-			if (storage->postMessage(NULL, STORAGE_IS_AVAILABLE, NULL))
+			if ((*j)->postMessage(NULL, STORAGE_IS_AVAILABLE, NULL))
 			{
 				string thePath = getCPPString(path);
-				if (storage->postMessage(NULL, STORAGE_TESTMOUNT, &thePath))
+				if ((*j)->postMessage(NULL, STORAGE_TESTMOUNT, &thePath))
 				{
 					[self updateChangeCount:NSChangeDone];
 					
@@ -454,6 +456,9 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 				}
 			}
 		}
+		
+		if (success)
+			break;
 	}
 	
 	[self unlockEmulation];
@@ -473,15 +478,17 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 		 i++)
 	{
 		OEComponent *device = ((OEEmulation *)emulation)->getComponent(*i);
-		OEComponent *storage = NULL;
+		OEComponents storages;
 		
-		device->postMessage(NULL, DEVICE_GET_STORAGE, &storage);
-		if (storage)
+		device->postMessage(NULL, DEVICE_GET_STORAGES, &storages);
+		for (OEComponents::iterator j = storages.begin(); 
+			 j != storages.end();
+			 j++)
 		{
-			if (storage->postMessage(NULL, STORAGE_IS_AVAILABLE, NULL))
+			if ((*j)->postMessage(NULL, STORAGE_IS_AVAILABLE, NULL))
 			{
 				string thePath = getCPPString(path);
-				if (storage->postMessage(NULL, STORAGE_MOUNT, &thePath))
+				if ((*j)->postMessage(NULL, STORAGE_MOUNT, &thePath))
 				{
 					[self updateChangeCount:NSChangeDone];
 					
@@ -490,6 +497,9 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 				}
 			}
 		}
+		
+		if (success)
+			break;
 	}
 	
 	[self unlockEmulation];
@@ -509,18 +519,23 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 		 i++)
 	{
 		OEComponent *device = ((OEEmulation *)emulation)->getComponent(*i);
-		OEComponent *storage = NULL;
+		OEComponents storages;
 		
-		device->postMessage(NULL, DEVICE_GET_STORAGE, &storage);
-		if (storage)
+		device->postMessage(NULL, DEVICE_GET_STORAGES, &storages);
+		for (OEComponents::iterator j = storages.begin(); 
+			 j != storages.end();
+			 j++)
 		{
 			string thePath = getCPPString(path);
-			if (storage->postMessage(NULL, STORAGE_TESTMOUNT, NULL))
+			if ((*j)->postMessage(NULL, STORAGE_TESTMOUNT, NULL))
 			{
 				success = YES;
 				break;
 			}
 		}
+		
+		if (success)
+			break;
 	}
 	
 	[self unlockEmulation];

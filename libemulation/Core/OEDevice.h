@@ -36,7 +36,7 @@ private:
 	DeviceSettings settings;
 	
 	OEComponents canvases;
-	OEComponent *storage;
+	OEComponents storages;
 };
 
 #endif

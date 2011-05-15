@@ -133,18 +133,21 @@
 		for (int i = 0; i < theCanvases.size(); i++)
 			[canvases addObject:[NSValue valueWithPointer:theCanvases.at(i)]];
 		
-		// Update storage device
-		((OEComponent *)device)->postMessage(NULL, DEVICE_GET_STORAGE, &storage);
-		if (storage)
+		// Update storage devices
+		OEComponents theStorages;
+		((OEComponent *)device)->postMessage(NULL, DEVICE_GET_STORAGES, &theStorages);
+		for (int i = 0; i < theStorages.size(); i++)
 		{
-			((OEComponent *)storage)->postMessage(NULL, STORAGE_GET_MOUNTPATH, &value);
+			OEComponent *theStorage = theStorages.at(i);
+			
+			theStorage->postMessage(NULL, STORAGE_GET_MOUNTPATH, &value);
 			if (value.size())
 			{
 				NSString *storageUID;
 				storageUID = [NSString stringWithFormat:@"%@.storage", uid];
 				
 				EmulationItem *storageItem;
-				storageItem = [[EmulationItem alloc] initMountWithStorage:storage
+				storageItem = [[EmulationItem alloc] initMountWithStorage:theStorage
 																	  uid:storageUID 
 															locationLabel:locationLabel
 																 document:theDocument];

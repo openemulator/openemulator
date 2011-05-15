@@ -97,30 +97,37 @@
 		NSSize titleSize = NSMakeSize(frameSize.width - viewSize.width * userScale,
 									  frameSize.height - viewSize.height * userScale);
 		
-		NSSize proposedSize = NSMakeSize(proposedFrameSize.width - titleSize.width,
-										 proposedFrameSize.height - titleSize.height);
-		float proposedRatio = proposedSize.width / proposedSize.height;
+		proposedFrameSize = NSMakeSize(proposedFrameSize.width - titleSize.width,
+									   proposedFrameSize.height - titleSize.height);
+		float proposedFrameRatio = proposedFrameSize.width / proposedFrameSize.height;
 		
-		if (defaultViewRatio > proposedRatio)
+		if (defaultViewRatio > proposedFrameRatio)
 		{
 			float minWidth = 0.5 * defaultViewSize.width;
-			if (proposedSize.width < minWidth)
-				proposedSize.width = minWidth;
-			proposedSize.height = proposedSize.width / defaultViewRatio;
+			if (proposedFrameSize.width < minWidth)
+				proposedFrameSize.width = minWidth;
+			proposedFrameSize.height = proposedFrameSize.width / defaultViewRatio;
 		}
 		else
 		{
 			float minHeight = 0.5 * defaultViewSize.height;
-			if (proposedSize.height < minHeight)
-				proposedSize.height = minHeight;
-			proposedSize.width = proposedSize.height * defaultViewRatio;
+			if (proposedFrameSize.height < minHeight)
+				proposedFrameSize.height = minHeight;
+			proposedFrameSize.width = proposedFrameSize.height * defaultViewRatio;
 		}
 		
-		return NSMakeSize((int) (proposedSize.width + titleSize.width),
-						  (int) (proposedSize.height + titleSize.height));
+		proposedFrameSize = NSMakeSize(round(proposedFrameSize.width + titleSize.width),
+									   round(proposedFrameSize.height + titleSize.height));
 	}
-	else
-		return proposedFrameSize;
+	else if ([fCanvasView isPaperCanvas])
+	{
+		if (proposedFrameSize.width < 512)
+			proposedFrameSize.width = 512;
+		if (proposedFrameSize.height < 384)
+			proposedFrameSize.height = 384;
+	}
+	
+	return proposedFrameSize;
 }
 
 - (BOOL)windowShouldClose:(id)sender
@@ -182,8 +189,8 @@
 	proposedSize.height += titleSize.height;
 	
 	NSRect frameRect = [self frame];
-	frameRect.origin.x = (int) (NSMidX(frameRect) - proposedSize.width / 2);
-	frameRect.origin.y = (int) (NSMaxY(frameRect) - proposedSize.height);
+	frameRect.origin.x = round(NSMidX(frameRect) - proposedSize.width / 2);
+	frameRect.origin.y = round(NSMaxY(frameRect) - proposedSize.height);
 	frameRect.size = proposedSize;
 	
 	if (NSMaxX(frameRect) > NSMaxX(screenRect))
