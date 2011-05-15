@@ -77,9 +77,9 @@ public:
 	OESize getDefaultViewportSize();
 	void setViewportSize(OESize size);
 	
-	float getClipOffset();
+	float getClipOrigin();
 	float getClipSize();
-	void scroll(float offset);
+	void scroll(float origin);
 	
 	OESize getPagePixelDensity();
 	int getPageNumber();
@@ -129,15 +129,14 @@ private:
 	CanvasCaptureMode captureMode;
 	
 	OESize viewportSize;
-	float clipOffset;
+	float clipOrigin;
 	bool isImageUpdated;
 	OEImage image;
+	bool isConfigurationUpdated;
 	
 	GLuint texture[OPENGLCANVAS_TEXTURE_END];
 	OESize textureSize[OPENGLCANVAS_TEXTURE_END];
 	
-	bool isDisplayConfigurationUpdated;
-	CanvasDisplayConfiguration updatedDisplayConfiguration;
 	CanvasDisplayConfiguration displayConfiguration;
 	bool isShaderActive;
 	GLuint shader[OPENGLCANVAS_SHADER_END];
@@ -183,7 +182,7 @@ private:
 	bool uploadImage();
 	void updateDisplayConfiguration();
 	void renderImage();
-	bool isDisplayDrawRequired();
+	bool isPersistanceDrawRequired();
 	void drawDisplayCanvas();
 	void updatePersistance();
 	

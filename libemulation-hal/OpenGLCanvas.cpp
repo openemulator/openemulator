@@ -88,7 +88,7 @@ void OpenGLCanvas::setEnableShader(bool value)
 	lock();
 	
 	isShaderEnabled = value;
-	isDisplayConfigurationUpdated = true;
+	isConfigurationUpdated = true;
 	
 	for (int i = 0; i < OPENGLCANVAS_PERSISTANCE_IMAGE_NUM; i++)
 		persistance[i] = -1;
@@ -116,7 +116,7 @@ OESize OpenGLCanvas::getDefaultViewportSize()
 	lock();
 	
 	if (mode == CANVAS_MODE_DISPLAY)
-		size = updatedDisplayConfiguration.displayResolution;
+		size = displayConfiguration.displayResolution;
 	else if (mode == CANVAS_MODE_PAPER)
 		size = OEMakeSize(512, 384);
 	else if (mode == CANVAS_MODE_OPENGL)
@@ -136,17 +136,17 @@ void OpenGLCanvas::setViewportSize(OESize size)
 	unlock();
 }
 
-float OpenGLCanvas::getClipOffset()
+float OpenGLCanvas::getClipOrigin()
 {
-	float theClipOffset;
+	float theClipOrigin;
 	
 	lock();
 	
-	theClipOffset = clipOffset;
+	theClipOrigin = clipOrigin;
 	
 	unlock();
 	
-	return theClipOffset;
+	return theClipOrigin;
 }
 
 float OpenGLCanvas::getClipSize()
@@ -173,11 +173,11 @@ float OpenGLCanvas::getClipSize()
 	return clipSize;
 }
 
-void OpenGLCanvas::scroll(float offset)
+void OpenGLCanvas::scroll(float origin)
 {
 	lock();
 	
-	clipOffset = offset;
+	clipOrigin = origin;
 	
 	unlock();
 }
@@ -190,7 +190,7 @@ OESize OpenGLCanvas::getPagePixelDensity()
 	
 	if (mode == CANVAS_MODE_DISPLAY)
 		// To-Do: Update with videoRect and imageSize
-		pixelDensity = updatedDisplayConfiguration.displayPixelDensity;
+		pixelDensity = displayConfiguration.displayPixelDensity;
 	else if (mode == CANVAS_MODE_PAPER)
 		pixelDensity = paperConfiguration.pagePixelDensity;
 	else if (mode == CANVAS_MODE_OPENGL)
@@ -213,38 +213,45 @@ OEImage OpenGLCanvas::getPage(int index)
 
 bool OpenGLCanvas::vsync()
 {
+	lock();
+	
+	CanvasVSync vSync;
+	vSync.viewportSize = viewportSize;
+	vSync.shouldDraw = false;
+	
 	if (mode == CANVAS_MODE_DISPLAY)
 	{
 		if (isImageUpdated)
 			uploadImage();
 		
-		if (isDisplayConfigurationUpdated)
+		if (isConfigurationUpdated)
 			updateDisplayConfiguration();
 		
-		if (isImageUpdated || isDisplayConfigurationUpdated)
-		{
+		if (isImageUpdated || isConfigurationUpdated)
 			renderImage();
-			
-			isImageUpdated = false;
-			isDisplayConfigurationUpdated = false;
-		}
+		
+		updatePersistance();
+		
+		if (isPersistanceDrawRequired())
+			vSync.shouldDraw = true;
 	}
+	else if (mode == CANVAS_MODE_PAPER)
+		vSync.shouldDraw = isImageUpdated || isConfigurationUpdated;
+		
+	if (isBezelDrawRequired)
+		vSync.shouldDraw = true;
 	
-	updatePersistance();
+	isImageUpdated = false;
+	isConfigurationUpdated = false;
 	
-	CanvasVSync vSync;
-	vSync.viewportSize = viewportSize;
-	vSync.shouldDraw = false;
-	notify(this, CANVAS_DID_VSYNC, &viewportSize);
+	unlock();
 	
-	bool willDraw = (isDisplayDrawRequired() ||
-					 vSync.shouldDraw ||
-					 isBezelDrawRequired);
+	notify(this, CANVAS_DID_VSYNC, &vSync);
 	
-	if (willDraw)
+	if (vSync.shouldDraw)
 		draw();
 	
-	return willDraw;
+	return vSync.shouldDraw;
 }
 
 void OpenGLCanvas::draw()
@@ -285,7 +292,7 @@ bool OpenGLCanvas::initOpenGL()
 		textureSize[i] = OEMakeSize(0, 0);
 	}
 	
-	isDisplayConfigurationUpdated = true;
+	isConfigurationUpdated = true;
 	isShaderActive = false;
 	for (int i = 0; i < OPENGLCANVAS_SHADER_END; i++)
 		shader[i] = 0;
@@ -658,8 +665,6 @@ void OpenGLCanvas::updateViewportSize(OESize size)
 
 bool OpenGLCanvas::uploadImage()
 {
-	lock();
-	
 	updateTextureSize(OPENGLCANVAS_TEXTURE_IMAGE_RAW, image.getSize());
 	
 	glBindTexture(GL_TEXTURE_2D, texture[OPENGLCANVAS_TEXTURE_IMAGE_RAW]);
@@ -669,8 +674,6 @@ bool OpenGLCanvas::uploadImage()
 					getGLFormat(image.getFormat()), GL_UNSIGNED_BYTE,
 					image.getPixels());
 	
-	unlock();
-	
 	glBindTexture(GL_TEXTURE_2D, 0);
 	
 	return true;
@@ -678,14 +681,7 @@ bool OpenGLCanvas::uploadImage()
 
 void OpenGLCanvas::updateDisplayConfiguration()
 {
-	lock();
-	
 	isShaderActive = false;
-	
-	if (isDisplayConfigurationUpdated)
-		displayConfiguration = updatedDisplayConfiguration;
-	
-	unlock();
 	
 #ifdef GL_VERSION_2_0
 	// Deactivate shader when needed
@@ -964,11 +960,8 @@ void OpenGLCanvas::renderImage()
 #endif
 }
 
-bool OpenGLCanvas::isDisplayDrawRequired()
+bool OpenGLCanvas::isPersistanceDrawRequired()
 {
-	if (mode != CANVAS_MODE_DISPLAY)
-		return false;
-	
 	for (int i = 1; i < OPENGLCANVAS_PERSISTANCE_IMAGE_NUM; i++)
 	{
 		if (persistance[i] != persistance[0])
@@ -1185,7 +1178,7 @@ void OpenGLCanvas::drawPaperCanvas()
 	float canvasViewportHeight = (viewportSize.height * imageSize.width /
 								  viewportSize.width / pixelDensityRatio);
 	OERect viewportCanvas = OEMakeRect(0,
-									   clipOffset * imageSize.height,
+									   clipOrigin * imageSize.height,
 									   imageSize.width,
 									   canvasViewportHeight);
 	
@@ -1664,8 +1657,8 @@ bool OpenGLCanvas::setDisplayConfiguration(CanvasDisplayConfiguration *configura
 	
 	lock();
 	
-	isDisplayConfigurationUpdated = true;
-	updatedDisplayConfiguration = *configuration;
+	isConfigurationUpdated = true;
+	displayConfiguration = *configuration;
 	
 	unlock();
 	
@@ -1679,6 +1672,7 @@ bool OpenGLCanvas::setPaperConfiguration(CanvasPaperConfiguration *configuration
 	
 	lock();
 	
+	isConfigurationUpdated = true;
 	paperConfiguration = *configuration;
 	
 	unlock();
@@ -1693,6 +1687,7 @@ bool OpenGLCanvas::setOpenGLConfiguration(CanvasOpenGLConfiguration *configurati
 	
 	lock();
 	
+	isConfigurationUpdated = true;
 	openGLConfiguration = *configuration;
 	
 	unlock();
@@ -1700,15 +1695,32 @@ bool OpenGLCanvas::setOpenGLConfiguration(CanvasOpenGLConfiguration *configurati
 	return true;
 }
 
-bool OpenGLCanvas::postImage(OEImage *image)
+bool OpenGLCanvas::postImage(OEImage *theImage)
 {
-	if (!image)
+	if (!theImage)
 		return false;
 	
 	lock();
 	
-	this->image = *image;
-	isImageUpdated = true;
+	switch (mode)
+	{
+		case CANVAS_MODE_DISPLAY:
+			this->image = *theImage;
+			isImageUpdated = true;
+			break;
+		case CANVAS_MODE_PAPER:
+			OESize theImageSize = theImage->getSize();
+			OESize imageSize = image.getSize();
+			OERect aRect = OEMakeRect(0, 0,
+									  theImageSize.width, theImageSize.height);
+			OERect bRect = OEMakeRect(printHead.x, printHead.y,
+									  imageSize.width, imageSize.height);
+			OERect unionRect = OEUnionRect(aRect, bRect);
+			image.setSize(unionRect.size);
+			image.overlay(printHead, *theImage);
+			isImageUpdated = true;
+			break;
+	}
 	
 	unlock();
 	

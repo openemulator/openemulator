@@ -1,4 +1,9 @@
 ==2011-05==
+* Improved OpenGLCanvas configuration logic
+* Implemented paper canvas postImage
+* Implemented OEImage overlay and clipping
+* Implemented paper canvas update when paper size changes
+* Fixed paper canvas size getting stuck
 * Implemented CanvasView paper scrolling
 * Defined paper vertical clip region
 * Added OpenGL paper canvas page separator

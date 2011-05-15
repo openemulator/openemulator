@@ -26,7 +26,8 @@
 	Document *document;
 	void *canvas;
 	
-	NSSize canvasSize;
+	float clipSize;
+	
 	NSUInteger keyMap[DEVICE_KEYMAP_SIZE];
 	NSUInteger keyModifierFlags;
 	NSUInteger keyboardFlags;

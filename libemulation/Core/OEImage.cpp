@@ -20,25 +20,6 @@ OEImage::OEImage()
 	size = OEMakeSize(0, 0);
 }
 
-OEImage::OEImage(const OEImage& image)
-{
-	format = image.format;
-	size = image.size;
-	pixels = image.pixels;
-}
-
-OEImage& OEImage::operator=(const OEImage& image)
-{
-	if (this != &image)
-	{
-		format = image.format;
-		size = image.size;
-		pixels = image.pixels;
-	}
-	
-	return *this;
-}
-
 void OEImage::setFormat(OEImageFormat format)
 {
 	this->format = format;
@@ -53,8 +34,8 @@ OEImageFormat OEImage::getFormat()
 
 void OEImage::setSize(OESize size)
 {
-	this->size.width = (int) size.width;
-	this->size.height = (int) size.height;
+	this->size.width = (int)size.width;
+	this->size.height = (int)size.height;
 	
 	update();
 }
@@ -160,6 +141,76 @@ bool OEImage::readFile(string path)
 	return result;
 }
 
+void OEImage::overlay(OEPoint origin, OEImage& image)
+{
+	if (image.getFormat() != getFormat())
+		return;
+	
+	OESize imageSize = image.getSize();
+	OERect rect = OEMakeRect(origin.x,
+							 origin.y,
+							 imageSize.width,
+							 imageSize.height);
+	rect = OEIntersectionRect(rect, OEMakeRect(0, 0, size.width, size.height));
+	
+	int srcBytesPerLine = image.getBytesPerLine();
+	int srcOffset = ((rect.origin.y - origin.y) * srcBytesPerLine +
+					 (rect.origin.x - origin.y) * image.getBytesPerPixel());
+	char *src = image.getPixels() + srcOffset;
+	int dstBytesPerLine = getBytesPerLine();
+	int dstOffset = (rect.origin.y * srcBytesPerLine +
+					 rect.origin.x * getBytesPerPixel());
+	char *dst = getPixels() + dstOffset;
+	int n = (int)OEWidth(rect) * getBytesPerPixel();
+	
+	for (int y = 0; y < OEHeight(rect); y++)
+	{
+		for (int i = 0; i < n; i++)
+		{
+			int temp = src[i] + dst[i];
+			if (temp > 0xff)
+				temp = 0xff;
+			dst[i] = temp;
+		}
+		src += srcBytesPerLine;
+		dst += dstBytesPerLine;
+	}
+}
+
+OEImage OEImage::getClip(OERect rect)
+{
+	OEImage image;
+	
+	rect = OEIntersectionRect(rect, OEMakeRect(0, 0, size.width, size.height));
+	image.setSize(rect.size);
+	
+	int srcBytesPerLine = getBytesPerLine();
+	int srcOffset = (rect.origin.y * srcBytesPerLine +
+					 rect.origin.x * getBytesPerPixel());
+	char *src = getPixels() + srcOffset;
+	int dstBytesPerLine = image.getBytesPerLine();
+	char *dst = image.getPixels();
+	
+	for (int y = 0; y < OEHeight(rect); y++)
+	{
+		memcpy(dst, src, dstBytesPerLine);
+		src += srcBytesPerLine;
+		dst += dstBytesPerLine;
+	}
+	
+	return image;
+}
+			   
+void OEImage::update()
+{
+	int prevSize = pixels.size();
+	pixels.resize(getBytesPerLine() * size.height);
+	
+	int diff = pixels.size() - prevSize;
+	if (diff > 0)
+		memset(&pixels.front() + prevSize, 0xff, diff);
+}
+
 bool OEImage::validatePNG(FILE *fp)
 {
 	char pngHeader[OEIMAGE_PNGSIG_BYTENUM];
@@ -169,14 +220,4 @@ bool OEImage::validatePNG(FILE *fp)
 		return false;
 	
 	return !png_sig_cmp((png_byte *) pngHeader, 0, OEIMAGE_PNGSIG_BYTENUM);
-}
-
-void OEImage::update()
-{
-	int prevSize = pixels.size();
-	pixels.resize(getBytesPerLine() * size.height);
-	
-	int diff = pixels.size() - prevSize;
-	if (diff > 0)
-		memset(&pixels.front() + prevSize, 0xff, diff);
 }

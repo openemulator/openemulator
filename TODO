@@ -1,8 +1,6 @@
 ==To-Do==
 * Fix: resize flickering
 
-* Fix: paper canvas size gets stuck sometimes
-* Fix: paper canvas is not re-displayed when paper size changes
 * Implement printing with the raw canvas bitmap
 * Implement copy with raw canvas bitmap
 

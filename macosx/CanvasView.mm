@@ -303,8 +303,6 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 {
 	NSLog(@"CanvasView windowDidResize");
 	
-	NSLog(@"frame 1 %@", NSStringFromRect([self visibleRect]));
-	
 	NSScrollView *scrollView = [self enclosingScrollView];
 	NSSize contentSize = [scrollView contentSize];
 	
@@ -315,18 +313,14 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 														 contentSize.height));
 	CGLUnlockContext(cglContextObj);
 	
-	float clipSize = ((OpenGLCanvas *)canvas)->getClipSize();
+	clipSize = ((OpenGLCanvas *)canvas)->getClipSize();
 	[document unlockEmulation];
 	
 	NSSize frameSize = NSMakeSize(contentSize.width,
-								  contentSize.height / clipSize);
+								  ceil(contentSize.height / clipSize));
 	if (frameSize.height < contentSize.height)
 		frameSize.height = contentSize.height;
 	[self setFrameSize:frameSize];
-	
-	NSLog(@"frame 2 %@", NSStringFromRect([self visibleRect]));
-	
-	[self setNeedsDisplay:YES];
 }
 
 - (void)windowDidBecomeKey:(NSNotification *)notification
@@ -563,8 +557,6 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (void)drawRect:(NSRect)theRect
 {
-	NSLog(@"drawRect frame %@", NSStringFromRect([self visibleRect]));
-	
 	CGLLockContext(cglContextObj);
 	
 	((OpenGLCanvas *)canvas)->scroll(NSMinY([self visibleRect]) / 
@@ -581,6 +573,15 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     CGLLockContext(cglContextObj);
 	
 	[[self openGLContext] makeCurrentContext];
+	
+	float newClipSize = ((OpenGLCanvas *)canvas)->getClipSize();
+	if (newClipSize != clipSize)
+	{
+		clipSize = newClipSize;
+		[self performSelectorOnMainThread:@selector(windowDidResize:)
+							   withObject:nil
+							waitUntilDone:NO];
+	}
 	
 	if (((OpenGLCanvas *)canvas)->vsync())
 		[[self openGLContext] flushBuffer];
