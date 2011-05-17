@@ -17,6 +17,7 @@
 		00039F0112B04EAA0025D374 /* libemulation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00039EFE12B04E910025D374 /* libemulation.a */; };
 		00039FD112B04F6C0025D374 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 00039FD012B04F6C0025D374 /* libxml2.dylib */; };
 		000E8D1913515C6E00DBFB2C /* StorageInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 000E8D1813515C6E00DBFB2C /* StorageInterface.h */; };
+		001C9B02137FDD0500D1355B /* AudioRecord.png in Resources */ = {isa = PBXBuildFile; fileRef = 00ED379A12779AD000BEF6BD /* AudioRecord.png */; };
 		001F56F90FD1E8E500EA246A /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 001F56F80FD1E8E500EA246A /* Sparkle.framework */; };
 		00391CB312D3A320002C5ABD /* LibraryWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00391CB212D3A320002C5ABD /* LibraryWindowController.m */; };
 		00391D6112D3B570002C5ABD /* IconLibrary.png in Resources */ = {isa = PBXBuildFile; fileRef = 00391D6012D3B570002C5ABD /* IconLibrary.png */; };
@@ -50,6 +51,7 @@
 		006115C211DD0347008AA3EE /* Application.m in Sources */ = {isa = PBXBuildFile; fileRef = 006115C111DD0347008AA3EE /* Application.m */; };
 		00679D09100817F700B38748 /* TemplateChooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00679D06100817F700B38748 /* TemplateChooser.xib */; };
 		006A4C5C134ED2F30033BE4D /* IEEE488Interface.h in Headers */ = {isa = PBXBuildFile; fileRef = 006A4C5B134ED2F30033BE4D /* IEEE488Interface.h */; };
+		006B5CD013826D0700EEB5BC /* CanvasWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 00A72B7212879F800083C6A7 /* CanvasWindow.m */; };
 		0071E3BA10803F7300F2D54F /* TemplateChooserItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0071E3B910803F7300F2D54F /* TemplateChooserItem.mm */; };
 		0073DD9F136FCC1100087303 /* CanvasToolbarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0073DD8E136FCA1C00087303 /* CanvasToolbarView.m */; };
 		0073DDBF136FCCC900087303 /* ToolbarBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 0073DDBE136FCCC900087303 /* ToolbarBackground.png */; };
@@ -71,7 +73,6 @@
 		00A0B8041069761A007930A5 /* Document.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00A0B8031069761A007930A5 /* Document.mm */; };
 		00A72B6F12879F650083C6A7 /* CanvasView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00A72B6E12879F650083C6A7 /* CanvasView.mm */; };
 		00A72B7012879F690083C6A7 /* CanvasWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00A72B6A12879F530083C6A7 /* CanvasWindowController.m */; };
-		00A72B7312879F800083C6A7 /* CanvasWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 00A72B7212879F800083C6A7 /* CanvasWindow.m */; };
 		00A72B951287A0F10083C6A7 /* Canvas.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00A72B931287A0F10083C6A7 /* Canvas.xib */; };
 		00A973AB12E512F80084724F /* OEEmulation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A9739E12E512F80084724F /* OEEmulation.cpp */; };
 		00A973AD12E512F80084724F /* OEComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A973A012E512F80084724F /* OEComponent.cpp */; };
@@ -112,7 +113,6 @@
 		00ED379C12779AD100BEF6BD /* AudioMax.png in Resources */ = {isa = PBXBuildFile; fileRef = 00ED379712779AD000BEF6BD /* AudioMax.png */; };
 		00ED379D12779AD100BEF6BD /* AudioMin.png in Resources */ = {isa = PBXBuildFile; fileRef = 00ED379812779AD000BEF6BD /* AudioMin.png */; };
 		00ED379E12779AD100BEF6BD /* AudioPlay.png in Resources */ = {isa = PBXBuildFile; fileRef = 00ED379912779AD000BEF6BD /* AudioPlay.png */; };
-		00ED379F12779AD100BEF6BD /* AudioRecord.png in Resources */ = {isa = PBXBuildFile; fileRef = 00ED379A12779AD000BEF6BD /* AudioRecord.png */; };
 		00ED37A012779AD100BEF6BD /* AudioStop.png in Resources */ = {isa = PBXBuildFile; fileRef = 00ED379B12779AD000BEF6BD /* AudioStop.png */; };
 		00ED37B912779DD900BEF6BD /* IconAudio.png in Resources */ = {isa = PBXBuildFile; fileRef = 00ED37A812779DD800BEF6BD /* IconAudio.png */; };
 		00ED37BA12779DD900BEF6BD /* IconColdRestart.png in Resources */ = {isa = PBXBuildFile; fileRef = 00ED37A912779DD800BEF6BD /* IconColdRestart.png */; };
@@ -1037,7 +1037,6 @@
 				00ED379C12779AD100BEF6BD /* AudioMax.png in Resources */,
 				00ED379D12779AD100BEF6BD /* AudioMin.png in Resources */,
 				00ED379E12779AD100BEF6BD /* AudioPlay.png in Resources */,
-				00ED379F12779AD100BEF6BD /* AudioRecord.png in Resources */,
 				00ED37A012779AD100BEF6BD /* AudioStop.png in Resources */,
 				00ED37B912779DD900BEF6BD /* IconAudio.png in Resources */,
 				00ED37BA12779DD900BEF6BD /* IconColdRestart.png in Resources */,
@@ -1066,6 +1065,7 @@
 				00391DAC12D3B94F002C5ABD /* library in Resources */,
 				00391F6C12D3FFF3002C5ABD /* TemplateChooserView.xib in Resources */,
 				0073DDBF136FCCC900087303 /* ToolbarBackground.png in Resources */,
+				001C9B02137FDD0500D1355B /* AudioRecord.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1165,13 +1165,13 @@
 				0049F9231277CFDA00553860 /* DocumentController.mm in Sources */,
 				00A72B6F12879F650083C6A7 /* CanvasView.mm in Sources */,
 				00A72B7012879F690083C6A7 /* CanvasWindowController.m in Sources */,
-				00A72B7312879F800083C6A7 /* CanvasWindow.m in Sources */,
 				00BB34B412C5C5AE007332B5 /* EmulationItem.mm in Sources */,
 				00F21CE712C7C7EE00A809EF /* VerticallyCenteredTextFieldCell.m in Sources */,
 				00391CB312D3A320002C5ABD /* LibraryWindowController.m in Sources */,
 				0039211812D43448002C5ABD /* BackgroundView.m in Sources */,
 				00F35D7312EF049B0027B9E4 /* EmulationOutlineView.m in Sources */,
 				0073DD9F136FCC1100087303 /* CanvasToolbarView.m in Sources */,
+				006B5CD013826D0700EEB5BC /* CanvasWindow.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

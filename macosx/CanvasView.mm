@@ -313,6 +313,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 														 contentSize.height));
 	CGLUnlockContext(cglContextObj);
 	
+	float clipOrigin = ((OpenGLCanvas *)canvas)->getClipOrigin();
 	clipSize = ((OpenGLCanvas *)canvas)->getClipSize();
 	[document unlockEmulation];
 	
@@ -321,6 +322,8 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	if (frameSize.height < contentSize.height)
 		frameSize.height = contentSize.height;
 	[self setFrameSize:frameSize];
+	
+	[self scrollPoint:NSMakePoint(0, clipOrigin * frameSize.height)];
 }
 
 - (void)windowDidBecomeKey:(NSNotification *)notification
@@ -575,7 +578,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	[[self openGLContext] makeCurrentContext];
 	
 	float newClipSize = ((OpenGLCanvas *)canvas)->getClipSize();
-	if (newClipSize != clipSize)
+	if (clipSize != newClipSize)
 	{
 		clipSize = newClipSize;
 		[self performSelectorOnMainThread:@selector(windowDidResize:)
@@ -828,7 +831,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
 	NSString *theString = [self copyString];
 	
-	if (theString)
+	if ([theString length])
 	{
 		NSArray *pasteboardTypes = [NSArray arrayWithObjects:NSStringPboardType, nil];
 		[pasteboard declareTypes:pasteboardTypes owner:self];
@@ -856,6 +859,11 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	[document lockEmulation];
 	((OpenGLCanvas *)canvas)->paste(getCPPString(text));
 	[document unlockEmulation];
+}
+
+- (void)print:(id)sender
+{
+	[[NSPrintOperation printOperationWithView:self] runOperation];	
 }
 
 - (void)paste:(id)sender

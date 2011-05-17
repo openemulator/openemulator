@@ -1,8 +1,11 @@
 ==To-Do==
 * Fix: resize flickering
 
+* Fix: first drawRect() should invoke vsync
+* Fix scrolling+resizing so it stays on the same line
 * Implement printing with the raw canvas bitmap
 * Implement copy with raw canvas bitmap
+* Implement paper canvas delete interface
 
 * Implement hardware library
 * Implement device dragging to the emulation window by checking testAddEDL

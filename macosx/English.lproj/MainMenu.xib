@@ -2,17 +2,17 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="7.10">
 	<data>
 		<int key="IBDocument.SystemTarget">1050</int>
-		<string key="IBDocument.SystemVersion">10J567</string>
-		<string key="IBDocument.InterfaceBuilderVersion">823</string>
+		<string key="IBDocument.SystemVersion">10J869</string>
+		<string key="IBDocument.InterfaceBuilderVersion">851</string>
 		<string key="IBDocument.AppKitVersion">1038.35</string>
-		<string key="IBDocument.HIToolboxVersion">462.00</string>
+		<string key="IBDocument.HIToolboxVersion">461.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
-			<string key="NS.object.0">823</string>
+			<string key="NS.object.0">851</string>
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="460"/>
+			<integer value="81"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1110,14 +1110,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
-						<string key="label">printDocument:</string>
-						<reference key="source" ref="1014"/>
-						<reference key="destination" ref="786807388"/>
-					</object>
-					<int key="connectionID">805</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
 						<string key="label">saveDocumentAsTemplate:</string>
 						<reference key="source" ref="1014"/>
 						<reference key="destination" ref="885339154"/>
@@ -1355,6 +1347,14 @@
 						<reference key="destination" ref="276624790"/>
 					</object>
 					<int key="connectionID">984</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">printDocument:</string>
+						<reference key="source" ref="1014"/>
+						<reference key="destination" ref="786807388"/>
+					</object>
+					<int key="connectionID">987</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -2385,7 +2385,7 @@
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>{{230, 203}, {299, 273}}</string>
+					<string>{{463, 369}, {299, 273}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>{{155, 774}, {199, 203}}</string>
@@ -2431,7 +2431,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">984</int>
+			<int key="maxID">987</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -2589,91 +2589,14 @@
 					<string key="className">CanvasView</string>
 					<string key="superclassName">NSOpenGLView</string>
 					<object class="NSMutableDictionary" key="actions">
-						<bool key="EncodedWithXMLCoder">YES</bool>
-						<object class="NSArray" key="dict.sortedKeys">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>applicationBreak:</string>
-							<string>applicationDebuggerBreak:</string>
-							<string>systemBreak:</string>
-							<string>systemColdRestart:</string>
-							<string>systemDebuggerBreak:</string>
-							<string>systemHibernate:</string>
-							<string>systemPowerDown:</string>
-							<string>systemSleep:</string>
-							<string>systemWakeUp:</string>
-							<string>systemWarmRestart:</string>
-						</object>
-						<object class="NSMutableArray" key="dict.values">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-						</object>
+						<string key="NS.key.0">printCanvas:</string>
+						<string key="NS.object.0">id</string>
 					</object>
 					<object class="NSMutableDictionary" key="actionInfosByName">
-						<bool key="EncodedWithXMLCoder">YES</bool>
-						<object class="NSArray" key="dict.sortedKeys">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>applicationBreak:</string>
-							<string>applicationDebuggerBreak:</string>
-							<string>systemBreak:</string>
-							<string>systemColdRestart:</string>
-							<string>systemDebuggerBreak:</string>
-							<string>systemHibernate:</string>
-							<string>systemPowerDown:</string>
-							<string>systemSleep:</string>
-							<string>systemWakeUp:</string>
-							<string>systemWarmRestart:</string>
-						</object>
-						<object class="NSMutableArray" key="dict.values">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<object class="IBActionInfo">
-								<string key="name">applicationBreak:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">applicationDebuggerBreak:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">systemBreak:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">systemColdRestart:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">systemDebuggerBreak:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">systemHibernate:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">systemPowerDown:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">systemSleep:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">systemWakeUp:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">systemWarmRestart:</string>
-								<string key="candidateClassName">id</string>
-							</object>
+						<string key="NS.key.0">printCanvas:</string>
+						<object class="IBActionInfo" key="NS.object.0">
+							<string key="name">printCanvas:</string>
+							<string key="candidateClassName">id</string>
 						</object>
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
@@ -2751,6 +2674,113 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">macosx/CanvasWindow.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">CanvasWindowController</string>
+					<string key="superclassName">NSWindowController</string>
+					<object class="NSMutableDictionary" key="actions">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>systemColdRestart:</string>
+							<string>systemDebuggerBreak:</string>
+							<string>systemPowerDown:</string>
+							<string>systemSleep:</string>
+							<string>systemWakeUp:</string>
+							<string>systemWarmRestart:</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+						</object>
+					</object>
+					<object class="NSMutableDictionary" key="actionInfosByName">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>systemColdRestart:</string>
+							<string>systemDebuggerBreak:</string>
+							<string>systemPowerDown:</string>
+							<string>systemSleep:</string>
+							<string>systemWakeUp:</string>
+							<string>systemWarmRestart:</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<object class="IBActionInfo">
+								<string key="name">systemColdRestart:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">systemDebuggerBreak:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">systemPowerDown:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">systemSleep:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">systemWakeUp:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">systemWarmRestart:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+						</object>
+					</object>
+					<object class="NSMutableDictionary" key="outlets">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>fCanvasView</string>
+							<string>fScrollView</string>
+							<string>fToolbarView</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>CanvasView</string>
+							<string>id</string>
+							<string>id</string>
+						</object>
+					</object>
+					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>fCanvasView</string>
+							<string>fScrollView</string>
+							<string>fToolbarView</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<object class="IBToOneOutletInfo">
+								<string key="name">fCanvasView</string>
+								<string key="candidateClassName">CanvasView</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">fScrollView</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">fToolbarView</string>
+								<string key="candidateClassName">id</string>
+							</object>
+						</object>
+					</object>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">macosx/CanvasWindowController.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
@@ -3006,16 +3036,11 @@
 							<string>fDeviceBox</string>
 							<string>fDeviceButton</string>
 							<string>fDeviceImage</string>
-							<string>fDeviceState1Label</string>
-							<string>fDeviceState1Value</string>
-							<string>fDeviceState2Label</string>
-							<string>fDeviceState2Value</string>
-							<string>fDeviceState3Label</string>
-							<string>fDeviceState3Value</string>
-							<string>fDeviceState4Label</string>
-							<string>fDeviceState4Value</string>
+							<string>fDeviceLocationValue</string>
+							<string>fDeviceStateValue</string>
 							<string>fOutlineView</string>
 							<string>fSplitView</string>
+							<string>fStatusLabelView</string>
 							<string>fTableKeyColumn</string>
 							<string>fTableValueColumn</string>
 							<string>fTableView</string>
@@ -3027,13 +3052,8 @@
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
 							<string>EmulationOutlineView</string>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -3047,16 +3067,11 @@
 							<string>fDeviceBox</string>
 							<string>fDeviceButton</string>
 							<string>fDeviceImage</string>
-							<string>fDeviceState1Label</string>
-							<string>fDeviceState1Value</string>
-							<string>fDeviceState2Label</string>
-							<string>fDeviceState2Value</string>
-							<string>fDeviceState3Label</string>
-							<string>fDeviceState3Value</string>
-							<string>fDeviceState4Label</string>
-							<string>fDeviceState4Value</string>
+							<string>fDeviceLocationValue</string>
+							<string>fDeviceStateValue</string>
 							<string>fOutlineView</string>
 							<string>fSplitView</string>
+							<string>fStatusLabelView</string>
 							<string>fTableKeyColumn</string>
 							<string>fTableValueColumn</string>
 							<string>fTableView</string>
@@ -3076,35 +3091,11 @@
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBToOneOutletInfo">
-								<string key="name">fDeviceState1Label</string>
+								<string key="name">fDeviceLocationValue</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBToOneOutletInfo">
-								<string key="name">fDeviceState1Value</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">fDeviceState2Label</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">fDeviceState2Value</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">fDeviceState3Label</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">fDeviceState3Value</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">fDeviceState4Label</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">fDeviceState4Value</string>
+								<string key="name">fDeviceStateValue</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBToOneOutletInfo">
@@ -3113,6 +3104,10 @@
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">fSplitView</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">fStatusLabelView</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBToOneOutletInfo">

@@ -178,10 +178,8 @@ public:
 	
 	void setFormat(OEImageFormat format);
 	OEImageFormat getFormat();
-	
 	void setSize(OESize size);
 	OESize getSize();
-	
 	int getBytesPerPixel();
 	int getBytesPerLine();
 	char *getPixels();

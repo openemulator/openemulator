@@ -1189,6 +1189,8 @@ void OpenGLCanvas::drawPaperCanvas()
 	glLoadIdentity();
 	glRotatef(180, 1, 0, 0);
 	
+	glColor4f(1, 1, 1, 1);
+	
 	int startIndex = OEMinY(viewportCanvas) / PAPER_SLICE;
 	int endIndex = OEMaxY(viewportCanvas) / PAPER_SLICE;
 	for (int i = startIndex; i <= endIndex; i++)
@@ -1716,6 +1718,9 @@ bool OpenGLCanvas::postImage(OEImage *theImage)
 			OERect bRect = OEMakeRect(printHead.x, printHead.y,
 									  imageSize.width, imageSize.height);
 			OERect unionRect = OEUnionRect(aRect, bRect);
+			
+			if (OEIsEmptyRect(bRect))
+				image.setFormat(theImage->getFormat());
 			image.setSize(unionRect.size);
 			image.overlay(printHead, *theImage);
 			isImageUpdated = true;

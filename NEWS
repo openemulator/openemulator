@@ -1,4 +1,8 @@
 ==2011-05==
+* Fixed paper canvas display problem, glColor was not set
+* Improved device mount logic: all storages are first tried for available, if none is available, the first is selected for remounting
+* Implemented multi-storage devices
+* Improved overlay
 * Improved OpenGLCanvas configuration logic
 * Implemented paper canvas postImage
 * Implemented OEImage overlay and clipping

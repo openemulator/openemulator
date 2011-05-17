@@ -134,7 +134,7 @@
 	NSString *stateLabel = @"";
 	BOOL isEnabled = YES;
 	
-	BOOL isStorageDevice = NO;
+	BOOL hasStorages = NO;
 	BOOL isMount = NO;
 	BOOL hasCanvases = NO;
 	
@@ -147,7 +147,7 @@
 			locationLabel = NSLocalizedString(@"Built-in", @"Emulation Value.");
 		stateLabel = NSLocalizedString([selectedItem stateLabel],
 									   @"Emulation Value.");
-		isStorageDevice = [selectedItem isStorageDevice];
+		hasStorages = [selectedItem hasStorages];
 		isMount = [selectedItem isMount];
 		hasCanvases = [selectedItem hasCanvases];
 	}
@@ -158,7 +158,7 @@
 	[fDeviceLocationValue setStringValue:locationLabel];
 	[fDeviceStateValue setStringValue:stateLabel];
 	
-	if (isStorageDevice)
+	if (hasStorages)
 	{
 		[fDeviceButton setTitle:NSLocalizedString(@"Open...",
 												  @"Emulation Button Label.")];
@@ -230,7 +230,7 @@
 	else if (action == @selector(showDevice:))
 		return [item hasCanvases];
 	else if (action == @selector(openDiskImage:))
-		return [item isStorageDevice];
+		return [item hasStorages];
 	else if (action == @selector(unmount:))
 		return [item isMount];
 	else if (action == @selector(revealInFinder:))
@@ -466,7 +466,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				  proposedItem:(id)item
 			proposedChildIndex:(NSInteger)index
 {
-	if (![item isStorageDevice] || (index != -1))
+	if (![item hasStorages] || (index != -1))
 		return NSDragOperationNone;
 	
 	DocumentController *documentController;
@@ -495,7 +495,9 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	NSString *path = [[pasteboard propertyListForType:NSFilenamesPboardType]
 					  objectAtIndex:0];
 	
-	return [self mount:path inItem:item];
+	[self mount:path inItem:item];
+	
+	return YES;
 }
 
 
@@ -553,7 +555,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	{
 		EmulationItem *item = [fOutlineView itemAtRow:clickedRow];
 		
-		if ([item isStorageDevice])
+		if ([item hasStorages])
 			[self openDiskImage:sender];
 		else if ([item hasCanvases])
 			[self showDevice:sender];
@@ -640,24 +642,47 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
 
 
 
-- (BOOL)forceMount:(NSString *)path inItem:(EmulationItem *)item
+- (IBAction)buttonAction:(id)sender
 {
-	if (![item mount:path])
-	{
-		NSBeginAlertSheet([NSString localizedStringWithFormat:
-						   @"The document \u201C%@\u201D can't be mounted "
-						   "in \u201C%@\u201D.",
-						   [path lastPathComponent], [item label]],
-						  nil, nil, nil,
-						  [self window],
-						  self, nil, nil, nil,
-						  [NSString localizedStringWithFormat:
-						   @"Try mounting the document in some other device."]);
-		
-		return NO;
-	}
+	EmulationItem *item = [self itemForSender:sender];
 	
-	return YES;
+	if ([item hasStorages])
+		[self openDiskImage:sender];
+	else if ([item isMount])
+		[self unmount:sender];
+	else if ([item hasCanvases])
+		[self showDevice:sender];
+}
+
+- (IBAction)openDiskImage:(id)sender
+{
+	NSOpenPanel *panel = [NSOpenPanel openPanel];
+	DocumentController *documentController;
+	documentController = [NSDocumentController sharedDocumentController];
+	NSArray *fileTypes = [documentController diskImagePathExtensions];
+	
+	[panel beginSheetForDirectory:nil
+							 file:nil
+							types:fileTypes
+				   modalForWindow:[self window]
+					modalDelegate:self
+				   didEndSelector:@selector(openPanelDidEnd:returnCode:contextInfo:)
+					  contextInfo:[self itemForSender:sender]];
+}
+
+- (void)openPanelDidEnd:(NSOpenPanel *)panel
+			 returnCode:(int)returnCode
+			contextInfo:(void *)contextInfo
+{
+	if (returnCode == NSOKButton)
+	{
+		NSString *path = [[panel URL] path];
+		[panel close];
+		
+		EmulationItem *item = contextInfo;
+		
+		[self mount:path inItem:item];
+	}
 }
 
 - (BOOL)mount:(NSString *)path inItem:(EmulationItem *)item
@@ -708,60 +733,24 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
 	[dict release];
 }
 
-- (IBAction)buttonAction:(id)sender
+- (BOOL)forceMount:(NSString *)path inItem:(EmulationItem *)item
 {
-	EmulationItem *item = [self itemForSender:sender];
-	
-	if ([item isStorageDevice])
-		[self openDiskImage:sender];
-	else if ([item isMount])
-		[self unmount:sender];
-	else if ([item hasCanvases])
-		[self showDevice:sender];
-}
-
-- (IBAction)showDevice:(id)sender
-{
-	EmulationItem *item = [self itemForSender:sender];
-	
-	[item showCanvases];
-}
-
-- (IBAction)revealInFinder:(id)sender
-{
-	EmulationItem *item = [self itemForSender:sender];
-	
-	[item revealInFinder];
-}
-
-- (IBAction)openDiskImage:(id)sender
-{
-	NSOpenPanel *panel = [NSOpenPanel openPanel];
-	DocumentController *documentController;
-	documentController = [NSDocumentController sharedDocumentController];
-	NSArray *fileTypes = [documentController diskImagePathExtensions];
-	
-	[panel beginSheetForDirectory:nil
-							 file:nil
-							types:fileTypes
-				   modalForWindow:[self window]
-					modalDelegate:self
-				   didEndSelector:@selector(openPanelDidEnd:returnCode:contextInfo:)
-					  contextInfo:[self itemForSender:sender]];
-}
-
-- (void)openPanelDidEnd:(NSOpenPanel *)panel
-			 returnCode:(int)returnCode
-			contextInfo:(void *)contextInfo
-{
-	if (returnCode == NSOKButton)
+	if (![item mount:path])
 	{
-		NSString *path = [[panel URL] path];
-		[panel close];
+		NSBeginAlertSheet([NSString localizedStringWithFormat:
+						   @"The document \u201C%@\u201D can't be mounted "
+						   "in \u201C%@\u201D.",
+						   [path lastPathComponent], [item label]],
+						  nil, nil, nil,
+						  [self window],
+						  self, nil, nil, nil,
+						  [NSString localizedStringWithFormat:
+						   @"Try mounting the document in some other device."]);
 		
-		EmulationItem *item = contextInfo;
-		[self mount:path inItem:item];
+		return NO;
 	}
+	
+	return YES;
 }
 
 - (IBAction)unmount:(id)sender
@@ -795,8 +784,23 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
 			   contextInfo:(void *)contextInfo
 {
 	EmulationItem *item = contextInfo;
+	
 	if (returnCode == NSAlertAlternateReturn)
 		[item unmount];
+}
+
+- (IBAction)showDevice:(id)sender
+{
+	EmulationItem *item = [self itemForSender:sender];
+	
+	[item showCanvases];
+}
+
+- (IBAction)revealInFinder:(id)sender
+{
+	EmulationItem *item = [self itemForSender:sender];
+	
+	[item revealInFinder];
 }
 
 - (IBAction)delete:(id)sender

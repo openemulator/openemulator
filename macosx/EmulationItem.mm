@@ -133,12 +133,14 @@
 		for (int i = 0; i < theCanvases.size(); i++)
 			[canvases addObject:[NSValue valueWithPointer:theCanvases.at(i)]];
 		
-		// Update storage devices
+		// Read storages
+		storages = [[NSMutableArray alloc] init];
 		OEComponents theStorages;
 		((OEComponent *)device)->postMessage(NULL, DEVICE_GET_STORAGES, &theStorages);
 		for (int i = 0; i < theStorages.size(); i++)
 		{
 			OEComponent *theStorage = theStorages.at(i);
+			[storages addObject:[NSValue valueWithPointer:theStorage]];
 			
 			theStorage->postMessage(NULL, STORAGE_GET_MOUNTPATH, &value);
 			if (value.size())
@@ -181,7 +183,8 @@
 		((OEComponent *)theStorage)->postMessage(NULL, STORAGE_GET_STATELABEL, &value);
 		stateLabel = [getNSString(value) retain];
 		
-		storage = theStorage;
+		storages = [[NSMutableArray alloc] init];
+		[storages addObject:[NSValue valueWithPointer:theStorage]];
 	}
 	
 	return self;
@@ -205,6 +208,7 @@
 	[settingsOptions release];
 	
 	[canvases release];
+	[storages release];
 	
 	[super dealloc];
 }
@@ -346,7 +350,7 @@
 	if (canvases)
 		return [canvases count];
 	
-	return false;
+	return NO;
 }
 
 - (void)showCanvases
@@ -358,20 +362,51 @@
 
 
 
-- (BOOL)isStorageDevice
+- (BOOL)hasStorages
 {
-	return (type == EMULATIONITEM_DEVICE) && (storage != nil);
+	if ((type == EMULATIONITEM_DEVICE) && [storages count])
+		return YES;
+	
+	return NO;
 }
 
 - (BOOL)mount:(NSString *)path
 {
-	if (!storage)
+	if (!storages)
 		return NO;
 	
-	string value = getCPPString(path);
-	bool success;
 	[document lockEmulation];
-	success = ((OEComponent *)storage)->postMessage(NULL, STORAGE_MOUNT, &value);
+	
+	string value = getCPPString(path);
+	BOOL success = NO;
+	for (int i = 0; i < [storages count]; i++)
+	{
+		OEComponent *component = (OEComponent *)[[storages objectAtIndex:i]
+												 pointerValue];
+		
+		if (component->postMessage(NULL, STORAGE_IS_AVAILABLE, NULL))
+		{
+			success = component->postMessage(NULL, STORAGE_MOUNT, &value);
+			
+			if (success)
+				break;
+		}
+	}
+	
+	if (!success)
+	{
+		for (int i = 0; i < [storages count]; i++)
+		{
+			OEComponent *component = (OEComponent *)[[storages objectAtIndex:i]
+													 pointerValue];
+			
+			success = component->postMessage(NULL, STORAGE_MOUNT, &value);
+			
+			if (success)
+				break;
+		}
+	}
+	
 	[document unlockEmulation];
 	
 	return success;
@@ -379,13 +414,24 @@
 
 - (BOOL)testMount:(NSString *)path
 {
-	if (!storage)
+	if (!storages)
 		return NO;
 	
-	string value = getCPPString(path);
-	bool success;
 	[document lockEmulation];
-	success = ((OEComponent *)storage)->postMessage(NULL, STORAGE_TESTMOUNT, &value);
+	
+	string value = getCPPString(path);
+	BOOL success = NO;
+	for (int i = 0; i < [storages count]; i++)
+	{
+		OEComponent *component = (OEComponent *)[[storages objectAtIndex:i]
+												 pointerValue];
+				
+		success = component->postMessage(NULL, STORAGE_TESTMOUNT, &value);
+		
+		if (success)
+			break;
+	}
+	
 	[document unlockEmulation];
 	
 	return success;
@@ -400,26 +446,42 @@
 
 - (void)revealInFinder
 {
-	if (!storage)
+	if (!storages)
 		return;
 	
 	string value;
-	[document lockEmulation];
-	((OEComponent *)storage)->postMessage(NULL, STORAGE_GET_MOUNTPATH, &value);
-	[document unlockEmulation];
-	
-	[[NSWorkspace sharedWorkspace] selectFile:getNSString(value)
-					 inFileViewerRootedAtPath:@""];
+	for (int i = 0; i < [storages count]; i++)
+	{
+		OEComponent *component = (OEComponent *)[[storages objectAtIndex:i]
+												 pointerValue];
+		
+		[document lockEmulation];
+		
+		component->postMessage(NULL, STORAGE_GET_MOUNTPATH, &value);
+		
+		[document unlockEmulation];
+		
+		[[NSWorkspace sharedWorkspace] selectFile:getNSString(value)
+						 inFileViewerRootedAtPath:@""];
+	}
 }
 
 - (BOOL)isLocked
 {
-	if (!storage)
+	if (!storages)
 		return NO;
 	
-	BOOL success;
 	[document lockEmulation];
-	success = ((OEComponent *)storage)->postMessage(NULL, STORAGE_IS_LOCKED, NULL);
+	
+	BOOL success = NO;
+	for (int i = 0; i < [storages count]; i++)
+	{
+		OEComponent *component = (OEComponent *)[[storages objectAtIndex:i]
+												 pointerValue];
+		
+		success |= component->postMessage(NULL, STORAGE_IS_LOCKED, NULL);
+	}
+	
 	[document unlockEmulation];
 	
 	return success;
@@ -427,11 +489,19 @@
 
 - (void)unmount
 {
-	if (!storage)
+	if (!storages)
 		return;
 	
 	[document lockEmulation];
-	((OEComponent *)storage)->postMessage(NULL, STORAGE_UNMOUNT, NULL);
+	
+	for (int i = 0; i < [storages count]; i++)
+	{
+		OEComponent *component = (OEComponent *)[[storages objectAtIndex:i]
+												 pointerValue];
+		
+		component->postMessage(NULL, STORAGE_UNMOUNT, NULL);
+	}
+	
 	[document unlockEmulation];
 	
 	return;

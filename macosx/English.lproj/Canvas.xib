@@ -12,7 +12,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="100133"/>
+			<integer value="100152"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -225,20 +225,20 @@
 					<int key="connectionID">100160</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">printDocument:</string>
-						<reference key="source" ref="613418571"/>
-						<reference key="destination" ref="986900264"/>
-					</object>
-					<int key="connectionID">100162</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">delegate</string>
 						<reference key="source" ref="275939982"/>
 						<reference key="destination" ref="1034993782"/>
 					</object>
 					<int key="connectionID">100163</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">printDocument:</string>
+						<reference key="source" ref="613418571"/>
+						<reference key="destination" ref="986900264"/>
+					</object>
+					<int key="connectionID">100166</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -432,7 +432,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">100163</int>
+			<int key="maxID">100166</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -448,6 +448,17 @@
 				<object class="IBPartialClassDescription">
 					<string key="className">CanvasView</string>
 					<string key="superclassName">NSOpenGLView</string>
+					<object class="NSMutableDictionary" key="actions">
+						<string key="NS.key.0">printCanvas:</string>
+						<string key="NS.object.0">id</string>
+					</object>
+					<object class="NSMutableDictionary" key="actionInfosByName">
+						<string key="NS.key.0">printCanvas:</string>
+						<object class="IBActionInfo" key="NS.object.0">
+							<string key="name">printCanvas:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">macosx/CanvasView.h</string>

@@ -336,16 +336,27 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	}
 }
 
-- (NSPrintOperation *)printOperationWithSettings:(NSDictionary *)printSettings
-										   error:(NSError **)outError
+- (void)printDocument:(id)sender
 {
-	NSLog(@"Document printOperationWithSettings");
-	
-	return [super printOperationWithSettings:printSettings
-									   error:outError];
+	NSPrintOperation *op = [NSPrintOperation printOperationWithView:[[NSApp mainWindow] contentView]
+														  printInfo:[self printInfo]];
+	[op runOperationModalForWindow:[NSApp mainWindow]
+						  delegate:self
+					didRunSelector:@selector(printOperationDidRun:success:contextInfo:)
+					   contextInfo:NULL];
 }
 
-// Emulation
+- (void)printOperationDidRun:(NSPrintOperation *)printOperation
+					 success:(BOOL)success
+				 contextInfo:(void *)info
+{
+	if (success)
+	{
+		// Can save updated NSPrintInfo, but only if you have
+		// a specific reason for doing so
+		// [self setPrintInfo:[printOperation printInfo]];
+	}
+}
 
 - (void)createEmulation:(NSURL *)url
 {

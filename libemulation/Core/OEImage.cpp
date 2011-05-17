@@ -153,23 +153,27 @@ void OEImage::overlay(OEPoint origin, OEImage& image)
 							 imageSize.height);
 	rect = OEIntersectionRect(rect, OEMakeRect(0, 0, size.width, size.height));
 	
+	bool isAlpha = (image.getFormat() == OEIMAGE_RGBA);
+	
 	int srcBytesPerLine = image.getBytesPerLine();
 	int srcOffset = ((rect.origin.y - origin.y) * srcBytesPerLine +
 					 (rect.origin.x - origin.y) * image.getBytesPerPixel());
-	char *src = image.getPixels() + srcOffset;
+	unsigned char *src = (unsigned char *)image.getPixels() + srcOffset;
 	int dstBytesPerLine = getBytesPerLine();
 	int dstOffset = (rect.origin.y * srcBytesPerLine +
 					 rect.origin.x * getBytesPerPixel());
-	char *dst = getPixels() + dstOffset;
+	unsigned char *dst = (unsigned char *)getPixels() + dstOffset;
 	int n = (int)OEWidth(rect) * getBytesPerPixel();
 	
 	for (int y = 0; y < OEHeight(rect); y++)
 	{
 		for (int i = 0; i < n; i++)
 		{
-			int temp = src[i] + dst[i];
-			if (temp > 0xff)
-				temp = 0xff;
+			if (isAlpha && !(~i & 0x3))
+				continue;
+			int temp = src[i] + dst[i] - 255;
+			if (temp < 0)
+				temp = 0;
 			dst[i] = temp;
 		}
 		src += srcBytesPerLine;

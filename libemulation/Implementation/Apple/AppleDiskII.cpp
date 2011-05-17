@@ -77,8 +77,10 @@ bool AppleDiskII::postMessage(OEComponent *sender, int message, void *data)
 	{
 		case STORAGE_IS_AVAILABLE:
 			return !image.size();
+			
 		case STORAGE_TESTMOUNT:
 			return true;
+			
 		case STORAGE_MOUNT:
 			if (data)
 			{
@@ -90,12 +92,14 @@ bool AppleDiskII::postMessage(OEComponent *sender, int message, void *data)
 				return true;
 			}
 			break;
+			
 		case STORAGE_UNMOUNT:
 			image = "";
 			
 			device->postMessage(this, DEVICE_UPDATE, NULL);
 			
 			return true;
+			
 		case STORAGE_GET_MOUNTPATH:
 			if (data)
 			{
@@ -105,6 +109,10 @@ bool AppleDiskII::postMessage(OEComponent *sender, int message, void *data)
 				return true;
 			}
 			break;
+			
+		case STORAGE_IS_LOCKED:
+			return true;
+			
 		case STORAGE_GET_STATELABEL:
 			if (data)
 			{
@@ -114,8 +122,6 @@ bool AppleDiskII::postMessage(OEComponent *sender, int message, void *data)
 				return true;
 			}
 			break;
-		case STORAGE_IS_LOCKED:
-			return true;
 	}
 	
 	return false;

@@ -42,8 +42,7 @@ typedef enum
 	NSMutableArray *settingsOptions;
 	
 	NSMutableArray *canvases;
-	
-	void *storage;
+	NSMutableArray *storages;
 }
 
 - (id)initRootWithDocument:(Document *)theDocument;
@@ -79,7 +78,7 @@ typedef enum
 - (BOOL)hasCanvases;
 - (void)showCanvases;
 
-- (BOOL)isStorageDevice;
+- (BOOL)hasStorages;
 - (BOOL)mount:(NSString *)path;
 - (BOOL)testMount:(NSString *)path;
 
