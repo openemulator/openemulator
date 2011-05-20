@@ -77,11 +77,11 @@ public:
 	OESize getDefaultViewportSize();
 	void setViewportSize(OESize size);
 	
-	float getClipOrigin();
-	float getClipSize();
-	void scroll(float origin);
+	OESize getSize();
+	OESize getPixelDensity();
+	OERect getClipRect();
+	void scrollPoint(OEPoint aPoint);
 	
-	OESize getPagePixelDensity();
 	int getPageNumber();
 	OEImage getPage(int index);
 	
@@ -129,7 +129,7 @@ private:
 	CanvasCaptureMode captureMode;
 	
 	OESize viewportSize;
-	float clipOrigin;
+	OEPoint clipOrigin;
 	bool isImageUpdated;
 	OEImage image;
 	bool isConfigurationUpdated;

@@ -87,6 +87,7 @@
 		00B5CB95136F0B6D007A7BED /* AppleSilentype.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B5CB93136F0B6C007A7BED /* AppleSilentype.h */; };
 		00B974B410701DDA00BD1402 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = 00B974AD10701DCD00BD1402 /* sounds */; };
 		00BB34B412C5C5AE007332B5 /* EmulationItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00BB34B312C5C5AE007332B5 /* EmulationItem.mm */; };
+		00BDB1F713863188004DF2AF /* CanvasPrintView.m in Sources */ = {isa = PBXBuildFile; fileRef = 00BDB1F613863188004DF2AF /* CanvasPrintView.m */; };
 		00C6C0C110602151004D084B /* roms in Resources */ = {isa = PBXBuildFile; fileRef = 00C6C08810602151004D084B /* roms */; };
 		00CAD7D912A04C22002B92E5 /* Emulation.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00CAD7D712A04C22002B92E5 /* Emulation.xib */; };
 		00D226051350F9A100FC69B9 /* AudioInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D225FA1350F9A100FC69B9 /* AudioInterface.h */; };
@@ -372,6 +373,8 @@
 		00B974AD10701DCD00BD1402 /* sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; path = sounds; sourceTree = "<group>"; };
 		00BB34B212C5C5AE007332B5 /* EmulationItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmulationItem.h; sourceTree = "<group>"; };
 		00BB34B312C5C5AE007332B5 /* EmulationItem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EmulationItem.mm; sourceTree = "<group>"; };
+		00BDB1F513863188004DF2AF /* CanvasPrintView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanvasPrintView.h; sourceTree = "<group>"; };
+		00BDB1F613863188004DF2AF /* CanvasPrintView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CanvasPrintView.m; sourceTree = "<group>"; };
 		00C6C08810602151004D084B /* roms */ = {isa = PBXFileReference; lastKnownFileType = folder; path = roms; sourceTree = "<group>"; };
 		00CAD7D812A04C22002B92E5 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Emulation.xib; sourceTree = "<group>"; };
 		00D225FA1350F9A100FC69B9 /* AudioInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioInterface.h; sourceTree = "<group>"; };
@@ -810,6 +813,8 @@
 				00391CB212D3A320002C5ABD /* LibraryWindowController.m */,
 				0073DD8D136FCA1C00087303 /* CanvasToolbarView.h */,
 				0073DD8E136FCA1C00087303 /* CanvasToolbarView.m */,
+				00BDB1F513863188004DF2AF /* CanvasPrintView.h */,
+				00BDB1F613863188004DF2AF /* CanvasPrintView.m */,
 			);
 			name = Sources;
 			path = macosx;
@@ -1172,6 +1177,7 @@
 				00F35D7312EF049B0027B9E4 /* EmulationOutlineView.m in Sources */,
 				0073DD9F136FCC1100087303 /* CanvasToolbarView.m in Sources */,
 				006B5CD013826D0700EEB5BC /* CanvasWindow.m in Sources */,
+				00BDB1F713863188004DF2AF /* CanvasPrintView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

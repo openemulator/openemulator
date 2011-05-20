@@ -1,5 +1,7 @@
 ==2011-05==
-* Fixed paper canvas display problem, glColor was not set
+* Implemented canvas printing
+* Disabled printing for emulation window
+* Improved CanvasView so it updates the canvas on initialization
 * Improved device mount logic: all storages are first tried for available, if none is available, the first is selected for remounting
 * Implemented multi-storage devices
 * Improved overlay

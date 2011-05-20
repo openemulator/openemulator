@@ -43,9 +43,14 @@
 	return canvas;
 }
 
-- (void)freeOpenGL
+- (void)closeWindow
 {
 	[fCanvasView freeOpenGL];
+}
+
+- (CanvasView *)canvasView
+{
+	return fCanvasView;
 }
 
 // User Interface

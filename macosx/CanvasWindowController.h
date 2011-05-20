@@ -28,7 +28,8 @@
 			   title:(NSString *)theTitle
 			  canvas:(void *)theCanvas;
 - (void *)canvas;
-- (void)freeOpenGL;
+- (void)closeWindow;
+- (CanvasView *)canvasView;
 
 - (void)systemPowerDown:(id)sender;
 - (void)systemSleep:(id)sender;

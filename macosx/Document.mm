@@ -301,7 +301,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 		canvasWindowController = [canvasWindowControllers objectAtIndex:i];
 		if ([canvasWindowController canvas] == canvas)
 		{
-			[canvasWindowController freeOpenGL];
+			[canvasWindowController closeWindow];
 			
 			[self removeWindowController:canvasWindowController];
 			[canvasWindowControllers removeObjectAtIndex:i];
@@ -336,26 +336,34 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	}
 }
 
-- (void)printDocument:(id)sender
+- (BOOL)validateUserInterfaceItem:(id <NSValidatedUserInterfaceItem >)anItem
 {
-	NSPrintOperation *op = [NSPrintOperation printOperationWithView:[[NSApp mainWindow] contentView]
-														  printInfo:[self printInfo]];
-	[op runOperationModalForWindow:[NSApp mainWindow]
-						  delegate:self
-					didRunSelector:@selector(printOperationDidRun:success:contextInfo:)
-					   contextInfo:NULL];
+	SEL action = [anItem action];
+	
+	if (action == @selector(runPageLayout:))
+		return ([[NSApp mainWindow] windowController] !=
+				emulationWindowController);
+	else if (action == @selector(printDocument:))
+		return ([[NSApp mainWindow] windowController] !=
+				emulationWindowController);
+	
+	return YES;
 }
 
-- (void)printOperationDidRun:(NSPrintOperation *)printOperation
-					 success:(BOOL)success
-				 contextInfo:(void *)info
+- (void)printDocument:(id)sender
 {
-	if (success)
-	{
-		// Can save updated NSPrintInfo, but only if you have
-		// a specific reason for doing so
-		// [self setPrintInfo:[printOperation printInfo]];
-	}
+	CanvasWindowController *windowController = [[NSApp mainWindow] windowController];
+	
+	if (![windowController respondsToSelector:@selector(canvasView)])
+		return;
+	
+	CanvasView *view = [windowController canvasView];
+	
+	NSPrintOperation *op = [NSPrintOperation printOperationWithView:view];
+	[op runOperationModalForWindow:[NSApp mainWindow]
+						  delegate:self
+					didRunSelector:NULL
+					   contextInfo:NULL];
 }
 
 - (void)createEmulation:(NSURL *)url

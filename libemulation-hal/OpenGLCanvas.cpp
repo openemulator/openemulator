@@ -136,53 +136,68 @@ void OpenGLCanvas::setViewportSize(OESize size)
 	unlock();
 }
 
-float OpenGLCanvas::getClipOrigin()
+OESize OpenGLCanvas::getSize()
 {
-	float theClipOrigin;
-	
-	lock();
-	
-	theClipOrigin = clipOrigin;
-	
-	unlock();
-	
-	return theClipOrigin;
-}
-
-float OpenGLCanvas::getClipSize()
-{
-	float clipSize;
+	OESize size;
 	
 	lock();
 	
 	if (mode == CANVAS_MODE_DISPLAY)
-		clipSize = 1;
+		size = displayConfiguration.displayResolution;
+	else if (mode == CANVAS_MODE_PAPER)
+		size = image.getSize();
+	else if (mode == CANVAS_MODE_OPENGL)
+		size = viewportSize;
+	
+	unlock();
+	
+	return size;
+}
+
+OERect OpenGLCanvas::getClipRect()
+{
+	OERect rect;
+	
+	lock();
+	
+	if (mode == CANVAS_MODE_DISPLAY)
+	{
+		rect.origin = OEMakePoint(0, 0);
+		rect.size = displayConfiguration.displayResolution;
+	}
 	else if (mode == CANVAS_MODE_PAPER)
 	{
 		float pixelDensityRatio = (paperConfiguration.pagePixelDensity.width /
 								   paperConfiguration.pagePixelDensity.height);
-		float viewportCanvasHeight = (viewportSize.width * image.getSize().height / 
-									  image.getSize().width * pixelDensityRatio);
-		clipSize = viewportSize.height / viewportCanvasHeight;
+		float clipHeight = (viewportSize.height * image.getSize().width /
+							viewportSize.width / pixelDensityRatio);
+		rect.origin = clipOrigin;
+		rect.size = OEMakeSize(image.getSize().width,
+							   clipHeight);
+		
+		unlock();
 	}
 	else if (mode == CANVAS_MODE_OPENGL)
-		clipSize = 1;
+	{
+		rect.origin = OEMakePoint(0, 0);
+		rect.size = viewportSize;
+	}
 	
 	unlock();
 	
-	return clipSize;
+	return rect;
 }
 
-void OpenGLCanvas::scroll(float origin)
+void OpenGLCanvas::scrollPoint(OEPoint aPoint)
 {
 	lock();
 	
-	clipOrigin = origin;
+	clipOrigin = aPoint;
 	
 	unlock();
 }
 
-OESize OpenGLCanvas::getPagePixelDensity()
+OESize OpenGLCanvas::getPixelDensity()
 {
 	OESize pixelDensity;
 	
@@ -208,7 +223,13 @@ int OpenGLCanvas::getPageNumber()
 
 OEImage OpenGLCanvas::getPage(int index)
 {
-	return OEImage();
+	OESize size = getSize();
+	
+	return image.getClip(OEMakeRect(0,
+									0,
+									size.width,
+									size.height))
+	;
 }
 
 bool OpenGLCanvas::vsync()
@@ -1096,6 +1117,7 @@ void OpenGLCanvas::drawDisplayCanvas()
 	glLoadIdentity();
 	glRotatef(180, 1, 0, 0);
 	
+	glClearColor(1, 1, 1, 1);
 	glBlendFunc(GL_ONE, GL_SRC_ALPHA);
 	
 	int startIndex = ((isShaderActive &&
@@ -1178,7 +1200,7 @@ void OpenGLCanvas::drawPaperCanvas()
 	float canvasViewportHeight = (viewportSize.height * imageSize.width /
 								  viewportSize.width / pixelDensityRatio);
 	OERect viewportCanvas = OEMakeRect(0,
-									   clipOrigin * imageSize.height,
+									   clipOrigin.y,
 									   imageSize.width,
 									   canvasViewportHeight);
 	
@@ -1188,8 +1210,6 @@ void OpenGLCanvas::drawPaperCanvas()
 	
 	glLoadIdentity();
 	glRotatef(180, 1, 0, 0);
-	
-	glColor4f(1, 1, 1, 1);
 	
 	int startIndex = OEMinY(viewportCanvas) / PAPER_SLICE;
 	int endIndex = OEMaxY(viewportCanvas) / PAPER_SLICE;
@@ -1209,7 +1229,7 @@ void OpenGLCanvas::drawPaperCanvas()
 		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0,
 						slice.size.width, slice.size.height,
 						getGLFormat(image.getFormat()), GL_UNSIGNED_BYTE,
-						image.getPixels() + image.getBytesPerLine() *
+						image.getPixels() + image.getBytesPerRow() *
 						(int)OEMinY(slice));
 		
 		OERect textureRect = OEMakeRect(0, 0,

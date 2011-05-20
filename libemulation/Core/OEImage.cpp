@@ -45,7 +45,7 @@ OESize OEImage::getSize()
 	return size;
 }
 
-char *OEImage::getPixels()
+unsigned char *OEImage::getPixels()
 {
 	return &pixels.front();
 }
@@ -65,7 +65,7 @@ int OEImage::getBytesPerPixel()
 	return 0;
 }
 
-int OEImage::getBytesPerLine()
+int OEImage::getBytesPerRow()
 {
 	return getBytesPerPixel() * size.width;
 }
@@ -117,14 +117,14 @@ bool OEImage::readFile(string path)
 						// Copy image
 						int bytesPerPixel = ((color_type == PNG_COLOR_TYPE_RGB) ? 
 											 3 : 4);
-						int bytesPerLine = width * bytesPerPixel;
-						char **rows = (char **) png_get_rows(png, info);
-						char *pixelsp = (char *) getPixels();
+						int bytesPerRow = width * bytesPerPixel;
+						unsigned char **rows = (unsigned char **) png_get_rows(png, info);
+						unsigned char *pixelsp = (unsigned char *) getPixels();
 						
 						for (int row = 0; row < height; row++)
 						{
-							memcpy(pixelsp, rows[row], bytesPerLine);
-							pixelsp += bytesPerLine;
+							memcpy(pixelsp, rows[row], bytesPerRow);
+							pixelsp += bytesPerRow;
 						}
 						
 						result = true;
@@ -155,12 +155,12 @@ void OEImage::overlay(OEPoint origin, OEImage& image)
 	
 	bool isAlpha = (image.getFormat() == OEIMAGE_RGBA);
 	
-	int srcBytesPerLine = image.getBytesPerLine();
-	int srcOffset = ((rect.origin.y - origin.y) * srcBytesPerLine +
+	int srcBytesPerRow = image.getBytesPerRow();
+	int srcOffset = ((rect.origin.y - origin.y) * srcBytesPerRow +
 					 (rect.origin.x - origin.y) * image.getBytesPerPixel());
 	unsigned char *src = (unsigned char *)image.getPixels() + srcOffset;
-	int dstBytesPerLine = getBytesPerLine();
-	int dstOffset = (rect.origin.y * srcBytesPerLine +
+	int dstBytesPerRow = getBytesPerRow();
+	int dstOffset = (rect.origin.y * srcBytesPerRow +
 					 rect.origin.x * getBytesPerPixel());
 	unsigned char *dst = (unsigned char *)getPixels() + dstOffset;
 	int n = (int)OEWidth(rect) * getBytesPerPixel();
@@ -176,8 +176,8 @@ void OEImage::overlay(OEPoint origin, OEImage& image)
 				temp = 0;
 			dst[i] = temp;
 		}
-		src += srcBytesPerLine;
-		dst += dstBytesPerLine;
+		src += srcBytesPerRow;
+		dst += dstBytesPerRow;
 	}
 }
 
@@ -188,18 +188,18 @@ OEImage OEImage::getClip(OERect rect)
 	rect = OEIntersectionRect(rect, OEMakeRect(0, 0, size.width, size.height));
 	image.setSize(rect.size);
 	
-	int srcBytesPerLine = getBytesPerLine();
-	int srcOffset = (rect.origin.y * srcBytesPerLine +
+	int srcBytesPerRow = getBytesPerRow();
+	int srcOffset = (rect.origin.y * srcBytesPerRow +
 					 rect.origin.x * getBytesPerPixel());
-	char *src = getPixels() + srcOffset;
-	int dstBytesPerLine = image.getBytesPerLine();
-	char *dst = image.getPixels();
+	unsigned char *src = getPixels() + srcOffset;
+	int dstBytesPerRow = image.getBytesPerRow();
+	unsigned char *dst = image.getPixels();
 	
 	for (int y = 0; y < OEHeight(rect); y++)
 	{
-		memcpy(dst, src, dstBytesPerLine);
-		src += srcBytesPerLine;
-		dst += dstBytesPerLine;
+		memcpy(dst, src, dstBytesPerRow);
+		src += srcBytesPerRow;
+		dst += dstBytesPerRow;
 	}
 	
 	return image;
@@ -208,7 +208,7 @@ OEImage OEImage::getClip(OERect rect)
 void OEImage::update()
 {
 	int prevSize = pixels.size();
-	pixels.resize(getBytesPerLine() * size.height);
+	pixels.resize(getBytesPerRow() * size.height);
 	
 	int diff = pixels.size() - prevSize;
 	if (diff > 0)
@@ -217,7 +217,7 @@ void OEImage::update()
 
 bool OEImage::validatePNG(FILE *fp)
 {
-	char pngHeader[OEIMAGE_PNGSIG_BYTENUM];
+	unsigned char pngHeader[OEIMAGE_PNGSIG_BYTENUM];
 	
 	if (fread(pngHeader, 1, OEIMAGE_PNGSIG_BYTENUM, fp) !=
 		OEIMAGE_PNGSIG_BYTENUM)

@@ -1,9 +1,7 @@
 ==To-Do==
 * Fix: resize flickering
+* Fix: paper canvas is sometimes not showing
 
-* Fix: first drawRect() should invoke vsync
-* Fix scrolling+resizing so it stays on the same line
-* Implement printing with the raw canvas bitmap
 * Implement copy with raw canvas bitmap
 * Implement paper canvas delete interface
 
@@ -12,7 +10,7 @@
 * Implement OEEmulation testAddEDL
 * Implement OEEmulation addEDL
 * Implement OEEmulation removeDevice
-* Delete an device in an emulation through Edit>Delete, or CMD+BACKSPACE
+* Delete a device in an emulation through Edit>Delete, or CMD+BACKSPACE
 * Implement removal of devices in a daisy chain (when port and connector are of the same kind)
 
 * Implement disk image file locking, if the disk image is writable (flock)
@@ -21,7 +19,6 @@
 * Debugging with JTAG
 * TCP AT Modem emulation
 * Debugger commands: run/step/break/readRegister/writeRegister/readMemory/writeMemory/addTrap/removeTrap/listTraps
-
 * Implement CPU Load
 * Fix template chooser width problem, when scroll bars show and hide
 * Fix template chooser problem when the first line of items is not selected

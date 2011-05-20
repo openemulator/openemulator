@@ -60,11 +60,11 @@
 	else if ([anItem action] == @selector(fitToScreen:))
 		return isResizable;
 	else if ([anItem action] == @selector(performZoom:))
-		return isResizable;
+		return !fullscreen;
 	else if ([anItem action] == @selector(toggleToolbarShown:))
-		return isResizable;
+		return !fullscreen;
 	else if ([anItem action] == @selector(runToolbarCustomizationPalette:))
-		return isResizable;
+		return !fullscreen;
 	
 	return [super validateUserInterfaceItem:anItem];
 }

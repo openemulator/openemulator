@@ -181,8 +181,8 @@ public:
 	void setSize(OESize size);
 	OESize getSize();
 	int getBytesPerPixel();
-	int getBytesPerLine();
-	char *getPixels();
+	int getBytesPerRow();
+	unsigned char *getPixels();
 	
 	bool readFile(string path);
 	
@@ -192,7 +192,7 @@ public:
 private:
 	OEImageFormat format;
 	OESize size;
-	vector<char> pixels;
+	vector<unsigned char> pixels;
 	
 	OERect getIntRect(OERect rect);
 	void update();
