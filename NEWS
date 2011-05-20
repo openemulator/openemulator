@@ -1,4 +1,5 @@
 ==2011-05==
+* Implemented canvas copy with glReadPixels
 * Implemented canvas printing
 * Disabled printing for emulation window
 * Improved CanvasView so it updates the canvas on initialization

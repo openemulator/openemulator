@@ -44,7 +44,9 @@
 - (NSSize)defaultViewSize;
 - (void)vsync;
 
-- (NSSize)printViewSize;
+- (NSSize)pageSize;
+- (NSInteger)getPageNumber;
+- (NSBitmapImageRep *)getPage:(int)index;
 
 - (void)setKeyboardFlags:(NSInteger)theKeyboardFlags;
 - (void)synchronizeKeyboardFlags;

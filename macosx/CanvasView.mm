@@ -240,9 +240,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (BOOL)validateUserInterfaceItem:(id)anItem
 {
-//	if ([anItem action] == @selector(copy:))
-//		return ![self isPaperCanvas];
-	if ([anItem action] == @selector(paste:))
+	if ([anItem action] == @selector(copy:))
+		return ![self isPaperCanvas];
+	else if ([anItem action] == @selector(paste:))
 	{
 		NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
 		return [[pasteboard types] containsObject:NSStringPboardType];
@@ -596,16 +596,14 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	if (!isDrawingInitialized)
 	{
 		isDrawingInitialized = YES;
+		
 		if (!((OpenGLCanvas *)canvas)->vsync())
 			((OpenGLCanvas *)canvas)->draw();
-		
-		[[self openGLContext] flushBuffer];
 	}
 	else
-	{
 		((OpenGLCanvas *)canvas)->draw();
-		[[self openGLContext] flushBuffer];
-	}
+	
+	[[self openGLContext] flushBuffer];
 	
 	CGLUnlockContext(cglContextObj);
 }
@@ -631,9 +629,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 // Printing
 
-// Keyboard
-
-- (NSSize)printViewSize
+- (NSSize)pageSize
 {
 	[document lockEmulation];
 	
@@ -930,9 +926,45 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 		NSArray *pasteboardTypes = [NSArray arrayWithObjects:NSTIFFPboardType, nil];
 		[pasteboard declareTypes:pasteboardTypes owner:self];
 		
-		NSBitmapImageRep *rep = [self getPage:0];
+		NSSize size = [self visibleRect].size;
+		NSSize bufferSize = NSMakeSize(((int)size.width + 3) & ~0x3,
+									   size.height);
+		NSMutableData *buffer = [NSMutableData dataWithLength:(bufferSize.width *
+															   bufferSize.height *
+															   3)];
 		
-		[pasteboard setData:[rep TIFFRepresentation] forType:NSTIFFPboardType];
+		CGLLockContext(cglContextObj);
+		
+		[[self openGLContext] makeCurrentContext];
+		
+		glReadBuffer(GL_BACK);
+		glReadPixels(0, 0, bufferSize.width, bufferSize.height, GL_RGB, GL_UNSIGNED_BYTE,
+					 [buffer mutableBytes]);
+		
+		CGLUnlockContext(cglContextObj);
+		
+		unsigned char *planes = (unsigned char *)[buffer mutableBytes];
+		
+		NSBitmapImageRep *rep;
+		rep = [[[NSBitmapImageRep alloc] initWithBitmapDataPlanes:&planes
+													   pixelsWide:size.width
+													   pixelsHigh:size.height
+													bitsPerSample:8
+												  samplesPerPixel:3
+														 hasAlpha:NO
+														 isPlanar:NO
+												   colorSpaceName:NSDeviceRGBColorSpace
+													  bytesPerRow:(bufferSize.width * 3)
+													 bitsPerPixel:24] autorelease];
+		
+		NSImage *image = [[[NSImage alloc] init] autorelease];
+		[image addRepresentation:rep];
+		[image setFlipped:YES];
+		// This flips the rep
+		[image lockFocusOnRepresentation:rep];
+		[image unlockFocus];
+		
+		[pasteboard setData:[image TIFFRepresentation] forType:NSTIFFPboardType];
 	}
 }
 

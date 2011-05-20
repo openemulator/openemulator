@@ -2,7 +2,7 @@
 * Fix: resize flickering
 * Fix: paper canvas is sometimes not showing
 
-* Implement copy with raw canvas bitmap
+* Fix printing
 * Implement paper canvas delete interface
 
 * Implement hardware library
