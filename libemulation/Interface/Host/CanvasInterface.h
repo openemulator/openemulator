@@ -28,6 +28,7 @@
 
 // Drawing:
 // * postImage post an image to the canvas (OEImage)
+// * clear clears the canvas
 // * movePrintHead sets the print head position in paper mode (OEPoint)
 
 // Notifications:
@@ -55,7 +56,7 @@ typedef enum
 	
 	CANVAS_POST_IMAGE,
 	CANVAS_CLEAR,
-	CANVAS_SET_PRINTHEAD,
+	CANVAS_MOVE_PRINTHEAD,
 } CanvasMessage;
 
 typedef enum
