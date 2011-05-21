@@ -1,4 +1,3 @@
-
 /**
  * libemulation
  * Canvas interface
@@ -71,6 +70,7 @@ typedef enum
 	
 	CANVAS_DID_COPY,
 	CANVAS_DID_PASTE,
+  CANVAS_DID_DELETE,
 	
 	CANVAS_DID_VSYNC,
 	CANVAS_WILL_DRAW,
