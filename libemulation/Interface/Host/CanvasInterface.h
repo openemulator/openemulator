@@ -12,7 +12,7 @@
 
 #include "OEImage.h"
 
-// Messages:
+// Settings:
 // * setMode sets the canvas mode (CanvasMode):
 //   - display (fixed aspect ratio)
 //   - paper (large scrolling areas)
@@ -23,8 +23,8 @@
 
 // Configuration:
 // * configureDisplay configures a display canvas (CanvasDisplayConfiguration)
-// * configurePaper configures a display canvas (CanvasPaperConfiguration)
-// * configureOpenGL configures a display canvas (CanvasOpenGLConfiguration)
+// * configurePaper configures a paper canvas (CanvasPaperConfiguration)
+// * configureOpenGL configures an OpenGL canvas (CanvasOpenGLConfiguration)
 
 // Drawing:
 // * postImage post an image to the canvas (OEImage)
