@@ -36,17 +36,17 @@
 
 <!ELEMENT port (inlet*)>
 <!ATTLIST port id ID #REQUIRED>
-<!ATTLIST port image ID #IMPLIED>
 <!ATTLIST port ref CDATA #REQUIRED>
 <!ATTLIST port type CDATA #REQUIRED>
 <!ATTLIST port label CDATA #REQUIRED>
+<!ATTLIST port image ID #IMPLIED>
 
 <!ELEMENT connector (inlet*)>
 <!ATTLIST connector id ID #REQUIRED>
-<!ATTLIST connector image ID #IMPLIED>
 <!ATTLIST connector ref CDATA #REQUIRED>
 <!ATTLIST connector type CDATA #REQUIRED>
 <!ATTLIST connector label CDATA #REQUIRED>
+<!ATTLIST connector image ID #IMPLIED>
 
 <!ELEMENT inlet EMPTY>
 <!ATTLIST inlet ref IDREF #REQUIRED>
