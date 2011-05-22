@@ -17,7 +17,7 @@
 //   - display (fixed aspect ratio)
 //   - paper (large scrolling areas)
 //   - OpenGL (custom graphics)
-// * setCaptureMode describes how the mouse and keyboard are captured (CanvasCaptureMode)
+// * setCaptureMode describes how mouse and keyboard are captured (CanvasCaptureMode)
 // * setKeyboardFlags sets the keyboard LEDs (CanvasKeyboardFlags)
 // * setBezel sets the canvas' bezel (CanvasBezel)
 
@@ -32,15 +32,18 @@
 // * movePrintHead sets the print head position in paper mode (OEPoint)
 
 // Notifications:
-// * HID notifications are sents as CanvasHIDNotification
-// * Pointer coordinates are in resolution coordinates
+// * HID notifications use the CanvasHIDNotification structure
+// * Pointer coordinates are in image coordinates
 // * didCopy, didPaste is sent when copying/pasting (string)
+// * didDelete is sent when deleting
 // * didVSync is called from the video thread after vertical sync (CanvasVSync)
-// * willDraw is called from the video thread when the screen will be drawn (OESize)
+//   It should be used for posting images and for requesting redraw
+// * willDraw is called from the video thread when an OpenGL canvas will be
+//   drawn (OESize)
 // * HID axes are in [-1:1] coordinates
 
 // Multithreading, beware!
-// * didVSync and didUpdate are sent from the drawing thread! Keep this in mind
+// * didVSync and willDraw are sent from the drawing thread! Keep this in mind
 //   for synchronizing correctly.
 
 typedef enum
