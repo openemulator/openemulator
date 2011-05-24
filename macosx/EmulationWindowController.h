@@ -22,8 +22,9 @@ NSOutlineViewDataSource, NSComboBoxDataSource>
 	
 	IBOutlet id fDeviceBox;
 	IBOutlet id fDeviceImage;
-	IBOutlet id fDeviceLocationValue;
-	IBOutlet id fDeviceStateValue;
+	IBOutlet id fDeviceLocationLabel;
+	IBOutlet id fDeviceStateTitle;
+	IBOutlet id fDeviceStateLabel;
 	IBOutlet id fDeviceButton;
 	IBOutlet id fTableView;
 	IBOutlet id fTableKeyColumn;
@@ -44,6 +45,8 @@ NSOutlineViewDataSource, NSComboBoxDataSource>
 
 - (EmulationItem *)itemForSender:(id)sender;
 - (BOOL)selectItem:(EmulationItem *)item withUid:(NSString *)uid;
+
+- (IBAction)buttonAction:(id)sender;
 
 - (IBAction)openDiskImage:(id)sender;
 - (BOOL)mount:(NSString *)path inItem:(EmulationItem *)item;

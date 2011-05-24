@@ -26,6 +26,16 @@ bool ROM::setData(string name, OEData *data)
 	return true;
 }
 
+bool ROM::getData(string name, OEData **data)
+{
+	if (name == "image")
+		*data = &this->data;
+	else
+		return false;
+	
+	return true;
+}
+
 bool ROM::init()
 {
 	if (!data.size())

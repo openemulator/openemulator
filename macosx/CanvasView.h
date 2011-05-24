@@ -27,7 +27,8 @@
 	void *canvas;
 	
 	NSSize canvasSize;
-	BOOL isDrawingInitialized;
+	BOOL drawingInitialized;
+	BOOL needsReshape;
 	
 	NSUInteger keyMap[DEVICE_KEYMAP_SIZE];
 	NSUInteger keyModifierFlags;
@@ -44,11 +45,13 @@
 - (NSSize)defaultViewSize;
 - (void)vsync;
 
+- (NSSize)canvasSize;
 - (NSSize)pageSize;
-- (NSInteger)getPageNumber;
-- (NSBitmapImageRep *)getPage:(int)index;
+- (NSBitmapImageRep *)page:(int)index;
 
 - (void)setKeyboardFlags:(NSInteger)theKeyboardFlags;
 - (void)synchronizeKeyboardFlags;
+
+- (void)pasteString:(NSString *)text;
 
 @end

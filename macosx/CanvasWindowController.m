@@ -101,6 +101,11 @@
 	return [NSString stringWithFormat:@"%@ - %@", displayName, title];
 }
 
+- (void)pasteString:(NSString *)text
+{
+	[fCanvasView pasteString:text];
+}
+
 
 
 - (NSToolbarItem *)toolbar:(NSToolbar *)toolbar

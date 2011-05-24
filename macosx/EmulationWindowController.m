@@ -107,19 +107,42 @@
 	[uid release];
 	
 	int deviceCount = 0;
-	NSMutableArray *children = [rootItem children];
-	for (int i = 0; i < [children count]; i++)
+	int availablePortCount = 0;
+	
+	NSMutableArray *groups = [rootItem children];
+	for (int i = 0; i < [groups count]; i++)
 	{
-		EmulationItem *groupItem = [children objectAtIndex:i];
-		NSMutableArray *devices = [groupItem children];
-		deviceCount += [devices count];
+		EmulationItem *groupItem = [groups objectAtIndex:i];
+		NSMutableArray *children = [groupItem children];
+		for (int j = 0; j < [children count]; j++)
+		{
+			EmulationItem *item = [children objectAtIndex:j];
+			if (![item isPort])
+				deviceCount++;
+			else
+				availablePortCount++;
+		}
 	}
 	
-	NSString *label;
+	NSString *label = @"";
 	if (deviceCount == 1)
-		label = [NSString localizedStringWithFormat:@"1 device"];
-	else
-		label = [NSString localizedStringWithFormat: @"%d devices", deviceCount];
+		label = [label stringByAppendingString:
+				 [NSString localizedStringWithFormat:@"1 device"]];
+	else if (deviceCount > 1)
+		label = [label stringByAppendingString:
+				 [NSString localizedStringWithFormat: @"%d devices",
+				  deviceCount]];
+	
+	if (deviceCount && availablePortCount)
+		label = [label stringByAppendingString:@", "];
+	
+	if (availablePortCount == 1)
+		label = [label stringByAppendingString:
+				 [NSString localizedStringWithFormat:@"1 available port"]];
+	else if (availablePortCount > 1)
+		label = [label stringByAppendingString:
+				 [NSString localizedStringWithFormat: @"%d available ports",
+				  availablePortCount]];
 	[fStatusLabelView setStringValue:label];
 }
 
@@ -131,6 +154,7 @@
 	
 	NSImage *image = nil;
 	NSString *locationLabel = @"";
+	NSString *stateTitle = @"";
 	NSString *stateLabel = @"";
 	BOOL isEnabled = YES;
 	
@@ -145,6 +169,9 @@
 		locationLabel = [selectedItem locationLabel];
 		if (![locationLabel length])
 			locationLabel = NSLocalizedString(@"Built-in", @"Emulation Value.");
+		stateTitle = ([selectedItem isMount] ?
+					  NSLocalizedString(@"Format:", @"Emulation Format.") :
+					  NSLocalizedString(@"State:", @"Emulation State."));
 		stateLabel = NSLocalizedString([selectedItem stateLabel],
 									   @"Emulation Value.");
 		hasStorages = [selectedItem hasStorages];
@@ -155,8 +182,9 @@
 	[fDeviceBox setTitle:title];
 	
 	[fDeviceImage setImage:image];
-	[fDeviceLocationValue setStringValue:locationLabel];
-	[fDeviceStateValue setStringValue:stateLabel];
+	[fDeviceLocationLabel setStringValue:locationLabel];
+	[fDeviceStateTitle setStringValue:stateTitle];
+	[fDeviceStateLabel setStringValue:stateLabel];
 	
 	if (hasStorages)
 	{
@@ -466,24 +494,27 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				  proposedItem:(id)item
 			proposedChildIndex:(NSInteger)index
 {
-	if (![item hasStorages] || (index != -1))
-		return NSDragOperationNone;
-	
-	DocumentController *documentController;
-	documentController = [NSDocumentController sharedDocumentController];
-	
 	NSPasteboard *pasteboard = [info draggingPasteboard];
-	NSString *path = [[pasteboard propertyListForType:NSFilenamesPboardType]
-					  objectAtIndex:0];
+	if ([[pasteboard types] containsObject:NSFilenamesPboardType])
+	{
+		DocumentController *documentController;
+		documentController = [NSDocumentController sharedDocumentController];
+		
+		NSString *path = [[pasteboard propertyListForType:NSFilenamesPboardType]
+						  objectAtIndex:0];
+		
+		NSString *pathExtension = [[path pathExtension] lowercaseString];
+		if ([[documentController diskImagePathExtensions] containsObject:pathExtension])
+		{
+			if ([item hasStorages] || (index == -1))
+			{
+				if ([item testMount:path])
+					return NSDragOperationCopy;
+			}
+		}
+	}
 	
-	NSString *pathExtension = [[path pathExtension] lowercaseString];
-	if (![[documentController diskImagePathExtensions] containsObject:pathExtension])
-		return NSDragOperationNone;
-	
-	if (![item testMount:path])
-		return NSDragOperationNone;
-	
-	return NSDragOperationCopy;
+	return NSDragOperationNone;	
 }
 
 - (BOOL)outlineView:(NSOutlineView *)outlineView

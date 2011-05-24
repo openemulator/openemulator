@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
+<edl version="1.0" label="Commodore 64" image="images/Commodore/Commodore 64.png" description="">
+
+<device id="c64" label="Commodore 64" image="images/Commodore/Commodore 64.png" group="system">
+</device>
+<port id="c64.control1" ref="" type="CommodoreControl" label="Control Port 1" image="">
+</port>
+<port id="c64.control2" ref="" type="CommodoreControl" label="Control Port 2" image="">
+</port>
+<port id="c64.expansion" ref="" type="CommodoreExpansion" label="Expansion Port" image="">
+</port>
+<port id="c64.video" ref="" type="CompositeVideo" label="Video Port" image="">
+</port>
+<port id="c64.serial" ref="" type="IEEE4888" label="Serial Port" image="">
+</port>
+<port id="c64.cassette" ref="" type="CommodoreCawsette" label="Cassette Port" image="">
+</port>
+<port id="c64.user" ref="" type="CommodoreUser" label="User Port" image="">
+</port>
+
+</edl>

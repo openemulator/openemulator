@@ -4,6 +4,12 @@
 
 <device id="appleMac128" label="Macintosh 128k" image="images/Apple/Apple Macintosh.png" group="system">
 </device>
+<port id="appleMac128.disk" ref="" type="AppleMacDisk" label="Disk Port" image="">
+</port>
+<port id="appleMac128.serial" ref="" type="RS232" label="Printer Port" image="">
+</port>
+<port id="appleMac128.serial" ref="" type="RS232" label="Serial Port" image="">
+</port>
 <component id="appleMac128.monitor" class="Monitor">
     <property name="device" ref="appleMac128" />
     <property name="dummy" value="${resourcePath}/images/mac.png" />

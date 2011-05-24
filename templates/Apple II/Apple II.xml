@@ -7,37 +7,37 @@
     <setting ref="appleII.video" name="characterSet" label="Character Set" type="select" options="Standard,Videx Lowercase Chip,Pigfont" />
     <setting ref="appleII.keyboard" name="type" label="Keyboard" type="select" options="Standard,Shift-Key Mod,Full ASCII" />
 </device>
-<port id="appleII.videoPort" ref="appleMonitorII.connector" type="CompositeVideo" label="Video">
+<port id="appleII.videoPort" ref="appleMonitorII.connector" type="CompositeVideo" label="Video Port">
     <inlet ref="appleII.video" property="monitor" outletRef="monitor" />
 </port>
-<port id="appleII.slot0" ref="s0.conn" type="AppleIISlot" label="Slot 0">
+<port id="appleII.slot0" ref="s0.conn" type="AppleIISlot" label="Slot 0" image="images/Apple/Apple II Slot.png">
     <inlet ref="appleII.io" property="refSlot0" outletRef="io" />
 </port>
-<port id="appleII.slot1" ref="s1.conn" type="AppleIISlot" label="Slot 1">
+<port id="appleII.slot1" ref="s1.conn" type="AppleIISlot" label="Slot 1" image="images/Apple/Apple II Slot.png">
     <inlet ref="appleII.io" property="refSlot1" outletRef="io" />
     <inlet ref="appleII.slotMemory" property="slot1" outletRef="memory" />
 </port>
-<port id="appleII.slot2" ref="s2.conn" type="AppleIISlot" label="Slot 2">
+<port id="appleII.slot2" ref="s2.conn" type="AppleIISlot" label="Slot 2" image="images/Apple/Apple II Slot.png">
     <inlet ref="appleII.io" property="refSlot2" outletRef="io" />
     <inlet ref="appleII.slotMemory" property="slot2" outletRef="memory" />
 </port>
-<port id="appleII.slot3" ref="s3.conn" type="AppleIISlot" label="Slot 3">
+<port id="appleII.slot3" ref="s3.conn" type="AppleIISlot" label="Slot 3" image="images/Apple/Apple II Slot.png">
     <inlet ref="appleII.io" property="refSlot3" outletRef="io" />
     <inlet ref="appleII.slotMemory" property="slot3" outletRef="memory" />
 </port>
-<port id="appleII.slot4" ref="s4.conn" type="AppleIISlot" label="Slot 4">
+<port id="appleII.slot4" ref="s4.conn" type="AppleIISlot" label="Slot 4" image="images/Apple/Apple II Slot.png">
     <inlet ref="appleII.io" property="refSlot4" outletRef="io" />
     <inlet ref="appleII.slotMemory" property="slot4" outletRef="memory" />
 </port>
-<port id="appleII.slot5" ref="s5.conn" type="AppleIISlot" label="Slot 5">
+<port id="appleII.slot5" ref="s5.conn" type="AppleIISlot" label="Slot 5" image="images/Apple/Apple II Slot.png">
     <inlet ref="appleII.io" property="refSlot5" outletRef="io" />
     <inlet ref="appleII.slotMemory" property="slot5" outletRef="memory" />
 </port>
-<port id="appleII.slot6" ref="appleDiskIIInterface.connector" type="AppleIISlot" label="Slot 6">
+<port id="appleII.slot6" ref="appleDiskIIInterface.connector" type="AppleIISlot" label="Slot 6" image="images/Apple/Apple II Slot.png">
     <inlet ref="appleII.io" property="refSlot6" outletRef="io" />
     <inlet ref="appleII.slotMemory" property="slot6" outletRef="memory" />
 </port>
-<port id="appleII.slot7" ref="" type="AppleIISlot" label="Slot 7">
+<port id="appleII.slot7" ref="" type="AppleIISlot" label="Slot 7" image="images/Apple/Apple II Slot.png">
     <inlet ref="appleII.io" property="refSlot7" outletRef="io" />
     <inlet ref="appleII.slotMemory" property="slot7" outletRef="memory" />
 </port>
@@ -281,7 +281,7 @@
 
 <device id="s1" label="Apple Silentype Interface Card" image="images/Apple/Apple Synch Printer Interface Card.png" group="expansions" />
 <connector id="s1.connector" ref="appleSilentype" type="AppleIISlot" label="Interface Port" />
-<port id="s1.port" ref="appleSilentype.connector" type="AppleSilentype" label="Interface Port" />
+<port id="s1.port" ref="appleSilentype.connector" type="AppleSilentype" label="Silentype Port" />
 
 <device id="appleSilentype" label="Apple Silentype" image="images/Apple/Apple Silentype.png" group="peripherals" />
 <connector id="appleSilentype.connector" ref="s1" type="AppleIISlot" label="Slot 0" />
@@ -317,7 +317,7 @@
 
 <device id="s5" label="Apple Graphics Tablet Interface Card" image="images/Apple/Apple Graphics Tablet Interface Card.png" group="expansions" />
 <connector id="s5.connector" ref="appleGraphicsTablet" type="AppleIISlot" label="Slot 0" />
-<port id="s5.port" ref="appleGraphicsTablet.connector" type="AppleGraphicsTablet" label="Interface Port" />
+<port id="s5.port" ref="appleGraphicsTablet.connector" type="AppleGraphicsTablet" label="Graphics Tablet Port" />
 
 <device id="appleGraphicsTablet" label="Apple Graphics Tablet" image="images/Apple/Apple Graphics Tablet.png" group="peripherals" />
 <connector id="appleGraphicsTablet.connector" ref="s5" type="AppleIISlot" label="Slot 0" />

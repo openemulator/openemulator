@@ -113,7 +113,7 @@ bool AppleDiskII::postMessage(OEComponent *sender, int message, void *data)
 		case STORAGE_IS_LOCKED:
 			return true;
 			
-		case STORAGE_GET_STATELABEL:
+		case STORAGE_GET_FORMATLABEL:
 			if (data)
 			{
 				string *value = (string *)data;

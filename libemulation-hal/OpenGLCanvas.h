@@ -82,7 +82,7 @@ public:
 	OERect getClipRect();
 	void scrollPoint(OEPoint aPoint);
 	
-	int getPageNumber();
+	OESize getPageSize();
 	OEImage getPage(int index);
 	
 	bool vsync();
@@ -105,8 +105,9 @@ public:
 	void sendJoystickHatEvent(int deviceIndex, int index, float value);
 	void moveJoystickBall(int deviceIndex, int index, float value);
 	
-	void copy(string& value);
-	void paste(string value);
+	void doCopy(string& value);
+	void doPaste(string value);
+	void doDelete();
 	
 	bool postMessage(OEComponent *sender, int message, void *data);
 	void notify(OEComponent *sender, int notification, void *data);
@@ -129,6 +130,7 @@ private:
 	CanvasCaptureMode captureMode;
 	
 	OESize viewportSize;
+	bool isViewportUpdated;
 	OEPoint clipOrigin;
 	bool isImageUpdated;
 	OEImage image;
@@ -176,8 +178,6 @@ private:
 	void deleteShaders();
 	GLuint loadShader(const char *source);
 	void deleteShader(GLuint glShader);
-	
-	void updateViewportSize(OESize size);
 	
 	bool uploadImage();
 	void updateDisplayConfiguration();

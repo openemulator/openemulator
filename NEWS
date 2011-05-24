@@ -1,4 +1,11 @@
 ==2011-05==
+* Added support for canvas delete commands
+* Modified State: to Format: label for emulation item images
+* Added emulation window available port group
+* Added emulation window available port status message
+* Verified and checked dragging for all cases
+* Improved ROM so it is saved if the ROM resides in the emulation
+* Added donation window
 * Implemented canvas copy with glReadPixels
 * Implemented canvas printing
 * Disabled printing for emulation window

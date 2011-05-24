@@ -25,6 +25,8 @@
 #define LINK_DEVURL		@"http://code.google.com/p/openemulator"
 #define LINK_DONATEURL	@"http://www.openemulator.org"
 
+#define DONATION_NAG_TIME	(7 * 24 * 60 * 60)
+
 @implementation DocumentController
 
 - (id)init
@@ -142,6 +144,67 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)notification
 {
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	
+    // Shamelessly ask for donations
+    if (![userDefaults boolForKey:@"OEDonationFinished"])
+    {
+        NSDate *lastDate = [userDefaults objectForKey:@"OEDonationDate"];
+		
+		if (!lastDate || ([lastDate timeIntervalSinceNow] <= 0))
+        {
+            NSAlert *alert = [[NSAlert alloc] init];
+            [alert setMessageText: NSLocalizedString(@"Support open-source indie software",
+													 "Donation beg -> title")];
+            
+			NSString *message;
+			
+            message = [NSString stringWithFormat:@"%@\n\n%@",
+					   NSLocalizedString(@"OpenEmulator is a full-featured emulator. "
+										 "A lot of time and effort have gone into development,"
+										 "coding, and refinement. If you enjoy using it, "
+										 "please consider showing your love with a donation.",
+										 "Donation beg -> message"),
+					   NSLocalizedString(@"Donate or not, there will be no difference to"
+										 " your emulator experience.",
+										 "Donation beg -> message")];
+            
+            [alert setInformativeText:message];
+            [alert setAlertStyle:NSInformationalAlertStyle];
+            
+            [alert addButtonWithTitle:NSLocalizedString(@"Donate...",
+														"Donation beg -> button")];
+            NSButton *noButton = [alert addButtonWithTitle:
+								  NSLocalizedString(@"No thanks",
+													"Donation beg -> button")];
+			// Escape key
+            [noButton setKeyEquivalent:@"\e"];
+            
+			// Hide the "don't show again" check the first time
+			// Give them time to try the app
+			[[alert suppressionButton]
+			 setTitle:NSLocalizedString(@"Don't bug me about this ever again.",
+										"Donation beg -> button")];
+            BOOL finished = [userDefaults boolForKey:@"OEDonationNotFirstTime"];
+            if (finished)
+				[alert setShowsSuppressionButton:YES];
+			
+            const NSInteger donateResult = [alert runModal];
+            if (donateResult == NSAlertFirstButtonReturn)
+                [self openDonate:self];
+				
+            if ([[alert suppressionButton] state] == NSOnState)
+                [userDefaults setBool:YES
+							   forKey:@"OEDonationFinished"];
+            
+            [alert release];
+			
+            [userDefaults setBool:YES
+						   forKey:@"OEDonationNotFirstTime"];
+            [userDefaults setObject:[NSDate dateWithTimeIntervalSinceNow:DONATION_NAG_TIME]
+							 forKey:@"OEDonationDate"];
+        }
+    }
 }
 
 - (void)applicationWillTerminate:(NSNotification *)sender
@@ -188,8 +251,10 @@
 													usedEncoding:nil
 														   error:nil];
 		
-		[[NSApp mainWindow] performSelector:@selector(pasteText:)
-								 withObject:clipboard];
+		NSWindowController *windowController = [[NSApp mainWindow] windowController];
+		if ([windowController respondsToSelector:@selector(pasteString:)])
+			[windowController performSelector:@selector(pasteString:)
+										withObject:clipboard];
 		
 		return YES;
 	}

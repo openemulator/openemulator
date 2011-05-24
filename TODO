@@ -1,9 +1,11 @@
 ==To-Do==
 * Fix: resize flickering
-* Fix: paper canvas is sometimes not showing
+* Fix: paper canvas is sometimes not showing. The canvas image is all white. How come?
+* CanvasWindow in fullscreen mode should have multiple display sizes
+* Implement available port group
 
 * Fix printing
-* Implement paper canvas delete interface
+* Change "State:" to "Type:" in emulation available ports
 
 * Implement hardware library
 * Implement device dragging to the emulation window by checking testAddEDL

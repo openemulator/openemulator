@@ -131,7 +131,8 @@ void OpenGLCanvas::setViewportSize(OESize size)
 {
 	lock();
 	
-	updateViewportSize(size);
+	viewportSize = size;
+	isViewportUpdated = true;
 	
 	unlock();
 }
@@ -216,9 +217,22 @@ OESize OpenGLCanvas::getPixelDensity()
 	return pixelDensity;
 }
 
-int OpenGLCanvas::getPageNumber()
+OESize OpenGLCanvas::getPageSize()
 {
-	return 1;
+	OESize size;
+	
+	lock();
+	
+	if (mode == CANVAS_MODE_DISPLAY)
+		size = displayConfiguration.displayResolution;
+	else if (mode == CANVAS_MODE_PAPER)
+		size = paperConfiguration.pageResolution;
+	else if (mode == CANVAS_MODE_OPENGL)
+		size = viewportSize;
+	
+	unlock();
+	
+	return size;
 }
 
 OEImage OpenGLCanvas::getPage(int index)
@@ -228,13 +242,14 @@ OEImage OpenGLCanvas::getPage(int index)
 	return image.getClip(OEMakeRect(0,
 									0,
 									size.width,
-									size.height))
-	;
+									size.height));
 }
 
 bool OpenGLCanvas::vsync()
 {
 	lock();
+	
+	glViewport(0, 0, viewportSize.width, viewportSize.height);
 	
 	CanvasVSync vSync;
 	vSync.viewportSize = viewportSize;
@@ -277,6 +292,16 @@ bool OpenGLCanvas::vsync()
 
 void OpenGLCanvas::draw()
 {
+	lock();
+	
+/*	if (isViewportUpdated)
+	{
+		isViewportUpdated = false;*/
+		glViewport(0, 0, viewportSize.width, viewportSize.height);
+//	}
+	
+	unlock();
+	
 	if (mode == CANVAS_MODE_DISPLAY)
 	{
 		lock();
@@ -673,13 +698,6 @@ void OpenGLCanvas::deleteShader(GLuint index)
 		glDeleteProgram(shader[index]);
 	shader[index] = 0;
 #endif
-}
-
-void OpenGLCanvas::updateViewportSize(OESize size)
-{
-	this->viewportSize = size;
-	
-	glViewport(0, 0, size.width, size.height);
 }
 
 // Display canvas
@@ -1602,14 +1620,19 @@ void OpenGLCanvas::resetKeysAndButtons()
 			setJoystickButton(i, j, false);
 }
 
-void OpenGLCanvas::copy(string& value)
+void OpenGLCanvas::doCopy(string& value)
 {
 	notify(NULL, CANVAS_DID_COPY, &value);
 }
 
-void OpenGLCanvas::paste(string value)
+void OpenGLCanvas::doPaste(string value)
 {
 	notify(NULL, CANVAS_DID_PASTE, &value);
+}
+
+void OpenGLCanvas::doDelete()
+{
+	notify(NULL, CANVAS_DID_DELETE, NULL);
 }
 
 bool OpenGLCanvas::setMode(CanvasMode *mode)
@@ -1793,7 +1816,10 @@ bool OpenGLCanvas::postMessage(OEComponent *sender, int message, void *data)
 		case CANVAS_POST_IMAGE:
 			return postImage((OEImage *)data);
 			
-		case CANVAS_SET_PRINTHEAD:
+		case CANVAS_CLEAR:
+			return true;
+			
+		case CANVAS_MOVE_PRINTHEAD:
 			return setPrintHead((OEPoint *)data);
 	}
 	

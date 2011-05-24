@@ -3,12 +3,11 @@
 <edl version="1.0" label="Apple-1" image="images/Apple/Apple-1.png" description="The Apple-1 was an early personal computer, and the first in combining a microprocessor with a connection for a keyboard and a monitor. It featured a MOS 6502 microprocessor, 4 kiB RAM, and 256 bytes ROM.">
 
 <device id="apple1" label="Apple-1" image="images/Apple/Apple-1.png" group="system" />
-<port id="apple1.videoPort" ref="" type="CompositeVideo" label="Video Out" image="Video Connector.png">
+<port id="apple1.videoPort" ref="" type="CompositeVideo" label="Video Port" image="images/Generic/Video Connector.png">
     <inlet ref="apple1.terminal" property="monitor" outletRef="connector" />
 </port>
-<port id="apple1.cpuSocket" ref="" type="CPU6502" label="CPU Socket" image="CPU 6502 Socket.png" />
-<port id="apple1.slot1" ref="" type="Apple1Slot" label="Slot 1" image="Apple-1 Slot.png" />
-<port id="apple1.slot2" ref="" type="Apple1Slot" label="Slot 2" image="Apple-1 Slot.png" />
+<port id="apple1.slot1" ref="" type="Apple1Slot" label="Slot 1" image="images/Apple/Apple-1 Slot.png" />
+<port id="apple1.slot2" ref="" type="Apple1Slot" label="Slot 2" image="images/Apple/Apple-1 Slot.png" />
 <component id="apple1.controlBus" class="ControlBus">
 	<property name="device" ref="apple1" />
     <property name="audio" ref="audio" />

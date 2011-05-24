@@ -12,8 +12,8 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="1741"/>
 			<integer value="1808"/>
+			<integer value="2349"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1048,27 +1048,35 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
-						<string key="label">fDeviceLocationValue</string>
-						<reference key="source" ref="762632889"/>
-						<reference key="destination" ref="488182672"/>
-					</object>
-					<int key="connectionID">2529</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">fDeviceStateValue</string>
-						<reference key="source" ref="762632889"/>
-						<reference key="destination" ref="727025502"/>
-					</object>
-					<int key="connectionID">2531</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
 						<string key="label">fStatusLabelView</string>
 						<reference key="source" ref="762632889"/>
 						<reference key="destination" ref="144120296"/>
 					</object>
 					<int key="connectionID">2536</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">fDeviceLocationLabel</string>
+						<reference key="source" ref="762632889"/>
+						<reference key="destination" ref="488182672"/>
+					</object>
+					<int key="connectionID">2538</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">fDeviceStateLabel</string>
+						<reference key="source" ref="762632889"/>
+						<reference key="destination" ref="727025502"/>
+					</object>
+					<int key="connectionID">2539</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">fDeviceStateTitle</string>
+						<reference key="source" ref="762632889"/>
+						<reference key="destination" ref="412721624"/>
+					</object>
+					<int key="connectionID">2540</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -1786,7 +1794,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">2536</int>
+			<int key="maxID">2540</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -1892,8 +1900,9 @@
 							<string>fDeviceBox</string>
 							<string>fDeviceButton</string>
 							<string>fDeviceImage</string>
-							<string>fDeviceLocationValue</string>
-							<string>fDeviceStateValue</string>
+							<string>fDeviceLocationLabel</string>
+							<string>fDeviceStateLabel</string>
+							<string>fDeviceStateTitle</string>
 							<string>fOutlineView</string>
 							<string>fSplitView</string>
 							<string>fStatusLabelView</string>
@@ -1903,6 +1912,7 @@
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -1923,8 +1933,9 @@
 							<string>fDeviceBox</string>
 							<string>fDeviceButton</string>
 							<string>fDeviceImage</string>
-							<string>fDeviceLocationValue</string>
-							<string>fDeviceStateValue</string>
+							<string>fDeviceLocationLabel</string>
+							<string>fDeviceStateLabel</string>
+							<string>fDeviceStateTitle</string>
 							<string>fOutlineView</string>
 							<string>fSplitView</string>
 							<string>fStatusLabelView</string>
@@ -1947,11 +1958,15 @@
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBToOneOutletInfo">
-								<string key="name">fDeviceLocationValue</string>
+								<string key="name">fDeviceLocationLabel</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBToOneOutletInfo">
-								<string key="name">fDeviceStateValue</string>
+								<string key="name">fDeviceStateLabel</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">fDeviceStateTitle</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBToOneOutletInfo">

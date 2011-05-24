@@ -77,7 +77,9 @@ bool OEEDL::open(string path)
 	{
 		xmlValidCtxtPtr validCtxt = xmlNewValidCtxt();
 		xmlDtdPtr dtd = xmlNewDtd(doc,
-								  <#const xmlChar *name#>, <#const xmlChar *ExternalID#>, <#const xmlChar *SystemID#>)
+								  <#const xmlChar *name#>,
+								  <#const xmlChar *ExternalID#>,
+								  <#const xmlChar *SystemID#>)
 		
 		if (!xmlValidateDocumentFinal(validCtxt, doc))
 		{
@@ -141,11 +143,11 @@ OEPortsInfo OEEDL::getFreePortsInfo()
 	for(xmlNodePtr node = rootNode->children;
 		node;
 		node = node->next)
-		if (!xmlStrcmp(node->name, BAD_CAST "ports"))
+		if (!xmlStrcmp(node->name, BAD_CAST "port"))
 		{
 			string ref = getNodeProperty(node, "ref");
 			
-			if (ref != "")
+			if (ref == "")
 			{
 				OEPortInfo portInfo;
 				portInfo.id = getNodeProperty(node, "id");
@@ -172,11 +174,11 @@ OEConnectorsInfo OEEDL::getFreeConnectorsInfo()
 	for(xmlNodePtr node = rootNode->children;
 		node;
 		node = node->next)
-		if (!xmlStrcmp(node->name, BAD_CAST "ports"))
+		if (!xmlStrcmp(node->name, BAD_CAST "connector"))
 		{
 			string ref = getNodeProperty(node, "ref");
 			
-			if (ref != "")
+			if (ref == "")
 			{
 				OEConnectorInfo connectorInfo;
 				

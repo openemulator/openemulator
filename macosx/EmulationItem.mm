@@ -29,6 +29,7 @@
 		
 		[document lockEmulation];
 		
+		// Create device items
 		OEEmulation *emulation = (OEEmulation *)[theDocument emulation];
 		OEIds *devices = (OEIds *)emulation->getDevices();
 		for (int i = 0; i < devices->size(); i++)
@@ -56,6 +57,33 @@
 												  document:theDocument];
 			[[groupItem children] addObject:deviceItem];
 			[deviceItem release];
+		}
+		
+		// Create available port items
+		OEPortsInfo portsInfo;
+		portsInfo = emulation->getFreePortsInfo();
+		if (portsInfo.size())
+		{
+			EmulationItem *groupItem;
+			groupItem = [[EmulationItem alloc] initGroup:@"AVAILABLE PORTS"];
+			[children addObject:groupItem];
+			[groupItem release];
+			
+			NSMutableArray *groupChildren = [groupItem children];
+			
+			for (OEPortsInfo::iterator i = portsInfo.begin();
+				 i != portsInfo.end();
+				 i++)
+			{
+				EmulationItem *portItem;
+				OEPortInfo port = *i;
+				portItem = [[EmulationItem alloc] initPortWithUID:getNSString(port.id)
+															 type:getNSString(port.type)
+															label:getNSString(port.label)
+														imagePath:getNSString(port.image)];
+				[groupChildren addObject:portItem];
+				[portItem release];
+			}
 		}
 		
 		[document unlockEmulation];
@@ -90,7 +118,7 @@
 		children = [[NSMutableArray alloc] init];
 		document = theDocument;
 		
-		device = (OEComponent *)theDevice;
+		device = theDevice;
 		string value;
 		
 		// Read device values
@@ -180,11 +208,29 @@
 		
 		locationLabel = [theLocationLabel copy];
 		value = "";
-		((OEComponent *)theStorage)->postMessage(NULL, STORAGE_GET_STATELABEL, &value);
+		((OEComponent *)theStorage)->postMessage(NULL, STORAGE_GET_FORMATLABEL, &value);
 		stateLabel = [getNSString(value) retain];
 		
 		storages = [[NSMutableArray alloc] init];
 		[storages addObject:[NSValue valueWithPointer:theStorage]];
+	}
+	
+	return self;
+}
+
+- (id)initPortWithUID:(NSString *)theUID
+				 type:(NSString *)theType
+				label:(NSString *)theLabel
+			imagePath:(NSString *)theImagePath
+{
+	if (self = [super init])
+	{
+		type = EMULATIONITEM_AVAILABLEPORT;
+		uid = [theUID copy];
+		label = [theLabel copy];
+		NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
+		NSString *imagePath = [resourcePath stringByAppendingPathComponent:theImagePath];
+		image = [[NSImage alloc] initByReferencingFile:imagePath];
 	}
 	
 	return self;
@@ -505,6 +551,11 @@
 	[document unlockEmulation];
 	
 	return;
+}
+
+- (BOOL)isPort
+{
+	return (type == EMULATIONITEM_AVAILABLEPORT);
 }
 
 @end

@@ -337,6 +337,8 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	[self scrollPoint:NSMakePoint(0,
 								  clipRect.origin.y * frame.size.height /
 								  canvasSize.height)];
+	
+	needsReshape = YES;
 }
 
 - (void)viewDidHide
@@ -450,7 +452,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 		string clipboard = getCPPString([pasteboard stringForType:NSStringPboardType]);
 		
 		[document lockEmulation];
-		((OpenGLCanvas *)canvas)->paste(clipboard);
+		((OpenGLCanvas *)canvas)->doPaste(clipboard);
 		[document unlockEmulation];
 		
 		return YES;
@@ -574,14 +576,14 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	return defaultViewSize;
 }
 
-- (void)update
-{
-	CGLLockContext(cglContextObj);
-	
-	[super update];
-	
-	CGLUnlockContext(cglContextObj);
-}
+/*- (void)update
+ {
+ CGLLockContext(cglContextObj);
+ 
+ [super update];
+ 
+ CGLUnlockContext(cglContextObj);
+ }*/
 
 - (void)drawRect:(NSRect)theRect
 {
@@ -593,9 +595,15 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 													  NSMinY([self visibleRect]) /
 													  NSHeight([self frame])));
 	
-	if (!isDrawingInitialized)
+	if (needsReshape)
 	{
-		isDrawingInitialized = YES;
+		needsReshape = NO;
+		[self update];
+	}
+	
+	if (!drawingInitialized)
+	{
+		drawingInitialized = YES;
 		
 		if (!((OpenGLCanvas *)canvas)->vsync())
 			((OpenGLCanvas *)canvas)->draw();
@@ -629,7 +637,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 // Printing
 
-- (NSSize)pageSize
+- (NSSize)canvasSize
 {
 	[document lockEmulation];
 	
@@ -640,12 +648,18 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	return NSMakeSize(size.width, size.height);
 }
 
-- (NSInteger)getPageNumber
+- (NSSize)pageSize
 {
-	return 0;
+	[document lockEmulation];
+	
+	OESize size = ((OpenGLCanvas *)canvas)->getPageSize();
+	
+	[document unlockEmulation];
+	
+	return NSMakeSize(size.width, size.height);
 }
 
-- (NSBitmapImageRep *)getPage:(int)index
+- (NSBitmapImageRep *)page:(int)index
 {
 	[document lockEmulation];
 	
@@ -659,17 +673,18 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	unsigned char *data = image.getPixels();
 	
 	NSBitmapImageRep *rep;
-	rep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:&data
-												  pixelsWide:size.width
-												  pixelsHigh:size.height
-											   bitsPerSample:8
-											 samplesPerPixel:bytesPerPixel
-													hasAlpha:(bytesPerPixel == 4)
-													isPlanar:NO
-											  colorSpaceName:NSCalibratedRGBColorSpace
-												bitmapFormat:0
-												 bytesPerRow:bytesPerRow
-												bitsPerPixel:8 * bytesPerPixel];
+	rep = [[[NSBitmapImageRep alloc] initWithBitmapDataPlanes:&data
+												   pixelsWide:size.width
+												   pixelsHigh:size.height
+												bitsPerSample:8
+											  samplesPerPixel:bytesPerPixel
+													 hasAlpha:(bytesPerPixel == 4)
+													 isPlanar:NO
+											   colorSpaceName:NSCalibratedRGBColorSpace
+												 bitmapFormat:0
+												  bytesPerRow:bytesPerRow
+												 bitsPerPixel:8 * bytesPerPixel]
+		   autorelease];
 	
 	return rep;
 }
@@ -902,7 +917,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	string clipboard;
 	
 	[document lockEmulation];
-	((OpenGLCanvas *)canvas)->copy(clipboard);
+	((OpenGLCanvas *)canvas)->doCopy(clipboard);
 	[document unlockEmulation];
 	
 	return getNSString(clipboard);
@@ -974,7 +989,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 		return;
 	
 	[document lockEmulation];
-	((OpenGLCanvas *)canvas)->paste(getCPPString(text));
+	((OpenGLCanvas *)canvas)->doPaste(getCPPString(text));
 	[document unlockEmulation];
 }
 
@@ -997,7 +1012,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (void)delete:(id)sender
 {
-	
+	[document lockEmulation];
+	((OpenGLCanvas *)canvas)->doDelete();
+	[document unlockEmulation];
 }
 
 // Support for the text system

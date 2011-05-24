@@ -13,6 +13,7 @@
 
 #import "EmulationWindowController.h"
 #import "CanvasWindowController.h"
+#import "CanvasPrintView.h"
 #import "StringConversion.h"
 
 #import "OEEmulation.h"
@@ -353,11 +354,12 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 - (void)printDocument:(id)sender
 {
 	CanvasWindowController *windowController = [[NSApp mainWindow] windowController];
-	
 	if (![windowController respondsToSelector:@selector(canvasView)])
 		return;
 	
-	CanvasView *view = [windowController canvasView];
+	CanvasView *canvasView = [windowController canvasView];
+	CanvasPrintView *view = [[[CanvasPrintView alloc] initWithCanvasView:canvasView]
+							 autorelease];
 	
 	NSPrintOperation *op = [NSPrintOperation printOperationWithView:view];
 	[op runOperationModalForWindow:[NSApp mainWindow]

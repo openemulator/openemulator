@@ -1,3 +1,11 @@
+==Shadows==
+The shadow for OpenEmulator images is done as follows.
+
+* Horizontal size is set to 120 pixels
+* A 3px offset shadow is drawn with 3px blur, at 20% (check if it is really 20%), 90 degrees
+* Canvas is then resized to 128x128
+
+
 =Emulation Description Language 1.0=
 EDL (Emulation Description Language) is a language for describing software emulations of generic computer systems.
 

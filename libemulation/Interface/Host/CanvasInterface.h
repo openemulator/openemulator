@@ -152,7 +152,7 @@ public:
 	CanvasDisplayConfiguration()
 	{
 		displayResolution = OEMakeSize(640, 480);
-		displayPixelDensity = OEMakeSize(72, 72;
+		displayPixelDensity = OEMakeSize(72, 72);
 		displayBarrel = 0;
 		displayScanlineAlpha = 0;
 		displayCenterLighting = 1;

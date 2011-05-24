@@ -10,9 +10,13 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface CanvasPrintView : NSObject
-{
+#import "CanvasView.h"
 
+@interface CanvasPrintView : NSView
+{
+	CanvasView *canvasView;
 }
+
+- (id)initWithCanvasView:(CanvasView *)theCanvasView;
 
 @end

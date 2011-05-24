@@ -18,6 +18,7 @@ typedef enum
 	EMULATIONITEM_GROUP,
 	EMULATIONITEM_DEVICE,
 	EMULATIONITEM_MOUNT,
+	EMULATIONITEM_AVAILABLEPORT,
 } EmulationItemType;
 
 @interface EmulationItem : NSObject
@@ -54,6 +55,10 @@ typedef enum
 					   uid:(NSString *)theUID
 			 locationLabel:(NSString *)theLocationLabel
 				  document:(Document *)theDocument;
+- (id)initPortWithUID:(NSString *)theUID
+				 type:(NSString *)theType
+				label:(NSString *)theLabel
+			imagePath:(NSString *)theImagePath;
 
 - (BOOL)isGroup;
 - (NSString *)uid;
@@ -86,5 +91,7 @@ typedef enum
 - (void)revealInFinder;
 - (BOOL)isLocked;
 - (void)unmount;
+
+- (BOOL)isPort;
 
 @end
