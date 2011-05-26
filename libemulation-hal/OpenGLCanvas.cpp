@@ -45,6 +45,8 @@ OpenGLCanvas::OpenGLCanvas(string resourcePath)
 	viewportSize = OEMakeSize(640, 480);
 	isImageUpdated = false;
 	
+	printHead = OEMakePoint(0, 0);
+	
 	bezel = CANVAS_BEZEL_NONE;
 	isBezelDrawRequired = false;
 	isBezelCapture = false;
@@ -346,8 +348,6 @@ bool OpenGLCanvas::initOpenGL()
 	renderShader = 0;
 	for (int i = 0; i < OPENGLCANVAS_PERSISTANCE_IMAGE_NUM; i++)
 		persistance[i] = -1;
-	
-	printHead = OEMakePoint(0, 0);
 	
 	capture = OPENGLCANVAS_CAPTURE_NONE;
 	

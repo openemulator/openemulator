@@ -1,4 +1,5 @@
 ==2011-05==
+* Enabled disclosure triangle for AVAILABLE PORTS (hidden by default)
 * Implemented available port label and location
 * Added support for canvas delete commands
 * Modified State: to Format: and Type: label for emulation item disk images and ports

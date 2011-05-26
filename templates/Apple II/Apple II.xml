@@ -7,7 +7,7 @@
     <setting ref="appleII.video" name="characterSet" label="Character Set" type="select" options="Standard,Videx Lowercase Chip,Pigfont" />
     <setting ref="appleII.keyboard" name="type" label="Keyboard" type="select" options="Standard,Shift-Key Mod,Full ASCII" />
 </device>
-<port id="appleII.videoPort" ref="appleMonitorII.connector" type="Composite Video" label="Video Port">
+<port id="appleII.videoPort" ref="appleMonitorII.connector" type="Composite Video" label="Video Port" image="images/Generic/RCA Female.png">
     <inlet ref="appleII.video" property="monitor" outletRef="monitor" />
 </port>
 <port id="appleII.slot0" ref="s0.conn" type="Apple II Slot" label="Slot 0" image="images/Apple/Apple II Slot.png">

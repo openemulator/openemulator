@@ -4,11 +4,11 @@
 
 <device id="appleMac128" label="Macintosh" image="images/Apple/Apple Macintosh.png" group="system">
 </device>
-<port id="appleMac128.disk" ref="" type="Apple Macintosh Disk Port" label="Disk Port" image="">
+<port id="appleMac128.disk" ref="" type="Apple Macintosh Disk Port" label="Disk Port" image="images/Generic/DB19 Female.png">
 </port>
-<port id="appleMac128.serial" ref="" type="RS232" label="Printer Port" image="">
+<port id="appleMac128.serial" ref="" type="RS232" label="Printer Port" image="images/generic/DB9 Female.png">
 </port>
-<port id="appleMac128.serial" ref="" type="RS232" label="Serial Port" image="">
+<port id="appleMac128.serial" ref="" type="RS232" label="Serial Port" image="images/generic/DB9 Female.png">
 </port>
 <component id="appleMac128.monitor" class="Monitor">
     <property name="device" ref="appleMac128" />

@@ -101,6 +101,11 @@
 	[fOutlineView reloadData];
 	[fOutlineView expandItem:nil expandChildren:YES];
 	
+	// Collapse ports
+	EmulationItem *portsItem = [rootItem childWithUID:@"AVAILABLE PORTS"];
+	if (portsItem)
+		[fOutlineView collapseItem:portsItem];
+	
 	if (![self selectItem:rootItem withUid:uid])
 		[fOutlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:1]
 				  byExtendingSelection:NO];

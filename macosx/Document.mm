@@ -261,7 +261,6 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	if (![[self windowControllers] containsObject:emulationWindowController])
 		[self addWindowController:emulationWindowController];
 	
-	[emulationWindowController updateEmulation:self];
 	[emulationWindowController showWindow:self];
 }
 
