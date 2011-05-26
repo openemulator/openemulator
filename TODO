@@ -1,4 +1,5 @@
 ==To-Do==
+* Fix copy, it seems the context is sometimes not chosen
 * Fix printing
 
 * Implement hardware library
@@ -9,7 +10,7 @@
 * Delete a device in an emulation through Edit>Delete, or CMD+BACKSPACE
 * Implement removal of devices in a daisy chain (when port and connector are of the same kind)
 
-* Fix: resize flickering
+* Fix resize flickering
 * Implement disk image file locking, if the disk image is writable (flock)
 
 * CanvasWindow in fullscreen mode could have multiple display sizes
