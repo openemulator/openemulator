@@ -53,6 +53,9 @@ public:
 	OEPortsInfo getFreePortsInfo();
 	OEConnectorsInfo getFreeConnectorsInfo();
 	
+	void setDeviceId(string& id, string deviceId);
+	string getDeviceId(string id);
+	
 protected:
 	bool is_open;
 	OEPackage *package;

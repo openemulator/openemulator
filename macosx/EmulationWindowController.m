@@ -169,9 +169,12 @@
 		locationLabel = [selectedItem locationLabel];
 		if (![locationLabel length])
 			locationLabel = NSLocalizedString(@"Built-in", @"Emulation Value.");
-		stateTitle = ([selectedItem isMount] ?
-					  NSLocalizedString(@"Format:", @"Emulation Format.") :
-					  NSLocalizedString(@"State:", @"Emulation State."));
+		if ([selectedItem isMount])
+			stateTitle = NSLocalizedString(@"Format:", @"Emulation Format.");
+		else if ([selectedItem isPort])
+			stateTitle = NSLocalizedString(@"Type:", @"Emulation Type.");
+		else
+			stateTitle = NSLocalizedString(@"State:", @"Emulation State.");
 		stateLabel = NSLocalizedString([selectedItem stateLabel],
 									   @"Emulation Value.");
 		hasStorages = [selectedItem hasStorages];

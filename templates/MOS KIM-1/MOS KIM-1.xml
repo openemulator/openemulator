@@ -6,9 +6,9 @@
 <port id="kim1.serialPort" ref="terminal.connector" type="RS232" label="Serial Port">
     <inlet ref="kim1.io" property="serialPort" outletRef="io" />
 </port>
-<port id="kim1.slot1" ref="" type="MOSKIM1Slot" label="Slot 1" image="images/MOS/MOS KIM-1 Slot.png" />
-<port id="kim1.slot2" ref="" type="MOSKIM1Slot" label="Slot 2" image="images/MOS/MOS KIM-1 Slot.png" />
-<port id="kim1.slot3" ref="" type="MOSKIM1Slot" label="Slot 3" image="images/MOS/MOS KIM-1 Slot.png" />
+<port id="kim1.slot1" ref="" type="MOS KIM-1 Slot" label="Slot 1" image="images/MOS/MOS KIM-1 Slot.png" />
+<port id="kim1.slot2" ref="" type="MOS KIM-1 Slot" label="Slot 2" image="images/MOS/MOS KIM-1 Slot.png" />
+<port id="kim1.slot3" ref="" type="MOS KIM-1 Slot" label="Slot 3" image="images/MOS/MOS KIM-1 Slot.png" />
 <component id="kim1.controlBus" class="ControlBus">
 	<property name="device" ref="kim1" />
     <property name="audio" ref="audio" />

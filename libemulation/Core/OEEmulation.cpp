@@ -712,26 +712,6 @@ string OEEmulation::parseValueProperties(string value, map<string, string>& prop
 	return value;
 }
 
-void OEEmulation::setDeviceId(string& id, string deviceId)
-{
-	int dotIndex = id.find_first_of('.');
-	
-	if (dotIndex == string::npos)
-		id = deviceId;
-	else
-		id = deviceId + "." + id.substr(0, dotIndex + 1);
-}
-
-string OEEmulation::getDeviceId(string id)
-{
-	int dotIndex = id.find_first_of('.');
-	
-	if (dotIndex == string::npos)
-		return id;
-	
-	return id.substr(0, dotIndex);
-}
-
 string OEEmulation::getLocationLabel(string id)
 {
 	if (!doc)
@@ -796,4 +776,3 @@ string OEEmulation::getLocationLabel(string id,
 	// Device not found
 	return "?";
 }
-

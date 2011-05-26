@@ -23,8 +23,8 @@
 	if (self = [super init])
 	{
 		type = EMULATIONITEM_ROOT;
+		uid = [@"" copy];
 		children = [[NSMutableArray alloc] init];
-		
 		document = theDocument;
 		
 		[document lockEmulation];
@@ -78,9 +78,10 @@
 				EmulationItem *portItem;
 				OEPortInfo port = *i;
 				portItem = [[EmulationItem alloc] initPortWithUID:getNSString(port.id)
-															 type:getNSString(port.type)
 															label:getNSString(port.label)
-														imagePath:getNSString(port.image)];
+														imagePath:getNSString(port.image)
+														 portType:getNSString(port.type)
+														 document:theDocument];
 				[groupChildren addObject:portItem];
 				[portItem release];
 			}
@@ -133,7 +134,10 @@
 		((OEComponent *)device)->postMessage(NULL, DEVICE_GET_LOCATIONLABEL, &value);
 		locationLabel = [getNSString(value) retain];
 		((OEComponent *)device)->postMessage(NULL, DEVICE_GET_STATELABEL, &value);
-		stateLabel = [getNSString(value) retain];
+		if (value == "")
+			stateLabel = @"Connected";
+		else
+			stateLabel = [getNSString(value) retain];
 		
 		// Read settings
 		settingsRef = [[NSMutableArray alloc] init];
@@ -198,6 +202,7 @@
 	if (self = [super init])
 	{
 		type = EMULATIONITEM_MOUNT;
+		uid = [theUID copy];
 		children = [[NSMutableArray alloc] init];
 		document = theDocument;
 		
@@ -219,18 +224,41 @@
 }
 
 - (id)initPortWithUID:(NSString *)theUID
-				 type:(NSString *)theType
 				label:(NSString *)theLabel
 			imagePath:(NSString *)theImagePath
+			 portType:(NSString *)thePortType
+			 document:(Document *)theDocument;
 {
 	if (self = [super init])
 	{
 		type = EMULATIONITEM_AVAILABLEPORT;
 		uid = [theUID copy];
-		label = [theLabel copy];
+		children = [[NSMutableArray alloc] init];
+		document = theDocument;
+		
+		OEEmulation *emulation = (OEEmulation *)[theDocument emulation];
+		string deviceId = emulation->getDeviceId(getCPPString(uid));
+		OEComponent *theDevice = emulation->getComponent(deviceId);
+		if (theDevice)
+		{
+			string deviceLabel;
+			theDevice->postMessage(NULL, DEVICE_GET_LABEL, &deviceLabel);
+			string theLocationLabel;
+			theDevice->postMessage(NULL, DEVICE_GET_LOCATIONLABEL, &theLocationLabel);
+			if (theLocationLabel == "")
+				label = [[getNSString(deviceLabel) stringByAppendingFormat:@" %@",
+						  theLabel] retain];
+			else
+				label = [[getNSString(theLocationLabel) stringByAppendingFormat:@" %@",
+						  theLabel] retain];
+			
+			locationLabel = [getNSString(theLocationLabel) retain];
+		}
 		NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
 		NSString *imagePath = [resourcePath stringByAppendingPathComponent:theImagePath];
 		image = [[NSImage alloc] initByReferencingFile:imagePath];
+		
+		stateLabel = [thePortType copy];
 	}
 	
 	return self;

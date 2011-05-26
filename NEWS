@@ -1,6 +1,7 @@
 ==2011-05==
+* Implemented available port label and location
 * Added support for canvas delete commands
-* Modified State: to Format: label for emulation item images
+* Modified State: to Format: and Type: label for emulation item disk images and ports
 * Added emulation window available port group
 * Added emulation window available port status message
 * Verified and checked dragging for all cases

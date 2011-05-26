@@ -282,3 +282,23 @@ void OEEDL::edlLog(string message)
 {
 	cerr << "libemulation: " << message << endl;
 }
+
+void OEEDL::setDeviceId(string& id, string deviceId)
+{
+	int dotIndex = id.find_first_of('.');
+	
+	if (dotIndex == string::npos)
+		id = deviceId;
+	else
+		id = deviceId + "." + id.substr(0, dotIndex + 1);
+}
+
+string OEEDL::getDeviceId(string id)
+{
+	int dotIndex = id.find_first_of('.');
+	
+	if (dotIndex == string::npos)
+		return id;
+	
+	return id.substr(0, dotIndex);
+}

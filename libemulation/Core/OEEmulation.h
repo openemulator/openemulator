@@ -85,9 +85,6 @@ private:
 	bool hasValueProperty(string value, string propertyName);
 	string parseValueProperties(string value, map<string, string>& propertiesMap);
 	
-	void setDeviceId(string& id, string deviceId);
-	string getDeviceId(string id);
-	
 	string getLocationLabel(string id);
 	string getLocationLabel(string id, vector<string>& visitedIds);
 	

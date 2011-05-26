@@ -56,9 +56,10 @@ typedef enum
 			 locationLabel:(NSString *)theLocationLabel
 				  document:(Document *)theDocument;
 - (id)initPortWithUID:(NSString *)theUID
-				 type:(NSString *)theType
 				label:(NSString *)theLabel
-			imagePath:(NSString *)theImagePath;
+			imagePath:(NSString *)theImagePath
+			 portType:(NSString *)theType
+			 document:(Document *)theDocument;
 
 - (BOOL)isGroup;
 - (NSString *)uid;
