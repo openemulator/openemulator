@@ -389,7 +389,8 @@ cellWasDoubleClickedAtIndex:(NSUInteger)index
 	}
 	[fImageBrowserView setSelectionIndexes:[NSIndexSet indexSetWithIndex:itemIndex]
 					  byExtendingSelection:NO];
-	[fImageBrowserView scrollIndexToVisible:itemIndex];
+	NSRect itemRect = [fImageBrowserView itemFrameAtIndex:itemIndex];
+	[fImageBrowserView scrollPoint:itemRect.origin];
 }
 
 - (NSString *)selectedGroup

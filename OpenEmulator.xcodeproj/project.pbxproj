@@ -42,7 +42,6 @@
 		003B16C312EE2A18003FB8F6 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 003B158312EE26BA003FB8F6 /* CoreAudio.framework */; };
 		003B16C812EE2A61003FB8F6 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 003B16C712EE2A61003FB8F6 /* CoreServices.framework */; };
 		003E25E71070796700185260 /* images in Resources */ = {isa = PBXBuildFile; fileRef = 003E2597107075D900185260 /* images */; };
-		0049F9231277CFDA00553860 /* DocumentController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00AD746811A2F10E00BAC29C /* DocumentController.mm */; };
 		005486CA0FDC84E500DBCFA8 /* Sparkle.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 001F56F80FD1E8E500EA246A /* Sparkle.framework */; };
 		0054E4A11131BE7A006D32D9 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0054E4A01131BE7A006D32D9 /* Cocoa.framework */; };
 		0054E4A71131BE8A006D32D9 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0054E4A61131BE8A006D32D9 /* OpenGL.framework */; };
@@ -66,6 +65,7 @@
 		008363101326C15300CB9A21 /* OEVector.h in Headers */ = {isa = PBXBuildFile; fileRef = 008363081326C15300CB9A21 /* OEVector.h */; };
 		008363111326C15300CB9A21 /* PAAudio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 008363091326C15300CB9A21 /* PAAudio.cpp */; };
 		008363121326C15300CB9A21 /* PAAudio.h in Headers */ = {isa = PBXBuildFile; fileRef = 0083630A1326C15300CB9A21 /* PAAudio.h */; };
+		008F2FE7138E0AD600409723 /* DocumentController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00AD746811A2F10E00BAC29C /* DocumentController.mm */; };
 		00954E781277B79E00C17203 /* EmulationOutlineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00954E771277B79E00C17203 /* EmulationOutlineCell.m */; };
 		00954E991277BB8E00C17203 /* EmulationWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00954E981277BB8E00C17203 /* EmulationWindowController.m */; };
 		00954EA71277BC1200C17203 /* AudioControlsWindowController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00954EA61277BC1200C17203 /* AudioControlsWindowController.mm */; };
@@ -1155,7 +1155,6 @@
 				00954E781277B79E00C17203 /* EmulationOutlineCell.m in Sources */,
 				00954E991277BB8E00C17203 /* EmulationWindowController.m in Sources */,
 				00954EA71277BC1200C17203 /* AudioControlsWindowController.mm in Sources */,
-				0049F9231277CFDA00553860 /* DocumentController.mm in Sources */,
 				00A72B6F12879F650083C6A7 /* CanvasView.mm in Sources */,
 				00A72B7012879F690083C6A7 /* CanvasWindowController.m in Sources */,
 				00BB34B412C5C5AE007332B5 /* EmulationItem.mm in Sources */,
@@ -1166,6 +1165,7 @@
 				0073DD9F136FCC1100087303 /* CanvasToolbarView.m in Sources */,
 				006B5CD013826D0700EEB5BC /* CanvasWindow.m in Sources */,
 				00BDB1F713863188004DF2AF /* CanvasPrintView.m in Sources */,
+				008F2FE7138E0AD600409723 /* DocumentController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

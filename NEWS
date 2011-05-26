@@ -1,4 +1,6 @@
 ==2011-05==
+* Fixed template chooser scroll problem
+* Added preservation of emulation window available ports expand state
 * Enabled disclosure triangle for AVAILABLE PORTS (hidden by default)
 * Implemented available port label and location
 * Added support for canvas delete commands

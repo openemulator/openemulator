@@ -4,11 +4,11 @@
 
 <device id="c64" label="C64" image="images/Commodore/Commodore 64.png" group="system">
 </device>
-<port id="c64.video" ref="" type="Composite Video" label="Video Port" image="images/Generic/RCA Female.png">
+<port id="c64.video" ref="" type="Composite Video" label="Video Port" image="images/Connectors/RCA Female.png">
 </port>
-<port id="c64.control1" ref="" type="Commodore 64 Control" label="Control Port 1" image="images/Generic/DB9 Male.png">
+<port id="c64.control1" ref="" type="Commodore 64 Control" label="Control Port 1" image="images/Connectors/DB9 Male.png">
 </port>
-<port id="c64.control2" ref="" type="Commodore 64 Control" label="Control Port 2" image="images/Generic/DB9 Male.png">
+<port id="c64.control2" ref="" type="Commodore 64 Control" label="Control Port 2" image="images/Connectors/DB9 Male.png">
 </port>
 <port id="c64.expansion" ref="" type="Commodore 64 Expansion" label="Expansion Port" image="">
 </port>

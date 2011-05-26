@@ -93,7 +93,14 @@
 	
 	NSLog(@"EmulationWindowController updateEmulation");
 	
+	EmulationItem *portsItem;
+	
+	// Preserve state
 	NSString *uid = [[selectedItem uid] copy];
+	BOOL isAvailablePortsExpanded = NO;
+	portsItem = [rootItem childWithUID:@"AVAILABLE PORTS"];
+	if (portsItem)
+		isAvailablePortsExpanded = [fOutlineView isItemExpanded:portsItem];
 	
 	[rootItem release];
 	rootItem = [[EmulationItem alloc] initRootWithDocument:[self document]];
@@ -102,8 +109,8 @@
 	[fOutlineView expandItem:nil expandChildren:YES];
 	
 	// Collapse ports
-	EmulationItem *portsItem = [rootItem childWithUID:@"AVAILABLE PORTS"];
-	if (portsItem)
+	portsItem = [rootItem childWithUID:@"AVAILABLE PORTS"];
+	if (portsItem && !isAvailablePortsExpanded)
 		[fOutlineView collapseItem:portsItem];
 	
 	if (![self selectItem:rootItem withUid:uid])

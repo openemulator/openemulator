@@ -10,13 +10,10 @@
 * Implement removal of devices in a daisy chain (when port and connector are of the same kind)
 
 * Fix: resize flickering
-* CanvasWindow in fullscreen mode could have multiple display sizes
 * Implement disk image file locking, if the disk image is writable (flock)
 
-==Future to-do's==
-* Debugging with JTAG
+* CanvasWindow in fullscreen mode could have multiple display sizes
+* Add search in template chooser
 * TCP AT Modem emulation
-* Debugger commands: run/step/break/readRegister/writeRegister/readMemory/writeMemory/addTrap/removeTrap/listTraps
+* Debugging a la JTAG with commands: run/step/break/readRegister/writeRegister/readMemory/writeMemory/addTrap/removeTrap/listTraps
 * Implement CPU Load
-* Fix template chooser width problem, when scroll bars show and hide
-* Fix template chooser problem when the first line of items is not selected
