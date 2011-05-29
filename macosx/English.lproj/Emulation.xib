@@ -12,8 +12,8 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
+			<integer value="2127"/>
 			<integer value="1808"/>
-			<integer value="2349"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1008,14 +1008,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
-						<string key="label">buttonAction:</string>
-						<reference key="source" ref="762632889"/>
-						<reference key="destination" ref="260745661"/>
-					</object>
-					<int key="connectionID">2419</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
 						<string key="label">openDiskImage:</string>
 						<reference key="source" ref="932410077"/>
 						<reference key="destination" ref="756966555"/>
@@ -1077,6 +1069,14 @@
 						<reference key="destination" ref="412721624"/>
 					</object>
 					<int key="connectionID">2540</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">outlineAction:</string>
+						<reference key="source" ref="762632889"/>
+						<reference key="destination" ref="260745661"/>
+					</object>
+					<int key="connectionID">2541</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -1794,7 +1794,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">2540</int>
+			<int key="maxID">2541</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -1833,6 +1833,7 @@
 							<string>buttonAction:</string>
 							<string>delete:</string>
 							<string>openDiskImage:</string>
+							<string>outlineAction:</string>
 							<string>revealInFinder:</string>
 							<string>showDevice:</string>
 							<string>unmount:</string>
@@ -1840,6 +1841,7 @@
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -1856,6 +1858,7 @@
 							<string>buttonAction:</string>
 							<string>delete:</string>
 							<string>openDiskImage:</string>
+							<string>outlineAction:</string>
 							<string>revealInFinder:</string>
 							<string>showDevice:</string>
 							<string>unmount:</string>
@@ -1873,6 +1876,10 @@
 							</object>
 							<object class="IBActionInfo">
 								<string key="name">openDiskImage:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">outlineAction:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">

@@ -46,6 +46,7 @@ NSOutlineViewDataSource, NSComboBoxDataSource>
 - (EmulationItem *)itemForSender:(id)sender;
 - (BOOL)selectItem:(EmulationItem *)item withUid:(NSString *)uid;
 
+- (IBAction)outlineAction:(id)sender;
 - (IBAction)buttonAction:(id)sender;
 
 - (IBAction)openDiskImage:(id)sender;

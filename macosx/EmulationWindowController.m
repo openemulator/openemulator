@@ -688,6 +688,16 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
 
 
 
+- (IBAction)outlineAction:(id)sender
+{
+	EmulationItem *item = [self itemForSender:sender];
+	
+	if ([item hasCanvases])
+		[self showDevice:sender];
+	else if ([item isMount])
+		[self unmount:sender];
+}
+
 - (IBAction)buttonAction:(id)sender
 {
 	EmulationItem *item = [self itemForSender:sender];

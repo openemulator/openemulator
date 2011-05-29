@@ -27,7 +27,6 @@
 	void *canvas;
 	
 	NSSize canvasSize;
-	BOOL drawingInitialized;
 	BOOL needsReshape;
 	
 	NSUInteger keyMap[DEVICE_KEYMAP_SIZE];

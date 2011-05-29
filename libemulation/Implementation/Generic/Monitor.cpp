@@ -304,15 +304,15 @@ void Monitor::notify(OEComponent *sender, int notification, void *data)
 			
 			if (canvas)
 				canvas->postMessage(this, CANVAS_POST_IMAGE, &image);
-		}
-		*/
+		}*/
+		
 		return;
 	}
 	
 	if (notification != CANVAS_DID_VSYNC)
 		return;
 	
-/*	int *p = (int *)image.getPixels();
+	int *p = (int *)image.getPixels();
 	if (p)
 	{
 		int w = image.getSize().width;
@@ -327,7 +327,6 @@ void Monitor::notify(OEComponent *sender, int notification, void *data)
 		if (canvas)
 			canvas->postMessage(this, CANVAS_POST_IMAGE, &image);
 	}
- */
 }
 
 void Monitor::updateVideoRect()

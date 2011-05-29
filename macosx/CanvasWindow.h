@@ -21,7 +21,7 @@
 }
 
 - (void)toggleFullscreen:(id)sender;
-- (void)setFrameScale:(float)scale;
+- (void)scaleFrame:(float)scale;
 - (void)setHalfSize:(id)sender;
 - (void)setActualSize:(id)sender;
 - (void)setDoubleSize:(id)sender;

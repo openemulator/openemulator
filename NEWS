@@ -1,6 +1,9 @@
 ==2011-05==
+* Fixed resize flickering (THIS ONE WAS HARD), CGL doesn't like multithreading+backbuffer rendering
+* Fixed canvas copy
+* Added support for detecting default shaderEnable value
 * Fixed template chooser scroll problem
-* Added preservation of emulation window available ports expand state
+* Added preservation of emulation window available ports expansion state
 * Enabled disclosure triangle for AVAILABLE PORTS (hidden by default)
 * Implemented available port label and location
 * Added support for canvas delete commands

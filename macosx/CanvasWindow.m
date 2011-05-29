@@ -81,7 +81,7 @@
 
 - (NSSize)windowWillResize:(NSWindow *)window toSize:(NSSize)proposedFrameSize
 {
-	NSLog(@"CanvasWindow windowWillResize");
+//	NSLog(@"CanvasWindow windowWillResize");
 	
 	if (fullscreen)
 		return proposedFrameSize;
@@ -153,7 +153,7 @@
 		[super setFrameOrigin:point];
 }
 
-- (void)setFrameScale:(float)scale
+- (void)scaleFrame:(float)scale
 {
 	NSSize defaultViewSize = [fCanvasView defaultViewSize];
 	float defaultViewRatio = defaultViewSize.width / defaultViewSize.height;
@@ -202,13 +202,19 @@
 	if (NSMinY(frameRect) < NSMinY(screenRect))
 		frameRect.origin.y = NSMinY(screenRect);
 	
+	[fCanvasView stopDisplayLink];
+	
 	[self setFrame:frameRect display:YES animate:YES];
+	
+	[fCanvasView startDisplayLink];
 }
 
 - (void)toggleFullscreen:(id)sender
 {
 	DocumentController *documentController;
 	documentController = [NSDocumentController sharedDocumentController];
+	
+	[fCanvasView stopDisplayLink];
 	
 	if (!fullscreen)
 	{
@@ -239,26 +245,28 @@
 		
 		fullscreen = NO;
 	}
+	
+	[fCanvasView startDisplayLink];
 }
 
 - (void)setHalfSize:(id)sender
 {
-	[self setFrameScale:0.5];
+	[self scaleFrame:0.5];
 }
 
 - (void)setActualSize:(id)sender
 {
-	[self setFrameScale:1.0];
+	[self scaleFrame:1.0];
 }
 
 - (void)setDoubleSize:(id)sender
 {
-	[self setFrameScale:2.0];
+	[self scaleFrame:2.0];
 }
 
 - (void)fitToScreen:(id)sender
 {
-	[self setFrameScale:10000.0];
+	[self scaleFrame:10000.0];
 }
 
 @end

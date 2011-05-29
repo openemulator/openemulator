@@ -102,6 +102,28 @@
 
 - (void)applicationWillFinishLaunching:(NSNotification *)notification
 {
+	BOOL shaderDefault = NO;
+	
+	// Determine default shaderEnable value
+	CGDirectDisplayID display = CGMainDisplayID();
+	CGOpenGLDisplayMask displayMask = CGDisplayIDToOpenGLDisplayMask(display);
+	
+	CGLRendererInfoObj info;
+	GLint numRenderers = 0;
+	if (CGLQueryRendererInfo(displayMask,
+							 &info, 
+							 &numRenderers) == 0)
+	{
+		for (int i = 0; i < numRenderers; i++)
+		{
+			GLint isAccelerated = 0;
+			CGLDescribeRenderer(info, i, kCGLRPAccelerated, &isAccelerated);
+			if (isAccelerated)
+				shaderDefault = YES;
+		}
+	}
+	
+	// Initialize defaults
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	
 	NSDictionary *defaults = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -109,7 +131,7 @@
 							  [NSNumber numberWithBool:NO], @"OEAudioFullDuplex",
 							  [NSNumber numberWithFloat:1.0], @"OEAudioPlayVolume",
 							  [NSNumber numberWithBool:YES], @"OEAudioPlayThrough",
-							  [NSNumber numberWithBool:YES], @"OEVideoEnableShader",
+							  [NSNumber numberWithBool:shaderDefault], @"OEVideoEnableShader",
 							  nil
 							  ];
 	[userDefaults registerDefaults:defaults]; 

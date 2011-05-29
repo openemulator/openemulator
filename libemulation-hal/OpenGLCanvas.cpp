@@ -43,6 +43,7 @@ OpenGLCanvas::OpenGLCanvas(string resourcePath)
 	captureMode = CANVAS_CAPTUREMODE_NO_CAPTURE;
 	
 	viewportSize = OEMakeSize(640, 480);
+	isViewportUpdated = true;
 	isImageUpdated = false;
 	
 	printHead = OEMakePoint(0, 0);
@@ -251,7 +252,11 @@ bool OpenGLCanvas::vsync()
 {
 	lock();
 	
-	glViewport(0, 0, viewportSize.width, viewportSize.height);
+	if (isViewportUpdated)
+	{
+		isViewportUpdated = false;
+		glViewport(0, 0, viewportSize.width, viewportSize.height);
+	}
 	
 	CanvasVSync vSync;
 	vSync.viewportSize = viewportSize;
@@ -275,12 +280,12 @@ bool OpenGLCanvas::vsync()
 	}
 	else if (mode == CANVAS_MODE_PAPER)
 		vSync.shouldDraw = isImageUpdated || isConfigurationUpdated;
-		
-	if (isBezelDrawRequired)
-		vSync.shouldDraw = true;
 	
 	isImageUpdated = false;
 	isConfigurationUpdated = false;
+	
+	if (isBezelDrawRequired)
+		vSync.shouldDraw = true;
 	
 	unlock();
 	
@@ -294,15 +299,15 @@ bool OpenGLCanvas::vsync()
 
 void OpenGLCanvas::draw()
 {
-	lock();
-	
-/*	if (isViewportUpdated)
+	if (isViewportUpdated)
 	{
-		isViewportUpdated = false;*/
+		lock();
+		
+		isViewportUpdated = false;
 		glViewport(0, 0, viewportSize.width, viewportSize.height);
-//	}
-	
-	unlock();
+		
+		unlock();
+	}
 	
 	if (mode == CANVAS_MODE_DISPLAY)
 	{
@@ -328,6 +333,18 @@ void OpenGLCanvas::draw()
 	drawBezel();
 	
 	unlock();
+}
+
+OEImage OpenGLCanvas::getFramebuffer()
+{
+	OEImage image;
+	
+	image.setFormat(OEIMAGE_RGB);
+	image.setSize(viewportSize);
+	
+	readFramebuffer(&image);
+	
+	return image;
 }
 
 // OpenGL
@@ -1392,6 +1409,20 @@ void OpenGLCanvas::drawBezel()
 	
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glColor4f(1, 1, 1, 1);
+}
+
+// Read framebuffer
+
+void OpenGLCanvas::readFramebuffer(OEImage *image)
+{
+	glPixelStorei(GL_PACK_ALIGNMENT, 1);
+	
+	glReadPixels(0, 0,
+				 image->getSize().width, image->getSize().height,
+				 GL_RGB, GL_UNSIGNED_BYTE,
+				 image->getPixels());
+	
+	glPixelStorei(GL_PACK_ALIGNMENT, 4);
 }
 
 // HID

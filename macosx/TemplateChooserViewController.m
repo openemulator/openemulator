@@ -390,7 +390,7 @@ cellWasDoubleClickedAtIndex:(NSUInteger)index
 	[fImageBrowserView setSelectionIndexes:[NSIndexSet indexSetWithIndex:itemIndex]
 					  byExtendingSelection:NO];
 	NSRect itemRect = [fImageBrowserView itemFrameAtIndex:itemIndex];
-	[fImageBrowserView scrollPoint:itemRect.origin];
+	[(NSView *)fImageBrowserView scrollPoint:itemRect.origin];
 }
 
 - (NSString *)selectedGroup

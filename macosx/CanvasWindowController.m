@@ -82,7 +82,7 @@
 	
 	CanvasWindow *window = (CanvasWindow *)[self window];
 	NSRect windowFrame = [window frame];
-	[window setFrameScale:1.0];
+	[window scaleFrame:1.0];
 	[window setFrameTopLeftPoint:NSMakePoint(NSMinX(windowFrame),
 											 NSMaxY(windowFrame))];
 }

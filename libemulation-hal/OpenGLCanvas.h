@@ -87,6 +87,7 @@ public:
 	
 	bool vsync();
 	void draw();
+	OEImage getFramebuffer();
 	
 	void becomeKeyWindow();
 	void resignKeyWindow();
@@ -190,6 +191,8 @@ private:
 	
 	double getCurrentTime();
 	void drawBezel();
+	
+	void readFramebuffer(OEImage *image);
 	
 	void postHIDNotification(int notification, int usageId, float value);
 	void updateCapture(OpenGLCanvasCapture capture);

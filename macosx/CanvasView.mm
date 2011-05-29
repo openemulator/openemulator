@@ -90,6 +90,8 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	NSOpenGLPixelFormatAttribute pixelFormatAtrributes[] =
 	{
 		NSOpenGLPFADoubleBuffer,
+		NSOpenGLPFADepthSize,
+		32,
 		0
 	};
 	
@@ -306,22 +308,38 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	[self stopDisplayLink];
 }
 
+- (void)viewDidHide
+{
+	NSLog(@"viewDidHide");
+	
+	[super viewDidHide];
+}
+
+- (void)viewDidUnhide
+{
+	NSLog(@"viewDidUnhide");
+	
+	[super viewDidUnhide];
+}
+
 - (void)windowDidResize:(NSNotification *)notification
 {
-	NSScrollView *scrollView = [self enclosingScrollView];
-	NSSize contentSize = [scrollView contentSize];
+//	NSLog(@"CanvasView windowDidResize");
 	
-	[document lockEmulation];
+	NSSize contentSize = [[self enclosingScrollView] contentSize];
 	
 	CGLLockContext(cglContextObj);
+	
+	[[self openGLContext] makeCurrentContext];
+	
 	((OpenGLCanvas *)canvas)->setViewportSize(OEMakeSize(contentSize.width,
 														 contentSize.height));
+	[NSOpenGLContext clearCurrentContext];
+	
 	CGLUnlockContext(cglContextObj);
 	
 	OESize newCanvasSize = ((OpenGLCanvas *)canvas)->getSize();
 	OERect clipRect = ((OpenGLCanvas *)canvas)->getClipRect();
-	
-	[document unlockEmulation];
 	
 	canvasSize = NSMakeSize(newCanvasSize.width, newCanvasSize.height);
 	
@@ -337,20 +355,6 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	[self scrollPoint:NSMakePoint(0,
 								  clipRect.origin.y * frame.size.height /
 								  canvasSize.height)];
-	
-	needsReshape = YES;
-}
-
-- (void)viewDidHide
-{
-	NSLog(@"viewDidHide");
-	[super viewDidHide];
-}
-
-- (void)viewDidUnhide
-{
-	NSLog(@"viewDidUnhide");
-	[super viewDidUnhide];
 }
 
 - (void)windowDidBecomeKey:(NSNotification *)notification
@@ -364,8 +368,10 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	}
 	
 	[document lockEmulation];
+	
 	((OpenGLCanvas *)canvas)->becomeKeyWindow();
 	[self synchronizeKeyboardFlags];
+	
 	[document unlockEmulation];
 	
 	if ([self isMouseInView])
@@ -396,7 +402,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 		[self mouseExited:nil];
 	
 	[document lockEmulation];
+	
 	((OpenGLCanvas *)canvas)->resignKeyWindow();
+	
 	[document unlockEmulation];
 	
 	for (NSTrackingArea *area in [self trackingAreas])
@@ -452,7 +460,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 		string clipboard = getCPPString([pasteboard stringForType:NSStringPboardType]);
 		
 		[document lockEmulation];
+		
 		((OpenGLCanvas *)canvas)->doPaste(clipboard);
+		
 		[document unlockEmulation];
 		
 		return YES;
@@ -478,15 +488,17 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 {
 	NSLog(@"CanvasView initOpenGL");
 	
-	[[self openGLContext] makeCurrentContext];
-	
 	GLint value = 1;
 	[[self openGLContext] setValues:&value
 					   forParameter:NSOpenGLCPSwapInterval]; 
 	
+	[[self openGLContext] makeCurrentContext];
+	
 	((OpenGLCanvas *)canvas)->open(setCapture,
 								   setKeyboardFlags,
 								   self);
+	
+	[NSOpenGLContext clearCurrentContext];
 	
 	if (CVDisplayLinkCreateWithActiveCGDisplays(&displayLink) == kCVReturnSuccess)
 	{
@@ -509,13 +521,32 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	
 	if (canvas)
 		((OpenGLCanvas *)canvas)->close();
+	
+	[NSOpenGLContext clearCurrentContext];
+}
+
+- (void)enterContext
+{
+	NSOpenGLContext *context = [self openGLContext];
+	
+	CGLLockContext((CGLContextObj)[context CGLContextObj]);
+	
+	[context makeCurrentContext];
+}
+
+- (void)leaveContext
+{
+	NSOpenGLContext *context = [self openGLContext];
+	
+	CGLUnlockContext((CGLContextObj)[context CGLContextObj]);
 }
 
 - (void)startDisplayLink
 {
 	NSLog(@"CanvasView startDisplayLink");
 	
-	CVDisplayLinkStart(displayLink);
+	if (displayLink)
+		CVDisplayLinkStart(displayLink);
 	
 	/*	[[NSNotificationCenter defaultCenter] addObserver:self
 	 selector:@selector(globalFrameDidChange:)
@@ -527,7 +558,8 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 {
 	NSLog(@"CanvasView stopDisplayLink");
 	
-	CVDisplayLinkStop(displayLink);
+	if (displayLink)
+		CVDisplayLinkStop(displayLink);
 	
 	//	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
@@ -541,22 +573,14 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (BOOL)isDisplayCanvas
 {
-	[document lockEmulation];
-	
 	CanvasMode value = ((OpenGLCanvas *)canvas)->getMode();
-	
-	[document unlockEmulation];
 	
 	return (value == CANVAS_MODE_DISPLAY);
 }
 
 - (BOOL)isPaperCanvas
 {
-	[document lockEmulation];
-	
 	CanvasMode value = ((OpenGLCanvas *)canvas)->getMode();
-	
-	[document unlockEmulation];
 	
 	return (value == CANVAS_MODE_PAPER);
 }
@@ -576,18 +600,18 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	return defaultViewSize;
 }
 
-/*- (void)update
- {
- CGLLockContext(cglContextObj);
- 
- [super update];
- 
- CGLUnlockContext(cglContextObj);
- }*/
+- (void)update
+{
+	[self enterContext];
+	
+	[super update];
+	
+	[self leaveContext];
+}
 
 - (void)drawRect:(NSRect)theRect
 {
-	CGLLockContext(cglContextObj);
+	[self enterContext];
 	
 	float canvasHeight = ((OpenGLCanvas *)canvas)->getSize().height;
 	((OpenGLCanvas *)canvas)->scrollPoint(OEMakePoint(0,
@@ -595,16 +619,8 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 													  NSMinY([self visibleRect]) /
 													  NSHeight([self frame])));
 	
-	if (needsReshape)
+	if (!CVDisplayLinkIsRunning(displayLink))
 	{
-		needsReshape = NO;
-		[self update];
-	}
-	
-	if (!drawingInitialized)
-	{
-		drawingInitialized = YES;
-		
 		if (!((OpenGLCanvas *)canvas)->vsync())
 			((OpenGLCanvas *)canvas)->draw();
 	}
@@ -613,14 +629,12 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	
 	[[self openGLContext] flushBuffer];
 	
-	CGLUnlockContext(cglContextObj);
+	[self leaveContext];
 }
 
 - (void)vsync
 {
-    CGLLockContext(cglContextObj);
-	
-	[[self openGLContext] makeCurrentContext];
+	[self enterContext];
 	
 	OESize newCanvasSize = ((OpenGLCanvas *)canvas)->getSize();
 	if (canvasSize.height != newCanvasSize.height)
@@ -632,40 +646,28 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	if (((OpenGLCanvas *)canvas)->vsync())
 		[[self openGLContext] flushBuffer];
 	
-    CGLUnlockContext(cglContextObj);
+	[self leaveContext];
 }
 
 // Printing
 
 - (NSSize)canvasSize
 {
-	[document lockEmulation];
-	
 	OESize size = ((OpenGLCanvas *)canvas)->getSize();
-	
-	[document unlockEmulation];
 	
 	return NSMakeSize(size.width, size.height);
 }
 
 - (NSSize)pageSize
 {
-	[document lockEmulation];
-	
 	OESize size = ((OpenGLCanvas *)canvas)->getPageSize();
-	
-	[document unlockEmulation];
 	
 	return NSMakeSize(size.width, size.height);
 }
 
 - (NSBitmapImageRep *)page:(int)index
 {
-	[document lockEmulation];
-	
 	OEImage image = ((OpenGLCanvas *)canvas)->getPage(index);
-	
-	[document unlockEmulation];
 	
 	OESize size = image.getSize();
 	int bytesPerPixel = image.getBytesPerPixel();
@@ -713,7 +715,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 		unicode = 8;
 	
 	[document lockEmulation];
+	
 	((OpenGLCanvas *)canvas)->sendUnicodeKeyEvent(unicode);
+	
 	[document unlockEmulation];
 }
 
@@ -727,7 +731,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	BOOL value = ((flags & mask) != 0);
 	
 	[document lockEmulation];
+	
 	((OpenGLCanvas *)canvas)->setKey(usageId, value);
+	
 	[document unlockEmulation];
 }
 
@@ -769,8 +775,11 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	if (![theEvent isARepeat])
 	{
 		NSInteger usageId = [self getUsageId:[theEvent keyCode]];
+		
 		[document lockEmulation];
+		
 		((OpenGLCanvas *)canvas)->setKey(usageId, true);
+		
 		[document unlockEmulation];
 	}
 }
@@ -778,8 +787,11 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 - (void)keyUp:(NSEvent *)theEvent
 {
 	NSInteger usageId = [self getUsageId:[theEvent keyCode]];
+	
 	[document lockEmulation];
+	
 	((OpenGLCanvas *)canvas)->setKey(usageId, false);
+	
 	[document unlockEmulation];
 }
 
@@ -806,7 +818,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	keyModifierFlags = flags;
 	
 	[document lockEmulation];
+	
 	[self synchronizeKeyboardFlags];
+	
 	[document unlockEmulation];
 }
 
@@ -817,7 +831,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	//	NSLog(@"CanvasView mouseEntered");
 	
 	[document lockEmulation];
+	
 	((OpenGLCanvas *)canvas)->enterMouse();
+	
 	[document unlockEmulation];
 }
 
@@ -826,7 +842,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	//	NSLog(@"CanvasView mouseExited");
 	
 	[document lockEmulation];
+	
 	((OpenGLCanvas *)canvas)->exitMouse();
+	
 	[document unlockEmulation];
 }
 
@@ -835,8 +853,10 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	NSPoint position = [NSEvent mouseLocation];
 	
 	[document lockEmulation];
+	
 	((OpenGLCanvas *)canvas)->setMousePosition(position.x, position.y);
 	((OpenGLCanvas *)canvas)->moveMouse([theEvent deltaX], [theEvent deltaY]);
+	
 	[document unlockEmulation];
 }
 
@@ -858,42 +878,54 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 - (void)mouseDown:(NSEvent *)theEvent
 {
 	[document lockEmulation];
+	
 	((OpenGLCanvas *)canvas)->setMouseButton(0, true);
+	
 	[document unlockEmulation];
 }
 
 - (void)mouseUp:(NSEvent *)theEvent
 {
 	[document lockEmulation];
+	
 	((OpenGLCanvas *)canvas)->setMouseButton(0, false);
+	
 	[document unlockEmulation];
 }
 
 - (void)rightMouseDown:(NSEvent *)theEvent
 {
 	[document lockEmulation];
+	
 	((OpenGLCanvas *)canvas)->setMouseButton(1, true);
+	
 	[document unlockEmulation];
 }
 
 - (void)rightMouseUp:(NSEvent *)theEvent
 {
 	[document lockEmulation];
+	
 	((OpenGLCanvas *)canvas)->setMouseButton(1, false);
+	
 	[document unlockEmulation];
 }
 
 - (void)otherMouseDown:(NSEvent *)theEvent
 {
 	[document lockEmulation];
+	
 	((OpenGLCanvas *)canvas)->setMouseButton([theEvent buttonNumber], true);
+	
 	[document unlockEmulation];
 }
 
 - (void)otherMouseUp:(NSEvent *)theEvent
 {
 	[document lockEmulation];
+	
 	((OpenGLCanvas *)canvas)->setMouseButton([theEvent buttonNumber], false);
+	
 	[document unlockEmulation];
 }
 
@@ -903,10 +935,12 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 		return [super scrollWheel:theEvent];
 	
 	[document lockEmulation];
+	
 	if ([theEvent deltaX])
 		((OpenGLCanvas *)canvas)->sendMouseWheelEvent(0, [theEvent deltaX]);
 	if ([theEvent deltaY])
 		((OpenGLCanvas *)canvas)->sendMouseWheelEvent(1, [theEvent deltaY]);
+	
 	[document unlockEmulation];
 }
 
@@ -917,7 +951,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	string clipboard;
 	
 	[document lockEmulation];
+	
 	((OpenGLCanvas *)canvas)->doCopy(clipboard);
+	
 	[document unlockEmulation];
 	
 	return getNSString(clipboard);
@@ -941,45 +977,34 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 		NSArray *pasteboardTypes = [NSArray arrayWithObjects:NSTIFFPboardType, nil];
 		[pasteboard declareTypes:pasteboardTypes owner:self];
 		
-		NSSize size = [self visibleRect].size;
-		NSSize bufferSize = NSMakeSize(((int)size.width + 3) & ~0x3,
-									   size.height);
-		NSMutableData *buffer = [NSMutableData dataWithLength:(bufferSize.width *
-															   bufferSize.height *
-															   3)];
+		[self enterContext];
 		
-		CGLLockContext(cglContextObj);
+		OEImage image = ((OpenGLCanvas *)canvas)->getFramebuffer();
 		
-		[[self openGLContext] makeCurrentContext];
+		[self leaveContext];
 		
-		glReadBuffer(GL_BACK);
-		glReadPixels(0, 0, bufferSize.width, bufferSize.height, GL_RGB, GL_UNSIGNED_BYTE,
-					 [buffer mutableBytes]);
-		
-		CGLUnlockContext(cglContextObj);
-		
-		unsigned char *planes = (unsigned char *)[buffer mutableBytes];
+		unsigned char *planes = (unsigned char *)image.getPixels();
 		
 		NSBitmapImageRep *rep;
 		rep = [[[NSBitmapImageRep alloc] initWithBitmapDataPlanes:&planes
-													   pixelsWide:size.width
-													   pixelsHigh:size.height
+													   pixelsWide:image.getSize().width
+													   pixelsHigh:image.getSize().height
 													bitsPerSample:8
 												  samplesPerPixel:3
 														 hasAlpha:NO
 														 isPlanar:NO
 												   colorSpaceName:NSDeviceRGBColorSpace
-													  bytesPerRow:(bufferSize.width * 3)
+													  bytesPerRow:image.getBytesPerRow()
 													 bitsPerPixel:24] autorelease];
 		
-		NSImage *image = [[[NSImage alloc] init] autorelease];
-		[image addRepresentation:rep];
-		[image setFlipped:YES];
+		NSImage *theImage = [[[NSImage alloc] init] autorelease];
+		[theImage addRepresentation:rep];
+		[theImage setFlipped:YES];
 		// This flips the rep
-		[image lockFocusOnRepresentation:rep];
-		[image unlockFocus];
+		[theImage lockFocusOnRepresentation:rep];
+		[theImage unlockFocus];
 		
-		[pasteboard setData:[image TIFFRepresentation] forType:NSTIFFPboardType];
+		[pasteboard setData:[theImage TIFFRepresentation] forType:NSTIFFPboardType];
 	}
 }
 
@@ -989,7 +1014,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 		return;
 	
 	[document lockEmulation];
+	
 	((OpenGLCanvas *)canvas)->doPaste(getCPPString(text));
+	
 	[document unlockEmulation];
 }
 
@@ -1013,7 +1040,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 - (void)delete:(id)sender
 {
 	[document lockEmulation];
+	
 	((OpenGLCanvas *)canvas)->doDelete();
+	
 	[document unlockEmulation];
 }
 
