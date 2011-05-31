@@ -545,8 +545,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 {
 	NSLog(@"CanvasView startDisplayLink");
 	
-	if (displayLink)
-		CVDisplayLinkStart(displayLink);
+	CVDisplayLinkStart(displayLink);
 	
 	/*	[[NSNotificationCenter defaultCenter] addObserver:self
 	 selector:@selector(globalFrameDidChange:)
@@ -558,10 +557,14 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 {
 	NSLog(@"CanvasView stopDisplayLink");
 	
-	if (displayLink)
-		CVDisplayLinkStop(displayLink);
+	CVDisplayLinkStop(displayLink);
 	
 	//	[[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (BOOL)displayLinkRunning
+{
+	return CVDisplayLinkIsRunning(displayLink);
 }
 
 - (void)globalFrameDidChange:(NSNotification*)notification
@@ -573,14 +576,22 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (BOOL)isDisplayCanvas
 {
+	[document lockEmulation];
+	
 	CanvasMode value = ((OpenGLCanvas *)canvas)->getMode();
+	
+	[document unlockEmulation];
 	
 	return (value == CANVAS_MODE_DISPLAY);
 }
 
 - (BOOL)isPaperCanvas
 {
+	[document lockEmulation];
+	
 	CanvasMode value = ((OpenGLCanvas *)canvas)->getMode();
+	
+	[document unlockEmulation];
 	
 	return (value == CANVAS_MODE_PAPER);
 }
@@ -619,7 +630,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 													  NSMinY([self visibleRect]) /
 													  NSHeight([self frame])));
 	
-	if (!CVDisplayLinkIsRunning(displayLink))
+	if (![self displayLinkRunning])
 	{
 		if (!((OpenGLCanvas *)canvas)->vsync())
 			((OpenGLCanvas *)canvas)->draw();
@@ -658,6 +669,13 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	return NSMakeSize(size.width, size.height);
 }
 
+- (NSSize)canvasPixelDensity
+{
+	OESize pixelDensity = ((OpenGLCanvas *)canvas)->getPixelDensity();
+	
+	return NSMakeSize(pixelDensity.width, pixelDensity.height);
+}
+
 - (NSSize)pageSize
 {
 	OESize size = ((OpenGLCanvas *)canvas)->getPageSize();
@@ -665,9 +683,16 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	return NSMakeSize(size.width, size.height);
 }
 
-- (NSBitmapImageRep *)page:(int)index
+- (NSImage *)canvasImage:(NSRect)rect
 {
-	OEImage image = ((OpenGLCanvas *)canvas)->getPage(index);
+	[self enterContext];
+	
+	OEImage image = ((OpenGLCanvas *)canvas)->getImage(OEMakeRect(rect.origin.x,
+																  rect.origin.y,
+																  rect.size.width,
+																  rect.size.height));
+	
+	[self leaveContext];
 	
 	OESize size = image.getSize();
 	int bytesPerPixel = image.getBytesPerPixel();
@@ -688,7 +713,15 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 												 bitsPerPixel:8 * bytesPerPixel]
 		   autorelease];
 	
-	return rep;
+	NSImage *theImage = [[[NSImage alloc] init] autorelease];
+	[theImage addRepresentation:rep];
+	
+	[theImage setFlipped:YES];
+	// This flips the rep
+	[theImage lockFocusOnRepresentation:rep];
+	[theImage unlockFocus];
+	
+	return theImage;
 }
 
 // Keyboard
@@ -977,34 +1010,14 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 		NSArray *pasteboardTypes = [NSArray arrayWithObjects:NSTIFFPboardType, nil];
 		[pasteboard declareTypes:pasteboardTypes owner:self];
 		
-		[self enterContext];
+		NSRect rect;
+		rect.origin = NSMakePoint(0, 0);
+		rect.size = [self canvasSize];
 		
-		OEImage image = ((OpenGLCanvas *)canvas)->getFramebuffer();
+		NSImage *image = [self canvasImage:rect];
 		
-		[self leaveContext];
-		
-		unsigned char *planes = (unsigned char *)image.getPixels();
-		
-		NSBitmapImageRep *rep;
-		rep = [[[NSBitmapImageRep alloc] initWithBitmapDataPlanes:&planes
-													   pixelsWide:image.getSize().width
-													   pixelsHigh:image.getSize().height
-													bitsPerSample:8
-												  samplesPerPixel:3
-														 hasAlpha:NO
-														 isPlanar:NO
-												   colorSpaceName:NSDeviceRGBColorSpace
-													  bytesPerRow:image.getBytesPerRow()
-													 bitsPerPixel:24] autorelease];
-		
-		NSImage *theImage = [[[NSImage alloc] init] autorelease];
-		[theImage addRepresentation:rep];
-		[theImage setFlipped:YES];
-		// This flips the rep
-		[theImage lockFocusOnRepresentation:rep];
-		[theImage unlockFocus];
-		
-		[pasteboard setData:[theImage TIFFRepresentation] forType:NSTIFFPboardType];
+		[pasteboard setData:[image TIFFRepresentation]
+					forType:NSTIFFPboardType];
 	}
 }
 

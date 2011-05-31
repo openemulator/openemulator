@@ -278,7 +278,8 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	
 	void *device = [[dict objectForKey:@"device"] pointerValue];
 	NSString *label = [dict objectForKey:@"label"];
-	OpenGLCanvas *canvas = (OpenGLCanvas *)[[dict objectForKey:@"canvas"] pointerValue];
+	OpenGLCanvas *canvas = (OpenGLCanvas *)[[dict objectForKey:@"canvas"]
+											pointerValue];
 	
 	CanvasWindowController *canvasWindowController;
 	canvasWindowController = [[CanvasWindowController alloc] initWithDevice:device
@@ -361,6 +362,31 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 							 autorelease];
 	
 	NSPrintOperation *op = [NSPrintOperation printOperationWithView:view];
+	NSPrintInfo *printInfo = [op printInfo];
+	[printInfo setHorizontalPagination:NSFitPagination];
+	[printInfo setHorizontallyCentered:NO];
+	[printInfo setVerticallyCentered:NO];
+	
+	if ([canvasView isPaperCanvas])
+	{
+		[printInfo setTopMargin:0.0 * 72.0];
+		[printInfo setRightMargin:0.0 * 72.0];
+		[printInfo setBottomMargin:0.0 * 72.0];
+		[printInfo setLeftMargin:0.0 * 72.0];
+	}
+	else
+	{
+		[printInfo setTopMargin:0.5 * 72.0];
+		[printInfo setRightMargin:0.5 * 72.0];
+		[printInfo setBottomMargin:0.5 * 72.0];
+		[printInfo setLeftMargin:0.5 * 72.0];
+	}
+	
+	NSPrintPanel *panel = [op printPanel];
+	[panel setOptions:([panel options] |
+					   NSPrintPanelShowsPaperSize |
+					   NSPrintPanelShowsOrientation)];
+	
 	[op runOperationModalForWindow:[NSApp mainWindow]
 						  delegate:self
 					didRunSelector:NULL
@@ -595,7 +621,9 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	}
 	
 	[self lockEmulation];
+	
 	((OEComponent *)device)->postMessage(NULL, message, NULL);
+	
 	[self unlockEmulation];
 }
 

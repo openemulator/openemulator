@@ -387,6 +387,7 @@ cellWasDoubleClickedAtIndex:(NSUInteger)index
 		if ([[item edlPath] compare:path] == NSOrderedSame)
 			itemIndex = i;
 	}
+	
 	[fImageBrowserView setSelectionIndexes:[NSIndexSet indexSetWithIndex:itemIndex]
 					  byExtendingSelection:NO];
 	NSRect itemRect = [fImageBrowserView itemFrameAtIndex:itemIndex];

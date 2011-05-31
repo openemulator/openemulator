@@ -272,23 +272,24 @@ void Monitor::notify(OEComponent *sender, int notification, void *data)
 {
 	if (sender == audio)
 	{
-		/*		ta++;
-		 if (canvas && (ta >= 48000 / 512 * 5))
-		 {
-		 canvas->removeObserver(this, CANVAS_KEYBOARD_DID_CHANGE);
-		 canvas->removeObserver(this, CANVAS_UNICODEKEYBOARD_DID_CHANGE);
-		 canvas->removeObserver(this, CANVAS_POINTER_DID_CHANGE);
-		 canvas->removeObserver(this, CANVAS_MOUSE_DID_CHANGE);
-		 canvas->removeObserver(this, CANVAS_JOYSTICK1_DID_CHANGE);
-		 canvas->removeObserver(this, CANVAS_JOYSTICK2_DID_CHANGE);
-		 canvas->removeObserver(this, CANVAS_JOYSTICK3_DID_CHANGE);
-		 canvas->removeObserver(this, CANVAS_JOYSTICK4_DID_CHANGE);
-		 
-		 canvas->removeObserver(this, CANVAS_DID_VSYNC);
-		 
-		 device->postMessage(this, DEVICE_DESTROY_CANVAS, &canvas);
-		 }
-		 */
+		/*
+		ta++;
+		if (canvas && (ta >= 48000 / 512 * 5))
+		{
+			canvas->removeObserver(this, CANVAS_KEYBOARD_DID_CHANGE);
+			canvas->removeObserver(this, CANVAS_UNICODEKEYBOARD_DID_CHANGE);
+			canvas->removeObserver(this, CANVAS_POINTER_DID_CHANGE);
+			canvas->removeObserver(this, CANVAS_MOUSE_DID_CHANGE);
+			canvas->removeObserver(this, CANVAS_JOYSTICK1_DID_CHANGE);
+			canvas->removeObserver(this, CANVAS_JOYSTICK2_DID_CHANGE);
+			canvas->removeObserver(this, CANVAS_JOYSTICK3_DID_CHANGE);
+			canvas->removeObserver(this, CANVAS_JOYSTICK4_DID_CHANGE);
+			
+			canvas->removeObserver(this, CANVAS_DID_VSYNC);
+			
+			device->postMessage(this, DEVICE_DESTROY_CANVAS, &canvas);
+		}
+		*/
 		/*
 		int *p = (int *)image.getPixels();
 		if (p)
@@ -304,14 +305,14 @@ void Monitor::notify(OEComponent *sender, int notification, void *data)
 			
 			if (canvas)
 				canvas->postMessage(this, CANVAS_POST_IMAGE, &image);
-		}*/
-		
+		}
+		*/
 		return;
 	}
 	
 	if (notification != CANVAS_DID_VSYNC)
 		return;
-	
+	/*
 	int *p = (int *)image.getPixels();
 	if (p)
 	{
@@ -326,7 +327,7 @@ void Monitor::notify(OEComponent *sender, int notification, void *data)
 		
 		if (canvas)
 			canvas->postMessage(this, CANVAS_POST_IMAGE, &image);
-	}
+	}*/
 }
 
 void Monitor::updateVideoRect()

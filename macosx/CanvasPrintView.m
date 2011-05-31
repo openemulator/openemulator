@@ -14,11 +14,14 @@
 
 - (id)initWithCanvasView:(CanvasView *)theCanvasView
 {
+	NSSize pixelDensity = [theCanvasView canvasPixelDensity];
+	NSSize scale = NSMakeSize(72.0 / pixelDensity.width,
+							  72.0 / pixelDensity.height);
+	
 	NSSize frameSize = [theCanvasView canvasSize];
-	NSRect frame = NSMakeRect(0,
-							  0,
-							  frameSize.width,
-							  frameSize.height);
+	NSRect frame = NSMakeRect(0, 0,
+							  frameSize.width * scale.width,
+							  frameSize.height * scale.height);
 	
 	if (self = [super initWithFrame:frame])
 	{
@@ -28,51 +31,33 @@
 	return self;
 }
 
-- (void)drawImage:(NSImage *)theImage inRect:(NSRect)rect isFlipped:(BOOL)flipped
+- (BOOL)isOpaque
 {
-	BOOL wasFlipped = [theImage isFlipped];
-	
-	[theImage setFlipped:flipped];
-	[theImage drawInRect:rect
-				fromRect:NSZeroRect
-			   operation:NSCompositeSourceOver
-				fraction:1.0];
-	
-	[theImage setFlipped:wasFlipped];
+    return YES;
+}
+
+- (BOOL)isFlipped
+{
+	return [canvasView isPaperCanvas];
 }
 
 - (void)drawRect:(NSRect)theRect
 {
-	NSBitmapImageRep *rep;
+	NSSize pixelDensity = [canvasView canvasPixelDensity];
+	NSSize scale = NSMakeSize(pixelDensity.width / 72.0,
+							  pixelDensity.height / 72.0);
 	
-	rep = [canvasView page:0];
+	NSRect ourRect = NSMakeRect(theRect.origin.x * scale.width,
+								theRect.origin.y * scale.height,
+								theRect.size.width * scale.width,
+								theRect.size.height * scale.height);
 	
-	NSImage *image = [[[NSImage alloc] init] autorelease];
-	[image addRepresentation:rep];
+	NSImage *image = [canvasView canvasImage:ourRect];
 	
-	[self drawImage:image
-			 inRect:theRect
-		  isFlipped:[self isFlipped]];
-}
-
-- (BOOL)knowsPageRange:(NSRangePointer)aRange
-{
-	NSRect bounds = [self bounds];
-	NSSize pageSize = [canvasView pageSize];
-	aRange->location = 1;
-	aRange->length = NSHeight(bounds) / pageSize.height + 1;
-	
-	return YES;
-}
-
-- (NSRect)rectForPage:(NSInteger)pageNumber
-{
-	NSSize pageSize = [canvasView pageSize];
-	
-	return NSMakeRect(0,
-					  pageNumber * pageSize.height,
-					  pageSize.width,
-					  pageSize.height);
+	[image drawInRect:theRect
+			 fromRect:NSZeroRect
+			operation:NSCompositeSourceOver
+			 fraction:1.0];
 }
 
 @end

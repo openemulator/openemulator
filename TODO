@@ -1,8 +1,4 @@
 ==To-Do==
-* Fix graphics tablet disappearing sometimes
-* Fix printing
-* Remove automatic scrolling in template chooser when changing group
-
 * Implement hardware library
 * Implement OEEmulation testAddEDL
 * Implement OEEmulation addEDL
@@ -13,6 +9,7 @@
 * Implement removal of devices in a daisy chain (when port and connector are of the same kind)
 * Implement disk image file locking, if the disk image is writable (flock)
 
+* Fix scrolling in template chooser when changing group
 * Add search in template chooser
 * CanvasWindow in fullscreen mode could have multiple display sizes
 * Implement CPU Load

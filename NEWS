@@ -1,4 +1,10 @@
+==2011-06==
+
 ==2011-05==
+* Fixed printing
+* Fixed getImage, the front buffer is now used
+* Fixed canvas display link trouble, canvases are no longer sleeping when they shouldn't
+* Fixed errors around glCopyTexSubImage2D
 * Fixed resize flickering (THIS ONE WAS HARD), CGL doesn't like multithreading+backbuffer rendering
 * Fixed canvas copy
 * Added support for detecting default shaderEnable value

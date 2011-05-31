@@ -37,16 +37,20 @@
 
 - (void)initOpenGL;
 - (void)freeOpenGL;
+
 - (void)startDisplayLink;
 - (void)stopDisplayLink;
+- (BOOL)displayLinkRunning;
+
 - (BOOL)isDisplayCanvas;
 - (BOOL)isPaperCanvas;
 - (NSSize)defaultViewSize;
 - (void)vsync;
 
 - (NSSize)canvasSize;
+- (NSSize)canvasPixelDensity;
 - (NSSize)pageSize;
-- (NSBitmapImageRep *)page:(int)index;
+- (NSImage *)canvasImage:(NSRect)rect;
 
 - (void)setKeyboardFlags:(NSInteger)theKeyboardFlags;
 - (void)synchronizeKeyboardFlags;

@@ -67,7 +67,7 @@ int OEImage::getBytesPerPixel()
 
 int OEImage::getBytesPerRow()
 {
-	return getBytesPerPixel() * size.width;
+	return getBytesPerPixel() * (int)size.width;
 }
 
 bool OEImage::readFile(string path)
@@ -115,8 +115,7 @@ bool OEImage::readFile(string path)
 						update();
 						
 						// Copy image
-						int bytesPerPixel = ((color_type == PNG_COLOR_TYPE_RGB) ? 
-											 3 : 4);
+						int bytesPerPixel = (format == OEIMAGE_RGB) ? 3 : 4;
 						int bytesPerRow = width * bytesPerPixel;
 						unsigned char **rows = (unsigned char **) png_get_rows(png, info);
 						unsigned char *pixelsp = (unsigned char *) getPixels();
@@ -156,12 +155,12 @@ void OEImage::overlay(OEPoint origin, OEImage& image)
 	bool isAlpha = (image.getFormat() == OEIMAGE_RGBA);
 	
 	int srcBytesPerRow = image.getBytesPerRow();
-	int srcOffset = ((rect.origin.y - origin.y) * srcBytesPerRow +
-					 (rect.origin.x - origin.y) * image.getBytesPerPixel());
+	int srcOffset = ((int)(rect.origin.y - origin.y) * srcBytesPerRow +
+					 (int)(rect.origin.x - origin.y) * image.getBytesPerPixel());
 	unsigned char *src = (unsigned char *)image.getPixels() + srcOffset;
 	int dstBytesPerRow = getBytesPerRow();
-	int dstOffset = (rect.origin.y * srcBytesPerRow +
-					 rect.origin.x * getBytesPerPixel());
+	int dstOffset = (int)rect.origin.y * srcBytesPerRow +
+					 (int)rect.origin.x * getBytesPerPixel();
 	unsigned char *dst = (unsigned char *)getPixels() + dstOffset;
 	int n = (int)OEWidth(rect) * getBytesPerPixel();
 	
@@ -186,16 +185,18 @@ OEImage OEImage::getClip(OERect rect)
 	OEImage image;
 	
 	rect = OEIntersectionRect(rect, OEMakeRect(0, 0, size.width, size.height));
+	
+	image.setFormat(format);
 	image.setSize(rect.size);
 	
 	int srcBytesPerRow = getBytesPerRow();
-	int srcOffset = (rect.origin.y * srcBytesPerRow +
-					 rect.origin.x * getBytesPerPixel());
+	int srcOffset = ((int)rect.origin.y * srcBytesPerRow +
+					 (int)rect.origin.x * getBytesPerPixel());
 	unsigned char *src = getPixels() + srcOffset;
 	int dstBytesPerRow = image.getBytesPerRow();
 	unsigned char *dst = image.getPixels();
 	
-	for (int y = 0; y < OEHeight(rect); y++)
+	for (int y = 0; y < (int)OEHeight(rect); y++)
 	{
 		memcpy(dst, src, dstBytesPerRow);
 		src += srcBytesPerRow;
@@ -208,7 +209,7 @@ OEImage OEImage::getClip(OERect rect)
 void OEImage::update()
 {
 	int prevSize = pixels.size();
-	pixels.resize(getBytesPerRow() * size.height);
+	pixels.resize(getBytesPerRow() * (int)size.height);
 	
 	int diff = pixels.size() - prevSize;
 	if (diff > 0)

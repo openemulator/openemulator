@@ -202,11 +202,14 @@
 	if (NSMinY(frameRect) < NSMinY(screenRect))
 		frameRect.origin.y = NSMinY(screenRect);
 	
-	[fCanvasView stopDisplayLink];
+	BOOL displayLinkRunning = [fCanvasView displayLinkRunning];
+	if (displayLinkRunning)
+		[fCanvasView stopDisplayLink];
 	
 	[self setFrame:frameRect display:YES animate:YES];
 	
-	[fCanvasView startDisplayLink];
+	if (displayLinkRunning)
+		[fCanvasView startDisplayLink];
 }
 
 - (void)toggleFullscreen:(id)sender

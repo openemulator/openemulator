@@ -152,7 +152,7 @@ public:
 	CanvasDisplayConfiguration()
 	{
 		displayResolution = OEMakeSize(640, 480);
-		displayPixelDensity = OEMakeSize(72, 72);
+		displayPixelDensity = 72;
 		displayBarrel = 0;
 		displayScanlineAlpha = 0;
 		displayCenterLighting = 1;
@@ -177,7 +177,7 @@ public:
 	}
 	
 	OESize displayResolution;
-	OESize displayPixelDensity;
+	float displayPixelDensity;
 	float displayBarrel;
 	float displayScanlineAlpha;
 	float displayCenterLighting;
@@ -220,9 +220,8 @@ public:
 };
 
 // OpenGL canvas configuration:
-// * pageResolution is the number of pixels resolved on a page
-// * pagePixelDensity is the number of resolved pixels on a page per inch
-// * Note that for paper canvases, pixel density is related to the image sampling frequency
+// * viewportDefaultSize is the default canvas size in display pixels
+// * viewportPixelDensity is scaling when printing
 
 class CanvasOpenGLConfiguration
 {
@@ -230,11 +229,11 @@ public:
 	CanvasOpenGLConfiguration()
 	{
 		viewportDefaultSize = OEMakeSize(640, 480);
-		viewportPixelDensity = OEMakeSize(72, 72);
+		viewportPixelDensity = 72;
 	}
 	
 	OESize viewportDefaultSize;
-	OESize viewportPixelDensity;
+	float viewportPixelDensity;
 };
 
 // Canvas HID notifications

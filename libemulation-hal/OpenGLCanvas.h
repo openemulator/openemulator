@@ -78,16 +78,14 @@ public:
 	void setViewportSize(OESize size);
 	
 	OESize getSize();
-	OESize getPixelDensity();
 	OERect getClipRect();
 	void scrollPoint(OEPoint aPoint);
-	
+	OESize getPixelDensity();
 	OESize getPageSize();
-	OEImage getPage(int index);
+	OEImage getImage(OERect rect);
 	
 	bool vsync();
 	void draw();
-	OEImage getFramebuffer();
 	
 	void becomeKeyWindow();
 	void resignKeyWindow();
@@ -192,7 +190,7 @@ private:
 	double getCurrentTime();
 	void drawBezel();
 	
-	void readFramebuffer(OEImage *image);
+	OEImage readFramebuffer();
 	
 	void postHIDNotification(int notification, int usageId, float value);
 	void updateCapture(OpenGLCanvasCapture capture);

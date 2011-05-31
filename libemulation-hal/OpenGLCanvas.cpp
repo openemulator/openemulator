@@ -178,8 +178,6 @@ OERect OpenGLCanvas::getClipRect()
 		rect.origin = clipOrigin;
 		rect.size = OEMakeSize(image.getSize().width,
 							   clipHeight);
-		
-		unlock();
 	}
 	else if (mode == CANVAS_MODE_OPENGL)
 	{
@@ -208,12 +206,13 @@ OESize OpenGLCanvas::getPixelDensity()
 	lock();
 	
 	if (mode == CANVAS_MODE_DISPLAY)
-		// To-Do: Update with videoRect and imageSize
-		pixelDensity = displayConfiguration.displayPixelDensity;
+		pixelDensity = OEMakeSize(displayConfiguration.displayPixelDensity,
+								  displayConfiguration.displayPixelDensity);
 	else if (mode == CANVAS_MODE_PAPER)
 		pixelDensity = paperConfiguration.pagePixelDensity;
 	else if (mode == CANVAS_MODE_OPENGL)
-		pixelDensity = openGLConfiguration.viewportPixelDensity;
+		pixelDensity = OEMakeSize(openGLConfiguration.viewportPixelDensity,
+								  openGLConfiguration.viewportPixelDensity);
 	
 	unlock();
 	
@@ -238,14 +237,27 @@ OESize OpenGLCanvas::getPageSize()
 	return size;
 }
 
-OEImage OpenGLCanvas::getPage(int index)
+OEImage OpenGLCanvas::getImage(OERect rect)
 {
-	OESize size = getSize();
-	
-	return image.getClip(OEMakeRect(0,
-									0,
-									size.width,
-									size.height));
+	if (mode == CANVAS_MODE_PAPER)
+	{
+		OESize size = getPageSize();
+		
+		return image.getClip(rect);
+	}
+	else 
+	{
+		OEImage image = readFramebuffer();
+		
+		OESize scale = OEMakeSize(image.getSize().height / getSize().height,
+								  image.getSize().height / getSize().height);
+		rect.origin.x *= scale.width;
+		rect.origin.y *= scale.height;
+		rect.size.width *= scale.width;
+		rect.size.height *= scale.height;
+		
+		return image.getClip(rect);
+	}
 }
 
 bool OpenGLCanvas::vsync()
@@ -335,18 +347,6 @@ void OpenGLCanvas::draw()
 	unlock();
 }
 
-OEImage OpenGLCanvas::getFramebuffer()
-{
-	OEImage image;
-	
-	image.setFormat(OEIMAGE_RGB);
-	image.setSize(viewportSize);
-	
-	readFramebuffer(&image);
-	
-	return image;
-}
-
 // OpenGL
 
 bool OpenGLCanvas::initOpenGL()
@@ -379,10 +379,11 @@ bool OpenGLCanvas::initOpenGL()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
 	glEnable(GL_TEXTURE_2D);
-	
 	glGenTextures(OPENGLCANVAS_TEXTURE_END, texture);
-	
 	loadTextures();
+
+	glPixelStorei(GL_PACK_ALIGNMENT, 1);
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	
 	loadShaders();
 	
@@ -959,6 +960,7 @@ void OpenGLCanvas::renderImage()
 	glUniform1i(glGetUniformLocation(renderShader, "texture"), 0);
 	glUniform2f(glGetUniformLocation(renderShader, "texture_size"),
 				texSize.width, texSize.height);
+	glReadBuffer(GL_BACK);
 	
 	OESize imageSize = image.getSize();
 	for (float y = 0; y < imageSize.height; y += viewportSize.height)
@@ -966,10 +968,10 @@ void OpenGLCanvas::renderImage()
 		{
 			// Calculate rects
 			OESize clipSize = viewportSize;
-			if (clipSize.width > imageSize.width)
-				clipSize.width = imageSize.width;
-			if (clipSize.height > imageSize.height)
-				clipSize.height = imageSize.height;
+			if ((x + clipSize.width) > imageSize.width)
+				clipSize.width = imageSize.width - x;
+			if ((y + clipSize.height) > imageSize.height)
+				clipSize.height = imageSize.height - y;
 			
 			OERect textureRect = OEMakeRect(x / texSize.width,
 											y / texSize.height,
@@ -1051,12 +1053,12 @@ void OpenGLCanvas::drawDisplayCanvas()
 									imageSize.width / texSize.width, 
 									imageSize.height / texSize.height);
 	
-	OESize canvasResolution = displayConfiguration.displayResolution;
+	OESize displayResolution = displayConfiguration.displayResolution;
 	
 	float viewportAspectRatio = viewportSize.width / viewportSize.height;
-	float canvasAspectRatio = canvasResolution.width / canvasResolution.height;
+	float displayAspectRatio = displayResolution.width / displayResolution.height;
 	
-	float ratio = viewportAspectRatio / canvasAspectRatio;
+	float ratio = viewportAspectRatio / displayAspectRatio;
 	
 	if (ratio > 1)
 	{
@@ -1132,10 +1134,10 @@ void OpenGLCanvas::drawDisplayCanvas()
 		if (dotPitch <= 0.001)
 			dotPitch = 0.001;
 		OESize elemNum = OEMakeSize(displayConfiguration.displayResolution.width /
-									displayConfiguration.displayPixelDensity.width *
+									displayConfiguration.displayPixelDensity *
 									25.4 / dotPitch * 0.5,
 									displayConfiguration.displayResolution.height / 
-									displayConfiguration.displayPixelDensity.height *
+									displayConfiguration.displayPixelDensity *
 									25.4 / dotPitch * shadowVerticalScale);
 		glUniform2f(glGetUniformLocation(displayShader, "shadowmask_scale"),
 					texSize.width / imageSize.width *
@@ -1413,16 +1415,44 @@ void OpenGLCanvas::drawBezel()
 
 // Read framebuffer
 
-void OpenGLCanvas::readFramebuffer(OEImage *image)
+OEImage OpenGLCanvas::readFramebuffer()
 {
-	glPixelStorei(GL_PACK_ALIGNMENT, 1);
+	OERect readRect;
 	
-	glReadPixels(0, 0,
-				 image->getSize().width, image->getSize().height,
+	readRect = OEMakeRect(0,
+						  0,
+						  viewportSize.width,
+						  viewportSize.height);
+	
+	OESize displayResolution = displayConfiguration.displayResolution;
+	
+	float viewportAspectRatio = viewportSize.width / viewportSize.height;
+	float displayAspectRatio = displayResolution.width / displayResolution.height;
+	
+	float ratio = viewportAspectRatio / displayAspectRatio;
+	if (ratio > 1)
+	{
+		readRect.origin.x = readRect.size.width * ((1.0 - 1.0 / ratio) * 0.5);
+		readRect.size.width /= ratio;
+	}
+	else
+	{
+		readRect.origin.y = readRect.size.width * ((1.0 - ratio) * 0.5);
+		readRect.size.height *= ratio;
+	}
+	
+	OEImage image;
+	
+	image.setFormat(OEIMAGE_RGB);
+	image.setSize(readRect.size);
+	
+	glReadBuffer(GL_FRONT);
+	glReadPixels(OEMinX(readRect), OEMinY(readRect),
+				 OEWidth(readRect), OEHeight(readRect),
 				 GL_RGB, GL_UNSIGNED_BYTE,
-				 image->getPixels());
+				 image.getPixels());
 	
-	glPixelStorei(GL_PACK_ALIGNMENT, 4);
+	return image;
 }
 
 // HID
@@ -1671,7 +1701,11 @@ bool OpenGLCanvas::setMode(CanvasMode *mode)
 	if (!mode)
 		return false;
 	
+	lock();
+	
 	this->mode = *mode;
+	
+	unlock();
 	
 	return true;
 }
@@ -1811,7 +1845,11 @@ bool OpenGLCanvas::setPrintHead(OEPoint *point)
 	if (!point)
 		return false;
 	
+	lock();
+	
 	printHead = *point;
+	
+	unlock();
 	
 	return true;
 }
@@ -1876,7 +1914,9 @@ void OpenGLCanvas::notify(OEComponent *sender, int notification, void *data)
 bool OpenGLCanvas::addObserver(OEComponent *observer, int notification)
 {
 	lock();
+	
 	bool value = OEComponent::addObserver(observer, notification);
+	
 	unlock();
 	
 	return value;
@@ -1885,7 +1925,9 @@ bool OpenGLCanvas::addObserver(OEComponent *observer, int notification)
 bool OpenGLCanvas::removeObserver(OEComponent *observer, int notification)
 {
 	lock();
+	
 	bool value = OEComponent::removeObserver(observer, notification);
+	
 	unlock();
 	
 	return value;

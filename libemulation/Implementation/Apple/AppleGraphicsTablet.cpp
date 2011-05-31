@@ -68,7 +68,7 @@ bool AppleGraphicsTablet::init()
 	image.readFile(viewPath);
 	
 	configuration.displayResolution = image.getSize();
-	configuration.displayPixelDensity = OEMakeSize(50, 50);
+	configuration.displayPixelDensity = 50;
 	canvas->postMessage(this, CANVAS_CONFIGURE_DISPLAY, &configuration);
 	
 	canvas->postMessage(this, CANVAS_POST_IMAGE, &image);

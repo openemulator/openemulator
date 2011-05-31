@@ -521,7 +521,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		NSString *pathExtension = [[path pathExtension] lowercaseString];
 		if ([[documentController diskImagePathExtensions] containsObject:pathExtension])
 		{
-			if ([item hasStorages] || (index == -1))
+			if ([item hasStorages] && (index == -1))
 			{
 				if ([item testMount:path])
 					return NSDragOperationCopy;
