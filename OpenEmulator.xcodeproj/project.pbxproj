@@ -66,6 +66,7 @@
 		008363111326C15300CB9A21 /* PAAudio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 008363091326C15300CB9A21 /* PAAudio.cpp */; };
 		008363121326C15300CB9A21 /* PAAudio.h in Headers */ = {isa = PBXBuildFile; fileRef = 0083630A1326C15300CB9A21 /* PAAudio.h */; };
 		008F2FE7138E0AD600409723 /* DocumentController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00AD746811A2F10E00BAC29C /* DocumentController.mm */; };
+		009085401395D23D00B7D75F /* LibraryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 0090853F1395D23D00B7D75F /* LibraryItem.m */; };
 		00954E781277B79E00C17203 /* EmulationOutlineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00954E771277B79E00C17203 /* EmulationOutlineCell.m */; };
 		00954E991277BB8E00C17203 /* EmulationWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00954E981277BB8E00C17203 /* EmulationWindowController.m */; };
 		00954EA71277BC1200C17203 /* AudioControlsWindowController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00954EA61277BC1200C17203 /* AudioControlsWindowController.mm */; };
@@ -266,6 +267,8 @@
 		008363081326C15300CB9A21 /* OEVector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEVector.h; sourceTree = "<group>"; };
 		008363091326C15300CB9A21 /* PAAudio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PAAudio.cpp; sourceTree = "<group>"; };
 		0083630A1326C15300CB9A21 /* PAAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAAudio.h; sourceTree = "<group>"; };
+		0090853E1395D23D00B7D75F /* LibraryItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryItem.h; sourceTree = "<group>"; };
+		0090853F1395D23D00B7D75F /* LibraryItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryItem.m; sourceTree = "<group>"; };
 		00954E761277B79E00C17203 /* EmulationOutlineCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmulationOutlineCell.h; sourceTree = "<group>"; };
 		00954E771277B79E00C17203 /* EmulationOutlineCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmulationOutlineCell.m; sourceTree = "<group>"; };
 		00954E971277BB8E00C17203 /* EmulationWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmulationWindowController.h; sourceTree = "<group>"; };
@@ -805,6 +808,8 @@
 				0073DD8E136FCA1C00087303 /* CanvasToolbarView.m */,
 				00BDB1F513863188004DF2AF /* CanvasPrintView.h */,
 				00BDB1F613863188004DF2AF /* CanvasPrintView.m */,
+				0090853E1395D23D00B7D75F /* LibraryItem.h */,
+				0090853F1395D23D00B7D75F /* LibraryItem.m */,
 			);
 			name = Sources;
 			path = macosx;
@@ -1166,6 +1171,7 @@
 				006B5CD013826D0700EEB5BC /* CanvasWindow.m in Sources */,
 				00BDB1F713863188004DF2AF /* CanvasPrintView.m in Sources */,
 				008F2FE7138E0AD600409723 /* DocumentController.mm in Sources */,
+				009085401395D23D00B7D75F /* LibraryItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

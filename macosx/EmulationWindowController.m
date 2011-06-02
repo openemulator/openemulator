@@ -93,25 +93,14 @@
 	
 	NSLog(@"EmulationWindowController updateEmulation");
 	
-	EmulationItem *portsItem;
-	
 	// Preserve state
 	NSString *uid = [[selectedItem uid] copy];
-	BOOL isAvailablePortsExpanded = NO;
-	portsItem = [rootItem childWithUID:@"AVAILABLE PORTS"];
-	if (portsItem)
-		isAvailablePortsExpanded = [fOutlineView isItemExpanded:portsItem];
 	
 	[rootItem release];
 	rootItem = [[EmulationItem alloc] initRootWithDocument:[self document]];
 	
 	[fOutlineView reloadData];
 	[fOutlineView expandItem:nil expandChildren:YES];
-	
-	// Collapse ports
-	portsItem = [rootItem childWithUID:@"AVAILABLE PORTS"];
-	if (portsItem && !isAvailablePortsExpanded)
-		[fOutlineView collapseItem:portsItem];
 	
 	if (![self selectItem:rootItem withUid:uid])
 		[fOutlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:1]
@@ -183,8 +172,6 @@
 			locationLabel = NSLocalizedString(@"Built-in", @"Emulation Value.");
 		if ([selectedItem isMount])
 			stateTitle = NSLocalizedString(@"Format:", @"Emulation Format.");
-		else if ([selectedItem isPort])
-			stateTitle = NSLocalizedString(@"Type:", @"Emulation Type.");
 		else
 			stateTitle = NSLocalizedString(@"State:", @"Emulation State.");
 		stateLabel = NSLocalizedString([selectedItem stateLabel],

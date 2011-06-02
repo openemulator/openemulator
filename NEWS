@@ -1,6 +1,9 @@
 ==2011-06==
+* Updated connector images
 
 ==2011-05==
+* Removed AVAILABLE PORTS disclosure triangle and port names with port types
+* Improved printing, display canvases are now displays centered and single-page always
 * Fixed printing
 * Fixed getImage, the front buffer is now used
 * Fixed canvas display link trouble, canvases are no longer sleeping when they shouldn't

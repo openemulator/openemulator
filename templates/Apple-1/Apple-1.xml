@@ -6,8 +6,8 @@
 <port id="apple1.videoPort" ref="" type="Composite Video" label="Video Port" image="images/Connectors/RCA Female.png">
     <inlet ref="apple1.terminal" property="monitor" outletRef="connector" />
 </port>
-<port id="apple1.slot1" ref="" type="Apple-1 Slot" label="Slot 1" image="images/Connectors/Edge44.png" />
-<port id="apple1.slot2" ref="" type="Apple-1 Slot" label="Slot 2" image="images/Connectors/Edge44.png" />
+<port id="apple1.slot1" ref="" type="Apple-1 Expansion" label="Expansion Port 1" image="images/Connectors/Edge44.png" />
+<port id="apple1.slot2" ref="" type="Apple-1 Expansion" label="Expansion Port 2" image="images/Connectors/Edge44.png" />
 <component id="apple1.controlBus" class="ControlBus">
 	<property name="device" ref="apple1" />
     <property name="audio" ref="audio" />

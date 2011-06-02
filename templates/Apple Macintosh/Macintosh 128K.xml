@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
-<edl version="1.0" label="Apple Macintosh 128k" image="images/Apple/Apple Macintosh.png" description="">
+<edl version="1.0" label="Macintosh 128K" image="images/Apple/Apple Macintosh.png" description="">
 
-<device id="appleMac128" label="Macintosh" image="images/Apple/Apple Macintosh.png" group="system">
+<device id="appleMac128" label="Macintosh 128K" image="images/Apple/Apple Macintosh.png" group="system">
 </device>
-<port id="appleMac128.disk" ref="" type="Apple Macintosh Disk Port" label="Disk Port" image="images/Connectors/DB19 Female.png">
+<port id="appleMac128.disk" ref="" type="Apple Disk Drive" label="Disk Drive Port" image="images/Connectors/DB19 Female.png">
 </port>
-<port id="appleMac128.serial" ref="" type="RS-232" label="Printer Port" image="images/Connectors/DB9 Female.png">
+<port id="appleMac128.serial" ref="" type="RS-232" label="Printer Port" image="images/Connectors/DE9 Female.png">
 </port>
-<port id="appleMac128.serial" ref="" type="RS-232" label="Serial Port" image="images/Connectors/DB9 Female.png">
+<port id="appleMac128.serial" ref="" type="RS-232" label="Serial Port" image="images/Connectors/DE9 Female.png">
 </port>
 <component id="appleMac128.monitor" class="Monitor">
     <property name="device" ref="appleMac128" />

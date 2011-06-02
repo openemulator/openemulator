@@ -78,13 +78,14 @@ bool MOSKIM1IO::init()
 		return false;
 	}
 	
-	CanvasBezel bezel = CANVAS_BEZEL_POWER;
+//	CanvasBezel bezel = CANVAS_BEZEL_POWER;
 	CanvasDisplayConfiguration configuration;
 	OEImage image;
 	image.readFile(viewPath);
 	configuration.displayResolution = image.getSize();
+	configuration.displayPixelDensity = 108;
 	
-	canvas->postMessage(this, CANVAS_SET_BEZEL, &bezel);
+//	canvas->postMessage(this, CANVAS_SET_BEZEL, &bezel);
 	canvas->postMessage(this, CANVAS_CONFIGURE_DISPLAY, &configuration);
 	canvas->postMessage(this, CANVAS_POST_IMAGE, &image);
 	

@@ -363,12 +363,12 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	
 	NSPrintOperation *op = [NSPrintOperation printOperationWithView:view];
 	NSPrintInfo *printInfo = [op printInfo];
-	[printInfo setHorizontalPagination:NSFitPagination];
-	[printInfo setHorizontallyCentered:NO];
-	[printInfo setVerticallyCentered:NO];
 	
 	if ([canvasView isPaperCanvas])
 	{
+		[printInfo setHorizontalPagination:NSFitPagination];
+		[printInfo setHorizontallyCentered:NO];
+		[printInfo setVerticallyCentered:NO];
 		[printInfo setTopMargin:0.0 * 72.0];
 		[printInfo setRightMargin:0.0 * 72.0];
 		[printInfo setBottomMargin:0.0 * 72.0];
@@ -376,6 +376,8 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	}
 	else
 	{
+		[printInfo setHorizontalPagination:NSFitPagination];
+		[printInfo setVerticalPagination:NSFitPagination];
 		[printInfo setTopMargin:0.5 * 72.0];
 		[printInfo setRightMargin:0.5 * 72.0];
 		[printInfo setBottomMargin:0.5 * 72.0];

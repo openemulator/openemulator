@@ -119,12 +119,7 @@
 	EmulationItem *item = [self itemAtRow:rowIndex];
 	float indentation;
 	if ([item isGroup])
-	{
-		if ([[item label] compare:@"AVAILABLE PORTS"] == NSOrderedSame)
-			indentation = 18.0;
-		else
-			indentation = 6.0;
-	}
+		indentation = 6.0;
 	else if ([item isMount])
 		indentation = 32.0;
 	else
@@ -138,11 +133,6 @@
 
 - (NSRect)frameOfOutlineCellAtRow:(NSInteger)row
 {
-	EmulationItem *item = [self itemAtRow:row];
-	if ([item isGroup] &&
-		[[item label] compare:@"AVAILABLE PORTS"] == NSOrderedSame)
-		return [super frameOfOutlineCellAtRow:row];
-	
 	return NSZeroRect;
 }
 

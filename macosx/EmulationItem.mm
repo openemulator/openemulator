@@ -246,19 +246,18 @@
 			string theLocationLabel;
 			theDevice->postMessage(NULL, DEVICE_GET_LOCATIONLABEL, &theLocationLabel);
 			if (theLocationLabel == "")
-				label = [[getNSString(deviceLabel) stringByAppendingFormat:@" %@",
-						  theLabel] retain];
+				locationLabel = [[getNSString(deviceLabel) stringByAppendingFormat:@" %@",
+								  theLabel] retain];
 			else
-				label = [[getNSString(theLocationLabel) stringByAppendingFormat:@" %@",
-						  theLabel] retain];
-			
-			locationLabel = [getNSString(theLocationLabel) retain];
+				locationLabel = [[getNSString(theLocationLabel) stringByAppendingFormat:@" %@",
+								  theLabel] retain];
 		}
 		NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
 		NSString *imagePath = [resourcePath stringByAppendingPathComponent:theImagePath];
 		image = [[NSImage alloc] initByReferencingFile:imagePath];
 		
-		stateLabel = [thePortType copy];
+		label = [thePortType copy];
+		stateLabel = @"Disconnected";
 	}
 	
 	return self;
