@@ -44,6 +44,8 @@ typedef enum
 	
 	NSMutableArray *canvases;
 	NSMutableArray *storages;
+	
+	NSString *portType;
 }
 
 - (id)initRootWithDocument:(Document *)theDocument;
@@ -58,7 +60,7 @@ typedef enum
 - (id)initPortWithUID:(NSString *)theUID
 				label:(NSString *)theLabel
 			imagePath:(NSString *)theImagePath
-			 portType:(NSString *)theType
+			 portType:(NSString *)thePortType
 			 document:(Document *)theDocument;
 
 - (BOOL)isGroup;
@@ -81,6 +83,8 @@ typedef enum
 - (void)setValue:(NSString *)value forSettingAtIndex:(NSInteger)index;
 - (NSString *)valueForSettingAtIndex:(NSInteger)index;
 
+- (BOOL)isRemovable;
+
 - (BOOL)hasCanvases;
 - (void)showCanvases;
 
@@ -94,5 +98,7 @@ typedef enum
 - (void)unmount;
 
 - (BOOL)isPort;
+- (BOOL)addEDL:(NSString *)path;
+- (BOOL)testAddEDL:(NSString *)path;
 
 @end

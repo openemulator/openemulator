@@ -11,7 +11,11 @@
 #import <Cocoa/Cocoa.h>
 
 @interface LibraryWindowController : NSWindowController
+<NSTableViewDataSource>
 {
+	IBOutlet NSTableView *fTableView;
+	
+	NSMutableArray *items;
 }
 
 @end

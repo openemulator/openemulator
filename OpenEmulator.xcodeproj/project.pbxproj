@@ -85,6 +85,7 @@
 		00B5709E10863C2A00CDE4A7 /* TemplateChooserWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B5709D10863C2A00CDE4A7 /* TemplateChooserWindowController.m */; };
 		00B5CB94136F0B6C007A7BED /* AppleSilentype.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B5CB92136F0B6C007A7BED /* AppleSilentype.cpp */; };
 		00B5CB95136F0B6D007A7BED /* AppleSilentype.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B5CB93136F0B6C007A7BED /* AppleSilentype.h */; };
+		00B7EDB913975D050046BBFE /* LibraryTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B7EDB813975D050046BBFE /* LibraryTableView.m */; };
 		00B974B410701DDA00BD1402 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = 00B974AD10701DCD00BD1402 /* sounds */; };
 		00BB34B412C5C5AE007332B5 /* EmulationItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00BB34B312C5C5AE007332B5 /* EmulationItem.mm */; };
 		00BDB1F713863188004DF2AF /* CanvasPrintView.m in Sources */ = {isa = PBXBuildFile; fileRef = 00BDB1F613863188004DF2AF /* CanvasPrintView.m */; };
@@ -304,6 +305,8 @@
 		00B5709D10863C2A00CDE4A7 /* TemplateChooserWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TemplateChooserWindowController.m; sourceTree = "<group>"; };
 		00B5CB92136F0B6C007A7BED /* AppleSilentype.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleSilentype.cpp; sourceTree = "<group>"; };
 		00B5CB93136F0B6C007A7BED /* AppleSilentype.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleSilentype.h; sourceTree = "<group>"; };
+		00B7EDB713975D050046BBFE /* LibraryTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryTableView.h; sourceTree = "<group>"; };
+		00B7EDB813975D050046BBFE /* LibraryTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryTableView.m; sourceTree = "<group>"; };
 		00B8864612A3923D0052B7A4 /* edl-1.0.dtd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "edl-1.0.dtd"; sourceTree = "<group>"; };
 		00B8881312A393990052B7A4 /* Apple1CassetteInterfaceCard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Apple1CassetteInterfaceCard.cpp; path = libemulation/Implementation/Apple/Apple1CassetteInterfaceCard.cpp; sourceTree = SOURCE_ROOT; };
 		00B8881412A393990052B7A4 /* Apple1CassetteInterfaceCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Apple1CassetteInterfaceCard.h; path = libemulation/Implementation/Apple/Apple1CassetteInterfaceCard.h; sourceTree = SOURCE_ROOT; };
@@ -810,6 +813,8 @@
 				00BDB1F613863188004DF2AF /* CanvasPrintView.m */,
 				0090853E1395D23D00B7D75F /* LibraryItem.h */,
 				0090853F1395D23D00B7D75F /* LibraryItem.m */,
+				00B7EDB713975D050046BBFE /* LibraryTableView.h */,
+				00B7EDB813975D050046BBFE /* LibraryTableView.m */,
 			);
 			name = Sources;
 			path = macosx;
@@ -1172,6 +1177,7 @@
 				00BDB1F713863188004DF2AF /* CanvasPrintView.m in Sources */,
 				008F2FE7138E0AD600409723 /* DocumentController.mm in Sources */,
 				009085401395D23D00B7D75F /* LibraryItem.m in Sources */,
+				00B7EDB913975D050046BBFE /* LibraryTableView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

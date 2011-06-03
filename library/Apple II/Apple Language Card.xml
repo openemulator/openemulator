@@ -3,7 +3,7 @@
 <edl version="1.0" label="16kB Language Card" image="images/Apple II/Apple Language Card.png">
 
 <device id="languageCard" label="images/Apple II/Apple 16kB Language Card" image="Apple Language Card.png" />
-<connector id="languageCard.connector" ref="" type="AppleIISlot" label="Apple 16kB Language Card" image="Apple Language Card.png">
+<connector id="languageCard.connector" ref="" type="Apple II Expansion Card" label="Connector" >
     <inlet ref="languageCard.io" property="mmu" outletRef="mmu" />
 </connector>
 <component id="languageCard.io" class="AppleLanguageCard">

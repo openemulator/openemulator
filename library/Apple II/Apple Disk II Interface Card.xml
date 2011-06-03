@@ -5,7 +5,7 @@
 <device id="diskIIInterface" label="Apple Disk II Interface Card" image="images/Apple/Apple Disk II Interface Card.png" group="expansions">
     <setting ref="diskII.drive" name="romType" label="Controller Type" type="select" options="13 Sector Controller,16 Sector Controller" />
 </device>
-<connector id="diskIIInterface.connector" ref="" type="AppleIISlot" label="Apple Disk II Interface Card" image="Apple Disk II Interface Card.png">
+<connector id="diskIIInterface.connector" ref="" type="Apple II Expansion Card" label="Apple Disk II Interface Card">
     <inlet ref="diskIIInterface.io" property="controlBus" outletRef="controlBus" />
 </connector>
 <port id="diskIIInterface.drive1" ref="" type="AppleDisk525" label="Drive 1" image="Apple Disk II Socket.png">

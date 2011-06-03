@@ -134,10 +134,7 @@
 		((OEComponent *)device)->postMessage(NULL, DEVICE_GET_LOCATIONLABEL, &value);
 		locationLabel = [getNSString(value) retain];
 		((OEComponent *)device)->postMessage(NULL, DEVICE_GET_STATELABEL, &value);
-		if (value == "")
-			stateLabel = @"Connected";
-		else
-			stateLabel = [getNSString(value) retain];
+		stateLabel = [getNSString(value) retain];
 		
 		// Read settings
 		settingsRef = [[NSMutableArray alloc] init];
@@ -257,7 +254,9 @@
 		image = [[NSImage alloc] initByReferencingFile:imagePath];
 		
 		label = [thePortType copy];
-		stateLabel = @"Disconnected";
+		stateLabel = @"";
+		
+		portType = [thePortType copy];
 	}
 	
 	return self;
@@ -282,6 +281,8 @@
 	
 	[canvases release];
 	[storages release];
+	
+	[portType release];
 	
 	[super dealloc];
 }
@@ -414,6 +415,13 @@
 	}
 	
 	return value;
+}
+
+
+
+- (BOOL)isRemovable
+{
+	return (type == EMULATIONITEM_DEVICE) && ([locationLabel length] != 0);
 }
 
 
@@ -580,9 +588,68 @@
 	return;
 }
 
+
+
 - (BOOL)isPort
 {
 	return (type == EMULATIONITEM_AVAILABLEPORT);
+}
+
+- (BOOL)addEDL:(NSString *)path
+{
+	OEEDL edl;
+	
+	edl.open(getCPPString(path));
+	if (!edl.isOpen())
+		return NO;
+	
+	OEConnectorsInfo connectorsInfo = edl.getFreeConnectorsInfo();
+	
+	edl.close();
+	
+	if (connectorsInfo.size() == 1)
+	{
+		OEConnectorInfo connectorInfo = connectorsInfo.at(0);
+		
+		map<string, string> idMap;
+		idMap[getCPPString([self uid])] = connectorInfo.id;
+		
+		OEEmulation *emulation = (OEEmulation *)[document emulation];
+		
+		[document lockEmulation];
+		
+		bool result = emulation->addEDL(getCPPString(path), idMap);
+		
+		[document unlockEmulation];
+		
+		return result;
+	}
+	
+	return NO;
+}
+
+- (BOOL)testAddEDL:(NSString *)path
+{
+	NSLog(@"Ahoy");
+	OEEDL edl;
+	
+	edl.open(getCPPString(path));
+	if (!edl.isOpen())
+		return NO;
+	
+	OEConnectorsInfo connectorsInfo = edl.getFreeConnectorsInfo();
+	
+	edl.close();
+	
+	if (connectorsInfo.size() == 1)
+	{
+		OEConnectorInfo connectorInfo = connectorsInfo.at(0);
+		
+		if (connectorInfo.type == getCPPString(portType))
+			return YES;
+	}
+	
+	return NO;
 }
 
 @end

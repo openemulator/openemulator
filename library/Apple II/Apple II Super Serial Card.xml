@@ -14,7 +14,7 @@
     <setting ref="ssc.io" name="delayAfterCR" label="Delay After CR" type="checkbox" />
 </device>
 <connector id="ssc.connector" ref="" type="AppleIISlot" label="Apple II Super Serial Card" image="Apple II Super Serial Card.png" />
-<port id="ssc.port" ref="" type="RS232" label="Serial Port" image="Serial Port.png">
+<port id="ssc.port" ref="" type="RS-232" label="Serial Port" image="Serial Port.png">
     <inlet ref="ssc.io" property="port" outletRef="io" />
 </port>
 <component id="ssc.io" class="AppleIISuperSerialCard">

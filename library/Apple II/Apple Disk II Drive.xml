@@ -5,7 +5,7 @@
 <device id="diskII" label="Apple Disk II" image="images/Apple/Apple Disk II" group="peripherals">
     <setting ref="diskII.io" name="lock" label="Force Write Protected" type="checkbox" />
 </device>
-<connector id="diskII.connector" ref="" type="AppleDisk525" label="Apple Disk II Connector" />
+<connector id="diskII.connector" ref="" type="Apple Disk Drive" label="Connector" />
 <component id="diskII.drive" class="AppleDiskII">
     <property name="image" value="/Users/mressl/test2.dsk" />
     <property name="lock" value="0" />

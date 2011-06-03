@@ -12,6 +12,14 @@
 
 @interface LibraryItem : NSObject
 {
+	NSString *name;
+	NSString *path;
 }
+
+- (id)initWithName:(NSString *)name
+			  path:(NSString *)path;
+
+- (NSString *)name;
+- (NSString *)path;
 
 @end

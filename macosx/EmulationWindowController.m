@@ -174,8 +174,14 @@
 			stateTitle = NSLocalizedString(@"Format:", @"Emulation Format.");
 		else
 			stateTitle = NSLocalizedString(@"State:", @"Emulation State.");
-		stateLabel = NSLocalizedString([selectedItem stateLabel],
-									   @"Emulation Value.");
+		stateLabel = NSLocalizedString([selectedItem stateLabel], @"Emulation Value.");
+		if (![stateLabel length])
+		{
+			if ([selectedItem isPort])
+				stateLabel = NSLocalizedString(@"Disconnected", @"Emulation Value.");
+			else
+				stateLabel = NSLocalizedString(@"Connected", @"Emulation Value.");
+		}
 		hasStorages = [selectedItem hasStorages];
 		isMount = [selectedItem isMount];
 		hasCanvases = [selectedItem hasCanvases];
@@ -266,7 +272,7 @@
 	else if (action == @selector(revealInFinder:))
 		return [item isMount];
 	else if (action == @selector(delete:))
-		return NO;
+		return [item isRemovable];
 	
 	return YES;
 }
@@ -514,6 +520,14 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 					return NSDragOperationCopy;
 			}
 		}
+		else if ([pathExtension compare:@"xml"] == NSOrderedSame)
+		{
+			if ([item isPort] && (index == -1))
+			{
+				if ([item testAddEDL:path])
+					return NSDragOperationCopy;
+			}
+		}
 	}
 	
 	return NSDragOperationNone;	
@@ -528,7 +542,14 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	NSString *path = [[pasteboard propertyListForType:NSFilenamesPboardType]
 					  objectAtIndex:0];
 	
-	[self mount:path inItem:item];
+	DocumentController *documentController;
+	documentController = [NSDocumentController sharedDocumentController];
+	
+	NSString *pathExtension = [[path pathExtension] lowercaseString];
+	if ([[documentController diskImagePathExtensions] containsObject:pathExtension])
+		[self mount:path inItem:item];
+	else if ([pathExtension compare:@"xml"] == NSOrderedSame)
+		[item addEDL:path];
 	
 	return YES;
 }
@@ -848,7 +869,7 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
 
 - (IBAction)delete:(id)sender
 {
-	// Remove device
+	// To-Do: Remove device
 }
 
 - (void)systemPowerDown:(id)sender

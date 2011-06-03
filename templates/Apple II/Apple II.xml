@@ -44,7 +44,7 @@
 <port id="appleII.gamePort" ref="sgp.conn" type="Apple Game Controller" label="Game Port" image="images/Connectors/DIP16.png">
     <inlet ref="appleII.game" property="port" outletRef="port" />
 </port>
-<port id="appleII.romSocket" ref="" type="No-Slot Clock" label="ROM Socket" image="images/Connectors/DIP28.png">
+<port id="appleII.romSocket" ref="" type="No-Slot Clock" label="ROM F8 Socket" image="images/Connectors/DIP28.png">
 </port>
 <port id="appleII.cpuSocket" ref="" type="6502 CPU" label="CPU Socket" image="images/Connectors/DIP40.png">
 </port>
@@ -344,6 +344,8 @@
 
 <device id="appleDiskII" label="Apple Disk II" image="images/Apple/Apple Disk II.png" group="peripherals">
     <setting ref="appleDiskII.io" name="forceWriteProtected" label="Force Write Protected" type="checkbox" />
+    <setting ref="appleDiskII.io" name="rpm" label="Speed" type="slider" options="290,310" />
+    <setting ref="appleDiskII.io" name="sound" label="Alternative Sounds" type="checkbox" />
 </device>
 <connector id="appleDiskII.connector" ref="" type="Apple Disk Drive Port" label="Connector" />
 <component id="appleDiskII.io" class="AppleDiskII">
@@ -360,6 +362,8 @@
 
 <device id="appleDiskII2" label="Apple Disk II" image="images/Apple/Apple Disk II.png" group="peripherals">
     <setting ref="appleDiskII2.io" name="forceWriteProtected" label="Force Write Protected" type="checkbox" />
+    <setting ref="appleDiskII.io" name="rpm" label="Speed" type="slider" options="290,310" />
+    <setting ref="appleDiskII.io" name="sound" label="Alternative Sounds" type="checkbox" />
 </device>
 <connector id="appleDiskII2.connector" ref="" type="Apple Disk Drive Port" label="Connector" />
 <component id="appleDiskII2.io" class="AppleDiskII">
