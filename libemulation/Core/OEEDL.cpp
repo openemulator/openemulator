@@ -61,7 +61,7 @@ bool OEEDL::open(string path)
 	if (is_open)
 	{
 		doc = xmlReadMemory(&data[0],
-							data.size(),
+							(int) data.size(),
 							OE_PACKAGE_EDL_PATH,
 							NULL,
 							0);
@@ -232,7 +232,7 @@ bool OEEDL::readFile(string path, OEData *data)
 	if (file.is_open())
 	{
 		file.seekg(0, ios::end);
-		int size = file.tellg();
+		int size = (int) file.tellg();
 		file.seekg(0, ios::beg);
 		
 		data->resize(size);
@@ -267,7 +267,7 @@ string OEEDL::getPathExtension(string path)
 		path = path.substr(0, path.length() - 1);
 	
 	// Find extension
-	int extensionIndex = path.rfind('.');
+	int extensionIndex = (int) path.rfind('.');
 	if (extensionIndex == string::npos)
 		return "";
 	
@@ -285,7 +285,7 @@ void OEEDL::edlLog(string message)
 
 void OEEDL::setDeviceId(string& id, string deviceId)
 {
-	int dotIndex = id.find_first_of('.');
+	int dotIndex = (int) id.find_first_of('.');
 	
 	if (dotIndex == string::npos)
 		id = deviceId;
@@ -295,7 +295,7 @@ void OEEDL::setDeviceId(string& id, string deviceId)
 
 string OEEDL::getDeviceId(string id)
 {
-	int dotIndex = id.find_first_of('.');
+	int dotIndex = (int) id.find_first_of('.');
 	
 	if (dotIndex == string::npos)
 		return id;

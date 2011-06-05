@@ -36,8 +36,6 @@
 
 static void setCapture(void *userData, OpenGLCanvasCapture capture)
 {
-	NSLog(@"CanvasView setCapture");
-	
 	BOOL isCapture = (capture != OPENGLCANVAS_CAPTURE_NONE);
 	BOOL enableMouseCursor = (capture !=
 							  OPENGLCANVAS_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR);
@@ -85,8 +83,6 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (id)initWithFrame:(NSRect)rect
 {
-	NSLog(@"CanvasView init");
-	
 	NSOpenGLPixelFormatAttribute pixelFormatAtrributes[] =
 	{
 		NSOpenGLPFADoubleBuffer,
@@ -108,7 +104,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	
 	[pixelFormat autorelease];
 	
-	if (self = [super initWithFrame:rect pixelFormat:pixelFormat])
+    self = [super initWithFrame:rect pixelFormat:pixelFormat];
+	
+    if (self)
 	{
 		// From:
 		//   http://stuff.mit.edu/afs/sipb/project/darwin/src/
@@ -231,8 +229,6 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (void)dealloc
 {
-	NSLog(@"CanvasView dealloc");
-	
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
 	[userDefaults removeObserver:self
 					  forKeyPath:@"OEVideoEnableShader"];
@@ -257,8 +253,6 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (void)awakeFromNib
 {
-	NSLog(@"CanvasView awakeFromNib");
-	
 	CanvasWindowController *canvasWindowController = [[self window] windowController];
 	document = [canvasWindowController document];
 	canvas = [canvasWindowController canvas];
@@ -303,29 +297,11 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (void)windowWillClose:(NSNotification *)notification
 {
-	NSLog(@"CanvasView windowWillClose");
-	
 	[self stopDisplayLink];
-}
-
-- (void)viewDidHide
-{
-	NSLog(@"viewDidHide");
-	
-	[super viewDidHide];
-}
-
-- (void)viewDidUnhide
-{
-	NSLog(@"viewDidUnhide");
-	
-	[super viewDidUnhide];
 }
 
 - (void)windowDidResize:(NSNotification *)notification
 {
-//	NSLog(@"CanvasView windowDidResize");
-	
 	NSSize contentSize = [[self enclosingScrollView] contentSize];
 	
 	CGLLockContext(cglContextObj);
@@ -359,13 +335,8 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (void)windowDidBecomeKey:(NSNotification *)notification
 {
-	//	NSLog(@"CanvasView windowDidBecomeKey");
-	
 	if (!canvas)
-	{
-		NSLog(@"CanvasView windowDidBecomeKey abort");
 		return;
-	}
 	
 	[document lockEmulation];
 	
@@ -390,13 +361,8 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (void)windowDidResignKey:(NSNotification *)notification
 {
-	//	NSLog(@"CanvasView windowDidResignKey");
-	
 	if (!canvas)
-	{
-		NSLog(@"CanvasView windowDidResignKey abort");
 		return;
-	}
 	
 	if ([self isMouseInView])
 		[self mouseExited:nil];
@@ -486,8 +452,6 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (void)initOpenGL
 {
-	NSLog(@"CanvasView initOpenGL");
-	
 	GLint value = 1;
 	[[self openGLContext] setValues:&value
 					   forParameter:NSOpenGLCPSwapInterval]; 
@@ -513,8 +477,6 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (void)freeOpenGL
 {
-	NSLog(@"CanvasView freeOpenGL");
-	
 	[[self openGLContext] makeCurrentContext];
 	
     CVDisplayLinkRelease(displayLink);
@@ -543,8 +505,6 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (void)startDisplayLink
 {
-	NSLog(@"CanvasView startDisplayLink");
-	
 	CVDisplayLinkStart(displayLink);
 	
 	/*	[[NSNotificationCenter defaultCenter] addObserver:self
@@ -555,8 +515,6 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (void)stopDisplayLink
 {
-	NSLog(@"CanvasView stopDisplayLink");
-	
 	CVDisplayLinkStop(displayLink);
 	
 	//	[[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -695,8 +653,8 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	[self leaveContext];
 	
 	OESize size = image.getSize();
-	int bytesPerPixel = image.getBytesPerPixel();
-	int bytesPerRow = image.getBytesPerRow();
+	NSInteger bytesPerPixel = image.getBytesPerPixel();
+	NSInteger bytesPerRow = image.getBytesPerRow();
 	unsigned char *data = image.getPixels();
 	
 	NSBitmapImageRep *rep;
@@ -728,7 +686,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (int)getUsageId:(int)keyCode
 {
-	NSInteger usageId = (keyCode < DEVICE_KEYMAP_SIZE) ? keyMap[keyCode] : 0;
+	int usageId = (keyCode < DEVICE_KEYMAP_SIZE) ? keyMap[keyCode] : 0;
 	
 	if (!usageId)
 		NSLog(@"Unknown key code %d", keyCode);
@@ -736,7 +694,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	return usageId;
 }
 
-- (void)sendUnicodeKeyEvent:(NSInteger)unicode
+- (void)sendUnicodeKeyEvent:(int)unicode
 {
 	// Discard private usage areas
 	if (((unicode >= 0xe000) && (unicode <= 0xf8ff)) ||
@@ -792,7 +750,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 		capsLockNotSynchronized = false;
 }
 
-- (void)setKeyboardFlags:(NSInteger)theKeyboardFlags
+- (void)setKeyboardFlags:(int)theKeyboardFlags
 {
 	keyboardFlags = theKeyboardFlags;
 	
@@ -807,7 +765,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	
 	if (![theEvent isARepeat])
 	{
-		NSInteger usageId = [self getUsageId:[theEvent keyCode]];
+		int usageId = [self getUsageId:[theEvent keyCode]];
 		
 		[document lockEmulation];
 		
@@ -819,7 +777,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (void)keyUp:(NSEvent *)theEvent
 {
-	NSInteger usageId = [self getUsageId:[theEvent keyCode]];
+	int usageId = [self getUsageId:[theEvent keyCode]];
 	
 	[document lockEmulation];
 	
@@ -830,7 +788,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (void)flagsChanged:(NSEvent *)theEvent
 {
-	NSInteger flags = [theEvent modifierFlags];
+	int flags = (int) [theEvent modifierFlags];
 	
 	[self updateFlags:flags forMask:NSLeftControlKeyMask
 			  usageId:CANVAS_K_LEFTCONTROL];
@@ -861,8 +819,6 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (void)mouseEntered:(NSEvent *)theEvent
 {
-	//	NSLog(@"CanvasView mouseEntered");
-	
 	[document lockEmulation];
 	
 	((OpenGLCanvas *)canvas)->enterMouse();
@@ -872,8 +828,6 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (void)mouseExited:(NSEvent *)theEvent
 {
-	//	NSLog(@"CanvasView mouseExited");
-	
 	[document lockEmulation];
 	
 	((OpenGLCanvas *)canvas)->exitMouse();
@@ -948,7 +902,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 {
 	[document lockEmulation];
 	
-	((OpenGLCanvas *)canvas)->setMouseButton([theEvent buttonNumber], true);
+	((OpenGLCanvas *)canvas)->setMouseButton((int) [theEvent buttonNumber], true);
 	
 	[document unlockEmulation];
 }
@@ -957,7 +911,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 {
 	[document lockEmulation];
 	
-	((OpenGLCanvas *)canvas)->setMouseButton([theEvent buttonNumber], false);
+	((OpenGLCanvas *)canvas)->setMouseButton((int) [theEvent buttonNumber], false);
 	
 	[document unlockEmulation];
 }

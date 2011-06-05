@@ -212,7 +212,7 @@ resizeSubviewsWithOldSize:(NSSize)oldSize
 	float deltaWidth = newSize.width - oldSize.width;
 	float deltaHeight = newSize.height - oldSize.height;
 	
-	for (NSInteger i = 0; i < [subviews count]; i++)
+	for (int i = 0; i < [subviews count]; i++)
 	{
 		NSView *subview = [subviews objectAtIndex:i];
 		NSRect frame = subview.frame;
@@ -381,7 +381,7 @@ cellWasDoubleClickedAtIndex:(NSUInteger)index
 	
 	NSInteger itemIndex = 0;
 	NSArray *groupItems = [items objectForKey:group];
-	for (NSInteger i = 0; i < [groupItems count]; i++)
+	for (int i = 0; i < [groupItems count]; i++)
 	{
 		TemplateChooserItem *item = [groupItems objectAtIndex:i];
 		if ([[item edlPath] compare:path] == NSOrderedSame)

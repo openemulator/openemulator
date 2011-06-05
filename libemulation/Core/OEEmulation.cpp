@@ -683,9 +683,9 @@ string OEEmulation::parseValueProperties(string value, map<string, string>& prop
 {
 	int startIndex;
 	
-	while ((startIndex = value.find("${")) != string::npos)
+	while ((startIndex = (int) value.find("${")) != string::npos)
 	{
-		int endIndex = value.find("}", startIndex);
+		int endIndex = (int) value.find("}", startIndex);
 		if (endIndex == string::npos)
 		{
 			value = value.substr(0, startIndex);
@@ -719,7 +719,7 @@ string OEEmulation::getLocationLabel(string id)
 	
 	vector<string> visitedIds;
 	string location = getLocationLabel(id, visitedIds);
-	int depth = visitedIds.size();
+	int depth = (int) visitedIds.size();
 	
 	if (depth == 1)
 		return "";

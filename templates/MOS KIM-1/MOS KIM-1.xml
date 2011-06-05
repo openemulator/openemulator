@@ -3,7 +3,7 @@
 <edl version="1.0" label="MOS KIM-1" image="images/MOS/MOS KIM-1.png" description="The KIM-1, short for Keyboard Input Monitor, was a small 6502-based single-board computer developed and produced by MOS Technology, Inc. and launched in 1976.">
 
 <device id="kim1" label="MOS KIM-1" image="images/MOS/MOS KIM-1.png" group="system" />
-<port id="kim1.serialPort" ref="terminal.connector" type="RS-232" label="Serial Port">
+<port id="kim1.serialPort" ref="" type="RS-232" label="Application Port" image="images/Connectors/Edge44.png">
     <inlet ref="kim1.io" property="serialPort" outletRef="io" />
 </port>
 <port id="kim1.slot1" ref="" type="MOS KIM-1 Expansion" label="Expansion Port" image="images/Connectors/Edge44.png" />
@@ -100,12 +100,6 @@
 <component id="kim1.audioIn" class="MOSKIM1PLL">
     <property name="audio" ref="audio" />
     <property name="decisionFrequency" value="3400" />
-</component>
-
-<device id="terminal" label="Terminal" image="images/Generic/Terminal.png" group="peripherals" />
-<connector id="terminal.connector" ref="" type="RS232" label="Serial Port" />
-<component id="terminal.io" class="Terminal">
-	<property name="device" ref="terminal" />
 </component>
 
 </edl>

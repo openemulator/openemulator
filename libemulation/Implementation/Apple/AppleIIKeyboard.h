@@ -21,6 +21,6 @@ public:
 	void write(OEAddress address, OEUInt8 value);
 	
 private:
-	OEComponent *host;
+	OEComponent *monitor;
 	string type;
 };

@@ -82,7 +82,7 @@ bool RAM::init()
 	if (!powerOnPattern.size())
 		powerOnPattern.resize(1);
 	else
-		powerOnPattern.resize(getNextPowerOf2(powerOnPattern.size()));
+		powerOnPattern.resize(getNextPowerOf2((int) powerOnPattern.size()));
 	
 	if (controlBus)
 		controlBus->postMessage(this, CONTROLBUS_GET_POWERSTATE, &powerState);
@@ -113,7 +113,7 @@ void RAM::notify(OEComponent *sender, int notification, void *data)
 	if ((powerState <= CONTROLBUS_POWERSTATE_HIBERNATE) &&
 		(newPowerState > CONTROLBUS_POWERSTATE_HIBERNATE))
 	{
-		int mask = powerOnPattern.size() - 1;
+		int mask = (int) powerOnPattern.size() - 1;
 		for (int i = 0; i < this->data.size(); i++)
 			datap[i] = powerOnPattern[i & mask];
 	}

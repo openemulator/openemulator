@@ -32,8 +32,8 @@ bool AppleIIKeyboard::getValue(string name, string& value)
 
 bool AppleIIKeyboard::setRef(string name, OEComponent *ref)
 {
-	if (name == "host")
-		host = ref;
+	if (name == "monitor")
+		monitor = ref;
 	else
 		return false;
 	

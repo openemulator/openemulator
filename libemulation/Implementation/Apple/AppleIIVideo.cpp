@@ -38,6 +38,14 @@ bool AppleIIVideo::setRef(string name, OEComponent *ref)
 {
 	if (name == "ram00")
 		ram = ref;
+	else if (name == "ram20")
+		ram = ref;
+	else if (name == "ram30")
+		ram = ref;
+	else if (name == "ram40")
+		ram = ref;
+	else if (name == "ram50")
+		ram = ref;
 	else if (name == "charset")
 		charset = ref;
 	else if (name == "charsetSocket")

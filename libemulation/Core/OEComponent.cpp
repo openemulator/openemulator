@@ -186,7 +186,7 @@ OEData OEComponent::getCharVector(const string& value)
 {
 	OEData result;
 	int start = (value.substr(0, 2) == "0x") ? 2 : 0;
-	int size = value.size() / 2 - start;
+	int size = (int) value.size() / 2 - start;
 	result.resize(size);
 	
 	for (int i = 0; i < size; i++)

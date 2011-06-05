@@ -24,7 +24,9 @@
 
 - (id)init
 {
-	if (self = [super initWithWindowNibName:@"Emulation"])
+    self = [super initWithWindowNibName:@"Emulation"];
+    
+	if (self)
 	{
 		checkBoxCell = [[NSButtonCell alloc] initTextCell:@""];
 		[checkBoxCell setControlSize:NSSmallControlSize];
@@ -57,8 +59,6 @@
 
 - (void)windowDidLoad
 {
-	NSLog(@"EmulationWindowController windowDidLoad");
-	
 	[self setWindowFrameAutosaveName:@"Emulation"];
 	
 	float thickness = NSMinY([fSplitView frame]);
@@ -90,8 +90,6 @@
 {
 	if (![self document])
 		return;
-	
-	NSLog(@"EmulationWindowController updateEmulation");
 	
 	// Preserve state
 	NSString *uid = [[selectedItem uid] copy];
@@ -149,8 +147,6 @@
 
 - (void)updateDetails
 {
-	NSLog(@"EmulationWindowController updateDetails");
-	
 	NSString *title = @"No Selection";
 	
 	NSImage *image = nil;
@@ -244,7 +240,7 @@
 	}
 	
 	NSArray *children = [item children];
-	for (NSInteger i = 0; i < [children count]; i++)
+	for (int i = 0; i < [children count]; i++)
 	{
 		if ([self selectItem:[children objectAtIndex:i] withUid:uid])
 			return YES;
@@ -418,7 +414,7 @@ resizeSubviewsWithOldSize:(NSSize)oldSize
 	float deltaWidth = newSize.width - oldSize.width;
 	float deltaHeight = newSize.height - oldSize.height;
 	
-	for (NSInteger i = 0; i < [subviews count]; i++)
+	for (int i = 0; i < [subviews count]; i++)
 	{
 		NSView *subview = [subviews objectAtIndex:i];
 		NSRect frame = subview.frame;

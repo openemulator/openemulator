@@ -41,6 +41,8 @@
 {
 	[self setWindowFrameAutosaveName:@"TemplateChooser"];
 	
+    [[self window] setDelegate:self];
+    
 	templateChooserViewController = [[TemplateChooserViewController alloc] init];
 	[templateChooserViewController setDelegate:self];
 	
@@ -52,6 +54,14 @@
 	NSString *group = [defaults stringForKey:@"OELastTemplateGroup"];
 	NSString *path = [defaults stringForKey:@"OELastTemplatePath"];
 	[templateChooserViewController selectGroup:group andItemWithPath:path];
+}
+
+- (BOOL)windowShouldClose:(id)sender
+{
+    // This nonsense avoids the kCGErrorInvalidConnection error
+    [[self window] orderOut:self];
+    
+    return NO;
 }
 
 - (void)templateChooserSelectionDidChange:(id)sender

@@ -66,7 +66,7 @@
 		008363111326C15300CB9A21 /* PAAudio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 008363091326C15300CB9A21 /* PAAudio.cpp */; };
 		008363121326C15300CB9A21 /* PAAudio.h in Headers */ = {isa = PBXBuildFile; fileRef = 0083630A1326C15300CB9A21 /* PAAudio.h */; };
 		008F2FE7138E0AD600409723 /* DocumentController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00AD746811A2F10E00BAC29C /* DocumentController.mm */; };
-		009085401395D23D00B7D75F /* LibraryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 0090853F1395D23D00B7D75F /* LibraryItem.m */; };
+		009085401395D23D00B7D75F /* LibraryItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0090853F1395D23D00B7D75F /* LibraryItem.mm */; };
 		00954E781277B79E00C17203 /* EmulationOutlineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00954E771277B79E00C17203 /* EmulationOutlineCell.m */; };
 		00954E991277BB8E00C17203 /* EmulationWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00954E981277BB8E00C17203 /* EmulationWindowController.m */; };
 		00954EA71277BC1200C17203 /* AudioControlsWindowController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00954EA61277BC1200C17203 /* AudioControlsWindowController.mm */; };
@@ -85,7 +85,6 @@
 		00B5709E10863C2A00CDE4A7 /* TemplateChooserWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B5709D10863C2A00CDE4A7 /* TemplateChooserWindowController.m */; };
 		00B5CB94136F0B6C007A7BED /* AppleSilentype.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B5CB92136F0B6C007A7BED /* AppleSilentype.cpp */; };
 		00B5CB95136F0B6D007A7BED /* AppleSilentype.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B5CB93136F0B6C007A7BED /* AppleSilentype.h */; };
-		00B7EDB913975D050046BBFE /* LibraryTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B7EDB813975D050046BBFE /* LibraryTableView.m */; };
 		00B974B410701DDA00BD1402 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = 00B974AD10701DCD00BD1402 /* sounds */; };
 		00BB34B412C5C5AE007332B5 /* EmulationItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00BB34B312C5C5AE007332B5 /* EmulationItem.mm */; };
 		00BDB1F713863188004DF2AF /* CanvasPrintView.m in Sources */ = {isa = PBXBuildFile; fileRef = 00BDB1F613863188004DF2AF /* CanvasPrintView.m */; };
@@ -103,6 +102,7 @@
 		00D226571350FF8B00FC69B9 /* OEMatrix3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00D226551350FF8B00FC69B9 /* OEMatrix3.cpp */; };
 		00D6729D12C9A256009F0D9E /* EmulationShow.png in Resources */ = {isa = PBXBuildFile; fileRef = 00E442931278727600713A05 /* EmulationShow.png */; };
 		00D73D9D136CC9B300BD5465 /* IEEE1394Interface.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D73D9C136CC9B300BD5465 /* IEEE1394Interface.h */; };
+		00D75C691399FFDB004AA153 /* LibraryTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D75C681399FFD9004AA153 /* LibraryTableCell.m */; };
 		00D8448B0FFF04C0005802F0 /* DiskImage.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000F66370FF8368F00C8AF23 /* DiskImage.icns */; };
 		00D8448F0FFF04C0005802F0 /* Emulation.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000F663A0FF8368F00C8AF23 /* Emulation.icns */; };
 		00D844A90FFF04C0005802F0 /* OpenEmulator.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000F66520FF8368F00C8AF23 /* OpenEmulator.icns */; };
@@ -194,12 +194,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		00039CEB12B01D530025D374 /* EmulationUnmountPressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = EmulationUnmountPressed.png; path = macosx/Images/EmulationUnmountPressed.png; sourceTree = "<group>"; };
-		00039CF212B01D530025D374 /* EmulationShowPressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = EmulationShowPressed.png; path = macosx/Images/EmulationShowPressed.png; sourceTree = "<group>"; };
-		00039D2412B01EB40025D374 /* EmulationUnmountSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = EmulationUnmountSelected.png; path = macosx/Images/EmulationUnmountSelected.png; sourceTree = "<group>"; };
-		00039D2512B01EB40025D374 /* EmulationShowSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = EmulationShowSelected.png; path = macosx/Images/EmulationShowSelected.png; sourceTree = "<group>"; };
-		00039E0A12B0365A0025D374 /* EmulationUnmountRollover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = EmulationUnmountRollover.png; path = macosx/Images/EmulationUnmountRollover.png; sourceTree = "<group>"; };
-		00039E0B12B0365A0025D374 /* EmulationShowRollover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = EmulationShowRollover.png; path = macosx/Images/EmulationShowRollover.png; sourceTree = "<group>"; };
+		00039CEB12B01D530025D374 /* EmulationUnmountPressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EmulationUnmountPressed.png; sourceTree = "<group>"; };
+		00039CF212B01D530025D374 /* EmulationShowPressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EmulationShowPressed.png; sourceTree = "<group>"; };
+		00039D2412B01EB40025D374 /* EmulationUnmountSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EmulationUnmountSelected.png; sourceTree = "<group>"; };
+		00039D2512B01EB40025D374 /* EmulationShowSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EmulationShowSelected.png; sourceTree = "<group>"; };
+		00039E0A12B0365A0025D374 /* EmulationUnmountRollover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EmulationUnmountRollover.png; sourceTree = "<group>"; };
+		00039E0B12B0365A0025D374 /* EmulationShowRollover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EmulationShowRollover.png; sourceTree = "<group>"; };
 		00039E7C12B03F660025D374 /* libemulation-hal.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libemulation-hal.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		00039EFE12B04E910025D374 /* libemulation.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libemulation.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		00039FD012B04F6C0025D374 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = /usr/lib/libxml2.dylib; sourceTree = "<absolute>"; };
@@ -215,7 +215,7 @@
 		002579FB1218A83400206E56 /* StringConversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StringConversion.h; sourceTree = "<group>"; };
 		00391CB112D3A320002C5ABD /* LibraryWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryWindowController.h; sourceTree = "<group>"; };
 		00391CB212D3A320002C5ABD /* LibraryWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryWindowController.m; sourceTree = "<group>"; };
-		00391D6012D3B570002C5ABD /* IconLibrary.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IconLibrary.png; path = macosx/Images/IconLibrary.png; sourceTree = "<group>"; };
+		00391D6012D3B570002C5ABD /* IconLibrary.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IconLibrary.png; sourceTree = "<group>"; };
 		00391D6312D3B588002C5ABD /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Library.xib; sourceTree = "<group>"; };
 		00391D9912D3B94F002C5ABD /* library */ = {isa = PBXFileReference; lastKnownFileType = folder; path = library; sourceTree = "<group>"; };
 		00391F6B12D3FFF3002C5ABD /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/TemplateChooserView.xib; sourceTree = "<group>"; };
@@ -255,8 +255,8 @@
 		0071E3B910803F7300F2D54F /* TemplateChooserItem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TemplateChooserItem.mm; sourceTree = "<group>"; };
 		0073DD8D136FCA1C00087303 /* CanvasToolbarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanvasToolbarView.h; sourceTree = "<group>"; };
 		0073DD8E136FCA1C00087303 /* CanvasToolbarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CanvasToolbarView.m; sourceTree = "<group>"; };
-		0073DDBE136FCCC900087303 /* ToolbarBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ToolbarBackground.png; path = macosx/Images/ToolbarBackground.png; sourceTree = "<group>"; };
-		0076FD6412A1ED8C00A3FEC7 /* AudioPause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = AudioPause.png; path = macosx/Images/AudioPause.png; sourceTree = "<group>"; };
+		0073DDBE136FCCC900087303 /* ToolbarBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ToolbarBackground.png; sourceTree = "<group>"; };
+		0076FD6412A1ED8C00A3FEC7 /* AudioPause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AudioPause.png; sourceTree = "<group>"; };
 		0078F654127348ED0042577E /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/AudioControls.xib; sourceTree = "<group>"; };
 		00811DFD12D251E9009AD2F0 /* AppleDiskIIInterfaceCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleDiskIIInterfaceCard.h; sourceTree = "<group>"; };
 		00811DFE12D251E9009AD2F0 /* AppleDiskIIInterfaceCard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleDiskIIInterfaceCard.cpp; sourceTree = "<group>"; };
@@ -269,7 +269,7 @@
 		008363091326C15300CB9A21 /* PAAudio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PAAudio.cpp; sourceTree = "<group>"; };
 		0083630A1326C15300CB9A21 /* PAAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAAudio.h; sourceTree = "<group>"; };
 		0090853E1395D23D00B7D75F /* LibraryItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryItem.h; sourceTree = "<group>"; };
-		0090853F1395D23D00B7D75F /* LibraryItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryItem.m; sourceTree = "<group>"; };
+		0090853F1395D23D00B7D75F /* LibraryItem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LibraryItem.mm; sourceTree = "<group>"; };
 		00954E761277B79E00C17203 /* EmulationOutlineCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmulationOutlineCell.h; sourceTree = "<group>"; };
 		00954E771277B79E00C17203 /* EmulationOutlineCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmulationOutlineCell.m; sourceTree = "<group>"; };
 		00954E971277BB8E00C17203 /* EmulationWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmulationWindowController.h; sourceTree = "<group>"; };
@@ -305,8 +305,6 @@
 		00B5709D10863C2A00CDE4A7 /* TemplateChooserWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TemplateChooserWindowController.m; sourceTree = "<group>"; };
 		00B5CB92136F0B6C007A7BED /* AppleSilentype.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleSilentype.cpp; sourceTree = "<group>"; };
 		00B5CB93136F0B6C007A7BED /* AppleSilentype.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleSilentype.h; sourceTree = "<group>"; };
-		00B7EDB713975D050046BBFE /* LibraryTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryTableView.h; sourceTree = "<group>"; };
-		00B7EDB813975D050046BBFE /* LibraryTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryTableView.m; sourceTree = "<group>"; };
 		00B8864612A3923D0052B7A4 /* edl-1.0.dtd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "edl-1.0.dtd"; sourceTree = "<group>"; };
 		00B8881312A393990052B7A4 /* Apple1CassetteInterfaceCard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Apple1CassetteInterfaceCard.cpp; path = libemulation/Implementation/Apple/Apple1CassetteInterfaceCard.cpp; sourceTree = SOURCE_ROOT; };
 		00B8881412A393990052B7A4 /* Apple1CassetteInterfaceCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Apple1CassetteInterfaceCard.h; path = libemulation/Implementation/Apple/Apple1CassetteInterfaceCard.h; sourceTree = SOURCE_ROOT; };
@@ -390,6 +388,8 @@
 		00D226541350FF8B00FC69B9 /* OEMatrix3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEMatrix3.h; sourceTree = "<group>"; };
 		00D226551350FF8B00FC69B9 /* OEMatrix3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEMatrix3.cpp; sourceTree = "<group>"; };
 		00D73D9C136CC9B300BD5465 /* IEEE1394Interface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IEEE1394Interface.h; sourceTree = "<group>"; };
+		00D75C671399FFD7004AA153 /* LibraryTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryTableCell.h; sourceTree = "<group>"; };
+		00D75C681399FFD9004AA153 /* LibraryTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryTableCell.m; sourceTree = "<group>"; };
 		00D844BE0FFF0505005802F0 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		00D844C40FFF0505005802F0 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Preferences.xib; sourceTree = "<group>"; };
 		00D845670FFF0FD2005802F0 /* DocumentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DocumentController.h; sourceTree = "<group>"; };
@@ -397,24 +397,24 @@
 		00D845760FFF0FD2005802F0 /* OpenEmulator_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenEmulator_Prefix.pch; sourceTree = "<group>"; };
 		00D845790FFF0FD2005802F0 /* PreferencesWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferencesWindowController.h; sourceTree = "<group>"; };
 		00D8457A0FFF0FD2005802F0 /* PreferencesWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferencesWindowController.m; sourceTree = "<group>"; };
-		00E442911278726B00713A05 /* IconDevices.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IconDevices.png; path = macosx/Images/IconDevices.png; sourceTree = "<group>"; };
-		00E442931278727600713A05 /* EmulationShow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = EmulationShow.png; path = macosx/Images/EmulationShow.png; sourceTree = "<group>"; };
-		00ED379712779AD000BEF6BD /* AudioMax.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = AudioMax.png; path = macosx/Images/AudioMax.png; sourceTree = "<group>"; };
-		00ED379812779AD000BEF6BD /* AudioMin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = AudioMin.png; path = macosx/Images/AudioMin.png; sourceTree = "<group>"; };
-		00ED379912779AD000BEF6BD /* AudioPlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = AudioPlay.png; path = macosx/Images/AudioPlay.png; sourceTree = "<group>"; };
-		00ED379A12779AD000BEF6BD /* AudioRecord.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = AudioRecord.png; path = macosx/Images/AudioRecord.png; sourceTree = "<group>"; };
-		00ED379B12779AD000BEF6BD /* AudioStop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = AudioStop.png; path = macosx/Images/AudioStop.png; sourceTree = "<group>"; };
-		00ED37A812779DD800BEF6BD /* IconAudio.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IconAudio.png; path = macosx/Images/IconAudio.png; sourceTree = "<group>"; };
-		00ED37A912779DD800BEF6BD /* IconColdRestart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IconColdRestart.png; path = macosx/Images/IconColdRestart.png; sourceTree = "<group>"; };
-		00ED37AA12779DD800BEF6BD /* IconDebuggerBreak.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IconDebuggerBreak.png; path = macosx/Images/IconDebuggerBreak.png; sourceTree = "<group>"; };
-		00ED37AB12779DD800BEF6BD /* IconGeneral.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IconGeneral.png; path = macosx/Images/IconGeneral.png; sourceTree = "<group>"; };
-		00ED37AC12779DD800BEF6BD /* IconInspector.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IconInspector.png; path = macosx/Images/IconInspector.png; sourceTree = "<group>"; };
-		00ED37AD12779DD800BEF6BD /* IconPowerDown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IconPowerDown.png; path = macosx/Images/IconPowerDown.png; sourceTree = "<group>"; };
-		00ED37AE12779DD800BEF6BD /* IconSleep.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IconSleep.png; path = macosx/Images/IconSleep.png; sourceTree = "<group>"; };
-		00ED37AF12779DD800BEF6BD /* IconVideo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IconVideo.png; path = macosx/Images/IconVideo.png; sourceTree = "<group>"; };
-		00ED37B012779DD800BEF6BD /* IconWakeUp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IconWakeUp.png; path = macosx/Images/IconWakeUp.png; sourceTree = "<group>"; };
-		00ED37B112779DD800BEF6BD /* IconWarmRestart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IconWarmRestart.png; path = macosx/Images/IconWarmRestart.png; sourceTree = "<group>"; };
-		00F01B4612A0D6EC000527CA /* EmulationUnmount.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = EmulationUnmount.png; path = macosx/Images/EmulationUnmount.png; sourceTree = "<group>"; };
+		00E442911278726B00713A05 /* IconDevices.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IconDevices.png; sourceTree = "<group>"; };
+		00E442931278727600713A05 /* EmulationShow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EmulationShow.png; sourceTree = "<group>"; };
+		00ED379712779AD000BEF6BD /* AudioMax.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AudioMax.png; sourceTree = "<group>"; };
+		00ED379812779AD000BEF6BD /* AudioMin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AudioMin.png; sourceTree = "<group>"; };
+		00ED379912779AD000BEF6BD /* AudioPlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AudioPlay.png; sourceTree = "<group>"; };
+		00ED379A12779AD000BEF6BD /* AudioRecord.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AudioRecord.png; sourceTree = "<group>"; };
+		00ED379B12779AD000BEF6BD /* AudioStop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AudioStop.png; sourceTree = "<group>"; };
+		00ED37A812779DD800BEF6BD /* IconAudio.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IconAudio.png; sourceTree = "<group>"; };
+		00ED37A912779DD800BEF6BD /* IconColdRestart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IconColdRestart.png; sourceTree = "<group>"; };
+		00ED37AA12779DD800BEF6BD /* IconDebuggerBreak.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IconDebuggerBreak.png; sourceTree = "<group>"; };
+		00ED37AB12779DD800BEF6BD /* IconGeneral.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IconGeneral.png; sourceTree = "<group>"; };
+		00ED37AC12779DD800BEF6BD /* IconInspector.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IconInspector.png; sourceTree = "<group>"; };
+		00ED37AD12779DD800BEF6BD /* IconPowerDown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IconPowerDown.png; sourceTree = "<group>"; };
+		00ED37AE12779DD800BEF6BD /* IconSleep.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IconSleep.png; sourceTree = "<group>"; };
+		00ED37AF12779DD800BEF6BD /* IconVideo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IconVideo.png; sourceTree = "<group>"; };
+		00ED37B012779DD800BEF6BD /* IconWakeUp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IconWakeUp.png; sourceTree = "<group>"; };
+		00ED37B112779DD800BEF6BD /* IconWarmRestart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IconWarmRestart.png; sourceTree = "<group>"; };
+		00F01B4612A0D6EC000527CA /* EmulationUnmount.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EmulationUnmount.png; sourceTree = "<group>"; };
 		00F21CE512C7C7EE00A809EF /* VerticallyCenteredTextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VerticallyCenteredTextFieldCell.h; sourceTree = "<group>"; };
 		00F21CE612C7C7EE00A809EF /* VerticallyCenteredTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VerticallyCenteredTextFieldCell.m; sourceTree = "<group>"; };
 		00F4D0BE12E2E42F00B7F5E6 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
@@ -503,6 +503,33 @@
 		000A79070FBA49C500A0F12E /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				00391D6012D3B570002C5ABD /* IconLibrary.png */,
+				00ED379712779AD000BEF6BD /* AudioMax.png */,
+				00ED379812779AD000BEF6BD /* AudioMin.png */,
+				0076FD6412A1ED8C00A3FEC7 /* AudioPause.png */,
+				00ED379912779AD000BEF6BD /* AudioPlay.png */,
+				00ED379A12779AD000BEF6BD /* AudioRecord.png */,
+				00ED379B12779AD000BEF6BD /* AudioStop.png */,
+				00E442931278727600713A05 /* EmulationShow.png */,
+				00039CF212B01D530025D374 /* EmulationShowPressed.png */,
+				00039E0B12B0365A0025D374 /* EmulationShowRollover.png */,
+				00039D2512B01EB40025D374 /* EmulationShowSelected.png */,
+				00F01B4612A0D6EC000527CA /* EmulationUnmount.png */,
+				00039CEB12B01D530025D374 /* EmulationUnmountPressed.png */,
+				00039E0A12B0365A0025D374 /* EmulationUnmountRollover.png */,
+				00039D2412B01EB40025D374 /* EmulationUnmountSelected.png */,
+				00ED37A812779DD800BEF6BD /* IconAudio.png */,
+				00ED37A912779DD800BEF6BD /* IconColdRestart.png */,
+				00E442911278726B00713A05 /* IconDevices.png */,
+				00ED37AA12779DD800BEF6BD /* IconDebuggerBreak.png */,
+				00ED37AB12779DD800BEF6BD /* IconGeneral.png */,
+				00ED37AC12779DD800BEF6BD /* IconInspector.png */,
+				00ED37AD12779DD800BEF6BD /* IconPowerDown.png */,
+				00ED37AE12779DD800BEF6BD /* IconSleep.png */,
+				00ED37AF12779DD800BEF6BD /* IconVideo.png */,
+				00ED37B012779DD800BEF6BD /* IconWakeUp.png */,
+				00ED37B112779DD800BEF6BD /* IconWarmRestart.png */,
+				0073DDBE136FCCC900087303 /* ToolbarBackground.png */,
 				000F66370FF8368F00C8AF23 /* DiskImage.icns */,
 				000F663A0FF8368F00C8AF23 /* Emulation.icns */,
 				000F66520FF8368F00C8AF23 /* OpenEmulator.icns */,
@@ -768,53 +795,53 @@
 		2A37F4ABFDCFA73011CA2CEA /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				00F21CE512C7C7EE00A809EF /* VerticallyCenteredTextFieldCell.h */,
-				00F21CE612C7C7EE00A809EF /* VerticallyCenteredTextFieldCell.m */,
-				00AD746811A2F10E00BAC29C /* DocumentController.mm */,
-				00A0B8031069761A007930A5 /* Document.mm */,
-				00A0B7B81068949D007930A5 /* Document.h */,
-				00D845670FFF0FD2005802F0 /* DocumentController.h */,
 				00D845730FFF0FD2005802F0 /* main.m */,
 				00D845760FFF0FD2005802F0 /* OpenEmulator_Prefix.pch */,
-				00D845790FFF0FD2005802F0 /* PreferencesWindowController.h */,
-				00D8457A0FFF0FD2005802F0 /* PreferencesWindowController.m */,
-				0071E3B810803F7300F2D54F /* TemplateChooserItem.h */,
-				0071E3B910803F7300F2D54F /* TemplateChooserItem.mm */,
+				002579FB1218A83400206E56 /* StringConversion.h */,
+				006115C011DD0347008AA3EE /* Application.h */,
+				006115C111DD0347008AA3EE /* Application.m */,
+				00D845670FFF0FD2005802F0 /* DocumentController.h */,
+				00AD746811A2F10E00BAC29C /* DocumentController.mm */,
 				00B5709C10863C2A00CDE4A7 /* TemplateChooserWindowController.h */,
 				00B5709D10863C2A00CDE4A7 /* TemplateChooserWindowController.m */,
 				00FE0C041095353B00B92AB7 /* TemplateChooserViewController.h */,
 				00FE0C051095353B00B92AB7 /* TemplateChooserViewController.m */,
-				006115C011DD0347008AA3EE /* Application.h */,
-				006115C111DD0347008AA3EE /* Application.m */,
-				002579FB1218A83400206E56 /* StringConversion.h */,
-				00954E761277B79E00C17203 /* EmulationOutlineCell.h */,
-				00954E771277B79E00C17203 /* EmulationOutlineCell.m */,
-				00954E971277BB8E00C17203 /* EmulationWindowController.h */,
-				00954E981277BB8E00C17203 /* EmulationWindowController.m */,
-				00954EA51277BC1200C17203 /* AudioControlsWindowController.h */,
-				00954EA61277BC1200C17203 /* AudioControlsWindowController.mm */,
-				00A72B6912879F530083C6A7 /* CanvasWindowController.h */,
-				00A72B6A12879F530083C6A7 /* CanvasWindowController.m */,
-				00A72B6D12879F650083C6A7 /* CanvasView.h */,
-				00A72B6E12879F650083C6A7 /* CanvasView.mm */,
-				00A72B7112879F800083C6A7 /* CanvasWindow.h */,
-				00A72B7212879F800083C6A7 /* CanvasWindow.m */,
-				0040284012B44878001C2F73 /* BackgroundView.h */,
-				0040284112B44878001C2F73 /* BackgroundView.m */,
-				00BB34B212C5C5AE007332B5 /* EmulationItem.h */,
-				00BB34B312C5C5AE007332B5 /* EmulationItem.mm */,
-				00FE381912CA6790002B47B1 /* EmulationOutlineView.h */,
-				00FE381A12CA6790002B47B1 /* EmulationOutlineView.m */,
+				0071E3B810803F7300F2D54F /* TemplateChooserItem.h */,
+				0071E3B910803F7300F2D54F /* TemplateChooserItem.mm */,
+				00D845790FFF0FD2005802F0 /* PreferencesWindowController.h */,
+				00D8457A0FFF0FD2005802F0 /* PreferencesWindowController.m */,
 				00391CB112D3A320002C5ABD /* LibraryWindowController.h */,
 				00391CB212D3A320002C5ABD /* LibraryWindowController.m */,
+				0090853E1395D23D00B7D75F /* LibraryItem.h */,
+				0090853F1395D23D00B7D75F /* LibraryItem.mm */,
+				00D75C671399FFD7004AA153 /* LibraryTableCell.h */,
+				00D75C681399FFD9004AA153 /* LibraryTableCell.m */,
+				00954EA51277BC1200C17203 /* AudioControlsWindowController.h */,
+				00954EA61277BC1200C17203 /* AudioControlsWindowController.mm */,
+				00A0B7B81068949D007930A5 /* Document.h */,
+				00A0B8031069761A007930A5 /* Document.mm */,
+				00954E971277BB8E00C17203 /* EmulationWindowController.h */,
+				00954E981277BB8E00C17203 /* EmulationWindowController.m */,
+				00FE381912CA6790002B47B1 /* EmulationOutlineView.h */,
+				00FE381A12CA6790002B47B1 /* EmulationOutlineView.m */,
+				00BB34B212C5C5AE007332B5 /* EmulationItem.h */,
+				00BB34B312C5C5AE007332B5 /* EmulationItem.mm */,
+				00954E761277B79E00C17203 /* EmulationOutlineCell.h */,
+				00954E771277B79E00C17203 /* EmulationOutlineCell.m */,
+				00A72B6912879F530083C6A7 /* CanvasWindowController.h */,
+				00A72B6A12879F530083C6A7 /* CanvasWindowController.m */,
+				00A72B7112879F800083C6A7 /* CanvasWindow.h */,
+				00A72B7212879F800083C6A7 /* CanvasWindow.m */,
+				00A72B6D12879F650083C6A7 /* CanvasView.h */,
+				00A72B6E12879F650083C6A7 /* CanvasView.mm */,
 				0073DD8D136FCA1C00087303 /* CanvasToolbarView.h */,
 				0073DD8E136FCA1C00087303 /* CanvasToolbarView.m */,
 				00BDB1F513863188004DF2AF /* CanvasPrintView.h */,
 				00BDB1F613863188004DF2AF /* CanvasPrintView.m */,
-				0090853E1395D23D00B7D75F /* LibraryItem.h */,
-				0090853F1395D23D00B7D75F /* LibraryItem.m */,
-				00B7EDB713975D050046BBFE /* LibraryTableView.h */,
-				00B7EDB813975D050046BBFE /* LibraryTableView.m */,
+				0040284012B44878001C2F73 /* BackgroundView.h */,
+				0040284112B44878001C2F73 /* BackgroundView.m */,
+				00F21CE512C7C7EE00A809EF /* VerticallyCenteredTextFieldCell.h */,
+				00F21CE612C7C7EE00A809EF /* VerticallyCenteredTextFieldCell.m */,
 			);
 			name = Sources;
 			path = macosx;
@@ -823,47 +850,20 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				0073DDBE136FCCC900087303 /* ToolbarBackground.png */,
-				00391F6A12D3FFF3002C5ABD /* TemplateChooserView.xib */,
-				00391D9912D3B94F002C5ABD /* library */,
-				00391D6212D3B588002C5ABD /* Library.xib */,
-				00391D6012D3B570002C5ABD /* IconLibrary.png */,
-				00039E0A12B0365A0025D374 /* EmulationUnmountRollover.png */,
-				00039E0B12B0365A0025D374 /* EmulationShowRollover.png */,
-				00039D2412B01EB40025D374 /* EmulationUnmountSelected.png */,
-				00039D2512B01EB40025D374 /* EmulationShowSelected.png */,
-				00039CEB12B01D530025D374 /* EmulationUnmountPressed.png */,
-				00039CF212B01D530025D374 /* EmulationShowPressed.png */,
-				0076FD6412A1ED8C00A3FEC7 /* AudioPause.png */,
-				00F01B4612A0D6EC000527CA /* EmulationUnmount.png */,
-				00CAD7D712A04C22002B92E5 /* Emulation.xib */,
-				00A72B931287A0F10083C6A7 /* Canvas.xib */,
-				00E442931278727600713A05 /* EmulationShow.png */,
-				00E442911278726B00713A05 /* IconDevices.png */,
-				00ED37A812779DD800BEF6BD /* IconAudio.png */,
-				00ED37A912779DD800BEF6BD /* IconColdRestart.png */,
-				00ED37AA12779DD800BEF6BD /* IconDebuggerBreak.png */,
-				00ED37AB12779DD800BEF6BD /* IconGeneral.png */,
-				00ED37AC12779DD800BEF6BD /* IconInspector.png */,
-				00ED37AD12779DD800BEF6BD /* IconPowerDown.png */,
-				00ED37AE12779DD800BEF6BD /* IconSleep.png */,
-				00ED37AF12779DD800BEF6BD /* IconVideo.png */,
-				00ED37B012779DD800BEF6BD /* IconWakeUp.png */,
-				00ED37B112779DD800BEF6BD /* IconWarmRestart.png */,
-				00ED379712779AD000BEF6BD /* AudioMax.png */,
-				00ED379812779AD000BEF6BD /* AudioMin.png */,
-				00ED379912779AD000BEF6BD /* AudioPlay.png */,
-				00ED379A12779AD000BEF6BD /* AudioRecord.png */,
-				00ED379B12779AD000BEF6BD /* AudioStop.png */,
 				0078F653127348ED0042577E /* AudioControls.xib */,
+				00A72B931287A0F10083C6A7 /* Canvas.xib */,
+				00CAD7D712A04C22002B92E5 /* Emulation.xib */,
+				00391D6212D3B588002C5ABD /* Library.xib */,
+				00D844BD0FFF0505005802F0 /* MainMenu.xib */,
+				00D844C30FFF0505005802F0 /* Preferences.xib */,
+				00679D06100817F700B38748 /* TemplateChooser.xib */,
+				00391F6A12D3FFF3002C5ABD /* TemplateChooserView.xib */,
+				0008FCD80FBA5D72005E876E /* Info.plist */,
+				00391D9912D3B94F002C5ABD /* library */,
 				003E2597107075D900185260 /* images */,
 				00B974AD10701DCD00BD1402 /* sounds */,
 				00C6C08810602151004D084B /* roms */,
-				00679D06100817F700B38748 /* TemplateChooser.xib */,
-				00D844BD0FFF0505005802F0 /* MainMenu.xib */,
-				00D844C30FFF0505005802F0 /* Preferences.xib */,
 				005928540FFC94E200F24A57 /* templates */,
-				0008FCD80FBA5D72005E876E /* Info.plist */,
 				000A79070FBA49C500A0F12E /* Images */,
 			);
 			name = Resources;
@@ -1176,8 +1176,8 @@
 				006B5CD013826D0700EEB5BC /* CanvasWindow.m in Sources */,
 				00BDB1F713863188004DF2AF /* CanvasPrintView.m in Sources */,
 				008F2FE7138E0AD600409723 /* DocumentController.mm in Sources */,
-				009085401395D23D00B7D75F /* LibraryItem.m in Sources */,
-				00B7EDB913975D050046BBFE /* LibraryTableView.m in Sources */,
+				009085401395D23D00B7D75F /* LibraryItem.mm in Sources */,
+				00D75C691399FFDB004AA153 /* LibraryTableCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1267,6 +1267,7 @@
 		00039E7D12B03F660025D374 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COPY_PHASE_STRIP = NO;
 				PRODUCT_NAME = "emulation-hal";
 			};
 			name = Debug;
@@ -1281,6 +1282,7 @@
 		006EECA50FCA5C32003D2C8D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COPY_PHASE_STRIP = NO;
 				PRODUCT_NAME = emulation;
 			};
 			name = Debug;
@@ -1295,27 +1297,24 @@
 		C05733C808A9546B00998B17 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				INFOPLIST_FILE = macosx/Info.plist;
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = macosx;
+				GCC_DYNAMIC_NO_PIC = NO;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/opt/local/lib,
 				);
-				PRODUCT_NAME = OpenEmulator;
 			};
 			name = Debug;
 		};
 		C05733C908A9546B00998B17 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				FRAMEWORK_SEARCH_PATHS = macosx;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/opt/local/lib,
 				);
-				PRODUCT_NAME = OpenEmulator;
 			};
 			name = Release;
 		};
@@ -1323,10 +1322,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
-				FRAMEWORK_SEARCH_PATHS = macosx;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
@@ -1340,8 +1340,8 @@
 					/opt/local/lib,
 				);
 				ONLY_ACTIVE_ARCH = YES;
-				PREBINDING = NO;
-				SDKROOT = macosx10.6;
+				PRODUCT_NAME = OpenEmulator;
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -1349,10 +1349,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
-				FRAMEWORK_SEARCH_PATHS = macosx;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					/usr/include/libxml2,
 					/usr/local/include,
@@ -1364,8 +1366,8 @@
 					/opt/local/lib,
 				);
 				ONLY_ACTIVE_ARCH = NO;
-				PREBINDING = NO;
-				SDKROOT = macosx10.6;
+				PRODUCT_NAME = OpenEmulator;
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};

@@ -17,9 +17,9 @@
 			   title:(NSString *)theTitle
 			  canvas:(void *)theCanvas
 {
-	NSLog(@"CanvasWindowController init");
-	
-	if (self = [self initWithWindowNibName:@"Canvas"])
+    self = [self initWithWindowNibName:@"Canvas"];
+    
+	if (self)
 	{
 		device = theDevice;
 		title = [theTitle copy];
@@ -31,8 +31,6 @@
 
 - (void)dealloc
 {
-	NSLog(@"CanvasWindowController dealloc");
-	
 	[title release];
 	
 	[super dealloc];
@@ -57,8 +55,6 @@
 
 - (void)awakeFromNib
 {
-	NSLog(@"CanvasWindowController awakeFromNib");
-	
 	if ([fCanvasView isPaperCanvas])
 		[fScrollView setHasVerticalScroller:YES];
 	else
@@ -70,8 +66,6 @@
 
 - (void)windowDidLoad
 {
-	NSLog(@"CanvasWindowController windowDidLoad");
-	
 	NSToolbar *toolbar;
 	toolbar = [[NSToolbar alloc] initWithIdentifier:@"Canvas Toolbar"];
 	[toolbar setDelegate:self];
@@ -89,8 +83,6 @@
 
 - (void)showWindow:(id)sender
 {
-	NSLog(@"CanvasWindowController showWindow");
-	
 	[super showWindow:sender];
 	
 	[fCanvasView startDisplayLink];

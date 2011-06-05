@@ -13,6 +13,7 @@
 @class TemplateChooserViewController;
 
 @interface TemplateChooserWindowController : NSWindowController
+<NSWindowDelegate>
 {
 	IBOutlet id fDocumentController;
 	

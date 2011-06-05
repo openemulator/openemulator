@@ -240,11 +240,7 @@ OESize OpenGLCanvas::getPageSize()
 OEImage OpenGLCanvas::getImage(OERect rect)
 {
 	if (mode == CANVAS_MODE_PAPER)
-	{
-		OESize size = getPageSize();
-		
 		return image.getClip(rect);
-	}
 	else 
 	{
 		OEImage image = readFramebuffer();
@@ -652,7 +648,7 @@ GLuint OpenGLCanvas::loadShader(const char *source)
 	
 #ifdef GL_VERSION_2_0
 	const GLchar **sourcePointer = (const GLchar **) &source;
-	GLint sourceLength = strlen(source);
+	GLint sourceLength = (GLint) strlen(source);
 	
 	GLuint glFragmentShader;
 	glFragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -857,6 +853,9 @@ void OpenGLCanvas::updateDisplayConfiguration()
 						   0, 0.5, 0,
 						   0, 0, 0);
 			break;
+            
+        default:
+            break;
 	}
 	
 	// Dynamic range gain
@@ -866,12 +865,17 @@ void OpenGLCanvas::updateDisplayConfiguration()
 		case CANVAS_DECODER_NTSC_CXA2025AS:
 		case CANVAS_DECODER_NTSC_YUV:
 		case CANVAS_DECODER_PAL:
+        {
 			float levelRange = (displayConfiguration.compositeWhiteLevel -
 								displayConfiguration.compositeBlackLevel);
 			if (fabs(levelRange) < 0.01)
 				levelRange = 0.01;
 			m *= 1 / levelRange;
 			break;
+        }
+            
+        default:
+            break;
 	}
 	
 	switch (displayConfiguration.videoDecoder)
@@ -1818,7 +1822,9 @@ bool OpenGLCanvas::postImage(OEImage *theImage)
 			this->image = *theImage;
 			isImageUpdated = true;
 			break;
+            
 		case CANVAS_MODE_PAPER:
+        {
 			OESize theImageSize = theImage->getSize();
 			OESize imageSize = image.getSize();
 			OERect aRect = OEMakeRect(0, 0,
@@ -1833,6 +1839,10 @@ bool OpenGLCanvas::postImage(OEImage *theImage)
 			image.overlay(printHead, *theImage);
 			isImageUpdated = true;
 			break;
+        }
+            
+        default:
+            break;
 	}
 	
 	unlock();

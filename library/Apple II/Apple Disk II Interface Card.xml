@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
-<edl version="1.0" label="Disk II Interface" image="Apple Disk II Interface Card.png">
+<edl version="1.0" label="Apple Disk II Interface Card" image="images/Apple/Apple Disk II Interface Card.png" description="The Disk II Interface Card is used for connecting two Disk II drives in an Apple II computer. It is usually installed in Slot 6.">
 
-<device id="diskIIInterface" label="Apple Disk II Interface Card" image="images/Apple/Apple Disk II Interface Card.png" group="expansions">
-    <setting ref="diskII.drive" name="romType" label="Controller Type" type="select" options="13 Sector Controller,16 Sector Controller" />
+<device id="appleD2IC" label="Apple Disk II Interface Card" image="images/Apple/Apple Disk II Interface Card.png" group="expansions">
+    <setting ref="appleD2IC.drive" name="romType" label="Controller Type" type="select" options="13 Sector Controller,16 Sector Controller" />
 </device>
-<connector id="diskIIInterface.connector" ref="" type="Apple II Expansion Card" label="Apple Disk II Interface Card">
-    <inlet ref="diskIIInterface.io" property="controlBus" outletRef="controlBus" />
+<connector id="appleD2IC.connector" ref="" type="Apple II Slot" label="Connector">
+    <inlet ref="appleD2IC.io" property="controlBus" outletRef="controlBus" />
 </connector>
-<port id="diskIIInterface.drive1" ref="" type="AppleDisk525" label="Drive 1" image="Apple Disk II Socket.png">
-    <inlet ref="diskIIInterface.io" property="drive1" outletRef="drive" />
+<port id="appleD2IC.drive1" ref="" type="Apple Disk Drive Port" label="Drive 1" image="images/Connectors/Header2x10.png">
+    <inlet ref="appleD2IC.io" property="drive1" outletRef="drive" />
 </port>
-<port id="diskIIInterface.drive2" ref="" type="AppleDisk525" label="Drive 2" image="Apple Disk II Socket.png">
-    <inlet ref="diskIIInterface.io" property="drive2" outletRef="drive" />
+<port id="appleD2IC.drive2" ref="" type="Apple Disk Drive Port" label="Drive 2" image="images/Connectors/Header2x10.png">
+    <inlet ref="appleD2IC.io" property="drive2" outletRef="drive" />
 </port>
-<component id="diskIIInterface.io" class="AppleDiskIIInterfaceCard">
+<component id="appleD2IC.io" class="AppleDiskIIInterfaceCard">
     <property name="controlBus" ref="" />
     <property name="drive1" ref="" />
     <property name="drive2" ref="" />
 </component>
-<component id="diskIIInterface.rom13" class="ROM">
+<component id="appleD2IC.rom13" class="ROM">
     <property name="image" src="roms/Apple/341-0009.bin" />
 </component>
-<component id="diskIIInterface.rom16" class="ROM">
+<component id="appleD2IC.rom16" class="ROM">
     <property name="image" src="roms/Apple/341-0027.bin" />
 </component>
 

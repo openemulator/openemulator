@@ -20,7 +20,9 @@
 
 - (id)initRootWithDocument:(Document *)theDocument
 {
-	if (self = [super init])
+    self = [super init];
+    
+	if (self)
 	{
 		type = EMULATIONITEM_ROOT;
 		uid = [@"" copy];
@@ -95,7 +97,7 @@
 
 - (id)initGroup:(NSString *)theGroup
 {
-	if (self = [super init])
+	if ((self = [super init]))
 	{
 		type = EMULATIONITEM_GROUP;
 		uid = [theGroup copy];
@@ -112,7 +114,7 @@
 			 uid:(NSString *)theUID
 		document:(Document *)theDocument
 {
-	if (self = [super init])
+	if ((self = [super init]))
 	{
 		type = EMULATIONITEM_DEVICE;
 		uid = [theUID copy];
@@ -196,7 +198,7 @@
 			 locationLabel:(NSString *)theLocationLabel
 				  document:(Document *)theDocument
 {
-	if (self = [super init])
+	if ((self = [super init]))
 	{
 		type = EMULATIONITEM_MOUNT;
 		uid = [theUID copy];
@@ -226,7 +228,7 @@
 			 portType:(NSString *)thePortType
 			 document:(Document *)theDocument;
 {
-	if (self = [super init])
+	if ((self = [super init]))
 	{
 		type = EMULATIONITEM_AVAILABLEPORT;
 		uid = [theUID copy];

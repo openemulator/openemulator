@@ -27,7 +27,7 @@ static int PAAudioRunAudio(const void *input,
 {
 	((PAAudio *) userData)->runAudio((const float *)input,
 									 (float *)output,
-									 frameCount);
+									 (int) frameCount);
 	
 	return paContinue;
 }
@@ -670,15 +670,15 @@ void PAAudio::playAudio(float *outputBuffer,
 	vector<float> srcBuffer;
 	srcBuffer.resize(frameNum * playChannelNum);
 	
-	int playSRCBufferFrameNum = playSRCBuffer.size() / playChannelNum;
+	int playSRCBufferFrameNum = (int) playSRCBuffer.size() / playChannelNum;
 	
 	do
 	{
 		if (playSRCBufferFrameBegin >= playSRCBufferFrameEnd)
 		{
-			int n = sf_readf_float(playSNDFILE,
-								   &playSRCBuffer.front(),
-								   playSRCBufferFrameNum);
+			int n = (int) sf_readf_float(playSNDFILE,
+                                         &playSRCBuffer.front(),
+                                         playSRCBufferFrameNum);
 			
 			playSRCBufferFrameBegin = 0;
 			playSRCBufferFrameEnd = n;
@@ -810,7 +810,7 @@ void PAAudio::recordAudio(float *outputBuffer, int frameNum, int channelNum)
 	if (!recording)
 		return;
 	
-	int n = sf_writef_float(recordingSNDFILE, outputBuffer, frameNum);
+	int n = (int) sf_writef_float(recordingSNDFILE, outputBuffer, frameNum);
 	recordingFrameNum += n;
 	
 	if (frameNum != n)

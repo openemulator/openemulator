@@ -10,13 +10,13 @@
 </port>
 <port id="appleIII.videoRGB" ref="" type="RGB Video" label="Color Video Port" image="images/Connectors/DA15 Female.png">
 </port>
-<port id="appleIII.slot1" ref="" type="Apple II Expansion Card" label="Slot 1" image="images/Connectors/Edge50.png">
+<port id="appleIII.slot1" ref="" type="Apple II Slot" label="Slot 1" image="images/Connectors/Edge50.png">
 </port>
-<port id="appleIII.slot2" ref="" type="Apple II Expansion Card" label="Slot 2" image="images/Connectors/Edge50.png">
+<port id="appleIII.slot2" ref="" type="Apple II Slot" label="Slot 2" image="images/Connectors/Edge50.png">
 </port>
-<port id="appleIII.slot3" ref="" type="Apple II Expansion Card" label="Slot 3" image="images/Connectors/Edge50.png">
+<port id="appleIII.slot3" ref="" type="Apple II Slot" label="Slot 3" image="images/Connectors/Edge50.png">
 </port>
-<port id="appleIII.slot4" ref="" type="Apple II Expansion Card" label="Slot 4" image="images/Connectors/Edge50.png">
+<port id="appleIII.slot4" ref="" type="Apple II Slot" label="Slot 4" image="images/Connectors/Edge50.png">
 </port>
 <port id="appleIII.floppyDrives" ref="" type="Apple III Disk Drive" label="Disk Drive Port" image="images/Connectors/Rectangular2x13 Male.png">
 </port>

@@ -10,11 +10,21 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "LibraryTableCell.h"
+
 @interface LibraryWindowController : NSWindowController
-<NSTableViewDataSource>
+<NSTableViewDataSource, NSTableViewDelegate>
 {
+	IBOutlet id fSplitView;
 	IBOutlet NSTableView *fTableView;
-	
+
+    IBOutlet id fSelImage;
+    IBOutlet id fSelLabel;
+    IBOutlet id fSelType;
+    IBOutlet id fSelDescription;
+
+    LibraryTableCell *cell;
+    
 	NSMutableArray *items;
 }
 

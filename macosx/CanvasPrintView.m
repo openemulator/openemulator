@@ -23,7 +23,9 @@
 							  frameSize.width * scale.width,
 							  frameSize.height * scale.height);
 	
-	if (self = [super initWithFrame:frame])
+    self = [super initWithFrame:frame];
+	
+    if (self)
 	{
 		canvasView = theCanvasView;
 	}

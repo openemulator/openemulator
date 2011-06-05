@@ -91,9 +91,9 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 - (id)initWithTemplateURL:(NSURL *)absoluteURL
 					error:(NSError **)outError
 {
-	NSLog(@"Document init");
-	
-	if (self = [super init])
+    self = [super init];
+    
+	if (self)
 	{
 		if ([self readFromURL:absoluteURL
 					   ofType:nil
@@ -113,8 +113,6 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 
 - (void)dealloc
 {
-	NSLog(@"Document dealloc");
-	
 	[self destroyEmulation];
 	
 	[emulationWindowController release];
@@ -242,8 +240,6 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 
 - (void)makeWindowControllers
 {
-	NSLog(@"Document makeWindowControllers");
-	
 	emulationWindowController = [[EmulationWindowController alloc] init];
 	
 	if ([canvasWindowControllers count])
@@ -274,8 +270,6 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 
 - (void)createCanvas:(NSDictionary *)dict
 {
-	NSLog(@"Document createCanvas");
-	
 	void *device = [[dict objectForKey:@"device"] pointerValue];
 	NSString *label = [dict objectForKey:@"label"];
 	OpenGLCanvas *canvas = (OpenGLCanvas *)[[dict objectForKey:@"canvas"]
@@ -293,8 +287,6 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 
 - (void)destroyCanvas:(NSValue *)canvasValue
 {
-	NSLog(@"Document destroyCanvas");
-	
 	OpenGLCanvas *canvas = (OpenGLCanvas *)[canvasValue pointerValue];
 	for (int i = 0; i < [canvasWindowControllers count]; i++)
 	{
@@ -318,8 +310,6 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 
 - (void)showCanvas:(NSValue *)canvasValue
 {
-	NSLog(@"Document showCanvas");
-	
 	void *canvas = [canvasValue pointerValue];
 	for (int i = 0; i < [canvasWindowControllers count]; i++)
 	{
@@ -397,8 +387,6 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 
 - (void)createEmulation:(NSURL *)url
 {
-	NSLog(@"Document createEmulation");
-	
 	if (!canvasWindowControllers)
 		canvasWindowControllers = [[NSMutableArray alloc] init];
 	
@@ -426,8 +414,6 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 
 - (void)destroyEmulation
 {
-	NSLog(@"Document destroyEmulation");
-	
 	if (!emulation)
 		return;
 	
@@ -446,8 +432,6 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 
 - (void)lockEmulation
 {
-//	NSLog(@"Document lockEmulation");
-	
 	DocumentController *documentController;
 	documentController = [NSDocumentController sharedDocumentController];
 	PAAudio *paAudio = (PAAudio *)[documentController paAudio];
@@ -457,8 +441,6 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 
 - (void)unlockEmulation
 {
-//	NSLog(@"Document unlockEmulation");
-	
 	DocumentController *documentController;
 	documentController = [NSDocumentController sharedDocumentController];
 	PAAudio *paAudio = (PAAudio *)[documentController paAudio];

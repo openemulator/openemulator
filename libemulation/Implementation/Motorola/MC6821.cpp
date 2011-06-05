@@ -132,7 +132,7 @@ bool MC6821::postMessage(OEComponent *sender, int message, void *data)
 			if ((!isLowToHigh && ca2 && !value) ||
 				(isLowToHigh && !ca2 && value))
 			{
-				if ((controlA & (MC6821_CR_C2OUTPUT && MC6821_CR_C2ENABLEIRQ))
+				if ((controlA & (MC6821_CR_C2OUTPUT & MC6821_CR_C2ENABLEIRQ))
 					== MC6821_CR_C2ENABLEIRQ)
 					setControlA(controlA | MC6821_CR_IRQ2FLAG);
 			}
@@ -177,7 +177,7 @@ bool MC6821::postMessage(OEComponent *sender, int message, void *data)
 			if ((!isLowToHigh && cb1 && !value) ||
 				(isLowToHigh && !cb1 && value))
 			{
-				if ((controlB & (MC6821_CR_C2OUTPUT && MC6821_CR_C2ENABLEIRQ))
+				if ((controlB & (MC6821_CR_C2OUTPUT & MC6821_CR_C2ENABLEIRQ))
 					== MC6821_CR_C1ENABLEIRQ)
 					setControlB(controlB | MC6821_CR_IRQ2FLAG);
 			}
@@ -222,7 +222,7 @@ OEUInt8 MC6821::read(OEAddress address)
 		case MC6821_RS_DATAREGISTERA:
 			if (controlA & MC6821_CR_DATAREGISTER)
 			{
-				if (controlA & (MC6821_CR_C2OUTPUT | MC6821_CR_C2DIRECT)
+				if ((controlA & (MC6821_CR_C2OUTPUT | MC6821_CR_C2DIRECT))
 					== MC6821_CR_C2OUTPUT)
 				{
 					int ca2 = 0;
@@ -276,7 +276,7 @@ void MC6821::write(OEAddress address, OEUInt8 value)
 			break;
 		case MC6821_RS_CONTROLREGISTERA:
 			setControlA(value);
-			if (value & (MC6821_CR_C2OUTPUT | MC6821_CR_C2DIRECT) ==
+			if ((value & (MC6821_CR_C2OUTPUT | MC6821_CR_C2DIRECT)) ==
 				(MC6821_CR_C2OUTPUT | MC6821_CR_C2DIRECT))
 			{
 				int ca2 = value & MC6821_CR_C2SET;
@@ -286,7 +286,7 @@ void MC6821::write(OEAddress address, OEUInt8 value)
 		case MC6821_RS_DATAREGISTERB:
 			if (controlB & MC6821_CR_DATAREGISTER)
 			{
-				if (controlB & (MC6821_CR_C2OUTPUT | MC6821_CR_C2DIRECT)
+				if ((controlB & (MC6821_CR_C2OUTPUT | MC6821_CR_C2DIRECT))
 					== MC6821_CR_C2OUTPUT)
 				{
 					int cb2 = 0;
@@ -305,7 +305,7 @@ void MC6821::write(OEAddress address, OEUInt8 value)
 			break;
 		case MC6821_RS_CONTROLREGISTERB:
 			setControlB(value);
-			if (value & (MC6821_CR_C2OUTPUT | MC6821_CR_C2DIRECT)
+			if ((value & (MC6821_CR_C2OUTPUT | MC6821_CR_C2DIRECT))
 				== (MC6821_CR_C2OUTPUT | MC6821_CR_C2DIRECT))
 			{
 				int cb2 = value & MC6821_CR_C2SET;

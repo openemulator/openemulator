@@ -208,10 +208,10 @@ OEImage OEImage::getClip(OERect rect)
 			   
 void OEImage::update()
 {
-	int prevSize = pixels.size();
+	int prevSize = (int) pixels.size();
 	pixels.resize(getBytesPerRow() * (int)size.height);
 	
-	int diff = pixels.size() - prevSize;
+	int diff = (int) pixels.size() - prevSize;
 	if (diff > 0)
 		memset(&pixels.front() + prevSize, 0xff, diff);
 }

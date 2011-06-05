@@ -29,9 +29,9 @@
 	NSSize canvasSize;
 	BOOL needsReshape;
 	
-	NSUInteger keyMap[DEVICE_KEYMAP_SIZE];
-	NSUInteger keyModifierFlags;
-	NSUInteger keyboardFlags;
+	int keyMap[DEVICE_KEYMAP_SIZE];
+	int keyModifierFlags;
+	int keyboardFlags;
 	BOOL capsLockNotSynchronized;
 }
 
@@ -52,7 +52,7 @@
 - (NSSize)pageSize;
 - (NSImage *)canvasImage:(NSRect)rect;
 
-- (void)setKeyboardFlags:(NSInteger)theKeyboardFlags;
+- (void)setKeyboardFlags:(int)theKeyboardFlags;
 - (void)synchronizeKeyboardFlags;
 
 - (void)pasteString:(NSString *)text;

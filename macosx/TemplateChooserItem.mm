@@ -19,7 +19,9 @@
 
 - (id)initWithEDLPath:(NSString *)path
 {
-	if (self = [super init])
+    self = [super init];
+    
+	if (self)
 		edlPath = [path copy];
 	
 	return self;

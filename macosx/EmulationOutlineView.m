@@ -16,7 +16,9 @@
 
 - (id)initWithCoder:(NSCoder *)decoder
 {
-	if ((self = [super initWithCoder:decoder]))
+    self = [super initWithCoder:decoder];
+    
+	if (self)
 	{
 		forcedRow = -1;
 		trackedRow = -1;
