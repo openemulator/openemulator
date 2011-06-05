@@ -15,17 +15,23 @@
 @interface LibraryWindowController : NSWindowController
 <NSTableViewDataSource, NSTableViewDelegate>
 {
+    IBOutlet id fPathFilter;
+    IBOutlet id fSearchFilter;
+    
 	IBOutlet id fSplitView;
 	IBOutlet NSTableView *fTableView;
 
+    NSMutableArray *filterPaths;
+	NSMutableArray *items;
+	NSMutableArray *filteredItems;
+    LibraryTableCell *cell;
+    
     IBOutlet id fSelImage;
     IBOutlet id fSelLabel;
     IBOutlet id fSelType;
     IBOutlet id fSelDescription;
-
-    LibraryTableCell *cell;
-    
-	NSMutableArray *items;
 }
+
+- (IBAction)filterItems:(id)sender;
 
 @end

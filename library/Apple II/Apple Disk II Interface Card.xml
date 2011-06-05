@@ -8,10 +8,10 @@
 <connector id="appleD2IC.connector" ref="" type="Apple II Slot" label="Connector">
     <inlet ref="appleD2IC.io" property="controlBus" outletRef="controlBus" />
 </connector>
-<port id="appleD2IC.drive1" ref="" type="Apple Disk Drive Port" label="Drive 1" image="images/Connectors/Header2x10.png">
+<port id="appleD2IC.drive1" ref="" type="Apple Disk Drive" label="Drive 1" image="images/Connectors/Header2x10.png">
     <inlet ref="appleD2IC.io" property="drive1" outletRef="drive" />
 </port>
-<port id="appleD2IC.drive2" ref="" type="Apple Disk Drive Port" label="Drive 2" image="images/Connectors/Header2x10.png">
+<port id="appleD2IC.drive2" ref="" type="Apple Disk Drive" label="Drive 2" image="images/Connectors/Header2x10.png">
     <inlet ref="appleD2IC.io" property="drive2" outletRef="drive" />
 </port>
 <component id="appleD2IC.io" class="AppleDiskIIInterfaceCard">

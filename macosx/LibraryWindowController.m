@@ -20,26 +20,32 @@
 {
     self = [super initWithWindowNibName:@"Library"];
 	
-    if (self)
-		items = [[NSMutableArray alloc] init];
-	
 	return self;
 }
 
 - (void)dealloc
 {
+	[filterPaths release];
+	[items release];
+	[filteredItems release];
+	
     [cell release];
     
-	[items release];
-	
 	[super dealloc];
 }
 
 - (void)windowDidLoad
 {
+    filterPaths = [[NSMutableArray alloc] init];
+    items = [[NSMutableArray alloc] init];
+    filteredItems = [[NSMutableArray alloc] init];
+    
+    cell = [[LibraryTableCell alloc] init];
+    
 	[self setWindowFrameAutosaveName:@"Library"];
 	
-    cell = [[LibraryTableCell alloc] init];
+    [filterPaths addObject:@""];
+    [fPathFilter addItemWithTitle:NSLocalizedString(@"Library", @"Library Root")];
     
 	NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
 	NSString *libraryPath = [resourcePath
@@ -60,13 +66,64 @@
 		}
         else if ([[path pathExtension] isEqualToString:@""])
         {
-            // Add to filters
+            NSString *title = NSLocalizedString([path lastPathComponent],
+                                                @"Library Path");
+            
+            NSString *tempPath = [[path copy] autorelease];
+            while ([tempPath length])
+            {
+                title = [@"  " stringByAppendingString:title];
+                tempPath = [tempPath stringByDeletingLastPathComponent];
+            }
+            
+            [filterPaths addObject:path];
+            [fPathFilter addItemWithTitle:title];
         }
 	}
 	
 	[fTableView setDataSource:self];
 	[fTableView setDelegate:self];
     [fTableView setSelectionHighlightStyle:NSTableViewSelectionHighlightStyleNone];
+    
+    [self filterItems:self];
+}
+
+- (IBAction)filterItems:(id)sender
+{
+    NSString *filterPath = [filterPaths objectAtIndex:
+                            [fPathFilter indexOfSelectedItem]];
+    if ([filterPath length])
+        filterPath = [filterPath stringByAppendingString:@"/"];
+    int filterPathLength = (int) [filterPath length];
+    
+    NSString *searchString = [fSearchFilter stringValue];
+    
+    [filteredItems removeAllObjects];
+    
+    for (int i = 0; i < [items count]; i++)
+    {
+        LibraryItem *item = [items objectAtIndex:i];
+        
+        // Validate path condition
+        if ([[[item path] substringToIndex:filterPathLength] compare:
+            filterPath] != NSOrderedSame)
+            continue;
+        
+        // Validate search condition
+        if ([searchString length])
+        {
+            NSRange range;
+            
+            range = [[item label] rangeOfString:searchString
+                                        options:NSCaseInsensitiveSearch];
+            if (range.location == NSNotFound)
+                continue;
+        }
+        
+        [filteredItems addObject:item];
+    }
+    
+    [fTableView reloadData];
 }
 
 
@@ -119,21 +176,21 @@ constrainMinCoordinate:(CGFloat)proposedMin
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView
 {
-	return [items count];
+	return [filteredItems count];
 }
 
 - (id)tableView:(NSTableView *)aTableView
 objectValueForTableColumn:(NSTableColumn *)aTableColumn
 			row:(NSInteger)rowIndex
 {
-	return [[items objectAtIndex:rowIndex] label];
+	return [[filteredItems objectAtIndex:rowIndex] label];
 }
 
 - (NSCell *)tableView:(NSTableView *)tableView
 dataCellForTableColumn:(NSTableColumn *)tableColumn
 				  row:(NSInteger)row
 {
-    [cell setRepresentedObject:[items objectAtIndex:row]];
+    [cell setRepresentedObject:[filteredItems objectAtIndex:row]];
     
     return cell;
 }
@@ -145,7 +202,9 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
    forTableColumn:(NSTableColumn *)aTableColumn
               row:(NSInteger)rowIndex
 {
-    [aCell setCustomFirstResponder:([[fTableView window] firstResponder] == fTableView)];
+    [aCell setCustomFirstResponder:(([[fTableView window] firstResponder] ==
+                                     fTableView) &&
+                                    ([[fTableView window] isKeyWindow]))];
     [aCell setCustomSelected:[[aTableView selectedRowIndexes]
                               containsIndex:rowIndex]];
 }
