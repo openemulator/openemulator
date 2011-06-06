@@ -72,7 +72,7 @@
 {
 	LibraryItem *item = [self representedObject];
 	
-    cellFrame = CGRectInset(cellFrame, 1.5, 0.5);
+    cellFrame = NSInsetRect(cellFrame, 1.5, 0.5);
     
     NSBezierPath* thePath = [NSBezierPath bezierPath];
     [thePath setLineWidth:1];
