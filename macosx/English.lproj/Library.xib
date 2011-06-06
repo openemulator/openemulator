@@ -855,6 +855,7 @@
 					<string>14.IBViewBoundsToFrameTransform</string>
 					<string>15.IBPluginDependency</string>
 					<string>16.IBPluginDependency</string>
+					<string>17.CustomClassName</string>
 					<string>17.IBPluginDependency</string>
 					<string>19.IBPluginDependency</string>
 					<string>2.IBPluginDependency</string>
@@ -900,6 +901,7 @@
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>LibraryTableView</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -971,6 +973,14 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">./Classes/LibraryTableCell.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">LibraryTableView</string>
+					<string key="superclassName">NSTableView</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/LibraryTableView.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">

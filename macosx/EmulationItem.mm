@@ -632,7 +632,6 @@
 
 - (BOOL)testAddEDL:(NSString *)path
 {
-	NSLog(@"Ahoy");
 	OEEDL edl;
 	
 	edl.open(getCPPString(path));

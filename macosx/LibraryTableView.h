@@ -1,16 +1,16 @@
 
 /**
  * OpenEmulator
- * Mac OS X Library Table Cell
+ * Mac OS X Library Table View
  * (C) 2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements a library table cell.
+ * Controls the library table view.
  */
 
 #import <Cocoa/Cocoa.h>
 
-@interface LibraryTableCell : NSTextFieldCell
+@interface LibraryTableView : NSTableView
 {
 }
 

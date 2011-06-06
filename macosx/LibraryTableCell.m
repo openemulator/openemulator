@@ -29,16 +29,6 @@
     return self;
 }
 
-- (void)setCustomFirstResponder:(BOOL)theCustomFirstResponder
-{
-    customFirstResponder = theCustomFirstResponder;
-}
-
-- (void)setCustomSelected:(BOOL)theCustomSelected
-{
-    customSelected = theCustomSelected;
-}
-
 - (NSRect)imageRectForBounds:(NSRect)bounds
 {
 	LibraryItem *item = [self representedObject];
@@ -86,12 +76,12 @@
     
     NSBezierPath* thePath = [NSBezierPath bezierPath];
     [thePath setLineWidth:1];
-    if (!customSelected)
+    if (![self isHighlighted])
     {
         [[NSColor colorWithCalibratedWhite:0.94 alpha:1.0] setFill];
         [[NSColor colorWithCalibratedWhite:0.94 alpha:1.0] setStroke];
     }
-    else if (customFirstResponder)
+    else if ([self backgroundStyle] == NSBackgroundStyleDark)
     {
         [[NSColor colorWithCalibratedRed:0.8 green:0.866 blue:0.941 alpha:1] setFill];
         [[NSColor colorWithCalibratedRed:0.157 green:0.306 blue:0.758 alpha:1] setStroke];

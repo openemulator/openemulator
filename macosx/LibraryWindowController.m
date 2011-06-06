@@ -83,7 +83,6 @@
 	
 	[fTableView setDataSource:self];
 	[fTableView setDelegate:self];
-    [fTableView setSelectionHighlightStyle:NSTableViewSelectionHighlightStyleNone];
     
     [self filterItems:self];
 }
@@ -186,6 +185,15 @@ objectValueForTableColumn:(NSTableColumn *)aTableColumn
 	return [[filteredItems objectAtIndex:rowIndex] label];
 }
 
+- (BOOL)tableView:(NSTableView *)aTableView
+writeRowsWithIndexes:(NSIndexSet *)rowIndexes
+     toPasteboard:(NSPasteboard *)pboard
+{
+    return YES;
+}
+
+
+
 - (NSCell *)tableView:(NSTableView *)tableView
 dataCellForTableColumn:(NSTableColumn *)tableColumn
 				  row:(NSInteger)row
@@ -193,20 +201,6 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
     [cell setRepresentedObject:[filteredItems objectAtIndex:row]];
     
     return cell;
-}
-
-
-
-- (void)tableView:(NSTableView *)aTableView
-  willDisplayCell:(id)aCell
-   forTableColumn:(NSTableColumn *)aTableColumn
-              row:(NSInteger)rowIndex
-{
-    [aCell setCustomFirstResponder:(([[fTableView window] firstResponder] ==
-                                     fTableView) &&
-                                    ([[fTableView window] isKeyWindow]))];
-    [aCell setCustomSelected:[[aTableView selectedRowIndexes]
-                              containsIndex:rowIndex]];
 }
 
 - (void)tableViewSelectionDidChange:(NSNotification *)aNotification
