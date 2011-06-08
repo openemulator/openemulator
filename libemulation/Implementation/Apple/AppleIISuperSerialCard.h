@@ -1,15 +1,15 @@
 
 /**
  * libemulation
- * Apple I Cassette Interface
+ * Apple II Super Serial Card
  * (C) 2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls Apple I cassette interface
+ * Controls an Apple II Super Serial Card
  */
 
 #include "OEComponent.h"
 
-class Apple1CassetteInterfaceCard : public OEComponent
+class AppleIISuperSerialCard : public OEComponent
 {
 };

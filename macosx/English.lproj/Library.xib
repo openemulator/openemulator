@@ -56,12 +56,12 @@
 			<object class="NSWindowTemplate" id="1007278541">
 				<int key="NSWindowStyleMask">27</int>
 				<int key="NSWindowBacking">2</int>
-				<string key="NSWindowRect">{{1119, 382}, {320, 480}}</string>
+				<string key="NSWindowRect">{{1104, 248}, {320, 480}}</string>
 				<int key="NSWTFlags">-466616320</int>
 				<string key="NSWindowTitle">Hardware Library</string>
 				<string key="NSWindowClass">NSPanel</string>
 				<nil key="NSViewClass"/>
-				<string key="NSWindowContentMinSize">{280, 400}</string>
+				<string key="NSWindowContentMinSize">{256, 384}</string>
 				<object class="NSView" key="NSWindowView" id="733244116">
 					<reference key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
@@ -505,7 +505,7 @@
 					<reference key="NSNextKeyView" ref="994341984"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1440, 878}}</string>
-				<string key="NSMinSize">{280, 416}</string>
+				<string key="NSMinSize">{256, 400}</string>
 				<string key="NSMaxSize">{1e+13, 1e+13}</string>
 			</object>
 		</object>

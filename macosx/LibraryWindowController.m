@@ -189,6 +189,18 @@ objectValueForTableColumn:(NSTableColumn *)aTableColumn
 writeRowsWithIndexes:(NSIndexSet *)rowIndexes
      toPasteboard:(NSPasteboard *)pboard
 {
+    LibraryItem *item = [filteredItems objectAtIndex:[rowIndexes firstIndex]];
+
+    NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                          [item path], @"path",
+                          [item label], @"label",
+                          [item type], @"type",
+                          nil];
+    
+    [pboard declareTypes:[NSArray arrayWithObject:@"OEDeviceType"] owner:self];
+    [pboard clearContents];
+    [pboard setPropertyList:dict forType:@"OEDeviceType"];
+    
     return YES;
 }
 

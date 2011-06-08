@@ -38,6 +38,8 @@
 #include "AppleIIGamePort.h"
 #include "AppleIISlotMemory.h"
 #include "AppleIISlotExpansionMemory.h"
+#include "AppleIISuperSerialCard.h"
+#include "AppleLanguageCard.h"
 #include "AppleSilentype.h"
 
 #include "MC6821.h"
@@ -65,6 +67,9 @@ OEComponent *OEComponentFactory::create(const string& className)
 	matchComponent(ROM);
 	matchComponent(Terminal);
 	
+	matchComponent(AppleDiskII);
+	matchComponent(AppleDiskIIInterfaceCard);
+	matchComponent(AppleGraphicsTablet);
 	matchComponent(Apple1IO);
 	matchComponent(Apple1Terminal);
 	matchComponent(Apple1CassetteInterfaceCard);
@@ -78,9 +83,8 @@ OEComponent *OEComponentFactory::create(const string& className)
 	matchComponent(AppleIIGamePort);
 	matchComponent(AppleIISlotMemory);
 	matchComponent(AppleIISlotExpansionMemory);
-	matchComponent(AppleDiskII);
-	matchComponent(AppleDiskIIInterfaceCard);
-	matchComponent(AppleGraphicsTablet);
+	matchComponent(AppleIISuperSerialCard);
+	matchComponent(AppleLanguageCard);
 	matchComponent(AppleSilentype);
 	
 	matchComponent(MC6821);

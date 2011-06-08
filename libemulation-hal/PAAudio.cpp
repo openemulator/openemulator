@@ -253,16 +253,16 @@ bool PAAudio::openEmulations()
 				if (!error)
 					return true;
 				else
-					printLog("could not create eulations thread, error " + getString(error));
+					logMessage("could not create eulations thread, error " + getString(error));
 			}
 			else
-				printLog("could not attr emulations thread, error " + getString(error));
+				logMessage("could not attr emulations thread, error " + getString(error));
 		}
 		else
-			printLog("could not init emulations attr, error " + getString(error));
+			logMessage("could not init emulations attr, error " + getString(error));
 	}
 	else
-		printLog("could not init emulations mutex, error " + getString(error));
+		logMessage("could not init emulations mutex, error " + getString(error));
 	
 	return false;
 }
@@ -374,8 +374,8 @@ bool PAAudio::openAudio()
 									  this);
 		if ((status != paNoError) && fullDuplex)
 		{
-			printLog("could not open audio stream, error " + getString(status));
-			printLog("attempting half-duplex");
+			logMessage("could not open audio stream, error " + getString(status));
+			logMessage("attempting half-duplex");
 			
 			status = Pa_OpenDefaultStream(&audioStream,
 										  0,
@@ -396,15 +396,15 @@ bool PAAudio::openAudio()
 				return true;
 			}
 			else
-				printLog("could not start audio stream, error " + getString(status));
+				logMessage("could not start audio stream, error " + getString(status));
 			
 			Pa_CloseStream(audioStream);
 		}
 		else
-			printLog("could not open audio stream, error " + getString(status));
+			logMessage("could not open audio stream, error " + getString(status));
 	}
 	else
-		printLog("could not init portaudio, error " + getString(status));
+		logMessage("could not init portaudio, error " + getString(status));
 	
 	int error;
 	pthread_attr_t attr;
@@ -422,18 +422,18 @@ bool PAAudio::openAudio()
 								   this);
 			if (!error)
 			{
-				printLog("started timer thread");
+				logMessage("started timer thread");
 				audioOpen = true;
 				return true;
 			}
 			else
-				printLog("could not create timer thread, error " + getString(error));
+				logMessage("could not create timer thread, error " + getString(error));
 		}
 		else
-			printLog("could not attr timer thread, error " + getString(error));
+			logMessage("could not attr timer thread, error " + getString(error));
 	}
 	else
-		printLog("could not init timer thread, error " + getString(error));
+		logMessage("could not init timer thread, error " + getString(error));
 	
 	return false;
 }
@@ -586,12 +586,12 @@ void PAAudio::openPlayer(string path)
 		}
 		else
 		{
-			printLog("could not init sample rate converter, error " + getString(error));
+			logMessage("could not init sample rate converter, error " + getString(error));
 			sf_close(playSNDFILE);
 		}
 	}
 	else
-		printLog("could not open file " + path);
+		logMessage("could not open file " + path);
 	
 	unlock();
 }
@@ -758,7 +758,7 @@ void PAAudio::openRecorder(string path)
 	lock();
 	
 	if (!(recordingSNDFILE = sf_open(path.c_str(), SFM_WRITE, &sfInfo)))
-		printLog("could not open temporary file " + path);
+		logMessage("could not open temporary file " + path);
 	recordingFrameNum = 0;
 	
 	unlock();

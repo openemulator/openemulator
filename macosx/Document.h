@@ -46,9 +46,9 @@ typedef enum
 - (void)createCanvas:(NSDictionary *)dict;
 - (void)destroyCanvas:(NSValue *)canvasValue;
 
-- (BOOL)isMountable:(NSString *)path;
+- (BOOL)canMountNow:(NSString *)path;
 - (BOOL)mount:(NSString *)path;
-- (BOOL)testMount:(NSString *)path;
+- (BOOL)canMount:(NSString *)path;
 
 - (void)sendSystemEvent:(DocumentSystemEvent)event toDevice:(void *)device;
 

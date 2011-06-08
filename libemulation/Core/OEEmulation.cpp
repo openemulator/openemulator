@@ -79,62 +79,6 @@ bool OEEmulation::open(string path)
 	return false;
 }
 
-bool OEEmulation::save(string path)
-{
-	close();
-	
-	OEData data;
-	string pathExtension = getPathExtension(path);
-	if (pathExtension == OE_FILE_PATH_EXTENSION)
-	{
-		if (updateEmulation())
-		{
-			if (dumpEmulation(&data))
-			{
-				is_open = writeFile(path, &data);
-				
-				if (!is_open)
-					printLog("could not open '" + path + "'");
-			}
-			else
-				printLog("could not dump EDL for '" + path + "'");
-		}
-		else
-			printLog("could not update the configuration for '" + path + "'");
-	}
-	else if (pathExtension == OE_PACKAGE_PATH_EXTENSION)
-	{
-		package = new OEPackage();
-		if (package && package->open(path))
-		{
-			if (updateEmulation())
-			{
-				if (dumpEmulation(&data))
-				{
-					is_open = package->writeFile(OE_PACKAGE_EDL_PATH, &data);
-					if (!is_open)
-						printLog("could not write '" OE_PACKAGE_EDL_PATH
-								   "' in '" + path + "'");
-				}
-				else
-					printLog("could not dump EDL for '" + path + "'");
-			}
-			
-			delete package;
-			package = NULL;
-		}
-		else
-			printLog("could not open '" + path + "'");
-	}
-	else
-		printLog("could not identify type of '" + path + "'");
-	
-	if (!is_open)
-		close();
-	
-	return is_open;
-}
-
 bool OEEmulation::addComponent(string id, OEComponent *component)
 {
 	if (!component)
@@ -179,43 +123,17 @@ string OEEmulation::getId(OEComponent *component)
 	return "";
 }
 
-OEIds *OEEmulation::getDevices()
+bool OEEmulation::addEDL(string path, OEIdMap connectionsMap)
 {
-	return &devices;
-}
-
-bool OEEmulation::addEDL(string path, map<string, string> connectionMap)
-{
-	if (!doc)
-		return false;
-	
-	// Load new EDL
-	OEEDL edl;
-	if (!edl.open(path))
-		return false;
-	
-/*	// Build name map for new EDL
-	OEIdList deviceIds = getDeviceIds();
-	OEIdList newDeviceIds = edl.getDeviceIds();
-	OEIdMap nameMap = buildNameMap(deviceIds, newDeviceIds);
-	
-	// Rename EDL id's, and rename connection map
-	edl.renameEmulation(nameMap);
-	renameConnectionMap(connectionMap, nameMap);
-	
-	// Insert EDL
-	//	xmlNodePtr insertionNode = findInsertionPoint(connectionMap.begin()->first)
-	//	insert(insertionNode, &edl);
-	
-	// Connect port inlets
-	connectEmulation();
-	*/
+    if (!OEEDL::addEDL(path, connectionsMap))
+        return false;
+    
 	return true;
 }
 
 bool OEEmulation::removeDevice(string id)
 {
-	for (OEIds::iterator i = devices.begin();
+/*	for (OEIds::iterator i = devices.begin();
 		 i != devices.end();
 		 i++)
 	{
@@ -228,7 +146,7 @@ bool OEEmulation::removeDevice(string id)
 	
 	return false;
 	// Verify device exists
-/*	if (!isDevice(deviceId))
+	if (!isDevice(deviceId))
 	{
 		log("could not find '" + deviceId + "'");
 		return false;
@@ -244,7 +162,7 @@ bool OEEmulation::removeDevice(string id)
 	// Remove elements matching this device
 	removeElements(deviceId);
 	*/
-	return true;
+	return false;
 }
 
 bool OEEmulation::isActive()
@@ -253,28 +171,6 @@ bool OEEmulation::isActive()
 }
 
 
-
-bool OEEmulation::dumpEmulation(OEData *data)
-{
-	if (!doc)
-		return false;
-	
-	xmlChar *xmlDump;
-	int xmlDumpSize;
-	
-	xmlDocDumpMemory(doc, &xmlDump, &xmlDumpSize);
-	if (xmlDump)
-	{
-		data->resize(xmlDumpSize);
-		memcpy(&data->front(), xmlDump, xmlDumpSize);
-		
-		xmlFree(xmlDump);
-		
-		return true;
-	}
-	
-	return false;
-}
 
 bool OEEmulation::createEmulation()
 {
@@ -314,19 +210,13 @@ bool OEEmulation::createDevice(string id)
 		OEComponent *component;
 		component = new OEDevice(this);
 		
-		if (component)
-		{
-			if (addComponent(id, component))
-			{
-				devices.push_back(id);
-				return true;
-			}
-		}
+		if (component && addComponent(id, component))
+			return true;
 		else
-			printLog("could not create device '" + id + "'");
+			logMessage("could not create device '" + id + "'");
 	}
 	else
-		printLog("redefinition of '" + id + "'");
+		logMessage("redefinition of '" + id + "'");
 	
 	return false;
 }
@@ -341,11 +231,11 @@ bool OEEmulation::createComponent(string id, string className)
 		if (component)
 			return addComponent(id, component);
 		else
-			printLog("could not create '" + id +
+			logMessage("could not create '" + id +
 					   "', class '" + className + "' undefined");
 	}
 	else
-		printLog("redefinition of '" + id + "'");
+		logMessage("redefinition of '" + id + "'");
 	
 	return false;
 }
@@ -424,7 +314,7 @@ bool OEEmulation::configureComponent(string id, xmlNodePtr children)
 	OEComponent *component = getComponent(id);
 	if (!component)
 	{
-		printLog("could not configure '" + id + "', it is not created");
+		logMessage("could not configure '" + id + "', component is not created");
 		return false;
 	}
 	
@@ -447,14 +337,14 @@ bool OEEmulation::configureComponent(string id, xmlNodePtr children)
 				value = parseValueProperties(value, propertiesMap);
 				
 				if (!component->setValue(name, value))
-					printLog("'" + id + "': invalid property '" + name + "'");
+					logMessage("'" + id + "': invalid property '" + name + "'");
 			}
 			else if (hasNodeProperty(node, "ref"))
 			{
 				string refId = getNodeProperty(node, "ref");
 				OEComponent *ref = getComponent(refId);
 				if (!component->setRef(name, ref))
-					printLog("'" + id + "': invalid property '" + name + "'");
+					logMessage("'" + id + "': invalid property '" + name + "'");
 			}
 			else if (hasNodeProperty(node, "data"))
 			{
@@ -474,12 +364,12 @@ bool OEEmulation::configureComponent(string id, xmlNodePtr children)
 				if (dataRead)
 				{
 					if (!component->setData(name, &data))
-						printLog("'" + id + "': invalid property '" + name + "'");
+						logMessage("'" + id + "': invalid property '" + name + "'");
 				}
 			}
 			else
 			{
-				printLog("'" + id + "': invalid property '" + name + "', "
+				logMessage("'" + id + "': invalid property '" + name + "', "
 						   "unrecognized type");
 			}
 		}
@@ -514,14 +404,14 @@ bool OEEmulation::initComponent(string id)
 	OEComponent *component = getComponent(id);
 	if (!component)
 	{
-		printLog("could not init '" + id + "', it is not created");
+		logMessage("could not init '" + id + "', component is not created");
 		
 		return false;
 	}
 	
 	if (!component->init())
 	{
-		printLog("could not init '" + id + "'");
+		logMessage("could not init '" + id + "'");
 		
 		return false;
 	}
@@ -557,7 +447,7 @@ bool OEEmulation::updateComponent(string id, xmlNodePtr children)
 	OEComponent *component = getComponent(id);
 	if (!component)
 	{
-		printLog("could not update '" + id + "', it is not created");
+		logMessage("could not update '" + id + "', component is not created");
 		return false;
 	}
 	
@@ -594,7 +484,7 @@ bool OEEmulation::updateComponent(string id, xmlNodePtr children)
 				if (component->getData(name, &data) && data)
 				{
 					if (!package->writeFile(parsedSrc, data))
-						printLog("could not write '" + dataSrc + "'");
+						logMessage("could not write '" + dataSrc + "'");
 				}
 			}
 		}
@@ -710,69 +600,4 @@ string OEEmulation::parseValueProperties(string value, map<string, string>& prop
 	}
 	
 	return value;
-}
-
-string OEEmulation::getLocationLabel(string id)
-{
-	if (!doc)
-		return "";
-	
-	vector<string> visitedIds;
-	string location = getLocationLabel(id, visitedIds);
-	int depth = (int) visitedIds.size();
-	
-	if (depth == 1)
-		return "";
-	else
-		return location;
-}
-
-string OEEmulation::getLocationLabel(string id,
-									 vector<string>& visitedIds)
-{
-	if (!doc)
-		return "";
-	
-	// Circularity check
-	if (find(visitedIds.begin(), visitedIds.end(), id) !=
-		visitedIds.end())
-		return "*";
-	visitedIds.push_back(id);
-	
-	// Find connected port
-	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
-	
-	for(xmlNodePtr node = rootNode->children;
-		node;
-		node = node->next)
-	{
-		if (!xmlStrcmp(node->name, BAD_CAST "port"))
-		{
-			string portId = getNodeProperty(node, "id");
-			string portRef = getNodeProperty(node, "ref");
-			string portLabel = getNodeProperty(node, "label");
-			
-			if (getDeviceId(portRef) == id)
-				return (getLocationLabel(getDeviceId(portId), visitedIds) +
-						" " + portLabel);
-		}
-	}
-	
-	// Find device label
-	for(xmlNodePtr node = rootNode->children;
-		node;
-		node = node->next)
-	{
-		if (!xmlStrcmp(node->name, BAD_CAST "device"))
-		{
-			string deviceId = getNodeProperty(node, "id");
-			string deviceLabel = getNodeProperty(node, "label");
-			
-			if (deviceId == id)
-				return deviceLabel;
-		}
-	}
-	
-	// Device not found
-	return "?";
 }

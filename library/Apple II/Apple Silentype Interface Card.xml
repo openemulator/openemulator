@@ -10,8 +10,5 @@
 <component id="appleSilentypeCard.io" class="AppleLanguageCard">
     <property name="mmu" ref="" />
 </component>
-<component id="appleSilentypeCard.memoryOffset" class="MemoryOffset">
-    <property name="component" ref="languageCard.memory" />
-</component>
 
 </edl>

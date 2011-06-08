@@ -5,7 +5,7 @@
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls Apple II audio input.
+ * Controls Apple II audio input
  */
 
 #include "AppleIIAudioIn.h"

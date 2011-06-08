@@ -5,7 +5,7 @@
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls an Apple II's slot memory range ($C100-$C7FF).
+ * Controls Apple II slot memory ($C100-$C7FF)
  */
 
 #include "OEComponent.h"

@@ -1,10 +1,11 @@
-/*
- *  AppleICassetteInterface.cpp
- *  OpenEmulator
+
+/**
+ * libemulation
+ * Apple I Cassette Interface
+ * (C) 2011 by Marc S. Ressl (mressl@umich.edu)
+ * Released under the GPL
  *
- *  Created by Marc S. Reßl on 17/03/10.
- *  Copyright 2010 ITBA. All rights reserved.
- *
+ * Controls Apple I cassette interface
  */
 
 #include "Apple1CassetteInterfaceCard.h"

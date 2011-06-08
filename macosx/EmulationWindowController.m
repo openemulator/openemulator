@@ -78,6 +78,7 @@
 	[fOutlineView setDoubleAction:@selector(outlineDoubleAction:)];
 	[fOutlineView registerForDraggedTypes:[NSArray arrayWithObjects:
 										   NSFilenamesPboardType,
+                                           @"OEDeviceType",
 										   nil]];
 	
 	[fTableView setDelegate:self];
@@ -498,32 +499,36 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				  proposedItem:(id)item
 			proposedChildIndex:(NSInteger)index
 {
-	NSPasteboard *pasteboard = [info draggingPasteboard];
-	if ([[pasteboard types] containsObject:NSFilenamesPboardType])
+	NSPasteboard *pboard = [info draggingPasteboard];
+	if ([[pboard types] containsObject:NSFilenamesPboardType])
 	{
-		DocumentController *documentController;
-		documentController = [NSDocumentController sharedDocumentController];
-		
-		NSString *path = [[pasteboard propertyListForType:NSFilenamesPboardType]
+		NSString *path = [[pboard propertyListForType:NSFilenamesPboardType]
 						  objectAtIndex:0];
 		
 		NSString *pathExtension = [[path pathExtension] lowercaseString];
+
+		DocumentController *documentController;
+		documentController = [NSDocumentController sharedDocumentController];
+        
 		if ([[documentController diskImagePathExtensions] containsObject:pathExtension])
 		{
 			if ([item hasStorages] && (index == -1))
 			{
-				if ([item testMount:path])
+				if ([item canMount:path])
 					return NSDragOperationCopy;
 			}
 		}
-		else if ([pathExtension compare:@"xml"] == NSOrderedSame)
-		{
-			if ([item isPort] && (index == -1))
-			{
-				if ([item testAddEDL:path])
-					return NSDragOperationCopy;
-			}
-		}
+    }
+	else if ([[pboard types] containsObject:@"OEDeviceType"])
+    {
+        if ([item isPort] && (index == -1))
+        {
+            NSDictionary *dict = [pboard propertyListForType:@"OEDeviceType"];
+            
+            NSString *type = [dict objectForKey:@"type"];
+            if ([type compare:[item portType]] == NSOrderedSame)
+                return NSDragOperationCopy;
+        }
 	}
 	
 	return NSDragOperationNone;	
@@ -534,20 +539,56 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			   item:(id)item
 		 childIndex:(NSInteger)index
 {
-	NSPasteboard *pasteboard = [info draggingPasteboard];
-	NSString *path = [[pasteboard propertyListForType:NSFilenamesPboardType]
-					  objectAtIndex:0];
+	NSPasteboard *pboard = [info draggingPasteboard];
+	if ([[pboard types] containsObject:NSFilenamesPboardType])
+    {
+        NSString *path = [[pboard propertyListForType:NSFilenamesPboardType]
+                          objectAtIndex:0];
+        
+        DocumentController *documentController;
+        documentController = [NSDocumentController sharedDocumentController];
+        
+        NSString *pathExtension = [[path pathExtension] lowercaseString];
+        if ([[documentController diskImagePathExtensions] containsObject:pathExtension])
+        {
+            [self mount:path inItem:item];
+            
+            return YES;
+        }
+    }
+	else if ([[pboard types] containsObject:@"OEDeviceType"])
+    {
+        NSDictionary *dict = [pboard propertyListForType:@"OEDeviceType"];
+        
+        NSString *path = [dict objectForKey:@"path"];
+        NSString *label = [dict objectForKey:@"label"];
+        
+        NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
+        NSString *libraryPath = [resourcePath
+                                 stringByAppendingPathComponent:@"library"];
+        
+		if ([item addEDL:[libraryPath stringByAppendingPathComponent:path]])
+        {
+            [self updateEmulation:self];
+            
+            [[self document] updateChangeCount:NSChangeDone];
+        }
+        else
+        {
+            NSBeginAlertSheet([NSString localizedStringWithFormat:
+                               @"The device \u201C%@\u201D could not be added.",
+                               label],
+                              nil, nil, nil,
+                              [self window],
+                              self, nil, nil, nil,
+                              [NSString localizedStringWithFormat:
+                               @"Check the console for additional information."]);
+        }
+        
+        return YES;
+    }
 	
-	DocumentController *documentController;
-	documentController = [NSDocumentController sharedDocumentController];
-	
-	NSString *pathExtension = [[path pathExtension] lowercaseString];
-	if ([[documentController diskImagePathExtensions] containsObject:pathExtension])
-		[self mount:path inItem:item];
-	else if ([pathExtension compare:@"xml"] == NSOrderedSame)
-		[item addEDL:path];
-	
-	return YES;
+	return NO;
 }
 
 

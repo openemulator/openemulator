@@ -5,7 +5,7 @@
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls Apple II's slot expansion memory range ($C800-$CFFF).
+ * Controls Apple II slot expansion memory ($C800-$CFFF)
  */
 
 #include "AppleIISlotExpansionMemory.h"

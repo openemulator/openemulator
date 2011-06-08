@@ -11,9 +11,10 @@
 #ifndef _OECOMPONENT_H
 #define _OECOMPONENT_H
 
-#include "OETypes.h"
+#include "OECommon.h"
 
 class OEComponent;
+
 typedef vector<OEComponent *> OEComponents;
 typedef map<int, OEComponents> OEObservers;
 
@@ -53,19 +54,6 @@ public:
 	
 protected:
 	OEObservers observers;
-	
-	// Helpers
-	void printLog(string message);
-	
-	int getInt(const string& value);
-	double getFloat(const string& value);
-	OEData getCharVector(const string& value);
-	
-	string getString(int value);
-	string getString(float value);
-	string getHexString(int value);
-	
-	int getNextPowerOf2(int value);
 };
 
 #endif

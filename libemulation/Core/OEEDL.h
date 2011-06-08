@@ -2,7 +2,7 @@
 /**
  * libemulation
  * OEEDL
- * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Controls an EDL document
@@ -13,7 +13,7 @@
 
 #include <libxml/tree.h>
 
-#include "OETypes.h"
+#include "OECommon.h"
 #include "OEPackage.h"
 
 #define OE_FILE_PATH_EXTENSION "xml"
@@ -39,6 +39,9 @@ typedef vector<OEPortInfo> OEPortsInfo;
 typedef OEPortInfo OEConnectorInfo;
 typedef OEPortsInfo OEConnectorsInfo;
 
+typedef vector<string> OEIds;
+typedef map<string, string> OEIdMap;
+
 class OEEDL
 {
 public:
@@ -47,12 +50,17 @@ public:
 	
 	bool open(string path);
 	bool isOpen();
+	bool save(string path);
 	void close();
 	
 	OEHeaderInfo getHeaderInfo();
 	OEPortsInfo getFreePortsInfo();
 	OEConnectorsInfo getFreeConnectorsInfo();
 	
+    bool addEDL(string path, OEIdMap connections);
+    
+    OEIds getDeviceIds();
+    
 	void setDeviceId(string& id, string deviceId);
 	string getDeviceId(string id);
 	
@@ -61,19 +69,28 @@ protected:
 	OEPackage *package;
 	xmlDocPtr doc;
 	
+    virtual bool updateEmulation();
+    
+	string getLocationLabel(string deviceId, vector<string>& visitedIds);
+	string getLocationLabel(string deviceId);
+    
 	string getNodeProperty(xmlNodePtr node, string name);
 	bool hasNodeProperty(xmlNodePtr node, string name);
 	void setNodeProperty(xmlNodePtr node, string name, string value);
 	
-	bool readFile(string path, OEData *data);
-	bool writeFile(string path, OEData *data);
-	
-	string getPathExtension(string path);
-	
 private:
 	bool validateEmulation();
-	
-	void edlLog(string message);
+	bool dumpEmulation(OEData *data);
+    
+    OEIdMap makeIdMap(OEIds& deviceIds);
+    void remapNode(OEIdMap& deviceIdMap, xmlNodePtr node, string property);
+    void remapDocument(OEIdMap& deviceIdMap);
+    void remapConnections(OEIdMap& connections, OEIdMap& deviceIdMap);
+    xmlNodePtr getLastNode(string theDeviceId);
+    string followChain(string deviceId, vector<string>& visitedIds);
+    xmlNodePtr getInsertionNode(string connectorId);
+    bool insertInto(xmlNodePtr dest);
+    void connect(OEEDL& edl, OEIdMap& connections);
 };
 
 #endif

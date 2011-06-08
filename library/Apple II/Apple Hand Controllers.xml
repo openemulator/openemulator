@@ -6,6 +6,6 @@
     <setting ref="appleHandControllers.io" name="inputDevice" label="Input Device" type="select" options="None,Mouse,Joystick" />
     <setting ref="appleHandControllers.io" name="invertAxes" label="Invert Axes" type="checkbox" />
 </device>
-<connector id="appleHandControllers.conn" ref="" type="Apple II Game Controller" label="Connector" />
+<connector id="appleHandControllers.conn" ref="" type="Apple Game Controller" label="Connector" />
 
 </edl>

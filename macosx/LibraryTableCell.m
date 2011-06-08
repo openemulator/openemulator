@@ -101,7 +101,14 @@
              inRect:[self imageRectForBounds:cellFrame]
           isFlipped:[controlView isFlipped]];
     
-	[[self attributedStringValue] drawInRect:[self textRectForBounds:cellFrame]];
+    NSMutableAttributedString *string;
+    string = [[NSMutableAttributedString alloc] initWithAttributedString:
+              [self attributedStringValue]];
+    [string addAttribute:NSForegroundColorAttributeName
+                   value:[NSColor blackColor]
+                   range:NSMakeRange(0, [[self attributedStringValue] length])];
+	[string drawInRect:[self textRectForBounds:cellFrame]];
+    [string release];
 }
 
 @end

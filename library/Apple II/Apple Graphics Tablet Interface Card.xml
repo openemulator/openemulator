@@ -6,7 +6,7 @@
 <connector id="appleGTIC.connector" ref="" type="Apple II Slot" label="Connector" >
     <inlet ref="appleGTIC.io" property="mmu" outletRef="mmu" />
 </connector>
-<port id="appleGTIC.port" ref="" type="Apple Graphics Tablet" label="Graphics Tablet Port" image="images/Connectors/Header1x6 Male.png">
+<port id="appleGTIC.port" ref="" type="Apple Graphics Tablet" label="Graphics Tablet Port" image="images/Connectors/Header1x6.png">
 </port>
 <component id="appleGTIC.io" class="AppleLanguageCard">
     <property name="mmu" ref="" />

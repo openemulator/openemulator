@@ -33,12 +33,17 @@
 		
 		// Create device items
 		OEEmulation *emulation = (OEEmulation *)[theDocument emulation];
-		OEIds *devices = (OEIds *)emulation->getDevices();
-		for (int i = 0; i < devices->size(); i++)
+		OEIds deviceIds = emulation->getDeviceIds();
+		for (OEIds::iterator i = deviceIds.begin();
+             i != deviceIds.end();
+             i++)
 		{
-			string deviceId = devices->at(i);
+			string deviceId = *i;
 			OEComponent *theDevice = emulation->getComponent(deviceId);
 			
+            if (!theDevice)
+                continue;
+            
 			// Create group item
 			string value;
 			
@@ -495,7 +500,7 @@
 	return success;
 }
 
-- (BOOL)testMount:(NSString *)path
+- (BOOL)canMount:(NSString *)path
 {
 	if (!storages)
 		return NO;
@@ -509,7 +514,7 @@
 		OEComponent *component = (OEComponent *)[[storages objectAtIndex:i]
 												 pointerValue];
 				
-		success = component->postMessage(NULL, STORAGE_TESTMOUNT, &value);
+		success = component->postMessage(NULL, STORAGE_CAN_MOUNT, &value);
 		
 		if (success)
 			break;
@@ -519,8 +524,6 @@
 	
 	return success;
 }
-
-
 
 - (BOOL)isMount
 {
@@ -630,27 +633,9 @@
 	return NO;
 }
 
-- (BOOL)testAddEDL:(NSString *)path
+- (NSString *)portType
 {
-	OEEDL edl;
-	
-	edl.open(getCPPString(path));
-	if (!edl.isOpen())
-		return NO;
-	
-	OEConnectorsInfo connectorsInfo = edl.getFreeConnectorsInfo();
-	
-	edl.close();
-	
-	if (connectorsInfo.size() == 1)
-	{
-		OEConnectorInfo connectorInfo = connectorsInfo.at(0);
-		
-		if (connectorInfo.type == getCPPString(portType))
-			return YES;
-	}
-	
-	return NO;
+	return portType;
 }
 
 @end

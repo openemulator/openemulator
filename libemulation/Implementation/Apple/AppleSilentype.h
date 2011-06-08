@@ -5,7 +5,7 @@
  * (C) 2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls an Apple Silentype.
+ * Controls an Apple Silentype printer
  */
 
 #include "OEComponent.h"

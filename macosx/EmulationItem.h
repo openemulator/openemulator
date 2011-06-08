@@ -90,8 +90,7 @@ typedef enum
 
 - (BOOL)hasStorages;
 - (BOOL)mount:(NSString *)path;
-- (BOOL)testMount:(NSString *)path;
-
+- (BOOL)canMount:(NSString *)path;
 - (BOOL)isMount;
 - (void)revealInFinder;
 - (BOOL)isLocked;
@@ -99,6 +98,6 @@ typedef enum
 
 - (BOOL)isPort;
 - (BOOL)addEDL:(NSString *)path;
-- (BOOL)testAddEDL:(NSString *)path;
+- (NSString *)portType;
 
 @end

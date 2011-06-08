@@ -455,15 +455,15 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 
 // Storage
 
-- (BOOL)isMountable:(NSString *)path
+- (BOOL)canMountNow:(NSString *)path
 {
 	BOOL success = NO;
 	
 	[self lockEmulation];
 	
-	OEIds *devices = (OEIds *)((OEEmulation *)emulation)->getDevices();
-	for (OEIds::iterator i = devices->begin();
-		 i != devices->end();
+	OEIds deviceIds = ((OEEmulation *)emulation)->getDeviceIds();
+	for (OEIds::iterator i = deviceIds.begin();
+		 i != deviceIds.end();
 		 i++)
 	{
 		OEComponent *device = ((OEEmulation *)emulation)->getComponent(*i);
@@ -477,7 +477,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 			if ((*j)->postMessage(NULL, STORAGE_IS_AVAILABLE, NULL))
 			{
 				string thePath = getCPPString(path);
-				if ((*j)->postMessage(NULL, STORAGE_TESTMOUNT, &thePath))
+				if ((*j)->postMessage(NULL, STORAGE_CAN_MOUNT, &thePath))
 				{
 					[self updateChangeCount:NSChangeDone];
 					
@@ -502,9 +502,9 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	
 	[self lockEmulation];
 	
-	OEIds *devices = (OEIds *)((OEEmulation *)emulation)->getDevices();
-	for (OEIds::iterator i = devices->begin();
-		 i != devices->end();
+	OEIds deviceIds = ((OEEmulation *)emulation)->getDeviceIds();
+	for (OEIds::iterator i = deviceIds.begin();
+		 i != deviceIds.end();
 		 i++)
 	{
 		OEComponent *device = ((OEEmulation *)emulation)->getComponent(*i);
@@ -537,15 +537,15 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	return success;
 }
 
-- (BOOL)testMount:(NSString *)path
+- (BOOL)canMount:(NSString *)path
 {
 	BOOL success = NO;
 	
 	[self lockEmulation];
 	
-	OEIds *devices = (OEIds *)((OEEmulation *)emulation)->getDevices();
-	for (OEIds::iterator i = devices->begin();
-		 i != devices->end();
+	OEIds deviceIds = ((OEEmulation *)emulation)->getDeviceIds();
+	for (OEIds::iterator i = deviceIds.begin();
+		 i != deviceIds.end();
 		 i++)
 	{
 		OEComponent *device = ((OEEmulation *)emulation)->getComponent(*i);
@@ -557,7 +557,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 			 j++)
 		{
 			string thePath = getCPPString(path);
-			if ((*j)->postMessage(NULL, STORAGE_TESTMOUNT, NULL))
+			if ((*j)->postMessage(NULL, STORAGE_CAN_MOUNT, NULL))
 			{
 				success = YES;
 				break;

@@ -40,7 +40,7 @@ bool AddressOffset::init()
 {
 	if (!component)
 	{
-		printLog("property 'component' undefined");
+		logMessage("property 'component' undefined");
 		return false;
 	}
 	

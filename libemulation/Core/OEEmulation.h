@@ -19,12 +19,11 @@
 
 using namespace std;
 
-typedef map<string, OEComponent *> OEComponentsMap;
-typedef vector<string> OEIds;
-
 typedef void (*EmulationDidUpdate)(void *userData);
 typedef OEComponent *(*EmulationCreateCanvas)(void *userData, OEComponent *device);
 typedef void (*EmulationDestroyCanvas)(void *userData, OEComponent *canvas);
+
+typedef map<string, OEComponent *> OEComponentsMap;
 
 class OEEmulation : public OEComponent, public OEEDL
 {
@@ -39,15 +38,13 @@ public:
 	void setUserData(void *userData);
 	
 	bool open(string path);
-	bool save(string path);
 	
 	bool addComponent(string id, OEComponent *component);
 	bool removeComponent(string id);
 	OEComponent *getComponent(string id);
 	string getId(OEComponent *component);
 	
-	OEIds *getDevices();
-	bool addEDL(string path, map<string, string> idMap);
+	bool addEDL(string path, OEIdMap connectionsMap);
 	bool removeDevice(string id);
 	
 	bool isActive();
@@ -55,7 +52,6 @@ public:
 private:
 	string resourcePath;
 	OEComponentsMap componentsMap;
-	OEIds devices;
 	
 	EmulationDidUpdate didUpdate;
 	EmulationCreateCanvas createCanvas;
@@ -64,7 +60,6 @@ private:
 	
 	int activityCount;
 	
-	bool dumpEmulation(OEData *data);
 	bool createEmulation();
 	bool createDevice(string id);
 	bool createComponent(string id, string className);
@@ -85,10 +80,7 @@ private:
 	bool hasValueProperty(string value, string propertyName);
 	string parseValueProperties(string value, map<string, string>& propertiesMap);
 	
-	string getLocationLabel(string id);
-	string getLocationLabel(string id, vector<string>& visitedIds);
-	
-	friend class OEDevice;
+    friend class OEDevice;
 };
 
 #endif

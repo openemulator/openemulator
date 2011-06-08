@@ -64,7 +64,7 @@ bool AppleDiskII::init()
 {
 	if (!device)
 	{
-		printLog("ref to 'device' undefined");
+		logMessage("ref to 'device' undefined");
 		return false;
 	}
 	
@@ -78,7 +78,7 @@ bool AppleDiskII::postMessage(OEComponent *sender, int message, void *data)
 		case STORAGE_IS_AVAILABLE:
 			return !image.size();
 			
-		case STORAGE_TESTMOUNT:
+		case STORAGE_CAN_MOUNT:
 			return true;
 			
 		case STORAGE_MOUNT:

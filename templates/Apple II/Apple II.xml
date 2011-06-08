@@ -45,7 +45,7 @@
 <port id="appleII.gamePort" ref="" type="Apple Game Controller" label="Game Port" image="images/Connectors/DIP16.png">
     <inlet ref="appleII.game" property="port" outletRef="port" />
 </port>
-<port id="appleII.cpuSocket" ref="" type="6502 CPU" label="CPU Socket" image="images/Connectors/DIP40.png">
+<port id="appleII.cpuSocket" ref="" type="6502 CPU Socket" label="CPU Socket" image="images/Connectors/DIP40.png">
 </port>
 <component id="appleII.controlBus" class="ControlBus">
     <property name="device" ref="appleII" />

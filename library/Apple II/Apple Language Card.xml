@@ -9,9 +9,6 @@
 <component id="appleLanguageCard.io" class="AppleLanguageCard">
     <property name="mmu" ref="" />
 </component>
-<component id="appleLanguageCard.memoryOffset" class="MemoryOffset">
-    <property name="component" ref="appleLanguageCard.memory" />
-</component>
 <component id="appleLanguageCard.memory" class="RAM">
     <property name="host" ref="host" />
     <property name="size" value="16384" />

@@ -130,7 +130,7 @@
 	
 	NSDictionary *defaults = [NSDictionary dictionaryWithObjectsAndKeys:
 							  [NSNumber numberWithBool:NO], @"OEAudioControlsVisible",
-							  [NSNumber numberWithBool:NO], @"OEAudioFullDuplex",
+							  [NSNumber numberWithBool:YES], @"OEAudioFullDuplex",
 							  [NSNumber numberWithFloat:1.0], @"OEAudioPlayVolume",
 							  [NSNumber numberWithBool:YES], @"OEAudioPlayThrough",
 							  [NSNumber numberWithBool:shaderDefault], @"OEVideoEnableShader",
@@ -304,7 +304,7 @@
 		if ([[self currentDocument] mount:path])
 			return YES;
 		
-		if ([[self currentDocument] testMount:path])
+		if ([[self currentDocument] canMount:path])
 		{
 			NSAlert *alert = [[NSAlert alloc] init];
 			[alert setMessageText:[NSString localizedStringWithFormat:

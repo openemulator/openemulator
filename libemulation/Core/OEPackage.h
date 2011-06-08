@@ -13,13 +13,7 @@
 
 #include <zip.h>
 
-#include "OETypes.h"
-
-#ifdef _WIN32
-#define OE_PATH_SEPARATOR "\\"
-#else
-#define OE_PATH_SEPARATOR "/"
-#endif
+#include "OECommon.h"
 
 using namespace std;
 

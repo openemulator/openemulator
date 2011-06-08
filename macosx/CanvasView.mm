@@ -392,7 +392,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 		
 		if ([[documentController diskImagePathExtensions] containsObject:pathExtension])
 		{
-			if ([document isMountable:path])
+			if ([document canMountNow:path])
 				return NSDragOperationCopy;
 		}
 		else if ([[documentController audioPathExtensions] containsObject:pathExtension] ||
@@ -417,9 +417,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 		
 		DocumentController *documentController;
 		documentController = [NSDocumentController sharedDocumentController];
-		[documentController application:NSApp openFile:path];
-		
-		return YES;
+		return [documentController application:NSApp openFile:path];
 	}
 	else if ([[pasteboard types] containsObject:NSStringPboardType])
 	{

@@ -12,9 +12,9 @@
 #define _STORAGEINTERFACE_H
 
 // Notes:
-// * isAvailable() determines if the device is available for mounting images.
-//   This is used when an emulation searches for a free device to mount an image.
-// * testMount() tests if an image can be mounted in this device.
+// * isAvailable() determines if the device is (now) available for mounting images.
+//   This is used when an emulation searches for an available device to mount an image.
+// * canMount() tests if an image can be mounted (some time) in this device.
 // * mount() force-mounts. It should attempt to mount the image by all means.
 //   If an error occurs, a previously mounted image should remain mounted.
 // * unmount() force-unmounts. It should attempt to unmount the image by all means.
@@ -26,7 +26,7 @@
 typedef enum
 {
 	STORAGE_IS_AVAILABLE,
-	STORAGE_TESTMOUNT,
+	STORAGE_CAN_MOUNT,
 	STORAGE_MOUNT,
 	STORAGE_UNMOUNT,
 	STORAGE_GET_MOUNTPATH,

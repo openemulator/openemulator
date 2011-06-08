@@ -673,7 +673,7 @@ GLuint OpenGLCanvas::loadShader(const char *source)
 		string errorString = "could not compile OpenGL fragment shader\n";
 		errorString += &infoLog.front();
 		
-		printLog(errorString);
+		logMessage(errorString);
 	}
 	
 	index = glCreateProgram();
@@ -698,7 +698,7 @@ GLuint OpenGLCanvas::loadShader(const char *source)
 		string errorString = "could not link OpenGL program\n";
 		errorString += &infoLog.front();
 		
-		printLog(errorString);
+		logMessage(errorString);
 	}
 #endif
 	

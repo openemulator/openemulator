@@ -86,13 +86,13 @@ bool ControlBus::init()
 {
 	if (!device)
 	{
-		printLog("ref to 'device' undefined");
+		logMessage("ref to 'device' undefined");
 		return false;
 	}
 	
 	if (!audio)
 	{
-		printLog("ref to 'audio' undefined");
+		logMessage("ref to 'audio' undefined");
 		return false;
 	}
 	

@@ -30,7 +30,7 @@
     <property name="delayAfterCR" value="0" />
 </component>
 <component id="appleSSC.memory" class="ROM">
-    <property name="image" src="roms/Apple II/Apple II Super Serial Card ROM.bin" />
+    <property name="image" data="${resourcePath}/roms/Apple/341-0065-A.bin" />
 </component>
 
 </edl>

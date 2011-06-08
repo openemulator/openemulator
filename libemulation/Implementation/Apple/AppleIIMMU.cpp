@@ -5,7 +5,7 @@
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls the Apple II D000-FFFF range.
+ * Controls Apple II memory ($D000-$FFFF)
  */
 
 #include "AppleIIMMU.h"

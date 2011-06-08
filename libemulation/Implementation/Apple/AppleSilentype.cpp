@@ -1,11 +1,11 @@
 
 /**
  * libemulation
- * Silentype
- * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
+ * Apple Silentype
+ * (C) 2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls an Apple Silentype.
+ * Controls an Apple Silentype printer
  */
 
 #include "AppleSilentype.h"
@@ -53,13 +53,13 @@ bool AppleSilentype::init()
 {
 	if (!device)
 	{
-		printLog("property 'device' undefined");
+		logMessage("property 'device' undefined");
 		return false;
 	}
 	
 	if (!canvas)
 	{
-		printLog("canvas could not be created");
+		logMessage("canvas could not be created");
 		return false;
 	}
 	

@@ -68,13 +68,13 @@ bool MOSKIM1IO::init()
 {
 	if (!device)
 	{
-		printLog("property 'device' undefined");
+		logMessage("property 'device' undefined");
 		return false;
 	}
 	
 	if (!canvas)
 	{
-		printLog("canvas could not be created");
+		logMessage("canvas could not be created");
 		return false;
 	}
 	
