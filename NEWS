@@ -1,5 +1,6 @@
 ==2011-06==
-* Skipped rev. 666 :-)
+* Implemented first part of OEEmulation addEDL
+* Skipped rev. 666
 * Implemented library window filtering
 * Implemented library window
 * Implemented drop of library items
