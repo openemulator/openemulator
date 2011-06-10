@@ -13,23 +13,23 @@
 #import "TemplateChooserItem.h"
 #import "StringConversion.h"
 
-#import "OEEDL.h"
+#import "OEDocument.h"
 
 @implementation TemplateChooserItem
 
-- (id)initWithEDLPath:(NSString *)path
+- (id)initWithOEDocumentPath:(NSString *)thePath
 {
     self = [super init];
     
 	if (self)
-		edlPath = [path copy];
+		path = [thePath copy];
 	
 	return self;
 }
 
 - (void)dealloc
 {
-	[edlPath release];
+	[path release];
 	
 	[label release];
 	[image release];
@@ -40,17 +40,17 @@
 
 - (void)update
 {
-	if (edlLoaded)
+	if (loaded)
 		return;
 	
-	OEEDL edl;
-	edl.open(getCPPString(edlPath));
-	if (edl.isOpen())
+	OEDocument oeDocument;
+	oeDocument.open(getCPPString(path));
+	if (oeDocument.isOpen())
 	{
-		OEHeaderInfo headerInfo = edl.getHeaderInfo();
+		OEHeaderInfo headerInfo = oeDocument.getHeaderInfo();
 		NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
 		
-		label = [[[edlPath lastPathComponent] stringByDeletingPathExtension]
+		label = [[[path lastPathComponent] stringByDeletingPathExtension]
 				 retain];
 		NSString *imagePath = [resourcePath stringByAppendingPathComponent:
 							   getNSString(headerInfo.image)];
@@ -58,7 +58,7 @@
 		description = [getNSString(headerInfo.description) retain];
 	}
 	
-	edlLoaded = YES;
+	loaded = YES;
 }
 
 - (NSString *)imageRepresentationType
@@ -89,7 +89,7 @@
 {
 	[self update];
 	
-	return edlPath;
+	return path;
 }
 
 - (NSString *)description
@@ -99,9 +99,9 @@
 	return description;
 }
 
-- (NSString *)edlPath
+- (NSString *)path
 {
-	return edlPath;
+	return path;
 }
 
 @end

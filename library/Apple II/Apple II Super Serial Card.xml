@@ -13,7 +13,7 @@
     <setting ref="appleSSC.io" name="charactersPerLine" label="Characters per Line" type="select" options="40,72,80,132" />
     <setting ref="appleSSC.io" name="delayAfterCR" label="Delay After CR" type="checkbox" />
 </device>
-<connector id="appleSSC.connector" ref="" type="Apple II Slot" label="Connector" />
+<connector id="appleSSC.connector" type="Apple II Slot" />
 <port id="appleSSC.port" ref="" type="RS-232" label="Serial Port" image="images/Connectors/DE9 Male.png">
     <inlet ref="appleSSC.io" property="port" outletRef="io" />
 </port>

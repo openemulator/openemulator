@@ -1,16 +1,16 @@
 
 /**
  * libemulation
- * OEEDL
+ * OEDocument
  * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls an EDL document
+ * Controls an OpenEmulator XML description
  */
 
-#include "OEEDL.h"
+#include "OEDocument.h"
 
-OEEDL::OEEDL()
+OEDocument::OEDocument()
 {
 	is_open = false;
 	
@@ -18,7 +18,7 @@ OEEDL::OEEDL()
 	doc = NULL;
 }
 
-OEEDL::~OEEDL()
+OEDocument::~OEDocument()
 {
 	close();
 	
@@ -26,7 +26,7 @@ OEEDL::~OEEDL()
 		xmlFreeDoc(doc);
 }
 
-bool OEEDL::open(string path)
+bool OEDocument::open(string path)
 {
 	close();
 	
@@ -67,7 +67,7 @@ bool OEEDL::open(string path)
 		if (!doc)
 		{
 			is_open = false;
-			logMessage("could not parse EDL in '" + path + "'");
+			logMessage("could not parse document '" + path + "'");
 		}
 	}
 	
@@ -83,13 +83,13 @@ bool OEEDL::open(string path)
      if (!xmlValidateDocumentFinal(validCtxt, doc))
      {
      is_open = false;
-     logMessage("could not validate DTD of EDL in '" + path + "'");
+     logMessage("could not validate DTD of document '" + path + "'");
      }
      
      xmlFreeValidCtxt(validCtxt);
      }*/
 	
-	if (is_open && !validateEmulation())
+	if (is_open && !validateDocument())
 	{
 		is_open = false;
 		logMessage("unknown EDL version");
@@ -101,12 +101,12 @@ bool OEEDL::open(string path)
 	return is_open;
 }
 
-bool OEEDL::isOpen()
+bool OEDocument::isOpen()
 {
 	return is_open;
 }
 
-bool OEEDL::save(string path)
+bool OEDocument::save(string path)
 {
 	close();
 	
@@ -114,9 +114,9 @@ bool OEEDL::save(string path)
 	string pathExtension = getPathExtension(path);
 	if (pathExtension == OE_FILE_PATH_EXTENSION)
 	{
-		if (updateEmulation())
+		if (updateDocument(doc))
 		{
-			if (dumpEmulation(&data))
+			if (dumpDocument(data))
 			{
 				is_open = writeFile(path, &data);
 				
@@ -124,7 +124,7 @@ bool OEEDL::save(string path)
 					logMessage("could not open '" + path + "'");
 			}
 			else
-				logMessage("could not dump EDL for '" + path + "'");
+				logMessage("could not dump document '" + path + "'");
 		}
 		else
 			logMessage("could not update the configuration for '" + path + "'");
@@ -134,9 +134,9 @@ bool OEEDL::save(string path)
 		package = new OEPackage();
 		if (package && package->open(path))
 		{
-			if (updateEmulation())
+			if (updateDocument(doc))
 			{
-				if (dumpEmulation(&data))
+				if (dumpDocument(data))
 				{
 					is_open = package->writeFile(OE_PACKAGE_EDL_PATH, &data);
 					if (!is_open)
@@ -144,7 +144,7 @@ bool OEEDL::save(string path)
 								   "' in '" + path + "'");
 				}
 				else
-					logMessage("could not dump EDL for '" + path + "'");
+					logMessage("could not dump document '" + path + "'");
 			}
             else
                 logMessage("could not update the configuration for '" + path + "'");
@@ -164,18 +164,19 @@ bool OEEDL::save(string path)
 	return is_open;
 }
 
-void OEEDL::close()
+void OEDocument::close()
 {
 	is_open = false;
 	
 	if (package)
 		delete package;
+    
 	package = NULL;
 }
 
 
 
-OEHeaderInfo OEEDL::getHeaderInfo()
+OEHeaderInfo OEDocument::getHeaderInfo()
 {
 	OEHeaderInfo headerInfo;
 	
@@ -190,18 +191,18 @@ OEHeaderInfo OEEDL::getHeaderInfo()
 	return headerInfo;
 }
 
-OEPortsInfo OEEDL::getFreePortsInfo()
+OEPortsInfo OEDocument::getFreePortsInfo()
 {
 	OEPortsInfo freePortsInfo;
 	
 	if (doc)
     {
         xmlNodePtr rootNode = xmlDocGetRootElement(doc);
-        
         for(xmlNodePtr node = rootNode->children;
             node;
             node = node->next)
-            if (!xmlStrcmp(node->name, BAD_CAST "port"))
+        {
+            if (getNodeName(node) == "port")
             {
                 string ref = getNodeProperty(node, "ref");
                 
@@ -216,12 +217,13 @@ OEPortsInfo OEEDL::getFreePortsInfo()
                     freePortsInfo.push_back(portInfo);
                 }
             }
+        }
     }
     
 	return freePortsInfo;
 }
 
-OEConnectorsInfo OEEDL::getFreeConnectorsInfo()
+OEConnectorsInfo OEDocument::getFreeConnectorsInfo()
 {
 	OEConnectorsInfo freeConnectorsInfo;
 	
@@ -232,7 +234,8 @@ OEConnectorsInfo OEEDL::getFreeConnectorsInfo()
         for(xmlNodePtr node = rootNode->children;
             node;
             node = node->next)
-            if (!xmlStrcmp(node->name, BAD_CAST "connector"))
+        {
+            if (getNodeName(node) == "connector")
             {
                 string ref = getNodeProperty(node, "ref");
                 
@@ -248,28 +251,29 @@ OEConnectorsInfo OEEDL::getFreeConnectorsInfo()
                     freeConnectorsInfo.push_back(connectorInfo);
                 }
             }
+        }
     }
 	
 	return freeConnectorsInfo;
 }
 
-bool OEEDL::addEDL(string path, OEIdMap connections)
+bool OEDocument::addDocument(string path, OEIdMap connections)
 {
 	if (!doc)
 		return false;
 	
-	OEEDL edl;
-	if (!edl.open(path))
+	OEDocument document;
+	if (!document.open(path))
 		return false;
 	
     // Remap id names
-    OEIds deviceIds = edl.getDeviceIds();
+    OEIds deviceIds = document.getDeviceIds();
 	OEIdMap deviceIdMap = makeIdMap(deviceIds);
     
-    edl.remapDocument(deviceIdMap);
-	remapConnections(connections, deviceIdMap);
+    document.remapDocument(deviceIdMap);
+	remapConnections(deviceIdMap, connections);
     
-    // Insert EDL
+    // Insert document
     string firstPortId = connections.begin()->first;
     xmlNodePtr node = getInsertionNode(firstPortId);
     if (!node)
@@ -279,19 +283,66 @@ bool OEEDL::addEDL(string path, OEIdMap connections)
         return false;
     }
     
-    if (!edl.insertInto(node))
+    if (!document.insertInto(node))
     {
         logMessage("could not insert '" + path + "'");
         
         return false;
     }
     
-    // To-Do: Connect
+    // Connect documents
+    OEInletMap inletMap = getInlets(connections);
+    
+    connectDocument(doc, connections, inletMap);
+    
+    // Construct new document
+    connectDocument(document.getXMLDoc(), connections, inletMap);
+    
+    constructDocument(document.getXMLDoc());
     
     return true;
 }
 
-OEIds OEEDL::getDeviceIds()
+bool OEDocument::isDeviceTerminal(string deviceId)
+{
+    return false;
+}
+
+bool OEDocument::removeDevice(string deviceId)
+{
+    /*	for (OEIds::iterator i = devices.begin();
+     i != devices.end();
+     i++)
+     {
+     if (*i == id)
+     {
+     devices.erase(i);
+     return true;
+     }
+     }
+     
+     return false;
+     // Verify device exists
+     if (!isDevice(deviceId))
+     {
+     log("could not find '" + deviceId + "'");
+     return false;
+     }
+     
+     // Recursively remove devices connected to this device
+     if (!removeConnectedDevices(deviceId))
+     return false;
+     
+     // Remove references to this device
+     disconnectDevice(deviceId);
+     
+     // Remove elements matching this device
+     removeElements(deviceId);
+     */
+    return false;
+}
+
+OEIds OEDocument::getDeviceIds()
 {
     OEIds deviceIds;
     
@@ -302,18 +353,20 @@ OEIds OEEDL::getDeviceIds()
         for(xmlNodePtr node = rootNode->children;
             node;
             node = node->next)
-            if (!xmlStrcmp(node->name, BAD_CAST "device"))
+        {
+            if (getNodeName(node) == "device")
             {
                 string deviceId = getNodeProperty(node, "id");
                 
                 deviceIds.push_back(deviceId);
             }
+        }
     }
     
 	return deviceIds;
 }
 
-void OEEDL::setDeviceId(string& id, string deviceId)
+void OEDocument::setDeviceId(string& id, string deviceId)
 {
 	int dotIndex = (int) id.find_first_of('.');
 	
@@ -323,7 +376,7 @@ void OEEDL::setDeviceId(string& id, string deviceId)
 		id = deviceId + "." + id.substr(dotIndex + 1);
 }
 
-string OEEDL::getDeviceId(string id)
+string OEDocument::getDeviceId(string id)
 {
 	int dotIndex = (int) id.find_first_of('.');
 	
@@ -336,14 +389,14 @@ string OEEDL::getDeviceId(string id)
 
 
 
-bool OEEDL::validateEmulation()
+bool OEDocument::validateDocument()
 {
 	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
 	
 	return (getNodeProperty(rootNode, "version") == "1.0");
 }
 
-bool OEEDL::dumpEmulation(OEData *data)
+bool OEDocument::dumpDocument(OEData& data)
 {
 	if (!doc)
 		return false;
@@ -354,8 +407,8 @@ bool OEEDL::dumpEmulation(OEData *data)
 	xmlDocDumpMemory(doc, &xmlDump, &xmlDumpSize);
 	if (xmlDump)
 	{
-		data->resize(xmlDumpSize);
-		memcpy(&data->front(), xmlDump, xmlDumpSize);
+		data.resize(xmlDumpSize);
+		memcpy(&data.front(), xmlDump, xmlDumpSize);
 		
 		xmlFree(xmlDump);
 		
@@ -365,15 +418,26 @@ bool OEEDL::dumpEmulation(OEData *data)
 	return false;
 }
 
-bool OEEDL::updateEmulation()
+bool OEDocument::constructDocument(xmlDocPtr doc)
+{
+    return true;
+}
+
+bool OEDocument::updateDocument(xmlDocPtr doc)
 {
     return true;
 }
 
 
 
-// Make an id map so a new document can be inserted to the current document
-OEIdMap OEEDL::makeIdMap(OEIds& deviceIds)
+xmlDocPtr OEDocument::getXMLDoc()
+{
+    return doc;
+}
+
+// Make an id map so a new document, when inserted in the current document,
+// has unique names
+OEIdMap OEDocument::makeIdMap(OEIds& deviceIds)
 {
     OEIds ourDeviceIds = getDeviceIds();
     
@@ -400,8 +464,8 @@ OEIdMap OEEDL::makeIdMap(OEIds& deviceIds)
 	return idMap;
 }
 
-// Rename document ids
-void OEEDL::remapNode(OEIdMap& deviceIdMap, xmlNodePtr node, string property)
+// Remap a node property
+void OEDocument::remapNodeProperty(OEIdMap& deviceIdMap, xmlNodePtr node, string property)
 {
 	string nodeProperty;
 	
@@ -418,8 +482,8 @@ void OEEDL::remapNode(OEIdMap& deviceIdMap, xmlNodePtr node, string property)
 	}
 }
 
-// Rename document ids
-void OEEDL::remapDocument(OEIdMap& deviceIdMap)
+// Remap document ids
+void OEDocument::remapDocument(OEIdMap& deviceIdMap)
 {
 	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
 	
@@ -427,8 +491,8 @@ void OEEDL::remapDocument(OEIdMap& deviceIdMap)
 		node;
 		node = node->next)
 	{
-		remapNode(deviceIdMap, node, "id");
-		remapNode(deviceIdMap, node, "ref");
+		remapNodeProperty(deviceIdMap, node, "id");
+		remapNodeProperty(deviceIdMap, node, "ref");
 		
 		if (node->children)
 		{
@@ -436,15 +500,15 @@ void OEEDL::remapDocument(OEIdMap& deviceIdMap)
 				propertyNode;
 				propertyNode = propertyNode->next)
 			{
-				remapNode(deviceIdMap, propertyNode, "id");
-				remapNode(deviceIdMap, propertyNode, "ref");
+				remapNodeProperty(deviceIdMap, propertyNode, "id");
+				remapNodeProperty(deviceIdMap, propertyNode, "ref");
 			}
 		}
 	}
 }
 
-// Rename connections ids
-void OEEDL::remapConnections(OEIdMap& connections, OEIdMap& deviceIdMap)
+// Remap connections
+void OEDocument::remapConnections(OEIdMap& deviceIdMap, OEIdMap& connections)
 {
 	for (OEIdMap::iterator i = connections.begin();
 		 i != connections.end();
@@ -463,7 +527,7 @@ void OEEDL::remapConnections(OEIdMap& connections, OEIdMap& deviceIdMap)
 }
 
 // Find last node belonging to a device
-xmlNodePtr OEEDL::getLastNode(string deviceId)
+xmlNodePtr OEDocument::getLastNode(string deviceId)
 {
     xmlNodePtr lastNode = NULL;
     xmlNodePtr lastDocNode = NULL;
@@ -488,7 +552,7 @@ xmlNodePtr OEEDL::getLastNode(string deviceId)
 }
 
 // Follow connection chain
-string OEEDL::followChain(string deviceId, vector<string>& visitedIds)
+string OEDocument::followChain(string deviceId, vector<string>& visitedIds)
 {
 	// Check circularity
 	if (find(visitedIds.begin(), visitedIds.end(), deviceId) != visitedIds.end())
@@ -502,12 +566,12 @@ string OEEDL::followChain(string deviceId, vector<string>& visitedIds)
         node;
         node = node->next)
     {
-		if (!xmlStrcmp(node->name, BAD_CAST "port"))
+		if (getNodeName(node) == "port")
 		{
-			string portId = getNodeProperty(node, "id");
+			string id = getNodeProperty(node, "id");
 			string ref = getNodeProperty(node, "ref");
 			
-			if (getDeviceId(portId) == deviceId)
+			if (getDeviceId(id) == deviceId)
 				lastDeviceId = followChain(getDeviceId(ref), visitedIds);
 		}
     }
@@ -516,23 +580,23 @@ string OEEDL::followChain(string deviceId, vector<string>& visitedIds)
 }
 
 // Find node for inserting another document
-xmlNodePtr OEEDL::getInsertionNode(string portId)
+xmlNodePtr OEDocument::getInsertionNode(string portId)
 {
     string portDeviceId = getDeviceId(portId);
     
-    // Find the previously used port
     string insertDeviceId;
     
+    // Find the previously used port
     xmlNodePtr rootNode = xmlDocGetRootElement(doc);
     for(xmlNodePtr node = rootNode->children;
         node;
         node = node->next)
     {
-        string id = getNodeProperty(node, "id");
-        
-        if (getDeviceId(id) == portDeviceId)
+        if (getNodeName(node) == "port")
         {
-            if (!xmlStrcmp(node->name, BAD_CAST "port"))
+            string id = getNodeProperty(node, "id");
+            
+            if (getDeviceId(id) == portDeviceId)
             {
                 if (id == portId)
                     break;
@@ -557,21 +621,22 @@ xmlNodePtr OEEDL::getInsertionNode(string portId)
 }
 
 // Insert this document into dest
-bool OEEDL::insertInto(xmlNodePtr dest)
+bool OEDocument::insertInto(xmlNodePtr dest)
 {
-	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
-	
-	for(xmlNodePtr childNode = rootNode->children;
-		childNode;
-		childNode = childNode->next)
+    if (!dest)
+        return false;
+    
+	xmlNodePtr rootNode = xmlDocGetRootElement(doc);	
+	for(xmlNodePtr node = rootNode->children;
+		node;
+		node = node->next)
 	{
-		if (!dest)
-			return false;
-        
         // Don't add last character data
-        if ((childNode->type != XML_TEXT_NODE) ||
-            childNode->next)
-            xmlAddNextSibling(dest, xmlCopyNode(childNode, 1));
+        if ((node->type != XML_TEXT_NODE) || node->next)
+        {
+            if (!xmlAddNextSibling(dest, xmlCopyNode(node, 1)))
+                return false;
+        }
         
         dest = dest->next;
 	}
@@ -579,7 +644,109 @@ bool OEEDL::insertInto(xmlNodePtr dest)
     return true;
 }
 
-string OEEDL::getLocationLabel(string deviceId, vector<string>& visitedIds)
+// Scan ports and connectors for inlets
+OEInletMap OEDocument::getInlets(OEIdMap& connections)
+{
+    OEInletMap inletMap;
+    
+	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+	for(xmlNodePtr node = rootNode->children;
+		node;
+		node = node->next)
+	{
+        if ((getNodeName(node) == "port") ||
+            (getNodeName(node) == "connector"))
+        {
+            string id = getNodeProperty(node, "id");
+            
+            for (OEIdMap::iterator i = connections.begin();
+                 i != connections.end();
+                 i++)
+            {
+                string portId = i->first;
+                string connectorId = i->second;
+                
+                if (id == portId)
+                    addInlets(inletMap, getDeviceId(connectorId), node->children);
+                else if (id == connectorId)
+                    addInlets(inletMap, getDeviceId(portId), node->children);
+            }
+        }
+    }
+    
+    return inletMap;
+}
+
+// Scan inlets
+void OEDocument::addInlets(OEInletMap& inletMap, string deviceId, xmlNodePtr children)
+{
+    for(xmlNodePtr node = children;
+        node;
+        node = node->next)
+    {
+        if (getNodeName(node) == "inlet")
+        {
+            string ref = getNodeProperty(node, "ref");
+            string property = getNodeProperty(node, "property");
+            string outletRef = deviceId + "." + getNodeProperty(node, "outletRef");
+            
+            inletMap[ref][property] = outletRef;
+        }
+    }
+}
+
+void OEDocument::connectDocument(xmlDocPtr doc, OEIdMap& connections, OEInletMap& inletMap)
+{
+	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+	for(xmlNodePtr node = rootNode->children;
+		node;
+		node = node->next)
+	{
+        if ((getNodeName(node) == "port") ||
+            (getNodeName(node) == "connector"))
+        {
+            string id = getNodeProperty(node, "id");
+            
+            for (OEIdMap::iterator i = connections.begin();
+                 i != connections.end();
+                 i++)
+            {
+                string portId = i->first;
+                string connectorId = i->second;
+                
+                if (id == portId)
+                    setNodeProperty(node, "ref", connectorId);
+                else if (id == connectorId)
+                    setNodeProperty(node, "ref", portId);
+            }
+        }
+        else if (getNodeName(node) == "component")
+        {
+            string id = getNodeProperty(node, "id");
+            
+            if (inletMap.count(id))
+                connectComponent(inletMap[id], node->children);
+        }
+    }
+}
+
+void OEDocument::connectComponent(OEIdMap& propertyMap, xmlNodePtr children)
+{
+	for(xmlNodePtr node = children;
+		node;
+		node = node->next)
+	{
+        if (getNodeName(node) == "property")
+        {
+            string name = getNodeProperty(node, "name");
+            
+            if (propertyMap.count(name))
+                setNodeProperty(node, "ref", propertyMap[name]);
+        }
+    }
+}
+
+string OEDocument::getLocationLabel(string deviceId, vector<string>& visitedIds)
 {
 	if (!doc)
 		return "";
@@ -596,7 +763,7 @@ string OEEDL::getLocationLabel(string deviceId, vector<string>& visitedIds)
 		node;
 		node = node->next)
 	{
-		if (!xmlStrcmp(node->name, BAD_CAST "port"))
+		if (getNodeName(node) == "port")
 		{
 			string portId = getNodeProperty(node, "id");
 			string ref = getNodeProperty(node, "ref");
@@ -613,7 +780,7 @@ string OEEDL::getLocationLabel(string deviceId, vector<string>& visitedIds)
 		node;
 		node = node->next)
 	{
-		if (!xmlStrcmp(node->name, BAD_CAST "device"))
+		if (getNodeName(node) == "device")
 		{
 			string theDeviceId = getNodeProperty(node, "id");
 			string label = getNodeProperty(node, "label");
@@ -627,7 +794,7 @@ string OEEDL::getLocationLabel(string deviceId, vector<string>& visitedIds)
 	return "?";
 }
 
-string OEEDL::getLocationLabel(string id)
+string OEDocument::getLocationLabel(string id)
 {
 	if (!doc)
 		return "";
@@ -642,7 +809,17 @@ string OEEDL::getLocationLabel(string id)
 		return location;
 }
 
-string OEEDL::getNodeProperty(xmlNodePtr node, string name)
+string OEDocument::getNodeName(xmlNodePtr node)
+{
+    string name;
+    
+    if (node->name)
+        name = (char *) node->name;
+    
+	return name;
+}
+
+string OEDocument::getNodeProperty(xmlNodePtr node, string name)
 {
 	char *value = (char *) xmlGetProp(node, BAD_CAST name.c_str());
 	string valueString = value ? value : "";
@@ -651,7 +828,7 @@ string OEEDL::getNodeProperty(xmlNodePtr node, string name)
 	return valueString;
 }
 
-bool OEEDL::hasNodeProperty(xmlNodePtr node, string name)
+bool OEDocument::hasNodeProperty(xmlNodePtr node, string name)
 {
 	char *value = (char *) xmlGetProp(node, BAD_CAST name.c_str());
 	xmlFree(value);
@@ -659,7 +836,7 @@ bool OEEDL::hasNodeProperty(xmlNodePtr node, string name)
 	return (value != NULL);
 }
 
-void OEEDL::setNodeProperty(xmlNodePtr node, string name, string value)
+void OEDocument::setNodeProperty(xmlNodePtr node, string name, string value)
 {
 	xmlSetProp(node, BAD_CAST name.c_str(), BAD_CAST value.c_str());
 }

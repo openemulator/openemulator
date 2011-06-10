@@ -1,11 +1,11 @@
 
 /**
  * libemulation
- * Package
+ * OEPackage
  * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements a package (zip and directory type)
+ * Implements a file package (zip and directory type)
  */
 
 #include <fstream>

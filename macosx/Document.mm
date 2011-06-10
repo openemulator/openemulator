@@ -42,7 +42,7 @@ void didUpdate(void *userData)
 	[pool drain];
 }
 
-OEComponent *createCanvas(void *userData, OEComponent *device)
+OEComponent *constructCanvas(void *userData, OEComponent *device)
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
@@ -58,9 +58,9 @@ OEComponent *createCanvas(void *userData, OEComponent *device)
 						  nil];
 	
 	if ([NSThread isMainThread])
-		[document createCanvas:dict];
+		[document constructCanvas:dict];
 	else
-		[document performSelectorOnMainThread:@selector(createCanvas:)
+		[document performSelectorOnMainThread:@selector(constructCanvas:)
 								   withObject:dict
 								waitUntilDone:NO];
 	
@@ -135,7 +135,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	if (emulation)
 		[self destroyEmulation];
 	
-	[self createEmulation:absoluteURL];
+	[self constructEmulation:absoluteURL];
 	
 	OEEmulation *theEmulation = (OEEmulation *)emulation;
 	if (theEmulation)
@@ -268,7 +268,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	[emulationWindowController updateEmulation:self];
 }
 
-- (void)createCanvas:(NSDictionary *)dict
+- (void)constructCanvas:(NSDictionary *)dict
 {
 	void *device = [[dict objectForKey:@"device"] pointerValue];
 	NSString *label = [dict objectForKey:@"label"];
@@ -385,7 +385,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 					   contextInfo:NULL];
 }
 
-- (void)createEmulation:(NSURL *)url
+- (void)constructEmulation:(NSURL *)url
 {
 	if (!canvasWindowControllers)
 		canvasWindowControllers = [[NSMutableArray alloc] init];
@@ -397,7 +397,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	OEEmulation *theEmulation = new OEEmulation();
 	
 	theEmulation->setResourcePath(getCPPString([[NSBundle mainBundle] resourcePath]));
-	theEmulation->setCreateCanvas(createCanvas);
+	theEmulation->setConstructCanvas(constructCanvas);
 	theEmulation->setDestroyCanvas(destroyCanvas);
 	theEmulation->setUserData(self);
 	

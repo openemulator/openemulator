@@ -2,7 +2,7 @@
 /**
  * libemulation
  * Component Factory
- * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2009-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Builds components
@@ -49,11 +49,13 @@
 #include "MOS6530.h"
 #include "MOSKIM1IO.h"
 #include "MOSKIM1PLL.h"
+
+#include "VidexVideoterm.h"
 // FACTORY_INCLUDE_END - Do not modify this section
 
 #define matchComponent(name) if (className == #name) return new name()
 
-OEComponent *OEComponentFactory::create(const string& className)
+OEComponent *OEComponentFactory::construct(const string& className)
 {
 // FACTORY_CODE_START - Do not modify this section
 	matchComponent(AddressDecoder);
@@ -94,6 +96,8 @@ OEComponent *OEComponentFactory::create(const string& className)
 	matchComponent(MOS6530);
 	matchComponent(MOSKIM1IO);
 	matchComponent(MOSKIM1PLL);
+    
+    matchComponent(VidexVideoterm);
 // FACTORY_CODE_END - Do not modify this section
 	
 	return NULL;

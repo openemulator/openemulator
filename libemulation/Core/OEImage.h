@@ -1,11 +1,11 @@
 
 /**
  * libemulation
- * Image
+ * OEImage
  * (C) 2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements an image type.
+ * Implements an OpenEmulator image type
  */
 
 #ifndef _OEIMAGE_H
@@ -41,6 +41,10 @@ typedef enum
 	OEIMAGE_RGBA,
 } OEImageFormat;
 
+typedef int OEImageOptions;
+#define OEIMAGE_COLORCARRIER    (1 << 0)
+
+// OEImage macros
 inline OEPoint OEMakePoint(float x, float y)
 {
 	OEPoint p;
@@ -178,9 +182,14 @@ public:
 	
 	void setFormat(OEImageFormat format);
 	OEImageFormat getFormat();
-	void setSize(OESize size);
+    
+    void setOptions(OEImageOptions options);
+    OEImageOptions getOptions();
+	
+    void setSize(OESize size);
 	OESize getSize();
-	int getBytesPerPixel();
+	
+    int getBytesPerPixel();
 	int getBytesPerRow();
 	unsigned char *getPixels();
 	
@@ -191,6 +200,7 @@ public:
 	
 private:
 	OEImageFormat format;
+    OEImageOptions options;
 	OESize size;
 	vector<unsigned char> pixels;
 	

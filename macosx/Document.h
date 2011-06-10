@@ -37,13 +37,13 @@ typedef enum
 - (void)showEmulation:(id)sender;
 - (void)showCanvas:(NSValue *)canvasValue;
 
-- (void)createEmulation:(NSURL *)url;
+- (void)constructEmulation:(NSURL *)url;
 - (void)destroyEmulation;
 - (void)lockEmulation;
 - (void)unlockEmulation;
 - (void *)emulation;
 
-- (void)createCanvas:(NSDictionary *)dict;
+- (void)constructCanvas:(NSDictionary *)dict;
 - (void)destroyCanvas:(NSValue *)canvasValue;
 
 - (BOOL)canMountNow:(NSString *)path;

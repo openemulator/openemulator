@@ -3,7 +3,7 @@
 <edl version="1.0" label="Apple Silentype" image="images/Apple/Apple Silentype.png" description="The Apple Silentype was Apple's first printer. It was designed for the Apple II (requiring the Apple II Silentype Interface Card), and can also be connected to the Apple III.">
 
 <device id="appleSilentype" label="Apple Silentype" image="images/Apple/Apple Silentype.png" group="peripherals" />
-<connector id="appleSilentype.connector" ref="" type="Apple Silentype" label="Connector" >
+<connector id="appleSilentype.connector" type="Apple Silentype">
     <inlet ref="appleSilentype.io" property="mmu" outletRef="mmu" />
 </connector>
 

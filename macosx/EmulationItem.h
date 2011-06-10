@@ -97,7 +97,7 @@ typedef enum
 - (void)unmount;
 
 - (BOOL)isPort;
-- (BOOL)addEDL:(NSString *)path;
+- (BOOL)addOEDocument:(NSString *)path;
 - (NSString *)portType;
 
 @end

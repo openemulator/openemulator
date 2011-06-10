@@ -5,7 +5,7 @@
  * (C) 2009-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls an emulation.
+ * Controls an OpenEmulator emulation
  */
 
 #include <fstream>
@@ -18,9 +18,9 @@
 
 #include "OEComponentFactory.h"
 
-OEEmulation::OEEmulation() : OEEDL()
+OEEmulation::OEEmulation() : OEDocument()
 {
-	createCanvas = NULL;
+	constructCanvas = NULL;
 	destroyCanvas = NULL;
 	didUpdate = NULL;
 	
@@ -35,8 +35,11 @@ OEEmulation::~OEEmulation()
 	
 	didUpdate = NULL;
 	
-	disconnectEmulation();
-	destroyEmulation();
+	if (doc)
+    {
+        disconnectDocument(doc);
+        destroyDocument(doc);
+    }
 }
 
 void OEEmulation::setResourcePath(string path)
@@ -44,9 +47,9 @@ void OEEmulation::setResourcePath(string path)
 	resourcePath = path;
 }
 
-void OEEmulation::setCreateCanvas(EmulationCreateCanvas createCanvas)
+void OEEmulation::setConstructCanvas(EmulationConstructCanvas constructCanvas)
 {
-	this->createCanvas = createCanvas;
+	this->constructCanvas = constructCanvas;
 }
 
 void OEEmulation::setDestroyCanvas(EmulationDestroyCanvas destroyCanvas)
@@ -62,21 +65,6 @@ void OEEmulation::setDidUpdate(EmulationDidUpdate didUpdate)
 void OEEmulation::setUserData(void *userData)
 {
 	this->userData = userData;
-}
-
-bool OEEmulation::open(string path)
-{
-	if (!OEEDL::open(path))
-		return false;
-	
-	if (createEmulation())
-		if (configureEmulation())
-			if (initEmulation())
-				return true;
-	
-	close();
-	
-	return false;
 }
 
 bool OEEmulation::addComponent(string id, OEComponent *component)
@@ -123,48 +111,6 @@ string OEEmulation::getId(OEComponent *component)
 	return "";
 }
 
-bool OEEmulation::addEDL(string path, OEIdMap connectionsMap)
-{
-    if (!OEEDL::addEDL(path, connectionsMap))
-        return false;
-    
-	return true;
-}
-
-bool OEEmulation::removeDevice(string id)
-{
-/*	for (OEIds::iterator i = devices.begin();
-		 i != devices.end();
-		 i++)
-	{
-		if (*i == id)
-		{
-			devices.erase(i);
-			return true;
-		}
-	}
-	
-	return false;
-	// Verify device exists
-	if (!isDevice(deviceId))
-	{
-		log("could not find '" + deviceId + "'");
-		return false;
-	}
-	
-	// Recursively remove devices connected to this device
-	if (!removeConnectedDevices(deviceId))
-		return false;
-	
-	// Remove references to this device
-	disconnectDevice(deviceId);
-	
-	// Remove elements matching this device
-	removeElements(deviceId);
-	*/
-	return false;
-}
-
 bool OEEmulation::isActive()
 {
 	return (activityCount != 0);
@@ -172,38 +118,39 @@ bool OEEmulation::isActive()
 
 
 
-bool OEEmulation::createEmulation()
+bool OEEmulation::constructDocument(xmlDocPtr doc)
 {
-	if (!doc)
-		return false;
-	
-	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
-	
+    xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+    
 	for(xmlNodePtr node = rootNode->children;
 		node;
 		node = node->next)
 	{
-		if (!xmlStrcmp(node->name, BAD_CAST "device"))
+		if (getNodeName(node) == "device")
 		{
 			string id = getNodeProperty(node, "id");
 			
-			if (!createDevice(id))
+			if (!constructDevice(id))
 				return false;
 		}
-		if (!xmlStrcmp(node->name, BAD_CAST "component"))
+		if (getNodeName(node) == "component")
 		{
 			string id = getNodeProperty(node, "id");
 			string className = getNodeProperty(node, "class");
 			
-			if (!createComponent(id, className))
+			if (!constructComponent(id, className))
 				return false;
 		}
 	}
 	
-	return true;
+    if (configureDocument(doc))
+        if (initDocument(doc))
+            return true;
+    
+	return false;
 }
 
-bool OEEmulation::createDevice(string id)
+bool OEEmulation::constructDevice(string id)
 {
 	if (!getComponent(id))
 	{
@@ -213,7 +160,7 @@ bool OEEmulation::createDevice(string id)
 		if (component && addComponent(id, component))
 			return true;
 		else
-			logMessage("could not create device '" + id + "'");
+			logMessage("could not construct device '" + id + "'");
 	}
 	else
 		logMessage("redefinition of '" + id + "'");
@@ -221,17 +168,17 @@ bool OEEmulation::createDevice(string id)
 	return false;
 }
 
-bool OEEmulation::createComponent(string id, string className)
+bool OEEmulation::constructComponent(string id, string className)
 {
 	if (!getComponent(id))
 	{
 		OEComponent *component;
-		component = OEComponentFactory::create(className);
+		component = OEComponentFactory::construct(className);
 		
 		if (component)
 			return addComponent(id, component);
 		else
-			logMessage("could not create '" + id +
+			logMessage("could not construct '" + id +
 					   "', class '" + className + "' undefined");
 	}
 	else
@@ -240,18 +187,15 @@ bool OEEmulation::createComponent(string id, string className)
 	return false;
 }
 
-bool OEEmulation::configureEmulation()
+bool OEEmulation::configureDocument(xmlDocPtr doc)
 {
-	if (!doc)
-		return false;
-	
-	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
-	
+    xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+    
 	for(xmlNodePtr node = rootNode->children;
 		node;
 		node = node->next)
 	{
-		if (!xmlStrcmp(node->name, BAD_CAST "device"))
+		if (getNodeName(node) == "device")
 		{
 			string id = getNodeProperty(node, "id");
 			string label = getNodeProperty(node, "label");
@@ -261,7 +205,7 @@ bool OEEmulation::configureEmulation()
 			if (!configureDevice(id, label, image, group, node->children))
 				return false;
 		}
-		if (!xmlStrcmp(node->name, BAD_CAST "component"))
+		if (getNodeName(node) == "component")
 		{
 			string id = getNodeProperty(node, "id");
 			
@@ -286,7 +230,7 @@ bool OEEmulation::configureDevice(string id,
 		node;
 		node = node->next)
 	{
-		if (!xmlStrcmp(node->name, BAD_CAST "setting"))
+		if (getNodeName(node) == "setting")
 		{
 			DeviceSetting setting;
 			
@@ -314,7 +258,8 @@ bool OEEmulation::configureComponent(string id, xmlNodePtr children)
 	OEComponent *component = getComponent(id);
 	if (!component)
 	{
-		logMessage("could not configure '" + id + "', component is not created");
+		logMessage("could not configure '" + id + "', component is not constructed");
+        
 		return false;
 	}
 	
@@ -327,7 +272,7 @@ bool OEEmulation::configureComponent(string id, xmlNodePtr children)
 		node;
 		node = node->next)
 	{
-		if (!xmlStrcmp(node->name, BAD_CAST "property"))
+		if (getNodeName(node) == "property")
 		{
 			string name = getNodeProperty(node, "name");
 			
@@ -378,23 +323,22 @@ bool OEEmulation::configureComponent(string id, xmlNodePtr children)
 	return true;
 }
 
-bool OEEmulation::initEmulation()
+bool OEEmulation::initDocument(xmlDocPtr doc)
 {
-	if (!doc)
-		return false;
-	
-	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
-	
+    xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+    
 	for(xmlNodePtr node = rootNode->children;
 		node;
 		node = node->next)
-		if (!xmlStrcmp(node->name, BAD_CAST "component"))
+    {
+		if (getNodeName(node) == "component")
 		{
 			string id = getNodeProperty(node, "id");
 			
 			if (!initComponent(id))
 				return false;
 		}
+    }
 	
 	return true;
 }
@@ -404,7 +348,7 @@ bool OEEmulation::initComponent(string id)
 	OEComponent *component = getComponent(id);
 	if (!component)
 	{
-		logMessage("could not init '" + id + "', component is not created");
+		logMessage("could not init '" + id + "', component is not constructed");
 		
 		return false;
 	}
@@ -421,17 +365,14 @@ bool OEEmulation::initComponent(string id)
 	return true;
 }
 
-bool OEEmulation::updateEmulation()
+bool OEEmulation::updateDocument(xmlDocPtr doc)
 {
-	if (!doc)
-		return false;
-	
-	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
-	
+    xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+    
 	for(xmlNodePtr node = rootNode->children;
 		node;
 		node = node->next)
-		if (!xmlStrcmp(node->name, BAD_CAST "component"))
+		if (getNodeName(node) == "component")
 		{
 			string id = getNodeProperty(node, "id");
 			
@@ -447,7 +388,8 @@ bool OEEmulation::updateComponent(string id, xmlNodePtr children)
 	OEComponent *component = getComponent(id);
 	if (!component)
 	{
-		logMessage("could not update '" + id + "', component is not created");
+		logMessage("could not update '" + id + "', component is not constructed");
+        
 		return false;
 	}
 	
@@ -460,7 +402,7 @@ bool OEEmulation::updateComponent(string id, xmlNodePtr children)
 		node;
 		node = node->next)
 	{
-		if (!xmlStrcmp(node->name, BAD_CAST "property"))
+		if (getNodeName(node) == "property")
 		{
 			string name = getNodeProperty(node, "name");
 			
@@ -493,18 +435,15 @@ bool OEEmulation::updateComponent(string id, xmlNodePtr children)
 	return true;
 }
 
-void OEEmulation::disconnectEmulation()
+void OEEmulation::disconnectDocument(xmlDocPtr doc)
 {
-	if (!doc)
-		return;
-	
-	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
-	
+    xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+    
 	for(xmlNodePtr node = rootNode->children;
 		node;
 		node = node->next)
 	{
-		if (!xmlStrcmp(node->name, BAD_CAST "component"))
+		if (getNodeName(node) == "component")
 		{
 			string id = getNodeProperty(node, "id");
 			
@@ -523,7 +462,7 @@ void OEEmulation::disconnectComponent(string id, xmlNodePtr children)
 		node;
 		node = node->next)
 	{
-		if (!xmlStrcmp(node->name, BAD_CAST "property"))
+		if (getNodeName(node) == "property")
 		{
 			string name = getNodeProperty(node, "name");
 			
@@ -533,18 +472,15 @@ void OEEmulation::disconnectComponent(string id, xmlNodePtr children)
 	}
 }
 
-void OEEmulation::destroyEmulation()
+void OEEmulation::destroyDocument(xmlDocPtr doc)
 {
-	if (!doc)
-		return;
-	
-	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
-	
+    xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+    
 	for(xmlNodePtr node = rootNode->children;
 		node;
 		node = node->next)
 	{
-		if (!xmlStrcmp(node->name, BAD_CAST "component"))
+		if (getNodeName(node) == "component")
 		{
 			string id = getNodeProperty(node, "id");
 			

@@ -3,7 +3,7 @@
 <edl version="1.0" label="Terminal" image="images/Generic/Terminal.png" description="A generic terminal that can be connected to any RS-232 port.">
 
 <device id="terminal" label="Terminal" image="images/Generic/Terminal.png" />
-<connector id="terminal.connector" ref="" type="RS-232" label="Connector" />
+<connector id="terminal.connector" type="RS-232" />
 <component id="terminal.io" class="Terminal">
     <property name="host" ref="hostEmulationController" />
     <property name="charset" ref="terminal.charset" />

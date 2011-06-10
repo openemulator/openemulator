@@ -12,8 +12,9 @@
     <setting ref="appleMonitorII.appleMonitorII" name="vertCenter" label="Vertical Center" type="slider" options="-1.0,1.0" />
     <setting ref="appleMonitorII.appleMonitorII" name="vertSize" label="Vertical Size" type="slider" options="0.0,1.0" />
 </device>
-<connector id="appleMonitorII.connector" ref="" type="Composite Video" label="Connector" />
-<component id="appleMonitorII.appleMonitorII" class="appleMonitorII">
+<connector id="appleMonitorII.connector" type="Composite Video" />
+<component id="appleMonitorII.appleMonitorII" class="Monitor">
+    <property name="device" ref="appleMonitorII" />
     <property name="compositeLumaCutoff" value="0.3" />
     <property name="compositeChromaCutoff" value="0.06" />
     <property name="compositeHue" value="0.06" />

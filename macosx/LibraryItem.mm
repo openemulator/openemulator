@@ -10,7 +10,7 @@
 
 #import "LibraryItem.h"
 #import "StringConversion.h"
-#import "OEEDL.h"
+#import "OEDocument.h"
 
 @implementation LibraryItem
 
@@ -53,20 +53,20 @@
     
     NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
     
-    // Read EDL
-	OEEDL edl;
+    // Read OE document
+	OEDocument oeDocument;
     
     NSString *fullPath = [[resourcePath stringByAppendingPathComponent:@"library"]
                           stringByAppendingPathComponent:path];
 	
-	edl.open(getCPPString(fullPath));
-	if (!edl.isOpen())
+	oeDocument.open(getCPPString(fullPath));
+	if (!oeDocument.isOpen())
 		return;
 	
-    NSString *imagePath = getNSString(edl.getHeaderInfo().image);
-	OEConnectorsInfo connectorsInfo = edl.getFreeConnectorsInfo();
+    NSString *imagePath = getNSString(oeDocument.getHeaderInfo().image);
+	OEConnectorsInfo connectorsInfo = oeDocument.getFreeConnectorsInfo();
 	
-	edl.close();
+	oeDocument.close();
     
     // Read image
     imagePath = [resourcePath stringByAppendingPathComponent:imagePath];
@@ -78,7 +78,7 @@
         type = [getNSString(connectorsInfo.at(0).type) retain];
     
     // Read description
-    description = [getNSString(edl.getHeaderInfo().description) retain];
+    description = [getNSString(oeDocument.getHeaderInfo().description) retain];
 }
 
 - (NSString *)path

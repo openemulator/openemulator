@@ -26,7 +26,7 @@
     <setting ref="studioMonitor.monitor" name="compositeBlackLevel" label="IRE Black Level" type="slider" options="0.0,1.0" />
     <setting ref="studioMonitor.monitor" name="compositeWhiteLevel" label="IRE White Level" type="slider" options="0.0,1.0" />
 </device>
-<connector id="studioMonitor.connector" ref="" type="Composite Video" label="Connector"/>
+<connector id="studioMonitor.connector" type="Composite Video" />
 <component id="studioMonitor.monitor" class="Monitor">
     <property name="device" ref="studioMonitor" />
     <property name="videoDecoder" value="NTSC Y'UV" />

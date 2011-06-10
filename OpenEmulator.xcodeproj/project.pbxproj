@@ -20,6 +20,8 @@
 		001C9B02137FDD0500D1355B /* AudioRecord.png in Resources */ = {isa = PBXBuildFile; fileRef = 00ED379A12779AD000BEF6BD /* AudioRecord.png */; };
 		001F56F90FD1E8E500EA246A /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 001F56F80FD1E8E500EA246A /* Sparkle.framework */; };
 		00247F38139D8F4C00B165D1 /* OECommon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00247F35139D85A900B165D1 /* OECommon.cpp */; };
+		002740B813A08A4F00E13D65 /* VidexVideoterm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 002740B613A08A4F00E13D65 /* VidexVideoterm.cpp */; };
+		002740B913A08A4F00E13D65 /* VidexVideoterm.h in Headers */ = {isa = PBXBuildFile; fileRef = 002740B713A08A4F00E13D65 /* VidexVideoterm.h */; };
 		00391CB312D3A320002C5ABD /* LibraryWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00391CB212D3A320002C5ABD /* LibraryWindowController.m */; };
 		00391D6112D3B570002C5ABD /* IconLibrary.png in Resources */ = {isa = PBXBuildFile; fileRef = 00391D6012D3B570002C5ABD /* IconLibrary.png */; };
 		00391D6412D3B588002C5ABD /* Library.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00391D6212D3B588002C5ABD /* Library.xib */; };
@@ -83,7 +85,7 @@
 		00A973AB12E512F80084724F /* OEEmulation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A9739E12E512F80084724F /* OEEmulation.cpp */; };
 		00A973AD12E512F80084724F /* OEComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A973A012E512F80084724F /* OEComponent.cpp */; };
 		00A973AF12E512F80084724F /* OEComponentFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A973A212E512F80084724F /* OEComponentFactory.cpp */; };
-		00A973B112E512F80084724F /* OEEDL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A973A412E512F80084724F /* OEEDL.cpp */; };
+		00A973B112E512F80084724F /* OEDocument.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A973A412E512F80084724F /* OEDocument.cpp */; };
 		00A973B312E512F80084724F /* OEImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A973A612E512F80084724F /* OEImage.cpp */; };
 		00A973B512E512F80084724F /* OEPackage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A973A812E512F80084724F /* OEPackage.cpp */; };
 		00B019B413501507001E01BB /* OEDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B019B213501507001E01BB /* OEDevice.h */; };
@@ -221,6 +223,8 @@
 		00247F35139D85A900B165D1 /* OECommon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OECommon.cpp; sourceTree = "<group>"; };
 		00247F36139D85AA00B165D1 /* OECommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OECommon.h; sourceTree = "<group>"; };
 		002579FB1218A83400206E56 /* StringConversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StringConversion.h; sourceTree = "<group>"; };
+		002740B613A08A4F00E13D65 /* VidexVideoterm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VidexVideoterm.cpp; path = Videx/VidexVideoterm.cpp; sourceTree = "<group>"; };
+		002740B713A08A4F00E13D65 /* VidexVideoterm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VidexVideoterm.h; path = Videx/VidexVideoterm.h; sourceTree = "<group>"; };
 		00391CB112D3A320002C5ABD /* LibraryWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryWindowController.h; sourceTree = "<group>"; };
 		00391CB212D3A320002C5ABD /* LibraryWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryWindowController.m; sourceTree = "<group>"; };
 		00391D6012D3B570002C5ABD /* IconLibrary.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IconLibrary.png; sourceTree = "<group>"; };
@@ -305,8 +309,8 @@
 		00A973A112E512F80084724F /* OEComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEComponent.h; sourceTree = "<group>"; };
 		00A973A212E512F80084724F /* OEComponentFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEComponentFactory.cpp; sourceTree = "<group>"; };
 		00A973A312E512F80084724F /* OEComponentFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEComponentFactory.h; sourceTree = "<group>"; };
-		00A973A412E512F80084724F /* OEEDL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEEDL.cpp; sourceTree = "<group>"; };
-		00A973A512E512F80084724F /* OEEDL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEEDL.h; sourceTree = "<group>"; };
+		00A973A412E512F80084724F /* OEDocument.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEDocument.cpp; sourceTree = "<group>"; };
+		00A973A512E512F80084724F /* OEDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEDocument.h; sourceTree = "<group>"; };
 		00A973A612E512F80084724F /* OEImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEImage.cpp; sourceTree = "<group>"; };
 		00A973A712E512F80084724F /* OEImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEImage.h; sourceTree = "<group>"; };
 		00A973A812E512F80084724F /* OEPackage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEPackage.cpp; sourceTree = "<group>"; };
@@ -554,6 +558,15 @@
 			path = macosx/Images;
 			sourceTree = "<group>";
 		};
+		002740B513A08A1E00E13D65 /* Videx */ = {
+			isa = PBXGroup;
+			children = (
+				002740B613A08A4F00E13D65 /* VidexVideoterm.cpp */,
+				002740B713A08A4F00E13D65 /* VidexVideoterm.h */,
+			);
+			name = Videx;
+			sourceTree = "<group>";
+		};
 		00A9739D12E512F80084724F /* Core */ = {
 			isa = PBXGroup;
 			children = (
@@ -567,8 +580,8 @@
 				00A973A112E512F80084724F /* OEComponent.h */,
 				00A973A212E512F80084724F /* OEComponentFactory.cpp */,
 				00A973A312E512F80084724F /* OEComponentFactory.h */,
-				00A973A412E512F80084724F /* OEEDL.cpp */,
-				00A973A512E512F80084724F /* OEEDL.h */,
+				00A973A412E512F80084724F /* OEDocument.cpp */,
+				00A973A512E512F80084724F /* OEDocument.h */,
 				00A9739E12E512F80084724F /* OEEmulation.cpp */,
 				00A9739F12E512F80084724F /* OEEmulation.h */,
 				00B019B313501507001E01BB /* OEDevice.cpp */,
@@ -596,6 +609,7 @@
 				00B8884212A393990052B7A4 /* MOS */,
 				00B8885212A393990052B7A4 /* Motorola */,
 				00B8885712A393990052B7A4 /* Ricoh */,
+				002740B513A08A1E00E13D65 /* Videx */,
 				00B8885D12A393990052B7A4 /* WDC */,
 				00B8886412A393990052B7A4 /* Zilog */,
 			);
@@ -954,6 +968,7 @@
 				00B5CB95136F0B6D007A7BED /* AppleSilentype.h in Headers */,
 				00678F88139F325F00940158 /* AppleLanguageCard.h in Headers */,
 				00678F8C139F346C00940158 /* AppleIISuperSerialCard.h in Headers */,
+				002740B913A08A4F00E13D65 /* VidexVideoterm.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1164,7 +1179,7 @@
 				00A973AB12E512F80084724F /* OEEmulation.cpp in Sources */,
 				00A973AD12E512F80084724F /* OEComponent.cpp in Sources */,
 				00A973AF12E512F80084724F /* OEComponentFactory.cpp in Sources */,
-				00A973B112E512F80084724F /* OEEDL.cpp in Sources */,
+				00A973B112E512F80084724F /* OEDocument.cpp in Sources */,
 				00A973B312E512F80084724F /* OEImage.cpp in Sources */,
 				00A973B512E512F80084724F /* OEPackage.cpp in Sources */,
 				00B019B513501507001E01BB /* OEDevice.cpp in Sources */,
@@ -1173,6 +1188,7 @@
 				00247F38139D8F4C00B165D1 /* OECommon.cpp in Sources */,
 				00678F87139F325F00940158 /* AppleLanguageCard.cpp in Sources */,
 				00678F8B139F346C00940158 /* AppleIISuperSerialCard.cpp in Sources */,
+				002740B813A08A4F00E13D65 /* VidexVideoterm.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

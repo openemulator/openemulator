@@ -124,31 +124,31 @@
 	return NO;
 }
 
-- (void)addTemplatesAtPath:(NSString *)path
-				   toGroup:(NSString *)group
+- (void)addTemplatesAtPath:(NSString *)thePath
+				   toGroup:(NSString *)theGroup
 {
-	if (![items objectForKey:group])
-		[items setObject:[NSMutableArray array] forKey:group];
+	if (![items objectForKey:theGroup])
+		[items setObject:[NSMutableArray array] forKey:theGroup];
 	
-	path = [path stringByExpandingTildeInPath];
+	thePath = [thePath stringByExpandingTildeInPath];
 	
 	NSArray *pathContents = [[NSFileManager defaultManager]
-							 contentsOfDirectoryAtPath:path
+							 contentsOfDirectoryAtPath:thePath
 							 error:nil];
-	for (NSString *edlFilename in pathContents)
+	for (NSString *filename in pathContents)
 	{
-		NSString *edlPath = [path stringByAppendingPathComponent:edlFilename];
+		NSString *path = [thePath stringByAppendingPathComponent:filename];
 		
-		NSString *pathExtension = [[edlPath pathExtension] lowercaseString];
+		NSString *pathExtension = [[path pathExtension] lowercaseString];
 		if (([pathExtension compare:EMULATION_PACKAGE_PATH_EXTENSION] != NSOrderedSame) &&
 			([pathExtension compare:EMULATION_FILE_PATH_EXTENSION] != NSOrderedSame))
 			continue;
 		
 		TemplateChooserItem *item;
-		item = [[TemplateChooserItem alloc] initWithEDLPath:edlPath];
+		item = [[TemplateChooserItem alloc] initWithOEDocumentPath:path];
 		
 		if (item)
-			[[items objectForKey:group] addObject:item];
+			[[items objectForKey:theGroup] addObject:item];
 	}
 }
 
@@ -384,7 +384,7 @@ cellWasDoubleClickedAtIndex:(NSUInteger)index
 	for (int i = 0; i < [groupItems count]; i++)
 	{
 		TemplateChooserItem *item = [groupItems objectAtIndex:i];
-		if ([[item edlPath] compare:path] == NSOrderedSame)
+		if ([[item path] compare:path] == NSOrderedSame)
 			itemIndex = i;
 	}
 	
@@ -410,7 +410,7 @@ cellWasDoubleClickedAtIndex:(NSUInteger)index
 	
 	TemplateChooserItem *item = [self imageBrowser:fImageBrowserView
 									   itemAtIndex:imageIndex];
-	return [[[item edlPath] copy] autorelease];
+	return [[[item path] copy] autorelease];
 }
 
 @end

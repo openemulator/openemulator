@@ -600,17 +600,17 @@
 	return (type == EMULATIONITEM_AVAILABLEPORT);
 }
 
-- (BOOL)addEDL:(NSString *)path
+- (BOOL)addOEDocument:(NSString *)thePath
 {
-	OEEDL edl;
+	OEDocument oeDocument;
 	
-	edl.open(getCPPString(path));
-	if (!edl.isOpen())
+	oeDocument.open(getCPPString(thePath));
+	if (!oeDocument.isOpen())
 		return NO;
 	
-	OEConnectorsInfo connectorsInfo = edl.getFreeConnectorsInfo();
+	OEConnectorsInfo connectorsInfo = oeDocument.getFreeConnectorsInfo();
 	
-	edl.close();
+	oeDocument.close();
 	
 	if (connectorsInfo.size() == 1)
 	{
@@ -623,7 +623,7 @@
 		
 		[document lockEmulation];
 		
-		bool result = emulation->addEDL(getCPPString(path), idMap);
+		bool result = emulation->addDocument(getCPPString(thePath), idMap);
 		
 		[document unlockEmulation];
 		

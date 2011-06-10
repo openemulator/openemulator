@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
-<edl version="1.0" label="Apple Disk II" image="images/Apple/Apple Disk II.png" description="The Disk II Floppy Disk Subsystem is a 5¼-inch floppy disk drive designed by Steve Wozniak for the Apple II computer.">
+<edl version="1.0" label="Apple Disk II" image="images/Apple/Apple Disk II.png" description="The Disk II Floppy Disk Subsystem is a 5¼-inch floppy disk drive designed for the Apple II computer.">
 
 <device id="appleDiskII" label="Apple Disk II" image="images/Apple/Apple Disk II.png" group="peripherals">
     <setting ref="appleDiskII.io" name="lock" label="Force Write Protected" type="checkbox" />
     <setting ref="appleDiskII.io" name="sounds" label="Sounds" type="Apple,Shugart" />
 </device>
-<connector id="appleDiskII.connector" ref="" type="Apple Disk Drive" label="Connector" />
-<component id="diskII.drive" class="AppleDiskII">
+<connector id="appleDiskII.connector" type="Apple Disk Drive" />
+<component id="appleDiskII.drive" class="AppleDiskII">
+    <property name="device" ref="appleDiskII" />
     <property name="image" value="/Users/mressl/test2.dsk" />
     <property name="lock" value="0" />
     <property name="rpm" value="300.0" />

@@ -1,11 +1,11 @@
 
 /**
  * libemulation
- * Image
+ * OEImage
  * (C) 2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements an image type.
+ * Implements an OpenEmulator image type
  */
 
 #include <png.h>
@@ -30,6 +30,16 @@ void OEImage::setFormat(OEImageFormat format)
 OEImageFormat OEImage::getFormat()
 {
 	return format;
+}
+
+void OEImage::setOptions(OEImageOptions options)
+{
+    this->options = options;
+}
+
+OEImageOptions OEImage::getOptions()
+{
+    return options;
 }
 
 void OEImage::setSize(OESize size)

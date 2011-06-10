@@ -5,7 +5,7 @@
  * (C) 2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls a device.
+ * Controls a device
  */
 
 #include "OEDevice.h"
@@ -81,13 +81,13 @@ bool OEDevice::postMessage(OEComponent *sender, int message, void *data)
 				*((DeviceSettings *)data) = settings;
 			return true;
 			
-		case DEVICE_CREATE_CANVAS:
-			if (emulation->createCanvas && data)
+		case DEVICE_CONSTRUCT_CANVAS:
+			if (emulation->constructCanvas && data)
 			{
 				OEComponent **ref = (OEComponent **)data;
 				
-				if (emulation->createCanvas)
-					*ref = emulation->createCanvas(emulation->userData, this);
+				if (emulation->constructCanvas)
+					*ref = emulation->constructCanvas(emulation->userData, this);
 				
 				canvases.push_back(*ref);
 				

@@ -45,7 +45,7 @@ bool MOSKIM1IO::setRef(string name, OEComponent *ref)
 		device = ref;
 		if (device)
 			device->postMessage(this,
-								   DEVICE_CREATE_CANVAS,
+								   DEVICE_CONSTRUCT_CANVAS,
 								   &canvas);
 	}
 	else if (name == "serialPort")

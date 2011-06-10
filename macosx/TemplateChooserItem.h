@@ -12,17 +12,17 @@
 
 @interface TemplateChooserItem : NSObject
 {
-	NSString *edlPath;
-	BOOL edlLoaded;
+	NSString *path;
+	BOOL loaded;
 	
 	NSString *label;
 	NSImage *image;
 	NSString *description;
 }
 
-- (id)initWithEDLPath:(NSString *)path;
+- (id)initWithOEDocumentPath:(NSString *)thePath;
 
 - (NSString *)description;
-- (NSString *)edlPath;
+- (NSString *)path;
 
 @end

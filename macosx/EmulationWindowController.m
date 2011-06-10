@@ -567,7 +567,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
         NSString *libraryPath = [resourcePath
                                  stringByAppendingPathComponent:@"library"];
         
-		if ([item addEDL:[libraryPath stringByAppendingPathComponent:path]])
+		if ([item addOEDocument:[libraryPath stringByAppendingPathComponent:path]])
         {
             [self updateEmulation:self];
             

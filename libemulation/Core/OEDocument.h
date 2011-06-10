@@ -1,15 +1,15 @@
 
 /**
  * libemulation
- * OEEDL
+ * OEDocument
  * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls an EDL document
+ * Controls an OpenEmulator XML description
  */
 
-#ifndef _OEEDL_H
-#define _OEEDL_H
+#ifndef _OEDOCUMENT_H
+#define _OEDOCUMENT_H
 
 #include <libxml/tree.h>
 
@@ -42,11 +42,13 @@ typedef OEPortsInfo OEConnectorsInfo;
 typedef vector<string> OEIds;
 typedef map<string, string> OEIdMap;
 
-class OEEDL
+typedef map<string, OEIdMap> OEInletMap;
+
+class OEDocument
 {
 public:
-	OEEDL();
-	~OEEDL();
+	OEDocument();
+	~OEDocument();
 	
 	bool open(string path);
 	bool isOpen();
@@ -57,7 +59,9 @@ public:
 	OEPortsInfo getFreePortsInfo();
 	OEConnectorsInfo getFreeConnectorsInfo();
 	
-    bool addEDL(string path, OEIdMap connections);
+    bool addDocument(string path, OEIdMap connections);
+    bool isDeviceTerminal(string deviceId);
+    bool removeDevice(string deviceId);
     
     OEIds getDeviceIds();
     
@@ -69,28 +73,34 @@ protected:
 	OEPackage *package;
 	xmlDocPtr doc;
 	
-    virtual bool updateEmulation();
+    virtual bool constructDocument(xmlDocPtr doc);
+    virtual bool updateDocument(xmlDocPtr doc);
     
 	string getLocationLabel(string deviceId, vector<string>& visitedIds);
 	string getLocationLabel(string deviceId);
     
+    string getNodeName(xmlNodePtr node);
 	string getNodeProperty(xmlNodePtr node, string name);
 	bool hasNodeProperty(xmlNodePtr node, string name);
 	void setNodeProperty(xmlNodePtr node, string name, string value);
 	
 private:
-	bool validateEmulation();
-	bool dumpEmulation(OEData *data);
+	bool validateDocument();
+	bool dumpDocument(OEData& data);
     
+    xmlDocPtr getXMLDoc();
     OEIdMap makeIdMap(OEIds& deviceIds);
-    void remapNode(OEIdMap& deviceIdMap, xmlNodePtr node, string property);
+    void remapNodeProperty(OEIdMap& deviceIdMap, xmlNodePtr node, string property);
     void remapDocument(OEIdMap& deviceIdMap);
-    void remapConnections(OEIdMap& connections, OEIdMap& deviceIdMap);
+    void remapConnections(OEIdMap& deviceIdMap, OEIdMap& connections);
     xmlNodePtr getLastNode(string theDeviceId);
     string followChain(string deviceId, vector<string>& visitedIds);
     xmlNodePtr getInsertionNode(string connectorId);
     bool insertInto(xmlNodePtr dest);
-    void connect(OEEDL& edl, OEIdMap& connections);
+    OEInletMap getInlets(OEIdMap& connections);
+    void addInlets(OEInletMap& inletMap, string deviceId, xmlNodePtr children);
+    void connectDocument(xmlDocPtr doc, OEIdMap& connections, OEInletMap& inletMap);
+    void connectComponent(OEIdMap& propertyMap, xmlNodePtr children);
 };
 
 #endif

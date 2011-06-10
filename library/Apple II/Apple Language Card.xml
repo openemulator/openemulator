@@ -3,7 +3,7 @@
 <edl version="1.0" label="Apple Language Card" image="images/Apple/Apple Language Card.png" description="The Apple Language Card is a 16 kiB memory expansion for the Apple II and Apple II+ computers. It is required for running Apple Pascal and ProDOS. It must be installed in slot 0.">
 
 <device id="appleLanguageCard" label="Apple Language Card" image="images/Apple/Apple Language Card.png" group="expansions" />
-<connector id="appleLanguageCard.connector" ref="" type="Apple II Slot" label="Connector" >
+<connector id="appleLanguageCard.connector" type="Apple II Slot">
     <inlet ref="appleLanguageCard.io" property="mmu" outletRef="mmu" />
 </connector>
 <component id="appleLanguageCard.io" class="AppleLanguageCard">
