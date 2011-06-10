@@ -1,5 +1,5 @@
 ==2011-06==
-* Implemented first part of OEEmulation addEDL
+* Implemented part of OEEmulation addDocument (unstable)
 * Skipped rev. 666
 * Implemented library window filtering
 * Implemented library window

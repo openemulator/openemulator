@@ -1,5 +1,6 @@
 ==To-Do==
-* Implement delete of devices through Edit>Delete, or CMD+BACKSPACE
+* Implement OEEDL addEDL connect, construct and init
+* Implement delete device through Edit>Delete, or CMD+BACKSPACE
 * Implement OEEmulation removeDevice
 * Implement removal of devices in a daisy chain (when port and connector are of the same kind)
 * Implement disk image file locking, if the disk image is writable (flock)
