@@ -1,5 +1,7 @@
 ==To-Do==
-* Implement OEEDL addEDL connect, construct and init
+* Fix group naming order (in some cases the order is not well defined)
+* Implement connection of main inlets
+* Fix recursive lock problem when adding a canvas
 * Implement delete device through Edit>Delete, or CMD+BACKSPACE
 * Implement OEEmulation removeDevice
 * Implement removal of devices in a daisy chain (when port and connector are of the same kind)

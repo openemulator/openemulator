@@ -18,11 +18,11 @@
 </port>
 <port id="appleIII.slot4" ref="" type="Apple II Slot" label="Slot 4" image="images/Connectors/Edge50.png">
 </port>
-<port id="appleIII.floppyDrives" ref="" type="Apple III Disk Drive" label="Disk Drive Port" image="images/Connectors/Rectangular2x13 Male.png">
+<port id="appleIII.floppyDrives" ref="" type="Apple III Disk Drive Port" label="Disk Drive Port" image="images/Connectors/Rectangular2x13 Male.png">
 </port>
-<port id="appleIII.portA" ref="" type="Apple Silentype" label="Port A" image="images/Connectors/DE9 Male.png">
+<port id="appleIII.portA" ref="" type="Apple Silentype Port" label="Port A" image="images/Connectors/DE9 Female.png">
 </port>
-<port id="appleIII.portB" ref="" type="Apple Game Controller" label="Port B" image="images/Connectors/DE9 Male.png">
+<port id="appleIII.portB" ref="" type="Apple Game Port" label="Port B" image="images/Connectors/DE9 Female.png">
 </port>
 <port id="appleIII.portC" ref="" type="RS-232" label="Port C" image="images/Connectors/DB25 Female.png">
 </port>

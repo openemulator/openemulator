@@ -2,17 +2,17 @@
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
 <edl version="1.0" label="Apple Language Card" image="images/Apple/Apple Language Card.png" description="The Apple Language Card is a 16 kiB memory expansion for the Apple II and Apple II+ computers. It is required for running Apple Pascal and ProDOS. It must be installed in slot 0.">
 
-<device id="appleLanguageCard" label="Apple Language Card" image="images/Apple/Apple Language Card.png" group="expansions" />
+<device id="appleLanguageCard" label="Apple Language Card" image="images/Apple/Apple Language Card.png" group="expansions"/>
 <connector id="appleLanguageCard.connector" type="Apple II Slot">
-    <inlet ref="appleLanguageCard.io" property="mmu" outletRef="mmu" />
+    <inlet ref="appleLanguageCard.io" property="mmu" outletRef="mmu"/>
 </connector>
 <component id="appleLanguageCard.io" class="AppleLanguageCard">
-    <property name="mmu" ref="" />
+    <property name="mmu" ref=""/>
 </component>
 <component id="appleLanguageCard.memory" class="RAM">
-    <property name="host" ref="host" />
-    <property name="size" value="16384" />
-    <property name="image" src="${packagePath}/${id}.bin" />
+    <property name="host" ref="host"/>
+    <property name="size" value="16384"/>
+    <property name="image" src="${packagePath}/${id}.bin"/>
 </component>
 
 </edl>

@@ -94,6 +94,9 @@ bool OEDocument::open(string path)
 		is_open = false;
 		logMessage("unknown EDL version");
 	}
+    
+    if (is_open)
+        is_open = constructDocument(doc);
 	
 	if (!is_open)
 		close();
@@ -225,6 +228,7 @@ OEPortsInfo OEDocument::getFreePortsInfo()
 
 OEConnectorsInfo OEDocument::getFreeConnectorsInfo()
 {
+    OEIds portRefs;
 	OEConnectorsInfo freeConnectorsInfo;
 	
 	if (doc)
@@ -235,25 +239,37 @@ OEConnectorsInfo OEDocument::getFreeConnectorsInfo()
             node;
             node = node->next)
         {
-            if (getNodeName(node) == "connector")
+            if (getNodeName(node) == "port")
+                portRefs.push_back(getNodeProperty(node, "ref"));
+            else if (getNodeName(node) == "connector")
             {
-                string ref = getNodeProperty(node, "ref");
+                string id = getNodeProperty(node, "id");
+                string type = getNodeProperty(node, "type");
                 
-                if (ref == "")
-                {
-                    OEConnectorInfo connectorInfo;
-                    
-                    connectorInfo.id = getNodeProperty(node, "id");
-                    connectorInfo.type = getNodeProperty(node, "type");
-                    connectorInfo.label = getNodeProperty(node, "label");
-                    connectorInfo.image = getNodeProperty(node, "image");
-                    
-                    freeConnectorsInfo.push_back(connectorInfo);
-                }
+                OEConnectorInfo connectorInfo;
+                connectorInfo.id = id;
+                connectorInfo.type = type;
+                freeConnectorsInfo.push_back(connectorInfo);
             }
         }
     }
 	
+    for (OEIds::iterator i = portRefs.begin();
+         i != portRefs.end();
+         i++)
+    {
+        for (OEConnectorsInfo::iterator j = freeConnectorsInfo.begin();
+             j != freeConnectorsInfo.end();
+             j++)
+        {
+            if (*i == j->id)
+            {
+                freeConnectorsInfo.erase(j);
+                break;
+            }
+        }
+    }
+    
 	return freeConnectorsInfo;
 }
 
@@ -435,8 +451,8 @@ xmlDocPtr OEDocument::getXMLDoc()
     return doc;
 }
 
-// Make an id map so a new document, when inserted in the current document,
-// has unique names
+// Make an id map so a new document, when inserted in the
+// current document, has unique names
 OEIdMap OEDocument::makeIdMap(OEIds& deviceIds)
 {
     OEIds ourDeviceIds = getDeviceIds();
@@ -517,7 +533,7 @@ void OEDocument::remapConnections(OEIdMap& deviceIdMap, OEIdMap& connections)
 		string srcId = i->first;
 		string destId = i->second;
 		
-		string deviceId = getDeviceId(srcId);
+		string deviceId = getDeviceId(destId);
         if (deviceIdMap.count(deviceId))
         {
             setDeviceId(destId, deviceIdMap[deviceId]);
@@ -539,6 +555,9 @@ xmlNodePtr OEDocument::getLastNode(string deviceId)
     {
         string id = getNodeProperty(node, "id");
         
+        if (id == "")
+            continue;
+        
         if (getDeviceId(id) == deviceId)
             lastNode = node;
         
@@ -551,8 +570,8 @@ xmlNodePtr OEDocument::getLastNode(string deviceId)
     return lastNode;
 }
 
-// Follow connection chain
-string OEDocument::followChain(string deviceId, vector<string>& visitedIds)
+// Follow device chain
+string OEDocument::followDeviceChain(string deviceId, vector<string>& visitedIds)
 {
 	// Check circularity
 	if (find(visitedIds.begin(), visitedIds.end(), deviceId) != visitedIds.end())
@@ -569,10 +588,14 @@ string OEDocument::followChain(string deviceId, vector<string>& visitedIds)
 		if (getNodeName(node) == "port")
 		{
 			string id = getNodeProperty(node, "id");
-			string ref = getNodeProperty(node, "ref");
 			
 			if (getDeviceId(id) == deviceId)
-				lastDeviceId = followChain(getDeviceId(ref), visitedIds);
+            {
+                string ref = getNodeProperty(node, "ref");
+                
+                if (ref != "")
+                    lastDeviceId = followDeviceChain(getDeviceId(ref), visitedIds);
+            }
 		}
     }
     
@@ -582,11 +605,9 @@ string OEDocument::followChain(string deviceId, vector<string>& visitedIds)
 // Find node for inserting another document
 xmlNodePtr OEDocument::getInsertionNode(string portId)
 {
-    string portDeviceId = getDeviceId(portId);
+    string previousDeviceId;
     
-    string insertDeviceId;
-    
-    // Find the previously used port
+    // Find the previous connected device to this port
     xmlNodePtr rootNode = xmlDocGetRootElement(doc);
     for(xmlNodePtr node = rootNode->children;
         node;
@@ -596,25 +617,27 @@ xmlNodePtr OEDocument::getInsertionNode(string portId)
         {
             string id = getNodeProperty(node, "id");
             
-            if (getDeviceId(id) == portDeviceId)
+            if (id == portId)
+                break;
+            
+            if (getDeviceId(id) == getDeviceId(portId))
             {
-                if (id == portId)
-                    break;
-                
                 string ref = getNodeProperty(node, "ref");
                 
-                // Follow the connection chain to the last device
                 if (ref != "")
-                {
-                    vector<string> visitedIds;
-                    insertDeviceId = followChain(getDeviceId(ref), visitedIds);
-                }
+                    previousDeviceId = getDeviceId(ref);
             }
         }
     }
     
-    if (insertDeviceId == "")
-        insertDeviceId = portDeviceId;
+    string insertDeviceId;
+    if (previousDeviceId != "")
+    {
+        vector<string> visitedIds;
+        insertDeviceId = followDeviceChain(previousDeviceId, visitedIds);
+    }
+    else
+        insertDeviceId = getDeviceId(portId);
     
     // Return last node of the insertion point
     return getLastNode(insertDeviceId);
@@ -642,6 +665,24 @@ bool OEDocument::insertInto(xmlNodePtr dest)
 	}
     
     return true;
+}
+
+// Scan inlets
+void OEDocument::addInlets(OEInletMap& inletMap, string deviceId, xmlNodePtr children)
+{
+    for(xmlNodePtr node = children;
+        node;
+        node = node->next)
+    {
+        if (getNodeName(node) == "inlet")
+        {
+            string ref = getNodeProperty(node, "ref");
+            string property = getNodeProperty(node, "property");
+            string outletRef = deviceId + "." + getNodeProperty(node, "outletRef");
+            
+            inletMap[ref][property] = outletRef;
+        }
+    }
 }
 
 // Scan ports and connectors for inlets
@@ -677,24 +718,7 @@ OEInletMap OEDocument::getInlets(OEIdMap& connections)
     return inletMap;
 }
 
-// Scan inlets
-void OEDocument::addInlets(OEInletMap& inletMap, string deviceId, xmlNodePtr children)
-{
-    for(xmlNodePtr node = children;
-        node;
-        node = node->next)
-    {
-        if (getNodeName(node) == "inlet")
-        {
-            string ref = getNodeProperty(node, "ref");
-            string property = getNodeProperty(node, "property");
-            string outletRef = deviceId + "." + getNodeProperty(node, "outletRef");
-            
-            inletMap[ref][property] = outletRef;
-        }
-    }
-}
-
+// Connects inlets
 void OEDocument::connectDocument(xmlDocPtr doc, OEIdMap& connections, OEInletMap& inletMap)
 {
 	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
@@ -702,23 +726,12 @@ void OEDocument::connectDocument(xmlDocPtr doc, OEIdMap& connections, OEInletMap
 		node;
 		node = node->next)
 	{
-        if ((getNodeName(node) == "port") ||
-            (getNodeName(node) == "connector"))
+        if ((getNodeName(node) == "port"))
         {
             string id = getNodeProperty(node, "id");
             
-            for (OEIdMap::iterator i = connections.begin();
-                 i != connections.end();
-                 i++)
-            {
-                string portId = i->first;
-                string connectorId = i->second;
-                
-                if (id == portId)
-                    setNodeProperty(node, "ref", connectorId);
-                else if (id == connectorId)
-                    setNodeProperty(node, "ref", portId);
-            }
+            if (connections.count(id))
+                setNodeProperty(node, "ref", connections[id]);
         }
         else if (getNodeName(node) == "component")
         {

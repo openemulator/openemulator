@@ -219,6 +219,24 @@
 		000F66370FF8368F00C8AF23 /* DiskImage.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = DiskImage.icns; sourceTree = "<group>"; };
 		000F663A0FF8368F00C8AF23 /* Emulation.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Emulation.icns; sourceTree = "<group>"; };
 		000F66520FF8368F00C8AF23 /* OpenEmulator.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = OpenEmulator.icns; sourceTree = "<group>"; };
+		001750B013A50A9C0043E2ED /* AUTHORS */ = {isa = PBXFileReference; lastKnownFileType = text; path = AUTHORS; sourceTree = "<group>"; };
+		001750B113A50A9C0043E2ED /* COPYING */ = {isa = PBXFileReference; lastKnownFileType = text; path = COPYING; sourceTree = "<group>"; };
+		001750B413A50A9C0043E2ED /* 2IMG Format.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "2IMG Format.txt"; sourceTree = "<group>"; };
+		001750B513A50A9C0043E2ED /* D64 Format.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "D64 Format.txt"; sourceTree = "<group>"; };
+		001750B613A50A9C0043E2ED /* D71 Format.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "D71 Format.txt"; sourceTree = "<group>"; };
+		001750B713A50A9C0043E2ED /* D80-D82 Format.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "D80-D82 Format.txt"; sourceTree = "<group>"; };
+		001750B813A50A9C0043E2ED /* D81 Format.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "D81 Format.txt"; sourceTree = "<group>"; };
+		001750B913A50A9C0043E2ED /* DiskCopy 4.2 Format.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "DiskCopy 4.2 Format.txt"; sourceTree = "<group>"; };
+		001750BA13A50A9C0043E2ED /* FDI Format Specification 2.0.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "FDI Format Specification 2.0.pdf"; sourceTree = "<group>"; };
+		001750BB13A50A9C0043E2ED /* G64 Format.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "G64 Format.txt"; sourceTree = "<group>"; };
+		001750BC13A50A9C0043E2ED /* QCOW2 Image Format.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = "QCOW2 Image Format.rtf"; sourceTree = "<group>"; };
+		001750BD13A50A9C0043E2ED /* UEF Format rev. 0.1.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = "UEF Format rev. 0.1.rtf"; sourceTree = "<group>"; };
+		001750BE13A50A9C0043E2ED /* X64 Format.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "X64 Format.txt"; sourceTree = "<group>"; };
+		001750BF13A50A9C0043E2ED /* The libemulation Book.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "The libemulation Book.txt"; sourceTree = "<group>"; };
+		001750C013A50A9C0043E2ED /* INSTALL */ = {isa = PBXFileReference; lastKnownFileType = text; path = INSTALL; sourceTree = "<group>"; };
+		001750C113A50A9C0043E2ED /* NEWS */ = {isa = PBXFileReference; lastKnownFileType = text; path = NEWS; sourceTree = "<group>"; };
+		001750C213A50A9C0043E2ED /* README */ = {isa = PBXFileReference; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
+		001750C313A50A9C0043E2ED /* TODO */ = {isa = PBXFileReference; lastKnownFileType = text; path = TODO; sourceTree = "<group>"; };
 		001F56F80FD1E8E500EA246A /* Sparkle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = Sparkle.framework; path = macosx/Sparkle.framework; sourceTree = "<group>"; };
 		00247F35139D85A900B165D1 /* OECommon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OECommon.cpp; sourceTree = "<group>"; };
 		00247F36139D85AA00B165D1 /* OECommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OECommon.h; sourceTree = "<group>"; };
@@ -558,6 +576,47 @@
 			path = macosx/Images;
 			sourceTree = "<group>";
 		};
+		001750AF13A50A690043E2ED /* Docs */ = {
+			isa = PBXGroup;
+			children = (
+				001750B013A50A9C0043E2ED /* AUTHORS */,
+				001750B113A50A9C0043E2ED /* COPYING */,
+				001750B213A50A9C0043E2ED /* doc */,
+				001750C013A50A9C0043E2ED /* INSTALL */,
+				001750C113A50A9C0043E2ED /* NEWS */,
+				001750C213A50A9C0043E2ED /* README */,
+				001750C313A50A9C0043E2ED /* TODO */,
+			);
+			name = Docs;
+			sourceTree = "<group>";
+		};
+		001750B213A50A9C0043E2ED /* doc */ = {
+			isa = PBXGroup;
+			children = (
+				001750B313A50A9C0043E2ED /* Formats */,
+				001750BF13A50A9C0043E2ED /* The libemulation Book.txt */,
+			);
+			path = doc;
+			sourceTree = "<group>";
+		};
+		001750B313A50A9C0043E2ED /* Formats */ = {
+			isa = PBXGroup;
+			children = (
+				001750B413A50A9C0043E2ED /* 2IMG Format.txt */,
+				001750B513A50A9C0043E2ED /* D64 Format.txt */,
+				001750B613A50A9C0043E2ED /* D71 Format.txt */,
+				001750B713A50A9C0043E2ED /* D80-D82 Format.txt */,
+				001750B813A50A9C0043E2ED /* D81 Format.txt */,
+				001750B913A50A9C0043E2ED /* DiskCopy 4.2 Format.txt */,
+				001750BA13A50A9C0043E2ED /* FDI Format Specification 2.0.pdf */,
+				001750BB13A50A9C0043E2ED /* G64 Format.txt */,
+				001750BC13A50A9C0043E2ED /* QCOW2 Image Format.rtf */,
+				001750BD13A50A9C0043E2ED /* UEF Format rev. 0.1.rtf */,
+				001750BE13A50A9C0043E2ED /* X64 Format.txt */,
+			);
+			path = Formats;
+			sourceTree = "<group>";
+		};
 		002740B513A08A1E00E13D65 /* Videx */ = {
 			isa = PBXGroup;
 			children = (
@@ -819,6 +878,7 @@
 				000A78A50FBA464600A0F12E /* OpenEmulator.app */,
 				00039E3C12B03BA90025D374 /* libemulation-hal */,
 				00B8864512A3923D0052B7A4 /* libemulation */,
+				001750AF13A50A690043E2ED /* Docs */,
 				19C28FB0FE9D524F11CA2CBB /* Products */,
 			);
 			name = OpenEmulator;

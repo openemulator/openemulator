@@ -3,35 +3,35 @@
 <edl version="1.0" label="Apple Monitor III" image="images/Apple/Apple Monitor III.png" description="The Apple Monitor III is a CRT-based green monochrome 12-inch monitor manufactured by Apple Computer for the Apple III personal computer.">
 
 <device id="appleMonitorIII" label="Apple Monitor III" image="images/Apple/Apple Monitor III.png" group="peripherals" >
-    <setting ref="appleMonitorIII.appleMonitorIII" name="brightness" label="Brightness" type="slider" options="-1.0,1.0" />
-    <setting ref="appleMonitorIII.appleMonitorIII" name="contrast" label="Contrast" type="slider" options="0.0,2.0" />
-    <setting ref="appleMonitorIII.appleMonitorIII" name="hue" label="Hue" type="slider" options="0.0,1.0" />
-    <setting ref="appleMonitorIII.appleMonitorIII" name="saturation" label="Saturation" type="slider" options="0.0,2.0" />
-    <setting ref="appleMonitorIII.appleMonitorIII" name="horizCenter" label="Horizontal Center" type="slider" options="-1.0,1.0" />
-    <setting ref="appleMonitorIII.appleMonitorIII" name="horizSize" label="Horizontal Size" type="slider" options="0.0,1.0" />
-    <setting ref="appleMonitorIII.appleMonitorIII" name="vertCenter" label="Vertical Center" type="slider" options="-1.0,1.0" />
-    <setting ref="appleMonitorIII.appleMonitorIII" name="vertSize" label="Vertical Size" type="slider" options="0.0,1.0" />
+    <setting ref="appleMonitorIII.appleMonitorIII" name="brightness" label="Brightness" type="slider" options="-1.0,1.0"/>
+    <setting ref="appleMonitorIII.appleMonitorIII" name="contrast" label="Contrast" type="slider" options="0.0,2.0"/>
+    <setting ref="appleMonitorIII.appleMonitorIII" name="hue" label="Hue" type="slider" options="0.0,1.0"/>
+    <setting ref="appleMonitorIII.appleMonitorIII" name="saturation" label="Saturation" type="slider" options="0.0,2.0"/>
+    <setting ref="appleMonitorIII.appleMonitorIII" name="horizCenter" label="Horizontal Center" type="slider" options="-1.0,1.0"/>
+    <setting ref="appleMonitorIII.appleMonitorIII" name="horizSize" label="Horizontal Size" type="slider" options="0.0,1.0"/>
+    <setting ref="appleMonitorIII.appleMonitorIII" name="vertCenter" label="Vertical Center" type="slider" options="-1.0,1.0"/>
+    <setting ref="appleMonitorIII.appleMonitorIII" name="vertSize" label="Vertical Size" type="slider" options="0.0,1.0"/>
 </device>
-<connector id="appleMonitorIII.connector" type="Composite Video" />
+<connector id="appleMonitorIII.connector" type="Composite Video"/>
 <component id="appleMonitorIII.appleMonitorIII" class="Monitor">
-    <property name="device" ref="appleMonitorIII" />
-    <property name="compositeLumaCutoff" value="0.3" />
-    <property name="compositeChromaCutoff" value="0.06" />
-    <property name="compositeHue" value="0.06" />
-    <property name="compositeBrightness" value="0.06" />
-    <property name="compositeColorize" value="0" />
-    <property name="compositeDecoderMatrix" value="standard" />
-    <property name="screenBrightness" value="0.0" />
-    <property name="screenContrast" value="1.0" />
-    <property name="screenRedGain" value="1.0" />
-    <property name="screenGreenGain" value="1.0" />
-    <property name="screenBlueGain" value="1.0" />
-    <property name="screenBarrel" value="0.05" />
-    <property name="screenPersistance" value="0.0" />
-    <property name="screenHorizCenter" value="0.5" />
-    <property name="screenHorizSize" value="1.0" />
-    <property name="screenVertCenter" value="0.5" />
-    <property name="screenVertSize" value="1.0" />
+    <property name="device" ref="appleMonitorIII"/>
+    <property name="compositeLumaCutoff" value="0.3"/>
+    <property name="compositeChromaCutoff" value="0.06"/>
+    <property name="compositeHue" value="0.06"/>
+    <property name="compositeBrightness" value="0.06"/>
+    <property name="compositeColorize" value="0"/>
+    <property name="compositeDecoderMatrix" value="standard"/>
+    <property name="screenBrightness" value="0.0"/>
+    <property name="screenContrast" value="1.0"/>
+    <property name="screenRedGain" value="1.0"/>
+    <property name="screenGreenGain" value="1.0"/>
+    <property name="screenBlueGain" value="1.0"/>
+    <property name="screenBarrel" value="0.05"/>
+    <property name="screenPersistance" value="0.0"/>
+    <property name="screenHorizCenter" value="0.5"/>
+    <property name="screenHorizSize" value="1.0"/>
+    <property name="screenVertCenter" value="0.5"/>
+    <property name="screenVertSize" value="1.0"/>
 </component>
 
 </edl>

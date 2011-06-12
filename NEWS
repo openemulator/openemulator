@@ -1,5 +1,6 @@
 ==2011-06==
-* Implemented part of OEEmulation addDocument (unstable)
+* Fixed connection order
+* Implemented OEEmulation addDocument
 * Skipped rev. 666
 * Implemented library window filtering
 * Implemented library window

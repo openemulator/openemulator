@@ -27,6 +27,13 @@
 	return self;
 }
 
+
+
+- (IBAction)delete:(id)sender
+{
+	// To-Do: Remove device
+}
+
 - (NSInteger)forcedRow
 {
 	return forcedRow;

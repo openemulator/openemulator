@@ -48,6 +48,8 @@
 			string value;
 			
 			theDevice->postMessage(NULL, DEVICE_GET_GROUP, &value);
+            if (value == "")
+                value = "devices";
 			NSString *group = getNSString(value);
 			EmulationItem *groupItem = [self childWithUID:group];
 			if (!groupItem)
@@ -82,8 +84,8 @@
 				 i != portsInfo.end();
 				 i++)
 			{
-				EmulationItem *portItem;
 				OEPortInfo port = *i;
+				EmulationItem *portItem;
 				portItem = [[EmulationItem alloc] initPortWithUID:getNSString(port.id)
 															label:getNSString(port.label)
 														imagePath:getNSString(port.image)
@@ -614,10 +616,10 @@
 	
 	if (connectorsInfo.size() == 1)
 	{
-		OEConnectorInfo connectorInfo = connectorsInfo.at(0);
+        OEConnectorsInfo::iterator i = connectorsInfo.begin();
 		
 		map<string, string> idMap;
-		idMap[getCPPString([self uid])] = connectorInfo.id;
+		idMap[getCPPString([self uid])] = i->id;
 		
 		OEEmulation *emulation = (OEEmulation *)[document emulation];
 		

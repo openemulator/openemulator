@@ -29,19 +29,21 @@ typedef struct
 
 typedef struct
 {
-	string id;
+    string id;
 	string type;
 	string label;
 	string image;
 } OEPortInfo;
+typedef struct
+{
+    string id;
+	string type;
+} OEConnectorInfo;
 typedef vector<OEPortInfo> OEPortsInfo;
-
-typedef OEPortInfo OEConnectorInfo;
-typedef OEPortsInfo OEConnectorsInfo;
+typedef vector<OEConnectorInfo> OEConnectorsInfo;
 
 typedef vector<string> OEIds;
 typedef map<string, string> OEIdMap;
-
 typedef map<string, OEIdMap> OEInletMap;
 
 class OEDocument
@@ -94,11 +96,11 @@ private:
     void remapDocument(OEIdMap& deviceIdMap);
     void remapConnections(OEIdMap& deviceIdMap, OEIdMap& connections);
     xmlNodePtr getLastNode(string theDeviceId);
-    string followChain(string deviceId, vector<string>& visitedIds);
+    string followDeviceChain(string deviceId, vector<string>& visitedIds);
     xmlNodePtr getInsertionNode(string connectorId);
     bool insertInto(xmlNodePtr dest);
-    OEInletMap getInlets(OEIdMap& connections);
     void addInlets(OEInletMap& inletMap, string deviceId, xmlNodePtr children);
+    OEInletMap getInlets(OEIdMap& connections);
     void connectDocument(xmlDocPtr doc, OEIdMap& connections, OEInletMap& inletMap);
     void connectComponent(OEIdMap& propertyMap, xmlNodePtr children);
 };

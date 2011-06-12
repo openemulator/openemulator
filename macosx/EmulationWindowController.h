@@ -55,6 +55,5 @@ NSOutlineViewDataSource, NSComboBoxDataSource>
 - (IBAction)unmount:(id)sender;
 - (IBAction)revealInFinder:(id)sender;
 - (IBAction)showDevice:(id)sender;
-- (IBAction)delete:(id)sender;
 
 @end

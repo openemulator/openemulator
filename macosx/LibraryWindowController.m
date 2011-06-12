@@ -113,8 +113,8 @@
         {
             NSRange range;
             
-            range = [[item label] rangeOfString:searchString
-                                        options:NSCaseInsensitiveSearch];
+            range = [[item path] rangeOfString:searchString
+                                       options:NSCaseInsensitiveSearch];
             if (range.location == NSNotFound)
                 continue;
         }
