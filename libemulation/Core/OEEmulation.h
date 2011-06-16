@@ -62,6 +62,7 @@ private:
 	bool configureDevice(string id,
 						 string label, string image, string group,
 						 xmlNodePtr children);
+    bool configureInlets(OEInletMap& inletMap);
 	bool configureComponent(string id, xmlNodePtr children);
 	bool initDocument(xmlDocPtr doc);
 	bool initComponent(string id);

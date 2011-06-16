@@ -166,7 +166,7 @@
 		image = [selectedItem image];
 		locationLabel = [selectedItem locationLabel];
 		if (![locationLabel length])
-			locationLabel = NSLocalizedString(@"Top", @"Emulation Value.");
+			locationLabel = NSLocalizedString(@"System", @"Emulation Value.");
 		if ([selectedItem isMount])
 			stateTitle = NSLocalizedString(@"Format:", @"Emulation Format.");
 		else

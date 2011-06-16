@@ -323,6 +323,39 @@ bool OEEmulation::configureComponent(string id, xmlNodePtr children)
 	return true;
 }
 
+bool OEEmulation::configureInlets(OEInletMap& inletMap)
+{
+    for (OEInletMap::iterator i = inletMap.begin();
+         i != inletMap.end();
+         i++)
+    {
+        string id = i->first;
+        OEIdMap& idMap = i->second;
+        
+        OEComponent *component = getComponent(id);
+        if (!component)
+        {
+            logMessage("could not configure '" + id + "', component is not constructed");
+            
+            continue;
+        }
+        
+        for (OEIdMap::iterator j = idMap.begin();
+             j != idMap.end();
+             j++)
+        {
+            string name = j->first;
+            string refId = j->second;
+            
+            OEComponent *ref = getComponent(refId);
+            if (!component->setRef(name, ref))
+                logMessage("'" + id + "': invalid property '" + name + "'");
+        }
+    }
+    
+    return true;
+}
+
 bool OEEmulation::initDocument(xmlDocPtr doc)
 {
     xmlNodePtr rootNode = xmlDocGetRootElement(doc);

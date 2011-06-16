@@ -186,6 +186,7 @@ OEHeaderInfo OEDocument::getHeaderInfo()
 	if (doc)
 	{
 		xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+        
 		headerInfo.label = getNodeProperty(rootNode, "label");
 		headerInfo.image = getNodeProperty(rootNode, "image");
 		headerInfo.description = getNodeProperty(rootNode, "description");
@@ -201,6 +202,7 @@ OEPortsInfo OEDocument::getFreePortsInfo()
 	if (doc)
     {
         xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+        
         for(xmlNodePtr node = rootNode->children;
             node;
             node = node->next)
@@ -282,12 +284,20 @@ bool OEDocument::addDocument(string path, OEIdMap connections)
 	if (!document.open(path))
 		return false;
 	
-    // Remap id names
+    // Remap ids
     OEIds deviceIds = document.getDeviceIds();
 	OEIdMap deviceIdMap = makeIdMap(deviceIds);
     
-    document.remapDocument(deviceIdMap);
 	remapConnections(deviceIdMap, connections);
+    document.remapDocument(deviceIdMap);
+    
+    // Connect ports and connector inlets
+    OEInletMap portInletMap = getInlets(doc, connections, "port");
+    OEInletMap connectorInletMap = getInlets(document.getXMLDoc(), connections, "connector");
+    
+    connectPorts(doc, connections);
+    connectInlets(doc, portInletMap);
+    connectInlets(document.getXMLDoc(), connectorInletMap);
     
     // Insert document
     string firstPortId = connections.begin()->first;
@@ -306,15 +316,11 @@ bool OEDocument::addDocument(string path, OEIdMap connections)
         return false;
     }
     
-    // Connect documents
-    OEInletMap inletMap = getInlets(connections);
-    
-    connectDocument(doc, connections, inletMap);
-    
     // Construct new document
-    connectDocument(document.getXMLDoc(), connections, inletMap);
-    
     constructDocument(document.getXMLDoc());
+    
+    // Init port inlets
+    configureInlets(portInletMap);
     
     return true;
 }
@@ -439,6 +445,11 @@ bool OEDocument::constructDocument(xmlDocPtr doc)
     return true;
 }
 
+bool OEDocument::configureInlets(OEInletMap& inletMap)
+{
+    return true;
+}
+
 bool OEDocument::updateDocument(xmlDocPtr doc)
 {
     return true;
@@ -549,6 +560,7 @@ xmlNodePtr OEDocument::getLastNode(string deviceId)
     xmlNodePtr lastDocNode = NULL;
     
     xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+    
     for(xmlNodePtr node = rootNode->children;
         node;
         node = node->next)
@@ -573,7 +585,7 @@ xmlNodePtr OEDocument::getLastNode(string deviceId)
 // Follow device chain
 string OEDocument::followDeviceChain(string deviceId, vector<string>& visitedIds)
 {
-	// Check circularity
+	// Avoid circularity
 	if (find(visitedIds.begin(), visitedIds.end(), deviceId) != visitedIds.end())
 		return deviceId;
 	visitedIds.push_back(deviceId);
@@ -581,6 +593,7 @@ string OEDocument::followDeviceChain(string deviceId, vector<string>& visitedIds
     string lastDeviceId = deviceId;
     
     xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+    
     for(xmlNodePtr node = rootNode->children;
         node;
         node = node->next)
@@ -609,6 +622,7 @@ xmlNodePtr OEDocument::getInsertionNode(string portId)
     
     // Find the previous connected device to this port
     xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+    
     for(xmlNodePtr node = rootNode->children;
         node;
         node = node->next)
@@ -649,7 +663,8 @@ bool OEDocument::insertInto(xmlNodePtr dest)
     if (!dest)
         return false;
     
-	xmlNodePtr rootNode = xmlDocGetRootElement(doc);	
+	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+    
 	for(xmlNodePtr node = rootNode->children;
 		node;
 		node = node->next)
@@ -686,17 +701,17 @@ void OEDocument::addInlets(OEInletMap& inletMap, string deviceId, xmlNodePtr chi
 }
 
 // Scan ports and connectors for inlets
-OEInletMap OEDocument::getInlets(OEIdMap& connections)
+OEInletMap OEDocument::getInlets(xmlDocPtr doc, OEIdMap& connections, string nodeType)
 {
     OEInletMap inletMap;
     
 	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+    
 	for(xmlNodePtr node = rootNode->children;
 		node;
 		node = node->next)
 	{
-        if ((getNodeName(node) == "port") ||
-            (getNodeName(node) == "connector"))
+        if (getNodeName(node) == nodeType)
         {
             string id = getNodeProperty(node, "id");
             
@@ -718,10 +733,11 @@ OEInletMap OEDocument::getInlets(OEIdMap& connections)
     return inletMap;
 }
 
-// Connects inlets
-void OEDocument::connectDocument(xmlDocPtr doc, OEIdMap& connections, OEInletMap& inletMap)
+// Connects ports
+void OEDocument::connectPorts(xmlDocPtr doc, OEIdMap& connections)
 {
 	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+    
 	for(xmlNodePtr node = rootNode->children;
 		node;
 		node = node->next)
@@ -733,17 +749,29 @@ void OEDocument::connectDocument(xmlDocPtr doc, OEIdMap& connections, OEInletMap
             if (connections.count(id))
                 setNodeProperty(node, "ref", connections[id]);
         }
-        else if (getNodeName(node) == "component")
+    }
+}
+
+// Connect inlets
+void OEDocument::connectInlets(xmlDocPtr doc, OEInletMap& inletMap)
+{
+	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+    
+	for(xmlNodePtr node = rootNode->children;
+		node;
+		node = node->next)
+	{
+        if (getNodeName(node) == "component")
         {
             string id = getNodeProperty(node, "id");
             
             if (inletMap.count(id))
-                connectComponent(inletMap[id], node->children);
+                connectInlet(inletMap[id], node->children);
         }
     }
 }
 
-void OEDocument::connectComponent(OEIdMap& propertyMap, xmlNodePtr children)
+void OEDocument::connectInlet(OEIdMap& propertyMap, xmlNodePtr children)
 {
 	for(xmlNodePtr node = children;
 		node;
@@ -764,7 +792,7 @@ string OEDocument::getLocationLabel(string deviceId, vector<string>& visitedIds)
 	if (!doc)
 		return "";
     
-	// Check circularity
+	// Avoid circularity
 	if (find(visitedIds.begin(), visitedIds.end(), deviceId) != visitedIds.end())
 		return "*";
 	visitedIds.push_back(deviceId);

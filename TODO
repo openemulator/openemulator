@@ -1,6 +1,4 @@
 ==To-Do==
-* Fix group naming order (in some cases the order is not well defined)
-* Implement connection of main inlets
 * Fix recursive lock problem when adding a canvas
 * Implement delete device through Edit>Delete, or CMD+BACKSPACE
 * Implement OEEmulation removeDevice

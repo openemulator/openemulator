@@ -76,6 +76,7 @@ protected:
 	xmlDocPtr doc;
 	
     virtual bool constructDocument(xmlDocPtr doc);
+    virtual bool configureInlets(OEInletMap& inletMap);
     virtual bool updateDocument(xmlDocPtr doc);
     
 	string getLocationLabel(string deviceId, vector<string>& visitedIds);
@@ -100,9 +101,10 @@ private:
     xmlNodePtr getInsertionNode(string connectorId);
     bool insertInto(xmlNodePtr dest);
     void addInlets(OEInletMap& inletMap, string deviceId, xmlNodePtr children);
-    OEInletMap getInlets(OEIdMap& connections);
-    void connectDocument(xmlDocPtr doc, OEIdMap& connections, OEInletMap& inletMap);
-    void connectComponent(OEIdMap& propertyMap, xmlNodePtr children);
+    OEInletMap getInlets(xmlDocPtr doc, OEIdMap& connections, string nodeType);
+    void connectPorts(xmlDocPtr doc, OEIdMap& connections);
+    void connectInlets(xmlDocPtr doc, OEInletMap& inletMap);
+    void connectInlet(OEIdMap& propertyMap, xmlNodePtr children);
 };
 
 #endif
