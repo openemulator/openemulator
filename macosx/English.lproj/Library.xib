@@ -88,7 +88,7 @@
 													<string key="NSFrameSize">{297, 276}</string>
 													<reference key="NSSuperview" ref="658228920"/>
 													<reference key="NSWindow"/>
-													<reference key="NSNextKeyView" ref="590391294"/>
+													<reference key="NSNextKeyView" ref="53255666"/>
 													<bool key="NSEnabled">YES</bool>
 													<object class="_NSCornerView" key="NSCornerView">
 														<nil key="NSNextResponder"/>
@@ -221,7 +221,7 @@
 									<string key="NSFrameSize">{299, 278}</string>
 									<reference key="NSSuperview" ref="361817689"/>
 									<reference key="NSWindow"/>
-									<reference key="NSNextKeyView" ref="53255666"/>
+									<reference key="NSNextKeyView" ref="658228920"/>
 									<int key="NSsFlags">530</int>
 									<reference key="NSVScroller" ref="590391294"/>
 									<reference key="NSHScroller" ref="53255666"/>
@@ -348,7 +348,7 @@
 													<string key="NSFrameSize">{297, 137}</string>
 													<reference key="NSSuperview" ref="301698788"/>
 													<reference key="NSWindow"/>
-													<reference key="NSNextKeyView" ref="248456428"/>
+													<reference key="NSNextKeyView" ref="996747171"/>
 													<string key="NSClassName">NSView</string>
 												</object>
 											</object>
@@ -366,7 +366,6 @@
 											<string key="NSFrame">{{283, 1}, {15, 77}}</string>
 											<reference key="NSSuperview" ref="969694547"/>
 											<reference key="NSWindow"/>
-											<reference key="NSNextKeyView"/>
 											<reference key="NSTarget" ref="969694547"/>
 											<string key="NSAction">_doScroller:</string>
 											<double key="NSCurValue">1</double>
@@ -388,7 +387,7 @@
 									<string key="NSFrame">{{0, 287}, {299, 139}}</string>
 									<reference key="NSSuperview" ref="361817689"/>
 									<reference key="NSWindow"/>
-									<reference key="NSNextKeyView" ref="996747171"/>
+									<reference key="NSNextKeyView" ref="301698788"/>
 									<int key="NSsFlags">530</int>
 									<reference key="NSVScroller" ref="1033947015"/>
 									<reference key="NSHScroller" ref="996747171"/>

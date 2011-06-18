@@ -944,14 +944,14 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				0078F653127348ED0042577E /* AudioControls.xib */,
-				00A72B931287A0F10083C6A7 /* Canvas.xib */,
-				00CAD7D712A04C22002B92E5 /* Emulation.xib */,
-				00391D6212D3B588002C5ABD /* Library.xib */,
 				00D844BD0FFF0505005802F0 /* MainMenu.xib */,
-				00D844C30FFF0505005802F0 /* Preferences.xib */,
 				00679D06100817F700B38748 /* TemplateChooser.xib */,
 				00391F6A12D3FFF3002C5ABD /* TemplateChooserView.xib */,
+				00D844C30FFF0505005802F0 /* Preferences.xib */,
+				00391D6212D3B588002C5ABD /* Library.xib */,
+				0078F653127348ED0042577E /* AudioControls.xib */,
+				00CAD7D712A04C22002B92E5 /* Emulation.xib */,
+				00A72B931287A0F10083C6A7 /* Canvas.xib */,
 				0008FCD80FBA5D72005E876E /* Info.plist */,
 				00391D9912D3B94F002C5ABD /* library */,
 				003E2597107075D900185260 /* images */,

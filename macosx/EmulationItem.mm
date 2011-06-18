@@ -29,7 +29,8 @@
 		children = [[NSMutableArray alloc] init];
 		document = theDocument;
 		
-		[document lockEmulation];
+        if (![NSThread isMainThread])
+            [document lockEmulation];
 		
 		// Create device items
 		OEEmulation *emulation = (OEEmulation *)[theDocument emulation];
@@ -96,7 +97,8 @@
 			}
 		}
 		
-		[document unlockEmulation];
+        if (![NSThread isMainThread])
+            [document unlockEmulation];
 	}
 	
 	return self;

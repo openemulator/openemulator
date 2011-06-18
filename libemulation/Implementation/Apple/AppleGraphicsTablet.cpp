@@ -21,8 +21,8 @@ AppleGraphicsTablet::AppleGraphicsTablet()
 
 bool AppleGraphicsTablet::setValue(string name, string value)
 {
-	if (name == "viewPath")
-		viewPath = value;
+	if (name == "imagePath")
+		imagePath = value;
 	else
 		return false;
 	
@@ -65,7 +65,7 @@ bool AppleGraphicsTablet::init()
 	
 	CanvasDisplayConfiguration configuration;
 	OEImage image;
-	image.readFile(viewPath);
+	image.readFile(imagePath);
 	
 	configuration.displayResolution = image.getSize();
 	configuration.displayPixelDensity = 50;

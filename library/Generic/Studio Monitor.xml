@@ -36,15 +36,15 @@
     <property name="videoSaturation" value="1"/>
     <property name="videoHue" value="0"/>
     <property name="videoHorizontalCenter" value="0"/>
-    <property name="videoVerticalCenter" value="0"/>
     <property name="videoHorizontalSize" value="1"/>
+    <property name="videoVerticalCenter" value="0"/>
     <property name="videoVerticalSize" value="1"/>
     <property name="displayBarrel" value="0.05"/>
     <property name="displayScanlineAlpha" value="0.05"/>
     <property name="displayCenterLighting" value="1"/>
     <property name="displayShadowMaskAlpha" value="0.05"/>
     <property name="displayShadowMaskDotPitch" value="0.5"/>
-    <property name="displayShadowMask" value="1"/>
+    <property name="displayShadowMask" value="Triad"/>
     <property name="displayPersistance" value="0"/>
     <property name="compositeBlackLevel" value="0"/>
     <property name="compositeWhiteLevel" value="1"/>

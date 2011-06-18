@@ -5,5 +5,9 @@
 <device id="appleGraphicsTablet" label="Apple Graphics Tablet" image="images/Apple/Apple Graphics Tablet.png" group="peripherals"/>
 <connector id="appleGraphicsTablet.connector" type="Apple Graphics Tablet Port">
 </connector>
+<component id="appleGraphicsTablet.canvas" class="AppleGraphicsTablet">
+    <property name="device" ref="appleGraphicsTablet"/>
+    <property name="imagePath" value="${resourcePath}/images/Apple/Apple Graphics Tablet View.png"/>
+</component>
 
 </edl>

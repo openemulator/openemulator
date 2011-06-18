@@ -1,10 +1,14 @@
 ==To-Do==
-* Fix recursive lock problem when adding a canvas
-* Implement delete device through Edit>Delete, or CMD+BACKSPACE
+* Fix [CanvasView update] recursion
 * Implement OEEmulation removeDevice
 * Implement removal of devices in a daisy chain (when port and connector are of the same kind)
-* Implement disk image file locking, if the disk image is writable (flock)
+* Think about adding replacing devices by draggin them over the device to be replaced
 
+* Brigthness in monochrome should be in chroma color, not in white
+* Add OESound: resampling, rendering to audio buffer
+* Remove data property, and add OEData class (allows to read from/write to file)
+
+* Use disk image file locking, if the disk image is writable (flock)
 * Fix scrolling in template chooser when changing group
 * Add search in template chooser
 * CanvasWindow in fullscreen mode could have multiple display sizes

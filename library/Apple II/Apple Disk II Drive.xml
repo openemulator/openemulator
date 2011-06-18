@@ -4,7 +4,7 @@
 
 <device id="appleDiskII" label="Apple Disk II" image="images/Apple/Apple Disk II.png" group="peripherals">
     <setting ref="appleDiskII.io" name="lock" label="Force Write Protected" type="checkbox"/>
-    <setting ref="appleDiskII.io" name="sounds" label="Sounds" type="Apple,Shugart"/>
+    <setting ref="appleDiskII.io" name="sounds" label="Drive Mechanism" type="select" options="Apple,Shugart"/>
 </device>
 <connector id="appleDiskII.connector" type="Apple Disk Drive Port"/>
 <component id="appleDiskII.drive" class="AppleDiskII">

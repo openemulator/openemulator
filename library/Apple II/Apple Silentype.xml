@@ -6,5 +6,9 @@
 <connector id="appleSilentype.connector" type="Apple Silentype Port">
     <inlet ref="appleSilentype.io" property="mmu" outletRef="mmu"/>
 </connector>
+<component id="appleSilentype.canvas" class="AppleSilentype">
+    <property name="device" ref="appleSilentype"/>
+    <property name="imagePath" value="${resourcePath}/images/print.png"/>
+</component>
 
 </edl>

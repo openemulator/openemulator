@@ -1,4 +1,6 @@
 ==2011-06==
+* Implemented delete device through Edit>Delete, or CMD+BACKSPACE
+* Fixed recursive lock problem when adding a canvas
 * Implemented connection of main inlets
 * Fixed connection order
 * Implemented OEEmulation addDocument

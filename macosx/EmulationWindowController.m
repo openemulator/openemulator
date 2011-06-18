@@ -223,7 +223,11 @@
 		[sender isKindOfClass:[EmulationOutlineView class]])
 	{
 		NSInteger clickedRow = [fOutlineView clickedRow];
-		return [fOutlineView itemAtRow:clickedRow];
+        
+        EmulationItem *item = [fOutlineView itemAtRow:clickedRow];
+        
+        if (item)
+            return item;
 	}
 	
 	return selectedItem;
@@ -906,7 +910,34 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
 
 - (IBAction)delete:(id)sender
 {
-	// To-Do: Remove device
+	EmulationItem *item = [self itemForSender:sender];
+	
+    NSBeginAlertSheet([NSString localizedStringWithFormat:
+                       @"Are you sure you want to delete the device \u201C%@\u201D?",
+                       [item label]],
+                      NSLocalizedString(@"Delete", @"Emulation Alert"),
+                      NSLocalizedString(@"Cancel", @"Emulation Alert"),
+                      nil,
+                      [self window], self,
+                      @selector(deletePanelDidEnd:returnCode:contextInfo:),
+                      nil, item,
+                      [NSString localizedStringWithFormat:
+                       @"This will also delete all the devices connected to \u201C%@\u201D.",
+                       [item label]]);
+    
+    return;
+}
+
+- (void)deletePanelDidEnd:(NSWindow *)sheet
+               returnCode:(int)returnCode
+              contextInfo:(void *)contextInfo
+{
+	EmulationItem *item = contextInfo;
+	
+	if (returnCode == NSAlertDefaultReturn)
+	{
+        // To-Do: Remove device
+	}
 }
 
 - (void)systemPowerDown:(id)sender

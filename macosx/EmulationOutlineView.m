@@ -28,10 +28,26 @@
 }
 
 
+- (BOOL)validateUserInterfaceItem:(id <NSValidatedUserInterfaceItem >)anItem
+{
+    return [[[self window] windowController] validateUserInterfaceItem:anItem];
+}
 
 - (IBAction)delete:(id)sender
 {
-	// To-Do: Remove device
+    return [[[self window] windowController] delete:sender];
+}
+
+- (BOOL)performKeyEquivalent:(NSEvent *)theEvent
+{
+    if ([[theEvent characters] characterAtIndex:0] == 0x7f)
+    {
+        [self delete:self];
+        
+        return YES;
+    }
+    
+    return NO;
 }
 
 - (NSInteger)forcedRow

@@ -21,8 +21,8 @@ AppleSilentype::AppleSilentype()
 
 bool AppleSilentype::setValue(string name, string value)
 {
-	if (name == "viewPath")
-		viewPath = value;
+	if (name == "imagePath")
+		imagePath = value;
 	else
 		return false;
 	
@@ -68,7 +68,7 @@ bool AppleSilentype::init()
 	configuration.pageResolution = OEMakeSize(612 * 2, 792 * 2);
 	configuration.pagePixelDensity = OEMakeSize(144, 144);
 	OEImage image;
-	image.readFile(viewPath);
+	image.readFile(imagePath);
 	
 	canvas->postMessage(this, CANVAS_SET_MODE, &mode);
 	canvas->postMessage(this, CANVAS_CONFIGURE_PAPER, &configuration);

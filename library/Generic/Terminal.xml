@@ -5,7 +5,7 @@
 <device id="terminal" label="Terminal" image="images/Generic/Terminal.png" group="peripherals"/>
 <connector id="terminal.connector" type="RS-232"/>
 <component id="terminal.io" class="Terminal">
-    <property name="host" ref="hostEmulationController"/>
+    <property name="device" ref="terminal"/>
     <property name="charset" ref="terminal.charset"/>
     <property name="width" value="24"/>
     <property name="height" value="40"/>
