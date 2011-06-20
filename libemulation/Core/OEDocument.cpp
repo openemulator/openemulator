@@ -117,7 +117,7 @@ bool OEDocument::save(string path)
 	string pathExtension = getPathExtension(path);
 	if (pathExtension == OE_FILE_PATH_EXTENSION)
 	{
-		if (updateDocument())
+		if (updateDocument(doc))
 		{
 			if (dumpDocument(data))
 			{
@@ -137,7 +137,7 @@ bool OEDocument::save(string path)
 		package = new OEPackage();
 		if (package && package->open(path))
 		{
-			if (updateDocument())
+			if (updateDocument(doc))
 			{
 				if (dumpDocument(data))
 				{
@@ -440,7 +440,7 @@ bool OEDocument::configureInlets(OEInletMap& inletMap)
     return true;
 }
 
-bool OEDocument::updateDocument()
+bool OEDocument::updateDocument(xmlDocPtr doc)
 {
     return true;
 }

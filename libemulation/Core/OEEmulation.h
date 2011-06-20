@@ -58,20 +58,20 @@ private:
 	bool constructDocument(xmlDocPtr doc);
 	bool constructDevice(string deviceId);
 	bool constructComponent(string id, string className);
-	bool configureDocument();
+	bool configureDocument(xmlDocPtr doc);
 	bool configureDevice(string deviceId,
 						 string label, string image, string group,
 						 xmlNodePtr children);
     bool configureInlets(OEInletMap& inletMap);
 	bool configureComponent(string id, xmlNodePtr children);
-	bool initDocument();
+	bool initDocument(xmlDocPtr doc);
 	bool initComponent(string id);
-	bool updateDocument();
+	bool updateDocument(xmlDocPtr doc);
 	bool updateComponent(string id, xmlNodePtr children);
-	void deconfigureDocument();
+	void deconfigureDocument(xmlDocPtr doc);
     void deconfigureDevice(string deviceId);
 	void deconfigureComponent(string id, xmlNodePtr children);
-	void destroyDocument();
+	void destroyDocument(xmlDocPtr doc);
     void destroyDevice(string deviceId);
 	void destroyComponent(string id, xmlNodePtr children);
 	

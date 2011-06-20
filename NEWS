@@ -1,4 +1,5 @@
 ==2011-06==
+* Fixed canvas hiding when adding devices
 * Implemented OEEmulation removeDevice
 * Implemented delete device through Edit>Delete, or CMD+BACKSPACE
 * Fixed recursive lock problem when adding a canvas

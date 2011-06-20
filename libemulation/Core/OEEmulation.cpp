@@ -37,9 +37,9 @@ OEEmulation::~OEEmulation()
 	
 	if (doc)
     {
-        deconfigureDocument();
+        deconfigureDocument(doc);
         
-        destroyDocument();
+        destroyDocument(doc);
     }
 }
 
@@ -144,8 +144,8 @@ bool OEEmulation::constructDocument(xmlDocPtr doc)
 		}
 	}
 	
-    if (configureDocument())
-        if (initDocument())
+    if (configureDocument(doc))
+        if (initDocument(doc))
             return true;
     
 	return false;
@@ -188,7 +188,7 @@ bool OEEmulation::constructComponent(string id, string className)
 	return false;
 }
 
-bool OEEmulation::configureDocument()
+bool OEEmulation::configureDocument(xmlDocPtr doc)
 {
     xmlNodePtr rootNode = xmlDocGetRootElement(doc);
     
@@ -357,7 +357,7 @@ bool OEEmulation::configureInlets(OEInletMap& inletMap)
     return true;
 }
 
-bool OEEmulation::initDocument()
+bool OEEmulation::initDocument(xmlDocPtr doc)
 {
     xmlNodePtr rootNode = xmlDocGetRootElement(doc);
     
@@ -399,7 +399,7 @@ bool OEEmulation::initComponent(string id)
 	return true;
 }
 
-bool OEEmulation::updateDocument()
+bool OEEmulation::updateDocument(xmlDocPtr doc)
 {
     xmlNodePtr rootNode = xmlDocGetRootElement(doc);
     
@@ -469,7 +469,7 @@ bool OEEmulation::updateComponent(string id, xmlNodePtr children)
 	return true;
 }
 
-void OEEmulation::deconfigureDocument()
+void OEEmulation::deconfigureDocument(xmlDocPtr doc)
 {
     xmlNodePtr rootNode = xmlDocGetRootElement(doc);
     
@@ -539,7 +539,7 @@ void OEEmulation::deconfigureComponent(string id, xmlNodePtr children)
 	}
 }
 
-void OEEmulation::destroyDocument()
+void OEEmulation::destroyDocument(xmlDocPtr doc)
 {
     xmlNodePtr rootNode = xmlDocGetRootElement(doc);
     

@@ -1,13 +1,12 @@
 ==To-Do==
-* Fix canvas hiding when adding devices
 * Fix [CanvasView update] recursion
 * Implement removal of devices in a daisy chain (when port and connector are of the same kind)
 * Think about replacing devices by dragging them over the device to be replaced
 
-* Brigthness in monochrome should be in chroma color, not in white
 * Add OESound: resampling, rendering to audio buffer
 * Remove data property, and add OEData class (allows to read from/write to file)
 
+* Brigthness in monochrome should be in chroma color, not in white
 * Use disk image file locking, if the disk image is writable (flock)
 * Fix scrolling in template chooser when changing group
 * Add search in template chooser
