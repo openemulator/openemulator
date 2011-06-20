@@ -408,6 +408,7 @@
 	NSString *value = @"";
 	
 	[document lockEmulation];
+    
 	OEEmulation *emulation = (OEEmulation *)[document emulation];
 	OEComponent *component = emulation->getComponent(getCPPString(settingRef));
 	if (component)
@@ -416,6 +417,7 @@
 		component->getValue(getCPPString(settingName), theValue);
 		value = getNSString(theValue);
 	}
+    
 	[document unlockEmulation];
 	
 	NSString *settingType = [settingsType objectAtIndex:index];
@@ -433,6 +435,17 @@
 - (BOOL)isRemovable
 {
 	return (type == EMULATIONITEM_DEVICE) && ([locationLabel length] != 0);
+}
+
+- (void)remove
+{
+	OEEmulation *emulation = (OEEmulation *)[document emulation];
+    
+	[document lockEmulation];
+    
+    emulation->removeDevice(getCPPString(uid));
+    
+	[document unlockEmulation];
 }
 
 
@@ -628,7 +641,7 @@
 		[document lockEmulation];
 		
 		bool result = emulation->addDocument(getCPPString(thePath), idMap);
-		
+        
 		[document unlockEmulation];
 		
 		return result;

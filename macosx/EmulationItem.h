@@ -84,6 +84,7 @@ typedef enum
 - (NSString *)valueForSettingAtIndex:(NSInteger)index;
 
 - (BOOL)isRemovable;
+- (void)remove;
 
 - (BOOL)hasCanvases;
 - (void)showCanvases;

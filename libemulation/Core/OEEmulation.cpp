@@ -37,8 +37,9 @@ OEEmulation::~OEEmulation()
 	
 	if (doc)
     {
-        disconnectDocument(doc);
-        destroyDocument(doc);
+        deconfigureDocument();
+        
+        destroyDocument();
     }
 }
 
@@ -82,7 +83,7 @@ bool OEEmulation::addComponent(string id, OEComponent *component)
 
 bool OEEmulation::removeComponent(string id)
 {
-	if (componentsMap.count(id))
+	if (!componentsMap.count(id))
 		return false;
 	
 	componentsMap.erase(id);
@@ -128,9 +129,9 @@ bool OEEmulation::constructDocument(xmlDocPtr doc)
 	{
 		if (getNodeName(node) == "device")
 		{
-			string id = getNodeProperty(node, "id");
+			string deviceId = getNodeProperty(node, "id");
 			
-			if (!constructDevice(id))
+			if (!constructDevice(deviceId))
 				return false;
 		}
 		if (getNodeName(node) == "component")
@@ -143,27 +144,27 @@ bool OEEmulation::constructDocument(xmlDocPtr doc)
 		}
 	}
 	
-    if (configureDocument(doc))
-        if (initDocument(doc))
+    if (configureDocument())
+        if (initDocument())
             return true;
     
 	return false;
 }
 
-bool OEEmulation::constructDevice(string id)
+bool OEEmulation::constructDevice(string deviceId)
 {
-	if (!getComponent(id))
+	if (!getComponent(deviceId))
 	{
 		OEComponent *component;
 		component = new OEDevice(this);
 		
-		if (component && addComponent(id, component))
+		if (component && addComponent(deviceId, component))
 			return true;
 		else
-			logMessage("could not construct device '" + id + "'");
+			logMessage("could not construct device '" + deviceId + "'");
 	}
 	else
-		logMessage("redefinition of '" + id + "'");
+		logMessage("redefinition of '" + deviceId + "'");
 	
 	return false;
 }
@@ -187,7 +188,7 @@ bool OEEmulation::constructComponent(string id, string className)
 	return false;
 }
 
-bool OEEmulation::configureDocument(xmlDocPtr doc)
+bool OEEmulation::configureDocument()
 {
     xmlNodePtr rootNode = xmlDocGetRootElement(doc);
     
@@ -197,12 +198,12 @@ bool OEEmulation::configureDocument(xmlDocPtr doc)
 	{
 		if (getNodeName(node) == "device")
 		{
-			string id = getNodeProperty(node, "id");
+			string deviceId = getNodeProperty(node, "id");
 			string label = getNodeProperty(node, "label");
 			string image = getNodeProperty(node, "image");
 			string group = getNodeProperty(node, "group");
 			
-			if (!configureDevice(id, label, image, group, node->children))
+			if (!configureDevice(deviceId, label, image, group, node->children))
 				return false;
 		}
 		if (getNodeName(node) == "component")
@@ -217,12 +218,12 @@ bool OEEmulation::configureDocument(xmlDocPtr doc)
 	return true;
 }
 
-bool OEEmulation::configureDevice(string id,
+bool OEEmulation::configureDevice(string deviceId,
 								  string label, string image, string group, 
 								  xmlNodePtr children)
 {
-	OEComponent *device = getComponent(id);
-	string locationLabel = getLocationLabel(id);
+	OEComponent *device = getComponent(deviceId);
+	string locationLabel = getLocationLabel(deviceId);
 	
 	// Parse settings
 	DeviceSettings settings;
@@ -356,7 +357,7 @@ bool OEEmulation::configureInlets(OEInletMap& inletMap)
     return true;
 }
 
-bool OEEmulation::initDocument(xmlDocPtr doc)
+bool OEEmulation::initDocument()
 {
     xmlNodePtr rootNode = xmlDocGetRootElement(doc);
     
@@ -398,7 +399,7 @@ bool OEEmulation::initComponent(string id)
 	return true;
 }
 
-bool OEEmulation::updateDocument(xmlDocPtr doc)
+bool OEEmulation::updateDocument()
 {
     xmlNodePtr rootNode = xmlDocGetRootElement(doc);
     
@@ -468,7 +469,7 @@ bool OEEmulation::updateComponent(string id, xmlNodePtr children)
 	return true;
 }
 
-void OEEmulation::disconnectDocument(xmlDocPtr doc)
+void OEEmulation::deconfigureDocument()
 {
     xmlNodePtr rootNode = xmlDocGetRootElement(doc);
     
@@ -480,12 +481,45 @@ void OEEmulation::disconnectDocument(xmlDocPtr doc)
 		{
 			string id = getNodeProperty(node, "id");
 			
-			disconnectComponent(id, node->children);
+			deconfigureComponent(id, node->children);
 		}
 	}
 }
 
-void OEEmulation::disconnectComponent(string id, xmlNodePtr children)
+void OEEmulation::deconfigureDevice(string deviceId)
+{
+    xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+    
+	for(xmlNodePtr node = rootNode->children;
+		node;
+		node = node->next)
+	{
+		if (getNodeName(node) == "component")
+		{
+            string componentId = getNodeProperty(node, "id");
+            
+            for(xmlNodePtr propertyNode = node->children;
+                propertyNode;
+                propertyNode = propertyNode->next)
+            {
+                string ref = getNodeProperty(propertyNode, "ref");
+                
+                if ((getDeviceId(componentId) == deviceId) ||
+                    (getDeviceId(ref) == deviceId))
+                {
+                    OEComponent *component = getComponent(componentId);
+                    if (component)
+                    {
+                        string name = getNodeProperty(propertyNode, "name");
+                        component->setRef(name, NULL);
+                    }
+                }
+            }
+		}
+	}
+}
+
+void OEEmulation::deconfigureComponent(string id, xmlNodePtr children)
 {
 	OEComponent *component = getComponent(id);
 	if (!component)
@@ -505,7 +539,7 @@ void OEEmulation::disconnectComponent(string id, xmlNodePtr children)
 	}
 }
 
-void OEEmulation::destroyDocument(xmlDocPtr doc)
+void OEEmulation::destroyDocument()
 {
     xmlNodePtr rootNode = xmlDocGetRootElement(doc);
     
@@ -513,11 +547,31 @@ void OEEmulation::destroyDocument(xmlDocPtr doc)
 		node;
 		node = node->next)
 	{
-		if (getNodeName(node) == "component")
+		if ((getNodeName(node) == "component") ||
+            (getNodeName(node) == "device"))
 		{
-			string id = getNodeProperty(node, "id");
+			string componentId = getNodeProperty(node, "id");
 			
-			destroyComponent(id, node->children);
+			destroyComponent(componentId, node->children);
+		}
+	}
+}
+
+void OEEmulation::destroyDevice(string deviceId)
+{
+    xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+    
+	for(xmlNodePtr node = rootNode->children;
+		node;
+		node = node->next)
+	{
+		if ((getNodeName(node) == "component") ||
+            (getNodeName(node) == "device"))
+		{
+			string componentId = getNodeProperty(node, "id");
+			
+            if (getDeviceId(componentId) == deviceId)
+                destroyComponent(componentId, node->children);
 		}
 	}
 }

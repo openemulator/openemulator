@@ -911,7 +911,10 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
 - (IBAction)delete:(id)sender
 {
 	EmulationItem *item = [self itemForSender:sender];
-	
+    
+	if (![item isRemovable])
+        return;
+    
     NSBeginAlertSheet([NSString localizedStringWithFormat:
                        @"Are you sure you want to delete the device \u201C%@\u201D?",
                        [item label]],
@@ -922,7 +925,7 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
                       @selector(deletePanelDidEnd:returnCode:contextInfo:),
                       nil, item,
                       [NSString localizedStringWithFormat:
-                       @"This will also delete all the devices connected to \u201C%@\u201D.",
+                       @"This will also delete the devices connected to \u201C%@\u201D.",
                        [item label]]);
     
     return;
@@ -932,12 +935,16 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
                returnCode:(int)returnCode
               contextInfo:(void *)contextInfo
 {
-	EmulationItem *item = contextInfo;
-	
 	if (returnCode == NSAlertDefaultReturn)
-	{
-        // To-Do: Remove device
-	}
+    {
+        EmulationItem *item = contextInfo;
+        
+        [item remove];
+        
+        [self updateEmulation:self];
+        
+        [[self document] updateChangeCount:NSChangeDone];
+    }
 }
 
 - (void)systemPowerDown:(id)sender

@@ -42,9 +42,12 @@
 {
     if ([[theEvent characters] characterAtIndex:0] == 0x7f)
     {
-        [self delete:self];
-        
-        return YES;
+        if ([self validateUserInterfaceItem:NULL])
+        {
+            [self delete:self];
+            
+            return YES;
+        }
     }
     
     return NO;

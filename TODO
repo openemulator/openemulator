@@ -1,8 +1,8 @@
 ==To-Do==
+* Fix canvas hiding when adding devices
 * Fix [CanvasView update] recursion
-* Implement OEEmulation removeDevice
 * Implement removal of devices in a daisy chain (when port and connector are of the same kind)
-* Think about adding replacing devices by draggin them over the device to be replaced
+* Think about replacing devices by dragging them over the device to be replaced
 
 * Brigthness in monochrome should be in chroma color, not in white
 * Add OESound: resampling, rendering to audio buffer

@@ -117,7 +117,7 @@ bool OEDocument::save(string path)
 	string pathExtension = getPathExtension(path);
 	if (pathExtension == OE_FILE_PATH_EXTENSION)
 	{
-		if (updateDocument(doc))
+		if (updateDocument())
 		{
 			if (dumpDocument(data))
 			{
@@ -137,7 +137,7 @@ bool OEDocument::save(string path)
 		package = new OEPackage();
 		if (package && package->open(path))
 		{
-			if (updateDocument(doc))
+			if (updateDocument())
 			{
 				if (dumpDocument(data))
 				{
@@ -325,43 +325,33 @@ bool OEDocument::addDocument(string path, OEIdMap connections)
     return true;
 }
 
-bool OEDocument::isDeviceTerminal(string deviceId)
-{
-    return false;
-}
-
 bool OEDocument::removeDevice(string deviceId)
 {
-    /*	for (OEIds::iterator i = devices.begin();
-     i != devices.end();
-     i++)
-     {
-     if (*i == id)
-     {
-     devices.erase(i);
-     return true;
-     }
-     }
-     
-     return false;
-     // Verify device exists
-     if (!isDevice(deviceId))
-     {
-     log("could not find '" + deviceId + "'");
-     return false;
-     }
-     
-     // Recursively remove devices connected to this device
-     if (!removeConnectedDevices(deviceId))
-     return false;
-     
-     // Remove references to this device
-     disconnectDevice(deviceId);
-     
-     // Remove elements matching this device
-     removeElements(deviceId);
-     */
-    return false;
+	if (!doc)
+		return false;
+	
+    // Get connected devices
+    OEIds connectedDevices = getConnectedDevices(deviceId);
+    
+    // Deconfigure device refs
+    deconfigureDevice(deviceId);
+    
+    // Destroy device components
+    destroyDevice(deviceId);
+    
+    // Disconnect device
+    disconnectDevice(deviceId);
+    
+    // Delete device items
+    deleteDevice(deviceId);
+    
+    // Remove connected devices
+    for (vector<string>::iterator i = connectedDevices.begin();
+         i != connectedDevices.end();
+         i++)
+        removeDevice(*i);
+    
+    return true;
 }
 
 OEIds OEDocument::getDeviceIds()
@@ -450,9 +440,17 @@ bool OEDocument::configureInlets(OEInletMap& inletMap)
     return true;
 }
 
-bool OEDocument::updateDocument(xmlDocPtr doc)
+bool OEDocument::updateDocument()
 {
     return true;
+}
+
+void OEDocument::deconfigureDevice(string deviceId)
+{
+}
+
+void OEDocument::destroyDevice(string deviceIds)
+{
 }
 
 
@@ -682,6 +680,34 @@ bool OEDocument::insertInto(xmlNodePtr dest)
     return true;
 }
 
+// Get connected devices
+OEIds OEDocument::getConnectedDevices(string deviceId)
+{
+    OEIds connectedDevices;
+    
+    xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+    
+    for(xmlNodePtr node = rootNode->children;
+        node;
+        node = node->next)
+    {
+        if (getNodeName(node) == "port")
+        {
+            string id = getNodeProperty(node, "id");
+            
+            if (getDeviceId(id) == deviceId)
+            {
+                string ref = getNodeProperty(node, "ref");
+                
+                if (ref != "")
+                    connectedDevices.push_back(getDeviceId(ref));
+            }
+        }
+    }
+    
+    return connectedDevices;
+}
+
 // Scan inlets
 void OEDocument::addInlets(OEInletMap& inletMap, string deviceId, xmlNodePtr children)
 {
@@ -784,6 +810,79 @@ void OEDocument::connectInlet(OEIdMap& propertyMap, xmlNodePtr children)
             if (propertyMap.count(name))
                 setNodeProperty(node, "ref", propertyMap[name]);
         }
+    }
+}
+
+// Disconnect device
+void OEDocument::disconnectDevice(string deviceId)
+{
+	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+    
+	for(xmlNodePtr node = rootNode->children;
+		node;
+		node = node->next)
+	{
+        if (getNodeName(node) == "port")
+        {
+            string ref = getNodeProperty(node, "ref");
+            
+            if (getDeviceId(ref) == deviceId)
+                setNodeProperty(node, "ref", "");
+        }
+        else if (getNodeName(node) == "component")
+        {
+            for(xmlNodePtr propertyNode = node->children;
+                propertyNode;
+                propertyNode = propertyNode->next)
+            {
+                if (getNodeName(propertyNode) == "property")
+                {
+                    string ref = getNodeProperty(propertyNode, "ref");
+                    
+                    if (getDeviceId(ref) == deviceId)
+                        setNodeProperty(propertyNode, "ref", "");
+                }
+            }
+        }
+    }
+}
+
+// Delete device
+void OEDocument::deleteDevice(string deviceId)
+{
+	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+    
+	for(xmlNodePtr node = rootNode->children;
+		node;)
+	{
+        string id = getNodeProperty(node, "id");
+        
+        if (id != "")
+        {
+            if (getDeviceId(id) == deviceId)
+            {
+                xmlNodePtr next = node->next;
+                
+                xmlUnlinkNode(node);
+                xmlFreeNode(node);
+                
+                node = next;
+                
+                if (node && (node->type == XML_TEXT_NODE))
+                {
+                    next = node->next;
+                    
+                    xmlUnlinkNode(node);
+                    xmlFreeNode(node);
+                    
+                    node = next;
+                }
+                
+                continue;
+            }
+        }
+        
+        node = node->next;
     }
 }
 

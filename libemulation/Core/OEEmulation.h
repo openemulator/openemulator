@@ -56,21 +56,23 @@ private:
 	int activityCount;
 	
 	bool constructDocument(xmlDocPtr doc);
-	bool constructDevice(string id);
+	bool constructDevice(string deviceId);
 	bool constructComponent(string id, string className);
-	bool configureDocument(xmlDocPtr doc);
-	bool configureDevice(string id,
+	bool configureDocument();
+	bool configureDevice(string deviceId,
 						 string label, string image, string group,
 						 xmlNodePtr children);
     bool configureInlets(OEInletMap& inletMap);
 	bool configureComponent(string id, xmlNodePtr children);
-	bool initDocument(xmlDocPtr doc);
+	bool initDocument();
 	bool initComponent(string id);
-	bool updateDocument(xmlDocPtr doc);
+	bool updateDocument();
 	bool updateComponent(string id, xmlNodePtr children);
-	void disconnectDocument(xmlDocPtr doc);
-	void disconnectComponent(string id, xmlNodePtr children);
-	void destroyDocument(xmlDocPtr doc);
+	void deconfigureDocument();
+    void deconfigureDevice(string deviceId);
+	void deconfigureComponent(string id, xmlNodePtr children);
+	void destroyDocument();
+    void destroyDevice(string deviceId);
 	void destroyComponent(string id, xmlNodePtr children);
 	
 	bool hasValueProperty(string value, string propertyName);

@@ -62,7 +62,6 @@ public:
 	OEConnectorsInfo getFreeConnectorsInfo();
 	
     bool addDocument(string path, OEIdMap connections);
-    bool isDeviceTerminal(string deviceId);
     bool removeDevice(string deviceId);
     
     OEIds getDeviceIds();
@@ -77,7 +76,9 @@ protected:
 	
     virtual bool constructDocument(xmlDocPtr doc);
     virtual bool configureInlets(OEInletMap& inletMap);
-    virtual bool updateDocument(xmlDocPtr doc);
+    virtual bool updateDocument();
+    virtual void deconfigureDevice(string deviceId);
+    virtual void destroyDevice(string deviceId);
     
 	string getLocationLabel(string deviceId, vector<string>& visitedIds);
 	string getLocationLabel(string deviceId);
@@ -100,11 +101,14 @@ private:
     string followDeviceChain(string deviceId, vector<string>& visitedIds);
     xmlNodePtr getInsertionNode(string connectorId);
     bool insertInto(xmlNodePtr dest);
+    OEIds getConnectedDevices(string deviceId);
     void addInlets(OEInletMap& inletMap, string deviceId, xmlNodePtr children);
     OEInletMap getInlets(xmlDocPtr doc, OEIdMap& connections, string nodeType);
     void connectPorts(xmlDocPtr doc, OEIdMap& connections);
     void connectInlets(xmlDocPtr doc, OEInletMap& inletMap);
     void connectInlet(OEIdMap& propertyMap, xmlNodePtr children);
+    void disconnectDevice(string deviceId);
+    void deleteDevice(string deviceId);
 };
 
 #endif
