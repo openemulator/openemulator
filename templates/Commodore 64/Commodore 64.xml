@@ -2,21 +2,21 @@
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
 <edl version="1.0" label="Commodore 64" image="images/Commodore/Commodore 64.png" description="">
 
-<device id="c64" label="Commodore 64" image="images/Commodore/Commodore 64.png" group="system">
+<device id="c64" label="Commodore 64" image="images/Commodore/Commodore 64.png">
 </device>
-<port id="c64.video" ref="" type="Composite Video" label="Video Port" image="images/Connectors/RCA Female.png">
+<port id="c64.video" ref="" type="Composite Video" group="peripherals" label="Video Port" image="images/Connectors/RCA Female.png">
 </port>
-<port id="c64.control1" ref="" type="Commodore Control Port" label="Control Port 1" image="images/Connectors/DE9 Male.png">
+<port id="c64.control1" ref="" type="Commodore Control Port" group="peripherals" label="Control Port 1" image="images/Connectors/DE9 Male.png">
 </port>
-<port id="c64.control2" ref="" type="Commodore Control Port" label="Control Port 2" image="images/Connectors/DE9 Male.png">
+<port id="c64.control2" ref="" type="Commodore Control Port" group="peripherals" label="Control Port 2" image="images/Connectors/DE9 Male.png">
 </port>
-<port id="c64.expansion" ref="" type="Commodore Expansion Port" label="Expansion Port" image="images/Connectors/Edge44.png">
+<port id="c64.expansion" ref="" type="Commodore Expansion Port" group="peripherals" label="Expansion Port" image="images/Connectors/Edge44.png">
 </port>
-<port id="c64.serial" ref="" type="IEEE-488" label="Serial Port" image="images/Connectors/DIN45322.png">
+<port id="c64.serial" ref="" type="IEEE-488" label="Serial Port" group="peripherals" image="images/Connectors/DIN45322.png">
 </port>
-<port id="c64.cassette" ref="" type="Commodore Datasette Port" label="Datasette Port" image="images/Commodore/Commodore 64 Cassette Port.png">
+<port id="c64.cassette" ref="" type="Commodore Datasette Port" group="peripherals" label="Datasette Port" image="images/Commodore/Commodore 64 Cassette Port.png">
 </port>
-<port id="c64.user" ref="" type="Commodore User Port" label="User Port" image="images/Commodore/Commodore 64 User Port.png">
+<port id="c64.user" ref="" type="Commodore User Port" group="peripherals" label="User Port" image="images/Commodore/Commodore 64 User Port.png">
 </port>
 
 </edl>

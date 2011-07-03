@@ -2,7 +2,7 @@
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
 <edl version="1.0" label="Apple Monitor II" image="images/Apple/Apple Monitor II.png" description="The Apple Monitor II is a CRT-based green monochrome 12-inch monitor manufactured by Apple Computer for the Apple II personal computer family.">
 
-<device id="appleMonitorII" label="Apple Monitor II" image="images/Apple/Apple Monitor II.png" group="peripherals" >
+<device id="appleMonitorII" label="Apple Monitor II" image="images/Apple/Apple Monitor II.png">
     <setting ref="appleMonitorII.appleMonitorII" name="videoBrightness" label="Brightness" type="slider" options="-1.0,0.0"/>
     <setting ref="appleMonitorII.appleMonitorII" name="videoContrast" label="Contrast" type="slider" options="0.0,1.0"/>
     <setting ref="appleMonitorII.appleMonitorII" name="videoVerticalCenter" label="Vertical Center" type="slider" options="-0.1,0.1"/>

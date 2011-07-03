@@ -29,7 +29,6 @@ private:
 	
 	string label;
 	string imagePath;
-	string group;
 	string locationLabel;
 	string stateLabel;
 	

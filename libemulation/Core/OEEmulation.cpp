@@ -201,9 +201,8 @@ bool OEEmulation::configureDocument(xmlDocPtr doc)
 			string deviceId = getNodeProperty(node, "id");
 			string label = getNodeProperty(node, "label");
 			string image = getNodeProperty(node, "image");
-			string group = getNodeProperty(node, "group");
 			
-			if (!configureDevice(deviceId, label, image, group, node->children))
+			if (!configureDevice(deviceId, label, image, node->children))
 				return false;
 		}
 		if (getNodeName(node) == "component")
@@ -219,7 +218,7 @@ bool OEEmulation::configureDocument(xmlDocPtr doc)
 }
 
 bool OEEmulation::configureDevice(string deviceId,
-								  string label, string image, string group, 
+								  string label, string image,
 								  xmlNodePtr children)
 {
 	OEComponent *device = getComponent(deviceId);
@@ -247,7 +246,6 @@ bool OEEmulation::configureDevice(string deviceId,
 	
 	device->postMessage(this, DEVICE_SET_LABEL, &label);
 	device->postMessage(this, DEVICE_SET_IMAGEPATH, &image);
-	device->postMessage(this, DEVICE_SET_GROUP, &group);
 	device->postMessage(this, DEVICE_SET_LOCATIONLABEL, &locationLabel);
 	device->postMessage(this, DEVICE_SET_SETTINGS, &settings);
 	

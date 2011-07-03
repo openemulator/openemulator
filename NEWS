@@ -1,3 +1,6 @@
+==2011-07==
+* Merged available ports with other groups
+
 ==2011-06==
 * Fixed canvas hiding when adding devices
 * Implemented OEEmulation removeDevice

@@ -2,7 +2,8 @@
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
 <edl version="1.0" label="Terminal" image="images/Generic/Terminal.png" description="A generic terminal that can be connected to any RS-232 port.">
 
-<device id="terminal" label="Terminal" image="images/Generic/Terminal.png" group="peripherals"/>
+<device id="terminal" label="Terminal" image="images/Generic/Terminal.png">
+</device>
 <connector id="terminal.connector" type="RS-232"/>
 <component id="terminal.io" class="Terminal">
     <property name="device" ref="terminal"/>

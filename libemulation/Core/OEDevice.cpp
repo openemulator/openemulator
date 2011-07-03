@@ -41,16 +41,6 @@ bool OEDevice::postMessage(OEComponent *sender, int message, void *data)
 				*((string *)data) = imagePath;
 			return true;
 			
-		case DEVICE_SET_GROUP:
-			if (data)
-				group = *((string *)data);
-			return true;
-			
-		case DEVICE_GET_GROUP:
-			if (data)
-				*((string *)data) = group;
-			return true;
-			
 		case DEVICE_SET_LOCATIONLABEL:
 			if (data)
 				locationLabel = *((string *)data);

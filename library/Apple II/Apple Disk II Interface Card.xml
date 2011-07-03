@@ -2,16 +2,16 @@
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
 <edl version="1.0" label="Apple Disk II Interface Card" image="images/Apple/Apple Disk II Interface Card.png" description="The Disk II Interface Card is used for connecting two Disk II drives in an Apple II computer. It is usually installed in Slot 6.">
 
-<device id="appleDiskIICard" label="Apple Disk II Interface Card" image="images/Apple/Apple Disk II Interface Card.png" group="expansions">
+<device id="appleDiskIICard" label="Apple Disk II Interface Card" image="images/Apple/Apple Disk II Interface Card.png">
     <setting ref="appleDiskIICard.drive" name="romType" label="Controller Type" type="select" options="13 Sector Controller,16 Sector Controller"/>
 </device>
 <connector id="appleDiskIICard.connector" type="Apple II Slot">
     <inlet ref="appleDiskIICard.io" property="controlBus" outletRef="controlBus"/>
 </connector>
-<port id="appleDiskIICard.drive1" ref="" type="Apple Disk Drive Port" label="Drive 1" image="images/Connectors/Header2x10.png">
+<port id="appleDiskIICard.drive1" ref="" type="Apple Disk Drive Port" group="peripherals" label="Drive 1" image="images/Connectors/Header2x10.png">
     <inlet ref="appleDiskIICard.io" property="drive1" outletRef="drive"/>
 </port>
-<port id="appleDiskIICard.drive2" ref="" type="Apple Disk Drive Port" label="Drive 2" image="images/Connectors/Header2x10.png">
+<port id="appleDiskIICard.drive2" ref="" type="Apple Disk Drive Port" group="peripherals" label="Drive 2" image="images/Connectors/Header2x10.png">
     <inlet ref="appleDiskIICard.io" property="drive2" outletRef="drive"/>
 </port>
 <component id="appleDiskIICard.io" class="AppleDiskIIInterfaceCard">

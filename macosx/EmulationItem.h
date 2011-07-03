@@ -49,24 +49,24 @@ typedef enum
 }
 
 - (id)initRootWithDocument:(Document *)theDocument;
-- (id)initGroup:(NSString *)theGroupName;
-- (id)initDevice:(void *)theDevice
-			 uid:(NSString *)theUID
+- (id)initGroup:(NSString *)theUID;
+- (id)initDevice:(NSString *)theUID
+       component:(void *)theComponent
+        portType:(NSString *)thePortType
 		document:(Document *)theDocument;
-- (id)initMountWithStorage:(void *)theStorage
-					   uid:(NSString *)theUID
-			 locationLabel:(NSString *)theLocationLabel
-				  document:(Document *)theDocument;
-- (id)initPortWithUID:(NSString *)theUID
-				label:(NSString *)theLabel
-			imagePath:(NSString *)theImagePath
-			 portType:(NSString *)thePortType
-			 document:(Document *)theDocument;
+- (id)initMount:(NSString *)theUID
+      component:(void *)theComponent
+  locationLabel:(NSString *)theLocationLabel
+       document:(Document *)theDocument;
+- (id)initPort:(NSString *)theUID
+         label:(NSString *)theLabel
+     imagePath:(NSString *)theImagePath
+      portType:(NSString *)thePortType
+      document:(Document *)theDocument;
 
 - (BOOL)isGroup;
 - (NSString *)uid;
 - (NSMutableArray *)children;
-- (EmulationItem *)childWithUID:(NSString *)theUID;
 
 - (NSString *)label;
 - (NSImage *)image;

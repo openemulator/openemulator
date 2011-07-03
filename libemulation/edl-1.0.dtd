@@ -25,7 +25,6 @@
 <!ATTLIST device id ID #REQUIRED>
 <!ATTLIST device label CDATA #REQUIRED>
 <!ATTLIST device image CDATA #IMPLIED>
-<!ATTLIST device group CDATA #IMPLIED>
 
 <!ELEMENT setting EMPTY>
 <!ATTLIST setting ref IDREF #REQUIRED>
@@ -38,6 +37,7 @@
 <!ATTLIST port id ID #REQUIRED>
 <!ATTLIST port ref CDATA #REQUIRED>
 <!ATTLIST port type CDATA #REQUIRED>
+<!ATTLIST port group CDATA #IMPLIED>
 <!ATTLIST port label CDATA #REQUIRED>
 <!ATTLIST port image ID #IMPLIED>
 

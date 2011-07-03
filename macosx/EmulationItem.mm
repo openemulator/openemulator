@@ -18,6 +18,21 @@
 
 @implementation EmulationItem
 
+- (EmulationItem *)getGroup:(NSString *)group
+{
+	for (EmulationItem *item in children)
+	{
+		if ([[item uid] compare:group] == NSOrderedSame)
+			return item;
+	}
+	
+    EmulationItem *item = [[EmulationItem alloc] initGroup:group];
+    [children addObject:item];
+    [item release];
+    
+    return item;
+}
+
 - (id)initRootWithDocument:(Document *)theDocument
 {
     self = [super init];
@@ -31,72 +46,74 @@
 		
         if (![NSThread isMainThread])
             [document lockEmulation];
-		
-		// Create device items
+        
+		// Get info
 		OEEmulation *emulation = (OEEmulation *)[theDocument emulation];
 		OEIds deviceIds = emulation->getDeviceIds();
-		for (OEIds::iterator i = deviceIds.begin();
+        
+		OEPortsInfo portsInfo;
+		portsInfo = emulation->getPortsInfo();
+        
+		// Create items connected on ports
+        EmulationItem *systemGroupItem = [self getGroup:@"system"];
+        
+        for (OEPortsInfo::iterator i = portsInfo.begin();
+             i != portsInfo.end();
+             i++)
+        {
+            OEPortInfo port = *i;
+            string deviceId = emulation->getDeviceId(port.ref);
+			OEComponent *theComponent = emulation->getComponent(deviceId);
+            
+            EmulationItem *item;
+            OEIds::iterator foundDeviceId;
+            foundDeviceId = find(deviceIds.begin(), deviceIds.end(), deviceId);
+            if (theComponent && (foundDeviceId != deviceIds.end()))
+            {
+                item = [[EmulationItem alloc] initDevice:getNSString(deviceId)
+                                               component:theComponent
+                                                portType:getNSString(port.type)
+                                                document:theDocument];
+                
+                deviceIds.erase(foundDeviceId);
+            }
+            else
+                item = [[EmulationItem alloc] initPort:getNSString(port.id)
+                                                 label:getNSString(port.label)
+                                             imagePath:getNSString(port.image)
+                                              portType:getNSString(port.type)
+                                              document:theDocument];
+            
+            string group = port.group;
+            if (group == "")
+                group = "Unknown";
+            EmulationItem *groupItem = [self getGroup:getNSString(group)];
+			NSMutableArray *groupChildren = [groupItem children];
+            [groupChildren addObject:item];
+            
+            [item release];
+        }
+        
+        // Create items not connected on ports
+        for (OEIds::iterator i = deviceIds.begin();
              i != deviceIds.end();
              i++)
-		{
-			string deviceId = *i;
-			OEComponent *theDevice = emulation->getComponent(deviceId);
-			
-            if (!theDevice)
-                continue;
+        {
+            string deviceId = *i;
+			OEComponent *theComponent = emulation->getComponent(deviceId);
             
-			// Create group item
-			string value;
-			
-			theDevice->postMessage(NULL, DEVICE_GET_GROUP, &value);
-            if (value == "")
-                value = "devices";
-			NSString *group = getNSString(value);
-			EmulationItem *groupItem = [self childWithUID:group];
-			if (!groupItem)
-			{
-				groupItem = [[EmulationItem alloc] initGroup:group];
-				[children addObject:groupItem];
-				[groupItem release];
-			}
-			
-			// Create device item
-			EmulationItem *deviceItem;
-			deviceItem = [[EmulationItem alloc] initDevice:theDevice
-													   uid:getNSString(deviceId)
-												  document:theDocument];
-			[[groupItem children] addObject:deviceItem];
-			[deviceItem release];
-		}
-		
-		// Create available port items
-		OEPortsInfo portsInfo;
-		portsInfo = emulation->getFreePortsInfo();
-		if (portsInfo.size())
-		{
-			EmulationItem *groupItem;
-			groupItem = [[EmulationItem alloc] initGroup:@"AVAILABLE PORTS"];
-			[children addObject:groupItem];
-			[groupItem release];
-			
-			NSMutableArray *groupChildren = [groupItem children];
-			
-			for (OEPortsInfo::iterator i = portsInfo.begin();
-				 i != portsInfo.end();
-				 i++)
-			{
-				OEPortInfo port = *i;
-				EmulationItem *portItem;
-				portItem = [[EmulationItem alloc] initPortWithUID:getNSString(port.id)
-															label:getNSString(port.label)
-														imagePath:getNSString(port.image)
-														 portType:getNSString(port.type)
-														 document:theDocument];
-				[groupChildren addObject:portItem];
-				[portItem release];
-			}
-		}
-		
+            EmulationItem *item;
+            item = [[EmulationItem alloc] initDevice:getNSString(deviceId)
+                                           component:theComponent
+                                            portType:@""
+                                            document:theDocument];
+            
+			NSMutableArray *systemGroupChildren = [systemGroupItem children];
+            [systemGroupChildren addObject:item];
+            
+            [item release];
+        }
+        
         if (![NSThread isMainThread])
             [document unlockEmulation];
 	}
@@ -104,23 +121,24 @@
 	return self;
 }
 
-- (id)initGroup:(NSString *)theGroup
+- (id)initGroup:(NSString *)theUID
 {
 	if ((self = [super init]))
 	{
 		type = EMULATIONITEM_GROUP;
-		uid = [theGroup copy];
+		uid = [theUID copy];
 		children = [[NSMutableArray alloc] init];
 		
-		label = [[NSLocalizedString(theGroup, @"Emulation Item Group Label.")
+		label = [[NSLocalizedString(theUID, @"Emulation Item Group Label.")
 				  uppercaseString] retain];
 	}
 	
 	return self;
 }
 
-- (id)initDevice:(void *)theDevice
-			 uid:(NSString *)theUID
+- (id)initDevice:(NSString *)theUID
+       component:(void *)theComponent
+        portType:(NSString *)thePortType
 		document:(Document *)theDocument
 {
 	if ((self = [super init]))
@@ -130,10 +148,11 @@
 		children = [[NSMutableArray alloc] init];
 		document = theDocument;
 		
-		device = theDevice;
-		string value;
-		
+		device = theComponent;
+        
 		// Read device values
+		string value;
+        
 		((OEComponent *)device)->postMessage(NULL, DEVICE_GET_LABEL, &value);
 		label = [getNSString(value) retain];
 		NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
@@ -179,33 +198,35 @@
 		((OEComponent *)device)->postMessage(NULL, DEVICE_GET_STORAGES, &theStorages);
 		for (int i = 0; i < theStorages.size(); i++)
 		{
-			OEComponent *theStorage = theStorages.at(i);
-			[storages addObject:[NSValue valueWithPointer:theStorage]];
+			OEComponent *theComponent = theStorages.at(i);
+			[storages addObject:[NSValue valueWithPointer:theComponent]];
 			
-			theStorage->postMessage(NULL, STORAGE_GET_MOUNTPATH, &value);
+			((OEComponent *)theComponent)->postMessage(NULL, STORAGE_GET_MOUNTPATH, &value);
 			if (value.size())
 			{
 				NSString *storageUID;
 				storageUID = [NSString stringWithFormat:@"%@.storage", uid];
 				
 				EmulationItem *storageItem;
-				storageItem = [[EmulationItem alloc] initMountWithStorage:theStorage
-																	  uid:storageUID 
-															locationLabel:locationLabel
-																 document:theDocument];
+				storageItem = [[EmulationItem alloc] initMount:storageUID
+                                                     component:theComponent
+                                                 locationLabel:locationLabel
+                                                      document:theDocument];
 				[children addObject:storageItem];
 				[storageItem release];
 			}
 		}
+        
+		portType = [thePortType copy];
 	}
 	
 	return self;
 }
 
-- (id)initMountWithStorage:(void *)theStorage
-					   uid:(NSString *)theUID
-			 locationLabel:(NSString *)theLocationLabel
-				  document:(Document *)theDocument
+- (id)initMount:(NSString *)theUID
+      component:(void *)theComponent
+  locationLabel:(NSString *)theLocationLabel
+       document:(Document *)theDocument
 {
 	if ((self = [super init]))
 	{
@@ -215,27 +236,28 @@
 		document = theDocument;
 		
 		string value;
-		((OEComponent *)theStorage)->postMessage(NULL, STORAGE_GET_MOUNTPATH, &value);
+        
+		((OEComponent *)theComponent)->postMessage(NULL, STORAGE_GET_MOUNTPATH, &value);
 		label = [[getNSString(value) lastPathComponent] retain];
 		image = [[NSImage imageNamed:@"DiskImage"] retain];
 		
 		locationLabel = [theLocationLabel copy];
 		value = "";
-		((OEComponent *)theStorage)->postMessage(NULL, STORAGE_GET_FORMATLABEL, &value);
+		((OEComponent *)theComponent)->postMessage(NULL, STORAGE_GET_FORMATLABEL, &value);
 		stateLabel = [getNSString(value) retain];
 		
 		storages = [[NSMutableArray alloc] init];
-		[storages addObject:[NSValue valueWithPointer:theStorage]];
+		[storages addObject:[NSValue valueWithPointer:theComponent]];
 	}
 	
 	return self;
 }
 
-- (id)initPortWithUID:(NSString *)theUID
-				label:(NSString *)theLabel
-			imagePath:(NSString *)theImagePath
-			 portType:(NSString *)thePortType
-			 document:(Document *)theDocument;
+- (id)initPort:(NSString *)theUID
+         label:(NSString *)theLabel
+     imagePath:(NSString *)theImagePath
+      portType:(NSString *)thePortType
+      document:(Document *)theDocument;
 {
 	if ((self = [super init]))
 	{
@@ -313,17 +335,6 @@
 - (NSMutableArray *)children
 {
 	return children;
-}
-
-- (EmulationItem *)childWithUID:(NSString *)theUID
-{
-	for (EmulationItem *item in children)
-	{
-		if ([[item uid] compare:theUID] == NSOrderedSame)
-			return item;
-	}
-	
-	return nil;
 }
 
 

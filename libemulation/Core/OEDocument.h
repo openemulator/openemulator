@@ -30,15 +30,19 @@ typedef struct
 typedef struct
 {
     string id;
+    string ref;
 	string type;
+    string group;
 	string label;
 	string image;
 } OEPortInfo;
+
 typedef struct
 {
     string id;
 	string type;
 } OEConnectorInfo;
+
 typedef vector<OEPortInfo> OEPortsInfo;
 typedef vector<OEConnectorInfo> OEConnectorsInfo;
 
@@ -58,7 +62,7 @@ public:
 	void close();
 	
 	OEHeaderInfo getHeaderInfo();
-	OEPortsInfo getFreePortsInfo();
+	OEPortsInfo getPortsInfo();
 	OEConnectorsInfo getFreeConnectorsInfo();
 	
     bool addDocument(string path, OEIdMap connections);

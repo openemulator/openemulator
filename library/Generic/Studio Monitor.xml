@@ -2,7 +2,7 @@
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
 <edl version="1.0" label="Studio Monitor" image="images/Generic/Studio Monitor.png" description="A generic studio monitor that can be connected to any composite video source.">
 
-<device id="studioMonitor" label="Studio Monitor" image="images/Generic/Studio Monitor.png" group="peripherals">
+<device id="studioMonitor" label="Studio Monitor" image="images/Generic/Studio Monitor.png">
     <setting ref="studioMonitor.monitor" name="videoDecoder" label="Decoder" type="select" options="Monochrome,NTSC Y'UV,NTSC Y'IQ,NTSC CXA2025AS,PAL"/>
     <setting ref="studioMonitor.monitor" name="videoBandwidth" label="Video Bandwidth" type="slider" options="0.0,1.0"/>
     <setting ref="studioMonitor.monitor" name="videoBrightness" label="Brightness" type="slider" options="-1.0,1.0"/>

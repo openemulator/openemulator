@@ -2,7 +2,7 @@
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
 <edl version="1.0" label="Apple II Super Serial Card" image="images/Apple/Apple II Super Serial Card.png" description="The Apple II Super Serial Card is the most commonly used RS-232 serial interface card on Apple II computers. It is usually installed in slot 2.">
 
-<device id="appleSSC" label="Apple II Super Serial Card" image="images/Apple/Apple II Super Serial Card.png" group="expansions">
+<device id="appleSSC" label="Apple II Super Serial Card" image="images/Apple/Apple II Super Serial Card.png">
     <setting ref="appleSSC.io" name="mode" label="Mode" type="select" options="Communications,Printer"/>
     <setting ref="appleSSC.io" name="baudRate" label="Baud Rate" type="select" options="50,75,110,135,150,300,600,1200,1800,2400,3600,4800,7200,9600,19200"/>
     <setting ref="appleSSC.io" name="dataBits" label="Data Bits" type="select" options="7,8"/>
@@ -14,7 +14,7 @@
     <setting ref="appleSSC.io" name="delayAfterCR" label="Delay After CR" type="checkbox"/>
 </device>
 <connector id="appleSSC.connector" type="Apple II Slot"/>
-<port id="appleSSC.port" ref="" type="RS-232" label="Serial Port" image="images/Connectors/DE9 Male.png">
+<port id="appleSSC.port" ref="" type="RS-232" group="peripherals" label="Serial Port" image="images/Connectors/DE9 Male.png">
     <inlet ref="appleSSC.io" property="port" outletRef="io"/>
 </port>
 <component id="appleSSC.io" class="AppleIISuperSerialCard">

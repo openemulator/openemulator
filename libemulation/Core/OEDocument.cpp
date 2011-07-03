@@ -195,9 +195,9 @@ OEHeaderInfo OEDocument::getHeaderInfo()
 	return headerInfo;
 }
 
-OEPortsInfo OEDocument::getFreePortsInfo()
+OEPortsInfo OEDocument::getPortsInfo()
 {
-	OEPortsInfo freePortsInfo;
+	OEPortsInfo portsInfo;
 	
 	if (doc)
     {
@@ -209,23 +209,20 @@ OEPortsInfo OEDocument::getFreePortsInfo()
         {
             if (getNodeName(node) == "port")
             {
-                string ref = getNodeProperty(node, "ref");
+                OEPortInfo portInfo;
+                portInfo.id = getNodeProperty(node, "id");
+                portInfo.ref = getNodeProperty(node, "ref");
+                portInfo.type = getNodeProperty(node, "type");
+                portInfo.group = getNodeProperty(node, "group");
+                portInfo.label = getNodeProperty(node, "label");
+                portInfo.image = getNodeProperty(node, "image");
                 
-                if (ref == "")
-                {
-                    OEPortInfo portInfo;
-                    portInfo.id = getNodeProperty(node, "id");
-                    portInfo.type = getNodeProperty(node, "type");
-                    portInfo.label = getNodeProperty(node, "label");
-                    portInfo.image = getNodeProperty(node, "image");
-                    
-                    freePortsInfo.push_back(portInfo);
-                }
+                portsInfo.push_back(portInfo);
             }
         }
     }
     
-	return freePortsInfo;
+	return portsInfo;
 }
 
 OEConnectorsInfo OEDocument::getFreeConnectorsInfo()

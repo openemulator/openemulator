@@ -60,7 +60,7 @@ private:
 	bool constructComponent(string id, string className);
 	bool configureDocument(xmlDocPtr doc);
 	bool configureDevice(string deviceId,
-						 string label, string image, string group,
+						 string label, string image,
 						 xmlNodePtr children);
     bool configureInlets(OEInletMap& inletMap);
 	bool configureComponent(string id, xmlNodePtr children);

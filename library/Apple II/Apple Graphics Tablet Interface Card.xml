@@ -2,11 +2,12 @@
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
 <edl version="1.0" label="Apple Grahpics Tablet Interface Card" image="images/Apple/Apple Graphics Tablet Interface Card.png" description="The Apple Graphics Tablet Interface Card is used for connecting an Apple Graphics Tablet to an Apple II computer. It is usually installed in slot 5.">
 
-<device id="appleGraphicsTabletCard" label="Apple Graphics Tablet Interface Card" image="images/Apple/Apple Graphics Tablet Interface Card.png" group="expansions"/>
+<device id="appleGraphicsTabletCard" label="Apple Graphics Tablet Interface Card" image="images/Apple/Apple Graphics Tablet Interface Card.png">
+</device>
 <connector id="appleGraphicsTabletCard.connector" type="Apple II Slot">
     <inlet ref="appleGraphicsTabletCard.io" property="mmu" outletRef="mmu"/>
 </connector>
-<port id="appleGraphicsTabletCard.port" ref="" type="Apple Graphics Tablet Port" label="Graphics Tablet Port" image="images/Connectors/Header1x6.png">
+<port id="appleGraphicsTabletCard.port" ref="" type="Apple Graphics Tablet Port" group="peripherals" label="Graphics Tablet Port" image="images/Connectors/Header1x6.png">
 </port>
 <component id="appleGraphicsTabletCard.io" class="AppleLanguageCard">
     <property name="mmu" ref=""/>
