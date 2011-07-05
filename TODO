@@ -1,12 +1,12 @@
 ==To-Do==
-* Implement device replacement by dragging
+* Brigthness in monochrome should be in chroma color, not in white
+* Improve portaudio device opening (so latency is correct)
+
 * Implement daisy chain device removal (when port and connector are of the same kind)
 * Fix [CanvasView update] recursion
-* Brigthness in monochrome should be in chroma color, not in white
 
-* Add OESound: resampling, rendering to audio buffer
-* Remove data property, and add OEData class (allows to read from/write to file)
-* Improve portaudio device opening (so latency is correct)
+* Add OESound:resampling, rendering to audio buffer
+* Remove data property, and add OEData class (allows to read from/write to file), but how would we access files in a zip package?
 
 * Use disk image file locking, if the disk image is writable (flock)
 * Fix scrolling in template chooser when changing group

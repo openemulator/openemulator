@@ -82,7 +82,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 		[document performSelectorOnMainThread:@selector(destroyCanvas:)
 								   withObject:canvasValue
 								waitUntilDone:NO];
-	
+    
 	[pool drain];
 }
 
@@ -170,8 +170,10 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 											 stringByAppendingString:@"/"]);
 		
 		[self lockEmulation];
+        
 		bool isSaved = theEmulation->save(emulationPath);
-		[self unlockEmulation];
+		
+        [self unlockEmulation];
 		
 		if (isSaved)
 			return YES;
@@ -281,8 +283,6 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 																	 canvas:canvas];
 	[canvasWindowControllers addObject:canvasWindowController];
 	[canvasWindowController release];
-	
-	[emulationWindowController updateEmulation:self];
 }
 
 - (void)destroyCanvas:(NSValue *)canvasValue
@@ -299,11 +299,9 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 			[self removeWindowController:canvasWindowController];
 			[canvasWindowControllers removeObjectAtIndex:i];
 			
-			[emulationWindowController updateEmulation:self];
-			
 			delete canvas;
 			
-			break;
+			return;
 		}
 	}
 }
@@ -404,10 +402,12 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	theEmulation->addComponent("audio", paAudio);
 	
 	[self lockEmulation];
+    
 	theEmulation->open(getCPPString([url path]));
 	theEmulation->setDidUpdate(didUpdate);
 	paAudio->addEmulation(theEmulation);
-	[self unlockEmulation];
+	
+    [self unlockEmulation];
 	
 	emulation = theEmulation;
 }
@@ -422,9 +422,11 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	PAAudio *paAudio = (PAAudio *)[documentController paAudio];
 	
 	[self lockEmulation];
+    
 	OEEmulation *theEmulation = (OEEmulation *)emulation;
 	paAudio->removeEmulation(theEmulation);
 	delete theEmulation;
+    
 	[self unlockEmulation];
 	
 	emulation = nil;

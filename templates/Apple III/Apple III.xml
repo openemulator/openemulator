@@ -16,7 +16,7 @@
 </port>
 <port id="appleIII.portB" ref="" type="Apple III Game Port" group="peripherals" label="Port B" image="images/Connectors/DE9 Female.png">
 </port>
-<port id="appleIII.portC" ref="" type="RS-232" group="peripherals" label="Port C" image="images/Connectors/DB25 Female.png">
+<port id="appleIII.portC" ref="" type="RS-232 Port" group="peripherals" label="Port C" image="images/Connectors/DB25 Female.png">
 </port>
 <port id="appleIII.slot1" ref="" type="Apple II Slot" group="expansions" label="Slot 1" image="images/Connectors/Edge50.png">
 </port>

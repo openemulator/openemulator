@@ -510,7 +510,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 						  objectAtIndex:0];
 		
 		NSString *pathExtension = [[path pathExtension] lowercaseString];
-
+        
 		DocumentController *documentController;
 		documentController = [NSDocumentController sharedDocumentController];
         
@@ -525,7 +525,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
     }
 	else if ([[pboard types] containsObject:@"OEDeviceType"])
     {
-        if ([item isPort] && (index == -1))
+        if (index == -1)
         {
             NSDictionary *dict = [pboard propertyListForType:@"OEDeviceType"];
             
@@ -567,27 +567,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
         NSString *path = [dict objectForKey:@"path"];
         NSString *label = [dict objectForKey:@"label"];
         
-        NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
-        NSString *libraryPath = [resourcePath
-                                 stringByAppendingPathComponent:@"library"];
-        
-		if ([item addOEDocument:[libraryPath stringByAppendingPathComponent:path]])
-        {
-            [self updateEmulation:self];
-            
-            [[self document] updateChangeCount:NSChangeDone];
-        }
-        else
-        {
-            NSBeginAlertSheet([NSString localizedStringWithFormat:
-                               @"The device \u201C%@\u201D could not be added.",
-                               label],
-                              nil, nil, nil,
-                              [self window],
-                              self, nil, nil, nil,
-                              [NSString localizedStringWithFormat:
-                               @"Check the console for additional information."]);
-        }
+        [self connect:path label:label toItem:item];
         
         return YES;
     }
@@ -759,6 +739,8 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
 		[self showDevice:sender];
 }
 
+
+
 - (IBAction)openDiskImage:(id)sender
 {
 	NSOpenPanel *panel = [NSOpenPanel openPanel];
@@ -781,9 +763,9 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
 {
 	if (returnCode == NSOKButton)
 	{
-		NSString *path = [[panel URL] path];
 		[panel close];
-		
+        
+		NSString *path = [[panel URL] path];
 		EmulationItem *item = contextInfo;
 		
 		[self mount:path inItem:item];
@@ -816,7 +798,7 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
 		return NO;
 	}
 	
-	return [self forceMount:path inItem:item];
+	return [self doMount:path inItem:item];
 }
 
 - (void)remountPanelDidEnd:(NSWindow *)sheet
@@ -832,13 +814,13 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
 		EmulationItem *item = [dict objectForKey:@"item"];
 		NSString *path = [dict objectForKey:@"path"];
 		
-		[self forceMount:path inItem:item];
+		[self doMount:path inItem:item];
 	}
 	
 	[dict release];
 }
 
-- (BOOL)forceMount:(NSString *)path inItem:(EmulationItem *)item
+- (BOOL)doMount:(NSString *)path inItem:(EmulationItem *)item
 {
 	if (![item mount:path])
 	{
@@ -925,7 +907,7 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
                       @selector(deletePanelDidEnd:returnCode:contextInfo:),
                       nil, item,
                       [NSString localizedStringWithFormat:
-                       @"This will also delete the devices connected to \u201C%@\u201D.",
+                       @"This might also delete the devices connected to \u201C%@\u201D.",
                        [item label]]);
     
     return;
@@ -945,6 +927,84 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
         
         [[self document] updateChangeCount:NSChangeDone];
     }
+}
+
+- (BOOL)connect:(NSString *)thePath
+          label:(NSString *)theLabel
+         toItem:(EmulationItem *)theItem
+{
+    NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
+    NSString *libraryPath = [resourcePath
+                             stringByAppendingPathComponent:@"library"];
+    NSString *path = [libraryPath stringByAppendingPathComponent:thePath];
+    
+    if ([theItem isPort])
+        return [self doConnect:path toItem:theItem];
+    else
+    {
+        NSDictionary *dict = [[NSDictionary dictionaryWithObjectsAndKeys:
+                               path, @"path",
+                               theLabel, @"label",
+                               [NSValue valueWithPointer:theItem], @"item",
+                               nil] retain];
+        
+        NSBeginAlertSheet([NSString localizedStringWithFormat:
+                           @"Are you sure you want to replace the device \u201C%@\u201D?",
+                           [theItem label]],
+                          NSLocalizedString(@"Replace", @"Emulation Alert"),
+                          NSLocalizedString(@"Cancel", @"Emulation Alert"),
+                          nil,
+                          [self window], self,
+                          @selector(connectPanelDidEnd:returnCode:contextInfo:),
+                          nil, dict,
+                          [NSString localizedStringWithFormat:
+                           @"This might also delete the devices connected to \u201C%@\u201D.",
+                           [theItem label]]);
+    }
+    
+    return YES;
+}
+
+- (void)connectPanelDidEnd:(NSWindow *)sheet
+                returnCode:(int)returnCode
+               contextInfo:(void *)contextInfo
+{
+    NSDictionary *dict = (NSDictionary *)contextInfo;
+    
+	if (returnCode == NSAlertDefaultReturn)
+    {
+        [sheet orderOut:self];
+        
+        EmulationItem *item = (EmulationItem *)[[dict objectForKey:@"item"] pointerValue];
+        NSString *path = [dict objectForKey:@"path"];
+        
+        [self doConnect:path toItem:item];
+    }
+    
+    [dict release];
+}
+
+- (BOOL)doConnect:(NSString *)thePath
+           toItem:(EmulationItem *)theItem
+{
+    if ([theItem addOEDocument:thePath])
+    {
+        [self updateEmulation:self];
+        
+        [[self document] updateChangeCount:NSChangeDone];
+        
+        return YES;
+    }
+    else
+        NSBeginAlertSheet([NSString localizedStringWithFormat:
+                           @"The device could not be connected."],
+                          nil, nil, nil,
+                          [self window],
+                          self, nil, nil, nil,
+                          [NSString localizedStringWithFormat:
+                           @"Check the console for additional information."]);
+    
+    return NO;
 }
 
 - (void)systemPowerDown:(id)sender

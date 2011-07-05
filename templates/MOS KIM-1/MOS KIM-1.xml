@@ -4,7 +4,7 @@
 
 <device id="kim1" label="MOS KIM-1" image="images/MOS/MOS KIM-1.png">
 </device>
-<port id="kim1.serialPort" ref="" type="RS-232" group="peripherals" label="Application Port" image="images/Connectors/Edge44.png">
+<port id="kim1.serialPort" ref="" type="RS-232 Port" group="peripherals" label="Application Port" image="images/Connectors/Edge44.png">
     <inlet ref="kim1.io" property="serialPort" outletRef="io"/>
 </port>
 <port id="kim1.slot1" ref="" type="MOS KIM-1 Expansion Port" group="expansions" label="Expansion Port" image="images/Connectors/Edge44.png"/>

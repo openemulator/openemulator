@@ -46,6 +46,7 @@ typedef enum
 	NSMutableArray *storages;
 	
 	NSString *portType;
+    NSString *portId;
 }
 
 - (id)initRootWithDocument:(Document *)theDocument;
@@ -53,6 +54,7 @@ typedef enum
 - (id)initDevice:(NSString *)theUID
        component:(void *)theComponent
         portType:(NSString *)thePortType
+          portId:(NSString *)thePortId
 		document:(Document *)theDocument;
 - (id)initMount:(NSString *)theUID
       component:(void *)theComponent

@@ -16,7 +16,7 @@
 #import "DeviceInterface.h"
 #import "StorageInterface.h"
 
-@implementation EmulationItem
+ @implementation EmulationItem
 
 - (EmulationItem *)getGroup:(NSString *)group
 {
@@ -73,6 +73,7 @@
                 item = [[EmulationItem alloc] initDevice:getNSString(deviceId)
                                                component:theComponent
                                                 portType:getNSString(port.type)
+                                                  portId:getNSString(port.id)
                                                 document:theDocument];
                 
                 deviceIds.erase(foundDeviceId);
@@ -106,6 +107,7 @@
             item = [[EmulationItem alloc] initDevice:getNSString(deviceId)
                                            component:theComponent
                                             portType:@""
+                                              portId:@""
                                             document:theDocument];
             
 			NSMutableArray *systemGroupChildren = [systemGroupItem children];
@@ -139,6 +141,7 @@
 - (id)initDevice:(NSString *)theUID
        component:(void *)theComponent
         portType:(NSString *)thePortType
+          portId:(NSString *)thePortId
 		document:(Document *)theDocument
 {
 	if ((self = [super init]))
@@ -218,6 +221,7 @@
 		}
         
 		portType = [thePortType copy];
+        portId = [thePortId copy];
 	}
 	
 	return self;
@@ -290,6 +294,7 @@
 		stateLabel = @"";
 		
 		portType = [thePortType copy];
+        portId = [theUID copy];
 	}
 	
 	return self;
@@ -316,6 +321,7 @@
 	[storages release];
 	
 	[portType release];
+    [portId release];
 	
 	[super dealloc];
 }
@@ -631,7 +637,6 @@
 - (BOOL)addOEDocument:(NSString *)thePath
 {
 	OEDocument oeDocument;
-	
 	oeDocument.open(getCPPString(thePath));
 	if (!oeDocument.isOpen())
 		return NO;
@@ -645,16 +650,19 @@
         OEConnectorsInfo::iterator i = connectorsInfo.begin();
 		
 		map<string, string> idMap;
-		idMap[getCPPString([self uid])] = i->id;
+		idMap[getCPPString(portId)] = i->id;
 		
 		OEEmulation *emulation = (OEEmulation *)[document emulation];
 		
 		[document lockEmulation];
-		
+        
+        if (type == EMULATIONITEM_DEVICE)
+            emulation->removeDevice(getCPPString(uid));
+        
 		bool result = emulation->addDocument(getCPPString(thePath), idMap);
         
 		[document unlockEmulation];
-		
+        
 		return result;
 	}
 	

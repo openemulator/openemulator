@@ -51,9 +51,15 @@ NSOutlineViewDataSource, NSComboBoxDataSource>
 
 - (IBAction)openDiskImage:(id)sender;
 - (BOOL)mount:(NSString *)path inItem:(EmulationItem *)item;
-- (BOOL)forceMount:(NSString *)path inItem:(EmulationItem *)item;
+- (BOOL)doMount:(NSString *)path inItem:(EmulationItem *)item;
 - (IBAction)unmount:(id)sender;
 - (IBAction)revealInFinder:(id)sender;
 - (IBAction)showDevice:(id)sender;
+
+- (BOOL)connect:(NSString *)thePath
+          label:(NSString *)theLabel
+         toItem:(EmulationItem *)theItem;
+- (BOOL)doConnect:(NSString *)thePath
+           toItem:(EmulationItem *)theItem;
 
 @end

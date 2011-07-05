@@ -6,9 +6,9 @@
 </device>
 <port id="appleMac128.disk" ref="" type="Apple Disk Drive Port" group="peripherals" label="Disk Drive Port" image="images/Connectors/DB19 Female.png">
 </port>
-<port id="appleMac128.serial" ref="" type="RS-422" group="peripherals" label="Printer Port" image="images/Connectors/DE9 Female.png">
+<port id="appleMac128.serial" ref="" type="RS-422 Port" group="peripherals" label="Printer Port" image="images/Connectors/DE9 Female.png">
 </port>
-<port id="appleMac128.serial" ref="" type="RS-422" group="peripherals" label="Serial Port" image="images/Connectors/DE9 Female.png">
+<port id="appleMac128.serial" ref="" type="RS-422 Port" group="peripherals" label="Serial Port" image="images/Connectors/DE9 Female.png">
 </port>
 <component id="appleMac128.monitor" class="Monitor">
     <property name="device" ref="appleMac128"/>

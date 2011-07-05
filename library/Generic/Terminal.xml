@@ -4,7 +4,7 @@
 
 <device id="terminal" label="Terminal" image="images/Generic/Terminal.png">
 </device>
-<connector id="terminal.connector" type="RS-232"/>
+<connector id="terminal.connector" type="RS-232 Port"/>
 <component id="terminal.io" class="Terminal">
     <property name="device" ref="terminal"/>
     <property name="charset" ref="terminal.charset"/>

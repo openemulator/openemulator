@@ -288,7 +288,7 @@ bool OpenGLCanvas::vsync()
 	}
 	else if (mode == CANVAS_MODE_PAPER)
 		vSync.shouldDraw = isImageUpdated || isConfigurationUpdated;
-	
+    
 	isImageUpdated = false;
 	isConfigurationUpdated = false;
 	

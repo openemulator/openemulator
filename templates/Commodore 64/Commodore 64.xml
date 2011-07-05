@@ -12,7 +12,7 @@
 </port>
 <port id="c64.expansion" ref="" type="Commodore Expansion Port" group="peripherals" label="Expansion Port" image="images/Connectors/Edge44.png">
 </port>
-<port id="c64.serial" ref="" type="IEEE-488" label="Serial Port" group="peripherals" image="images/Connectors/DIN45322.png">
+<port id="c64.serial" ref="" type="IEEE-488 Port" label="Serial Port" group="peripherals" image="images/Connectors/DIN45322.png">
 </port>
 <port id="c64.cassette" ref="" type="Commodore Datasette Port" group="peripherals" label="Datasette Port" image="images/Commodore/Commodore 64 Cassette Port.png">
 </port>
