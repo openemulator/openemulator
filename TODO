@@ -1,7 +1,7 @@
 ==To-Do==
 * Implement daisy chain device removal (when port and connector are of the same kind)
-* Fix [CanvasView update] recursion
 * Fix hardware library detail view filtering
+* Fix [CanvasView update] recursion
 
 * Add OESound:resampling, rendering to audio buffer
 * Remove data property, and add OEData class (allows to read from/write to file), but how would we access files in a zip package?

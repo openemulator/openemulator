@@ -1044,9 +1044,7 @@ bool OpenGLCanvas::isPersistanceDrawRequired()
 void OpenGLCanvas::drawDisplayCanvas()
 {
 	// Clear
-	float clearColor = isShaderActive ? displayConfiguration.videoBrightness : 0;
-    clearColor = 0;
-	glClearColor(clearColor, clearColor, clearColor, 1);
+	glClearColor(0, 0, 0, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	OESize imageSize = image.getSize();
