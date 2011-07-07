@@ -496,6 +496,7 @@ void OpenGLCanvas::loadShaders()
 		uniform sampler2D texture;\
 		uniform vec2 texture_size;\
 		uniform vec3 c0, c1, c2, c3, c4, c5, c6, c7, c8;\
+        uniform vec3 offset;\
 		uniform mat3 decoder;\
 		\
 		vec3 pixel(vec2 q)\
@@ -520,6 +521,7 @@ void OpenGLCanvas::loadShaders()
 		p += pixels(q, 6.0 / texture_size.x) * c6;\
 		p += pixels(q, 7.0 / texture_size.x) * c7;\
 		p += pixels(q, 8.0 / texture_size.x) * c8;\
+        p += offset;\
 		gl_FragColor = vec4(decoder * p, 1.0);\
 		}");
 	
@@ -527,15 +529,15 @@ void OpenGLCanvas::loadShaders()
 		uniform sampler2D texture;\
 		uniform vec2 texture_size;\
 		uniform vec2 comp_phase;\
-		uniform float comp_black;\
 		uniform vec3 c0, c1, c2, c3, c4, c5, c6, c7, c8;\
+        uniform vec3 offset;\
 		uniform mat3 decoder;\
 		\
 		float PI = 3.14159265358979323846264;\
 		\
 		vec3 pixel(vec2 q)\
 		{\
-			vec3 p = texture2D(texture, q).rgb - comp_black;\
+			vec3 p = texture2D(texture, q).rgb;\
 			float phase = 2.0 * PI * dot(comp_phase * texture_size, q);\
 			return p * vec3(1.0, sin(phase), cos(phase));\
 		}\
@@ -557,6 +559,7 @@ void OpenGLCanvas::loadShaders()
 			p += pixels(q, 6.0 / texture_size.x) * c6;\
 			p += pixels(q, 7.0 / texture_size.x) * c7;\
 			p += pixels(q, 8.0 / texture_size.x) * c8;\
+            p += offset;\
 			gl_FragColor = vec4(decoder * p, 1.0);\
 		}");
 	
@@ -564,15 +567,15 @@ void OpenGLCanvas::loadShaders()
 		uniform sampler2D texture;\
 		uniform vec2 texture_size;\
 		uniform vec2 comp_phase;\
-		uniform float comp_black;\
 		uniform vec3 c0, c1, c2, c3, c4, c5, c6, c7, c8;\
+        uniform vec3 offset;\
 		uniform mat3 decoder;\
 		\
 		float PI = 3.14159265358979323846264;\
 		\
 		vec3 pixel(vec2 q)\
 		{\
-			vec3 p = texture2D(texture, q).rgb - comp_black;\
+			vec3 p = texture2D(texture, q).rgb;\
 			float phase = 2.0 * PI * dot(comp_phase * texture_size, q);\
 			float pal = -sqrt(2.0) * sin(0.5 * PI * texture_size.y * q.y);\
 			return p * vec3(1.0, sin(phase), cos(phase) * pal);\
@@ -595,6 +598,7 @@ void OpenGLCanvas::loadShaders()
 			p += pixels(q, 6.0 / texture_size.x) * c6;\
 			p += pixels(q, 7.0 / texture_size.x) * c7;\
 			p += pixels(q, 8.0 / texture_size.x) * c8;\
+            p += offset;\
 			gl_FragColor = vec4(decoder * p, 1.0);\
 		}");
 	
@@ -609,7 +613,6 @@ void OpenGLCanvas::loadShaders()
 		uniform vec2 shadowmask_scale;\
 		uniform vec2 shadowmask_translate;\
 		uniform float shadowmask_alpha;\
-		uniform float brightness;\
 		uniform float alpha;\
 		\
 		float PI = 3.14159265358979323846264;\
@@ -629,7 +632,6 @@ void OpenGLCanvas::loadShaders()
 			vec3 m = texture2D(shadowmask, q * shadowmask_scale +\
 							   shadowmask_translate).rgb;\
 			p *= mix(vec3(1.0, 1.0, 1.0), m, shadowmask_alpha);\
-			p += brightness;\
 			gl_FragColor = vec4(p, alpha);\
 		}");
 }
@@ -849,8 +851,8 @@ void OpenGLCanvas::updateDisplayConfiguration()
 			
 		case CANVAS_DECODER_MONOCHROME:
 			// Set Y'PbPr maximum hue
-			m *= OEMatrix3(1, 0, 0,
-						   0, 0.5, 0,
+			m *= OEMatrix3(1, 0.5, 0,
+						   0, 0, 0,
 						   0, 0, 0);
 			break;
             
@@ -925,6 +927,14 @@ void OpenGLCanvas::updateDisplayConfiguration()
 				wy.getValue(1), wu.getValue(1), wv.getValue(1));
 	glUniform3f(glGetUniformLocation(renderShader, "c8"),
 				wy.getValue(0), wu.getValue(0), wv.getValue(0));
+    if (displayConfiguration.videoDecoder == CANVAS_DECODER_RGB)
+        glUniform3f(glGetUniformLocation(renderShader, "offset"),
+                    displayConfiguration.videoBrightness,
+                    displayConfiguration.videoBrightness,
+                    displayConfiguration.videoBrightness);
+    else
+        glUniform3f(glGetUniformLocation(renderShader, "offset"),
+                    displayConfiguration.videoBrightness, 0, 0);
 	glUniformMatrix3fv(glGetUniformLocation(renderShader, "decoder"),
 					   9, false, m.getValues());
 	
@@ -938,8 +948,6 @@ void OpenGLCanvas::updateDisplayConfiguration()
 		centerLighting = 0.001;
 	glUniform1f(glGetUniformLocation(displayShader, "center_lighting"),
 				1.0 / centerLighting - 1.0);
-	glUniform1f(glGetUniformLocation(displayShader, "brightness"),
-				displayConfiguration.videoBrightness);
 	
 	glUseProgram(0);
 #endif
@@ -1037,6 +1045,7 @@ void OpenGLCanvas::drawDisplayCanvas()
 {
 	// Clear
 	float clearColor = isShaderActive ? displayConfiguration.videoBrightness : 0;
+    clearColor = 0;
 	glClearColor(clearColor, clearColor, clearColor, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	

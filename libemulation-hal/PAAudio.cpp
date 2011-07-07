@@ -364,27 +364,45 @@ bool PAAudio::openAudio()
 	int status = Pa_Initialize();
 	if (status == paNoError)
 	{
-		status = Pa_OpenDefaultStream(&audioStream,
-									  fullDuplex ? channelNum : 0,
-									  channelNum,
-									  paFloat32,
-									  sampleRate,
-									  framesPerBuffer,
-									  PAAudioRunAudio,
-									  this);
+        PaStreamParameters inputParameters;
+        PaStreamParameters outputParameters;
+        const PaDeviceInfo *deviceInfo;
+        
+        inputParameters.device = Pa_GetDefaultInputDevice();
+        inputParameters.channelCount = channelNum;
+        inputParameters.sampleFormat = paFloat32;
+        deviceInfo = Pa_GetDeviceInfo(inputParameters.device);
+        inputParameters.suggestedLatency = deviceInfo->defaultLowOutputLatency;
+        inputParameters.hostApiSpecificStreamInfo = NULL;
+        
+        outputParameters.device = Pa_GetDefaultOutputDevice();
+        outputParameters.channelCount = channelNum;
+        outputParameters.sampleFormat = paFloat32;
+        deviceInfo = Pa_GetDeviceInfo(outputParameters.device);
+        outputParameters.suggestedLatency = deviceInfo->defaultLowOutputLatency;
+        outputParameters.hostApiSpecificStreamInfo = NULL;
+        
+		status = Pa_OpenStream(&audioStream,
+                               &inputParameters,
+                               &outputParameters,
+                               sampleRate,
+                               framesPerBuffer,
+                               paClipOff,
+                               PAAudioRunAudio,
+                               this);
 		if ((status != paNoError) && fullDuplex)
 		{
 			logMessage("could not open audio stream, error " + getString(status));
 			logMessage("attempting half-duplex");
 			
-			status = Pa_OpenDefaultStream(&audioStream,
-										  0,
-										  channelNum,
-										  paFloat32,
-										  sampleRate,
-										  framesPerBuffer,
-										  PAAudioRunAudio,
-										  this);
+            status = Pa_OpenStream(&audioStream,
+                                   NULL,
+                                   &outputParameters,
+                                   sampleRate,
+                                   framesPerBuffer,
+                                   paClipOff,
+                                   PAAudioRunAudio,
+                                   this);
 		}
 		
 		if (status == paNoError)

@@ -1,4 +1,6 @@
 ==2011-07==
+* Improved portaudio latency
+* Fixed brigthness in monochrome
 * Implemented device replacement by dragging
 * Merged available ports with other groups
 

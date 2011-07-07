@@ -1,9 +1,7 @@
 ==To-Do==
-* Brigthness in monochrome should be in chroma color, not in white
-* Improve portaudio device opening (so latency is correct)
-
 * Implement daisy chain device removal (when port and connector are of the same kind)
 * Fix [CanvasView update] recursion
+* Fix hardware library detail view filtering
 
 * Add OESound:resampling, rendering to audio buffer
 * Remove data property, and add OEData class (allows to read from/write to file), but how would we access files in a zip package?
