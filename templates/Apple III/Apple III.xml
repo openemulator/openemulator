@@ -14,7 +14,7 @@
 </port>
 <port id="appleIII.portA" ref="" type="Apple Silentype Port" group="peripherals" label="Port A" image="images/Connectors/DE9 Female.png">
 </port>
-<port id="appleIII.portB" ref="" type="Apple III Game Port" group="peripherals" label="Port B" image="images/Connectors/DE9 Female.png">
+<port id="appleIII.portB" ref="" type="Apple II Game Port" group="peripherals" label="Port B" image="images/Connectors/DE9 Female.png">
 </port>
 <port id="appleIII.portC" ref="" type="RS-232 Port" group="peripherals" label="Port C" image="images/Connectors/DB25 Female.png">
 </port>

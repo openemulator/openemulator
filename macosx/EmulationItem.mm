@@ -269,6 +269,9 @@
 		uid = [theUID copy];
 		children = [[NSMutableArray alloc] init];
 		document = theDocument;
+        
+        if ([theLabel length])
+            theLabel = [@" " stringByAppendingString:theLabel];
 		
 		OEEmulation *emulation = (OEEmulation *)[theDocument emulation];
 		string deviceId = emulation->getDeviceId(getCPPString(uid));
@@ -280,10 +283,10 @@
 			string theLocationLabel;
 			theDevice->postMessage(NULL, DEVICE_GET_LOCATIONLABEL, &theLocationLabel);
 			if (theLocationLabel == "")
-				locationLabel = [[getNSString(deviceLabel) stringByAppendingFormat:@" %@",
+				locationLabel = [[getNSString(deviceLabel) stringByAppendingFormat:@"%@",
 								  theLabel] retain];
 			else
-				locationLabel = [[getNSString(theLocationLabel) stringByAppendingFormat:@" %@",
+				locationLabel = [[getNSString(theLocationLabel) stringByAppendingFormat:@"%@",
 								  theLabel] retain];
 		}
 		NSString *resourcePath = [[NSBundle mainBundle] resourcePath];

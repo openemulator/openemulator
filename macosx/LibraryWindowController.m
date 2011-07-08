@@ -221,7 +221,7 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
     
 	NSInteger index = [fTableView selectedRow];
 	if (index != -1)
-        item = [items objectAtIndex:index];
+        item = [filteredItems objectAtIndex:index];
 	
 	[fSelImage setImage:[item image]];
     [fSelLabel setStringValue:NSLocalizedString([item label],

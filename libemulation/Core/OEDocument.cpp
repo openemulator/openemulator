@@ -907,8 +907,11 @@ string OEDocument::getLocationLabel(string deviceId, vector<string>& visitedIds)
 			string label = getNodeProperty(node, "label");
 			
 			if (getDeviceId(ref) == deviceId)
-				return (getLocationLabel(getDeviceId(portId), visitedIds) +
-						" " + label);
+            {
+                if (label != "")
+                    label = " " + label;
+				return getLocationLabel(getDeviceId(portId), visitedIds) + label;
+            }
 		}
 	}
 	
