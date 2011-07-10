@@ -195,9 +195,9 @@ OEHeaderInfo OEDocument::getHeaderInfo()
 	return headerInfo;
 }
 
-OEPortsInfo OEDocument::getPortsInfo()
+OEPortInfos OEDocument::getPortInfos()
 {
-	OEPortsInfo portsInfo;
+	OEPortInfos portsInfo;
 	
 	if (doc)
     {
@@ -225,10 +225,10 @@ OEPortsInfo OEDocument::getPortsInfo()
 	return portsInfo;
 }
 
-OEConnectorsInfo OEDocument::getFreeConnectorsInfo()
+OEConnectorInfos OEDocument::getFreeConnectorInfos()
 {
     OEIds portRefs;
-	OEConnectorsInfo freeConnectorsInfo;
+	OEConnectorInfos freeConnectorInfos;
 	
 	if (doc)
     {
@@ -248,7 +248,7 @@ OEConnectorsInfo OEDocument::getFreeConnectorsInfo()
                 OEConnectorInfo connectorInfo;
                 connectorInfo.id = id;
                 connectorInfo.type = type;
-                freeConnectorsInfo.push_back(connectorInfo);
+                freeConnectorInfos.push_back(connectorInfo);
             }
         }
     }
@@ -257,19 +257,19 @@ OEConnectorsInfo OEDocument::getFreeConnectorsInfo()
          i != portRefs.end();
          i++)
     {
-        for (OEConnectorsInfo::iterator j = freeConnectorsInfo.begin();
-             j != freeConnectorsInfo.end();
+        for (OEConnectorInfos::iterator j = freeConnectorInfos.begin();
+             j != freeConnectorInfos.end();
              j++)
         {
             if (*i == j->id)
             {
-                freeConnectorsInfo.erase(j);
+                freeConnectorInfos.erase(j);
                 break;
             }
         }
     }
     
-	return freeConnectorsInfo;
+	return freeConnectorInfos;
 }
 
 bool OEDocument::addDocument(string path, OEIdMap connections)
@@ -316,7 +316,7 @@ bool OEDocument::addDocument(string path, OEIdMap connections)
     // Construct new document
     constructDocument(document.getXMLDoc());
     
-    // Init port inlets
+    // Configure port inlets
     configureInlets(portInletMap);
     
     return true;
@@ -328,7 +328,7 @@ bool OEDocument::removeDevice(string deviceId)
 		return false;
 	
     // Get connected devices
-    OEIds connectedDevices = getConnectedDevices(deviceId);
+    OEPortInfos portInfos = getPortInfos();
     
     // Deconfigure device refs
     deconfigureDevice(deviceId);
@@ -342,11 +342,54 @@ bool OEDocument::removeDevice(string deviceId)
     // Delete device items
     deleteDevice(deviceId);
     
-    // Remove connected devices
-    for (vector<string>::iterator i = connectedDevices.begin();
-         i != connectedDevices.end();
+    // Analyze ports and connectors
+    OEPortInfos ports;
+    OEPortInfos connectors;
+    for (OEPortInfos::iterator i = portInfos.begin();
+         i != portInfos.end();
          i++)
-        removeDevice(*i);
+    {
+        OEPortInfo port = *i;
+        
+        if (getDeviceId(port.ref) == deviceId)
+            ports.push_back(port);
+        else if (getDeviceId(port.id) == deviceId)
+            connectors.push_back(port);
+    }
+    
+    // Disconnect daisy chain devices?
+    if ((ports.size() == 1) &&
+        (connectors.size() == 1) &&
+        (ports[0].type == connectors[0].type))
+    {
+        // Build connections
+        OEIdMap connections;
+        connections[ports[0].id] = connectors[0].ref;
+        
+        // Connect ports and connector inlets
+        OEInletMap portInletMap = getInlets(doc, connections, "port");
+        OEInletMap connectorInletMap = getInlets(doc, connections, "connector");
+        
+        connectPorts(doc, connections);
+        connectInlets(doc, portInletMap);
+        connectInlets(doc, connectorInletMap);
+        
+        // Init port inlets
+        configureInlets(portInletMap);
+    }
+    else
+    {
+        // Remove connected devices
+        for (OEPortInfos::iterator i = portInfos.begin();
+             i != portInfos.end();
+             i++)
+        {
+            OEPortInfo port = *i;
+            if ((getDeviceId(port.id) == deviceId) &&
+                (port.ref != ""))
+                removeDevice(getDeviceId(port.ref));
+        }
+    }
     
     return true;
 }
@@ -677,37 +720,12 @@ bool OEDocument::insertInto(xmlNodePtr dest)
     return true;
 }
 
-// Get connected devices
-OEIds OEDocument::getConnectedDevices(string deviceId)
-{
-    OEIds connectedDevices;
-    
-    xmlNodePtr rootNode = xmlDocGetRootElement(doc);
-    
-    for(xmlNodePtr node = rootNode->children;
-        node;
-        node = node->next)
-    {
-        if (getNodeName(node) == "port")
-        {
-            string id = getNodeProperty(node, "id");
-            
-            if (getDeviceId(id) == deviceId)
-            {
-                string ref = getNodeProperty(node, "ref");
-                
-                if (ref != "")
-                    connectedDevices.push_back(getDeviceId(ref));
-            }
-        }
-    }
-    
-    return connectedDevices;
-}
-
 // Scan inlets
 void OEDocument::addInlets(OEInletMap& inletMap, string deviceId, xmlNodePtr children)
 {
+    if (deviceId == "")
+        return;
+    
     for(xmlNodePtr node = children;
         node;
         node = node->next)

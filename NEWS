@@ -1,4 +1,5 @@
 ==2011-07==
+* Implemented daisy chain device removal
 * Fixed hardware library detail view filtering
 * Improved portaudio latency
 * Fixed brigthness in monochrome
@@ -392,7 +393,7 @@ sudo touch /private/var/db/.AccessibilityAPIEnabled
 * Moved key modifier events to keyboard class
 * Moved mouse events to mouse class
 
-==2008-04==
+==2008-04 AppleIIGo==
 * Moved microprocessor timing to VideoController class
 * Removed SpeedController
 * Added timing synchronization to hardware, scanline by scanline
@@ -401,7 +402,7 @@ sudo touch /private/var/db/.AccessibilityAPIEnabled
 * Implemented 65C02 WAIT and STOP modes
 * Added CTRL-ALT-META-BACKSPACE shortcut for shutdown
 
-==2008-04==
+==2008-04 AppleIIGo==
 * Renamed Video class to VideoController, Monitor to VideoRenderer, Slot to SlotDevice, AuxSlot to AuxSlotDevice
 * Added Device class which handles connections, reset, persistency and audio
 * Designed VideoRenderer interface

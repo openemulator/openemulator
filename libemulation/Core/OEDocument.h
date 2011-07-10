@@ -43,8 +43,8 @@ typedef struct
 	string type;
 } OEConnectorInfo;
 
-typedef vector<OEPortInfo> OEPortsInfo;
-typedef vector<OEConnectorInfo> OEConnectorsInfo;
+typedef vector<OEPortInfo> OEPortInfos;
+typedef vector<OEConnectorInfo> OEConnectorInfos;
 
 typedef vector<string> OEIds;
 typedef map<string, string> OEIdMap;
@@ -62,8 +62,8 @@ public:
 	void close();
 	
 	OEHeaderInfo getHeaderInfo();
-	OEPortsInfo getPortsInfo();
-	OEConnectorsInfo getFreeConnectorsInfo();
+	OEPortInfos getPortInfos();
+	OEConnectorInfos getFreeConnectorInfos();
 	
     bool addDocument(string path, OEIdMap connections);
     bool removeDevice(string deviceId);
@@ -105,7 +105,6 @@ private:
     string followDeviceChain(string deviceId, vector<string>& visitedIds);
     xmlNodePtr getInsertionNode(string connectorId);
     bool insertInto(xmlNodePtr dest);
-    OEIds getConnectedDevices(string deviceId);
     void addInlets(OEInletMap& inletMap, string deviceId, xmlNodePtr children);
     OEInletMap getInlets(xmlDocPtr doc, OEIdMap& connections, string nodeType);
     void connectPorts(xmlDocPtr doc, OEIdMap& connections);

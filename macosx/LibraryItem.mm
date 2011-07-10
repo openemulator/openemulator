@@ -64,7 +64,7 @@
 		return;
 	
     NSString *imagePath = getNSString(oeDocument.getHeaderInfo().image);
-	OEConnectorsInfo connectorsInfo = oeDocument.getFreeConnectorsInfo();
+	OEConnectorInfos connectorInfos = oeDocument.getFreeConnectorInfos();
 	
 	oeDocument.close();
     
@@ -74,9 +74,9 @@
     image = [[NSImage alloc] initByReferencingFile:imagePath];
     
     // Read connector type
-    if (connectorsInfo.size() == 1)
+    if (connectorInfos.size() == 1)
     {
-        OEConnectorsInfo::iterator i = connectorsInfo.begin();
+        OEConnectorInfos::iterator i = connectorInfos.begin();
         type = [getNSString(i->type) retain];
     }
     

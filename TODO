@@ -1,10 +1,8 @@
 ==To-Do==
-* Implement daisy chain device removal (when port and connector are of the same kind)
 * Fix [CanvasView update] recursion
 
 * Add OESound:resampling, rendering to audio buffer
 * Remove data property, and add OEData class (allows to read from/write to file), but how would we access files in a zip package?
-
 * Use disk image file locking, if the disk image is writable (flock)
 * Fix scrolling in template chooser when changing group
 * Add search in template chooser

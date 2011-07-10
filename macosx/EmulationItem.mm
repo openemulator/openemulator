@@ -51,14 +51,14 @@
 		OEEmulation *emulation = (OEEmulation *)[theDocument emulation];
 		OEIds deviceIds = emulation->getDeviceIds();
         
-		OEPortsInfo portsInfo;
-		portsInfo = emulation->getPortsInfo();
+		OEPortInfos portInfos;
+		portInfos = emulation->getPortInfos();
         
 		// Create items connected on ports
         EmulationItem *systemGroupItem = [self getGroup:@"system"];
         
-        for (OEPortsInfo::iterator i = portsInfo.begin();
-             i != portsInfo.end();
+        for (OEPortInfos::iterator i = portInfos.begin();
+             i != portInfos.end();
              i++)
         {
             OEPortInfo port = *i;
@@ -644,13 +644,13 @@
 	if (!oeDocument.isOpen())
 		return NO;
 	
-	OEConnectorsInfo connectorsInfo = oeDocument.getFreeConnectorsInfo();
+	OEConnectorInfos connectorInfos = oeDocument.getFreeConnectorInfos();
 	
 	oeDocument.close();
 	
-	if (connectorsInfo.size() == 1)
+	if (connectorInfos.size() == 1)
 	{
-        OEConnectorsInfo::iterator i = connectorsInfo.begin();
+        OEConnectorInfos::iterator i = connectorInfos.begin();
 		
 		map<string, string> idMap;
 		idMap[getCPPString(portId)] = i->id;
