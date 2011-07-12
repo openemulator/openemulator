@@ -8,25 +8,38 @@
  * Controls the Apple I Video
  */
 
-#include "Terminal.h"
+#include "OEComponent.h"
 
-#define APPLE1TERMINAL_DEFAULT_WIDTH 40
-#define APPLE1TERMINAL_DEFAULT_HEIGHT 24
+#include "OEImage.h"
 
-class Apple1Terminal : public Terminal
+class Apple1Terminal : public OEComponent
 {
 public:
 	Apple1Terminal();
 	
-	bool setRef(string name, OEComponent *id);
-	
+    bool setValue(string name, string value);
+    bool getValue(string name, string& value);
+	bool setRef(string name, OEComponent *ref);
+    bool setData(string name, OEData *data);
+    bool init();
+    
+    void notify(OEComponent *sender, int notification, void *data);
+    
 	void write(int address, int value);
 	
 private:
-	OEComponent *host;
-	OEComponent *charset;
+	OEComponent *vram;
+	OEComponent *controlBus;
 	OEComponent *monitor;
 	
-	OEData characterSet;
-	char screen[APPLE1TERMINAL_DEFAULT_HEIGHT][APPLE1TERMINAL_DEFAULT_WIDTH];
+    bool speedLimit;
+    int cursorX, cursorY;
+    
+	OEData font;
+    OEImage image;
+    
+    void scheduleTimer();
+    void loadFont(OEData *data);
+    void updateCanvas();
+    void sendKey(int unicode);
 };

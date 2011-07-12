@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
 <edl version="1.0" label="Videx Videoterm" image="images/Videx/Videx Videoterm.png" description="The Videx Videoterm is an 80-column video card for the Apple II. It is usually installed in slot 3.">
-
-<device id="videxVideoterm" label="Videx Videoterm" image="images/Videx/Videx Videoterm.png">
-</device>
-<connector id="videxVideoterm.connector" type="Apple II Slot"/>
-<component id="videxVideoterm.io" class="VidexVideoterm"/>
-<component id="videxVideoterm.memory" class="ROM">
-    <property name="image" data="${resourcePath}/roms/Videx/Videx Videoterm 2.4 ROM.bin"/>
-</component>
-
+    
+    <device id="videxVideoterm" label="Videx Videoterm" image="images/Videx/Videx Videoterm.png">
+    </device>
+    <connector id="videxVideoterm.connector" type="Apple II Slot"/>
+    <component id="videxVideoterm.io" class="VidexVideoterm"/>
+    <component id="videxVideoterm.memory" class="ROM">
+        <property name="image" data="${resourcePath}/roms/Videx/Videx Videoterm 2.4 ROM.bin"/>
+    </component>
+    
 </edl>

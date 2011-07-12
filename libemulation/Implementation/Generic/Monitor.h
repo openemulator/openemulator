@@ -22,22 +22,15 @@ public:
 	bool setRef(string name, OEComponent *ref);
 	bool init();
 	void update();
-	void notify(OEComponent *sender, int message, void *data);
-	
+    
+    bool postMessage(OEComponent *sender, int message, void *data);
+    
 private:
 	OEComponent *device;
 	OEComponent *canvas;
 	
 	CanvasDisplayConfiguration configuration;
 	OERect videoRect;
-	
-	string dummyPath;
-	OEComponent *audio;
-	
-	OEImage image;
-	
-	int ta;
-	int da;
 	
 	void updateVideoRect();
 };

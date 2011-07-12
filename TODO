@@ -1,4 +1,5 @@
 ==To-Do==
+* Fix problem when replacing a monitor in full screen
 * Fix [CanvasView update] recursion
 
 * Add OESound:resampling, rendering to audio buffer

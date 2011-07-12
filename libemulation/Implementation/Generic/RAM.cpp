@@ -79,19 +79,22 @@ bool RAM::init()
 		return false;
 	}
 	
+	if (controlBus)
+		controlBus->postMessage(this, CONTROLBUS_GET_POWERSTATE, &powerState);
+	
 	if (!powerOnPattern.size())
 		powerOnPattern.resize(1);
 	else
 		powerOnPattern.resize(getNextPowerOf2((int) powerOnPattern.size()));
 	
-	if (controlBus)
-		controlBus->postMessage(this, CONTROLBUS_GET_POWERSTATE, &powerState);
-	
 	size = getNextPowerOf2(size);
+    size_t oldSize = data.size();
 	data.resize(size);
+    if (oldSize == 0)
+        initMemory();
 	datap = (OEUInt8 *) &data.front();
 	mask = size - 1;
-	
+    
 	return true;
 }
 
@@ -112,11 +115,8 @@ void RAM::notify(OEComponent *sender, int notification, void *data)
 	bool newPowerState = *((int *)data);
 	if ((powerState <= CONTROLBUS_POWERSTATE_HIBERNATE) &&
 		(newPowerState > CONTROLBUS_POWERSTATE_HIBERNATE))
-	{
-		int mask = (int) powerOnPattern.size() - 1;
-		for (int i = 0; i < this->data.size(); i++)
-			datap[i] = powerOnPattern[i & mask];
-	}
+        initMemory();
+    
 	powerState = newPowerState;
 }
 
@@ -128,4 +128,12 @@ OEUInt8 RAM::read(OEAddress address)
 void RAM::write(OEAddress address, OEUInt8 value)
 {
 	datap[address & mask] = value;
+}
+
+void RAM::initMemory()
+{
+    int mask = (int) powerOnPattern.size() - 1;
+    
+    for (int i = 0; i < this->data.size(); i++)
+        data[i] = powerOnPattern[i & mask];
 }

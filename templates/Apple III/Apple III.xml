@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
 <edl version="1.0" label="Apple III" image="images/Apple/Apple III.png" description="">
-
-<device id="appleIII" label="Apple III" image="images/Apple/Apple III.png">
-</device>
-<port id="appleIII.videoBW" ref="" type="Composite Video" group="peripherals" label="B/W Video Port" image="images/Connectors/RCA Female.png">
-</port>
-<port id="appleIII.videoColor" ref="" type="Composite Video" group="peripherals" label="Color Video Port" image="images/Connectors/DA15 Female.png">
-</port>
-<port id="appleIII.videoRGB" ref="" type="RGB Video" group="peripherals" label="Color Video Port" image="images/Connectors/DA15 Female.png">
-</port>
-<port id="appleIII.floppyDrives" ref="" type="Apple Disk Drive Port" group="peripherals" label="Disk Drive Port" image="images/Connectors/Rectangular2x13 Male.png">
-</port>
-<port id="appleIII.portA" ref="" type="Apple Silentype Port" group="peripherals" label="Port A" image="images/Connectors/DE9 Female.png">
-</port>
-<port id="appleIII.portB" ref="" type="Apple II Game Port" group="peripherals" label="Port B" image="images/Connectors/DE9 Female.png">
-</port>
-<port id="appleIII.portC" ref="" type="RS-232 Port" group="peripherals" label="Port C" image="images/Connectors/DB25 Female.png">
-</port>
-<port id="appleIII.slot1" ref="" type="Apple II Slot" group="expansions" label="Slot 1" image="images/Connectors/Edge50.png">
-</port>
-<port id="appleIII.slot2" ref="" type="Apple II Slot" group="expansions" label="Slot 2" image="images/Connectors/Edge50.png">
-</port>
-<port id="appleIII.slot3" ref="" type="Apple II Slot" group="expansions" label="Slot 3" image="images/Connectors/Edge50.png">
-</port>
-<port id="appleIII.slot4" ref="" type="Apple II Slot" group="expansions" label="Slot 4" image="images/Connectors/Edge50.png">
-</port>
-
+    
+    <device id="appleIII" label="Apple III" image="images/Apple/Apple III.png">
+    </device>
+    <port id="appleIII.videoBW" ref="" type="Composite Video" group="peripherals" label="B/W Video Port" image="images/Connectors/RCA Female.png">
+    </port>
+    <port id="appleIII.videoColor" ref="" type="Composite Video" group="peripherals" label="Color Video Port" image="images/Connectors/DA15 Female.png">
+    </port>
+    <port id="appleIII.videoRGB" ref="" type="RGB Video" group="peripherals" label="Color Video Port" image="images/Connectors/DA15 Female.png">
+    </port>
+    <port id="appleIII.floppyDrives" ref="" type="Apple Disk Drive Port" group="peripherals" label="Disk Drive Port" image="images/Connectors/Rectangular2x13 Male.png">
+    </port>
+    <port id="appleIII.portA" ref="" type="Apple Silentype Port" group="peripherals" label="Port A" image="images/Connectors/DE9 Female.png">
+    </port>
+    <port id="appleIII.portB" ref="" type="Apple II Game Port" group="peripherals" label="Port B" image="images/Connectors/DE9 Female.png">
+    </port>
+    <port id="appleIII.portC" ref="" type="RS-232 Port" group="peripherals" label="Port C" image="images/Connectors/DB25 Female.png">
+    </port>
+    <port id="appleIII.slot1" ref="" type="Apple II Slot" group="expansions" label="Slot 1" image="images/Connectors/Edge50.png">
+    </port>
+    <port id="appleIII.slot2" ref="" type="Apple II Slot" group="expansions" label="Slot 2" image="images/Connectors/Edge50.png">
+    </port>
+    <port id="appleIII.slot3" ref="" type="Apple II Slot" group="expansions" label="Slot 3" image="images/Connectors/Edge50.png">
+    </port>
+    <port id="appleIII.slot4" ref="" type="Apple II Slot" group="expansions" label="Slot 4" image="images/Connectors/Edge50.png">
+    </port>
+    
 </edl>

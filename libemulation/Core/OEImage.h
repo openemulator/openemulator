@@ -43,6 +43,7 @@ typedef enum
 
 typedef int OEImageOptions;
 #define OEIMAGE_COLORCARRIER    (1 << 0)
+#define OEIMAGE_PAPER           (1 << 1)
 
 // OEImage macros
 inline OEPoint OEMakePoint(float x, float y)
@@ -205,7 +206,7 @@ private:
 	vector<unsigned char> pixels;
 	
 	OERect getIntRect(OERect rect);
-	void update();
+	void updateSize();
 	bool validatePNG(FILE *fp);
 };
 

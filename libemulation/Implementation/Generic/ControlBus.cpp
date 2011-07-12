@@ -68,9 +68,11 @@ bool ControlBus::setRef(string name, OEComponent *ref)
 	}
 	else if (name == "audio")
 	{
-		removeObserver(audio, AUDIO_FRAME_IS_RENDERING);
+        if (audio)
+            audio->removeObserver(this, AUDIO_FRAME_IS_RENDERING);
 		audio = ref;
-		addObserver(audio, AUDIO_FRAME_IS_RENDERING);
+        if (audio)
+            audio->addObserver(this, AUDIO_FRAME_IS_RENDERING);
 	}
 	else if (name == "cpu")
 		cpu = ref;
@@ -86,13 +88,13 @@ bool ControlBus::init()
 {
 	if (!device)
 	{
-		logMessage("ref to 'device' undefined");
+		logMessage("device not connected");
 		return false;
 	}
 	
 	if (!audio)
 	{
-		logMessage("ref to 'audio' undefined");
+		logMessage("audio not connected");
 		return false;
 	}
 	
@@ -167,9 +169,11 @@ bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
 			return true;
 			
 		case CONTROLBUS_SCHEDULE_TIMER:
+            // To-Do: timers
 			return true;
 			
 		case CONTROLBUS_INVALIDATE_TIMER:
+            // To-Do: timers
 			return true;
 			
 		case CONTROLBUS_GET_CLOCKCYCLE:
@@ -184,19 +188,20 @@ bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
 
 void ControlBus::notify(OEComponent *sender, int notification, void *data)
 {
-/*	HostAudioBuffer *buffer = (HostAudioBuffer *) data;
-	float *out = buffer->output;
-	
-	float freq = 440.0 + rand() * 2.0 / RAND_MAX;
-	
-	for(int i = 0; i < buffer->frameNum; i++)
-	{
-		float x = 0.01 * sin(phase);
-		phase += 2 * M_PI * freq / buffer->sampleRate;
-		
-		for (int ch = 0; ch < buffer->channelNum; ch++)
-			*out++ += x;
-	}*/
+    if (notification == AUDIO_FRAME_IS_RENDERING)
+    {
+        AudioBuffer *buffer = (AudioBuffer *)data;
+        float *out = buffer->output;
+        
+        for(int i = 0; i < buffer->frameNum; i++)
+        {
+            float x = 0.01 * sin(phase);
+            phase += 2 * M_PI * 440 / buffer->sampleRate;
+            
+            for (int ch = 0; ch < buffer->channelNum; ch++)
+                *out++ += x;
+        }
+    }
 }
 
 void ControlBus::updateCPUFrequency()

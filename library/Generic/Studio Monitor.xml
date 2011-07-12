@@ -1,58 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
 <edl version="1.0" label="Studio Monitor" image="images/Generic/Studio Monitor.png" description="A generic studio monitor that can be connected to any composite video source.">
-
-<device id="studioMonitor" label="Studio Monitor" image="images/Generic/Studio Monitor.png">
-    <setting ref="studioMonitor.monitor" name="videoDecoder" label="Decoder" type="select" options="Monochrome,NTSC Y'UV,NTSC Y'IQ,NTSC CXA2025AS,PAL"/>
-    <setting ref="studioMonitor.monitor" name="videoBandwidth" label="Video Bandwidth" type="slider" options="0.0,1.0"/>
-    <setting ref="studioMonitor.monitor" name="videoBrightness" label="Brightness" type="slider" options="-1.0,1.0"/>
-    <setting ref="studioMonitor.monitor" name="videoContrast" label="Contrast" type="slider" options="0.0,2.0,1.0"/>
-    <setting ref="studioMonitor.monitor" name="videoSaturation" label="Saturation" type="slider" options="0.0,2.0,1.0"/>
-    <setting ref="studioMonitor.monitor" name="videoHue" label="Hue" type="slider" options="-0.5,0.5,0.0"/>
-    <setting ref="studioMonitor.monitor" name="videoHorizontalCenter" label="Horizontal Center" type="slider" options="-0.1,0.1"/>
-    <setting ref="studioMonitor.monitor" name="videoHorizontalSize" label="Horizontal Size" type="slider" options="0.8,1.2"/>
-    <setting ref="studioMonitor.monitor" name="videoVerticalCenter" label="Vertical Center" type="slider" options="-0.1,0.1"/>
-    <setting ref="studioMonitor.monitor" name="videoVerticalSize" label="Vertical Size" type="slider" options="0.8,1.2"/>
-    <setting ref="studioMonitor.monitor" name="displayBarrel" label="Barrel" type="slider" options="0.0,1.0"/>
-    <setting ref="studioMonitor.monitor" name="displayScanlineAlpha" label="Scanline Alpha" type="slider" options="0.0,1.0"/>
-    <setting ref="studioMonitor.monitor" name="displayCenterLighting" label="Center Lighting" type="slider" options="0.0,1.0"/>
-    <setting ref="studioMonitor.monitor" name="displayShadowMaskAlpha" label="Shadow Mask Alpha" type="slider" options="0.0,1.0"/>
-    <setting ref="studioMonitor.monitor" name="displayShadowMaskDotPitch" label="Shadow Mask Dot Pitch" type="slider" options="0.0,2.0"/>
-    <setting ref="studioMonitor.monitor" name="displayShadowMask" label="Shadow Mask" type="select" options="Triad,Inline,Aperture,LCD,Bayer"/>
-    <setting ref="studioMonitor.monitor" name="displayPersistance" label="Persistance" type="slider" options="0.0,1.0"/>
-    <setting ref="studioMonitor.monitor" name="compositeCarrierFrequency" label="Chroma Carrier Frequency" type="slider" options="0.24,0.3"/>
-    <setting ref="studioMonitor.monitor" name="compositeLinePhase" label="Chroma Line Phase" type="slider" options="0.0,1.0"/>
-    <setting ref="studioMonitor.monitor" name="compositeChromaBandwidth" label="Chroma Bandwidth" type="slider" options="0.0,1.0"/>
-    <setting ref="studioMonitor.monitor" name="compositeBlackLevel" label="IRE Black Level" type="slider" options="0.0,1.0"/>
-    <setting ref="studioMonitor.monitor" name="compositeWhiteLevel" label="IRE White Level" type="slider" options="0.0,1.0"/>
-</device>
-<connector id="studioMonitor.connector" type="Composite Video"/>
-<component id="studioMonitor.monitor" class="Monitor">
-    <property name="device" ref="studioMonitor"/>
-    <property name="videoDecoder" value="NTSC Y'UV"/>
-    <property name="videoBandwidth" value="0.28"/>
-    <property name="videoBrightness" value="0"/>
-    <property name="videoContrast" value="1"/>
-    <property name="videoSaturation" value="1"/>
-    <property name="videoHue" value="0"/>
-    <property name="videoHorizontalCenter" value="0"/>
-    <property name="videoHorizontalSize" value="1"/>
-    <property name="videoVerticalCenter" value="0"/>
-    <property name="videoVerticalSize" value="1"/>
-    <property name="displayBarrel" value="0.05"/>
-    <property name="displayScanlineAlpha" value="0.05"/>
-    <property name="displayCenterLighting" value="1"/>
-    <property name="displayShadowMaskAlpha" value="0.05"/>
-    <property name="displayShadowMaskDotPitch" value="0.5"/>
-    <property name="displayShadowMask" value="Triad"/>
-    <property name="displayPersistance" value="0"/>
-    <property name="compositeBlackLevel" value="0"/>
-    <property name="compositeWhiteLevel" value="1"/>
-    <property name="compositeCarrierFrequency" value="0.25"/>
-    <property name="compositeLinePhase" value="0"/>
-    <property name="compositeChromaBandwidth" value="0.01"/>
-        <property name="dummy" value="${resourcePath}/images/Dummy.png"/>
-        <property name="audio" ref="audio"/>
-</component>
-
+    
+    <device id="studioMonitor" label="Studio Monitor" image="images/Generic/Studio Monitor.png">
+        <setting ref="studioMonitor.monitor" name="videoDecoder" label="Decoder" type="select" options="Monochrome,NTSC Y'UV,NTSC Y'IQ,NTSC CXA2025AS,PAL"/>
+        <setting ref="studioMonitor.monitor" name="videoBandwidth" label="Video Bandwidth" type="slider" options="0.0,1.0"/>
+        <setting ref="studioMonitor.monitor" name="videoBrightness" label="Brightness" type="slider" options="-1.0,1.0"/>
+        <setting ref="studioMonitor.monitor" name="videoContrast" label="Contrast" type="slider" options="0.0,2.0,1.0"/>
+        <setting ref="studioMonitor.monitor" name="videoSaturation" label="Saturation" type="slider" options="0.0,2.0,1.0"/>
+        <setting ref="studioMonitor.monitor" name="videoHue" label="Hue" type="slider" options="-0.5,0.5,0.0"/>
+        <setting ref="studioMonitor.monitor" name="videoHorizontalCenter" label="Horizontal Center" type="slider" options="-0.1,0.1"/>
+        <setting ref="studioMonitor.monitor" name="videoHorizontalSize" label="Horizontal Size" type="slider" options="0.8,1.2"/>
+        <setting ref="studioMonitor.monitor" name="videoVerticalCenter" label="Vertical Center" type="slider" options="-0.1,0.1"/>
+        <setting ref="studioMonitor.monitor" name="videoVerticalSize" label="Vertical Size" type="slider" options="0.8,1.2"/>
+        <setting ref="studioMonitor.monitor" name="displayBarrel" label="Barrel" type="slider" options="0.0,1.0"/>
+        <setting ref="studioMonitor.monitor" name="displayScanlineAlpha" label="Scanline Alpha" type="slider" options="0.0,1.0"/>
+        <setting ref="studioMonitor.monitor" name="displayCenterLighting" label="Center Lighting" type="slider" options="0.0,1.0"/>
+        <setting ref="studioMonitor.monitor" name="displayShadowMaskAlpha" label="Shadow Mask Alpha" type="slider" options="0.0,1.0"/>
+        <setting ref="studioMonitor.monitor" name="displayShadowMaskDotPitch" label="Shadow Mask Dot Pitch" type="slider" options="0.0,2.0"/>
+        <setting ref="studioMonitor.monitor" name="displayShadowMask" label="Shadow Mask" type="select" options="Triad,Inline,Aperture,LCD,Bayer"/>
+        <setting ref="studioMonitor.monitor" name="displayPersistance" label="Persistance" type="slider" options="0.0,1.0"/>
+        <setting ref="studioMonitor.monitor" name="compositeCarrierFrequency" label="Chroma Carrier Frequency" type="slider" options="0.24,0.3"/>
+        <setting ref="studioMonitor.monitor" name="compositeLinePhase" label="Chroma Line Phase" type="slider" options="0.0,1.0"/>
+        <setting ref="studioMonitor.monitor" name="compositeChromaBandwidth" label="Chroma Bandwidth" type="slider" options="0.0,1.0"/>
+        <setting ref="studioMonitor.monitor" name="compositeBlackLevel" label="IRE Black Level" type="slider" options="0.0,1.0"/>
+        <setting ref="studioMonitor.monitor" name="compositeWhiteLevel" label="IRE White Level" type="slider" options="0.0,1.0"/>
+    </device>
+    <connector id="studioMonitor.connector" type="Composite Video"/>
+    <component id="studioMonitor.monitor" class="Monitor">
+        <property name="device" ref="studioMonitor"/>
+        <property name="videoDecoder" value="NTSC Y'UV"/>
+        <property name="videoBandwidth" value="0.28"/>
+        <property name="videoBrightness" value="0"/>
+        <property name="videoContrast" value="1"/>
+        <property name="videoSaturation" value="1"/>
+        <property name="videoHue" value="0"/>
+        <property name="videoHorizontalCenter" value="0"/>
+        <property name="videoHorizontalSize" value="1"/>
+        <property name="videoVerticalCenter" value="0"/>
+        <property name="videoVerticalSize" value="1"/>
+        <property name="displayBarrel" value="0.05"/>
+        <property name="displayScanlineAlpha" value="0.05"/>
+        <property name="displayCenterLighting" value="1"/>
+        <property name="displayShadowMaskAlpha" value="0.05"/>
+        <property name="displayShadowMaskDotPitch" value="0.5"/>
+        <property name="displayShadowMask" value="Triad"/>
+        <property name="displayPersistance" value="0"/>
+        <property name="compositeBlackLevel" value="0"/>
+        <property name="compositeWhiteLevel" value="1"/>
+        <property name="compositeCarrierFrequency" value="0.25"/>
+        <property name="compositeLinePhase" value="0"/>
+        <property name="compositeChromaBandwidth" value="0.01"/>
+    </component>
+    
 </edl>

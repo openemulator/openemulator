@@ -20,11 +20,6 @@ Monitor::Monitor()
 	
 	configuration.displayResolution = OEMakeSize(768, 576);
 	videoRect = OEMakeRect(0, 0, 1, 1);
-	
-	audio = NULL;
-	
-	ta = 0;
-	da = 0;
 }
 
 bool Monitor::setValue(string name, string value)
@@ -97,8 +92,6 @@ bool Monitor::setValue(string name, string value)
 		configuration.compositeBlackLevel = getFloat(value);
 	else if (name == "compositeWhiteLevel")
 		configuration.compositeWhiteLevel = getFloat(value);
-	else if (name == "dummy")
-		dummyPath = value;
 	else
 		return false;
 	
@@ -198,7 +191,8 @@ bool Monitor::setRef(string name, OEComponent *ref)
 				canvas->removeObserver(this, CANVAS_JOYSTICK3_DID_CHANGE);
 				canvas->removeObserver(this, CANVAS_JOYSTICK4_DID_CHANGE);
 				
-				canvas->removeObserver(this, CANVAS_DID_VSYNC);
+				canvas->removeObserver(this, CANVAS_DID_COPY);
+				canvas->removeObserver(this, CANVAS_DID_PASTE);
 			}
 			
 			device->postMessage(this, DEVICE_DESTROY_CANVAS, &canvas);
@@ -219,17 +213,10 @@ bool Monitor::setRef(string name, OEComponent *ref)
 				canvas->addObserver(this, CANVAS_JOYSTICK3_DID_CHANGE);
 				canvas->addObserver(this, CANVAS_JOYSTICK4_DID_CHANGE);
 				
-				canvas->addObserver(this, CANVAS_DID_VSYNC);
+				canvas->addObserver(this, CANVAS_DID_COPY);
+				canvas->addObserver(this, CANVAS_DID_PASTE);
 			}
 		}
-	}
-	else if (name == "audio")
-	{
-		if (audio)
-			audio->removeObserver(this, AUDIO_FRAME_WILL_RENDER);
-		audio = ref;
-		if (audio)
-			audio->addObserver(this, AUDIO_FRAME_WILL_RENDER);
 	}
 	else
 		return false;
@@ -241,7 +228,7 @@ bool Monitor::init()
 {
 	if (!device)
 	{
-		logMessage("property 'device' undefined");
+		logMessage("device not connected");
 		return false;
 	}
 	
@@ -250,12 +237,6 @@ bool Monitor::init()
 		logMessage("canvas could not be created");
 		return false;
 	}
-	
-//	CanvasCaptureMode captureMode = CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_CLICK;
-	image.readFile(dummyPath);
-	
-//	canvas->postMessage(this, CANVAS_SET_CAPTUREMODE, &captureMode);
-	canvas->postMessage(this, CANVAS_POST_IMAGE, &image);
 	
 	return true;
 }
@@ -268,66 +249,24 @@ void Monitor::update()
 		canvas->postMessage(this, CANVAS_CONFIGURE_DISPLAY, &configuration);
 }
 
-void Monitor::notify(OEComponent *sender, int notification, void *data)
+bool Monitor::postMessage(OEComponent *sender, int message, void *data)
 {
-	if (sender == audio)
-	{
-		/*
-		ta++;
-		if (canvas && (ta >= 48000 / 512 * 5))
-		{
-			canvas->removeObserver(this, CANVAS_KEYBOARD_DID_CHANGE);
-			canvas->removeObserver(this, CANVAS_UNICODEKEYBOARD_DID_CHANGE);
-			canvas->removeObserver(this, CANVAS_POINTER_DID_CHANGE);
-			canvas->removeObserver(this, CANVAS_MOUSE_DID_CHANGE);
-			canvas->removeObserver(this, CANVAS_JOYSTICK1_DID_CHANGE);
-			canvas->removeObserver(this, CANVAS_JOYSTICK2_DID_CHANGE);
-			canvas->removeObserver(this, CANVAS_JOYSTICK3_DID_CHANGE);
-			canvas->removeObserver(this, CANVAS_JOYSTICK4_DID_CHANGE);
-			
-			canvas->removeObserver(this, CANVAS_DID_VSYNC);
-			
-			device->postMessage(this, DEVICE_DESTROY_CANVAS, &canvas);
-		}
-		*/
-		/*
-		int *p = (int *)image.getPixels();
-		if (p)
-		{
-			int w = image.getSize().width;
-			int h = image.getSize().height;
-			for (int y = 0; y < h; y++)
-				for (int x = 0; x < 128; x++)
-					p[y * w + x] = ((x & 0xfa) == da) ? 0xffffffff : 0x00000000;
-			
-			da += 0x9;
-			da &= 0xf8;
-			
-			if (canvas)
-				canvas->postMessage(this, CANVAS_POST_IMAGE, &image);
-		}
-		*/
-		return;
-	}
-	
-	if (notification != CANVAS_DID_VSYNC)
-		return;
-	/*
-	int *p = (int *)image.getPixels();
-	if (p)
-	{
-		int w = image.getSize().width;
-		int h = image.getSize().height;
-		for (int y = 0; y < h; y++)
-			for (int x = 0; x < 128; x++)
-				p[y * w + x] = ((x & 0x0fa) == da) ? 0xffffffff : 0xff000000;
-		
-		da += 0x9;
-		da &= 0xf8;
-		
-		if (canvas)
-			canvas->postMessage(this, CANVAS_POST_IMAGE, &image);
-	}*/
+    if (canvas)
+    {
+        if (message == CANVAS_POST_IMAGE)
+        {
+            OEImage *image = (OEImage *)data;
+            
+            int options = image->getOptions();
+            
+            options = 0;
+            
+            // Analyze image->getOptions(), set saturation and bandwidth accordingly
+        }
+        return canvas->postMessage(sender, message, data);
+    }
+    
+    return false;
 }
 
 void Monitor::updateVideoRect()

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
 <edl version="1.0" label="Apple Silentype Interface Card" image="images/Apple/Apple Synch Printer Interface Card.png" description="The Apple Silentype Printer Interface Card is used for connecting an Apple Silentype printer to an Apple II Computer. It is usually installed in slot 1.">
-
-<device id="appleSilentypeCard" label="Apple Silentype Interface Card" image="images/Apple/Apple Synch Printer Interface Card.png">
-</device>
-<connector id="appleSilentypeCard.connector" type="Apple II Slot">
-    <inlet ref="appleSilentypeCard.io" property="mmu" outletRef="mmu"/>
-</connector>
-<port id="appleSilentypeCard.port" ref="" type="Apple Silentype Port" group="peripherals" label="Silentype Port" image="images/Connectors/DE9 Female.png"/>
-<component id="appleSilentypeCard.io" class="AppleLanguageCard">
-    <property name="mmu" ref=""/>
-</component>
-
+    
+    <device id="appleSilentypeCard" label="Apple Silentype Interface Card" image="images/Apple/Apple Synch Printer Interface Card.png">
+    </device>
+    <connector id="appleSilentypeCard.connector" type="Apple II Slot">
+        <inlet ref="appleSilentypeCard.io" property="mmu" outletRef="mmu"/>
+    </connector>
+    <port id="appleSilentypeCard.port" ref="" type="Apple Silentype Port" group="peripherals" label="Silentype Port" image="images/Connectors/DE9 Female.png"/>
+    <component id="appleSilentypeCard.io" class="AppleLanguageCard">
+        <property name="mmu" ref=""/>
+    </component>
+    
 </edl>

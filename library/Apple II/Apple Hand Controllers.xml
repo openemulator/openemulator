@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
 <edl version="1.0" label="Apple Hand Controllers" image="images/Apple/Apple Hand Controllers.png" description="The Apple Hand Controllers are a pair of game controllers made by Apple for the Apple II line of computers.">
-
-<device id="appleHandControllers" label="Apple Hand Controllers" image="images/Apple/Apple Hand Controllers.png">
-    <setting ref="appleHandControllers.io" name="inputDevice" label="Input Device" type="select" options="None,Mouse,Joystick"/>
-    <setting ref="appleHandControllers.io" name="invertAxes" label="Invert Axes" type="checkbox"/>
-</device>
-<connector id="appleHandControllers.conn" type="Apple II Game Port"/>
-
+    
+    <device id="appleHandControllers" label="Apple Hand Controllers" image="images/Apple/Apple Hand Controllers.png">
+        <setting ref="appleHandControllers.io" name="inputDevice" label="Input Device" type="select" options="None,Mouse,Joystick"/>
+        <setting ref="appleHandControllers.io" name="invertAxes" label="Invert Axes" type="checkbox"/>
+    </device>
+    <connector id="appleHandControllers.conn" type="Apple II Game Port"/>
+    
 </edl>

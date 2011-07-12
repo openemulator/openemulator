@@ -808,10 +808,10 @@
 		00B8886912A393990052B7A4 /* Interface */ = {
 			isa = PBXGroup;
 			children = (
+				00B8886A12A393990052B7A4 /* Apple */,
 				00D225F91350F9A100FC69B9 /* Host */,
 				00B8886C12A393990052B7A4 /* EIA */,
 				00B8887E12A393990052B7A4 /* IEEE */,
-				00B8886A12A393990052B7A4 /* Apple */,
 			);
 			name = Interface;
 			path = libemulation/Interface;

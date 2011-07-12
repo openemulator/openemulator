@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
 <edl version="1.0" label="Apple Language Card" image="images/Mountain Computer/Mountain Computer Apple Clock.png" description="The Mountain Computer Apple Clock is a realtime clock for the Apple II line of computers. It is usually installed in slot 4.">
-
-<device id="mountainAppleClock" label="Mountain Computer Apple Clock" image="images/Mountain Computer/Mountain Computer Apple Clock.png">
-</device>
-<connector id="mountainAppleClock.connector" type="Apple II Slot">
-</connector>
-
+    
+    <device id="mountainAppleClock" label="Mountain Computer Apple Clock" image="images/Mountain Computer/Mountain Computer Apple Clock.png">
+    </device>
+    <connector id="mountainAppleClock.connector" type="Apple II Slot">
+    </connector>
+    
 </edl>

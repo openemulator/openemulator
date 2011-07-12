@@ -1,39 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
 <edl version="1.0" label="Apple Monitor III" image="images/Apple/Apple Monitor III.png" description="The Apple Monitor III is a CRT-based green monochrome 12-inch monitor manufactured by Apple Computer for the Apple III personal computer.">
-
-<device id="appleMonitorIII" label="Apple Monitor III" image="images/Apple/Apple Monitor III.png">
-    <setting ref="appleMonitorIII.monitor" name="videoBrightness" label="Brightness" type="slider" options="-1.0,1.0"/>
-    <setting ref="appleMonitorIII.monitor" name="videoContrast" label="Contrast" type="slider" options="0.0,2.0,1.0"/>
-    <setting ref="appleMonitorIII.monitor" name="videoVerticalCenter" label="Vertical Center" type="slider" options="-0.1,0.1"/>
-    <setting ref="appleMonitorIII.monitor" name="videoVerticalSize" label="Vertical Size" type="slider" options="0.9,1.3"/>
-</device>
-<connector id="appleMonitorIII.connector" type="Composite Video"/>
-<component id="appleMonitorIII.monitor" class="Monitor">
-    <property name="device" ref="appleMonitorIII"/>
-    <property name="videoDecoder" value="NTSC Y'UV"/>
-    <property name="videoBandwidth" value="0.28"/>
-    <property name="videoBrightness" value="0"/>
-    <property name="videoContrast" value="1"/>
-    <property name="videoSaturation" value="1"/>
-    <property name="videoHue" value="0"/>
-    <property name="videoHorizontalCenter" value="0"/>
-    <property name="videoHorizontalSize" value="1.1"/>
-    <property name="videoVerticalCenter" value="0"/>
-    <property name="videoVerticalSize" value="1.1"/>
-    <property name="displayBarrel" value="0.05"/>
-    <property name="displayScanlineAlpha" value="0.05"/>
-    <property name="displayCenterLighting" value="1"/>
-    <property name="displayShadowMaskAlpha" value="0.05"/>
-    <property name="displayShadowMaskDotPitch" value="0.5"/>
-    <property name="displayShadowMask" value="Triad"/>
-    <property name="compositeBlackLevel" value="0"/>
-    <property name="compositeWhiteLevel" value="1"/>
-    <property name="compositeCarrierFrequency" value="0.25"/>
-    <property name="compositeLinePhase" value="0"/>
-    <property name="compositeChromaBandwidth" value="0.01"/>
-        <property name="dummy" value="${resourcePath}/images/Dummy.png"/>
-        <property name="audio" ref="audio"/>
-</component>
-
+    
+    <device id="appleMonitorIII" label="Apple Monitor III" image="images/Apple/Apple Monitor III.png">
+        <setting ref="appleMonitorIII.monitor" name="videoBrightness" label="Brightness" type="slider" options="-1.0,1.0"/>
+        <setting ref="appleMonitorIII.monitor" name="videoContrast" label="Contrast" type="slider" options="0.0,1.0"/>
+        <setting ref="appleMonitorIII.monitor" name="videoVerticalCenter" label="Vertical Center" type="slider" options="-0.1,0.1"/>
+        <setting ref="appleMonitorIII.monitor" name="videoVerticalSize" label="Vertical Size" type="slider" options="0.9,1.1"/>
+    </device>
+    <connector id="appleMonitorIII.connector" type="Composite Video"/>
+    <component id="appleMonitorIII.monitor" class="Monitor">
+        <property name="device" ref="appleMonitorIII"/>
+        <property name="videoDecoder" value="Monochrome"/>
+        <property name="videoBandwidth" value="0.83"/>
+        <property name="videoBrightness" value="0"/>
+        <property name="videoContrast" value="0.74"/>
+        <property name="videoSaturation" value="1"/>
+        <property name="videoHue" value="0.36"/>
+        <property name="videoHorizontalCenter" value="0"/>
+        <property name="videoHorizontalSize" value="1.1"/>
+        <property name="videoVerticalCenter" value="0"/>
+        <property name="videoVerticalSize" value="1.1"/>
+        <property name="displayBarrel" value="0.05"/>
+        <property name="displayScanlineAlpha" value="0.1"/>
+        <property name="displayCenterLighting" value="1"/>
+        <property name="displayShadowMaskAlpha" value="0.0"/>
+        <property name="displayShadowMaskDotPitch" value="0.5"/>
+        <property name="displayShadowMask" value="Triad"/>
+    </component>
+    
 </edl>

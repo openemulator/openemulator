@@ -1533,7 +1533,7 @@ void OpenGLCanvas::postHIDNotification(int notification, int usageId, float valu
 
 void OpenGLCanvas::sendUnicodeKeyEvent(int unicode)
 {
-	//	log("unicode " + getHexString(unicode));
+//	logMessage("unicode " + getHexString(unicode));
 	
 	postHIDNotification(CANVAS_UNICODEKEYBOARD_DID_CHANGE, unicode, 0);
 }

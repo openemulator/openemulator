@@ -48,4 +48,6 @@ private:
 	OEComponent *controlBus;
 	OEData powerOnPattern;
 	int powerState;
+    
+    void initMemory();
 };

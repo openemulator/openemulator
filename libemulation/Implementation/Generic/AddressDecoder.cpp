@@ -54,7 +54,7 @@ bool AddressDecoder::init()
 {
 	if (!floatingBus)
 	{
-		logMessage("ref 'floatingBus' undefined");
+		logMessage("floatingBus not connected");
 		return false;
 	}
 	

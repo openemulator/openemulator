@@ -24,7 +24,7 @@ void OEImage::setFormat(OEImageFormat format)
 {
 	this->format = format;
 	
-	update();
+	updateSize();
 }
 
 OEImageFormat OEImage::getFormat()
@@ -47,7 +47,7 @@ void OEImage::setSize(OESize size)
 	this->size.width = (int)size.width;
 	this->size.height = (int)size.height;
 	
-	update();
+	updateSize();
 }
 
 OESize OEImage::getSize()
@@ -122,7 +122,7 @@ bool OEImage::readFile(string path)
 						size.width = width;
 						size.height = height;
 						
-						update();
+						updateSize();
 						
 						// Copy image
 						int bytesPerPixel = (format == OEIMAGE_RGB) ? 3 : 4;
@@ -216,14 +216,17 @@ OEImage OEImage::getClip(OERect rect)
 	return image;
 }
 			   
-void OEImage::update()
+void OEImage::updateSize()
 {
 	int prevSize = (int) pixels.size();
 	pixels.resize(getBytesPerRow() * (int)size.height);
 	
-	int diff = (int) pixels.size() - prevSize;
-	if (diff > 0)
-		memset(&pixels.front() + prevSize, 0xff, diff);
+    if (options & OEIMAGE_PAPER)
+    {
+        int diff = (int) pixels.size() - prevSize;
+        if (diff > 0)
+            memset(&pixels.front() + prevSize, 0xff, diff);
+    }
 }
 
 bool OEImage::validatePNG(FILE *fp)
