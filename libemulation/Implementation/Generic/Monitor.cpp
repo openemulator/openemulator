@@ -19,7 +19,6 @@ Monitor::Monitor()
 	canvas = NULL;
 	
 	configuration.displayResolution = OEMakeSize(768, 576);
-	videoRect = OEMakeRect(0, 0, 1, 1);
 }
 
 bool Monitor::setValue(string name, string value)
@@ -50,13 +49,13 @@ bool Monitor::setValue(string name, string value)
 	else if (name == "videoHue")
 		configuration.videoHue = getFloat(value);
 	else if (name == "videoHorizontalCenter")
-		videoRect.origin.x = getFloat(value);
+		configuration.videoRect.origin.x = getFloat(value);
 	else if (name == "videoVerticalCenter")
-		videoRect.origin.y = getFloat(value);
+		configuration.videoRect.origin.y = getFloat(value);
 	else if (name == "videoHorizontalSize")
-		videoRect.size.width = getFloat(value);
+		configuration.videoRect.size.width = getFloat(value);
 	else if (name == "videoVerticalSize")
-		videoRect.size.height = getFloat(value);
+		configuration.videoRect.size.height = getFloat(value);
 	else if (name == "displayBarrel")
 		configuration.displayBarrel = getFloat(value);
 	else if (name == "displayScanlineAlpha")
@@ -82,16 +81,18 @@ bool Monitor::setValue(string name, string value)
 	}
 	else if (name == "displayPersistance")
 		configuration.displayPersistance = getFloat(value);
-	else if (name == "compositeCarrierFrequency")
-		configuration.compositeCarrierFrequency = getFloat(value);
-	else if (name == "compositeLinePhase")
-		configuration.compositeLinePhase = getFloat(value);
-	else if (name == "compositeChromaBandwidth")
-		configuration.compositeChromaBandwidth = getFloat(value);
 	else if (name == "compositeBlackLevel")
 		configuration.compositeBlackLevel = getFloat(value);
 	else if (name == "compositeWhiteLevel")
 		configuration.compositeWhiteLevel = getFloat(value);
+	else if (name == "compositeCarrierFrequency")
+		configuration.compositeCarrierFrequency = getFloat(value);
+	else if (name == "compositeLinePhase")
+		configuration.compositeLinePhase = getFloat(value);
+	else if (name == "compositeLumaBandwidth")
+		configuration.compositeLumaBandwidth = getFloat(value);
+	else if (name == "compositeChromaBandwidth")
+		configuration.compositeChromaBandwidth = getFloat(value);
 	else
 		return false;
 	
@@ -126,13 +127,13 @@ bool Monitor::getValue(string name, string& value)
 	else if (name == "videoHue")
 		value = getString(configuration.videoHue);
 	else if (name == "videoHorizontalCenter")
-		value = getString(videoRect.origin.x);
+		value = getString(configuration.videoRect.origin.x);
 	else if (name == "videoVerticalCenter")
-		value = getString(videoRect.origin.y);
+		value = getString(configuration.videoRect.origin.y);
 	else if (name == "videoHorizontalSize")
-		value = getString(videoRect.size.width);
+		value = getString(configuration.videoRect.size.width);
 	else if (name == "videoVerticalSize")
-		value = getString(videoRect.size.height);
+		value = getString(configuration.videoRect.size.height);
 	else if (name == "displayBarrel")
 		value = getString(configuration.displayBarrel);
 	else if (name == "displayScanlineAlpha")
@@ -166,6 +167,8 @@ bool Monitor::getValue(string name, string& value)
 		value = getString(configuration.compositeCarrierFrequency);
 	else if (name == "compositeLinePhase")
 		value = getString(configuration.compositeLinePhase);
+	else if (name == "compositeLumaBandwidth")
+		value = getString(configuration.compositeLumaBandwidth);
 	else if (name == "compositeChromaBandwidth")
 		value = getString(configuration.compositeChromaBandwidth);
 	else
@@ -243,8 +246,6 @@ bool Monitor::init()
 
 void Monitor::update()
 {
-	updateVideoRect();
-	
 	if (canvas)
 		canvas->postMessage(this, CANVAS_CONFIGURE_DISPLAY, &configuration);
 }
@@ -252,39 +253,7 @@ void Monitor::update()
 bool Monitor::postMessage(OEComponent *sender, int message, void *data)
 {
     if (canvas)
-    {
-        if (message == CANVAS_POST_IMAGE)
-        {
-            OEImage *image = (OEImage *)data;
-            
-            int options = image->getOptions();
-            
-            options = 0;
-            
-            // Analyze image->getOptions(), set saturation and bandwidth accordingly
-        }
         return canvas->postMessage(sender, message, data);
-    }
     
     return false;
-}
-
-void Monitor::updateVideoRect()
-{
-	bool pal = false;
-	if (pal)
-		configuration.videoRect = OEMakeRect(96 * 1.0 / 768, 34 * 2.0 / 576,
-											 576 * 1.0 / 768, 192 * 2.0 / 576);
-	else
-		configuration.videoRect = OEMakeRect(96 * 1.0 / 768, 24 * 2.0 / 483,
-											 576 * 1.0 / 768, 192 * 2.0 / 483);
-	
-	configuration.videoRect.origin.x += (videoRect.origin.x +
-										 configuration.videoRect.size.width *
-										 (1.0 - videoRect.size.width) * 0.5);
-	configuration.videoRect.origin.y += (videoRect.origin.y +
-										 configuration.videoRect.size.height *
-										 (1.0 - videoRect.size.height) * 0.5);
-	configuration.videoRect.size.width *= videoRect.size.width;
-	configuration.videoRect.size.height *= videoRect.size.height;
 }

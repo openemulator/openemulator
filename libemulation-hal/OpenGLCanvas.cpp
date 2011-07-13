@@ -71,8 +71,8 @@ void OpenGLCanvas::unlock()
 // Video
 
 void OpenGLCanvas::open(CanvasSetCapture setCapture,
-					 CanvasSetKeyboardFlags setKeyboardFlags,
-					 void *userData)
+                        CanvasSetKeyboardFlags setKeyboardFlags,
+                        void *userData)
 {
 	this->setCapture = setCapture;
 	this->setKeyboardFlags = setKeyboardFlags;
@@ -377,7 +377,7 @@ bool OpenGLCanvas::initOpenGL()
 	glEnable(GL_TEXTURE_2D);
 	glGenTextures(OPENGLCANVAS_TEXTURE_END, texture);
 	loadTextures();
-
+    
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	
@@ -493,147 +493,147 @@ void OpenGLCanvas::loadShaders()
 	deleteShaders();
 	
 	shader[OPENGLCANVAS_SHADER_RGB] = loadShader("\
-		uniform sampler2D texture;\
-		uniform vec2 texture_size;\
-		uniform vec3 c0, c1, c2, c3, c4, c5, c6, c7, c8;\
-        uniform vec3 offset;\
-		uniform mat3 decoder;\
-		\
-		vec3 pixel(vec2 q)\
-		{\
-		return texture2D(texture, q).rgb;\
-		}\
-		\
-		vec3 pixels(vec2 q, float i)\
-		{\
-		return pixel(vec2(q.x + i, q.y)) + pixel(vec2(q.x - i, q.y));\
-		}\
-		\
-		void main(void)\
-		{\
-		vec2 q = gl_TexCoord[0].xy;\
-		vec3 p = pixel(q) * c0;\
-		p += pixels(q, 1.0 / texture_size.x) * c1;\
-		p += pixels(q, 2.0 / texture_size.x) * c2;\
-		p += pixels(q, 3.0 / texture_size.x) * c3;\
-		p += pixels(q, 4.0 / texture_size.x) * c4;\
-		p += pixels(q, 5.0 / texture_size.x) * c5;\
-		p += pixels(q, 6.0 / texture_size.x) * c6;\
-		p += pixels(q, 7.0 / texture_size.x) * c7;\
-		p += pixels(q, 8.0 / texture_size.x) * c8;\
-        p += offset;\
-		gl_FragColor = vec4(decoder * p, 1.0);\
-		}");
+                                                 uniform sampler2D texture;\
+                                                 uniform vec2 texture_size;\
+                                                 uniform vec3 c0, c1, c2, c3, c4, c5, c6, c7, c8;\
+                                                 uniform vec3 offset;\
+                                                 uniform mat3 decoder;\
+                                                 \
+                                                 vec3 pixel(vec2 q)\
+                                                 {\
+                                                 return texture2D(texture, q).rgb;\
+                                                 }\
+                                                 \
+                                                 vec3 pixels(vec2 q, float i)\
+                                                 {\
+                                                 return pixel(vec2(q.x + i, q.y)) + pixel(vec2(q.x - i, q.y));\
+                                                 }\
+                                                 \
+                                                 void main(void)\
+                                                 {\
+                                                 vec2 q = gl_TexCoord[0].xy;\
+                                                 vec3 p = pixel(q) * c0;\
+                                                 p += pixels(q, 1.0 / texture_size.x) * c1;\
+                                                 p += pixels(q, 2.0 / texture_size.x) * c2;\
+                                                 p += pixels(q, 3.0 / texture_size.x) * c3;\
+                                                 p += pixels(q, 4.0 / texture_size.x) * c4;\
+                                                 p += pixels(q, 5.0 / texture_size.x) * c5;\
+                                                 p += pixels(q, 6.0 / texture_size.x) * c6;\
+                                                 p += pixels(q, 7.0 / texture_size.x) * c7;\
+                                                 p += pixels(q, 8.0 / texture_size.x) * c8;\
+                                                 p += offset;\
+                                                 gl_FragColor = vec4(decoder * p, 1.0);\
+                                                 }");
 	
 	shader[OPENGLCANVAS_SHADER_NTSC] = loadShader("\
-		uniform sampler2D texture;\
-		uniform vec2 texture_size;\
-		uniform vec2 comp_phase;\
-		uniform vec3 c0, c1, c2, c3, c4, c5, c6, c7, c8;\
-        uniform vec3 offset;\
-		uniform mat3 decoder;\
-		\
-		float PI = 3.14159265358979323846264;\
-		\
-		vec3 pixel(vec2 q)\
-		{\
-			vec3 p = texture2D(texture, q).rgb;\
-			float phase = 2.0 * PI * dot(comp_phase * texture_size, q);\
-			return p * vec3(1.0, sin(phase), cos(phase));\
-		}\
-		\
-		vec3 pixels(vec2 q, float i)\
-		{\
-			return pixel(vec2(q.x + i, q.y)) + pixel(vec2(q.x - i, q.y));\
-		}\
-		\
-		void main(void)\
-		{\
-			vec2 q = gl_TexCoord[0].xy;\
-			vec3 p = pixel(q) * c0;\
-			p += pixels(q, 1.0 / texture_size.x) * c1;\
-			p += pixels(q, 2.0 / texture_size.x) * c2;\
-			p += pixels(q, 3.0 / texture_size.x) * c3;\
-			p += pixels(q, 4.0 / texture_size.x) * c4;\
-			p += pixels(q, 5.0 / texture_size.x) * c5;\
-			p += pixels(q, 6.0 / texture_size.x) * c6;\
-			p += pixels(q, 7.0 / texture_size.x) * c7;\
-			p += pixels(q, 8.0 / texture_size.x) * c8;\
-            p += offset;\
-			gl_FragColor = vec4(decoder * p, 1.0);\
-		}");
+                                                  uniform sampler2D texture;\
+                                                  uniform vec2 texture_size;\
+                                                  uniform vec2 comp_phase;\
+                                                  uniform vec3 c0, c1, c2, c3, c4, c5, c6, c7, c8;\
+                                                  uniform vec3 offset;\
+                                                  uniform mat3 decoder;\
+                                                  \
+                                                  float PI = 3.14159265358979323846264;\
+                                                  \
+                                                  vec3 pixel(vec2 q)\
+                                                  {\
+                                                  vec3 p = texture2D(texture, q).rgb;\
+                                                  float phase = 2.0 * PI * dot(comp_phase * texture_size, q);\
+                                                  return p * vec3(1.0, sin(phase), cos(phase));\
+                                                  }\
+                                                  \
+                                                  vec3 pixels(vec2 q, float i)\
+                                                  {\
+                                                  return pixel(vec2(q.x + i, q.y)) + pixel(vec2(q.x - i, q.y));\
+                                                  }\
+                                                  \
+                                                  void main(void)\
+                                                  {\
+                                                  vec2 q = gl_TexCoord[0].xy;\
+                                                  vec3 p = pixel(q) * c0;\
+                                                  p += pixels(q, 1.0 / texture_size.x) * c1;\
+                                                  p += pixels(q, 2.0 / texture_size.x) * c2;\
+                                                  p += pixels(q, 3.0 / texture_size.x) * c3;\
+                                                  p += pixels(q, 4.0 / texture_size.x) * c4;\
+                                                  p += pixels(q, 5.0 / texture_size.x) * c5;\
+                                                  p += pixels(q, 6.0 / texture_size.x) * c6;\
+                                                  p += pixels(q, 7.0 / texture_size.x) * c7;\
+                                                  p += pixels(q, 8.0 / texture_size.x) * c8;\
+                                                  p += offset;\
+                                                  gl_FragColor = vec4(decoder * p, 1.0);\
+                                                  }");
 	
 	shader[OPENGLCANVAS_SHADER_PAL] = loadShader("\
-		uniform sampler2D texture;\
-		uniform vec2 texture_size;\
-		uniform vec2 comp_phase;\
-		uniform vec3 c0, c1, c2, c3, c4, c5, c6, c7, c8;\
-        uniform vec3 offset;\
-		uniform mat3 decoder;\
-		\
-		float PI = 3.14159265358979323846264;\
-		\
-		vec3 pixel(vec2 q)\
-		{\
-			vec3 p = texture2D(texture, q).rgb;\
-			float phase = 2.0 * PI * dot(comp_phase * texture_size, q);\
-			float pal = -sqrt(2.0) * sin(0.5 * PI * texture_size.y * q.y);\
-			return p * vec3(1.0, sin(phase), cos(phase) * pal);\
-		}\
-		\
-		vec3 pixels(vec2 q, float i)\
-		{\
-			return pixel(vec2(q.x + i, q.y)) + pixel(vec2(q.x - i, q.y));\
-		}\
-		\
-		void main(void)\
-		{\
-			vec2 q = gl_TexCoord[0].xy;\
-			vec3 p = pixel(q) * c0;\
-			p += pixels(q, 1.0 / texture_size.x) * c1;\
-			p += pixels(q, 2.0 / texture_size.x) * c2;\
-			p += pixels(q, 3.0 / texture_size.x) * c3;\
-			p += pixels(q, 4.0 / texture_size.x) * c4;\
-			p += pixels(q, 5.0 / texture_size.x) * c5;\
-			p += pixels(q, 6.0 / texture_size.x) * c6;\
-			p += pixels(q, 7.0 / texture_size.x) * c7;\
-			p += pixels(q, 8.0 / texture_size.x) * c8;\
-            p += offset;\
-			gl_FragColor = vec4(decoder * p, 1.0);\
-		}");
+                                                 uniform sampler2D texture;\
+                                                 uniform vec2 texture_size;\
+                                                 uniform vec2 comp_phase;\
+                                                 uniform vec3 c0, c1, c2, c3, c4, c5, c6, c7, c8;\
+                                                 uniform vec3 offset;\
+                                                 uniform mat3 decoder;\
+                                                 \
+                                                 float PI = 3.14159265358979323846264;\
+                                                 \
+                                                 vec3 pixel(vec2 q)\
+                                                 {\
+                                                 vec3 p = texture2D(texture, q).rgb;\
+                                                 float phase = 2.0 * PI * dot(comp_phase * texture_size, q);\
+                                                 float pal = -sqrt(2.0) * sin(0.5 * PI * texture_size.y * q.y);\
+                                                 return p * vec3(1.0, sin(phase), cos(phase) * pal);\
+                                                 }\
+                                                 \
+                                                 vec3 pixels(vec2 q, float i)\
+                                                 {\
+                                                 return pixel(vec2(q.x + i, q.y)) + pixel(vec2(q.x - i, q.y));\
+                                                 }\
+                                                 \
+                                                 void main(void)\
+                                                 {\
+                                                 vec2 q = gl_TexCoord[0].xy;\
+                                                 vec3 p = pixel(q) * c0;\
+                                                 p += pixels(q, 1.0 / texture_size.x) * c1;\
+                                                 p += pixels(q, 2.0 / texture_size.x) * c2;\
+                                                 p += pixels(q, 3.0 / texture_size.x) * c3;\
+                                                 p += pixels(q, 4.0 / texture_size.x) * c4;\
+                                                 p += pixels(q, 5.0 / texture_size.x) * c5;\
+                                                 p += pixels(q, 6.0 / texture_size.x) * c6;\
+                                                 p += pixels(q, 7.0 / texture_size.x) * c7;\
+                                                 p += pixels(q, 8.0 / texture_size.x) * c8;\
+                                                 p += offset;\
+                                                 gl_FragColor = vec4(decoder * p, 1.0);\
+                                                 }");
 	
 	shader[OPENGLCANVAS_SHADER_DISPLAY] = loadShader("\
-		uniform sampler2D texture;\
-		uniform vec2 texture_size;\
-		uniform float barrel;\
-		uniform vec2 barrel_center;\
-		uniform float scanline_alpha;\
-		uniform float center_lighting;\
-		uniform sampler2D shadowmask;\
-		uniform vec2 shadowmask_scale;\
-		uniform vec2 shadowmask_translate;\
-		uniform float shadowmask_alpha;\
-		uniform float alpha;\
-		\
-		float PI = 3.14159265358979323846264;\
-		\
-		void main(void)\
-		{\
-			vec2 q = gl_TexCoord[0].xy;\
-			\
-			vec2 qc = q - barrel_center;\
-			q += barrel * qc * dot(qc, qc);\
-			\
-			vec3 p = texture2D(texture, q).rgb;\
-			float s = sin(PI * texture_size.y * q.y);\
-			p *= mix(1.0, s * s, scanline_alpha);\
-			vec2 c = qc * center_lighting;\
-			p *= exp(-dot(c, c));\
-			vec3 m = texture2D(shadowmask, q * shadowmask_scale +\
-							   shadowmask_translate).rgb;\
-			p *= mix(vec3(1.0, 1.0, 1.0), m, shadowmask_alpha);\
-			gl_FragColor = vec4(p, alpha);\
-		}");
+                                                     uniform sampler2D texture;\
+                                                     uniform vec2 texture_size;\
+                                                     uniform float barrel;\
+                                                     uniform vec2 barrel_center;\
+                                                     uniform float scanline_alpha;\
+                                                     uniform float center_lighting;\
+                                                     uniform sampler2D shadowmask;\
+                                                     uniform vec2 shadowmask_scale;\
+                                                     uniform vec2 shadowmask_translate;\
+                                                     uniform float shadowmask_alpha;\
+                                                     uniform float alpha;\
+                                                     \
+                                                     float PI = 3.14159265358979323846264;\
+                                                     \
+                                                     void main(void)\
+                                                     {\
+                                                     vec2 q = gl_TexCoord[0].xy;\
+                                                     \
+                                                     vec2 qc = q - barrel_center;\
+                                                     q += barrel * qc * dot(qc, qc);\
+                                                     \
+                                                     vec3 p = texture2D(texture, q).rgb;\
+                                                     float s = sin(PI * texture_size.y * q.y);\
+                                                     p *= mix(1.0, s * s, scanline_alpha);\
+                                                     vec2 c = qc * center_lighting;\
+                                                     p *= exp(-dot(c, c));\
+                                                     vec3 m = texture2D(shadowmask, q * shadowmask_scale +\
+                                                     shadowmask_translate).rgb;\
+                                                     p *= mix(vec3(1.0, 1.0, 1.0), m, shadowmask_alpha);\
+                                                     gl_FragColor = vec4(p, alpha);\
+                                                     }");
 }
 
 void OpenGLCanvas::deleteShaders()
@@ -741,8 +741,6 @@ void OpenGLCanvas::updateDisplayConfiguration()
 #ifdef GL_VERSION_2_0
 	// Deactivate shader when needed
 	if (!isShaderEnabled)
-		return;
-	if (mode == CANVAS_MODE_PAPER)
 		return;
 	
 	// Y'UV filters
@@ -1533,7 +1531,7 @@ void OpenGLCanvas::postHIDNotification(int notification, int usageId, float valu
 
 void OpenGLCanvas::sendUnicodeKeyEvent(int unicode)
 {
-//	logMessage("unicode " + getHexString(unicode));
+    //	logMessage("unicode " + getHexString(unicode));
 	
 	postHIDNotification(CANVAS_UNICODEKEYBOARD_DID_CHANGE, unicode, 0);
 }

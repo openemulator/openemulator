@@ -59,6 +59,17 @@ string getHexString(int value)
 	return ss.str();
 }
 
+string rtrim(string value)
+{
+    size_t found;
+    
+    found = value.find_last_not_of(" \n\r\t\f\v");
+    if (found != string::npos)
+        return value.substr(0, found + 1);
+    
+    return "";
+}
+
 OEData getCharVector(const string& value)
 {
 	OEData result;

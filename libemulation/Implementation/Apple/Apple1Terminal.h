@@ -33,13 +33,17 @@ private:
 	OEComponent *monitor;
 	
     bool speedLimit;
+    bool cursorActive;
     int cursorX, cursorY;
     
 	OEData font;
+    char *vramp;
     OEImage image;
     
     void scheduleTimer();
     void loadFont(OEData *data);
     void updateCanvas();
     void sendKey(int unicode);
+    void copy(string *s);
+    void paste(string *s);
 };

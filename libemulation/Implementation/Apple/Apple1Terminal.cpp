@@ -14,9 +14,10 @@
 #include "ControlBus.h"
 #include "CanvasInterface.h"
 
-#define SCREEN_OFFSET 8
-#define SCREEN_WIDTH 576
-#define SCREEN_HEIGHT 192
+#define SCREEN_ORIGIN_X 104
+#define SCREEN_ORIGIN_Y 25
+#define SCREEN_WIDTH 768
+#define SCREEN_HEIGHT 242
 #define TERM_WIDTH 40
 #define TERM_HEIGHT 24
 #define CHAR_WIDTH 14
@@ -32,9 +33,11 @@ Apple1Terminal::Apple1Terminal()
     monitor = NULL;
     
     speedLimit = true;
+    cursorActive = true;
     cursorX = 0;
     cursorY = 0;
     
+    vramp = NULL;
     image.setFormat(OEIMAGE_LUMINANCE);
     image.setSize(OEMakeSize(SCREEN_WIDTH, SCREEN_HEIGHT));
 }
@@ -75,11 +78,17 @@ bool Apple1Terminal::setRef(string name, OEComponent *ref)
 	else if (name == "monitor")
     {
         if (monitor)
+        {
             monitor->removeObserver(this, CANVAS_UNICODEKEYBOARD_DID_CHANGE);
+            monitor->removeObserver(this, CANVAS_DID_COPY);
+            monitor->removeObserver(this, CANVAS_DID_PASTE);
+        }
 		monitor = ref;
         if (monitor)
         {
             monitor->addObserver(this, CANVAS_UNICODEKEYBOARD_DID_CHANGE);
+            monitor->addObserver(this, CANVAS_DID_COPY);
+            monitor->addObserver(this, CANVAS_DID_PASTE);
             updateCanvas();
         }
     }
@@ -113,6 +122,15 @@ bool Apple1Terminal::init()
         return false;
     }
     
+    OEData *vramData;
+    vram->postMessage(this, RAM_GET_MEMORY, &vramData);
+    if (vramData->size() < (TERM_WIDTH * TERM_HEIGHT))
+    {
+        logMessage("not enough vram");
+        return false;
+    }
+    vramp = &vramData->front();
+    
     scheduleTimer();
     updateCanvas();
     
@@ -124,7 +142,22 @@ void Apple1Terminal::notify(OEComponent *sender, int notification, void *data)
     if (sender == controlBus)
         scheduleTimer();
     else if (sender == monitor)
-        sendKey(*((int *)data));
+    {
+        switch (notification)
+        {
+            case CANVAS_UNICODEKEYBOARD_DID_CHANGE:
+                sendKey(*((int *)data));
+                break;
+                
+            case CANVAS_DID_COPY:
+                copy((string *)data);
+                break;
+                
+            case CANVAS_DID_PASTE:
+                paste((string *)data);
+                break;
+        }
+    }
 }
 
 void Apple1Terminal::write(int address, int value)
@@ -155,29 +188,30 @@ void Apple1Terminal::loadFont(OEData *data)
     }
 }
 
+// We just copy 3 int's, and leave the last 2 pixels
 #define copyCharLine(x) \
-    *((int *)(p + x * SCREEN_WIDTH + 0)) = *((int *)(f + x * FONT_WIDTH + 0));\
-    *((int *)(p + x * SCREEN_WIDTH + 4)) = *((int *)(f + x * FONT_WIDTH + 4));\
-    *((int *)(p + x * SCREEN_WIDTH + 8)) = *((int *)(f + x * FONT_WIDTH + 8));\
+*((int *)(p + x * SCREEN_WIDTH + 0)) = *((int *)(f + x * FONT_WIDTH + 0));\
+*((int *)(p + x * SCREEN_WIDTH + 4)) = *((int *)(f + x * FONT_WIDTH + 4));\
+*((int *)(p + x * SCREEN_WIDTH + 8)) = *((int *)(f + x * FONT_WIDTH + 8));
 
 void Apple1Terminal::updateCanvas()
 {
     if (!monitor)
         return;
     
-    OEData *vramData;
-    vram->postMessage(this, RAM_GET_MEMORY, &vramData);
-    if (vramData->size() < (TERM_WIDTH * TERM_HEIGHT))
+    if (!vramp)
         return;
     
     for (int y = 0; y < TERM_HEIGHT; y++)
         for (int x = 0; x < TERM_WIDTH; x++)
         {
-            int c = (*vramData)[y * TERM_WIDTH + x] & (FONT_SIZE - 1);
-//            c = (x + y) & 0x3f;
+            int c = vramp[y * TERM_WIDTH + x] & (FONT_SIZE - 1);
+            if (cursorActive && (x == cursorX) && (y == cursorY))
+                c = 0;
+            
             char *f = (char *)&font.front() + c * FONT_HEIGHT * FONT_WIDTH;
             char *p = ((char *)image.getPixels() + y * SCREEN_WIDTH * CHAR_HEIGHT +
-                       x * CHAR_WIDTH + SCREEN_OFFSET);
+                       x * CHAR_WIDTH + SCREEN_ORIGIN_Y * SCREEN_WIDTH + SCREEN_ORIGIN_X);
             
             copyCharLine(0);
             copyCharLine(1);
@@ -194,19 +228,59 @@ void Apple1Terminal::updateCanvas()
 
 void Apple1Terminal::sendKey(int unicode)
 {
-    OEData *vramData;
-    vram->postMessage(this, RAM_GET_MEMORY, &vramData);
+    if (unicode >= 0x80)
+        return;
     
-    (*vramData)[cursorY * TERM_WIDTH + cursorX] = unicode;
-    cursorX++;
-    if (cursorX >= TERM_WIDTH)
+    if (unicode == 0x0a)
     {
         cursorX = 0;
         cursorY++;
+    }
+    else if (unicode == 0x0c)
+    {
+        memset(vramp, 0x20, TERM_HEIGHT * TERM_WIDTH);
         
-        if (cursorY >= TERM_HEIGHT)
-            cursorY = 0;
+        cursorX = 0;
+        cursorY = 0;
+    }
+    else if (unicode <= 0x7f)
+    {
+        vramp[cursorY * TERM_WIDTH + cursorX] = unicode;
+        
+        cursorX++;
+        if (cursorX >= TERM_WIDTH)
+        {
+            cursorX = 0;
+            cursorY++;
+        }
+    }
+    
+    if (cursorY >= TERM_HEIGHT)
+    {
+        cursorY = TERM_HEIGHT - 1;
+        
+        memmove(vramp, vramp + TERM_WIDTH, (TERM_HEIGHT - 1) * TERM_WIDTH);
+        memset(vramp + (TERM_HEIGHT - 1) * TERM_WIDTH, 0x20, TERM_WIDTH);
     }
     
     updateCanvas();
+}
+
+void Apple1Terminal::copy(string *s)
+{
+    for (int y = 0; y < TERM_HEIGHT; y++)
+    {
+        string line;
+        
+        for (int x = 0; x < TERM_WIDTH; x++)
+            line += vramp[y * TERM_WIDTH + x];
+        
+        *s += rtrim(line) + '\n';
+    }
+}
+
+void Apple1Terminal::paste(string *s)
+{
+    for (int i = 0; i < s->size(); i++)
+        sendKey((*s)[i]);
 }

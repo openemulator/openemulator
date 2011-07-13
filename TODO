@@ -1,5 +1,9 @@
 ==To-Do==
+* Configure monitor according to color carrier
+* Connect monitors to powerState
+* Fix video contrast, it should not modify brightness
 * Fix problem when replacing a monitor in full screen
+* Fix UNICODE entry of composed keys on Mac OS X (like ^ or « or `)
 * Fix [CanvasView update] recursion
 
 * Add OESound:resampling, rendering to audio buffer

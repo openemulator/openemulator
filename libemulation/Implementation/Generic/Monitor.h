@@ -30,7 +30,4 @@ private:
 	OEComponent *canvas;
 	
 	CanvasDisplayConfiguration configuration;
-	OERect videoRect;
-	
-	void updateVideoRect();
 };

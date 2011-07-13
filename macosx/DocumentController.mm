@@ -463,7 +463,7 @@
 			return document;
 		
 		[defaults setBool:NO forKey:@"OEDefaultTemplateEnabled"];
-		[defaults setObject:@"" forKey:@"OEDefaultTemplatePath"];
+		[defaults setObject:nil forKey:@"OEDefaultTemplatePath"];
 	}
 	
 	[self newDocumentFromTemplateChooser:self];

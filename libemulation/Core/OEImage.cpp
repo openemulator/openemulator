@@ -17,6 +17,7 @@
 OEImage::OEImage()
 {
 	format = OEIMAGE_RGBA;
+    options = 0;
 	size = OEMakeSize(0, 0);
 }
 
@@ -170,7 +171,7 @@ void OEImage::overlay(OEPoint origin, OEImage& image)
 	unsigned char *src = (unsigned char *)image.getPixels() + srcOffset;
 	int dstBytesPerRow = getBytesPerRow();
 	int dstOffset = (int)rect.origin.y * srcBytesPerRow +
-					 (int)rect.origin.x * getBytesPerPixel();
+    (int)rect.origin.x * getBytesPerPixel();
 	unsigned char *dst = (unsigned char *)getPixels() + dstOffset;
 	int n = (int)OEWidth(rect) * getBytesPerPixel();
 	
@@ -215,7 +216,7 @@ OEImage OEImage::getClip(OERect rect)
 	
 	return image;
 }
-			   
+
 void OEImage::updateSize()
 {
 	int prevSize = (int) pixels.size();

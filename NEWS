@@ -1,4 +1,6 @@
 ==2011-07==
+* Implemented Apple-1 terminal copy line trimming
+* Added Apple-1 terminal copy/paste support
 * Implemented Apple-1 terminal
 * Implemented daisy chain device removal
 * Fixed hardware library detail view filtering

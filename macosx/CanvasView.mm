@@ -759,7 +759,15 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 {
 	NSString *characters = [theEvent characters];
 	for (NSInteger i = 0; i < [characters length]; i++)
-		[self sendUnicodeKeyEvent:[characters characterAtIndex:i]];
+    {
+        int c = [characters characterAtIndex:i];
+        if (c == 0x0d)
+            [self sendUnicodeKeyEvent:0x0a];
+        else if (c == 0x0a)
+            [self sendUnicodeKeyEvent:0x0d];
+        else
+            [self sendUnicodeKeyEvent:c];
+    }
 	
 	if (![theEvent isARepeat])
 	{

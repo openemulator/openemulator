@@ -173,6 +173,7 @@ public:
 		compositeWhiteLevel = 1;
 		compositeCarrierFrequency = 0.25;
 		compositeLinePhase = 0;
+        compositeLumaBandwidth = 0.28;
 		compositeChromaBandwidth = 0.01;
 	}
 	
@@ -198,6 +199,7 @@ public:
 	float compositeWhiteLevel;
 	float compositeCarrierFrequency;
 	float compositeLinePhase;
+	float compositeLumaBandwidth;
 	float compositeChromaBandwidth;
 };
 
