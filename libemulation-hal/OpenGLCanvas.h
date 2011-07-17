@@ -139,10 +139,8 @@ private:
 	OESize textureSize[OPENGLCANVAS_TEXTURE_END];
 	
 	CanvasDisplayConfiguration displayConfiguration;
-	bool isShaderActive;
 	GLuint shader[OPENGLCANVAS_SHADER_END];
 	int renderIndex;
-	GLuint renderShader;
 	int persistance[OPENGLCANVAS_PERSISTANCE_IMAGE_NUM];
 	
 	CanvasPaperConfiguration paperConfiguration;
@@ -179,6 +177,8 @@ private:
 	void deleteShader(GLuint glShader);
 	
 	bool uploadImage();
+    void configureRenderShader(CanvasDecoder videoDecoder, bool isMonochrome);
+    void configureDisplayShader();
 	void updateDisplayConfiguration();
 	void renderImage();
 	bool isPersistanceDrawRequired();

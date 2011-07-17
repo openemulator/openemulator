@@ -354,11 +354,9 @@ bool OpenGLCanvas::initOpenGL()
 	}
 	
 	isConfigurationUpdated = true;
-	isShaderActive = false;
 	for (int i = 0; i < OPENGLCANVAS_SHADER_END; i++)
 		shader[i] = 0;
 	renderIndex = 0;
-	renderShader = 0;
 	for (int i = 0; i < OPENGLCANVAS_PERSISTANCE_IMAGE_NUM; i++)
 		persistance[i] = -1;
 	
@@ -734,44 +732,42 @@ bool OpenGLCanvas::uploadImage()
 	return true;
 }
 
-void OpenGLCanvas::updateDisplayConfiguration()
+void OpenGLCanvas::configureRenderShader(CanvasDecoder videoDecoder,
+                                         bool isMonochrome)
 {
-	isShaderActive = false;
-	
 #ifdef GL_VERSION_2_0
-	// Deactivate shader when needed
-	if (!isShaderEnabled)
-		return;
-	
 	// Y'UV filters
 	OEVector w = OEVector::chebyshevWindow(17, 50);
 	w = w.normalize();
 	
-	OEVector wy;
-	wy = w * OEVector::lanczosWindow(17, displayConfiguration.videoBandwidth);
-	wy = wy.normalize();
-	
-	OEVector wu, wv;
-	switch (displayConfiguration.videoDecoder)
+	OEVector wy, wu, wv;
+	switch (videoDecoder)
 	{
 		case CANVAS_DECODER_RGB:
-		case CANVAS_DECODER_MONOCHROME:
+            wy = w * OEVector::lanczosWindow(17, displayConfiguration.videoBandwidth);
+            wy = wy.normalize();
 			wu = wv = wy;
 			break;
 			
+		case CANVAS_DECODER_MONOCHROME:
+            wy = w * OEVector::lanczosWindow(17, displayConfiguration.videoBandwidth);
+            wy = wy.normalize();
+			wu = wv = OEVector(17);
+			break;
+            
 		case CANVAS_DECODER_NTSC_YIQ:
-			wu = w * OEVector::lanczosWindow(17, (displayConfiguration.
-												  compositeChromaBandwidth));
+            wy = w * OEVector::lanczosWindow(17, displayConfiguration.compositeLumaBandwidth);
+            wy = wy.normalize();
+			wu = w * OEVector::lanczosWindow(17, (displayConfiguration.compositeChromaBandwidth));
 			wu = wu.normalize() * 2;
-			wv = w * OEVector::lanczosWindow(17, (displayConfiguration.
-												  compositeChromaBandwidth +
-												  NTSC_YIQ_I_SHIFT));
+			wv = w * OEVector::lanczosWindow(17, (displayConfiguration.compositeChromaBandwidth + NTSC_YIQ_I_SHIFT));
 			wv = wv.normalize() * 2;
 			break;
 			
 		default:
-			wu = w * OEVector::lanczosWindow(17, (displayConfiguration.
-												  compositeChromaBandwidth));
+            wy = w * OEVector::lanczosWindow(17, displayConfiguration.compositeLumaBandwidth);
+            wy = wy.normalize();
+			wu = w * OEVector::lanczosWindow(17, (displayConfiguration.compositeChromaBandwidth));
 			wu = wv = wu.normalize() * 2;
 			break;
 	}
@@ -782,10 +778,22 @@ void OpenGLCanvas::updateDisplayConfiguration()
 				0, 0, 1);
 	
 	// Contrast
-	m *= displayConfiguration.videoContrast;
+    float contrast = displayConfiguration.videoContrast;
+    if (contrast < 0.001)
+        contrast = 0.001;
+	m *= contrast;
+    
+    float persistanceEnergy = 1;
+    float persistanceTotalEnergy = 1;
+    for (int i = 1; i < OPENGLCANVAS_PERSISTANCE_IMAGE_NUM; i++)
+    {
+        persistanceEnergy *= displayConfiguration.displayPersistance;
+        persistanceTotalEnergy += persistanceEnergy;
+    }
+    m = m * (1.0 / persistanceTotalEnergy);
 	
 	// Decoder matrices from "Digital Video and HDTV Algorithms and Interfaces"
-	switch (displayConfiguration.videoDecoder)
+	switch (videoDecoder)
 	{
 		case CANVAS_DECODER_RGB:
 		case CANVAS_DECODER_MONOCHROME:
@@ -836,6 +844,10 @@ void OpenGLCanvas::updateDisplayConfiguration()
 	m *= OEMatrix3(1, 0, 0,
 				   0, displayConfiguration.videoSaturation, 0,
 				   0, 0, displayConfiguration.videoSaturation);
+    if (isMonochrome)
+        m *= OEMatrix3(1, 0, 0,
+                       0, 0, 0,
+                       0, 0, 0);
 	
 	// Encoder matrices
 	switch (displayConfiguration.videoDecoder)
@@ -858,55 +870,33 @@ void OpenGLCanvas::updateDisplayConfiguration()
             break;
 	}
 	
-	// Dynamic range gain
-	switch (displayConfiguration.videoDecoder)
-	{
-		case CANVAS_DECODER_NTSC_YIQ:
-		case CANVAS_DECODER_NTSC_CXA2025AS:
-		case CANVAS_DECODER_NTSC_YUV:
-		case CANVAS_DECODER_PAL:
-        {
-			float levelRange = (displayConfiguration.compositeWhiteLevel -
-								displayConfiguration.compositeBlackLevel);
-			if (fabs(levelRange) < 0.01)
-				levelRange = 0.01;
-			m *= 1 / levelRange;
-			break;
-        }
-            
-        default:
-            break;
-	}
-	
-	switch (displayConfiguration.videoDecoder)
+    GLuint renderShader;
+	switch (videoDecoder)
 	{
 		case CANVAS_DECODER_NTSC_YIQ:
 		case CANVAS_DECODER_NTSC_YUV:
 		case CANVAS_DECODER_NTSC_CXA2025AS:
 			renderShader = shader[OPENGLCANVAS_SHADER_NTSC];
 			break;
+            
 		case CANVAS_DECODER_PAL:
 			renderShader = shader[OPENGLCANVAS_SHADER_PAL];
 			break;
+            
 		default:
 			renderShader = shader[OPENGLCANVAS_SHADER_RGB];
 			break;
 	}
 	
-	isShaderActive = renderShader && shader[OPENGLCANVAS_SHADER_DISPLAY];
-	if (!isShaderActive)
-		return;
-	
+    if (!renderShader)
+        return;
+    
 	glUseProgram(renderShader);
 	
 	if (renderShader != shader[OPENGLCANVAS_SHADER_RGB])
-	{
 		glUniform2f(glGetUniformLocation(renderShader, "comp_phase"),
-					displayConfiguration.compositeCarrierFrequency,
-					displayConfiguration.compositeLinePhase);
-		glUniform1f(glGetUniformLocation(renderShader, "comp_black"),
-					displayConfiguration.compositeBlackLevel);
-	}
+					displayConfiguration.compositeChromaCarrier,
+					displayConfiguration.compositeChromaLine);
 	glUniform3f(glGetUniformLocation(renderShader, "c0"),
 				wy.getValue(8), wu.getValue(8), wv.getValue(8));
 	glUniform3f(glGetUniformLocation(renderShader, "c1"),
@@ -925,6 +915,7 @@ void OpenGLCanvas::updateDisplayConfiguration()
 				wy.getValue(1), wu.getValue(1), wv.getValue(1));
 	glUniform3f(glGetUniformLocation(renderShader, "c8"),
 				wy.getValue(0), wu.getValue(0), wv.getValue(0));
+    
     if (displayConfiguration.videoDecoder == CANVAS_DECODER_RGB)
         glUniform3f(glGetUniformLocation(renderShader, "offset"),
                     displayConfiguration.videoBrightness,
@@ -932,11 +923,20 @@ void OpenGLCanvas::updateDisplayConfiguration()
                     displayConfiguration.videoBrightness);
     else
         glUniform3f(glGetUniformLocation(renderShader, "offset"),
-                    displayConfiguration.videoBrightness, 0, 0);
+                    displayConfiguration.videoBrightness / contrast, 0, 0);
 	glUniformMatrix3fv(glGetUniformLocation(renderShader, "decoder"),
 					   9, false, m.getValues());
-	
+#endif
+}
+
+void OpenGLCanvas::configureDisplayShader()
+{
+#ifdef GL_VERSION_2_0
 	GLuint displayShader = shader[OPENGLCANVAS_SHADER_DISPLAY];
+    
+    if (!displayShader)
+        return;
+    
 	glUseProgram(displayShader);
 	glUniform1i(glGetUniformLocation(displayShader, "shadowmask"), 1);
 	glUniform1f(glGetUniformLocation(displayShader, "barrel"),
@@ -951,6 +951,26 @@ void OpenGLCanvas::updateDisplayConfiguration()
 #endif
 }
 
+void OpenGLCanvas::updateDisplayConfiguration()
+{
+	switch (displayConfiguration.videoDecoder)
+	{
+		case CANVAS_DECODER_NTSC_YIQ:
+		case CANVAS_DECODER_NTSC_YUV:
+		case CANVAS_DECODER_NTSC_CXA2025AS:
+		case CANVAS_DECODER_PAL:
+            configureRenderShader(displayConfiguration.videoDecoder, false);
+            configureRenderShader(CANVAS_DECODER_RGB, true);
+			break;
+            
+		default:
+            configureRenderShader(displayConfiguration.videoDecoder, false);
+			break;
+	}
+    
+    configureDisplayShader();
+}
+
 void OpenGLCanvas::renderImage()
 {
 #ifdef GL_VERSION_2_0
@@ -959,14 +979,38 @@ void OpenGLCanvas::renderImage()
 		renderIndex = 0;
 	persistance[0] = renderIndex;
 	
-	if (!isShaderActive)
-		return;
+	GLuint renderShader;
+    if (image.getOptions() & OEIMAGE_COLORCARRIER)
+    {
+        switch (displayConfiguration.videoDecoder)
+        {
+            case CANVAS_DECODER_NTSC_YIQ:
+            case CANVAS_DECODER_NTSC_YUV:
+            case CANVAS_DECODER_NTSC_CXA2025AS:
+                renderShader = shader[OPENGLCANVAS_SHADER_NTSC];
+                break;
+                
+            case CANVAS_DECODER_PAL:
+                renderShader = shader[OPENGLCANVAS_SHADER_PAL];
+                break;
+                
+            default:
+                renderShader = shader[OPENGLCANVAS_SHADER_RGB];
+                break;
+        }
+    }
+    else
+        renderShader = shader[OPENGLCANVAS_SHADER_RGB];
+    
+    if (!isShaderEnabled || !renderShader)
+        return;
 	
+	glUseProgram(renderShader);
+    
 	GLuint textureIndex = OPENGLCANVAS_TEXTURE_IMAGE_RENDERED + renderIndex;
 	OESize texSize = textureSize[OPENGLCANVAS_TEXTURE_IMAGE_RAW];
 	updateTextureSize(textureIndex, texSize);
 	
-	glUseProgram(renderShader);
 	glUniform1i(glGetUniformLocation(renderShader, "texture"), 0);
 	glUniform2f(glGetUniformLocation(renderShader, "texture_size"),
 				texSize.width, texSize.height);
@@ -1082,11 +1126,16 @@ void OpenGLCanvas::drawDisplayCanvas()
 	
 	// Set shader uniforms
 #ifdef GL_VERSION_2_0
-	if (isShaderActive)
+    GLuint displayShader = shader[OPENGLCANVAS_SHADER_DISPLAY];
+    if (!isShaderEnabled)
+        displayShader = 0;
+    
+	if (displayShader)
 	{
-		GLuint displayShader = shader[OPENGLCANVAS_SHADER_DISPLAY];
 		glUseProgram(displayShader);
 		
+        glUniform1i(glGetUniformLocation(displayShader, "texture"), 0);
+        
 		OEPoint barrelCenter;
 		barrelCenter.x = ((0.5 - displayConfiguration.videoRect.origin.x) /
 						  displayConfiguration.videoRect.size.width *
@@ -1156,6 +1205,8 @@ void OpenGLCanvas::drawDisplayCanvas()
 		glUniform2f(glGetUniformLocation(displayShader, "shadowmask_translate"),
 					displayConfiguration.videoRect.origin.x * elemNum.width,
 					displayConfiguration.videoRect.origin.y * elemNum.height);
+        glUniform1f(glGetUniformLocation(displayShader, "alpha"),
+                    displayConfiguration.displayPersistance);
 	}
 #endif
 	
@@ -1166,7 +1217,7 @@ void OpenGLCanvas::drawDisplayCanvas()
 	glClearColor(1, 1, 1, 1);
 	glBlendFunc(GL_ONE, GL_SRC_ALPHA);
 	
-	int startIndex = ((isShaderActive &&
+	int startIndex = ((displayShader &&
 					   (displayConfiguration.displayPersistance != 0)) ?
 					  (OPENGLCANVAS_PERSISTANCE_IMAGE_NUM - 1) : 0);
 	for (int i = startIndex; i >= 0; i--)
@@ -1175,24 +1226,17 @@ void OpenGLCanvas::drawDisplayCanvas()
 			continue;
 		
 		int textureIndex;
-		if (isShaderActive)
+		if (displayShader)
 			textureIndex = OPENGLCANVAS_TEXTURE_IMAGE_RENDERED + persistance[i];
 		else
 			textureIndex = OPENGLCANVAS_TEXTURE_IMAGE_RAW;
 		glBindTexture(GL_TEXTURE_2D, texture[textureIndex]);
 		
 #ifdef GL_VERSION_2_0
-		if (isShaderActive)
-		{
-			GLuint displayShader = shader[OPENGLCANVAS_SHADER_DISPLAY];
-			OESize size = textureSize[textureIndex];
-			glUseProgram(displayShader);
-			glUniform1i(glGetUniformLocation(displayShader, "texture"), 0);
+		if (displayShader)
 			glUniform2f(glGetUniformLocation(displayShader, "texture_size"),
-						size.width, size.height);
-			glUniform1f(glGetUniformLocation(displayShader, "alpha"),
-						displayConfiguration.displayPersistance);
-		}
+						textureSize[textureIndex].width,
+                        textureSize[textureIndex].height);
 #endif
 		
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -1217,7 +1261,7 @@ void OpenGLCanvas::drawDisplayCanvas()
 	glBindTexture(GL_TEXTURE_2D, 0);
 	
 #ifdef GL_VERSION_2_0
-	if (isShaderActive)
+	if (displayShader)
 		glUseProgram(0);
 #endif
 }

@@ -20,18 +20,16 @@
         <setting ref="studioMonitor.monitor" name="displayShadowMaskDotPitch" label="Shadow Mask Dot Pitch" type="slider" options="0.0,2.0"/>
         <setting ref="studioMonitor.monitor" name="displayShadowMask" label="Shadow Mask" type="select" options="Triad,Inline,Aperture,LCD,Bayer"/>
         <setting ref="studioMonitor.monitor" name="displayPersistance" label="Persistance" type="slider" options="0.0,1.0"/>
-        <setting ref="studioMonitor.monitor" name="compositeCarrierFrequency" label="Chroma Carrier Frequency" type="slider" options="0.24,0.3"/>
-        <setting ref="studioMonitor.monitor" name="compositeLinePhase" label="Chroma Line Phase" type="slider" options="0.0,1.0"/>
         <setting ref="studioMonitor.monitor" name="compositeLumaBandwidth" label="Luma Bandwidth" type="slider" options="0.0,1.0"/>
         <setting ref="studioMonitor.monitor" name="compositeChromaBandwidth" label="Chroma Bandwidth" type="slider" options="0.0,1.0"/>
-        <setting ref="studioMonitor.monitor" name="compositeBlackLevel" label="IRE Black Level" type="slider" options="0.0,1.0"/>
-        <setting ref="studioMonitor.monitor" name="compositeWhiteLevel" label="IRE White Level" type="slider" options="0.0,1.0"/>
+        <setting ref="studioMonitor.monitor" name="compositeChromaCarrier" label="Chroma Carrier Frequency" type="slider" options="0.24,0.3"/>
+        <setting ref="studioMonitor.monitor" name="compositeChromaLine" label="Chroma Line Phase" type="slider" options="0.0,1.0"/>
     </device>
     <connector id="studioMonitor.connector" type="Composite Video"/>
     <component id="studioMonitor.monitor" class="Monitor">
         <property name="device" ref="studioMonitor"/>
         <property name="videoDecoder" value="NTSC Y'UV"/>
-        <property name="videoBandwidth" value="0.85"/>
+        <property name="videoBandwidth" value="1"/>
         <property name="videoBrightness" value="0"/>
         <property name="videoContrast" value="1"/>
         <property name="videoSaturation" value="1"/>
@@ -47,12 +45,10 @@
         <property name="displayShadowMaskDotPitch" value="0.5"/>
         <property name="displayShadowMask" value="Triad"/>
         <property name="displayPersistance" value="0"/>
-        <property name="compositeBlackLevel" value="0"/>
-        <property name="compositeWhiteLevel" value="1"/>
-        <property name="compositeCarrierFrequency" value="0.25"/>
-        <property name="compositeLinePhase" value="0"/>
         <property name="compositeLumaBandwidth" value="0.28"/>
         <property name="compositeChromaBandwidth" value="0.01"/>
+        <property name="compositeChromaCarrier" value="0.25"/>
+        <property name="compositeChromaLine" value="0"/>
     </component>
     
 </edl>

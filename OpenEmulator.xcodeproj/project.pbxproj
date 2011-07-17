@@ -100,7 +100,6 @@
 		00CAD7D912A04C22002B92E5 /* Emulation.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00CAD7D712A04C22002B92E5 /* Emulation.xib */; };
 		00D226051350F9A100FC69B9 /* AudioInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D225FA1350F9A100FC69B9 /* AudioInterface.h */; };
 		00D226061350F9A100FC69B9 /* CanvasInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D225FB1350F9A100FC69B9 /* CanvasInterface.h */; };
-		00D226071350F9A100FC69B9 /* CPUInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D225FC1350F9A100FC69B9 /* CPUInterface.h */; };
 		00D226081350F9A100FC69B9 /* DeviceInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D225FD1350F9A100FC69B9 /* DeviceInterface.h */; };
 		00D2260A1350F9A100FC69B9 /* EthernetInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D225FF1350F9A100FC69B9 /* EthernetInterface.h */; };
 		00D2260B1350F9A100FC69B9 /* MIDIInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D226001350F9A100FC69B9 /* MIDIInterface.h */; };
@@ -155,7 +154,6 @@
 		00FC27EF12D1070A0065E986 /* AddressDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8882E12A393990052B7A4 /* AddressDecoder.cpp */; };
 		00FC27F112D1070A0065E986 /* AddressOffset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8883012A393990052B7A4 /* AddressOffset.cpp */; };
 		00FC27F312D1070A0065E986 /* AudioSampleConverter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8883212A393990052B7A4 /* AudioSampleConverter.cpp */; };
-		00FC27F512D1070A0065E986 /* CharsetLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8883412A393990052B7A4 /* CharsetLoader.cpp */; };
 		00FC27F712D1070A0065E986 /* Monitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8883612A393990052B7A4 /* Monitor.cpp */; };
 		00FC27F912D1070A0065E986 /* ControlBus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8883812A393990052B7A4 /* ControlBus.cpp */; };
 		00FC27FB12D1070A0065E986 /* FloatingBus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8883A12A393990052B7A4 /* FloatingBus.cpp */; };
@@ -237,6 +235,7 @@
 		001750C113A50A9C0043E2ED /* NEWS */ = {isa = PBXFileReference; lastKnownFileType = text; path = NEWS; sourceTree = "<group>"; };
 		001750C213A50A9C0043E2ED /* README */ = {isa = PBXFileReference; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		001750C313A50A9C0043E2ED /* TODO */ = {isa = PBXFileReference; lastKnownFileType = text; path = TODO; sourceTree = "<group>"; };
+		001CC97E13D11EBC00B0DDA7 /* CPUInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CPUInterface.h; sourceTree = "<group>"; };
 		001F56F80FD1E8E500EA246A /* Sparkle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = Sparkle.framework; path = macosx/Sparkle.framework; sourceTree = "<group>"; };
 		00247F35139D85A900B165D1 /* OECommon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OECommon.cpp; sourceTree = "<group>"; };
 		00247F36139D85AA00B165D1 /* OECommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OECommon.h; sourceTree = "<group>"; };
@@ -373,8 +372,6 @@
 		00B8883112A393990052B7A4 /* AddressOffset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AddressOffset.h; path = libemulation/Implementation/Generic/AddressOffset.h; sourceTree = SOURCE_ROOT; };
 		00B8883212A393990052B7A4 /* AudioSampleConverter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AudioSampleConverter.cpp; path = libemulation/Implementation/Generic/AudioSampleConverter.cpp; sourceTree = SOURCE_ROOT; };
 		00B8883312A393990052B7A4 /* AudioSampleConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioSampleConverter.h; path = libemulation/Implementation/Generic/AudioSampleConverter.h; sourceTree = SOURCE_ROOT; };
-		00B8883412A393990052B7A4 /* CharsetLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CharsetLoader.cpp; path = libemulation/Implementation/Generic/CharsetLoader.cpp; sourceTree = SOURCE_ROOT; };
-		00B8883512A393990052B7A4 /* CharsetLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CharsetLoader.h; path = libemulation/Implementation/Generic/CharsetLoader.h; sourceTree = SOURCE_ROOT; };
 		00B8883612A393990052B7A4 /* Monitor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Monitor.cpp; sourceTree = "<group>"; };
 		00B8883712A393990052B7A4 /* Monitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Monitor.h; sourceTree = "<group>"; };
 		00B8883812A393990052B7A4 /* ControlBus.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ControlBus.cpp; path = libemulation/Implementation/Generic/ControlBus.cpp; sourceTree = SOURCE_ROOT; };
@@ -414,7 +411,6 @@
 		00CAD7D812A04C22002B92E5 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Emulation.xib; sourceTree = "<group>"; };
 		00D225FA1350F9A100FC69B9 /* AudioInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioInterface.h; sourceTree = "<group>"; };
 		00D225FB1350F9A100FC69B9 /* CanvasInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanvasInterface.h; sourceTree = "<group>"; };
-		00D225FC1350F9A100FC69B9 /* CPUInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CPUInterface.h; sourceTree = "<group>"; };
 		00D225FD1350F9A100FC69B9 /* DeviceInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceInterface.h; sourceTree = "<group>"; };
 		00D225FF1350F9A100FC69B9 /* EthernetInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EthernetInterface.h; sourceTree = "<group>"; };
 		00D226001350F9A100FC69B9 /* MIDIInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MIDIInterface.h; sourceTree = "<group>"; };
@@ -617,6 +613,14 @@
 			path = Formats;
 			sourceTree = "<group>";
 		};
+		001CC97D13D11E9900B0DDA7 /* Generic */ = {
+			isa = PBXGroup;
+			children = (
+				001CC97E13D11EBC00B0DDA7 /* CPUInterface.h */,
+			);
+			path = Generic;
+			sourceTree = "<group>";
+		};
 		002740B513A08A1E00E13D65 /* Videx */ = {
 			isa = PBXGroup;
 			children = (
@@ -731,8 +735,6 @@
 				00B8883112A393990052B7A4 /* AddressOffset.h */,
 				00B8883212A393990052B7A4 /* AudioSampleConverter.cpp */,
 				00B8883312A393990052B7A4 /* AudioSampleConverter.h */,
-				00B8883412A393990052B7A4 /* CharsetLoader.cpp */,
-				00B8883512A393990052B7A4 /* CharsetLoader.h */,
 				00B8883812A393990052B7A4 /* ControlBus.cpp */,
 				00B8883912A393990052B7A4 /* ControlBus.h */,
 				00B8883A12A393990052B7A4 /* FloatingBus.cpp */,
@@ -809,8 +811,9 @@
 			isa = PBXGroup;
 			children = (
 				00B8886A12A393990052B7A4 /* Apple */,
-				00D225F91350F9A100FC69B9 /* Host */,
 				00B8886C12A393990052B7A4 /* EIA */,
+				001CC97D13D11E9900B0DDA7 /* Generic */,
+				00D225F91350F9A100FC69B9 /* Host */,
 				00B8887E12A393990052B7A4 /* IEEE */,
 			);
 			name = Interface;
@@ -851,7 +854,6 @@
 			children = (
 				00D225FA1350F9A100FC69B9 /* AudioInterface.h */,
 				00D225FB1350F9A100FC69B9 /* CanvasInterface.h */,
-				00D225FC1350F9A100FC69B9 /* CPUInterface.h */,
 				00D225FD1350F9A100FC69B9 /* DeviceInterface.h */,
 				00D225FF1350F9A100FC69B9 /* EthernetInterface.h */,
 				00D226001350F9A100FC69B9 /* MIDIInterface.h */,
@@ -953,12 +955,12 @@
 				00CAD7D712A04C22002B92E5 /* Emulation.xib */,
 				00A72B931287A0F10083C6A7 /* Canvas.xib */,
 				0008FCD80FBA5D72005E876E /* Info.plist */,
-				00391D9912D3B94F002C5ABD /* library */,
+				000A79070FBA49C500A0F12E /* Images */,
 				003E2597107075D900185260 /* images */,
+				00391D9912D3B94F002C5ABD /* library */,
 				00B974AD10701DCD00BD1402 /* sounds */,
 				00C6C08810602151004D084B /* roms */,
 				005928540FFC94E200F24A57 /* templates */,
-				000A79070FBA49C500A0F12E /* Images */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1016,7 +1018,6 @@
 				00B019B413501507001E01BB /* OEDevice.h in Headers */,
 				00D226051350F9A100FC69B9 /* AudioInterface.h in Headers */,
 				00D226061350F9A100FC69B9 /* CanvasInterface.h in Headers */,
-				00D226071350F9A100FC69B9 /* CPUInterface.h in Headers */,
 				00D226081350F9A100FC69B9 /* DeviceInterface.h in Headers */,
 				00D2260A1350F9A100FC69B9 /* EthernetInterface.h in Headers */,
 				00D2260B1350F9A100FC69B9 /* MIDIInterface.h in Headers */,
@@ -1221,7 +1222,6 @@
 				00FC27EF12D1070A0065E986 /* AddressDecoder.cpp in Sources */,
 				00FC27F112D1070A0065E986 /* AddressOffset.cpp in Sources */,
 				00FC27F312D1070A0065E986 /* AudioSampleConverter.cpp in Sources */,
-				00FC27F512D1070A0065E986 /* CharsetLoader.cpp in Sources */,
 				00FC27F712D1070A0065E986 /* Monitor.cpp in Sources */,
 				00FC27F912D1070A0065E986 /* ControlBus.cpp in Sources */,
 				00FC27FB12D1070A0065E986 /* FloatingBus.cpp in Sources */,

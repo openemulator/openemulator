@@ -81,18 +81,14 @@ bool Monitor::setValue(string name, string value)
 	}
 	else if (name == "displayPersistance")
 		configuration.displayPersistance = getFloat(value);
-	else if (name == "compositeBlackLevel")
-		configuration.compositeBlackLevel = getFloat(value);
-	else if (name == "compositeWhiteLevel")
-		configuration.compositeWhiteLevel = getFloat(value);
-	else if (name == "compositeCarrierFrequency")
-		configuration.compositeCarrierFrequency = getFloat(value);
-	else if (name == "compositeLinePhase")
-		configuration.compositeLinePhase = getFloat(value);
 	else if (name == "compositeLumaBandwidth")
 		configuration.compositeLumaBandwidth = getFloat(value);
 	else if (name == "compositeChromaBandwidth")
 		configuration.compositeChromaBandwidth = getFloat(value);
+	else if (name == "compositeChromaCarrier")
+		configuration.compositeChromaCarrier = getFloat(value);
+	else if (name == "compositeChromaLine")
+		configuration.compositeChromaLine = getFloat(value);
 	else
 		return false;
 	
@@ -159,18 +155,14 @@ bool Monitor::getValue(string name, string& value)
 	}
 	else if (name == "displayPersistance")
 		value = getString(configuration.displayPersistance);
-	else if (name == "compositeBlackLevel")
-		value = getString(configuration.compositeBlackLevel);
-	else if (name == "compositeWhiteLevel")
-		value = getString(configuration.compositeWhiteLevel);
-	else if (name == "compositeCarrierFrequency")
-		value = getString(configuration.compositeCarrierFrequency);
-	else if (name == "compositeLinePhase")
-		value = getString(configuration.compositeLinePhase);
 	else if (name == "compositeLumaBandwidth")
 		value = getString(configuration.compositeLumaBandwidth);
 	else if (name == "compositeChromaBandwidth")
 		value = getString(configuration.compositeChromaBandwidth);
+	else if (name == "compositeChromaCarrier")
+		value = getString(configuration.compositeChromaCarrier);
+	else if (name == "compositeChromaLine")
+		value = getString(configuration.compositeChromaLine);
 	else
 		return false;
 	

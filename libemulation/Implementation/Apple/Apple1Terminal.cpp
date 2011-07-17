@@ -39,6 +39,7 @@ Apple1Terminal::Apple1Terminal()
     
     vramp = NULL;
     image.setFormat(OEIMAGE_LUMINANCE);
+    image.setOptions(OEIMAGE_COLORCARRIER);
     image.setSize(OEMakeSize(SCREEN_WIDTH, SCREEN_HEIGHT));
 }
 

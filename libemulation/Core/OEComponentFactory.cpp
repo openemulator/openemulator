@@ -14,7 +14,6 @@
 #include "AddressDecoder.h"
 #include "AddressOffset.h"
 #include "AudioSampleConverter.h"
-#include "CharsetLoader.h"
 #include "ControlBus.h"
 #include "FloatingBus.h"
 #include "Monitor.h"
@@ -61,7 +60,6 @@ OEComponent *OEComponentFactory::construct(const string& className)
 	matchComponent(AddressDecoder);
 	matchComponent(AddressOffset);
 	matchComponent(AudioSampleConverter);
-	matchComponent(CharsetLoader);
 	matchComponent(ControlBus);
 	matchComponent(FloatingBus);
 	matchComponent(Monitor);

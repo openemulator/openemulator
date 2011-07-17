@@ -1,4 +1,6 @@
 ==2011-07==
+* Fixed canvas interface and OpenGLHAL contrast/brightness
+* Configured monitor according to color carrier (and changes luma bandwidth accordingly)
 * Implemented Apple-1 terminal copy line trimming
 * Added Apple-1 terminal copy/paste support
 * Implemented Apple-1 terminal

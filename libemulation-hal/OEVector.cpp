@@ -16,6 +16,11 @@ OEVector::OEVector()
 {
 }
 
+OEVector::OEVector(int size)
+{
+	data.resize(size);
+}
+
 OEVector::OEVector(vector<float> data)
 {
 	this->data = data;

@@ -185,7 +185,7 @@
 			
             message = [NSString stringWithFormat:@"%@\n\n%@",
 					   NSLocalizedString(@"OpenEmulator is a full-featured emulator. "
-										 "A lot of time and effort have gone into development,"
+										 "A lot of time and effort have gone into development, "
 										 "coding, and refinement. If you enjoy using it, "
 										 "please consider showing your love with a donation.",
 										 "Donation beg -> message"),

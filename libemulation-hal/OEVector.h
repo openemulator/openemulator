@@ -19,6 +19,7 @@ class OEVector
 {
 public:
 	OEVector();
+    OEVector(int size);
 	OEVector(vector<float> data);
 	
 	float getValue(unsigned int i);

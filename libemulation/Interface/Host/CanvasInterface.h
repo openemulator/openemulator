@@ -169,12 +169,10 @@ public:
 		videoHue = 0;
 		videoRect = OEMakeRect(0, 0, 1, 1);
 		
-		compositeBlackLevel = 0;
-		compositeWhiteLevel = 1;
-		compositeCarrierFrequency = 0.25;
-		compositeLinePhase = 0;
         compositeLumaBandwidth = 0.28;
 		compositeChromaBandwidth = 0.01;
+		compositeChromaCarrier = 0.25;
+		compositeChromaLine = 0;
 	}
 	
 	OESize displayResolution;
@@ -195,12 +193,10 @@ public:
 	float videoHue;
 	OERect videoRect;
 	
-	float compositeBlackLevel;
-	float compositeWhiteLevel;
-	float compositeCarrierFrequency;
-	float compositeLinePhase;
 	float compositeLumaBandwidth;
 	float compositeChromaBandwidth;
+	float compositeChromaCarrier;
+	float compositeChromaLine;
 };
 
 // Paper canvas configuration:
