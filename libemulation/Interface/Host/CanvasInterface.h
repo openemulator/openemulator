@@ -37,7 +37,7 @@
 // * didCopy, didPaste is sent when copying/pasting (string)
 // * didDelete is sent when deleting
 // * didVSync is called from the video thread after vertical sync (CanvasVSync)
-//   It should be used for posting images and for requesting redraw
+//   It should be used for posting images or for requesting redraw
 // * willDraw is called from the video thread when an OpenGL canvas will be
 //   drawn (OESize)
 // * HID axes are in [-1:1] coordinates
@@ -167,7 +167,8 @@ public:
 		videoContrast = 1;
 		videoSaturation = 1;
 		videoHue = 0;
-		videoRect = OEMakeRect(0, 0, 1, 1);
+        videoCenter = OEMakePoint(0, 0);
+        videoSize = OEMakeSize(1, 1);
 		
         compositeLumaBandwidth = 0.28;
 		compositeChromaBandwidth = 0.01;
@@ -191,7 +192,8 @@ public:
 	float videoContrast;
 	float videoSaturation;
 	float videoHue;
-	OERect videoRect;
+    OEPoint videoCenter;
+    OESize videoSize;
 	
 	float compositeLumaBandwidth;
 	float compositeChromaBandwidth;

@@ -49,13 +49,13 @@ bool Monitor::setValue(string name, string value)
 	else if (name == "videoHue")
 		configuration.videoHue = getFloat(value);
 	else if (name == "videoHorizontalCenter")
-		configuration.videoRect.origin.x = getFloat(value);
+		configuration.videoCenter.x = getFloat(value);
 	else if (name == "videoVerticalCenter")
-		configuration.videoRect.origin.y = getFloat(value);
+		configuration.videoCenter.y = getFloat(value);
 	else if (name == "videoHorizontalSize")
-		configuration.videoRect.size.width = getFloat(value);
+		configuration.videoSize.width = getFloat(value);
 	else if (name == "videoVerticalSize")
-		configuration.videoRect.size.height = getFloat(value);
+		configuration.videoSize.height = getFloat(value);
 	else if (name == "displayBarrel")
 		configuration.displayBarrel = getFloat(value);
 	else if (name == "displayScanlineAlpha")
@@ -123,13 +123,13 @@ bool Monitor::getValue(string name, string& value)
 	else if (name == "videoHue")
 		value = getString(configuration.videoHue);
 	else if (name == "videoHorizontalCenter")
-		value = getString(configuration.videoRect.origin.x);
+		value = getString(configuration.videoCenter.x);
 	else if (name == "videoVerticalCenter")
-		value = getString(configuration.videoRect.origin.y);
+		value = getString(configuration.videoCenter.y);
 	else if (name == "videoHorizontalSize")
-		value = getString(configuration.videoRect.size.width);
+		value = getString(configuration.videoSize.width);
 	else if (name == "videoVerticalSize")
-		value = getString(configuration.videoRect.size.height);
+		value = getString(configuration.videoSize.height);
 	else if (name == "displayBarrel")
 		value = getString(configuration.displayBarrel);
 	else if (name == "displayScanlineAlpha")

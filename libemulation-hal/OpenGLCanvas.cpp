@@ -1095,12 +1095,13 @@ void OpenGLCanvas::drawDisplayCanvas()
 	
 	// Calculate rects
 	OESize texSize = textureSize[OPENGLCANVAS_TEXTURE_IMAGE_RAW];
-	OERect videoRect = displayConfiguration.videoRect;
+	OEPoint videoCenter = displayConfiguration.videoCenter;
+	OESize videoSize = displayConfiguration.videoSize;
 	
-	OERect vertexRect = OEMakeRect(2 * videoRect.origin.x - 1,
-								   2 * videoRect.origin.y - 1,
-								   2 * videoRect.size.width,
-								   2 * videoRect.size.height);
+	OERect vertexRect = OEMakeRect(2 * videoCenter.x - videoSize.width,
+								   2 * videoCenter.y - videoSize.height,
+								   2 * videoSize.width,
+								   2 * videoSize.height);
 	OERect textureRect = OEMakeRect(0,
 									0,
 									imageSize.width / texSize.width, 
@@ -1137,12 +1138,8 @@ void OpenGLCanvas::drawDisplayCanvas()
         glUniform1i(glGetUniformLocation(displayShader, "texture"), 0);
         
 		OEPoint barrelCenter;
-		barrelCenter.x = ((0.5 - displayConfiguration.videoRect.origin.x) /
-						  displayConfiguration.videoRect.size.width *
-						  imageSize.width / texSize.width);
-		barrelCenter.y = ((0.5 - displayConfiguration.videoRect.origin.y) /
-						  displayConfiguration.videoRect.size.height *
-						  imageSize.height / texSize.height);
+		barrelCenter.x = (0.5 - videoCenter.x) * imageSize.width / texSize.width;
+		barrelCenter.y = (0.5 - videoCenter.y) * imageSize.height / texSize.height;
 		glUniform2f(glGetUniformLocation(displayShader, "barrel_center"),
 					barrelCenter.x, barrelCenter.y);
 		
@@ -1175,8 +1172,7 @@ void OpenGLCanvas::drawDisplayCanvas()
 		glBindTexture(GL_TEXTURE_2D, texture[shadowMaskTexture]);
 		glActiveTexture(GL_TEXTURE0);
 		
-		float scanlineHeight = (viewportSize.height / imageSize.height *
-								displayConfiguration.videoRect.size.height);
+		float scanlineHeight = (viewportSize.height / imageSize.height * videoSize.height);
 		float alpha = displayConfiguration.displayScanlineAlpha;
 		float scanlineAlpha = ((scanlineHeight > 2.5) ? alpha :
 							   (scanlineHeight < 2) ? 0 :
@@ -1198,13 +1194,11 @@ void OpenGLCanvas::drawDisplayCanvas()
 									displayConfiguration.displayPixelDensity *
 									25.4 / dotPitch * shadowVerticalScale);
 		glUniform2f(glGetUniformLocation(displayShader, "shadowmask_scale"),
-					texSize.width / imageSize.width *
-					displayConfiguration.videoRect.size.width * elemNum.width,
-					texSize.height / imageSize.height *
-					displayConfiguration.videoRect.size.height * elemNum.height);
+					texSize.width / imageSize.width * videoSize.width * elemNum.width,
+					texSize.height / imageSize.height * videoSize.height * elemNum.height);
 		glUniform2f(glGetUniformLocation(displayShader, "shadowmask_translate"),
-					displayConfiguration.videoRect.origin.x * elemNum.width,
-					displayConfiguration.videoRect.origin.y * elemNum.height);
+					(videoCenter.x - 0.5 * videoSize.width) * elemNum.width,
+                    (videoCenter.y - 0.5 * videoSize.height) * elemNum.height);
         glUniform1f(glGetUniformLocation(displayShader, "alpha"),
                     displayConfiguration.displayPersistance);
 	}

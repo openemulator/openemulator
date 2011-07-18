@@ -1,6 +1,5 @@
 ==To-Do==
-* Fix canvas vertical and horizontal centering
-* Fix problem when replacing a monitor in full screen
+* Fix problem when removing a monitor in full screen
 * Display powerstate in monitors
 * Finish ControlBus
 * Finish 6502 CPU

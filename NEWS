@@ -1,4 +1,5 @@
 ==2011-07==
+* Fixed canvas vertical and horizontal video center/size
 * Fixed canvas interface and OpenGLHAL contrast/brightness
 * Configured monitor according to color carrier (and changes luma bandwidth accordingly)
 * Implemented Apple-1 terminal copy line trimming
