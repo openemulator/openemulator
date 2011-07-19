@@ -20,6 +20,8 @@
 	NSRect windowRect;
 }
 
+- (BOOL)windowShouldClose:(id)sender;
+
 - (void)toggleFullscreen:(id)sender;
 - (void)scaleFrame:(float)scale;
 - (void)setHalfSize:(id)sender;

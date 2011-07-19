@@ -741,6 +741,7 @@ void OpenGLCanvas::configureRenderShader(CanvasDecoder videoDecoder,
 	w = w.normalize();
 	
 	OEVector wy, wu, wv;
+    float bandwidth;
 	switch (videoDecoder)
 	{
 		case CANVAS_DECODER_RGB:
@@ -756,18 +757,32 @@ void OpenGLCanvas::configureRenderShader(CanvasDecoder videoDecoder,
 			break;
             
 		case CANVAS_DECODER_NTSC_YIQ:
-            wy = w * OEVector::lanczosWindow(17, displayConfiguration.compositeLumaBandwidth);
+            bandwidth = displayConfiguration.videoBandwidth;
+            if (bandwidth > displayConfiguration.compositeLumaBandwidth)
+                bandwidth = displayConfiguration.compositeLumaBandwidth;
+            wy = w * OEVector::lanczosWindow(17, bandwidth);
             wy = wy.normalize();
-			wu = w * OEVector::lanczosWindow(17, (displayConfiguration.compositeChromaBandwidth));
+            
+            bandwidth = displayConfiguration.compositeChromaBandwidth;
+            if (bandwidth > displayConfiguration.compositeChromaBandwidth)
+                bandwidth = displayConfiguration.compositeChromaBandwidth;
+			wu = w * OEVector::lanczosWindow(17, bandwidth);
 			wu = wu.normalize() * 2;
-			wv = w * OEVector::lanczosWindow(17, (displayConfiguration.compositeChromaBandwidth + NTSC_YIQ_I_SHIFT));
+			wv = w * OEVector::lanczosWindow(17, bandwidth + NTSC_YIQ_I_SHIFT);
 			wv = wv.normalize() * 2;
 			break;
 			
 		default:
-            wy = w * OEVector::lanczosWindow(17, displayConfiguration.compositeLumaBandwidth);
+            bandwidth = displayConfiguration.videoBandwidth;
+            if (bandwidth > displayConfiguration.compositeLumaBandwidth)
+                bandwidth = displayConfiguration.compositeLumaBandwidth;
+            wy = w * OEVector::lanczosWindow(17, bandwidth);
             wy = wy.normalize();
-			wu = w * OEVector::lanczosWindow(17, (displayConfiguration.compositeChromaBandwidth));
+            
+            bandwidth = displayConfiguration.compositeChromaBandwidth;
+            if (bandwidth > displayConfiguration.compositeChromaBandwidth)
+                bandwidth = displayConfiguration.compositeChromaBandwidth;
+			wu = w * OEVector::lanczosWindow(17, bandwidth);
 			wu = wv = wu.normalize() * 2;
 			break;
 	}

@@ -101,9 +101,12 @@ bool ControlBus::init()
 	string stateLabel = "Powered On";
 	device->postMessage(this, DEVICE_SET_STATELABEL, &stateLabel);
 	
-	updateCPUFrequency();
-	
 	return true;
+}
+
+void ControlBus::update()
+{
+	updateCPUFrequency();
 }
 
 bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
@@ -183,6 +186,12 @@ bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
 		case CONTROLBUS_GET_AUDIOBUFFERINDEX:
             // To-Do: timers
 			return true;
+            
+        case CONTROLBUS_REQUEST_BUS:
+            break;
+            
+        case CONTROLBUS_RELEASE_BUS:
+            break;
 	}
 	
 	return false;
@@ -192,7 +201,7 @@ void ControlBus::notify(OEComponent *sender, int notification, void *data)
 {
     if (notification == AUDIO_FRAME_IS_RENDERING)
     {
-        AudioBuffer *buffer = (AudioBuffer *)data;
+/*        AudioBuffer *buffer = (AudioBuffer *)data;
         float *out = buffer->output;
         
         for(int i = 0; i < buffer->frameNum; i++)
@@ -202,7 +211,7 @@ void ControlBus::notify(OEComponent *sender, int notification, void *data)
             
             for (int ch = 0; ch < buffer->channelNum; ch++)
                 *out++ += x;
-        }
+        }*/
     }
 }
 

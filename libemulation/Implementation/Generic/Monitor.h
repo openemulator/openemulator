@@ -25,8 +25,11 @@ public:
     
     bool postMessage(OEComponent *sender, int message, void *data);
     
+	void notify(OEComponent *sender, int notification, void *data);
+    
 private:
 	OEComponent *device;
+	OEComponent *controlBus;
 	OEComponent *canvas;
 	
 	CanvasDisplayConfiguration configuration;

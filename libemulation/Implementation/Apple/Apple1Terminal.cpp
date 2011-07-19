@@ -274,7 +274,7 @@ void Apple1Terminal::copy(string *s)
         string line;
         
         for (int x = 0; x < TERM_WIDTH; x++)
-            line += vramp[y * TERM_WIDTH + x];
+            line += (vramp[y * TERM_WIDTH + x]) & 0x7f;
         
         *s += rtrim(line) + '\n';
     }
@@ -282,6 +282,8 @@ void Apple1Terminal::copy(string *s)
 
 void Apple1Terminal::paste(string *s)
 {
-    for (int i = 0; i < s->size(); i++)
-        sendKey((*s)[i]);
+    wstring ws = getWString(*s);
+    
+    for (int i = 0; i < ws.size(); i++)
+        sendKey(ws[i]);
 }

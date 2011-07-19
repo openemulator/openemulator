@@ -1,4 +1,7 @@
 ==2011-07==
+* Added UTF-8 copy/paste support with wstring
+* Implemented powerstate in monitors
+* Fixed problem when removing a monitor in full screen
 * Fixed canvas vertical and horizontal video center/size
 * Fixed canvas interface and OpenGLHAL contrast/brightness
 * Configured monitor according to color carrier (and changes luma bandwidth accordingly)

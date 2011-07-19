@@ -13,9 +13,12 @@
 #include "DeviceInterface.h"
 #include "AudioInterface.h"
 
+#include "ControlBus.h"
+
 Monitor::Monitor()
 {
 	device = NULL;
+    controlBus = NULL;
 	canvas = NULL;
 	
 	configuration.displayResolution = OEMakeSize(768, 576);
@@ -213,6 +216,14 @@ bool Monitor::setRef(string name, OEComponent *ref)
 			}
 		}
 	}
+    else if (name == "controlBus")
+    {
+        if (controlBus)
+            controlBus->removeObserver(this, CONTROLBUS_POWERSTATE_DID_CHANGE);
+        controlBus = ref;
+        if (controlBus)
+            controlBus->addObserver(this, CONTROLBUS_POWERSTATE_DID_CHANGE);
+    }
 	else
 		return false;
 	
@@ -240,6 +251,29 @@ void Monitor::update()
 {
 	if (canvas)
 		canvas->postMessage(this, CANVAS_CONFIGURE_DISPLAY, &configuration);
+    
+    if (controlBus)
+    {
+        int powerState = 0;
+        controlBus->postMessage(this, CONTROLBUS_GET_POWERSTATE, &powerState);
+        
+        CanvasBezel bezel;
+        switch(powerState)
+        {
+            case CONTROLBUS_POWERSTATE_OFF:
+                bezel = CANVAS_BEZEL_POWER;
+                break;
+                
+            case CONTROLBUS_POWERSTATE_ON:
+                bezel = CANVAS_BEZEL_NONE;
+                break;
+                
+            default:
+                bezel = CANVAS_BEZEL_PAUSE;
+                break;
+        }
+        canvas->postMessage(this, CANVAS_SET_BEZEL, &bezel);
+    }
 }
 
 bool Monitor::postMessage(OEComponent *sender, int message, void *data)
@@ -248,4 +282,12 @@ bool Monitor::postMessage(OEComponent *sender, int message, void *data)
         return canvas->postMessage(sender, message, data);
     
     return false;
+}
+
+void Monitor::notify(OEComponent *sender, int notification, void *data)
+{
+    if (sender == controlBus)
+        update();
+    else
+        OEComponent::notify(sender, notification, data);
 }

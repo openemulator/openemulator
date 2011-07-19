@@ -6,11 +6,14 @@
         <setting ref="appleMonitorII.monitor" name="videoBrightness" label="Brightness" type="slider" options="-1.0,1.0"/>
         <setting ref="appleMonitorII.monitor" name="videoContrast" label="Contrast" type="slider" options="0.0,1.0"/>
         <setting ref="appleMonitorII.monitor" name="videoVerticalCenter" label="Vertical Center" type="slider" options="-0.1,0.1"/>
-        <setting ref="appleMonitorII.monitor" name="videoVerticalSize" label="Vertical Size" type="slider" options="0.9,1.1"/>
+        <setting ref="appleMonitorII.monitor" name="videoVerticalSize" label="Vertical Size" type="slider" options="0.8,1.2"/>
     </device>
-    <connector id="appleMonitorII.connector" type="Composite Video"/>
+    <connector id="appleMonitorII.connector" type="Composite Video">
+        <inlet ref="appleMonitorII.monitor" property="controlBus" outletRef="controlBus"/>
+    </connector>
     <component id="appleMonitorII.monitor" class="Monitor">
         <property name="device" ref="appleMonitorII"/>
+        <property name="controlBus" ref="controlBus"/>
         <property name="videoDecoder" value="Monochrome"/>
         <property name="videoBandwidth" value="0.83"/>
         <property name="videoBrightness" value="0.1"/>
@@ -21,9 +24,9 @@
         <property name="videoHorizontalSize" value="1.0"/>
         <property name="videoVerticalCenter" value="0"/>
         <property name="videoVerticalSize" value="1.0"/>
-        <property name="displayBarrel" value="0.05"/>
+        <property name="displayBarrel" value="0.1"/>
         <property name="displayScanlineAlpha" value="0.5"/>
-        <property name="displayCenterLighting" value="1"/>
+        <property name="displayCenterLighting" value="0.5"/>
         <property name="displayShadowMaskAlpha" value="0.0"/>
         <property name="displayShadowMaskDotPitch" value="0.5"/>
         <property name="displayShadowMask" value="Triad"/>

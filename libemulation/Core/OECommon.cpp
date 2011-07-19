@@ -70,6 +70,59 @@ string rtrim(string value)
     return "";
 }
 
+wstring getWString(string value)
+{
+    wstring ws;
+    
+	wchar_t w = 0;
+	int bytes = 0;
+    
+	for (size_t i = 0; i < value.size(); i++)
+    {
+		unsigned char c = (unsigned char)value[i];
+        
+		if (c <= 0x7f)
+        {
+            // first byte
+            bytes = 0;
+			ws.push_back((wchar_t)c);
+		}
+		else if (c <= 0xbf)
+        {
+            // second/third/fourth byte
+			if (bytes)
+            {
+				w = ((w << 6) | (c & 0x3f));
+				bytes--;
+				if (bytes == 0)
+					ws.push_back(w);
+			}
+		}
+		else if (c <= 0xdf)
+        {
+            // 2-byte sequence start
+			bytes = 1;
+			w = c & 0x1f;
+		}
+		else if (c <= 0xef)
+        {
+            // 3-byte sequence start
+			bytes = 2;
+			w = c & 0x0f;
+		}
+		else if (c <= 0xf7)
+        {
+            // 4-byte sequence start
+			bytes = 3;
+			w = c & 0x07;
+		}
+		else
+			bytes = 0;
+	}
+    
+    return ws;
+}
+
 OEData getCharVector(const string& value)
 {
 	OEData result;

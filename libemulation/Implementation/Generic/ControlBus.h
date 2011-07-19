@@ -62,6 +62,7 @@ public:
 	bool setValue(string name, string value);
 	bool setRef(string name, OEComponent *ref);
 	bool init();
+    void update();
 	
 	bool postMessage(OEComponent *sender, int event, void *data);
 	

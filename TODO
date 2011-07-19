@@ -1,6 +1,4 @@
 ==To-Do==
-* Fix problem when removing a monitor in full screen
-* Display powerstate in monitors
 * Finish ControlBus
 * Finish 6502 CPU
 * Implement Apple-1 I/O
@@ -8,6 +6,7 @@
 * Implement CFFA1
 * Fix UNICODE entry of composed keys on Mac OS X (like ^ or « or `)
 * Fix [CanvasView update] recursion in printer view
+* Optimize persistance
 
 * Add OESound:resampling, rendering to audio buffer
 * Remove data property, and add OEData class (allows to read from/write to file), but how would we access files in a zip package?

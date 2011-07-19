@@ -69,6 +69,7 @@ string getString(int value);
 string getString(float value);
 string getHexString(int value);
 string rtrim(string value);
+wstring getWString(string value);
 
 int getNextPowerOf2(int value);
 

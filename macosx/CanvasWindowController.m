@@ -44,6 +44,9 @@
 - (void)closeWindow
 {
 	[fCanvasView freeOpenGL];
+    
+	CanvasWindow *window = (CanvasWindow *)[self window];
+    [window windowShouldClose:nil];
 }
 
 - (CanvasView *)canvasView

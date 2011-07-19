@@ -145,10 +145,6 @@
         <property name="monitor" ref=""/>
         <property name="type" value="Standard"/>
     </component>
-    <component id="appleII.charset" class="CharsetLoader">
-        <property name="image" data="${resourcePath}/roms/Signetics/Signetics 2513 Video ROM.bin"/>
-        <property name="format" value="Signetics"/>
-    </component>
     <component id="appleII.video" class="AppleIIVideo">
         <property name="tvSystem" value="NTSC"/>
         <property name="characterSet" value="Standard"/>
@@ -157,8 +153,6 @@
         <property name="ram30" ref="appleII.ram00"/>
         <property name="ram40" ref="appleII.ram40"/>
         <property name="ram50" ref="appleII.ram40"/>
-        <property name="charset" ref="appleII.charset"/>
-        <property name="charsetSocket" ref=""/>
         <property name="monitor" ref=""/>
     </component>
     <component id="appleII.audioOut" class="AppleIIAudioOut">
