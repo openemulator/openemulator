@@ -159,8 +159,8 @@
 {
 	NSOpenPanel *panel = [NSOpenPanel openPanel];
 	
-	if ([panel runModalForTypes:[fDocumentController audioPathExtensions]] ==
-		NSOKButton)
+    [panel setAllowedFileTypes:[fDocumentController audioPathExtensions]];
+    if ([panel runModal] == NSOKButton)
 	{
 		NSString *path = [[panel URL] path];
 		[self readFromPath:path];

@@ -259,7 +259,7 @@
 	SEL action = [anItem action];
 	EmulationItem *item = [self itemForSender:anItem];
 	
-	if (action == @selector(paste:))
+    if (action == @selector(paste:))
 	{
 		NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
 		return [[pasteboard types] containsObject:NSStringPboardType];
@@ -746,31 +746,23 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
 	NSOpenPanel *panel = [NSOpenPanel openPanel];
 	DocumentController *documentController;
 	documentController = [NSDocumentController sharedDocumentController];
-	NSArray *fileTypes = [documentController diskImagePathExtensions];
 	
-	[panel beginSheetForDirectory:nil
-							 file:nil
-							types:fileTypes
-				   modalForWindow:[self window]
-					modalDelegate:self
-				   didEndSelector:@selector(openPanelDidEnd:returnCode:contextInfo:)
-					  contextInfo:[self itemForSender:sender]];
+    [panel setAllowedFileTypes:[documentController diskImagePathExtensions]];
+	[panel beginSheetModalForWindow:[self window]
+                  completionHandler:^(NSInteger returnCode)
+     {
+         if (returnCode == NSOKButton)
+         {
+             [panel close];
+             
+             NSString *path = [[panel URL] path];
+             EmulationItem *item = [self itemForSender:sender];
+             
+             [self mount:path inItem:item];
+         }
+     }];
 }
 
-- (void)openPanelDidEnd:(NSOpenPanel *)panel
-			 returnCode:(int)returnCode
-			contextInfo:(void *)contextInfo
-{
-	if (returnCode == NSOKButton)
-	{
-		[panel close];
-        
-		NSString *path = [[panel URL] path];
-		EmulationItem *item = contextInfo;
-		
-		[self mount:path inItem:item];
-	}
-}
 
 - (BOOL)mount:(NSString *)path inItem:(EmulationItem *)item
 {

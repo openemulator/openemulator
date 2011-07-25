@@ -123,11 +123,6 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 
 // Document
 
-- (NSWindow *)windowForSheet
-{
-	return [NSApp mainWindow];
-}
-
 - (BOOL)readFromURL:(NSURL *)absoluteURL
 			 ofType:(NSString *)typeName
 			  error:(NSError **)outError
@@ -166,8 +161,8 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 	OEEmulation *theEmulation = (OEEmulation *)emulation;
 	if (theEmulation)
 	{
-		string emulationPath = getCPPString([[absoluteURL path]
-											 stringByAppendingString:@"/"]);
+        NSString *s = [[absoluteURL path] stringByAppendingString:@"/"];
+		string emulationPath = getCPPString(s);
 		
 		[self lockEmulation];
         
@@ -216,14 +211,20 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 									 error:nil];
 	
 	NSSavePanel *panel = [NSSavePanel savePanel];
-	[panel setRequiredFileType:@"emulation"];
-	[panel beginSheetForDirectory:path
-							 file:nil
-				   modalForWindow:[self windowForSheet]
-					modalDelegate:self
-				   didEndSelector:@selector(saveDocumentAsTemplateDidEnd:
-											returnCode:contextInfo:)
-					  contextInfo:nil];
+	[panel setAllowedFileTypes:[NSArray arrayWithObject:@"emulation"]];
+    [panel setDirectoryURL:[NSURL fileURLWithPath:path]];
+	[panel beginSheetModalForWindow:[NSApp mainWindow]
+                  completionHandler:^(NSInteger returnCode)
+     {
+         if (returnCode != NSOKButton)
+             return;
+         
+         NSError *error;
+         if (![self writeToURL:[panel URL]
+                        ofType:nil
+                         error:&error])
+             [[NSAlert alertWithError:error] runModal];
+     }];
 }
 
 - (void)saveDocumentAsTemplateDidEnd:(NSSavePanel *)panel

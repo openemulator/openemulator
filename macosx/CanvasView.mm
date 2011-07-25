@@ -81,6 +81,12 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 // Class
 
+- (NSApplicationPresentationOptions)window:(NSWindow *)window
+      willUseFullScreenPresentationOptions:(NSApplicationPresentationOptions)proposedOptions
+{
+    return (proposedOptions | NSApplicationPresentationAutoHideToolbar);
+}
+
 - (id)initWithFrame:(NSRect)rect
 {
 	NSOpenGLPixelFormatAttribute pixelFormatAtrributes[] =

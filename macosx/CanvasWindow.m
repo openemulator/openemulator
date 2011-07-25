@@ -22,15 +22,24 @@
                             styleMask:windowStyle
                               backing:bufferingType
                                 defer:deferCreation];
-
+    
 	if (self)
+    {
 		fullscreen = NO;
+        
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_7
+        [self setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
+#endif
+    }
 	
 	return self;
 }
 
 - (BOOL)validateUserInterfaceItem:(id)anItem
 {
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_7
+    fullscreen = ([self styleMask] & NSFullScreenWindowMask) == NSFullScreenWindowMask;
+#endif
 	BOOL isResizable = !fullscreen && [fCanvasView isDisplayCanvas];
 	
 	if ([anItem action] == @selector(toggleFullscreen:))
@@ -62,6 +71,7 @@
 	return [super validateUserInterfaceItem:anItem];
 }
 
+#if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_7
 - (NSRect)constrainFrameRect:(NSRect)frameRect toScreen:(NSScreen *)screen
 {
 	if (fullscreen)
@@ -70,11 +80,15 @@
 	return [super constrainFrameRect:frameRect toScreen:screen];
 }
 
+- (void)setFrameOrigin:(NSPoint)point
+{
+	if (!fullscreen)
+		[super setFrameOrigin:point];
+}
+#endif
+
 - (NSSize)windowWillResize:(NSWindow *)window toSize:(NSSize)proposedFrameSize
 {
-	if (fullscreen)
-		return proposedFrameSize;
-	
 	if ([fCanvasView isDisplayCanvas])
 	{
 		NSSize defaultViewSize = [fCanvasView defaultViewSize];
@@ -121,6 +135,7 @@
 
 - (BOOL)windowShouldClose:(id)sender
 {
+#if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_7
 	if (fullscreen)
 	{
 		DocumentController *documentController;
@@ -130,14 +145,8 @@
 		
 		fullscreen = NO;
 	}
-	
+#endif
 	return YES;
-}
-
-- (void)setFrameOrigin:(NSPoint)point
-{
-	if (!fullscreen)
-		[super setFrameOrigin:point];
 }
 
 - (void)scaleFrame:(float)scale
@@ -201,6 +210,9 @@
 
 - (void)toggleFullscreen:(id)sender
 {
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_7
+    [self toggleFullScreen:nil];
+#else
 	DocumentController *documentController;
 	documentController = [NSDocumentController sharedDocumentController];
 	
@@ -237,6 +249,7 @@
 	}
 	
 	[fCanvasView startDisplayLink];
+#endif
 }
 
 - (void)setHalfSize:(id)sender

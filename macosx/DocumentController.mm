@@ -421,8 +421,9 @@
 	[fileTypes addObjectsFromArray:audioPathExtensions];
 	[fileTypes addObjectsFromArray:diskImagePathExtensions];
 	[fileTypes addObjectsFromArray:textPathExtensions];
-	
-	if ([panel runModalForTypes:fileTypes] == NSOKButton)
+    [panel setAllowedFileTypes:fileTypes];
+    
+	if ([panel runModal] == NSOKButton)
 	{
 		NSURL *url = [panel URL];
 		if ([self application:NSApp openFile:[url path]])

@@ -885,62 +885,62 @@ void OpenGLCanvas::configureRenderShader(CanvasDecoder videoDecoder,
             break;
 	}
 	
-    GLuint renderShader;
+    GLuint theShader;
 	switch (videoDecoder)
 	{
 		case CANVAS_DECODER_NTSC_YIQ:
 		case CANVAS_DECODER_NTSC_YUV:
 		case CANVAS_DECODER_NTSC_CXA2025AS:
-			renderShader = shader[OPENGLCANVAS_SHADER_NTSC];
+			theShader = shader[OPENGLCANVAS_SHADER_NTSC];
 			break;
             
 		case CANVAS_DECODER_PAL:
-			renderShader = shader[OPENGLCANVAS_SHADER_PAL];
+			theShader = shader[OPENGLCANVAS_SHADER_PAL];
 			break;
             
 		default:
-			renderShader = shader[OPENGLCANVAS_SHADER_RGB];
+			theShader = shader[OPENGLCANVAS_SHADER_RGB];
 			break;
 	}
 	
-    if (!renderShader)
+    if (!theShader)
         return;
     
-	glUseProgram(renderShader);
+	glUseProgram(theShader);
 	
-	if (renderShader != shader[OPENGLCANVAS_SHADER_RGB])
-		glUniform2f(glGetUniformLocation(renderShader, "comp_phase"),
+	if (theShader != shader[OPENGLCANVAS_SHADER_RGB])
+		glUniform2f(glGetUniformLocation(theShader, "comp_phase"),
 					displayConfiguration.compositeChromaCarrier,
 					displayConfiguration.compositeChromaLine);
-	glUniform3f(glGetUniformLocation(renderShader, "c0"),
+	glUniform3f(glGetUniformLocation(theShader, "c0"),
 				wy.getValue(8), wu.getValue(8), wv.getValue(8));
-	glUniform3f(glGetUniformLocation(renderShader, "c1"),
+	glUniform3f(glGetUniformLocation(theShader, "c1"),
 				wy.getValue(7), wu.getValue(7), wv.getValue(7));
-	glUniform3f(glGetUniformLocation(renderShader, "c2"),
+	glUniform3f(glGetUniformLocation(theShader, "c2"),
 				wy.getValue(6), wu.getValue(6), wv.getValue(6));
-	glUniform3f(glGetUniformLocation(renderShader, "c3"),
+	glUniform3f(glGetUniformLocation(theShader, "c3"),
 				wy.getValue(5), wu.getValue(5), wv.getValue(5));
-	glUniform3f(glGetUniformLocation(renderShader, "c4"),
+	glUniform3f(glGetUniformLocation(theShader, "c4"),
 				wy.getValue(4), wu.getValue(4), wv.getValue(4));
-	glUniform3f(glGetUniformLocation(renderShader, "c5"),
+	glUniform3f(glGetUniformLocation(theShader, "c5"),
 				wy.getValue(3), wu.getValue(3), wv.getValue(3));
-	glUniform3f(glGetUniformLocation(renderShader, "c6"),
+	glUniform3f(glGetUniformLocation(theShader, "c6"),
 				wy.getValue(2), wu.getValue(2), wv.getValue(2));
-	glUniform3f(glGetUniformLocation(renderShader, "c7"),
+	glUniform3f(glGetUniformLocation(theShader, "c7"),
 				wy.getValue(1), wu.getValue(1), wv.getValue(1));
-	glUniform3f(glGetUniformLocation(renderShader, "c8"),
+	glUniform3f(glGetUniformLocation(theShader, "c8"),
 				wy.getValue(0), wu.getValue(0), wv.getValue(0));
     
     if (displayConfiguration.videoDecoder == CANVAS_DECODER_RGB)
-        glUniform3f(glGetUniformLocation(renderShader, "offset"),
+        glUniform3f(glGetUniformLocation(theShader, "offset"),
                     displayConfiguration.videoBrightness,
                     displayConfiguration.videoBrightness,
                     displayConfiguration.videoBrightness);
     else
-        glUniform3f(glGetUniformLocation(renderShader, "offset"),
+        glUniform3f(glGetUniformLocation(theShader, "offset"),
                     displayConfiguration.videoBrightness / contrast, 0, 0);
-	glUniformMatrix3fv(glGetUniformLocation(renderShader, "decoder"),
-					   9, false, m.getValues());
+	glUniformMatrix3fv(glGetUniformLocation(theShader, "decoder"),
+					   1, false, m.getValues());
 #endif
 }
 

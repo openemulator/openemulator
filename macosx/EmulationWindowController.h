@@ -14,7 +14,7 @@
 @class EmulationItem;
 
 @interface EmulationWindowController : NSWindowController
-<NSToolbarDelegate, NSOutlineViewDelegate,
+<NSWindowDelegate, NSToolbarDelegate, NSOutlineViewDelegate,
 NSOutlineViewDataSource, NSComboBoxDataSource>
 {
 	IBOutlet id fSplitView;
