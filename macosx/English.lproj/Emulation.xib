@@ -290,12 +290,10 @@
 																						<reference key="NSWindow"/>
 																						<reference key="NSTableView" ref="546929068"/>
 																					</object>
-																					<object class="_NSCornerView" key="NSCornerView" id="923604608">
-																						<reference key="NSNextResponder" ref="522608439"/>
+																					<object class="_NSCornerView" key="NSCornerView">
+																						<nil key="NSNextResponder"/>
 																						<int key="NSvFlags">-2147483392</int>
 																						<string key="NSFrame">{{331, 0}, {16, 17}}</string>
-																						<reference key="NSSuperview" ref="522608439"/>
-																						<reference key="NSWindow"/>
 																					</object>
 																					<object class="NSMutableArray" key="NSTableColumns">
 																						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -459,7 +457,6 @@
 																			<reference key="NSBGColor" ref="962395363"/>
 																			<int key="NScvFlags">4</int>
 																		</object>
-																		<reference ref="923604608"/>
 																	</object>
 																	<string key="NSFrame">{{18, 18}, {347, 119}}</string>
 																	<reference key="NSSuperview" ref="165862810"/>
@@ -470,7 +467,6 @@
 																	<reference key="NSHScroller" ref="876794921"/>
 																	<reference key="NSContentView" ref="603504539"/>
 																	<reference key="NSHeaderClipView" ref="856700717"/>
-																	<reference key="NSCornerView" ref="923604608"/>
 																	<bytes key="NSScrollAmts">QSAAAEEgAABBoAAAQaAAAA</bytes>
 																</object>
 															</object>
@@ -1137,14 +1133,6 @@
 						<reference key="destination" ref="260745661"/>
 					</object>
 					<int key="connectionID">2541</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">delegate</string>
-						<reference key="source" ref="266599386"/>
-						<reference key="destination" ref="762632889"/>
-					</object>
-					<int key="connectionID">2543</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">

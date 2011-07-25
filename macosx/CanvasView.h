@@ -17,7 +17,7 @@
 #define DEVICE_MOUSE_BUTTONNUM	8
 
 @interface CanvasView : NSOpenGLView
-<NSWindowDelegate, NSTextInputClient>
+<NSTextInputClient>
 {
 	CVDisplayLinkRef displayLink;
 	CGLContextObj cglContextObj;
@@ -34,6 +34,11 @@
 	int keyboardFlags;
 	BOOL capsLockNotSynchronized;
 }
+
+- (void)windowWillClose:(NSNotification *)notification;
+- (void)windowDidResize:(NSNotification *)notification;
+- (void)windowDidBecomeKey:(NSNotification *)notification;
+- (void)windowDidResignKey:(NSNotification *)notification;
 
 - (void)initOpenGL;
 - (void)freeOpenGL;

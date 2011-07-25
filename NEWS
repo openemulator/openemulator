@@ -1,4 +1,6 @@
 ==2011-07==
+* Improved canvas window delegate
+* Fixed toolbar menu title "Show/Hide Toolbar"
 * Added compatibility with Mac OS X 10.7
 * Fixed GLSL error in glUniformMatrix3fv
 * Added UTF-8 copy/paste support with wstring

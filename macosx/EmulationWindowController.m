@@ -83,6 +83,8 @@
 	
 	[fTableView setDelegate:self];
 	[fTableView setDataSource:self];
+    
+    [[self window] setDelegate:self];
 	
 	[self updateEmulation:self];
 }
@@ -278,7 +280,7 @@
 	return YES;
 }
 
-
+// Toolbar
 
 - (NSToolbarItem *)toolbar:(NSToolbar *)toolbar
 	 itemForItemIdentifier:(NSString *)ident
@@ -408,7 +410,7 @@
 			nil];
 }
 
-
+// Split view
 
 - (void)splitView:(NSSplitView *)sender
 resizeSubviewsWithOldSize:(NSSize)oldSize
@@ -461,7 +463,7 @@ constrainMaxCoordinate:(CGFloat)proposedMax
 			[splitView dividerThickness]);
 }
 
-
+// Outline view
 
 - (NSInteger)outlineView:(NSOutlineView *)outlineView
   numberOfChildrenOfItem:(id)item
@@ -575,8 +577,6 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	return NO;
 }
 
-
-
 - (void)outlineView:(NSOutlineView *)outlineView
 	willDisplayCell:(id)cell
 	 forTableColumn:(NSTableColumn *)tableColumn
@@ -618,8 +618,6 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	[self updateDetails];
 }
 
-
-
 - (void)outlineDoubleAction:(id)sender
 {
 	if ([fOutlineView forcedRow] != -1)
@@ -637,7 +635,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	}
 }
 
-
+// Table view
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView
 {
@@ -670,8 +668,6 @@ objectValueForTableColumn:(NSTableColumn *)aTableColumn
 	[selectedItem setValue:[anObject stringValue]
 		 forSettingAtIndex:rowIndex];
 }
-
-
 
 - (void)tableViewDataCellDidUpdate:(id)sender
 {
@@ -715,8 +711,6 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
 	return nil;
 }
 
-
-
 - (IBAction)outlineAction:(id)sender
 {
 	EmulationItem *item = [self itemForSender:sender];
@@ -739,7 +733,7 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
 		[self showDevice:sender];
 }
 
-
+// Operations
 
 - (IBAction)openDiskImage:(id)sender
 {
@@ -762,7 +756,6 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
          }
      }];
 }
-
 
 - (BOOL)mount:(NSString *)path inItem:(EmulationItem *)item
 {

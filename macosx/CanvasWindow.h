@@ -13,7 +13,6 @@
 #import "CanvasView.h"
 
 @interface CanvasWindow : NSWindow
-<NSWindowDelegate>
 {
 	IBOutlet CanvasView *fCanvasView;
 	
@@ -21,13 +20,7 @@
 	NSRect windowRect;
 }
 
-- (BOOL)windowShouldClose:(id)sender;
-
+- (BOOL)isFullscreen;
 - (void)toggleFullscreen:(id)sender;
-- (void)scaleFrame:(float)scale;
-- (void)setHalfSize:(id)sender;
-- (void)setActualSize:(id)sender;
-- (void)setDoubleSize:(id)sender;
-- (void)fitToScreen:(id)sender;
 
 @end

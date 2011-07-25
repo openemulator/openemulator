@@ -13,7 +13,7 @@
 #import "CanvasView.h"
 
 @interface CanvasWindowController : NSWindowController
-<NSToolbarDelegate>
+<NSToolbarDelegate, NSWindowDelegate>
 {
 	IBOutlet id fScrollView;
 	IBOutlet CanvasView *fCanvasView;
@@ -30,6 +30,11 @@
 - (void *)canvas;
 - (void)closeWindow;
 - (CanvasView *)canvasView;
+
+- (void)setHalfSize:(id)sender;
+- (void)setActualSize:(id)sender;
+- (void)setDoubleSize:(id)sender;
+- (void)fitToScreen:(id)sender;
 
 - (void)systemPowerDown:(id)sender;
 - (void)systemSleep:(id)sender;

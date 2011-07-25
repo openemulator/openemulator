@@ -27,7 +27,6 @@
 	return self;
 }
 
-
 - (BOOL)validateUserInterfaceItem:(id <NSValidatedUserInterfaceItem >)anItem
 {
     return [[[self window] windowController] validateUserInterfaceItem:anItem];

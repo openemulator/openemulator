@@ -81,12 +81,6 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 // Class
 
-- (NSApplicationPresentationOptions)window:(NSWindow *)window
-      willUseFullScreenPresentationOptions:(NSApplicationPresentationOptions)proposedOptions
-{
-    return (proposedOptions | NSApplicationPresentationAutoHideToolbar);
-}
-
 - (id)initWithFrame:(NSRect)rect
 {
 	NSOpenGLPixelFormatAttribute pixelFormatAtrributes[] =
@@ -241,6 +235,8 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	
 	[super dealloc];
 }
+
+// Window
 
 - (BOOL)validateUserInterfaceItem:(id)anItem
 {
@@ -1025,7 +1021,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	[document unlockEmulation];
 }
 
-// Support for the text system
+// Support for the text input system
 
 - (BOOL)hasMarkedText
 {
