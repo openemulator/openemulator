@@ -175,7 +175,7 @@ bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
             // To-Do: timers
 			return true;
 			
-		case CONTROLBUS_INVALIDATE_TIMER:
+		case CONTROLBUS_REMOVE_TIMERS:
             // To-Do: timers
 			return true;
 			

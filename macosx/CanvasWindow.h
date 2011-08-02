@@ -22,5 +22,6 @@
 
 - (BOOL)isFullscreen;
 - (void)toggleFullscreen:(id)sender;
+- (void)leaveFullscreen;
 
 @end

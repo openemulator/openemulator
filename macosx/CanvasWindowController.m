@@ -46,8 +46,7 @@
 	[fCanvasView freeOpenGL];
     
 	CanvasWindow *window = (CanvasWindow *)[self window];
-    if ([window isFullscreen])
-        [window toggleFullscreen:self];
+    [window leaveFullscreen];
 }
 
 - (CanvasView *)canvasView

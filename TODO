@@ -1,4 +1,5 @@
 ==To-Do==
+* Fix display link problem when replacing/deleting a fullscreen canvas in 10.7
 * Finish ControlBus
 * Finish 6502 CPU
 * Implement Apple-1 I/O
