@@ -13,6 +13,8 @@
 
 #include "OEComponent.h"
 
+#include <list>
+
 typedef enum
 {
 	CONTROLBUS_SET_POWERSTATE,
@@ -24,7 +26,7 @@ typedef enum
 	CONTROLBUS_ASSERT_NMI,
 	CONTROLBUS_CLEAR_NMI,
 	CONTROLBUS_SCHEDULE_TIMER,
-	CONTROLBUS_REMOVE_TIMERS,
+	CONTROLBUS_CLEAR_TIMERS,
 	CONTROLBUS_GET_CLOCKCYCLE,
 	CONTROLBUS_ADD_CLOCKCYCLE,
 	CONTROLBUS_GET_AUDIOBUFFERINDEX,
@@ -46,13 +48,19 @@ typedef enum
 
 typedef enum
 {
-	CONTROLBUS_POWERSTATE_ON,
-	CONTROLBUS_POWERSTATE_PAUSE,
-	CONTROLBUS_POWERSTATE_STANDBY,
-	CONTROLBUS_POWERSTATE_SLEEP,
-	CONTROLBUS_POWERSTATE_HIBERNATE,
 	CONTROLBUS_POWERSTATE_OFF,
+	CONTROLBUS_POWERSTATE_HIBERNATE,
+	CONTROLBUS_POWERSTATE_SLEEP,
+	CONTROLBUS_POWERSTATE_STANDBY,
+	CONTROLBUS_POWERSTATE_PAUSE,
+	CONTROLBUS_POWERSTATE_ON,
 } ControlBusPowerState;
+
+typedef struct
+{
+    int clocks;
+    OEComponent *component;
+} ControlBusEvent;
 
 class ControlBus : public OEComponent
 {
@@ -83,9 +91,10 @@ private:
 	int irqCount;
 	int nmiCount;
 	
-	double phase;
-	
-	void updateCPUFrequency();
+    list<ControlBusEvent> events;
+    
+    void setPowerState(int powerState);
+    void scheduleTimer(OEComponent *component, int clocks);
 	bool isPoweredOn(int powerState);
 };
 

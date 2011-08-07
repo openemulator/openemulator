@@ -39,7 +39,7 @@ typedef enum
 	DEVICE_GET_STORAGES,
 	
 	DEVICE_UPDATE,
-	DEVICE_POST_SYSTEMEVENT,
+    DEVICE_ARE_EVENTS_ENABLED,
 	DEVICE_ASSERT_ACTIVITY,
 	DEVICE_CLEAR_ACTIVITY,
 } DeviceMessage;
@@ -57,7 +57,7 @@ typedef vector<DeviceSetting> DeviceSettings;
 
 typedef enum
 {
-	DEVICE_SYSTEMEVENT_DID_OCCUR,
+	DEVICE_EVENT_DID_OCCUR,
 } DeviceNotification;
 
 typedef enum
@@ -102,6 +102,6 @@ typedef enum
 	DEVICE_DISPLAYLCDAUTOSCALE,
 	
 	DEVICE_END,
-} DeviceSystemEvent;
+} DeviceEvent;
 
 #endif

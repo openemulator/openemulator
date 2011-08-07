@@ -36,6 +36,11 @@
 	[super dealloc];
 }
 
+- (void *)device
+{
+	return device;
+}
+
 - (void *)canvas
 {
 	return canvas;
@@ -312,7 +317,7 @@
 		[item setToolTip:NSLocalizedString(@"Initiate power-down.",
 										   @"Canvas Toolbar Tool Tip.")];
 		[item setImage:[NSImage imageNamed:@"IconPowerDown.png"]];
-		[item setAction:@selector(systemPowerDown:)];
+		[item setAction:@selector(sendPowerDown:)];
 	}
 	else if ([ident isEqualToString:@"Sleep"])
 	{
@@ -323,7 +328,7 @@
 		[item setToolTip:NSLocalizedString(@"Initiate low power mode.",
 										   @"Canvas Toolbar Tool Tip.")];
 		[item setImage:[NSImage imageNamed:@"IconSleep.png"]];
-		[item setAction:@selector(systemSleep:)];
+		[item setAction:@selector(sendSleep:)];
 	}
 	else if ([ident isEqualToString:@"Wake Up"])
 	{
@@ -334,7 +339,7 @@
 		[item setToolTip:NSLocalizedString(@"Initiate full power state.",
 										   @"Canvas Toolbar Tool Tip.")];
 		[item setImage:[NSImage imageNamed:@"IconWakeUp.png"]];
-		[item setAction:@selector(systemWakeUp:)];
+		[item setAction:@selector(sendWakeUp:)];
 	}
 	else if ([ident isEqualToString:@"Cold Restart"])
 	{
@@ -346,7 +351,7 @@
 										   "primitive level.",
 										   @"Canvas Toolbar Tool Tip.")];
 		[item setImage:[NSImage imageNamed:@"IconColdRestart.png"]];
-		[item setAction:@selector(systemColdRestart:)];
+		[item setAction:@selector(sendColdRestart:)];
 	}
 	else if ([ident isEqualToString:@"Warm Restart"])
 	{
@@ -357,7 +362,7 @@
 		[item setToolTip:NSLocalizedString(@"Restart the operating system.",
 										   @"Canvas Toolbar Tool Tip.")];
 		[item setImage:[NSImage imageNamed:@"IconWarmRestart.png"]];
-		[item setAction:@selector(systemWarmRestart:)];
+		[item setAction:@selector(sendWarmRestart:)];
 	}
 	else if ([ident isEqualToString:@"Debugger Break"])
 	{
@@ -368,7 +373,7 @@
 		[item setToolTip:NSLocalizedString(@"Break into the operating system debugger.",
 										   @"Canvas Toolbar Tool Tip.")];
 		[item setImage:[NSImage imageNamed:@"IconDebuggerBreak.png"]];
-		[item setAction:@selector(systemDebuggerBreak:)];
+		[item setAction:@selector(sendDebuggerBreak:)];
 	}
 	else if ([ident isEqualToString:@"AudioControls"])
 	{
@@ -425,44 +430,6 @@
 			NSToolbarSpaceItemIdentifier,
 			NSToolbarFlexibleSpaceItemIdentifier,
 			nil];
-}
-
-// System events
-
-- (void)systemPowerDown:(id)sender
-{
-	[[self document] sendSystemEvent:DOCUMENT_POWERDOWN
-							toDevice:device];
-}
-
-- (void)systemSleep:(id)sender
-{
-	[[self document] sendSystemEvent:DOCUMENT_SLEEP
-							toDevice:device];
-}
-
-- (void)systemWakeUp:(id)sender
-{
-	[[self document] sendSystemEvent:DOCUMENT_WAKEUP
-							toDevice:device];
-}
-
-- (void)systemColdRestart:(id)sender
-{
-	[[self document] sendSystemEvent:DOCUMENT_COLDRESTART
-							toDevice:device];
-}
-
-- (void)systemWarmRestart:(id)sender
-{
-	[[self document] sendSystemEvent:DOCUMENT_WARMRESTART
-							toDevice:device];
-}
-
-- (void)systemDebuggerBreak:(id)sender
-{
-	[[self document] sendSystemEvent:DOCUMENT_DEBUGGERBREAK
-							toDevice:device];
 }
 
 @end

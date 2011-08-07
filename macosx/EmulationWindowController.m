@@ -276,6 +276,13 @@
 		return [item isMount];
 	else if (action == @selector(delete:))
 		return [item isRemovable];
+    else if ((action == @selector(sendPowerDown:)) ||
+             (action == @selector(sendSleep:)) ||
+             (action == @selector(sendWakeUp:)) ||
+             (action == @selector(sendColdRestart:)) ||
+             (action == @selector(sendWarmRestart:)) ||
+             (action == @selector(sendDebuggerBreak:)))
+        return [item areDeviceEventsEnabled];
 	
 	return YES;
 }
@@ -301,7 +308,7 @@
 		[item setToolTip:NSLocalizedString(@"Initiate power-down.",
 										   @"Canvas Toolbar Tool Tip.")];
 		[item setImage:[NSImage imageNamed:@"IconPowerDown.png"]];
-		[item setAction:@selector(systemPowerDown:)];
+		[item setAction:@selector(sendPowerDown:)];
 	}
 	else if ([ident isEqualToString:@"Sleep"])
 	{
@@ -312,7 +319,7 @@
 		[item setToolTip:NSLocalizedString(@"Initiate low power mode.",
 										   @"Canvas Toolbar Tool Tip.")];
 		[item setImage:[NSImage imageNamed:@"IconSleep.png"]];
-		[item setAction:@selector(systemSleep:)];
+		[item setAction:@selector(sendSleep:)];
 	}
 	else if ([ident isEqualToString:@"Wake Up"])
 	{
@@ -323,7 +330,7 @@
 		[item setToolTip:NSLocalizedString(@"Initiate full power state.",
 										   @"Canvas Toolbar Tool Tip.")];
 		[item setImage:[NSImage imageNamed:@"IconWakeUp.png"]];
-		[item setAction:@selector(systemWakeUp:)];
+		[item setAction:@selector(sendWakeUp:)];
 	}
 	else if ([ident isEqualToString:@"Cold Restart"])
 	{
@@ -335,7 +342,7 @@
 										   "primitive level.",
 										   @"Canvas Toolbar Tool Tip.")];
 		[item setImage:[NSImage imageNamed:@"IconColdRestart.png"]];
-		[item setAction:@selector(systemColdRestart:)];
+		[item setAction:@selector(sendColdRestart:)];
 	}
 	else if ([ident isEqualToString:@"Warm Restart"])
 	{
@@ -346,7 +353,7 @@
 		[item setToolTip:NSLocalizedString(@"Restart the operating system.",
 										   @"Canvas Toolbar Tool Tip.")];
 		[item setImage:[NSImage imageNamed:@"IconWarmRestart.png"]];
-		[item setAction:@selector(systemWarmRestart:)];
+		[item setAction:@selector(sendWarmRestart:)];
 	}
 	else if ([ident isEqualToString:@"Debugger Break"])
 	{
@@ -357,7 +364,7 @@
 		[item setToolTip:NSLocalizedString(@"Break into the operating system debugger.",
 										   @"Canvas Toolbar Tool Tip.")];
 		[item setImage:[NSImage imageNamed:@"IconDebuggerBreak.png"]];
-		[item setAction:@selector(systemDebuggerBreak:)];
+		[item setAction:@selector(sendDebuggerBreak:)];
 	}
 	else if ([ident isEqualToString:@"AudioControls"])
 	{
@@ -992,46 +999,40 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
     return NO;
 }
 
-- (void)systemPowerDown:(id)sender
+- (void)sendPowerDown:(id)sender
 {
 	if (selectedItem)
-		[[self document] sendSystemEvent:DOCUMENT_POWERDOWN
-								toDevice:[selectedItem device]];
+        [selectedItem sendDeviceEvent:EMULATIONDEVICEEVENT_POWERDOWN];
 }
 
-- (void)systemSleep:(id)sender
+- (void)sendSleep:(id)sender
 {
 	if (selectedItem)
-		[[self document] sendSystemEvent:DOCUMENT_SLEEP
-								toDevice:[selectedItem device]];
+        [selectedItem sendDeviceEvent:EMULATIONDEVICEEVENT_SLEEP];
 }
 
-- (void)systemWakeUp:(id)sender
+- (void)sendWakeUp:(id)sender
 {
 	if (selectedItem)
-		[[self document] sendSystemEvent:DOCUMENT_WAKEUP
-								toDevice:[selectedItem device]];
+        [selectedItem sendDeviceEvent:EMULATIONDEVICEEVENT_WAKEUP];
 }
 
-- (void)systemColdRestart:(id)sender
+- (void)sendColdRestart:(id)sender
 {
 	if (selectedItem)
-		[[self document] sendSystemEvent:DOCUMENT_COLDRESTART
-								toDevice:[selectedItem device]];
+        [selectedItem sendDeviceEvent:EMULATIONDEVICEEVENT_COLDRESTART];
 }
 
-- (void)systemWarmRestart:(id)sender
+- (void)sendWarmRestart:(id)sender
 {
 	if (selectedItem)
-		[[self document] sendSystemEvent:DOCUMENT_WARMRESTART
-								toDevice:[selectedItem device]];
+        [selectedItem sendDeviceEvent:EMULATIONDEVICEEVENT_WARMRESTART];
 }
 
-- (void)systemDebuggerBreak:(id)sender
+- (void)sendDebuggerBreak:(id)sender
 {
 	if (selectedItem)
-		[[self document] sendSystemEvent:DOCUMENT_DEBUGGERBREAK
-								toDevice:[selectedItem device]];
+        [selectedItem sendDeviceEvent:EMULATIONDEVICEEVENT_DEBUGGERBREAK];
 }
 
 @end

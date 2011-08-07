@@ -10,9 +10,10 @@
 
 #include "Apple1Terminal.h"
 
+#include "DeviceInterface.h"
+#include "CanvasInterface.h"
 #include "RAM.h"
 #include "ControlBus.h"
-#include "CanvasInterface.h"
 
 #define SCREEN_ORIGIN_X 104
 #define SCREEN_ORIGIN_Y 25
@@ -28,8 +29,10 @@
 
 Apple1Terminal::Apple1Terminal()
 {
-    vram = NULL;
+    device = NULL;
     controlBus = NULL;
+    vram = NULL;
+    monitorDevice = NULL;
     monitor = NULL;
     
     speedLimit = true;
@@ -66,7 +69,15 @@ bool Apple1Terminal::getValue(string name, string& value)
 
 bool Apple1Terminal::setRef(string name, OEComponent *ref)
 {
-    if (name == "vram")
+    if (name == "device")
+    {
+        if (device)
+            device->removeObserver(this, DEVICE_EVENT_DID_OCCUR);
+        device = ref;
+        if (device)
+            device->addObserver(this, DEVICE_EVENT_DID_OCCUR);
+    }
+    else if (name == "vram")
         vram = ref;
     else if (name == "controlBus")
     {
@@ -75,6 +86,14 @@ bool Apple1Terminal::setRef(string name, OEComponent *ref)
         controlBus = ref;
         if (controlBus)
             controlBus->addObserver(this, CONTROLBUS_TIMER_DID_FIRE);
+    }
+	else if (name == "monitorDevice")
+    {
+        if (monitorDevice)
+            monitorDevice->removeObserver(this, DEVICE_EVENT_DID_OCCUR);
+		monitorDevice = ref;
+        if (monitorDevice)
+            monitorDevice->addObserver(this, DEVICE_EVENT_DID_OCCUR);
     }
 	else if (name == "monitor")
     {
@@ -140,8 +159,29 @@ bool Apple1Terminal::init()
 
 void Apple1Terminal::notify(OEComponent *sender, int notification, void *data)
 {
-    if (sender == controlBus)
+    if (sender == device)
+    {
+        switch (notification)
+        {
+            case DEVICE_POWERDOWN:
+            {
+                ControlBusPowerState powerState;
+                controlBus->postMessage(this, CONTROLBUS_GET_POWERSTATE, &powerState);
+                powerState = ((powerState == CONTROLBUS_POWERSTATE_ON) ?
+                              CONTROLBUS_POWERSTATE_OFF : CONTROLBUS_POWERSTATE_ON);
+                controlBus->postMessage(this, CONTROLBUS_SET_POWERSTATE, &powerState);
+            }
+            case DEVICE_SLEEP:
+            {
+                ControlBusPowerState powerState = CONTROLBUS_POWERSTATE_PAUSE;
+                controlBus->postMessage(this, CONTROLBUS_SET_POWERSTATE, &powerState);
+            }
+        }
+    }
+    else if (sender == controlBus)
         scheduleTimer();
+    else if (sender == monitorDevice)
+        device->notify(sender, notification, data);
     else if (sender == monitor)
     {
         switch (notification)

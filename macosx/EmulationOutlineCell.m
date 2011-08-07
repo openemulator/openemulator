@@ -97,12 +97,14 @@
 		name = @"EmulationShow";
 	else if ([item isMount])
 		name = @"EmulationUnmount";
+    
 	if (buttonPressed)
 		name = [name stringByAppendingString:@"Pressed"];
 	else if (buttonRollover)
 		name = [name stringByAppendingString:@"Rollover"];
-	else if ([self backgroundStyle] == NSBackgroundStyleLowered)
+	else if ([self backgroundStyle] == NSBackgroundStyleDark)
 		name = [name stringByAppendingString:@"Selected"];
+    
 	[self drawImage:[NSImage imageNamed:name]
 			 inRect:[self buttonRectForBounds:cellFrame]
 		  isFlipped:[controlView isFlipped]];

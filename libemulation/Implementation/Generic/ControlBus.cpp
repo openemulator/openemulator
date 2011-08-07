@@ -14,6 +14,7 @@
 
 #include "DeviceInterface.h"
 #include "AudioInterface.h"
+#include "CPUInterface.h"
 
 ControlBus::ControlBus()
 {
@@ -32,8 +33,6 @@ ControlBus::ControlBus()
 	resetCount = 0;
 	irqCount = 0;
 	nmiCount = 0;
-	
-	phase = 0;
 }
 
 bool ControlBus::setValue(string name, string value)
@@ -44,6 +43,8 @@ bool ControlBus::setValue(string name, string value)
 		cpuFrequencyDivider = getInt(value);
 	else if (name == "resetOnPowerOn")
 		resetOnPowerOn = getInt(value);
+    else if (name == "powerState")
+        powerState = getInt(value);
 	else
 		return false;
 	
@@ -57,13 +58,13 @@ bool ControlBus::setRef(string name, OEComponent *ref)
 		if (device)
 		{
 			device->postMessage(this, DEVICE_CLEAR_ACTIVITY, NULL);
-			device->removeObserver(this, DEVICE_SYSTEMEVENT_DID_OCCUR);
+			device->removeObserver(this, DEVICE_EVENT_DID_OCCUR);
 		}
 		device = ref;
 		if (device)
 		{
 			device->postMessage(this, DEVICE_ASSERT_ACTIVITY, NULL);
-			device->addObserver(this, DEVICE_SYSTEMEVENT_DID_OCCUR);
+			device->addObserver(this, DEVICE_EVENT_DID_OCCUR);
 		}
 	}
 	else if (name == "audio")
@@ -98,15 +99,14 @@ bool ControlBus::init()
 		return false;
 	}
 	
-	string stateLabel = "Powered On";
-	device->postMessage(this, DEVICE_SET_STATELABEL, &stateLabel);
-	
+    postMessage(this, CONTROLBUS_SET_POWERSTATE, &powerState);
+    
 	return true;
 }
 
 void ControlBus::update()
 {
-	updateCPUFrequency();
+	cpuFrequency = crystalFrequency / cpuFrequencyDivider;
 }
 
 bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
@@ -114,23 +114,9 @@ bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
 	switch (message)
 	{
 		case CONTROLBUS_SET_POWERSTATE:
-		{
-			int oldPowerState = powerState;
-			powerState = *((int *)data);
-			if (!isPoweredOn(oldPowerState) &&
-				isPoweredOn(powerState) &&
-				resetOnPowerOn)
-			{
-				bool value = true;
-				postMessage(this, CONTROLBUS_ASSERT_RESET, &value);
-				value = false;
-				postMessage(this, CONTROLBUS_CLEAR_RESET, &value);
-			}
-			
-			// To-Do: Change RUNNING state in emulation
-			
+            setPowerState(*((int *)data));
 			return true;
-		}
+            
 		case CONTROLBUS_GET_POWERSTATE:
 			*((int *)data) = powerState;
 			return true;
@@ -175,7 +161,7 @@ bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
             // To-Do: timers
 			return true;
 			
-		case CONTROLBUS_REMOVE_TIMERS:
+		case CONTROLBUS_CLEAR_TIMERS:
             // To-Do: timers
 			return true;
 			
@@ -199,25 +185,116 @@ bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
 
 void ControlBus::notify(OEComponent *sender, int notification, void *data)
 {
-    if (notification == AUDIO_FRAME_IS_RENDERING)
+    if (sender == audio)
     {
-/*        AudioBuffer *buffer = (AudioBuffer *)data;
-        float *out = buffer->output;
-        
-        for(int i = 0; i < buffer->frameNum; i++)
+        AudioBuffer *buffer = (AudioBuffer *)data;
+         
+/*        scheduleTimer(NULL, cpuFrequency * buffer->frameNum / buffer->sampleRate);
+        while (1)
         {
-            float x = 0.01 * sin(phase);
-            phase += 2 * M_PI * 440 / buffer->sampleRate;
-            
-            for (int ch = 0; ch < buffer->channelNum; ch++)
-                *out++ += x;
+            int clocks = events.front().clocks;
+            if (cpu)
+                cpu->postMessage(this, CPU_RUN, &clocks);
+            OEComponent *component = events.front().component;
+            events.pop_front();
+            if (!component)
+                break;
+            component->notify(this, CONTROLBUS_TIMER_DID_FIRE, NULL);
         }*/
+    }
+    else if (sender == device)
+    {
+        switch (*((int *)data))
+        {
+            case DEVICE_POWERDOWN:
+                setPowerState(powerState == CONTROLBUS_POWERSTATE_OFF ?
+                              CONTROLBUS_POWERSTATE_ON :
+                              CONTROLBUS_POWERSTATE_OFF);
+                break;
+                
+            case DEVICE_SLEEP:
+                if (powerState != CONTROLBUS_POWERSTATE_OFF)
+                    setPowerState(CONTROLBUS_POWERSTATE_PAUSE);
+                break;
+                
+            case DEVICE_WAKEUP:
+                if (powerState != CONTROLBUS_POWERSTATE_PAUSE)
+                    setPowerState(CONTROLBUS_POWERSTATE_ON);
+                break;
+                
+            case DEVICE_COLDRESTART:
+                setPowerState(CONTROLBUS_POWERSTATE_OFF);
+                setPowerState(CONTROLBUS_POWERSTATE_ON);
+                break;
+                
+            case DEVICE_WARMRESTART:
+                postMessage(this, CONTROLBUS_ASSERT_RESET, NULL);
+                postMessage(this, CONTROLBUS_CLEAR_RESET, NULL);
+                break;
+                
+            case DEVICE_DEBUGGERBREAK:
+                postMessage(this, CONTROLBUS_ASSERT_NMI, NULL);
+                postMessage(this, CONTROLBUS_CLEAR_NMI, NULL);
+                break;
+        }
     }
 }
 
-void ControlBus::updateCPUFrequency()
+void ControlBus::setPowerState(int powerState)
 {
-	cpuFrequency = crystalFrequency / cpuFrequencyDivider;
+    if (resetOnPowerOn &&
+        !isPoweredOn(powerState) &&
+        isPoweredOn(this->powerState))
+    {
+        postMessage(this, CONTROLBUS_ASSERT_RESET, NULL);
+        postMessage(this, CONTROLBUS_CLEAR_RESET, NULL);
+    }
+    this->powerState = powerState;
+    
+    string stateLabel;
+    switch (powerState)
+    {
+        case CONTROLBUS_POWERSTATE_OFF:
+            stateLabel = "Powered Off";
+            break;
+            
+        case CONTROLBUS_POWERSTATE_HIBERNATE:
+            stateLabel = "Hibernated";
+            break;
+            
+        case CONTROLBUS_POWERSTATE_SLEEP:
+            stateLabel = "Sleeping";
+            break;
+            
+        case CONTROLBUS_POWERSTATE_STANDBY:
+            stateLabel = "Stand By";
+            break;
+            
+        case CONTROLBUS_POWERSTATE_PAUSE:
+            stateLabel = "Paused";
+            break;
+            
+        case CONTROLBUS_POWERSTATE_ON:
+            stateLabel = "Powered On";
+            break;
+            
+        default:
+            stateLabel = "Unknown";
+            break;
+    }
+    device->postMessage(this, DEVICE_SET_STATELABEL, &stateLabel);
+}
+
+void ControlBus::scheduleTimer(OEComponent *component, int clocks)
+{
+    int currentClock;
+    cpu->postMessage(this, CPU_GET_CLOCKCYCLES, &currentClock);
+    
+    // Mido el tiempo actual
+    //    int nextClock = currentClock + clocks;
+    
+    // Sump, parto (C en dos), inserto
+    // Si cae al principio, actualizo la CPU
 }
 
 bool ControlBus::isPoweredOn(int powerState)

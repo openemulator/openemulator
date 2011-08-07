@@ -677,4 +677,48 @@
 	return portType;
 }
 
+
+
+- (BOOL)areDeviceEventsEnabled
+{
+    bool areEventsEnabled = false;
+    if (type == EMULATIONITEM_DEVICE)
+        ((OEComponent *)device)->postMessage(NULL, DEVICE_ARE_EVENTS_ENABLED, &areEventsEnabled);
+    
+    return areEventsEnabled;
+}
+
+- (void)sendDeviceEvent:(EmulationDeviceEvent)theEvent
+{
+    switch (theEvent)
+    {
+        case EMULATIONDEVICEEVENT_POWERDOWN:
+            ((OEComponent *)device)->notify(NULL, DEVICE_POWERDOWN, NULL);
+            break;
+            
+        case EMULATIONDEVICEEVENT_SLEEP:
+            ((OEComponent *)device)->notify(NULL, DEVICE_SLEEP, NULL);
+            break;
+            
+        case EMULATIONDEVICEEVENT_WAKEUP:
+            ((OEComponent *)device)->notify(NULL, DEVICE_WAKEUP, NULL);
+            break;
+            
+        case EMULATIONDEVICEEVENT_COLDRESTART:
+            ((OEComponent *)device)->notify(NULL, DEVICE_COLDRESTART, NULL);
+            break;
+            
+        case EMULATIONDEVICEEVENT_WARMRESTART:
+            ((OEComponent *)device)->notify(NULL, DEVICE_WARMRESTART, NULL);
+            break;
+            
+        case EMULATIONDEVICEEVENT_DEBUGGERBREAK:
+            ((OEComponent *)device)->notify(NULL, DEVICE_DEBUGGERBREAK, NULL);
+            break;
+            
+        default:
+            break;
+    }
+}
+
 @end

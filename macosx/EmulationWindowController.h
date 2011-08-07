@@ -62,4 +62,11 @@ NSOutlineViewDataSource, NSComboBoxDataSource>
 - (BOOL)doConnect:(NSString *)thePath
            toItem:(EmulationItem *)theItem;
 
+- (void)sendPowerDown:(id)sender;
+- (void)sendSleep:(id)sender;
+- (void)sendWakeUp:(id)sender;
+- (void)sendColdRestart:(id)sender;
+- (void)sendWarmRestart:(id)sender;
+- (void)sendDebuggerBreak:(id)sender;
+
 @end

@@ -1,4 +1,6 @@
 ==2011-07==
+* Improved device events
+* Almost finished ControlBus
 * Improved canvas window delegate
 * Fixed toolbar menu title "Show/Hide Toolbar"
 * Added compatibility with Mac OS X 10.7

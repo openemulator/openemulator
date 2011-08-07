@@ -28,8 +28,10 @@ public:
 	void write(int address, int value);
 	
 private:
-	OEComponent *vram;
+    OEComponent *device;
 	OEComponent *controlBus;
+	OEComponent *vram;
+	OEComponent *monitorDevice;
 	OEComponent *monitor;
 	
     bool speedLimit;

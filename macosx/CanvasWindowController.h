@@ -28,19 +28,13 @@
 			   title:(NSString *)theTitle
 			  canvas:(void *)theCanvas;
 - (void *)canvas;
+- (void *)device;
 - (void)closeWindow;
 - (CanvasView *)canvasView;
 
-- (void)setHalfSize:(id)sender;
-- (void)setActualSize:(id)sender;
-- (void)setDoubleSize:(id)sender;
-- (void)fitToScreen:(id)sender;
-
-- (void)systemPowerDown:(id)sender;
-- (void)systemSleep:(id)sender;
-- (void)systemWakeUp:(id)sender;
-- (void)systemColdRestart:(id)sender;
-- (void)systemWarmRestart:(id)sender;
-- (void)systemDebuggerBreak:(id)sender;
+- (IBAction)setHalfSize:(id)sender;
+- (IBAction)setActualSize:(id)sender;
+- (IBAction)setDoubleSize:(id)sender;
+- (IBAction)fitToScreen:(id)sender;
 
 @end

@@ -240,15 +240,28 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (BOOL)validateUserInterfaceItem:(id)anItem
 {
-	if ([anItem action] == @selector(copy:))
+	SEL action = [anItem action];
+    
+	if (action == @selector(copy:))
 		return ![self isPaperCanvas];
-	else if ([anItem action] == @selector(paste:))
+	else if (action == @selector(paste:))
 	{
 		NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
 		return [[pasteboard types] containsObject:NSStringPboardType];
 	}
-	else if ([anItem action] == @selector(delete:))
+	else if (action == @selector(delete:))
 		return [self isPaperCanvas];
+    else if ((action == @selector(sendPowerDown:)) ||
+             (action == @selector(sendSleep:)) ||
+             (action == @selector(sendWakeUp:)) ||
+             (action == @selector(sendColdRestart:)) ||
+             (action == @selector(sendWarmRestart:)) ||
+             (action == @selector(sendDebuggerBreak:)))
+    {
+        bool areEventsEnabled = false;
+        ((OEComponent *)device)->postMessage(NULL, DEVICE_ARE_EVENTS_ENABLED, &areEventsEnabled);
+        return areEventsEnabled;
+    }
 	
 	return YES;
 }
@@ -257,6 +270,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 {
 	CanvasWindowController *canvasWindowController = [[self window] windowController];
 	document = [canvasWindowController document];
+	device = [canvasWindowController device];
 	canvas = [canvasWindowController canvas];
 	
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -1019,6 +1033,44 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	((OpenGLCanvas *)canvas)->doDelete();
 	
 	[document unlockEmulation];
+}
+
+// System events
+
+- (void)sendPowerDown:(id)sender
+{
+    DeviceEvent event = DEVICE_POWERDOWN;
+	((OEComponent *)device)->notify(NULL, DEVICE_EVENT_DID_OCCUR, &event);
+}
+
+- (void)sendSleep:(id)sender
+{
+    DeviceEvent event = DEVICE_SLEEP;
+	((OEComponent *)device)->notify(NULL, DEVICE_EVENT_DID_OCCUR, &event);
+}
+
+- (void)sendWakeUp:(id)sender
+{
+    DeviceEvent event = DEVICE_WAKEUP;
+	((OEComponent *)device)->notify(NULL, DEVICE_EVENT_DID_OCCUR, &event);
+}
+
+- (void)sendColdRestart:(id)sender
+{
+    DeviceEvent event = DEVICE_COLDRESTART;
+	((OEComponent *)device)->notify(NULL, DEVICE_EVENT_DID_OCCUR, &event);
+}
+
+- (void)sendWarmRestart:(id)sender
+{
+    DeviceEvent event = DEVICE_WARMRESTART;
+	((OEComponent *)device)->notify(NULL, DEVICE_EVENT_DID_OCCUR, &event);
+}
+
+- (void)sendDebuggerBreak:(id)sender
+{
+    DeviceEvent event = DEVICE_DEBUGGERBREAK;
+	((OEComponent *)device)->notify(NULL, DEVICE_EVENT_DID_OCCUR, &event);
 }
 
 // Support for the text input system

@@ -1,6 +1,6 @@
 ==To-Do==
-* Fix display link problem when replacing/deleting a fullscreen canvas in 10.7
-* Finish ControlBus
+* Fix display link problem when replacing/deleting a fullscreen canvas in Mac OS X 10.7
+* Implement ControlBus scheduler
 * Finish 6502 CPU
 * Implement Apple-1 I/O
 * Implement Apple-1 Cassette Interface

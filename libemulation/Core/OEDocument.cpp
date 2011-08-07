@@ -734,7 +734,12 @@ void OEDocument::addInlets(OEInletMap& inletMap, string deviceId, xmlNodePtr chi
         {
             string ref = getNodeProperty(node, "ref");
             string property = getNodeProperty(node, "property");
-            string outletRef = deviceId + "." + getNodeProperty(node, "outletRef");
+            string outletRef = getNodeProperty(node, "outletRef");
+            
+            if (outletRef == "")
+                outletRef = deviceId;
+            else
+                outletRef = deviceId + "." + outletRef;
             
             inletMap[ref][property] = outletRef;
         }

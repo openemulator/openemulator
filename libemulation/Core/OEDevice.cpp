@@ -147,9 +147,10 @@ bool OEDevice::postMessage(OEComponent *sender, int message, void *data)
 			emulation->activityCount--;
 			return true;
 			
-		case DEVICE_POST_SYSTEMEVENT:
-			notify(sender, DEVICE_SYSTEMEVENT_DID_OCCUR, data);
-			return true;
+        case DEVICE_ARE_EVENTS_ENABLED:
+            if (data)
+                *((bool *)data) = (observers[DEVICE_EVENT_DID_OCCUR].size() != 0);
+            return true;
 	}
 	
 	return false;

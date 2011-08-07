@@ -21,7 +21,7 @@
 }
 
 - (BOOL)isFullscreen;
-- (void)toggleFullscreen:(id)sender;
+- (IBAction)toggleFullscreen:(id)sender;
 - (void)leaveFullscreen;
 
 @end

@@ -21,6 +21,16 @@ typedef enum
 	EMULATIONITEM_AVAILABLEPORT,
 } EmulationItemType;
 
+typedef enum
+{
+	EMULATIONDEVICEEVENT_POWERDOWN,
+	EMULATIONDEVICEEVENT_SLEEP,
+	EMULATIONDEVICEEVENT_WAKEUP,
+	EMULATIONDEVICEEVENT_COLDRESTART,
+	EMULATIONDEVICEEVENT_WARMRESTART,
+	EMULATIONDEVICEEVENT_DEBUGGERBREAK,
+} EmulationDeviceEvent;
+
 @interface EmulationItem : NSObject
 {
 	EmulationItemType type;
@@ -102,5 +112,8 @@ typedef enum
 - (BOOL)isPort;
 - (BOOL)addOEDocument:(NSString *)path;
 - (NSString *)portType;
+
+- (BOOL)areDeviceEventsEnabled;
+- (void)sendDeviceEvent:(EmulationDeviceEvent)event;
 
 @end
