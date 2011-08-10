@@ -32,7 +32,7 @@
         <property name="device" ref="studioMonitor"/>
         <property name="controlBus" ref=""/>
         <property name="videoDecoder" value="NTSC Y'UV"/>
-        <property name="videoBandwidth" value="1"/>
+        <property name="videoBandwidth" value="0.8"/>
         <property name="videoBrightness" value="0"/>
         <property name="videoContrast" value="1"/>
         <property name="videoSaturation" value="1"/>

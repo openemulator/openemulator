@@ -42,13 +42,11 @@ Apple1Terminal::Apple1Terminal()
     
     vramp = NULL;
     image.setFormat(OEIMAGE_LUMINANCE);
-    image.setOptions(OEIMAGE_COLORCARRIER);
     image.setSize(OEMakeSize(SCREEN_WIDTH, SCREEN_HEIGHT));
 }
 
 bool Apple1Terminal::setValue(string name, string value)
 {
-    
     if (name == "terminalSpeed")
         speedLimit = (value == "Standard");
     else
@@ -82,10 +80,16 @@ bool Apple1Terminal::setRef(string name, OEComponent *ref)
     else if (name == "controlBus")
     {
         if (controlBus)
+        {
+            controlBus->removeObserver(this, CONTROLBUS_POWERSTATE_DID_CHANGE);
             controlBus->removeObserver(this, CONTROLBUS_TIMER_DID_FIRE);
+        }
         controlBus = ref;
         if (controlBus)
+        {
+            controlBus->addObserver(this, CONTROLBUS_POWERSTATE_DID_CHANGE);
             controlBus->addObserver(this, CONTROLBUS_TIMER_DID_FIRE);
+        }
     }
 	else if (name == "monitorDevice")
     {
@@ -130,6 +134,12 @@ bool Apple1Terminal::setData(string name, OEData *data)
 
 bool Apple1Terminal::init()
 {
+    if (!device)
+    {
+        logMessage("device not connected");
+        return false;
+    }
+    
     if (!vram)
     {
         logMessage("vram not connected");
@@ -165,23 +175,60 @@ void Apple1Terminal::notify(OEComponent *sender, int notification, void *data)
         {
             case DEVICE_POWERDOWN:
             {
-                ControlBusPowerState powerState;
-                controlBus->postMessage(this, CONTROLBUS_GET_POWERSTATE, &powerState);
-                powerState = ((powerState == CONTROLBUS_POWERSTATE_ON) ?
-                              CONTROLBUS_POWERSTATE_OFF : CONTROLBUS_POWERSTATE_ON);
+                ControlBusPowerState powerState = CONTROLBUS_POWERSTATE_OFF;
                 controlBus->postMessage(this, CONTROLBUS_SET_POWERSTATE, &powerState);
+                break;
+            }
+            case DEVICE_WAKEUP:
+            {
+                ControlBusPowerState powerState = CONTROLBUS_POWERSTATE_ON;
+                controlBus->postMessage(this, CONTROLBUS_SET_POWERSTATE, &powerState);
+                break;
             }
             case DEVICE_SLEEP:
             {
                 ControlBusPowerState powerState = CONTROLBUS_POWERSTATE_PAUSE;
                 controlBus->postMessage(this, CONTROLBUS_SET_POWERSTATE, &powerState);
+                break;
             }
         }
     }
     else if (sender == controlBus)
-        scheduleTimer();
+    {
+        switch (notification)
+        {
+            case CONTROLBUS_TIMER_DID_FIRE:
+                scheduleTimer();
+                break;
+                
+            case CONTROLBUS_POWERSTATE_DID_CHANGE:
+            {
+                CanvasBezel bezel;
+                switch (*((ControlBusPowerState *)data))
+                {
+                    case CONTROLBUS_POWERSTATE_OFF:
+                        bezel = CANVAS_BEZEL_POWER;
+                        break;
+                        
+                    case CONTROLBUS_POWERSTATE_PAUSE:
+                        bezel = CANVAS_BEZEL_PAUSE;
+                        break;
+                        
+                    default:
+                        bezel = CANVAS_BEZEL_NONE;
+                        break;
+                }
+                
+                monitor->postMessage(this, CANVAS_SET_BEZEL, &bezel);
+                break;
+            }
+        }
+    }
     else if (sender == monitorDevice)
-        device->notify(sender, notification, data);
+    {
+        if (device)
+            device->notify(sender, notification, data);
+    }
     else if (sender == monitor)
     {
         switch (notification)
@@ -229,11 +276,12 @@ void Apple1Terminal::loadFont(OEData *data)
     }
 }
 
-// We just copy 3 int's, and leave the last 2 pixels
+// Copy a 14-pixel char scanline with 3 ints and one short
 #define copyCharLine(x) \
 *((int *)(p + x * SCREEN_WIDTH + 0)) = *((int *)(f + x * FONT_WIDTH + 0));\
 *((int *)(p + x * SCREEN_WIDTH + 4)) = *((int *)(f + x * FONT_WIDTH + 4));\
-*((int *)(p + x * SCREEN_WIDTH + 8)) = *((int *)(f + x * FONT_WIDTH + 8));
+*((int *)(p + x * SCREEN_WIDTH + 8)) = *((int *)(f + x * FONT_WIDTH + 8));\
+*((short *)(p + x * SCREEN_WIDTH + 12)) = *((short *)(f + x * FONT_WIDTH + 12));
 
 void Apple1Terminal::updateCanvas()
 {
@@ -269,9 +317,6 @@ void Apple1Terminal::updateCanvas()
 
 void Apple1Terminal::sendKey(int unicode)
 {
-    if (unicode >= 0x80)
-        return;
-    
     if (unicode == 0x0a)
     {
         cursorX = 0;
@@ -284,7 +329,7 @@ void Apple1Terminal::sendKey(int unicode)
         cursorX = 0;
         cursorY = 0;
     }
-    else if (unicode <= 0x7f)
+    else if ((unicode >= 0x20) && (unicode <= 0x7f))
     {
         vramp[cursorY * TERM_WIDTH + cursorX] = unicode;
         

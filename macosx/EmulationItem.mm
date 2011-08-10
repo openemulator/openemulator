@@ -690,35 +690,39 @@
 
 - (void)sendDeviceEvent:(EmulationDeviceEvent)theEvent
 {
+    DeviceEvent event;
+    
     switch (theEvent)
     {
         case EMULATIONDEVICEEVENT_POWERDOWN:
-            ((OEComponent *)device)->notify(NULL, DEVICE_POWERDOWN, NULL);
+            event = DEVICE_POWERDOWN;
             break;
             
         case EMULATIONDEVICEEVENT_SLEEP:
-            ((OEComponent *)device)->notify(NULL, DEVICE_SLEEP, NULL);
+            event = DEVICE_SLEEP;
             break;
             
         case EMULATIONDEVICEEVENT_WAKEUP:
-            ((OEComponent *)device)->notify(NULL, DEVICE_WAKEUP, NULL);
+            event = DEVICE_WAKEUP;
             break;
             
         case EMULATIONDEVICEEVENT_COLDRESTART:
-            ((OEComponent *)device)->notify(NULL, DEVICE_COLDRESTART, NULL);
+            event = DEVICE_COLDRESTART;
             break;
             
         case EMULATIONDEVICEEVENT_WARMRESTART:
-            ((OEComponent *)device)->notify(NULL, DEVICE_WARMRESTART, NULL);
+            event = DEVICE_WARMRESTART;
             break;
             
         case EMULATIONDEVICEEVENT_DEBUGGERBREAK:
-            ((OEComponent *)device)->notify(NULL, DEVICE_DEBUGGERBREAK, NULL);
+            event = DEVICE_DEBUGGERBREAK;
             break;
             
         default:
-            break;
+            return;
     }
+    
+    ((OEComponent *)device)->notify(NULL, DEVICE_EVENT_DID_OCCUR, &event);
 }
 
 @end

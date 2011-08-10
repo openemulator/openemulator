@@ -23,10 +23,6 @@
 	CGLContextObj cglContextObj;
 	CGLPixelFormatObj cglPixelFormatObj;
 	
-	Document *document;
-    void *device;
-	void *canvas;
-	
 	NSSize canvasSize;
 	BOOL needsReshape;
 	

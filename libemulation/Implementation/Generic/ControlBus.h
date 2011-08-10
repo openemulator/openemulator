@@ -85,7 +85,7 @@ private:
 	float cpuFrequencyDivider;
 	bool resetOnPowerOn;
 	
-	int powerState;
+	ControlBusPowerState powerState;
 	float cpuFrequency;
 	int resetCount;
 	int irqCount;
@@ -93,9 +93,9 @@ private:
 	
     list<ControlBusEvent> events;
     
-    void setPowerState(int powerState);
+    void setPowerState(ControlBusPowerState powerState);
     void scheduleTimer(OEComponent *component, int clocks);
-	bool isPoweredOn(int powerState);
+	bool isPoweredOn(ControlBusPowerState powerState);
 };
 
 #endif

@@ -44,7 +44,7 @@ bool ControlBus::setValue(string name, string value)
 	else if (name == "resetOnPowerOn")
 		resetOnPowerOn = getInt(value);
     else if (name == "powerState")
-        powerState = getInt(value);
+        powerState = (ControlBusPowerState) getInt(value);
 	else
 		return false;
 	
@@ -114,7 +114,7 @@ bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
 	switch (message)
 	{
 		case CONTROLBUS_SET_POWERSTATE:
-            setPowerState(*((int *)data));
+            setPowerState(*((ControlBusPowerState *)data));
 			return true;
             
 		case CONTROLBUS_GET_POWERSTATE:
@@ -124,37 +124,37 @@ bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
 		case CONTROLBUS_ASSERT_RESET:
 			resetCount++;
 			if (resetCount == 1)
-				notify(this, CONTROLBUS_RESET_DID_ASSERT, NULL);
+				OEComponent::notify(this, CONTROLBUS_RESET_DID_ASSERT, NULL);
 			return true;
 			
 		case CONTROLBUS_CLEAR_RESET:
 			resetCount--;
 			if (resetCount == 0)
-				notify(this, CONTROLBUS_RESET_DID_CLEAR, NULL);
+				OEComponent::notify(this, CONTROLBUS_RESET_DID_CLEAR, NULL);
 			return true;
 			
 		case CONTROLBUS_ASSERT_IRQ:
 			irqCount++;
 			if (irqCount == 1)
-				notify(this, CONTROLBUS_IRQ_DID_ASSERT, NULL);
+				OEComponent::notify(this, CONTROLBUS_IRQ_DID_ASSERT, NULL);
 			return true;
 			
 		case CONTROLBUS_CLEAR_IRQ:
 			irqCount--;
 			if (irqCount == 0)
-				notify(this, CONTROLBUS_IRQ_DID_CLEAR, NULL);
+				OEComponent::notify(this, CONTROLBUS_IRQ_DID_CLEAR, NULL);
 			return true;
 			
 		case CONTROLBUS_ASSERT_NMI:
 			nmiCount++;
 			if (nmiCount == 1)
-				notify(this, CONTROLBUS_NMI_DID_ASSERT, NULL);
+				OEComponent::notify(this, CONTROLBUS_NMI_DID_ASSERT, NULL);
 			return true;
 			
 		case CONTROLBUS_CLEAR_NMI:
 			nmiCount--;
 			if (nmiCount == 0)
-				notify(this, CONTROLBUS_NMI_DID_ASSERT, NULL);
+				OEComponent::notify(this, CONTROLBUS_NMI_DID_ASSERT, NULL);
 			return true;
 			
 		case CONTROLBUS_SCHEDULE_TIMER:
@@ -207,9 +207,7 @@ void ControlBus::notify(OEComponent *sender, int notification, void *data)
         switch (*((int *)data))
         {
             case DEVICE_POWERDOWN:
-                setPowerState(powerState == CONTROLBUS_POWERSTATE_OFF ?
-                              CONTROLBUS_POWERSTATE_ON :
-                              CONTROLBUS_POWERSTATE_OFF);
+                setPowerState(CONTROLBUS_POWERSTATE_OFF);
                 break;
                 
             case DEVICE_SLEEP:
@@ -218,8 +216,7 @@ void ControlBus::notify(OEComponent *sender, int notification, void *data)
                 break;
                 
             case DEVICE_WAKEUP:
-                if (powerState != CONTROLBUS_POWERSTATE_PAUSE)
-                    setPowerState(CONTROLBUS_POWERSTATE_ON);
+                setPowerState(CONTROLBUS_POWERSTATE_ON);
                 break;
                 
             case DEVICE_COLDRESTART:
@@ -240,8 +237,11 @@ void ControlBus::notify(OEComponent *sender, int notification, void *data)
     }
 }
 
-void ControlBus::setPowerState(int powerState)
+void ControlBus::setPowerState(ControlBusPowerState powerState)
 {
+    if (this->powerState == powerState)
+        return;
+    
     if (resetOnPowerOn &&
         !isPoweredOn(powerState) &&
         isPoweredOn(this->powerState))
@@ -249,6 +249,7 @@ void ControlBus::setPowerState(int powerState)
         postMessage(this, CONTROLBUS_ASSERT_RESET, NULL);
         postMessage(this, CONTROLBUS_CLEAR_RESET, NULL);
     }
+    
     this->powerState = powerState;
     
     string stateLabel;
@@ -283,6 +284,8 @@ void ControlBus::setPowerState(int powerState)
             break;
     }
     device->postMessage(this, DEVICE_SET_STATELABEL, &stateLabel);
+    
+    OEComponent::notify(this, CONTROLBUS_POWERSTATE_DID_CHANGE, &powerState);
 }
 
 void ControlBus::scheduleTimer(OEComponent *component, int clocks)
@@ -297,7 +300,7 @@ void ControlBus::scheduleTimer(OEComponent *component, int clocks)
     // Si cae al principio, actualizo la CPU
 }
 
-bool ControlBus::isPoweredOn(int powerState)
+bool ControlBus::isPoweredOn(ControlBusPowerState powerState)
 {
 	return (powerState >= CONTROLBUS_POWERSTATE_HIBERNATE);
 }

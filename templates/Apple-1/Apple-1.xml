@@ -84,6 +84,7 @@
         <property name="powerOnPattern" value="20"/>
     </component>
     <component id="apple1.terminal" class="Apple1Terminal">
+        <property name="device" ref="apple1"/>
         <property name="vram" ref="apple1.terminalRAM"/>
         <property name="controlBus" ref="apple1.controlBus"/>
         <property name="monitorDevice" ref=""/>

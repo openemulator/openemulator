@@ -50,6 +50,9 @@
 {
 	[fCanvasView freeOpenGL];
     
+    canvas = NULL;
+    device = NULL;
+    
 	CanvasWindow *window = (CanvasWindow *)[self window];
     [window leaveFullscreen];
 }
