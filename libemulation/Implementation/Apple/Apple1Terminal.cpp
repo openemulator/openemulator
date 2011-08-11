@@ -36,7 +36,8 @@ Apple1Terminal::Apple1Terminal()
     monitor = NULL;
     
     speedLimit = true;
-    cursorActive = true;
+    cursorActive = false;
+    cursorCount = 0;
     cursorX = 0;
     cursorY = 0;
     
@@ -162,7 +163,6 @@ bool Apple1Terminal::init()
     vramp = &vramData->front();
     
     scheduleTimer();
-    updateCanvas();
     
     return true;
 }
@@ -198,6 +198,7 @@ void Apple1Terminal::notify(OEComponent *sender, int notification, void *data)
         switch (notification)
         {
             case CONTROLBUS_TIMER_DID_FIRE:
+                updateCanvas();
                 scheduleTimer();
                 break;
                 
@@ -220,6 +221,7 @@ void Apple1Terminal::notify(OEComponent *sender, int notification, void *data)
                 }
                 
                 monitor->postMessage(this, CANVAS_SET_BEZEL, &bezel);
+                
                 break;
             }
         }
@@ -254,8 +256,8 @@ void Apple1Terminal::write(int address, int value)
 
 void Apple1Terminal::scheduleTimer()
 {
-    int clock = 525 * 65;
-    controlBus->postMessage(this, CONTROLBUS_SCHEDULE_TIMER, &clock);
+    OEUInt32 clocks = 525 * 65 * 14;
+    controlBus->postMessage(this, CONTROLBUS_SCHEDULE_TIMER, &clocks);
 }
 
 void Apple1Terminal::loadFont(OEData *data)
@@ -291,6 +293,17 @@ void Apple1Terminal::updateCanvas()
     if (!vramp)
         return;
     
+    if (cursorCount)
+        cursorCount--;
+    else
+    {
+        cursorActive = !cursorActive;
+        cursorCount = cursorActive ? 10 : 20;
+    }
+    
+    char *fp = (char *)&font.front();
+    char *ip = (char *)image.getPixels();
+    
     for (int y = 0; y < TERM_HEIGHT; y++)
         for (int x = 0; x < TERM_WIDTH; x++)
         {
@@ -298,8 +311,8 @@ void Apple1Terminal::updateCanvas()
             if (cursorActive && (x == cursorX) && (y == cursorY))
                 c = 0;
             
-            char *f = (char *)&font.front() + c * FONT_HEIGHT * FONT_WIDTH;
-            char *p = ((char *)image.getPixels() + y * SCREEN_WIDTH * CHAR_HEIGHT +
+            char *f = fp + c * FONT_HEIGHT * FONT_WIDTH;
+            char *p = (ip + y * SCREEN_WIDTH * CHAR_HEIGHT +
                        x * CHAR_WIDTH + SCREEN_ORIGIN_Y * SCREEN_WIDTH + SCREEN_ORIGIN_X);
             
             copyCharLine(0);
@@ -348,8 +361,6 @@ void Apple1Terminal::sendKey(int unicode)
         memmove(vramp, vramp + TERM_WIDTH, (TERM_HEIGHT - 1) * TERM_WIDTH);
         memset(vramp + (TERM_HEIGHT - 1) * TERM_WIDTH, 0x20, TERM_WIDTH);
     }
-    
-    updateCanvas();
 }
 
 void Apple1Terminal::copy(string *s)

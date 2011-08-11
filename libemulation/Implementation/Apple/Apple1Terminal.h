@@ -36,6 +36,7 @@ private:
 	
     bool speedLimit;
     bool cursorActive;
+    int cursorCount;
     int cursorX, cursorY;
     
 	OEData font;

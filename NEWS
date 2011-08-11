@@ -1,4 +1,5 @@
 ==2011-08==
+* Implement ControlBus scheduler
 * Fixed display link problem when replacing/deleting a fullscreen canvas in Mac OS X 10.7
 * Implemented Apple-1 power state bezels
 

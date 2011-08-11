@@ -1407,6 +1407,7 @@
 					"$(inherited)",
 					/opt/local/lib,
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 			};
 			name = Debug;
 		};
@@ -1418,6 +1419,7 @@
 					"$(inherited)",
 					/opt/local/lib,
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 			};
 			name = Release;
 		};

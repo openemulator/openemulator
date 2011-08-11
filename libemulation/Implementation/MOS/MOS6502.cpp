@@ -90,6 +90,18 @@ bool MOS6502::setRef(string name, OEComponent *ref)
 	return true;
 }
 
+bool MOS6502::postMessage(OEComponent *sender, int message, void *data)
+{
+    switch (message)
+    {
+        case CPU_GET_CLOCKCYCLES:
+            *((OEUInt32 *)data) = 0;
+            return true;
+    }
+    
+    return false;
+}
+
 void MOS6502::notify(OEComponent *sender, int notification, void *data)
 {
 	switch (notification)

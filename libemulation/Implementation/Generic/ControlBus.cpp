@@ -118,7 +118,7 @@ bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
 			return true;
             
 		case CONTROLBUS_GET_POWERSTATE:
-			*((int *)data) = powerState;
+			*((ControlBusPowerState *)data) = powerState;
 			return true;
 			
 		case CONTROLBUS_ASSERT_RESET:
@@ -158,7 +158,7 @@ bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
 			return true;
 			
 		case CONTROLBUS_SCHEDULE_TIMER:
-            // To-Do: timers
+            scheduleTimer(sender, *((OEUInt32 *)data));
 			return true;
 			
 		case CONTROLBUS_CLEAR_TIMERS:
@@ -189,18 +189,23 @@ void ControlBus::notify(OEComponent *sender, int notification, void *data)
     {
         AudioBuffer *buffer = (AudioBuffer *)data;
          
-/*        scheduleTimer(NULL, cpuFrequency * buffer->frameNum / buffer->sampleRate);
+        scheduleTimer(NULL, cpuFrequency * buffer->frameNum / buffer->sampleRate);
+        
         while (1)
         {
-            int clocks = events.front().clocks;
+            OEUInt32 clocks = events.front().clocks;
+            
             if (cpu)
                 cpu->postMessage(this, CPU_RUN, &clocks);
+            
             OEComponent *component = events.front().component;
             events.pop_front();
+            
             if (!component)
                 break;
+            
             component->notify(this, CONTROLBUS_TIMER_DID_FIRE, NULL);
-        }*/
+        }
     }
     else if (sender == device)
     {
@@ -288,16 +293,40 @@ void ControlBus::setPowerState(ControlBusPowerState powerState)
     OEComponent::notify(this, CONTROLBUS_POWERSTATE_DID_CHANGE, &powerState);
 }
 
-void ControlBus::scheduleTimer(OEComponent *component, int clocks)
+void ControlBus::scheduleTimer(OEComponent *component, OEUInt32 clocks)
 {
-    int currentClock;
-    cpu->postMessage(this, CPU_GET_CLOCKCYCLES, &currentClock);
+    OEUInt32 currentClocks;
+    if (cpu)
+        cpu->postMessage(this, CPU_GET_CLOCKCYCLES, &currentClocks);
+    events.front().clocks -= currentClocks;
     
-    // Mido el tiempo actual
-    //    int nextClock = currentClock + clocks;
+    list<ControlBusEvent>::iterator i;
+    for (i = events.begin();
+         i != events.end();
+         i++)
+    {
+        if (clocks < i->clocks)
+        {
+            i->clocks -= clocks;
+            
+            if (i == events.begin())
+            {
+                if (cpu)
+                    cpu->postMessage(this, CPU_SET_CLOCKCYCLES, &clocks);
+            }
+            
+            break;
+        }
+        
+        clocks -= i->clocks;
+    }
     
-    // Sump, parto (C en dos), inserto
-    // Si cae al principio, actualizo la CPU
+    ControlBusEvent event;
+    
+    event.clocks = clocks;
+    event.component = component;
+    
+    events.insert(i, event);
 }
 
 bool ControlBus::isPoweredOn(ControlBusPowerState powerState)

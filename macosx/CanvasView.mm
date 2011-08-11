@@ -649,7 +649,11 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	OpenGLCanvas *canvas = (OpenGLCanvas *)[canvasWindowController canvas];
     
     if (!canvas)
+    {
+        NSEraseRect(theRect);
+        
         return;
+    }
     
 	[self enterContext];
 	

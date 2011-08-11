@@ -94,7 +94,7 @@ private:
     list<ControlBusEvent> events;
     
     void setPowerState(ControlBusPowerState powerState);
-    void scheduleTimer(OEComponent *component, int clocks);
+    void scheduleTimer(OEComponent *component, OEUInt32 clocks);
 	bool isPoweredOn(ControlBusPowerState powerState);
 };
 
