@@ -1,4 +1,7 @@
 ==2011-08==
+* Fixed several smaller issues within ControlBus, Devices and Apple1Terminal
+* Implemented ControlBus device activity update
+* Improved timing framework
 * Implement ControlBus scheduler
 * Fixed display link problem when replacing/deleting a fullscreen canvas in Mac OS X 10.7
 * Implemented Apple-1 power state bezels

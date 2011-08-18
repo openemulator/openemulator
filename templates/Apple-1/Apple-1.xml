@@ -14,10 +14,12 @@
     <component id="apple1.controlBus" class="ControlBus">
         <property name="device" ref="apple1"/>
         <property name="audio" ref="audio"/>
-        <property name="crystalFrequency" value="14.31818MHz"/>
-        <property name="cpuFrequencyDivider" value="14"/>
+        <!-- Clock frequency: 14318180 Hz * 57 / 910 -->
+        <property name="clockFrequency" value="896853.033"/>
+        <property name="cpuSpeedMultiplier" value="1"/>
         <property name="cpu" ref="apple1.cpu"/>
         <property name="resetOnPowerOn" value="1"/>
+        <property name="powerState" value="0"/>
     </component>
     <component id="apple1.memoryBus" class="AddressDecoder">
         <property name="addressSize" value="16"/>
@@ -91,6 +93,8 @@
         <property name="monitor" ref=""/>
         <property name="font" data="${resourcePath}/roms/Signetics/Signetics 2513 Video ROM.bin"/>
         <property name="terminalSpeed" value="Standard"/>
+        <property name="cursorX" value="0"/>
+        <property name="cursorY" value="0"/>
     </component>
     <component id="apple1.ram2" class="RAM">
         <property name="controlBus" ref="apple1.controlBus"/>

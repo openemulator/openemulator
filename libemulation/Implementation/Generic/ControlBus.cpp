@@ -18,37 +18,48 @@
 
 ControlBus::ControlBus()
 {
+	clockFrequency = 1E6;
+    cpuSpeedMultiplier = 1;
+	resetOnPowerOn = false;
+	powerState = CONTROLBUS_POWERSTATE_OFF;
+    
 	device = NULL;
 	audio = NULL;
 	cpu = NULL;
 	cpuSocket = NULL;
 	
-	crystalFrequency = 1E6;
-	cpuFrequencyDivider = 1.0;
-	cpu = NULL;
-	cpuSocket = NULL;
-	resetOnPowerOn = false;
-	
-	powerState = CONTROLBUS_POWERSTATE_ON;
 	resetCount = 0;
 	irqCount = 0;
 	nmiCount = 0;
+    
+    clock = 0;
+    clockRemainder = 0;
 }
 
 bool ControlBus::setValue(string name, string value)
 {
-	if (name == "crystalFrequency")
-		crystalFrequency = getInt(value);
-	else if (name == "cpuFrequencyDivider")
-		cpuFrequencyDivider = getInt(value);
+	if (name == "clockFrequency")
+		clockFrequency = getFloat(value);
+	else if (name == "cpuSpeedMultiplier")
+		cpuSpeedMultiplier = getFloat(value);
 	else if (name == "resetOnPowerOn")
 		resetOnPowerOn = getInt(value);
     else if (name == "powerState")
-        powerState = (ControlBusPowerState) getInt(value);
+        powerState = (ControlBusPowerState)getInt(value);
 	else
 		return false;
 	
 	return true;
+}
+
+bool ControlBus::getValue(string name, string &value)
+{
+    if (name == "powerState")
+        value = getString(powerState);
+    else
+        return false;
+    
+    return true;
 }
 
 bool ControlBus::setRef(string name, OEComponent *ref)
@@ -57,13 +68,15 @@ bool ControlBus::setRef(string name, OEComponent *ref)
 	{
 		if (device)
 		{
-			device->postMessage(this, DEVICE_CLEAR_ACTIVITY, NULL);
+            if (powerState == CONTROLBUS_POWERSTATE_ON)
+                device->postMessage(this, DEVICE_CLEAR_ACTIVITY, NULL);
 			device->removeObserver(this, DEVICE_EVENT_DID_OCCUR);
 		}
 		device = ref;
 		if (device)
 		{
-			device->postMessage(this, DEVICE_ASSERT_ACTIVITY, NULL);
+            if (powerState == CONTROLBUS_POWERSTATE_ON)
+                device->postMessage(this, DEVICE_ASSERT_ACTIVITY, NULL);
 			device->addObserver(this, DEVICE_EVENT_DID_OCCUR);
 		}
 	}
@@ -99,14 +112,17 @@ bool ControlBus::init()
 		return false;
 	}
 	
-    postMessage(this, CONTROLBUS_SET_POWERSTATE, &powerState);
+    if (!cpu)
+    {
+        logMessage("cpu not connected");
+        return false;
+    }
+    
+    setPowerState(powerState);
+    if (powerState == CONTROLBUS_POWERSTATE_ON)
+        device->postMessage(this, DEVICE_ASSERT_ACTIVITY, NULL);
     
 	return true;
-}
-
-void ControlBus::update()
-{
-	cpuFrequency = crystalFrequency / cpuFrequencyDivider;
 }
 
 bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
@@ -158,26 +174,24 @@ bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
 			return true;
 			
 		case CONTROLBUS_SCHEDULE_TIMER:
-            scheduleTimer(sender, *((OEUInt32 *)data));
+            scheduleTimer(sender, *((OEUInt64 *)data));
 			return true;
 			
 		case CONTROLBUS_CLEAR_TIMERS:
-            // To-Do: timers
+            clearTimers(sender);
 			return true;
 			
-		case CONTROLBUS_GET_CLOCKCYCLE:
-            // To-Do: timers
+		case CONTROLBUS_GET_CLOCK:
+            // To-Do
+			return true;
+			
+		case CONTROLBUS_SKIP_CLOCKS:
+            // To-Do
 			return true;
 			
 		case CONTROLBUS_GET_AUDIOBUFFERINDEX:
-            // To-Do: timers
+            // To-Do
 			return true;
-            
-        case CONTROLBUS_REQUEST_BUS:
-            break;
-            
-        case CONTROLBUS_RELEASE_BUS:
-            break;
 	}
 	
 	return false;
@@ -188,17 +202,19 @@ void ControlBus::notify(OEComponent *sender, int notification, void *data)
     if (sender == audio)
     {
         AudioBuffer *buffer = (AudioBuffer *)data;
-         
-        scheduleTimer(NULL, cpuFrequency * buffer->frameNum / buffer->sampleRate);
+        
+        scheduleTimer(NULL, clockFrequency * buffer->frameNum / buffer->sampleRate);
         
         while (1)
         {
-            OEUInt32 clocks = events.front().clocks;
+            float accurateCPUClocks = clockRemainder + events.front().clocks * cpuSpeedMultiplier;
+            OEUInt64 cpuClocks = accurateCPUClocks;
+            clockRemainder = accurateCPUClocks - cpuClocks;
+            cpu->postMessage(this, CPU_RUN, &cpuClocks);
             
-            if (cpu)
-                cpu->postMessage(this, CPU_RUN, &clocks);
-            
-            OEComponent *component = events.front().component;
+            ControlBusEvent *event = &events.front();
+            clock += event->clocks;
+            OEComponent *component = event->component;
             events.pop_front();
             
             if (!component)
@@ -244,16 +260,7 @@ void ControlBus::notify(OEComponent *sender, int notification, void *data)
 
 void ControlBus::setPowerState(ControlBusPowerState powerState)
 {
-    if (this->powerState == powerState)
-        return;
-    
-    if (resetOnPowerOn &&
-        !isPoweredOn(powerState) &&
-        isPoweredOn(this->powerState))
-    {
-        postMessage(this, CONTROLBUS_ASSERT_RESET, NULL);
-        postMessage(this, CONTROLBUS_CLEAR_RESET, NULL);
-    }
+    ControlBusPowerState lastPowerState = this->powerState;
     
     this->powerState = powerState;
     
@@ -289,16 +296,32 @@ void ControlBus::setPowerState(ControlBusPowerState powerState)
             break;
     }
     device->postMessage(this, DEVICE_SET_STATELABEL, &stateLabel);
+    device->postMessage(this, DEVICE_UPDATE, NULL);
     
-    OEComponent::notify(this, CONTROLBUS_POWERSTATE_DID_CHANGE, &powerState);
+    if ((lastPowerState == CONTROLBUS_POWERSTATE_ON) &&
+        (powerState != CONTROLBUS_POWERSTATE_ON))
+        device->postMessage(this, DEVICE_CLEAR_ACTIVITY, NULL);
+    else if ((lastPowerState != CONTROLBUS_POWERSTATE_ON) &&
+            (powerState == CONTROLBUS_POWERSTATE_ON))
+        device->postMessage(this, DEVICE_ASSERT_ACTIVITY, NULL);
+    
+    if (lastPowerState != powerState)
+        OEComponent::notify(this, CONTROLBUS_POWERSTATE_DID_CHANGE, &powerState);
+    
+    if (resetOnPowerOn &&
+        (lastPowerState != CONTROLBUS_POWERSTATE_ON) &&
+        (powerState == CONTROLBUS_POWERSTATE_ON))
+    {
+        postMessage(this, CONTROLBUS_ASSERT_RESET, NULL);
+        postMessage(this, CONTROLBUS_CLEAR_RESET, NULL);
+    }
 }
 
-void ControlBus::scheduleTimer(OEComponent *component, OEUInt32 clocks)
+void ControlBus::scheduleTimer(OEComponent *component, OEUInt64 clocks)
 {
-    OEUInt32 currentClocks;
-    if (cpu)
-        cpu->postMessage(this, CPU_GET_CLOCKCYCLES, &currentClocks);
-    events.front().clocks -= currentClocks;
+    OEUInt64 cpuClocks;
+    cpu->postMessage(this, CPU_GET_CLOCKS, &cpuClocks);
+    events.front().clocks -= cpuClocks / cpuSpeedMultiplier;
     
     list<ControlBusEvent>::iterator i;
     for (i = events.begin();
@@ -311,8 +334,8 @@ void ControlBus::scheduleTimer(OEComponent *component, OEUInt32 clocks)
             
             if (i == events.begin())
             {
-                if (cpu)
-                    cpu->postMessage(this, CPU_SET_CLOCKCYCLES, &clocks);
+                cpuClocks = clocks * cpuSpeedMultiplier;
+                cpu->postMessage(this, CPU_SET_CLOCKS, &cpuClocks);
             }
             
             break;
@@ -329,7 +352,14 @@ void ControlBus::scheduleTimer(OEComponent *component, OEUInt32 clocks)
     events.insert(i, event);
 }
 
-bool ControlBus::isPoweredOn(ControlBusPowerState powerState)
+void ControlBus::clearTimers(OEComponent *component)
 {
-	return (powerState >= CONTROLBUS_POWERSTATE_HIBERNATE);
+    list<ControlBusEvent>::iterator i;
+    for (i = events.begin();
+         i != events.end();
+         i++)
+    {
+        if (i->component == component)
+            i = events.erase(i);
+    }
 }

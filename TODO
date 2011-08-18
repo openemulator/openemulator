@@ -7,6 +7,8 @@
 * Fix [CanvasView update] recursion in printer view
 * Optimize persistance
 
+* EDL version detection
+* Automatic GPU disabling when no physical GPU is present (when loading configuration)
 * Add OESound:resampling, rendering to audio buffer
 * Remove data property, and add OEData class (allows to read from/write to file), but how would we access files in a zip package?
 * Use disk image file locking, if the disk image is writable (flock)

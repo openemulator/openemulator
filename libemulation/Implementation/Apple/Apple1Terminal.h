@@ -11,6 +11,7 @@
 #include "OEComponent.h"
 
 #include "OEImage.h"
+#include "ControlBus.h"
 
 class Apple1Terminal : public OEComponent
 {
@@ -43,9 +44,12 @@ private:
     char *vramp;
     OEImage image;
     
+    ControlBusPowerState powerState;
+    
     void scheduleTimer();
     void loadFont(OEData *data);
     void updateCanvas();
+    void updateBezel();
     void sendKey(int unicode);
     void copy(string *s);
     void paste(string *s);

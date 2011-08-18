@@ -1265,7 +1265,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
         return;
     
     DeviceEvent event = DEVICE_POWERDOWN;
-	device->notify(NULL, DEVICE_EVENT_DID_OCCUR, &event);
+	device->notify(device, DEVICE_EVENT_DID_OCCUR, &event);
 }
 
 - (void)sendSleep:(id)sender
@@ -1277,7 +1277,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
         return;
     
     DeviceEvent event = DEVICE_SLEEP;
-	device->notify(NULL, DEVICE_EVENT_DID_OCCUR, &event);
+	device->notify(device, DEVICE_EVENT_DID_OCCUR, &event);
 }
 
 - (void)sendWakeUp:(id)sender
@@ -1289,7 +1289,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
         return;
     
     DeviceEvent event = DEVICE_WAKEUP;
-	device->notify(NULL, DEVICE_EVENT_DID_OCCUR, &event);
+	device->notify(device, DEVICE_EVENT_DID_OCCUR, &event);
 }
 
 - (void)sendColdRestart:(id)sender
@@ -1301,7 +1301,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
         return;
     
     DeviceEvent event = DEVICE_COLDRESTART;
-	device->notify(NULL, DEVICE_EVENT_DID_OCCUR, &event);
+	device->notify(device, DEVICE_EVENT_DID_OCCUR, &event);
 }
 
 - (void)sendWarmRestart:(id)sender
@@ -1313,7 +1313,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
         return;
     
     DeviceEvent event = DEVICE_WARMRESTART;
-	device->notify(NULL, DEVICE_EVENT_DID_OCCUR, &event);
+	device->notify(device, DEVICE_EVENT_DID_OCCUR, &event);
 }
 
 - (void)sendDebuggerBreak:(id)sender
@@ -1325,7 +1325,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
         return;
     
     DeviceEvent event = DEVICE_DEBUGGERBREAK;
-	device->notify(NULL, DEVICE_EVENT_DID_OCCUR, &event);
+	device->notify(device, DEVICE_EVENT_DID_OCCUR, &event);
 }
 
 // Support for the text input system

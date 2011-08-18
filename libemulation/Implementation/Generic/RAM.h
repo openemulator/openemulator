@@ -10,9 +10,11 @@
 
 #include "OEComponent.h"
 
+#include "ControlBus.h"
+
 // Parameters:
 // * size is the RAM size. It must be a power of two.
-// * controlBus can be used to determine power state.
+// * A controlBus can be used to determine power state.
 // * powerOnPattern is the byte pattern used when power is applied.
 // * image is the RAM image.
 
@@ -47,7 +49,7 @@ private:
 	
 	OEComponent *controlBus;
 	OEData powerOnPattern;
-	int powerState;
+	ControlBusPowerState powerState;
     
     void initMemory();
 };

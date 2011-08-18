@@ -13,7 +13,6 @@
 #include "DeviceInterface.h"
 #include "CanvasInterface.h"
 #include "RAM.h"
-#include "ControlBus.h"
 
 #define SCREEN_ORIGIN_X 104
 #define SCREEN_ORIGIN_Y 25
@@ -50,6 +49,10 @@ bool Apple1Terminal::setValue(string name, string value)
 {
     if (name == "terminalSpeed")
         speedLimit = (value == "Standard");
+    else if (name == "cursorX")
+        cursorX = getInt(value);
+    else if (name == "cursorY")
+        cursorY = getInt(value);
     else
         return false;
     
@@ -60,6 +63,10 @@ bool Apple1Terminal::getValue(string name, string& value)
 {
     if (name == "terminalSpeed")
         value = speedLimit ? "Standard" : "Enhanced";
+    else if (name == "cursorX")
+        value = getString(cursorX);
+    else if (name == "cursorY")
+        value = getString(cursorY);
     else
         return false;
     
@@ -69,13 +76,7 @@ bool Apple1Terminal::getValue(string name, string& value)
 bool Apple1Terminal::setRef(string name, OEComponent *ref)
 {
     if (name == "device")
-    {
-        if (device)
-            device->removeObserver(this, DEVICE_EVENT_DID_OCCUR);
         device = ref;
-        if (device)
-            device->addObserver(this, DEVICE_EVENT_DID_OCCUR);
-    }
     else if (name == "vram")
         vram = ref;
     else if (name == "controlBus")
@@ -114,7 +115,9 @@ bool Apple1Terminal::setRef(string name, OEComponent *ref)
             monitor->addObserver(this, CANVAS_UNICODEKEYBOARD_DID_CHANGE);
             monitor->addObserver(this, CANVAS_DID_COPY);
             monitor->addObserver(this, CANVAS_DID_PASTE);
+            
             updateCanvas();
+            updateBezel();
         }
     }
 	else
@@ -162,6 +165,11 @@ bool Apple1Terminal::init()
     }
     vramp = &vramData->front();
     
+    controlBus->postMessage(this, CONTROLBUS_GET_POWERSTATE, &powerState);
+    
+    updateCanvas();
+    updateBezel();
+    
     scheduleTimer();
     
     return true;
@@ -169,31 +177,7 @@ bool Apple1Terminal::init()
 
 void Apple1Terminal::notify(OEComponent *sender, int notification, void *data)
 {
-    if (sender == device)
-    {
-        switch (notification)
-        {
-            case DEVICE_POWERDOWN:
-            {
-                ControlBusPowerState powerState = CONTROLBUS_POWERSTATE_OFF;
-                controlBus->postMessage(this, CONTROLBUS_SET_POWERSTATE, &powerState);
-                break;
-            }
-            case DEVICE_WAKEUP:
-            {
-                ControlBusPowerState powerState = CONTROLBUS_POWERSTATE_ON;
-                controlBus->postMessage(this, CONTROLBUS_SET_POWERSTATE, &powerState);
-                break;
-            }
-            case DEVICE_SLEEP:
-            {
-                ControlBusPowerState powerState = CONTROLBUS_POWERSTATE_PAUSE;
-                controlBus->postMessage(this, CONTROLBUS_SET_POWERSTATE, &powerState);
-                break;
-            }
-        }
-    }
-    else if (sender == controlBus)
+    if (sender == controlBus)
     {
         switch (notification)
         {
@@ -204,33 +188,26 @@ void Apple1Terminal::notify(OEComponent *sender, int notification, void *data)
                 
             case CONTROLBUS_POWERSTATE_DID_CHANGE:
             {
-                CanvasBezel bezel;
-                switch (*((ControlBusPowerState *)data))
+                powerState = *((ControlBusPowerState *)data);
+                if (monitor)
                 {
-                    case CONTROLBUS_POWERSTATE_OFF:
-                        bezel = CANVAS_BEZEL_POWER;
-                        break;
+                    updateBezel();
+                    
+                    if (powerState == CONTROLBUS_POWERSTATE_OFF)
+                    {
+                        monitor->postMessage(this, CANVAS_CLEAR, NULL);
                         
-                    case CONTROLBUS_POWERSTATE_PAUSE:
-                        bezel = CANVAS_BEZEL_PAUSE;
-                        break;
-                        
-                    default:
-                        bezel = CANVAS_BEZEL_NONE;
-                        break;
+                        cursorX = 0;
+                        cursorY = 0;
+                    }
                 }
-                
-                monitor->postMessage(this, CANVAS_SET_BEZEL, &bezel);
                 
                 break;
             }
         }
     }
     else if (sender == monitorDevice)
-    {
-        if (device)
-            device->notify(sender, notification, data);
-    }
+        device->notify(sender, notification, data);
     else if (sender == monitor)
     {
         switch (notification)
@@ -256,7 +233,7 @@ void Apple1Terminal::write(int address, int value)
 
 void Apple1Terminal::scheduleTimer()
 {
-    OEUInt32 clocks = 525 * 65 * 14;
+    OEUInt64 clocks = 262 * 57;
     controlBus->postMessage(this, CONTROLBUS_SCHEDULE_TIMER, &clocks);
 }
 
@@ -293,13 +270,21 @@ void Apple1Terminal::updateCanvas()
     if (!vramp)
         return;
     
-    if (cursorCount)
-        cursorCount--;
-    else
+    if (powerState == CONTROLBUS_POWERSTATE_OFF)
+        return;
+    
+    if (powerState == CONTROLBUS_POWERSTATE_ON)
     {
-        cursorActive = !cursorActive;
-        cursorCount = cursorActive ? 10 : 20;
+        if (cursorCount)
+            cursorCount--;
+        else
+        {
+            cursorActive = !cursorActive;
+            cursorCount = cursorActive ? 10 : 20;
+        }
     }
+    else
+        cursorActive = false;
     
     char *fp = (char *)&font.front();
     char *ip = (char *)image.getPixels();
@@ -328,8 +313,35 @@ void Apple1Terminal::updateCanvas()
     monitor->postMessage(this, CANVAS_POST_IMAGE, &image);
 }
 
+void Apple1Terminal::updateBezel()
+{
+    if (!monitor)
+        return;
+    
+    CanvasBezel bezel;
+    switch (powerState)
+    {
+        case CONTROLBUS_POWERSTATE_OFF:
+            bezel = CANVAS_BEZEL_POWER;
+            break;
+            
+        case CONTROLBUS_POWERSTATE_PAUSE:
+            bezel = CANVAS_BEZEL_PAUSE;
+            break;
+            
+        default:
+            bezel = CANVAS_BEZEL_NONE;
+            break;
+    }
+    
+    monitor->postMessage(this, CANVAS_SET_BEZEL, &bezel);
+}
+
 void Apple1Terminal::sendKey(int unicode)
 {
+    if (powerState != CONTROLBUS_POWERSTATE_ON)
+        return;
+    
     if (unicode == 0x0a)
     {
         cursorX = 0;

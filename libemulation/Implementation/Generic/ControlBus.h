@@ -27,11 +27,9 @@ typedef enum
 	CONTROLBUS_CLEAR_NMI,
 	CONTROLBUS_SCHEDULE_TIMER,
 	CONTROLBUS_CLEAR_TIMERS,
-	CONTROLBUS_GET_CLOCKCYCLE,
-	CONTROLBUS_ADD_CLOCKCYCLE,
+	CONTROLBUS_GET_CLOCK,
+	CONTROLBUS_SKIP_CLOCKS,
 	CONTROLBUS_GET_AUDIOBUFFERINDEX,
-	CONTROLBUS_REQUEST_BUS,
-	CONTROLBUS_RELEASE_BUS,
 } ControlBusMessage;
 
 typedef enum
@@ -48,17 +46,17 @@ typedef enum
 
 typedef enum
 {
-	CONTROLBUS_POWERSTATE_OFF,
-	CONTROLBUS_POWERSTATE_HIBERNATE,
-	CONTROLBUS_POWERSTATE_SLEEP,
-	CONTROLBUS_POWERSTATE_STANDBY,
-	CONTROLBUS_POWERSTATE_PAUSE,
 	CONTROLBUS_POWERSTATE_ON,
+	CONTROLBUS_POWERSTATE_PAUSE,
+	CONTROLBUS_POWERSTATE_STANDBY,
+	CONTROLBUS_POWERSTATE_SLEEP,
+	CONTROLBUS_POWERSTATE_HIBERNATE,
+	CONTROLBUS_POWERSTATE_OFF,
 } ControlBusPowerState;
 
 typedef struct
 {
-    int clocks;
+    OEUInt64 clocks;
     OEComponent *component;
 } ControlBusEvent;
 
@@ -68,34 +66,36 @@ public:
 	ControlBus();
 	
 	bool setValue(string name, string value);
+    bool getValue(string name, string &value);
 	bool setRef(string name, OEComponent *ref);
 	bool init();
-    void update();
-	
+    
 	bool postMessage(OEComponent *sender, int event, void *data);
 	
 	void notify(OEComponent *sender, int notification, void *data);
 	
 private:
+	float clockFrequency;
+    float cpuSpeedMultiplier;
+	bool resetOnPowerOn;
+	ControlBusPowerState powerState;
+    
 	OEComponent *device;
 	OEComponent *audio;
 	OEComponent *cpu;
 	OEComponent *cpuSocket;
-	float crystalFrequency;
-	float cpuFrequencyDivider;
-	bool resetOnPowerOn;
-	
-	ControlBusPowerState powerState;
-	float cpuFrequency;
+    
 	int resetCount;
 	int irqCount;
 	int nmiCount;
 	
+    OEUInt64 clock;
+    float clockRemainder;
     list<ControlBusEvent> events;
     
     void setPowerState(ControlBusPowerState powerState);
-    void scheduleTimer(OEComponent *component, OEUInt32 clocks);
-	bool isPoweredOn(ControlBusPowerState powerState);
+    void scheduleTimer(OEComponent *component, OEUInt64 clocks);
+    void clearTimers(OEComponent *component);
 };
 
 #endif

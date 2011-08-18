@@ -1431,6 +1431,8 @@ void OpenGLCanvas::drawBezel()
 		blackAlpha = 0.3;
 		isBezelDrawRequired = false;
 	}
+    else
+        isBezelDrawRequired = false;
 	
 	if (!textureIndex)
 		return;
@@ -1877,7 +1879,7 @@ bool OpenGLCanvas::postImage(OEImage *theImage)
 	switch (mode)
 	{
 		case CANVAS_MODE_DISPLAY:
-			this->image = *theImage;
+			image = *theImage;
 			isImageUpdated = true;
 			break;
             
@@ -1906,6 +1908,30 @@ bool OpenGLCanvas::postImage(OEImage *theImage)
 	unlock();
 	
 	return true;
+}
+
+bool OpenGLCanvas::clear()
+{
+    lock();
+    
+    switch (mode)
+    {
+        case CANVAS_MODE_DISPLAY:
+            image = OEImage();
+            isImageUpdated = true;
+            break;
+            
+        case CANVAS_MODE_PAPER:
+            // To-Do
+            break;
+            
+        default:
+            break;
+    }
+    
+    unlock();
+    
+    return true;
 }
 
 bool OpenGLCanvas::setPrintHead(OEPoint *point)
@@ -1954,7 +1980,7 @@ bool OpenGLCanvas::postMessage(OEComponent *sender, int message, void *data)
 			return postImage((OEImage *)data);
 			
 		case CANVAS_CLEAR:
-			return true;
+			return clear();
 			
 		case CANVAS_MOVE_PRINTHEAD:
 			return setPrintHead((OEPoint *)data);

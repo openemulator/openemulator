@@ -395,6 +395,9 @@
 - (NSArray *)toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar
 {
 	return [NSArray arrayWithObjects:
+			@"Power Down",
+			@"Sleep",
+			@"Wake Up",
 			NSToolbarFlexibleSpaceItemIdentifier,
 			@"Library",
 			nil];

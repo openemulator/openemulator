@@ -203,6 +203,7 @@ private:
 	bool setPaperConfiguration(CanvasPaperConfiguration *configuration);
 	bool setOpenGLConfiguration(CanvasOpenGLConfiguration *configuration);
 	bool postImage(OEImage *frame);
+    bool clear();
 	bool setPrintHead(OEPoint *point);
 };
 

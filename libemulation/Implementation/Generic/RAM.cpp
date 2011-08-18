@@ -9,7 +9,6 @@
  */
 
 #include "RAM.h"
-#include "ControlBus.h"
 #include "AddressDecoder.h"
 
 RAM::RAM()
@@ -36,9 +35,11 @@ bool RAM::setRef(string name, OEComponent *ref)
 {
 	if (name == "controlBus")
 	{
-		removeObserver(controlBus, CONTROLBUS_POWERSTATE_DID_CHANGE);
+        if (controlBus)
+            controlBus->removeObserver(this, CONTROLBUS_POWERSTATE_DID_CHANGE);
 		controlBus = ref;
-		addObserver(controlBus, CONTROLBUS_POWERSTATE_DID_CHANGE);
+        if (controlBus)
+            controlBus->addObserver(this, CONTROLBUS_POWERSTATE_DID_CHANGE);
 	}
 	else
 		return false;
@@ -60,7 +61,7 @@ bool RAM::getData(string name, OEData **data)
 {
 	if (name == "image")
 	{
-		if (controlBus && (powerState <= CONTROLBUS_POWERSTATE_HIBERNATE))
+		if (powerState == CONTROLBUS_POWERSTATE_OFF)
 			*data = NULL;
 		else
 			*data = &this->data;
@@ -76,6 +77,7 @@ bool RAM::init()
 	if (size <= 0)
 	{
 		logMessage("invalid RAM size");
+        
 		return false;
 	}
 	
@@ -112,12 +114,12 @@ bool RAM::postMessage(OEComponent *sender, int message, void *data)
 
 void RAM::notify(OEComponent *sender, int notification, void *data)
 {
-	bool newPowerState = *((int *)data);
-	if ((powerState <= CONTROLBUS_POWERSTATE_HIBERNATE) &&
-		(newPowerState > CONTROLBUS_POWERSTATE_HIBERNATE))
-        initMemory();
+	ControlBusPowerState oldPowerState = powerState;
+    powerState = *((ControlBusPowerState *)data);
     
-	powerState = newPowerState;
+	if ((oldPowerState == CONTROLBUS_POWERSTATE_OFF) &&
+		(powerState != CONTROLBUS_POWERSTATE_OFF))
+        initMemory();
 }
 
 OEUInt8 RAM::read(OEAddress address)

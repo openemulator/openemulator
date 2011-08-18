@@ -94,8 +94,8 @@ bool MOS6502::postMessage(OEComponent *sender, int message, void *data)
 {
     switch (message)
     {
-        case CPU_GET_CLOCKCYCLES:
-            *((OEUInt32 *)data) = 0;
+        case CPU_GET_CLOCKS:
+            *((OEUInt64 *)data) = 0;
             return true;
     }
     

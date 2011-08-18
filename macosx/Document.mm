@@ -250,6 +250,8 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 		CanvasWindowController *canvasWindowController;
 		canvasWindowController = [canvasWindowControllers objectAtIndex:0];
 		[self addWindowController:canvasWindowController];
+        
+        [canvasWindowController showWindow:self];
 	}
 	else
 		[self addWindowController:emulationWindowController];
