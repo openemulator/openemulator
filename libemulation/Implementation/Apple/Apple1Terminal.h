@@ -11,6 +11,7 @@
 #include "OEComponent.h"
 
 #include "OEImage.h"
+#include "CanvasInterface.h"
 #include "ControlBus.h"
 
 class Apple1Terminal : public OEComponent
@@ -50,7 +51,7 @@ private:
     void loadFont(OEData *data);
     void updateCanvas();
     void updateBezel();
-    void sendKey(int unicode);
+    void sendUnicodeChar(CanvasUnicodeChar unicodeChar);
     void copy(string *s);
     void paste(string *s);
 };

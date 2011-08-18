@@ -28,7 +28,6 @@ typedef enum
 	CONTROLBUS_SCHEDULE_TIMER,
 	CONTROLBUS_CLEAR_TIMERS,
 	CONTROLBUS_GET_CLOCK,
-	CONTROLBUS_SKIP_CLOCKS,
 	CONTROLBUS_GET_AUDIOBUFFERINDEX,
 } ControlBusMessage;
 
@@ -76,7 +75,7 @@ public:
 	
 private:
 	float clockFrequency;
-    float cpuSpeedMultiplier;
+    float cpuClockMultiplier;
 	bool resetOnPowerOn;
 	ControlBusPowerState powerState;
     
@@ -91,11 +90,16 @@ private:
 	
     OEUInt64 clock;
     float clockRemainder;
+    
+    OEUInt64 clockAtAudioBufferStart;
+    float audioSampleToClockRatio;
+    
     list<ControlBusEvent> events;
     
     void setPowerState(ControlBusPowerState powerState);
     void scheduleTimer(OEComponent *component, OEUInt64 clocks);
     void clearTimers(OEComponent *component);
+    OEUInt64 getClock();
 };
 
 #endif

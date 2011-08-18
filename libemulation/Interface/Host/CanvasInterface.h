@@ -64,8 +64,8 @@ typedef enum
 
 typedef enum
 {
+	CANVAS_UNICODECHAR_WAS_SENT,
 	CANVAS_KEYBOARD_DID_CHANGE,
-	CANVAS_UNICODEKEYBOARD_DID_CHANGE,
 	CANVAS_POINTER_DID_CHANGE,
 	CANVAS_MOUSE_DID_CHANGE,
 	CANVAS_JOYSTICK1_DID_CHANGE,
@@ -240,7 +240,7 @@ public:
 
 typedef struct
 {
-	int usageId;
+	OEUInt32 usageId;
 	float value;
 } CanvasHIDNotification;
 
@@ -252,6 +252,8 @@ typedef struct
 #define CANVAS_JOYSTICK_BUTTON_NUM	16
 #define CANVAS_JOYSTICK_HAT_NUM		4
 #define CANVAS_JOYSTICK_RAXIS_NUM	4
+
+typedef OEUInt32 CanvasUnicodeChar;
 
 typedef enum
 {
@@ -472,7 +474,7 @@ typedef enum
 	CANVAS_K_RIGHTSHIFT,
 	CANVAS_K_RIGHTALT,
 	CANVAS_K_RIGHTGUI,
-} CanvasKeyboardUsageIds;
+} CanvasKeyboardUsageId;
 
 typedef enum
 {
@@ -489,7 +491,7 @@ typedef enum
 	CANVAS_P_BUTTON8,
 	CANVAS_P_WHEELX,
 	CANVAS_P_WHEELY,
-} CanvasPointerUsageIds;
+} CanvasPointerUsageId;
 
 typedef enum
 {
@@ -505,7 +507,7 @@ typedef enum
 	CANVAS_M_BUTTON8,
 	CANVAS_M_WHEELX,
 	CANVAS_M_WHEELY,
-} CanvasMouseUsageIds;
+} CanvasMouseUsageId;
 
 typedef enum
 {
@@ -549,7 +551,7 @@ typedef enum
 	CANVAS_J_RELAXIS2,
 	CANVAS_J_RELAXIS3,
 	CANVAS_J_RELAXIS4,
-} CanvasJoystickUsageIds;
+} CanvasJoystickUsageId;
 
 typedef struct
 {

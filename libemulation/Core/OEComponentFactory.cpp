@@ -13,7 +13,7 @@
 // FACTORY_INCLUDE_START - Do not modify this section
 #include "AddressDecoder.h"
 #include "AddressOffset.h"
-#include "AudioSampleConverter.h"
+#include "ADCDAC.h"
 #include "ControlBus.h"
 #include "FloatingBus.h"
 #include "Monitor.h"
@@ -59,7 +59,7 @@ OEComponent *OEComponentFactory::construct(const string& className)
 // FACTORY_CODE_START - Do not modify this section
 	matchComponent(AddressDecoder);
 	matchComponent(AddressOffset);
-	matchComponent(AudioSampleConverter);
+	matchComponent(ADCDAC);
 	matchComponent(ControlBus);
 	matchComponent(FloatingBus);
 	matchComponent(Monitor);

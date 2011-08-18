@@ -156,15 +156,15 @@
         <property name="monitor" ref=""/>
     </component>
     <component id="appleII.audioOut" class="AppleIIAudioOut">
-        <property name="sampleConverter" ref="appleII.sampleConverter"/>
+        <property name="adcdac" ref="appleII.adcdac"/>
         <property name="floatingBus" ref="appleII.floatingBus"/>
         <property name="state" value="0"/>
     </component>
     <component id="appleII.audioIn" class="AppleIIAudioIn">
-        <property name="sampleConverter" ref="appleII.sampleConverter"/>
+        <property name="adcdac" ref="appleII.adcdac"/>
         <property name="floatingBus" ref="appleII.floatingBus"/>
     </component>
-    <component id="appleII.sampleConverter" class="AudioSampleConverter">
+    <component id="appleII.adcdac" class="ADCDAC">
         <property name="controlBus" ref="appleII.controlBus"/>
     </component>
     <component id="appleII.game" class="AppleIIGamePort">

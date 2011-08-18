@@ -180,8 +180,8 @@ bool Monitor::setRef(string name, OEComponent *ref)
 		{
 			if (canvas)
 			{
+				canvas->removeObserver(this, CANVAS_UNICODECHAR_WAS_SENT);
 				canvas->removeObserver(this, CANVAS_KEYBOARD_DID_CHANGE);
-				canvas->removeObserver(this, CANVAS_UNICODEKEYBOARD_DID_CHANGE);
 				canvas->removeObserver(this, CANVAS_POINTER_DID_CHANGE);
 				canvas->removeObserver(this, CANVAS_MOUSE_DID_CHANGE);
 				canvas->removeObserver(this, CANVAS_JOYSTICK1_DID_CHANGE);
@@ -202,8 +202,8 @@ bool Monitor::setRef(string name, OEComponent *ref)
 			
 			if (canvas)
 			{
+				canvas->addObserver(this, CANVAS_UNICODECHAR_WAS_SENT);
 				canvas->addObserver(this, CANVAS_KEYBOARD_DID_CHANGE);
-				canvas->addObserver(this, CANVAS_UNICODEKEYBOARD_DID_CHANGE);
 				canvas->addObserver(this, CANVAS_POINTER_DID_CHANGE);
 				canvas->addObserver(this, CANVAS_MOUSE_DID_CHANGE);
 				canvas->addObserver(this, CANVAS_JOYSTICK1_DID_CHANGE);

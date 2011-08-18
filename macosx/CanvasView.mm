@@ -819,7 +819,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 	
 	[document lockEmulation];
 	
-	canvas->sendUnicodeKeyEvent(unicode);
+	canvas->sendUnicodeChar((CanvasUnicodeChar)unicode);
 	
 	[document unlockEmulation];
 }

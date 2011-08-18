@@ -16,7 +16,7 @@
         <property name="audio" ref="audio"/>
         <!-- Clock frequency: 14318180 Hz * 57 / 910 -->
         <property name="clockFrequency" value="896853.033"/>
-        <property name="cpuSpeedMultiplier" value="1"/>
+        <property name="cpuClockMultiplier" value="1"/>
         <property name="cpu" ref="apple1.cpu"/>
         <property name="resetOnPowerOn" value="1"/>
         <property name="powerState" value="0"/>

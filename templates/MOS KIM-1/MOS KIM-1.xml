@@ -94,7 +94,7 @@
         <property name="audioOut" ref="kim1.audioOut"/>
         <property name="audioIn" ref="kim1.audioIn"/>
     </component>
-    <component id="kim1.audioOut" class="AudioSampleConverter">
+    <component id="kim1.audioOut" class="ADCDAC">
         <property name="audio" ref="audio"/>
         <property name="controlBus" ref="kim1.controlBus"/>
     </component>

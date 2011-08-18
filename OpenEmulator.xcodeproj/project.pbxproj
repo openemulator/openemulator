@@ -153,7 +153,7 @@
 		00FC27EE12D1070A0065E986 /* AppleDiskII.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00044CA212CE6FD400D26940 /* AppleDiskII.cpp */; };
 		00FC27EF12D1070A0065E986 /* AddressDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8882E12A393990052B7A4 /* AddressDecoder.cpp */; };
 		00FC27F112D1070A0065E986 /* AddressOffset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8883012A393990052B7A4 /* AddressOffset.cpp */; };
-		00FC27F312D1070A0065E986 /* AudioSampleConverter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8883212A393990052B7A4 /* AudioSampleConverter.cpp */; };
+		00FC27F312D1070A0065E986 /* ADCDAC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8883212A393990052B7A4 /* ADCDAC.cpp */; };
 		00FC27F712D1070A0065E986 /* Monitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8883612A393990052B7A4 /* Monitor.cpp */; };
 		00FC27F912D1070A0065E986 /* ControlBus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8883812A393990052B7A4 /* ControlBus.cpp */; };
 		00FC27FB12D1070A0065E986 /* FloatingBus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8883A12A393990052B7A4 /* FloatingBus.cpp */; };
@@ -370,8 +370,8 @@
 		00B8882F12A393990052B7A4 /* AddressDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AddressDecoder.h; path = libemulation/Implementation/Generic/AddressDecoder.h; sourceTree = SOURCE_ROOT; };
 		00B8883012A393990052B7A4 /* AddressOffset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AddressOffset.cpp; path = libemulation/Implementation/Generic/AddressOffset.cpp; sourceTree = SOURCE_ROOT; };
 		00B8883112A393990052B7A4 /* AddressOffset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AddressOffset.h; path = libemulation/Implementation/Generic/AddressOffset.h; sourceTree = SOURCE_ROOT; };
-		00B8883212A393990052B7A4 /* AudioSampleConverter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AudioSampleConverter.cpp; path = libemulation/Implementation/Generic/AudioSampleConverter.cpp; sourceTree = SOURCE_ROOT; };
-		00B8883312A393990052B7A4 /* AudioSampleConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioSampleConverter.h; path = libemulation/Implementation/Generic/AudioSampleConverter.h; sourceTree = SOURCE_ROOT; };
+		00B8883212A393990052B7A4 /* ADCDAC.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ADCDAC.cpp; path = libemulation/Implementation/Generic/ADCDAC.cpp; sourceTree = SOURCE_ROOT; };
+		00B8883312A393990052B7A4 /* ADCDAC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ADCDAC.h; path = libemulation/Implementation/Generic/ADCDAC.h; sourceTree = SOURCE_ROOT; };
 		00B8883612A393990052B7A4 /* Monitor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Monitor.cpp; sourceTree = "<group>"; };
 		00B8883712A393990052B7A4 /* Monitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Monitor.h; sourceTree = "<group>"; };
 		00B8883812A393990052B7A4 /* ControlBus.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ControlBus.cpp; path = libemulation/Implementation/Generic/ControlBus.cpp; sourceTree = SOURCE_ROOT; };
@@ -729,12 +729,12 @@
 		00B8882D12A393990052B7A4 /* Generic */ = {
 			isa = PBXGroup;
 			children = (
+				00B8883212A393990052B7A4 /* ADCDAC.cpp */,
+				00B8883312A393990052B7A4 /* ADCDAC.h */,
 				00B8882E12A393990052B7A4 /* AddressDecoder.cpp */,
 				00B8882F12A393990052B7A4 /* AddressDecoder.h */,
 				00B8883012A393990052B7A4 /* AddressOffset.cpp */,
 				00B8883112A393990052B7A4 /* AddressOffset.h */,
-				00B8883212A393990052B7A4 /* AudioSampleConverter.cpp */,
-				00B8883312A393990052B7A4 /* AudioSampleConverter.h */,
 				00B8883812A393990052B7A4 /* ControlBus.cpp */,
 				00B8883912A393990052B7A4 /* ControlBus.h */,
 				00B8883A12A393990052B7A4 /* FloatingBus.cpp */,
@@ -1222,7 +1222,7 @@
 				00FC27EE12D1070A0065E986 /* AppleDiskII.cpp in Sources */,
 				00FC27EF12D1070A0065E986 /* AddressDecoder.cpp in Sources */,
 				00FC27F112D1070A0065E986 /* AddressOffset.cpp in Sources */,
-				00FC27F312D1070A0065E986 /* AudioSampleConverter.cpp in Sources */,
+				00FC27F312D1070A0065E986 /* ADCDAC.cpp in Sources */,
 				00FC27F712D1070A0065E986 /* Monitor.cpp in Sources */,
 				00FC27F912D1070A0065E986 /* ControlBus.cpp in Sources */,
 				00FC27FB12D1070A0065E986 /* FloatingBus.cpp in Sources */,

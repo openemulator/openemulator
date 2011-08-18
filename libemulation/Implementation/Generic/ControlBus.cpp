@@ -19,7 +19,7 @@
 ControlBus::ControlBus()
 {
 	clockFrequency = 1E6;
-    cpuSpeedMultiplier = 1;
+    cpuClockMultiplier = 1;
 	resetOnPowerOn = false;
 	powerState = CONTROLBUS_POWERSTATE_OFF;
     
@@ -34,14 +34,17 @@ ControlBus::ControlBus()
     
     clock = 0;
     clockRemainder = 0;
+    
+    clockAtAudioBufferStart = 0;
+    audioSampleToClockRatio = 0;
 }
 
 bool ControlBus::setValue(string name, string value)
 {
 	if (name == "clockFrequency")
 		clockFrequency = getFloat(value);
-	else if (name == "cpuSpeedMultiplier")
-		cpuSpeedMultiplier = getFloat(value);
+	else if (name == "cpuClockMultiplier")
+		cpuClockMultiplier = getFloat(value);
 	else if (name == "resetOnPowerOn")
 		resetOnPowerOn = getInt(value);
     else if (name == "powerState")
@@ -182,15 +185,11 @@ bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
 			return true;
 			
 		case CONTROLBUS_GET_CLOCK:
-            // To-Do
-			return true;
-			
-		case CONTROLBUS_SKIP_CLOCKS:
-            // To-Do
+            *((OEUInt64 *)data) = getClock();
 			return true;
 			
 		case CONTROLBUS_GET_AUDIOBUFFERINDEX:
-            // To-Do
+            *((float *)data) = (getClock() - clockAtAudioBufferStart) * audioSampleToClockRatio;
 			return true;
 	}
 	
@@ -205,9 +204,12 @@ void ControlBus::notify(OEComponent *sender, int notification, void *data)
         
         scheduleTimer(NULL, clockFrequency * buffer->frameNum / buffer->sampleRate);
         
+        clockAtAudioBufferStart = clock;
+        audioSampleToClockRatio = buffer->sampleRate / clockFrequency;
+        
         while (1)
         {
-            float accurateCPUClocks = clockRemainder + events.front().clocks * cpuSpeedMultiplier;
+            float accurateCPUClocks = clockRemainder + events.front().clocks * cpuClockMultiplier;
             OEUInt64 cpuClocks = accurateCPUClocks;
             clockRemainder = accurateCPUClocks - cpuClocks;
             cpu->postMessage(this, CPU_RUN, &cpuClocks);
@@ -321,7 +323,7 @@ void ControlBus::scheduleTimer(OEComponent *component, OEUInt64 clocks)
 {
     OEUInt64 cpuClocks;
     cpu->postMessage(this, CPU_GET_CLOCKS, &cpuClocks);
-    events.front().clocks -= cpuClocks / cpuSpeedMultiplier;
+    events.front().clocks -= cpuClocks / cpuClockMultiplier;
     
     list<ControlBusEvent>::iterator i;
     for (i = events.begin();
@@ -334,7 +336,7 @@ void ControlBus::scheduleTimer(OEComponent *component, OEUInt64 clocks)
             
             if (i == events.begin())
             {
-                cpuClocks = clocks * cpuSpeedMultiplier;
+                cpuClocks = clocks * cpuClockMultiplier;
                 cpu->postMessage(this, CPU_SET_CLOCKS, &cpuClocks);
             }
             
@@ -362,4 +364,12 @@ void ControlBus::clearTimers(OEComponent *component)
         if (i->component == component)
             i = events.erase(i);
     }
+}
+
+OEUInt64 ControlBus::getClock()
+{
+    OEUInt64 cpuClocks;
+    cpu->postMessage(this, CPU_GET_CLOCKS, &cpuClocks);
+    
+    return clock + cpuClocks / cpuClockMultiplier;
 }

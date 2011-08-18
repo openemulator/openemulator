@@ -11,7 +11,6 @@
 #include "Apple1Terminal.h"
 
 #include "DeviceInterface.h"
-#include "CanvasInterface.h"
 #include "RAM.h"
 
 #define SCREEN_ORIGIN_X 104
@@ -105,14 +104,14 @@ bool Apple1Terminal::setRef(string name, OEComponent *ref)
     {
         if (monitor)
         {
-            monitor->removeObserver(this, CANVAS_UNICODEKEYBOARD_DID_CHANGE);
+            monitor->removeObserver(this, CANVAS_UNICODECHAR_WAS_SENT);
             monitor->removeObserver(this, CANVAS_DID_COPY);
             monitor->removeObserver(this, CANVAS_DID_PASTE);
         }
 		monitor = ref;
         if (monitor)
         {
-            monitor->addObserver(this, CANVAS_UNICODEKEYBOARD_DID_CHANGE);
+            monitor->addObserver(this, CANVAS_UNICODECHAR_WAS_SENT);
             monitor->addObserver(this, CANVAS_DID_COPY);
             monitor->addObserver(this, CANVAS_DID_PASTE);
             
@@ -212,8 +211,8 @@ void Apple1Terminal::notify(OEComponent *sender, int notification, void *data)
     {
         switch (notification)
         {
-            case CANVAS_UNICODEKEYBOARD_DID_CHANGE:
-                sendKey(*((int *)data));
+            case CANVAS_UNICODECHAR_WAS_SENT:
+                sendUnicodeChar(*((CanvasUnicodeChar *)data));
                 break;
                 
             case CANVAS_DID_COPY:
@@ -270,6 +269,7 @@ void Apple1Terminal::updateCanvas()
     if (!vramp)
         return;
     
+    // No updates when power is turned off
     if (powerState == CONTROLBUS_POWERSTATE_OFF)
         return;
     
@@ -283,6 +283,7 @@ void Apple1Terminal::updateCanvas()
             cursorCount = cursorActive ? 10 : 20;
         }
     }
+    // Hide cursor when paused
     else
         cursorActive = false;
     
@@ -337,26 +338,26 @@ void Apple1Terminal::updateBezel()
     monitor->postMessage(this, CANVAS_SET_BEZEL, &bezel);
 }
 
-void Apple1Terminal::sendKey(int unicode)
+void Apple1Terminal::sendUnicodeChar(CanvasUnicodeChar unicodeChar)
 {
     if (powerState != CONTROLBUS_POWERSTATE_ON)
         return;
     
-    if (unicode == 0x0a)
+    if (unicodeChar == 0x0a)
     {
         cursorX = 0;
         cursorY++;
     }
-    else if (unicode == 0x0c)
+    else if (unicodeChar == 0x0c)
     {
         memset(vramp, 0x20, TERM_HEIGHT * TERM_WIDTH);
         
         cursorX = 0;
         cursorY = 0;
     }
-    else if ((unicode >= 0x20) && (unicode <= 0x7f))
+    else if ((unicodeChar >= 0x20) && (unicodeChar <= 0x7f))
     {
-        vramp[cursorY * TERM_WIDTH + cursorX] = unicode;
+        vramp[cursorY * TERM_WIDTH + cursorX] = unicodeChar;
         
         cursorX++;
         if (cursorX >= TERM_WIDTH)
@@ -393,5 +394,5 @@ void Apple1Terminal::paste(string *s)
     wstring ws = getWString(*s);
     
     for (int i = 0; i < ws.size(); i++)
-        sendKey(ws[i]);
+        sendUnicodeChar(ws[i]);
 }

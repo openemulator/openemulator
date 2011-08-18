@@ -89,8 +89,10 @@ public:
 	
 	void becomeKeyWindow();
 	void resignKeyWindow();
+    
+	void sendUnicodeChar(CanvasUnicodeChar unicodeChar);
+    
 	void setKey(int usageId, bool value);
-	void sendUnicodeKeyEvent(int unicode);
 	
 	void setMouseButton(int index, bool value);
 	void enterMouse();

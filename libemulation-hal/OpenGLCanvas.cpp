@@ -1546,6 +1546,20 @@ void OpenGLCanvas::resignKeyWindow()
 	updateCapture(OPENGLCANVAS_CAPTURE_NONE);
 }
 
+void OpenGLCanvas::postHIDNotification(int notification, int usageId, float value)
+{
+	CanvasHIDNotification data = {usageId, value};
+	
+	notify(this, notification, &data);
+}
+
+void OpenGLCanvas::sendUnicodeChar(CanvasUnicodeChar unicodeChar)
+{
+    //	logMessage("unicode " + getHexString(unicode));
+	
+	postHIDNotification(CANVAS_UNICODECHAR_WAS_SENT, unicodeChar, 0);
+}
+
 void OpenGLCanvas::setKey(int usageId, bool value)
 {
 	if (keyDown[usageId] == value)
@@ -1575,20 +1589,6 @@ void OpenGLCanvas::setKey(int usageId, bool value)
 		
 		updateCapture(OPENGLCANVAS_CAPTURE_NONE);
 	}
-}
-
-void OpenGLCanvas::postHIDNotification(int notification, int usageId, float value)
-{
-	CanvasHIDNotification data = {usageId, value};
-	
-	notify(this, notification, &data);
-}
-
-void OpenGLCanvas::sendUnicodeKeyEvent(int unicode)
-{
-    //	logMessage("unicode " + getHexString(unicode));
-	
-	postHIDNotification(CANVAS_UNICODEKEYBOARD_DID_CHANGE, unicode, 0);
 }
 
 void OpenGLCanvas::enterMouse()

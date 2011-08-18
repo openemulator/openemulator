@@ -1,4 +1,5 @@
 ==2011-08==
+* Implemented control bus clock functions
 * Fixed several smaller issues within ControlBus, Devices and Apple1Terminal
 * Implemented ControlBus device activity update
 * Improved timing framework
