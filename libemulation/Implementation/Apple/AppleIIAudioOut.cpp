@@ -13,7 +13,7 @@
 bool AppleIIAudioOut::setValue(string name, string value)
 {
 	if (name == "state")
-		state = getInt(value);
+		state = getUInt32(value);
 	else
 		return false;
 	

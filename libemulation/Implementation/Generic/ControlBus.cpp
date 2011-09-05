@@ -8,6 +8,20 @@
  * Implements a control bus with clock control and reset/IRQ/NMI lines
  */
 
+/*
+ * Timing diagram (for cpuClockMultiplier = 5/3)
+ *
+ * CPU cycle:         |  |  |  |  |  |  |  |  |  |  |  |
+ * Master cycle:        |    |    |    |    |    |    |
+ *
+ * Suppose we need to render 6 master cycles, then:
+ *
+ * blockSize:         |                               |
+ * blockCPUCycles:    |                             |
+ * blockOffset:         |                             |
+ *
+ */
+
 #include <math.h>
 
 #include "ControlBus.h"
@@ -21,22 +35,23 @@ ControlBus::ControlBus()
 	clockFrequency = 1E6;
     cpuClockMultiplier = 1;
 	resetOnPowerOn = false;
-	powerState = CONTROLBUS_POWERSTATE_OFF;
     
 	device = NULL;
 	audio = NULL;
 	cpu = NULL;
-	cpuSocket = NULL;
 	
+	powerState = CONTROLBUS_POWERSTATE_OFF;
 	resetCount = 0;
 	irqCount = 0;
 	nmiCount = 0;
     
-    clock = 0;
-    clockRemainder = 0;
+    cycleCount = 0;
+    cycleStart = 0;
+    sampleToCycleRatio = 0;
     
-    clockAtAudioBufferStart = 0;
-    audioSampleToClockRatio = 0;
+    blockSize = 0;
+    blockCPUCycles = 0;
+    blockOffset = 0;
 }
 
 bool ControlBus::setValue(string name, string value)
@@ -46,9 +61,17 @@ bool ControlBus::setValue(string name, string value)
 	else if (name == "cpuClockMultiplier")
 		cpuClockMultiplier = getFloat(value);
 	else if (name == "resetOnPowerOn")
-		resetOnPowerOn = getInt(value);
+		resetOnPowerOn = getUInt32(value);
     else if (name == "powerState")
-        powerState = (ControlBusPowerState)getInt(value);
+        powerState = (ControlBusPowerState) getInt32(value);
+    else if (name == "cycleCount")
+        cycleCount = getUInt64(value);
+    else if (name == "resetCount")
+        resetCount = getUInt32(value);
+    else if (name == "irqCount")
+        irqCount = getUInt32(value);
+    else if (name == "nmiCount")
+        nmiCount = getUInt32(value);
 	else
 		return false;
 	
@@ -59,6 +82,14 @@ bool ControlBus::getValue(string name, string &value)
 {
     if (name == "powerState")
         value = getString(powerState);
+    else if (name == "cycleCount")
+        value = getString(cycleCount);
+    else if (name == "resetCount")
+        value = getString(resetCount);
+    else if (name == "irqCount")
+        value = getString(irqCount);
+    else if (name == "nmiCount")
+        value = getString(nmiCount);
     else
         return false;
     
@@ -93,8 +124,6 @@ bool ControlBus::setRef(string name, OEComponent *ref)
 	}
 	else if (name == "cpu")
 		cpu = ref;
-	else if (name == "cpuSocket")
-		cpuSocket = ref;
 	else
 		return false;
 	
@@ -173,9 +202,29 @@ bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
 		case CONTROLBUS_CLEAR_NMI:
 			nmiCount--;
 			if (nmiCount == 0)
-				OEComponent::notify(this, CONTROLBUS_NMI_DID_ASSERT, NULL);
+				OEComponent::notify(this, CONTROLBUS_NMI_DID_CLEAR, NULL);
 			return true;
 			
+        case CONTROLBUS_IS_RESET_ASSERTED:
+            *((bool *)data) = (resetCount != 0);
+            return true;
+            
+        case CONTROLBUS_IS_IRQ_ASSERTED:
+            *((bool *)data) = (irqCount != 0);
+            return true;
+            
+        case CONTROLBUS_IS_NMI_ASSERTED:
+            *((bool *)data) = (nmiCount != 0);
+            return true;
+            
+		case CONTROLBUS_GET_CYCLECOUNT:
+            *((OEUInt64 *)data) = getCycleCount();
+			return true;
+			
+		case CONTROLBUS_GET_AUDIOBUFFERINDEX:
+            *((float *)data) = (getCycleCount() - cycleStart) * sampleToCycleRatio;
+			return true;
+            
 		case CONTROLBUS_SCHEDULE_TIMER:
             scheduleTimer(sender, *((OEUInt64 *)data));
 			return true;
@@ -184,13 +233,9 @@ bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
             clearTimers(sender);
 			return true;
 			
-		case CONTROLBUS_GET_CLOCK:
-            *((OEUInt64 *)data) = getClock();
-			return true;
-			
-		case CONTROLBUS_GET_AUDIOBUFFERINDEX:
-            *((float *)data) = (getClock() - clockAtAudioBufferStart) * audioSampleToClockRatio;
-			return true;
+        case CONTROLBUS_SET_CPUCLOCKMULTIPLIER:
+            setCPUClockMultiplier(*((float *)data));
+            break;
 	}
 	
 	return false;
@@ -204,26 +249,30 @@ void ControlBus::notify(OEComponent *sender, int notification, void *data)
         
         scheduleTimer(NULL, clockFrequency * buffer->frameNum / buffer->sampleRate);
         
-        clockAtAudioBufferStart = clock;
-        audioSampleToClockRatio = buffer->sampleRate / clockFrequency;
+        cycleStart = cycleCount;
+        sampleToCycleRatio = buffer->sampleRate / clockFrequency;
         
-        while (1)
+        OEComponent *component = NULL;
+        
+        do
         {
-            float accurateCPUClocks = clockRemainder + events.front().clocks * cpuClockMultiplier;
-            OEUInt64 cpuClocks = accurateCPUClocks;
-            clockRemainder = accurateCPUClocks - cpuClocks;
-            cpu->postMessage(this, CPU_RUN, &cpuClocks);
+            blockSize = events.front().cycles * cpuClockMultiplier - blockOffset;
+            blockCPUCycles = floor(blockSize);
+            blockOffset += blockCPUCycles;
             
-            ControlBusEvent *event = &events.front();
-            clock += event->clocks;
-            OEComponent *component = event->component;
+            OEInt64 cpuCycles = blockCPUCycles;
+            cpu->postMessage(this, CPU_RUN_CYCLES, &cpuCycles);
+            
+            component = events.front().component;
+            if (component)
+                component->notify(this, CONTROLBUS_TIMER_DID_FIRE, NULL);
+            
+            cycleCount += events.front().cycles;
+            blockOffset = -(blockSize - blockCPUCycles);
+            blockSize += cpuCycles;
+            
             events.pop_front();
-            
-            if (!component)
-                break;
-            
-            component->notify(this, CONTROLBUS_TIMER_DID_FIRE, NULL);
-        }
+        } while (component);
     }
     else if (sender == device)
     {
@@ -263,7 +312,6 @@ void ControlBus::notify(OEComponent *sender, int notification, void *data)
 void ControlBus::setPowerState(ControlBusPowerState powerState)
 {
     ControlBusPowerState lastPowerState = this->powerState;
-    
     this->powerState = powerState;
     
     string stateLabel;
@@ -304,7 +352,7 @@ void ControlBus::setPowerState(ControlBusPowerState powerState)
         (powerState != CONTROLBUS_POWERSTATE_ON))
         device->postMessage(this, DEVICE_CLEAR_ACTIVITY, NULL);
     else if ((lastPowerState != CONTROLBUS_POWERSTATE_ON) &&
-            (powerState == CONTROLBUS_POWERSTATE_ON))
+             (powerState == CONTROLBUS_POWERSTATE_ON))
         device->postMessage(this, DEVICE_ASSERT_ACTIVITY, NULL);
     
     if (lastPowerState != powerState)
@@ -319,36 +367,52 @@ void ControlBus::setPowerState(ControlBusPowerState powerState)
     }
 }
 
-void ControlBus::scheduleTimer(OEComponent *component, OEUInt64 clocks)
+OEUInt64 ControlBus::getCycleCount()
 {
-    OEUInt64 cpuClocks;
-    cpu->postMessage(this, CPU_GET_CLOCKS, &cpuClocks);
-    events.front().clocks -= cpuClocks / cpuClockMultiplier;
+    OEInt64 cpuCycles;
+    cpu->postMessage(this, CPU_GET_CYCLES, &cpuCycles);
+    
+    return cycleCount + (blockOffset - cpuCycles) / cpuClockMultiplier;
+}
+
+void ControlBus::scheduleTimer(OEComponent *component, OEUInt64 cycles)
+{
+    OEInt64 cpuCycles;
+    cpu->postMessage(this, CPU_GET_CYCLES, &cpuCycles);
+    
+    cycles += (blockOffset - cpuCycles) / cpuClockMultiplier;
     
     list<ControlBusEvent>::iterator i;
     for (i = events.begin();
          i != events.end();
          i++)
     {
-        if (clocks < i->clocks)
+        if (i->cycles > cycles)
         {
-            i->clocks -= clocks;
+            i->cycles -= cycles;
             
             if (i == events.begin())
             {
-                cpuClocks = clocks * cpuClockMultiplier;
-                cpu->postMessage(this, CPU_SET_CLOCKS, &cpuClocks);
+                OEInt64 oldBlockCPUCycles = blockCPUCycles;
+                
+                blockOffset -= blockCPUCycles;
+                blockSize = cycles * cpuClockMultiplier - blockOffset;
+                blockCPUCycles = floor(blockSize);
+                blockOffset += blockCPUCycles;
+                
+                cpuCycles += blockCPUCycles - oldBlockCPUCycles;
+                cpu->postMessage(this, CPU_SET_CYCLES, &cpuCycles);
             }
             
             break;
         }
         
-        clocks -= i->clocks;
+        cycles -= i->cycles;
     }
     
     ControlBusEvent event;
     
-    event.clocks = clocks;
+    event.cycles = cycles;
     event.component = component;
     
     events.insert(i, event);
@@ -356,20 +420,44 @@ void ControlBus::scheduleTimer(OEComponent *component, OEUInt64 clocks)
 
 void ControlBus::clearTimers(OEComponent *component)
 {
+    OEUInt64 pendingCycles = 0;
+    
     list<ControlBusEvent>::iterator i;
     for (i = events.begin();
          i != events.end();
          i++)
     {
         if (i->component == component)
+        {
+            pendingCycles = i->cycles;
             i = events.erase(i);
+        }
+        else if (pendingCycles)
+        {
+            i->cycles += pendingCycles;
+            pendingCycles = 0;
+            
+            if (i == events.begin())
+            {
+                OEInt64 oldBlockCPUCycles = blockCPUCycles;
+                
+                blockOffset -= blockCPUCycles;
+                blockSize = i->cycles * cpuClockMultiplier - blockOffset;
+                blockCPUCycles = floor(blockSize);
+                blockOffset += blockCPUCycles;
+                
+                OEInt64 cpuCycles;
+                cpu->postMessage(this, CPU_GET_CYCLES, &cpuCycles);
+                cpuCycles += blockCPUCycles - oldBlockCPUCycles;
+                cpu->postMessage(this, CPU_SET_CYCLES, &cpuCycles);
+            }
+        }
     }
 }
 
-OEUInt64 ControlBus::getClock()
+void ControlBus::setCPUClockMultiplier(float cpuClockMultiplier)
 {
-    OEUInt64 cpuClocks;
-    cpu->postMessage(this, CPU_GET_CLOCKS, &cpuClocks);
+    // To-Do: update CPU clock multiplier gracefully
     
-    return clock + cpuClocks / cpuClockMultiplier;
+    this->cpuClockMultiplier = cpuClockMultiplier;
 }

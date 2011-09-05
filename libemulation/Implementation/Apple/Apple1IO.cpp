@@ -5,7 +5,7 @@
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls Apple I input/output
+ * Controls Apple I input/output PIA memory
  */
 
 #include "Apple1IO.h"
@@ -32,20 +32,20 @@ bool Apple1IO::setRef(string name, OEComponent *ref)
 
 void Apple1IO::notify(OEComponent *sender, int notification, void *data)
 {
-/*	HostHIDEvent *event = (HostHIDEvent *) data;
-	
-	key = event->usageId;
-	
-	bool value = true;
-	pia->postEvent(pia, MC6821_SET_CA1, &value);
- */
+    /*	HostHIDEvent *event = (HostHIDEvent *) data;
+     
+     key = event->usageId;
+     
+     bool value = true;
+     pia->postEvent(pia, MC6821_SET_CA1, &value);
+     */
 }
 
 OEUInt8 Apple1IO::read(OEAddress address)
 {
 	/*
-	bool value = false;
-	pia->postEvent(pia, MC6821_SET_CA1, &value);
-	*/
+     bool value = false;
+     pia->postEvent(pia, MC6821_SET_CA1, &value);
+     */
 	return key | APPLE1KEYBOARD_MASK;
 }

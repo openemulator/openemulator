@@ -5,7 +5,7 @@
  * (C) 2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls Apple I cassette interface
+ * Controls an Apple I cassette interface
  */
 
 #include "OEComponent.h"

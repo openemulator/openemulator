@@ -32,7 +32,7 @@ typedef signed int OEInt32;
 typedef unsigned long long OEUInt64;
 typedef signed long long OEInt64;
 
-typedef unsigned int OEAddress;
+typedef OEUInt64 OEAddress;
 
 typedef union
 {
@@ -49,7 +49,7 @@ typedef union
 #endif
 	OEUInt32 d;
 	OEInt32 sd;
-} OEPair;
+} OEUnion32;
 
 typedef vector<char> OEData;
 
@@ -61,17 +61,23 @@ typedef vector<char> OEData;
 
 void logMessage(string message);
 
-int getInt(const string& value);
+OEUInt32 getUInt32(const string& value);
+OEInt32 getInt32(const string& value);
+OEUInt64 getUInt64(const string& value);
+OEInt64 getInt64(const string& value);
 double getFloat(const string& value);
 OEData getCharVector(const string& value);
 
-string getString(int value);
+string getString(OEUInt32 value);
+string getString(OEInt32 value);
+string getString(OEUInt64 value);
+string getString(OEInt64 value);
 string getString(float value);
-string getHexString(int value);
+string getHexString(OEUInt64 value);
 string rtrim(string value);
 wstring getWString(string value);
 
-int getNextPowerOf2(int value);
+OEUInt64 getNextPowerOf2(OEUInt64 value);
 
 bool readFile(string path, OEData *data);
 bool writeFile(string path, OEData *data);

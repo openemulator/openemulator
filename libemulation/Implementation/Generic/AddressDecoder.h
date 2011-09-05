@@ -13,9 +13,10 @@
 
 #include "OEComponent.h"
 
-typedef enum {
+typedef enum
+{
 	ADDRESSDECODER_MAP,
-} AddressDecoderMessages;
+} AddressDecoderMessage;
 
 typedef struct
 {	
@@ -47,8 +48,8 @@ public:
 	void write(OEAddress address, OEUInt8 value);
 	
 private:
-	int addressSize;
-	int blockSize;
+	OEAddress addressSize;
+	OEAddress blockSize;
 	OEComponent *floatingBus;
 	
 	AddressDecoderConf conf;

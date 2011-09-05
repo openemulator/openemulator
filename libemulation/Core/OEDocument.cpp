@@ -420,7 +420,7 @@ OEIds OEDocument::getDeviceIds()
 
 void OEDocument::setDeviceId(string& id, string deviceId)
 {
-	int dotIndex = (int) id.find_first_of('.');
+	size_t dotIndex = id.find_first_of('.');
 	
 	if (dotIndex == string::npos)
 		id = deviceId;
@@ -430,7 +430,7 @@ void OEDocument::setDeviceId(string& id, string deviceId)
 
 string OEDocument::getDeviceId(string id)
 {
-	int dotIndex = (int) id.find_first_of('.');
+	size_t dotIndex = id.find_first_of('.');
 	
 	if (dotIndex == string::npos)
 		return id;
@@ -514,7 +514,7 @@ OEIdMap OEDocument::makeIdMap(OEIds& deviceIds)
 	{
 		string deviceId = *i;
         
-		int newDeviceIdCount = 1;
+		OEUInt32 newDeviceIdCount = 1;
 		string newDeviceId = deviceId;
 		while (find(ourDeviceIds.begin(), ourDeviceIds.end(), newDeviceId) !=
                ourDeviceIds.end())
@@ -964,7 +964,7 @@ string OEDocument::getLocationLabel(string id)
 	
 	vector<string> visitedIds;
 	string location = getLocationLabel(id, visitedIds);
-	int depth = (int) visitedIds.size();
+	size_t depth = visitedIds.size();
 	
 	if (depth == 1)
 		return "";

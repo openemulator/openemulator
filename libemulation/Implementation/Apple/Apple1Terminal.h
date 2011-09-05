@@ -1,11 +1,11 @@
 
 /**
  * libemulation
- * Apple I Video
+ * Apple I Terminal
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls the Apple I Video
+ * Controls an Apple I Terminal
  */
 
 #include "OEComponent.h"
@@ -38,8 +38,8 @@ private:
 	
     bool speedLimit;
     bool cursorActive;
-    int cursorCount;
-    int cursorX, cursorY;
+    OEUInt32 cursorCount;
+    OEUInt32 cursorX, cursorY;
     
 	OEData font;
     char *vramp;

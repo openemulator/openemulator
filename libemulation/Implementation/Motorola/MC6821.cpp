@@ -25,25 +25,25 @@ MC6821::MC6821()
 bool MC6821::setValue(string name, string value)
 {
 	if (name == "controlA")
-		setControlA(getInt(value));
+		setControlA(getUInt32(value));
 	else if (name == "directionA")
-		directionA = getInt(value);
+		directionA = getUInt32(value);
 	else if (name == "dataA")
-		dataA = getInt(value);
+		dataA = getUInt32(value);
 	else if (name == "ca1")
-		ca1 = getInt(value);
+		ca1 = getUInt32(value);
 	else if (name == "ca2")
-		ca2 = getInt(value);
+		ca2 = getUInt32(value);
 	else if (name == "controlB")
-		setControlB(getInt(value));
+		setControlB(getUInt32(value));
 	else if (name == "directionB")
-		directionB = getInt(value);
+		directionB = getUInt32(value);
 	else if (name == "dataB")
-		dataB = getInt(value);
+		dataB = getUInt32(value);
 	else if (name == "cb1")
-		cb1 = getInt(value);
+		cb1 = getUInt32(value);
 	else if (name == "cb2")
-		cb2 = getInt(value);
+		cb2 = getUInt32(value);
 	else
 		return false;
 	

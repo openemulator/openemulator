@@ -24,13 +24,13 @@ MOS6530::MOS6530()
 bool MOS6530::setValue(string name, string value)
 {
 	if (name == "directionA")
-		directionA = getInt(value);
+		directionA = getUInt32(value);
 	else if (name == "dataA")
-		dataA = getInt(value);
+		dataA = getUInt32(value);
 	else if (name == "directionB")
-		directionB = getInt(value);
+		directionB = getUInt32(value);
 	else if (name == "dataB")
-		dataB = getInt(value);
+		dataB = getUInt32(value);
 	else
 		return false;
 	

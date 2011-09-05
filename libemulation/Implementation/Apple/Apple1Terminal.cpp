@@ -1,11 +1,11 @@
 
 /**
  * libemulation
- * Apple I Video
+ * Apple I Terminal
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls the Apple I Video
+ * Controls an Apple I Terminal
  */
 
 #include "Apple1Terminal.h"
@@ -49,9 +49,9 @@ bool Apple1Terminal::setValue(string name, string value)
     if (name == "terminalSpeed")
         speedLimit = (value == "Standard");
     else if (name == "cursorX")
-        cursorX = getInt(value);
+        cursorX = getUInt32(value);
     else if (name == "cursorY")
-        cursorY = getInt(value);
+        cursorY = getUInt32(value);
     else
         return false;
     

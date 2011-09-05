@@ -27,9 +27,9 @@ AddressDecoder::AddressDecoder()
 bool AddressDecoder::setValue(string name, string value)
 {
 	if (name == "addressSize")
-		addressSize = getInt(value);
+		addressSize = getUInt64(value);
 	else if (name == "blockSize")
-		blockSize = getInt(value);
+		blockSize = getUInt64(value);
 	else if (name.substr(0, 3) == "map")
 		conf[name.substr(3)] = value;
 	else
@@ -61,11 +61,11 @@ bool AddressDecoder::init()
 	OEAddress addressSpace = (1 << addressSize);
 	addressMask = addressSpace - 1;
 	
-	int blockNum = 1 << (addressSize - blockSize);
+	OEAddress blockNum = 1 << (addressSize - blockSize);
 	readMap.resize(blockNum);
 	writeMap.resize(blockNum);
 	
-	for (int i = 0; i < blockNum; i++)
+	for (OEAddress i = 0; i < blockNum; i++)
 	{
 		readMap[i] = floatingBus;
 		writeMap[i] = floatingBus;
@@ -112,15 +112,15 @@ void AddressDecoder::write(OEAddress address, OEUInt8 value)
 
 void AddressDecoder::map(AddressDecoderMap *map)
 {
-	int startBlock = map->startAddress >> blockSize;
-	int endBlock = map->endAddress >> blockSize;
+	OEAddress startBlock = map->startAddress >> blockSize;
+	OEAddress endBlock = map->endAddress >> blockSize;
 	
 	if (map->read)
-		for (int j = startBlock; j < endBlock; j++)
+		for (OEAddress j = startBlock; j < endBlock; j++)
 			readMap[j] = map->component;
 
 	if (map->write)
-		for (int j = startBlock; j < endBlock; j++)
+		for (OEAddress j = startBlock; j < endBlock; j++)
 			writeMap[j] = map->component;
 }
 
@@ -204,15 +204,15 @@ bool AddressDecoder::getMap(AddressDecoderMap& map, OEComponent *component,
 	
 	size_t separatorPos = value.find_first_of('-', pos);
 	if (separatorPos == string::npos)
-		map.endAddress = map.startAddress = getInt(value.substr(pos));
+		map.endAddress = map.startAddress = getUInt64(value.substr(pos));
 	else if (separatorPos == pos)
 		return false;
 	else if (separatorPos == value.size())
 		return false;
 	else
 	{
-		map.startAddress = getInt(value.substr(pos, separatorPos));
-		map.endAddress = getInt(value.substr(separatorPos + 1));
+		map.startAddress = getUInt64(value.substr(pos, separatorPos));
+		map.endAddress = getUInt64(value.substr(separatorPos + 1));
 	}
 	
 	return true;

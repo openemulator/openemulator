@@ -24,5 +24,5 @@ private:
 	OEComponent *slotExpansionMemory;
 	
 	OEComponent *slot[8];
-	int slotSel;
+	OEUInt32 slotSel;
 };

@@ -19,27 +19,37 @@ typedef enum
 {
 	CONTROLBUS_SET_POWERSTATE,
 	CONTROLBUS_GET_POWERSTATE,
+    
 	CONTROLBUS_ASSERT_RESET,
 	CONTROLBUS_CLEAR_RESET,
 	CONTROLBUS_ASSERT_IRQ,
 	CONTROLBUS_CLEAR_IRQ,
 	CONTROLBUS_ASSERT_NMI,
 	CONTROLBUS_CLEAR_NMI,
+    CONTROLBUS_IS_RESET_ASSERTED,
+    CONTROLBUS_IS_IRQ_ASSERTED,
+    CONTROLBUS_IS_NMI_ASSERTED,
+    
+	CONTROLBUS_GET_CYCLECOUNT,
+	CONTROLBUS_GET_AUDIOBUFFERINDEX,
+    
 	CONTROLBUS_SCHEDULE_TIMER,
 	CONTROLBUS_CLEAR_TIMERS,
-	CONTROLBUS_GET_CLOCK,
-	CONTROLBUS_GET_AUDIOBUFFERINDEX,
+    
+    CONTROLBUS_SET_CPUCLOCKMULTIPLIER,
 } ControlBusMessage;
 
 typedef enum
 {
 	CONTROLBUS_POWERSTATE_DID_CHANGE,
+    
 	CONTROLBUS_RESET_DID_ASSERT,
 	CONTROLBUS_RESET_DID_CLEAR,
 	CONTROLBUS_IRQ_DID_ASSERT,
 	CONTROLBUS_IRQ_DID_CLEAR,
 	CONTROLBUS_NMI_DID_ASSERT,
 	CONTROLBUS_NMI_DID_CLEAR,
+    
 	CONTROLBUS_TIMER_DID_FIRE,
 } ControlBusNotification;
 
@@ -55,7 +65,7 @@ typedef enum
 
 typedef struct
 {
-    OEUInt64 clocks;
+    OEUInt64 cycles;
     OEComponent *component;
 } ControlBusEvent;
 
@@ -77,29 +87,34 @@ private:
 	float clockFrequency;
     float cpuClockMultiplier;
 	bool resetOnPowerOn;
-	ControlBusPowerState powerState;
     
 	OEComponent *device;
 	OEComponent *audio;
 	OEComponent *cpu;
-	OEComponent *cpuSocket;
     
-	int resetCount;
-	int irqCount;
-	int nmiCount;
+	ControlBusPowerState powerState;
+    
+	OEUInt32 resetCount;
+	OEUInt32 irqCount;
+	OEUInt32 nmiCount;
 	
-    OEUInt64 clock;
-    float clockRemainder;
+    OEUInt64 cycleCount;
+    OEUInt64 cycleStart;
+    float sampleToCycleRatio;
     
-    OEUInt64 clockAtAudioBufferStart;
-    float audioSampleToClockRatio;
+    float blockSize;
+    int blockCPUCycles;
+    float blockOffset;
     
     list<ControlBusEvent> events;
     
     void setPowerState(ControlBusPowerState powerState);
-    void scheduleTimer(OEComponent *component, OEUInt64 clocks);
+    
+    OEUInt64 getCycleCount();
+    void scheduleTimer(OEComponent *component, OEUInt64 cycles);
     void clearTimers(OEComponent *component);
-    OEUInt64 getClock();
+    
+    void setCPUClockMultiplier(float cpuClockMultiplier);
 };
 
 #endif

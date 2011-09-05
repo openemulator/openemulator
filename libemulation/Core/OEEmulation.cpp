@@ -592,11 +592,11 @@ bool OEEmulation::hasValueProperty(string value, string propertyName)
 
 string OEEmulation::parseValueProperties(string value, map<string, string>& propertiesMap)
 {
-	int startIndex;
+    size_t startIndex;
 	
-	while ((startIndex = (int) value.find("${")) != string::npos)
+	while ((startIndex = value.find("${")) != string::npos)
 	{
-		int endIndex = (int) value.find("}", startIndex);
+		size_t endIndex = value.find("}", startIndex);
 		if (endIndex == string::npos)
 		{
 			value = value.substr(0, startIndex);

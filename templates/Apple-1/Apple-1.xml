@@ -20,6 +20,9 @@
         <property name="cpu" ref="apple1.cpu"/>
         <property name="resetOnPowerOn" value="1"/>
         <property name="powerState" value="0"/>
+        <property name="resetCount" value="0"/>
+        <property name="irqCount" value="0"/>
+        <property name="nmiCount" value="0"/>
     </component>
     <component id="apple1.memoryBus" class="AddressDecoder">
         <property name="addressSize" value="16"/>

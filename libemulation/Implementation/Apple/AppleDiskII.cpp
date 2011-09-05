@@ -23,7 +23,7 @@ AppleDiskII::AppleDiskII()
 bool AppleDiskII::setValue(string name, string value)
 {
 	if (name == "forceWriteProtected")
-		forceWriteProtected = getInt(value);
+		forceWriteProtected = getUInt32(value);
 	else if (name == "image")
 		image = value;
 	else

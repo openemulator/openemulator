@@ -53,7 +53,7 @@ private:
 	EmulationDestroyCanvas destroyCanvas;
 	void *userData;
 	
-	int activityCount;
+	OEUInt32 activityCount;
 	
 	bool constructDocument(xmlDocPtr doc);
 	bool constructDevice(string deviceId);

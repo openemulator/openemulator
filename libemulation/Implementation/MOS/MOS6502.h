@@ -27,24 +27,25 @@ private:
 	OEComponent *controlBus;
 	OEComponent *memoryBus;
 	
-	OEPair ppc;
+	OEUnion32 ppc;
 	
 	OEUInt8 a;
 	OEUInt8 x;
 	OEUInt8 y;
 	OEUInt8 p;
 	
-	OEPair pc;
-	OEPair sp;
-	OEPair zp;
-	OEPair ea;
+	OEUnion32 pc;
+	OEUnion32 sp;
+	OEUnion32 zp;
+	OEUnion32 ea;
 	
+	OEUInt32 irqCount;
+    
 	OEUInt8 pendingIRQ;
 	OEUInt8 afterCLI;
-	OEUInt8 irqCount;
 	OEUInt8 overflow;
 	
-	OEInt32 icount;
+	OEInt64 icount;
 	
 	void reset();
 	void assertIRQ();

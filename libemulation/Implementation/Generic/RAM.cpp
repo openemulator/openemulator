@@ -22,7 +22,7 @@ RAM::RAM()
 bool RAM::setValue(string name, string value)
 {
 	if (name == "size")
-		size = getInt(value);
+		size = getUInt64(value);
 	else if (name == "powerOnPattern")
 		powerOnPattern = getCharVector(value);
 	else

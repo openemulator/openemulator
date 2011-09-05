@@ -1,5 +1,7 @@
 ==To-Do==
-* Finish 6502 CPU
+* Implement ControlBus::setCPUClockMultiplier
+* Fix Revert to Saved
+* Integrate 6502 CPU
 * Implement Apple-1 I/O
 * Implement Apple-1 Cassette Interface
 * Implement CFFA1
@@ -9,12 +11,12 @@
 
 * EDL version detection
 * Automatic GPU disabling when no physical GPU is present (when loading configuration)
-* Add OESound:resampling, rendering to audio buffer
+* Add OESound: resampling, rendering to audio buffer
 * Remove data property, and add OEData class (allows to read from/write to file), but how would we access files in a zip package?
-* Use disk image file locking, if the disk image is writable (flock)
+* Do disk image file locking, if the disk image is writable (flock)
 * Fix scrolling in template chooser when changing group
 * Add search in template chooser
 * CanvasWindow in fullscreen mode could have multiple display sizes
-* Implement CPU Load
+* Implement a CPU Load Window
 * TCP AT Modem emulation
-* Debugging a la JTAG with commands: run/step/break/readRegister/writeRegister/readMemory/writeMemory/addTrap/removeTrap/listTraps
+* Debugging ˆ la JTAG with commands: run/step/break/readRegister/writeRegister/readMemory/writeMemory/addTrap/removeTrap/listTraps

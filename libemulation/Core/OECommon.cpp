@@ -19,18 +19,60 @@ void logMessage(string message)
 	cerr << "libemulation: " << message << endl;
 }
 
-int getInt(const string& value)
+OEUInt32 getUInt32(const string& value)
 {
+    OEUInt32 i;
+    stringstream ss;
+    
 	if (value.substr(0, 2) == "0x")
-	{
-		unsigned int i;
-		stringstream ss;
 		ss << hex << value.substr(2);
-		ss >> i;
-		return i;
-	}
 	else
-		return atoi(value.c_str());
+		ss << value;
+    ss >> i;
+    
+    return i;
+}
+
+OEInt32 getInt32(const string& value)
+{
+    OEInt32 i;
+    stringstream ss;
+    
+	if (value.substr(0, 2) == "0x")
+		ss << hex << value.substr(2);
+	else
+		ss << value;
+    ss >> i;
+    
+    return i;
+}
+
+OEUInt64 getUInt64(const string& value)
+{
+    OEUInt64 i;
+    stringstream ss;
+    
+	if (value.substr(0, 2) == "0x")
+		ss << hex << value.substr(2);
+	else
+		ss << value;
+    ss >> i;
+    
+    return i;
+}
+
+OEInt64 getInt64(const string& value)
+{
+    OEInt64 i;
+    stringstream ss;
+    
+	if (value.substr(0, 2) == "0x")
+		ss << hex << value.substr(2);
+	else
+		ss << value;
+    ss >> i;
+    
+    return i;
 }
 
 double getFloat(const string& value)
@@ -38,7 +80,28 @@ double getFloat(const string& value)
 	return atof(value.c_str());
 }
 
-string getString(int value)
+string getString(OEUInt32 value)
+{
+	stringstream ss;
+	ss << value;
+	return ss.str();
+}
+
+string getString(OEInt32 value)
+{
+	stringstream ss;
+	ss << value;
+	return ss.str();
+}
+
+string getString(OEUInt64 value)
+{
+	stringstream ss;
+	ss << value;
+	return ss.str();
+}
+
+string getString(OEInt64 value)
 {
 	stringstream ss;
 	ss << value;
@@ -52,7 +115,7 @@ string getString(float value)
 	return ss.str();
 }
 
-string getHexString(int value)
+string getHexString(OEUInt64 value)
 {
 	stringstream ss;
 	ss << "0x" << hex << value;
@@ -75,7 +138,7 @@ wstring getWString(string value)
     wstring ws;
     
 	wchar_t w = 0;
-	int bytes = 0;
+	OEUInt32 bytes = 0;
     
 	for (size_t i = 0; i < value.size(); i++)
     {
@@ -126,13 +189,13 @@ wstring getWString(string value)
 OEData getCharVector(const string& value)
 {
 	OEData result;
-	int start = (value.substr(0, 2) == "0x") ? 2 : 0;
-	int size = (int) value.size() / 2 - start;
+	size_t start = (value.substr(0, 2) == "0x") ? 2 : 0;
+	size_t size = value.size() / 2 - start;
 	result.resize(size);
 	
-	for (int i = 0; i < size; i++)
+	for (size_t i = 0; i < size; i++)
 	{
-		unsigned int n;
+		OEUInt8 n;
 		stringstream ss;
 		ss << hex << value.substr(start + i * 2, 2);
 		ss >> n;
@@ -142,9 +205,9 @@ OEData getCharVector(const string& value)
 	return result;
 }
 
-int getNextPowerOf2(int value)
+OEUInt64 getNextPowerOf2(OEUInt64 value)
 {
-	return (int) pow(2, ceil(log2(value)));
+	return (OEUInt64) pow(2, ceil(log2(value)));
 }
 
 bool readFile(string path, OEData *data)
@@ -156,7 +219,7 @@ bool readFile(string path, OEData *data)
 	if (file.is_open())
 	{
 		file.seekg(0, ios::end);
-		int size = (int) file.tellg();
+		streampos size = file.tellg();
 		file.seekg(0, ios::beg);
 		
 		data->resize(size);
@@ -191,12 +254,12 @@ string getPathExtension(string path)
 		path = path.substr(0, path.length() - 1);
 	
 	// Find extension
-	int extensionIndex = (int) path.rfind('.');
+	size_t extensionIndex = path.rfind('.');
 	if (extensionIndex == string::npos)
 		return "";
 	
 	// Convert to lower case
-	for (int i = 0; i < path.size(); i++)
+	for (size_t i = 0; i < path.size(); i++)
 		path[i] = tolower(path[i]);
 	
 	return path.substr(extensionIndex + 1);
