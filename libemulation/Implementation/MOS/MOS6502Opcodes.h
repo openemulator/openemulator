@@ -45,11 +45,11 @@
  *****************************************************************************
  * op    temp     cycles             rdmem   opc  wrmem   ********************/
 
-#define MOS6502_OP00 {                  BRK;					} /* 7 BRK */
-#define MOS6502_OP20 {                  JSR;					} /* 6 JSR */
-#define MOS6502_OP40 {                  RTI;					} /* 6 RTI */
-#define MOS6502_OP60 {                  RTS;					} /* 6 RTS */
-#define MOS6502_OP80 { int tmp; RD_IMM; NOP;					} /* 2 NOP IMM */
+#define MOS6502_OP00 { BRK;                                     } /* 7 BRK */
+#define MOS6502_OP20 { JSR;                                     } /* 6 JSR */
+#define MOS6502_OP40 { RTI;                                     } /* 6 RTI */
+#define MOS6502_OP60 { RTS;                                     } /* 6 RTS */
+#define MOS6502_OP80 { RDOPARG(); NOP;       					} /* 2 NOP IMM */
 #define MOS6502_OPa0 { int tmp; RD_IMM; LDY;					} /* 2 LDY IMM */
 #define MOS6502_OPc0 { int tmp; RD_IMM; CPY;					} /* 2 CPY IMM */
 #define MOS6502_OPe0 { int tmp; RD_IMM; CPX;					} /* 2 CPX IMM */
@@ -81,14 +81,14 @@
 #define MOS6502_OPd1 { int tmp; RD_IDY_P; CMP;					} /* 5 CMP IDY page penalty */
 #define MOS6502_OPf1 { int tmp; RD_IDY_P; SBC;					} /* 5 SBC IDY page penalty */
 
-#define MOS6502_OP02 {                  KIL;					} /* 1 KIL */
-#define MOS6502_OP22 {                  KIL;					} /* 1 KIL */
-#define MOS6502_OP42 {                  KIL;					} /* 1 KIL */
-#define MOS6502_OP62 {                  KIL;					} /* 1 KIL */
-#define MOS6502_OP82 { int tmp; RD_IMM; NOP;					} /* 2 NOP IMM */
+#define MOS6502_OP02 { KIL;                                     } /* 1 KIL */
+#define MOS6502_OP22 { KIL;                                     } /* 1 KIL */
+#define MOS6502_OP42 { KIL;                                     } /* 1 KIL */
+#define MOS6502_OP62 { KIL;                                     } /* 1 KIL */
+#define MOS6502_OP82 { RDOPARG(); NOP;                          } /* 2 NOP IMM */
 #define MOS6502_OPa2 { int tmp; RD_IMM; LDX;					} /* 2 LDX IMM */
-#define MOS6502_OPc2 { int tmp; RD_IMM; NOP;					} /* 2 NOP IMM */
-#define MOS6502_OPe2 { int tmp; RD_IMM; NOP;					} /* 2 NOP IMM */
+#define MOS6502_OPc2 { RDOPARG(); NOP;                          } /* 2 NOP IMM */
+#define MOS6502_OPe2 { RDOPARG(); NOP;                          } /* 2 NOP IMM */
 
 #define MOS6502_OP12 { KIL;										} /* 1 KIL */
 #define MOS6502_OP32 { KIL;										} /* 1 KIL */
@@ -117,23 +117,23 @@
 #define MOS6502_OPd3 { int tmp; RD_IDY_NP; WB_EA; DCP; WB_EA;	} /* 7 DCP IDY */
 #define MOS6502_OPf3 { int tmp; RD_IDY_NP; WB_EA; ISB; WB_EA;	} /* 7 ISB IDY */
 
-#define MOS6502_OP04 { int tmp; RD_ZPG; NOP;					} /* 3 NOP ZPG */
+#define MOS6502_OP04 { RD_ZPG_DISCARD; NOP;                     } /* 3 NOP ZPG */
 #define MOS6502_OP24 { int tmp; RD_ZPG; BIT;					} /* 3 BIT ZPG */
-#define MOS6502_OP44 { int tmp; RD_ZPG; NOP;					} /* 3 NOP ZPG */
-#define MOS6502_OP64 { int tmp; RD_ZPG; NOP;					} /* 3 NOP ZPG */
+#define MOS6502_OP44 { RD_ZPG_DISCARD; NOP;                     } /* 3 NOP ZPG */
+#define MOS6502_OP64 { RD_ZPG_DISCARD; NOP;                     } /* 3 NOP ZPG */
 #define MOS6502_OP84 { int tmp; STY; WR_ZPG;					} /* 3 STY ZPG */
 #define MOS6502_OPa4 { int tmp; RD_ZPG; LDY;					} /* 3 LDY ZPG */
-#define MOS6502_OPc4 { int tmp; RD_ZPG; CPY;					}	/* 3 CPY ZPG */
+#define MOS6502_OPc4 { int tmp; RD_ZPG; CPY;					} /* 3 CPY ZPG */
 #define MOS6502_OPe4 { int tmp; RD_ZPG; CPX;					} /* 3 CPX ZPG */
 
-#define MOS6502_OP14 { int tmp; RD_ZPX; NOP;					} /* 4 NOP ZPX */
-#define MOS6502_OP34 { int tmp; RD_ZPX; NOP;					} /* 4 NOP ZPX */
-#define MOS6502_OP54 { int tmp; RD_ZPX; NOP;					} /* 4 NOP ZPX */
-#define MOS6502_OP74 { int tmp; RD_ZPX; NOP;					} /* 4 NOP ZPX */
+#define MOS6502_OP14 { RD_ZPX_DISCARD; NOP;                     } /* 4 NOP ZPX */
+#define MOS6502_OP34 { RD_ZPX_DISCARD; NOP;                     } /* 4 NOP ZPX */
+#define MOS6502_OP54 { RD_ZPX_DISCARD; NOP;                     } /* 4 NOP ZPX */
+#define MOS6502_OP74 { RD_ZPX_DISCARD; NOP;                     } /* 4 NOP ZPX */
 #define MOS6502_OP94 { int tmp; STY; WR_ZPX;					} /* 4 STY ZPX */
 #define MOS6502_OPb4 { int tmp; RD_ZPX; LDY;					} /* 4 LDY ZPX */
-#define MOS6502_OPd4 { int tmp; RD_ZPX; NOP;					} /* 4 NOP ZPX */
-#define MOS6502_OPf4 { int tmp; RD_ZPX; NOP;					} /* 4 NOP ZPX */
+#define MOS6502_OPd4 { RD_ZPX_DISCARD; NOP;                     } /* 4 NOP ZPX */
+#define MOS6502_OPf4 { RD_ZPX_DISCARD; NOP;                     } /* 4 NOP ZPX */
 
 #define MOS6502_OP05 { int tmp; RD_ZPG; ORA;					} /* 3 ORA ZPG */
 #define MOS6502_OP25 { int tmp; RD_ZPG; AND;					} /* 3 AND ZPG */
@@ -211,7 +211,7 @@
 #define MOS6502_OP29 { int tmp; RD_IMM; AND;					} /* 2 AND IMM */
 #define MOS6502_OP49 { int tmp; RD_IMM; EOR;					} /* 2 EOR IMM */
 #define MOS6502_OP69 { int tmp; RD_IMM; ADC;					} /* 2 ADC IMM */
-#define MOS6502_OP89 { int tmp; RD_IMM; NOP;					} /* 2 NOP IMM */
+#define MOS6502_OP89 { RD_IMM_DISCARD; NOP;                     } /* 2 NOP IMM */
 #define MOS6502_OPa9 { int tmp; RD_IMM; LDA;					} /* 2 LDA IMM */
 #define MOS6502_OPc9 { int tmp; RD_IMM; CMP;					} /* 2 CMP IMM */
 #define MOS6502_OPe9 { int tmp; RD_IMM; SBC;					} /* 2 SBC IMM */
@@ -261,7 +261,7 @@
 #define MOS6502_OPdb { int tmp; RD_ABY_NP; WB_EA; DCP; WB_EA;	} /* 7 DCP ABY */
 #define MOS6502_OPfb { int tmp; RD_ABY_NP; WB_EA; ISB; WB_EA;	} /* 7 ISB ABY */
 
-#define MOS6502_OP0c { int tmp; RD_ABS; NOP;					} /* 4 NOP ABS */
+#define MOS6502_OP0c { RD_ABS_DISCARD; NOP;                     } /* 4 NOP ABS */
 #define MOS6502_OP2c { int tmp; RD_ABS; BIT;					} /* 4 BIT ABS */
 #define MOS6502_OP4c { EA_ABS; JMP;								} /* 3 JMP ABS */
 #define MOS6502_OP6c { int tmp; EA_IND; JMP;					} /* 5 JMP IND */
@@ -270,14 +270,14 @@
 #define MOS6502_OPcc { int tmp; RD_ABS; CPY;					} /* 4 CPY ABS */
 #define MOS6502_OPec { int tmp; RD_ABS; CPX;					} /* 4 CPX ABS */
 
-#define MOS6502_OP1c { int tmp; RD_ABX_P; NOP;					} /* 4 NOP ABX page penalty */
-#define MOS6502_OP3c { int tmp; RD_ABX_P; NOP;					} /* 4 NOP ABX page penalty */
-#define MOS6502_OP5c { int tmp; RD_ABX_P; NOP;					} /* 4 NOP ABX page penalty */
-#define MOS6502_OP7c { int tmp; RD_ABX_P; NOP;					} /* 4 NOP ABX page penalty */
+#define MOS6502_OP1c { RD_ABX_P_DISCARD; NOP;					} /* 4 NOP ABX page penalty */
+#define MOS6502_OP3c { RD_ABX_P_DISCARD; NOP;					} /* 4 NOP ABX page penalty */
+#define MOS6502_OP5c { RD_ABX_P_DISCARD; NOP;					} /* 4 NOP ABX page penalty */
+#define MOS6502_OP7c { RD_ABX_P_DISCARD; NOP;					} /* 4 NOP ABX page penalty */
 #define MOS6502_OP9c { int tmp; EA_ABX_NP; SYH; WB_EA;			} /* 5 SYH ABX */
 #define MOS6502_OPbc { int tmp; RD_ABX_P; LDY;					} /* 4 LDY ABX page penalty */
-#define MOS6502_OPdc { int tmp; RD_ABX_P; NOP;					} /* 4 NOP ABX page penalty */
-#define MOS6502_OPfc { int tmp; RD_ABX_P; NOP;					} /* 4 NOP ABX page penalty */
+#define MOS6502_OPdc { RD_ABX_P_DISCARD; NOP;					} /* 4 NOP ABX page penalty */
+#define MOS6502_OPfc { RD_ABX_P_DISCARD; NOP;					} /* 4 NOP ABX page penalty */
 
 #define MOS6502_OP0d { int tmp; RD_ABS; ORA;					} /* 4 ORA ABS */
 #define MOS6502_OP2d { int tmp; RD_ABS; AND;					} /* 4 AND ABS */

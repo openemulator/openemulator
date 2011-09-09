@@ -22,7 +22,7 @@ public:
 	
 private:
 	OEComponent *device;
-
+    
 	OEComponent *canvas;
 };
 

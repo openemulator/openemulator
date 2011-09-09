@@ -66,21 +66,21 @@ private:
 	OEComponent *controlBus;
 	
 	OEComponent *portA;
-	int controlA;
-	int directionA;
-	int dataA;
-	int ca1;
-	int ca2;
+	OEUInt8 controlA;
+	OEUInt8 directionA;
+	OEUInt8 dataA;
+	bool ca1;
+	bool ca2;
 	OEComponent *controlBusA;
 
 	OEComponent *portB;
-	int controlB;
-	int directionB;
-	int dataB;
-	int cb1;
-	int cb2;
+	OEUInt8 controlB;
+	OEUInt8 directionB;
+	OEUInt8 dataB;
+	bool cb1;
+	bool cb2;
 	OEComponent *controlBusB;
 	
-	void setControlA(int value);
-	void setControlB(int value);
+	void setControlA(OEUInt8 value);
+	void setControlB(OEUInt8 value);
 };

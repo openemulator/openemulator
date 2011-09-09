@@ -1,6 +1,5 @@
 ==To-Do==
 * Fix Revert to Saved
-* Integrate 6502 CPU
 * Implement Apple-1 I/O
 * Implement Apple-1 Cassette Interface
 * Implement CFFA1

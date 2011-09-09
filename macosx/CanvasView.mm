@@ -814,9 +814,6 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 		((unicode >= 0x100000) && (unicode <= 0x10fffd)))
 		return;
 	
-	if (unicode == 127)
-		unicode = 8;
-	
 	[document lockEmulation];
 	
 	canvas->sendUnicodeChar((CanvasUnicodeChar)unicode);
@@ -899,6 +896,10 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
             [self sendUnicodeKeyEvent:0x0a];
         else if (c == 0x0a)
             [self sendUnicodeKeyEvent:0x0d];
+        else if (c == 0x7f)
+            [self sendUnicodeKeyEvent:0x08];
+        else if (c == 0xf728)
+            [self sendUnicodeKeyEvent:0x7f];
         else
             [self sendUnicodeKeyEvent:c];
     }

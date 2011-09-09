@@ -1,17 +1,17 @@
 
 /**
  * libemulation
- * ADC/DAC
- * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
+ * Audio codec
+ * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls an audio ADC/DAC (8 and 16 bit)
+ * Implements an 8/16 bit audio codec (ADC/DAC)
  */
 
-#include "ADCDAC.h"
+#include "AudioCodec.h"
 #include "ControlBus.h"
 
-ADCDAC::ADCDAC()
+AudioCodec::AudioCodec()
 {
 	audio = NULL;
 	controlBus = NULL;
@@ -19,7 +19,7 @@ ADCDAC::ADCDAC()
     audioBuffer = NULL;
 }
 
-bool ADCDAC::setRef(string name, OEComponent *ref)
+bool AudioCodec::setRef(string name, OEComponent *ref)
 {
 	if (name == "audio")
 	{
@@ -37,13 +37,13 @@ bool ADCDAC::setRef(string name, OEComponent *ref)
 	return true;
 }
 
-void ADCDAC::notify(OEComponent *sender, int notification, void *data)
+void AudioCodec::notify(OEComponent *sender, int notification, void *data)
 {
 	// To-Do: Implement simulation
     audioBuffer = (AudioBuffer *)data;
 }
 
-OEUInt8 ADCDAC::read(OEAddress address)
+OEUInt8 AudioCodec::read(OEAddress address)
 {
     float audioBufferIndex;
     
@@ -52,18 +52,18 @@ OEUInt8 ADCDAC::read(OEAddress address)
 	return 0;
 }
 
-void ADCDAC::write(OEAddress address, OEUInt8 value)
+void AudioCodec::write(OEAddress address, OEUInt8 value)
 {
     float audioBufferIndex;
     
     controlBus->postMessage(this, CONTROLBUS_GET_AUDIOBUFFERINDEX, &audioBufferIndex);
 }
 
-OEUInt16 ADCDAC::read16(OEAddress address)
+OEUInt16 AudioCodec::read16(OEAddress address)
 {
 	return 0;
 }
 
-void ADCDAC::write16(OEAddress address, OEUInt16 value)
+void AudioCodec::write16(OEAddress address, OEUInt16 value)
 {
 }

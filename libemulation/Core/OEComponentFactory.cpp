@@ -13,7 +13,7 @@
 // FACTORY_INCLUDE_START - Do not modify this section
 #include "AddressDecoder.h"
 #include "AddressOffset.h"
-#include "ADCDAC.h"
+#include "AudioCodec.h"
 #include "ControlBus.h"
 #include "FloatingBus.h"
 #include "Monitor.h"
@@ -56,10 +56,10 @@
 
 OEComponent *OEComponentFactory::construct(const string& className)
 {
-// FACTORY_CODE_START - Do not modify this section
+    // FACTORY_CODE_START - Do not modify this section
 	matchComponent(AddressDecoder);
 	matchComponent(AddressOffset);
-	matchComponent(ADCDAC);
+	matchComponent(AudioCodec);
 	matchComponent(ControlBus);
 	matchComponent(FloatingBus);
 	matchComponent(Monitor);
@@ -96,7 +96,7 @@ OEComponent *OEComponentFactory::construct(const string& className)
 	matchComponent(MOSKIM1PLL);
     
     matchComponent(VidexVideoterm);
-// FACTORY_CODE_END - Do not modify this section
+    // FACTORY_CODE_END - Do not modify this section
 	
 	return NULL;
 }

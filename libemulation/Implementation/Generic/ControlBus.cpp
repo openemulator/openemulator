@@ -61,17 +61,17 @@ bool ControlBus::setValue(string name, string value)
 	else if (name == "cpuClockMultiplier")
 		cpuClockMultiplier = getFloat(value);
 	else if (name == "resetOnPowerOn")
-		resetOnPowerOn = getUInt32(value);
+		resetOnPowerOn = getUInt(value);
     else if (name == "powerState")
-        powerState = (ControlBusPowerState) getInt32(value);
+        powerState = (ControlBusPowerState) getInt(value);
     else if (name == "cycleCount")
-        cycleCount = getUInt64(value);
+        cycleCount = getUInt(value);
     else if (name == "resetCount")
-        resetCount = getUInt32(value);
+        resetCount = (OEUInt32) getUInt(value);
     else if (name == "irqCount")
-        irqCount = getUInt32(value);
+        irqCount = (OEUInt32) getUInt(value);
     else if (name == "nmiCount")
-        nmiCount = getUInt32(value);
+        nmiCount = (OEUInt32) getUInt(value);
 	else
 		return false;
 	
@@ -276,7 +276,7 @@ void ControlBus::notify(OEComponent *sender, int notification, void *data)
     }
     else if (sender == device)
     {
-        switch (*((int *)data))
+        switch (*((ControlBusPowerState *)data))
         {
             case DEVICE_POWERDOWN:
                 setPowerState(CONTROLBUS_POWERSTATE_OFF);
@@ -304,6 +304,9 @@ void ControlBus::notify(OEComponent *sender, int notification, void *data)
             case DEVICE_DEBUGGERBREAK:
                 postMessage(this, CONTROLBUS_ASSERT_NMI, NULL);
                 postMessage(this, CONTROLBUS_CLEAR_NMI, NULL);
+                break;
+                
+            default:
                 break;
         }
     }

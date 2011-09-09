@@ -49,9 +49,9 @@ bool Apple1Terminal::setValue(string name, string value)
     if (name == "terminalSpeed")
         speedLimit = (value == "Standard");
     else if (name == "cursorX")
-        cursorX = getUInt32(value);
+        cursorX = (OEUInt32) getUInt(value);
     else if (name == "cursorY")
-        cursorY = getUInt32(value);
+        cursorY = (OEUInt32) getUInt(value);
     else
         return false;
     
@@ -348,7 +348,7 @@ void Apple1Terminal::sendUnicodeChar(CanvasUnicodeChar unicodeChar)
         cursorX = 0;
         cursorY++;
     }
-    else if (unicodeChar == 0x0c)
+    else if (unicodeChar == 0x7f)
     {
         memset(vramp, 0x20, TERM_HEIGHT * TERM_WIDTH);
         

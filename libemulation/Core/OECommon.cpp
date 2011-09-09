@@ -19,35 +19,7 @@ void logMessage(string message)
 	cerr << "libemulation: " << message << endl;
 }
 
-OEUInt32 getUInt32(const string& value)
-{
-    OEUInt32 i;
-    stringstream ss;
-    
-	if (value.substr(0, 2) == "0x")
-		ss << hex << value.substr(2);
-	else
-		ss << value;
-    ss >> i;
-    
-    return i;
-}
-
-OEInt32 getInt32(const string& value)
-{
-    OEInt32 i;
-    stringstream ss;
-    
-	if (value.substr(0, 2) == "0x")
-		ss << hex << value.substr(2);
-	else
-		ss << value;
-    ss >> i;
-    
-    return i;
-}
-
-OEUInt64 getUInt64(const string& value)
+OEUInt64 getUInt(const string& value)
 {
     OEUInt64 i;
     stringstream ss;
@@ -61,7 +33,7 @@ OEUInt64 getUInt64(const string& value)
     return i;
 }
 
-OEInt64 getInt64(const string& value)
+OEInt64 getInt(const string& value)
 {
     OEInt64 i;
     stringstream ss;

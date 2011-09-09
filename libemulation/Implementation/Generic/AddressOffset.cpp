@@ -19,7 +19,7 @@ AddressOffset::AddressOffset()
 bool AddressOffset::setValue(string name, string value)
 {
 	if (name == "offset")
-		offset = getInt64(value);
+		offset = getInt(value);
 	else
 		return false;
 	

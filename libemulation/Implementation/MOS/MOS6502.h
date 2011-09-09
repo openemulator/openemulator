@@ -2,7 +2,7 @@
 /**
  * libemulation
  * MOS6502
- * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Emulates a MOS6502 microprocessor.
@@ -18,7 +18,8 @@ public:
 	bool setValue(string name, string value);
 	bool getValue(string name, string& value);
 	bool setRef(string name, OEComponent *ref);
-	
+	bool init();
+    
     bool postMessage(OEComponent *sender, int message, void *data);
     
 	void notify(OEComponent *sender, int notification, void *data);
@@ -27,28 +28,19 @@ private:
 	OEComponent *controlBus;
 	OEComponent *memoryBus;
 	
-	OEUnion32 ppc;
-	
 	OEUInt8 a;
 	OEUInt8 x;
 	OEUInt8 y;
 	OEUInt8 p;
-	
-	OEUnion32 pc;
-	OEUnion32 sp;
-	OEUnion32 zp;
-	OEUnion32 ea;
-	
-	OEUInt32 irqCount;
+	OEUnion pc;
+	OEUnion sp;
     
-	OEUInt8 pendingIRQ;
-	OEUInt8 afterCLI;
-	OEUInt8 overflow;
-	
 	OEInt64 icount;
 	
-	void reset();
-	void assertIRQ();
-	void assertNMI();
-	void execute();
+    bool isReset;
+	bool isIRQ;
+    bool isNMI;
+    bool isIRQEnabled;
+    
+    void execute();
 };

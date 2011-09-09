@@ -28,8 +28,8 @@ private:
 	OEComponent *portB;
 	OEComponent *controlBusB;
 	
-	int directionA;
-	int dataA;
-	int directionB;
-	int dataB;
+	OEUInt8 directionA;
+	OEUInt8 dataA;
+	OEUInt8 directionB;
+	OEUInt8 dataB;
 };

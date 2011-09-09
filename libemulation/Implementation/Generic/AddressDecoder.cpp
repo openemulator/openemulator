@@ -27,9 +27,9 @@ AddressDecoder::AddressDecoder()
 bool AddressDecoder::setValue(string name, string value)
 {
 	if (name == "addressSize")
-		addressSize = getUInt64(value);
+		addressSize = getUInt(value);
 	else if (name == "blockSize")
-		blockSize = getUInt64(value);
+		blockSize = getUInt(value);
 	else if (name.substr(0, 3) == "map")
 		conf[name.substr(3)] = value;
 	else
@@ -116,11 +116,11 @@ void AddressDecoder::map(AddressDecoderMap *map)
 	OEAddress endBlock = map->endAddress >> blockSize;
 	
 	if (map->read)
-		for (OEAddress j = startBlock; j < endBlock; j++)
+		for (OEAddress j = startBlock; j <= endBlock; j++)
 			readMap[j] = map->component;
-
+    
 	if (map->write)
-		for (OEAddress j = startBlock; j < endBlock; j++)
+		for (OEAddress j = startBlock; j <= endBlock; j++)
 			writeMap[j] = map->component;
 }
 
@@ -204,15 +204,15 @@ bool AddressDecoder::getMap(AddressDecoderMap& map, OEComponent *component,
 	
 	size_t separatorPos = value.find_first_of('-', pos);
 	if (separatorPos == string::npos)
-		map.endAddress = map.startAddress = getUInt64(value.substr(pos));
+		map.endAddress = map.startAddress = getUInt(value.substr(pos));
 	else if (separatorPos == pos)
 		return false;
 	else if (separatorPos == value.size())
 		return false;
 	else
 	{
-		map.startAddress = getUInt64(value.substr(pos, separatorPos));
-		map.endAddress = getUInt64(value.substr(separatorPos + 1));
+		map.startAddress = getUInt(value.substr(pos, separatorPos));
+		map.endAddress = getUInt(value.substr(separatorPos + 1));
 	}
 	
 	return true;

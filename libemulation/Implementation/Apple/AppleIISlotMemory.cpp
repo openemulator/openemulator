@@ -14,7 +14,7 @@
 bool AppleIISlotMemory::setValue(string name, string value)
 {
 	if (name == "slotSel")
-		slotSel = getUInt32(value);
+		slotSel = (OEUInt32) getUInt(value);
 	else
 		return false;
 	

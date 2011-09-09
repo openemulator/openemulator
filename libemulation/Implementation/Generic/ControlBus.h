@@ -103,7 +103,7 @@ private:
     float sampleToCycleRatio;
     
     float blockSize;
-    int blockCPUCycles;
+    OEInt32 blockCPUCycles;
     float blockOffset;
     
     list<ControlBusEvent> events;

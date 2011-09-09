@@ -13,13 +13,13 @@
 bool AppleIIGamePort::setValue(string name, string value)
 {
 	if (name == "an0")
-		an0 = getUInt32(value);
+		an0 = (OEUInt32) getUInt(value);
 	else if (name == "an1")
-		an1 = getUInt32(value);
+		an1 = (OEUInt32) getUInt(value);
 	else if (name == "an2")
-		an2 = getUInt32(value);
+		an2 = (OEUInt32) getUInt(value);
 	else if (name == "an3")
-		an3 = getUInt32(value);
+		an3 = (OEUInt32) getUInt(value);
 	else
 		return false;
 	

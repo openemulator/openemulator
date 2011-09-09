@@ -23,4 +23,9 @@ typedef enum
 	CPU_GET_CYCLES,
 } CPUMessage;
 
+typedef enum
+{
+	CPU_INSTRUCTION_WILL_EXECUTE,
+} CPUNotification;
+
 #endif

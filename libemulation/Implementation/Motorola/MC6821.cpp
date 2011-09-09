@@ -27,25 +27,25 @@ MC6821::MC6821()
 bool MC6821::setValue(string name, string value)
 {
 	if (name == "controlA")
-		setControlA(getUInt32(value));
+		setControlA(getUInt(value));
 	else if (name == "directionA")
-		directionA = getUInt32(value);
+		directionA = getUInt(value);
 	else if (name == "dataA")
-		dataA = getUInt32(value);
+		dataA = getUInt(value);
 	else if (name == "ca1")
-		ca1 = getUInt32(value);
+		ca1 = getUInt(value);
 	else if (name == "ca2")
-		ca2 = getUInt32(value);
+		ca2 = getUInt(value);
 	else if (name == "controlB")
-		setControlB(getUInt32(value));
+		setControlB(getUInt(value));
 	else if (name == "directionB")
-		directionB = getUInt32(value);
+		directionB = getUInt(value);
 	else if (name == "dataB")
-		dataB = getUInt32(value);
+		dataB = getUInt(value);
 	else if (name == "cb1")
-		cb1 = getUInt32(value);
+		cb1 = getUInt(value);
 	else if (name == "cb2")
-		cb2 = getUInt32(value);
+		cb2 = getUInt(value);
 	else
 		return false;
 	
@@ -317,7 +317,7 @@ void MC6821::write(OEAddress address, OEUInt8 value)
 	}
 }
 
-void MC6821::setControlA(int value)
+void MC6821::setControlA(OEUInt8 value)
 {
 	bool wasIRQ = controlA & MC6821_CR_IRQFLAGS;
 	controlA = value;
@@ -332,7 +332,7 @@ void MC6821::setControlA(int value)
 	}
 }
 
-void MC6821::setControlB(int value)
+void MC6821::setControlB(OEUInt8 value)
 {
 	bool wasIRQ = controlB & MC6821_CR_IRQFLAGS;
 	controlB = value;

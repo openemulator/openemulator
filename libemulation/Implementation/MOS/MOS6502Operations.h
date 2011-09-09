@@ -31,9 +31,9 @@
  *****************************************************************************/
 
 /* Interrupt vectors */
-#define MOS6502_NMI_VEC	0xfffa
-#define MOS6502_RST_VEC	0xfffc
-#define MOS6502_IRQ_VEC	0xfffe
+#define MOS6502_NMI_VECTOR	0xfffa
+#define MOS6502_RST_VECTOR	0xfffc
+#define MOS6502_IRQ_VECTOR	0xfffe
 
 /* 6502 flags */
 #define F_C 0x01
@@ -51,7 +51,7 @@
 #define Y	y
 #define P	p
 #define S	sp.b.l
-#define SPD sp.d
+#define SPA sp.q
 
 #define NZ	nz
 
@@ -64,19 +64,17 @@
 #define EAL ea.b.l
 #define EAH ea.b.h
 #define EAW ea.w.l
-#define EAD ea.d
+#define EAA ea.q
 
 #define ZPL zp.b.l
 #define ZPH zp.b.h
 #define ZPW zp.w.l
-#define ZPD zp.d
+#define ZPA zp.q
 
 #define PCL pc.b.l
 #define PCH pc.b.h
 #define PCW pc.w.l
-#define PCD pc.d
-
-#define PPC ppc.d
+#define PCA pc.q
 
 #define RDMEM_ID(a)		memoryBus->read(a)
 #define WRMEM_ID(a,d)	memoryBus->write(a, d)
@@ -84,13 +82,13 @@
 /***************************************************************
  *  RDOP    read an opcode
  ***************************************************************/
-#define RDOP() memoryBus->read(PCW++); icount -= 1
-#define PEEKOP() memoryBus->read(PCW)
+#define RDOP() memoryBus->read(PCA++); icount -= 1
+#define PEEKOP() memoryBus->read(PCA)
 
 /***************************************************************
  *  RDOPARG read an opcode argument
  ***************************************************************/
-#define RDOPARG() memoryBus->read(PCW++); icount -= 1
+#define RDOPARG() memoryBus->read(PCA++); icount -= 1
 
 /***************************************************************
  *  RDMEM   read memory
@@ -112,11 +110,10 @@
 		if (cond)												\
 		{														\
 			RDMEM(PCW);											\
-			EAW = PCW + (signed char)tmp2;						\
-			if ( EAH != PCH ) {									\
-				RDMEM( (PCH << 8 ) | EAL) ;						\
-			}													\
-			PCD = EAD;											\
+			EAW = PCW + (signed char) tmp2;						\
+			if (EAH != PCH)                                     \
+				RDMEM((PCH << 8 ) | EAL);						\
+			PCA = EAA;											\
 		}														\
 	}
 
@@ -127,181 +124,184 @@
  ***************************************************************/
 
 /***************************************************************
- *  EA = zero page address
+ * EA = zero page address
  ***************************************************************/
 #define EA_ZPG													\
 	ZPL = RDOPARG();											\
-	EAD = ZPD
+	EAA = ZPA
 
 /***************************************************************
- *  EA = zero page address + X
+ * EA = zero page address + X
  ***************************************************************/
 #define EA_ZPX													\
 	ZPL = RDOPARG();											\
-	RDMEM(ZPD);													\
+	RDMEM(ZPA);													\
 	ZPL = X + ZPL;												\
-	EAD = ZPD
+	EAA = ZPA
 
 /***************************************************************
- *  EA = zero page address + Y
+ * EA = zero page address + Y
  ***************************************************************/
 #define EA_ZPY													\
 	ZPL = RDOPARG();											\
-	RDMEM(ZPD);													\
+	RDMEM(ZPA);													\
 	ZPL = Y + ZPL;												\
-	EAD = ZPD
+	EAA = ZPA
 
 /***************************************************************
- *  EA = absolute address
+ * EA = absolute address
  ***************************************************************/
 #define EA_ABS													\
 	EAL = RDOPARG();											\
 	EAH = RDOPARG()
 
 /***************************************************************
- *  EA = absolute address + X
+ * EA = absolute address + X
  * one additional read if page boundary is crossed
  ***************************************************************/
 #define EA_ABX_P												\
 	EA_ABS; 													\
-	if ( EAL + X > 0xff ) {										\
-		RDMEM( ( EAH << 8 ) | ( ( EAL + X ) & 0xff ) );			\
-	}															\
+	if (EAL + X > 0xff)                                         \
+		RDMEM((EAH << 8) | ((EAL + X) & 0xff));                 \
 	EAW += X;
 
 /***************************************************************
- *  EA = absolute address + X
+ * EA = absolute address + X
  ***************************************************************/
 #define EA_ABX_NP												\
 	EA_ABS;														\
-	RDMEM( ( EAH << 8 ) | ( ( EAL + X ) & 0xff ) );				\
+	RDMEM((EAH << 8) | ((EAL + X) & 0xff));                     \
 	EAW += X
 
 /***************************************************************
- *  EA = absolute address + Y
+ * EA = absolute address + Y
  * one additional read if page boundary is crossed
  ***************************************************************/
 #define EA_ABY_P												\
 	EA_ABS; 													\
-	if ( EAL + Y > 0xff ) {										\
-		RDMEM( ( EAH << 8 ) | ( ( EAL + Y ) & 0xff ) );			\
-	}															\
+	if (EAL + Y > 0xff)                                         \
+		RDMEM((EAH << 8) | ((EAL + Y) & 0xff));                 \
 	EAW += Y;
 
 /***************************************************************
- *  EA = absolute address + Y
+ * EA = absolute address + Y
  ***************************************************************/
 #define EA_ABY_NP												\
 	EA_ABS;														\
-	RDMEM( ( EAH << 8 ) | ( ( EAL + Y ) & 0xff ) );				\
+	RDMEM((EAH << 8) | ((EAL + Y) & 0xff));                     \
 	EAW += Y
 
 /***************************************************************
- *  EA = zero page + X indirect (pre indexed)
+ * EA = zero page + X indirect (pre indexed)
  ***************************************************************/
 #define EA_IDX													\
 	ZPL = RDOPARG();											\
-	RDMEM(ZPD);													\
+	RDMEM(ZPA);													\
 	ZPL = ZPL + X;												\
-	EAL = RDMEM(ZPD);											\
+	EAL = RDMEM(ZPA);											\
 	ZPL++;														\
-	EAH = RDMEM(ZPD)
+	EAH = RDMEM(ZPA)
 
 /***************************************************************
- *  EA = zero page indirect + Y (post indexed)
- *  subtract 1 cycle if page boundary is crossed
+ * EA = zero page indirect + Y (post indexed)
+ * subtract 1 cycle if page boundary is crossed
  ***************************************************************/
 #define EA_IDY_P												\
 	ZPL = RDOPARG();											\
-	EAL = RDMEM(ZPD);											\
+	EAL = RDMEM(ZPA);											\
 	ZPL++;														\
-	EAH = RDMEM(ZPD);											\
-	if (EAL + Y > 0xff) {										\
-		RDMEM( ( EAH << 8 ) | ( ( EAL + Y ) & 0xff ) );			\
-	}															\
+	EAH = RDMEM(ZPA);											\
+	if (EAL + Y > 0xff) 										\
+		RDMEM((EAH << 8 ) | ((EAL + Y) & 0xff));                \
 	EAW += Y;
 
 /***************************************************************
- *  EA = zero page indirect + Y
+ * EA = zero page indirect + Y
  ***************************************************************/
 #define EA_IDY_NP												\
 	ZPL = RDOPARG();											\
-	EAL = RDMEM(ZPD);											\
+	EAL = RDMEM(ZPA);											\
 	ZPL++;														\
-	EAH = RDMEM(ZPD);											\
-	RDMEM( ( EAH << 8 ) | ( ( EAL + Y ) & 0xff ) );				\
+	EAH = RDMEM(ZPA);											\
+	RDMEM((EAH << 8) | ((EAL + Y) & 0xff));                     \
 	EAW += Y
 
 /***************************************************************
- *  EA = zero page indirect (65c02 pre indexed w/o X)
+ * EA = zero page indirect (65c02 pre indexed w/o X)
  ***************************************************************/
 #define EA_ZPI													\
-        ZPL = RDOPARG();										\
-        EAL = RDMEM(ZPD);										\
-        ZPL++;													\
-        EAH = RDMEM(ZPD)
+    ZPL = RDOPARG();                                            \
+    EAL = RDMEM(ZPA);                                           \
+    ZPL++;                                                      \
+    EAH = RDMEM(ZPA)
 
 /***************************************************************
- *  EA = indirect (only used by JMP)
+ * EA = indirect (only used by JMP)
  ***************************************************************/
 #define EA_IND													\
 	EA_ABS; 													\
-	tmp = RDMEM(EAD);											\
+	tmp = RDMEM(EAA);											\
 	EAL++;	/* booby trap: stay in same page! ;-) */			\
-	EAH = RDMEM(EAD);											\
+	EAH = RDMEM(EAA);											\
 	EAL = tmp
 
 /* read a value into tmp */
 /* Base number of cycles taken for each mode (including reading of opcode):
-   RD_IMM       2
-   RD_DUM       2
-   RD_ACC       0
-   RD_ZPG/WR_ZPG    3
-   RD_ZPX/WR_ZPX    4
-   RD_ZPY/WR_ZPY    4
-   RD_ABS/WR_ABS    4
-   RD_ABX_P     4/5
+   RD_IMM               2
+   RD_DUM               2
+   RD_ACC               0
+   RD_ZPG/WR_ZPG        3
+   RD_ZPX/WR_ZPX        4
+   RD_ZPY/WR_ZPY        4
+   RD_ABS/WR_ABS        4
+   RD_ABX_P             4/5
    RD_ABX_NP/WR_ABX_NP  5
-   RD_ABY_P     4/5
+   RD_ABY_P             4/5
    RD_ABY_NP/WR_ABY_NP  5
-   RD_IDX/WR_IDX    6
-   RD_IDY_P     5/6
+   RD_IDX/WR_IDX        6
+   RD_IDY_P             5/6
    RD_IDY_NP/WR_IDY_NP  6
-   RD_ZPI/WR_ZPI    5
+   RD_ZPI/WR_ZPI        5
  */
-#define RD_IMM		tmp = RDOPARG()
-#define RD_DUM		RDMEM(PCW)
-#define RD_ACC		tmp = A
-#define RD_ZPG		EA_ZPG; tmp = RDMEM(EAD)
-#define RD_ZPX		EA_ZPX; tmp = RDMEM(EAD)
-#define RD_ZPY		EA_ZPY; tmp = RDMEM(EAD)
-#define RD_ABS		EA_ABS; tmp = RDMEM(EAD)
-#define RD_ABX_P	EA_ABX_P; tmp = RDMEM(EAD)
-#define RD_ABX_NP	EA_ABX_NP; tmp = RDMEM(EAD)
-#define RD_ABY_P	EA_ABY_P; tmp = RDMEM(EAD)
-#define RD_ABY_NP	EA_ABY_NP; tmp = RDMEM(EAD)
-#define RD_IDX		EA_IDX; tmp = RDMEM_ID(EAD); icount -= 1
-#define RD_IDY_P	EA_IDY_P; tmp = RDMEM_ID(EAD); icount -= 1
-#define RD_IDY_NP	EA_IDY_NP; tmp = RDMEM_ID(EAD); icount -= 1
-#define RD_ZPI		EA_ZPI; tmp = RDMEM(EAD)
+
+#define RD_IMM              tmp = RDOPARG()
+#define RD_IMM_DISCARD      RDOPARG()
+#define RD_DUM              RDMEM(PCW)
+#define RD_ACC              tmp = A
+#define RD_ZPG              EA_ZPG; tmp = RDMEM(EAA)
+#define RD_ZPG_DISCARD      EA_ZPG; RDMEM(EAA)
+#define RD_ZPX              EA_ZPX; tmp = RDMEM(EAA)
+#define RD_ZPX_DISCARD      EA_ZPX; RDMEM(EAA)
+#define RD_ZPY              EA_ZPY; tmp = RDMEM(EAA)
+#define RD_ABS              EA_ABS; tmp = RDMEM(EAA)
+#define RD_ABS_DISCARD      EA_ABS; RDMEM(EAA)
+#define RD_ABX_P            EA_ABX_P; tmp = RDMEM(EAA)
+#define RD_ABX_P_DISCARD    EA_ABX_P; RDMEM(EAA);
+#define RD_ABX_NP           EA_ABX_NP; tmp = RDMEM(EAA)
+#define RD_ABY_P            EA_ABY_P; tmp = RDMEM(EAA)
+#define RD_ABY_NP           EA_ABY_NP; tmp = RDMEM(EAA)
+#define RD_IDX              EA_IDX; tmp = RDMEM_ID(EAA); icount -= 1
+#define RD_IDY_P            EA_IDY_P; tmp = RDMEM_ID(EAA); icount -= 1
+#define RD_IDY_NP           EA_IDY_NP; tmp = RDMEM_ID(EAA); icount -= 1
+#define RD_ZPI              EA_ZPI; tmp = RDMEM(EAA)
 
 /* write a value from tmp */
-#define WR_ZPG		EA_ZPG; WRMEM(EAD, tmp)
-#define WR_ZPX		EA_ZPX; WRMEM(EAD, tmp)
-#define WR_ZPY		EA_ZPY; WRMEM(EAD, tmp)
-#define WR_ABS		EA_ABS; WRMEM(EAD, tmp)
-#define WR_ABX_NP	EA_ABX_NP; WRMEM(EAD, tmp)
-#define WR_ABY_NP	EA_ABY_NP; WRMEM(EAD, tmp)
-#define WR_IDX		EA_IDX; WRMEM_ID(EAD, tmp); icount -= 1
-#define WR_IDY_NP	EA_IDY_NP; WRMEM_ID(EAD, tmp); icount -= 1
-#define WR_ZPI		EA_ZPI; WRMEM(EAD, tmp)
+#define WR_ZPG              EA_ZPG; WRMEM(EAA, tmp)
+#define WR_ZPX              EA_ZPX; WRMEM(EAA, tmp)
+#define WR_ZPY              EA_ZPY; WRMEM(EAA, tmp)
+#define WR_ABS              EA_ABS; WRMEM(EAA, tmp)
+#define WR_ABX_NP           EA_ABX_NP; WRMEM(EAA, tmp)
+#define WR_ABY_NP           EA_ABY_NP; WRMEM(EAA, tmp)
+#define WR_IDX              EA_IDX; WRMEM_ID(EAA, tmp); icount -= 1
+#define WR_IDY_NP           EA_IDY_NP; WRMEM_ID(EAA, tmp); icount -= 1
+#define WR_ZPI              EA_ZPI; WRMEM(EAA, tmp)
 
 /* dummy read from the last EA */
-#define RD_EA	RDMEM(EAD)
+#define RD_EA               RDMEM(EAA)
 
 /* write back a value from tmp to the last EA */
-#define WB_ACC	A = (OEUInt8)tmp;
-#define WB_EA	WRMEM(EAD, tmp)
+#define WB_ACC              A = (OEUInt8)tmp;
+#define WB_EA               WRMEM(EAA, tmp)
 
 /***************************************************************
  ***************************************************************
@@ -312,40 +312,46 @@
 /***************************************************************
  * push a register onto the stack
  ***************************************************************/
-#define PUSH(Rg) WRMEM(SPD, Rg); S--
+#define PUSH(Rg) WRMEM(SPA, Rg); S--
 
 /***************************************************************
  * pull a register from the stack
  ***************************************************************/
-#define PULL(Rg) S++; Rg = RDMEM(SPD)
+#define PULL(Rg) S++; Rg = RDMEM(SPA)
 
 /* 6502 ********************************************************
- *  ADC Add with carry
+ * ADC Add with carry
  ***************************************************************/
 #define ADC 													\
-	if (P & F_D) {												\
-	int c = (P & F_C);											\
-	int lo = (A & 0x0f) + (tmp & 0x0f) + c; 					\
-	int hi = (A & 0xf0) + (tmp & 0xf0); 						\
-		P &= ~(F_V | F_C|F_N|F_Z);								\
-		if (!((lo+hi)&0xff)) P|=F_Z;							\
-		if (lo > 0x09) {										\
+	if (P & F_D)                                                \
+    {                                                           \
+        int c = (P & F_C);										\
+        int lo = (A & 0x0f) + (tmp & 0x0f) + c; 				\
+        int hi = (A & 0xf0) + (tmp & 0xf0); 					\
+		P &= ~(F_V | F_C | F_N | F_Z);							\
+		if (!((lo + hi) & 0xff))                                \
+            P |= F_Z;                                           \
+		if (lo > 0x09)                                          \
+        {                                                       \
 			hi += 0x10; 										\
 			lo += 0x06; 										\
 		}														\
-		if (hi&0x80) P|=F_N;									\
-		if (~(A^tmp) & (A^hi) & F_N)							\
+		if (hi & 0x80)                                          \
+            P |= F_N;                                           \
+		if (~(A ^ tmp) & (A ^ hi) & F_N)						\
 			P |= F_V;											\
 		if (hi > 0x90)											\
 			hi += 0x60; 										\
 		if (hi & 0xff00)										\
 			P |= F_C;											\
 		A = (lo & 0x0f) + (hi & 0xf0);							\
-	} else {													\
+	}                                                           \
+    else                                                        \
+    {                                                           \
 		int c = (P & F_C);										\
 		int sum = A + tmp + c;									\
 		P &= ~(F_V | F_C);										\
-		if (~(A^tmp) & (A^sum) & F_N)							\
+		if (~(A ^ tmp) & (A ^ sum) & F_N)						\
 			P |= F_V;											\
 		if (sum & 0xff00)										\
 			P |= F_C;											\
@@ -354,14 +360,14 @@
 	}
 
 /* 6502 ********************************************************
- *  AND Logical and
+ * AND Logical and
  ***************************************************************/
 #define AND 													\
 	A = (OEUInt8)(A & tmp);										\
 	SET_NZ(A)
 
 /* 6502 ********************************************************
- *  ASL Arithmetic shift left
+ * ASL Arithmetic shift left
  ***************************************************************/
 #define ASL 													\
 	P = (P & ~F_C) | ((tmp >> 7) & F_C);						\
@@ -369,49 +375,49 @@
 	SET_NZ(tmp)
 
 /* 6502 ********************************************************
- *  BCC Branch if carry clear
+ * BCC Branch if carry clear
  ***************************************************************/
 #define BCC BRA(!(P & F_C))
 
 /* 6502 ********************************************************
- *  BCS Branch if carry set
+ * BCS Branch if carry set
  ***************************************************************/
 #define BCS BRA(P & F_C)
 
 /* 6502 ********************************************************
- *  BEQ Branch if equal
+ * BEQ Branch if equal
  ***************************************************************/
 #define BEQ BRA(P & F_Z)
 
 /* 6502 ********************************************************
- *  BIT Bit test
+ * BIT Bit test
  ***************************************************************/
 #undef BIT
 #define BIT 													\
-	P &= ~(F_N|F_V|F_Z);										\
-	P |= tmp & (F_N|F_V);										\
+	P &= ~(F_N | F_V | F_Z);									\
+	P |= tmp & (F_N | F_V);										\
 	if ((tmp & A) == 0) 										\
 		P |= F_Z
 
 /* 6502 ********************************************************
- *  BMI Branch if minus
+ * BMI Branch if minus
  ***************************************************************/
 #define BMI BRA(P & F_N)
 
 /* 6502 ********************************************************
- *  BNE Branch if not equal
+ * BNE Branch if not equal
  ***************************************************************/
 #define BNE BRA(!(P & F_Z))
 
 /* 6502 ********************************************************
- *  BPL Branch if plus
+ * BPL Branch if plus
  ***************************************************************/
 #define BPL BRA(!(P & F_N))
 
 /* 6502 ********************************************************
- *  BRK Break
- *  increment PC, push PC hi, PC lo, flags (with B bit set),
- *  set I flag, jump via IRQ vector
+ * BRK Break
+ * increment PC, push PC hi, PC lo, flags (with B bit set),
+ * set I flag, jump via IRQ vector
  ***************************************************************/
 #define BRK 													\
 	RDOPARG();													\
@@ -419,50 +425,45 @@
 	PUSH(PCL);													\
 	PUSH(P | F_B);												\
 	P = (P | F_I);												\
-	PCL = RDMEM(MOS6502_IRQ_VEC); 								\
-	PCH = RDMEM(MOS6502_IRQ_VEC+1)
+	PCL = RDMEM(MOS6502_IRQ_VECTOR); 							\
+	PCH = RDMEM(MOS6502_IRQ_VECTOR + 1)
 
 /* 6502 ********************************************************
- * BVC  Branch if overflow clear
+ * BVC Branch if overflow clear
  ***************************************************************/
 #define BVC BRA(!(P & F_V))
 
 /* 6502 ********************************************************
- * BVS  Branch if overflow set
+ * BVS Branch if overflow set
  ***************************************************************/
 #define BVS BRA(P & F_V)
 
 /* 6502 ********************************************************
- * CLC  Clear carry flag
+ * CLC Clear carry flag
  ***************************************************************/
 #define CLC 													\
 	P &= ~F_C
 
 /* 6502 ********************************************************
- * CLD  Clear decimal flag
+ * CLD Clear decimal flag
  ***************************************************************/
 #define CLD 													\
 	P &= ~F_D
 
 /* 6502 ********************************************************
- * CLI  Clear interrupt flag
+ * CLI Clear interrupt flag
  ***************************************************************/
 #define CLI 													\
-	if (irqCount && (P & F_I)) {								\
-		/* kludge for now until IRQ rewrite: ignore if RTI follows */ \
-		if (PEEKOP() != 0x40) \
-			afterCLI = 1;										\
-	}															\
 	P &= ~F_I
 
 /* 6502 ********************************************************
- * CLV  Clear overflow flag
+ * CLV Clear overflow flag
  ***************************************************************/
 #define CLV 													\
 	P &= ~F_V
 
 /* 6502 ********************************************************
- *  CMP Compare accumulator
+ * CMP Compare accumulator
  ***************************************************************/
 #define CMP 													\
 	P &= ~F_C;													\
@@ -471,7 +472,7 @@
 	SET_NZ((OEUInt8)(A - tmp))
 
 /* 6502 ********************************************************
- *  CPX Compare index X
+ * CPX Compare index X
  ***************************************************************/
 #define CPX 													\
 	P &= ~F_C;													\
@@ -480,7 +481,7 @@
 	SET_NZ((OEUInt8)(X - tmp))
 
 /* 6502 ********************************************************
- *  CPY Compare index Y
+ * CPY Compare index Y
  ***************************************************************/
 #define CPY 													\
 	P &= ~F_C;													\
@@ -489,107 +490,104 @@
 	SET_NZ((OEUInt8)(Y - tmp))
 
 /* 6502 ********************************************************
- *  DEC Decrement memory
+ * DEC Decrement memory
  ***************************************************************/
 #define DEC 													\
-	tmp = (OEUInt8)(tmp-1);										\
+	tmp = (OEUInt8)(tmp - 1);									\
 	SET_NZ(tmp)
 
 /* 6502 ********************************************************
- *  DEX Decrement index X
+ * DEX Decrement index X
  ***************************************************************/
 #define DEX 													\
-	X = (OEUInt8)(X-1);											\
+	X = (OEUInt8)(X - 1);										\
 	SET_NZ(X)
 
 /* 6502 ********************************************************
- *  DEY Decrement index Y
+ * DEY Decrement index Y
  ***************************************************************/
 #define DEY 													\
-	Y = (OEUInt8)(Y-1);											\
+	Y = (OEUInt8)(Y - 1);										\
 	SET_NZ(Y)
 
 /* 6502 ********************************************************
- *  EOR Logical exclusive or
+ * EOR Logical exclusive or
  ***************************************************************/
 #define EOR 													\
 	A = (OEUInt8)(A ^ tmp);										\
 	SET_NZ(A)
 
 /* 6502 ********************************************************
- *  ILL Illegal opcode
+ * ILL Illegal opcode
  ***************************************************************/
 #define ILL 													\
-	logMessage("M6502 illegal opcode %04x: %02x\n",				\
-		(PCW-1) & 0xffff, memoryBus->read((PCW - 1) & 0xffff))
+	logMessage("M6502 illegal opcode")
 
 /* 6502 ********************************************************
- *  INC Increment memory
+ * INC Increment memory
  ***************************************************************/
 #define INC 													\
-	tmp = (OEUInt8)(tmp+1);										\
+	tmp = (OEUInt8)(tmp + 1);									\
 	SET_NZ(tmp)
 
 /* 6502 ********************************************************
- *  INX Increment index X
+ * INX Increment index X
  ***************************************************************/
 #define INX 													\
-	X = (OEUInt8)(X+1);											\
+	X = (OEUInt8)(X + 1);										\
 	SET_NZ(X)
 
 /* 6502 ********************************************************
- *  INY Increment index Y
+ * INY Increment index Y
  ***************************************************************/
 #define INY														\
-	Y = (OEUInt8)(Y+1);											\
+	Y = (OEUInt8)(Y + 1);										\
 	SET_NZ(Y)
 
 /* 6502 ********************************************************
- *  JMP Jump to address
- *  set PC to the effective address
+ * JMP Jump to address
+ * set PC to the effective address
  ***************************************************************/
-#define JMP														\
-	if( EAD == PPC && !pendingIRQ && !afterCLI )				\
-		if( icount > 0 ) icount = 0;							\
-	PCD = EAD
+#define JMP                                                     \
+	PCA = EAA
 
 /* 6502 ********************************************************
- *  JSR Jump to subroutine
- *  decrement PC (sic!) push PC hi, push PC lo and set
- *  PC to the effective address
+ * JSR Jump to subroutine
+ * decrement PC (sic!) push PC hi, push PC lo and set
+ * PC to the effective address
  ***************************************************************/
 #define JSR 													\
 	EAL = RDOPARG();											\
-	RDMEM(SPD);													\
+	RDMEM(SPA);													\
 	PUSH(PCH);													\
 	PUSH(PCL);													\
 	EAH = RDOPARG();											\
-	PCD = EAD
+	PCA = EAA
 
 /* 6502 ********************************************************
- *  LDA Load accumulator
+ * LDA Load accumulator
  ***************************************************************/
 #define LDA 													\
 	A = (OEUInt8)tmp; 											\
 	SET_NZ(A)
 
 /* 6502 ********************************************************
- *  LDX Load index X
+ * LDX Load index X
  ***************************************************************/
 #define LDX 													\
 	X = (OEUInt8)tmp; 											\
 	SET_NZ(X)
 
 /* 6502 ********************************************************
- *  LDY Load index Y
+ * LDY Load index Y
  ***************************************************************/
 #define LDY 													\
 	Y = (OEUInt8)tmp; 											\
 	SET_NZ(Y)
 
 /* 6502 ********************************************************
- *  LSR Logic shift right
- *  0 -> [7][6][5][4][3][2][1][0] -> C
+ * LSR Logic shift right
+ * 0 -> [7][6][5][4][3][2][1][0] -> C
  ***************************************************************/
 #define LSR 													\
 	P = (P & ~F_C) | (tmp & F_C);								\
@@ -597,57 +595,49 @@
 	SET_NZ(tmp)
 
 /* 6502 ********************************************************
- *  NOP No operation
+ * NOP No operation
  ***************************************************************/
 #define NOP
 
 /* 6502 ********************************************************
- *  ORA Logical inclusive or
+ * ORA Logical inclusive or
  ***************************************************************/
 #define ORA 													\
 	A = (OEUInt8)(A | tmp);										\
 	SET_NZ(A)
 
 /* 6502 ********************************************************
- *  PHA Push accumulator
+ * PHA Push accumulator
  ***************************************************************/
 #define PHA 													\
 	PUSH(A)
 
 /* 6502 ********************************************************
- *  PHP Push processor status (flags)
+ * PHP Push processor status (flags)
  ***************************************************************/
 #define PHP 													\
 	PUSH(P)
 
 /* 6502 ********************************************************
- *  PLA Pull accumulator
+ * PLA Pull accumulator
  ***************************************************************/
 #define PLA 													\
-	RDMEM(SPD);													\
+	RDMEM(SPA);													\
 	PULL(A);													\
 	SET_NZ(A)
 
 
 /* 6502 ********************************************************
- *  PLP Pull processor status (flags)
+ * PLP Pull processor status (flags)
  ***************************************************************/
 #define PLP 													\
-	RDMEM(SPD);													\
-	if ( P & F_I ) {											\
-		PULL(P);												\
-		if (irqCount && !(P & F_I)) {							\
-			logMessage("M6502 PLP sets afterCLI");				\
-			afterCLI = 1;										\
-		}														\
-	} else {													\
-		PULL(P);												\
-	}															\
-	P |= (F_T|F_B);
+	RDMEM(SPA);													\
+	PULL(P);                                                    \
+	P |= (F_T | F_B);
 
 /* 6502 ********************************************************
- * ROL  Rotate left
- *  new C <- [7][6][5][4][3][2][1][0] <- C
+ * ROL Rotate left
+ * new C <- [7][6][5][4][3][2][1][0] <- C
  ***************************************************************/
 #define ROL 													\
 	tmp = (tmp << 1) | (P & F_C);								\
@@ -656,8 +646,8 @@
 	SET_NZ(tmp)
 
 /* 6502 ********************************************************
- * ROR  Rotate right
- *  C -> [7][6][5][4][3][2][1][0] -> new C
+ * ROR Rotate right
+ * C -> [7][6][5][4][3][2][1][0] -> new C
  ***************************************************************/
 #define ROR 													\
 	tmp |= (P & F_C) << 8;										\
@@ -666,36 +656,31 @@
 	SET_NZ(tmp)
 
 /* 6502 ********************************************************
- * RTI  Return from interrupt
+ * RTI Return from interrupt
  * pull flags, pull PC lo, pull PC hi and increment PC
- *  PCW++;
+ * PCW++;
  ***************************************************************/
 #define RTI 													\
 	RDOPARG();													\
-	RDMEM(SPD);													\
+	RDMEM(SPA);													\
 	PULL(P);													\
 	PULL(PCL);													\
 	PULL(PCH);													\
-	P |= F_T | F_B; 											\
-	if(irqCount && !(P & F_I) )									\
-	{															\
-		logMessage("M6502 RTI sets afterCLI");					\
-		afterCLI = 1;											\
-	}
+	P |= F_T | F_B;
 
 /* 6502 ********************************************************
- *  RTS Return from subroutine
- *  pull PC lo, PC hi and increment PC
+ * RTS Return from subroutine
+ * pull PC lo, PC hi and increment PC
  ***************************************************************/
 #define RTS 													\
 	RDOPARG();													\
-	RDMEM(SPD);													\
+	RDMEM(SPA);													\
 	PULL(PCL);													\
 	PULL(PCH);													\
 	RDMEM(PCW); PCW++
 
 /* 6502 ********************************************************
- *  SBC Subtract with carry
+ * SBC Subtract with carry
  ***************************************************************/
 #define SBC 													\
 	if (P & F_D)												\
@@ -710,15 +695,15 @@
 			hi--;												\
 		}														\
 		P &= ~(F_V | F_C|F_Z|F_N);								\
-		if( (A^tmp) & (A^sum) & F_N )							\
+		if ((A ^ tmp) & (A ^ sum) & F_N)                        \
 			P |= F_V;											\
-		if( hi & 0x0100 )										\
+		if (hi & 0x0100)										\
 			hi -= 0x60; 										\
-		if( (sum & 0xff00) == 0 )								\
+		if ((sum & 0xff00) == 0)								\
 			P |= F_C;											\
-		if( !((A-tmp-c) & 0xff) )								\
+		if (!((A-tmp-c) & 0xff))								\
 			P |= F_Z;											\
-		if( (A-tmp-c) & 0x80 )									\
+		if ((A-tmp-c) & 0x80)									\
 			P |= F_N;											\
 		A = (lo & 0x0f) | (hi & 0xf0);							\
 	}															\
@@ -727,16 +712,16 @@
 		int c = (P & F_C) ^ F_C;								\
 		int sum = A - tmp - c;									\
 		P &= ~(F_V | F_C);										\
-		if( (A^tmp) & (A^sum) & F_N )							\
+		if ((A ^ tmp) & (A ^ sum) & F_N)						\
 			P |= F_V;											\
-		if( (sum & 0xff00) == 0 )								\
+		if ((sum & 0xff00) == 0)								\
 			P |= F_C;											\
 		A = (OEUInt8) sum;										\
 		SET_NZ(A);												\
 	}
 
 /* 6502 ********************************************************
- *  SEC Set carry flag
+ * SEC Set carry flag
  ***************************************************************/
 #if defined(SEC)
 #undef SEC
@@ -745,72 +730,72 @@
 	P |= F_C
 
 /* 6502 ********************************************************
- *  SED Set decimal flag
+ * SED Set decimal flag
  ***************************************************************/
 #define SED 													\
 	P |= F_D
 
 /* 6502 ********************************************************
- *  SEI Set interrupt flag
+ * SEI Set interrupt flag
  ***************************************************************/
 #define SEI 													\
 	P |= F_I
 
 /* 6502 ********************************************************
- * STA  Store accumulator
+ * STA Store accumulator
  ***************************************************************/
 #define STA 													\
 	tmp = A
 
 /* 6502 ********************************************************
- * STX  Store index X
+ * STX Store index X
  ***************************************************************/
 #define STX 													\
 	tmp = X
 
 /* 6502 ********************************************************
- * STY  Store index Y
+ * STY Store index Y
  ***************************************************************/
 #define STY 													\
 	tmp = Y
 
 /* 6502 ********************************************************
- * TAX  Transfer accumulator to index X
+ * TAX Transfer accumulator to index X
  ***************************************************************/
 #define TAX 													\
 	X = A;														\
 	SET_NZ(X)
 
 /* 6502 ********************************************************
- * TAY  Transfer accumulator to index Y
+ * TAY Transfer accumulator to index Y
  ***************************************************************/
 #define TAY 													\
 	Y = A;														\
 	SET_NZ(Y)
 
 /* 6502 ********************************************************
- * TSX  Transfer stack LSB to index X
+ * TSX Transfer stack LSB to index X
  ***************************************************************/
 #define TSX 													\
 	X = S;														\
 	SET_NZ(X)
 
 /* 6502 ********************************************************
- * TXA  Transfer index X to accumulator
+ * TXA Transfer index X to accumulator
  ***************************************************************/
 #define TXA 													\
 	A = X;														\
 	SET_NZ(A)
 
 /* 6502 ********************************************************
- * TXS  Transfer index X to stack LSB
+ * TXS Transfer index X to stack LSB
  * no flags changed (sic!)
  ***************************************************************/
 #define TXS 													\
 	S = X
 
 /* 6502 ********************************************************
- * TYA  Transfer index Y to accumulator
+ * TYA Transfer index Y to accumulator
  ***************************************************************/
 #define TYA 													\
 	A = Y;														\
