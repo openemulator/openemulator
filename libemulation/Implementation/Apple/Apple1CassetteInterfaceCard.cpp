@@ -10,3 +10,12 @@
 
 #include "Apple1CassetteInterfaceCard.h"
 
+OEUInt8 Apple1CassetteInterfaceCard::read(OEAddress address)
+{
+    return 0;
+}
+
+void Apple1CassetteInterfaceCard::write(OEAddress address, OEUInt8 value)
+{
+    
+}

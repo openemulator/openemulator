@@ -12,4 +12,7 @@
 
 class Apple1CassetteInterfaceCard : public OEComponent
 {
+public:
+	OEUInt8 read(OEAddress address);
+	void write(OEAddress address, OEUInt8 value);
 };

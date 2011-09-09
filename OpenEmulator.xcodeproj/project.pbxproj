@@ -136,9 +136,10 @@
 		00F01B4712A0D6EC000527CA /* EmulationUnmount.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F01B4612A0D6EC000527CA /* EmulationUnmount.png */; };
 		00F21CE712C7C7EE00A809EF /* VerticallyCenteredTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00F21CE612C7C7EE00A809EF /* VerticallyCenteredTextFieldCell.m */; };
 		00F35D7312EF049B0027B9E4 /* EmulationOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 00FE381A12CA6790002B47B1 /* EmulationOutlineView.m */; };
+		00F397E4141655DA00C53A3E /* Apple1IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00F397E3141655DA00C53A3E /* Apple1IO.cpp */; };
+		00F397E6141655EC00C53A3E /* Apple1IO.h in Headers */ = {isa = PBXBuildFile; fileRef = 00F397E5141655EB00C53A3E /* Apple1IO.h */; };
 		00F4D0BF12E2E42F00B7F5E6 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00F4D0BE12E2E42F00B7F5E6 /* ApplicationServices.framework */; };
 		00FC27D312D1070A0065E986 /* Apple1CassetteInterfaceCard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881312A393990052B7A4 /* Apple1CassetteInterfaceCard.cpp */; };
-		00FC27D512D1070A0065E986 /* Apple1IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881512A393990052B7A4 /* Apple1IO.cpp */; };
 		00FC27D712D1070A0065E986 /* Apple1Terminal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881712A393990052B7A4 /* Apple1Terminal.cpp */; };
 		00FC27D912D1070A0065E986 /* AppleIIAudioIn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881912A393990052B7A4 /* AppleIIAudioIn.cpp */; };
 		00FC27DB12D1070A0065E986 /* AppleIIAudioOut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881B12A393990052B7A4 /* AppleIIAudioOut.cpp */; };
@@ -342,8 +343,6 @@
 		00B8864612A3923D0052B7A4 /* edl-1.0.dtd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "edl-1.0.dtd"; sourceTree = "<group>"; };
 		00B8881312A393990052B7A4 /* Apple1CassetteInterfaceCard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Apple1CassetteInterfaceCard.cpp; path = libemulation/Implementation/Apple/Apple1CassetteInterfaceCard.cpp; sourceTree = SOURCE_ROOT; };
 		00B8881412A393990052B7A4 /* Apple1CassetteInterfaceCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Apple1CassetteInterfaceCard.h; path = libemulation/Implementation/Apple/Apple1CassetteInterfaceCard.h; sourceTree = SOURCE_ROOT; };
-		00B8881512A393990052B7A4 /* Apple1IO.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Apple1IO.cpp; path = libemulation/Implementation/Apple/Apple1IO.cpp; sourceTree = SOURCE_ROOT; };
-		00B8881612A393990052B7A4 /* Apple1IO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Apple1IO.h; path = libemulation/Implementation/Apple/Apple1IO.h; sourceTree = SOURCE_ROOT; };
 		00B8881712A393990052B7A4 /* Apple1Terminal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Apple1Terminal.cpp; path = libemulation/Implementation/Apple/Apple1Terminal.cpp; sourceTree = SOURCE_ROOT; };
 		00B8881812A393990052B7A4 /* Apple1Terminal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Apple1Terminal.h; path = libemulation/Implementation/Apple/Apple1Terminal.h; sourceTree = SOURCE_ROOT; };
 		00B8881912A393990052B7A4 /* AppleIIAudioIn.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AppleIIAudioIn.cpp; path = libemulation/Implementation/Apple/AppleIIAudioIn.cpp; sourceTree = SOURCE_ROOT; };
@@ -448,6 +447,8 @@
 		00F01B4612A0D6EC000527CA /* EmulationUnmount.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EmulationUnmount.png; sourceTree = "<group>"; };
 		00F21CE512C7C7EE00A809EF /* VerticallyCenteredTextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VerticallyCenteredTextFieldCell.h; sourceTree = "<group>"; };
 		00F21CE612C7C7EE00A809EF /* VerticallyCenteredTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VerticallyCenteredTextFieldCell.m; sourceTree = "<group>"; };
+		00F397E3141655DA00C53A3E /* Apple1IO.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Apple1IO.cpp; sourceTree = "<group>"; };
+		00F397E5141655EB00C53A3E /* Apple1IO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Apple1IO.h; sourceTree = "<group>"; };
 		00F4D0BE12E2E42F00B7F5E6 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
 		00FE0C041095353B00B92AB7 /* TemplateChooserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TemplateChooserViewController.h; sourceTree = "<group>"; };
 		00FE0C051095353B00B92AB7 /* TemplateChooserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TemplateChooserViewController.m; sourceTree = "<group>"; };
@@ -685,8 +686,8 @@
 			children = (
 				00B8881312A393990052B7A4 /* Apple1CassetteInterfaceCard.cpp */,
 				00B8881412A393990052B7A4 /* Apple1CassetteInterfaceCard.h */,
-				00B8881512A393990052B7A4 /* Apple1IO.cpp */,
-				00B8881612A393990052B7A4 /* Apple1IO.h */,
+				00F397E3141655DA00C53A3E /* Apple1IO.cpp */,
+				00F397E5141655EB00C53A3E /* Apple1IO.h */,
 				00B8881712A393990052B7A4 /* Apple1Terminal.cpp */,
 				00B8881812A393990052B7A4 /* Apple1Terminal.h */,
 				00044CA112CE6FD400D26940 /* AppleDiskII.h */,
@@ -1030,6 +1031,7 @@
 				00678F88139F325F00940158 /* AppleLanguageCard.h in Headers */,
 				00678F8C139F346C00940158 /* AppleIISuperSerialCard.h in Headers */,
 				002740B913A08A4F00E13D65 /* VidexVideoterm.h in Headers */,
+				00F397E6141655EC00C53A3E /* Apple1IO.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1207,7 +1209,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				00FC27D312D1070A0065E986 /* Apple1CassetteInterfaceCard.cpp in Sources */,
-				00FC27D512D1070A0065E986 /* Apple1IO.cpp in Sources */,
 				00FC27D712D1070A0065E986 /* Apple1Terminal.cpp in Sources */,
 				00FC27D912D1070A0065E986 /* AppleIIAudioIn.cpp in Sources */,
 				00FC27DB12D1070A0065E986 /* AppleIIAudioOut.cpp in Sources */,
@@ -1250,6 +1251,7 @@
 				00678F87139F325F00940158 /* AppleLanguageCard.cpp in Sources */,
 				00678F8B139F346C00940158 /* AppleIISuperSerialCard.cpp in Sources */,
 				002740B813A08A4F00E13D65 /* VidexVideoterm.cpp in Sources */,
+				00F397E4141655DA00C53A3E /* Apple1IO.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

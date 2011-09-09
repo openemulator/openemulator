@@ -1,5 +1,4 @@
 ==To-Do==
-* Implement ControlBus::setCPUClockMultiplier
 * Fix Revert to Saved
 * Integrate 6502 CPU
 * Implement Apple-1 I/O

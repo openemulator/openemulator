@@ -7,5 +7,8 @@
     <connector id="appleACI.connector" type="Apple-1 Expansion Port">
         <inlet ref="appleACI.io" property="mmu" outletRef="mmu"/>
     </connector>
+    <component id="appleACI.rom" class="ROM">
+        <property name="image" data="${resourcePath}/roms/Apple/Apple-1 ACI ROM.bin"/>
+    </component>
     
 </edl>

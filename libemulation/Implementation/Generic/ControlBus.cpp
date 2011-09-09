@@ -457,7 +457,19 @@ void ControlBus::clearTimers(OEComponent *component)
 
 void ControlBus::setCPUClockMultiplier(float cpuClockMultiplier)
 {
-    // To-Do: update CPU clock multiplier gracefully
+    OEInt64 cpuCycles;
+    cpu->postMessage(this, CPU_GET_CYCLES, &cpuCycles);
+    
+    float currentCPUCycles = ((blockOffset - cpuCycles) * cpuClockMultiplier /
+                              this->cpuClockMultiplier);
+    blockOffset = currentCPUCycles - ceil(currentCPUCycles);
+    
+    blockSize = events.front().cycles * cpuClockMultiplier - blockOffset;
+    blockCPUCycles = floor(blockSize);
+    blockOffset += blockCPUCycles;
+    
+    cpuCycles = blockCPUCycles - ceil(currentCPUCycles);
+    cpu->postMessage(this, CPU_SET_CYCLES, &cpuCycles);
     
     this->cpuClockMultiplier = cpuClockMultiplier;
 }

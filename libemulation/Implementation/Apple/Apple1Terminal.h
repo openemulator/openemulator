@@ -27,12 +27,12 @@ public:
     
     void notify(OEComponent *sender, int notification, void *data);
     
-	void write(int address, int value);
+	void write(OEAddress address, OEUInt8 value);
 	
 private:
     OEComponent *device;
-	OEComponent *controlBus;
 	OEComponent *vram;
+	OEComponent *controlBus;
 	OEComponent *monitorDevice;
 	OEComponent *monitor;
 	

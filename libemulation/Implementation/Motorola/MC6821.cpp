@@ -16,9 +16,11 @@
 MC6821::MC6821()
 {
 	controlBus = NULL;
+    
 	portA = NULL;
 	controlBusA = NULL;
-	portB = NULL;
+	
+    portB = NULL;
 	controlBusB = NULL;
 }
 

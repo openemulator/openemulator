@@ -9,6 +9,7 @@
  */
 
 #include "OEComponent.h"
+#include "AudioInterface.h"
 
 class ADCDAC : public OEComponent
 {
@@ -28,5 +29,5 @@ private:
 	OEComponent *audio;
 	OEComponent *controlBus;
 	
-	double phase;
+    AudioBuffer *audioBuffer;
 };

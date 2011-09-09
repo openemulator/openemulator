@@ -226,7 +226,7 @@ void Apple1Terminal::notify(OEComponent *sender, int notification, void *data)
     }
 }
 
-void Apple1Terminal::write(int address, int value)
+void Apple1Terminal::write(OEAddress address, OEUInt8 value)
 {
 }
 

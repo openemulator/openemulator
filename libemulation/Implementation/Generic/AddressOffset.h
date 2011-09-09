@@ -23,7 +23,7 @@ public:
 	void write(OEAddress address, OEUInt8 value);
 	
 private:
-	OEInt64 offset;
+	OEAddress offset;
 	
 	OEComponent *component;
 };
