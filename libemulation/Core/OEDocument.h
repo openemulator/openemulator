@@ -22,25 +22,25 @@
 
 typedef struct
 {
-	string label;
-	string image;
-	string description;
+    string label;
+    string image;
+    string description;
 } OEHeaderInfo;
 
 typedef struct
 {
     string id;
     string ref;
-	string type;
+    string type;
     string group;
-	string label;
-	string image;
+    string label;
+    string image;
 } OEPortInfo;
 
 typedef struct
 {
     string id;
-	string type;
+    string type;
 } OEConnectorInfo;
 
 typedef vector<OEPortInfo> OEPortInfos;
@@ -53,48 +53,48 @@ typedef map<string, OEIdMap> OEInletMap;
 class OEDocument
 {
 public:
-	OEDocument();
-	~OEDocument();
-	
-	bool open(string path);
-	bool isOpen();
-	bool save(string path);
-	void close();
-	
-	OEHeaderInfo getHeaderInfo();
-	OEPortInfos getPortInfos();
-	OEConnectorInfos getFreeConnectorInfos();
-	
+    OEDocument();
+    ~OEDocument();
+    
+    bool open(string path);
+    bool isOpen();
+    bool save(string path);
+    void close();
+    
+    OEHeaderInfo getHeaderInfo();
+    OEPortInfos getPortInfos();
+    OEConnectorInfos getFreeConnectorInfos();
+    
     bool addDocument(string path, OEIdMap connections);
     bool removeDevice(string deviceId);
     
     OEIds getDeviceIds();
     
-	void setDeviceId(string& id, string deviceId);
-	string getDeviceId(string id);
-	
+    void setDeviceId(string& id, string deviceId);
+    string getDeviceId(string id);
+    
 protected:
-	bool is_open;
-	OEPackage *package;
-	xmlDocPtr doc;
-	
+    bool is_open;
+    OEPackage *package;
+    xmlDocPtr doc;
+    
     virtual bool constructDocument(xmlDocPtr doc);
     virtual bool configureInlets(OEInletMap& inletMap);
     virtual bool updateDocument(xmlDocPtr doc);
     virtual void deconfigureDevice(string deviceId);
     virtual void destroyDevice(string deviceId);
     
-	string getLocationLabel(string deviceId, vector<string>& visitedIds);
-	string getLocationLabel(string deviceId);
+    string getLocationLabel(string deviceId, vector<string>& visitedIds);
+    string getLocationLabel(string deviceId);
     
     string getNodeName(xmlNodePtr node);
-	string getNodeProperty(xmlNodePtr node, string name);
-	bool hasNodeProperty(xmlNodePtr node, string name);
-	void setNodeProperty(xmlNodePtr node, string name, string value);
-	
+    string getNodeProperty(xmlNodePtr node, string name);
+    bool hasNodeProperty(xmlNodePtr node, string name);
+    void setNodeProperty(xmlNodePtr node, string name, string value);
+    
 private:
-	bool validateDocument();
-	bool dumpDocument(OEData& data);
+    bool validateDocument();
+    bool dumpDocument(OEData& data);
     
     xmlDocPtr getXMLDoc();
     OEIdMap makeIdMap(OEIds& deviceIds);

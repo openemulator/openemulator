@@ -17,31 +17,32 @@
 class Apple1Terminal : public OEComponent
 {
 public:
-	Apple1Terminal();
-	
+    Apple1Terminal();
+    
     bool setValue(string name, string value);
     bool getValue(string name, string& value);
-	bool setRef(string name, OEComponent *ref);
+    bool setRef(string name, OEComponent *ref);
     bool setData(string name, OEData *data);
     bool init();
     
+    bool postMessage(OEComponent *sender, int message, void *data);
+    
     void notify(OEComponent *sender, int notification, void *data);
     
-	void write(OEAddress address, OEUInt8 value);
-	
+    void write(OEAddress address, OEUInt8 value);
+    
 private:
     OEComponent *device;
-	OEComponent *vram;
-	OEComponent *controlBus;
-	OEComponent *monitorDevice;
-	OEComponent *monitor;
-	
-    bool speedLimit;
+    OEComponent *vram;
+    OEComponent *controlBus;
+    OEComponent *monitorDevice;
+    OEComponent *monitor;
+    
     bool cursorActive;
     OEUInt32 cursorCount;
     OEUInt32 cursorX, cursorY;
     
-	OEData font;
+    OEData font;
     char *vramp;
     OEImage image;
     

@@ -37,22 +37,22 @@ typedef OEUInt64 OEAddress;
 typedef union
 {
 #ifdef BYTES_BIG_ENDIAN
-	struct { OEUInt8 h7, h6, h5, h4, h3, h2, h, l; } b;
-	struct { OEInt8 h7, h6, h5, h4, h3, h2, h, l; } sb;
-	struct { OEUInt16 h3, h2, h, l; } w;
-	struct { OEInt8 h3, h2, h, l; } sw;
-	struct { OEUInt32 l, h; } d;
-	struct { OEInt32 l, h; } sd;
+    struct { OEUInt8 h7, h6, h5, h4, h3, h2, h, l; } b;
+    struct { OEInt8 h7, h6, h5, h4, h3, h2, h, l; } sb;
+    struct { OEUInt16 h3, h2, h, l; } w;
+    struct { OEInt8 h3, h2, h, l; } sw;
+    struct { OEUInt32 l, h; } d;
+    struct { OEInt32 l, h; } sd;
 #else
-	struct { OEUInt8 l, h, h2, h3, h4, h5, h6, h7; } b;
-	struct { OEInt8 l, h, h2, h3, h4, h5, h6, h7; } sb;
-	struct { OEUInt16 l, h, h2, h3; } w;
-	struct { OEInt16 l, h, h2, h3; } sw;
-	struct { OEUInt32 l, h; } d;
-	struct { OEInt32 l, h; } sd;
+    struct { OEUInt8 l, h, h2, h3, h4, h5, h6, h7; } b;
+    struct { OEInt8 l, h, h2, h3, h4, h5, h6, h7; } sb;
+    struct { OEUInt16 l, h, h2, h3; } w;
+    struct { OEInt16 l, h, h2, h3; } sw;
+    struct { OEUInt32 l, h; } d;
+    struct { OEInt32 l, h; } sd;
 #endif
-	OEUInt64 q;
-	OEInt64 qd;
+    OEUInt64 q;
+    OEInt64 qd;
 } OEUnion;
 
 typedef vector<char> OEData;

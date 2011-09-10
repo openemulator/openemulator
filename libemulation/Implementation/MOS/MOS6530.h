@@ -13,23 +13,23 @@
 class MOS6530 : public OEComponent
 {
 public:
-	MOS6530();
-	
-	bool setValue(string name, string value);
-	bool getValue(string name, string& value);
-	bool setRef(string name, OEComponent *ref);
-	
-	OEUInt8 read(OEAddress address);
-	void write(OEAddress address, OEUInt8 value);
-	
+    MOS6530();
+    
+    bool setValue(string name, string value);
+    bool getValue(string name, string& value);
+    bool setRef(string name, OEComponent *ref);
+    
+    OEUInt8 read(OEAddress address);
+    void write(OEAddress address, OEUInt8 value);
+    
 private:
-	OEComponent *controlBus;
-	OEComponent *portA;
-	OEComponent *portB;
-	OEComponent *controlBusB;
-	
-	OEUInt8 directionA;
-	OEUInt8 dataA;
-	OEUInt8 directionB;
-	OEUInt8 dataB;
+    OEComponent *controlBus;
+    OEComponent *portA;
+    OEComponent *portB;
+    OEComponent *controlBusB;
+    
+    OEUInt8 directionA;
+    OEUInt8 dataA;
+    OEUInt8 directionB;
+    OEUInt8 dataB;
 };

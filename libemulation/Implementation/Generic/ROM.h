@@ -10,22 +10,22 @@
 
 #include "OEComponent.h"
 
-// Parameters:
+// Notes:
 // * image is the ROM image.
 
 class ROM : public OEComponent
 {
 public:
-	ROM();
-	
-	bool setData(string name, OEData *data);
-	bool getData(string name, OEData **data);
-	bool init();
-	
-	OEUInt8 read(OEAddress address);
-	
+    ROM();
+    
+    bool setData(string name, OEData *data);
+    bool getData(string name, OEData **data);
+    bool init();
+    
+    OEUInt8 read(OEAddress address);
+    
 private:
-	OEData data;
-	OEUInt8 *datap;
-	OEAddress mask;
+    OEData data;
+    OEUInt8 *datap;
+    OEAddress mask;
 };

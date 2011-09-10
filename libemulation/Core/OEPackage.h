@@ -20,28 +20,28 @@ using namespace std;
 class OEPackage
 {
 public:
-	OEPackage();
-	~OEPackage();
-	
-	bool open(const string& path);
-	bool isOpen();
-	void close();
-	
-	bool readFile(const string& packagePath, OEData *data);
-	bool writeFile(const string& packagePath, OEData *data);
-	
-	bool remove();
-	
+    OEPackage();
+    ~OEPackage();
+    
+    bool open(const string& path);
+    bool isOpen();
+    void close();
+    
+    bool readFile(const string& packagePath, OEData *data);
+    bool writeFile(const string& packagePath, OEData *data);
+    
+    bool remove();
+    
 private:
-	bool is_open;
-	
-	string path;
-	struct zip *zip;
-	
-	bool pathExists(const string& path);
-	bool isDirectory(const string& path);
-	bool createDirectory(const string& path);
-	bool removeItemAtPath(const string& path);
+    bool is_open;
+    
+    string path;
+    struct zip *zip;
+    
+    bool pathExists(const string& path);
+    bool isDirectory(const string& path);
+    bool createDirectory(const string& path);
+    bool removeItemAtPath(const string& path);
 };
 
 #endif

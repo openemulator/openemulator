@@ -5,26 +5,25 @@
  * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Emulates a MOS6502 microprocessor.
+ * Emulates a MOS6502 microprocessor
  */
-
-#include "CPUInterface.h"
-#include "ControlBus.h"
 
 #include "MOS6502.h"
 #include "MOS6502Opcodes.h"
 
+#include "CPUInterface.h"
+
 MOS6502::MOS6502()
 {
-	controlBus = NULL;
-	memoryBus = NULL;
-	
-	a = 0;
-	x = 0;
-	y = 0;
-	p = 0;
-	pc.q = 0;
-	sp.q = 0x1ff;
+    controlBus = NULL;
+    memoryBus = NULL;
+    
+    a = 0;
+    x = 0;
+    y = 0;
+    p = 0;
+    pc.q = 0;
+    sp.q = 0x1ff;
     
     isReset = false;
     isIRQ = false;
@@ -35,78 +34,81 @@ MOS6502::MOS6502()
 
 bool MOS6502::setValue(string name, string value)
 {
-	if (name == "a")
-		a = getUInt(value);
-	else if (name == "x")
-		x = getUInt(value);
-	else if (name == "y")
-		y = getUInt(value);
-	else if (name == "s")
-		sp.b.l = getUInt(value);
-	else if (name == "p")
-		p = getUInt(value);
-	else if (name == "pc")
-		pc.w.l = getUInt(value);
-	else
-		return false;
-	
-	return true;
+    if (name == "a")
+        a = getUInt(value);
+    else if (name == "x")
+        x = getUInt(value);
+    else if (name == "y")
+        y = getUInt(value);
+    else if (name == "s")
+        sp.b.l = getUInt(value);
+    else if (name == "p")
+        p = getUInt(value);
+    else if (name == "pc")
+        pc.w.l = getUInt(value);
+    else
+        return false;
+    
+    return true;
 }
 
 bool MOS6502::getValue(string name, string& value)
 {
-	if (name == "a")
-		value = getHexString(a);
-	else if (name == "x")
-		value = getHexString(x);
-	else if (name == "y")
-		value = getHexString(y);
-	else if (name == "s")
-		value = getHexString(sp.b.l);
-	else if (name == "p")
-		value = getHexString(p);
-	else if (name == "pc")
-		value = getHexString(pc.w.l);
-	else
-		return false;
-	
-	return true;
+    if (name == "a")
+        value = getHexString(a);
+    else if (name == "x")
+        value = getHexString(x);
+    else if (name == "y")
+        value = getHexString(y);
+    else if (name == "s")
+        value = getHexString(sp.b.l);
+    else if (name == "p")
+        value = getHexString(p);
+    else if (name == "pc")
+        value = getHexString(pc.w.l);
+    else
+        return false;
+    
+    return true;
 }
 
 bool MOS6502::setRef(string name, OEComponent *ref)
 {
-	if (name == "memoryBus")
-		memoryBus = ref;
-	else if (name == "controlBus")
-	{
+    if (name == "memoryBus")
+        memoryBus = ref;
+    else if (name == "controlBus")
+    {
         if (controlBus)
         {
+            controlBus->removeObserver(this, CONTROLBUS_POWERSTATE_DID_CHANGE);
             controlBus->removeObserver(this, CONTROLBUS_RESET_DID_ASSERT);
             controlBus->removeObserver(this, CONTROLBUS_RESET_DID_CLEAR);
             controlBus->removeObserver(this, CONTROLBUS_IRQ_DID_ASSERT);
             controlBus->removeObserver(this, CONTROLBUS_IRQ_DID_CLEAR);
             controlBus->removeObserver(this, CONTROLBUS_NMI_DID_ASSERT);
         }
-		controlBus = ref;
+        controlBus = ref;
         if (controlBus)
         {
+            controlBus->addObserver(this, CONTROLBUS_POWERSTATE_DID_CHANGE);
             controlBus->addObserver(this, CONTROLBUS_RESET_DID_ASSERT);
             controlBus->addObserver(this, CONTROLBUS_RESET_DID_CLEAR);
             controlBus->addObserver(this, CONTROLBUS_IRQ_DID_ASSERT);
             controlBus->addObserver(this, CONTROLBUS_IRQ_DID_CLEAR);
             controlBus->addObserver(this, CONTROLBUS_NMI_DID_ASSERT);
         }
-	}
-	else
-		return false;
-	
-	return true;
+    }
+    else
+        return false;
+    
+    return true;
 }
 
 bool MOS6502::init()
 {
     if (controlBus)
     {
+        controlBus->postMessage(this, CONTROLBUS_GET_POWERSTATE, &powerState);
         controlBus->postMessage(this, CONTROLBUS_IS_RESET_ASSERTED, &isReset);
         controlBus->postMessage(this, CONTROLBUS_IS_IRQ_ASSERTED, &isIRQ);
     }
@@ -138,45 +140,75 @@ bool MOS6502::postMessage(OEComponent *sender, int message, void *data)
 
 void MOS6502::notify(OEComponent *sender, int notification, void *data)
 {
-	switch (notification)
-	{
-		case CONTROLBUS_RESET_DID_ASSERT:
+    switch (notification)
+    {
+        case CONTROLBUS_POWERSTATE_DID_CHANGE:
+            powerState = *((ControlBusPowerState *)data);
+            
+            if (powerState != CONTROLBUS_POWERSTATE_ON)
+                icount = 0;
+            
+            return;
+            
+        case CONTROLBUS_RESET_DID_ASSERT:
             isReset = true;
-			return;
+            icount = 0;
+            return;
             
         case CONTROLBUS_RESET_DID_CLEAR:
             isReset = false;
-            
-            p = F_T | F_I | F_Z | F_B | (P & F_D);
-            PCL = RDMEM(MOS6502_RST_VECTOR);
-            PCH = RDMEM(MOS6502_RST_VECTOR + 1);
-            sp.q = 0x1ff;
-            
+            isResetStart = true;
             return;
-			
-		case CONTROLBUS_IRQ_DID_ASSERT:
+            
+        case CONTROLBUS_IRQ_DID_ASSERT:
             isIRQ = true;
- 			return;
-			
-		case CONTROLBUS_IRQ_DID_CLEAR:
+            return;
+            
+        case CONTROLBUS_IRQ_DID_CLEAR:
             isIRQ = false;
-			return;
-			
-		case CONTROLBUS_NMI_DID_ASSERT:
+            return;
+            
+        case CONTROLBUS_NMI_DID_ASSERT:
             isNMI = true;
-			return;
-	}
+            return;
+    }
 }
 
 void MOS6502::execute()
 {
-	while (icount > 0)
-	{
+    if (powerState != CONTROLBUS_POWERSTATE_ON)
+        icount = 0;
+    
+    if (isReset)
+        icount = 0;
+    
+    OEUnion zp;
+    OEUnion ea;
+    
+    zp.q = 0;
+    ea.q = 0;
+    
+    while (icount > 0)
+    {
         bool wasIRQEnabled = isIRQEnabled;
         isIRQEnabled = !(P & F_I);
         
-        if (isReset)
-            icount = 0;
+        OEComponent::notify(this, CPU_INSTRUCTION_WILL_EXECUTE, NULL);
+        
+        if (isResetStart)
+        {
+            isResetStart = false;
+            
+            sp.b.l = 0;
+            
+            icount -= 2;
+            PUSH_DISCARD(PCH);
+            PUSH_DISCARD(PCL);
+            PUSH_DISCARD(P & ~F_B);
+            P |= F_I;
+            PCL = RDMEM(MOS6502_RST_VECTOR);
+            PCH = RDMEM(MOS6502_RST_VECTOR + 1);
+        }
         else if (isNMI)
         {
             isNMI = false;
@@ -185,37 +217,25 @@ void MOS6502::execute()
             PUSH(PCH);
             PUSH(PCL);
             PUSH(P & ~F_B);
-            // clear D flag, set I flag
-            P = (P & ~F_D) | F_I;
+            P |= F_I;
             PCL = RDMEM(MOS6502_NMI_VECTOR);
             PCH = RDMEM(MOS6502_NMI_VECTOR + 1);
         }
         else if (isIRQ && wasIRQEnabled)
         {
-			icount -= 2;
-			PUSH(PCH);
-			PUSH(PCL);
-			PUSH(P & ~F_B);
-            // set I flag
-			P |= F_I;
+            isIRQEnabled = false;
+            
+            icount -= 2;
+            PUSH(PCH);
+            PUSH(PCL);
+            PUSH(P & ~F_B);
+            P |= F_I;
             PCL = RDMEM(MOS6502_IRQ_VECTOR);
-			PCH = RDMEM(MOS6502_IRQ_VECTOR + 1);
+            PCH = RDMEM(MOS6502_IRQ_VECTOR + 1);
         }
         else
         {
-            OEUnion zp;
-            OEUnion ea;
-            
-            OEComponent::notify(this, CPU_INSTRUCTION_WILL_EXECUTE, &pc);
-            
-            if (pc.q != 0)
-            {
-                int a = 4;
-                a = 5;
-            }
-            
             OEUInt8 opcode = RDOP();
-            
             switch (opcode)
             {
                 MOS6502_OP(00);
@@ -507,5 +527,5 @@ void MOS6502::execute()
                 MOS6502_OP(ff);
             }
         }
-	};
+    };
 }

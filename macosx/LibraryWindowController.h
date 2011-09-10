@@ -5,7 +5,7 @@
  * (C) 2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls the library window.
+ * Controls the library window
  */
 
 #import <Cocoa/Cocoa.h>
@@ -18,12 +18,12 @@
     IBOutlet id fPathFilter;
     IBOutlet id fSearchFilter;
     
-	IBOutlet id fSplitView;
-	IBOutlet NSTableView *fTableView;
+    IBOutlet id fSplitView;
+    IBOutlet NSTableView *fTableView;
 
     NSMutableArray *filterPaths;
-	NSMutableArray *items;
-	NSMutableArray *filteredItems;
+    NSMutableArray *items;
+    NSMutableArray *filteredItems;
     LibraryTableCell *cell;
     
     IBOutlet id fSelImage;

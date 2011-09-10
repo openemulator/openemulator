@@ -13,16 +13,24 @@
 class Apple1IO : public OEComponent
 {
 public:
-	Apple1IO();
-	
-	bool setRef(string name, OEComponent *ref);
-	
-	void notify(OEComponent *sender, int notification, void *data);
-	
-	OEUInt8 read(OEAddress address);
-	
+    Apple1IO();
+    
+    bool setValue(string name, string value);
+    bool getValue(string name, string &value);
+    bool setRef(string name, OEComponent *ref);
+
+    void notify(OEComponent *sender, int notification, void *data);
+    
+    OEUInt8 read(OEAddress address);
+    void write(OEAddress address, OEUInt8 value);
+
 private:
-	OEComponent *terminal;
-	
-	int key;
+    OEComponent *pia;
+    OEComponent *terminal;
+    
+    bool enhancedTerminalSpeed;
+    bool fullASCIIKeyboard;
+    
+    OEUInt8 termKey;
+    OEUInt8 termChar;
 };

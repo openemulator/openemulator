@@ -5,7 +5,7 @@
  * (C) 2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements a library item.
+ * Implements a library item
  */
 
 #import "LibraryItem.h"
@@ -18,14 +18,14 @@
 {
     self = [super init];
     
-	if (self)
-	{
-		path = [thePath copy];
+    if (self)
+    {
+        path = [thePath copy];
         label = [[[path lastPathComponent] stringByDeletingPathExtension]
                  retain];
-	}
-	
-	return self;
+    }
+    
+    return self;
 }
 
 - (id)copyWithZone:(NSZone *)zone
@@ -35,13 +35,13 @@
 
 - (void)dealloc
 {
-	[path release];
+    [path release];
     [label release];
     
     [image release];
     [type release];
-	
-	[super dealloc];
+    
+    [super dealloc];
 }
 
 - (void)loadItem
@@ -54,19 +54,19 @@
     NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
     
     // Read OE document
-	OEDocument oeDocument;
+    OEDocument oeDocument;
     
     NSString *fullPath = [[resourcePath stringByAppendingPathComponent:@"library"]
                           stringByAppendingPathComponent:path];
-	
-	oeDocument.open(getCPPString(fullPath));
-	if (!oeDocument.isOpen())
-		return;
-	
+    
+    oeDocument.open(getCPPString(fullPath));
+    if (!oeDocument.isOpen())
+        return;
+    
     NSString *imagePath = getNSString(oeDocument.getHeaderInfo().image);
-	OEConnectorInfos connectorInfos = oeDocument.getFreeConnectorInfos();
-	
-	oeDocument.close();
+    OEConnectorInfos connectorInfos = oeDocument.getFreeConnectorInfos();
+    
+    oeDocument.close();
     
     // Read image
     imagePath = [resourcePath stringByAppendingPathComponent:imagePath];
@@ -86,12 +86,12 @@
 
 - (NSString *)path
 {
-	return path;
+    return path;
 }
 
 - (NSString *)label
 {
-	return label;
+    return label;
 }
 
 - (NSImage *)image
@@ -105,14 +105,14 @@
 {
     [self loadItem];
     
-	return type;
+    return type;
 }
 
 - (NSString *)description
 {
     [self loadItem];
     
-	return description;
+    return description;
 }
 
 @end

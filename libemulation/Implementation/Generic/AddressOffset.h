@@ -13,17 +13,17 @@
 class AddressOffset : public OEComponent
 {
 public:
-	AddressOffset();
-	
-	bool setValue(string name, string value);
-	bool setRef(string name, OEComponent *ref);
-	bool init();
-	
-	OEUInt8 read(OEAddress address);
-	void write(OEAddress address, OEUInt8 value);
-	
+    AddressOffset();
+    
+    bool setValue(string name, string value);
+    bool setRef(string name, OEComponent *ref);
+    bool init();
+    
+    OEUInt8 read(OEAddress address);
+    void write(OEAddress address, OEUInt8 value);
+    
 private:
-	OEAddress offset;
-	
-	OEComponent *component;
+    OEAddress offset;
+    
+    OEComponent *component;
 };

@@ -16,7 +16,7 @@
 class OEComponentFactory
 {
 public:
-	static OEComponent *construct(const string& className);
+    static OEComponent *construct(const string& className);
 };
 
 #endif

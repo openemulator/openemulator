@@ -5,7 +5,7 @@
  * (C) 2009-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls a canvas window.
+ * Controls a canvas window
  */
 
 #import <Cocoa/Cocoa.h>
@@ -15,18 +15,18 @@
 @interface CanvasWindowController : NSWindowController
 <NSToolbarDelegate, NSWindowDelegate>
 {
-	IBOutlet id fScrollView;
-	IBOutlet CanvasView *fCanvasView;
-	IBOutlet id fToolbarView;
-	
-	void *device;
-	NSString *title;
-	void *canvas;
+    IBOutlet id fScrollView;
+    IBOutlet CanvasView *fCanvasView;
+    IBOutlet id fToolbarView;
+    
+    void *device;
+    NSString *title;
+    void *canvas;
 }
 
 - (id)initWithDevice:(void *)theDevice
-			   title:(NSString *)theTitle
-			  canvas:(void *)theCanvas;
+               title:(NSString *)theTitle
+              canvas:(void *)theCanvas;
 - (void *)canvas;
 - (void *)device;
 - (void)closeWindow;

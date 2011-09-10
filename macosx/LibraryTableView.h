@@ -5,7 +5,7 @@
  * (C) 2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls the library table view.
+ * Controls the library table view
  */
 
 #import <Cocoa/Cocoa.h>

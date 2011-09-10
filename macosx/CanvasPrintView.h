@@ -5,7 +5,7 @@
  * (C) 2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls a canvas print view.
+ * Controls a canvas print view
  */
 
 #import <Cocoa/Cocoa.h>
@@ -14,7 +14,7 @@
 
 @interface CanvasPrintView : NSView
 {
-	CanvasView *canvasView;
+    CanvasView *canvasView;
 }
 
 - (id)initWithCanvasView:(CanvasView *)theCanvasView;

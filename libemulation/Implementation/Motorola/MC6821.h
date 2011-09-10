@@ -2,11 +2,20 @@
 /**
  * libemulation
  * MC6821
- * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls a generic MC6821 Peripheral Interface Adapter
+ * Controls a generic MC6821 PIA (Peripheral Interface Adapter)
  */
+
+// Notes:
+// * The PIA forwards port data read and write requests as calls to
+//   read() and write(). Address 0 is used to for port A, address 1
+//   is used for port B.
+// * A port device can change CA1, CA2, CB1 and CB2 with setCxy.
+// * A port device listens to CA2 and CB2 changes by listening to Cx2_DID_CHANGE.
+// * The PIA can listen to resets on the main control bus.
+// * It can generate an IRQ on the control bus of port A or port B.
 
 #include "OEComponent.h"
 
@@ -22,9 +31,10 @@ typedef enum
 } MC6821Message;
 
 // Notifications
-typedef enum {
-	MC6821_CA2_CHANGED,
-	MC6821_CB2_CHANGED,
+typedef enum
+{
+	MC6821_CA2_DID_CHANGE,
+	MC6821_CB2_DID_CHANGE,
 } MC6821Notification;
 
 #define MC6821_RS_DATAREGISTERA		0x00

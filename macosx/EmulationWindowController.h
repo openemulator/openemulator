@@ -5,7 +5,7 @@
  * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls an emulation window.
+ * Controls an emulation window
  */
 
 #import <Cocoa/Cocoa.h>
@@ -17,28 +17,28 @@
 <NSWindowDelegate, NSToolbarDelegate, NSOutlineViewDelegate,
 NSOutlineViewDataSource, NSComboBoxDataSource>
 {
-	IBOutlet id fSplitView;
-	IBOutlet EmulationOutlineView *fOutlineView;
-	
-	IBOutlet id fDeviceBox;
-	IBOutlet id fDeviceImage;
-	IBOutlet id fDeviceLocationLabel;
-	IBOutlet id fDeviceStateTitle;
-	IBOutlet id fDeviceStateLabel;
-	IBOutlet id fDeviceButton;
-	IBOutlet id fTableView;
-	IBOutlet id fTableKeyColumn;
-	IBOutlet id fTableValueColumn;
-	
-	IBOutlet id fStatusLabelView;
-	
-	EmulationItem *rootItem;
-	
-	EmulationItem *selectedItem;
-	
-	NSButtonCell *checkBoxCell;
-	NSPopUpButtonCell *popUpButtonCell;
-	NSSliderCell *sliderCell;
+    IBOutlet id fSplitView;
+    IBOutlet EmulationOutlineView *fOutlineView;
+    
+    IBOutlet id fDeviceBox;
+    IBOutlet id fDeviceImage;
+    IBOutlet id fDeviceLocationLabel;
+    IBOutlet id fDeviceStateTitle;
+    IBOutlet id fDeviceStateLabel;
+    IBOutlet id fDeviceButton;
+    IBOutlet id fTableView;
+    IBOutlet id fTableKeyColumn;
+    IBOutlet id fTableValueColumn;
+    
+    IBOutlet id fStatusLabelView;
+    
+    EmulationItem *rootItem;
+    
+    EmulationItem *selectedItem;
+    
+    NSButtonCell *checkBoxCell;
+    NSPopUpButtonCell *popUpButtonCell;
+    NSSliderCell *sliderCell;
 }
 
 - (void)updateEmulation:(id)sender;

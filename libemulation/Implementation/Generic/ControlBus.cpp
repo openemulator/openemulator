@@ -8,19 +8,17 @@
  * Implements a control bus with clock control and reset/IRQ/NMI lines
  */
 
-/*
- * Timing diagram (for cpuClockMultiplier = 5/3)
- *
- * CPU cycle:         |  |  |  |  |  |  |  |  |  |  |  |
- * Master cycle:        |    |    |    |    |    |    |
- *
- * Suppose we need to render 6 master cycles, then:
- *
- * blockSize:         |                               |
- * blockCPUCycles:    |                             |
- * blockOffset:         |                             |
- *
- */
+// Notes:
+// Timing diagram (for cpuClockMultiplier = 5/3)
+//
+// CPU cycle:         |  |  |  |  |  |  |  |  |  |  |  |
+// Master cycle:        |    |    |    |    |    |    |
+//
+// Suppose we need to render 6 master cycles, then:
+//
+// blockSize:         |                               |
+// blockCPUCycles:    |                             |
+// blockOffset:         |                             |
 
 #include <math.h>
 
@@ -32,18 +30,18 @@
 
 ControlBus::ControlBus()
 {
-	clockFrequency = 1E6;
+    clockFrequency = 1E6;
     cpuClockMultiplier = 1;
-	resetOnPowerOn = false;
+    resetOnPowerOn = false;
     
-	device = NULL;
-	audio = NULL;
-	cpu = NULL;
-	
-	powerState = CONTROLBUS_POWERSTATE_OFF;
-	resetCount = 0;
-	irqCount = 0;
-	nmiCount = 0;
+    device = NULL;
+    audio = NULL;
+    cpu = NULL;
+    
+    powerState = CONTROLBUS_POWERSTATE_OFF;
+    resetCount = 0;
+    irqCount = 0;
+    nmiCount = 0;
     
     cycleCount = 0;
     cycleStart = 0;
@@ -56,12 +54,12 @@ ControlBus::ControlBus()
 
 bool ControlBus::setValue(string name, string value)
 {
-	if (name == "clockFrequency")
-		clockFrequency = getFloat(value);
-	else if (name == "cpuClockMultiplier")
-		cpuClockMultiplier = getFloat(value);
-	else if (name == "resetOnPowerOn")
-		resetOnPowerOn = getUInt(value);
+    if (name == "clockFrequency")
+        clockFrequency = getFloat(value);
+    else if (name == "cpuClockMultiplier")
+        cpuClockMultiplier = getFloat(value);
+    else if (name == "resetOnPowerOn")
+        resetOnPowerOn = getUInt(value);
     else if (name == "powerState")
         powerState = (ControlBusPowerState) getInt(value);
     else if (name == "cycleCount")
@@ -72,10 +70,10 @@ bool ControlBus::setValue(string name, string value)
         irqCount = (OEUInt32) getUInt(value);
     else if (name == "nmiCount")
         nmiCount = (OEUInt32) getUInt(value);
-	else
-		return false;
-	
-	return true;
+    else
+        return false;
+    
+    return true;
 }
 
 bool ControlBus::getValue(string name, string &value)
@@ -98,52 +96,52 @@ bool ControlBus::getValue(string name, string &value)
 
 bool ControlBus::setRef(string name, OEComponent *ref)
 {
-	if (name == "device")
-	{
-		if (device)
-		{
+    if (name == "device")
+    {
+        if (device)
+        {
             if (powerState == CONTROLBUS_POWERSTATE_ON)
                 device->postMessage(this, DEVICE_CLEAR_ACTIVITY, NULL);
-			device->removeObserver(this, DEVICE_EVENT_DID_OCCUR);
-		}
-		device = ref;
-		if (device)
-		{
+            device->removeObserver(this, DEVICE_EVENT_DID_OCCUR);
+        }
+        device = ref;
+        if (device)
+        {
             if (powerState == CONTROLBUS_POWERSTATE_ON)
                 device->postMessage(this, DEVICE_ASSERT_ACTIVITY, NULL);
-			device->addObserver(this, DEVICE_EVENT_DID_OCCUR);
-		}
-	}
-	else if (name == "audio")
-	{
+            device->addObserver(this, DEVICE_EVENT_DID_OCCUR);
+        }
+    }
+    else if (name == "audio")
+    {
         if (audio)
             audio->removeObserver(this, AUDIO_FRAME_IS_RENDERING);
-		audio = ref;
+        audio = ref;
         if (audio)
             audio->addObserver(this, AUDIO_FRAME_IS_RENDERING);
-	}
-	else if (name == "cpu")
-		cpu = ref;
-	else
-		return false;
-	
-	return true;
+    }
+    else if (name == "cpu")
+        cpu = ref;
+    else
+        return false;
+    
+    return true;
 }
 
 bool ControlBus::init()
 {
-	if (!device)
-	{
-		logMessage("device not connected");
-		return false;
-	}
-	
-	if (!audio)
-	{
-		logMessage("audio not connected");
-		return false;
-	}
-	
+    if (!device)
+    {
+        logMessage("device not connected");
+        return false;
+    }
+    
+    if (!audio)
+    {
+        logMessage("audio not connected");
+        return false;
+    }
+    
     if (!cpu)
     {
         logMessage("cpu not connected");
@@ -154,57 +152,57 @@ bool ControlBus::init()
     if (powerState == CONTROLBUS_POWERSTATE_ON)
         device->postMessage(this, DEVICE_ASSERT_ACTIVITY, NULL);
     
-	return true;
+    return true;
 }
 
 bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
 {
-	switch (message)
-	{
-		case CONTROLBUS_SET_POWERSTATE:
+    switch (message)
+    {
+        case CONTROLBUS_SET_POWERSTATE:
             setPowerState(*((ControlBusPowerState *)data));
-			return true;
+            return true;
             
-		case CONTROLBUS_GET_POWERSTATE:
-			*((ControlBusPowerState *)data) = powerState;
-			return true;
-			
-		case CONTROLBUS_ASSERT_RESET:
-			resetCount++;
-			if (resetCount == 1)
-				OEComponent::notify(this, CONTROLBUS_RESET_DID_ASSERT, NULL);
-			return true;
-			
-		case CONTROLBUS_CLEAR_RESET:
-			resetCount--;
-			if (resetCount == 0)
-				OEComponent::notify(this, CONTROLBUS_RESET_DID_CLEAR, NULL);
-			return true;
-			
-		case CONTROLBUS_ASSERT_IRQ:
-			irqCount++;
-			if (irqCount == 1)
-				OEComponent::notify(this, CONTROLBUS_IRQ_DID_ASSERT, NULL);
-			return true;
-			
-		case CONTROLBUS_CLEAR_IRQ:
-			irqCount--;
-			if (irqCount == 0)
-				OEComponent::notify(this, CONTROLBUS_IRQ_DID_CLEAR, NULL);
-			return true;
-			
-		case CONTROLBUS_ASSERT_NMI:
-			nmiCount++;
-			if (nmiCount == 1)
-				OEComponent::notify(this, CONTROLBUS_NMI_DID_ASSERT, NULL);
-			return true;
-			
-		case CONTROLBUS_CLEAR_NMI:
-			nmiCount--;
-			if (nmiCount == 0)
-				OEComponent::notify(this, CONTROLBUS_NMI_DID_CLEAR, NULL);
-			return true;
-			
+        case CONTROLBUS_GET_POWERSTATE:
+            *((ControlBusPowerState *)data) = powerState;
+            return true;
+            
+        case CONTROLBUS_ASSERT_RESET:
+            resetCount++;
+            if (resetCount == 1)
+                OEComponent::notify(this, CONTROLBUS_RESET_DID_ASSERT, NULL);
+            return true;
+            
+        case CONTROLBUS_CLEAR_RESET:
+            resetCount--;
+            if (resetCount == 0)
+                OEComponent::notify(this, CONTROLBUS_RESET_DID_CLEAR, NULL);
+            return true;
+            
+        case CONTROLBUS_ASSERT_IRQ:
+            irqCount++;
+            if (irqCount == 1)
+                OEComponent::notify(this, CONTROLBUS_IRQ_DID_ASSERT, NULL);
+            return true;
+            
+        case CONTROLBUS_CLEAR_IRQ:
+            irqCount--;
+            if (irqCount == 0)
+                OEComponent::notify(this, CONTROLBUS_IRQ_DID_CLEAR, NULL);
+            return true;
+            
+        case CONTROLBUS_ASSERT_NMI:
+            nmiCount++;
+            if (nmiCount == 1)
+                OEComponent::notify(this, CONTROLBUS_NMI_DID_ASSERT, NULL);
+            return true;
+            
+        case CONTROLBUS_CLEAR_NMI:
+            nmiCount--;
+            if (nmiCount == 0)
+                OEComponent::notify(this, CONTROLBUS_NMI_DID_CLEAR, NULL);
+            return true;
+            
         case CONTROLBUS_IS_RESET_ASSERTED:
             *((bool *)data) = (resetCount != 0);
             return true;
@@ -217,28 +215,28 @@ bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
             *((bool *)data) = (nmiCount != 0);
             return true;
             
-		case CONTROLBUS_GET_CYCLECOUNT:
+        case CONTROLBUS_GET_CYCLECOUNT:
             *((OEUInt64 *)data) = getCycleCount();
-			return true;
-			
-		case CONTROLBUS_GET_AUDIOBUFFERINDEX:
-            *((float *)data) = (getCycleCount() - cycleStart) * sampleToCycleRatio;
-			return true;
+            return true;
             
-		case CONTROLBUS_SCHEDULE_TIMER:
+        case CONTROLBUS_GET_AUDIOBUFFERINDEX:
+            *((float *)data) = (getCycleCount() - cycleStart) * sampleToCycleRatio;
+            return true;
+            
+        case CONTROLBUS_SCHEDULE_TIMER:
             scheduleTimer(sender, *((OEUInt64 *)data));
-			return true;
-			
-		case CONTROLBUS_CLEAR_TIMERS:
+            return true;
+            
+        case CONTROLBUS_CLEAR_TIMERS:
             clearTimers(sender);
-			return true;
-			
+            return true;
+            
         case CONTROLBUS_SET_CPUCLOCKMULTIPLIER:
             setCPUClockMultiplier(*((float *)data));
             break;
-	}
-	
-	return false;
+    }
+    
+    return false;
 }
 
 void ControlBus::notify(OEComponent *sender, int notification, void *data)

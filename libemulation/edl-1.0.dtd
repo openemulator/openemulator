@@ -11,8 +11,8 @@
    PUBLIC "-//W3C//DTD EDL 1.0//EN"
    SYSTEM "http://www.openemulator.org/DTD/edl-1.dtd"
 
-   $Revision: 0.2 $
-   $Date: 2011/06/10 12:00:00 $
+   $Revision: 0.8 $
+   $Date: 2011/09/10 17:00:00-0300 $
 -->
 
 <!ELEMENT edl (device*|port*|connector*|component*)>

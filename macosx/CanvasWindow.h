@@ -5,7 +5,7 @@
  * (C) 2009-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Handles canvas window messages.
+ * Handles canvas window messages
  */
 
 #import <Cocoa/Cocoa.h>
@@ -14,10 +14,10 @@
 
 @interface CanvasWindow : NSWindow
 {
-	IBOutlet CanvasView *fCanvasView;
-	
-	BOOL fullscreen;
-	NSRect windowRect;
+    IBOutlet CanvasView *fCanvasView;
+    
+    BOOL fullscreen;
+    NSRect windowRect;
 }
 
 - (BOOL)isFullscreen;

@@ -8,13 +8,16 @@
  * Defines the CPU interface
  */
 
-#ifndef _CPUINTERFACE_H
-#define _CPUINTERFACE_H
-
-// Messages:
-// * runCycles executes a number of CPU cycles, returning the number of remaining cycles (OEInt64).
+// Notes:
+// * runCycles executes a number of CPU cycles, returning the number of
+//   remaining cycles (OEInt64).
 // * setCycles sets the number of cycles to be executed (OEInt64).
 // * getCycles returns the number of remaining cycles (OEInt64).
+// * instructionWillExecute before the current instruction will be executed.
+//   this can be used for cycle by cycle instruction stepping.
+
+#ifndef _CPUINTERFACE_H
+#define _CPUINTERFACE_H
 
 typedef enum
 {

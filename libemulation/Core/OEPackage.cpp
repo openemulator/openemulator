@@ -21,223 +21,223 @@
 
 OEPackage::OEPackage()
 {
-	is_open = false;
-	
-	zip = NULL;
+    is_open = false;
+    
+    zip = NULL;
 }
 
 OEPackage::~OEPackage()
 {
-	close();
+    close();
 }
 
 bool OEPackage::open(const string& path)
 {
-	close();
-	this->path = path;
-	
-	bool isPackage;
-	if (pathExists(path))
-		isPackage = isDirectory(path);
-	else
-		isPackage = (path.substr(path.size() - 1, 1) == OE_PATH_SEPARATOR);
-	
-	if (isPackage)
-	{
-		createDirectory(path);
-		is_open = pathExists(path);
-	}
-	else
-	{
-		zip = zip_open(path.c_str(), ZIP_CREATE, NULL);
-		is_open = (zip != NULL);
-	}
-	
-	return is_open;
+    close();
+    this->path = path;
+    
+    bool isPackage;
+    if (pathExists(path))
+        isPackage = isDirectory(path);
+    else
+        isPackage = (path.substr(path.size() - 1, 1) == OE_PATH_SEPARATOR);
+    
+    if (isPackage)
+    {
+        createDirectory(path);
+        is_open = pathExists(path);
+    }
+    else
+    {
+        zip = zip_open(path.c_str(), ZIP_CREATE, NULL);
+        is_open = (zip != NULL);
+    }
+    
+    return is_open;
 }
 
 bool OEPackage::isOpen()
 {
-	return is_open;
+    return is_open;
 }
 
 void OEPackage::close()
 {
-	is_open = false;
-	
-	if (zip)
-		zip_close(zip);
-	zip = NULL;
+    is_open = false;
+    
+    if (zip)
+        zip_close(zip);
+    zip = NULL;
 }
 
 bool OEPackage::readFile(const string& packagePath, OEData *data)
 {
-	bool error = true;
-	
-	if (!is_open)
-		return false;
-	
-	if (zip)
-	{
-		struct zip_stat zipStat;
-		struct zip_file *zipFile;
-		
-		if (zip_stat(zip, (const char *) packagePath.c_str(), 0, &zipStat) == 0)
-		{
-			if ((zipFile = zip_fopen(zip, packagePath.c_str(), 0)) != NULL)
-			{
-				data->resize((int) zipStat.size);
-				error = (zip_fread(zipFile,
-								   &data->front(),
+    bool error = true;
+    
+    if (!is_open)
+        return false;
+    
+    if (zip)
+    {
+        struct zip_stat zipStat;
+        struct zip_file *zipFile;
+        
+        if (zip_stat(zip, (const char *) packagePath.c_str(), 0, &zipStat) == 0)
+        {
+            if ((zipFile = zip_fopen(zip, packagePath.c_str(), 0)) != NULL)
+            {
+                data->resize((int) zipStat.size);
+                error = (zip_fread(zipFile,
+                                   &data->front(),
                                    data->size()) != zipStat.size);
-				zip_fclose(zipFile);
-			}
-		}
-	}
-	else
-	{
-		ifstream file((path + OE_PATH_SEPARATOR + packagePath).c_str());
-		
-		if (file.is_open())
-		{
-			file.seekg(0, ios::end);
-			streampos size = file.tellg();
-			file.seekg(0, ios::beg);
-			
-			data->resize((int) size);
-			file.read(&data->front(), data->size());
-			
-			error = !file.good();
-			
-			file.close();
-		}
-	}
-	
-	return !error;
+                zip_fclose(zipFile);
+            }
+        }
+    }
+    else
+    {
+        ifstream file((path + OE_PATH_SEPARATOR + packagePath).c_str());
+        
+        if (file.is_open())
+        {
+            file.seekg(0, ios::end);
+            streampos size = file.tellg();
+            file.seekg(0, ios::beg);
+            
+            data->resize((int) size);
+            file.read(&data->front(), data->size());
+            
+            error = !file.good();
+            
+            file.close();
+        }
+    }
+    
+    return !error;
 }
 
 bool OEPackage::writeFile(const string& packagePath, OEData *data)
 {
-	bool error = true;
-	
-	if (!is_open)
-		return false;
-	
-	if (zip)
-	{
-		struct zip_source *zipSource = NULL;
-		
-		if ((zipSource = zip_source_buffer(zip,
-										   &data->front(), data->size(),
-										   0)) != NULL)
-		{
-			int index;
-			if ((index = zip_name_locate(zip, packagePath.c_str(), 0)) == -1)
-				error = (zip_add(zip, packagePath.c_str(), zipSource) == -1);
-			else
-				error = (zip_replace(zip, index, zipSource) == -1);
-			
-			zip_source_free(zipSource);
-		}
-	}
-	else
-	{
-		ofstream file((path + OE_PATH_SEPARATOR + packagePath).c_str());
-		
-		if (file.is_open())
-		{
-			file.write(&data->front(), data->size());
-			error = !file.good();
-			file.close();
-		}
-	}
-	
-	return !error;
+    bool error = true;
+    
+    if (!is_open)
+        return false;
+    
+    if (zip)
+    {
+        struct zip_source *zipSource = NULL;
+        
+        if ((zipSource = zip_source_buffer(zip,
+                                           &data->front(), data->size(),
+                                           0)) != NULL)
+        {
+            int index;
+            if ((index = zip_name_locate(zip, packagePath.c_str(), 0)) == -1)
+                error = (zip_add(zip, packagePath.c_str(), zipSource) == -1);
+            else
+                error = (zip_replace(zip, index, zipSource) == -1);
+            
+            zip_source_free(zipSource);
+        }
+    }
+    else
+    {
+        ofstream file((path + OE_PATH_SEPARATOR + packagePath).c_str());
+        
+        if (file.is_open())
+        {
+            file.write(&data->front(), data->size());
+            error = !file.good();
+            file.close();
+        }
+    }
+    
+    return !error;
 }
 
 bool OEPackage::remove()
 {
-	close();
-	
-	return removeItemAtPath(path);
+    close();
+    
+    return removeItemAtPath(path);
 }
 
 bool OEPackage::pathExists(const string& path)
 {
 #ifdef _WIN32
-	return (GetFileAttributes(path.c_str()) != INVALID_FILE_ATTRIBUTES);
+    return (GetFileAttributes(path.c_str()) != INVALID_FILE_ATTRIBUTES);
 #else
-	struct stat statbuf;
-	return (stat(path.c_str(), &statbuf) == 0);
+    struct stat statbuf;
+    return (stat(path.c_str(), &statbuf) == 0);
 #endif
 }
 
 bool OEPackage::isDirectory(const string& path)
 {
 #ifdef _WIN32
-	return (GetFileAttributes(path.c_str()) & FILE_ATTRIBUTE_DIRECTORY);
+    return (GetFileAttributes(path.c_str()) & FILE_ATTRIBUTE_DIRECTORY);
 #else
-	struct stat statbuf;
-	if (stat(path.c_str(), &statbuf) != 0)
-		return false;
-	
-	return (statbuf.st_mode & S_IFDIR);
+    struct stat statbuf;
+    if (stat(path.c_str(), &statbuf) != 0)
+        return false;
+    
+    return (statbuf.st_mode & S_IFDIR);
 #endif
 }
 
 bool OEPackage::createDirectory(const string& path)
 {
 #ifdef _WIN32
-	return CreateDirectory(path.c_str())
+    return CreateDirectory(path.c_str())
 #else
-	return (mkdir(path.c_str(), 0777) == 0);
+    return (mkdir(path.c_str(), 0777) == 0);
 #endif
 }
 
 bool OEPackage::removeItemAtPath(const string& path)
 {
 #ifdef _WIN32
-	if (!isDirectory(path))
-		return DeleteFile(path.c_str());
-	
-	string dirPath = path + OE_PATH_SEPARATOR + "*";
-	WIN32_FIND_DATA findFileData;
-	HANDLE hFind = FindFirstFile(dirPath.c_str(), &findFileData);
-	if (hFind == INVALID_HANDLE_VALUE)
-		return false;
-	
-	while (FindNextFile(hFind, &findFileData))
-	{
-		string fileName = findFileData.cFileName;
-		if ((fileName == ".") || (fileName == ".."))
-			continue;
-		
-		removeItemAtPath(path + OE_PATH_SEPARATOR + fileName);
-	}
-	
-	FindClose(hFind);
-	
-	return RemoveDirectory(path);
+    if (!isDirectory(path))
+        return DeleteFile(path.c_str());
+    
+    string dirPath = path + OE_PATH_SEPARATOR + "*";
+    WIN32_FIND_DATA findFileData;
+    HANDLE hFind = FindFirstFile(dirPath.c_str(), &findFileData);
+    if (hFind == INVALID_HANDLE_VALUE)
+        return false;
+    
+    while (FindNextFile(hFind, &findFileData))
+    {
+        string fileName = findFileData.cFileName;
+        if ((fileName == ".") || (fileName == ".."))
+            continue;
+        
+        removeItemAtPath(path + OE_PATH_SEPARATOR + fileName);
+    }
+    
+    FindClose(hFind);
+    
+    return RemoveDirectory(path);
 #else
-	if (!isDirectory(path))
-		return (unlink(path.c_str()) == 0);
-	
-	DIR *dir;
-	if (!(dir = opendir(path.c_str())))
-		return false;
-	
-	struct dirent *dp;
-	while ((dp = readdir(dir)) != NULL)
-	{
-		string fileName = string(dp->d_name);
-		if ((fileName == ".") || (fileName == ".."))
-			continue;
-		
-		removeItemAtPath(path + OE_PATH_SEPARATOR + fileName);
-	}
-	
-	closedir(dir);
-	
-	return rmdir(path.c_str());
+    if (!isDirectory(path))
+        return (unlink(path.c_str()) == 0);
+    
+    DIR *dir;
+    if (!(dir = opendir(path.c_str())))
+        return false;
+    
+    struct dirent *dp;
+    while ((dp = readdir(dir)) != NULL)
+    {
+        string fileName = string(dp->d_name);
+        if ((fileName == ".") || (fileName == ".."))
+            continue;
+        
+        removeItemAtPath(path + OE_PATH_SEPARATOR + fileName);
+    }
+    
+    closedir(dir);
+    
+    return rmdir(path.c_str());
 #endif
 }

@@ -5,7 +5,7 @@
  * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements an emulation item.
+ * Implements an emulation item
  */
 
 #import <Cocoa/Cocoa.h>
@@ -14,48 +14,48 @@
 
 typedef enum
 {
-	EMULATIONITEM_ROOT,
-	EMULATIONITEM_GROUP,
-	EMULATIONITEM_DEVICE,
-	EMULATIONITEM_MOUNT,
-	EMULATIONITEM_AVAILABLEPORT,
+    EMULATIONITEM_ROOT,
+    EMULATIONITEM_GROUP,
+    EMULATIONITEM_DEVICE,
+    EMULATIONITEM_MOUNT,
+    EMULATIONITEM_AVAILABLEPORT,
 } EmulationItemType;
 
 typedef enum
 {
-	EMULATIONDEVICEEVENT_POWERDOWN,
-	EMULATIONDEVICEEVENT_SLEEP,
-	EMULATIONDEVICEEVENT_WAKEUP,
-	EMULATIONDEVICEEVENT_COLDRESTART,
-	EMULATIONDEVICEEVENT_WARMRESTART,
-	EMULATIONDEVICEEVENT_DEBUGGERBREAK,
+    EMULATIONDEVICEEVENT_POWERDOWN,
+    EMULATIONDEVICEEVENT_SLEEP,
+    EMULATIONDEVICEEVENT_WAKEUP,
+    EMULATIONDEVICEEVENT_COLDRESTART,
+    EMULATIONDEVICEEVENT_WARMRESTART,
+    EMULATIONDEVICEEVENT_DEBUGGERBREAK,
 } EmulationDeviceEvent;
 
 @interface EmulationItem : NSObject
 {
-	EmulationItemType type;
-	NSString *uid;
-	NSMutableArray *children;
-	Document *document;
-	
-	NSString *label;
-	NSImage *image;
-	
-	NSString *locationLabel;
-	NSString *stateLabel;
-	
-	void *device;
-	
-	NSMutableArray *settingsRef;
-	NSMutableArray *settingsName;
-	NSMutableArray *settingsLabel;
-	NSMutableArray *settingsType;
-	NSMutableArray *settingsOptions;
-	
-	NSMutableArray *canvases;
-	NSMutableArray *storages;
-	
-	NSString *portType;
+    EmulationItemType type;
+    NSString *uid;
+    NSMutableArray *children;
+    Document *document;
+    
+    NSString *label;
+    NSImage *image;
+    
+    NSString *locationLabel;
+    NSString *stateLabel;
+    
+    void *device;
+    
+    NSMutableArray *settingsRef;
+    NSMutableArray *settingsName;
+    NSMutableArray *settingsLabel;
+    NSMutableArray *settingsType;
+    NSMutableArray *settingsOptions;
+    
+    NSMutableArray *canvases;
+    NSMutableArray *storages;
+    
+    NSString *portType;
     NSString *portId;
 }
 
@@ -65,7 +65,7 @@ typedef enum
        component:(void *)theComponent
         portType:(NSString *)thePortType
           portId:(NSString *)thePortId
-		document:(Document *)theDocument;
+        document:(Document *)theDocument;
 - (id)initMount:(NSString *)theUID
       component:(void *)theComponent
   locationLabel:(NSString *)theLocationLabel

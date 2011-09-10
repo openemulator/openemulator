@@ -5,7 +5,7 @@
  * (C) 2009-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Handles an emulation.
+ * Controls an emulation
  */
 
 #import <Cocoa/Cocoa.h>
@@ -16,10 +16,10 @@
 
 @interface Document : NSDocument
 {
-	void *emulation;
-	
-	EmulationWindowController *emulationWindowController;
-	NSMutableArray *canvasWindowControllers;
+    void *emulation;
+    
+    EmulationWindowController *emulationWindowController;
+    NSMutableArray *canvasWindowControllers;
 }
 
 - (id)initWithTemplateURL:(NSURL *)templateURL error:(NSError **)outError;

@@ -5,7 +5,7 @@
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls a background view.
+ * Controls a background view
  */
 
 #import "BackgroundView.h"
@@ -14,7 +14,7 @@
 
 - (void)drawRect:(NSRect)rect
 {
-	NSEraseRect(rect);
+    NSEraseRect(rect);
 }
 
 @end

@@ -57,46 +57,46 @@
 OEComponent *OEComponentFactory::construct(const string& className)
 {
     // FACTORY_CODE_START - Do not modify this section
-	matchComponent(AddressDecoder);
-	matchComponent(AddressOffset);
-	matchComponent(AudioCodec);
-	matchComponent(ControlBus);
-	matchComponent(FloatingBus);
-	matchComponent(Monitor);
-	matchComponent(RAM);
-	matchComponent(ROM);
-	matchComponent(Terminal);
-	
-	matchComponent(AppleDiskII);
-	matchComponent(AppleDiskIIInterfaceCard);
-	matchComponent(AppleGraphicsTablet);
-	matchComponent(Apple1IO);
-	matchComponent(Apple1Terminal);
-	matchComponent(Apple1CassetteInterfaceCard);
-	matchComponent(AppleIIControlBus);
-	matchComponent(AppleIIMMU);
-	matchComponent(AppleIIFloatingBus);
-	matchComponent(AppleIIKeyboard);
-	matchComponent(AppleIIVideo);
-	matchComponent(AppleIIAudioOut);
-	matchComponent(AppleIIAudioIn);
-	matchComponent(AppleIIGamePort);
-	matchComponent(AppleIISlotMemory);
-	matchComponent(AppleIISlotExpansionMemory);
-	matchComponent(AppleIISuperSerialCard);
-	matchComponent(AppleLanguageCard);
-	matchComponent(AppleSilentype);
-	
-	matchComponent(MC6821);
-	matchComponent(MC6845);
-	
-	matchComponent(MOS6502);
-	matchComponent(MOS6530);
-	matchComponent(MOSKIM1IO);
-	matchComponent(MOSKIM1PLL);
+    matchComponent(AddressDecoder);
+    matchComponent(AddressOffset);
+    matchComponent(AudioCodec);
+    matchComponent(ControlBus);
+    matchComponent(FloatingBus);
+    matchComponent(Monitor);
+    matchComponent(RAM);
+    matchComponent(ROM);
+    matchComponent(Terminal);
+    
+    matchComponent(AppleDiskII);
+    matchComponent(AppleDiskIIInterfaceCard);
+    matchComponent(AppleGraphicsTablet);
+    matchComponent(Apple1IO);
+    matchComponent(Apple1Terminal);
+    matchComponent(Apple1CassetteInterfaceCard);
+    matchComponent(AppleIIControlBus);
+    matchComponent(AppleIIMMU);
+    matchComponent(AppleIIFloatingBus);
+    matchComponent(AppleIIKeyboard);
+    matchComponent(AppleIIVideo);
+    matchComponent(AppleIIAudioOut);
+    matchComponent(AppleIIAudioIn);
+    matchComponent(AppleIIGamePort);
+    matchComponent(AppleIISlotMemory);
+    matchComponent(AppleIISlotExpansionMemory);
+    matchComponent(AppleIISuperSerialCard);
+    matchComponent(AppleLanguageCard);
+    matchComponent(AppleSilentype);
+    
+    matchComponent(MC6821);
+    matchComponent(MC6845);
+    
+    matchComponent(MOS6502);
+    matchComponent(MOS6530);
+    matchComponent(MOSKIM1IO);
+    matchComponent(MOSKIM1PLL);
     
     matchComponent(VidexVideoterm);
     // FACTORY_CODE_END - Do not modify this section
-	
-	return NULL;
+    
+    return NULL;
 }

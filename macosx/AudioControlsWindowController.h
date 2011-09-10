@@ -5,7 +5,7 @@
  * (C) 2009-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls the audio controls window.
+ * Controls the audio controls window
  */
 
 #import <Cocoa/Cocoa.h>
@@ -15,23 +15,23 @@
 @interface AudioControlsWindowController : NSWindowController
 <NSWindowDelegate>
 {
-	IBOutlet DocumentController *fDocumentController;
-	
-	IBOutlet id fPlayNameLabel;
-	IBOutlet id fTogglePlayButton;
-	IBOutlet id fPlayTimeLabel;
-	IBOutlet id fPlayPosition;
-	IBOutlet id fPlayDurationLabel;
-	
-	IBOutlet id fSaveRecordingAsButton;
-	IBOutlet id fToggleRecordingButton;
-	IBOutlet id fRecordingTimeLabel;
-	IBOutlet id fRecordingSizeLabel;
-	
-	NSTimer *timer;
-	
-	NSString *playPath;
-	NSString *recordingPath;
+    IBOutlet DocumentController *fDocumentController;
+    
+    IBOutlet id fPlayNameLabel;
+    IBOutlet id fTogglePlayButton;
+    IBOutlet id fPlayTimeLabel;
+    IBOutlet id fPlayPosition;
+    IBOutlet id fPlayDurationLabel;
+    
+    IBOutlet id fSaveRecordingAsButton;
+    IBOutlet id fToggleRecordingButton;
+    IBOutlet id fRecordingTimeLabel;
+    IBOutlet id fRecordingSizeLabel;
+    
+    NSTimer *timer;
+    
+    NSString *playPath;
+    NSString *recordingPath;
 }
 
 - (void) updatePlay;

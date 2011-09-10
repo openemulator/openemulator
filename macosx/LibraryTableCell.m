@@ -5,7 +5,7 @@
  * (C) 2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements a library table cell.
+ * Implements a library table cell
  */
 
 #import "LibraryTableCell.h"
@@ -31,47 +31,47 @@
 
 - (NSRect)imageRectForBounds:(NSRect)bounds
 {
-	LibraryItem *item = [self representedObject];
-	if (![item image])
-		return NSZeroRect;
-	
-	NSRect rect = bounds;
-	NSRect paddingRect;
-	NSDivideRect(rect, &paddingRect, &rect, IMAGE_PADDING, NSMinXEdge);
-	NSDivideRect(rect, &rect, &paddingRect, IMAGE_SIZE, NSMinXEdge);
-	return NSInsetRect(rect, 0, (NSHeight(bounds) - IMAGE_SIZE) / 2.0);
+    LibraryItem *item = [self representedObject];
+    if (![item image])
+        return NSZeroRect;
+    
+    NSRect rect = bounds;
+    NSRect paddingRect;
+    NSDivideRect(rect, &paddingRect, &rect, IMAGE_PADDING, NSMinXEdge);
+    NSDivideRect(rect, &rect, &paddingRect, IMAGE_SIZE, NSMinXEdge);
+    return NSInsetRect(rect, 0, (NSHeight(bounds) - IMAGE_SIZE) / 2.0);
 }
 
 - (NSRect)textRectForBounds:(NSRect)bounds
 {
-	NSRect rect = bounds;
-	NSRect paddingRect;
-	
-	NSDivideRect(rect, &paddingRect, &rect,
+    NSRect rect = bounds;
+    NSRect paddingRect;
+    
+    NSDivideRect(rect, &paddingRect, &rect,
                  IMAGE_PADDING + IMAGE_SIZE + IMAGE_PADDING, NSMinXEdge);
-	NSDivideRect(rect, &paddingRect, &rect,
+    NSDivideRect(rect, &paddingRect, &rect,
                  IMAGE_PADDING, NSMaxXEdge);
     
-	return NSInsetRect(rect, 0, (NSHeight(bounds) - [self cellSize].height) / 2.0);
+    return NSInsetRect(rect, 0, (NSHeight(bounds) - [self cellSize].height) / 2.0);
 }
 
 - (void)drawImage:(NSImage *)theImage inRect:(NSRect)rect isFlipped:(BOOL)flipped
 {
-	BOOL wasFlipped = [theImage isFlipped];
+    BOOL wasFlipped = [theImage isFlipped];
     
     [theImage setFlipped:flipped];
-	[theImage drawInRect:rect
-				fromRect:NSZeroRect
-			   operation:NSCompositeSourceOver
-				fraction:1.0];
-	
-	[theImage setFlipped:wasFlipped];
+    [theImage drawInRect:rect
+                fromRect:NSZeroRect
+               operation:NSCompositeSourceOver
+                fraction:1.0];
+    
+    [theImage setFlipped:wasFlipped];
 }
 
 - (void)drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView
 {
-	LibraryItem *item = [self representedObject];
-	
+    LibraryItem *item = [self representedObject];
+    
     cellFrame = NSInsetRect(cellFrame, 1.5, 0.5);
     
     NSBezierPath* thePath = [NSBezierPath bezierPath];
@@ -107,7 +107,7 @@
     [string addAttribute:NSForegroundColorAttributeName
                    value:[NSColor blackColor]
                    range:NSMakeRange(0, [[self attributedStringValue] length])];
-	[string drawInRect:[self textRectForBounds:cellFrame]];
+    [string drawInRect:[self textRectForBounds:cellFrame]];
     [string release];
 }
 

@@ -13,15 +13,15 @@
 class FloatingBus : public OEComponent
 {
 public:
-	FloatingBus();
-	
-	bool setValue(string name, string value);
-	
-	OEUInt8 read(OEAddress address);
+    FloatingBus();
+    
+    bool setValue(string name, string value);
+    
+    OEUInt8 read(OEAddress address);
     
 private:
-	bool randomMode;
-	OEUInt8 busValue;
+    bool randomMode;
+    OEUInt8 busValue;
     
-	void setMode(string mode);
+    void setMode(string mode);
 };

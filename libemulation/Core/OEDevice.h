@@ -20,22 +20,22 @@ class OEEmulation;
 class OEDevice : public OEComponent
 {
 public:
-	OEDevice(OEEmulation *emulation);
-	
-	bool postMessage(OEComponent *sender, int message, void *data);
-	
+    OEDevice(OEEmulation *emulation);
+    
+    bool postMessage(OEComponent *sender, int message, void *data);
+    
 private:
-	OEEmulation *emulation;
-	
-	string label;
-	string imagePath;
-	string locationLabel;
-	string stateLabel;
-	
-	DeviceSettings settings;
-	
-	OEComponents canvases;
-	OEComponents storages;
+    OEEmulation *emulation;
+    
+    string label;
+    string imagePath;
+    string locationLabel;
+    string stateLabel;
+    
+    DeviceSettings settings;
+    
+    OEComponents canvases;
+    OEComponents storages;
 };
 
 #endif

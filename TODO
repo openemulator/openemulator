@@ -1,6 +1,6 @@
 ==To-Do==
+* Correct RAM initialization when no image is present
 * Fix Revert to Saved
-* Implement Apple-1 I/O
 * Implement Apple-1 Cassette Interface
 * Implement CFFA1
 * Fix UNICODE entry of composed keys on Mac OS X (like ^ or « or `)

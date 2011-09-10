@@ -5,7 +5,7 @@
  * (C) 2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls the library window.
+ * Controls the library window
  */
 
 #import "LibraryWindowController.h"
@@ -19,19 +19,19 @@
 - (id)init
 {
     self = [super initWithWindowNibName:@"Library"];
-	
-	return self;
+    
+    return self;
 }
 
 - (void)dealloc
 {
-	[filterPaths release];
-	[items release];
-	[filteredItems release];
-	
+    [filterPaths release];
+    [items release];
+    [filteredItems release];
+    
     [cell release];
     
-	[super dealloc];
+    [super dealloc];
 }
 
 - (void)windowDidLoad
@@ -42,28 +42,28 @@
     
     cell = [[LibraryTableCell alloc] init];
     
-	[self setWindowFrameAutosaveName:@"Library"];
-	
+    [self setWindowFrameAutosaveName:@"Library"];
+    
     [filterPaths addObject:@""];
     [fPathFilter addItemWithTitle:NSLocalizedString(@"Library", @"Library Root")];
     
-	NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
-	NSString *libraryPath = [resourcePath
-							 stringByAppendingPathComponent:@"library"];
-	
-	NSDirectoryEnumerator *dirEnum = [[NSFileManager defaultManager]
-									  enumeratorAtPath:libraryPath];
-	NSString *path;
-	while ((path = [dirEnum nextObject]))
-	{
-		if ([[path pathExtension] isEqualToString:@"xml"])
-		{
-			LibraryItem *item = [[LibraryItem alloc] initWithPath:path];
-			
-			[items addObject:item];
-			
-			[item release];
-		}
+    NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
+    NSString *libraryPath = [resourcePath
+                             stringByAppendingPathComponent:@"library"];
+    
+    NSDirectoryEnumerator *dirEnum = [[NSFileManager defaultManager]
+                                      enumeratorAtPath:libraryPath];
+    NSString *path;
+    while ((path = [dirEnum nextObject]))
+    {
+        if ([[path pathExtension] isEqualToString:@"xml"])
+        {
+            LibraryItem *item = [[LibraryItem alloc] initWithPath:path];
+            
+            [items addObject:item];
+            
+            [item release];
+        }
         else if ([[path pathExtension] isEqualToString:@""])
         {
             NSString *title = NSLocalizedString([path lastPathComponent],
@@ -79,10 +79,10 @@
             [filterPaths addObject:path];
             [fPathFilter addItemWithTitle:title];
         }
-	}
-	
-	[fTableView setDataSource:self];
-	[fTableView setDelegate:self];
+    }
+    
+    [fTableView setDataSource:self];
+    [fTableView setDelegate:self];
     
     [self filterItems:self];
 }
@@ -130,17 +130,17 @@
 - (void)splitView:(NSSplitView *)sender
 resizeSubviewsWithOldSize:(NSSize)oldSize
 {
-	NSArray *subviews = [sender subviews];
-	
-	NSSize newSize = [sender frame].size;
-	float deltaWidth = newSize.width - oldSize.width;
-	float deltaHeight = newSize.height - oldSize.height;
-	
-	for (int i = 0; i < [subviews count]; i++)
-	{
-		NSView *subview = [subviews objectAtIndex:i];
-		NSRect frame = subview.frame;
-		
+    NSArray *subviews = [sender subviews];
+    
+    NSSize newSize = [sender frame].size;
+    float deltaWidth = newSize.width - oldSize.width;
+    float deltaHeight = newSize.height - oldSize.height;
+    
+    for (int i = 0; i < [subviews count]; i++)
+    {
+        NSView *subview = [subviews objectAtIndex:i];
+        NSRect frame = subview.frame;
+        
         frame.size.width += deltaWidth;
         if (i == 0)
         {
@@ -159,30 +159,30 @@ resizeSubviewsWithOldSize:(NSSize)oldSize
                 frame.size.height = maxHeight;
             }
         }
-		
-		[subview setFrame:frame];
-	}
+        
+        [subview setFrame:frame];
+    }
 }
 
 - (CGFloat)splitView:(NSSplitView *)splitView
 constrainMinCoordinate:(CGFloat)proposedMin
-		 ofSubviewAt:(NSInteger)dividerIndex
+         ofSubviewAt:(NSInteger)dividerIndex
 {
-	return SPLIT_MIN;
+    return SPLIT_MIN;
 }
 
 
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView
 {
-	return [filteredItems count];
+    return [filteredItems count];
 }
 
 - (id)tableView:(NSTableView *)aTableView
 objectValueForTableColumn:(NSTableColumn *)aTableColumn
-			row:(NSInteger)rowIndex
+            row:(NSInteger)rowIndex
 {
-	return [[filteredItems objectAtIndex:rowIndex] label];
+    return [[filteredItems objectAtIndex:rowIndex] label];
 }
 
 - (BOOL)tableView:(NSTableView *)aTableView
@@ -208,7 +208,7 @@ writeRowsWithIndexes:(NSIndexSet *)rowIndexes
 
 - (NSCell *)tableView:(NSTableView *)tableView
 dataCellForTableColumn:(NSTableColumn *)tableColumn
-				  row:(NSInteger)row
+                  row:(NSInteger)row
 {
     [cell setRepresentedObject:[filteredItems objectAtIndex:row]];
     
@@ -219,11 +219,11 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
 {
     LibraryItem *item = nil;
     
-	NSInteger index = [fTableView selectedRow];
-	if (index != -1)
+    NSInteger index = [fTableView selectedRow];
+    if (index != -1)
         item = [filteredItems objectAtIndex:index];
-	
-	[fSelImage setImage:[item image]];
+    
+    [fSelImage setImage:[item image]];
     [fSelLabel setStringValue:NSLocalizedString([item label],
                                                 @"Device Label")];
     [fSelType setStringValue:NSLocalizedString([item type],

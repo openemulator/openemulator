@@ -2,10 +2,10 @@
 /**
  * libemulation
  * MC6821
- * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls a generic MC6821 Peripheral Interface Adapter
+ * Controls a generic MC6821 PIA (Peripheral Interface Adapter)
  */
 
 #include "MC6821.h"
@@ -61,9 +61,9 @@ bool MC6821::getValue(string name, string& value)
 	else if (name == "dataA")
 		value = getHexString(dataA);
 	else if (name == "ca1")
-		value = getHexString(ca1);
+		value = getString(ca1);
 	else if (name == "ca2")
-		value = getHexString(ca2);
+		value = getString(ca2);
 	else if (name == "controlB")
 		value = getHexString(controlB);
 	else if (name == "directionB")
@@ -71,9 +71,9 @@ bool MC6821::getValue(string name, string& value)
 	else if (name == "dataB")
 		value = getHexString(dataB);
 	else if (name == "cb1")
-		value = getHexString(cb1);
+		value = getString(cb1);
 	else if (name == "cb2")
-		value = getHexString(cb2);
+		value = getString(cb2);
 	else
 		return false;
 	
@@ -139,7 +139,7 @@ bool MC6821::postMessage(OEComponent *sender, int message, void *data)
 					setControlA(controlA | MC6821_CR_IRQ2FLAG);
 			}
 			if ((controlA & MC6821_CR_C2OUTPUT) && (ca2 != value))
-				notify(this, MC6821_CA2_CHANGED, NULL);
+				OEComponent::notify(this, MC6821_CA2_DID_CHANGE, &value);
 			ca2 = value;
 			
 			return true;
@@ -184,7 +184,7 @@ bool MC6821::postMessage(OEComponent *sender, int message, void *data)
 					setControlB(controlB | MC6821_CR_IRQ2FLAG);
 			}
 			if (cb2 != value)
-				notify(this, MC6821_CB2_CHANGED, &value);
+				OEComponent::notify(this, MC6821_CB2_DID_CHANGE, &value);
 			cb2 = value;
 			
 			return true;
@@ -203,7 +203,8 @@ bool MC6821::postMessage(OEComponent *sender, int message, void *data)
 
 void MC6821::notify(OEComponent *component, int notification, void *data)
 {
-	// Reset did assert
+	// CONTROLBUS_RESET_DID_ASSERT
+    
 	setControlA(0);
 	directionA = 0;
 	dataA = 0;

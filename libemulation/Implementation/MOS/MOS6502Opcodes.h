@@ -5,7 +5,7 @@
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements MOS6502 opcodes.
+ * Implements MOS6502 opcodes
  */
 
 /*****************************************************************************
@@ -217,7 +217,7 @@
 #define MOS6502_OPe9 { int tmp; RD_IMM; SBC;					} /* 2 SBC IMM */
 
 #define MOS6502_OP19 { int tmp; RD_ABY_P; ORA;					} /* 4 ORA ABY page penalty */
-#define MOS6502_OP39 { int tmp; RD_ABY_P; AND;					}	/* 4 AND ABY page penalty */
+#define MOS6502_OP39 { int tmp; RD_ABY_P; AND;					} /* 4 AND ABY page penalty */
 #define MOS6502_OP59 { int tmp; RD_ABY_P; EOR;					} /* 4 EOR ABY page penalty */
 #define MOS6502_OP79 { int tmp; RD_ABY_P; ADC;					} /* 4 ADC ABY page penalty */
 #define MOS6502_OP99 { int tmp; STA; WR_ABY_NP;					} /* 5 STA ABY */
@@ -235,7 +235,7 @@
 #define MOS6502_OPea { RD_DUM; NOP;								} /* 2 NOP */
 
 #define MOS6502_OP1a { RD_DUM; NOP;								} /* 2 NOP */
-#define MOS6502_OP3a { RD_DUM; NOP;								}	/* 2 NOP */
+#define MOS6502_OP3a { RD_DUM; NOP;								} /* 2 NOP */
 #define MOS6502_OP5a { RD_DUM; NOP;								} /* 2 NOP */
 #define MOS6502_OP7a { RD_DUM; NOP;								} /* 2 NOP */
 #define MOS6502_OP9a { RD_DUM; TXS;								} /* 2 TXS */
@@ -245,7 +245,7 @@
 
 #define MOS6502_OP0b { int tmp; RD_IMM; ANC;					} /* 2 ANC IMM */
 #define MOS6502_OP2b { int tmp; RD_IMM; ANC;					} /* 2 ANC IMM */
-#define MOS6502_OP4b { int tmp; RD_IMM; ASR; WB_ACC;			}	/* 2 ASR IMM */
+#define MOS6502_OP4b { int tmp; RD_IMM; ASR; WB_ACC;			} /* 2 ASR IMM */
 #define MOS6502_OP6b { int tmp; RD_IMM; ARR; WB_ACC;			} /* 2 ARR IMM */
 #define MOS6502_OP8b { int tmp; RD_IMM; AXA;					} /* 2 AXA IMM */
 #define MOS6502_OPab { int tmp; RD_IMM; OAL;					} /* 2 OAL IMM */

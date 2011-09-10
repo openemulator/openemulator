@@ -11,6 +11,7 @@
 #include "Apple1Terminal.h"
 
 #include "DeviceInterface.h"
+#include "RS232Interface.h"
 #include "RAM.h"
 
 #define SCREEN_ORIGIN_X 104
@@ -33,7 +34,6 @@ Apple1Terminal::Apple1Terminal()
     monitorDevice = NULL;
     monitor = NULL;
     
-    speedLimit = true;
     cursorActive = false;
     cursorCount = 0;
     cursorX = 0;
@@ -46,9 +46,7 @@ Apple1Terminal::Apple1Terminal()
 
 bool Apple1Terminal::setValue(string name, string value)
 {
-    if (name == "terminalSpeed")
-        speedLimit = (value == "Standard");
-    else if (name == "cursorX")
+    if (name == "cursorX")
         cursorX = (OEUInt32) getUInt(value);
     else if (name == "cursorY")
         cursorY = (OEUInt32) getUInt(value);
@@ -60,9 +58,7 @@ bool Apple1Terminal::setValue(string name, string value)
 
 bool Apple1Terminal::getValue(string name, string& value)
 {
-    if (name == "terminalSpeed")
-        value = speedLimit ? "Standard" : "Enhanced";
-    else if (name == "cursorX")
+    if (name == "cursorX")
         value = getString(cursorX);
     else if (name == "cursorY")
         value = getString(cursorY);
@@ -92,15 +88,15 @@ bool Apple1Terminal::setRef(string name, OEComponent *ref)
             controlBus->addObserver(this, CONTROLBUS_TIMER_DID_FIRE);
         }
     }
-	else if (name == "monitorDevice")
+    else if (name == "monitorDevice")
     {
         if (monitorDevice)
             monitorDevice->removeObserver(this, DEVICE_EVENT_DID_OCCUR);
-		monitorDevice = ref;
+        monitorDevice = ref;
         if (monitorDevice)
             monitorDevice->addObserver(this, DEVICE_EVENT_DID_OCCUR);
     }
-	else if (name == "monitor")
+    else if (name == "monitor")
     {
         if (monitor)
         {
@@ -108,7 +104,7 @@ bool Apple1Terminal::setRef(string name, OEComponent *ref)
             monitor->removeObserver(this, CANVAS_DID_COPY);
             monitor->removeObserver(this, CANVAS_DID_PASTE);
         }
-		monitor = ref;
+        monitor = ref;
         if (monitor)
         {
             monitor->addObserver(this, CANVAS_UNICODECHAR_WAS_SENT);
@@ -119,20 +115,20 @@ bool Apple1Terminal::setRef(string name, OEComponent *ref)
             updateBezel();
         }
     }
-	else
-		return false;
-	
-	return true;
+    else
+        return false;
+    
+    return true;
 }
 
 bool Apple1Terminal::setData(string name, OEData *data)
 {
-	if (name == "font")
+    if (name == "font")
         loadFont(data);
-	else
-		return false;
-	
-	return true;
+    else
+        return false;
+    
+    return true;
 }
 
 bool Apple1Terminal::init()
@@ -174,6 +170,24 @@ bool Apple1Terminal::init()
     return true;
 }
 
+bool Apple1Terminal::postMessage(OEComponent *sender, int message, void *data)
+{
+    switch (message)
+    {
+        case RS232_SEND_DATA:
+            {
+                OEData *theData = (OEData *)data;
+                for (OEData::iterator i = theData->begin(); 
+                     i != theData->end();
+                     i++)
+                    sendUnicodeChar(*i);
+                return true;
+            }
+    }
+    
+    return false;
+}
+
 void Apple1Terminal::notify(OEComponent *sender, int notification, void *data)
 {
     if (sender == controlBus)
@@ -212,7 +226,15 @@ void Apple1Terminal::notify(OEComponent *sender, int notification, void *data)
         switch (notification)
         {
             case CANVAS_UNICODECHAR_WAS_SENT:
-                sendUnicodeChar(*((CanvasUnicodeChar *)data));
+                {
+                    OEUInt32 unicodeChar = *((CanvasUnicodeChar *)data);
+                    if (unicodeChar < 128)
+                    {
+                        OEData data;
+                        data.push_back(unicodeChar);
+                        OEComponent::notify(this, RS232_DID_RECEIVE_DATA, &data);
+                    }
+                }
                 break;
                 
             case CANVAS_DID_COPY:

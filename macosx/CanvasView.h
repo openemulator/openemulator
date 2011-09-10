@@ -5,7 +5,7 @@
  * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls a canvas view.
+ * Controls a canvas view
  */
 
 #import <Cocoa/Cocoa.h>
@@ -19,17 +19,17 @@
 @interface CanvasView : NSOpenGLView
 <NSTextInputClient>
 {
-	CVDisplayLinkRef displayLink;
-	CGLContextObj cglContextObj;
-	CGLPixelFormatObj cglPixelFormatObj;
-	
-	NSSize canvasSize;
-	BOOL needsReshape;
-	
-	int keyMap[DEVICE_KEYMAP_SIZE];
-	int keyModifierFlags;
-	int keyboardFlags;
-	BOOL capsLockNotSynchronized;
+    CVDisplayLinkRef displayLink;
+    CGLContextObj cglContextObj;
+    CGLPixelFormatObj cglPixelFormatObj;
+    
+    NSSize canvasSize;
+    BOOL needsReshape;
+    
+    int keyMap[DEVICE_KEYMAP_SIZE];
+    int keyModifierFlags;
+    int keyboardFlags;
+    BOOL capsLockNotSynchronized;
 }
 
 - (void)windowWillClose:(NSNotification *)notification;

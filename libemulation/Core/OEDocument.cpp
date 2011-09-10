@@ -12,65 +12,65 @@
 
 OEDocument::OEDocument()
 {
-	is_open = false;
-	
-	package = NULL;
-	doc = NULL;
+    is_open = false;
+    
+    package = NULL;
+    doc = NULL;
 }
 
 OEDocument::~OEDocument()
 {
-	close();
-	
-	if (doc)
-		xmlFreeDoc(doc);
+    close();
+    
+    if (doc)
+        xmlFreeDoc(doc);
 }
 
 bool OEDocument::open(string path)
 {
-	close();
-	
-	OEData data;
-	string pathExtension = getPathExtension(path);
-	if (pathExtension == OE_FILE_PATH_EXTENSION)
-	{
-		is_open = readFile(path, &data);
-		
-		if (!is_open)
-			logMessage("could not open '" + path + "'");
-	}
-	else if (pathExtension == OE_PACKAGE_PATH_EXTENSION)
-	{
-		package = new OEPackage();
-		if (package && package->open(path))
-		{
-			is_open = package->readFile(OE_PACKAGE_EDL_PATH, &data);
-			
-			if (!is_open)
-				logMessage("could not read '" OE_PACKAGE_EDL_PATH
+    close();
+    
+    OEData data;
+    string pathExtension = getPathExtension(path);
+    if (pathExtension == OE_FILE_PATH_EXTENSION)
+    {
+        is_open = readFile(path, &data);
+        
+        if (!is_open)
+            logMessage("could not open '" + path + "'");
+    }
+    else if (pathExtension == OE_PACKAGE_PATH_EXTENSION)
+    {
+        package = new OEPackage();
+        if (package && package->open(path))
+        {
+            is_open = package->readFile(OE_PACKAGE_EDL_PATH, &data);
+            
+            if (!is_open)
+                logMessage("could not read '" OE_PACKAGE_EDL_PATH
                            "' in '" + path + "'");
-		}
-		else
-			logMessage("could not open package '" + path + "'");
-	}
-	else
-		logMessage("could not identify type of '" + path + "'");
-	
-	if (is_open)
-	{
-		doc = xmlReadMemory(&data[0],
-							(int) data.size(),
-							OE_PACKAGE_EDL_PATH,
-							NULL,
-							0);
-		
-		if (!doc)
-		{
-			is_open = false;
-			logMessage("could not parse document '" + path + "'");
-		}
-	}
-	
+        }
+        else
+            logMessage("could not open package '" + path + "'");
+    }
+    else
+        logMessage("could not identify type of '" + path + "'");
+    
+    if (is_open)
+    {
+        doc = xmlReadMemory(&data[0],
+                            (int) data.size(),
+                            OE_PACKAGE_EDL_PATH,
+                            NULL,
+                            0);
+        
+        if (!doc)
+        {
+            is_open = false;
+            logMessage("could not parse document '" + path + "'");
+        }
+    }
+    
     /* To-Do: validate DTD
      if (is_open)
      {
@@ -88,118 +88,118 @@ bool OEDocument::open(string path)
      
      xmlFreeValidCtxt(validCtxt);
      }*/
-	
-	if (is_open && !validateDocument())
-	{
-		is_open = false;
-		logMessage("unknown EDL version");
-	}
+    
+    if (is_open && !validateDocument())
+    {
+        is_open = false;
+        logMessage("unknown EDL version");
+    }
     
     if (is_open)
         is_open = constructDocument(doc);
-	
-	if (!is_open)
-		close();
-	
-	return is_open;
+    
+    if (!is_open)
+        close();
+    
+    return is_open;
 }
 
 bool OEDocument::isOpen()
 {
-	return is_open;
+    return is_open;
 }
 
 bool OEDocument::save(string path)
 {
-	close();
-	
-	OEData data;
-	string pathExtension = getPathExtension(path);
-	if (pathExtension == OE_FILE_PATH_EXTENSION)
-	{
-		if (updateDocument(doc))
-		{
-			if (dumpDocument(data))
-			{
-				is_open = writeFile(path, &data);
-				
-				if (!is_open)
-					logMessage("could not open '" + path + "'");
-			}
-			else
-				logMessage("could not dump document '" + path + "'");
-		}
-		else
-			logMessage("could not update the configuration for '" + path + "'");
-	}
-	else if (pathExtension == OE_PACKAGE_PATH_EXTENSION)
-	{
-		package = new OEPackage();
-		if (package && package->open(path))
-		{
-			if (updateDocument(doc))
-			{
-				if (dumpDocument(data))
-				{
-					is_open = package->writeFile(OE_PACKAGE_EDL_PATH, &data);
-					if (!is_open)
-						logMessage("could not write '" OE_PACKAGE_EDL_PATH
-								   "' in '" + path + "'");
-				}
-				else
-					logMessage("could not dump document '" + path + "'");
-			}
+    close();
+    
+    OEData data;
+    string pathExtension = getPathExtension(path);
+    if (pathExtension == OE_FILE_PATH_EXTENSION)
+    {
+        if (updateDocument(doc))
+        {
+            if (dumpDocument(data))
+            {
+                is_open = writeFile(path, &data);
+                
+                if (!is_open)
+                    logMessage("could not open '" + path + "'");
+            }
+            else
+                logMessage("could not dump document '" + path + "'");
+        }
+        else
+            logMessage("could not update the configuration for '" + path + "'");
+    }
+    else if (pathExtension == OE_PACKAGE_PATH_EXTENSION)
+    {
+        package = new OEPackage();
+        if (package && package->open(path))
+        {
+            if (updateDocument(doc))
+            {
+                if (dumpDocument(data))
+                {
+                    is_open = package->writeFile(OE_PACKAGE_EDL_PATH, &data);
+                    if (!is_open)
+                        logMessage("could not write '" OE_PACKAGE_EDL_PATH
+                                   "' in '" + path + "'");
+                }
+                else
+                    logMessage("could not dump document '" + path + "'");
+            }
             else
                 logMessage("could not update the configuration for '" + path + "'");
-			
-			delete package;
-			package = NULL;
-		}
-		else
-			logMessage("could not open '" + path + "'");
-	}
-	else
-		logMessage("could not identify type of '" + path + "'");
-	
-	if (!is_open)
-		close();
-	
-	return is_open;
+            
+            delete package;
+            package = NULL;
+        }
+        else
+            logMessage("could not open '" + path + "'");
+    }
+    else
+        logMessage("could not identify type of '" + path + "'");
+    
+    if (!is_open)
+        close();
+    
+    return is_open;
 }
 
 void OEDocument::close()
 {
-	is_open = false;
-	
-	if (package)
-		delete package;
+    is_open = false;
     
-	package = NULL;
+    if (package)
+        delete package;
+    
+    package = NULL;
 }
 
 
 
 OEHeaderInfo OEDocument::getHeaderInfo()
 {
-	OEHeaderInfo headerInfo;
-	
-	if (doc)
-	{
-		xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+    OEHeaderInfo headerInfo;
+    
+    if (doc)
+    {
+        xmlNodePtr rootNode = xmlDocGetRootElement(doc);
         
-		headerInfo.label = getNodeProperty(rootNode, "label");
-		headerInfo.image = getNodeProperty(rootNode, "image");
-		headerInfo.description = getNodeProperty(rootNode, "description");
-	}
-	
-	return headerInfo;
+        headerInfo.label = getNodeProperty(rootNode, "label");
+        headerInfo.image = getNodeProperty(rootNode, "image");
+        headerInfo.description = getNodeProperty(rootNode, "description");
+    }
+    
+    return headerInfo;
 }
 
 OEPortInfos OEDocument::getPortInfos()
 {
-	OEPortInfos portsInfo;
-	
-	if (doc)
+    OEPortInfos portsInfo;
+    
+    if (doc)
     {
         xmlNodePtr rootNode = xmlDocGetRootElement(doc);
         
@@ -222,15 +222,15 @@ OEPortInfos OEDocument::getPortInfos()
         }
     }
     
-	return portsInfo;
+    return portsInfo;
 }
 
 OEConnectorInfos OEDocument::getFreeConnectorInfos()
 {
     OEIds portRefs;
-	OEConnectorInfos freeConnectorInfos;
-	
-	if (doc)
+    OEConnectorInfos freeConnectorInfos;
+    
+    if (doc)
     {
         xmlNodePtr rootNode = xmlDocGetRootElement(doc);
         
@@ -252,7 +252,7 @@ OEConnectorInfos OEDocument::getFreeConnectorInfos()
             }
         }
     }
-	
+    
     for (OEIds::iterator i = portRefs.begin();
          i != portRefs.end();
          i++)
@@ -269,23 +269,23 @@ OEConnectorInfos OEDocument::getFreeConnectorInfos()
         }
     }
     
-	return freeConnectorInfos;
+    return freeConnectorInfos;
 }
 
 bool OEDocument::addDocument(string path, OEIdMap connections)
 {
-	if (!doc)
-		return false;
-	
-	OEDocument document;
-	if (!document.open(path))
-		return false;
-	
+    if (!doc)
+        return false;
+    
+    OEDocument document;
+    if (!document.open(path))
+        return false;
+    
     // Remap ids
     OEIds deviceIds = document.getDeviceIds();
-	OEIdMap deviceIdMap = makeIdMap(deviceIds);
+    OEIdMap deviceIdMap = makeIdMap(deviceIds);
     
-	remapConnections(deviceIdMap, connections);
+    remapConnections(deviceIdMap, connections);
     document.remapDocument(deviceIdMap);
     
     // Connect ports and connector inlets
@@ -324,9 +324,9 @@ bool OEDocument::addDocument(string path, OEIdMap connections)
 
 bool OEDocument::removeDevice(string deviceId)
 {
-	if (!doc)
-		return false;
-	
+    if (!doc)
+        return false;
+    
     // Get connected devices
     OEPortInfos portInfos = getPortInfos();
     
@@ -398,7 +398,7 @@ OEIds OEDocument::getDeviceIds()
 {
     OEIds deviceIds;
     
-	if (doc)
+    if (doc)
     {
         xmlNodePtr rootNode = xmlDocGetRootElement(doc);
         
@@ -415,27 +415,27 @@ OEIds OEDocument::getDeviceIds()
         }
     }
     
-	return deviceIds;
+    return deviceIds;
 }
 
 void OEDocument::setDeviceId(string& id, string deviceId)
 {
-	size_t dotIndex = id.find_first_of('.');
-	
-	if (dotIndex == string::npos)
-		id = deviceId;
-	else
-		id = deviceId + "." + id.substr(dotIndex + 1);
+    size_t dotIndex = id.find_first_of('.');
+    
+    if (dotIndex == string::npos)
+        id = deviceId;
+    else
+        id = deviceId + "." + id.substr(dotIndex + 1);
 }
 
 string OEDocument::getDeviceId(string id)
 {
-	size_t dotIndex = id.find_first_of('.');
-	
-	if (dotIndex == string::npos)
-		return id;
-	
-	return id.substr(0, dotIndex);
+    size_t dotIndex = id.find_first_of('.');
+    
+    if (dotIndex == string::npos)
+        return id;
+    
+    return id.substr(0, dotIndex);
 }
 
 
@@ -443,31 +443,31 @@ string OEDocument::getDeviceId(string id)
 
 bool OEDocument::validateDocument()
 {
-	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
-	
-	return (getNodeProperty(rootNode, "version") == "1.0");
+    xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+    
+    return (getNodeProperty(rootNode, "version") == "1.0");
 }
 
 bool OEDocument::dumpDocument(OEData& data)
 {
-	if (!doc)
-		return false;
-	
-	xmlChar *xmlDump;
-	int xmlDumpSize;
-	
-	xmlDocDumpMemory(doc, &xmlDump, &xmlDumpSize);
-	if (xmlDump)
-	{
-		data.resize(xmlDumpSize);
-		memcpy(&data.front(), xmlDump, xmlDumpSize);
-		
-		xmlFree(xmlDump);
-		
-		return true;
-	}
-	
-	return false;
+    if (!doc)
+        return false;
+    
+    xmlChar *xmlDump;
+    int xmlDumpSize;
+    
+    xmlDocDumpMemory(doc, &xmlDump, &xmlDumpSize);
+    if (xmlDump)
+    {
+        data.resize(xmlDumpSize);
+        memcpy(&data.front(), xmlDump, xmlDumpSize);
+        
+        xmlFree(xmlDump);
+        
+        return true;
+    }
+    
+    return false;
 }
 
 bool OEDocument::constructDocument(xmlDocPtr doc)
@@ -506,83 +506,83 @@ OEIdMap OEDocument::makeIdMap(OEIds& deviceIds)
 {
     OEIds ourDeviceIds = getDeviceIds();
     
-	OEIdMap idMap;
-	
-	for (OEIds::iterator i = deviceIds.begin();
-		 i != deviceIds.end();
-		 i++)
-	{
-		string deviceId = *i;
+    OEIdMap idMap;
+    
+    for (OEIds::iterator i = deviceIds.begin();
+         i != deviceIds.end();
+         i++)
+    {
+        string deviceId = *i;
         
-		OEUInt32 newDeviceIdCount = 1;
-		string newDeviceId = deviceId;
-		while (find(ourDeviceIds.begin(), ourDeviceIds.end(), newDeviceId) !=
+        OEUInt32 newDeviceIdCount = 1;
+        string newDeviceId = deviceId;
+        while (find(ourDeviceIds.begin(), ourDeviceIds.end(), newDeviceId) !=
                ourDeviceIds.end())
-		{
-			newDeviceIdCount++;
-			newDeviceId = deviceId + getString(newDeviceIdCount);
-		}
-		
-		idMap[deviceId] = newDeviceId;
-	}
-	
-	return idMap;
+        {
+            newDeviceIdCount++;
+            newDeviceId = deviceId + getString(newDeviceIdCount);
+        }
+        
+        idMap[deviceId] = newDeviceId;
+    }
+    
+    return idMap;
 }
 
 // Remap a node property
 void OEDocument::remapNodeProperty(OEIdMap& deviceIdMap, xmlNodePtr node, string property)
 {
-	string nodeProperty;
-	
-	if (hasNodeProperty(node, property))
-	{
-		string id = getNodeProperty(node, property);
-		string deviceId = getDeviceId(id);
+    string nodeProperty;
+    
+    if (hasNodeProperty(node, property))
+    {
+        string id = getNodeProperty(node, property);
+        string deviceId = getDeviceId(id);
         
-		if (deviceIdMap.count(deviceId))
-		{
-			setDeviceId(id, deviceIdMap[deviceId]);
-			setNodeProperty(node, property, id);
-		}
-	}
+        if (deviceIdMap.count(deviceId))
+        {
+            setDeviceId(id, deviceIdMap[deviceId]);
+            setNodeProperty(node, property, id);
+        }
+    }
 }
 
 // Remap document ids
 void OEDocument::remapDocument(OEIdMap& deviceIdMap)
 {
-	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
-	
-	for(xmlNodePtr node = rootNode->children;
-		node;
-		node = node->next)
-	{
-		remapNodeProperty(deviceIdMap, node, "id");
-		remapNodeProperty(deviceIdMap, node, "ref");
-		
-		if (node->children)
-		{
-			for(xmlNodePtr propertyNode = node->children;
-				propertyNode;
-				propertyNode = propertyNode->next)
-			{
-				remapNodeProperty(deviceIdMap, propertyNode, "id");
-				remapNodeProperty(deviceIdMap, propertyNode, "ref");
-			}
-		}
-	}
+    xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+    
+    for(xmlNodePtr node = rootNode->children;
+        node;
+        node = node->next)
+    {
+        remapNodeProperty(deviceIdMap, node, "id");
+        remapNodeProperty(deviceIdMap, node, "ref");
+        
+        if (node->children)
+        {
+            for(xmlNodePtr propertyNode = node->children;
+                propertyNode;
+                propertyNode = propertyNode->next)
+            {
+                remapNodeProperty(deviceIdMap, propertyNode, "id");
+                remapNodeProperty(deviceIdMap, propertyNode, "ref");
+            }
+        }
+    }
 }
 
 // Remap connections
 void OEDocument::remapConnections(OEIdMap& deviceIdMap, OEIdMap& connections)
 {
-	for (OEIdMap::iterator i = connections.begin();
-		 i != connections.end();
-		 i++)
-	{
-		string srcId = i->first;
-		string destId = i->second;
-		
-		string deviceId = getDeviceId(destId);
+    for (OEIdMap::iterator i = connections.begin();
+         i != connections.end();
+         i++)
+    {
+        string srcId = i->first;
+        string destId = i->second;
+        
+        string deviceId = getDeviceId(destId);
         if (deviceIdMap.count(deviceId))
         {
             setDeviceId(destId, deviceIdMap[deviceId]);
@@ -623,11 +623,11 @@ xmlNodePtr OEDocument::getLastNode(string deviceId)
 // Follow device chain
 string OEDocument::followDeviceChain(string deviceId, vector<string>& visitedIds)
 {
-	// Avoid circularity
-	if (find(visitedIds.begin(), visitedIds.end(), deviceId) != visitedIds.end())
-		return deviceId;
-	visitedIds.push_back(deviceId);
-	
+    // Avoid circularity
+    if (find(visitedIds.begin(), visitedIds.end(), deviceId) != visitedIds.end())
+        return deviceId;
+    visitedIds.push_back(deviceId);
+    
     string lastDeviceId = deviceId;
     
     xmlNodePtr rootNode = xmlDocGetRootElement(doc);
@@ -636,18 +636,18 @@ string OEDocument::followDeviceChain(string deviceId, vector<string>& visitedIds
         node;
         node = node->next)
     {
-		if (getNodeName(node) == "port")
-		{
-			string id = getNodeProperty(node, "id");
-			
-			if (getDeviceId(id) == deviceId)
+        if (getNodeName(node) == "port")
+        {
+            string id = getNodeProperty(node, "id");
+            
+            if (getDeviceId(id) == deviceId)
             {
                 string ref = getNodeProperty(node, "ref");
                 
                 if (ref != "")
                     lastDeviceId = followDeviceChain(getDeviceId(ref), visitedIds);
             }
-		}
+        }
     }
     
     return lastDeviceId;
@@ -701,12 +701,12 @@ bool OEDocument::insertInto(xmlNodePtr dest)
     if (!dest)
         return false;
     
-	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+    xmlNodePtr rootNode = xmlDocGetRootElement(doc);
     
-	for(xmlNodePtr node = rootNode->children;
-		node;
-		node = node->next)
-	{
+    for(xmlNodePtr node = rootNode->children;
+        node;
+        node = node->next)
+    {
         // Don't add last character data
         if ((node->type != XML_TEXT_NODE) || node->next)
         {
@@ -715,7 +715,7 @@ bool OEDocument::insertInto(xmlNodePtr dest)
         }
         
         dest = dest->next;
-	}
+    }
     
     return true;
 }
@@ -751,12 +751,12 @@ OEInletMap OEDocument::getInlets(xmlDocPtr doc, OEIdMap& connections, string nod
 {
     OEInletMap inletMap;
     
-	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+    xmlNodePtr rootNode = xmlDocGetRootElement(doc);
     
-	for(xmlNodePtr node = rootNode->children;
-		node;
-		node = node->next)
-	{
+    for(xmlNodePtr node = rootNode->children;
+        node;
+        node = node->next)
+    {
         if (getNodeName(node) == nodeType)
         {
             string id = getNodeProperty(node, "id");
@@ -782,12 +782,12 @@ OEInletMap OEDocument::getInlets(xmlDocPtr doc, OEIdMap& connections, string nod
 // Connects ports
 void OEDocument::connectPorts(xmlDocPtr doc, OEIdMap& connections)
 {
-	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+    xmlNodePtr rootNode = xmlDocGetRootElement(doc);
     
-	for(xmlNodePtr node = rootNode->children;
-		node;
-		node = node->next)
-	{
+    for(xmlNodePtr node = rootNode->children;
+        node;
+        node = node->next)
+    {
         if ((getNodeName(node) == "port"))
         {
             string id = getNodeProperty(node, "id");
@@ -801,12 +801,12 @@ void OEDocument::connectPorts(xmlDocPtr doc, OEIdMap& connections)
 // Connect inlets
 void OEDocument::connectInlets(xmlDocPtr doc, OEInletMap& inletMap)
 {
-	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+    xmlNodePtr rootNode = xmlDocGetRootElement(doc);
     
-	for(xmlNodePtr node = rootNode->children;
-		node;
-		node = node->next)
-	{
+    for(xmlNodePtr node = rootNode->children;
+        node;
+        node = node->next)
+    {
         if (getNodeName(node) == "component")
         {
             string id = getNodeProperty(node, "id");
@@ -819,10 +819,10 @@ void OEDocument::connectInlets(xmlDocPtr doc, OEInletMap& inletMap)
 
 void OEDocument::connectInlet(OEIdMap& propertyMap, xmlNodePtr children)
 {
-	for(xmlNodePtr node = children;
-		node;
-		node = node->next)
-	{
+    for(xmlNodePtr node = children;
+        node;
+        node = node->next)
+    {
         if (getNodeName(node) == "property")
         {
             string name = getNodeProperty(node, "name");
@@ -836,12 +836,12 @@ void OEDocument::connectInlet(OEIdMap& propertyMap, xmlNodePtr children)
 // Disconnect device
 void OEDocument::disconnectDevice(string deviceId)
 {
-	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+    xmlNodePtr rootNode = xmlDocGetRootElement(doc);
     
-	for(xmlNodePtr node = rootNode->children;
-		node;
-		node = node->next)
-	{
+    for(xmlNodePtr node = rootNode->children;
+        node;
+        node = node->next)
+    {
         if (getNodeName(node) == "port")
         {
             string ref = getNodeProperty(node, "ref");
@@ -870,11 +870,11 @@ void OEDocument::disconnectDevice(string deviceId)
 // Delete device
 void OEDocument::deleteDevice(string deviceId)
 {
-	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+    xmlNodePtr rootNode = xmlDocGetRootElement(doc);
     
-	for(xmlNodePtr node = rootNode->children;
-		node;)
-	{
+    for(xmlNodePtr node = rootNode->children;
+        node;)
+    {
         string id = getNodeProperty(node, "id");
         
         if (id != "")
@@ -908,68 +908,68 @@ void OEDocument::deleteDevice(string deviceId)
 
 string OEDocument::getLocationLabel(string deviceId, vector<string>& visitedIds)
 {
-	if (!doc)
-		return "";
+    if (!doc)
+        return "";
     
-	// Avoid circularity
-	if (find(visitedIds.begin(), visitedIds.end(), deviceId) != visitedIds.end())
-		return "*";
-	visitedIds.push_back(deviceId);
-	
-	// Follow connection chain
-	xmlNodePtr rootNode = xmlDocGetRootElement(doc);
-	
-	for(xmlNodePtr node = rootNode->children;
-		node;
-		node = node->next)
-	{
-		if (getNodeName(node) == "port")
-		{
-			string portId = getNodeProperty(node, "id");
-			string ref = getNodeProperty(node, "ref");
-			string label = getNodeProperty(node, "label");
-			
-			if (getDeviceId(ref) == deviceId)
+    // Avoid circularity
+    if (find(visitedIds.begin(), visitedIds.end(), deviceId) != visitedIds.end())
+        return "*";
+    visitedIds.push_back(deviceId);
+    
+    // Follow connection chain
+    xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+    
+    for(xmlNodePtr node = rootNode->children;
+        node;
+        node = node->next)
+    {
+        if (getNodeName(node) == "port")
+        {
+            string portId = getNodeProperty(node, "id");
+            string ref = getNodeProperty(node, "ref");
+            string label = getNodeProperty(node, "label");
+            
+            if (getDeviceId(ref) == deviceId)
             {
                 if (label != "")
                     label = " " + label;
-				return getLocationLabel(getDeviceId(portId), visitedIds) + label;
+                return getLocationLabel(getDeviceId(portId), visitedIds) + label;
             }
-		}
-	}
-	
-	// Find device
-	for(xmlNodePtr node = rootNode->children;
-		node;
-		node = node->next)
-	{
-		if (getNodeName(node) == "device")
-		{
-			string theDeviceId = getNodeProperty(node, "id");
-			string label = getNodeProperty(node, "label");
-			
-			if (theDeviceId == deviceId)
-				return label;
-		}
-	}
-	
-	// Device was not found
-	return "?";
+        }
+    }
+    
+    // Find device
+    for(xmlNodePtr node = rootNode->children;
+        node;
+        node = node->next)
+    {
+        if (getNodeName(node) == "device")
+        {
+            string theDeviceId = getNodeProperty(node, "id");
+            string label = getNodeProperty(node, "label");
+            
+            if (theDeviceId == deviceId)
+                return label;
+        }
+    }
+    
+    // Device was not found
+    return "?";
 }
 
 string OEDocument::getLocationLabel(string id)
 {
-	if (!doc)
-		return "";
-	
-	vector<string> visitedIds;
-	string location = getLocationLabel(id, visitedIds);
-	size_t depth = visitedIds.size();
-	
-	if (depth == 1)
-		return "";
-	else
-		return location;
+    if (!doc)
+        return "";
+    
+    vector<string> visitedIds;
+    string location = getLocationLabel(id, visitedIds);
+    size_t depth = visitedIds.size();
+    
+    if (depth == 1)
+        return "";
+    else
+        return location;
 }
 
 string OEDocument::getNodeName(xmlNodePtr node)
@@ -979,27 +979,27 @@ string OEDocument::getNodeName(xmlNodePtr node)
     if (node->name)
         name = (char *) node->name;
     
-	return name;
+    return name;
 }
 
 string OEDocument::getNodeProperty(xmlNodePtr node, string name)
 {
-	char *value = (char *) xmlGetProp(node, BAD_CAST name.c_str());
-	string valueString = value ? value : "";
-	xmlFree(value);
-	
-	return valueString;
+    char *value = (char *) xmlGetProp(node, BAD_CAST name.c_str());
+    string valueString = value ? value : "";
+    xmlFree(value);
+    
+    return valueString;
 }
 
 bool OEDocument::hasNodeProperty(xmlNodePtr node, string name)
 {
-	char *value = (char *) xmlGetProp(node, BAD_CAST name.c_str());
-	xmlFree(value);
-	
-	return (value != NULL);
+    char *value = (char *) xmlGetProp(node, BAD_CAST name.c_str());
+    xmlFree(value);
+    
+    return (value != NULL);
 }
 
 void OEDocument::setNodeProperty(xmlNodePtr node, string name, string value)
 {
-	xmlSetProp(node, BAD_CAST name.c_str(), BAD_CAST value.c_str());
+    xmlSetProp(node, BAD_CAST name.c_str(), BAD_CAST value.c_str());
 }

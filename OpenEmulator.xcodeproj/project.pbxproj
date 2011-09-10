@@ -104,7 +104,7 @@
 		00D2260A1350F9A100FC69B9 /* EthernetInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D225FF1350F9A100FC69B9 /* EthernetInterface.h */; };
 		00D2260B1350F9A100FC69B9 /* MIDIInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D226001350F9A100FC69B9 /* MIDIInterface.h */; };
 		00D2260E1350F9A100FC69B9 /* USBInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D226031350F9A100FC69B9 /* USBInterface.h */; };
-		00D2260F1350F9A100FC69B9 /* VideoInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D226041350F9A100FC69B9 /* VideoInterface.h */; };
+		00D2260F1350F9A100FC69B9 /* VideoCaptureInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D226041350F9A100FC69B9 /* VideoCaptureInterface.h */; };
 		00D226561350FF8B00FC69B9 /* OEMatrix3.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D226541350FF8B00FC69B9 /* OEMatrix3.h */; };
 		00D226571350FF8B00FC69B9 /* OEMatrix3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00D226551350FF8B00FC69B9 /* OEMatrix3.cpp */; };
 		00D6729D12C9A256009F0D9E /* EmulationShow.png in Resources */ = {isa = PBXBuildFile; fileRef = 00E442931278727600713A05 /* EmulationShow.png */; };
@@ -414,7 +414,7 @@
 		00D225FF1350F9A100FC69B9 /* EthernetInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EthernetInterface.h; sourceTree = "<group>"; };
 		00D226001350F9A100FC69B9 /* MIDIInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MIDIInterface.h; sourceTree = "<group>"; };
 		00D226031350F9A100FC69B9 /* USBInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = USBInterface.h; sourceTree = "<group>"; };
-		00D226041350F9A100FC69B9 /* VideoInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoInterface.h; sourceTree = "<group>"; };
+		00D226041350F9A100FC69B9 /* VideoCaptureInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoCaptureInterface.h; sourceTree = "<group>"; };
 		00D226541350FF8B00FC69B9 /* OEMatrix3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEMatrix3.h; sourceTree = "<group>"; };
 		00D226551350FF8B00FC69B9 /* OEMatrix3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEMatrix3.cpp; sourceTree = "<group>"; };
 		00D73D9C136CC9B300BD5465 /* IEEE1394Interface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IEEE1394Interface.h; sourceTree = "<group>"; };
@@ -860,7 +860,7 @@
 				00D225FF1350F9A100FC69B9 /* EthernetInterface.h */,
 				00D226001350F9A100FC69B9 /* MIDIInterface.h */,
 				00D226031350F9A100FC69B9 /* USBInterface.h */,
-				00D226041350F9A100FC69B9 /* VideoInterface.h */,
+				00D226041350F9A100FC69B9 /* VideoCaptureInterface.h */,
 				000E8D1813515C6E00DBFB2C /* StorageInterface.h */,
 			);
 			path = Host;
@@ -1024,7 +1024,7 @@
 				00D2260A1350F9A100FC69B9 /* EthernetInterface.h in Headers */,
 				00D2260B1350F9A100FC69B9 /* MIDIInterface.h in Headers */,
 				00D2260E1350F9A100FC69B9 /* USBInterface.h in Headers */,
-				00D2260F1350F9A100FC69B9 /* VideoInterface.h in Headers */,
+				00D2260F1350F9A100FC69B9 /* VideoCaptureInterface.h in Headers */,
 				00D226561350FF8B00FC69B9 /* OEMatrix3.h in Headers */,
 				000E8D1913515C6E00DBFB2C /* StorageInterface.h in Headers */,
 				00D73D9D136CC9B300BD5465 /* IEEE1394Interface.h in Headers */,

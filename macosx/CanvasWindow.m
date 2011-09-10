@@ -5,7 +5,7 @@
  * (C) 2009-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Handles canvas window messages.
+ * Handles canvas window messages
  */
 
 #import "CanvasWindow.h"
@@ -15,45 +15,45 @@
 
 - (BOOL)isOnLionOrBetter
 {
-	return floor(NSAppKitVersionNumber) >
+    return floor(NSAppKitVersionNumber) >
     NSAppKitVersionNumber10_6;
 }
 
 - (id)initWithContentRect:(NSRect)contentRect
-				styleMask:(NSUInteger)windowStyle
-				  backing:(NSBackingStoreType)bufferingType 
-					defer:(BOOL)deferCreation
+                styleMask:(NSUInteger)windowStyle
+                  backing:(NSBackingStoreType)bufferingType 
+                    defer:(BOOL)deferCreation
 {
     self = [super initWithContentRect:contentRect
                             styleMask:windowStyle
                               backing:bufferingType
                                 defer:deferCreation];
     
-	if (self)
+    if (self)
     {
-		fullscreen = NO;
+        fullscreen = NO;
         
         if ([self isOnLionOrBetter])
             [self setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
    }
-	
-	return self;
+    
+    return self;
 }
 
 - (NSRect)constrainFrameRect:(NSRect)frameRect toScreen:(NSScreen *)screen
 {
     if (![self isOnLionOrBetter] &&
         [self isFullscreen])
-		return frameRect;
-	
-	return [super constrainFrameRect:frameRect toScreen:screen];
+        return frameRect;
+    
+    return [super constrainFrameRect:frameRect toScreen:screen];
 }
 
 - (void)setFrameOrigin:(NSPoint)point
 {
     if (![self isOnLionOrBetter] &&
         ![self isFullscreen])
-		[super setFrameOrigin:point];
+        [super setFrameOrigin:point];
 }
 
 - (BOOL)isFullscreen

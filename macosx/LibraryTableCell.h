@@ -5,7 +5,7 @@
  * (C) 2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements a library table cell.
+ * Implements a library table cell
  */
 
 #import <Cocoa/Cocoa.h>

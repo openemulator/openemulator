@@ -5,7 +5,7 @@
  * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls all emulations.
+ * Controls all emulations
  */
 
 #import <Cocoa/Cocoa.h>
@@ -17,20 +17,20 @@
 @interface DocumentController : NSDocumentController
 <NSApplicationDelegate>
 {
-	IBOutlet AudioControlsWindowController *fAudioControlsWindowController;
-	IBOutlet TemplateChooserWindowController *fTemplateChooserWindowController;
-	IBOutlet LibraryWindowController *fLibraryWindowController;
-	
-	IBOutlet id fAudioControlsMenuItem;
-	IBOutlet id fLibraryMenuItem;
-	
-	NSArray *diskImagePathExtensions;
-	NSArray *audioPathExtensions;
-	NSArray *textPathExtensions;
-	
-	void *paAudio;
-	
-	NSInteger disableMenuBarCount;
+    IBOutlet AudioControlsWindowController *fAudioControlsWindowController;
+    IBOutlet TemplateChooserWindowController *fTemplateChooserWindowController;
+    IBOutlet LibraryWindowController *fLibraryWindowController;
+    
+    IBOutlet id fAudioControlsMenuItem;
+    IBOutlet id fLibraryMenuItem;
+    
+    NSArray *diskImagePathExtensions;
+    NSArray *audioPathExtensions;
+    NSArray *textPathExtensions;
+    
+    void *paAudio;
+    
+    NSInteger disableMenuBarCount;
 }
 
 - (NSArray *)diskImagePathExtensions;
@@ -43,10 +43,10 @@
 
 - (IBAction)newDocumentFromTemplateChooser:(id)sender;
 - (id)openUntitledDocumentWithTemplateURL:(NSURL *)absoluteURL
-								  display:(BOOL)displayDocument
-									error:(NSError **)outError;
+                                  display:(BOOL)displayDocument
+                                    error:(NSError **)outError;
 - (id)makeUntitledDocumentWithTemplateURL:(NSURL *)absoluteURL
-									error:(NSError **)outError;
+                                    error:(NSError **)outError;
 
 - (void)disableMenuBar;
 - (void)enableMenuBar;

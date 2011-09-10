@@ -8,9 +8,6 @@
  * Defines the storage interface.
  */
 
-#ifndef _STORAGEINTERFACE_H
-#define _STORAGEINTERFACE_H
-
 // Notes:
 // * isAvailable() determines if the device is available (now) for mounting images.
 //   This is used when an emulation searches for an available device to mount an image.
@@ -23,28 +20,31 @@
 // * getFormatLabel() returns a format label describing the mount.
 //   E.g.: "16 sectors, 35 track, read-only".
 
+#ifndef _STORAGEINTERFACE_H
+#define _STORAGEINTERFACE_H
+
 typedef enum
 {
-	STORAGE_IS_AVAILABLE,
-	STORAGE_CAN_MOUNT,
-	STORAGE_MOUNT,
-	STORAGE_UNMOUNT,
-	STORAGE_GET_MOUNTPATH,
-	STORAGE_IS_LOCKED,
-	
-	STORAGE_GET_FORMATLABEL,
-	
-	STORAGE_SET_SETTINGS,
-	STORAGE_GET_SETTINGS,
+    STORAGE_IS_AVAILABLE,
+    STORAGE_CAN_MOUNT,
+    STORAGE_MOUNT,
+    STORAGE_UNMOUNT,
+    STORAGE_GET_MOUNTPATH,
+    STORAGE_IS_LOCKED,
+    
+    STORAGE_GET_FORMATLABEL,
+    
+    STORAGE_SET_SETTINGS,
+    STORAGE_GET_SETTINGS,
 } StorageMessage;
 
 typedef struct
 {
-	string ref;
-	string name;
-	string label;
-	string type;
-	string options;
+    string ref;
+    string name;
+    string label;
+    string type;
+    string options;
 } StorageSetting;
 
 typedef vector<StorageSetting> StorageSettings;
