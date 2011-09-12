@@ -48,8 +48,8 @@ private:
     
     ControlBusPowerState powerState;
     
-    queue<OEUInt8> keyQueue;
     bool isRTS;
+    queue<OEUInt8> pasteBuffer;
     
     void scheduleTimer();
     void loadFont(OEData *data);
@@ -57,8 +57,8 @@ private:
     void updateBezel();
     void putChar(OEUInt8 c);
     void clearScreen();
-    void enqueueKey(OEUInt8 c);
-    void emptyQueue();
+    void sendKey(CanvasUnicodeChar key);
     void copy(wstring *s);
     void paste(wstring *s);
+    void emptyPasteBuffer();
 };

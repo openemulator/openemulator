@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
-<edl version="1.0" label="Apple Monitor III" image="images/Apple/Apple Monitor III.png" description="The Apple Monitor III is a CRT-based green monochrome 12-inch monitor manufactured by Apple Computer for the Apple III personal computer.">
+<edl version="1.0" generator="OpenEmulator" build="700" label="Apple Monitor III" image="images/Apple/Apple Monitor III.png" description="The Apple Monitor III is a CRT-based green monochrome 12-inch monitor manufactured by Apple Computer for the Apple III personal computer.">
     
     <device id="appleMonitorIII" label="Apple Monitor III" image="images/Apple/Apple Monitor III.png">
         <setting ref="appleMonitorIII.monitor" name="videoBrightness" label="Brightness" type="slider" options="-1.0,1.0"/>

@@ -81,12 +81,14 @@ bool Apple1Terminal::setRef(string name, OEComponent *ref)
         if (controlBus)
         {
             controlBus->removeObserver(this, CONTROLBUS_POWERSTATE_DID_CHANGE);
+            controlBus->removeObserver(this, CONTROLBUS_RESET_DID_ASSERT);
             controlBus->removeObserver(this, CONTROLBUS_TIMER_DID_FIRE);
         }
         controlBus = ref;
         if (controlBus)
         {
             controlBus->addObserver(this, CONTROLBUS_POWERSTATE_DID_CHANGE);
+            controlBus->addObserver(this, CONTROLBUS_RESET_DID_ASSERT);
             controlBus->addObserver(this, CONTROLBUS_TIMER_DID_FIRE);
         }
     }
@@ -189,9 +191,10 @@ bool Apple1Terminal::postMessage(OEComponent *sender, int message, void *data)
         }
             
         case RS232_ASSERT_RTS:
+            // Empty paste buffer
             isRTS = true;
             
-            emptyQueue();
+            emptyPasteBuffer();
             
             return true;
             
@@ -210,30 +213,31 @@ void Apple1Terminal::notify(OEComponent *sender, int notification, void *data)
     {
         switch (notification)
         {
+            case CONTROLBUS_POWERSTATE_DID_CHANGE:
+                powerState = *((ControlBusPowerState *)data);
+                if (powerState == CONTROLBUS_POWERSTATE_OFF)
+                {
+                    clearScreen();
+                    updateBezel();
+                    
+                    if (monitor)
+                        monitor->postMessage(this, CANVAS_CLEAR, NULL);
+                }
+                
+                break;
+                
+            case CONTROLBUS_RESET_DID_ASSERT:
+                // Empty pastebuffer
+                while (!pasteBuffer.empty())
+                    pasteBuffer.pop();
+                
+                break;
+                
             case CONTROLBUS_TIMER_DID_FIRE:
                 updateCanvas();
                 scheduleTimer();
                 
                 break;
-                
-            case CONTROLBUS_POWERSTATE_DID_CHANGE:
-            {
-                powerState = *((ControlBusPowerState *)data);
-
-                if (powerState == CONTROLBUS_POWERSTATE_OFF)
-                {
-                    updateBezel();
-                    clearScreen();
-                    
-                    if (monitor)
-                        monitor->postMessage(this, CANVAS_CLEAR, NULL);
-                    
-                    while (!keyQueue.empty())
-                        keyQueue.pop();
-                }
-                
-                break;
-            }
         }
     }
     else if (sender == monitorDevice)
@@ -244,12 +248,15 @@ void Apple1Terminal::notify(OEComponent *sender, int notification, void *data)
         {
             case CANVAS_UNICODECHAR_WAS_SENT:
             {
-                OEUInt8 key = *((CanvasUnicodeChar *)data);
+                if (!pasteBuffer.empty())
+                    break;
                 
-                if (key == 127)
+                CanvasUnicodeChar key = *((CanvasUnicodeChar *)data);
+                
+                if (key == 0x7f)
                     clearScreen();
-                else if (key < 127)
-                    enqueueKey(key);
+                else
+                    sendKey(key);
                 
                 break;
             }
@@ -378,9 +385,6 @@ void Apple1Terminal::updateBezel()
 
 void Apple1Terminal::putChar(OEUInt8 c)
 {
-    if (powerState != CONTROLBUS_POWERSTATE_ON)
-        return;
-    
     if (c == 0x0d)
     {
         cursorX = 0;
@@ -415,28 +419,20 @@ void Apple1Terminal::clearScreen()
     cursorY = 0;
 }
 
-void Apple1Terminal::enqueueKey(OEUInt8 key)
+void Apple1Terminal::sendKey(CanvasUnicodeChar key)
 {
+    if (key >= 0x80)
+        return;
+    
     if (key == '\n')
         key = '\r';
     else if (key == '\r')
         return;
     
-    keyQueue.push(key);
+    OEData data;
+    data.push_back(key);
     
-    emptyQueue();
-}
-
-void Apple1Terminal::emptyQueue()
-{
-    while (isRTS && !keyQueue.empty())
-    {
-        OEData data;
-        data.push_back(keyQueue.front());
-        keyQueue.pop();
-        
-        OEComponent::notify(this, RS232_DID_RECEIVE_DATA, &data);
-    }
+    OEComponent::notify(this, RS232_DID_RECEIVE_DATA, &data);
 }
 
 void Apple1Terminal::copy(wstring *s)
@@ -458,8 +454,16 @@ void Apple1Terminal::copy(wstring *s)
 void Apple1Terminal::paste(wstring *s)
 {
     for (int i = 0; i < s->size(); i++)
+        pasteBuffer.push(s->at(i));
+    
+    emptyPasteBuffer();
+}
+
+void Apple1Terminal::emptyPasteBuffer()
+{
+    while (isRTS && !pasteBuffer.empty())
     {
-        if (s->at(i) < 127)
-            enqueueKey(s->at(i));
+        sendKey(pasteBuffer.front());
+        pasteBuffer.pop();
     }
 }

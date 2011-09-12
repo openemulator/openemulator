@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
-<edl version="1.0" label="Terminal" image="images/Generic/Terminal.png" description="A generic terminal that can be connected to any RS-232 port.">
+<edl version="1.0" generator="OpenEmulator" build="700" label="Terminal" image="images/Generic/Terminal.png" description="A generic terminal that can be connected to any RS-232 port.">
     
     <device id="terminal" label="Terminal" image="images/Generic/Terminal.png">
     </device>

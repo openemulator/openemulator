@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTDs/edl-1.0.dtd">
-<edl version="1.0" label="Apple-1" image="images/Apple/Apple-1.png" description="The Apple-1 was an early personal computer, and the first in combining a microprocessor with a connection for a keyboard and a monitor. It featured a MOS 6502 microprocessor, 4 kiB RAM, and 256 bytes ROM.">
+<edl version="1.0" generator="OpenEmulator" build="700" label="Apple-1" image="images/Apple/Apple-1.png" description="The Apple-1 was an early personal computer, and the first in combining a microprocessor with a connection for a keyboard and a monitor. It featured a MOS 6502 microprocessor, 4 kiB RAM, and 256 bytes ROM.">
     
     <device id="apple1" label="Apple-1" image="images/Apple/Apple-1.png">
         <setting ref="apple1.io" name="terminalSpeed" label="Terminal Speed" type="select" options="Standard,Enhanced"/>

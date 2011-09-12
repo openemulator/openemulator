@@ -360,7 +360,7 @@ void ControlBus::setPowerState(ControlBusPowerState powerState)
         OEComponent::notify(this, CONTROLBUS_POWERSTATE_DID_CHANGE, &powerState);
     
     if (resetOnPowerOn &&
-        (lastPowerState != CONTROLBUS_POWERSTATE_ON) &&
+        (lastPowerState == CONTROLBUS_POWERSTATE_OFF) &&
         (powerState == CONTROLBUS_POWERSTATE_ON))
     {
         postMessage(this, CONTROLBUS_ASSERT_RESET, NULL);

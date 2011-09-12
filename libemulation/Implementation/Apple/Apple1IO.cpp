@@ -182,10 +182,11 @@ void Apple1IO::write(OEAddress address, OEUInt8 value)
     switch (address & 1)
     {
         case MC6821_PORTA:
-            return;
+            break;
             
         case MC6821_PORTB:
             terminalChar = value & 0x7f;
-            return;
+            
+            break;
     }
 }
