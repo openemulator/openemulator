@@ -25,6 +25,7 @@ typedef enum
 	MC6821_SET_CA1,
 	MC6821_SET_CA2,
 	MC6821_GET_CA2,
+    
 	MC6821_SET_CB1,
 	MC6821_SET_CB2,
 	MC6821_GET_CB2,
@@ -36,6 +37,9 @@ typedef enum
 	MC6821_CA2_DID_CHANGE,
 	MC6821_CB2_DID_CHANGE,
 } MC6821Notification;
+
+#define MC6821_PORTA                0x00
+#define MC6821_PORTB                0x01
 
 #define MC6821_RS_DATAREGISTERA		0x00
 #define MC6821_RS_CONTROLREGISTERA	0x01
@@ -91,6 +95,9 @@ private:
 	bool cb2;
 	OEComponent *controlBusB;
 	
+    void setCA2(bool value);
+    void setCB2(bool value);
+    
 	void setControlA(OEUInt8 value);
 	void setControlB(OEUInt8 value);
 };

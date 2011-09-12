@@ -9,8 +9,10 @@
  */
 
 #import "AudioControlsWindowController.h"
+
+#import "NSStringAdditions.h"
+
 #import "DocumentController.h"
-#import "StringConversion.h"
 
 #import "PAAudio.h"
 
@@ -197,7 +199,7 @@
     playPath = [path copy];
     if (playPath)
     {
-        paAudio->openPlayer(getCPPString(playPath));
+        paAudio->openPlayer([playPath cppString]);
         paAudio->play();
         
         if (!paAudio->getPlayDuration())
@@ -250,7 +252,7 @@
                           stringByAppendingPathComponent:@"oerecording"];
         recordingPath = [path copy];
         
-        paAudio->openRecorder(getCPPString(recordingPath));
+        paAudio->openRecorder([recordingPath cppString]);
         paAudio->record();
     }
     else

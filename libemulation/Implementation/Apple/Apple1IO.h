@@ -1,11 +1,11 @@
 
 /**
  * libemulation
- * Apple I input/output
- * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
+ * Apple-1 input/output
+ * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls Apple I input/output PIA memory
+ * Interfaces an Apple-1 terminal with a PIA
  */
 
 #include "OEComponent.h"
@@ -31,6 +31,8 @@ private:
     bool enhancedTerminalSpeed;
     bool fullASCIIKeyboard;
     
-    OEUInt8 termKey;
-    OEUInt8 termChar;
+    OEUInt8 terminalKey;
+    OEUInt8 terminalChar;
+    
+    void putChar();
 };

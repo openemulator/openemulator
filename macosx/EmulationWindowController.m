@@ -15,7 +15,6 @@
 #import "EmulationOutlineCell.h"
 #import "VerticallyCenteredTextFieldCell.h"
 #import "DocumentController.h"
-#import "StringConversion.h"
 
 #define SPLIT_VERT_LEFT_MIN 128
 #define SPLIT_VERT_RIGHT_MIN 351

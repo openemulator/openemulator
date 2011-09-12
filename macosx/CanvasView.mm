@@ -12,13 +12,13 @@
 
 #import "CanvasView.h"
 
+#import "NSStringAdditions.h"
+
 #import "CanvasWindowController.h"
 #import "Application.h"
 #import "DocumentController.h"
-#import "StringConversion.h"
 
 #import "DeviceInterface.h"
-
 #import "OpenGLCanvas.h"
 
 #define NSLeftControlKeyMask	0x00000001
@@ -461,7 +461,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
         Document *document = [canvasWindowController document];
         OpenGLCanvas *canvas = (OpenGLCanvas *)[canvasWindowController canvas];
         
-        string clipboard = getCPPString([pasteboard stringForType:NSStringPboardType]);
+        wstring clipboard = [[pasteboard stringForType:NSStringPboardType] cppWString];
         
         [document lockEmulation];
         
@@ -1163,7 +1163,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     if (!canvas)
         return @"";
     
-    string clipboard;
+    wstring clipboard;
     
     [document lockEmulation];
     
@@ -1171,7 +1171,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     
     [document unlockEmulation];
     
-    return getNSString(clipboard);
+    return [NSString stringWithCPPWString:clipboard];
 }
 
 - (void)copy:(id)sender
@@ -1217,7 +1217,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     
     [document lockEmulation];
     
-    canvas->doPaste(getCPPString(text));
+    canvas->doPaste([text cppWString]);
     
     [document unlockEmulation];
 }

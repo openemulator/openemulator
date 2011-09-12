@@ -1745,12 +1745,12 @@ void OpenGLCanvas::resetKeysAndButtons()
             setJoystickButton(i, j, false);
 }
 
-void OpenGLCanvas::doCopy(string& value)
+void OpenGLCanvas::doCopy(wstring& value)
 {
     notify(NULL, CANVAS_DID_COPY, &value);
 }
 
-void OpenGLCanvas::doPaste(string value)
+void OpenGLCanvas::doPaste(wstring value)
 {
     notify(NULL, CANVAS_DID_PASTE, &value);
 }

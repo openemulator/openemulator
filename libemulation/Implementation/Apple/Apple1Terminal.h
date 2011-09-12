@@ -1,11 +1,11 @@
 
 /**
  * libemulation
- * Apple I Terminal
- * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
+ * Apple-1 Terminal
+ * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls an Apple I Terminal
+ * Implements an Apple-1 terminal
  */
 
 #include "OEComponent.h"
@@ -13,6 +13,8 @@
 #include "OEImage.h"
 #include "CanvasInterface.h"
 #include "ControlBus.h"
+
+#include <queue>
 
 class Apple1Terminal : public OEComponent
 {
@@ -28,8 +30,6 @@ public:
     bool postMessage(OEComponent *sender, int message, void *data);
     
     void notify(OEComponent *sender, int notification, void *data);
-    
-    void write(OEAddress address, OEUInt8 value);
     
 private:
     OEComponent *device;
@@ -48,11 +48,17 @@ private:
     
     ControlBusPowerState powerState;
     
+    queue<OEUInt8> keyQueue;
+    bool isRTS;
+    
     void scheduleTimer();
     void loadFont(OEData *data);
     void updateCanvas();
     void updateBezel();
-    void sendUnicodeChar(CanvasUnicodeChar unicodeChar);
-    void copy(string *s);
-    void paste(string *s);
+    void putChar(OEUInt8 c);
+    void clearScreen();
+    void enqueueKey(OEUInt8 c);
+    void emptyQueue();
+    void copy(wstring *s);
+    void paste(wstring *s);
 };

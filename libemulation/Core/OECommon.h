@@ -76,8 +76,9 @@ string getString(OEUInt64 value);
 string getString(OEInt64 value);
 string getString(float value);
 string getHexString(OEUInt64 value);
+
 string rtrim(string value);
-wstring getWString(string value);
+wstring rtrim(wstring value);
 
 OEUInt64 getNextPowerOf2(OEUInt64 value);
 

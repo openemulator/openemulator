@@ -9,12 +9,14 @@
  */
 
 #import "Document.h"
+
+#import "NSStringAdditions.h"
+
 #import "DocumentController.h"
 
 #import "EmulationWindowController.h"
 #import "CanvasWindowController.h"
 #import "CanvasPrintView.h"
-#import "StringConversion.h"
 
 #import "OEEmulation.h"
 #import "PAAudio.h"
@@ -46,14 +48,14 @@ OEComponent *constructCanvas(void *userData, OEComponent *device)
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     
-    OpenGLCanvas *canvas = new OpenGLCanvas(getCPPString([[NSBundle mainBundle] resourcePath]));
+    OpenGLCanvas *canvas = new OpenGLCanvas([[[NSBundle mainBundle] resourcePath] cppString]);
     string label;
     device->postMessage(NULL, DEVICE_GET_LABEL, &label);
     
     Document *document = (Document *)userData;
     NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
                           [NSValue valueWithPointer:device], @"device",
-                          getNSString(label), @"label",
+                          [NSString stringWithCPPString:label], @"label",
                           [NSValue valueWithPointer:canvas], @"canvas",
                           nil];
     
@@ -162,7 +164,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
     if (theEmulation)
     {
         NSString *s = [[absoluteURL path] stringByAppendingString:@"/"];
-        string emulationPath = getCPPString(s);
+        string emulationPath = [s cppString];
         
         [self lockEmulation];
         
@@ -397,7 +399,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
     
     OEEmulation *theEmulation = new OEEmulation();
     
-    theEmulation->setResourcePath(getCPPString([[NSBundle mainBundle] resourcePath]));
+    theEmulation->setResourcePath([[[NSBundle mainBundle] resourcePath] cppString]);
     theEmulation->setConstructCanvas(constructCanvas);
     theEmulation->setDestroyCanvas(destroyCanvas);
     theEmulation->setUserData(self);
@@ -406,7 +408,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
     
     [self lockEmulation];
     
-    theEmulation->open(getCPPString([url path]));
+    theEmulation->open([[url path] cppString]);
     theEmulation->setDidUpdate(didUpdate);
     paAudio->addEmulation(theEmulation);
     
@@ -481,7 +483,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
         {
             if ((*j)->postMessage(NULL, STORAGE_IS_AVAILABLE, NULL))
             {
-                string thePath = getCPPString(path);
+                string thePath = [path cppString];
                 if ((*j)->postMessage(NULL, STORAGE_CAN_MOUNT, &thePath))
                 {
                     [self updateChangeCount:NSChangeDone];
@@ -522,7 +524,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
         {
             if ((*j)->postMessage(NULL, STORAGE_IS_AVAILABLE, NULL))
             {
-                string thePath = getCPPString(path);
+                string thePath = [path cppString];
                 if ((*j)->postMessage(NULL, STORAGE_MOUNT, &thePath))
                 {
                     [self updateChangeCount:NSChangeDone];
@@ -561,7 +563,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
              j != storages.end();
              j++)
         {
-            string thePath = getCPPString(path);
+            string thePath = [path cppString];
             if ((*j)->postMessage(NULL, STORAGE_CAN_MOUNT, NULL))
             {
                 success = YES;

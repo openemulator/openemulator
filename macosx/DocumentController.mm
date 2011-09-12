@@ -11,12 +11,12 @@
 #import <Carbon/Carbon.h>
 
 #import "DocumentController.h"
+
 #import "Document.h"
 #import "TemplateChooserWindowController.h"
 #import "AudioControlsWindowController.h"
 #import "LibraryWindowController.h"
 #import "CanvasWindow.h"
-#import "StringConversion.h"
 
 #import "PAAudio.h"
 
@@ -178,8 +178,8 @@
         if (!lastDate || ([lastDate timeIntervalSinceNow] <= 0))
         {
             NSAlert *alert = [[NSAlert alloc] init];
-            [alert setMessageText: NSLocalizedString(@"Support open-source indie software",
-                                                     "Donation beg -> title")];
+            [alert setMessageText:NSLocalizedString(@"Support open-source indie software",
+                                                    "Donation beg -> title")];
             
             NSString *message;
             
@@ -216,7 +216,7 @@
             const NSInteger donateResult = [alert runModal];
             if (donateResult == NSAlertFirstButtonReturn)
                 [self openDonate:self];
-                
+            
             if ([[alert suppressionButton] state] == NSOnState)
                 [userDefaults setBool:YES
                                forKey:@"OEDonationFinished"];
@@ -278,7 +278,7 @@
         NSWindowController *windowController = [[NSApp mainWindow] windowController];
         if ([windowController respondsToSelector:@selector(pasteString:)])
             [windowController performSelector:@selector(pasteString:)
-                                        withObject:clipboard];
+                                   withObject:clipboard];
         
         return YES;
     }

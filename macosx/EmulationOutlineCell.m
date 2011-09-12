@@ -11,7 +11,6 @@
 #import "EmulationOutlineCell.h"
 #import "EmulationOutlineView.h"
 #import "EmulationItem.h"
-#import "StringConversion.h"
 
 #define IMAGE_SIZE				16.0
 #define IMAGE_PADDING			3.0

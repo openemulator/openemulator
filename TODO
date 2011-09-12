@@ -1,5 +1,4 @@
 ==To-Do==
-* Correct RAM initialization when no image is present
 * Fix Revert to Saved
 * Implement Apple-1 Cassette Interface
 * Implement CFFA1

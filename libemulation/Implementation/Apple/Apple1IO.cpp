@@ -1,11 +1,11 @@
 
 /**
  * libemulation
- * Apple I input/output
- * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
+ * Apple-1 input/output
+ * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls Apple I input/output PIA memory
+ * Interfaces an Apple-1 terminal with a PIA
  */
 
 #include "Apple1IO.h"
@@ -18,10 +18,14 @@
 
 Apple1IO::Apple1IO()
 {
+    pia = NULL;
     terminal = NULL;
     
     enhancedTerminalSpeed = false;
     fullASCIIKeyboard = false;
+    
+    terminalKey = 0;
+    terminalChar = 0;
 }
 
 bool Apple1IO::setValue(string name, string value)
@@ -70,6 +74,7 @@ bool Apple1IO::setRef(string name, OEComponent *ref)
         {
             terminal->addObserver(this, RS232_DID_RECEIVE_DATA);
             terminal->addObserver(this, RS232_CTS_DID_ASSERT);
+            terminal->postMessage(this, RS232_ASSERT_RTS, NULL);
         }
     }
     else
@@ -80,46 +85,93 @@ bool Apple1IO::setRef(string name, OEComponent *ref)
 
 void Apple1IO::notify(OEComponent *sender, int notification, void *data)
 {
-    if (sender == terminal)
+    if (sender == pia)
+    {
+        switch (notification)
+        {
+            case MC6821_CB2_DID_CHANGE:
+            {
+                bool cb2 = *((bool *)data);
+                
+                if (!cb2)
+                {
+                    // Signal DA
+                    OEData s;
+                    s.push_back(terminalChar);
+                    terminal->postMessage(this, RS232_SEND_DATA, &s);
+                }
+            }
+        }
+    }
+    else if (sender == terminal)
     {
         switch (notification)
         {
             case RS232_DID_RECEIVE_DATA:
+            {
+                // Get key
+                OEData *s = (OEData *)data;
+                OEUInt8 key = s->at(0);
+                
+                if (!fullASCIIKeyboard)
                 {
-                    OEData *s = (OEData *)data;
-                    termKey = s->at(0);
+                    if (key >= 'a' && key <= 'z')
+                        key -= 0x20;
+                    else if (key >= 0x60 && key <= 0x7f)
+                        return;
                 }
+                
+                terminalKey = key;
+                
+                // Signal Keyboard strobe
+                bool ca1 = true;
+                pia->postMessage(this, MC6821_SET_CA1, &ca1);
+                ca1 = false;
+                pia->postMessage(this, MC6821_SET_CA1, &ca1);
+                
+                terminal->postMessage(this, RS232_CLEAR_RTS, NULL);
+                
                 return;
+            }
                 
             case RS232_CTS_DID_ASSERT:
-                {
-                    OEData data;
-                    data.push_back(termChar);
-                    terminal->postMessage(this, RS232_SEND_DATA, &data);
-                }
+            {
+                // Signal /RDA
+                bool cb1 = true;
+                pia->postMessage(this, MC6821_SET_CB1, &cb1);
+                // (it should last 3.5 µs, but we'll toggle it a bit faster)
+                cb1 = false;
+                pia->postMessage(this, MC6821_SET_CB1, &cb1);
+                
                 return;
+            }
         }
-    }
-    else if (sender == pia)
-    {
-        // CB2 did change
-        
     }
 }
 
 OEUInt8 Apple1IO::read(OEAddress address)
 {
-    switch (address & 0)
+    switch (address & 1)
     {
-        case 0:
-            return termKey | APPLE1KEYBOARD_MASK;
+        case MC6821_PORTA:
+        {
+            OEUInt8 value = terminalKey | APPLE1KEYBOARD_MASK;
             
-        case 1:
-            {
-                bool cb2;
-                terminal->postMessage(this, MC6821_GET_CB2, &cb2);
-                return ((!cb2) << 7);
-            }
+            terminalKey = 0;
+            
+            terminal->postMessage(this, RS232_ASSERT_RTS, NULL);
+            
+            return value;
+        }
+            
+        case MC6821_PORTB:
+        {
+            // Loop /CB2 signal to PB7
+            bool cb2;
+            pia->postMessage(this, MC6821_GET_CB2, &cb2);
+            
+            return ((!cb2) << 7);
+        }
     }
     
     return 0;
@@ -127,13 +179,13 @@ OEUInt8 Apple1IO::read(OEAddress address)
 
 void Apple1IO::write(OEAddress address, OEUInt8 value)
 {
-    switch (address & 0)
+    switch (address & 1)
     {
-        case 0:
+        case MC6821_PORTA:
             return;
             
-        case 1:
-            termChar = value & 0x7f;
+        case MC6821_PORTB:
+            terminalChar = value & 0x7f;
             return;
     }
 }

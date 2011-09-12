@@ -9,7 +9,8 @@
  */
 
 #import "EmulationItem.h"
-#import "StringConversion.h"
+
+#import "NSStringAdditions.h"
 
 #import "OEEmulation.h"
 
@@ -70,25 +71,25 @@
             foundDeviceId = find(deviceIds.begin(), deviceIds.end(), deviceId);
             if (theComponent && (foundDeviceId != deviceIds.end()))
             {
-                item = [[EmulationItem alloc] initDevice:getNSString(deviceId)
+                item = [[EmulationItem alloc] initDevice:[NSString stringWithCPPString:deviceId]
                                                component:theComponent
-                                                portType:getNSString(port.type)
-                                                  portId:getNSString(port.id)
+                                                portType:[NSString stringWithCPPString:port.type]
+                                                  portId:[NSString stringWithCPPString:port.id]
                                                 document:theDocument];
                 
                 deviceIds.erase(foundDeviceId);
             }
             else
-                item = [[EmulationItem alloc] initPort:getNSString(port.id)
-                                                 label:getNSString(port.label)
-                                             imagePath:getNSString(port.image)
-                                              portType:getNSString(port.type)
+                item = [[EmulationItem alloc] initPort:[NSString stringWithCPPString:port.id]
+                                                 label:[NSString stringWithCPPString:port.label]
+                                             imagePath:[NSString stringWithCPPString:port.image]
+                                              portType:[NSString stringWithCPPString:port.type]
                                               document:theDocument];
             
             string group = port.group;
             if (group == "")
                 group = "Unknown";
-            EmulationItem *groupItem = [self getGroup:getNSString(group)];
+            EmulationItem *groupItem = [self getGroup:[NSString stringWithCPPString:group]];
             NSMutableArray *groupChildren = [groupItem children];
             [groupChildren addObject:item];
             
@@ -104,7 +105,7 @@
             OEComponent *theComponent = emulation->getComponent(deviceId);
             
             EmulationItem *item;
-            item = [[EmulationItem alloc] initDevice:getNSString(deviceId)
+            item = [[EmulationItem alloc] initDevice:[NSString stringWithCPPString:deviceId]
                                            component:theComponent
                                             portType:@""
                                               portId:@""
@@ -157,17 +158,17 @@
         string value;
         
         ((OEComponent *)device)->postMessage(NULL, DEVICE_GET_LABEL, &value);
-        label = [getNSString(value) retain];
+        label = [[NSString stringWithCPPString:value] retain];
         NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
         ((OEComponent *)device)->postMessage(NULL, DEVICE_GET_IMAGEPATH, &value);
         NSString *imagePath = [[resourcePath stringByAppendingPathComponent:
-                                getNSString(value)] retain];
+                                [NSString stringWithCPPString:value]] retain];
         image = [[NSImage alloc] initByReferencingFile:imagePath];
         
         ((OEComponent *)device)->postMessage(NULL, DEVICE_GET_LOCATIONLABEL, &value);
-        locationLabel = [getNSString(value) retain];
+        locationLabel = [[NSString stringWithCPPString:value] retain];
         ((OEComponent *)device)->postMessage(NULL, DEVICE_GET_STATELABEL, &value);
-        stateLabel = [getNSString(value) retain];
+        stateLabel = [[NSString stringWithCPPString:value] retain];
         
         // Read settings
         settingsRef = [[NSMutableArray alloc] init];
@@ -180,11 +181,11 @@
         for (int i = 0; i < settings.size(); i++)
         {
             DeviceSetting setting = settings[i];
-            [settingsRef addObject:getNSString(setting.ref)];
-            [settingsName addObject:getNSString(setting.name)];
-            [settingsLabel addObject:getNSString(setting.label)];
-            [settingsType addObject:getNSString(setting.type)];
-            [settingsOptions addObject:[getNSString(setting.options)
+            [settingsRef addObject:[NSString stringWithCPPString:setting.ref]];
+            [settingsName addObject:[NSString stringWithCPPString:setting.name]];
+            [settingsLabel addObject:[NSString stringWithCPPString:setting.label]];
+            [settingsType addObject:[NSString stringWithCPPString:setting.type]];
+            [settingsOptions addObject:[[NSString stringWithCPPString:setting.options]
                                         componentsSeparatedByString:@","]];
         }
         
@@ -242,13 +243,13 @@
         string value;
         
         ((OEComponent *)theComponent)->postMessage(NULL, STORAGE_GET_MOUNTPATH, &value);
-        label = [[getNSString(value) lastPathComponent] retain];
+        label = [[[NSString stringWithCPPString:value] lastPathComponent] retain];
         image = [[NSImage imageNamed:@"DiskImage"] retain];
         
         locationLabel = [theLocationLabel copy];
         value = "";
         ((OEComponent *)theComponent)->postMessage(NULL, STORAGE_GET_FORMATLABEL, &value);
-        stateLabel = [getNSString(value) retain];
+        stateLabel = [[NSString stringWithCPPString:value] retain];
         
         storages = [[NSMutableArray alloc] init];
         [storages addObject:[NSValue valueWithPointer:theComponent]];
@@ -274,7 +275,7 @@
             theLabel = [@" " stringByAppendingString:theLabel];
         
         OEEmulation *emulation = (OEEmulation *)[theDocument emulation];
-        string deviceId = emulation->getDeviceId(getCPPString(uid));
+        string deviceId = emulation->getDeviceId([uid cppString]);
         OEComponent *theDevice = emulation->getComponent(deviceId);
         if (theDevice)
         {
@@ -283,10 +284,10 @@
             string theLocationLabel;
             theDevice->postMessage(NULL, DEVICE_GET_LOCATIONLABEL, &theLocationLabel);
             if (theLocationLabel == "")
-                locationLabel = [[getNSString(deviceLabel) stringByAppendingFormat:@"%@",
+                locationLabel = [[[NSString stringWithCPPString:deviceLabel]stringByAppendingFormat:@"%@",
                                   theLabel] retain];
             else
-                locationLabel = [[getNSString(theLocationLabel) stringByAppendingFormat:@"%@",
+                locationLabel = [[[NSString stringWithCPPString:theLocationLabel] stringByAppendingFormat:@"%@",
                                   theLabel] retain];
         }
         NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
@@ -412,10 +413,10 @@
     
     [document lockEmulation];
     OEEmulation *emulation = (OEEmulation *)[document emulation];
-    OEComponent *component = emulation->getComponent(getCPPString(settingRef));
+    OEComponent *component = emulation->getComponent([settingRef cppString]);
     if (component)
     {
-        if (component->setValue(getCPPString(settingName), getCPPString(value)))
+        if (component->setValue([settingName cppString], [value cppString]))
             component->update();
     }
     [document unlockEmulation];
@@ -430,12 +431,12 @@
     [document lockEmulation];
     
     OEEmulation *emulation = (OEEmulation *)[document emulation];
-    OEComponent *component = emulation->getComponent(getCPPString(settingRef));
+    OEComponent *component = emulation->getComponent([settingRef cppString]);
     if (component)
     {
         string theValue;
-        component->getValue(getCPPString(settingName), theValue);
-        value = getNSString(theValue);
+        component->getValue([settingName cppString], theValue);
+        value = [NSString stringWithCPPString:theValue];
     }
     
     [document unlockEmulation];
@@ -463,7 +464,7 @@
     
     [document lockEmulation];
     
-    emulation->removeDevice(getCPPString(uid));
+    emulation->removeDevice([uid cppString]);
     
     [document unlockEmulation];
 }
@@ -502,7 +503,7 @@
     
     [document lockEmulation];
     
-    string value = getCPPString(path);
+    string value = [path cppString];
     BOOL success = NO;
     for (int i = 0; i < [storages count]; i++)
     {
@@ -544,7 +545,7 @@
     
     [document lockEmulation];
     
-    string value = getCPPString(path);
+    string value = [path cppString];
     BOOL success = NO;
     for (int i = 0; i < [storages count]; i++)
     {
@@ -584,7 +585,7 @@
         
         [document unlockEmulation];
         
-        [[NSWorkspace sharedWorkspace] selectFile:getNSString(value)
+        [[NSWorkspace sharedWorkspace] selectFile:[NSString stringWithCPPString:value]
                          inFileViewerRootedAtPath:@""];
     }
 }
@@ -640,7 +641,7 @@
 - (BOOL)addOEDocument:(NSString *)thePath
 {
     OEDocument oeDocument;
-    oeDocument.open(getCPPString(thePath));
+    oeDocument.open([thePath cppString]);
     if (!oeDocument.isOpen())
         return NO;
     
@@ -653,16 +654,16 @@
         OEConnectorInfos::iterator i = connectorInfos.begin();
         
         map<string, string> idMap;
-        idMap[getCPPString(portId)] = i->id;
+        idMap[[portId cppString]] = i->id;
         
         OEEmulation *emulation = (OEEmulation *)[document emulation];
         
         [document lockEmulation];
         
         if (type == EMULATIONITEM_DEVICE)
-            emulation->removeDevice(getCPPString(uid));
+            emulation->removeDevice([uid cppString]);
         
-        bool result = emulation->addDocument(getCPPString(thePath), idMap);
+        bool result = emulation->addDocument([thePath cppString], idMap);
         
         [document unlockEmulation];
         

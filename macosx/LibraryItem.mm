@@ -9,7 +9,9 @@
  */
 
 #import "LibraryItem.h"
-#import "StringConversion.h"
+
+#import "NSStringAdditions.h"
+
 #import "OEDocument.h"
 
 @implementation LibraryItem
@@ -59,11 +61,11 @@
     NSString *fullPath = [[resourcePath stringByAppendingPathComponent:@"library"]
                           stringByAppendingPathComponent:path];
     
-    oeDocument.open(getCPPString(fullPath));
+    oeDocument.open([fullPath cppString]);
     if (!oeDocument.isOpen())
         return;
     
-    NSString *imagePath = getNSString(oeDocument.getHeaderInfo().image);
+    NSString *imagePath = [NSString stringWithCPPString:oeDocument.getHeaderInfo().image];
     OEConnectorInfos connectorInfos = oeDocument.getFreeConnectorInfos();
     
     oeDocument.close();
@@ -77,11 +79,11 @@
     if (connectorInfos.size() == 1)
     {
         OEConnectorInfos::iterator i = connectorInfos.begin();
-        type = [getNSString(i->type) retain];
+        type = [[NSString stringWithCPPString:i->type] retain];
     }
     
     // Read description
-    description = [getNSString(oeDocument.getHeaderInfo().description) retain];
+    description = [[NSString stringWithCPPString:oeDocument.getHeaderInfo().description] retain];
 }
 
 - (NSString *)path

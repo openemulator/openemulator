@@ -11,7 +11,8 @@
 #import "Quartz/Quartz.h"
 
 #import "TemplateChooserItem.h"
-#import "StringConversion.h"
+
+#import "NSStringAdditions.h"
 
 #import "OEDocument.h"
 
@@ -44,7 +45,7 @@
         return;
     
     OEDocument oeDocument;
-    oeDocument.open(getCPPString(path));
+    oeDocument.open([path cppString]);
     if (oeDocument.isOpen())
     {
         OEHeaderInfo headerInfo = oeDocument.getHeaderInfo();
@@ -53,9 +54,9 @@
         label = [[[path lastPathComponent] stringByDeletingPathExtension]
                  retain];
         NSString *imagePath = [resourcePath stringByAppendingPathComponent:
-                               getNSString(headerInfo.image)];
+                               [NSString stringWithCPPString:headerInfo.image]];
         image = [[NSImage alloc] initWithContentsOfFile:imagePath];
-        description = [getNSString(headerInfo.description) retain];
+        description = [[NSString stringWithCPPString:headerInfo.description] retain];
     }
     
     loaded = YES;

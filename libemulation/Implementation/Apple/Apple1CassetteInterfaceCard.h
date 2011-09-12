@@ -1,11 +1,11 @@
 
 /**
  * libemulation
- * Apple I Cassette Interface
+ * Apple-1 Cassette Interface
  * (C) 2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls an Apple I cassette interface
+ * Implements an Apple-1 cassette interface
  */
 
 #include "OEComponent.h"

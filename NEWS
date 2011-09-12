@@ -1,4 +1,5 @@
 ==2011-09==
+* Added several Apple-1 features: keyboard buffering, pasting
 * Implemented Apple-1 I/O
 * Fixed generic components bugs
 * Implemented MOS 6502

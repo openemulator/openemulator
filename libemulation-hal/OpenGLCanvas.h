@@ -106,8 +106,8 @@ public:
     void sendJoystickHatEvent(int deviceIndex, int index, float value);
     void moveJoystickBall(int deviceIndex, int index, float value);
     
-    void doCopy(string& value);
-    void doPaste(string value);
+    void doCopy(wstring& value);
+    void doPaste(wstring value);
     void doDelete();
     
     bool postMessage(OEComponent *sender, int message, void *data);

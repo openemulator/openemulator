@@ -105,64 +105,22 @@ string rtrim(string value)
     return "";
 }
 
-wstring getWString(string value)
+wstring rtrim(wstring value)
 {
-    wstring ws;
+    size_t found;
     
-    wchar_t w = 0;
-    OEUInt32 bytes = 0;
+    found = value.find_last_not_of(L" \n\r\t\f\v");
+    if (found != string::npos)
+        return value.substr(0, found + 1);
     
-    for (size_t i = 0; i < value.size(); i++)
-    {
-        unsigned char c = (unsigned char)value[i];
-        
-        if (c <= 0x7f)
-        {
-            // first byte
-            bytes = 0;
-            ws.push_back((wchar_t)c);
-        }
-        else if (c <= 0xbf)
-        {
-            // second/third/fourth byte
-            if (bytes)
-            {
-                w = ((w << 6) | (c & 0x3f));
-                bytes--;
-                if (bytes == 0)
-                    ws.push_back(w);
-            }
-        }
-        else if (c <= 0xdf)
-        {
-            // 2-byte sequence start
-            bytes = 1;
-            w = c & 0x1f;
-        }
-        else if (c <= 0xef)
-        {
-            // 3-byte sequence start
-            bytes = 2;
-            w = c & 0x0f;
-        }
-        else if (c <= 0xf7)
-        {
-            // 4-byte sequence start
-            bytes = 3;
-            w = c & 0x07;
-        }
-        else
-            bytes = 0;
-    }
-    
-    return ws;
+    return L"";
 }
 
 OEData getCharVector(const string& value)
 {
     OEData result;
     size_t start = (value.substr(0, 2) == "0x") ? 2 : 0;
-    size_t size = value.size() / 2 - start;
+    size_t size = (value.size() - start) / 2;
     result.resize(size);
     
     for (size_t i = 0; i < size; i++)

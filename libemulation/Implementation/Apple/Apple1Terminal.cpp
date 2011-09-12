@@ -1,11 +1,11 @@
 
 /**
  * libemulation
- * Apple I Terminal
- * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
+ * Apple-1 Terminal
+ * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls an Apple I Terminal
+ * Implements an Apple-1 terminal
  */
 
 #include "Apple1Terminal.h"
@@ -14,17 +14,19 @@
 #include "RS232Interface.h"
 #include "RAM.h"
 
-#define SCREEN_ORIGIN_X 104
-#define SCREEN_ORIGIN_Y 25
-#define SCREEN_WIDTH 768
-#define SCREEN_HEIGHT 242
-#define TERM_WIDTH 40
-#define TERM_HEIGHT 24
-#define CHAR_WIDTH 14
-#define CHAR_HEIGHT 8
-#define FONT_SIZE 0x40
-#define FONT_WIDTH 16
-#define FONT_HEIGHT 8
+#define SCREEN_ORIGIN_X     104
+#define SCREEN_ORIGIN_Y     25
+#define SCREEN_WIDTH        768
+#define SCREEN_HEIGHT       242
+#define TERM_WIDTH          40
+#define TERM_HEIGHT         24
+#define CHAR_WIDTH          14
+#define CHAR_HEIGHT         8
+#define FONT_SIZE           0x40
+#define FONT_WIDTH          16
+#define FONT_HEIGHT         8
+#define BLINK_ON            10
+#define BLINK_OFF           20
 
 Apple1Terminal::Apple1Terminal()
 {
@@ -175,16 +177,30 @@ bool Apple1Terminal::postMessage(OEComponent *sender, int message, void *data)
     switch (message)
     {
         case RS232_SEND_DATA:
-            {
-                OEData *theData = (OEData *)data;
-                for (OEData::iterator i = theData->begin(); 
-                     i != theData->end();
-                     i++)
-                    sendUnicodeChar(*i);
-                return true;
-            }
+        {
+            // Receive chars
+            OEData *theData = (OEData *)data;
+            for (OEData::iterator i = theData->begin();
+                 i != theData->end();
+                 i++)
+                putChar(*i);
+            
+            return true;
+        }
+            
+        case RS232_ASSERT_RTS:
+            isRTS = true;
+            
+            emptyQueue();
+            
+            return true;
+            
+        case RS232_CLEAR_RTS:
+            isRTS = false;
+            
+            return true;
     }
-    
+
     return false;
 }
 
@@ -197,22 +213,23 @@ void Apple1Terminal::notify(OEComponent *sender, int notification, void *data)
             case CONTROLBUS_TIMER_DID_FIRE:
                 updateCanvas();
                 scheduleTimer();
+                
                 break;
                 
             case CONTROLBUS_POWERSTATE_DID_CHANGE:
             {
                 powerState = *((ControlBusPowerState *)data);
-                if (monitor)
+
+                if (powerState == CONTROLBUS_POWERSTATE_OFF)
                 {
                     updateBezel();
+                    clearScreen();
                     
-                    if (powerState == CONTROLBUS_POWERSTATE_OFF)
-                    {
+                    if (monitor)
                         monitor->postMessage(this, CANVAS_CLEAR, NULL);
-                        
-                        cursorX = 0;
-                        cursorY = 0;
-                    }
+                    
+                    while (!keyQueue.empty())
+                        keyQueue.pop();
                 }
                 
                 break;
@@ -226,36 +243,35 @@ void Apple1Terminal::notify(OEComponent *sender, int notification, void *data)
         switch (notification)
         {
             case CANVAS_UNICODECHAR_WAS_SENT:
-                {
-                    OEUInt32 unicodeChar = *((CanvasUnicodeChar *)data);
-                    if (unicodeChar < 128)
-                    {
-                        OEData data;
-                        data.push_back(unicodeChar);
-                        OEComponent::notify(this, RS232_DID_RECEIVE_DATA, &data);
-                    }
-                }
+            {
+                OEUInt8 key = *((CanvasUnicodeChar *)data);
+                
+                if (key == 127)
+                    clearScreen();
+                else if (key < 127)
+                    enqueueKey(key);
+                
                 break;
+            }
                 
             case CANVAS_DID_COPY:
-                copy((string *)data);
+                copy((wstring *)data);
                 break;
                 
             case CANVAS_DID_PASTE:
-                paste((string *)data);
+                paste((wstring *)data);
                 break;
         }
     }
-}
-
-void Apple1Terminal::write(OEAddress address, OEUInt8 value)
-{
 }
 
 void Apple1Terminal::scheduleTimer()
 {
     OEUInt64 clocks = 262 * 57;
     controlBus->postMessage(this, CONTROLBUS_SCHEDULE_TIMER, &clocks);
+    
+    OEComponent::notify(this, RS232_CTS_DID_ASSERT, NULL);
+    OEComponent::notify(this, RS232_CTS_DID_CLEAR, NULL);
 }
 
 void Apple1Terminal::loadFont(OEData *data)
@@ -291,8 +307,8 @@ void Apple1Terminal::updateCanvas()
     if (!vramp)
         return;
     
-    // No updates when power is turned off
     if (powerState == CONTROLBUS_POWERSTATE_OFF)
+        // No updates when power is turned off
         return;
     
     if (powerState == CONTROLBUS_POWERSTATE_ON)
@@ -302,11 +318,11 @@ void Apple1Terminal::updateCanvas()
         else
         {
             cursorActive = !cursorActive;
-            cursorCount = cursorActive ? 10 : 20;
+            cursorCount = cursorActive ? BLINK_ON : BLINK_OFF;
         }
     }
-    // Hide cursor when paused
     else
+        // Hide cursor when paused
         cursorActive = false;
     
     char *fp = (char *)&font.front();
@@ -360,26 +376,19 @@ void Apple1Terminal::updateBezel()
     monitor->postMessage(this, CANVAS_SET_BEZEL, &bezel);
 }
 
-void Apple1Terminal::sendUnicodeChar(CanvasUnicodeChar unicodeChar)
+void Apple1Terminal::putChar(OEUInt8 c)
 {
     if (powerState != CONTROLBUS_POWERSTATE_ON)
         return;
     
-    if (unicodeChar == 0x0a)
+    if (c == 0x0d)
     {
         cursorX = 0;
         cursorY++;
     }
-    else if (unicodeChar == 0x7f)
+    else if ((c >= 0x20) && (c <= 0x7f))
     {
-        memset(vramp, 0x20, TERM_HEIGHT * TERM_WIDTH);
-        
-        cursorX = 0;
-        cursorY = 0;
-    }
-    else if ((unicodeChar >= 0x20) && (unicodeChar <= 0x7f))
-    {
-        vramp[cursorY * TERM_WIDTH + cursorX] = unicodeChar;
+        vramp[cursorY * TERM_WIDTH + cursorX] = c;
         
         cursorX++;
         if (cursorX >= TERM_WIDTH)
@@ -398,23 +407,59 @@ void Apple1Terminal::sendUnicodeChar(CanvasUnicodeChar unicodeChar)
     }
 }
 
-void Apple1Terminal::copy(string *s)
+void Apple1Terminal::clearScreen()
+{
+    memset(vramp, 0x20, TERM_HEIGHT * TERM_WIDTH);
+    
+    cursorX = 0;
+    cursorY = 0;
+}
+
+void Apple1Terminal::enqueueKey(OEUInt8 key)
+{
+    if (key == '\n')
+        key = '\r';
+    else if (key == '\r')
+        return;
+    
+    keyQueue.push(key);
+    
+    emptyQueue();
+}
+
+void Apple1Terminal::emptyQueue()
+{
+    while (isRTS && !keyQueue.empty())
+    {
+        OEData data;
+        data.push_back(keyQueue.front());
+        keyQueue.pop();
+        
+        OEComponent::notify(this, RS232_DID_RECEIVE_DATA, &data);
+    }
+}
+
+void Apple1Terminal::copy(wstring *s)
 {
     for (int y = 0; y < TERM_HEIGHT; y++)
     {
-        string line;
+        wstring line;
         
         for (int x = 0; x < TERM_WIDTH; x++)
             line += (vramp[y * TERM_WIDTH + x]) & 0x7f;
         
-        *s += rtrim(line) + '\n';
+        line = rtrim(line);
+        line += '\n';
+        
+        *s += line;
     }
 }
 
-void Apple1Terminal::paste(string *s)
+void Apple1Terminal::paste(wstring *s)
 {
-    wstring ws = getWString(*s);
-    
-    for (int i = 0; i < ws.size(); i++)
-        sendUnicodeChar(ws[i]);
+    for (int i = 0; i < s->size(); i++)
+    {
+        if (s->at(i) < 127)
+            enqueueKey(s->at(i));
+    }
 }
