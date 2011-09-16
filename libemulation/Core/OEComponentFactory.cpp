@@ -41,13 +41,15 @@
 #include "AppleLanguageCard.h"
 #include "AppleSilentype.h"
 
-#include "MC6821.h"
-#include "MC6845.h"
-
 #include "MOS6502.h"
 #include "MOS6530.h"
 #include "MOSKIM1IO.h"
 #include "MOSKIM1PLL.h"
+
+#include "MC6821.h"
+#include "MC6845.h"
+
+#include "RDCFFA1.h"
 
 #include "VidexVideoterm.h"
 // FACTORY_INCLUDE_END - Do not modify this section
@@ -87,13 +89,15 @@ OEComponent *OEComponentFactory::construct(const string& className)
     matchComponent(AppleLanguageCard);
     matchComponent(AppleSilentype);
     
-    matchComponent(MC6821);
-    matchComponent(MC6845);
-    
     matchComponent(MOS6502);
     matchComponent(MOS6530);
     matchComponent(MOSKIM1IO);
     matchComponent(MOSKIM1PLL);
+    
+    matchComponent(MC6821);
+    matchComponent(MC6845);
+    
+    matchComponent(RDCFFA1);
     
     matchComponent(VidexVideoterm);
     // FACTORY_CODE_END - Do not modify this section

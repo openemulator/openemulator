@@ -1,12 +1,12 @@
 ==To-Do==
 * Implement CFFA1
 * Implement Apple-1 Apple Cassette Interface
+* Optimize screen persistance
+* Implement automatic software update
 
-* Add EDL generator and build
-* Optimize persistance
 * Add OESound: resampling, rendering to audio buffer
 * Implement UNICODE entry of composed keys on Mac OS X (like ^ or « or `)
-* Fix [CanvasView update] recursion in printer view
+* Fix [CanvasView update] problem in paper view
 * Remove data property, and add OEData class (allows to read from/write to file), but how would we access files in a zip package?
 * Do disk image file locking, if the disk image is writable (flock)
 * Fix scrolling in template chooser when changing group

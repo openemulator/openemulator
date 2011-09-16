@@ -170,7 +170,7 @@ bool MC6821::postMessage(OEComponent *sender, int message, void *data)
             return true;
         }
             
-        case MC6821_GET_DATAA:
+        case MC6821_GET_PA:
             *((OEUInt8 *) data) = dataA;
             return true;
             
@@ -226,7 +226,7 @@ bool MC6821::postMessage(OEComponent *sender, int message, void *data)
             return true;
         }
             
-        case MC6821_GET_DATAB:
+        case MC6821_GET_PB:
             *((OEUInt8 *) data) = dataB;
             return true;
     }

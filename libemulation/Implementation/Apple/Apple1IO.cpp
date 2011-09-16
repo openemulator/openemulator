@@ -97,7 +97,7 @@ bool Apple1IO::init()
         return false;
     }
     
-    pia->postMessage(this, MC6821_GET_DATAB, &terminalChar);
+    pia->postMessage(this, MC6821_GET_PB, &terminalChar);
     
     terminalChar &= 0x7f;
     

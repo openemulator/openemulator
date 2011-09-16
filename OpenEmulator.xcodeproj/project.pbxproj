@@ -119,6 +119,8 @@
 		00D844CC0FFF0505005802F0 /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00D844C30FFF0505005802F0 /* Preferences.xib */; };
 		00D845830FFF0FD2005802F0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D845730FFF0FD2005802F0 /* main.m */; };
 		00D845860FFF0FD2005802F0 /* PreferencesWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D8457A0FFF0FD2005802F0 /* PreferencesWindowController.m */; };
+		00DEA9201423B7BC003E9FA0 /* RDCFFA1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00DEA91F1423B7BC003E9FA0 /* RDCFFA1.cpp */; };
+		00DEA9221423B7C9003E9FA0 /* RDCFFA1.h in Headers */ = {isa = PBXBuildFile; fileRef = 00DEA9211423B7C9003E9FA0 /* RDCFFA1.h */; };
 		00E442921278726B00713A05 /* IconDevices.png in Resources */ = {isa = PBXBuildFile; fileRef = 00E442911278726B00713A05 /* IconDevices.png */; };
 		00ED379C12779AD100BEF6BD /* AudioMax.png in Resources */ = {isa = PBXBuildFile; fileRef = 00ED379712779AD000BEF6BD /* AudioMax.png */; };
 		00ED379D12779AD100BEF6BD /* AudioMin.png in Resources */ = {isa = PBXBuildFile; fileRef = 00ED379812779AD000BEF6BD /* AudioMin.png */; };
@@ -429,6 +431,8 @@
 		00D845760FFF0FD2005802F0 /* OpenEmulator_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenEmulator_Prefix.pch; sourceTree = "<group>"; };
 		00D845790FFF0FD2005802F0 /* PreferencesWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferencesWindowController.h; sourceTree = "<group>"; };
 		00D8457A0FFF0FD2005802F0 /* PreferencesWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferencesWindowController.m; sourceTree = "<group>"; };
+		00DEA91F1423B7BC003E9FA0 /* RDCFFA1.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RDCFFA1.cpp; sourceTree = "<group>"; };
+		00DEA9211423B7C9003E9FA0 /* RDCFFA1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDCFFA1.h; sourceTree = "<group>"; };
 		00E442911278726B00713A05 /* IconDevices.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IconDevices.png; sourceTree = "<group>"; };
 		00E442931278727600713A05 /* EmulationShow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EmulationShow.png; sourceTree = "<group>"; };
 		00ED379712779AD000BEF6BD /* AudioMax.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AudioMax.png; sourceTree = "<group>"; };
@@ -675,6 +679,7 @@
 				00B8882D12A393990052B7A4 /* Generic */,
 				00B8884212A393990052B7A4 /* MOS */,
 				00B8885212A393990052B7A4 /* Motorola */,
+				00DEA91E1423B779003E9FA0 /* R&D */,
 				00B8885712A393990052B7A4 /* Ricoh */,
 				002740B513A08A1E00E13D65 /* Videx */,
 				00B8885D12A393990052B7A4 /* WDC */,
@@ -868,6 +873,16 @@
 			path = Host;
 			sourceTree = "<group>";
 		};
+		00DEA91E1423B779003E9FA0 /* R&D */ = {
+			isa = PBXGroup;
+			children = (
+				00DEA91F1423B7BC003E9FA0 /* RDCFFA1.cpp */,
+				00DEA9211423B7C9003E9FA0 /* RDCFFA1.h */,
+			);
+			name = "R&D";
+			path = RD;
+			sourceTree = "<group>";
+		};
 		19C28FB0FE9D524F11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -1037,6 +1052,7 @@
 				002740B913A08A4F00E13D65 /* VidexVideoterm.h in Headers */,
 				00F397E6141655EC00C53A3E /* Apple1IO.h in Headers */,
 				00FBD2DE1419A03B00BA8CEE /* AudioCodec.h in Headers */,
+				00DEA9221423B7C9003E9FA0 /* RDCFFA1.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1289,6 +1305,7 @@
 				00D75C691399FFDB004AA153 /* LibraryTableCell.m in Sources */,
 				004763D2139C94F30016277E /* LibraryTableView.m in Sources */,
 				0009068E141D2A0300F06D99 /* NSStringAdditions.mm in Sources */,
+				00DEA9201423B7BC003E9FA0 /* RDCFFA1.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

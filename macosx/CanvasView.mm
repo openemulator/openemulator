@@ -285,9 +285,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
         OEComponent *device = (OEComponent *)[canvasWindowController device];
         if (device)
         {
-            bool areEventsEnabled = false;
-            device->postMessage(NULL, DEVICE_ARE_EVENTS_ENABLED, &areEventsEnabled);
-            return areEventsEnabled;
+            bool areEventsListened = false;
+            device->postMessage(NULL, DEVICE_ARE_EVENTS_LISTENED, &areEventsListened);
+            return areEventsListened;
         }
     }
     

@@ -285,7 +285,7 @@
              (action == @selector(sendColdRestart:)) ||
              (action == @selector(sendWarmRestart:)) ||
              (action == @selector(sendDebuggerBreak:)))
-        return [item areDeviceEventsEnabled];
+        return [item areDeviceEventsListened];
     
     return YES;
 }
