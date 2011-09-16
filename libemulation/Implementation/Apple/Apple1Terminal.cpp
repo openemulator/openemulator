@@ -25,8 +25,8 @@
 #define FONT_SIZE           0x40
 #define FONT_WIDTH          16
 #define FONT_HEIGHT         8
-#define BLINK_ON            10
-#define BLINK_OFF           20
+#define BLINK_ON            20
+#define BLINK_OFF           10
 
 Apple1Terminal::Apple1Terminal()
 {
@@ -237,6 +237,9 @@ void Apple1Terminal::notify(OEComponent *sender, int notification, void *data)
                 updateCanvas();
                 scheduleTimer();
                 
+                OEComponent::notify(this, RS232_CTS_DID_ASSERT, NULL);
+                OEComponent::notify(this, RS232_CTS_DID_CLEAR, NULL);
+                
                 break;
         }
     }
@@ -276,9 +279,6 @@ void Apple1Terminal::scheduleTimer()
 {
     OEUInt64 clocks = 262 * 57;
     controlBus->postMessage(this, CONTROLBUS_SCHEDULE_TIMER, &clocks);
-    
-    OEComponent::notify(this, RS232_CTS_DID_ASSERT, NULL);
-    OEComponent::notify(this, RS232_CTS_DID_CLEAR, NULL);
 }
 
 void Apple1Terminal::loadFont(OEData *data)
@@ -291,7 +291,7 @@ void Apple1Terminal::loadFont(OEData *data)
         {
             for (int x = 0; x < FONT_WIDTH; x++)
             {
-                bool b = (data->at(i * FONT_HEIGHT + y) >> (x >> 1)) & 0x1;
+                bool b = (data->at(i * FONT_HEIGHT + y) << (x >> 1)) & 0x40;
                 
                 font[(i * FONT_HEIGHT + y) * FONT_WIDTH + x] = b ? 0xff : 0x00;
             }

@@ -15,8 +15,7 @@
 
 - (BOOL)isOnLionOrBetter
 {
-    return floor(NSAppKitVersionNumber) >
-    NSAppKitVersionNumber10_6;
+    return floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_6;
 }
 
 - (id)initWithContentRect:(NSRect)contentRect

@@ -170,6 +170,10 @@ bool MC6821::postMessage(OEComponent *sender, int message, void *data)
             return true;
         }
             
+        case MC6821_GET_DATAA:
+            *((OEUInt8 *) data) = dataA;
+            return true;
+            
         case MC6821_SET_CB1:
         {
             bool value = *((bool *) data);
@@ -221,6 +225,10 @@ bool MC6821::postMessage(OEComponent *sender, int message, void *data)
             
             return true;
         }
+            
+        case MC6821_GET_DATAB:
+            *((OEUInt8 *) data) = dataB;
+            return true;
     }
     
     return false;

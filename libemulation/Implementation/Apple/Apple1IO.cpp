@@ -83,6 +83,27 @@ bool Apple1IO::setRef(string name, OEComponent *ref)
     return true;
 }
 
+bool Apple1IO::init()
+{
+    if (!pia)
+    {
+        logMessage("pia not connected");
+        return false;
+    }
+    
+    if (!terminal)
+    {
+        logMessage("terminal not connected");
+        return false;
+    }
+    
+    pia->postMessage(this, MC6821_GET_DATAB, &terminalChar);
+    
+    terminalChar &= 0x7f;
+    
+    return true;
+}
+
 void Apple1IO::notify(OEComponent *sender, int notification, void *data)
 {
     if (sender == pia)
@@ -91,11 +112,11 @@ void Apple1IO::notify(OEComponent *sender, int notification, void *data)
         {
             case MC6821_CB2_DID_CHANGE:
             {
-                bool cb2 = *((bool *)data);
+                bool ready = *((bool *)data);
                 
-                if (!cb2)
+                if (ready && !enhancedTerminalSpeed)
                 {
-                    // Signal DA
+                    // Send char
                     OEData s;
                     s.push_back(terminalChar);
                     terminal->postMessage(this, RS232_SEND_DATA, &s);
@@ -166,11 +187,17 @@ OEUInt8 Apple1IO::read(OEAddress address)
             
         case MC6821_PORTB:
         {
-            // Loop /CB2 signal to PB7
-            bool cb2;
-            pia->postMessage(this, MC6821_GET_CB2, &cb2);
+            bool ready;
             
-            return ((!cb2) << 7);
+            if (enhancedTerminalSpeed)
+                ready = true;
+            else
+            {
+                // Loop /CB2 signal to PB7
+                pia->postMessage(this, MC6821_GET_CB2, &ready);
+            }
+            
+            return ((!ready) << 7);
         }
     }
     
@@ -186,6 +213,14 @@ void Apple1IO::write(OEAddress address, OEUInt8 value)
             
         case MC6821_PORTB:
             terminalChar = value & 0x7f;
+            
+            if (enhancedTerminalSpeed)
+            {
+                // Send char
+                OEData s;
+                s.push_back(terminalChar);
+                terminal->postMessage(this, RS232_SEND_DATA, &s);
+            }
             
             break;
     }

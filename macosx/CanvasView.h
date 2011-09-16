@@ -32,10 +32,9 @@
     BOOL capsLockNotSynchronized;
 }
 
-- (void)windowWillClose:(NSNotification *)notification;
-- (void)windowDidResize:(NSNotification *)notification;
-- (void)windowDidBecomeKey:(NSNotification *)notification;
-- (void)windowDidResignKey:(NSNotification *)notification;
+- (void)windowDidResize;
+- (void)windowDidBecomeKey;
+- (void)windowDidResignKey;
 
 - (void)initOpenGL;
 - (void)freeOpenGL;

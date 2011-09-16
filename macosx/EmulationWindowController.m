@@ -58,6 +58,8 @@
 
 - (void)windowDidLoad
 {
+    document = [self document];
+    
     [self setWindowFrameAutosaveName:@"Emulation"];
     
     float thickness = NSMinY([fSplitView frame]);
@@ -85,19 +87,19 @@
     
     [[self window] setDelegate:self];
     
-    [self updateEmulation:self];
+    [self updateWindow:self];
 }
 
-- (void)updateEmulation:(id)sender
+- (void)updateWindow:(id)sender
 {
-    if (![self document])
+    if (![self isWindowLoaded])
         return;
     
-    // Preserve state
+    // Preserve selected uid
     NSString *uid = [[selectedItem uid] copy];
     
     [rootItem release];
-    rootItem = [[EmulationItem alloc] initRootWithDocument:[self document]];
+    rootItem = [[EmulationItem alloc] initRootWithDocument:document];
     
     [fOutlineView reloadData];
     [fOutlineView expandItem:nil expandChildren:YES];
@@ -260,7 +262,9 @@
     SEL action = [anItem action];
     EmulationItem *item = [self itemForSender:anItem];
     
-    if (action == @selector(paste:))
+    if (action == @selector(print:))
+        return NO;
+    else if (action == @selector(paste:))
     {
         NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
         return [[pasteboard types] containsObject:NSStringPboardType];
@@ -917,9 +921,9 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
         
         [item remove];
         
-        [self updateEmulation:self];
+        [self updateWindow:self];
         
-        [[self document] updateChangeCount:NSChangeDone];
+        [document updateChangeCount:NSChangeDone];
     }
 }
 
@@ -983,9 +987,9 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
 {
     if ([theItem addOEDocument:thePath])
     {
-        [self updateEmulation:self];
+        [self updateWindow:self];
         
-        [[self document] updateChangeCount:NSChangeDone];
+        [document updateChangeCount:NSChangeDone];
         
         return YES;
     }

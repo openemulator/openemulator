@@ -62,8 +62,6 @@ bool ControlBus::setValue(string name, string value)
         resetOnPowerOn = getUInt(value);
     else if (name == "powerState")
         powerState = (ControlBusPowerState) getInt(value);
-    else if (name == "cycleCount")
-        cycleCount = getUInt(value);
     else if (name == "resetCount")
         resetCount = (OEUInt32) getUInt(value);
     else if (name == "irqCount")
@@ -80,8 +78,6 @@ bool ControlBus::getValue(string name, string &value)
 {
     if (name == "powerState")
         value = getString(powerState);
-    else if (name == "cycleCount")
-        value = getString(cycleCount);
     else if (name == "resetCount")
         value = getString(resetCount);
     else if (name == "irqCount")

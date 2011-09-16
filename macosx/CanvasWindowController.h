@@ -22,6 +22,8 @@
     void *device;
     NSString *title;
     void *canvas;
+    
+    BOOL isClosing;
 }
 
 - (id)initWithDevice:(void *)theDevice
@@ -29,7 +31,6 @@
               canvas:(void *)theCanvas;
 - (void *)canvas;
 - (void *)device;
-- (void)closeWindow;
 - (CanvasView *)canvasView;
 
 - (IBAction)setHalfSize:(id)sender;

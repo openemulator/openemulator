@@ -1,4 +1,11 @@
 ==2011-09==
+* Fixed EmulationWindowController Document when ordered out
+* Fixed Apple1IO terminalChar persistance
+* Fixed "Revert to Saved"
+* Implemented GPU check for setting shaders when starting the first time
+* Fixed error handling when emulation did not init and some canvas was created
+* Implemented Apple-1 enhanced terminal speed
+* Fixed Signetics 2513 bit order
 * Fixed reset problem, improved keyboard buffering
 * Added several Apple-1 features: keyboard buffering, pasting
 * Implemented Apple-1 I/O

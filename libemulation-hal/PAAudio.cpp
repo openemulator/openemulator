@@ -336,23 +336,6 @@ void PAAudio::runEmulations()
     }
 }
 
-bool PAAudio::addEmulation(OEEmulation *emulation)
-{
-    emulations.push_back(emulation);
-    
-    return true;
-}
-
-void PAAudio::removeEmulation(OEEmulation *emulation)
-{
-    vector<OEEmulation *>::iterator first = emulations.begin();
-    vector<OEEmulation *>::iterator last = emulations.end();
-    vector<OEEmulation *>::iterator i = remove(first, last, emulation);
-    
-    if (i != last)
-        emulations.erase(i, last);
-}
-
 //
 // Audio
 //

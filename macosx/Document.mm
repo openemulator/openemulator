@@ -16,7 +16,6 @@
 
 #import "EmulationWindowController.h"
 #import "CanvasWindowController.h"
-#import "CanvasPrintView.h"
 
 #import "OEEmulation.h"
 #import "PAAudio.h"
@@ -100,9 +99,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
         if ([self readFromURL:absoluteURL
                        ofType:nil
                         error:outError])
-        {
             return self;
-        }
     }
     
     if (outError)
@@ -130,16 +127,33 @@ void destroyCanvas(void *userData, OEComponent *canvas)
               error:(NSError **)outError
 {
     if (emulation)
-        [self destroyEmulation];
-    
-    [self constructEmulation:absoluteURL];
-    
-    OEEmulation *theEmulation = (OEEmulation *)emulation;
-    if (theEmulation)
     {
-        if (theEmulation->isOpen())
+        [emulationWindowController close];
+        
+        [self destroyEmulation];
+        
+        [emulationWindowController release];
+        emulationWindowController = nil;
+        
+        [canvasWindowControllers release];
+        canvasWindowControllers = nil;
+        
+        DocumentController *documentController;
+        documentController = [NSDocumentController sharedDocumentController];
+        [documentController openDocumentWithContentsOfURL:absoluteURL
+                                                  display:YES
+                                                    error:outError];
+        
+        return YES;
+    }
+    
+    emulation = [self constructEmulation:absoluteURL];
+    
+    if (emulation)
+    {
+        if (((OEEmulation *)emulation)->isOpen())
         {
-            if (theEmulation->isActive())
+            if (((OEEmulation *)emulation)->isActive())
                 [self updateChangeCount:NSChangeDone];
             
             return YES;
@@ -243,6 +257,87 @@ void destroyCanvas(void *userData, OEComponent *canvas)
         [[NSAlert alertWithError:error] runModal];
 }
 
+// Emulation
+
+- (void)didUpdate:(id)sender
+{
+    if (emulation && ((OEEmulation *)emulation)->isActive())
+        [self updateChangeCount:NSChangeDone];
+    
+    [emulationWindowController updateWindow:self];
+}
+
+- (void *)constructEmulation:(NSURL *)url
+{
+    if (!canvasWindowControllers)
+        canvasWindowControllers = [[NSMutableArray alloc] init];
+    
+    DocumentController *documentController;
+    documentController = [NSDocumentController sharedDocumentController];
+    PAAudio *paAudio = (PAAudio *)[documentController paAudio];
+    
+    OEEmulation *theEmulation = new OEEmulation();
+    
+    theEmulation->setResourcePath([[[NSBundle mainBundle] resourcePath] cppString]);
+    theEmulation->setConstructCanvas(constructCanvas);
+    theEmulation->setDestroyCanvas(destroyCanvas);
+    theEmulation->setUserData(self);
+    
+    theEmulation->addComponent("audio", paAudio);
+    
+    [self lockEmulation];
+    
+    if (theEmulation->open([[url path] cppString]))
+        theEmulation->setDidUpdate(didUpdate);
+    else
+    {
+        delete theEmulation;
+        theEmulation = nil;
+    }
+    
+    [self unlockEmulation];
+    
+    return theEmulation;
+}
+
+- (void)destroyEmulation
+{
+    if (!emulation)
+        return;
+    
+    [self lockEmulation];
+    
+    delete (OEEmulation *)emulation;
+    emulation = NULL;
+    
+    [self unlockEmulation];
+}
+
+- (void)lockEmulation
+{
+    DocumentController *documentController;
+    documentController = [NSDocumentController sharedDocumentController];
+    PAAudio *paAudio = (PAAudio *)[documentController paAudio];
+    
+    paAudio->lock();
+}
+
+- (void)unlockEmulation
+{
+    DocumentController *documentController;
+    documentController = [NSDocumentController sharedDocumentController];
+    PAAudio *paAudio = (PAAudio *)[documentController paAudio];
+    
+    paAudio->unlock();
+}
+
+- (void *)emulation
+{
+    return emulation;
+}
+
+// Window controllers
+
 - (void)makeWindowControllers
 {
     emulationWindowController = [[EmulationWindowController alloc] init];
@@ -261,18 +356,9 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 
 - (IBAction)showEmulation:(id)sender
 {
-    if (![[self windowControllers] containsObject:emulationWindowController])
-        [self addWindowController:emulationWindowController];
+    [self addWindowController:emulationWindowController];
     
     [emulationWindowController showWindow:self];
-}
-
-- (void)didUpdate:(id)sender
-{
-    if (emulation && ((OEEmulation *)emulation)->isActive())
-        [self updateChangeCount:NSChangeDone];
-    
-    [emulationWindowController updateEmulation:self];
 }
 
 - (void)constructCanvas:(NSDictionary *)dict
@@ -299,9 +385,10 @@ void destroyCanvas(void *userData, OEComponent *canvas)
         canvasWindowController = [canvasWindowControllers objectAtIndex:i];
         if ([canvasWindowController canvas] == canvas)
         {
-            [canvasWindowController closeWindow];
+            [canvasWindowController close];
             
-            [self removeWindowController:canvasWindowController];
+            if ([[self windowControllers] containsObject:canvasWindowController])
+                [self removeWindowController:canvasWindowController];
             [canvasWindowControllers removeObjectAtIndex:i];
             
             delete canvas;
@@ -328,136 +415,6 @@ void destroyCanvas(void *userData, OEComponent *canvas)
             break;
         }
     }
-}
-
-- (BOOL)validateUserInterfaceItem:(id <NSValidatedUserInterfaceItem >)anItem
-{
-    SEL action = [anItem action];
-    
-    if (action == @selector(runPageLayout:))
-        return ([[NSApp mainWindow] windowController] !=
-                emulationWindowController);
-    else if (action == @selector(printDocument:))
-        return ([[NSApp mainWindow] windowController] !=
-                emulationWindowController);
-    
-    return YES;
-}
-
-- (void)printDocument:(id)sender
-{
-    CanvasWindowController *windowController = [[NSApp mainWindow] windowController];
-    if (![windowController respondsToSelector:@selector(canvasView)])
-        return;
-    
-    CanvasView *canvasView = [windowController canvasView];
-    CanvasPrintView *view = [[[CanvasPrintView alloc] initWithCanvasView:canvasView]
-                             autorelease];
-    
-    NSPrintOperation *op = [NSPrintOperation printOperationWithView:view];
-    NSPrintInfo *printInfo = [op printInfo];
-    
-    if ([canvasView isPaperCanvas])
-    {
-        [printInfo setHorizontalPagination:NSFitPagination];
-        [printInfo setHorizontallyCentered:NO];
-        [printInfo setVerticallyCentered:NO];
-        [printInfo setTopMargin:0.0 * 72.0];
-        [printInfo setRightMargin:0.0 * 72.0];
-        [printInfo setBottomMargin:0.0 * 72.0];
-        [printInfo setLeftMargin:0.0 * 72.0];
-    }
-    else
-    {
-        [printInfo setHorizontalPagination:NSFitPagination];
-        [printInfo setVerticalPagination:NSFitPagination];
-        [printInfo setTopMargin:0.5 * 72.0];
-        [printInfo setRightMargin:0.5 * 72.0];
-        [printInfo setBottomMargin:0.5 * 72.0];
-        [printInfo setLeftMargin:0.5 * 72.0];
-    }
-    
-    NSPrintPanel *panel = [op printPanel];
-    [panel setOptions:([panel options] |
-                       NSPrintPanelShowsPaperSize |
-                       NSPrintPanelShowsOrientation)];
-    
-    [op runOperationModalForWindow:[NSApp mainWindow]
-                          delegate:self
-                    didRunSelector:NULL
-                       contextInfo:NULL];
-}
-
-- (void)constructEmulation:(NSURL *)url
-{
-    if (!canvasWindowControllers)
-        canvasWindowControllers = [[NSMutableArray alloc] init];
-    
-    DocumentController *documentController;
-    documentController = [NSDocumentController sharedDocumentController];
-    PAAudio *paAudio = (PAAudio *)[documentController paAudio];
-    
-    OEEmulation *theEmulation = new OEEmulation();
-    
-    theEmulation->setResourcePath([[[NSBundle mainBundle] resourcePath] cppString]);
-    theEmulation->setConstructCanvas(constructCanvas);
-    theEmulation->setDestroyCanvas(destroyCanvas);
-    theEmulation->setUserData(self);
-    
-    theEmulation->addComponent("audio", paAudio);
-    
-    [self lockEmulation];
-    
-    theEmulation->open([[url path] cppString]);
-    theEmulation->setDidUpdate(didUpdate);
-    paAudio->addEmulation(theEmulation);
-    
-    [self unlockEmulation];
-    
-    emulation = theEmulation;
-}
-
-- (void)destroyEmulation
-{
-    if (!emulation)
-        return;
-    
-    DocumentController *documentController;
-    documentController = [NSDocumentController sharedDocumentController];
-    PAAudio *paAudio = (PAAudio *)[documentController paAudio];
-    
-    [self lockEmulation];
-    
-    OEEmulation *theEmulation = (OEEmulation *)emulation;
-    paAudio->removeEmulation(theEmulation);
-    delete theEmulation;
-    
-    [self unlockEmulation];
-    
-    emulation = nil;
-}
-
-- (void)lockEmulation
-{
-    DocumentController *documentController;
-    documentController = [NSDocumentController sharedDocumentController];
-    PAAudio *paAudio = (PAAudio *)[documentController paAudio];
-    
-    paAudio->lock();
-}
-
-- (void)unlockEmulation
-{
-    DocumentController *documentController;
-    documentController = [NSDocumentController sharedDocumentController];
-    PAAudio *paAudio = (PAAudio *)[documentController paAudio];
-    
-    paAudio->unlock();
-}
-
-- (void *)emulation
-{
-    return emulation;
 }
 
 // Storage

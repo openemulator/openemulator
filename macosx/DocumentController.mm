@@ -25,7 +25,7 @@
 #define LINK_DEVURL		@"http://code.google.com/p/openemulator"
 #define LINK_DONATEURL	@"http://www.openemulator.org"
 
-#define DONATION_NAG_TIME	(7 * 24 * 60 * 60)
+#define DONATION_NAG_TIME	(7 * (24 * (60 * 60)))
 
 @implementation DocumentController
 
@@ -256,7 +256,7 @@
 {
     NSString *pathExtension = [[path pathExtension] lowercaseString];
     
-    // Open emulation through the Cocoa interface
+    // Open emulation with the Cocoa interface
     if ([pathExtension compare:@OE_PACKAGE_PATH_EXTENSION] == NSOrderedSame)
         return NO;
     
@@ -416,11 +416,13 @@
 - (IBAction)openDocument:(id)sender
 {
     NSOpenPanel *panel = [NSOpenPanel openPanel];
+    
     NSMutableArray *fileTypes = [NSMutableArray array];
     [fileTypes addObject:@OE_PACKAGE_PATH_EXTENSION];
     [fileTypes addObjectsFromArray:audioPathExtensions];
     [fileTypes addObjectsFromArray:diskImagePathExtensions];
     [fileTypes addObjectsFromArray:textPathExtensions];
+    
     [panel setAllowedFileTypes:fileTypes];
     
     if ([panel runModal] == NSOKButton)
@@ -490,6 +492,7 @@
         if (displayDocument)
         {
             [document makeWindowControllers];
+            
             [document showWindows];
         }
     }

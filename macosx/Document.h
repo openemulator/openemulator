@@ -24,15 +24,15 @@
 
 - (id)initWithTemplateURL:(NSURL *)templateURL error:(NSError **)outError;
 - (IBAction)saveDocumentAsTemplate:(id)sender;
-- (void)showEmulation:(id)sender;
-- (void)showCanvas:(NSValue *)canvasValue;
 
-- (void)constructEmulation:(NSURL *)url;
+- (void *)constructEmulation:(NSURL *)url;
 - (void)destroyEmulation;
 - (void)lockEmulation;
 - (void)unlockEmulation;
 - (void *)emulation;
 
+- (void)showEmulation:(id)sender;
+- (void)showCanvas:(NSValue *)canvasValue;
 - (void)constructCanvas:(NSDictionary *)dict;
 - (void)destroyCanvas:(NSValue *)canvasValue;
 

@@ -43,8 +43,6 @@ public:
     void unlock();
     
     void runEmulations();
-    bool addEmulation(OEEmulation *emulation);
-    void removeEmulation(OEEmulation *emulation);
     
     void runAudio(const float *input,
                   float *output,
@@ -86,7 +84,6 @@ private:
     pthread_t emulationsThread;
     pthread_mutex_t emulationsMutex;
     pthread_cond_t emulationsCond;
-    vector<OEEmulation *> emulations;
     
     bool audioOpen;
     PaStream *audioStream;

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
-<edl version="1.0" label="Apple II" image="images/Apple/Apple II.png" description="The Apple II was an 8-bit home computer, one of the first highly successful mass-produced microcomputers. It had a MOS 6502 microprocessor running at 1 MHz, 4 kiB of RAM, an audio cassette interface for loading programs and storing data, and the Integer BASIC built into the ROMs.">
+<edl version="1.0" generator="OpenEmulator" framework="700" label="Apple II" image="images/Apple/Apple II.png" description="The Apple II was an 8-bit home computer, one of the first highly successful mass-produced microcomputers. It had a MOS 6502 microprocessor running at 1 MHz, 4 kiB of RAM, an audio cassette interface for loading programs and storing data, and the Integer BASIC built into the ROMs.">
     
     <device id="appleII" label="Apple II" image="images/Apple/Apple II.png">
         <setting ref="appleII.video" name="tvSystem" label="TV System" type="select" options="NTSC,PAL"/>
@@ -118,8 +118,8 @@
         <property name="mapKeyboard" value="0x00-0x1f"/>
         <property name="refSpeaker" ref="appleII.audioOut"/>
         <property name="mapSpeaker" value="0x20-0x3f"/>
-        <property name="refVideoControl" ref="appleII.video"/>
-        <property name="mapVideoControl" value="0x50-0x57"/>
+        <property name="refVideoGenerator" ref="appleII.videoGenerator"/>
+        <property name="mapVideoGenerator" value="0x50-0x57"/>
         <property name="refGame" ref=""/>
         <property name="mapGame" value="0x58-0x5f,0x61-0x6f"/>
         <property name="refAudioIn" ref="appleII.audioIn"/>
@@ -145,7 +145,7 @@
         <property name="monitor" ref=""/>
         <property name="type" value="Standard"/>
     </component>
-    <component id="appleII.video" class="AppleIIVideo">
+    <component id="appleII.videoGenerator" class="AppleIIVideoGenerator">
         <property name="tvSystem" value="NTSC"/>
         <property name="characterSet" value="Standard"/>
         <property name="ram00" ref="appleII.ram00"/>
@@ -158,14 +158,14 @@
     <component id="appleII.audioOut" class="AppleIIAudioOut">
         <property name="adcdac" ref="appleII.adcdac"/>
         <property name="floatingBus" ref="appleII.floatingBus"/>
-        <property name="state" value="0"/>
     </component>
     <component id="appleII.audioIn" class="AppleIIAudioIn">
         <property name="adcdac" ref="appleII.adcdac"/>
         <property name="floatingBus" ref="appleII.floatingBus"/>
     </component>
-    <component id="appleII.adcdac" class="ADCDAC">
+    <component id="appleII.audioCodec" class="AudioCodec">
         <property name="controlBus" ref="appleII.controlBus"/>
+        <property name="output" value="0"/>
     </component>
     <component id="appleII.game" class="AppleIIGamePort">
         <property name="floatingBus" ref="appleII.floatingBus"/>
@@ -189,6 +189,7 @@
     </component>
     <component id="appleII.slotExpansionMemory" class="AppleIISlotExpansionMemory">
         <property name="floatingBus" ref="appleII.floatingBus"/>
+        <property name="slotMemory" ref="appleII.slotMemory"/>
     </component>
     <component id="appleII.romD0" class="ROM">
         <property name="image" data="${resourcePath}/roms/Apple/341-0016-00.bin"/>

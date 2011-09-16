@@ -10,6 +10,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "Document.h"
+
 @class EmulationOutlineView;
 @class EmulationItem;
 
@@ -32,6 +34,7 @@ NSOutlineViewDataSource, NSComboBoxDataSource>
     
     IBOutlet id fStatusLabelView;
     
+    Document *document;
     EmulationItem *rootItem;
     
     EmulationItem *selectedItem;
@@ -41,7 +44,7 @@ NSOutlineViewDataSource, NSComboBoxDataSource>
     NSSliderCell *sliderCell;
 }
 
-- (void)updateEmulation:(id)sender;
+- (void)updateWindow:(id)sender;
 
 - (EmulationItem *)itemForSender:(id)sender;
 - (BOOL)selectItem:(EmulationItem *)item withUid:(NSString *)uid;
