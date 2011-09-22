@@ -4,9 +4,9 @@
     
     <device id="appleIII" label="Apple III" image="images/Apple/Apple III.png">
     </device>
-    <port id="appleIII.videoBW" ref="" type="Composite Video" group="peripherals" label="B/W Video Port" image="images/Connectors/RCA Female.png">
+    <port id="appleIII.videoBW" ref="" type="Composite Video Port" group="peripherals" label="B/W Video Port" image="images/Connectors/RCA Female.png">
     </port>
-    <port id="appleIII.videoColor" ref="" type="Composite Video" group="peripherals" label="Color Video Port" image="images/Connectors/DA15 Female.png">
+    <port id="appleIII.videoColor" ref="" type="Composite Video Port" group="peripherals" label="Color Video Port" image="images/Connectors/DA15 Female.png">
     </port>
     <port id="appleIII.videoRGB" ref="" type="RGB Video" group="peripherals" label="Color Video Port" image="images/Connectors/DA15 Female.png">
     </port>

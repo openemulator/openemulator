@@ -25,7 +25,7 @@
         <setting ref="studioMonitor.monitor" name="compositeChromaCarrier" label="Chroma Carrier" type="slider" options="0.24,0.3"/>
         <setting ref="studioMonitor.monitor" name="compositeChromaLine" label="Chroma Line" type="slider" options="0.0,1.0"/>
     </device>
-    <connector id="studioMonitor.connector" type="Composite Video">
+    <connector id="studioMonitor.connector" type="Composite Video Port">
         <inlet ref="studioMonitor.monitor" property="controlBus" outletRef="controlBus"/>
     </connector>
     <component id="studioMonitor.monitor" class="Monitor">

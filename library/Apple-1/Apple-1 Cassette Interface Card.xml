@@ -1,12 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
-<edl version="1.0" generator="OpenEmulator" build="700" label="Apple-1 Cassette Interface Card" image="images/Apple/Apple-1 Cassette Interface Card.png" description="The Apple-1 Cassette Interface Card is used for loading data on tape to an Apple-1 computer. To load data, enter C100R in the monitor. Next, enter the memory range for loading as XXXX.YYYYR">
+<edl version="1.0" generator="OpenEmulator" build="700" label="Apple-1 Cassette Interface Card" image="images/Apple/Apple-1 Cassette Interface Card.png" description="The Apple-1 Cassette Interface Card is used for moving data from tape to an Apple-1 computer. To load data, enter C100R in the monitor. Next, enter the memory range for loading as XXXX.YYYYR">
     
     <device id="appleACI" label="Apple-1 Cassette Interface Card" image="images/Apple/Apple-1 Cassette Interface Card.png">
     </device>
     <connector id="appleACI.connector" type="Apple-1 Expansion Port">
-        <inlet ref="appleACI.io" property="mmu" outletRef="mmu"/>
+        <inlet ref="appleACI.io" property="memoryBus" outletRef="memoryBus"/>
+        <inlet ref="appleACI.audioCodec" property="controlBus" outletRef="controlBus"/>
     </connector>
+    <component id="appleACI.io" class="Apple1ACI">
+        <property name="rom" ref="appleACI.rom"/>
+        <property name="memoryBus" ref=""/>
+        <property name="audioCodec" ref="appleACI.audioCodec"/>
+    </component>
+    <component id="appleACI.audioCodec" class="AudioCodec">
+        <property name="audio" ref="audio"/>
+        <property name="controlBus" ref=""/>
+    </component>
     <component id="appleACI.rom" class="ROM">
         <property name="image" data="${resourcePath}/roms/Apple/Apple-1 ACI ROM.bin"/>
     </component>

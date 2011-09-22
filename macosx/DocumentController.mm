@@ -2,7 +2,7 @@
 /**
  * OpenEmulator
  * Mac OS X Document Controller
- * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2009-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Controls emulations
@@ -130,7 +130,7 @@
     
     NSDictionary *defaults = [NSDictionary dictionaryWithObjectsAndKeys:
                               [NSNumber numberWithBool:NO], @"OEAudioControlsVisible",
-                              [NSNumber numberWithBool:YES], @"OEAudioFullDuplex",
+                              [NSNumber numberWithBool:NO], @"OEAudioFullDuplex",
                               [NSNumber numberWithFloat:1.0], @"OEAudioPlayVolume",
                               [NSNumber numberWithBool:YES], @"OEAudioPlayThrough",
                               [NSNumber numberWithBool:shaderDefault], @"OEVideoEnableShader",

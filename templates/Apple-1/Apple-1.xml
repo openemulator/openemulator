@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTDs/edl-1.0.dtd">
-<edl version="1.0" generator="OpenEmulator" framework="700" label="Apple-1" image="images/Apple/Apple-1.png" description="The Apple-1 is an early personal computer, and the first in combining a microprocessor with a connection for a keyboard and a monitor. It features a MOS 6502 microprocessor, 8 kiB RAM (available at $0000-$0FFF and $E000-$EFFF), and 256 bytes ROM (at $FF00-$FFFF).">
+<edl version="1.0" generator="OpenEmulator" framework="700" label="Apple-1" image="images/Apple/Apple-1.png" description="The Apple-1 is an early personal computer, and the first in combining a microprocessor with a connection for a keyboard and a monitor. It features a MOS 6502 microprocessor, 8 kiB RAM (at $0000-$0FFF and $E000-$EFFF), and 256 bytes ROM (at $FF00-$FFFF).">
     
     <device id="apple1" label="Apple-1" image="images/Apple/Apple-1.png">
         <setting ref="apple1.io" name="terminalSpeed" label="Terminal Speed" type="select" options="Standard,Enhanced"/>
         <setting ref="apple1.io" name="keyboardType" label="Keyboard" type="select" options="Standard,Full ASCII"/>
     </device>
-    <port id="apple1.videoPort" ref="" type="Composite Video" group="peripherals" label="Video Port" image="images/Connectors/RCA Female.png">
+    <port id="apple1.videoPort" ref="" type="Composite Video Port" group="peripherals" label="Video Port" image="images/Connectors/RCA Female.png">
         <inlet ref="apple1.terminal" property="monitorDevice" outletRef=""/>
         <inlet ref="apple1.terminal" property="monitor" outletRef="monitor"/>
     </port>
@@ -44,7 +44,7 @@
         <property name="y" value="0x0"/>
         <property name="s" value="0x0"/>
         <property name="p" value="0x0"/>
-        <property name="pc" value="0xf000"/>
+        <property name="pc" value="0xff00"/>
         <property name="memoryBus" ref="apple1.memoryBus"/>
         <property name="controlBus" ref="apple1.controlBus"/>
     </component>

@@ -10,7 +10,7 @@
     <component id="appleDiskII.drive" class="AppleDiskII">
         <property name="device" ref="appleDiskII"/>
         <property name="image" value=""/>
-        <property name="lock" value="0"/>
+        <property name="forceWriteProtected" value="0"/>
         <property name="rpm" value="300.0"/>
         <property name="rpmVariance" value="1.0"/>
         <property name="soundSpin" src="${resourcePath}/sounds/Apple Disk II Spin.wav"/>

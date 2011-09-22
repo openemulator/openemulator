@@ -4,7 +4,7 @@
     
     <device id="c64" label="Commodore 64" image="images/Commodore/Commodore 64.png">
     </device>
-    <port id="c64.video" ref="" type="Composite Video" group="peripherals" label="Video Port" image="images/Connectors/RCA Female.png">
+    <port id="c64.video" ref="" type="Composite Video Port" group="peripherals" label="Video Port" image="images/Connectors/RCA Female.png">
     </port>
     <port id="c64.control1" ref="" type="Commodore Control Port" group="peripherals" label="Control Port 1" image="images/Connectors/DE9 Male.png">
     </port>

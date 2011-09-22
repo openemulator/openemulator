@@ -32,9 +32,9 @@ public:
     
     void setFullDuplex(bool value);
     void setSampleRate(double value);
-    void setChannelNum(int value);
-    void setFramesPerBuffer(int value);
-    void setBufferNum(int value);
+    void setChannelNum(OEUInt32 value);
+    void setFramesPerBuffer(OEUInt32 value);
+    void setBufferNum(OEUInt32 value);
     
     bool open();
     void close();
@@ -46,7 +46,7 @@ public:
     
     void runAudio(const float *input,
                   float *output,
-                  int frameCount);
+                  OEUInt32 frameCount);
     void runTimer();
     
     void setPlayVolume(float value);
@@ -71,12 +71,12 @@ public:
 private:
     bool fullDuplex;
     double sampleRate;
-    int channelNum;
-    int framesPerBuffer;
-    int bufferNum;
+    OEUInt32 channelNum;
+    OEUInt32 framesPerBuffer;
+    OEUInt32 bufferNum;
     
-    volatile int bufferAudioIndex;
-    volatile int bufferEmulationIndex;
+    volatile OEUInt32 bufferAudioIndex;
+    volatile OEUInt32 bufferEmulationIndex;
     vector<float> bufferInput;
     vector<float> bufferOutput;
     
@@ -96,12 +96,12 @@ private:
     bool playing;
     long long playFrameIndex;
     long long playFrameNum;
-    int playChannelNum;
+    OEUInt32 playChannelNum;
     double playSRCRatio;
     SRC_STATE *playSRC;
     vector<float> playSRCBuffer;
-    int playSRCBufferFrameBegin;
-    int playSRCBufferFrameEnd;
+    OEUInt32 playSRCBufferFrameBegin;
+    OEUInt32 playSRCBufferFrameEnd;
     
     SNDFILE *recordingSNDFILE;
     bool recording;
@@ -125,10 +125,14 @@ private:
     bool openEmulations();
     void closeEmulations();
     
-    void playAudio(float *outputBuffer,
-                   float *inputBuffer, int frameNum, int channelNum);
+    void playAudio(float *inputBuffer,
+                   float *outputBuffer,
+                   OEUInt32 frameNum,
+                   OEUInt32 channelNum);
     
-    void recordAudio(float *outputBuffer, int frameNum, int channelNum);
+    void recordAudio(float *outputBuffer,
+                     OEUInt32 frameNum,
+                     OEUInt32 channelNum);
 };
 
 #endif

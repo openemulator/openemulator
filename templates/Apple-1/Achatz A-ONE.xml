@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTDs/edl-1.0.dtd">
+<edl version="1.0" generator="OpenEmulator" framework="700" label="A-ONE" image="images/Achatz/A-ONE.png" description="The Achatz A-ONE (www.achatz.nl) is a fully functional replica of the Apple 1 computer. It features a WDC 65C02 microprocessor, 32 kiB RAM (at $0000-$7FFF), and 8 kiB bytes ROM (BASIC at $E000-$EFFF, Krusader at $F000-$FEFF, Monitor at $FF00-$FFFF).">
+    
+    <device id="aONE" label="A-ONE" image="images/Achatz/A-ONE.png">
+        <setting ref="aONE.io" name="terminalSpeed" label="Terminal Speed" type="select" options="Standard,Enhanced"/>
+        <setting ref="aONE.io" name="keyboardType" label="Keyboard" type="select" options="Standard,Full ASCII"/>
+        <setting ref="aONE.muxE000" name="sel" label="Memory at $E000" type="select" options="ROM,RAM"/>
+    </device>
+    <port id="aONE.videoPort" ref="" type="Composite Video Port" group="peripherals" label="Video Port" image="images/Connectors/RCA Female.png">
+        <inlet ref="aONE.terminal" property="monitorDevice" outletRef=""/>
+        <inlet ref="aONE.terminal" property="monitor" outletRef="monitor"/>
+    </port>
+    <port id="aONE.slot1" ref="" type="Apple-1 Expansion Port" group="expansions" label="Expansion Port" image="images/Connectors/Edge44.png"/>
+    <port id="aONE.slot2" ref="" type="Apple-1 Expansion Port" group="expansions" label="Expansion Port" image="images/Connectors/Edge44.png"/>
+    <component id="aONE.controlBus" class="ControlBus">
+        <property name="device" ref="aONE"/>
+        <property name="audio" ref="audio"/>
+        <!-- Clock frequency: 14318180 Hz * 61 / 910 -->
+        <property name="clockFrequency" value="959790.088"/>
+        <property name="cpuClockMultiplier" value="1"/>
+        <property name="cpu" ref="aONE.cpu"/>
+        <property name="resetOnPowerOn" value="0"/>
+        <property name="powerState" value="0"/>
+        <property name="resetCount" value="0"/>
+        <property name="irqCount" value="0"/>
+        <property name="nmiCount" value="0"/>
+    </component>
+    <component id="aONE.memoryBus" class="AddressDecoder">
+        <property name="addressSize" value="16"/>
+        <property name="blockSize" value="8"/>
+        <property name="floatingBus" ref="aONE.floatingBus"/>
+        <property name="refRAM" ref="aONE.ram"/>
+        <property name="mapRAM" value="0x0000-0x7fff"/>
+        <property name="refIO" ref="aONE.ioMemory"/>
+        <property name="mapIO" value="0xd000-0xdfff"/>
+        <property name="refE000" ref="aONE.muxE000"/>
+        <property name="mapE000" value="0xe000-0xefff"/>
+        <property name="refROM" ref="aONE.rom"/>
+        <property name="mapROM" value="0xf000-0xffff"/>
+    </component>
+    <component id="aONE.cpu" class="W65C02S">
+        <property name="a" value="0x0"/>
+        <property name="x" value="0x0"/>
+        <property name="y" value="0x0"/>
+        <property name="s" value="0x0"/>
+        <property name="p" value="0x0"/>
+        <property name="pc" value="0x0"/>
+        <property name="memoryBus" ref="aONE.memoryBus"/>
+        <property name="controlBus" ref="aONE.controlBus"/>
+    </component>
+    <component id="aONE.floatingBus" class="FloatingBus">
+        <property name="mode" value="ground"/>
+    </component>
+    <component id="aONE.ram" class="RAM">
+        <property name="controlBus" ref="aONE.controlBus"/>
+        <property name="image" data="${packagePath}/${id}.bin"/>
+        <property name="size" value="0x8000"/>
+    </component>
+    <component id="aONE.ioMemory" class="AddressDecoder">
+        <property name="addressSize" value="5"/>
+        <property name="blockSize" value="4"/>
+        <property name="floatingBus" ref="aONE.floatingBus"/>
+        <property name="refPIA" ref="aONE.pia"/>
+        <property name="mapPIA" value="0x10-0x1f"/>
+    </component>
+    <component id="aONE.pia" class="MC6821">
+        <property name="controlBus" ref="aONE.controlBus"/>
+        <property name="portA" ref="aONE.io"/>
+        <property name="controlA" value="0x0"/>
+        <property name="directionA" value="0x0"/>
+        <property name="dataA" value="0x0"/>
+        <property name="ca1" value="0"/>
+        <property name="ca2" value="0"/>
+        <property name="controlBusA" ref=""/>
+        <property name="portB" ref="aONE.io"/>
+        <property name="controlB" value="0x0"/>
+        <property name="directionB" value="0x0"/>
+        <property name="dataB" value="0x0"/>
+        <property name="cb1" value="0"/>
+        <property name="cb2" value="0"/>
+        <property name="controlBusB" ref=""/>
+    </component>
+    <component id="aONE.io" class="Apple1IO">
+        <property name="pia" ref="aONE.pia"/>
+        <property name="terminal" ref="aONE.terminal"/>
+        <property name="terminalSpeed" value="Enhanced"/>
+        <property name="keyboardType" value="Standard"/>
+    </component>
+    <component id="aONE.terminalRAM" class="RAM">
+        <property name="controlBus" ref="aONE.controlBus"/>
+        <property name="image" data="${packagePath}/${id}.bin"/>
+        <property name="size" value="1024"/>
+        <property name="powerOnPattern" value="0x2B2020202020202020204150504C4520312020202020202020412D4F4E452020202020202020202B20202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020204F726967696E616C204170706C6520312064657369676E3A20202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020537465766520576F7A6E69616B2020203139373520202020202020202020202020202020202020207777772E776F7A2E6F726720202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020412D4F6E652068617264776172652064657369676E3A2020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020204672616E7A2041636861747A202020203230303620202020202020202020202020202020202020207777772E61636861747A2E6E6C2020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020566964656F20636F6E74726F6C6C657220736F6674776172653A202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202053616E20426572676D616E73202020203230303620202020202020202020202020202020202020207777772E736270726F6A656374732E636F6D2020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020204B6579626F61726420636F6E74726F6C6C657220736F6674776172653A202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202042656E205A696A6C73747261202020203230303620202020202020202020202020202020202020207777772E62656E73686F626279636F726E65722E6E6C20202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202B2020506C6561736520707265737320524553455420746F2067657420737461727465642E20202B"/>
+    </component>
+    <component id="aONE.terminal" class="Apple1Terminal">
+        <property name="device" ref="aONE"/>
+        <property name="vram" ref="aONE.terminalRAM"/>
+        <property name="controlBus" ref="aONE.controlBus"/>
+        <property name="monitorDevice" ref=""/>
+        <property name="monitor" ref=""/>
+        <property name="font" data="${resourcePath}/roms/Achatz/A-ONE Video ROM.bin"/>
+        <property name="cursorX" value="0"/>
+        <property name="cursorY" value="0"/>
+    </component>
+    <component id="aONE.muxE000" class="Mux">
+        <property name="refRAM" ref="aONE.ram"/>
+        <property name="refROM" ref="aONE.rom"/>
+        <property name="sel" value="ROM"/>
+    </component>
+    <component id="aONE.rom" class="ROM">
+        <property name="image" data="${resourcePath}/roms/Briel/Replica-1 65C02 ROM.bin"/>
+    </component>
+    
+</edl>

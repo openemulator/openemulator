@@ -150,7 +150,7 @@
     else if ([item isMount])
         indentation = 32.0;
     else
-        indentation = 18.0;
+        indentation = 16.0;
     
     NSRect frame = [super frameOfCellAtColumn:columnIndex row:rowIndex];
     frame.origin.x = indentation;

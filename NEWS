@@ -1,4 +1,13 @@
 ==2011-09==
+* Fixed ControlBus timing
+* Improved PAAudio so AudioBuffers can be accessed beyond the current frame
+* Prepared Briel Replica-1 and Achatz A-ONE images
+* Added Achatz ROM/RAM mux
+* Implemented mux component
+* Implemented Apple-1 Apple Cassette Interface
+* Implemented W65C02
+* Added A-ONE font
+* Implemented R&D CFFA1
 * Fixed EmulationWindowController Document when ordered out
 * Fixed Apple1IO terminalChar persistance
 * Fixed "Revert to Saved"

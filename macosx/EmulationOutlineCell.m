@@ -12,11 +12,11 @@
 #import "EmulationOutlineView.h"
 #import "EmulationItem.h"
 
+#define CELL_RIGHT_PADDING      10.0
 #define IMAGE_SIZE				16.0
-#define IMAGE_PADDING			3.0
+#define IMAGE_RIGHT_PADDING		3.0
 #define BUTTON_LEFT_PADDING		2.0
 #define BUTTON_SIZE				18.0
-#define BUTTON_RIGHT_PADDING	3.0
 
 @implementation EmulationOutlineCell
 
@@ -44,14 +44,12 @@
     NSRect rect = bounds;
     NSRect paddingRect;
     
+    
+    NSDivideRect(rect, &paddingRect, &rect, CELL_RIGHT_PADDING, NSMaxXEdge);
     if ([item image])
-        NSDivideRect(rect, &paddingRect, &rect,
-                     IMAGE_SIZE + IMAGE_PADDING,
-                     NSMinXEdge);
+        NSDivideRect(rect, &paddingRect, &rect, IMAGE_SIZE + IMAGE_RIGHT_PADDING, NSMinXEdge);
     if ([item hasCanvases] || [item isMount])
-        NSDivideRect(rect, &paddingRect, &rect,
-                     BUTTON_LEFT_PADDING + BUTTON_SIZE + BUTTON_RIGHT_PADDING,
-                     NSMaxXEdge);
+        NSDivideRect(rect, &paddingRect, &rect, BUTTON_LEFT_PADDING + BUTTON_SIZE, NSMaxXEdge);
     
     return NSInsetRect(rect, 0, (NSHeight(bounds) - [self cellSize].height) / 2.0);
 }
@@ -65,8 +63,10 @@
     
     NSRect rect = bounds;
     NSRect paddingRect;
-    NSDivideRect(rect, &paddingRect, &rect, BUTTON_RIGHT_PADDING, NSMaxXEdge);
+    
+    NSDivideRect(rect, &paddingRect, &rect, CELL_RIGHT_PADDING, NSMaxXEdge);
     NSDivideRect(rect, &rect, &paddingRect, BUTTON_SIZE, NSMaxXEdge);
+    
     return NSInsetRect(rect, 0, (NSHeight(bounds) - BUTTON_SIZE) / 2.0);
 }
 

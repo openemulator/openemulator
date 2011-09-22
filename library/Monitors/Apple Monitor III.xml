@@ -8,7 +8,7 @@
         <setting ref="appleMonitorIII.monitor" name="videoVerticalCenter" label="Vertical Center" type="slider" options="-0.1,0.1"/>
         <setting ref="appleMonitorIII.monitor" name="videoVerticalSize" label="Vertical Size" type="slider" options="0.8,1.2"/>
     </device>
-    <connector id="appleMonitorIII.connector" type="Composite Video">
+    <connector id="appleMonitorIII.connector" type="Composite Video Port">
         <inlet ref="appleMonitorIII.monitor" property="controlBus" outletRef="controlBus"/>
     </connector>
     <component id="appleMonitorIII.monitor" class="Monitor">

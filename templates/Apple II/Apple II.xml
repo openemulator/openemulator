@@ -7,7 +7,7 @@
         <setting ref="appleII.video" name="characterSet" label="Character Set" type="select" options="Standard,Videx Lowercase Chip,Pigfont"/>
         <setting ref="appleII.keyboard" name="type" label="Keyboard" type="select" options="Standard,Shift-Key Mod,Full ASCII"/>
     </device>
-    <port id="appleII.videoPort" ref="" type="Composite Video" group="peripherals" label="Video Port" image="images/Connectors/RCA Female.png">
+    <port id="appleII.videoPort" ref="" type="Composite Video Port" group="peripherals" label="Video Port" image="images/Connectors/RCA Female.png">
         <inlet ref="appleII.video" property="monitor" outletRef="monitor"/>
         <inlet ref="appleII.keyboard" property="monitor" outletRef="monitor"/>
     </port>
@@ -120,7 +120,7 @@
         <property name="mapSpeaker" value="0x20-0x3f"/>
         <property name="refVideoGenerator" ref="appleII.videoGenerator"/>
         <property name="mapVideoGenerator" value="0x50-0x57"/>
-        <property name="refGame" ref=""/>
+        <property name="refGame" ref="appleII.gamePort"/>
         <property name="mapGame" value="0x58-0x5f,0x61-0x6f"/>
         <property name="refAudioIn" ref="appleII.audioIn"/>
         <property name="mapAudioIn" value="0x60"/>
@@ -150,9 +150,7 @@
         <property name="characterSet" value="Standard"/>
         <property name="ram00" ref="appleII.ram00"/>
         <property name="ram20" ref="appleII.ram00"/>
-        <property name="ram30" ref="appleII.ram00"/>
         <property name="ram40" ref="appleII.ram40"/>
-        <property name="ram50" ref="appleII.ram40"/>
         <property name="monitor" ref=""/>
     </component>
     <component id="appleII.audioOut" class="AppleIIAudioOut">
@@ -167,7 +165,7 @@
         <property name="controlBus" ref="appleII.controlBus"/>
         <property name="output" value="0"/>
     </component>
-    <component id="appleII.game" class="AppleIIGamePort">
+    <component id="appleII.gamePort" class="AppleIIGamePort">
         <property name="floatingBus" ref="appleII.floatingBus"/>
         <property name="port" ref=""/>
         <property name="an0" value="0"/>
