@@ -8,6 +8,9 @@
  * Emulates a MOS6502 microprocessor
  */
 
+#ifndef _MOS6502_H
+#define _MOS6502_H
+
 #include "OEComponent.h"
 #include "ControlBus.h"
 
@@ -25,7 +28,7 @@ public:
     
     void notify(OEComponent *sender, int notification, void *data);
     
-private:
+protected:
     OEComponent *controlBus;
     OEComponent *memoryBus;
     
@@ -43,8 +46,12 @@ private:
     bool isIRQ;
     bool isNMI;
     
-    bool isResetStart;
+    bool isResetTransition;
+    bool isSpecialCondition;
     bool isIRQEnabled;
     
-    void execute();
+    void updateSpecialCondition();
+    virtual void execute();
 };
+
+#endif

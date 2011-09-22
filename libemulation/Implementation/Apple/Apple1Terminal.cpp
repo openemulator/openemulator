@@ -22,7 +22,8 @@
 #define TERM_HEIGHT         24
 #define CHAR_WIDTH          14
 #define CHAR_HEIGHT         8
-#define FONT_SIZE           0x40
+#define FONT_SIZE           0x80
+#define FONT_SIZE_MASK      0x7f
 #define FONT_WIDTH          16
 #define FONT_HEIGHT         8
 #define BLINK_ON            20
@@ -140,18 +141,21 @@ bool Apple1Terminal::init()
     if (!device)
     {
         logMessage("device not connected");
+        
         return false;
     }
     
     if (!vram)
     {
         logMessage("vram not connected");
+        
         return false;
     }
     
     if (!controlBus)
     {
         logMessage("controlBus not connected");
+        
         return false;
     }
     
@@ -160,9 +164,17 @@ bool Apple1Terminal::init()
     if (vramData->size() < (TERM_WIDTH * TERM_HEIGHT))
     {
         logMessage("not enough vram");
+        
         return false;
     }
-    vramp = &vramData->front();
+    vramp = (OEUInt8 *)&vramData->front();
+    
+    if (!font.size())
+    {
+        logMessage("font not loaded");
+        
+        return false;
+    }
     
     controlBus->postMessage(this, CONTROLBUS_GET_POWERSTATE, &powerState);
     
@@ -180,7 +192,6 @@ bool Apple1Terminal::postMessage(OEComponent *sender, int message, void *data)
     {
         case RS232_SEND_DATA:
         {
-            // Receive chars
             OEData *theData = (OEData *)data;
             for (OEData::iterator i = theData->begin();
                  i != theData->end();
@@ -191,7 +202,6 @@ bool Apple1Terminal::postMessage(OEComponent *sender, int message, void *data)
         }
             
         case RS232_ASSERT_RTS:
-            // Empty paste buffer
             isRTS = true;
             
             emptyPasteBuffer();
@@ -277,23 +287,28 @@ void Apple1Terminal::notify(OEComponent *sender, int notification, void *data)
 
 void Apple1Terminal::scheduleTimer()
 {
-    OEUInt64 clocks = 262 * 57;
+    OEUInt64 clocks = 262 * 61;
     controlBus->postMessage(this, CONTROLBUS_SCHEDULE_TIMER, &clocks);
 }
 
 void Apple1Terminal::loadFont(OEData *data)
 {
+    if (data->size() < FONT_HEIGHT)
+        return;
+    
+    int cMask = (int) getNextPowerOf2(data->size() / FONT_HEIGHT) - 1;
+    
     font.resize(FONT_SIZE * FONT_HEIGHT * FONT_WIDTH);
     
-    for (int i = 0; i < FONT_SIZE; i++)
+    for (int c = 0; c < FONT_SIZE; c++)
     {
         for (int y = 0; y < FONT_HEIGHT; y++)
         {
             for (int x = 0; x < FONT_WIDTH; x++)
             {
-                bool b = (data->at(i * FONT_HEIGHT + y) << (x >> 1)) & 0x40;
+                bool b = (data->at((c & cMask) * FONT_HEIGHT + y) << (x >> 1)) & 0x40;
                 
-                font[(i * FONT_HEIGHT + y) * FONT_WIDTH + x] = b ? 0xff : 0x00;
+                font[(c * FONT_HEIGHT + y) * FONT_WIDTH + x] = b ? 0xff : 0x00;
             }
         }
     }
@@ -301,10 +316,9 @@ void Apple1Terminal::loadFont(OEData *data)
 
 // Copy a 14-pixel char scanline with 3 ints and one short
 #define copyCharLine(x) \
-*((int *)(p + x * SCREEN_WIDTH + 0)) = *((int *)(f + x * FONT_WIDTH + 0));\
-*((int *)(p + x * SCREEN_WIDTH + 4)) = *((int *)(f + x * FONT_WIDTH + 4));\
-*((int *)(p + x * SCREEN_WIDTH + 8)) = *((int *)(f + x * FONT_WIDTH + 8));\
-*((short *)(p + x * SCREEN_WIDTH + 12)) = *((short *)(f + x * FONT_WIDTH + 12));
+*((OEUInt64 *)(p + x * SCREEN_WIDTH + 0)) = *((OEUInt64 *)(f + x * FONT_WIDTH + 0));\
+*((OEUInt32 *)(p + x * SCREEN_WIDTH + 8)) = *((OEUInt32 *)(f + x * FONT_WIDTH + 8));\
+*((OEUInt16 *)(p + x * SCREEN_WIDTH + 12)) = *((OEUInt16 *)(f + x * FONT_WIDTH + 12));
 
 void Apple1Terminal::updateCanvas()
 {
@@ -314,8 +328,8 @@ void Apple1Terminal::updateCanvas()
     if (!vramp)
         return;
     
+    // No updates when power is turned off
     if (powerState == CONTROLBUS_POWERSTATE_OFF)
-        // No updates when power is turned off
         return;
     
     if (powerState == CONTROLBUS_POWERSTATE_ON)
@@ -328,22 +342,25 @@ void Apple1Terminal::updateCanvas()
             cursorCount = cursorActive ? BLINK_ON : BLINK_OFF;
         }
     }
+    // Hide cursor when paused
     else
-        // Hide cursor when paused
         cursorActive = false;
     
-    char *fp = (char *)&font.front();
-    char *ip = (char *)image.getPixels();
+    OEUInt8 *fp = (OEUInt8 *)&font.front();
+    OEUInt8 *ip = (OEUInt8 *)image.getPixels();
     
     for (int y = 0; y < TERM_HEIGHT; y++)
         for (int x = 0; x < TERM_WIDTH; x++)
         {
-            int c = vramp[y * TERM_WIDTH + x] & (FONT_SIZE - 1);
-            if (cursorActive && (x == cursorX) && (y == cursorY))
-                c = 0;
+            OEUInt8 c = vramp[y * TERM_WIDTH + x] & FONT_SIZE_MASK;
             
-            char *f = fp + c * FONT_HEIGHT * FONT_WIDTH;
-            char *p = (ip + y * SCREEN_WIDTH * CHAR_HEIGHT +
+            if (cursorActive &&
+                (x == cursorX) &&
+                (y == cursorY))
+                c = 0x40;
+            
+            OEUInt8 *f = fp + c * FONT_HEIGHT * FONT_WIDTH;
+            OEUInt8 *p = (ip + y * SCREEN_WIDTH * CHAR_HEIGHT +
                        x * CHAR_WIDTH + SCREEN_ORIGIN_Y * SCREEN_WIDTH + SCREEN_ORIGIN_X);
             
             copyCharLine(0);

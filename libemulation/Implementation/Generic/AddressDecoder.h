@@ -54,17 +54,21 @@ private:
     
     AddressDecoderConf conf;
     AddressDecoderRef ref;
+    AddressDecoderMaps pendingMaps;
     
     OEAddress addressMask;
     OEComponents readMap;
     OEComponents writeMap;
     
-    void initMap(OEComponent *component);
-    void map(AddressDecoderMap *theMap);
-    bool map(OEComponent *component, string value);
+    OEComponents defaultReadMap;
+    OEComponents defaultWriteMap;
     
-    bool getMaps(AddressDecoderMaps& maps, OEComponent *component, string value);
-    bool getMap(AddressDecoderMap& map, OEComponent *component, string value);
+    void initMap(OEComponent *component);
+    void mapRange(AddressDecoderMap *theMap);
+    bool mapRange(OEComponent *component, string value);
+    
+    bool getMaps(AddressDecoderMaps& theMaps, OEComponent *component, string value);
+    bool getMap(AddressDecoderMap& theMap, OEComponent *component, string value);
 };
 
 #endif

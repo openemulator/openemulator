@@ -47,6 +47,7 @@ ControlBus::ControlBus()
     cycleStart = 0;
     sampleToCycleRatio = 0;
     
+    inBlock = false;
     blockSize = 0;
     blockCPUCycles = 0;
     blockOffset = 0;
@@ -248,6 +249,8 @@ void ControlBus::notify(OEComponent *sender, int notification, void *data)
         
         OEComponent *component = NULL;
         
+        inBlock = true;
+        
         do
         {
             blockSize = events.front().cycles * cpuClockMultiplier - blockOffset;
@@ -267,6 +270,8 @@ void ControlBus::notify(OEComponent *sender, int notification, void *data)
             
             events.pop_front();
         } while (component);
+        
+        inBlock = false;
     }
     else if (sender == device)
     {
@@ -367,6 +372,7 @@ void ControlBus::setPowerState(ControlBusPowerState powerState)
 OEUInt64 ControlBus::getCycleCount()
 {
     OEInt64 cpuCycles;
+    
     cpu->postMessage(this, CPU_GET_CYCLES, &cpuCycles);
     
     return cycleCount + (blockOffset - cpuCycles) / cpuClockMultiplier;
@@ -388,7 +394,7 @@ void ControlBus::scheduleTimer(OEComponent *component, OEUInt64 cycles)
         {
             i->cycles -= cycles;
             
-            if (i == events.begin())
+            if ((i == events.begin()) && inBlock)
             {
                 OEInt64 oldBlockCPUCycles = blockCPUCycles;
                 

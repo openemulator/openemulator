@@ -2,15 +2,15 @@
 /**
  * libemulator
  * Apple II Video
- * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls Apple II video
+ * Generates Apple II video
  */
 
-#include "AppleIIVideo.h"
+#include "AppleIIVideoGenerator.h"
 
-bool AppleIIVideo::setValue(string name, string value)
+bool AppleIIVideoGenerator::setValue(string name, string value)
 {
 	if (name == "tvSystem")
 		palTiming = (value == "PAL");
@@ -22,7 +22,7 @@ bool AppleIIVideo::setValue(string name, string value)
 	return true;
 }
 
-bool AppleIIVideo::getValue(string name, string& value)
+bool AppleIIVideoGenerator::getValue(string name, string& value)
 {
 	if (name == "tvSystem")
 		value = palTiming ? "PAL" : "NTSC";
@@ -34,7 +34,7 @@ bool AppleIIVideo::getValue(string name, string& value)
 	return true;
 }
 
-bool AppleIIVideo::setRef(string name, OEComponent *ref)
+bool AppleIIVideoGenerator::setRef(string name, OEComponent *ref)
 {
 	if (name == "ram00")
 		ram = ref;
@@ -58,11 +58,11 @@ bool AppleIIVideo::setRef(string name, OEComponent *ref)
 	return true;
 }
 
-OEUInt8 AppleIIVideo::read(OEAddress address)
+OEUInt8 AppleIIVideoGenerator::read(OEAddress address)
 {
 	return 0;
 }
 
-void AppleIIVideo::write(OEAddress address, OEUInt8 value)
+void AppleIIVideoGenerator::write(OEAddress address, OEUInt8 value)
 {
 }

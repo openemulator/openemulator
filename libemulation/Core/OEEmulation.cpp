@@ -281,14 +281,14 @@ bool OEEmulation::configureComponent(string id, xmlNodePtr children)
                 value = parseValueProperties(value, propertiesMap);
                 
                 if (!component->setValue(name, value))
-                    logMessage("'" + id + "': invalid property '" + name + "'");
+                    logMessage("'" + id + "': unknown property '" + name + "'");
             }
             else if (hasNodeProperty(node, "ref"))
             {
                 string refId = getNodeProperty(node, "ref");
                 OEComponent *ref = getComponent(refId);
                 if (!component->setRef(name, ref))
-                    logMessage("'" + id + "': invalid property '" + name + "'");
+                    logMessage("'" + id + "': unknown property '" + name + "'");
             }
             else if (hasNodeProperty(node, "data"))
             {
@@ -308,14 +308,11 @@ bool OEEmulation::configureComponent(string id, xmlNodePtr children)
                 if (dataRead)
                 {
                     if (!component->setData(name, &data))
-                        logMessage("'" + id + "': invalid property '" + name + "'");
+                        logMessage("'" + id + "': unknown property '" + name + "'");
                 }
             }
             else
-            {
-                logMessage("'" + id + "': invalid property '" + name + "', "
-                           "unrecognized type");
-            }
+                logMessage("'" + id + "': unrecognized property '" + name + "'");
         }
     }
     
@@ -348,7 +345,7 @@ bool OEEmulation::configureInlets(OEInletMap& inletMap)
             
             OEComponent *ref = getComponent(refId);
             if (!component->setRef(name, ref))
-                logMessage("'" + id + "': invalid property '" + name + "'");
+                logMessage("'" + id + "': unknown property '" + name + "'");
         }
     }
     

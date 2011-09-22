@@ -17,27 +17,27 @@
 #include "ControlBus.h"
 #include "FloatingBus.h"
 #include "Monitor.h"
+#include "Mux.h"
 #include "RAM.h"
 #include "ROM.h"
 #include "Terminal.h"
 
+#include "Apple1ACI.h"
+#include "Apple1IO.h"
+#include "Apple1Terminal.h"
 #include "AppleDiskII.h"
 #include "AppleDiskIIInterfaceCard.h"
 #include "AppleGraphicsTablet.h"
-#include "Apple1IO.h"
-#include "Apple1Terminal.h"
-#include "Apple1CassetteInterfaceCard.h"
-#include "AppleIIControlBus.h"
-#include "AppleIIMMU.h"
-#include "AppleIIFloatingBus.h"
-#include "AppleIIKeyboard.h"
-#include "AppleIIVideo.h"
-#include "AppleIIAudioOut.h"
 #include "AppleIIAudioIn.h"
+#include "AppleIIAudioOut.h"
+#include "AppleIIFloatingBus.h"
 #include "AppleIIGamePort.h"
-#include "AppleIISlotMemory.h"
+#include "AppleIIKeyboard.h"
+#include "AppleIIMMU.h"
 #include "AppleIISlotExpansionMemory.h"
+#include "AppleIISlotMemory.h"
 #include "AppleIISuperSerialCard.h"
+#include "AppleIIVideoGenerator.h"
 #include "AppleLanguageCard.h"
 #include "AppleSilentype.h"
 
@@ -52,6 +52,8 @@
 #include "RDCFFA1.h"
 
 #include "VidexVideoterm.h"
+
+#include "W65C02S.h"
 // FACTORY_INCLUDE_END - Do not modify this section
 
 #define matchComponent(name) if (className == #name) return new name()
@@ -65,27 +67,28 @@ OEComponent *OEComponentFactory::construct(const string& className)
     matchComponent(ControlBus);
     matchComponent(FloatingBus);
     matchComponent(Monitor);
+    matchComponent(Mux);
     matchComponent(RAM);
     matchComponent(ROM);
     matchComponent(Terminal);
     
+    matchComponent(Apple1ACI);
+    matchComponent(Apple1IO);
+    matchComponent(Apple1Terminal);
+    
     matchComponent(AppleDiskII);
     matchComponent(AppleDiskIIInterfaceCard);
     matchComponent(AppleGraphicsTablet);
-    matchComponent(Apple1IO);
-    matchComponent(Apple1Terminal);
-    matchComponent(Apple1CassetteInterfaceCard);
-    matchComponent(AppleIIControlBus);
-    matchComponent(AppleIIMMU);
-    matchComponent(AppleIIFloatingBus);
-    matchComponent(AppleIIKeyboard);
-    matchComponent(AppleIIVideo);
-    matchComponent(AppleIIAudioOut);
     matchComponent(AppleIIAudioIn);
+    matchComponent(AppleIIAudioOut);
+    matchComponent(AppleIIFloatingBus);
     matchComponent(AppleIIGamePort);
-    matchComponent(AppleIISlotMemory);
+    matchComponent(AppleIIKeyboard);
+    matchComponent(AppleIIMMU);
     matchComponent(AppleIISlotExpansionMemory);
+    matchComponent(AppleIISlotMemory);
     matchComponent(AppleIISuperSerialCard);
+    matchComponent(AppleIIVideoGenerator);
     matchComponent(AppleLanguageCard);
     matchComponent(AppleSilentype);
     
@@ -100,6 +103,8 @@ OEComponent *OEComponentFactory::construct(const string& className)
     matchComponent(RDCFFA1);
     
     matchComponent(VidexVideoterm);
+    
+    matchComponent(W65C02S);
     // FACTORY_CODE_END - Do not modify this section
     
     return NULL;

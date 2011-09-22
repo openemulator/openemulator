@@ -27,7 +27,6 @@ private:
 	
 	OEComponent *canvas;
 	
-	string image;
-	
 	bool forceWriteProtected;
+	string diskImage;
 };

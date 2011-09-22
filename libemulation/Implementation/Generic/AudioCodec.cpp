@@ -23,11 +23,17 @@ bool AudioCodec::setRef(string name, OEComponent *ref)
 {
     if (name == "audio")
     {
-        removeObserver(audio, AUDIO_FRAME_WILL_RENDER);
-        removeObserver(audio, AUDIO_FRAME_DID_RENDER);
+        if (audio)
+        {
+            audio->removeObserver(this, AUDIO_FRAME_WILL_RENDER);
+            audio->removeObserver(this, AUDIO_FRAME_DID_RENDER);
+        }
         audio = ref;
-        addObserver(audio, AUDIO_FRAME_WILL_RENDER);
-        addObserver(audio, AUDIO_FRAME_DID_RENDER);
+        if (audio)
+        {
+            audio->addObserver(this, AUDIO_FRAME_WILL_RENDER);
+            audio->addObserver(this, AUDIO_FRAME_DID_RENDER);
+        }
     }
     else if (name == "controlBus")
         controlBus = ref;
@@ -37,10 +43,31 @@ bool AudioCodec::setRef(string name, OEComponent *ref)
     return true;
 }
 
+bool AudioCodec::init()
+{
+    if (!audio)
+    {
+		logMessage("audio not connected");
+        return false;
+    }
+    
+    if (!controlBus)
+    {
+		logMessage("controlBus not connected");
+        return false;
+    }
+    
+    return true;
+}
+
 void AudioCodec::notify(OEComponent *sender, int notification, void *data)
 {
-    // To-Do: Implement simulation
-    audioBuffer = (AudioBuffer *)data;
+    if (notification == AUDIO_FRAME_WILL_RENDER)
+        audioBuffer = (AudioBuffer *)data;
+    else if (notification == AUDIO_FRAME_DID_RENDER)
+    {
+        // To-Do: transform rest of frame
+    }
 }
 
 OEUInt8 AudioCodec::read(OEAddress address)
@@ -49,7 +76,8 @@ OEUInt8 AudioCodec::read(OEAddress address)
     
     controlBus->postMessage(this, CONTROLBUS_GET_AUDIOBUFFERINDEX, &audioBufferIndex);
     
-    return 0;
+    return 128 + (OEUInt8)(audioBuffer->input[audioBuffer->channelNum *
+                                              ((OEUInt32) audioBufferIndex)] * 127.0F);
 }
 
 void AudioCodec::write(OEAddress address, OEUInt8 value)
@@ -61,7 +89,12 @@ void AudioCodec::write(OEAddress address, OEUInt8 value)
 
 OEUInt16 AudioCodec::read16(OEAddress address)
 {
-    return 0;
+    float audioBufferIndex;
+    
+    controlBus->postMessage(this, CONTROLBUS_GET_AUDIOBUFFERINDEX, &audioBufferIndex);
+    
+    return (OEInt16)(audioBuffer->input[audioBuffer->channelNum *
+                                        ((OEUInt32) audioBufferIndex)] * 32767.0F);
 }
 
 void AudioCodec::write16(OEAddress address, OEUInt16 value)

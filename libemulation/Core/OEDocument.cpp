@@ -314,10 +314,12 @@ bool OEDocument::addDocument(string path, OEIdMap connections)
     }
     
     // Construct new document
-    constructDocument(document.getXMLDoc());
+    if (!constructDocument(document.getXMLDoc()))
+        return false;
     
     // Configure port inlets
-    configureInlets(portInletMap);
+    if (!configureInlets(portInletMap))
+        return false;
     
     return true;
 }

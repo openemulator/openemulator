@@ -13,6 +13,8 @@
 
 AddressOffset::AddressOffset()
 {
+    component = NULL;
+    
     offset = 0;
 }
 

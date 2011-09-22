@@ -16,7 +16,7 @@
 AppleDiskII::AppleDiskII()
 {
 	device = NULL;
-	
+    
 	forceWriteProtected = false;
 }
 
@@ -25,7 +25,7 @@ bool AppleDiskII::setValue(string name, string value)
 	if (name == "forceWriteProtected")
 		forceWriteProtected = (OEUInt32) getUInt(value);
 	else if (name == "image")
-		image = value;
+		diskImage = value;
 	else
 		return false;
 	
@@ -36,8 +36,8 @@ bool AppleDiskII::getValue(string name, string& value)
 {
 	if (name == "forceWriteProtected")
 		value = getString(forceWriteProtected);
-	else if (name == "image")
-		value = image;
+	else if (diskImage == "image")
+		value = diskImage;
 	else
 		return false;
 	
@@ -76,7 +76,7 @@ bool AppleDiskII::postMessage(OEComponent *sender, int message, void *data)
 	switch(message)
 	{
 		case STORAGE_IS_AVAILABLE:
-			return !image.size();
+			return !diskImage.size();
 			
 		case STORAGE_CAN_MOUNT:
 			return true;
@@ -85,7 +85,7 @@ bool AppleDiskII::postMessage(OEComponent *sender, int message, void *data)
 			if (data)
 			{
 				string *path = (string *)data;
-				image = *path;
+				diskImage = *path;
 				
 				device->postMessage(this, DEVICE_UPDATE, NULL);
 				
@@ -94,7 +94,7 @@ bool AppleDiskII::postMessage(OEComponent *sender, int message, void *data)
 			break;
 			
 		case STORAGE_UNMOUNT:
-			image = "";
+			diskImage = "";
 			
 			device->postMessage(this, DEVICE_UPDATE, NULL);
 			
@@ -104,7 +104,7 @@ bool AppleDiskII::postMessage(OEComponent *sender, int message, void *data)
 			if (data)
 			{
 				string *path = (string *)data;
-				*path = image;
+				*path = diskImage;
 				
 				return true;
 			}

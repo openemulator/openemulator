@@ -102,6 +102,7 @@ private:
     OEUInt64 cycleStart;
     float sampleToCycleRatio;
     
+    bool inBlock;
     float blockSize;
     OEInt32 blockCPUCycles;
     float blockOffset;

@@ -19,9 +19,6 @@ AddressDecoder::AddressDecoder()
 	floatingBus = NULL;
 	
 	addressMask = 0;
-	
-	readMap.resize(1);
-	writeMap.resize(1);
 }
 
 bool AddressDecoder::setValue(string name, string value)
@@ -62,8 +59,12 @@ bool AddressDecoder::init()
 	addressMask = addressSpace - 1;
 	
 	OEAddress blockNum = 1 << (addressSize - blockSize);
-	readMap.resize(blockNum);
+	
+    readMap.resize(blockNum);
 	writeMap.resize(blockNum);
+    
+    defaultReadMap.resize(blockNum);
+    defaultWriteMap.resize(blockNum);
 	
 	for (OEAddress i = 0; i < blockNum; i++)
 	{
@@ -71,6 +72,7 @@ bool AddressDecoder::init()
 		writeMap[i] = floatingBus;
 	}
 	
+    // Map configuration
 	for (AddressDecoderConf::iterator i = conf.begin();
 		 i != conf.end();
 		 i++)
@@ -80,10 +82,26 @@ bool AddressDecoder::init()
 			logMessage("invalid address range '" + i->first + "'");
 			return false;
 		}
+        
+        if (!ref[i->first])
+        {
+			logMessage("'" + i->first + "' not connected");
+            return false;
+        }
 		
-		if (!map(ref[i->first], i->second))
+		if (!mapRange(ref[i->first], i->second))
 			return false;
 	}
+    
+    // Store defaults
+    defaultReadMap = readMap;
+    defaultWriteMap = writeMap;
+    
+    // Map pending ranges
+    for (AddressDecoderMaps::iterator i = pendingMaps.begin();
+         i != pendingMaps.end();
+         i++)
+		mapRange(&(*i));
 	
 	return true;
 }
@@ -93,7 +111,11 @@ bool AddressDecoder::postMessage(OEComponent *sender, int message, void *data)
 	switch(message)
 	{
 		case ADDRESSDECODER_MAP:
-			map((AddressDecoderMap *) data);
+            if (readMap.size())
+                mapRange((AddressDecoderMap *) data);
+            else
+                pendingMaps.push_back(*((AddressDecoderMap *) data));
+            
 			return true;
 	}
 	
@@ -110,21 +132,33 @@ void AddressDecoder::write(OEAddress address, OEUInt8 value)
 	writeMap[(address & addressMask) >> blockSize]->write(address, value);
 }
 
-void AddressDecoder::map(AddressDecoderMap *map)
+void AddressDecoder::mapRange(AddressDecoderMap *theMap)
 {
-	OEAddress startBlock = map->startAddress >> blockSize;
-	OEAddress endBlock = map->endAddress >> blockSize;
+	OEAddress startBlock = theMap->startAddress >> blockSize;
+	OEAddress endBlock = theMap->endAddress >> blockSize;
 	
-	if (map->read)
-		for (OEAddress j = startBlock; j <= endBlock; j++)
-			readMap[j] = map->component;
+	if (theMap->read)
+    {
+        if (theMap->component)
+            for (OEAddress i = startBlock; i <= endBlock; i++)
+                readMap[i] = theMap->component;
+        else
+            for (OEAddress i = startBlock; i <= endBlock; i++)
+                readMap[i] = defaultReadMap[i];
+    }
     
-	if (map->write)
-		for (OEAddress j = startBlock; j <= endBlock; j++)
-			writeMap[j] = map->component;
+	if (theMap->write)
+    {
+        if (theMap->component)
+            for (OEAddress i = startBlock; i <= endBlock; i++)
+                writeMap[i] = theMap->component;
+        else
+            for (OEAddress i = startBlock; i <= endBlock; i++)
+                writeMap[i] = defaultWriteMap[i];
+    }
 }
 
-bool AddressDecoder::map(OEComponent *component, string value)
+bool AddressDecoder::mapRange(OEComponent *component, string value)
 {
 	AddressDecoderMaps maps;
 	
@@ -146,13 +180,14 @@ bool AddressDecoder::map(OEComponent *component, string value)
 			return false;
 		}
 		
-		map(&(*i));
+		mapRange(&(*i));
 	}
 	
 	return true;
 }
 
-bool AddressDecoder::getMaps(AddressDecoderMaps& maps, OEComponent *component,
+bool AddressDecoder::getMaps(AddressDecoderMaps& theMaps,
+                             OEComponent *component,
 							 string value)
 {
 	size_t startPos = value.find_first_not_of(',', 0);
@@ -160,15 +195,15 @@ bool AddressDecoder::getMaps(AddressDecoderMaps& maps, OEComponent *component,
 	
 	while ((startPos != string::npos) || (endPos != string::npos))
 	{
-		AddressDecoderMap map;
+		AddressDecoderMap theMap;
 		
-		if (!getMap(map, component, value.substr(startPos, endPos - startPos)))
+		if (!getMap(theMap, component, value.substr(startPos, endPos - startPos)))
 		{
 			logMessage("invalid address range '" + value + "'");
 			return false;
 		}
 		
-		maps.push_back(map);
+		theMaps.push_back(theMap);
 		
 		startPos = value.find_first_not_of(',', endPos);
 		endPos = value.find_first_of(',', startPos);
@@ -177,13 +212,14 @@ bool AddressDecoder::getMaps(AddressDecoderMaps& maps, OEComponent *component,
 	return true;
 }
 
-bool AddressDecoder::getMap(AddressDecoderMap& map, OEComponent *component,
+bool AddressDecoder::getMap(AddressDecoderMap& theMap,
+                            OEComponent *component,
 							string value)
 {
-	map.component = component;
+	theMap.component = component;
 	
-	map.read = false;
-	map.write = false;
+	theMap.read = false;
+	theMap.write = false;
 	
 	size_t pos = 0;
 	
@@ -192,27 +228,27 @@ bool AddressDecoder::getMap(AddressDecoderMap& map, OEComponent *component,
 		if (pos == value.size())
 			return false;
 		else if (tolower(value[pos]) == 'r')
-			map.read = true;
+			theMap.read = true;
 		else if (tolower(value[pos]) == 'w')
-			map.write = true;
+			theMap.write = true;
 		else
 			break;
 	}
 	
-	if (!map.read && !map.write)
-		map.read = map.write = true;
+	if (!theMap.read && !theMap.write)
+		theMap.read = theMap.write = true;
 	
 	size_t separatorPos = value.find_first_of('-', pos);
 	if (separatorPos == string::npos)
-		map.endAddress = map.startAddress = getUInt(value.substr(pos));
+		theMap.endAddress = theMap.startAddress = getUInt(value.substr(pos));
 	else if (separatorPos == pos)
 		return false;
 	else if (separatorPos == value.size())
 		return false;
 	else
 	{
-		map.startAddress = getUInt(value.substr(pos, separatorPos));
-		map.endAddress = getUInt(value.substr(separatorPos + 1));
+		theMap.startAddress = getUInt(value.substr(pos, separatorPos));
+		theMap.endAddress = getUInt(value.substr(separatorPos + 1));
 	}
 	
 	return true;

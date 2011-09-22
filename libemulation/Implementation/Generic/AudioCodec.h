@@ -17,6 +17,7 @@ public:
     AudioCodec();
     
     bool setRef(string name, OEComponent *ref);
+    bool init();
     
     void notify(OEComponent *sender, int notification, void *data);
     
@@ -30,4 +31,6 @@ private:
     OEComponent *controlBus;
     
     AudioBuffer *audioBuffer;
+    
+    vector<float> deltaBuffer;
 };

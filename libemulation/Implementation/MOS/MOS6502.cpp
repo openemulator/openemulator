@@ -25,11 +25,15 @@ MOS6502::MOS6502()
     pc.q = 0;
     sp.q = 0x1ff;
     
+    icount = 0;
+    
     isReset = false;
     isIRQ = false;
     isNMI = false;
     
-    icount = 0;
+    isResetTransition = false;
+    updateSpecialCondition();
+    isIRQEnabled = false;
 }
 
 bool MOS6502::setValue(string name, string value)
@@ -113,6 +117,8 @@ bool MOS6502::init()
         controlBus->postMessage(this, CONTROLBUS_IS_IRQ_ASSERTED, &isIRQ);
     }
     
+    updateSpecialCondition();
+    
     return true;
 }
 
@@ -157,21 +163,30 @@ void MOS6502::notify(OEComponent *sender, int notification, void *data)
             
         case CONTROLBUS_RESET_DID_CLEAR:
             isReset = false;
-            isResetStart = true;
+            isResetTransition = true;
+            updateSpecialCondition();
             return;
             
         case CONTROLBUS_IRQ_DID_ASSERT:
             isIRQ = true;
+            updateSpecialCondition();
             return;
             
         case CONTROLBUS_IRQ_DID_CLEAR:
             isIRQ = false;
+            updateSpecialCondition();
             return;
             
         case CONTROLBUS_NMI_DID_ASSERT:
             isNMI = true;
+            updateSpecialCondition();
             return;
     }
+}
+
+inline void MOS6502::updateSpecialCondition()
+{
+    isSpecialCondition = isIRQ || isResetTransition || isNMI;
 }
 
 void MOS6502::execute()
@@ -193,45 +208,54 @@ void MOS6502::execute()
         bool wasIRQEnabled = isIRQEnabled;
         isIRQEnabled = !(P & F_I);
         
-        OEComponent::notify(this, CPU_INSTRUCTION_WILL_EXECUTE, NULL);
+//        OEComponent::notify(this, CPU_INSTRUCTION_WILL_EXECUTE, NULL);
         
-        if (isResetStart)
+        if (isSpecialCondition)
         {
-            isResetStart = false;
-            
-            sp.b.l = 0;
-            
-            icount -= 2;
-            PUSH_DISCARD(PCH);
-            PUSH_DISCARD(PCL);
-            PUSH_DISCARD(P & ~F_B);
-            P |= F_I;
-            PCL = RDMEM(MOS6502_RST_VECTOR);
-            PCH = RDMEM(MOS6502_RST_VECTOR + 1);
-        }
-        else if (isNMI)
-        {
-            isNMI = false;
-            
-            icount -= 2;
-            PUSH(PCH);
-            PUSH(PCL);
-            PUSH(P & ~F_B);
-            P |= F_I;
-            PCL = RDMEM(MOS6502_NMI_VECTOR);
-            PCH = RDMEM(MOS6502_NMI_VECTOR + 1);
-        }
-        else if (isIRQ && wasIRQEnabled)
-        {
-            isIRQEnabled = false;
-            
-            icount -= 2;
-            PUSH(PCH);
-            PUSH(PCL);
-            PUSH(P & ~F_B);
-            P |= F_I;
-            PCL = RDMEM(MOS6502_IRQ_VECTOR);
-            PCH = RDMEM(MOS6502_IRQ_VECTOR + 1);
+            if (isIRQ && wasIRQEnabled)
+            {
+                isIRQEnabled = false;
+                
+                icount -= 2;
+                PUSH(PCH);
+                PUSH(PCL);
+                PUSH(P & ~F_B);
+                P |= F_I;
+                PCL = RDMEM(MOS6502_IRQ_VECTOR);
+                PCH = RDMEM(MOS6502_IRQ_VECTOR + 1);
+                
+                updateSpecialCondition();
+            }
+            else if (isResetTransition)
+            {
+                isResetTransition = false;
+                
+                sp.b.l = 0;
+                
+                icount -= 2;
+                PUSH_DISCARD(PCH);
+                PUSH_DISCARD(PCL);
+                PUSH_DISCARD(P & ~F_B);
+                P |= F_I;
+                PCL = RDMEM(MOS6502_RST_VECTOR);
+                PCH = RDMEM(MOS6502_RST_VECTOR + 1);
+                
+                updateSpecialCondition();
+            }
+            else
+            {
+                isNMI = false;
+                
+                icount -= 2;
+                PUSH(PCH);
+                PUSH(PCL);
+                PUSH(P & ~F_B);
+                P |= F_I;
+                PCL = RDMEM(MOS6502_NMI_VECTOR);
+                PCH = RDMEM(MOS6502_NMI_VECTOR + 1);
+                
+                updateSpecialCondition();
+            }
         }
         else
         {

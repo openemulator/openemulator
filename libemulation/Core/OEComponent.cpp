@@ -124,13 +124,3 @@ OEUInt64 OEComponent::read64(OEAddress address)
 void OEComponent::write64(OEAddress address, OEUInt64 value)
 {
 }
-
-int OEComponent::readBlock(OEAddress address, OEData *value)
-{
-    return 0;
-}
-
-int OEComponent::writeBlock(OEAddress address, OEData *value)
-{
-    return 0;
-}

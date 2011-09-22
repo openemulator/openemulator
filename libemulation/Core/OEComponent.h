@@ -49,8 +49,6 @@ public:
     virtual void write32(OEAddress address, OEUInt32 value);
     virtual OEUInt64 read64(OEAddress address);
     virtual void write64(OEAddress address, OEUInt64 value);
-    virtual int readBlock(OEAddress address, OEData *value);
-    virtual int writeBlock(OEAddress address, OEData *value);
     
 protected:
     OEObservers observers;

@@ -1,16 +1,16 @@
 
 /**
  * libemulator
- * Apple II Video
- * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
+ * Apple II Video Generator
+ * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls Apple II video
+ * Generates Apple II video
  */
 
 #include "OEComponent.h"
 
-class AppleIIVideo : public OEComponent
+class AppleIIVideoGenerator : public OEComponent
 {
 public:
 	bool setValue(string name, string value);
