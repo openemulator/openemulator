@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTDs/edl-1.0.dtd">
-<edl version="1.0" generator="OpenEmulator" framework="700" label="A-ONE" image="images/Achatz/A-ONE.png" description="The Achatz A-ONE (www.achatz.nl) is a fully functional replica of the Apple 1 computer. It features a WDC 65C02 microprocessor, 32 kiB RAM (at $0000-$7FFF), and 8 kiB bytes ROM (BASIC at $E000-$EFFF, Krusader at $F000-$FEFF, Monitor at $FF00-$FFFF).">
+<edl version="1.0" generator="OpenEmulator" framework="700" label="A-ONE" image="images/Achatz/A-ONE.png" description="The Achatz A-ONE (www.achatz.nl) is a fully functional replica of the Apple 1 computer. It features a WDC 65C02 microprocessor, 32 kiB RAM (at $0000-$7FFF), and 32 kiB bytes ROM (SBASM at $9000-$9FFF, BASIC at $E000-$EFFF, Krusader at $F000-$FEFF, monitor at $FF00-$FFFF).">
     
     <device id="aONE" label="A-ONE" image="images/Achatz/A-ONE.png">
         <setting ref="aONE.io" name="terminalSpeed" label="Terminal Speed" type="select" options="Standard,Enhanced"/>
@@ -20,9 +20,9 @@
         <property name="clockFrequency" value="959790.088"/>
         <property name="cpuClockMultiplier" value="1"/>
         <property name="cpu" ref="aONE.cpu"/>
-        <property name="resetOnPowerOn" value="0"/>
-        <property name="powerState" value="0"/>
-        <property name="resetCount" value="0"/>
+        <property name="powerState" value="S0"/>
+        <property name="resetOnPowerOn" value="1"/>
+        <property name="resetCount" value="1"/>
         <property name="irqCount" value="0"/>
         <property name="nmiCount" value="0"/>
     </component>
@@ -34,10 +34,10 @@
         <property name="mapRAM" value="0x0000-0x7fff"/>
         <property name="refIO" ref="aONE.ioMemory"/>
         <property name="mapIO" value="0xd000-0xdfff"/>
+        <property name="refROM" ref="aONE.rom"/>
+        <property name="mapROM" value="0x8000-0x9fff,0xf000-0xffff"/>
         <property name="refE000" ref="aONE.muxE000"/>
         <property name="mapE000" value="0xe000-0xefff"/>
-        <property name="refROM" ref="aONE.rom"/>
-        <property name="mapROM" value="0xf000-0xffff"/>
     </component>
     <component id="aONE.cpu" class="W65C02S">
         <property name="a" value="0x0"/>
@@ -45,7 +45,7 @@
         <property name="y" value="0x0"/>
         <property name="s" value="0x0"/>
         <property name="p" value="0x0"/>
-        <property name="pc" value="0x0"/>
+        <property name="pc" value="0xff00"/>
         <property name="memoryBus" ref="aONE.memoryBus"/>
         <property name="controlBus" ref="aONE.controlBus"/>
     </component>
@@ -102,6 +102,9 @@
         <property name="font" data="${resourcePath}/roms/Achatz/A-ONE Video ROM.bin"/>
         <property name="cursorX" value="0"/>
         <property name="cursorY" value="0"/>
+        <property name="clearScreenOnCtrlL" value="1"/>
+        <property name="splashScreen" value="1"/>
+        <property name="splashScreenActive" value="1"/>
     </component>
     <component id="aONE.muxE000" class="Mux">
         <property name="refRAM" ref="aONE.ram"/>
@@ -109,7 +112,7 @@
         <property name="sel" value="ROM"/>
     </component>
     <component id="aONE.rom" class="ROM">
-        <property name="image" data="${resourcePath}/roms/Briel/Replica-1 65C02 ROM.bin"/>
+        <property name="image" data="${resourcePath}/roms/Achatz/A-ONE ROM.bin"/>
     </component>
     
 </edl>

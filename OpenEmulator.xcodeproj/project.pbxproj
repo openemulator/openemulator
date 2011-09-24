@@ -20,6 +20,7 @@
 		000E8D1913515C6E00DBFB2C /* StorageInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 000E8D1813515C6E00DBFB2C /* StorageInterface.h */; };
 		001C9B02137FDD0500D1355B /* AudioRecord.png in Resources */ = {isa = PBXBuildFile; fileRef = 00ED379A12779AD000BEF6BD /* AudioRecord.png */; };
 		001F56F90FD1E8E500EA246A /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 001F56F80FD1E8E500EA246A /* Sparkle.framework */; };
+		0022236C142C557100B7451D /* ControlBusInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 0022236B142C557100B7451D /* ControlBusInterface.h */; };
 		00247F38139D8F4C00B165D1 /* OECommon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00247F35139D85A900B165D1 /* OECommon.cpp */; };
 		002740B813A08A4F00E13D65 /* VidexVideoterm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 002740B613A08A4F00E13D65 /* VidexVideoterm.cpp */; };
 		002740B913A08A4F00E13D65 /* VidexVideoterm.h in Headers */ = {isa = PBXBuildFile; fileRef = 002740B713A08A4F00E13D65 /* VidexVideoterm.h */; };
@@ -244,6 +245,7 @@
 		001750C313A50A9C0043E2ED /* TODO */ = {isa = PBXFileReference; lastKnownFileType = text; path = TODO; sourceTree = "<group>"; };
 		001CC97E13D11EBC00B0DDA7 /* CPUInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CPUInterface.h; sourceTree = "<group>"; };
 		001F56F80FD1E8E500EA246A /* Sparkle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = Sparkle.framework; path = macosx/Sparkle.framework; sourceTree = "<group>"; };
+		0022236B142C557100B7451D /* ControlBusInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ControlBusInterface.h; sourceTree = "<group>"; };
 		00247F35139D85A900B165D1 /* OECommon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OECommon.cpp; sourceTree = "<group>"; };
 		00247F36139D85AA00B165D1 /* OECommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OECommon.h; sourceTree = "<group>"; };
 		002579FB1218A83400206E56 /* NSStringAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSStringAdditions.h; sourceTree = "<group>"; };
@@ -383,7 +385,7 @@
 		00B8883612A393990052B7A4 /* Monitor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Monitor.cpp; sourceTree = "<group>"; };
 		00B8883712A393990052B7A4 /* Monitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Monitor.h; sourceTree = "<group>"; };
 		00B8883812A393990052B7A4 /* ControlBus.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ControlBus.cpp; path = libemulation/Implementation/Generic/ControlBus.cpp; sourceTree = SOURCE_ROOT; };
-		00B8883912A393990052B7A4 /* ControlBus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ControlBus.h; path = libemulation/Implementation/Generic/ControlBus.h; sourceTree = SOURCE_ROOT; };
+		00B8883912A393990052B7A4 /* ControlBus.h */ = {isa = PBXFileReference; fileEncoding = 4; name = ControlBus.h; path = libemulation/Implementation/Generic/ControlBus.h; sourceTree = SOURCE_ROOT; };
 		00B8883A12A393990052B7A4 /* FloatingBus.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FloatingBus.cpp; path = libemulation/Implementation/Generic/FloatingBus.cpp; sourceTree = SOURCE_ROOT; };
 		00B8883B12A393990052B7A4 /* FloatingBus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FloatingBus.h; path = libemulation/Implementation/Generic/FloatingBus.h; sourceTree = SOURCE_ROOT; };
 		00B8883C12A393990052B7A4 /* RAM.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RAM.cpp; path = libemulation/Implementation/Generic/RAM.cpp; sourceTree = SOURCE_ROOT; };
@@ -630,6 +632,7 @@
 			isa = PBXGroup;
 			children = (
 				001CC97E13D11EBC00B0DDA7 /* CPUInterface.h */,
+				0022236B142C557100B7451D /* ControlBusInterface.h */,
 			);
 			path = Generic;
 			sourceTree = "<group>";
@@ -1062,6 +1065,7 @@
 				00F397E6141655EC00C53A3E /* Apple1IO.h in Headers */,
 				00FBD2DE1419A03B00BA8CEE /* AudioCodec.h in Headers */,
 				00DEA9221423B7C9003E9FA0 /* RDCFFA1.h in Headers */,
+				0022236C142C557100B7451D /* ControlBusInterface.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

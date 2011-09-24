@@ -16,8 +16,10 @@ class AudioCodec : public OEComponent
 public:
     AudioCodec();
     
+    bool setValue(string name, string value);
     bool setRef(string name, OEComponent *ref);
     bool init();
+    void update();
     
     void notify(OEComponent *sender, int notification, void *data);
     
@@ -30,7 +32,17 @@ private:
     OEComponent *audio;
     OEComponent *controlBus;
     
+    float highpassFrequency;
+    float lowpassFrequency;
+    double timeAccuracy;
+    OEUInt32 sidelobes;
+    
     AudioBuffer *audioBuffer;
     
+    OEUInt32 bufferFrameNum;
     vector<float> deltaBuffer;
+    
+    void updateSynth();
+    void setSample(float index, int channel, float level);
+    void renderBuffer();
 };

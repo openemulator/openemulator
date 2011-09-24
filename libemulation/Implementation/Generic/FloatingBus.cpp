@@ -14,13 +14,21 @@
 FloatingBus::FloatingBus()
 {
     randomMode = false;
+    
     busValue = 0;
 }
 
 bool FloatingBus::setValue(string name, string value)
 {
     if (name == "mode")
-        setMode(value);
+    {
+        if (value == "vcc")
+            busValue = 0xff;
+        else
+            busValue = 0x00;
+        
+        randomMode = (value == "random");
+    }
     else
         return false;
     
@@ -33,20 +41,4 @@ OEUInt8 FloatingBus::read(OEAddress address)
         return random() & 0xff;
     else
         return busValue;
-}
-
-void FloatingBus::setMode(string mode)
-{
-    if (mode == "ground")
-    {
-        randomMode = false;
-        busValue = 0x00;
-    }
-    else if (mode == "vcc")
-    {
-        randomMode = false;
-        busValue = 0xff;
-    }
-    else if (mode == "random")
-        randomMode = true;
 }

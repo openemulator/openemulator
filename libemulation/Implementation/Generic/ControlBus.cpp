@@ -23,7 +23,6 @@
 #include <math.h>
 
 #include "ControlBus.h"
-
 #include "DeviceInterface.h"
 #include "AudioInterface.h"
 #include "CPUInterface.h"
@@ -32,7 +31,7 @@ ControlBus::ControlBus()
 {
     clockFrequency = 1E6;
     cpuClockMultiplier = 1;
-    resetOnPowerOn = false;
+    resetOnPowerOn = true;
     
     device = NULL;
     audio = NULL;
@@ -59,10 +58,10 @@ bool ControlBus::setValue(string name, string value)
         clockFrequency = getFloat(value);
     else if (name == "cpuClockMultiplier")
         cpuClockMultiplier = getFloat(value);
-    else if (name == "resetOnPowerOn")
-        resetOnPowerOn = getUInt(value);
     else if (name == "powerState")
-        powerState = (ControlBusPowerState) getInt(value);
+        powerState = (ControlBusPowerState) getInt(value.substr(1));
+    else if (name == "resetOnPowerOn")
+        resetOnPowerOn = getInt(value);
     else if (name == "resetCount")
         resetCount = (OEUInt32) getUInt(value);
     else if (name == "irqCount")
@@ -78,7 +77,7 @@ bool ControlBus::setValue(string name, string value)
 bool ControlBus::getValue(string name, string &value)
 {
     if (name == "powerState")
-        value = getString(powerState);
+        value = string("S") + getString(powerState);
     else if (name == "resetCount")
         value = getString(resetCount);
     else if (name == "irqCount")
@@ -296,8 +295,11 @@ void ControlBus::notify(OEComponent *sender, int notification, void *data)
                 break;
                 
             case DEVICE_WARMRESTART:
-                postMessage(this, CONTROLBUS_ASSERT_RESET, NULL);
-                postMessage(this, CONTROLBUS_CLEAR_RESET, NULL);
+                if (resetOnPowerOn)
+                {
+                    postMessage(this, CONTROLBUS_ASSERT_RESET, NULL);
+                    postMessage(this, CONTROLBUS_CLEAR_RESET, NULL);
+                }
                 break;
                 
             case DEVICE_DEBUGGERBREAK:

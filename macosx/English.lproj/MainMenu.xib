@@ -679,7 +679,7 @@
 								</object>
 								<object class="NSMenuItem" id="231350452">
 									<reference key="NSMenu" ref="361438485"/>
-									<string key="NSTitle">Cold Restart</string>
+									<string key="NSTitle">Restart</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="1033313550"/>
@@ -687,7 +687,7 @@
 								</object>
 								<object class="NSMenuItem" id="417495872">
 									<reference key="NSMenu" ref="361438485"/>
-									<string key="NSTitle">Warm Restart</string>
+									<string key="NSTitle">Reset</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="1033313550"/>

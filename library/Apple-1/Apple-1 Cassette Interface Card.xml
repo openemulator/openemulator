@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
-<edl version="1.0" generator="OpenEmulator" build="700" label="Apple-1 Cassette Interface Card" image="images/Apple/Apple-1 Cassette Interface Card.png" description="The Apple-1 Cassette Interface Card is used for moving data from tape to an Apple-1 computer. To load data, enter C100R in the monitor. Next, enter the memory range for loading as XXXX.YYYYR">
+<edl version="1.0" generator="OpenEmulator" build="700" label="Apple-1 Cassette Interface Card" image="images/Apple/Apple-1 Cassette Interface Card.png" description="The Apple-1 Cassette Interface Card is used for saving and loading data to an Apple-1 computer. To load data enter C100R in the monitor, play back the recording, and enter the memory range in hex as XXXX.YYYYR.">
     
     <device id="appleACI" label="Apple-1 Cassette Interface Card" image="images/Apple/Apple-1 Cassette Interface Card.png">
     </device>

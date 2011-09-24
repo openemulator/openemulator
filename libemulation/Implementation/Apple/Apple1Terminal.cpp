@@ -37,14 +37,20 @@ Apple1Terminal::Apple1Terminal()
     monitorDevice = NULL;
     monitor = NULL;
     
-    cursorActive = false;
-    cursorCount = 0;
     cursorX = 0;
     cursorY = 0;
+    clearScreenOnCtrlL = false;
+    splashScreen = false;
+    splashScreenActive = false;
     
     vramp = NULL;
+    canvasShouldUpdate = true;
     image.setFormat(OEIMAGE_LUMINANCE);
     image.setSize(OEMakeSize(SCREEN_WIDTH, SCREEN_HEIGHT));
+    cursorActive = false;
+    cursorCount = 0;
+    
+    powerState = CONTROLBUS_POWERSTATE_ON;
 }
 
 bool Apple1Terminal::setValue(string name, string value)
@@ -53,6 +59,12 @@ bool Apple1Terminal::setValue(string name, string value)
         cursorX = (OEUInt32) getUInt(value);
     else if (name == "cursorY")
         cursorY = (OEUInt32) getUInt(value);
+    else if (name == "clearScreenOnCtrlL")
+        clearScreenOnCtrlL = getUInt(value);
+    else if (name == "splashScreen")
+        splashScreen = getUInt(value);
+    else if (name == "splashScreenActive")
+        splashScreenActive = getUInt(value);
     else
         return false;
     
@@ -65,6 +77,8 @@ bool Apple1Terminal::getValue(string name, string& value)
         value = getString(cursorX);
     else if (name == "cursorY")
         value = getString(cursorY);
+    else if (name == "splashScreenActive")
+        value = getString(splashScreenActive);
     else
         return false;
     
@@ -74,7 +88,13 @@ bool Apple1Terminal::getValue(string name, string& value)
 bool Apple1Terminal::setRef(string name, OEComponent *ref)
 {
     if (name == "device")
+    {
+        if (device)
+            device->removeObserver(this, DEVICE_EVENT_DID_OCCUR);
         device = ref;
+        if (device)
+            device->addObserver(this, DEVICE_EVENT_DID_OCCUR);
+    }
     else if (name == "vram")
         vram = ref;
     else if (name == "controlBus")
@@ -117,7 +137,6 @@ bool Apple1Terminal::setRef(string name, OEComponent *ref)
             monitor->addObserver(this, CANVAS_DID_PASTE);
             
             updateCanvas();
-            updateBezel();
         }
     }
     else
@@ -179,7 +198,6 @@ bool Apple1Terminal::init()
     controlBus->postMessage(this, CONTROLBUS_GET_POWERSTATE, &powerState);
     
     updateCanvas();
-    updateBezel();
     
     scheduleTimer();
     
@@ -193,6 +211,7 @@ bool Apple1Terminal::postMessage(OEComponent *sender, int message, void *data)
         case RS232_SEND_DATA:
         {
             OEData *theData = (OEData *)data;
+            
             for (OEData::iterator i = theData->begin();
                  i != theData->end();
                  i++)
@@ -224,20 +243,25 @@ void Apple1Terminal::notify(OEComponent *sender, int notification, void *data)
         switch (notification)
         {
             case CONTROLBUS_POWERSTATE_DID_CHANGE:
-                powerState = *((ControlBusPowerState *)data);
-                if (powerState == CONTROLBUS_POWERSTATE_OFF)
+                if (splashScreen && (powerState == CONTROLBUS_POWERSTATE_OFF))
                 {
-                    clearScreen();
-                    updateBezel();
-                    
-                    if (monitor)
-                        monitor->postMessage(this, CANVAS_CLEAR, NULL);
+                    if (!splashScreenActive)
+                    {
+                        splashScreenActive = true;
+                        
+                        controlBus->postMessage(this, CONTROLBUS_ASSERT_RESET, NULL);
+                    }
                 }
+                
+                powerState = *((ControlBusPowerState *)data);
+                
+                if (powerState == CONTROLBUS_POWERSTATE_OFF)
+                    clearScreen();
                 
                 break;
                 
             case CONTROLBUS_RESET_DID_ASSERT:
-                // Empty pastebuffer
+                // Clear pastebuffer
                 while (!pasteBuffer.empty())
                     pasteBuffer.pop();
                 
@@ -266,9 +290,10 @@ void Apple1Terminal::notify(OEComponent *sender, int notification, void *data)
                 
                 CanvasUnicodeChar key = *((CanvasUnicodeChar *)data);
                 
-                if (key == 0x7f)
+                if (((key == 0x0c) && clearScreenOnCtrlL) ||
+                    (key == 0x7f))
                     clearScreen();
-                else
+                else if (key <= 0x80)
                     sendKey(key);
                 
                 break;
@@ -283,11 +308,26 @@ void Apple1Terminal::notify(OEComponent *sender, int notification, void *data)
                 break;
         }
     }
+    else if (sender == device)
+    {
+        if (*((DeviceEvent *)data) == DEVICE_WARMRESTART)
+        {
+            if (splashScreenActive)
+            {
+                splashScreenActive = false;
+                
+                controlBus->postMessage(this, CONTROLBUS_CLEAR_RESET, NULL);
+                
+                clearScreen();
+            }
+        }
+    }
 }
 
 void Apple1Terminal::scheduleTimer()
 {
     OEUInt64 clocks = 262 * 61;
+    
     controlBus->postMessage(this, CONTROLBUS_SCHEDULE_TIMER, &clocks);
 }
 
@@ -322,46 +362,43 @@ void Apple1Terminal::loadFont(OEData *data)
 
 void Apple1Terminal::updateCanvas()
 {
-    if (!monitor)
+    if (!monitor ||
+        !vramp ||
+        (powerState != CONTROLBUS_POWERSTATE_ON))
         return;
     
-    if (!vramp)
-        return;
-    
-    // No updates when power is turned off
-    if (powerState == CONTROLBUS_POWERSTATE_OFF)
-        return;
-    
-    if (powerState == CONTROLBUS_POWERSTATE_ON)
-    {
-        if (cursorCount)
-            cursorCount--;
-        else
-        {
-            cursorActive = !cursorActive;
-            cursorCount = cursorActive ? BLINK_ON : BLINK_OFF;
-        }
-    }
-    // Hide cursor when paused
-    else
+    if (splashScreenActive)
         cursorActive = false;
+    else if (cursorCount)
+        cursorCount--;
+    else
+    {
+        cursorActive = !cursorActive;
+        cursorCount = cursorActive ? BLINK_ON : BLINK_OFF;
+        
+        canvasShouldUpdate = true;
+    }
+    
+    if (!canvasShouldUpdate)
+        return;
     
     OEUInt8 *fp = (OEUInt8 *)&font.front();
     OEUInt8 *ip = (OEUInt8 *)image.getPixels();
+    
+    // Generate cursor
+    OEUInt8 cursorChar = vramp[cursorY * TERM_WIDTH + cursorX];
+    if (cursorActive)
+        vramp[cursorY * TERM_WIDTH + cursorX] = '@';
     
     for (int y = 0; y < TERM_HEIGHT; y++)
         for (int x = 0; x < TERM_WIDTH; x++)
         {
             OEUInt8 c = vramp[y * TERM_WIDTH + x] & FONT_SIZE_MASK;
-            
-            if (cursorActive &&
-                (x == cursorX) &&
-                (y == cursorY))
-                c = 0x40;
-            
             OEUInt8 *f = fp + c * FONT_HEIGHT * FONT_WIDTH;
             OEUInt8 *p = (ip + y * SCREEN_WIDTH * CHAR_HEIGHT +
-                       x * CHAR_WIDTH + SCREEN_ORIGIN_Y * SCREEN_WIDTH + SCREEN_ORIGIN_X);
+                          x * CHAR_WIDTH +
+                          SCREEN_ORIGIN_Y * SCREEN_WIDTH +
+                          SCREEN_ORIGIN_X);
             
             copyCharLine(0);
             copyCharLine(1);
@@ -374,30 +411,21 @@ void Apple1Terminal::updateCanvas()
         }
     
     monitor->postMessage(this, CANVAS_POST_IMAGE, &image);
+
+    // Restore cursor char
+    vramp[cursorY * TERM_WIDTH + cursorX] = cursorChar;
+    
+    canvasShouldUpdate = false;
 }
 
-void Apple1Terminal::updateBezel()
+void Apple1Terminal::clearScreen()
 {
-    if (!monitor)
-        return;
+    memset(vramp, ' ', TERM_HEIGHT * TERM_WIDTH);
     
-    CanvasBezel bezel;
-    switch (powerState)
-    {
-        case CONTROLBUS_POWERSTATE_OFF:
-            bezel = CANVAS_BEZEL_POWER;
-            break;
-            
-        case CONTROLBUS_POWERSTATE_PAUSE:
-            bezel = CANVAS_BEZEL_PAUSE;
-            break;
-            
-        default:
-            bezel = CANVAS_BEZEL_NONE;
-            break;
-    }
+    cursorX = 0;
+    cursorY = 0;
     
-    monitor->postMessage(this, CANVAS_SET_BEZEL, &bezel);
+    canvasShouldUpdate = true;
 }
 
 void Apple1Terminal::putChar(OEUInt8 c)
@@ -406,6 +434,8 @@ void Apple1Terminal::putChar(OEUInt8 c)
     {
         cursorX = 0;
         cursorY++;
+        
+        canvasShouldUpdate = true;
     }
     else if ((c >= 0x20) && (c <= 0x7f))
     {
@@ -417,6 +447,8 @@ void Apple1Terminal::putChar(OEUInt8 c)
             cursorX = 0;
             cursorY++;
         }
+        
+        canvasShouldUpdate = true;
     }
     
     if (cursorY >= TERM_HEIGHT)
@@ -424,16 +456,10 @@ void Apple1Terminal::putChar(OEUInt8 c)
         cursorY = TERM_HEIGHT - 1;
         
         memmove(vramp, vramp + TERM_WIDTH, (TERM_HEIGHT - 1) * TERM_WIDTH);
-        memset(vramp + (TERM_HEIGHT - 1) * TERM_WIDTH, 0x20, TERM_WIDTH);
+        memset(vramp + (TERM_HEIGHT - 1) * TERM_WIDTH, ' ', TERM_WIDTH);
+        
+        canvasShouldUpdate = true;
     }
-}
-
-void Apple1Terminal::clearScreen()
-{
-    memset(vramp, 0x20, TERM_HEIGHT * TERM_WIDTH);
-    
-    cursorX = 0;
-    cursorY = 0;
 }
 
 void Apple1Terminal::sendKey(CanvasUnicodeChar key)
@@ -471,7 +497,10 @@ void Apple1Terminal::copy(wstring *s)
 void Apple1Terminal::paste(wstring *s)
 {
     for (int i = 0; i < s->size(); i++)
-        pasteBuffer.push(s->at(i));
+    {
+        if (s->at(i) <= 0x80)
+            pasteBuffer.push(s->at(i));
+    }
     
     emptyPasteBuffer();
 }

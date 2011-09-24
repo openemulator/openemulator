@@ -210,9 +210,9 @@
     }
     else if ([ident isEqualToString:@"Cold Restart"])
     {
-        [item setLabel:NSLocalizedString(@"Cold Restart",
+        [item setLabel:NSLocalizedString(@"Restart",
                                          @"Canvas Toolbar Label.")];
-        [item setPaletteLabel:NSLocalizedString(@"Cold Restart",
+        [item setPaletteLabel:NSLocalizedString(@"Restart",
                                                 @"Canvas Toolbar Palette Label.")];
         [item setToolTip:NSLocalizedString(@"Restart the system at the most "
                                            "primitive level.",
@@ -222,9 +222,9 @@
     }
     else if ([ident isEqualToString:@"Warm Restart"])
     {
-        [item setLabel:NSLocalizedString(@"Warm Restart",
+        [item setLabel:NSLocalizedString(@"Reset",
                                          @"Canvas Toolbar Label.")];
-        [item setPaletteLabel:NSLocalizedString(@"Warm Restart",
+        [item setPaletteLabel:NSLocalizedString(@"Reset",
                                                 @"Canvas Toolbar Palette Label.")];
         [item setToolTip:NSLocalizedString(@"Restart the operating system.",
                                            @"Canvas Toolbar Tool Tip.")];

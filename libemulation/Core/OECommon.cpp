@@ -49,27 +49,39 @@ OEInt64 getInt(const string& value)
 
 double getFloat(const string& value)
 {
-    return atof(value.c_str());
+    double f;
+    stringstream ss;
+    
+    ss << value;
+    ss >> f;
+    
+    return f;
 }
 
 string getString(OEUInt32 value)
 {
     stringstream ss;
+    
     ss << value;
+    
     return ss.str();
 }
 
 string getString(OEInt32 value)
 {
     stringstream ss;
+    
     ss << value;
+    
     return ss.str();
 }
 
 string getString(OEUInt64 value)
 {
     stringstream ss;
+    
     ss << value;
+    
     return ss.str();
 }
 
@@ -83,14 +95,18 @@ string getString(OEInt64 value)
 string getString(float value)
 {
     stringstream ss;
+    
     ss << value;
+    
     return ss.str();
 }
 
 string getHexString(OEUInt64 value)
 {
     stringstream ss;
+    
     ss << "0x" << hex << value;
+    
     return ss.str();
 }
 
@@ -99,6 +115,7 @@ string rtrim(string value)
     size_t found;
     
     found = value.find_last_not_of(" \n\r\t\f\v");
+    
     if (found != string::npos)
         return value.substr(0, found + 1);
     
@@ -110,6 +127,7 @@ wstring rtrim(wstring value)
     size_t found;
     
     found = value.find_last_not_of(L" \n\r\t\f\v");
+    
     if (found != string::npos)
         return value.substr(0, found + 1);
     
@@ -121,6 +139,7 @@ OEData getCharVector(const string& value)
     OEData result;
     size_t start = (value.substr(0, 2) == "0x") ? 2 : 0;
     size_t size = (value.size() - start) / 2;
+    
     result.resize(size);
     
     for (size_t i = 0; i < size; i++)
@@ -149,7 +168,7 @@ bool readFile(string path, OEData *data)
     if (file.is_open())
     {
         file.seekg(0, ios::end);
-        streampos size = file.tellg();
+        size_t size = (size_t) file.tellg();
         file.seekg(0, ios::beg);
         
         data->resize(size);

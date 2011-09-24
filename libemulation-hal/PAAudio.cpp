@@ -394,7 +394,7 @@ bool PAAudio::openAudio()
                                &outputParameters,
                                sampleRate,
                                framesPerBuffer,
-                               paClipOff,
+                               paNoFlag,
                                PAAudioRunAudio,
                                this);
         if ((status != paNoError) && fullDuplex)
@@ -407,7 +407,7 @@ bool PAAudio::openAudio()
                                    &outputParameters,
                                    sampleRate,
                                    framesPerBuffer,
-                                   paClipOff,
+                                   paNoFlag,
                                    PAAudioRunAudio,
                                    this);
         }

@@ -32,8 +32,6 @@ void W65C02S::execute()
         bool wasIRQEnabled = isIRQEnabled;
         isIRQEnabled = !(P & F_I);
         
-//        OEComponent::notify(this, CPU_INSTRUCTION_WILL_EXECUTE, NULL);
-        
         if (isSpecialCondition)
         {
             if (isIRQ && wasIRQEnabled)
@@ -68,7 +66,7 @@ void W65C02S::execute()
             }
             else
             {
-                isNMI = false;
+                isNMITransition = false;
                 
                 icount -= 2;
                 PUSH(PCH);

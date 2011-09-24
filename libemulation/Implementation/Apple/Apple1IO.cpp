@@ -31,7 +31,11 @@ Apple1IO::Apple1IO()
 bool Apple1IO::setValue(string name, string value)
 {
     if (name == "terminalSpeed")
+    {
         enhancedTerminalSpeed = (value == "Enhanced");
+        
+        sendChar();
+    }
     else if (name == "keyboardType")
         fullASCIIKeyboard = (value == "Full ASCII");
     else
@@ -88,12 +92,14 @@ bool Apple1IO::init()
     if (!pia)
     {
         logMessage("pia not connected");
+        
         return false;
     }
     
     if (!terminal)
     {
         logMessage("terminal not connected");
+        
         return false;
     }
     
@@ -115,12 +121,7 @@ void Apple1IO::notify(OEComponent *sender, int notification, void *data)
                 bool ready = *((bool *)data);
                 
                 if (ready && !enhancedTerminalSpeed)
-                {
-                    // Send char
-                    OEData s;
-                    s.push_back(terminalChar);
-                    terminal->postMessage(this, RS232_SEND_DATA, &s);
-                }
+                    sendChar();
             }
         }
     }
@@ -160,7 +161,7 @@ void Apple1IO::notify(OEComponent *sender, int notification, void *data)
                 // Signal /RDA
                 bool cb1 = true;
                 pia->postMessage(this, MC6821_SET_CB1, &cb1);
-                // (it should last 3.5 µs, but we'll toggle it a bit faster)
+                // (it should last 3.5 µs, but we'll toggle a bit faster)
                 cb1 = false;
                 pia->postMessage(this, MC6821_SET_CB1, &cb1);
                 
@@ -192,10 +193,8 @@ OEUInt8 Apple1IO::read(OEAddress address)
             if (enhancedTerminalSpeed)
                 ready = true;
             else
-            {
                 // Loop /CB2 signal to PB7
                 pia->postMessage(this, MC6821_GET_CB2, &ready);
-            }
             
             return ((!ready) << 7);
         }
@@ -215,13 +214,17 @@ void Apple1IO::write(OEAddress address, OEUInt8 value)
             terminalChar = value & 0x7f;
             
             if (enhancedTerminalSpeed)
-            {
-                // Send char
-                OEData s;
-                s.push_back(terminalChar);
-                terminal->postMessage(this, RS232_SEND_DATA, &s);
-            }
+                sendChar();
             
             break;
     }
+}
+
+void Apple1IO::sendChar()
+{
+    OEData s;
+    s.push_back(terminalChar);
+    terminal->postMessage(this, RS232_SEND_DATA, &s);
+    
+    terminalChar = 0;
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTDs/edl-1.0.dtd">
-<edl version="1.0" generator="OpenEmulator" framework="700" label="Replica-1" image="images/Briel/Replica-1.png" description="The Replica-1 (www.brielcomputers.com) is a functional clone of the Apple-1 computer. It features a WDC 65C02 microprocessor, 32 kiB RAM (at $0000-$7FFF), and 8 kiB bytes ROM (BASIC at $E000-$EFFF, Krusader at $F000-$FEFF, Monitor at $FF00-$FFFF).">
+<edl version="1.0" generator="OpenEmulator" framework="700" label="Replica-1" image="images/Briel/Replica-1.png" description="The Replica-1 (www.brielcomputers.com) is a functional clone of the Apple-1 computer. It features a WDC 65C02 microprocessor, 32 kiB RAM (at $0000-$7FFF), and 8 kiB bytes ROM (BASIC at $E000-$EFFF, Krusader at $F000-$FEFF, monitor at $FF00-$FFFF).">
     
     <device id="replica1" label="Replica-1" image="images/Briel/Replica-1.png">
         <setting ref="replica1.io" name="terminalSpeed" label="Terminal Speed" type="select" options="Standard,Enhanced"/>
@@ -19,8 +19,8 @@
         <property name="clockFrequency" value="959790.088"/>
         <property name="cpuClockMultiplier" value="1"/>
         <property name="cpu" ref="replica1.cpu"/>
+        <property name="powerState" value="S0"/>
         <property name="resetOnPowerOn" value="1"/>
-        <property name="powerState" value="0"/>
         <property name="resetCount" value="0"/>
         <property name="irqCount" value="0"/>
         <property name="nmiCount" value="0"/>
@@ -99,6 +99,7 @@
         <property name="font" data="${resourcePath}/roms/Signetics/Signetics 2513 Video ROM.bin"/>
         <property name="cursorX" value="0"/>
         <property name="cursorY" value="0"/>
+        <property name="clearScreenOnCtrlL" value="1"/>
     </component>
     <component id="replica1.rom" class="ROM">
         <property name="image" data="${resourcePath}/roms/Briel/Replica-1 65C02 ROM.bin"/>

@@ -13,13 +13,13 @@
 #include "DeviceInterface.h"
 #include "AudioInterface.h"
 
-#include "ControlBus.h"
-
 Monitor::Monitor()
 {
     device = NULL;
     controlBus = NULL;
     canvas = NULL;
+    
+    powerState = CONTROLBUS_POWERSTATE_ON;
     
     configuration.displayResolution = OEMakeSize(768, 576);
 }
@@ -244,6 +244,9 @@ bool Monitor::init()
         return false;
     }
     
+    if (controlBus)
+        controlBus->postMessage(this, CONTROLBUS_GET_POWERSTATE, &powerState);
+    
     return true;
 }
 
@@ -255,7 +258,7 @@ void Monitor::update()
 
 bool Monitor::postMessage(OEComponent *sender, int message, void *data)
 {
-    if (canvas)
+    if (canvas && (powerState != CONTROLBUS_POWERSTATE_OFF))
         return canvas->postMessage(sender, message, data);
     
     return false;
@@ -266,20 +269,29 @@ void Monitor::notify(OEComponent *sender, int notification, void *data)
     if (sender == controlBus)
     {
         CanvasBezel bezel;
-        switch(*((ControlBusPowerState *)data))
+        
+        powerState = *((ControlBusPowerState *)data);
+        
+        switch(powerState)
         {
             case CONTROLBUS_POWERSTATE_OFF:
+                canvas->postMessage(this, CANVAS_CLEAR, NULL);
+                
                 bezel = CANVAS_BEZEL_POWER;
+                
                 break;
                 
             case CONTROLBUS_POWERSTATE_ON:
                 bezel = CANVAS_BEZEL_NONE;
+                
                 break;
                 
             default:
                 bezel = CANVAS_BEZEL_PAUSE;
+                
                 break;
         }
+        
         canvas->postMessage(this, CANVAS_SET_BEZEL, &bezel);
     }
     else

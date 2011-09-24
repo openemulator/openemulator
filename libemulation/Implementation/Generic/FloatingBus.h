@@ -21,7 +21,6 @@ public:
     
 private:
     bool randomMode;
-    OEUInt8 busValue;
     
-    void setMode(string mode);
+    OEUInt8 busValue;
 };

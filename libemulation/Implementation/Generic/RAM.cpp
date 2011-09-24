@@ -87,11 +87,11 @@ bool RAM::init()
     if (!powerOnPattern.size())
         powerOnPattern.resize(1);
     else
-        powerOnPattern.resize(getNextPowerOf2((int) powerOnPattern.size()));
+        powerOnPattern.resize((size_t) getNextPowerOf2((int) powerOnPattern.size()));
     
     size = getNextPowerOf2(size);
     size_t oldSize = data.size();
-    data.resize(size);
+    data.resize((size_t) size);
     if (oldSize == 0)
         initMemory();
     datap = (OEUInt8 *) &data.front();

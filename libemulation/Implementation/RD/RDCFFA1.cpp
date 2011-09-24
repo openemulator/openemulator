@@ -249,7 +249,7 @@ void RDCFFA1::write(OEAddress address, OEUInt8 value)
                 diskImageFP &&
                 !forceWriteProtected)
             {
-                fseek(diskImageFP, ataLBA.q << 9, SEEK_SET);
+                fseek(diskImageFP, (size_t) (ataLBA.q << 9), SEEK_SET);
                 ataError = !fwrite(ataBuffer, 0x200, 1, diskImageFP);
             }
             
@@ -291,10 +291,8 @@ void RDCFFA1::write(OEAddress address, OEUInt8 value)
                     
                     if (diskImageFP)
                     {
-                        fseek(diskImageFP, ataLBA.q << 9, SEEK_SET);
+                        fseek(diskImageFP, (size_t) (ataLBA.q << 9), SEEK_SET);
                         ataError = !fread(ataBuffer, 0x200, 1, diskImageFP);
-                        
-                        ataError = false;
                     }
                     else
                         ataError = true;
@@ -320,7 +318,7 @@ void RDCFFA1::write(OEAddress address, OEUInt8 value)
                     if (diskImageFP)
                     {
                         OEUnion lbaSize;
-                        fseek(diskImageFP, ataLBA.q, SEEK_END);
+                        fseek(diskImageFP, 0, SEEK_END);
                         lbaSize.q = ftell(diskImageFP) >> 9;
                         
                         memset(ataBuffer, 0, 0x200);

@@ -16,7 +16,7 @@
 
 #include "OEImage.h"
 #include "CanvasInterface.h"
-#include "ControlBus.h"
+#include "ControlBusInterface.h"
 
 #include <queue>
 
@@ -42,13 +42,17 @@ private:
     OEComponent *monitorDevice;
     OEComponent *monitor;
     
-    bool cursorActive;
-    OEUInt32 cursorCount;
     OEUInt32 cursorX, cursorY;
+    bool clearScreenOnCtrlL;
+    bool splashScreen;
+    bool splashScreenActive;
     
     OEData font;
     OEUInt8 *vramp;
+    bool canvasShouldUpdate;
     OEImage image;
+    bool cursorActive;
+    OEUInt32 cursorCount;
     
     ControlBusPowerState powerState;
     
@@ -58,9 +62,8 @@ private:
     void scheduleTimer();
     void loadFont(OEData *data);
     void updateCanvas();
-    void updateBezel();
-    void putChar(OEUInt8 c);
     void clearScreen();
+    void putChar(OEUInt8 c);
     void sendKey(CanvasUnicodeChar key);
     void copy(wstring *s);
     void paste(wstring *s);

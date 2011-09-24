@@ -58,7 +58,7 @@ bool AddressDecoder::init()
 	OEAddress addressSpace = (1 << addressSize);
 	addressMask = addressSpace - 1;
 	
-	OEAddress blockNum = 1 << (addressSize - blockSize);
+	size_t blockNum = (size_t) (1 << (addressSize - blockSize));
 	
     readMap.resize(blockNum);
 	writeMap.resize(blockNum);
@@ -66,7 +66,7 @@ bool AddressDecoder::init()
     defaultReadMap.resize(blockNum);
     defaultWriteMap.resize(blockNum);
 	
-	for (OEAddress i = 0; i < blockNum; i++)
+	for (size_t i = 0; i < blockNum; i++)
 	{
 		readMap[i] = floatingBus;
 		writeMap[i] = floatingBus;
@@ -124,36 +124,36 @@ bool AddressDecoder::postMessage(OEComponent *sender, int message, void *data)
 
 OEUInt8 AddressDecoder::read(OEAddress address)
 {
-	return readMap[(address & addressMask) >> blockSize]->read(address);
+	return readMap[(size_t) ((address & addressMask) >> blockSize)]->read(address);
 }
 
 void AddressDecoder::write(OEAddress address, OEUInt8 value)
 {
-	writeMap[(address & addressMask) >> blockSize]->write(address, value);
+	writeMap[(size_t) ((address & addressMask) >> blockSize)]->write(address, value);
 }
 
 void AddressDecoder::mapRange(AddressDecoderMap *theMap)
 {
-	OEAddress startBlock = theMap->startAddress >> blockSize;
-	OEAddress endBlock = theMap->endAddress >> blockSize;
+	size_t startBlock = (size_t) (theMap->startAddress >> blockSize);
+	size_t endBlock = (size_t) (theMap->endAddress >> blockSize);
 	
 	if (theMap->read)
     {
         if (theMap->component)
-            for (OEAddress i = startBlock; i <= endBlock; i++)
+            for (size_t i = startBlock; i <= endBlock; i++)
                 readMap[i] = theMap->component;
         else
-            for (OEAddress i = startBlock; i <= endBlock; i++)
+            for (size_t i = startBlock; i <= endBlock; i++)
                 readMap[i] = defaultReadMap[i];
     }
     
 	if (theMap->write)
     {
         if (theMap->component)
-            for (OEAddress i = startBlock; i <= endBlock; i++)
+            for (size_t i = startBlock; i <= endBlock; i++)
                 writeMap[i] = theMap->component;
         else
-            for (OEAddress i = startBlock; i <= endBlock; i++)
+            for (size_t i = startBlock; i <= endBlock; i++)
                 writeMap[i] = defaultWriteMap[i];
     }
 }
@@ -233,6 +233,8 @@ bool AddressDecoder::getMap(AddressDecoderMap& theMap,
 			theMap.write = true;
 		else
 			break;
+        
+        pos++;
 	}
 	
 	if (!theMap.read && !theMap.write)

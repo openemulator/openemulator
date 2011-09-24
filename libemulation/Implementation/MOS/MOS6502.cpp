@@ -18,22 +18,17 @@ MOS6502::MOS6502()
     controlBus = NULL;
     memoryBus = NULL;
     
-    a = 0;
-    x = 0;
-    y = 0;
-    p = 0;
-    pc.q = 0;
-    sp.q = 0x1ff;
+    initCPU();
     
     icount = 0;
     
     isReset = false;
-    isIRQ = false;
-    isNMI = false;
-    
     isResetTransition = false;
-    updateSpecialCondition();
+    isIRQ = false;
     isIRQEnabled = false;
+    isNMITransition = false;
+    
+    updateSpecialCondition();
 }
 
 bool MOS6502::setValue(string name, string value)
@@ -154,39 +149,61 @@ void MOS6502::notify(OEComponent *sender, int notification, void *data)
             if (powerState != CONTROLBUS_POWERSTATE_ON)
                 icount = 0;
             
+            if (powerState == CONTROLBUS_POWERSTATE_OFF)
+                initCPU();
+            
             return;
             
         case CONTROLBUS_RESET_DID_ASSERT:
             isReset = true;
             icount = 0;
+            
             return;
             
         case CONTROLBUS_RESET_DID_CLEAR:
             isReset = false;
             isResetTransition = true;
+            
             updateSpecialCondition();
+            
             return;
             
         case CONTROLBUS_IRQ_DID_ASSERT:
             isIRQ = true;
+            
             updateSpecialCondition();
+            
             return;
             
         case CONTROLBUS_IRQ_DID_CLEAR:
             isIRQ = false;
+            
             updateSpecialCondition();
+            
             return;
             
         case CONTROLBUS_NMI_DID_ASSERT:
-            isNMI = true;
+            isNMITransition = true;
+            
             updateSpecialCondition();
+            
             return;
     }
 }
 
-inline void MOS6502::updateSpecialCondition()
+void MOS6502::initCPU()
 {
-    isSpecialCondition = isIRQ || isResetTransition || isNMI;
+    a = 0x00;
+    x = 0x00;
+    y = 0x00;
+    p = 0x00;
+    pc.q = 0x0000;
+    sp.q = 0x01ff;
+}
+
+void MOS6502::updateSpecialCondition()
+{
+    isSpecialCondition = isIRQ || isResetTransition || isNMITransition;
 }
 
 void MOS6502::execute()
@@ -207,8 +224,6 @@ void MOS6502::execute()
     {
         bool wasIRQEnabled = isIRQEnabled;
         isIRQEnabled = !(P & F_I);
-        
-//        OEComponent::notify(this, CPU_INSTRUCTION_WILL_EXECUTE, NULL);
         
         if (isSpecialCondition)
         {
@@ -244,7 +259,7 @@ void MOS6502::execute()
             }
             else
             {
-                isNMI = false;
+                isNMITransition = false;
                 
                 icount -= 2;
                 PUSH(PCH);

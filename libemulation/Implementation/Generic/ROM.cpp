@@ -45,7 +45,7 @@ bool ROM::init()
     }
     
     OEAddress size = getNextPowerOf2((int) data.size());
-    data.resize(size);
+    data.resize((size_t) size);
     datap = (OEUInt8 *) &data.front();
     mask = size - 1;
     

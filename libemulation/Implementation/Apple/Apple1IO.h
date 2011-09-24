@@ -35,5 +35,5 @@ private:
     OEUInt8 terminalKey;
     OEUInt8 terminalChar;
     
-    void putChar();
+    void sendChar();
 };

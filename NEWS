@@ -1,4 +1,11 @@
 ==2011-09==
+* Fixed Apple1IO so no characters are lost when toggling terminal speed
+* Optimized Apple1Terminal
+* Implemented Apple1Terminal splash screen
+* Implemented clear screen on CTRL+L in Apple1Terminal
+* Fixed Monitor bezel handling and canvas cleaning on power off
+* Implemented automatic software update
+* Optimized MOS6502 and W65C02S special condition handling
 * Fixed ControlBus timing
 * Improved PAAudio so AudioBuffers can be accessed beyond the current frame
 * Prepared Briel Replica-1 and Achatz A-ONE images

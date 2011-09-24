@@ -12,7 +12,7 @@
 #define _MOS6502_H
 
 #include "OEComponent.h"
-#include "ControlBus.h"
+#include "ControlBusInterface.h"
 
 class MOS6502 : public OEComponent
 {
@@ -43,13 +43,13 @@ protected:
     
     ControlBusPowerState powerState;
     bool isReset;
-    bool isIRQ;
-    bool isNMI;
-    
     bool isResetTransition;
-    bool isSpecialCondition;
+    bool isIRQ;
     bool isIRQEnabled;
+    bool isNMITransition;
+    bool isSpecialCondition;
     
+    void initCPU();
     void updateSpecialCondition();
     virtual void execute();
 };

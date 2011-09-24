@@ -19,8 +19,8 @@
         <property name="clockFrequency" value="959790.088"/>
         <property name="cpuClockMultiplier" value="1"/>
         <property name="cpu" ref="apple1.cpu"/>
+        <property name="powerState" value="S0"/>
         <property name="resetOnPowerOn" value="1"/>
-        <property name="powerState" value="0"/>
         <property name="resetCount" value="0"/>
         <property name="irqCount" value="0"/>
         <property name="nmiCount" value="0"/>

@@ -11,6 +11,7 @@
 #include "OEComponent.h"
 
 #include "CanvasInterface.h"
+#include "ControlBusInterface.h"
 
 class Monitor : public OEComponent
 {
@@ -31,6 +32,8 @@ private:
     OEComponent *device;
     OEComponent *controlBus;
     OEComponent *canvas;
+    
+    ControlBusPowerState powerState;
     
     CanvasDisplayConfiguration configuration;
 };

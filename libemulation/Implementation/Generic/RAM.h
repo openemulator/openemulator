@@ -16,11 +16,12 @@
 
 #include "OEComponent.h"
 
-#include "ControlBus.h"
+#include "ControlBusInterface.h"
 
 typedef enum
 {
     RAM_GET_MEMORY,
+    RAM_SET_MEMORY,
 } RAMMessage;
 
 class RAM : public OEComponent

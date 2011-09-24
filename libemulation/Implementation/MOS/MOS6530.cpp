@@ -10,7 +10,7 @@
 
 #include "MOS6530.h"
 
-#include "ControlBus.h"
+#include "ControlBusInterface.h"
 #include "AddressDecoder.h"
 
 MOS6530::MOS6530()

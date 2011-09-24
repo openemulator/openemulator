@@ -10,7 +10,7 @@
 
 #include "MC6821.h"
 
-#include "ControlBus.h"
+#include "ControlBusInterface.h"
 #include "AddressDecoder.h"
 
 MC6821::MC6821()
