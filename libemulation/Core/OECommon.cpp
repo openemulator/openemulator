@@ -134,6 +134,65 @@ wstring rtrim(wstring value)
     return L"";
 }
 
+vector<string> strsplit(string value, char c)
+{
+    vector<string> splitString;
+    
+    size_t startPos = 0;
+    size_t endPos = value.find(c, startPos);
+    
+    while (endPos != string::npos)
+    {
+        splitString.push_back(value.substr(startPos, endPos - startPos));
+        
+        startPos = endPos + 1;
+        endPos = value.find(c, startPos);
+    }
+    
+    splitString.push_back(value.substr(startPos));
+    
+    return splitString;
+}
+
+string strfilter(string value, string filter)
+{
+    string filteredString;
+    
+    for (string::iterator i = value.begin();
+         i != value.end();
+         i++)
+    {
+        if (filter.find(*i) != string::npos)
+            filteredString += *i;
+    }
+    
+    return filteredString;
+}
+
+string strtolower(string value)
+{
+    string filteredString;
+    
+    for (string::iterator i = value.begin();
+         i != value.end();
+         i++)
+        filteredString += tolower(*i);
+    
+    return filteredString;
+}
+
+string strtoupper(string value)
+{
+    string filteredString;
+    
+    for (string::iterator i = value.begin();
+         i != value.end();
+         i++)
+        filteredString += toupper(*i);
+    
+    return filteredString;
+}
+
 OEData getCharVector(const string& value)
 {
     OEData result;

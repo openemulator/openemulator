@@ -235,12 +235,14 @@ bool Monitor::init()
     if (!device)
     {
         logMessage("device not connected");
+        
         return false;
     }
     
     if (!canvas)
     {
         logMessage("canvas could not be created");
+        
         return false;
     }
     

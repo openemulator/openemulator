@@ -32,17 +32,30 @@ private:
     OEComponent *audio;
     OEComponent *controlBus;
     
-    float highpassFrequency;
-    float lowpassFrequency;
-    double timeAccuracy;
-    OEUInt32 sidelobes;
+    float timeAccuracy;
+    float lowFrequency;
+    float highFrequency;
+    OEUInt32 filterSize;
     
     AudioBuffer *audioBuffer;
     
-    OEUInt32 bufferFrameNum;
-    vector<float> deltaBuffer;
+    float sampleRate;
+    OEUInt32 channelNum;
+    OEUInt32 frameNum;
+    OEUInt32 sampleNum;
+    
+    OEUInt32 impulseFilterSize;
+    OEUInt32 impulseFilterHalfSize;
+    OEUInt32 impulseTableEntryNum;
+    OEUInt32 impulseTableEntrySize;
+    vector<float> impulseTable;
+    
+    vector<float> lastInput;
+    vector<float> buffer;
+    float integrationAlpha;
+    vector<float> lastOutput;
     
     void updateSynth();
-    void setSample(float index, int channel, float level);
-    void renderBuffer();
+    void setSynth(float index, OEUInt32 channel, float level);
+    void synthBuffer();
 };

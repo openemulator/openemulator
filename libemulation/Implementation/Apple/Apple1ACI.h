@@ -26,8 +26,8 @@ private:
     OEComponent *memoryBus;
     OEComponent *audioCodec;
     
-    bool lastState;
-    OEInt8 audioLevel;
+    OEUInt8 audioLevel;
+    OEUInt8 threshold;
     
     void toggleSpeaker();
 };

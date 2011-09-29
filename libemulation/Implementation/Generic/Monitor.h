@@ -10,8 +10,8 @@
 
 #include "OEComponent.h"
 
-#include "CanvasInterface.h"
 #include "ControlBusInterface.h"
+#include "CanvasInterface.h"
 
 class Monitor : public OEComponent
 {

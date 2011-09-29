@@ -94,16 +94,13 @@ OEVector OEVector::lanczosWindow(unsigned int n, float fc)
     OEVector v;
     v.data.resize(n);
     
-    int n2 = n / 2;
+    int halfN = n / 2;
     
     for (int i = 0; i < n; i++)
     {
-        float x = (i - n2) * fc;
+        float x = (i - halfN) * fc;
         
-        if (x == 0.0F)
-            v.data[i] = 1.0F;
-        else
-            v.data[i] = sinf(M_PI * x) / (M_PI * x);
+        v.data[i] = (x == 0.0F) ? 1.0F : x = sinf(M_PI * x) / (M_PI * x);
     }
     
     return v;

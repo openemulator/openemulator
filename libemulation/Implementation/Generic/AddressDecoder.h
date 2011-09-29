@@ -63,12 +63,10 @@ private:
     OEComponents defaultReadMap;
     OEComponents defaultWriteMap;
     
-    void initMap(OEComponent *component);
-    void mapRange(AddressDecoderMap *theMap);
-    bool mapRange(OEComponent *component, string value);
+    void mapDecoderMap(AddressDecoderMap *theMap);
     
-    bool getMaps(AddressDecoderMaps& theMaps, OEComponent *component, string value);
-    bool getMap(AddressDecoderMap& theMap, OEComponent *component, string value);
+    bool getDecoderMap(AddressDecoderMap& theMap, OEComponent *component, string value);
+    bool mapConf(OEComponent *component, string conf);
 };
 
 #endif

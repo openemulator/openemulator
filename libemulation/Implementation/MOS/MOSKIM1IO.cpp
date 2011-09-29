@@ -81,7 +81,7 @@ bool MOSKIM1IO::init()
 //	CanvasBezel bezel = CANVAS_BEZEL_POWER;
 	CanvasDisplayConfiguration configuration;
 	OEImage image;
-	image.readFile(viewPath);
+	image.load(viewPath);
 	configuration.displayResolution = image.getSize();
 	configuration.displayPixelDensity = 108;
 	

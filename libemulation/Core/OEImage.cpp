@@ -81,7 +81,7 @@ int OEImage::getBytesPerRow()
     return getBytesPerPixel() * (int)size.width;
 }
 
-bool OEImage::readFile(string path)
+bool OEImage::load(string path)
 {
     bool result = false;
     

@@ -86,20 +86,16 @@ bool Apple1ACI::init()
 
 OEUInt8 Apple1ACI::read(OEAddress address)
 {
-    // Note: to void clicks when reading from tape,
-    // we just toggle the speaker when bit 7 is 0.
     if (address & 0x80)
     {
-        bool value;
-        
         // A Schmitt trigger to improve noise rejection...
-        if (!lastState)
-            value = (audioCodec->read(0) >= (0x80 + SCHMITT_TRIGGER_THRESHOLD));
-        else
-            value = (audioCodec->read(0) >= (0x80 - SCHMITT_TRIGGER_THRESHOLD));
-        
-        if (value)
+        if (audioCodec->read(0) >= threshold)
+        {
             address &= ~0x1;
+            threshold = 0x80 - SCHMITT_TRIGGER_THRESHOLD;
+        }
+        else
+            threshold = 0x80 + SCHMITT_TRIGGER_THRESHOLD;
         
         // Debugging
 /*        {
@@ -115,11 +111,9 @@ OEUInt8 Apple1ACI::read(OEAddress address)
             else
                 count++;
         }*/
-        
-        lastState = value;
     }
-    else
-        toggleSpeaker();
+    
+    toggleSpeaker();
     
     return rom->read(address);
 }
@@ -134,4 +128,5 @@ void Apple1ACI::toggleSpeaker()
     audioLevel = (audioLevel == 128) ? 192 : 128;
     
     audioCodec->write(0, audioLevel);
+    audioCodec->write(1, audioLevel);
 }

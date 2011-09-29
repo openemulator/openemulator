@@ -19,11 +19,6 @@
 
 #include "OEEmulation.h"
 
-#define OEPORTAUDIO_SAMPLERATE			48000
-#define OEPORTAUDIO_CHANNELNUM			2
-#define OEPORTAUDIO_FRAMESPERBUFFER		512
-#define OEPORTAUDIO_BUFFERNUM			3
-
 class PAAudio : public OEComponent
 {
 public:

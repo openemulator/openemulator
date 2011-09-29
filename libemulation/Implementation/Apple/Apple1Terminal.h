@@ -8,10 +8,6 @@
  * Implements an Apple-1 terminal
  */
 
-// Notes:
-// * The terminal is decoupled from the Apple-1 and is implemented as an RS-232 compatible terminal
-// * Flow control is implemented with symmetric RTS/CTS virtual lines
-
 #include "OEComponent.h"
 
 #include "OEImage.h"

@@ -65,7 +65,7 @@ bool AppleGraphicsTablet::init()
 	
 	CanvasDisplayConfiguration configuration;
 	OEImage image;
-	image.readFile(imagePath);
+	image.load(imagePath);
 	
 	configuration.displayResolution = image.getSize();
 	configuration.displayPixelDensity = 50;

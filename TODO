@@ -1,11 +1,10 @@
 =To-Do=
 
 ==1.0==
-* Implement AudioCodec
 * Implement screen persistance with IIR filtering
+* Fix problem when resizing (with half, actual or double menu) and no video stream is generated
 * Fix opening emulations (sometimes dragging disk images to canvas opens the template chooser)
 * Fix Cocoa initial window sizes
-* Fix problem when resizing to half, normal, double, max size
 
 ==1.0.1==
 * Implement Apple II
@@ -52,8 +51,8 @@
 ==Framework==
 * Find a way so that ROM images can be stored in packages (but not in the resources directory)... use RAM block and read-only memory mapping?
 * Implement select settings with values and labels
-* Add OESound: resampling, rendering to audio buffer
-* Do disk image file locking, if the disk image is writable (flock)
+* Add OESound: resampling, rendering to audio buffer?
+* Do disk image file locking if the disk image is writable (flock)
 * TCP AT Modem emulation
 * Add debugging ˆ la JTAG with gdb commands in a separate terminal
 * Implement frame interpolation with sinc function
@@ -64,7 +63,7 @@
 * Fix scrolling in template chooser when changing group
 * CanvasWindow in fullscreen mode could have multiple display sizes (e.g. for the Macintosh 512x342 window)
 
-==Improbable to-do's==
+==Unimportant things==
 * Remove data property, and replace with value so that it points to the file (so the interface for opening files is unified, and we don't have to exchange buffers). Implement an OEData class that is capable of read from/writing to file. How could OEData get the handle to a zip package? How could an emulation
 * Implement a CPU Load Window
 * Add search in template chooser

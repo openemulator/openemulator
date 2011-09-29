@@ -11,11 +11,11 @@
 #ifndef _CONTROLBUS_H
 #define _CONTROLBUS_H
 
+#include <list>
+
 #include "OEComponent.h"
 
 #include "ControlBusInterface.h"
-
-#include <list>
 
 typedef struct
 {

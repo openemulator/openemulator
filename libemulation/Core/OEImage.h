@@ -43,7 +43,9 @@ typedef enum
 
 typedef int OEImageOptions;
 #define OEIMAGE_COLORCARRIER    (1 << 0)
-#define OEIMAGE_PAPER           (1 << 1)
+#define OEIMAGE_COLORPHASE0     (1 << 1)
+#define OEIMAGE_COLORPHASE1     (1 << 2)
+#define OEIMAGE_PAPER           (1 << 3)
 
 // OEImage macros
 inline OEPoint OEMakePoint(float x, float y)
@@ -194,7 +196,7 @@ public:
     int getBytesPerRow();
     unsigned char *getPixels();
     
-    bool readFile(string path);
+    bool load(string path);
     
     void overlay(OEPoint origin, OEImage& image);
     OEImage getClip(OERect rect);

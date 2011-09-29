@@ -51,6 +51,8 @@ Apple1Terminal::Apple1Terminal()
     cursorCount = 0;
     
     powerState = CONTROLBUS_POWERSTATE_ON;
+    
+    image.setOptions(OEIMAGE_COLORCARRIER);
 }
 
 bool Apple1Terminal::setValue(string name, string value)

@@ -12,7 +12,13 @@
 #include <iostream>
 
 #include "PAAudio.h"
+
 #include "AudioInterface.h"
+
+#define DEFAULT_SAMPLERATE			48000
+#define DEFAULT_CHANNELNUM			2
+#define DEFAULT_FRAMESPERBUFFER		512
+#define DEFAULT_BUFFERNUM			3
 
 using namespace std;
 
@@ -51,10 +57,10 @@ void *PAAudioRunEmulations(void *arg)
 PAAudio::PAAudio()
 {
     fullDuplex = false;
-    sampleRate = OEPORTAUDIO_SAMPLERATE;
-    channelNum = OEPORTAUDIO_CHANNELNUM;
-    framesPerBuffer = OEPORTAUDIO_FRAMESPERBUFFER;
-    bufferNum = OEPORTAUDIO_BUFFERNUM;
+    sampleRate = DEFAULT_SAMPLERATE;
+    channelNum = DEFAULT_CHANNELNUM;
+    framesPerBuffer = DEFAULT_FRAMESPERBUFFER;
+    bufferNum = DEFAULT_BUFFERNUM;
     
     audioOpen = false;
     pthread_cond_init(&emulationsCond, NULL);
@@ -165,54 +171,68 @@ void PAAudio::initBuffer()
 bool PAAudio::isAudioBufferEmpty()
 {
     OEUInt32 stateNum = 2 * bufferNum;
+    
     OEUInt32 delta = (stateNum + bufferEmulationIndex - bufferAudioIndex) % stateNum;
+    
     return delta <= 0;
 }
 
 float *PAAudio::getAudioInputBuffer()
 {
     OEUInt32 index = bufferAudioIndex % bufferNum;
+    
     OEUInt32 samplesPerBuffer = framesPerBuffer * channelNum;
+    
     return &bufferInput[index * samplesPerBuffer];
 }
 
 float *PAAudio::getAudioOutputBuffer()
 {
     OEUInt32 index = bufferAudioIndex % bufferNum;
+    
     OEUInt32 samplesPerBuffer = framesPerBuffer * channelNum;
+    
     return &bufferOutput[index * samplesPerBuffer];
 }
 
 void PAAudio::advanceAudioBuffer()
 {
     OEUInt32 stateNum = 2 * bufferNum;
+    
     bufferAudioIndex = (bufferAudioIndex + 1) % stateNum;
 }
 
 bool PAAudio::isEmulationsBufferEmpty()
 {
     OEUInt32 stateNum = 2 * bufferNum;
+    
     OEUInt32 delta = (stateNum + bufferEmulationIndex - bufferAudioIndex) % stateNum;
+    
     return (bufferNum - delta) <= 0;
 }
 
 float *PAAudio::getEmulationsInputBuffer()
 {
     int index = bufferEmulationIndex % bufferNum;
+    
     int samplesPerBuffer = framesPerBuffer * channelNum;
+    
     return &bufferInput[index * samplesPerBuffer];
 }
 
 float *PAAudio::getEmulationsOutputBuffer()
 {
     int index = bufferEmulationIndex % bufferNum;
+    
     int samplesPerBuffer = framesPerBuffer * channelNum;
+    
     return &bufferOutput[index * samplesPerBuffer];
 }
 
 void PAAudio::advanceEmulationsBuffer()
 {
     int stateNum = 2 * bufferNum;
+    
     bufferEmulationIndex = (bufferEmulationIndex + 1) % stateNum;
 }
 
@@ -227,7 +247,9 @@ bool PAAudio::openEmulations()
     if (!error)
     {
         pthread_attr_t attr;
+        
         error = pthread_attr_init(&attr);
+        
         if (!error)
         {
             sched_param param;
@@ -418,6 +440,7 @@ bool PAAudio::openAudio()
             if (status == paNoError)
             {
                 audioOpen = true;
+                
                 return true;
             }
             else
@@ -433,7 +456,9 @@ bool PAAudio::openAudio()
     
     int error;
     pthread_attr_t attr;
+    
     error = pthread_attr_init(&attr);
+    
     if (!error)
     {
         error = pthread_attr_setdetachstate(&attr,
@@ -448,7 +473,9 @@ bool PAAudio::openAudio()
             if (!error)
             {
                 logMessage("started timer thread");
+                
                 audioOpen = true;
+                
                 return true;
             }
             else
@@ -597,6 +624,7 @@ void PAAudio::openPlayer(string path)
         playChannelNum = sfInfo.channels;
         
         int error;
+        
         playSRCRatio = (double) sampleRate / sfInfo.samplerate;
         playSRC = src_new(SRC_SINC_FASTEST,
                           sfInfo.channels,
@@ -616,6 +644,7 @@ void PAAudio::openPlayer(string path)
         else
         {
             logMessage("could not init sample rate converter, error " + getString(error));
+            
             sf_close(playSNDFILE);
         }
     }
@@ -717,6 +746,7 @@ void PAAudio::playAudio(float *inputBuffer,
         
         OEUInt32 index = playSRCBufferFrameBegin * playChannelNum;
         OEUInt32 inputFrameNum = (playSRCBufferFrameEnd - playSRCBufferFrameBegin);
+        
         SRC_DATA srcData =
         {
             &playSRCBuffer[index],
@@ -737,27 +767,24 @@ void PAAudio::playAudio(float *inputBuffer,
             return;
         }
         
-        float *in = &srcBuffer.front();
         float linearVolume = pow(10.0, (playVolume - 1.0) * 100.0 / 20.0);
-        for (OEUInt32 i = 0; i < srcData.output_frames_gen; i++)
-        {
-            for (OEUInt32 ch = 0; ch < channelNum; ch++)
-                inputBuffer[ch] += in[ch % playChannelNum] * linearVolume;
-            
-            in += playChannelNum;
-            inputBuffer += channelNum;
-        }
+        OEUInt32 sampleNum = frameNum * channelNum;
         
-        if (playThrough)
+        for (OEUInt32 ch = 0; ch < channelNum; ch++)
         {
-            float *in = &srcBuffer.front();
-            for (OEUInt32 i = 0; i < srcData.output_frames_gen; i++)
+            float *x = &srcBuffer.front() + (ch % playChannelNum);
+            float *yi = inputBuffer + ch;
+            float *yo = outputBuffer + ch;
+            
+            for (OEUInt32 i = 0; i < sampleNum; i += channelNum)
             {
-                for (OEUInt32 ch = 0; ch < channelNum; ch++)
-                    outputBuffer[ch] += in[ch % playChannelNum] * linearVolume;
+                float value = *x * linearVolume;
                 
-                in += playChannelNum;
-                outputBuffer += channelNum;
+                yi[i] += value;
+                if (playThrough)
+                    yo[i] += value;
+                
+                x += playChannelNum;
             }
         }
         
@@ -789,6 +816,7 @@ void PAAudio::openRecorder(string path)
     
     if (!(recordingSNDFILE = sf_open(path.c_str(), SFM_WRITE, &sfInfo)))
         logMessage("could not open temporary file " + path);
+    
     recordingFrameNum = 0;
     
     unlock();
@@ -802,6 +830,7 @@ void PAAudio::closeRecorder()
     lock();
     
     sf_close(recordingSNDFILE);
+    
     recordingSNDFILE = NULL;
     recording = false;
     
@@ -842,12 +871,13 @@ void PAAudio::recordAudio(float *outputBuffer,
     if (!recording)
         return;
     
-    OEUInt32 n = (OEUInt32)sf_writef_float(recordingSNDFILE, outputBuffer, frameNum);
+    OEUInt32 n = (OEUInt32) sf_writef_float(recordingSNDFILE, outputBuffer, frameNum);
     recordingFrameNum += n;
     
     if (frameNum != n)
     {
         sf_close(recordingSNDFILE);
+        
         recording = false;
         recordingSNDFILE = NULL;
         recordingFrameNum = 0;
