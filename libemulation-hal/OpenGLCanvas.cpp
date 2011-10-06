@@ -16,15 +16,119 @@
 #include "OEVector.h"
 #include "OEMatrix3.h"
 
-#define NTSC_CARRIER            (0.25 * 14.31818)
-#define NTSC_YIQ_CUTOFF         1.3
-#define NTSC_YUV_CUTOFF         0.6
-#define NTSC_YIQ_I_SHIFT        ((NTSC_YUV_CUTOFF - NTSC_YIQ_CUTOFF) / NTSC_CARRIER)
+#define NTSC_I_CUTOFF               1300000
+#define NTSC_Q_CUTOFF               600000
+#define NTSC_IQ_DELTA               (NTSC_I_CUTOFF - NTSC_Q_CUTOFF)
 
-#define PAPER_SLICE             256
+#define PAPER_SLICE                 256
 
-#define BEZELCAPTURE_START      2.0
-#define BEZELCAPTURE_FADEOUT    0.5
+#define BEZELCAPTURE_DISPLAY_TIME   2.0
+#define BEZELCAPTURE_FADEOUT_TIME   0.5
+
+static const char *rgbShader = "\
+uniform sampler2D texture;\n\
+uniform vec2 texture_size;\n\
+uniform vec3 c0, c1, c2, c3, c4, c5, c6, c7, c8;\n\
+uniform vec3 offset;\n\
+uniform mat3 decoderMatrix;\n\
+\n\
+vec3 pixel(vec2 q)\n\
+{\n\
+return texture2D(texture, q).rgb;\n\
+}\n\
+\n\
+vec3 pixels(vec2 q, float i)\n\
+{\n\
+return pixel(vec2(q.x + i, q.y)) + pixel(vec2(q.x - i, q.y));\n\
+}\n\
+\n\
+void main(void)\n\
+{\n\
+vec2 q = gl_TexCoord[0].xy;\n\
+vec3 c = pixel(q) * c0;\n\
+c += pixels(q, 1.0 / texture_size.x) * c1;\n\
+c += pixels(q, 2.0 / texture_size.x) * c2;\n\
+c += pixels(q, 3.0 / texture_size.x) * c3;\n\
+c += pixels(q, 4.0 / texture_size.x) * c4;\n\
+c += pixels(q, 5.0 / texture_size.x) * c5;\n\
+c += pixels(q, 6.0 / texture_size.x) * c6;\n\
+c += pixels(q, 7.0 / texture_size.x) * c7;\n\
+c += pixels(q, 8.0 / texture_size.x) * c8;\n\
+c += offset;\n\
+gl_FragColor = vec4(decoderMatrix * c, 1.0);\n\
+}";
+
+static const char *compositeShader = "\
+uniform sampler2D texture;\n\
+uniform float subcarrier;\n\
+uniform sampler1D color_burst;\n\
+uniform vec2 texture_size;\n\
+uniform vec3 c0, c1, c2, c3, c4, c5, c6, c7, c8;\n\
+uniform vec3 offset;\n\
+uniform mat3 decoderMatrix;\n\
+\n\
+float PI = 3.14159265358979323846264;\n\
+\n\
+vec3 pixel(vec2 q)\n\
+{\n\
+vec3 c = texture2D(texture, q).rgb;\n\
+vec2 p = texture1D(color_burst, texture_size.x * q.x).rg;\n\
+float phase = 2.0 * PI * subcarrier * texture_size.x * q.x + p.x;\n\
+return c * vec3(1.0, sin(phase), p.y * cos(phase));\n\
+}\n\
+\n\
+vec3 pixels(vec2 q, float i)\n\
+{\n\
+return pixel(vec2(q.x + i, q.y)) + pixel(vec2(q.x - i, q.y));\n\
+}\n\
+\n\
+void main(void)\n\
+{\n\
+vec2 q = gl_TexCoord[0].xy;\n\
+vec3 c = pixel(q) * c0;\n\
+c += pixels(q, 1.0 / texture_size.x) * c1;\n\
+c += pixels(q, 2.0 / texture_size.x) * c2;\n\
+c += pixels(q, 3.0 / texture_size.x) * c3;\n\
+c += pixels(q, 4.0 / texture_size.x) * c4;\n\
+c += pixels(q, 5.0 / texture_size.x) * c5;\n\
+c += pixels(q, 6.0 / texture_size.x) * c6;\n\
+c += pixels(q, 7.0 / texture_size.x) * c7;\n\
+c += pixels(q, 8.0 / texture_size.x) * c8;\n\
+c += offset;\n\
+gl_FragColor = vec4(decoderMatrix * c, 1.0);\n\
+}";
+
+static const char *displayShader = "\
+uniform sampler2D texture;\n\
+uniform vec2 texture_size;\n\
+uniform float barrel;\n\
+uniform vec2 barrel_center;\n\
+uniform float scanline_alpha;\n\
+uniform float center_lighting;\n\
+uniform sampler2D shadowmask;\n\
+uniform vec2 shadowmask_scale;\n\
+uniform vec2 shadowmask_translate;\n\
+uniform float shadowmask_alpha;\n\
+uniform float alpha;\n\
+\n\
+float PI = 3.14159265358979323846264;\n\
+\n\
+void main(void)\n\
+{\n\
+vec2 q = gl_TexCoord[0].xy;\n\
+\n\
+vec2 qc = q - barrel_center;\n\
+q += barrel * qc * dot(qc, qc);\n\
+\n\
+vec3 p = texture2D(texture, q).rgb;\n\
+float s = sin(PI * texture_size.y * q.y);\n\
+p *= mix(1.0, s * s, scanline_alpha);\n\
+vec2 c = qc * center_lighting;\n\
+p *= exp(-dot(c, c));\n\
+vec3 m = texture2D(shadowmask, q * shadowmask_scale + shadowmask_translate).rgb;\n\
+p *= mix(vec3(1.0, 1.0, 1.0), m, shadowmask_alpha);\n\
+gl_FragColor = vec4(p, alpha);\n\
+}";
 
 OpenGLCanvas::OpenGLCanvas(string resourcePath)
 {
@@ -92,9 +196,6 @@ void OpenGLCanvas::setEnableShader(bool value)
     
     isShaderEnabled = value;
     isConfigurationUpdated = true;
-    
-    for (int i = 0; i < OPENGLCANVAS_PERSISTANCE_IMAGE_NUM; i++)
-        persistance[i] = -1;
     
     unlock();
 }
@@ -175,6 +276,7 @@ OERect OpenGLCanvas::getClipRect()
                                    paperConfiguration.pagePixelDensity.height);
         float clipHeight = (viewportSize.height * image.getSize().width /
                             viewportSize.width / pixelDensityRatio);
+        
         rect.origin = clipOrigin;
         rect.size = OEMakeSize(image.getSize().width,
                                clipHeight);
@@ -240,7 +342,7 @@ OESize OpenGLCanvas::getPageSize()
 OEImage OpenGLCanvas::getImage(OERect rect)
 {
     if (mode == CANVAS_MODE_PAPER)
-        return image.getClip(rect);
+        return OEImage(image, rect);
     else 
     {
         OEImage image = readFramebuffer();
@@ -252,7 +354,7 @@ OEImage OpenGLCanvas::getImage(OERect rect)
         rect.size.width *= scale.width;
         rect.size.height *= scale.height;
         
-        return image.getClip(rect);
+        return OEImage(image, rect);
     }
 }
 
@@ -263,6 +365,7 @@ bool OpenGLCanvas::vsync()
     if (isViewportUpdated)
     {
         isViewportUpdated = false;
+        
         glViewport(0, 0, viewportSize.width, viewportSize.height);
     }
     
@@ -281,9 +384,7 @@ bool OpenGLCanvas::vsync()
         if (isImageUpdated || isConfigurationUpdated)
             renderImage();
         
-        updatePersistance();
-        
-        if (isPersistanceDrawRequired())
+        if (displayConfiguration.displayPersistance != 0.0)
             vSync.shouldDraw = true;
     }
     else if (mode == CANVAS_MODE_PAPER)
@@ -312,6 +413,7 @@ void OpenGLCanvas::draw()
         lock();
         
         isViewportUpdated = false;
+        
         glViewport(0, 0, viewportSize.width, viewportSize.height);
         
         unlock();
@@ -356,9 +458,6 @@ bool OpenGLCanvas::initOpenGL()
     isConfigurationUpdated = true;
     for (int i = 0; i < OPENGLCANVAS_SHADER_END; i++)
         shader[i] = 0;
-    renderIndex = 0;
-    for (int i = 0; i < OPENGLCANVAS_PERSISTANCE_IMAGE_NUM; i++)
-        persistance[i] = -1;
     
     capture = OPENGLCANVAS_CAPTURE_NONE;
     
@@ -490,155 +589,15 @@ void OpenGLCanvas::loadShaders()
 {
     deleteShaders();
     
-    shader[OPENGLCANVAS_SHADER_RGB] = loadShader("\
-uniform sampler2D texture;\
-uniform vec2 texture_size;\
-uniform vec3 c0, c1, c2, c3, c4, c5, c6, c7, c8;\
-uniform vec3 offset;\
-uniform mat3 decoder;\
-\
-vec3 pixel(vec2 q)\
-{\
-return texture2D(texture, q).rgb;\
-}\
-\
-vec3 pixels(vec2 q, float i)\
-{\
-return pixel(vec2(q.x + i, q.y)) + pixel(vec2(q.x - i, q.y));\
-}\
-\
-void main(void)\
-{\
-vec2 q = gl_TexCoord[0].xy;\
-vec3 p = pixel(q) * c0;\
-p += pixels(q, 1.0 / texture_size.x) * c1;\
-p += pixels(q, 2.0 / texture_size.x) * c2;\
-p += pixels(q, 3.0 / texture_size.x) * c3;\
-p += pixels(q, 4.0 / texture_size.x) * c4;\
-p += pixels(q, 5.0 / texture_size.x) * c5;\
-p += pixels(q, 6.0 / texture_size.x) * c6;\
-p += pixels(q, 7.0 / texture_size.x) * c7;\
-p += pixels(q, 8.0 / texture_size.x) * c8;\
-p += offset;\
-gl_FragColor = vec4(decoder * p, 1.0);\
-}");
-    
-    shader[OPENGLCANVAS_SHADER_NTSC] = loadShader("\
-uniform sampler2D texture;\
-uniform vec2 texture_size;\
-uniform vec2 comp_phase;\
-uniform vec3 c0, c1, c2, c3, c4, c5, c6, c7, c8;\
-uniform vec3 offset;\
-uniform mat3 decoder;\
-\
-float PI = 3.14159265358979323846264;\
-\
-vec3 pixel(vec2 q)\
-{\
-vec3 p = texture2D(texture, q).rgb;\
-float phase = 2.0 * PI * dot(comp_phase * texture_size, q);\
-return p * vec3(1.0, sin(phase), cos(phase));\
-}\
-\
-vec3 pixels(vec2 q, float i)\
-{\
-return pixel(vec2(q.x + i, q.y)) + pixel(vec2(q.x - i, q.y));\
-}\
-\
-void main(void)\
-{\
-vec2 q = gl_TexCoord[0].xy;\
-vec3 p = pixel(q) * c0;\
-p += pixels(q, 1.0 / texture_size.x) * c1;\
-p += pixels(q, 2.0 / texture_size.x) * c2;\
-p += pixels(q, 3.0 / texture_size.x) * c3;\
-p += pixels(q, 4.0 / texture_size.x) * c4;\
-p += pixels(q, 5.0 / texture_size.x) * c5;\
-p += pixels(q, 6.0 / texture_size.x) * c6;\
-p += pixels(q, 7.0 / texture_size.x) * c7;\
-p += pixels(q, 8.0 / texture_size.x) * c8;\
-p += offset;\
-gl_FragColor = vec4(decoder * p, 1.0);\
-}");
-    
-    shader[OPENGLCANVAS_SHADER_PAL] = loadShader("\
-uniform sampler2D texture;\
-uniform vec2 texture_size;\
-uniform vec2 comp_phase;\
-uniform vec3 c0, c1, c2, c3, c4, c5, c6, c7, c8;\
-uniform vec3 offset;\
-uniform mat3 decoder;\
-\
-float PI = 3.14159265358979323846264;\
-\
-vec3 pixel(vec2 q)\
-{\
-vec3 p = texture2D(texture, q).rgb;\
-float phase = 2.0 * PI * dot(comp_phase * texture_size, q);\
-float pal = -sqrt(2.0) * sin(0.5 * PI * texture_size.y * q.y);\
-return p * vec3(1.0, sin(phase), cos(phase) * pal);\
-}\
-\
-vec3 pixels(vec2 q, float i)\
-{\
-return pixel(vec2(q.x + i, q.y)) + pixel(vec2(q.x - i, q.y));\
-}\
-\
-void main(void)\
-{\
-vec2 q = gl_TexCoord[0].xy;\
-vec3 p = pixel(q) * c0;\
-p += pixels(q, 1.0 / texture_size.x) * c1;\
-p += pixels(q, 2.0 / texture_size.x) * c2;\
-p += pixels(q, 3.0 / texture_size.x) * c3;\
-p += pixels(q, 4.0 / texture_size.x) * c4;\
-p += pixels(q, 5.0 / texture_size.x) * c5;\
-p += pixels(q, 6.0 / texture_size.x) * c6;\
-p += pixels(q, 7.0 / texture_size.x) * c7;\
-p += pixels(q, 8.0 / texture_size.x) * c8;\
-p += offset;\
-gl_FragColor = vec4(decoder * p, 1.0);\
-}");
-    
-    shader[OPENGLCANVAS_SHADER_DISPLAY] = loadShader("\
-uniform sampler2D texture;\
-uniform vec2 texture_size;\
-uniform float barrel;\
-uniform vec2 barrel_center;\
-uniform float scanline_alpha;\
-uniform float center_lighting;\
-uniform sampler2D shadowmask;\
-uniform vec2 shadowmask_scale;\
-uniform vec2 shadowmask_translate;\
-uniform float shadowmask_alpha;\
-uniform float alpha;\
-\
-float PI = 3.14159265358979323846264;\
-\
-void main(void)\
-{\
-vec2 q = gl_TexCoord[0].xy;\
-\
-vec2 qc = q - barrel_center;\
-q += barrel * qc * dot(qc, qc);\
-\
-vec3 p = texture2D(texture, q).rgb;\
-float s = sin(PI * texture_size.y * q.y);\
-p *= mix(1.0, s * s, scanline_alpha);\
-vec2 c = qc * center_lighting;\
-p *= exp(-dot(c, c));\
-vec3 m = texture2D(shadowmask, q * shadowmask_scale +\
-shadowmask_translate).rgb;\
-p *= mix(vec3(1.0, 1.0, 1.0), m, shadowmask_alpha);\
-gl_FragColor = vec4(p, alpha);\
-}");
+    shader[OPENGLCANVAS_SHADER_RGB] = loadShader(rgbShader);
+    shader[OPENGLCANVAS_SHADER_COMPOSITE] = loadShader(compositeShader);
+    shader[OPENGLCANVAS_SHADER_DISPLAY] = loadShader(displayShader);
 }
 
 void OpenGLCanvas::deleteShaders()
 {
-    deleteShader(OPENGLCANVAS_SHADER_NTSC);
-    deleteShader(OPENGLCANVAS_SHADER_PAL);
     deleteShader(OPENGLCANVAS_SHADER_RGB);
+    deleteShader(OPENGLCANVAS_SHADER_COMPOSITE);
     deleteShader(OPENGLCANVAS_SHADER_DISPLAY);
 }
 
@@ -732,59 +691,70 @@ bool OpenGLCanvas::uploadImage()
     return true;
 }
 
-void OpenGLCanvas::configureRenderShader(CanvasDecoder videoDecoder,
-                                         bool isMonochrome)
+void OpenGLCanvas::configureVideoShader(CanvasDecoder videoDecoder)
 {
 #ifdef GL_VERSION_2_0
-    // Y'UV filters
     OEVector w = OEVector::chebyshevWindow(17, 50);
     w = w.normalize();
     
     OEVector wy, wu, wv;
-    float bandwidth;
+    
+    float sampleRate = image.getSampleRate();
+    
+    float bandwidth = displayConfiguration.videoBandwidth / sampleRate;
+    float lumaBandwidth = displayConfiguration.videoLumaBandwidth / sampleRate;
+    float chromaBandwidth = displayConfiguration.videoChromaBandwidth / sampleRate;
+    
+    if (lumaBandwidth > bandwidth)
+        lumaBandwidth = bandwidth;
+    if (chromaBandwidth > bandwidth)
+        chromaBandwidth = bandwidth;
+    
     switch (videoDecoder)
     {
         case CANVAS_DECODER_RGB:
-            wy = w * OEVector::lanczosWindow(17, displayConfiguration.videoBandwidth);
+        {
+            wy = w * OEVector::lanczosWindow(17, bandwidth);
             wy = wy.normalize();
             wu = wv = wy;
+            
             break;
+        }
             
         case CANVAS_DECODER_MONOCHROME:
-            wy = w * OEVector::lanczosWindow(17, displayConfiguration.videoBandwidth);
+        {
+            wy = w * OEVector::lanczosWindow(17, bandwidth);
             wy = wy.normalize();
             wu = wv = OEVector(17);
-            break;
             
-        case CANVAS_DECODER_NTSC_YIQ:
-            bandwidth = displayConfiguration.videoBandwidth;
-            if (bandwidth > displayConfiguration.compositeLumaBandwidth)
-                bandwidth = displayConfiguration.compositeLumaBandwidth;
-            wy = w * OEVector::lanczosWindow(17, bandwidth);
+            break;
+        }
+            
+        case CANVAS_DECODER_YUV:
+        {
+            wy = w * OEVector::lanczosWindow(17, lumaBandwidth);
             wy = wy.normalize();
             
-            bandwidth = displayConfiguration.compositeChromaBandwidth;
-            if (bandwidth > displayConfiguration.compositeChromaBandwidth)
-                bandwidth = displayConfiguration.compositeChromaBandwidth;
-            wu = w * OEVector::lanczosWindow(17, bandwidth);
+            wu = w * OEVector::lanczosWindow(17, chromaBandwidth);
+            wv = wu = wu.normalize() * 2;
+            break;
+        }
+            
+        case CANVAS_DECODER_YIQ:
+        case CANVAS_DECODER_CXA2025AS:
+        {
+            wy = w * OEVector::lanczosWindow(17, lumaBandwidth);
+            wy = wy.normalize();
+            
+            wu = w * OEVector::lanczosWindow(17, chromaBandwidth);
             wu = wu.normalize() * 2;
-            wv = w * OEVector::lanczosWindow(17, bandwidth + NTSC_YIQ_I_SHIFT);
+            
+            chromaBandwidth += NTSC_IQ_DELTA / sampleRate;
+            
+            wv = w * OEVector::lanczosWindow(17, chromaBandwidth);
             wv = wv.normalize() * 2;
             break;
-            
-        default:
-            bandwidth = displayConfiguration.videoBandwidth;
-            if (bandwidth > displayConfiguration.compositeLumaBandwidth)
-                bandwidth = displayConfiguration.compositeLumaBandwidth;
-            wy = w * OEVector::lanczosWindow(17, bandwidth);
-            wy = wy.normalize();
-            
-            bandwidth = displayConfiguration.compositeChromaBandwidth;
-            if (bandwidth > displayConfiguration.compositeChromaBandwidth)
-                bandwidth = displayConfiguration.compositeChromaBandwidth;
-            wu = w * OEVector::lanczosWindow(17, bandwidth);
-            wu = wv = wu.normalize() * 2;
-            break;
+        }
     }
     
     // Decoder matrix
@@ -798,15 +768,6 @@ void OpenGLCanvas::configureRenderShader(CanvasDecoder videoDecoder,
         contrast = 0.001;
     m *= contrast;
     
-    float persistanceEnergy = 1;
-    float persistanceTotalEnergy = 1;
-    for (int i = 1; i < OPENGLCANVAS_PERSISTANCE_IMAGE_NUM; i++)
-    {
-        persistanceEnergy *= displayConfiguration.displayPersistance;
-        persistanceTotalEnergy += persistanceEnergy;
-    }
-    m = m * (1.0 / persistanceTotalEnergy);
-    
     // Decoder matrices from "Digital Video and HDTV Algorithms and Interfaces"
     switch (videoDecoder)
     {
@@ -818,8 +779,14 @@ void OpenGLCanvas::configureRenderShader(CanvasDecoder videoDecoder,
                            1.402, -0.714, 0);
             break;
             
-        case CANVAS_DECODER_NTSC_YUV:
-        case CANVAS_DECODER_NTSC_YIQ:
+        case CANVAS_DECODER_YUV:
+            // Y'UV decoder matrix
+            m *= OEMatrix3(1, 1, 1,
+                           0, -0.394642, 2.032062,
+                           1.139883, -0.580622, 0);
+            break;
+            
+        case CANVAS_DECODER_YIQ:
             // Y'IQ decoder matrix
             m *= OEMatrix3(1, 1, 1,
                            0.955986, -0.272013, -1.106740,
@@ -830,7 +797,7 @@ void OpenGLCanvas::configureRenderShader(CanvasDecoder videoDecoder,
                            0, 1, 0);
             break;
             
-        case CANVAS_DECODER_NTSC_CXA2025AS:
+        case CANVAS_DECODER_CXA2025AS:
             // CXA2025AS decoder matrix
             m *= OEMatrix3(1, 1, 1,
                            1.630, -0.378, -1.089,
@@ -839,13 +806,6 @@ void OpenGLCanvas::configureRenderShader(CanvasDecoder videoDecoder,
             m *= OEMatrix3(1, 0, 0,
                            0, 0, 1,
                            0, 1, 0);
-            break;
-            
-        case CANVAS_DECODER_PAL:
-            // Y'UV decoder matrix
-            m *= OEMatrix3(1, 1, 1,
-                           0, -0.394642, 2.032062,
-                           1.139883, -0.580622, 0);
             break;
     }
     
@@ -856,13 +816,14 @@ void OpenGLCanvas::configureRenderShader(CanvasDecoder videoDecoder,
                    0, sinf(hue), cosf(hue));
     
     // Saturation
-    m *= OEMatrix3(1, 0, 0,
-                   0, displayConfiguration.videoSaturation, 0,
-                   0, 0, displayConfiguration.videoSaturation);
     if (isMonochrome)
         m *= OEMatrix3(1, 0, 0,
                        0, 0, 0,
                        0, 0, 0);
+    else
+        m *= OEMatrix3(1, 0, 0,
+                       0, displayConfiguration.videoSaturation, 0,
+                       0, 0, displayConfiguration.videoSaturation);
     
     // Encoder matrices
     switch (displayConfiguration.videoDecoder)
@@ -888,14 +849,10 @@ void OpenGLCanvas::configureRenderShader(CanvasDecoder videoDecoder,
     GLuint theShader;
     switch (videoDecoder)
     {
-        case CANVAS_DECODER_NTSC_YIQ:
-        case CANVAS_DECODER_NTSC_YUV:
-        case CANVAS_DECODER_NTSC_CXA2025AS:
-            theShader = shader[OPENGLCANVAS_SHADER_NTSC];
-            break;
-            
-        case CANVAS_DECODER_PAL:
-            theShader = shader[OPENGLCANVAS_SHADER_PAL];
+        case CANVAS_DECODER_YUV:
+        case CANVAS_DECODER_YIQ:
+        case CANVAS_DECODER_CXA2025AS:
+            theShader = shader[OPENGLCANVAS_SHADER_COMPOSITE];
             break;
             
         default:
@@ -908,10 +865,6 @@ void OpenGLCanvas::configureRenderShader(CanvasDecoder videoDecoder,
     
     glUseProgram(theShader);
     
-    if (theShader != shader[OPENGLCANVAS_SHADER_RGB])
-        glUniform2f(glGetUniformLocation(theShader, "comp_phase"),
-                    displayConfiguration.compositeChromaCarrier,
-                    displayConfiguration.compositeChromaLine);
     glUniform3f(glGetUniformLocation(theShader, "c0"),
                 wy.getValue(8), wu.getValue(8), wv.getValue(8));
     glUniform3f(glGetUniformLocation(theShader, "c1"),
@@ -939,7 +892,8 @@ void OpenGLCanvas::configureRenderShader(CanvasDecoder videoDecoder,
     else
         glUniform3f(glGetUniformLocation(theShader, "offset"),
                     displayConfiguration.videoBrightness / contrast, 0, 0);
-    glUniformMatrix3fv(glGetUniformLocation(theShader, "decoder"),
+    
+    glUniformMatrix3fv(glGetUniformLocation(theShader, "decoderMatrix"),
                        1, false, m.getValues());
 #endif
 }
@@ -970,16 +924,15 @@ void OpenGLCanvas::updateDisplayConfiguration()
 {
     switch (displayConfiguration.videoDecoder)
     {
-        case CANVAS_DECODER_NTSC_YIQ:
-        case CANVAS_DECODER_NTSC_YUV:
-        case CANVAS_DECODER_NTSC_CXA2025AS:
-        case CANVAS_DECODER_PAL:
-            configureRenderShader(displayConfiguration.videoDecoder, false);
-            configureRenderShader(CANVAS_DECODER_RGB, true);
+        case CANVAS_DECODER_YUV:
+        case CANVAS_DECODER_YIQ:
+        case CANVAS_DECODER_CXA2025AS:
+            configureVideoShader(displayConfiguration.videoDecoder);
+            configureVideoShader(CANVAS_DECODER_RGB);
             break;
             
         default:
-            configureRenderShader(displayConfiguration.videoDecoder, false);
+            configureVideoShader(displayConfiguration.videoDecoder);
             break;
     }
     
@@ -989,42 +942,27 @@ void OpenGLCanvas::updateDisplayConfiguration()
 void OpenGLCanvas::renderImage()
 {
 #ifdef GL_VERSION_2_0
-    renderIndex++;
-    if (renderIndex >= OPENGLCANVAS_PERSISTANCE_IMAGE_NUM)
-        renderIndex = 0;
-    persistance[0] = renderIndex;
-    
     GLuint renderShader;
-    if (image.getOptions() & OEIMAGE_COLORCARRIER)
+    switch (displayConfiguration.videoDecoder)
     {
-        switch (displayConfiguration.videoDecoder)
-        {
-            case CANVAS_DECODER_NTSC_YIQ:
-            case CANVAS_DECODER_NTSC_YUV:
-            case CANVAS_DECODER_NTSC_CXA2025AS:
-                renderShader = shader[OPENGLCANVAS_SHADER_NTSC];
-                break;
-                
-            case CANVAS_DECODER_PAL:
-                renderShader = shader[OPENGLCANVAS_SHADER_PAL];
-                break;
-                
-            default:
-                renderShader = shader[OPENGLCANVAS_SHADER_RGB];
-                break;
-        }
+        case CANVAS_DECODER_YUV:
+        case CANVAS_DECODER_YIQ:
+        case CANVAS_DECODER_CXA2025AS:
+            renderShader = shader[OPENGLCANVAS_SHADER_COMPOSITE];
+            break;
+            
+        default:
+            renderShader = shader[OPENGLCANVAS_SHADER_RGB];
+            break;
     }
-    else
-        renderShader = shader[OPENGLCANVAS_SHADER_RGB];
     
     if (!isShaderEnabled || !renderShader)
         return;
     
     glUseProgram(renderShader);
     
-    GLuint textureIndex = OPENGLCANVAS_TEXTURE_IMAGE_RENDERED + renderIndex;
     OESize texSize = textureSize[OPENGLCANVAS_TEXTURE_IMAGE_RAW];
-    updateTextureSize(textureIndex, texSize);
+    updateTextureSize(OPENGLCANVAS_TEXTURE_IMAGE_RENDERED, texSize);
     
     glUniform1i(glGetUniformLocation(renderShader, "texture"), 0);
     glUniform2f(glGetUniformLocation(renderShader, "texture_size"),
@@ -1071,7 +1009,7 @@ void OpenGLCanvas::renderImage()
             glEnd();
             
             // Copy framebuffer
-            glBindTexture(GL_TEXTURE_2D, texture[textureIndex]);
+            glBindTexture(GL_TEXTURE_2D, texture[OPENGLCANVAS_TEXTURE_IMAGE_RENDERED]);
             glCopyTexSubImage2D(GL_TEXTURE_2D, 0,
                                 x,
                                 y,
@@ -1085,17 +1023,6 @@ void OpenGLCanvas::renderImage()
     
     glUseProgram(0);
 #endif
-}
-
-bool OpenGLCanvas::isPersistanceDrawRequired()
-{
-    for (int i = 1; i < OPENGLCANVAS_PERSISTANCE_IMAGE_NUM; i++)
-    {
-        if (persistance[i] != persistance[0])
-            return true;
-    }
-    
-    return false;
 }
 
 void OpenGLCanvas::drawDisplayCanvas()
@@ -1226,45 +1153,36 @@ void OpenGLCanvas::drawDisplayCanvas()
     glClearColor(1, 1, 1, 1);
     glBlendFunc(GL_ONE, GL_SRC_ALPHA);
     
-    int startIndex = ((displayShader &&
-                       (displayConfiguration.displayPersistance != 0)) ?
-                      (OPENGLCANVAS_PERSISTANCE_IMAGE_NUM - 1) : 0);
-    for (int i = startIndex; i >= 0; i--)
-    {
-        if (persistance[i] < 0)
-            continue;
-        
-        int textureIndex;
-        if (displayShader)
-            textureIndex = OPENGLCANVAS_TEXTURE_IMAGE_RENDERED + persistance[i];
-        else
-            textureIndex = OPENGLCANVAS_TEXTURE_IMAGE_RAW;
-        glBindTexture(GL_TEXTURE_2D, texture[textureIndex]);
-        
+    int textureIndex;
+    if (displayShader)
+        textureIndex = OPENGLCANVAS_TEXTURE_IMAGE_RENDERED;
+    else
+        textureIndex = OPENGLCANVAS_TEXTURE_IMAGE_RAW;
+    glBindTexture(GL_TEXTURE_2D, texture[textureIndex]);
+    
 #ifdef GL_VERSION_2_0
-        if (displayShader)
-            glUniform2f(glGetUniformLocation(displayShader, "texture_size"),
-                        textureSize[textureIndex].width,
-                        textureSize[textureIndex].height);
+    if (displayShader)
+        glUniform2f(glGetUniformLocation(displayShader, "texture_size"),
+                    textureSize[textureIndex].width,
+                    textureSize[textureIndex].height);
 #endif
-        
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-        
-        // Render
-        glBegin(GL_QUADS);
-        glTexCoord2f(OEMinX(textureRect), OEMinY(textureRect));
-        glVertex2f(OEMinX(vertexRect), OEMinY(vertexRect));
-        glTexCoord2f(OEMaxX(textureRect), OEMinY(textureRect));
-        glVertex2f(OEMaxX(vertexRect), OEMinY(vertexRect));
-        glTexCoord2f(OEMaxX(textureRect), OEMaxY(textureRect));
-        glVertex2f(OEMaxX(vertexRect), OEMaxY(vertexRect));
-        glTexCoord2f(OEMinX(textureRect), OEMaxY(textureRect));
-        glVertex2f(OEMinX(vertexRect), OEMaxY(vertexRect));
-        glEnd();
-    }
+    
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+    
+    // Render
+    glBegin(GL_QUADS);
+    glTexCoord2f(OEMinX(textureRect), OEMinY(textureRect));
+    glVertex2f(OEMinX(vertexRect), OEMinY(vertexRect));
+    glTexCoord2f(OEMaxX(textureRect), OEMinY(textureRect));
+    glVertex2f(OEMaxX(vertexRect), OEMinY(vertexRect));
+    glTexCoord2f(OEMaxX(textureRect), OEMaxY(textureRect));
+    glVertex2f(OEMaxX(vertexRect), OEMaxY(vertexRect));
+    glTexCoord2f(OEMinX(textureRect), OEMaxY(textureRect));
+    glVertex2f(OEMinX(vertexRect), OEMaxY(vertexRect));
+    glEnd();
     
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glBindTexture(GL_TEXTURE_2D, 0);
@@ -1273,12 +1191,6 @@ void OpenGLCanvas::drawDisplayCanvas()
     if (displayShader)
         glUseProgram(0);
 #endif
-}
-
-void OpenGLCanvas::updatePersistance()
-{
-    for (int i = (OPENGLCANVAS_PERSISTANCE_IMAGE_NUM - 1); i > 0; i--)
-        persistance[i] = persistance[i - 1];
 }
 
 // Paper canvas
@@ -1408,16 +1320,16 @@ void OpenGLCanvas::drawBezel()
         double diff = now - bezelCaptureTime;
         
         textureIndex = OPENGLCANVAS_TEXTURE_BEZEL_CAPTURE;
-        if (diff > (BEZELCAPTURE_START +
-                    BEZELCAPTURE_FADEOUT))
+        if (diff > (BEZELCAPTURE_DISPLAY_TIME +
+                    BEZELCAPTURE_FADEOUT_TIME))
         {
             isBezelDrawRequired = false;
             isBezelCapture = false;
             textureAlpha = 0;
         }
-        else if (diff > BEZELCAPTURE_START)
-            textureAlpha = 0.5 + 0.5 * cos((diff - BEZELCAPTURE_START) *
-                                           M_PI / BEZELCAPTURE_FADEOUT);
+        else if (diff > BEZELCAPTURE_DISPLAY_TIME)
+            textureAlpha = 0.5 + 0.5 * cos((diff - BEZELCAPTURE_DISPLAY_TIME) *
+                                           M_PI / BEZELCAPTURE_FADEOUT_TIME);
     }
     else if (bezel == CANVAS_BEZEL_POWER)
     {
@@ -1584,8 +1496,8 @@ void OpenGLCanvas::setKey(int usageId, bool value)
         ctrlAltWasPressed = false;
         
         double now = getCurrentTime();
-        if ((now - bezelCaptureTime) < BEZELCAPTURE_START)
-            bezelCaptureTime = now - BEZELCAPTURE_START;
+        if ((now - bezelCaptureTime) < BEZELCAPTURE_DISPLAY_TIME)
+            bezelCaptureTime = now - BEZELCAPTURE_DISPLAY_TIME;
         
         updateCapture(OPENGLCANVAS_CAPTURE_NONE);
     }
@@ -1880,13 +1792,16 @@ bool OpenGLCanvas::postImage(OEImage *theImage)
     {
         case CANVAS_MODE_DISPLAY:
             image = *theImage;
+            
             isImageUpdated = true;
+            
             break;
             
         case CANVAS_MODE_PAPER:
         {
             OESize theImageSize = theImage->getSize();
             OESize imageSize = image.getSize();
+            
             OERect aRect = OEMakeRect(0, 0,
                                       theImageSize.width, theImageSize.height);
             OERect bRect = OEMakeRect(printHead.x, printHead.y,
@@ -1896,8 +1811,10 @@ bool OpenGLCanvas::postImage(OEImage *theImage)
             if (OEIsEmptyRect(bRect))
                 image.setFormat(theImage->getFormat());
             image.setSize(unionRect.size);
-            image.overlay(printHead, *theImage);
+            image.print(*theImage, printHead);
+            
             isImageUpdated = true;
+            
             break;
         }
             
@@ -1918,7 +1835,9 @@ bool OpenGLCanvas::clear()
     {
         case CANVAS_MODE_DISPLAY:
             image = OEImage();
+            
             isImageUpdated = true;
+            
             break;
             
         case CANVAS_MODE_PAPER:

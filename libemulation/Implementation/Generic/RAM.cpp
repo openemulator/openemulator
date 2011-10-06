@@ -104,8 +104,17 @@ bool RAM::postMessage(OEComponent *sender, int message, void *data)
 {
     switch (message)
     {
+        case RAM_GET_MEMORYSIZE:
+            *((OEUInt64 *) data) = size;
+            return true;
+            
         case RAM_GET_MEMORY:
             *((OEData **) data) = &this->data;
+            return true;
+            
+        case RAM_SET_MEMORY:
+            this->data = *((OEData *) data);
+            this->data.resize(size);
             return true;
     }
     

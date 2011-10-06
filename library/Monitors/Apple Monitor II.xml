@@ -15,7 +15,6 @@
         <property name="device" ref="appleMonitorII"/>
         <property name="controlBus" ref="controlBus"/>
         <property name="videoDecoder" value="Monochrome"/>
-        <property name="videoBandwidth" value="0.83"/>
         <property name="videoBrightness" value="0.1"/>
         <property name="videoContrast" value="0.75"/>
         <property name="videoSaturation" value="1.4"/>
@@ -24,12 +23,11 @@
         <property name="videoHorizontalSize" value="1.0"/>
         <property name="videoVerticalCenter" value="0"/>
         <property name="videoVerticalSize" value="1.0"/>
+        <property name="videoBandwidth" value="18000000.0"/>
         <property name="displayBarrel" value="0.1"/>
         <property name="displayScanlineAlpha" value="0.5"/>
         <property name="displayCenterLighting" value="0.5"/>
-        <property name="displayShadowMaskAlpha" value="0.0"/>
-        <property name="displayShadowMaskDotPitch" value="0.5"/>
-        <property name="displayShadowMask" value="Triad"/>
+        <property name="displayPersistance" value="0.4"/>
     </component>
     
 </edl>

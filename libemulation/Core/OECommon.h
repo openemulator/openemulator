@@ -55,7 +55,7 @@ typedef union
     OEInt64 qd;
 } OEUnion;
 
-typedef vector<char> OEData;
+typedef vector<OEUInt8> OEData;
 
 #ifdef _WIN32
 #define OE_PATH_SEPARATOR "\\"

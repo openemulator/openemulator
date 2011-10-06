@@ -19,8 +19,6 @@
 #include "OEComponent.h"
 #include "CanvasInterface.h"
 
-#define OPENGLCANVAS_PERSISTANCE_IMAGE_NUM 6
-
 typedef enum
 {
     OPENGLCANVAS_CAPTURE_NONE,
@@ -40,16 +38,14 @@ typedef enum
     OPENGLCANVAS_TEXTURE_BEZEL_CAPTURE,
     OPENGLCANVAS_TEXTURE_IMAGE_RAW,
     OPENGLCANVAS_TEXTURE_IMAGE_RENDERED,
-    OPENGLCANVAS_TEXTURE_IMAGE_RENDERED_END = (OPENGLCANVAS_TEXTURE_IMAGE_RENDERED +
-                                               OPENGLCANVAS_PERSISTANCE_IMAGE_NUM),
+    OPENGLCANVAS_TEXTURE_IMAGE_PERSISTANCE,
     OPENGLCANVAS_TEXTURE_END,
 } OpenGLCanvasTextureIndex;
 
 typedef enum
 {
     OPENGLCANVAS_SHADER_RGB,
-    OPENGLCANVAS_SHADER_NTSC,
-    OPENGLCANVAS_SHADER_PAL,
+    OPENGLCANVAS_SHADER_COMPOSITE,
     OPENGLCANVAS_SHADER_DISPLAY,
     OPENGLCANVAS_SHADER_END,
 } OpenGLCanvasProgram;
@@ -142,8 +138,6 @@ private:
     
     CanvasDisplayConfiguration displayConfiguration;
     GLuint shader[OPENGLCANVAS_SHADER_END];
-    int renderIndex;
-    int persistance[OPENGLCANVAS_PERSISTANCE_IMAGE_NUM];
     
     CanvasPaperConfiguration paperConfiguration;
     OEPoint printHead;
@@ -179,13 +173,11 @@ private:
     void deleteShader(GLuint glShader);
     
     bool uploadImage();
-    void configureRenderShader(CanvasDecoder videoDecoder, bool isMonochrome);
+    void configureVideoShader(CanvasDecoder videoDecoder);
     void configureDisplayShader();
     void updateDisplayConfiguration();
     void renderImage();
-    bool isPersistanceDrawRequired();
     void drawDisplayCanvas();
-    void updatePersistance();
     
     void drawPaperCanvas();
     

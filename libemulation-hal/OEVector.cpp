@@ -91,6 +91,9 @@ OEVector OEVector::realIDFT()
 
 OEVector OEVector::lanczosWindow(unsigned int n, float fc)
 {
+    if (fc > 0.5)
+        fc = 0.5;
+    
     OEVector v;
     v.data.resize(n);
     
@@ -98,9 +101,9 @@ OEVector OEVector::lanczosWindow(unsigned int n, float fc)
     
     for (int i = 0; i < n; i++)
     {
-        float x = (i - halfN) * fc;
+        float x = 2 * M_PI * fc * (i - halfN);
         
-        v.data[i] = (x == 0.0F) ? 1.0F : x = sinf(M_PI * x) / (M_PI * x);
+        v.data[i] = (x == 0.0F) ? 1.0F : x = sinf(x) / x;
     }
     
     return v;

@@ -121,20 +121,16 @@ typedef enum
 // * displayResolution is the number of resolved pixels of the device (this
 //   is not necessarily the video frame resolution)
 // * displayPixelDensity is the number of resolved pixels of the device per inch
-// * The video rectangle sets the bounds of the video frame within the canvas
-//   (origin is upper left, coordinate system is [0..1, 0..1])
 // * The shadow mask dot pitch measures the spacing of the pixels in mm
-// * Video bandwidths are relative to the image sampling frequency,
-//   not to the display resolution
+// * Video bandwidths are in Hz
 
 typedef enum
 {
     CANVAS_DECODER_RGB,
     CANVAS_DECODER_MONOCHROME,
-    CANVAS_DECODER_NTSC_YIQ,
-    CANVAS_DECODER_NTSC_CXA2025AS,
-    CANVAS_DECODER_NTSC_YUV,
-    CANVAS_DECODER_PAL,
+    CANVAS_DECODER_YUV,
+    CANVAS_DECODER_YIQ,
+    CANVAS_DECODER_CXA2025AS,
 } CanvasDecoder;
 
 typedef enum
@@ -151,30 +147,38 @@ class CanvasDisplayConfiguration
 public:
     CanvasDisplayConfiguration()
     {
-        displayResolution = OEMakeSize(640, 480);
-        displayPixelDensity = 72;
-        displayBarrel = 0;
-        displayScanlineAlpha = 0;
-        displayCenterLighting = 1;
-        displayShadowMask = CANVAS_SHADOWMASK_TRIAD;
-        displayShadowMaskDotPitch = 1;
-        displayShadowMaskAlpha = 0;
-        displayPersistance = 0;
-        
         videoDecoder = CANVAS_DECODER_RGB;
-        videoBandwidth = 1;
         videoBrightness = 0;
         videoContrast = 1;
         videoSaturation = 1;
         videoHue = 0;
         videoCenter = OEMakePoint(0, 0);
         videoSize = OEMakeSize(1, 1);
+        videoBandwidth = 14318180.0;
+        videoLumaBandwidth = 600000.0;
+        videoChromaBandwidth = 2000000.0;
         
-        compositeLumaBandwidth = 0.28;
-        compositeChromaBandwidth = 0.01;
-        compositeChromaCarrier = 0.25;
-        compositeChromaLine = 0;
+        displayResolution = OEMakeSize(640, 480);
+        displayPixelDensity = 72;
+        displayBarrel = 0;
+        displayScanlineAlpha = 0;
+        displayCenterLighting = 1;
+        displayShadowMaskAlpha = 0;
+        displayShadowMaskDotPitch = 1;
+        displayShadowMask = CANVAS_SHADOWMASK_TRIAD;
+        displayPersistance = 0;
     }
+    
+    CanvasDecoder videoDecoder;
+    float videoBrightness;
+    float videoContrast;
+    float videoSaturation;
+    float videoHue;
+    OEPoint videoCenter;
+    OESize videoSize;
+    float videoBandwidth;
+    float videoLumaBandwidth;
+    float videoChromaBandwidth;
     
     OESize displayResolution;
     float displayPixelDensity;
@@ -185,20 +189,6 @@ public:
     float displayShadowMaskDotPitch;
     CanvasShadowMask displayShadowMask;
     float displayPersistance;
-    
-    CanvasDecoder videoDecoder;
-    float videoBandwidth;
-    float videoBrightness;
-    float videoContrast;
-    float videoSaturation;
-    float videoHue;
-    OEPoint videoCenter;
-    OESize videoSize;
-    
-    float compositeLumaBandwidth;
-    float compositeChromaBandwidth;
-    float compositeChromaCarrier;
-    float compositeChromaLine;
 };
 
 // Paper canvas configuration:

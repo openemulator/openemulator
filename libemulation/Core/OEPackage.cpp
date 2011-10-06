@@ -86,7 +86,7 @@ bool OEPackage::readFile(const string& packagePath, OEData *data)
         {
             if ((zipFile = zip_fopen(zip, packagePath.c_str(), 0)) != NULL)
             {
-                data->resize((int) zipStat.size);
+                data->resize((size_t) zipStat.size);
                 error = (zip_fread(zipFile,
                                    &data->front(),
                                    data->size()) != zipStat.size);
@@ -104,8 +104,8 @@ bool OEPackage::readFile(const string& packagePath, OEData *data)
             streampos size = file.tellg();
             file.seekg(0, ios::beg);
             
-            data->resize((int) size);
-            file.read(&data->front(), data->size());
+            data->resize((size_t) size);
+            file.read((char *) &data->front(), data->size());
             
             error = !file.good();
             
@@ -146,7 +146,7 @@ bool OEPackage::writeFile(const string& packagePath, OEData *data)
         
         if (file.is_open())
         {
-            file.write(&data->front(), data->size());
+            file.write((char *) &data->front(), data->size());
             error = !file.good();
             file.close();
         }

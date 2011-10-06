@@ -3,8 +3,7 @@
 <edl version="1.0" generator="OpenEmulator" build="700" label="Studio Monitor" image="images/Generic/Studio Monitor.png" description="A generic studio monitor that can be connected to any composite video source.">
     
     <device id="studioMonitor" label="Studio Monitor" image="images/Generic/Studio Monitor.png">
-        <setting ref="studioMonitor.monitor" name="videoDecoder" label="Decoder" type="select" options="Monochrome,NTSC Y'UV,NTSC Y'IQ,NTSC CXA2025AS,PAL"/>
-        <setting ref="studioMonitor.monitor" name="videoBandwidth" label="Video Bandwidth" type="slider" options="0.0,1.0"/>
+        <setting ref="studioMonitor.monitor" name="videoDecoder" label="Decoder" type="select" options="Monochrome,Composite Y'UV,Composite Y'IQ,Composite CXA2025AS"/>
         <setting ref="studioMonitor.monitor" name="videoBrightness" label="Brightness" type="slider" options="-1.0,1.0"/>
         <setting ref="studioMonitor.monitor" name="videoContrast" label="Contrast" type="slider" options="0.0,2.0,1.0"/>
         <setting ref="studioMonitor.monitor" name="videoSaturation" label="Saturation" type="slider" options="0.0,2.0,1.0"/>
@@ -13,6 +12,9 @@
         <setting ref="studioMonitor.monitor" name="videoHorizontalSize" label="Horizontal Size" type="slider" options="0.8,1.2"/>
         <setting ref="studioMonitor.monitor" name="videoVerticalCenter" label="Vertical Center" type="slider" options="-0.1,0.1"/>
         <setting ref="studioMonitor.monitor" name="videoVerticalSize" label="Vertical Size" type="slider" options="0.8,1.2"/>
+        <setting ref="studioMonitor.monitor" name="videoBandwidth" label="Video Bandwidth" type="slider" options="0.0,7159090.0"/>
+        <setting ref="studioMonitor.monitor" name="videoLumaBandwidth" label="Luma Bandwidth" type="slider" options="0.0,7159090.0"/>
+        <setting ref="studioMonitor.monitor" name="videoChromaBandwidth" label="Chroma Bandwidth" type="slider" options="0.0,7159090.0"/>
         <setting ref="studioMonitor.monitor" name="displayBarrel" label="Barrel" type="slider" options="0.0,1.0"/>
         <setting ref="studioMonitor.monitor" name="displayScanlineAlpha" label="Scanline Alpha" type="slider" options="0.0,1.0"/>
         <setting ref="studioMonitor.monitor" name="displayCenterLighting" label="Center Lighting" type="slider" options="0.0,1.0"/>
@@ -20,10 +22,6 @@
         <setting ref="studioMonitor.monitor" name="displayShadowMaskDotPitch" label="Shadow Mask Dot Pitch" type="slider" options="0.0,2.0"/>
         <setting ref="studioMonitor.monitor" name="displayShadowMask" label="Shadow Mask" type="select" options="Triad,Inline,Aperture,LCD,Bayer"/>
         <setting ref="studioMonitor.monitor" name="displayPersistance" label="Persistance" type="slider" options="0.0,1.0"/>
-        <setting ref="studioMonitor.monitor" name="compositeLumaBandwidth" label="Luma Bandwidth" type="slider" options="0.0,1.0"/>
-        <setting ref="studioMonitor.monitor" name="compositeChromaBandwidth" label="Chroma Bandwidth" type="slider" options="0.0,1.0"/>
-        <setting ref="studioMonitor.monitor" name="compositeChromaCarrier" label="Chroma Carrier" type="slider" options="0.24,0.3"/>
-        <setting ref="studioMonitor.monitor" name="compositeChromaLine" label="Chroma Line" type="slider" options="0.0,1.0"/>
     </device>
     <connector id="studioMonitor.connector" type="Composite Video Port">
         <inlet ref="studioMonitor.monitor" property="controlBus" outletRef="controlBus"/>
@@ -31,8 +29,7 @@
     <component id="studioMonitor.monitor" class="Monitor">
         <property name="device" ref="studioMonitor"/>
         <property name="controlBus" ref=""/>
-        <property name="videoDecoder" value="NTSC Y'UV"/>
-        <property name="videoBandwidth" value="0.8"/>
+        <property name="videoDecoder" value="Composite Y'UV"/>
         <property name="videoBrightness" value="0"/>
         <property name="videoContrast" value="1"/>
         <property name="videoSaturation" value="1"/>
@@ -41,6 +38,9 @@
         <property name="videoHorizontalSize" value="1"/>
         <property name="videoVerticalCenter" value="0"/>
         <property name="videoVerticalSize" value="1"/>
+        <property name="videoBandwidth" value="6000000.0"/>
+        <property name="videoLumaBandwidth" value="2000000.0"/>
+        <property name="videoChromaBandwidth" value="600000.0"/>
         <property name="displayBarrel" value="0.05"/>
         <property name="displayScanlineAlpha" value="0.05"/>
         <property name="displayCenterLighting" value="1"/>
@@ -48,10 +48,6 @@
         <property name="displayShadowMaskDotPitch" value="0.5"/>
         <property name="displayShadowMask" value="Triad"/>
         <property name="displayPersistance" value="0"/>
-        <property name="compositeLumaBandwidth" value="0.28"/>
-        <property name="compositeChromaBandwidth" value="0.01"/>
-        <property name="compositeChromaCarrier" value="0.25"/>
-        <property name="compositeChromaLine" value="0"/>
     </component>
     
 </edl>

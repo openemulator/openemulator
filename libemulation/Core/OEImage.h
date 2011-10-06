@@ -11,8 +11,7 @@
 #ifndef _OEIMAGE_H
 #define _OEIMAGE_H
 
-#include <string>
-#include <vector>
+#include "OECommon.h"
 
 using namespace std;
 
@@ -41,36 +40,84 @@ typedef enum
     OEIMAGE_RGBA,
 } OEImageFormat;
 
-typedef int OEImageOptions;
-#define OEIMAGE_COLORCARRIER    (1 << 0)
-#define OEIMAGE_COLORPHASE0     (1 << 1)
-#define OEIMAGE_COLORPHASE1     (1 << 2)
-#define OEIMAGE_PAPER           (1 << 3)
+typedef struct
+{
+    float black;
+    float white;
+} OEImageVideoLevels;
 
-// OEImage macros
+class OEImagePixel
+{
+public:
+    OEImagePixel()
+    {
+        r = 0;
+        g = 0;
+        b = 0;
+        a = 0xff;
+    }
+    
+    OEImagePixel(OEUInt8 l)
+    {
+        r = l;
+        g = l;
+        b = l;
+        a = 0xff;
+    }
+    
+    OEImagePixel(OEUInt8 r, OEUInt8 g, OEUInt8 b)
+    {
+        this->r = r;
+        this->g = g;
+        this->b = b;
+        a = 0xff;
+    }
+    
+    OEImagePixel(OEUInt8 r, OEUInt8 g, OEUInt8 b, OEUInt8 a)
+    {
+        this->r = r;
+        this->g = g;
+        this->b = b;
+        this->a = a;
+    }
+    
+    OEUInt8 r;
+    OEUInt8 g;
+    OEUInt8 b;
+    OEUInt8 a;
+};
+
+// Macros
+
 inline OEPoint OEMakePoint(float x, float y)
 {
     OEPoint p;
+    
     p.x = x;
     p.y = y;
+    
     return p;
 }
 
 inline OESize OEMakeSize(float w, float h)
 {
     OESize s;
+    
     s.width = w;
     s.height = h;
+    
     return s;
 }
 
 inline OERect OEMakeRect(float x, float y, float w, float h)
 {
     OERect r;
+    
     r.origin.x = x;
     r.origin.y = y;
     r.size.width = w;
     r.size.height = h;
+    
     return r;
 }
 
@@ -182,34 +229,49 @@ class OEImage
 {
 public:
     OEImage();
+    OEImage(OEImage& image, OERect rect);
     
-    void setFormat(OEImageFormat format);
+    void setFormat(OEImageFormat value);
     OEImageFormat getFormat();
-    
-    void setOptions(OEImageOptions options);
-    OEImageOptions getOptions();
-    
-    void setSize(OESize size);
+    void setSize(OESize value);
     OESize getSize();
+    OEUInt32 getBytesPerPixel();
+    OEUInt32 getBytesPerRow();
+    OEUInt8 *getPixels();
     
-    int getBytesPerPixel();
-    int getBytesPerRow();
-    unsigned char *getPixels();
+    void setSampleRate(float value);
+    float getSampleRate();
+    void setVideoLevels(OEImageVideoLevels value);
+    OEImageVideoLevels getVideoLevels();
+    void setInterlace(float value);
+    float getInterlace();
+    void setSubcarrier(float value);
+    float getSubcarrier();
+    void setColorBurst(vector<float> value);
+    vector<float> getColorBurst();
+    void setPhaseAlternation(vector<bool> value);
+    vector<bool> getPhaseAlternation();
     
     bool load(string path);
-    
-    void overlay(OEPoint origin, OEImage& image);
-    OEImage getClip(OERect rect);
+    void print(OEImage& image, OEPoint origin);
     
 private:
     OEImageFormat format;
-    OEImageOptions options;
     OESize size;
-    vector<unsigned char> pixels;
+    OEData pixels;
     
-    OERect getIntRect(OERect rect);
-    void updateSize();
-    bool validatePNG(FILE *fp);
+    float sampleRate;
+    OEImageVideoLevels videoLevels;
+    float interlace;
+    float subcarrier;
+    vector<float> colorBurst;
+    vector<bool> phaseAlternation;
+    
+    void setSize(OESize value, OEUInt8 fillByte);
+    OEImagePixel getPixel(OEUInt32 x, OEUInt32 y);
+    void setPixel(OEUInt32 x, OEUInt32 y, OEImagePixel value);
+    OEImagePixel subtractPixel(OEImagePixel p1, OEImagePixel p2);
+    bool validatePNGHeader(FILE *fp);
 };
 
 #endif

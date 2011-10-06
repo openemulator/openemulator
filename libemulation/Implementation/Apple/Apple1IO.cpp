@@ -222,6 +222,9 @@ void Apple1IO::write(OEAddress address, OEUInt8 value)
 
 void Apple1IO::sendChar()
 {
+//    if (!terminalChar)
+//        return;
+    
     OEData s;
     s.push_back(terminalChar);
     terminal->postMessage(this, RS232_SEND_DATA, &s);

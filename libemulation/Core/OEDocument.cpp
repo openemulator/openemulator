@@ -58,7 +58,7 @@ bool OEDocument::open(string path)
     
     if (is_open)
     {
-        doc = xmlReadMemory(&data[0],
+        doc = xmlReadMemory((char *) &data.front(),
                             (int) data.size(),
                             OE_PACKAGE_EDL_PATH,
                             NULL,

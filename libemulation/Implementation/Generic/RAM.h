@@ -20,6 +20,7 @@
 
 typedef enum
 {
+    RAM_GET_MEMORYSIZE,
     RAM_GET_MEMORY,
     RAM_SET_MEMORY,
 } RAMMessage;

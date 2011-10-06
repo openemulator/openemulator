@@ -43,7 +43,6 @@ Apple1Terminal::Apple1Terminal()
     splashScreen = false;
     splashScreenActive = false;
     
-    vramp = NULL;
     canvasShouldUpdate = true;
     image.setFormat(OEIMAGE_LUMINANCE);
     image.setSize(OEMakeSize(SCREEN_WIDTH, SCREEN_HEIGHT));
@@ -51,8 +50,6 @@ Apple1Terminal::Apple1Terminal()
     cursorCount = 0;
     
     powerState = CONTROLBUS_POWERSTATE_ON;
-    
-    image.setOptions(OEIMAGE_COLORCARRIER);
 }
 
 bool Apple1Terminal::setValue(string name, string value)
@@ -180,15 +177,14 @@ bool Apple1Terminal::init()
         return false;
     }
     
-    OEData *vramData;
-    vram->postMessage(this, RAM_GET_MEMORY, &vramData);
-    if (vramData->size() < (TERM_WIDTH * TERM_HEIGHT))
+    OEUInt64 vramSize;
+    vram->postMessage(this, RAM_GET_MEMORYSIZE, &vramSize);
+    if (vramSize < (TERM_WIDTH * TERM_HEIGHT))
     {
         logMessage("not enough vram");
         
         return false;
     }
-    vramp = (OEUInt8 *)&vramData->front();
     
     if (!font.size())
     {
@@ -364,6 +360,8 @@ void Apple1Terminal::loadFont(OEData *data)
 
 void Apple1Terminal::updateCanvas()
 {
+    OEUInt8 *vramp = getVRAMData();
+    
     if (!monitor ||
         !vramp ||
         (powerState != CONTROLBUS_POWERSTATE_ON))
@@ -422,7 +420,7 @@ void Apple1Terminal::updateCanvas()
 
 void Apple1Terminal::clearScreen()
 {
-    memset(vramp, ' ', TERM_HEIGHT * TERM_WIDTH);
+    memset(getVRAMData(), ' ', TERM_HEIGHT * TERM_WIDTH);
     
     cursorX = 0;
     cursorY = 0;
@@ -432,6 +430,11 @@ void Apple1Terminal::clearScreen()
 
 void Apple1Terminal::putChar(OEUInt8 c)
 {
+    OEUInt8 *vramp = getVRAMData();
+    
+    if (!vramp)
+        return;
+    
     if (c == 0x0d)
     {
         cursorX = 0;
@@ -482,12 +485,14 @@ void Apple1Terminal::sendKey(CanvasUnicodeChar key)
 
 void Apple1Terminal::copy(wstring *s)
 {
+    OEUInt8 *vramp = getVRAMData();
+    
     for (int y = 0; y < TERM_HEIGHT; y++)
     {
         wstring line;
         
         for (int x = 0; x < TERM_WIDTH; x++)
-            line += (vramp[y * TERM_WIDTH + x]) & 0x7f;
+            line += vramp[y * TERM_WIDTH + x] & 0x7f;
         
         line = rtrim(line);
         line += '\n';
@@ -514,4 +519,13 @@ void Apple1Terminal::emptyPasteBuffer()
         sendKey(pasteBuffer.front());
         pasteBuffer.pop();
     }
+}
+
+OEUInt8 *Apple1Terminal::getVRAMData()
+{
+    OEData *vramData;
+    
+    vram->postMessage(this, RAM_GET_MEMORY, &vramData);
+    
+    return &vramData->front();
 }

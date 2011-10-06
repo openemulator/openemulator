@@ -32,17 +32,13 @@ bool Monitor::setValue(string name, string value)
             configuration.videoDecoder = CANVAS_DECODER_RGB;
         else if (value == "Monochrome")
             configuration.videoDecoder = CANVAS_DECODER_MONOCHROME;
-        else if (value == "NTSC Y'IQ")
-            configuration.videoDecoder = CANVAS_DECODER_NTSC_YIQ;
-        else if (value == "NTSC CXA2025AS")
-            configuration.videoDecoder = CANVAS_DECODER_NTSC_CXA2025AS;
-        else if (value == "NTSC Y'UV")
-            configuration.videoDecoder = CANVAS_DECODER_NTSC_YUV;
-        else if (value == "PAL")
-            configuration.videoDecoder = CANVAS_DECODER_PAL;
+        else if (value == "Composite Y'UV")
+            configuration.videoDecoder = CANVAS_DECODER_YUV;
+        else if (value == "Composite Y'IQ")
+            configuration.videoDecoder = CANVAS_DECODER_YIQ;
+        else if (value == "Composite CXA2025AS")
+            configuration.videoDecoder = CANVAS_DECODER_CXA2025AS;
     }
-    else if (name == "videoBandwidth")
-        configuration.videoBandwidth = getFloat(value);
     else if (name == "videoBrightness")
         configuration.videoBrightness = getFloat(value);
     else if (name == "videoContrast")
@@ -59,6 +55,12 @@ bool Monitor::setValue(string name, string value)
         configuration.videoSize.width = getFloat(value);
     else if (name == "videoVerticalSize")
         configuration.videoSize.height = getFloat(value);
+    else if (name == "videoBandwidth")
+        configuration.videoBandwidth = getFloat(value);
+    else if (name == "videoLumaBandwidth")
+        configuration.videoLumaBandwidth = getFloat(value);
+    else if (name == "videoChromaBandwidth")
+        configuration.videoChromaBandwidth = getFloat(value);
     else if (name == "displayBarrel")
         configuration.displayBarrel = getFloat(value);
     else if (name == "displayScanlineAlpha")
@@ -84,14 +86,6 @@ bool Monitor::setValue(string name, string value)
     }
     else if (name == "displayPersistance")
         configuration.displayPersistance = getFloat(value);
-    else if (name == "compositeLumaBandwidth")
-        configuration.compositeLumaBandwidth = getFloat(value);
-    else if (name == "compositeChromaBandwidth")
-        configuration.compositeChromaBandwidth = getFloat(value);
-    else if (name == "compositeChromaCarrier")
-        configuration.compositeChromaCarrier = getFloat(value);
-    else if (name == "compositeChromaLine")
-        configuration.compositeChromaLine = getFloat(value);
     else
         return false;
     
@@ -106,17 +100,13 @@ bool Monitor::getValue(string name, string& value)
             value = "RGB";
         else if (configuration.videoDecoder == CANVAS_DECODER_MONOCHROME)
             value = "Monochrome";
-        else if (configuration.videoDecoder == CANVAS_DECODER_NTSC_YIQ)
-            value = "NTSC Y'IQ";
-        else if (configuration.videoDecoder == CANVAS_DECODER_NTSC_CXA2025AS)
-            value = "NTSC CXA2025AS";
-        else if (configuration.videoDecoder == CANVAS_DECODER_NTSC_YUV)
-            value = "NTSC Y'UV";
-        else if (configuration.videoDecoder == CANVAS_DECODER_PAL)
-            value = "PAL";
+        else if (configuration.videoDecoder == CANVAS_DECODER_YUV)
+            value = "Composite Y'UV";
+        else if (configuration.videoDecoder == CANVAS_DECODER_YIQ)
+            value = "Composite Y'IQ";
+        else if (configuration.videoDecoder == CANVAS_DECODER_CXA2025AS)
+            value = "Composite CXA2025AS";
     }
-    else if (name == "videoBandwidth")
-        value = getString(configuration.videoBandwidth);
     else if (name == "videoBrightness")
         value = getString(configuration.videoBrightness);
     else if (name == "videoContrast")
@@ -133,6 +123,12 @@ bool Monitor::getValue(string name, string& value)
         value = getString(configuration.videoSize.width);
     else if (name == "videoVerticalSize")
         value = getString(configuration.videoSize.height);
+    else if (name == "videoBandwidth")
+        value = getString(configuration.videoBandwidth);
+    else if (name == "videoLumaBandwidth")
+        value = getString(configuration.videoLumaBandwidth);
+    else if (name == "videoChromaBandwidth")
+        value = getString(configuration.videoChromaBandwidth);
     else if (name == "displayBarrel")
         value = getString(configuration.displayBarrel);
     else if (name == "displayScanlineAlpha")
@@ -158,14 +154,6 @@ bool Monitor::getValue(string name, string& value)
     }
     else if (name == "displayPersistance")
         value = getString(configuration.displayPersistance);
-    else if (name == "compositeLumaBandwidth")
-        value = getString(configuration.compositeLumaBandwidth);
-    else if (name == "compositeChromaBandwidth")
-        value = getString(configuration.compositeChromaBandwidth);
-    else if (name == "compositeChromaCarrier")
-        value = getString(configuration.compositeChromaCarrier);
-    else if (name == "compositeChromaLine")
-        value = getString(configuration.compositeChromaLine);
     else
         return false;
     

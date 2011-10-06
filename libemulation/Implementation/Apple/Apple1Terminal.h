@@ -44,7 +44,6 @@ private:
     bool splashScreenActive;
     
     OEData font;
-    OEUInt8 *vramp;
     bool canvasShouldUpdate;
     OEImage image;
     bool cursorActive;
@@ -64,4 +63,5 @@ private:
     void copy(wstring *s);
     void paste(wstring *s);
     void emptyPasteBuffer();
+    OEUInt8 *getVRAMData();
 };

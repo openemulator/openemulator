@@ -231,7 +231,7 @@ bool readFile(string path, OEData *data)
         file.seekg(0, ios::beg);
         
         data->resize(size);
-        file.read(&data->front(), size);
+        file.read((char *) &data->front(), size);
         success = file.good();
         file.close();
     }
@@ -247,7 +247,7 @@ bool writeFile(string path, OEData *data)
     
     if (file.is_open())
     {
-        file.write(&data->front(), data->size());
+        file.write((char *) &data->front(), data->size());
         success = file.good();
         file.close();
     }
