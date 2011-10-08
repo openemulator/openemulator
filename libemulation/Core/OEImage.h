@@ -40,12 +40,6 @@ typedef enum
     OEIMAGE_RGBA,
 } OEImageFormat;
 
-typedef struct
-{
-    float black;
-    float white;
-} OEImageVideoLevels;
-
 class OEImagePixel
 {
 public:
@@ -241,8 +235,10 @@ public:
     
     void setSampleRate(float value);
     float getSampleRate();
-    void setVideoLevels(OEImageVideoLevels value);
-    OEImageVideoLevels getVideoLevels();
+    void setBlackLevel(float value);
+    float getBlackLevel();
+    void setWhiteLevel(float value);
+    float getWhiteLevel();
     void setInterlace(float value);
     float getInterlace();
     void setSubcarrier(float value);
@@ -261,7 +257,8 @@ private:
     OEData pixels;
     
     float sampleRate;
-    OEImageVideoLevels videoLevels;
+    float blackLevel;
+    float whiteLevel;
     float interlace;
     float subcarrier;
     vector<float> colorBurst;
@@ -270,7 +267,7 @@ private:
     void setSize(OESize value, OEUInt8 fillByte);
     OEImagePixel getPixel(OEUInt32 x, OEUInt32 y);
     void setPixel(OEUInt32 x, OEUInt32 y, OEImagePixel value);
-    OEImagePixel subtractPixel(OEImagePixel p1, OEImagePixel p2);
+    OEImagePixel darken(OEImagePixel p1, OEImagePixel p2);
     bool validatePNGHeader(FILE *fp);
 };
 

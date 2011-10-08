@@ -20,10 +20,10 @@
         <property name="videoSaturation" value="1.4"/>
         <property name="videoHue" value="0.33"/>
         <property name="videoHorizontalCenter" value="0"/>
-        <property name="videoHorizontalSize" value="1.0"/>
+        <property name="videoHorizontalSize" value="1"/>
         <property name="videoVerticalCenter" value="0"/>
-        <property name="videoVerticalSize" value="1.0"/>
-        <property name="videoBandwidth" value="18000000.0"/>
+        <property name="videoVerticalSize" value="1"/>
+        <property name="videoBandwidth" value="18000000"/>
         <property name="displayBarrel" value="0.1"/>
         <property name="displayScanlineAlpha" value="0.5"/>
         <property name="displayCenterLighting" value="0.5"/>

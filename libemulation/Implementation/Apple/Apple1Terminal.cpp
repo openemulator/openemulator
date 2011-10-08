@@ -50,6 +50,8 @@ Apple1Terminal::Apple1Terminal()
     cursorCount = 0;
     
     powerState = CONTROLBUS_POWERSTATE_ON;
+    
+    image.setSubcarrier(3579545);
 }
 
 bool Apple1Terminal::setValue(string name, string value)
@@ -523,6 +525,9 @@ void Apple1Terminal::emptyPasteBuffer()
 
 OEUInt8 *Apple1Terminal::getVRAMData()
 {
+    if (!vram)
+        return NULL;
+    
     OEData *vramData;
     
     vram->postMessage(this, RAM_GET_MEMORY, &vramData);

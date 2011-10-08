@@ -129,8 +129,14 @@ private:
     OESize viewportSize;
     bool isViewportUpdated;
     OEPoint clipOrigin;
+    
     bool isImageUpdated;
     OEImage image;
+    float imageSampleRate;
+    float imageBlackLevel;
+    float imageWhiteLevel;
+    float imageSubcarrier;
+    
     bool isConfigurationUpdated;
     
     GLuint texture[OPENGLCANVAS_TEXTURE_END];
@@ -169,13 +175,12 @@ private:
     void updateTextureSize(int textureIndex, OESize size);
     void loadShaders();
     void deleteShaders();
-    GLuint loadShader(const char *source);
-    void deleteShader(GLuint glShader);
+    void loadShader(GLuint shaderIndex, const char *source);
+    void deleteShader(GLuint shaderIndex);
     
     bool uploadImage();
-    void configureVideoShader(CanvasDecoder videoDecoder);
-    void configureDisplayShader();
-    void updateDisplayConfiguration();
+    GLuint getRenderShader();
+    void configureShaders();
     void renderImage();
     void drawDisplayCanvas();
     

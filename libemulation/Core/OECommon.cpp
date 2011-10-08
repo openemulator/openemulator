@@ -11,6 +11,7 @@
 #include <math.h>
 #include <sstream>
 #include <fstream>
+#include <iomanip>
 
 #include "OECommon.h"
 
@@ -96,7 +97,7 @@ string getString(float value)
 {
     stringstream ss;
     
-    ss << value;
+    ss << setprecision(10) << value;
     
     return ss.str();
 }

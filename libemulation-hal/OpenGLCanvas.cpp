@@ -16,6 +16,9 @@
 #include "OEVector.h"
 #include "OEMatrix3.h"
 
+// References:
+// * Poynton C., Digital Video and HDTV Algorithms and Interfaces
+
 #define NTSC_I_CUTOFF               1300000
 #define NTSC_Q_CUTOFF               600000
 #define NTSC_IQ_DELTA               (NTSC_I_CUTOFF - NTSC_Q_CUTOFF)
@@ -54,9 +57,10 @@ c += pixels(q, 5.0 / texture_size.x) * c5;\n\
 c += pixels(q, 6.0 / texture_size.x) * c6;\n\
 c += pixels(q, 7.0 / texture_size.x) * c7;\n\
 c += pixels(q, 8.0 / texture_size.x) * c8;\n\
-c += offset;\n\
-gl_FragColor = vec4(decoderMatrix * c, 1.0);\n\
+gl_FragColor = vec4(decoderMatrix * (c + offset), 1.0);\n\
 }";
+
+// vec2 p = texture1D(color_burst, texture_size.x * q.x).rg;\n\
 
 static const char *compositeShader = "\
 uniform sampler2D texture;\n\
@@ -72,7 +76,7 @@ float PI = 3.14159265358979323846264;\n\
 vec3 pixel(vec2 q)\n\
 {\n\
 vec3 c = texture2D(texture, q).rgb;\n\
-vec2 p = texture1D(color_burst, texture_size.x * q.x).rg;\n\
+vec2 p = vec2(0, 0);\n\
 float phase = 2.0 * PI * subcarrier * texture_size.x * q.x + p.x;\n\
 return c * vec3(1.0, sin(phase), p.y * cos(phase));\n\
 }\n\
@@ -94,8 +98,7 @@ c += pixels(q, 5.0 / texture_size.x) * c5;\n\
 c += pixels(q, 6.0 / texture_size.x) * c6;\n\
 c += pixels(q, 7.0 / texture_size.x) * c7;\n\
 c += pixels(q, 8.0 / texture_size.x) * c8;\n\
-c += offset;\n\
-gl_FragColor = vec4(decoderMatrix * c, 1.0);\n\
+gl_FragColor = vec4(decoderMatrix * (c + offset), 1.0);\n\
 }";
 
 static const char *displayShader = "\
@@ -120,14 +123,14 @@ vec2 q = gl_TexCoord[0].xy;\n\
 vec2 qc = q - barrel_center;\n\
 q += barrel * qc * dot(qc, qc);\n\
 \n\
-vec3 p = texture2D(texture, q).rgb;\n\
-float s = sin(PI * texture_size.y * q.y);\n\
-p *= mix(1.0, s * s, scanline_alpha);\n\
-vec2 c = qc * center_lighting;\n\
-p *= exp(-dot(c, c));\n\
+vec3 c = texture2D(texture, q).rgb;\n\
+float scanline = sin(PI * texture_size.y * q.y);\n\
+c *= mix(1.0, scanline * scanline, scanline_alpha);\n\
+vec2 lighting = qc * center_lighting;\n\
+c *= exp(-dot(lighting, lighting));\n\
 vec3 m = texture2D(shadowmask, q * shadowmask_scale + shadowmask_translate).rgb;\n\
-p *= mix(vec3(1.0, 1.0, 1.0), m, shadowmask_alpha);\n\
-gl_FragColor = vec4(p, alpha);\n\
+c *= mix(vec3(1.0, 1.0, 1.0), m, shadowmask_alpha);\n\
+gl_FragColor = vec4(c, alpha);\n\
 }";
 
 OpenGLCanvas::OpenGLCanvas(string resourcePath)
@@ -148,7 +151,11 @@ OpenGLCanvas::OpenGLCanvas(string resourcePath)
     
     viewportSize = OEMakeSize(640, 480);
     isViewportUpdated = true;
+    
     isImageUpdated = false;
+    imageSampleRate = 0;
+    imageBlackLevel = 0;
+    imageWhiteLevel = 0;
     
     printHead = OEMakePoint(0, 0);
     
@@ -362,16 +369,18 @@ bool OpenGLCanvas::vsync()
 {
     lock();
     
+    CanvasVSync vSync;
+    vSync.viewportSize = viewportSize;
+    vSync.shouldDraw = false;
+    
     if (isViewportUpdated)
     {
         isViewportUpdated = false;
         
         glViewport(0, 0, viewportSize.width, viewportSize.height);
+        
+        vSync.shouldDraw = true;
     }
-    
-    CanvasVSync vSync;
-    vSync.viewportSize = viewportSize;
-    vSync.shouldDraw = false;
     
     if (mode == CANVAS_MODE_DISPLAY)
     {
@@ -379,19 +388,28 @@ bool OpenGLCanvas::vsync()
             uploadImage();
         
         if (isConfigurationUpdated)
-            updateDisplayConfiguration();
+            configureShaders();
         
         if (isImageUpdated || isConfigurationUpdated)
+        {
+            isImageUpdated = false;
+            isConfigurationUpdated = false;
+            
             renderImage();
+            
+            vSync.shouldDraw = true;
+        }
         
         if (displayConfiguration.displayPersistance != 0.0)
             vSync.shouldDraw = true;
     }
     else if (mode == CANVAS_MODE_PAPER)
+    {
         vSync.shouldDraw = isImageUpdated || isConfigurationUpdated;
     
-    isImageUpdated = false;
-    isConfigurationUpdated = false;
+        isImageUpdated = false;
+        isConfigurationUpdated = false;
+    }
     
     if (isBezelDrawRequired)
         vSync.shouldDraw = true;
@@ -412,9 +430,9 @@ void OpenGLCanvas::draw()
     {
         lock();
         
-        isViewportUpdated = false;
-        
         glViewport(0, 0, viewportSize.width, viewportSize.height);
+        
+        isViewportUpdated = false;
         
         unlock();
     }
@@ -425,6 +443,8 @@ void OpenGLCanvas::draw()
         
         drawDisplayCanvas();
         
+        drawBezel();
+        
         unlock();
     }
     else if (mode == CANVAS_MODE_PAPER)
@@ -433,16 +453,20 @@ void OpenGLCanvas::draw()
         
         drawPaperCanvas();
         
+        drawBezel();
+        
         unlock();
     }
     else
+    {
         notify(this, CANVAS_WILL_DRAW, &viewportSize);
-    
-    lock();
-    
-    drawBezel();
-    
-    unlock();
+        
+        lock();
+        
+        drawBezel();
+        
+        unlock();
+    }
 }
 
 // OpenGL
@@ -589,9 +613,9 @@ void OpenGLCanvas::loadShaders()
 {
     deleteShaders();
     
-    shader[OPENGLCANVAS_SHADER_RGB] = loadShader(rgbShader);
-    shader[OPENGLCANVAS_SHADER_COMPOSITE] = loadShader(compositeShader);
-    shader[OPENGLCANVAS_SHADER_DISPLAY] = loadShader(displayShader);
+    loadShader(OPENGLCANVAS_SHADER_RGB, rgbShader);
+    loadShader(OPENGLCANVAS_SHADER_COMPOSITE, compositeShader);
+    loadShader(OPENGLCANVAS_SHADER_DISPLAY, displayShader);
 }
 
 void OpenGLCanvas::deleteShaders()
@@ -601,11 +625,11 @@ void OpenGLCanvas::deleteShaders()
     deleteShader(OPENGLCANVAS_SHADER_DISPLAY);
 }
 
-GLuint OpenGLCanvas::loadShader(const char *source)
+void OpenGLCanvas::loadShader(GLuint shaderIndex, const char *source)
 {
     GLuint index = 0;
-    
 #ifdef GL_VERSION_2_0
+    
     const GLchar **sourcePointer = (const GLchar **) &source;
     GLint sourceLength = (GLint) strlen(source);
     
@@ -629,7 +653,7 @@ GLuint OpenGLCanvas::loadShader(const char *source)
         glGetShaderInfoLog(glFragmentShader, bufSize,
                            &infoLogLength, &infoLog.front());
         
-        string errorString = "could not compile OpenGL fragment shader\n";
+        string errorString = "could not compile OpenGL fragment shader " + getString(shaderIndex) + "\n";
         errorString += &infoLog.front();
         
         logMessage(errorString);
@@ -654,22 +678,23 @@ GLuint OpenGLCanvas::loadShader(const char *source)
         glGetProgramInfoLog(index, bufSize,
                             &infoLogLength, &infoLog.front());
         
-        string errorString = "could not link OpenGL program\n";
+        string errorString = "could not link OpenGL program " + getString(shaderIndex) + "\n";
         errorString += &infoLog.front();
         
         logMessage(errorString);
     }
 #endif
     
-    return index;
+    shader[shaderIndex] = index;
 }
 
-void OpenGLCanvas::deleteShader(GLuint index)
+void OpenGLCanvas::deleteShader(GLuint shaderIndex)
 {
 #ifdef GL_VERSION_2_0
-    if (shader[index])
-        glDeleteProgram(shader[index]);
-    shader[index] = 0;
+    if (shader[shaderIndex])
+        glDeleteProgram(shader[shaderIndex]);
+    
+    shader[shaderIndex] = 0;
 #endif
 }
 
@@ -688,228 +713,247 @@ bool OpenGLCanvas::uploadImage()
     
     glBindTexture(GL_TEXTURE_2D, 0);
     
+    if ((image.getSampleRate() != imageSampleRate) ||
+        (image.getBlackLevel() != imageBlackLevel) ||
+        (image.getWhiteLevel() != imageWhiteLevel) ||
+        (image.getSubcarrier() != imageSubcarrier))
+    {
+        imageSampleRate = image.getSampleRate();
+        imageBlackLevel = image.getBlackLevel();
+        imageWhiteLevel = image.getWhiteLevel();
+        imageSubcarrier = image.getSubcarrier();
+        
+        isConfigurationUpdated = true;
+    }
+    
     return true;
 }
 
-void OpenGLCanvas::configureVideoShader(CanvasDecoder videoDecoder)
+GLuint OpenGLCanvas::getRenderShader()
+{
+    switch (displayConfiguration.videoDecoder)
+    {
+        case CANVAS_DECODER_RGB:
+        case CANVAS_DECODER_MONOCHROME:
+            return shader[OPENGLCANVAS_SHADER_RGB];
+            
+        case CANVAS_DECODER_YUV:
+        case CANVAS_DECODER_YIQ:
+        case CANVAS_DECODER_CXA2025AS:
+            return shader[OPENGLCANVAS_SHADER_COMPOSITE];
+    }
+}
+
+void OpenGLCanvas::configureShaders()
 {
 #ifdef GL_VERSION_2_0
+    GLuint renderShader = getRenderShader();
+    GLuint displayShader = shader[OPENGLCANVAS_SHADER_DISPLAY];
+    
+    if (!renderShader || !displayShader)
+        return;
+    
+    bool isCompositeDecoder = ((displayConfiguration.videoDecoder == CANVAS_DECODER_YUV) ||
+                               (displayConfiguration.videoDecoder == CANVAS_DECODER_YIQ) ||
+                               (displayConfiguration.videoDecoder == CANVAS_DECODER_CXA2025AS));
+    
+    // Render shader
+    glUseProgram(renderShader);
+    
+    // Subcarrier
+    if (isCompositeDecoder)
+        glUniform1f(glGetUniformLocation(renderShader, "subcarrier"),
+                    imageSubcarrier / imageSampleRate);
+    
+    // Color burst
+    if (isCompositeDecoder)
+    {
+        
+    }
+    
+    // Filters
     OEVector w = OEVector::chebyshevWindow(17, 50);
     w = w.normalize();
     
     OEVector wy, wu, wv;
     
-    float sampleRate = image.getSampleRate();
+    float bandwidth = displayConfiguration.videoBandwidth / imageSampleRate;
     
-    float bandwidth = displayConfiguration.videoBandwidth / sampleRate;
-    float lumaBandwidth = displayConfiguration.videoLumaBandwidth / sampleRate;
-    float chromaBandwidth = displayConfiguration.videoChromaBandwidth / sampleRate;
-    
-    if (lumaBandwidth > bandwidth)
-        lumaBandwidth = bandwidth;
-    if (chromaBandwidth > bandwidth)
-        chromaBandwidth = bandwidth;
-    
-    switch (videoDecoder)
+    if (isCompositeDecoder)
     {
-        case CANVAS_DECODER_RGB:
+        float lumaBandwidth = displayConfiguration.videoLumaBandwidth / imageSampleRate;
+        float chromaBandwidth = displayConfiguration.videoChromaBandwidth / imageSampleRate;
+        float iBandwidth = chromaBandwidth + NTSC_IQ_DELTA / imageSampleRate;
+        
+        if (lumaBandwidth > bandwidth)
+            lumaBandwidth = bandwidth;
+        if (chromaBandwidth > bandwidth)
+            chromaBandwidth = bandwidth;
+        if (iBandwidth > bandwidth)
+            iBandwidth = bandwidth;
+        
+        // Switch to video bandwidth when no subcarrier
+        if (imageSubcarrier == 0.0)
         {
-            wy = w * OEVector::lanczosWindow(17, bandwidth);
-            wy = wy.normalize();
-            wu = wv = wy;
-            
-            break;
+            lumaBandwidth = bandwidth;
+            chromaBandwidth = bandwidth;
+            iBandwidth = bandwidth;
         }
-            
-        case CANVAS_DECODER_MONOCHROME:
-        {
-            wy = w * OEVector::lanczosWindow(17, bandwidth);
-            wy = wy.normalize();
-            wu = wv = OEVector(17);
-            
-            break;
-        }
-            
-        case CANVAS_DECODER_YUV:
-        {
-            wy = w * OEVector::lanczosWindow(17, lumaBandwidth);
-            wy = wy.normalize();
-            
+        
+        wy = w * OEVector::lanczosWindow(17, lumaBandwidth);
+        wy = wy.normalize();
+        
+        if (displayConfiguration.videoDecoder == CANVAS_DECODER_YIQ)
+            wu = w * OEVector::lanczosWindow(17, iBandwidth);
+        else
             wu = w * OEVector::lanczosWindow(17, chromaBandwidth);
-            wv = wu = wu.normalize() * 2;
-            break;
-        }
-            
-        case CANVAS_DECODER_YIQ:
-        case CANVAS_DECODER_CXA2025AS:
-        {
-            wy = w * OEVector::lanczosWindow(17, lumaBandwidth);
-            wy = wy.normalize();
-            
-            wu = w * OEVector::lanczosWindow(17, chromaBandwidth);
-            wu = wu.normalize() * 2;
-            
-            chromaBandwidth += NTSC_IQ_DELTA / sampleRate;
-            
-            wv = w * OEVector::lanczosWindow(17, chromaBandwidth);
-            wv = wv.normalize() * 2;
-            break;
-        }
+        wu = wu.normalize() * 2;
+        
+        wv = w * OEVector::lanczosWindow(17, chromaBandwidth);
+        wv = wv.normalize() * 2;
     }
+    else
+    {
+        wy = w * OEVector::lanczosWindow(17, bandwidth);
+        wu = wv = wy = wy.normalize();
+    }
+    
+    glUniform3f(glGetUniformLocation(renderShader, "c0"),
+                wy.getValue(8), wu.getValue(8), wv.getValue(8));
+    glUniform3f(glGetUniformLocation(renderShader, "c1"),
+                wy.getValue(7), wu.getValue(7), wv.getValue(7));
+    glUniform3f(glGetUniformLocation(renderShader, "c2"),
+                wy.getValue(6), wu.getValue(6), wv.getValue(6));
+    glUniform3f(glGetUniformLocation(renderShader, "c3"),
+                wy.getValue(5), wu.getValue(5), wv.getValue(5));
+    glUniform3f(glGetUniformLocation(renderShader, "c4"),
+                wy.getValue(4), wu.getValue(4), wv.getValue(4));
+    glUniform3f(glGetUniformLocation(renderShader, "c5"),
+                wy.getValue(3), wu.getValue(3), wv.getValue(3));
+    glUniform3f(glGetUniformLocation(renderShader, "c6"),
+                wy.getValue(2), wu.getValue(2), wv.getValue(2));
+    glUniform3f(glGetUniformLocation(renderShader, "c7"),
+                wy.getValue(1), wu.getValue(1), wv.getValue(1));
+    glUniform3f(glGetUniformLocation(renderShader, "c8"),
+                wy.getValue(0), wu.getValue(0), wv.getValue(0));
+    
+    // Brigthness
+    float brightness = imageBlackLevel + displayConfiguration.videoBrightness;
+    
+    if (isCompositeDecoder)
+        glUniform3f(glGetUniformLocation(renderShader, "offset"),
+                    brightness, 0, 0);
+    else
+        glUniform3f(glGetUniformLocation(renderShader, "offset"),
+                    brightness, brightness, brightness);
     
     // Decoder matrix
     OEMatrix3 m(1, 0, 0,
                 0, 1, 0,
                 0, 0, 1);
     
-    // Contrast
-    float contrast = displayConfiguration.videoContrast;
-    if (contrast < 0.001)
-        contrast = 0.001;
-    m *= contrast;
+    // Encode
+    if (!isCompositeDecoder)
+    {
+        // Y'PbPr encoding matrix
+        m = OEMatrix3(0.299, -0.168736, 0.5,
+                      0.587, -0.331264, -0.418688,
+                      0.114, 0.5, -0.081312) * m;
+    }
     
-    // Decoder matrices from "Digital Video and HDTV Algorithms and Interfaces"
-    switch (videoDecoder)
+    // Set hue
+    if (displayConfiguration.videoDecoder == CANVAS_DECODER_MONOCHROME)
+        m = OEMatrix3(1, -0.5, 0,
+                      0, 0, 0,
+                      0, 0, 0) * m;
+    
+    // Disable color decoding when no subcarrier
+    if (isCompositeDecoder)
+    {
+        if (imageSubcarrier == 0.0)
+        {
+            m = OEMatrix3(1, 0, 0,
+                          0, 0, 0,
+                          0, 0, 0) * m;
+        }
+    }
+    
+    // Saturation
+    m = OEMatrix3(1, 0, 0,
+                  0, displayConfiguration.videoSaturation, 0,
+                  0, 0, displayConfiguration.videoSaturation) * m;
+    
+    // Hue
+    float hue = 2 * M_PI * displayConfiguration.videoHue;
+    
+    if (displayConfiguration.videoDecoder == CANVAS_DECODER_YIQ)
+        hue -= 33 * M_PI / 180;
+    
+    m = OEMatrix3(1, 0, 0,
+                  0, cosf(hue), -sinf(hue),
+                  0, sinf(hue), cosf(hue)) * m;
+    
+    // Decode
+    switch (displayConfiguration.videoDecoder)
     {
         case CANVAS_DECODER_RGB:
         case CANVAS_DECODER_MONOCHROME:
             // Y'PbPr decoder matrix
-            m *= OEMatrix3(1, 1, 1,
-                           0, -0.344, 1.772,
-                           1.402, -0.714, 0);
+            m = OEMatrix3(1, 1, 1,
+                          0, -0.344136, 1.772,
+                          1.402, -0.714136, 0) * m;
             break;
             
         case CANVAS_DECODER_YUV:
             // Y'UV decoder matrix
-            m *= OEMatrix3(1, 1, 1,
-                           0, -0.394642, 2.032062,
-                           1.139883, -0.580622, 0);
+            m = OEMatrix3(1, 1, 1,
+                          0, -0.394642, 2.032062,
+                          1.139883, -0.580622, 0) * m;
             break;
             
         case CANVAS_DECODER_YIQ:
             // Y'IQ decoder matrix
-            m *= OEMatrix3(1, 1, 1,
-                           0.955986, -0.272013, -1.106740,
-                           0.620825, -0.647204, 1.704230);
-            // Invert IQ
-            m *= OEMatrix3(1, 0, 0,
-                           0, 0, 1,
-                           0, 1, 0);
+            m = OEMatrix3(1, 1, 1,
+                          0.955986, -0.272013, -1.106740,
+                          0.620825, -0.647204, 1.704230) * m;
             break;
             
         case CANVAS_DECODER_CXA2025AS:
             // CXA2025AS decoder matrix
-            m *= OEMatrix3(1, 1, 1,
-                           1.630, -0.378, -1.089,
-                           0.317, -0.466, 1.677);
-            // Invert IQ
-            m *= OEMatrix3(1, 0, 0,
-                           0, 0, 1,
-                           0, 1, 0);
+            m = OEMatrix3(1, 1, 1,
+                          1.630, -0.378, -1.089,
+                          0.317, -0.466, 1.677) * m;
             break;
     }
     
-    // Hue
-    float hue = 2 * M_PI * displayConfiguration.videoHue;
-    m *= OEMatrix3(1, 0, 0,
-                   0, cosf(hue), -sinf(hue),
-                   0, sinf(hue), cosf(hue));
+    // Contrast
+    float contrast = displayConfiguration.videoContrast;
     
-    // Saturation
-    if (isMonochrome)
-        m *= OEMatrix3(1, 0, 0,
-                       0, 0, 0,
-                       0, 0, 0);
+    float videoLevel = (imageWhiteLevel - imageBlackLevel);
+    if (videoLevel > 0)
+        contrast /= videoLevel;
     else
-        m *= OEMatrix3(1, 0, 0,
-                       0, displayConfiguration.videoSaturation, 0,
-                       0, 0, displayConfiguration.videoSaturation);
+        contrast = 0;
     
-    // Encoder matrices
-    switch (displayConfiguration.videoDecoder)
-    {
-        case CANVAS_DECODER_RGB:
-            // Y'PbPr encoding matrix
-            m *= OEMatrix3(0.299, -0.169, 0.5,
-                           0.587, -0.331, -0.419,
-                           0.114, 0.5, -0.081);
-            break;
-            
-        case CANVAS_DECODER_MONOCHROME:
-            // Set Y'PbPr maximum hue
-            m *= OEMatrix3(1, 0.5, 0,
-                           0, 0, 0,
-                           0, 0, 0);
-            break;
-            
-        default:
-            break;
-    }
+    if (contrast < 0)
+        contrast = 0;
     
-    GLuint theShader;
-    switch (videoDecoder)
-    {
-        case CANVAS_DECODER_YUV:
-        case CANVAS_DECODER_YIQ:
-        case CANVAS_DECODER_CXA2025AS:
-            theShader = shader[OPENGLCANVAS_SHADER_COMPOSITE];
-            break;
-            
-        default:
-            theShader = shader[OPENGLCANVAS_SHADER_RGB];
-            break;
-    }
+    m *= contrast;
     
-    if (!theShader)
-        return;
-    
-    glUseProgram(theShader);
-    
-    glUniform3f(glGetUniformLocation(theShader, "c0"),
-                wy.getValue(8), wu.getValue(8), wv.getValue(8));
-    glUniform3f(glGetUniformLocation(theShader, "c1"),
-                wy.getValue(7), wu.getValue(7), wv.getValue(7));
-    glUniform3f(glGetUniformLocation(theShader, "c2"),
-                wy.getValue(6), wu.getValue(6), wv.getValue(6));
-    glUniform3f(glGetUniformLocation(theShader, "c3"),
-                wy.getValue(5), wu.getValue(5), wv.getValue(5));
-    glUniform3f(glGetUniformLocation(theShader, "c4"),
-                wy.getValue(4), wu.getValue(4), wv.getValue(4));
-    glUniform3f(glGetUniformLocation(theShader, "c5"),
-                wy.getValue(3), wu.getValue(3), wv.getValue(3));
-    glUniform3f(glGetUniformLocation(theShader, "c6"),
-                wy.getValue(2), wu.getValue(2), wv.getValue(2));
-    glUniform3f(glGetUniformLocation(theShader, "c7"),
-                wy.getValue(1), wu.getValue(1), wv.getValue(1));
-    glUniform3f(glGetUniformLocation(theShader, "c8"),
-                wy.getValue(0), wu.getValue(0), wv.getValue(0));
-    
-    if (displayConfiguration.videoDecoder == CANVAS_DECODER_RGB)
-        glUniform3f(glGetUniformLocation(theShader, "offset"),
-                    displayConfiguration.videoBrightness,
-                    displayConfiguration.videoBrightness,
-                    displayConfiguration.videoBrightness);
-    else
-        glUniform3f(glGetUniformLocation(theShader, "offset"),
-                    displayConfiguration.videoBrightness / contrast, 0, 0);
-    
-    glUniformMatrix3fv(glGetUniformLocation(theShader, "decoderMatrix"),
+    glUniformMatrix3fv(glGetUniformLocation(renderShader, "decoderMatrix"),
                        1, false, m.getValues());
-#endif
-}
-
-void OpenGLCanvas::configureDisplayShader()
-{
-#ifdef GL_VERSION_2_0
-    GLuint displayShader = shader[OPENGLCANVAS_SHADER_DISPLAY];
     
-    if (!displayShader)
-        return;
-    
+    // Display shader
     glUseProgram(displayShader);
+    
+    // Shadow mask
     glUniform1i(glGetUniformLocation(displayShader, "shadowmask"), 1);
+    
+    // Barrel
     glUniform1f(glGetUniformLocation(displayShader, "barrel"),
                 displayConfiguration.displayBarrel);
+    
+    // Center lighting
     float centerLighting = displayConfiguration.displayCenterLighting;
     if (fabs(centerLighting) < 0.001)
         centerLighting = 0.001;
@@ -920,41 +964,10 @@ void OpenGLCanvas::configureDisplayShader()
 #endif
 }
 
-void OpenGLCanvas::updateDisplayConfiguration()
-{
-    switch (displayConfiguration.videoDecoder)
-    {
-        case CANVAS_DECODER_YUV:
-        case CANVAS_DECODER_YIQ:
-        case CANVAS_DECODER_CXA2025AS:
-            configureVideoShader(displayConfiguration.videoDecoder);
-            configureVideoShader(CANVAS_DECODER_RGB);
-            break;
-            
-        default:
-            configureVideoShader(displayConfiguration.videoDecoder);
-            break;
-    }
-    
-    configureDisplayShader();
-}
-
 void OpenGLCanvas::renderImage()
 {
 #ifdef GL_VERSION_2_0
-    GLuint renderShader;
-    switch (displayConfiguration.videoDecoder)
-    {
-        case CANVAS_DECODER_YUV:
-        case CANVAS_DECODER_YIQ:
-        case CANVAS_DECODER_CXA2025AS:
-            renderShader = shader[OPENGLCANVAS_SHADER_COMPOSITE];
-            break;
-            
-        default:
-            renderShader = shader[OPENGLCANVAS_SHADER_RGB];
-            break;
-    }
+    GLuint renderShader = getRenderShader();
     
     if (!isShaderEnabled || !renderShader)
         return;
@@ -1027,6 +1040,10 @@ void OpenGLCanvas::renderImage()
 
 void OpenGLCanvas::drawDisplayCanvas()
 {
+    GLuint displayShader = shader[OPENGLCANVAS_SHADER_DISPLAY];
+    if (!isShaderEnabled)
+        displayShader = 0;
+    
     // Clear
     glClearColor(0, 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -1069,10 +1086,6 @@ void OpenGLCanvas::drawDisplayCanvas()
     
     // Set shader uniforms
 #ifdef GL_VERSION_2_0
-    GLuint displayShader = shader[OPENGLCANVAS_SHADER_DISPLAY];
-    if (!isShaderEnabled)
-        displayShader = 0;
-    
     if (displayShader)
     {
         glUseProgram(displayShader);
@@ -1230,8 +1243,10 @@ void OpenGLCanvas::drawPaperCanvas()
                                   i * PAPER_SLICE,
                                   imageSize.width,
                                   PAPER_SLICE);
+        
         if (OEMaxY(slice) >= imageSize.height)
             break;
+        
         if (OEMinY(slice) >= imageSize.height)
             slice.size.height = imageSize.height - slice.origin.y;
         
@@ -1240,19 +1255,12 @@ void OpenGLCanvas::drawPaperCanvas()
         glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0,
                         slice.size.width, slice.size.height,
                         getGLFormat(image.getFormat()), GL_UNSIGNED_BYTE,
-                        image.getPixels() + image.getBytesPerRow() *
-                        (int)OEMinY(slice));
+                        image.getPixels() + image.getBytesPerRow() * (OEUInt32) OEMinY(slice));
         
         OERect textureRect = OEMakeRect(0, 0,
-                                        OEWidth(slice) / texSize.width,
-                                        OEHeight(slice) / texSize.height);
-        OERect vertexRect = OEMakeRect(-1,
-                                       2 * (OEMinY(slice) -
-                                            OEMinY(viewportCanvas)) /
-                                       OEHeight(viewportCanvas) - 1,
-                                       2,
-                                       2 * slice.size.height /
-                                       OEHeight(viewportCanvas));
+                                        OEWidth(slice) / texSize.width, OEHeight(slice) / texSize.height);
+        OERect vertexRect = OEMakeRect(-1, 2 * (OEMinY(slice) - OEMinY(viewportCanvas)) / OEHeight(viewportCanvas) - 1,
+                                       2, 2 * slice.size.height / OEHeight(viewportCanvas));
         
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);

@@ -38,9 +38,9 @@
         <property name="videoHorizontalSize" value="1"/>
         <property name="videoVerticalCenter" value="0"/>
         <property name="videoVerticalSize" value="1"/>
-        <property name="videoBandwidth" value="6000000.0"/>
-        <property name="videoLumaBandwidth" value="2000000.0"/>
-        <property name="videoChromaBandwidth" value="600000.0"/>
+        <property name="videoBandwidth" value="6000000"/>
+        <property name="videoLumaBandwidth" value="2000000"/>
+        <property name="videoChromaBandwidth" value="600000"/>
         <property name="displayBarrel" value="0.05"/>
         <property name="displayScanlineAlpha" value="0.05"/>
         <property name="displayCenterLighting" value="1"/>

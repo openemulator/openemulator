@@ -20,9 +20,9 @@ OEImage::OEImage()
     size = OEMakeSize(0, 0);
     
     sampleRate = 14318180;
+    blackLevel = 0;
+    whiteLevel = 1;
     interlace = 0;
-    videoLevels.black = 0;
-    videoLevels.white = 1;
     subcarrier = 0;
 }
 
@@ -36,7 +36,8 @@ OEImage::OEImage(OEImage& image, OERect rect)
     
     sampleRate = image.sampleRate;
     interlace = image.interlace;
-    videoLevels = image.videoLevels;
+    blackLevel = image.blackLevel;
+    whiteLevel = image.whiteLevel;
     subcarrier = image.subcarrier;
     colorBurst = image.colorBurst;
     phaseAlternation = image.phaseAlternation;
@@ -123,14 +124,24 @@ OEUInt32 OEImage::getBytesPerRow()
     return getBytesPerPixel() * (OEUInt32)size.width;
 }
 
-void OEImage::setVideoLevels(OEImageVideoLevels value)
+void OEImage::setBlackLevel(float value)
 {
-    videoLevels = value;
+    blackLevel = value;
 }
 
-OEImageVideoLevels OEImage::getVideoLevels()
+float OEImage::getBlackLevel()
 {
-    return videoLevels;
+    return blackLevel;
+}
+
+void OEImage::setWhiteLevel(float value)
+{
+    whiteLevel = value;
+}
+
+float OEImage::getWhiteLevel()
+{
+    return whiteLevel;
 }
 
 void OEImage::setInterlace(float value)
@@ -256,7 +267,7 @@ void OEImage::print(OEImage& image, OEPoint origin)
             OEImagePixel p1 = getPixel(x + origin.x, y + origin.y);
             OEImagePixel p2 = image.getPixel(x, y);
             
-            setPixel(x + origin.x, y + origin.y, subtractPixel(p1, p2));
+            setPixel(x + origin.x, y + origin.y, darken(p1, p2));
         }
     
     return;
@@ -366,7 +377,7 @@ void OEImage::setPixel(OEUInt32 x, OEUInt32 y, OEImagePixel value)
     }
 }
 
-OEImagePixel OEImage::subtractPixel(OEImagePixel p1, OEImagePixel p2)
+OEImagePixel OEImage::darken(OEImagePixel p1, OEImagePixel p2)
 {
     OEInt32 r = (OEInt32) p1.r + (OEInt32) p2.r - 255;
     OEInt32 g = (OEInt32) p1.g + (OEInt32) p2.g - 255;
