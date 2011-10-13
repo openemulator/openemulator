@@ -12,10 +12,10 @@ requires these external libraries:
  
 * libxml2 (http://www.xmlsoft.org/)
 * libzip (http://www.nih.at/libzip/)
+* libpng (http://www.libpng.org/)
 * portaudio (http://www.portaudio.com/)
 * libsndfile (http://www.mega-nerd.com/libsndfile/)
 * libsamplerate (http://www.mega-nerd.com/SRC/)
-* libpng (http://www.libpng.org/)
 
   If you make a binary distribution, include a pointer to the official
 distribution site:
@@ -36,10 +36,10 @@ commands:
 
   sudo apt-get install libxml2-dev
   sudo apt-get install libzip-dev
+  sudo apt-get install libpng12-dev
   sudo apt-get install portaudio19-dev
   sudo apt-get install libsndfile1-dev
   sudo apt-get install libsamplerate1-dev
-  sudo apt-get install libpng12-dev
 
 Mac OS X
 ========
@@ -53,10 +53,16 @@ them is through MacPorts:
   Download and install MacPorts, then try the following commands:
 
   sudo port install libzip +universal
+  sudo port install libpng +universal
   sudo port install portaudio +universal
   sudo port install libsndfile +universal
   sudo port install libsamplerate +universal
-  sudo port install libpng +universal
+
+  To produce binaries that work with Mac OS X 10.6, edit macports.conf
+and add:
+
+  universal_target        10.6
+  universal_sysroot       /Developer/SDKs/MacOSX10.6.sdk
 
 Windows
 =======

@@ -84,8 +84,8 @@ bool Monitor::setValue(string name, string value)
         else if (value == "Bayer")
             configuration.displayShadowMask = CANVAS_SHADOWMASK_BAYER;
     }
-    else if (name == "displayPersistance")
-        configuration.displayPersistance = getFloat(value);
+    else if (name == "displayPersistence")
+        configuration.displayPersistence = getFloat(value);
     else
         return false;
     
@@ -152,8 +152,8 @@ bool Monitor::getValue(string name, string& value)
         else if (configuration.displayShadowMask == CANVAS_SHADOWMASK_BAYER)
             value = "Bayer";
     }
-    else if (name == "displayPersistance")
-        value = getString(configuration.displayPersistance);
+    else if (name == "displayPersistence")
+        value = getString(configuration.displayPersistence);
     else
         return false;
     

@@ -24,6 +24,9 @@ OEImage::OEImage()
     whiteLevel = 1;
     interlace = 0;
     subcarrier = 0;
+    
+    colorBurst.push_back(0);
+    phaseAlternation.push_back(false);
 }
 
 OEImage::OEImage(OEImage& image, OERect rect)
@@ -109,6 +112,11 @@ OEUInt32 OEImage::getBytesPerPixel()
     }
 }
 
+OEUInt32 OEImage::getBytesPerRow()
+{
+    return getBytesPerPixel() * (OEUInt32)size.width;
+}
+
 void OEImage::setSampleRate(float value)
 {
     sampleRate = value;
@@ -117,11 +125,6 @@ void OEImage::setSampleRate(float value)
 float OEImage::getSampleRate()
 {
     return sampleRate;
-}
-
-OEUInt32 OEImage::getBytesPerRow()
-{
-    return getBytesPerPixel() * (OEUInt32)size.width;
 }
 
 void OEImage::setBlackLevel(float value)
@@ -226,7 +229,8 @@ bool OEImage::load(string path)
                             format = OEIMAGE_RGB;
                         else
                             format = OEIMAGE_RGBA;
-                        setSize(OEMakeSize(width, height));
+                        size = OEMakeSize(width, height);
+                        pixels.resize(getBytesPerRow() * size.height);
                         
                         // Copy image
                         OEUInt8 **rows = (unsigned char **) png_get_rows(png, info);
@@ -301,14 +305,14 @@ void OEImage::setSize(OESize value, OEUInt8 fillByte)
         pixels.resize(getBytesPerRow() * size.height);
         
         if (size.height > oldSize.height)
-            memset(getPixels(), fillByte, dstBytesPerRow * (size.height - oldSize.height));
+            memset(getPixels(), fillByte, getBytesPerRow() * (size.height - oldSize.height));
     }
     else if (size.width > oldSize.width)
     {
         pixels.resize(getBytesPerRow() * size.height);
         
         if (size.height > oldSize.height)
-            memset(getPixels() + height * dstBytesPerRow, fillByte,
+            memset(getPixels() + height * getBytesPerRow(), fillByte,
                    (size.height - oldSize.height) * dstBytesPerRow);
         
         OEUInt8 *src = getPixels() + (height - 1) * srcBytesPerRow;

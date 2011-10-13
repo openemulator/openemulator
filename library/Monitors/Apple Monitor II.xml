@@ -27,7 +27,7 @@
         <property name="displayBarrel" value="0.1"/>
         <property name="displayScanlineAlpha" value="0.5"/>
         <property name="displayCenterLighting" value="0.5"/>
-        <property name="displayPersistance" value="0.4"/>
+        <property name="displayPersistence" value="0.4"/>
     </component>
     
 </edl>

@@ -123,6 +123,7 @@ typedef enum
 // * displayPixelDensity is the number of resolved pixels of the device per inch
 // * The shadow mask dot pitch measures the spacing of the pixels in mm
 // * Video bandwidths are in Hz
+// * Persistence is in frames
 
 typedef enum
 {
@@ -162,11 +163,11 @@ public:
         displayPixelDensity = 72;
         displayBarrel = 0;
         displayScanlineAlpha = 0;
-        displayCenterLighting = 1;
         displayShadowMaskAlpha = 0;
         displayShadowMaskDotPitch = 1;
         displayShadowMask = CANVAS_SHADOWMASK_TRIAD;
-        displayPersistance = 0;
+        displayPersistence = 0;
+        displayCenterLighting = 1;
     }
     
     CanvasDecoder videoDecoder;
@@ -184,11 +185,11 @@ public:
     float displayPixelDensity;
     float displayBarrel;
     float displayScanlineAlpha;
-    float displayCenterLighting;
     float displayShadowMaskAlpha;
     float displayShadowMaskDotPitch;
     CanvasShadowMask displayShadowMask;
-    float displayPersistance;
+    float displayPersistence;
+    float displayCenterLighting;
 };
 
 // Paper canvas configuration:

@@ -1,4 +1,7 @@
 ==2011-10==
+* Fixed problem when resizing and no video is generated
+* Implemented OpenGLCanvas interlace
+* Implemented OpenGLCanvas color bursts
 * Improved OEImage interface
 
 ==2011-09==

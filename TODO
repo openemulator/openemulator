@@ -1,8 +1,6 @@
-=To-Do=
-
 ==1.0==
-* Implement screen persistance with IIR filtering
-* Fix problem when resizing (with half, actual or double menu) and no video stream is generated
+* Implement display persistence
+* Fix Apple-1 cassette interface noise, probably related to overflow
 * Fix opening emulations (sometimes dragging disk images to canvas opens the template chooser)
 * Fix Cocoa initial window sizes
 
@@ -47,6 +45,11 @@
 ==Devices==
 * Implement video capture interface
 * Implement Digisector DS-65
+
+==Canvas==
+* Implement shadow mask with width depending on strength
+* Implement video bloom
+* Implement RGB>YIQ>RGB video processing in the GPU
 
 ==Framework==
 * Find a way so that ROM images can be stored in packages (but not in the resources directory)... use RAM block and read-only memory mapping?

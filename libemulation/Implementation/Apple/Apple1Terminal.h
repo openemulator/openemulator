@@ -50,7 +50,7 @@ private:
     OEUInt32 cursorCount;
     
     ControlBusPowerState powerState;
-    
+        
     bool isRTS;
     queue<OEUInt8> pasteBuffer;
     

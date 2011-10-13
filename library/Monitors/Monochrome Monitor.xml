@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
+<edl version="1.0" generator="OpenEmulator" build="700" label="Monochrome Monitor" image="images/Generic/Monochrome Monitor.png" description="A generic monochrome monitor that can be connected to any composite video source.">
+    
+    <device id="monochromeMonitor" label="Monochrome Monitor" image="images/Generic/Monochrome Monitor.png">
+        <setting ref="monochromeMonitor.monitor" name="videoBrightness" label="Brightness" type="slider" options="-1.0,1.0"/>
+        <setting ref="monochromeMonitor.monitor" name="videoContrast" label="Contrast" type="slider" options="0.0,2.0,1.0"/>
+        <setting ref="monochromeMonitor.monitor" name="videoSaturation" label="Saturation" type="slider" options="0.0,2.0,1.0"/>
+        <setting ref="monochromeMonitor.monitor" name="videoHue" label="Hue" type="slider" options="-0.5,0.5,0.0"/>
+        <setting ref="monochromeMonitor.monitor" name="videoHorizontalCenter" label="Horizontal Center" type="slider" options="-0.1,0.1"/>
+        <setting ref="monochromeMonitor.monitor" name="videoHorizontalSize" label="Horizontal Size" type="slider" options="0.8,1.2"/>
+        <setting ref="monochromeMonitor.monitor" name="videoVerticalCenter" label="Vertical Center" type="slider" options="-0.1,0.1"/>
+        <setting ref="monochromeMonitor.monitor" name="videoVerticalSize" label="Vertical Size" type="slider" options="0.8,1.2"/>
+        <setting ref="monochromeMonitor.monitor" name="videoBandwidth" label="Video Bandwidth" type="slider" options="0.0,7159090.0"/>
+        <setting ref="monochromeMonitor.monitor" name="displayBarrel" label="Barrel" type="slider" options="0.0,1.0"/>
+        <setting ref="monochromeMonitor.monitor" name="displayScanlineAlpha" label="Scanline Alpha" type="slider" options="0.0,1.0"/>
+        <setting ref="monochromeMonitor.monitor" name="displayPersistence" label="Persistence" type="slider" options="0.0,1.0"/>
+        <setting ref="monochromeMonitor.monitor" name="displayCenterLighting" label="Center Lighting" type="slider" options="0.0,1.0"/>
+    </device>
+    <connector id="monochromeMonitor.connector" type="Composite Video Port">
+        <inlet ref="monochromeMonitor.monitor" property="controlBus" outletRef="controlBus"/>
+    </connector>
+    <component id="monochromeMonitor.monitor" class="Monitor">
+        <property name="device" ref="monochromeMonitor"/>
+        <property name="controlBus" ref=""/>
+        <property name="videoDecoder" value="Monochrome"/>
+        <property name="videoBrightness" value="0.1"/>
+        <property name="videoContrast" value="0.8"/>
+        <property name="videoSaturation" value="1.2"/>
+        <property name="videoHue" value="0.38"/>
+        <property name="videoHorizontalCenter" value="0"/>
+        <property name="videoHorizontalSize" value="1"/>
+        <property name="videoVerticalCenter" value="0"/>
+        <property name="videoVerticalSize" value="1"/>
+        <property name="videoBandwidth" value="18000000"/>
+        <property name="displayBarrel" value="0.1"/>
+        <property name="displayScanlineAlpha" value="0.5"/>
+        <property name="displayPersistence" value="0"/>
+        <property name="displayCenterLighting" value="0.5"/>
+    </component>
+    
+</edl>
