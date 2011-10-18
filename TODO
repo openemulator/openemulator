@@ -1,8 +1,9 @@
 ==1.0==
-* Implement display persistence
+* Fix brightness/contrast in OpenGLCanvas
 * Fix Apple-1 cassette interface noise, probably related to overflow
 * Fix opening emulations (sometimes dragging disk images to canvas opens the template chooser)
 * Fix Cocoa initial window sizes
+* Fix removing a window when in fullscreen mode
 
 ==1.0.1==
 * Implement Apple II

@@ -301,7 +301,7 @@
 
 // Delegate
 
-- (NSSize)windowWillResize:(NSWindow *)window toSize:(NSSize)proposedFrameSize
+/*- (NSSize)windowWillResize:(NSWindow *)window toSize:(NSSize)proposedFrameSize
 {
     if ([fCanvasView isDisplayCanvas])
     {
@@ -346,7 +346,7 @@
     }
     
     return proposedFrameSize;
-}
+}*/
 
 - (void)windowDidResize:(NSNotification *)notification
 {

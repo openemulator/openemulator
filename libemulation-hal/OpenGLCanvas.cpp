@@ -30,7 +30,7 @@
 
 static const char *rgbShader = "\
 uniform sampler2D texture;\n\
-uniform vec2 texture_size;\n\
+uniform vec2 textureSize;\n\
 uniform vec3 c0, c1, c2, c3, c4, c5, c6, c7, c8;\n\
 uniform vec3 offset;\n\
 uniform mat3 decoderMatrix;\n\
@@ -40,7 +40,7 @@ vec3 pixel(vec2 q)\n\
 return texture2D(texture, q).rgb;\n\
 }\n\
 \n\
-vec3 pixels(vec2 q, float i)\n\
+vec3 pixels(in vec2 q, in float i)\n\
 {\n\
 return pixel(vec2(q.x + i, q.y)) + pixel(vec2(q.x - i, q.y));\n\
 }\n\
@@ -49,33 +49,33 @@ void main(void)\n\
 {\n\
 vec2 q = gl_TexCoord[0].xy;\n\
 vec3 c = pixel(q) * c0;\n\
-c += pixels(q, 1.0 / texture_size.x) * c1;\n\
-c += pixels(q, 2.0 / texture_size.x) * c2;\n\
-c += pixels(q, 3.0 / texture_size.x) * c3;\n\
-c += pixels(q, 4.0 / texture_size.x) * c4;\n\
-c += pixels(q, 5.0 / texture_size.x) * c5;\n\
-c += pixels(q, 6.0 / texture_size.x) * c6;\n\
-c += pixels(q, 7.0 / texture_size.x) * c7;\n\
-c += pixels(q, 8.0 / texture_size.x) * c8;\n\
+c += pixels(q, 1.0 / textureSize.x) * c1;\n\
+c += pixels(q, 2.0 / textureSize.x) * c2;\n\
+c += pixels(q, 3.0 / textureSize.x) * c3;\n\
+c += pixels(q, 4.0 / textureSize.x) * c4;\n\
+c += pixels(q, 5.0 / textureSize.x) * c5;\n\
+c += pixels(q, 6.0 / textureSize.x) * c6;\n\
+c += pixels(q, 7.0 / textureSize.x) * c7;\n\
+c += pixels(q, 8.0 / textureSize.x) * c8;\n\
 gl_FragColor = vec4(decoderMatrix * (c + offset), 1.0);\n\
 }";
 
 static const char *compositeShader = "\
 uniform sampler2D texture;\n\
-uniform vec2 texture_size;\n\
+uniform vec2 textureSize;\n\
 uniform float subcarrier;\n\
-uniform sampler1D phase_info;\n\
+uniform sampler1D phaseInfo;\n\
 uniform vec3 c0, c1, c2, c3, c4, c5, c6, c7, c8;\n\
 uniform vec3 offset;\n\
 uniform mat3 decoderMatrix;\n\
 \n\
 float PI = 3.14159265358979323846264;\n\
 \n\
-vec3 pixel(vec2 q)\n\
+vec3 pixel(in vec2 q)\n\
 {\n\
 vec3 c = texture2D(texture, q).rgb;\n\
-vec2 p = texture1D(phase_info, q.y).xy;\n\
-float phase = 2.0 * PI * (subcarrier * texture_size.x * q.x + p.x);\n\
+vec2 p = texture1D(phaseInfo, q.y).rg;\n\
+float phase = 2.0 * PI * (subcarrier * textureSize.x * q.x + p.x);\n\
 return c * vec3(1.0, sin(phase), (1.0 - 2.0 * p.y) * cos(phase));\n\
 }\n\
 \n\
@@ -86,53 +86,58 @@ return pixel(vec2(q.x + i, q.y)) + pixel(vec2(q.x - i, q.y));\n\
 \n\
 void main(void)\n\
 {\n\
-vec2 q = gl_TexCoord[0].xy;\n\
+vec2 q = gl_TexCoord[0].st;\n\
 vec3 c = pixel(q) * c0;\n\
-c += pixels(q, 1.0 / texture_size.x) * c1;\n\
-c += pixels(q, 2.0 / texture_size.x) * c2;\n\
-c += pixels(q, 3.0 / texture_size.x) * c3;\n\
-c += pixels(q, 4.0 / texture_size.x) * c4;\n\
-c += pixels(q, 5.0 / texture_size.x) * c5;\n\
-c += pixels(q, 6.0 / texture_size.x) * c6;\n\
-c += pixels(q, 7.0 / texture_size.x) * c7;\n\
-c += pixels(q, 8.0 / texture_size.x) * c8;\n\
+c += pixels(q, 1.0 / textureSize.x) * c1;\n\
+c += pixels(q, 2.0 / textureSize.x) * c2;\n\
+c += pixels(q, 3.0 / textureSize.x) * c3;\n\
+c += pixels(q, 4.0 / textureSize.x) * c4;\n\
+c += pixels(q, 5.0 / textureSize.x) * c5;\n\
+c += pixels(q, 6.0 / textureSize.x) * c6;\n\
+c += pixels(q, 7.0 / textureSize.x) * c7;\n\
+c += pixels(q, 8.0 / textureSize.x) * c8;\n\
 gl_FragColor = vec4(decoderMatrix * (c + offset), 1.0);\n\
 }";
 
 static const char *displayShader = "\
 uniform sampler2D texture;\n\
-uniform vec2 texture_size;\n\
+uniform vec2 textureSize;\n\
 uniform float barrel;\n\
-uniform vec2 barrel_center;\n\
-uniform float scanline_alpha;\n\
-uniform float center_lighting;\n\
-uniform sampler2D shadowmask;\n\
-uniform vec2 shadowmask_scale;\n\
-uniform vec2 shadowmask_translate;\n\
-uniform float shadowmask_alpha;\n\
-uniform sampler2D last;\n\
-uniform float persistence;\n\
+uniform vec2 barrelSize;\n\
+uniform float scanlineAlpha;\n\
+uniform sampler2D shadowMask;\n\
+uniform vec2 shadowMaskSize;\n\
+uniform float shadowMaskAlpha;\n\
+uniform float centerLighting;\n\
+uniform sampler2D persistence;\n\
+uniform vec2 persistenceSize;\n\
+uniform vec2 persistenceOrigin;\n\
+uniform float persistenceAlpha;\n\
 \n\
 float PI = 3.14159265358979323846264;\n\
 \n\
 void main(void)\n\
 {\n\
-vec2 q = gl_TexCoord[0].xy;\n\
-\n\
-vec2 qc = q - barrel_center;\n\
-q += barrel * qc * dot(qc, qc);\n\
+vec2 qc = (gl_TexCoord[1].st - vec2(0.5, 0.5)) * barrelSize;\n\
+vec2 qb = barrel * qc * dot(qc, qc);\n\
+vec2 q = gl_TexCoord[0].st + qb;\n\
 \n\
 vec3 c = texture2D(texture, q).rgb;\n\
-float scanline = sin(PI * texture_size.y * q.y);\n\
-c *= mix(1.0, scanline * scanline, scanline_alpha);\n\
-vec2 lighting = qc * center_lighting;\n\
+\n\
+float scanline = sin(PI * textureSize.y * q.y);\n\
+c *= mix(1.0, scanline * scanline, scanlineAlpha);\n\
+\n\
+vec3 mask = texture2D(shadowMask, (gl_TexCoord[1].st + qb) * shadowMaskSize).rgb;\n\
+c *= mix(vec3(1.0, 1.0, 1.0), mask, shadowMaskAlpha);\n\
+\n\
+vec2 lighting = qc * centerLighting;\n\
 c *= exp(-dot(lighting, lighting));\n\
-vec3 m = texture2D(shadowmask, q * shadowmask_scale + shadowmask_translate).rgb;\n\
-c *= mix(vec3(1.0, 1.0, 1.0), m, shadowmask_alpha);\n\
+\n\
+vec2 qp = gl_TexCoord[1].st * persistenceSize + persistenceOrigin;\n\
+c = max(c, texture2D(persistence, qp).rgb * persistenceAlpha - 0.5 / 256.0);\n\
+\n\
 gl_FragColor = vec4(c, 1.0);\n\
 }";
-
-// c = min(c, texture2D(last, gl_TexCoord[0].xy) - persistance);\n\
 
 OpenGLCanvas::OpenGLCanvas(string resourcePath)
 {
@@ -163,6 +168,8 @@ OpenGLCanvas::OpenGLCanvas(string resourcePath)
     bezel = CANVAS_BEZEL_NONE;
     isBezelDrawRequired = false;
     isBezelCapture = false;
+    
+    persistenceTexRect = OEMakeRect(0, 0, 0, 0);
 }
 
 OpenGLCanvas::~OpenGLCanvas()
@@ -474,14 +481,14 @@ void OpenGLCanvas::draw()
 
 bool OpenGLCanvas::initOpenGL()
 {
-    for (int i = 0; i < OPENGLCANVAS_TEXTURE_END; i++)
+    for (int i = 0; i < OPENGLCANVAS_TEXTUREEND; i++)
     {
         texture[i] = 0;
         textureSize[i] = OEMakeSize(0, 0);
     }
     
     isConfigurationUpdated = true;
-    for (int i = 0; i < OPENGLCANVAS_SHADER_END; i++)
+    for (int i = 0; i < OPENGLCANVAS_SHADEREND; i++)
         shader[i] = 0;
     
     capture = OPENGLCANVAS_CAPTURE_NONE;
@@ -499,7 +506,8 @@ bool OpenGLCanvas::initOpenGL()
     glEnable(GL_TEXTURE_1D);
     glEnable(GL_TEXTURE_2D);
     
-    glGenTextures(OPENGLCANVAS_TEXTURE_END, texture);
+    glGenTextures(OPENGLCANVAS_TEXTUREEND, texture);
+    
     loadTextures();
     
     glPixelStorei(GL_PACK_ALIGNMENT, 1);
@@ -514,7 +522,7 @@ bool OpenGLCanvas::initOpenGL()
 
 void OpenGLCanvas::freeOpenGL()
 {
-    glDeleteTextures(OPENGLCANVAS_TEXTURE_END, texture);
+    glDeleteTextures(OPENGLCANVAS_TEXTUREEND, texture);
     
     deleteShaders();
     
@@ -536,21 +544,21 @@ GLuint OpenGLCanvas::getGLFormat(OEImageFormat format)
 void OpenGLCanvas::loadTextures()
 {
     loadTexture("images/Host/Shadow Mask Triad.png", true,
-                OPENGLCANVAS_TEXTURE_SHADOWMASK_TRIAD);
+                OPENGLCANVAS_SHADOWMASK_TRIAD);
     loadTexture("images/Host/Shadow Mask Inline.png", true,
-                OPENGLCANVAS_TEXTURE_SHADOWMASK_INLINE);
+                OPENGLCANVAS_SHADOWMASK_INLINE);
     loadTexture("images/Host/Shadow Mask Aperture.png", true,
-                OPENGLCANVAS_TEXTURE_SHADOWMASK_APERTURE);
+                OPENGLCANVAS_SHADOWMASK_APERTURE);
     loadTexture("images/Host/Shadow Mask LCD.png", true,
-                OPENGLCANVAS_TEXTURE_SHADOWMASK_LCD);
+                OPENGLCANVAS_SHADOWMASK_LCD);
     loadTexture("images/Host/Shadow Mask Bayer.png", true,
-                OPENGLCANVAS_TEXTURE_SHADOWMASK_BAYER);
+                OPENGLCANVAS_SHADOWMASK_BAYER);
     loadTexture("images/Host/Bezel Power.png", false,
-                OPENGLCANVAS_TEXTURE_BEZEL_POWER);
+                OPENGLCANVAS_BEZEL_POWER);
     loadTexture("images/Host/Bezel Pause.png", false,
-                OPENGLCANVAS_TEXTURE_BEZEL_PAUSE);
+                OPENGLCANVAS_BEZEL_PAUSE);
     loadTexture("images/Host/Bezel Capture.png", false,
-                OPENGLCANVAS_TEXTURE_BEZEL_CAPTURE);
+                OPENGLCANVAS_BEZEL_CAPTURE);
 }
 
 void OpenGLCanvas::loadTexture(string path, bool isMipmap, int textureIndex)
@@ -566,19 +574,15 @@ void OpenGLCanvas::loadTexture(string path, bool isMipmap, int textureIndex)
                           image.getSize().width, image.getSize().height,
                           getGLFormat(image.getFormat()),
                           GL_UNSIGNED_BYTE, image.getPixels());
-        
-        glBindTexture(GL_TEXTURE_2D, 0);
     }
     else
     {
         glBindTexture(GL_TEXTURE_2D, texture[textureIndex]);
         
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
                      image.getSize().width, image.getSize().height,
                      0,
                      getGLFormat(image.getFormat()), GL_UNSIGNED_BYTE, image.getPixels());
-        
-        glBindTexture(GL_TEXTURE_2D, 0);
     }
     
     textureSize[textureIndex] = image.getSize();
@@ -610,24 +614,22 @@ void OpenGLCanvas::updateTextureSize(int textureIndex, OESize size)
                  texSize.width, texSize.height,
                  0,
                  GL_LUMINANCE, GL_UNSIGNED_BYTE, &dummy.front());
-    
-    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void OpenGLCanvas::loadShaders()
 {
     deleteShaders();
     
-    loadShader(OPENGLCANVAS_SHADER_RGB, rgbShader);
-    loadShader(OPENGLCANVAS_SHADER_COMPOSITE, compositeShader);
-    loadShader(OPENGLCANVAS_SHADER_DISPLAY, displayShader);
+    loadShader(OPENGLCANVAS_RGB, rgbShader);
+    loadShader(OPENGLCANVAS_COMPOSITE, compositeShader);
+    loadShader(OPENGLCANVAS_DISPLAY, displayShader);
 }
 
 void OpenGLCanvas::deleteShaders()
 {
-    deleteShader(OPENGLCANVAS_SHADER_RGB);
-    deleteShader(OPENGLCANVAS_SHADER_COMPOSITE);
-    deleteShader(OPENGLCANVAS_SHADER_DISPLAY);
+    deleteShader(OPENGLCANVAS_RGB);
+    deleteShader(OPENGLCANVAS_COMPOSITE);
+    deleteShader(OPENGLCANVAS_DISPLAY);
 }
 
 void OpenGLCanvas::loadShader(GLuint shaderIndex, const char *source)
@@ -708,17 +710,16 @@ void OpenGLCanvas::deleteShader(GLuint shaderIndex)
 bool OpenGLCanvas::uploadImage()
 {
     // Upload image
-    updateTextureSize(OPENGLCANVAS_TEXTURE_IMAGE_IN, image.getSize());
+    updateTextureSize(OPENGLCANVAS_IMAGE_IN, image.getSize());
     
-    glBindTexture(GL_TEXTURE_2D, texture[OPENGLCANVAS_TEXTURE_IMAGE_IN]);
+    glBindTexture(GL_TEXTURE_2D, texture[OPENGLCANVAS_IMAGE_IN]);
     
     glTexSubImage2D(GL_TEXTURE_2D, 0,
                     0, 0,
                     image.getSize().width, image.getSize().height,
                     getGLFormat(image.getFormat()), GL_UNSIGNED_BYTE, image.getPixels());
     
-    glBindTexture(GL_TEXTURE_2D, 0);
-    
+    // Update configuration
     if ((image.getSampleRate() != imageSampleRate) ||
         (image.getBlackLevel() != imageBlackLevel) ||
         (image.getWhiteLevel() != imageWhiteLevel) ||
@@ -747,14 +748,12 @@ bool OpenGLCanvas::uploadImage()
         phaseInfo[3 * x + 1] = phaseAlternation[x % phaseAlternation.size()];
     }
     
-    glBindTexture(GL_TEXTURE_1D, texture[OPENGLCANVAS_TEXTURE_IMAGE_PHASEINFO]);
+    glBindTexture(GL_TEXTURE_1D, texture[OPENGLCANVAS_IMAGE_PHASEINFO]);
     
     glTexImage1D(GL_TEXTURE_1D, 0, GL_RGB,
                  texSize,
                  0,
                  GL_RGB, GL_FLOAT, &phaseInfo.front());
-    
-    glBindTexture(GL_TEXTURE_1D, 0);
     
     return true;
 }
@@ -765,12 +764,12 @@ GLuint OpenGLCanvas::getRenderShader()
     {
         case CANVAS_DECODER_RGB:
         case CANVAS_DECODER_MONOCHROME:
-            return shader[OPENGLCANVAS_SHADER_RGB];
+            return shader[OPENGLCANVAS_RGB];
             
         case CANVAS_DECODER_YUV:
         case CANVAS_DECODER_YIQ:
         case CANVAS_DECODER_CXA2025AS:
-            return shader[OPENGLCANVAS_SHADER_COMPOSITE];
+            return shader[OPENGLCANVAS_COMPOSITE];
     }
 }
 
@@ -778,12 +777,12 @@ void OpenGLCanvas::configureShaders()
 {
 #ifdef GL_VERSION_2_0
     GLuint renderShader = getRenderShader();
-    GLuint displayShader = shader[OPENGLCANVAS_SHADER_DISPLAY];
+    GLuint displayShader = shader[OPENGLCANVAS_DISPLAY];
     
     if (!renderShader || !displayShader)
         return;
     
-    bool isCompositeDecoder = (renderShader == shader[OPENGLCANVAS_SHADER_COMPOSITE]);
+    bool isCompositeDecoder = (renderShader == shader[OPENGLCANVAS_COMPOSITE]);
     
     // Render shader
     glUseProgram(renderShader);
@@ -963,18 +962,27 @@ void OpenGLCanvas::configureShaders()
     // Display shader
     glUseProgram(displayShader);
     
-    // Shadow mask
-    glUniform1i(glGetUniformLocation(displayShader, "shadowmask"), 1);
-    
     // Barrel
     glUniform1f(glGetUniformLocation(displayShader, "barrel"),
                 displayConfiguration.displayBarrel);
+    
+    // Shadow mask
+    glUniform1i(glGetUniformLocation(displayShader, "shadowMask"), 1);
+    glUniform1f(glGetUniformLocation(displayShader, "shadowMaskAlpha"),
+                displayConfiguration.displayShadowMaskAlpha);
+    
+    // Persistence
+    float frameRate = 60.0;
+    
+    glUniform1f(glGetUniformLocation(displayShader, "persistenceAlpha"),
+                displayConfiguration.displayPersistence /
+                (1.0 / frameRate + displayConfiguration.displayPersistence));
     
     // Center lighting
     float centerLighting = displayConfiguration.displayCenterLighting;
     if (fabs(centerLighting) < 0.001)
         centerLighting = 0.001;
-    glUniform1f(glGetUniformLocation(displayShader, "center_lighting"),
+    glUniform1f(glGetUniformLocation(displayShader, "centerLighting"),
                 1.0 / centerLighting - 1.0);
     
     glUseProgram(0);
@@ -989,25 +997,25 @@ void OpenGLCanvas::renderImage()
     if (!isShaderEnabled || !renderShader)
         return;
     
-    bool isCompositeDecoder = (renderShader == shader[OPENGLCANVAS_SHADER_COMPOSITE]);
+    bool isCompositeDecoder = (renderShader == shader[OPENGLCANVAS_COMPOSITE]);
     
     glUseProgram(renderShader);
     
-    OESize texSize = textureSize[OPENGLCANVAS_TEXTURE_IMAGE_IN];
+    OESize texSize = textureSize[OPENGLCANVAS_IMAGE_IN];
     
-    updateTextureSize(OPENGLCANVAS_TEXTURE_IMAGE_DECODED, texSize);
+    updateTextureSize(OPENGLCANVAS_IMAGE_DECODED, texSize);
     
     glUniform1i(glGetUniformLocation(renderShader, "texture"), 0);
-    glUniform2f(glGetUniformLocation(renderShader, "texture_size"),
+    glUniform2f(glGetUniformLocation(renderShader, "textureSize"),
                 texSize.width, texSize.height);
     
     if (isCompositeDecoder)
     {
-        glUniform1i(glGetUniformLocation(renderShader, "phase_info"), 1);
+        glUniform1i(glGetUniformLocation(renderShader, "phaseInfo"), 1);
         
         glActiveTexture(GL_TEXTURE1);
         
-        glBindTexture(GL_TEXTURE_1D, texture[OPENGLCANVAS_TEXTURE_IMAGE_PHASEINFO]);
+        glBindTexture(GL_TEXTURE_1D, texture[OPENGLCANVAS_IMAGE_PHASEINFO]);
         
         glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -1035,13 +1043,13 @@ void OpenGLCanvas::renderImage()
                                             y / texSize.height,
                                             clipSize.width / texSize.width,
                                             clipSize.height / texSize.height);
-            OERect vertexRect = OEMakeRect(-1,
+            OERect canvasRect = OEMakeRect(-1,
                                            -1,
                                            2 * clipSize.width / viewportSize.width, 
                                            2 * clipSize.height / viewportSize.height);
             
             // Render
-            glBindTexture(GL_TEXTURE_2D, texture[OPENGLCANVAS_TEXTURE_IMAGE_IN]);
+            glBindTexture(GL_TEXTURE_2D, texture[OPENGLCANVAS_IMAGE_IN]);
             
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -1050,38 +1058,49 @@ void OpenGLCanvas::renderImage()
             
             glBegin(GL_QUADS);
             glTexCoord2f(OEMinX(textureRect), OEMinY(textureRect));
-            glVertex2f(OEMinX(vertexRect), OEMinY(vertexRect));
+            glVertex2f(OEMinX(canvasRect), OEMinY(canvasRect));
             glTexCoord2f(OEMaxX(textureRect), OEMinY(textureRect));
-            glVertex2f(OEMaxX(vertexRect), OEMinY(vertexRect));
+            glVertex2f(OEMaxX(canvasRect), OEMinY(canvasRect));
             glTexCoord2f(OEMaxX(textureRect), OEMaxY(textureRect));
-            glVertex2f(OEMaxX(vertexRect), OEMaxY(vertexRect));
+            glVertex2f(OEMaxX(canvasRect), OEMaxY(canvasRect));
             glTexCoord2f(OEMinX(textureRect), OEMaxY(textureRect));
-            glVertex2f(OEMinX(vertexRect), OEMaxY(vertexRect));
+            glVertex2f(OEMinX(canvasRect), OEMaxY(canvasRect));
             glEnd();
             
             // Copy framebuffer
-            glBindTexture(GL_TEXTURE_2D, texture[OPENGLCANVAS_TEXTURE_IMAGE_DECODED]);
+            glBindTexture(GL_TEXTURE_2D, texture[OPENGLCANVAS_IMAGE_DECODED]);
+            
             glCopyTexSubImage2D(GL_TEXTURE_2D, 0,
                                 x, y, 0, 0,
                                 clipSize.width, clipSize.height);
         }
     
-    if (isCompositeDecoder)
-    {
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_1D, 0);
-        glActiveTexture(GL_TEXTURE0);
-    }
-    
-    glBindTexture(GL_TEXTURE_2D, 0);
-    
     glUseProgram(0);
 #endif
 }
 
+// Convert screen coordinates to texture coordinates
+OEPoint OpenGLCanvas::getDisplayCanvasTexPoint(OEPoint p)
+{
+    OEPoint videoCenter = displayConfiguration.videoCenter;
+    OESize videoSize = displayConfiguration.videoSize;
+    
+    p = OEMakePoint((p.x - 2 * videoCenter.x) / videoSize.width,
+                    (p.y - 2 * videoCenter.y) / videoSize.height);
+    
+    OESize imageSize = image.getSize();
+    OESize texSize = textureSize[OPENGLCANVAS_IMAGE_IN];
+    
+    p.x = (p.x + 1) * 0.5 * imageSize.width / texSize.width;
+    p.y = (p.y + 1) * 0.5 * imageSize.height / texSize.height;
+    
+    return p;
+}
+
 void OpenGLCanvas::drawDisplayCanvas()
 {
-    GLuint displayShader = shader[OPENGLCANVAS_SHADER_DISPLAY];
+    GLuint displayShader = shader[OPENGLCANVAS_DISPLAY];
+    
     if (!isShaderEnabled)
         displayShader = 0;
     
@@ -1089,27 +1108,15 @@ void OpenGLCanvas::drawDisplayCanvas()
     glClearColor(0, 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
-    OESize imageSize = image.getSize();
-    if ((imageSize.width == 0) || (imageSize.height == 0))
+    if ((image.getSize().width == 0) ||
+        (image.getSize().height == 0))
         return;
     
-    // Calculate rects
-    OESize texSize = textureSize[OPENGLCANVAS_TEXTURE_IMAGE_IN];
-    OEPoint videoCenter = displayConfiguration.videoCenter;
-    OESize videoSize = displayConfiguration.videoSize;
-    
-    float imageOffset = 2 * image.getInterlace() / texSize.height * videoSize.height;
-    
-    OERect textureRect = OEMakeRect(0,
-                                    0,
-                                    imageSize.width / texSize.width, 
-                                    imageSize.height / texSize.height);
-    OERect vertexRect = OEMakeRect(2 * videoCenter.x - videoSize.width,
-                                   2 * videoCenter.y - videoSize.height + imageOffset,
-                                   2 * videoSize.width,
-                                   2 * videoSize.height);
-    
+    // Grab common variables
     OESize displayResolution = displayConfiguration.displayResolution;
+    
+    // Vertex rect
+    OERect vertexRect = OEMakeRect(-1, -1, 2, 2);
     
     float viewportAspectRatio = viewportSize.width / viewportSize.height;
     float displayAspectRatio = displayResolution.width / displayResolution.height;
@@ -1127,137 +1134,202 @@ void OpenGLCanvas::drawDisplayCanvas()
         vertexRect.size.height *= ratio;
     }
     
-    // Set shader uniforms
+    // Base texture rect
+    OERect baseTexRect = OEMakeRect(0, 0, 1, 1);
+    
+    // Canvas texture tect
+    OEPoint canvasTexLowerLeft = getDisplayCanvasTexPoint(OEMakePoint(-1, -1));
+    OEPoint canvasTexUpperRight = getDisplayCanvasTexPoint(OEMakePoint(1, 1));
+    
+    OERect canvasTexRect = OEMakeRect(canvasTexLowerLeft.x,
+                                      canvasTexLowerLeft.y,
+                                      canvasTexUpperRight.x - canvasTexLowerLeft.x,
+                                      canvasTexUpperRight.y - canvasTexLowerLeft.y);
+    
+    // Interlace shift
+    // canvasTexRect.origin.y += image.getInterlace() / image.getSize().height;
+    
+    OESize canvasSize = OEMakeSize(0.5 * viewportSize.width *
+                                   vertexRect.size.width,
+                                   0.5 * viewportSize.height *
+                                   vertexRect.size.height);
+    
+    OESize canvasVideoSize = OEMakeSize(canvasSize.width *
+                                        displayConfiguration.videoSize.width,
+                                        canvasSize.height *
+                                        displayConfiguration.videoSize.height);
+    
+    OERect barrelTexRect;
+    
+    // Render
+    OEUInt32 textureIndex;
+    if (displayShader)
+        textureIndex = OPENGLCANVAS_IMAGE_DECODED;
+    else
+        textureIndex = OPENGLCANVAS_IMAGE_IN;
+    
 #ifdef GL_VERSION_2_0
+    // Set uniforms
     if (displayShader)
     {
         glUseProgram(displayShader);
         
+        // Texture
+        OESize texSize = textureSize[textureIndex];
+        
         glUniform1i(glGetUniformLocation(displayShader, "texture"), 0);
+        glUniform2f(glGetUniformLocation(displayShader, "textureSize"),
+                    texSize.width, texSize.height);
         
-        OEPoint barrelCenter;
-        barrelCenter.x = (0.5 - videoCenter.x) * imageSize.width / texSize.width;
-        barrelCenter.y = (0.5 - videoCenter.y) * imageSize.height / texSize.height;
-        glUniform2f(glGetUniformLocation(displayShader, "barrel_center"),
-                    barrelCenter.x, barrelCenter.y);
+        // Barrel
+        barrelTexRect = OEMakeRect(-0.5, -0.5 / displayAspectRatio,
+                                   1.0, 1.0 / displayAspectRatio);
+        glUniform2f(glGetUniformLocation(displayShader, "barrelSize"),
+                    1, 1 / displayAspectRatio);
         
+        // Scanlines
+        float scanlineHeight = canvasVideoSize.height / image.getSize().height;
+        float scanlineAlpha = displayConfiguration.displayScanlineAlpha;
+        
+        scanlineAlpha = ((scanlineHeight > 2.5) ? scanlineAlpha :
+                         (scanlineHeight < 2) ? 0 :
+                         (scanlineHeight - 2) / (2.5 - 2) * scanlineAlpha);
+        
+        glUniform1f(glGetUniformLocation(displayShader, "scanlineAlpha"), scanlineAlpha);
+        
+        // Shadow mask
         GLuint shadowMaskTexture = 0;
-        float shadowVerticalScale;
+        float shadowMaskAspectRatio;
         switch (displayConfiguration.displayShadowMask)
         {
             case CANVAS_SHADOWMASK_TRIAD:
-                shadowMaskTexture = OPENGLCANVAS_TEXTURE_SHADOWMASK_TRIAD;
-                shadowVerticalScale = (240.0 / 274.0);
+                shadowMaskTexture = OPENGLCANVAS_SHADOWMASK_TRIAD;
+                shadowMaskAspectRatio = 2 / (274.0 / 240.0);
                 break;
             case CANVAS_SHADOWMASK_INLINE:
-                shadowMaskTexture = OPENGLCANVAS_TEXTURE_SHADOWMASK_INLINE;
-                shadowVerticalScale = 1;
+                shadowMaskTexture = OPENGLCANVAS_SHADOWMASK_INLINE;
+                shadowMaskAspectRatio = 2;
                 break;
             case CANVAS_SHADOWMASK_APERTURE:
-                shadowMaskTexture = OPENGLCANVAS_TEXTURE_SHADOWMASK_APERTURE;
-                shadowVerticalScale = 1;
+                shadowMaskTexture = OPENGLCANVAS_SHADOWMASK_APERTURE;
+                shadowMaskAspectRatio = 2;
                 break;
             case CANVAS_SHADOWMASK_LCD:
-                shadowMaskTexture = OPENGLCANVAS_TEXTURE_SHADOWMASK_LCD;
-                shadowVerticalScale = 1;
+                shadowMaskTexture = OPENGLCANVAS_SHADOWMASK_LCD;
+                shadowMaskAspectRatio = 2;
                 break;
             case CANVAS_SHADOWMASK_BAYER:
-                shadowMaskTexture = OPENGLCANVAS_TEXTURE_SHADOWMASK_BAYER;
-                shadowVerticalScale = 1;
+                shadowMaskTexture = OPENGLCANVAS_SHADOWMASK_BAYER;
+                shadowMaskAspectRatio = 2;
                 break;
         }
+        
+        float shadowMaskDotPitch = displayConfiguration.displayShadowMaskDotPitch;
+        
+        if (shadowMaskDotPitch <= 0.001)
+            shadowMaskDotPitch = 0.001;
+        
+        float shadowMaskElemX = (displayResolution.width /
+                                 displayConfiguration.displayPixelDensity *
+                                 25.4 / shadowMaskDotPitch);
+        OESize shadowMaskSize = OEMakeSize(shadowMaskElemX,
+                                           shadowMaskElemX * shadowMaskAspectRatio /
+                                           displayAspectRatio);
         
         glActiveTexture(GL_TEXTURE1);
         
         glBindTexture(GL_TEXTURE_2D, texture[shadowMaskTexture]);
         
+        glUniform2f(glGetUniformLocation(displayShader, "shadowMaskSize"),
+                    shadowMaskSize.width, shadowMaskSize.height);
+        
+        // Persistence
+        glActiveTexture(GL_TEXTURE2);
+        
+        glBindTexture(GL_TEXTURE_2D, texture[OPENGLCANVAS_IMAGE_PERSISTENCE]);
+        
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        
         glActiveTexture(GL_TEXTURE0);
         
-        float scanlineHeight = (viewportSize.height / imageSize.height * videoSize.height);
-        float alpha = displayConfiguration.displayScanlineAlpha;
-        float scanlineAlpha = ((scanlineHeight > 2.5) ? alpha :
-                               (scanlineHeight < 2) ? 0 :
-                               (scanlineHeight - 2) / (2.5 - 2) * alpha);
-        glUniform1f(glGetUniformLocation(displayShader, "scanline_alpha"),
-                    scanlineAlpha);
-        
-        float shadowMaskAlpha = displayConfiguration.displayShadowMaskAlpha;
-        glUniform1f(glGetUniformLocation(displayShader, "shadowmask_alpha"),
-                    shadowMaskAlpha);
-        
-        float dotPitch = displayConfiguration.displayShadowMaskDotPitch;
-        if (dotPitch <= 0.001)
-            dotPitch = 0.001;
-        OESize elemNum = OEMakeSize(displayConfiguration.displayResolution.width /
-                                    displayConfiguration.displayPixelDensity *
-                                    25.4 / dotPitch * 0.5,
-                                    displayConfiguration.displayResolution.height / 
-                                    displayConfiguration.displayPixelDensity *
-                                    25.4 / dotPitch * shadowVerticalScale);
-        glUniform2f(glGetUniformLocation(displayShader, "shadowmask_scale"),
-                    texSize.width / imageSize.width * videoSize.width * elemNum.width,
-                    texSize.height / imageSize.height * videoSize.height * elemNum.height);
-        glUniform2f(glGetUniformLocation(displayShader, "shadowmask_translate"),
-                    (videoCenter.x - 0.5 * videoSize.width) * elemNum.width,
-                    (videoCenter.y - 0.5 * videoSize.height) * elemNum.height);
+        glUniform1i(glGetUniformLocation(displayShader, "persistence"), 2);
+        glUniform2f(glGetUniformLocation(displayShader, "persistenceOrigin"),
+                    persistenceTexRect.origin.x, persistenceTexRect.origin.y);
+        glUniform2f(glGetUniformLocation(displayShader, "persistenceSize"),
+                    persistenceTexRect.size.width, persistenceTexRect.size.height);
     }
 #endif
     
-    // Render
     glLoadIdentity();
+    
     glRotatef(180, 1, 0, 0);
-    
-    glClearColor(1, 1, 1, 1);
-    glBlendFunc(GL_ONE, GL_SRC_ALPHA);
-    
-    OEUInt32 textureIndex;
-    if (displayShader)
-        textureIndex = OPENGLCANVAS_TEXTURE_IMAGE_DECODED;
-    else
-        textureIndex = OPENGLCANVAS_TEXTURE_IMAGE_IN;
     
     glBindTexture(GL_TEXTURE_2D, texture[textureIndex]);
     
-#ifdef GL_VERSION_2_0
-    if (displayShader)
-        glUniform2f(glGetUniformLocation(displayShader, "texture_size"),
-                    textureSize[textureIndex].width,
-                    textureSize[textureIndex].height);
-#endif
-    
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
     
     // Render
     glBegin(GL_QUADS);
-    glTexCoord2f(OEMinX(textureRect), OEMinY(textureRect));
+    glTexCoord2f(OEMinX(canvasTexRect), OEMinY(canvasTexRect));
+#ifdef GL_VERSION_2_0
+    if (displayShader)
+        glMultiTexCoord2d(1, OEMinX(baseTexRect), OEMinY(baseTexRect));
+#endif
     glVertex2f(OEMinX(vertexRect), OEMinY(vertexRect));
-    glTexCoord2f(OEMaxX(textureRect), OEMinY(textureRect));
+    
+    glTexCoord2f(OEMaxX(canvasTexRect), OEMinY(canvasTexRect));
+#ifdef GL_VERSION_2_0
+    if (displayShader)
+        glMultiTexCoord2d(1, OEMaxX(baseTexRect), OEMinY(baseTexRect));
+#endif
     glVertex2f(OEMaxX(vertexRect), OEMinY(vertexRect));
-    glTexCoord2f(OEMaxX(textureRect), OEMaxY(textureRect));
+    
+    glTexCoord2f(OEMaxX(canvasTexRect), OEMaxY(canvasTexRect));
+#ifdef GL_VERSION_2_0
+    if (displayShader)
+        glMultiTexCoord2d(1, OEMaxX(baseTexRect), OEMaxY(baseTexRect));
+#endif
     glVertex2f(OEMaxX(vertexRect), OEMaxY(vertexRect));
-    glTexCoord2f(OEMinX(textureRect), OEMaxY(textureRect));
+    
+    glTexCoord2f(OEMinX(canvasTexRect), OEMaxY(canvasTexRect));
+#ifdef GL_VERSION_2_0
+    if (displayShader)
+        glMultiTexCoord2d(1, OEMinX(baseTexRect), OEMaxY(baseTexRect));
+#endif
     glVertex2f(OEMinX(vertexRect), OEMaxY(vertexRect));
     glEnd();
     
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    
-    glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, 0);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, 0);
+    if (displayConfiguration.displayPersistence != 0.0)
+    {
+        updateTextureSize(OPENGLCANVAS_IMAGE_PERSISTENCE, viewportSize);
+        
+        glBindTexture(GL_TEXTURE_2D, texture[OPENGLCANVAS_IMAGE_PERSISTENCE]);
+        
+        glReadBuffer(GL_BACK);
+        
+        glCopyTexSubImage2D(GL_TEXTURE_2D, 0,
+                            0, 0, 0, 0,
+                            viewportSize.width, viewportSize.height);
+        
+        OESize persistenceTexSize = OEMakeSize(viewportSize.width /
+                                               textureSize[OPENGLCANVAS_IMAGE_PERSISTENCE].width,
+                                               viewportSize.height /
+                                               textureSize[OPENGLCANVAS_IMAGE_PERSISTENCE].height);
+        persistenceTexRect = OEMakeRect((vertexRect.origin.x + 1) * 0.5 * persistenceTexSize.width,
+                                        (vertexRect.origin.y + 1) * 0.5 * persistenceTexSize.height,
+                                        vertexRect.size.width * 0.5 * persistenceTexSize.width,
+                                        vertexRect.size.height * 0.5 * persistenceTexSize.height);
+        
+        persistenceTexRect.origin.y = persistenceTexRect.size.height - persistenceTexRect.origin.y;
+        persistenceTexRect.size.height = -persistenceTexRect.size.height;
+    }
     
 #ifdef GL_VERSION_2_0
-    // Persistance
-/*    texSize = OEMakeSize(getNextPowerOf2(viewportSize.width),
-                         getNextPowerOf2(viewportSize.height));
-    updateTextureSize(OPENGLCANVAS_TEXTURE_IMAGE_IN, texSize);
-    glCopyTexSubImage2D(GL_TEXTURE_2D, 0,
-                        0, 0, 0, 0,
-                        texSize.width, texSize.height);*/
-    
     if (displayShader)
         glUseProgram(0);
 #endif
@@ -1287,7 +1359,7 @@ void OpenGLCanvas::drawPaperCanvas()
     
     OESize texSize = OEMakeSize(getNextPowerOf2(imageSize.width),
                                 getNextPowerOf2(PAPER_SLICE));
-    updateTextureSize(OPENGLCANVAS_TEXTURE_IMAGE_IN, texSize);
+    updateTextureSize(OPENGLCANVAS_IMAGE_IN, texSize);
     
     glLoadIdentity();
     glRotatef(180, 1, 0, 0);
@@ -1307,7 +1379,7 @@ void OpenGLCanvas::drawPaperCanvas()
         if (OEMinY(slice) >= imageSize.height)
             slice.size.height = imageSize.height - slice.origin.y;
         
-        glBindTexture(GL_TEXTURE_2D, texture[OPENGLCANVAS_TEXTURE_IMAGE_IN]);
+        glBindTexture(GL_TEXTURE_2D, texture[OPENGLCANVAS_IMAGE_IN]);
         
         glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0,
                         slice.size.width, slice.size.height,
@@ -1316,7 +1388,7 @@ void OpenGLCanvas::drawPaperCanvas()
         
         OERect textureRect = OEMakeRect(0, 0,
                                         OEWidth(slice) / texSize.width, OEHeight(slice) / texSize.height);
-        OERect vertexRect = OEMakeRect(-1, 2 * (OEMinY(slice) - OEMinY(viewportCanvas)) / OEHeight(viewportCanvas) - 1,
+        OERect canvasRect = OEMakeRect(-1, 2 * (OEMinY(slice) - OEMinY(viewportCanvas)) / OEHeight(viewportCanvas) - 1,
                                        2, 2 * slice.size.height / OEHeight(viewportCanvas));
         
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -1326,17 +1398,15 @@ void OpenGLCanvas::drawPaperCanvas()
         
         glBegin(GL_QUADS);
         glTexCoord2f(OEMinX(textureRect), OEMinY(textureRect));
-        glVertex2f(OEMinX(vertexRect), OEMinY(vertexRect));
+        glVertex2f(OEMinX(canvasRect), OEMinY(canvasRect));
         glTexCoord2f(OEMaxX(textureRect), OEMinY(textureRect));
-        glVertex2f(OEMaxX(vertexRect), OEMinY(vertexRect));
+        glVertex2f(OEMaxX(canvasRect), OEMinY(canvasRect));
         glTexCoord2f(OEMaxX(textureRect), OEMaxY(textureRect));
-        glVertex2f(OEMaxX(vertexRect), OEMaxY(vertexRect));
+        glVertex2f(OEMaxX(canvasRect), OEMaxY(canvasRect));
         glTexCoord2f(OEMinX(textureRect), OEMaxY(textureRect));
-        glVertex2f(OEMinX(vertexRect), OEMaxY(vertexRect));
+        glVertex2f(OEMinX(canvasRect), OEMaxY(canvasRect));
         glEnd();
     }
-    
-    glBindTexture(GL_TEXTURE_2D, 0);
     
     // Render page separators
     glColor4f(0.8, 0.8, 0.8, 1);
@@ -1384,7 +1454,7 @@ void OpenGLCanvas::drawBezel()
         double now = getCurrentTime();
         double diff = now - bezelCaptureTime;
         
-        textureIndex = OPENGLCANVAS_TEXTURE_BEZEL_CAPTURE;
+        textureIndex = OPENGLCANVAS_BEZEL_CAPTURE;
         if (diff > (BEZELCAPTURE_DISPLAY_TIME +
                     BEZELCAPTURE_FADEOUT_TIME))
         {
@@ -1398,13 +1468,13 @@ void OpenGLCanvas::drawBezel()
     }
     else if (bezel == CANVAS_BEZEL_POWER)
     {
-        textureIndex = OPENGLCANVAS_TEXTURE_BEZEL_POWER;
+        textureIndex = OPENGLCANVAS_BEZEL_POWER;
         blackAlpha = 0.3;
         isBezelDrawRequired = false;
     }
     else if (bezel == CANVAS_BEZEL_PAUSE)
     {
-        textureIndex = OPENGLCANVAS_TEXTURE_BEZEL_PAUSE;
+        textureIndex = OPENGLCANVAS_BEZEL_PAUSE;
         blackAlpha = 0.3;
         isBezelDrawRequired = false;
     }
@@ -1454,8 +1524,6 @@ void OpenGLCanvas::drawBezel()
     glVertex2f(OEMinX(renderFrame), OEMaxY(renderFrame));
     glEnd();
     
-    glBindTexture(GL_TEXTURE_2D, 0);
-    
     glColor4f(1, 1, 1, 1);
 }
 
@@ -1488,6 +1556,7 @@ OEImage OpenGLCanvas::readFramebuffer()
     image.setSize(canvasRect.size);
     
     glReadBuffer(GL_FRONT);
+    
     glReadPixels(OEMinX(canvasRect), OEMinY(canvasRect),
                  OEWidth(canvasRect), OEHeight(canvasRect),
                  GL_RGB, GL_UNSIGNED_BYTE,

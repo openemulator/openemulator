@@ -28,27 +28,27 @@ typedef enum
 
 typedef enum
 {
-    OPENGLCANVAS_TEXTURE_SHADOWMASK_TRIAD,
-    OPENGLCANVAS_TEXTURE_SHADOWMASK_INLINE,
-    OPENGLCANVAS_TEXTURE_SHADOWMASK_APERTURE,
-    OPENGLCANVAS_TEXTURE_SHADOWMASK_LCD,
-    OPENGLCANVAS_TEXTURE_SHADOWMASK_BAYER,
-    OPENGLCANVAS_TEXTURE_BEZEL_POWER,
-    OPENGLCANVAS_TEXTURE_BEZEL_PAUSE,
-    OPENGLCANVAS_TEXTURE_BEZEL_CAPTURE,
-    OPENGLCANVAS_TEXTURE_IMAGE_PHASEINFO,
-    OPENGLCANVAS_TEXTURE_IMAGE_IN,
-    OPENGLCANVAS_TEXTURE_IMAGE_DECODED,
-    OPENGLCANVAS_TEXTURE_IMAGE_LAST,
-    OPENGLCANVAS_TEXTURE_END,
+    OPENGLCANVAS_SHADOWMASK_TRIAD,
+    OPENGLCANVAS_SHADOWMASK_INLINE,
+    OPENGLCANVAS_SHADOWMASK_APERTURE,
+    OPENGLCANVAS_SHADOWMASK_LCD,
+    OPENGLCANVAS_SHADOWMASK_BAYER,
+    OPENGLCANVAS_BEZEL_POWER,
+    OPENGLCANVAS_BEZEL_PAUSE,
+    OPENGLCANVAS_BEZEL_CAPTURE,
+    OPENGLCANVAS_IMAGE_PHASEINFO,
+    OPENGLCANVAS_IMAGE_IN,
+    OPENGLCANVAS_IMAGE_DECODED,
+    OPENGLCANVAS_IMAGE_PERSISTENCE,
+    OPENGLCANVAS_TEXTUREEND,
 } OpenGLCanvasTextureIndex;
 
 typedef enum
 {
-    OPENGLCANVAS_SHADER_RGB,
-    OPENGLCANVAS_SHADER_COMPOSITE,
-    OPENGLCANVAS_SHADER_DISPLAY,
-    OPENGLCANVAS_SHADER_END,
+    OPENGLCANVAS_RGB,
+    OPENGLCANVAS_COMPOSITE,
+    OPENGLCANVAS_DISPLAY,
+    OPENGLCANVAS_SHADEREND,
 } OpenGLCanvasProgram;
 
 typedef void (*CanvasSetCapture)(void *userData, OpenGLCanvasCapture capture);
@@ -140,11 +140,11 @@ private:
     
     bool isConfigurationUpdated;
     
-    GLuint texture[OPENGLCANVAS_TEXTURE_END];
-    OESize textureSize[OPENGLCANVAS_TEXTURE_END];
+    GLuint texture[OPENGLCANVAS_TEXTUREEND];
+    OESize textureSize[OPENGLCANVAS_TEXTUREEND];
     
     CanvasDisplayConfiguration displayConfiguration;
-    GLuint shader[OPENGLCANVAS_SHADER_END];
+    GLuint shader[OPENGLCANVAS_SHADEREND];
     
     CanvasPaperConfiguration paperConfiguration;
     OEPoint printHead;
@@ -155,6 +155,8 @@ private:
     bool isBezelDrawRequired;
     bool isBezelCapture;
     double bezelCaptureTime;
+    
+    OERect persistenceTexRect;
     
     OpenGLCanvasCapture capture;
     
@@ -183,6 +185,7 @@ private:
     GLuint getRenderShader();
     void configureShaders();
     void renderImage();
+    OEPoint getDisplayCanvasTexPoint(OEPoint p);
     void drawDisplayCanvas();
     
     void drawPaperCanvas();

@@ -1,4 +1,6 @@
 ==2011-10==
+* Refactorized shaders
+* Implemented display persistence
 * Fixed problem when resizing and no video is generated
 * Implemented OpenGLCanvas interlace
 * Implemented OpenGLCanvas color bursts
