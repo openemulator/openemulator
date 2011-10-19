@@ -110,12 +110,7 @@
 
 - (void)leaveFullscreen
 {
-    if ([self isOnLionOrBetter])
-    {
-        if ([self isFullscreen])
-            [self toggleFullScreen:nil];
-    }
-    else
+    if (![self isOnLionOrBetter])
     {
         if ([self isFullscreen])
         {

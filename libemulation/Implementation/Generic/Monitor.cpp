@@ -63,12 +63,12 @@ bool Monitor::setValue(string name, string value)
         configuration.videoChromaBandwidth = getFloat(value);
     else if (name == "displayBarrel")
         configuration.displayBarrel = getFloat(value);
-    else if (name == "displayScanlineAlpha")
-        configuration.displayScanlineAlpha = getFloat(value);
+    else if (name == "displayScanlineLevel")
+        configuration.displayScanlineLevel = getFloat(value);
     else if (name == "displayCenterLighting")
         configuration.displayCenterLighting = getFloat(value);
-    else if (name == "displayShadowMaskAlpha")
-        configuration.displayShadowMaskAlpha = getFloat(value);
+    else if (name == "displayShadowMaskLevel")
+        configuration.displayShadowMaskLevel = getFloat(value);
     else if (name == "displayShadowMaskDotPitch")
         configuration.displayShadowMaskDotPitch = getFloat(value);
     else if (name == "displayShadowMask")
@@ -86,6 +86,8 @@ bool Monitor::setValue(string name, string value)
     }
     else if (name == "displayPersistence")
         configuration.displayPersistence = getFloat(value);
+    else if (name == "displayLuminanceGain")
+        configuration.displayLuminanceGain = getFloat(value);
     else
         return false;
     
@@ -131,12 +133,12 @@ bool Monitor::getValue(string name, string& value)
         value = getString(configuration.videoChromaBandwidth);
     else if (name == "displayBarrel")
         value = getString(configuration.displayBarrel);
-    else if (name == "displayScanlineAlpha")
-        value = getString(configuration.displayScanlineAlpha);
+    else if (name == "displayScanlineLevel")
+        value = getString(configuration.displayScanlineLevel);
     else if (name == "displayCenterLighting")
         value = getString(configuration.displayCenterLighting);
-    else if (name == "displayShadowMaskAlpha")
-        value = getString(configuration.displayShadowMaskAlpha);
+    else if (name == "displayShadowMaskLevel")
+        value = getString(configuration.displayShadowMaskLevel);
     else if (name == "displayShadowMaskDotPitch")
         value = getString(configuration.displayShadowMaskDotPitch);
     else if (name == "displayShadowMask")
@@ -154,6 +156,8 @@ bool Monitor::getValue(string name, string& value)
     }
     else if (name == "displayPersistence")
         value = getString(configuration.displayPersistence);
+    else if (name == "displayLuminanceGain")
+        value = getString(configuration.displayLuminanceGain);
     else
         return false;
     

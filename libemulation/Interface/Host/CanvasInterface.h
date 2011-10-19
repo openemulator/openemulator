@@ -162,12 +162,13 @@ public:
         displayResolution = OEMakeSize(640, 480);
         displayPixelDensity = 72;
         displayBarrel = 0;
-        displayScanlineAlpha = 0;
-        displayShadowMaskAlpha = 0;
+        displayScanlineLevel = 0;
+        displayShadowMaskLevel = 0;
         displayShadowMaskDotPitch = 1;
         displayShadowMask = CANVAS_SHADOWMASK_TRIAD;
         displayPersistence = 0;
         displayCenterLighting = 1;
+        displayLuminanceGain = 1;
     }
     
     CanvasDecoder videoDecoder;
@@ -184,12 +185,13 @@ public:
     OESize displayResolution;
     float displayPixelDensity;
     float displayBarrel;
-    float displayScanlineAlpha;
-    float displayShadowMaskAlpha;
+    float displayScanlineLevel;
+    float displayShadowMaskLevel;
     float displayShadowMaskDotPitch;
     CanvasShadowMask displayShadowMask;
     float displayPersistence;
     float displayCenterLighting;
+    float displayLuminanceGain;
 };
 
 // Paper canvas configuration:

@@ -95,6 +95,7 @@
 - (void)close
 {
     CanvasWindow *window = (CanvasWindow *)[self window];
+    
     [window leaveFullscreen];
     
     if ([self isWindowLoaded])

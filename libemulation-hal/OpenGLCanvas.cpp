@@ -32,8 +32,8 @@ static const char *rgbShader = "\
 uniform sampler2D texture;\n\
 uniform vec2 textureSize;\n\
 uniform vec3 c0, c1, c2, c3, c4, c5, c6, c7, c8;\n\
-uniform vec3 offset;\n\
 uniform mat3 decoderMatrix;\n\
+uniform vec3 decoderOffset;\n\
 \n\
 vec3 pixel(vec2 q)\n\
 {\n\
@@ -57,7 +57,7 @@ c += pixels(q, 5.0 / textureSize.x) * c5;\n\
 c += pixels(q, 6.0 / textureSize.x) * c6;\n\
 c += pixels(q, 7.0 / textureSize.x) * c7;\n\
 c += pixels(q, 8.0 / textureSize.x) * c8;\n\
-gl_FragColor = vec4(decoderMatrix * (c + offset), 1.0);\n\
+gl_FragColor = vec4(decoderMatrix * c + decoderOffset, 1.0);\n\
 }";
 
 static const char *compositeShader = "\
@@ -66,8 +66,8 @@ uniform vec2 textureSize;\n\
 uniform float subcarrier;\n\
 uniform sampler1D phaseInfo;\n\
 uniform vec3 c0, c1, c2, c3, c4, c5, c6, c7, c8;\n\
-uniform vec3 offset;\n\
 uniform mat3 decoderMatrix;\n\
+uniform vec3 decoderOffset;\n\
 \n\
 float PI = 3.14159265358979323846264;\n\
 \n\
@@ -96,7 +96,7 @@ c += pixels(q, 5.0 / textureSize.x) * c5;\n\
 c += pixels(q, 6.0 / textureSize.x) * c6;\n\
 c += pixels(q, 7.0 / textureSize.x) * c7;\n\
 c += pixels(q, 8.0 / textureSize.x) * c8;\n\
-gl_FragColor = vec4(decoderMatrix * (c + offset), 1.0);\n\
+gl_FragColor = vec4(decoderMatrix * c + decoderOffset, 1.0);\n\
 }";
 
 static const char *displayShader = "\
@@ -104,15 +104,16 @@ uniform sampler2D texture;\n\
 uniform vec2 textureSize;\n\
 uniform float barrel;\n\
 uniform vec2 barrelSize;\n\
-uniform float scanlineAlpha;\n\
+uniform float scanlineLevel;\n\
 uniform sampler2D shadowMask;\n\
 uniform vec2 shadowMaskSize;\n\
-uniform float shadowMaskAlpha;\n\
+uniform float shadowMaskLevel;\n\
 uniform float centerLighting;\n\
 uniform sampler2D persistence;\n\
 uniform vec2 persistenceSize;\n\
 uniform vec2 persistenceOrigin;\n\
-uniform float persistenceAlpha;\n\
+uniform float persistenceLevel;\n\
+uniform float luminanceGain;\n\
 \n\
 float PI = 3.14159265358979323846264;\n\
 \n\
@@ -125,16 +126,18 @@ vec2 q = gl_TexCoord[0].st + qb;\n\
 vec3 c = texture2D(texture, q).rgb;\n\
 \n\
 float scanline = sin(PI * textureSize.y * q.y);\n\
-c *= mix(1.0, scanline * scanline, scanlineAlpha);\n\
+c *= mix(1.0, scanline * scanline, scanlineLevel);\n\
 \n\
 vec3 mask = texture2D(shadowMask, (gl_TexCoord[1].st + qb) * shadowMaskSize).rgb;\n\
-c *= mix(vec3(1.0, 1.0, 1.0), mask, shadowMaskAlpha);\n\
+c *= mix(vec3(1.0, 1.0, 1.0), mask, shadowMaskLevel);\n\
 \n\
 vec2 lighting = qc * centerLighting;\n\
 c *= exp(-dot(lighting, lighting));\n\
 \n\
+c *= luminanceGain;\n\
+\n\
 vec2 qp = gl_TexCoord[1].st * persistenceSize + persistenceOrigin;\n\
-c = max(c, texture2D(persistence, qp).rgb * persistenceAlpha - 0.5 / 256.0);\n\
+c = max(c, texture2D(persistence, qp).rgb * persistenceLevel - 0.5 / 256.0);\n\
 \n\
 gl_FragColor = vec4(c, 1.0);\n\
 }";
@@ -851,58 +854,48 @@ void OpenGLCanvas::configureShaders()
     glUniform3f(glGetUniformLocation(renderShader, "c8"),
                 wy.getValue(0), wu.getValue(0), wv.getValue(0));
     
-    // Brigthness
-    float brightness = displayConfiguration.videoBrightness - imageBlackLevel;
-    
-    if (isCompositeDecoder)
-        glUniform3f(glGetUniformLocation(renderShader, "offset"),
-                    brightness, 0, 0);
-    else
-        glUniform3f(glGetUniformLocation(renderShader, "offset"),
-                    brightness, brightness, brightness);
-    
     // Decoder matrix
-    OEMatrix3 m(1, 0, 0,
-                0, 1, 0,
-                0, 0, 1);
+    OEMatrix3 decoderMatrix(1, 0, 0,
+                            0, 1, 0,
+                            0, 0, 1);
     
     // Encode
     if (!isCompositeDecoder)
     {
         // Y'PbPr encoding matrix
-        m = OEMatrix3(0.299, -0.168736, 0.5,
-                      0.587, -0.331264, -0.418688,
-                      0.114, 0.5, -0.081312) * m;
+        decoderMatrix = OEMatrix3(0.299, -0.168736, 0.5,
+                                  0.587, -0.331264, -0.418688,
+                                  0.114, 0.5, -0.081312) * decoderMatrix;
     }
     
     // Set hue
     if (displayConfiguration.videoDecoder == CANVAS_DECODER_MONOCHROME)
-        m = OEMatrix3(1, 0.5, 0,
-                      0, 0, 0,
-                      0, 0, 0) * m;
+        decoderMatrix = OEMatrix3(1, 0.5, 0,
+                                  0, 0, 0,
+                                  0, 0, 0) * decoderMatrix;
     
     // Disable color decoding when no subcarrier
     if (isCompositeDecoder)
     {
         if (imageSubcarrier == 0.0)
         {
-            m = OEMatrix3(1, 0, 0,
-                          0, 0, 0,
-                          0, 0, 0) * m;
+            decoderMatrix = OEMatrix3(1, 0, 0,
+                                      0, 0, 0,
+                                      0, 0, 0) * decoderMatrix;
         }
     }
     
     // Saturation
-    m = OEMatrix3(1, 0, 0,
-                  0, displayConfiguration.videoSaturation, 0,
-                  0, 0, displayConfiguration.videoSaturation) * m;
+    decoderMatrix = OEMatrix3(1, 0, 0,
+                              0, displayConfiguration.videoSaturation, 0,
+                              0, 0, displayConfiguration.videoSaturation) * decoderMatrix;
     
     // Hue
     float hue = 2 * M_PI * displayConfiguration.videoHue;
     
-    m = OEMatrix3(1, 0, 0,
-                  0, cosf(hue), -sinf(hue),
-                  0, sinf(hue), cosf(hue)) * m;
+    decoderMatrix = OEMatrix3(1, 0, 0,
+                              0, cosf(hue), -sinf(hue),
+                              0, sinf(hue), cosf(hue)) * decoderMatrix;
     
     // Decode
     switch (displayConfiguration.videoDecoder)
@@ -910,37 +903,55 @@ void OpenGLCanvas::configureShaders()
         case CANVAS_DECODER_RGB:
         case CANVAS_DECODER_MONOCHROME:
             // Y'PbPr decoder matrix
-            m = OEMatrix3(1, 1, 1,
-                          0, -0.344136, 1.772,
-                          1.402, -0.714136, 0) * m;
+            decoderMatrix = OEMatrix3(1, 1, 1,
+                                      0, -0.344136, 1.772,
+                                      1.402, -0.714136, 0) * decoderMatrix;
             break;
             
         case CANVAS_DECODER_YUV:
         case CANVAS_DECODER_YIQ:
             // Y'UV decoder matrix
-            m = OEMatrix3(1, 1, 1,
-                          0, -0.394642, 2.032062,
-                          1.139883, -0.580622, 0) * m;
+            decoderMatrix = OEMatrix3(1, 1, 1,
+                                      0, -0.394642, 2.032062,
+                                      1.139883, -0.580622, 0) * decoderMatrix;
             break;
             
         case CANVAS_DECODER_CXA2025AS:
             // Exchange I and Q
-            m = OEMatrix3(1, 0, 0,
-                          0, 0, 1,
-                          0, 1, 0) * m;
+            decoderMatrix = OEMatrix3(1, 0, 0,
+                                      0, 0, 1,
+                                      0, 1, 0) * decoderMatrix;
             
             // Rotate 33 degrees
             hue = -M_PI * 33 / 180;
-            m = OEMatrix3(1, 0, 0,
-                          0, cosf(hue), -sinf(hue),
-                          0, sinf(hue), cosf(hue)) * m;
+            decoderMatrix = OEMatrix3(1, 0, 0,
+                                      0, cosf(hue), -sinf(hue),
+                                      0, sinf(hue), cosf(hue)) * decoderMatrix;
             
             // CXA2025AS decoder matrix
-            m = OEMatrix3(1, 1, 1,
-                          1.630, -0.378, -1.089,
-                          0.317, -0.466, 1.677) * m;
+            decoderMatrix = OEMatrix3(1, 1, 1,
+                                      1.630, -0.378, -1.089,
+                                      0.317, -0.466, 1.677) * decoderMatrix;
             break;
     }
+    
+    // Brigthness
+    float brightness = displayConfiguration.videoBrightness - imageBlackLevel;
+    OEMatrix3 decoderOffset;
+    
+    if (isCompositeDecoder)
+        decoderOffset = decoderMatrix * OEMatrix3(brightness, 0, 0,
+                                                  0, 0, 0,
+                                                  0, 0, 0);
+    else
+        decoderOffset = decoderMatrix * OEMatrix3(brightness, 0, 0,
+                                                  brightness, 0, 0,
+                                                  brightness, 0, 0);
+    
+    glUniform3f(glGetUniformLocation(renderShader, "decoderOffset"),
+                decoderOffset.getValue(0, 0),
+                decoderOffset.getValue(0, 1),
+                decoderOffset.getValue(0, 2));
     
     // Contrast
     float contrast = displayConfiguration.videoContrast;
@@ -954,10 +965,10 @@ void OpenGLCanvas::configureShaders()
     if (contrast < 0)
         contrast = 0;
     
-    m *= contrast;
+    decoderMatrix *= contrast;
     
     glUniformMatrix3fv(glGetUniformLocation(renderShader, "decoderMatrix"),
-                       1, false, m.getValues());
+                       1, false, decoderMatrix.getValues());
     
     // Display shader
     glUseProgram(displayShader);
@@ -968,15 +979,18 @@ void OpenGLCanvas::configureShaders()
     
     // Shadow mask
     glUniform1i(glGetUniformLocation(displayShader, "shadowMask"), 1);
-    glUniform1f(glGetUniformLocation(displayShader, "shadowMaskAlpha"),
-                displayConfiguration.displayShadowMaskAlpha);
+    glUniform1f(glGetUniformLocation(displayShader, "shadowMaskLevel"),
+                displayConfiguration.displayShadowMaskLevel);
     
     // Persistence
     float frameRate = 60.0;
     
-    glUniform1f(glGetUniformLocation(displayShader, "persistenceAlpha"),
+    glUniform1f(glGetUniformLocation(displayShader, "persistenceLevel"),
                 displayConfiguration.displayPersistence /
                 (1.0 / frameRate + displayConfiguration.displayPersistence));
+    
+    if (displayConfiguration.displayPersistence == 0.0)
+        updateTextureSize(OPENGLCANVAS_IMAGE_PERSISTENCE, OEMakeSize(0, 0));
     
     // Center lighting
     float centerLighting = displayConfiguration.displayCenterLighting;
@@ -984,6 +998,10 @@ void OpenGLCanvas::configureShaders()
         centerLighting = 0.001;
     glUniform1f(glGetUniformLocation(displayShader, "centerLighting"),
                 1.0 / centerLighting - 1.0);
+    
+    // Luminance gain
+    glUniform1f(glGetUniformLocation(displayShader, "luminanceGain"),
+                displayConfiguration.displayLuminanceGain);
     
     glUseProgram(0);
 #endif
@@ -1138,16 +1156,15 @@ void OpenGLCanvas::drawDisplayCanvas()
     OERect baseTexRect = OEMakeRect(0, 0, 1, 1);
     
     // Canvas texture tect
-    OEPoint canvasTexLowerLeft = getDisplayCanvasTexPoint(OEMakePoint(-1, -1));
-    OEPoint canvasTexUpperRight = getDisplayCanvasTexPoint(OEMakePoint(1, 1));
+    float interlaceShift = image.getInterlace() / image.getSize().height;
+    
+    OEPoint canvasTexLowerLeft = getDisplayCanvasTexPoint(OEMakePoint(-1, -1 + 2 * interlaceShift));
+    OEPoint canvasTexUpperRight = getDisplayCanvasTexPoint(OEMakePoint(1, 1 + 2 * interlaceShift));
     
     OERect canvasTexRect = OEMakeRect(canvasTexLowerLeft.x,
                                       canvasTexLowerLeft.y,
                                       canvasTexUpperRight.x - canvasTexLowerLeft.x,
                                       canvasTexUpperRight.y - canvasTexLowerLeft.y);
-    
-    // Interlace shift
-    // canvasTexRect.origin.y += image.getInterlace() / image.getSize().height;
     
     OESize canvasSize = OEMakeSize(0.5 * viewportSize.width *
                                    vertexRect.size.width,
@@ -1189,13 +1206,13 @@ void OpenGLCanvas::drawDisplayCanvas()
         
         // Scanlines
         float scanlineHeight = canvasVideoSize.height / image.getSize().height;
-        float scanlineAlpha = displayConfiguration.displayScanlineAlpha;
+        float scanlineLevel = displayConfiguration.displayScanlineLevel;
         
-        scanlineAlpha = ((scanlineHeight > 2.5) ? scanlineAlpha :
+        scanlineLevel = ((scanlineHeight > 2.5) ? scanlineLevel :
                          (scanlineHeight < 2) ? 0 :
-                         (scanlineHeight - 2) / (2.5 - 2) * scanlineAlpha);
+                         (scanlineHeight - 2) / (2.5 - 2) * scanlineLevel);
         
-        glUniform1f(glGetUniformLocation(displayShader, "scanlineAlpha"), scanlineAlpha);
+        glUniform1f(glGetUniformLocation(displayShader, "scanlineLevel"), scanlineLevel);
         
         // Shadow mask
         GLuint shadowMaskTexture = 0;
@@ -1231,7 +1248,7 @@ void OpenGLCanvas::drawDisplayCanvas()
         
         float shadowMaskElemX = (displayResolution.width /
                                  displayConfiguration.displayPixelDensity *
-                                 25.4 / shadowMaskDotPitch);
+                                 25.4 * 0.5 / shadowMaskDotPitch);
         OESize shadowMaskSize = OEMakeSize(shadowMaskElemX,
                                            shadowMaskElemX * shadowMaskAspectRatio /
                                            displayAspectRatio);
@@ -1325,7 +1342,7 @@ void OpenGLCanvas::drawDisplayCanvas()
                                         vertexRect.size.width * 0.5 * persistenceTexSize.width,
                                         vertexRect.size.height * 0.5 * persistenceTexSize.height);
         
-        persistenceTexRect.origin.y = persistenceTexRect.size.height - persistenceTexRect.origin.y;
+        persistenceTexRect.origin.y += persistenceTexRect.size.height;
         persistenceTexRect.size.height = -persistenceTexRect.size.height;
     }
     

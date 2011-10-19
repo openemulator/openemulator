@@ -13,9 +13,10 @@
         <setting ref="monochromeMonitor.monitor" name="videoVerticalSize" label="Vertical Size" type="slider" options="0.8,1.2"/>
         <setting ref="monochromeMonitor.monitor" name="videoBandwidth" label="Video Bandwidth" type="slider" options="0.0,7159090.0"/>
         <setting ref="monochromeMonitor.monitor" name="displayBarrel" label="Barrel" type="slider" options="0.0,1.0"/>
-        <setting ref="monochromeMonitor.monitor" name="displayScanlineAlpha" label="Scanline Alpha" type="slider" options="0.0,1.0"/>
+        <setting ref="monochromeMonitor.monitor" name="displayScanlineLevel" label="Scanline Level" type="slider" options="0.0,1.0"/>
         <setting ref="monochromeMonitor.monitor" name="displayPersistence" label="Persistence" type="slider" options="0.0,1.0"/>
         <setting ref="monochromeMonitor.monitor" name="displayCenterLighting" label="Center Lighting" type="slider" options="0.0,1.0"/>
+        <setting ref="monochromeMonitor.monitor" name="displayLuminanceGain" label="Luminance Gain" type="slider" options="1.0,2.0"/>
     </device>
     <connector id="monochromeMonitor.connector" type="Composite Video Port">
         <inlet ref="monochromeMonitor.monitor" property="controlBus" outletRef="controlBus"/>
@@ -34,9 +35,10 @@
         <property name="videoVerticalSize" value="1"/>
         <property name="videoBandwidth" value="18000000"/>
         <property name="displayBarrel" value="0.1"/>
-        <property name="displayScanlineAlpha" value="0.5"/>
+        <property name="displayScanlineLevel" value="0.5"/>
         <property name="displayPersistence" value="0"/>
         <property name="displayCenterLighting" value="0.5"/>
+        <property name="displayLuminanceGain" value="1"/>
     </component>
     
 </edl>

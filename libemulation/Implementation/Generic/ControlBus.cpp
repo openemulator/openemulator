@@ -377,7 +377,7 @@ OEUInt64 ControlBus::getCycleCount()
     
     cpu->postMessage(this, CPU_GET_CYCLES, &cpuCycles);
     
-    return cycleCount + (blockOffset - cpuCycles) / cpuClockMultiplier;
+    return cycleCount + (OEUInt64) ((blockOffset - cpuCycles) / cpuClockMultiplier);
 }
 
 void ControlBus::scheduleTimer(OEComponent *component, OEUInt64 cycles)

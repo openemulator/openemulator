@@ -126,7 +126,10 @@ bool Apple1Terminal::setRef(string name, OEComponent *ref)
             monitorDevice->removeObserver(this, DEVICE_EVENT_DID_OCCUR);
         monitorDevice = ref;
         if (monitorDevice)
+        {
             monitorDevice->addObserver(this, DEVICE_EVENT_DID_OCCUR);
+            canvasShouldUpdate = true;
+        }
     }
     else if (name == "monitor")
     {

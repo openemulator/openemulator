@@ -15,19 +15,19 @@
         <property name="device" ref="appleMonitorII"/>
         <property name="controlBus" ref="controlBus"/>
         <property name="videoDecoder" value="Monochrome"/>
-        <property name="videoBrightness" value="0.1"/>
-        <property name="videoContrast" value="0.75"/>
-        <property name="videoSaturation" value="1.4"/>
-        <property name="videoHue" value="0.33"/>
+        <property name="videoBrightness" value="0.15"/>
+        <property name="videoContrast" value="0.8"/>
+        <property name="videoSaturation" value="1.45"/>
+        <property name="videoHue" value="0.27"/>
         <property name="videoHorizontalCenter" value="0"/>
         <property name="videoHorizontalSize" value="1"/>
         <property name="videoVerticalCenter" value="0"/>
         <property name="videoVerticalSize" value="1"/>
-        <property name="videoBandwidth" value="18000000"/>
+        <property name="videoBandwidth" value="4500000"/>
         <property name="displayBarrel" value="0.1"/>
-        <property name="displayScanlineAlpha" value="0.5"/>
+        <property name="displayScanlineLevel" value="0.5"/>
         <property name="displayCenterLighting" value="0.5"/>
-        <property name="displayPersistence" value="0.4"/>
+        <property name="displayLuminanceGain" value="1.5"/>
     </component>
     
 </edl>

@@ -1,4 +1,9 @@
 ==2011-10==
+* Added luminance gain
+* Fixed removing a window when in fullscreen mode
+* Fixed persistence when changing window size
+* Fixed ControlBus cycle count
+* Fixed brightness/contrast in OpenGLCanvas
 * Refactorized shaders
 * Implemented display persistence
 * Fixed problem when resizing and no video is generated

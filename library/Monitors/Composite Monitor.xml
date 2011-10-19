@@ -16,12 +16,13 @@
         <setting ref="compositeMonitor.monitor" name="videoChromaBandwidth" label="Chroma Bandwidth" type="slider" options="0.0,7159090.0"/>
         <setting ref="compositeMonitor.monitor" name="videoBandwidth" label="B/W Bandwidth" type="slider" options="0.0,7159090.0"/>
         <setting ref="compositeMonitor.monitor" name="displayBarrel" label="Barrel" type="slider" options="0.0,1.0"/>
-        <setting ref="compositeMonitor.monitor" name="displayScanlineAlpha" label="Scanline Alpha" type="slider" options="0.0,1.0"/>
-        <setting ref="compositeMonitor.monitor" name="displayShadowMaskAlpha" label="Shadow Mask Alpha" type="slider" options="0.0,1.0"/>
+        <setting ref="compositeMonitor.monitor" name="displayScanlineLevel" label="Scanline Level" type="slider" options="0.0,1.0"/>
+        <setting ref="compositeMonitor.monitor" name="displayShadowMaskLevel" label="Shadow Mask Level" type="slider" options="0.0,1.0"/>
         <setting ref="compositeMonitor.monitor" name="displayShadowMaskDotPitch" label="Shadow Mask Dot Pitch" type="slider" options="0.0,2.0"/>
         <setting ref="compositeMonitor.monitor" name="displayShadowMask" label="Shadow Mask" type="select" options="Triad,Inline,Aperture,LCD,Bayer"/>
         <setting ref="compositeMonitor.monitor" name="displayPersistence" label="Persistence" type="slider" options="0.0,1.0"/>
         <setting ref="compositeMonitor.monitor" name="displayCenterLighting" label="Center Lighting" type="slider" options="0.0,1.0"/>
+        <setting ref="compositeMonitor.monitor" name="displayLuminanceGain" label="Luminance Gain" type="slider" options="1.0,2.0"/>
     </device>
     <connector id="compositeMonitor.connector" type="Composite Video Port">
         <inlet ref="compositeMonitor.monitor" property="controlBus" outletRef="controlBus"/>
@@ -42,12 +43,13 @@
         <property name="videoLumaBandwidth" value="2000000"/>
         <property name="videoChromaBandwidth" value="600000"/>
         <property name="displayBarrel" value="0.05"/>
-        <property name="displayScanlineAlpha" value="0.05"/>
-        <property name="displayShadowMaskAlpha" value="0.05"/>
+        <property name="displayScanlineLevel" value="0.05"/>
+        <property name="displayShadowMaskLevel" value="0.05"/>
         <property name="displayShadowMaskDotPitch" value="0.5"/>
         <property name="displayShadowMask" value="Triad"/>
         <property name="displayPersistence" value="0"/>
         <property name="displayCenterLighting" value="1"/>
+        <property name="displayLuminanceGain" value="1"/>
     </component>
     
 </edl>
