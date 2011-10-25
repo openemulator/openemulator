@@ -85,13 +85,12 @@ bool AddressDecoder::init()
 			return false;
 		}
         
-        if (!ref[i->first])
-        {
-			logMessage("'" + i->first + "' not connected");
-            return false;
-        }
-		
-		if (!mapConf(ref[i->first], i->second))
+        OEComponent *component = ref[i->first];
+        
+        if (!component)
+            component = floatingBus;
+        
+		if (!mapConf(component, i->second))
 			return false;
 	}
     
@@ -178,14 +177,23 @@ bool AddressDecoder::getDecoderMap(AddressDecoderMap& decoderMap,
 	
     vector<string> item = strsplit(confItem, '-');
     
-    if (item.size() != 2)
+    if (item.size() == 1)
+    {
+        if (item[0] == "")
+            return false;
+        
+        decoderMap.startAddress = decoderMap.endAddress = getUInt(item[0]);
+    }
+    else if (item.size() == 2)
+    {
+        if ((item[0] == "") || (item[1] == ""))
+            return false;
+        
+        decoderMap.startAddress = getUInt(item[0]);
+        decoderMap.endAddress = getUInt(item[1]);
+    }
+    else
         return false;
-    
-    if ((item[0] == "") || (item[1] == ""))
-        return false;
-    
-    decoderMap.startAddress = getUInt(item[0]);
-    decoderMap.endAddress = getUInt(item[1]);
     
     OEAddress blockMask = (1 << blockSize) - 1;
     

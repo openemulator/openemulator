@@ -12,15 +12,15 @@
 
 #include "AddressDecoder.h"
 
-#define SCHMITT_TRIGGER_THRESHOLD 4
-
 Apple1ACI::Apple1ACI()
 {
     rom = NULL;
     memoryBus = NULL;
     audioCodec = NULL;
     
-    audioLevel = 128;
+    audioLevel = 0x80;
+    noiseRejection = 5;
+    threshold = 0x80;
 }
 
 bool Apple1ACI::setRef(string name, OEComponent *ref)
@@ -65,6 +65,26 @@ bool Apple1ACI::setRef(string name, OEComponent *ref)
     return true;
 }
 
+bool Apple1ACI::setValue(string name, string value)
+{
+    if (name == "noiseRejection")
+        noiseRejection = getInt(value);
+    else
+        return false;
+    
+    return true;
+}
+
+bool Apple1ACI::getValue(string name, string &value)
+{
+    if (name == "noiseRejection")
+        value = getString(noiseRejection);
+    else
+        return false;
+    
+    return true;
+}
+
 bool Apple1ACI::init()
 {
     if (!rom)
@@ -88,14 +108,15 @@ OEUInt8 Apple1ACI::read(OEAddress address)
 {
     if (address & 0x80)
     {
-        // A Schmitt trigger to improve noise rejection...
+        // Noise rejection
         if (audioCodec->read(0) >= threshold)
         {
             address &= ~0x1;
-            threshold = 0x80 - SCHMITT_TRIGGER_THRESHOLD;
+            
+            threshold = 0x80 - noiseRejection;
         }
         else
-            threshold = 0x80 + SCHMITT_TRIGGER_THRESHOLD;
+            threshold = 0x80 + noiseRejection;
         
         // Debugging
 /*        {
@@ -125,7 +146,7 @@ void Apple1ACI::write(OEAddress address, OEUInt8 value)
 
 void Apple1ACI::toggleSpeaker()
 {
-    audioLevel = (audioLevel == 128) ? 192 : 128;
+    audioLevel = (audioLevel == 0x80) ? 0xc0 : 0x80;
     
     audioCodec->write(0, audioLevel);
     audioCodec->write(1, audioLevel);

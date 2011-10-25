@@ -16,6 +16,8 @@ public:
     Apple1ACI();
     
     bool setRef(string name, OEComponent *ref);
+    bool setValue(string name, string value);
+    bool getValue(string name, string &value);
     bool init();
     
     OEUInt8 read(OEAddress address);
@@ -27,6 +29,7 @@ private:
     OEComponent *audioCodec;
     
     OEUInt8 audioLevel;
+    OEUInt8 noiseRejection;
     OEUInt8 threshold;
     
     void toggleSpeaker();

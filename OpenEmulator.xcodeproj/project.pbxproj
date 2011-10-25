@@ -385,7 +385,7 @@
 		00B8883612A393990052B7A4 /* Monitor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Monitor.cpp; sourceTree = "<group>"; };
 		00B8883712A393990052B7A4 /* Monitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Monitor.h; sourceTree = "<group>"; };
 		00B8883812A393990052B7A4 /* ControlBus.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ControlBus.cpp; path = libemulation/Implementation/Generic/ControlBus.cpp; sourceTree = SOURCE_ROOT; };
-		00B8883912A393990052B7A4 /* ControlBus.h */ = {isa = PBXFileReference; fileEncoding = 4; name = ControlBus.h; path = libemulation/Implementation/Generic/ControlBus.h; sourceTree = SOURCE_ROOT; };
+		00B8883912A393990052B7A4 /* ControlBus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ControlBus.h; path = libemulation/Implementation/Generic/ControlBus.h; sourceTree = SOURCE_ROOT; };
 		00B8883A12A393990052B7A4 /* FloatingBus.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FloatingBus.cpp; path = libemulation/Implementation/Generic/FloatingBus.cpp; sourceTree = SOURCE_ROOT; };
 		00B8883B12A393990052B7A4 /* FloatingBus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FloatingBus.h; path = libemulation/Implementation/Generic/FloatingBus.h; sourceTree = SOURCE_ROOT; };
 		00B8883C12A393990052B7A4 /* RAM.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RAM.cpp; path = libemulation/Implementation/Generic/RAM.cpp; sourceTree = SOURCE_ROOT; };
@@ -409,7 +409,7 @@
 		00B8885412A393990052B7A4 /* MC6821.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MC6821.h; path = libemulation/Implementation/Motorola/MC6821.h; sourceTree = SOURCE_ROOT; };
 		00B8885512A393990052B7A4 /* MC6845.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MC6845.cpp; path = libemulation/Implementation/Motorola/MC6845.cpp; sourceTree = SOURCE_ROOT; };
 		00B8885612A393990052B7A4 /* MC6845.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MC6845.h; path = libemulation/Implementation/Motorola/MC6845.h; sourceTree = SOURCE_ROOT; };
-		00B8886B12A393990052B7A4 /* AppleIIMMUInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppleIIMMUInterface.h; path = libemulation/Interface/Apple/AppleIIMMUInterface.h; sourceTree = SOURCE_ROOT; };
+		00B8886B12A393990052B7A4 /* AppleIIInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppleIIInterface.h; path = libemulation/Interface/Apple/AppleIIInterface.h; sourceTree = SOURCE_ROOT; };
 		00B8886D12A393990052B7A4 /* RS232Interface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RS232Interface.h; path = libemulation/Interface/EIA/RS232Interface.h; sourceTree = SOURCE_ROOT; };
 		00B8887F12A393990052B7A4 /* IEEE1284Interface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IEEE1284Interface.h; path = libemulation/Interface/IEEE/IEEE1284Interface.h; sourceTree = SOURCE_ROOT; };
 		00B974AD10701DCD00BD1402 /* sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; path = sounds; sourceTree = "<group>"; };
@@ -844,7 +844,7 @@
 		00B8886A12A393990052B7A4 /* Apple */ = {
 			isa = PBXGroup;
 			children = (
-				00B8886B12A393990052B7A4 /* AppleIIMMUInterface.h */,
+				00B8886B12A393990052B7A4 /* AppleIIInterface.h */,
 			);
 			name = Apple;
 			path = libemulation/Interface/Apple;

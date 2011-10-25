@@ -1128,7 +1128,11 @@ void OpenGLCanvas::drawDisplayCanvas()
     
     if ((image.getSize().width == 0) ||
         (image.getSize().height == 0))
+    {
+        updateTextureSize(OPENGLCANVAS_IMAGE_PERSISTENCE, OEMakeSize(0, 0));
+        
         return;
+    }
     
     // Grab common variables
     OESize displayResolution = displayConfiguration.displayResolution;

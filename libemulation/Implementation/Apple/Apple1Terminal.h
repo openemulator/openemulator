@@ -40,6 +40,7 @@ private:
     
     OEUInt32 cursorX, cursorY;
     bool clearScreenOnCtrlL;
+    bool underscoreOnBackspace;
     bool splashScreen;
     bool splashScreenActive;
     

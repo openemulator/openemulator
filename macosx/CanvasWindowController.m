@@ -277,6 +277,7 @@
             @"Power Down",
             @"Sleep",
             @"Wake Up",
+            @"Warm Restart",
             NSToolbarFlexibleSpaceItemIdentifier,
             @"AudioControls",
             @"Devices",
@@ -302,8 +303,11 @@
 
 // Delegate
 
-/*- (NSSize)windowWillResize:(NSWindow *)window toSize:(NSSize)proposedFrameSize
+- (NSSize)windowWillResize:(NSWindow *)window toSize:(NSSize)proposedFrameSize
 {
+    if ([(CanvasWindow *)window isFullscreen])
+        return proposedFrameSize;
+    
     if ([fCanvasView isDisplayCanvas])
     {
         NSSize defaultViewSize = [fCanvasView defaultViewSize];
@@ -347,7 +351,7 @@
     }
     
     return proposedFrameSize;
-}*/
+}
 
 - (void)windowDidResize:(NSNotification *)notification
 {

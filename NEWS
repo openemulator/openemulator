@@ -1,4 +1,8 @@
 ==2011-10==
+* Added Apple-1 cassette interface noise rejection parameter
+* Fixed timing problem
+* Added Apple-1 underscore on backspace parameter
+* Refactorized the ControlBus scheduler. Niceeee!
 * Added luminance gain
 * Fixed removing a window when in fullscreen mode
 * Fixed persistence when changing window size

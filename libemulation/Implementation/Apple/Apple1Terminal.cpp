@@ -40,6 +40,7 @@ Apple1Terminal::Apple1Terminal()
     cursorX = 0;
     cursorY = 0;
     clearScreenOnCtrlL = false;
+    underscoreOnBackspace = false;
     splashScreen = false;
     splashScreenActive = false;
     
@@ -68,6 +69,8 @@ bool Apple1Terminal::setValue(string name, string value)
         cursorY = (OEUInt32) getUInt(value);
     else if (name == "clearScreenOnCtrlL")
         clearScreenOnCtrlL = getUInt(value);
+    else if (name == "underscoreOnBackspace")
+        underscoreOnBackspace = getUInt(value);
     else if (name == "splashScreen")
         splashScreen = getUInt(value);
     else if (name == "splashScreenActive")
@@ -302,6 +305,8 @@ void Apple1Terminal::notify(OEComponent *sender, int notification, void *data)
                 if (((key == 0x0c) && clearScreenOnCtrlL) ||
                     (key == 0x7f))
                     clearScreen();
+                else if (underscoreOnBackspace && (key == 0x08))
+                    sendKey('_');
                 else if (key <= 0x80)
                     sendKey(key);
                 

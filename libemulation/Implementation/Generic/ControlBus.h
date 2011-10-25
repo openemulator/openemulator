@@ -53,15 +53,13 @@ private:
     OEUInt32 nmiCount;
     
     OEUInt64 cycleCount;
-    OEUInt64 cycleStart;
-    float sampleToCycleRatio;
-    
     bool inBlock;
-    float blockSize;
-    OEInt32 blockCPUCycles;
     float blockOffset;
     
     list<ControlBusEvent> events;
+    
+    OEUInt64 cycleStart;
+    float sampleToCycleRatio;
     
     void setPowerState(ControlBusPowerState powerState);
     

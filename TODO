@@ -1,8 +1,5 @@
-==1.0==
-* Fix Cocoa initial window sizes
-* Fix opening emulations (sometimes dragging disk images to canvas opens the template chooser)
-
 ==1.0.1==
+* Fix Apple-1 cassette interface receiver problems
 * Implement Apple II
 * Implement Apple IIplus
 * Implement Apple IIj-plus
@@ -45,6 +42,7 @@
 * Implement Digisector DS-65
 
 ==Canvas==
+* Fix persistence when powering down and restarting an emulation
 * Implement shadow mask with width depending on strength
 * Implement video bloom
 * Implement RGB>YIQ>RGB video processing in the GPU
@@ -59,12 +57,14 @@
 * Implement frame interpolation with sinc function
 
 ==GUI==
+* Fix Cocoa initial window sizes
+* Fix opening emulations (sometimes dragging disk images to canvas opens the template chooser)
 * Implement UNICODE entry of composed keys on Mac OS X (like ^ or « or `)
 * Fix [CanvasView update] problem in paper view
 * Fix scrolling in template chooser when changing group
 * CanvasWindow in fullscreen mode could have multiple display sizes (e.g. for the Macintosh 512x342 window)
 
-==Unimportant things==
+==Secondary things==
 * Remove data property, and replace with value so that it points to the file (so the interface for opening files is unified, and we don't have to exchange buffers). Implement an OEData class that is capable of read from/writing to file. How could OEData get the handle to a zip package? How could an emulation
 * Implement a CPU Load Window
 * Add search in template chooser

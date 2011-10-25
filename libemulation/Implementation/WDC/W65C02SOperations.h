@@ -37,7 +37,9 @@
 #define EA_ABX_C02_P                                            \
     EA_ABS;                                                     \
     if (EAL + X > 0xff)                                         \
+    {                                                           \
         RDMEM(PCW - 1);                                         \
+    }                                                           \
     EAW += X;
 
 /* 65C02 *******************************************************
@@ -55,7 +57,9 @@
 #define EA_ABY_C02_P                                            \
     EA_ABS;														\
     if (EAL + Y > 0xff)                                         \
+    {                                                           \
         RDMEM(PCW - 1);                                         \
+    }                                                           \
     EAW += Y;
 
 /* 65C02 *******************************************************
@@ -76,7 +80,9 @@
     ZPL++;														\
     EAH = RDMEM(ZPA);											\
     if (EAL + Y > 0xff) 										\
+    {                                                           \
         RDMEM(PCW - 1);                                         \
+    }                                                           \
     EAW += Y;
 
 /* 65C02 *******************************************************
@@ -109,7 +115,9 @@
     EA_ABS;														\
     RDMEM(PCW - 1);                                             \
     if (EAL + X > 0xff) 										\
+    {                                                           \
         RDMEM(PCW - 1);                                         \
+    }                                                           \
     EAW += X;													\
     tmp = RDMEM(EAA);											\
     EAA++;														\
@@ -127,11 +135,11 @@
 #define RD_ABX_C02_P	EA_ABX_C02_P; tmp = RDMEM(EAA)
 #define RD_ABX_C02_NP	EA_ABX_C02_NP; tmp = RDMEM(EAA)
 #define RD_ABY_C02_P	EA_ABY_C02_P; tmp = RDMEM(EAA)
-#define RD_IDY_C02_P	EA_IDY_C02_P; tmp = RDMEM_ID(EAA); icount--
+#define RD_IDY_C02_P	EA_IDY_C02_P; tmp = RDMEM_ID(EAA)
 
 #define WR_ABX_C02_NP	EA_ABX_C02_NP; WRMEM(EAA, tmp)
 #define WR_ABY_C02_NP	EA_ABY_C02_NP; WRMEM(EAA, tmp)
-#define WR_IDY_C02_NP	EA_IDY_C02_NP; WRMEM_ID(EAA, tmp); icount--
+#define WR_IDY_C02_NP	EA_IDY_C02_NP; WRMEM_ID(EAA, tmp)
 
 /* 65C02********************************************************
  *  BRA  branch relative
@@ -144,7 +152,9 @@
         RDMEM(PCW);												\
         EAW = PCW + (OEInt8)tmp;                                \
         if (EAH != PCH) 										\
+        {                                                       \
             RDMEM(PCW - 1);										\
+        }                                                       \
         PCA = EAA;												\
     }
 

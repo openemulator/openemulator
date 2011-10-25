@@ -76,9 +76,6 @@
 #define PCW pc.w.l
 #define PCA pc.q
 
-#define RDMEM_ID(a)		memoryBus->read(a)
-#define WRMEM_ID(a,d)	memoryBus->write(a, d)
-
 /***************************************************************
  *  RDOP    read an opcode
  ***************************************************************/
@@ -93,11 +90,13 @@
  *  RDMEM   read memory
  ***************************************************************/
 #define RDMEM(addr) memoryBus->read(addr); icount--
+#define RDMEM_ID(a) memoryBus->read(a); icount--
 
 /***************************************************************
  *  WRMEM   write memory
  ***************************************************************/
 #define WRMEM(addr,data) memoryBus->write(addr, data); icount--
+#define WRMEM_ID(a,d) memoryBus->write(a, d); icount--
 
 /***************************************************************
  *  BRA  branch relative
@@ -105,13 +104,15 @@
  ***************************************************************/
 #define BRA(cond)												\
     {															\
-        OEUInt8 tmp2 = RDOPARG();								\
+        OEInt8 tmp2 = RDOPARG();								\
         if (cond)												\
         {														\
             RDMEM(PCW);											\
-            EAW = PCW + (signed char) tmp2;						\
+            EAW = PCW + tmp2;                                   \
             if (EAH != PCH)                                     \
-                RDMEM((PCH << 8 ) | EAL);						\
+            {                                                   \
+                RDMEM((PCH << 8) | EAL);						\
+            }                                                   \
             PCA = EAA;											\
         }														\
     }
@@ -161,7 +162,9 @@
 #define EA_ABX_P												\
     EA_ABS; 													\
     if (EAL + X > 0xff)                                         \
+    {                                                           \
         RDMEM((EAH << 8) | ((EAL + X) & 0xff));                 \
+    }                                                           \
     EAW += X;
 
 /***************************************************************
@@ -179,7 +182,9 @@
 #define EA_ABY_P												\
     EA_ABS; 													\
     if (EAL + Y > 0xff)                                         \
+    {                                                           \
         RDMEM((EAH << 8) | ((EAL + Y) & 0xff));                 \
+    }                                                           \
     EAW += Y;
 
 /***************************************************************
@@ -211,7 +216,9 @@
     ZPL++;														\
     EAH = RDMEM(ZPA);											\
     if (EAL + Y > 0xff) 										\
+    {                                                           \
         RDMEM((EAH << 8 ) | ((EAL + Y) & 0xff));                \
+    }                                                           \
     EAW += Y;
 
 /***************************************************************
@@ -279,9 +286,9 @@
 #define RD_ABX_NP           EA_ABX_NP; tmp = RDMEM(EAA)
 #define RD_ABY_P            EA_ABY_P; tmp = RDMEM(EAA)
 #define RD_ABY_NP           EA_ABY_NP; tmp = RDMEM(EAA)
-#define RD_IDX              EA_IDX; tmp = RDMEM_ID(EAA); icount--
-#define RD_IDY_P            EA_IDY_P; tmp = RDMEM_ID(EAA); icount--
-#define RD_IDY_NP           EA_IDY_NP; tmp = RDMEM_ID(EAA); icount--
+#define RD_IDX              EA_IDX; tmp = RDMEM_ID(EAA)
+#define RD_IDY_P            EA_IDY_P; tmp = RDMEM_ID(EAA)
+#define RD_IDY_NP           EA_IDY_NP; tmp = RDMEM_ID(EAA)
 #define RD_ZPI              EA_ZPI; tmp = RDMEM(EAA)
 
 /* write a value from tmp */
@@ -291,8 +298,8 @@
 #define WR_ABS              EA_ABS; WRMEM(EAA, tmp)
 #define WR_ABX_NP           EA_ABX_NP; WRMEM(EAA, tmp)
 #define WR_ABY_NP           EA_ABY_NP; WRMEM(EAA, tmp)
-#define WR_IDX              EA_IDX; WRMEM_ID(EAA, tmp); icount--
-#define WR_IDY_NP           EA_IDY_NP; WRMEM_ID(EAA, tmp); icount--
+#define WR_IDX              EA_IDX; WRMEM_ID(EAA, tmp)
+#define WR_IDY_NP           EA_IDY_NP; WRMEM_ID(EAA, tmp)
 #define WR_ZPI              EA_ZPI; WRMEM(EAA, tmp)
 
 /* dummy read from the last EA */
