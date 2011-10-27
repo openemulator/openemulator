@@ -284,7 +284,14 @@
     }
     
     // Open new untitled document if no document is open
-    if (![self currentDocument])
+    NSWindow *mainWindow = nil;
+    Document *currentDocument = nil;
+    
+    mainWindow = [NSApp mainWindow];
+    if (mainWindow)
+        currentDocument = [[mainWindow windowController] document];
+    
+    if (!currentDocument)
     {
         NSError *error;
         if (![self openUntitledDocumentAndDisplay:YES
@@ -301,10 +308,10 @@
     // Mount disk image
     if ([diskImagePathExtensions containsObject:pathExtension])
     {
-        if ([[self currentDocument] mount:path])
+        if ([currentDocument mount:path])
             return YES;
         
-        if ([[self currentDocument] canMount:path])
+        if ([currentDocument canMount:path])
         {
             NSAlert *alert = [[NSAlert alloc] init];
             [alert setMessageText:[NSString localizedStringWithFormat:

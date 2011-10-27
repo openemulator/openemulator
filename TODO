@@ -1,5 +1,9 @@
 ==1.0.1==
-* Fix Apple-1 cassette interface receiver problems
+* Implement AppleIISlotMemory and AppleIISlotExpansionMemory
+* Implement AppleIIMMU
+* Implement AppleIIGamePort or Delegate component
+* Think about representing Apple II video in components: AppleIIVideoGenerator + AppleIIVideoControl? Overwrite AddressDecoder entries dynamically depending on video mode?
+* Implement AppleIIFloatingBus and video
 * Implement Apple II
 * Implement Apple IIplus
 * Implement Apple IIj-plus

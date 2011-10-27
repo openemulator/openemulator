@@ -1,4 +1,6 @@
 ==2011-10==
+* Fixed audio recorder
+* Fixed audio file dragging to canvases
 * Added Apple-1 cassette interface noise rejection parameter
 * Fixed timing problem
 * Added Apple-1 underscore on backspace parameter

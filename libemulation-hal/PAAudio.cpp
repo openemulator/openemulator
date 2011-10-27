@@ -20,6 +20,8 @@
 #define DEFAULT_FRAMESPERBUFFER		512
 #define DEFAULT_BUFFERNUM			3
 
+#define PLAY_FRAMESPERBUFFER        1024
+
 using namespace std;
 
 // Callbacks
@@ -606,6 +608,8 @@ void PAAudio::openPlayer(string path)
 {
     closePlayer();
     
+    lock();
+    
     SF_INFO sfInfo = 
     {
         0,
@@ -616,36 +620,30 @@ void PAAudio::openPlayer(string path)
         0,
     };
     
-    lock();
-    
     playSNDFILE = sf_open(path.c_str(), SFM_READ, &sfInfo);
     if (playSNDFILE)
     {
         playChannelNum = sfInfo.channels;
+        playSRCRatio = (double) sampleRate / sfInfo.samplerate;
+        playFrameIndex = 0;
+        playFrameNum = sfInfo.frames * playSRCRatio;
         
         int error;
         
-        playSRCRatio = (double) sampleRate / sfInfo.samplerate;
-        playSRC = src_new(SRC_SINC_FASTEST,
-                          sfInfo.channels,
-                          &error);
-        
+        playSRC = src_new(SRC_SINC_FASTEST, playChannelNum, &error);
         if (playSRC)
         {
-            playSRCBufferFrameBegin = 0;
-            playSRCBufferFrameEnd = 0;
+            playSRCInputFrameNum = 0;
             
-            OEUInt32 frameNum = 2 * playSRCRatio * framesPerBuffer;
-            playSRCBuffer.resize(frameNum * playChannelNum);
-            
-            playFrameIndex = 0;
-            playFrameNum = sfInfo.frames * playSRCRatio;
+            playSRCInput.resize(framesPerBuffer * playChannelNum);
         }
         else
         {
             logMessage("could not init sample rate converter, error " + getString(error));
             
             sf_close(playSNDFILE);
+              
+            playSNDFILE = NULL;
         }
     }
     else
@@ -662,6 +660,7 @@ void PAAudio::closePlayer()
     lock();
     
     sf_close(playSNDFILE);
+    
     playSNDFILE = NULL;
     playing = false;
     playFrameIndex = 0;
@@ -681,10 +680,7 @@ void PAAudio::setPlayPosition(float time)
     sf_seek(playSNDFILE, playFrameIndex / playSRCRatio, SEEK_SET);
     
     if (!playing)
-    {
-        playSRCBufferFrameBegin = 0;
-        playSRCBufferFrameEnd = 0;
-    }
+        playSRCInputFrameNum = 0;
     
     unlock();
 }
@@ -727,72 +723,71 @@ void PAAudio::playAudio(float *inputBuffer,
     if (!playing)
         return;
     
-    vector<float> srcBuffer;
-    srcBuffer.resize(frameNum * playChannelNum);
+    OEUInt32 srcOutputFrameIndex = 0;
+    OEUInt32 srcOutputFrameNum = frameNum;
     
-    OEUInt32 playSRCBufferFrameNum = (OEUInt32) playSRCBuffer.size() / playChannelNum;
+    vector<float> srcOutput;
+    srcOutput.resize(srcOutputFrameNum * playChannelNum);
     
     do
     {
-        if (playSRCBufferFrameBegin >= playSRCBufferFrameEnd)
+        if (!playSRCInputFrameNum)
         {
-            OEUInt32 n = (OEUInt32) sf_readf_float(playSNDFILE,
-                                                   &playSRCBuffer.front(),
-                                                   playSRCBufferFrameNum);
-            
-            playSRCBufferFrameBegin = 0;
-            playSRCBufferFrameEnd = n;
+            playSRCInputFrameIndex = 0;
+            playSRCInputFrameNum = (OEUInt32) sf_readf_float(playSNDFILE,
+                                                             &playSRCInput.front(),
+                                                             (OEUInt32) playSRCInput.size() / playChannelNum);
         }
-        
-        OEUInt32 index = playSRCBufferFrameBegin * playChannelNum;
-        OEUInt32 inputFrameNum = (playSRCBufferFrameEnd - playSRCBufferFrameBegin);
         
         SRC_DATA srcData =
         {
-            &playSRCBuffer[index],
-            &srcBuffer.front(),
-            inputFrameNum,
-            frameNum,
-            0,
-            0,
+            &playSRCInput[playSRCInputFrameIndex * playChannelNum],
+            &srcOutput[srcOutputFrameIndex * playChannelNum],
+            playSRCInputFrameNum,
+            srcOutputFrameNum,
+            0, 0,
             0,
             playSRCRatio,
         };
+        
         src_process(playSRC, &srcData);
         
         if (!srcData.output_frames_gen)
         {
             playing = false;
             
-            return;
+            break;
         }
         
-        float linearVolume = pow(10.0, (playVolume - 1.0) * 100.0 / 20.0);
-        OEUInt32 sampleNum = frameNum * channelNum;
+        playSRCInputFrameIndex += srcData.input_frames_used;
+        playSRCInputFrameNum -= srcData.input_frames_used;
         
-        for (OEUInt32 ch = 0; ch < channelNum; ch++)
-        {
-            float *x = &srcBuffer.front() + (ch % playChannelNum);
-            float *yi = inputBuffer + ch;
-            float *yo = outputBuffer + ch;
-            
-            for (OEUInt32 i = 0; i < sampleNum; i += channelNum)
-            {
-                float value = *x * linearVolume;
-                
-                yi[i] += value;
-                if (playThrough)
-                    yo[i] += value;
-                
-                x += playChannelNum;
-            }
-        }
+        srcOutputFrameIndex += srcData.output_frames_gen;
+        srcOutputFrameNum -= srcData.output_frames_gen;
         
         playFrameIndex += srcData.output_frames_gen;
-        playSRCBufferFrameBegin += srcData.input_frames_used;
+    } while (srcOutputFrameNum > 0);
+    
+    float linearVolume = pow(10.0, (playVolume - 1.0) * 100.0 / 20.0);
+    OEUInt32 sampleNum = (frameNum - srcOutputFrameNum) * channelNum;
+    
+    for (OEUInt32 ch = 0; ch < channelNum; ch++)
+    {
+        float *x = &srcOutput.front() + (ch % playChannelNum);
+        float *yi = inputBuffer + ch;
+        float *yo = outputBuffer + ch;
         
-        frameNum -= srcData.output_frames_gen;
-    } while (frameNum > 0);
+        for (OEUInt32 i = 0; i < sampleNum; i += channelNum)
+        {
+            float value = *x * linearVolume;
+            
+            yi[i] += value;
+            if (playThrough)
+                yo[i] += value;
+            
+            x += playChannelNum;
+        }
+    }
 }
 
 //
@@ -859,9 +854,9 @@ float PAAudio::getRecordingTime()
     return (float) recordingFrameNum / sampleRate;
 }
 
-long long PAAudio::getRecordingSize()
+OEUInt64 PAAudio::getRecordingSize()
 {
-    return (long long) recordingFrameNum * channelNum * sizeof(short);
+    return (OEUInt64) recordingFrameNum * channelNum * sizeof(short);
 }
 
 void PAAudio::recordAudio(float *outputBuffer,
