@@ -8,22 +8,15 @@
  * Controls random access memory
  */
 
+#include "OEComponent.h"
+
+#include "ControlBusInterface.h"
+
 // Notes:
 // * size is the RAM size. It must be a power of two.
 // * To determine the power state, set the controlBus.
 // * powerOnPattern is the byte pattern used when power is first applied.
 // * image is the RAM image.
-
-#include "OEComponent.h"
-
-#include "ControlBusInterface.h"
-
-typedef enum
-{
-    RAM_GET_MEMORYSIZE,
-    RAM_GET_MEMORY,
-    RAM_SET_MEMORY,
-} RAMMessage;
 
 class RAM : public OEComponent
 {

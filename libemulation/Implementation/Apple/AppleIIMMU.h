@@ -2,7 +2,7 @@
 /**
  * libemulator
  * Apple II Memory Management Unit
- * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Controls Apple II memory ($D000-$FFFF)
@@ -16,22 +16,20 @@ public:
 	AppleIIMMU();
 	
 	bool setRef(string name, OEComponent *ref);	
-	
+	bool init();
+    
+    bool postMessage(OEComponent *sender, int message, void *data);
+    
 private:
 	OEComponent *memoryBus;
 	OEComponent *floatingBus;
 	
-	OEComponent *romD0;
-	OEComponent *romD8;
-	OEComponent *romE0;
-	OEComponent *romE8;
-	OEComponent *romF0;
-	OEComponent *romF8;
-	
-	OEComponent *romD0Socket;
-	OEComponent *romD8Socket;
-	OEComponent *romE0Socket;
-	OEComponent *romE8Socket;
-	OEComponent *romF0Socket;
-	OEComponent *romF8Socket;
+    OEComponent *ram[3];
+	OEComponent *rom[6];
+    OEComponent *videoSync;
+    OEComponent *slotIO[8];
+    OEComponent *slotMemory[8];
+    
+    void updateSlotIO(int index, OEComponent *ref);
+    void updateSlotMemory(int index, OEComponent *ref);
 };

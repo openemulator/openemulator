@@ -37,6 +37,8 @@ OEEmulation::~OEEmulation()
     
     if (doc)
     {
+        disposeDocument(doc);
+        
         deconfigureDocument(doc);
         
         destroyDocument(doc);
@@ -134,7 +136,7 @@ bool OEEmulation::constructDocument(xmlDocPtr doc)
             if (!constructDevice(deviceId))
                 return false;
         }
-        if (getNodeName(node) == "component")
+        else if (getNodeName(node) == "component")
         {
             string id = getNodeProperty(node, "id");
             string className = getNodeProperty(node, "class");
@@ -205,7 +207,7 @@ bool OEEmulation::configureDocument(xmlDocPtr doc)
             if (!configureDevice(deviceId, label, image, node->children))
                 return false;
         }
-        if (getNodeName(node) == "component")
+        else if (getNodeName(node) == "component")
         {
             string id = getNodeProperty(node, "id");
             
@@ -286,7 +288,9 @@ bool OEEmulation::configureComponent(string id, xmlNodePtr children)
             else if (hasNodeProperty(node, "ref"))
             {
                 string refId = getNodeProperty(node, "ref");
+                
                 OEComponent *ref = getComponent(refId);
+                
                 if (!component->setRef(name, ref))
                     logMessage("'" + id + "': unknown property '" + name + "'");
             }
@@ -295,8 +299,11 @@ bool OEEmulation::configureComponent(string id, xmlNodePtr children)
                 string dataSrc = getNodeProperty(node, "data");
                 
                 OEData data;
+                
                 string parsedSrc = parseValueProperties(dataSrc, propertiesMap);
+                
                 bool dataRead = false;
+                
                 if (hasValueProperty(dataSrc, "packagePath"))
                 {
                     if (package)
@@ -329,6 +336,7 @@ bool OEEmulation::configureInlets(OEInletMap& inletMap)
         OEIdMap& idMap = i->second;
         
         OEComponent *component = getComponent(id);
+        
         if (!component)
         {
             logMessage("could not configure '" + id + "', component is not constructed");
@@ -344,6 +352,7 @@ bool OEEmulation::configureInlets(OEInletMap& inletMap)
             string refId = j->second;
             
             OEComponent *ref = getComponent(refId);
+            
             if (!component->setRef(name, ref))
                 logMessage("'" + id + "': unknown property '" + name + "'");
         }
@@ -375,6 +384,7 @@ bool OEEmulation::initDocument(xmlDocPtr doc)
 bool OEEmulation::initComponent(string id)
 {
     OEComponent *component = getComponent(id);
+    
     if (!component)
     {
         logMessage("could not init '" + id + "', component is not constructed");
@@ -415,6 +425,7 @@ bool OEEmulation::updateDocument(xmlDocPtr doc)
 bool OEEmulation::updateComponent(string id, xmlNodePtr children)
 {
     OEComponent *component = getComponent(id);
+    
     if (!component)
     {
         logMessage("could not update '" + id + "', component is not constructed");
@@ -450,6 +461,7 @@ bool OEEmulation::updateComponent(string id, xmlNodePtr children)
                     continue;
                 
                 OEData *data = NULL;
+                
                 string parsedSrc = parseValueProperties(dataSrc, propertiesMap);
                 
                 if (component->getData(name, &data) && data)
@@ -462,6 +474,63 @@ bool OEEmulation::updateComponent(string id, xmlNodePtr children)
     }
     
     return true;
+}
+
+void OEEmulation::disposeDocument(xmlDocPtr doc)
+{
+    xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+    
+    for(xmlNodePtr node = rootNode->children;
+        node;
+        node = node->next)
+    {
+        if (getNodeName(node) == "component")
+        {
+            string id = getNodeProperty(node, "id");
+            
+            disposeComponent(id);
+        }
+    }
+}
+
+void OEEmulation::disposeDevice(string deviceId)
+{
+    xmlNodePtr rootNode = xmlDocGetRootElement(doc);
+    
+    for(xmlNodePtr node = rootNode->children;
+        node;
+        node = node->next)
+    {
+        if (getNodeName(node) == "component")
+        {
+            string componentId = getNodeProperty(node, "id");
+            
+            for(xmlNodePtr propertyNode = node->children;
+                propertyNode;
+                propertyNode = propertyNode->next)
+            {
+                string ref = getNodeProperty(propertyNode, "ref");
+                
+                if ((getDeviceId(componentId) == deviceId) ||
+                    (getDeviceId(ref) == deviceId))
+                    disposeComponent(componentId);
+            }
+        }
+    }
+}
+
+void OEEmulation::disposeComponent(string id)
+{
+    OEComponent *component = getComponent(id);
+    
+    if (!component)
+    {
+        logMessage("could not dispose '" + id + "', component is not constructed");
+        
+        return;
+    }
+    
+    component->dispose();
 }
 
 void OEEmulation::deconfigureDocument(xmlDocPtr doc)
@@ -506,6 +575,7 @@ void OEEmulation::deconfigureDevice(string deviceId)
                     if (component)
                     {
                         string name = getNodeProperty(propertyNode, "name");
+                        
                         component->setRef(name, NULL);
                     }
                 }
@@ -517,8 +587,13 @@ void OEEmulation::deconfigureDevice(string deviceId)
 void OEEmulation::deconfigureComponent(string id, xmlNodePtr children)
 {
     OEComponent *component = getComponent(id);
+    
     if (!component)
+    {
+        logMessage("could not deconfigure '" + id + "', component is not constructed");
+        
         return;
+    }
     
     for(xmlNodePtr node = children;
         node;
@@ -574,8 +649,13 @@ void OEEmulation::destroyDevice(string deviceId)
 void OEEmulation::destroyComponent(string id, xmlNodePtr children)
 {
     OEComponent *component = getComponent(id);
+    
     if (!component)
+    {
+        logMessage("could not destroy '" + id + "', component is not constructed");
+        
         return;
+    }
     
     delete component;
     

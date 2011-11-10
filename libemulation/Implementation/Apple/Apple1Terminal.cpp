@@ -12,7 +12,7 @@
 
 #include "DeviceInterface.h"
 #include "RS232Interface.h"
-#include "RAM.h"
+#include "MemoryInterface.h"
 
 #define SCREEN_ORIGIN_X     104
 #define SCREEN_ORIGIN_Y     25
@@ -40,7 +40,6 @@ Apple1Terminal::Apple1Terminal()
     cursorX = 0;
     cursorY = 0;
     clearScreenOnCtrlL = false;
-    underscoreOnBackspace = false;
     splashScreen = false;
     splashScreenActive = false;
     
@@ -51,14 +50,6 @@ Apple1Terminal::Apple1Terminal()
     cursorCount = 0;
     
     powerState = CONTROLBUS_POWERSTATE_ON;
-    
-/*    image.setSubcarrier(3579545);
-//    image.setBlackLevel(0.1921);
-//    image.setWhiteLevel(0.6118);
-    image.load("/Users/mressl/Desktop/OE/composite/penelope.png");
-    image.load("/Users/mressl/Documents/OpenEmulator/Archive/Video/Composite/Tests/Apple II/BruceLee2.png");
-    
-    ph = 0;*/
 }
 
 bool Apple1Terminal::setValue(string name, string value)
@@ -69,8 +60,6 @@ bool Apple1Terminal::setValue(string name, string value)
         cursorY = (OEUInt32) getUInt(value);
     else if (name == "clearScreenOnCtrlL")
         clearScreenOnCtrlL = getUInt(value);
-    else if (name == "underscoreOnBackspace")
-        underscoreOnBackspace = getUInt(value);
     else if (name == "splashScreen")
         splashScreen = getUInt(value);
     else if (name == "splashScreenActive")
@@ -305,7 +294,7 @@ void Apple1Terminal::notify(OEComponent *sender, int notification, void *data)
                 if (((key == 0x0c) && clearScreenOnCtrlL) ||
                     (key == 0x7f))
                     clearScreen();
-                else if (underscoreOnBackspace && (key == 0x08))
+                else if (key == 0x08)
                     sendKey('_');
                 else if (key <= 0x80)
                     sendKey(key);
@@ -376,64 +365,6 @@ void Apple1Terminal::loadFont(OEData *data)
 
 void Apple1Terminal::updateCanvas()
 {
-/*    OEImage i;
-    if (ph == 0)
-    {
-        i = OEImage(image, OEMakeRect(0, 0, 768, 242));
-        
-        vector<float> colorBurst;
-        colorBurst.push_back(0.28);
-        colorBurst.push_back(0.78);
-        i.setColorBurst(colorBurst);
-        
-        i.setInterlace(0.0);
-    }
-    else if (ph == 1)
-    {
-        i = OEImage(image, OEMakeRect(0, 262, 768, 242));
-        
-        vector<float> colorBurst;
-        colorBurst.push_back(0.28);
-        colorBurst.push_back(0.78);
-        i.setColorBurst(colorBurst);
-        
-        i.setInterlace(-0.5);
-    }
-    else if (ph == 2)
-    {
-        i = OEImage(image, OEMakeRect(0, 525, 768, 242));
-        
-        vector<float> colorBurst;
-        colorBurst.push_back(0.78);
-        colorBurst.push_back(0.28);
-        i.setColorBurst(colorBurst);
-        
-        i.setInterlace(0.0);
-    }
-    else if (ph == 3)
-    {
-        i = OEImage(image, OEMakeRect(0, 787, 768, 242));
-        
-        vector<float> colorBurst;
-        colorBurst.push_back(0.78);
-        colorBurst.push_back(0.28);
-        i.setColorBurst(colorBurst);
-        
-        i.setInterlace(-0.5);
-    }
-    
-    monitor->postMessage(this, CANVAS_POST_IMAGE, &i);
-    
-    ph++;
-    if (ph >= 4)
-        ph = 0;
-    
-    return;
-    
-    monitor->postMessage(this, CANVAS_POST_IMAGE, &image);
-    
-    return;*/
-    
     OEUInt8 *vramp = getVRAMData();
     
     if (!monitor ||

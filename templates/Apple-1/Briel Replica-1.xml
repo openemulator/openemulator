@@ -10,8 +10,8 @@
         <inlet ref="replica1.terminal" property="monitorDevice" outletRef=""/>
         <inlet ref="replica1.terminal" property="monitor" outletRef="monitor"/>
     </port>
-    <port id="replica1.slot1" ref="appleACI.connector" type="Apple-1 Expansion Port" group="expansions" label="Expansion Port" image="images/Connectors/Edge44.png"/>
-    <port id="replica1.slot2" ref="rdCFFA1.connector" type="Apple-1 Expansion Port" group="expansions" label="Expansion Port" image="images/Connectors/Edge44.png"/>
+    <port id="replica1.slot1" ref="" type="Apple-1 Expansion Port" group="expansions" label="Expansion Port" image="images/Connectors/Edge44.png"/>
+    <port id="replica1.slot2" ref="" type="Apple-1 Expansion Port" group="expansions" label="Expansion Port" image="images/Connectors/Edge44.png"/>
     <component id="replica1.controlBus" class="ControlBus">
         <property name="device" ref="replica1"/>
         <property name="audio" ref="audio"/>
@@ -29,6 +29,9 @@
         <property name="addressSize" value="16"/>
         <property name="blockSize" value="8"/>
         <property name="floatingBus" ref="replica1.floatingBus"/>
+    </component>
+    <component id="replica1.mmu" class="MMU">
+        <property name="addressDecoder" ref="replica1.memoryBus"/>
         <property name="refRAM" ref="replica1.ram"/>
         <property name="mapRAM" value="0x0000-0x7fff"/>
         <property name="refIO" ref="replica1.ioMemory"/>
@@ -94,7 +97,6 @@
         <property name="cursorX" value="0"/>
         <property name="cursorY" value="0"/>
         <property name="clearScreenOnCtrlL" value="1"/>
-        <property name="underscoreOnBackspace" value="1"/>
     </component>
     <component id="replica1.terminalRAM" class="RAM">
         <property name="controlBus" ref="replica1.controlBus"/>
@@ -103,7 +105,7 @@
         <property name="powerOnPattern" value="0x20"/>
     </component>
     <component id="replica1.rom" class="ROM">
-        <property name="image" data="${resourcePath}/roms/Briel/Replica-1 65C02 ROM.bin"/>
+        <property name="image" data="${resourcePath}/roms/Briel/Replica-1 6502 ROM.bin"/>
     </component>
     
     <device id="appleMonitorII" label="Apple Monitor II" image="images/Apple/Apple Monitor II.png">
@@ -132,53 +134,6 @@
         <property name="displayScanlineLevel" value="0.5"/>
         <property name="displayCenterLighting" value="0.5"/>
         <property name="displayLuminanceGain" value="1.5"/>
-    </component>
-    
-    <device id="appleACI" label="Apple-1 Cassette Interface Card" image="images/Apple/Apple-1 Cassette Interface Card.png">
-    </device>
-    <connector id="appleACI.connector" type="Apple-1 Expansion Port">
-        <inlet ref="appleACI.io" property="memoryBus" outletRef="memoryBus"/>
-        <inlet ref="appleACI.audioCodec" property="controlBus" outletRef="controlBus"/>
-    </connector>
-    <component id="appleACI.io" class="Apple1ACI">
-        <property name="rom" ref="appleACI.rom"/>
-        <property name="memoryBus" ref="replica1.memoryBus"/>
-        <property name="audioCodec" ref="appleACI.audioCodec"/>
-    </component>
-    <component id="appleACI.audioCodec" class="AudioCodec">
-        <property name="audio" ref="audio"/>
-        <property name="controlBus" ref="replica1.controlBus"/>
-        <property name="timeAccuracy" value="0.000001"/>
-        <property name="filterSize" value="17"/>
-        <property name="lowFrequency" value="20"/>
-        <property name="highFrequency" value="10000"/>
-    </component>
-    <component id="appleACI.rom" class="ROM">
-        <property name="image" data="${resourcePath}/roms/Apple/Apple-1 ACI ROM.bin"/>
-    </component>
-    
-    <device id="rdCFFA1" label="R&amp;D CFFA1" image="images/R&amp;D/R&amp;D CFFA1.png">
-        <setting ref="rdCFFA1.io" name="forceWriteProtected" label="Force Write Protected" type="checkbox"/>
-    </device>
-    <connector id="rdCFFA1.connector" type="Apple-1 Expansion Port">
-        <inlet ref="rdCFFA1.io" property="memoryBus" outletRef="memoryBus"/>
-        <inlet ref="rdCFFA1.ram" property="controlBus" outletRef="controlBus"/>
-    </connector>
-    <component id="rdCFFA1.io" class="RDCFFA1">
-        <property name="device" ref="rdCFFA1"/>
-        <property name="ram" ref="rdCFFA1.ram"/>
-        <property name="rom" ref="rdCFFA1.rom"/>
-        <property name="memoryBus" ref="replica1.memoryBus"/>
-        <property name="image" value=""/>
-        <property name="forceWriteProtected" value="0"/>
-    </component>
-    <component id="rdCFFA1.ram" class="RAM">
-        <property name="controlBus" ref="replica1.controlBus"/>
-        <property name="image" data="${packagePath}/${id}.bin"/>
-        <property name="size" value="0x8000"/>
-    </component>
-    <component id="rdCFFA1.rom" class="ROM">
-        <property name="image" data="${resourcePath}/roms/R&amp;D/CFFA1V1.0.bin"/>
     </component>
     
 </edl>

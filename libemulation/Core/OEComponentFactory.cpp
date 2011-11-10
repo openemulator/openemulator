@@ -16,11 +16,11 @@
 #include "AudioCodec.h"
 #include "ControlBus.h"
 #include "FloatingBus.h"
+#include "MMU.h"
 #include "Monitor.h"
 #include "Mux.h"
 #include "RAM.h"
 #include "ROM.h"
-#include "Terminal.h"
 
 #include "Apple1ACI.h"
 #include "Apple1IO.h"
@@ -66,11 +66,11 @@ OEComponent *OEComponentFactory::construct(const string& className)
     matchComponent(AudioCodec);
     matchComponent(ControlBus);
     matchComponent(FloatingBus);
+    matchComponent(MMU);
     matchComponent(Monitor);
     matchComponent(Mux);
     matchComponent(RAM);
     matchComponent(ROM);
-    matchComponent(Terminal);
     
     matchComponent(Apple1ACI);
     matchComponent(Apple1IO);

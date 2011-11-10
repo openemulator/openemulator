@@ -9,7 +9,8 @@
  */
 
 #include "RAM.h"
-#include "AddressDecoder.h"
+
+#include "MemoryInterface.h"
 
 RAM::RAM()
 {

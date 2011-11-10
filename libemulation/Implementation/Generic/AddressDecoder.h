@@ -11,25 +11,13 @@
 #ifndef _ADDRESSDECODER_H
 #define _ADDRESSDECODER_H
 
+#include <list>
+
 #include "OEComponent.h"
 
-typedef enum
-{
-    ADDRESSDECODER_MAP,
-} AddressDecoderMessage;
+#include "MemoryInterface.h"
 
-typedef struct
-{	
-    OEComponent *component;
-    
-    OEAddress startAddress;
-    OEAddress endAddress;
-    
-    bool read;
-    bool write;
-} AddressDecoderMap;
-
-typedef vector<AddressDecoderMap> AddressDecoderMaps;
+typedef list<MemoryMap> AddressDecoderMaps;
 typedef map<string, string> AddressDecoderConf;
 typedef map<string, OEComponent *> AddressDecoderRef;
 
@@ -54,19 +42,18 @@ private:
     
     AddressDecoderConf conf;
     AddressDecoderRef ref;
+    
     AddressDecoderMaps pendingMaps;
     
-    OEAddress addressMask;
     OEComponents readMap;
     OEComponents writeMap;
     
-    OEComponents defaultReadMap;
-    OEComponents defaultWriteMap;
+    OEAddress addressMask;
     
-    void mapDecoderMap(AddressDecoderMap *theMap);
-    
-    bool getDecoderMap(AddressDecoderMap& theMap, OEComponent *component, string value);
-    bool mapConf(OEComponent *component, string conf);
+    bool getMemoryMap(MemoryMap& theMap, OEComponent *component, string value);
+    bool mapRef(OEComponent *component, string conf);
+    void clear();
+    void mapMemory(MemoryMap *theMap);
 };
 
 #endif

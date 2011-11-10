@@ -332,6 +332,9 @@ bool OEDocument::removeDevice(string deviceId)
     // Get connected devices
     OEPortInfos portInfos = getPortInfos();
     
+    // Dispose device refs
+    disposeDevice(deviceId);
+    
     // Deconfigure device refs
     deconfigureDevice(deviceId);
     
@@ -485,6 +488,10 @@ bool OEDocument::configureInlets(OEInletMap& inletMap)
 bool OEDocument::updateDocument(xmlDocPtr doc)
 {
     return true;
+}
+
+void OEDocument::disposeDevice(string deviceId)
+{
 }
 
 void OEDocument::deconfigureDevice(string deviceId)

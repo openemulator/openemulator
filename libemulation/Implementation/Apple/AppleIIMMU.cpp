@@ -2,7 +2,7 @@
 /**
  * libemulator
  * Apple II Memory Management Unit
- * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Controls Apple II memory ($D000-$FFFF)
@@ -10,59 +10,113 @@
 
 #include "AppleIIMMU.h"
 
-#define APPLEIIMMU_ROM_OFFSET	0xd000
-#define APPLEIIMMU_ROM_SIZE		0x3000
+#include "MemoryInterface.h"
+#include "AppleIIInterface.h"
 
 AppleIIMMU::AppleIIMMU()
 {
 	memoryBus = NULL;
 	floatingBus = NULL;
 	
-	romD0 = NULL;
-	romD8 = NULL;
-	romE0 = NULL;
-	romE8 = NULL;
-	romF0 = NULL;
-	romF8 = NULL;
-
-	romD0Socket = NULL;
-	romD8Socket = NULL;
-	romE0Socket = NULL;
-	romE8Socket = NULL;
-	romF0Socket = NULL;
-	romF8Socket = NULL;
+    for (int i = 0; i < 3; i++)
+        ram[i] = NULL;
+    for (int i = 0; i < 6; i++)
+        rom[i] = NULL;
+    for (int i = 0; i < 8; i++)
+        slotIO[i] = NULL;
+    for (int i = 0; i < 8; i++)
+        slotMemory[i] = NULL;
 }
 
 bool AppleIIMMU::setRef(string name, OEComponent *ref)
 {
 	if (name == "memoryBus")
 		memoryBus = ref;
+	else if (name == "floatingBus")
+		floatingBus = ref;
+	else if (name == "ram1")
+		ram[0] = ref;
+	else if (name == "ram2")
+		ram[1] = ref;
+	else if (name == "ram3")
+		ram[2] = ref;
 	else if (name == "romD0")
-		romD0 = ref;
+		rom[0] = ref;
 	else if (name == "romD8")
-		romD8 = ref;
+		rom[1] = ref;
 	else if (name == "romE0")
-		romE0 = ref;
+		rom[2] = ref;
 	else if (name == "romE8")
-		romE8 = ref;
+		rom[3] = ref;
 	else if (name == "romF0")
-		romF0 = ref;
+		rom[4] = ref;
 	else if (name == "romF8")
-		romF8 = ref;
-	else if (name == "romD0Socket")
-		romD0Socket = ref;
-	else if (name == "romD8Socket")
-		romD8Socket = ref;
-	else if (name == "romE0Socket")
-		romE0Socket = ref;
-	else if (name == "romE8Socket")
-		romE8Socket = ref;
-	else if (name == "romF0Socket")
-		romF0Socket = ref;
-	else if (name == "romF8Socket")
-		romF8Socket = ref;
+		rom[5] = ref;
+	else if (name == "videoSync")
+		videoSync = ref;
+	else if (name == "slot0IO")
+        updateSlotIO(0, ref);
+	else if (name == "slot1IO")
+        updateSlotIO(1, ref);
+	else if (name == "slot2IO")
+        updateSlotIO(2, ref);
+	else if (name == "slot3IO")
+        updateSlotIO(3, ref);
+	else if (name == "slot4IO")
+        updateSlotIO(4, ref);
+	else if (name == "slot5IO")
+        updateSlotIO(5, ref);
+	else if (name == "slot6IO")
+        updateSlotIO(6, ref);
+	else if (name == "slot7IO")
+        updateSlotIO(7, ref);
+	else if (name == "slot1Memory")
+        updateSlotMemory(1, ref);
+	else if (name == "slot2Memory")
+        updateSlotMemory(2, ref);
+	else if (name == "slot3Memory")
+        updateSlotMemory(3, ref);
+	else if (name == "slot4Memory")
+        updateSlotMemory(4, ref);
+	else if (name == "slot5Memory")
+        updateSlotMemory(5, ref);
+	else if (name == "slot6Memory")
+        updateSlotMemory(6, ref);
+	else if (name == "slot7Memory")
+        updateSlotMemory(7, ref);
 	else
 		return false;
 	
 	return true;
+}
+
+bool AppleIIMMU::init()
+{
+    if (!floatingBus)
+    {
+        logMessage("floatingBus not connected");
+        
+        return false;
+    }
+    
+    return true;
+}
+
+bool AppleIIMMU::postMessage(OEComponent *sender, int message, void *data)
+{
+    switch(message)
+    {
+    }
+    
+    return false;
+}
+
+void AppleIIMMU::updateSlotIO(int index, OEComponent *ref)
+{
+    
+}
+
+void AppleIIMMU::updateSlotMemory(int index, OEComponent *ref)
+{
+    
 }

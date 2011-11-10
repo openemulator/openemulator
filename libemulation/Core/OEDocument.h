@@ -81,6 +81,7 @@ protected:
     virtual bool constructDocument(xmlDocPtr doc);
     virtual bool configureInlets(OEInletMap& inletMap);
     virtual bool updateDocument(xmlDocPtr doc);
+    virtual void disposeDevice(string deviceId);
     virtual void deconfigureDevice(string deviceId);
     virtual void destroyDevice(string deviceId);
     

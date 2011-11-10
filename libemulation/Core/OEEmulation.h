@@ -68,6 +68,9 @@ private:
     bool initComponent(string id);
     bool updateDocument(xmlDocPtr doc);
     bool updateComponent(string id, xmlNodePtr children);
+    void disposeDocument(xmlDocPtr doc);
+    void disposeDevice(string deviceId);
+    void disposeComponent(string id);
     void deconfigureDocument(xmlDocPtr doc);
     void deconfigureDevice(string deviceId);
     void deconfigureComponent(string id, xmlNodePtr children);

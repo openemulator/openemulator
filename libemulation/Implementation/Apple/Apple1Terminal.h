@@ -8,13 +8,13 @@
  * Implements an Apple-1 terminal
  */
 
+#include <queue>
+
 #include "OEComponent.h"
 
 #include "OEImage.h"
 #include "CanvasInterface.h"
 #include "ControlBusInterface.h"
-
-#include <queue>
 
 class Apple1Terminal : public OEComponent
 {
@@ -40,7 +40,6 @@ private:
     
     OEUInt32 cursorX, cursorY;
     bool clearScreenOnCtrlL;
-    bool underscoreOnBackspace;
     bool splashScreen;
     bool splashScreenActive;
     

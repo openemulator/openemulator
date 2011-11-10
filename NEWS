@@ -1,3 +1,11 @@
+==2011-11==
+* Added OEComponent destroy() callback
+* Fixed last frame error in audio player 
+* Implemented AppleIIGamePort
+* Updated Replica-1 ROM to KRUSADER 1.3
+* Implemented generic MMU
+* Refactorized OpenEmulator memory paradigm
+
 ==2011-10==
 * Fixed audio recorder
 * Fixed audio file dragging to canvases

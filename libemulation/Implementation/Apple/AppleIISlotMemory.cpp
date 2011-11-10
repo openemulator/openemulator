@@ -32,44 +32,71 @@ bool AppleIISlotMemory::setRef(string name, OEComponent *ref)
 	else if (name == "slotExpansionMemory")
 		slotExpansionMemory = ref;
 	else if (name == "slot1")
-		slot[1] = ref;
+        setSlot(1, ref);
 	else if (name == "slot2")
-		slot[2] = ref;
+        setSlot(2, ref);
 	else if (name == "slot3")
-		slot[3] = ref;
+        setSlot(3, ref);
 	else if (name == "slot4")
-		slot[4] = ref;
+        setSlot(4, ref);
 	else if (name == "slot5")
-		slot[5] = ref;
+        setSlot(5, ref);
 	else if (name == "slot6")
-		slot[6] = ref;
+        setSlot(6, ref);
 	else if (name == "slot7")
-		slot[7] = ref;
+        setSlot(7, ref);
 	else
 		return false;
 	
 	return true;
 }
 
-bool init()
+bool AppleIISlotMemory::init()
 {
+    if (!floatingBus)
+    {
+        logMessage("floatingBus not connected");
+        
+        return false;
+    }
+    
+    if (!slotExpansionMemory)
+    {
+        logMessage("slotExpansionMemory not connected");
+        
+        return false;
+    }
+    
+	OEComponent *component = slot[slotSel];
+    
+//	slotExpansionMemory->postMessage(this, APPLEIISLOTMEMORY_RESET, component);
+	
     return true;
 }
 
 OEUInt8 AppleIISlotMemory::read(OEAddress address)
 {
-	OEComponent *component = slot[(address >> 12) & 0x7];
+    slotSel = (address >> 12) & 0x7;
     
-	slotExpansionMemory->postMessage(this, APPLEIISLOTEXPANSIONMEMORY_SET_SLOT, component);
+	OEComponent *component = slot[slotSel];
+    
+//	slotExpansionMemory->postMessage(this, APPLEIISLOTMEMORY_RESET, component);
 	
     return component->read(address);
 }
 
 void AppleIISlotMemory::write(OEAddress address, OEUInt8 value)
 {
-	OEComponent *component = slot[(address >> 12) & 0x7];
+    slotSel = (address >> 12) & 0x7;
     
-	slotExpansionMemory->postMessage(this, APPLEIISLOTEXPANSIONMEMORY_SET_SLOT, component);
+	OEComponent *component = slot[slotSel];
+    
+//	slotExpansionMemory->postMessage(this, APPLEIISLOTMEMORY_RESET, component);
 	
     component->write(address, value);
+}
+
+void AppleIISlotMemory::setSlot(OEUInt32 slotIndex, OEComponent *ref)
+{
+    slot[slotIndex] = ref ? ref : floatingBus;
 }

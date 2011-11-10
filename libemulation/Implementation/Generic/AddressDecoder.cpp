@@ -54,6 +54,7 @@ bool AddressDecoder::init()
 	if (!floatingBus)
 	{
 		logMessage("floatingBus not connected");
+        
 		return false;
 	}
 	
@@ -65,16 +66,8 @@ bool AddressDecoder::init()
     readMap.resize(blockNum);
 	writeMap.resize(blockNum);
     
-    defaultReadMap.resize(blockNum);
-    defaultWriteMap.resize(blockNum);
+    clear();
 	
-	for (size_t i = 0; i < blockNum; i++)
-	{
-		readMap[i] = floatingBus;
-		writeMap[i] = floatingBus;
-	}
-	
-    // Map configuration
 	for (AddressDecoderConf::iterator i = conf.begin();
 		 i != conf.end();
 		 i++)
@@ -90,19 +83,14 @@ bool AddressDecoder::init()
         if (!component)
             component = floatingBus;
         
-		if (!mapConf(component, i->second))
+		if (!mapRef(component, i->second))
 			return false;
 	}
     
-    // Store defaults
-    defaultReadMap = readMap;
-    defaultWriteMap = writeMap;
-    
-    // Map pending decoder maps
     for (AddressDecoderMaps::iterator i = pendingMaps.begin();
          i != pendingMaps.end();
          i++)
-		mapDecoderMap(&(*i));
+		mapMemory(&(*i));
 	
 	return true;
 }
@@ -113,11 +101,16 @@ bool AddressDecoder::postMessage(OEComponent *sender, int message, void *data)
 	{
 		case ADDRESSDECODER_MAP:
             if (readMap.size())
-                mapDecoderMap((AddressDecoderMap *) data);
+                mapMemory((MemoryMap *) data);
             else
-                pendingMaps.push_back(*((AddressDecoderMap *) data));
+                pendingMaps.push_back(*((MemoryMap *) data));
             
 			return true;
+            
+        case ADDRESSDECODER_CLEAR:
+            clear();
+            
+            return true;
 	}
 	
 	return false;
@@ -133,64 +126,38 @@ void AddressDecoder::write(OEAddress address, OEUInt8 value)
 	writeMap[(size_t) ((address & addressMask) >> blockSize)]->write(address, value);
 }
 
-void AddressDecoder::mapDecoderMap(AddressDecoderMap *theMap)
-{
-	size_t startBlock = (size_t) (theMap->startAddress >> blockSize);
-	size_t endBlock = (size_t) (theMap->endAddress >> blockSize);
-	
-	if (theMap->read)
-    {
-        if (theMap->component)
-            for (size_t i = startBlock; i <= endBlock; i++)
-                readMap[i] = theMap->component;
-        else
-            for (size_t i = startBlock; i <= endBlock; i++)
-                readMap[i] = defaultReadMap[i];
-    }
-    
-	if (theMap->write)
-    {
-        if (theMap->component)
-            for (size_t i = startBlock; i <= endBlock; i++)
-                writeMap[i] = theMap->component;
-        else
-            for (size_t i = startBlock; i <= endBlock; i++)
-                writeMap[i] = defaultWriteMap[i];
-    }
-}
-
-bool AddressDecoder::getDecoderMap(AddressDecoderMap& decoderMap,
-                                   OEComponent *component,
-                                   string confItem)
+bool AddressDecoder::getMemoryMap(MemoryMap& decoderMap,
+                                  OEComponent *component,
+                                  string value)
 {
 	decoderMap.component = component;
 	
-    confItem = strtolower(confItem);
+    value = strtolower(value);
     
-	decoderMap.read = (confItem.find_first_of('r') != string::npos);
-	decoderMap.write = (confItem.find_first_of('w') != string::npos);
+	decoderMap.read = (value.find_first_of('r') != string::npos);
+	decoderMap.write = (value.find_first_of('w') != string::npos);
     
 	if (!decoderMap.read && !decoderMap.write)
 		decoderMap.read = decoderMap.write = true;
 	
-    confItem = strfilter(confItem, "0123456789abcdef-x");
+    value = strfilter(value, "0123456789abcdef-x");
 	
-    vector<string> item = strsplit(confItem, '-');
+    vector<string> items = strsplit(value, '-');
     
-    if (item.size() == 1)
+    if (items.size() == 1)
     {
-        if (item[0] == "")
+        if (items[0] == "")
             return false;
         
-        decoderMap.startAddress = decoderMap.endAddress = getUInt(item[0]);
+        decoderMap.startAddress = decoderMap.endAddress = getUInt(items[0]);
     }
-    else if (item.size() == 2)
+    else if (items.size() == 2)
     {
-        if ((item[0] == "") || (item[1] == ""))
+        if ((items[0] == "") || (items[1] == ""))
             return false;
         
-        decoderMap.startAddress = getUInt(item[0]);
-        decoderMap.endAddress = getUInt(item[1]);
+        decoderMap.startAddress = getUInt(items[0]);
+        decoderMap.endAddress = getUInt(items[1]);
     }
     else
         return false;
@@ -206,25 +173,59 @@ bool AddressDecoder::getDecoderMap(AddressDecoderMap& decoderMap,
 	return true;
 }
 
-bool AddressDecoder::mapConf(OEComponent *component, string conf)
+bool AddressDecoder::mapRef(OEComponent *component, string value)
 {
-    vector<string> confItem = strsplit(conf, ',');
+    vector<string> items = strsplit(value, ',');
     
-    for (vector<string>::iterator i = confItem.begin();
-         i != confItem.end();
+    for (vector<string>::iterator i = items.begin();
+         i != items.end();
          i++)
     {
-		AddressDecoderMap theMap;
+		MemoryMap memoryMap;
         
-		if (!getDecoderMap(theMap, component, *i))
+		if (!getMemoryMap(memoryMap, component, *i))
 		{
-			logMessage("invalid map '" + conf + "'");
+			logMessage("invalid map '" + value + "'");
             
 			return false;
 		}
 		
-        mapDecoderMap(&theMap);
+        mapMemory(&memoryMap);
     };
     
     return true;
+}
+
+void AddressDecoder::clear()
+{
+    OEUInt32 blockNum = (OEUInt32) readMap.size();
+    
+	for (size_t i = 0; i < blockNum; i++)
+	{
+		readMap[i] = floatingBus;
+		writeMap[i] = floatingBus;
+	}
+}
+
+void AddressDecoder::mapMemory(MemoryMap *theMap)
+{
+	size_t startBlock = (size_t) (theMap->startAddress >> blockSize);
+	size_t endBlock = (size_t) (theMap->endAddress >> blockSize);
+	
+    OEComponent *component = theMap->component;
+    
+    if (!component)
+        component = floatingBus;
+    
+	if (theMap->read)
+    {
+        for (size_t i = startBlock; i <= endBlock; i++)
+            readMap[i] = component;
+    }
+    
+	if (theMap->write)
+    {
+        for (size_t i = startBlock; i <= endBlock; i++)
+            writeMap[i] = component;
+    }
 }

@@ -20,6 +20,7 @@ public:
     bool getValue(string name, string& value);
     bool setRef(string name, OEComponent *ref);
     bool init();
+    void dispose();
     
     bool postMessage(OEComponent *sender, int message, void *data);
     
@@ -33,7 +34,7 @@ private:
     OEComponent *rom;
     
     OEComponent *controlBus;
-    OEComponent *memoryBus;
+    OEComponent *mmu;
     
     string diskImage;
     FILE *diskImageFP;
@@ -45,6 +46,7 @@ private:
     OEUnion ataLBA;
     OEUInt8 ataCommand;
     
+    void mapMMU(int message);
     bool openDiskImage(string filename);
     void closeDiskImage();
 };

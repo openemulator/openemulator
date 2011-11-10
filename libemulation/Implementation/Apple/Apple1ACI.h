@@ -19,18 +19,20 @@ public:
     bool setValue(string name, string value);
     bool getValue(string name, string &value);
     bool init();
+    void dispose();
     
     OEUInt8 read(OEAddress address);
     void write(OEAddress address, OEUInt8 value);
     
 private:
     OEComponent *rom;
-    OEComponent *memoryBus;
+    OEComponent *mmu;
     OEComponent *audioCodec;
     
     OEUInt8 audioLevel;
     OEUInt8 noiseRejection;
     OEUInt8 threshold;
     
+    void mapMMU(int message);
     void toggleSpeaker();
 };

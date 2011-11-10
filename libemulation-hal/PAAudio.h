@@ -95,6 +95,7 @@ private:
     double playSRCRatio;
     SRC_STATE *playSRC;
     vector<float> playSRCInput;
+    bool playSRCEndOfInput;
     OEUInt32 playSRCInputFrameIndex;
     OEUInt32 playSRCInputFrameNum;
     

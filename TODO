@@ -1,12 +1,13 @@
-==1.0.1==
-* Implement AppleIISlotMemory and AppleIISlotExpansionMemory
+==1.0.2==
 * Implement AppleIIMMU
-* Implement AppleIIGamePort or Delegate component
-* Think about representing Apple II video in components: AppleIIVideoGenerator + AppleIIVideoControl? Overwrite AddressDecoder entries dynamically depending on video mode?
-* Implement AppleIIFloatingBus and video
+* Implement AppleIISlotMemory and AppleIISlotExpansionMemory
+* Implement AppleIIFloatingBus
+* Implement AppleIIVideo and AppleIIVideoGenerator
 * Implement Apple II
 * Implement Apple IIplus
 * Implement Apple IIj-plus
+
+==1.0.3==
 * Implement Apple Disk II Interface Card
 * Implement Apple Disk II
 * Implement Apple Language Card
@@ -16,7 +17,7 @@
 * Implement Videx Videoterm
 * Refactor PAAudio
 
-==1.0.2==
+==1.0.4==
 * Implement Apple IIe
 * Implement Apple II Memory Expansion Card
 * Implement AE RamWorks
@@ -31,14 +32,17 @@
 * Implement Apple Graphics Tablet
 * Implement Apple II Super Serial Card
 
-==1.0.3==
+==1.0.5==
 * Implement Apple IIc FF
 * Implement Apple IIc 00
 * Implement Apple IIc 01
 * Implement Apple IIc 03
 * Implement Apple IIc plus
 
-==1.0.4==
+==1.0.6==
+* Implement Apple III
+
+==1.0.7==
 * Implement Apple IIGS ROM00, ROM01, ROM03
 
 ==Devices==

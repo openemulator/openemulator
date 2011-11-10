@@ -15,7 +15,8 @@ class AppleIISlotMemory : public OEComponent
 public:
 	bool setValue(string name, string value);
 	bool setRef(string name, OEComponent *ref);
-	
+	bool init();
+    
 	OEUInt8 read(OEAddress address);
 	void write(OEAddress address, OEUInt8 value);
 	
@@ -25,4 +26,6 @@ private:
 	
 	OEComponent *slot[8];
 	OEUInt32 slotSel;
+    
+    void setSlot(OEUInt32 slotIndex, OEComponent *ref);
 };
