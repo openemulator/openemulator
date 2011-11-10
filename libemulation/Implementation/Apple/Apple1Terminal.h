@@ -26,6 +26,7 @@ public:
     bool setRef(string name, OEComponent *ref);
     bool setData(string name, OEData *data);
     bool init();
+    void dispose();
     
     bool postMessage(OEComponent *sender, int message, void *data);
     
@@ -38,6 +39,7 @@ private:
     OEComponent *monitorDevice;
     OEComponent *monitor;
     
+    OEUInt8 *vramp;
     OEUInt32 cursorX, cursorY;
     bool clearScreenOnCtrlL;
     bool splashScreen;
@@ -63,5 +65,4 @@ private:
     void copy(wstring *s);
     void paste(wstring *s);
     void emptyPasteBuffer();
-    OEUInt8 *getVRAMData();
 };

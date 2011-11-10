@@ -27,9 +27,7 @@ typedef enum
 
 typedef enum
 {
-    RAM_GET_MEMORYSIZE,
-    RAM_GET_MEMORY,
-    RAM_SET_MEMORY,
+    RAM_GET_DATA,
 } RAMMessage;
 
 typedef struct

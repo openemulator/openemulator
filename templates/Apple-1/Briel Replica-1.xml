@@ -87,6 +87,12 @@
         <property name="terminalSpeed" value="Enhanced"/>
         <property name="keyboardType" value="Standard"/>
     </component>
+    <component id="replica1.terminalRAM" class="RAM">
+        <property name="controlBus" ref="replica1.controlBus"/>
+        <property name="image" data="${packagePath}/${id}.bin"/>
+        <property name="size" value="1024"/>
+        <property name="powerOnPattern" value="0x20"/>
+    </component>
     <component id="replica1.terminal" class="Apple1Terminal">
         <property name="device" ref="replica1"/>
         <property name="vram" ref="replica1.terminalRAM"/>
@@ -98,12 +104,6 @@
         <property name="cursorY" value="0"/>
         <property name="clearScreenOnCtrlL" value="1"/>
     </component>
-    <component id="replica1.terminalRAM" class="RAM">
-        <property name="controlBus" ref="replica1.controlBus"/>
-        <property name="image" data="${packagePath}/${id}.bin"/>
-        <property name="size" value="1024"/>
-        <property name="powerOnPattern" value="0x20"/>
-    </component>
     <component id="replica1.rom" class="ROM">
         <property name="image" data="${resourcePath}/roms/Briel/Replica-1 6502 ROM.bin"/>
     </component>
@@ -112,7 +112,7 @@
         <setting ref="appleMonitorII.monitor" name="videoBrightness" label="Brightness" type="slider" options="-1.0,1.0"/>
         <setting ref="appleMonitorII.monitor" name="videoContrast" label="Contrast" type="slider" options="0.0,1.0"/>
         <setting ref="appleMonitorII.monitor" name="videoVerticalCenter" label="Vertical Center" type="slider" options="-0.1,0.1"/>
-        <setting ref="appleMonitorII.monitor" name="videoVerticalSize" label="Vertical Size" type="slider" options="0.8,1.2"/>
+        <setting ref="appleMonitorII.monitor" name="videoVerticalSize" label="Vertical Size" type="slider" options="0.85,1.25"/>
     </device>
     <connector id="appleMonitorII.connector" type="Composite Video Port">
         <inlet ref="appleMonitorII.monitor" property="controlBus" outletRef="controlBus"/>
@@ -121,16 +121,16 @@
         <property name="device" ref="appleMonitorII"/>
         <property name="controlBus" ref="replica1.controlBus"/>
         <property name="videoDecoder" value="Monochrome"/>
-        <property name="videoBrightness" value="0.150000006"/>
-        <property name="videoContrast" value="0.8000000119"/>
-        <property name="videoSaturation" value="1.450000048"/>
-        <property name="videoHue" value="0.2700000107"/>
+        <property name="videoBrightness" value="0.15"/>
+        <property name="videoContrast" value="0.8"/>
+        <property name="videoSaturation" value="1.45"/>
+        <property name="videoHue" value="0.27"/>
         <property name="videoHorizontalCenter" value="0"/>
-        <property name="videoHorizontalSize" value="1"/>
+        <property name="videoHorizontalSize" value="1.05"/>
         <property name="videoVerticalCenter" value="0"/>
-        <property name="videoVerticalSize" value="1"/>
+        <property name="videoVerticalSize" value="1.05"/>
         <property name="videoBandwidth" value="4500000"/>
-        <property name="displayBarrel" value="0.1000000015"/>
+        <property name="displayBarrel" value="0.1"/>
         <property name="displayScanlineLevel" value="0.5"/>
         <property name="displayCenterLighting" value="0.5"/>
         <property name="displayLuminanceGain" value="1.5"/>

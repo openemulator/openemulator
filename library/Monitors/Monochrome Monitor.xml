@@ -8,9 +8,9 @@
         <setting ref="monochromeMonitor.monitor" name="videoSaturation" label="Saturation" type="slider" options="0.0,2.0,1.0"/>
         <setting ref="monochromeMonitor.monitor" name="videoHue" label="Hue" type="slider" options="-0.5,0.5,0.0"/>
         <setting ref="monochromeMonitor.monitor" name="videoHorizontalCenter" label="Horizontal Center" type="slider" options="-0.1,0.1"/>
-        <setting ref="monochromeMonitor.monitor" name="videoHorizontalSize" label="Horizontal Size" type="slider" options="0.8,1.2"/>
+        <setting ref="monochromeMonitor.monitor" name="videoHorizontalSize" label="Horizontal Size" type="slider" options="0.85,1.25"/>
         <setting ref="monochromeMonitor.monitor" name="videoVerticalCenter" label="Vertical Center" type="slider" options="-0.1,0.1"/>
-        <setting ref="monochromeMonitor.monitor" name="videoVerticalSize" label="Vertical Size" type="slider" options="0.8,1.2"/>
+        <setting ref="monochromeMonitor.monitor" name="videoVerticalSize" label="Vertical Size" type="slider" options="0.85,1.25"/>
         <setting ref="monochromeMonitor.monitor" name="videoBandwidth" label="Video Bandwidth" type="slider" options="0.0,7159090.0"/>
         <setting ref="monochromeMonitor.monitor" name="displayBarrel" label="Barrel" type="slider" options="0.0,1.0"/>
         <setting ref="monochromeMonitor.monitor" name="displayScanlineLevel" label="Scanline Level" type="slider" options="0.0,1.0"/>
@@ -30,9 +30,9 @@
         <property name="videoSaturation" value="1.45"/>
         <property name="videoHue" value="0.27"/>
         <property name="videoHorizontalCenter" value="0"/>
-        <property name="videoHorizontalSize" value="1"/>
+        <property name="videoHorizontalSize" value="1.05"/>
         <property name="videoVerticalCenter" value="0"/>
-        <property name="videoVerticalSize" value="1"/>
+        <property name="videoVerticalSize" value="1.05"/>
         <property name="videoBandwidth" value="4500000"/>
         <property name="displayBarrel" value="0.1"/>
         <property name="displayScanlineLevel" value="0.5"/>

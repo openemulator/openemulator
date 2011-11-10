@@ -241,6 +241,8 @@ bool Monitor::init()
     if (controlBus)
         controlBus->postMessage(this, CONTROLBUS_GET_POWERSTATE, &powerState);
     
+    updateBezel();
+    
     return true;
 }
 
@@ -262,32 +264,37 @@ void Monitor::notify(OEComponent *sender, int notification, void *data)
 {
     if (sender == controlBus)
     {
-        CanvasBezel bezel;
-        
         powerState = *((ControlBusPowerState *)data);
         
-        switch(powerState)
-        {
-            case CONTROLBUS_POWERSTATE_OFF:
-                canvas->postMessage(this, CANVAS_CLEAR, NULL);
-                
-                bezel = CANVAS_BEZEL_POWER;
-                
-                break;
-                
-            case CONTROLBUS_POWERSTATE_ON:
-                bezel = CANVAS_BEZEL_NONE;
-                
-                break;
-                
-            default:
-                bezel = CANVAS_BEZEL_PAUSE;
-                
-                break;
-        }
-        
-        canvas->postMessage(this, CANVAS_SET_BEZEL, &bezel);
+        updateBezel();
     }
     else
         OEComponent::notify(sender, notification, data);
+}
+
+void Monitor::updateBezel()
+{
+    CanvasBezel bezel;
+    
+    switch(powerState)
+    {
+        case CONTROLBUS_POWERSTATE_OFF:
+            canvas->postMessage(this, CANVAS_CLEAR, NULL);
+            
+            bezel = CANVAS_BEZEL_POWER;
+            
+            break;
+            
+        case CONTROLBUS_POWERSTATE_ON:
+            bezel = CANVAS_BEZEL_NONE;
+            
+            break;
+            
+        default:
+            bezel = CANVAS_BEZEL_PAUSE;
+            
+            break;
+    }
+    
+    canvas->postMessage(this, CANVAS_SET_BEZEL, &bezel);
 }

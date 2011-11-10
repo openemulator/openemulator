@@ -484,7 +484,8 @@ void OEEmulation::disposeDocument(xmlDocPtr doc)
         node;
         node = node->next)
     {
-        if (getNodeName(node) == "component")
+        if ((getNodeName(node) == "component") ||
+            (getNodeName(node) == "device"))
         {
             string id = getNodeProperty(node, "id");
             
@@ -501,20 +502,13 @@ void OEEmulation::disposeDevice(string deviceId)
         node;
         node = node->next)
     {
-        if (getNodeName(node) == "component")
+        if ((getNodeName(node) == "component") ||
+            (getNodeName(node) == "device"))
         {
             string componentId = getNodeProperty(node, "id");
             
-            for(xmlNodePtr propertyNode = node->children;
-                propertyNode;
-                propertyNode = propertyNode->next)
-            {
-                string ref = getNodeProperty(propertyNode, "ref");
-                
-                if ((getDeviceId(componentId) == deviceId) ||
-                    (getDeviceId(ref) == deviceId))
-                    disposeComponent(componentId);
-            }
+            if (getDeviceId(componentId) == deviceId)
+                disposeComponent(componentId);
         }
     }
 }

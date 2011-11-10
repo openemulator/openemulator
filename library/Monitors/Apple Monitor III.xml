@@ -6,7 +6,7 @@
         <setting ref="appleMonitorIII.monitor" name="videoBrightness" label="Brightness" type="slider" options="-1.0,1.0"/>
         <setting ref="appleMonitorIII.monitor" name="videoContrast" label="Contrast" type="slider" options="0.0,1.0"/>
         <setting ref="appleMonitorIII.monitor" name="videoVerticalCenter" label="Vertical Center" type="slider" options="-0.1,0.1"/>
-        <setting ref="appleMonitorIII.monitor" name="videoVerticalSize" label="Vertical Size" type="slider" options="0.8,1.2"/>
+        <setting ref="appleMonitorIII.monitor" name="videoVerticalSize" label="Vertical Size" type="slider" options="0.85,1.25"/>
     </device>
     <connector id="appleMonitorIII.connector" type="Composite Video Port">
         <inlet ref="appleMonitorIII.monitor" property="controlBus" outletRef="controlBus"/>
@@ -20,9 +20,9 @@
         <property name="videoSaturation" value="1.45"/>
         <property name="videoHue" value="0.27"/>
         <property name="videoHorizontalCenter" value="0"/>
-        <property name="videoHorizontalSize" value="1"/>
+        <property name="videoHorizontalSize" value="1.05"/>
         <property name="videoVerticalCenter" value="0"/>
-        <property name="videoVerticalSize" value="1"/>
+        <property name="videoVerticalSize" value="1.05"/>
         <property name="videoBandwidth" value="4500000"/>
         <property name="displayBarrel" value="0.1"/>
         <property name="displayScanlineLevel" value="0.5"/>

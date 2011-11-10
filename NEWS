@@ -1,5 +1,7 @@
 ==2011-11==
-* Added OEComponent destroy() callback
+* Added monitor safe area
+* Fixed Monitor bezel on init
+* Added OEComponent dispose() callback
 * Fixed last frame error in audio player 
 * Implemented AppleIIGamePort
 * Updated Replica-1 ROM to KRUSADER 1.3

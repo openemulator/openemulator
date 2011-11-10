@@ -37,12 +37,13 @@ Apple1Terminal::Apple1Terminal()
     monitorDevice = NULL;
     monitor = NULL;
     
+    vramp = NULL;
     cursorX = 0;
     cursorY = 0;
     clearScreenOnCtrlL = false;
     splashScreen = false;
     splashScreenActive = false;
-    
+        
     canvasShouldUpdate = true;
     image.setFormat(OEIMAGE_LUMINANCE);
     image.setSize(OEMakeSize(SCREEN_WIDTH, SCREEN_HEIGHT));
@@ -120,6 +121,7 @@ bool Apple1Terminal::setRef(string name, OEComponent *ref)
         if (monitorDevice)
         {
             monitorDevice->addObserver(this, DEVICE_EVENT_DID_OCCUR);
+            
             canvasShouldUpdate = true;
         }
     }
@@ -180,14 +182,15 @@ bool Apple1Terminal::init()
         return false;
     }
     
-    OEUInt64 vramSize;
-    vram->postMessage(this, RAM_GET_MEMORYSIZE, &vramSize);
-    if (vramSize < (TERM_WIDTH * TERM_HEIGHT))
+    OEData *vramData;
+    vram->postMessage(this, RAM_GET_DATA, &vramData);
+    if (vramData->size() < (TERM_WIDTH * TERM_HEIGHT))
     {
         logMessage("not enough vram");
         
         return false;
     }
+    vramp = &vramData->front();
     
     if (!font.size())
     {
@@ -203,6 +206,11 @@ bool Apple1Terminal::init()
     scheduleTimer();
     
     return true;
+}
+
+void Apple1Terminal::dispose()
+{
+    vramp = NULL;
 }
 
 bool Apple1Terminal::postMessage(OEComponent *sender, int message, void *data)
@@ -365,23 +373,24 @@ void Apple1Terminal::loadFont(OEData *data)
 
 void Apple1Terminal::updateCanvas()
 {
-    OEUInt8 *vramp = getVRAMData();
-    
     if (!monitor ||
         !vramp ||
-        (powerState != CONTROLBUS_POWERSTATE_ON))
+        (powerState == CONTROLBUS_POWERSTATE_OFF))
         return;
     
     if (splashScreenActive)
         cursorActive = false;
-    else if (cursorCount)
-        cursorCount--;
-    else
+    else if (powerState == CONTROLBUS_POWERSTATE_ON)
     {
-        cursorActive = !cursorActive;
-        cursorCount = cursorActive ? BLINK_ON : BLINK_OFF;
-        
-        canvasShouldUpdate = true;
+        if (cursorCount)
+            cursorCount--;
+        else
+        {
+            cursorActive = !cursorActive;
+            cursorCount = cursorActive ? BLINK_ON : BLINK_OFF;
+            
+            canvasShouldUpdate = true;
+        }
     }
     
     if (!canvasShouldUpdate)
@@ -425,7 +434,10 @@ void Apple1Terminal::updateCanvas()
 
 void Apple1Terminal::clearScreen()
 {
-    memset(getVRAMData(), ' ', TERM_HEIGHT * TERM_WIDTH);
+    if (!vramp)
+        return;
+    
+    memset(vramp, ' ', TERM_HEIGHT * TERM_WIDTH);
     
     cursorX = 0;
     cursorY = 0;
@@ -435,8 +447,6 @@ void Apple1Terminal::clearScreen()
 
 void Apple1Terminal::putChar(OEUInt8 c)
 {
-    OEUInt8 *vramp = getVRAMData();
-    
     if (!vramp)
         return;
     
@@ -490,7 +500,8 @@ void Apple1Terminal::sendKey(CanvasUnicodeChar key)
 
 void Apple1Terminal::copy(wstring *s)
 {
-    OEUInt8 *vramp = getVRAMData();
+    if (!vramp)
+        return;
     
     for (int y = 0; y < TERM_HEIGHT; y++)
     {
@@ -524,16 +535,4 @@ void Apple1Terminal::emptyPasteBuffer()
         sendKey(pasteBuffer.front());
         pasteBuffer.pop();
     }
-}
-
-OEUInt8 *Apple1Terminal::getVRAMData()
-{
-    if (!vram)
-        return NULL;
-    
-    OEData *vramData;
-    
-    vram->postMessage(this, RAM_GET_MEMORY, &vramData);
-    
-    return &vramData->front();
 }
