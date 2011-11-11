@@ -204,7 +204,9 @@ void MMU::updateMaps()
     if (!addressDecoder)
         return;
     
-    addressDecoder->postMessage(this, ADDRESSDECODER_CLEAR, NULL);
+//    addressDecoder->postMessage(this, ADDRESSDECODER_CLEAR, NULL);
+    
+    // To-Do: Update
     
     for (MMUMaps::iterator i = memoryMaps.begin();
          i != memoryMaps.end();

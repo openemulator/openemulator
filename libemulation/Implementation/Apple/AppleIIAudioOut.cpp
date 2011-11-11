@@ -20,10 +20,10 @@ AppleIIAudioOut::AppleIIAudioOut()
 
 bool AppleIIAudioOut::setRef(string name, OEComponent *id)
 {
-	if (name == "audioCodec")
-		audioCodec = id;
-	else if (name == "floatingBus")
+	if (name == "floatingBus")
 		floatingBus = id;
+	else if (name == "audioCodec")
+		audioCodec = id;
 	else
 		return false;
 	
@@ -32,16 +32,16 @@ bool AppleIIAudioOut::setRef(string name, OEComponent *id)
 
 bool AppleIIAudioOut::init()
 {
-    if (!audioCodec)
+    if (!floatingBus)
     {
-        logMessage("audioCodec not connected");
+        logMessage("floatingBus not connected");
         
         return false;
     }
     
-    if (!floatingBus)
+    if (!audioCodec)
     {
-        logMessage("floatingBus not connected");
+        logMessage("audioCodec not connected");
         
         return false;
     }
@@ -65,6 +65,7 @@ void AppleIIAudioOut::toggleSpeaker()
 {
     audioLevel = (audioLevel == 0x80) ? 0xc0 : 0x80;
     
+    // Write stereo
     audioCodec->write(0, audioLevel);
     audioCodec->write(1, audioLevel);
 }

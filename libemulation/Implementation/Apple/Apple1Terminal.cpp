@@ -95,8 +95,6 @@ bool Apple1Terminal::setRef(string name, OEComponent *ref)
         if (device)
             device->addObserver(this, DEVICE_EVENT_DID_OCCUR);
     }
-    else if (name == "vram")
-        vram = ref;
     else if (name == "controlBus")
     {
         if (controlBus)
@@ -113,6 +111,8 @@ bool Apple1Terminal::setRef(string name, OEComponent *ref)
             controlBus->addObserver(this, CONTROLBUS_TIMER_DID_FIRE);
         }
     }
+    else if (name == "vram")
+        vram = ref;
     else if (name == "monitorDevice")
     {
         if (monitorDevice)
@@ -183,13 +183,16 @@ bool Apple1Terminal::init()
     }
     
     OEData *vramData;
+    
     vram->postMessage(this, RAM_GET_DATA, &vramData);
+    
     if (vramData->size() < (TERM_WIDTH * TERM_HEIGHT))
     {
         logMessage("not enough vram");
         
         return false;
     }
+    
     vramp = &vramData->front();
     
     if (!font.size())
@@ -247,7 +250,21 @@ bool Apple1Terminal::postMessage(OEComponent *sender, int message, void *data)
 
 void Apple1Terminal::notify(OEComponent *sender, int notification, void *data)
 {
-    if (sender == controlBus)
+    if (sender == device)
+    {
+        if (*((DeviceEvent *)data) == DEVICE_WARMRESTART)
+        {
+            if (splashScreenActive)
+            {
+                splashScreenActive = false;
+                
+                controlBus->postMessage(this, CONTROLBUS_CLEAR_RESET, NULL);
+                
+                clearScreen();
+            }
+        }
+    }
+    else if (sender == controlBus)
     {
         switch (notification)
         {
@@ -312,25 +329,13 @@ void Apple1Terminal::notify(OEComponent *sender, int notification, void *data)
                 
             case CANVAS_DID_COPY:
                 copy((wstring *)data);
+                
                 break;
                 
             case CANVAS_DID_PASTE:
                 paste((wstring *)data);
+                
                 break;
-        }
-    }
-    else if (sender == device)
-    {
-        if (*((DeviceEvent *)data) == DEVICE_WARMRESTART)
-        {
-            if (splashScreenActive)
-            {
-                splashScreenActive = false;
-                
-                controlBus->postMessage(this, CONTROLBUS_CLEAR_RESET, NULL);
-                
-                clearScreen();
-            }
         }
     }
 }
@@ -533,6 +538,7 @@ void Apple1Terminal::emptyPasteBuffer()
     while (isRTS && !pasteBuffer.empty())
     {
         sendKey(pasteBuffer.front());
+        
         pasteBuffer.pop();
     }
 }

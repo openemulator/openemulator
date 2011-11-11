@@ -16,7 +16,6 @@
 typedef enum
 {
     ADDRESSDECODER_MAP,
-    ADDRESSDECODER_CLEAR,
 } AddressDecoderMessage;
 
 typedef enum

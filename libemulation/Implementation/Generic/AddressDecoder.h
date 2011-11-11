@@ -52,7 +52,6 @@ private:
     
     bool getMemoryMap(MemoryMap& theMap, OEComponent *component, string value);
     bool mapRef(OEComponent *component, string conf);
-    void clear();
     void mapMemory(MemoryMap *theMap);
 };
 

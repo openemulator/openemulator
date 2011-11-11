@@ -66,8 +66,12 @@ bool AddressDecoder::init()
     readMap.resize(blockNum);
 	writeMap.resize(blockNum);
     
-    clear();
-	
+	for (size_t i = 0; i < readMap.size(); i++)
+	{
+		readMap[i] = floatingBus;
+		writeMap[i] = floatingBus;
+	}
+    
 	for (AddressDecoderConf::iterator i = conf.begin();
 		 i != conf.end();
 		 i++)
@@ -106,11 +110,6 @@ bool AddressDecoder::postMessage(OEComponent *sender, int message, void *data)
                 pendingMaps.push_back(*((MemoryMap *) data));
             
 			return true;
-            
-        case ADDRESSDECODER_CLEAR:
-            clear();
-            
-            return true;
 	}
 	
 	return false;
@@ -194,17 +193,6 @@ bool AddressDecoder::mapRef(OEComponent *component, string value)
     };
     
     return true;
-}
-
-void AddressDecoder::clear()
-{
-    OEUInt32 blockNum = (OEUInt32) readMap.size();
-    
-	for (size_t i = 0; i < blockNum; i++)
-	{
-		readMap[i] = floatingBus;
-		writeMap[i] = floatingBus;
-	}
 }
 
 void AddressDecoder::mapMemory(MemoryMap *theMap)

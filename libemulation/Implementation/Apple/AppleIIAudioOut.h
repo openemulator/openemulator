@@ -22,8 +22,8 @@ public:
 	void write(OEAddress address, OEUInt8 value);
 	
 private:
-	OEComponent *audioCodec;
 	OEComponent *floatingBus;
+	OEComponent *audioCodec;
 	
 	OEUInt8 audioLevel;
     

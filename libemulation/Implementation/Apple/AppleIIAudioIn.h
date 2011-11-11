@@ -15,14 +15,17 @@ class AppleIIAudioIn : public OEComponent
 public:
     AppleIIAudioIn();
     
+    bool setValue(string name, string value);
+    bool getValue(string name, string &value);
 	bool setRef(string name, OEComponent *ref);
 	bool init();
     
 	OEUInt8 read(OEAddress address);
 	
 private:
-	OEComponent *audioCodec;
 	OEComponent *floatingBus;
+	OEComponent *audioCodec;
     
+    OEUInt8 noiseRejection;
     OEUInt8 threshold;
 };

@@ -159,7 +159,7 @@
 		00FC27E512D1070A0065E986 /* AppleIIMMU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8882512A393990052B7A4 /* AppleIIMMU.cpp */; };
 		00FC27E712D1070A0065E986 /* AppleIISlotExpansionMemory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8882712A393990052B7A4 /* AppleIISlotExpansionMemory.cpp */; };
 		00FC27E912D1070A0065E986 /* AppleIISlotMemory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8882912A393990052B7A4 /* AppleIISlotMemory.cpp */; };
-		00FC27EB12D1070A0065E986 /* AppleIIVideoGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8882B12A393990052B7A4 /* AppleIIVideoGenerator.cpp */; };
+		00FC27EB12D1070A0065E986 /* AppleIIVideo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8882B12A393990052B7A4 /* AppleIIVideo.cpp */; };
 		00FC27EE12D1070A0065E986 /* AppleDiskII.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00044CA212CE6FD400D26940 /* AppleDiskII.cpp */; };
 		00FC27EF12D1070A0065E986 /* AddressDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8882E12A393990052B7A4 /* AddressDecoder.cpp */; };
 		00FC27F112D1070A0065E986 /* AddressOffset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8883012A393990052B7A4 /* AddressOffset.cpp */; };
@@ -378,8 +378,8 @@
 		00B8882812A393990052B7A4 /* AppleIISlotExpansionMemory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppleIISlotExpansionMemory.h; path = libemulation/Implementation/Apple/AppleIISlotExpansionMemory.h; sourceTree = SOURCE_ROOT; };
 		00B8882912A393990052B7A4 /* AppleIISlotMemory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AppleIISlotMemory.cpp; path = libemulation/Implementation/Apple/AppleIISlotMemory.cpp; sourceTree = SOURCE_ROOT; };
 		00B8882A12A393990052B7A4 /* AppleIISlotMemory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppleIISlotMemory.h; path = libemulation/Implementation/Apple/AppleIISlotMemory.h; sourceTree = SOURCE_ROOT; };
-		00B8882B12A393990052B7A4 /* AppleIIVideoGenerator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AppleIIVideoGenerator.cpp; path = libemulation/Implementation/Apple/AppleIIVideoGenerator.cpp; sourceTree = SOURCE_ROOT; };
-		00B8882C12A393990052B7A4 /* AppleIIVideoGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppleIIVideoGenerator.h; path = libemulation/Implementation/Apple/AppleIIVideoGenerator.h; sourceTree = SOURCE_ROOT; };
+		00B8882B12A393990052B7A4 /* AppleIIVideo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AppleIIVideo.cpp; path = libemulation/Implementation/Apple/AppleIIVideo.cpp; sourceTree = SOURCE_ROOT; };
+		00B8882C12A393990052B7A4 /* AppleIIVideo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppleIIVideo.h; path = libemulation/Implementation/Apple/AppleIIVideo.h; sourceTree = SOURCE_ROOT; };
 		00B8882E12A393990052B7A4 /* AddressDecoder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AddressDecoder.cpp; path = libemulation/Implementation/Generic/AddressDecoder.cpp; sourceTree = SOURCE_ROOT; };
 		00B8882F12A393990052B7A4 /* AddressDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AddressDecoder.h; path = libemulation/Implementation/Generic/AddressDecoder.h; sourceTree = SOURCE_ROOT; };
 		00B8883012A393990052B7A4 /* AddressOffset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AddressOffset.cpp; path = libemulation/Implementation/Generic/AddressOffset.cpp; sourceTree = SOURCE_ROOT; };
@@ -735,8 +735,8 @@
 				00B8882A12A393990052B7A4 /* AppleIISlotMemory.h */,
 				00678F89139F346400940158 /* AppleIISuperSerialCard.cpp */,
 				00678F8A139F346900940158 /* AppleIISuperSerialCard.h */,
-				00B8882B12A393990052B7A4 /* AppleIIVideoGenerator.cpp */,
-				00B8882C12A393990052B7A4 /* AppleIIVideoGenerator.h */,
+				00B8882B12A393990052B7A4 /* AppleIIVideo.cpp */,
+				00B8882C12A393990052B7A4 /* AppleIIVideo.h */,
 				00678F85139F325F00940158 /* AppleLanguageCard.cpp */,
 				00678F86139F325F00940158 /* AppleLanguageCard.h */,
 				00B5CB92136F0B6C007A7BED /* AppleSilentype.cpp */,
@@ -1260,7 +1260,7 @@
 				00FC27E512D1070A0065E986 /* AppleIIMMU.cpp in Sources */,
 				00FC27E712D1070A0065E986 /* AppleIISlotExpansionMemory.cpp in Sources */,
 				00FC27E912D1070A0065E986 /* AppleIISlotMemory.cpp in Sources */,
-				00FC27EB12D1070A0065E986 /* AppleIIVideoGenerator.cpp in Sources */,
+				00FC27EB12D1070A0065E986 /* AppleIIVideo.cpp in Sources */,
 				00FC27EE12D1070A0065E986 /* AppleDiskII.cpp in Sources */,
 				00FC27EF12D1070A0065E986 /* AddressDecoder.cpp in Sources */,
 				00FC27F112D1070A0065E986 /* AddressOffset.cpp in Sources */,

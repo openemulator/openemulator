@@ -22,10 +22,9 @@ AppleIIMMU::AppleIIMMU()
         ram[i] = NULL;
     for (int i = 0; i < 6; i++)
         rom[i] = NULL;
-    for (int i = 0; i < 8; i++)
-        slotIO[i] = NULL;
-    for (int i = 0; i < 8; i++)
-        slotMemory[i] = NULL;
+    
+    slotIO.resize(APPLEIIMMU_SLOTIO);
+    slotMemory.resize(APPLEIIMMU_SLOTMEMORY);
 }
 
 bool AppleIIMMU::setRef(string name, OEComponent *ref)
@@ -55,35 +54,35 @@ bool AppleIIMMU::setRef(string name, OEComponent *ref)
 	else if (name == "videoSync")
 		videoSync = ref;
 	else if (name == "slot0IO")
-        updateSlotIO(0, ref);
+        slotIO[0] = ref;
 	else if (name == "slot1IO")
-        updateSlotIO(1, ref);
+        slotIO[1] = ref;
 	else if (name == "slot2IO")
-        updateSlotIO(2, ref);
+        slotIO[2] = ref;
 	else if (name == "slot3IO")
-        updateSlotIO(3, ref);
+        slotIO[3] = ref;
 	else if (name == "slot4IO")
-        updateSlotIO(4, ref);
+        slotIO[4] = ref;
 	else if (name == "slot5IO")
-        updateSlotIO(5, ref);
+        slotIO[5] = ref;
 	else if (name == "slot6IO")
-        updateSlotIO(6, ref);
+        slotIO[6] = ref;
 	else if (name == "slot7IO")
-        updateSlotIO(7, ref);
+        slotIO[7] = ref;
 	else if (name == "slot1Memory")
-        updateSlotMemory(1, ref);
+        slotMemory[1] = ref;
 	else if (name == "slot2Memory")
-        updateSlotMemory(2, ref);
+        slotMemory[2] = ref;
 	else if (name == "slot3Memory")
-        updateSlotMemory(3, ref);
+        slotMemory[3] = ref;
 	else if (name == "slot4Memory")
-        updateSlotMemory(4, ref);
+        slotMemory[4] = ref;
 	else if (name == "slot5Memory")
-        updateSlotMemory(5, ref);
+        slotMemory[5] = ref;
 	else if (name == "slot6Memory")
-        updateSlotMemory(6, ref);
+        slotMemory[6] = ref;
 	else if (name == "slot7Memory")
-        updateSlotMemory(7, ref);
+        slotMemory[7] = ref;
 	else
 		return false;
 	
@@ -99,7 +98,38 @@ bool AppleIIMMU::init()
         return false;
     }
     
+    for (int i = 0; i < APPLEIIMMU_RAM; i++)
+    {
+        MemoryMap memoryMap;
+        
+        memoryMap.component = ram[i];
+        memoryMap.startAddress = 0x0000 + 0x4000 * i;
+        memoryMap.endAddress = 0x3fff + 0x4000 * i;
+        memoryMap.read = true;
+        memoryMap.write = true;
+        
+        memoryBus->postMessage(this, ADDRESSDECODER_MAP, &memoryMap);
+    }
+    
+    for (int i = 0; i < APPLEIIMMU_ROM; i++)
+    {
+        MemoryMap memoryMap;
+        
+        memoryMap.component = rom[i];
+        memoryMap.startAddress = 0xd000 + 0x0800 * i;
+        memoryMap.endAddress = 0xd7ff + 0x0800 * i;
+        memoryMap.read = true;
+        memoryMap.write = false;
+        
+        memoryBus->postMessage(this, ADDRESSDECODER_MAP, &memoryMap);
+    }
+    
     return true;
+}
+
+void AppleIIMMU::dispose()
+{
+    
 }
 
 bool AppleIIMMU::postMessage(OEComponent *sender, int message, void *data)
@@ -109,14 +139,4 @@ bool AppleIIMMU::postMessage(OEComponent *sender, int message, void *data)
     }
     
     return false;
-}
-
-void AppleIIMMU::updateSlotIO(int index, OEComponent *ref)
-{
-    
-}
-
-void AppleIIMMU::updateSlotMemory(int index, OEComponent *ref)
-{
-    
 }

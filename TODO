@@ -1,4 +1,5 @@
 ==1.0.2==
+* Fix PAUSE>RESET>SAVE>LOAD>PLAY
 * Implement AppleIIMMU
 * Implement AppleIISlotMemory and AppleIISlotExpansionMemory
 * Implement AppleIIFloatingBus

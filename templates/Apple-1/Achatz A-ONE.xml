@@ -98,8 +98,8 @@
     </component>
     <component id="aONE.terminal" class="Apple1Terminal">
         <property name="device" ref="aONE"/>
-        <property name="vram" ref="aONE.terminalRAM"/>
         <property name="controlBus" ref="aONE.controlBus"/>
+        <property name="vram" ref="aONE.terminalRAM"/>
         <property name="monitorDevice" ref="appleMonitorII"/>
         <property name="monitor" ref="appleMonitorII.monitor"/>
         <property name="font" data="${resourcePath}/roms/Achatz/A-ONE Video ROM.bin"/>

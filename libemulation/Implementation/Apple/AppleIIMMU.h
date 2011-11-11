@@ -10,6 +10,11 @@
 
 #include "OEComponent.h"
 
+#define APPLEIIMMU_RAM 3
+#define APPLEIIMMU_ROM 6
+#define APPLEIIMMU_SLOTIO 8
+#define APPLEIIMMU_SLOTMEMORY 8
+
 class AppleIIMMU : public OEComponent
 {
 public:
@@ -17,6 +22,7 @@ public:
 	
 	bool setRef(string name, OEComponent *ref);	
 	bool init();
+    void dispose();
     
     bool postMessage(OEComponent *sender, int message, void *data);
     
@@ -24,12 +30,9 @@ private:
 	OEComponent *memoryBus;
 	OEComponent *floatingBus;
 	
-    OEComponent *ram[3];
-	OEComponent *rom[6];
+    OEComponent *ram[APPLEIIMMU_RAM];
+	OEComponent *rom[APPLEIIMMU_ROM];
     OEComponent *videoSync;
-    OEComponent *slotIO[8];
-    OEComponent *slotMemory[8];
-    
-    void updateSlotIO(int index, OEComponent *ref);
-    void updateSlotMemory(int index, OEComponent *ref);
+    OEComponents slotIO;
+    OEComponents slotMemory;
 };
