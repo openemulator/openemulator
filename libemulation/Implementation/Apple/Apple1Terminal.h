@@ -33,18 +33,18 @@ public:
     void notify(OEComponent *sender, int notification, void *data);
     
 private:
-    OEComponent *device;
-    OEComponent *vram;
-    OEComponent *controlBus;
-    OEComponent *monitorDevice;
-    OEComponent *monitor;
-    
-    OEUInt8 *vramp;
     OEUInt32 cursorX, cursorY;
     bool clearScreenOnCtrlL;
     bool splashScreen;
     bool splashScreenActive;
     
+    OEComponent *device;
+    OEComponent *controlBus;
+    OEComponent *vram;
+    OEComponent *monitorDevice;
+    OEComponent *monitor;
+    
+    OEUInt8 *vramp;
     OEData font;
     bool canvasShouldUpdate;
     OEImage image;
@@ -58,7 +58,7 @@ private:
     
     void scheduleTimer();
     void loadFont(OEData *data);
-    void updateCanvas();
+    void vsync();
     void clearScreen();
     void putChar(OEUInt8 c);
     void sendKey(CanvasUnicodeChar key);

@@ -38,9 +38,9 @@ public:
 private:
     OEAddress addressSize;
     OEAddress blockSize;
-    OEComponent *floatingBus;
-    
     AddressDecoderConf conf;
+    
+    OEComponent *floatingBus;
     AddressDecoderRef ref;
     
     AddressDecoderMaps pendingMaps;

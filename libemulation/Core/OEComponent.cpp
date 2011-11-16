@@ -66,12 +66,6 @@ bool OEComponent::postMessage(OEComponent *sender, int message, void *data)
 
 
 
-void OEComponent::notify(OEComponent *sender, int notification, void *data)
-{
-    for (size_t i = 0; i < observers[notification].size(); i++)
-        observers[notification][i]->notify(this, notification, data);
-}
-
 bool OEComponent::addObserver(OEComponent *observer, int notification)
 {
     if (observer)
@@ -90,6 +84,17 @@ bool OEComponent::removeObserver(OEComponent *observer, int notification)
         observers[notification].erase(i, last);
     
     return (i != last);
+}
+
+void OEComponent::postNotification(OEComponent *sender, int notification, void *data)
+{
+    for (size_t i = 0; i < observers[notification].size(); i++)
+        observers[notification][i]->notify(this, notification, data);
+}
+
+void OEComponent::notify(OEComponent *sender, int notification, void *data)
+{
+    
 }
 
 

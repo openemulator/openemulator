@@ -16,22 +16,22 @@
 MC6821::MC6821()
 {
     controlBus = NULL;
-    
     portA = NULL;
+    controlBusA = NULL;
+    portB = NULL;
+    controlBusB = NULL;
+    
     controlA = 0;
     directionA = 0;
     dataA = 0;
     ca1 = false;
     ca2 = false;
-    controlBusA = NULL;
     
-    portB = NULL;
     controlB = 0;
     directionB = 0;
     dataB = 0;
     cb1 = false;
     cb2 = false;
-    controlBusB = NULL;
 }
 
 bool MC6821::setValue(string name, string value)
@@ -359,7 +359,7 @@ void MC6821::write(OEAddress address, OEUInt8 value)
 void MC6821::setCA2(bool value)
 {
     if (ca2 != value)
-        OEComponent::notify(this, MC6821_CA2_DID_CHANGE, &value);
+        postNotification(this, MC6821_CA2_DID_CHANGE, &value);
     
     ca2 = value;
 }
@@ -367,7 +367,7 @@ void MC6821::setCA2(bool value)
 void MC6821::setCB2(bool value)
 {
     if (cb2 != value)
-        OEComponent::notify(this, MC6821_CB2_DID_CHANGE, &value);
+        postNotification(this, MC6821_CB2_DID_CHANGE, &value);
     
     cb2 = value;
 }

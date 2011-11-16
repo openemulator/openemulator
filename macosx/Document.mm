@@ -17,6 +17,9 @@
 #import "EmulationWindowController.h"
 #import "CanvasWindowController.h"
 
+#import "CanvasWindow.h"
+#import "CanvasPrintView.h"
+
 #import "OEEmulation.h"
 #import "PAAudio.h"
 #import "OpenGLCanvas.h"
@@ -535,6 +538,65 @@ void destroyCanvas(void *userData, OEComponent *canvas)
     [self unlockEmulation];
     
     return success;
+}
+
+- (BOOL)validateUserInterfaceItem:(id)anItem
+{
+    SEL action = [anItem action];
+    
+    if (action == @selector(printDocument:))
+    {
+        NSWindow *window = [NSApp mainWindow];
+        
+        return [window isMemberOfClass:[CanvasWindow class]];
+    }
+    
+    return YES;
+}
+- (void)printDocument:(id)sender
+{
+    CanvasWindow *canvasWindow = (CanvasWindow *)[NSApp mainWindow];
+    
+    if (![canvasWindow isMemberOfClass:[CanvasWindow class]])
+         return;
+    
+    CanvasView *canvasView = [[canvasWindow windowController] canvasView];
+    
+    CanvasPrintView *view = [[[CanvasPrintView alloc] initWithCanvasView:canvasView]
+                             autorelease];
+    
+    NSPrintOperation *op = [NSPrintOperation printOperationWithView:view];
+    NSPrintInfo *printInfo = [op printInfo];
+    
+    if ([canvasView isPaperCanvas])
+    {
+        [printInfo setHorizontalPagination:NSFitPagination];
+        [printInfo setHorizontallyCentered:NO];
+        [printInfo setVerticallyCentered:NO];
+        [printInfo setTopMargin:0.0 * 72.0];
+        [printInfo setRightMargin:0.0 * 72.0];
+        [printInfo setBottomMargin:0.0 * 72.0];
+        [printInfo setLeftMargin:0.0 * 72.0];
+    }
+    else
+    {
+        [printInfo setHorizontalPagination:NSFitPagination];
+        [printInfo setVerticalPagination:NSFitPagination];
+        [printInfo setTopMargin:0.5 * 72.0];
+        [printInfo setRightMargin:0.5 * 72.0];
+        [printInfo setBottomMargin:0.5 * 72.0];
+        [printInfo setLeftMargin:0.5 * 72.0];
+    }
+    
+    NSPrintPanel *panel = [op printPanel];
+    [panel setOptions:([panel options] |
+                       NSPrintPanelShowsPaperSize |
+                       NSPrintPanelShowsOrientation)];
+    
+    [op runOperationModalForWindow:canvasWindow
+                          delegate:self
+                    didRunSelector:NULL
+                       contextInfo:NULL];
 }
 
 @end

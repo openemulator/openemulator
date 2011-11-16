@@ -19,11 +19,11 @@
 
 Apple1IO::Apple1IO()
 {
-    pia = NULL;
-    terminal = NULL;
-    
     enhancedTerminalSpeed = false;
     fullASCIIKeyboard = false;
+    
+    pia = NULL;
+    terminal = NULL;
     
     terminalKey = 0;
     terminalChar = 0;

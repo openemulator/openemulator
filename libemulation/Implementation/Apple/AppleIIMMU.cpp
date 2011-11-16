@@ -136,6 +136,8 @@ bool AppleIIMMU::postMessage(OEComponent *sender, int message, void *data)
 {
     switch(message)
     {
+        case APPLEIIMMU_GET_VIDEOMEMORY:
+            return true;
     }
     
     return false;

@@ -37,9 +37,10 @@ public:
     virtual bool postMessage(OEComponent *sender, int message, void *data);
     
     // Notification
-    virtual void notify(OEComponent *sender, int notification, void *data);
     virtual bool addObserver(OEComponent *observer, int notification);
     virtual bool removeObserver(OEComponent *observer, int notification);
+    virtual void postNotification(OEComponent *sender, int notification, void *data);
+    virtual void notify(OEComponent *sender, int notification, void *data);
     
     // Memory access
     virtual OEUInt8 read(OEAddress address);

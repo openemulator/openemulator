@@ -66,7 +66,11 @@ bool MMU::init()
 			return false;
 	}
     
-    updateMaps();
+    // Set maps
+    for (MMUMaps::iterator i = memoryMaps.begin();
+         i != memoryMaps.end();
+         i++)
+        addressDecoder->postMessage(this, ADDRESSDECODER_MAP, &(*i));
     
 	return true;
 }
@@ -79,7 +83,7 @@ bool MMU::postMessage(OEComponent *sender, int message, void *data)
             if (!addMemoryMap((MemoryMap *) data))
                 return false;
             
-            updateMaps();
+            addressDecoder->postMessage(this, ADDRESSDECODER_MAP, data);
             
 			return true;
             
@@ -87,7 +91,7 @@ bool MMU::postMessage(OEComponent *sender, int message, void *data)
             if (!removeMemoryMap((MemoryMap *) data))
                 return false;
             
-            updateMaps();
+            unmap((MemoryMap *) data);
             
 			return true;
 	}
@@ -154,8 +158,6 @@ bool MMU::mapRef(OEComponent *component, string conf)
         addMemoryMap(&memoryMap);
     };
     
-    updateMaps();
-    
     return true;
 }
 
@@ -199,17 +201,26 @@ bool MMU::removeMemoryMap(MemoryMap *value)
     return false;
 }
 
-void MMU::updateMaps()
+void MMU::unmap(MemoryMap *value)
 {
-    if (!addressDecoder)
-        return;
-    
-//    addressDecoder->postMessage(this, ADDRESSDECODER_CLEAR, NULL);
-    
-    // To-Do: Update
+    MemoryMap m = *value;
+    m.component = NULL;
+    addressDecoder->postMessage(this, ADDRESSDECODER_MAP, &m);
     
     for (MMUMaps::iterator i = memoryMaps.begin();
          i != memoryMaps.end();
          i++)
-        addressDecoder->postMessage(this, ADDRESSDECODER_MAP, &(*i));
+    {
+        if ((i->endAddress < value->startAddress) ||
+            (i->startAddress > value->endAddress))
+            continue;
+        
+        MemoryMap m = *i;
+        if (i->startAddress < value->startAddress)
+            m.startAddress = value->startAddress;
+        if (i->endAddress > value->endAddress)
+            m.endAddress = value->endAddress;
+        
+        addressDecoder->postMessage(this, ADDRESSDECODER_MAP, &m);
+    }
 }

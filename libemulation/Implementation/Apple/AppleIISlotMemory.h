@@ -13,19 +13,22 @@
 class AppleIISlotMemory : public OEComponent
 {
 public:
+    AppleIISlotMemory();
+    
 	bool setValue(string name, string value);
+    bool getValue(string name, string &value);
 	bool setRef(string name, OEComponent *ref);
 	bool init();
+    
+    void notify(OEComponent *sender, int notification, void *data);
     
 	OEUInt8 read(OEAddress address);
 	void write(OEAddress address, OEUInt8 value);
 	
 private:
-	OEComponent *floatingBus;
+    OEComponent *mmu;
+    OEComponent *slotMemory;
 	OEComponent *slotExpansionMemory;
 	
-	OEComponent *slot[8];
-	OEUInt32 slotSel;
-    
-    void setSlot(OEUInt32 slotIndex, OEComponent *ref);
+	OEUInt32 en;
 };

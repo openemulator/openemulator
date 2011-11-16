@@ -14,27 +14,14 @@
 
 Apple1ACI::Apple1ACI()
 {
+    noiseRejection = 5;
+    
     rom = NULL;
     mmu = NULL;
     audioCodec = NULL;
     
     audioLevel = 0x80;
-    noiseRejection = 5;
     threshold = 0x80;
-}
-
-bool Apple1ACI::setRef(string name, OEComponent *ref)
-{
-    if (name == "rom")
-        rom = ref;
-    else if (name == "mmu")
-        mmu = ref;
-    else if (name == "audioCodec")
-        audioCodec = ref;
-    else
-        return false;
-    
-    return true;
 }
 
 bool Apple1ACI::setValue(string name, string value)
@@ -51,6 +38,20 @@ bool Apple1ACI::getValue(string name, string &value)
 {
     if (name == "noiseRejection")
         value = getString(noiseRejection);
+    else
+        return false;
+    
+    return true;
+}
+
+bool Apple1ACI::setRef(string name, OEComponent *ref)
+{
+    if (name == "rom")
+        rom = ref;
+    else if (name == "mmu")
+        mmu = ref;
+    else if (name == "audioCodec")
+        audioCodec = ref;
     else
         return false;
     

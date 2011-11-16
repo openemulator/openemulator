@@ -15,9 +15,9 @@ class Apple1ACI : public OEComponent
 public:
     Apple1ACI();
     
-    bool setRef(string name, OEComponent *ref);
     bool setValue(string name, string value);
     bool getValue(string name, string &value);
+    bool setRef(string name, OEComponent *ref);
     bool init();
     void dispose();
     
@@ -25,12 +25,13 @@ public:
     void write(OEAddress address, OEUInt8 value);
     
 private:
+    OEUInt8 noiseRejection;
+    
     OEComponent *rom;
     OEComponent *mmu;
     OEComponent *audioCodec;
     
     OEUInt8 audioLevel;
-    OEUInt8 noiseRejection;
     OEUInt8 threshold;
     
     void mapMMU(int message);

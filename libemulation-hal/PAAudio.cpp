@@ -368,9 +368,9 @@ void PAAudio::runEmulations()
             localOutputBuffer,
         };
         
-        notify(this, AUDIO_FRAME_WILL_RENDER, &audioBuffer);
-        notify(this, AUDIO_FRAME_IS_RENDERING, &audioBuffer);
-        notify(this, AUDIO_FRAME_DID_RENDER, &audioBuffer);
+        postNotification(this, AUDIO_FRAME_WILL_RENDER, &audioBuffer);
+        postNotification(this, AUDIO_FRAME_IS_RENDERING, &audioBuffer);
+        postNotification(this, AUDIO_FRAME_DID_RENDER, &audioBuffer);
         
         // Audio recording
         recordAudio(localOutputBuffer, framesPerBuffer, channelNum);

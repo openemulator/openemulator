@@ -1,14 +1,14 @@
 ==1.0.2==
-* Fix PAUSE>RESET>SAVE>LOAD>PLAY
 * Implement AppleIIMMU
 * Implement AppleIISlotMemory and AppleIISlotExpansionMemory
 * Implement AppleIIFloatingBus
 * Implement AppleIIVideo and AppleIIVideoGenerator
 * Implement Apple II
-* Implement Apple IIplus
-* Implement Apple IIj-plus
+* Implement Apple Game Paddles
 
 ==1.0.3==
+* Implement Apple IIplus
+* Implement Apple IIj-plus
 * Implement Apple Disk II Interface Card
 * Implement Apple Disk II
 * Implement Apple Language Card

@@ -18,6 +18,7 @@ AddressDecoder::AddressDecoder()
 {
 	addressSize = 16;
 	blockSize = 8;
+    
 	floatingBus = NULL;
 	
 	addressMask = 0;

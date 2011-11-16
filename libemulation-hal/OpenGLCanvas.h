@@ -108,7 +108,7 @@ public:
     void doDelete();
     
     bool postMessage(OEComponent *sender, int message, void *data);
-    void notify(OEComponent *sender, int notification, void *data);
+    void postNotification(OEComponent *sender, int notification, void *data);
     bool addObserver(OEComponent *observer, int notification);
     bool removeObserver(OEComponent *observer, int notification);
     

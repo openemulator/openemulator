@@ -10,17 +10,20 @@
 
 #include "AppleIISlotExpansionMemory.h"
 
-#define APPLEIISLOTEXPANSIONMEMORY_MASK	0x7ff
+#include "AppleIIInterface.h"
 
 AppleIISlotExpansionMemory::AppleIISlotExpansionMemory()
 {
-    floatingBus = NULL;
+    mmu = NULL;
+    memory = NULL;
 }
 
 bool AppleIISlotExpansionMemory::setRef(string name, OEComponent *ref)
 {
-	if (name == "floatingBus")
-		floatingBus = ref;
+	if (name == "mmu")
+		mmu = ref;
+	else if (name == "memory")
+		memory = ref;
 	else
 		return false;
 	
@@ -29,9 +32,16 @@ bool AppleIISlotExpansionMemory::setRef(string name, OEComponent *ref)
 
 bool AppleIISlotExpansionMemory::init()
 {
-    if (!floatingBus)
+    if (!mmu)
     {
-        logMessage("floatingBus not connected");
+        logMessage("mmu not connected");
+        
+        return false;
+    }
+    
+    if (!memory)
+    {
+        logMessage("memory not connected");
         
         return false;
     }
@@ -41,16 +51,16 @@ bool AppleIISlotExpansionMemory::init()
 
 OEUInt8 AppleIISlotExpansionMemory::read(OEAddress address)
 {
-	if (!((~address) & APPLEIISLOTEXPANSIONMEMORY_MASK))
-		slotExpansionMemory = floatingBus;
+    if (address == 0xcfff)
+        mmu->postNotification(this, APPLEIIMMU_SLOTEXPANSIONMEMORY_WILL_UNMAP, NULL);
 	
-	return slotExpansionMemory->read(address);
+	return memory->read(address);
 }
 
 void AppleIISlotExpansionMemory::write(OEAddress address, OEUInt8 value)
 {
-	if (!((~address) & APPLEIISLOTEXPANSIONMEMORY_MASK))
-		slotExpansionMemory = floatingBus;
-	
-	slotExpansionMemory->write(address, value);
+    if (address == 0xcfff)
+        mmu->postNotification(this, APPLEIIMMU_SLOTEXPANSIONMEMORY_WILL_UNMAP, NULL);
+    
+	memory->write(address, value);
 }

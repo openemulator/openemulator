@@ -22,6 +22,6 @@ public:
 	void write(OEAddress address, OEUInt8 value);
 	
 private:
-	OEComponent *floatingBus;
-	OEComponent *slotExpansionMemory;
+	OEComponent *mmu;
+	OEComponent *memory;
 };

@@ -13,7 +13,7 @@
     </connector>
     <component id="appleMonitorII.monitor" class="Monitor">
         <property name="device" ref="appleMonitorII"/>
-        <property name="controlBus" ref="controlBus"/>
+        <property name="controlBus" ref=""/>
         <property name="videoDecoder" value="Monochrome"/>
         <property name="videoBrightness" value="0.15"/>
         <property name="videoContrast" value="0.8"/>

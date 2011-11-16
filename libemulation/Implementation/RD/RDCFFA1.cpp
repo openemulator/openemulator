@@ -29,15 +29,14 @@
 
 RDCFFA1::RDCFFA1()
 {
-    device = NULL;
+    forceWriteProtected = false;
     
+    device = NULL;
     ram = NULL;
     rom = NULL;
-    
     mmu = NULL;
     
     diskImageFP = NULL;
-    forceWriteProtected = false;
     
     ataBufferIndex = 0;
     ataError = false;
@@ -85,15 +84,9 @@ bool RDCFFA1::setRef(string name, OEComponent *ref)
             device->postMessage(this, DEVICE_ADD_STORAGE, this);
     }
     else if (name == "ram")
-    {
-        if (ref)
-            ram = ref;
-    }
+        ram = ref;
     else if (name == "rom")
-    {
-        if (ref)
-            rom = ref;
-    }
+        rom = ref;
     else if (name == "mmu")
         mmu = ref;
     else
@@ -371,9 +364,10 @@ bool RDCFFA1::openDiskImage(string filename)
 
 void RDCFFA1::closeDiskImage()
 {
+    diskImage = "";
+    
     if (diskImageFP)
         fclose(diskImageFP);
     
     diskImageFP = NULL;
-    diskImage = "";
 }

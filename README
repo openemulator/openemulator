@@ -29,6 +29,9 @@ Mail suggestions and bug reports to <mressl@umich.edu>.
 Linux
 =====
 
+  Important: the user-interface has not yet been implemented. These are
+  only instructions for building the libemulation library.
+
   Installation of libraries depends on the Linux distribution.
 
   If you have a Debian-compatible distribution, try the following

@@ -23,19 +23,20 @@ public:
     bool setRef(string name, OEComponent *ref);
     bool init();
     void update();
+    void dispose();
     
     bool postMessage(OEComponent *sender, int message, void *data);
     
     void notify(OEComponent *sender, int notification, void *data);
     
 private:
+    CanvasDisplayConfiguration configuration;
+    
     OEComponent *device;
     OEComponent *controlBus;
+    
     OEComponent *canvas;
-    
     ControlBusPowerState powerState;
-    
-    CanvasDisplayConfiguration configuration;
     
     void updateBezel();
 };

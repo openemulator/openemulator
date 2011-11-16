@@ -29,9 +29,6 @@ public:
     void notify(OEComponent *sender, int notification, void *data);
     
 protected:
-    OEComponent *controlBus;
-    OEComponent *memoryBus;
-    
     OEUInt8 a;
     OEUInt8 x;
     OEUInt8 y;
@@ -39,14 +36,19 @@ protected:
     OEUnion pc;
     OEUnion sp;
     
+    OEComponent *controlBus;
+    OEComponent *memoryBus;
+    
     OEInt64 icount;
     
     ControlBusPowerState powerState;
+    
     bool isReset;
     bool isResetTransition;
     bool isIRQ;
     bool isIRQEnabled;
     bool isNMITransition;
+    
     bool isSpecialCondition;
     
     void initCPU();

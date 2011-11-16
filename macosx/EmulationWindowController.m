@@ -262,9 +262,7 @@
     SEL action = [anItem action];
     EmulationItem *item = [self itemForSender:anItem];
     
-    if (action == @selector(print:))
-        return NO;
-    else if (action == @selector(paste:))
+    if (action == @selector(paste:))
     {
         NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
         return [[pasteboard types] containsObject:NSStringPboardType];

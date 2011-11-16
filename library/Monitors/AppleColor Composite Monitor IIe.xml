@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
+<edl version="1.0" generator="OpenEmulator" build="700" label="AppleColor Composite Monitor IIe" image="images/Apple/AppleColor Composite Monitor IIe.png" description="The AppleColor Composite Monitor IIe is a CRT-based color 13-inch monitor manufactured by Apple Computer for the Apple II personal computer family.">
+    
+    <device id="appleColorCompositeMonitorIIe" label="AppleColor Composite Monitor IIe" image="images/Apple/AppleColor Composite Monitor IIe.png">
+        <setting ref="appleColorCompositeMonitorIIe.monitor" name="videoBrightness" label="Brightness" type="slider" options="-1.0,1.0"/>
+        <setting ref="appleColorCompositeMonitorIIe.monitor" name="videoContrast" label="Contrast" type="slider" options="0.0,2.0,1.0"/>
+        <setting ref="appleColorCompositeMonitorIIe.monitor" name="videoSaturation" label="Saturation" type="slider" options="0.0,2.0,1.0"/>
+        <setting ref="appleColorCompositeMonitorIIe.monitor" name="videoHue" label="Hue" type="slider" options="-0.5,0.5,0.0"/>
+        <setting ref="appleColorCompositeMonitorIIe.monitor" name="videoWhiteOnly" label="White Only" type="checkbox"/>
+        <setting ref="appleColorCompositeMonitorIIe.monitor" name="videoHorizontalCenter" label="Horizontal Center" type="slider" options="-0.1,0.1"/>
+        <setting ref="appleColorCompositeMonitorIIe.monitor" name="videoVerticalCenter" label="Vertical Center" type="slider" options="-0.1,0.1"/>
+        <setting ref="appleColorCompositeMonitorIIe.monitor" name="videoVerticalSize" label="Vertical Size" type="slider" options="0.85,1.25"/>
+    </device>
+    <connector id="appleColorCompositeMonitorIIe.connector" type="Composite Video Port">
+        <inlet ref="appleColorCompositeMonitorIIe.monitor" property="controlBus" outletRef="controlBus"/>
+    </connector>
+    <component id="appleColorCompositeMonitorIIe.monitor" class="Monitor">
+        <property name="device" ref="appleColorCompositeMonitorIIe"/>
+        <property name="controlBus" ref=""/>
+        <property name="videoDecoder" value="Composite Y'UV"/>
+        <property name="videoBrightness" value="0"/>
+        <property name="videoContrast" value="1"/>
+        <property name="videoSaturation" value="1"/>
+        <property name="videoHue" value="0"/>
+        <property name="videoWhiteOnly" value="0"/>
+        <property name="videoHorizontalCenter" value="0"/>
+        <property name="videoHorizontalSize" value="1.05"/>
+        <property name="videoVerticalCenter" value="0"/>
+        <property name="videoVerticalSize" value="1.05"/>
+        <property name="videoBandwidth" value="4500000"/>
+        <property name="videoLumaBandwidth" value="2000000"/>
+        <property name="videoChromaBandwidth" value="600000"/>
+        <property name="displayBarrel" value="0.05"/>
+        <property name="displayScanlineLevel" value="0.05"/>
+        <property name="displayShadowMaskLevel" value="0.05"/>
+        <property name="displayShadowMaskDotPitch" value="0.5"/>
+        <property name="displayShadowMask" value="Triad"/>
+        <property name="displayPersistence" value="0"/>
+        <property name="displayCenterLighting" value="1"/>
+        <property name="displayLuminanceGain" value="1"/>
+    </component>
+    
+</edl>

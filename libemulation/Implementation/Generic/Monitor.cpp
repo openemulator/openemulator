@@ -15,13 +15,13 @@
 
 Monitor::Monitor()
 {
+    configuration.displayResolution = OEMakeSize(768, 576);
+    
     device = NULL;
     controlBus = NULL;
+    
     canvas = NULL;
-    
     powerState = CONTROLBUS_POWERSTATE_ON;
-    
-    configuration.displayResolution = OEMakeSize(768, 576);
 }
 
 bool Monitor::setValue(string name, string value)
@@ -61,6 +61,8 @@ bool Monitor::setValue(string name, string value)
         configuration.videoLumaBandwidth = getFloat(value);
     else if (name == "videoChromaBandwidth")
         configuration.videoChromaBandwidth = getFloat(value);
+    else if (name == "videoWhiteOnly")
+        configuration.videoWhiteOnly = getInt(value);
     else if (name == "displayBarrel")
         configuration.displayBarrel = getFloat(value);
     else if (name == "displayScanlineLevel")
@@ -131,6 +133,8 @@ bool Monitor::getValue(string name, string& value)
         value = getString(configuration.videoLumaBandwidth);
     else if (name == "videoChromaBandwidth")
         value = getString(configuration.videoChromaBandwidth);
+    else if (name == "videoWhiteOnly")
+        value = getString(configuration.videoWhiteOnly);
     else if (name == "displayBarrel")
         value = getString(configuration.displayBarrel);
     else if (name == "displayScanlineLevel")
@@ -167,47 +171,7 @@ bool Monitor::getValue(string name, string& value)
 bool Monitor::setRef(string name, OEComponent *ref)
 {
     if (name == "device")
-    {
-        if (device)
-        {
-            if (canvas)
-            {
-                canvas->removeObserver(this, CANVAS_UNICODECHAR_WAS_SENT);
-                canvas->removeObserver(this, CANVAS_KEYBOARD_DID_CHANGE);
-                canvas->removeObserver(this, CANVAS_POINTER_DID_CHANGE);
-                canvas->removeObserver(this, CANVAS_MOUSE_DID_CHANGE);
-                canvas->removeObserver(this, CANVAS_JOYSTICK1_DID_CHANGE);
-                canvas->removeObserver(this, CANVAS_JOYSTICK2_DID_CHANGE);
-                canvas->removeObserver(this, CANVAS_JOYSTICK3_DID_CHANGE);
-                canvas->removeObserver(this, CANVAS_JOYSTICK4_DID_CHANGE);
-                
-                canvas->removeObserver(this, CANVAS_DID_COPY);
-                canvas->removeObserver(this, CANVAS_DID_PASTE);
-            }
-            
-            device->postMessage(this, DEVICE_DESTROY_CANVAS, &canvas);
-        }
         device = ref;
-        if (device)
-        {
-            device->postMessage(this, DEVICE_CONSTRUCT_CANVAS, &canvas);
-            
-            if (canvas)
-            {
-                canvas->addObserver(this, CANVAS_UNICODECHAR_WAS_SENT);
-                canvas->addObserver(this, CANVAS_KEYBOARD_DID_CHANGE);
-                canvas->addObserver(this, CANVAS_POINTER_DID_CHANGE);
-                canvas->addObserver(this, CANVAS_MOUSE_DID_CHANGE);
-                canvas->addObserver(this, CANVAS_JOYSTICK1_DID_CHANGE);
-                canvas->addObserver(this, CANVAS_JOYSTICK2_DID_CHANGE);
-                canvas->addObserver(this, CANVAS_JOYSTICK3_DID_CHANGE);
-                canvas->addObserver(this, CANVAS_JOYSTICK4_DID_CHANGE);
-                
-                canvas->addObserver(this, CANVAS_DID_COPY);
-                canvas->addObserver(this, CANVAS_DID_PASTE);
-            }
-        }
-    }
     else if (name == "controlBus")
     {
         if (controlBus)
@@ -231,11 +195,28 @@ bool Monitor::init()
         return false;
     }
     
+    device->postMessage(this, DEVICE_CONSTRUCT_CANVAS, &canvas);
+    
     if (!canvas)
     {
         logMessage("canvas could not be created");
         
         return false;
+    }
+    
+    if (canvas)
+    {
+        canvas->addObserver(this, CANVAS_UNICODECHAR_WAS_SENT);
+        canvas->addObserver(this, CANVAS_KEYBOARD_DID_CHANGE);
+        canvas->addObserver(this, CANVAS_POINTER_DID_CHANGE);
+        canvas->addObserver(this, CANVAS_MOUSE_DID_CHANGE);
+        canvas->addObserver(this, CANVAS_JOYSTICK1_DID_CHANGE);
+        canvas->addObserver(this, CANVAS_JOYSTICK2_DID_CHANGE);
+        canvas->addObserver(this, CANVAS_JOYSTICK3_DID_CHANGE);
+        canvas->addObserver(this, CANVAS_JOYSTICK4_DID_CHANGE);
+        
+        canvas->addObserver(this, CANVAS_DID_COPY);
+        canvas->addObserver(this, CANVAS_DID_PASTE);
     }
     
     if (controlBus)
@@ -250,6 +231,26 @@ void Monitor::update()
 {
     if (canvas)
         canvas->postMessage(this, CANVAS_CONFIGURE_DISPLAY, &configuration);
+}
+
+void Monitor::dispose()
+{
+    if (canvas)
+    {
+        canvas->removeObserver(this, CANVAS_UNICODECHAR_WAS_SENT);
+        canvas->removeObserver(this, CANVAS_KEYBOARD_DID_CHANGE);
+        canvas->removeObserver(this, CANVAS_POINTER_DID_CHANGE);
+        canvas->removeObserver(this, CANVAS_MOUSE_DID_CHANGE);
+        canvas->removeObserver(this, CANVAS_JOYSTICK1_DID_CHANGE);
+        canvas->removeObserver(this, CANVAS_JOYSTICK2_DID_CHANGE);
+        canvas->removeObserver(this, CANVAS_JOYSTICK3_DID_CHANGE);
+        canvas->removeObserver(this, CANVAS_JOYSTICK4_DID_CHANGE);
+        
+        canvas->removeObserver(this, CANVAS_DID_COPY);
+        canvas->removeObserver(this, CANVAS_DID_PASTE);
+    }
+    
+    device->postMessage(this, DEVICE_DESTROY_CANVAS, &canvas);
 }
 
 bool Monitor::postMessage(OEComponent *sender, int message, void *data)
@@ -268,8 +269,8 @@ void Monitor::notify(OEComponent *sender, int notification, void *data)
         
         updateBezel();
     }
-    else
-        OEComponent::notify(sender, notification, data);
+    else if (sender == canvas)
+        postNotification(sender, notification, data);
 }
 
 void Monitor::updateBezel()
@@ -296,5 +297,6 @@ void Monitor::updateBezel()
             break;
     }
     
-    canvas->postMessage(this, CANVAS_SET_BEZEL, &bezel);
+    if (canvas)
+        canvas->postMessage(this, CANVAS_SET_BEZEL, &bezel);
 }

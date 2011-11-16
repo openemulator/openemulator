@@ -34,13 +34,13 @@
 
 AudioCodec::AudioCodec()
 {
-    audio = NULL;
-    controlBus = NULL;
-    
     timeAccuracy = 0.000001;
     filterSize = 17;
     lowFrequency = 20;
     highFrequency = 20000;
+    
+    audio = NULL;
+    controlBus = NULL;
     
     audioBuffer = NULL;
     
@@ -188,8 +188,6 @@ void AudioCodec::write16(OEAddress address, OEUInt16 value)
     if (address < audioBuffer->channelNum)
         setSynth(audioBufferIndex, (OEUInt32) address, ((OEInt16) value) / 32768.0F);
 }
-
-
 
 void AudioCodec::updateSynth()
 {

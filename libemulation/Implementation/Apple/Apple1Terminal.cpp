@@ -119,11 +119,7 @@ bool Apple1Terminal::setRef(string name, OEComponent *ref)
             monitorDevice->removeObserver(this, DEVICE_EVENT_DID_OCCUR);
         monitorDevice = ref;
         if (monitorDevice)
-        {
             monitorDevice->addObserver(this, DEVICE_EVENT_DID_OCCUR);
-            
-            canvasShouldUpdate = true;
-        }
     }
     else if (name == "monitor")
     {
@@ -140,7 +136,7 @@ bool Apple1Terminal::setRef(string name, OEComponent *ref)
             monitor->addObserver(this, CANVAS_DID_COPY);
             monitor->addObserver(this, CANVAS_DID_PASTE);
             
-            updateCanvas();
+            canvasShouldUpdate = true;
         }
     }
     else
@@ -168,16 +164,16 @@ bool Apple1Terminal::init()
         return false;
     }
     
-    if (!vram)
+    if (!controlBus)
     {
-        logMessage("vram not connected");
+        logMessage("controlBus not connected");
         
         return false;
     }
     
-    if (!controlBus)
+    if (!vram)
     {
-        logMessage("controlBus not connected");
+        logMessage("vram not connected");
         
         return false;
     }
@@ -203,8 +199,6 @@ bool Apple1Terminal::init()
     }
     
     controlBus->postMessage(this, CONTROLBUS_GET_POWERSTATE, &powerState);
-    
-    updateCanvas();
     
     scheduleTimer();
     
@@ -269,14 +263,16 @@ void Apple1Terminal::notify(OEComponent *sender, int notification, void *data)
         switch (notification)
         {
             case CONTROLBUS_POWERSTATE_DID_CHANGE:
-                if (splashScreen && (powerState == CONTROLBUS_POWERSTATE_OFF))
+                if (powerState == CONTROLBUS_POWERSTATE_OFF)
                 {
-                    if (!splashScreenActive)
+                    if (splashScreen && !splashScreenActive)
                     {
                         splashScreenActive = true;
                         
                         controlBus->postMessage(this, CONTROLBUS_ASSERT_RESET, NULL);
                     }
+                    
+                    canvasShouldUpdate = true;
                 }
                 
                 powerState = *((ControlBusPowerState *)data);
@@ -294,17 +290,18 @@ void Apple1Terminal::notify(OEComponent *sender, int notification, void *data)
                 break;
                 
             case CONTROLBUS_TIMER_DID_FIRE:
-                updateCanvas();
+                vsync();
+                
                 scheduleTimer();
                 
-                OEComponent::notify(this, RS232_CTS_DID_ASSERT, NULL);
-                OEComponent::notify(this, RS232_CTS_DID_CLEAR, NULL);
+                postNotification(this, RS232_CTS_DID_ASSERT, NULL);
+                postNotification(this, RS232_CTS_DID_CLEAR, NULL);
                 
                 break;
         }
     }
     else if (sender == monitorDevice)
-        device->notify(sender, notification, data);
+        device->postNotification(sender, notification, data);
     else if (sender == monitor)
     {
         switch (notification)
@@ -376,11 +373,9 @@ void Apple1Terminal::loadFont(OEData *data)
 *((OEUInt32 *)(p + x * SCREEN_WIDTH + 8)) = *((OEUInt32 *)(f + x * FONT_WIDTH + 8));\
 *((OEUInt16 *)(p + x * SCREEN_WIDTH + 12)) = *((OEUInt16 *)(f + x * FONT_WIDTH + 12));
 
-void Apple1Terminal::updateCanvas()
+void Apple1Terminal::vsync()
 {
-    if (!monitor ||
-        !vramp ||
-        (powerState == CONTROLBUS_POWERSTATE_OFF))
+    if (!vramp || !monitor || (powerState == CONTROLBUS_POWERSTATE_OFF))
         return;
     
     if (splashScreenActive)
@@ -500,7 +495,7 @@ void Apple1Terminal::sendKey(CanvasUnicodeChar key)
     OEData data;
     data.push_back(key);
     
-    OEComponent::notify(this, RS232_DID_RECEIVE_DATA, &data);
+    postNotification(this, RS232_DID_RECEIVE_DATA, &data);
 }
 
 void Apple1Terminal::copy(wstring *s)

@@ -79,24 +79,24 @@ public:
 	void write(OEAddress address, OEUInt8 value);
 	
 private:
-	OEComponent *controlBus;
-	
-	OEComponent *portA;
 	OEUInt8 controlA;
 	OEUInt8 directionA;
 	OEUInt8 dataA;
 	bool ca1;
 	bool ca2;
-	OEComponent *controlBusA;
-
-	OEComponent *portB;
+    
 	OEUInt8 controlB;
 	OEUInt8 directionB;
 	OEUInt8 dataB;
 	bool cb1;
 	bool cb2;
-	OEComponent *controlBusB;
 	
+	OEComponent *controlBus;
+	OEComponent *portA;
+	OEComponent *controlBusA;
+	OEComponent *portB;
+	OEComponent *controlBusB;
+    
     void setCA2(bool value);
     void setCB2(bool value);
     

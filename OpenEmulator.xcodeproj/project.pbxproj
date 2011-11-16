@@ -64,6 +64,7 @@
 		006A4C5C134ED2F30033BE4D /* IEEE488Interface.h in Headers */ = {isa = PBXBuildFile; fileRef = 006A4C5B134ED2F30033BE4D /* IEEE488Interface.h */; };
 		006B5CD013826D0700EEB5BC /* CanvasWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 00A72B7212879F800083C6A7 /* CanvasWindow.m */; };
 		0071E3BA10803F7300F2D54F /* TemplateChooserItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0071E3B910803F7300F2D54F /* TemplateChooserItem.mm */; };
+		00722D3C1470E31400FE7007 /* Apple1Terminal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00722D3B1470E31400FE7007 /* Apple1Terminal.cpp */; };
 		0073DD9F136FCC1100087303 /* CanvasToolbarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0073DD8E136FCA1C00087303 /* CanvasToolbarView.m */; };
 		0073DDBF136FCCC900087303 /* ToolbarBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 0073DDBE136FCCC900087303 /* ToolbarBackground.png */; };
 		0076FD6512A1ED8C00A3FEC7 /* AudioPause.png in Resources */ = {isa = PBXBuildFile; fileRef = 0076FD6412A1ED8C00A3FEC7 /* AudioPause.png */; };
@@ -150,7 +151,6 @@
 		00F580A61464CDE70094DA5C /* MMU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00F580A31464CDDA0094DA5C /* MMU.cpp */; };
 		00FBD2DE1419A03B00BA8CEE /* AudioCodec.h in Headers */ = {isa = PBXBuildFile; fileRef = 00FBD2DD1419A03A00BA8CEE /* AudioCodec.h */; };
 		00FC27D312D1070A0065E986 /* Apple1ACI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881312A393990052B7A4 /* Apple1ACI.cpp */; };
-		00FC27D712D1070A0065E986 /* Apple1Terminal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881712A393990052B7A4 /* Apple1Terminal.cpp */; };
 		00FC27D912D1070A0065E986 /* AppleIIAudioIn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881912A393990052B7A4 /* AppleIIAudioIn.cpp */; };
 		00FC27DB12D1070A0065E986 /* AppleIIAudioOut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881B12A393990052B7A4 /* AppleIIAudioOut.cpp */; };
 		00FC27DF12D1070A0065E986 /* AppleIIFloatingBus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881F12A393990052B7A4 /* AppleIIFloatingBus.cpp */; };
@@ -305,6 +305,7 @@
 		006EEE8F0FCA781C003D2C8D /* DiskImage.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = DiskImage.icns; sourceTree = "<group>"; };
 		0071E3B810803F7300F2D54F /* TemplateChooserItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TemplateChooserItem.h; sourceTree = "<group>"; };
 		0071E3B910803F7300F2D54F /* TemplateChooserItem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TemplateChooserItem.mm; sourceTree = "<group>"; };
+		00722D3B1470E31400FE7007 /* Apple1Terminal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Apple1Terminal.cpp; sourceTree = "<group>"; };
 		0073DD8D136FCA1C00087303 /* CanvasToolbarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanvasToolbarView.h; sourceTree = "<group>"; };
 		0073DD8E136FCA1C00087303 /* CanvasToolbarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CanvasToolbarView.m; sourceTree = "<group>"; };
 		0073DDBE136FCCC900087303 /* ToolbarBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ToolbarBackground.png; sourceTree = "<group>"; };
@@ -360,7 +361,6 @@
 		00B8864612A3923D0052B7A4 /* edl-1.0.dtd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "edl-1.0.dtd"; sourceTree = "<group>"; };
 		00B8881312A393990052B7A4 /* Apple1ACI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Apple1ACI.cpp; path = libemulation/Implementation/Apple/Apple1ACI.cpp; sourceTree = SOURCE_ROOT; };
 		00B8881412A393990052B7A4 /* Apple1ACI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Apple1ACI.h; path = libemulation/Implementation/Apple/Apple1ACI.h; sourceTree = SOURCE_ROOT; };
-		00B8881712A393990052B7A4 /* Apple1Terminal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Apple1Terminal.cpp; path = libemulation/Implementation/Apple/Apple1Terminal.cpp; sourceTree = SOURCE_ROOT; };
 		00B8881812A393990052B7A4 /* Apple1Terminal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Apple1Terminal.h; path = libemulation/Implementation/Apple/Apple1Terminal.h; sourceTree = SOURCE_ROOT; };
 		00B8881912A393990052B7A4 /* AppleIIAudioIn.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AppleIIAudioIn.cpp; path = libemulation/Implementation/Apple/AppleIIAudioIn.cpp; sourceTree = SOURCE_ROOT; };
 		00B8881A12A393990052B7A4 /* AppleIIAudioIn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppleIIAudioIn.h; path = libemulation/Implementation/Apple/AppleIIAudioIn.h; sourceTree = SOURCE_ROOT; };
@@ -709,7 +709,7 @@
 				00B8881412A393990052B7A4 /* Apple1ACI.h */,
 				00F397E3141655DA00C53A3E /* Apple1IO.cpp */,
 				00F397E5141655EB00C53A3E /* Apple1IO.h */,
-				00B8881712A393990052B7A4 /* Apple1Terminal.cpp */,
+				00722D3B1470E31400FE7007 /* Apple1Terminal.cpp */,
 				00B8881812A393990052B7A4 /* Apple1Terminal.h */,
 				00044CA212CE6FD400D26940 /* AppleDiskII.cpp */,
 				00044CA112CE6FD400D26940 /* AppleDiskII.h */,
@@ -1251,7 +1251,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				00FC27D312D1070A0065E986 /* Apple1ACI.cpp in Sources */,
-				00FC27D712D1070A0065E986 /* Apple1Terminal.cpp in Sources */,
 				00FC27D912D1070A0065E986 /* AppleIIAudioIn.cpp in Sources */,
 				00FC27DB12D1070A0065E986 /* AppleIIAudioOut.cpp in Sources */,
 				00FC27DF12D1070A0065E986 /* AppleIIFloatingBus.cpp in Sources */,
@@ -1328,6 +1327,7 @@
 				004763D2139C94F30016277E /* LibraryTableView.m in Sources */,
 				0009068E141D2A0300F06D99 /* NSStringAdditions.mm in Sources */,
 				00DEA9201423B7BC003E9FA0 /* RDCFFA1.cpp in Sources */,
+				00722D3C1470E31400FE7007 /* Apple1Terminal.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

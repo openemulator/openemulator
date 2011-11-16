@@ -15,10 +15,10 @@
 
 MOS6502::MOS6502()
 {
+    initCPU();
+    
     controlBus = NULL;
     memoryBus = NULL;
-    
-    initCPU();
     
     icount = 0;
     
@@ -73,9 +73,7 @@ bool MOS6502::getValue(string name, string& value)
 
 bool MOS6502::setRef(string name, OEComponent *ref)
 {
-    if (name == "memoryBus")
-        memoryBus = ref;
-    else if (name == "controlBus")
+    if (name == "controlBus")
     {
         if (controlBus)
         {
@@ -97,6 +95,8 @@ bool MOS6502::setRef(string name, OEComponent *ref)
             controlBus->addObserver(this, CONTROLBUS_NMI_DID_ASSERT);
         }
     }
+    else if (name == "memoryBus")
+        memoryBus = ref;
     else
         return false;
     

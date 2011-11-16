@@ -33,9 +33,9 @@ public:
     bool postMessage(OEComponent *sender, int event, void *data);
     
 private:
-    OEComponent *addressDecoder;
-    
     MMUConf conf;
+    
+    OEComponent *addressDecoder;
     MMURef ref;
     
     MMUMaps memoryMaps;
@@ -45,7 +45,7 @@ private:
     
     bool addMemoryMap(MemoryMap *value);
     bool removeMemoryMap(MemoryMap *value);
-    void updateMaps();
+    void unmap(MemoryMap *value);
 };
 
 #endif

@@ -26,11 +26,11 @@ public:
     void write(OEAddress address, OEUInt8 value);
 
 private:
-    OEComponent *pia;
-    OEComponent *terminal;
-    
     bool enhancedTerminalSpeed;
     bool fullASCIIKeyboard;
+    
+    OEComponent *pia;
+    OEComponent *terminal;
     
     OEUInt8 terminalKey;
     OEUInt8 terminalChar;

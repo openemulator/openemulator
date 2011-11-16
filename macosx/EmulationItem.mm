@@ -723,7 +723,7 @@
             return;
     }
     
-    ((OEComponent *)device)->notify((OEComponent *)device, DEVICE_EVENT_DID_OCCUR, &event);
+    ((OEComponent *)device)->postNotification((OEComponent *)device, DEVICE_EVENT_DID_OCCUR, &event);
 }
 
 @end

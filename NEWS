@@ -1,4 +1,9 @@
 ==2011-11==
+* Fixed printing in Mac OS X
+* Fixed window resizing in Mac OS X
+* Optimized MMU
+* Added postNotification to OEComponent
+* Implemented monitor White Only
 * Implemented AppleIIKeyboard
 * Added monitor safe area
 * Fixed Monitor bezel on init

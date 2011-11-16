@@ -31,16 +31,15 @@ ControlBus::ControlBus()
 {
     clockFrequency = 1E6;
     cpuClockMultiplier = 1;
+    powerState = CONTROLBUS_POWERSTATE_OFF;
     resetOnPowerOn = true;
+    resetCount = 0;
+    irqCount = 0;
+    nmiCount = 0;
     
     device = NULL;
     audio = NULL;
     cpu = NULL;
-    
-    powerState = CONTROLBUS_POWERSTATE_OFF;
-    resetCount = 0;
-    irqCount = 0;
-    nmiCount = 0;
     
     cycleCount = 0;
     inBlock = false;
@@ -164,37 +163,37 @@ bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
         case CONTROLBUS_ASSERT_RESET:
             resetCount++;
             if (resetCount == 1)
-                OEComponent::notify(this, CONTROLBUS_RESET_DID_ASSERT, NULL);
+                postNotification(this, CONTROLBUS_RESET_DID_ASSERT, NULL);
             return true;
             
         case CONTROLBUS_CLEAR_RESET:
             resetCount--;
             if (resetCount == 0)
-                OEComponent::notify(this, CONTROLBUS_RESET_DID_CLEAR, NULL);
+                postNotification(this, CONTROLBUS_RESET_DID_CLEAR, NULL);
             return true;
             
         case CONTROLBUS_ASSERT_IRQ:
             irqCount++;
             if (irqCount == 1)
-                OEComponent::notify(this, CONTROLBUS_IRQ_DID_ASSERT, NULL);
+                postNotification(this, CONTROLBUS_IRQ_DID_ASSERT, NULL);
             return true;
             
         case CONTROLBUS_CLEAR_IRQ:
             irqCount--;
             if (irqCount == 0)
-                OEComponent::notify(this, CONTROLBUS_IRQ_DID_CLEAR, NULL);
+                postNotification(this, CONTROLBUS_IRQ_DID_CLEAR, NULL);
             return true;
             
         case CONTROLBUS_ASSERT_NMI:
             nmiCount++;
             if (nmiCount == 1)
-                OEComponent::notify(this, CONTROLBUS_NMI_DID_ASSERT, NULL);
+                postNotification(this, CONTROLBUS_NMI_DID_ASSERT, NULL);
             return true;
             
         case CONTROLBUS_CLEAR_NMI:
             nmiCount--;
             if (nmiCount == 0)
-                OEComponent::notify(this, CONTROLBUS_NMI_DID_CLEAR, NULL);
+                postNotification(this, CONTROLBUS_NMI_DID_CLEAR, NULL);
             return true;
             
         case CONTROLBUS_IS_RESET_ASSERTED:
@@ -355,7 +354,7 @@ void ControlBus::setPowerState(ControlBusPowerState powerState)
         device->postMessage(this, DEVICE_ASSERT_ACTIVITY, NULL);
     
     if (lastPowerState != powerState)
-        OEComponent::notify(this, CONTROLBUS_POWERSTATE_DID_CHANGE, &powerState);
+        postNotification(this, CONTROLBUS_POWERSTATE_DID_CHANGE, &powerState);
     
     if (resetOnPowerOn &&
         (lastPowerState == CONTROLBUS_POWERSTATE_OFF) &&

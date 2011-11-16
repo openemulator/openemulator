@@ -137,23 +137,27 @@ OEUInt8 AppleIIGamePort::read(OEAddress address)
         case 0x44: case 0x45: case 0x46: case 0x47:
         case 0x48: case 0x49: case 0x4a: case 0x4b:
         case 0x4c: case 0x4d: case 0x4e: case 0x4f:
-            notify(this, APPLEIIGAMEPORT_DID_STROBE, NULL);
+            postNotification(this, APPLEIIGAMEPORT_DID_STROBE, NULL);
             
-            return value;
+            break;
             
         case 0x58: case 0x59: case 0x5a: case 0x5b:
         case 0x5c: case 0x5d: case 0x5e: case 0x5f:
             setAN((address & 0x6) >> 1, (address & 0x1));
             
-            return value;
+            break;
             
         case 0x60: case 0x61: case 0x62: case 0x63:
         case 0x68: case 0x69: case 0x6a: case 0x6b:
-            return (pb[address & 0x3] << 7) | (value & 0x7f);
+            value = (pb[address & 0x3] << 7) | (value & 0x7f);
+            
+            break;
             
         case 0x64: case 0x65: case 0x66: case 0x67:
         case 0x6c: case 0x6d: case 0x6e: case 0x6f:
-            return (isTimerExpired(address & 0x3) << 7) | (value & 0x7f);
+            value = (isTimerExpired(address & 0x3) << 7) | (value & 0x7f);
+            
+            break;
             
         case 0x70: case 0x71: case 0x72: case 0x73:
         case 0x74: case 0x75: case 0x76: case 0x77:
@@ -161,10 +165,10 @@ OEUInt8 AppleIIGamePort::read(OEAddress address)
         case 0x7c: case 0x7d: case 0x7e: case 0x7f:
             resetTimer();
             
-            return value;
+            break;
     }
     
-    return 0;
+    return value;
 }
 
 void AppleIIGamePort::write(OEAddress address, OEUInt8 value)
@@ -175,15 +179,15 @@ void AppleIIGamePort::write(OEAddress address, OEUInt8 value)
         case 0x44: case 0x45: case 0x46: case 0x47:
         case 0x48: case 0x49: case 0x4a: case 0x4b:
         case 0x4c: case 0x4d: case 0x4e: case 0x4f:
-            notify(this, APPLEIIGAMEPORT_DID_STROBE, NULL);
+            postNotification(this, APPLEIIGAMEPORT_DID_STROBE, NULL);
             
-            return;
+            break;
             
         case 0x58: case 0x59: case 0x5a: case 0x5b:
         case 0x5c: case 0x5d: case 0x5e: case 0x5f:
             setAN((address & 0x6) >> 1, (address & 0x1));
             
-            return;
+            break;
             
         case 0x70: case 0x71: case 0x62: case 0x63:
         case 0x74: case 0x75: case 0x66: case 0x67:
@@ -191,15 +195,18 @@ void AppleIIGamePort::write(OEAddress address, OEUInt8 value)
         case 0x7c: case 0x6d: case 0x6e: case 0x6f:
             resetTimer();
             
-            return;
+            break;
     }
 }
 
 void AppleIIGamePort::setAN(int index, bool value)
 {
+    bool oldValue = an[index];
+    
     an[index] = value;
     
-    notify(this, APPLEIIGAMEPORT_AN0_DID_CHANGE + index, &value);
+    if (value != oldValue)
+        postNotification(this, APPLEIIGAMEPORT_AN0_DID_CHANGE + index, &value);
 }
 
 bool AppleIIGamePort::isTimerExpired(int index)

@@ -11,8 +11,6 @@
 #import "CanvasWindowController.h"
 #import "CanvasWindow.h"
 
-#import "CanvasPrintView.h"
-
 @implementation CanvasWindowController
 
 - (id)initWithDevice:(void *)theDevice
@@ -80,6 +78,15 @@
     
     CanvasWindow *window = (CanvasWindow *)[self window];
     NSRect windowFrame = [window frame];
+    
+    NSSize defaultViewSize = [fCanvasView defaultViewSize];
+    [window setContentAspectRatio:NSMakeSize(defaultViewSize.width,
+                                             defaultViewSize.height)];
+    
+    NSSize minSize = NSMakeSize(0.5 * defaultViewSize.width,
+                                0.5 * defaultViewSize.height);
+    [window setContentMinSize:minSize];
+    
     [self setActualSize:self];
     [window setFrameTopLeftPoint:NSMakePoint(NSMinX(windowFrame),
                                              NSMaxY(windowFrame))];
@@ -303,56 +310,6 @@
 
 // Delegate
 
-- (NSSize)windowWillResize:(NSWindow *)window toSize:(NSSize)proposedFrameSize
-{
-    if ([(CanvasWindow *)window isFullscreen])
-        return proposedFrameSize;
-    
-    if ([fCanvasView isDisplayCanvas])
-    {
-        NSSize defaultViewSize = [fCanvasView defaultViewSize];
-        float defaultViewRatio = defaultViewSize.width / defaultViewSize.height;
-        
-        NSWindow *window = [self window];
-        NSSize frameSize = [window frame].size;
-        NSSize viewSize = [[window contentView] frame].size;
-        float userScale = [window userSpaceScaleFactor];
-        NSSize titleSize = NSMakeSize(frameSize.width - viewSize.width * userScale,
-                                      frameSize.height - viewSize.height * userScale);
-        
-        proposedFrameSize = NSMakeSize(proposedFrameSize.width - titleSize.width,
-                                       proposedFrameSize.height - titleSize.height);
-        float proposedFrameRatio = proposedFrameSize.width / proposedFrameSize.height;
-        
-        if (defaultViewRatio > proposedFrameRatio)
-        {
-            float minWidth = 0.5 * defaultViewSize.width;
-            if (proposedFrameSize.width < minWidth)
-                proposedFrameSize.width = minWidth;
-            proposedFrameSize.height = proposedFrameSize.width / defaultViewRatio;
-        }
-        else
-        {
-            float minHeight = 0.5 * defaultViewSize.height;
-            if (proposedFrameSize.height < minHeight)
-                proposedFrameSize.height = minHeight;
-            proposedFrameSize.width = proposedFrameSize.height * defaultViewRatio;
-        }
-        
-        proposedFrameSize = NSMakeSize(round(proposedFrameSize.width + titleSize.width),
-                                       round(proposedFrameSize.height + titleSize.height));
-    }
-    else if ([fCanvasView isPaperCanvas])
-    {
-        if (proposedFrameSize.width < 512)
-            proposedFrameSize.width = 512;
-        if (proposedFrameSize.height < 384)
-            proposedFrameSize.height = 384;
-    }
-    
-    return proposedFrameSize;
-}
-
 - (void)windowDidResize:(NSNotification *)notification
 {
     [fCanvasView windowDidResize];
@@ -459,45 +416,6 @@
 - (void)fitToScreen:(id)sender
 {
     [self scaleFrame:10000.0];
-}
-
-- (IBAction)print:(id)sender
-{
-    CanvasPrintView *view = [[[CanvasPrintView alloc] initWithCanvasView:fCanvasView]
-                             autorelease];
-    
-    NSPrintOperation *op = [NSPrintOperation printOperationWithView:view];
-    NSPrintInfo *printInfo = [op printInfo];
-    
-    if ([fCanvasView isPaperCanvas])
-    {
-        [printInfo setHorizontalPagination:NSFitPagination];
-        [printInfo setHorizontallyCentered:NO];
-        [printInfo setVerticallyCentered:NO];
-        [printInfo setTopMargin:0.0 * 72.0];
-        [printInfo setRightMargin:0.0 * 72.0];
-        [printInfo setBottomMargin:0.0 * 72.0];
-        [printInfo setLeftMargin:0.0 * 72.0];
-    }
-    else
-    {
-        [printInfo setHorizontalPagination:NSFitPagination];
-        [printInfo setVerticalPagination:NSFitPagination];
-        [printInfo setTopMargin:0.5 * 72.0];
-        [printInfo setRightMargin:0.5 * 72.0];
-        [printInfo setBottomMargin:0.5 * 72.0];
-        [printInfo setLeftMargin:0.5 * 72.0];
-    }
-    
-    NSPrintPanel *panel = [op printPanel];
-    [panel setOptions:([panel options] |
-                       NSPrintPanelShowsPaperSize |
-                       NSPrintPanelShowsOrientation)];
-    
-    [op runOperationModalForWindow:[self window]
-                          delegate:self
-                    didRunSelector:NULL
-                       contextInfo:NULL];
 }
 
 @end

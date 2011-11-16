@@ -9,6 +9,7 @@
  */
 
 #import "CanvasWindow.h"
+
 #import "DocumentController.h"
 
 @implementation CanvasWindow

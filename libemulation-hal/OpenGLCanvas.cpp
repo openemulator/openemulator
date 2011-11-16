@@ -427,7 +427,7 @@ bool OpenGLCanvas::vsync()
     
     unlock();
     
-    notify(this, CANVAS_DID_VSYNC, &vSync);
+    postNotification(this, CANVAS_DID_VSYNC, &vSync);
     
     if (vSync.shouldDraw)
         draw();
@@ -470,7 +470,7 @@ void OpenGLCanvas::draw()
     }
     else
     {
-        notify(this, CANVAS_WILL_DRAW, &viewportSize);
+        postNotification(this, CANVAS_WILL_DRAW, &viewportSize);
         
         lock();
         
@@ -813,7 +813,8 @@ void OpenGLCanvas::configureShaders()
             uBandwidth = uBandwidth + NTSC_IQ_DELTA / imageSampleRate;
         
         // Switch to video bandwidth when no subcarrier
-        if (imageSubcarrier == 0.0)
+        if ((imageSubcarrier == 0.0) ||
+            (displayConfiguration.videoWhiteOnly))
         {
             yBandwidth = bandwidth;
             uBandwidth = bandwidth;
@@ -877,7 +878,8 @@ void OpenGLCanvas::configureShaders()
     // Disable color decoding when no subcarrier
     if (isCompositeDecoder)
     {
-        if (imageSubcarrier == 0.0)
+        if ((imageSubcarrier == 0.0) ||
+            (displayConfiguration.videoWhiteOnly))
         {
             decoderMatrix = OEMatrix3(1, 0, 0,
                                       0, 0, 0,
@@ -1617,7 +1619,7 @@ void OpenGLCanvas::postHIDNotification(int notification, int usageId, float valu
 {
     CanvasHIDNotification data = {usageId, value};
     
-    notify(this, notification, &data);
+    postNotification(this, notification, &data);
 }
 
 void OpenGLCanvas::sendUnicodeChar(CanvasUnicodeChar unicodeChar)
@@ -1814,17 +1816,17 @@ void OpenGLCanvas::resetKeysAndButtons()
 
 void OpenGLCanvas::doCopy(wstring& value)
 {
-    notify(NULL, CANVAS_DID_COPY, &value);
+    postNotification(this, CANVAS_DID_COPY, &value);
 }
 
 void OpenGLCanvas::doPaste(wstring value)
 {
-    notify(NULL, CANVAS_DID_PASTE, &value);
+    postNotification(this, CANVAS_DID_PASTE, &value);
 }
 
 void OpenGLCanvas::doDelete()
 {
-    notify(NULL, CANVAS_DID_DELETE, NULL);
+    postNotification(this, CANVAS_DID_DELETE, NULL);
 }
 
 bool OpenGLCanvas::setMode(CanvasMode *mode)
@@ -2063,7 +2065,7 @@ bool OpenGLCanvas::postMessage(OEComponent *sender, int message, void *data)
     return false;
 }
 
-void OpenGLCanvas::notify(OEComponent *sender, int notification, void *data)
+void OpenGLCanvas::postNotification(OEComponent *sender, int notification, void *data)
 {
     lock();
     

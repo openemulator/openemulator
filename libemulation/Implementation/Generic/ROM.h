@@ -24,6 +24,7 @@ public:
     
 private:
     OEData data;
+    
     OEUInt8 *datap;
     OEAddress mask;
 };

@@ -8,14 +8,14 @@
  * Controls Apple II memory ($D000-$FFFF)
  */
 
-#include "OEComponent.h"
+#include "MMU.h"
 
 #define APPLEIIMMU_RAM 3
 #define APPLEIIMMU_ROM 6
 #define APPLEIIMMU_SLOTIO 8
 #define APPLEIIMMU_SLOTMEMORY 8
 
-class AppleIIMMU : public OEComponent
+class AppleIIMMU : public MMU
 {
 public:
 	AppleIIMMU();

@@ -40,17 +40,15 @@ public:
 private:
     float clockFrequency;
     float cpuClockMultiplier;
+    ControlBusPowerState powerState;
     bool resetOnPowerOn;
+    OEUInt32 resetCount;
+    OEUInt32 irqCount;
+    OEUInt32 nmiCount;
     
     OEComponent *device;
     OEComponent *audio;
     OEComponent *cpu;
-    
-    ControlBusPowerState powerState;
-    
-    OEUInt32 resetCount;
-    OEUInt32 irqCount;
-    OEUInt32 nmiCount;
     
     OEUInt64 cycleCount;
     bool inBlock;

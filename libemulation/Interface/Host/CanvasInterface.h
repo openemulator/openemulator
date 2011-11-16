@@ -158,6 +158,7 @@ public:
         videoBandwidth = 14318180.0;
         videoLumaBandwidth = 600000.0;
         videoChromaBandwidth = 2000000.0;
+        videoWhiteOnly = false;
         
         displayResolution = OEMakeSize(640, 480);
         displayPixelDensity = 72;
@@ -181,6 +182,7 @@ public:
     float videoBandwidth;
     float videoLumaBandwidth;
     float videoChromaBandwidth;
+    bool videoWhiteOnly;
     
     OESize displayResolution;
     float displayPixelDensity;

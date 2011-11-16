@@ -13,9 +13,9 @@
 
 AddressOffset::AddressOffset()
 {
-    component = NULL;
-    
     offset = 0;
+    
+    component = NULL;
 }
 
 bool AddressOffset::setValue(string name, string value)

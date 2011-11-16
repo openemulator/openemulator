@@ -76,8 +76,8 @@
         <property name="s" value="0"/>
         <property name="p" value="0"/>
         <property name="pc" value="0xff59"/>
-        <property name="memoryBus" ref="appleII.memoryBus"/>
         <property name="controlBus" ref="appleII.controlBus"/>
+        <property name="memoryBus" ref="appleII.memoryBus"/>
     </component>
     <component id="appleII.floatingBus" class="AppleIIFloatingBus">
         <property name="controlBus" ref="appleII.controlBus"/>
@@ -113,6 +113,71 @@
     <component id="appleII.romF8" class="ROM">
         <property name="image" data="${resourcePath}/roms/Apple/341-0004-00.bin"/>
     </component>
+    <component id="appleII.io" class="AddressDecoder">
+        <property name="addressSize" value="8"/>
+        <property name="blockSize" value="0"/>
+        <property name="floatingBus" ref="appleII.floatingBus"/>
+        <property name="refKeyboard" ref="appleII.keyboard"/>
+        <property name="mapKeyboard" value="0x00-0x1f"/>
+        <property name="refSpeaker" ref="appleII.audioOut"/>
+        <property name="mapSpeaker" value="0x20-0x3f"/>
+        <property name="refVideo" ref="appleII.video"/>
+        <property name="mapVideo" value="0x50-0x57"/>
+        <property name="refAudioIn" ref="appleII.audioIn"/>
+        <property name="mapAudioIn" value="0x60"/>
+        <property name="refGame" ref="appleII.gamePort"/>
+        <property name="mapGame" value="0x40-0x4f,0x58-0x5f,0x61-0x6f"/>
+    </component>
+    <component id="appleII.keyboard" class="AppleIIKeyboard">
+        <property name="type" value="Standard"/>
+        <property name="controlBus" ref="appleII.controlBus"/>
+        <property name="floatingBus" ref="appleII.floatingBus"/>
+        <property name="gamePort" ref="appleII.gamePort"/>
+        <property name="monitor" ref=""/>
+    </component>
+    <component id="appleII.video" class="AppleIIVideo">
+        <property name="rev" value="Revision 1"/>
+        <property name="tvSystem" value="NTSC"/>
+        <property name="characterSet" value="Standard"/>
+        <property name="text" value="0"/>
+        <property name="mixed" value="0"/>
+        <property name="page2" value="0"/>
+        <property name="hires" value="0"/>
+        <property name="device" ref="appleII"/>
+        <property name="controlBus" ref="appleII.controlBus"/>
+        <property name="floatingBus" ref="appleII.floatingBus"/>
+        <property name="mmu" ref="appleII.mmu"/>
+        <property name="monitorDevice" ref=""/>
+        <property name="monitor" ref=""/>
+        <property name="fontStandard" data="${resourcePath}/roms/Apple/Signetics 2513 Video ROM.bin"/>
+        <property name="fontPigfont" data="${resourcePath}/roms/Apple/Pigfont Video ROM.bin"/>
+        <property name="fontVidex" data="${resourcePath}/roms/Apple/Pigfont Video ROM.bin"/>
+    </component>
+    <component id="appleII.audioOut" class="AppleIIAudioOut">
+        <property name="floatingBus" ref="appleII.floatingBus"/>
+        <property name="audioCodec" ref="appleII.audioCodec"/>
+    </component>
+    <component id="appleII.audioIn" class="AppleIIAudioIn">
+        <property name="floatingBus" ref="appleII.floatingBus"/>
+        <property name="audioCodec" ref="appleII.audioCodec"/>
+    </component>
+    <component id="appleII.audioCodec" class="AudioCodec">
+        <property name="audio" ref="audio"/>
+        <property name="controlBus" ref="appleII.controlBus"/>
+        <property name="timeAccuracy" value="0.000001"/>
+        <property name="filterSize" value="17"/>
+        <property name="lowFrequency" value="20"/>
+        <property name="highFrequency" value="10000"/>
+    </component>
+    <component id="appleII.gamePort" class="AppleIIGamePort">
+        <property name="controlBus" ref="appleII.controlBus"/>
+        <property name="floatingBus" ref="appleII.floatingBus"/>
+        <property name="gamePort" ref=""/>
+        <property name="an0" value="0"/>
+        <property name="an1" value="0"/>
+        <property name="an2" value="0"/>
+        <property name="an3" value="0"/>
+    </component>
     <component id="appleII.mmu" class="AppleIIMMU">
         <property name="memoryBus" ref="appleII.memoryBus"/>
         <property name="floatingBus" ref="appleII.floatingBus"/>
@@ -141,65 +206,6 @@
         <property name="slot5Memory" ref=""/>
         <property name="slot6Memory" ref=""/>
         <property name="slot7Memory" ref=""/>
-    </component>
-    <component id="appleII.io" class="AddressDecoder">
-        <property name="addressSize" value="8"/>
-        <property name="blockSize" value="0"/>
-        <property name="floatingBus" ref="appleII.floatingBus"/>
-        <property name="refKeyboard" ref="appleII.keyboard"/>
-        <property name="mapKeyboard" value="0x00-0x1f"/>
-        <property name="refSpeaker" ref="appleII.audioOut"/>
-        <property name="mapSpeaker" value="0x20-0x3f"/>
-        <property name="refVideo" ref="appleII.video"/>
-        <property name="mapVideo" value="0x50-0x57"/>
-        <property name="refAudioIn" ref="appleII.audioIn"/>
-        <property name="mapAudioIn" value="0x60"/>
-        <property name="refGame" ref="appleII.gamePort"/>
-        <property name="mapGame" value="0x40-0x4f,0x58-0x5f,0x61-0x6f"/>
-    </component>
-    <component id="appleII.keyboard" class="AppleIIKeyboard">
-        <property name="type" value="Standard"/>
-        <property name="controlBus" ref="appleII.controlBus"/>
-        <property name="floatingBus" ref="appleII.floatingBus"/>
-        <property name="gamePort" ref="appleII.gamePort"/>
-        <property name="monitor" ref=""/>
-    </component>
-    <component id="appleII.video" class="AppleIIVideo">
-        <property name="rev" value="1"/>
-        <property name="tvSystem" value="NTSC"/>
-        <property name="characterSet" value="Standard"/>
-        <property name="device" ref="appleII"/>
-        <property name="controlBus" ref="appleII.controlBus"/>
-        <property name="fontStandard" data="${resourcePath}/roms/Apple/Signetics 2513 Video ROM.bin"/>
-        <property name="fontPigfont" data="${resourcePath}/roms/Apple/Pigfont Video ROM.bin"/>
-        <property name="fontVidex" data="${resourcePath}/roms/Apple/Pigfont Video ROM.bin"/>
-        <property name="monitorDevice" ref=""/>
-        <property name="monitor" ref=""/>
-    </component>
-    <component id="appleII.audioOut" class="AppleIIAudioOut">
-        <property name="floatingBus" ref="appleII.floatingBus"/>
-        <property name="audioCodec" ref="appleII.audioCodec"/>
-    </component>
-    <component id="appleII.audioIn" class="AppleIIAudioIn">
-        <property name="floatingBus" ref="appleII.floatingBus"/>
-        <property name="audioCodec" ref="appleII.audioCodec"/>
-    </component>
-    <component id="appleII.audioCodec" class="AudioCodec">
-        <property name="audio" ref="audio"/>
-        <property name="controlBus" ref="appleII.controlBus"/>
-        <property name="timeAccuracy" value="0.000001"/>
-        <property name="filterSize" value="17"/>
-        <property name="lowFrequency" value="20"/>
-        <property name="highFrequency" value="10000"/>
-    </component>
-    <component id="appleII.gamePort" class="AppleIIGamePort">
-        <property name="controlBus" ref="appleII.controlBus"/>
-        <property name="floatingBus" ref="appleII.floatingBus"/>
-        <property name="gamePort" ref=""/>
-        <property name="an0" value="0"/>
-        <property name="an1" value="0"/>
-        <property name="an2" value="0"/>
-        <property name="an3" value="0"/>
     </component>
     
 </edl>

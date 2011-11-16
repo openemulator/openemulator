@@ -48,8 +48,8 @@
         <property name="s" value="0x0"/>
         <property name="p" value="0x0"/>
         <property name="pc" value="0xff00"/>
-        <property name="memoryBus" ref="apple1.memoryBus"/>
         <property name="controlBus" ref="apple1.controlBus"/>
+        <property name="memoryBus" ref="apple1.memoryBus"/>
     </component>
     <component id="apple1.floatingBus" class="FloatingBus">
         <property name="mode" value="ground"/>
@@ -84,10 +84,10 @@
         <property name="controlBusB" ref=""/>
     </component>
     <component id="apple1.io" class="Apple1IO">
-        <property name="pia" ref="apple1.pia"/>
-        <property name="terminal" ref="apple1.terminal"/>
         <property name="terminalSpeed" value="Standard"/>
         <property name="keyboardType" value="Standard"/>
+        <property name="pia" ref="apple1.pia"/>
+        <property name="terminal" ref="apple1.terminal"/>
     </component>
     <component id="apple1.terminalRAM" class="RAM">
         <property name="controlBus" ref="apple1.controlBus"/>
@@ -96,14 +96,14 @@
         <property name="powerOnPattern" value="0x20"/>
     </component>
     <component id="apple1.terminal" class="Apple1Terminal">
+        <property name="cursorX" value="0"/>
+        <property name="cursorY" value="0"/>
         <property name="device" ref="apple1"/>
         <property name="vram" ref="apple1.terminalRAM"/>
         <property name="controlBus" ref="apple1.controlBus"/>
         <property name="monitorDevice" ref="appleMonitorIII"/>
         <property name="monitor" ref="appleMonitorIII.monitor"/>
         <property name="font" data="${resourcePath}/roms/Signetics/Signetics 2513 Video ROM.bin"/>
-        <property name="cursorX" value="0"/>
-        <property name="cursorY" value="0"/>
     </component>
     <component id="apple1.ram2" class="RAM">
         <property name="controlBus" ref="apple1.controlBus"/>

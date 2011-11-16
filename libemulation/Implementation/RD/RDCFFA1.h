@@ -28,6 +28,9 @@ public:
     void write(OEAddress address, OEUInt8 value);
     
 private:
+    string diskImage;
+    bool forceWriteProtected;
+    
     OEComponent *device;
     
     OEComponent *ram;
@@ -36,9 +39,7 @@ private:
     OEComponent *controlBus;
     OEComponent *mmu;
     
-    string diskImage;
     FILE *diskImageFP;
-    bool forceWriteProtected;
     
     OEUInt8 ataBuffer[0x200];
     OEUInt32 ataBufferIndex;

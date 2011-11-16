@@ -32,8 +32,9 @@ public:
     void write64(OEAddress address, OEUInt64 value);
     
 private:
+    string sel;
+    
 	map<string, OEComponent *>ref;
     
-    string sel;
     OEComponent *component;
 };

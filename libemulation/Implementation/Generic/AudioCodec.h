@@ -30,13 +30,13 @@ public:
     void write16(OEAddress address, OEUInt16 value);
     
 private:
-    OEComponent *audio;
-    OEComponent *controlBus;
-    
     float timeAccuracy;
     float lowFrequency;
     float highFrequency;
     OEUInt32 filterSize;
+    
+    OEComponent *audio;
+    OEComponent *controlBus;
     
     AudioBuffer *audioBuffer;
     

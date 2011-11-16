@@ -9,10 +9,11 @@
  */
 
 #include "OEComponent.h"
-
 #include "OEImage.h"
+
 #include "CanvasInterface.h"
 #include "ControlBusInterface.h"
+#include "AppleIIInterface.h"
 
 class AppleIIVideo : public OEComponent
 {
@@ -26,6 +27,8 @@ public:
 	bool init();
     void dispose();
     
+    bool postMessage(OEComponent *sender, int message, void *data);
+    
     void notify(OEComponent *sender, int notification, void *data);
     
 	OEUInt8 read(OEAddress address);
@@ -34,6 +37,8 @@ public:
 private:
     OEComponent *device;
     OEComponent *controlBus;
+    OEComponent *floatingBus;
+    OEComponent *mmu;
     OEComponent *monitorDevice;
 	OEComponent *monitor;
 	
@@ -41,9 +46,9 @@ private:
 	bool palTiming;
 	string characterSet;
     
-    OEUInt8 *textp;
-    OEUInt8 *hires1p;
-    OEUInt8 *hires2p;
+    OEUInt32 mode;
+    
+    AppleIIMMUVideoMemory vram;
     OEUInt32 cursorX, cursorY;
     
     map<string, OEData> font;
@@ -54,8 +59,9 @@ private:
     
     ControlBusPowerState powerState;
     
+    void updateMode(OEUInt32 mask, bool value);
     void scheduleTimer();
-    void loadFont(OEData *data);
-    void updateCanvas();
+    OEData loadFont(OEData *data);
+    void vsync();
     void copy(wstring *s);
 };
