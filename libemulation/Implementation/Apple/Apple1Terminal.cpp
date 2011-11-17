@@ -43,7 +43,7 @@ Apple1Terminal::Apple1Terminal()
     clearScreenOnCtrlL = false;
     splashScreen = false;
     splashScreenActive = false;
-        
+    
     canvasShouldUpdate = true;
     image.setFormat(OEIMAGE_LUMINANCE);
     image.setSize(OEMakeSize(SCREEN_WIDTH, SCREEN_HEIGHT));
@@ -238,7 +238,7 @@ bool Apple1Terminal::postMessage(OEComponent *sender, int message, void *data)
             
             return true;
     }
-
+    
     return false;
 }
 

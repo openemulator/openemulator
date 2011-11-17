@@ -25,6 +25,16 @@
         <property name="irqCount" value="0"/>
         <property name="nmiCount" value="0"/>
     </component>
+    <component id="replica1.cpu" class="W65C02S">
+        <property name="a" value="0x0"/>
+        <property name="x" value="0x0"/>
+        <property name="y" value="0x0"/>
+        <property name="s" value="0x0"/>
+        <property name="p" value="0x0"/>
+        <property name="pc" value="0xff00"/>
+        <property name="controlBus" ref="replica1.controlBus"/>
+        <property name="memoryBus" ref="replica1.memoryBus"/>
+    </component>
     <component id="replica1.memoryBus" class="AddressDecoder">
         <property name="addressSize" value="16"/>
         <property name="blockSize" value="8"/>
@@ -38,16 +48,6 @@
         <property name="mapIO" value="0xd000-0xdfff"/>
         <property name="refROM" ref="replica1.rom"/>
         <property name="mapROM" value="0xe000-0xffff"/>
-    </component>
-    <component id="replica1.cpu" class="W65C02S">
-        <property name="a" value="0x0"/>
-        <property name="x" value="0x0"/>
-        <property name="y" value="0x0"/>
-        <property name="s" value="0x0"/>
-        <property name="p" value="0x0"/>
-        <property name="pc" value="0xff00"/>
-        <property name="controlBus" ref="replica1.controlBus"/>
-        <property name="memoryBus" ref="replica1.memoryBus"/>
     </component>
     <component id="replica1.floatingBus" class="FloatingBus">
         <property name="mode" value="ground"/>

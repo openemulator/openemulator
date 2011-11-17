@@ -67,6 +67,13 @@ bool Apple1ACI::init()
         return false;
     }
     
+    if (!mmu)
+    {
+        logMessage("mmu not connected");
+        
+        return false;
+    }
+    
     if (!audioCodec)
     {
         logMessage("audioCodec not connected");

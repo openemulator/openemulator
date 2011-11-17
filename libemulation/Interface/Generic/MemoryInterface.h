@@ -11,6 +11,8 @@
 #ifndef _ADDRESSINTERFACE_H
 #define _ADDRESSINTERFACE_H
 
+#include <list>
+
 #include "OEComponent.h"
 
 typedef enum
@@ -39,5 +41,7 @@ typedef struct
     bool read;
     bool write;
 } MemoryMap;
+
+typedef list<MemoryMap> MemoryMaps;
 
 #endif

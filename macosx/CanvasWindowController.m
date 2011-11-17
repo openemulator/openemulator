@@ -80,8 +80,9 @@
     NSRect windowFrame = [window frame];
     
     NSSize defaultViewSize = [fCanvasView defaultViewSize];
-    [window setContentAspectRatio:NSMakeSize(defaultViewSize.width,
-                                             defaultViewSize.height)];
+    if ([fCanvasView isDisplayCanvas])
+        [window setContentAspectRatio:NSMakeSize(defaultViewSize.width,
+                                                 defaultViewSize.height)];
     
     NSSize minSize = NSMakeSize(0.5 * defaultViewSize.width,
                                 0.5 * defaultViewSize.height);

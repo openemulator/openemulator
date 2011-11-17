@@ -11,13 +11,10 @@
 #ifndef _MMU_H
 #define _MMU_H
 
-#include <list>
-
 #include "OEComponent.h"
 
 #include "MemoryInterface.h"
 
-typedef list<MemoryMap> MMUMaps;
 typedef map<string, string> MMUConf;
 typedef map<string, OEComponent *> MMURef;
 
@@ -32,19 +29,20 @@ public:
     
     bool postMessage(OEComponent *sender, int event, void *data);
     
+protected:
+    bool addMemoryMap(MemoryMap *value);
+    bool removeMemoryMap(MemoryMap *value);
+    
 private:
     MMUConf conf;
     
     OEComponent *addressDecoder;
     MMURef ref;
     
-    MMUMaps memoryMaps;
+    MemoryMaps memoryMaps;
     
     bool getMemoryMap(MemoryMap& theMap, OEComponent *component, string value);
     bool mapRef(OEComponent *component, string conf);
-    
-    bool addMemoryMap(MemoryMap *value);
-    bool removeMemoryMap(MemoryMap *value);
     void unmap(MemoryMap *value);
 };
 

@@ -8,9 +8,14 @@
  * Generates Apple II video
  */
 
+#include <math.h>
+
 #include "AppleIIVideo.h"
 
 #include "DeviceInterface.h"
+#include "MemoryInterface.h"
+#include "CanvasInterface.h"
+#include "AppleIIInterface.h"
 
 #define SCREEN_ORIGIN_X     104
 #define SCREEN_ORIGIN_Y     25
@@ -20,25 +25,65 @@
 #define TERM_HEIGHT         24
 #define CHAR_WIDTH          14
 #define CHAR_HEIGHT         8
-#define FONT_SIZE           0x80
-#define FONT_SIZE_MASK      0x7f
+#define FONT_SIZE           0x100
+#define FONT_SIZE_MASK      0xff
 #define FONT_WIDTH          16
 #define FONT_HEIGHT         8
-#define BLINK_ON            20
-#define BLINK_OFF           10
+#define FLASH_HALFCYCLE     14
+
+OEAddress appleIIVideoTextOffset[] = {
+    0x000,
+    0x080,
+    0x100,
+    0x180,
+    0x200,
+    0x280,
+    0x300,
+    0x380,
+    0x028,
+    0x0a8,
+    0x128,
+    0x1a8,
+    0x228,
+    0x2a8,
+    0x328,
+    0x3a8,
+    0x050,
+    0x0d0,
+    0x150,
+    0x1d0,
+    0x250,
+    0x2d0,
+    0x350,
+    0x3d0,
+};
 
 AppleIIVideo::AppleIIVideo()
 {
     device = NULL;
     controlBus = NULL;
     floatingBus = NULL;
-    mmu = NULL;
     monitorDevice = NULL;
     monitor = NULL;
     
     rev0 = false;
     palTiming = false;
     characterSet = "Standard";
+    
+    for (int i = 0; i < 2; i++)
+        text[i] = NULL;
+    for (int i = 0; i < 2; i++)
+        hires[i] = NULL;
+    canvasShouldUpdate = true;
+    
+    image.setFormat(OEIMAGE_LUMINANCE);
+    image.setSize(OEMakeSize(SCREEN_WIDTH, SCREEN_HEIGHT));
+    vector<float> colorBurst;
+    colorBurst.push_back(M_PI * -33.0 / 180.0);
+    image.setColorBurst(colorBurst);
+    
+    flash = false;
+    flashCount = 0;
 }
 
 bool AppleIIVideo::setValue(string name, string value)
@@ -50,13 +95,13 @@ bool AppleIIVideo::setValue(string name, string value)
 	else if (name == "characterSet")
 		characterSet = value;
 	else if (name == "text")
-        updateMode(APPLEIIVIDEO_TEXT, getInt(value));
+        OESetBit(mode, APPLEIIVIDEO_TEXT, getInt(value));
 	else if (name == "mixed")
-        updateMode(APPLEIIVIDEO_MIXED, getInt(value));
+        OESetBit(mode, APPLEIIVIDEO_MIXED, getInt(value));
 	else if (name == "page2")
-        updateMode(APPLEIIVIDEO_PAGE2, getInt(value));
+        OESetBit(mode, APPLEIIVIDEO_PAGE2, getInt(value));
 	else if (name == "hires")
-        updateMode(APPLEIIVIDEO_HIRES, getInt(value));
+        OESetBit(mode, APPLEIIVIDEO_HIRES, getInt(value));
 	else
 		return false;
 	
@@ -99,14 +144,12 @@ bool AppleIIVideo::setRef(string name, OEComponent *ref)
     }
 	else if (name == "floatingBus")
 		floatingBus = ref;
-	else if (name == "mmu")
-    {
-        if (mmu)
-            mmu->removeObserver(this, APPLEIIMMU_VIDEOMEMORY_DID_CHANGE);
-		mmu = ref;
-        if (mmu)
-            mmu->addObserver(this, APPLEIIMMU_VIDEOMEMORY_DID_CHANGE);
-    }
+    else if ((name == "ram1") || (name == "ram"))
+        ram1 = ref;
+    else if (name == "ram2")
+        ram2 = ref;
+    else if (name == "ram3")
+        ram3 = ref;
     else if (name == "monitorDevice")
     {
         if (monitorDevice)
@@ -129,6 +172,11 @@ bool AppleIIVideo::setRef(string name, OEComponent *ref)
 
 bool AppleIIVideo::setData(string name, OEData *data)
 {
+    if (name.substr(0, 4) == "font")
+        loadFont(name.substr(4), data);
+    else
+        return false;
+    
     return true;
 }
 
@@ -155,43 +203,17 @@ bool AppleIIVideo::init()
         return false;
     }
     
-    if (!mmu)
-    {
-        logMessage("mmu not connected");
-        
-        return false;
-    }
+    OEAddress startAddress = 0;
     
-/*    OEData *data;
-    vram->postMessage(this, RAM_GET_DATA, &data);
-    if (vramData->size() < (TERM_WIDTH * TERM_HEIGHT))
-    {
-        logMessage("not enough vram");
-        
-        return false;
-    }
-    vramp = &vramData->front();
-    
-    if (!font.size())
-    {
-        logMessage("font not loaded");
-        
-        return false;
-    }
-    */
+    getVRAM(ram1, startAddress);
+    getVRAM(ram2, startAddress);
+    getVRAM(ram3, startAddress);
     
     controlBus->postMessage(this, CONTROLBUS_GET_POWERSTATE, &powerState);
     
     scheduleTimer();
     
-    mmu->postMessage(this, APPLEIIMMU_GET_VIDEOMEMORY, &vram);
-    
     return true;
-}
-
-void AppleIIVideo::dispose()
-{
-    
 }
 
 bool AppleIIVideo::postMessage(OEComponent *sender, int message, void *data)
@@ -226,8 +248,6 @@ void AppleIIVideo::notify(OEComponent *sender, int notification, void *data)
                 break;
         }
     }
-    else if (sender == mmu)
-        vram = *((AppleIIMMUVideoMemory *)data);
     else if (sender == monitorDevice)
         device->postNotification(sender, notification, data);
     else if (sender == monitor)
@@ -254,25 +274,86 @@ void AppleIIVideo::write(OEAddress address, OEUInt8 value)
     switch (address & 0x7f)
     {
         case 0x50: case 0x51:
-            OESetBit(mode, APPLEIIVIDEO_TEXT, address & 0x1);
+            updateMode(APPLEIIVIDEO_TEXT, address & 0x1);
             
             break;
             
         case 0x52: case 0x53:
-            OESetBit(mode, APPLEIIVIDEO_MIXED, address & 0x1);
+            updateMode(APPLEIIVIDEO_MIXED, address & 0x1);
             
             break;
             
         case 0x54: case 0x55:
-            OESetBit(mode, APPLEIIVIDEO_PAGE2, address & 0x1);
+            updateMode(APPLEIIVIDEO_PAGE2, address & 0x1);
             
             break;
             
         case 0x56: case 0x57:
-            OESetBit(mode, APPLEIIVIDEO_HIRES, address & 0x1);
+            updateMode(APPLEIIVIDEO_HIRES, address & 0x1);
             
             break;
     }
+}
+
+void AppleIIVideo::getVRAM(OEComponent *ram, OEAddress& startAddress)
+{
+    if (!ram)
+        return;
+    
+    OEData *data;
+    ram->postMessage(this, RAM_GET_DATA, &data);
+    
+    OEAddress endAddress = startAddress + data->size() - 1;
+    
+    if ((startAddress <= 0x400) && (endAddress >= 0x7ff))
+        text[0] = &data->front() + 0x400 - startAddress;
+    if ((startAddress <= 0x800) && (endAddress >= 0xbff))
+        text[1] = &data->front() + 0x800 - startAddress;
+    if ((startAddress <= 0x2000) && (endAddress >= 0x3fff))
+        hires[0] = &data->front() + 0x2000 - startAddress;
+    if ((startAddress <= 0x4000) && (endAddress >= 0x5fff))
+        hires[1] = &data->front() + 0x4000 - startAddress;
+    
+    startAddress += data->size();
+}
+
+void AppleIIVideo::scheduleTimer()
+{
+    OEUInt64 clocks = 262 * 65;
+    
+    controlBus->postMessage(this, CONTROLBUS_SCHEDULE_TIMER, &clocks);
+}
+
+void AppleIIVideo::loadFont(string name, OEData *data)
+{
+    if (data->size() < FONT_HEIGHT)
+        return;
+    
+    OEData theFont;
+    
+    theFont.resize(2 * FONT_SIZE * FONT_HEIGHT * FONT_WIDTH);
+    
+    OEUInt8 *fp = &theFont[0];
+    int cMask = (int) getNextPowerOf2(data->size() / FONT_HEIGHT) - 1;
+    
+    for (int c = 0; c < 2 * FONT_SIZE; c++)
+    {
+        for (int y = 0; y < FONT_HEIGHT; y++)
+        {
+            OEUInt8 byte = data->at((c & cMask) * FONT_HEIGHT + y);
+            
+            bool inv = !((c & 0x80) || ((byte & 0x80) && (c & 0x100)));
+            
+            for (int x = 0; x < FONT_WIDTH; x++)
+            {
+                bool b = (byte << (x >> 1)) & 0x40;
+                
+                fp[(c * FONT_HEIGHT + y) * FONT_WIDTH + x] = (b ^ inv) ? 0xff : 0x00;
+            }
+        }
+    }
+    
+    font[name] = theFont;
 }
 
 void AppleIIVideo::updateMode(OEUInt32 mask, bool value)
@@ -283,40 +364,11 @@ void AppleIIVideo::updateMode(OEUInt32 mask, bool value)
     
     if (mode != oldMode)
         postNotification(this, APPLEIIVIDEO_MODE_DID_CHANGE, &mode);
-}
-
-void AppleIIVideo::scheduleTimer()
-{
-    OEUInt64 clocks = 262 * 65;
     
-    controlBus->postMessage(this, CONTROLBUS_SCHEDULE_TIMER, &clocks);
-}
-
-OEData AppleIIVideo::loadFont(OEData *data)
-{
-    OEData font;
-    
-    font.resize(FONT_SIZE * FONT_HEIGHT * FONT_WIDTH);
-    
-    if (data->size() >= FONT_HEIGHT)
-    {
-        int cMask = (int) getNextPowerOf2(data->size() / FONT_HEIGHT) - 1;
-        
-        for (int c = 0; c < FONT_SIZE; c++)
-        {
-            for (int y = 0; y < FONT_HEIGHT; y++)
-            {
-                for (int x = 0; x < FONT_WIDTH; x++)
-                {
-                    bool b = (data->at((c & cMask) * FONT_HEIGHT + y) << (x >> 1)) & 0x40;
-                    
-                    font[(c * FONT_HEIGHT + y) * FONT_WIDTH + x] = b ? 0xff : 0x00;
-                }
-            }
-        }
-    }
-    
-    return font;
+    if (rev0 || ((mode & ~APPLEIIVIDEO_PAGE2) == APPLEIIVIDEO_TEXT))
+        image.setSubcarrier(3579545);
+    else
+        image.setSubcarrier(0);
 }
 
 // Copy a 14-pixel char scanline with 3 ints and one short
@@ -327,19 +379,17 @@ OEData AppleIIVideo::loadFont(OEData *data)
 
 void AppleIIVideo::vsync()
 {
-/*    if (!monitor ||
-        !textp ||
-        (powerState == CONTROLBUS_POWERSTATE_OFF))
+    if (!monitor || (powerState == CONTROLBUS_POWERSTATE_OFF))
         return;
     
     if (powerState == CONTROLBUS_POWERSTATE_ON)
     {
-        if (cursorCount)
-            cursorCount--;
+        if (flashCount)
+            flashCount--;
         else
         {
-            cursorActive = !cursorActive;
-            cursorCount = cursorActive ? BLINK_ON : BLINK_OFF;
+            flash = !flash;
+            flashCount = FLASH_HALFCYCLE;
             
             canvasShouldUpdate = true;
         }
@@ -348,18 +398,24 @@ void AppleIIVideo::vsync()
     if (!canvasShouldUpdate)
         return;
     
-    OEUInt8 *fp = (OEUInt8 *)&font.front();
+    OEUInt8 *vp = text[OEGetBit(mode, APPLEIIVIDEO_PAGE2) ? 1 : 0];
+    OEUInt8 *fp = (OEUInt8 *)&font[characterSet].front();
     OEUInt8 *ip = (OEUInt8 *)image.getPixels();
     
-    // Generate cursor
-    OEUInt8 cursorChar = vramp[cursorY * TERM_WIDTH + cursorX];
-//    if (cursorActive)
-//        textp[cursorY * TERM_WIDTH + cursorX] = '@';
+    if (!vp || !fp || !ip)
+    {
+        monitor->postMessage(this, CANVAS_CLEAR, NULL);
+        
+        return;
+    }
+    
+    if (flash)
+        fp += FONT_SIZE * FONT_WIDTH * FONT_HEIGHT;
     
     for (int y = 0; y < TERM_HEIGHT; y++)
         for (int x = 0; x < TERM_WIDTH; x++)
         {
-            OEUInt8 c = vramp[y * TERM_WIDTH + x] & FONT_SIZE_MASK;
+            OEUInt8 c = vp[appleIIVideoTextOffset[y] + x];
             OEUInt8 *f = fp + c * FONT_HEIGHT * FONT_WIDTH;
             OEUInt8 *p = (ip + y * SCREEN_WIDTH * CHAR_HEIGHT +
                           x * CHAR_WIDTH +
@@ -378,10 +434,7 @@ void AppleIIVideo::vsync()
     
     monitor->postMessage(this, CANVAS_POST_IMAGE, &image);
     
-    // Restore cursor char
-//    textp[cursorY * TERM_WIDTH + cursorX] = cursorChar;
-    
-    canvasShouldUpdate = false;*/
+    canvasShouldUpdate = false;
 }
 
 void AppleIIVideo::copy(wstring *s)

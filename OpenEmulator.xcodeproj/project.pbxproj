@@ -56,10 +56,6 @@
 		0054E6311131BEE7006D32D9 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0054E6301131BEE7006D32D9 /* Carbon.framework */; };
 		0054E66C1131BF58006D32D9 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0054E66B1131BF58006D32D9 /* Quartz.framework */; };
 		006115C211DD0347008AA3EE /* Application.m in Sources */ = {isa = PBXBuildFile; fileRef = 006115C111DD0347008AA3EE /* Application.m */; };
-		00678F87139F325F00940158 /* AppleLanguageCard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00678F85139F325F00940158 /* AppleLanguageCard.cpp */; };
-		00678F88139F325F00940158 /* AppleLanguageCard.h in Headers */ = {isa = PBXBuildFile; fileRef = 00678F86139F325F00940158 /* AppleLanguageCard.h */; };
-		00678F8B139F346C00940158 /* AppleIISuperSerialCard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00678F89139F346400940158 /* AppleIISuperSerialCard.cpp */; };
-		00678F8C139F346C00940158 /* AppleIISuperSerialCard.h in Headers */ = {isa = PBXBuildFile; fileRef = 00678F8A139F346900940158 /* AppleIISuperSerialCard.h */; };
 		00679D09100817F700B38748 /* TemplateChooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00679D06100817F700B38748 /* TemplateChooser.xib */; };
 		006A4C5C134ED2F30033BE4D /* IEEE488Interface.h in Headers */ = {isa = PBXBuildFile; fileRef = 006A4C5B134ED2F30033BE4D /* IEEE488Interface.h */; };
 		006B5CD013826D0700EEB5BC /* CanvasWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 00A72B7212879F800083C6A7 /* CanvasWindow.m */; };
@@ -128,6 +124,7 @@
 		00DEA9201423B7BC003E9FA0 /* RDCFFA1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00DEA91F1423B7BC003E9FA0 /* RDCFFA1.cpp */; };
 		00DEA9221423B7C9003E9FA0 /* RDCFFA1.h in Headers */ = {isa = PBXBuildFile; fileRef = 00DEA9211423B7C9003E9FA0 /* RDCFFA1.h */; };
 		00E442921278726B00713A05 /* IconDevices.png in Resources */ = {isa = PBXBuildFile; fileRef = 00E442911278726B00713A05 /* IconDevices.png */; };
+		00E473421475695500F367B7 /* diskimage.h in Headers */ = {isa = PBXBuildFile; fileRef = 00E473411475695500F367B7 /* diskimage.h */; };
 		00ED379C12779AD100BEF6BD /* AudioMax.png in Resources */ = {isa = PBXBuildFile; fileRef = 00ED379712779AD000BEF6BD /* AudioMax.png */; };
 		00ED379D12779AD100BEF6BD /* AudioMin.png in Resources */ = {isa = PBXBuildFile; fileRef = 00ED379812779AD000BEF6BD /* AudioMin.png */; };
 		00ED379E12779AD100BEF6BD /* AudioPlay.png in Resources */ = {isa = PBXBuildFile; fileRef = 00ED379912779AD000BEF6BD /* AudioPlay.png */; };
@@ -156,7 +153,6 @@
 		00FC27DF12D1070A0065E986 /* AppleIIFloatingBus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881F12A393990052B7A4 /* AppleIIFloatingBus.cpp */; };
 		00FC27E112D1070A0065E986 /* AppleIIGamePort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8882112A393990052B7A4 /* AppleIIGamePort.cpp */; };
 		00FC27E312D1070A0065E986 /* AppleIIKeyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8882312A393990052B7A4 /* AppleIIKeyboard.cpp */; };
-		00FC27E512D1070A0065E986 /* AppleIIMMU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8882512A393990052B7A4 /* AppleIIMMU.cpp */; };
 		00FC27E712D1070A0065E986 /* AppleIISlotExpansionMemory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8882712A393990052B7A4 /* AppleIISlotExpansionMemory.cpp */; };
 		00FC27E912D1070A0065E986 /* AppleIISlotMemory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8882912A393990052B7A4 /* AppleIISlotMemory.cpp */; };
 		00FC27EB12D1070A0065E986 /* AppleIIVideo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8882B12A393990052B7A4 /* AppleIIVideo.cpp */; };
@@ -191,6 +187,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 006EECA30FCA5C31003D2C8D;
 			remoteInfo = emulator;
+		};
+		00E4734314756AC800F367B7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 00E4733C1475692E00F367B7;
+			remoteInfo = libdiskimage;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -296,10 +299,6 @@
 		005928540FFC94E200F24A57 /* templates */ = {isa = PBXFileReference; lastKnownFileType = folder; path = templates; sourceTree = "<group>"; };
 		006115C011DD0347008AA3EE /* Application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Application.h; sourceTree = "<group>"; };
 		006115C111DD0347008AA3EE /* Application.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Application.m; sourceTree = "<group>"; };
-		00678F85139F325F00940158 /* AppleLanguageCard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleLanguageCard.cpp; sourceTree = "<group>"; };
-		00678F86139F325F00940158 /* AppleLanguageCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleLanguageCard.h; sourceTree = "<group>"; };
-		00678F89139F346400940158 /* AppleIISuperSerialCard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleIISuperSerialCard.cpp; sourceTree = "<group>"; };
-		00678F8A139F346900940158 /* AppleIISuperSerialCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleIISuperSerialCard.h; sourceTree = "<group>"; };
 		00679D07100817F700B38748 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/TemplateChooser.xib; sourceTree = "<group>"; };
 		006A4C5B134ED2F30033BE4D /* IEEE488Interface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IEEE488Interface.h; sourceTree = "<group>"; };
 		006EEE8F0FCA781C003D2C8D /* DiskImage.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = DiskImage.icns; sourceTree = "<group>"; };
@@ -372,8 +371,6 @@
 		00B8882212A393990052B7A4 /* AppleIIGamePort.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppleIIGamePort.h; path = libemulation/Implementation/Apple/AppleIIGamePort.h; sourceTree = SOURCE_ROOT; };
 		00B8882312A393990052B7A4 /* AppleIIKeyboard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AppleIIKeyboard.cpp; path = libemulation/Implementation/Apple/AppleIIKeyboard.cpp; sourceTree = SOURCE_ROOT; };
 		00B8882412A393990052B7A4 /* AppleIIKeyboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppleIIKeyboard.h; path = libemulation/Implementation/Apple/AppleIIKeyboard.h; sourceTree = SOURCE_ROOT; };
-		00B8882512A393990052B7A4 /* AppleIIMMU.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AppleIIMMU.cpp; path = libemulation/Implementation/Apple/AppleIIMMU.cpp; sourceTree = SOURCE_ROOT; };
-		00B8882612A393990052B7A4 /* AppleIIMMU.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppleIIMMU.h; path = libemulation/Implementation/Apple/AppleIIMMU.h; sourceTree = SOURCE_ROOT; };
 		00B8882712A393990052B7A4 /* AppleIISlotExpansionMemory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AppleIISlotExpansionMemory.cpp; path = libemulation/Implementation/Apple/AppleIISlotExpansionMemory.cpp; sourceTree = SOURCE_ROOT; };
 		00B8882812A393990052B7A4 /* AppleIISlotExpansionMemory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppleIISlotExpansionMemory.h; path = libemulation/Implementation/Apple/AppleIISlotExpansionMemory.h; sourceTree = SOURCE_ROOT; };
 		00B8882912A393990052B7A4 /* AppleIISlotMemory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AppleIISlotMemory.cpp; path = libemulation/Implementation/Apple/AppleIISlotMemory.cpp; sourceTree = SOURCE_ROOT; };
@@ -444,6 +441,8 @@
 		00DEA9211423B7C9003E9FA0 /* RDCFFA1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDCFFA1.h; sourceTree = "<group>"; };
 		00E442911278726B00713A05 /* IconDevices.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IconDevices.png; sourceTree = "<group>"; };
 		00E442931278727600713A05 /* EmulationShow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EmulationShow.png; sourceTree = "<group>"; };
+		00E4733D1475692E00F367B7 /* liblibdiskimage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = liblibdiskimage.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		00E473411475695500F367B7 /* diskimage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = diskimage.h; sourceTree = "<group>"; };
 		00ED379712779AD000BEF6BD /* AudioMax.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AudioMax.png; sourceTree = "<group>"; };
 		00ED379812779AD000BEF6BD /* AudioMin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AudioMin.png; sourceTree = "<group>"; };
 		00ED379912779AD000BEF6BD /* AudioPlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AudioPlay.png; sourceTree = "<group>"; };
@@ -484,6 +483,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		006EECA20FCA5C31003D2C8D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		00E4733A1475692E00F367B7 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -727,18 +733,12 @@
 				00B8882212A393990052B7A4 /* AppleIIGamePort.h */,
 				00B8882312A393990052B7A4 /* AppleIIKeyboard.cpp */,
 				00B8882412A393990052B7A4 /* AppleIIKeyboard.h */,
-				00B8882512A393990052B7A4 /* AppleIIMMU.cpp */,
-				00B8882612A393990052B7A4 /* AppleIIMMU.h */,
 				00B8882712A393990052B7A4 /* AppleIISlotExpansionMemory.cpp */,
 				00B8882812A393990052B7A4 /* AppleIISlotExpansionMemory.h */,
 				00B8882912A393990052B7A4 /* AppleIISlotMemory.cpp */,
 				00B8882A12A393990052B7A4 /* AppleIISlotMemory.h */,
-				00678F89139F346400940158 /* AppleIISuperSerialCard.cpp */,
-				00678F8A139F346900940158 /* AppleIISuperSerialCard.h */,
 				00B8882B12A393990052B7A4 /* AppleIIVideo.cpp */,
 				00B8882C12A393990052B7A4 /* AppleIIVideo.h */,
-				00678F85139F325F00940158 /* AppleLanguageCard.cpp */,
-				00678F86139F325F00940158 /* AppleLanguageCard.h */,
 				00B5CB92136F0B6C007A7BED /* AppleSilentype.cpp */,
 				00B5CB93136F0B6C007A7BED /* AppleSilentype.h */,
 			);
@@ -900,12 +900,21 @@
 			path = RD;
 			sourceTree = "<group>";
 		};
+		00E473201475689C00F367B7 /* libdiskimage */ = {
+			isa = PBXGroup;
+			children = (
+				00E473411475695500F367B7 /* diskimage.h */,
+			);
+			path = libdiskimage;
+			sourceTree = "<group>";
+		};
 		19C28FB0FE9D524F11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
 				8D15AC370486D014006FF6A4 /* OpenEmulator.app */,
 				00039E7C12B03F660025D374 /* libemulation-hal.a */,
 				00039EFE12B04E910025D374 /* libemulation.a */,
+				00E4733D1475692E00F367B7 /* liblibdiskimage.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -916,6 +925,7 @@
 				000A78A50FBA464600A0F12E /* OpenEmulator.app */,
 				00039E3C12B03BA90025D374 /* libemulation-hal */,
 				00B8864512A3923D0052B7A4 /* libemulation */,
+				00E473201475689C00F367B7 /* libdiskimage */,
 				001750AF13A50A690043E2ED /* Docs */,
 				19C28FB0FE9D524F11CA2CBB /* Products */,
 			);
@@ -1065,14 +1075,20 @@
 				000E8D1913515C6E00DBFB2C /* StorageInterface.h in Headers */,
 				00D73D9D136CC9B300BD5465 /* IEEE1394Interface.h in Headers */,
 				00B5CB95136F0B6D007A7BED /* AppleSilentype.h in Headers */,
-				00678F88139F325F00940158 /* AppleLanguageCard.h in Headers */,
-				00678F8C139F346C00940158 /* AppleIISuperSerialCard.h in Headers */,
 				002740B913A08A4F00E13D65 /* VidexVideoterm.h in Headers */,
 				00F397E6141655EC00C53A3E /* Apple1IO.h in Headers */,
 				00FBD2DE1419A03B00BA8CEE /* AudioCodec.h in Headers */,
 				00DEA9221423B7C9003E9FA0 /* RDCFFA1.h in Headers */,
 				0022236C142C557100B7451D /* ControlBusInterface.h in Headers */,
 				00DC0E79145DFECD00FF51BD /* MemoryInterface.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		00E4733B1475692E00F367B7 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				00E473421475695500F367B7 /* diskimage.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1113,6 +1129,23 @@
 			productReference = 00039EFE12B04E910025D374 /* libemulation.a */;
 			productType = "com.apple.product-type.library.static";
 		};
+		00E4733C1475692E00F367B7 /* libdiskimage */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 00E4733E1475692E00F367B7 /* Build configuration list for PBXNativeTarget "libdiskimage" */;
+			buildPhases = (
+				00E473391475692E00F367B7 /* Sources */,
+				00E4733A1475692E00F367B7 /* Frameworks */,
+				00E4733B1475692E00F367B7 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = libdiskimage;
+			productName = libdiskimage;
+			productReference = 00E4733D1475692E00F367B7 /* liblibdiskimage.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 		8D15AC270486D014006FF6A4 /* OpenEmulator */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C05733C708A9546B00998B17 /* Build configuration list for PBXNativeTarget "OpenEmulator" */;
@@ -1126,6 +1159,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				00E4734414756AC800F367B7 /* PBXTargetDependency */,
 				006EECE60FCA6097003D2C8D /* PBXTargetDependency */,
 				00039E8212B03F7A0025D374 /* PBXTargetDependency */,
 			);
@@ -1161,6 +1195,7 @@
 				8D15AC270486D014006FF6A4 /* OpenEmulator */,
 				00039E7B12B03F650025D374 /* emulation-hal */,
 				006EECA30FCA5C31003D2C8D /* emulation */,
+				00E4733C1475692E00F367B7 /* libdiskimage */,
 			);
 		};
 /* End PBXProject section */
@@ -1256,7 +1291,6 @@
 				00FC27DF12D1070A0065E986 /* AppleIIFloatingBus.cpp in Sources */,
 				00FC27E112D1070A0065E986 /* AppleIIGamePort.cpp in Sources */,
 				00FC27E312D1070A0065E986 /* AppleIIKeyboard.cpp in Sources */,
-				00FC27E512D1070A0065E986 /* AppleIIMMU.cpp in Sources */,
 				00FC27E712D1070A0065E986 /* AppleIISlotExpansionMemory.cpp in Sources */,
 				00FC27E912D1070A0065E986 /* AppleIISlotMemory.cpp in Sources */,
 				00FC27EB12D1070A0065E986 /* AppleIIVideo.cpp in Sources */,
@@ -1287,13 +1321,18 @@
 				00D226571350FF8B00FC69B9 /* OEMatrix3.cpp in Sources */,
 				00B5CB94136F0B6C007A7BED /* AppleSilentype.cpp in Sources */,
 				00247F38139D8F4C00B165D1 /* OECommon.cpp in Sources */,
-				00678F87139F325F00940158 /* AppleLanguageCard.cpp in Sources */,
-				00678F8B139F346C00940158 /* AppleIISuperSerialCard.cpp in Sources */,
 				002740B813A08A4F00E13D65 /* VidexVideoterm.cpp in Sources */,
 				00F397E4141655DA00C53A3E /* Apple1IO.cpp in Sources */,
 				004BD1C01425AA8500768B80 /* W65C02S.cpp in Sources */,
 				0029EEE214266B8900AD900E /* Mux.cpp in Sources */,
 				00F580A61464CDE70094DA5C /* MMU.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		00E473391475692E00F367B7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1343,6 +1382,11 @@
 			isa = PBXTargetDependency;
 			target = 006EECA30FCA5C31003D2C8D /* emulation */;
 			targetProxy = 006EECE50FCA6097003D2C8D /* PBXContainerItemProxy */;
+		};
+		00E4734414756AC800F367B7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 00E4733C1475692E00F367B7 /* libdiskimage */;
+			targetProxy = 00E4734314756AC800F367B7 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1444,12 +1488,46 @@
 			};
 			name = Release;
 		};
+		00E4733F1475692E00F367B7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				EXECUTABLE_PREFIX = lib;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		00E473401475692E00F367B7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		C05733C808A9546B00998B17 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = macosx;
-				GCC_DYNAMIC_NO_PIC = NO;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/opt/local/lib,
@@ -1543,6 +1621,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		00E4733E1475692E00F367B7 /* Build configuration list for PBXNativeTarget "libdiskimage" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				00E4733F1475692E00F367B7 /* Debug */,
+				00E473401475692E00F367B7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 		C05733C708A9546B00998B17 /* Build configuration list for PBXNativeTarget "OpenEmulator" */ = {
 			isa = XCConfigurationList;

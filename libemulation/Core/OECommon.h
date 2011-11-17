@@ -18,12 +18,12 @@
 
 using namespace std;
 
-#define OEAssertBit(x,m) ((x)|=(1 << m))
-#define OEClearBit(x,m) ((x)&=~(1 << m))
-#define OEToggleBit(x,m) ((x)^=(1 << m))
+#define OEAssertBit(x,m) ((x)|=(m))
+#define OEClearBit(x,m) ((x)&=~(m))
+#define OEToggleBit(x,m) ((x)^=(m))
 
 #define OESetBit(x,m,v) if (v) OEAssertBit(x,m); else OEClearBit(x,m)
-#define OEGetBit(x,m) ((x)&(1 << m))
+#define OEGetBit(x,m) ((x)&(m))
 
 typedef unsigned char OEUInt8;
 typedef signed char OEInt8;

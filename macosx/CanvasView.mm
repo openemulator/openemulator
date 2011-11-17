@@ -809,7 +809,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     CFRelease(event);
     
     bool hostCapsLock = modifierFlags & NSAlphaShiftKeyMask;
-    bool emulationCapsLock = keyboardFlags & CANVAS_L_CAPSLOCK;
+    bool emulationCapsLock = OEGetBit(keyboardFlags, CANVAS_L_CAPSLOCK);
     if (hostCapsLock != emulationCapsLock)
     {
         if (!capsLockNotSynchronized)

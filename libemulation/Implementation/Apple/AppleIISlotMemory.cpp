@@ -10,6 +10,8 @@
 
 #include "AppleIISlotMemory.h"
 
+#include "MemoryInterface.h"
+
 #include "AppleIIInterface.h"
 
 AppleIISlotMemory::AppleIISlotMemory()
@@ -70,18 +72,19 @@ bool AppleIISlotMemory::init()
     }
     
     if (en)
-        mmu->postMessage(this, APPLEIIMMU_MAP_SLOTEXPANSION, &slotExpansionMemory);
+    {
+    }
     
     return true;
 }
 
 void AppleIISlotMemory::notify(OEComponent *sender, int notification, void *data)
 {
-    if (sender == mmu)
+    if ((sender == mmu) && en)
     {
         en = false;
         
-        mmu->postMessage(this, APPLEIIMMU_UNMAP_SLOTEXPANSION, &slotExpansionMemory);
+        mapMMU(MMU_UNMAP);
     }
 }
 
@@ -91,7 +94,7 @@ OEUInt8 AppleIISlotMemory::read(OEAddress address)
     {
         en = true;
         
-        mmu->postMessage(this, APPLEIIMMU_MAP_SLOTEXPANSION, &slotExpansionMemory);
+        mapMMU(MMU_MAP);
     }
     
     return slotMemory->read(address);
@@ -103,8 +106,21 @@ void AppleIISlotMemory::write(OEAddress address, OEUInt8 value)
     {
         en = true;
         
-        mmu->postMessage(this, APPLEIIMMU_MAP_SLOTEXPANSION, &slotExpansionMemory);
+        mapMMU(MMU_MAP);
     }
     
     slotMemory->write(address, value);
+}
+
+void AppleIISlotMemory::mapMMU(int message)
+{
+    MemoryMap memoryMap;
+    
+    memoryMap.component = slotExpansionMemory;
+    memoryMap.startAddress = 0xc800;
+    memoryMap.endAddress = 0xcfff;
+    memoryMap.read = true;
+    memoryMap.write = true;
+    
+    mmu->postMessage(this, message, &memoryMap);
 }

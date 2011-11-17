@@ -67,7 +67,7 @@ bool MMU::init()
 	}
     
     // Set maps
-    for (MMUMaps::iterator i = memoryMaps.begin();
+    for (MemoryMaps::iterator i = memoryMaps.begin();
          i != memoryMaps.end();
          i++)
         addressDecoder->postMessage(this, ADDRESSDECODER_MAP, &(*i));
@@ -83,15 +83,11 @@ bool MMU::postMessage(OEComponent *sender, int message, void *data)
             if (!addMemoryMap((MemoryMap *) data))
                 return false;
             
-            addressDecoder->postMessage(this, ADDRESSDECODER_MAP, data);
-            
 			return true;
             
         case MMU_UNMAP:
             if (!removeMemoryMap((MemoryMap *) data))
                 return false;
-            
-            unmap((MemoryMap *) data);
             
 			return true;
 	}
@@ -163,7 +159,7 @@ bool MMU::mapRef(OEComponent *component, string conf)
 
 bool MMU::addMemoryMap(MemoryMap *value)
 {
-    for (MMUMaps::iterator i = memoryMaps.begin();
+    for (MemoryMaps::iterator i = memoryMaps.begin();
          i != memoryMaps.end();
          i++)
     {
@@ -177,28 +173,9 @@ bool MMU::addMemoryMap(MemoryMap *value)
     
     memoryMaps.push_back(*value);
     
-    return true;
-}
-
-bool MMU::removeMemoryMap(MemoryMap *value)
-{
-    for (MMUMaps::iterator i = memoryMaps.begin();
-         i != memoryMaps.end();
-         i++)
-    {
-        if ((i->component == value->component) &&
-            (i->startAddress == value->startAddress) &&
-            (i->endAddress == value->endAddress) &&
-            (i->read == value->read) &&
-            (i->write == value->write))
-        {
-            memoryMaps.erase(i);
-            
-            return true;
-        }
-    }
+    addressDecoder->postMessage(this, ADDRESSDECODER_MAP, value);
     
-    return false;
+    return true;
 }
 
 void MMU::unmap(MemoryMap *value)
@@ -207,7 +184,7 @@ void MMU::unmap(MemoryMap *value)
     m.component = NULL;
     addressDecoder->postMessage(this, ADDRESSDECODER_MAP, &m);
     
-    for (MMUMaps::iterator i = memoryMaps.begin();
+    for (MemoryMaps::iterator i = memoryMaps.begin();
          i != memoryMaps.end();
          i++)
     {
@@ -223,4 +200,27 @@ void MMU::unmap(MemoryMap *value)
         
         addressDecoder->postMessage(this, ADDRESSDECODER_MAP, &m);
     }
+}
+
+bool MMU::removeMemoryMap(MemoryMap *value)
+{
+    for (MemoryMaps::iterator i = memoryMaps.begin();
+         i != memoryMaps.end();
+         i++)
+    {
+        if ((i->component == value->component) &&
+            (i->startAddress == value->startAddress) &&
+            (i->endAddress == value->endAddress) &&
+            (i->read == value->read) &&
+            (i->write == value->write))
+        {
+            memoryMaps.erase(i);
+            
+            unmap(value);
+            
+            return true;
+        }
+    }
+    
+    return false;
 }

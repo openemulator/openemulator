@@ -31,4 +31,6 @@ private:
 	OEComponent *slotExpansionMemory;
 	
 	OEUInt32 en;
+
+    void mapMMU(int message);
 };

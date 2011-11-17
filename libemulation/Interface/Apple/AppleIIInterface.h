@@ -1,56 +1,20 @@
 
 /**
  * libemulation
- * Apple II MMU Interface
+ * Apple II Interface
  * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Defines the Apple II MMU interface
+ * Defines the Apple II interface
  */
 
-#ifndef _APPLEIIMMUINTERFACE_H
-#define _APPLEIIMMUINTERFACE_H
+#ifndef _APPLEIIINTERFACE_H
+#define _APPLEIIINTERFACE_H
 
 typedef enum
 {
-    APPLEIIMMU_GET_VIDEOMEMORY,
-    APPLEIIMMU_MAP_SLOT,
-    APPLEIIMMU_UNMAP_SLOT,
-    APPLEIIMMU_MAP_SLOTEXPANSION,
-    APPLEIIMMU_UNMAP_SLOTEXPANSION,
-	APPLEIIMMU_MAP_MEMORY,
-    APPLEIIMMU_UNMAP_MEMORY,
-} AppleIIMMUMessage;
-
-typedef enum
-{
-    APPLEIIMMU_VIDEOMEMORY_DID_CHANGE,
     APPLEIIMMU_SLOTEXPANSIONMEMORY_WILL_UNMAP,
 } AppleIIMMUNotification;
-
-class AppleIIMMUVideoMemory
-{
-public:
-    AppleIIMMUVideoMemory()
-    {
-        text = NULL;
-        hires = NULL;
-        auxText = NULL;
-        auxHires = NULL;
-    }
-    
-    OEUInt8 *text;
-    OEUInt8 *hires;
-    OEUInt8 *auxText;
-    OEUInt8 *auxHires;
-};
-
-typedef struct
-{
-    OEUInt32 slot;
-    OEComponent *io;
-    OEComponent *memory;
-} AppleIIMMUSlotMap;
 
 typedef enum
 {
@@ -62,10 +26,10 @@ typedef enum
     APPLEIIVIDEO_MODE_DID_CHANGE,
 } AppleIIVideoNotification;
 
-#define APPLEIIVIDEO_TEXT   (1 << 0)
-#define APPLEIIVIDEO_MIXED  (1 << 1)
-#define APPLEIIVIDEO_PAGE2  (1 << 2)
-#define APPLEIIVIDEO_HIRES  (1 << 3)
+#define APPLEIIVIDEO_TEXT   0
+#define APPLEIIVIDEO_MIXED  1
+#define APPLEIIVIDEO_PAGE2  2
+#define APPLEIIVIDEO_HIRES  3
 
 typedef enum
 {

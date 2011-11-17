@@ -97,9 +97,30 @@ bool RDCFFA1::setRef(string name, OEComponent *ref)
 
 bool RDCFFA1::init()
 {
+    if (!device)
+    {
+        logMessage("device not connected");
+        
+        return false;
+    }
+    
+    if (!ram)
+    {
+        logMessage("ram not connected");
+        
+        return false;
+    }
+    
     if (!rom)
     {
         logMessage("rom not connected");
+        
+        return false;
+    }
+    
+    if (!mmu)
+    {
+        logMessage("mmu not connected");
         
         return false;
     }

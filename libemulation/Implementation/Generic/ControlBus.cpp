@@ -154,78 +154,104 @@ bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
     {
         case CONTROLBUS_SET_POWERSTATE:
             setPowerState(*((ControlBusPowerState *)data));
+            
             return true;
             
         case CONTROLBUS_GET_POWERSTATE:
             *((ControlBusPowerState *)data) = powerState;
+            
             return true;
             
         case CONTROLBUS_ASSERT_RESET:
             resetCount++;
             if (resetCount == 1)
                 postNotification(this, CONTROLBUS_RESET_DID_ASSERT, NULL);
+            
             return true;
             
         case CONTROLBUS_CLEAR_RESET:
             resetCount--;
             if (resetCount == 0)
                 postNotification(this, CONTROLBUS_RESET_DID_CLEAR, NULL);
+            
             return true;
             
         case CONTROLBUS_ASSERT_IRQ:
             irqCount++;
             if (irqCount == 1)
                 postNotification(this, CONTROLBUS_IRQ_DID_ASSERT, NULL);
+            
             return true;
             
         case CONTROLBUS_CLEAR_IRQ:
             irqCount--;
             if (irqCount == 0)
                 postNotification(this, CONTROLBUS_IRQ_DID_CLEAR, NULL);
+            
             return true;
             
         case CONTROLBUS_ASSERT_NMI:
             nmiCount++;
             if (nmiCount == 1)
                 postNotification(this, CONTROLBUS_NMI_DID_ASSERT, NULL);
+            
             return true;
             
         case CONTROLBUS_CLEAR_NMI:
             nmiCount--;
             if (nmiCount == 0)
                 postNotification(this, CONTROLBUS_NMI_DID_CLEAR, NULL);
+            
             return true;
             
         case CONTROLBUS_IS_RESET_ASSERTED:
             *((bool *)data) = (resetCount != 0);
+            
             return true;
             
         case CONTROLBUS_IS_IRQ_ASSERTED:
             *((bool *)data) = (irqCount != 0);
+            
             return true;
             
         case CONTROLBUS_IS_NMI_ASSERTED:
             *((bool *)data) = (nmiCount != 0);
+            
+            return true;
+            
+        case CONTROLBUS_SET_CLOCKFREQUENCY:
+            clockFrequency = *((float *)data);
+            
+            return true;
+            
+        case CONTROLBUS_GET_CLOCKFREQUENCY:
+            *((float *)data) = clockFrequency;
+            
             return true;
             
         case CONTROLBUS_GET_CYCLECOUNT:
             *((OEUInt64 *)data) = getCycleCount();
+            
             return true;
             
         case CONTROLBUS_GET_AUDIOBUFFERINDEX:
             *((float *)data) = (getCycleCount() - cycleStart) * sampleToCycleRatio;
+            
             return true;
             
         case CONTROLBUS_SCHEDULE_TIMER:
             scheduleTimer(sender, *((OEUInt64 *)data));
+            
             return true;
             
         case CONTROLBUS_CLEAR_TIMERS:
             clearTimers(sender);
+            
             return true;
             
         case CONTROLBUS_SET_CPUCLOCKMULTIPLIER:
             setCPUClockMultiplier(*((float *)data));
+            
             break;
     }
     
@@ -272,20 +298,24 @@ void ControlBus::notify(OEComponent *sender, int notification, void *data)
         {
             case DEVICE_POWERDOWN:
                 setPowerState(CONTROLBUS_POWERSTATE_OFF);
+                
                 break;
                 
             case DEVICE_SLEEP:
                 if (powerState != CONTROLBUS_POWERSTATE_OFF)
                     setPowerState(CONTROLBUS_POWERSTATE_PAUSE);
+                
                 break;
                 
             case DEVICE_WAKEUP:
                 setPowerState(CONTROLBUS_POWERSTATE_ON);
+                
                 break;
                 
             case DEVICE_COLDRESTART:
                 setPowerState(CONTROLBUS_POWERSTATE_OFF);
                 setPowerState(CONTROLBUS_POWERSTATE_ON);
+                
                 break;
                 
             case DEVICE_WARMRESTART:
@@ -294,11 +324,13 @@ void ControlBus::notify(OEComponent *sender, int notification, void *data)
                     postMessage(this, CONTROLBUS_ASSERT_RESET, NULL);
                     postMessage(this, CONTROLBUS_CLEAR_RESET, NULL);
                 }
+                
                 break;
                 
             case DEVICE_DEBUGGERBREAK:
                 postMessage(this, CONTROLBUS_ASSERT_NMI, NULL);
                 postMessage(this, CONTROLBUS_CLEAR_NMI, NULL);
+                
                 break;
                 
             default:

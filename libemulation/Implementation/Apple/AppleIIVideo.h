@@ -11,9 +11,7 @@
 #include "OEComponent.h"
 #include "OEImage.h"
 
-#include "CanvasInterface.h"
 #include "ControlBusInterface.h"
-#include "AppleIIInterface.h"
 
 class AppleIIVideo : public OEComponent
 {
@@ -25,7 +23,6 @@ public:
 	bool setRef(string name, OEComponent *ref);
     bool setData(string name, OEData *data);
 	bool init();
-    void dispose();
     
     bool postMessage(OEComponent *sender, int message, void *data);
     
@@ -38,7 +35,9 @@ private:
     OEComponent *device;
     OEComponent *controlBus;
     OEComponent *floatingBus;
-    OEComponent *mmu;
+    OEComponent *ram1;
+    OEComponent *ram2;
+    OEComponent *ram3;
     OEComponent *monitorDevice;
 	OEComponent *monitor;
 	
@@ -47,21 +46,20 @@ private:
 	string characterSet;
     
     OEUInt32 mode;
-    
-    AppleIIMMUVideoMemory vram;
-    OEUInt32 cursorX, cursorY;
-    
+    OEUInt8 *text[2];
+    OEUInt8 *hires[2];
     map<string, OEData> font;
     bool canvasShouldUpdate;
     OEImage image;
-    bool cursorActive;
-    OEUInt32 cursorCount;
+    bool flash;
+    OEUInt32 flashCount;
     
     ControlBusPowerState powerState;
     
-    void updateMode(OEUInt32 mask, bool value);
+    void getVRAM(OEComponent *ram, OEAddress &start);
     void scheduleTimer();
-    OEData loadFont(OEData *data);
+    void loadFont(string name, OEData *data);
+    void updateMode(OEUInt32 mask, bool value);
     void vsync();
     void copy(wstring *s);
 };

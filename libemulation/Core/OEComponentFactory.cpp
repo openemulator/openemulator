@@ -33,12 +33,9 @@
 #include "AppleIIFloatingBus.h"
 #include "AppleIIGamePort.h"
 #include "AppleIIKeyboard.h"
-#include "AppleIIMMU.h"
 #include "AppleIISlotExpansionMemory.h"
 #include "AppleIISlotMemory.h"
-#include "AppleIISuperSerialCard.h"
 #include "AppleIIVideo.h"
-#include "AppleLanguageCard.h"
 #include "AppleSilentype.h"
 
 #include "MOS6502.h"
@@ -84,12 +81,9 @@ OEComponent *OEComponentFactory::construct(const string& className)
     matchComponent(AppleIIFloatingBus);
     matchComponent(AppleIIGamePort);
     matchComponent(AppleIIKeyboard);
-    matchComponent(AppleIIMMU);
     matchComponent(AppleIISlotExpansionMemory);
     matchComponent(AppleIISlotMemory);
-    matchComponent(AppleIISuperSerialCard);
     matchComponent(AppleIIVideo);
-    matchComponent(AppleLanguageCard);
     matchComponent(AppleSilentype);
     
     matchComponent(MOS6502);

@@ -53,16 +53,16 @@ bool AppleIIAudioIn::setRef(string name, OEComponent *ref)
 
 bool AppleIIAudioIn::init()
 {
-    if (!audioCodec)
+    if (!floatingBus)
     {
-        logMessage("audioCodec not connected");
+        logMessage("floatingBus not connected");
         
         return false;
     }
     
-    if (!floatingBus)
+    if (!audioCodec)
     {
-        logMessage("floatingBus not connected");
+        logMessage("audioCodec not connected");
         
         return false;
     }

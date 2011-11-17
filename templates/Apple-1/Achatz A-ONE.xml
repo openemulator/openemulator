@@ -26,6 +26,16 @@
         <property name="irqCount" value="0"/>
         <property name="nmiCount" value="0"/>
     </component>
+    <component id="aONE.cpu" class="W65C02S">
+        <property name="a" value="0x0"/>
+        <property name="x" value="0x0"/>
+        <property name="y" value="0x0"/>
+        <property name="s" value="0x0"/>
+        <property name="p" value="0x0"/>
+        <property name="pc" value="0xff00"/>
+        <property name="controlBus" ref="aONE.controlBus"/>
+        <property name="memoryBus" ref="aONE.memoryBus"/>
+    </component>
     <component id="aONE.memoryBus" class="AddressDecoder">
         <property name="addressSize" value="16"/>
         <property name="blockSize" value="8"/>
@@ -41,16 +51,6 @@
         <property name="mapROM" value="0x8000-0x9fff,0xf000-0xffff"/>
         <property name="refE000" ref="aONE.muxE000"/>
         <property name="mapE000" value="0xe000-0xefff"/>
-    </component>
-    <component id="aONE.cpu" class="W65C02S">
-        <property name="a" value="0x0"/>
-        <property name="x" value="0x0"/>
-        <property name="y" value="0x0"/>
-        <property name="s" value="0x0"/>
-        <property name="p" value="0x0"/>
-        <property name="pc" value="0xff00"/>
-        <property name="controlBus" ref="aONE.controlBus"/>
-        <property name="memoryBus" ref="aONE.memoryBus"/>
     </component>
     <component id="aONE.floatingBus" class="FloatingBus">
         <property name="mode" value="ground"/>

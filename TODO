@@ -1,9 +1,9 @@
 ==1.0.2==
-* Implement AppleIIMMU
 * Implement AppleIISlotMemory and AppleIISlotExpansionMemory
 * Implement AppleIIFloatingBus
 * Implement AppleIIVideo and AppleIIVideoGenerator
 * Implement Apple II
+* Implement Mac OS X joystick support
 * Implement Apple Game Paddles
 
 ==1.0.3==

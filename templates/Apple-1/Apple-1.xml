@@ -25,6 +25,16 @@
         <property name="irqCount" value="0"/>
         <property name="nmiCount" value="0"/>
     </component>
+    <component id="apple1.cpu" class="MOS6502">
+        <property name="a" value="0x0"/>
+        <property name="x" value="0x0"/>
+        <property name="y" value="0x0"/>
+        <property name="s" value="0x0"/>
+        <property name="p" value="0x0"/>
+        <property name="pc" value="0xff00"/>
+        <property name="controlBus" ref="apple1.controlBus"/>
+        <property name="memoryBus" ref="apple1.memoryBus"/>
+    </component>
     <component id="apple1.memoryBus" class="AddressDecoder">
         <property name="addressSize" value="16"/>
         <property name="blockSize" value="8"/>
@@ -40,16 +50,6 @@
         <property name="mapRAM2" value="0xe000-0xefff"/>
         <property name="refROM" ref="apple1.rom"/>
         <property name="mapROM" value="0xf000-0xffff"/>
-    </component>
-    <component id="apple1.cpu" class="MOS6502">
-        <property name="a" value="0x0"/>
-        <property name="x" value="0x0"/>
-        <property name="y" value="0x0"/>
-        <property name="s" value="0x0"/>
-        <property name="p" value="0x0"/>
-        <property name="pc" value="0xff00"/>
-        <property name="controlBus" ref="apple1.controlBus"/>
-        <property name="memoryBus" ref="apple1.memoryBus"/>
     </component>
     <component id="apple1.floatingBus" class="FloatingBus">
         <property name="mode" value="ground"/>
