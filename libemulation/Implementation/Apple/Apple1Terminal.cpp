@@ -367,8 +367,8 @@ void Apple1Terminal::loadFont(OEData *data)
     }
 }
 
-// Copy a 14-pixel char scanline with 3 ints and one short
-#define copyCharLine(x) \
+// Copy a 14-pixel char scanline
+#define copyBlock(x) \
 *((OEUInt64 *)(p + x * SCREEN_WIDTH + 0)) = *((OEUInt64 *)(f + x * FONT_WIDTH + 0));\
 *((OEUInt32 *)(p + x * SCREEN_WIDTH + 8)) = *((OEUInt32 *)(f + x * FONT_WIDTH + 8));\
 *((OEUInt16 *)(p + x * SCREEN_WIDTH + 12)) = *((OEUInt16 *)(f + x * FONT_WIDTH + 12));
@@ -399,34 +399,38 @@ void Apple1Terminal::vsync()
     OEUInt8 *fp = (OEUInt8 *)&font.front();
     OEUInt8 *ip = (OEUInt8 *)image.getPixels();
     
-    // Generate cursor
+    // Place cursor
     OEUInt8 cursorChar = vramp[cursorY * TERM_WIDTH + cursorX];
     if (cursorActive)
         vramp[cursorY * TERM_WIDTH + cursorX] = '@';
     
     for (int y = 0; y < TERM_HEIGHT; y++)
+    {
+        OEUInt8 *p = (ip + y * SCREEN_WIDTH * CHAR_HEIGHT +
+                      SCREEN_ORIGIN_Y * SCREEN_WIDTH +
+                      SCREEN_ORIGIN_X);
+        
         for (int x = 0; x < TERM_WIDTH; x++)
         {
             OEUInt8 c = vramp[y * TERM_WIDTH + x] & FONT_SIZE_MASK;
             OEUInt8 *f = fp + c * FONT_HEIGHT * FONT_WIDTH;
-            OEUInt8 *p = (ip + y * SCREEN_WIDTH * CHAR_HEIGHT +
-                          x * CHAR_WIDTH +
-                          SCREEN_ORIGIN_Y * SCREEN_WIDTH +
-                          SCREEN_ORIGIN_X);
             
-            copyCharLine(0);
-            copyCharLine(1);
-            copyCharLine(2);
-            copyCharLine(3);
-            copyCharLine(4);
-            copyCharLine(5);
-            copyCharLine(6);
-            copyCharLine(7);
+            copyBlock(0);
+            copyBlock(1);
+            copyBlock(2);
+            copyBlock(3);
+            copyBlock(4);
+            copyBlock(5);
+            copyBlock(6);
+            copyBlock(7);
+            
+            p += CHAR_WIDTH;
         }
+    }
     
     monitor->postMessage(this, CANVAS_POST_IMAGE, &image);
-
-    // Restore cursor char
+    
+    // Remove cursor
     vramp[cursorY * TERM_WIDTH + cursorX] = cursorChar;
     
     canvasShouldUpdate = false;

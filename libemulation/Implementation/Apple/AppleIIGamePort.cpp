@@ -21,7 +21,7 @@ AppleIIGamePort::AppleIIGamePort()
     for (int i = 0; i < 4; i++)
         pdl[i] = 0;
     
-    for (int i = 0; i < 3; i++)
+    for (int i = 0; i < 4; i++)
         pb[i] = 0;
     
     for (int i = 0; i < 4; i++)
@@ -111,7 +111,7 @@ bool AppleIIGamePort::postMessage(OEComponent *sender, int message, void *data)
         case APPLEIIGAMEPORT_SET_PB0:
         case APPLEIIGAMEPORT_SET_PB1:
         case APPLEIIGAMEPORT_SET_PB2:
-            pb[message - APPLEIIGAMEPORT_SET_PB0] = *((bool *)data);
+            pb[message - APPLEIIGAMEPORT_SET_PB0 + 1] = *((bool *)data);
             
             return true;
             

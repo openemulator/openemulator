@@ -31,7 +31,7 @@ private:
 	OEComponent *gamePort;
 	
     float pdl[4];
-    bool pb[3];
+    bool pb[4];
 	bool an[4];
     
     OEUInt64 timerStart;

@@ -1,5 +1,8 @@
 ==2011-11==
-* Implemented Apple II text video modes
+* Optimized Apple1Terminal
+* Implemented AppleIIFloatingBus
+* Implemented Apple II lores mode
+* Implemented Apple II text video mode
 * Fixed printing in Mac OS X
 * Fixed window resizing in Mac OS X
 * Optimized MMU

@@ -113,8 +113,7 @@
         <property name="mapROMF8" value="0xf800-0xffff"/>
     </component>
     <component id="appleII.floatingBus" class="AppleIIFloatingBus">
-        <property name="controlBus" ref="appleII.controlBus"/>
-        <property name="ram" ref="appleII.ram"/>
+        <property name="video" ref="appleII.video"/>
     </component>
     <component id="appleII.ram1" class="RAM">
         <property name="controlBus" ref="appleII.controlBus"/>
@@ -148,9 +147,9 @@
         <property name="refVideo" ref="appleII.video"/>
         <property name="mapVideo" value="0x50-0x57"/>
         <property name="refAudioIn" ref="appleII.audioIn"/>
-        <property name="mapAudioIn" value="0x60"/>
+        <property name="mapAudioIn" value="0x60,0x68"/>
         <property name="refGame" ref="appleII.gamePort"/>
-        <property name="mapGame" value="0x40-0x4f,0x58-0x5f,0x61-0x6f"/>
+        <property name="mapGame" value="0x40-0x4f,0x58-0x5f,0x61-0x67,0x69-0x6f"/>
         <property name="refSlot0" ref=""/>
         <property name="mapSlot0" value="0x80-0x8f"/>
         <property name="refSlot1" ref=""/>

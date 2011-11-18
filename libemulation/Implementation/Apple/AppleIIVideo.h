@@ -1,7 +1,7 @@
 
 /**
  * libemulator
- * Apple II Video Generator
+ * Apple II Video
  * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
@@ -12,6 +12,18 @@
 #include "OEImage.h"
 
 #include "ControlBusInterface.h"
+
+typedef struct {
+    OEUInt32 h;
+    OEUInt32 v;
+} AppleIIVideoCount;
+
+typedef enum
+{
+    APPLEIIVIDEO_RENDERER_TEXT,
+    APPLEIIVIDEO_RENDERER_LORES,
+    APPLEIIVIDEO_RENDERER_HIRES,
+} AppleIIVideoRenderer;
 
 class AppleIIVideo : public OEComponent
 {
@@ -46,10 +58,23 @@ private:
 	string characterSet;
     
     OEUInt32 mode;
-    OEUInt8 *text[2];
-    OEUInt8 *hires[2];
-    map<string, OEData> font;
+    
+    AppleIIVideoRenderer renderer;
+    
+    bool vsyncTimer;
+    OEUInt64 vsyncCycleCount;
+    
     bool canvasShouldUpdate;
+    AppleIIVideoCount lastCount;
+    
+    OEUInt8 *textMemory[2];
+    OEUInt8 *hiresMemory[2];
+    vector<OEAddress> textOffset;
+    vector<OEAddress> hiresOffset;
+    
+    map<string, OEData> textMap;
+    OEData loresMap;
+    
     OEImage image;
     bool flash;
     OEUInt32 flashCount;
@@ -58,8 +83,20 @@ private:
     
     void getVRAM(OEComponent *ram, OEAddress &start);
     void scheduleTimer();
-    void loadFont(string name, OEData *data);
-    void updateMode(OEUInt32 mask, bool value);
+    
+    void initOffsets();
+    void loadTextMap(string name, OEData *data);
+    void initLoresMap();
+    
+    void setMode(OEUInt32 mask, bool value);
+    AppleIIVideoCount getCount();
+    OEUInt8 readFloatingBus();
+    
     void vsync();
+    
+    void updateVideo();
+    void drawText();
+    void drawLores();
+    void drawHires();
     void copy(wstring *s);
 };

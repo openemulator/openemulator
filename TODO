@@ -1,12 +1,12 @@
 ==1.0.2==
-* Implement AppleIISlotMemory and AppleIISlotExpansionMemory
-* Implement AppleIIFloatingBus
-* Implement AppleIIVideo and AppleIIVideoGenerator
-* Implement Apple II
+* Fix color carrier per scanline
+* Implement AppleIIVideo
 * Implement Mac OS X joystick support
 * Implement Apple Game Paddles
+* Implement Apple II
 
 ==1.0.3==
+* Implement AppleIISlotMemory and AppleIISlotExpansionMemory
 * Implement Apple IIplus
 * Implement Apple IIj-plus
 * Implement Apple Disk II Interface Card

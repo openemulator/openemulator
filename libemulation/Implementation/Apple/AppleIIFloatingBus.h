@@ -2,10 +2,10 @@
 /**
  * libemulator
  * Apple II Floating Bus
- * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls an Apple II floating bus
+ * Implements the Apple II floating bus
  */
 
 #include "OEComponent.h"
@@ -13,11 +13,13 @@
 class AppleIIFloatingBus : public OEComponent
 {
 public:
+    AppleIIFloatingBus();
+    
 	bool setRef(string name, OEComponent *ref);
+    bool init();
 	
 	OEUInt8 read(OEAddress address);
 	
 private:
-	OEComponent *controlBus;
-	OEComponent *ram;
+	OEComponent *video;
 };

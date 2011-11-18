@@ -19,17 +19,20 @@ typedef enum
 typedef enum
 {
     APPLEIIVIDEO_GET_MODE,
+    APPLEIIVIDEO_UPDATE,
+    APPLEIIVIDEO_READ_FLOATINGBUS,
 } AppleIIVideoMessage;
 
 typedef enum
 {
     APPLEIIVIDEO_MODE_DID_CHANGE,
+    APPLEIIVIDEO_DID_VSYNC,
 } AppleIIVideoNotification;
 
-#define APPLEIIVIDEO_TEXT   0
-#define APPLEIIVIDEO_MIXED  1
-#define APPLEIIVIDEO_PAGE2  2
-#define APPLEIIVIDEO_HIRES  3
+#define APPLEIIVIDEO_TEXT   (1 << 0)
+#define APPLEIIVIDEO_MIXED  (1 << 1)
+#define APPLEIIVIDEO_PAGE2  (1 << 2)
+#define APPLEIIVIDEO_HIRES  (1 << 3)
 
 typedef enum
 {
