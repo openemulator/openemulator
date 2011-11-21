@@ -17,16 +17,20 @@
 #include "CanvasInterface.h"
 #include "AppleIIInterface.h"
 
-#define SCREEN_ORIGIN_X     104
-#define SCREEN_ORIGIN_Y     25
 #define SCREEN_WIDTH        768
-#define SCREEN_HEIGHT       242
+#define SCREEN_ORIGIN_X     104
+#define NTSC_ORIGIN_Y       25
+#define NTSC_HEIGHT         242
+#define PAL_ORIGIN_Y        35
+#define PAL_HEIGHT          312
+
 #define VIDEO_WIDTH         40
 #define VIDEO_HEIGHT        192
 #define TERM_WIDTH          40
 #define TERM_HEIGHT         24
-#define CHAR_WIDTH          14
-#define CHAR_HEIGHT         8
+#define BLOCK_WIDTH         14
+#define BLOCK_HEIGHT        8
+
 #define FONT_SIZE           0x100
 #define FONT_SIZE_MASK      0xff
 #define FONT_WIDTH          16
@@ -51,8 +55,9 @@ AppleIIVideo::AppleIIVideo()
         hiresMemory[i] = NULL;
     canvasShouldUpdate = true;
     
+    mode = 0;
+    
     image.setFormat(OEIMAGE_LUMINANCE);
-    image.setSize(OEMakeSize(SCREEN_WIDTH, SCREEN_HEIGHT));
     vector<float> colorBurst;
     colorBurst.push_back(M_PI * -33.0 / 180.0);
     image.setColorBurst(colorBurst);
@@ -142,8 +147,20 @@ bool AppleIIVideo::setRef(string name, OEComponent *ref)
         }
     }
 	else if (name == "monitor")
-		monitor = ref;
-	else
+    {
+        if (monitor)
+        {
+            monitor->removeObserver(this, CANVAS_MOUSE_DID_CHANGE);
+            monitor->removeObserver(this, CANVAS_DID_COPY);
+        }
+        monitor = ref;
+        if (monitor)
+        {
+            monitor->addObserver(this, CANVAS_MOUSE_DID_CHANGE);
+            monitor->addObserver(this, CANVAS_DID_COPY);
+        }
+    }
+    else
 		return false;
 	
 	return true;
@@ -191,11 +208,36 @@ bool AppleIIVideo::init()
     
     initLoresMap();
     
+    initHCountMap();
+    
     controlBus->postMessage(this, CONTROLBUS_GET_POWERSTATE, &powerState);
     
     scheduleTimer();
     
     return true;
+}
+
+void AppleIIVideo::update()
+{
+    image.setSize(OEMakeSize(SCREEN_WIDTH,
+                             palTiming ? PAL_HEIGHT : NTSC_HEIGHT));
+    if (rev0 || !OEGetBit(mode, APPLEIIVIDEO_TEXT))
+        image.setSubcarrier(3579545);
+    else
+        image.setSubcarrier(0);
+    image.setSampleRate(14318180);
+    
+    imageOrigin = (palTiming ? (PAL_ORIGIN_Y * SCREEN_WIDTH + SCREEN_ORIGIN_X) :
+                   (NTSC_ORIGIN_Y * SCREEN_WIDTH + SCREEN_ORIGIN_X));
+    vCountStart = (palTiming ? 0xc8 : 0xfa);
+    
+    float clockFrequency = palTiming ? (14318180.0 * 65 / 912) : (14250000.0 * 65 / 912);
+    
+    controlBus->postMessage(this, CONTROLBUS_SET_CLOCKFREQUENCY, &clockFrequency);
+    
+    initHiresMap();
+    
+    canvasShouldUpdate = true;
 }
 
 bool AppleIIVideo::postMessage(OEComponent *sender, int message, void *data)
@@ -247,6 +289,11 @@ void AppleIIVideo::notify(OEComponent *sender, int notification, void *data)
     {
         switch (notification)
         {
+            case CANVAS_MOUSE_DID_CHANGE:
+                postNotification(this, APPLEIIVIDEO_MOUSE_DID_CHANGE, data);
+                
+                break;
+                
             case CANVAS_DID_COPY:
                 copy((wstring *)data);
                 
@@ -323,7 +370,7 @@ void AppleIIVideo::scheduleTimer()
         else
             renderer = APPLEIIVIDEO_RENDERER_HIRES;
         
-        clocks = (262 - 64 - 32) * 65;
+        clocks = ((palTiming ? 312 : 262) - 64 - 32) * 65;
         
         updateVideo();
     }
@@ -354,9 +401,9 @@ void AppleIIVideo::initOffsets()
     for (int y = 0; y < TERM_HEIGHT; y++)
         textOffset[y] = (y >> 3) * TERM_WIDTH + (y & 0x7) * 0x80;
     
-    hiresOffset.resize(TERM_HEIGHT * CHAR_HEIGHT);
+    hiresOffset.resize(TERM_HEIGHT * BLOCK_HEIGHT);
     
-    for (int y = 0; y < TERM_HEIGHT * CHAR_HEIGHT; y++)
+    for (int y = 0; y < TERM_HEIGHT * BLOCK_HEIGHT; y++)
         hiresOffset[y] = (y >> 6) * TERM_WIDTH + ((y >> 3) & 0x7) * 0x80 + (y & 0x7) * 0x400;
 }
 
@@ -414,16 +461,39 @@ void AppleIIVideo::initLoresMap()
     }
 }
 
+void AppleIIVideo::initHiresMap()
+{
+    hiresMap.resize(2 * FONT_SIZE * FONT_WIDTH);
+    
+    for (int c = 0; c < 2 * FONT_SIZE; c++)
+    {
+        OEUInt8 byte = (c & 0x7f) << 1 | (c >> 8);
+        bool delay = !rev0 && (c & 0x80);
+        
+        for (int x = 0; x < FONT_WIDTH; x++)
+        {
+            bool b = (byte >> ((x + 2 - delay) >> 1)) & 0x1;
+            
+            hiresMap[c * FONT_WIDTH + x] = b ? 0xff : 0x00;
+        }
+    }
+}
+
+void AppleIIVideo::initHCountMap()
+{
+    hCountMap[0] = 0;
+    
+    for (int i = 0; i < 64; i++)
+        hCountMap[i + 1] = 64 + i;
+}
+
 void AppleIIVideo::setMode(OEUInt32 mask, bool value)
 {
     OEUInt32 oldMode = mode;
     
     OESetBit(mode, mask, value);
     
-    if (rev0 || ((mode & ~APPLEIIVIDEO_PAGE2) != APPLEIIVIDEO_TEXT))
-        image.setSubcarrier(3579545);
-    else
-        image.setSubcarrier(0);
+    update();
     
     if (mode != oldMode)
     {
@@ -444,7 +514,7 @@ AppleIIVideoCount AppleIIVideo::getCount()
     AppleIIVideoCount count;
     
     count.h = (OEUInt32) cycleCount % 65;
-    count.v = (0xfa + cycleCount / 65) & 0x1ff;
+    count.v = (vCountStart + cycleCount / 65) & 0x1ff;
     
     return count;
 }
@@ -526,7 +596,7 @@ void AppleIIVideo::updateVideo()
 }
 
 // Copy a 14-pixel char scanline
-#define copyTextLine(x) \
+#define copyBlockLine(x) \
 *((OEUInt64 *)(p + x * SCREEN_WIDTH + 0)) = *((OEUInt64 *)(m + x * FONT_WIDTH + 0));\
 *((OEUInt32 *)(p + x * SCREEN_WIDTH + 8)) = *((OEUInt32 *)(m + x * FONT_WIDTH + 8));\
 *((OEUInt16 *)(p + x * SCREEN_WIDTH + 12)) = *((OEUInt16 *)(m + x * FONT_WIDTH + 12));
@@ -535,34 +605,39 @@ void AppleIIVideo::drawText()
 {
     AppleIIVideoCount count = getCount();
     
-    OEUInt8 *vp = textMemory[OEGetBit(mode, APPLEIIVIDEO_PAGE2) ? 1 : 0];
+    OEUInt32 page = OEGetBit(mode, APPLEIIVIDEO_PAGE2) ? 1 : 0;
+    
+    OEUInt8 *vp = textMemory[page];
     OEUInt8 *mp = (OEUInt8 *)&textMap[characterSet].front();
     OEUInt8 *ip = (OEUInt8 *)image.getPixels();
     
-    if (!vp || !mp)
+    if (!vp || !mp || !ip)
         return;
     
     if (flash)
         mp += FONT_SIZE * FONT_WIDTH * FONT_HEIGHT;
     
     for (int y = 0; y < TERM_HEIGHT; y++)
+    {
+        OEUInt8 *p = ip + imageOrigin + y * SCREEN_WIDTH * BLOCK_HEIGHT;
+        
         for (int x = 0; x < TERM_WIDTH; x++)
         {
             OEUInt8 c = vp[textOffset[y] + x];
             OEUInt8 *m = mp + c * FONT_HEIGHT * FONT_WIDTH;
-            OEUInt8 *p = (ip + y * SCREEN_WIDTH * CHAR_HEIGHT +
-                          x * CHAR_WIDTH +
-                          SCREEN_ORIGIN_Y * SCREEN_WIDTH +
-                          SCREEN_ORIGIN_X);
-            copyTextLine(0);
-            copyTextLine(1);
-            copyTextLine(2);
-            copyTextLine(3);
-            copyTextLine(4);
-            copyTextLine(5);
-            copyTextLine(6);
-            copyTextLine(7);
+            
+            copyBlockLine(0);
+            copyBlockLine(1);
+            copyBlockLine(2);
+            copyBlockLine(3);
+            copyBlockLine(4);
+            copyBlockLine(5);
+            copyBlockLine(6);
+            copyBlockLine(7);
+            
+            p += BLOCK_WIDTH;
         }
+    }
     
     lastCount = count;
 }
@@ -571,42 +646,86 @@ void AppleIIVideo::drawLores()
 {
     AppleIIVideoCount count = getCount();
     
-    OEUInt8 *vp = textMemory[OEGetBit(mode, APPLEIIVIDEO_PAGE2) ? 1 : 0];
+    OEUInt32 page = OEGetBit(mode, APPLEIIVIDEO_PAGE2) ? 1 : 0;
+    
+    OEUInt8 *vp = textMemory[page];
     OEUInt8 *mp = (OEUInt8 *)&loresMap.front();
     OEUInt8 *ip = (OEUInt8 *)image.getPixels();
     
-    if (!vp || !mp)
+    if (!vp || !mp || !ip)
         return;
     
     for (int y = 0; y < TERM_HEIGHT; y++)
+    {
+        OEUInt8 *p = ip + imageOrigin + y * SCREEN_WIDTH * BLOCK_HEIGHT;
+        
         for (int x = 0; x < TERM_WIDTH; x++)
         {
             OEUInt8 c = vp[textOffset[y] + x];
             OEUInt8 *m = mp + c * FONT_HEIGHT * FONT_WIDTH + (x & 1) * FONT_SIZE * FONT_WIDTH * FONT_HEIGHT;
-            OEUInt8 *p = (ip + y * SCREEN_WIDTH * CHAR_HEIGHT +
-                          x * CHAR_WIDTH +
-                          SCREEN_ORIGIN_Y * SCREEN_WIDTH +
-                          SCREEN_ORIGIN_X);
-            copyTextLine(0);
-            copyTextLine(1);
-            copyTextLine(2);
-            copyTextLine(3);
-            copyTextLine(4);
-            copyTextLine(5);
-            copyTextLine(6);
-            copyTextLine(7);
+            
+            copyBlockLine(0);
+            copyBlockLine(1);
+            copyBlockLine(2);
+            copyBlockLine(3);
+            copyBlockLine(4);
+            copyBlockLine(5);
+            copyBlockLine(6);
+            copyBlockLine(7);
+            
+            p += BLOCK_WIDTH;
         }
+    }
     
     lastCount = count;
 }
 
 void AppleIIVideo::drawHires()
 {
+    AppleIIVideoCount count = getCount();
+    
+    OEUInt32 page = OEGetBit(mode, APPLEIIVIDEO_PAGE2) ? 1 : 0;
+    
+    OEUInt8 *vp = hiresMemory[page];
+    OEUInt8 *mp = (OEUInt8 *)&hiresMap.front();
+    OEUInt8 *ip = (OEUInt8 *)image.getPixels();
+    
+    if (!vp || !mp || !ip)
+        return;
+    
+    OEUInt8 lastC = 0;
+    
+    for (int y = 0; y < VIDEO_HEIGHT; y++)
+    {
+        OEUInt8 *p = ip + imageOrigin + y * SCREEN_WIDTH;
+        
+        for (int x = 0; x < VIDEO_WIDTH; x++)
+        {
+            OEUInt32 c = vp[hiresOffset[y] + x] | ((lastC & 0x40) << 2);
+            OEUInt8 *m = mp + c * FONT_WIDTH;
+            copyBlockLine(0);
+            
+            p += BLOCK_WIDTH;
+            
+            lastC = c;
+        }
+    }
+    
+    lastCount = count;
 }
 
 void AppleIIVideo::copy(wstring *s)
 {
-/*    if (!vramp)
+    if (!OEGetBit(mode, APPLEIIVIDEO_TEXT))
+        return;
+    
+    OEUInt8 charMap[] = {0x40, 0x20, 0x40, 0x20, 0x40, 0x20, 0x40, 0x60};
+    
+    OEUInt32 page = OEGetBit(mode, APPLEIIVIDEO_PAGE2) ? 1 : 0;
+    
+    OEUInt8 *vp = textMemory[page];
+    
+    if (!vp)
         return;
     
     for (int y = 0; y < TERM_HEIGHT; y++)
@@ -614,11 +733,16 @@ void AppleIIVideo::copy(wstring *s)
         wstring line;
         
         for (int x = 0; x < TERM_WIDTH; x++)
-            line += vramp[y * TERM_WIDTH + x] & 0x7f;
+        {
+            OEUInt8 value = vp[textOffset[y] + x];
+            
+            // To-Do: Mousetext
+            line += charMap[value >> 5] | (value & 0x1f);
+        }
         
         line = rtrim(line);
         line += '\n';
         
         *s += line;
-    }*/
+    }
 }

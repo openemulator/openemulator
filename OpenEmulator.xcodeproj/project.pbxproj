@@ -75,6 +75,7 @@
 		008363101326C15300CB9A21 /* OEVector.h in Headers */ = {isa = PBXBuildFile; fileRef = 008363081326C15300CB9A21 /* OEVector.h */; };
 		008363111326C15300CB9A21 /* PAAudio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 008363091326C15300CB9A21 /* PAAudio.cpp */; };
 		008363121326C15300CB9A21 /* PAAudio.h in Headers */ = {isa = PBXBuildFile; fileRef = 0083630A1326C15300CB9A21 /* PAAudio.h */; };
+		008CA97E147803E500B9F5D0 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 008CA97D147803E500B9F5D0 /* IOKit.framework */; };
 		008F2FE7138E0AD600409723 /* DocumentController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00AD746811A2F10E00BAC29C /* DocumentController.mm */; };
 		009085401395D23D00B7D75F /* LibraryItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0090853F1395D23D00B7D75F /* LibraryItem.mm */; };
 		00954E781277B79E00C17203 /* EmulationOutlineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00954E771277B79E00C17203 /* EmulationOutlineCell.m */; };
@@ -84,6 +85,8 @@
 		00A72B6F12879F650083C6A7 /* CanvasView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00A72B6E12879F650083C6A7 /* CanvasView.mm */; };
 		00A72B7012879F690083C6A7 /* CanvasWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00A72B6A12879F530083C6A7 /* CanvasWindowController.m */; };
 		00A72B951287A0F10083C6A7 /* Canvas.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00A72B931287A0F10083C6A7 /* Canvas.xib */; };
+		00A88A6F1478A7190059CCE5 /* AppleHandControllers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A88A6E1478A7190059CCE5 /* AppleHandControllers.cpp */; };
+		00A88A711478A7250059CCE5 /* AppleHandControllers.h in Headers */ = {isa = PBXBuildFile; fileRef = 00A88A701478A7250059CCE5 /* AppleHandControllers.h */; };
 		00A973AB12E512F80084724F /* OEEmulation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A9739E12E512F80084724F /* OEEmulation.cpp */; };
 		00A973AD12E512F80084724F /* OEComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A973A012E512F80084724F /* OEComponent.cpp */; };
 		00A973AF12E512F80084724F /* OEComponentFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A973A212E512F80084724F /* OEComponentFactory.cpp */; };
@@ -250,6 +253,7 @@
 		001750C213A50A9C0043E2ED /* README */ = {isa = PBXFileReference; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		001750C313A50A9C0043E2ED /* TODO */ = {isa = PBXFileReference; lastKnownFileType = text; path = TODO; sourceTree = "<group>"; };
 		001CC97E13D11EBC00B0DDA7 /* CPUInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CPUInterface.h; sourceTree = "<group>"; };
+		001D1F7A1479E7BD0014D496 /* JoystickInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JoystickInterface.h; sourceTree = "<group>"; };
 		001F56F80FD1E8E500EA246A /* Sparkle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = Sparkle.framework; path = macosx/Sparkle.framework; sourceTree = "<group>"; };
 		0022236B142C557100B7451D /* ControlBusInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ControlBusInterface.h; sourceTree = "<group>"; };
 		00247F35139D85A900B165D1 /* OECommon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OECommon.cpp; sourceTree = "<group>"; };
@@ -279,7 +283,6 @@
 		003B165112EE275C003FB8F6 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
 		003B165712EE276E003FB8F6 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		003B165D12EE279E003FB8F6 /* libvorbisfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisfile.a; path = /opt/local/lib/libvorbisfile.a; sourceTree = "<absolute>"; };
-		003B167412EE27D7003FB8F6 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
 		003B167B12EE27ED003FB8F6 /* CoreAudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudioKit.framework; path = System/Library/Frameworks/CoreAudioKit.framework; sourceTree = SDKROOT; };
 		003B16A012EE2846003FB8F6 /* libvorbisenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisenc.a; path = /opt/local/lib/libvorbisenc.a; sourceTree = "<absolute>"; };
 		003B16C712EE2A61003FB8F6 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
@@ -322,6 +325,7 @@
 		008363081326C15300CB9A21 /* OEVector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEVector.h; sourceTree = "<group>"; };
 		008363091326C15300CB9A21 /* PAAudio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PAAudio.cpp; sourceTree = "<group>"; };
 		0083630A1326C15300CB9A21 /* PAAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAAudio.h; sourceTree = "<group>"; };
+		008CA97D147803E500B9F5D0 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		0090853E1395D23D00B7D75F /* LibraryItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryItem.h; sourceTree = "<group>"; };
 		0090853F1395D23D00B7D75F /* LibraryItem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LibraryItem.mm; sourceTree = "<group>"; };
 		00954E761277B79E00C17203 /* EmulationOutlineCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmulationOutlineCell.h; sourceTree = "<group>"; };
@@ -339,6 +343,8 @@
 		00A72B7112879F800083C6A7 /* CanvasWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanvasWindow.h; sourceTree = "<group>"; };
 		00A72B7212879F800083C6A7 /* CanvasWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CanvasWindow.m; sourceTree = "<group>"; };
 		00A72B941287A0F10083C6A7 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Canvas.xib; sourceTree = "<group>"; };
+		00A88A6E1478A7190059CCE5 /* AppleHandControllers.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleHandControllers.cpp; sourceTree = "<group>"; };
+		00A88A701478A7250059CCE5 /* AppleHandControllers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleHandControllers.h; sourceTree = "<group>"; };
 		00A9739E12E512F80084724F /* OEEmulation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEEmulation.cpp; sourceTree = "<group>"; };
 		00A9739F12E512F80084724F /* OEEmulation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEEmulation.h; sourceTree = "<group>"; };
 		00A973A012E512F80084724F /* OEComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEComponent.cpp; sourceTree = "<group>"; };
@@ -528,6 +534,7 @@
 				003B16B712EE2A0D003FB8F6 /* AudioUnit.framework in Frameworks */,
 				003B16C312EE2A18003FB8F6 /* CoreAudio.framework in Frameworks */,
 				003B16C812EE2A61003FB8F6 /* CoreServices.framework in Frameworks */,
+				008CA97E147803E500B9F5D0 /* IOKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -539,10 +546,10 @@
 			children = (
 				008363051326C15300CB9A21 /* OpenGLCanvas.cpp */,
 				008363061326C15300CB9A21 /* OpenGLCanvas.h */,
-				008363071326C15300CB9A21 /* OEVector.cpp */,
-				008363081326C15300CB9A21 /* OEVector.h */,
 				008363091326C15300CB9A21 /* PAAudio.cpp */,
 				0083630A1326C15300CB9A21 /* PAAudio.h */,
+				008363071326C15300CB9A21 /* OEVector.cpp */,
+				008363081326C15300CB9A21 /* OEVector.h */,
 				00D226551350FF8B00FC69B9 /* OEMatrix3.cpp */,
 				00D226541350FF8B00FC69B9 /* OEMatrix3.h */,
 			);
@@ -726,6 +733,8 @@
 				00811DFD12D251E9009AD2F0 /* AppleDiskIIInterfaceCard.h */,
 				00811F1112D2738B009AD2F0 /* AppleGraphicsTablet.cpp */,
 				00811F1012D2738B009AD2F0 /* AppleGraphicsTablet.h */,
+				00A88A6E1478A7190059CCE5 /* AppleHandControllers.cpp */,
+				00A88A701478A7250059CCE5 /* AppleHandControllers.h */,
 				00B8881912A393990052B7A4 /* AppleIIAudioIn.cpp */,
 				00B8881A12A393990052B7A4 /* AppleIIAudioIn.h */,
 				00B8881B12A393990052B7A4 /* AppleIIAudioOut.cpp */,
@@ -883,14 +892,15 @@
 		00D225F91350F9A100FC69B9 /* Host */ = {
 			isa = PBXGroup;
 			children = (
+				00D225FD1350F9A100FC69B9 /* DeviceInterface.h */,
 				00D225FA1350F9A100FC69B9 /* AudioInterface.h */,
 				00D225FB1350F9A100FC69B9 /* CanvasInterface.h */,
-				00D225FD1350F9A100FC69B9 /* DeviceInterface.h */,
+				000E8D1813515C6E00DBFB2C /* StorageInterface.h */,
+				001D1F7A1479E7BD0014D496 /* JoystickInterface.h */,
 				00D225FF1350F9A100FC69B9 /* EthernetInterface.h */,
 				00D226001350F9A100FC69B9 /* MIDIInterface.h */,
 				00D226031350F9A100FC69B9 /* USBInterface.h */,
 				00D226041350F9A100FC69B9 /* VideoCaptureInterface.h */,
-				000E8D1813515C6E00DBFB2C /* StorageInterface.h */,
 			);
 			path = Host;
 			sourceTree = "<group>";
@@ -1039,13 +1049,13 @@
 				003B167B12EE27ED003FB8F6 /* CoreAudioKit.framework */,
 				0054E4A61131BE8A006D32D9 /* OpenGL.framework */,
 				0054E66B1131BF58006D32D9 /* Quartz.framework */,
-				001F56F80FD1E8E500EA246A /* Sparkle.framework */,
 				00F4D0BE12E2E42F00B7F5E6 /* ApplicationServices.framework */,
 				003B158312EE26BA003FB8F6 /* CoreAudio.framework */,
 				003B165112EE275C003FB8F6 /* AudioUnit.framework */,
 				003B165712EE276E003FB8F6 /* AudioToolbox.framework */,
-				003B167412EE27D7003FB8F6 /* GLUT.framework */,
 				003B16C712EE2A61003FB8F6 /* CoreServices.framework */,
+				008CA97D147803E500B9F5D0 /* IOKit.framework */,
+				001F56F80FD1E8E500EA246A /* Sparkle.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1086,6 +1096,7 @@
 				00DEA9221423B7C9003E9FA0 /* RDCFFA1.h in Headers */,
 				0022236C142C557100B7451D /* ControlBusInterface.h in Headers */,
 				00DC0E79145DFECD00FF51BD /* MemoryInterface.h in Headers */,
+				00A88A711478A7250059CCE5 /* AppleHandControllers.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1331,6 +1342,7 @@
 				004BD1C01425AA8500768B80 /* W65C02S.cpp in Sources */,
 				0029EEE214266B8900AD900E /* Mux.cpp in Sources */,
 				00F580A61464CDE70094DA5C /* MMU.cpp in Sources */,
+				00A88A6F1478A7190059CCE5 /* AppleHandControllers.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

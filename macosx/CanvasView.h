@@ -58,6 +58,13 @@
 
 - (void)pasteString:(NSString *)text;
 
+- (void)setJoystickButton:(int)index
+                forDevice:(int)deviceIndex
+                    value:(bool)value;
+- (void)setJoystickPosition:(int)index
+                  forDevice:(int)deviceIndex
+                      value:(float)value;
+
 - (IBAction)sendPowerDown:(id)sender;
 - (IBAction)sendSleep:(id)sender;
 - (IBAction)sendWakeUp:(id)sender;

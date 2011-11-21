@@ -210,10 +210,7 @@ bool Monitor::init()
         canvas->addObserver(this, CANVAS_KEYBOARD_DID_CHANGE);
         canvas->addObserver(this, CANVAS_POINTER_DID_CHANGE);
         canvas->addObserver(this, CANVAS_MOUSE_DID_CHANGE);
-        canvas->addObserver(this, CANVAS_JOYSTICK1_DID_CHANGE);
-        canvas->addObserver(this, CANVAS_JOYSTICK2_DID_CHANGE);
-        canvas->addObserver(this, CANVAS_JOYSTICK3_DID_CHANGE);
-        canvas->addObserver(this, CANVAS_JOYSTICK4_DID_CHANGE);
+        canvas->addObserver(this, CANVAS_JOYSTICK_DID_CHANGE);
         
         canvas->addObserver(this, CANVAS_DID_COPY);
         canvas->addObserver(this, CANVAS_DID_PASTE);
@@ -241,10 +238,7 @@ void Monitor::dispose()
         canvas->removeObserver(this, CANVAS_KEYBOARD_DID_CHANGE);
         canvas->removeObserver(this, CANVAS_POINTER_DID_CHANGE);
         canvas->removeObserver(this, CANVAS_MOUSE_DID_CHANGE);
-        canvas->removeObserver(this, CANVAS_JOYSTICK1_DID_CHANGE);
-        canvas->removeObserver(this, CANVAS_JOYSTICK2_DID_CHANGE);
-        canvas->removeObserver(this, CANVAS_JOYSTICK3_DID_CHANGE);
-        canvas->removeObserver(this, CANVAS_JOYSTICK4_DID_CHANGE);
+        canvas->removeObserver(this, CANVAS_JOYSTICK_DID_CHANGE);
         
         canvas->removeObserver(this, CANVAS_DID_COPY);
         canvas->removeObserver(this, CANVAS_DID_PASTE);

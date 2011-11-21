@@ -16,10 +16,9 @@
 AppleIIGamePort::AppleIIGamePort()
 {
     floatingBus = NULL;
-    gamePort = NULL;
     
     for (int i = 0; i < 4; i++)
-        pdl[i] = 0;
+        setPDL(i, 127);
     
     for (int i = 0; i < 4; i++)
         pb[i] = 0;
@@ -68,8 +67,6 @@ bool AppleIIGamePort::setRef(string name, OEComponent *ref)
 		controlBus = ref;
 	else if (name == "floatingBus")
 		floatingBus = ref;
-	else if (name == "gamePort")
-		gamePort = ref;
 	else
 		return false;
 	
@@ -103,15 +100,14 @@ bool AppleIIGamePort::postMessage(OEComponent *sender, int message, void *data)
         case APPLEIIGAMEPORT_SET_PDL1:
         case APPLEIIGAMEPORT_SET_PDL2:
         case APPLEIIGAMEPORT_SET_PDL3:
-            // From Applesoft BASIC, $FB1E-$FB2E
-            pdl[message - APPLEIIGAMEPORT_SET_PDL0] = (*((float *)data) * 11 + 8) * 14;
+            setPDL(message - APPLEIIGAMEPORT_SET_PDL0, *((float *)data) * 255);
             
             return true;
             
         case APPLEIIGAMEPORT_SET_PB0:
         case APPLEIIGAMEPORT_SET_PB1:
         case APPLEIIGAMEPORT_SET_PB2:
-            pb[message - APPLEIIGAMEPORT_SET_PB0 + 1] = *((bool *)data);
+            pb[message - APPLEIIGAMEPORT_SET_PB0 + 1] = *((float *)data);
             
             return true;
             
@@ -155,7 +151,7 @@ OEUInt8 AppleIIGamePort::read(OEAddress address)
             
         case 0x64: case 0x65: case 0x66: case 0x67:
         case 0x6c: case 0x6d: case 0x6e: case 0x6f:
-            value = (isTimerExpired(address & 0x3) << 7) | (value & 0x7f);
+            value = (isTimerPending(address & 0x3) << 7) | (value & 0x7f);
             
             break;
             
@@ -209,15 +205,19 @@ void AppleIIGamePort::setAN(int index, bool value)
         postNotification(this, APPLEIIGAMEPORT_AN0_DID_CHANGE + index, &value);
 }
 
-bool AppleIIGamePort::isTimerExpired(int index)
+void AppleIIGamePort::setPDL(int index, OEUInt32 value)
+{
+    // From Applesoft BASIC, $FB1E-$FB2E
+    pdl[index] = value * 11 + 8;
+}
+
+bool AppleIIGamePort::isTimerPending(int index)
 {
     OEUInt64 timerCount;
     
     controlBus->postMessage(this, CONTROLBUS_GET_CYCLECOUNT, &timerCount);
     
-    timerCount -= timerStart;
-    
-    return (timerCount < pdl[index]);
+    return ((timerCount - timerStart) < pdl[index]);
 }
 
 void AppleIIGamePort::resetTimer()

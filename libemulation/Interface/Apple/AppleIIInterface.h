@@ -27,6 +27,7 @@ typedef enum
 {
     APPLEIIVIDEO_MODE_DID_CHANGE,
     APPLEIIVIDEO_DID_VSYNC,
+    APPLEIIVIDEO_MOUSE_DID_CHANGE,
 } AppleIIVideoNotification;
 
 #define APPLEIIVIDEO_TEXT   (1 << 0)

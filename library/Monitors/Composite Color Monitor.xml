@@ -8,6 +8,7 @@
         <setting ref="compositeMonitor.monitor" name="videoContrast" label="Contrast" type="slider" options="0.0,2.0,1.0"/>
         <setting ref="compositeMonitor.monitor" name="videoSaturation" label="Saturation" type="slider" options="0.0,2.0,1.0"/>
         <setting ref="compositeMonitor.monitor" name="videoHue" label="Hue" type="slider" options="-0.5,0.5,0.0"/>
+        <setting ref="compositeMonitor.monitor" name="videoWhiteOnly" label="White Only" type="checkbox"/>
         <setting ref="compositeMonitor.monitor" name="videoHorizontalCenter" label="Horizontal Center" type="slider" options="-0.1,0.1"/>
         <setting ref="compositeMonitor.monitor" name="videoHorizontalSize" label="Horizontal Size" type="slider" options="0.85,1.25"/>
         <setting ref="compositeMonitor.monitor" name="videoVerticalCenter" label="Vertical Center" type="slider" options="-0.1,0.1"/>
@@ -35,6 +36,7 @@
         <property name="videoContrast" value="1"/>
         <property name="videoSaturation" value="1"/>
         <property name="videoHue" value="0"/>
+        <property name="videoWhiteOnly" value="0"/>
         <property name="videoHorizontalCenter" value="0"/>
         <property name="videoHorizontalSize" value="1.05"/>
         <property name="videoVerticalCenter" value="0"/>

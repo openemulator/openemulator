@@ -16,6 +16,7 @@
 #import "TemplateChooserWindowController.h"
 #import "AudioControlsWindowController.h"
 #import "LibraryWindowController.h"
+#import "CanvasWindowController.h"
 #import "CanvasWindow.h"
 
 #import "PAAudio.h"
@@ -27,6 +28,21 @@
 
 #define DONATION_NAG_TIME	(7 * (24 * (60 * 60)))
 
+void hidDeviceWasAdded(void *inContext, IOReturn inResult, void *inSender, IOHIDDeviceRef device)
+{
+    [(DocumentController *)inContext hidDeviceWasAdded:device];
+}
+
+void hidDeviceWasRemoved(void *inContext, IOReturn inResult, void *inSender, IOHIDDeviceRef device)
+{
+    [(DocumentController *)inContext hidDeviceWasRemoved:device];
+}
+
+void hidDeviceEventOcurred(void *inContext, IOReturn inResult, void *inSender, IOHIDValueRef value)
+{
+    [(DocumentController *)inContext hidDeviceEventOccured:value];
+}
+
 @implementation DocumentController
 
 - (id)init
@@ -36,6 +52,7 @@
     if (self)
     {
         paAudio = new PAAudio();
+        hidJoystick = new OEComponent();
         
         diskImagePathExtensions = [[NSArray alloc] initWithObjects:
                                    @"bin",
@@ -62,6 +79,8 @@
         textPathExtensions = [[NSArray alloc] initWithObjects:
                               @"txt",
                               nil];
+        
+        hidDevices = [[NSMutableArray alloc] init];
     }
     
     return self;
@@ -74,11 +93,12 @@
     [textPathExtensions release];
     
     delete (PAAudio *)paAudio;
+    delete (OEComponent *)hidJoystick;
+    
+    [hidDevices release];
     
     [super dealloc];
 }
-
-
 
 - (NSArray *)diskImagePathExtensions
 {
@@ -100,7 +120,10 @@
     return paAudio;
 }
 
-
+- (void *)hidJoystick
+{
+    return hidJoystick;
+}
 
 - (void)applicationWillFinishLaunching:(NSNotification *)notification
 {
@@ -124,6 +147,25 @@
                 shaderDefault = YES;
         }
     }
+    
+    // Initialize game pad callbacks
+    ioHIDManager = IOHIDManagerCreate(kCFAllocatorDefault, kIOHIDOptionsTypeNone);
+    
+    NSDictionary *criterion = [NSDictionary dictionaryWithObjectsAndKeys:
+                               [NSNumber numberWithInt:kHIDPage_GenericDesktop],
+                               (NSString *)CFSTR(kIOHIDDeviceUsagePageKey),
+                               [NSNumber numberWithInt:kHIDUsage_GD_Joystick],
+                               (NSString *)CFSTR(kIOHIDDeviceUsageKey),
+                               nil];
+    IOHIDManagerSetDeviceMatching(ioHIDManager, (CFDictionaryRef)criterion);
+    
+    IOHIDManagerRegisterDeviceMatchingCallback(ioHIDManager, hidDeviceWasAdded, self);
+    IOHIDManagerRegisterDeviceRemovalCallback(ioHIDManager, hidDeviceWasRemoved, self);
+    IOHIDManagerRegisterInputValueCallback(ioHIDManager, hidDeviceEventOcurred, self);
+    
+    IOHIDManagerScheduleWithRunLoop(ioHIDManager, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
+    
+    IOHIDManagerOpen(ioHIDManager, kIOHIDOptionsTypeNone);
     
     // Initialize defaults
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -346,8 +388,6 @@
     return YES;
 }
 
-
-
 - (void)observeValueForKeyPath:(NSString *)keyPath
                       ofObject:(id)object
                         change:(NSDictionary *)change
@@ -412,8 +452,6 @@
     else
         [[fLibraryWindowController window] orderFront:self];
 }
-
-
 
 - (IBAction)newDocumentFromTemplateChooser:(id)sender
 {
@@ -518,7 +556,53 @@
     return nil;
 }
 
+- (void)hidDeviceWasAdded:(IOHIDDeviceRef)device
+{
+    [hidDevices addObject:[NSValue valueWithPointer:device]];
+}
 
+- (void)hidDeviceWasRemoved:(IOHIDDeviceRef)device
+{
+    [hidDevices removeObject:[NSValue valueWithPointer:device]];
+}
+
+- (void)hidDeviceEventOccured:(IOHIDValueRef)value
+{
+    CanvasWindowController *canvasWindowController;
+    canvasWindowController = (CanvasWindowController *)[[NSApp mainWindow] windowController];
+    
+    if ([canvasWindowController isMemberOfClass:[CanvasWindowController class]])
+    {
+        CanvasView *canvasView = [canvasWindowController canvasView];
+        
+        IOHIDElementRef element = IOHIDValueGetElement(value);
+        long int intValue = IOHIDValueGetIntegerValue(value);
+        
+        IOHIDDeviceRef device = IOHIDElementGetDevice(element);
+        OEUInt32 usagePage = IOHIDElementGetUsagePage(element);
+        OEUInt32 usage = IOHIDElementGetUsage(element);
+        long int min = IOHIDElementGetLogicalMin(element);
+        long int max = IOHIDElementGetLogicalMax(element);
+        
+        int deviceIndex = (int) [hidDevices indexOfObject:[NSValue valueWithPointer:device]];
+        
+        if (usagePage == 0x9)
+            [canvasView setJoystickButton:(usage - 1)
+                                forDevice:deviceIndex
+                                    value:intValue];
+        else if (usagePage == 0x1)
+        {
+            if ((usage >= 0x30) && (usage <= 0x38))
+                [canvasView setJoystickPosition:(usage - 0x30)
+                                      forDevice:deviceIndex
+                                          value:((float) intValue - min) / (max - min)];
+            else if (usage == 0x39)
+                [canvasView setJoystickPosition:(usage - 0x30)
+                                      forDevice:deviceIndex
+                                          value:intValue];
+        }
+    }
+}
 
 - (void)disableMenuBar
 {

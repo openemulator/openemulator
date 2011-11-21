@@ -28,7 +28,6 @@ public:
 private:
     OEComponent *controlBus;
 	OEComponent *floatingBus;
-	OEComponent *gamePort;
 	
     float pdl[4];
     bool pb[4];
@@ -37,6 +36,7 @@ private:
     OEUInt64 timerStart;
     
     void setAN(int index, bool value);
-    bool isTimerExpired(int index);
+    void setPDL(int index, OEUInt32 value);
+    bool isTimerPending(int index);
     void resetTimer();
 };

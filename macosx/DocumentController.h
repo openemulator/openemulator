@@ -10,6 +10,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import <IOKit/hid/IOHIDManager.h>
+
 @class AudioControlsWindowController;
 @class TemplateChooserWindowController;
 @class LibraryWindowController;
@@ -28,7 +30,12 @@
     NSArray *audioPathExtensions;
     NSArray *textPathExtensions;
     
+    IOHIDManagerRef ioHIDManager;
+    
     void *paAudio;
+    void *hidJoystick;
+    
+    NSMutableArray *hidDevices;
     
     NSInteger disableMenuBarCount;
 }
@@ -37,6 +44,7 @@
 - (NSArray *)audioPathExtensions;
 - (NSArray *)textPathExtensions;
 - (void *)paAudio;
+- (void *)hidJoystick;
 
 - (IBAction)toggleAudioControls:(id)sender;
 - (IBAction)toggleLibrary:(id)sender;
@@ -47,6 +55,10 @@
                                     error:(NSError **)outError;
 - (id)makeUntitledDocumentWithTemplateURL:(NSURL *)absoluteURL
                                     error:(NSError **)outError;
+
+- (void)hidDeviceWasAdded:(IOHIDDeviceRef)device;
+- (void)hidDeviceWasRemoved:(IOHIDDeviceRef)device;
+- (void)hidDeviceEventOccured:(IOHIDValueRef)value;
 
 - (void)disableMenuBar;
 - (void)enableMenuBar;

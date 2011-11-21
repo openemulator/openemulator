@@ -35,6 +35,7 @@ public:
 	bool setRef(string name, OEComponent *ref);
     bool setData(string name, OEData *data);
 	bool init();
+    void update();
     
     bool postMessage(OEComponent *sender, int message, void *data);
     
@@ -74,10 +75,15 @@ private:
     
     map<string, OEData> textMap;
     OEData loresMap;
+    OEData hiresMap;
     
     OEImage image;
+    OEUInt32 imageOrigin;
     bool flash;
     OEUInt32 flashCount;
+    
+    OEUInt32 hCountMap[65];
+    OEUInt32 vCountStart;
     
     ControlBusPowerState powerState;
     
@@ -87,6 +93,8 @@ private:
     void initOffsets();
     void loadTextMap(string name, OEData *data);
     void initLoresMap();
+    void initHiresMap();
+    void initHCountMap();
     
     void setMode(OEUInt32 mask, bool value);
     AppleIIVideoCount getCount();

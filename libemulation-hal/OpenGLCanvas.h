@@ -91,17 +91,12 @@ public:
     
     void setKey(int usageId, bool value);
     
-    void setMouseButton(int index, bool value);
     void enterMouse();
     void exitMouse();
     void setMousePosition(float x, float y);
     void moveMouse(float rx, float ry);
     void sendMouseWheelEvent(int index, float value);
-    
-    void setJoystickButton(int deviceIndex, int index, bool value);
-    void setJoystickPosition(int deviceIndex, int index, float value);
-    void sendJoystickHatEvent(int deviceIndex, int index, float value);
-    void moveJoystickBall(int deviceIndex, int index, float value);
+    void setMouseButton(int index, bool value);
     
     void doCopy(wstring& value);
     void doPaste(wstring value);
@@ -165,7 +160,6 @@ private:
     bool ctrlAltWasPressed;
     bool mouseEntered;
     bool mouseButtonDown[CANVAS_MOUSE_BUTTON_NUM];
-    bool joystickButtonDown[CANVAS_JOYSTICK_NUM][CANVAS_JOYSTICK_BUTTON_NUM];
     
     void lock();
     void unlock();

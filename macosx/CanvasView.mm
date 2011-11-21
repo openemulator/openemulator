@@ -1068,6 +1068,38 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     [document unlockEmulation];
 }
 
+// HID events
+
+- (void)setJoystickButton:(int)index
+                forDevice:(int)deviceIndex
+                    value:(bool)value
+{
+    CanvasWindowController *canvasWindowController = [[self window] windowController];
+    Document *document = [canvasWindowController document];
+    OpenGLCanvas *canvas = (OpenGLCanvas *)[canvasWindowController canvas];
+    
+    [document lockEmulation];
+    
+    canvas->setJoystickButton(deviceIndex, index, value);
+    
+    [document unlockEmulation];
+}
+
+- (void)setJoystickPosition:(int)index
+                  forDevice:(int)deviceIndex
+                      value:(float)value
+{
+    CanvasWindowController *canvasWindowController = [[self window] windowController];
+    Document *document = [canvasWindowController document];
+    OpenGLCanvas *canvas = (OpenGLCanvas *)[canvasWindowController canvas];
+    
+    [document lockEmulation];
+    
+    canvas->setJoystickPosition(deviceIndex, index, value);
+    
+    [document unlockEmulation];
+}
+
 // Copy/paste
 
 - (NSString *)copyString

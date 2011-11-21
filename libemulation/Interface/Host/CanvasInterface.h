@@ -35,7 +35,7 @@
 //   It should be used for posting images or for requesting redraw
 // * willDraw is called from the video thread when an OpenGL canvas will be
 //   drawn (OESize)
-// * HID axes are in [-1:1] coordinates
+// * HID axes are in [0:1] coordinates
 
 // Multithreading, beware!
 // * didVSync and willDraw are sent from the drawing thread! Keep this in mind
@@ -68,10 +68,6 @@ typedef enum
     CANVAS_KEYBOARD_DID_CHANGE,
     CANVAS_POINTER_DID_CHANGE,
     CANVAS_MOUSE_DID_CHANGE,
-    CANVAS_JOYSTICK1_DID_CHANGE,
-    CANVAS_JOYSTICK2_DID_CHANGE,
-    CANVAS_JOYSTICK3_DID_CHANGE,
-    CANVAS_JOYSTICK4_DID_CHANGE,
     
     CANVAS_DID_COPY,
     CANVAS_DID_PASTE,
@@ -242,11 +238,6 @@ typedef struct
 #define CANVAS_KEYBOARD_KEY_NUM		256
 #define CANVAS_POINTER_BUTTON_NUM	8
 #define CANVAS_MOUSE_BUTTON_NUM		8
-#define CANVAS_JOYSTICK_NUM			4
-#define CANVAS_JOYSTICK_AXIS_NUM	16
-#define CANVAS_JOYSTICK_BUTTON_NUM	16
-#define CANVAS_JOYSTICK_HAT_NUM		4
-#define CANVAS_JOYSTICK_RAXIS_NUM	4
 
 typedef OEUInt32 CanvasUnicodeChar;
 
@@ -473,9 +464,11 @@ typedef enum
 
 typedef enum
 {
+    CANVAS_P_PROXIMITY,
     CANVAS_P_X,
     CANVAS_P_Y,
-    CANVAS_P_PROXIMITY,
+    CANVAS_P_WHEELX,
+    CANVAS_P_WHEELY,
     CANVAS_P_BUTTON1,
     CANVAS_P_BUTTON2,
     CANVAS_P_BUTTON3,
@@ -484,14 +477,14 @@ typedef enum
     CANVAS_P_BUTTON6,
     CANVAS_P_BUTTON7,
     CANVAS_P_BUTTON8,
-    CANVAS_P_WHEELX,
-    CANVAS_P_WHEELY,
 } CanvasPointerUsageId;
 
 typedef enum
 {
-    CANVAS_M_RELX,
-    CANVAS_M_RELY,
+    CANVAS_M_RX,
+    CANVAS_M_RY,
+    CANVAS_M_WHEELX,
+    CANVAS_M_WHEELY,
     CANVAS_M_BUTTON1,
     CANVAS_M_BUTTON2,
     CANVAS_M_BUTTON3,
@@ -500,53 +493,7 @@ typedef enum
     CANVAS_M_BUTTON6,
     CANVAS_M_BUTTON7,
     CANVAS_M_BUTTON8,
-    CANVAS_M_WHEELX,
-    CANVAS_M_WHEELY,
 } CanvasMouseUsageId;
-
-typedef enum
-{
-    CANVAS_J_AXIS1,
-    CANVAS_J_AXIS2,
-    CANVAS_J_AXIS3,
-    CANVAS_J_AXIS4,
-    CANVAS_J_AXIS5,
-    CANVAS_J_AXIS6,
-    CANVAS_J_AXIS7,
-    CANVAS_J_AXIS8,
-    CANVAS_J_AXIS9,
-    CANVAS_J_AXIS10,
-    CANVAS_J_AXIS11,
-    CANVAS_J_AXIS12,
-    CANVAS_J_AXIS13,
-    CANVAS_J_AXIS14,
-    CANVAS_J_AXIS15,
-    CANVAS_J_AXIS16,
-    CANVAS_J_BUTTON1,
-    CANVAS_J_BUTTON2,
-    CANVAS_J_BUTTON3,
-    CANVAS_J_BUTTON4,
-    CANVAS_J_BUTTON5,
-    CANVAS_J_BUTTON6,
-    CANVAS_J_BUTTON7,
-    CANVAS_J_BUTTON8,
-    CANVAS_J_BUTTON9,
-    CANVAS_J_BUTTON10,
-    CANVAS_J_BUTTON11,
-    CANVAS_J_BUTTON12,
-    CANVAS_J_BUTTON13,
-    CANVAS_J_BUTTON14,
-    CANVAS_J_BUTTON15,
-    CANVAS_J_BUTTON16,
-    CANVAS_J_HAT1,
-    CANVAS_J_HAT2,
-    CANVAS_J_HAT3,
-    CANVAS_J_HAT4,
-    CANVAS_J_RELAXIS1,
-    CANVAS_J_RELAXIS2,
-    CANVAS_J_RELAXIS3,
-    CANVAS_J_RELAXIS4,
-} CanvasJoystickUsageId;
 
 typedef struct
 {

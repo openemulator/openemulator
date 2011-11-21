@@ -3,9 +3,46 @@
 <edl version="1.0" label="Apple Hand Controllers" image="images/Apple/Apple Hand Controllers.png" description="The Apple Hand Controllers are a pair of game controllers made by Apple for the Apple II line of computers.">
     
     <device id="appleHandControllers" label="Apple Hand Controllers" image="images/Apple/Apple Hand Controllers.png">
-        <setting ref="appleHandControllers.io" name="inputDevice" label="Input Device" type="select" options="Mouse,Joystick"/>
-        <setting ref="appleHandControllers.io" name="invertAxes" label="Invert Axes" type="checkbox"/>
+        <setting ref="appleHandControllers.io" name="configuration" label="Configuration" type="select" options="Mouse,Joystick,Customized"/>
+        <setting ref="appleHandControllers.io" name="pdl0" label="PDL0" type="select" options="Mouse X,Mouse Y,Mouse Wheel X,Mouse Wheel Y,Joystick 1 X-Axis,Joystick 1 Y-Axis,Joystick 1 Z-Axis,Joystick 1 X-Rotation,Joystick 1 Y-Rotation,Joystick 1 Z-Rotation,Joystick 1 Slider,Joystick 1 Dial,Joystick 1 Wheel,Joystick 2 X-Axis,Joystick 2 Y-Axis,Joystick 2 Z-Axis,Joystick 2 X-Rotation,Joystick 2 Y-Rotation,Joystick 2 Z-Rotation,Joystick 2 Slider,Joystick 2 Dial,Joystick 2 Wheel,Unmapped"/>
+        <setting ref="appleHandControllers.io" name="pdl1" label="PDL1" type="select" options="Mouse X,Mouse Y,Mouse Wheel X,Mouse Wheel Y,Joystick 1 X-Axis,Joystick 1 Y-Axis,Joystick 1 Z-Axis,Joystick 1 X-Rotation,Joystick 1 Y-Rotation,Joystick 1 Z-Rotation,Joystick 1 Slider,Joystick 1 Dial,Joystick 1 Wheel,Joystick 2 X-Axis,Joystick 2 Y-Axis,Joystick 2 Z-Axis,Joystick 2 X-Rotation,Joystick 2 Y-Rotation,Joystick 2 Z-Rotation,Joystick 2 Slider,Joystick 2 Dial,Joystick 2 Wheel,Unmapped"/>
+        <setting ref="appleHandControllers.io" name="pdl2" label="PDL2" type="select" options="Mouse X,Mouse Y,Mouse Wheel X,Mouse Wheel Y,Joystick 1 X-Axis,Joystick 1 Y-Axis,Joystick 1 Z-Axis,Joystick 1 X-Rotation,Joystick 1 Y-Rotation,Joystick 1 Z-Rotation,Joystick 1 Slider,Joystick 1 Dial,Joystick 1 Wheel,Joystick 2 X-Axis,Joystick 2 Y-Axis,Joystick 2 Z-Axis,Joystick 2 X-Rotation,Joystick 2 Y-Rotation,Joystick 2 Z-Rotation,Joystick 2 Slider,Joystick 2 Dial,Joystick 2 Wheel,Unmapped"/>
+        <setting ref="appleHandControllers.io" name="pdl3" label="PDL3" type="select" options="Mouse X,Mouse Y,Mouse Wheel X,Mouse Wheel Y,Joystick 1 X-Axis,Joystick 1 Y-Axis,Joystick 1 Z-Axis,Joystick 1 X-Rotation,Joystick 1 Y-Rotation,Joystick 1 Z-Rotation,Joystick 1 Slider,Joystick 1 Dial,Joystick 1 Wheel,Joystick 2 X-Axis,Joystick 2 Y-Axis,Joystick 2 Z-Axis,Joystick 2 X-Rotation,Joystick 2 Y-Rotation,Joystick 2 Z-Rotation,Joystick 2 Slider,Joystick 2 Dial,Joystick 2 Wheel,Unmapped"/>
+        <setting ref="appleHandControllers.io" name="pb0" label="PB0" type="select" options="Mouse Button 1,Mouse Button 2,Mouse Button 3,Mouse Button 4,Joystick 1 Button 1,Joystick 1 Button 2,Joystick 1 Button 3,Joystick 1 Button 4,Joystick 1 Button 5,Joystick 1 Button 6,Joystick 1 Button 7,Joystick 1 Button 8,Joystick 2 Button 1,Joystick 2 Button 2,Joystick 2 Button 3,Joystick 2 Button 4,Joystick 2 Button 5,Joystick 2 Button 6,Joystick 2 Button 7,Joystick 2 Button 8,Unmapped"/>
+        <setting ref="appleHandControllers.io" name="pb1" label="PB1" type="select" options="Mouse Button 1,Mouse Button 2,Mouse Button 3,Mouse Button 4,Joystick 1 Button 1,Joystick 1 Button 2,Joystick 1 Button 3,Joystick 1 Button 4,Joystick 1 Button 5,Joystick 1 Button 6,Joystick 1 Button 7,Joystick 1 Button 8,Joystick 2 Button 1,Joystick 2 Button 2,Joystick 2 Button 3,Joystick 2 Button 4,Joystick 2 Button 5,Joystick 2 Button 6,Joystick 2 Button 7,Joystick 2 Button 8,Unmapped"/>
+        <setting ref="appleHandControllers.io" name="pb2" label="PB2" type="select" options="Mouse Button 1,Mouse Button 2,Mouse Button 3,Mouse Button 4,Joystick 1 Button 1,Joystick 1 Button 2,Joystick 1 Button 3,Joystick 1 Button 4,Joystick 1 Button 5,Joystick 1 Button 6,Joystick 1 Button 7,Joystick 1 Button 8,Joystick 2 Button 1,Joystick 2 Button 2,Joystick 2 Button 3,Joystick 2 Button 4,Joystick 2 Button 5,Joystick 2 Button 6,Joystick 2 Button 7,Joystick 2 Button 8,Unmapped"/>
+        <setting ref="appleHandControllers.io" name="sensitivityPDL0" label="Sensitivity PDL0" type="slider" options="0,1"/>
+        <setting ref="appleHandControllers.io" name="sensitivityPDL1" label="Sensitivity PDL1" type="slider" options="0,1"/>
+        <setting ref="appleHandControllers.io" name="sensitivityPDL2" label="Sensitivity PDL2" type="slider" options="0,1"/>
+        <setting ref="appleHandControllers.io" name="sensitivityPDL3" label="Sensitivity PDL3" type="slider" options="0,1"/>
+        <setting ref="appleHandControllers.io" name="reversePDL0" label="Reverse PDL0" type="checkbox"/>
+        <setting ref="appleHandControllers.io" name="reversePDL1" label="Reverse PDL1" type="checkbox"/>
+        <setting ref="appleHandControllers.io" name="reversePDL2" label="Reverse PDL2" type="checkbox"/>
+        <setting ref="appleHandControllers.io" name="reversePDL3" label="Reverse PDL3" type="checkbox"/>
     </device>
-    <connector id="appleHandControllers.connector" type="Apple II Game Port"/>
-    
+    <connector id="appleHandControllers.connector" type="Apple II Game Port">
+        <inlet ref="appleHandControllers.io" property="gamePort" outletRef="gamePort"/>
+        <inlet ref="appleHandControllers.io" property="video" outletRef="video"/>
+    </connector>
+    <component id="appleHandControllers.io" class="AppleHandControllers">
+        <property name="configuration" value="Mouse"/>
+        <property name="pdl0" value="Mouse X"/>
+        <property name="pdl1" value="Mouse Y"/>
+        <property name="pdl2" value="Unmapped"/>
+        <property name="pdl3" value="Unmapped"/>
+        <property name="pb0" value="Mouse Button 1"/>
+        <property name="pb1" value="Mouse Button 2"/>
+        <property name="pb2" value="Mouse Button 3"/>
+        <property name="sensitivityPDL0" value="0.5"/>
+        <property name="sensitivityPDL1" value="0.5"/>
+        <property name="sensitivityPDL2" value="0.5"/>
+        <property name="sensitivityPDL3" value="0.5"/>
+        <property name="reversePDL0" value="0"/>
+        <property name="reversePDL1" value="0"/>
+        <property name="reversePDL2" value="0"/>
+        <property name="reversePDL3" value="0"/>
+        <property name="gamePort" ref=""/>
+        <property name="video" ref=""/>
+        <property name="joystick" ref="joystick"/>
+    </component>
 </edl>

@@ -278,6 +278,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
     DocumentController *documentController;
     documentController = [NSDocumentController sharedDocumentController];
     PAAudio *paAudio = (PAAudio *)[documentController paAudio];
+    OEComponent *hidJoystick = (OEComponent *)[documentController hidJoystick];
     
     OEEmulation *theEmulation = new OEEmulation();
     
@@ -287,6 +288,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
     theEmulation->setUserData(self);
     
     theEmulation->addComponent("audio", paAudio);
+    theEmulation->addComponent("joystick", hidJoystick);
     
     [self lockEmulation];
     

@@ -28,6 +28,7 @@
 #include "AppleDiskII.h"
 #include "AppleDiskIIInterfaceCard.h"
 #include "AppleGraphicsTablet.h"
+#include "AppleHandControllers.h"
 #include "AppleIIAudioIn.h"
 #include "AppleIIAudioOut.h"
 #include "AppleIIFloatingBus.h"
@@ -76,6 +77,7 @@ OEComponent *OEComponentFactory::construct(const string& className)
     matchComponent(AppleDiskII);
     matchComponent(AppleDiskIIInterfaceCard);
     matchComponent(AppleGraphicsTablet);
+    matchComponent(AppleHandControllers);
     matchComponent(AppleIIAudioIn);
     matchComponent(AppleIIAudioOut);
     matchComponent(AppleIIFloatingBus);

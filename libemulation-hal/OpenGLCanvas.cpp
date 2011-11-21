@@ -501,7 +501,6 @@ bool OpenGLCanvas::initOpenGL()
     ctrlAltWasPressed = false;
     mouseEntered = false;
     memset(mouseButtonDown, 0, sizeof(mouseButtonDown));
-    memset(joystickButtonDown, 0, sizeof(joystickButtonDown));
     
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -747,7 +746,9 @@ bool OpenGLCanvas::uploadImage()
     
     for (OEUInt32 x = 0; x < image.getSize().height; x++)
     {
-        phaseInfo[3 * x + 0] = colorBurst[x % colorBurst.size()];
+        float c = colorBurst[x % colorBurst.size()] / 2.0 / M_PI;
+        
+        phaseInfo[3 * x + 0] = c - floor(c);
         phaseInfo[3 * x + 1] = phaseAlternation[x % phaseAlternation.size()];
     }
     
@@ -1702,12 +1703,24 @@ void OpenGLCanvas::moveMouse(float rx, float ry)
     if (capture == OPENGLCANVAS_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR)
     {
         postHIDNotification(CANVAS_MOUSE_DID_CHANGE,
-                            CANVAS_M_RELX,
+                            CANVAS_M_RX,
                             rx);
         postHIDNotification(CANVAS_MOUSE_DID_CHANGE,
-                            CANVAS_M_RELY,
+                            CANVAS_M_RY,
                             ry);
     }
+}
+
+void OpenGLCanvas::sendMouseWheelEvent(int index, float value)
+{
+    if (capture == OPENGLCANVAS_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR)
+        postHIDNotification(CANVAS_MOUSE_DID_CHANGE,
+                            CANVAS_M_WHEELX + index,
+                            value);
+    else
+        postHIDNotification(CANVAS_POINTER_DID_CHANGE,
+                            CANVAS_P_WHEELX + index,
+                            value);
 }
 
 void OpenGLCanvas::setMouseButton(int index, bool value)
@@ -1738,69 +1751,6 @@ void OpenGLCanvas::setMouseButton(int index, bool value)
                             value);
 }
 
-void OpenGLCanvas::sendMouseWheelEvent(int index, float value)
-{
-    if (capture == OPENGLCANVAS_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR)
-        postHIDNotification(CANVAS_MOUSE_DID_CHANGE,
-                            CANVAS_M_WHEELX + index,
-                            value);
-    else
-        postHIDNotification(CANVAS_POINTER_DID_CHANGE,
-                            CANVAS_P_WHEELX + index,
-                            value);
-}
-
-void OpenGLCanvas::setJoystickButton(int deviceIndex, int index, bool value)
-{
-    if (deviceIndex >= CANVAS_JOYSTICK_NUM)
-        return;
-    if (index >= CANVAS_JOYSTICK_BUTTON_NUM)
-        return;
-    if (joystickButtonDown[deviceIndex][index] == value)
-        return;
-    joystickButtonDown[deviceIndex][index] = value;
-    
-    postHIDNotification(CANVAS_JOYSTICK1_DID_CHANGE + deviceIndex,
-                        CANVAS_J_BUTTON1 + index,
-                        value);
-}
-
-void OpenGLCanvas::setJoystickPosition(int deviceIndex, int index, float value)
-{
-    if (deviceIndex >= CANVAS_JOYSTICK_NUM)
-        return;
-    if (index >= CANVAS_JOYSTICK_AXIS_NUM)
-        return;
-    
-    postHIDNotification(CANVAS_JOYSTICK1_DID_CHANGE + deviceIndex,
-                        CANVAS_J_AXIS1 + index,
-                        value);
-}
-
-void OpenGLCanvas::sendJoystickHatEvent(int deviceIndex, int index, float value)
-{
-    if (deviceIndex >= CANVAS_JOYSTICK_NUM)
-        return;
-    if (index >= CANVAS_JOYSTICK_HAT_NUM)
-        return;
-    
-    postHIDNotification(CANVAS_JOYSTICK1_DID_CHANGE + deviceIndex,
-                        CANVAS_J_AXIS1 + index,
-                        value);
-}
-
-void OpenGLCanvas::moveJoystickBall(int deviceIndex, int index, float value)
-{
-    if (deviceIndex >= CANVAS_JOYSTICK_NUM)
-        return;
-    if (index >= CANVAS_JOYSTICK_RAXIS_NUM)
-        return;
-    
-    postHIDNotification(CANVAS_JOYSTICK1_DID_CHANGE + deviceIndex,
-                        CANVAS_J_AXIS1 + index,
-                        value);
-}
-
 void OpenGLCanvas::resetKeysAndButtons()
 {
     for (int i = 0; i < CANVAS_KEYBOARD_KEY_NUM; i++)
@@ -1808,10 +1758,6 @@ void OpenGLCanvas::resetKeysAndButtons()
     
     for (int i = 0; i < CANVAS_MOUSE_BUTTON_NUM; i++)
         setMouseButton(i, false);
-    
-    for (int i = 0; i < CANVAS_JOYSTICK_NUM; i++)
-        for (int j = 0; j < CANVAS_JOYSTICK_BUTTON_NUM; j++)
-            setJoystickButton(i, j, false);
 }
 
 void OpenGLCanvas::doCopy(wstring& value)

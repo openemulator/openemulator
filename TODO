@@ -1,8 +1,5 @@
 ==1.0.2==
-* Fix color carrier per scanline
-* Implement AppleIIVideo
-* Implement Mac OS X joystick support
-* Implement Apple Game Paddles
+* Optimize AppleIIVideo
 * Implement Apple II
 
 ==1.0.3==

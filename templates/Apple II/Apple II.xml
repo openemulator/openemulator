@@ -5,7 +5,7 @@
     <device id="appleII" label="Apple II" image="images/Apple/Apple II.png">
         <setting ref="appleII.video" name="rev" label="Revision" type="select" options="Revision 0,Revision 1"/>
         <setting ref="appleII.video" name="tvSystem" label="TV System" type="select" options="NTSC,PAL"/>
-        <setting ref="appleII.video" name="characterSet" label="Character Set" type="select" options="Standard,Videx Lowercase Chip,Pigfont"/>
+        <setting ref="appleII.video" name="characterSet" label="Character Set" type="select" options="Standard,Videx|Videx Lowercase Chip,Pigfont"/>
         <setting ref="appleII.keyboard" name="type" label="Keyboard" type="select" options="Standard,Shift-Key Mod,Full ASCII"/>
     </device>
     <port id="appleII.videoPort" ref="" type="Composite Video Port" group="peripherals" label="Video Port" image="images/Connectors/RCA Female.png">
@@ -13,9 +13,7 @@
         <inlet ref="appleII.video" property="monitorDevice" outletRef=""/>
         <inlet ref="appleII.video" property="monitor" outletRef="monitor"/>
     </port>
-    <port id="appleII.gamePort" ref="" type="Apple II Game Port" group="peripherals" label="Game Port" image="images/Connectors/DIP16.png">
-        <inlet ref="appleII.gamePort" property="gamePort" outletRef="gamePort"/>
-    </port>
+    <port id="appleII.gamePort" ref="" type="Apple II Game Port" group="peripherals" label="Game Port" image="images/Connectors/DIP16.png"/>
     <port id="appleII.slot0" ref="" type="Apple II Slot" group="expansions" label="Slot 0" image="images/Connectors/Edge50.png">
         <inlet ref="appleII.iou" property="refSlot0" outletRef="io"/>
     </port>
@@ -52,7 +50,7 @@
     <component id="appleII.controlBus" class="ControlBus">
         <property name="device" ref="appleII"/>
         <property name="audio" ref="audio"/>
-        <!-- Clock frequency: 14318180 Hz * 65 / 912 -->
+        <!-- Clock frequency: 14318180 Hz * 65 / 912 or 14250000 Hz * 65 / 912 -->
         <property name="clockFrequency" value="1020484.3202"/>
         <property name="cpuClockMultiplier" value="1"/>
         <property name="cpu" ref="appleII.cpu"/>
@@ -149,7 +147,7 @@
         <property name="refAudioIn" ref="appleII.audioIn"/>
         <property name="mapAudioIn" value="0x60,0x68"/>
         <property name="refGame" ref="appleII.gamePort"/>
-        <property name="mapGame" value="0x40-0x4f,0x58-0x5f,0x61-0x67,0x69-0x6f"/>
+        <property name="mapGame" value="0x40-0x4f,0x58-0x5f,0x61-0x67,0x69-0x6f,0x70-0x7f"/>
         <property name="refSlot0" ref=""/>
         <property name="mapSlot0" value="0x80-0x8f"/>
         <property name="refSlot1" ref=""/>
@@ -191,7 +189,7 @@
         <property name="monitorDevice" ref=""/>
         <property name="monitor" ref=""/>
         <property name="fontStandard" data="${resourcePath}/roms/Apple/341-0036.bin"/>
-        <property name="fontVidex Lowercase Chip" data="${resourcePath}/roms/Videx/Videx Lower Case Chip ROM.bin"/>
+        <property name="fontVidex" data="${resourcePath}/roms/Videx/Videx Lower Case Chip ROM.bin"/>
         <property name="fontPigfont" data="${resourcePath}/roms/Apple/Pigfont Video ROM.bin"/>
     </component>
     <component id="appleII.audioOut" class="AppleIIAudioOut">
@@ -213,7 +211,6 @@
     <component id="appleII.gamePort" class="AppleIIGamePort">
         <property name="controlBus" ref="appleII.controlBus"/>
         <property name="floatingBus" ref="appleII.floatingBus"/>
-        <property name="gamePort" ref=""/>
         <property name="an0" value="0"/>
         <property name="an1" value="0"/>
         <property name="an2" value="0"/>

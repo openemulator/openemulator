@@ -1,4 +1,12 @@
 ==2011-11==
+* Refactorized joystick interface
+* Implemented Apple Game Controllers
+* Implemented Mac OS X joystick support
+* Implemented AppleIIVideo PAL/NTSC
+* Implemented Apple II copy
+* Fixed color carrier per scanline
+* Implemented Apple II hires mode
+* Implemented Apple II revision 1
 * Optimized Apple1Terminal
 * Implemented AppleIIFloatingBus
 * Implemented Apple II lores mode
