@@ -16,10 +16,9 @@
 #import "TemplateChooserWindowController.h"
 #import "AudioControlsWindowController.h"
 #import "LibraryWindowController.h"
-#import "CanvasWindowController.h"
-#import "CanvasWindow.h"
 
 #import "PAAudio.h"
+#import "HIDJoystick.h"
 
 #define LINK_HOMEPAGE	@"http://www.openemulator.org"
 #define LINK_FORUMSURL	@"http://groups.google.com/group/openemulator"
@@ -52,7 +51,7 @@ void hidDeviceEventOcurred(void *inContext, IOReturn inResult, void *inSender, I
     if (self)
     {
         paAudio = new PAAudio();
-        hidJoystick = new OEComponent();
+        hidJoystick = new HIDJoystick();
         
         diskImagePathExtensions = [[NSArray alloc] initWithObjects:
                                    @"bin",
@@ -93,7 +92,7 @@ void hidDeviceEventOcurred(void *inContext, IOReturn inResult, void *inSender, I
     [textPathExtensions release];
     
     delete (PAAudio *)paAudio;
-    delete (OEComponent *)hidJoystick;
+    delete (HIDJoystick *)hidJoystick;
     
     [hidDevices release];
     
@@ -556,52 +555,61 @@ void hidDeviceEventOcurred(void *inContext, IOReturn inResult, void *inSender, I
     return nil;
 }
 
+- (void)lockEmulation
+{
+    ((PAAudio *)paAudio)->lock();
+}
+
+- (void)unlockEmulation
+{
+    ((PAAudio *)paAudio)->unlock();
+}
+
 - (void)hidDeviceWasAdded:(IOHIDDeviceRef)device
 {
     [hidDevices addObject:[NSValue valueWithPointer:device]];
+    
+    ((HIDJoystick *)hidJoystick)->addDevice();
 }
 
 - (void)hidDeviceWasRemoved:(IOHIDDeviceRef)device
 {
+    ((HIDJoystick *)hidJoystick)->removeDevice();
+    
     [hidDevices removeObject:[NSValue valueWithPointer:device]];
 }
 
 - (void)hidDeviceEventOccured:(IOHIDValueRef)value
 {
-    CanvasWindowController *canvasWindowController;
-    canvasWindowController = (CanvasWindowController *)[[NSApp mainWindow] windowController];
+    IOHIDElementRef element = IOHIDValueGetElement(value);
+    long int intValue = IOHIDValueGetIntegerValue(value);
     
-    if ([canvasWindowController isMemberOfClass:[CanvasWindowController class]])
+    IOHIDDeviceRef device = IOHIDElementGetDevice(element);
+    OEUInt32 usagePage = IOHIDElementGetUsagePage(element);
+    OEUInt32 usageId = IOHIDElementGetUsage(element);
+    long int min = IOHIDElementGetLogicalMin(element);
+    long int max = IOHIDElementGetLogicalMax(element);
+    
+    int deviceIndex = (int) [hidDevices indexOfObject:[NSValue valueWithPointer:device]];
+    
+    [self lockEmulation];
+    
+    if (usagePage == 0x9)
+        ((HIDJoystick *)hidJoystick)->setButton(deviceIndex, usageId - 1,
+                                                intValue);
+    else if (usagePage == 0x1)
     {
-        CanvasView *canvasView = [canvasWindowController canvasView];
-        
-        IOHIDElementRef element = IOHIDValueGetElement(value);
-        long int intValue = IOHIDValueGetIntegerValue(value);
-        
-        IOHIDDeviceRef device = IOHIDElementGetDevice(element);
-        OEUInt32 usagePage = IOHIDElementGetUsagePage(element);
-        OEUInt32 usage = IOHIDElementGetUsage(element);
-        long int min = IOHIDElementGetLogicalMin(element);
-        long int max = IOHIDElementGetLogicalMax(element);
-        
-        int deviceIndex = (int) [hidDevices indexOfObject:[NSValue valueWithPointer:device]];
-        
-        if (usagePage == 0x9)
-            [canvasView setJoystickButton:(usage - 1)
-                                forDevice:deviceIndex
-                                    value:intValue];
-        else if (usagePage == 0x1)
+        if ((usageId >= 0x30) && (usageId <= 0x38))
         {
-            if ((usage >= 0x30) && (usage <= 0x38))
-                [canvasView setJoystickPosition:(usage - 0x30)
-                                      forDevice:deviceIndex
-                                          value:((float) intValue - min) / (max - min)];
-            else if (usage == 0x39)
-                [canvasView setJoystickPosition:(usage - 0x30)
-                                      forDevice:deviceIndex
-                                          value:intValue];
+            float normalizedValue = ((float) intValue - min) / (max - min);
+            
+            ((HIDJoystick *)hidJoystick)->setAxis(deviceIndex, usageId - 0x30, normalizedValue);
         }
+        else if (usageId == 0x39)
+            ((HIDJoystick *)hidJoystick)->setHat(deviceIndex, usageId - 0x39, (OEInt32) intValue);
     }
+    
+    [self unlockEmulation];
 }
 
 - (void)disableMenuBar

@@ -82,6 +82,7 @@ string getHexString(OEUInt64 value);
 string rtrim(string value);
 wstring rtrim(wstring value);
 vector<string> strsplit(string value, char c);
+string strjoin(vector<string>& value, char c);
 string strfilter(string value, string filter);
 string strtolower(string value);
 string strtoupper(string value);

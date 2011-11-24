@@ -56,7 +56,10 @@ bool ControlBus::setValue(string name, string value)
     else if (name == "cpuClockMultiplier")
         cpuClockMultiplier = getFloat(value);
     else if (name == "powerState")
-        powerState = (ControlBusPowerState) getInt(value.substr(1));
+    {
+        if (value.size() >= 2)
+            powerState = (ControlBusPowerState) getInt(value.substr(1));
+    }
     else if (name == "resetOnPowerOn")
         resetOnPowerOn = getInt(value);
     else if (name == "resetCount")

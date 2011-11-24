@@ -1,4 +1,5 @@
-==2011-11==
+==Ongoing==
+* Implemented JoystickMapper
 * Refactorized joystick interface
 * Implemented Apple Game Controllers
 * Implemented Mac OS X joystick support
@@ -26,13 +27,15 @@
 * Implemented generic MMU
 * Refactorized OpenEmulator memory paradigm
 
-==2011-10==
+==OpenEmulator 1.0.1 26/10/2011==
 * Fixed audio recorder
 * Fixed audio file dragging to canvases
 * Added Apple-1 cassette interface noise rejection parameter
 * Fixed timing problem
 * Added Apple-1 underscore on backspace parameter
 * Refactorized the ControlBus scheduler. Niceeee!
+
+==OpenEmulator 1.0 19/10/2011==
 * Added luminance gain
 * Fixed removing a window when in fullscreen mode
 * Fixed persistence when changing window size

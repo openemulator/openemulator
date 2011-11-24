@@ -14,7 +14,6 @@
 
 #include "DeviceInterface.h"
 #include "MemoryInterface.h"
-#include "CanvasInterface.h"
 #include "AppleIIInterface.h"
 
 #define SCREEN_WIDTH        768
@@ -31,10 +30,10 @@
 #define BLOCK_WIDTH         14
 #define BLOCK_HEIGHT        8
 
-#define FONT_SIZE           0x100
-#define FONT_SIZE_MASK      0xff
-#define FONT_WIDTH          16
-#define FONT_HEIGHT         8
+#define MAP_SIZE           0x100
+#define MAP_SIZE_MASK      0xff
+#define MAP_WIDTH          16
+#define MAP_HEIGHT         8
 #define FLASH_HALFCYCLE     14
 
 AppleIIVideo::AppleIIVideo()
@@ -290,7 +289,7 @@ void AppleIIVideo::notify(OEComponent *sender, int notification, void *data)
         switch (notification)
         {
             case CANVAS_MOUSE_DID_CHANGE:
-                postNotification(this, APPLEIIVIDEO_MOUSE_DID_CHANGE, data);
+                postNotification(this, notification, data);
                 
                 break;
                 
@@ -337,6 +336,10 @@ void AppleIIVideo::write(OEAddress address, OEUInt8 value)
 
 void AppleIIVideo::getVRAM(OEComponent *ram, OEAddress& startAddress)
 {
+    // Notes:
+    // * This requires memory to be mapped contiguously
+    // * For hires to work, memory at $2000 and $4000 should be in a single block
+    
     if (!ram)
         return;
     
@@ -409,28 +412,28 @@ void AppleIIVideo::initOffsets()
 
 void AppleIIVideo::loadTextMap(string name, OEData *data)
 {
-    if (data->size() < FONT_HEIGHT)
+    if (data->size() < MAP_HEIGHT)
         return;
     
     OEData theMap;
     
-    theMap.resize(2 * FONT_SIZE * FONT_HEIGHT * FONT_WIDTH);
+    theMap.resize(2 * MAP_SIZE * MAP_HEIGHT * MAP_WIDTH);
     
-    int cMask = (int) getNextPowerOf2(data->size() / FONT_HEIGHT) - 1;
+    int cMask = (int) getNextPowerOf2(data->size() / MAP_HEIGHT) - 1;
     
-    for (int c = 0; c < 2 * FONT_SIZE; c++)
+    for (int c = 0; c < 2 * MAP_SIZE; c++)
     {
-        for (int y = 0; y < FONT_HEIGHT; y++)
+        for (int y = 0; y < MAP_HEIGHT; y++)
         {
-            OEUInt8 byte = data->at((c & cMask) * FONT_HEIGHT + y);
+            OEUInt8 byte = data->at((c & cMask) * MAP_HEIGHT + y);
             
             bool inv = !(OEGetBit(c, 0x80) || (OEGetBit(byte, 0x80) && OEGetBit(c, 0x100)));
             
-            for (int x = 0; x < FONT_WIDTH; x++)
+            for (int x = 0; x < MAP_WIDTH; x++)
             {
                 bool b = (byte << (x >> 1)) & 0x40;
                 
-                theMap[(c * FONT_HEIGHT + y) * FONT_WIDTH + x] = (b ^ inv) ? 0xff : 0x00;
+                theMap[(c * MAP_HEIGHT + y) * MAP_WIDTH + x] = (b ^ inv) ? 0xff : 0x00;
             }
         }
     }
@@ -440,20 +443,20 @@ void AppleIIVideo::loadTextMap(string name, OEData *data)
 
 void AppleIIVideo::initLoresMap()
 {
-    loresMap.resize(2 * FONT_SIZE * FONT_HEIGHT * FONT_WIDTH);
+    loresMap.resize(2 * MAP_SIZE * MAP_HEIGHT * MAP_WIDTH);
     
-    for (int c = 0; c < 2 * FONT_SIZE; c++)
+    for (int c = 0; c < 2 * MAP_SIZE; c++)
     {
-        for (int y = 0; y < FONT_HEIGHT; y++)
+        for (int y = 0; y < MAP_HEIGHT; y++)
         {
             OEUInt32 v = (y < 4) ? c & 0xf : (c >> 4) & 0xf;
             
             OEUInt32 bitmap = (v << 12) | (v << 8) | (v << 4) | v;
             bitmap >>= OEGetBit(c, 0x100) ? 2 : 0;
             
-            for (int x = 0; x < FONT_WIDTH; x++)
+            for (int x = 0; x < MAP_WIDTH; x++)
             {
-                loresMap[(c * FONT_HEIGHT + y) * FONT_WIDTH + x] = (bitmap & 0x1) ? 0xff : 0x00;
+                loresMap[(c * MAP_HEIGHT + y) * MAP_WIDTH + x] = (bitmap & 0x1) ? 0xff : 0x00;
                 
                 bitmap >>= 1;
             }
@@ -463,18 +466,18 @@ void AppleIIVideo::initLoresMap()
 
 void AppleIIVideo::initHiresMap()
 {
-    hiresMap.resize(2 * FONT_SIZE * FONT_WIDTH);
+    hiresMap.resize(2 * MAP_SIZE * MAP_WIDTH);
     
-    for (int c = 0; c < 2 * FONT_SIZE; c++)
+    for (int c = 0; c < 2 * MAP_SIZE; c++)
     {
         OEUInt8 byte = (c & 0x7f) << 1 | (c >> 8);
         bool delay = !rev0 && (c & 0x80);
         
-        for (int x = 0; x < FONT_WIDTH; x++)
+        for (int x = 0; x < MAP_WIDTH; x++)
         {
             bool b = (byte >> ((x + 2 - delay) >> 1)) & 0x1;
             
-            hiresMap[c * FONT_WIDTH + x] = b ? 0xff : 0x00;
+            hiresMap[c * MAP_WIDTH + x] = b ? 0xff : 0x00;
         }
     }
 }
@@ -597,9 +600,9 @@ void AppleIIVideo::updateVideo()
 
 // Copy a 14-pixel char scanline
 #define copyBlockLine(x) \
-*((OEUInt64 *)(p + x * SCREEN_WIDTH + 0)) = *((OEUInt64 *)(m + x * FONT_WIDTH + 0));\
-*((OEUInt32 *)(p + x * SCREEN_WIDTH + 8)) = *((OEUInt32 *)(m + x * FONT_WIDTH + 8));\
-*((OEUInt16 *)(p + x * SCREEN_WIDTH + 12)) = *((OEUInt16 *)(m + x * FONT_WIDTH + 12));
+*((OEUInt64 *)(p + x * SCREEN_WIDTH + 0)) = *((OEUInt64 *)(m + x * MAP_WIDTH + 0));\
+*((OEUInt32 *)(p + x * SCREEN_WIDTH + 8)) = *((OEUInt32 *)(m + x * MAP_WIDTH + 8));\
+*((OEUInt16 *)(p + x * SCREEN_WIDTH + 12)) = *((OEUInt16 *)(m + x * MAP_WIDTH + 12));
 
 void AppleIIVideo::drawText()
 {
@@ -615,7 +618,7 @@ void AppleIIVideo::drawText()
         return;
     
     if (flash)
-        mp += FONT_SIZE * FONT_WIDTH * FONT_HEIGHT;
+        mp += MAP_SIZE * MAP_WIDTH * MAP_HEIGHT;
     
     for (int y = 0; y < TERM_HEIGHT; y++)
     {
@@ -624,7 +627,7 @@ void AppleIIVideo::drawText()
         for (int x = 0; x < TERM_WIDTH; x++)
         {
             OEUInt8 c = vp[textOffset[y] + x];
-            OEUInt8 *m = mp + c * FONT_HEIGHT * FONT_WIDTH;
+            OEUInt8 *m = mp + c * MAP_HEIGHT * MAP_WIDTH;
             
             copyBlockLine(0);
             copyBlockLine(1);
@@ -662,7 +665,7 @@ void AppleIIVideo::drawLores()
         for (int x = 0; x < TERM_WIDTH; x++)
         {
             OEUInt8 c = vp[textOffset[y] + x];
-            OEUInt8 *m = mp + c * FONT_HEIGHT * FONT_WIDTH + (x & 1) * FONT_SIZE * FONT_WIDTH * FONT_HEIGHT;
+            OEUInt8 *m = mp + c * MAP_HEIGHT * MAP_WIDTH + (x & 1) * MAP_SIZE * MAP_WIDTH * MAP_HEIGHT;
             
             copyBlockLine(0);
             copyBlockLine(1);
@@ -702,7 +705,7 @@ void AppleIIVideo::drawHires()
         for (int x = 0; x < VIDEO_WIDTH; x++)
         {
             OEUInt32 c = vp[hiresOffset[y] + x] | ((lastC & 0x40) << 2);
-            OEUInt8 *m = mp + c * FONT_WIDTH;
+            OEUInt8 *m = mp + c * MAP_WIDTH;
             copyBlockLine(0);
             
             p += BLOCK_WIDTH;

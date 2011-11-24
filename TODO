@@ -1,4 +1,5 @@
 ==1.0.2==
+* Implement JoystickMapper buttons and relative axes
 * Optimize AppleIIVideo
 * Implement Apple II
 

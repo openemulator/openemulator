@@ -155,6 +155,23 @@ vector<string> strsplit(string value, char c)
     return splitString;
 }
 
+string strjoin(vector<string>& value, char c)
+{
+    string joinedString;
+    
+    for (vector<string>::iterator i = value.begin();
+         i != value.end();
+         i++)
+    {
+        if (joinedString != "")
+            joinedString += c;
+        
+        joinedString += *i;
+    }
+    
+    return joinedString;
+}
+
 string strfilter(string value, string filter)
 {
     string filteredString;

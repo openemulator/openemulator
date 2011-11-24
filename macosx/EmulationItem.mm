@@ -680,13 +680,13 @@
 
 
 
-- (BOOL)isDeviceEventObservers
+- (BOOL)isDeviceObserved
 {
-    bool isEventObservers = false;
+    bool isObserved = false;
     if (type == EMULATIONITEM_DEVICE)
-        ((OEComponent *)device)->postMessage(NULL, DEVICE_IS_EVENT_OBSERVERS, &isEventObservers);
+        ((OEComponent *)device)->postMessage(NULL, DEVICE_IS_OBSERVED, &isObserved);
     
-    return isEventObservers;
+    return isObserved;
 }
 
 - (void)sendDeviceEvent:(EmulationDeviceEvent)theEvent

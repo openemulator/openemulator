@@ -167,9 +167,10 @@ bool OEDevice::postMessage(OEComponent *sender, int message, void *data)
             
             return true;
             
-        case DEVICE_IS_EVENT_OBSERVERS:
+        case DEVICE_IS_OBSERVED:
             if (data)
                 *((bool *)data) = (observers[DEVICE_EVENT_DID_OCCUR].size() != 0);
+            
             return true;
     }
     

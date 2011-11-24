@@ -292,7 +292,7 @@ bool OEEmulation::configureComponent(string id, xmlNodePtr children)
                 OEComponent *ref = getComponent(refId);
                 
                 if (!component->setRef(name, ref))
-                    logMessage("'" + id + "': unknown property '" + name + "'");
+                    logMessage("'" + id + "': unknown ref '" + name + "'");
             }
             else if (hasNodeProperty(node, "data"))
             {
@@ -315,7 +315,7 @@ bool OEEmulation::configureComponent(string id, xmlNodePtr children)
                 if (dataRead)
                 {
                     if (!component->setData(name, &data))
-                        logMessage("'" + id + "': unknown property '" + name + "'");
+                        logMessage("'" + id + "': unknown data '" + name + "'");
                 }
             }
             else

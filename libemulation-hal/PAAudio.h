@@ -5,7 +5,7 @@
  * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements a PortAudio audio component.
+ * Implements a PortAudio audio component
  */
 
 #ifndef _PAAUDIO_H

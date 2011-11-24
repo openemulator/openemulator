@@ -13,7 +13,9 @@
         <inlet ref="appleII.video" property="monitorDevice" outletRef=""/>
         <inlet ref="appleII.video" property="monitor" outletRef="monitor"/>
     </port>
-    <port id="appleII.gamePort" ref="" type="Apple II Game Port" group="peripherals" label="Game Port" image="images/Connectors/DIP16.png"/>
+    <port id="appleII.gamePort" ref="" type="Apple II Game Port" group="peripherals" label="Game Port" image="images/Connectors/DIP16.png">
+        <inlet ref="appleII.gamePort" property="gamePort" outletRef="io"/>
+    </port>
     <port id="appleII.slot0" ref="" type="Apple II Slot" group="expansions" label="Slot 0" image="images/Connectors/Edge50.png">
         <inlet ref="appleII.iou" property="refSlot0" outletRef="io"/>
     </port>
@@ -50,7 +52,8 @@
     <component id="appleII.controlBus" class="ControlBus">
         <property name="device" ref="appleII"/>
         <property name="audio" ref="audio"/>
-        <!-- Clock frequency: 14318180 Hz * 65 / 912 or 14250000 Hz * 65 / 912 -->
+        <!-- NTSC clock frequency: (14318180 crystal cycles/s) * (65 CPU cycles/scanline) / (912 crystal cycles/scanline) -->
+        <!-- PAL clock frequency: (14318180 crystal cycles/s) * (65 CPU cycles/scanline) / (912 crystal cycles/scanline) -->
         <property name="clockFrequency" value="1020484.3202"/>
         <property name="cpuClockMultiplier" value="1"/>
         <property name="cpu" ref="appleII.cpu"/>
@@ -209,12 +212,13 @@
         <property name="highFrequency" value="10000"/>
     </component>
     <component id="appleII.gamePort" class="AppleIIGamePort">
-        <property name="controlBus" ref="appleII.controlBus"/>
-        <property name="floatingBus" ref="appleII.floatingBus"/>
         <property name="an0" value="0"/>
         <property name="an1" value="0"/>
         <property name="an2" value="0"/>
         <property name="an3" value="0"/>
+        <property name="controlBus" ref="appleII.controlBus"/>
+        <property name="floatingBus" ref="appleII.floatingBus"/>
+        <property name="gamePort" ref=""/>
     </component>
     <component id="appleII.romD0" class="ROM">
         <property name="image" data="${resourcePath}/roms/Apple/341-0016-00.bin"/>

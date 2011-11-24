@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
-<edl version="1.0" generator="OpenEmulator" build="700" label="RD CFFA1" image="images/R&amp;D/R&amp;D CFFA1.png" description="The CFFA1 interface card (www.dreher.net) is used for accessing CompactFlash devices on an Apple-1 computer. It also provides 32kiB of RAM at $1000-$8FFF. To start the file manager, enter 9000R in the monitor.">
+<edl version="1.0" generator="OpenEmulator" framework="700" label="RD CFFA1" image="images/R&amp;D/R&amp;D CFFA1.png" description="The CFFA1 interface card (www.dreher.net) is used for accessing CompactFlash devices on an Apple-1 computer. It also provides 32kiB of RAM at $1000-$8FFF. To start the file manager, enter 9000R in the monitor.">
     
     <device id="rdCFFA1" label="R&amp;D CFFA1" image="images/R&amp;D/R&amp;D CFFA1.png">
         <setting ref="rdCFFA1.io" name="forceWriteProtected" label="Force Write Protected" type="checkbox"/>

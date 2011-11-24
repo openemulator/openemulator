@@ -15,7 +15,7 @@
     <component id="replica1.controlBus" class="ControlBus">
         <property name="device" ref="replica1"/>
         <property name="audio" ref="audio"/>
-        <!-- Clock frequency: 14318180 Hz * 61 / 910 -->
+        <!-- Clock frequency: (14318180 crystal cycles/s) * (61 effective CPU cycles/scanline) / (910 crystal cycles/scanline) -->
         <property name="clockFrequency" value="959790.088"/>
         <property name="cpuClockMultiplier" value="1"/>
         <property name="cpu" ref="replica1.cpu"/>

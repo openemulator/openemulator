@@ -75,6 +75,8 @@ typedef enum
     
     CANVAS_DID_VSYNC,
     CANVAS_WILL_DRAW,
+    
+    CANVAS_NOTIFICATION_END,
 } CanvasNotification;
 
 // Definitions
@@ -231,7 +233,7 @@ public:
 
 typedef struct
 {
-    OEUInt32 usageId;
+    OEInt32 usageId;
     float value;
 } CanvasHIDNotification;
 

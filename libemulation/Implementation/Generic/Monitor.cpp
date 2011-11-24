@@ -210,7 +210,6 @@ bool Monitor::init()
         canvas->addObserver(this, CANVAS_KEYBOARD_DID_CHANGE);
         canvas->addObserver(this, CANVAS_POINTER_DID_CHANGE);
         canvas->addObserver(this, CANVAS_MOUSE_DID_CHANGE);
-        canvas->addObserver(this, CANVAS_JOYSTICK_DID_CHANGE);
         
         canvas->addObserver(this, CANVAS_DID_COPY);
         canvas->addObserver(this, CANVAS_DID_PASTE);
@@ -238,13 +237,13 @@ void Monitor::dispose()
         canvas->removeObserver(this, CANVAS_KEYBOARD_DID_CHANGE);
         canvas->removeObserver(this, CANVAS_POINTER_DID_CHANGE);
         canvas->removeObserver(this, CANVAS_MOUSE_DID_CHANGE);
-        canvas->removeObserver(this, CANVAS_JOYSTICK_DID_CHANGE);
         
         canvas->removeObserver(this, CANVAS_DID_COPY);
         canvas->removeObserver(this, CANVAS_DID_PASTE);
     }
     
-    device->postMessage(this, DEVICE_DESTROY_CANVAS, &canvas);
+    if (device)
+        device->postMessage(this, DEVICE_DESTROY_CANVAS, &canvas);
 }
 
 bool Monitor::postMessage(OEComponent *sender, int message, void *data)

@@ -1,21 +1,24 @@
 
 /**
  * libemulator
- * Apple II Game Port
- * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
+ * Apple II Game Port 
+ * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls an Apple II's game port
+ * Implements an Apple II Game Port
  */
 
 #include "AppleIIGamePort.h"
 
 #include "ControlBusInterface.h"
+#include "JoystickInterface.h"
 #include "AppleIIInterface.h"
 
 AppleIIGamePort::AppleIIGamePort()
 {
+    controlBus = NULL;
     floatingBus = NULL;
+    gamePort = NULL;
     
     for (int i = 0; i < 4; i++)
         setPDL(i, 127);
@@ -67,6 +70,14 @@ bool AppleIIGamePort::setRef(string name, OEComponent *ref)
 		controlBus = ref;
 	else if (name == "floatingBus")
 		floatingBus = ref;
+    else if (name == "gamePort")
+    {
+        if (gamePort)
+            gamePort->removeObserver(this, JOYSTICK_DID_CHANGE);
+        gamePort = ref;
+        if (gamePort)
+            gamePort->addObserver(this, JOYSTICK_DID_CHANGE);
+    }
 	else
 		return false;
 	
@@ -96,21 +107,6 @@ bool AppleIIGamePort::postMessage(OEComponent *sender, int message, void *data)
 {
     switch (message)
     {
-        case APPLEIIGAMEPORT_SET_PDL0:
-        case APPLEIIGAMEPORT_SET_PDL1:
-        case APPLEIIGAMEPORT_SET_PDL2:
-        case APPLEIIGAMEPORT_SET_PDL3:
-            setPDL(message - APPLEIIGAMEPORT_SET_PDL0, *((float *)data) * 255);
-            
-            return true;
-            
-        case APPLEIIGAMEPORT_SET_PB0:
-        case APPLEIIGAMEPORT_SET_PB1:
-        case APPLEIIGAMEPORT_SET_PB2:
-            pb[message - APPLEIIGAMEPORT_SET_PB0 + 1] = *((float *)data);
-            
-            return true;
-            
         case APPLEIIGAMEPORT_GET_AN0:
         case APPLEIIGAMEPORT_GET_AN1:
         case APPLEIIGAMEPORT_GET_AN2:
@@ -121,6 +117,33 @@ bool AppleIIGamePort::postMessage(OEComponent *sender, int message, void *data)
     }
     
     return false;
+}
+
+void AppleIIGamePort::notify(OEComponent *sender, int notification, void *data)
+{
+    if (notification == JOYSTICK_DID_CHANGE)
+    {
+        JoystickHIDNotification *hidNotification;
+        hidNotification = (JoystickHIDNotification *)data;
+        
+        switch (hidNotification->usageId)
+        {
+            case JOYSTICK_AXIS1:
+            case JOYSTICK_AXIS2:
+            case JOYSTICK_AXIS3:
+            case JOYSTICK_AXIS4:
+                setPDL(hidNotification->usageId - JOYSTICK_AXIS1, hidNotification->value);
+                
+                break;
+                
+            case JOYSTICK_BUTTON1:
+            case JOYSTICK_BUTTON2:
+            case JOYSTICK_BUTTON3:
+                setPB(hidNotification->usageId - JOYSTICK_BUTTON1 + 1, hidNotification->value ? true : false);
+                
+                break;
+        }
+    }
 }
 
 OEUInt8 AppleIIGamePort::read(OEAddress address)
@@ -205,10 +228,22 @@ void AppleIIGamePort::setAN(int index, bool value)
         postNotification(this, APPLEIIGAMEPORT_AN0_DID_CHANGE + index, &value);
 }
 
-void AppleIIGamePort::setPDL(int index, OEUInt32 value)
+void AppleIIGamePort::setPDL(int index, float value)
 {
+    if (value < 0)
+        value = 0;
+    else if (value > 1)
+        value = 1;
+    
+    value *= 255;
+    
     // From Applesoft BASIC, $FB1E-$FB2E
     pdl[index] = value * 11 + 8;
+}
+
+void AppleIIGamePort::setPB(int index, bool value)
+{
+    pb[index] = value;
 }
 
 bool AppleIIGamePort::isTimerPending(int index)

@@ -322,18 +322,16 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 {
     DocumentController *documentController;
     documentController = [NSDocumentController sharedDocumentController];
-    PAAudio *paAudio = (PAAudio *)[documentController paAudio];
     
-    paAudio->lock();
+    [documentController lockEmulation];
 }
 
 - (void)unlockEmulation
 {
     DocumentController *documentController;
     documentController = [NSDocumentController sharedDocumentController];
-    PAAudio *paAudio = (PAAudio *)[documentController paAudio];
     
-    paAudio->unlock();
+    [documentController unlockEmulation];
 }
 
 - (void *)emulation

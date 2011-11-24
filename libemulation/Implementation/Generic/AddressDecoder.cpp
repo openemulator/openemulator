@@ -31,7 +31,7 @@ bool AddressDecoder::setValue(string name, string value)
 	else if (name == "blockSize")
 		blockSize = getUInt(value);
 	else if (name.substr(0, 3) == "map")
-		conf[name.substr(3)] = value;
+        conf[name.substr(3)] = value;
 	else
 		return false;
 	

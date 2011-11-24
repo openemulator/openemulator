@@ -82,11 +82,11 @@
 		00954E991277BB8E00C17203 /* EmulationWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00954E981277BB8E00C17203 /* EmulationWindowController.m */; };
 		00954EA71277BC1200C17203 /* AudioControlsWindowController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00954EA61277BC1200C17203 /* AudioControlsWindowController.mm */; };
 		00A0B8041069761A007930A5 /* Document.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00A0B8031069761A007930A5 /* Document.mm */; };
+		00A12995147A8E7500DF323F /* HIDJoystick.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A12994147A8E7500DF323F /* HIDJoystick.cpp */; };
+		00A12997147A8E7E00DF323F /* HIDJoystick.h in Headers */ = {isa = PBXBuildFile; fileRef = 00A12996147A8E7E00DF323F /* HIDJoystick.h */; };
 		00A72B6F12879F650083C6A7 /* CanvasView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00A72B6E12879F650083C6A7 /* CanvasView.mm */; };
 		00A72B7012879F690083C6A7 /* CanvasWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00A72B6A12879F530083C6A7 /* CanvasWindowController.m */; };
 		00A72B951287A0F10083C6A7 /* Canvas.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00A72B931287A0F10083C6A7 /* Canvas.xib */; };
-		00A88A6F1478A7190059CCE5 /* AppleHandControllers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A88A6E1478A7190059CCE5 /* AppleHandControllers.cpp */; };
-		00A88A711478A7250059CCE5 /* AppleHandControllers.h in Headers */ = {isa = PBXBuildFile; fileRef = 00A88A701478A7250059CCE5 /* AppleHandControllers.h */; };
 		00A973AB12E512F80084724F /* OEEmulation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A9739E12E512F80084724F /* OEEmulation.cpp */; };
 		00A973AD12E512F80084724F /* OEComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A973A012E512F80084724F /* OEComponent.cpp */; };
 		00A973AF12E512F80084724F /* OEComponentFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A973A212E512F80084724F /* OEComponentFactory.cpp */; };
@@ -98,6 +98,9 @@
 		00B5709E10863C2A00CDE4A7 /* TemplateChooserWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B5709D10863C2A00CDE4A7 /* TemplateChooserWindowController.m */; };
 		00B5CB94136F0B6C007A7BED /* AppleSilentype.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B5CB92136F0B6C007A7BED /* AppleSilentype.cpp */; };
 		00B5CB95136F0B6D007A7BED /* AppleSilentype.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B5CB93136F0B6C007A7BED /* AppleSilentype.h */; };
+		00B7C646147B4B4100BB7E6B /* JoystickMapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B7C645147B4B4100BB7E6B /* JoystickMapper.cpp */; };
+		00B7C648147B5B2300BB7E6B /* AppleIIGamePort.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B7C647147B5B2300BB7E6B /* AppleIIGamePort.h */; };
+		00B7C64A147B5B2B00BB7E6B /* AppleIIGamePort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B7C649147B5B2B00BB7E6B /* AppleIIGamePort.cpp */; };
 		00B974B410701DDA00BD1402 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = 00B974AD10701DCD00BD1402 /* sounds */; };
 		00BB34B412C5C5AE007332B5 /* EmulationItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00BB34B312C5C5AE007332B5 /* EmulationItem.mm */; };
 		00BDB1F713863188004DF2AF /* CanvasPrintView.m in Sources */ = {isa = PBXBuildFile; fileRef = 00BDB1F613863188004DF2AF /* CanvasPrintView.m */; };
@@ -155,7 +158,6 @@
 		00FC27D912D1070A0065E986 /* AppleIIAudioIn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881912A393990052B7A4 /* AppleIIAudioIn.cpp */; };
 		00FC27DB12D1070A0065E986 /* AppleIIAudioOut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881B12A393990052B7A4 /* AppleIIAudioOut.cpp */; };
 		00FC27DF12D1070A0065E986 /* AppleIIFloatingBus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881F12A393990052B7A4 /* AppleIIFloatingBus.cpp */; };
-		00FC27E112D1070A0065E986 /* AppleIIGamePort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8882112A393990052B7A4 /* AppleIIGamePort.cpp */; };
 		00FC27E312D1070A0065E986 /* AppleIIKeyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8882312A393990052B7A4 /* AppleIIKeyboard.cpp */; };
 		00FC27E712D1070A0065E986 /* AppleIISlotExpansionMemory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8882712A393990052B7A4 /* AppleIISlotExpansionMemory.cpp */; };
 		00FC27E912D1070A0065E986 /* AppleIISlotMemory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8882912A393990052B7A4 /* AppleIISlotMemory.cpp */; };
@@ -336,6 +338,8 @@
 		00954EA61277BC1200C17203 /* AudioControlsWindowController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AudioControlsWindowController.mm; sourceTree = "<group>"; };
 		00A0B7B81068949D007930A5 /* Document.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Document.h; sourceTree = "<group>"; };
 		00A0B8031069761A007930A5 /* Document.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Document.mm; sourceTree = "<group>"; };
+		00A12994147A8E7500DF323F /* HIDJoystick.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HIDJoystick.cpp; sourceTree = "<group>"; };
+		00A12996147A8E7E00DF323F /* HIDJoystick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HIDJoystick.h; sourceTree = "<group>"; };
 		00A72B6912879F530083C6A7 /* CanvasWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanvasWindowController.h; sourceTree = "<group>"; };
 		00A72B6A12879F530083C6A7 /* CanvasWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CanvasWindowController.m; sourceTree = "<group>"; };
 		00A72B6D12879F650083C6A7 /* CanvasView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanvasView.h; sourceTree = "<group>"; };
@@ -343,8 +347,6 @@
 		00A72B7112879F800083C6A7 /* CanvasWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanvasWindow.h; sourceTree = "<group>"; };
 		00A72B7212879F800083C6A7 /* CanvasWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CanvasWindow.m; sourceTree = "<group>"; };
 		00A72B941287A0F10083C6A7 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Canvas.xib; sourceTree = "<group>"; };
-		00A88A6E1478A7190059CCE5 /* AppleHandControllers.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleHandControllers.cpp; sourceTree = "<group>"; };
-		00A88A701478A7250059CCE5 /* AppleHandControllers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleHandControllers.h; sourceTree = "<group>"; };
 		00A9739E12E512F80084724F /* OEEmulation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEEmulation.cpp; sourceTree = "<group>"; };
 		00A9739F12E512F80084724F /* OEEmulation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEEmulation.h; sourceTree = "<group>"; };
 		00A973A012E512F80084724F /* OEComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEComponent.cpp; sourceTree = "<group>"; };
@@ -364,6 +366,10 @@
 		00B5709D10863C2A00CDE4A7 /* TemplateChooserWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TemplateChooserWindowController.m; sourceTree = "<group>"; };
 		00B5CB92136F0B6C007A7BED /* AppleSilentype.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleSilentype.cpp; sourceTree = "<group>"; };
 		00B5CB93136F0B6C007A7BED /* AppleSilentype.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleSilentype.h; sourceTree = "<group>"; };
+		00B7C644147B4B2B00BB7E6B /* JoystickMapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JoystickMapper.h; sourceTree = "<group>"; };
+		00B7C645147B4B4100BB7E6B /* JoystickMapper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JoystickMapper.cpp; sourceTree = "<group>"; };
+		00B7C647147B5B2300BB7E6B /* AppleIIGamePort.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleIIGamePort.h; sourceTree = "<group>"; };
+		00B7C649147B5B2B00BB7E6B /* AppleIIGamePort.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleIIGamePort.cpp; sourceTree = "<group>"; };
 		00B8864612A3923D0052B7A4 /* edl-1.0.dtd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "edl-1.0.dtd"; sourceTree = "<group>"; };
 		00B8881312A393990052B7A4 /* Apple1ACI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Apple1ACI.cpp; path = libemulation/Implementation/Apple/Apple1ACI.cpp; sourceTree = SOURCE_ROOT; };
 		00B8881412A393990052B7A4 /* Apple1ACI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Apple1ACI.h; path = libemulation/Implementation/Apple/Apple1ACI.h; sourceTree = SOURCE_ROOT; };
@@ -374,8 +380,6 @@
 		00B8881C12A393990052B7A4 /* AppleIIAudioOut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppleIIAudioOut.h; path = libemulation/Implementation/Apple/AppleIIAudioOut.h; sourceTree = SOURCE_ROOT; };
 		00B8881F12A393990052B7A4 /* AppleIIFloatingBus.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AppleIIFloatingBus.cpp; path = libemulation/Implementation/Apple/AppleIIFloatingBus.cpp; sourceTree = SOURCE_ROOT; };
 		00B8882012A393990052B7A4 /* AppleIIFloatingBus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppleIIFloatingBus.h; path = libemulation/Implementation/Apple/AppleIIFloatingBus.h; sourceTree = SOURCE_ROOT; };
-		00B8882112A393990052B7A4 /* AppleIIGamePort.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AppleIIGamePort.cpp; path = libemulation/Implementation/Apple/AppleIIGamePort.cpp; sourceTree = SOURCE_ROOT; };
-		00B8882212A393990052B7A4 /* AppleIIGamePort.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppleIIGamePort.h; path = libemulation/Implementation/Apple/AppleIIGamePort.h; sourceTree = SOURCE_ROOT; };
 		00B8882312A393990052B7A4 /* AppleIIKeyboard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AppleIIKeyboard.cpp; path = libemulation/Implementation/Apple/AppleIIKeyboard.cpp; sourceTree = SOURCE_ROOT; };
 		00B8882412A393990052B7A4 /* AppleIIKeyboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppleIIKeyboard.h; path = libemulation/Implementation/Apple/AppleIIKeyboard.h; sourceTree = SOURCE_ROOT; };
 		00B8882712A393990052B7A4 /* AppleIISlotExpansionMemory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AppleIISlotExpansionMemory.cpp; path = libemulation/Implementation/Apple/AppleIISlotExpansionMemory.cpp; sourceTree = SOURCE_ROOT; };
@@ -552,6 +556,8 @@
 				008363081326C15300CB9A21 /* OEVector.h */,
 				00D226551350FF8B00FC69B9 /* OEMatrix3.cpp */,
 				00D226541350FF8B00FC69B9 /* OEMatrix3.h */,
+				00A12994147A8E7500DF323F /* HIDJoystick.cpp */,
+				00A12996147A8E7E00DF323F /* HIDJoystick.h */,
 			);
 			path = "libemulation-hal";
 			sourceTree = "<group>";
@@ -733,16 +739,14 @@
 				00811DFD12D251E9009AD2F0 /* AppleDiskIIInterfaceCard.h */,
 				00811F1112D2738B009AD2F0 /* AppleGraphicsTablet.cpp */,
 				00811F1012D2738B009AD2F0 /* AppleGraphicsTablet.h */,
-				00A88A6E1478A7190059CCE5 /* AppleHandControllers.cpp */,
-				00A88A701478A7250059CCE5 /* AppleHandControllers.h */,
 				00B8881912A393990052B7A4 /* AppleIIAudioIn.cpp */,
 				00B8881A12A393990052B7A4 /* AppleIIAudioIn.h */,
 				00B8881B12A393990052B7A4 /* AppleIIAudioOut.cpp */,
 				00B8881C12A393990052B7A4 /* AppleIIAudioOut.h */,
 				00B8881F12A393990052B7A4 /* AppleIIFloatingBus.cpp */,
 				00B8882012A393990052B7A4 /* AppleIIFloatingBus.h */,
-				00B8882112A393990052B7A4 /* AppleIIGamePort.cpp */,
-				00B8882212A393990052B7A4 /* AppleIIGamePort.h */,
+				00B7C649147B5B2B00BB7E6B /* AppleIIGamePort.cpp */,
+				00B7C647147B5B2300BB7E6B /* AppleIIGamePort.h */,
 				00B8882312A393990052B7A4 /* AppleIIKeyboard.cpp */,
 				00B8882412A393990052B7A4 /* AppleIIKeyboard.h */,
 				00B8882712A393990052B7A4 /* AppleIISlotExpansionMemory.cpp */,
@@ -773,6 +777,8 @@
 				00B8883912A393990052B7A4 /* ControlBus.h */,
 				00B8883A12A393990052B7A4 /* FloatingBus.cpp */,
 				00B8883B12A393990052B7A4 /* FloatingBus.h */,
+				00B7C645147B4B4100BB7E6B /* JoystickMapper.cpp */,
+				00B7C644147B4B2B00BB7E6B /* JoystickMapper.h */,
 				00F580A31464CDDA0094DA5C /* MMU.cpp */,
 				00F580A51464CDE20094DA5C /* MMU.h */,
 				00B8883612A393990052B7A4 /* Monitor.cpp */,
@@ -1096,7 +1102,8 @@
 				00DEA9221423B7C9003E9FA0 /* RDCFFA1.h in Headers */,
 				0022236C142C557100B7451D /* ControlBusInterface.h in Headers */,
 				00DC0E79145DFECD00FF51BD /* MemoryInterface.h in Headers */,
-				00A88A711478A7250059CCE5 /* AppleHandControllers.h in Headers */,
+				00A12997147A8E7E00DF323F /* HIDJoystick.h in Headers */,
+				00B7C648147B5B2300BB7E6B /* AppleIIGamePort.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1305,7 +1312,6 @@
 				00FC27D912D1070A0065E986 /* AppleIIAudioIn.cpp in Sources */,
 				00FC27DB12D1070A0065E986 /* AppleIIAudioOut.cpp in Sources */,
 				00FC27DF12D1070A0065E986 /* AppleIIFloatingBus.cpp in Sources */,
-				00FC27E112D1070A0065E986 /* AppleIIGamePort.cpp in Sources */,
 				00FC27E312D1070A0065E986 /* AppleIIKeyboard.cpp in Sources */,
 				00FC27E712D1070A0065E986 /* AppleIISlotExpansionMemory.cpp in Sources */,
 				00FC27E912D1070A0065E986 /* AppleIISlotMemory.cpp in Sources */,
@@ -1342,7 +1348,9 @@
 				004BD1C01425AA8500768B80 /* W65C02S.cpp in Sources */,
 				0029EEE214266B8900AD900E /* Mux.cpp in Sources */,
 				00F580A61464CDE70094DA5C /* MMU.cpp in Sources */,
-				00A88A6F1478A7190059CCE5 /* AppleHandControllers.cpp in Sources */,
+				00A12995147A8E7500DF323F /* HIDJoystick.cpp in Sources */,
+				00B7C646147B4B4100BB7E6B /* JoystickMapper.cpp in Sources */,
+				00B7C64A147B5B2B00BB7E6B /* AppleIIGamePort.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

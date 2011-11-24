@@ -283,7 +283,7 @@
              (action == @selector(sendColdRestart:)) ||
              (action == @selector(sendWarmRestart:)) ||
              (action == @selector(sendDebuggerBreak:)))
-        return [item isDeviceEventObservers];
+        return [item isDeviceObserved];
     
     return YES;
 }

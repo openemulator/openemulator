@@ -30,11 +30,10 @@
     NSArray *audioPathExtensions;
     NSArray *textPathExtensions;
     
-    IOHIDManagerRef ioHIDManager;
-    
     void *paAudio;
-    void *hidJoystick;
     
+    IOHIDManagerRef ioHIDManager;
+    void *hidJoystick;
     NSMutableArray *hidDevices;
     
     NSInteger disableMenuBarCount;
@@ -55,6 +54,9 @@
                                     error:(NSError **)outError;
 - (id)makeUntitledDocumentWithTemplateURL:(NSURL *)absoluteURL
                                     error:(NSError **)outError;
+
+- (void)lockEmulation;
+- (void)unlockEmulation;
 
 - (void)hidDeviceWasAdded:(IOHIDDeviceRef)device;
 - (void)hidDeviceWasRemoved:(IOHIDDeviceRef)device;

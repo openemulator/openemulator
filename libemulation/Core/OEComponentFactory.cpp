@@ -16,6 +16,7 @@
 #include "AudioCodec.h"
 #include "ControlBus.h"
 #include "FloatingBus.h"
+#include "JoystickMapper.h"
 #include "MMU.h"
 #include "Monitor.h"
 #include "Mux.h"
@@ -28,7 +29,6 @@
 #include "AppleDiskII.h"
 #include "AppleDiskIIInterfaceCard.h"
 #include "AppleGraphicsTablet.h"
-#include "AppleHandControllers.h"
 #include "AppleIIAudioIn.h"
 #include "AppleIIAudioOut.h"
 #include "AppleIIFloatingBus.h"
@@ -64,6 +64,7 @@ OEComponent *OEComponentFactory::construct(const string& className)
     matchComponent(AudioCodec);
     matchComponent(ControlBus);
     matchComponent(FloatingBus);
+    matchComponent(JoystickMapper);
     matchComponent(MMU);
     matchComponent(Monitor);
     matchComponent(Mux);
@@ -77,7 +78,6 @@ OEComponent *OEComponentFactory::construct(const string& className)
     matchComponent(AppleDiskII);
     matchComponent(AppleDiskIIInterfaceCard);
     matchComponent(AppleGraphicsTablet);
-    matchComponent(AppleHandControllers);
     matchComponent(AppleIIAudioIn);
     matchComponent(AppleIIAudioOut);
     matchComponent(AppleIIFloatingBus);
