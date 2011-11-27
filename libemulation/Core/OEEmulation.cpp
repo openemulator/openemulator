@@ -10,6 +10,7 @@
 
 #include <fstream>
 #include <sstream>
+#include <set>
 
 #include <libxml/parser.h>
 
@@ -266,7 +267,7 @@ bool OEEmulation::configureComponent(string id, xmlNodePtr children)
     
     map<string, string> propertiesMap;
     propertiesMap["id"] = id;
-    propertiesMap["deviceId"] = getDeviceId(id);
+    propertiesMap["deviceId"] = OEGetDeviceId(id);
     propertiesMap["resourcePath"] = resourcePath;
     
     for(xmlNodePtr node = children;
@@ -290,6 +291,9 @@ bool OEEmulation::configureComponent(string id, xmlNodePtr children)
                 string refId = getNodeProperty(node, "ref");
                 
                 OEComponent *ref = getComponent(refId);
+                
+                if ((refId != "") && !ref)
+                    logMessage("'" + id + "': ref '" + name + "' not available");
                 
                 if (!component->setRef(name, ref))
                     logMessage("'" + id + "': unknown ref '" + name + "'");
@@ -328,6 +332,8 @@ bool OEEmulation::configureComponent(string id, xmlNodePtr children)
 
 bool OEEmulation::configureInlets(OEInletMap& inletMap)
 {
+    set<OEComponent *> components;
+    
     for (OEInletMap::iterator i = inletMap.begin();
          i != inletMap.end();
          i++)
@@ -355,8 +361,15 @@ bool OEEmulation::configureInlets(OEInletMap& inletMap)
             
             if (!component->setRef(name, ref))
                 logMessage("'" + id + "': unknown property '" + name + "'");
+            else
+                components.insert(component);
         }
     }
+    
+    for (set<OEComponent *>::iterator i = components.begin();
+         i != components.end();
+         i++)
+        (*i)->update();
     
     return true;
 }
@@ -435,7 +448,7 @@ bool OEEmulation::updateComponent(string id, xmlNodePtr children)
     
     map<string, string> propertiesMap;
     propertiesMap["id"] = id;
-    propertiesMap["deviceId"] = getDeviceId(id);
+    propertiesMap["deviceId"] = OEGetDeviceId(id);
     propertiesMap["resourcePath"] = resourcePath;
     
     for(xmlNodePtr node = children;
@@ -507,7 +520,7 @@ void OEEmulation::disposeDevice(string deviceId)
         {
             string componentId = getNodeProperty(node, "id");
             
-            if (getDeviceId(componentId) == deviceId)
+            if (OEGetDeviceId(componentId) == deviceId)
                 disposeComponent(componentId);
         }
     }
@@ -562,8 +575,8 @@ void OEEmulation::deconfigureDevice(string deviceId)
             {
                 string ref = getNodeProperty(propertyNode, "ref");
                 
-                if ((getDeviceId(componentId) == deviceId) ||
-                    (getDeviceId(ref) == deviceId))
+                if ((OEGetDeviceId(componentId) == deviceId) ||
+                    (OEGetDeviceId(ref) == deviceId))
                 {
                     OEComponent *component = getComponent(componentId);
                     if (component)
@@ -634,7 +647,7 @@ void OEEmulation::destroyDevice(string deviceId)
         {
             string componentId = getNodeProperty(node, "id");
             
-            if (getDeviceId(componentId) == deviceId)
+            if (OEGetDeviceId(componentId) == deviceId)
                 destroyComponent(componentId, node->children);
         }
     }

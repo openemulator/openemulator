@@ -31,7 +31,7 @@ bool AddressDecoder::setValue(string name, string value)
 	else if (name == "blockSize")
 		blockSize = getUInt(value);
 	else if (name.substr(0, 3) == "map")
-        conf[name.substr(3)] = value;
+        confMap[name.substr(3)] = value;
 	else
 		return false;
 	
@@ -43,7 +43,7 @@ bool AddressDecoder::setRef(string name, OEComponent *ref)
 	if (name == "floatingBus")
 		floatingBus = ref;
 	else if (name.substr(0, 3) == "ref")
-		this->ref[name.substr(3)] = ref;
+		confRef[name.substr(3)] = ref;
 	else
 		return false;
 	
@@ -73,22 +73,23 @@ bool AddressDecoder::init()
 		writeMap[i] = floatingBus;
 	}
     
-	for (AddressDecoderConf::iterator i = conf.begin();
-		 i != conf.end();
+	for (AddressDecoderMap::iterator i = confMap.begin();
+		 i != confMap.end();
 		 i++)
 	{
-		if (!ref.count(i->first))
+		if (!confRef.count(i->first))
 		{
 			logMessage("invalid address range '" + i->first + "'");
+            
 			return false;
 		}
         
-        OEComponent *component = ref[i->first];
+        OEComponent *component = confRef[i->first];
         
         if (!component)
             component = floatingBus;
         
-		if (!mapRef(component, i->second))
+		if (!mapConf(component, i->second))
 			return false;
 	}
     
@@ -173,29 +174,6 @@ bool AddressDecoder::getMemoryMap(MemoryMap& decoderMap,
 	return true;
 }
 
-bool AddressDecoder::mapRef(OEComponent *component, string value)
-{
-    vector<string> items = strsplit(value, ',');
-    
-    for (vector<string>::iterator i = items.begin();
-         i != items.end();
-         i++)
-    {
-		MemoryMap memoryMap;
-        
-		if (!getMemoryMap(memoryMap, component, *i))
-		{
-			logMessage("invalid map '" + value + "'");
-            
-			return false;
-		}
-		
-        mapMemory(&memoryMap);
-    };
-    
-    return true;
-}
-
 void AddressDecoder::mapMemory(MemoryMap *theMap)
 {
 	size_t startBlock = (size_t) (theMap->startAddress >> blockSize);
@@ -217,4 +195,27 @@ void AddressDecoder::mapMemory(MemoryMap *theMap)
         for (size_t i = startBlock; i <= endBlock; i++)
             writeMap[i] = component;
     }
+}
+
+bool AddressDecoder::mapConf(OEComponent *component, string value)
+{
+    vector<string> items = strsplit(value, ',');
+    
+    for (vector<string>::iterator i = items.begin();
+         i != items.end();
+         i++)
+    {
+		MemoryMap memoryMap;
+        
+		if (!getMemoryMap(memoryMap, component, *i))
+		{
+			logMessage("invalid map '" + value + "'");
+            
+			return false;
+		}
+		
+        mapMemory(&memoryMap);
+    };
+    
+    return true;
 }

@@ -91,6 +91,9 @@
     [self setActualSize:self];
     [window setFrameTopLeftPoint:NSMakePoint(NSMinX(windowFrame),
                                              NSMaxY(windowFrame))];
+    
+    [window setAcceptsMouseMovedEvents:YES];
+    [window setAllowsConcurrentViewDrawing:YES];
 }
 
 - (void)showWindow:(id)sender

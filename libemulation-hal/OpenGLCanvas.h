@@ -51,10 +51,8 @@ typedef enum
     OPENGLCANVAS_SHADEREND,
 } OpenGLCanvasProgram;
 
-typedef void (*CanvasSetCapture)(void *userData, OpenGLCanvasCapture capture);
-typedef void (*CanvasSetKeyboardFlags)(void *userData, OEUInt32 flags);
-
-
+typedef void (*CanvasSetCapture)(void *userData, OpenGLCanvasCapture value);
+typedef void (*CanvasSetKeyboardLEDs)(void *userData, CanvasKeyboardLEDs value);
 
 class OpenGLCanvas : public OEComponent
 {
@@ -63,7 +61,7 @@ public:
     ~OpenGLCanvas();
     
     void open(CanvasSetCapture setCapture,
-              CanvasSetKeyboardFlags setKeyboardFlags,
+              CanvasSetKeyboardLEDs setKeyboardLEDs,
               void *userData);
     void close();
     
@@ -111,7 +109,7 @@ private:
     string resourcePath;
     
     CanvasSetCapture setCapture;
-    CanvasSetKeyboardFlags setKeyboardFlags;
+    CanvasSetKeyboardLEDs setKeyboardLEDs;
     void *userData;
     
     bool isOpen;
@@ -158,6 +156,7 @@ private:
     bool keyDown[CANVAS_KEYBOARD_KEY_NUM];
     int keyDownCount;
     bool ctrlAltWasPressed;
+    
     bool mouseEntered;
     bool mouseButtonDown[CANVAS_MOUSE_BUTTON_NUM];
     
@@ -189,7 +188,7 @@ private:
     
     OEImage readFramebuffer();
     
-    void postHIDNotification(int notification, int usageId, float value);
+    void postHIDEvent(int notification, int usageId, float value);
     void updateCapture(OpenGLCanvasCapture capture);
     void resetKeysAndButtons();
     
@@ -202,6 +201,8 @@ private:
     bool postImage(OEImage *frame);
     bool clear();
     bool setPrintHead(OEPoint *point);
+    
+    CanvasKeyboardFlags getKeyboardFlags();
 };
 
 #endif

@@ -171,7 +171,39 @@ bool Monitor::getValue(string name, string& value)
 bool Monitor::setRef(string name, OEComponent *ref)
 {
     if (name == "device")
+    {
+        if (device)
+        {
+            if (canvas)
+            {
+                canvas->removeObserver(this, CANVAS_UNICODECHAR_WAS_SENT);
+                canvas->removeObserver(this, CANVAS_KEYBOARD_DID_CHANGE);
+                canvas->removeObserver(this, CANVAS_POINTER_DID_CHANGE);
+                canvas->removeObserver(this, CANVAS_MOUSE_DID_CHANGE);
+                
+                canvas->removeObserver(this, CANVAS_DID_COPY);
+                canvas->removeObserver(this, CANVAS_DID_PASTE);
+            }
+            
+            device->postMessage(this, DEVICE_DESTROY_CANVAS, &canvas);
+        }
         device = ref;
+        if (device)
+        {
+            device->postMessage(this, DEVICE_CONSTRUCT_CANVAS, &canvas);
+            
+            if (canvas)
+            {
+                canvas->addObserver(this, CANVAS_UNICODECHAR_WAS_SENT);
+                canvas->addObserver(this, CANVAS_KEYBOARD_DID_CHANGE);
+                canvas->addObserver(this, CANVAS_POINTER_DID_CHANGE);
+                canvas->addObserver(this, CANVAS_MOUSE_DID_CHANGE);
+                
+                canvas->addObserver(this, CANVAS_DID_COPY);
+                canvas->addObserver(this, CANVAS_DID_PASTE);
+            }
+        }
+    }
     else if (name == "controlBus")
     {
         if (controlBus)
@@ -195,24 +227,11 @@ bool Monitor::init()
         return false;
     }
     
-    device->postMessage(this, DEVICE_CONSTRUCT_CANVAS, &canvas);
-    
     if (!canvas)
     {
         logMessage("canvas could not be created");
         
         return false;
-    }
-    
-    if (canvas)
-    {
-        canvas->addObserver(this, CANVAS_UNICODECHAR_WAS_SENT);
-        canvas->addObserver(this, CANVAS_KEYBOARD_DID_CHANGE);
-        canvas->addObserver(this, CANVAS_POINTER_DID_CHANGE);
-        canvas->addObserver(this, CANVAS_MOUSE_DID_CHANGE);
-        
-        canvas->addObserver(this, CANVAS_DID_COPY);
-        canvas->addObserver(this, CANVAS_DID_PASTE);
     }
     
     if (controlBus)
@@ -229,26 +248,9 @@ void Monitor::update()
         canvas->postMessage(this, CANVAS_CONFIGURE_DISPLAY, &configuration);
 }
 
-void Monitor::dispose()
-{
-    if (canvas)
-    {
-        canvas->removeObserver(this, CANVAS_UNICODECHAR_WAS_SENT);
-        canvas->removeObserver(this, CANVAS_KEYBOARD_DID_CHANGE);
-        canvas->removeObserver(this, CANVAS_POINTER_DID_CHANGE);
-        canvas->removeObserver(this, CANVAS_MOUSE_DID_CHANGE);
-        
-        canvas->removeObserver(this, CANVAS_DID_COPY);
-        canvas->removeObserver(this, CANVAS_DID_PASTE);
-    }
-    
-    if (device)
-        device->postMessage(this, DEVICE_DESTROY_CANVAS, &canvas);
-}
-
 bool Monitor::postMessage(OEComponent *sender, int message, void *data)
 {
-    if (canvas && (powerState != CONTROLBUS_POWERSTATE_OFF))
+    if (canvas)
         return canvas->postMessage(sender, message, data);
     
     return false;

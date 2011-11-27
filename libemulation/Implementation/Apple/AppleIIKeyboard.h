@@ -21,6 +21,13 @@ typedef enum
     APPLEIIKEYBOARD_TYPE_FULLASCII,
 } AppleIIKeyboardType;
 
+typedef enum
+{
+    APPLEIIKEYBOARD_NORMAL,
+    APPLEIIKEYBOARD_RESET,
+    APPLEIIKEYBOARD_RESTART,
+} AppleIIKeyboardState;
+
 class AppleIIKeyboard : public OEComponent
 {
 public:
@@ -29,24 +36,27 @@ public:
 	bool setValue(string name, string value);
 	bool getValue(string name, string& value);
 	bool setRef(string name, OEComponent *ref);
-	
+	void update();
+    
     void notify(OEComponent *sender, int notification, void *data);
     
 	OEUInt8 read(OEAddress address);
 	void write(OEAddress address, OEUInt8 value);
 	
 private:
+	AppleIIKeyboardType type;
+    
     OEComponent *controlBus;
     OEComponent *floatingBus;
     OEComponent *gamePort;
 	OEComponent *monitor;
     
-	AppleIIKeyboardType type;
-    
     OEUInt8 keyLatch;
+    AppleIIKeyboardState state;
     
     queue<OEUInt8> pasteBuffer;
     
+    void updateShiftKeyMod();
     void sendKey(CanvasUnicodeChar key);
     void paste(wstring *s);
     void emptyPasteBuffer();

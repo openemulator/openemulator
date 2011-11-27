@@ -1,6 +1,8 @@
 ==1.0.2==
-* Implement JoystickMapper buttons and relative axes
+* Test CTRL+ALT canvas capture
+* Test CTRL+COMMAND+BACKSPACE and bezel not appearing some times
 * Optimize AppleIIVideo
+* Implement hires bit 7 left border
 * Implement Apple II
 
 ==1.0.3==

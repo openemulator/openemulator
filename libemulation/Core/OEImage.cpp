@@ -81,7 +81,11 @@ OEImageFormat OEImage::getFormat()
 
 void OEImage::setSize(OESize value)
 {
-    setSize(value, 0);
+    size = value;
+    
+    pixels.resize(getBytesPerRow() * size.height);
+    
+    memset(getPixels(), 0, getBytesPerRow() * size.height);
 }
 
 OESize OEImage::getSize()

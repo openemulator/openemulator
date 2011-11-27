@@ -1,4 +1,11 @@
 ==Ongoing==
+* Implemented Apple II shift key mod
+* Added keyboard modifiers to the canvas interface
+* Implemented Apple II CTRL+BACKSPACE and CTRL+COMMAND+BACKSPACE
+* Added update() call on addDocument/removeDevice
+* Fixed Apple II NTSC/PAL switching
+* Fixed mouse tracking in capture mode
+* Implemented JoystickMapper buttons and relative axes
 * Implemented JoystickMapper
 * Refactorized joystick interface
 * Implemented Apple Game Controllers

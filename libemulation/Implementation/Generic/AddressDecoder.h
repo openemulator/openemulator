@@ -18,7 +18,7 @@
 #include "MemoryInterface.h"
 
 typedef list<MemoryMap> AddressDecoderMaps;
-typedef map<string, string> AddressDecoderConf;
+typedef map<string, string> AddressDecoderMap;
 typedef map<string, OEComponent *> AddressDecoderRef;
 
 class AddressDecoder : public OEComponent
@@ -38,10 +38,10 @@ public:
 private:
     OEAddress addressSize;
     OEAddress blockSize;
-    AddressDecoderConf conf;
+    AddressDecoderMap confMap;
     
     OEComponent *floatingBus;
-    AddressDecoderRef ref;
+    AddressDecoderRef confRef;
     
     AddressDecoderMaps pendingMaps;
     
@@ -51,8 +51,8 @@ private:
     OEAddress addressMask;
     
     bool getMemoryMap(MemoryMap& theMap, OEComponent *component, string value);
-    bool mapRef(OEComponent *component, string conf);
     void mapMemory(MemoryMap *theMap);
+    bool mapConf(OEComponent *component, string conf);
 };
 
 #endif

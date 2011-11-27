@@ -32,11 +32,7 @@ Apple1IO::Apple1IO()
 bool Apple1IO::setValue(string name, string value)
 {
     if (name == "terminalSpeed")
-    {
         enhancedTerminalSpeed = (value == "Enhanced");
-        
-        sendChar();
-    }
     else if (name == "keyboardType")
         fullASCIIKeyboard = (value == "Full ASCII");
     else
@@ -109,6 +105,11 @@ bool Apple1IO::init()
     terminalChar &= 0x7f;
     
     return true;
+}
+
+void Apple1IO::update()
+{
+    sendChar();
 }
 
 void Apple1IO::notify(OEComponent *sender, int notification, void *data)

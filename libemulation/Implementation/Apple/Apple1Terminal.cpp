@@ -90,10 +90,10 @@ bool Apple1Terminal::setRef(string name, OEComponent *ref)
     if (name == "device")
     {
         if (device)
-            device->removeObserver(this, DEVICE_EVENT_DID_OCCUR);
+            device->removeObserver(this, DEVICE_DID_CHANGE);
         device = ref;
         if (device)
-            device->addObserver(this, DEVICE_EVENT_DID_OCCUR);
+            device->addObserver(this, DEVICE_DID_CHANGE);
     }
     else if (name == "controlBus")
     {
@@ -116,10 +116,10 @@ bool Apple1Terminal::setRef(string name, OEComponent *ref)
     else if (name == "monitorDevice")
     {
         if (monitorDevice)
-            monitorDevice->removeObserver(this, DEVICE_EVENT_DID_OCCUR);
+            monitorDevice->removeObserver(this, DEVICE_DID_CHANGE);
         monitorDevice = ref;
         if (monitorDevice)
-            monitorDevice->addObserver(this, DEVICE_EVENT_DID_OCCUR);
+            monitorDevice->addObserver(this, DEVICE_DID_CHANGE);
     }
     else if (name == "monitor")
     {
@@ -135,8 +135,6 @@ bool Apple1Terminal::setRef(string name, OEComponent *ref)
             monitor->addObserver(this, CANVAS_UNICODECHAR_WAS_SENT);
             monitor->addObserver(this, CANVAS_DID_COPY);
             monitor->addObserver(this, CANVAS_DID_PASTE);
-            
-            canvasShouldUpdate = true;
         }
     }
     else
@@ -203,6 +201,11 @@ bool Apple1Terminal::init()
     scheduleTimer();
     
     return true;
+}
+
+void Apple1Terminal::update()
+{
+    canvasShouldUpdate = true;
 }
 
 void Apple1Terminal::dispose()

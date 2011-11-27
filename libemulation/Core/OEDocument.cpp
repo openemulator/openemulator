@@ -10,6 +10,26 @@
 
 #include "OEDocument.h"
 
+string OESetDeviceId(string id, string deviceId)
+{
+    size_t dotIndex = id.find_first_of('.');
+    
+    if (dotIndex == string::npos)
+        return deviceId;
+    else
+        return deviceId + "." + id.substr(dotIndex + 1);
+}
+
+string OEGetDeviceId(string id)
+{
+    size_t dotIndex = id.find_first_of('.');
+    
+    if (dotIndex == string::npos)
+        return id;
+    
+    return id.substr(0, dotIndex);
+}
+
 OEDocument::OEDocument()
 {
     is_open = false;
@@ -176,8 +196,6 @@ void OEDocument::close()
     
     package = NULL;
 }
-
-
 
 OEHeaderInfo OEDocument::getHeaderInfo()
 {
@@ -356,9 +374,9 @@ bool OEDocument::removeDevice(string deviceId)
     {
         OEPortInfo port = *i;
         
-        if (getDeviceId(port.ref) == deviceId)
+        if (OEGetDeviceId(port.ref) == deviceId)
             ports.push_back(port);
-        else if (getDeviceId(port.id) == deviceId)
+        else if (OEGetDeviceId(port.id) == deviceId)
             connectors.push_back(port);
     }
     
@@ -390,9 +408,9 @@ bool OEDocument::removeDevice(string deviceId)
              i++)
         {
             OEPortInfo port = *i;
-            if ((getDeviceId(port.id) == deviceId) &&
+            if ((OEGetDeviceId(port.id) == deviceId) &&
                 (port.ref != ""))
-                removeDevice(getDeviceId(port.ref));
+                removeDevice(OEGetDeviceId(port.ref));
         }
     }
     
@@ -422,29 +440,6 @@ OEIds OEDocument::getDeviceIds()
     
     return deviceIds;
 }
-
-void OEDocument::setDeviceId(string& id, string deviceId)
-{
-    size_t dotIndex = id.find_first_of('.');
-    
-    if (dotIndex == string::npos)
-        id = deviceId;
-    else
-        id = deviceId + "." + id.substr(dotIndex + 1);
-}
-
-string OEDocument::getDeviceId(string id)
-{
-    size_t dotIndex = id.find_first_of('.');
-    
-    if (dotIndex == string::npos)
-        return id;
-    
-    return id.substr(0, dotIndex);
-}
-
-
-
 
 bool OEDocument::validateDocument()
 {
@@ -502,8 +497,6 @@ void OEDocument::destroyDevice(string deviceIds)
 {
 }
 
-
-
 xmlDocPtr OEDocument::getXMLDoc()
 {
     return doc;
@@ -546,13 +539,10 @@ void OEDocument::remapNodeProperty(OEIdMap& deviceIdMap, xmlNodePtr node, string
     if (hasNodeProperty(node, property))
     {
         string id = getNodeProperty(node, property);
-        string deviceId = getDeviceId(id);
+        string deviceId = OEGetDeviceId(id);
         
         if (deviceIdMap.count(deviceId))
-        {
-            setDeviceId(id, deviceIdMap[deviceId]);
-            setNodeProperty(node, property, id);
-        }
+            setNodeProperty(node, property, OESetDeviceId(id, deviceIdMap[deviceId]));
     }
 }
 
@@ -591,12 +581,9 @@ void OEDocument::remapConnections(OEIdMap& deviceIdMap, OEIdMap& connections)
         string srcId = i->first;
         string destId = i->second;
         
-        string deviceId = getDeviceId(destId);
+        string deviceId = OEGetDeviceId(destId);
         if (deviceIdMap.count(deviceId))
-        {
-            setDeviceId(destId, deviceIdMap[deviceId]);
-            connections[srcId] = destId;
-        }
+            connections[srcId] = OESetDeviceId(destId, deviceIdMap[deviceId]);
     }
 }
 
@@ -617,7 +604,7 @@ xmlNodePtr OEDocument::getLastNode(string deviceId)
         if (id == "")
             continue;
         
-        if (getDeviceId(id) == deviceId)
+        if (OEGetDeviceId(id) == deviceId)
             lastNode = node;
         
         lastDocNode = node;
@@ -649,12 +636,12 @@ string OEDocument::followDeviceChain(string deviceId, vector<string>& visitedIds
         {
             string id = getNodeProperty(node, "id");
             
-            if (getDeviceId(id) == deviceId)
+            if (OEGetDeviceId(id) == deviceId)
             {
                 string ref = getNodeProperty(node, "ref");
                 
                 if (ref != "")
-                    lastDeviceId = followDeviceChain(getDeviceId(ref), visitedIds);
+                    lastDeviceId = followDeviceChain(OEGetDeviceId(ref), visitedIds);
             }
         }
     }
@@ -681,12 +668,12 @@ xmlNodePtr OEDocument::getInsertionNode(string portId)
             if (id == portId)
                 break;
             
-            if (getDeviceId(id) == getDeviceId(portId))
+            if (OEGetDeviceId(id) == OEGetDeviceId(portId))
             {
                 string ref = getNodeProperty(node, "ref");
                 
                 if (ref != "")
-                    previousDeviceId = getDeviceId(ref);
+                    previousDeviceId = OEGetDeviceId(ref);
             }
         }
     }
@@ -698,7 +685,7 @@ xmlNodePtr OEDocument::getInsertionNode(string portId)
         insertDeviceId = followDeviceChain(previousDeviceId, visitedIds);
     }
     else
-        insertDeviceId = getDeviceId(portId);
+        insertDeviceId = OEGetDeviceId(portId);
     
     // Return last node of the insertion point
     return getLastNode(insertDeviceId);
@@ -778,9 +765,9 @@ OEInletMap OEDocument::getInlets(xmlDocPtr doc, OEIdMap& connections, string nod
                 string connectorId = i->second;
                 
                 if (id == portId)
-                    addInlets(inletMap, getDeviceId(connectorId), node->children);
+                    addInlets(inletMap, OEGetDeviceId(connectorId), node->children);
                 else if (id == connectorId)
-                    addInlets(inletMap, getDeviceId(portId), node->children);
+                    addInlets(inletMap, OEGetDeviceId(portId), node->children);
             }
         }
     }
@@ -855,7 +842,7 @@ void OEDocument::disconnectDevice(string deviceId)
         {
             string ref = getNodeProperty(node, "ref");
             
-            if (getDeviceId(ref) == deviceId)
+            if (OEGetDeviceId(ref) == deviceId)
                 setNodeProperty(node, "ref", "");
         }
         else if (getNodeName(node) == "component")
@@ -868,7 +855,7 @@ void OEDocument::disconnectDevice(string deviceId)
                 {
                     string ref = getNodeProperty(propertyNode, "ref");
                     
-                    if (getDeviceId(ref) == deviceId)
+                    if (OEGetDeviceId(ref) == deviceId)
                         setNodeProperty(propertyNode, "ref", "");
                 }
             }
@@ -888,7 +875,7 @@ void OEDocument::deleteDevice(string deviceId)
         
         if (id != "")
         {
-            if (getDeviceId(id) == deviceId)
+            if (OEGetDeviceId(id) == deviceId)
             {
                 xmlNodePtr next = node->next;
                 
@@ -938,11 +925,11 @@ string OEDocument::getLocationLabel(string deviceId, vector<string>& visitedIds)
             string ref = getNodeProperty(node, "ref");
             string label = getNodeProperty(node, "label");
             
-            if (getDeviceId(ref) == deviceId)
+            if (OEGetDeviceId(ref) == deviceId)
             {
                 if (label != "")
                     label = " " + label;
-                return getLocationLabel(getDeviceId(portId), visitedIds) + label;
+                return getLocationLabel(OEGetDeviceId(portId), visitedIds) + label;
             }
         }
     }

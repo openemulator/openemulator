@@ -23,7 +23,6 @@ public:
     bool setRef(string name, OEComponent *ref);
     bool init();
     void update();
-    void dispose();
     
     bool postMessage(OEComponent *sender, int message, void *data);
     

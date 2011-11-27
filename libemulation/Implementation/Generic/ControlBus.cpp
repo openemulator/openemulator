@@ -57,7 +57,7 @@ bool ControlBus::setValue(string name, string value)
         cpuClockMultiplier = getFloat(value);
     else if (name == "powerState")
     {
-        if (value.size() >= 2)
+        if (value.substr(0, 1) == "S")
             powerState = (ControlBusPowerState) getInt(value.substr(1));
     }
     else if (name == "resetOnPowerOn")
@@ -98,14 +98,16 @@ bool ControlBus::setRef(string name, OEComponent *ref)
         {
             if (powerState == CONTROLBUS_POWERSTATE_ON)
                 device->postMessage(this, DEVICE_CLEAR_ACTIVITY, NULL);
-            device->removeObserver(this, DEVICE_EVENT_DID_OCCUR);
+            
+            device->removeObserver(this, DEVICE_DID_CHANGE);
         }
         device = ref;
         if (device)
         {
             if (powerState == CONTROLBUS_POWERSTATE_ON)
                 device->postMessage(this, DEVICE_ASSERT_ACTIVITY, NULL);
-            device->addObserver(this, DEVICE_EVENT_DID_OCCUR);
+            
+            device->addObserver(this, DEVICE_DID_CHANGE);
         }
     }
     else if (name == "audio")
@@ -129,22 +131,26 @@ bool ControlBus::init()
     if (!device)
     {
         logMessage("device not connected");
+        
         return false;
     }
     
     if (!audio)
     {
         logMessage("audio not connected");
+        
         return false;
     }
     
     if (!cpu)
     {
         logMessage("cpu not connected");
+        
         return false;
     }
     
     setPowerState(powerState);
+    
     if (powerState == CONTROLBUS_POWERSTATE_ON)
         device->postMessage(this, DEVICE_ASSERT_ACTIVITY, NULL);
     
@@ -167,6 +173,7 @@ bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
             
         case CONTROLBUS_ASSERT_RESET:
             resetCount++;
+            
             if (resetCount == 1)
                 postNotification(this, CONTROLBUS_RESET_DID_ASSERT, NULL);
             
@@ -174,6 +181,7 @@ bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
             
         case CONTROLBUS_CLEAR_RESET:
             resetCount--;
+            
             if (resetCount == 0)
                 postNotification(this, CONTROLBUS_RESET_DID_CLEAR, NULL);
             
@@ -181,6 +189,7 @@ bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
             
         case CONTROLBUS_ASSERT_IRQ:
             irqCount++;
+            
             if (irqCount == 1)
                 postNotification(this, CONTROLBUS_IRQ_DID_ASSERT, NULL);
             
@@ -188,6 +197,7 @@ bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
             
         case CONTROLBUS_CLEAR_IRQ:
             irqCount--;
+            
             if (irqCount == 0)
                 postNotification(this, CONTROLBUS_IRQ_DID_CLEAR, NULL);
             
@@ -195,6 +205,7 @@ bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
             
         case CONTROLBUS_ASSERT_NMI:
             nmiCount++;
+            
             if (nmiCount == 1)
                 postNotification(this, CONTROLBUS_NMI_DID_ASSERT, NULL);
             
@@ -202,6 +213,7 @@ bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
             
         case CONTROLBUS_CLEAR_NMI:
             nmiCount--;
+            
             if (nmiCount == 0)
                 postNotification(this, CONTROLBUS_NMI_DID_CLEAR, NULL);
             
@@ -378,7 +390,9 @@ void ControlBus::setPowerState(ControlBusPowerState powerState)
             stateLabel = "Unknown";
             break;
     }
+    
     device->postMessage(this, DEVICE_SET_STATELABEL, &stateLabel);
+    
     device->postMessage(this, DEVICE_UPDATE, NULL);
     
     if ((lastPowerState == CONTROLBUS_POWERSTATE_ON) &&

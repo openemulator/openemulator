@@ -11,8 +11,8 @@
         <inlet ref="aONE.terminal" property="monitorDevice" outletRef=""/>
         <inlet ref="aONE.terminal" property="monitor" outletRef="monitor"/>
     </port>
-    <port id="aONE.slot1" ref="" type="Apple-1 Expansion Port" group="expansions" label="Expansion Port" image="images/Connectors/Edge44.png"/>
-    <port id="aONE.slot2" ref="" type="Apple-1 Expansion Port" group="expansions" label="Expansion Port" image="images/Connectors/Edge44.png"/>
+    <port id="aONE.slot1" ref="appleACI" type="Apple-1 Expansion Port" group="expansions" label="Expansion Port" image="images/Connectors/Edge44.png"/>
+    <port id="aONE.slot2" ref="rdCFFA1" type="Apple-1 Expansion Port" group="expansions" label="Expansion Port" image="images/Connectors/Edge44.png"/>
     <component id="aONE.controlBus" class="ControlBus">
         <property name="device" ref="aONE"/>
         <property name="audio" ref="audio"/>
@@ -109,7 +109,7 @@
         <property name="monitor" ref="appleMonitorII.monitor"/>
         <property name="font" data="${resourcePath}/roms/Achatz/A-ONE Video ROM.bin"/>
     </component>
-    <component id="aONE.muxE000" class="Mux">
+    <component id="aONE.muxE000" class="AddressMux">
         <property name="refRAM" ref="aONE.ram"/>
         <property name="refROM" ref="aONE.rom"/>
         <property name="sel" value="ROM"/>
@@ -144,6 +144,54 @@
         <property name="displayScanlineLevel" value="0.5"/>
         <property name="displayCenterLighting" value="0.5"/>
         <property name="displayLuminanceGain" value="1.5"/>
+    </component>
+    
+    <device id="appleACI" label="Apple-1 Cassette Interface Card" image="images/Apple/Apple-1 Cassette Interface Card.png">
+    </device>
+    <connector id="appleACI.connector" type="Apple-1 Expansion Port">
+        <inlet ref="appleACI.audioCodec" property="controlBus" outletRef="controlBus"/>
+        <inlet ref="appleACI.io" property="mmu" outletRef="mmu"/>
+    </connector>
+    <component id="appleACI.io" class="Apple1ACI">
+        <property name="rom" ref="appleACI.rom"/>
+        <property name="mmu" ref="aONE.mmu"/>
+        <property name="audioCodec" ref="appleACI.audioCodec"/>
+        <property name="noiseRejection" value="5"/>
+    </component>
+    <component id="appleACI.audioCodec" class="AudioCodec">
+        <property name="audio" ref="audio"/>
+        <property name="controlBus" ref="aONE.controlBus"/>
+        <property name="timeAccuracy" value="0.000001"/>
+        <property name="filterSize" value="17"/>
+        <property name="lowFrequency" value="20"/>
+        <property name="highFrequency" value="10000"/>
+    </component>
+    <component id="appleACI.rom" class="ROM">
+        <property name="image" data="${resourcePath}/roms/Apple/Apple-1 ACI ROM.bin"/>
+    </component>
+
+    <device id="rdCFFA1" label="R&amp;D CFFA1" image="images/R&amp;D/R&amp;D CFFA1.png">
+        <setting ref="rdCFFA1.io" name="forceWriteProtected" label="Force Write Protected" type="checkbox"/>
+    </device>
+    <connector id="rdCFFA1.connector" type="Apple-1 Expansion Port">
+        <inlet ref="rdCFFA1.ram" property="controlBus" outletRef="controlBus"/>
+        <inlet ref="rdCFFA1.io" property="mmu" outletRef="mmu"/>
+    </connector>
+    <component id="rdCFFA1.io" class="RDCFFA1">
+        <property name="device" ref="rdCFFA1"/>
+        <property name="ram" ref="rdCFFA1.ram"/>
+        <property name="rom" ref="rdCFFA1.rom"/>
+        <property name="mmu" ref="aONE.mmu"/>
+        <property name="image" value=""/>
+        <property name="forceWriteProtected" value="0"/>
+    </component>
+    <component id="rdCFFA1.ram" class="RAM">
+        <property name="controlBus" ref="aONE.controlBus"/>
+        <property name="image" data="${packagePath}/${id}.bin"/>
+        <property name="size" value="0x8000"/>
+    </component>
+    <component id="rdCFFA1.rom" class="ROM">
+        <property name="image" data="${resourcePath}/roms/R&amp;D/CFFA1V1.0.bin"/>
     </component>
     
 </edl>

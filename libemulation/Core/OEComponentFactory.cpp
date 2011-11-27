@@ -12,6 +12,7 @@
 
 // FACTORY_INCLUDE_START - Do not modify this section
 #include "AddressDecoder.h"
+#include "AddressMux.h"
 #include "AddressOffset.h"
 #include "AudioCodec.h"
 #include "ControlBus.h"
@@ -19,7 +20,6 @@
 #include "JoystickMapper.h"
 #include "MMU.h"
 #include "Monitor.h"
-#include "Mux.h"
 #include "RAM.h"
 #include "ROM.h"
 
@@ -60,6 +60,7 @@ OEComponent *OEComponentFactory::construct(const string& className)
 {
     // FACTORY_CODE_START - Do not modify this section
     matchComponent(AddressDecoder);
+    matchComponent(AddressMux);
     matchComponent(AddressOffset);
     matchComponent(AudioCodec);
     matchComponent(ControlBus);
@@ -67,7 +68,6 @@ OEComponent *OEComponentFactory::construct(const string& className)
     matchComponent(JoystickMapper);
     matchComponent(MMU);
     matchComponent(Monitor);
-    matchComponent(Mux);
     matchComponent(RAM);
     matchComponent(ROM);
     

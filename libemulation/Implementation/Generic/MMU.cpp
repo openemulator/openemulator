@@ -23,7 +23,7 @@ MMU::MMU()
 bool MMU::setValue(string name, string value)
 {
 	if (name.substr(0, 3) == "map")
-		conf[name.substr(3)] = value;
+		confMap[name.substr(3)] = value;
 	else
 		return false;
 	
@@ -35,7 +35,7 @@ bool MMU::setRef(string name, OEComponent *ref)
     if (name == "addressDecoder")
         addressDecoder = ref;
 	else if (name.substr(0, 3) == "ref")
-		this->ref[name.substr(3)] = ref;
+		confRef[name.substr(3)] = ref;
 	else
 		return false;
 	
@@ -51,18 +51,18 @@ bool MMU::init()
         return false;
     }
     
-	for (MMUConf::iterator i = conf.begin();
-		 i != conf.end();
+	for (MMUMap::iterator i = confMap.begin();
+		 i != confMap.end();
 		 i++)
 	{
-		if (!ref.count(i->first))
+		if (!confRef.count(i->first))
 		{
 			logMessage("invalid address range '" + i->first + "'");
             
 			return false;
 		}
         
- 		if (!mapRef(ref[i->first], i->second))
+ 		if (!mapConf(confRef[i->first], i->second))
 			return false;
 	}
     
@@ -134,9 +134,9 @@ bool MMU::getMemoryMap(MemoryMap& decoderMap,
 	return true;
 }
 
-bool MMU::mapRef(OEComponent *component, string conf)
+bool MMU::mapConf(OEComponent *component, string value)
 {
-    vector<string> confItem = strsplit(conf, ',');
+    vector<string> confItem = strsplit(value, ',');
     
     for (vector<string>::iterator i = confItem.begin();
          i != confItem.end();
@@ -146,7 +146,7 @@ bool MMU::mapRef(OEComponent *component, string conf)
         
 		if (!getMemoryMap(memoryMap, component, *i))
 		{
-			logMessage("invalid map '" + conf + "'");
+			logMessage("invalid map '" + value + "'");
             
 			return false;
 		}

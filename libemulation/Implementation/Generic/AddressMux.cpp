@@ -8,14 +8,14 @@
  * Multiplexes several components.
  */
 
-#include "Mux.h"
+#include "AddressMux.h"
 
-Mux::Mux()
+AddressMux::AddressMux()
 {
     component = NULL;
 }
 
-bool Mux::setValue(string name, string value)
+bool AddressMux::setValue(string name, string value)
 {
     if (name == "sel")
         sel = value;
@@ -25,7 +25,7 @@ bool Mux::setValue(string name, string value)
     return true;
 }
 
-bool Mux::getValue(string name, string& value)
+bool AddressMux::getValue(string name, string& value)
 {
     if (name == "sel")
         value = sel;
@@ -35,25 +35,25 @@ bool Mux::getValue(string name, string& value)
     return true;
 }
 
-bool Mux::setRef(string name, OEComponent *ref)
+bool AddressMux::setRef(string name, OEComponent *ref)
 {
 	if (name.substr(0, 3) == "ref")
-		this->ref[name.substr(3)] = ref;
+		confRef[name.substr(3)] = ref;
     else
         return false;
     
     return true;
 }
 
-void Mux::update()
+void AddressMux::update()
 {
-    if (ref.count(sel))
-        component = ref[sel];
+    if (confRef.count(sel))
+        component = confRef[sel];
     else
         component = NULL;
 }
 
-bool Mux::postMessage(OEComponent *sender, int message, void *data)
+bool AddressMux::postMessage(OEComponent *sender, int message, void *data)
 {
     if (component)
         return component->postMessage(sender, message, data);
@@ -61,7 +61,7 @@ bool Mux::postMessage(OEComponent *sender, int message, void *data)
     return false;
 }
 
-OEUInt8 Mux::read(OEAddress address)
+OEUInt8 AddressMux::read(OEAddress address)
 {
     if (component)
         return component->read(address);
@@ -69,13 +69,13 @@ OEUInt8 Mux::read(OEAddress address)
     return 0;
 }
 
-void Mux::write(OEAddress address, OEUInt8 value)
+void AddressMux::write(OEAddress address, OEUInt8 value)
 {
     if (component)
         component->write(address, value);
 }
 
-OEUInt16 Mux::read16(OEAddress address)
+OEUInt16 AddressMux::read16(OEAddress address)
 {
     if (component)
         return component->read16(address);
@@ -83,13 +83,13 @@ OEUInt16 Mux::read16(OEAddress address)
     return 0;
 }
 
-void Mux::write16(OEAddress address, OEUInt16 value)
+void AddressMux::write16(OEAddress address, OEUInt16 value)
 {
     if (component)
         component->write16(address, value);
 }
 
-OEUInt32 Mux::read32(OEAddress address)
+OEUInt32 AddressMux::read32(OEAddress address)
 {
     if (component)
         return component->read32(address);
@@ -97,13 +97,13 @@ OEUInt32 Mux::read32(OEAddress address)
     return 0;
 }
 
-void Mux::write32(OEAddress address, OEUInt32 value)
+void AddressMux::write32(OEAddress address, OEUInt32 value)
 {
     if (component)
         component->write32(address, value);
 }
 
-OEUInt64 Mux::read64(OEAddress address)
+OEUInt64 AddressMux::read64(OEAddress address)
 {
     if (component)
         return component->read64(address);
@@ -111,7 +111,7 @@ OEUInt64 Mux::read64(OEAddress address)
     return 0;
 }
 
-void Mux::write64(OEAddress address, OEUInt64 value)
+void AddressMux::write64(OEAddress address, OEUInt64 value)
 {
     if (component)
         component->write64(address, value);

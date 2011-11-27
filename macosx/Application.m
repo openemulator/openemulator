@@ -22,9 +22,13 @@
     if (([theEvent type] == NSKeyDown) ||
         ([theEvent type] == NSKeyUp))
     {
-        // If HELP key was pressed, or capture is active
+        // If HELP key was pressed,
+        // or backspace key was pressed,
+        // or capture is active
         // send event directly to key window
-        if (([theEvent keyCode] == 0x72) || capture)
+        if (([theEvent keyCode] == 0x33) ||
+            ([theEvent keyCode] == 0x72) ||
+            capture)
         {
             [[NSApp keyWindow] sendEvent:theEvent];
             

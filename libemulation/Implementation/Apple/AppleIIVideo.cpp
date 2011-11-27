@@ -120,10 +120,16 @@ bool AppleIIVideo::setRef(string name, OEComponent *ref)
     else if (name == "controlBus")
     {
         if (controlBus)
+        {
+            controlBus->removeObserver(this, CONTROLBUS_POWERSTATE_DID_CHANGE);
             controlBus->removeObserver(this, CONTROLBUS_TIMER_DID_FIRE);
+        }
         controlBus = ref;
         if (controlBus)
+        {
+            controlBus->addObserver(this, CONTROLBUS_POWERSTATE_DID_CHANGE);
             controlBus->addObserver(this, CONTROLBUS_TIMER_DID_FIRE);
+        }
     }
 	else if (name == "floatingBus")
 		floatingBus = ref;
@@ -136,14 +142,10 @@ bool AppleIIVideo::setRef(string name, OEComponent *ref)
     else if (name == "monitorDevice")
     {
         if (monitorDevice)
-            monitorDevice->removeObserver(this, DEVICE_EVENT_DID_OCCUR);
+            monitorDevice->removeObserver(this, DEVICE_DID_CHANGE);
         monitorDevice = ref;
         if (monitorDevice)
-        {
-            monitorDevice->addObserver(this, DEVICE_EVENT_DID_OCCUR);
-            
-            canvasShouldUpdate = true;
-        }
+            monitorDevice->addObserver(this, DEVICE_DID_CHANGE);
     }
 	else if (name == "monitor")
     {
@@ -218,12 +220,9 @@ bool AppleIIVideo::init()
 
 void AppleIIVideo::update()
 {
-    image.setSize(OEMakeSize(SCREEN_WIDTH,
-                             palTiming ? PAL_HEIGHT : NTSC_HEIGHT));
-    if (rev0 || !OEGetBit(mode, APPLEIIVIDEO_TEXT))
-        image.setSubcarrier(3579545);
-    else
-        image.setSubcarrier(0);
+    updateMode();
+    
+    image.setSize(OEMakeSize(SCREEN_WIDTH, palTiming ? PAL_HEIGHT : NTSC_HEIGHT));
     image.setSampleRate(14318180);
     
     imageOrigin = (palTiming ? (PAL_ORIGIN_Y * SCREEN_WIDTH + SCREEN_ORIGIN_X) :
@@ -235,6 +234,13 @@ void AppleIIVideo::update()
     controlBus->postMessage(this, CONTROLBUS_SET_CLOCKFREQUENCY, &clockFrequency);
     
     initHiresMap();
+    
+    if (monitor)
+    {
+        CanvasCaptureMode captureMode;
+        captureMode = CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_CLICK;
+        monitor->postMessage(this, CANVAS_SET_CAPTUREMODE, &captureMode);
+    }
     
     canvasShouldUpdate = true;
 }
@@ -490,16 +496,24 @@ void AppleIIVideo::initHCountMap()
         hCountMap[i + 1] = 64 + i;
 }
 
+void AppleIIVideo::updateMode()
+{
+    if (rev0 || !OEGetBit(mode, APPLEIIVIDEO_TEXT))
+        image.setSubcarrier(3579545);
+    else
+        image.setSubcarrier(0);
+}
+
 void AppleIIVideo::setMode(OEUInt32 mask, bool value)
 {
     OEUInt32 oldMode = mode;
     
     OESetBit(mode, mask, value);
     
-    update();
-    
     if (mode != oldMode)
     {
+        updateMode();
+        
         postNotification(this, APPLEIIVIDEO_MODE_DID_CHANGE, &mode);
         
         updateVideo();

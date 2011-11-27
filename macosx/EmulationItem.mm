@@ -63,7 +63,7 @@
              i++)
         {
             OEPortInfo port = *i;
-            string deviceId = emulation->getDeviceId(port.ref);
+            string deviceId = OEGetDeviceId(port.ref);
             OEComponent *theComponent = emulation->getComponent(deviceId);
             
             EmulationItem *item;
@@ -275,7 +275,7 @@
             theLabel = [@" " stringByAppendingString:theLabel];
         
         OEEmulation *emulation = (OEEmulation *)[theDocument emulation];
-        string deviceId = emulation->getDeviceId([uid cppString]);
+        string deviceId = OEGetDeviceId([uid cppString]);
         OEComponent *theDevice = emulation->getComponent(deviceId);
         if (theDevice)
         {
@@ -330,8 +330,6 @@
     [super dealloc];
 }
 
-
-
 - (BOOL)isGroup
 {
     return (type == EMULATIONITEM_GROUP);
@@ -347,8 +345,6 @@
     return children;
 }
 
-
-
 - (NSString *)label
 {
     return label;
@@ -358,8 +354,6 @@
 {
     return image;
 }
-
-
 
 - (NSString *)locationLabel
 {
@@ -371,14 +365,10 @@
     return stateLabel;
 }
 
-
-
 - (void *)device
 {
     return device;
 }
-
-
 
 - (NSInteger)numberOfSettings
 {
@@ -451,8 +441,6 @@
     return value;
 }
 
-
-
 - (BOOL)isRemovable
 {
     return (type == EMULATIONITEM_DEVICE) && ([locationLabel length] != 0);
@@ -469,8 +457,6 @@
     [document unlockEmulation];
 }
 
-
-
 - (BOOL)hasCanvases
 {
     if (canvases)
@@ -485,8 +471,6 @@
         for (int i = 0; i < [canvases count]; i++)
             [document showCanvas:[canvases objectAtIndex:i]];
 }
-
-
 
 - (BOOL)hasStorages
 {
@@ -631,8 +615,6 @@
     return;
 }
 
-
-
 - (BOOL)isPort
 {
     return (type == EMULATIONITEM_AVAILABLEPORT);
@@ -678,8 +660,6 @@
     return portType;
 }
 
-
-
 - (BOOL)isDeviceObserved
 {
     bool isObserved = false;
@@ -723,7 +703,7 @@
             return;
     }
     
-    ((OEComponent *)device)->postNotification((OEComponent *)device, DEVICE_EVENT_DID_OCCUR, &event);
+    ((OEComponent *)device)->postNotification((OEComponent *)device, DEVICE_DID_CHANGE, &event);
 }
 
 @end

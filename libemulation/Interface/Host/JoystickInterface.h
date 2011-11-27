@@ -33,7 +33,7 @@ typedef struct
     OEInt32 deviceId;
     OEInt32 usageId;
     float value;
-} JoystickHIDNotification;
+} JoystickHIDEvent;
 
 typedef enum
 {

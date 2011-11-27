@@ -96,6 +96,7 @@ private:
     void initHiresMap();
     void initHCountMap();
     
+    void updateMode();
     void setMode(OEUInt32 mask, bool value);
     AppleIIVideoCount getCount();
     OEUInt8 readFloatingBus();

@@ -34,10 +34,10 @@
 
 // Callback methods
 
-static void setCapture(void *userData, OpenGLCanvasCapture capture)
+static void setCapture(void *userData, OpenGLCanvasCapture value)
 {
-    BOOL isCapture = (capture != OPENGLCANVAS_CAPTURE_NONE);
-    BOOL enableMouseCursor = (capture !=
+    BOOL isCapture = (value != OPENGLCANVAS_CAPTURE_NONE);
+    BOOL enableMouseCursor = (value !=
                               OPENGLCANVAS_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR);
     
     [(Application *)NSApp setCapture:isCapture];
@@ -54,11 +54,11 @@ static void setCapture(void *userData, OpenGLCanvasCapture capture)
     CGAssociateMouseAndMouseCursorPosition(enableMouseCursor);
 }
 
-static void setKeyboardFlags(void *userData, OEUInt32 flags)
+static void setKeyboardLEDs(void *userData, CanvasKeyboardLEDs value)
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     
-    [(CanvasView *)userData setKeyboardFlags:flags];
+    [(CanvasView *)userData setKeyboardLEDs:value];
     
     [pool drain];
 }
@@ -317,6 +317,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     NSPoint mouseLocation = [self convertPoint:[[self window] convertScreenToBase:
                                                 [NSEvent mouseLocation]]
                                       fromView:nil];
+    
     return NSMouseInRect(mouseLocation, [self bounds], [self isFlipped]);
 }
 
@@ -324,6 +325,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 {
     CanvasWindowController *canvasWindowController = [[self window] windowController];
     OpenGLCanvas *canvas = (OpenGLCanvas *)[canvasWindowController canvas];
+    
+    if (!canvas)
+        return;
     
     NSSize contentSize = [[self enclosingScrollView] contentSize];
     
@@ -363,26 +367,31 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     Document *document = [canvasWindowController document];
     OpenGLCanvas *canvas = (OpenGLCanvas *)[canvasWindowController canvas];
     
+    if (!canvas)
+        return;
+    
     [document lockEmulation];
     
     ((OpenGLCanvas *)canvas)->becomeKeyWindow();
     
-    [self synchronizeKeyboardFlags];
+    [self synchronizeKeyboardLEDs];
     
     [document unlockEmulation];
     
     if ([self isMouseInView])
         [self mouseEntered:nil];
     
-    NSTrackingAreaOptions options = (NSTrackingMouseEnteredAndExited |
+/*    NSTrackingAreaOptions options = (NSTrackingMouseEnteredAndExited |
                                      NSTrackingMouseMoved |
                                      NSTrackingActiveInKeyWindow);
     NSTrackingArea *area = [[NSTrackingArea alloc] initWithRect:[self bounds]
                                                         options:options
                                                           owner:self
                                                        userInfo:nil];
+    
     [self addTrackingArea:area];
-    [area release];
+    
+    [area release];*/
 }
 
 - (void)windowDidResignKey
@@ -390,6 +399,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     CanvasWindowController *canvasWindowController = [[self window] windowController];
     Document *document = [canvasWindowController document];
     OpenGLCanvas *canvas = (OpenGLCanvas *)[canvasWindowController canvas];
+    
+    if (!canvas)
+        return;
     
     if ([self isMouseInView])
         [self mouseExited:nil];
@@ -400,9 +412,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     
     [document unlockEmulation];
     
-    for (NSTrackingArea *area in [self trackingAreas])
+/*    for (NSTrackingArea *area in [self trackingAreas])
         if ([area owner] == self)
-            [self removeTrackingArea:area];
+            [self removeTrackingArea:area];*/
 }
 
 // Drag and drop
@@ -457,6 +469,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
         Document *document = [canvasWindowController document];
         OpenGLCanvas *canvas = (OpenGLCanvas *)[canvasWindowController canvas];
         
+        if (!canvas)
+            return NO;
+        
         wstring clipboard = [[pasteboard stringForType:NSStringPboardType] cppWString];
         
         [document lockEmulation];
@@ -479,6 +494,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     CanvasWindowController *canvasWindowController = [[self window] windowController];
     OpenGLCanvas *canvas = (OpenGLCanvas *)[canvasWindowController canvas];
     
+    if (!canvas)
+        return;
+    
     id theObject = [change objectForKey:NSKeyValueChangeNewKey];
     
     if ([keyPath isEqualToString:@"OEVideoEnableShader"])
@@ -492,13 +510,16 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     CanvasWindowController *canvasWindowController = [[self window] windowController];
     OpenGLCanvas *canvas = (OpenGLCanvas *)[canvasWindowController canvas];
     
+    if (!canvas)
+        return;
+    
     GLint value = 1;
     [[self openGLContext] setValues:&value
                        forParameter:NSOpenGLCPSwapInterval]; 
     
     [[self openGLContext] makeCurrentContext];
     
-    canvas->open(setCapture, setKeyboardFlags, self);
+    canvas->open(setCapture, setKeyboardLEDs, self);
     
     [NSOpenGLContext clearCurrentContext];
     
@@ -519,6 +540,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 {
     CanvasWindowController *canvasWindowController = [[self window] windowController];
     OpenGLCanvas *canvas = (OpenGLCanvas *)[canvasWindowController canvas];
+    
+    if (!canvas)
+        return;
     
     [[self openGLContext] makeCurrentContext];
     
@@ -574,6 +598,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     Document *document = [canvasWindowController document];
     OpenGLCanvas *canvas = (OpenGLCanvas *)[canvasWindowController canvas];
     
+    if (!canvas)
+        return NO;
+    
     [document lockEmulation];
     
     CanvasMode value = canvas->getMode();
@@ -588,6 +615,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     CanvasWindowController *canvasWindowController = [[self window] windowController];
     Document *document = [canvasWindowController document];
     OpenGLCanvas *canvas = (OpenGLCanvas *)[canvasWindowController canvas];
+    
+    if (!canvas)
+        return NO;
     
     [document lockEmulation];
     
@@ -604,9 +634,14 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     Document *document = [canvasWindowController document];
     OpenGLCanvas *canvas = (OpenGLCanvas *)[canvasWindowController canvas];
     
+    if (!canvas)
+        return NSMakeSize(0, 0);
+    
+    OESize size = OEMakeSize(0, 0);
+    
     [document lockEmulation];
     
-    OESize size = canvas->getDefaultViewportSize();
+    size = canvas->getDefaultViewportSize();
     
     [document unlockEmulation];
     
@@ -630,6 +665,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 {
     CanvasWindowController *canvasWindowController = [[self window] windowController];
     OpenGLCanvas *canvas = (OpenGLCanvas *)[canvasWindowController canvas];
+    
+    if (!canvas)
+        return;
     
     [self enterContext];
     
@@ -657,6 +695,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     CanvasWindowController *canvasWindowController = [[self window] windowController];
     OpenGLCanvas *canvas = (OpenGLCanvas *)[canvasWindowController canvas];
     
+    if (!canvas)
+        return;
+    
     [self enterContext];
     
     OESize newCanvasSize = canvas->getSize();
@@ -679,6 +720,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     CanvasWindowController *canvasWindowController = [[self window] windowController];
     OpenGLCanvas *canvas = (OpenGLCanvas *)[canvasWindowController canvas];
     
+    if (!canvas)
+        return NSMakeSize(0, 0);
+        
     OESize size = canvas->getSize();
     
     return NSMakeSize(size.width, size.height);
@@ -688,6 +732,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 {
     CanvasWindowController *canvasWindowController = [[self window] windowController];
     OpenGLCanvas *canvas = (OpenGLCanvas *)[canvasWindowController canvas];
+    
+    if (!canvas)
+        return NSMakeSize(0, 0);
     
     OESize pixelDensity = canvas->getPixelDensity();
     
@@ -699,6 +746,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     CanvasWindowController *canvasWindowController = [[self window] windowController];
     OpenGLCanvas *canvas = (OpenGLCanvas *)[canvasWindowController canvas];
     
+    if (!canvas)
+        return NSMakeSize(0, 0);
+    
     OESize size = canvas->getPageSize();
     
     return NSMakeSize(size.width, size.height);
@@ -708,6 +758,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 {
     CanvasWindowController *canvasWindowController = [[self window] windowController];
     OpenGLCanvas *canvas = (OpenGLCanvas *)[canvasWindowController canvas];
+    
+    if (!canvas)
+        return nil;
     
     [self enterContext];
     
@@ -766,10 +819,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     Document *document = [canvasWindowController document];
     OpenGLCanvas *canvas = (OpenGLCanvas *)[canvasWindowController canvas];
     
-    // Discard private usage areas
-    if (((unicode >= 0xe000) && (unicode <= 0xf8ff)) ||
-        ((unicode >= 0xf0000) && (unicode <= 0xffffd)) ||
-        ((unicode >= 0x100000) && (unicode <= 0x10fffd)))
+    if (!canvas)
         return;
     
     [document lockEmulation];
@@ -787,6 +837,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     Document *document = [canvasWindowController document];
     OpenGLCanvas *canvas = (OpenGLCanvas *)[canvasWindowController canvas];
     
+    if (!canvas)
+        return;
+    
     if ((flags & mask) == (keyModifierFlags & mask))
         return;
     
@@ -799,17 +852,20 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     [document unlockEmulation];
 }
 
-- (void)synchronizeKeyboardFlags
+- (void)synchronizeKeyboardLEDs
 {
     CanvasWindowController *canvasWindowController = [[self window] windowController];
     OpenGLCanvas *canvas = (OpenGLCanvas *)[canvasWindowController canvas];
+    
+    if (!canvas)
+        return;
     
     CGEventRef event = CGEventCreate(NULL);
     CGEventFlags modifierFlags = CGEventGetFlags(event);
     CFRelease(event);
     
     bool hostCapsLock = modifierFlags & NSAlphaShiftKeyMask;
-    bool emulationCapsLock = OEGetBit(keyboardFlags, CANVAS_L_CAPSLOCK);
+    bool emulationCapsLock = OEGetBit(keyboardLEDs, CANVAS_KL_CAPSLOCK);
     if (hostCapsLock != emulationCapsLock)
     {
         if (!capsLockNotSynchronized)
@@ -824,11 +880,11 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
         capsLockNotSynchronized = false;
 }
 
-- (void)setKeyboardFlags:(int)theKeyboardFlags
+- (void)setKeyboardLEDs:(int)theKeyboardLEDs
 {
-    keyboardFlags = theKeyboardFlags;
+    keyboardLEDs = theKeyboardLEDs;
     
-    [self synchronizeKeyboardFlags];
+    [self synchronizeKeyboardLEDs];
 }
 
 - (void)keyDown:(NSEvent *)theEvent
@@ -836,6 +892,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     CanvasWindowController *canvasWindowController = [[self window] windowController];
     Document *document = [canvasWindowController document];
     OpenGLCanvas *canvas = (OpenGLCanvas *)[canvasWindowController canvas];
+    
+    if (!canvas)
+        return;
     
     NSString *characters = [theEvent characters];
     for (NSInteger i = 0; i < [characters length]; i++)
@@ -870,6 +929,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     CanvasWindowController *canvasWindowController = [[self window] windowController];
     Document *document = [canvasWindowController document];
     OpenGLCanvas *canvas = (OpenGLCanvas *)[canvasWindowController canvas];
+    
+    if (!canvas)
+        return;
     
     int usageId = [self getUsageId:[theEvent keyCode]];
     
@@ -907,7 +969,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     
     [document lockEmulation];
     
-    [self synchronizeKeyboardFlags];
+    [self synchronizeKeyboardLEDs];
     
     [document unlockEmulation];
 }
@@ -919,6 +981,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     CanvasWindowController *canvasWindowController = [[self window] windowController];
     Document *document = [canvasWindowController document];
     OpenGLCanvas *canvas = (OpenGLCanvas *)[canvasWindowController canvas];
+    
+    if (!canvas)
+        return;
     
     [document lockEmulation];
     
@@ -933,6 +998,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     Document *document = [canvasWindowController document];
     OpenGLCanvas *canvas = (OpenGLCanvas *)[canvasWindowController canvas];
     
+    if (!canvas)
+        return;
+    
     [document lockEmulation];
     
     canvas->exitMouse();
@@ -945,6 +1013,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     CanvasWindowController *canvasWindowController = [[self window] windowController];
     Document *document = [canvasWindowController document];
     OpenGLCanvas *canvas = (OpenGLCanvas *)[canvasWindowController canvas];
+    
+    if (!canvas)
+        return;
     
     NSPoint position = [NSEvent mouseLocation];
     
@@ -977,6 +1048,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     Document *document = [canvasWindowController document];
     OpenGLCanvas *canvas = (OpenGLCanvas *)[canvasWindowController canvas];
     
+    if (!canvas)
+        return;
+    
     [document lockEmulation];
     
     canvas->setMouseButton(0, true);
@@ -989,6 +1063,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     CanvasWindowController *canvasWindowController = [[self window] windowController];
     Document *document = [canvasWindowController document];
     OpenGLCanvas *canvas = (OpenGLCanvas *)[canvasWindowController canvas];
+    
+    if (!canvas)
+        return;
     
     [document lockEmulation];
     
@@ -1003,6 +1080,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     Document *document = [canvasWindowController document];
     OpenGLCanvas *canvas = (OpenGLCanvas *)[canvasWindowController canvas];
     
+    if (!canvas)
+        return;
+    
     [document lockEmulation];
     
     canvas->setMouseButton(1, true);
@@ -1015,6 +1095,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     CanvasWindowController *canvasWindowController = [[self window] windowController];
     Document *document = [canvasWindowController document];
     OpenGLCanvas *canvas = (OpenGLCanvas *)[canvasWindowController canvas];
+    
+    if (!canvas)
+        return;
     
     [document lockEmulation];
     
@@ -1029,6 +1112,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     Document *document = [canvasWindowController document];
     OpenGLCanvas *canvas = (OpenGLCanvas *)[canvasWindowController canvas];
     
+    if (!canvas)
+        return;
+    
     [document lockEmulation];
     
     canvas->setMouseButton((int) [theEvent buttonNumber], true);
@@ -1042,6 +1128,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     Document *document = [canvasWindowController document];
     OpenGLCanvas *canvas = (OpenGLCanvas *)[canvasWindowController canvas];
     
+    if (!canvas)
+        return;
+    
     [document lockEmulation];
     
     canvas->setMouseButton((int) [theEvent buttonNumber], false);
@@ -1054,6 +1143,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     CanvasWindowController *canvasWindowController = [[self window] windowController];
     Document *document = [canvasWindowController document];
     OpenGLCanvas *canvas = (OpenGLCanvas *)[canvasWindowController canvas];
+    
+    if (!canvas)
+        return;
     
     if ([self isPaperCanvas])
         return [super scrollWheel:theEvent];
@@ -1075,6 +1167,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     CanvasWindowController *canvasWindowController = [[self window] windowController];
     Document *document = [canvasWindowController document];
     OpenGLCanvas *canvas = (OpenGLCanvas *)[canvasWindowController canvas];
+    
+    if (!canvas)
+        return @"";
     
     wstring clipboard;
     
@@ -1122,6 +1217,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     Document *document = [canvasWindowController document];
     OpenGLCanvas *canvas = (OpenGLCanvas *)[canvasWindowController canvas];
     
+    if (!canvas)
+        return;
+    
     if (!text)
         return;
     
@@ -1155,6 +1253,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     Document *document = [canvasWindowController document];
     OpenGLCanvas *canvas = (OpenGLCanvas *)[canvasWindowController canvas];
     
+    if (!canvas)
+        return;
+    
     [document lockEmulation];
     
     canvas->doDelete();
@@ -1164,58 +1265,46 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 
 // System events
 
-- (void)sendPowerDown:(id)sender
+- (void)sendEvent:(int)value
 {
     CanvasWindowController *canvasWindowController = [[self window] windowController];
     OEComponent *device = (OpenGLCanvas *)[canvasWindowController device];
     
-    DeviceEvent event = DEVICE_POWERDOWN;
-    device->postNotification(device, DEVICE_EVENT_DID_OCCUR, &event);
+    if (!device)
+        return;
+    
+    DeviceEvent event = (DeviceEvent)value;
+    device->postNotification(device, DEVICE_DID_CHANGE, &event);
+}
+
+- (void)sendPowerDown:(id)sender
+{
+    [self sendEvent:DEVICE_POWERDOWN];
 }
 
 - (void)sendSleep:(id)sender
 {
-    CanvasWindowController *canvasWindowController = [[self window] windowController];
-    OEComponent *device = (OpenGLCanvas *)[canvasWindowController device];
-    
-    DeviceEvent event = DEVICE_SLEEP;
-    device->postNotification(device, DEVICE_EVENT_DID_OCCUR, &event);
+    [self sendEvent:DEVICE_SLEEP];
 }
 
 - (void)sendWakeUp:(id)sender
 {
-    CanvasWindowController *canvasWindowController = [[self window] windowController];
-    OEComponent *device = (OpenGLCanvas *)[canvasWindowController device];
-    
-    DeviceEvent event = DEVICE_WAKEUP;
-    device->postNotification(device, DEVICE_EVENT_DID_OCCUR, &event);
+    [self sendEvent:DEVICE_WAKEUP];
 }
 
 - (void)sendColdRestart:(id)sender
 {
-    CanvasWindowController *canvasWindowController = [[self window] windowController];
-    OEComponent *device = (OpenGLCanvas *)[canvasWindowController device];
-    
-    DeviceEvent event = DEVICE_COLDRESTART;
-    device->postNotification(device, DEVICE_EVENT_DID_OCCUR, &event);
+    [self sendEvent:DEVICE_COLDRESTART];
 }
 
 - (void)sendWarmRestart:(id)sender
 {
-    CanvasWindowController *canvasWindowController = [[self window] windowController];
-    OEComponent *device = (OpenGLCanvas *)[canvasWindowController device];
-    
-    DeviceEvent event = DEVICE_WARMRESTART;
-    device->postNotification(device, DEVICE_EVENT_DID_OCCUR, &event);
+    [self sendEvent:DEVICE_WARMRESTART];
 }
 
 - (void)sendDebuggerBreak:(id)sender
 {
-    CanvasWindowController *canvasWindowController = [[self window] windowController];
-    OEComponent *device = (OpenGLCanvas *)[canvasWindowController device];
-    
-    DeviceEvent event = DEVICE_DEBUGGERBREAK;
-    device->postNotification(device, DEVICE_EVENT_DID_OCCUR, &event);
+    [self sendEvent:DEVICE_DEBUGGERBREAK];
 }
 
 // Support for the text input system

@@ -1,3 +1,4 @@
+
 /**
  * libemulation
  * Canvas interface
@@ -29,8 +30,8 @@
 // Notifications:
 // * HID notifications use the CanvasHIDNotification structure
 // * Pointer coordinates are in image coordinates
-// * didCopy, didPaste is sent when copying/pasting (string)
-// * didDelete is sent when deleting
+// * didCopy, didPaste is sent when the user requests copy/paste (wstring)
+// * didDelete is sent when the user requests delete
 // * didVSync is called from the video thread after vertical sync (CanvasVSync)
 //   It should be used for posting images or for requesting redraw
 // * willDraw is called from the video thread when an OpenGL canvas will be
@@ -39,7 +40,7 @@
 
 // Multithreading, beware!
 // * didVSync and willDraw are sent from the drawing thread! Keep this in mind
-//   for synchronizing correctly.
+//   for managing threads correctly.
 
 #ifndef _CANVASINTERFACE_H
 #define _CANVASINTERFACE_H
@@ -50,8 +51,11 @@ typedef enum
 {
     CANVAS_SET_MODE,
     CANVAS_SET_CAPTUREMODE,
-    CANVAS_SET_KEYBOARDFLAGS,
     CANVAS_SET_BEZEL,
+    
+    CANVAS_SET_KEYBOARD_LEDS,
+    CANVAS_GET_KEYBOARD_FLAGS,
+    CANVAS_GET_KEYBOARD_ANYKEYDOWN,
     
     CANVAS_CONFIGURE_DISPLAY,
     CANVAS_CONFIGURE_PAPER,
@@ -95,25 +99,12 @@ typedef enum
     CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_ENTER,
 } CanvasCaptureMode;
 
-// Canvas keyboard flags
-typedef OEUInt32 CanvasKeyboardFlags;
-#define CANVAS_L_NUMLOCK	(1 << 0)
-#define CANVAS_L_CAPSLOCK	(1 << 1)
-#define CANVAS_L_SCROLLLOCK	(1 << 2)
-#define CANVAS_L_COMPOSE	(1 << 3)
-#define CANVAS_L_KANA		(1 << 4)
-#define CANVAS_L_POWER		(1 << 5)
-#define CANVAS_L_SHIFT		(1 << 6)
-
-// Canvas bezels
 typedef enum
 {
     CANVAS_BEZEL_NONE,
     CANVAS_BEZEL_POWER,
     CANVAS_BEZEL_PAUSE,
 } CanvasBezel;
-
-// Copy and paste use string
 
 // Display canvas configuration:
 // * displayResolution is the number of resolved pixels of the device (this
@@ -229,19 +220,121 @@ public:
     float viewportPixelDensity;
 };
 
-// Canvas HID notifications
+// Canvas HID notification events
 
 typedef struct
 {
     OEInt32 usageId;
     float value;
-} CanvasHIDNotification;
+} CanvasHIDEvent;
 
-#define CANVAS_KEYBOARD_KEY_NUM		256
-#define CANVAS_POINTER_BUTTON_NUM	8
-#define CANVAS_MOUSE_BUTTON_NUM		8
+// Canvas keyboard events
 
 typedef OEUInt32 CanvasUnicodeChar;
+
+typedef enum
+{
+    CANVAS_U_UP = 0xf700,
+    CANVAS_U_DOWN,
+    CANVAS_U_LEFT,
+    CANVAS_U_RIGHT,
+    CANVAS_U_F1,
+    CANVAS_U_F2,
+    CANVAS_U_F3,
+    CANVAS_U_F4,
+    CANVAS_U_F5,
+    CANVAS_U_F6,
+    CANVAS_U_F7,
+    CANVAS_U_F8,
+    CANVAS_U_F9,
+    CANVAS_U_F10,
+    CANVAS_U_F11,
+    CANVAS_U_F12,
+    CANVAS_U_F13,
+    CANVAS_U_F14,
+    CANVAS_U_F15,
+    CANVAS_U_F16,
+    CANVAS_U_F17,
+    CANVAS_U_F18,
+    CANVAS_U_F19,
+    CANVAS_U_F20,
+    CANVAS_U_F21,
+    CANVAS_U_F22,
+    CANVAS_U_F23,
+    CANVAS_U_F24,
+    CANVAS_U_F25,
+    CANVAS_U_F26,
+    CANVAS_U_F27,
+    CANVAS_U_F28,
+    CANVAS_U_F29,
+    CANVAS_U_F30,
+    CANVAS_U_F31,
+    CANVAS_U_F32,
+    CANVAS_U_F33,
+    CANVAS_U_F34,
+    CANVAS_U_F35,
+    CANVAS_U_INSERT,
+    CANVAS_U_DELETE,
+    CANVAS_U_HOME,
+    CANVAS_U_BEGIN,
+    CANVAS_U_END,
+    CANVAS_U_PAGEUP,
+    CANVAS_U_PAGEDOWN,
+    CANVAS_U_PRINTSCREEN,
+    CANVAS_U_SCROLLLOCK,
+    CANVAS_U_PAUSE,
+    CANVAS_U_SYSREQ,
+    CANVAS_U_BREAK,
+    CANVAS_U_RESET,
+    CANVAS_U_STOP,
+    CANVAS_U_MENU,
+    CANVAS_U_USER,
+    CANVAS_U_SYSTEM,
+    CANVAS_U_PRINT,
+    CANVAS_U_CLEARLINE,
+    CANVAS_U_CLEARDISPLAY,
+    CANVAS_U_INSERTLINE,
+    CANVAS_U_DELETELINE,
+    CANVAS_U_INSERTCHAR,
+    CANVAS_U_DELETECHAR,
+    CANVAS_U_PREV,
+    CANVAS_U_NEXT,
+    CANVAS_U_SELECT,
+    CANVAS_U_EXECUTE,
+    CANVAS_U_UNDO,
+    CANVAS_U_REDO,
+    CANVAS_U_FIND,
+    CANVAS_U_HELP,
+    CANVAS_U_MODESWITCH,
+} CanvasUnicodeFunctionKey;
+
+#define CANVAS_KEYBOARD_KEY_NUM		256
+
+typedef OEUInt32 CanvasKeyboardLEDs;
+
+#define CANVAS_KL_NUMLOCK       (1 << 0)
+#define CANVAS_KL_CAPSLOCK      (1 << 1)
+#define CANVAS_KL_SCROLLLOCK	(1 << 2)
+#define CANVAS_KL_COMPOSE       (1 << 3)
+#define CANVAS_KL_KANA          (1 << 4)
+#define CANVAS_KL_POWER         (1 << 5)
+#define CANVAS_KL_SHIFT         (1 << 6)
+
+typedef OEUInt32 CanvasKeyboardFlags;
+
+#define CANVAS_KF_LEFTCONTROL	(1 << 0)
+#define CANVAS_KF_LEFTSHIFT     (1 << 1)
+#define CANVAS_KF_LEFTALT       (1 << 2)
+#define CANVAS_KF_LEFTGUI       (1 << 3)
+#define CANVAS_KF_RIGHTCONTROL	(1 << 4)
+#define CANVAS_KF_RIGHTSHIFT	(1 << 5)
+#define CANVAS_KF_RIGHTALT		(1 << 6)
+#define CANVAS_KF_RIGHTGUI		(1 << 7)
+
+#define CANVAS_KF_CONTROL       (CANVAS_KF_LEFTCONTROL | CANVAS_KF_RIGHTCONTROL)
+#define CANVAS_KF_SHIFT         (CANVAS_KF_LEFTSHIFT | CANVAS_KF_RIGHTSHIFT)
+#define CANVAS_KF_ALT           (CANVAS_KF_LEFTALT | CANVAS_KF_RIGHTALT)
+#define CANVAS_KF_GUI           (CANVAS_KF_LEFTGUI | CANVAS_KF_RIGHTGUI)
 
 typedef enum
 {
@@ -464,6 +557,10 @@ typedef enum
     CANVAS_K_RIGHTGUI,
 } CanvasKeyboardUsageId;
 
+// Canvas pointer events
+
+#define CANVAS_POINTER_BUTTON_NUM	8
+
 typedef enum
 {
     CANVAS_P_PROXIMITY,
@@ -481,6 +578,10 @@ typedef enum
     CANVAS_P_BUTTON8,
 } CanvasPointerUsageId;
 
+// Canvas mouse events
+
+#define CANVAS_MOUSE_BUTTON_NUM		8
+
 typedef enum
 {
     CANVAS_M_RX,
@@ -496,6 +597,8 @@ typedef enum
     CANVAS_M_BUTTON7,
     CANVAS_M_BUTTON8,
 } CanvasMouseUsageId;
+
+// Canvas vsync events
 
 typedef struct
 {

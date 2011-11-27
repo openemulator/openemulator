@@ -43,6 +43,7 @@ bool AddressOffset::init()
     if (!component)
     {
         logMessage("component not connected");
+        
         return false;
     }
     

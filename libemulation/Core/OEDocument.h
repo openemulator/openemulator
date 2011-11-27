@@ -50,6 +50,9 @@ typedef vector<string> OEIds;
 typedef map<string, string> OEIdMap;
 typedef map<string, OEIdMap> OEInletMap;
 
+string OESetDeviceId(string id, string deviceId);
+string OEGetDeviceId(string id);
+
 class OEDocument
 {
 public:
@@ -69,9 +72,6 @@ public:
     bool removeDevice(string deviceId);
     
     OEIds getDeviceIds();
-    
-    void setDeviceId(string& id, string deviceId);
-    string getDeviceId(string id);
     
 protected:
     bool is_open;

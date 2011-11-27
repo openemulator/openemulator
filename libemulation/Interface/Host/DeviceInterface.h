@@ -57,7 +57,7 @@ typedef vector<DeviceSetting> DeviceSettings;
 
 typedef enum
 {
-    DEVICE_EVENT_DID_OCCUR,
+    DEVICE_DID_CHANGE,
 } DeviceNotification;
 
 typedef enum

@@ -143,7 +143,7 @@ void Apple1ACI::toggleSpeaker()
 {
     audioLevel = (audioLevel == 0x80) ? 0xc0 : 0x80;
     
-    // Write stereo
+    // Write in stereo
     audioCodec->write(0, audioLevel);
     audioCodec->write(1, audioLevel);
 }

@@ -147,7 +147,7 @@ OpenGLCanvas::OpenGLCanvas(string resourcePath)
     this->resourcePath = resourcePath;
     
     setCapture = NULL;
-    setKeyboardFlags = NULL;
+    setKeyboardLEDs = NULL;
     userData = NULL;
     
     isOpen = false;
@@ -193,11 +193,11 @@ void OpenGLCanvas::unlock()
 // Video
 
 void OpenGLCanvas::open(CanvasSetCapture setCapture,
-                        CanvasSetKeyboardFlags setKeyboardFlags,
+                        CanvasSetKeyboardLEDs setKeyboardLEDs,
                         void *userData)
 {
     this->setCapture = setCapture;
-    this->setKeyboardFlags = setKeyboardFlags;
+    this->setKeyboardLEDs = setKeyboardLEDs;
     this->userData = userData;
     
     initOpenGL();
@@ -1593,7 +1593,7 @@ OEImage OpenGLCanvas::readFramebuffer()
 
 void OpenGLCanvas::updateCapture(OpenGLCanvasCapture capture)
 {
-    //	log("updateCapture");
+    //	logMessage("updateCapture");
     
     if (this->capture == capture)
         return;
@@ -1616,27 +1616,27 @@ void OpenGLCanvas::resignKeyWindow()
     updateCapture(OPENGLCANVAS_CAPTURE_NONE);
 }
 
-void OpenGLCanvas::postHIDNotification(int notification, int usageId, float value)
+void OpenGLCanvas::postHIDEvent(int notification, int usageId, float value)
 {
-    CanvasHIDNotification data = {usageId, value};
+    CanvasHIDEvent hidEvent;
     
-    postNotification(this, notification, &data);
+    hidEvent.usageId = usageId;
+    hidEvent.value = value;
+    
+    postNotification(this, notification, &hidEvent);
 }
 
 void OpenGLCanvas::sendUnicodeChar(CanvasUnicodeChar unicodeChar)
 {
     //	logMessage("unicode " + getHexString(unicode));
     
-    postHIDNotification(CANVAS_UNICODECHAR_WAS_SENT, unicodeChar, 0);
+    postHIDEvent(CANVAS_UNICODECHAR_WAS_SENT, unicodeChar, 0);
 }
 
 void OpenGLCanvas::setKey(int usageId, bool value)
 {
     if (keyDown[usageId] == value)
         return;
-    
-    //	log("key " + getHexString(usageId) + ": " + getString(value));
-    //	log("keyDownCount " + getString(keyDownCount));
     
     keyDown[usageId] = value;
     keyDownCount += value ? 1 : -1;
@@ -1646,7 +1646,7 @@ void OpenGLCanvas::setKey(int usageId, bool value)
          keyDown[CANVAS_K_RIGHTALT]))
         ctrlAltWasPressed = true;
     
-    postHIDNotification(CANVAS_KEYBOARD_DID_CHANGE, usageId, value);
+    postHIDEvent(CANVAS_KEYBOARD_DID_CHANGE, usageId, value);
     
     if ((capture == OPENGLCANVAS_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR) &&
         !keyDownCount && ctrlAltWasPressed)
@@ -1659,6 +1659,9 @@ void OpenGLCanvas::setKey(int usageId, bool value)
         
         updateCapture(OPENGLCANVAS_CAPTURE_NONE);
     }
+    
+//    logMessage("key " + getHexString(usageId) + ": " + getString(value));
+//    logMessage("keyDownCount " + getString(keyDownCount));
 }
 
 void OpenGLCanvas::enterMouse()
@@ -1668,9 +1671,7 @@ void OpenGLCanvas::enterMouse()
     if (captureMode == CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_ENTER)
         updateCapture(OPENGLCANVAS_CAPTURE_KEYBOARD_AND_HIDE_MOUSE_CURSOR);
     
-    postHIDNotification(CANVAS_POINTER_DID_CHANGE,
-                        CANVAS_P_PROXIMITY,
-                        1);
+    postHIDEvent(CANVAS_POINTER_DID_CHANGE, CANVAS_P_PROXIMITY, 1);
 }
 
 void OpenGLCanvas::exitMouse()
@@ -1680,21 +1681,15 @@ void OpenGLCanvas::exitMouse()
     if (captureMode == CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_ENTER)
         updateCapture(OPENGLCANVAS_CAPTURE_NONE);
     
-    postHIDNotification(CANVAS_POINTER_DID_CHANGE,
-                        CANVAS_P_PROXIMITY,
-                        0);
+    postHIDEvent(CANVAS_POINTER_DID_CHANGE, CANVAS_P_PROXIMITY, 0);
 }
 
 void OpenGLCanvas::setMousePosition(float x, float y)
 {
     if (capture != OPENGLCANVAS_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR)
     {
-        postHIDNotification(CANVAS_POINTER_DID_CHANGE,
-                            CANVAS_P_X,
-                            x);
-        postHIDNotification(CANVAS_POINTER_DID_CHANGE,
-                            CANVAS_P_Y,
-                            y);
+        postHIDEvent(CANVAS_POINTER_DID_CHANGE, CANVAS_P_X, x);
+        postHIDEvent(CANVAS_POINTER_DID_CHANGE, CANVAS_P_Y, y);
     }
 }
 
@@ -1702,25 +1697,17 @@ void OpenGLCanvas::moveMouse(float rx, float ry)
 {
     if (capture == OPENGLCANVAS_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR)
     {
-        postHIDNotification(CANVAS_MOUSE_DID_CHANGE,
-                            CANVAS_M_RX,
-                            rx);
-        postHIDNotification(CANVAS_MOUSE_DID_CHANGE,
-                            CANVAS_M_RY,
-                            ry);
+        postHIDEvent(CANVAS_MOUSE_DID_CHANGE, CANVAS_M_RX, rx);
+        postHIDEvent(CANVAS_MOUSE_DID_CHANGE, CANVAS_M_RY, ry);
     }
 }
 
 void OpenGLCanvas::sendMouseWheelEvent(int index, float value)
 {
     if (capture == OPENGLCANVAS_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR)
-        postHIDNotification(CANVAS_MOUSE_DID_CHANGE,
-                            CANVAS_M_WHEELX + index,
-                            value);
+        postHIDEvent(CANVAS_MOUSE_DID_CHANGE, CANVAS_M_WHEELX + index, value);
     else
-        postHIDNotification(CANVAS_POINTER_DID_CHANGE,
-                            CANVAS_P_WHEELX + index,
-                            value);
+        postHIDEvent(CANVAS_POINTER_DID_CHANGE, CANVAS_P_WHEELX + index, value);
 }
 
 void OpenGLCanvas::setMouseButton(int index, bool value)
@@ -1732,23 +1719,21 @@ void OpenGLCanvas::setMouseButton(int index, bool value)
     mouseButtonDown[index] = value;
     
     if (capture == OPENGLCANVAS_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR)
-        postHIDNotification(CANVAS_MOUSE_DID_CHANGE,
-                            CANVAS_M_BUTTON1 + index,
-                            value);
+        postHIDEvent(CANVAS_MOUSE_DID_CHANGE, CANVAS_M_BUTTON1 + index, value);
     else if ((captureMode == CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_CLICK) &&
              (capture == OPENGLCANVAS_CAPTURE_NONE) &&
              (bezel == CANVAS_BEZEL_NONE) &&
-             (index == 0))
+             (index == 0) &&
+             value)
     {
         isBezelDrawRequired = true;
         isBezelCapture = true;
         bezelCaptureTime = getCurrentTime();
+        
         updateCapture(OPENGLCANVAS_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR);
     }
     else
-        postHIDNotification(CANVAS_POINTER_DID_CHANGE,
-                            CANVAS_P_BUTTON1 + index,
-                            value);
+        postHIDEvent(CANVAS_POINTER_DID_CHANGE, CANVAS_P_BUTTON1 + index, value);
 }
 
 void OpenGLCanvas::resetKeysAndButtons()
@@ -1970,6 +1955,22 @@ bool OpenGLCanvas::setPrintHead(OEPoint *point)
     return true;
 }
 
+CanvasKeyboardFlags OpenGLCanvas::getKeyboardFlags()
+{
+    CanvasKeyboardFlags flags = 0;
+    
+    OESetBit(flags, CANVAS_KF_LEFTCONTROL, keyDown[CANVAS_K_LEFTCONTROL]);
+    OESetBit(flags, CANVAS_KF_LEFTSHIFT, keyDown[CANVAS_K_LEFTSHIFT]);
+    OESetBit(flags, CANVAS_KF_LEFTALT, keyDown[CANVAS_K_LEFTALT]);
+    OESetBit(flags, CANVAS_KF_LEFTGUI, keyDown[CANVAS_K_LEFTGUI]);
+    OESetBit(flags, CANVAS_KF_RIGHTCONTROL, keyDown[CANVAS_K_RIGHTCONTROL]);
+    OESetBit(flags, CANVAS_KF_RIGHTSHIFT, keyDown[CANVAS_K_RIGHTSHIFT]);
+    OESetBit(flags, CANVAS_KF_RIGHTALT, keyDown[CANVAS_K_RIGHTALT]);
+    OESetBit(flags, CANVAS_KF_RIGHTGUI, keyDown[CANVAS_K_RIGHTGUI]);
+    
+    return flags;
+}
+
 bool OpenGLCanvas::postMessage(OEComponent *sender, int message, void *data)
 {
     switch (message)
@@ -1980,14 +1981,24 @@ bool OpenGLCanvas::postMessage(OEComponent *sender, int message, void *data)
         case CANVAS_SET_CAPTUREMODE:
             return setCaptureMode((CanvasCaptureMode *)data);
             
-        case CANVAS_SET_KEYBOARDFLAGS:
-            if (setKeyboardFlags)
-                setKeyboardFlags(userData, *((OEUInt32 *)data));
+        case CANVAS_SET_BEZEL:
+            return setBezel((CanvasBezel *)data);
+            
+        case CANVAS_SET_KEYBOARD_LEDS:
+            if (setKeyboardLEDs)
+                setKeyboardLEDs(userData, *((CanvasKeyboardLEDs *)data));
             
             return true;
             
-        case CANVAS_SET_BEZEL:
-            return setBezel((CanvasBezel *)data);
+        case CANVAS_GET_KEYBOARD_FLAGS:
+            *((CanvasKeyboardFlags *)data) = getKeyboardFlags();
+            
+            return true;
+            
+        case CANVAS_GET_KEYBOARD_ANYKEYDOWN:
+            *((bool *)data) = (keyDownCount != 0);
+            
+            return true;
             
         case CANVAS_CONFIGURE_DISPLAY:
             return setDisplayConfiguration((CanvasDisplayConfiguration *)data);

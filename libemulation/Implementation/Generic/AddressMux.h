@@ -10,10 +10,12 @@
 
 #include "OEComponent.h"
 
-class Mux : public OEComponent
+typedef map<string, OEComponent *> AddressMuxRef;
+
+class AddressMux : public OEComponent
 {
 public:
-    Mux();
+    AddressMux();
     
     bool setValue(string name, string value);
     bool getValue(string name, string& value);
@@ -34,7 +36,7 @@ public:
 private:
     string sel;
     
-	map<string, OEComponent *>ref;
+	AddressMuxRef confRef;
     
     OEComponent *component;
 };

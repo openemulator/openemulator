@@ -28,7 +28,7 @@
     
     int keyMap[DEVICE_KEYMAP_SIZE];
     int keyModifierFlags;
-    int keyboardFlags;
+    int keyboardLEDs;
     BOOL capsLockNotSynchronized;
 }
 
@@ -53,8 +53,8 @@
 - (NSSize)pageSize;
 - (NSImage *)canvasImage:(NSRect)rect;
 
-- (void)setKeyboardFlags:(int)theKeyboardFlags;
-- (void)synchronizeKeyboardFlags;
+- (void)setKeyboardLEDs:(int)theKeyboardLEDs;
+- (void)synchronizeKeyboardLEDs;
 
 - (void)pasteString:(NSString *)text;
 

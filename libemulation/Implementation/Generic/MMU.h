@@ -15,7 +15,7 @@
 
 #include "MemoryInterface.h"
 
-typedef map<string, string> MMUConf;
+typedef map<string, string> MMUMap;
 typedef map<string, OEComponent *> MMURef;
 
 class MMU : public OEComponent
@@ -34,15 +34,15 @@ protected:
     bool removeMemoryMap(MemoryMap *value);
     
 private:
-    MMUConf conf;
+    MMUMap confMap;
     
     OEComponent *addressDecoder;
-    MMURef ref;
+    MMURef confRef;
     
     MemoryMaps memoryMaps;
     
     bool getMemoryMap(MemoryMap& theMap, OEComponent *component, string value);
-    bool mapRef(OEComponent *component, string conf);
+    bool mapConf(OEComponent *component, string value);
     void unmap(MemoryMap *value);
 };
 

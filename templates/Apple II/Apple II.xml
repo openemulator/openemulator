@@ -5,7 +5,7 @@
     <device id="appleII" label="Apple II" image="images/Apple/Apple II.png">
         <setting ref="appleII.video" name="rev" label="Revision" type="select" options="Revision 0,Revision 1"/>
         <setting ref="appleII.video" name="tvSystem" label="TV System" type="select" options="NTSC,PAL"/>
-        <setting ref="appleII.video" name="characterSet" label="Character Set" type="select" options="Standard,Videx|Videx Lowercase Chip,Pigfont"/>
+        <setting ref="appleII.video" name="characterSet" label="Character Set" type="select" options="Standard,Videx Lowercase Chip,Pigfont"/>
         <setting ref="appleII.keyboard" name="type" label="Keyboard" type="select" options="Standard,Shift-Key Mod,Full ASCII"/>
     </device>
     <port id="appleII.videoPort" ref="" type="Composite Video Port" group="peripherals" label="Video Port" image="images/Connectors/RCA Female.png">
@@ -52,8 +52,7 @@
     <component id="appleII.controlBus" class="ControlBus">
         <property name="device" ref="appleII"/>
         <property name="audio" ref="audio"/>
-        <!-- NTSC clock frequency: (14318180 crystal cycles/s) * (65 CPU cycles/scanline) / (912 crystal cycles/scanline) -->
-        <!-- PAL clock frequency: (14318180 crystal cycles/s) * (65 CPU cycles/scanline) / (912 crystal cycles/scanline) -->
+        <!-- Clock frequency: (14318180 crystal cycles/s) * (65 CPU cycles/scanline) / (912 crystal cycles/scanline) -->
         <property name="clockFrequency" value="1020484.3202"/>
         <property name="cpuClockMultiplier" value="1"/>
         <property name="cpu" ref="appleII.cpu"/>
@@ -192,7 +191,7 @@
         <property name="monitorDevice" ref=""/>
         <property name="monitor" ref=""/>
         <property name="fontStandard" data="${resourcePath}/roms/Apple/341-0036.bin"/>
-        <property name="fontVidex" data="${resourcePath}/roms/Videx/Videx Lower Case Chip ROM.bin"/>
+        <property name="fontVidex Lowercase Chip" data="${resourcePath}/roms/Videx/Videx Lower Case Chip ROM.bin"/>
         <property name="fontPigfont" data="${resourcePath}/roms/Apple/Pigfont Video ROM.bin"/>
     </component>
     <component id="appleII.audioOut" class="AppleIIAudioOut">

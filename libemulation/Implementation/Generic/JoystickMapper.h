@@ -44,12 +44,14 @@ public:
         type = JOYSTICKMAPPER_UNMAPPED;
         sensitivity = 0;
         reverse = false;
+        value = 0;
     }
     
     OEInt32 usageId;
     JoystickMapperType type;
     float sensitivity;
     bool reverse;
+    float value;
 };
 
 typedef map<OEInt32,JoystickMapperRelation> JoystickMapperMap;
@@ -83,11 +85,14 @@ private:
     
     void addItem(string inputDevice, string label,
                  JoystickMapperType type, OEUInt32 usageId);
+    OEInt32 getItemUsageId(string value);
+    JoystickMapperType getItemType(string value);
+    string getItemLabel(OEInt32 value);
     
     void mapNotification(OEInt32 usageId, float value);
     
-    void setUsageId(OEInt32 usageId, string value);
-    string getUsageId(OEInt32 usageId);
+    void setMap(OEInt32 usageId, string value);
+    string getMap(OEInt32 usageId);
     void setSensitivity(OEInt32 usageId, float value);
     string getSensitivity(OEInt32 usageId);
     void setReverse(OEInt32 usageId, bool value);

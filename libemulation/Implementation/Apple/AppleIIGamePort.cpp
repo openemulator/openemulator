@@ -21,7 +21,7 @@ AppleIIGamePort::AppleIIGamePort()
     gamePort = NULL;
     
     for (int i = 0; i < 4; i++)
-        setPDL(i, 127);
+        setPDL(i, 0.5);
     
     for (int i = 0; i < 4; i++)
         pb[i] = 0;
@@ -107,6 +107,21 @@ bool AppleIIGamePort::postMessage(OEComponent *sender, int message, void *data)
 {
     switch (message)
     {
+        case APPLEIIGAMEPORT_SET_PDL0:
+        case APPLEIIGAMEPORT_SET_PDL1:
+        case APPLEIIGAMEPORT_SET_PDL2:
+        case APPLEIIGAMEPORT_SET_PDL3:
+            pb[message - APPLEIIGAMEPORT_SET_PDL0] = *((float *)data);
+            
+            break;
+            
+        case APPLEIIGAMEPORT_SET_PB0:
+        case APPLEIIGAMEPORT_SET_PB1:
+        case APPLEIIGAMEPORT_SET_PB2:
+            pb[message - APPLEIIGAMEPORT_SET_PB0 + 1] = *((bool *)data);
+            
+            break;
+            
         case APPLEIIGAMEPORT_GET_AN0:
         case APPLEIIGAMEPORT_GET_AN1:
         case APPLEIIGAMEPORT_GET_AN2:
@@ -123,23 +138,22 @@ void AppleIIGamePort::notify(OEComponent *sender, int notification, void *data)
 {
     if (notification == JOYSTICK_DID_CHANGE)
     {
-        JoystickHIDNotification *hidNotification;
-        hidNotification = (JoystickHIDNotification *)data;
+        JoystickHIDEvent *hidEvent = (JoystickHIDEvent *)data;
         
-        switch (hidNotification->usageId)
+        switch (hidEvent->usageId)
         {
             case JOYSTICK_AXIS1:
             case JOYSTICK_AXIS2:
             case JOYSTICK_AXIS3:
             case JOYSTICK_AXIS4:
-                setPDL(hidNotification->usageId - JOYSTICK_AXIS1, hidNotification->value);
+                setPDL(hidEvent->usageId - JOYSTICK_AXIS1, hidEvent->value);
                 
                 break;
                 
             case JOYSTICK_BUTTON1:
             case JOYSTICK_BUTTON2:
             case JOYSTICK_BUTTON3:
-                setPB(hidNotification->usageId - JOYSTICK_BUTTON1 + 1, hidNotification->value ? true : false);
+                setPB(hidEvent->usageId - JOYSTICK_BUTTON1 + 1, hidEvent->value ? true : false);
                 
                 break;
         }

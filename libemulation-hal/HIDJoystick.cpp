@@ -52,12 +52,12 @@ void HIDJoystick::setAxis(int deviceIndex, int index, float value)
     if (index >= JOYSTICK_AXIS_NUM)
         return;
     
-    JoystickHIDNotification hidNotification;
-    hidNotification.deviceId = deviceIndex;
-    hidNotification.usageId = JOYSTICK_AXIS1 + index;
-    hidNotification.value = value;
+    JoystickHIDEvent hidEvent;
+    hidEvent.deviceId = deviceIndex;
+    hidEvent.usageId = JOYSTICK_AXIS1 + index;
+    hidEvent.value = value;
     
-    postNotification(this, JOYSTICK_DID_CHANGE, &hidNotification);
+    postNotification(this, JOYSTICK_DID_CHANGE, &hidEvent);
 }
 
 void HIDJoystick::setHat(int deviceIndex, int index, int value)
@@ -65,12 +65,12 @@ void HIDJoystick::setHat(int deviceIndex, int index, int value)
     if (index >= JOYSTICK_HAT_NUM)
         return;
     
-    JoystickHIDNotification hidNotification;
-    hidNotification.deviceId = deviceIndex;
-    hidNotification.usageId = JOYSTICK_HAT1 + index;
-    hidNotification.value = value;
+    JoystickHIDEvent hidEvent;
+    hidEvent.deviceId = deviceIndex;
+    hidEvent.usageId = JOYSTICK_HAT1 + index;
+    hidEvent.value = value;
     
-    postNotification(this, JOYSTICK_DID_CHANGE, &hidNotification);
+    postNotification(this, JOYSTICK_DID_CHANGE, &hidEvent);
 }
 
 void HIDJoystick::setButton(int deviceIndex, int index, bool value)
@@ -78,10 +78,10 @@ void HIDJoystick::setButton(int deviceIndex, int index, bool value)
     if (index >= JOYSTICK_BUTTON_NUM)
         return;
     
-    JoystickHIDNotification hidNotification;
-    hidNotification.deviceId = deviceIndex;
-    hidNotification.usageId = JOYSTICK_BUTTON1 + index;
-    hidNotification.value = value;
+    JoystickHIDEvent hidEvent;
+    hidEvent.deviceId = deviceIndex;
+    hidEvent.usageId = JOYSTICK_BUTTON1 + index;
+    hidEvent.value = value;
     
-    postNotification(this, JOYSTICK_DID_CHANGE, &hidNotification);
+    postNotification(this, JOYSTICK_DID_CHANGE, &hidEvent);
 }

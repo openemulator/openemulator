@@ -18,13 +18,14 @@
 		00039FD112B04F6C0025D374 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 00039FD012B04F6C0025D374 /* libxml2.dylib */; };
 		0009068E141D2A0300F06D99 /* NSStringAdditions.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0009068D141D2A0300F06D99 /* NSStringAdditions.mm */; };
 		000E8D1913515C6E00DBFB2C /* StorageInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 000E8D1813515C6E00DBFB2C /* StorageInterface.h */; };
+		0014DF14148286A5006A7660 /* Application.m in Sources */ = {isa = PBXBuildFile; fileRef = 0014DF13148286A5006A7660 /* Application.m */; };
 		001C9B02137FDD0500D1355B /* AudioRecord.png in Resources */ = {isa = PBXBuildFile; fileRef = 00ED379A12779AD000BEF6BD /* AudioRecord.png */; };
 		001F56F90FD1E8E500EA246A /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 001F56F80FD1E8E500EA246A /* Sparkle.framework */; };
 		0022236C142C557100B7451D /* ControlBusInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 0022236B142C557100B7451D /* ControlBusInterface.h */; };
 		00247F38139D8F4C00B165D1 /* OECommon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00247F35139D85A900B165D1 /* OECommon.cpp */; };
 		002740B813A08A4F00E13D65 /* VidexVideoterm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 002740B613A08A4F00E13D65 /* VidexVideoterm.cpp */; };
 		002740B913A08A4F00E13D65 /* VidexVideoterm.h in Headers */ = {isa = PBXBuildFile; fileRef = 002740B713A08A4F00E13D65 /* VidexVideoterm.h */; };
-		0029EEE214266B8900AD900E /* Mux.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0029EEDF14266B7700AD900E /* Mux.cpp */; };
+		0029EEE214266B8900AD900E /* AddressMux.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0029EEDF14266B7700AD900E /* AddressMux.cpp */; };
 		00391CB312D3A320002C5ABD /* LibraryWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00391CB212D3A320002C5ABD /* LibraryWindowController.m */; };
 		00391D6112D3B570002C5ABD /* IconLibrary.png in Resources */ = {isa = PBXBuildFile; fileRef = 00391D6012D3B570002C5ABD /* IconLibrary.png */; };
 		00391D6412D3B588002C5ABD /* Library.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00391D6212D3B588002C5ABD /* Library.xib */; };
@@ -55,7 +56,6 @@
 		0054E4A71131BE8A006D32D9 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0054E4A61131BE8A006D32D9 /* OpenGL.framework */; };
 		0054E6311131BEE7006D32D9 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0054E6301131BEE7006D32D9 /* Carbon.framework */; };
 		0054E66C1131BF58006D32D9 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0054E66B1131BF58006D32D9 /* Quartz.framework */; };
-		006115C211DD0347008AA3EE /* Application.m in Sources */ = {isa = PBXBuildFile; fileRef = 006115C111DD0347008AA3EE /* Application.m */; };
 		00679D09100817F700B38748 /* TemplateChooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00679D06100817F700B38748 /* TemplateChooser.xib */; };
 		006A4C5C134ED2F30033BE4D /* IEEE488Interface.h in Headers */ = {isa = PBXBuildFile; fileRef = 006A4C5B134ED2F30033BE4D /* IEEE488Interface.h */; };
 		006B5CD013826D0700EEB5BC /* CanvasWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 00A72B7212879F800083C6A7 /* CanvasWindow.m */; };
@@ -236,6 +236,8 @@
 		000F66370FF8368F00C8AF23 /* DiskImage.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = DiskImage.icns; sourceTree = "<group>"; };
 		000F663A0FF8368F00C8AF23 /* Emulation.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Emulation.icns; sourceTree = "<group>"; };
 		000F66520FF8368F00C8AF23 /* OpenEmulator.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = OpenEmulator.icns; sourceTree = "<group>"; };
+		0014DF12148286A4006A7660 /* Application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Application.h; sourceTree = "<group>"; };
+		0014DF13148286A5006A7660 /* Application.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Application.m; sourceTree = "<group>"; };
 		001750B013A50A9C0043E2ED /* AUTHORS */ = {isa = PBXFileReference; lastKnownFileType = text; path = AUTHORS; sourceTree = "<group>"; };
 		001750B113A50A9C0043E2ED /* COPYING */ = {isa = PBXFileReference; lastKnownFileType = text; path = COPYING; sourceTree = "<group>"; };
 		001750B413A50A9C0043E2ED /* 2IMG Format.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "2IMG Format.txt"; sourceTree = "<group>"; };
@@ -263,8 +265,8 @@
 		002579FB1218A83400206E56 /* NSStringAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSStringAdditions.h; sourceTree = "<group>"; };
 		002740B613A08A4F00E13D65 /* VidexVideoterm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VidexVideoterm.cpp; path = Videx/VidexVideoterm.cpp; sourceTree = "<group>"; };
 		002740B713A08A4F00E13D65 /* VidexVideoterm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VidexVideoterm.h; path = Videx/VidexVideoterm.h; sourceTree = "<group>"; };
-		0029EEDF14266B7700AD900E /* Mux.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Mux.cpp; sourceTree = "<group>"; };
-		0029EEE114266B8000AD900E /* Mux.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mux.h; sourceTree = "<group>"; };
+		0029EEDF14266B7700AD900E /* AddressMux.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AddressMux.cpp; sourceTree = "<group>"; };
+		0029EEE114266B8000AD900E /* AddressMux.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddressMux.h; sourceTree = "<group>"; };
 		00391CB112D3A320002C5ABD /* LibraryWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryWindowController.h; sourceTree = "<group>"; };
 		00391CB212D3A320002C5ABD /* LibraryWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryWindowController.m; sourceTree = "<group>"; };
 		00391D6012D3B570002C5ABD /* IconLibrary.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IconLibrary.png; sourceTree = "<group>"; };
@@ -303,8 +305,6 @@
 		0054E6301131BEE7006D32D9 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		0054E66B1131BF58006D32D9 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
 		005928540FFC94E200F24A57 /* templates */ = {isa = PBXFileReference; lastKnownFileType = folder; path = templates; sourceTree = "<group>"; };
-		006115C011DD0347008AA3EE /* Application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Application.h; sourceTree = "<group>"; };
-		006115C111DD0347008AA3EE /* Application.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Application.m; sourceTree = "<group>"; };
 		00679D07100817F700B38748 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/TemplateChooser.xib; sourceTree = "<group>"; };
 		006A4C5B134ED2F30033BE4D /* IEEE488Interface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IEEE488Interface.h; sourceTree = "<group>"; };
 		006EEE8F0FCA781C003D2C8D /* DiskImage.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = DiskImage.icns; sourceTree = "<group>"; };
@@ -771,6 +771,8 @@
 				00FBD2DD1419A03A00BA8CEE /* AudioCodec.h */,
 				00B8882E12A393990052B7A4 /* AddressDecoder.cpp */,
 				00B8882F12A393990052B7A4 /* AddressDecoder.h */,
+				0029EEDF14266B7700AD900E /* AddressMux.cpp */,
+				0029EEE114266B8000AD900E /* AddressMux.h */,
 				00B8883012A393990052B7A4 /* AddressOffset.cpp */,
 				00B8883112A393990052B7A4 /* AddressOffset.h */,
 				00B8883812A393990052B7A4 /* ControlBus.cpp */,
@@ -783,8 +785,6 @@
 				00F580A51464CDE20094DA5C /* MMU.h */,
 				00B8883612A393990052B7A4 /* Monitor.cpp */,
 				00B8883712A393990052B7A4 /* Monitor.h */,
-				0029EEDF14266B7700AD900E /* Mux.cpp */,
-				0029EEE114266B8000AD900E /* Mux.h */,
 				00B8883C12A393990052B7A4 /* RAM.cpp */,
 				00B8883D12A393990052B7A4 /* RAM.h */,
 				00B8883E12A393990052B7A4 /* ROM.cpp */,
@@ -957,11 +957,11 @@
 			isa = PBXGroup;
 			children = (
 				00D845730FFF0FD2005802F0 /* main.m */,
+				0014DF12148286A4006A7660 /* Application.h */,
+				0014DF13148286A5006A7660 /* Application.m */,
 				00D845760FFF0FD2005802F0 /* OpenEmulator_Prefix.pch */,
 				002579FB1218A83400206E56 /* NSStringAdditions.h */,
 				0009068D141D2A0300F06D99 /* NSStringAdditions.mm */,
-				006115C011DD0347008AA3EE /* Application.h */,
-				006115C111DD0347008AA3EE /* Application.m */,
 				00D845670FFF0FD2005802F0 /* DocumentController.h */,
 				00AD746811A2F10E00BAC29C /* DocumentController.mm */,
 				00B5709C10863C2A00CDE4A7 /* TemplateChooserWindowController.h */,
@@ -1346,7 +1346,7 @@
 				002740B813A08A4F00E13D65 /* VidexVideoterm.cpp in Sources */,
 				00F397E4141655DA00C53A3E /* Apple1IO.cpp in Sources */,
 				004BD1C01425AA8500768B80 /* W65C02S.cpp in Sources */,
-				0029EEE214266B8900AD900E /* Mux.cpp in Sources */,
+				0029EEE214266B8900AD900E /* AddressMux.cpp in Sources */,
 				00F580A61464CDE70094DA5C /* MMU.cpp in Sources */,
 				00A12995147A8E7500DF323F /* HIDJoystick.cpp in Sources */,
 				00B7C646147B4B4100BB7E6B /* JoystickMapper.cpp in Sources */,
@@ -1371,7 +1371,6 @@
 				0071E3BA10803F7300F2D54F /* TemplateChooserItem.mm in Sources */,
 				00B5709E10863C2A00CDE4A7 /* TemplateChooserWindowController.m in Sources */,
 				008107DE1120C57600D744FB /* TemplateChooserViewController.m in Sources */,
-				006115C211DD0347008AA3EE /* Application.m in Sources */,
 				00954E781277B79E00C17203 /* EmulationOutlineCell.m in Sources */,
 				00954E991277BB8E00C17203 /* EmulationWindowController.m in Sources */,
 				00954EA71277BC1200C17203 /* AudioControlsWindowController.mm in Sources */,
@@ -1393,6 +1392,7 @@
 				00DEA9201423B7BC003E9FA0 /* RDCFFA1.cpp in Sources */,
 				00722D3C1470E31400FE7007 /* Apple1Terminal.cpp in Sources */,
 				00C655BE147602B2009DA9D5 /* AppleIIVideoSync.cpp in Sources */,
+				0014DF14148286A5006A7660 /* Application.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

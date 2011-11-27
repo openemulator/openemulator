@@ -10,7 +10,9 @@
 
 #include "AppleIIKeyboard.h"
 
+#include "DeviceInterface.h"
 #include "ControlBusInterface.h"
+#include "AppleIIInterface.h"
 
 AppleIIKeyboard::AppleIIKeyboard()
 {
@@ -61,10 +63,16 @@ bool AppleIIKeyboard::setRef(string name, OEComponent *ref)
     if (name == "controlBus")
     {
         if (controlBus)
+        {
+            controlBus->removeObserver(this, CONTROLBUS_POWERSTATE_DID_CHANGE);
             controlBus->removeObserver(this, CONTROLBUS_RESET_DID_ASSERT);
+        }
         controlBus = ref;
         if (controlBus)
+        {
+            controlBus->addObserver(this, CONTROLBUS_POWERSTATE_DID_CHANGE);
             controlBus->addObserver(this, CONTROLBUS_RESET_DID_ASSERT);
+        }
     }
     else if (name == "floatingBus")
         floatingBus = ref;
@@ -75,12 +83,14 @@ bool AppleIIKeyboard::setRef(string name, OEComponent *ref)
         if (monitor)
         {
             monitor->removeObserver(this, CANVAS_UNICODECHAR_WAS_SENT);
+            monitor->removeObserver(this, CANVAS_KEYBOARD_DID_CHANGE);
             monitor->removeObserver(this, CANVAS_DID_PASTE);
         }
         monitor = ref;
         if (monitor)
         {
             monitor->addObserver(this, CANVAS_UNICODECHAR_WAS_SENT);
+            monitor->addObserver(this, CANVAS_KEYBOARD_DID_CHANGE);
             monitor->addObserver(this, CANVAS_DID_PASTE);
         }
     }
@@ -90,12 +100,23 @@ bool AppleIIKeyboard::setRef(string name, OEComponent *ref)
 	return true;
 }
 
+void AppleIIKeyboard::update()
+{
+    updateShiftKeyMod();
+}
+
 void AppleIIKeyboard::notify(OEComponent *sender, int notification, void *data)
 {
     if (sender == controlBus)
     {
         switch (notification)
         {
+            case CONTROLBUS_POWERSTATE_DID_CHANGE:
+                if (*((ControlBusPowerState *)data) == CONTROLBUS_POWERSTATE_ON)
+                    keyLatch = 0;
+                
+                break;
+                
             case CONTROLBUS_RESET_DID_ASSERT:
                 // Clear pastebuffer
                 while (!pasteBuffer.empty())
@@ -114,6 +135,70 @@ void AppleIIKeyboard::notify(OEComponent *sender, int notification, void *data)
                     break;
                 
                 sendKey(*((CanvasUnicodeChar *)data));
+                
+                break;
+            }
+                
+            case CANVAS_KEYBOARD_DID_CHANGE:
+            {
+                CanvasHIDEvent *hidEvent = (CanvasHIDEvent *)data;
+                
+                switch (state)
+                {
+                    case APPLEIIKEYBOARD_NORMAL:
+                        // Shift-key mod
+                        updateShiftKeyMod();
+                        
+                        // React on key down
+                        if (!hidEvent->value)
+                            break;
+                        else if (hidEvent->usageId == CANVAS_K_BACKSPACE)
+                        {
+                            CanvasKeyboardFlags flags;
+                            
+                            monitor->postMessage(this, CANVAS_GET_KEYBOARD_FLAGS, &flags);
+                            
+                            if (OEGetBit(flags, CANVAS_KF_CONTROL) &&
+                                OEGetBit(flags, CANVAS_KF_GUI))
+                            {
+                                ControlBusPowerState powerState = CONTROLBUS_POWERSTATE_OFF;
+                                controlBus->postMessage(this, CONTROLBUS_SET_POWERSTATE, &powerState);
+                                
+                                state = APPLEIIKEYBOARD_RESTART;
+                            }
+                            else if (OEGetBit(flags, CANVAS_KF_CONTROL))
+                            {
+                                controlBus->postMessage(this, CONTROLBUS_ASSERT_RESET, NULL);
+                                
+                                state = APPLEIIKEYBOARD_RESET;
+                            }
+                        }
+                        break;
+                        
+                    case APPLEIIKEYBOARD_RESET:
+                    {
+                        if (hidEvent->usageId == CANVAS_K_BACKSPACE)
+                        {
+                            controlBus->postMessage(this, CONTROLBUS_CLEAR_RESET, NULL);
+                            
+                            state = APPLEIIKEYBOARD_NORMAL;
+                        }
+                        
+                        break;
+                    }
+                    case APPLEIIKEYBOARD_RESTART:
+                    {
+                        if (hidEvent->usageId == CANVAS_K_BACKSPACE)
+                        {
+                            ControlBusPowerState powerState = CONTROLBUS_POWERSTATE_ON;
+                            controlBus->postMessage(this, CONTROLBUS_SET_POWERSTATE, &powerState);
+                            
+                            state = APPLEIIKEYBOARD_NORMAL;
+                        }
+                        
+                        break;
+                    }
+                }
                 
                 break;
             }
@@ -150,9 +235,27 @@ void AppleIIKeyboard::write(OEAddress address, OEUInt8 value)
     }
 }
 
+void AppleIIKeyboard::updateShiftKeyMod()
+{
+    if (type == APPLEIIKEYBOARD_TYPE_SHIFTKEYMOD)
+    {
+        CanvasKeyboardFlags flags;
+        
+        monitor->postMessage(this, CANVAS_GET_KEYBOARD_FLAGS, &flags);
+        
+        bool shiftKeyUp = !OEGetBit(flags, CANVAS_KF_SHIFT);
+        
+        gamePort->postMessage(this, APPLEIIGAMEPORT_SET_PB2, &shiftKeyUp);
+    }
+}
+
 void AppleIIKeyboard::sendKey(CanvasUnicodeChar key)
 {
-    if (key >= 0x80)
+    if (key == CANVAS_U_LEFT)
+        key = 0x08;
+    else if (key == CANVAS_U_RIGHT)
+        key = 0x15;
+    else if (key >= 0x80)
         return;
     
     if (key == '\n')
