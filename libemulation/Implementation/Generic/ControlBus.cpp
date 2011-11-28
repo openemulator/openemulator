@@ -354,10 +354,10 @@ void ControlBus::notify(OEComponent *sender, int notification, void *data)
     }
 }
 
-void ControlBus::setPowerState(ControlBusPowerState powerState)
+void ControlBus::setPowerState(ControlBusPowerState value)
 {
-    ControlBusPowerState lastPowerState = this->powerState;
-    this->powerState = powerState;
+    ControlBusPowerState lastPowerState = powerState;
+    powerState = value;
     
     string stateLabel;
     switch (powerState)
@@ -496,7 +496,7 @@ void ControlBus::clearTimers(OEComponent *component)
     }*/
 }
 
-void ControlBus::setCPUClockMultiplier(float cpuClockMultiplier)
+void ControlBus::setCPUClockMultiplier(float value)
 {
     if (!inBlock)
         return;
@@ -505,7 +505,7 @@ void ControlBus::setCPUClockMultiplier(float cpuClockMultiplier)
     
 /*    cpu->postMessage(this, CPU_GET_CYCLES, &cpuCycles);
     
-    cpuCycles = floor(cycles * cpuClockMultiplier + cpuCycles - blockOffset);
+    cpuCycles = floor(cycles * value + cpuCycles - blockOffset);
     blockOffset += cpuCycles;
     
     cpu->postMessage(this, CPU_SET_CYCLES, &cpuCycles);
@@ -514,16 +514,16 @@ void ControlBus::setCPUClockMultiplier(float cpuClockMultiplier)
     
     
     
-    float currentCycles = ((blockOffset - cpuCycles) * cpuClockMultiplier /
-                           this->cpuClockMultiplier);
+    float currentCycles = ((blockOffset - cpuCycles) * value /
+                           cpuClockMultiplier);
     blockOffset = currentCycles - ceil(currentCycles);
     
-    blockSize = events.front().cycles * cpuClockMultiplier - blockOffset;
+    blockSize = events.front().cycles * value - blockOffset;
     blockCycles = floor(blockSize);
     blockOffset += blockCycles;
     
     cpuCycles = blockCycles - ceil(currentCycles);
     cpu->postMessage(this, CPU_SET_CYCLES, &cpuCycles);
     
-    this->cpuClockMultiplier = cpuClockMultiplier;*/
+    cpuClockMultiplier = value;*/
 }

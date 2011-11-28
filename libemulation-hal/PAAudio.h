@@ -48,7 +48,7 @@ public:
     void setPlayThrough(bool value);
     void openPlayer(string path);
     void closePlayer();
-    void setPlayPosition(float time);
+    void setPlayPosition(float value);
     void play();
     void pause();
     bool isPlaying();
@@ -116,7 +116,7 @@ private:
     bool openAudio();
     void closeAudio();
     bool disableAudio();
-    void enableAudio(bool state);
+    void enableAudio(bool value);
     
     bool openEmulations();
     void closeEmulations();

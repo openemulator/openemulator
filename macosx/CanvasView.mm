@@ -900,14 +900,13 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     for (NSInteger i = 0; i < [characters length]; i++)
     {
         int c = [characters characterAtIndex:i];
+        
         if (c == 0x0d)
             [self sendUnicodeKeyEvent:0x0a];
         else if (c == 0x0a)
             [self sendUnicodeKeyEvent:0x0d];
         else if (c == 0x7f)
             [self sendUnicodeKeyEvent:0x08];
-        else if (c == 0xf728)
-            [self sendUnicodeKeyEvent:0x7f];
         else
             [self sendUnicodeKeyEvent:c];
     }

@@ -60,6 +60,8 @@ private:
     
     OEUInt32 mode;
     
+    bool oldPALTiming;
+    
     AppleIIVideoRenderer renderer;
     
     bool vsyncTimer;
@@ -95,6 +97,8 @@ private:
     void initLoresMap();
     void initHiresMap();
     void initHCountMap();
+    
+    void updateTiming();
     
     void updateMode();
     void setMode(OEUInt32 mask, bool value);

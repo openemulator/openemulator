@@ -526,13 +526,13 @@ bool PAAudio::disableAudio()
     return state;
 }
 
-void PAAudio::enableAudio(bool state)
+void PAAudio::enableAudio(bool value)
 {
     initBuffer();
     
     unlock();
     
-    if (state)
+    if (value)
         openAudio();
 }
 
@@ -669,14 +669,14 @@ void PAAudio::closePlayer()
     unlock();
 }
 
-void PAAudio::setPlayPosition(float time)
+void PAAudio::setPlayPosition(float value)
 {
     if (!playSNDFILE)
         return;
     
     lock();
     
-    playFrameIndex = time * sampleRate;
+    playFrameIndex = value * sampleRate;
     sf_seek(playSNDFILE, playFrameIndex / playSRCRatio, SEEK_SET);
     
     if (!playing)

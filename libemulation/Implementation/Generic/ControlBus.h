@@ -59,13 +59,13 @@ private:
     OEUInt64 cycleStart;
     float sampleToCycleRatio;
     
-    void setPowerState(ControlBusPowerState powerState);
+    void setPowerState(ControlBusPowerState value);
     
     OEUInt64 getCycleCount();
     void scheduleTimer(OEComponent *component, OEUInt64 cycles);
     void clearTimers(OEComponent *component);
     
-    void setCPUClockMultiplier(float cpuClockMultiplier);
+    void setCPUClockMultiplier(float value);
 };
 
 #endif

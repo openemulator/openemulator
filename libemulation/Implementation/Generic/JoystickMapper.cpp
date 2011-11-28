@@ -336,42 +336,43 @@ void JoystickMapper::mapNotification(OEInt32 usageId, float value)
     {
         if (i->second.usageId == usageId)
         {
-            switch (i->second.type)
-            {
-                case JOYSTICKMAPPER_AXIS:
-                case JOYSTICKMAPPER_BUTTON:
-                    if (i->second.value == value)
-                        return;
-                    
-                    i->second.value = value;
-                    
-                case JOYSTICKMAPPER_RELATIVEAXIS:
-                    i->second.value += value * pow(10, (i->second.sensitivity - 50) / 20);
-                    
-                    break;
-                    
-                case JOYSTICKMAPPER_UNMAPPED:
-                    return;
-            }
-            
-            if (i->second.value < 0)
-                i->second.value = 0;
-            else if (i->second.value > 1)
-                i->second.value = 1;
-            
             JoystickHIDEvent hidEvent;
             
             hidEvent.deviceId = deviceId;
             hidEvent.usageId = i->first;
-            hidEvent.value = i->second.value;
+            hidEvent.value = value;
             
-            hidEvent.value -= 0.5;
-            if (i->second.reverse)
-                hidEvent.value = -hidEvent.value;
-            if ((i->second.type == JOYSTICKMAPPER_AXIS) ||
-                (i->second.type == JOYSTICKMAPPER_RELATIVEAXIS))
-                hidEvent.value *= pow(10, i->second.sensitivity / 20);
-            hidEvent.value += 0.5;
+            switch (i->second.type)
+            {
+                case JOYSTICKMAPPER_AXIS:
+                    hidEvent.value -= 0.5;
+                    if (i->second.reverse)
+                        hidEvent.value = -hidEvent.value;
+                    hidEvent.value *= pow(10, i->second.sensitivity / 20);
+                    hidEvent.value += 0.5;
+                    
+                    break;
+                    
+                case JOYSTICKMAPPER_RELATIVEAXIS:
+                    if (i->second.reverse)
+                        hidEvent.value = -hidEvent.value;
+                    hidEvent.value = i->second.value + hidEvent.value * pow(10, (i->second.sensitivity - 50) / 20);
+                    
+                    break;
+                    
+                default:
+                    break;
+            }
+            
+            if (hidEvent.value < 0)
+                hidEvent.value = 0;
+            else if (hidEvent.value > 1)
+                hidEvent.value = 1;
+            
+            if (i->second.value == hidEvent.value)
+                return;
+            
+            i->second.value = hidEvent.value;
             
             postNotification(this, JOYSTICK_DID_CHANGE, &hidEvent);
         }

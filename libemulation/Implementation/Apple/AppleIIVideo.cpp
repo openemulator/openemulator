@@ -200,6 +200,12 @@ bool AppleIIVideo::init()
         return false;
     }
     
+    image.setSampleRate(14318180);
+    
+    updateTiming();
+    
+    oldPALTiming = palTiming;
+    
     OEAddress startAddress = 0;
     getVRAM(ram1, startAddress);
     getVRAM(ram2, startAddress);
@@ -222,12 +228,12 @@ void AppleIIVideo::update()
 {
     updateMode();
     
-    image.setSize(OEMakeSize(SCREEN_WIDTH, palTiming ? PAL_HEIGHT : NTSC_HEIGHT));
-    image.setSampleRate(14318180);
-    
-    imageOrigin = (palTiming ? (PAL_ORIGIN_Y * SCREEN_WIDTH + SCREEN_ORIGIN_X) :
-                   (NTSC_ORIGIN_Y * SCREEN_WIDTH + SCREEN_ORIGIN_X));
-    vCountStart = (palTiming ? 0xc8 : 0xfa);
+    if (palTiming != oldPALTiming)
+    {
+        updateTiming();
+        
+        oldPALTiming = palTiming;
+    }
     
     float clockFrequency = palTiming ? (14318180.0 * 65 / 912) : (14250000.0 * 65 / 912);
     
@@ -494,6 +500,15 @@ void AppleIIVideo::initHCountMap()
     
     for (int i = 0; i < 64; i++)
         hCountMap[i + 1] = 64 + i;
+}
+
+void AppleIIVideo::updateTiming()
+{
+    image.setSize(OEMakeSize(SCREEN_WIDTH, palTiming ? PAL_HEIGHT : NTSC_HEIGHT));
+    
+    imageOrigin = (palTiming ? (PAL_ORIGIN_Y * SCREEN_WIDTH + SCREEN_ORIGIN_X) :
+                   (NTSC_ORIGIN_Y * SCREEN_WIDTH + SCREEN_ORIGIN_X));
+    vCountStart = (palTiming ? 0xc8 : 0xfa);
 }
 
 void AppleIIVideo::updateMode()

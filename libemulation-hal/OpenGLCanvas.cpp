@@ -1482,8 +1482,8 @@ void OpenGLCanvas::drawBezel()
         if (diff > (BEZELCAPTURE_DISPLAY_TIME +
                     BEZELCAPTURE_FADEOUT_TIME))
         {
-            isBezelDrawRequired = false;
             isBezelCapture = false;
+            
             textureAlpha = 0;
         }
         else if (diff > BEZELCAPTURE_DISPLAY_TIME)
@@ -1640,6 +1640,7 @@ void OpenGLCanvas::setKey(int usageId, bool value)
     
     keyDown[usageId] = value;
     keyDownCount += value ? 1 : -1;
+    
     if ((keyDown[CANVAS_K_LEFTCONTROL] ||
          keyDown[CANVAS_K_RIGHTCONTROL]) &&
         (keyDown[CANVAS_K_LEFTALT] ||
@@ -1760,29 +1761,29 @@ void OpenGLCanvas::doDelete()
     postNotification(this, CANVAS_DID_DELETE, NULL);
 }
 
-bool OpenGLCanvas::setMode(CanvasMode *mode)
+bool OpenGLCanvas::setMode(CanvasMode *value)
 {
-    if (!mode)
+    if (!value)
         return false;
     
     lock();
     
-    this->mode = *mode;
+    mode = *value;
     
     unlock();
     
     return true;
 }
 
-bool OpenGLCanvas::setCaptureMode(CanvasCaptureMode *captureMode)
+bool OpenGLCanvas::setCaptureMode(CanvasCaptureMode *value)
 {
-    if (!captureMode)
+    if (!value)
         return false;
     
-    if (this->captureMode == *captureMode)
+    if (captureMode == *value)
         return true;
     
-    switch (*captureMode)
+    switch (*value)
     {
         case CANVAS_CAPTUREMODE_NO_CAPTURE:
             updateCapture(OPENGLCANVAS_CAPTURE_NONE);
@@ -1801,22 +1802,22 @@ bool OpenGLCanvas::setCaptureMode(CanvasCaptureMode *captureMode)
             return false;
     }
     
-    this->captureMode = *captureMode;
+    captureMode = *value;
     
     return true;
 }
 
-bool OpenGLCanvas::setBezel(CanvasBezel *bezel)
+bool OpenGLCanvas::setBezel(CanvasBezel *value)
 {
-    if (!bezel)
+    if (!value)
         return false;
     
-    if (this->bezel == *bezel)
+    if (bezel == *value)
         return true;
     
     lock();
     
-    this->bezel = *bezel;
+    bezel = *value;
     isBezelDrawRequired = true;
     
     unlock();
@@ -1824,54 +1825,54 @@ bool OpenGLCanvas::setBezel(CanvasBezel *bezel)
     return true;
 }
 
-bool OpenGLCanvas::setDisplayConfiguration(CanvasDisplayConfiguration *configuration)
+bool OpenGLCanvas::setDisplayConfiguration(CanvasDisplayConfiguration *value)
 {
-    if (!configuration)
+    if (!value)
         return false;
     
     lock();
     
     isConfigurationUpdated = true;
-    displayConfiguration = *configuration;
+    displayConfiguration = *value;
     
     unlock();
     
     return true;
 }
 
-bool OpenGLCanvas::setPaperConfiguration(CanvasPaperConfiguration *configuration)
+bool OpenGLCanvas::setPaperConfiguration(CanvasPaperConfiguration *value)
 {
-    if (!configuration)
+    if (!value)
         return false;
     
     lock();
     
     isConfigurationUpdated = true;
-    paperConfiguration = *configuration;
+    paperConfiguration = *value;
     
     unlock();
     
     return true;
 }
 
-bool OpenGLCanvas::setOpenGLConfiguration(CanvasOpenGLConfiguration *configuration)
+bool OpenGLCanvas::setOpenGLConfiguration(CanvasOpenGLConfiguration *value)
 {
-    if (!configuration)
+    if (!value)
         return false;
     
     lock();
     
     isConfigurationUpdated = true;
-    openGLConfiguration = *configuration;
+    openGLConfiguration = *value;
     
     unlock();
     
     return true;
 }
 
-bool OpenGLCanvas::postImage(OEImage *theImage)
+bool OpenGLCanvas::postImage(OEImage *value)
 {
-    if (!theImage)
+    if (!value)
         return false;
     
     lock();
@@ -1879,7 +1880,7 @@ bool OpenGLCanvas::postImage(OEImage *theImage)
     switch (mode)
     {
         case CANVAS_MODE_DISPLAY:
-            image = *theImage;
+            image = *value;
             
             isImageUpdated = true;
             
@@ -1887,19 +1888,19 @@ bool OpenGLCanvas::postImage(OEImage *theImage)
             
         case CANVAS_MODE_PAPER:
         {
-            OESize theImageSize = theImage->getSize();
+            OESize newImageSize = value->getSize();
             OESize imageSize = image.getSize();
             
             OERect aRect = OEMakeRect(0, 0,
-                                      theImageSize.width, theImageSize.height);
+                                      newImageSize.width, newImageSize.height);
             OERect bRect = OEMakeRect(printHead.x, printHead.y,
                                       imageSize.width, imageSize.height);
             OERect unionRect = OEUnionRect(aRect, bRect);
             
             if (OEIsEmptyRect(bRect))
-                image.setFormat(theImage->getFormat());
+                image.setFormat(value->getFormat());
             image.setSize(unionRect.size);
-            image.print(*theImage, printHead);
+            image.print(*value, printHead);
             
             isImageUpdated = true;
             
@@ -1941,14 +1942,14 @@ bool OpenGLCanvas::clear()
     return true;
 }
 
-bool OpenGLCanvas::setPrintHead(OEPoint *point)
+bool OpenGLCanvas::setPrintHead(OEPoint *value)
 {
-    if (!point)
+    if (!value)
         return false;
     
     lock();
     
-    printHead = *point;
+    printHead = *value;
     
     unlock();
     

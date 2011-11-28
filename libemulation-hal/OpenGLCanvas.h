@@ -189,18 +189,18 @@ private:
     OEImage readFramebuffer();
     
     void postHIDEvent(int notification, int usageId, float value);
-    void updateCapture(OpenGLCanvasCapture capture);
+    void updateCapture(OpenGLCanvasCapture value);
     void resetKeysAndButtons();
     
-    bool setMode(CanvasMode *mode);
-    bool setCaptureMode(CanvasCaptureMode *captureMode);
-    bool setBezel(CanvasBezel *bezel);
-    bool setDisplayConfiguration(CanvasDisplayConfiguration *configuration);
-    bool setPaperConfiguration(CanvasPaperConfiguration *configuration);
-    bool setOpenGLConfiguration(CanvasOpenGLConfiguration *configuration);
-    bool postImage(OEImage *frame);
+    bool setMode(CanvasMode *value);
+    bool setCaptureMode(CanvasCaptureMode *value);
+    bool setBezel(CanvasBezel *value);
+    bool setDisplayConfiguration(CanvasDisplayConfiguration *value);
+    bool setPaperConfiguration(CanvasPaperConfiguration *value);
+    bool setOpenGLConfiguration(CanvasOpenGLConfiguration *value);
+    bool postImage(OEImage *value);
     bool clear();
-    bool setPrintHead(OEPoint *point);
+    bool setPrintHead(OEPoint *value);
     
     CanvasKeyboardFlags getKeyboardFlags();
 };

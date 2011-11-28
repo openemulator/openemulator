@@ -1,8 +1,6 @@
 ==1.0.2==
-* Test CTRL+ALT canvas capture
-* Test CTRL+COMMAND+BACKSPACE and bezel not appearing some times
 * Optimize AppleIIVideo
-* Implement hires bit 7 left border
+* Implement AppleIIVideo left border hires bit 7
 * Implement Apple II
 
 ==1.0.3==

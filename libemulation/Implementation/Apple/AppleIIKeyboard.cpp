@@ -22,6 +22,9 @@ AppleIIKeyboard::AppleIIKeyboard()
     floatingBus = NULL;
     gamePort = NULL;
     monitor = NULL;
+    
+    keyLatch = 0;
+    state = APPLEIIKEYBOARD_STATE_NORMAL;
 }
 
 bool AppleIIKeyboard::setValue(string name, string value)
@@ -145,7 +148,7 @@ void AppleIIKeyboard::notify(OEComponent *sender, int notification, void *data)
                 
                 switch (state)
                 {
-                    case APPLEIIKEYBOARD_NORMAL:
+                    case APPLEIIKEYBOARD_STATE_NORMAL:
                         // Shift-key mod
                         updateShiftKeyMod();
                         
@@ -164,36 +167,37 @@ void AppleIIKeyboard::notify(OEComponent *sender, int notification, void *data)
                                 ControlBusPowerState powerState = CONTROLBUS_POWERSTATE_OFF;
                                 controlBus->postMessage(this, CONTROLBUS_SET_POWERSTATE, &powerState);
                                 
-                                state = APPLEIIKEYBOARD_RESTART;
+                                state = APPLEIIKEYBOARD_STATE_RESTART;
                             }
                             else if (OEGetBit(flags, CANVAS_KF_CONTROL))
                             {
                                 controlBus->postMessage(this, CONTROLBUS_ASSERT_RESET, NULL);
                                 
-                                state = APPLEIIKEYBOARD_RESET;
+                                state = APPLEIIKEYBOARD_STATE_RESET;
                             }
                         }
                         break;
                         
-                    case APPLEIIKEYBOARD_RESET:
+                    case APPLEIIKEYBOARD_STATE_RESET:
                     {
                         if (hidEvent->usageId == CANVAS_K_BACKSPACE)
                         {
                             controlBus->postMessage(this, CONTROLBUS_CLEAR_RESET, NULL);
                             
-                            state = APPLEIIKEYBOARD_NORMAL;
+                            keyLatch = 0;
+                            state = APPLEIIKEYBOARD_STATE_NORMAL;
                         }
                         
                         break;
                     }
-                    case APPLEIIKEYBOARD_RESTART:
+                    case APPLEIIKEYBOARD_STATE_RESTART:
                     {
                         if (hidEvent->usageId == CANVAS_K_BACKSPACE)
                         {
                             ControlBusPowerState powerState = CONTROLBUS_POWERSTATE_ON;
                             controlBus->postMessage(this, CONTROLBUS_SET_POWERSTATE, &powerState);
                             
-                            state = APPLEIIKEYBOARD_NORMAL;
+                            state = APPLEIIKEYBOARD_STATE_NORMAL;
                         }
                         
                         break;
