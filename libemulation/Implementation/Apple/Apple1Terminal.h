@@ -34,6 +34,7 @@ public:
     void notify(OEComponent *sender, int notification, void *data);
     
 private:
+    // Settings
     OEUInt32 cursorX, cursorY;
     bool clearScreenOnCtrlL;
     bool splashScreen;
@@ -45,19 +46,22 @@ private:
     OEComponent *monitorDevice;
     OEComponent *monitor;
     
+    // State
     OEUInt8 *vramp;
     OEData font;
     bool canvasShouldUpdate;
+    
     OEImage image;
+    
     bool cursorActive;
     OEUInt32 cursorCount;
     
     ControlBusPowerState powerState;
-        
+    
     bool isRTS;
     queue<OEUInt8> pasteBuffer;
     
-    void scheduleTimer();
+    void scheduleNextTimer(OEInt64 cycles);
     void loadFont(OEData *data);
     void vsync();
     void clearScreen();

@@ -42,7 +42,7 @@ bool AppleIIVideoSync::init()
 
 void AppleIIVideoSync::write(OEAddress address, OEUInt8 value)
 {
-    video->postMessage(this, APPLEIIVIDEO_UPDATE, NULL);
+    video->postMessage(this, APPLEIIVIDEO_REFRESH, NULL);
     
     ram->write(address, value);
 }

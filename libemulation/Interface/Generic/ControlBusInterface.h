@@ -8,6 +8,10 @@
  * Defines the control bus interface
  */
 
+// Notes:
+// * scheduleTimer schedules a timer in a given number of cycles (OEUInt64)
+// * timerDidFire passes the number of remaining cycles for this timer (OEInt64)
+
 #ifndef _CONTROLBUSINTERFACE_H
 #define _CONTROLBUSINTERFACE_H
 

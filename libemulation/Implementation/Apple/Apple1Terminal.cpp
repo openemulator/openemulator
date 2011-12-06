@@ -198,7 +198,7 @@ bool Apple1Terminal::init()
     
     controlBus->postMessage(this, CONTROLBUS_GET_POWERSTATE, &powerState);
     
-    scheduleTimer();
+    scheduleNextTimer(0);
     
     return true;
 }
@@ -295,7 +295,7 @@ void Apple1Terminal::notify(OEComponent *sender, int notification, void *data)
             case CONTROLBUS_TIMER_DID_FIRE:
                 vsync();
                 
-                scheduleTimer();
+                scheduleNextTimer(*((OEInt64 *) data));
                 
                 postNotification(this, RS232_CTS_DID_ASSERT, NULL);
                 postNotification(this, RS232_CTS_DID_CLEAR, NULL);
@@ -340,11 +340,11 @@ void Apple1Terminal::notify(OEComponent *sender, int notification, void *data)
     }
 }
 
-void Apple1Terminal::scheduleTimer()
+void Apple1Terminal::scheduleNextTimer(OEInt64 cycles)
 {
-    OEUInt64 clocks = 262 * 61;
+    cycles += 262 * 61;
     
-    controlBus->postMessage(this, CONTROLBUS_SCHEDULE_TIMER, &clocks);
+    controlBus->postMessage(this, CONTROLBUS_SCHEDULE_TIMER, &cycles);
 }
 
 void Apple1Terminal::loadFont(OEData *data)

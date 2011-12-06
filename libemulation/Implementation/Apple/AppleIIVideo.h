@@ -13,10 +13,24 @@
 
 #include "ControlBusInterface.h"
 
-typedef struct {
-    OEUInt32 h;
-    OEUInt32 v;
-} AppleIIVideoCount;
+class AppleIIVideoPoint
+{
+public:
+    AppleIIVideoPoint()
+    {
+        x = 0;
+        y = 0;
+    }
+    
+    AppleIIVideoPoint(int x, int y)
+    {
+        this->x = x;
+        this->y = y;
+    }
+    
+    int x;
+    int y;
+};
 
 typedef enum
 {
@@ -24,6 +38,14 @@ typedef enum
     APPLEIIVIDEO_RENDERER_LORES,
     APPLEIIVIDEO_RENDERER_HIRES,
 } AppleIIVideoRenderer;
+
+typedef enum
+{
+    APPLEIIVIDEO_TIMER_VSYNC,
+    APPLEIIVIDEO_TIMER_ACTIVESTART,
+    APPLEIIVIDEO_TIMER_MIXED,
+    APPLEIIVIDEO_TIMER_ACTIVEEND,
+} AppleIIVideoTimerType;
 
 class AppleIIVideo : public OEComponent
 {
@@ -54,24 +76,18 @@ private:
     OEComponent *monitorDevice;
 	OEComponent *monitor;
 	
+    // Settings
     bool rev0;
 	bool palTiming;
 	string characterSet;
-    
+    OEUInt32 flashFrameNum;
     OEUInt32 mode;
     
-    bool oldPALTiming;
+    // Tables
+    vector<OEUInt32> segment;
+    vector<AppleIIVideoPoint> point;
+    vector<AppleIIVideoPoint> count;
     
-    AppleIIVideoRenderer renderer;
-    
-    bool vsyncTimer;
-    OEUInt64 vsyncCycleCount;
-    
-    bool canvasShouldUpdate;
-    AppleIIVideoCount lastCount;
-    
-    OEUInt8 *textMemory[2];
-    OEUInt8 *hiresMemory[2];
     vector<OEAddress> textOffset;
     vector<OEAddress> hiresOffset;
     
@@ -79,37 +95,62 @@ private:
     OEData loresMap;
     OEData hiresMap;
     
+    OEUInt8 *textMemory[2];
+    OEUInt8 *hiresMemory[2];
+    
+    // State variables
     OEImage image;
-    OEUInt32 imageOrigin;
-    bool flash;
+    
+    AppleIIVideoRenderer renderer;
+    OEUInt8 *rendererImage;
+    OEUInt8 *rendererTextMemory;
+    OEUInt8 *rendererHiresMemory;
+    OEUInt8 *rendererTextMap;
+    OEUInt8 *rendererLoresMap;
+    OEUInt8 *rendererHiresMap;
+    
+    OERect videoRect;
+    OERect pictureRect;
+    OERect activeRect;
+    
+    OEUInt64 segmentStart;
+    int lastSegment;
+    int pendingSegments;
+    
+    bool flashActive;
     OEUInt32 flashCount;
     
-    OEUInt32 hCountMap[65];
-    OEUInt32 vCountStart;
+    AppleIIVideoTimerType currentTimer;
     
     ControlBusPowerState powerState;
     
-    void getVRAM(OEComponent *ram, OEAddress &start);
-    void scheduleTimer();
+    bool isTVSystemUpdated;
+    bool isRevUpdated;
     
+    void updateSegments();
+    void initPoints();
+    void updateCounts();
     void initOffsets();
     void loadTextMap(string name, OEData *data);
     void initLoresMap();
-    void initHiresMap();
-    void initHCountMap();
-    
-    void updateTiming();
-    
+    void updateHiresMap();
+    void updateRendererMap();
+    void initVideoRAM(OEComponent *ram, OEAddress &start);
+    void updateImage();
+    void updateClockFrequency();
     void updateMode();
+    
     void setMode(OEUInt32 mask, bool value);
-    AppleIIVideoCount getCount();
+    
+    void refreshVideo();
+    void drawVideo(AppleIIVideoPoint p0, AppleIIVideoPoint p1);
+    void drawVideoLine(int y, int x0, int x1);
+    
+    void scheduleNextTimer(OEInt64 cycles);
+    AppleIIVideoPoint getCount();
     OEUInt8 readFloatingBus();
     
     void vsync();
     
-    void updateVideo();
-    void drawText();
-    void drawLores();
-    void drawHires();
     void copy(wstring *s);
 };

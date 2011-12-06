@@ -178,6 +178,7 @@
         <property name="rev" value="Revision 1"/>
         <property name="tvSystem" value="NTSC"/>
         <property name="characterSet" value="Standard"/>
+        <property name="flashFrameNum" value="14"/>
         <property name="text" value="0"/>
         <property name="mixed" value="0"/>
         <property name="page2" value="0"/>

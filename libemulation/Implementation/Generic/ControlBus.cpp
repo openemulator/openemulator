@@ -297,7 +297,7 @@ void ControlBus::notify(OEComponent *sender, int notification, void *data)
             
             component = events.front().component;
             if (component)
-                component->notify(this, CONTROLBUS_TIMER_DID_FIRE, NULL);
+                component->notify(this, CONTROLBUS_TIMER_DID_FIRE, &cpuCycles);
             
             cycleCount += events.front().cycles;
             blockOffset -= events.front().cycles * cpuClockMultiplier - cpuCycles;

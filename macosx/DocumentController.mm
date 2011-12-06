@@ -73,6 +73,7 @@ void hidDeviceEventOcurred(void *inContext, IOReturn inResult, void *inSender, I
                                @"flac",
                                @"caf",
                                @"ogg", @"oga",
+                               @"ct2",
                                nil];
         
         textPathExtensions = [[NSArray alloc] initWithObjects:

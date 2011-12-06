@@ -1,4 +1,6 @@
 ==Ongoing==
+* Optimized AppleIIVideo
+* Fixed ControlBus, so overdone cycles are notified
 * Fixed JoystickMapper transformations
 * Implemented Apple II shift key mod
 * Added keyboard modifiers to the canvas interface
