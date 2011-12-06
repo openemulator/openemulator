@@ -295,11 +295,6 @@ bool AppleIIVideo::postMessage(OEComponent *sender, int message, void *data)
 {
     switch (message)
     {
-        case APPLEIIVIDEO_GET_MODE:
-            *((OEUInt32 *)data) = mode;
-            
-            return true;
-            
         case APPLEIIVIDEO_REFRESH:
             refreshVideo();
             
