@@ -1,4 +1,5 @@
 ==1.0.2==
+* Connect AppleIIVideoSync
 * Implement AppleIIVideo left border hires bit 7
 * Implement Apple II
 
@@ -36,6 +37,8 @@
 * Implement Apple IIc 01
 * Implement Apple IIc 03
 * Implement Apple IIc plus
+* Implement Mountain Computer SuperTalker
+* Implement Mockingboard
 
 ==1.0.6==
 * Implement Apple III
@@ -49,7 +52,6 @@
 
 ==Canvas==
 * Fix persistence when powering down and restarting an emulation
-* Implement shadow mask with width depending on strength
 * Implement video bloom
 * Implement RGB>YIQ>RGB video processing in the GPU
 

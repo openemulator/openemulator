@@ -41,10 +41,10 @@ typedef enum
 
 typedef enum
 {
-    APPLEIIVIDEO_TIMER_VSYNC,
     APPLEIIVIDEO_TIMER_ACTIVESTART,
     APPLEIIVIDEO_TIMER_MIXED,
     APPLEIIVIDEO_TIMER_ACTIVEEND,
+    APPLEIIVIDEO_TIMER_VSYNC,
 } AppleIIVideoTimerType;
 
 class AppleIIVideo : public OEComponent
@@ -100,6 +100,7 @@ private:
     
     // State variables
     OEImage image;
+    bool imageDidChange;
     
     AppleIIVideoRenderer renderer;
     OEUInt8 *rendererImage;
@@ -108,19 +109,19 @@ private:
     OEUInt8 *rendererTextMap;
     OEUInt8 *rendererLoresMap;
     OEUInt8 *rendererHiresMap;
+    OEUInt8 rendererHiresLast;
     
     OERect videoRect;
     OERect pictureRect;
     OERect activeRect;
     
-    OEUInt64 segmentStart;
+    OEUInt64 frameStart;
+    AppleIIVideoTimerType currentTimer;
     int lastSegment;
     int pendingSegments;
     
     bool flashActive;
     OEUInt32 flashCount;
-    
-    AppleIIVideoTimerType currentTimer;
     
     ControlBusPowerState powerState;
     
@@ -134,15 +135,16 @@ private:
     void loadTextMap(string name, OEData *data);
     void initLoresMap();
     void updateHiresMap();
-    void updateRendererMap();
     void initVideoRAM(OEComponent *ram, OEAddress &start);
     void updateImage();
     void updateClockFrequency();
-    void updateMode();
+    void updateRendererMap();
+    void updateRenderer();
     
     void setMode(OEUInt32 mask, bool value);
     
     void refreshVideo();
+    void updateVideo();
     void drawVideo(AppleIIVideoPoint p0, AppleIIVideoPoint p1);
     void drawVideoLine(int y, int x0, int x1);
     

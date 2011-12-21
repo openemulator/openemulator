@@ -1,4 +1,5 @@
 ==Ongoing==
+* Fixed ControlBus scheduler bug
 * Optimized AppleIIVideo
 * Fixed ControlBus, so overdone cycles are notified
 * Fixed JoystickMapper transformations

@@ -77,6 +77,12 @@ AppleIIVideo::AppleIIVideo()
     image.setSampleRate(14318180);
     image.setFormat(OEIMAGE_LUMINANCE);
     image.setColorBurst(colorBurst);
+    imageDidChange = true;
+    
+    frameStart = 0;
+    currentTimer = APPLEIIVIDEO_TIMER_VSYNC;
+    lastSegment = 0;
+    pendingSegments = 0;
     
     flashActive = false;
     flashCount = flashFrameNum;
@@ -128,7 +134,7 @@ bool AppleIIVideo::getValue(string name, string& value)
 	else if (name == "characterSet")
 		value = characterSet;
 	else if (name == "flashFrameNum")
-		value = flashFrameNum;
+		value = getString(flashFrameNum);
 	else if (name == "text")
 		value = getString(OEGetBit(mode, APPLEIIVIDEO_TEXT));
 	else if (name == "mixed")
@@ -237,6 +243,8 @@ bool AppleIIVideo::init()
     
     controlBus->postMessage(this, CONTROLBUS_GET_POWERSTATE, &powerState);
     
+    update();
+    
     scheduleNextTimer(0);
     
     return true;
@@ -264,7 +272,8 @@ void AppleIIVideo::update()
         updateImage();
         updateClockFrequency();
         
-        controlBus->postMessage(this, CONTROLBUS_GET_CYCLECOUNT, &segmentStart);
+        controlBus->postMessage(this, CONTROLBUS_GET_CYCLECOUNT, &frameStart);
+        currentTimer = APPLEIIVIDEO_TIMER_VSYNC;
         lastSegment = 0;
         
         isTVSystemUpdated = false;
@@ -277,8 +286,6 @@ void AppleIIVideo::update()
         isRevUpdated = false;
     }
     
-    updateMode();
-    
     if (monitor)
     {
         CanvasCaptureMode captureMode;
@@ -288,7 +295,11 @@ void AppleIIVideo::update()
     
     updateRendererMap();
     
+    updateRenderer();
+    
     refreshVideo();
+    
+    updateVideo();
 }
 
 bool AppleIIVideo::postMessage(OEComponent *sender, int message, void *data)
@@ -405,7 +416,7 @@ void AppleIIVideo::updateSegments()
         else if (yv >= ACTIVE_HEIGHT)
         {
             xv = 0;
-            yv = ACTIVE_HEIGHT;
+            yv = 0;
         }
         
         segment[i] = xv + yv * TERM_WIDTH;
@@ -419,7 +430,7 @@ void AppleIIVideo::initPoints()
     for (int i = 0; i < (TERM_WIDTH * ACTIVE_HEIGHT + 1); i++)
     {
         point[i].x = i % TERM_WIDTH;
-        point[i].y = (i / TERM_WIDTH) % ACTIVE_HEIGHT;
+        point[i].y = i / TERM_WIDTH;
     }
 }
 
@@ -524,18 +535,6 @@ void AppleIIVideo::updateHiresMap()
     }
 }
 
-void AppleIIVideo::updateRendererMap()
-{
-    rendererTextMap = (OEUInt8 *)&textMap[characterSet].front();
-
-    if (flashActive)
-        rendererTextMap += MAP_SIZE * MAP_WIDTH * MAP_HEIGHT;
-    
-    rendererLoresMap = (OEUInt8 *)&loresMap.front();
-    
-    rendererHiresMap = (OEUInt8 *)&hiresMap.front();
-}
-
 void AppleIIVideo::initVideoRAM(OEComponent *ram, OEAddress& startAddress)
 {
     // Notes:
@@ -578,7 +577,19 @@ void AppleIIVideo::updateClockFrequency()
     controlBus->postMessage(this, CONTROLBUS_SET_CLOCKFREQUENCY, &clockFrequency);
 }
 
-void AppleIIVideo::updateMode()
+void AppleIIVideo::updateRendererMap()
+{
+    rendererTextMap = (OEUInt8 *)&textMap[characterSet].front();
+    
+    if (flashActive)
+        rendererTextMap += MAP_SIZE * MAP_WIDTH * MAP_HEIGHT;
+    
+    rendererLoresMap = (OEUInt8 *)&loresMap.front();
+    
+    rendererHiresMap = (OEUInt8 *)&hiresMap.front();
+}
+
+void AppleIIVideo::updateRenderer()
 {
     if (rev0 || !OEGetBit(mode, APPLEIIVIDEO_TEXT))
         image.setSubcarrier(3579545);
@@ -589,6 +600,33 @@ void AppleIIVideo::updateMode()
     
     rendererTextMemory = textMemory[page];
     rendererHiresMemory = hiresMemory[page];
+    
+    switch (currentTimer)
+    {
+        case APPLEIIVIDEO_TIMER_MIXED:
+            if (OEGetBit(mode, APPLEIIVIDEO_TEXT))
+                renderer = APPLEIIVIDEO_RENDERER_TEXT;
+            else if (!OEGetBit(mode, APPLEIIVIDEO_HIRES))
+                renderer = APPLEIIVIDEO_RENDERER_LORES;
+            else
+                renderer = APPLEIIVIDEO_RENDERER_HIRES;
+            
+            break;
+            
+        case APPLEIIVIDEO_TIMER_ACTIVEEND:
+            if (OEGetBit(mode, APPLEIIVIDEO_TEXT) ||
+                OEGetBit(mode, APPLEIIVIDEO_MIXED))
+                renderer = APPLEIIVIDEO_RENDERER_TEXT;
+            else if (!OEGetBit(mode, APPLEIIVIDEO_HIRES))
+                renderer = APPLEIIVIDEO_RENDERER_LORES;
+            else
+                renderer = APPLEIIVIDEO_RENDERER_HIRES;
+            
+            break;
+            
+        default:
+            break;
+    }
 }
 
 void AppleIIVideo::setMode(OEUInt32 mask, bool value)
@@ -601,49 +639,54 @@ void AppleIIVideo::setMode(OEUInt32 mask, bool value)
     {
         refreshVideo();
         
-        updateMode();
+        updateVideo();
+        
+        updateRenderer();
     }
 }
 
 void AppleIIVideo::refreshVideo()
 {
+    pendingSegments = ACTIVE_HEIGHT * TERM_WIDTH;
+}
+
+void AppleIIVideo::updateVideo()
+{
     OEUInt64 cycles;
     
     controlBus->postMessage(this, CONTROLBUS_GET_CYCLECOUNT, &cycles);
     
-    int currentSegment = segment[cycles - segmentStart];
+    int currentSegment = segment[cycles - frameStart];
     
-    int segmentNum = min(currentSegment - lastSegment, pendingSegments);
+    int deltaSegment = currentSegment - lastSegment;
+    
+    if (deltaSegment < 0)
+        deltaSegment += ACTIVE_HEIGHT * TERM_WIDTH;
+    
+    int segmentNum = min(deltaSegment, pendingSegments);
+    
+    if (!segmentNum)
+        return;
     
     pendingSegments -= segmentNum;
     
-    int nextSegment = lastSegment + segmentNum;
+    int thisSegment = lastSegment + segmentNum;
     
-    if (nextSegment >= ACTIVE_HEIGHT * TERM_WIDTH)
-    {
-        AppleIIVideoPoint p0 = point[lastSegment];
-        AppleIIVideoPoint p1 = point[nextSegment - ACTIVE_HEIGHT * TERM_WIDTH];
-        
-        drawVideo(p0, AppleIIVideoPoint(TERM_WIDTH, ACTIVE_HEIGHT - 1));
-        drawVideo(AppleIIVideoPoint(0, 0), p1);
-    }
-    else if (nextSegment >= 0)
-    {
-        AppleIIVideoPoint p0 = point[lastSegment];
-        AppleIIVideoPoint p1 = point[nextSegment];
-        
-        drawVideo(p0, p1);
-    }
+    AppleIIVideoPoint p0 = point[lastSegment];
+    AppleIIVideoPoint p1 = point[thisSegment];
+    
+    drawVideo(p0, p1);
     
     lastSegment = currentSegment;
-    pendingSegments = ACTIVE_HEIGHT * TERM_WIDTH;
 }
 
 void AppleIIVideo::drawVideo(AppleIIVideoPoint p0, AppleIIVideoPoint p1)
 {
+    imageDidChange = true;
+    
     if (p0.y == p1.y)
         drawVideoLine(p0.y, p0.x, p1.x);
-    else
+    else if (p0.y < p1.y)
     {
         drawVideoLine(p0.y, p0.x, TERM_WIDTH);
         
@@ -667,7 +710,7 @@ void AppleIIVideo::drawVideoLine(int y, int x0, int x1)
         case APPLEIIVIDEO_RENDERER_TEXT:
         {
             OEUInt64 memoryOffset = textOffset[y >> 3];
-            OEUInt8 *p = rendererImage + y * ((int) OEWidth(pictureRect));
+            OEUInt8 *p = rendererImage + y * ((int) OEWidth(pictureRect)) + x0 * CHAR_WIDTH;
             
             for (int x = x0; x < x1; x++, p += CHAR_WIDTH)
             {
@@ -682,7 +725,7 @@ void AppleIIVideo::drawVideoLine(int y, int x0, int x1)
         case APPLEIIVIDEO_RENDERER_LORES:
         {
             OEUInt64 memoryOffset = textOffset[y >> 3];
-            OEUInt8 *p = rendererImage + y * ((int) OEWidth(pictureRect));
+            OEUInt8 *p = rendererImage + y * ((int) OEWidth(pictureRect)) + x0 * CHAR_WIDTH;
             
             for (int x = x0; x < x1; x++, p += CHAR_WIDTH)
             {
@@ -698,18 +741,16 @@ void AppleIIVideo::drawVideoLine(int y, int x0, int x1)
         case APPLEIIVIDEO_RENDERER_HIRES:
         {
             OEUInt64 memoryOffset = hiresOffset[y];
-            OEUInt8 *p = rendererImage + y * ((int) OEWidth(pictureRect));
-            
-            OEUInt8 lastC = 0;
+            OEUInt8 *p = rendererImage + y * ((int) OEWidth(pictureRect)) + x0 * CHAR_WIDTH;
             
             for (int x = x0; x < x1; x++, p += CHAR_WIDTH)
             {
-                OEUInt8 c = rendererHiresMemory[memoryOffset + x] | ((lastC & 0x40) << 2);
+                OEUInt32 c = rendererHiresMemory[memoryOffset + x] | ((rendererHiresLast & 0x40) << 2);
                 OEUInt8 *m = rendererHiresMap + c * MAP_WIDTH;
                 
                 copySegment(p, m);
                 
-                lastC = c;
+                rendererHiresLast = c;
             }
             
             break;
@@ -719,11 +760,22 @@ void AppleIIVideo::drawVideoLine(int y, int x0, int x1)
 
 void AppleIIVideo::scheduleNextTimer(OEInt64 cycles)
 {
+    updateVideo();
+    
+    currentTimer++;
+    if (currentTimer > APPLEIIVIDEO_TIMER_VSYNC)
+        currentTimer = APPLEIIVIDEO_TIMER_ACTIVESTART;
+    
     switch (currentTimer)
     {
-        case APPLEIIVIDEO_TIMER_VSYNC:
-            if (monitor)
-                monitor->postMessage(this, CANVAS_POST_IMAGE, &image);
+        case APPLEIIVIDEO_TIMER_ACTIVESTART:
+            if (imageDidChange)
+            {
+                imageDidChange = false;
+                
+                if (monitor)
+                    monitor->postMessage(this, CANVAS_POST_IMAGE, &image);
+            }
             
             if (powerState == CONTROLBUS_POWERSTATE_ON)
             {
@@ -740,54 +792,33 @@ void AppleIIVideo::scheduleNextTimer(OEInt64 cycles)
                 }
             }
             
-            controlBus->postMessage(this, CONTROLBUS_GET_CYCLECOUNT, &segmentStart);
+            controlBus->postMessage(this, CONTROLBUS_GET_CYCLECOUNT, &frameStart);
             
-            segmentStart -= cycles;
+            frameStart += cycles;
             
             cycles += OEMinY(activeRect) * 65;
             
             break;
             
-        case APPLEIIVIDEO_TIMER_ACTIVESTART:
-            if (OEGetBit(mode, APPLEIIVIDEO_TEXT))
-                renderer = APPLEIIVIDEO_RENDERER_TEXT;
-            else if (!OEGetBit(mode, APPLEIIVIDEO_HIRES))
-                renderer = APPLEIIVIDEO_RENDERER_LORES;
-            else
-                renderer = APPLEIIVIDEO_RENDERER_HIRES;
+        case APPLEIIVIDEO_TIMER_MIXED:
+            updateRenderer();
             
-            if (pendingSegments)
-                refreshVideo();
-            
-            cycles += (ACTIVE_HEIGHT - 32) * 65;
+            cycles += (OEHeight(activeRect) - 32) * 65;
             
             break;
             
-        case APPLEIIVIDEO_TIMER_MIXED:
-            if (OEGetBit(mode, APPLEIIVIDEO_TEXT) ||
-                OEGetBit(mode, APPLEIIVIDEO_MIXED))
-                renderer = APPLEIIVIDEO_RENDERER_TEXT;
-            else if (!OEGetBit(mode, APPLEIIVIDEO_HIRES))
-                renderer = APPLEIIVIDEO_RENDERER_LORES;
-            else
-                renderer = APPLEIIVIDEO_RENDERER_HIRES;
-            
-            if (pendingSegments)
-                refreshVideo();
+        case APPLEIIVIDEO_TIMER_ACTIVEEND:
+            updateRenderer();
             
             cycles += 32 * 65;
             
             break;
             
-        case APPLEIIVIDEO_TIMER_ACTIVEEND:
+        case APPLEIIVIDEO_TIMER_VSYNC:
             cycles += (OEMaxY(videoRect) - OEMaxY(activeRect)) * 65;
             
             break;
     }
-    
-    currentTimer++;
-    if (currentTimer > APPLEIIVIDEO_TIMER_ACTIVEEND)
-        currentTimer = APPLEIIVIDEO_TIMER_VSYNC;
     
     controlBus->postMessage(this, CONTROLBUS_SCHEDULE_TIMER, &cycles);
 }
@@ -798,7 +829,7 @@ AppleIIVideoPoint AppleIIVideo::getCount()
     
     controlBus->postMessage(this, CONTROLBUS_GET_CYCLECOUNT, &cycles);
     
-    return count[cycles - segmentStart];
+    return count[cycles - frameStart];
 }
 
 OEUInt8 AppleIIVideo::readFloatingBus()
