@@ -34,6 +34,19 @@ public:
 
 typedef enum
 {
+    APPLEIIVIDEO_REVISION0,
+    APPLEIIVIDEO_REVISION1,
+    APPLEIIVIDEO_REVISIONIIE,
+} AppleIIVideoRevision;
+
+typedef enum
+{
+    APPLEIIVIDEO_NTSC,
+    APPLEIIVIDEO_PAL,
+} AppleIIVideoSystem;
+
+typedef enum
+{
     APPLEIIVIDEO_RENDERER_TEXT,
     APPLEIIVIDEO_RENDERER_LORES,
     APPLEIIVIDEO_RENDERER_HIRES,
@@ -69,6 +82,7 @@ public:
 private:
     OEComponent *device;
     OEComponent *controlBus;
+    OEComponent *mmu;
     OEComponent *floatingBus;
     OEComponent *ram1;
     OEComponent *ram2;
@@ -77,14 +91,14 @@ private:
 	OEComponent *monitor;
 	
     // Settings
-    bool rev0;
-	bool palTiming;
+    AppleIIVideoRevision revision;
+    AppleIIVideoSystem tvSystem;
 	string characterSet;
     OEUInt32 flashFrameNum;
     OEUInt32 mode;
     
     // Tables
-    vector<OEUInt32> segment;
+    vector<int> segment;
     vector<AppleIIVideoPoint> point;
     vector<AppleIIVideoPoint> count;
     
@@ -96,6 +110,7 @@ private:
     OEData hiresMap;
     
     OEUInt8 *textMemory[2];
+    OEUInt8 *textHBLMemory[2];
     OEUInt8 *hiresMemory[2];
     
     // State variables
@@ -109,7 +124,6 @@ private:
     OEUInt8 *rendererTextMap;
     OEUInt8 *rendererLoresMap;
     OEUInt8 *rendererHiresMap;
-    OEUInt8 rendererHiresLast;
     
     OERect videoRect;
     OERect pictureRect;
@@ -125,8 +139,8 @@ private:
     
     ControlBusPowerState powerState;
     
+    bool isRevisionUpdated;
     bool isTVSystemUpdated;
-    bool isRevUpdated;
     
     void updateSegments();
     void initPoints();
@@ -143,10 +157,9 @@ private:
     
     void setMode(OEUInt32 mask, bool value);
     
-    void refreshVideo();
     void updateVideo();
-    void drawVideo(AppleIIVideoPoint p0, AppleIIVideoPoint p1);
     void drawVideoLine(int y, int x0, int x1);
+    void setNeedsDisplay();
     
     void scheduleNextTimer(OEInt64 cycles);
     AppleIIVideoPoint getCount();

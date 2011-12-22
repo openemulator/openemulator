@@ -131,7 +131,6 @@
 		00DEA9201423B7BC003E9FA0 /* RDCFFA1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00DEA91F1423B7BC003E9FA0 /* RDCFFA1.cpp */; };
 		00DEA9221423B7C9003E9FA0 /* RDCFFA1.h in Headers */ = {isa = PBXBuildFile; fileRef = 00DEA9211423B7C9003E9FA0 /* RDCFFA1.h */; };
 		00E442921278726B00713A05 /* IconDevices.png in Resources */ = {isa = PBXBuildFile; fileRef = 00E442911278726B00713A05 /* IconDevices.png */; };
-		00E473421475695500F367B7 /* diskimage.h in Headers */ = {isa = PBXBuildFile; fileRef = 00E473411475695500F367B7 /* diskimage.h */; };
 		00ED379C12779AD100BEF6BD /* AudioMax.png in Resources */ = {isa = PBXBuildFile; fileRef = 00ED379712779AD000BEF6BD /* AudioMax.png */; };
 		00ED379D12779AD100BEF6BD /* AudioMin.png in Resources */ = {isa = PBXBuildFile; fileRef = 00ED379812779AD000BEF6BD /* AudioMin.png */; };
 		00ED379E12779AD100BEF6BD /* AudioPlay.png in Resources */ = {isa = PBXBuildFile; fileRef = 00ED379912779AD000BEF6BD /* AudioPlay.png */; };
@@ -193,13 +192,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 006EECA30FCA5C31003D2C8D;
 			remoteInfo = emulator;
-		};
-		00E4734314756AC800F367B7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 00E4733C1475692E00F367B7;
-			remoteInfo = libdiskimage;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -454,7 +446,6 @@
 		00DEA9211423B7C9003E9FA0 /* RDCFFA1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDCFFA1.h; sourceTree = "<group>"; };
 		00E442911278726B00713A05 /* IconDevices.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IconDevices.png; sourceTree = "<group>"; };
 		00E442931278727600713A05 /* EmulationShow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EmulationShow.png; sourceTree = "<group>"; };
-		00E4733D1475692E00F367B7 /* liblibdiskimage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = liblibdiskimage.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E473411475695500F367B7 /* diskimage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = diskimage.h; sourceTree = "<group>"; };
 		00ED379712779AD000BEF6BD /* AudioMax.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AudioMax.png; sourceTree = "<group>"; };
 		00ED379812779AD000BEF6BD /* AudioMin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AudioMin.png; sourceTree = "<group>"; };
@@ -496,13 +487,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		006EECA20FCA5C31003D2C8D /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		00E4733A1475692E00F367B7 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -935,7 +919,6 @@
 				8D15AC370486D014006FF6A4 /* OpenEmulator.app */,
 				00039E7C12B03F660025D374 /* libemulation-hal.a */,
 				00039EFE12B04E910025D374 /* libemulation.a */,
-				00E4733D1475692E00F367B7 /* liblibdiskimage.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1107,14 +1090,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		00E4733B1475692E00F367B7 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				00E473421475695500F367B7 /* diskimage.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
@@ -1152,23 +1127,6 @@
 			productReference = 00039EFE12B04E910025D374 /* libemulation.a */;
 			productType = "com.apple.product-type.library.static";
 		};
-		00E4733C1475692E00F367B7 /* libdiskimage */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 00E4733E1475692E00F367B7 /* Build configuration list for PBXNativeTarget "libdiskimage" */;
-			buildPhases = (
-				00E473391475692E00F367B7 /* Sources */,
-				00E4733A1475692E00F367B7 /* Frameworks */,
-				00E4733B1475692E00F367B7 /* Headers */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = libdiskimage;
-			productName = libdiskimage;
-			productReference = 00E4733D1475692E00F367B7 /* liblibdiskimage.a */;
-			productType = "com.apple.product-type.library.static";
-		};
 		8D15AC270486D014006FF6A4 /* OpenEmulator */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C05733C708A9546B00998B17 /* Build configuration list for PBXNativeTarget "OpenEmulator" */;
@@ -1182,7 +1140,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				00E4734414756AC800F367B7 /* PBXTargetDependency */,
 				006EECE60FCA6097003D2C8D /* PBXTargetDependency */,
 				00039E8212B03F7A0025D374 /* PBXTargetDependency */,
 			);
@@ -1218,7 +1175,6 @@
 				8D15AC270486D014006FF6A4 /* OpenEmulator */,
 				00039E7B12B03F650025D374 /* emulation-hal */,
 				006EECA30FCA5C31003D2C8D /* emulation */,
-				00E4733C1475692E00F367B7 /* libdiskimage */,
 			);
 		};
 /* End PBXProject section */
@@ -1354,13 +1310,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		00E473391475692E00F367B7 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		8D15AC300486D014006FF6A4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1408,11 +1357,6 @@
 			isa = PBXTargetDependency;
 			target = 006EECA30FCA5C31003D2C8D /* emulation */;
 			targetProxy = 006EECE50FCA6097003D2C8D /* PBXContainerItemProxy */;
-		};
-		00E4734414756AC800F367B7 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 00E4733C1475692E00F367B7 /* libdiskimage */;
-			targetProxy = 00E4734314756AC800F367B7 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1514,41 +1458,6 @@
 			};
 			name = Release;
 		};
-		00E4733F1475692E00F367B7 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				COPY_PHASE_STRIP = NO;
-				EXECUTABLE_PREFIX = lib;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		00E473401475692E00F367B7 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				EXECUTABLE_PREFIX = lib;
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
 		C05733C808A9546B00998B17 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1644,15 +1553,6 @@
 			buildConfigurations = (
 				006EECA50FCA5C32003D2C8D /* Debug */,
 				006EECA60FCA5C32003D2C8D /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		00E4733E1475692E00F367B7 /* Build configuration list for PBXNativeTarget "libdiskimage" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				00E4733F1475692E00F367B7 /* Debug */,
-				00E473401475692E00F367B7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -3,7 +3,7 @@
 <edl version="1.0" generator="OpenEmulator" framework="700" label="Apple II" image="images/Apple/Apple II.png" description="The Apple II was an 8-bit home computer, one of the first highly successful mass-produced microcomputers. It had a MOS 6502 microprocessor running at 1 MHz, 4 kiB of RAM, an audio cassette interface for loading programs and storing data, and the Integer BASIC built into the ROMs.">
     
     <device id="appleII" label="Apple II" image="images/Apple/Apple II.png">
-        <setting ref="appleII.video" name="rev" label="Revision" type="select" options="Revision 0,Revision 1"/>
+        <setting ref="appleII.video" name="revision" label="Revision" type="select" options="Revision 0,Revision 1+"/>
         <setting ref="appleII.video" name="tvSystem" label="TV System" type="select" options="NTSC,PAL"/>
         <setting ref="appleII.video" name="characterSet" label="Character Set" type="select" options="Standard,Videx Lowercase Chip,Pigfont"/>
         <setting ref="appleII.keyboard" name="type" label="Keyboard" type="select" options="Standard,Shift-Key Mod,Full ASCII"/>
@@ -175,7 +175,7 @@
         <property name="monitor" ref=""/>
     </component>
     <component id="appleII.video" class="AppleIIVideo">
-        <property name="rev" value="Revision 1"/>
+        <property name="revision" value="Revision 1+"/>
         <property name="tvSystem" value="NTSC"/>
         <property name="characterSet" value="Standard"/>
         <property name="flashFrameNum" value="14"/>
@@ -185,6 +185,7 @@
         <property name="hires" value="0"/>
         <property name="device" ref="appleII"/>
         <property name="controlBus" ref="appleII.controlBus"/>
+        <property name="mmu" ref="appleII.mmu"/>
         <property name="floatingBus" ref="appleII.floatingBus"/>
         <property name="ram1" ref="appleII.ram1"/>
         <property name="ram2" ref="appleII.ram2"/>
@@ -194,6 +195,9 @@
         <property name="fontStandard" data="${resourcePath}/roms/Apple/341-0036.bin"/>
         <property name="fontVidex Lowercase Chip" data="${resourcePath}/roms/Videx/Videx Lower Case Chip ROM.bin"/>
         <property name="fontPigfont" data="${resourcePath}/roms/Apple/Pigfont Video ROM.bin"/>
+    </component>
+    <component id="appleII.videoSync" class="AppleIIVideoSync">
+        <property name="video" ref="appleII.video"/>
     </component>
     <component id="appleII.audioOut" class="AppleIIAudioOut">
         <property name="floatingBus" ref="appleII.floatingBus"/>

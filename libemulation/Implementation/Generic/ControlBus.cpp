@@ -442,6 +442,7 @@ void ControlBus::scheduleTimer(OEComponent *component, OEUInt64 cycles)
             
             if (inBlock && (i == events.begin()))
             {
+                // To-Do: Check this!!
                 cpuCycles = floor(cycles * cpuClockMultiplier - blockOffset);
                 blockOffset += cpuCycles;
                 

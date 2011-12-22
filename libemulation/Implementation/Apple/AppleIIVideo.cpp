@@ -47,8 +47,8 @@
 
 AppleIIVideo::AppleIIVideo()
 {
-    rev0 = false;
-    palTiming = false;
+    revision = APPLEIIVIDEO_REVISIONIIE;
+    tvSystem = APPLEIIVIDEO_NTSC;
     characterSet = "Standard";
     flashFrameNum = 16;
     mode = 0;
@@ -67,9 +67,11 @@ AppleIIVideo::AppleIIVideo()
     initLoresMap();
     
     for (int i = 0; i < 2; i++)
+    {
         textMemory[i] = NULL;
-    for (int i = 0; i < 2; i++)
+        textHBLMemory[i] = NULL;
         hiresMemory[i] = NULL;
+    }
     
     vector<float> colorBurst;
     colorBurst.push_back(M_PI * -33.0 / 180.0);
@@ -89,21 +91,29 @@ AppleIIVideo::AppleIIVideo()
     
     powerState = CONTROLBUS_POWERSTATE_ON;
     
+    isRevisionUpdated = true;
     isTVSystemUpdated = true;
-    isRevUpdated = true;
 }
 
 bool AppleIIVideo::setValue(string name, string value)
 {
-	if (name == "rev")
+	if (name == "revision")
     {
-        rev0 = (value == "Revision 0");
+        if (value == "Revision 0")
+            revision = APPLEIIVIDEO_REVISION0;
+        else if (value == "Revision 1+")
+            revision = APPLEIIVIDEO_REVISION1;
+        else if (value == "IIe")
+            revision = APPLEIIVIDEO_REVISIONIIE;
         
-        isRevUpdated = true;
+        isRevisionUpdated = true;
     }
 	else if (name == "tvSystem")
     {
-		palTiming = (value == "PAL");
+        if (value == "NTSC")
+            tvSystem = APPLEIIVIDEO_NTSC;
+        else if (value == "PAL")
+            tvSystem = APPLEIIVIDEO_PAL;
         
         isTVSystemUpdated = true;
     }
@@ -127,10 +137,41 @@ bool AppleIIVideo::setValue(string name, string value)
 
 bool AppleIIVideo::getValue(string name, string& value)
 {
-    if (name == "rev")
-        value = rev0 ? "Revision 0" : "Revision 1";
+    if (name == "revision")
+    {
+        switch (revision)
+        {
+            case APPLEIIVIDEO_REVISION0:
+                value = "Revision 0";
+                
+                break;
+                
+            case APPLEIIVIDEO_REVISION1:
+                value = "Revision 1+";
+                
+                break;
+                
+            case APPLEIIVIDEO_REVISIONIIE:
+                value = "IIe";
+                
+                break;
+        }
+    }
 	else if (name == "tvSystem")
-		value = palTiming ? "PAL" : "NTSC";
+    {
+        switch (tvSystem)
+        {
+            case APPLEIIVIDEO_NTSC:
+                value = "NTSC";
+                
+                break;
+                
+            case APPLEIIVIDEO_PAL:
+                value = "PAL";
+                
+                break;
+        }
+    }
 	else if (name == "characterSet")
 		value = characterSet;
 	else if (name == "flashFrameNum")
@@ -167,6 +208,8 @@ bool AppleIIVideo::setRef(string name, OEComponent *ref)
             controlBus->addObserver(this, CONTROLBUS_TIMER_DID_FIRE);
         }
     }
+    else if (name == "mmu")
+        mmu = ref;
 	else if (name == "floatingBus")
 		floatingBus = ref;
     else if ((name == "ram1") || (name == "ram"))
@@ -254,17 +297,17 @@ void AppleIIVideo::update()
 {
     if (isTVSystemUpdated)
     {
-        if (!palTiming)
+        if (tvSystem == APPLEIIVIDEO_NTSC)
         {
             videoRect = OEMakeRect(0, 0, 912, 262);
             pictureRect = OEMakeRect(128, 19, 768, 240);
             activeRect = OEMakeRect(232, 38, 560, 192);
         }
-        else
+        else if (tvSystem == APPLEIIVIDEO_PAL)
         {
             videoRect = OEMakeRect(0, 0, 912, 312);
             pictureRect = OEMakeRect(128, 21, 768, 288);
-            activeRect = OEMakeRect(232, 47, 560, 192);
+            activeRect = OEMakeRect(232, 48, 560, 192);
         }
         
         updateSegments();
@@ -279,11 +322,11 @@ void AppleIIVideo::update()
         isTVSystemUpdated = false;
     }
     
-    if (isRevUpdated)
+    if (isRevisionUpdated)
     {
         updateHiresMap();
         
-        isRevUpdated = false;
+        isRevisionUpdated = false;
     }
     
     if (monitor)
@@ -293,13 +336,13 @@ void AppleIIVideo::update()
         monitor->postMessage(this, CANVAS_SET_CAPTUREMODE, &captureMode);
     }
     
+    updateVideo();
+    
     updateRendererMap();
     
     updateRenderer();
     
-    refreshVideo();
-    
-    updateVideo();
+    setNeedsDisplay();
 }
 
 bool AppleIIVideo::postMessage(OEComponent *sender, int message, void *data)
@@ -307,7 +350,7 @@ bool AppleIIVideo::postMessage(OEComponent *sender, int message, void *data)
     switch (message)
     {
         case APPLEIIVIDEO_REFRESH:
-            refreshVideo();
+            setNeedsDisplay();
             
             return true;
             
@@ -425,9 +468,9 @@ void AppleIIVideo::updateSegments()
 
 void AppleIIVideo::initPoints()
 {
-    point.resize(TERM_WIDTH * ACTIVE_HEIGHT + 1);
+    point.resize(TERM_WIDTH * ACTIVE_HEIGHT);
     
-    for (int i = 0; i < (TERM_WIDTH * ACTIVE_HEIGHT + 1); i++)
+    for (int i = 0; i < TERM_WIDTH * ACTIVE_HEIGHT; i++)
     {
         point[i].x = i % TERM_WIDTH;
         point[i].y = i / TERM_WIDTH;
@@ -440,13 +483,20 @@ void AppleIIVideo::updateCounts()
     
     count.resize(cycleNum);
     
+    int videoHeight = (int) OEHeight(videoRect);
+    
     for (int i = 0; i < cycleNum; i++)
     {
         int x = i % 65;
         int y = i / 65;
         
         count[i].x = x ? (x + 0x40 - 1) : 0;
-        count[i].y = (y + 0x1ff - (int) OEMinY(activeRect)) & 0x1ff;
+        count[i].y = y + 0x100 - (int) OEMinY(activeRect);
+        
+        if (count[i].y < (0x200 - videoHeight))
+            count[i].y += videoHeight;
+        else if (count[i].y > 0x200)
+            count[i].y -= videoHeight;
     }
 }
 
@@ -524,7 +574,7 @@ void AppleIIVideo::updateHiresMap()
     for (int c = 0; c < 2 * MAP_SIZE; c++)
     {
         OEUInt8 byte = (c & 0x7f) << 1 | (c >> 8);
-        bool delay = !rev0 && (c & 0x80);
+        bool delay = (revision != APPLEIIVIDEO_REVISION0) && (c & 0x80);
         
         for (int x = 0; x < MAP_WIDTH; x++)
         {
@@ -553,6 +603,10 @@ void AppleIIVideo::initVideoRAM(OEComponent *ram, OEAddress& startAddress)
         textMemory[0] = &data->front() + 0x400 - startAddress;
     if ((startAddress <= 0x800) && (endAddress >= 0xbff))
         textMemory[1] = &data->front() + 0x800 - startAddress;
+    if ((startAddress <= 0x1400) && (endAddress >= 0x17ff))
+        textHBLMemory[0] = &data->front() + 0x1400 - startAddress;
+    if ((startAddress <= 0x1800) && (endAddress >= 0x1bff))
+        textHBLMemory[1] = &data->front() + 0x1800 - startAddress;
     if ((startAddress <= 0x2000) && (endAddress >= 0x3fff))
         hiresMemory[0] = &data->front() + 0x2000 - startAddress;
     if ((startAddress <= 0x4000) && (endAddress >= 0x5fff))
@@ -572,7 +626,12 @@ void AppleIIVideo::updateImage()
 
 void AppleIIVideo::updateClockFrequency()
 {
-    float clockFrequency = palTiming ? (14318180.0 * 65 / 912) : (14250000.0 * 65 / 912);
+    float clockFrequency;
+    
+    if (tvSystem == APPLEIIVIDEO_NTSC)
+        clockFrequency = 14318180.0 * 65 / 912;
+    else if (tvSystem == APPLEIIVIDEO_PAL)
+        clockFrequency = 14250000.0 * 65 / 912;
     
     controlBus->postMessage(this, CONTROLBUS_SET_CLOCKFREQUENCY, &clockFrequency);
 }
@@ -591,7 +650,7 @@ void AppleIIVideo::updateRendererMap()
 
 void AppleIIVideo::updateRenderer()
 {
-    if (rev0 || !OEGetBit(mode, APPLEIIVIDEO_TEXT))
+    if ((revision == APPLEIIVIDEO_REVISION0) || !OEGetBit(mode, APPLEIIVIDEO_TEXT))
         image.setSubcarrier(3579545);
     else
         image.setSubcarrier(0);
@@ -637,17 +696,12 @@ void AppleIIVideo::setMode(OEUInt32 mask, bool value)
     
     if (mode != oldMode)
     {
-        refreshVideo();
-        
         updateVideo();
         
         updateRenderer();
+        
+        setNeedsDisplay();
     }
-}
-
-void AppleIIVideo::refreshVideo()
-{
-    pendingSegments = ACTIVE_HEIGHT * TERM_WIDTH;
 }
 
 void AppleIIVideo::updateVideo()
@@ -656,7 +710,7 @@ void AppleIIVideo::updateVideo()
     
     controlBus->postMessage(this, CONTROLBUS_GET_CYCLECOUNT, &cycles);
     
-    int currentSegment = segment[cycles - frameStart];
+    int currentSegment = segment[(size_t) (cycles - frameStart)];
     
     int deltaSegment = currentSegment - lastSegment;
     
@@ -665,36 +719,31 @@ void AppleIIVideo::updateVideo()
     
     int segmentNum = min(deltaSegment, pendingSegments);
     
-    if (!segmentNum)
-        return;
-    
-    pendingSegments -= segmentNum;
-    
-    int thisSegment = lastSegment + segmentNum;
-    
-    AppleIIVideoPoint p0 = point[lastSegment];
-    AppleIIVideoPoint p1 = point[thisSegment];
-    
-    drawVideo(p0, p1);
+    if (segmentNum)
+    {
+        pendingSegments -= segmentNum;
+        
+        int thisSegment = lastSegment + segmentNum;
+        
+        AppleIIVideoPoint p0 = point[lastSegment];
+        AppleIIVideoPoint p1 = point[thisSegment - 1];
+        
+        if (p0.y == p1.y)
+            drawVideoLine(p0.y, p0.x, p1.x);
+        else
+        {
+            drawVideoLine(p0.y, p0.x, TERM_WIDTH - 1);
+            
+            for (OEUInt32 i = (p0.y + 1); i < p1.y; i++)
+                drawVideoLine(i, 0, TERM_WIDTH - 1);
+            
+            drawVideoLine(p1.y, 0, p1.x);
+        }
+        
+        imageDidChange = true;
+    }
     
     lastSegment = currentSegment;
-}
-
-void AppleIIVideo::drawVideo(AppleIIVideoPoint p0, AppleIIVideoPoint p1)
-{
-    imageDidChange = true;
-    
-    if (p0.y == p1.y)
-        drawVideoLine(p0.y, p0.x, p1.x);
-    else if (p0.y < p1.y)
-    {
-        drawVideoLine(p0.y, p0.x, TERM_WIDTH);
-        
-        for (OEUInt32 i = (p0.y + 1); i < p1.y; i++)
-            drawVideoLine(i, 0, TERM_WIDTH);
-        
-        drawVideoLine(p1.y, 0, p1.x);
-    }
 }
 
 // Copy a 14-pixel segment
@@ -712,10 +761,11 @@ void AppleIIVideo::drawVideoLine(int y, int x0, int x1)
             OEUInt64 memoryOffset = textOffset[y >> 3];
             OEUInt8 *p = rendererImage + y * ((int) OEWidth(pictureRect)) + x0 * CHAR_WIDTH;
             
-            for (int x = x0; x < x1; x++, p += CHAR_WIDTH)
+            for (OEUInt64 x = x0; x <= x1; x++, p += CHAR_WIDTH)
             {
                 OEUInt8 c = rendererTextMemory[memoryOffset + x];
-                OEUInt8 *m = rendererTextMap + (y & 0x7) * MAP_WIDTH + c * MAP_HEIGHT * MAP_WIDTH;
+                OEUInt8 *m = (rendererTextMap + (y & 0x7) * MAP_WIDTH +
+                              c * MAP_HEIGHT * MAP_WIDTH);
                 
                 copySegment(p, m);
             }
@@ -727,11 +777,12 @@ void AppleIIVideo::drawVideoLine(int y, int x0, int x1)
             OEUInt64 memoryOffset = textOffset[y >> 3];
             OEUInt8 *p = rendererImage + y * ((int) OEWidth(pictureRect)) + x0 * CHAR_WIDTH;
             
-            for (int x = x0; x < x1; x++, p += CHAR_WIDTH)
+            for (OEUInt64 x = x0; x <= x1; x++, p += CHAR_WIDTH)
             {
                 OEUInt8 c = rendererTextMemory[memoryOffset + x];
                 OEUInt8 *m = (rendererLoresMap + (y & 0x7) * MAP_WIDTH +
-                              c * MAP_HEIGHT * MAP_WIDTH + (x & 1) * MAP_SIZE * MAP_WIDTH * MAP_HEIGHT);
+                              c * MAP_HEIGHT * MAP_WIDTH +
+                              (x & 1) * MAP_SIZE * MAP_WIDTH * MAP_HEIGHT);
                 
                 copySegment(p, m);
             }
@@ -743,19 +794,26 @@ void AppleIIVideo::drawVideoLine(int y, int x0, int x1)
             OEUInt64 memoryOffset = hiresOffset[y];
             OEUInt8 *p = rendererImage + y * ((int) OEWidth(pictureRect)) + x0 * CHAR_WIDTH;
             
-            for (int x = x0; x < x1; x++, p += CHAR_WIDTH)
+            for (OEUInt64 x = x0; x <= x1; x++, p += CHAR_WIDTH)
             {
-                OEUInt32 c = rendererHiresMemory[memoryOffset + x] | ((rendererHiresLast & 0x40) << 2);
+                // To-Do: Implement Apple IIe delay
+                OEUInt64 offset = memoryOffset + x;
+                OEUInt64 lastOffset = (offset & ~0x7f) | ((offset - 1) & 0x7f);
+                
+                OEUInt32 c = rendererHiresMemory[offset] | ((rendererHiresMemory[lastOffset] & 0x40) << 2);
                 OEUInt8 *m = rendererHiresMap + c * MAP_WIDTH;
                 
                 copySegment(p, m);
-                
-                rendererHiresLast = c;
             }
             
             break;
         }
     }
+}
+
+void AppleIIVideo::setNeedsDisplay()
+{
+    pendingSegments = ACTIVE_HEIGHT * TERM_WIDTH;
 }
 
 void AppleIIVideo::scheduleNextTimer(OEInt64 cycles)
@@ -788,7 +846,7 @@ void AppleIIVideo::scheduleNextTimer(OEInt64 cycles)
                     
                     updateRendererMap();
                     
-                    refreshVideo();
+                    setNeedsDisplay();
                 }
             }
             
@@ -829,39 +887,41 @@ AppleIIVideoPoint AppleIIVideo::getCount()
     
     controlBus->postMessage(this, CONTROLBUS_GET_CYCLECOUNT, &cycles);
     
-    return count[cycles - frameStart];
+    return count[(size_t) (cycles - frameStart)];
 }
 
 OEUInt8 AppleIIVideo::readFloatingBus()
 {
     AppleIIVideoPoint count = getCount();
     
-	bool isMixed = OEGetBit(mode, APPLEIIVIDEO_MIXED) && ((count.y & 0xa0) == 0xa0);
-	bool isHires = OEGetBit(mode, APPLEIIVIDEO_HIRES) && !(OEGetBit(mode, APPLEIIVIDEO_TEXT) || isMixed);
-	bool isPage2 = OEGetBit(mode, APPLEIIVIDEO_PAGE2);
+	bool mixed = OEGetBit(mode, APPLEIIVIDEO_MIXED) && ((count.y & 0xa0) == 0xa0);
+	bool hires = OEGetBit(mode, APPLEIIVIDEO_HIRES) && !(OEGetBit(mode, APPLEIIVIDEO_TEXT) || mixed);
+	bool page = OEGetBit(mode, APPLEIIVIDEO_PAGE2);
 	
 	OEUInt32 address = count.x & 0x7;
-	OEUInt32 h5h4h3 = count.x & 0x38;
 	
+    OEUInt32 h5h4h3 = count.x & 0x38;
+    
     OEUInt32 v4v3 = count.y & 0xc0;
 	OEUInt32 v4v3v4v3 = (v4v3 >> 3) | (v4v3 >> 1);
 	
     address |= ((0x68 + h5h4h3 + v4v3v4v3) & 0x78);
 	address |= (count.y & 0x38) << 4;
     
-	if (isHires)
+	if (hires)
     {
 		address |= (count.y & 0x7) << 10;
         
-//        if (isAppleIIVideo)
-        {
-			bool isHbl = count.x < 0x58;
-			address |= isHbl ? 0x1000 : 0x0000;
-		}
-        return hiresMemory[isPage2][address];
+        return hiresMemory[page][address];
 	}
     else
-        return textMemory[isPage2][address];
+    {
+        // On the Apple II: set A12 on horizontal blanking
+        if ((revision != APPLEIIVIDEO_REVISIONIIE) && (count.x < 0x58))
+            return textHBLMemory[page][address];
+        
+        return textMemory[page][address];
+    }
 }
 
 void AppleIIVideo::copy(wstring *s)

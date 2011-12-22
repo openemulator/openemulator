@@ -37,6 +37,7 @@
 #include "AppleIISlotExpansionMemory.h"
 #include "AppleIISlotMemory.h"
 #include "AppleIIVideo.h"
+#include "AppleIIVideoSync.h"
 #include "AppleSilentype.h"
 
 #include "MOS6502.h"
@@ -86,6 +87,7 @@ OEComponent *OEComponentFactory::construct(const string& className)
     matchComponent(AppleIISlotExpansionMemory);
     matchComponent(AppleIISlotMemory);
     matchComponent(AppleIIVideo);
+    matchComponent(AppleIIVideoSync);
     matchComponent(AppleSilentype);
     
     matchComponent(MOS6502);

@@ -33,7 +33,7 @@
         <property name="videoHorizontalSize" value="1.05"/>
         <property name="videoVerticalCenter" value="0"/>
         <property name="videoVerticalSize" value="1.05"/>
-        <property name="videoBandwidth" value="4500000"/>
+        <property name="videoBandwidth" value="6000000"/>
         <property name="displayBarrel" value="0.1"/>
         <property name="displayScanlineLevel" value="0.5"/>
         <property name="displayPersistence" value="0"/>

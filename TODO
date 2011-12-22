@@ -1,6 +1,5 @@
 ==1.0.2==
-* Connect AppleIIVideoSync
-* Implement AppleIIVideo left border hires bit 7
+* Manage AppleIIVideoSync
 * Implement Apple II
 
 ==1.0.3==
@@ -45,6 +44,10 @@
 
 ==1.0.7==
 * Implement Apple IIGS ROM00, ROM01, ROM03
+
+==Checks==
+* Fix screen blanking when power is turned off
+* Check CPU consumption when paused
 
 ==Devices==
 * Implement video capture interface

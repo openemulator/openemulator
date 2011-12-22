@@ -1,4 +1,7 @@
 ==Ongoing==
+* Implemented AppleIIVideo left border hires bit 7
+* Fixed horizontal and vertical counts
+* Fixed AppleIIVideo lastSegment bug
 * Fixed ControlBus scheduler bug
 * Optimized AppleIIVideo
 * Fixed ControlBus, so overdone cycles are notified
