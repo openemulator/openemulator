@@ -59,6 +59,7 @@ AppleIIVideo::AppleIIVideo()
     ram1 = NULL;
     ram2 = NULL;
     ram3 = NULL;
+    videoRAMSync = NULL;
     monitorDevice = NULL;
     monitor = NULL;
     
@@ -93,6 +94,8 @@ AppleIIVideo::AppleIIVideo()
     
     isRevisionUpdated = true;
     isTVSystemUpdated = true;
+    
+    isVideoRAMInSync = false;
 }
 
 bool AppleIIVideo::setValue(string name, string value)
@@ -218,6 +221,8 @@ bool AppleIIVideo::setRef(string name, OEComponent *ref)
         ram2 = ref;
     else if (name == "ram3")
         ram3 = ref;
+    else if (name == "videoRAMSync")
+        videoRAMSync = ref;
     else if (name == "monitorDevice")
     {
         if (monitorDevice)
@@ -272,9 +277,23 @@ bool AppleIIVideo::init()
         return false;
     }
     
+    if (!mmu)
+    {
+        logMessage("mmu not connected");
+        
+        return false;
+    }
+    
     if (!floatingBus)
     {
         logMessage("floatingBus not connected");
+        
+        return false;
+    }
+    
+    if (!videoRAMSync)
+    {
+        logMessage("videoRAMSync not connected");
         
         return false;
     }
@@ -287,6 +306,8 @@ bool AppleIIVideo::init()
     controlBus->postMessage(this, CONTROLBUS_GET_POWERSTATE, &powerState);
     
     update();
+    
+    updateVideoRAMSync();
     
     scheduleNextTimer(0);
     
@@ -331,8 +352,8 @@ void AppleIIVideo::update()
     
     if (monitor)
     {
-        CanvasCaptureMode captureMode;
-        captureMode = CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_CLICK;
+        CanvasCaptureMode captureMode = CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_CLICK;
+        
         monitor->postMessage(this, CANVAS_SET_CAPTUREMODE, &captureMode);
     }
     
@@ -626,7 +647,7 @@ void AppleIIVideo::updateImage()
 
 void AppleIIVideo::updateClockFrequency()
 {
-    float clockFrequency;
+    float clockFrequency = 0;
     
     if (tvSystem == APPLEIIVIDEO_NTSC)
         clockFrequency = 14318180.0 * 65 / 912;
@@ -699,6 +720,8 @@ void AppleIIVideo::setMode(OEUInt32 mask, bool value)
         updateVideo();
         
         updateRenderer();
+        
+        updateVideoRAMSync();
         
         setNeedsDisplay();
     }
@@ -814,6 +837,30 @@ void AppleIIVideo::drawVideoLine(int y, int x0, int x1)
 void AppleIIVideo::setNeedsDisplay()
 {
     pendingSegments = ACTIVE_HEIGHT * TERM_WIDTH;
+}
+
+void AppleIIVideo::updateVideoRAMSync()
+{
+    if (isVideoRAMInSync)
+        return;
+    
+    MemoryMap ramSyncMap;
+    
+    ramSyncMap.component = videoRAMSync;
+    ramSyncMap.startAddress = 0x400;
+    ramSyncMap.endAddress = 0xbff;
+    ramSyncMap.read = false;
+    ramSyncMap.write = true;
+    mmu->postMessage(this, MMU_MAP, &ramSyncMap);
+    
+    ramSyncMap.component = videoRAMSync;
+    ramSyncMap.startAddress = 0x2000;
+    ramSyncMap.endAddress = 0x5fff;
+    ramSyncMap.read = false;
+    ramSyncMap.write = true;
+    mmu->postMessage(this, MMU_MAP, &ramSyncMap);
+    
+    isVideoRAMInSync = true;
 }
 
 void AppleIIVideo::scheduleNextTimer(OEInt64 cycles)

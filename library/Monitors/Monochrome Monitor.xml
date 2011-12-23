@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
-<edl version="1.0" generator="OpenEmulator" build="700" label="Monochrome Monitor" image="images/Generic/Monochrome Monitor.png" description="A generic monochrome monitor that can be connected to any composite video source.">
+<edl version="1.0" generator="OpenEmulator" build="736" label="Monochrome Monitor" image="images/Generic/Monochrome Monitor.png" description="A generic monochrome monitor that can be connected to any composite video source.">
     
     <device id="monochromeMonitor" label="Monochrome Monitor" image="images/Generic/Monochrome Monitor.png">
         <setting ref="monochromeMonitor.monitor" name="videoBrightness" label="Brightness" type="slider" options="-1.0,1.0"/>

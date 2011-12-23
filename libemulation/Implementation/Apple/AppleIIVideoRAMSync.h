@@ -1,19 +1,19 @@
 
 /**
  * libemulator
- * Apple II Video Sync
+ * Apple II Video RAM Sync
  * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Synchronizes video with memory
+ * Synchronizes video with video RAM
  */
 
 #include "OEComponent.h"
 
-class AppleIIVideoSync : public OEComponent
+class AppleIIVideoRAMSync : public OEComponent
 {
 public:
-    AppleIIVideoSync();
+    AppleIIVideoRAMSync();
     
 	bool setRef(string name, OEComponent *ref);
     bool init();
@@ -22,5 +22,6 @@ public:
     
 private:
     OEComponent *video;
-    OEComponent *ram;
+    OEComponent *ram1;
+    OEComponent *ram2;
 };

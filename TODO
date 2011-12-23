@@ -1,8 +1,7 @@
-==1.0.2==
-* Manage AppleIIVideoSync
-* Implement Apple II
-
 ==1.0.3==
+* Fix AppleIIVideoRAMSync
+* Fix screen blanking when power is turned off
+* Check CPU consumption when paused
 * Implement AppleIISlotMemory and AppleIISlotExpansionMemory
 * Implement Apple IIplus
 * Implement Apple IIj-plus
@@ -44,10 +43,6 @@
 
 ==1.0.7==
 * Implement Apple IIGS ROM00, ROM01, ROM03
-
-==Checks==
-* Fix screen blanking when power is turned off
-* Check CPU consumption when paused
 
 ==Devices==
 * Implement video capture interface

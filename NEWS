@@ -1,4 +1,7 @@
-==Ongoing==
+==Current==
+
+==OpenEmulator 1.0.2 23/12/2011==
+* Connected AppleIIVideoSync
 * Implemented AppleIIVideo left border hires bit 7
 * Fixed horizontal and vertical counts
 * Fixed AppleIIVideo lastSegment bug
@@ -21,7 +24,7 @@
 * Implemented Apple II copy
 * Fixed color carrier per scanline
 * Implemented Apple II hires mode
-* Implemented Apple II revision 1
+* Implemented Apple II revision 1+
 * Optimized Apple1Terminal
 * Implemented AppleIIFloatingBus
 * Implemented Apple II lores mode

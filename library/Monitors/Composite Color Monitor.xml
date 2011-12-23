@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
-<edl version="1.0" generator="OpenEmulator" build="700" label="Composite Color Monitor" image="images/Generic/Composite Color Monitor.png" description="A generic 14-inch composite color monitor that can be connected to any composite video source.">
+<edl version="1.0" generator="OpenEmulator" build="736" label="Composite Color Monitor" image="images/Generic/Composite Color Monitor.png" description="A generic 14-inch composite color monitor that can be connected to any composite video source.">
     
     <device id="compositeMonitor" label="Composite Color Monitor" image="images/Generic/Composite Color Monitor.png">
         <setting ref="compositeMonitor.monitor" name="videoDecoder" label="Decoder" type="select" options="Composite Y'UV,Composite Y'IQ,Composite CXA2025AS"/>

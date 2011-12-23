@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
-<edl version="1.0" generator="OpenEmulator" framework="700" label="Apple Hand Controllers" image="images/Apple/Apple Hand Controllers.png" description="The Apple Hand Controllers are a pair of game controllers made by Apple for the Apple II line of computers.">
+<edl version="1.0" generator="OpenEmulator" framework="736" label="Apple Hand Controllers" image="images/Apple/Apple Hand Controllers.png" description="The Apple Hand Controllers are a pair of game controllers made by Apple for the Apple II line of computers.">
     
     <device id="appleHandControllers" label="Apple Hand Controllers" image="images/Apple/Apple Hand Controllers.png">
         <setting ref="appleHandControllers.io" name="inputDevice" label="Input Device" type="select" options="Mouse,Joystick,None"/>
@@ -21,7 +21,6 @@
         <setting ref="appleHandControllers.io" name="reverseAxis3" label="PDL3 Reverse" type="checkbox"/>
     </device>
     <connector id="appleHandControllers.connector" type="Apple II Game Port">
-        <inlet ref="appleHandControllers.io" property="gamePort" outletRef="gamePort"/>
         <inlet ref="appleHandControllers.io" property="canvas" outletRef="video"/>
     </connector>
     <component id="appleHandControllers.io" class="JoystickMapper">
@@ -49,4 +48,5 @@
         <property name="canvas" ref=""/>
         <property name="joystick" ref="joystick"/>
     </component>
+    
 </edl>

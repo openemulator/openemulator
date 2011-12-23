@@ -87,6 +87,7 @@ private:
     OEComponent *ram1;
     OEComponent *ram2;
     OEComponent *ram3;
+    OEComponent *videoRAMSync;
     OEComponent *monitorDevice;
 	OEComponent *monitor;
 	
@@ -142,6 +143,8 @@ private:
     bool isRevisionUpdated;
     bool isTVSystemUpdated;
     
+    bool isVideoRAMInSync;
+    
     void updateSegments();
     void initPoints();
     void updateCounts();
@@ -160,6 +163,8 @@ private:
     void updateVideo();
     void drawVideoLine(int y, int x0, int x1);
     void setNeedsDisplay();
+    
+    void updateVideoRAMSync();
     
     void scheduleNextTimer(OEInt64 cycles);
     AppleIIVideoPoint getCount();
