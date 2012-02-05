@@ -418,7 +418,7 @@
 		00BB34B312C5C5AE007332B5 /* EmulationItem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EmulationItem.mm; sourceTree = "<group>"; };
 		00BDB1F513863188004DF2AF /* CanvasPrintView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanvasPrintView.h; sourceTree = "<group>"; };
 		00BDB1F613863188004DF2AF /* CanvasPrintView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CanvasPrintView.m; sourceTree = "<group>"; };
-		00C655BC147602A7009DA9D5 /* AppleIIVideoRAMSync.h */ = {isa = PBXFileReference; fileEncoding = 4; path = AppleIIVideoRAMSync.h; sourceTree = "<group>"; };
+		00C655BC147602A7009DA9D5 /* AppleIIVideoRAMSync.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleIIVideoRAMSync.h; sourceTree = "<group>"; };
 		00C655BD147602B2009DA9D5 /* AppleIIVideoRAMSync.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleIIVideoRAMSync.cpp; sourceTree = "<group>"; };
 		00C6C08810602151004D084B /* roms */ = {isa = PBXFileReference; lastKnownFileType = folder; path = roms; sourceTree = "<group>"; };
 		00CAD7D812A04C22002B92E5 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Emulation.xib; sourceTree = "<group>"; };
@@ -1155,7 +1155,7 @@
 		2A37F4A9FDCFA73011CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0410;
+				LastUpgradeCheck = 0420;
 				ORGANIZATIONNAME = OpenEmulator;
 			};
 			buildConfigurationList = C05733CB08A9546B00998B17 /* Build configuration list for PBXProject "OpenEmulator" */;

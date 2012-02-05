@@ -305,17 +305,20 @@ bool AppleIIVideo::init()
     
     controlBus->postMessage(this, CONTROLBUS_GET_POWERSTATE, &powerState);
     
-    update();
-    
     updateVideoRAMSync();
-    
-    scheduleNextTimer(0);
     
     return true;
 }
 
 void AppleIIVideo::update()
 {
+    if (isRevisionUpdated)
+    {
+        updateHiresMap();
+        
+        isRevisionUpdated = false;
+    }
+    
     if (isTVSystemUpdated)
     {
         if (tvSystem == APPLEIIVIDEO_NTSC)
@@ -336,18 +339,15 @@ void AppleIIVideo::update()
         updateImage();
         updateClockFrequency();
         
-        controlBus->postMessage(this, CONTROLBUS_GET_CYCLECOUNT, &frameStart);
+        controlBus->postMessage(this, CONTROLBUS_INVALIDATE_TIMERS, this);
+        
+        scheduleNextTimer(0);
+        
+        controlBus->postMessage(this, CONTROLBUS_GET_CYCLES, &frameStart);
         currentTimer = APPLEIIVIDEO_TIMER_VSYNC;
         lastSegment = 0;
         
         isTVSystemUpdated = false;
-    }
-    
-    if (isRevisionUpdated)
-    {
-        updateHiresMap();
-        
-        isRevisionUpdated = false;
     }
     
     if (monitor)
@@ -455,7 +455,7 @@ void AppleIIVideo::write(OEAddress address, OEUInt8 value)
 
 void AppleIIVideo::updateSegments()
 {
-    int cycleNum = 65 * OEHeight(videoRect) + 16;
+    int cycleNum = 65 * OEHeight(videoRect) + 256;
     
     segment.resize(cycleNum);
     
@@ -652,7 +652,7 @@ void AppleIIVideo::updateClockFrequency()
     if (tvSystem == APPLEIIVIDEO_NTSC)
         clockFrequency = 14318180.0 * 65 / 912;
     else if (tvSystem == APPLEIIVIDEO_PAL)
-        clockFrequency = 14250000.0 * 65 / 912;
+        clockFrequency = 14250450.0 * 65 / 912;
     
     controlBus->postMessage(this, CONTROLBUS_SET_CLOCKFREQUENCY, &clockFrequency);
 }
@@ -731,7 +731,7 @@ void AppleIIVideo::updateVideo()
 {
     OEUInt64 cycles;
     
-    controlBus->postMessage(this, CONTROLBUS_GET_CYCLECOUNT, &cycles);
+    controlBus->postMessage(this, CONTROLBUS_GET_CYCLES, &cycles);
     
     int currentSegment = segment[(size_t) (cycles - frameStart)];
     
@@ -878,7 +878,7 @@ void AppleIIVideo::scheduleNextTimer(OEInt64 cycles)
             {
                 imageDidChange = false;
                 
-                if (monitor)
+                if (monitor && (powerState != CONTROLBUS_POWERSTATE_OFF))
                     monitor->postMessage(this, CANVAS_POST_IMAGE, &image);
             }
             
@@ -897,7 +897,7 @@ void AppleIIVideo::scheduleNextTimer(OEInt64 cycles)
                 }
             }
             
-            controlBus->postMessage(this, CONTROLBUS_GET_CYCLECOUNT, &frameStart);
+            controlBus->postMessage(this, CONTROLBUS_GET_CYCLES, &frameStart);
             
             frameStart += cycles;
             
@@ -932,7 +932,7 @@ AppleIIVideoPoint AppleIIVideo::getCount()
 {
     OEUInt64 cycles;
     
-    controlBus->postMessage(this, CONTROLBUS_GET_CYCLECOUNT, &cycles);
+    controlBus->postMessage(this, CONTROLBUS_GET_CYCLES, &cycles);
     
     return count[(size_t) (cycles - frameStart)];
 }

@@ -1,4 +1,6 @@
 ==Current==
+* Refactorized and fixed ControlBus, scheduleTimer(), invalidateTimers(), setCPUClockMultiplier()
+* Fixed AppleIIVideo screen blanking when power is turned off
 
 ==OpenEmulator 1.0.2 23/12/2011==
 * Connected AppleIIVideoSync

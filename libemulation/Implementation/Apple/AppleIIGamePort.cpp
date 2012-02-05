@@ -264,12 +264,12 @@ bool AppleIIGamePort::isTimerPending(int index)
 {
     OEUInt64 timerCount;
     
-    controlBus->postMessage(this, CONTROLBUS_GET_CYCLECOUNT, &timerCount);
+    controlBus->postMessage(this, CONTROLBUS_GET_CYCLES, &timerCount);
     
     return ((timerCount - timerStart) < pdl[index]);
 }
 
 void AppleIIGamePort::resetTimer()
 {
-    controlBus->postMessage(this, CONTROLBUS_GET_CYCLECOUNT, &timerStart);
+    controlBus->postMessage(this, CONTROLBUS_GET_CYCLES, &timerStart);
 }

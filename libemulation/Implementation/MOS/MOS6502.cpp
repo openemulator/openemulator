@@ -121,22 +121,18 @@ bool MOS6502::postMessage(OEComponent *sender, int message, void *data)
 {
     switch (message)
     {
-        case CPU_RUN_CYCLES:
+        case CPU_SET_PENDINGCYCLES:
             icount = *((OEInt64 *)data);
             
+            return true;
+            
+        case CPU_GET_PENDINGCYCLES:
+            *((OEInt64 *)data) = icount;
+            
+            return true;
+            
+        case CPU_RUN:
             execute();
-            
-            *((OEInt64 *)data) = icount;
-            
-            return true;
-            
-        case CPU_SET_CYCLES:
-            icount = *((OEInt64 *)data);
-            
-            return true;
-            
-        case CPU_GET_CYCLES:
-            *((OEInt64 *)data) = icount;
             
             return true;
     }

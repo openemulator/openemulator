@@ -2,7 +2,7 @@
 /**
  * libemulation
  * Control bus
- * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2010-2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Implements a control bus with clock control and reset/IRQ/NMI lines
@@ -50,20 +50,22 @@ private:
     OEComponent *audio;
     OEComponent *cpu;
     
-    OEUInt64 cycleCount;
-    bool inBlock;
-    float blockOffset;
-    
+    OEUInt64 cycles;
+    float cpuCycles;
     list<ControlBusEvent> events;
+    bool inEvent;
     
-    OEUInt64 cycleStart;
+    OEUInt64 audioBufferStart;
     float sampleToCycleRatio;
     
     void setPowerState(ControlBusPowerState value);
     
-    OEUInt64 getCycleCount();
+    OEInt64 getPendingCPUCycles();
+    void setPendingCPUCycles(OEInt64 value);
+    void runCPU();
+    OEUInt64 getCycles();
     void scheduleTimer(OEComponent *component, OEUInt64 cycles);
-    void clearTimers(OEComponent *component);
+    void invalidateTimers(OEComponent *component);
     
     void setCPUClockMultiplier(float value);
 };

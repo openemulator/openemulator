@@ -378,7 +378,7 @@ void Apple1Terminal::loadFont(OEData *data)
 
 void Apple1Terminal::vsync()
 {
-    if (!vramp || !monitor || (powerState == CONTROLBUS_POWERSTATE_OFF))
+    if (powerState == CONTROLBUS_POWERSTATE_OFF)
         return;
     
     if (splashScreenActive)
@@ -397,6 +397,9 @@ void Apple1Terminal::vsync()
     }
     
     if (!canvasShouldUpdate)
+        return;
+    
+    if (!vramp)
         return;
     
     OEUInt8 *fp = (OEUInt8 *)&font.front();
@@ -431,7 +434,8 @@ void Apple1Terminal::vsync()
         }
     }
     
-    monitor->postMessage(this, CANVAS_POST_IMAGE, &image);
+    if (monitor)
+        monitor->postMessage(this, CANVAS_POST_IMAGE, &image);
     
     // Remove cursor
     vramp[cursorY * TERM_WIDTH + cursorX] = cursorChar;

@@ -1,7 +1,12 @@
 ==1.0.3==
-* Fix AppleIIVideoRAMSync
-* Fix screen blanking when power is turned off
+* Fix video flicker when changing NTSC/PAL in mixed mode
+* Fix Apple II startup beep (sometimes not heard)
+* Fix rainbow 
+* Fix Apple II floating bus
+* Open canvases when adding new devices
+* Fix Apple-1 strange noises when loading files
 * Check CPU consumption when paused
+* Fix AppleIIVideoRAMSync
 * Implement AppleIISlotMemory and AppleIISlotExpansionMemory
 * Implement Apple IIplus
 * Implement Apple IIj-plus
@@ -28,6 +33,7 @@
 * Implement Apple Silentype
 * Implement Apple Graphics Tablet
 * Implement Apple II Super Serial Card
+* Implement Digisector DS-65
 
 ==1.0.5==
 * Implement Apple IIc FF
@@ -44,23 +50,18 @@
 ==1.0.7==
 * Implement Apple IIGS ROM00, ROM01, ROM03
 
-==Devices==
-* Implement video capture interface
-* Implement Digisector DS-65
-
-==Canvas==
-* Fix persistence when powering down and restarting an emulation
-* Implement video bloom
-* Implement RGB>YIQ>RGB video processing in the GPU
-
 ==Framework==
-* Find a way so that ROM images can be stored in packages (but not in the resources directory)... use RAM block and read-only memory mapping?
+* Fix persistence when powering down and restarting an emulation
+* Implement RGB>YIQ>RGB video processing in the GPU
 * Implement select settings with values and labels
-* Add OESound: resampling, rendering to audio buffer?
+* Add OESound: resampling, rendering to audio buffer
+* Find an elegant way for ROM images to be stored in packages... use RAM block and read-only memory mapping?
 * Do disk image file locking if the disk image is writable (flock)
 * TCP AT Modem emulation
 * Add debugging ˆ la JTAG with gdb commands in a separate terminal
 * Implement frame interpolation with sinc function
+* Remove data property, and replace with value property that references the filename. Thus the interface for opening files is unified, and we don't have to exchange buffers. Implement an OEData class that is capable of reading from/writing to file. How could OEData get the handle to a zip package? How could we write back the file?
+* Implement video bloom
 
 ==GUI==
 * Fix Cocoa initial window sizes
@@ -69,8 +70,4 @@
 * Fix [CanvasView update] problem in paper view
 * Fix scrolling in template chooser when changing group
 * CanvasWindow in fullscreen mode could have multiple display sizes (e.g. for the Macintosh 512x342 window)
-
-==Secondary things==
-* Remove data property, and replace with value so that it points to the file (so the interface for opening files is unified, and we don't have to exchange buffers). Implement an OEData class that is capable of read from/writing to file. How could OEData get the handle to a zip package? How could an emulation
-* Implement a CPU Load Window
 * Add search in template chooser
