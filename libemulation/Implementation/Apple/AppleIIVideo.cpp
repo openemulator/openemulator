@@ -2,7 +2,7 @@
 /**
  * libemulator
  * Apple II Video
- * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2010-2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Generates Apple II video
@@ -30,7 +30,7 @@
 /*
  * Notes:
  *
- * Video, picture and active rects are defined as follows:
+ * Video and picture rects:
  *
  * +------------------+
  * |                  | 19 lines (NTSC) / 21 lines (PAL)
@@ -47,7 +47,7 @@
 
 AppleIIVideo::AppleIIVideo()
 {
-    revision = APPLEIIVIDEO_REVISIONIIE;
+    revision = APPLEIIVIDEO_IIE;
     tvSystem = APPLEIIVIDEO_NTSC;
     characterSet = "Standard";
     flashFrameNum = 16;
@@ -94,8 +94,6 @@ AppleIIVideo::AppleIIVideo()
     
     isRevisionUpdated = true;
     isTVSystemUpdated = true;
-    
-    isVideoRAMInSync = false;
 }
 
 bool AppleIIVideo::setValue(string name, string value)
@@ -106,8 +104,10 @@ bool AppleIIVideo::setValue(string name, string value)
             revision = APPLEIIVIDEO_REVISION0;
         else if (value == "Revision 1+")
             revision = APPLEIIVIDEO_REVISION1;
+        else if (value == "II j-plus")
+            revision = APPLEIIVIDEO_IIJPLUS;
         else if (value == "IIe")
-            revision = APPLEIIVIDEO_REVISIONIIE;
+            revision = APPLEIIVIDEO_IIE;
         
         isRevisionUpdated = true;
     }
@@ -154,7 +154,12 @@ bool AppleIIVideo::getValue(string name, string& value)
                 
                 break;
                 
-            case APPLEIIVIDEO_REVISIONIIE:
+            case APPLEIIVIDEO_IIJPLUS:
+                value = "II j-plus";
+                
+                break;
+                
+            case APPLEIIVIDEO_IIE:
                 value = "IIe";
                 
                 break;
@@ -305,7 +310,7 @@ bool AppleIIVideo::init()
     
     controlBus->postMessage(this, CONTROLBUS_GET_POWERSTATE, &powerState);
     
-    updateVideoRAMSync();
+    initVideoRAMSync();
     
     return true;
 }
@@ -339,13 +344,12 @@ void AppleIIVideo::update()
         updateImage();
         updateClockFrequency();
         
+        currentTimer = APPLEIIVIDEO_TIMER_VSYNC;
+        lastSegment = 0;
+        
         controlBus->postMessage(this, CONTROLBUS_INVALIDATE_TIMERS, this);
         
         scheduleNextTimer(0);
-        
-        controlBus->postMessage(this, CONTROLBUS_GET_CYCLES, &frameStart);
-        currentTimer = APPLEIIVIDEO_TIMER_VSYNC;
-        lastSegment = 0;
         
         isTVSystemUpdated = false;
     }
@@ -461,16 +465,11 @@ void AppleIIVideo::updateSegments()
     
     for (int i = 0; i < cycleNum; i++)
     {
-        int xv = i % 65 - (65 - TERM_WIDTH) + 9;
+        int xv = i % 65 - (65 - TERM_WIDTH);
         int yv = i / 65 - OEMinY(activeRect);
         
         if (xv < 0)
             xv = 0;
-        else if (xv >= TERM_WIDTH)
-        {
-            xv = 0;
-            yv++;
-        }
         
         if (yv < 0)
         {
@@ -721,8 +720,6 @@ void AppleIIVideo::setMode(OEUInt32 mask, bool value)
         
         updateRenderer();
         
-        updateVideoRAMSync();
-        
         setNeedsDisplay();
     }
 }
@@ -839,11 +836,8 @@ void AppleIIVideo::setNeedsDisplay()
     pendingSegments = ACTIVE_HEIGHT * TERM_WIDTH;
 }
 
-void AppleIIVideo::updateVideoRAMSync()
+void AppleIIVideo::initVideoRAMSync()
 {
-    if (isVideoRAMInSync)
-        return;
-    
     MemoryMap ramSyncMap;
     
     ramSyncMap.component = videoRAMSync;
@@ -859,8 +853,6 @@ void AppleIIVideo::updateVideoRAMSync()
     ramSyncMap.read = false;
     ramSyncMap.write = true;
     mmu->postMessage(this, MMU_MAP, &ramSyncMap);
-    
-    isVideoRAMInSync = true;
 }
 
 void AppleIIVideo::scheduleNextTimer(OEInt64 cycles)
@@ -952,7 +944,7 @@ OEUInt8 AppleIIVideo::readFloatingBus()
     OEUInt32 v4v3 = count.y & 0xc0;
 	OEUInt32 v4v3v4v3 = (v4v3 >> 3) | (v4v3 >> 1);
 	
-    address |= ((0x68 + h5h4h3 + v4v3v4v3) & 0x78);
+    address |= (0x68 + h5h4h3 + v4v3v4v3) & 0x78;
 	address |= (count.y & 0x38) << 4;
     
 	if (hires)
@@ -964,7 +956,7 @@ OEUInt8 AppleIIVideo::readFloatingBus()
     else
     {
         // On the Apple II: set A12 on horizontal blanking
-        if ((revision != APPLEIIVIDEO_REVISIONIIE) && (count.x < 0x58))
+        if ((revision != APPLEIIVIDEO_IIE) && (count.x < 0x58))
             return textHBLMemory[page][address];
         
         return textMemory[page][address];

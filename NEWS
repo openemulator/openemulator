@@ -1,4 +1,9 @@
 ==Current==
+* Fixed video renderer and floating bus sync
+* Improved component framework error messages
+* Fixed video flicker when changing NTSC/PAL in mixed mode
+* Implemented Apple II j-plus
+* Implemented Apple II plus
 * Refactorized and fixed ControlBus, scheduleTimer(), invalidateTimers(), setCPUClockMultiplier()
 * Fixed AppleIIVideo screen blanking when power is turned off
 

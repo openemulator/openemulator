@@ -2,7 +2,7 @@
 /**
  * libemulation-hal
  * PortAudio audio
- * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2010-2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Implements a PortAudio audio component
@@ -44,10 +44,10 @@ public:
                   OEUInt32 frameCount);
     void runTimer();
     
-    void setPlayVolume(float value);
-    void setPlayThrough(bool value);
     void openPlayer(string path);
     void closePlayer();
+    void setPlayVolume(float value);
+    void setPlayThrough(bool value);
     void setPlayPosition(float value);
     void play();
     void pause();
@@ -87,9 +87,10 @@ private:
     
     float playVolume;
     bool playThrough;
+    float playPosition;
+    bool playing;
     SNDFILE *playSNDFILE;
     OEUInt32 playChannelNum;
-    bool playing;
     OEUInt64 playFrameIndex;
     OEUInt64 playFrameNum;
     double playSRCRatio;
@@ -99,8 +100,8 @@ private:
     OEUInt32 playSRCInputFrameIndex;
     OEUInt32 playSRCInputFrameNum;
     
-    SNDFILE *recordingSNDFILE;
     bool recording;
+    SNDFILE *recordingSNDFILE;
     OEUInt64 recordingFrameNum;
     
     void initBuffer();

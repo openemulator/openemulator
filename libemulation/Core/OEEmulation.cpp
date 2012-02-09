@@ -2,7 +2,7 @@
 /**
  * libemulation
  * OEEmulation
- * (C) 2009-2011 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2009-2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Controls an OpenEmulator emulation
@@ -164,7 +164,7 @@ bool OEEmulation::constructDevice(string deviceId)
         if (component && addComponent(deviceId, component))
             return true;
         else
-            logMessage("could not construct device '" + deviceId + "'");
+            logMessage("could not construct '" + deviceId + "'");
     }
     else
         logMessage("redefinition of '" + deviceId + "'");
@@ -183,7 +183,7 @@ bool OEEmulation::constructComponent(string id, string className)
             return addComponent(id, component);
         else
             logMessage("could not construct '" + id +
-                       "', class '" + className + "' undefined");
+                       "', class '" + className + "' is not defined");
     }
     else
         logMessage("redefinition of '" + id + "'");
@@ -260,7 +260,7 @@ bool OEEmulation::configureComponent(string id, xmlNodePtr children)
     OEComponent *component = getComponent(id);
     if (!component)
     {
-        logMessage("could not configure '" + id + "', component is not constructed");
+        logMessage("'" + id + "' was not declared");
         
         return false;
     }
@@ -284,7 +284,7 @@ bool OEEmulation::configureComponent(string id, xmlNodePtr children)
                 value = parseValueProperties(value, propertiesMap);
                 
                 if (!component->setValue(name, value))
-                    logMessage("'" + id + "': unknown property '" + name + "'");
+                    logMessage("could not set value property '" + name + "' for '" + id + "'");
             }
             else if (hasNodeProperty(node, "ref"))
             {
@@ -293,10 +293,10 @@ bool OEEmulation::configureComponent(string id, xmlNodePtr children)
                 OEComponent *ref = getComponent(refId);
                 
                 if ((refId != "") && !ref)
-                    logMessage("'" + id + "': ref '" + name + "' not available");
+                    logMessage("'" + name + "' was not declared");
                 
                 if (!component->setRef(name, ref))
-                    logMessage("'" + id + "': unknown ref '" + name + "'");
+                    logMessage("could not set ref property '" + name + "' for '" + id + "'");
             }
             else if (hasNodeProperty(node, "data"))
             {
@@ -319,11 +319,11 @@ bool OEEmulation::configureComponent(string id, xmlNodePtr children)
                 if (dataRead)
                 {
                     if (!component->setData(name, &data))
-                        logMessage("'" + id + "': unknown data '" + name + "'");
+                        logMessage("could not set data property '" + name + "' for '" + id + "'");
                 }
             }
             else
-                logMessage("'" + id + "': unrecognized property '" + name + "'");
+                logMessage("could not recognize type of property '" + name + "' in '" + id + "'");
         }
     }
     
@@ -345,7 +345,7 @@ bool OEEmulation::configureInlets(OEInletMap& inletMap)
         
         if (!component)
         {
-            logMessage("could not configure '" + id + "', component is not constructed");
+            logMessage("'" + id + "' was not declared");
             
             continue;
         }
@@ -360,7 +360,7 @@ bool OEEmulation::configureInlets(OEInletMap& inletMap)
             OEComponent *ref = getComponent(refId);
             
             if (!component->setRef(name, ref))
-                logMessage("'" + id + "': unknown property '" + name + "'");
+                logMessage("could not set ref property '" + name + "' for '" + id + "'");
             else
                 components.insert(component);
         }
@@ -400,7 +400,7 @@ bool OEEmulation::initComponent(string id)
     
     if (!component)
     {
-        logMessage("could not init '" + id + "', component is not constructed");
+        logMessage("'" + id + "' was not declared");
         
         return false;
     }
@@ -441,7 +441,7 @@ bool OEEmulation::updateComponent(string id, xmlNodePtr children)
     
     if (!component)
     {
-        logMessage("could not update '" + id + "', component is not constructed");
+        logMessage("'" + id + "' was not declared");
         
         return false;
     }
@@ -480,7 +480,7 @@ bool OEEmulation::updateComponent(string id, xmlNodePtr children)
                 if (component->getData(name, &data) && data)
                 {
                     if (!package->writeFile(parsedSrc, data))
-                        logMessage("could not write '" + dataSrc + "'");
+                        logMessage("could not store data property '" + dataSrc + "'");
                 }
             }
         }
@@ -532,7 +532,7 @@ void OEEmulation::disposeComponent(string id)
     
     if (!component)
     {
-        logMessage("could not dispose '" + id + "', component is not constructed");
+        logMessage("'" + id + "' was not declared");
         
         return;
     }
@@ -597,7 +597,7 @@ void OEEmulation::deconfigureComponent(string id, xmlNodePtr children)
     
     if (!component)
     {
-        logMessage("could not deconfigure '" + id + "', component is not constructed");
+        logMessage("'" + id + "' was not declared");
         
         return;
     }
@@ -659,7 +659,7 @@ void OEEmulation::destroyComponent(string id, xmlNodePtr children)
     
     if (!component)
     {
-        logMessage("could not destroy '" + id + "', component is not constructed");
+        logMessage("'" + id + "' was not declared");
         
         return;
     }

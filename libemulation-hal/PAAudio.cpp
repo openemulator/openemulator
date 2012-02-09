@@ -2,7 +2,7 @@
 /**
  * libemulation-hal
  * PortAudio audio
- * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2010-2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Implements a PortAudio audio component
@@ -15,10 +15,10 @@
 
 #include "AudioInterface.h"
 
-#define DEFAULT_SAMPLERATE			48000
-#define DEFAULT_CHANNELNUM			2
-#define DEFAULT_FRAMESPERBUFFER		512
-#define DEFAULT_BUFFERNUM			3
+#define DEFAULT_SAMPLERATE          48000
+#define DEFAULT_CHANNELNUM          2
+#define DEFAULT_FRAMESPERBUFFER     512
+#define DEFAULT_BUFFERNUM           3
 
 #define PLAY_FRAMESPERBUFFER        1024
 
@@ -70,8 +70,9 @@ PAAudio::PAAudio()
     
     emulationsThreadShouldRun = false;
     
-    playVolume = 1.0F;
+    playVolume = 1;
     playThrough = false;
+    playPosition = -1;
     playSNDFILE = NULL;
     playing = false;
     recordingSNDFILE = NULL;
@@ -544,7 +545,7 @@ void PAAudio::runAudio(const float *input,
     OEUInt32 bytesPerBuffer = samplesPerBuffer * sizeof(float);
     
     // Render noise when no data is available
-    // Note: this should go once the framework is stable
+    // Note: this should be removed when the framework is stable
     if (isAudioBufferEmpty() || (frameCount != framesPerBuffer))
     {
         float k = 0.1 / RAND_MAX;
@@ -594,16 +595,6 @@ void PAAudio::runTimer()
 //
 // Play
 //
-void PAAudio::setPlayVolume(float value)
-{
-    playVolume = value;
-}
-
-void PAAudio::setPlayThrough(bool value)
-{
-    playThrough = value;
-}
-
 void PAAudio::openPlayer(string path)
 {
     closePlayer();
@@ -642,7 +633,7 @@ void PAAudio::openPlayer(string path)
             logMessage("could not init sample rate converter, error " + getString(error));
             
             sf_close(playSNDFILE);
-              
+            
             playSNDFILE = NULL;
         }
     }
@@ -661,46 +652,38 @@ void PAAudio::closePlayer()
     
     sf_close(playSNDFILE);
     
-    playSNDFILE = NULL;
     playing = false;
+    playSNDFILE = NULL;
     playFrameIndex = 0;
     playFrameNum = 0;
     
     unlock();
 }
 
+void PAAudio::setPlayVolume(float value)
+{
+    playVolume = value;
+}
+
+void PAAudio::setPlayThrough(bool value)
+{
+    playThrough = value;
+}
+
 void PAAudio::setPlayPosition(float value)
 {
-    if (!playSNDFILE)
-        return;
-    
-    lock();
-    
-    playFrameIndex = value * sampleRate;
-    sf_seek(playSNDFILE, playFrameIndex / playSRCRatio, SEEK_SET);
-    
-    if (!playing)
-    {
-        playSRCInputFrameNum = 0;
-        playSRCEndOfInput = false;
-    }
-    
-    unlock();
+    playPosition = value;
 }
 
 void PAAudio::play()
 {
-    if ((getPlayTime() + 0.1) >= getPlayDuration())
-        setPlayPosition(0.0);
-    
-    if (playSNDFILE)
-        playing = true;
+    playPosition = 0;
+    playing = true;
 }
 
 void PAAudio::pause()
 {
-    if (playSNDFILE)
-        playing = false;
+    playing = false;
 }
 
 bool PAAudio::isPlaying()
@@ -818,7 +801,7 @@ void PAAudio::openRecorder(string path)
     lock();
     
     if (!(recordingSNDFILE = sf_open(path.c_str(), SFM_WRITE, &sfInfo)))
-        logMessage("could not open temporary file " + path);
+        logMessage("could not open temporary recorder file " + path);
     
     recordingFrameNum = 0;
     

@@ -2,7 +2,7 @@
 /**
  * libemulation
  * OEDocument
- * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2010-2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Controls an OpenEmulator XML description
@@ -112,7 +112,7 @@ bool OEDocument::open(string path)
     if (is_open && !validateDocument())
     {
         is_open = false;
-        logMessage("unknown EDL version");
+        logMessage("invalid EDL version");
     }
     
     if (is_open)

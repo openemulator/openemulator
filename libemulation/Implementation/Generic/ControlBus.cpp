@@ -288,8 +288,8 @@ void ControlBus::notify(OEComponent *sender, int notification, void *data)
             
             if (component)
             {
-                OEUInt64 overdoneCycles = getCycles();
-                component->notify(this, CONTROLBUS_TIMER_DID_FIRE, &overdoneCycles);
+                OEUInt64 pendingCycles = -getCycles();
+                component->notify(this, CONTROLBUS_TIMER_DID_FIRE, &pendingCycles);
             }
             else
                 break;

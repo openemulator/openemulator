@@ -2,7 +2,7 @@
 /**
  * libemulator
  * Apple II Video
- * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2010-2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Generates Apple II video
@@ -36,7 +36,8 @@ typedef enum
 {
     APPLEIIVIDEO_REVISION0,
     APPLEIIVIDEO_REVISION1,
-    APPLEIIVIDEO_REVISIONIIE,
+    APPLEIIVIDEO_IIJPLUS,
+    APPLEIIVIDEO_IIE,
 } AppleIIVideoRevision;
 
 typedef enum
@@ -142,9 +143,7 @@ private:
     
     bool isRevisionUpdated;
     bool isTVSystemUpdated;
-    
-    bool isVideoRAMInSync;
-    
+        
     void updateSegments();
     void initPoints();
     void updateCounts();
@@ -164,7 +163,7 @@ private:
     void drawVideoLine(int y, int x0, int x1);
     void setNeedsDisplay();
     
-    void updateVideoRAMSync();
+    void initVideoRAMSync();
     
     void scheduleNextTimer(OEInt64 cycles);
     AppleIIVideoPoint getCount();
