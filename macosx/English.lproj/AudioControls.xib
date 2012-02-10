@@ -2,13 +2,13 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="7.10">
 	<data>
 		<int key="IBDocument.SystemTarget">1050</int>
-		<string key="IBDocument.SystemVersion">11B26</string>
-		<string key="IBDocument.InterfaceBuilderVersion">1617</string>
-		<string key="IBDocument.AppKitVersion">1138</string>
-		<string key="IBDocument.HIToolboxVersion">566.00</string>
+		<string key="IBDocument.SystemVersion">11D50</string>
+		<string key="IBDocument.InterfaceBuilderVersion">1938</string>
+		<string key="IBDocument.AppKitVersion">1138.32</string>
+		<string key="IBDocument.HIToolboxVersion">568.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
-			<string key="NS.object.0">1617</string>
+			<string key="NS.object.0">1938</string>
 		</object>
 		<object class="NSArray" key="IBDocument.IntegratedClassDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -31,11 +31,8 @@
 			<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 		</object>
 		<object class="NSMutableDictionary" key="IBDocument.Metadata">
-			<bool key="EncodedWithXMLCoder">YES</bool>
-			<object class="NSArray" key="dict.sortedKeys" id="0">
-				<bool key="EncodedWithXMLCoder">YES</bool>
-			</object>
-			<reference key="dict.values" ref="0"/>
+			<string key="NS.key.0">PluginDependencyRecalculationVersion</string>
+			<integer value="1" key="NS.object.0"/>
 		</object>
 		<object class="NSMutableArray" key="IBDocument.RootObjects" id="110858478">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -106,7 +103,6 @@
 							<string key="NSFrame">{{171, 7}, {77, 14}}</string>
 							<reference key="NSSuperview" ref="330288021"/>
 							<reference key="NSWindow"/>
-							<reference key="NSNextKeyView"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="453822350">
 								<int key="NSCellFlags">68288064</int>
@@ -570,14 +566,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
-						<string key="label">fPlayTimeLabel</string>
-						<reference key="source" ref="762632889"/>
-						<reference key="destination" ref="887503953"/>
-					</object>
-					<int key="connectionID">1649</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
 						<string key="label">fRecordingTimeLabel</string>
 						<reference key="source" ref="762632889"/>
 						<reference key="destination" ref="573294572"/>
@@ -633,6 +621,38 @@
 					<int key="connectionID">1792</int>
 				</object>
 				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">fPlayPositionLabel</string>
+						<reference key="source" ref="762632889"/>
+						<reference key="destination" ref="887503953"/>
+					</object>
+					<int key="connectionID">1797</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">fPlayTimeLabel</string>
+						<reference key="source" ref="762632889"/>
+						<reference key="destination" ref="293061857"/>
+					</object>
+					<int key="connectionID">1798</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: values.OEAudioPlayThrough</string>
+						<reference key="source" ref="49332116"/>
+						<reference key="destination" ref="517465799"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="49332116"/>
+							<reference key="NSDestination" ref="517465799"/>
+							<string key="NSLabel">value: values.OEAudioPlayThrough</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">values.OEAudioPlayThrough</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">1795</int>
+				</object>
+				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
 						<string key="label">value: values.OEAudioPlayVolume</string>
 						<reference key="source" ref="810346905"/>
@@ -652,29 +672,15 @@
 					</object>
 					<int key="connectionID">1794</int>
 				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: values.OEAudioPlayThrough</string>
-						<reference key="source" ref="49332116"/>
-						<reference key="destination" ref="517465799"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="49332116"/>
-							<reference key="NSDestination" ref="517465799"/>
-							<string key="NSLabel">value: values.OEAudioPlayThrough</string>
-							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">values.OEAudioPlayThrough</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">1795</int>
-				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<object class="IBObjectRecord">
 						<int key="objectID">0</int>
-						<reference key="object" ref="0"/>
+						<object class="NSArray" key="object" id="0">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+						</object>
 						<reference key="children" ref="110858478"/>
 						<nil key="parent"/>
 					</object>
@@ -1138,7 +1144,7 @@
 				<reference key="dict.values" ref="0"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">1796</int>
+			<int key="maxID">1798</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -1204,9 +1210,9 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>fDocumentController</string>
-							<string>fPlayDurationLabel</string>
 							<string>fPlayNameLabel</string>
 							<string>fPlayPosition</string>
+							<string>fPlayPositionLabel</string>
 							<string>fPlayTimeLabel</string>
 							<string>fRecordingSizeLabel</string>
 							<string>fRecordingTimeLabel</string>
@@ -1233,9 +1239,9 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>fDocumentController</string>
-							<string>fPlayDurationLabel</string>
 							<string>fPlayNameLabel</string>
 							<string>fPlayPosition</string>
+							<string>fPlayPositionLabel</string>
 							<string>fPlayTimeLabel</string>
 							<string>fRecordingSizeLabel</string>
 							<string>fRecordingTimeLabel</string>
@@ -1250,15 +1256,15 @@
 								<string key="candidateClassName">DocumentController</string>
 							</object>
 							<object class="IBToOneOutletInfo">
-								<string key="name">fPlayDurationLabel</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBToOneOutletInfo">
 								<string key="name">fPlayNameLabel</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">fPlayPosition</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">fPlayPositionLabel</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBToOneOutletInfo">
@@ -1576,10 +1582,6 @@
 		<int key="IBDocument.localizationMode">0</int>
 		<string key="IBDocument.TargetRuntimeIdentifier">IBCocoaFramework</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginDeclaredDependencies">
-			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin.macosx</string>
-			<integer value="1050" key="NS.object.0"/>
-		</object>
-		<object class="NSMutableDictionary" key="IBDocument.PluginDeclaredDependencyDefaults">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin.macosx</string>
 			<integer value="1050" key="NS.object.0"/>
 		</object>

@@ -49,19 +49,19 @@ public:
     void setPlayVolume(float value);
     void setPlayThrough(bool value);
     void setPlayPosition(float value);
+    float getPlayPosition();
+    float getPlayTime();
+    bool isPlaying();
     void play();
     void pause();
-    bool isPlaying();
-    float getPlayTime();
-    float getPlayDuration();
     
     void openRecorder(string path);
     void closeRecorder();
-    void record();
-    void stop();
-    bool isRecording();
     float getRecordingTime();
     OEUInt64 getRecordingSize();
+    bool isRecording();
+    void record();
+    void stop();
     
 private:
     bool fullDuplex;
@@ -87,7 +87,6 @@ private:
     
     float playVolume;
     bool playThrough;
-    float playPosition;
     bool playing;
     SNDFILE *playSNDFILE;
     OEUInt32 playChannelNum;
@@ -95,10 +94,10 @@ private:
     OEUInt64 playFrameNum;
     double playSRCRatio;
     SRC_STATE *playSRC;
-    vector<float> playSRCInput;
     bool playSRCEndOfInput;
-    OEUInt32 playSRCInputFrameIndex;
-    OEUInt32 playSRCInputFrameNum;
+    vector<float> playInput;
+    OEUInt32 playInputFrameIndex;
+    OEUInt32 playInputFrameNum;
     
     bool recording;
     SNDFILE *recordingSNDFILE;

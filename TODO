@@ -1,17 +1,16 @@
 ==1.0.3==
-* Fix audio recorder lock
-* Fix Apple-1 strange noises when loading files
-* Refactorize PAAudio
 * Implement Apple II j-plus AN2
-* Auto-open canvas when adding a canvas device
+* Implement auto-open canvas when adding a canvas device
+* Fix Apple II Game Server hi speed
 * Implement AppleIISlotMemory and AppleIISlotExpansionMemory
 * Implement Apple Disk II Interface Card
 * Implement Apple Disk II
 * Implement Apple Language Card
 * Implement SoundPlayer
-* Implement CFFA card
 * Implement Saturn RAMboard
+* Implement CFFA card
 * Implement Videx Videoterm
+* Fix mouse capture
 
 ==1.0.4==
 * Implement Apple III

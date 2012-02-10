@@ -54,7 +54,7 @@ void *PAAudioRunEmulations(void *arg)
     return NULL;
 }
 
-// Constructor/destructor
+// Configuration
 
 PAAudio::PAAudio()
 {
@@ -72,7 +72,6 @@ PAAudio::PAAudio()
     
     playVolume = 1;
     playThrough = false;
-    playPosition = -1;
     playSNDFILE = NULL;
     playing = false;
     recordingSNDFILE = NULL;
@@ -83,8 +82,6 @@ PAAudio::~PAAudio()
 {
     pthread_cond_destroy(&emulationsCond);
 }
-
-// Configuration
 
 void PAAudio::setFullDuplex(bool value)
 {
@@ -158,9 +155,8 @@ void PAAudio::close()
     closeEmulations();
 }
 
-//
 // Audio buffering
-//
+
 void PAAudio::initBuffer()
 {
     OEUInt32 bufferSize = bufferNum * framesPerBuffer * channelNum;
@@ -239,9 +235,8 @@ void PAAudio::advanceEmulationsBuffer()
     bufferEmulationIndex = (bufferEmulationIndex + 1) % stateNum;
 }
 
-//
 // Emulations
-//
+
 bool PAAudio::openEmulations()
 {
     int error;
@@ -385,9 +380,8 @@ void PAAudio::runEmulations()
     }
 }
 
-//
 // Audio
-//
+
 bool PAAudio::openAudio()
 {
     if (audioOpen)
@@ -592,9 +586,8 @@ void PAAudio::runTimer()
     }
 }
 
-//
-// Play
-//
+// Player
+
 void PAAudio::openPlayer(string path)
 {
     closePlayer();
@@ -615,18 +608,17 @@ void PAAudio::openPlayer(string path)
     if (playSNDFILE)
     {
         playChannelNum = sfInfo.channels;
-        playSRCRatio = (double) sampleRate / sfInfo.samplerate;
         playFrameIndex = 0;
         playFrameNum = sfInfo.frames * playSRCRatio;
+        playSRCRatio = (double) sampleRate / sfInfo.samplerate;
         
         int error;
         
         playSRC = src_new(SRC_SINC_FASTEST, playChannelNum, &error);
         if (playSRC)
         {
-            playSRCInputFrameNum = 0;
-            
-            playSRCInput.resize(framesPerBuffer * playChannelNum);
+            playInput.resize(framesPerBuffer * playChannelNum);
+            playInputFrameNum = 0;
         }
         else
         {
@@ -638,7 +630,7 @@ void PAAudio::openPlayer(string path)
         }
     }
     else
-        logMessage("could not open file " + path);
+        logMessage("could not open " + path);
     
     unlock();
 }
@@ -672,33 +664,54 @@ void PAAudio::setPlayThrough(bool value)
 
 void PAAudio::setPlayPosition(float value)
 {
-    playPosition = value;
+    if (!playSNDFILE)
+        return;
+    
+    lock();
+    
+    playFrameIndex = value * sampleRate;
+    sf_seek(playSNDFILE, playFrameIndex / playSRCRatio, SEEK_SET);
+    
+    src_reset(playSRC);
+    
+    playInputFrameNum = 0;
+    playSRCEndOfInput = false;
+    
+    unlock();
 }
 
 void PAAudio::play()
 {
-    playPosition = 0;
+    if (getPlayPosition() >= (getPlayTime() - 0.1))
+        setPlayPosition(0);
+    
+    if (!playSNDFILE)
+        return;
+    
     playing = true;
 }
 
 void PAAudio::pause()
 {
+    if (!playSNDFILE)
+        return;
+    
     playing = false;
+}
+
+float PAAudio::getPlayPosition()
+{
+    return (float) playFrameIndex / sampleRate;
+}
+
+float PAAudio::getPlayTime()
+{
+    return (float) playFrameNum / sampleRate;
 }
 
 bool PAAudio::isPlaying()
 {
     return playing;
-}
-
-float PAAudio::getPlayTime()
-{
-    return (float) playFrameIndex / sampleRate;
-}
-
-float PAAudio::getPlayDuration()
-{
-    return (float) playFrameNum / sampleRate;
 }
 
 void PAAudio::playAudio(float *inputBuffer,
@@ -717,24 +730,23 @@ void PAAudio::playAudio(float *inputBuffer,
     
     do
     {
-        if (!playSRCInputFrameNum)
+        if (!playInputFrameNum)
         {
-            OEUInt32 inputFrameNum = (OEUInt32) playSRCInput.size() / playChannelNum;
+            OEUInt32 inputFrameNum = (OEUInt32) playInput.size() / playChannelNum;
             
-            playSRCInputFrameIndex = 0;
+            playInputFrameIndex = 0;
+            playInputFrameNum = (OEUInt32) sf_readf_float(playSNDFILE,
+                                                          &playInput.front(),
+                                                          inputFrameNum);
             
-            playSRCInputFrameNum = (OEUInt32) sf_readf_float(playSNDFILE,
-                                                             &playSRCInput.front(),
-                                                             inputFrameNum);
-            
-            playSRCEndOfInput = (playSRCInputFrameNum != inputFrameNum);
+            playSRCEndOfInput = (playInputFrameNum != inputFrameNum);
         }
         
         SRC_DATA srcData =
         {
-            &playSRCInput[playSRCInputFrameIndex * playChannelNum],
+            &playInput[playInputFrameIndex * playChannelNum],
             &srcOutput[srcOutputFrameIndex * playChannelNum],
-            playSRCInputFrameNum,
+            playInputFrameNum,
             srcOutputFrameNum,
             0, 0,
             playSRCEndOfInput,
@@ -750,8 +762,8 @@ void PAAudio::playAudio(float *inputBuffer,
             break;
         }
         
-        playSRCInputFrameIndex += srcData.input_frames_used;
-        playSRCInputFrameNum -= srcData.input_frames_used;
+        playInputFrameIndex += srcData.input_frames_used;
+        playInputFrameNum -= srcData.input_frames_used;
         
         srcOutputFrameIndex += srcData.output_frames_gen;
         srcOutputFrameNum -= srcData.output_frames_gen;
@@ -781,9 +793,8 @@ void PAAudio::playAudio(float *inputBuffer,
     }
 }
 
-//
-// Recording
-//
+// Recorder
+
 void PAAudio::openRecorder(string path)
 {
     closeRecorder();
@@ -823,6 +834,21 @@ void PAAudio::closeRecorder()
     unlock();
 }
 
+float PAAudio::getRecordingTime()
+{
+    return (float) recordingFrameNum / sampleRate;
+}
+
+OEUInt64 PAAudio::getRecordingSize()
+{
+    return (OEUInt64) recordingFrameNum * channelNum * sizeof(short);
+}
+
+bool PAAudio::isRecording()
+{
+    return recording;
+}
+
 void PAAudio::record()
 {
     if (recordingSNDFILE)
@@ -833,21 +859,6 @@ void PAAudio::stop()
 {
     if (recordingSNDFILE)
         recording = false;
-}
-
-bool PAAudio::isRecording()
-{
-    return recording;
-}
-
-float PAAudio::getRecordingTime()
-{
-    return (float) recordingFrameNum / sampleRate;
-}
-
-OEUInt64 PAAudio::getRecordingSize()
-{
-    return (OEUInt64) recordingFrameNum * channelNum * sizeof(short);
 }
 
 void PAAudio::recordAudio(float *outputBuffer,

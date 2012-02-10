@@ -131,8 +131,8 @@
     {
         [fPlayNameLabel setStringValue:@""];
         [fPlayPosition setFloatValue:0.0];
+        [fPlayPositionLabel setStringValue:@"--:--:--"];
         [fPlayTimeLabel setStringValue:@"--:--:--"];
-        [fPlayDurationLabel setStringValue:@"--:--:--"];
     }
     else
     {
@@ -140,13 +140,13 @@
         [fPlayNameLabel setStringValue:path];
         [fPlayNameLabel setToolTip:path];
         
+        float playPosition = paAudio->getPlayPosition();
         float playTime = paAudio->getPlayTime();
-        float playDuration = paAudio->getPlayDuration();
+        NSString *positionLabel = [self formatTime:playPosition];
         NSString *timeLabel = [self formatTime:playTime];
-        NSString *durationLabel = [self formatTime:playDuration];
-        [fPlayPosition setFloatValue:playTime / playDuration];
+        [fPlayPositionLabel setStringValue:positionLabel];
+        [fPlayPosition setFloatValue:playPosition / playTime];
         [fPlayTimeLabel setStringValue:timeLabel];
-        [fPlayDurationLabel setStringValue:durationLabel];
     }
     
     BOOL isPlaying = paAudio->isPlaying();
@@ -186,7 +186,7 @@
     
     PAAudio *paAudio = (PAAudio *)[fDocumentController paAudio];
     
-    float time = [sender floatValue] * paAudio->getPlayDuration();
+    float time = [sender floatValue] * paAudio->getPlayTime();
     paAudio->setPlayPosition(time);
 }
 
@@ -202,7 +202,7 @@
         paAudio->openPlayer([playPath cppString]);
         paAudio->play();
         
-        if (!paAudio->getPlayDuration())
+        if (!paAudio->getPlayTime())
         {
             paAudio->closePlayer();
             

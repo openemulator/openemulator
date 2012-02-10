@@ -19,9 +19,9 @@
     
     IBOutlet id fPlayNameLabel;
     IBOutlet id fTogglePlayButton;
-    IBOutlet id fPlayTimeLabel;
+    IBOutlet id fPlayPositionLabel;
     IBOutlet id fPlayPosition;
-    IBOutlet id fPlayDurationLabel;
+    IBOutlet id fPlayTimeLabel;
     
     IBOutlet id fSaveRecordingAsButton;
     IBOutlet id fToggleRecordingButton;
