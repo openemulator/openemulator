@@ -3,8 +3,6 @@
 <edl version="1.0" generator="OpenEmulator" framework="739" label="Apple II" image="images/Apple/Apple II.png" description="The Apple II j-plus is the japanese version of the Apple II plus computer. It has a MOS 6502 microprocessor running at 1 MHz, 48 kiB of RAM, an audio cassette interface for loading programs and storing data, and Applesoft BASIC built into ROM.">
     
     <device id="appleIIjplus" label="Apple II" image="images/Apple/Apple II.png">
-        <setting ref="appleIIjplus.video" name="tvSystem" label="TV System" type="select" options="NTSC,PAL"/>
-        <setting ref="appleIIjplus.video" name="characterSet" label="Character Set" type="select" options="Standard,Videx Lowercase Chip,Pigfont"/>
         <setting ref="appleIIjplus.keyboard" name="type" label="Keyboard" type="select" options="Standard,Shift-Key Mod,Full ASCII"/>
     </device>
     <port id="appleIIjplus.videoPort" ref="appleMonitorII" type="Composite Video Port" group="peripherals" label="Video Port" image="images/Connectors/RCA Female.png">
@@ -176,9 +174,10 @@
         <property name="monitor" ref="appleMonitorII.monitor"/>
     </component>
     <component id="appleIIjplus.video" class="AppleIIVideo">
+        <property name="model" value="II j-plus"/>
         <property name="revision" value="Revision 1+"/>
         <property name="tvSystem" value="NTSC"/>
-        <property name="characterSet" value="Japanese"/>
+        <property name="characterSet" value="Standard"/>
         <property name="flashFrameNum" value="14"/>
         <property name="text" value="1"/>
         <property name="mixed" value="0"/>
@@ -192,9 +191,10 @@
         <property name="ram2" ref="appleIIjplus.ram2"/>
         <property name="ram3" ref="appleIIjplus.ram3"/>
         <property name="videoRAMSync" ref="appleIIjplus.videoRAMSync"/>
+        <property name="gamePort" ref="appleIIjplus.gamePort"/>
         <property name="monitorDevice" ref="appleMonitorII"/>
         <property name="monitor" ref="appleMonitorII.monitor"/>
-        <property name="fontJapanese" data="${resourcePath}/roms/Apple/Apple II j-plus Video ROM.bin"/>
+        <property name="fontStandard" data="${resourcePath}/roms/Apple/Apple II j-plus Video ROM.bin"/>
     </component>
     <component id="appleIIjplus.videoRAMSync" class="AppleIIVideoRAMSync">
         <property name="video" ref="appleIIjplus.video"/>

@@ -1,4 +1,5 @@
 ==Current==
+* Implemented Apple II j-plus AN2 to video
 * Fixed audio recorder lock
 * Fixed Apple-1 strange noises when loading files
 * Fixed video renderer and floating bus sync

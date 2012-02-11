@@ -175,6 +175,7 @@
         <property name="monitor" ref="appleMonitorII.monitor"/>
     </component>
     <component id="appleII.video" class="AppleIIVideo">
+        <property name="model" value="II"/>
         <property name="revision" value="Revision 1+"/>
         <property name="tvSystem" value="NTSC"/>
         <property name="characterSet" value="Standard"/>

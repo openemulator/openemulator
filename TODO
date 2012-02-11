@@ -1,7 +1,6 @@
 ==1.0.3==
-* Implement Apple II j-plus AN2
-* Implement auto-open canvas when adding a canvas device
 * Fix Apple II Game Server hi speed
+* Implement auto-open canvas when adding a canvas device
 * Implement AppleIISlotMemory and AppleIISlotExpansionMemory
 * Implement Apple Disk II Interface Card
 * Implement Apple Disk II

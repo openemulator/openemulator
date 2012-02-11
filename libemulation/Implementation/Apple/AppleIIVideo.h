@@ -34,10 +34,15 @@ public:
 
 typedef enum
 {
-    APPLEIIVIDEO_REVISION0,
-    APPLEIIVIDEO_REVISION1,
+    APPLEIIVIDEO_II,
     APPLEIIVIDEO_IIJPLUS,
     APPLEIIVIDEO_IIE,
+} AppleIIVideoModel;
+
+typedef enum
+{
+    APPLEIIVIDEO_REVISION0,
+    APPLEIIVIDEO_REVISION1,
 } AppleIIVideoRevision;
 
 typedef enum
@@ -89,10 +94,12 @@ private:
     OEComponent *ram2;
     OEComponent *ram3;
     OEComponent *videoRAMSync;
+    OEComponent *gamePort;
     OEComponent *monitorDevice;
 	OEComponent *monitor;
 	
     // Settings
+    AppleIIVideoModel model;
     AppleIIVideoRevision revision;
     AppleIIVideoSystem tvSystem;
 	string characterSet;
@@ -140,6 +147,8 @@ private:
     OEUInt32 flashCount;
     
     ControlBusPowerState powerState;
+    
+    bool an2;
     
     bool isRevisionUpdated;
     bool isTVSystemUpdated;

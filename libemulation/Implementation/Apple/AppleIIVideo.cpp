@@ -47,7 +47,7 @@
 
 AppleIIVideo::AppleIIVideo()
 {
-    revision = APPLEIIVIDEO_IIE;
+    model = APPLEIIVIDEO_IIE;
     tvSystem = APPLEIIVIDEO_NTSC;
     characterSet = "Standard";
     flashFrameNum = 16;
@@ -60,6 +60,7 @@ AppleIIVideo::AppleIIVideo()
     ram2 = NULL;
     ram3 = NULL;
     videoRAMSync = NULL;
+    gamePort = NULL;
     monitorDevice = NULL;
     monitor = NULL;
     
@@ -98,16 +99,21 @@ AppleIIVideo::AppleIIVideo()
 
 bool AppleIIVideo::setValue(string name, string value)
 {
-	if (name == "revision")
+	if (name == "model")
+    {
+        if (value == "II")
+            model = APPLEIIVIDEO_II;
+        else if (value == "II j-plus")
+            model = APPLEIIVIDEO_IIJPLUS;
+        else if (value == "IIe")
+            model = APPLEIIVIDEO_IIE;
+    }
+	else if (name == "revision")
     {
         if (value == "Revision 0")
             revision = APPLEIIVIDEO_REVISION0;
         else if (value == "Revision 1+")
             revision = APPLEIIVIDEO_REVISION1;
-        else if (value == "II j-plus")
-            revision = APPLEIIVIDEO_IIJPLUS;
-        else if (value == "IIe")
-            revision = APPLEIIVIDEO_IIE;
         
         isRevisionUpdated = true;
     }
@@ -151,16 +157,6 @@ bool AppleIIVideo::getValue(string name, string& value)
                 
             case APPLEIIVIDEO_REVISION1:
                 value = "Revision 1+";
-                
-                break;
-                
-            case APPLEIIVIDEO_IIJPLUS:
-                value = "II j-plus";
-                
-                break;
-                
-            case APPLEIIVIDEO_IIE:
-                value = "IIe";
                 
                 break;
         }
@@ -228,6 +224,14 @@ bool AppleIIVideo::setRef(string name, OEComponent *ref)
         ram3 = ref;
     else if (name == "videoRAMSync")
         videoRAMSync = ref;
+    else if (name == "gamePort")
+    {
+        if (gamePort)
+            gamePort->removeObserver(this, APPLEIIGAMEPORT_AN2_DID_CHANGE);
+        gamePort = ref;
+        if (gamePort)
+            gamePort->addObserver(this, APPLEIIGAMEPORT_AN2_DID_CHANGE);
+    }
     else if (name == "monitorDevice")
     {
         if (monitorDevice)
@@ -311,6 +315,9 @@ bool AppleIIVideo::init()
     controlBus->postMessage(this, CONTROLBUS_GET_POWERSTATE, &powerState);
     
     initVideoRAMSync();
+    
+    if (gamePort)
+        gamePort->postMessage(this, APPLEIIGAMEPORT_GET_AN2, &an2);
     
     return true;
 }
@@ -404,6 +411,12 @@ void AppleIIVideo::notify(OEComponent *sender, int notification, void *data)
                 
                 break;
         }
+    }
+    else if (sender == gamePort)
+    {
+        an2 = *((bool *)data);
+        
+        updateRendererMap();
     }
     else if (sender == monitorDevice)
         device->postNotification(sender, notification, data);
@@ -540,15 +553,25 @@ void AppleIIVideo::loadTextMap(string name, OEData *data)
     
     OEData theMap;
     
-    theMap.resize(2 * MAP_SIZE * MAP_HEIGHT * MAP_WIDTH);
+    theMap.resize(4 * MAP_SIZE * MAP_HEIGHT * MAP_WIDTH);
     
     int cMask = (int) getNextPowerOf2(data->size() / MAP_HEIGHT) - 1;
     
-    for (int c = 0; c < 2 * MAP_SIZE; c++)
+    for (int c = 0; c < 4 * MAP_SIZE; c++)
     {
         for (int y = 0; y < MAP_HEIGHT; y++)
         {
-            OEUInt8 byte = data->at((c & cMask) * MAP_HEIGHT + y);
+            int cr = c;
+            
+            if (model == APPLEIIVIDEO_IIJPLUS)
+            {
+                OESetBit(cr, 0x40, OEGetBit(c, 0x80));
+                OESetBit(cr, 0x80, OEGetBit(c, 0x200));
+            }
+            
+            OEUInt8 byte = data->at((cr & cMask) * MAP_HEIGHT + y);
+            
+            OESetBit(byte, 0x80, (c & 0xc0) == 0x40);
             
             bool inv = !(OEGetBit(c, 0x80) || (OEGetBit(byte, 0x80) && OEGetBit(c, 0x100)));
             
@@ -660,6 +683,8 @@ void AppleIIVideo::updateRendererMap()
 {
     rendererTextMap = (OEUInt8 *)&textMap[characterSet].front();
     
+    if (an2)
+        rendererTextMap += 2 * MAP_SIZE * MAP_WIDTH * MAP_HEIGHT;
     if (flashActive)
         rendererTextMap += MAP_SIZE * MAP_WIDTH * MAP_HEIGHT;
     
