@@ -105,7 +105,7 @@ bool AddressDecoder::postMessage(OEComponent *sender, int message, void *data)
 {
 	switch(message)
 	{
-		case ADDRESSDECODER_MAP:
+		case ADDRESSDECODER_MAP_MEMORY:
             if (readMap.size())
                 mapMemory((MemoryMap *) data);
             else

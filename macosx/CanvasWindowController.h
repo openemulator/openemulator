@@ -22,8 +22,6 @@
     void *device;
     NSString *title;
     void *canvas;
-    
-    BOOL isClosing;
 }
 
 - (id)initWithDevice:(void *)theDevice

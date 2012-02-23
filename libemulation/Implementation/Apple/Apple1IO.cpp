@@ -41,7 +41,7 @@ bool Apple1IO::setValue(string name, string value)
     return true;
 }
 
-bool Apple1IO::getValue(string name, string &value)
+bool Apple1IO::getValue(string name, string& value)
 {
     if (name == "terminalSpeed")
         value = enhancedTerminalSpeed ? "Enhanced" : "Standard";

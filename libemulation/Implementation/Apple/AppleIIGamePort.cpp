@@ -48,7 +48,7 @@ bool AppleIIGamePort::setValue(string name, string value)
 	return true;
 }
 
-bool AppleIIGamePort::getValue(string name, string &value)
+bool AppleIIGamePort::getValue(string name, string& value)
 {
 	if (name == "an0")
         value = getString(an[0]);

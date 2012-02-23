@@ -17,13 +17,13 @@
 
 typedef enum
 {
-    ADDRESSDECODER_MAP,
+    ADDRESSDECODER_MAP_MEMORY,
 } AddressDecoderMessage;
 
 typedef enum
 {
-    MMU_MAP,
-    MMU_UNMAP,
+    MMU_MAP_MEMORY,
+    MMU_UNMAP_MEMORY,
 } MMUMessage;
 
 typedef enum

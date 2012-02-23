@@ -20,6 +20,9 @@
     
     EmulationWindowController *emulationWindowController;
     NSMutableArray *canvasWindowControllers;
+    
+    BOOL newCanvasesCapture;
+    NSMutableArray *newCanvases;
 }
 
 - (id)initWithTemplateURL:(NSURL *)templateURL error:(NSError **)outError;
@@ -32,9 +35,11 @@
 - (void *)emulation;
 
 - (void)showEmulation:(id)sender;
-- (void)showCanvas:(NSValue *)canvasValue;
 - (void)constructCanvas:(NSDictionary *)dict;
 - (void)destroyCanvas:(NSValue *)canvasValue;
+- (void)showCanvas:(NSValue *)canvasValue;
+- (void)captureNewCanvases:(BOOL)value;
+- (NSArray *)getNewCanvases;
 
 - (BOOL)canMountNow:(NSString *)path;
 - (BOOL)mount:(NSString *)path;

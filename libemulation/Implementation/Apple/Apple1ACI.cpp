@@ -2,11 +2,13 @@
 /**
  * libemulation
  * Apple-1 ACI
- * (C) 2011 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2011-2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Implements an Apple-1 ACI (Apple Cassette Interface)
  */
+
+#include <math.h>
 
 #include "Apple1ACI.h"
 
@@ -14,29 +16,35 @@
 
 Apple1ACI::Apple1ACI()
 {
-    noiseRejection = 5;
+    volume = 1;
+    noiseRejection = 0.04;
     
     rom = NULL;
     mmu = NULL;
     audioCodec = NULL;
     
-    audioLevel = 0x80;
-    threshold = 0x80;
+    inputCurrentThreshold = 0x80;
+    
+    outputState = false;
 }
 
 bool Apple1ACI::setValue(string name, string value)
 {
-    if (name == "noiseRejection")
-        noiseRejection = getInt(value);
+    if (name == "volume")
+        volume = getFloat(value);
+    else if (name == "noiseRejection")
+        noiseRejection = getFloat(value);
     else
         return false;
     
     return true;
 }
 
-bool Apple1ACI::getValue(string name, string &value)
+bool Apple1ACI::getValue(string name, string& value)
 {
-    if (name == "noiseRejection")
+    if (name == "volume")
+        value = getString(volume);
+    else if (name == "noiseRejection")
         value = getString(noiseRejection);
     else
         return false;
@@ -81,14 +89,22 @@ bool Apple1ACI::init()
         return false;
     }
     
-    mapMMU(MMU_MAP);
+    mapMMU(MMU_MAP_MEMORY);
     
     return true;
 }
 
+void Apple1ACI::update()
+{
+    if (volume != 0)
+        outputHighLevel = 16384 * pow(10.0, (volume - 1.0) * 40.0 / 20.0);
+    else
+        outputHighLevel = 0;
+}
+
 void Apple1ACI::dispose()
 {
-    mapMMU(MMU_UNMAP);
+    mapMMU(MMU_UNMAP_MEMORY);
 }
 
 OEUInt8 Apple1ACI::read(OEAddress address)
@@ -96,14 +112,14 @@ OEUInt8 Apple1ACI::read(OEAddress address)
     if (address & 0x80)
     {
         // Noise rejection
-        if (audioCodec->read(0) >= threshold)
+        if (audioCodec->read(0) >= inputCurrentThreshold)
         {
             address &= ~0x1;
             
-            threshold = 0x80 - noiseRejection;
+            inputCurrentThreshold = 0x80 - inputTriggerThreshold;
         }
         else
-            threshold = 0x80 + noiseRejection;
+            inputCurrentThreshold = 0x80 + inputTriggerThreshold;
     }
     
     toggleSpeaker();
@@ -141,9 +157,17 @@ void Apple1ACI::mapMMU(int message)
 
 void Apple1ACI::toggleSpeaker()
 {
-    audioLevel = (audioLevel == 0x80) ? 0xc0 : 0x80;
+    outputState = !outputState;
     
-    // Write in stereo
-    audioCodec->write(0, audioLevel);
-    audioCodec->write(1, audioLevel);
+    // Stereo
+    if (outputState)
+    {
+        audioCodec->write16(0, outputHighLevel);
+        audioCodec->write16(1, outputHighLevel);
+    }
+    else
+    {
+        audioCodec->write16(0, 0);
+        audioCodec->write16(1, 0);
+    }
 }

@@ -2,7 +2,7 @@
 /**
  * libemulator
  * Apple II Audio Input
- * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2010-2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Controls Apple II audio input
@@ -12,11 +12,12 @@
 
 AppleIIAudioIn::AppleIIAudioIn()
 {
+    noiseRejection = 0.04;
+    
     audioCodec = NULL;
     floatingBus = NULL;
     
-    noiseRejection = 5;
-    threshold = 0x80;
+    inputCurrentThreshold = 0x80;
 }
 
 bool AppleIIAudioIn::setValue(string name, string value)
@@ -70,18 +71,23 @@ bool AppleIIAudioIn::init()
     return true;
 }
 
+void AppleIIAudioIn::update()
+{
+    inputTriggerThreshold = 127 * noiseRejection;
+}
+
 OEUInt8 AppleIIAudioIn::read(OEAddress address)
 {
     // A Schmitt trigger to improve noise rejection...
-    if (audioCodec->read(0) >= threshold)
+    if (audioCodec->read(0) >= inputCurrentThreshold)
     {
-        threshold = 0x80 - noiseRejection;
+        inputCurrentThreshold = 0x80 - inputTriggerThreshold;
         
         return 0x80 | (floatingBus->read(0) & 0x7f);
     }
     else
     {
-        threshold = 0x80 + noiseRejection;
+        inputCurrentThreshold = 0x80 + inputTriggerThreshold;
         
         return 0x00 | (floatingBus->read(0) & 0x7f);
     }

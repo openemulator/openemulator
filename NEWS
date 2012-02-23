@@ -1,4 +1,7 @@
 ==Current==
+* Implemented Apple-1 and Apple II volume controls
+* Implemented auto-open canvas when adding a canvas device
+* Fixed dragging of audio files to a canvas
 * Implemented Apple II j-plus AN2 to video
 * Fixed audio recorder lock
 * Fixed Apple-1 strange noises when loading files

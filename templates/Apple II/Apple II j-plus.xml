@@ -3,6 +3,7 @@
 <edl version="1.0" generator="OpenEmulator" framework="739" label="Apple II" image="images/Apple/Apple II.png" description="The Apple II j-plus is the japanese version of the Apple II plus computer. It has a MOS 6502 microprocessor running at 1 MHz, 48 kiB of RAM, an audio cassette interface for loading programs and storing data, and Applesoft BASIC built into ROM.">
     
     <device id="appleIIjplus" label="Apple II" image="images/Apple/Apple II.png">
+        <setting ref="appleIIjplus.audioOut" name="volume" label="Volume" type="slider" options="0,1"/>
         <setting ref="appleIIjplus.keyboard" name="type" label="Keyboard" type="select" options="Standard,Shift-Key Mod,Full ASCII"/>
     </device>
     <port id="appleIIjplus.videoPort" ref="appleMonitorII" type="Composite Video Port" group="peripherals" label="Video Port" image="images/Connectors/RCA Female.png">
@@ -202,10 +203,12 @@
         <property name="ram2" ref="appleIIjplus.ram2"/>
     </component>
     <component id="appleIIjplus.audioOut" class="AppleIIAudioOut">
+        <property name="volume" value="1"/>
         <property name="floatingBus" ref="appleIIjplus.floatingBus"/>
         <property name="audioCodec" ref="appleIIjplus.audioCodec"/>
     </component>
     <component id="appleIIjplus.audioIn" class="AppleIIAudioIn">
+        <property name="noiseRejection" value="0.04"/>
         <property name="floatingBus" ref="appleIIjplus.floatingBus"/>
         <property name="audioCodec" ref="appleIIjplus.audioCodec"/>
     </component>

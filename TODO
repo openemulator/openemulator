@@ -1,25 +1,32 @@
 ==1.0.3==
-* Fix Apple II Game Server hi speed
-* Implement auto-open canvas when adding a canvas device
+* Fix auto-open canvas when adding a canvas device
+* Refactorize Apple1ACI, AppleIIAudioIn, AppleIIAudioOut
+* Make a library of common functions (i.e. linear to log audio volume, decoding a memory string to a MemoryMap list)
+* Fix thread priority in PAAudio
+* Refactorize PAAudio
+* Design the interface between Apple II video memory and AppleIIVideo
 * Implement AppleIISlotMemory and AppleIISlotExpansionMemory
+* Implement sound player
 * Implement Apple Disk II Interface Card
 * Implement Apple Disk II
 * Implement Apple Language Card
-* Implement SoundPlayer
-* Implement Saturn RAMboard
-* Implement CFFA card
-* Implement Videx Videoterm
-* Fix mouse capture
+* Implement Apple Graphics Tablet
+* Fix [CanvasView update] problem in paper view
+* Implement Apple Silentype
+* Fix CTRL+ALT mouse capture
 
 ==1.0.4==
 * Implement Apple III
+* Implement Videx Videoterm
+* Implement CFFA card
+* Implement Saturn RAMboard
+* Implement Mountain Computer Apple Clock
+* Implement TimeMaster II H.O.
 
 ==1.0.5==
 * Implement Apple IIe
 * Implement Apple II Memory Expansion Card
 * Implement AE RamWorks
-* Implement Mountain Computer Apple Clock
-* Implement TimeMaster II H.O.
 * Implement Thunderclock Plus
 * Implement ZIP Chip
 * Implement AE TransWarp
@@ -60,7 +67,6 @@
 * Implement Cocoa canvas positioning in upper left
 * Fix opening emulations (sometimes dragging disk images to canvas opens the template chooser)
 * Implement UNICODE entry of composed keys on Mac OS X (like ^ or « or `)
-* Fix [CanvasView update] problem in paper view
 * Fix scrolling in template chooser when changing group
 * CanvasWindow in fullscreen mode could have multiple display sizes (e.g. for the Macintosh 512x342 window)
 * Add search in template chooser

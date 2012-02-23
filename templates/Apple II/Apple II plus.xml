@@ -4,6 +4,7 @@
     
     <device id="appleIIplus" label="Apple II" image="images/Apple/Apple II.png">
         <setting ref="appleIIplus.video" name="tvSystem" label="TV System" type="select" options="NTSC,PAL"/>
+        <setting ref="appleIIplus.audioOut" name="volume" label="Volume" type="slider" options="0,1"/>
         <setting ref="appleIIplus.video" name="characterSet" label="Character Set" type="select" options="Standard,Videx Lowercase Chip,Pigfont"/>
         <setting ref="appleIIplus.keyboard" name="type" label="Keyboard" type="select" options="Standard,Shift-Key Mod,Full ASCII"/>
     </device>
@@ -205,10 +206,12 @@
         <property name="ram2" ref="appleIIplus.ram2"/>
     </component>
     <component id="appleIIplus.audioOut" class="AppleIIAudioOut">
+        <property name="volume" value="1"/>
         <property name="floatingBus" ref="appleIIplus.floatingBus"/>
         <property name="audioCodec" ref="appleIIplus.audioCodec"/>
     </component>
     <component id="appleIIplus.audioIn" class="AppleIIAudioIn">
+        <property name="noiseRejection" value="0.04"/>
         <property name="floatingBus" ref="appleIIplus.floatingBus"/>
         <property name="audioCodec" ref="appleIIplus.audioCodec"/>
     </component>

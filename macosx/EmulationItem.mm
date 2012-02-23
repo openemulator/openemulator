@@ -2,7 +2,7 @@
 /**
  * OpenEmulator
  * Mac OS X Emulation Item
- * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2010-2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Implements an emulation item
@@ -638,6 +638,8 @@
         map<string, string> idMap;
         idMap[[portId cppString]] = i->id;
         
+        [document captureNewCanvases:YES];
+        
         OEEmulation *emulation = (OEEmulation *)[document emulation];
         
         [document lockEmulation];
@@ -648,6 +650,13 @@
         bool result = emulation->addDocument([thePath cppString], idMap);
         
         [document unlockEmulation];
+        
+        NSArray *newCanvases = [document getNewCanvases];
+        
+        for (int i = 0; i < [newCanvases count]; i++)
+            [[newCanvases objectAtIndex:i] showWindow:self];
+        
+        [document captureNewCanvases:YES];
         
         return result;
     }

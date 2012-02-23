@@ -102,7 +102,11 @@ void destroyCanvas(void *userData, OEComponent *canvas)
         if ([self readFromURL:absoluteURL
                        ofType:nil
                         error:outError])
+        {
+            newCanvases = [[NSMutableArray alloc] init];
+            
             return self;
+        }
     }
     
     if (outError)
@@ -119,6 +123,8 @@ void destroyCanvas(void *userData, OEComponent *canvas)
     
     [emulationWindowController release];
     [canvasWindowControllers release];
+    
+    [newCanvases release];
     
     [super dealloc];
 }
@@ -377,6 +383,9 @@ void destroyCanvas(void *userData, OEComponent *canvas)
                                                                      canvas:canvas];
     [canvasWindowControllers addObject:canvasWindowController];
     [canvasWindowController release];
+    
+    if (newCanvasesCapture)
+        [newCanvases addObject:canvasWindowController];
 }
 
 - (void)destroyCanvas:(NSValue *)canvasValue
@@ -418,6 +427,19 @@ void destroyCanvas(void *userData, OEComponent *canvas)
             break;
         }
     }
+}
+
+- (void)captureNewCanvases:(BOOL)value
+{
+    newCanvasesCapture = value;
+    
+    if (!value)
+        [newCanvases removeAllObjects];
+}
+
+- (NSArray *)getNewCanvases
+{
+    return newCanvases;
 }
 
 // Storage

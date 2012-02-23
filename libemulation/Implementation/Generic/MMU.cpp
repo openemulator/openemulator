@@ -70,7 +70,7 @@ bool MMU::init()
     for (MemoryMaps::iterator i = memoryMaps.begin();
          i != memoryMaps.end();
          i++)
-        addressDecoder->postMessage(this, ADDRESSDECODER_MAP, &(*i));
+        addressDecoder->postMessage(this, ADDRESSDECODER_MAP_MEMORY, &(*i));
     
 	return true;
 }
@@ -79,13 +79,13 @@ bool MMU::postMessage(OEComponent *sender, int message, void *data)
 {
 	switch(message)
 	{
-		case MMU_MAP:
+		case MMU_MAP_MEMORY:
             if (!addMemoryMap((MemoryMap *) data))
                 return false;
             
 			return true;
             
-        case MMU_UNMAP:
+        case MMU_UNMAP_MEMORY:
             if (!removeMemoryMap((MemoryMap *) data))
                 return false;
             
@@ -173,7 +173,7 @@ bool MMU::addMemoryMap(MemoryMap *value)
     
     memoryMaps.push_back(*value);
     
-    addressDecoder->postMessage(this, ADDRESSDECODER_MAP, value);
+    addressDecoder->postMessage(this, ADDRESSDECODER_MAP_MEMORY, value);
     
     return true;
 }
@@ -182,7 +182,7 @@ void MMU::unmap(MemoryMap *value)
 {
     MemoryMap m = *value;
     m.component = NULL;
-    addressDecoder->postMessage(this, ADDRESSDECODER_MAP, &m);
+    addressDecoder->postMessage(this, ADDRESSDECODER_MAP_MEMORY, &m);
     
     for (MemoryMaps::iterator i = memoryMaps.begin();
          i != memoryMaps.end();
@@ -198,7 +198,7 @@ void MMU::unmap(MemoryMap *value)
         if (i->endAddress > value->endAddress)
             m.endAddress = value->endAddress;
         
-        addressDecoder->postMessage(this, ADDRESSDECODER_MAP, &m);
+        addressDecoder->postMessage(this, ADDRESSDECODER_MAP_MEMORY, &m);
     }
 }
 

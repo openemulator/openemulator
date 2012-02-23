@@ -608,9 +608,9 @@ void PAAudio::openPlayer(string path)
     if (playSNDFILE)
     {
         playChannelNum = sfInfo.channels;
+        playSRCRatio = (double) sampleRate / sfInfo.samplerate;
         playFrameIndex = 0;
         playFrameNum = sfInfo.frames * playSRCRatio;
-        playSRCRatio = (double) sampleRate / sfInfo.samplerate;
         
         int error;
         
@@ -771,7 +771,12 @@ void PAAudio::playAudio(float *inputBuffer,
         playFrameIndex += srcData.output_frames_gen;
     } while (srcOutputFrameNum > 0);
     
-    float linearVolume = pow(10.0, (playVolume - 1.0) * 100.0 / 20.0);
+    float linearVolume;
+    if (playVolume != 0)
+        linearVolume = pow(10.0, (playVolume - 1.0) * 40.0 / 20.0);
+    else
+        linearVolume = 0;
+    
     OEUInt32 sampleNum = (frameNum - srcOutputFrameNum) * channelNum;
     
     for (OEUInt32 ch = 0; ch < channelNum; ch++)

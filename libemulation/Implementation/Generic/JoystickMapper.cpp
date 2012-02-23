@@ -90,7 +90,7 @@ bool JoystickMapper::setValue(string name, string value)
     return true;
 }
 
-bool JoystickMapper::getValue(string name, string &value)
+bool JoystickMapper::getValue(string name, string& value)
 {
     if (name == "inputDevice")
         value = inputDevice;

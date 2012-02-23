@@ -2,7 +2,7 @@
 /**
  * libemulator
  * Apple II Slot Memory
- * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2010-2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Controls Apple II slot memory ($C100-$C7FF)
@@ -32,7 +32,7 @@ bool AppleIISlotMemory::setValue(string name, string value)
 	return true;
 }
 
-bool AppleIISlotMemory::getValue(string name, string &value)
+bool AppleIISlotMemory::getValue(string name, string& value)
 {
 	if (name == "en")
         value = getString(en);
@@ -84,7 +84,7 @@ void AppleIISlotMemory::notify(OEComponent *sender, int notification, void *data
     {
         en = false;
         
-        mapMMU(MMU_UNMAP);
+        mapMMU(MMU_UNMAP_MEMORY);
     }
 }
 
@@ -94,7 +94,7 @@ OEUInt8 AppleIISlotMemory::read(OEAddress address)
     {
         en = true;
         
-        mapMMU(MMU_MAP);
+        mapMMU(MMU_MAP_MEMORY);
     }
     
     return slotMemory->read(address);
@@ -106,7 +106,7 @@ void AppleIISlotMemory::write(OEAddress address, OEUInt8 value)
     {
         en = true;
         
-        mapMMU(MMU_MAP);
+        mapMMU(MMU_MAP_MEMORY);
     }
     
     slotMemory->write(address, value);

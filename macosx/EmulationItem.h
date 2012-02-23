@@ -2,7 +2,7 @@
 /**
  * OpenEmulator
  * Mac OS X Emulation Item
- * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2010-2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Implements an emulation item

@@ -62,7 +62,7 @@ bool ControlBus::setValue(string name, string value)
     return true;
 }
 
-bool ControlBus::getValue(string name, string &value)
+bool ControlBus::getValue(string name, string& value)
 {
     if (name == "powerState")
         value = string("S") + getString(powerState);

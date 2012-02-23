@@ -21,6 +21,8 @@
     
     if (self)
     {
+        NSLog(@"CanvasWindowController init");
+        
         device = theDevice;
         title = [theTitle copy];
         canvas = theCanvas;
@@ -31,6 +33,8 @@
 
 - (void)dealloc
 {
+    NSLog(@"CanvasWindowController dealloc");
+    
     [title release];
     
     [super dealloc];
@@ -55,6 +59,8 @@
 
 - (void)awakeFromNib
 {
+    NSLog(@"CanvasWindowController awakeFromNib");
+    
     if ([fCanvasView isPaperCanvas])
         [fScrollView setHasVerticalScroller:YES];
     else
@@ -66,6 +72,8 @@
 
 - (void)windowDidLoad
 {
+    NSLog(@"CanvasWindowController windowDidLoad");
+    
     NSToolbar *toolbar;
     toolbar = [[NSToolbar alloc] initWithIdentifier:@"Canvas Toolbar"];
     [toolbar setDelegate:self];
@@ -115,7 +123,8 @@
         [fCanvasView freeOpenGL];
     }
     
-    isClosing = YES;
+    canvas = NULL;
+    device = NULL;
     
     [super close];
 }
@@ -326,14 +335,12 @@
 
 - (void)windowDidBecomeKey:(NSNotification *)notification
 {
-    if (isClosing)
-        [fCanvasView windowDidBecomeKey];
+    [fCanvasView windowDidBecomeKey];
 }
 
 - (void)windowDidResignKey:(NSNotification *)notification
 {
-    if (!isClosing)
-        [fCanvasView windowDidResignKey];
+    [fCanvasView windowDidResignKey];
 }
 
 - (NSApplicationPresentationOptions)window:(NSWindow *)window

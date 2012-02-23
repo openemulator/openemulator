@@ -870,14 +870,14 @@ void AppleIIVideo::initVideoRAMSync()
     ramSyncMap.endAddress = 0xbff;
     ramSyncMap.read = false;
     ramSyncMap.write = true;
-    mmu->postMessage(this, MMU_MAP, &ramSyncMap);
+    mmu->postMessage(this, MMU_MAP_MEMORY, &ramSyncMap);
     
     ramSyncMap.component = videoRAMSync;
     ramSyncMap.startAddress = 0x2000;
     ramSyncMap.endAddress = 0x5fff;
     ramSyncMap.read = false;
     ramSyncMap.write = true;
-    mmu->postMessage(this, MMU_MAP, &ramSyncMap);
+    mmu->postMessage(this, MMU_MAP_MEMORY, &ramSyncMap);
 }
 
 void AppleIIVideo::scheduleNextTimer(OEInt64 cycles)

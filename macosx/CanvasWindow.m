@@ -31,6 +31,8 @@
     
     if (self)
     {
+        NSLog(@"CanvasWindow init");
+        
         fullscreen = NO;
         
         if ([self isOnLionOrBetter])
@@ -38,6 +40,13 @@
    }
     
     return self;
+}
+
+- (void)dealloc
+{
+    NSLog(@"CanvasWindow dealloc");
+    
+    [super dealloc];
 }
 
 - (NSRect)constrainFrameRect:(NSRect)frameRect toScreen:(NSScreen *)screen

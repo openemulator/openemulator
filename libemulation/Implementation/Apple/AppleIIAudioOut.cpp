@@ -2,20 +2,44 @@
 /**
  * libemulator
  * Apple II Audio Output
- * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2010-2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Controls Apple II audio output
  */
 
+#include <math.h>
+
 #include "AppleIIAudioOut.h"
 
 AppleIIAudioOut::AppleIIAudioOut()
 {
+    volume = 1;
+    
     audioCodec = NULL;
     floatingBus = NULL;
     
-    audioLevel = 0x80;
+    outputState = false;
+}
+
+bool AppleIIAudioOut::setValue(string name, string value)
+{
+    if (name == "volume")
+        volume = getFloat(value);
+    else
+        return false;
+    
+    return true;
+}
+
+bool AppleIIAudioOut::getValue(string name, string& value)
+{
+    if (name == "volume")
+        value = getString(volume);
+    else
+        return false;
+    
+    return true;
 }
 
 bool AppleIIAudioOut::setRef(string name, OEComponent *id)
@@ -49,6 +73,14 @@ bool AppleIIAudioOut::init()
     return true;
 }
 
+void AppleIIAudioOut::update()
+{
+    if (volume != 0)
+        outputHighLevel = 16384 * pow(10.0, (volume - 1.0) * 40.0 / 20.0);
+    else
+        outputHighLevel = 0;
+}
+
 OEUInt8 AppleIIAudioOut::read(OEAddress address)
 {
     toggleSpeaker();
@@ -63,9 +95,17 @@ void AppleIIAudioOut::write(OEAddress address, OEUInt8 value)
 
 void AppleIIAudioOut::toggleSpeaker()
 {
-    audioLevel = (audioLevel == 0x80) ? 0xc0 : 0x80;
+    outputState = !outputState;
     
-    // Write stereo
-    audioCodec->write(0, audioLevel);
-    audioCodec->write(1, audioLevel);
+    // Stereo
+    if (outputState)
+    {
+        audioCodec->write16(0, outputHighLevel);
+        audioCodec->write16(1, outputHighLevel);
+    }
+    else
+    {
+        audioCodec->write16(0, 0);
+        audioCodec->write16(1, 0);
+    }
 }

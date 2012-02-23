@@ -2,7 +2,7 @@
 /**
  * libemulation
  * Apple II Interface
- * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2010-2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Defines the Apple II interface
@@ -12,6 +12,12 @@
 #define _APPLEIIINTERFACE_H
 
 #include "CanvasInterface.h"
+
+typedef enum
+{
+    APPLEIIMMU_MAP_SLOTMEMORY,
+    APPLEIIMMU_UNMAP_SLOTMEMORY,
+} AppleIIMMUMessage;
 
 typedef enum
 {

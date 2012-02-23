@@ -125,14 +125,14 @@ bool RDCFFA1::init()
         return false;
     }
     
-    mapMMU(MMU_MAP);
+    mapMMU(MMU_MAP_MEMORY);
     
     return true;
 }
 
 void RDCFFA1::dispose()
 {
-    mapMMU(MMU_UNMAP);
+    mapMMU(MMU_UNMAP_MEMORY);
 }
 
 bool RDCFFA1::postMessage(OEComponent *sender, int message, void *data)

@@ -2,7 +2,7 @@
 /**
  * libemulator
  * Apple II Slot Memory
- * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2010-2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Controls Apple II slot memory ($C100-$C7FF)
@@ -16,7 +16,7 @@ public:
     AppleIISlotMemory();
     
 	bool setValue(string name, string value);
-    bool getValue(string name, string &value);
+    bool getValue(string name, string& value);
 	bool setRef(string name, OEComponent *ref);
 	bool init();
     

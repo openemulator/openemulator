@@ -144,16 +144,18 @@
     </component>
     
     <device id="appleACI" label="Apple-1 Cassette Interface Card" image="images/Apple/Apple-1 Cassette Interface Card.png">
+        <setting ref="appleACI.io" name="volume" label="Volume" type="slider" options="0,1"/>
     </device>
     <connector id="appleACI.connector" type="Apple-1 Expansion Port">
         <inlet ref="appleACI.audioCodec" property="controlBus" outletRef="controlBus"/>
         <inlet ref="appleACI.io" property="mmu" outletRef="mmu"/>
     </connector>
     <component id="appleACI.io" class="Apple1ACI">
+        <property name="volume" value="1"/>
+        <property name="noiseRejection" value="0.04"/>
         <property name="rom" ref="appleACI.rom"/>
         <property name="mmu" ref="apple1.mmu"/>
         <property name="audioCodec" ref="appleACI.audioCodec"/>
-        <property name="noiseRejection" value="5"/>
     </component>
     <component id="appleACI.audioCodec" class="AudioCodec">
         <property name="audio" ref="audio"/>
