@@ -8,37 +8,23 @@
  * Implements an Apple-1 ACI (Apple Cassette Interface)
  */
 
-#include "OEComponent.h"
+#include "Audio1Bit.h"
 
-class Apple1ACI : public OEComponent
+class Apple1ACI : public Audio1Bit
 {
 public:
     Apple1ACI();
     
-    bool setValue(string name, string value);
-    bool getValue(string name, string& value);
     bool setRef(string name, OEComponent *ref);
     bool init();
-    void update();
     void dispose();
     
     OEUInt8 read(OEAddress address);
     void write(OEAddress address, OEUInt8 value);
     
 private:
-    float volume;
-    float noiseRejection;
-    
+    OEComponent *memoryBus;
     OEComponent *rom;
-    OEComponent *mmu;
-    OEComponent *audioCodec;
     
-    OEUInt8 inputTriggerThreshold;
-    OEUInt8 inputCurrentThreshold;
-    
-    bool outputState;
-	OEInt16 outputHighLevel;
-    
-    void mapMMU(int message);
-    void toggleSpeaker();
+    void mapMemory(int message);
 };

@@ -1,4 +1,9 @@
-==Current==
+==Latest==
+* Designed the Apple II memory and video interfaces
+* Redesigned AddressMux and renamed it to AddressMapper
+* Integrated AddressDecoder with MMU
+* Added AudioInterface and MemoryInterface helper functions
+* Refactorized Apple1ACI, AppleIIAudioIn, AppleIIAudioOut
 * Implemented Apple-1 and Apple II volume controls
 * Implemented auto-open canvas when adding a canvas device
 * Fixed dragging of audio files to a canvas

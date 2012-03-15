@@ -107,26 +107,26 @@ bool AppleIIGamePort::postMessage(OEComponent *sender, int message, void *data)
 {
     switch (message)
     {
-        case APPLEIIGAMEPORT_SET_PDL0:
-        case APPLEIIGAMEPORT_SET_PDL1:
-        case APPLEIIGAMEPORT_SET_PDL2:
-        case APPLEIIGAMEPORT_SET_PDL3:
-            pb[message - APPLEIIGAMEPORT_SET_PDL0] = *((float *)data);
+        case APPLEII_SET_PDL0:
+        case APPLEII_SET_PDL1:
+        case APPLEII_SET_PDL2:
+        case APPLEII_SET_PDL3:
+            pb[message - APPLEII_SET_PDL0] = *((float *)data);
             
             break;
             
-        case APPLEIIGAMEPORT_SET_PB0:
-        case APPLEIIGAMEPORT_SET_PB1:
-        case APPLEIIGAMEPORT_SET_PB2:
-            pb[message - APPLEIIGAMEPORT_SET_PB0 + 1] = *((bool *)data);
+        case APPLEII_SET_PB0:
+        case APPLEII_SET_PB1:
+        case APPLEII_SET_PB2:
+            pb[message - APPLEII_SET_PB0 + 1] = *((bool *)data);
             
             break;
             
-        case APPLEIIGAMEPORT_GET_AN0:
-        case APPLEIIGAMEPORT_GET_AN1:
-        case APPLEIIGAMEPORT_GET_AN2:
-        case APPLEIIGAMEPORT_GET_AN3:
-            *((bool *)data) = an[message - APPLEIIGAMEPORT_GET_AN0];
+        case APPLEII_GET_AN0:
+        case APPLEII_GET_AN1:
+        case APPLEII_GET_AN2:
+        case APPLEII_GET_AN3:
+            *((bool *)data) = an[message - APPLEII_GET_AN0];
             
             return true;
     }
@@ -170,7 +170,7 @@ OEUInt8 AppleIIGamePort::read(OEAddress address)
         case 0x44: case 0x45: case 0x46: case 0x47:
         case 0x48: case 0x49: case 0x4a: case 0x4b:
         case 0x4c: case 0x4d: case 0x4e: case 0x4f:
-            postNotification(this, APPLEIIGAMEPORT_DID_STROBE, NULL);
+            postNotification(this, APPLEII_DID_STROBE, NULL);
             
             break;
             
@@ -212,7 +212,7 @@ void AppleIIGamePort::write(OEAddress address, OEUInt8 value)
         case 0x44: case 0x45: case 0x46: case 0x47:
         case 0x48: case 0x49: case 0x4a: case 0x4b:
         case 0x4c: case 0x4d: case 0x4e: case 0x4f:
-            postNotification(this, APPLEIIGAMEPORT_DID_STROBE, NULL);
+            postNotification(this, APPLEII_DID_STROBE, NULL);
             
             break;
             
@@ -239,7 +239,7 @@ void AppleIIGamePort::setAN(int index, bool value)
     an[index] = value;
     
     if (value != oldValue)
-        postNotification(this, APPLEIIGAMEPORT_AN0_DID_CHANGE + index, &value);
+        postNotification(this, APPLEII_AN0_DID_CHANGE + index, &value);
 }
 
 void AppleIIGamePort::setPDL(int index, float value)

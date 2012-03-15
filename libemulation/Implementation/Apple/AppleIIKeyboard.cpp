@@ -249,7 +249,7 @@ void AppleIIKeyboard::updateShiftKeyMod()
         
         bool shiftKeyUp = !OEGetBit(flags, CANVAS_KF_SHIFT);
         
-        gamePort->postMessage(this, APPLEIIGAMEPORT_SET_PB2, &shiftKeyUp);
+        gamePort->postMessage(this, APPLEII_SET_PB2, &shiftKeyUp);
     }
 }
 

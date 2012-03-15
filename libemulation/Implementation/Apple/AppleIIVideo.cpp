@@ -27,6 +27,11 @@
 #define MAP_WIDTH           16
 #define MAP_HEIGHT          8
 
+#define MODE_TEXT       (1 << 0)
+#define MODE_MIXED      (1 << 1)
+#define MODE_PAGE2      (1 << 2)
+#define MODE_HIRES      (1 << 3)
+
 /*
  * Notes:
  *
@@ -47,8 +52,8 @@
 
 AppleIIVideo::AppleIIVideo()
 {
-    model = APPLEIIVIDEO_IIE;
-    tvSystem = APPLEIIVIDEO_NTSC;
+    model = APPLEII_MODELIIE;
+    tvSystem = APPLEII_NTSC;
     characterSet = "Standard";
     flashFrameNum = 16;
     mode = 0;
@@ -59,7 +64,6 @@ AppleIIVideo::AppleIIVideo()
     ram1 = NULL;
     ram2 = NULL;
     ram3 = NULL;
-    videoRAMSync = NULL;
     gamePort = NULL;
     monitorDevice = NULL;
     monitor = NULL;
@@ -84,7 +88,7 @@ AppleIIVideo::AppleIIVideo()
     imageDidChange = true;
     
     frameStart = 0;
-    currentTimer = APPLEIIVIDEO_TIMER_VSYNC;
+    currentTimer = APPLEII_TIMER_VSYNC;
     lastSegment = 0;
     pendingSegments = 0;
     
@@ -102,27 +106,27 @@ bool AppleIIVideo::setValue(string name, string value)
 	if (name == "model")
     {
         if (value == "II")
-            model = APPLEIIVIDEO_II;
+            model = APPLEII_MODELII;
         else if (value == "II j-plus")
-            model = APPLEIIVIDEO_IIJPLUS;
+            model = APPLEII_MODELIIJPLUS;
         else if (value == "IIe")
-            model = APPLEIIVIDEO_IIE;
+            model = APPLEII_MODELIIE;
     }
 	else if (name == "revision")
     {
         if (value == "Revision 0")
-            revision = APPLEIIVIDEO_REVISION0;
+            revision = APPLEII_REVISION0;
         else if (value == "Revision 1+")
-            revision = APPLEIIVIDEO_REVISION1;
+            revision = APPLEII_REVISION1;
         
         isRevisionUpdated = true;
     }
 	else if (name == "tvSystem")
     {
         if (value == "NTSC")
-            tvSystem = APPLEIIVIDEO_NTSC;
+            tvSystem = APPLEII_NTSC;
         else if (value == "PAL")
-            tvSystem = APPLEIIVIDEO_PAL;
+            tvSystem = APPLEII_PAL;
         
         isTVSystemUpdated = true;
     }
@@ -131,13 +135,13 @@ bool AppleIIVideo::setValue(string name, string value)
 	else if (name == "flashFrameNum")
 		flashFrameNum = (OEUInt32) getInt(value);
 	else if (name == "text")
-        OESetBit(mode, APPLEIIVIDEO_TEXT, getInt(value));
+        OESetBit(mode, MODE_TEXT, getInt(value));
 	else if (name == "mixed")
-        OESetBit(mode, APPLEIIVIDEO_MIXED, getInt(value));
+        OESetBit(mode, MODE_MIXED, getInt(value));
 	else if (name == "page2")
-        OESetBit(mode, APPLEIIVIDEO_PAGE2, getInt(value));
+        OESetBit(mode, MODE_PAGE2, getInt(value));
 	else if (name == "hires")
-        OESetBit(mode, APPLEIIVIDEO_HIRES, getInt(value));
+        OESetBit(mode, MODE_HIRES, getInt(value));
 	else
 		return false;
 	
@@ -150,12 +154,12 @@ bool AppleIIVideo::getValue(string name, string& value)
     {
         switch (revision)
         {
-            case APPLEIIVIDEO_REVISION0:
+            case APPLEII_REVISION0:
                 value = "Revision 0";
                 
                 break;
                 
-            case APPLEIIVIDEO_REVISION1:
+            case APPLEII_REVISION1:
                 value = "Revision 1+";
                 
                 break;
@@ -165,12 +169,12 @@ bool AppleIIVideo::getValue(string name, string& value)
     {
         switch (tvSystem)
         {
-            case APPLEIIVIDEO_NTSC:
+            case APPLEII_NTSC:
                 value = "NTSC";
                 
                 break;
                 
-            case APPLEIIVIDEO_PAL:
+            case APPLEII_PAL:
                 value = "PAL";
                 
                 break;
@@ -181,13 +185,13 @@ bool AppleIIVideo::getValue(string name, string& value)
 	else if (name == "flashFrameNum")
 		value = getString(flashFrameNum);
 	else if (name == "text")
-		value = getString(OEGetBit(mode, APPLEIIVIDEO_TEXT));
+		value = getString(OEGetBit(mode, MODE_TEXT));
 	else if (name == "mixed")
-		value = getString(OEGetBit(mode, APPLEIIVIDEO_MIXED));
+		value = getString(OEGetBit(mode, MODE_MIXED));
 	else if (name == "page2")
-		value = getString(OEGetBit(mode, APPLEIIVIDEO_PAGE2));
+		value = getString(OEGetBit(mode, MODE_PAGE2));
 	else if (name == "hires")
-		value = getString(OEGetBit(mode, APPLEIIVIDEO_HIRES));
+		value = getString(OEGetBit(mode, MODE_HIRES));
 	else
 		return false;
 	
@@ -222,15 +226,13 @@ bool AppleIIVideo::setRef(string name, OEComponent *ref)
         ram2 = ref;
     else if (name == "ram3")
         ram3 = ref;
-    else if (name == "videoRAMSync")
-        videoRAMSync = ref;
     else if (name == "gamePort")
     {
         if (gamePort)
-            gamePort->removeObserver(this, APPLEIIGAMEPORT_AN2_DID_CHANGE);
+            gamePort->removeObserver(this, APPLEII_AN2_DID_CHANGE);
         gamePort = ref;
         if (gamePort)
-            gamePort->addObserver(this, APPLEIIGAMEPORT_AN2_DID_CHANGE);
+            gamePort->addObserver(this, APPLEII_AN2_DID_CHANGE);
     }
     else if (name == "monitorDevice")
     {
@@ -300,13 +302,6 @@ bool AppleIIVideo::init()
         return false;
     }
     
-    if (!videoRAMSync)
-    {
-        logMessage("videoRAMSync not connected");
-        
-        return false;
-    }
-    
     OEAddress startAddress = 0;
     initVideoRAM(ram1, startAddress);
     initVideoRAM(ram2, startAddress);
@@ -317,7 +312,7 @@ bool AppleIIVideo::init()
     initVideoRAMSync();
     
     if (gamePort)
-        gamePort->postMessage(this, APPLEIIGAMEPORT_GET_AN2, &an2);
+        gamePort->postMessage(this, APPLEII_GET_AN2, &an2);
     
     return true;
 }
@@ -333,13 +328,13 @@ void AppleIIVideo::update()
     
     if (isTVSystemUpdated)
     {
-        if (tvSystem == APPLEIIVIDEO_NTSC)
+        if (tvSystem == APPLEII_NTSC)
         {
             videoRect = OEMakeRect(0, 0, 912, 262);
             pictureRect = OEMakeRect(128, 19, 768, 240);
             activeRect = OEMakeRect(232, 38, 560, 192);
         }
-        else if (tvSystem == APPLEIIVIDEO_PAL)
+        else if (tvSystem == APPLEII_PAL)
         {
             videoRect = OEMakeRect(0, 0, 912, 312);
             pictureRect = OEMakeRect(128, 21, 768, 288);
@@ -351,7 +346,7 @@ void AppleIIVideo::update()
         updateImage();
         updateClockFrequency();
         
-        currentTimer = APPLEIIVIDEO_TIMER_VSYNC;
+        currentTimer = APPLEII_TIMER_VSYNC;
         lastSegment = 0;
         
         controlBus->postMessage(this, CONTROLBUS_INVALIDATE_TIMERS, this);
@@ -381,12 +376,12 @@ bool AppleIIVideo::postMessage(OEComponent *sender, int message, void *data)
 {
     switch (message)
     {
-        case APPLEIIVIDEO_REFRESH:
+        case APPLEII_REFRESH_VIDEO:
             setNeedsDisplay();
             
             return true;
             
-        case APPLEIIVIDEO_READ_FLOATINGBUS:
+        case APPLEII_READ_FLOATINGBUS:
             *((OEUInt8 *)data) = readFloatingBus();
             
             return true;
@@ -449,22 +444,22 @@ void AppleIIVideo::write(OEAddress address, OEUInt8 value)
     switch (address & 0x7f)
     {
         case 0x50: case 0x51:
-            setMode(APPLEIIVIDEO_TEXT, address & 0x1);
+            setMode(MODE_TEXT, address & 0x1);
             
             break;
             
         case 0x52: case 0x53:
-            setMode(APPLEIIVIDEO_MIXED, address & 0x1);
+            setMode(MODE_MIXED, address & 0x1);
             
             break;
             
         case 0x54: case 0x55:
-            setMode(APPLEIIVIDEO_PAGE2, address & 0x1);
+            setMode(MODE_PAGE2, address & 0x1);
             
             break;
             
         case 0x56: case 0x57:
-            setMode(APPLEIIVIDEO_HIRES, address & 0x1);
+            setMode(MODE_HIRES, address & 0x1);
             
             break;
     }
@@ -563,7 +558,7 @@ void AppleIIVideo::loadTextMap(string name, OEData *data)
         {
             int cr = c;
             
-            if (model == APPLEIIVIDEO_IIJPLUS)
+            if (model == APPLEII_MODELIIJPLUS)
             {
                 OESetBit(cr, 0x40, OEGetBit(c, 0x80));
                 OESetBit(cr, 0x80, OEGetBit(c, 0x200));
@@ -617,7 +612,7 @@ void AppleIIVideo::updateHiresMap()
     for (int c = 0; c < 2 * MAP_SIZE; c++)
     {
         OEUInt8 byte = (c & 0x7f) << 1 | (c >> 8);
-        bool delay = (revision != APPLEIIVIDEO_REVISION0) && (c & 0x80);
+        bool delay = (revision != APPLEII_REVISION0) && (c & 0x80);
         
         for (int x = 0; x < MAP_WIDTH; x++)
         {
@@ -671,9 +666,9 @@ void AppleIIVideo::updateClockFrequency()
 {
     float clockFrequency = 0;
     
-    if (tvSystem == APPLEIIVIDEO_NTSC)
+    if (tvSystem == APPLEII_NTSC)
         clockFrequency = 14318180.0 * 65 / 912;
-    else if (tvSystem == APPLEIIVIDEO_PAL)
+    else if (tvSystem == APPLEII_PAL)
         clockFrequency = 14250450.0 * 65 / 912;
     
     controlBus->postMessage(this, CONTROLBUS_SET_CLOCKFREQUENCY, &clockFrequency);
@@ -695,36 +690,36 @@ void AppleIIVideo::updateRendererMap()
 
 void AppleIIVideo::updateRenderer()
 {
-    if ((revision == APPLEIIVIDEO_REVISION0) || !OEGetBit(mode, APPLEIIVIDEO_TEXT))
+    if ((revision == APPLEII_REVISION0) || !OEGetBit(mode, MODE_TEXT))
         image.setSubcarrier(3579545);
     else
         image.setSubcarrier(0);
     
-    OEUInt32 page = OEGetBit(mode, APPLEIIVIDEO_PAGE2) ? 1 : 0;
+    OEUInt32 page = OEGetBit(mode, MODE_PAGE2) ? 1 : 0;
     
     rendererTextMemory = textMemory[page];
     rendererHiresMemory = hiresMemory[page];
     
     switch (currentTimer)
     {
-        case APPLEIIVIDEO_TIMER_MIXED:
-            if (OEGetBit(mode, APPLEIIVIDEO_TEXT))
-                renderer = APPLEIIVIDEO_RENDERER_TEXT;
-            else if (!OEGetBit(mode, APPLEIIVIDEO_HIRES))
-                renderer = APPLEIIVIDEO_RENDERER_LORES;
+        case APPLEII_TIMER_MIXED:
+            if (OEGetBit(mode, MODE_TEXT))
+                renderer = APPLEII_RENDERER_TEXT;
+            else if (!OEGetBit(mode, MODE_HIRES))
+                renderer = APPLEII_RENDERER_LORES;
             else
-                renderer = APPLEIIVIDEO_RENDERER_HIRES;
+                renderer = APPLEII_RENDERER_HIRES;
             
             break;
             
-        case APPLEIIVIDEO_TIMER_ACTIVEEND:
-            if (OEGetBit(mode, APPLEIIVIDEO_TEXT) ||
-                OEGetBit(mode, APPLEIIVIDEO_MIXED))
-                renderer = APPLEIIVIDEO_RENDERER_TEXT;
-            else if (!OEGetBit(mode, APPLEIIVIDEO_HIRES))
-                renderer = APPLEIIVIDEO_RENDERER_LORES;
+        case APPLEII_TIMER_ACTIVEEND:
+            if (OEGetBit(mode, MODE_TEXT) ||
+                OEGetBit(mode, MODE_MIXED))
+                renderer = APPLEII_RENDERER_TEXT;
+            else if (!OEGetBit(mode, MODE_HIRES))
+                renderer = APPLEII_RENDERER_LORES;
             else
-                renderer = APPLEIIVIDEO_RENDERER_HIRES;
+                renderer = APPLEII_RENDERER_HIRES;
             
             break;
             
@@ -801,7 +796,7 @@ void AppleIIVideo::drawVideoLine(int y, int x0, int x1)
 {
     switch (renderer)
     {
-        case APPLEIIVIDEO_RENDERER_TEXT:
+        case APPLEII_RENDERER_TEXT:
         {
             OEUInt64 memoryOffset = textOffset[y >> 3];
             OEUInt8 *p = rendererImage + y * ((int) OEWidth(pictureRect)) + x0 * CHAR_WIDTH;
@@ -817,7 +812,7 @@ void AppleIIVideo::drawVideoLine(int y, int x0, int x1)
             
             break;
         }
-        case APPLEIIVIDEO_RENDERER_LORES:
+        case APPLEII_RENDERER_LORES:
         {
             OEUInt64 memoryOffset = textOffset[y >> 3];
             OEUInt8 *p = rendererImage + y * ((int) OEWidth(pictureRect)) + x0 * CHAR_WIDTH;
@@ -834,7 +829,7 @@ void AppleIIVideo::drawVideoLine(int y, int x0, int x1)
             
             break;
         }
-        case APPLEIIVIDEO_RENDERER_HIRES:
+        case APPLEII_RENDERER_HIRES:
         {
             OEUInt64 memoryOffset = hiresOffset[y];
             OEUInt8 *p = rendererImage + y * ((int) OEWidth(pictureRect)) + x0 * CHAR_WIDTH;
@@ -863,21 +858,21 @@ void AppleIIVideo::setNeedsDisplay()
 
 void AppleIIVideo::initVideoRAMSync()
 {
-    MemoryMap ramSyncMap;
+/*    MemoryMap ramSyncMap;
     
     ramSyncMap.component = videoRAMSync;
     ramSyncMap.startAddress = 0x400;
     ramSyncMap.endAddress = 0xbff;
     ramSyncMap.read = false;
     ramSyncMap.write = true;
-    mmu->postMessage(this, MMU_MAP_MEMORY, &ramSyncMap);
+    mmu->postMessage(this, ADDRESSDECODER_MAP_MEMORY, &ramSyncMap);
     
     ramSyncMap.component = videoRAMSync;
     ramSyncMap.startAddress = 0x2000;
     ramSyncMap.endAddress = 0x5fff;
     ramSyncMap.read = false;
     ramSyncMap.write = true;
-    mmu->postMessage(this, MMU_MAP_MEMORY, &ramSyncMap);
+    mmu->postMessage(this, ADDRESSDECODER_MAP_MEMORY, &ramSyncMap);*/
 }
 
 void AppleIIVideo::scheduleNextTimer(OEInt64 cycles)
@@ -885,12 +880,12 @@ void AppleIIVideo::scheduleNextTimer(OEInt64 cycles)
     updateVideo();
     
     currentTimer++;
-    if (currentTimer > APPLEIIVIDEO_TIMER_VSYNC)
-        currentTimer = APPLEIIVIDEO_TIMER_ACTIVESTART;
+    if (currentTimer > APPLEII_TIMER_VSYNC)
+        currentTimer = APPLEII_TIMER_ACTIVESTART;
     
     switch (currentTimer)
     {
-        case APPLEIIVIDEO_TIMER_ACTIVESTART:
+        case APPLEII_TIMER_ACTIVESTART:
             if (imageDidChange)
             {
                 imageDidChange = false;
@@ -922,21 +917,21 @@ void AppleIIVideo::scheduleNextTimer(OEInt64 cycles)
             
             break;
             
-        case APPLEIIVIDEO_TIMER_MIXED:
+        case APPLEII_TIMER_MIXED:
             updateRenderer();
             
             cycles += (OEHeight(activeRect) - 32) * 65;
             
             break;
             
-        case APPLEIIVIDEO_TIMER_ACTIVEEND:
+        case APPLEII_TIMER_ACTIVEEND:
             updateRenderer();
             
             cycles += 32 * 65;
             
             break;
             
-        case APPLEIIVIDEO_TIMER_VSYNC:
+        case APPLEII_TIMER_VSYNC:
             cycles += (OEMaxY(videoRect) - OEMaxY(activeRect)) * 65;
             
             break;
@@ -958,9 +953,9 @@ OEUInt8 AppleIIVideo::readFloatingBus()
 {
     AppleIIVideoPoint count = getCount();
     
-	bool mixed = OEGetBit(mode, APPLEIIVIDEO_MIXED) && ((count.y & 0xa0) == 0xa0);
-	bool hires = OEGetBit(mode, APPLEIIVIDEO_HIRES) && !(OEGetBit(mode, APPLEIIVIDEO_TEXT) || mixed);
-	bool page = OEGetBit(mode, APPLEIIVIDEO_PAGE2);
+	bool mixed = OEGetBit(mode, MODE_MIXED) && ((count.y & 0xa0) == 0xa0);
+	bool hires = OEGetBit(mode, MODE_HIRES) && !(OEGetBit(mode, MODE_TEXT) || mixed);
+	bool page = OEGetBit(mode, MODE_PAGE2);
 	
 	OEUInt32 address = count.x & 0x7;
 	
@@ -981,7 +976,7 @@ OEUInt8 AppleIIVideo::readFloatingBus()
     else
     {
         // On the Apple II: set A12 on horizontal blanking
-        if ((revision != APPLEIIVIDEO_IIE) && (count.x < 0x58))
+        if ((model != APPLEII_MODELIIE) && (count.x < 0x58))
             return textHBLMemory[page][address];
         
         return textMemory[page][address];
@@ -990,12 +985,12 @@ OEUInt8 AppleIIVideo::readFloatingBus()
 
 void AppleIIVideo::copy(wstring *s)
 {
-    if (!OEGetBit(mode, APPLEIIVIDEO_TEXT))
+    if (!OEGetBit(mode, MODE_TEXT))
         return;
     
     OEUInt8 charMap[] = {0x40, 0x20, 0x40, 0x20, 0x40, 0x20, 0x40, 0x60};
     
-    OEUInt32 page = OEGetBit(mode, APPLEIIVIDEO_PAGE2) ? 1 : 0;
+    OEUInt32 page = OEGetBit(mode, MODE_PAGE2) ? 1 : 0;
     
     OEUInt8 *vp = textMemory[page];
     

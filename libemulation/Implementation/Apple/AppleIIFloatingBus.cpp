@@ -43,7 +43,7 @@ OEUInt8 AppleIIFloatingBus::read(OEAddress address)
 {
     OEUInt8 value;
     
-    video->postMessage(this, APPLEIIVIDEO_READ_FLOATINGBUS, &value);
+    video->postMessage(this, APPLEII_READ_FLOATINGBUS, &value);
     
 	return value;
 }

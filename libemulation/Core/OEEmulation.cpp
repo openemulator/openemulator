@@ -293,7 +293,7 @@ bool OEEmulation::configureComponent(string id, xmlNodePtr children)
                 OEComponent *ref = getComponent(refId);
                 
                 if ((refId != "") && !ref)
-                    logMessage("'" + name + "' was not declared");
+                    logMessage("'" + refId + "' was not declared");
                 
                 if (!component->setRef(name, ref))
                     logMessage("could not set ref property '" + name + "' for '" + id + "'");
@@ -531,11 +531,7 @@ void OEEmulation::disposeComponent(string id)
     OEComponent *component = getComponent(id);
     
     if (!component)
-    {
-        logMessage("'" + id + "' was not declared");
-        
         return;
-    }
     
     component->dispose();
 }
@@ -596,11 +592,7 @@ void OEEmulation::deconfigureComponent(string id, xmlNodePtr children)
     OEComponent *component = getComponent(id);
     
     if (!component)
-    {
-        logMessage("'" + id + "' was not declared");
-        
         return;
-    }
     
     for(xmlNodePtr node = children;
         node;
@@ -658,11 +650,7 @@ void OEEmulation::destroyComponent(string id, xmlNodePtr children)
     OEComponent *component = getComponent(id);
     
     if (!component)
-    {
-        logMessage("'" + id + "' was not declared");
-        
         return;
-    }
     
     delete component;
     

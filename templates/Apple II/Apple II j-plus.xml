@@ -70,13 +70,11 @@
         <property name="controlBus" ref="appleIIjplus.controlBus"/>
         <property name="memoryBus" ref="appleIIjplus.memoryBus"/>
     </component>
-    <component id="appleIIjplus.memoryBus" class="AddressDecoder">
+    <component id="appleIIjplus.memoryBus" class="AppleIIAddressDecoder">
         <property name="addressSize" value="16"/>
         <property name="blockSize" value="8"/>
         <property name="floatingBus" ref="appleIIjplus.floatingBus"/>
-    </component>
-    <component id="appleIIjplus.mmu" class="MMU">
-        <property name="addressDecoder" ref="appleIIjplus.memoryBus"/>
+        <property name="video" ref="appleIIjplus.video"/>
         <property name="refRAM1" ref="appleIIjplus.ram1"/>
         <property name="mapRAM1" value="0x0000-0x3fff"/>
         <property name="refRAM2" ref="appleIIjplus.ram2"/>
@@ -137,9 +135,6 @@
         <property name="addressSize" value="8"/>
         <property name="blockSize" value="0"/>
         <property name="floatingBus" ref="appleIIjplus.floatingBus"/>
-    </component>
-    <component id="appleIIjplus.iou" class="MMU">
-        <property name="addressDecoder" ref="appleIIjplus.io"/>
         <property name="refKeyboard" ref="appleIIjplus.keyboard"/>
         <property name="mapKeyboard" value="0x00-0x1f"/>
         <property name="refSpeaker" ref="appleIIjplus.audioOut"/>
@@ -181,26 +176,20 @@
         <property name="characterSet" value="Standard"/>
         <property name="flashFrameNum" value="14"/>
         <property name="text" value="1"/>
-        <property name="mixed" value="0"/>
-        <property name="page2" value="0"/>
-        <property name="hires" value="0"/>
+        <property name="mixed" value="1"/>
+        <property name="page2" value="1"/>
+        <property name="hires" value="1"/>
         <property name="device" ref="appleIIjplus"/>
         <property name="controlBus" ref="appleIIjplus.controlBus"/>
-        <property name="mmu" ref="appleIIjplus.mmu"/>
+        <property name="mmu" ref="appleIIjplus.memoryBus"/>
         <property name="floatingBus" ref="appleIIjplus.floatingBus"/>
         <property name="ram1" ref="appleIIjplus.ram1"/>
         <property name="ram2" ref="appleIIjplus.ram2"/>
         <property name="ram3" ref="appleIIjplus.ram3"/>
-        <property name="videoRAMSync" ref="appleIIjplus.videoRAMSync"/>
         <property name="gamePort" ref="appleIIjplus.gamePort"/>
         <property name="monitorDevice" ref="appleMonitorII"/>
         <property name="monitor" ref="appleMonitorII.monitor"/>
         <property name="fontStandard" data="${resourcePath}/roms/Apple/Apple II j-plus Video ROM.bin"/>
-    </component>
-    <component id="appleIIjplus.videoRAMSync" class="AppleIIVideoRAMSync">
-        <property name="video" ref="appleIIjplus.video"/>
-        <property name="ram1" ref="appleIIjplus.ram1"/>
-        <property name="ram2" ref="appleIIjplus.ram2"/>
     </component>
     <component id="appleIIjplus.audioOut" class="AppleIIAudioOut">
         <property name="volume" value="1"/>

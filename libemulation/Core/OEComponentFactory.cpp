@@ -12,13 +12,13 @@
 
 // FACTORY_INCLUDE_START - Do not modify this section
 #include "AddressDecoder.h"
-#include "AddressMux.h"
+#include "AddressMapper.h"
 #include "AddressOffset.h"
 #include "AudioCodec.h"
+#include "BankSwitchedRAM.h"
 #include "ControlBus.h"
 #include "FloatingBus.h"
 #include "JoystickMapper.h"
-#include "MMU.h"
 #include "Monitor.h"
 #include "RAM.h"
 #include "ROM.h"
@@ -29,6 +29,7 @@
 #include "AppleDiskII.h"
 #include "AppleDiskIIInterfaceCard.h"
 #include "AppleGraphicsTablet.h"
+#include "AppleIIAddressDecoder.h"
 #include "AppleIIAudioIn.h"
 #include "AppleIIAudioOut.h"
 #include "AppleIIFloatingBus.h"
@@ -37,7 +38,6 @@
 #include "AppleIISlotExpansionMemory.h"
 #include "AppleIISlotMemory.h"
 #include "AppleIIVideo.h"
-#include "AppleIIVideoRAMSync.h"
 #include "AppleSilentype.h"
 
 #include "MOS6502.h"
@@ -61,13 +61,13 @@ OEComponent *OEComponentFactory::construct(const string& className)
 {
     // FACTORY_CODE_START - Do not modify this section
     matchComponent(AddressDecoder);
-    matchComponent(AddressMux);
+    matchComponent(AddressMapper);
     matchComponent(AddressOffset);
     matchComponent(AudioCodec);
+    matchComponent(BankSwitchedRAM);
     matchComponent(ControlBus);
     matchComponent(FloatingBus);
     matchComponent(JoystickMapper);
-    matchComponent(MMU);
     matchComponent(Monitor);
     matchComponent(RAM);
     matchComponent(ROM);
@@ -79,6 +79,7 @@ OEComponent *OEComponentFactory::construct(const string& className)
     matchComponent(AppleDiskII);
     matchComponent(AppleDiskIIInterfaceCard);
     matchComponent(AppleGraphicsTablet);
+    matchComponent(AppleIIAddressDecoder);
     matchComponent(AppleIIAudioIn);
     matchComponent(AppleIIAudioOut);
     matchComponent(AppleIIFloatingBus);
@@ -87,7 +88,6 @@ OEComponent *OEComponentFactory::construct(const string& className)
     matchComponent(AppleIISlotExpansionMemory);
     matchComponent(AppleIISlotMemory);
     matchComponent(AppleIIVideo);
-    matchComponent(AppleIIVideoRAMSync);
     matchComponent(AppleSilentype);
     
     matchComponent(MOS6502);

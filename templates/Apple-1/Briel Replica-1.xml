@@ -39,9 +39,6 @@
         <property name="addressSize" value="16"/>
         <property name="blockSize" value="8"/>
         <property name="floatingBus" ref="replica1.floatingBus"/>
-    </component>
-    <component id="replica1.mmu" class="MMU">
-        <property name="addressDecoder" ref="replica1.memoryBus"/>
         <property name="refRAM" ref="replica1.ram"/>
         <property name="mapRAM" value="0x0000-0x7fff"/>
         <property name="refIO" ref="replica1.ioMemory"/>
@@ -141,14 +138,14 @@
     </device>
     <connector id="appleACI.connector" type="Apple-1 Expansion Port">
         <inlet ref="appleACI.audioCodec" property="controlBus" outletRef="controlBus"/>
-        <inlet ref="appleACI.io" property="mmu" outletRef="mmu"/>
+        <inlet ref="appleACI.io" property="memoryBus" outletRef="memoryBus"/>
     </connector>
     <component id="appleACI.io" class="Apple1ACI">
         <property name="volume" value="1"/>
         <property name="noiseRejection" value="0.04"/>
-        <property name="rom" ref="appleACI.rom"/>
-        <property name="mmu" ref="replica1.mmu"/>
         <property name="audioCodec" ref="appleACI.audioCodec"/>
+        <property name="memoryBus" ref="replica1.memoryBus"/>
+        <property name="rom" ref="appleACI.rom"/>
     </component>
     <component id="appleACI.audioCodec" class="AudioCodec">
         <property name="audio" ref="audio"/>
@@ -167,13 +164,13 @@
     </device>
     <connector id="rdCFFA1.connector" type="Apple-1 Expansion Port">
         <inlet ref="rdCFFA1.ram" property="controlBus" outletRef="controlBus"/>
-        <inlet ref="rdCFFA1.io" property="mmu" outletRef="mmu"/>
+        <inlet ref="rdCFFA1.io" property="memoryBus" outletRef="memoryBus"/>
     </connector>
     <component id="rdCFFA1.io" class="RDCFFA1">
         <property name="device" ref="rdCFFA1"/>
         <property name="ram" ref="rdCFFA1.ram"/>
         <property name="rom" ref="rdCFFA1.rom"/>
-        <property name="mmu" ref="replica1.mmu"/>
+        <property name="memoryBus" ref="replica1.memoryBus"/>
         <property name="image" value=""/>
         <property name="forceWriteProtected" value="0"/>
     </component>

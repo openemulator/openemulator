@@ -40,6 +40,8 @@ typedef enum
     CONTROLBUS_INVALIDATE_TIMERS,
     
     CONTROLBUS_SET_CPUCLOCKMULTIPLIER,
+    
+    CONTROLBUS_END,
 } ControlBusMessage;
 
 typedef enum

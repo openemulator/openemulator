@@ -32,5 +32,5 @@ private:
 	
 	OEUInt32 en;
 
-    void mapMMU(int message);
+    void mapMemory(int message);
 };

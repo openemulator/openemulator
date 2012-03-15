@@ -8,7 +8,6 @@
  * Implements a PortAudio audio component
  */
 
-#include <math.h>
 #include <iostream>
 
 #include "PAAudio.h"
@@ -771,12 +770,7 @@ void PAAudio::playAudio(float *inputBuffer,
         playFrameIndex += srcData.output_frames_gen;
     } while (srcOutputFrameNum > 0);
     
-    float linearVolume;
-    if (playVolume != 0)
-        linearVolume = pow(10.0, (playVolume - 1.0) * 40.0 / 20.0);
-    else
-        linearVolume = 0;
-    
+    float linearVolume = getLevelFromVolume(playVolume);
     OEUInt32 sampleNum = (frameNum - srcOutputFrameNum) * channelNum;
     
     for (OEUInt32 ch = 0; ch < channelNum; ch++)

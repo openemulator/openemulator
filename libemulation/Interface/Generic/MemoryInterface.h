@@ -2,7 +2,7 @@
 /**
  * libemulation
  * Memory interface
- * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2010-2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Defines the address interfaces
@@ -17,14 +17,11 @@
 
 typedef enum
 {
-    ADDRESSDECODER_MAP_MEMORY,
+    ADDRESSDECODER_MAP_MEMORYMAPS,
+    ADDRESSDECODER_UNMAP_MEMORYMAPS,
+    
+    ADDRESSDECODER_END,
 } AddressDecoderMessage;
-
-typedef enum
-{
-    MMU_MAP_MEMORY,
-    MMU_UNMAP_MEMORY,
-} MMUMessage;
 
 typedef enum
 {
@@ -43,5 +40,15 @@ typedef struct
 } MemoryMap;
 
 typedef list<MemoryMap> MemoryMaps;
+
+typedef map<string, string> MemoryMapsConf;
+typedef map<string, OEComponent *> MemoryMapsRef;
+
+bool appendMemoryMaps(MemoryMaps& theMaps,
+                      OEComponent *component,
+                      string value);
+bool validateMemoryMapsConf(MemoryMaps& theMaps,
+                            OEAddress blockSize,
+                            OEAddress addressMask);
 
 #endif

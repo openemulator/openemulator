@@ -8,27 +8,18 @@
  * Controls Apple II audio input
  */
 
-#include "OEComponent.h"
+#include "Audio1Bit.h"
 
-class AppleIIAudioIn : public OEComponent
+class AppleIIAudioIn : public Audio1Bit
 {
 public:
     AppleIIAudioIn();
     
-    bool setValue(string name, string value);
-    bool getValue(string name, string& value);
 	bool setRef(string name, OEComponent *ref);
 	bool init();
-    void update();
     
 	OEUInt8 read(OEAddress address);
 	
 private:
-    float noiseRejection;
-    
 	OEComponent *floatingBus;
-	OEComponent *audioCodec;
-    
-    OEUInt8 inputTriggerThreshold;
-    OEUInt8 inputCurrentThreshold;
 };

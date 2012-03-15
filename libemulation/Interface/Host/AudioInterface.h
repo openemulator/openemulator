@@ -30,4 +30,6 @@ typedef struct
     float *output;
 } AudioBuffer;
 
+float getLevelFromVolume(float value);
+
 #endif

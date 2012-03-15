@@ -8,6 +8,9 @@
  * Controls random access memory
  */
 
+#ifndef _RAM_H
+#define _RAM_H
+
 #include "OEComponent.h"
 
 #include "ControlBusInterface.h"
@@ -50,3 +53,5 @@ private:
     
     void initMemory();
 };
+
+#endif

@@ -1,10 +1,7 @@
 ==1.0.3==
 * Fix auto-open canvas when adding a canvas device
-* Refactorize Apple1ACI, AppleIIAudioIn, AppleIIAudioOut
-* Make a library of common functions (i.e. linear to log audio volume, decoding a memory string to a MemoryMap list)
 * Fix thread priority in PAAudio
 * Refactorize PAAudio
-* Design the interface between Apple II video memory and AppleIIVideo
 * Implement AppleIISlotMemory and AppleIISlotExpansionMemory
 * Implement sound player
 * Implement Apple Disk II Interface Card

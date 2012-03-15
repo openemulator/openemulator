@@ -2,7 +2,7 @@
 /**
  * libemulation
  * R&D CFFA1
- * (C) 2011 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2011-2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Implements an R&D CFFA1 interface card
@@ -36,8 +36,7 @@ private:
     OEComponent *ram;
     OEComponent *rom;
     
-    OEComponent *controlBus;
-    OEComponent *mmu;
+    OEComponent *memoryBus;
     
     FILE *diskImageFP;
     
@@ -47,7 +46,7 @@ private:
     OEUnion ataLBA;
     OEUInt8 ataCommand;
     
-    void mapMMU(int message);
+    void mapMemory(int message);
     bool openDiskImage(string filename);
     void closeDiskImage();
 };

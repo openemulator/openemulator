@@ -47,10 +47,10 @@ bool AppleIISlotMemory::setRef(string name, OEComponent *ref)
 	if (name == "mmu")
     {
         if (mmu)
-            mmu->removeObserver(this, APPLEIIMMU_SLOTEXPANSIONMEMORY_WILL_UNMAP);
+            mmu->removeObserver(this, APPLEII_SLOTEXPANSIONMEMORY_WILL_UNMAP);
 		mmu = ref;
         if (mmu)
-            mmu->addObserver(this, APPLEIIMMU_SLOTEXPANSIONMEMORY_WILL_UNMAP);
+            mmu->addObserver(this, APPLEII_SLOTEXPANSIONMEMORY_WILL_UNMAP);
     }
 	else if (name == "slotMemory")
 		slotMemory = ref;
@@ -84,7 +84,7 @@ void AppleIISlotMemory::notify(OEComponent *sender, int notification, void *data
     {
         en = false;
         
-        mapMMU(MMU_UNMAP_MEMORY);
+        mapMemory(APPLEII_UNMAP_SLOTMEMORYMAPS);
     }
 }
 
@@ -94,7 +94,7 @@ OEUInt8 AppleIISlotMemory::read(OEAddress address)
     {
         en = true;
         
-        mapMMU(MMU_MAP_MEMORY);
+        mapMemory(APPLEII_MAP_SLOTMEMORYMAPS);
     }
     
     return slotMemory->read(address);
@@ -106,13 +106,13 @@ void AppleIISlotMemory::write(OEAddress address, OEUInt8 value)
     {
         en = true;
         
-        mapMMU(MMU_MAP_MEMORY);
+        mapMemory(APPLEII_MAP_SLOTMEMORYMAPS);
     }
     
     slotMemory->write(address, value);
 }
 
-void AppleIISlotMemory::mapMMU(int message)
+void AppleIISlotMemory::mapMemory(int message)
 {
     MemoryMap memoryMap;
     

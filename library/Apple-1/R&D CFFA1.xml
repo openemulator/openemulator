@@ -7,13 +7,13 @@
     </device>
     <connector id="rdCFFA1.connector" type="Apple-1 Expansion Port">
         <inlet ref="rdCFFA1.ram" property="controlBus" outletRef="controlBus"/>
-        <inlet ref="rdCFFA1.io" property="mmu" outletRef="mmu"/>
+        <inlet ref="rdCFFA1.io" property="memoryBus" outletRef="memoryBus"/>
     </connector>
     <component id="rdCFFA1.io" class="RDCFFA1">
         <property name="device" ref="rdCFFA1"/>
         <property name="ram" ref="rdCFFA1.ram"/>
         <property name="rom" ref="rdCFFA1.rom"/>
-        <property name="mmu" ref=""/>
+        <property name="memoryBus" ref=""/>
         <property name="image" value=""/>
         <property name="forceWriteProtected" value="0"/>
     </component>

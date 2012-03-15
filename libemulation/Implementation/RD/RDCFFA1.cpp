@@ -2,7 +2,7 @@
 /**
  * libemulation
  * R&D CFFA1
- * (C) 2011 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2011-2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Implements an R&D CFFA1 interface card
@@ -34,7 +34,7 @@ RDCFFA1::RDCFFA1()
     device = NULL;
     ram = NULL;
     rom = NULL;
-    mmu = NULL;
+    memoryBus = NULL;
     
     diskImageFP = NULL;
     
@@ -87,8 +87,8 @@ bool RDCFFA1::setRef(string name, OEComponent *ref)
         ram = ref;
     else if (name == "rom")
         rom = ref;
-    else if (name == "mmu")
-        mmu = ref;
+    else if (name == "memoryBus")
+        memoryBus = ref;
     else
         return false;
     
@@ -118,21 +118,21 @@ bool RDCFFA1::init()
         return false;
     }
     
-    if (!mmu)
+    if (!memoryBus)
     {
-        logMessage("mmu not connected");
+        logMessage("memoryBus not connected");
         
         return false;
     }
     
-    mapMMU(MMU_MAP_MEMORY);
+    mapMemory(ADDRESSDECODER_MAP_MEMORYMAPS);
     
     return true;
 }
 
 void RDCFFA1::dispose()
 {
-    mapMMU(MMU_UNMAP_MEMORY);
+    mapMemory(ADDRESSDECODER_UNMAP_MEMORYMAPS);
 }
 
 bool RDCFFA1::postMessage(OEComponent *sender, int message, void *data)
@@ -342,34 +342,34 @@ void RDCFFA1::write(OEAddress address, OEUInt8 value)
     }
 }
 
-void RDCFFA1::mapMMU(int message)
+void RDCFFA1::mapMemory(int message)
 {
-    MemoryMap ramMap, romMap, ioMap;
+    MemoryMaps m;
+    MemoryMap theMap;
     
-    ramMap.component = ram;
-    ramMap.startAddress = 0x1000;
-    ramMap.endAddress = 0x8fff;
-    ramMap.read = true;
-    ramMap.write = true;
+    theMap.component = ram;
+    theMap.startAddress = 0x1000;
+    theMap.endAddress = 0x8fff;
+    theMap.read = true;
+    theMap.write = true;
+    m.push_back(theMap);
     
-    romMap.component = rom;
-    romMap.startAddress = 0x9000;
-    romMap.endAddress = 0xaeff;
-    romMap.read = true;
-    romMap.write = true;
+    theMap.component = rom;
+    theMap.startAddress = 0x9000;
+    theMap.endAddress = 0xaeff;
+    theMap.read = true;
+    theMap.write = true;
+    m.push_back(theMap);
     
-    ioMap.component = this;
-    ioMap.startAddress = 0xaf00;
-    ioMap.endAddress = 0xafff;
-    ioMap.read = true;
-    ioMap.write = true;
+    theMap.component = this;
+    theMap.startAddress = 0xaf00;
+    theMap.endAddress = 0xafff;
+    theMap.read = true;
+    theMap.write = true;
+    m.push_back(theMap);
     
-    if (mmu)
-    {
-        mmu->postMessage(this, message, &ramMap);
-        mmu->postMessage(this, message, &romMap);
-        mmu->postMessage(this, message, &ioMap);
-    }
+    if (memoryBus)
+        memoryBus->postMessage(this, message, &m);
 }
 
 bool RDCFFA1::openDiskImage(string filename)

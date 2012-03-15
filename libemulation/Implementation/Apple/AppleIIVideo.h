@@ -34,37 +34,37 @@ public:
 
 typedef enum
 {
-    APPLEIIVIDEO_II,
-    APPLEIIVIDEO_IIJPLUS,
-    APPLEIIVIDEO_IIE,
-} AppleIIVideoModel;
+    APPLEII_MODELII,
+    APPLEII_MODELIIJPLUS,
+    APPLEII_MODELIIE,
+} AppleIIModel;
 
 typedef enum
 {
-    APPLEIIVIDEO_REVISION0,
-    APPLEIIVIDEO_REVISION1,
-} AppleIIVideoRevision;
+    APPLEII_REVISION0,
+    APPLEII_REVISION1,
+} AppleIIRevision;
 
 typedef enum
 {
-    APPLEIIVIDEO_NTSC,
-    APPLEIIVIDEO_PAL,
-} AppleIIVideoSystem;
+    APPLEII_NTSC,
+    APPLEII_PAL,
+} AppleIITVSystem;
 
 typedef enum
 {
-    APPLEIIVIDEO_RENDERER_TEXT,
-    APPLEIIVIDEO_RENDERER_LORES,
-    APPLEIIVIDEO_RENDERER_HIRES,
-} AppleIIVideoRenderer;
+    APPLEII_RENDERER_TEXT,
+    APPLEII_RENDERER_LORES,
+    APPLEII_RENDERER_HIRES,
+} AppleIIRenderer;
 
 typedef enum
 {
-    APPLEIIVIDEO_TIMER_ACTIVESTART,
-    APPLEIIVIDEO_TIMER_MIXED,
-    APPLEIIVIDEO_TIMER_ACTIVEEND,
-    APPLEIIVIDEO_TIMER_VSYNC,
-} AppleIIVideoTimerType;
+    APPLEII_TIMER_ACTIVESTART,
+    APPLEII_TIMER_MIXED,
+    APPLEII_TIMER_ACTIVEEND,
+    APPLEII_TIMER_VSYNC,
+} AppleIITimerType;
 
 class AppleIIVideo : public OEComponent
 {
@@ -93,15 +93,14 @@ private:
     OEComponent *ram1;
     OEComponent *ram2;
     OEComponent *ram3;
-    OEComponent *videoRAMSync;
     OEComponent *gamePort;
     OEComponent *monitorDevice;
 	OEComponent *monitor;
 	
     // Settings
-    AppleIIVideoModel model;
-    AppleIIVideoRevision revision;
-    AppleIIVideoSystem tvSystem;
+    AppleIIModel model;
+    AppleIIRevision revision;
+    AppleIITVSystem tvSystem;
 	string characterSet;
     OEUInt32 flashFrameNum;
     OEUInt32 mode;
@@ -126,7 +125,7 @@ private:
     OEImage image;
     bool imageDidChange;
     
-    AppleIIVideoRenderer renderer;
+    AppleIIRenderer renderer;
     OEUInt8 *rendererImage;
     OEUInt8 *rendererTextMemory;
     OEUInt8 *rendererHiresMemory;
@@ -139,7 +138,7 @@ private:
     OERect activeRect;
     
     OEUInt64 frameStart;
-    AppleIIVideoTimerType currentTimer;
+    AppleIITimerType currentTimer;
     int lastSegment;
     int pendingSegments;
     

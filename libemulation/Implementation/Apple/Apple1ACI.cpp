@@ -8,66 +8,40 @@
  * Implements an Apple-1 ACI (Apple Cassette Interface)
  */
 
-#include <math.h>
-
 #include "Apple1ACI.h"
 
 #include "MemoryInterface.h"
 
-Apple1ACI::Apple1ACI()
+Apple1ACI::Apple1ACI() : Audio1Bit()
 {
-    volume = 1;
-    noiseRejection = 0.04;
-    
+    memoryBus = NULL;
     rom = NULL;
-    mmu = NULL;
-    audioCodec = NULL;
-    
-    inputCurrentThreshold = 0x80;
-    
-    outputState = false;
-}
-
-bool Apple1ACI::setValue(string name, string value)
-{
-    if (name == "volume")
-        volume = getFloat(value);
-    else if (name == "noiseRejection")
-        noiseRejection = getFloat(value);
-    else
-        return false;
-    
-    return true;
-}
-
-bool Apple1ACI::getValue(string name, string& value)
-{
-    if (name == "volume")
-        value = getString(volume);
-    else if (name == "noiseRejection")
-        value = getString(noiseRejection);
-    else
-        return false;
-    
-    return true;
 }
 
 bool Apple1ACI::setRef(string name, OEComponent *ref)
 {
-    if (name == "rom")
+    if (name == "memoryBus")
+        memoryBus = ref;
+    else if (name == "rom")
         rom = ref;
-    else if (name == "mmu")
-        mmu = ref;
-    else if (name == "audioCodec")
-        audioCodec = ref;
     else
-        return false;
+        return Audio1Bit::setRef(name, ref);
     
     return true;
 }
 
 bool Apple1ACI::init()
 {
+    if (!Audio1Bit::init())
+        return false;
+    
+    if (!memoryBus)
+    {
+        logMessage("memoryBus not connected");
+        
+        return false;
+    }
+    
     if (!rom)
     {
         logMessage("rom not connected");
@@ -75,99 +49,53 @@ bool Apple1ACI::init()
         return false;
     }
     
-    if (!mmu)
-    {
-        logMessage("mmu not connected");
-        
-        return false;
-    }
-    
-    if (!audioCodec)
-    {
-        logMessage("audioCodec not connected");
-        
-        return false;
-    }
-    
-    mapMMU(MMU_MAP_MEMORY);
+    mapMemory(ADDRESSDECODER_MAP_MEMORYMAPS);
     
     return true;
 }
 
-void Apple1ACI::update()
-{
-    if (volume != 0)
-        outputHighLevel = 16384 * pow(10.0, (volume - 1.0) * 40.0 / 20.0);
-    else
-        outputHighLevel = 0;
-}
-
 void Apple1ACI::dispose()
 {
-    mapMMU(MMU_UNMAP_MEMORY);
+    mapMemory(ADDRESSDECODER_UNMAP_MEMORYMAPS);
 }
 
 OEUInt8 Apple1ACI::read(OEAddress address)
 {
     if (address & 0x80)
     {
-        // Noise rejection
-        if (audioCodec->read(0) >= inputCurrentThreshold)
-        {
+        if (readAudioInput())
             address &= ~0x1;
-            
-            inputCurrentThreshold = 0x80 - inputTriggerThreshold;
-        }
-        else
-            inputCurrentThreshold = 0x80 + inputTriggerThreshold;
     }
     
-    toggleSpeaker();
+    toggleAudioOutput();
     
     return rom->read(address);
 }
 
 void Apple1ACI::write(OEAddress address, OEUInt8 value)
 {
-    toggleSpeaker();
+    toggleAudioOutput();
 }
 
-void Apple1ACI::mapMMU(int message)
+void Apple1ACI::mapMemory(int message)
 {
-    MemoryMap ioMap;
-    ioMap.component = this;
-    ioMap.startAddress = 0xc000;
-    ioMap.endAddress = 0xc0ff;
-    ioMap.read = true;
-    ioMap.write = true;
+    MemoryMaps m;
+    MemoryMap theMap;
     
-    MemoryMap romMap;
-    romMap.component = rom;
-    romMap.startAddress = 0xc100;
-    romMap.endAddress = 0xc1ff;
-    romMap.read = true;
-    romMap.write = false;
+    theMap.component = this;
+    theMap.startAddress = 0xc000;
+    theMap.endAddress = 0xc0ff;
+    theMap.read = true;
+    theMap.write = true;
+    m.push_back(theMap);
     
-    if (mmu)
-    {
-        mmu->postMessage(this, message, &ioMap);
-        mmu->postMessage(this, message, &romMap);
-    }
-}
-
-void Apple1ACI::toggleSpeaker()
-{
-    outputState = !outputState;
+    theMap.component = rom;
+    theMap.startAddress = 0xc100;
+    theMap.endAddress = 0xc1ff;
+    theMap.read = true;
+    theMap.write = false;
+    m.push_back(theMap);
     
-    // Stereo
-    if (outputState)
-    {
-        audioCodec->write16(0, outputHighLevel);
-        audioCodec->write16(1, outputHighLevel);
-    }
-    else
-    {
-        audioCodec->write16(0, 0);
-        audioCodec->write16(1, 0);
-    }
+    if (memoryBus)
+        memoryBus->postMessage(this, message, &m);
 }

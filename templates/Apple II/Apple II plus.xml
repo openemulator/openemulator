@@ -72,13 +72,11 @@
         <property name="controlBus" ref="appleIIplus.controlBus"/>
         <property name="memoryBus" ref="appleIIplus.memoryBus"/>
     </component>
-    <component id="appleIIplus.memoryBus" class="AddressDecoder">
+    <component id="appleIIplus.memoryBus" class="AppleIIAddressDecoder">
         <property name="addressSize" value="16"/>
         <property name="blockSize" value="8"/>
         <property name="floatingBus" ref="appleIIplus.floatingBus"/>
-    </component>
-    <component id="appleIIplus.mmu" class="MMU">
-        <property name="addressDecoder" ref="appleIIplus.memoryBus"/>
+        <property name="video" ref="appleIIplus.video"/>
         <property name="refRAM1" ref="appleIIplus.ram1"/>
         <property name="mapRAM1" value="0x0000-0x3fff"/>
         <property name="refRAM2" ref="appleIIplus.ram2"/>
@@ -139,9 +137,6 @@
         <property name="addressSize" value="8"/>
         <property name="blockSize" value="0"/>
         <property name="floatingBus" ref="appleIIplus.floatingBus"/>
-    </component>
-    <component id="appleIIplus.iou" class="MMU">
-        <property name="addressDecoder" ref="appleIIplus.io"/>
         <property name="refKeyboard" ref="appleIIplus.keyboard"/>
         <property name="mapKeyboard" value="0x00-0x1f"/>
         <property name="refSpeaker" ref="appleIIplus.audioOut"/>
@@ -183,27 +178,21 @@
         <property name="characterSet" value="Standard"/>
         <property name="flashFrameNum" value="14"/>
         <property name="text" value="1"/>
-        <property name="mixed" value="0"/>
-        <property name="page2" value="0"/>
-        <property name="hires" value="0"/>
+        <property name="mixed" value="1"/>
+        <property name="page2" value="1"/>
+        <property name="hires" value="1"/>
         <property name="device" ref="appleIIplus"/>
         <property name="controlBus" ref="appleIIplus.controlBus"/>
-        <property name="mmu" ref="appleIIplus.mmu"/>
+        <property name="mmu" ref="appleIIplus.memoryBus"/>
         <property name="floatingBus" ref="appleIIplus.floatingBus"/>
         <property name="ram1" ref="appleIIplus.ram1"/>
         <property name="ram2" ref="appleIIplus.ram2"/>
         <property name="ram3" ref="appleIIplus.ram3"/>
-        <property name="videoRAMSync" ref="appleIIplus.videoRAMSync"/>
         <property name="monitorDevice" ref="appleMonitorII"/>
         <property name="monitor" ref="appleMonitorII.monitor"/>
         <property name="fontStandard" data="${resourcePath}/roms/Apple/341-0036.bin"/>
         <property name="fontVidex Lowercase Chip" data="${resourcePath}/roms/Videx/Videx Lower Case Chip ROM.bin"/>
         <property name="fontPigfont" data="${resourcePath}/roms/Apple/Pigfont Video ROM.bin"/>
-    </component>
-    <component id="appleIIplus.videoRAMSync" class="AppleIIVideoRAMSync">
-        <property name="video" ref="appleIIplus.video"/>
-        <property name="ram1" ref="appleIIplus.ram1"/>
-        <property name="ram2" ref="appleIIplus.ram2"/>
     </component>
     <component id="appleIIplus.audioOut" class="AppleIIAudioOut">
         <property name="volume" value="1"/>
