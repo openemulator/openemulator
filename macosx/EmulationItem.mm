@@ -176,6 +176,8 @@
         settingsLabel = [[NSMutableArray alloc] init];
         settingsType = [[NSMutableArray alloc] init];
         settingsOptions = [[NSMutableArray alloc] init];
+        settingsOptionKeys = [[NSMutableArray alloc] init];
+        
         DeviceSettings settings;
         ((OEComponent *)device)->postMessage(NULL, DEVICE_GET_SETTINGS, &settings);
         for (int i = 0; i < settings.size(); i++)
@@ -185,8 +187,25 @@
             [settingsName addObject:[NSString stringWithCPPString:setting.name]];
             [settingsLabel addObject:[NSString stringWithCPPString:setting.label]];
             [settingsType addObject:[NSString stringWithCPPString:setting.type]];
-            [settingsOptions addObject:[[NSString stringWithCPPString:setting.options]
-                                        componentsSeparatedByString:@","]];
+            
+            NSArray *optionEntries = [[NSString stringWithCPPString:setting.options]
+                                      componentsSeparatedByString:@","];
+            
+            NSMutableArray *options = [NSMutableArray array];
+            NSMutableArray *optionKeys = [NSMutableArray array];
+            
+            for (int i = 0; i < [optionEntries count]; i++)
+            {
+                NSString *optionEntry = [optionEntries objectAtIndex:i];
+                NSArray *optionComponents = [optionEntry componentsSeparatedByString:@"|"];
+                
+                NSUInteger lastN = [optionComponents count] - 1;
+                [optionKeys addObject:[optionComponents objectAtIndex:0]];
+                [options addObject:[optionComponents objectAtIndex:lastN]];
+            }
+            
+            [settingsOptionKeys addObject:optionKeys];
+            [settingsOptions addObject:options];
         }
         
         // Read canvases
@@ -320,6 +339,7 @@
     [settingsLabel release];
     [settingsType release];
     [settingsOptions release];
+    [settingsOptionKeys release];
     
     [canvases release];
     [storages release];
@@ -397,8 +417,8 @@
     NSString *settingType = [settingsType objectAtIndex:index];
     if ([settingType compare:@"select"] == NSOrderedSame)
     {
-        NSArray *settingOptions = [settingsOptions objectAtIndex:index];
-        value = [settingOptions objectAtIndex:[value integerValue]];
+        NSArray *settingOptionKeys = [settingsOptionKeys objectAtIndex:index];
+        value = [settingOptionKeys objectAtIndex:[value integerValue]];
     }
     
     [document lockEmulation];
@@ -434,8 +454,8 @@
     NSString *settingType = [settingsType objectAtIndex:index];
     if ([settingType compare:@"select"] == NSOrderedSame)
     {
-        NSArray *options = [settingsOptions objectAtIndex:index];
-        value = [NSString stringWithFormat:@"%d", [options indexOfObject:value]];
+        NSArray *optionKeys = [settingsOptionKeys objectAtIndex:index];
+        value = [NSString stringWithFormat:@"%d", [optionKeys indexOfObject:value]];
     }
     
     return value;
@@ -651,12 +671,9 @@
         
         [document unlockEmulation];
         
-        NSArray *newCanvases = [document getNewCanvases];
+        [document showNewCanvases];
         
-        for (int i = 0; i < [newCanvases count]; i++)
-            [[newCanvases objectAtIndex:i] showWindow:self];
-        
-        [document captureNewCanvases:YES];
+        [document captureNewCanvases:NO];
         
         return result;
     }

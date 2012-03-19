@@ -39,7 +39,7 @@
 - (void)destroyCanvas:(NSValue *)canvasValue;
 - (void)showCanvas:(NSValue *)canvasValue;
 - (void)captureNewCanvases:(BOOL)value;
-- (NSArray *)getNewCanvases;
+- (void)showNewCanvases;
 
 - (BOOL)canMountNow:(NSString *)path;
 - (BOOL)mount:(NSString *)path;

@@ -374,8 +374,8 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 {
     void *device = [[dict objectForKey:@"device"] pointerValue];
     NSString *label = [dict objectForKey:@"label"];
-    OpenGLCanvas *canvas = (OpenGLCanvas *)[[dict objectForKey:@"canvas"]
-                                            pointerValue];
+    NSValue *canvasValue = [dict objectForKey:@"canvas"];
+    OpenGLCanvas *canvas = (OpenGLCanvas *)[canvasValue pointerValue];
     
     CanvasWindowController *canvasWindowController;
     canvasWindowController = [[CanvasWindowController alloc] initWithDevice:device
@@ -385,7 +385,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
     [canvasWindowController release];
     
     if (newCanvasesCapture)
-        [newCanvases addObject:canvasWindowController];
+        [newCanvases addObject:canvasValue];
 }
 
 - (void)destroyCanvas:(NSValue *)canvasValue
@@ -417,6 +417,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
     {
         CanvasWindowController *canvasWindowController;
         canvasWindowController = [canvasWindowControllers objectAtIndex:i];
+        
         if ([canvasWindowController canvas] == canvas)
         {
             if (![[self windowControllers] containsObject:canvasWindowController])
@@ -437,9 +438,10 @@ void destroyCanvas(void *userData, OEComponent *canvas)
         [newCanvases removeAllObjects];
 }
 
-- (NSArray *)getNewCanvases
+- (void)showNewCanvases
 {
-    return newCanvases;
+    for (int i = 0; i < [newCanvases count]; i++)
+        [self showCanvas:[newCanvases objectAtIndex:i]];
 }
 
 // Storage
@@ -575,6 +577,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
     
     return YES;
 }
+
 - (void)printDocument:(id)sender
 {
     CanvasWindow *canvasWindow = (CanvasWindow *)[NSApp mainWindow];

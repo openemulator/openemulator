@@ -72,15 +72,17 @@ bool Audio1Bit::init()
 
 void Audio1Bit::update()
 {
-    inputLevel = 32768 * inputThreshold;
+    inputLevel = 32768 * noiseRejection;
     
     outputLevel = 16384 * getLevelFromVolume(volume);
 }
 
 bool Audio1Bit::readAudioInput()
 {
+    OEInt16 value = audioCodec->read16(0);
+    
     // Schmitt trigger
-    if (audioCodec->read16(0) >= inputThreshold)
+    if (value >= inputThreshold)
     {
         inputThreshold = -inputLevel;
         
@@ -88,7 +90,7 @@ bool Audio1Bit::readAudioInput()
     }
     else
     {
-        inputThreshold = noiseRejection;
+        inputThreshold = inputLevel;
         
         return false;
     }

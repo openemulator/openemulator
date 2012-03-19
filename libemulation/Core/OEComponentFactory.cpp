@@ -13,6 +13,7 @@
 // FACTORY_INCLUDE_START - Do not modify this section
 #include "AddressDecoder.h"
 #include "AddressMapper.h"
+#include "AddressMux.h"
 #include "AddressOffset.h"
 #include "AudioCodec.h"
 #include "BankSwitchedRAM.h"
@@ -62,6 +63,7 @@ OEComponent *OEComponentFactory::construct(const string& className)
     // FACTORY_CODE_START - Do not modify this section
     matchComponent(AddressDecoder);
     matchComponent(AddressMapper);
+    matchComponent(AddressMux);
     matchComponent(AddressOffset);
     matchComponent(AudioCodec);
     matchComponent(BankSwitchedRAM);

@@ -12,8 +12,9 @@
 
 #include "AppleIIInterface.h"
 
-AppleIIAddressDecoder::AppleIIAddressDecoder()
+AppleIIAddressDecoder::AppleIIAddressDecoder() : AddressDecoder()
 {
+    dummyVRAM.resize(0x2000);
 }
 
 bool AppleIIAddressDecoder::setRef(string name, OEComponent *ref)
@@ -59,8 +60,22 @@ bool AppleIIAddressDecoder::postMessage(OEComponent *sender, int event, void *da
             break;
             
         case APPLEII_GET_VRAM:
-            // To-Do: Dependiendo del modo, devolvemos la memoria referida
+        {
+            AppleIIVRAM *vram = (AppleIIVRAM *)data;
+            
+            vram->textMain[0] = getMemory(0x400, 0x7ff);
+            vram->textMain[1] = getMemory(0x800, 0xbff);
+            vram->hiresMain[0] = getMemory(0x2000, 0x3fff);
+            vram->hiresMain[1] = getMemory(0x4000, 0x5fff);
+            vram->hbl[0] = getMemory(0x1400, 0x17ff);
+            vram->hbl[1] = getMemory(0x1800, 0x1bff);
+            vram->textAux[0] = &dummyVRAM.front();
+            vram->textAux[1] = &dummyVRAM.front();
+            vram->hiresAux[0] = &dummyVRAM.front();
+            vram->hiresAux[1] = &dummyVRAM.front();
+            
             break;
+        }
             
         case APPLEII_MAP_SLOTMEMORYMAPS:
             return AddressDecoder::postMessage(sender, ADDRESSDECODER_MAP_MEMORYMAPS, data);
@@ -85,4 +100,24 @@ void AppleIIAddressDecoder::write(OEAddress address, OEUInt8 value)
     
     if (videoRefreshp[index])
         video->postMessage(this, APPLEII_REFRESH_VIDEO, NULL);
+}
+
+OEUInt8 *AppleIIAddressDecoder::getMemory(OEAddress startAddress, OEAddress endAddress)
+{
+    for (MemoryMaps::iterator i = staticMemoryMaps.begin();
+         i != staticMemoryMaps.end();
+         i++)
+    {
+        if ((i->startAddress <= startAddress) &&
+            (i->endAddress >= endAddress))
+        {
+            OEData *data;
+            
+            i->component->postMessage(this, RAM_GET_DATA, &data);
+            
+            return &data->front() + startAddress - i->startAddress;
+        }
+    }
+    
+    return &dummyVRAM.front();
 }

@@ -2,14 +2,44 @@
 /**
  * libdiskimage
  * Disk image library
- * (C) 2011 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Implements an emulation disk image library
  */
 
-#ifndef _DISKIMAGE_H
-#define _DISKIMAGE_H
+/*
+ * Standard properties:
+ *
+ * description
+ * creator
+ * locked
+ * trackNum
+ * headNum
+ */
+
+// Ideas:
+// * Data is always opened track by track, except for FDI files
+// * When writing a dsk file and not every sector is recognized,
+//   the original file is automatically closed, and an .fdi file
+//   is created instead
+// * When an FDI file is opened or created, everything is loaded
+//   to memory
+
+#ifndef _FLOPPYDISK_H
+#define _FLOPPYDISK_H
+
+#include <vector>
+
+using namespace std;
+
+typedef vector<unsigned char> DiskImageData;
+
+typedef struct
+{
+    DiskImageData data;
+    int bitnum;
+} DiskImagePhysicalTrack;
 
 class DiskImage
 {
@@ -20,17 +50,14 @@ public:
     bool open(string path);
     void close();
     
-    bool setInfo(string name, string value);
-    bool getInfo(string name, string& value);
+    bool setProperty(string name, string value);
+    bool getProperty(string name, string& value);
     
-    bool setBlock(long offset, unsigned char *data, long size);
-    bool getBlock(long int offset, unsigned char *data, long& size);
+    bool setBlock(unsigned long offset, DiskImageData& data);
+    bool getBlock(unsigned long offset, DiskImageData& data);
     
-    bool setApple525Track();
-    bool getApple525Track();
-
-    bool setApple35Track();
-    bool getApple35Track();
+    bool setRawTrack(int track, int head, DiskImagePhysicalTrack& data);
+    bool getRawTrack(int track, int head, DiskImagePhysicalTrack& data);
 };
 
 #endif

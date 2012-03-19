@@ -21,6 +21,8 @@ public:
 	
 private:
 	OEComponent *controlBus;
-	
+	OEComponent *drive1;
+	OEComponent *drive2;
+    
 	bool controllerType;
 };

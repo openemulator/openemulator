@@ -13,6 +13,8 @@
 
 #include "ControlBusInterface.h"
 
+#include "AppleIIInterface.h"
+
 class AppleIIVideoPoint
 {
 public:
@@ -88,11 +90,8 @@ public:
 private:
     OEComponent *device;
     OEComponent *controlBus;
-    OEComponent *mmu;
+    OEComponent *memoryBus;
     OEComponent *floatingBus;
-    OEComponent *ram1;
-    OEComponent *ram2;
-    OEComponent *ram3;
     OEComponent *gamePort;
     OEComponent *monitorDevice;
 	OEComponent *monitor;
@@ -117,9 +116,7 @@ private:
     OEData loresMap;
     OEData hiresMap;
     
-    OEUInt8 *textMemory[2];
-    OEUInt8 *textHBLMemory[2];
-    OEUInt8 *hiresMemory[2];
+    AppleIIVRAM vram;
     
     // State variables
     OEImage image;
@@ -170,9 +167,7 @@ private:
     void updateVideo();
     void drawVideoLine(int y, int x0, int x1);
     void setNeedsDisplay();
-    
-    void initVideoRAMSync();
-    
+        
     void scheduleNextTimer(OEInt64 cycles);
     AppleIIVideoPoint getCount();
     OEUInt8 readFloatingBus();

@@ -51,6 +51,7 @@ typedef enum
     NSMutableArray *settingsLabel;
     NSMutableArray *settingsType;
     NSMutableArray *settingsOptions;
+    NSMutableArray *settingsOptionKeys;
     
     NSMutableArray *canvases;
     NSMutableArray *storages;

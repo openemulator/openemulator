@@ -41,6 +41,10 @@ bool AppleDiskIIInterfaceCard::setRef(string name, OEComponent *ref)
 {
 	if (name == "controlBus")
 		controlBus = ref;
+	else if (name == "drive1")
+		drive1 = ref;
+	else if (name == "drive2")
+		drive2 = ref;
 	else
 		return false;
 	

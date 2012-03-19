@@ -30,6 +30,10 @@
 		002740B813A08A4F00E13D65 /* VidexVideoterm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 002740B613A08A4F00E13D65 /* VidexVideoterm.cpp */; };
 		002740B913A08A4F00E13D65 /* VidexVideoterm.h in Headers */ = {isa = PBXBuildFile; fileRef = 002740B713A08A4F00E13D65 /* VidexVideoterm.h */; };
 		0029EEE214266B8900AD900E /* AddressMapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0029EEDF14266B7700AD900E /* AddressMapper.cpp */; };
+		00365CEB1516955C00978DF6 /* AddressMux.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00365CEA1516955C00978DF6 /* AddressMux.cpp */; };
+		00365CED1516956600978DF6 /* AddressMux.h in Headers */ = {isa = PBXBuildFile; fileRef = 00365CEC1516956600978DF6 /* AddressMux.h */; };
+		00365CF91516F4BD00978DF6 /* diskimage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00365CF01516F37800978DF6 /* diskimage.cpp */; };
+		00365CFA1516F4E700978DF6 /* libdiskimage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00365CF51516F3D800978DF6 /* libdiskimage.a */; };
 		00391CB312D3A320002C5ABD /* LibraryWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00391CB212D3A320002C5ABD /* LibraryWindowController.m */; };
 		00391D6112D3B570002C5ABD /* IconLibrary.png in Resources */ = {isa = PBXBuildFile; fileRef = 00391D6012D3B570002C5ABD /* IconLibrary.png */; };
 		00391D6412D3B588002C5ABD /* Library.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00391D6212D3B588002C5ABD /* Library.xib */; };
@@ -268,6 +272,10 @@
 		002740B713A08A4F00E13D65 /* VidexVideoterm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VidexVideoterm.h; path = Videx/VidexVideoterm.h; sourceTree = "<group>"; };
 		0029EEDF14266B7700AD900E /* AddressMapper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AddressMapper.cpp; sourceTree = "<group>"; };
 		0029EEE114266B8000AD900E /* AddressMapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddressMapper.h; sourceTree = "<group>"; };
+		00365CEA1516955C00978DF6 /* AddressMux.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AddressMux.cpp; sourceTree = "<group>"; };
+		00365CEC1516956600978DF6 /* AddressMux.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddressMux.h; sourceTree = "<group>"; };
+		00365CF01516F37800978DF6 /* diskimage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = diskimage.cpp; sourceTree = "<group>"; };
+		00365CF51516F3D800978DF6 /* libdiskimage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libdiskimage.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		00391CB112D3A320002C5ABD /* LibraryWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryWindowController.h; sourceTree = "<group>"; };
 		00391CB212D3A320002C5ABD /* LibraryWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryWindowController.m; sourceTree = "<group>"; };
 		00391D6012D3B570002C5ABD /* IconLibrary.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IconLibrary.png; sourceTree = "<group>"; };
@@ -495,6 +503,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		00365CF21516F3D800978DF6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		006EECA20FCA5C31003D2C8D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -532,6 +547,7 @@
 				003B16C312EE2A18003FB8F6 /* CoreAudio.framework in Frameworks */,
 				003B16C812EE2A61003FB8F6 /* CoreServices.framework in Frameworks */,
 				008CA97E147803E500B9F5D0 /* IOKit.framework in Frameworks */,
+				00365CFA1516F4E700978DF6 /* libdiskimage.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -737,6 +753,7 @@
 				00139F85151195EE00B0E108 /* AppleIIAddressDecoder.h */,
 				00B8881912A393990052B7A4 /* AppleIIAudioIn.cpp */,
 				00B8881A12A393990052B7A4 /* AppleIIAudioIn.h */,
+				00B8882412A393990052B7A4 /* AppleIIKeyboard.h */,
 				00B8881B12A393990052B7A4 /* AppleIIAudioOut.cpp */,
 				00B8881C12A393990052B7A4 /* AppleIIAudioOut.h */,
 				00B8881F12A393990052B7A4 /* AppleIIFloatingBus.cpp */,
@@ -744,7 +761,6 @@
 				00B7C649147B5B2B00BB7E6B /* AppleIIGamePort.cpp */,
 				00B7C647147B5B2300BB7E6B /* AppleIIGamePort.h */,
 				00B8882312A393990052B7A4 /* AppleIIKeyboard.cpp */,
-				00B8882412A393990052B7A4 /* AppleIIKeyboard.h */,
 				00B8882712A393990052B7A4 /* AppleIISlotExpansionMemory.cpp */,
 				00B8882812A393990052B7A4 /* AppleIISlotExpansionMemory.h */,
 				00B8882912A393990052B7A4 /* AppleIISlotMemory.cpp */,
@@ -769,6 +785,8 @@
 				00B8882F12A393990052B7A4 /* AddressDecoder.h */,
 				0029EEDF14266B7700AD900E /* AddressMapper.cpp */,
 				0029EEE114266B8000AD900E /* AddressMapper.h */,
+				00365CEA1516955C00978DF6 /* AddressMux.cpp */,
+				00365CEC1516956600978DF6 /* AddressMux.h */,
 				00B8883012A393990052B7A4 /* AddressOffset.cpp */,
 				00B8883112A393990052B7A4 /* AddressOffset.h */,
 				00139F7F1511863B00B0E108 /* BankSwitchedRAM.cpp */,
@@ -922,6 +940,7 @@
 			isa = PBXGroup;
 			children = (
 				00E473411475695500F367B7 /* diskimage.h */,
+				00365CF01516F37800978DF6 /* diskimage.cpp */,
 			);
 			path = libdiskimage;
 			sourceTree = "<group>";
@@ -932,6 +951,7 @@
 				8D15AC370486D014006FF6A4 /* OpenEmulator.app */,
 				00039E7C12B03F660025D374 /* libemulation-hal.a */,
 				00039EFE12B04E910025D374 /* libemulation.a */,
+				00365CF51516F3D800978DF6 /* libdiskimage.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1075,6 +1095,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		00365CF31516F3D800978DF6 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		006EECA00FCA5C31003D2C8D /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -1102,6 +1129,7 @@
 				00B7C648147B5B2300BB7E6B /* AppleIIGamePort.h in Headers */,
 				00139F821511864800B0E108 /* BankSwitchedRAM.h in Headers */,
 				00139F86151195EE00B0E108 /* AppleIIAddressDecoder.h in Headers */,
+				00365CED1516956600978DF6 /* AddressMux.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1123,6 +1151,23 @@
 			name = "emulation-hal";
 			productName = "emulation-hal";
 			productReference = 00039E7C12B03F660025D374 /* libemulation-hal.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		00365CF41516F3D800978DF6 /* diskimage */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 00365CF61516F3D800978DF6 /* Build configuration list for PBXNativeTarget "diskimage" */;
+			buildPhases = (
+				00365CF11516F3D800978DF6 /* Sources */,
+				00365CF21516F3D800978DF6 /* Frameworks */,
+				00365CF31516F3D800978DF6 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = diskimage;
+			productName = diskimage;
+			productReference = 00365CF51516F3D800978DF6 /* libdiskimage.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 		006EECA30FCA5C31003D2C8D /* emulation */ = {
@@ -1190,6 +1235,7 @@
 				8D15AC270486D014006FF6A4 /* OpenEmulator */,
 				00039E7B12B03F650025D374 /* emulation-hal */,
 				006EECA30FCA5C31003D2C8D /* emulation */,
+				00365CF41516F3D800978DF6 /* diskimage */,
 			);
 		};
 /* End PBXProject section */
@@ -1275,6 +1321,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		00365CF11516F3D800978DF6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				00365CF91516F4BD00978DF6 /* diskimage.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		006EECA10FCA5C31003D2C8D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1326,6 +1380,7 @@
 				00A90FB5150D3A0E00BB2999 /* AudioInterface.cpp in Sources */,
 				00139F801511863B00B0E108 /* BankSwitchedRAM.cpp in Sources */,
 				00139F84151195E600B0E108 /* AppleIIAddressDecoder.cpp in Sources */,
+				00365CEB1516955C00978DF6 /* AddressMux.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1461,6 +1516,32 @@
 			};
 			name = Release;
 		};
+		00365CF71516F3D800978DF6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		00365CF81516F3D800978DF6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		006EECA50FCA5C32003D2C8D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1485,7 +1566,6 @@
 					"$(inherited)",
 					/opt/local/lib,
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
 			};
 			name = Debug;
 		};
@@ -1497,7 +1577,6 @@
 					"$(inherited)",
 					/opt/local/lib,
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
 			};
 			name = Release;
 		};
@@ -1508,7 +1587,6 @@
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -1524,7 +1602,7 @@
 				);
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = OpenEmulator;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 			};
 			name = Debug;
 		};
@@ -1534,7 +1612,6 @@
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = s;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -1550,7 +1627,7 @@
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = OpenEmulator;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 			};
 			name = Release;
 		};
@@ -1562,6 +1639,15 @@
 			buildConfigurations = (
 				00039E7D12B03F660025D374 /* Debug */,
 				00039E7E12B03F660025D374 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		00365CF61516F3D800978DF6 /* Build configuration list for PBXNativeTarget "diskimage" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				00365CF71516F3D800978DF6 /* Debug */,
+				00365CF81516F3D800978DF6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

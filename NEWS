@@ -1,7 +1,13 @@
 ==Latest==
+* Fixed add device to AddressDecoder after init
+* Implemented select settings with values and labels
+* Implemented Apple Disk II Interface Card
+* Fixed auto-open canvas when adding a canvas device
+* Refactorized AppleIIVideo memory retrieval
+* Implemented AppleIIAddressDecoder
 * Designed the Apple II memory and video interfaces
-* Redesigned AddressMux and renamed it to AddressMapper
-* Integrated AddressDecoder with MMU
+* Reimplemented AddressMux as AddressMapper
+* Integrated MMU into AddressDecoder
 * Added AudioInterface and MemoryInterface helper functions
 * Refactorized Apple1ACI, AppleIIAudioIn, AppleIIAudioOut
 * Implemented Apple-1 and Apple II volume controls

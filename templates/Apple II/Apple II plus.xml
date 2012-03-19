@@ -5,7 +5,7 @@
     <device id="appleIIplus" label="Apple II" image="images/Apple/Apple II.png">
         <setting ref="appleIIplus.video" name="tvSystem" label="TV System" type="select" options="NTSC,PAL"/>
         <setting ref="appleIIplus.audioOut" name="volume" label="Volume" type="slider" options="0,1"/>
-        <setting ref="appleIIplus.video" name="characterSet" label="Character Set" type="select" options="Standard,Videx Lowercase Chip,Pigfont"/>
+        <setting ref="appleIIplus.video" name="characterSet" label="Character Set" type="select" options="Standard,Videx|Videx Lowercase Chip,Pigfont"/>
         <setting ref="appleIIplus.keyboard" name="type" label="Keyboard" type="select" options="Standard,Shift-Key Mod,Full ASCII"/>
     </device>
     <port id="appleIIplus.videoPort" ref="appleMonitorII" type="Composite Video Port" group="peripherals" label="Video Port" image="images/Connectors/RCA Female.png">
@@ -17,35 +17,35 @@
         <inlet ref="appleIIplus.gamePort" property="gamePort" outletRef="io"/>
     </port>
     <port id="appleIIplus.slot0" ref="" type="Apple II Slot" group="expansions" label="Slot 0" image="images/Connectors/Edge50.png">
-        <inlet ref="appleIIplus.iou" property="refSlot0" outletRef="io"/>
+        <inlet ref="appleIIplus.io" property="refSlot0" outletRef="io"/>
     </port>
     <port id="appleIIplus.slot1" ref="" type="Apple II Slot" group="expansions" label="Slot 1" image="images/Connectors/Edge50.png">
-        <inlet ref="appleIIplus.iou" property="refSlot1" outletRef="io"/>
-        <inlet ref="appleIIplus.mmu" property="refSlot1" outletRef="memory"/>
+        <inlet ref="appleIIplus.io" property="refSlot1" outletRef="io"/>
+        <inlet ref="appleIIplus.memoryBus" property="refSlot1" outletRef="memory"/>
     </port>
     <port id="appleIIplus.slot2" ref="" type="Apple II Slot" group="expansions" label="Slot 2" image="images/Connectors/Edge50.png">
-        <inlet ref="appleIIplus.iou" property="refSlot2" outletRef="io"/>
-        <inlet ref="appleIIplus.mmu" property="refSlot2" outletRef="memory"/>
+        <inlet ref="appleIIplus.io" property="refSlot2" outletRef="io"/>
+        <inlet ref="appleIIplus.memoryBus" property="refSlot2" outletRef="memory"/>
     </port>
     <port id="appleIIplus.slot3" ref="" type="Apple II Slot" group="expansions" label="Slot 3" image="images/Connectors/Edge50.png">
-        <inlet ref="appleIIplus.iou" property="refSlot3" outletRef="io"/>
-        <inlet ref="appleIIplus.mmu" property="refSlot3" outletRef="memory"/>
+        <inlet ref="appleIIplus.io" property="refSlot3" outletRef="io"/>
+        <inlet ref="appleIIplus.memoryBus" property="refSlot3" outletRef="memory"/>
     </port>
     <port id="appleIIplus.slot4" ref="" type="Apple II Slot" group="expansions" label="Slot 4" image="images/Connectors/Edge50.png">
-        <inlet ref="appleIIplus.iou" property="refSlot4" outletRef="io"/>
-        <inlet ref="appleIIplus.mmu" property="refSlot4" outletRef="memory"/>
+        <inlet ref="appleIIplus.io" property="refSlot4" outletRef="io"/>
+        <inlet ref="appleIIplus.memoryBus" property="refSlot4" outletRef="memory"/>
     </port>
     <port id="appleIIplus.slot5" ref="" type="Apple II Slot" group="expansions" label="Slot 5" image="images/Connectors/Edge50.png">
-        <inlet ref="appleIIplus.iou" property="refSlot5" outletRef="io"/>
-        <inlet ref="appleIIplus.mmu" property="refSlot5" outletRef="memory"/>
+        <inlet ref="appleIIplus.io" property="refSlot5" outletRef="io"/>
+        <inlet ref="appleIIplus.memoryBus" property="refSlot5" outletRef="memory"/>
     </port>
     <port id="appleIIplus.slot6" ref="" type="Apple II Slot" group="expansions" label="Slot 6" image="images/Connectors/Edge50.png">
-        <inlet ref="appleIIplus.iou" property="refSlot6" outletRef="io"/>
-        <inlet ref="appleIIplus.mmu" property="refSlot6" outletRef="memory"/>
+        <inlet ref="appleIIplus.io" property="refSlot6" outletRef="io"/>
+        <inlet ref="appleIIplus.memoryBus" property="refSlot6" outletRef="memory"/>
     </port>
     <port id="appleIIplus.slot7" ref="" type="Apple II Slot" group="expansions" label="Slot 7" image="images/Connectors/Edge50.png">
-        <inlet ref="appleIIplus.iou" property="refSlot7" outletRef="io"/>
-        <inlet ref="appleIIplus.mmu" property="refSlot7" outletRef="memory"/>
+        <inlet ref="appleIIplus.io" property="refSlot7" outletRef="io"/>
+        <inlet ref="appleIIplus.memoryBus" property="refSlot7" outletRef="memory"/>
     </port>
     <port id="appleIIplus.cpuSocket" ref="" type="Apple II CPU Socket" group="expansions" label="CPU Socket" image="images/Connectors/DIP40.png">
     </port>
@@ -183,15 +183,11 @@
         <property name="hires" value="1"/>
         <property name="device" ref="appleIIplus"/>
         <property name="controlBus" ref="appleIIplus.controlBus"/>
-        <property name="mmu" ref="appleIIplus.memoryBus"/>
-        <property name="floatingBus" ref="appleIIplus.floatingBus"/>
-        <property name="ram1" ref="appleIIplus.ram1"/>
-        <property name="ram2" ref="appleIIplus.ram2"/>
-        <property name="ram3" ref="appleIIplus.ram3"/>
+        <property name="memoryBus" ref="appleIIplus.memoryBus"/>
         <property name="monitorDevice" ref="appleMonitorII"/>
         <property name="monitor" ref="appleMonitorII.monitor"/>
         <property name="fontStandard" data="${resourcePath}/roms/Apple/341-0036.bin"/>
-        <property name="fontVidex Lowercase Chip" data="${resourcePath}/roms/Videx/Videx Lower Case Chip ROM.bin"/>
+        <property name="fontVidex" data="${resourcePath}/roms/Videx/Videx Lower Case Chip ROM.bin"/>
         <property name="fontPigfont" data="${resourcePath}/roms/Apple/Pigfont Video ROM.bin"/>
     </component>
     <component id="appleIIplus.audioOut" class="AppleIIAudioOut">

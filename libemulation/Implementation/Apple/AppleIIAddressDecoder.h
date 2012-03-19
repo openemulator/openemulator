@@ -26,6 +26,10 @@ private:
     OEComponent *video;
     
     vector<int> videoRefresh;
-
+    
     int *videoRefreshp;
+    
+    OEData dummyVRAM;
+    
+    OEUInt8 *getMemory(OEAddress startAddress, OEAddress endAddress);
 };

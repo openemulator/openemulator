@@ -1,16 +1,16 @@
 ==1.0.3==
-* Fix auto-open canvas when adding a canvas device
-* Fix thread priority in PAAudio
-* Refactorize PAAudio
-* Implement AppleIISlotMemory and AppleIISlotExpansionMemory
-* Implement sound player
-* Implement Apple Disk II Interface Card
 * Implement Apple Disk II
+* Implement sound player
+* Implement AppleIISlotMemory and AppleIISlotExpansionMemory
 * Implement Apple Language Card
 * Implement Apple Graphics Tablet
 * Fix [CanvasView update] problem in paper view
 * Implement Apple Silentype
+
 * Fix CTRL+ALT mouse capture
+* Fix thread priority in PAAudio
+* Refactorize PAAudio
+* Remove AppleIIFloatingBus, remove second AddressDecoder, add AppleIIIO ($C050-$C057) and integrate with AppleIIGamePort
 
 ==1.0.4==
 * Implement Apple III
@@ -47,7 +47,6 @@
 * Implement Apple IIGS ROM00, ROM01, ROM03
 
 ==Framework==
-* Implement select settings with values and labels
 * Fix persistence when powering down and restarting an emulation
 * Implement RGB>YIQ>RGB video processing in the GPU
 * Implement video bloom

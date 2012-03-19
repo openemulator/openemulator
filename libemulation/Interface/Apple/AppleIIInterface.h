@@ -15,23 +15,28 @@
 
 typedef enum
 {
-    APPLEII_VIDEOMEMORYMODE_TEXT1,
-    APPLEII_VIDEOMEMORYMODE_HIRES1,
-    APPLEII_VIDEOMEMORYMODE_MIXED1,
-    APPLEII_VIDEOMEMORYMODE_SHIRES1,
-    APPLEII_VIDEOMEMORYMODE_TEXT2,
-    APPLEII_VIDEOMEMORYMODE_HIRES2,
-    APPLEII_VIDEOMEMORYMODE_MIXED2,
-    APPLEII_VIDEOMEMORYMODE_SHIRES2,
+    APPLEII_VRAMMODE_TEXT1,
+    APPLEII_VRAMMODE_TEXT2,
+    APPLEII_VRAMMODE_HIRES1,
+    APPLEII_VRAMMODE_HIRES2,
+    APPLEII_VRAMMODE_MIXED1,
+    APPLEII_VRAMMODE_MIXED2,
+    APPLEII_VRAMMODE_SHIRES,
 } AppleIIVRAMMode;
 
 typedef struct
 {
-    OEUInt8 *textMain;
-    OEUInt8 *hiresMain;
-    OEUInt8 *textAux;
-    OEUInt8 *hiresAux;
-} AppleIIVideoVRAM;
+    OEUInt8 *textMain[2];
+    OEUInt8 *hiresMain[2];
+    OEUInt8 *textAux[2];
+    OEUInt8 *hiresAux[2];
+    OEUInt8 *hbl[2];
+} AppleIIVRAM;
+
+#define APPLEIIVIDEO_TEXT     (1 << 0)
+#define APPLEIIVIDEO_PAGE2    (1 << 1)
+#define APPLEIIVIDEO_MIXED    (1 << 2)
+#define APPLEIIVIDEO_HIRES    (1 << 3)
 
 #define APPLEIIMMU_ALTZP      (1 << 0)
 #define APPLEIIMMU_RAMRD      (1 << 1)
@@ -59,7 +64,7 @@ typedef enum
     APPLEII_GET_MMUSOFTSWITCHES,
 } AppleIIAddressDecoderMessage;
 
-// Move this to AppleIIControlBus:
+// Move this to AppleIIControl:
 //    APPLEII_ASSERT_DISKMOTORON,
 //    APPLEII_CLEAR_DISKMOTORON,
 
@@ -73,6 +78,10 @@ typedef enum
 {
     APPLEII_REFRESH_VIDEO,
     APPLEII_READ_FLOATINGBUS,
+    APPLEII_SET_TEXT,
+    APPLEII_SET_PAGE2,
+    APPLEII_SET_MIXED,
+    APPLEII_SET_HIRES,
 } AppleIIVideoMessage;
 
 typedef enum
@@ -88,6 +97,8 @@ typedef enum
     APPLEII_GET_AN1,
     APPLEII_GET_AN2,
     APPLEII_GET_AN3,
+    
+    APPLEII_SET_BANKSELECT_COMPONENT,
 } AppleIIGamePortMessage;
 
 typedef enum

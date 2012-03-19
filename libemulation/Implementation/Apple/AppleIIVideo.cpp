@@ -14,7 +14,6 @@
 
 #include "DeviceInterface.h"
 #include "MemoryInterface.h"
-#include "AppleIIInterface.h"
 
 #define ACTIVE_HEIGHT       192
 #define TERM_WIDTH          40
@@ -60,10 +59,6 @@ AppleIIVideo::AppleIIVideo()
     
     device = NULL;
     controlBus = NULL;
-    floatingBus = NULL;
-    ram1 = NULL;
-    ram2 = NULL;
-    ram3 = NULL;
     gamePort = NULL;
     monitorDevice = NULL;
     monitor = NULL;
@@ -71,13 +66,6 @@ AppleIIVideo::AppleIIVideo()
     initPoints();
     initOffsets();
     initLoresMap();
-    
-    for (int i = 0; i < 2; i++)
-    {
-        textMemory[i] = NULL;
-        textHBLMemory[i] = NULL;
-        hiresMemory[i] = NULL;
-    }
     
     vector<float> colorBurst;
     colorBurst.push_back(M_PI * -33.0 / 180.0);
@@ -216,16 +204,8 @@ bool AppleIIVideo::setRef(string name, OEComponent *ref)
             controlBus->addObserver(this, CONTROLBUS_TIMER_DID_FIRE);
         }
     }
-    else if (name == "mmu")
-        mmu = ref;
-	else if (name == "floatingBus")
-		floatingBus = ref;
-    else if ((name == "ram1") || (name == "ram"))
-        ram1 = ref;
-    else if (name == "ram2")
-        ram2 = ref;
-    else if (name == "ram3")
-        ram3 = ref;
+    else if (name == "memoryBus")
+        memoryBus = ref;
     else if (name == "gamePort")
     {
         if (gamePort)
@@ -288,28 +268,16 @@ bool AppleIIVideo::init()
         return false;
     }
     
-    if (!mmu)
+    if (!memoryBus)
     {
-        logMessage("mmu not connected");
+        logMessage("memoryBus not connected");
         
         return false;
     }
-    
-    if (!floatingBus)
-    {
-        logMessage("floatingBus not connected");
-        
-        return false;
-    }
-    
-    OEAddress startAddress = 0;
-    initVideoRAM(ram1, startAddress);
-    initVideoRAM(ram2, startAddress);
-    initVideoRAM(ram3, startAddress);
     
     controlBus->postMessage(this, CONTROLBUS_GET_POWERSTATE, &powerState);
     
-    initVideoRAMSync();
+    memoryBus->postMessage(this, APPLEII_GET_VRAM, &vram);
     
     if (gamePort)
         gamePort->postMessage(this, APPLEII_GET_AN2, &an2);
@@ -436,7 +404,7 @@ OEUInt8 AppleIIVideo::read(OEAddress address)
 {
     write(address, 0);
     
-	return floatingBus->read(address);
+	return readFloatingBus();
 }
 
 void AppleIIVideo::write(OEAddress address, OEUInt8 value)
@@ -623,36 +591,6 @@ void AppleIIVideo::updateHiresMap()
     }
 }
 
-void AppleIIVideo::initVideoRAM(OEComponent *ram, OEAddress& startAddress)
-{
-    // Notes:
-    // * Requires memory to be mapped contiguously
-    // * For hires to work, memory at $2000 and $4000 should be in a single block
-    
-    if (!ram)
-        return;
-    
-    OEData *data;
-    ram->postMessage(this, RAM_GET_DATA, &data);
-    
-    OEAddress endAddress = startAddress + data->size() - 1;
-    
-    if ((startAddress <= 0x400) && (endAddress >= 0x7ff))
-        textMemory[0] = &data->front() + 0x400 - startAddress;
-    if ((startAddress <= 0x800) && (endAddress >= 0xbff))
-        textMemory[1] = &data->front() + 0x800 - startAddress;
-    if ((startAddress <= 0x1400) && (endAddress >= 0x17ff))
-        textHBLMemory[0] = &data->front() + 0x1400 - startAddress;
-    if ((startAddress <= 0x1800) && (endAddress >= 0x1bff))
-        textHBLMemory[1] = &data->front() + 0x1800 - startAddress;
-    if ((startAddress <= 0x2000) && (endAddress >= 0x3fff))
-        hiresMemory[0] = &data->front() + 0x2000 - startAddress;
-    if ((startAddress <= 0x4000) && (endAddress >= 0x5fff))
-        hiresMemory[1] = &data->front() + 0x4000 - startAddress;
-    
-    startAddress += data->size();
-}
-
 void AppleIIVideo::updateImage()
 {
     image.setSize(pictureRect.size);
@@ -697,8 +635,8 @@ void AppleIIVideo::updateRenderer()
     
     OEUInt32 page = OEGetBit(mode, MODE_PAGE2) ? 1 : 0;
     
-    rendererTextMemory = textMemory[page];
-    rendererHiresMemory = hiresMemory[page];
+    rendererTextMemory = vram.textMain[page];
+    rendererHiresMemory = vram.hiresMain[page];
     
     switch (currentTimer)
     {
@@ -856,25 +794,6 @@ void AppleIIVideo::setNeedsDisplay()
     pendingSegments = ACTIVE_HEIGHT * TERM_WIDTH;
 }
 
-void AppleIIVideo::initVideoRAMSync()
-{
-/*    MemoryMap ramSyncMap;
-    
-    ramSyncMap.component = videoRAMSync;
-    ramSyncMap.startAddress = 0x400;
-    ramSyncMap.endAddress = 0xbff;
-    ramSyncMap.read = false;
-    ramSyncMap.write = true;
-    mmu->postMessage(this, ADDRESSDECODER_MAP_MEMORY, &ramSyncMap);
-    
-    ramSyncMap.component = videoRAMSync;
-    ramSyncMap.startAddress = 0x2000;
-    ramSyncMap.endAddress = 0x5fff;
-    ramSyncMap.read = false;
-    ramSyncMap.write = true;
-    mmu->postMessage(this, ADDRESSDECODER_MAP_MEMORY, &ramSyncMap);*/
-}
-
 void AppleIIVideo::scheduleNextTimer(OEInt64 cycles)
 {
     updateVideo();
@@ -971,15 +890,15 @@ OEUInt8 AppleIIVideo::readFloatingBus()
     {
 		address |= (count.y & 0x7) << 10;
         
-        return hiresMemory[page][address];
+        return vram.hiresMain[page][address];
 	}
     else
     {
         // On the Apple II: set A12 on horizontal blanking
         if ((model != APPLEII_MODELIIE) && (count.x < 0x58))
-            return textHBLMemory[page][address];
+            return vram.hbl[page][address];
         
-        return textMemory[page][address];
+        return vram.textMain[page][address];
     }
 }
 
@@ -992,7 +911,7 @@ void AppleIIVideo::copy(wstring *s)
     
     OEUInt32 page = OEGetBit(mode, MODE_PAGE2) ? 1 : 0;
     
-    OEUInt8 *vp = textMemory[page];
+    OEUInt8 *vp = vram.textMain[page];
     
     if (!vp)
         return;

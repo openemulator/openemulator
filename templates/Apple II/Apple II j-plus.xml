@@ -15,35 +15,35 @@
         <inlet ref="appleIIjplus.gamePort" property="gamePort" outletRef="io"/>
     </port>
     <port id="appleIIjplus.slot0" ref="" type="Apple II Slot" group="expansions" label="Slot 0" image="images/Connectors/Edge50.png">
-        <inlet ref="appleIIjplus.iou" property="refSlot0" outletRef="io"/>
+        <inlet ref="appleIIjplus.io" property="refSlot0" outletRef="io"/>
     </port>
     <port id="appleIIjplus.slot1" ref="" type="Apple II Slot" group="expansions" label="Slot 1" image="images/Connectors/Edge50.png">
-        <inlet ref="appleIIjplus.iou" property="refSlot1" outletRef="io"/>
-        <inlet ref="appleIIjplus.mmu" property="refSlot1" outletRef="memory"/>
+        <inlet ref="appleIIjplus.io" property="refSlot1" outletRef="io"/>
+        <inlet ref="appleIIjplus.memoryBus" property="refSlot1" outletRef="memory"/>
     </port>
     <port id="appleIIjplus.slot2" ref="" type="Apple II Slot" group="expansions" label="Slot 2" image="images/Connectors/Edge50.png">
-        <inlet ref="appleIIjplus.iou" property="refSlot2" outletRef="io"/>
-        <inlet ref="appleIIjplus.mmu" property="refSlot2" outletRef="memory"/>
+        <inlet ref="appleIIjplus.io" property="refSlot2" outletRef="io"/>
+        <inlet ref="appleIIjplus.memoryBus" property="refSlot2" outletRef="memory"/>
     </port>
     <port id="appleIIjplus.slot3" ref="" type="Apple II Slot" group="expansions" label="Slot 3" image="images/Connectors/Edge50.png">
-        <inlet ref="appleIIjplus.iou" property="refSlot3" outletRef="io"/>
-        <inlet ref="appleIIjplus.mmu" property="refSlot3" outletRef="memory"/>
+        <inlet ref="appleIIjplus.io" property="refSlot3" outletRef="io"/>
+        <inlet ref="appleIIjplus.memoryBus" property="refSlot3" outletRef="memory"/>
     </port>
     <port id="appleIIjplus.slot4" ref="" type="Apple II Slot" group="expansions" label="Slot 4" image="images/Connectors/Edge50.png">
-        <inlet ref="appleIIjplus.iou" property="refSlot4" outletRef="io"/>
-        <inlet ref="appleIIjplus.mmu" property="refSlot4" outletRef="memory"/>
+        <inlet ref="appleIIjplus.io" property="refSlot4" outletRef="io"/>
+        <inlet ref="appleIIjplus.memoryBus" property="refSlot4" outletRef="memory"/>
     </port>
     <port id="appleIIjplus.slot5" ref="" type="Apple II Slot" group="expansions" label="Slot 5" image="images/Connectors/Edge50.png">
-        <inlet ref="appleIIjplus.iou" property="refSlot5" outletRef="io"/>
-        <inlet ref="appleIIjplus.mmu" property="refSlot5" outletRef="memory"/>
+        <inlet ref="appleIIjplus.io" property="refSlot5" outletRef="io"/>
+        <inlet ref="appleIIjplus.memoryBus" property="refSlot5" outletRef="memory"/>
     </port>
     <port id="appleIIjplus.slot6" ref="" type="Apple II Slot" group="expansions" label="Slot 6" image="images/Connectors/Edge50.png">
-        <inlet ref="appleIIjplus.iou" property="refSlot6" outletRef="io"/>
-        <inlet ref="appleIIjplus.mmu" property="refSlot6" outletRef="memory"/>
+        <inlet ref="appleIIjplus.io" property="refSlot6" outletRef="io"/>
+        <inlet ref="appleIIjplus.memoryBus" property="refSlot6" outletRef="memory"/>
     </port>
     <port id="appleIIjplus.slot7" ref="" type="Apple II Slot" group="expansions" label="Slot 7" image="images/Connectors/Edge50.png">
-        <inlet ref="appleIIjplus.iou" property="refSlot7" outletRef="io"/>
-        <inlet ref="appleIIjplus.mmu" property="refSlot7" outletRef="memory"/>
+        <inlet ref="appleIIjplus.io" property="refSlot7" outletRef="io"/>
+        <inlet ref="appleIIjplus.memoryBus" property="refSlot7" outletRef="memory"/>
     </port>
     <port id="appleIIjplus.cpuSocket" ref="" type="Apple II CPU Socket" group="expansions" label="CPU Socket" image="images/Connectors/DIP40.png">
     </port>
@@ -181,11 +181,7 @@
         <property name="hires" value="1"/>
         <property name="device" ref="appleIIjplus"/>
         <property name="controlBus" ref="appleIIjplus.controlBus"/>
-        <property name="mmu" ref="appleIIjplus.memoryBus"/>
-        <property name="floatingBus" ref="appleIIjplus.floatingBus"/>
-        <property name="ram1" ref="appleIIjplus.ram1"/>
-        <property name="ram2" ref="appleIIjplus.ram2"/>
-        <property name="ram3" ref="appleIIjplus.ram3"/>
+        <property name="memoryBus" ref="appleIIjplus.memoryBus"/>
         <property name="gamePort" ref="appleIIjplus.gamePort"/>
         <property name="monitorDevice" ref="appleMonitorII"/>
         <property name="monitor" ref="appleMonitorII.monitor"/>
