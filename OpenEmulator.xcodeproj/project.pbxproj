@@ -87,6 +87,9 @@
 		008CA97E147803E500B9F5D0 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 008CA97D147803E500B9F5D0 /* IOKit.framework */; };
 		008F2FE7138E0AD600409723 /* DocumentController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00AD746811A2F10E00BAC29C /* DocumentController.mm */; };
 		009085401395D23D00B7D75F /* LibraryItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0090853F1395D23D00B7D75F /* LibraryItem.mm */; };
+		00936E8615170428006B0EAC /* AudioPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 00936E8515170428006B0EAC /* AudioPlayer.h */; };
+		00936E8815170435006B0EAC /* AudioPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00936E8715170435006B0EAC /* AudioPlayer.cpp */; };
+		00936E8A15177B60006B0EAC /* AudioPlayerInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 00936E8915177B60006B0EAC /* AudioPlayerInterface.h */; };
 		00954E781277B79E00C17203 /* EmulationOutlineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00954E771277B79E00C17203 /* EmulationOutlineCell.m */; };
 		00954E991277BB8E00C17203 /* EmulationWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00954E981277BB8E00C17203 /* EmulationWindowController.m */; };
 		00954EA71277BC1200C17203 /* AudioControlsWindowController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00954EA61277BC1200C17203 /* AudioControlsWindowController.mm */; };
@@ -341,6 +344,9 @@
 		008CA97D147803E500B9F5D0 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		0090853E1395D23D00B7D75F /* LibraryItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryItem.h; sourceTree = "<group>"; };
 		0090853F1395D23D00B7D75F /* LibraryItem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LibraryItem.mm; sourceTree = "<group>"; };
+		00936E8515170428006B0EAC /* AudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioPlayer.h; sourceTree = "<group>"; };
+		00936E8715170435006B0EAC /* AudioPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioPlayer.cpp; sourceTree = "<group>"; };
+		00936E8915177B60006B0EAC /* AudioPlayerInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioPlayerInterface.h; sourceTree = "<group>"; };
 		00954E761277B79E00C17203 /* EmulationOutlineCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmulationOutlineCell.h; sourceTree = "<group>"; };
 		00954E771277B79E00C17203 /* EmulationOutlineCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmulationOutlineCell.m; sourceTree = "<group>"; };
 		00954E971277BB8E00C17203 /* EmulationWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmulationWindowController.h; sourceTree = "<group>"; };
@@ -666,6 +672,7 @@
 		001CC97D13D11E9900B0DDA7 /* Generic */ = {
 			isa = PBXGroup;
 			children = (
+				00936E8915177B60006B0EAC /* AudioPlayerInterface.h */,
 				0022236B142C557100B7451D /* ControlBusInterface.h */,
 				001CC97E13D11EBC00B0DDA7 /* CPUInterface.h */,
 				00A90FB2150D3A0000BB2999 /* MemoryInterface.cpp */,
@@ -777,10 +784,6 @@
 		00B8882D12A393990052B7A4 /* Generic */ = {
 			isa = PBXGroup;
 			children = (
-				00B8883212A393990052B7A4 /* AudioCodec.cpp */,
-				00FBD2DD1419A03A00BA8CEE /* AudioCodec.h */,
-				0084D43514FC4FF80031A8A5 /* Audio1Bit.cpp */,
-				0084D43714FC50060031A8A5 /* Audio1Bit.h */,
 				00B8882E12A393990052B7A4 /* AddressDecoder.cpp */,
 				00B8882F12A393990052B7A4 /* AddressDecoder.h */,
 				0029EEDF14266B7700AD900E /* AddressMapper.cpp */,
@@ -789,6 +792,12 @@
 				00365CEC1516956600978DF6 /* AddressMux.h */,
 				00B8883012A393990052B7A4 /* AddressOffset.cpp */,
 				00B8883112A393990052B7A4 /* AddressOffset.h */,
+				0084D43514FC4FF80031A8A5 /* Audio1Bit.cpp */,
+				0084D43714FC50060031A8A5 /* Audio1Bit.h */,
+				00B8883212A393990052B7A4 /* AudioCodec.cpp */,
+				00FBD2DD1419A03A00BA8CEE /* AudioCodec.h */,
+				00936E8715170435006B0EAC /* AudioPlayer.cpp */,
+				00936E8515170428006B0EAC /* AudioPlayer.h */,
 				00139F7F1511863B00B0E108 /* BankSwitchedRAM.cpp */,
 				00139F811511864800B0E108 /* BankSwitchedRAM.h */,
 				00B8883812A393990052B7A4 /* ControlBus.cpp */,
@@ -1130,6 +1139,8 @@
 				00139F821511864800B0E108 /* BankSwitchedRAM.h in Headers */,
 				00139F86151195EE00B0E108 /* AppleIIAddressDecoder.h in Headers */,
 				00365CED1516956600978DF6 /* AddressMux.h in Headers */,
+				00936E8615170428006B0EAC /* AudioPlayer.h in Headers */,
+				00936E8A15177B60006B0EAC /* AudioPlayerInterface.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1381,6 +1392,7 @@
 				00139F801511863B00B0E108 /* BankSwitchedRAM.cpp in Sources */,
 				00139F84151195E600B0E108 /* AppleIIAddressDecoder.cpp in Sources */,
 				00365CEB1516955C00978DF6 /* AddressMux.cpp in Sources */,
+				00936E8815170435006B0EAC /* AudioPlayer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -171,42 +171,9 @@
         stateLabel = [[NSString stringWithCPPString:value] retain];
         
         // Read settings
-        settingsRef = [[NSMutableArray alloc] init];
-        settingsName = [[NSMutableArray alloc] init];
-        settingsLabel = [[NSMutableArray alloc] init];
-        settingsType = [[NSMutableArray alloc] init];
-        settingsOptions = [[NSMutableArray alloc] init];
-        settingsOptionKeys = [[NSMutableArray alloc] init];
-        
         DeviceSettings settings;
         ((OEComponent *)device)->postMessage(NULL, DEVICE_GET_SETTINGS, &settings);
-        for (int i = 0; i < settings.size(); i++)
-        {
-            DeviceSetting setting = settings[i];
-            [settingsRef addObject:[NSString stringWithCPPString:setting.ref]];
-            [settingsName addObject:[NSString stringWithCPPString:setting.name]];
-            [settingsLabel addObject:[NSString stringWithCPPString:setting.label]];
-            [settingsType addObject:[NSString stringWithCPPString:setting.type]];
-            
-            NSArray *optionEntries = [[NSString stringWithCPPString:setting.options]
-                                      componentsSeparatedByString:@","];
-            
-            NSMutableArray *options = [NSMutableArray array];
-            NSMutableArray *optionKeys = [NSMutableArray array];
-            
-            for (int i = 0; i < [optionEntries count]; i++)
-            {
-                NSString *optionEntry = [optionEntries objectAtIndex:i];
-                NSArray *optionComponents = [optionEntry componentsSeparatedByString:@"|"];
-                
-                NSUInteger lastN = [optionComponents count] - 1;
-                [optionKeys addObject:[optionComponents objectAtIndex:0]];
-                [options addObject:[optionComponents objectAtIndex:lastN]];
-            }
-            
-            [settingsOptionKeys addObject:optionKeys];
-            [settingsOptions addObject:options];
-        }
+        [self initSettings:&settings];
         
         // Read canvases
         canvases = [[NSMutableArray alloc] init];
@@ -269,6 +236,10 @@
         value = "";
         ((OEComponent *)theComponent)->postMessage(NULL, STORAGE_GET_FORMATLABEL, &value);
         stateLabel = [[NSString stringWithCPPString:value] retain];
+        
+        DeviceSettings settings;
+        ((OEComponent *)theComponent)->postMessage(NULL, STORAGE_GET_SETTINGS, &settings);
+        [self initSettings:&settings];
         
         storages = [[NSMutableArray alloc] init];
         [storages addObject:[NSValue valueWithPointer:theComponent]];
@@ -334,7 +305,7 @@
     [locationLabel release];
     [stateLabel release];
     
-    [settingsRef release];
+    [settingsComponent release];
     [settingsName release];
     [settingsLabel release];
     [settingsType release];
@@ -348,6 +319,47 @@
     [portId release];
     
     [super dealloc];
+}
+
+- (void)initSettings:(void *)theSettings
+{
+    settingsComponent = [[NSMutableArray alloc] init];
+    settingsName = [[NSMutableArray alloc] init];
+    settingsLabel = [[NSMutableArray alloc] init];
+    settingsType = [[NSMutableArray alloc] init];
+    settingsOptions = [[NSMutableArray alloc] init];
+    settingsOptionKeys = [[NSMutableArray alloc] init];
+    
+    DeviceSettings *settings = (DeviceSettings *)theSettings;
+    
+    for (int i = 0; i < settings->size(); i++)
+    {
+        DeviceSetting setting = settings->at(i);
+        
+        [settingsComponent addObject:[NSValue valueWithPointer:setting.component]];
+        [settingsName addObject:[NSString stringWithCPPString:setting.name]];
+        [settingsLabel addObject:[NSString stringWithCPPString:setting.label]];
+        [settingsType addObject:[NSString stringWithCPPString:setting.type]];
+        
+        NSArray *optionEntries = [[NSString stringWithCPPString:setting.options]
+                                  componentsSeparatedByString:@","];
+        
+        NSMutableArray *options = [NSMutableArray array];
+        NSMutableArray *optionKeys = [NSMutableArray array];
+        
+        for (int i = 0; i < [optionEntries count]; i++)
+        {
+            NSString *optionEntry = [optionEntries objectAtIndex:i];
+            NSArray *optionComponents = [optionEntry componentsSeparatedByString:@"|"];
+            
+            NSUInteger lastN = [optionComponents count] - 1;
+            [options addObject:[optionComponents objectAtIndex:lastN]];
+            [optionKeys addObject:[optionComponents objectAtIndex:0]];
+        }
+        
+        [settingsOptions addObject:options];
+        [settingsOptionKeys addObject:optionKeys];
+    }
 }
 
 - (BOOL)isGroup
@@ -392,7 +404,7 @@
 
 - (NSInteger)numberOfSettings
 {
-    return [settingsRef count];
+    return [settingsComponent count];
 }
 
 - (NSString *)labelForSettingAtIndex:(NSInteger)index
@@ -412,7 +424,8 @@
 
 - (void)setValue:(NSString *)value forSettingAtIndex:(NSInteger)index;
 {
-    NSString *settingRef = [settingsRef objectAtIndex:index];
+    OEComponent *settingComponent = (OEComponent *) [[settingsComponent objectAtIndex:index]
+                                                     pointerValue];
     NSString *settingName = [settingsName objectAtIndex:index];
     NSString *settingType = [settingsType objectAtIndex:index];
     if ([settingType compare:@"select"] == NSOrderedSame)
@@ -422,30 +435,27 @@
     }
     
     [document lockEmulation];
-    OEEmulation *emulation = (OEEmulation *)[document emulation];
-    OEComponent *component = emulation->getComponent([settingRef cppString]);
-    if (component)
-    {
-        if (component->setValue([settingName cppString], [value cppString]))
-            component->update();
-    }
+    
+    if (settingComponent &&
+        settingComponent->setValue([settingName cppString], [value cppString]))
+            settingComponent->update();
+    
     [document unlockEmulation];
 }
 
 - (NSString *)valueForSettingAtIndex:(NSInteger)index
 {
-    NSString *settingRef = [settingsRef objectAtIndex:index];
+    OEComponent *settingComponent = (OEComponent *) [[settingsComponent objectAtIndex:index]
+                                                     pointerValue];
     NSString *settingName = [settingsName objectAtIndex:index];
     NSString *value = @"";
     
     [document lockEmulation];
     
-    OEEmulation *emulation = (OEEmulation *)[document emulation];
-    OEComponent *component = emulation->getComponent([settingRef cppString]);
-    if (component)
+    if (settingComponent)
     {
         string theValue;
-        component->getValue([settingName cppString], theValue);
+        settingComponent->getValue([settingName cppString], theValue);
         value = [NSString stringWithCPPString:theValue];
     }
     

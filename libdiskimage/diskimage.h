@@ -11,11 +11,16 @@
 /*
  * Standard properties:
  *
- * description
- * creator
- * locked
+ * sectorsPerTrack
  * trackNum
  * headNum
+ * readonly
+ * lockSupported
+ * description
+ * creator
+ *
+ * Apple II properties:
+ * 
  */
 
 // Ideas:

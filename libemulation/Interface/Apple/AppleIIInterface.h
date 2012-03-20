@@ -13,6 +13,8 @@
 
 #include "CanvasInterface.h"
 
+#include "diskimage.h"
+
 typedef enum
 {
     APPLEII_VRAMMODE_TEXT1,
@@ -109,5 +111,27 @@ typedef enum
     APPLEII_AN2_DID_CHANGE,
     APPLEII_AN3_DID_CHANGE,
 } AppleIIGamePortNotification;
+
+typedef struct
+{
+    int trackIndex;
+    
+    DiskImagePhysicalTrack track;
+} AppleIIDiskTrack;
+
+typedef enum
+{
+    APPLEII_SET_DISKTRACK,
+    APPLEII_GET_DISKTRACK,
+    APPLEII_ASSERT_MOTORON,
+    APPLEII_CLEAR_MOTORON,
+    APPLEII_IS_DISK_LOCKED,
+    APPLEII_GET_RPM,
+} AppleIIDiskDriveMessage;
+
+typedef enum
+{
+    APPLEII_RPM_DID_CHANGE,
+} AppleIIDiskDriveNotification;
 
 #endif

@@ -1,6 +1,5 @@
 ==1.0.3==
-* Implement Apple Disk II
-* Implement sound player
+* Implement audio player
 * Implement AppleIISlotMemory and AppleIISlotExpansionMemory
 * Implement Apple Language Card
 * Implement Apple Graphics Tablet

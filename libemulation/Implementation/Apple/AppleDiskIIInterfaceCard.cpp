@@ -50,3 +50,30 @@ bool AppleDiskIIInterfaceCard::setRef(string name, OEComponent *ref)
 	
 	return true;
 }
+
+OEUInt8 AppleDiskIIInterfaceCard::read(OEAddress address)
+{
+    switch (address & 0xf)
+    {
+        case 0x8:
+            break;
+            
+        case 0x9:
+            break;
+            
+    }
+    
+    return 0;
+}
+
+void AppleDiskIIInterfaceCard::write(OEAddress address, OEUInt8 value)
+{
+    switch (address & 0xf)
+    {
+        case 0x8:
+            break;
+            
+        case 0x9:
+            break;
+    }
+}

@@ -46,7 +46,7 @@ typedef enum
     
     void *device;
     
-    NSMutableArray *settingsRef;
+    NSMutableArray *settingsComponent;
     NSMutableArray *settingsName;
     NSMutableArray *settingsLabel;
     NSMutableArray *settingsType;
@@ -76,6 +76,8 @@ typedef enum
      imagePath:(NSString *)theImagePath
       portType:(NSString *)thePortType
       document:(Document *)theDocument;
+
+- (void)initSettings:(void *)theSettings;
 
 - (BOOL)isGroup;
 - (NSString *)uid;

@@ -16,6 +16,7 @@
 #include "AddressMux.h"
 #include "AddressOffset.h"
 #include "AudioCodec.h"
+#include "AudioPlayer.h"
 #include "BankSwitchedRAM.h"
 #include "ControlBus.h"
 #include "FloatingBus.h"
@@ -66,6 +67,7 @@ OEComponent *OEComponentFactory::construct(const string& className)
     matchComponent(AddressMux);
     matchComponent(AddressOffset);
     matchComponent(AudioCodec);
+    matchComponent(AudioPlayer);
     matchComponent(BankSwitchedRAM);
     matchComponent(ControlBus);
     matchComponent(FloatingBus);

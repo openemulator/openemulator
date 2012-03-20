@@ -1,4 +1,6 @@
 ==Latest==
+* Modified Device settings structure
+* Implemented Apple Disk II
 * Fixed add device to AddressDecoder after init
 * Implemented select settings with values and labels
 * Implemented Apple Disk II Interface Card

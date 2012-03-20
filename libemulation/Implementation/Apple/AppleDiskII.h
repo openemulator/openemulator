@@ -2,13 +2,15 @@
 /**
  * libemulation
  * Apple Disk II
- * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2010-2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Controls an Apple Disk II drive
  */
 
 #include "OEComponent.h"
+
+#include "DeviceInterface.h"
 
 class AppleDiskII : public OEComponent
 {
@@ -24,9 +26,8 @@ public:
 	
 private:
 	OEComponent *device;
-	
-	OEComponent *canvas;
-	
+    
 	bool forceWriteProtected;
 	string diskImage;
+    string mechanism;
 };

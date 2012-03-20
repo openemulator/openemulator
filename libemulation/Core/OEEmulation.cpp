@@ -235,9 +235,20 @@ bool OEEmulation::configureDevice(string deviceId,
     {
         if (getNodeName(node) == "setting")
         {
+            string ref = getNodeProperty(node, "ref");
+            
+            OEComponent *component = getComponent(ref);
+            
+            if (!component)
+            {
+                logMessage("'" + ref + "' was not declared");
+                
+                return false;
+            }
+            
             DeviceSetting setting;
             
-            setting.ref = getNodeProperty(node, "ref");
+            setting.component = component;
             setting.name = getNodeProperty(node, "name");
             setting.type = getNodeProperty(node, "type");
             setting.options = getNodeProperty(node, "options");

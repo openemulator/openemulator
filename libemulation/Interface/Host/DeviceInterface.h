@@ -14,6 +14,8 @@
 #include <string>
 #include <vector>
 
+#include "OEComponent.h"
+
 using namespace std;
 
 typedef enum
@@ -46,7 +48,7 @@ typedef enum
 
 typedef struct
 {
-    string ref;
+    OEComponent *component;
     string name;
     string label;
     string type;
