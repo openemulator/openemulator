@@ -5,7 +5,7 @@
  * (C) 2010-2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls an OpenEmulator XML description
+ * Controls an emulator XML description
  */
 
 #ifndef _OEDOCUMENT_H
@@ -80,7 +80,7 @@ protected:
     
     virtual bool constructDocument(xmlDocPtr doc);
     virtual bool configureInlets(OEInletMap& inletMap);
-    virtual bool updateDocument(xmlDocPtr doc);
+    virtual bool reconfigureDocument(xmlDocPtr doc);
     virtual void disposeDevice(string deviceId);
     virtual void deconfigureDevice(string deviceId);
     virtual void destroyDevice(string deviceId);

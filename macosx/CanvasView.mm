@@ -108,8 +108,6 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     
     if (self)
     {
-        NSLog(@"CanvasView init");
-        
         // From:
         //   http://stuff.mit.edu/afs/sipb/project/darwin/src/
         //   modules/AppleADBKeyboard/AppleADBKeyboard.cpp
@@ -237,8 +235,6 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     
     if (displayLink)
         CVDisplayLinkRelease(displayLink);
-    
-    NSLog(@"CanvasView dealloc");
     
     [super dealloc];
 }

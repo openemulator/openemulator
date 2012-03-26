@@ -9,22 +9,23 @@
     <connector id="appleDiskII.connector" type="Apple Disk Drive Port"/>
     <component id="appleDiskII.drive" class="AppleDiskII">
         <property name="device" ref="appleDiskII"/>
-        <property name="audioPlayer" ref="appleDiskII.audioPlayer"/>
         <property name="image" value=""/>
         <property name="forceWriteProtected" value="0"/>
+        <property name="drivePlayer" ref="appleDiskII.drivePlayer"/>
+        <property name="headPlayer" ref="appleDiskII.headPlayer"/>
         <property name="mechanism" value="Shugart"/>
-        <property name="mute" value="0"/>
-        <property name="soundShugartSpin" data="${resourcePath}/sounds/Apple Disk II Spin.wav"/>
-        <property name="soundShugartArm" data="${resourcePath}/sounds/Apple Disk II Arm.wav"/>
-        <property name="soundShugartStop" data="${resourcePath}/sounds/Apple Disk II Stop.wav"/>
-        <property name="soundShugartShake" data="${resourcePath}/sounds/Apple Disk II Shake.wav"/>
-        <property name="soundAlpsSpin" data="${resourcePath}/sounds/Apple Disk II Spin.wav"/>
-        <property name="soundAlpsArm" data="${resourcePath}/sounds/Apple Disk II Arm.wav"/>
-        <property name="soundAlpsStop" data="${resourcePath}/sounds/Apple Disk II Stop.wav"/>
-        <property name="soundAlpsShake" data="${resourcePath}/sounds/Apple Disk II Shake.wav"/>
+        <property name="soundShugartDrive" value="${resourcePath}/sounds/Shugart/Shugart SA400 Drive.ogg"/>
+        <property name="soundShugartHead" value="${resourcePath}/sounds/Shugart/Shugart SA400 Head.ogg"/>
+        <property name="soundShugartStop" value="${resourcePath}/sounds/Shugart/Shugart SA400 Stop.ogg"/>
+        <property name="soundShugartAlign" value="${resourcePath}/sounds/Shugart/Shugart SA400 Align.ogg"/>
+        <property name="soundAlpsDrive" value="${resourcePath}/sounds/Alps/Alps 2124A Drive.ogg"/>
+        <property name="soundAlpsHead" value="${resourcePath}/sounds/Alps/Alps 2124A Head.ogg"/>
+        <property name="soundAlpsStop" value="${resourcePath}/sounds/Alps/Alps 2124A Stop.ogg"/>
+        <property name="soundAlpsAlign" value="${resourcePath}/sounds/Alps/Alps 2124A Align.ogg"/>
     </component>
-    <component id="appleDiskII.spinPlayer" class="AudioPlayer">
+    <component id="appleDiskII.drivePlayer" class="AudioPlayer">
         <property name="audio" ref="audio"/>
+        <property name="loop" value="1"/>
     </component>
     <component id="appleDiskII.headPlayer" class="AudioPlayer">
         <property name="audio" ref="audio"/>

@@ -282,6 +282,8 @@ bool AppleIIVideo::init()
     if (gamePort)
         gamePort->postMessage(this, APPLEII_GET_AN2, &an2);
     
+    update();
+    
     return true;
 }
 

@@ -12,6 +12,7 @@
 #define _APPLEIIINTERFACE_H
 
 #include "CanvasInterface.h"
+#include "StorageInterface.h"
 
 #include "diskimage.h"
 
@@ -121,17 +122,10 @@ typedef struct
 
 typedef enum
 {
-    APPLEII_SET_DISKTRACK,
-    APPLEII_GET_DISKTRACK,
-    APPLEII_ASSERT_MOTORON,
-    APPLEII_CLEAR_MOTORON,
-    APPLEII_IS_DISK_LOCKED,
-    APPLEII_GET_RPM,
+    APPLEII_ASSERT_DRIVEENABLE = STORAGE_END,
+    APPLEII_CLEAR_DRIVEENABLE,
+    APPLEII_SET_PHASE,
+    APPLEII_IS_WRITE_PROTECTED,
 } AppleIIDiskDriveMessage;
-
-typedef enum
-{
-    APPLEII_RPM_DID_CHANGE,
-} AppleIIDiskDriveNotification;
 
 #endif

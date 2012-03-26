@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
+<edl version="1.0" generator="OpenEmulator" build="736" label="Apple Monitor IIc" image="images/Apple/Apple Monitor IIc.png" description="The Apple Monitor IIc is a CRT-based green monochrome 9-inch monitor manufactured by Apple Computer for the Apple IIc personal computer.">
+    
+    <device id="appleMonitorIIc" label="Apple Monitor IIc" image="images/Apple/Apple Monitor IIc.png">
+        <setting ref="appleMonitorIIc.monitor" name="videoBrightness" label="Brightness" type="slider" options="-1.0,1.0"/>
+        <setting ref="appleMonitorIIc.monitor" name="videoContrast" label="Contrast" type="slider" options="0.0,1.0"/>
+        <setting ref="appleMonitorIIc.monitor" name="videoVerticalCenter" label="Vertical Center" type="slider" options="-0.1,0.1"/>
+        <setting ref="appleMonitorIIc.monitor" name="videoVerticalSize" label="Vertical Size" type="slider" options="0.85,1.25"/>
+    </device>
+    <connector id="appleMonitorIIc.connector" type="Composite Video Port">
+        <inlet ref="appleMonitorIIc.monitor" property="controlBus" outletRef="controlBus"/>
+    </connector>
+    <component id="appleMonitorIIc.monitor" class="Monitor">
+        <property name="device" ref="appleMonitorIIc"/>
+        <property name="controlBus" ref=""/>
+        <property name="videoDecoder" value="Monochrome"/>
+        <property name="videoBrightness" value="0.15"/>
+        <property name="videoContrast" value="0.8"/>
+        <property name="videoSaturation" value="1.45"/>
+        <property name="videoHue" value="0.27"/>
+        <property name="videoHorizontalCenter" value="0"/>
+        <property name="videoHorizontalSize" value="1.05"/>
+        <property name="videoVerticalCenter" value="0"/>
+        <property name="videoVerticalSize" value="1.05"/>
+        <property name="videoBandwidth" value="6000000"/>
+        <property name="displayBarrel" value="0.1"/>
+        <property name="displayScanlineLevel" value="0.5"/>
+        <property name="displayCenterLighting" value="0.5"/>
+        <property name="displayLuminanceGain" value="1.5"/>
+    </component>
+    
+</edl>

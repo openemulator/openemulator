@@ -104,6 +104,8 @@ bool Apple1IO::init()
     
     terminalChar &= 0x7f;
     
+    sendChar();
+    
     return true;
 }
 

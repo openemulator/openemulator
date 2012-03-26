@@ -57,6 +57,8 @@ bool AddressMapper::init()
         return false;
     }
     
+    update();
+    
     return true;
 }
 

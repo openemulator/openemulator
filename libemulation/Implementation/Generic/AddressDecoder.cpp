@@ -70,33 +70,12 @@ bool AddressDecoder::init()
     readMapp = &readMap.front();
     writeMapp = &writeMap.front();
     
-	return true;
+    return updateMemoryMaps();
 }
 
 void AddressDecoder::update()
 {
-    staticMemoryMaps.clear();
-    
-	for (MemoryMapsConf::iterator i = conf.begin();
-		 i != conf.end();
-		 i++)
-	{
-		if (!ref.count(i->first))
-		{
-			logMessage("undeclared ref for address map '" + i->first + "'");
-            
-			continue;
-		}
-        
-        OEComponent *component = ref[i->first];
-        
-        if (!component)
-            continue;
-        
-		appendMemoryMaps(staticMemoryMaps, component, i->second);
-	}
-    
-    updateMemoryMaps(0, addressMask);
+    updateMemoryMaps();
 }
 
 bool AddressDecoder::postMessage(OEComponent *sender, int message, void *data)
@@ -180,6 +159,38 @@ void AddressDecoder::updateMemoryMaps(OEAddress startAddress, OEAddress endAddre
     updateMemoryMaps(staticMemoryMaps, startAddress, endAddress);
     
     updateMemoryMaps(dynamicMemoryMaps, startAddress, endAddress);
+}
+
+bool AddressDecoder::updateMemoryMaps()
+{
+    bool success = true;
+    
+    staticMemoryMaps.clear();
+    
+	for (MemoryMapsConf::iterator i = conf.begin();
+		 i != conf.end();
+		 i++)
+	{
+		if (!ref.count(i->first))
+		{
+			logMessage("undeclared ref for address map '" + i->first + "'");
+            
+            success = false;
+            
+			continue;
+		}
+        
+        OEComponent *component = ref[i->first];
+        
+        if (!component)
+            continue;
+        
+		appendMemoryMaps(staticMemoryMaps, component, i->second);
+	}
+    
+    updateMemoryMaps(0, addressMask);
+    
+    return success;
 }
 
 bool AddressDecoder::addMemoryMaps(MemoryMaps *value)

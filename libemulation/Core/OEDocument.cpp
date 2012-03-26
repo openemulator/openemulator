@@ -5,7 +5,7 @@
  * (C) 2010-2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls an OpenEmulator XML description
+ * Controls an emulator XML description
  */
 
 #include "OEDocument.h"
@@ -137,7 +137,7 @@ bool OEDocument::save(string path)
     string pathExtension = getPathExtension(path);
     if (pathExtension == OE_FILE_PATH_EXTENSION)
     {
-        if (updateDocument(doc))
+        if (reconfigureDocument(doc))
         {
             if (dumpDocument(data))
             {
@@ -157,7 +157,7 @@ bool OEDocument::save(string path)
         package = new OEPackage();
         if (package && package->open(path))
         {
-            if (updateDocument(doc))
+            if (reconfigureDocument(doc))
             {
                 if (dumpDocument(data))
                 {
@@ -347,8 +347,22 @@ bool OEDocument::removeDevice(string deviceId)
     if (!doc)
         return false;
     
-    // Get connected devices
+    // Get document ports
     OEPortInfos portInfos = getPortInfos();
+    
+    // Find ports that reference this device
+    // and connectors of this device
+    OEPortInfos ports;
+    OEPortInfos connectors;
+    for (OEPortInfos::iterator i = portInfos.begin();
+         i != portInfos.end();
+         i++)
+    {
+        if (OEGetDeviceId(i->ref) == deviceId)
+            ports.push_back(*i);
+        else if (OEGetDeviceId(i->id) == deviceId)
+            connectors.push_back(*i);
+    }
     
     // Dispose device refs
     disposeDevice(deviceId);
@@ -364,21 +378,6 @@ bool OEDocument::removeDevice(string deviceId)
     
     // Delete device items
     deleteDevice(deviceId);
-    
-    // Analyze ports and connectors
-    OEPortInfos ports;
-    OEPortInfos connectors;
-    for (OEPortInfos::iterator i = portInfos.begin();
-         i != portInfos.end();
-         i++)
-    {
-        OEPortInfo port = *i;
-        
-        if (OEGetDeviceId(port.ref) == deviceId)
-            ports.push_back(port);
-        else if (OEGetDeviceId(port.id) == deviceId)
-            connectors.push_back(port);
-    }
     
     // Disconnect daisy chain devices?
     if ((ports.size() == 1) &&
@@ -480,7 +479,7 @@ bool OEDocument::configureInlets(OEInletMap& inletMap)
     return true;
 }
 
-bool OEDocument::updateDocument(xmlDocPtr doc)
+bool OEDocument::reconfigureDocument(xmlDocPtr doc)
 {
     return true;
 }

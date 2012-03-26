@@ -12,6 +12,8 @@
 
 #include "DeviceInterface.h"
 
+#include "OESound.h"
+
 class AppleDiskII : public OEComponent
 {
 public:
@@ -26,8 +28,11 @@ public:
 	
 private:
 	OEComponent *device;
+    OEComponent *drivePlayer;
+    OEComponent *headPlayer;
     
-	bool forceWriteProtected;
 	string diskImage;
+	bool forceWriteProtected;
     string mechanism;
+    map<string, OESound>sound;
 };

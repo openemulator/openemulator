@@ -2,7 +2,7 @@
 /**
  * libemulation
  * Apple Disk II
- * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2010-2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Controls an Apple Disk II drive
@@ -11,7 +11,9 @@
 #include "AppleDiskII.h"
 
 #include "DeviceInterface.h"
-#include "StorageInterface.h"
+#include "AudioPlayerInterface.h"
+
+#include "AppleIIInterface.h"
 
 AppleDiskII::AppleDiskII()
 {
@@ -22,12 +24,14 @@ AppleDiskII::AppleDiskII()
 
 bool AppleDiskII::setValue(string name, string value)
 {
-	if (name == "forceWriteProtected")
-		forceWriteProtected = (OEUInt32) getUInt(value);
-	else if (name == "image")
+	if (name == "image")
 		diskImage = value;
+	else if (name == "forceWriteProtected")
+		forceWriteProtected = (OEUInt32) getUInt(value);
 	else if (name == "mechanism")
 		mechanism = value;
+    else if (name.substr(0, 5) == "sound")
+        sound[name.substr(5)] = OESound(value);
 	else
 		return false;
 	
@@ -36,10 +40,10 @@ bool AppleDiskII::setValue(string name, string value)
 
 bool AppleDiskII::getValue(string name, string& value)
 {
-	if (name == "forceWriteProtected")
-		value = getString(forceWriteProtected);
-	else if (name == "image")
+	if (name == "image")
 		value = diskImage;
+	else if (name == "forceWriteProtected")
+		value = getString(forceWriteProtected);
 	else if (name == "mechanism")
 		value = mechanism;
 	else
@@ -58,7 +62,11 @@ bool AppleDiskII::setRef(string name, OEComponent *ref)
 		if (device)
 			device->postMessage(this, DEVICE_ADD_STORAGE, this);
 	}
-	else
+	else if (name == "drivePlayer")
+        drivePlayer = ref;
+    else if (name == "headPlayer")
+        headPlayer = ref;
+    else
 		return false;
 	
 	return true;
@@ -69,9 +77,10 @@ bool AppleDiskII::init()
 	if (!device)
 	{
 		logMessage("device not connected");
+        
 		return false;
 	}
-	
+    
 	return true;
 }
 
@@ -86,14 +95,14 @@ bool AppleDiskII::postMessage(OEComponent *sender, int message, void *data)
 			return true;
 			
 		case STORAGE_MOUNT:
-			{
-				string *path = (string *)data;
-				diskImage = *path;
-				
-				device->postMessage(this, DEVICE_UPDATE, NULL);
-				
-				return true;
-			}
+        {
+            string *path = (string *)data;
+            diskImage = *path;
+            
+            device->postMessage(this, DEVICE_UPDATE, NULL);
+            
+            return true;
+        }
 			
 		case STORAGE_UNMOUNT:
 			diskImage = "";
@@ -103,23 +112,23 @@ bool AppleDiskII::postMessage(OEComponent *sender, int message, void *data)
 			return true;
 			
 		case STORAGE_GET_MOUNTPATH:
-			{
-				string *path = (string *)data;
-				*path = diskImage;
-				
-				return true;
-			}
+        {
+            string *path = (string *)data;
+            *path = diskImage;
+            
+            return true;
+        }
 			
 		case STORAGE_IS_LOCKED:
-			return true;
+			return false;
 			
 		case STORAGE_GET_FORMATLABEL:
-			{
-				string *value = (string *)data;
-				*value = "16 sectors, 35 tracks, read-only";
-				
-				return true;
-			}
+        {
+            string *value = (string *)data;
+            *value = "16 sectors, 35 tracks, read-only";
+            
+            return true;
+        }
             
         case STORAGE_GET_SETTINGS:
         {
@@ -127,8 +136,8 @@ bool AppleDiskII::postMessage(OEComponent *sender, int message, void *data)
             
             DeviceSetting s;
             s.component = this;
-            s.name = "locked";
-            s.label = "Locked";
+            s.name = "writeProtect";
+            s.label = "Write Protected";
             s.type = "checkbox";
             s.options = "";
             
@@ -136,6 +145,35 @@ bool AppleDiskII::postMessage(OEComponent *sender, int message, void *data)
             
             return true;
         }
+            
+        case APPLEII_CLEAR_DRIVEENABLE:
+        {
+            if (drivePlayer)
+                drivePlayer->postMessage(this, AUDIOPLAYER_PAUSE, NULL);
+            
+            string image = "images/Apple/Apple Disk II.png";
+            device->postMessage(this, DEVICE_SET_IMAGEPATH, &image);
+            device->postMessage(this, DEVICE_UPDATE, NULL);
+            
+            return true;
+        }
+        case APPLEII_ASSERT_DRIVEENABLE:
+        {
+            if (drivePlayer)
+            {
+                drivePlayer->postMessage(this, AUDIOPLAYER_SET_SOUND, &sound["AlpsDrive"]);
+                drivePlayer->postMessage(this, AUDIOPLAYER_PLAY, NULL);
+            }
+            
+            string image = "images/Apple/Apple Disk II In Use.png";
+            device->postMessage(this, DEVICE_SET_IMAGEPATH, &image);
+            device->postMessage(this, DEVICE_UPDATE, NULL);
+            
+            return true;
+        }
+        case APPLEII_IS_WRITE_PROTECTED:
+            
+            return true;
 	}
 	
 	return false;

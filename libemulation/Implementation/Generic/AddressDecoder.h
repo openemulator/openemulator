@@ -54,6 +54,7 @@ private:
     void clear();
     void updateMemoryMaps(MemoryMaps& value, OEAddress startAddress, OEAddress endAddress);
     void updateMemoryMaps(OEAddress startAddress, OEAddress endAddress);
+    bool updateMemoryMaps();
     
     bool addMemoryMaps(MemoryMaps *value);
     bool removeMemoryMaps(MemoryMaps *value);

@@ -5,7 +5,7 @@
  * (C) 2009-2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls an OpenEmulator emulation
+ * Controls an emulation
  */
 
 #ifndef _OEEMULATION_H
@@ -66,8 +66,8 @@ private:
     bool configureComponent(string id, xmlNodePtr children);
     bool initDocument(xmlDocPtr doc);
     bool initComponent(string id);
-    bool updateDocument(xmlDocPtr doc);
-    bool updateComponent(string id, xmlNodePtr children);
+    bool reconfigureDocument(xmlDocPtr doc);
+    bool reconfigureComponent(string id, xmlNodePtr children);
     void disposeDocument(xmlDocPtr doc);
     void disposeDevice(string deviceId);
     void disposeComponent(string id);

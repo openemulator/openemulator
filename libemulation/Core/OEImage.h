@@ -2,10 +2,10 @@
 /**
  * libemulation
  * OEImage
- * (C) 2011 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2011-2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements an OpenEmulator image type
+ * Implements an image type
  */
 
 #ifndef _OEIMAGE_H
@@ -223,6 +223,8 @@ class OEImage
 {
 public:
     OEImage();
+    OEImage(string path);
+    OEImage(OEData& data);
     OEImage(OEImage& image, OERect rect);
     
     void setFormat(OEImageFormat value);
@@ -249,6 +251,7 @@ public:
     vector<bool> getPhaseAlternation();
     
     bool load(string path);
+    bool load(OEData& data);
     void print(OEImage& image, OEPoint origin);
     
 private:
@@ -264,6 +267,7 @@ private:
     vector<float> colorBurst;
     vector<bool> phaseAlternation;
     
+    void init();
     void setSize(OESize value, OEUInt8 fillByte);
     OEImagePixel getPixel(OEUInt32 x, OEUInt32 y);
     void setPixel(OEUInt32 x, OEUInt32 y, OEImagePixel value);

@@ -2,10 +2,10 @@
 /**
  * libemulation
  * OEImage
- * (C) 2011 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2011-2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements an OpenEmulator image type
+ * Implements an image type
  */
 
 #include <png.h>
@@ -16,18 +16,22 @@
 
 OEImage::OEImage()
 {
-    format = OEIMAGE_RGBA;
-    size = OEMakeSize(0, 0);
-    
-    sampleRate = 14318180;
-    blackLevel = 0;
-    whiteLevel = 1;
-    interlace = 0;
-    subcarrier = 0;
-    
-    colorBurst.push_back(0);
-    phaseAlternation.push_back(false);
+    init();
 }
+
+OEImage::OEImage(string path)
+{
+    init();
+    
+    load(path);
+}
+
+/*OEImage::OEImage(OEData& data)
+{
+    init();
+    
+    load(data);
+}*/
 
 OEImage::OEImage(OEImage& image, OERect rect)
 {
@@ -60,6 +64,21 @@ OEImage::OEImage(OEImage& image, OERect rect)
         src += srcBytesPerRow;
         dst += dstBytesPerRow;
     }
+}
+
+void OEImage::init()
+{
+    format = OEIMAGE_RGBA;
+    size = OEMakeSize(0, 0);
+    
+    sampleRate = 14318180;
+    blackLevel = 0;
+    whiteLevel = 1;
+    interlace = 0;
+    subcarrier = 0;
+    
+    colorBurst.push_back(0);
+    phaseAlternation.push_back(false);
 }
 
 void OEImage::setFormat(OEImageFormat value)
@@ -260,6 +279,11 @@ bool OEImage::load(string path)
     }
     
     return success;
+}
+
+bool load(OEData& data)
+{
+    return false;
 }
 
 void OEImage::print(OEImage& image, OEPoint origin)

@@ -44,6 +44,13 @@ bool AddressMux::setRef(string name, OEComponent *ref)
     return true;
 }
 
+bool AddressMux::init()
+{
+    update();
+    
+    return true;
+}
+
 void AddressMux::update()
 {
     if (ref.count(sel))

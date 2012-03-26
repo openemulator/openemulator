@@ -32,6 +32,7 @@ public:
     bool getValue(string name, string& value);
     bool setRef(string name, OEComponent *ref);
     bool init();
+    void dispose();
     
     bool postMessage(OEComponent *sender, int event, void *data);
     

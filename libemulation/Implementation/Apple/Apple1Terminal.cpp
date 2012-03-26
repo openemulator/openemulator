@@ -200,6 +200,8 @@ bool Apple1Terminal::init()
     
     scheduleNextTimer(0);
     
+    canvasShouldUpdate = true;
+    
     return true;
 }
 

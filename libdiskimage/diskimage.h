@@ -50,9 +50,12 @@ class DiskImage
 {
 public:
     DiskImage();
+    DiskImage(string path);
+    DiskImage(DiskImageData& data);
     ~DiskImage();
     
     bool open(string path);
+    bool open(DiskImageData& data);
     void close();
     
     bool setProperty(string name, string value);

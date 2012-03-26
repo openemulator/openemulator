@@ -2,10 +2,10 @@
 /**
  * libemulation
  * Common types and functions
- * (C) 2011 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2011-2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Common OpenEmulator types and functions
+ * Common emulation types and functions
  */
 
 #ifndef _OECOMMON_H

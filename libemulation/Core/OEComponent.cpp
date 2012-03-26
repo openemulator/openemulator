@@ -5,7 +5,7 @@
  * (C) 2009-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Defines the base OpenEmulator component
+ * Defines the base emulation component
  */
 
 #include "math.h"

@@ -5,7 +5,7 @@
  * (C) 2009-2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls an OpenEmulator emulation
+ * Controls an emulation
  */
 
 #include <fstream>
@@ -423,12 +423,10 @@ bool OEEmulation::initComponent(string id)
         return false;
     }
     
-    component->update();
-    
     return true;
 }
 
-bool OEEmulation::updateDocument(xmlDocPtr doc)
+bool OEEmulation::reconfigureDocument(xmlDocPtr doc)
 {
     xmlNodePtr rootNode = xmlDocGetRootElement(doc);
     
@@ -439,14 +437,14 @@ bool OEEmulation::updateDocument(xmlDocPtr doc)
         {
             string id = getNodeProperty(node, "id");
             
-            if (!updateComponent(id, node->children))
+            if (!reconfigureComponent(id, node->children))
                 return false;
         }
     
     return true;
 }
 
-bool OEEmulation::updateComponent(string id, xmlNodePtr children)
+bool OEEmulation::reconfigureComponent(string id, xmlNodePtr children)
 {
     OEComponent *component = getComponent(id);
     
@@ -541,10 +539,8 @@ void OEEmulation::disposeComponent(string id)
 {
     OEComponent *component = getComponent(id);
     
-    if (!component)
-        return;
-    
-    component->dispose();
+    if (component)
+        component->dispose();
 }
 
 void OEEmulation::deconfigureDocument(xmlDocPtr doc)
@@ -566,6 +562,8 @@ void OEEmulation::deconfigureDocument(xmlDocPtr doc)
 
 void OEEmulation::deconfigureDevice(string deviceId)
 {
+    set<OEComponent *> components;
+    
     xmlNodePtr rootNode = xmlDocGetRootElement(doc);
     
     for(xmlNodePtr node = rootNode->children;
@@ -580,22 +578,36 @@ void OEEmulation::deconfigureDevice(string deviceId)
                 propertyNode;
                 propertyNode = propertyNode->next)
             {
-                string ref = getNodeProperty(propertyNode, "ref");
-                
-                if ((OEGetDeviceId(componentId) == deviceId) ||
-                    (OEGetDeviceId(ref) == deviceId))
+                if (getNodeName(propertyNode) == "property")
                 {
-                    OEComponent *component = getComponent(componentId);
-                    if (component)
+                    string ref = getNodeProperty(propertyNode, "ref");
+                    
+                    if (ref == "")
+                        continue;
+                    
+                    if ((OEGetDeviceId(componentId) == deviceId) ||
+                        (OEGetDeviceId(ref) == deviceId))
                     {
-                        string name = getNodeProperty(propertyNode, "name");
-                        
-                        component->setRef(name, NULL);
+                        OEComponent *component = getComponent(componentId);
+                        if (component)
+                        {
+                            string name = getNodeProperty(propertyNode, "name");
+                            
+                            component->setRef(name, NULL);
+                            
+                            if (OEGetDeviceId(ref) == deviceId)
+                                components.insert(component);
+                        }
                     }
                 }
             }
         }
     }
+    
+    for (set<OEComponent *>::iterator i = components.begin();
+         i != components.end();
+         i++)
+        (*i)->update();
 }
 
 void OEEmulation::deconfigureComponent(string id, xmlNodePtr children)

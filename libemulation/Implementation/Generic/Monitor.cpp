@@ -237,6 +237,8 @@ bool Monitor::init()
     if (controlBus)
         controlBus->postMessage(this, CONTROLBUS_GET_POWERSTATE, &powerState);
     
+    update();
+    
     updateBezel();
     
     return true;

@@ -1,4 +1,7 @@
 ==Latest==
+* Fixed OEEmulation when removing the device
+* Refactorized component lifecycle, update() is now only called on update, not on init
+* Implemented audio player, added OESound
 * Modified Device settings structure
 * Implemented Apple Disk II
 * Fixed add device to AddressDecoder after init

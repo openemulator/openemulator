@@ -2,7 +2,7 @@
 /**
  * libemulation
  * Component Factory
- * (C) 2009-2011 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2009-2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Builds components

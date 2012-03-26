@@ -363,9 +363,9 @@ void PAAudio::runEmulations()
             localOutputBuffer,
         };
         
-        postNotification(this, AUDIO_FRAME_WILL_RENDER, &audioBuffer);
-        postNotification(this, AUDIO_FRAME_IS_RENDERING, &audioBuffer);
-        postNotification(this, AUDIO_FRAME_DID_RENDER, &audioBuffer);
+        postNotification(this, AUDIO_BUFFER_WILL_RENDER, &audioBuffer);
+        postNotification(this, AUDIO_BUFFER_IS_RENDERING, &audioBuffer);
+        postNotification(this, AUDIO_BUFFER_DID_RENDER, &audioBuffer);
         
         // Audio recording
         recordAudio(localOutputBuffer, framesPerBuffer, channelNum);
@@ -593,15 +593,7 @@ void PAAudio::openPlayer(string path)
     
     lock();
     
-    SF_INFO sfInfo = 
-    {
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-    };
+    SF_INFO sfInfo;
     
     playSNDFILE = sf_open(path.c_str(), SFM_READ, &sfInfo);
     if (playSNDFILE)

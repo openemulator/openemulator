@@ -71,14 +71,14 @@ bool AudioCodec::setRef(string name, OEComponent *ref)
     {
         if (audio)
         {
-            audio->removeObserver(this, AUDIO_FRAME_WILL_RENDER);
-            audio->removeObserver(this, AUDIO_FRAME_DID_RENDER);
+            audio->removeObserver(this, AUDIO_BUFFER_WILL_RENDER);
+            audio->removeObserver(this, AUDIO_BUFFER_DID_RENDER);
         }
         audio = ref;
         if (audio)
         {
-            audio->addObserver(this, AUDIO_FRAME_WILL_RENDER);
-            audio->addObserver(this, AUDIO_FRAME_DID_RENDER);
+            audio->addObserver(this, AUDIO_BUFFER_WILL_RENDER);
+            audio->addObserver(this, AUDIO_BUFFER_DID_RENDER);
         }
     }
     else if (name == "controlBus")
@@ -105,6 +105,8 @@ bool AudioCodec::init()
         return false;
     }
     
+    updateSynth();
+    
     return true;
 }
 
@@ -115,7 +117,7 @@ void AudioCodec::update()
 
 void AudioCodec::notify(OEComponent *sender, int notification, void *data)
 {
-    if (notification == AUDIO_FRAME_WILL_RENDER)
+    if (notification == AUDIO_BUFFER_WILL_RENDER)
     {
         audioBuffer = (AudioBuffer *)data;
         
@@ -141,7 +143,7 @@ void AudioCodec::notify(OEComponent *sender, int notification, void *data)
         memcpy(&buffer.front(), &buffer.front() + sampleNum, sampleNum * sizeof(float));
         memset(&buffer.front() + sampleNum, 0, sampleNum * sizeof(float));
     }
-    else if (notification == AUDIO_FRAME_DID_RENDER)
+    else if (notification == AUDIO_BUFFER_DID_RENDER)
         synthBuffer();
 }
 

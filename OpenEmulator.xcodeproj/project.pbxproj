@@ -107,6 +107,8 @@
 		00A973B112E512F80084724F /* OEDocument.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A973A412E512F80084724F /* OEDocument.cpp */; };
 		00A973B312E512F80084724F /* OEImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A973A612E512F80084724F /* OEImage.cpp */; };
 		00A973B512E512F80084724F /* OEPackage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A973A812E512F80084724F /* OEPackage.cpp */; };
+		00AD7026151AC19100424637 /* OESound.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AD7025151AC19100424637 /* OESound.h */; };
+		00AD7028151AC41E00424637 /* OESound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00AD7027151AC41E00424637 /* OESound.cpp */; };
 		00B019B413501507001E01BB /* OEDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B019B213501507001E01BB /* OEDevice.h */; };
 		00B019B513501507001E01BB /* OEDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B019B313501507001E01BB /* OEDevice.cpp */; };
 		00B5709E10863C2A00CDE4A7 /* TemplateChooserWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B5709D10863C2A00CDE4A7 /* TemplateChooserWindowController.m */; };
@@ -378,6 +380,8 @@
 		00A973A712E512F80084724F /* OEImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEImage.h; sourceTree = "<group>"; };
 		00A973A812E512F80084724F /* OEPackage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEPackage.cpp; sourceTree = "<group>"; };
 		00A973A912E512F80084724F /* OEPackage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEPackage.h; sourceTree = "<group>"; };
+		00AD7025151AC19100424637 /* OESound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OESound.h; sourceTree = "<group>"; };
+		00AD7027151AC41E00424637 /* OESound.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OESound.cpp; sourceTree = "<group>"; };
 		00AD746811A2F10E00BAC29C /* DocumentController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DocumentController.mm; sourceTree = "<group>"; };
 		00B019B213501507001E01BB /* OEDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEDevice.h; sourceTree = "<group>"; };
 		00B019B313501507001E01BB /* OEDevice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEDevice.cpp; sourceTree = "<group>"; };
@@ -695,20 +699,22 @@
 			children = (
 				00247F35139D85A900B165D1 /* OECommon.cpp */,
 				00247F36139D85AA00B165D1 /* OECommon.h */,
-				00A973A612E512F80084724F /* OEImage.cpp */,
-				00A973A712E512F80084724F /* OEImage.h */,
-				00A973A812E512F80084724F /* OEPackage.cpp */,
-				00A973A912E512F80084724F /* OEPackage.h */,
 				00A973A012E512F80084724F /* OEComponent.cpp */,
 				00A973A112E512F80084724F /* OEComponent.h */,
 				00A973A212E512F80084724F /* OEComponentFactory.cpp */,
 				00A973A312E512F80084724F /* OEComponentFactory.h */,
+				00B019B313501507001E01BB /* OEDevice.cpp */,
+				00B019B213501507001E01BB /* OEDevice.h */,
 				00A973A412E512F80084724F /* OEDocument.cpp */,
 				00A973A512E512F80084724F /* OEDocument.h */,
 				00A9739E12E512F80084724F /* OEEmulation.cpp */,
 				00A9739F12E512F80084724F /* OEEmulation.h */,
-				00B019B313501507001E01BB /* OEDevice.cpp */,
-				00B019B213501507001E01BB /* OEDevice.h */,
+				00A973A612E512F80084724F /* OEImage.cpp */,
+				00A973A712E512F80084724F /* OEImage.h */,
+				00A973A812E512F80084724F /* OEPackage.cpp */,
+				00A973A912E512F80084724F /* OEPackage.h */,
+				00AD7027151AC41E00424637 /* OESound.cpp */,
+				00AD7025151AC19100424637 /* OESound.h */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -760,7 +766,6 @@
 				00139F85151195EE00B0E108 /* AppleIIAddressDecoder.h */,
 				00B8881912A393990052B7A4 /* AppleIIAudioIn.cpp */,
 				00B8881A12A393990052B7A4 /* AppleIIAudioIn.h */,
-				00B8882412A393990052B7A4 /* AppleIIKeyboard.h */,
 				00B8881B12A393990052B7A4 /* AppleIIAudioOut.cpp */,
 				00B8881C12A393990052B7A4 /* AppleIIAudioOut.h */,
 				00B8881F12A393990052B7A4 /* AppleIIFloatingBus.cpp */,
@@ -768,6 +773,7 @@
 				00B7C649147B5B2B00BB7E6B /* AppleIIGamePort.cpp */,
 				00B7C647147B5B2300BB7E6B /* AppleIIGamePort.h */,
 				00B8882312A393990052B7A4 /* AppleIIKeyboard.cpp */,
+				00B8882412A393990052B7A4 /* AppleIIKeyboard.h */,
 				00B8882712A393990052B7A4 /* AppleIISlotExpansionMemory.cpp */,
 				00B8882812A393990052B7A4 /* AppleIISlotExpansionMemory.h */,
 				00B8882912A393990052B7A4 /* AppleIISlotMemory.cpp */,
@@ -1141,6 +1147,7 @@
 				00365CED1516956600978DF6 /* AddressMux.h in Headers */,
 				00936E8615170428006B0EAC /* AudioPlayer.h in Headers */,
 				00936E8A15177B60006B0EAC /* AudioPlayerInterface.h in Headers */,
+				00AD7026151AC19100424637 /* OESound.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1393,6 +1400,7 @@
 				00139F84151195E600B0E108 /* AppleIIAddressDecoder.cpp in Sources */,
 				00365CEB1516955C00978DF6 /* AddressMux.cpp in Sources */,
 				00936E8815170435006B0EAC /* AudioPlayer.cpp in Sources */,
+				00AD7028151AC41E00424637 /* OESound.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

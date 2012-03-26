@@ -101,10 +101,10 @@ bool ControlBus::setRef(string name, OEComponent *ref)
     else if (name == "audio")
     {
         if (audio)
-            audio->removeObserver(this, AUDIO_FRAME_IS_RENDERING);
+            audio->removeObserver(this, AUDIO_BUFFER_IS_RENDERING);
         audio = ref;
         if (audio)
-            audio->addObserver(this, AUDIO_FRAME_IS_RENDERING);
+            audio->addObserver(this, AUDIO_BUFFER_IS_RENDERING);
     }
     else if (name == "cpu")
         cpu = ref;
@@ -143,6 +143,12 @@ bool ControlBus::init()
         device->postMessage(this, DEVICE_ASSERT_ACTIVITY, NULL);
     
     return true;
+}
+
+void ControlBus::dispose()
+{
+    if (powerState == CONTROLBUS_POWERSTATE_ON)
+        device->postMessage(this, DEVICE_CLEAR_ACTIVITY, NULL);
 }
 
 bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
@@ -248,7 +254,7 @@ bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
             return true;
             
         case CONTROLBUS_INVALIDATE_TIMERS:
-            invalidateTimers((OEComponent *)data);
+            invalidateTimers(sender);
             
             return true;
             

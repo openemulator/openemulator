@@ -155,6 +155,8 @@ bool JoystickMapper::init()
         return false;
     }
     
+    update();
+    
     return true;
 }
 

@@ -35,6 +35,8 @@ typedef enum
     STORAGE_GET_FORMATLABEL,
     
     STORAGE_GET_SETTINGS,
+    
+    STORAGE_END,
 } StorageMessage;
 
 #endif

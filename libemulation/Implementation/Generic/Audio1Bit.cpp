@@ -67,6 +67,8 @@ bool Audio1Bit::init()
         return false;
     }
     
+    update();
+    
     return true;
 }
 
