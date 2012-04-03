@@ -10,10 +10,10 @@
 
 #include "diskimage.h"
 
-DiskImage::DiskImage()
+BlockDiskImage::BlockDiskImage()
 {
 }
 
-DiskImage::~DiskImage()
+BlockDiskImage::~BlockDiskImage()
 {
 }

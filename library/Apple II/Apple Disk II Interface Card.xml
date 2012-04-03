@@ -7,6 +7,7 @@
     </device>
     <connector id="appleDiskIICard.connector" type="Apple II Slot">
         <inlet ref="appleDiskIICard.io" property="controlBus" outletRef="controlBus"/>
+        <inlet ref="appleDiskIICard.io" property="floatingBus" outletRef="floatingBus"/>
     </connector>
     <port id="appleDiskIICard.drive1" ref="" type="Apple Disk Drive Port" group="peripherals" label="Drive 1" image="images/Connectors/Header2x10.png">
         <inlet ref="appleDiskIICard.io" property="drive1" outletRef="drive"/>
@@ -16,11 +17,12 @@
     </port>
     <component id="appleDiskIICard.io" class="AppleDiskIIInterfaceCard">
         <property name="controlBus" ref=""/>
-        <property name="phase" value="0"/>
+        <property name="floatingBus" ref=""/>
+        <property name="phaseControl" value="0"/>
         <property name="driveOn" value="0"/>
         <property name="driveSel" value="0"/>
-        <property name="load" value="0"/>
-        <property name="write" value="0"/>
+        <property name="sequencerMode" value="0"/>
+        <property name="sequencerState" value="0"/>
         <property name="dataRegister" value="0"/>
         <property name="drive1" ref=""/>
         <property name="drive2" ref=""/>

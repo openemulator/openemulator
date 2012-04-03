@@ -10,6 +10,7 @@
     <component id="appleDiskII.drive" class="AppleDiskII">
         <property name="device" ref="appleDiskII"/>
         <property name="image" value=""/>
+        <property name="track" value="0"/>
         <property name="forceWriteProtected" value="0"/>
         <property name="drivePlayer" ref="appleDiskII.drivePlayer"/>
         <property name="headPlayer" ref="appleDiskII.headPlayer"/>

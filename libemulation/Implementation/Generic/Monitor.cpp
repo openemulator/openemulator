@@ -63,6 +63,12 @@ bool Monitor::setValue(string name, string value)
         configuration.videoChromaBandwidth = getFloat(value);
     else if (name == "videoWhiteOnly")
         configuration.videoWhiteOnly = getInt(value);
+    else if (name == "displayResolutionX")
+        configuration.displayResolution.width = getFloat(value);
+    else if (name == "displayResolutionY")
+        configuration.displayResolution.height = getFloat(value);
+    else if (name == "displayPixelDensity")
+        configuration.displayPixelDensity = getFloat(value);
     else if (name == "displayBarrel")
         configuration.displayBarrel = getFloat(value);
     else if (name == "displayScanlineLevel")
@@ -135,6 +141,12 @@ bool Monitor::getValue(string name, string& value)
         value = getString(configuration.videoChromaBandwidth);
     else if (name == "videoWhiteOnly")
         value = getString(configuration.videoWhiteOnly);
+    else if (name == "displayResolutionX")
+        value = getString(configuration.displayResolution.width);
+    else if (name == "displayResolutionY")
+        value = getString(configuration.displayResolution.height);
+    else if (name == "displayPixelDensity")
+        value = getString(configuration.displayPixelDensity);
     else if (name == "displayBarrel")
         value = getString(configuration.displayBarrel);
     else if (name == "displayScanlineLevel")

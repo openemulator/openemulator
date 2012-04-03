@@ -23,7 +23,8 @@ public:
 	bool getValue(string name, string& value);
 	bool setRef(string name, OEComponent *ref);
 	bool init();
-	
+	void update();
+    
 	bool postMessage(OEComponent *sender, int message, void *data);
 	
 private:
@@ -35,4 +36,11 @@ private:
 	bool forceWriteProtected;
     string mechanism;
     map<string, OESound>sound;
+    
+    OEUInt32 phaseControl;
+    OEInt32 trackIndex;
+    bool isWriteProtected;
+    
+    void updateSound();
+    void setPhaseControl(OEUInt32 value);
 };

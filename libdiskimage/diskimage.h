@@ -44,15 +44,15 @@ typedef struct
 {
     DiskImageData data;
     int bitnum;
-} DiskImagePhysicalTrack;
+} DiskImageBitData;
 
-class DiskImage
+class BlockDiskImage
 {
 public:
-    DiskImage();
-    DiskImage(string path);
-    DiskImage(DiskImageData& data);
-    ~DiskImage();
+    BlockDiskImage();
+    BlockDiskImage(string path);
+    BlockDiskImage(DiskImageData& data);
+    ~BlockDiskImage();
     
     bool open(string path);
     bool open(DiskImageData& data);
@@ -61,11 +61,27 @@ public:
     bool setProperty(string name, string value);
     bool getProperty(string name, string& value);
     
-    bool setBlock(unsigned long offset, DiskImageData& data);
-    bool getBlock(unsigned long offset, DiskImageData& data);
+    bool read(unsigned long offset, DiskImageData& data);
+    bool write(unsigned long offset, DiskImageData& data);
+};
+
+class BitDiskImage
+{
+public:
+    BitDiskImage();
+    BitDiskImage(string path);
+    BitDiskImage(DiskImageData& data);
+    ~BitDiskImage();
     
-    bool setRawTrack(int track, int head, DiskImagePhysicalTrack& data);
-    bool getRawTrack(int track, int head, DiskImagePhysicalTrack& data);
+    bool open(string path);
+    bool open(DiskImageData& data);
+    void close();
+    
+    bool setProperty(string name, string value);
+    bool getProperty(string name, string& value);
+    
+    bool read(int track, int head, DiskImageBitData& data);
+    bool write(int track, int head, DiskImageBitData& data);
 };
 
 #endif

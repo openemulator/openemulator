@@ -14,7 +14,7 @@
 #include "CanvasInterface.h"
 #include "StorageInterface.h"
 
-#include "diskimage.h"
+#define APPLEII_CLOCKFREQUENCY   1020484.3202
 
 typedef enum
 {
@@ -113,19 +113,15 @@ typedef enum
     APPLEII_AN3_DID_CHANGE,
 } AppleIIGamePortNotification;
 
-typedef struct
-{
-    int trackIndex;
-    
-    DiskImagePhysicalTrack track;
-} AppleIIDiskTrack;
-
 typedef enum
 {
     APPLEII_ASSERT_DRIVEENABLE = STORAGE_END,
     APPLEII_CLEAR_DRIVEENABLE,
-    APPLEII_SET_PHASE,
+    APPLEII_ASSERT_WRITEREQUEST,
+    APPLEII_CLEAR_WRITEREQUEST,
+    APPLEII_SET_PHASECONTROL,
     APPLEII_IS_WRITE_PROTECTED,
+    APPLEII_SKIP_DATA,
 } AppleIIDiskDriveMessage;
 
 #endif

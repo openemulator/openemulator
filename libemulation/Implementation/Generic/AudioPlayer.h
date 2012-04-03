@@ -41,6 +41,6 @@ private:
     OESound loadedSound;
     
     int srcChannelNum;
-    SRC_STATE *src;
+    SRC_STATE *srcState;
     bool srcEndOfInput;
 };

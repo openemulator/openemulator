@@ -13,27 +13,52 @@
 #include "AppleIIInterface.h"
 #include "ControlBusInterface.h"
 
+#define SEQUENCER_LOAD      (1 << 0)
+#define SEQUENCER_WRITE     (1 << 1)
+
+#define SEQUENCER_SKIP      (8 * 64)
+
+typedef enum
+{
+    SEQUENCER_READSHIFT,
+    SEQUENCER_READLOAD,
+    SEQUENCER_WRITESHIFT,
+    SEQUENCER_WRITELOAD,
+} SequencerMode;
+
 AppleDiskIIInterfaceCard::AppleDiskIIInterfaceCard()
 {
 	controlBus = NULL;
     drive[0] = &dummyDrive;
     drive[1] = &dummyDrive;
     
-    phase = 0;
+    phaseControl = 0;
     driveSel = 0;
     driveOn = false;
     
     currentDrive = &dummyDrive;
+    reset = false;
+    timerOn = false;
+    
+    driveEnableControl = false;
+    writeRequest = false;
+    lastCycles = 0;
 }
 
 bool AppleDiskIIInterfaceCard::setValue(string name, string value)
 {
-	if (name == "phase")
-		phase = (OEUInt32) getUInt(value);
-	else if (name == "driveSel")
-		driveSel = (OEUInt32) getUInt(value);
+	if (name == "phaseControl")
+		phaseControl = (OEUInt32) getUInt(value);
 	else if (name == "driveOn")
 		driveOn = (OEUInt32) getUInt(value);
+	else if (name == "driveSel")
+		driveSel = (OEUInt32) getUInt(value);
+	else if (name == "sequencerMode")
+		sequencerMode = (OEUInt32) getUInt(value);
+	else if (name == "sequencerState")
+		sequencerState = (OEUInt32) getUInt(value);
+	else if (name == "dataRegister")
+		dataRegister = (OEUInt8) getUInt(value);
 	else
 		return false;
     
@@ -42,12 +67,18 @@ bool AppleDiskIIInterfaceCard::setValue(string name, string value)
 
 bool AppleDiskIIInterfaceCard::getValue(string name, string& value)
 {
-	if (name == "phase")
-		value = getString(phase);
-	else if (name == "driveSel")
-		value = getString(driveSel);
+	if (name == "phaseControl")
+		value = getString(phaseControl);
 	else if (name == "driveOn")
 		value = getString(driveOn);
+	else if (name == "driveSel")
+		value = getString(driveSel);
+	else if (name == "sequencerMode")
+		value = getString(sequencerMode);
+	else if (name == "sequencerState")
+		value = getString(sequencerState);
+	else if (name == "dataRegister")
+		value = getString(dataRegister);
 	else
 		return false;
 	
@@ -72,6 +103,8 @@ bool AppleDiskIIInterfaceCard::setRef(string name, OEComponent *ref)
             controlBus->addObserver(this, CONTROLBUS_POWERSTATE_DID_CHANGE);
         }
     }
+    else if (name == "floatingBus")
+        floatingBus = ref;
 	else if (name == "drive1")
 		drive[0] = ref ? ref : &dummyDrive;
 	else if (name == "drive2")
@@ -84,6 +117,20 @@ bool AppleDiskIIInterfaceCard::setRef(string name, OEComponent *ref)
 
 bool AppleDiskIIInterfaceCard::init()
 {
+    if (!controlBus)
+    {
+        logMessage("controlBus not connected");
+        
+        return false;
+    }
+    
+    if (!floatingBus)
+    {
+        logMessage("floatingBus not connected");
+        
+        return false;
+    }
+    
     update();
     
     return true;
@@ -108,12 +155,14 @@ void AppleDiskIIInterfaceCard::notify(OEComponent *sender, int notification, voi
         case CONTROLBUS_RESET_DID_ASSERT:
             reset = true;
             
-            setPhase(0, false);
-            setPhase(1, false);
-            setPhase(2, false);
-            setPhase(3, false);
+            setPhaseControl(0, false);
+            setPhaseControl(1, false);
+            setPhaseControl(2, false);
+            setPhaseControl(3, false);
             setDriveOn(false);
             setDriveSel(0);
+            setSequencerLoad(false);
+            setSequencerWrite(false);
             
             break;
             
@@ -124,37 +173,41 @@ void AppleDiskIIInterfaceCard::notify(OEComponent *sender, int notification, voi
             
         case CONTROLBUS_POWERSTATE_DID_CHANGE:
             if (*((ControlBusPowerState *)data) != CONTROLBUS_POWERSTATE_ON)
+            {
+                driveOn = false;
                 timerOn = false;
-            else
-                timerOn = driveOn;
-                
+            }
+            
             break;
     }
     
-    updateDriveOn();
+    updateDriveEnableControl();
 }
 
 OEUInt8 AppleDiskIIInterfaceCard::read(OEAddress address)
 {
+    if (driveEnableControl)
+        updateSequencer(getQ3CyclesSinceLastUpdate() - 2, 0);
+    
     switch (address & 0xf)
     {
         case 0x0: case 0x1:
-            setPhase(0, address & 0x1);
+            setPhaseControl(0, address & 0x1);
             
             break;
             
         case 0x2: case 0x3:
-            setPhase(1, address & 0x1);
+            setPhaseControl(1, address & 0x1);
             
             break;
             
         case 0x4: case 0x5:
-            setPhase(2, address & 0x1);
+            setPhaseControl(2, address & 0x1);
             
             break;
             
         case 0x6: case 0x7:
-            setPhase(3, address & 0x1);
+            setPhaseControl(3, address & 0x1);
             
             break;
             
@@ -169,40 +222,48 @@ OEUInt8 AppleDiskIIInterfaceCard::read(OEAddress address)
             break;
             
         case 0xc: case 0xd:
-            setSequencer(false, address & 0x1);
+            setSequencerWrite(address & 0x1);
             
             break;
             
         case 0xe: case 0xf:
-            setSequencer(true, address & 0x1);
+            setSequencerLoad(address & 0x1);
             
             break;
     }
     
-    return 0;
+    updateSequencer(2, 0);
+    
+    if (driveEnableControl && !(address & 0x1))
+        return dataRegister;
+    else
+        return floatingBus->read(address);
 }
 
 void AppleDiskIIInterfaceCard::write(OEAddress address, OEUInt8 value)
 {
+    if (driveEnableControl)
+        updateSequencer(getQ3CyclesSinceLastUpdate() - 2, value);
+    
     switch (address & 0xf)
     {
         case 0x0: case 0x1:
-            setPhase(0, address & 0x1);
+            setPhaseControl(0, address & 0x1);
             
             break;
             
         case 0x2: case 0x3:
-            setPhase(1, address & 0x1);
+            setPhaseControl(1, address & 0x1);
             
             break;
             
         case 0x4: case 0x5:
-            setPhase(2, address & 0x1);
+            setPhaseControl(2, address & 0x1);
             
             break;
             
         case 0x6: case 0x7:
-            setPhase(3, address & 0x1);
+            setPhaseControl(3, address & 0x1);
             
             break;
             
@@ -217,22 +278,33 @@ void AppleDiskIIInterfaceCard::write(OEAddress address, OEUInt8 value)
             break;
             
         case 0xc: case 0xd:
-            setSequencer(false, address & 0x1);
+            setSequencerWrite(address & 0x1);
             
             break;
             
         case 0xe: case 0xf:
-            setSequencer(true, address & 0x1);
+            setSequencerLoad(address & 0x1);
             
             break;
     }
+    
+    if (driveEnableControl)
+        updateSequencer(2, value);
 }
 
-void AppleDiskIIInterfaceCard::setPhase(OEUInt32 index, bool value)
+void AppleDiskIIInterfaceCard::setPhaseControl(OEUInt32 index, bool value)
 {
-    OESetBit(phase, 1 << index, value);
+    OEUInt32 lastPhaseControl = phaseControl;
     
-    currentDrive->postMessage(this, APPLEII_SET_PHASE, &phase);
+    OESetBit(phaseControl, 1 << index, value);
+    
+    if ((lastPhaseControl != phaseControl) && driveEnableControl)
+        updatePhaseControl();
+}
+
+void AppleDiskIIInterfaceCard::updatePhaseControl()
+{
+    currentDrive->postMessage(this, APPLEII_SET_PHASECONTROL, &phaseControl);
 }
 
 void AppleDiskIIInterfaceCard::setDriveOn(bool value)
@@ -242,29 +314,45 @@ void AppleDiskIIInterfaceCard::setDriveOn(bool value)
     
     driveOn = value;
     
-    controlBus->postMessage(this, CONTROLBUS_INVALIDATE_TIMERS, NULL);
+    if (timerOn)
+    {
+        controlBus->postMessage(this, CONTROLBUS_INVALIDATE_TIMERS, NULL);
+        
+        timerOn = false;
+    }
     
     if (driveOn)
-    {
-        timerOn = true;
-        
-        updateDriveOn();
-    }
+        controlBus->postMessage(this, CONTROLBUS_GET_CYCLES, &lastCycles);
     else
     {
-        OEUInt64 cycles = 1000000;
+        OEUInt64 cycles = 1.0 * APPLEII_CLOCKFREQUENCY;
         
         controlBus->postMessage(this, CONTROLBUS_SCHEDULE_TIMER, &cycles);
+        
+        timerOn = true;
     }
+    
+    updateDriveEnableControl();
 }
 
-void AppleDiskIIInterfaceCard::updateDriveOn()
+void AppleDiskIIInterfaceCard::updateDriveEnableControl()
 {
-    bool motorOn = !reset && timerOn;
+    bool wasDriveEnableControl = driveEnableControl;
     
-    currentDrive->postMessage(this, motorOn ?
+    driveEnableControl = (driveOn || timerOn) && !reset;
+    
+    if (driveEnableControl != wasDriveEnableControl)
+        updateDriveEnabled();
+}
+
+void AppleDiskIIInterfaceCard::updateDriveEnabled()
+{
+    currentDrive->postMessage(this, driveEnableControl ?
                               APPLEII_ASSERT_DRIVEENABLE :
                               APPLEII_CLEAR_DRIVEENABLE, NULL);
+    currentDrive->postMessage(this, writeRequest ?
+                              APPLEII_ASSERT_WRITEREQUEST :
+                              APPLEII_CLEAR_WRITEREQUEST, NULL);
 }
 
 void AppleDiskIIInterfaceCard::setDriveSel(OEUInt32 value)
@@ -277,17 +365,164 @@ void AppleDiskIIInterfaceCard::setDriveSel(OEUInt32 value)
 
 void AppleDiskIIInterfaceCard::updateDriveSel(OEUInt32 value)
 {
-    if (driveOn)
-        currentDrive->postMessage(this, APPLEII_CLEAR_DRIVEENABLE, NULL);
-    
     driveSel = value;
+    
+    OEComponent *lastDrive = currentDrive;
     currentDrive = drive[driveSel];
     
-    currentDrive->postMessage(this, APPLEII_SET_PHASE, &phase);
-    currentDrive->postMessage(this, driveOn ? APPLEII_ASSERT_DRIVEENABLE :
-                              APPLEII_CLEAR_DRIVEENABLE, NULL);
+    if (lastDrive == currentDrive)
+        return;
+    
+    if (driveEnableControl)
+        lastDrive->postMessage(this, APPLEII_CLEAR_DRIVEENABLE, NULL);
+    if (writeRequest)
+        lastDrive->postMessage(this, APPLEII_CLEAR_WRITEREQUEST, NULL);
+    
+    updatePhaseControl();
+    updateDriveEnabled();
+    updateWriteRequest();
 }
 
-void AppleDiskIIInterfaceCard::setSequencer(bool shift, bool value)
+void AppleDiskIIInterfaceCard::setSequencerWrite(bool value)
 {
+    if (writeRequest == value)
+        return;
+    
+    OESetBit(sequencerMode, SEQUENCER_WRITE, value);
+    
+    writeRequest = value;
+    
+    if (driveEnableControl)
+        updateWriteRequest();
+}
+
+void AppleDiskIIInterfaceCard::setSequencerLoad(bool value)
+{
+    OESetBit(sequencerMode, SEQUENCER_LOAD, value);
+}
+
+void AppleDiskIIInterfaceCard::updateWriteRequest()
+{
+    currentDrive->postMessage(this, writeRequest ?
+                              APPLEII_ASSERT_WRITEREQUEST : APPLEII_CLEAR_WRITEREQUEST,
+                              NULL);
+}
+
+OEUInt64 AppleDiskIIInterfaceCard::getQ3CyclesSinceLastUpdate()
+{
+    OEUInt64 cycles;
+    
+    controlBus->postMessage(this, CONTROLBUS_GET_CYCLES, &cycles);
+    
+    OEUInt64 q3Cycles = (cycles - lastCycles) << 1;
+    lastCycles = cycles;
+    
+    return q3Cycles;
+}
+
+void AppleDiskIIInterfaceCard::updateSequencer(OEUInt64 q3Cycles, OEUInt8 value)
+{
+	switch (sequencerMode)
+    {
+		case SEQUENCER_READSHIFT:
+        {
+/*            if (q3Cycles > SEQUENCER_SKIP)
+            {
+                q3Cycles -= SEQUENCER_SKIP;
+                
+                OEUInt64 skippedBitNum = (q3Cycles >> 3);
+                currentDrive->postMessage(this, APPLEII_SKIP_DATA, &skippedBitNum);
+                
+                q3Cycles = SEQUENCER_SKIP;
+            }*/
+            
+            OEUInt64 bitNum = (q3Cycles + (sequencerState & 0x7)) >> 3;
+            
+			while (bitNum--)
+            {
+                bool bit = currentDrive->read(0);
+                
+                // Is QA set?
+                if (dataRegister & 0x80)
+                {
+                    // Did we receive a new bit after QA was set?
+                    if (sequencerState & 0x8)
+                    {
+                        sequencerState &= 0x7;
+                        
+                        dataRegister = 0x1;
+                    }
+                    else
+                    {
+                        // We did not receive a new bit after QA was set
+                        // Is it arriving now?
+                        if (bit)
+                            sequencerState |= 0x8;
+                        
+                        continue;
+                    }
+                }
+                
+                dataRegister <<= 1;
+                dataRegister |= bit;
+			}
+            
+            sequencerState &= 0x8;
+            sequencerState |= q3Cycles & 0x7;
+            
+			break;
+        }
+            
+		case SEQUENCER_READLOAD:
+        {
+            bool isWriteProtected;
+            
+            currentDrive->postMessage(this, APPLEII_IS_WRITE_PROTECTED, &isWriteProtected);
+            
+            if (q3Cycles > 8)
+                q3Cycles = 8;
+            
+            dataRegister >>= q3Cycles;
+            
+            if (isWriteProtected)
+            {
+                const OEUInt8 bits[] =
+                {
+                    0x00, 0x80, 0xc0, 0xe0, 0xf0, 0xf8, 0xfc, 0xfe, 0xff
+                };
+                
+                dataRegister |= bits[q3Cycles];
+            }
+            
+            sequencerState = 0;
+            
+			break;
+		}
+            
+        case SEQUENCER_WRITESHIFT:
+        {
+            OEUInt64 bitNum = (q3Cycles + sequencerState) >> 3;
+            
+			while (bitNum--)
+            {
+                bool bit = dataRegister & 0x80;
+                currentDrive->write(0, bit);
+                
+                dataRegister <<= 1;
+            }
+            
+            sequencerState = q3Cycles & 0x7;
+            
+            break;
+        }
+            
+		case SEQUENCER_WRITELOAD:
+            sequencerState += q3Cycles;
+            sequencerState &= 0x7;
+            
+            if (sequencerState == 2)
+                dataRegister = value;
+            
+			break;
+	}
 }

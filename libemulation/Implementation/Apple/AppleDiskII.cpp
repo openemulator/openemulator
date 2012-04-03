@@ -8,6 +8,15 @@
  * Controls an Apple Disk II drive
  */
 
+/**
+ * Floppy Disk Drive Notes
+ *
+ * A floppy disk drive has a head stepper motor with 4 discretely controlled
+ * magnetic phases. Of the 16 possible head phase states, 12 map to 8 net
+ * phase vectors, 3 to undefined behaviour, and one to the off state.
+ * The stepper motor has an inertial time constant of approx. 2 ms.
+ */
+
 #include "AppleDiskII.h"
 
 #include "DeviceInterface.h"
@@ -26,6 +35,8 @@ bool AppleDiskII::setValue(string name, string value)
 {
 	if (name == "image")
 		diskImage = value;
+    else if (name == "track")
+        trackIndex = (OEUInt32) getUInt(value);
 	else if (name == "forceWriteProtected")
 		forceWriteProtected = (OEUInt32) getUInt(value);
 	else if (name == "mechanism")
@@ -42,6 +53,8 @@ bool AppleDiskII::getValue(string name, string& value)
 {
 	if (name == "image")
 		value = diskImage;
+	else if (name == "track")
+		value = getString(trackIndex);
 	else if (name == "forceWriteProtected")
 		value = getString(forceWriteProtected);
 	else if (name == "mechanism")
@@ -81,7 +94,14 @@ bool AppleDiskII::init()
 		return false;
 	}
     
+    updateSound();
+    
 	return true;
+}
+
+void AppleDiskII::update()
+{
+    updateSound();
 }
 
 bool AppleDiskII::postMessage(OEComponent *sender, int message, void *data)
@@ -92,6 +112,7 @@ bool AppleDiskII::postMessage(OEComponent *sender, int message, void *data)
 			return !diskImage.size();
 			
 		case STORAGE_CAN_MOUNT:
+            // To-Do: check image compatibility
 			return true;
 			
 		case STORAGE_MOUNT:
@@ -124,8 +145,8 @@ bool AppleDiskII::postMessage(OEComponent *sender, int message, void *data)
 			
 		case STORAGE_GET_FORMATLABEL:
         {
-            string *value = (string *)data;
-            *value = "16 sectors, 35 tracks, read-only";
+            // To-Do: build label
+            *((string *)data) = "16 sectors, 35 tracks, read-write";
             
             return true;
         }
@@ -157,13 +178,11 @@ bool AppleDiskII::postMessage(OEComponent *sender, int message, void *data)
             
             return true;
         }
+            
         case APPLEII_ASSERT_DRIVEENABLE:
         {
             if (drivePlayer)
-            {
-                drivePlayer->postMessage(this, AUDIOPLAYER_SET_SOUND, &sound["AlpsDrive"]);
                 drivePlayer->postMessage(this, AUDIOPLAYER_PLAY, NULL);
-            }
             
             string image = "images/Apple/Apple Disk II In Use.png";
             device->postMessage(this, DEVICE_SET_IMAGEPATH, &image);
@@ -171,10 +190,106 @@ bool AppleDiskII::postMessage(OEComponent *sender, int message, void *data)
             
             return true;
         }
+            
+        case APPLEII_SET_PHASECONTROL:
+            setPhaseControl(*((OEUInt32 *)data));
+            
+            return true;
+            
         case APPLEII_IS_WRITE_PROTECTED:
+            *((bool *)data) = isWriteProtected;
             
             return true;
 	}
 	
 	return false;
+}
+
+void AppleDiskII::updateSound()
+{
+    OESound *drivePlayerSound = NULL;
+    OESound *headPlayerSound = NULL;
+    
+    if (sound.count(mechanism + "Drive"))
+        drivePlayerSound = &sound[mechanism + "Drive"];
+    if (sound.count(mechanism + "Head"))
+        headPlayerSound = &sound[mechanism + "Head"];
+    
+    if (drivePlayer)
+        drivePlayer->postMessage(this, AUDIOPLAYER_SET_SOUND, drivePlayerSound);
+    if (headPlayer)
+        headPlayer->postMessage(this, AUDIOPLAYER_SET_SOUND, headPlayerSound);
+}
+
+void AppleDiskII::setPhaseControl(OEUInt32 value)
+{
+    phaseControl = value;
+    
+	OEUInt32 currentPhase = trackIndex & 0x7;
+	OEUInt32 nextPhase;
+	
+	switch (phaseControl) {
+		case 0x1: case 0xb:
+			nextPhase = 0;
+            
+			break;
+            
+		case 0x3:
+			nextPhase = 1;
+            
+			break;
+            
+		case 0x2: case 0x7:
+			nextPhase = 2;
+            
+			break;
+            
+		case 0x6:
+			nextPhase = 3;
+            
+			break;
+            
+		case 0x4: case 0xe:
+			nextPhase = 4;
+            
+			break;
+            
+		case 0xc:
+			nextPhase = 5;
+            
+			break;
+            
+		case 0x8: case 0xd:
+			nextPhase = 6;
+            
+			break;
+            
+		case 0x9:
+			nextPhase = 7;
+            
+			break;
+            
+		case 0x0: case 0x5: case 0xa: case 0xf:
+			nextPhase = currentPhase;
+            
+			break;
+	}
+	
+	OEInt32 trackDelta = ((nextPhase - currentPhase + 4) & 0x7) - 4;
+	trackIndex += trackDelta;
+	
+	if (trackIndex < 0)
+    {
+		trackIndex = 0;
+        
+        headPlayer->postMessage(this, AUDIOPLAYER_STOP, NULL);
+        headPlayer->postMessage(this, AUDIOPLAYER_PLAY, NULL);
+	}
+    else if (trackIndex > 39)
+    {
+		trackIndex = 39;
+        
+        headPlayer->postMessage(this, AUDIOPLAYER_STOP, NULL);
+        headPlayer->postMessage(this, AUDIOPLAYER_PLAY, NULL);
+	}
 }

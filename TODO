@@ -1,11 +1,11 @@
 ==1.0.3==
-* Implement AppleIISlotMemory and AppleIISlotExpansionMemory
 * Implement Apple Language Card
+* Implement AppleIISlotMemory and AppleIISlotExpansionMemory
 * Implement Apple Graphics Tablet
 * Fix [CanvasView update] problem in paper view
 * Implement Apple Silentype
 
-* Fix replace monitor+emulation lock problem
+* Fix replace monitor+emulation lock problem (happens when a monitor is replaced and selected)
 * Fix CTRL+ALT mouse capture
 * Refactorize PAAudio, so an emulation is stopped while it is being configured. Also increase thread priority
 * Remove AppleIIFloatingBus, remove second AddressDecoder, add AppleIIIO ($C050-$C057) and integrate with AppleIIGamePort (?)

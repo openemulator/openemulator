@@ -28,22 +28,37 @@ public:
     
 private:
 	OEComponent *controlBus;
+    OEComponent *floatingBus;
 	OEComponent *drive[2];
     
-    OEUInt32 phase;
-    OEUInt32 driveSel;
+    OEUInt32 phaseControl;
     bool driveOn;
+    OEUInt32 driveSel;
+    OEUInt32 sequencerMode;
     
-    OEComponent *currentDrive;
-    bool reset;
-    bool timerOn;
+    OEUInt32 sequencerState;
+    OEUInt8 dataRegister;
     
     OEComponent dummyDrive;
+    OEComponent *currentDrive;
+    bool timerOn;
+    bool reset;
     
-    void setPhase(OEUInt32 index, bool value);
+    bool driveEnableControl;
+    bool writeRequest;
+    
+    OEUInt64 lastCycles;
+    
+    void setPhaseControl(OEUInt32 index, bool value);
+    void updatePhaseControl();
     void setDriveOn(bool value);
-    void updateDriveOn();
+    void updateDriveEnableControl();
+    void updateDriveEnabled();
     void setDriveSel(OEUInt32 value);
     void updateDriveSel(OEUInt32 value);
-    void setSequencer(bool shift, bool value);
+    void setSequencerWrite(bool value);
+    void setSequencerLoad(bool value);
+    void updateWriteRequest();
+    OEUInt64 getQ3CyclesSinceLastUpdate();
+    void updateSequencer(OEUInt64 q3Cycles, OEUInt8 value);
 };

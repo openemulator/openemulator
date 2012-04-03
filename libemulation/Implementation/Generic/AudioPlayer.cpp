@@ -27,7 +27,7 @@ AudioPlayer::AudioPlayer()
     sound = NULL;
     
     srcChannelNum = 0;
-    src = NULL;
+    srcState = NULL;
     srcEndOfInput = false;
 }
 
@@ -114,8 +114,15 @@ bool AudioPlayer::postMessage(OEComponent *sender, int message, void *data)
             
             break;
             
-        case AUDIOPLAYER_SET_SOUND:
+        case AUDIOPLAYER_STOP:
+            frameIndex = 0;
             playing = false;
+            
+            src_reset(srcState);
+            
+            break;
+            
+        case AUDIOPLAYER_SET_SOUND:
             sound = (OESound *)data;
             
             return true;
@@ -127,6 +134,11 @@ bool AudioPlayer::postMessage(OEComponent *sender, int message, void *data)
             
         case AUDIOPLAYER_SET_VOLUME:
             volume = *((float *)data);
+            
+            return true;
+            
+        case AUDIOPLAYER_IS_PLAYING:
+            *((bool *)data) = playing;
             
             return true;
     }
@@ -148,15 +160,18 @@ void AudioPlayer::notify(OEComponent *sender, int notification, void *data)
     {
         int error;
         
-        if (src)
-            src_delete(src);
+        if (srcState)
+            src_delete(srcState);
         
-        src = src_new(SRC_SINC_FASTEST, sound->getChannelNum(), &error);
+        srcState = src_new(SRC_SINC_FASTEST, sound->getChannelNum(), &error);
         srcChannelNum = sound->getChannelNum();
     }
     
-    if (!src)
+    if (!srcState)
         return;
+    
+    if (frameIndex > sound->getFrameNum())
+        frameIndex = sound->getFrameNum();
     
     vector<float> output;
     output.resize(buffer->frameNum * srcChannelNum);
@@ -175,7 +190,17 @@ void AudioPlayer::notify(OEComponent *sender, int notification, void *data)
             buffer->sampleRate / sound->getSampleRate(),
         };
         
-        src_process(src, &srcData);
+        if (srcData.src_ratio != 1.0)
+            src_process(srcState, &srcData);
+        else
+        {
+            srcData.input_frames_used = ((srcData.input_frames < srcData.output_frames) ?
+                                         srcData.input_frames : srcData.output_frames);
+            srcData.output_frames_gen = srcData.input_frames_used;
+            
+            memcpy(srcData.data_out, srcData.data_in,
+                   srcData.input_frames_used * srcChannelNum * sizeof(float));
+        }
         
         frameIndex += srcData.input_frames_used;
         outputFrameIndex += srcData.output_frames_gen;

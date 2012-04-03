@@ -24,6 +24,8 @@
         <property name="videoVerticalCenter" value="0"/>
         <property name="videoVerticalSize" value="1.05"/>
         <property name="videoBandwidth" value="6000000"/>
+        <property name="displayResolutionX" value="640"/>
+        <property name="displayResolutionY" value="480"/>
         <property name="displayBarrel" value="0.1"/>
         <property name="displayScanlineLevel" value="0.5"/>
         <property name="displayCenterLighting" value="0.5"/>
