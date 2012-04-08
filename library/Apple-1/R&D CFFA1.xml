@@ -14,16 +14,16 @@
         <property name="ram" ref="rdCFFA1.ram"/>
         <property name="rom" ref="rdCFFA1.rom"/>
         <property name="memoryBus" ref=""/>
-        <property name="image" value=""/>
+        <property name="diskImage" value=""/>
         <property name="forceWriteProtected" value="0"/>
     </component>
     <component id="rdCFFA1.ram" class="RAM">
         <property name="controlBus" ref=""/>
-        <property name="image" data="${packagePath}/${id}.bin"/>
+        <property name="memoryImage" data="${packagePath}/${id}.bin"/>
         <property name="size" value="0x8000"/>
     </component>
     <component id="rdCFFA1.rom" class="ROM">
-        <property name="image" data="${resourcePath}/roms/R&amp;D/CFFA1V1.0.bin"/>
+        <property name="memoryImage" data="${resourcePath}/roms/R&amp;D/CFFA1V1.0.bin"/>
     </component>
     
 </edl>

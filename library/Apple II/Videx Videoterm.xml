@@ -9,7 +9,7 @@
     <connector id="videxVideoterm.connector" type="Apple II Slot"/>
     <component id="videxVideoterm.io" class="FloatingBus"/>
     <component id="videxVideoterm.memory" class="ROM">
-        <property name="image" data="${resourcePath}/roms/Videx/Videx Videoterm 2.4 ROM.bin"/>
+        <property name="memoryImage" data="${resourcePath}/roms/Videx/Videx Videoterm 2.4 ROM.bin"/>
     </component>
     
 </edl>

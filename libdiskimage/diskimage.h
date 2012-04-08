@@ -5,83 +5,39 @@
  * (C) 2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements an emulation disk image library
+ * Emulation disk image library
  */
 
 /*
- * Standard properties:
+ * Common properties:
  *
- * sectorsPerTrack
- * trackNum
- * headNum
- * readonly
- * lockSupported
- * description
- * creator
+ *   readOnly
  *
- * Apple II properties:
- * 
+ * Block Disk Image properties:
+ *
+ *   imageSize (in bytes)
+ *
+ * Bit Disk Image properties:
+ *
+ *   diskSize (can be 8", 5.25", 3.5", 3")
+ *   trackNum
+ *   headNum
+ *   rotationSpeed (in RPM)
+ *   tracksPerInch
+ *
+ * System specific properties:
+ *   gcrVolume (Apple II)
+ *   gcrFormat (Apple II)
  */
 
 // Ideas:
-// * Data is always opened track by track, except for FDI files
+// * BlockDiskImages are meant for block devies.
+//   They are accessed on the fly.
+// * BitDiskImages are meant for streaming devices.
+//   They are 
 // * When writing a dsk file and not every sector is recognized,
 //   the original file is automatically closed, and an .fdi file
 //   is created instead
-// * When an FDI file is opened or created, everything is loaded
-//   to memory
 
-#ifndef _FLOPPYDISK_H
-#define _FLOPPYDISK_H
-
-#include <vector>
-
-using namespace std;
-
-typedef vector<unsigned char> DiskImageData;
-
-typedef struct
-{
-    DiskImageData data;
-    int bitnum;
-} DiskImageBitData;
-
-class BlockDiskImage
-{
-public:
-    BlockDiskImage();
-    BlockDiskImage(string path);
-    BlockDiskImage(DiskImageData& data);
-    ~BlockDiskImage();
-    
-    bool open(string path);
-    bool open(DiskImageData& data);
-    void close();
-    
-    bool setProperty(string name, string value);
-    bool getProperty(string name, string& value);
-    
-    bool read(unsigned long offset, DiskImageData& data);
-    bool write(unsigned long offset, DiskImageData& data);
-};
-
-class BitDiskImage
-{
-public:
-    BitDiskImage();
-    BitDiskImage(string path);
-    BitDiskImage(DiskImageData& data);
-    ~BitDiskImage();
-    
-    bool open(string path);
-    bool open(DiskImageData& data);
-    void close();
-    
-    bool setProperty(string name, string value);
-    bool getProperty(string name, string& value);
-    
-    bool read(int track, int head, DiskImageBitData& data);
-    bool write(int track, int head, DiskImageBitData& data);
-};
-
-#endif
+#include "BlockDiskImage.h"
+#include "BitDiskImage.h"

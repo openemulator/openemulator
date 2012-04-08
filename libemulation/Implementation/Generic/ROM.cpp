@@ -12,7 +12,7 @@
 
 bool ROM::setData(string name, OEData *data)
 {
-    if (name == "image")
+    if (name == "memoryImage")
         data->swap(this->data);
     else
         return false;
@@ -22,7 +22,7 @@ bool ROM::setData(string name, OEData *data)
 
 bool ROM::getData(string name, OEData **data)
 {
-    if (name == "image")
+    if (name == "memoryImage")
         *data = &this->data;
     else
         return false;

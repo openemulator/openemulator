@@ -60,7 +60,7 @@
     </component>
     <component id="aONE.ram" class="RAM">
         <property name="controlBus" ref="aONE.controlBus"/>
-        <property name="image" data="${packagePath}/${id}.bin"/>
+        <property name="memoryImage" data="${packagePath}/${id}.bin"/>
         <property name="size" value="0x8000"/>
     </component>
     <component id="aONE.ioMemory" class="AddressDecoder">
@@ -95,7 +95,7 @@
     </component>
     <component id="aONE.terminalRAM" class="RAM">
         <property name="controlBus" ref="aONE.controlBus"/>
-        <property name="image" data="${packagePath}/${id}.bin"/>
+        <property name="memoryImage" data="${packagePath}/${id}.bin"/>
         <property name="size" value="1024"/>
         <property name="powerOnPattern" value="0x2B2020202020202020204150504C4520312020202020202020412D4F4E452020202020202020202B20202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020204F726967696E616C204170706C6520312064657369676E3A20202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020537465766520576F7A6E69616B2020203139373520202020202020202020202020202020202020207777772E776F7A2E6F726720202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020412D4F6E652068617264776172652064657369676E3A2020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020204672616E7A2041636861747A202020203230303620202020202020202020202020202020202020207777772E61636861747A2E6E6C2020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020566964656F20636F6E74726F6C6C657220736F6674776172653A202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202053616E20426572676D616E73202020203230303620202020202020202020202020202020202020207777772E736270726F6A656374732E636F6D2020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020204B6579626F61726420636F6E74726F6C6C657220736F6674776172653A202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202042656E205A696A6C73747261202020203230303620202020202020202020202020202020202020207777772E62656E73686F626279636F726E65722E6E6C20202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202B2020506C6561736520707265737320524553455420746F2067657420737461727465642E20202B"/>
     </component>
@@ -113,7 +113,7 @@
         <property name="font" data="${resourcePath}/roms/Achatz/A-ONE Video ROM.bin"/>
     </component>
     <component id="aONE.rom" class="ROM">
-        <property name="image" data="${resourcePath}/roms/Achatz/A-ONE ROM.bin"/>
+        <property name="memoryImage" data="${resourcePath}/roms/Achatz/A-ONE ROM.bin"/>
     </component>
     
     <device id="appleMonitorII" label="Apple Monitor II" image="images/Apple/Apple Monitor II.png">
@@ -167,7 +167,7 @@
         <property name="highFrequency" value="10000"/>
     </component>
     <component id="appleACI.rom" class="ROM">
-        <property name="image" data="${resourcePath}/roms/Apple/Apple-1 ACI ROM.bin"/>
+        <property name="memoryImage" data="${resourcePath}/roms/Apple/Apple-1 ACI ROM.bin"/>
     </component>
 
     <device id="rdCFFA1" label="R&amp;D CFFA1" image="images/R&amp;D/R&amp;D CFFA1.png">
@@ -182,16 +182,16 @@
         <property name="ram" ref="rdCFFA1.ram"/>
         <property name="rom" ref="rdCFFA1.rom"/>
         <property name="memoryBus" ref="aONE.memoryBus"/>
-        <property name="image" value=""/>
+        <property name="diskImage" value=""/>
         <property name="forceWriteProtected" value="0"/>
     </component>
     <component id="rdCFFA1.ram" class="RAM">
         <property name="controlBus" ref="aONE.controlBus"/>
-        <property name="image" data="${packagePath}/${id}.bin"/>
+        <property name="memoryImage" data="${packagePath}/${id}.bin"/>
         <property name="size" value="0x8000"/>
     </component>
     <component id="rdCFFA1.rom" class="ROM">
-        <property name="image" data="${resourcePath}/roms/R&amp;D/CFFA1V1.0.bin"/>
+        <property name="memoryImage" data="${resourcePath}/roms/R&amp;D/CFFA1V1.0.bin"/>
     </component>
     
 </edl>

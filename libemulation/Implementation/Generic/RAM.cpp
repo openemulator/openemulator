@@ -50,7 +50,7 @@ bool RAM::setRef(string name, OEComponent *ref)
 
 bool RAM::setData(string name, OEData *data)
 {
-    if (name == "image")
+    if (name == "memoryImage")
         data->swap(this->data);
     else
         return false;
@@ -60,7 +60,7 @@ bool RAM::setData(string name, OEData *data)
 
 bool RAM::getData(string name, OEData **data)
 {
-    if (name == "image")
+    if (name == "memoryImage")
     {
         if (powerState == CONTROLBUS_POWERSTATE_OFF)
             *data = NULL;

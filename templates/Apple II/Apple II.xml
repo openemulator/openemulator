@@ -117,19 +117,19 @@
     <component id="appleII.ram1" class="RAM">
         <property name="controlBus" ref="appleII.controlBus"/>
         <property name="size" value="0x4000"/>
-        <property name="image" data="${packagePath}/${id}.bin"/>
+        <property name="memoryImage" data="${packagePath}/${id}.bin"/>
         <property name="powerOnPattern" value="0xffff0000"/>
     </component>
     <component id="appleII.ram2" class="RAM">
         <property name="controlBus" ref="appleII.controlBus"/>
         <property name="size" value="0x4000"/>
-        <property name="image" data="${packagePath}/${id}.bin"/>
+        <property name="memoryImage" data="${packagePath}/${id}.bin"/>
         <property name="powerOnPattern" value="0xffff0000"/>
     </component>
     <component id="appleII.ram3" class="RAM">
         <property name="controlBus" ref="appleII.controlBus"/>
         <property name="size" value="0x4000"/>
-        <property name="image" data="${packagePath}/${id}.bin"/>
+        <property name="memoryImage" data="${packagePath}/${id}.bin"/>
         <property name="powerOnPattern" value="0xffff0000"/>
     </component>
     <component id="appleII.io" class="AddressDecoder">
@@ -217,19 +217,19 @@
         <property name="gamePort" ref="appleHandControllers.io"/>
     </component>
     <component id="appleII.romD0" class="ROM">
-        <property name="image" data="${resourcePath}/roms/Apple/341-0016-00.bin"/>
+        <property name="memoryImage" data="${resourcePath}/roms/Apple/341-0016-00.bin"/>
     </component>
     <component id="appleII.romE0" class="ROM">
-        <property name="image" data="${resourcePath}/roms/Apple/341-0001-00.bin"/>
+        <property name="memoryImage" data="${resourcePath}/roms/Apple/341-0001-00.bin"/>
     </component>
     <component id="appleII.romE8" class="ROM">
-        <property name="image" data="${resourcePath}/roms/Apple/341-0002-00.bin"/>
+        <property name="memoryImage" data="${resourcePath}/roms/Apple/341-0002-00.bin"/>
     </component>
     <component id="appleII.romF0" class="ROM">
-        <property name="image" data="${resourcePath}/roms/Apple/341-0003-00.bin"/>
+        <property name="memoryImage" data="${resourcePath}/roms/Apple/341-0003-00.bin"/>
     </component>
     <component id="appleII.romF8" class="ROM">
-        <property name="image" data="${resourcePath}/roms/Apple/341-0004-00.bin"/>
+        <property name="memoryImage" data="${resourcePath}/roms/Apple/341-0004-00.bin"/>
     </component>
     
     <device id="appleMonitorII" label="Apple Monitor II" image="images/Apple/Apple Monitor II.png">

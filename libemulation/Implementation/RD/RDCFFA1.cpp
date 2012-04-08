@@ -51,7 +51,7 @@ RDCFFA1::~RDCFFA1()
 
 bool RDCFFA1::setValue(string name, string value)
 {
-    if (name == "image")
+    if (name == "diskImage")
         openDiskImage(value);
     else if (name == "forceWriteProtected")
         forceWriteProtected = getInt(value);
@@ -63,7 +63,7 @@ bool RDCFFA1::setValue(string name, string value)
 
 bool RDCFFA1::getValue(string name, string& value)
 {
-    if (name == "image")
+    if (name == "diskImage")
         value = diskImage;
     else if (name == "forceWriteProtected")
         value = getString(forceWriteProtected);

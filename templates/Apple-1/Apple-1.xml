@@ -53,7 +53,7 @@
     </component>
     <component id="apple1.ram1" class="RAM">
         <property name="controlBus" ref="apple1.controlBus"/>
-        <property name="image" data="${packagePath}/${id}.bin"/>
+        <property name="memoryImage" data="${packagePath}/${id}.bin"/>
         <property name="size" value="0x1000"/>
     </component>
     <component id="apple1.ioMemory" class="AddressDecoder">
@@ -88,7 +88,7 @@
     </component>
     <component id="apple1.terminalRAM" class="RAM">
         <property name="controlBus" ref="apple1.controlBus"/>
-        <property name="image" data="${packagePath}/${id}.bin"/>
+        <property name="memoryImage" data="${packagePath}/${id}.bin"/>
         <property name="size" value="1024"/>
         <property name="powerOnPattern" value="0x20"/>
     </component>
@@ -104,11 +104,11 @@
     </component>
     <component id="apple1.ram2" class="RAM">
         <property name="controlBus" ref="apple1.controlBus"/>
-        <property name="image" data="${packagePath}/${id}.bin"/>
+        <property name="memoryImage" data="${packagePath}/${id}.bin"/>
         <property name="size" value="0x1000"/>
     </component>
     <component id="apple1.rom" class="ROM">
-        <property name="image" data="${resourcePath}/roms/Apple/Apple-1 Monitor ROM.bin"/>
+        <property name="memoryImage" data="${resourcePath}/roms/Apple/Apple-1 Monitor ROM.bin"/>
     </component>
     
     <device id="appleMonitorIII" label="Apple Monitor III" image="images/Apple/Apple Monitor III.png">
@@ -163,7 +163,7 @@
         <property name="highFrequency" value="10000"/>
     </component>
     <component id="appleACI.rom" class="ROM">
-        <property name="image" data="${resourcePath}/roms/Apple/Apple-1 ACI ROM.bin"/>
+        <property name="memoryImage" data="${resourcePath}/roms/Apple/Apple-1 ACI ROM.bin"/>
     </component>
 
     <device id="rdCFFA1" label="R&amp;D CFFA1" image="images/R&amp;D/R&amp;D CFFA1.png">
@@ -178,16 +178,16 @@
         <property name="ram" ref="rdCFFA1.ram"/>
         <property name="rom" ref="rdCFFA1.rom"/>
         <property name="memoryBus" ref="apple1.memoryBus"/>
-        <property name="image" value=""/>
+        <property name="diskImage" value=""/>
         <property name="forceWriteProtected" value="0"/>
     </component>
     <component id="rdCFFA1.ram" class="RAM">
         <property name="controlBus" ref="apple1.controlBus"/>
-        <property name="image" data="${packagePath}/${id}.bin"/>
+        <property name="memoryImage" data="${packagePath}/${id}.bin"/>
         <property name="size" value="0x8000"/>
     </component>
     <component id="rdCFFA1.rom" class="ROM">
-        <property name="image" data="${resourcePath}/roms/R&amp;D/CFFA1V1.0.bin"/>
+        <property name="memoryImage" data="${resourcePath}/roms/R&amp;D/CFFA1V1.0.bin"/>
     </component>
     
 </edl>

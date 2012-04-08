@@ -12,7 +12,7 @@
     <component id="appleLanguageCard.memory" class="RAM">
         <property name="host" ref="host"/>
         <property name="size" value="16384"/>
-        <property name="image" src="${packagePath}/${id}.bin"/>
+        <property name="memoryImage" src="${packagePath}/${id}.bin"/>
     </component>
     
 </edl>

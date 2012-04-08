@@ -116,19 +116,19 @@
     <component id="appleIIjplus.ram1" class="RAM">
         <property name="controlBus" ref="appleIIjplus.controlBus"/>
         <property name="size" value="0x4000"/>
-        <property name="image" data="${packagePath}/${id}.bin"/>
+        <property name="memoryImage" data="${packagePath}/${id}.bin"/>
         <property name="powerOnPattern" value="0xffff0000"/>
     </component>
     <component id="appleIIjplus.ram2" class="RAM">
         <property name="controlBus" ref="appleIIjplus.controlBus"/>
         <property name="size" value="0x4000"/>
-        <property name="image" data="${packagePath}/${id}.bin"/>
+        <property name="memoryImage" data="${packagePath}/${id}.bin"/>
         <property name="powerOnPattern" value="0xffff0000"/>
     </component>
     <component id="appleIIjplus.ram3" class="RAM">
         <property name="controlBus" ref="appleIIjplus.controlBus"/>
         <property name="size" value="0x4000"/>
-        <property name="image" data="${packagePath}/${id}.bin"/>
+        <property name="memoryImage" data="${packagePath}/${id}.bin"/>
         <property name="powerOnPattern" value="0xffff0000"/>
     </component>
     <component id="appleIIjplus.io" class="AddressDecoder">
@@ -215,22 +215,22 @@
         <property name="gamePort" ref="appleHandControllers.io"/>
     </component>
     <component id="appleIIjplus.romD0" class="ROM">
-        <property name="image" data="${resourcePath}/roms/Apple/341-0011-D0.bin"/>
+        <property name="memoryImage" data="${resourcePath}/roms/Apple/341-0011-D0.bin"/>
     </component>
     <component id="appleIIjplus.romD8" class="ROM">
-        <property name="image" data="${resourcePath}/roms/Apple/341-0012-D8.bin"/>
+        <property name="memoryImage" data="${resourcePath}/roms/Apple/341-0012-D8.bin"/>
     </component>
     <component id="appleIIjplus.romE0" class="ROM">
-        <property name="image" data="${resourcePath}/roms/Apple/341-0013-E0.bin"/>
+        <property name="memoryImage" data="${resourcePath}/roms/Apple/341-0013-E0.bin"/>
     </component>
     <component id="appleIIjplus.romE8" class="ROM">
-        <property name="image" data="${resourcePath}/roms/Apple/341-0014-E8.bin"/>
+        <property name="memoryImage" data="${resourcePath}/roms/Apple/341-0014-E8.bin"/>
     </component>
     <component id="appleIIjplus.romF0" class="ROM">
-        <property name="image" data="${resourcePath}/roms/Apple/341-0015-F0.bin"/>
+        <property name="memoryImage" data="${resourcePath}/roms/Apple/341-0015-F0.bin"/>
     </component>
     <component id="appleIIjplus.romF8" class="ROM">
-        <property name="image" data="${resourcePath}/roms/Apple/341-0047-00.bin"/>
+        <property name="memoryImage" data="${resourcePath}/roms/Apple/341-0047-00.bin"/>
     </component>
     
     <device id="appleMonitorII" label="Apple Monitor II" image="images/Apple/Apple Monitor II.png">

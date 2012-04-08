@@ -9,7 +9,7 @@
     <connector id="appleDiskII.connector" type="Apple Disk Drive Port"/>
     <component id="appleDiskII.drive" class="AppleDiskII">
         <property name="device" ref="appleDiskII"/>
-        <property name="image" value=""/>
+        <property name="diskImage" value=""/>
         <property name="track" value="0"/>
         <property name="forceWriteProtected" value="0"/>
         <property name="drivePlayer" ref="appleDiskII.drivePlayer"/>

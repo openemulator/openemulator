@@ -33,10 +33,10 @@
         <property name="sel" value="ROM16"/>
     </component>
     <component id="appleDiskIICard.rom13" class="ROM">
-        <property name="image" data="${resourcePath}/roms/Apple/341-0009.bin"/>
+        <property name="memoryImage" data="${resourcePath}/roms/Apple/341-0009.bin"/>
     </component>
     <component id="appleDiskIICard.rom16" class="ROM">
-        <property name="image" data="${resourcePath}/roms/Apple/341-0027.bin"/>
+        <property name="memoryImage" data="${resourcePath}/roms/Apple/341-0027.bin"/>
     </component>
     
 </edl>

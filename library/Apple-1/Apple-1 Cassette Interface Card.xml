@@ -25,7 +25,7 @@
         <property name="highFrequency" value="10000"/>
     </component>
     <component id="appleACI.rom" class="ROM">
-        <property name="image" data="${resourcePath}/roms/Apple/Apple-1 ACI ROM.bin"/>
+        <property name="memoryImage" data="${resourcePath}/roms/Apple/Apple-1 ACI ROM.bin"/>
     </component>
     
 </edl>
