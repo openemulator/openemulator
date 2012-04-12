@@ -12,6 +12,8 @@
 
 #include "Block2IMG.h"
 
+#define HEADER_SIZE 0x40
+
 Block2IMG::Block2IMG() : BlockRAW()
 {
 }
@@ -30,7 +32,7 @@ Block2IMG::~Block2IMG()
 
 bool Block2IMG::open(string path)
 {
-    if (!BlockData::open(path))
+    if (!BlockRAW::open(path))
         return false;
     
     if (!open2IMG())
@@ -45,7 +47,7 @@ bool Block2IMG::open(string path)
 
 bool Block2IMG::open(DIData& data)
 {
-    if (!BlockData::open(data))
+    if (!BlockRAW::open(data))
         return false;
     
     if (!open2IMG())
@@ -60,7 +62,7 @@ bool Block2IMG::open(DIData& data)
 
 void Block2IMG::close()
 {
-    BlockData::close();
+    BlockRAW::close();
     
     imageOffset = 0;
     imageSize = 0;
@@ -70,11 +72,9 @@ void Block2IMG::close()
 
 bool Block2IMG::open2IMG()
 {
-    DIData header;
+    DIChar header[HEADER_SIZE];
     
-    header.resize(0x40);
-    
-    if (!BlockData::read(0, header))
+    if (!BlockRAW::read(0, header, HEADER_SIZE))
         return false;
     
     // Check id
@@ -96,7 +96,7 @@ bool Block2IMG::open2IMG()
     switch (format)
     {
         case 0:
-            sectorOrder = BLOCKRAW_APPLEDOS33;
+            sectorOrder = "Apple DOS 3.3";
             
             break;
             
@@ -111,6 +111,7 @@ bool Block2IMG::open2IMG()
     DIInt flags = getDIIntLE(&header[0x10]);
     
     readOnly = flags & 0x80000000;
+    
     if (flags & 0x100)
         gcrVolume = flags & 0xff;
     else
@@ -128,7 +129,9 @@ bool Block2IMG::open2IMG()
 
 bool Block2IMG::getProperty(string name, string& value)
 {
-    if (name == "gcrVolume")
+    if (name == "imageSize")
+        value = getDIString(imageSize);
+    else if (name == "gcrVolume")
         value = getDIString(gcrVolume);
     else
         return BlockRAW::getProperty(name, value);
@@ -136,18 +139,18 @@ bool Block2IMG::getProperty(string name, string& value)
     return true;
 }
 
-bool Block2IMG::read(DILong offset, DIData& data)
+bool Block2IMG::read(DILong offset, DIChar *data, DILong size)
 {
-    if ((offset + data.size()) > imageSize)
+    if ((offset + size) > imageSize)
         return false;
     
-    return BlockRAW::read(imageOffset + offset, data);
+    return BlockRAW::read(imageOffset + offset, data, size);
 }
 
-bool Block2IMG::write(DILong offset, DIData& data)
+bool Block2IMG::write(DILong offset, DIChar *data, DILong size)
 {
-    if ((offset + data.size()) > imageSize)
+    if ((offset + size) > imageSize)
         return false;
     
-    return BlockRAW::write(imageOffset + offset, data);
+    return BlockRAW::write(imageOffset + offset, data, size);
 }

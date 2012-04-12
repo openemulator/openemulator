@@ -14,13 +14,21 @@
 
 DIInt getDIInt(const string& value)
 {
-    int i;
+    DIInt i;
     stringstream ss;
     
-    if (value.substr(0, 2) == "0x")
-        ss << hex << value.substr(2);
-    else
-        ss << value;
+    ss << value;
+    ss >> i;
+    
+    return i;
+}
+
+DILong getDILong(const string& value)
+{
+    DILong i;
+    stringstream ss;
+    
+    ss << value;
     ss >> i;
     
     return i;
@@ -44,19 +52,19 @@ string getDIString(DILong value)
     return ss.str();
 }
 
-DIShort getDIShortLE(unsigned char *p)
+DIShort getDIShortLE(DIChar *p)
 {
     return ((p[0] << 0) |
             (p[1] << 8));
 }
 
-DIShort getDIShortBE(unsigned char *p)
+DIShort getDIShortBE(DIChar *p)
 {
     return ((p[0] << 8) |
             (p[1] << 0));
 }
 
-DIInt getDIIntLE(unsigned char *p)
+DIInt getDIIntLE(DIChar *p)
 {
     return ((p[0] << 0) |
             (p[1] << 8) |
@@ -64,7 +72,7 @@ DIInt getDIIntLE(unsigned char *p)
             (p[3] << 24));
 }
 
-DIInt getDIIntBE(unsigned char *p)
+DIInt getDIIntBE(DIChar *p)
 {
     return ((p[0] << 24) |
             (p[1] << 16) |
@@ -72,6 +80,29 @@ DIInt getDIIntBE(unsigned char *p)
             (p[3] << 0));
 }
 
+DILong getDILongLE(DIChar *p)
+{
+    return (((DILong) p[0] << 0) |
+            ((DILong) p[1] << 8) |
+            ((DILong) p[2] << 16) |
+            ((DILong) p[3] << 24) |
+            ((DILong) p[4] << 32) |
+            ((DILong) p[5] << 40) |
+            ((DILong) p[6] << 48) |
+            ((DILong) p[7] << 56));
+}
+
+DILong getDILongBE(DIChar *p)
+{
+    return (((DILong) p[0] << 56) |
+            ((DILong) p[1] << 48) |
+            ((DILong) p[2] << 40) |
+            ((DILong) p[3] << 32) |
+            ((DILong) p[4] << 24) |
+            ((DILong) p[5] << 16) |
+            ((DILong) p[6] << 8) |
+            ((DILong) p[7] << 0));
+}
 string getDIPathExtension(string path)
 {
     // Remove tailing path separator

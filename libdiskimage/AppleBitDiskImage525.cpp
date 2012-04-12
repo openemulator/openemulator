@@ -8,4 +8,4 @@
  * Implements a data type for representing a bit disk image
  */
 
-#include "BitDiskImage.h"
+#include "BitDiskImage525.h"

@@ -1,11 +1,11 @@
 
 /**
  * libemulation
- * Apple Disk II
+ * Apple 5.25" Disk Drive
  * (C) 2010-2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls an Apple Disk II drive
+ * Controls an Apple 5.25" Disk Drive
  */
 
 /**
@@ -17,21 +17,21 @@
  * The stepper motor has an inertial time constant of approx. 2 ms.
  */
 
-#include "AppleDiskII.h"
+#include "AppleDiskDrive525.h"
 
 #include "DeviceInterface.h"
 #include "AudioPlayerInterface.h"
 
 #include "AppleIIInterface.h"
 
-AppleDiskII::AppleDiskII()
+AppleDiskDrive525::AppleDiskDrive525()
 {
 	device = NULL;
     
 	forceWriteProtected = false;
 }
 
-bool AppleDiskII::setValue(string name, string value)
+bool AppleDiskDrive525::setValue(string name, string value)
 {
 	if (name == "image")
 		diskImage = value;
@@ -49,7 +49,7 @@ bool AppleDiskII::setValue(string name, string value)
 	return true;
 }
 
-bool AppleDiskII::getValue(string name, string& value)
+bool AppleDiskDrive525::getValue(string name, string& value)
 {
 	if (name == "image")
 		value = diskImage;
@@ -65,7 +65,7 @@ bool AppleDiskII::getValue(string name, string& value)
 	return true;
 }
 
-bool AppleDiskII::setRef(string name, OEComponent *ref)
+bool AppleDiskDrive525::setRef(string name, OEComponent *ref)
 {
 	if (name == "device")
 	{
@@ -85,7 +85,7 @@ bool AppleDiskII::setRef(string name, OEComponent *ref)
 	return true;
 }
 
-bool AppleDiskII::init()
+bool AppleDiskDrive525::init()
 {
 	if (!device)
 	{
@@ -99,12 +99,12 @@ bool AppleDiskII::init()
 	return true;
 }
 
-void AppleDiskII::update()
+void AppleDiskDrive525::update()
 {
     updateSound();
 }
 
-bool AppleDiskII::postMessage(OEComponent *sender, int message, void *data)
+bool AppleDiskDrive525::postMessage(OEComponent *sender, int message, void *data)
 {
 	switch(message)
 	{
@@ -205,7 +205,7 @@ bool AppleDiskII::postMessage(OEComponent *sender, int message, void *data)
 	return false;
 }
 
-void AppleDiskII::updateSound()
+void AppleDiskDrive525::updateSound()
 {
     OESound *drivePlayerSound = NULL;
     OESound *headPlayerSound = NULL;
@@ -221,7 +221,7 @@ void AppleDiskII::updateSound()
         headPlayer->postMessage(this, AUDIOPLAYER_SET_SOUND, headPlayerSound);
 }
 
-void AppleDiskII::setPhaseControl(OEUInt32 value)
+void AppleDiskDrive525::setPhaseControl(OEUInt32 value)
 {
     phaseControl = value;
     

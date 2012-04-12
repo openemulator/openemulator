@@ -5,22 +5,24 @@
  * (C) 2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Decodes the DiskCopy 4.2 format
+ * Accesses DiskCopy 4.2 disk images
  */
 
 #include <string.h>
 
 #include "BlockDC42.h"
 
-BlockDC42::BlockDC42() : BlockData()
+#define HEADER_SIZE 0x54
+
+BlockDC42::BlockDC42() : BlockRAW()
 {
 }
 
-BlockDC42::BlockDC42(string path) : BlockData(path)
+BlockDC42::BlockDC42(string path) : BlockRAW(path)
 {
 }
 
-BlockDC42::BlockDC42(DIData& data) : BlockData(data)
+BlockDC42::BlockDC42(DIData& data) : BlockRAW(data)
 {
 }
 
@@ -30,7 +32,7 @@ BlockDC42::~BlockDC42()
 
 bool BlockDC42::open(string path)
 {
-    if (!BlockData::open(path))
+    if (!BlockRAW::open(path))
         return false;
     
     if (!openDC42())
@@ -45,7 +47,7 @@ bool BlockDC42::open(string path)
 
 bool BlockDC42::open(DIData& data)
 {
-    if (!BlockData::open(data))
+    if (!BlockRAW::open(data))
         return false;
     
     if (!openDC42())
@@ -60,7 +62,7 @@ bool BlockDC42::open(DIData& data)
 
 void BlockDC42::close()
 {
-    BlockData::close();
+    BlockRAW::close();
     
     imageOffset = 0;
     imageSize = 0;
@@ -73,21 +75,19 @@ void BlockDC42::close()
 
 bool BlockDC42::openDC42()
 {
-    DIData header;
+    DIChar header[HEADER_SIZE];
     
-    header.resize(0x54);
-    
-    if (!BlockData::read(0, header))
+    if (!BlockRAW::read(0, header, HEADER_SIZE))
         return false;
     
     // Get image and tag location
-    imageOffset = 0x54;
+    imageOffset = HEADER_SIZE;
     imageSize = getDIIntBE(&header[0x40]);
     
     tagOffset = imageOffset + imageSize;
     tagSize = getDIIntBE(&header[0x44]);
     
-    if ((tagOffset + tagSize) > dataSize)
+    if ((tagOffset + tagSize) != dataSize)
         return false;
     
     // Get GCR Format byte
@@ -102,42 +102,44 @@ bool BlockDC42::openDC42()
 
 bool BlockDC42::getProperty(string name, string& value)
 {
-    if (name == "gcrFormat")
+    if (name == "imageSize")
+        value = imageSize;
+    else if (name == "gcrFormat")
         value = getDIString(gcrFormat);
     else
-        return BlockData::getProperty(name, value);
+        return BlockRAW::getProperty(name, value);
     
     return true;
 }
 
-bool BlockDC42::read(DILong offset, DIData& data)
+bool BlockDC42::read(DILong offset, DIChar *data, DILong size)
 {
-    if ((offset + data.size()) > imageSize)
+    if ((offset + size) > imageSize)
         return false;
     
-    return BlockData::read(imageOffset + offset, data);
+    return BlockRAW::read(imageOffset + offset, data, size);
 }
 
-bool BlockDC42::write(DILong offset, DIData& data)
+bool BlockDC42::write(DILong offset, DIChar *data, DILong size)
 {
-    if ((offset + data.size()) > imageSize)
+    if ((offset + size) > imageSize)
         return false;
     
-    return BlockData::write(imageOffset + offset, data);
+    return BlockRAW::write(imageOffset + offset, data, size);
 }
 
-bool BlockDC42::readTag(DILong offset, DIData& data)
+bool BlockDC42::readTag(DILong offset, DIChar *data, DILong size)
 {
-    if ((offset + data.size()) > tagSize)
+    if ((offset + size) > tagSize)
         return false;
     
-    return BlockData::read(tagOffset + offset, data);
+    return BlockRAW::read(tagOffset + offset, data, size);
 }
 
-bool BlockDC42::writeTag(DILong offset, DIData& data)
+bool BlockDC42::writeTag(DILong offset, DIChar *data, DILong size)
 {
-    if ((offset + data.size()) > tagSize)
+    if ((offset + size) > tagSize)
         return false;
     
-    return BlockData::write(tagOffset + offset, data);
+    return BlockRAW::write(tagOffset + offset, data, size);
 }

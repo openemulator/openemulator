@@ -15,27 +15,30 @@
 
 using namespace std;
 
+#define DISKIMAGE_BLOCKSIZE  512
+#define DISKIMAGE_TAGSIZE    12
+
 class BlockDiskImage
 {
 public:
     BlockDiskImage();
     BlockDiskImage(string path);
-    BlockDiskImage(DIData& data, string extension);
+    BlockDiskImage(DIData& data);
     virtual ~BlockDiskImage();
     
     virtual bool open(string path);
-    virtual bool open(DIData& data, string extension);
+    virtual bool open(DIData& data);
     virtual bool is_open();
     virtual void close();
     
     virtual bool setProperty(string name, string value);
     virtual bool getProperty(string name, string& value);
     
-    virtual bool read(DILong offset, DIData& data);
-    virtual bool write(DILong offset, DIData& data);
+    virtual bool read(DILong blockIndex, DIChar *blockData, DIInt blockNum);
+    virtual bool write(DILong blockIndex, DIChar *blockData, DIInt blockNum);
     
-    virtual bool readTag(DILong offset, DIData& data);
-    virtual bool writeTag(DILong offset, DIData& data);
+    virtual bool readTag(DILong tagIndex, DIChar *tagData, DIInt tagNum);
+    virtual bool writeTag(DILong tagIndex, DIChar *tagData, DIInt tagNum);
 };
 
 #endif

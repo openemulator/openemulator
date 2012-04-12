@@ -1,24 +1,24 @@
 
 /**
  * libdiskimage
- * Block data disk image
+ * Block RAW Disk Image
  * (C) 2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements a data type for handling disk image data
+ * Accesses RAW disk images
  */
 
 #include <fstream>
 
-#include "BlockDiskImage.h"
+#include "DICommon.h"
 
-class BlockData : public BlockDiskImage
+class DiskImageData
 {
 public:
-    BlockData();
-    BlockData(string path);
-    BlockData(DIData& data);
-    ~BlockData();
+    DiskImageData();
+    DiskImageData(string path);
+    DiskImageData(DIData& data);
+    ~DiskImageData();
     
     bool open(string path);
     bool open(DIData& data);
@@ -28,8 +28,8 @@ public:
     bool setProperty(string name, string value);
     bool getProperty(string name, string& value);
     
-    bool read(DILong offset, DIData& data);
-    bool write(DILong offset, DIData& data);
+    bool read(DILong offset, DIChar *data, DILong size);
+    bool write(DILong offset, DIChar *data, DILong size);
     
 protected:
     DILong dataSize;

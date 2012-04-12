@@ -10,6 +10,8 @@
 
 #include "OEComponent.h"
 
+#include "diskimage.h"
+
 class RDCFFA1 : public OEComponent
 {
 public:
@@ -38,6 +40,7 @@ private:
     
     OEComponent *memoryBus;
     
+    BlockApple blockApple
     FILE *diskImageFP;
     
     OEUInt8 ataBuffer[0x200];

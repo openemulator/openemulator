@@ -49,6 +49,8 @@ Prefix Format
                                     00= DOS 3.3 sector order
                                     01= ProDOS sector order
                                     02= NIB data
+                                    03= CP/M sector order
+                                    04= Copy ][ sector order (drive order)
 
 **Note: "Creator" refers to application creating the image.
 Here are ID's in use by various applications:

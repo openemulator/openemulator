@@ -28,7 +28,7 @@
 #include "Apple1ACI.h"
 #include "Apple1IO.h"
 #include "Apple1Terminal.h"
-#include "AppleDiskII.h"
+#include "AppleDiskDrive525.h"
 #include "AppleDiskIIInterfaceCard.h"
 #include "AppleGraphicsTablet.h"
 #include "AppleIIAddressDecoder.h"
@@ -80,7 +80,7 @@ OEComponent *OEComponentFactory::construct(const string& className)
     matchComponent(Apple1IO);
     matchComponent(Apple1Terminal);
     
-    matchComponent(AppleDiskII);
+    matchComponent(AppleDiskDrive525);
     matchComponent(AppleDiskIIInterfaceCard);
     matchComponent(AppleGraphicsTablet);
     matchComponent(AppleIIAddressDecoder);

@@ -1,0 +1,22 @@
+==V2D Format Specification==
+
+The V2D disk image format stores nibble streams in a manner similar to the NIB format, but with these improvements:
+
+* Supports quarter tracks
+* Allows for a variable number of nibbles per track
+* Stores only used tracks
+
+16 and 32 bit integers are stored in most significant byte order:
+
+struct v2dHeader {
+	unsigned int containerByteNum;	// filesize - 8
+	char id[4];	// "D5NI"
+	unsigned short trackNum;
+}
+
+For every track:
+
+struct v2dTrack {
+	unsigned short quarterTrackIndex;
+	unsigned short trackByteNum;
+}

@@ -18,7 +18,7 @@ BlockDiskImage::BlockDiskImage(string path)
 {
 }
 
-BlockDiskImage::BlockDiskImage(DIData& data, string extension)
+BlockDiskImage::BlockDiskImage(DIData& data)
 {
 }
 
@@ -31,7 +31,7 @@ bool BlockDiskImage::open(string path)
     return true;
 }
 
-bool BlockDiskImage::open(DIData &data, string extension)
+bool BlockDiskImage::open(DIData &data)
 {
     return true;
 }
@@ -55,22 +55,22 @@ bool BlockDiskImage::getProperty(string name, string &value)
     return false;
 }
 
-bool BlockDiskImage::read(DILong offset, DIData& data)
+bool BlockDiskImage::read(DILong blockIndex, DIChar *blockData, DIInt blockNum)
 {
     return false;
 }
 
-bool BlockDiskImage::write(DILong offset, DIData& data)
+bool BlockDiskImage::write(DILong blockIndex, DIChar *blockData, DIInt blockNum)
 {
     return false;
 }
 
-bool BlockDiskImage::readTag(DILong offset, DIData& data)
+bool BlockDiskImage::readTag(DILong tagIndex, DIChar *tagData, DIInt tagNum)
 {
     return false;
 }
 
-bool BlockDiskImage::writeTag(DILong offset, DIData& data)
+bool BlockDiskImage::writeTag(DILong tagIndex, DIChar *tagData, DIInt tagNum)
 {
     return false;
 }

@@ -26,12 +26,12 @@ OEImage::OEImage(string path)
     load(path);
 }
 
-/*OEImage::OEImage(OEData& data)
+OEImage::OEImage(OEData& data)
 {
     init();
     
     load(data);
-}*/
+}
 
 OEImage::OEImage(OEImage& image, OERect rect)
 {
@@ -281,7 +281,7 @@ bool OEImage::load(string path)
     return success;
 }
 
-bool load(OEData& data)
+bool OEImage::load(OEData& data)
 {
     return false;
 }

@@ -16,10 +16,11 @@
  * Block Disk Image properties:
  *
  *   imageSize (in bytes)
+ *   sectorOrder (can be: Apple DOS 3.2, Apple DOS 3.3, Apple CP/M)
  *
  * Bit Disk Image properties:
  *
- *   diskSize (can be 8", 5.25", 3.5", 3")
+ *   diskSize (can be: 8", 5.25", 3.5", 3")
  *   trackNum
  *   headNum
  *   rotationSpeed (in RPM)
@@ -39,5 +40,6 @@
 //   the original file is automatically closed, and an .fdi file
 //   is created instead
 
-#include "BlockDiskImage.h"
-#include "BitDiskImage.h"
+#include "AppleBlockDiskImage.h"
+#include "AppleBitDiskImage525.h"
+#include "AppleBitDiskImage35.h"

@@ -1,44 +1,42 @@
 
 /**
  * libdiskimage
- * Block data disk image
+ * Block RAW Disk Image
  * (C) 2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements a data type for handling disk image data
+ * Accesses RAW disk images
  */
 
-#include <sstream>
+#include "DiskImageData.h"
 
-#include "BlockData.h"
-
-BlockData::BlockData()
+DiskImageData::DiskImageData()
 {
     init();
 }
 
-BlockData::BlockData(string path)
+DiskImageData::DiskImageData(string path)
 {
     init();
 }
 
-BlockData::BlockData(DIData& data)
+DiskImageData::DiskImageData(DIData& data)
 {
     init();
 }
 
-BlockData::~BlockData()
+DiskImageData::~DiskImageData()
 {
 }
 
-void BlockData::init()
+void DiskImageData::init()
 {
     dataSize = 0;
     
     readOnly = false;
 }
 
-bool BlockData::open(string path)
+bool DiskImageData::open(string path)
 {
     close();
     
@@ -54,7 +52,7 @@ bool BlockData::open(string path)
     return true;
 }
 
-bool BlockData::open(DIData& data)
+bool DiskImageData::open(DIData& data)
 {
     close();
     
@@ -65,32 +63,36 @@ bool BlockData::open(DIData& data)
     return true;
 }
 
-bool BlockData::is_open()
+bool DiskImageData::is_open()
 {
     return (file.is_open() || data.size());
 }
 
-void BlockData::close()
+void DiskImageData::close()
 {
     file.close();
     
     init();
 }
 
-bool BlockData::setProperty(string name, string value)
+bool DiskImageData::setProperty(string name, string value)
 {
     if (name == "readOnly")
         readOnly = getDIInt(value);
+    else if (name == "sectorOrder")
+        sectorOrder = value;
     else
         return false;
     
     return true;
 }
 
-bool BlockData::getProperty(string name, string& value)
+bool DiskImageData::getProperty(string name, string& value)
 {
     if (name == "readOnly")
         value = getDIString((DIInt) readOnly);
+    else if (name == "sectorOrder")
+        value = sectorOrder;
     else if (name == "imageSize")
         value = dataSize;
     else
@@ -99,9 +101,9 @@ bool BlockData::getProperty(string name, string& value)
     return true;
 }
 
-bool BlockData::read(DILong offset, DIData& data)
+bool DiskImageData::read(DILong offset, DIChar *data, DILong size)
 {
-    size_t end = (size_t) offset + data.size();
+    DILong end = offset + size;
     
     if (end >= dataSize)
         return false;
@@ -110,39 +112,42 @@ bool BlockData::read(DILong offset, DIData& data)
     {
         file.seekg(offset, ios::beg);
         
-        file.read((char *)data.front(), data.size());
+        file.read((char *)data, (size_t) size);
         
         return !(file.failbit || file.badbit);
     }
     else
     {
-        memcpy(&data.front(), &this->data.front() + offset, data.size());
+        memcpy((char *) data, &this->data.front() + offset, (size_t) size);
         
         return true;
     }
 }
 
-bool BlockData::write(DILong offset, DIData& data)
+bool DiskImageData::write(DILong offset, DIChar *data, DILong size)
 {
     if (readOnly)
         return false;
     
-    size_t end = (size_t) offset + data.size();
+    DILong end = offset + size;
     
     if (end >= dataSize)
-        return false;
+        dataSize = end;
     
     if (file.is_open())
     {
         file.seekg(offset, ios::beg);
         
-        file.write((char *)data.front(), data.size());
+        file.write((char *)data, (size_t) size);
         
         return !(file.failbit || file.badbit);
     }
     else
     {
-        memcpy(&this->data.front() + offset, &data.front(), data.size());
+        if (dataSize != this->data.size())
+            this->data.resize((size_t) dataSize);
+        
+        memcpy(&this->data.front() + offset, data, (size_t) size);
         
         return true;
     }

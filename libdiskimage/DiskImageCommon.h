@@ -16,11 +16,12 @@
 
 using namespace std;
 
-typedef vector<unsigned char> DIData;
-
+typedef unsigned char DIChar;
 typedef unsigned short DIShort;
 typedef unsigned int DIInt;
 typedef unsigned long long DILong;
+
+typedef vector<DIChar> DIData;
 
 #ifdef _WIN32
 #define DI_PATH_SEPARATOR "\\"
@@ -29,13 +30,16 @@ typedef unsigned long long DILong;
 #endif
 
 DIInt getDIInt(const string& value);
+DILong getDILong(const string& value);
 string getDIString(DIInt value);
 string getDIString(DILong value);
 
-DIShort getDIShortLE(unsigned char *p);
-DIShort getDIShortBE(unsigned char *p);
-DIInt getDIIntLE(unsigned char *p);
-DIInt getDIIntBE(unsigned char *p);
+DIShort getDIShortLE(DIChar *p);
+DIShort getDIShortBE(DIChar *p);
+DIInt getDIIntLE(DIChar *p);
+DIInt getDIIntBE(DIChar *p);
+DILong getDILongLE(DIChar *p);
+DILong getDILongBE(DIChar *p);
 
 string getDIPathExtension(string path);
 

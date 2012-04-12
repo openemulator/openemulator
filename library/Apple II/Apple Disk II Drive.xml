@@ -7,7 +7,7 @@
         <setting ref="appleDiskII.drive" name="mechanism" label="Drive Sounds" type="select" options="Shugart,Alps,None"/>
     </device>
     <connector id="appleDiskII.connector" type="Apple Disk Drive Port"/>
-    <component id="appleDiskII.drive" class="AppleDiskII">
+    <component id="appleDiskII.drive" class="AppleDiskDrive525">
         <property name="device" ref="appleDiskII"/>
         <property name="diskImage" value=""/>
         <property name="track" value="0"/>

@@ -5,7 +5,7 @@
  * (C) 2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Decodes the 2IMG format
+ * Accesses 2IMG disk images
  */
 
 #include "BlockRAW.h"
@@ -24,8 +24,8 @@ public:
     
     bool getProperty(string name, string& value);
     
-    bool read(DILong offset, DIData& data);
-    bool write(DILong offset, DIData& data);
+    bool read(DILong offset, DIChar *data, DILong size);
+    bool write(DILong offset, DIChar *data, DILong size);
     
 private:
     DILong imageOffset;

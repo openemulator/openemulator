@@ -5,90 +5,140 @@
  * (C) 2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements a data type for handling raw disk images
+ * Accesses RAW disk images
  */
-
-#include <sstream>
 
 #include "BlockRAW.h"
 
-BlockRAW::BlockRAW() : BlockData()
-{
+#define BLOCK_SIZE 512
+
+BlockRAW::BlockRAW()
+{    
 }
 
-BlockRAW::BlockRAW(string path) : BlockData(path)
+BlockRAW::BlockRAW(string path)
 {
+    open(path);
 }
 
-BlockRAW::BlockRAW(DIData& data) : BlockData(data)
+BlockRAW::BlockRAW(DIData& data)
 {
-}
-
-BlockRAW::~BlockRAW()
-{
+    open(data);
 }
 
 bool BlockRAW::open(string path)
 {
-    if (!BlockData::open(path))
+    if (!diskImage.open(path))
         return false;
     
-    // Only accept sector-sized disk images
-    if (dataSize & 0xff)
-        return false;
-    
-    string ext = getDIPathExtension(path);
-    
-    if ((ext == "dsk") || (ext == "do"))
-        sectorOrder = BLOCKRAW_APPLEDOS33;
-    else if (ext == "cpm")
-        sectorOrder = BLOCKRAW_APPLECPM;
-    
-    return true;
+    return checkSectorOrder();
 }
 
-bool BlockRAW::open(DIData &data)
+bool BlockRAW::open(DIData& data)
 {
-    if (!BlockData::open(data))
-        return false;
-    
-    // Only accept sector-sized disk images
-    if (dataSize & 0xff)
-        return false;
-    
-    return true;
+    return diskImage.open(data);
 }
 
-bool BlockRAW::read(DILong offset, DIData& data)
+bool BlockRAW::is_open()
 {
-    if (offset & 0xff)
-        return false;
+    return diskImage.is_open();
+}
+
+void BlockRAW::close()
+{
+    diskImage.close();
     
-    if (data.size() & 0xff)
-        return false;
-    
-    if (!sectorOrder)
-        return BlockData::read(offset, data);
-    
-    int sectorStart = offset >> 8;
-    int sectorNum = data.size() >> 8;
-    for (DIInt i = 0; i < sectorNum; i++)
+    appleDOS33Reorder = false;
+}
+
+bool BlockRAW::setProperty(string name, string value)
+{
+    return diskImage.setProperty(name, value);
+}
+
+bool BlockRAW::getProperty(string name, string& value)
+{
+    if (name == "blockNum")
     {
-//        DIInt sector = 
-//        if (!BlockData::read())
-//            return false;
+        if (!diskImage.getProperty("imageSize", value))
+            return false;
+        
+        value = getDIString(getDILong(value) / BLOCK_SIZE);
+    }
+    else
+        return diskImage.getProperty(name, value);
+    
+    return true;
+}
+
+bool BlockRAW::readBlock(DIInt blockIndex, DIChar *block)
+{
+    if (!reorder)
+        return diskImage.read(blockIndex * BLOCK_SIZE, block, BLOCK_SIZE);
+    
+    DIInt sector = 2 * blockIndex;
+    if (!diskImage.read(((sector & ~0xf) |
+                         BlockRAWSectorReorder[sector & 0xf]) * SECTOR_SIZE,
+                        block,
+                        SECTOR_SIZE))
+        return false;
+    
+    sector++;
+    return diskImage.read(((sector & ~0xf) |
+                           BlockRAWSectorReorder[sector & 0xf]) * SECTOR_SIZE,
+                          block + SECTOR_SIZE,
+                          SECTOR_SIZE);
+}
+
+bool BlockRAW::writeBlock(DIInt blockIndex, DIChar *block)
+{
+    if (!reorder)
+        return diskImage.write(blockIndex * BLOCK_SIZE, block, BLOCK_SIZE);
+    
+    DIInt sector = 2 * blockIndex;
+    if (!diskImage.write(((sector & ~0xf) |
+                          BlockRAWSectorReorder[sector & 0xf]) * SECTOR_SIZE,
+                         block,
+                         SECTOR_SIZE))
+        return false;
+    
+    sector++;
+    return diskImage.write(((sector & ~0xf) |
+                            BlockRAWSectorReorder[sector & 0xf]) * SECTOR_SIZE,
+                           block + SECTOR_SIZE,
+                           SECTOR_SIZE);
+}
+
+bool BlockRAW::checkSectorOrder()
+{
+    string sectorOrder;
+    
+    if (!diskImage.getProperty("sectorOrder", sectorOrder))
+    {
+        close();
+        
+        return false;
+    }
+    
+/*    string ext = getDIPathExtension(path);
+    
+    if (ext == "d13")
+        sectorOrder = "Apple DOS 3.2";
+    else if ((ext == "dsk") || (ext == "do"))
+        sectorOrder = "Apple DOS 3.3";
+    else if (ext == "cpm")
+        sectorOrder = "Apple CP/M";*/
+    
+    if (sectorOrder == "")
+        reorder = false;
+    else if (sectorOrder == "Apple DOS 3.3")
+        reorder = true;
+    else
+    {
+        close();
+        
+        return false;
     }
     
     return true;
-}
-
-bool BlockRAW::write(DILong offset, DIData& data)
-{
-    if (offset & 0xff)
-        return false;
-    
-    if (data.size() & 0xff)
-        return false;
-    
-    return BlockData::write(offset, data);
 }

@@ -1,41 +1,34 @@
 
 /**
  * libdiskimage
- * Block RAW disk image
+ * Block RAW Disk Image
  * (C) 2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements a data type for handling raw disk images
+ * Accesses RAW disk images
  */
 
-#include <fstream>
+#include "BlockDiskImage.h"
+#include "DiskImageData.h"
 
-#include "BlockData.h"
-
-typedef enum
-{
-    BLOCKRAW_DEFAULT,
-    BLOCKRAW_APPLEDOS33,
-    BLOCKRAW_APPLECPM,
-} BlockRAWSectorOrder;
-
-class BlockRAW : public BlockData
+class BlockRAW : public BlockDiskImage
 {
 public:
     BlockRAW();
     BlockRAW(string path);
     BlockRAW(DIData& data);
-    ~BlockRAW();
     
     bool open(string path);
-    bool open(DIData &data);
+    bool open(DIData& data);
+    bool is_open();
+    void close();
     
-    bool read(DILong offset, DIData& data);
-    bool write(DILong offset, DIData& data);
+    bool setProperty(string name, string value);
+    bool getProperty(string name, string& value);
     
-protected:
-    DILong imageOffset;
-    DILong imageSize;
+    bool read(DILong blockIndex, DIChar *blockData, DIInt blockNum);
+    bool write(DILong blockIndex, DIChar *blockData, DIInt blockNum);
     
-    BlockRAWSectorOrder sectorOrder;
+private:
+    DiskImageData diskImage;
 };

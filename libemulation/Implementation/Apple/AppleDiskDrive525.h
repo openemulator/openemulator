@@ -1,11 +1,11 @@
 
 /**
  * libemulation
- * Apple Disk II
+ * Apple 5.25" Disk Drive
  * (C) 2010-2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls an Apple Disk II drive
+ * Controls an Apple 5.25" Disk Drive
  */
 
 #include "OEComponent.h"
@@ -14,10 +14,10 @@
 
 #include "OESound.h"
 
-class AppleDiskII : public OEComponent
+class AppleDiskDrive525 : public OEComponent
 {
 public:
-	AppleDiskII();
+	AppleDiskDrive525();
 	
 	bool setValue(string name, string value);
 	bool getValue(string name, string& value);

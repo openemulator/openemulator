@@ -5,12 +5,12 @@
  * (C) 2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Decodes the DiskCopy 4.2 format
+ * Accesses DiskCopy 4.2 disk images
  */
 
-#include "BlockData.h"
+#include "BlockRAW.h"
 
-class BlockDC42 : public BlockData
+class BlockDC42 : public BlockRAW
 {
 public:
     BlockDC42();
@@ -22,14 +22,13 @@ public:
     bool open(DIData& data);
     void close();
     
-    bool setProperty(string name, string value);
     bool getProperty(string name, string& value);
     
-    bool read(DILong offset, DIData& data);
-    bool write(DILong offset, DIData& data);
+    bool read(DILong offset, DIChar *data, DILong size);
+    bool write(DILong offset, DIChar *data, DILong size);
     
-    bool readTag(DILong offset, DIData& data);
-    bool writeTag(DILong offset, DIData& data);
+    bool readTag(DILong offset, DIChar *data, DILong size);
+    bool writeTag(DILong offset, DIChar *data, DILong size);
     
 private:
     DILong imageOffset;

@@ -155,6 +155,49 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
+				<string>img</string>
+				<string>image</string>
+				<string>dmg</string>
+				<string>hdv</string>
+				<string>hfv</string>
+				<string>qcow</string>
+				<string>qcow2</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>DiskImage.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>Disk Image</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>iso</string>
+				<string>cdr</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>DiskImage.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>ISO Disk Image</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>fdi</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>DiskImage.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>Formatted Disk Image</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
 				<string>txt</string>
 			</array>
 			<key>CFBundleTypeName</key>
@@ -239,46 +282,6 @@
 			<string>Unified Emulator Format Archive</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
-		</dict>
-		<dict>
-			<key>CFBundleTypeExtensions</key>
-			<array>
-				<string>fdi</string>
-			</array>
-			<key>CFBundleTypeIconFile</key>
-			<string>DiskImage.icns</string>
-			<key>CFBundleTypeName</key>
-			<string>Formatted Disk Image</string>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-		</dict>
-		<dict>
-			<key>CFBundleTypeExtensions</key>
-			<array>
-				<string>img</string>
-				<string>dmg</string>
-				<string>hdv</string>
-				<string>hfv</string>
-			</array>
-			<key>CFBundleTypeIconFile</key>
-			<string>DiskImage.icns</string>
-			<key>CFBundleTypeName</key>
-			<string>Disk Image</string>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-		</dict>
-		<dict>
-			<key>CFBundleTypeExtensions</key>
-			<array>
-				<string>iso</string>
-				<string>cdr</string>
-			</array>
-			<key>CFBundleTypeIconFile</key>
-			<string>DiskImage.icns</string>
-			<key>CFBundleTypeName</key>
-			<string>ISO Disk Image</string>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
 		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
