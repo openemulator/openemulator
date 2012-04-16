@@ -30,7 +30,7 @@ public:
     void write(OEAddress address, OEUInt8 value);
     
 private:
-    string diskImage;
+    string diskImagePath;
     bool forceWriteProtected;
     
     OEComponent *device;
@@ -40,8 +40,7 @@ private:
     
     OEComponent *memoryBus;
     
-    BlockApple blockApple
-    FILE *diskImageFP;
+    DiskImageAppleBlock *diskImage;
     
     OEUInt8 ataBuffer[0x200];
     OEUInt32 ataBufferIndex;

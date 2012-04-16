@@ -23,6 +23,12 @@ typedef unsigned long long DILong;
 
 typedef vector<DIChar> DIData;
 
+typedef struct
+{
+    DIData stream;
+    DIInt bitnum;
+} DITrack;
+
 #ifdef _WIN32
 #define DI_PATH_SEPARATOR "\\"
 #else
@@ -33,6 +39,7 @@ DIInt getDIInt(const string& value);
 DILong getDILong(const string& value);
 string getDIString(DIInt value);
 string getDIString(DILong value);
+string getDIString(float value);
 
 DIShort getDIShortLE(DIChar *p);
 DIShort getDIShortBE(DIChar *p);

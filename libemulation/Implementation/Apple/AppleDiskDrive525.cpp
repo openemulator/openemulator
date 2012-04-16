@@ -33,7 +33,7 @@ AppleDiskDrive525::AppleDiskDrive525()
 
 bool AppleDiskDrive525::setValue(string name, string value)
 {
-	if (name == "image")
+	if (name == "diskImage")
 		diskImage = value;
     else if (name == "track")
         trackIndex = (OEUInt32) getUInt(value);
@@ -51,7 +51,7 @@ bool AppleDiskDrive525::setValue(string name, string value)
 
 bool AppleDiskDrive525::getValue(string name, string& value)
 {
-	if (name == "image")
+	if (name == "diskImage")
 		value = diskImage;
 	else if (name == "track")
 		value = getString(trackIndex);

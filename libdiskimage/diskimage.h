@@ -8,38 +8,11 @@
  * Emulation disk image library
  */
 
-/*
- * Common properties:
- *
- *   readOnly
- *
- * Block Disk Image properties:
- *
- *   imageSize (in bytes)
- *   sectorOrder (can be: Apple DOS 3.2, Apple DOS 3.3, Apple CP/M)
- *
- * Bit Disk Image properties:
- *
- *   diskSize (can be: 8", 5.25", 3.5", 3")
- *   trackNum
- *   headNum
- *   rotationSpeed (in RPM)
- *   tracksPerInch
- *
- * System specific properties:
- *   gcrVolume (Apple II)
- *   gcrFormat (Apple II)
- */
+#ifndef _DISKIMAGE_H
+#define _DISKIMAGE_H
 
-// Ideas:
-// * BlockDiskImages are meant for block devies.
-//   They are accessed on the fly.
-// * BitDiskImages are meant for streaming devices.
-//   They are 
-// * When writing a dsk file and not every sector is recognized,
-//   the original file is automatically closed, and an .fdi file
-//   is created instead
+#include "DiskImageAppleBlock.h"
+#include "DiskImageApple525.h"
+#include "DiskImageApple35.h"
 
-#include "AppleBlockDiskImage.h"
-#include "AppleBitDiskImage525.h"
-#include "AppleBitDiskImage35.h"
+#endif

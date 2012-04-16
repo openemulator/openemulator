@@ -36,7 +36,7 @@ RDCFFA1::RDCFFA1()
     rom = NULL;
     memoryBus = NULL;
     
-    diskImageFP = NULL;
+    diskImage = NULL;
     
     ataBufferIndex = 0;
     ataError = false;
@@ -64,7 +64,7 @@ bool RDCFFA1::setValue(string name, string value)
 bool RDCFFA1::getValue(string name, string& value)
 {
     if (name == "diskImage")
-        value = diskImage;
+        value = diskImagePath;
     else if (name == "forceWriteProtected")
         value = getString(forceWriteProtected);
     else
@@ -163,7 +163,7 @@ bool RDCFFA1::postMessage(OEComponent *sender, int message, void *data)
             return true;
             
         case STORAGE_GET_MOUNTPATH:
-            *(string *)data = diskImage;
+            *(string *)data = diskImagePath;
             
             return true;
             
@@ -212,7 +212,7 @@ OEUInt8 RDCFFA1::read(OEAddress address)
         case 0x0f:
             // ATAStatus
             return (ATA_RDY |
-                    (diskImageFP ? ATA_DSC : 0) |
+                    (diskImage ? ATA_DSC : 0) |
                     (ataError ? ATA_ERR : ((ataBufferIndex < 0x200) ? ATA_DRQ : 0)));
             
         default:
@@ -236,12 +236,9 @@ void RDCFFA1::write(OEAddress address, OEUInt8 value)
             
             if ((ataCommand == ATA_WRITE) &&
                 (ataBufferIndex == 0x200) &&
-                diskImageFP &&
+                diskImage &&
                 !forceWriteProtected)
-            {
-                fseek(diskImageFP, (size_t) (ataLBA.q << 9), SEEK_SET);
-                ataError = !fwrite(ataBuffer, 0x200, 1, diskImageFP);
-            }
+                diskImage->writeBlock(ataLBA.q, ataBuffer);
             
             break;
             
@@ -279,11 +276,8 @@ void RDCFFA1::write(OEAddress address, OEUInt8 value)
                 case ATA_READ:
                     ataBufferIndex = 0;
                     
-                    if (diskImageFP)
-                    {
-                        fseek(diskImageFP, (size_t) (ataLBA.q << 9), SEEK_SET);
-                        ataError = !fread(ataBuffer, 0x200, 1, diskImageFP);
-                    }
+                    if (diskImage)
+                        diskImage->readBlock(ataLBA.q, ataBuffer);
                     else
                         ataError = true;
                     
@@ -292,8 +286,7 @@ void RDCFFA1::write(OEAddress address, OEUInt8 value)
                 case ATA_WRITE:
                     ataBufferIndex = 0;
                     
-                    if (diskImageFP &&
-                        !forceWriteProtected)
+                    if (diskImage && !forceWriteProtected)
                         ataError = false;
                     else
                         ataError = true;
@@ -305,11 +298,10 @@ void RDCFFA1::write(OEAddress address, OEUInt8 value)
                     // Identify
                     ataBufferIndex = 0;
                     
-                    if (diskImageFP)
+                    if (diskImage)
                     {
                         OEUnion lbaSize;
-                        fseek(diskImageFP, 0, SEEK_END);
-                        lbaSize.q = ftell(diskImageFP) >> 9;
+                        lbaSize.q = diskImage->getBlockNum();
                         
                         memset(ataBuffer, 0, 0x200);
                         
@@ -372,23 +364,22 @@ void RDCFFA1::mapMemory(int message)
         memoryBus->postMessage(this, message, &m);
 }
 
-bool RDCFFA1::openDiskImage(string filename)
+bool RDCFFA1::openDiskImage(string path)
 {
     closeDiskImage();
     
-    diskImageFP = fopen(filename.c_str(), "r+");
-    if (diskImageFP)
-        diskImage = filename;
+    diskImage = new DiskImageAppleBlock();
     
-    return diskImageFP != NULL;
+    if (!diskImage->open(path))
+        closeDiskImage();
+    
+    return diskImage != NULL;
 }
 
 void RDCFFA1::closeDiskImage()
 {
-    diskImage = "";
+    if (diskImage)
+        delete diskImage;
     
-    if (diskImageFP)
-        fclose(diskImageFP);
-    
-    diskImageFP = NULL;
+    diskImage = NULL;
 }

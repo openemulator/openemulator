@@ -1,37 +1,37 @@
 
 /**
  * libdiskimage
- * 2IMG Block Disk Image
+ * Disk Image 2IMG
  * (C) 2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Accesses 2IMG disk images
  */
 
-#include "BlockRAW.h"
+#include "DiskImageFile.h"
 
-class Block2IMG : public BlockRAW
+class DiskImage2IMG
 {
 public:
-    Block2IMG();
-    Block2IMG(string path);
-    Block2IMG(DIData& data);
-    ~Block2IMG();
+    DiskImage2IMG();
     
-    bool open(string path);
-    bool open(DIData& data);
+    bool open(DiskImageFile *file);
     void close();
     
-    bool getProperty(string name, string& value);
+    bool isReadOnly();
+    DILong getSize();
+    string getSectorOrder();
+    DIInt getGCRVolume();
     
-    bool read(DILong offset, DIChar *data, DILong size);
-    bool write(DILong offset, DIChar *data, DILong size);
+    bool read(DILong pos, DIChar *buf, DILong num);
+    bool write(DILong pos, const DIChar *buf, DILong num);
     
 private:
+    DiskImageFile *file;
+    
+    bool readOnly;
+    string sectorOrder;
+    DIInt gcrVolume;
     DILong imageOffset;
     DILong imageSize;
-    
-    DIInt gcrVolume;
-    
-    bool open2IMG();
 };

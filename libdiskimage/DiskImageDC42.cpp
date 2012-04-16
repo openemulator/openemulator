@@ -1,83 +1,29 @@
 
 /**
  * libdiskimage
- * DiskCopy 4.2 Block Disk Image
+ * Disk Image DiskCopy 4.2
  * (C) 2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Accesses DiskCopy 4.2 disk images
  */
 
-#include <string.h>
-
-#include "BlockDC42.h"
+#include "DiskImageDC42.h"
 
 #define HEADER_SIZE 0x54
 
-BlockDC42::BlockDC42() : BlockRAW()
+DiskImageDC42::DiskImageDC42()
 {
+    close();
 }
 
-BlockDC42::BlockDC42(string path) : BlockRAW(path)
+bool DiskImageDC42::open(DiskImageFile *file)
 {
-}
-
-BlockDC42::BlockDC42(DIData& data) : BlockRAW(data)
-{
-}
-
-BlockDC42::~BlockDC42()
-{
-}
-
-bool BlockDC42::open(string path)
-{
-    if (!BlockRAW::open(path))
-        return false;
+    close();
     
-    if (!openDC42())
-    {
-        close();
-        
-        return false;
-    }
-    
-    return true;
-}
-
-bool BlockDC42::open(DIData& data)
-{
-    if (!BlockRAW::open(data))
-        return false;
-    
-    if (!openDC42())
-    {
-        close();
-        
-        return false;
-    }
-    
-    return true;
-}
-
-void BlockDC42::close()
-{
-    BlockRAW::close();
-    
-    imageOffset = 0;
-    imageSize = 0;
-    
-    tagOffset = 0;
-    tagSize = 0;
-    
-    gcrFormat = 0;
-}
-
-bool BlockDC42::openDC42()
-{
     DIChar header[HEADER_SIZE];
     
-    if (!BlockRAW::read(0, header, HEADER_SIZE))
+    if (!file->read(0, header, HEADER_SIZE))
         return false;
     
     // Get image and tag location
@@ -87,7 +33,7 @@ bool BlockDC42::openDC42()
     tagOffset = imageOffset + imageSize;
     tagSize = getDIIntBE(&header[0x44]);
     
-    if ((tagOffset + tagSize) != dataSize)
+    if ((tagOffset + tagSize) != file->getSize())
         return false;
     
     // Get GCR Format byte
@@ -97,49 +43,62 @@ bool BlockDC42::openDC42()
     if (getDIShortBE(&header[0x52]) != 0x0100)
         return false;
     
-    return true;
-}
-
-bool BlockDC42::getProperty(string name, string& value)
-{
-    if (name == "imageSize")
-        value = imageSize;
-    else if (name == "gcrFormat")
-        value = getDIString(gcrFormat);
-    else
-        return BlockRAW::getProperty(name, value);
+    this->file = file;
     
     return true;
 }
 
-bool BlockDC42::read(DILong offset, DIChar *data, DILong size)
+void DiskImageDC42::close()
 {
-    if ((offset + size) > imageSize)
-        return false;
+    file = NULL;
     
-    return BlockRAW::read(imageOffset + offset, data, size);
+    gcrFormat = 0;
+    
+    imageOffset = 0;
+    imageSize = 0;
+    
+    tagOffset = 0;
+    tagSize = 0;
 }
 
-bool BlockDC42::write(DILong offset, DIChar *data, DILong size)
+DILong DiskImageDC42::getSize()
 {
-    if ((offset + size) > imageSize)
-        return false;
-    
-    return BlockRAW::write(imageOffset + offset, data, size);
+    return imageSize;
 }
 
-bool BlockDC42::readTag(DILong offset, DIChar *data, DILong size)
+DIInt DiskImageDC42::getGCRFormat()
 {
-    if ((offset + size) > tagSize)
-        return false;
-    
-    return BlockRAW::read(tagOffset + offset, data, size);
+    return gcrFormat;
 }
 
-bool BlockDC42::writeTag(DILong offset, DIChar *data, DILong size)
+bool DiskImageDC42::read(DILong pos, DIChar *buf, DILong num)
 {
-    if ((offset + size) > tagSize)
+    if ((pos + num) > imageSize)
         return false;
     
-    return BlockRAW::write(tagOffset + offset, data, size);
+    return file->read(imageOffset + pos, buf, num);
+}
+
+bool DiskImageDC42::write(DILong pos, const DIChar *buf, DILong num)
+{
+    if ((pos + num) > imageSize)
+        return false;
+    
+    return file->write(imageOffset + pos, buf, num);
+}
+
+bool DiskImageDC42::readTag(DILong pos, DIChar *buf, DILong num)
+{
+    if ((pos + num) > tagSize)
+        return false;
+    
+    return file->read(tagOffset + pos, buf, num);
+}
+
+bool DiskImageDC42::writeTag(DILong pos, const DIChar *buf, DILong num)
+{
+    if ((pos + num) > tagSize)
+        return false;
+    
+    return file->write(tagOffset + pos, buf, num);
 }

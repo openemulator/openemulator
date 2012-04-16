@@ -22,11 +22,9 @@
 		00139F821511864800B0E108 /* BankSwitchedRAM.h in Headers */ = {isa = PBXBuildFile; fileRef = 00139F811511864800B0E108 /* BankSwitchedRAM.h */; };
 		00139F84151195E600B0E108 /* AppleIIAddressDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00139F83151195E600B0E108 /* AppleIIAddressDecoder.cpp */; };
 		00139F86151195EE00B0E108 /* AppleIIAddressDecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 00139F85151195EE00B0E108 /* AppleIIAddressDecoder.h */; };
-		00140DEA152D280C00D4795D /* BlockDiskImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00140DE9152D280C00D4795D /* BlockDiskImage.cpp */; };
-		00140DEE152D281F00D4795D /* AppleBitDiskImage525.h in Headers */ = {isa = PBXBuildFile; fileRef = 00140DED152D281F00D4795D /* AppleBitDiskImage525.h */; };
-		00140DF0152D282400D4795D /* AppleBitDiskImage525.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00140DEF152D282400D4795D /* AppleBitDiskImage525.cpp */; };
-		00140DF6152D36F900D4795D /* DiskImageData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00140DF5152D36F900D4795D /* DiskImageData.cpp */; };
-		00140DF8152D370300D4795D /* DiskImageData.h in Headers */ = {isa = PBXBuildFile; fileRef = 00140DF7152D370300D4795D /* DiskImageData.h */; };
+		00140DF0152D282400D4795D /* DiskImageApple525.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00140DEF152D282400D4795D /* DiskImageApple525.cpp */; };
+		00140DF6152D36F900D4795D /* DiskImageFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00140DF5152D36F900D4795D /* DiskImageFile.cpp */; };
+		00140DF8152D370300D4795D /* DiskImageFile.h in Headers */ = {isa = PBXBuildFile; fileRef = 00140DF7152D370300D4795D /* DiskImageFile.h */; };
 		00140DFC152D371C00D4795D /* DiskImage2IMG.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00140DFB152D371C00D4795D /* DiskImage2IMG.cpp */; };
 		00140E02152D375E00D4795D /* DiskImageFDI.h in Headers */ = {isa = PBXBuildFile; fileRef = 00140E01152D375D00D4795D /* DiskImageFDI.h */; };
 		00140E04152D376400D4795D /* DiskImageFDI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00140E03152D376400D4795D /* DiskImageFDI.cpp */; };
@@ -41,11 +39,12 @@
 		0020AE751530AE2500E3DF80 /* DiskImageCommon.h in Headers */ = {isa = PBXBuildFile; fileRef = 0020AE701530A21F00E3DF80 /* DiskImageCommon.h */; };
 		0020AE761530AE2500E3DF80 /* DiskImage2IMG.h in Headers */ = {isa = PBXBuildFile; fileRef = 00140DF9152D371000D4795D /* DiskImage2IMG.h */; };
 		0020AE771530AE2500E3DF80 /* DiskImageDC42.h in Headers */ = {isa = PBXBuildFile; fileRef = 00140E09152D37ED00D4795D /* DiskImageDC42.h */; };
-		0020AE781530AE2500E3DF80 /* BlockDiskImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 00140DEB152D281300D4795D /* BlockDiskImage.h */; };
 		0022236C142C557100B7451D /* ControlBusInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 0022236B142C557100B7451D /* ControlBusInterface.h */; };
 		00247F38139D8F4C00B165D1 /* OECommon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00247F35139D85A900B165D1 /* OECommon.cpp */; };
 		002740B813A08A4F00E13D65 /* VidexVideoterm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 002740B613A08A4F00E13D65 /* VidexVideoterm.cpp */; };
 		002740B913A08A4F00E13D65 /* VidexVideoterm.h in Headers */ = {isa = PBXBuildFile; fileRef = 002740B713A08A4F00E13D65 /* VidexVideoterm.h */; };
+		0027E67E153738CC0066A9BE /* DiskImageQCOW.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0027E67D153738CC0066A9BE /* DiskImageQCOW.cpp */; };
+		0027E680153738D30066A9BE /* DiskImageQCOW.h in Headers */ = {isa = PBXBuildFile; fileRef = 0027E67F153738D30066A9BE /* DiskImageQCOW.h */; };
 		0029EEE214266B8900AD900E /* AddressMapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0029EEDF14266B7700AD900E /* AddressMapper.cpp */; };
 		00365CEB1516955C00978DF6 /* AddressMux.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00365CEA1516955C00978DF6 /* AddressMux.cpp */; };
 		00365CED1516956600978DF6 /* AddressMux.h in Headers */ = {isa = PBXBuildFile; fileRef = 00365CEC1516956600978DF6 /* AddressMux.h */; };
@@ -109,10 +108,9 @@
 		00954E781277B79E00C17203 /* EmulationOutlineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00954E771277B79E00C17203 /* EmulationOutlineCell.m */; };
 		00954E991277BB8E00C17203 /* EmulationWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00954E981277BB8E00C17203 /* EmulationWindowController.m */; };
 		00954EA71277BC1200C17203 /* AudioControlsWindowController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00954EA61277BC1200C17203 /* AudioControlsWindowController.mm */; };
-		00A06AE31533055600A494A7 /* BlockRAW.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A06AE21533055600A494A7 /* BlockRAW.cpp */; };
-		00A06AE51533055D00A494A7 /* BlockRAW.h in Headers */ = {isa = PBXBuildFile; fileRef = 00A06AE41533055D00A494A7 /* BlockRAW.h */; };
-		00A06AE71533EE2800A494A7 /* AppleBitDiskImage35.h in Headers */ = {isa = PBXBuildFile; fileRef = 00A06AE61533EE2700A494A7 /* AppleBitDiskImage35.h */; };
-		00A06AE91533EE3100A494A7 /* AppleBitDiskImage35.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A06AE81533EE3100A494A7 /* AppleBitDiskImage35.cpp */; };
+		00A06AE31533055600A494A7 /* DiskImageAppleBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A06AE21533055600A494A7 /* DiskImageAppleBlock.cpp */; };
+		00A06AE51533055D00A494A7 /* DiskImageAppleBlock.h in Headers */ = {isa = PBXBuildFile; fileRef = 00A06AE41533055D00A494A7 /* DiskImageAppleBlock.h */; };
+		00A06AE91533EE3100A494A7 /* DiskImageApple35.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A06AE81533EE3100A494A7 /* DiskImageApple35.cpp */; };
 		00A0B8041069761A007930A5 /* Document.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00A0B8031069761A007930A5 /* Document.mm */; };
 		00A12995147A8E7500DF323F /* HIDJoystick.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A12994147A8E7500DF323F /* HIDJoystick.cpp */; };
 		00A12997147A8E7E00DF323F /* HIDJoystick.h in Headers */ = {isa = PBXBuildFile; fileRef = 00A12996147A8E7E00DF323F /* HIDJoystick.h */; };
@@ -181,6 +179,8 @@
 		00ED37C112779DD900BEF6BD /* IconWakeUp.png in Resources */ = {isa = PBXBuildFile; fileRef = 00ED37B012779DD800BEF6BD /* IconWakeUp.png */; };
 		00ED37C212779DD900BEF6BD /* IconWarmRestart.png in Resources */ = {isa = PBXBuildFile; fileRef = 00ED37B112779DD800BEF6BD /* IconWarmRestart.png */; };
 		00F01B4712A0D6EC000527CA /* EmulationUnmount.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F01B4612A0D6EC000527CA /* EmulationUnmount.png */; };
+		00F17297153B381E00AAC9C2 /* DiskImageApple525.h in Headers */ = {isa = PBXBuildFile; fileRef = 00140DED152D281F00D4795D /* DiskImageApple525.h */; };
+		00F17298153B382200AAC9C2 /* DiskImageApple35.h in Headers */ = {isa = PBXBuildFile; fileRef = 00A06AE61533EE2700A494A7 /* DiskImageApple35.h */; };
 		00F21CE712C7C7EE00A809EF /* VerticallyCenteredTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00F21CE612C7C7EE00A809EF /* VerticallyCenteredTextFieldCell.m */; };
 		00F35D7312EF049B0027B9E4 /* EmulationOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 00FE381A12CA6790002B47B1 /* EmulationOutlineView.m */; };
 		00F397E4141655DA00C53A3E /* Apple1IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00F397E3141655DA00C53A3E /* Apple1IO.cpp */; };
@@ -266,12 +266,10 @@
 		00139F811511864800B0E108 /* BankSwitchedRAM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BankSwitchedRAM.h; sourceTree = "<group>"; };
 		00139F83151195E600B0E108 /* AppleIIAddressDecoder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleIIAddressDecoder.cpp; sourceTree = "<group>"; };
 		00139F85151195EE00B0E108 /* AppleIIAddressDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleIIAddressDecoder.h; sourceTree = "<group>"; };
-		00140DE9152D280C00D4795D /* BlockDiskImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BlockDiskImage.cpp; sourceTree = "<group>"; };
-		00140DEB152D281300D4795D /* BlockDiskImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlockDiskImage.h; sourceTree = "<group>"; };
-		00140DED152D281F00D4795D /* AppleBitDiskImage525.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleBitDiskImage525.h; sourceTree = "<group>"; };
-		00140DEF152D282400D4795D /* AppleBitDiskImage525.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleBitDiskImage525.cpp; sourceTree = "<group>"; };
-		00140DF5152D36F900D4795D /* DiskImageData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DiskImageData.cpp; sourceTree = "<group>"; };
-		00140DF7152D370300D4795D /* DiskImageData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiskImageData.h; sourceTree = "<group>"; };
+		00140DED152D281F00D4795D /* DiskImageApple525.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiskImageApple525.h; sourceTree = "<group>"; };
+		00140DEF152D282400D4795D /* DiskImageApple525.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DiskImageApple525.cpp; sourceTree = "<group>"; };
+		00140DF5152D36F900D4795D /* DiskImageFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DiskImageFile.cpp; sourceTree = "<group>"; };
+		00140DF7152D370300D4795D /* DiskImageFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiskImageFile.h; sourceTree = "<group>"; };
 		00140DF9152D371000D4795D /* DiskImage2IMG.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiskImage2IMG.h; sourceTree = "<group>"; };
 		00140DFB152D371C00D4795D /* DiskImage2IMG.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DiskImage2IMG.cpp; sourceTree = "<group>"; };
 		00140E01152D375D00D4795D /* DiskImageFDI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiskImageFDI.h; sourceTree = "<group>"; };
@@ -310,6 +308,8 @@
 		002579FB1218A83400206E56 /* NSStringAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSStringAdditions.h; sourceTree = "<group>"; };
 		002740B613A08A4F00E13D65 /* VidexVideoterm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VidexVideoterm.cpp; path = Videx/VidexVideoterm.cpp; sourceTree = "<group>"; };
 		002740B713A08A4F00E13D65 /* VidexVideoterm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VidexVideoterm.h; path = Videx/VidexVideoterm.h; sourceTree = "<group>"; };
+		0027E67D153738CC0066A9BE /* DiskImageQCOW.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DiskImageQCOW.cpp; sourceTree = "<group>"; };
+		0027E67F153738D30066A9BE /* DiskImageQCOW.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiskImageQCOW.h; sourceTree = "<group>"; };
 		0029EEDF14266B7700AD900E /* AddressMapper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AddressMapper.cpp; sourceTree = "<group>"; };
 		0029EEE114266B8000AD900E /* AddressMapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddressMapper.h; sourceTree = "<group>"; };
 		00365CEA1516955C00978DF6 /* AddressMux.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AddressMux.cpp; sourceTree = "<group>"; };
@@ -390,10 +390,10 @@
 		00954EA51277BC1200C17203 /* AudioControlsWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioControlsWindowController.h; sourceTree = "<group>"; };
 		00954EA61277BC1200C17203 /* AudioControlsWindowController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AudioControlsWindowController.mm; sourceTree = "<group>"; };
 		00A06AE11533009A00A494A7 /* V2D Format.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "V2D Format.txt"; sourceTree = "<group>"; };
-		00A06AE21533055600A494A7 /* BlockRAW.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BlockRAW.cpp; sourceTree = "<group>"; };
-		00A06AE41533055D00A494A7 /* BlockRAW.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlockRAW.h; sourceTree = "<group>"; };
-		00A06AE61533EE2700A494A7 /* AppleBitDiskImage35.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleBitDiskImage35.h; sourceTree = "<group>"; };
-		00A06AE81533EE3100A494A7 /* AppleBitDiskImage35.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleBitDiskImage35.cpp; sourceTree = "<group>"; };
+		00A06AE21533055600A494A7 /* DiskImageAppleBlock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DiskImageAppleBlock.cpp; sourceTree = "<group>"; };
+		00A06AE41533055D00A494A7 /* DiskImageAppleBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiskImageAppleBlock.h; sourceTree = "<group>"; };
+		00A06AE61533EE2700A494A7 /* DiskImageApple35.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiskImageApple35.h; sourceTree = "<group>"; };
+		00A06AE81533EE3100A494A7 /* DiskImageApple35.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DiskImageApple35.cpp; sourceTree = "<group>"; };
 		00A0B7B81068949D007930A5 /* Document.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Document.h; sourceTree = "<group>"; };
 		00A0B8031069761A007930A5 /* Document.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Document.mm; sourceTree = "<group>"; };
 		00A12994147A8E7500DF323F /* HIDJoystick.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HIDJoystick.cpp; sourceTree = "<group>"; };
@@ -996,24 +996,24 @@
 				00E473411475695500F367B7 /* diskimage.h */,
 				0020AE721530A22700E3DF80 /* DiskImageCommon.cpp */,
 				0020AE701530A21F00E3DF80 /* DiskImageCommon.h */,
-				00140DF5152D36F900D4795D /* DiskImageData.cpp */,
-				00140DF7152D370300D4795D /* DiskImageData.h */,
-				00140DE9152D280C00D4795D /* BlockDiskImage.cpp */,
-				00140DEB152D281300D4795D /* BlockDiskImage.h */,
-				00A06AE21533055600A494A7 /* BlockRAW.cpp */,
-				00A06AE41533055D00A494A7 /* BlockRAW.h */,
+				00140DF5152D36F900D4795D /* DiskImageFile.cpp */,
+				00140DF7152D370300D4795D /* DiskImageFile.h */,
 				00140DFB152D371C00D4795D /* DiskImage2IMG.cpp */,
 				00140DF9152D371000D4795D /* DiskImage2IMG.h */,
 				00140E0B152D37F400D4795D /* DiskImageDC42.cpp */,
 				00140E09152D37ED00D4795D /* DiskImageDC42.h */,
 				00140E03152D376400D4795D /* DiskImageFDI.cpp */,
 				00140E01152D375D00D4795D /* DiskImageFDI.h */,
+				0027E67D153738CC0066A9BE /* DiskImageQCOW.cpp */,
+				0027E67F153738D30066A9BE /* DiskImageQCOW.h */,
 				00140E11152D395900D4795D /* DiskImageV2D.cpp */,
 				00140E13152D396500D4795D /* DiskImageV2D.h */,
-				00140DEF152D282400D4795D /* AppleBitDiskImage525.cpp */,
-				00140DED152D281F00D4795D /* AppleBitDiskImage525.h */,
-				00A06AE81533EE3100A494A7 /* AppleBitDiskImage35.cpp */,
-				00A06AE61533EE2700A494A7 /* AppleBitDiskImage35.h */,
+				00A06AE21533055600A494A7 /* DiskImageAppleBlock.cpp */,
+				00A06AE41533055D00A494A7 /* DiskImageAppleBlock.h */,
+				00140DEF152D282400D4795D /* DiskImageApple525.cpp */,
+				00140DED152D281F00D4795D /* DiskImageApple525.h */,
+				00A06AE81533EE3100A494A7 /* DiskImageApple35.cpp */,
+				00A06AE61533EE2700A494A7 /* DiskImageApple35.h */,
 			);
 			path = libdiskimage;
 			sourceTree = "<group>";
@@ -1172,17 +1172,17 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00140DEE152D281F00D4795D /* AppleBitDiskImage525.h in Headers */,
-				00140DF8152D370300D4795D /* DiskImageData.h in Headers */,
+				00140DF8152D370300D4795D /* DiskImageFile.h in Headers */,
 				00140E02152D375E00D4795D /* DiskImageFDI.h in Headers */,
 				00140E14152D396500D4795D /* DiskImageV2D.h in Headers */,
 				0020AE741530AE2500E3DF80 /* diskimage.h in Headers */,
 				0020AE751530AE2500E3DF80 /* DiskImageCommon.h in Headers */,
 				0020AE761530AE2500E3DF80 /* DiskImage2IMG.h in Headers */,
 				0020AE771530AE2500E3DF80 /* DiskImageDC42.h in Headers */,
-				0020AE781530AE2500E3DF80 /* BlockDiskImage.h in Headers */,
-				00A06AE51533055D00A494A7 /* BlockRAW.h in Headers */,
-				00A06AE71533EE2800A494A7 /* AppleBitDiskImage35.h in Headers */,
+				00A06AE51533055D00A494A7 /* DiskImageAppleBlock.h in Headers */,
+				0027E680153738D30066A9BE /* DiskImageQCOW.h in Headers */,
+				00F17297153B381E00AAC9C2 /* DiskImageApple525.h in Headers */,
+				00F17298153B382200AAC9C2 /* DiskImageApple35.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1412,16 +1412,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00140DEA152D280C00D4795D /* BlockDiskImage.cpp in Sources */,
-				00140DF0152D282400D4795D /* AppleBitDiskImage525.cpp in Sources */,
-				00140DF6152D36F900D4795D /* DiskImageData.cpp in Sources */,
+				00140DF0152D282400D4795D /* DiskImageApple525.cpp in Sources */,
+				00140DF6152D36F900D4795D /* DiskImageFile.cpp in Sources */,
 				00140DFC152D371C00D4795D /* DiskImage2IMG.cpp in Sources */,
 				00140E04152D376400D4795D /* DiskImageFDI.cpp in Sources */,
 				00140E0C152D37F500D4795D /* DiskImageDC42.cpp in Sources */,
 				00140E12152D395900D4795D /* DiskImageV2D.cpp in Sources */,
 				0020AE731530A22700E3DF80 /* DiskImageCommon.cpp in Sources */,
-				00A06AE31533055600A494A7 /* BlockRAW.cpp in Sources */,
-				00A06AE91533EE3100A494A7 /* AppleBitDiskImage35.cpp in Sources */,
+				00A06AE31533055600A494A7 /* DiskImageAppleBlock.cpp in Sources */,
+				00A06AE91533EE3100A494A7 /* DiskImageApple35.cpp in Sources */,
+				0027E67E153738CC0066A9BE /* DiskImageQCOW.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

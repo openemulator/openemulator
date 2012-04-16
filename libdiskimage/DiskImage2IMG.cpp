@@ -1,80 +1,29 @@
 
 /**
  * libdiskimage
- * 2IMG Block Disk Image
+ * Disk Image 2IMG
  * (C) 2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Decodes the 2IMG format
  */
 
-#include <string.h>
-
-#include "Block2IMG.h"
+#include "DiskImage2IMG.h"
 
 #define HEADER_SIZE 0x40
 
-Block2IMG::Block2IMG() : BlockRAW()
+DiskImage2IMG::DiskImage2IMG()
 {
+    close();
 }
 
-Block2IMG::Block2IMG(string path) : BlockRAW(path)
+bool DiskImage2IMG::open(DiskImageFile *file)
 {
-}
-
-Block2IMG::Block2IMG(DIData& data) : BlockRAW(data)
-{
-}
-
-Block2IMG::~Block2IMG()
-{
-}
-
-bool Block2IMG::open(string path)
-{
-    if (!BlockRAW::open(path))
-        return false;
+    close();
     
-    if (!open2IMG())
-    {
-        close();
-        
-        return false;
-    }
-    
-    return true;
-}
-
-bool Block2IMG::open(DIData& data)
-{
-    if (!BlockRAW::open(data))
-        return false;
-    
-    if (!open2IMG())
-    {
-        close();
-        
-        return false;
-    }
-    
-    return true;
-}
-
-void Block2IMG::close()
-{
-    BlockRAW::close();
-    
-    imageOffset = 0;
-    imageSize = 0;
-    
-    gcrVolume = 0;
-}
-
-bool Block2IMG::open2IMG()
-{
     DIChar header[HEADER_SIZE];
     
-    if (!BlockRAW::read(0, header, HEADER_SIZE))
+    if (!file->read(0, header, HEADER_SIZE))
         return false;
     
     // Check id
@@ -90,7 +39,7 @@ bool Block2IMG::open2IMG()
     if (getDIShortLE(&header[0x0a]) != 1)
         return false;
     
-    // Check sector order, do not accept NIB order here
+    // Check sector order
     DIInt format = getDIIntLE(&header[0x0c]);
     
     switch (format)
@@ -101,6 +50,13 @@ bool Block2IMG::open2IMG()
             break;
             
         case 1:
+            sectorOrder = "Apple ProDOS";
+            
+            break;
+            
+        case 2:
+            sectorOrder = "Apple NIB";
+            
             break;
             
         default:
@@ -110,47 +66,69 @@ bool Block2IMG::open2IMG()
     // Get flags
     DIInt flags = getDIIntLE(&header[0x10]);
     
-    readOnly = flags & 0x80000000;
-    
-    if (flags & 0x100)
-        gcrVolume = flags & 0xff;
-    else
-        gcrVolume = 254;
+    gcrVolume = (flags & 0x100) ? (flags & 0xff) : 254;
+    readOnly = (flags & 0x80000000);
     
     // Get image location
     imageOffset = getDIIntLE(&header[0x18]);
     imageSize = getDIIntLE(&header[0x1c]);
     
-    if ((imageOffset + imageSize) > dataSize)
+    if ((imageOffset + imageSize) > file->getSize())
         return false;
+    
+    imageOffset = 0;
+    imageSize = 0;
+    
+    gcrVolume = 0;
+    
+    this->file = file;
     
     return true;
 }
 
-bool Block2IMG::getProperty(string name, string& value)
+void DiskImage2IMG::close()
 {
-    if (name == "imageSize")
-        value = getDIString(imageSize);
-    else if (name == "gcrVolume")
-        value = getDIString(gcrVolume);
-    else
-        return BlockRAW::getProperty(name, value);
+    file = NULL;
     
-    return true;
+    readOnly = false;
+    sectorOrder = "";
+    gcrVolume = 0;
+    imageOffset = 0;
+    imageSize = 0;
 }
 
-bool Block2IMG::read(DILong offset, DIChar *data, DILong size)
+bool DiskImage2IMG::isReadOnly()
 {
-    if ((offset + size) > imageSize)
-        return false;
-    
-    return BlockRAW::read(imageOffset + offset, data, size);
+    return readOnly;
 }
 
-bool Block2IMG::write(DILong offset, DIChar *data, DILong size)
+DILong DiskImage2IMG::getSize()
 {
-    if ((offset + size) > imageSize)
+    return imageSize;
+}
+
+string DiskImage2IMG::getSectorOrder()
+{
+    return sectorOrder;
+}
+
+DIInt DiskImage2IMG::getGCRVolume()
+{
+    return gcrVolume;
+}
+
+bool DiskImage2IMG::read(DILong pos, DIChar *buf, DILong num)
+{
+    if ((pos + num) > imageSize)
         return false;
     
-    return BlockRAW::write(imageOffset + offset, data, size);
+    return file->read(imageOffset + pos, buf, num);
+}
+
+bool DiskImage2IMG::write(DILong pos, const DIChar *buf, DILong num)
+{
+    if ((pos + num) > imageSize)
+        return false;
+    
+    return file->write(imageOffset + pos, buf, num);
 }

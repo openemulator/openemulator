@@ -6,7 +6,7 @@ The V2D disk image format stores nibble streams in a manner similar to the NIB f
 * Allows for a variable number of nibbles per track
 * Stores only used tracks
 
-16 and 32 bit integers are stored in most significant byte order:
+16 and 32 bit integers are stored in big-endian byte order:
 
 struct v2dHeader {
 	unsigned int containerByteNum;	// filesize - 8

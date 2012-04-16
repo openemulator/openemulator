@@ -1,14 +1,30 @@
-//
-//  BitV2D.h
-//  OpenEmulator
-//
-//  Created by Marc Reßl on 04/04/12.
-//  Copyright (c) 2012 OpenEmulator. All rights reserved.
-//
 
-#ifndef OpenEmulator_BitV2D_h
-#define OpenEmulator_BitV2D_h
+/**
+ * libdiskimage
+ * Disk Image V2D
+ * (C) 2012 by Marc S. Ressl (mressl@umich.edu)
+ * Released under the GPL
+ *
+ * Accesses Virtual II disk images
+ */
 
+#include "DiskImageFile.h"
 
+#define DI_V2D_TRACKNUM   (40 * 4)
 
-#endif
+class DiskImageV2D
+{
+public:
+    DiskImageV2D();
+    
+    bool open(DiskImageFile *file);
+    void close();
+    
+    bool readTrack(DIInt quarterTrack, DIData& buf);
+    
+private:
+    DiskImageFile *file;
+    
+    vector<DIInt> trackOffset;
+    vector<DIInt> trackSize;
+};

@@ -1,43 +1,42 @@
 
 /**
  * libdiskimage
- * DiskCopy 4.2 Block Disk Image
+ * Disk Image DiskCopy 4.2
  * (C) 2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Accesses DiskCopy 4.2 disk images
  */
 
-#include "BlockRAW.h"
+#include "DiskImageFile.h"
 
-class BlockDC42 : public BlockRAW
+#define DI_DC42_TAGSIZE   12
+
+class DiskImageDC42
 {
 public:
-    BlockDC42();
-    BlockDC42(string path);
-    BlockDC42(DIData& data);
-    ~BlockDC42();
+    DiskImageDC42();
     
-    bool open(string path);
-    bool open(DIData& data);
+    bool open(DiskImageFile *data);
     void close();
     
-    bool getProperty(string name, string& value);
+    DILong getSize();
+    DIInt getGCRFormat();
     
-    bool read(DILong offset, DIChar *data, DILong size);
-    bool write(DILong offset, DIChar *data, DILong size);
+    bool read(DILong pos, DIChar *buf, DILong num);
+    bool write(DILong pos, const DIChar *buf, DILong num);
     
-    bool readTag(DILong offset, DIChar *data, DILong size);
-    bool writeTag(DILong offset, DIChar *data, DILong size);
+    bool readTag(DILong pos, DIChar *buf, DILong num);
+    bool writeTag(DILong pos, const DIChar *buf, DILong num);
     
 private:
+    DiskImageFile *file;
+    
+    DIInt gcrFormat;
+    
     DILong imageOffset;
     DILong imageSize;
     
     DILong tagOffset;
     DILong tagSize;
-    
-    DIInt gcrFormat;
-    
-    bool openDC42();
 };

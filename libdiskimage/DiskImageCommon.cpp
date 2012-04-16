@@ -10,7 +10,7 @@
 
 #include <sstream>
 
-#include "DICommon.h"
+#include "DiskImageCommon.h"
 
 DIInt getDIInt(const string& value)
 {
@@ -44,6 +44,15 @@ string getDIString(DIInt value)
 }
 
 string getDIString(DILong value)
+{
+    stringstream ss;
+    
+    ss << value;
+    
+    return ss.str();
+}
+
+string getDIString(float value)
 {
     stringstream ss;
     
