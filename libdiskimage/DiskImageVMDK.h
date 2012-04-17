@@ -13,7 +13,7 @@
 class DiskImageVMDK
 {
 public:
-    DiskImageVMDKDiskImageVMDK();
+    DiskImageVMDK();
     
     bool open(DiskImageFile *data);
     void close();
