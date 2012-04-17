@@ -5,7 +5,7 @@
  * (C) 2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Accesses DiskCopy 4.2 disk images
+ * Accesses QCOW disk images
  */
 
 #include "DiskImageQCOW.h"

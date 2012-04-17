@@ -88,7 +88,7 @@ bool DiskImageApple525::isReadOnly()
     return false;
 }
 
-DIDisk *DiskImageApple525::getDisk()
+DITrack *DiskImageApple525::getTrack(DIInt track, DIInt head)
 {
     return NULL;
 }

@@ -15,10 +15,12 @@
 
 typedef enum 
 {
-    DISKIMAGEAPPLEBLOCK_RAW,
+    DISKIMAGEAPPLEBLOCK_PO,
+    DISKIMAGEAPPLEBLOCK_DO,
     DISKIMAGEAPPLEBLOCK_2IMG,
     DISKIMAGEAPPLEBLOCK_DC42,
     DISKIMAGEAPPLEBLOCK_QCOW,
+    DISKIMAGEAPPLEBLOCK_VMDK,
 } DiskImageAppleBlockFormat;
 
 class DiskImageAppleBlock
@@ -32,6 +34,7 @@ public:
     
     bool isReadOnly();
     DILong getBlockNum();
+    string getFormatLabel();
     
     bool readBlock(DILong index, DIChar *buf);
     bool writeBlock(DILong index, const DIChar *buf);
@@ -43,6 +46,7 @@ private:
     DiskImage2IMG diskImage2IMG;
     DiskImageDC42 diskImageDC42;
     DiskImageQCOW diskImageQCOW;
+    DiskImageQCOW diskImageVMDK;
     
     bool open();
 };

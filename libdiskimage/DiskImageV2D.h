@@ -20,7 +20,7 @@ public:
     bool open(DiskImageFile *file);
     void close();
     
-    bool readTrack(DIInt quarterTrack, DIData& buf);
+    bool readTrack(DIInt track, DIData& buf);
     
 private:
     DiskImageFile *file;

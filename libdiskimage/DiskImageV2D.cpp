@@ -39,22 +39,21 @@ bool DiskImageV2D::open(DiskImageFile *file)
     
     DIInt trackNum = getDIShortBE(&header[0x08]);
     
-    DIInt trackOffset = HEADER_SIZE;
-    
+    DIInt offset = HEADER_SIZE;
     for (int i = 0; i < trackNum; i++)
     {
         DIChar trackHeader[TRACKHEADER_SIZE];
         
-        if (!file->read(trackOffset, trackHeader, TRACKHEADER_SIZE))
+        if (!file->read(offset, trackHeader, TRACKHEADER_SIZE))
             return false;
         
-        DIInt quarterTrackIndex = getDIIntBE(&trackHeader[0x00]);
-        DIInt trackSize = getDIShortBE(&trackHeader[0x02]);
+        DIInt index = getDIShortBE(&trackHeader[0x00]);
+        DIInt size = getDIShortBE(&trackHeader[0x02]);
         
-//        tracks[quarterTrackIndex].bit
+        trackOffset[index] = offset;
+        trackSize[index] = size;
         
-//        if (!data->read(trackOffset + TRACKHEADER_SIZE, 
-//                        imageOffset + pos, buf, num);
+        offset += TRACKHEADER_SIZE + size;
     }
     
     this->file = file;
@@ -66,10 +65,16 @@ void DiskImageV2D::close()
 {
     file = NULL;
     
-    tracks.resize(0);
+    trackOffset.resize(0);
+    trackSize.resize(0);
 }
 
-bool DiskImageV2D::readTrack(DIInt quarterTrackIndex, DIData& nibbleData)
+bool DiskImageV2D::readTrack(DIInt track, DIData& buf)
 {
-    return false;
+    if (!file)
+        return false;
+    
+    buf.resize(trackSize[track]);
+    
+    return file->read(trackOffset[track], &buf.front(), trackSize[track]);
 }

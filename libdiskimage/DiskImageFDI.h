@@ -84,8 +84,6 @@ public:
     DIFDIDiskType getDiskType();
     void setHeadNum(DIInt value);
     DIInt getHeadNum();
-    void setTrackNum(DIInt value);
-    DIInt getTrackNum();
     void setRotationSpeed(float value);
     float getRotationSpeed();
     void setTracksPerInch(DIInt value);
@@ -99,7 +97,6 @@ public:
 private:
     bool readOnly;
     DIFDIDiskType diskType;
-    DIInt trackNum;
     DIInt headNum;
     float rotationSpeed;
     DIInt tracksPerInch;
@@ -107,4 +104,7 @@ private:
     
     vector<DIFDIFormat> trackFormat;
     vector<DIData> trackData;
+    
+    DIInt getCodeFromTPI(DIInt value);
+    DIInt getTPIFromCode(DIInt value);
 };

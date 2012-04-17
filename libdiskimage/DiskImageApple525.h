@@ -22,7 +22,7 @@ public:
     
     bool isReadOnly();
     
-    DIDisk *getDisk();
+    DITrack *getTrack(DIInt track, DIInt head);
     
 private:
     bool open(DiskImageFile *diskImageFile);

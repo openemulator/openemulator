@@ -1,19 +1,19 @@
 
 /**
  * libdiskimage
- * QCOW Disk Image
+ * VMDK Disk Image
  * (C) 2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Accesses QCOW disk images
+ * Accesses VMDK disk images
  */
 
 #include "DiskImageFile.h"
 
-class DiskImageQCOW
+class DiskImageVMDK
 {
 public:
-    DiskImageQCOW();
+    DiskImageVMDKDiskImageVMDK();
     
     bool open(DiskImageFile *data);
     void close();

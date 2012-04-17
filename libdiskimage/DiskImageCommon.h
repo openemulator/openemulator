@@ -11,6 +11,8 @@
 #ifndef _DICOMMON_H
 #define _DICOMMON_H
 
+#define DI_VERSION "1.0"
+
 #include <vector>
 #include <string>
 
@@ -47,6 +49,13 @@ DIInt getDIIntLE(DIChar *p);
 DIInt getDIIntBE(DIChar *p);
 DILong getDILongLE(DIChar *p);
 DILong getDILongBE(DIChar *p);
+
+void setDIShortLE(DIChar *p, DIShort value);
+void setDIShortBE(DIChar *p, DIShort value);
+void setDIIntLE(DIChar *p, DIInt value);
+void setDIIntBE(DIChar *p, DIInt value);
+void setDILongLE(DIChar *p, DILong value);
+void setDILongBE(DIChar *p, DILong value);
 
 string getDIPathExtension(string path);
 

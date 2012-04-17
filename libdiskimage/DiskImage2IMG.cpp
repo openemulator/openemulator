@@ -32,11 +32,11 @@ bool DiskImage2IMG::open(DiskImageFile *file)
     
     // Check header size
     DIInt headerSize = getDIShortLE(&header[0x08]);
-    if (headerSize <= 0x40)
+    if (headerSize < 0x40)
         return false;
     
     // Check 2IMG version
-    if (getDIShortLE(&header[0x0a]) != 1)
+    if (getDIShortLE(&header[0x0c]) > 1)
         return false;
     
     // Check sector order
@@ -75,11 +75,6 @@ bool DiskImage2IMG::open(DiskImageFile *file)
     
     if ((imageOffset + imageSize) > file->getSize())
         return false;
-    
-    imageOffset = 0;
-    imageSize = 0;
-    
-    gcrVolume = 0;
     
     this->file = file;
     

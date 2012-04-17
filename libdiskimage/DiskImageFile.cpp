@@ -75,7 +75,7 @@ bool DiskImageFile::read(DILong pos, DIChar *buf, DILong num)
 {
     DILong end = pos + num;
     
-    if (end >= num)
+    if (end >= dataSize)
         return false;
     
     if (file.is_open())
@@ -84,7 +84,7 @@ bool DiskImageFile::read(DILong pos, DIChar *buf, DILong num)
         
         file.read((char *) buf, (size_t) num);
         
-        return !(file.failbit || file.badbit);
+        return file.good();
     }
     else if (ifile.is_open())
     {
@@ -92,7 +92,7 @@ bool DiskImageFile::read(DILong pos, DIChar *buf, DILong num)
         
         ifile.read((char *) buf, (size_t) num);
         
-        return !(ifile.failbit || ifile.badbit);
+        return ifile.good();
     }
     else
     {
@@ -104,18 +104,13 @@ bool DiskImageFile::read(DILong pos, DIChar *buf, DILong num)
 
 bool DiskImageFile::write(DILong pos, const DIChar *buf, DILong num)
 {
-    DILong end = pos + num;
-    
-    if (end >= num)
-        num = end;
-    
     if (file.is_open())
     {
         file.seekg(pos, ios::beg);
         
         file.write((char *) buf, (size_t) num);
         
-        return !(file.failbit || file.badbit);
+        return file.good();
     }
     else if (ifile.is_open())
         return false;

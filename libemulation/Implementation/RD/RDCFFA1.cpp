@@ -143,8 +143,11 @@ bool RDCFFA1::postMessage(OEComponent *sender, int message, void *data)
             return true;
             
         case STORAGE_CAN_MOUNT:
-            return true;
+        {
+            DiskImageAppleBlock diskImage;
             
+            return diskImage.open(*((string *)data));
+        }            
         case STORAGE_MOUNT:
             if (openDiskImage(*((string *)data)))
             {
@@ -371,9 +374,15 @@ bool RDCFFA1::openDiskImage(string path)
     diskImage = new DiskImageAppleBlock();
     
     if (!diskImage->open(path))
+    {
         closeDiskImage();
+        
+        return false;
+    }
     
-    return diskImage != NULL;
+    diskImagePath = path;
+    
+    return true;
 }
 
 void RDCFFA1::closeDiskImage()

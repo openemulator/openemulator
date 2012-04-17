@@ -112,6 +112,59 @@ DILong getDILongBE(DIChar *p)
             ((DILong) p[6] << 8) |
             ((DILong) p[7] << 0));
 }
+
+void setDIShortLE(DIChar *p, DIShort value)
+{
+    p[0] = (value >> 0);
+    p[1] = (value >> 8);
+}
+
+void setDIShortBE(DIChar *p, DIShort value)
+{
+    p[0] = (value >> 8);
+    p[1] = (value >> 0);
+}
+
+void setDIIntLE(DIChar *p, DIInt value)
+{
+    p[0] = (value >> 0);
+    p[1] = (value >> 8);
+    p[2] = (value >> 16);
+    p[3] = (value >> 24);
+}
+
+void setDIIntBE(DIChar *p, DIInt value)
+{
+    p[0] = (value >> 24);
+    p[1] = (value >> 16);
+    p[2] = (value >> 8);
+    p[3] = (value >> 0);
+}
+
+void setDILongLE(DIChar *p, DILong value)
+{
+    p[0] = (value >> 0);
+    p[1] = (value >> 8);
+    p[2] = (value >> 16);
+    p[3] = (value >> 24);
+    p[4] = (value >> 32);
+    p[5] = (value >> 40);
+    p[6] = (value >> 48);
+    p[7] = (value >> 56);
+}
+
+void setDILongBE(DIChar *p, DILong value)
+{
+    p[0] = (value >> 56);
+    p[1] = (value >> 48);
+    p[2] = (value >> 40);
+    p[3] = (value >> 32);
+    p[4] = (value >> 24);
+    p[5] = (value >> 16);
+    p[6] = (value >> 8);
+    p[7] = (value >> 0);
+}
+
 string getDIPathExtension(string path)
 {
     // Remove tailing path separator
