@@ -8,21 +8,31 @@
  * Accesses VMDK disk images
  */
 
-#include "DiskImageFile.h"
+#ifndef DIVMDKDISKIMAGE_H
+#define DIVMDKDISKIMAGE_H
 
-class DiskImageVMDK
+#include <fstream>
+
+#include "DIBackingStore.h"
+#include "DIDiskImage.h"
+
+class DIVMDKDiskImage : public DIDiskImage
 {
 public:
-    DiskImageVMDK();
+    DIVMDKDiskImage();
     
-    bool open(DiskImageFile *data);
+    bool open(DIBackingStore *backingStore);
     void close();
     
+    bool isWriteEnabled();
     DILong getBlockNum();
+    string getFormatLabel();
     
     bool readBlocks(DILong index, DIChar *buf, DIInt num);
     bool writeBlocks(DILong index, const DIChar *buf, DIInt num);
     
 private:
-    DiskImageFile *file;
+    fstream file;
 };
+
+#endif

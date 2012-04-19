@@ -1,29 +1,29 @@
 
 /**
  * libdiskimage
- * Disk Image 2IMG
+ * 2IMG backing store
  * (C) 2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Decodes the 2IMG format
+ * Accesses a 2IMG backing store
  */
 
-#include "DiskImage2IMG.h"
+#include "DI2IMGBackingStore.h"
 
 #define HEADER_SIZE 0x40
 
-DiskImage2IMG::DiskImage2IMG()
+DI2IMGBackingStore::DI2IMGBackingStore()
 {
     close();
 }
 
-bool DiskImage2IMG::open(DiskImageFile *file)
+bool DI2IMGBackingStore::open(DIBackingStore *backingStore)
 {
     close();
     
     DIChar header[HEADER_SIZE];
     
-    if (!file->read(0, header, HEADER_SIZE))
+    if (!backingStore->read(0, header, HEADER_SIZE))
         return false;
     
     // Check id
@@ -67,63 +67,73 @@ bool DiskImage2IMG::open(DiskImageFile *file)
     DIInt flags = getDIIntLE(&header[0x10]);
     
     gcrVolume = (flags & 0x100) ? (flags & 0xff) : 254;
-    readOnly = (flags & 0x80000000);
+    writeEnabled = !(flags & 0x80000000);
     
     // Get image location
     imageOffset = getDIIntLE(&header[0x18]);
     imageSize = getDIIntLE(&header[0x1c]);
     
-    if ((imageOffset + imageSize) > file->getSize())
+    if ((imageOffset + imageSize) > backingStore->getSize())
         return false;
     
-    this->file = file;
+    this->backingStore = backingStore;
     
     return true;
 }
 
-void DiskImage2IMG::close()
+void DI2IMGBackingStore::close()
 {
-    file = NULL;
+    backingStore = NULL;
     
-    readOnly = false;
+    writeEnabled = false;
     sectorOrder = "";
     gcrVolume = 0;
     imageOffset = 0;
     imageSize = 0;
 }
 
-bool DiskImage2IMG::isReadOnly()
+bool DI2IMGBackingStore::isWriteEnabled()
 {
-    return readOnly;
+    return writeEnabled && backingStore->isWriteEnabled();
 }
 
-DILong DiskImage2IMG::getSize()
+DILong DI2IMGBackingStore::getSize()
 {
     return imageSize;
 }
 
-string DiskImage2IMG::getSectorOrder()
+string DI2IMGBackingStore::getFormatLabel()
+{
+    string formatLabel = "2IMG Disk Image";
+    
+    if (!isWriteEnabled())
+        formatLabel += " (read-only)";
+    
+    return formatLabel;
+}
+
+string DI2IMGBackingStore::getSectorOrder()
 {
     return sectorOrder;
 }
 
-DIInt DiskImage2IMG::getGCRVolume()
+DIInt DI2IMGBackingStore::getGCRVolume()
 {
     return gcrVolume;
 }
 
-bool DiskImage2IMG::read(DILong pos, DIChar *buf, DILong num)
+bool DI2IMGBackingStore::read(DILong pos, DIChar *buf, DILong num)
 {
     if ((pos + num) > imageSize)
         return false;
     
-    return file->read(imageOffset + pos, buf, num);
+    return backingStore->read(imageOffset + pos, buf, num);
 }
 
-bool DiskImage2IMG::write(DILong pos, const DIChar *buf, DILong num)
+bool DI2IMGBackingStore::write(DILong pos, const DIChar *buf, DILong num)
 {
     if ((pos + num) > imageSize)
         return false;
     
-    return file->write(imageOffset + pos, buf, num);
+    return backingStore->write(imageOffset + pos, buf, num);
 }

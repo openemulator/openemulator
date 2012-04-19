@@ -1,41 +1,36 @@
 
 /**
  * libdiskimage
- * Disk Image File
+ * RAM Backing Store
  * (C) 2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Accesses a disk image file
+ * Accesses a RAM backing store
  */
- 
-#ifndef _DISKIMAGEFILE_H
-#define _DISKIMAGEFILE_H
+
+#ifndef _DIRAMBACKINGSTORE_H
+#define _DIRAMBACKINGSTORE_H
 
 #include <fstream>
 
-#include "DiskImageCommon.h"
+#include "DIBackingStore.h"
 
-class DiskImageFile
+class DIRAMBackingStore : public DIBackingStore
 {
 public:
-    DiskImageFile();
+    DIRAMBackingStore();
     
-    bool open(string path);
     bool open(DIData& data);
     void close();
     
-    bool isReadOnly();
+    bool isWriteEnabled();
     DILong getSize();
     
     bool read(DILong pos, DIChar *buf, DILong num);
     bool write(DILong pos, const DIChar *buf, DILong num);
     
 private:
-    fstream file;
-    ifstream ifile;
     DIData data;
-    
-    DILong dataSize;
     
     void init();
 };

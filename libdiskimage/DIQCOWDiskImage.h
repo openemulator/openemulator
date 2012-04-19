@@ -8,21 +8,29 @@
  * Accesses QCOW disk images
  */
 
-#include "DiskImageFile.h"
+#ifndef DIQCOWDISKIMAGE_H
+#define DIQCOWDISKIMAGE_H
 
-class DiskImageQCOW
+#include "DIBackingStore.h"
+#include "DIDiskImage.h"
+
+class DIQCOWDiskImage : public DIDiskImage
 {
 public:
-    DiskImageQCOW();
+    DIQCOWDiskImage();
     
-    bool open(DiskImageFile *data);
+    bool open(DIBackingStore *backingStore);
     void close();
     
+    bool isWriteEnabled();
     DILong getBlockNum();
+    string getFormatLabel();
     
     bool readBlocks(DILong index, DIChar *buf, DIInt num);
     bool writeBlocks(DILong index, const DIChar *buf, DIInt num);
     
 private:
-    DiskImageFile *file;
+    DIBackingStore *backingStore;
 };
+
+#endif

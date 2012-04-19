@@ -1,21 +1,21 @@
 
 /**
  * libdiskimage
- * Disk Image File
+ * File Backing Store
  * (C) 2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Accesses a disk image file
+ * Accesses a file backing store
  */
 
-#include "DiskImageFile.h"
+#include "DIFileBackingStore.h"
 
-DiskImageFile::DiskImageFile()
+DIFileBackingStore::DIFileBackingStore()
 {
-    dataSize = 0;
+    close();
 }
 
-bool DiskImageFile::open(string path)
+bool DIFileBackingStore::open(string path)
 {
     close();
     
@@ -44,34 +44,25 @@ bool DiskImageFile::open(string path)
     return false;
 }
 
-bool DiskImageFile::open(DIData& data)
-{
-    close();
-    
-    this->data.swap(data);
-    
-    dataSize = this->data.size();
-    
-    return true;
-}
-
-void DiskImageFile::close()
+void DIFileBackingStore::close()
 {
     file.close();
     ifile.close();
+    
+    dataSize = 0;
 }
 
-DILong DiskImageFile::getSize()
+bool DIFileBackingStore::isWriteEnabled()
+{
+    return file.is_open();
+}
+
+DILong DIFileBackingStore::getSize()
 {
     return dataSize;
 }
 
-bool DiskImageFile::isReadOnly()
-{
-    return ifile.is_open();
-}
-
-bool DiskImageFile::read(DILong pos, DIChar *buf, DILong num)
+bool DIFileBackingStore::read(DILong pos, DIChar *buf, DILong num)
 {
     DILong end = pos + num;
     
@@ -94,33 +85,25 @@ bool DiskImageFile::read(DILong pos, DIChar *buf, DILong num)
         
         return ifile.good();
     }
-    else
-    {
-        memcpy((char *) buf, &data.front() + pos, (size_t) num);
-        
-        return true;
-    }
+    
+    return false;
 }
 
-bool DiskImageFile::write(DILong pos, const DIChar *buf, DILong num)
+bool DIFileBackingStore::write(DILong pos, const DIChar *buf, DILong num)
 {
     if (file.is_open())
     {
+        DILong end = pos + num;
+        
+        if (end >= dataSize)
+            dataSize = end;
+        
         file.seekg(pos, ios::beg);
         
         file.write((char *) buf, (size_t) num);
         
         return file.good();
     }
-    else if (ifile.is_open())
-        return false;
-    else
-    {
-        if (num != this->data.size())
-            this->data.resize((size_t) num);
-        
-        memcpy(&data.front() + pos, buf, (size_t) num);
-        
-        return true;
-    }
+    
+    return false;
 }

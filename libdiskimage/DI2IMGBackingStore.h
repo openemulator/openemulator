@@ -1,25 +1,30 @@
 
 /**
  * libdiskimage
- * Disk Image 2IMG
+ * 2IMG backing store
  * (C) 2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Accesses 2IMG disk images
+ * Accesses a 2IMG backing store
  */
 
-#include "DiskImageFile.h"
+#ifndef _DI2IMGBACKINGSTORE_H
+#define _DI2IMGBACKINGSTORE_H
 
-class DiskImage2IMG
+#include "DIBackingStore.h"
+
+class DI2IMGBackingStore : public DIBackingStore
 {
 public:
-    DiskImage2IMG();
+    DI2IMGBackingStore();
     
-    bool open(DiskImageFile *file);
+    bool open(DIBackingStore *file);
     void close();
     
-    bool isReadOnly();
+    bool isWriteEnabled();
     DILong getSize();
+    string getFormatLabel();
+    
     string getSectorOrder();
     DIInt getGCRVolume();
     
@@ -27,11 +32,13 @@ public:
     bool write(DILong pos, const DIChar *buf, DILong num);
     
 private:
-    DiskImageFile *file;
+    DIBackingStore *backingStore;
     
-    bool readOnly;
+    bool writeEnabled;
     string sectorOrder;
     DIInt gcrVolume;
     DILong imageOffset;
     DILong imageSize;
 };
+
+#endif

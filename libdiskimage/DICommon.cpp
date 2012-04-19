@@ -5,12 +5,12 @@
  * (C) 2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Common emulation types and functions
+ * Common types and functions
  */
 
 #include <sstream>
 
-#include "DiskImageCommon.h"
+#include "DICommon.h"
 
 DIInt getDIInt(const string& value)
 {

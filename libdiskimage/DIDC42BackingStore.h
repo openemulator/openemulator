@@ -1,26 +1,32 @@
 
 /**
  * libdiskimage
- * Disk Image DiskCopy 4.2
+ * Disk Copy 4.2 Backing Store
  * (C) 2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Accesses DiskCopy 4.2 disk images
+ * Accesses a Disk Copy 4.2 backing store
  */
 
-#include "DiskImageFile.h"
+#ifndef _DIDC42BACKINGSTORE_H
+#define _DIDC42BACKINGSTORE_H
+
+#include "DIBackingStore.h"
 
 #define DI_DC42_TAGSIZE   12
 
-class DiskImageDC42
+class DIDC42BackingStore : DIBackingStore
 {
 public:
-    DiskImageDC42();
+    DIDC42BackingStore();
     
-    bool open(DiskImageFile *data);
+    bool open(DIBackingStore *backingStore);
     void close();
     
+    bool isWriteEnabled();
     DILong getSize();
+    string getFormatLabel();
+    
     DIInt getGCRFormat();
     
     bool read(DILong pos, DIChar *buf, DILong num);
@@ -30,7 +36,7 @@ public:
     bool writeTag(DILong pos, const DIChar *buf, DILong num);
     
 private:
-    DiskImageFile *file;
+    DIBackingStore *backingStore;
     
     DIInt gcrFormat;
     
@@ -40,3 +46,5 @@ private:
     DILong tagOffset;
     DILong tagSize;
 };
+
+#endif

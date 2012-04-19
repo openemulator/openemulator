@@ -8,7 +8,7 @@
  * Accesses Virtual II disk images
  */
 
-#include "DiskImageV2D.h"
+#include "DIV2D.h"
 
 #define HEADER_SIZE 10
 #define TRACKHEADER_SIZE 4
@@ -20,7 +20,7 @@ DiskImageV2D::DiskImageV2D()
 
 bool DiskImageV2D::open(DiskImageFile *file)
 {
-    this->file = NULL;
+    close();
     
     DIChar header[HEADER_SIZE];
     
