@@ -12,7 +12,7 @@
 #define _DISKIMAGE_H
 
 #include "DIAppleDiskImage.h"
-#include "DIApple525.h"
-#include "DIApple35.h"
+#include "DIApple525DiskStorage.h"
+#include "DIApple35DiskStorage.h"
 
 #endif

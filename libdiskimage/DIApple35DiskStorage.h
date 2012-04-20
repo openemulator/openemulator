@@ -8,12 +8,12 @@
  * Accesses an Apple 3.5" disk image
  */
 
-#include "DiskImageCommon.h"
+#include "DICommon.h"
 
-class DiskImageApple35
+class DIApple35
 {
 public:
-    DiskImageApple35();
+    DIApple35();
     
     bool open(string path);
     bool open(DIData& data);

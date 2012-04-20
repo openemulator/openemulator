@@ -86,7 +86,7 @@ DIInt DIDC42BackingStore::getGCRFormat()
     return gcrFormat;
 }
 
-bool DIDC42BackingStore::read(DILong pos, DIChar *buf, DILong num)
+bool DIDC42BackingStore::read(DILong pos, DIChar *buf, DIInt num)
 {
     if ((pos + num) > imageSize)
         return false;
@@ -94,7 +94,7 @@ bool DIDC42BackingStore::read(DILong pos, DIChar *buf, DILong num)
     return backingStore->read(imageOffset + pos, buf, num);
 }
 
-bool DIDC42BackingStore::write(DILong pos, const DIChar *buf, DILong num)
+bool DIDC42BackingStore::write(DILong pos, const DIChar *buf, DIInt num)
 {
     if ((pos + num) > imageSize)
         return false;
@@ -102,7 +102,7 @@ bool DIDC42BackingStore::write(DILong pos, const DIChar *buf, DILong num)
     return backingStore->write(imageOffset + pos, buf, num);
 }
 
-bool DIDC42BackingStore::readTag(DILong pos, DIChar *buf, DILong num)
+bool DIDC42BackingStore::readTag(DILong pos, DIChar *buf, DIInt num)
 {
     if ((pos + num) > tagSize)
         return false;
@@ -110,7 +110,7 @@ bool DIDC42BackingStore::readTag(DILong pos, DIChar *buf, DILong num)
     return backingStore->read(tagOffset + pos, buf, num);
 }
 
-bool DIDC42BackingStore::writeTag(DILong pos, const DIChar *buf, DILong num)
+bool DIDC42BackingStore::writeTag(DILong pos, const DIChar *buf, DIInt num)
 {
     if ((pos + num) > tagSize)
         return false;

@@ -12,98 +12,92 @@
 
 DIFileBackingStore::DIFileBackingStore()
 {
-    close();
+    fp = NULL;
+    writeEnabled = false;
 }
 
 bool DIFileBackingStore::open(string path)
 {
     close();
     
-    file.open(path.c_str());
+    fp = fopen(path.c_str(), "r+b");
     
-    if (file.is_open())
+    if (!fp)
     {
-        file.seekg(0, ios::end);
-        dataSize = file.tellg();
-        file.seekg(0, ios::beg);
+        fp = fopen(path.c_str(), "rb");
         
-        return true;
+        if (!fp)
+            return false;
     }
+    else
+        writeEnabled = true;
     
-    ifile.open(path.c_str());
+    this->path = path; 
     
-    if (ifile.is_open())
-    {
-        ifile.seekg(0, ios::end);
-        dataSize = ifile.tellg();
-        ifile.seekg(0, ios::beg);
-        
-        return true;
-    }
-    
-    return false;
+    return true;
 }
 
 void DIFileBackingStore::close()
 {
-    file.close();
-    ifile.close();
+    if (fp)
+        fclose(fp);
     
-    dataSize = 0;
+    fp = NULL;
+    writeEnabled = false;
 }
 
 bool DIFileBackingStore::isWriteEnabled()
 {
-    return file.is_open();
+    return writeEnabled;
 }
 
 DILong DIFileBackingStore::getSize()
 {
+    if (!fp)
+        return 0;
+    
+    fseek(fp, 0, SEEK_END);
+    DILong dataSize = ftell(fp);
+    
     return dataSize;
 }
 
-bool DIFileBackingStore::read(DILong pos, DIChar *buf, DILong num)
+bool DIFileBackingStore::read(DILong pos, DIChar *buf, DIInt num)
 {
-    DILong end = pos + num;
-    
-    if (end >= dataSize)
+    if (!fp)
         return false;
     
-    if (file.is_open())
-    {
-        file.seekg(pos, ios::beg);
-        
-        file.read((char *) buf, (size_t) num);
-        
-        return file.good();
-    }
-    else if (ifile.is_open())
-    {
-        ifile.seekg(pos, ios::beg);
-        
-        ifile.read((char *) buf, (size_t) num);
-        
-        return ifile.good();
-    }
-    
-    return false;
+    fseek(fp, (long) pos, SEEK_SET);
+    return fread(buf, num, 1, fp);
 }
 
-bool DIFileBackingStore::write(DILong pos, const DIChar *buf, DILong num)
+bool DIFileBackingStore::write(DILong pos, const DIChar *buf, DIInt num)
 {
-    if (file.is_open())
+    if (!writeEnabled)
+        return false;
+    
+    if (!fp)
+        return false;
+    
+    fseek(fp, (long) pos, SEEK_SET);
+    return fwrite(buf, num, 1, fp);
+}
+
+bool DIFileBackingStore::truncate()
+{
+    if (!writeEnabled)
+        return false;
+    
+    fclose(fp);
+    
+    fp = fopen(path.c_str(), "wb");
+    
+    if (!fp)
     {
-        DILong end = pos + num;
+        writeEnabled = false;
         
-        if (end >= dataSize)
-            dataSize = end;
-        
-        file.seekg(pos, ios::beg);
-        
-        file.write((char *) buf, (size_t) num);
-        
-        return file.good();
+        return false;
     }
     
-    return false;
+    return true;
 }

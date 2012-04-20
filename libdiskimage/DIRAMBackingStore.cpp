@@ -39,7 +39,7 @@ DILong DIRAMBackingStore::getSize()
     return data.size();
 }
 
-bool DIRAMBackingStore::read(DILong pos, DIChar *buf, DILong num)
+bool DIRAMBackingStore::read(DILong pos, DIChar *buf, DIInt num)
 {
     DILong end = pos + num;
     
@@ -51,7 +51,7 @@ bool DIRAMBackingStore::read(DILong pos, DIChar *buf, DILong num)
     return true;
 }
 
-bool DIRAMBackingStore::write(DILong pos, const DIChar *buf, DILong num)
+bool DIRAMBackingStore::write(DILong pos, const DIChar *buf, DIInt num)
 {
     DILong end = pos + num;
     
@@ -59,6 +59,13 @@ bool DIRAMBackingStore::write(DILong pos, const DIChar *buf, DILong num)
         data.resize((size_t) end);
     
     memcpy(&data.front() + pos, buf, (size_t) num);
+    
+    return true;
+}
+
+bool DIRAMBackingStore::truncate()
+{
+    data.resize(0);
     
     return true;
 }

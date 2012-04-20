@@ -40,7 +40,7 @@ private:
     
     OEComponent *memoryBus;
     
-    DiskImageAppleBlock *diskImage;
+    DIAppleDiskImage diskImage;
     
     OEUInt8 ataBuffer[0x200];
     OEUInt32 ataBufferIndex;

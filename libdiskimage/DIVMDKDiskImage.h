@@ -32,7 +32,7 @@ public:
     bool writeBlocks(DILong index, const DIChar *buf, DIInt num);
     
 private:
-    fstream file;
+    DIBackingStore *backingStore;
 };
 
 #endif

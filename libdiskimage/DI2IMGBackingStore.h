@@ -13,6 +13,13 @@
 
 #include "DIBackingStore.h"
 
+typedef enum
+{
+    DI_2IMG_DOS,
+    DI_2IMG_PRODOS,
+    DI_2IMG_NIB,
+} DI2IMGFormat;
+
 class DI2IMGBackingStore : public DIBackingStore
 {
 public:
@@ -25,17 +32,17 @@ public:
     DILong getSize();
     string getFormatLabel();
     
-    string getSectorOrder();
+    DI2IMGFormat getFormat();
     DIInt getGCRVolume();
     
-    bool read(DILong pos, DIChar *buf, DILong num);
-    bool write(DILong pos, const DIChar *buf, DILong num);
+    bool read(DILong pos, DIChar *buf, DIInt num);
+    bool write(DILong pos, const DIChar *buf, DIInt num);
     
 private:
     DIBackingStore *backingStore;
     
     bool writeEnabled;
-    string sectorOrder;
+    DI2IMGFormat format;
     DIInt gcrVolume;
     DILong imageOffset;
     DILong imageSize;

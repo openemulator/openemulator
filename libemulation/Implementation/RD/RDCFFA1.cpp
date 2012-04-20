@@ -36,8 +36,6 @@ RDCFFA1::RDCFFA1()
     rom = NULL;
     memoryBus = NULL;
     
-    diskImage = NULL;
-    
     ataBufferIndex = 0;
     ataError = false;
     ataLBA.q = 0;
@@ -144,10 +142,10 @@ bool RDCFFA1::postMessage(OEComponent *sender, int message, void *data)
             
         case STORAGE_CAN_MOUNT:
         {
-            DiskImageAppleBlock diskImage;
+            DIAppleDiskImage diskImage;
             
             return diskImage.open(*((string *)data));
-        }            
+        }
         case STORAGE_MOUNT:
             if (openDiskImage(*((string *)data)))
             {
@@ -174,7 +172,7 @@ bool RDCFFA1::postMessage(OEComponent *sender, int message, void *data)
             return false;
             
         case STORAGE_GET_FORMATLABEL:
-            *((string *)data) = "Read/Write Disk Image";
+            *((string *)data) = diskImage.getFormatLabel();
             
             return true;
     }
@@ -215,7 +213,7 @@ OEUInt8 RDCFFA1::read(OEAddress address)
         case 0x0f:
             // ATAStatus
             return (ATA_RDY |
-                    (diskImage ? ATA_DSC : 0) |
+                    (diskImage.isOpen() ? ATA_DSC : 0) |
                     (ataError ? ATA_ERR : ((ataBufferIndex < 0x200) ? ATA_DRQ : 0)));
             
         default:
@@ -233,15 +231,16 @@ void RDCFFA1::write(OEAddress address, OEUInt8 value)
         case 0x08:
             // ATA Data
             if (ataBufferIndex >= 0x200)
-                return;
+                break;
             
             ataBuffer[ataBufferIndex++] = value;
             
-            if ((ataCommand == ATA_WRITE) &&
-                (ataBufferIndex == 0x200) &&
-                diskImage &&
-                !forceWriteProtected)
-                diskImage->writeBlock(ataLBA.q, ataBuffer);
+            if ((ataBufferIndex == 0x200) &&
+                (ataCommand == ATA_WRITE))
+            {
+                if (diskImage.isWriteEnabled() && !forceWriteProtected)
+                    ataError = !diskImage.writeBlocks(ataLBA.q, ataBuffer, 1);
+            }
             
             break;
             
@@ -279,20 +278,14 @@ void RDCFFA1::write(OEAddress address, OEUInt8 value)
                 case ATA_READ:
                     ataBufferIndex = 0;
                     
-                    if (diskImage)
-                        diskImage->readBlock(ataLBA.q, ataBuffer);
-                    else
-                        ataError = true;
+                    ataError = !diskImage.readBlocks(ataLBA.q, ataBuffer, 1);
                     
                     break;
                     
                 case ATA_WRITE:
                     ataBufferIndex = 0;
                     
-                    if (diskImage && !forceWriteProtected)
-                        ataError = false;
-                    else
-                        ataError = true;
+                    ataError = !diskImage.isWriteEnabled() || !forceWriteProtected;
                     
                     break;
                     
@@ -301,10 +294,10 @@ void RDCFFA1::write(OEAddress address, OEUInt8 value)
                     // Identify
                     ataBufferIndex = 0;
                     
-                    if (diskImage)
+                    if (diskImage.isOpen())
                     {
                         OEUnion lbaSize;
-                        lbaSize.q = diskImage->getBlockNum();
+                        lbaSize.q = diskImage.getBlockNum();
                         
                         memset(ataBuffer, 0, 0x200);
                         
@@ -371,14 +364,8 @@ bool RDCFFA1::openDiskImage(string path)
 {
     closeDiskImage();
     
-    diskImage = new DiskImageAppleBlock();
-    
-    if (!diskImage->open(path))
-    {
-        closeDiskImage();
-        
+    if (!diskImage.open(path))
         return false;
-    }
     
     diskImagePath = path;
     
@@ -387,8 +374,7 @@ bool RDCFFA1::openDiskImage(string path)
 
 void RDCFFA1::closeDiskImage()
 {
-    if (diskImage)
-        delete diskImage;
+    diskImage.close();
     
-    diskImage = NULL;
+    diskImagePath = "";
 }

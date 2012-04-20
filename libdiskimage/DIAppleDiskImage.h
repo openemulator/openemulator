@@ -29,6 +29,7 @@ public:
     
     bool open(string path);
     bool open(DIData& data);
+    bool isOpen();
     void close();
     
     bool isWriteEnabled();
@@ -39,18 +40,19 @@ public:
     bool writeBlocks(DILong index, const DIChar *buf, DIInt num);
     
 private:
-    DIDiskImage dummyDiskImage;
     DIFileBackingStore fileBackingStore;
     DIRAMBackingStore ramBackingStore;
     DI2IMGBackingStore twoImgBackingStore;
     DIDC42BackingStore dc42BackingStore;
+    
+    DIDiskImage dummyDiskImage;
     DIRAWDiskImage rawDiskImage;
     DIQCOWDiskImage qcowDiskImage;
     DIVMDKDiskImage vmdkDiskImage;
     
     DIDiskImage *diskImage;
     
-    bool open(DIBackingStore *backingStore);
+    bool open(DIBackingStore *backingStore, string pathExtension);
 };
 
 #endif

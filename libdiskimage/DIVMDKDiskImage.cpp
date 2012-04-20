@@ -24,9 +24,19 @@ void DIVMDKDiskImage::close()
 {
 }
 
+bool DIVMDKDiskImage::isWriteEnabled()
+{
+    return false;
+}
+
 DILong DIVMDKDiskImage::getBlockNum()
 {
     return 0;
+}
+
+string DIVMDKDiskImage::getFormatLabel()
+{
+    return "";
 }
 
 bool DIVMDKDiskImage::readBlocks(DILong index, DIChar *buf, DIInt num)

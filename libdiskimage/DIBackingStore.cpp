@@ -29,12 +29,17 @@ string DIBackingStore::getFormatLabel()
     return "";
 }
 
-bool DIBackingStore::read(DILong pos, DIChar *buf, DILong num)
+bool DIBackingStore::read(DILong pos, DIChar *buf, DIInt num)
 {
     return false;
 }
 
-bool DIBackingStore::write(DILong pos, const DIChar *buf, DILong num)
+bool DIBackingStore::write(DILong pos, const DIChar *buf, DIInt num)
+{
+    return false;
+}
+
+bool DIBackingStore::truncate()
 {
     return false;
 }

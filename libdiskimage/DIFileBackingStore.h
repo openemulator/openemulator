@@ -11,7 +11,7 @@
 #ifndef _DIFILEBACKINGSTORE_H
 #define _DIFILEBACKINGSTORE_H
 
-#include <fstream>
+#include "stdio.h"
 
 #include "DIBackingStore.h"
 
@@ -26,16 +26,16 @@ public:
     bool isWriteEnabled();
     DILong getSize();
     
-    bool read(DILong pos, DIChar *buf, DILong num);
-    bool write(DILong pos, const DIChar *buf, DILong num);
+    bool read(DILong pos, DIChar *buf, DIInt num);
+    bool write(DILong pos, const DIChar *buf, DIInt num);
+    
+    bool truncate();
     
 private:
-    fstream file;
-    ifstream ifile;
+    FILE *fp;
+    bool writeEnabled;
     
-    DILong dataSize;
-    
-    void init();
+    string path;
 };
 
 #endif

@@ -8,5 +8,5 @@
  * Accesses an Apple 3.5" disk image
  */
 
-#include "DiskImageApple35.h"
+#include "DIApple35DiskStorage.h"
 

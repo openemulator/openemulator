@@ -24,9 +24,19 @@ void DIQCOWDiskImage::close()
 {
 }
 
+bool DIQCOWDiskImage::isWriteEnabled()
+{
+    return false;
+}
+
 DILong DIQCOWDiskImage::getBlockNum()
 {
     return 0;
+}
+
+string DIQCOWDiskImage::getFormatLabel()
+{
+    return "";
 }
     
 bool DIQCOWDiskImage::readBlocks(DILong index, DIChar *buf, DIInt num)

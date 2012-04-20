@@ -155,13 +155,14 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
-				<string>img</string>
-				<string>image</string>
 				<string>dmg</string>
 				<string>hdv</string>
 				<string>hfv</string>
+				<string>image</string>
+				<string>img</string>
 				<string>qcow</string>
 				<string>qcow2</string>
+				<string>vmdk</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
 			<string>DiskImage.icns</string>
@@ -194,16 +195,6 @@
 			<string>Formatted Disk Image</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
-		</dict>
-		<dict>
-			<key>CFBundleTypeExtensions</key>
-			<array>
-				<string>txt</string>
-			</array>
-			<key>CFBundleTypeName</key>
-			<string>ASCII Binary Image</string>
-			<key>CFBundleTypeRole</key>
-			<string>Viewer</string>
 		</dict>
 		<dict>
 			<key>CFBundleTypeExtensions</key>

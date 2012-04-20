@@ -32,7 +32,7 @@ bool DI2IMGBackingStore::open(DIBackingStore *backingStore)
     
     // Check header size
     DIInt headerSize = getDIShortLE(&header[0x08]);
-    if (headerSize < 0x40)
+    if (headerSize < 0x30)
         return false;
     
     // Check 2IMG version
@@ -40,28 +40,7 @@ bool DI2IMGBackingStore::open(DIBackingStore *backingStore)
         return false;
     
     // Check sector order
-    DIInt format = getDIIntLE(&header[0x0c]);
-    
-    switch (format)
-    {
-        case 0:
-            sectorOrder = "Apple DOS 3.3";
-            
-            break;
-            
-        case 1:
-            sectorOrder = "Apple ProDOS";
-            
-            break;
-            
-        case 2:
-            sectorOrder = "Apple NIB";
-            
-            break;
-            
-        default:
-            return false;
-    }
+    format = (DI2IMGFormat) getDIIntLE(&header[0x0c]);
     
     // Get flags
     DIInt flags = getDIIntLE(&header[0x10]);
@@ -86,7 +65,7 @@ void DI2IMGBackingStore::close()
     backingStore = NULL;
     
     writeEnabled = false;
-    sectorOrder = "";
+    format = DI_2IMG_DOS;
     gcrVolume = 0;
     imageOffset = 0;
     imageSize = 0;
@@ -112,9 +91,9 @@ string DI2IMGBackingStore::getFormatLabel()
     return formatLabel;
 }
 
-string DI2IMGBackingStore::getSectorOrder()
+DI2IMGFormat DI2IMGBackingStore::getFormat()
 {
-    return sectorOrder;
+    return format;
 }
 
 DIInt DI2IMGBackingStore::getGCRVolume()
@@ -122,7 +101,7 @@ DIInt DI2IMGBackingStore::getGCRVolume()
     return gcrVolume;
 }
 
-bool DI2IMGBackingStore::read(DILong pos, DIChar *buf, DILong num)
+bool DI2IMGBackingStore::read(DILong pos, DIChar *buf, DIInt num)
 {
     if ((pos + num) > imageSize)
         return false;
@@ -130,7 +109,7 @@ bool DI2IMGBackingStore::read(DILong pos, DIChar *buf, DILong num)
     return backingStore->read(imageOffset + pos, buf, num);
 }
 
-bool DI2IMGBackingStore::write(DILong pos, const DIChar *buf, DILong num)
+bool DI2IMGBackingStore::write(DILong pos, const DIChar *buf, DIInt num)
 {
     if ((pos + num) > imageSize)
         return false;

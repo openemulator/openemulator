@@ -1,4 +1,6 @@
 ==Latest==
+* Added libdiskimage support to CFFA1
+* Refactorized disk image framework
 * Implemented disk image framework
 * Fixed OEEmulation when removing the device
 * Refactorized component lifecycle, update() is now only called on update, not on init

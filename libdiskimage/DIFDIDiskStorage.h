@@ -5,10 +5,10 @@
  * (C) 2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Accesses FDI disk images
+ * Accesses FDI storage
  */
 
-#include "DiskImageFile.h"
+#include "DIBackingStore.h"
 
 typedef enum
 {
@@ -70,16 +70,16 @@ typedef enum
     DI_FDI_RAWMFM_1MBPS,
 } DIFDIFormat;
 
-class DiskImageFDI
+class DIFDIDiskStorage
 {
 public:
-    DiskImageFDI();
+    DIFDIDiskStorage();
     
-    bool load(DiskImageFile *file);
-    bool save(DiskImageFile *file);
+    bool open(DIBackingStore *backingStore);
+    void close();
     
-    void setReadOnly(bool value);
-    bool isReadOnly();
+    void setWriteEnabled(bool value);
+    bool isWriteEnabled();
     void setDiskType(DIFDIDiskType value);
     DIFDIDiskType getDiskType();
     void setHeadNum(DIInt value);
@@ -91,11 +91,13 @@ public:
     void setHeadWidth(DIInt value);
     DIInt getHeadWidth();
     
-    bool readTrack(DIInt track, DIInt head, DIData& buf, DIFDIFormat& format);
-    bool writeTrack(DIInt track, DIInt head, DIData& buf, DIFDIFormat format);
+    bool readTrack(DIInt head, DIInt track, DIData& buf, DIFDIFormat& format);
+    bool writeTrack(DIInt head, DIInt track, DIData& buf, DIFDIFormat format);
     
 private:
-    bool readOnly;
+    DIBackingStore *backingStore;
+    
+    bool writeEnabled;
     DIFDIDiskType diskType;
     DIInt headNum;
     float rotationSpeed;

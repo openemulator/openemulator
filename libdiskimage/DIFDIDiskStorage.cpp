@@ -10,14 +10,16 @@
 
 #include "math.h"
 
-#include "DiskImageFDI.h"
+#include "DIFDIDiskStorage.h"
 
 #define FDI_SIGNATURE   "Formatted Disk Image File\n\r"
 #define FDI_CREATOR     "libdiskimage " DI_VERSION
 
-DiskImageFDI::DiskImageFDI()
+DIFDIDiskStorage::DIFDIDiskStorage()
 {
-    readOnly = false;
+    backingStore = NULL;
+    
+    writeEnabled = false;
     diskType = DI_FDI_525_INCH;
     headNum = 0;
     rotationSpeed = 300;
@@ -25,13 +27,13 @@ DiskImageFDI::DiskImageFDI()
     headWidth = 48;
 }
 
-bool DiskImageFDI::load(DiskImageFile *file)
+bool DIFDIDiskStorage::open(DIBackingStore *backingStore)
 {
     // Read first page of header
     DIData header;
     header.resize(0x200);
     
-    if (!file->read(0, &header.front(), header.size()))
+    if (!backingStore->read(0, &header.front(), header.size()))
         return false;
     
     // Check signature
@@ -46,7 +48,7 @@ bool DiskImageFDI::load(DiskImageFile *file)
     DIInt trackNum = getDIShortBE(&header[142]) + 1;
     headNum = header[144] + 1;
     rotationSpeed = header[146] + 128;
-    readOnly = header[147] & 0x1;
+    writeEnabled = !(header[147] & 0x1);
     tracksPerInch = getTPIFromCode(header[148]);
     headWidth = getTPIFromCode(header[149]);
     
@@ -55,7 +57,7 @@ bool DiskImageFDI::load(DiskImageFile *file)
     
     header.resize(((152 + 2 * trackDataNum) / 0x200) * 0x200);
     
-    if (!file->read(0, &header.front(), header.size()))
+    if (!backingStore->read(0, &header.front(), header.size()))
         return false;
     
     DIInt trackOffset = header.size();
@@ -76,17 +78,24 @@ bool DiskImageFDI::load(DiskImageFile *file)
         trackFormat[i] = (DIFDIFormat) format;
         trackData[i].resize(trackSize);
         
-        if (!file->read(trackOffset, &trackData[i].front(), trackSize))
+        if (!backingStore->read(trackOffset, &trackData[i].front(), trackSize))
             return false;
         
         trackOffset += size;
     }
     
+    this->backingStore = backingStore;
+    
     return true;
 }
 
-bool DiskImageFDI::save(DiskImageFile *file)
+void DIFDIDiskStorage::close()
 {
+    if (!backingStore)
+        return;
+    
+    backingStore->truncate();
+    
     // Fix trackDataNum
     DIInt trackDataNum = trackData.size();
     trackDataNum = ceil(trackDataNum / headNum) * headNum;
@@ -122,7 +131,7 @@ bool DiskImageFDI::save(DiskImageFile *file)
     else if (rotSpeed > 255)
         rotSpeed = 255;
     header[146] = rotSpeed;
-    header[147] = readOnly;
+    header[147] = !writeEnabled;
     header[148] = getCodeFromTPI(tracksPerInch);
     header[149] = getCodeFromTPI(headWidth);
     
@@ -139,8 +148,8 @@ bool DiskImageFDI::save(DiskImageFile *file)
     }
     
     // Write header
-    if (!file->write(0, &header.front(), header.size()))
-        return false;
+    if (!backingStore->write(0, &header.front(), header.size()))
+        return;
     
     // Write tracks
     DIInt trackOffset = header.size();
@@ -149,76 +158,76 @@ bool DiskImageFDI::save(DiskImageFile *file)
         DIInt trackSize = ceil(trackData[i].size() / 0x100) * 0x100;
         trackData[i].resize(trackSize);
         
-        if (!file->write(trackOffset, &trackData[i].front(), trackSize))
-            return false;
+        if (!backingStore->write(trackOffset, &trackData[i].front(), trackSize))
+            return;
         
         trackOffset += trackSize;
     }
     
-    return true;
+    return;
 }
 
-void DiskImageFDI::setReadOnly(bool value)
+void DIFDIDiskStorage::setWriteEnabled(bool value)
 {
-    readOnly = value;
+    writeEnabled = value;
 }
 
-bool DiskImageFDI::isReadOnly()
+bool DIFDIDiskStorage::isWriteEnabled()
 {
-    return readOnly;
+    return writeEnabled;
 }
 
-void DiskImageFDI::setDiskType(DIFDIDiskType value)
+void DIFDIDiskStorage::setDiskType(DIFDIDiskType value)
 {
     diskType = value;
 }
 
-DIFDIDiskType DiskImageFDI::getDiskType()
+DIFDIDiskType DIFDIDiskStorage::getDiskType()
 {
     return diskType;
 }
 
-void DiskImageFDI::setHeadNum(DIInt value)
+void DIFDIDiskStorage::setHeadNum(DIInt value)
 {
     headNum = value;
 }
 
-DIInt DiskImageFDI::getHeadNum()
+DIInt DIFDIDiskStorage::getHeadNum()
 {
     return headNum;
 }
 
-void DiskImageFDI::setRotationSpeed(float value)
+void DIFDIDiskStorage::setRotationSpeed(float value)
 {
     rotationSpeed = value;
 }
 
-float DiskImageFDI::getRotationSpeed()
+float DIFDIDiskStorage::getRotationSpeed()
 {
     return rotationSpeed;
 }
 
-void DiskImageFDI::setTracksPerInch(DIInt value)
+void DIFDIDiskStorage::setTracksPerInch(DIInt value)
 {
     tracksPerInch = value;
 }
 
-DIInt DiskImageFDI::getTracksPerInch()
+DIInt DIFDIDiskStorage::getTracksPerInch()
 {
     return tracksPerInch;
 }
 
-void DiskImageFDI::setHeadWidth(DIInt value)
+void DIFDIDiskStorage::setHeadWidth(DIInt value)
 {
     headWidth = value;
 }
 
-DIInt DiskImageFDI::getHeadWidth()
+DIInt DIFDIDiskStorage::getHeadWidth()
 {
     return headWidth;
 }
 
-bool DiskImageFDI::readTrack(DIInt track, DIInt head, DIData& buf, DIFDIFormat& format)
+bool DIFDIDiskStorage::readTrack(DIInt track, DIInt head, DIData& buf, DIFDIFormat& format)
 {
     DIInt index = track * headNum + head;
     
@@ -228,7 +237,7 @@ bool DiskImageFDI::readTrack(DIInt track, DIInt head, DIData& buf, DIFDIFormat& 
     return true;
 }
 
-bool DiskImageFDI::writeTrack(DIInt track, DIInt head, DIData& buf, DIFDIFormat format)
+bool DIFDIDiskStorage::writeTrack(DIInt track, DIInt head, DIData& buf, DIFDIFormat format)
 {
     DIInt index = track * headNum + head;
     
@@ -238,7 +247,7 @@ bool DiskImageFDI::writeTrack(DIInt track, DIInt head, DIData& buf, DIFDIFormat 
     return true;
 }
 
-DIInt DiskImageFDI::getCodeFromTPI(DIInt value)
+DIInt DIFDIDiskStorage::getCodeFromTPI(DIInt value)
 {
     switch (value)
     {
@@ -259,7 +268,7 @@ DIInt DiskImageFDI::getCodeFromTPI(DIInt value)
     }
 }
 
-DIInt DiskImageFDI::getTPIFromCode(DIInt value)
+DIInt DIFDIDiskStorage::getTPIFromCode(DIInt value)
 {
     switch (value)
     {

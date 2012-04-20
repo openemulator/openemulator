@@ -26,8 +26,10 @@ public:
     bool isWriteEnabled();
     DILong getSize();
     
-    bool read(DILong pos, DIChar *buf, DILong num);
-    bool write(DILong pos, const DIChar *buf, DILong num);
+    bool read(DILong pos, DIChar *buf, DIInt num);
+    bool write(DILong pos, const DIChar *buf, DIInt num);
+    
+    bool truncate();
     
 private:
     DIData data;

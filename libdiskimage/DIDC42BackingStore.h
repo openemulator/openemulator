@@ -15,7 +15,7 @@
 
 #define DI_DC42_TAGSIZE   12
 
-class DIDC42BackingStore : DIBackingStore
+class DIDC42BackingStore : public DIBackingStore
 {
 public:
     DIDC42BackingStore();
@@ -29,11 +29,11 @@ public:
     
     DIInt getGCRFormat();
     
-    bool read(DILong pos, DIChar *buf, DILong num);
-    bool write(DILong pos, const DIChar *buf, DILong num);
+    bool read(DILong pos, DIChar *buf, DIInt num);
+    bool write(DILong pos, const DIChar *buf, DIInt num);
     
-    bool readTag(DILong pos, DIChar *buf, DILong num);
-    bool writeTag(DILong pos, const DIChar *buf, DILong num);
+    bool readTag(DILong pos, DIChar *buf, DIInt num);
+    bool writeTag(DILong pos, const DIChar *buf, DIInt num);
     
 private:
     DIBackingStore *backingStore;

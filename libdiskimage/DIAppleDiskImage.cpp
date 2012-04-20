@@ -12,8 +12,6 @@
 #include "DIRAMBackingStore.h"
 #include "DIAppleDiskImage.h"
 
-#define SECTOR_SIZE 256
-
 DIAppleDiskImage::DIAppleDiskImage()
 {
     close();
@@ -21,52 +19,33 @@ DIAppleDiskImage::DIAppleDiskImage()
 
 bool DIAppleDiskImage::open(string path)
 {
-    close();
-    
-    if (fileBackingStore.open(path))
-    {
-        if (open(&fileBackingStore))
-            return true;
-    }
-    
-    close();
-    
-    return false;
+    return (fileBackingStore.open(path) &&
+            open(&fileBackingStore, getDIPathExtension(path)));
 }
 
 bool DIAppleDiskImage::open(DIData& data)
 {
-    close();
-    
-    if (ramBackingStore.open(data))
-    {
-        if (open(&ramBackingStore))
-            return true;
-    }
-    
-    close();
-    
-    return false;
+    return (ramBackingStore.open(data) &&
+            open(&ramBackingStore, ""));
 }
 
-bool DIAppleDiskImage::open(DIBackingStore *backingStore)
+bool DIAppleDiskImage::open(DIBackingStore *backingStore, string pathExtension)
 {
-    close();
-    
     if (twoImgBackingStore.open(backingStore))
     {
-        if (rawDiskImage.open(&twoImgBackingStore))
+        if (twoImgBackingStore.getFormat() == DI_2IMG_PRODOS)
         {
-            diskImage = &rawDiskImage;
-            
-            return true;
+            if (rawDiskImage.open(&twoImgBackingStore))
+            {
+                diskImage = &rawDiskImage;
+                
+                return true;
+            }
         }
-        
-        return false;
     }
     else if (dc42BackingStore.open(backingStore))
     {
-        if (rawDiskImage.open(&twoImgBackingStore))
+        if (rawDiskImage.open(&dc42BackingStore))
         {
             diskImage = &rawDiskImage;
             
@@ -87,15 +66,28 @@ bool DIAppleDiskImage::open(DIBackingStore *backingStore)
     }
     else
     {
-        if (rawDiskImage.open(&twoImgBackingStore))
+        if ((pathExtension == "image") ||
+            (pathExtension == "img") ||
+            (pathExtension == "hdf") ||
+            (pathExtension == "hdv") ||
+            (pathExtension == "po") ||
+            (pathExtension == "vdsk"))
         {
-            diskImage = &rawDiskImage;
-            
-            return true;
+            if (rawDiskImage.open(backingStore))
+            {
+                diskImage = &rawDiskImage;
+                
+                return true;
+            }
         }
     }
     
-    return true;
+    return false;
+}
+
+bool DIAppleDiskImage::isOpen()
+{
+    return diskImage != NULL;
 }
 
 void DIAppleDiskImage::close()
@@ -104,6 +96,8 @@ void DIAppleDiskImage::close()
     ramBackingStore.close();
     twoImgBackingStore.close();
     dc42BackingStore.close();
+    
+    rawDiskImage.close();
     qcowDiskImage.close();
     vmdkDiskImage.close();
     
