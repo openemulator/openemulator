@@ -51,8 +51,8 @@ private:
     DIInt getCodeFromTPI(DIInt value);
     DIInt getTPIFromCode(DIInt value);
     
-    bool encodeBitstreamTrack(DIData& data, DIInt bitrate, DITrack& track);
-    bool decodeBitstreamTrack(DITrack& track, DIData& data, DIInt& bitrate);
-    bool encodePulsesTrack(DIData& data, DIInt bitrate, DITrack& track);
-    bool decodePulsesTrack(DITrack& track, DIData& data, DIInt& bitrate);
+    bool encodeBitstreamTrack(DITrack& track, DIData& data, DIInt bitrate);
+    bool decodeBitstreamTrack(DIData& data, DIInt& bitrate, DITrack& track);
+    bool encodePulsesTrack(DITrack& track, DIData& data, DIInt bitrate);
+    bool decodePulsesTrack(DIData& data, DIInt& bitrate, DITrack& track);
 };

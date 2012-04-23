@@ -15,11 +15,6 @@
 #define FDI_SIGNATURE   "Formatted Disk Image File\n\r"
 #define FDI_CREATOR     "libdiskimage " DI_VERSION
 
-static const DIInt tpiCode[] =
-{
-    48, 67, 96, 100, 135, 192
-};
-
 typedef enum
 {
     DI_FDI_BLANK = 0x00,
@@ -38,39 +33,44 @@ typedef enum
     DI_FDI_APPLE_35,
     DI_FDI_PC_SD,
     DI_FDI_PULSES = 0x80,
-    DI_FDI_DECODEDGCRFM_125KBPS = 0xc0,
-    DI_FDI_DECODEDGCRFM_150KBPS,
-    DI_FDI_DECODEDGCRFM_250KBPS,
-    DI_FDI_DECODEDGCRFM_300KBPS,
-    DI_FDI_DECODEDGCRFM_500KBPS,
+    DI_FDI_DECODEDGCRFM_125000BPS = 0xc0,
+    DI_FDI_DECODEDGCRFM_150000BPS,
+    DI_FDI_DECODEDGCRFM_250000BPS,
+    DI_FDI_DECODEDGCRFM_300000BPS,
+    DI_FDI_DECODEDGCRFM_500000BPS,
     DI_FDI_DECODEDC1541_ZONE1 = 0xc9,
     DI_FDI_DECODEDC1541_ZONE2,
     DI_FDI_DECODEDC1541_ZONE3,
-    DI_FDI_GCRFM_125KBPS = 0xd0,
-    DI_FDI_GCRFM_150KBPS,
-    DI_FDI_GCRFM_250KBPS,
-    DI_FDI_GCRFM_300KBPS,
-    DI_FDI_GCRFM_500KBPS,
-    DI_FDI_APPLEGCR35_ZONE1,
-    DI_FDI_APPLEGCR35_ZONE2,
-    DI_FDI_APPLEGCR35_ZONE3,
-    DI_FDI_APPLEGCR35_ZONE4,
+    DI_FDI_GCRFM_125000BPS = 0xd0,
+    DI_FDI_GCRFM_150000BPS,
+    DI_FDI_GCRFM_250000BPS,
+    DI_FDI_GCRFM_300000BPS,
+    DI_FDI_GCRFM_500000BPS,
+    DI_FDI_GCRFM_281500BPS,
+    DI_FDI_GCRFM_312500BPS,
+    DI_FDI_GCRFM_343750BPS,
+    DI_FDI_GCRFM_375000BPS,
     DI_FDI_RAWC1541_ZONE1,
     DI_FDI_RAWC1541_ZONE2,
     DI_FDI_RAWC1541_ZONE3,
-    DI_FDI_RAWDECODEDMFM_125KBPS = 0xe0,
-    DI_FDI_RAWDECODEDMFM_150KBPS,
-    DI_FDI_RAWDECODEDMFM_250KBPS,
-    DI_FDI_RAWDECODEDMFM_300KBPS,
-    DI_FDI_RAWDECODEDMFM_500KBPS,
-    DI_FDI_RAWDECODEDMFM_1MBPS,
-    DI_FDI_RAWMFM_125KBPS = 0xf0,
-    DI_FDI_RAWMFM_150KBPS,
-    DI_FDI_RAWMFM_250KBPS,
-    DI_FDI_RAWMFM_300KBPS,
-    DI_FDI_RAWMFM_500KBPS,
-    DI_FDI_RAWMFM_1MBPS,
+    DI_FDI_RAWDECODEDMFM_125000BPS = 0xe0,
+    DI_FDI_RAWDECODEDMFM_150000BPS,
+    DI_FDI_RAWDECODEDMFM_250000BPS,
+    DI_FDI_RAWDECODEDMFM_300000BPS,
+    DI_FDI_RAWDECODEDMFM_500000BPS,
+    DI_FDI_RAWDECODEDMFM_1000000BPS,
+    DI_FDI_RAWMFM_125000BPS = 0xf0,
+    DI_FDI_RAWMFM_150000BPS,
+    DI_FDI_RAWMFM_250000BPS,
+    DI_FDI_RAWMFM_300000BPS,
+    DI_FDI_RAWMFM_500000BPS,
+    DI_FDI_RAWMFM_1000000BPS,
 } DIFDITrackFormat;
+
+static const DIInt tpiCode[] =
+{
+    48, 67, 96, 100, 135, 192
+};
 
 DIFDIDiskStorage::DIFDIDiskStorage()
 {
@@ -148,72 +148,90 @@ bool DIFDIDiskStorage::openForWriting(DIBackingStore *backingStore, bool writeEn
 {
     close();
     
-    // Fix trackData
-    DIInt indexNum = trackData.size();
-    indexNum = ceil(indexNum / headNum) * headNum;
+    this->writeEnabled = writeEnabled;
+    this->diskType = diskType;
+    this->headNum = headNum;
+    this->rotationSpeed = rotationSpeed;
+    this->tracksPerInch = tracksPerInch;
     
-    trackData.resize(indexNum);
-    trackFormat.resize(indexNum);
+    this->backingStore = backingStore;
     
-    // Build header
-    DIData header;
-    header.resize(ceil((152 + 2 * indexNum) / 0x200) * 0x200);
+    return true;
+}
+
+bool DIFDIDiskStorage::close()
+{
+    bool writing = false;
     
-    // Set signature
-    memcpy((char *) &header[0], FDI_SIGNATURE, sizeof(FDI_SIGNATURE) - 1);
-    
-    // Set creator
-    memset(&header[0], ' ', 30);
-    memcpy(&header[0], FDI_CREATOR, sizeof(FDI_CREATOR) - 1);
-    header[57] = '\n';
-    header[58] = '\r';
-    
-    // Set comment
-    memset(&header[59], 0x1a, 80);
-    header[139] = 0x1a;
-    
-    // Set header data
-    setDIShortBE(&header[140], 0x0200);
-    setDIShortBE(&header[142], indexNum  / headNum - 1);
-    header[144] = headNum - 1;
-    header[145] = diskType;
-    signed char rotSpeed = rotationSpeed - 128;
-    if (rotSpeed < 0)
-        rotSpeed = 0;
-    else if (rotSpeed > 255)
-        rotSpeed = 255;
-    header[146] = rotSpeed;
-    header[147] = !writeEnabled;
-    header[148] = getCodeFromTPI(tracksPerInch);
-    header[149] = getCodeFromTPI(tracksPerInch);
-    
-    for (int i = 0; i < indexNum; i++)
+    if (writing)
     {
-        DIInt format = DI_FDI_GCRFM_250KBPS;
-        DIInt size = trackData[i].size() / 0x100;
+        // Fix trackData
+        DIInt indexNum = trackData.size();
+        indexNum = ceil(indexNum / headNum) * headNum;
         
-        if (format == DI_FDI_PULSES)
-            format |= (size >> 8) & 0x3f;
+        trackData.resize(indexNum);
+        trackFormat.resize(indexNum);
         
-        header[152 + 2 * i] = format;
-        header[152 + 2 * i + 1] = size;
-    }
-    
-    // Write header
-    if (!backingStore->write(0, &header.front(), header.size()))
-        return false;
-    
-    // Write tracks
-    DIInt trackOffset = header.size();
-    for (int i = 0; i < indexNum; i++)
-    {
-        DIInt trackSize = ceil(trackData[i].size() / 0x100) * 0x100;
-        trackData[i].resize(trackSize);
+        // Build header
+        DIData header;
+        header.resize(ceil((152 + 2 * indexNum) / 0x200) * 0x200);
         
-        if (!backingStore->write(trackOffset, &trackData[i].front(), trackSize))
+        // Set signature
+        memcpy((char *) &header[0], FDI_SIGNATURE, sizeof(FDI_SIGNATURE) - 1);
+        
+        // Set creator
+        memset(&header[0], ' ', 30);
+        memcpy(&header[0], FDI_CREATOR, sizeof(FDI_CREATOR) - 1);
+        header[57] = '\n';
+        header[58] = '\r';
+        
+        // Set comment
+        memset(&header[59], 0x1a, 80);
+        header[139] = 0x1a;
+        
+        // Set header data
+        setDIShortBE(&header[140], 0x0200);
+        setDIShortBE(&header[142], indexNum  / headNum - 1);
+        header[144] = headNum - 1;
+        header[145] = diskType;
+        signed char rotSpeed = rotationSpeed - 128;
+        if (rotSpeed < 0)
+            rotSpeed = 0;
+        else if (rotSpeed > 255)
+            rotSpeed = 255;
+        header[146] = rotSpeed;
+        header[147] = !writeEnabled;
+        header[148] = getCodeFromTPI(tracksPerInch);
+        header[149] = getCodeFromTPI(tracksPerInch);
+        
+        for (int i = 0; i < indexNum; i++)
+        {
+            DIInt format = DI_FDI_GCRFM_250000BPS;
+            DIInt size = trackData[i].size() / 0x100;
+            
+            if (format == DI_FDI_PULSES)
+                format |= (size >> 8) & 0x3f;
+            
+            header[152 + 2 * i] = format;
+            header[152 + 2 * i + 1] = size;
+        }
+        
+        // Write header
+        if (!backingStore->write(0, &header.front(), header.size()))
             return false;
         
-        trackOffset += trackSize;
+        // Write tracks
+        DIInt trackOffset = header.size();
+        for (int i = 0; i < indexNum; i++)
+        {
+            DIInt trackSize = ceil(trackData[i].size() / 0x100) * 0x100;
+            trackData[i].resize(trackSize);
+            
+            if (!backingStore->write(trackOffset, &trackData[i].front(), trackSize))
+                return false;
+            
+            trackOffset += trackSize;
+        }
     }
     
     return true;
@@ -284,11 +302,15 @@ bool DIFDIDiskStorage::readTrack(DIInt headIndex, DIInt trackIndex, DITrack& tra
             return backingStore->read(trackOffset[index], &track.data.front(), trackSize[index]);
         }
             
-        case DI_FDI_GCRFM_125KBPS:
-        case DI_FDI_GCRFM_150KBPS:
-        case DI_FDI_GCRFM_250KBPS:
-        case DI_FDI_GCRFM_300KBPS:
-        case DI_FDI_GCRFM_500KBPS:
+        case DI_FDI_GCRFM_125000BPS:
+        case DI_FDI_GCRFM_150000BPS:
+        case DI_FDI_GCRFM_250000BPS:
+        case DI_FDI_GCRFM_300000BPS:
+        case DI_FDI_GCRFM_500000BPS:
+        case DI_FDI_GCRFM_281500BPS:
+        case DI_FDI_GCRFM_312500BPS:
+        case DI_FDI_GCRFM_343750BPS:
+        case DI_FDI_GCRFM_375000BPS:
         {
             DIData data;
             
@@ -297,11 +319,13 @@ bool DIFDIDiskStorage::readTrack(DIInt headIndex, DIInt trackIndex, DITrack& tra
             if (!backingStore->read(trackOffset[index], &data.front(), trackSize[index]))
                 return false;
             
-            DIInt formatBitrate[] = { 125000, 150000, 250000, 300000, 500000 };
+            DIInt formatBitrate[] = {
+                125000, 150000, 250000, 300000, 500000, 281500, 312500, 343750, 375000
+            };
             
-            DIInt bitrate = formatBitrate[format - DI_FDI_GCRFM_125KBPS];
+            DIInt bitrate = formatBitrate[format - DI_FDI_GCRFM_125000BPS];
             
-            if (!encodeBitstreamTrack(data, bitrate, track))
+            if (!encodeBitstreamTrack(track, data, bitrate))
                 return false;
         }
             
@@ -330,7 +354,7 @@ DIInt DIFDIDiskStorage::getTPIFromCode(DIInt value)
     return 0;
 }
 
-bool DIFDIDiskStorage::encodeBitstreamTrack(DIData& data, DIInt bitrate, DITrack& track)
+bool DIFDIDiskStorage::encodeBitstreamTrack(DITrack& track, DIData& data, DIInt bitrate)
 {
     if (data.size() < 8)
         return false;
@@ -342,14 +366,15 @@ bool DIFDIDiskStorage::encodeBitstreamTrack(DIData& data, DIInt bitrate, DITrack
     
     track.data.resize(bitNum);
     
-    if (data.size() < (8 + ((bitNum + 7) >> 3)))
+    DIInt minSize = (8 + ((bitNum + 7) / 8));
+    if (data.size() < minSize)
         return false;
     
     DIChar codeTable[] = {0x00, 0xff};
     for (int i = 0; i < bitNum; i++)
     {
         DIInt byteIndex = i >> 3;
-        DIInt bitIndex = 7 - i & 0x07;
+        DIInt bitIndex = 7 - (i & 0x07);
         
         track.data[i] = codeTable[(data[byteIndex] >> bitIndex) & 0x1];
     }
@@ -360,17 +385,36 @@ bool DIFDIDiskStorage::encodeBitstreamTrack(DIData& data, DIInt bitrate, DITrack
     return true;
 }
 
-bool DIFDIDiskStorage::decodeBitstreamTrack(DITrack& track, DIData& data, DIInt& bitrate)
+bool DIFDIDiskStorage::decodeBitstreamTrack(DIData& data, DIInt& bitrate, DITrack& track)
+{
+    DIInt bitNum = track.data.size();
+    DIInt byteNum = (bitNum + 7) >> 3;
+    
+    data.resize(8 + byteNum);
+    
+    // Write header
+    setDIIntLE(&data[0x00], bitNum);
+    setDIIntLE(&data[0x04], 0);
+    
+    for (int i = 0; i < bitNum; i++)
+    {
+        DIInt byteIndex = i >> 3;
+        DIInt bitIndex = 7 - (i & 0x07);
+        
+        data[byteIndex] |= ((track.data[i] != 0) << bitIndex);
+    }
+    
+    bitrate = track.bitrate;
+    
+    return true;
+}
+
+bool DIFDIDiskStorage::encodePulsesTrack(DITrack& track, DIData& data, DIInt bitrate)
 {
     return true;
 }
 
-bool DIFDIDiskStorage::encodePulsesTrack(DIData& data, DIInt bitrate, DITrack& track)
-{
-    return true;
-}
-
-bool DIFDIDiskStorage::decodePulsesTrack(DITrack& track, DIData& data, DIInt& bitrate)
+bool DIFDIDiskStorage::decodePulsesTrack(DIData& data, DIInt& bitrate, DITrack& track)
 {
     return true;
 }

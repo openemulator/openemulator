@@ -38,8 +38,8 @@ public:
     bool isWriteEnabled();
     string getFormatLabel();
     
-    bool readTrack(DIInt headIndex, DIInt trackIndex, DITrack& track);
-    bool writeTrack(DIInt headIndex, DIInt trackIndex, DITrack& track);
+    bool readTrack(DIInt headIndex, DIInt trackIndex, DIData& data);
+    bool writeTrack(DIInt headIndex, DIInt trackIndex, DIData& data);
     
 private:
     DIFileBackingStore fileBackingStore;
@@ -54,11 +54,11 @@ private:
     
     DIDiskStorage *diskStorage;
     
-    vector<DITrack> tracks;
-    bool tracksModified;
+    vector<DIData> trackData;
+    bool trackDataModified;
     
-    DIChar *streamTrackData;
-    DIInt streamTrackSize;
+    DIChar *streamData;
+    DIInt streamSize;
     DIInt streamOffset;
     DIChar gcrVolume;
     DIChar gcrChecksum;  
@@ -69,13 +69,13 @@ private:
     bool checkLogicalDisk(DIBackingStore *backingStore,
                           DITrackFormat& trackFormat, DIInt& trackSize);
     
-    DIInt *getSectorOrder(DIInt trackIndex);
+    DIInt *getSectorOrder(DITrackFormat trackFormat);
     
-    bool encodeGCR53Track(DITrack& track, DIInt trackIndex);
-    bool encodeGCR62Track(DITrack& track, DIInt trackIndex);
-    bool encodeNIBTrack(DITrack& track, DIInt trackIndex);
-    bool decodeGCR53Track(DITrack& decodedTrack, DIInt trackIndex);
-    bool decodeGCR62Track(DITrack& decodedTrack, DIInt trackIndex);
+    bool encodeGCR53Track(DIInt trackIndex, DITrack& track);
+    bool encodeGCR62Track(DIInt trackIndex, DITrack& track);
+    bool encodeNIBTrack(DIInt trackIndex, DITrack& track);
+    bool decodeGCR53Track(DITrack& track, DIInt trackIndex);
+    bool decodeGCR62Track(DITrack& track, DIInt trackIndex, DITrackFormat trackFormat);
     
     void writeGCR53AddressField(DIInt trackIndex, DIInt sectorIndex);
     void writeGCR53DataField(DIChar *data);
@@ -105,7 +105,9 @@ private:
     DIChar readGCR62Value();
     bool validateGCR62Checksum();
     
-    void setStreamTrack(DITrack& track);
+    void setStreamData(DIData& data);
+    DIInt getStreamOffset();
+    
     void writeNibble(DIChar value);
     void writeNibble(DIChar value, DIInt q3Clocks);
     DIChar readNibble();
