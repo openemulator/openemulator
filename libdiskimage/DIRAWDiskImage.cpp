@@ -40,27 +40,22 @@ bool DIRAWDiskImage::isWriteEnabled()
     return backingStore->isWriteEnabled();
 }
 
-DILong DIRAWDiskImage::getBlockNum()
+DIInt DIRAWDiskImage::getBlockNum()
 {
-    return backingStore->getSize() / BLOCK_SIZE;
+    return (DIInt) (backingStore->getSize() / BLOCK_SIZE);
 }
 
 string DIRAWDiskImage::getFormatLabel()
 {
-    string formatLabel = "RAW Disk Image";
-    
-    if (!isWriteEnabled())
-        formatLabel += " (read-only)";
-    
-    return formatLabel;
+    return backingStore->getFormatLabel();
 }
 
-bool DIRAWDiskImage::readBlocks(DILong index, DIChar *buf, DIInt num)
+bool DIRAWDiskImage::readBlocks(DIInt index, DIChar *buf, DIInt num)
 {
     return backingStore->read(index * BLOCK_SIZE, buf, num * BLOCK_SIZE);
 }
 
-bool DIRAWDiskImage::writeBlocks(DILong index, const DIChar *buf, DIInt num)
+bool DIRAWDiskImage::writeBlocks(DIInt index, const DIChar *buf, DIInt num)
 {
     return backingStore->write(index * BLOCK_SIZE, buf, num * BLOCK_SIZE);
 }

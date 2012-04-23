@@ -19,11 +19,11 @@
 #define ATA_IDENTIFY        0xec
 #define ATA_SET_FEATURE     0xef
 
-#define ATA_ERR             0x01
-#define ATA_DRQ             0x08
-#define ATA_DSC             0x10
-#define ATA_RDY             0x40
-#define ATA_BSY             0x80
+#define ATA_ERR             (1 << 0)
+#define ATA_DRQ             (1 << 3)
+#define ATA_DSC             (1 << 4)
+#define ATA_RDY             (1 << 6)
+#define ATA_BSY             (1 << 7)
 
 #define ATA_IDENTIFY_SIZE   114
 
@@ -146,6 +146,7 @@ bool RDCFFA1::postMessage(OEComponent *sender, int message, void *data)
             
             return diskImage.open(*((string *)data));
         }
+            
         case STORAGE_MOUNT:
             if (openDiskImage(*((string *)data)))
             {
@@ -157,7 +158,9 @@ bool RDCFFA1::postMessage(OEComponent *sender, int message, void *data)
             return false;
             
         case STORAGE_UNMOUNT:
-            closeDiskImage();
+            if (closeDiskImage())
+            {
+            }
             
             device->postMessage(this, DEVICE_UPDATE, NULL);
             
@@ -211,10 +214,19 @@ OEUInt8 RDCFFA1::read(OEAddress address)
             return ataLBA.b.h3;
             
         case 0x0f:
+        {
             // ATAStatus
-            return (ATA_RDY |
-                    (diskImage.isOpen() ? ATA_DSC : 0) |
-                    (ataError ? ATA_ERR : ((ataBufferIndex < 0x200) ? ATA_DRQ : 0)));
+            OEUInt8 status = 0;
+            
+            if (ataError)
+                OEAssertBit(status, ATA_ERR);
+            else
+                OESetBit(status, ATA_DRQ, ataBufferIndex < 0x200);
+            OEAssertBit(status, ATA_DSC);
+            OEAssertBit(status, ATA_RDY);
+            
+            return status;
+        }
             
         default:
             return 0;
@@ -239,7 +251,9 @@ void RDCFFA1::write(OEAddress address, OEUInt8 value)
                 (ataCommand == ATA_WRITE))
             {
                 if (diskImage.isWriteEnabled() && !forceWriteProtected)
-                    ataError = !diskImage.writeBlocks(ataLBA.q, ataBuffer, 1);
+                    ataError = !diskImage.writeBlocks(ataLBA.d.l, ataBuffer, 1);
+                else
+                    ataError = true;
             }
             
             break;
@@ -278,14 +292,14 @@ void RDCFFA1::write(OEAddress address, OEUInt8 value)
                 case ATA_READ:
                     ataBufferIndex = 0;
                     
-                    ataError = !diskImage.readBlocks(ataLBA.q, ataBuffer, 1);
+                    ataError = !diskImage.readBlocks(ataLBA.d.l, ataBuffer, 1);
                     
                     break;
                     
                 case ATA_WRITE:
                     ataBufferIndex = 0;
                     
-                    ataError = !diskImage.isWriteEnabled() || !forceWriteProtected;
+                    ataError = !diskImage.isWriteEnabled() || forceWriteProtected;
                     
                     break;
                     
@@ -372,9 +386,11 @@ bool RDCFFA1::openDiskImage(string path)
     return true;
 }
 
-void RDCFFA1::closeDiskImage()
+bool RDCFFA1::closeDiskImage()
 {
+    diskImagePath = "";
+    
     diskImage.close();
     
-    diskImagePath = "";
+    return true;
 }

@@ -17,6 +17,8 @@ DIVMDKDiskImage::DIVMDKDiskImage()
 
 bool DIVMDKDiskImage::open(DIBackingStore *backingStore)
 {
+    close();
+    
     return false;
 }
 
@@ -29,22 +31,27 @@ bool DIVMDKDiskImage::isWriteEnabled()
     return false;
 }
 
-DILong DIVMDKDiskImage::getBlockNum()
+DIInt DIVMDKDiskImage::getBlockNum()
 {
     return 0;
 }
 
 string DIVMDKDiskImage::getFormatLabel()
 {
-    return "";
+    string formatLabel = "VMDK Disk Image";
+    
+    if (!isWriteEnabled())
+        formatLabel += " (read-only)";
+    
+    return formatLabel;
 }
 
-bool DIVMDKDiskImage::readBlocks(DILong index, DIChar *buf, DIInt num)
+bool DIVMDKDiskImage::readBlocks(DIInt index, DIChar *buf, DIInt num)
 {
     return false;
 }
 
-bool DIVMDKDiskImage::writeBlocks(DILong index, const DIChar *buf, DIInt num)
+bool DIVMDKDiskImage::writeBlocks(DIInt index, const DIChar *buf, DIInt num)
 {
     return false;
 }

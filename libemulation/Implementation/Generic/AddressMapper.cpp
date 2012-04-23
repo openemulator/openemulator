@@ -79,7 +79,7 @@ void AddressMapper::update()
     if (ref.count(sel))
     {
         if (!appendMemoryMaps(m, ref[sel], conf[sel]))
-            logMessage("could not add memory map " + conf[sel] + " for " + sel);
+            logMessage("could not add memory map '" + conf[sel] + "' for '" + sel + "'");
         
         addressDecoder->postMessage(this, ADDRESSDECODER_MAP_MEMORYMAPS, &m);
     }

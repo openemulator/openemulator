@@ -15,15 +15,16 @@
 #include "DI2IMGBackingStore.h"
 #include "DIDC42BackingStore.h"
 
+#include "DIDiskStorage.h"
+#include "DILogicalDiskStorage.h"
 #include "DIFDIDiskStorage.h"
 #include "DIV2DDiskStorage.h"
 
-typedef enum
+typedef struct 
 {
-    DI_APPLE525_DOS,
-    DI_APPLE525_PRODOS,
-    DI_APPLE525_CPM,
-} DIApple525SectorOrder;
+    DITrack *track;
+    DIInt index;
+} DIApple525Track;
 
 class DIApple525DiskStorage
 {
@@ -32,12 +33,13 @@ public:
     
     bool open(string path);
     bool open(DIData& data);
-    void close();
+    bool close();
     
     bool isWriteEnabled();
     string getFormatLabel();
     
-    DITrack *getTrack(DIInt head, DIInt track);
+    bool readTrack(DIInt headIndex, DIInt trackIndex, DITrack& track);
+    bool writeTrack(DIInt headIndex, DIInt trackIndex, DITrack& track);
     
 private:
     DIFileBackingStore fileBackingStore;
@@ -45,23 +47,66 @@ private:
     DI2IMGBackingStore twoIMGBackingStore;
     DIDC42BackingStore dc42BackingStore;
     
+    DIDiskStorage dummyDiskStorage;
+    DILogicalDiskStorage logicalDiskStorage;
     DIFDIDiskStorage fdiDiskStorage;
     DIV2DDiskStorage v2dDiskStorage;
     
-    vector<DITrack> trackData;
+    DIDiskStorage *diskStorage;
     
-    bool writeEnabled;
+    vector<DITrack> tracks;
+    bool tracksModified;
+    
+    DIChar *streamTrackData;
+    DIInt streamTrackSize;
+    DIInt streamOffset;
+    DIChar gcrVolume;
+    DIChar gcrChecksum;  
+    bool gcrError;
     
     bool open(DIBackingStore *backingStore, string pathExtension);
-    bool encodeGCRDisk(DIBackingStore *backingStore,
-                       DIApple525SectorOrder sectorOrder, DIInt volume);
-    bool encodeNIBDisk(DIBackingStore *backingStore);
-    bool encodeFDIDisk();
-    bool encodeV2DDisk();
     
-    void encodeGCR53Track(DIInt qtrack, DIData& data);
-    void encodeGCR62Track(DIInt qtrack, DIData& data, DIApple525SectorOrder sectorOrder);
-    void encodeNIBTrack(DIInt qtrack, DIData& data);
-    void encodeFDIBitstream(DIInt qtrack, DIData& data);
-    void encodeFDIPulses(DIInt qtrack, DIData& data);
+    bool checkLogicalDisk(DIBackingStore *backingStore,
+                          DITrackFormat& trackFormat, DIInt& trackSize);
+    
+    DIInt *getSectorOrder(DIInt trackIndex);
+    
+    bool encodeGCR53Track(DITrack& track, DIInt trackIndex);
+    bool encodeGCR62Track(DITrack& track, DIInt trackIndex);
+    bool encodeNIBTrack(DITrack& track, DIInt trackIndex);
+    bool decodeGCR53Track(DITrack& decodedTrack, DIInt trackIndex);
+    bool decodeGCR62Track(DITrack& decodedTrack, DIInt trackIndex);
+    
+    void writeGCR53AddressField(DIInt trackIndex, DIInt sectorIndex);
+    void writeGCR53DataField(DIChar *data);
+    bool readGCR53AddressField(DIInt trackIndex, DIInt sectorIndex);
+    bool readGCR53DataField(DIChar *data);
+    
+    void writeGCR62AddressField(DIInt trackIndex, DIInt sectorIndex);
+    void writeGCR62DataField(DIChar *data);
+    bool readGCR62AddressField(DIInt trackIndex, DIInt sectorIndex);
+    bool readGCR62DataField(DIChar *data);
+    
+    void writeSync(DIInt num, DIInt q3Clocks, DIInt lastQ3Clocks);
+    
+    void writeFMValue(DIChar value);
+    DIChar readFMValue();
+    
+    void resetGCR();
+    bool isGCRError();
+    
+    void writeGCR53Value(DIChar value);
+    void writeGCR53Checksum();
+    DIChar readGCR53Value();
+    bool validateGCR53Checksum();
+    
+    void writeGCR62Value(DIChar value);
+    void writeGCR62Checksum();
+    DIChar readGCR62Value();
+    bool validateGCR62Checksum();
+    
+    void setStreamTrack(DITrack& track);
+    void writeNibble(DIChar value);
+    void writeNibble(DIChar value, DIInt q3Clocks);
+    DIChar readNibble();
 };

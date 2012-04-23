@@ -19,7 +19,7 @@ bool DIDiskImage::isWriteEnabled()
     return false;
 }
 
-DILong DIDiskImage::getBlockNum()
+DIInt DIDiskImage::getBlockNum()
 {
     return 0;
 }
@@ -29,12 +29,12 @@ string DIDiskImage::getFormatLabel()
     return "";
 }
 
-bool DIDiskImage::readBlocks(DILong index, DIChar *buf, DIInt num)
+bool DIDiskImage::readBlocks(DIInt index, DIChar *buf, DIInt num)
 {
     return false;
 }
 
-bool DIDiskImage::writeBlocks(DILong index, const DIChar *buf, DIInt num)
+bool DIDiskImage::writeBlocks(DIInt index, const DIChar *buf, DIInt num)
 {
     return false;
 }

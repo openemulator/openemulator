@@ -46,22 +46,22 @@ public:
     
     void openPlayer(string path);
     void closePlayer();
-    void setPlayVolume(float value);
-    void setPlayThrough(bool value);
-    void setPlayPosition(float value);
-    float getPlayPosition();
-    float getPlayTime();
-    bool isPlaying();
-    void play();
-    void pause();
+    void setPlayerVolume(float value);
+    void setPlayerPlayThrough(bool value);
+    void setPlayerPosition(float value);
+    float getPlayerPosition();
+    float getPlayerTime();
+    bool isPlayerPlaying();
+    void startPlayer();
+    void pausePlayer();
     
     void openRecorder(string path);
     void closeRecorder();
-    float getRecordingTime();
-    OEUInt64 getRecordingSize();
-    bool isRecording();
-    void record();
-    void stop();
+    float getRecorderTime();
+    OEUInt64 getRecorderSize();
+    bool isRecorderRecording();
+    void startRecorder();
+    void stopRecorder();
     
 private:
     bool fullDuplex;
@@ -85,23 +85,23 @@ private:
     bool timerThreadShouldRun;
     pthread_t timerThread;
     
-    float playVolume;
-    bool playThrough;
-    bool playing;
-    SNDFILE *playSNDFILE;
-    OEUInt32 playChannelNum;
-    OEUInt64 playFrameIndex;
-    OEUInt64 playFrameNum;
-    double playSRCRatio;
-    SRC_STATE *playSRC;
-    bool playSRCEndOfInput;
-    vector<float> playInput;
-    OEUInt32 playInputFrameIndex;
-    OEUInt32 playInputFrameNum;
+    float playerVolume;
+    bool playerPlayThrough;
+    bool playerPlaying;
+    SNDFILE *playerSNDFILE;
+    OEUInt32 playerChannelNum;
+    OEUInt64 playerFrameIndex;
+    OEUInt64 playerFrameNum;
+    double playerSRCRatio;
+    SRC_STATE *playerSRC;
+    bool playerSRCEndOfInput;
+    vector<float> playerInput;
+    OEUInt32 playerInputFrameIndex;
+    OEUInt32 playerInputFrameNum;
     
-    bool recording;
-    SNDFILE *recordingSNDFILE;
-    OEUInt64 recordingFrameNum;
+    bool recorderRecording;
+    SNDFILE *recorderSNDFILE;
+    OEUInt64 recorderFrameNum;
     
     void initBuffer();
     bool isAudioBufferEmpty();

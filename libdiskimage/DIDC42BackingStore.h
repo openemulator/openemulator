@@ -11,6 +11,7 @@
 #ifndef _DIDC42BACKINGSTORE_H
 #define _DIDC42BACKINGSTORE_H
 
+#include "DICommon.h"
 #include "DIBackingStore.h"
 
 #define DI_DC42_TAGSIZE   12

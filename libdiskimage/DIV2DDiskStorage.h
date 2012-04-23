@@ -9,8 +9,9 @@
  */
 
 #include "DIBackingStore.h"
+#include "DIDiskStorage.h"
 
-class DIV2DDiskStorage
+class DIV2DDiskStorage : public DIDiskStorage
 {
 public:
     DIV2DDiskStorage();
@@ -18,11 +19,20 @@ public:
     bool open(DIBackingStore *file);
     void close();
     
-    bool readTrack(DIInt track, DIData& buf);
-    bool writeTrack(DIInt track, DIData& buf);
+    bool isWriteEnabled();
+    DIDiskType getDiskType();
+    DIInt getHeadNum();
+    float getRotationSpeed();
+    DIInt getTracksPerInch();
+    string getFormatLabel();
+    
+    bool readTrack(DIInt headIndex, DIInt trackIndex, DITrack& track);
     
 private:
+    DIBackingStore dummyBackingStore;
+    
     DIBackingStore *backingStore;
     
-    vector<DIData> trackData;
+    vector<DIInt> trackOffset;
+    vector<DIInt> trackSize;
 };

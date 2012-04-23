@@ -110,7 +110,7 @@ typedef enum
 - (BOOL)isMount;
 - (void)revealInFinder;
 - (BOOL)isLocked;
-- (void)unmount;
+- (BOOL)unmount;
 
 - (BOOL)isPort;
 - (BOOL)addOEDocument:(NSString *)path;

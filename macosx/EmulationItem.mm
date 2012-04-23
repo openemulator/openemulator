@@ -625,10 +625,12 @@
     return success;
 }
 
-- (void)unmount
+- (BOOL)unmount
 {
+    bool success = true;
+    
     if (!storages)
-        return;
+        return success;
     
     [document lockEmulation];
     
@@ -637,12 +639,13 @@
         OEComponent *component = (OEComponent *)[[storages objectAtIndex:i]
                                                  pointerValue];
         
-        component->postMessage(NULL, STORAGE_UNMOUNT, NULL);
+        if (!component->postMessage(NULL, STORAGE_UNMOUNT, NULL))
+            success = false;
     }
     
     [document unlockEmulation];
     
-    return;
+    return success;
 }
 
 - (BOOL)isPort

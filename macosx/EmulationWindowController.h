@@ -56,6 +56,7 @@ NSOutlineViewDataSource, NSComboBoxDataSource>
 - (BOOL)mount:(NSString *)path inItem:(EmulationItem *)item;
 - (BOOL)doMount:(NSString *)path inItem:(EmulationItem *)item;
 - (IBAction)unmount:(id)sender;
+- (BOOL)doUnmount:(EmulationItem *)item;
 - (IBAction)revealInFinder:(id)sender;
 - (IBAction)showDevice:(id)sender;
 

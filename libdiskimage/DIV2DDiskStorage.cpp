@@ -10,20 +10,26 @@
 
 #include "DIV2DDiskStorage.h"
 
-#define V2D_TRACKNUM            (40 * 4)
 #define V2D_SIGNATURE           0x44354e49
 #define V2D_HEADER_SIZE         10
 #define V2D_TRACKHEADER_SIZE    4
 
+#define V2D_HEADNUM             1
+#define V2D_TRACKSPERINCH       192
+#define V2D_ROTATIONSPEED       300
+
+#define V2D_TRACKNUM            (40 * 4)
+#define V2D_BITRATE             250000
+
 DIV2DDiskStorage::DIV2DDiskStorage()
 {
-    backingStore = NULL;
-    
-    trackData.resize(V2D_TRACKNUM);
+    close();
 }
 
 bool DIV2DDiskStorage::open(DIBackingStore *backingStore)
 {
+    close();
+    
     DIChar header[V2D_HEADER_SIZE];
     
     if (!backingStore->read(0, header, V2D_HEADER_SIZE))
@@ -36,7 +42,7 @@ bool DIV2DDiskStorage::open(DIBackingStore *backingStore)
         return false;
     
     // Check id
-    if (getDIIntBE(&header[0x04]) != 0x44354e49)
+    if (getDIIntBE(&header[0x04]) != V2D_SIGNATURE)
         return false;
     
     DIInt trackNum = getDIShortBE(&header[0x08]);
@@ -57,9 +63,8 @@ bool DIV2DDiskStorage::open(DIBackingStore *backingStore)
         
         offset += V2D_TRACKHEADER_SIZE;
         
-        trackData[track].resize(size);
-        if (!backingStore->read(offset, &trackData[track].front(), size))
-            return false;
+        trackOffset[track] = offset;
+        trackSize[track] = size;
         
         offset += size;
     }
@@ -71,74 +76,62 @@ bool DIV2DDiskStorage::open(DIBackingStore *backingStore)
 
 void DIV2DDiskStorage::close()
 {
-    if (!backingStore)
-        return;
+    backingStore = &dummyBackingStore;
     
-    backingStore->truncate();
-    
-    DIInt fileSize = V2D_HEADER_SIZE;
-    DIInt trackNum = 0;
-    
-    for (DIInt track = 0; track < V2D_TRACKNUM; track++)
-    {
-        if (!trackData[track].size())
-            continue;
-        
-        fileSize += V2D_HEADER_SIZE + trackData[track].size();
-        trackNum++;
-    }
-    
-    DIChar header[V2D_HEADER_SIZE];
-    
-    setDIIntBE(&header[0x00], fileSize);
-    setDIIntBE(&header[0x04], V2D_SIGNATURE);
-    setDIShortBE(&header[0x08], trackNum);
-    
-    if (!backingStore->write(0, header, V2D_HEADER_SIZE))
-        return;
-    
-    DIInt offset = V2D_HEADER_SIZE;
-    for (int track = 0; track < V2D_TRACKNUM; track++)
-    {
-        DIInt size = trackData[track].size();
-        if (!size)
-            continue;
-        
-        DIChar trackHeader[V2D_TRACKHEADER_SIZE];
-        
-        setDIShortBE(&trackHeader[0x00], track);
-        setDIShortBE(&trackHeader[0x02], size);
-        
-        if (!backingStore->write(offset, trackHeader, V2D_TRACKHEADER_SIZE))
-            return;
-        
-        offset += V2D_TRACKHEADER_SIZE;
-        
-        if (!backingStore->write(offset, &trackData[track].front(), size))
-            return;
-        
-        offset += size;
-    }
-    
-    return;
+    trackOffset.resize(0);
+    trackSize.resize(0);
 }
 
-bool DIV2DDiskStorage::readTrack(DIInt track, DIData& buf)
+bool DIV2DDiskStorage::isWriteEnabled()
 {
-    if (track >= V2D_TRACKNUM)
-        return false;
-    
-    buf = trackData[track];
-    
-    return true;
+    return backingStore->isWriteEnabled();
 }
 
-bool DIV2DDiskStorage::writeTrack(DIInt track, DIData& buf)
+DIDiskType DIV2DDiskStorage::getDiskType()
 {
-    if (track >= V2D_TRACKNUM)
+    return DI_525_INCH;
+}
+
+DIInt DIV2DDiskStorage::getHeadNum()
+{
+    return V2D_HEADNUM;
+}
+
+float DIV2DDiskStorage::getRotationSpeed()
+{
+    return V2D_ROTATIONSPEED;
+}
+
+DIInt DIV2DDiskStorage::getTracksPerInch()
+{
+    return V2D_TRACKSPERINCH;
+}
+
+string DIV2DDiskStorage::getFormatLabel()
+{
+    return "V2D Disk Image";
+}
+
+bool DIV2DDiskStorage::readTrack(DIInt headIndex, DIInt trackIndex, DITrack& track)
+{
+    if (trackIndex >= V2D_TRACKNUM)
         return false;
     
-    trackData[track] = buf;
+    DIInt size = trackSize[trackIndex];
     
-    return true;
+    track.data.resize(size);
+    track.bitrate = V2D_BITRATE;
+    
+    if (size)
+    {
+        track.format = DI_APPLE_NIB;
+        
+        return backingStore->read(trackOffset[trackIndex], &track.data.front(), size);
+    }
+    else
+    {
+        track.format = DI_BLANK;
+        
+        return true;
+    }
 }

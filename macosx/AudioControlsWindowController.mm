@@ -140,8 +140,8 @@
         [fPlayNameLabel setStringValue:path];
         [fPlayNameLabel setToolTip:path];
         
-        float playPosition = paAudio->getPlayPosition();
-        float playTime = paAudio->getPlayTime();
+        float playPosition = paAudio->getPlayerPosition();
+        float playTime = paAudio->getPlayerTime();
         NSString *positionLabel = [self formatTime:playPosition];
         NSString *timeLabel = [self formatTime:playTime];
         [fPlayPositionLabel setStringValue:positionLabel];
@@ -149,7 +149,7 @@
         [fPlayTimeLabel setStringValue:timeLabel];
     }
     
-    BOOL isPlaying = paAudio->isPlaying();
+    BOOL isPlaying = paAudio->isPlayerPlaying();
     [fTogglePlayButton setEnabled:playPath ? YES : NO];
     [fTogglePlayButton setImage:(isPlaying ?
                                  [NSImage imageNamed:@"AudioPause.png"] :
@@ -173,10 +173,10 @@
 {
     PAAudio *paAudio = (PAAudio *)[fDocumentController paAudio];
     
-    if (!paAudio->isPlaying())
-        paAudio->play();
+    if (!paAudio->isPlayerPlaying())
+        paAudio->startPlayer();
     else
-        paAudio->pause();
+        paAudio->pausePlayer();
 }
 
 - (IBAction)playPositionDidChange:(id)sender
@@ -186,8 +186,8 @@
     
     PAAudio *paAudio = (PAAudio *)[fDocumentController paAudio];
     
-    float time = [sender floatValue] * paAudio->getPlayTime();
-    paAudio->setPlayPosition(time);
+    float time = [sender floatValue] * paAudio->getPlayerTime();
+    paAudio->setPlayerPosition(time);
 }
 
 - (void)readFromPath:(NSString *)path
@@ -200,9 +200,9 @@
     if (playPath)
     {
         paAudio->openPlayer([playPath cppString]);
-        paAudio->play();
+        paAudio->startPlayer();
         
-        if (!paAudio->getPlayTime())
+        if (!paAudio->getPlayerTime())
         {
             paAudio->closePlayer();
             
@@ -226,15 +226,15 @@
     }
     else
     {
-        float recordingTime = paAudio->getRecordingTime();
-        long long recordingSize = paAudio->getRecordingSize();
+        float recordingTime = paAudio->getRecorderTime();
+        long long recordingSize = paAudio->getRecorderSize();
         NSString *timeLabel = [self formatTime:recordingTime];
         NSString *sizeLabel = [self formatSize:recordingSize];
         [fRecordingTimeLabel setStringValue:timeLabel];
         [fRecordingSizeLabel setStringValue:sizeLabel];
     }
     
-    BOOL isRecording = paAudio->isRecording();
+    BOOL isRecording = paAudio->isRecorderRecording();
     [fToggleRecordingButton setImage:(isRecording ?
                                       [NSImage imageNamed:@"AudioStop.png"] :
                                       [NSImage imageNamed:@"AudioRecord.png"]
@@ -246,14 +246,14 @@
 {
     PAAudio *paAudio = (PAAudio *)[fDocumentController paAudio];
     
-    if (!paAudio->isRecording())
+    if (!paAudio->isRecorderRecording())
     {
         NSString *path = [NSTemporaryDirectory()
                           stringByAppendingPathComponent:@"oerecording"];
         recordingPath = [path copy];
         
         paAudio->openRecorder([recordingPath cppString]);
-        paAudio->record();
+        paAudio->startRecorder();
     }
     else
         paAudio->closeRecorder();

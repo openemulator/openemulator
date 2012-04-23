@@ -23,13 +23,12 @@ typedef unsigned short DIShort;
 typedef unsigned int DIInt;
 typedef unsigned long long DILong;
 
-typedef vector<DIChar> DIData;
+typedef signed char DISChar;
+typedef signed short DISShort;
+typedef signed int DISInt;
+typedef signed long long DISLong;
 
-typedef struct
-{
-    DIData stream;
-    DIInt bitnum;
-} DITrack;
+typedef vector<DIChar> DIData;
 
 #ifdef _WIN32
 #define DI_PATH_SEPARATOR "\\"

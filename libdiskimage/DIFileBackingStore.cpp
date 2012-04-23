@@ -37,6 +37,22 @@ bool DIFileBackingStore::open(string path)
     return true;
 }
 
+bool DIFileBackingStore::create(string path)
+{
+    close();
+    
+    fp = fopen(path.c_str(), "wb");
+    
+    if (!fp)
+        return false;
+    
+    writeEnabled = true;
+    
+    this->path = path; 
+    
+    return true;
+}
+
 void DIFileBackingStore::close()
 {
     if (fp)
@@ -62,12 +78,23 @@ DILong DIFileBackingStore::getSize()
     return dataSize;
 }
 
+string DIFileBackingStore::getFormatLabel()
+{
+    string formatLabel = "RAW Disk Image";
+    
+    if (!isWriteEnabled())
+        formatLabel += " (read-only)";
+    
+    return formatLabel;
+}
+
 bool DIFileBackingStore::read(DILong pos, DIChar *buf, DIInt num)
 {
     if (!fp)
         return false;
     
     fseek(fp, (long) pos, SEEK_SET);
+    
     return fread(buf, num, 1, fp);
 }
 
@@ -80,24 +107,6 @@ bool DIFileBackingStore::write(DILong pos, const DIChar *buf, DIInt num)
         return false;
     
     fseek(fp, (long) pos, SEEK_SET);
+    
     return fwrite(buf, num, 1, fp);
-}
-
-bool DIFileBackingStore::truncate()
-{
-    if (!writeEnabled)
-        return false;
-    
-    fclose(fp);
-    
-    fp = fopen(path.c_str(), "wb");
-    
-    if (!fp)
-    {
-        writeEnabled = false;
-        
-        return false;
-    }
-    
-    return true;
 }

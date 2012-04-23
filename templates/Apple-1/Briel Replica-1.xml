@@ -5,6 +5,7 @@
     <device id="replica1" label="Replica-1" image="images/Briel/Replica-1.png">
         <setting ref="replica1.io" name="terminalSpeed" label="Terminal Speed" type="select" options="Standard,Enhanced"/>
         <setting ref="replica1.io" name="keyboardType" label="Keyboard" type="select" options="Standard,Full ASCII"/>
+        <setting ref="replica1.memoryE000" name="sel" label="Memory at $E000" type="select" options="ROM6502|Replica-1 6502 ROM,ROM65C02|Replica-1 65C02 ROM,ROMApplesoftLite|Applesoft Lite ROM"/>
     </device>
     <port id="replica1.videoPort" ref="appleMonitorII.connector" type="Composite Video Port" group="peripherals" label="Video Port" image="images/Connectors/RCA Female.png">
         <inlet ref="replica1.terminal" property="monitorDevice" outletRef=""/>
@@ -43,8 +44,16 @@
         <property name="mapRAM" value="0x0000-0x7fff"/>
         <property name="refIO" ref="replica1.ioMemory"/>
         <property name="mapIO" value="0xd000-0xdfff"/>
-        <property name="refROM" ref="replica1.rom"/>
-        <property name="mapROM" value="0xe000-0xffff"/>
+    </component>
+    <component id="replica1.memoryE000" class="AddressMapper">
+        <property name="addressDecoder" ref="replica1.memoryBus"/>
+        <property name="refROM6502" ref="replica1.rom6502"/>
+        <property name="mapROM6502" value="0xe000-0xffff"/>
+        <property name="refROM65C02" ref="replica1.rom65C02"/>
+        <property name="mapROM65C02" value="0xe000-0xffff"/>
+        <property name="refROMApplesoftLite" ref="replica1.romApplesoftLite"/>
+        <property name="mapROMApplesoftLite" value="0xe000-0xffff"/>
+        <property name="sel" value="ROM6502"/>
     </component>
     <component id="replica1.floatingBus" class="FloatingBus">
         <property name="mode" value="ground"/>
@@ -101,8 +110,14 @@
         <property name="monitor" ref="appleMonitorII.monitor"/>
         <property name="font" data="${resourcePath}/roms/Signetics/Signetics 2513 Video ROM.bin"/>
     </component>
-    <component id="replica1.rom" class="ROM">
+    <component id="replica1.rom6502" class="ROM">
         <property name="memoryImage" data="${resourcePath}/roms/Briel/Replica-1 6502 ROM.bin"/>
+    </component>
+    <component id="replica1.rom65C02" class="ROM">
+        <property name="memoryImage" data="${resourcePath}/roms/Briel/Replica-1 65C02 ROM.bin"/>
+    </component>
+    <component id="replica1.romApplesoftLite" class="ROM">
+        <property name="memoryImage" data="${resourcePath}/roms/Briel/applesoft-lite-0.4.bin"/>
     </component>
     
     <device id="appleMonitorII" label="Apple Monitor II" image="images/Apple/Apple Monitor II.png">

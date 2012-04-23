@@ -38,8 +38,3 @@ bool DIBackingStore::write(DILong pos, const DIChar *buf, DIInt num)
 {
     return false;
 }
-
-bool DIBackingStore::truncate()
-{
-    return false;
-}

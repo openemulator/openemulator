@@ -21,6 +21,6 @@ public:
     
     bool isReadOnly();
     
-    bool readTrack(DIInt trackIndex, DIInt head, DITrack& data);
-    bool writeTrack(DIInt trackIndex, DIInt head, DITrack& data);
+    bool readTrack(DIInt trackIndex, DIInt headIndex, DIData& data);
+    bool writeTrack(DIInt trackIndex, DIInt headIndex, DIData& data);
 };

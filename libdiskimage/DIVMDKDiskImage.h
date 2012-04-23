@@ -11,8 +11,7 @@
 #ifndef DIVMDKDISKIMAGE_H
 #define DIVMDKDISKIMAGE_H
 
-#include <fstream>
-
+#include "DICommon.h"
 #include "DIBackingStore.h"
 #include "DIDiskImage.h"
 
@@ -25,11 +24,11 @@ public:
     void close();
     
     bool isWriteEnabled();
-    DILong getBlockNum();
+    DIInt getBlockNum();
     string getFormatLabel();
     
-    bool readBlocks(DILong index, DIChar *buf, DIInt num);
-    bool writeBlocks(DILong index, const DIChar *buf, DIInt num);
+    bool readBlocks(DIInt index, DIChar *buf, DIInt num);
+    bool writeBlocks(DIInt index, const DIChar *buf, DIInt num);
     
 private:
     DIBackingStore *backingStore;

@@ -31,27 +31,17 @@ bool DIAppleDiskImage::open(DIData& data)
 
 bool DIAppleDiskImage::open(DIBackingStore *backingStore, string pathExtension)
 {
+    close();
+    
     if (twoImgBackingStore.open(backingStore))
     {
-        if (twoImgBackingStore.getFormat() == DI_2IMG_PRODOS)
-        {
-            if (rawDiskImage.open(&twoImgBackingStore))
-            {
-                diskImage = &rawDiskImage;
-                
-                return true;
-            }
-        }
+        if (twoImgBackingStore.getFormat() != DI_2IMG_PRODOS)
+            return false;
+        
+        backingStore = &twoImgBackingStore;
     }
     else if (dc42BackingStore.open(backingStore))
-    {
-        if (rawDiskImage.open(&dc42BackingStore))
-        {
-            diskImage = &rawDiskImage;
-            
-            return true;
-        }
-    }
+        backingStore = &dc42BackingStore;
     else if (qcowDiskImage.open(backingStore))
     {
         diskImage = &qcowDiskImage;
@@ -66,28 +56,26 @@ bool DIAppleDiskImage::open(DIBackingStore *backingStore, string pathExtension)
     }
     else
     {
-        if ((pathExtension == "image") ||
-            (pathExtension == "img") ||
-            (pathExtension == "hdf") ||
-            (pathExtension == "hdv") ||
-            (pathExtension == "po") ||
-            (pathExtension == "vdsk"))
-        {
-            if (rawDiskImage.open(backingStore))
-            {
-                diskImage = &rawDiskImage;
-                
-                return true;
-            }
-        }
+        if ((pathExtension != "image") &&
+            (pathExtension != "img") &&
+            (pathExtension != "hdf") &&
+            (pathExtension != "hdv") &&
+            (pathExtension != "po") &&
+            (pathExtension != "vdsk"))
+            return false;
     }
     
-    return false;
+    if (!rawDiskImage.open(backingStore))
+        return false;
+    
+    diskImage = &rawDiskImage;
+    
+    return true;
 }
 
 bool DIAppleDiskImage::isOpen()
 {
-    return diskImage != NULL;
+    return diskImage != &dummyDiskImage;
 }
 
 void DIAppleDiskImage::close()
@@ -102,6 +90,8 @@ void DIAppleDiskImage::close()
     vmdkDiskImage.close();
     
     diskImage = &dummyDiskImage;
+    
+    return;
 }
 
 bool DIAppleDiskImage::isWriteEnabled()
@@ -109,7 +99,7 @@ bool DIAppleDiskImage::isWriteEnabled()
     return diskImage->isWriteEnabled();
 }
 
-DILong DIAppleDiskImage::getBlockNum()
+DIInt DIAppleDiskImage::getBlockNum()
 {
     return diskImage->getBlockNum();
 }
@@ -119,12 +109,12 @@ string DIAppleDiskImage::getFormatLabel()
     return diskImage->getFormatLabel();
 }
 
-bool DIAppleDiskImage::readBlocks(DILong index, DIChar *buf, DIInt num)
+bool DIAppleDiskImage::readBlocks(DIInt index, DIChar *buf, DIInt num)
 {
     return diskImage->readBlocks(index, buf, num);
 }
 
-bool DIAppleDiskImage::writeBlocks(DILong index, const DIChar *buf, DIInt num)
+bool DIAppleDiskImage::writeBlocks(DIInt index, const DIChar *buf, DIInt num)
 {
     return diskImage->writeBlocks(index, buf, num);
 }

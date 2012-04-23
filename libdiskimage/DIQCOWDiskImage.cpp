@@ -17,6 +17,8 @@ DIQCOWDiskImage::DIQCOWDiskImage()
 
 bool DIQCOWDiskImage::open(DIBackingStore *backingStore)
 {
+    close();
+    
     return false;
 }
 
@@ -29,22 +31,27 @@ bool DIQCOWDiskImage::isWriteEnabled()
     return false;
 }
 
-DILong DIQCOWDiskImage::getBlockNum()
+DIInt DIQCOWDiskImage::getBlockNum()
 {
     return 0;
 }
 
 string DIQCOWDiskImage::getFormatLabel()
 {
-    return "";
+    string formatLabel = "QCOW Disk Image";
+    
+    if (!isWriteEnabled())
+        formatLabel += " (read-only)";
+    
+    return formatLabel;
 }
     
-bool DIQCOWDiskImage::readBlocks(DILong index, DIChar *buf, DIInt num)
+bool DIQCOWDiskImage::readBlocks(DIInt index, DIChar *buf, DIInt num)
 {
     return false;
 }
 
-bool DIQCOWDiskImage::writeBlocks(DILong index, const DIChar *buf, DIInt num)
+bool DIQCOWDiskImage::writeBlocks(DIInt index, const DIChar *buf, DIInt num)
 {
     return false;
 }

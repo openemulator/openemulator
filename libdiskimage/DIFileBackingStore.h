@@ -13,6 +13,7 @@
 
 #include "stdio.h"
 
+#include "DICommon.h"
 #include "DIBackingStore.h"
 
 class DIFileBackingStore : public DIBackingStore
@@ -21,15 +22,15 @@ public:
     DIFileBackingStore();
     
     bool open(string path);
+    bool create(string path);
     void close();
     
     bool isWriteEnabled();
     DILong getSize();
+    string getFormatLabel();
     
     bool read(DILong pos, DIChar *buf, DIInt num);
     bool write(DILong pos, const DIChar *buf, DIInt num);
-    
-    bool truncate();
     
 private:
     FILE *fp;

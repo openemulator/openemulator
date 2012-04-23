@@ -50,5 +50,5 @@ private:
     
     void mapMemory(int message);
     bool openDiskImage(string filename);
-    void closeDiskImage();
+    bool closeDiskImage();
 };

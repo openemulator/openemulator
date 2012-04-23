@@ -11,6 +11,7 @@
 #ifndef _DI2IMGBACKINGSTORE_H
 #define _DI2IMGBACKINGSTORE_H
 
+#include "DICommon.h"
 #include "DIBackingStore.h"
 
 typedef enum
@@ -25,7 +26,7 @@ class DI2IMGBackingStore : public DIBackingStore
 public:
     DI2IMGBackingStore();
     
-    bool open(DIBackingStore *file);
+    bool open(DIBackingStore *backingStore);
     void close();
     
     bool isWriteEnabled();

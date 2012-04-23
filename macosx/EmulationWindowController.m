@@ -860,7 +860,7 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
         return;
     }
     
-    [item unmount];
+    [self doUnmount:item];
 }
 
 - (void)unmountPanelDidEnd:(NSWindow *)sheet
@@ -870,7 +870,26 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
     EmulationItem *item = contextInfo;
     
     if (returnCode == NSAlertAlternateReturn)
-        [item unmount];
+        [self doUnmount:item];
+}
+
+- (BOOL)doUnmount:(EmulationItem *)item
+{
+    if (![item unmount])
+    {
+        NSBeginAlertSheet([NSString localizedStringWithFormat:
+                           @"The document in \u201C%@\u201D can't be unmounted.",
+                           [item label]],
+                          nil, nil, nil,
+                          [self window],
+                          self, nil, nil, nil,
+                          [NSString localizedStringWithFormat:
+                           @"Check the console for additional information."]);
+        
+        return NO;
+    }
+    
+    return YES;
 }
 
 - (IBAction)showDevice:(id)sender

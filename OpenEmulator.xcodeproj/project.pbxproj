@@ -32,6 +32,10 @@
 		00140E12152D395900D4795D /* DIV2DDiskStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00140E11152D395900D4795D /* DIV2DDiskStorage.cpp */; };
 		00140E14152D396500D4795D /* DIV2DDiskStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = 00140E13152D396500D4795D /* DIV2DDiskStorage.h */; };
 		0014DF14148286A5006A7660 /* Application.m in Sources */ = {isa = PBXBuildFile; fileRef = 0014DF13148286A5006A7660 /* Application.m */; };
+		0019177C1543D31A009A301E /* DIDiskStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = 0019177B1543D319009A301E /* DIDiskStorage.h */; };
+		0019177E1543D321009A301E /* DIDiskStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0019177D1543D320009A301E /* DIDiskStorage.cpp */; };
+		001917801543D338009A301E /* DILogicalDiskStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = 0019177F1543D337009A301E /* DILogicalDiskStorage.h */; };
+		001917821543D347009A301E /* DILogicalDiskStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 001917811543D346009A301E /* DILogicalDiskStorage.cpp */; };
 		001C9B02137FDD0500D1355B /* AudioRecord.png in Resources */ = {isa = PBXBuildFile; fileRef = 00ED379A12779AD000BEF6BD /* AudioRecord.png */; };
 		001F56F90FD1E8E500EA246A /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 001F56F80FD1E8E500EA246A /* Sparkle.framework */; };
 		0020AE731530A22700E3DF80 /* DICommon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0020AE721530A22700E3DF80 /* DICommon.cpp */; };
@@ -307,6 +311,10 @@
 		001750C113A50A9C0043E2ED /* NEWS */ = {isa = PBXFileReference; lastKnownFileType = text; path = NEWS; sourceTree = "<group>"; };
 		001750C213A50A9C0043E2ED /* README */ = {isa = PBXFileReference; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		001750C313A50A9C0043E2ED /* TODO */ = {isa = PBXFileReference; lastKnownFileType = text; path = TODO; sourceTree = "<group>"; };
+		0019177B1543D319009A301E /* DIDiskStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DIDiskStorage.h; sourceTree = "<group>"; };
+		0019177D1543D320009A301E /* DIDiskStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DIDiskStorage.cpp; sourceTree = "<group>"; };
+		0019177F1543D337009A301E /* DILogicalDiskStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DILogicalDiskStorage.h; sourceTree = "<group>"; };
+		001917811543D346009A301E /* DILogicalDiskStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DILogicalDiskStorage.cpp; sourceTree = "<group>"; };
 		001CC97E13D11EBC00B0DDA7 /* CPUInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CPUInterface.h; sourceTree = "<group>"; };
 		001D1F7A1479E7BD0014D496 /* JoystickInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JoystickInterface.h; sourceTree = "<group>"; };
 		001F56F80FD1E8E500EA246A /* Sparkle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = Sparkle.framework; path = macosx/Sparkle.framework; sourceTree = "<group>"; };
@@ -1034,6 +1042,10 @@
 				0027E67F153738D30066A9BE /* DIQCOWDiskImage.h */,
 				00536BC5153DD400005A5336 /* DIVMDKDiskImage.cpp */,
 				00536BC4153DD3F5005A5336 /* DIVMDKDiskImage.h */,
+				0019177D1543D320009A301E /* DIDiskStorage.cpp */,
+				0019177B1543D319009A301E /* DIDiskStorage.h */,
+				001917811543D346009A301E /* DILogicalDiskStorage.cpp */,
+				0019177F1543D337009A301E /* DILogicalDiskStorage.h */,
 				00140E03152D376400D4795D /* DIFDIDiskStorage.cpp */,
 				00140E01152D375D00D4795D /* DIFDIDiskStorage.h */,
 				00140E11152D395900D4795D /* DIV2DDiskStorage.cpp */,
@@ -1218,6 +1230,8 @@
 				007DEFAD153FB15C00A9CC01 /* DIRAMBackingStore.h in Headers */,
 				007DEFB5153FB5F000A9CC01 /* DIDiskImage.h in Headers */,
 				007DEFB91540607C00A9CC01 /* DIRAWDiskImage.h in Headers */,
+				0019177C1543D31A009A301E /* DIDiskStorage.h in Headers */,
+				001917801543D338009A301E /* DILogicalDiskStorage.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1462,6 +1476,8 @@
 				007DEFB1153FB17500A9CC01 /* DIBackingStore.cpp in Sources */,
 				007DEFB3153FB5E800A9CC01 /* DIDiskImage.cpp in Sources */,
 				007DEFBB1540608300A9CC01 /* DIRAWDiskImage.cpp in Sources */,
+				0019177E1543D321009A301E /* DIDiskStorage.cpp in Sources */,
+				001917821543D347009A301E /* DILogicalDiskStorage.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

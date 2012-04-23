@@ -18,11 +18,13 @@
 #include "DIRAMBackingStore.h"
 #include "DI2IMGBackingStore.h"
 #include "DIDC42BackingStore.h"
+
+#include "DIDiskImage.h"
 #include "DIRAWDiskImage.h"
 #include "DIQCOWDiskImage.h"
 #include "DIVMDKDiskImage.h"
 
-class DIAppleDiskImage : DIDiskImage
+class DIAppleDiskImage
 {
 public:
     DIAppleDiskImage();
@@ -33,11 +35,11 @@ public:
     void close();
     
     bool isWriteEnabled();
-    DILong getBlockNum();
+    DIInt getBlockNum();
     string getFormatLabel();
     
-    bool readBlocks(DILong index, DIChar *buf, DIInt num);
-    bool writeBlocks(DILong index, const DIChar *buf, DIInt num);
+    bool readBlocks(DIInt index, DIChar *buf, DIInt num);
+    bool writeBlocks(DIInt index, const DIChar *buf, DIInt num);
     
 private:
     DIFileBackingStore fileBackingStore;

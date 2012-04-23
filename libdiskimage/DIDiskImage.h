@@ -19,11 +19,11 @@ public:
     DIDiskImage();
     
     virtual bool isWriteEnabled();
-    virtual DILong getBlockNum();
+    virtual DIInt getBlockNum();
     virtual string getFormatLabel();
     
-    virtual bool readBlocks(DILong index, DIChar *buf, DIInt num);
-    virtual bool writeBlocks(DILong index, const DIChar *buf, DIInt num);
+    virtual bool readBlocks(DIInt index, DIChar *buf, DIInt num);
+    virtual bool writeBlocks(DIInt index, const DIChar *buf, DIInt num);
 };
 
 #endif

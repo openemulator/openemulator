@@ -24,6 +24,11 @@ bool DIRAMBackingStore::open(DIData& data)
     return true;
 }
 
+void DIRAMBackingStore::clear()
+{
+    data.clear();
+}
+
 void DIRAMBackingStore::close()
 {
     data.resize(0);
@@ -37,6 +42,16 @@ bool DIRAMBackingStore::isWriteEnabled()
 DILong DIRAMBackingStore::getSize()
 {
     return data.size();
+}
+
+string DIRAMBackingStore::getFormatLabel()
+{
+    string formatLabel = "RAW Disk Image";
+    
+    if (!isWriteEnabled())
+        formatLabel += " (read-only)";
+    
+    return formatLabel;
 }
 
 bool DIRAMBackingStore::read(DILong pos, DIChar *buf, DIInt num)
@@ -59,13 +74,6 @@ bool DIRAMBackingStore::write(DILong pos, const DIChar *buf, DIInt num)
         data.resize((size_t) end);
     
     memcpy(&data.front() + pos, buf, (size_t) num);
-    
-    return true;
-}
-
-bool DIRAMBackingStore::truncate()
-{
-    data.resize(0);
     
     return true;
 }

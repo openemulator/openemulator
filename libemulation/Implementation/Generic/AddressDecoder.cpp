@@ -149,8 +149,8 @@ void AddressDecoder::updateMemoryMaps(OEAddress startAddress, OEAddress endAddre
     MemoryMap m;
     
     m.component = floatingBus;
-    m.startAddress = 0;
-    m.endAddress = addressMask;
+    m.startAddress = startAddress;
+    m.endAddress = endAddress;
     m.read = true;
     m.write = true;
     
@@ -198,8 +198,13 @@ bool AddressDecoder::addMemoryMaps(MemoryMaps *value)
     for (MemoryMaps::iterator i = value->begin();
          i != value->end();
          i++)
-        dynamicMemoryMaps.push_back(*i);
+    {
+        if (!i->component)
+            continue;
         
+        dynamicMemoryMaps.push_back(*i);
+    }
+    
     for (MemoryMaps::iterator i = value->begin();
          i != value->end();
          i++)

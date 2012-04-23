@@ -200,10 +200,10 @@ void hidDeviceEventOcurred(void *inContext, IOReturn inResult, void *inSender, I
     
     ((PAAudio *)paAudio)->setFullDuplex([userDefaults
                                          boolForKey:@"OEAudioFullDuplex"]);
-    ((PAAudio *)paAudio)->setPlayVolume([userDefaults
-                                         floatForKey:@"OEAudioPlayVolume"]);
-    ((PAAudio *)paAudio)->setPlayThrough([userDefaults
-                                          boolForKey:@"OEAudioPlayThrough"]);
+    ((PAAudio *)paAudio)->setPlayerVolume([userDefaults
+                                           floatForKey:@"OEAudioPlayVolume"]);
+    ((PAAudio *)paAudio)->setPlayerPlayThrough([userDefaults
+                                                boolForKey:@"OEAudioPlayThrough"]);
     
     ((PAAudio *)paAudio)->open();
 }
@@ -398,9 +398,9 @@ void hidDeviceEventOcurred(void *inContext, IOReturn inResult, void *inSender, I
     if ([keyPath isEqualToString:@"OEAudioFullDuplex"])
         ((PAAudio *)paAudio)->setFullDuplex([theObject boolValue]);
     else if ([keyPath isEqualToString:@"OEAudioPlayVolume"])
-        ((PAAudio *)paAudio)->setPlayVolume([theObject floatValue]);
+        ((PAAudio *)paAudio)->setPlayerVolume([theObject floatValue]);
     else if ([keyPath isEqualToString:@"OEAudioPlayThrough"])
-        ((PAAudio *)paAudio)->setPlayThrough([theObject boolValue]);
+        ((PAAudio *)paAudio)->setPlayerPlayThrough([theObject boolValue]);
 }
 
 - (BOOL)validateUserInterfaceItem:(id <NSValidatedUserInterfaceItem>)anItem
