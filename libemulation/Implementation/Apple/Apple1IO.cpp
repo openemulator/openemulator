@@ -137,7 +137,7 @@ void Apple1IO::notify(OEComponent *sender, int notification, void *data)
             {
                 // Get key
                 OEData *s = (OEData *)data;
-                OEUInt8 key = s->at(0);
+                OEChar key = s->at(0);
                 
                 if (!fullASCIIKeyboard)
                 {
@@ -175,13 +175,13 @@ void Apple1IO::notify(OEComponent *sender, int notification, void *data)
     }
 }
 
-OEUInt8 Apple1IO::read(OEAddress address)
+OEChar Apple1IO::read(OEAddress address)
 {
     switch (address & 1)
     {
         case MC6821_PORTA:
         {
-            OEUInt8 value = terminalKey | APPLE1KEYBOARD_MASK;
+            OEChar value = terminalKey | APPLE1KEYBOARD_MASK;
             
             terminalKey = 0;
             
@@ -207,7 +207,7 @@ OEUInt8 Apple1IO::read(OEAddress address)
     return 0;
 }
 
-void Apple1IO::write(OEAddress address, OEUInt8 value)
+void Apple1IO::write(OEAddress address, OEChar value)
 {
     switch (address & 1)
     {

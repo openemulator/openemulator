@@ -25,39 +25,39 @@ using namespace std;
 #define OESetBit(x,m,v) if (v) OEAssertBit(x,m); else OEClearBit(x,m)
 #define OEGetBit(x,m) ((x)&(m))
 
-typedef unsigned char OEUInt8;
-typedef signed char OEInt8;
-typedef unsigned short int OEUInt16;
-typedef signed short int OEInt16;
-typedef unsigned int OEUInt32;
-typedef signed int OEInt32;
-typedef unsigned long long OEUInt64;
-typedef signed long long OEInt64;
+typedef unsigned char OEChar;
+typedef signed char OESChar;
+typedef unsigned short int OEShort;
+typedef signed short int OESShort;
+typedef unsigned int OEInt;
+typedef signed int OESInt;
+typedef unsigned long long OELong;
+typedef signed long long OESLong;
 
-typedef OEUInt64 OEAddress;
+typedef OELong OEAddress;
 
 typedef union
 {
 #ifdef BYTES_BIG_ENDIAN
-    struct { OEUInt8 h7, h6, h5, h4, h3, h2, h, l; } b;
-    struct { OEInt8 h7, h6, h5, h4, h3, h2, h, l; } sb;
-    struct { OEUInt16 h3, h2, h, l; } w;
-    struct { OEInt8 h3, h2, h, l; } sw;
-    struct { OEUInt32 l, h; } d;
-    struct { OEInt32 l, h; } sd;
+    struct { OEChar h7, h6, h5, h4, h3, h2, h, l; } b;
+    struct { OESChar h7, h6, h5, h4, h3, h2, h, l; } sb;
+    struct { OEShort h3, h2, h, l; } w;
+    struct { OESShort h3, h2, h, l; } sw;
+    struct { OEInt l, h; } d;
+    struct { OESInt l, h; } sd;
 #else
-    struct { OEUInt8 l, h, h2, h3, h4, h5, h6, h7; } b;
-    struct { OEInt8 l, h, h2, h3, h4, h5, h6, h7; } sb;
-    struct { OEUInt16 l, h, h2, h3; } w;
-    struct { OEInt16 l, h, h2, h3; } sw;
-    struct { OEUInt32 l, h; } d;
-    struct { OEInt32 l, h; } sd;
+    struct { OEChar l, h, h2, h3, h4, h5, h6, h7; } b;
+    struct { OESChar l, h, h2, h3, h4, h5, h6, h7; } sb;
+    struct { OEShort l, h, h2, h3; } w;
+    struct { OESShort l, h, h2, h3; } sw;
+    struct { OEInt l, h; } d;
+    struct { OESInt l, h; } sd;
 #endif
-    OEUInt64 q;
-    OEInt64 qd;
+    OELong q;
+    OESLong qd;
 } OEUnion;
 
-typedef vector<OEUInt8> OEData;
+typedef vector<OEChar> OEData;
 
 #ifdef _WIN32
 #define OE_PATH_SEPARATOR "\\"
@@ -67,17 +67,21 @@ typedef vector<OEUInt8> OEData;
 
 void logMessage(string message);
 
-OEUInt64 getUInt(const string& value);
-OEInt64 getInt(const string& value);
+OEInt getOEInt(const string& value);
+OESInt getOESInt(const string& value);
+OELong getOELong(const string& value);
+OESLong getOESLong(const string& value);
+
 double getFloat(const string& value);
 OEData getCharVector(const string& value);
 
-string getString(OEUInt32 value);
-string getString(OEInt32 value);
-string getString(OEUInt64 value);
-string getString(OEInt64 value);
+string getString(OEInt value);
+string getString(OESInt value);
+string getString(OELong value);
+string getString(OESLong value);
+
 string getString(float value);
-string getHexString(OEUInt64 value);
+string getHexString(OELong value);
 
 string rtrim(string value);
 wstring rtrim(wstring value);
@@ -87,7 +91,7 @@ string strfilter(string value, string filter);
 string strtolower(string value);
 string strtoupper(string value);
 
-OEUInt64 getNextPowerOf2(OEUInt64 value);
+OELong getNextPowerOf2(OELong value);
 
 bool readFile(string path, OEData *data);
 bool writeFile(string path, OEData *data);

@@ -40,7 +40,7 @@ bool AppleIIAudioIn::init()
     return true;
 }
 
-OEUInt8 AppleIIAudioIn::read(OEAddress address)
+OEChar AppleIIAudioIn::read(OEAddress address)
 {
     return (readAudioInput() << 7) | (floatingBus->read(0) & 0x7f);
 }

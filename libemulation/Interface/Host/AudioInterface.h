@@ -14,6 +14,8 @@
 #ifndef _AUDIOINTERFACE_H
 #define _AUDIOINTERFACE_H
 
+#include "OECommon.h"
+
 typedef enum
 {
     AUDIO_BUFFER_WILL_RENDER,
@@ -24,8 +26,8 @@ typedef enum
 typedef struct
 {
     float sampleRate;
-    int channelNum;
-    int frameNum;
+    OEInt channelNum;
+    OEInt frameNum;
     const float *input;
     float *output;
 } AudioBuffer;

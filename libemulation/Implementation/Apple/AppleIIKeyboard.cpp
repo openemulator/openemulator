@@ -222,7 +222,7 @@ void AppleIIKeyboard::notify(OEComponent *sender, int notification, void *data)
     }
 }
 
-OEUInt8 AppleIIKeyboard::read(OEAddress address)
+OEChar AppleIIKeyboard::read(OEAddress address)
 {
     if (address & 0x10)
     {
@@ -236,7 +236,7 @@ OEUInt8 AppleIIKeyboard::read(OEAddress address)
 	return floatingBus->read(address);
 }
 
-void AppleIIKeyboard::write(OEAddress address, OEUInt8 value)
+void AppleIIKeyboard::write(OEAddress address, OEChar value)
 {
     if (address & 0x10)
     {
@@ -287,7 +287,7 @@ void AppleIIKeyboard::sendKey(CanvasUnicodeChar key)
 
 void AppleIIKeyboard::paste(wstring *s)
 {
-    for (int i = 0; i < s->size(); i++)
+    for (OEInt i = 0; i < s->size(); i++)
         pasteBuffer.push(s->at(i));
     
     emptyPasteBuffer();

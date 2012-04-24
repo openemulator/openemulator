@@ -37,14 +37,14 @@ bool AppleIIAudioOut::init()
     return Audio1Bit::init();
 }
 
-OEUInt8 AppleIIAudioOut::read(OEAddress address)
+OEChar AppleIIAudioOut::read(OEAddress address)
 {
     toggleAudioOutput();
     
 	return floatingBus->read(address);
 }
 
-void AppleIIAudioOut::write(OEAddress address, OEUInt8 value)
+void AppleIIAudioOut::write(OEAddress address, OEChar value)
 {
     toggleAudioOutput();
 }

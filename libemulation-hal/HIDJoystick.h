@@ -20,10 +20,10 @@ public:
     void addDevice();
     void removeDevice();
     
-    void setAxis(int deviceIndex, int index, float value);
-    void setHat(int deviceIndex, int index, int value);
-    void setButton(int deviceIndex, int index, bool value);
+    void setAxis(OEInt deviceIndex, OEInt index, float value);
+    void setHat(OEInt deviceIndex, OEInt index, OEInt value);
+    void setButton(OEInt deviceIndex, OEInt index, bool value);
     
 private:
-    OEUInt32 joystickNum;
+    OEInt joystickNum;
 };

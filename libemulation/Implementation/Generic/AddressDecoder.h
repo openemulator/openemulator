@@ -27,12 +27,12 @@ public:
     
     bool postMessage(OEComponent *sender, int event, void *data);
     
-    OEUInt8 read(OEAddress address);
-    void write(OEAddress address, OEUInt8 value);
+    OEChar read(OEAddress address);
+    void write(OEAddress address, OEChar value);
     
 protected:
-    OEAddress addressSize;
-    OEAddress blockSize;
+    OEInt addressSize;
+    OEInt blockSize;
     
     MemoryMaps staticMemoryMaps;
     MemoryMaps dynamicMemoryMaps;

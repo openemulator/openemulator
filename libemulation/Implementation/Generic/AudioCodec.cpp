@@ -54,7 +54,7 @@ bool AudioCodec::setValue(string name, string value)
     if (name == "timeAccuracy")
         timeAccuracy = getFloat(value);
     else if (name == "filterSize")
-        filterSize = (OEUInt32) getUInt(value);
+        filterSize = getOEInt(value);
     else if (name == "lowFrequency")
         lowFrequency = getFloat(value);
     else if (name == "highFrequency")
@@ -147,48 +147,48 @@ void AudioCodec::notify(OEComponent *sender, int notification, void *data)
         synthBuffer();
 }
 
-OEUInt8 AudioCodec::read(OEAddress address)
+OEChar AudioCodec::read(OEAddress address)
 {
     float audioBufferIndex;
     
     controlBus->postMessage(this, CONTROLBUS_GET_AUDIOBUFFERINDEX, &audioBufferIndex);
     
-    OEUInt32 index = audioBuffer->channelNum * ((OEUInt32) audioBufferIndex);
+    OEInt index = audioBuffer->channelNum * ((OEInt) audioBufferIndex);
     index += address % audioBuffer->channelNum;
     
-    return 128 + (OEUInt8)(audioBuffer->input[index] * 127.0F);
+    return 128 + (OEChar)(audioBuffer->input[index] * 127.0F);
 }
 
-void AudioCodec::write(OEAddress address, OEUInt8 value)
+void AudioCodec::write(OEAddress address, OEChar value)
 {
     float audioBufferIndex;
     
     controlBus->postMessage(this, CONTROLBUS_GET_AUDIOBUFFERINDEX, &audioBufferIndex);
     
     if (address < audioBuffer->channelNum)
-        setSynth(audioBufferIndex, (OEUInt32) address, (value - 128) / 128.0F);
+        setSynth(audioBufferIndex, (OEInt) address, (value - 128) / 128.0F);
 }
 
-OEUInt16 AudioCodec::read16(OEAddress address)
+OEShort AudioCodec::read16(OEAddress address)
 {
     float audioBufferIndex;
     
     controlBus->postMessage(this, CONTROLBUS_GET_AUDIOBUFFERINDEX, &audioBufferIndex);
     
-    OEUInt32 index = audioBuffer->channelNum * ((OEUInt32) audioBufferIndex);
+    OEInt index = audioBuffer->channelNum * ((OEInt) audioBufferIndex);
     index += address % audioBuffer->channelNum;
     
-    return (OEInt16)(audioBuffer->input[index] * 32767.0F);
+    return (OESShort)(audioBuffer->input[index] * 32767.0F);
 }
 
-void AudioCodec::write16(OEAddress address, OEUInt16 value)
+void AudioCodec::write16(OEAddress address, OEShort value)
 {
     float audioBufferIndex;
     
     controlBus->postMessage(this, CONTROLBUS_GET_AUDIOBUFFERINDEX, &audioBufferIndex);
     
     if (address < audioBuffer->channelNum)
-        setSynth(audioBufferIndex, (OEUInt32) address, ((OEInt16) value) / 32768.0F);
+        setSynth(audioBufferIndex, (OEInt) address, ((OESShort) value) / 32768.0F);
 }
 
 void AudioCodec::updateSynth()
@@ -207,17 +207,17 @@ void AudioCodec::updateSynth()
     impulseFilterSize = impulseFilterHalfSize * 2 + 1;
     
     // Calculate number of impulses
-    impulseTableEntryNum = (OEUInt32) (1.0 / (timeAccuracy * audioBuffer->sampleRate));
-    impulseTableEntrySize = (OEUInt32) getNextPowerOf2(impulseFilterSize);
+    impulseTableEntryNum = (OEInt) (1.0 / (timeAccuracy * audioBuffer->sampleRate));
+    impulseTableEntrySize = (OEInt) getNextPowerOf2(impulseFilterSize);
     impulseTable.resize(impulseTableEntryNum * impulseTableEntrySize);
     
-    for (OEUInt32 phase = 0; phase < impulseTableEntryNum; phase++)
+    for (OEInt phase = 0; phase < impulseTableEntryNum; phase++)
     {
         float *impulseEntry = &impulseTable.front() + phase * impulseTableEntrySize;
         
         float energy = 0;
         
-        for (OEUInt32 n = 0; n < impulseFilterSize; n++)
+        for (OEInt n = 0; n < impulseFilterSize; n++)
         {
             float i = n - (float) impulseFilterHalfSize;
             float x = i - (float) phase / impulseTableEntryNum;
@@ -238,38 +238,38 @@ void AudioCodec::updateSynth()
         float gain = 1.0 / energy;
         
         // Normalize
-        for (OEUInt32 n = 0; n < impulseFilterSize; n++)
+        for (OEInt n = 0; n < impulseFilterSize; n++)
             impulseEntry[n] *= gain;
     }
 }
 
-void AudioCodec::setSynth(float index, OEUInt32 channel, float level)
+void AudioCodec::setSynth(float index, OEInt channel, float level)
 {
     float gain = level - lastInput[channel];
     lastInput[channel] = level;
     
-    OEUInt32 n = index;
+    OEInt n = index;
     float nr = index - n;
     
-    OEUInt32 phase = (OEUInt32) (nr * impulseTableEntryNum);
+    OEInt phase = (OEInt) (nr * impulseTableEntryNum);
     
     float *x = &impulseTable.front() + phase * impulseTableEntrySize;
     float *y = &buffer.front() + n * channelNum + channel;
     
-    for (OEUInt32 i = 0; i < impulseFilterSize; i++, y += channelNum)
+    for (OEInt i = 0; i < impulseFilterSize; i++, y += channelNum)
         *y += gain * x[i];
 }
 
 void AudioCodec::synthBuffer()
 {
-    for (OEUInt32 ch = 0; ch < channelNum; ch++)
+    for (OEInt ch = 0; ch < channelNum; ch++)
     {
         float *x = &buffer.front() + ch;
         float *y = audioBuffer->output + ch;
         
         float yLast = lastOutput[ch];
         
-        for (OEUInt32 i = 0; i < sampleNum; i += channelNum)
+        for (OEInt i = 0; i < sampleNum; i += channelNum)
         {
             yLast = integrationAlpha * yLast + x[i];
             y[i] += yLast;

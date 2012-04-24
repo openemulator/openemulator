@@ -75,19 +75,19 @@ public:
 	
 	void notify(OEComponent *component, int notification, void *data);
 	
-	OEUInt8 read(OEAddress address);
-	void write(OEAddress address, OEUInt8 value);
+	OEChar read(OEAddress address);
+	void write(OEAddress address, OEChar value);
 	
 private:
-	OEUInt8 controlA;
-	OEUInt8 directionA;
-	OEUInt8 dataA;
+	OEChar controlA;
+	OEChar directionA;
+	OEChar dataA;
 	bool ca1;
 	bool ca2;
     
-	OEUInt8 controlB;
-	OEUInt8 directionB;
-	OEUInt8 dataB;
+	OEChar controlB;
+	OEChar directionB;
+	OEChar dataB;
 	bool cb1;
 	bool cb2;
 	
@@ -100,6 +100,6 @@ private:
     void setCA2(bool value);
     void setCB2(bool value);
     
-	void setControlA(OEUInt8 value);
-	void setControlB(OEUInt8 value);
+	void setControlA(OEChar value);
+	void setControlB(OEChar value);
 };

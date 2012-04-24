@@ -20,13 +20,13 @@ AppleIIGamePort::AppleIIGamePort()
     floatingBus = NULL;
     gamePort = NULL;
     
-    for (int i = 0; i < 4; i++)
+    for (OEInt i = 0; i < 4; i++)
         setPDL(i, 0.5);
     
-    for (int i = 0; i < 4; i++)
+    for (OEInt i = 0; i < 4; i++)
         pb[i] = 0;
     
-    for (int i = 0; i < 4; i++)
+    for (OEInt i = 0; i < 4; i++)
         an[i] = false;
     
     timerStart = 0;
@@ -35,13 +35,13 @@ AppleIIGamePort::AppleIIGamePort()
 bool AppleIIGamePort::setValue(string name, string value)
 {
 	if (name == "an0")
-		an[0] = (OEUInt32) getUInt(value);
+		an[0] = getOEInt(value);
 	else if (name == "an1")
-		an[1] = (OEUInt32) getUInt(value);
+		an[1] = getOEInt(value);
 	else if (name == "an2")
-		an[2] = (OEUInt32) getUInt(value);
+		an[2] = getOEInt(value);
 	else if (name == "an3")
-		an[3] = (OEUInt32) getUInt(value);
+		an[3] = getOEInt(value);
 	else
 		return false;
 	
@@ -160,9 +160,9 @@ void AppleIIGamePort::notify(OEComponent *sender, int notification, void *data)
     }
 }
 
-OEUInt8 AppleIIGamePort::read(OEAddress address)
+OEChar AppleIIGamePort::read(OEAddress address)
 {
-    OEUInt8 value = floatingBus->read(address);
+    OEChar value = floatingBus->read(address);
     
     switch (address & 0x7f)
     {
@@ -204,7 +204,7 @@ OEUInt8 AppleIIGamePort::read(OEAddress address)
     return value;
 }
 
-void AppleIIGamePort::write(OEAddress address, OEUInt8 value)
+void AppleIIGamePort::write(OEAddress address, OEChar value)
 {
     switch (address & 0x7f)
     {
@@ -232,7 +232,7 @@ void AppleIIGamePort::write(OEAddress address, OEUInt8 value)
     }
 }
 
-void AppleIIGamePort::setAN(int index, bool value)
+void AppleIIGamePort::setAN(OEInt index, bool value)
 {
     bool oldValue = an[index];
     
@@ -242,7 +242,7 @@ void AppleIIGamePort::setAN(int index, bool value)
         postNotification(this, APPLEII_AN0_DID_CHANGE + index, &value);
 }
 
-void AppleIIGamePort::setPDL(int index, float value)
+void AppleIIGamePort::setPDL(OEInt index, float value)
 {
     if (value < 0)
         value = 0;
@@ -255,14 +255,14 @@ void AppleIIGamePort::setPDL(int index, float value)
     pdl[index] = value * 11 + 8;
 }
 
-void AppleIIGamePort::setPB(int index, bool value)
+void AppleIIGamePort::setPB(OEInt index, bool value)
 {
     pb[index] = value;
 }
 
-bool AppleIIGamePort::isTimerPending(int index)
+bool AppleIIGamePort::isTimerPending(OEInt index)
 {
-    OEUInt64 timerCount;
+    OELong timerCount;
     
     controlBus->postMessage(this, CONTROLBUS_GET_CYCLES, &timerCount);
     

@@ -34,7 +34,7 @@ OEMatrix3::OEMatrix3(float c00, float c01, float c02,
     data[8] = c22;
 }
 
-float OEMatrix3::getValue(unsigned int i, unsigned int j)
+float OEMatrix3::getValue(OEInt i, OEInt j)
 {
     return data[3 * i + j];
 }
@@ -48,7 +48,7 @@ OEMatrix3 OEMatrix3::operator*(const float value)
 {
     OEMatrix3 m;
     
-    for (int i = 0; i < 9; i++)
+    for (OEInt i = 0; i < 9; i++)
         m.data[i] = data[i] * value;
     
     return m;
@@ -58,9 +58,9 @@ OEMatrix3 OEMatrix3::operator*(const OEMatrix3& m)
 {
     OEMatrix3 n;
     
-    for (int i = 0; i < 3; i++)
-        for (int j = 0; j < 3; j++)
-            for (int k = 0; k < 3; k++)
+    for (OEInt i = 0; i < 3; i++)
+        for (OEInt j = 0; j < 3; j++)
+            for (OEInt k = 0; k < 3; k++)
                 n.data[i * 3 + j] += m.data[i * 3 + k] * data[k * 3 + j];
     
     return n;

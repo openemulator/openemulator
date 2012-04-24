@@ -84,8 +84,8 @@ public:
     
     void notify(OEComponent *sender, int notification, void *data);
     
-	OEUInt8 read(OEAddress address);
-	void write(OEAddress address, OEUInt8 value);
+	OEChar read(OEAddress address);
+	void write(OEAddress address, OEChar value);
 	
 private:
     OEComponent *device;
@@ -101,16 +101,16 @@ private:
     AppleIIRevision revision;
     AppleIITVSystem tvSystem;
 	string characterSet;
-    OEUInt32 flashFrameNum;
-    OEUInt32 mode;
+    OEInt flashFrameNum;
+    OEInt mode;
     
     // Tables
     vector<int> segment;
     vector<AppleIIVideoPoint> point;
     vector<AppleIIVideoPoint> count;
     
-    vector<OEAddress> textOffset;
-    vector<OEAddress> hiresOffset;
+    vector<OEInt> textOffset;
+    vector<OEInt> hiresOffset;
     
     map<string, OEData> textMap;
     OEData loresMap;
@@ -123,24 +123,24 @@ private:
     bool imageDidChange;
     
     AppleIIRenderer renderer;
-    OEUInt8 *rendererImage;
-    OEUInt8 *rendererTextMemory;
-    OEUInt8 *rendererHiresMemory;
-    OEUInt8 *rendererTextMap;
-    OEUInt8 *rendererLoresMap;
-    OEUInt8 *rendererHiresMap;
+    OEChar *rendererImage;
+    OEChar *rendererTextMemory;
+    OEChar *rendererHiresMemory;
+    OEChar *rendererTextMap;
+    OEChar *rendererLoresMap;
+    OEChar *rendererHiresMap;
     
     OERect videoRect;
     OERect pictureRect;
     OERect activeRect;
     
-    OEUInt64 frameStart;
+    OELong frameStart;
     AppleIITimerType currentTimer;
     int lastSegment;
     int pendingSegments;
     
     bool flashActive;
-    OEUInt32 flashCount;
+    OEInt flashCount;
     
     ControlBusPowerState powerState;
     
@@ -162,15 +162,15 @@ private:
     void updateRendererMap();
     void updateRenderer();
     
-    void setMode(OEUInt32 mask, bool value);
+    void setMode(OEInt mask, bool value);
     
     void updateVideo();
     void drawVideoLine(int y, int x0, int x1);
     void setNeedsDisplay();
         
-    void scheduleNextTimer(OEInt64 cycles);
+    void scheduleNextTimer(OESLong cycles);
     AppleIIVideoPoint getCount();
-    OEUInt8 readFloatingBus();
+    OEChar readFloatingBus();
     
     void vsync();
     

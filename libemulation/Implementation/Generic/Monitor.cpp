@@ -62,7 +62,7 @@ bool Monitor::setValue(string name, string value)
     else if (name == "videoChromaBandwidth")
         configuration.videoChromaBandwidth = getFloat(value);
     else if (name == "videoWhiteOnly")
-        configuration.videoWhiteOnly = getInt(value);
+        configuration.videoWhiteOnly = getOEInt(value);
     else if (name == "displayResolutionX")
         configuration.displayResolution.width = getFloat(value);
     else if (name == "displayResolutionY")

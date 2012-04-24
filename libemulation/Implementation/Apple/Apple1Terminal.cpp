@@ -56,15 +56,15 @@ Apple1Terminal::Apple1Terminal()
 bool Apple1Terminal::setValue(string name, string value)
 {
     if (name == "cursorX")
-        cursorX = (OEUInt32) getUInt(value);
+        cursorX = getOEInt(value);
     else if (name == "cursorY")
-        cursorY = (OEUInt32) getUInt(value);
+        cursorY = getOEInt(value);
     else if (name == "clearScreenOnCtrlL")
-        clearScreenOnCtrlL = getUInt(value);
+        clearScreenOnCtrlL = getOEInt(value);
     else if (name == "splashScreen")
-        splashScreen = getUInt(value);
+        splashScreen = getOEInt(value);
     else if (name == "splashScreenActive")
-        splashScreenActive = getUInt(value);
+        splashScreenActive = getOEInt(value);
     else
         return false;
     
@@ -297,7 +297,7 @@ void Apple1Terminal::notify(OEComponent *sender, int notification, void *data)
             case CONTROLBUS_TIMER_DID_FIRE:
                 vsync();
                 
-                scheduleNextTimer(*((OEInt64 *) data));
+                scheduleNextTimer(*((OESLong *) data));
                 
                 postNotification(this, RS232_CTS_DID_ASSERT, NULL);
                 postNotification(this, RS232_CTS_DID_CLEAR, NULL);
@@ -342,7 +342,7 @@ void Apple1Terminal::notify(OEComponent *sender, int notification, void *data)
     }
 }
 
-void Apple1Terminal::scheduleNextTimer(OEInt64 cycles)
+void Apple1Terminal::scheduleNextTimer(OESLong cycles)
 {
     cycles += 262 * 61;
     
@@ -374,9 +374,9 @@ void Apple1Terminal::loadFont(OEData *data)
 
 // Copy a 14-pixel char scanline
 #define copyBlock(x) \
-*((OEUInt64 *)(p + x * SCREEN_WIDTH + 0)) = *((OEUInt64 *)(f + x * FONT_WIDTH + 0));\
-*((OEUInt32 *)(p + x * SCREEN_WIDTH + 8)) = *((OEUInt32 *)(f + x * FONT_WIDTH + 8));\
-*((OEUInt16 *)(p + x * SCREEN_WIDTH + 12)) = *((OEUInt16 *)(f + x * FONT_WIDTH + 12));
+*((OELong *)(p + x * SCREEN_WIDTH + 0)) = *((OELong *)(f + x * FONT_WIDTH + 0));\
+*((OEInt *)(p + x * SCREEN_WIDTH + 8)) = *((OEInt *)(f + x * FONT_WIDTH + 8));\
+*((OEShort *)(p + x * SCREEN_WIDTH + 12)) = *((OEShort *)(f + x * FONT_WIDTH + 12));
 
 void Apple1Terminal::vsync()
 {
@@ -404,24 +404,24 @@ void Apple1Terminal::vsync()
     if (!vramp)
         return;
     
-    OEUInt8 *fp = (OEUInt8 *)&font.front();
-    OEUInt8 *ip = (OEUInt8 *)image.getPixels();
+    OEChar *fp = (OEChar *)&font.front();
+    OEChar *ip = (OEChar *)image.getPixels();
     
     // Place cursor
-    OEUInt8 cursorChar = vramp[cursorY * TERM_WIDTH + cursorX];
+    OEChar cursorChar = vramp[cursorY * TERM_WIDTH + cursorX];
     if (cursorActive)
         vramp[cursorY * TERM_WIDTH + cursorX] = '@';
     
     for (int y = 0; y < TERM_HEIGHT; y++)
     {
-        OEUInt8 *p = (ip + y * SCREEN_WIDTH * CHAR_HEIGHT +
-                      SCREEN_ORIGIN_Y * SCREEN_WIDTH +
-                      SCREEN_ORIGIN_X);
+        OEChar *p = (ip + y * SCREEN_WIDTH * CHAR_HEIGHT +
+                     SCREEN_ORIGIN_Y * SCREEN_WIDTH +
+                     SCREEN_ORIGIN_X);
         
         for (int x = 0; x < TERM_WIDTH; x++)
         {
-            OEUInt8 c = vramp[y * TERM_WIDTH + x] & FONT_SIZE_MASK;
-            OEUInt8 *f = fp + c * FONT_HEIGHT * FONT_WIDTH;
+            OEChar c = vramp[y * TERM_WIDTH + x] & FONT_SIZE_MASK;
+            OEChar *f = fp + c * FONT_HEIGHT * FONT_WIDTH;
             
             copyBlock(0);
             copyBlock(1);
@@ -458,7 +458,7 @@ void Apple1Terminal::clearScreen()
     canvasShouldUpdate = true;
 }
 
-void Apple1Terminal::putChar(OEUInt8 c)
+void Apple1Terminal::putChar(OEChar c)
 {
     if (!vramp)
         return;

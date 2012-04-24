@@ -35,7 +35,7 @@ public:
     
 private:
     // Settings
-    OEUInt32 cursorX, cursorY;
+    OEInt cursorX, cursorY;
     bool clearScreenOnCtrlL;
     bool splashScreen;
     bool splashScreenActive;
@@ -47,25 +47,25 @@ private:
     OEComponent *monitor;
     
     // State
-    OEUInt8 *vramp;
+    OEChar *vramp;
     OEData font;
     bool canvasShouldUpdate;
     
     OEImage image;
     
     bool cursorActive;
-    OEUInt32 cursorCount;
+    OEInt cursorCount;
     
     ControlBusPowerState powerState;
     
     bool isRTS;
-    queue<OEUInt8> pasteBuffer;
+    queue<OEChar> pasteBuffer;
     
-    void scheduleNextTimer(OEInt64 cycles);
+    void scheduleNextTimer(OESLong cycles);
     void loadFont(OEData *data);
     void vsync();
     void clearScreen();
-    void putChar(OEUInt8 c);
+    void putChar(OEChar c);
     void sendKey(CanvasUnicodeChar key);
     void copy(wstring *s);
     void paste(wstring *s);

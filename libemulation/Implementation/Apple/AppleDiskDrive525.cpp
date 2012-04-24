@@ -34,11 +34,11 @@ AppleDiskDrive525::AppleDiskDrive525()
 bool AppleDiskDrive525::setValue(string name, string value)
 {
 	if (name == "diskImage")
-		diskImage = value;
+		openDiskImage(value);
     else if (name == "track")
-        trackIndex = (OEUInt32) getUInt(value);
+        trackIndex = getOEInt(value);
 	else if (name == "forceWriteProtected")
-		forceWriteProtected = (OEUInt32) getUInt(value);
+		forceWriteProtected = getOEInt(value);
 	else if (name == "mechanism")
 		mechanism = value;
     else if (name.substr(0, 5) == "sound")
@@ -52,7 +52,7 @@ bool AppleDiskDrive525::setValue(string name, string value)
 bool AppleDiskDrive525::getValue(string name, string& value)
 {
 	if (name == "diskImage")
-		value = diskImage;
+		value = diskImagePath;
 	else if (name == "track")
 		value = getString(trackIndex);
 	else if (name == "forceWriteProtected")
@@ -109,63 +109,44 @@ bool AppleDiskDrive525::postMessage(OEComponent *sender, int message, void *data
 	switch(message)
 	{
 		case STORAGE_IS_AVAILABLE:
-			return !diskImage.size();
+			return !diskImagePath.size();
 			
 		case STORAGE_CAN_MOUNT:
             // To-Do: check image compatibility
 			return true;
 			
 		case STORAGE_MOUNT:
-        {
-            string *path = (string *)data;
-            diskImage = *path;
-            
-            device->postMessage(this, DEVICE_UPDATE, NULL);
+            if (openDiskImage(*((string *)data)))
+            {
+                device->postMessage(this, DEVICE_UPDATE, NULL);
+                
+                return false;
+            }
             
             return true;
-        }
 			
 		case STORAGE_UNMOUNT:
-			diskImage = "";
-			
-			device->postMessage(this, DEVICE_UPDATE, NULL);
-			
-			return true;
-			
-		case STORAGE_GET_MOUNTPATH:
-        {
-            string *path = (string *)data;
-            *path = diskImage;
+            if (closeDiskImage())
+            {
+                device->postMessage(this, DEVICE_UPDATE, NULL);
+                
+                return false;
+            }
             
             return true;
-        }
+			
+		case STORAGE_GET_MOUNTPATH:
+            *((string *)data) = diskImagePath;
+            
+            return true;
 			
 		case STORAGE_IS_LOCKED:
 			return false;
 			
 		case STORAGE_GET_FORMATLABEL:
-        {
-            // To-Do: build label
-            *((string *)data) = "16 sectors, 35 tracks, read-write";
+            *((string *)data) = diskStorage.getFormatLabel();
             
             return true;
-        }
-            
-        case STORAGE_GET_SETTINGS:
-        {
-            DeviceSettings *settings = (DeviceSettings *)data;
-            
-            DeviceSetting s;
-            s.component = this;
-            s.name = "writeProtect";
-            s.label = "Write Protected";
-            s.type = "checkbox";
-            s.options = "";
-            
-            settings->push_back(s);
-            
-            return true;
-        }
             
         case APPLEII_CLEAR_DRIVEENABLE:
         {
@@ -192,7 +173,7 @@ bool AppleDiskDrive525::postMessage(OEComponent *sender, int message, void *data
         }
             
         case APPLEII_SET_PHASECONTROL:
-            setPhaseControl(*((OEUInt32 *)data));
+            setPhaseControl(*((OEInt *)data));
             
             return true;
             
@@ -203,6 +184,15 @@ bool AppleDiskDrive525::postMessage(OEComponent *sender, int message, void *data
 	}
 	
 	return false;
+}
+
+OEChar AppleDiskDrive525::read(OEAddress address)
+{
+    return 0;
+}
+
+void AppleDiskDrive525::write(OEAddress address, OEChar value)
+{
 }
 
 void AppleDiskDrive525::updateSound()
@@ -221,12 +211,12 @@ void AppleDiskDrive525::updateSound()
         headPlayer->postMessage(this, AUDIOPLAYER_SET_SOUND, headPlayerSound);
 }
 
-void AppleDiskDrive525::setPhaseControl(OEUInt32 value)
+void AppleDiskDrive525::setPhaseControl(OEInt value)
 {
     phaseControl = value;
     
-	OEUInt32 currentPhase = trackIndex & 0x7;
-	OEUInt32 nextPhase;
+	OEInt currentPhase = trackIndex & 0x7;
+	OEInt nextPhase;
 	
 	switch (phaseControl) {
 		case 0x1: case 0xb:
@@ -275,21 +265,49 @@ void AppleDiskDrive525::setPhaseControl(OEUInt32 value)
 			break;
 	}
 	
-	OEInt32 trackDelta = ((nextPhase - currentPhase + 4) & 0x7) - 4;
-	trackIndex += trackDelta;
+	OESInt trackDelta = ((nextPhase - currentPhase + 4) & 0x7) - 4;
+    
+    OESInt nextTrackIndex = trackIndex + trackDelta;
 	
-	if (trackIndex < 0)
+	if (nextTrackIndex < 0)
     {
 		trackIndex = 0;
         
         headPlayer->postMessage(this, AUDIOPLAYER_STOP, NULL);
         headPlayer->postMessage(this, AUDIOPLAYER_PLAY, NULL);
 	}
-    else if (trackIndex > 39)
+    else if (nextTrackIndex > 39)
     {
 		trackIndex = 39;
         
         headPlayer->postMessage(this, AUDIOPLAYER_STOP, NULL);
         headPlayer->postMessage(this, AUDIOPLAYER_PLAY, NULL);
 	}
+    else
+        trackIndex = nextTrackIndex;
+    
+    if (trackDelta)
+    {
+        
+    }
+}
+
+bool AppleDiskDrive525::openDiskImage(string path)
+{
+    if (!diskStorage.open(path))
+        return false;
+    
+    diskImagePath = path;
+    
+    return true;
+}
+
+bool AppleDiskDrive525::closeDiskImage()
+{
+    if (!diskStorage.close())
+        return false;
+    
+    diskImagePath = "";
+    
+    return true;
 }

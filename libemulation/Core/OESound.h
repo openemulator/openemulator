@@ -21,8 +21,8 @@ public:
     OESound(OEData& data);
     
     float getSampleRate();
-    OEUInt32 getChannelNum();
-    OEUInt64 getFrameNum();
+    OEInt getChannelNum();
+    OEInt getFrameNum();
     float *getSamples();
     
     bool load(string path);
@@ -30,7 +30,7 @@ public:
     
 private:
 	float sampleRate;
-	OEUInt32 channelNum;
+	OEInt channelNum;
     
     vector<float> samples;
     

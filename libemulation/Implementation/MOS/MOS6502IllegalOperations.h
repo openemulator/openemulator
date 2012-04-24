@@ -48,7 +48,7 @@
  ***************************************************************/
 #define ANC                                                     \
     P &= ~F_C;                                                  \
-    A = (OEUInt8)(A & tmp);                                     \
+    A = (OEChar)(A & tmp);                                      \
     if (A & 0x80)                                               \
     P |= F_C;                                                   \
     SET_NZ(A)
@@ -128,7 +128,7 @@
     X &= A; 													\
     if (X >= tmp)												\
         P |= F_C;												\
-    X = (OEUInt8)(X - tmp);										\
+    X = (OEChar)(X - tmp);										\
     SET_NZ(X)
 
 /***************************************************************
@@ -137,18 +137,18 @@
  * between opcode read and operand read
  ***************************************************************/
 #define AXA                                                     \
-    A = (OEUInt8)((A | 0xee)& X & tmp);							\
+    A = (OEChar)((A | 0xee)& X & tmp);							\
     SET_NZ(A)
 
 /***************************************************************
  * DCP decrement data and compare
  ***************************************************************/
 #define DCP                                                     \
-    tmp = (OEUInt8)(tmp-1);										\
+    tmp = (OEChar)(tmp-1);										\
     P &= ~F_C;													\
     if (A >= tmp)												\
         P |= F_C;												\
-    SET_NZ((OEUInt8)(A - tmp))
+    SET_NZ((OEChar)(A - tmp))
 
 /***************************************************************
  * DOP double no operation
@@ -160,21 +160,21 @@
  * ISB increment and subtract with carry
  ***************************************************************/
 #define ISB                                                     \
-    tmp = (OEUInt8)(tmp + 1);                                   \
+    tmp = (OEChar)(tmp + 1);                                    \
     SBC
 
 /***************************************************************
  * LAX load accumulator and index X
  ***************************************************************/
 #define LAX                                                     \
-    A = X = (OEUInt8)tmp; 										\
+    A = X = (OEChar)tmp; 										\
     SET_NZ(A)
 
 /***************************************************************
  * OAL load accumulator and index X
  ***************************************************************/
 #define OAL                                                     \
-    A = X = (OEUInt8)((A | 0xee) & tmp);						\
+    A = X = (OEChar)((A | 0xee) & tmp);                         \
     SET_NZ(A)
 
 /***************************************************************
@@ -184,7 +184,7 @@
 #define RLA                                                     \
     tmp = (tmp << 1) | (P & F_C);								\
     P = (P & ~F_C) | ((tmp >> 8) & F_C);						\
-    tmp = (OEUInt8)tmp;											\
+    tmp = (OEChar)tmp;											\
     A &= tmp;													\
     SET_NZ(A)
 
@@ -195,7 +195,7 @@
 #define RRA                                                     \
     tmp |= (P & F_C) << 8;										\
     P = (P & ~F_C) | (tmp & F_C);								\
-    tmp = (OEUInt8)(tmp >> 1);									\
+    tmp = (OEChar)(tmp >> 1);									\
     ADC
 
 /***************************************************************
@@ -209,7 +209,7 @@
  ***************************************************************/
 #define SLO                                                     \
     P = (P & ~F_C) | ((tmp >> 7) & F_C);						\
-    tmp = (OEUInt8)(tmp << 1);									\
+    tmp = (OEChar)(tmp << 1);									\
     A |= tmp;													\
     SET_NZ(A)
 
@@ -219,7 +219,7 @@
  ***************************************************************/
 #define SRE                                                     \
     P = (P & ~F_C) | (tmp & F_C);								\
-    tmp = (OEUInt8)tmp >> 1;									\
+    tmp = (OEChar)tmp >> 1;                                     \
     A ^= tmp;													\
     SET_NZ(A)
 
@@ -240,7 +240,7 @@
 #if 0
 #define SSH                                                     \
     tmp = S = A & X;											\
-    tmp &= (OEUInt8)(memoryBus->read((PCW + 1) & 0xffff) + 1)
+    tmp &= (OEChar)(memoryBus->read((PCW + 1) & 0xffff) + 1)
     #endif
 
 /***************************************************************

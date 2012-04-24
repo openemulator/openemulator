@@ -30,8 +30,8 @@ typedef enum
 
 typedef struct
 {
-    OEInt32 deviceId;
-    OEInt32 usageId;
+    OEInt deviceId;
+    OEInt usageId;
     float value;
 } JoystickHIDEvent;
 

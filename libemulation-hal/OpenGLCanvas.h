@@ -87,14 +87,14 @@ public:
     
     void sendUnicodeChar(CanvasUnicodeChar unicodeChar);
     
-    void setKey(int usageId, bool value);
+    void setKey(OEInt usageId, bool value);
     
     void enterMouse();
     void exitMouse();
     void setMousePosition(float x, float y);
     void moveMouse(float rx, float ry);
-    void sendMouseWheelEvent(int index, float value);
-    void setMouseButton(int index, bool value);
+    void sendMouseWheelEvent(OEInt index, float value);
+    void setMouseButton(OEInt index, bool value);
     
     void doCopy(wstring& value);
     void doPaste(wstring value);
@@ -154,7 +154,7 @@ private:
     OpenGLCanvasCapture capture;
     
     bool keyDown[CANVAS_KEYBOARD_KEY_NUM];
-    int keyDownCount;
+    OEInt keyDownCount;
     bool ctrlAltWasPressed;
     
     bool mouseEntered;
@@ -167,7 +167,7 @@ private:
     void freeOpenGL();
     GLuint getGLFormat(OEImageFormat format);
     void loadTextures();
-    void loadTexture(string path, bool isMipmap, int textureIndex);
+    void loadTexture(string path, bool isMipmap, OEInt textureIndex);
     void updateTextureSize(int textureIndex, OESize size);
     void loadShaders();
     void deleteShaders();
@@ -188,7 +188,7 @@ private:
     
     OEImage readFramebuffer();
     
-    void postHIDEvent(int notification, int usageId, float value);
+    void postHIDEvent(OEInt notification, OEInt usageId, float value);
     void updateCapture(OpenGLCanvasCapture value);
     void resetKeysAndButtons();
     

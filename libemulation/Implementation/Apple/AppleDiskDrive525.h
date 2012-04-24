@@ -14,6 +14,8 @@
 
 #include "OESound.h"
 
+#include "diskimage.h"
+
 class AppleDiskDrive525 : public OEComponent
 {
 public:
@@ -27,20 +29,32 @@ public:
     
 	bool postMessage(OEComponent *sender, int message, void *data);
 	
+    OEChar read(OEAddress address);
+    void write(OEAddress address, OEChar value);
+    
 private:
 	OEComponent *device;
     OEComponent *drivePlayer;
     OEComponent *headPlayer;
     
-	string diskImage;
+	string diskImagePath;
 	bool forceWriteProtected;
     string mechanism;
     map<string, OESound>sound;
     
-    OEUInt32 phaseControl;
-    OEInt32 trackIndex;
+    OEInt phaseControl;
+    OEInt trackIndex;
     bool isWriteProtected;
     
+    DIApple525DiskStorage diskStorage;
+    
+    DIData track;
+    OEChar *trackData;
+    OEInt trackSize;
+    
     void updateSound();
-    void setPhaseControl(OEUInt32 value);
+    void setPhaseControl(OEInt value);
+    
+    bool openDiskImage(string path);
+    bool closeDiskImage();
 };

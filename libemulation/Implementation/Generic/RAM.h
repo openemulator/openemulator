@@ -36,8 +36,8 @@ public:
     
     void notify(OEComponent *sender, int notification, void *data);
     
-    OEUInt8 read(OEAddress address);
-    void write(OEAddress address, OEUInt8 value);
+    OEChar read(OEAddress address);
+    void write(OEAddress address, OEChar value);
     
 private:
     OEAddress size;
@@ -46,7 +46,7 @@ private:
     OEComponent *controlBus;
     
     OEData data;
-    OEUInt8 *datap;
+    OEChar *datap;
     OEAddress mask;
     
     ControlBusPowerState powerState;

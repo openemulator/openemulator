@@ -29,7 +29,7 @@ public:
     
     string inputDevice;
     string label;
-    OEInt32 usageId;
+    OEInt usageId;
     JoystickMapperType type;
 };
 
@@ -47,14 +47,14 @@ public:
         value = 0;
     }
     
-    OEInt32 usageId;
+    OEInt usageId;
     JoystickMapperType type;
     float sensitivity;
     bool reverse;
     float value;
 };
 
-typedef map<OEInt32,JoystickMapperRelation> JoystickMapperMap;
+typedef map<OEInt,JoystickMapperRelation> JoystickMapperMap;
 
 class JoystickMapper : public OEComponent
 {
@@ -80,23 +80,23 @@ private:
     string oldInputDevice;
     map<string, string> inputDeviceMap;
     
-    OEInt32 deviceId;
+    OEInt deviceId;
     JoystickMapperMap usageIdMap;
     
     void addItem(string inputDevice, string label,
-                 JoystickMapperType type, OEUInt32 usageId);
-    OEInt32 getItemUsageId(string value);
+                 JoystickMapperType type, OEInt usageId);
+    OEInt getItemUsageId(string value);
     JoystickMapperType getItemType(string value);
-    string getItemLabel(OEInt32 value);
+    string getItemLabel(OEInt value);
     
-    void mapNotification(OEInt32 usageId, float value);
+    void mapNotification(OEInt usageId, float value);
     
-    void setMap(OEInt32 usageId, string value);
-    string getMap(OEInt32 usageId);
-    void setSensitivity(OEInt32 usageId, float value);
-    string getSensitivity(OEInt32 usageId);
-    void setReverse(OEInt32 usageId, bool value);
-    string getReverse(OEInt32 usageId);
+    void setMap(OEInt usageId, string value);
+    string getMap(OEInt usageId);
+    void setSensitivity(OEInt usageId, float value);
+    string getSensitivity(OEInt usageId);
+    void setReverse(OEInt usageId, bool value);
+    string getReverse(OEInt usageId);
     
     string serializeMap();
     void unserializeMap(string serialConf);

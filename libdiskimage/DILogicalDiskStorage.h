@@ -33,6 +33,8 @@ public:
     DIInt getTracksPerInch();
     string getFormatLabel();
     
+    DITrackFormat getTrackFormat();
+    
     bool readTrack(DIInt headIndex, DIInt trackIndex, DITrack& track);
     bool writeTrack(DIInt headIndex, DIInt trackIndex, DITrack& track);
     

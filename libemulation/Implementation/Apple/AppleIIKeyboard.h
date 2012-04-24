@@ -41,8 +41,8 @@ public:
     
     void notify(OEComponent *sender, int notification, void *data);
     
-	OEUInt8 read(OEAddress address);
-	void write(OEAddress address, OEUInt8 value);
+	OEChar read(OEAddress address);
+	void write(OEAddress address, OEChar value);
 	
 private:
 	AppleIIKeyboardType type;
@@ -52,10 +52,10 @@ private:
     OEComponent *gamePort;
 	OEComponent *monitor;
     
-    OEUInt8 keyLatch;
+    OEChar keyLatch;
     AppleIIKeyboardState state;
     
-    queue<OEUInt8> pasteBuffer;
+    queue<OEChar> pasteBuffer;
     
     void updateShiftKeyMod();
     void sendKey(CanvasUnicodeChar key);

@@ -586,8 +586,8 @@ void hidDeviceEventOcurred(void *inContext, IOReturn inResult, void *inSender, I
     long int intValue = IOHIDValueGetIntegerValue(value);
     
     IOHIDDeviceRef device = IOHIDElementGetDevice(element);
-    OEUInt32 usagePage = IOHIDElementGetUsagePage(element);
-    OEUInt32 usageId = IOHIDElementGetUsage(element);
+    OEInt usagePage = IOHIDElementGetUsagePage(element);
+    OEInt usageId = IOHIDElementGetUsage(element);
     long int min = IOHIDElementGetLogicalMin(element);
     long int max = IOHIDElementGetLogicalMax(element);
     
@@ -607,7 +607,7 @@ void hidDeviceEventOcurred(void *inContext, IOReturn inResult, void *inSender, I
             ((HIDJoystick *)hidJoystick)->setAxis(deviceIndex, usageId - 0x30, normalizedValue);
         }
         else if (usageId == 0x39)
-            ((HIDJoystick *)hidJoystick)->setHat(deviceIndex, usageId - 0x39, (OEInt32) intValue);
+            ((HIDJoystick *)hidJoystick)->setHat(deviceIndex, usageId - 0x39, (OEInt) intValue);
     }
     
     [self unlockEmulation];

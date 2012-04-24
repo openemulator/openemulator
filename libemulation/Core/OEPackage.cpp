@@ -132,6 +132,7 @@ bool OEPackage::writeFile(const string& packagePath, OEData *data)
                                            0)) != NULL)
         {
             int index;
+            
             if ((index = zip_name_locate(zip, packagePath.c_str(), 0)) == -1)
                 error = (zip_add(zip, packagePath.c_str(), zipSource) == -1);
             else

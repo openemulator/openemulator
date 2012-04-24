@@ -51,7 +51,7 @@ public:
         a = 0xff;
     }
     
-    OEImagePixel(OEUInt8 l)
+    OEImagePixel(OEChar l)
     {
         r = l;
         g = l;
@@ -59,7 +59,7 @@ public:
         a = 0xff;
     }
     
-    OEImagePixel(OEUInt8 r, OEUInt8 g, OEUInt8 b)
+    OEImagePixel(OEChar r, OEChar g, OEChar b)
     {
         this->r = r;
         this->g = g;
@@ -67,7 +67,7 @@ public:
         a = 0xff;
     }
     
-    OEImagePixel(OEUInt8 r, OEUInt8 g, OEUInt8 b, OEUInt8 a)
+    OEImagePixel(OEChar r, OEChar g, OEChar b, OEChar a)
     {
         this->r = r;
         this->g = g;
@@ -75,10 +75,10 @@ public:
         this->a = a;
     }
     
-    OEUInt8 r;
-    OEUInt8 g;
-    OEUInt8 b;
-    OEUInt8 a;
+    OEChar r;
+    OEChar g;
+    OEChar b;
+    OEChar a;
 };
 
 // Macros
@@ -231,9 +231,9 @@ public:
     OEImageFormat getFormat();
     void setSize(OESize value);
     OESize getSize();
-    OEUInt32 getBytesPerPixel();
-    OEUInt32 getBytesPerRow();
-    OEUInt8 *getPixels();
+    OEInt getBytesPerPixel();
+    OEInt getBytesPerRow();
+    OEChar *getPixels();
     
     void setSampleRate(float value);
     float getSampleRate();
@@ -268,9 +268,9 @@ private:
     vector<bool> phaseAlternation;
     
     void init();
-    void setSize(OESize value, OEUInt8 fillByte);
-    OEImagePixel getPixel(OEUInt32 x, OEUInt32 y);
-    void setPixel(OEUInt32 x, OEUInt32 y, OEImagePixel value);
+    void setSize(OESize value, OEChar fillByte);
+    OEImagePixel getPixel(OEInt x, OEInt y);
+    void setPixel(OEInt x, OEInt y, OEImagePixel value);
     OEImagePixel darken(OEImagePixel p1, OEImagePixel p2);
     bool validatePNGHeader(FILE *fp);
 };

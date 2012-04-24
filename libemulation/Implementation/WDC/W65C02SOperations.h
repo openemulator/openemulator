@@ -150,7 +150,7 @@
     if (cond)													\
     {															\
         RDMEM(PCW);												\
-        EAW = PCW + (OEInt8)tmp;                                \
+        EAW = PCW + (OESChar)tmp;                               \
         if (EAH != PCH) 										\
         {                                                       \
             RDMEM(PCW - 1);										\
@@ -192,7 +192,7 @@
             P |= F_V;											\
         if (sum & 0xff00)										\
             P |= F_C;											\
-        A = (OEUInt8) sum;										\
+        A = (OEChar) sum;										\
     }															\
     SET_NZ(A)
 
@@ -230,7 +230,7 @@
             P |= F_V;											\
         if ((sum & 0xff00) == 0)								\
             P |= F_C;											\
-        A = (OEUInt8) sum;										\
+        A = (OEChar) sum;										\
     }															\
     SET_NZ(A)
 
@@ -264,14 +264,14 @@
  *  DEA Decrement accumulator
  ***************************************************************/
 #define DEA                                                     \
-    A = (OEUInt8)(A - 1);										\
+    A = (OEChar)(A - 1);										\
     SET_NZ(A)
 
 /* 65C02 *******************************************************
  *  INA Increment accumulator
  ***************************************************************/
 #define INA                                                     \
-    A = (OEUInt8)(A + 1);										\
+    A = (OEChar)(A + 1);										\
     SET_NZ(A)
 
 /* 65C02 *******************************************************

@@ -29,17 +29,17 @@ public:
     void notify(OEComponent *sender, int notification, void *data);
     
 protected:
-    OEUInt8 a;
-    OEUInt8 x;
-    OEUInt8 y;
-    OEUInt8 p;
+    OEChar a;
+    OEChar x;
+    OEChar y;
+    OEChar p;
     OEUnion pc;
     OEUnion sp;
     
     OEComponent *controlBus;
     OEComponent *memoryBus;
     
-    OEInt64 icount;
+    OESLong icount;
     
     ControlBusPowerState powerState;
     

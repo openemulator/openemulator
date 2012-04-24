@@ -18,7 +18,7 @@ public:
 	bool setRef(string name, OEComponent *ref);
 	bool init();
     
-	OEUInt8 read(OEAddress address);
+	OEChar read(OEAddress address);
 	
 private:
 	OEComponent *floatingBus;

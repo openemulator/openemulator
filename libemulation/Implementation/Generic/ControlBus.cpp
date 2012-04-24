@@ -46,16 +46,16 @@ bool ControlBus::setValue(string name, string value)
     else if (name == "powerState")
     {
         if (value.substr(0, 1) == "S")
-            powerState = (ControlBusPowerState) getInt(value.substr(1));
+            powerState = (ControlBusPowerState) getOEInt(value.substr(1));
     }
     else if (name == "resetOnPowerOn")
-        resetOnPowerOn = getInt(value);
+        resetOnPowerOn = getOEInt(value);
     else if (name == "resetCount")
-        resetCount = (OEUInt32) getUInt(value);
+        resetCount = getOEInt(value);
     else if (name == "irqCount")
-        irqCount = (OEUInt32) getUInt(value);
+        irqCount = getOEInt(value);
     else if (name == "nmiCount")
-        nmiCount = (OEUInt32) getUInt(value);
+        nmiCount = getOEInt(value);
     else
         return false;
     
@@ -239,7 +239,7 @@ bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
             return true;
             
         case CONTROLBUS_GET_CYCLES:
-            *((OEUInt64 *)data) = cycles + getCycles();
+            *((OELong *)data) = cycles + getCycles();
             
             return true;
             
@@ -249,7 +249,7 @@ bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
             return true;
             
         case CONTROLBUS_SCHEDULE_TIMER:
-            scheduleTimer(sender, *((OEUInt64 *)data));
+            scheduleTimer(sender, *((OELong *)data));
             
             return true;
             
@@ -294,7 +294,7 @@ void ControlBus::notify(OEComponent *sender, int notification, void *data)
             
             if (component)
             {
-                OEUInt64 pendingCycles = -getCycles();
+                OELong pendingCycles = -getCycles();
                 component->notify(this, CONTROLBUS_TIMER_DID_FIRE, &pendingCycles);
             }
             else
@@ -408,16 +408,16 @@ void ControlBus::setPowerState(ControlBusPowerState value)
     }
 }
 
-inline OEInt64 ControlBus::getPendingCPUCycles()
+inline OESLong ControlBus::getPendingCPUCycles()
 {
-    OEInt64 value;
+    OESLong value;
     
     cpu->postMessage(this, CPU_GET_PENDINGCYCLES, &value);
     
     return value;
 }
 
-inline void ControlBus::setPendingCPUCycles(OEInt64 value)
+inline void ControlBus::setPendingCPUCycles(OESLong value)
 {
     cpu->postMessage(this, CPU_SET_PENDINGCYCLES, &value);
 }
@@ -427,12 +427,12 @@ inline void ControlBus::runCPU()
     cpu->postMessage(this, CPU_RUN, &cpuCycles);
 }
 
-OEUInt64 ControlBus::getCycles()
+OELong ControlBus::getCycles()
 {
     return floor((cpuCycles - getPendingCPUCycles()) / cpuClockMultiplier);
 }
 
-void ControlBus::scheduleTimer(OEComponent *component, OEUInt64 cycles)
+void ControlBus::scheduleTimer(OEComponent *component, OELong cycles)
 {
     cycles += getCycles();
     
@@ -445,7 +445,7 @@ void ControlBus::scheduleTimer(OEComponent *component, OEUInt64 cycles)
         {
             if ((i == events.begin()) && inEvent)
             {
-                OEInt64 doneCPUCycles = floor(cpuCycles - getPendingCPUCycles());
+                OESLong doneCPUCycles = floor(cpuCycles - getPendingCPUCycles());
                 cpuCycles -= floor(cpuCycles);
                 
                 cpuCycles += ceil(cycles * cpuClockMultiplier - cpuCycles);
@@ -470,7 +470,7 @@ void ControlBus::scheduleTimer(OEComponent *component, OEUInt64 cycles)
 
 void ControlBus::invalidateTimers(OEComponent *component)
 {
-    OEUInt64 cycles = 0;
+    OELong cycles = 0;
     
     list<ControlBusEvent>::iterator i;
     for (i = events.begin();
@@ -489,7 +489,7 @@ void ControlBus::invalidateTimers(OEComponent *component)
             
             if ((i == events.begin()) && inEvent)
             {
-                OEInt64 doneCPUCycles = floor(cpuCycles - getPendingCPUCycles());
+                OESLong doneCPUCycles = floor(cpuCycles - getPendingCPUCycles());
                 cpuCycles -= floor(cpuCycles);
                 
                 cpuCycles += ceil(events.front().cycles * cpuClockMultiplier - cpuCycles);
@@ -503,7 +503,7 @@ void ControlBus::setCPUClockMultiplier(float value)
 {
     float ratio = value / cpuClockMultiplier;
     
-    OEInt64 pendingCPUCycles;
+    OESLong pendingCPUCycles;
     
     pendingCPUCycles = getPendingCPUCycles();
     

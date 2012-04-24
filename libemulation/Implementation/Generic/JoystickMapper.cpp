@@ -43,7 +43,7 @@ JoystickMapper::JoystickMapper()
     for (int deviceId = 0; deviceId < 2; deviceId++)
     {
         string deviceLabel = "Joystick " + getString(deviceId + 1);
-        OEInt32 deviceOffset = JOYSTICK_START + JOYSTICK_OFFSET * deviceId;
+        OEInt deviceOffset = JOYSTICK_START + JOYSTICK_OFFSET * deviceId;
         
         for (int i = 0; i < JOYSTICK_AXIS_NUM; i++)
         {
@@ -73,15 +73,15 @@ bool JoystickMapper::setValue(string name, string value)
     if (name == "inputDevice")
         inputDevice = value;
     else if (name == "deviceId")
-        deviceId = (OEUInt32) getInt(value);
+        deviceId = getOEInt(value);
     else if (name.substr(0, 4) == "axis")
-        setMap(JOYSTICK_AXIS1 + (OEInt32) getInt(name.substr(4)), value);
+        setMap(JOYSTICK_AXIS1 + getOEInt(name.substr(4)), value);
     else if (name.substr(0, 6) == "button")
-        setMap(JOYSTICK_BUTTON1 + (OEInt32) getInt(name.substr(6)), value);
+        setMap(JOYSTICK_BUTTON1 + getOEInt(name.substr(6)), value);
     else if (name.substr(0, 15) == "sensitivityAxis")
-        setSensitivity(JOYSTICK_AXIS1 + (OEInt32) getInt(name.substr(15)), getFloat(value));
+        setSensitivity(JOYSTICK_AXIS1 + getOEInt(name.substr(15)), getFloat(value));
     else if (name.substr(0, 11) == "reverseAxis")
-        setReverse(JOYSTICK_AXIS1 + (OEInt32) getInt(name.substr(11)), getInt(value));
+        setReverse(JOYSTICK_AXIS1 + getOEInt(name.substr(11)), getOEInt(value));
     else if (name.substr(0, 3) == "map")
         inputDeviceMap[name.substr(3)] = value;
     else
@@ -97,13 +97,13 @@ bool JoystickMapper::getValue(string name, string& value)
     else if (name == "deviceId")
         value = getString(deviceId);
     else if (name.substr(0, 4) == "axis")
-        value = getMap(JOYSTICK_AXIS1 + (OEUInt32) getInt(name.substr(4)));
+        value = getMap(JOYSTICK_AXIS1 + getOEInt(name.substr(4)));
     else if (name.substr(0, 6) == "button")
-        value = getMap(JOYSTICK_BUTTON1 + (OEUInt32) getInt(name.substr(6)));
+        value = getMap(JOYSTICK_BUTTON1 + getOEInt(name.substr(6)));
     else if (name.substr(0, 15) == "sensitivityAxis")
-        value = getSensitivity(JOYSTICK_AXIS1 + (OEUInt32) getInt(name.substr(15)));
+        value = getSensitivity(JOYSTICK_AXIS1 + getOEInt(name.substr(15)));
     else if (name.substr(0, 11) == "reverseAxis")
-        value = getReverse(JOYSTICK_AXIS1 + (OEUInt32) getInt(name.substr(11)));
+        value = getReverse(JOYSTICK_AXIS1 + getOEInt(name.substr(11)));
     else if (name.substr(0, 3) == "map")
         value = inputDeviceMap[name.substr(3)];
     else
@@ -266,7 +266,7 @@ void JoystickMapper::notify(OEComponent *sender, int notification, void *data)
         }
         else
         {
-            OEUInt32 joystickNum = *((OEUInt32 *)data);
+            OEInt joystickNum = *((OEInt *)data);
             
             if ((inputDevice == "Mouse") && joystickNum)
                 inputDevice = "Joystick";
@@ -279,7 +279,7 @@ void JoystickMapper::notify(OEComponent *sender, int notification, void *data)
 }
 
 void JoystickMapper::addItem(string inputDevice, string label,
-                             JoystickMapperType type, OEUInt32 usageId)
+                             JoystickMapperType type, OEInt usageId)
 {
     JoystickMapperItem item;
     
@@ -291,7 +291,7 @@ void JoystickMapper::addItem(string inputDevice, string label,
     items.push_back(item);
 }
 
-OEInt32 JoystickMapper::getItemUsageId(string label)
+OEInt JoystickMapper::getItemUsageId(string label)
 {
     for (JoystickMapperItems::iterator i = items.begin();
          i != items.end();
@@ -317,7 +317,7 @@ JoystickMapperType JoystickMapper::getItemType(string label)
     return JOYSTICKMAPPER_UNMAPPED;
 }
 
-string JoystickMapper::getItemLabel(OEInt32 usageId)
+string JoystickMapper::getItemLabel(OEInt usageId)
 {
     for (JoystickMapperItems::iterator i = items.begin();
          i != items.end();
@@ -330,7 +330,7 @@ string JoystickMapper::getItemLabel(OEInt32 usageId)
     return "";
 }
 
-void JoystickMapper::mapNotification(OEInt32 usageId, float value)
+void JoystickMapper::mapNotification(OEInt usageId, float value)
 {
     for (JoystickMapperMap::iterator i = usageIdMap.begin();
          i != usageIdMap.end();
@@ -381,34 +381,34 @@ void JoystickMapper::mapNotification(OEInt32 usageId, float value)
     }
 }
 
-void JoystickMapper::setMap(OEInt32 usageId, string value)
+void JoystickMapper::setMap(OEInt usageId, string value)
 {
     usageIdMap[usageId].type = getItemType(value);
     usageIdMap[usageId].usageId = getItemUsageId(value);
     usageIdMap[usageId].value = 0.5;
 }
 
-string JoystickMapper::getMap(OEInt32 usageId)
+string JoystickMapper::getMap(OEInt usageId)
 {
     return getItemLabel(usageIdMap[usageId].usageId);
 }
 
-void JoystickMapper::setSensitivity(OEInt32 usageId, float value)
+void JoystickMapper::setSensitivity(OEInt usageId, float value)
 {
     usageIdMap[usageId].sensitivity = value;
 }
 
-string JoystickMapper::getSensitivity(OEInt32 usageId)
+string JoystickMapper::getSensitivity(OEInt usageId)
 {
     return getString(usageIdMap[usageId].sensitivity);
 }
 
-void JoystickMapper::setReverse(OEInt32 usageId, bool value)
+void JoystickMapper::setReverse(OEInt usageId, bool value)
 {
     usageIdMap[usageId].reverse = value;
 }
 
-string JoystickMapper::getReverse(OEInt32 usageId)
+string JoystickMapper::getReverse(OEInt usageId)
 {
     return getString(usageIdMap[usageId].reverse);
 }
@@ -438,15 +438,15 @@ void JoystickMapper::unserializeMap(string serialConf)
     
     splitConf = strsplit(serialConf, ',');
     
-    int index = 0;
-    for (int i = 0; i < (splitConf.size() / 4); i++)
+    OEInt index = 0;
+    for (OEInt i = 0; i < (splitConf.size() / 4); i++)
     {
         JoystickMapperItem item;
         
-        OEInt32 usageId = getItemUsageId(splitConf[index++]);
+        OEInt usageId = getItemUsageId(splitConf[index++]);
         
         usageIdMap[usageId].usageId = getItemUsageId(splitConf[index++]);
         usageIdMap[usageId].sensitivity = getFloat(splitConf[index++]);
-        usageIdMap[usageId].reverse = (bool) getInt(splitConf[index++]);
+        usageIdMap[usageId].reverse = getOEInt(splitConf[index++]);
     }
 }

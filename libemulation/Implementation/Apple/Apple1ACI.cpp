@@ -59,7 +59,7 @@ void Apple1ACI::dispose()
     mapMemory(ADDRESSDECODER_UNMAP_MEMORYMAPS);
 }
 
-OEUInt8 Apple1ACI::read(OEAddress address)
+OEChar Apple1ACI::read(OEAddress address)
 {
     if (address & 0x80)
     {
@@ -72,7 +72,7 @@ OEUInt8 Apple1ACI::read(OEAddress address)
     return rom->read(address);
 }
 
-void Apple1ACI::write(OEAddress address, OEUInt8 value)
+void Apple1ACI::write(OEAddress address, OEChar value)
 {
     toggleAudioOutput();
 }

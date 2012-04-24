@@ -22,7 +22,7 @@ bool HIDJoystick::postMessage(OEComponent *sender, int message, void *data)
     switch (message)
     {
         case JOYSTICK_GET_JOYSTICKNUM:
-            *((OEUInt32 *)data) = joystickNum;
+            *((OEInt *)data) = joystickNum;
             
             return true;
     }
@@ -47,7 +47,7 @@ void HIDJoystick::removeDevice()
     postNotification(this, JOYSTICK_WAS_REMOVED, &joystickNum);
 }
 
-void HIDJoystick::setAxis(int deviceIndex, int index, float value)
+void HIDJoystick::setAxis(OEInt deviceIndex, OEInt index, float value)
 {
     if (index >= JOYSTICK_AXIS_NUM)
         return;
@@ -60,7 +60,7 @@ void HIDJoystick::setAxis(int deviceIndex, int index, float value)
     postNotification(this, JOYSTICK_DID_CHANGE, &hidEvent);
 }
 
-void HIDJoystick::setHat(int deviceIndex, int index, int value)
+void HIDJoystick::setHat(OEInt deviceIndex, OEInt index, OEInt value)
 {
     if (index >= JOYSTICK_HAT_NUM)
         return;
@@ -73,7 +73,7 @@ void HIDJoystick::setHat(int deviceIndex, int index, int value)
     postNotification(this, JOYSTICK_DID_CHANGE, &hidEvent);
 }
 
-void HIDJoystick::setButton(int deviceIndex, int index, bool value)
+void HIDJoystick::setButton(OEInt deviceIndex, OEInt index, bool value)
 {
     if (index >= JOYSTICK_BUTTON_NUM)
         return;

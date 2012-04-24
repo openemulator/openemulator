@@ -52,7 +52,7 @@ bool RDCFFA1::setValue(string name, string value)
     if (name == "diskImage")
         openDiskImage(value);
     else if (name == "forceWriteProtected")
-        forceWriteProtected = getInt(value);
+        forceWriteProtected = getOEInt(value);
     else
         return false;
     
@@ -158,9 +158,7 @@ bool RDCFFA1::postMessage(OEComponent *sender, int message, void *data)
             return false;
             
         case STORAGE_UNMOUNT:
-            if (closeDiskImage())
-            {
-            }
+            closeDiskImage();
             
             device->postMessage(this, DEVICE_UPDATE, NULL);
             
@@ -183,7 +181,7 @@ bool RDCFFA1::postMessage(OEComponent *sender, int message, void *data)
     return false;
 }
 
-OEUInt8 RDCFFA1::read(OEAddress address)
+OEChar RDCFFA1::read(OEAddress address)
 {
     if ((address & 0xe0) != 0xe0)
         return rom->read(address);
@@ -216,7 +214,7 @@ OEUInt8 RDCFFA1::read(OEAddress address)
         case 0x0f:
         {
             // ATAStatus
-            OEUInt8 status = 0;
+            OEChar status = 0;
             
             if (ataError)
                 OEAssertBit(status, ATA_ERR);
@@ -233,7 +231,7 @@ OEUInt8 RDCFFA1::read(OEAddress address)
     }
 }
 
-void RDCFFA1::write(OEAddress address, OEUInt8 value)
+void RDCFFA1::write(OEAddress address, OEChar value)
 {
     if ((address & 0xe0) != 0xe0)
         return;
@@ -386,11 +384,9 @@ bool RDCFFA1::openDiskImage(string path)
     return true;
 }
 
-bool RDCFFA1::closeDiskImage()
+void RDCFFA1::closeDiskImage()
 {
-    diskImagePath = "";
-    
     diskImage.close();
     
-    return true;
+    diskImagePath = "";
 }

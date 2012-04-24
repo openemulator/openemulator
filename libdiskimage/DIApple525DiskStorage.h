@@ -70,6 +70,7 @@ private:
                           DITrackFormat& trackFormat, DIInt& trackSize);
     
     DIInt *getSectorOrder(DITrackFormat trackFormat);
+    bool getLogicalDisk(vector<DIData>& disk);
     
     bool encodeGCR53Track(DIInt trackIndex, DITrack& track);
     bool encodeGCR62Track(DIInt trackIndex, DITrack& track);

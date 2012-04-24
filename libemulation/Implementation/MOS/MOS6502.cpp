@@ -34,17 +34,17 @@ MOS6502::MOS6502()
 bool MOS6502::setValue(string name, string value)
 {
     if (name == "a")
-        a = getUInt(value);
+        a = getOEInt(value);
     else if (name == "x")
-        x = getUInt(value);
+        x = getOEInt(value);
     else if (name == "y")
-        y = getUInt(value);
+        y = getOEInt(value);
     else if (name == "s")
-        sp.b.l = getUInt(value);
+        sp.b.l = getOEInt(value);
     else if (name == "p")
-        p = getUInt(value);
+        p = getOEInt(value);
     else if (name == "pc")
-        pc.w.l = getUInt(value);
+        pc.w.l = getOEInt(value);
     else
         return false;
     
@@ -122,12 +122,12 @@ bool MOS6502::postMessage(OEComponent *sender, int message, void *data)
     switch (message)
     {
         case CPU_SET_PENDINGCYCLES:
-            icount = *((OEInt64 *)data);
+            icount = *((OESLong *)data);
             
             return true;
             
         case CPU_GET_PENDINGCYCLES:
-            *((OEInt64 *)data) = icount;
+            *((OESLong *)data) = icount;
             
             return true;
             
@@ -275,7 +275,7 @@ void MOS6502::execute()
         }
         else
         {
-            OEUInt8 opcode = RDOP();
+            OEChar opcode = RDOP();
             switch (opcode)
             {
                 MOS6502_OP(00);

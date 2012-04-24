@@ -24,13 +24,13 @@ MOS6530::MOS6530()
 bool MOS6530::setValue(string name, string value)
 {
     if (name == "directionA")
-        directionA = (OEUInt8) getUInt(value);
+        directionA = getOEInt(value);
     else if (name == "dataA")
-        dataA = (OEUInt8) getUInt(value);
+        dataA = getOEInt(value);
     else if (name == "directionB")
-        directionB = (OEUInt8) getUInt(value);
+        directionB = getOEInt(value);
     else if (name == "dataB")
-        dataB = (OEUInt8) getUInt(value);
+        dataB = getOEInt(value);
     else
         return false;
     
@@ -73,7 +73,7 @@ bool MOS6530::setRef(string name, OEComponent *ref)
     return true;
 }
 
-OEUInt8 MOS6530::read(OEAddress address)
+OEChar MOS6530::read(OEAddress address)
 {
     switch (address & 0xf)
     {
@@ -109,7 +109,7 @@ OEUInt8 MOS6530::read(OEAddress address)
     return 0;
 }
 
-void MOS6530::write(OEAddress address, OEUInt8 value)
+void MOS6530::write(OEAddress address, OEChar value)
 {
     switch (address & 0xf)
     {

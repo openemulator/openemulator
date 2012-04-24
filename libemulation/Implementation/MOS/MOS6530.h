@@ -19,8 +19,8 @@ public:
     bool getValue(string name, string& value);
     bool setRef(string name, OEComponent *ref);
     
-    OEUInt8 read(OEAddress address);
-    void write(OEAddress address, OEUInt8 value);
+    OEChar read(OEAddress address);
+    void write(OEAddress address, OEChar value);
     
 private:
     OEComponent *controlBus;
@@ -28,8 +28,8 @@ private:
     OEComponent *portB;
     OEComponent *controlBusB;
     
-    OEUInt8 directionA;
-    OEUInt8 dataA;
-    OEUInt8 directionB;
-    OEUInt8 dataB;
+    OEChar directionA;
+    OEChar dataA;
+    OEChar directionB;
+    OEChar dataB;
 };

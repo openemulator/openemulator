@@ -49,7 +49,7 @@ bool AppleIISlotExpansionMemory::init()
     return true;
 }
 
-OEUInt8 AppleIISlotExpansionMemory::read(OEAddress address)
+OEChar AppleIISlotExpansionMemory::read(OEAddress address)
 {
     if (address == 0xcfff)
         mmu->postNotification(this, APPLEII_SLOTEXPANSIONMEMORY_WILL_UNMAP, NULL);
@@ -57,7 +57,7 @@ OEUInt8 AppleIISlotExpansionMemory::read(OEAddress address)
 	return memory->read(address);
 }
 
-void AppleIISlotExpansionMemory::write(OEAddress address, OEUInt8 value)
+void AppleIISlotExpansionMemory::write(OEAddress address, OEChar value)
 {
     if (address == 0xcfff)
         mmu->postNotification(this, APPLEII_SLOTEXPANSIONMEMORY_WILL_UNMAP, NULL);

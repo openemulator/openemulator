@@ -35,7 +35,7 @@ private:
     bool playing;
     bool loop;
     float volume;
-    OEUInt64 frameIndex;
+    OEInt frameIndex;
     
     OESound *sound;
     OESound loadedSound;

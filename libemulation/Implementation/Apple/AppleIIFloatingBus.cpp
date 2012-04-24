@@ -39,9 +39,9 @@ bool AppleIIFloatingBus::init()
     return true;
 }
 
-OEUInt8 AppleIIFloatingBus::read(OEAddress address)
+OEChar AppleIIFloatingBus::read(OEAddress address)
 {
-    OEUInt8 value;
+    OEChar value;
     
     video->postMessage(this, APPLEII_READ_FLOATINGBUS, &value);
     

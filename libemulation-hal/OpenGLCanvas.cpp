@@ -484,14 +484,14 @@ void OpenGLCanvas::draw()
 
 bool OpenGLCanvas::initOpenGL()
 {
-    for (int i = 0; i < OPENGLCANVAS_TEXTUREEND; i++)
+    for (OEInt i = 0; i < OPENGLCANVAS_TEXTUREEND; i++)
     {
         texture[i] = 0;
         textureSize[i] = OEMakeSize(0, 0);
     }
     
     isConfigurationUpdated = true;
-    for (int i = 0; i < OPENGLCANVAS_SHADEREND; i++)
+    for (OEInt i = 0; i < OPENGLCANVAS_SHADEREND; i++)
         shader[i] = 0;
     
     capture = OPENGLCANVAS_CAPTURE_NONE;
@@ -563,7 +563,7 @@ void OpenGLCanvas::loadTextures()
                 OPENGLCANVAS_BEZEL_CAPTURE);
 }
 
-void OpenGLCanvas::loadTexture(string path, bool isMipmap, int textureIndex)
+void OpenGLCanvas::loadTexture(string path, bool isMipmap, OEInt textureIndex)
 {
     OEImage image;
     image.load(resourcePath + "/" + path);
@@ -736,7 +736,7 @@ bool OpenGLCanvas::uploadImage()
     }
     
     // Upload phase info
-    OEUInt32 texSize = (OEUInt32) getNextPowerOf2((OEUInt32) image.getSize().height);
+    OEInt texSize = (OEInt) getNextPowerOf2((OEInt) image.getSize().height);
     
     vector<float> colorBurst = image.getColorBurst();
     vector<bool> phaseAlternation = image.getPhaseAlternation();
@@ -744,7 +744,7 @@ bool OpenGLCanvas::uploadImage()
     vector<float> phaseInfo;
     phaseInfo.resize(3 * texSize);
     
-    for (OEUInt32 x = 0; x < image.getSize().height; x++)
+    for (OEInt x = 0; x < image.getSize().height; x++)
     {
         float c = colorBurst[x % colorBurst.size()] / 2.0 / M_PI;
         
@@ -1186,7 +1186,7 @@ void OpenGLCanvas::drawDisplayCanvas()
     OERect barrelTexRect;
     
     // Render
-    OEUInt32 textureIndex;
+    OEInt textureIndex;
     if (displayShader)
         textureIndex = OPENGLCANVAS_IMAGE_DECODED;
     else
@@ -1388,9 +1388,9 @@ void OpenGLCanvas::drawPaperCanvas()
     glLoadIdentity();
     glRotatef(180, 1, 0, 0);
     
-    int startIndex = OEMinY(viewportCanvas) / PAPER_SLICE;
-    int endIndex = OEMaxY(viewportCanvas) / PAPER_SLICE;
-    for (int i = startIndex; i <= endIndex; i++)
+    OEInt startIndex = OEMinY(viewportCanvas) / PAPER_SLICE;
+    OEInt endIndex = OEMaxY(viewportCanvas) / PAPER_SLICE;
+    for (OEInt i = startIndex; i <= endIndex; i++)
     {
         OERect slice = OEMakeRect(0,
                                   i * PAPER_SLICE,
@@ -1408,7 +1408,7 @@ void OpenGLCanvas::drawPaperCanvas()
         glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0,
                         slice.size.width, slice.size.height,
                         getGLFormat(image.getFormat()), GL_UNSIGNED_BYTE,
-                        image.getPixels() + image.getBytesPerRow() * (OEUInt32) OEMinY(slice));
+                        image.getPixels() + image.getBytesPerRow() * (OEInt) OEMinY(slice));
         
         OERect textureRect = OEMakeRect(0, 0,
                                         OEWidth(slice) / texSize.width, OEHeight(slice) / texSize.height);
@@ -1435,8 +1435,8 @@ void OpenGLCanvas::drawPaperCanvas()
     // Render page separators
     glColor4f(0.8, 0.8, 0.8, 1);
     
-    int pageNum = ceil(imageSize.height / paperConfiguration.pageResolution.height);
-    for (int i = 0; i < pageNum; i++)
+    OEInt pageNum = ceil(imageSize.height / paperConfiguration.pageResolution.height);
+    for (OEInt i = 0; i < pageNum; i++)
     {
         OERect line = OEMakeRect(-1, 2 * (paperConfiguration.pageResolution.height *
                                           (i + 1) - OEMinY(viewportCanvas)) /
@@ -1616,7 +1616,7 @@ void OpenGLCanvas::resignKeyWindow()
     updateCapture(OPENGLCANVAS_CAPTURE_NONE);
 }
 
-void OpenGLCanvas::postHIDEvent(int notification, int usageId, float value)
+void OpenGLCanvas::postHIDEvent(OEInt notification, OEInt usageId, float value)
 {
     CanvasHIDEvent hidEvent;
     
@@ -1633,7 +1633,7 @@ void OpenGLCanvas::sendUnicodeChar(CanvasUnicodeChar unicodeChar)
     postHIDEvent(CANVAS_UNICODECHAR_WAS_SENT, unicodeChar, 0);
 }
 
-void OpenGLCanvas::setKey(int usageId, bool value)
+void OpenGLCanvas::setKey(OEInt usageId, bool value)
 {
     if (keyDown[usageId] == value)
         return;
@@ -1703,7 +1703,7 @@ void OpenGLCanvas::moveMouse(float rx, float ry)
     }
 }
 
-void OpenGLCanvas::sendMouseWheelEvent(int index, float value)
+void OpenGLCanvas::sendMouseWheelEvent(OEInt index, float value)
 {
     if (capture == OPENGLCANVAS_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR)
         postHIDEvent(CANVAS_MOUSE_DID_CHANGE, CANVAS_M_WHEELX + index, value);
@@ -1711,7 +1711,7 @@ void OpenGLCanvas::sendMouseWheelEvent(int index, float value)
         postHIDEvent(CANVAS_POINTER_DID_CHANGE, CANVAS_P_WHEELX + index, value);
 }
 
-void OpenGLCanvas::setMouseButton(int index, bool value)
+void OpenGLCanvas::setMouseButton(OEInt index, bool value)
 {
     if (index >= CANVAS_MOUSE_BUTTON_NUM)
         return;
@@ -1739,10 +1739,10 @@ void OpenGLCanvas::setMouseButton(int index, bool value)
 
 void OpenGLCanvas::resetKeysAndButtons()
 {
-    for (int i = 0; i < CANVAS_KEYBOARD_KEY_NUM; i++)
+    for (OEInt i = 0; i < CANVAS_KEYBOARD_KEY_NUM; i++)
         setKey(i, false);
     
-    for (int i = 0; i < CANVAS_MOUSE_BUTTON_NUM; i++)
+    for (OEInt i = 0; i < CANVAS_MOUSE_BUTTON_NUM; i++)
         setMouseButton(i, false);
 }
 
@@ -2027,7 +2027,7 @@ void OpenGLCanvas::postNotification(OEComponent *sender, int notification, void 
 {
     lock();
     
-    for (int i = 0; i < observers[notification].size(); i++)
+    for (OEInt i = 0; i < observers[notification].size(); i++)
     {
         unlock();
         

@@ -23,7 +23,7 @@ RAM::RAM()
 bool RAM::setValue(string name, string value)
 {
     if (name == "size")
-        size = getUInt(value);
+        size = getOELong(value);
     else if (name == "powerOnPattern")
         powerOnPattern = getCharVector(value);
     else
@@ -95,7 +95,7 @@ bool RAM::init()
     data.resize((size_t) size);
     if (oldSize == 0)
         initMemory();
-    datap = (OEUInt8 *) &data.front();
+    datap = &data.front();
     mask = size - 1;
     
     return true;
@@ -123,12 +123,12 @@ void RAM::notify(OEComponent *sender, int notification, void *data)
         initMemory();
 }
 
-OEUInt8 RAM::read(OEAddress address)
+OEChar RAM::read(OEAddress address)
 {
     return datap[address & mask];
 }
 
-void RAM::write(OEAddress address, OEUInt8 value)
+void RAM::write(OEAddress address, OEChar value)
 {
     datap[address & mask] = value;
 }

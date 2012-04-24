@@ -49,15 +49,15 @@ OEImage::OEImage(OEImage& image, OERect rect)
     colorBurst = image.colorBurst;
     phaseAlternation = image.phaseAlternation;
     
-    OEUInt32 srcBytesPerRow = image.getBytesPerRow();
-    OEUInt32 srcOffset = ((OEUInt32)rect.origin.y * srcBytesPerRow +
-                          (OEUInt32)rect.origin.x * image.getBytesPerPixel());
-    unsigned char *src = image.getPixels() + srcOffset;
+    OEInt srcBytesPerRow = image.getBytesPerRow();
+    OEInt srcOffset = ((OEInt)rect.origin.y * srcBytesPerRow +
+                          (OEInt)rect.origin.x * image.getBytesPerPixel());
+    OEChar *src = image.getPixels() + srcOffset;
     
-    OEUInt32 dstBytesPerRow = getBytesPerRow();
-    unsigned char *dst = getPixels();
+    OEInt dstBytesPerRow = getBytesPerRow();
+    OEChar *dst = getPixels();
     
-    for (OEUInt32 y = 0; y < size.height; y++)
+    for (OEInt y = 0; y < size.height; y++)
     {
         memcpy(dst, src, dstBytesPerRow);
         
@@ -88,8 +88,8 @@ void OEImage::setFormat(OEImageFormat value)
     format = value;
     pixels.resize(getBytesPerRow() * size.height);
     
-    for (OEUInt32 y = 0; y < size.height; y++)
-        for (OEUInt32 x = 0; x < size.width; x++)
+    for (OEInt y = 0; y < size.height; y++)
+        for (OEInt x = 0; x < size.width; x++)
             setPixel(x, y, image.getPixel(x, y));
 }
 
@@ -117,7 +117,7 @@ unsigned char *OEImage::getPixels()
     return &pixels.front();
 }
 
-OEUInt32 OEImage::getBytesPerPixel()
+OEInt OEImage::getBytesPerPixel()
 {
     switch (format)
     {
@@ -135,9 +135,9 @@ OEUInt32 OEImage::getBytesPerPixel()
     }
 }
 
-OEUInt32 OEImage::getBytesPerRow()
+OEInt OEImage::getBytesPerRow()
 {
-    return getBytesPerPixel() * (OEUInt32)size.width;
+    return getBytesPerPixel() * (OEInt)size.width;
 }
 
 void OEImage::setSampleRate(float value)
@@ -256,12 +256,12 @@ bool OEImage::load(string path)
                         pixels.resize(getBytesPerRow() * size.height);
                         
                         // Copy image
-                        OEUInt8 **rows = (unsigned char **) png_get_rows(png, info);
+                        OEChar **rows = (unsigned char **) png_get_rows(png, info);
                         
-                        OEUInt8 *dst = getPixels();
-                        OEUInt32 dstBytesPerRow = getBytesPerRow();
+                        OEChar *dst = getPixels();
+                        OEInt dstBytesPerRow = getBytesPerRow();
                         
-                        for (int row = 0; row < height; row++)
+                        for (OEInt row = 0; row < height; row++)
                         {
                             memcpy(dst, rows[row], dstBytesPerRow);
                             dst += dstBytesPerRow;
@@ -293,8 +293,8 @@ void OEImage::print(OEImage& image, OEPoint origin)
     
     setSize(OEUnionRect(rect, imageRect).size, 0xff);
     
-    for (OEUInt32 y = 0; y < image.size.height; y++)
-        for (OEUInt32 x = 0; x < image.size.width; x++)
+    for (OEInt y = 0; y < image.size.height; y++)
+        for (OEInt x = 0; x < image.size.width; x++)
         {
             OEImagePixel p1 = getPixel(x + origin.x, y + origin.y);
             OEImagePixel p2 = image.getPixel(x, y);
@@ -305,24 +305,24 @@ void OEImage::print(OEImage& image, OEPoint origin)
     return;
 }
 
-void OEImage::setSize(OESize value, OEUInt8 fillByte)
+void OEImage::setSize(OESize value, OEChar fillByte)
 {
-    OEUInt32 srcBytesPerRow = getBytesPerRow();
+    OEInt srcBytesPerRow = getBytesPerRow();
     
     OESize oldSize = size;
-    size = OEMakeSize((OEUInt32) value.width,
-                      (OEUInt32) value.height);
+    size = OEMakeSize((OEInt) value.width,
+                      (OEInt) value.height);
     
-    OEUInt32 dstBytesPerRow = getBytesPerRow();
+    OEInt dstBytesPerRow = getBytesPerRow();
     
-    OEUInt32 height = min(oldSize.height, size.height);
+    OEInt height = min(oldSize.height, size.height);
     
     if (size.width < oldSize.width)
     {
-        OEUInt8 *src = getPixels();
-        OEUInt8 *dst = getPixels();
+        OEChar *src = getPixels();
+        OEChar *dst = getPixels();
         
-        for (OEUInt32 y = 0; y < height; y++)
+        for (OEInt y = 0; y < height; y++)
         {
             memmove(dst, src, dstBytesPerRow);
             
@@ -343,10 +343,10 @@ void OEImage::setSize(OESize value, OEUInt8 fillByte)
             memset(getPixels() + height * getBytesPerRow(), fillByte,
                    (size.height - oldSize.height) * dstBytesPerRow);
         
-        OEUInt8 *src = getPixels() + (height - 1) * srcBytesPerRow;
-        OEUInt8 *dst = getPixels() + (height - 1) * dstBytesPerRow;
+        OEChar *src = getPixels() + (height - 1) * srcBytesPerRow;
+        OEChar *dst = getPixels() + (height - 1) * dstBytesPerRow;
         
-        for (OEInt32 y = (height - 1); y >= 0; y--)
+        for (OESInt y = (height - 1); y >= 0; y--)
         {
             memmove(dst, src, srcBytesPerRow);
             memset(dst + srcBytesPerRow, fillByte, dstBytesPerRow - srcBytesPerRow);
@@ -359,9 +359,9 @@ void OEImage::setSize(OESize value, OEUInt8 fillByte)
         pixels.resize(getBytesPerRow() * size.height);
 }
 
-OEImagePixel OEImage::getPixel(OEUInt32 x, OEUInt32 y)
+OEImagePixel OEImage::getPixel(OEInt x, OEInt y)
 {
-    OEUInt8 *p = &pixels[y * getBytesPerRow() + x * getBytesPerPixel()];
+    OEChar *p = &pixels[y * getBytesPerRow() + x * getBytesPerPixel()];
     
     switch (format)
     {
@@ -379,16 +379,16 @@ OEImagePixel OEImage::getPixel(OEUInt32 x, OEUInt32 y)
     }
 }
 
-void OEImage::setPixel(OEUInt32 x, OEUInt32 y, OEImagePixel value)
+void OEImage::setPixel(OEInt x, OEInt y, OEImagePixel value)
 {
-    OEUInt8 *p = &pixels[y * getBytesPerRow() + x * getBytesPerPixel()];
+    OEChar *p = &pixels[y * getBytesPerRow() + x * getBytesPerPixel()];
     
     switch (format)
     {
         case OEIMAGE_LUMINANCE:
-            p[0] = ((OEUInt32) value.r +
-                    (OEUInt32) value.g +
-                    (OEUInt32) value.b) / 3;
+            p[0] = ((OEInt) value.r +
+                    (OEInt) value.g +
+                    (OEInt) value.b) / 3;
             
             break;
             
@@ -411,9 +411,9 @@ void OEImage::setPixel(OEUInt32 x, OEUInt32 y, OEImagePixel value)
 
 OEImagePixel OEImage::darken(OEImagePixel p1, OEImagePixel p2)
 {
-    OEInt32 r = (OEInt32) p1.r + (OEInt32) p2.r - 255;
-    OEInt32 g = (OEInt32) p1.g + (OEInt32) p2.g - 255;
-    OEInt32 b = (OEInt32) p1.b + (OEInt32) p2.b - 255;
+    OESInt r = (OESInt) p1.r + (OESInt) p2.r - 255;
+    OESInt g = (OESInt) p1.g + (OESInt) p2.g - 255;
+    OESInt b = (OESInt) p1.b + (OESInt) p2.b - 255;
     
     if (r < 0)
         r = 0;
@@ -427,7 +427,7 @@ OEImagePixel OEImage::darken(OEImagePixel p1, OEImagePixel p2)
 
 bool OEImage::validatePNGHeader(FILE *fp)
 {
-    OEUInt8 pngHeader[PNGSIG_BYTENUM];
+    OEChar pngHeader[PNGSIG_BYTENUM];
     
     if (fread(pngHeader, 1, PNGSIG_BYTENUM, fp) != PNGSIG_BYTENUM)
         return false;

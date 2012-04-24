@@ -43,14 +43,14 @@ public:
     virtual void notify(OEComponent *sender, int notification, void *data);
     
     // Memory access
-    virtual OEUInt8 read(OEAddress address);
-    virtual void write(OEAddress address, OEUInt8 value);
-    virtual OEUInt16 read16(OEAddress address);
-    virtual void write16(OEAddress address, OEUInt16 value);
-    virtual OEUInt32 read32(OEAddress address);
-    virtual void write32(OEAddress address, OEUInt32 value);
-    virtual OEUInt64 read64(OEAddress address);
-    virtual void write64(OEAddress address, OEUInt64 value);
+    virtual OEChar read(OEAddress address);
+    virtual void write(OEAddress address, OEChar value);
+    virtual OEShort read16(OEAddress address);
+    virtual void write16(OEAddress address, OEShort value);
+    virtual OEInt read32(OEAddress address);
+    virtual void write32(OEAddress address, OEInt value);
+    virtual OELong read64(OEAddress address);
+    virtual void write64(OEAddress address, OELong value);
     
 protected:
     OEObservers observers;

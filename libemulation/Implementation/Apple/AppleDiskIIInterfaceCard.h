@@ -23,21 +23,21 @@ public:
     
     void notify(OEComponent *sender, int notification, void *data);
     
-    OEUInt8 read(OEAddress address);
-	void write(OEAddress address, OEUInt8 value);
+    OEChar read(OEAddress address);
+	void write(OEAddress address, OEChar value);
     
 private:
 	OEComponent *controlBus;
     OEComponent *floatingBus;
 	OEComponent *drive[2];
     
-    OEUInt32 phaseControl;
+    OEInt phaseControl;
     bool driveOn;
-    OEUInt32 driveSel;
-    OEUInt32 sequencerMode;
+    OEInt driveSel;
+    OEInt sequencerMode;
     
-    OEUInt32 sequencerState;
-    OEUInt8 dataRegister;
+    OEInt sequencerState;
+    OEChar dataRegister;
     
     OEComponent dummyDrive;
     OEComponent *currentDrive;
@@ -47,18 +47,18 @@ private:
     bool driveEnableControl;
     bool writeRequest;
     
-    OEUInt64 lastCycles;
+    OELong lastCycles;
     
-    void setPhaseControl(OEUInt32 index, bool value);
+    void setPhaseControl(OEInt index, bool value);
     void updatePhaseControl();
     void setDriveOn(bool value);
     void updateDriveEnableControl();
     void updateDriveEnabled();
-    void setDriveSel(OEUInt32 value);
-    void updateDriveSel(OEUInt32 value);
+    void setDriveSel(OEInt value);
+    void updateDriveSel(OEInt value);
     void setSequencerWrite(bool value);
     void setSequencerLoad(bool value);
     void updateWriteRequest();
-    OEUInt64 getQ3CyclesSinceLastUpdate();
-    void updateSequencer(OEUInt64 q3Cycles, OEUInt8 value);
+    OELong getQ3CyclesSinceLastUpdate();
+    void updateSequencer(OELong q3Cycles, OEChar value);
 };

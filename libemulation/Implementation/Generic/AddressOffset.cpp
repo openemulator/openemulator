@@ -21,7 +21,7 @@ AddressOffset::AddressOffset()
 bool AddressOffset::setValue(string name, string value)
 {
     if (name == "offset")
-        offset = getInt(value);
+        offset = getOELong(value);
     else
         return false;
     
@@ -50,12 +50,12 @@ bool AddressOffset::init()
     return true;
 }
 
-OEUInt8 AddressOffset::read(OEAddress address)
+OEChar AddressOffset::read(OEAddress address)
 {
     return component->read(address + offset);
 }
 
-void AddressOffset::write(OEAddress address, OEUInt8 value)
+void AddressOffset::write(OEAddress address, OEChar value)
 {
     component->write(address + offset, value);
 }

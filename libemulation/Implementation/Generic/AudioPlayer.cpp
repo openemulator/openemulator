@@ -34,9 +34,9 @@ AudioPlayer::AudioPlayer()
 bool AudioPlayer::setValue(string name, string value)
 {
     if (name == "playing")
-        playing = getUInt(value);
+        playing = getOEInt(value);
     else if (name == "loop")
-        loop = getUInt(value);
+        loop = getOEInt(value);
     else if (name == "volume")
         volume = getFloat(value);
     else
@@ -175,7 +175,7 @@ void AudioPlayer::notify(OEComponent *sender, int notification, void *data)
     
     vector<float> output;
     output.resize(buffer->frameNum * srcChannelNum);
-    OEUInt32 outputFrameIndex = 0;
+    OEInt outputFrameIndex = 0;
     
     do
     {
@@ -216,14 +216,14 @@ void AudioPlayer::notify(OEComponent *sender, int notification, void *data)
         }
     } while (outputFrameIndex != output.size());
     
-    OEUInt32 sampleNum = buffer->frameNum * buffer->channelNum;
+    OEInt sampleNum = buffer->frameNum * buffer->channelNum;
     
-    for (OEUInt32 ch = 0; ch < buffer->channelNum; ch++)
+    for (OEInt ch = 0; ch < buffer->channelNum; ch++)
     {
         float *x = &output.front() + (ch % srcChannelNum);
         float *y = buffer->output + ch;
         
-        for (OEUInt32 i = 0; i < sampleNum; i += buffer->channelNum)
+        for (OEInt i = 0; i < sampleNum; i += buffer->channelNum)
         {
             y[i] += *x * volume;
             x += srcChannelNum;

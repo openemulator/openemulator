@@ -20,7 +20,7 @@ public:
     
     bool postMessage(OEComponent *sender, int event, void *data);
     
-    void write(OEAddress address, OEUInt8 value);
+    void write(OEAddress address, OEChar value);
     
 private:
     OEComponent *video;
@@ -31,5 +31,5 @@ private:
     
     OEData dummyVRAM;
     
-    OEUInt8 *getMemory(OEAddress startAddress, OEAddress endAddress);
+    OEChar *getMemory(OEAddress startAddress, OEAddress endAddress);
 };

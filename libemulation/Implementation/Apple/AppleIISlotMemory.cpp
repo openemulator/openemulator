@@ -25,7 +25,7 @@ AppleIISlotMemory::AppleIISlotMemory()
 bool AppleIISlotMemory::setValue(string name, string value)
 {
 	if (name == "en")
-		en = (OEUInt32) getUInt(value);
+		en = getOEInt(value);
 	else
 		return false;
     
@@ -88,7 +88,7 @@ void AppleIISlotMemory::notify(OEComponent *sender, int notification, void *data
     }
 }
 
-OEUInt8 AppleIISlotMemory::read(OEAddress address)
+OEChar AppleIISlotMemory::read(OEAddress address)
 {
     if (!en)
     {
@@ -100,7 +100,7 @@ OEUInt8 AppleIISlotMemory::read(OEAddress address)
     return slotMemory->read(address);
 }
 
-void AppleIISlotMemory::write(OEAddress address, OEUInt8 value)
+void AppleIISlotMemory::write(OEAddress address, OEChar value)
 {
     if (!en)
     {

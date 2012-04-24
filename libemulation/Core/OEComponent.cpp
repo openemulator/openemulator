@@ -99,38 +99,38 @@ void OEComponent::notify(OEComponent *sender, int notification, void *data)
 
 
 
-OEUInt8 OEComponent::read(OEAddress address)
+OEChar OEComponent::read(OEAddress address)
 {
     return 0;
 }
 
-void OEComponent::write(OEAddress address, OEUInt8 value)
+void OEComponent::write(OEAddress address, OEChar value)
 {
 }
 
-OEUInt16 OEComponent::read16(OEAddress address)
-{
-    return 0;
-}
-
-void OEComponent::write16(OEAddress address, OEUInt16 value)
-{
-}
-
-OEUInt32 OEComponent::read32(OEAddress address)
+OEShort OEComponent::read16(OEAddress address)
 {
     return 0;
 }
 
-void OEComponent::write32(OEAddress address, OEUInt32 value)
+void OEComponent::write16(OEAddress address, OEShort value)
 {
 }
 
-OEUInt64 OEComponent::read64(OEAddress address)
+OEInt OEComponent::read32(OEAddress address)
 {
     return 0;
 }
 
-void OEComponent::write64(OEAddress address, OEUInt64 value)
+void OEComponent::write32(OEAddress address, OEInt value)
+{
+}
+
+OELong OEComponent::read64(OEAddress address)
+{
+    return 0;
+}
+
+void OEComponent::write64(OEAddress address, OELong value)
 {
 }

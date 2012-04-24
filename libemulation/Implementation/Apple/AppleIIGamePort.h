@@ -23,8 +23,8 @@ public:
 	bool postMessage(OEComponent *sender, int message, void *data);
     void notify(OEComponent *sender, int notification, void *data);
     
-    OEUInt8 read(OEAddress address);
-	void write(OEAddress address, OEUInt8 value);
+    OEChar read(OEAddress address);
+	void write(OEAddress address, OEChar value);
 	
 private:
     OEComponent *controlBus;
@@ -35,11 +35,11 @@ private:
     bool pb[4];
 	bool an[4];
     
-    OEUInt64 timerStart;
+    OELong timerStart;
     
-    void setAN(int index, bool value);
-    void setPDL(int index, float value);
-    void setPB(int index, bool value);
-    bool isTimerPending(int index);
+    void setAN(OEInt index, bool value);
+    void setPDL(OEInt index, float value);
+    void setPB(OEInt index, bool value);
+    bool isTimerPending(OEInt index);
     void resetTimer();
 };

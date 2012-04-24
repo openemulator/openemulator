@@ -26,8 +26,8 @@ public:
     
     bool postMessage(OEComponent *sender, int message, void *data);
     
-    OEUInt8 read(OEAddress address);
-    void write(OEAddress address, OEUInt8 value);
+    OEChar read(OEAddress address);
+    void write(OEAddress address, OEChar value);
     
 private:
     string diskImagePath;
@@ -42,13 +42,13 @@ private:
     
     DIAppleDiskImage diskImage;
     
-    OEUInt8 ataBuffer[0x200];
-    OEUInt32 ataBufferIndex;
+    OEChar ataBuffer[0x200];
+    OEInt ataBufferIndex;
     bool ataError;
     OEUnion ataLBA;
-    OEUInt8 ataCommand;
+    OEChar ataCommand;
     
     void mapMemory(int message);
-    bool openDiskImage(string filename);
-    bool closeDiskImage();
+    bool openDiskImage(string path);
+    void closeDiskImage();
 };

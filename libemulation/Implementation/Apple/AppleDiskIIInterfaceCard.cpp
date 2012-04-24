@@ -48,17 +48,17 @@ AppleDiskIIInterfaceCard::AppleDiskIIInterfaceCard()
 bool AppleDiskIIInterfaceCard::setValue(string name, string value)
 {
 	if (name == "phaseControl")
-		phaseControl = (OEUInt32) getUInt(value);
+		phaseControl = getOEInt(value);
 	else if (name == "driveOn")
-		driveOn = (OEUInt32) getUInt(value);
+		driveOn = getOEInt(value);
 	else if (name == "driveSel")
-		driveSel = (OEUInt32) getUInt(value);
+		driveSel = getOEInt(value);
 	else if (name == "sequencerMode")
-		sequencerMode = (OEUInt32) getUInt(value);
+		sequencerMode = getOEInt(value);
 	else if (name == "sequencerState")
-		sequencerState = (OEUInt32) getUInt(value);
+		sequencerState = getOEInt(value);
 	else if (name == "dataRegister")
-		dataRegister = (OEUInt8) getUInt(value);
+		dataRegister = getOEInt(value);
 	else
 		return false;
     
@@ -184,7 +184,7 @@ void AppleDiskIIInterfaceCard::notify(OEComponent *sender, int notification, voi
     updateDriveEnableControl();
 }
 
-OEUInt8 AppleDiskIIInterfaceCard::read(OEAddress address)
+OEChar AppleDiskIIInterfaceCard::read(OEAddress address)
 {
     if (driveEnableControl)
         updateSequencer(getQ3CyclesSinceLastUpdate() - 2, 0);
@@ -240,7 +240,7 @@ OEUInt8 AppleDiskIIInterfaceCard::read(OEAddress address)
         return floatingBus->read(address);
 }
 
-void AppleDiskIIInterfaceCard::write(OEAddress address, OEUInt8 value)
+void AppleDiskIIInterfaceCard::write(OEAddress address, OEChar value)
 {
     if (driveEnableControl)
         updateSequencer(getQ3CyclesSinceLastUpdate() - 2, value);
@@ -292,9 +292,9 @@ void AppleDiskIIInterfaceCard::write(OEAddress address, OEUInt8 value)
         updateSequencer(2, value);
 }
 
-void AppleDiskIIInterfaceCard::setPhaseControl(OEUInt32 index, bool value)
+void AppleDiskIIInterfaceCard::setPhaseControl(OEInt index, bool value)
 {
-    OEUInt32 lastPhaseControl = phaseControl;
+    OEInt lastPhaseControl = phaseControl;
     
     OESetBit(phaseControl, 1 << index, value);
     
@@ -325,7 +325,7 @@ void AppleDiskIIInterfaceCard::setDriveOn(bool value)
         controlBus->postMessage(this, CONTROLBUS_GET_CYCLES, &lastCycles);
     else
     {
-        OEUInt64 cycles = 1.0 * APPLEII_CLOCKFREQUENCY;
+        OELong cycles = 1.0 * APPLEII_CLOCKFREQUENCY;
         
         controlBus->postMessage(this, CONTROLBUS_SCHEDULE_TIMER, &cycles);
         
@@ -355,7 +355,7 @@ void AppleDiskIIInterfaceCard::updateDriveEnabled()
                               APPLEII_CLEAR_WRITEREQUEST, NULL);
 }
 
-void AppleDiskIIInterfaceCard::setDriveSel(OEUInt32 value)
+void AppleDiskIIInterfaceCard::setDriveSel(OEInt value)
 {
     if (driveSel == value)
         return;
@@ -363,7 +363,7 @@ void AppleDiskIIInterfaceCard::setDriveSel(OEUInt32 value)
     updateDriveSel(value);
 }
 
-void AppleDiskIIInterfaceCard::updateDriveSel(OEUInt32 value)
+void AppleDiskIIInterfaceCard::updateDriveSel(OEInt value)
 {
     driveSel = value;
     
@@ -408,19 +408,19 @@ void AppleDiskIIInterfaceCard::updateWriteRequest()
                               NULL);
 }
 
-OEUInt64 AppleDiskIIInterfaceCard::getQ3CyclesSinceLastUpdate()
+OELong AppleDiskIIInterfaceCard::getQ3CyclesSinceLastUpdate()
 {
-    OEUInt64 cycles;
+    OELong cycles;
     
     controlBus->postMessage(this, CONTROLBUS_GET_CYCLES, &cycles);
     
-    OEUInt64 q3Cycles = (cycles - lastCycles) << 1;
+    OELong q3Cycles = (cycles - lastCycles) << 1;
     lastCycles = cycles;
     
     return q3Cycles;
 }
 
-void AppleDiskIIInterfaceCard::updateSequencer(OEUInt64 q3Cycles, OEUInt8 value)
+void AppleDiskIIInterfaceCard::updateSequencer(OELong q3Cycles, OEChar value)
 {
 	switch (sequencerMode)
     {
@@ -436,7 +436,7 @@ void AppleDiskIIInterfaceCard::updateSequencer(OEUInt64 q3Cycles, OEUInt8 value)
                 q3Cycles = SEQUENCER_SKIP;
             }*/
             
-            OEUInt64 bitNum = (q3Cycles + (sequencerState & 0x7)) >> 3;
+            OELong bitNum = (q3Cycles + (sequencerState & 0x7)) >> 3;
             
 			while (bitNum--)
             {
@@ -486,7 +486,7 @@ void AppleDiskIIInterfaceCard::updateSequencer(OEUInt64 q3Cycles, OEUInt8 value)
             
             if (isWriteProtected)
             {
-                const OEUInt8 bits[] =
+                const OEChar bits[] =
                 {
                     0x00, 0x80, 0xc0, 0xe0, 0xf0, 0xf8, 0xfc, 0xfe, 0xff
                 };
@@ -501,7 +501,7 @@ void AppleDiskIIInterfaceCard::updateSequencer(OEUInt64 q3Cycles, OEUInt8 value)
             
         case SEQUENCER_WRITESHIFT:
         {
-            OEUInt64 bitNum = (q3Cycles + sequencerState) >> 3;
+            OELong bitNum = (q3Cycles + sequencerState) >> 3;
             
 			while (bitNum--)
             {

@@ -16,7 +16,7 @@ OEVector::OEVector()
 {
 }
 
-OEVector::OEVector(int size)
+OEVector::OEVector(OEInt size)
 {
     data.resize(size);
 }
@@ -26,7 +26,7 @@ OEVector::OEVector(vector<float> data)
     this->data = data;
 }
 
-float OEVector::getValue(unsigned int i)
+float OEVector::getValue(OEInt i)
 {
     return data[i];
 }
@@ -35,7 +35,7 @@ OEVector OEVector::operator *(const float value)
 {
     OEVector w(data);
     
-    for (int i = 0; i < data.size(); i++)
+    for (OEInt i = 0; i < data.size(); i++)
         w.data[i] *= value;
     
     return w;
@@ -48,7 +48,7 @@ OEVector OEVector::operator *(const OEVector& v)
     
     OEVector w(data);
     
-    for (int i = 0; i < data.size(); i++)
+    for (OEInt i = 0; i < data.size(); i++)
         w.data[i] *= v.data[i];
     
     return w;
@@ -58,13 +58,13 @@ OEVector OEVector::normalize()
 {
     float sum = 0.0;
     
-    for (int i = 0; i < data.size(); i++)
+    for (OEInt i = 0; i < data.size(); i++)
         sum += data[i];
     
     OEVector w(data);
     float gain = 1.0 / sum;
     
-    for (int i = 0; i < data.size(); i++)
+    for (OEInt i = 0; i < data.size(); i++)
         w.data[i] *= gain;
     
     return w;
@@ -75,21 +75,21 @@ OEVector OEVector::realIDFT()
     OEVector w;
     w.data.resize(data.size());
     
-    for (int i = 0; i < data.size(); i++)
+    for (OEInt i = 0; i < data.size(); i++)
     {
         float omega = 2.0 * M_PI * i / data.size();
         
-        for (int j = 0; j < data.size(); j++)
+        for (OEInt j = 0; j < data.size(); j++)
             w.data[i] += data[j] * cosf(j * omega);
     }
     
-    for (int i = 0; i < data.size(); i++)
+    for (OEInt i = 0; i < data.size(); i++)
         w.data[i] /= data.size();
     
     return w;
 }
 
-OEVector OEVector::lanczosWindow(unsigned int n, float fc)
+OEVector OEVector::lanczosWindow(OEInt n, float fc)
 {
     if (fc > 0.5)
         fc = 0.5;
@@ -97,9 +97,9 @@ OEVector OEVector::lanczosWindow(unsigned int n, float fc)
     OEVector v;
     v.data.resize(n);
     
-    int halfN = n / 2;
+    OEInt halfN = n / 2;
     
-    for (int i = 0; i < n; i++)
+    for (OEInt i = 0; i < n; i++)
     {
         float x = 2 * M_PI * fc * (i - halfN);
         
@@ -113,16 +113,16 @@ OEVector OEVector::lanczosWindow(unsigned int n, float fc)
 // Based on ideas at:
 // http://www.dsprelated.com/showarticle/42.php
 //
-OEVector OEVector::chebyshevWindow(unsigned int n, float sidelobeDb)
+OEVector OEVector::chebyshevWindow(OEInt n, float sidelobeDb)
 {
-    int m = n - 1;
+    OEInt m = n - 1;
     
     OEVector w;
     w.data.resize(m);
     
     float alpha = coshf(acoshf(powf(10, sidelobeDb / 20.0)) / m);
     
-    for (int i = 0; i < m; i++)
+    for (OEInt i = 0; i < m; i++)
     {
         float a = fabsf(alpha * cosf(M_PI * i / m));
         if (a > 1)
@@ -139,11 +139,11 @@ OEVector OEVector::chebyshevWindow(unsigned int n, float sidelobeDb)
     
     float max = 0.0;
     
-    for (int i = 0; i < n; i++)
+    for (OEInt i = 0; i < n; i++)
         if (fabs(w.data[i]) > max)
             max = fabs(w.data[i]);
     
-    for (int i = 0; i < n; i++)
+    for (OEInt i = 0; i < n; i++)
         w.data[i] /= max;
     
     return w;

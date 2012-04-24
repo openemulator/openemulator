@@ -64,42 +64,42 @@ bool AddressMux::postMessage(OEComponent *sender, int message, void *data)
     return component->postMessage(sender, message, data);
 }
 
-OEUInt8 AddressMux::read(OEAddress address)
+OEChar AddressMux::read(OEAddress address)
 {
     return component->read(address);
 }
 
-void AddressMux::write(OEAddress address, OEUInt8 value)
+void AddressMux::write(OEAddress address, OEChar value)
 {
     component->write(address, value);
 }
 
-OEUInt16 AddressMux::read16(OEAddress address)
+OEShort AddressMux::read16(OEAddress address)
 {
     return component->read16(address);
 }
 
-void AddressMux::write16(OEAddress address, OEUInt16 value)
+void AddressMux::write16(OEAddress address, OEShort value)
 {
     component->write16(address, value);
 }
 
-OEUInt32 AddressMux::read32(OEAddress address)
+OEInt AddressMux::read32(OEAddress address)
 {
     return component->read32(address);
 }
 
-void AddressMux::write32(OEAddress address, OEUInt32 value)
+void AddressMux::write32(OEAddress address, OEInt value)
 {
     component->write32(address, value);
 }
 
-OEUInt64 AddressMux::read64(OEAddress address)
+OELong AddressMux::read64(OEAddress address)
 {
     return component->read64(address);
 }
 
-void AddressMux::write64(OEAddress address, OEUInt64 value)
+void AddressMux::write64(OEAddress address, OELong value)
 {
     component->write64(address, value);
 }

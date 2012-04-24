@@ -22,15 +22,15 @@ public:
     
     void notify(OEComponent *sender, int notification, void *data);
     
-	OEUInt8 read(OEAddress address);
-	void write(OEAddress address, OEUInt8 value);
+	OEChar read(OEAddress address);
+	void write(OEAddress address, OEChar value);
 	
 private:
     OEComponent *mmu;
     OEComponent *slotMemory;
 	OEComponent *slotExpansionMemory;
 	
-	OEUInt32 en;
+	OEInt en;
 
     void mapMemory(int message);
 };

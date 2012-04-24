@@ -18,8 +18,8 @@ public:
 	bool setRef(string name, OEComponent *ref);
 	bool init();
     
-	OEUInt8 read(OEAddress address);
-	void write(OEAddress address, OEUInt8 value);
+	OEChar read(OEAddress address);
+	void write(OEAddress address, OEChar value);
 	
 private:
 	OEComponent *mmu;

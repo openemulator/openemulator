@@ -1,4 +1,5 @@
 ==Latest==
+* Improved OE common function names
 * Added applesoft-lite 0.4 to Briel Replica-1
 * Added libdiskimage support to CFFA1
 * Refactorized disk image framework

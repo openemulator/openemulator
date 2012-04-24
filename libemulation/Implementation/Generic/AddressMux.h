@@ -25,14 +25,14 @@ public:
     
     bool postMessage(OEComponent *sender, int message, void *data);
     
-    OEUInt8 read(OEAddress address);
-    void write(OEAddress address, OEUInt8 value);
-    OEUInt16 read16(OEAddress address);
-    void write16(OEAddress address, OEUInt16 value);
-    OEUInt32 read32(OEAddress address);
-    void write32(OEAddress address, OEUInt32 value);
-    OEUInt64 read64(OEAddress address);
-    void write64(OEAddress address, OEUInt64 value);
+    OEChar read(OEAddress address);
+    void write(OEAddress address, OEChar value);
+    OEShort read16(OEAddress address);
+    void write16(OEAddress address, OEShort value);
+    OEInt read32(OEAddress address);
+    void write32(OEAddress address, OEInt value);
+    OELong read64(OEAddress address);
+    void write64(OEAddress address, OELong value);
     
 private:
     MemoryMapsRef ref;

@@ -41,15 +41,15 @@ bool appendMemoryMaps(MemoryMaps& theMaps,
             if (address[0] == "")
                 return false;
             
-            m.startAddress = m.endAddress = getUInt(address[0]);
+            m.startAddress = m.endAddress = getOELong(address[0]);
         }
         else if (address.size() == 2)
         {
             if ((address[0] == "") || (address[1] == ""))
                 return false;
             
-            m.startAddress = getUInt(address[0]);
-            m.endAddress = getUInt(address[1]);
+            m.startAddress = getOELong(address[0]);
+            m.endAddress = getOELong(address[1]);
         }
         else
             return false;
@@ -64,7 +64,7 @@ bool validateMemoryMapsConf(MemoryMaps& theMaps,
                             OEAddress blockSize,
                             OEAddress addressMask)
 {
-    OEUInt64 blockMask = (1 << blockSize) - 1;
+    OEAddress blockMask = (1 << blockSize) - 1;
     
     for (MemoryMaps::iterator i = theMaps.begin();
          i != theMaps.end();

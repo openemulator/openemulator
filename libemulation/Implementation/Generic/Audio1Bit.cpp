@@ -81,7 +81,7 @@ void Audio1Bit::update()
 
 bool Audio1Bit::readAudioInput()
 {
-    OEInt16 value = audioCodec->read16(0);
+    OESShort value = audioCodec->read16(0);
     
     // Schmitt trigger
     if (value >= inputThreshold)

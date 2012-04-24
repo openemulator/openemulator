@@ -106,14 +106,14 @@ float OESound::getSampleRate()
     return sampleRate;
 }
 
-OEUInt32 OESound::getChannelNum()
+OEInt OESound::getChannelNum()
 {
     return channelNum;
 }
 
-OEUInt64 OESound::getFrameNum()
+OEInt OESound::getFrameNum()
 {
-    return (OEUInt64) (samples.size() / channelNum);
+    return (samples.size() / channelNum);
 }
 
 float *OESound::getSamples()

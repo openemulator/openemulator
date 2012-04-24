@@ -27,9 +27,9 @@ AddressDecoder::AddressDecoder()
 bool AddressDecoder::setValue(string name, string value)
 {
 	if (name == "addressSize")
-		addressSize = getUInt(value);
+		addressSize = getOEInt(value);
 	else if (name == "blockSize")
-		blockSize = getUInt(value);
+		blockSize = getOEInt(value);
 	else if (name.substr(0, 3) == "map")
         conf[name.substr(3)] = value;
 	else
@@ -92,12 +92,12 @@ bool AddressDecoder::postMessage(OEComponent *sender, int message, void *data)
 	return false;
 }
 
-OEUInt8 AddressDecoder::read(OEAddress address)
+OEChar AddressDecoder::read(OEAddress address)
 {
 	return readMapp[(size_t) ((address & addressMask) >> blockSize)]->read(address);
 }
 
-void AddressDecoder::write(OEAddress address, OEUInt8 value)
+void AddressDecoder::write(OEAddress address, OEChar value)
 {
 	writeMapp[(size_t) ((address & addressMask) >> blockSize)]->write(address, value);
 }

@@ -36,7 +36,7 @@ bool FloatingBus::setValue(string name, string value)
     return true;
 }
 
-OEUInt8 FloatingBus::read(OEAddress address)
+OEChar FloatingBus::read(OEAddress address)
 {
     if (randomMode)
         return random() & 0xff;

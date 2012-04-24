@@ -29,11 +29,11 @@ typedef enum
 
 typedef struct
 {
-    OEUInt8 *textMain[2];
-    OEUInt8 *hiresMain[2];
-    OEUInt8 *textAux[2];
-    OEUInt8 *hiresAux[2];
-    OEUInt8 *hbl[2];
+    OEChar *textMain[2];
+    OEChar *hiresMain[2];
+    OEChar *textAux[2];
+    OEChar *hiresAux[2];
+    OEChar *hbl[2];
 } AppleIIVRAM;
 
 #define APPLEIIVIDEO_TEXT     (1 << 0)

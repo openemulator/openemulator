@@ -20,9 +20,9 @@ void logMessage(string message)
     cerr << "libemulation: " << message << endl;
 }
 
-OEUInt64 getUInt(const string& value)
+OEInt getOEInt(const string& value)
 {
-    OEUInt64 i;
+    OEInt i;
     stringstream ss;
     
     if (value.substr(0, 2) == "0x")
@@ -34,9 +34,37 @@ OEUInt64 getUInt(const string& value)
     return i;
 }
 
-OEInt64 getInt(const string& value)
+OESInt getOESInt(const string& value)
 {
-    OEInt64 i;
+    OESInt i;
+    stringstream ss;
+    
+    if (value.substr(0, 2) == "0x")
+        ss << hex << value.substr(2);
+    else
+        ss << value;
+    ss >> i;
+    
+    return i;
+}
+
+OELong getOELong(const string& value)
+{
+    OELong i;
+    stringstream ss;
+    
+    if (value.substr(0, 2) == "0x")
+        ss << hex << value.substr(2);
+    else
+        ss << value;
+    ss >> i;
+    
+    return i;
+}
+
+OESLong getOESLong(const string& value)
+{
+    OESLong i;
     stringstream ss;
     
     if (value.substr(0, 2) == "0x")
@@ -59,7 +87,7 @@ double getFloat(const string& value)
     return f;
 }
 
-string getString(OEUInt32 value)
+string getString(OEInt value)
 {
     stringstream ss;
     
@@ -68,7 +96,7 @@ string getString(OEUInt32 value)
     return ss.str();
 }
 
-string getString(OEInt32 value)
+string getString(OESInt value)
 {
     stringstream ss;
     
@@ -77,7 +105,7 @@ string getString(OEInt32 value)
     return ss.str();
 }
 
-string getString(OEUInt64 value)
+string getString(OELong value)
 {
     stringstream ss;
     
@@ -86,10 +114,12 @@ string getString(OEUInt64 value)
     return ss.str();
 }
 
-string getString(OEInt64 value)
+string getString(OESLong value)
 {
     stringstream ss;
+    
     ss << value;
+    
     return ss.str();
 }
 
@@ -102,7 +132,7 @@ string getString(float value)
     return ss.str();
 }
 
-string getHexString(OEUInt64 value)
+string getHexString(OELong value)
 {
     stringstream ss;
     
@@ -222,7 +252,7 @@ OEData getCharVector(const string& value)
     for (size_t i = 0; i < size; i++)
     {
         stringstream ss;
-        OEUInt32 n;
+        OEInt n;
         ss << hex << value.substr(start + i * 2, 2);
         ss >> n;
         result[i] = n;
@@ -231,9 +261,9 @@ OEData getCharVector(const string& value)
     return result;
 }
 
-OEUInt64 getNextPowerOf2(OEUInt64 value)
+OELong getNextPowerOf2(OELong value)
 {
-    return (OEUInt64) pow(2, ceil(log2(value)));
+    return (OELong) pow(2, ceil(log2(value)));
 }
 
 bool readFile(string path, OEData *data)

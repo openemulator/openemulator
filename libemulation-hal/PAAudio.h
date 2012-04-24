@@ -27,9 +27,9 @@ public:
     
     void setFullDuplex(bool value);
     void setSampleRate(double value);
-    void setChannelNum(OEUInt32 value);
-    void setFramesPerBuffer(OEUInt32 value);
-    void setBufferNum(OEUInt32 value);
+    void setChannelNum(OEInt value);
+    void setFramesPerBuffer(OEInt value);
+    void setBufferNum(OEInt value);
     
     bool open();
     void close();
@@ -41,7 +41,7 @@ public:
     
     void runAudio(const float *input,
                   float *output,
-                  OEUInt32 frameCount);
+                  OEInt frameCount);
     void runTimer();
     
     void openPlayer(string path);
@@ -58,7 +58,7 @@ public:
     void openRecorder(string path);
     void closeRecorder();
     float getRecorderTime();
-    OEUInt64 getRecorderSize();
+    OELong getRecorderSize();
     bool isRecorderRecording();
     void startRecorder();
     void stopRecorder();
@@ -66,12 +66,12 @@ public:
 private:
     bool fullDuplex;
     double sampleRate;
-    OEUInt32 channelNum;
-    OEUInt32 framesPerBuffer;
-    OEUInt32 bufferNum;
+    OEInt channelNum;
+    OEInt framesPerBuffer;
+    OEInt bufferNum;
     
-    volatile OEUInt32 bufferAudioIndex;
-    volatile OEUInt32 bufferEmulationIndex;
+    volatile OEInt bufferAudioIndex;
+    volatile OEInt bufferEmulationIndex;
     vector<float> bufferInput;
     vector<float> bufferOutput;
     
@@ -89,19 +89,19 @@ private:
     bool playerPlayThrough;
     bool playerPlaying;
     SNDFILE *playerSNDFILE;
-    OEUInt32 playerChannelNum;
-    OEUInt64 playerFrameIndex;
-    OEUInt64 playerFrameNum;
+    OEInt playerChannelNum;
+    OELong playerFrameIndex;
+    OELong playerFrameNum;
     double playerSRCRatio;
     SRC_STATE *playerSRC;
     bool playerSRCEndOfInput;
     vector<float> playerInput;
-    OEUInt32 playerInputFrameIndex;
-    OEUInt32 playerInputFrameNum;
+    OEInt playerInputFrameIndex;
+    OEInt playerInputFrameNum;
     
     bool recorderRecording;
     SNDFILE *recorderSNDFILE;
-    OEUInt64 recorderFrameNum;
+    OELong recorderFrameNum;
     
     void initBuffer();
     bool isAudioBufferEmpty();
@@ -123,12 +123,12 @@ private:
     
     void playAudio(float *inputBuffer,
                    float *outputBuffer,
-                   OEUInt32 frameNum,
-                   OEUInt32 channelNum);
+                   OEInt frameNum,
+                   OEInt channelNum);
     
     void recordAudio(float *outputBuffer,
-                     OEUInt32 frameNum,
-                     OEUInt32 channelNum);
+                     OEInt frameNum,
+                     OEInt channelNum);
 };
 
 #endif

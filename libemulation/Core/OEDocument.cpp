@@ -515,7 +515,7 @@ OEIdMap OEDocument::makeIdMap(OEIds& deviceIds)
     {
         string deviceId = *i;
         
-        OEUInt32 newDeviceIdCount = 1;
+        OEInt newDeviceIdCount = 1;
         string newDeviceId = deviceId;
         while (find(ourDeviceIds.begin(), ourDeviceIds.end(), newDeviceId) !=
                ourDeviceIds.end())

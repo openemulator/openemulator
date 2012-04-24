@@ -35,10 +35,10 @@ private:
     float volume;
     
     float inputThreshold;
-    OEInt16 inputLevel;
+    OESShort inputLevel;
     
     bool outputState;
-	OEInt16 outputLevel;
+	OESShort outputLevel;
 };
 
 #endif

@@ -28,7 +28,7 @@
 
 #define DEFAULT_TRACKSIZE       (DEFAULT_BITRATE * 60 / DEFAULT_ROTATIONSPEED)
 
-#define NIB_FF40_THRESHOLD		10
+#define NIB_FF40_THRESHOLD		5
 
 static const DIChar gcr53EncodeMap[] =
 {
@@ -270,27 +270,16 @@ bool DIApple525DiskStorage::close()
         //    Leemos todo en memoria con readTrack
         //    Abrimos un archivo FDI, y escribimos lo que teníamos
         
-        // Attempt to encode in original format
-        
         // Find active disk storage
 /*        if (diskStorage == &logicalDiskStorage)
         {
-            vector<DITrack> decodedTracks;
+            vector<DIData> logicalDisk;
             
-            // Check tracks
-            for (int index = 0; index < MAX_TRACKNUM; index++)
+            if (getLogicalDisk(logicalDisk))
             {
-                if (index & 0x3)
-                {
-                    if (!readTrack(0, index, track))
-                        return false;
-                    
-                    if (!decodeGCR53Track(track, decodedTracks[index]))
-                        break;
-                    
-                    diskStorage->writeTrack(0, index, track);
-              }
+                
             }
+            
         }
         
         DITrack track;
@@ -457,6 +446,28 @@ bool DIApple525DiskStorage::checkLogicalDisk(DIBackingStore *backingStore,
     return false;
 }
 
+bool DIApple525DiskStorage::getLogicalDisk(vector<DIData>& disk)
+{
+    // Check tracks
+    for (DIInt i = 0; i < MAX_TRACKNUM; i++)
+    {
+        if (!(i & 0x3))
+        {
+/*            DITrack track;
+            
+            if (!readTrack(0, i, track))
+                return false;
+            
+            if (!decodeGCR53Track(track, decodedTracks[index]))
+                break;
+            
+            diskStorage->writeTrack(0, index, track);*/
+        }
+    }
+    
+    return true;
+}
+
 DIInt *DIApple525DiskStorage::getSectorOrder(DITrackFormat trackFormat)
 {
     switch (trackFormat)
@@ -525,19 +536,19 @@ bool DIApple525DiskStorage::encodeNIBTrack(DIInt trackIndex, DITrack& track)
     DIInt size = track.data.size();
     
 	bool isSync = false;
-	DIInt trackBitNum = 0;
 	
     trackData[trackIndex].resize(2 * DEFAULT_TRACKSIZE);
+    
     setStreamData(trackData[trackIndex]);
     
-	for (DIInt index = 0; index < size; index++)
+	for (DIInt i = 0; i < size; i++)
     {
         DIChar trackByte;
 		DIInt syncCount = 0;
         
 		for (DIInt syncIndex = 0; syncIndex < size; syncIndex++)
         {
-			trackByte = data[(index + syncIndex) % size];
+			trackByte = data[(i + syncIndex) % size];
             
 			if (!(trackByte & 0x80))
 				continue;
@@ -549,29 +560,32 @@ bool DIApple525DiskStorage::encodeNIBTrack(DIInt trackIndex, DITrack& track)
 			if (syncCount >= NIB_FF40_THRESHOLD)
             {
 				isSync = true;
+                
 				break;
 			}
 		}
 		
-		trackByte = data[index];
+		trackByte = data[i];
 		if (!(trackByte & 0x80))
 			continue;
         
 		if (trackByte != 0xff)
 			isSync = false;
-		trackBitNum += isSync ? 40 : 32;
 		
         writeNibble(trackByte, isSync ? 40 : 32);
 	}
 	
     trackData[trackIndex].resize(getStreamOffset());
     
-	return trackBitNum;
+	return true;
 }
 
 bool DIApple525DiskStorage::decodeGCR53Track(DITrack &track, DIInt trackIndex)
 {
     setStreamData(trackData[trackIndex]);
+    
+    if (!readNibble())
+        return false;
     
     track.data.resize(GCR53_TRACKSIZE);
     
@@ -593,6 +607,9 @@ bool DIApple525DiskStorage::decodeGCR62Track(DITrack &track, DIInt trackIndex,
                                              DITrackFormat trackFormat)
 {
     setStreamData(trackData[trackIndex]);
+    
+    if (!readNibble())
+        return false;
     
     DIInt *sectorOrder = getSectorOrder(trackFormat);
     
@@ -1009,24 +1026,30 @@ void DIApple525DiskStorage::writeNibble(DIChar value)
 
 void DIApple525DiskStorage::writeNibble(DIChar value, DIInt q3Clocks)
 {
+    value = 0;
+    
 	while (q3Clocks)
     {
-        // To-Do
+        streamData[streamOffset++] = ((value & 80) >> 7);
+        streamOffset %= streamSize;
         
+        value <<= 1;
         q3Clocks -= 4;
 	}
 }
 
 DIChar DIApple525DiskStorage::readNibble()
 {
-    DIInt q3Clocks;
-
-    while (q3Clocks)
+    DIChar value = 0;
+    
+    for (DIInt bitNum = 0; bitNum < streamSize; bitNum++)
     {
-        // To-Do
+        value <<= 1;
+        value |= streamData[(streamOffset + bitNum) % streamSize] & 0x1;
         
-        q3Clocks -= 4;
+        if (value & 0x80)
+            return value;
     }
     
-    return 0xff;
+    return 0;
 }

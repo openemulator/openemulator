@@ -224,13 +224,13 @@ public:
 
 typedef struct
 {
-    OEInt32 usageId;
+    OEInt usageId;
     float value;
 } CanvasHIDEvent;
 
 // Canvas keyboard events
 
-typedef OEUInt32 CanvasUnicodeChar;
+typedef OEInt CanvasUnicodeChar;
 
 typedef enum
 {
@@ -310,7 +310,7 @@ typedef enum
 
 #define CANVAS_KEYBOARD_KEY_NUM		256
 
-typedef OEUInt32 CanvasKeyboardLEDs;
+typedef OEInt CanvasKeyboardLEDs;
 
 #define CANVAS_KL_NUMLOCK       (1 << 0)
 #define CANVAS_KL_CAPSLOCK      (1 << 1)
@@ -320,7 +320,7 @@ typedef OEUInt32 CanvasKeyboardLEDs;
 #define CANVAS_KL_POWER         (1 << 5)
 #define CANVAS_KL_SHIFT         (1 << 6)
 
-typedef OEUInt32 CanvasKeyboardFlags;
+typedef OEInt CanvasKeyboardFlags;
 
 #define CANVAS_KF_LEFTCONTROL	(1 << 0)
 #define CANVAS_KF_LEFTSHIFT     (1 << 1)

@@ -11,9 +11,7 @@
 #ifndef _OEMATRIX3_H
 #define _OEMATRIX3_H
 
-#include <vector>
-
-using namespace std;
+#include "OECommon.h"
 
 class OEMatrix3
 {
@@ -23,7 +21,7 @@ public:
               float c10, float c11, float c12,
               float c20, float c21, float c22);
 	
-	float getValue(unsigned int i, unsigned int j);
+	float getValue(OEInt i, OEInt j);
 	float *getValues();
 	
 	OEMatrix3 operator*(float value);

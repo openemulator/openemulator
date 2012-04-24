@@ -20,11 +20,11 @@ public:
     bool getData(string name, OEData **data);
     bool init();
     
-    OEUInt8 read(OEAddress address);
+    OEChar read(OEAddress address);
     
 private:
     OEData data;
     
-    OEUInt8 *datap;
+    OEChar *datap;
     OEAddress mask;
 };

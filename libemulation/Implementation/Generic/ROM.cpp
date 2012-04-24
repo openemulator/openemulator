@@ -41,13 +41,13 @@ bool ROM::init()
     
     OEAddress size = getNextPowerOf2((int) data.size());
     data.resize((size_t) size);
-    datap = (OEUInt8 *) &data.front();
+    datap = &data.front();
     mask = size - 1;
     
     return true;
 }
 
-OEUInt8 ROM::read(OEAddress address)
+OEChar ROM::read(OEAddress address)
 {
     return datap[address & mask];
 }

@@ -19,7 +19,7 @@
 
 typedef struct
 {
-    OEUInt64 cycles;
+    OELong cycles;
     OEComponent *component;
 } ControlBusEvent;
 
@@ -43,29 +43,29 @@ private:
     float cpuClockMultiplier;
     ControlBusPowerState powerState;
     bool resetOnPowerOn;
-    OEUInt32 resetCount;
-    OEUInt32 irqCount;
-    OEUInt32 nmiCount;
+    OEInt resetCount;
+    OEInt irqCount;
+    OEInt nmiCount;
     
     OEComponent *device;
     OEComponent *audio;
     OEComponent *cpu;
     
-    OEUInt64 cycles;
+    OELong cycles;
     float cpuCycles;
     list<ControlBusEvent> events;
     bool inEvent;
     
-    OEUInt64 audioBufferStart;
+    OELong audioBufferStart;
     float sampleToCycleRatio;
     
     void setPowerState(ControlBusPowerState value);
     
-    OEInt64 getPendingCPUCycles();
-    void setPendingCPUCycles(OEInt64 value);
+    OESLong getPendingCPUCycles();
+    void setPendingCPUCycles(OESLong value);
     void runCPU();
-    OEUInt64 getCycles();
-    void scheduleTimer(OEComponent *component, OEUInt64 cycles);
+    OELong getCycles();
+    void scheduleTimer(OEComponent *component, OELong cycles);
     void invalidateTimers(OEComponent *component);
     
     void setCPUClockMultiplier(float value);

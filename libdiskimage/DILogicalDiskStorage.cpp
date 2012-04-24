@@ -73,6 +73,11 @@ string DILogicalDiskStorage::getFormatLabel()
     return backingStore->getFormatLabel();
 }
 
+DITrackFormat DILogicalDiskStorage::getTrackFormat()
+{
+    return trackFormat;
+}
+
 bool DILogicalDiskStorage::readTrack(DIInt headIndex, DIInt trackIndex, DITrack& track)
 {
     track.data.resize(trackSize);

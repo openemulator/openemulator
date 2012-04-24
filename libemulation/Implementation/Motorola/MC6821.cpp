@@ -37,25 +37,25 @@ MC6821::MC6821()
 bool MC6821::setValue(string name, string value)
 {
     if (name == "controlA")
-        setControlA(getUInt(value));
+        setControlA(getOEInt(value));
     else if (name == "directionA")
-        directionA = getUInt(value);
+        directionA = getOEInt(value);
     else if (name == "dataA")
-        dataA = getUInt(value);
+        dataA = getOEInt(value);
     else if (name == "ca1")
-        ca1 = getUInt(value);
+        ca1 = getOEInt(value);
     else if (name == "ca2")
-        ca2 = getUInt(value);
+        ca2 = getOEInt(value);
     else if (name == "controlB")
-        setControlB(getUInt(value));
+        setControlB(getOEInt(value));
     else if (name == "directionB")
-        directionB = getUInt(value);
+        directionB = getOEInt(value);
     else if (name == "dataB")
-        dataB = getUInt(value);
+        dataB = getOEInt(value);
     else if (name == "cb1")
-        cb1 = getUInt(value);
+        cb1 = getOEInt(value);
     else if (name == "cb2")
-        cb2 = getUInt(value);
+        cb2 = getOEInt(value);
     else
         return false;
     
@@ -171,7 +171,7 @@ bool MC6821::postMessage(OEComponent *sender, int message, void *data)
         }
             
         case MC6821_GET_PA:
-            *((OEUInt8 *) data) = dataA;
+            *((OEChar *) data) = dataA;
             return true;
             
         case MC6821_SET_CB1:
@@ -227,7 +227,7 @@ bool MC6821::postMessage(OEComponent *sender, int message, void *data)
         }
             
         case MC6821_GET_PB:
-            *((OEUInt8 *) data) = dataB;
+            *((OEChar *) data) = dataB;
             return true;
     }
     
@@ -254,7 +254,7 @@ void MC6821::notify(OEComponent *component, int notification, void *data)
     }
 }
 
-OEUInt8 MC6821::read(OEAddress address)
+OEChar MC6821::read(OEAddress address)
 {
     switch(address & 0x3)
     {
@@ -301,7 +301,7 @@ OEUInt8 MC6821::read(OEAddress address)
     return 0;
 }
 
-void MC6821::write(OEAddress address, OEUInt8 value)
+void MC6821::write(OEAddress address, OEChar value)
 {
     switch(address & 0x3)
     {
@@ -372,7 +372,7 @@ void MC6821::setCB2(bool value)
     cb2 = value;
 }
 
-void MC6821::setControlA(OEUInt8 value)
+void MC6821::setControlA(OEChar value)
 {
     bool wasIRQFlag = controlA & MC6821_CR_IRQFLAGS;
     controlA = value;
@@ -387,7 +387,7 @@ void MC6821::setControlA(OEUInt8 value)
     }
 }
 
-void MC6821::setControlB(OEUInt8 value)
+void MC6821::setControlB(OEChar value)
 {
     bool wasIRQFlag = controlB & MC6821_CR_IRQFLAGS;
     controlB = value;

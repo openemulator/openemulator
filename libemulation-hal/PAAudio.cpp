@@ -34,7 +34,7 @@ static int PAAudioRunAudio(const void *input,
 {
     ((PAAudio *) userData)->runAudio((const float *)input,
                                      (float *)output,
-                                     (OEUInt32) frameCount);
+                                     (OEInt) frameCount);
     
     return paContinue;
 }
@@ -106,7 +106,7 @@ void PAAudio::setSampleRate(double value)
     enableAudio(state);
 }
 
-void PAAudio::setChannelNum(OEUInt32 value)
+void PAAudio::setChannelNum(OEInt value)
 {
     closePlayer();
     closeRecorder();
@@ -118,7 +118,7 @@ void PAAudio::setChannelNum(OEUInt32 value)
     enableAudio(state);
 }
 
-void PAAudio::setFramesPerBuffer(OEUInt32 value)
+void PAAudio::setFramesPerBuffer(OEInt value)
 {
     bool state = disableAudio();
     
@@ -127,7 +127,7 @@ void PAAudio::setFramesPerBuffer(OEUInt32 value)
     enableAudio(state);
 }
 
-void PAAudio::setBufferNum(OEUInt32 value)
+void PAAudio::setBufferNum(OEInt value)
 {
     bool state = disableAudio();
     
@@ -161,7 +161,7 @@ void PAAudio::close()
 
 void PAAudio::initBuffer()
 {
-    OEUInt32 bufferSize = bufferNum * framesPerBuffer * channelNum;
+    OEInt bufferSize = bufferNum * framesPerBuffer * channelNum;
     bufferInput.resize(bufferSize);
     bufferOutput.resize(bufferSize);
     
@@ -171,43 +171,43 @@ void PAAudio::initBuffer()
 
 bool PAAudio::isAudioBufferEmpty()
 {
-    OEUInt32 stateNum = 2 * bufferNum;
+    OEInt stateNum = 2 * bufferNum;
     
-    OEUInt32 delta = (stateNum + bufferEmulationIndex - bufferAudioIndex) % stateNum;
+    OEInt delta = (stateNum + bufferEmulationIndex - bufferAudioIndex) % stateNum;
     
     return delta <= 0;
 }
 
 float *PAAudio::getAudioInputBuffer()
 {
-    OEUInt32 index = bufferAudioIndex % bufferNum;
+    OEInt index = bufferAudioIndex % bufferNum;
     
-    OEUInt32 samplesPerBuffer = framesPerBuffer * channelNum;
+    OEInt samplesPerBuffer = framesPerBuffer * channelNum;
     
     return &bufferInput[index * samplesPerBuffer];
 }
 
 float *PAAudio::getAudioOutputBuffer()
 {
-    OEUInt32 index = bufferAudioIndex % bufferNum;
+    OEInt index = bufferAudioIndex % bufferNum;
     
-    OEUInt32 samplesPerBuffer = framesPerBuffer * channelNum;
+    OEInt samplesPerBuffer = framesPerBuffer * channelNum;
     
     return &bufferOutput[index * samplesPerBuffer];
 }
 
 void PAAudio::advanceAudioBuffer()
 {
-    OEUInt32 stateNum = 2 * bufferNum;
+    OEInt stateNum = 2 * bufferNum;
     
     bufferAudioIndex = (bufferAudioIndex + 1) % stateNum;
 }
 
 bool PAAudio::isEmulationsBufferEmpty()
 {
-    OEUInt32 stateNum = 2 * bufferNum;
+    OEInt stateNum = 2 * bufferNum;
     
-    OEUInt32 delta = (stateNum + bufferEmulationIndex - bufferAudioIndex) % stateNum;
+    OEInt delta = (stateNum + bufferEmulationIndex - bufferAudioIndex) % stateNum;
     
     return (bufferNum - delta) <= 0;
 }
@@ -316,7 +316,7 @@ void PAAudio::unlock()
 
 void PAAudio::runEmulations()
 {
-    OEUInt32 localBufferSize = 0;
+    OEInt localBufferSize = 0;
     float *localInputBuffer = NULL;
     float *localOutputBuffer = NULL;
     
@@ -327,8 +327,8 @@ void PAAudio::runEmulations()
         if (isEmulationsBufferEmpty())
             pthread_cond_wait(&emulationsCond, &emulationsMutex);
         
-        OEUInt32 samplesPerBuffer = framesPerBuffer * channelNum;
-        OEUInt32 bytesPerBuffer = samplesPerBuffer * sizeof(float);
+        OEInt samplesPerBuffer = framesPerBuffer * channelNum;
+        OEInt bytesPerBuffer = samplesPerBuffer * sizeof(float);
         
         // Resize local buffers
         if (localBufferSize != bytesPerBuffer)
@@ -535,10 +535,10 @@ void PAAudio::enableAudio(bool value)
 
 void PAAudio::runAudio(const float *input,
                        float *output,
-                       OEUInt32 frameCount)
+                       OEInt frameCount)
 {
-    OEUInt32 samplesPerBuffer = frameCount * channelNum;
-    OEUInt32 bytesPerBuffer = samplesPerBuffer * sizeof(float);
+    OEInt samplesPerBuffer = frameCount * channelNum;
+    OEInt bytesPerBuffer = samplesPerBuffer * sizeof(float);
     
     // Render noise when no data is available
     // Note: this should be removed when the framework is stable
@@ -546,7 +546,7 @@ void PAAudio::runAudio(const float *input,
     {
         float k = 0.1 / RAND_MAX;
         
-        for (OEUInt32 i = 0; i < samplesPerBuffer; i++)
+        for (OEInt i = 0; i < samplesPerBuffer; i++)
             *output++ = k * rand();
         
         return;
@@ -572,8 +572,8 @@ void PAAudio::runTimer()
 {
     while (timerThreadShouldRun)
     {
-        OEUInt32 samplesPerBuffer = framesPerBuffer * channelNum;
-        OEUInt32 bytesPerBuffer = samplesPerBuffer * sizeof(float);
+        OEInt samplesPerBuffer = framesPerBuffer * channelNum;
+        OEInt bytesPerBuffer = samplesPerBuffer * sizeof(float);
         
         usleep(1E6 * framesPerBuffer / sampleRate);
         
@@ -710,14 +710,14 @@ bool PAAudio::isPlayerPlaying()
 
 void PAAudio::playAudio(float *inputBuffer,
                         float *outputBuffer,
-                        OEUInt32 frameNum,
-                        OEUInt32 channelNum)
+                        OEInt frameNum,
+                        OEInt channelNum)
 {
     if (!playerPlaying)
         return;
     
-    OEUInt32 srcOutputFrameIndex = 0;
-    OEUInt32 srcOutputFrameNum = frameNum;
+    OEInt srcOutputFrameIndex = 0;
+    OEInt srcOutputFrameNum = frameNum;
     
     vector<float> srcOutput;
     srcOutput.resize(srcOutputFrameNum * playerChannelNum);
@@ -726,10 +726,10 @@ void PAAudio::playAudio(float *inputBuffer,
     {
         if (!playerInputFrameNum)
         {
-            OEUInt32 inputFrameNum = (OEUInt32) playerInput.size() / playerChannelNum;
+            OEInt inputFrameNum = (OEInt) playerInput.size() / playerChannelNum;
             
             playerInputFrameIndex = 0;
-            playerInputFrameNum = (OEUInt32) sf_readf_float(playerSNDFILE,
+            playerInputFrameNum = (OEInt) sf_readf_float(playerSNDFILE,
                                                             &playerInput.front(),
                                                             inputFrameNum);
             
@@ -766,15 +766,15 @@ void PAAudio::playAudio(float *inputBuffer,
     } while (srcOutputFrameNum > 0);
     
     float linearVolume = getLevelFromVolume(playerVolume);
-    OEUInt32 sampleNum = (frameNum - srcOutputFrameNum) * channelNum;
+    OEInt sampleNum = (frameNum - srcOutputFrameNum) * channelNum;
     
-    for (OEUInt32 ch = 0; ch < channelNum; ch++)
+    for (OEInt ch = 0; ch < channelNum; ch++)
     {
         float *x = &srcOutput.front() + (ch % playerChannelNum);
         float *yi = inputBuffer + ch;
         float *yo = outputBuffer + ch;
         
-        for (OEUInt32 i = 0; i < sampleNum; i += channelNum)
+        for (OEInt i = 0; i < sampleNum; i += channelNum)
         {
             float value = *x * linearVolume;
             
@@ -833,9 +833,9 @@ float PAAudio::getRecorderTime()
     return (float) recorderFrameNum / sampleRate;
 }
 
-OEUInt64 PAAudio::getRecorderSize()
+OELong PAAudio::getRecorderSize()
 {
-    return (OEUInt64) recorderFrameNum * channelNum * sizeof(short);
+    return (OELong) recorderFrameNum * channelNum * sizeof(short);
 }
 
 bool PAAudio::isRecorderRecording()
@@ -856,13 +856,13 @@ void PAAudio::stopRecorder()
 }
 
 void PAAudio::recordAudio(float *outputBuffer,
-                          OEUInt32 frameNum,
-                          OEUInt32 channelNum)
+                          OEInt frameNum,
+                          OEInt channelNum)
 {
     if (!recorderRecording)
         return;
     
-    OEUInt32 n = (OEUInt32) sf_writef_float(recorderSNDFILE, outputBuffer, frameNum);
+    OEInt n = (OEInt) sf_writef_float(recorderSNDFILE, outputBuffer, frameNum);
     recorderFrameNum += n;
     
     if (frameNum != n)

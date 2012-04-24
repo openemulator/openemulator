@@ -337,6 +337,17 @@ bool DIFDIDiskStorage::readTrack(DIInt headIndex, DIInt trackIndex, DITrack& tra
     }
 }
 
+bool DIFDIDiskStorage::writeTrack(DIInt headIndex, DIInt trackIndex, DITrack& track)
+{
+    DIInt index = trackIndex * headNum + headIndex;
+    
+    trackData[index] = track.data;
+    trackFormat[index] = track.format;
+    trackBitrate[index] = track.bitrate;
+    
+    return true;
+}
+
 DIInt DIFDIDiskStorage::getCodeFromTPI(DIInt value)
 {
     for (DIInt i = 0; i < (sizeof(tpiCode) / sizeof(DIInt)); i++)

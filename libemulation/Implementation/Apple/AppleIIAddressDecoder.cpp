@@ -40,10 +40,10 @@ bool AppleIIAddressDecoder::init()
     
     videoRefreshp = &videoRefresh.front();
     
-    for (int i = 0x4; i < 0xc; i++)
+    for (OEInt i = 0x4; i < 0xc; i++)
         videoRefresh[i] = true;
     
-    for (int i = 0x20; i < 0x4f; i++)
+    for (OEInt i = 0x20; i < 0x4f; i++)
         videoRefresh[i] = true;
     
     return AddressDecoder::init();
@@ -93,7 +93,7 @@ bool AppleIIAddressDecoder::postMessage(OEComponent *sender, int event, void *da
     return false;
 }
 
-void AppleIIAddressDecoder::write(OEAddress address, OEUInt8 value)
+void AppleIIAddressDecoder::write(OEAddress address, OEChar value)
 {
     size_t index = (size_t) (address & addressMask) >> blockSize;
 	writeMapp[index]->write(address, value);
@@ -102,7 +102,7 @@ void AppleIIAddressDecoder::write(OEAddress address, OEUInt8 value)
         video->postMessage(this, APPLEII_REFRESH_VIDEO, NULL);
 }
 
-OEUInt8 *AppleIIAddressDecoder::getMemory(OEAddress startAddress, OEAddress endAddress)
+OEChar *AppleIIAddressDecoder::getMemory(OEAddress startAddress, OEAddress endAddress)
 {
     for (MemoryMaps::iterator i = staticMemoryMaps.begin();
          i != staticMemoryMaps.end();
