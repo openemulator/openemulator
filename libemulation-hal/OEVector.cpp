@@ -97,9 +97,9 @@ OEVector OEVector::lanczosWindow(OEInt n, float fc)
     OEVector v;
     v.data.resize(n);
     
-    OEInt halfN = n / 2;
+    OESInt halfN = n / 2;
     
-    for (OEInt i = 0; i < n; i++)
+    for (OESInt i = 0; i < n; i++)
     {
         float x = 2 * M_PI * fc * (i - halfN);
         

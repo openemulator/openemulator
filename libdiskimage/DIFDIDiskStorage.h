@@ -33,7 +33,7 @@ public:
     bool writeTrack(DIInt headIndex, DIInt trackIndex, DITrack& track);
     
 private:
-    DIBackingStore *backingStore;
+    bool writing;
     
     bool writeEnabled;
     DIDiskType diskType;
@@ -41,8 +41,9 @@ private:
     float rotationSpeed;
     DIInt tracksPerInch;
     
+    DIBackingStore *backingStore;
+    
     vector<DIInt> trackFormat;
-    vector<DIInt> trackBitrate;
     vector<DIInt> trackOffset;
     vector<DIInt> trackSize;
     
@@ -51,8 +52,7 @@ private:
     DIInt getCodeFromTPI(DIInt value);
     DIInt getTPIFromCode(DIInt value);
     
-    bool encodeBitstreamTrack(DITrack& track, DIData& data, DIInt bitrate);
-    bool decodeBitstreamTrack(DIData& data, DIInt& bitrate, DITrack& track);
-    bool encodePulsesTrack(DITrack& track, DIData& data, DIInt bitrate);
-    bool decodePulsesTrack(DIData& data, DIInt& bitrate, DITrack& track);
+    bool decodeBitstreamTrack(DIData& encodedData, DIData& data);
+    bool encodeBitstreamTrack(DIData& decodedData, DIData& data);
+    bool decodePulsesTrack(DIData& encodedData, DIData& data, DIInt bitRate);
 };

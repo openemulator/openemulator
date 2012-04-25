@@ -76,7 +76,7 @@ bool DIV2DDiskStorage::open(DIBackingStore *backingStore)
 
 void DIV2DDiskStorage::close()
 {
-    backingStore = &dummyBackingStore;
+    backingStore = NULL;
     
     trackOffset.resize(0);
     trackSize.resize(0);
@@ -120,7 +120,6 @@ bool DIV2DDiskStorage::readTrack(DIInt headIndex, DIInt trackIndex, DITrack& tra
     DIInt size = trackSize[trackIndex];
     
     track.data.resize(size);
-    track.bitrate = V2D_BITRATE;
     
     if (size)
     {

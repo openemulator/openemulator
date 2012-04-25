@@ -29,8 +29,6 @@ public:
     bool readTrack(DIInt headIndex, DIInt trackIndex, DITrack& track);
     
 private:
-    DIBackingStore dummyBackingStore;
-    
     DIBackingStore *backingStore;
     
     vector<DIInt> trackOffset;

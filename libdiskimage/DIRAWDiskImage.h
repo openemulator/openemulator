@@ -31,8 +31,6 @@ public:
     bool writeBlocks(DIInt index, const DIChar *buf, DIInt num);
     
 private:
-    DIBackingStore dummyBackingStore;
-    
     DIBackingStore *backingStore;
 };
 

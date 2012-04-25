@@ -42,6 +42,9 @@ public:
     bool writeTrack(DIInt headIndex, DIInt trackIndex, DIData& data);
     
 private:
+    DIChar gcr53DecodeMap[0x100];
+    DIChar gcr62DecodeMap[0x100];
+    
     DIFileBackingStore fileBackingStore;
     DIRAMBackingStore ramBackingStore;
     DI2IMGBackingStore twoIMGBackingStore;

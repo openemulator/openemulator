@@ -39,8 +39,6 @@ public:
     bool writeTrack(DIInt headIndex, DIInt trackIndex, DITrack& track);
     
 private:
-    DIBackingStore dummyBackingStore;
-    
     DIBackingStore *backingStore;
     
     DIDiskType diskType;

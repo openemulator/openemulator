@@ -37,7 +37,7 @@ bool DILogicalDiskStorage::open(DIBackingStore *backingStore,
 
 void DILogicalDiskStorage::close()
 {
-    backingStore = &dummyBackingStore;
+    backingStore = NULL;
     
     trackFormat = DI_BLANK;
     trackSize = 0;

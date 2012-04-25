@@ -32,7 +32,7 @@ bool DIRAWDiskImage::open(DIBackingStore *backingStore)
 
 void DIRAWDiskImage::close()
 {
-    backingStore = &dummyBackingStore;
+    backingStore = NULL;
 }
 
 bool DIRAWDiskImage::isWriteEnabled()

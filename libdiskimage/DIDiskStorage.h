@@ -29,14 +29,14 @@ typedef enum
     DI_APPLE_CPM,
     DI_APPLE_PRODOS,
     DI_APPLE_NIB,
-    DI_BITSTREAM,
+    DI_BITSTREAM_250000BPS,
+    DI_BITSTREAM_500000BPS,
 } DITrackFormat;
 
 typedef struct
 {
-    DIData data;
     DITrackFormat format;
-    DIInt bitrate;
+    DIData data;
 } DITrack;
 
 class DIDiskStorage
