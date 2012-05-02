@@ -58,4 +58,7 @@ void setDILongBE(DIChar *p, DILong value);
 
 string getDIPathExtension(string path);
 
+DIInt getDICRC16(DIChar *p, DIInt size);
+DIInt getDICRC32(DIChar *p, DIInt size);
+
 #endif

@@ -20,18 +20,13 @@ typedef enum
     DI_FDI_BLANK = 0x00,
     DI_FDI_AMIGA_DD,
     DI_FDI_AMIGA_HD,
-    DI_FDI_ATARI_DD9,
-    DI_FDI_ATARI_DD10,
-    DI_FDI_PC_DD8,
-    DI_FDI_PC_DD9,
-    DI_FDI_PC_HD15,
-    DI_FDI_PC_HD16,
-    DI_FDI_PC_EHD,
-    DI_FDI_C1541,
+    DI_FDI_PC,
+    DI_FDI_PC_INDEXMARKS = 0x05,
+    DI_FDI_C1541 = 0x0a,
     DI_FDI_APPLE_DOS32,
     DI_FDI_APPLE_DOS33,
     DI_FDI_APPLE_35,
-    DI_FDI_PC_SD,
+    DI_FDI_PC_FM,
     DI_FDI_PULSES = 0x80,
     DI_FDI_DECODEDGCRFM_125000BPS = 0xc0,
     DI_FDI_DECODEDGCRFM_150000BPS,
@@ -95,7 +90,10 @@ bool DIFDIDiskStorage::openForReading(DIBackingStore *backingStore)
         return false;
     
     // Check version
-    if (getDIShortBE(&header[140]) != 0x0200)
+    DIShort version = getDIShortBE(&header[140]);
+    
+    if ((version != 0x0200) ||
+        (version != 0x0201))
         return false;
     
     // Read header
@@ -105,14 +103,18 @@ bool DIFDIDiskStorage::openForReading(DIBackingStore *backingStore)
     writeEnabled = !(header[147] & 0x1);
     tracksPerInch = getTPIFromCode(header[148]);
     
-    // Read full header
+    // Read full header (152 header bytes, tracks, and 8 CRC bytes)
     DIInt indexNum = trackNum * headNum;
     
-    header.resize(((152 + 2 * indexNum) / 0x200) * 0x200);
-    
+    if (version == 0x0200)
+        header.resize(((152 + 2 * indexNum) / 0x200) * 0x200);
+    else
+        header.resize(((152 + 2 * indexNum + 8) / 0x200) * 0x200);
+        
     if (!backingStore->read(0, &header.front(), header.size()))
         return false;
     
+    // Analyze tracks
     DIInt offset = header.size();
     for (int index = 0; index < indexNum; index++)
     {
@@ -131,6 +133,16 @@ bool DIFDIDiskStorage::openForReading(DIBackingStore *backingStore)
         trackSize[index] = size * 0x100;
         
         offset += trackSize[index];
+    }
+    
+    // Analyze CRC
+    if (version >= 0x201)
+    {
+        // Check header CRC
+        DIInt headerCRC32 = getDIIntBE(&header[header.size() - 0x04]);
+        
+        if (headerCRC32 != getDICRC32(&header[0x0], header.size() - 0x08))
+            return false;
     }
     
     this->backingStore = backingStore;
@@ -168,9 +180,9 @@ bool DIFDIDiskStorage::close()
         trackFormat.resize(indexNum);
         trackData.resize(indexNum);
         
-        // Build header
+        // Build header (152 header bytes, tracks, and 8 CRC bytes)
         DIData header;
-        header.resize(ceil((152 + 2 * indexNum) / 0x200) * 0x200);
+        header.resize(ceil((152 + 2 * indexNum + 8) / 0x200) * 0x200);
         
         // Set signature
         memcpy((char *) &header[0], FDI_SIGNATURE, sizeof(FDI_SIGNATURE) - 1);
@@ -409,17 +421,17 @@ DIInt DIFDIDiskStorage::getTPIFromCode(DIInt value)
     return 0;
 }
 
-bool DIFDIDiskStorage::decodeBitstreamTrack(DIData& encodedData, DIData& data)
+bool DIFDIDiskStorage::decodeBitstreamTrack(DIData& decodedData, DIData& data)
 {
     if (data.size() < 8)
         return false;
     
     // Track format is:
-    // * 4 bytes little-endian number of bits
-    // * 4 bytes little-endian index offset (not used)
-    DIInt bitNum = getDIIntLE(&data[0x00]);
+    // * 4 bytes big-endian number of bits
+    // * 4 bytes big-endian index offset (not used)
+    DIInt bitNum = getDIIntBE(&data[0x00]);
     
-    encodedData.resize(bitNum);
+    decodedData.resize(bitNum);
     
     DIInt minSize = (8 + ((bitNum + 7) / 8));
     if (data.size() < minSize)
@@ -431,36 +443,249 @@ bool DIFDIDiskStorage::decodeBitstreamTrack(DIData& encodedData, DIData& data)
         DIInt byteIndex = i >> 3;
         DIInt bitIndex = 7 - (i & 0x07);
         
-        encodedData[i] = codeTable[(data[byteIndex] >> bitIndex) & 0x1];
+        decodedData[i] = codeTable[(data[byteIndex] >> bitIndex) & 0x1];
     }
     
     return true;
 }
 
-bool DIFDIDiskStorage::encodeBitstreamTrack(DIData& decodedData, DIData& data)
+bool DIFDIDiskStorage::encodeBitstreamTrack(DIData& encodedData, DIData& data)
 {
     DIInt bitNum = data.size();
     DIInt byteNum = (bitNum + 7) >> 3;
     
-    decodedData.clear();
-    decodedData.resize(8 + byteNum);
+    encodedData.clear();
+    encodedData.resize(8 + byteNum);
     
     // Write header
-    setDIIntLE(&decodedData[0x00], bitNum);
-    setDIIntLE(&decodedData[0x04], 0);
+    setDIIntBE(&encodedData[0x00], bitNum);
+    setDIIntBE(&encodedData[0x04], 0);
     
     for (int i = 0; i < bitNum; i++)
     {
         DIInt byteIndex = i >> 3;
         DIInt bitIndex = 7 - (i & 0x07);
         
-        decodedData[byteIndex] |= ((data[i] != 0) << bitIndex);
+        encodedData[byteIndex] |= ((data[i] != 0) << bitIndex);
     }
     
     return true;
 }
 
-bool DIFDIDiskStorage::decodePulsesTrack(DIData& encodedData, DIData& data, DIInt bitRate)
+bool DIFDIDiskStorage::decodePulsesTrack(DIData& decodedData, DIData& data, DIInt bitRate)
 {
+    if (data.size() < 0x10)
+        return false;
+    
+    // Track format is:
+    // * 4 bytes little-endian number of pulses
+    // * 3 bytes little-endian size in bytes of average stream
+    // * 3 bytes little-endian size in bytes of minimum stream
+    // * 3 bytes little-endian size in bytes of maximum stream
+    // * 3 bytes little-endian size in bytes of index stream
+    DIInt pulseNum = getDIIntBE(&data[0x00]);
+    DIInt averageStreamOffset = 0x10;
+    DIInt averageStreamSize = getDIShortBE(&data[0x05]) + (data[0x04] & 0x1f) * 0x10000;
+    DIInt averageStreamCompression = data[0x04] >> 6;
+    DIInt minimumStreamOffset = minimumStreamOffset + averageStreamSize;
+    DIInt minimumStreamSize = getDIShortBE(&data[0x08]) + (data[0x07] & 0x1f) * 0x10000;
+    DIInt minimumStreamCompression = data[0x07] >> 6;
+    DIInt maximumStreamOffset = minimumStreamOffset + averageStreamSize;
+    DIInt maximumStreamSize = getDIShortBE(&data[0x0b]) + (data[0x0a] & 0x1f) * 0x10000;
+    DIInt maximumStreamCompression = data[0x0a] >> 6;
+    DIInt indexStreamOffset = minimumStreamOffset + averageStreamSize;
+    DIInt indexStreamSize = getDIShortBE(&data[0x0e]) + (data[0x0d] & 0x1f) * 0x10000;
+    DIInt indexStreamCompression = data[0x0d] >> 6;
+    
+    DIFDIStream averageStream, minimumStream, maximumStream, indexStream;
+    if (!getStream(averageStream,
+                   &data[averageStreamOffset],
+                   averageStreamSize,
+                   averageStreamCompression,
+                   pulseNum))
+        return false;
+    if (!getStream(minimumStream,
+                   &data[minimumStreamOffset],
+                   minimumStreamSize,
+                   minimumStreamCompression,
+                   pulseNum))
+        return false;
+    if (!getStream(maximumStream,
+                   &data[maximumStreamOffset],
+                   maximumStreamSize,
+                   maximumStreamCompression,
+                   pulseNum))
+        return false;
+    if (!getStream(indexStream,
+                   &data[indexStreamOffset],
+                   indexStreamSize,
+                   indexStreamCompression,
+                   pulseNum))
+        return false;
+    
+    DIInt bitNum = 2 * bitRate * 60 / rotationSpeed;
+    decodedData.resize(bitNum);
+    
+    // To-Do
+    
     return true;
+}
+
+bool DIFDIDiskStorage::getStream(DIFDIStream& stream, DIChar *data, DIInt size, DIInt compression,
+                                 DIInt pulseNum)
+{
+    stream.resize(pulseNum);
+    
+    if (compression == 0)
+    {
+        if (size != (sizeof(DIInt) * pulseNum))
+            return false;
+        
+        for (int i = 0; i < pulseNum; i++)
+            stream[i] = getDIIntBE(data + i * sizeof(DIInt));
+        
+        return true;
+    }
+    else if (compression == 1)
+    {
+        initHuffman(data, size);
+        
+        DIInt substreamShift = 1;
+        
+        while (substreamShift)
+        {
+            DIInt streamIndex = 0;
+            
+            // Read substream header
+            DIInt header1 = readHuffmanByte();
+            DIInt header2 = readHuffmanByte();
+            
+            substreamShift = ((header2 & 0x7f) << 7) | (header1 & 0x7f);
+            huffmanSignExtension = (header1 & 0x80);
+            huffman16Bits = (header2 & 0x80);
+            
+            // Build Huffman tree
+            DIFDIHuffmanNode *root = new DIFDIHuffmanNode();
+            
+            buildHuffmanTree(root);
+            
+            // Read Huffman tree values
+            readHuffmanTreeValues(root);
+            
+            // Decode Huffman stream
+            while (!isHuffmanBitEOF())
+            {
+                if (streamIndex >= pulseNum)
+                {
+                    delete root;
+                    
+                    return false;
+                }
+                
+                DIFDIHuffmanNode *currentNode = root;
+                
+                while (currentNode->left)
+                {
+                    if (!readHuffmanBit())
+                        currentNode = currentNode->left;
+                    else
+                        currentNode = currentNode->right;
+                }
+                
+                DIInt value = currentNode->value;
+                
+                if (huffmanSignExtension)
+                {
+                    if (huffman16Bits)
+                    {
+                        if (value & 0x8000)
+                            value |= 0xffff0000;
+                    }
+                    else
+                    {
+                        if (value & 0x80)
+                            value |= 0xffffff00;
+                    }
+                }
+                
+                value <<= substreamShift;
+                
+                stream[streamIndex++] |= value;
+            }
+            
+            delete root;
+        }
+    }
+    else
+        return false;
+    
+    return true;
+}
+
+void DIFDIDiskStorage::initHuffman(DIChar *data, DIInt size)
+{
+    huffmanStreamData = data;
+    huffmanStreamSize = size;
+    huffmanStreamBitIndex = 0;
+}
+
+DIChar DIFDIDiskStorage::readHuffmanByte()
+{
+    huffmanStreamBitIndex = 0;
+    
+    if (huffmanStreamSize)
+    {
+        huffmanStreamSize--;
+        return *(huffmanStreamData++);
+    }
+    
+    return 0;
+}
+
+bool DIFDIDiskStorage::readHuffmanBit()
+{
+    if (huffmanStreamBitIndex >= 8)
+    {
+        if (!huffmanStreamSize)
+            return false;
+        
+        huffmanStreamValue = readHuffmanByte();
+    }
+    
+    return (huffmanStreamValue << huffmanStreamBitIndex++) & 0x80;
+}
+
+bool DIFDIDiskStorage::isHuffmanBitEOF()
+{
+    return (huffmanStreamSize == 0) && (huffmanStreamBitIndex >= 8);
+}
+
+void DIFDIDiskStorage::buildHuffmanTree(DIFDIHuffmanNode *node)
+{
+    bool hasBranches = readHuffmanBit();
+    
+    if (hasBranches)
+    {
+		node->left = new DIFDIHuffmanNode();
+        buildHuffmanTree(node->left);
+        
+		node->right = new DIFDIHuffmanNode();
+		buildHuffmanTree(node->right);
+    }
+}
+
+void DIFDIDiskStorage::readHuffmanTreeValues(DIFDIHuffmanNode *node)
+{
+	if (!node->left)
+    {
+        if (huffman16Bits)
+            node->value = (readHuffmanByte() << 8) | readHuffmanByte();
+        else
+            node->value = readHuffmanByte();
+	}
+    else
+    {
+        readHuffmanTreeValues(node->left);
+        readHuffmanTreeValues(node->right);
+    }
 }

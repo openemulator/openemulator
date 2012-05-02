@@ -182,3 +182,53 @@ string getDIPathExtension(string path)
     
     return path.substr(extensionIndex + 1);
 }
+
+static DIInt crcTable16[256];
+static DIInt crcTable32[256];
+
+static void buildCRCTables()
+{
+	for (DIInt i = 0; i < 256; i++)
+    {
+		DIInt c = i;
+		DIShort w = i << 8;
+		for (DIInt k = 0; k < 8; k++)
+        {
+			c = (c >> 1) ^ (c & 1 ? 0xedb88320 : 0);
+			w = (w << 1) ^ ((w & 0x8000) ? 0x1021 : 0);
+		}
+        
+		crcTable32[i] = c;
+		crcTable32[i] = w;
+	}
+}
+
+DIInt getDICRC16(DIChar *p, DIInt size)
+{
+    DIShort crc;
+    
+    if (!crcTable32[1])
+        buildCRCTables();
+    
+    crc = 0xffff;
+    
+    while (size--)
+        crc = (crc << 8) ^ crcTable16[((crc >> 8) ^ (*p++)) & 0xff];
+    
+    return crc;
+}
+
+DIInt getDICRC32(DIChar *p, DIInt size)
+{
+    DIInt crc;
+    
+    if (!crcTable32[1])
+        buildCRCTables();
+    
+    crc = 0xffffffff;
+    
+    while (size--)
+        crc = crcTable32[(crc ^ (*p++)) & 0xff] ^ (crc >> 8);
+    
+    return crc ^ 0xffffffff;
+}

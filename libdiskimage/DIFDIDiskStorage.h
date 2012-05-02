@@ -11,6 +11,31 @@
 #include "DIBackingStore.h"
 #include "DIDiskStorage.h"
 
+typedef vector<DIInt> DIFDIStream;
+
+struct DIFDIHuffmanNode
+{
+    DIFDIHuffmanNode()
+    {
+        value = NULL;
+        left = NULL;
+        right = NULL;
+    }
+    
+    ~DIFDIHuffmanNode()
+    {
+        if (left)
+            delete left;
+        if (right)
+            delete right;
+    }
+    
+	DIShort value;
+    
+	struct DIFDIHuffmanNode *left;
+	struct DIFDIHuffmanNode *right;
+};
+
 class DIFDIDiskStorage : public DIDiskStorage
 {
 public:
@@ -49,10 +74,29 @@ private:
     
     vector<DIData> trackData;
     
+    DIChar *huffmanStreamData;
+    DIInt huffmanStreamSize;
+    DIChar huffmanStreamValue;
+    DIInt huffmanStreamBitIndex;
+    bool huffmanSignExtension;
+    bool huffman16Bits;
+    
     DIInt getCodeFromTPI(DIInt value);
     DIInt getTPIFromCode(DIInt value);
     
     bool decodeBitstreamTrack(DIData& encodedData, DIData& data);
     bool encodeBitstreamTrack(DIData& decodedData, DIData& data);
     bool decodePulsesTrack(DIData& encodedData, DIData& data, DIInt bitRate);
+    
+    bool getStream(DIFDIStream& stream,
+                   DIChar *data, DIInt size, DIInt compression,
+                   DIInt pulseNum);
+    
+    void initHuffman(DIChar *data, DIInt size);
+    DIChar readHuffmanByte();
+    bool readHuffmanBit();
+    bool isHuffmanBitEOF();
+    
+    void buildHuffmanTree(DIFDIHuffmanNode *node);
+    void readHuffmanTreeValues(DIFDIHuffmanNode *node);
 };
