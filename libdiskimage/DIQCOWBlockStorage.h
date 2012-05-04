@@ -1,24 +1,24 @@
 
 /**
  * libdiskimage
- * RAW Disk Image
+ * QCOW Block Storage
  * (C) 2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Accesses a RAW disk image
+ * Accesses a QCOW block storage
  */
 
-#ifndef _DIRAWDISKIMAGE_H
-#define _DIRAWDISKIMAGE_H
+#ifndef DIQCOWBLOCKSTORAGE_H
+#define DIQCOWBLOCKSTORAGE_H
 
 #include "DICommon.h"
 #include "DIBackingStore.h"
-#include "DIDiskImage.h"
+#include "DIBlockStorage.h"
 
-class DIRAWDiskImage : public DIDiskImage
+class DIQCOWBlockStorage : public DIBlockStorage
 {
 public:
-    DIRAWDiskImage();
+    DIQCOWBlockStorage();
     
     bool open(DIBackingStore *backingStore);
     void close();

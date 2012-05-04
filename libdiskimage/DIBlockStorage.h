@@ -1,22 +1,22 @@
 
 /**
  * libdiskimage
- * Disk Image
+ * Block Storage
  * (C) 2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Defines the disk image interface
+ * Defines the block storage interface
  */
 
-#ifndef _DIDISKIMAGE_H
-#define _DIDISKIMAGE_H
+#ifndef _DIBLOCKSTORAGE_H
+#define _DIBLOCKSTORAGE_H
 
 #include "DICommon.h"
 
-class DIDiskImage
+class DIBlockStorage
 {
 public:
-    DIDiskImage();
+    DIBlockStorage();
     
     virtual bool isWriteEnabled();
     virtual DIInt getBlockNum();

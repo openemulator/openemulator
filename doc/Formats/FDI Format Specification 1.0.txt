@@ -1,0 +1,217 @@
+Formatted Disk Image (FDI) file format version 1.0 description
+
+
+Header (512 bytes):
+
++  0  signature DB "Formatted Disk Image file",0Dh,0Ah ;file signature
++ 27  creator   DB 30 DUP (20h) ;creator signature
+                              ;(for example: "ApH's Disk2FDI PC version 0.9 ")
++ 57  CR        DB 0Dh,0Ah
++ 59  comment   DB 80 DUP (1Ah) ;comment (contained program)
++139  EOF       DB 1Ah ;End Of File (for DOS "type" command)
++140  version   DB 1,0 ;Image version number
++142  ltrack    DW ? ;last track in image (number of tracks - 1), big endian
++144  lhead     DB ? ;last head in image (number of heads - 1)
++145  type      DB ? ;0=8", 1=5.25", 2=3.5", 3=3"
++146  rotspeed  DB ? ;base rotation speed - 128 (in rotations/minute)
++147  flags     DB ? ;XXXX XXXX
+                      ││││ │││└ =1 => Disk is write protected
+                      ││││ ││└─ =1 => Image is index-synchronized
+                      └┴┴┴─┴┴── reserved for future use
++148  reserved  DD 0 ;reserved for future use
++152-XXX tracks description (90 double-sided cylinders reserved in first 512 bytes)
+         track ordered, then head ordered.
+
+If more than 180
+
+Track description
++  0  type      DB ? ;track type:
+                        00h=blank track (size field should be 0)
+                        01h=standard Amiga double-density track
+                        02h=standard Amiga high-density track
+                        03h=standard ST double-density 9-sector track
+                        04h="standard" ST double-density 10-sector track
+                        05h=standard PC double-density 8-sector track
+                        06h=standard PC double-density 9-sector track
+                        07h=standard PC high-density 15-sector track
+                        08h=standard IBM high-density 18-sector track
+                        09h=standard IBM extra-high-density 36-sector track
+                        0Ah-0DFh=reserved for future use
+                        0Exh=sectors described track
+                        0Fxh=raw data track, including MFM, FM, GCR, ... pulses
+                                where x=bit rate:0=125Kbit/s
+                                                 1=150Kbit/s
+                                                 2=250Kbit/s
+                                                 3=300Kbit/s
+                                                 4=500Kbit/s
+                                                 5=1Mbit/s
+                                                 6-15=reserved for future use
++  1  size      DB (tracksize/256) ;size of track data in image
+                                    in multiple of 256 bytes
+				   ;in the case of an Amiga double-density
+				   ;track (type 1):
+					high 4 bits=first sector in track
+					low 4 bits=size of track data in image
+						   in multiple of 512 bytes
+						   (remaining is 0)
+
+Sectors Described Track:
+first byte in buffer=type of encoding
+0=MFM
+1=FM
+2=GCR
+three following bytes in buffer=offset in the decoded buffer of index signal
+(=0 with version 0.9. Will be defined more precisely with version 1.0)
+
+Then for MFM:
+================================================================================
+data type description |data|packed data extension:  |unpacked data
+                      |type|size in bytes-          |DD stands for data byte
+                      |byte|description of the field|CC stands for CRC byte
+================================================================================
+In this section, unpacked data for types 0x02 and 0x03 include the first MFM
+synchronization bit. They also include the next MFM synchronization bit if they
+are immediately followed by MFM-decoded data of type 0x0C or 0x0D.
+--------------------------------------------------------------------------------
+one "0" bit           |0x00|-                       |0
+--------------------------------------------------------------------------------
+one "1" bit           |0x01|-                       |1
+--------------------------------------------------------------------------------
+standard MFM sync     |0x02|-                       |1*0x4489
+--------------------------------------------------------------------------------
+standard Index sync   |0x03|-                       |1*0x5224
+--------------------------------------------------------------------------------
+one MFM sync bit      |0x04|-                       |1 if both neighboring
+                      |    |                        |bits are 0, 0 otherwise.
+--------------------------------------------------------------------------------
+                      |0x05|-                       |
+reserved              | ...|-                       |
+                      |0x07|-                       |
+================================================================================
+In this section, unpacked data do NOT include the 2 outter MFM sync bits.
+For RLE data, a size of 0 means 256 bytes.
+--------------------------------------------------------------------------------
+RLE MFM-encoded data  |0x08|1-size in bytes, 1-data byte|X*DD
+--------------------------------------------------------------------------------
+RLE MFM-decoded data  |0x09|1-size in bytes, 1-data byte|X*DD
+--------------------------------------------------------------------------------
+MFM-encoded data      |0x0A|2-size in bits,           |X*DD
+                      |    |ceil(size in bits/8)-data)|
+--------------------------------------------------------------------------------
+MFM-encoded data      |0x0B|2-(size in bits-65536),   |X*DD
+                      |    |ceil(size in bits/8)-data)|
+--------------------------------------------------------------------------------
+MFM-decoded data      |0x0C|2-size in bits,           |X*DD
+                      |    |ceil(size in bits/8)-data)|
+--------------------------------------------------------------------------------
+MFM-decoded data      |0x0D|2-(size in bits-65536),   |X*DD
+                      |    |ceil(size in bits/8)-data)|
+--------------------------------------------------------------------------------
+reserved              |0x0E|-                       |
+reserved              |0x0F|-                       |
+================================================================================
+In this section, unpacked data do NOT include the 2 outter MFM synchronization
+bits. However, unpacked data starting with 3*MFM0x4489 DO include the first
+MFM synchronization bit (0, i.e. the leftmost bit of the first MFM0x4489).
+--------------------------------------------------------------------------------
+standard IBM index    |0x10|-                       |12*0x00, 3*MFM0x5224,
+address mark          |    |-                       |1*0xFC
+--------------------------------------------------------------------------------
+standard IBM pre-gap  |0x11|-                      |78*0x4E, 12*0x00,
+                      |    |                       |3*MFM0x5224, 1*0xFC, 50*0x4E
+--------------------------------------------------------------------------------
+standard ST pre-gap   |0x12|-                       |58*0x4E
+--------------------------------------------------------------------------------
+standard extended     |0x13|4-header info           |12*0x00, 3*MFM0x4489,
+IBM sector header     |    |                        |1*0xFE, 4*DD, 2*CC
+--------------------------------------------------------------------------------
+standard mini-extended|0x14|4-header info           |3*MFM0x4489, 1*0xFE,
+IBM sector header     |    |                        |4*DD, 2*CC
+--------------------------------------------------------------------------------
+standard short IBM    |0x15|1-sector number         |12*0x00, 3*MFM0x4489,
+sector header         |    |                        |1*0xFE, 4*DD, 2*CC
+--------------------------------------------------------------------------------
+standard mini-short   |0x16|1-sector number         |3*MFM0x4489, 1*0xFE,
+IBM sector header     |    |                        |4*DD, 2*CC
+--------------------------------------------------------------------------------
+standard CRC-incorrect|0x17|4-header info, 2-CRC    |3*MFM0x4489, 1*0xFE,
+mini-extended IBM     |    |                        |4*DD, 2*CC
+sector header         |    |                        |
+--------------------------------------------------------------------------------
+standard CRC-incorrect|0x18|1-sector number, 2-CRC  |3*MFM0x4489, 1*0xFE,
+mini-short IBM sector |    |                        |4*DD, 2*CC
+header                |    |                        |
+--------------------------------------------------------------------------------
+standard 512-byte,    |0x19|512-data                |3*MFM0x4489, 1*0xFB,
+CRC-correct IBM data  |    |                        |512*DD, 2*CC
+--------------------------------------------------------------------------------
+standard 128*2^x-byte,|0x1A|1-x, 128*2^x-data       |3*MFM0x4489, 1*0xFB,
+CRC-correct IBM data  |    |                        |(128*2^x)*DD, 2*CC
+--------------------------------------------------------------------------------
+standard 128*2^x-byte,|0x1B|1-x, 128*2^x-data, 2-CRC|3*MFM0x4489, 1*0xFB,
+CRC-incorrect IBM data|    |                        |(128*2^x)*DD, 2*CC
+--------------------------------------------------------------------------------
+standard extended     |0x1C|4-header info,        |12*0x00, 3*MFM0x4489, 1*0xFE,
+IBM sector            |    |128*2^x-data          |4*DD, 2*CC, 22*0x4E, 12*0x00,
+                      |    |                      |3*MFM0x4489, 1*0xFB,
+                      |    |                      |(128*2^x)*DD, 2*CC
+--------------------------------------------------------------------------------
+standard short        |0x1D|1-sector number,      |12*0x00, 3*MFM0x4489, 1*0xFE,
+IBM sector            |    |512-data              |4*DD, 2*CC, 22*0x4E, 12*0x00,
+                      |    |                      |3*MFM0x4489, 1*0xFB,
+                      |    |                      |512*DD, 2*CC
+--------------------------------------------------------------------------------
+reserved              |0x1E|-                       |
+reserved              |0x1F|-                       |
+================================================================================
+In this section, unpacked data do NOT include the 2 outter MFM sync bits.
+However, unpacked data starting with a '+' DO include the first MFM sync bit.
+--------------------------------------------------------------------------------
+standard super-extended|0x20|4-header info,         |2*0x00, 2*MFM0x4489,
+Amiga sector header    |    |16-header data         |4*DD, 16*DD, 4*CC
+--------------------------------------------------------------------------------
+standard extended     |0x21|4-header info           |2*0x00, 2*MFM0x4489,
+Amiga sector header   |    |                        |4*DD, 16*0x00, 4*CC
+--------------------------------------------------------------------------------
+standard short Amiga  |0x22|1-sector number,        |2*0x00, 2*MFM0x4489,
+sector header         |    |1-sectors until gap     |4*DD, 16*0x00, 4*CC
+--------------------------------------------------------------------------------
+standard 512-byte,    |0x23|512-data                |+, 4*CC, 512*DD
+CRC-correct Amiga data|    |                        |
+--------------------------------------------------------------------------------
+not-decoded, 128*2^x-byte,|0x24|1-x, 128*2^x-data   |+, 4*CC, (128*2^x)*DD
+CRC-correct Amiga data    |    |                    |
+--------------------------------------------------------------------------------
+not-decoded, 128*2^x-byte,|0x25|1-x, 4-CRC, 128*2^x-data|+, 4*CC, (128*2^x)*DD
+CRC-incorrect Amiga data  |    |                        |
+--------------------------------------------------------------------------------
+standard extended     |0x26|4-header info, 512-data |2*0x00, 2*MFM0x4489, 4*DD,
+Amiga sector          |    |                        |16*0x00, 4*CC, 4*CC, 512*DD
+--------------------------------------------------------------------------------
+standard short   |0x27|1-sector number,             |2*0x00, 2*MFM0x4489, 4*DD,
+Amiga sector     |    |1-sectors until gap, 512-data|16*0x00, 4*CC, 4*CC, 512*DD
+--------------------------------------------------------------------------------
+                      |0x28|-                       |
+reserved              | ...|-                       |
+                      |0x2F|-                       |
+================================================================================
+                      |0x30|-                       |
+reserved              | ...|-                       |
+                      |0xEF|-                       |
+================================================================================
+                      |0xF0|-                       |
+reserved              | ...|-                       |
+                      |0xFE|-                       |
+--------------------------------------------------------------------------------
+end of buffer         |0xFF|-                       |
+================================================================================
+
+
+Raw Data Track:
++  0  size      DD ? ;exact size (in bits) of track
+                      from an index pulse to the next
++  4  rawdata   DB size/8(+1) ;raw data, including MFM, FM, GCR, ... pulses
+
+---- End of Formatted Disk Image (FDI) file format version 1.0 description ----
+
+                                                Vincent "ApH" Joguin.

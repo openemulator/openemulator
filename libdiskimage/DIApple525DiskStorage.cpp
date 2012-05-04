@@ -74,12 +74,16 @@ DIApple525DiskStorage::DIApple525DiskStorage()
 
 bool DIApple525DiskStorage::open(string path)
 {
+    close();
+    
     return (fileBackingStore.open(path) &&
             open(&fileBackingStore, getDIPathExtension(path)));
 }
 
 bool DIApple525DiskStorage::open(DIData& data)
 {
+    close();
+    
     return (ramBackingStore.open(data) &&
             open(&ramBackingStore, ""));
 }
@@ -214,36 +218,36 @@ bool DIApple525DiskStorage::close()
         //    Abrimos un archivo FDI, y escribimos lo que teníamos
         
         // Find active disk storage
-/*        if (diskStorage == &logicalDiskStorage)
-        {
-            vector<DIData> logicalDisk;
-            
-            if (getLogicalDisk(logicalDisk))
-            {
-                
-            }
-            
-        }
-        
-        DITrack track;
-        
-        for (int index = 0; index < MAX_TRACKNUM; index++)
-        {
-            DITrack diskStorageTrack;
-            
-            if (!diskStorage->readTrack(0, index, diskStorageTrack))
-                return false;
-            
-            switch (diskStorageTrack.format)
-            {
-                case DI_APPLE_DOS32:
-                    decodeGCR53Track(diskStorageTrack, diskStorageTrack);
-                    
-            }
-            
-            if (track.format == DI_APPLE_DOS32)
-                decodeGCR53Track(track, diskStorageTrack);
-        }*/
+        /*        if (diskStorage == &logicalDiskStorage)
+         {
+         vector<DIData> logicalDisk;
+         
+         if (getLogicalDisk(logicalDisk))
+         {
+         
+         }
+         
+         }
+         
+         DITrack track;
+         
+         for (int index = 0; index < MAX_TRACKNUM; index++)
+         {
+         DITrack diskStorageTrack;
+         
+         if (!diskStorage->readTrack(0, index, diskStorageTrack))
+         return false;
+         
+         switch (diskStorageTrack.format)
+         {
+         case DI_APPLE_DOS32:
+         decodeGCR53Track(diskStorageTrack, diskStorageTrack);
+         
+         }
+         
+         if (track.format == DI_APPLE_DOS32)
+         decodeGCR53Track(track, diskStorageTrack);
+         }*/
     }
     
     fileBackingStore.close();
@@ -280,20 +284,32 @@ bool DIApple525DiskStorage::readTrack(DIInt headIndex, DIInt trackIndex, DIData&
     if (headIndex)
         return false;
     
+    if (trackIndex >= trackData.size())
+        trackData.resize(trackIndex + 1);
+    
     if (!trackData[trackIndex].size())
     {
         DITrack track;
         
-        if (!diskStorage->readTrack(headIndex,
-                                    (trackIndex * diskStorage->getTracksPerInch() /
-                                     DEFAULT_TRACKSPERINCH), track))
-            return false;
+        DIInt trackRatio = 1;
+        
+        if (diskStorage->getTracksPerInch())
+            trackRatio = DEFAULT_TRACKSPERINCH / diskStorage->getTracksPerInch();
+        
+        if (trackIndex % trackRatio)
+            track.format = DI_BLANK;
+        else
+        {
+            track.format = DI_BITSTREAM_250000BPS;
+            if (!diskStorage->readTrack(headIndex, trackIndex / trackRatio, track))
+                return false;
+        }
         
         switch (track.format)
         {
             case DI_BLANK:
-                trackData[trackIndex].clear();
-                trackData[trackIndex].resize(DEFAULT_TRACKSIZE);
+                data.clear();
+                data.resize(DEFAULT_TRACKSIZE);
                 
                 return true;
                 
@@ -325,8 +341,6 @@ bool DIApple525DiskStorage::readTrack(DIInt headIndex, DIInt trackIndex, DIData&
             default:
                 return false;
         }
-        
-        return true;
     }
     
     data = trackData[trackIndex];
@@ -393,15 +407,15 @@ bool DIApple525DiskStorage::getLogicalDisk(vector<DIData>& disk)
     {
         if (!(i & 0x3))
         {
-/*            DITrack track;
-            
-            if (!readTrack(0, i, track))
-                return false;
-            
-            if (!decodeGCR53Track(track, decodedTracks[index]))
-                break;
-            
-            diskStorage->writeTrack(0, index, track);*/
+            /*            DITrack track;
+             
+             if (!readTrack(0, i, track))
+             return false;
+             
+             if (!decodeGCR53Track(track, decodedTracks[index]))
+             break;
+             
+             diskStorage->writeTrack(0, index, track);*/
         }
     }
     

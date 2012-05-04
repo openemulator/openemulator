@@ -1,24 +1,24 @@
 
 /**
  * libdiskimage
- * VMDK Disk Image
+ * VMDK Block Storage
  * (C) 2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Accesses VMDK disk images
+ * Accesses a VMDK block storage
  */
 
-#ifndef DIVMDKDISKIMAGE_H
-#define DIVMDKDISKIMAGE_H
+#ifndef DIVMDKBLOCKSTORAGE_H
+#define DIVMDKBLOCKSTORAGE_H
 
 #include "DICommon.h"
 #include "DIBackingStore.h"
-#include "DIDiskImage.h"
+#include "DIBlockStorage.h"
 
-class DIVMDKDiskImage : public DIDiskImage
+class DIVMDKBlockStorage : public DIBlockStorage
 {
 public:
-    DIVMDKDiskImage();
+    DIVMDKBlockStorage();
     
     bool open(DIBackingStore *backingStore);
     void close();

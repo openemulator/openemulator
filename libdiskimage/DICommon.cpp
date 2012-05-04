@@ -190,16 +190,17 @@ static void buildCRCTables()
 {
 	for (DIInt i = 0; i < 256; i++)
     {
-		DIInt c = i;
 		DIShort w = i << 8;
+		DIInt d = i;
+        
 		for (DIInt k = 0; k < 8; k++)
         {
-			c = (c >> 1) ^ (c & 1 ? 0xedb88320 : 0);
 			w = (w << 1) ^ ((w & 0x8000) ? 0x1021 : 0);
+			d = (d >> 1) ^ (d & 1 ? 0xedb88320 : 0);
 		}
         
-		crcTable32[i] = c;
-		crcTable32[i] = w;
+		crcTable16[i] = w;
+		crcTable32[i] = d;
 	}
 }
 

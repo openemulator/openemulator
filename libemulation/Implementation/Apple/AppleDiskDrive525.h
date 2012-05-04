@@ -44,17 +44,19 @@ private:
     
     OEInt phaseControl;
     OEInt trackIndex;
-    bool isWriteProtected;
     
     DIApple525DiskStorage diskStorage;
     
     DIData track;
     OEChar *trackData;
-    OEInt trackSize;
+    OEInt trackDataSize;
+    OEInt trackDataIndex;
     
     void updateSound();
     void setPhaseControl(OEInt value);
     
     bool openDiskImage(string path);
     bool closeDiskImage();
+    
+    void updateTrack();
 };

@@ -16,6 +16,11 @@ DIFileBackingStore::DIFileBackingStore()
     writeEnabled = false;
 }
 
+DIFileBackingStore::~DIFileBackingStore()
+{
+    close();
+}
+
 bool DIFileBackingStore::open(string path)
 {
     close();
@@ -72,7 +77,9 @@ DILong DIFileBackingStore::getSize()
     if (!fp)
         return 0;
     
-    fseek(fp, 0, SEEK_END);
+    if (fseek(fp, 0, SEEK_END))
+        return 0;
+    
     DILong dataSize = ftell(fp);
     
     return dataSize;
@@ -80,7 +87,7 @@ DILong DIFileBackingStore::getSize()
 
 string DIFileBackingStore::getFormatLabel()
 {
-    string formatLabel = "RAW Disk Image";
+    string formatLabel = "Raw Disk Image";
     
     if (!isWriteEnabled())
         formatLabel += " (read-only)";
@@ -93,7 +100,8 @@ bool DIFileBackingStore::read(DILong pos, DIChar *buf, DIInt num)
     if (!fp)
         return false;
     
-    fseek(fp, (long) pos, SEEK_SET);
+    if (fseek(fp, (long) pos, SEEK_SET))
+        return false;
     
     return fread(buf, num, 1, fp);
 }
@@ -106,7 +114,8 @@ bool DIFileBackingStore::write(DILong pos, const DIChar *buf, DIInt num)
     if (!fp)
         return false;
     
-    fseek(fp, (long) pos, SEEK_SET);
+    if (fseek(fp, (long) pos, SEEK_SET))
+        return false;
     
     return fwrite(buf, num, 1, fp);
 }

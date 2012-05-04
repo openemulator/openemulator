@@ -1,0 +1,292 @@
+﻿Tutorial: All about VDIs
+by TerryE, 20. Jul 2008, 01:46
+
+This tutorial is an experiment to see if forum users find it useful to have a single collected reference for some common questions that visitors ask about VDIs, their internals and their use. The tutorial is currently in DRAFT, so don't take the content as full gospel until it has had some level of review from the other VBox "power users" who visit the forum.
+
+    * How are VDI files structured?
+    * What's in the Header Descriptor?
+    * So how are virtual bytes in my Virtual HDD mapped into physical bytes in my VDI?
+    * So what about snapshots. How do they work?
+    * So what are Immutable and Writethrough drives? How do they work?
+    * Why do dynamic VDIs grow far more than the used space?
+    * How can I reduce the size of a dynamic VDI on disk?
+    * How do I get the best performance out of my VDIs?
+    * Where is the best place to keep my VDIs?
+    * How can I resize the partitions inside my VDI?
+    * How do I backup my VDIs? 
+
+You will find this topic is locked so that only forum moderators can change the content or add additional Qs. However, if you want to discuss this; recommend corrections or challenge the content; suggest new questions within this general VDI umbrella then you can do so on Discuss All about VDIs. If you want to suggest other possible tutorials or discuss the whole approach the you can do so on Discussion on New Tutorials.
+
+
+
+Q: How are VDI files structured?
+
+A: All VDIs essentially have the same structure. The VDI has four sections:
+
+    * A Standard header descriptor [512 bytes]
+    * An image block map. If the (maximum) size of the virtual HDD is N MByte, then this map is 4N bytes long.
+    * Block alignment padding. The header format allows for padding between the image block map and the image blocks, and (as of version 1.6.2) the CreateVDI function adds padding after the map to ensure that the first image block begins on a 512byte sector boundary. Since the allocation unit on both NTFS and Ext3 file systems is 4096 bytes, you will therefore get slightly better performance (typically a few %) if you make your VDIs (1024N – 128) MByte long.
+    * Up to N x 1MByte image blocks.
+
+
+
+Q: What’s in the Header Descriptor
+
+A: Here is a hexadecimal dump of a typical VDI header. Note that this for the current VBox VDI version (1.1):
+
+    0000      3C 3C 3C 20 53 75 6E 20 78 56 4D 20 56 69 72 74    <<< Sun xVM Virt
+    0010      75 61 6C 42 6F 78 20 44 69 73 6B 20 49 6D 61 67    ualBox Disk Imag
+    0020      65 20 3E 3E 3E 0A 00 00 00 00 00 00 00 00 00 00    e >>>
+    0030      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+
+    0040      7F 10 DA BE                                        Image Signature
+                          01 00 01 00                            Version 1.1
+                                      90 01 00 00                Size of Header(0x190)
+                                                  01 00 00 00    Image Type (Dynamic VDI)
+    0050      00 00 00 00                                        Image Flags
+                          00 00 00 00 00 00 00 00 00 00 00 00    Image Description
+    0060-001F 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+    0150      00 00 00 00
+                          00 02 00 00                            offsetBlocks
+                                      00 20 00 00                offsetData
+                                                  00 00 00 00    #Cylinders (0)
+    0160      00 00 00 00                                        #Heads (0)
+                          00 00 00 00                            #Sectors (0)
+                                      00 02 00 00                SectorSize (512)
+                                                  00 00 00 00     -- unused --
+    0170      00 00 00 78 00 00 00 00                            DiskSize (Bytes)
+                                      00 00 10 00                BlockSize
+                                                  00 00 00 00    Block Extra Data (0)
+    0180      80 07 00 00                                        #BlocksInHDD
+                          0B 02 00 00                            #BlocksAllocated
+                                      5A 08 62 27 A8 B6 69 44    UUID of this VDI
+    0190      A1 57 E2 B2 43 A5 8F CB
+                                      0C 5C B1 E3 C5 73 ED 40    UUID of last SNAP
+    01A0      AE F7 06 D6 20 69 0C 96
+                                      00 00 00 00 00 00 00 00    UUID link
+    01B0      00 00 00 00 00 00 00 00
+                                      00 00 00 00 00 00 00 00    UUID Parent
+    01C0      00 00 00 00 00 00 00 00
+                                      CF 03 00 00 00 00 00 00    -- garbage / unused --
+    01D0      3F 00 00 00 00 02 00 00 00 00 00 00 00 00 00 00    -- garbage / unused --
+    01E0      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    -- unused --
+    01F0      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    -- unused –
+
+
+Also note that multi-byte values are “little-endian” that is the bytes are least significant first, so the blockSize = “00 00 10 00” = 0x100000 = 1 Mbyte.
+
+As VDI does not embed its filename, so you are free to change the name of unregistered VDIs. (If you change the name of registered VDIs without manually editing your VirtualBox and Machine XML registries, your machines can become unloadable). However the VDI does embed its UUID and up to three other UUIDs which are discussed in a later Q.
+Last edited by TerryE on 1. Aug 2008, 00:41, edited 2 times in total.
+
+
+
+Q. So how are virtual bytes in my Virtual HDD mapped into physical bytes in my VDI?
+
+A: The underlying virtual HDD is divided into 1 Mbyte pages. These are mapped onto image blocks in the VDI. Remember that the zeroth image block starts at an offset and that all image blocks are 1Mbyte long. Any virtual HDD byte address is converted into a block number and block offset. The block number is then mapped to a physical image block in the VDI file by means of the image block mapping table, so for byte Z in the virtual HDD:
+
+    * Hsize = 512 + 4N + (508 + 4N) mod 512
+    * Zblock = int( Z / BlockSize )
+    * Zoffset = Z mod BlockSize
+    * Fblock = IndexMap[Zblock]
+    * Fposition = Hsize + ( Fblock * BlockSize ) + ZOffset
+
+However the VDI can be sparse. What this means is that zero blocks (that is 1Mbytes of 0x00) may not be allocated. In such a case, the image map entry is set to -1, and this tells the driver that the corresponding block is not allocated. Reading from an unallocated block returns zeros. If you write to an unallocated block then a new block is allocated at the end of the VDI with the rest of it filled with zeros. Note that this map is small in size (40 Kbytes in the case of a 10 GByte VDI), so all such VDI maps and VDI header info are cached into the VMM memory, so this translation of virtual addresses into physical addresses does not incur additional read/write operations except in the relatively rare case where the I/O transfer cuts across a 1Mbyte boundary).
+
+    * In the case of a dynamic VDI (Type 1) as “new” 1Mbyte blocks in the virtual HDD are written to, these are mapped to new 1Mbyte blocks which are allocated at the end of the VDI file; that is a dynamic VDI is initially ordered in chronological not physical order. The initial size of an N Mbyte dynamic VDI is 512+4N+F bytes with all N image map entries set to -1. F = (508+4N) mod 512, that is the packing necessary to round up to a sector boundary.
+
+    * In the case of a static (Type 2) VDI all blocks are pre-allocated so no dynamic allocation is necessary. The create utility also writes zeros to the entire file because many file systems themselves adopt a just-in-time allocation policy. The initial size of an N Mbyte static VDI is 512+4N+F+1048576N bytes, where F is as in the dynamic case.
+
+The pros and cons of deciding whether choosing whether to use a static or dynamic VDI are complex. Static drives are fragmentation free at a file level, and since you also take the ‘pain’ of file allocation up-front in one hit, you know that you aren’t going to have continuous growth of your VDIs slowly filling up your host file system. VirtualBox recommend the use of static VDIs primarily because fragmentation can degrade performance. I personally disagree and prefer using dynamic VDIs myself for the following reasons:
+
+    * If you are going to use your VDI as an immutable drive or a baseline for snapshots, then there is little point in allocating space that is never going to be written to, so why waste the HDD space?
+
+    * As long as your process for creating the disk in the first place is not too fragmented then the more compact dynamic VDI will actually give you better performance. (I now defragment the dynamic VDIs that I am going to use, and I’ve posted the utility I use in this topic: Example VDI Defragmentation Utility.)
+
+
+
+Q. So what about snapshots? How do they work?
+
+A: A snapshot allows you to establish a baseline of your HDDs (and your RAM if the VMis running or paused), which you can then roll back to at a later stage. These can be very useful for testing out new options and installations because you know that you can trivially roll back to the snapshot point. (As I discussed later, they can also significantly reduce the size of working backups.) When you take a snapshot, the current VDI is "frozen" and a new delta VDIs is created. If your machine is running or in savestate then this state (basically a copy of the memory) is also "frozen".
+
+The snapshot has the same format and is initialised in the same way as a dynamic VDI. When the guest VM OS wants to read from the file, the VirtualBox VM monitor (VMM) process in the host has to map this to a host file read from a VDI. All such read operations first index into the current snapshot's image map and if the map entry exists, then the corresponding image block is used. In the case of a "miss", the same read process is repeated on the parent VDI/snapshot index map, and so on up the snapshot chain until the block is found. If no match is found (i.e. the block has zero content), then a new zeroed block is allocated in the current snapshot and its image map updated.
+
+In the case of a write, the data is always written to a block in the current snapshot. If there is a "miss" on the current index map, a new block is allocated in the current snapshot, with the remaining content copied by using a read search up the snapshot chain and copying the contents of the block found (if it exists), and zero-filling otherwise. The following figure gives a simple example of how this all maps out:
+
+                 < - - - - -Block Map - - - - - >   Block Order
+                 0         1         2         3      on VDI
+                 01234567890123456789012345678901
+    Snapshot 1:  AB-FOG---CIJD--EM----NKL----H---  ABCDEFGHIJKLMN
+    Snapshot 2:  ---f----bc---d--e-----a------g--  abcdefg
+    Current:     -----3--1------0------245-------  012345
+    (Logical)
+    Source File: 11-213--321112-32----1333---12-- 
+    Block:       AB-fO3--1cIJDd-0e----N245---Hg-
+
+                                  Figure 1
+
+This example has a 32Mb initial dynamic VDI. At the time of the first snapshot 14 blocks have been allocated, and 18 are still zero/unallocated. A snapshot is then taken and another 7 blocks are written to (4 of which supersede the original VDI) and then a second snapshot with another six blocks. Whilst the guest OS 'sees' a current 32Mb disk, the VMM has to read from one of the three different VDIs, and the final physical block order is pretty randomised compare to the logical block sequence.
+
+    VDI chain
+       UUID       Location            Date of  Size  UUID Links in Snapshot Header
+                                      Snapshot   Mb    This   Last   Link  Parent
+    {UUID-5} VDI/jeosLAMPsys.vdi    19/07/2008 587   UUID-5 UUID-7 000000 000000
+    {UUID-6} Snapshots/{UUID-6}.vdi 24/07/2008  29   UUID-6 UUID-8 UUID-5 UUID-7
+    {UUID-4} Snapshots/{UUID-4}.vdi 26/07/2008  12   UUID-4 UUID-9 UUID-6 UUID-8
+
+    VM Details in jeosLAMP.xml
+      name="jeosLAMP"
+      uuid="{UUID-1}"
+      lastStateChange="2008-07-26T00:01:39Z"
+      currentSnapshot="{UUID-2}"
+      stateFile="Snapshots\{UUID-1}.sav"
+      hardDisk="{UUID-4}"
+        name="Snapshot 1"
+        uuid={UUID-3}"
+        timeStamp="2008-07-19T15:58:16Z"
+        stateFile=Snapshots\{UUID-3}.sav
+        hardDisk="{UUID-5}"
+          name="Snapshot 2"
+          uuid="{UUID-2}"
+          timeStamp="2008-07-26T00:01:23Z"
+          stateFile="Snapshots\{UUID-2}.sav"
+          hardDisk="{UUID-6}"
+                                  Figure 2
+
+As you can see from the above example, the snapshots form an ordered chain. The four UUIDs in the snapshot headers are used to link the snapshots logically so that the VBoxManager and the VirtualBox GUI can build and check the integrity of the chain to be used for a given VDI. (The UUIDs are just random unique hex fingerprints, e.g. {ca788f17-f54f-417f-b666-3016a2472159}, so I have replaced them by UUID-N in this example to make it more readable). The VMM also uses the VM's "registry" (machine.xml) which also references the savestate files and snapshots by UUID for each disk. (I have again included a simplified extract in the above). Hence the snapshots and VDIs include double linked references by UUID and to the registry. If any of these get out of sync then your VM will not load. Whilst it is possible to patch up broken chains, VirtualBox does not currently include any repair utilities, and so any repair has to be done manually by editing the machines registry and header of files of the VDIs. (This is not a task for the novice or the faint-hearted).
+
+You cannot branch the snapshot chain, but you can delete individual nodes: deleting discarding a snapshot can be done in one of two ways:
+
+    * A discard refers to a specific snapshot by UUID or name. You do this through the GUI or the VBoxManager tool. If is the latest in the chain (Current), then this deletes the VDI and SAV files. However, in the middle of a snapshot chain, things are a little more complicated because the VirtualBox system needs to keep the blocks that are different from the parent or child snapshots to preserve the integrity of the child (as shown in figure 3 which you should compare to figure 1). The VMM does this by over-writing existing blocks end of the child snapshot and copying new ones to the end, and in this example the VMM had to copy 5 blocks to delete the snapshot. Because this can take some seconds, you cannot discard a snapshot of a running machine. Also note that if you want to roll the base VDI to the current state then you must discard each of the snapshots, leaving only the current state.
+
+          Snapshot 1:  AB-FOG---CIJD--EM----NKL----H---  ABCDEFGHIJKLMN
+          Snapshot 2:  <deleted>
+          Current*:    ---f-3--1c---d-0e-----245----g--  012345fcdeg
+          (Logical)    AB-fO3--1CIJDd-0e----N245---Hg-
+
+                                        Figure 3
+
+    * A discardcurrent refers to the current machine and snapshot. The –state clears down any saved state (rather like pulling the power on a real server) but it maintains the current VDI and any snapshot content. The –all option discards the state but also the latest snapshot, so that “current” reverts to the latest but one. Again this can be done through the GUI or the VBoxManager tool.
+
+
+
+Q. So what are Immutable and Writethrough drives? How do they work?
+
+A: A drive can be designated as normal (the default), immutable or writethrough when it is registered through the VBoxManage registerimage disk command. An immutable drive is a special delta drive that is constructed much as a snapshot in that the VDI file is opened readonly (and for that reason can be used by multiple VMs), but as far as the guest OS is concerned the drive is read/write with any writes going to a machine-specific delta VDI, much the same as a current snapshot. The unique characteristic of an immutable drive is that these delta VDIs are discarded on power-down and hence the drive reverts to its initial state, with all changes lost. Note that immutable drives are preserved through the snapshot process if the snapshot is taken when the guest is not powered down.
+
+An example use of a immutable disk could be where your system is spread over a system disk and a user data disk. If you make the system disk immutable, then each time you reboot, the system disk is returned to its clean state, but the user data persists. This means that any virus or other configuration change cannot persist on the system disk (but by the same reason, there is little point in your guest being configured for automatic OS update as any updates will also be lost on reboot!)
+
+VBox uses a writethrough drive is not involved in snapshots or reversion of snapshots. For example raw partitions (which are a VMDK format and not covered in this topic) are write-through. A scenario where you might use write-through drives is one where you wanted to test an application and frequently needed to roll-back by reverting snapshots. Here you might configure your test system over 3 drives:
+
+    * An immutable system disk
+    * A normal application disk
+    * A write-through audit and results disk.
+
+Remember that the normal / immutable / write-through status is at the virtual drive (VDI) level. You cannot ‘mix and match’ at the partition level.
+
+Also note that this write-through concept has nothing to do with the sync and dirsync options that some Linux file systems support.
+
+
+
+Q: Why do dynamic VDIs grow far more than the used space?
+
+A: Think about the design objectives of the writers of file systems. These include things like being able to allocate files to the file system flexibly, to be able to append data to files, to be able to index into files, and to have file I/O as efficient as is practical. They use various types of allocation structures and regimes to ensure flexibility and try to minimise file fragmentation so that I/O is efficient. One of the ways that this is done is by spreading the files over the file system. Indeed, the idea of scrunching all of the files into one small region would be an anathema to most file system developers. So recall how space is allocated on a dynamic VDI: each time the file system touches any bytes in a new 1 Mbyte image block, then the full 1Mbyte block is allocated. It stays allocated even if the file is deleted and the space return to some “free pool”. So if you have a 20 GByte partition, over time the file system will touch every 1 MByte block, and therefore the VDI will grow to 20 GBytes even if you actually only use 5 GByte.
+
+If you typically only use 5 GBytes in your partition with its sometimes growing up to 8 GBytes, say, and you don't want it to occupy more than 10 GBytes on your host then don't make your partition bigger than 10 GBytes! OK, so many would then say “but I want to allocate 20 GBytes for growth capacity”. My response here would be either to use LVM if you are an advanced user, or to reserve say 100% space between your partitions. Remember that this dead space will only take up 4 bytes per Gbyte. You can then easily resize your partitions when you require (as discussed in a later question).
+
+
+
+Q: How can I reduce the size of a dynamic VDI on disk?
+
+A: There are two approaches to cleaning up and reducing the size of the file system stored on a dynamic VDI. The first is what I call in-place and the second is by doing a file system copy. This answer addresses the first of these.
+
+You must prepare the file system before you attempt to reduce its size, otherwise the benefit will be minimal. First, clear out any obvious garbage files that are lying around; for example empty your wastebasket and Internet caches; clean up any temporary folders and files that you no longer need. In the case of NTFS and FAT file systems, you should run a defragment utility, because this not only reduces file fragmentation but also free space fragmentation.
+
+You then need to use a utility to zero the free space within the file system (remember that in general free space will not be zero, because it will contain data blocks that have been used and recycled to the file system). This utility must understand the structure of the file system and in particular its free-space maps, and be able to bypass the high level file-system I/O functions to write directly to the disk at a block level, without compromising its integrity. It is therefore OS specific.
+
+The best tool to use for NTFS under a Windows guest OS is the System Internals (now part of Microsoft) tool sdelete (Microsoft SysInternals File Utillities). You run this at the command prompt with the -c option to tell sdelete to clear the unused space, hence the following command cleans out the C and D partitions:
+
+    sdelete -c C
+    sdelete -c D
+
+In the case of Linux, a good utility for ext2, ext3 and ext4 file systems is zerofree written by Ron Yorston and available on his website:zerofree. The easiest way to use this utility is to keep a copy in /usr/bin on each system image. Some distributions such as Ubuntu now include this so you can install it in your Ubuntu guest by running sudo apt-get install zerofree. To zero out the file systems, you boot your system in init 1 mode (typically the second option on most grub-loader menus); then remount your file systems read-only (as zerofree will only clear out read-only file systems); and then run zerofree on each partition, for example the following clears my system and application disks:
+
+    mount -n -o remount,ro -t ext2 /dev/sda1 /
+    mount -n -o remount,ro -t ext2 /dev/sdb1 /var
+    zerofree /dev/sda1
+    zerofree /dev/sdb1
+
+The safest thing to do immediately following these commands is to shutdown / reboot your VM after scheduling a boot-time file system check. Then shutdown your VB. You can then execute VBoxManage modifyvdi xxxx.vdi compact command from your host OS where xxxx.vdi is your dynamic VDI. (I find that the easiest thing to do is to cd to my VDI directory first so I don't have to bother with pathnames in the command).
+
+Compacting a dynamic VDI is done in place in a two pass algorithm. First all blocks are scanned and any that are entirely zero are freed; this creates holes in the physical allocation. So if the image contained 110 blocks and 10 were tagged as zero, then the new image should contain 100 blocks. The second phase copies any blocks above the 100 high-water mark into the now vacant blocks below the mark. The block map is then updated and the VDI file truncated to the new length. This process minimises the amount of temporary disk required, but it does have the disadvantage that the compaction process further shuffles block order.
+
+
+
+Q: How do I get the best performance out of my VDIs?
+
+A: In general you will get the best performance if your VDI is stored on contiguous blocks on the file system, with the individual 1 MByte allocation blocks within the file also contiguous. (This is what I think of as an unfragmented VDI). Also minimise the number of snapshots that you use. Any contiguous blocks can then be read from the file system without having to do extra HDD seeks. So why am I concerned so much about I/O operations? Whilst CPU speeds have increased by perhaps four orders of magnitude in the last few decades, physical aspects such as the rotation speed of disks and track-to-track seek times have only doubled or thereabouts. So what this means is that the relative consequence of file and file system fragmentation has increased over the decades. Your CPU can now spend tens of millions of CPU cycles waiting for a physical disk to move into position to start an I/O operation.
+
+Unfortunately file fragmentation is a necessary evil that rises from the need to have flexibility in allocating your files, and being able to increase your files in size when necessary, though modest levels of fragmentation produce very little perceivable performance impact. In the case of the Microsoft Windows OSs, the fragmentation within NTFS and the FAT file systems is so bad (certainly compared to the Linux file systems) that Microsoft have had to include a basic defragmenting utility in their OSs, and there is a sufficient market demand to sustain the more sophisticated third-party defragmenting utilities that are also available. Wise Windows users defragment regularly, and novice users just end up waiting around saying “Why is my disk becoming so slow”.
+
+The allocation strategies within Linux file systems are a lot better at mitigating the impacts of fragmentation, so most Linux users aren't aware of this is an issue. Nonetheless, Linux file systems can still badly defragment over years, especially if you allow the file system utilisation to climb much over 80%.
+
+With VDIs, you have one or more file systems embedded within a single VDI container, and in the case of dynamic VDIs and snapshots, you face a triple fragmentation whammy:
+
+    * The guest OS file system can fragment.
+    * The block allocation scheme within VDIs introduces another level of fragmentation.
+    * The host file system can also fragment its allocation of the VDI.
+
+The net result of this is that unless you actively manage your fragmentation at all three levels, your PC might end up doing twice as many I/Os as the equivalent native OS installation, and therefore run at half the speed on an I/O bound application. Remember that dynamic VDIs initially order the 1 MByte image blocks in chronological allocation order. If you are compacting your drives, and using snapshots which you roll forward, this slowly shuffles this block order over time, so the order of the 1 MByte blocks can get quite randomised.
+
+By its nature a dynamic VDI will slowly grow over time. This type of slow file growth is something that neither Ext3 nor NTFS handles very well and tends to cause fragmentation. In the case of Windows NTFS hosted VDIs, there is an excellent Microsoft SysInternal utility called contig which analyses and calls the internal NT API to defragment individual files. This is great for making sure that individual VDIs are not too fragmented.
+
+The simple way to avoid such internal fragmentation within the VDI is to use a static format. However, as I mentioned above, as long as you keep your VDIs reasonably defragmented as well as the file system that contains them, the performance reductions are marginal, even compared to using raw image VMDKs within VirtualBox.
+
+
+
+Q: Where is the best place to keep my VDIs?
+
+A: One answer to this question is anywhere really. In many ways, VDIs are just large files and if you don't use your VMs intensively, or your usage patterns are such that your VM I/O rates are not high, then their location is not so important. However, if you have multiple VMs, do a lot of snapshots in your use of them, or need reasonable IO performance then you do have to think about the location.
+
+I personally dislike the idea of placing savesets and VDIs in a hidden folder in your home directory. OK, leaving your VirtualBox.xml registry there is one thing, but putting business critical data images in a hidden directory hierarchy is just daft in my view. I always move them to a clearly defined location that is quite visible.
+
+If you have the space, then it's a good idea to put them in a dedicated partition. In the case of Windows, format this using NTFS (avoid FAT because of its 4Gbyte file limit); then create some top level directories VDI, Machine, ISO, etc. NTFS is about as fast as you can get using a current Windows OS, as long as you keep it defragmented, so (1) keep the utilisation below 80%, and (2) run DEFRAG regularly. Note however that DEFRAG will work on any disk but as it doesn't touch open files, your VDIs will not get defragmented if you leave your VMs up most of the time. The way to overcome this is to create a small batch command which does a controlvm savestate, then uses contig to defrag the VDIs and snapshots before starting the machine again.
+
+In the case of Linux, again I recommend using a separate dedicated partition with similar naming convention hooked into /var. For most uses Ext3 will give you the best compromise between integrity and performance, though XFS may give you slightly better performance for this type of file. However only consider XFS if you have a UPS (as XFS is vulnerable to file system corruption on PCs in the case of powerfail). Though I now use LVM and an Ext4 partition with it. This has the great advantage that I can use LVM snapshots to "freeze" a running system and safely back up a hot copy.
+
+The VirtualBox GUI allows you to change the default location for these root folders through the System->Preferences menu. If you have multiple users you need to think about how you construct these hierarchies and what levels of access control you need to implement, but I don’t address this in this tutorial.
+
+Lastly note that only the current VDI files are opened read-write, so in the case of snapshotted systems and immutable drives the base VDI is opened read only. This means that you can not only share mutable drives across VMs but that you can also mount them from read-only file systems such as CD-ROMs.
+
+
+
+Q: How can I resize the partitions inside my VDI?
+
+A: For all non-experts I have a standard answer, and that is to use a Gparted liveCD. At the time of posting you can download this from Gparted on SourceForge. This is a reasonably large download (90 MByte), but you only need to download it once and keep it in a central directory (I have a VirtualBox/ISO in which I store my ISOs). You simply attach this ISO as your CD in the interactive GUI and temporarily change the boot order to boot from CD first. The default liveCD configuration boots happily under VirtualBox. You have to answer a couple of questions to choose the correct keyboard and language but after that you will be presented with a simple Windows interface that any Windows, Mac or Linux user will be familiar with. The Gparted online documentation includes a couple of step-by-step introductions for beginners to show how to use it, so there is little point in my covering this ground here. Note that this latest version handles most file system formats automatically (including Ext2, Ext3, FAT16, FAT32, JFS, NTFS, ReiserFS, XFS). See the Gparted->Show Features option for more details. So even though this is a Linux CD, you can still use it to resize and to copy NTFS volumes. 
+
+The tedious bit is then getting the new partition to boot properly. Unfortunately the bootstrap process is quite complex and works differently for the Linux (grub) and NT boot processes. You need to integrate the bootstrap loader that is located in the MBR with an OS-specific secondary bootstrap in the filesystem. For Windows, the easiest way is to boot from your Windows media into recovery console, then do
+
+    Fixboot
+
+and this will fix up the MBR. For Linux, I boot off the old system image mount the new image and use the grub-install --root-directory option to create a grub loader on the new drive. Once you’ve cracked this for your OS, you can quickly get this down to a routine process, but there are enough complications here to merit a separate topic in its own right.
+
+Also note that since the Gparted utility copies only allocated blocks (that is it doesn't copy file-system free space) and also copies in partition block order, this process can be used to create optimally ordered dynamic VDIs if you copy from an existing VDI to a new blank one.
+
+
+
+Q: How do I backup my VDIs?
+
+Perhaps before answering this Q, I need to emphasise a simple truth here: if you don't want to loose data then you must backup. Disks can fail; host OSs and PCs can fail; guest OSs , VMs, VirtualBox itself, and guest apps can all fail. One outcome of any of these is that you might just loose access to your data. You need to have a recovery strategy in place in the case of such failure that is match to the value of your data.
+
+A: Remember that VDIs are just disk drives as far as the guest system is concerned, so one option is to use whatever guest based backup that you are comfortable with. For example with one of my LAMP systems I have an automatic script which dumps the database, diffs it against a weekly baseline and compresses the diff file. It also does a compressed tarball of any changed files in the www hierarchy since the last dump. These are then pulled to an offsite server. This runs every night and takes about a min to save the entire LAMP stack. It doesn’t need any bouncing of VMs or stopping of the applications.
+
+The alternative is that you can savestate your VM and backup your VDIs at a file level in the host OS. Use of snapshots can help you here. If you have a file system that is reasonably stable then use clean up process discussed above and then snapshot it. The base VDI is now fixed and only needs to be backed up once. All changes will be written to the delta VDI in the Machine Snapshots directory, and this is typically a lot smaller than the base snapshot, so it backups will be smaller than the backup of the base VDI.
+
+Use your favourite compression tool to backup the delta VDIs. Gzip is fast but its compression isn’t too great. WinZIP in windows is comparable. 7-Zip gives far better compression but is a lot slower and CPU intensive. A good time to do this is overnight, then you can use high compression algorithms to minimise backup space. Make sure to back any files such as the machine.xml so that you can recover the directory hierarchies if you need to.
+
+What I now do is to use the rsync utility to update on off machine copy of the VDI. This is very efficient since only updated blocks get copied and the content is compressed before transfer over the network.
+
+From time to time (say once a month in the case of a system that you are actively adding to), after doing the backup, take the system down for maintenance; delete any snapshots to roll forward to a single current VDI; and clean it up using the process described above. You can script most of this. What this does is to establish a new baseline VDI that you can backup from. Use snapshots sparingly and only for a reason. I have been contacted by a number of users who have a VM with a long snapshot chain that has become corrupted. Be warned. I myself use snapshots frequently, but avoid the snapshot chain getting longer than base + 2 snapshots. If you do this you need to be careful so that you can reconstruct the Snapshot chains if you need to restore and this will be the topic of a separate post.
+
+If you can’t take your VMs offline for long then one good trick is to start a new snapshot. Only the latest snapshot VDIs are opened R/W, so you can then backup the second to last whilst still using the VM. To resync, you savestate, delete the second last snapshot which in effect merges its content into latest; and resume the VM. This takes minutes rather than the compress which can take hours.
+
+Now that I have switched from Windows to Linux for my host of preference, I now use a more advanced technique based on hosting my VDIs on a LVM partition. My backup utility uses a VBoxManage guestcontrol execute command to sync the guest file system and then established a temporary readonly snapshot. I then use rsync to mirror this frozen copy of the VM to a separate host before releasing the snapshot. This gives me the ability to hot-copy any VM.

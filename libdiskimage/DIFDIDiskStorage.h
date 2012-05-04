@@ -74,10 +74,11 @@ private:
     
     vector<DIData> trackData;
     
-    DIChar *huffmanStreamData;
-    DIInt huffmanStreamSize;
-    DIChar huffmanStreamValue;
-    DIInt huffmanStreamBitIndex;
+    DIChar *streamData;
+    DIInt streamSize;
+    DIChar streamValue;
+    DIInt streamBitMask;
+    
     bool huffmanSignExtension;
     bool huffman16Bits;
     
@@ -92,10 +93,10 @@ private:
                    DIChar *data, DIInt size, DIInt compression,
                    DIInt pulseNum);
     
-    void initHuffman(DIChar *data, DIInt size);
-    DIChar readHuffmanByte();
-    bool readHuffmanBit();
-    bool isHuffmanBitEOF();
+    void initStream(DIChar *data, DIInt size);
+    DIChar readStreamByte();
+    bool readStreamBit();
+    bool isStreamEnd();
     
     void buildHuffmanTree(DIFDIHuffmanNode *node);
     void readHuffmanTreeValues(DIFDIHuffmanNode *node);

@@ -41,7 +41,7 @@ DIInt DIDiskStorage::getTracksPerInch()
 
 string DIDiskStorage::getFormatLabel()
 {
-    return 0;
+    return "";
 }
 
 bool DIDiskStorage::readTrack(DIInt headIndex, DIInt trackIndex, DITrack& track)

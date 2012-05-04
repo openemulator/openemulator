@@ -32,7 +32,7 @@ bool DILogicalDiskStorage::open(DIBackingStore *backingStore,
     this->trackFormat = trackFormat;
     this->trackSize = trackSize;
     
-    return false;
+    return true;
 }
 
 void DILogicalDiskStorage::close()

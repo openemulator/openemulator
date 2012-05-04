@@ -11,7 +11,7 @@
 #ifndef _DISKIMAGE_H
 #define _DISKIMAGE_H
 
-#include "DIAppleDiskImage.h"
+#include "DIAppleBlockStorage.h"
 #include "DIApple525DiskStorage.h"
 #include "DIApple35DiskStorage.h"
 

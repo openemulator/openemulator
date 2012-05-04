@@ -1,23 +1,23 @@
 
 /**
  * libdiskimage
- * RAW Disk Image
+ * RAW Block Storage
  * (C) 2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Accesses a RAW disk image
+ * Accesses a RAW block storage
  */
 
-#include "DIRAWDiskImage.h"
+#include "DIRAWBlockStorage.h"
 
 #define BLOCK_SIZE 512
 
-DIRAWDiskImage::DIRAWDiskImage()
+DIRAWBlockStorage::DIRAWBlockStorage()
 {
     close();
 }
 
-bool DIRAWDiskImage::open(DIBackingStore *backingStore)
+bool DIRAWBlockStorage::open(DIBackingStore *backingStore)
 {
     close();
     
@@ -30,32 +30,32 @@ bool DIRAWDiskImage::open(DIBackingStore *backingStore)
     return true;
 }
 
-void DIRAWDiskImage::close()
+void DIRAWBlockStorage::close()
 {
     backingStore = NULL;
 }
 
-bool DIRAWDiskImage::isWriteEnabled()
+bool DIRAWBlockStorage::isWriteEnabled()
 {
     return backingStore->isWriteEnabled();
 }
 
-DIInt DIRAWDiskImage::getBlockNum()
+DIInt DIRAWBlockStorage::getBlockNum()
 {
     return (DIInt) (backingStore->getSize() / BLOCK_SIZE);
 }
 
-string DIRAWDiskImage::getFormatLabel()
+string DIRAWBlockStorage::getFormatLabel()
 {
     return backingStore->getFormatLabel();
 }
 
-bool DIRAWDiskImage::readBlocks(DIInt index, DIChar *buf, DIInt num)
+bool DIRAWBlockStorage::readBlocks(DIInt index, DIChar *buf, DIInt num)
 {
     return backingStore->read(index * BLOCK_SIZE, buf, num * BLOCK_SIZE);
 }
 
-bool DIRAWDiskImage::writeBlocks(DIInt index, const DIChar *buf, DIInt num)
+bool DIRAWBlockStorage::writeBlocks(DIInt index, const DIChar *buf, DIInt num)
 {
     return backingStore->write(index * BLOCK_SIZE, buf, num * BLOCK_SIZE);
 }

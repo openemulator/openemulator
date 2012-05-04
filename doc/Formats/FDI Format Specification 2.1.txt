@@ -29,7 +29,7 @@ Offset|Name|Size in bytes|Value      Description
     |         |  |  ," Image file"|
     |         |  |        ,0xD,0xA|
 + 27|creator  |30| 0x20 by default|Creator's signature. For example:
-    |         |  |                |"Disk2FDI PC/DOS version 1.0à3 "
+    |         |  |                |"Disk2FDI PC/DOS version 1.0Ã“3 "
 + 57|CR       | 2|         0xD,0xA|
 + 59|comment  |80| 0x1A by default|Comment describing the disk image contents
 +139|EOF      | 1|            0x1A|End Of File (for DOS "type" command)
@@ -39,10 +39,10 @@ Offset|Name|Size in bytes|Value      Description
 +145|type     | 1|               ?|0=8", 1=5.25", 2=3.5", 3=3"
 +146|rotspeed | 1|               ?|Base rotation speed - 128 (in rotations/min)
 +147|flags    | 1|       0000 0???|Flags
-    |         |  |       ³³³³ ³³³À|=1 => Disk is write protected
-    |         |  |       ³³³³ ³³ÀÄ|=1 => Image is index-synchronized
-    |         |  |       ³³³³ ³ÀÄÄ|=1 => Heads are reversed in image
-    |         |  |       ÀÁÁÁÄÁÄÄÄ|Reserved for future use
+    |         |  |       â”‚â”‚â”‚â”‚ â”‚â”‚â”‚â””|=1 => Disk is write protected
+    |         |  |       â”‚â”‚â”‚â”‚ â”‚â”‚â””â”€|=1 => Image is index-synchronized
+    |         |  |       â”‚â”‚â”‚â”‚ â”‚â””â”€â”€|=1 => Heads are reversed in image
+    |         |  |       â””â”´â”´â”´â”€â”´â”€â”€â”€|Reserved for future use
 +148|tpi      | 1|               ?|TPI: 0=48, 1=67, 2=96, 3=100, 4=135, 5=192
 +149|headwidth| 1|               ?|In TPI equivalent: 0=48, 1=67, ..., 5=192
 +150|reserved | 2|               0|Reserved for future use

@@ -46,7 +46,7 @@ DILong DIRAMBackingStore::getSize()
 
 string DIRAMBackingStore::getFormatLabel()
 {
-    string formatLabel = "RAW Disk Image";
+    string formatLabel = "Raw Disk Image";
     
     if (!isWriteEnabled())
         formatLabel += " (read-only)";
@@ -56,9 +56,7 @@ string DIRAMBackingStore::getFormatLabel()
 
 bool DIRAMBackingStore::read(DILong pos, DIChar *buf, DIInt num)
 {
-    DILong end = pos + num;
-    
-    if (end >= data.size())
+    if ((pos + num) > data.size())
         return false;
     
     memcpy((char *) buf, &data.front() + pos, (size_t) num);
@@ -68,10 +66,8 @@ bool DIRAMBackingStore::read(DILong pos, DIChar *buf, DIInt num)
 
 bool DIRAMBackingStore::write(DILong pos, const DIChar *buf, DIInt num)
 {
-    DILong end = pos + num;
-    
-    if (end >= data.size())
-        data.resize((size_t) end);
+    if ((pos + num) >= data.size())
+        data.resize((size_t) pos + num);
     
     memcpy(&data.front() + pos, buf, (size_t) num);
     

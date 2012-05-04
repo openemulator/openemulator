@@ -7,7 +7,7 @@
  *
  * Accesses a file backing store
  */
- 
+
 #ifndef _DIFILEBACKINGSTORE_H
 #define _DIFILEBACKINGSTORE_H
 
@@ -20,6 +20,7 @@ class DIFileBackingStore : public DIBackingStore
 {
 public:
     DIFileBackingStore();
+    ~DIFileBackingStore();
     
     bool open(string path);
     bool create(string path);

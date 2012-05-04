@@ -27,8 +27,16 @@
 AppleDiskDrive525::AppleDiskDrive525()
 {
 	device = NULL;
+    drivePlayer = NULL;
+    headPlayer = NULL;
     
 	forceWriteProtected = false;
+    
+    phaseControl = 0;
+    trackIndex = 0;
+    
+    trackDataIndex = 0;
+    updateTrack();
 }
 
 bool AppleDiskDrive525::setValue(string name, string value)
@@ -112,28 +120,31 @@ bool AppleDiskDrive525::postMessage(OEComponent *sender, int message, void *data
 			return !diskImagePath.size();
 			
 		case STORAGE_CAN_MOUNT:
-            // To-Do: check image compatibility
-			return true;
+        {
+            DIApple525DiskStorage diskStorage;
+            
+            return diskStorage.open(*((string *)data));
+        }
 			
 		case STORAGE_MOUNT:
             if (openDiskImage(*((string *)data)))
             {
                 device->postMessage(this, DEVICE_UPDATE, NULL);
                 
-                return false;
+                return true;
             }
             
-            return true;
+            return false;
 			
 		case STORAGE_UNMOUNT:
             if (closeDiskImage())
             {
                 device->postMessage(this, DEVICE_UPDATE, NULL);
                 
-                return false;
+                return true;
             }
             
-            return true;
+            return false;
 			
 		case STORAGE_GET_MOUNTPATH:
             *((string *)data) = diskImagePath;
@@ -178,7 +189,7 @@ bool AppleDiskDrive525::postMessage(OEComponent *sender, int message, void *data
             return true;
             
         case APPLEII_IS_WRITE_PROTECTED:
-            *((bool *)data) = isWriteProtected;
+            *((bool *)data) = !diskStorage.isWriteEnabled();
             
             return true;
 	}
@@ -188,7 +199,12 @@ bool AppleDiskDrive525::postMessage(OEComponent *sender, int message, void *data
 
 OEChar AppleDiskDrive525::read(OEAddress address)
 {
-    return 0;
+    OEChar value = trackData[trackDataIndex];
+    
+    trackDataIndex++;
+    trackDataIndex %= trackDataSize;
+    
+    return value;
 }
 
 void AppleDiskDrive525::write(OEAddress address, OEChar value)
@@ -267,16 +283,17 @@ void AppleDiskDrive525::setPhaseControl(OEInt value)
 	
 	OESInt trackDelta = ((nextPhase - currentPhase + 4) & 0x7) - 4;
     
-    OESInt nextTrackIndex = trackIndex + trackDelta;
+    OEInt oldTrackIndex = trackIndex;
+    OESInt newTrackIndex = trackIndex + trackDelta;
 	
-	if (nextTrackIndex < 0)
+	if (newTrackIndex < 0)
     {
 		trackIndex = 0;
         
         headPlayer->postMessage(this, AUDIOPLAYER_STOP, NULL);
         headPlayer->postMessage(this, AUDIOPLAYER_PLAY, NULL);
 	}
-    else if (nextTrackIndex > 39)
+    else if (newTrackIndex > 39)
     {
 		trackIndex = 39;
         
@@ -284,12 +301,10 @@ void AppleDiskDrive525::setPhaseControl(OEInt value)
         headPlayer->postMessage(this, AUDIOPLAYER_PLAY, NULL);
 	}
     else
-        trackIndex = nextTrackIndex;
+        trackIndex = newTrackIndex;
     
-    if (trackDelta)
-    {
-        
-    }
+    if (trackIndex != oldTrackIndex)
+        updateTrack();
 }
 
 bool AppleDiskDrive525::openDiskImage(string path)
@@ -299,15 +314,31 @@ bool AppleDiskDrive525::openDiskImage(string path)
     
     diskImagePath = path;
     
+    updateTrack();
+    
     return true;
 }
 
 bool AppleDiskDrive525::closeDiskImage()
 {
-    if (!diskStorage.close())
-        return false;
+    bool success = diskStorage.close();
     
     diskImagePath = "";
     
-    return true;
+    updateTrack();
+    
+    return success;
+}
+
+void AppleDiskDrive525::updateTrack()
+{
+    if (!diskStorage.readTrack(0, trackIndex, track))
+    {
+        track.clear();
+        track.resize(1);
+    }
+    
+    trackData = &track.front();
+    trackDataSize = track.size();
+    trackDataIndex %= trackDataSize;
 }

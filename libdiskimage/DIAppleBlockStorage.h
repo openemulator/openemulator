@@ -1,33 +1,30 @@
 
 /**
  * libdiskimage
- * Disk Image Apple Block
+ * Apple Block Storage
  * (C) 2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Accesses an Apple block disk
+ * Accesses an Apple block storage
  */
 
-#ifndef _DIAPPLEDISKIMAGE_H
-#define _DIAPPLEDISKIMAGE_H
-
-#include "DIBackingStore.h"
-#include "DIDiskImage.h"
+#ifndef _DIAPPLEBLOCKSTORAGE_H
+#define _DIAPPLEBLOCKSTORAGE_H
 
 #include "DIFileBackingStore.h"
 #include "DIRAMBackingStore.h"
 #include "DI2IMGBackingStore.h"
 #include "DIDC42BackingStore.h"
 
-#include "DIDiskImage.h"
-#include "DIRAWDiskImage.h"
-#include "DIQCOWDiskImage.h"
-#include "DIVMDKDiskImage.h"
+#include "DIBlockStorage.h"
+#include "DIRAWBlockStorage.h"
+#include "DIQCOWBlockStorage.h"
+#include "DIVMDKBlockStorage.h"
 
-class DIAppleDiskImage
+class DIAppleBlockStorage
 {
 public:
-    DIAppleDiskImage();
+    DIAppleBlockStorage();
     
     bool open(string path);
     bool open(DIData& data);
@@ -47,12 +44,12 @@ private:
     DI2IMGBackingStore twoImgBackingStore;
     DIDC42BackingStore dc42BackingStore;
     
-    DIDiskImage dummyDiskImage;
-    DIRAWDiskImage rawDiskImage;
-    DIQCOWDiskImage qcowDiskImage;
-    DIVMDKDiskImage vmdkDiskImage;
+    DIBlockStorage dummyBlockStorage;
+    DIRAWBlockStorage rawBlockStorage;
+    DIQCOWBlockStorage qcowBlockStorage;
+    DIVMDKBlockStorage vmdkBlockStorage;
     
-    DIDiskImage *diskImage;
+    DIBlockStorage *blockStorage;
     
     bool open(DIBackingStore *backingStore, string pathExtension);
 };

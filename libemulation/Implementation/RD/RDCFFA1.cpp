@@ -142,9 +142,9 @@ bool RDCFFA1::postMessage(OEComponent *sender, int message, void *data)
             
         case STORAGE_CAN_MOUNT:
         {
-            DIAppleDiskImage diskImage;
+            DIAppleBlockStorage blockStorage;
             
-            return diskImage.open(*((string *)data));
+            return blockStorage.open(*((string *)data));
         }
             
         case STORAGE_MOUNT:
@@ -173,7 +173,7 @@ bool RDCFFA1::postMessage(OEComponent *sender, int message, void *data)
             return false;
             
         case STORAGE_GET_FORMATLABEL:
-            *((string *)data) = diskImage.getFormatLabel();
+            *((string *)data) = blockStorage.getFormatLabel();
             
             return true;
     }
@@ -248,8 +248,8 @@ void RDCFFA1::write(OEAddress address, OEChar value)
             if ((ataBufferIndex == 0x200) &&
                 (ataCommand == ATA_WRITE))
             {
-                if (diskImage.isWriteEnabled() && !forceWriteProtected)
-                    ataError = !diskImage.writeBlocks(ataLBA.d.l, ataBuffer, 1);
+                if (blockStorage.isWriteEnabled() && !forceWriteProtected)
+                    ataError = !blockStorage.writeBlocks(ataLBA.d.l, ataBuffer, 1);
                 else
                     ataError = true;
             }
@@ -290,14 +290,14 @@ void RDCFFA1::write(OEAddress address, OEChar value)
                 case ATA_READ:
                     ataBufferIndex = 0;
                     
-                    ataError = !diskImage.readBlocks(ataLBA.d.l, ataBuffer, 1);
+                    ataError = !blockStorage.readBlocks(ataLBA.d.l, ataBuffer, 1);
                     
                     break;
                     
                 case ATA_WRITE:
                     ataBufferIndex = 0;
                     
-                    ataError = !diskImage.isWriteEnabled() || forceWriteProtected;
+                    ataError = !blockStorage.isWriteEnabled() || forceWriteProtected;
                     
                     break;
                     
@@ -306,10 +306,10 @@ void RDCFFA1::write(OEAddress address, OEChar value)
                     // Identify
                     ataBufferIndex = 0;
                     
-                    if (diskImage.isOpen())
+                    if (blockStorage.isOpen())
                     {
                         OEUnion lbaSize;
-                        lbaSize.q = diskImage.getBlockNum();
+                        lbaSize.q = blockStorage.getBlockNum();
                         
                         memset(ataBuffer, 0, 0x200);
                         
@@ -376,7 +376,7 @@ bool RDCFFA1::openDiskImage(string path)
 {
     closeDiskImage();
     
-    if (!diskImage.open(path))
+    if (!blockStorage.open(path))
         return false;
     
     diskImagePath = path;
@@ -386,7 +386,7 @@ bool RDCFFA1::openDiskImage(string path)
 
 void RDCFFA1::closeDiskImage()
 {
-    diskImage.close();
+    blockStorage.close();
     
     diskImagePath = "";
 }
