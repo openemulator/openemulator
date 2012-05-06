@@ -14,7 +14,7 @@
 #include "CanvasInterface.h"
 #include "StorageInterface.h"
 
-#define APPLEII_CLOCKFREQUENCY   1020484.3202
+#define APPLEII_CLOCKFREQUENCY   (14318180.0 * 65 / 912)
 
 typedef enum
 {

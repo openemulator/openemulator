@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
+<edl version="1.0" generator="OpenEmulator" framework="700" label="RD CFFA1" image="images/R&amp;D/R&amp;D CFFA.png" description="The CFFA interface card (www.dreher.net) is used for accessing CompactFlash devices on an Apple II computer. It is usually connected to slot 7.">
+    
+    <device id="rdCFFA" label="R&amp;D CFFA" image="images/R&amp;D/R&amp;D CFFA.png">
+        <setting ref="rdCFFA.io" name="forceWriteProtected" label="Force Write Protected" type="checkbox"/>
+        <setting ref="rdCFFA.memory" name="sel" label="Controller Type" type="select" options="ROM6502|6502 ROM,ROM65C02|65C02 ROM"/>
+    </device>
+    <connector id="rdCFFA.connector" type="Apple II Slot">
+        <inlet ref="rdCFFA.io" property="memoryBus" outletRef="memoryBus"/>
+    </connector>
+    <component id="rdCFFA.io" class="RDCFFA">
+        <property name="device" ref="rdCFFA"/>
+        <property name="memoryBus" ref=""/>
+        <property name="diskImage" value=""/>
+        <property name="forceWriteProtected" value="0"/>
+    </component>
+    <component id="rdCFFA.memory" class="AddressMux">
+        <property name="refROM6502" ref="rdCFFA.rom6502"/>
+        <property name="refROM65C02" ref="rdCFFA.rom65C02"/>
+        <property name="sel" value="ROM6502"/>
+    </component>
+    <component id="rdCFFA.rom6502" class="ROM">
+        <property name="memoryImage" data="${resourcePath}/roms/R&amp;D/CFFA20EE02.bin"/>
+    </component>
+    <component id="rdCFFA.rom65C02" class="ROM">
+        <property name="memoryImage" data="${resourcePath}/roms/R&amp;D/CFFA20EEC02.bin"/>
+    </component>
+    
+</edl>

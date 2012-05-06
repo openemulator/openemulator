@@ -44,9 +44,9 @@ bool DIAppleBlockStorage::open(DIBackingStore *backingStore, string pathExtensio
     }
     else if (dc42BackingStore.open(backingStore))
         backingStore = &dc42BackingStore;
-    else if (qcowBlockStorage.open(backingStore))
+    else if (vdiBlockStorage.open(backingStore))
     {
-        blockStorage = &qcowBlockStorage;
+        blockStorage = &vdiBlockStorage;
         
         return true;
     }
@@ -88,7 +88,7 @@ void DIAppleBlockStorage::close()
     dc42BackingStore.close();
     
     rawBlockStorage.close();
-    qcowBlockStorage.close();
+    vdiBlockStorage.close();
     vmdkBlockStorage.close();
     
     blockStorage = &dummyBlockStorage;

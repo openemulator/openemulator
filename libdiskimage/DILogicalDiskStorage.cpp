@@ -81,6 +81,7 @@ DITrackFormat DILogicalDiskStorage::getTrackFormat()
 bool DILogicalDiskStorage::readTrack(DIInt headIndex, DIInt trackIndex, DITrack& track)
 {
     track.data.resize(trackSize);
+    track.format = trackFormat;
     
     DIInt index = trackIndex * headNum + headIndex;
     return backingStore->read(trackSize * index, &track.data.front(), trackSize);

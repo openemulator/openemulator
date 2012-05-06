@@ -5,6 +5,7 @@
 * Fix [CanvasView update] problem in paper view
 * Implement Apple Silentype
 
+* Improve audio player for sample-accurate playback
 * Fix dragging a disk image to a canvas does not mount when canvas is not in focus
 * Fix replace monitor+emulation lock problem (happens when a monitor is replaced and selected)
 * Fix CTRL+ALT mouse capture
@@ -14,7 +15,6 @@
 ==1.0.4==
 * Implement Apple III
 * Implement Videx Videoterm
-* Implement CFFA card
 * Implement Saturn RAMboard
 * Implement Mountain Computer Apple Clock
 * Implement TimeMaster II H.O.

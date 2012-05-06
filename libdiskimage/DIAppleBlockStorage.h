@@ -18,7 +18,7 @@
 
 #include "DIBlockStorage.h"
 #include "DIRAWBlockStorage.h"
-#include "DIQCOWBlockStorage.h"
+#include "DIVDIBlockStorage.h"
 #include "DIVMDKBlockStorage.h"
 
 class DIAppleBlockStorage
@@ -46,7 +46,7 @@ private:
     
     DIBlockStorage dummyBlockStorage;
     DIRAWBlockStorage rawBlockStorage;
-    DIQCOWBlockStorage qcowBlockStorage;
+    DIVDIBlockStorage vdiBlockStorage;
     DIVMDKBlockStorage vmdkBlockStorage;
     
     DIBlockStorage *blockStorage;

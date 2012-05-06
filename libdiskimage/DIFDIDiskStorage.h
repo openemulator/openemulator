@@ -17,7 +17,8 @@ struct DIFDIHuffmanNode
 {
     DIFDIHuffmanNode()
     {
-        value = NULL;
+        value = 0;
+        
         left = NULL;
         right = NULL;
     }
@@ -87,6 +88,8 @@ private:
     
     bool decodeBitstreamTrack(DIData& encodedData, DIData& data);
     bool encodeBitstreamTrack(DIData& decodedData, DIData& data);
+    
+    DIInt getIndexHoleCount(DIInt value);
     bool decodePulsesTrack(DIData& encodedData, DIData& data, DIInt bitRate);
     
     bool getStream(DIFDIStream& stream,

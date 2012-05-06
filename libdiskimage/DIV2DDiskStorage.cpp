@@ -24,6 +24,9 @@
 DIV2DDiskStorage::DIV2DDiskStorage()
 {
     close();
+    
+    trackOffset.resize(V2D_TRACKNUM);
+    trackSize.resize(V2D_TRACKNUM);
 }
 
 bool DIV2DDiskStorage::open(DIBackingStore *backingStore)

@@ -24,6 +24,8 @@
 
 #include "AppleIIInterface.h"
 
+#define DRIVE_TRACKNUM   (40 * 4)
+
 AppleDiskDrive525::AppleDiskDrive525()
 {
 	device = NULL;
@@ -117,7 +119,7 @@ bool AppleDiskDrive525::postMessage(OEComponent *sender, int message, void *data
 	switch(message)
 	{
 		case STORAGE_IS_AVAILABLE:
-			return !diskImagePath.size();
+			return true;
 			
 		case STORAGE_CAN_MOUNT:
         {
@@ -189,7 +191,7 @@ bool AppleDiskDrive525::postMessage(OEComponent *sender, int message, void *data
             return true;
             
         case APPLEII_IS_WRITE_PROTECTED:
-            *((bool *)data) = !diskStorage.isWriteEnabled();
+            *((bool *)data) = !diskStorage.isWriteEnabled() || forceWriteProtected;
             
             return true;
 	}
@@ -209,6 +211,10 @@ OEChar AppleDiskDrive525::read(OEAddress address)
 
 void AppleDiskDrive525::write(OEAddress address, OEChar value)
 {
+    trackData[trackDataIndex] = value;
+    
+    trackDataIndex++;
+    trackDataIndex %= trackDataSize;
 }
 
 void AppleDiskDrive525::updateSound()
@@ -293,15 +299,18 @@ void AppleDiskDrive525::setPhaseControl(OEInt value)
         headPlayer->postMessage(this, AUDIOPLAYER_STOP, NULL);
         headPlayer->postMessage(this, AUDIOPLAYER_PLAY, NULL);
 	}
-    else if (newTrackIndex > 39)
+    else if (newTrackIndex >= DRIVE_TRACKNUM)
     {
-		trackIndex = 39;
+		trackIndex = DRIVE_TRACKNUM - 1;
         
         headPlayer->postMessage(this, AUDIOPLAYER_STOP, NULL);
         headPlayer->postMessage(this, AUDIOPLAYER_PLAY, NULL);
 	}
     else
         trackIndex = newTrackIndex;
+    
+    headPlayer->postMessage(this, AUDIOPLAYER_STOP, NULL);
+    headPlayer->postMessage(this, AUDIOPLAYER_PLAY, NULL);
     
     if (trackIndex != oldTrackIndex)
         updateTrack();
@@ -332,7 +341,7 @@ bool AppleDiskDrive525::closeDiskImage()
 
 void AppleDiskDrive525::updateTrack()
 {
-    if (!diskStorage.readTrack(0, trackIndex, track))
+    if (!diskStorage.readTrack(trackIndex, track))
     {
         track.clear();
         track.resize(1);

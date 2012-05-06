@@ -1,24 +1,24 @@
 
 /**
  * libdiskimage
- * QCOW Block Storage
+ * VDI Block Storage
  * (C) 2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Accesses a QCOW block storage
+ * Accesses a VDI block storage
  */
 
-#ifndef DIQCOWBLOCKSTORAGE_H
-#define DIQCOWBLOCKSTORAGE_H
+#ifndef DIVDIBLOCKSTORAGE_H
+#define DIVDIBLOCKSTORAGE_H
 
 #include "DICommon.h"
 #include "DIBackingStore.h"
 #include "DIBlockStorage.h"
 
-class DIQCOWBlockStorage : public DIBlockStorage
+class DIVDIBlockStorage : public DIBlockStorage
 {
 public:
-    DIQCOWBlockStorage();
+    DIVDIBlockStorage();
     
     bool open(DIBackingStore *backingStore);
     void close();

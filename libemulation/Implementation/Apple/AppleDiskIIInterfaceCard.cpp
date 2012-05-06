@@ -138,6 +138,8 @@ bool AppleDiskIIInterfaceCard::init()
 
 void AppleDiskIIInterfaceCard::update()
 {
+    updateDriveEnableControl();
+    
     currentDrive = &dummyDrive;
     
     updateDriveSel(driveSel);
@@ -486,12 +488,12 @@ void AppleDiskIIInterfaceCard::updateSequencer(OELong q3Cycles, OEChar value)
             
             if (isWriteProtected)
             {
-                const OEChar bits[] =
+                const OEChar codeTable[] =
                 {
                     0x00, 0x80, 0xc0, 0xe0, 0xf0, 0xf8, 0xfc, 0xfe, 0xff
                 };
                 
-                dataRegister |= bits[q3Cycles];
+                dataRegister |= codeTable[q3Cycles];
             }
             
             sequencerState = 0;
@@ -505,8 +507,8 @@ void AppleDiskIIInterfaceCard::updateSequencer(OELong q3Cycles, OEChar value)
             
 			while (bitNum--)
             {
-                bool bit = dataRegister & 0x80;
-                currentDrive->write(0, bit);
+                OEChar codeTable[] = { 0x00, 0xff };
+                currentDrive->write(0, codeTable[dataRegister >> 7]);
                 
                 dataRegister <<= 1;
             }

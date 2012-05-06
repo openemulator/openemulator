@@ -548,7 +548,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
              j++)
         {
             string thePath = [path cppString];
-            if ((*j)->postMessage(NULL, STORAGE_CAN_MOUNT, NULL))
+            if ((*j)->postMessage(NULL, STORAGE_CAN_MOUNT, &thePath))
             {
                 success = YES;
                 break;

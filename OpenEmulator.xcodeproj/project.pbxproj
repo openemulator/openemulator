@@ -21,7 +21,6 @@
 		00139F801511863B00B0E108 /* BankSwitchedRAM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00139F7F1511863B00B0E108 /* BankSwitchedRAM.cpp */; };
 		00139F821511864800B0E108 /* BankSwitchedRAM.h in Headers */ = {isa = PBXBuildFile; fileRef = 00139F811511864800B0E108 /* BankSwitchedRAM.h */; };
 		00139F84151195E600B0E108 /* AppleIIAddressDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00139F83151195E600B0E108 /* AppleIIAddressDecoder.cpp */; };
-		00139F86151195EE00B0E108 /* AppleIIAddressDecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 00139F85151195EE00B0E108 /* AppleIIAddressDecoder.h */; };
 		00140DF0152D282400D4795D /* DIApple525DiskStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00140DEF152D282400D4795D /* DIApple525DiskStorage.cpp */; };
 		00140DF6152D36F900D4795D /* DIFileBackingStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00140DF5152D36F900D4795D /* DIFileBackingStore.cpp */; };
 		00140DF8152D370300D4795D /* DIFileBackingStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 00140DF7152D370300D4795D /* DIFileBackingStore.h */; };
@@ -37,6 +36,11 @@
 		001917801543D338009A301E /* DILogicalDiskStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = 0019177F1543D337009A301E /* DILogicalDiskStorage.h */; };
 		001917821543D347009A301E /* DILogicalDiskStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 001917811543D346009A301E /* DILogicalDiskStorage.cpp */; };
 		001C9B02137FDD0500D1355B /* AudioRecord.png in Resources */ = {isa = PBXBuildFile; fileRef = 00ED379A12779AD000BEF6BD /* AudioRecord.png */; };
+		001E096C1556339800405DC0 /* AppleLanguageCard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 001E09691556339400405DC0 /* AppleLanguageCard.cpp */; };
+		001E096E155633A600405DC0 /* RDCFFA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 001E096615562F0E00405DC0 /* RDCFFA.cpp */; };
+		001E096F155633AC00405DC0 /* RDCFFA1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00DEA91F1423B7BC003E9FA0 /* RDCFFA1.cpp */; };
+		001E0970155633D000405DC0 /* AppleIIAudioIn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881912A393990052B7A4 /* AppleIIAudioIn.cpp */; };
+		001E0971155633E700405DC0 /* Apple1Terminal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00722D3B1470E31400FE7007 /* Apple1Terminal.cpp */; };
 		001F56F90FD1E8E500EA246A /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 001F56F80FD1E8E500EA246A /* Sparkle.framework */; };
 		0020AE731530A22700E3DF80 /* DICommon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0020AE721530A22700E3DF80 /* DICommon.cpp */; };
 		0020AE741530AE2500E3DF80 /* diskimage.h in Headers */ = {isa = PBXBuildFile; fileRef = 00E473411475695500F367B7 /* diskimage.h */; };
@@ -47,8 +51,8 @@
 		00247F38139D8F4C00B165D1 /* OECommon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00247F35139D85A900B165D1 /* OECommon.cpp */; };
 		002740B813A08A4F00E13D65 /* VidexVideoterm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 002740B613A08A4F00E13D65 /* VidexVideoterm.cpp */; };
 		002740B913A08A4F00E13D65 /* VidexVideoterm.h in Headers */ = {isa = PBXBuildFile; fileRef = 002740B713A08A4F00E13D65 /* VidexVideoterm.h */; };
-		0027E67E153738CC0066A9BE /* DIQCOWBlockStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0027E67D153738CC0066A9BE /* DIQCOWBlockStorage.cpp */; };
-		0027E680153738D30066A9BE /* DIQCOWBlockStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = 0027E67F153738D30066A9BE /* DIQCOWBlockStorage.h */; };
+		0027E67E153738CC0066A9BE /* DIVDIBlockStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0027E67D153738CC0066A9BE /* DIVDIBlockStorage.cpp */; };
+		0027E680153738D30066A9BE /* DIVDIBlockStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = 0027E67F153738D30066A9BE /* DIVDIBlockStorage.h */; };
 		0029EEE214266B8900AD900E /* AddressMapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0029EEDF14266B7700AD900E /* AddressMapper.cpp */; };
 		00365CEB1516955C00978DF6 /* AddressMux.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00365CEA1516955C00978DF6 /* AddressMux.cpp */; };
 		00365CED1516956600978DF6 /* AddressMux.h in Headers */ = {isa = PBXBuildFile; fileRef = 00365CEC1516956600978DF6 /* AddressMux.h */; };
@@ -89,7 +93,6 @@
 		006A4C5C134ED2F30033BE4D /* IEEE488Interface.h in Headers */ = {isa = PBXBuildFile; fileRef = 006A4C5B134ED2F30033BE4D /* IEEE488Interface.h */; };
 		006B5CD013826D0700EEB5BC /* CanvasWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 00A72B7212879F800083C6A7 /* CanvasWindow.m */; };
 		0071E3BA10803F7300F2D54F /* TemplateChooserItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0071E3B910803F7300F2D54F /* TemplateChooserItem.mm */; };
-		00722D3C1470E31400FE7007 /* Apple1Terminal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00722D3B1470E31400FE7007 /* Apple1Terminal.cpp */; };
 		0073DD9F136FCC1100087303 /* CanvasToolbarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0073DD8E136FCA1C00087303 /* CanvasToolbarView.m */; };
 		0073DDBF136FCCC900087303 /* ToolbarBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 0073DDBE136FCCC900087303 /* ToolbarBackground.png */; };
 		0076FD6512A1ED8C00A3FEC7 /* AudioPause.png in Resources */ = {isa = PBXBuildFile; fileRef = 0076FD6412A1ED8C00A3FEC7 /* AudioPause.png */; };
@@ -145,9 +148,7 @@
 		00B019B513501507001E01BB /* OEDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B019B313501507001E01BB /* OEDevice.cpp */; };
 		00B5709E10863C2A00CDE4A7 /* TemplateChooserWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B5709D10863C2A00CDE4A7 /* TemplateChooserWindowController.m */; };
 		00B5CB94136F0B6C007A7BED /* AppleSilentype.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B5CB92136F0B6C007A7BED /* AppleSilentype.cpp */; };
-		00B5CB95136F0B6D007A7BED /* AppleSilentype.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B5CB93136F0B6C007A7BED /* AppleSilentype.h */; };
 		00B7C646147B4B4100BB7E6B /* JoystickMapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B7C645147B4B4100BB7E6B /* JoystickMapper.cpp */; };
-		00B7C648147B5B2300BB7E6B /* AppleIIGamePort.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B7C647147B5B2300BB7E6B /* AppleIIGamePort.h */; };
 		00B7C64A147B5B2B00BB7E6B /* AppleIIGamePort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B7C649147B5B2B00BB7E6B /* AppleIIGamePort.cpp */; };
 		00B974B410701DDA00BD1402 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = 00B974AD10701DCD00BD1402 /* sounds */; };
 		00BB34B412C5C5AE007332B5 /* EmulationItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00BB34B312C5C5AE007332B5 /* EmulationItem.mm */; };
@@ -175,8 +176,6 @@
 		00D845830FFF0FD2005802F0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D845730FFF0FD2005802F0 /* main.m */; };
 		00D845860FFF0FD2005802F0 /* PreferencesWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D8457A0FFF0FD2005802F0 /* PreferencesWindowController.m */; };
 		00DC0E79145DFECD00FF51BD /* MemoryInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 00DC0E78145DFECD00FF51BD /* MemoryInterface.h */; };
-		00DEA9201423B7BC003E9FA0 /* RDCFFA1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00DEA91F1423B7BC003E9FA0 /* RDCFFA1.cpp */; };
-		00DEA9221423B7C9003E9FA0 /* RDCFFA1.h in Headers */ = {isa = PBXBuildFile; fileRef = 00DEA9211423B7C9003E9FA0 /* RDCFFA1.h */; };
 		00E442921278726B00713A05 /* IconDevices.png in Resources */ = {isa = PBXBuildFile; fileRef = 00E442911278726B00713A05 /* IconDevices.png */; };
 		00ED379C12779AD100BEF6BD /* AudioMax.png in Resources */ = {isa = PBXBuildFile; fileRef = 00ED379712779AD000BEF6BD /* AudioMax.png */; };
 		00ED379D12779AD100BEF6BD /* AudioMin.png in Resources */ = {isa = PBXBuildFile; fileRef = 00ED379812779AD000BEF6BD /* AudioMin.png */; };
@@ -198,11 +197,9 @@
 		00F21CE712C7C7EE00A809EF /* VerticallyCenteredTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00F21CE612C7C7EE00A809EF /* VerticallyCenteredTextFieldCell.m */; };
 		00F35D7312EF049B0027B9E4 /* EmulationOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 00FE381A12CA6790002B47B1 /* EmulationOutlineView.m */; };
 		00F397E4141655DA00C53A3E /* Apple1IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00F397E3141655DA00C53A3E /* Apple1IO.cpp */; };
-		00F397E6141655EC00C53A3E /* Apple1IO.h in Headers */ = {isa = PBXBuildFile; fileRef = 00F397E5141655EB00C53A3E /* Apple1IO.h */; };
 		00F4D0BF12E2E42F00B7F5E6 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00F4D0BE12E2E42F00B7F5E6 /* ApplicationServices.framework */; };
 		00FBD2DE1419A03B00BA8CEE /* AudioCodec.h in Headers */ = {isa = PBXBuildFile; fileRef = 00FBD2DD1419A03A00BA8CEE /* AudioCodec.h */; };
 		00FC27D312D1070A0065E986 /* Apple1ACI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881312A393990052B7A4 /* Apple1ACI.cpp */; };
-		00FC27D912D1070A0065E986 /* AppleIIAudioIn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881912A393990052B7A4 /* AppleIIAudioIn.cpp */; };
 		00FC27DB12D1070A0065E986 /* AppleIIAudioOut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881B12A393990052B7A4 /* AppleIIAudioOut.cpp */; };
 		00FC27DF12D1070A0065E986 /* AppleIIFloatingBus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881F12A393990052B7A4 /* AppleIIFloatingBus.cpp */; };
 		00FC27E312D1070A0065E986 /* AppleIIKeyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8882312A393990052B7A4 /* AppleIIKeyboard.cpp */; };
@@ -323,6 +320,10 @@
 		001917811543D346009A301E /* DILogicalDiskStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DILogicalDiskStorage.cpp; sourceTree = "<group>"; };
 		001CC97E13D11EBC00B0DDA7 /* CPUInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CPUInterface.h; sourceTree = "<group>"; };
 		001D1F7A1479E7BD0014D496 /* JoystickInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JoystickInterface.h; sourceTree = "<group>"; };
+		001E096615562F0E00405DC0 /* RDCFFA.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RDCFFA.cpp; sourceTree = "<group>"; };
+		001E096715562F0E00405DC0 /* RDCFFA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDCFFA.h; sourceTree = "<group>"; };
+		001E09691556339400405DC0 /* AppleLanguageCard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleLanguageCard.cpp; sourceTree = "<group>"; };
+		001E096A1556339400405DC0 /* AppleLanguageCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleLanguageCard.h; sourceTree = "<group>"; };
 		001F56F80FD1E8E500EA246A /* Sparkle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = Sparkle.framework; path = macosx/Sparkle.framework; sourceTree = "<group>"; };
 		0020AE701530A21F00E3DF80 /* DICommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DICommon.h; sourceTree = "<group>"; };
 		0020AE721530A22700E3DF80 /* DICommon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DICommon.cpp; sourceTree = "<group>"; };
@@ -332,8 +333,8 @@
 		002579FB1218A83400206E56 /* NSStringAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSStringAdditions.h; sourceTree = "<group>"; };
 		002740B613A08A4F00E13D65 /* VidexVideoterm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VidexVideoterm.cpp; path = Videx/VidexVideoterm.cpp; sourceTree = "<group>"; };
 		002740B713A08A4F00E13D65 /* VidexVideoterm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VidexVideoterm.h; path = Videx/VidexVideoterm.h; sourceTree = "<group>"; };
-		0027E67D153738CC0066A9BE /* DIQCOWBlockStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DIQCOWBlockStorage.cpp; sourceTree = "<group>"; };
-		0027E67F153738D30066A9BE /* DIQCOWBlockStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DIQCOWBlockStorage.h; sourceTree = "<group>"; };
+		0027E67D153738CC0066A9BE /* DIVDIBlockStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DIVDIBlockStorage.cpp; sourceTree = "<group>"; };
+		0027E67F153738D30066A9BE /* DIVDIBlockStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DIVDIBlockStorage.h; sourceTree = "<group>"; };
 		0029EEDF14266B7700AD900E /* AddressMapper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AddressMapper.cpp; sourceTree = "<group>"; };
 		0029EEE114266B8000AD900E /* AddressMapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddressMapper.h; sourceTree = "<group>"; };
 		00365CEA1516955C00978DF6 /* AddressMux.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AddressMux.cpp; sourceTree = "<group>"; };
@@ -829,6 +830,8 @@
 		00B8881012A393990052B7A4 /* Apple */ = {
 			isa = PBXGroup;
 			children = (
+				001E09691556339400405DC0 /* AppleLanguageCard.cpp */,
+				001E096A1556339400405DC0 /* AppleLanguageCard.h */,
 				00B8881312A393990052B7A4 /* Apple1ACI.cpp */,
 				00B8881412A393990052B7A4 /* Apple1ACI.h */,
 				00F397E3141655DA00C53A3E /* Apple1IO.cpp */,
@@ -1023,6 +1026,8 @@
 		00DEA91E1423B779003E9FA0 /* R&D */ = {
 			isa = PBXGroup;
 			children = (
+				001E096615562F0E00405DC0 /* RDCFFA.cpp */,
+				001E096715562F0E00405DC0 /* RDCFFA.h */,
 				00DEA91F1423B7BC003E9FA0 /* RDCFFA1.cpp */,
 				00DEA9211423B7C9003E9FA0 /* RDCFFA1.h */,
 			);
@@ -1050,8 +1055,8 @@
 				007DEFB4153FB5EF00A9CC01 /* DIBlockStorage.h */,
 				007DEFBA1540608200A9CC01 /* DIRAWBlockStorage.cpp */,
 				007DEFB81540607C00A9CC01 /* DIRAWBlockStorage.h */,
-				0027E67D153738CC0066A9BE /* DIQCOWBlockStorage.cpp */,
-				0027E67F153738D30066A9BE /* DIQCOWBlockStorage.h */,
+				0027E67D153738CC0066A9BE /* DIVDIBlockStorage.cpp */,
+				0027E67F153738D30066A9BE /* DIVDIBlockStorage.h */,
 				00536BC5153DD400005A5336 /* DIVMDKBlockStorage.cpp */,
 				00536BC4153DD3F5005A5336 /* DIVMDKBlockStorage.h */,
 				0019177D1543D320009A301E /* DIDiskStorage.cpp */,
@@ -1234,7 +1239,7 @@
 				0020AE761530AE2500E3DF80 /* DI2IMGBackingStore.h in Headers */,
 				0020AE771530AE2500E3DF80 /* DIDC42BackingStore.h in Headers */,
 				00A06AE51533055D00A494A7 /* DIAppleBlockStorage.h in Headers */,
-				0027E680153738D30066A9BE /* DIQCOWBlockStorage.h in Headers */,
+				0027E680153738D30066A9BE /* DIVDIBlockStorage.h in Headers */,
 				00F17297153B381E00AAC9C2 /* DIApple525DiskStorage.h in Headers */,
 				00F17298153B382200AAC9C2 /* DIApple35DiskStorage.h in Headers */,
 				00536BC7153DD40A005A5336 /* DIVMDKBlockStorage.h in Headers */,
@@ -1263,17 +1268,12 @@
 				00D226561350FF8B00FC69B9 /* OEMatrix3.h in Headers */,
 				000E8D1913515C6E00DBFB2C /* StorageInterface.h in Headers */,
 				00D73D9D136CC9B300BD5465 /* IEEE1394Interface.h in Headers */,
-				00B5CB95136F0B6D007A7BED /* AppleSilentype.h in Headers */,
 				002740B913A08A4F00E13D65 /* VidexVideoterm.h in Headers */,
-				00F397E6141655EC00C53A3E /* Apple1IO.h in Headers */,
 				00FBD2DE1419A03B00BA8CEE /* AudioCodec.h in Headers */,
-				00DEA9221423B7C9003E9FA0 /* RDCFFA1.h in Headers */,
 				0022236C142C557100B7451D /* ControlBusInterface.h in Headers */,
 				00DC0E79145DFECD00FF51BD /* MemoryInterface.h in Headers */,
 				00A12997147A8E7E00DF323F /* HIDJoystick.h in Headers */,
-				00B7C648147B5B2300BB7E6B /* AppleIIGamePort.h in Headers */,
 				00139F821511864800B0E108 /* BankSwitchedRAM.h in Headers */,
-				00139F86151195EE00B0E108 /* AppleIIAddressDecoder.h in Headers */,
 				00365CED1516956600978DF6 /* AddressMux.h in Headers */,
 				00936E8615170428006B0EAC /* AudioPlayer.h in Headers */,
 				00936E8A15177B60006B0EAC /* AudioPlayerInterface.h in Headers */,
@@ -1482,7 +1482,7 @@
 				0020AE731530A22700E3DF80 /* DICommon.cpp in Sources */,
 				00A06AE31533055600A494A7 /* DIAppleBlockStorage.cpp in Sources */,
 				00A06AE91533EE3100A494A7 /* DIApple35DiskStorage.cpp in Sources */,
-				0027E67E153738CC0066A9BE /* DIQCOWBlockStorage.cpp in Sources */,
+				0027E67E153738CC0066A9BE /* DIVDIBlockStorage.cpp in Sources */,
 				00536BC6153DD400005A5336 /* DIVMDKBlockStorage.cpp in Sources */,
 				007DEFAF153FB16800A9CC01 /* DIRAMBackingStore.cpp in Sources */,
 				007DEFB1153FB17500A9CC01 /* DIBackingStore.cpp in Sources */,
@@ -1498,7 +1498,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				00FC27D312D1070A0065E986 /* Apple1ACI.cpp in Sources */,
-				00FC27D912D1070A0065E986 /* AppleIIAudioIn.cpp in Sources */,
 				00FC27DB12D1070A0065E986 /* AppleIIAudioOut.cpp in Sources */,
 				00FC27DF12D1070A0065E986 /* AppleIIFloatingBus.cpp in Sources */,
 				00FC27E312D1070A0065E986 /* AppleIIKeyboard.cpp in Sources */,
@@ -1547,6 +1546,11 @@
 				00365CEB1516955C00978DF6 /* AddressMux.cpp in Sources */,
 				00936E8815170435006B0EAC /* AudioPlayer.cpp in Sources */,
 				00AD7028151AC41E00424637 /* OESound.cpp in Sources */,
+				001E096C1556339800405DC0 /* AppleLanguageCard.cpp in Sources */,
+				001E096E155633A600405DC0 /* RDCFFA.cpp in Sources */,
+				001E096F155633AC00405DC0 /* RDCFFA1.cpp in Sources */,
+				001E0970155633D000405DC0 /* AppleIIAudioIn.cpp in Sources */,
+				001E0971155633E700405DC0 /* Apple1Terminal.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1578,8 +1582,6 @@
 				00D75C691399FFDB004AA153 /* LibraryTableCell.m in Sources */,
 				004763D2139C94F30016277E /* LibraryTableView.m in Sources */,
 				0009068E141D2A0300F06D99 /* NSStringAdditions.mm in Sources */,
-				00DEA9201423B7BC003E9FA0 /* RDCFFA1.cpp in Sources */,
-				00722D3C1470E31400FE7007 /* Apple1Terminal.cpp in Sources */,
 				0014DF14148286A5006A7660 /* Application.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

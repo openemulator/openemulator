@@ -1,10 +1,12 @@
 ==Latest==
+* Implemented R&D CFFA card
+* Implemented low-level FDI format decoding
 * Implemented FDI format Huffman compression
-* Improved OE common function names
+* Improved OE common function and type names
 * Added applesoft-lite 0.4 to Briel Replica-1
 * Added libdiskimage support to CFFA1
-* Refactorized disk image framework
-* Implemented disk image framework
+* Refactorized libdiskimage
+* Implemented libdiskimage
 * Fixed OEEmulation when removing the device
 * Refactorized component lifecycle, update() is now only called on update, not on init
 * Implemented audio player, added OESound

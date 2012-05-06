@@ -38,8 +38,8 @@ public:
     bool isWriteEnabled();
     string getFormatLabel();
     
-    bool readTrack(DIInt headIndex, DIInt trackIndex, DIData& data);
-    bool writeTrack(DIInt headIndex, DIInt trackIndex, DIData& data);
+    bool readTrack(DIInt trackIndex, DIData& data);
+    bool writeTrack(DIInt trackIndex, DIData& data);
     
 private:
     DIChar gcr53DecodeMap[0x100];

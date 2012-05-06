@@ -24,13 +24,14 @@ typedef enum
 typedef enum
 {
     DI_BLANK,
+    DI_BITSTREAM_250000BPS,
+    DI_BITSTREAM_500000BPS,
+    DI_LOGICAL,
     DI_APPLE_DOS32,
     DI_APPLE_DOS33,
     DI_APPLE_CPM,
     DI_APPLE_PRODOS,
     DI_APPLE_NIB,
-    DI_BITSTREAM_250000BPS,
-    DI_BITSTREAM_500000BPS,
 } DITrackFormat;
 
 typedef struct

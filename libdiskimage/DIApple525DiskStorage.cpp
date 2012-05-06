@@ -279,11 +279,8 @@ string DIApple525DiskStorage::getFormatLabel()
     return diskStorage->getFormatLabel();
 }
 
-bool DIApple525DiskStorage::readTrack(DIInt headIndex, DIInt trackIndex, DIData& data)
+bool DIApple525DiskStorage::readTrack(DIInt trackIndex, DIData& data)
 {
-    if (headIndex)
-        return false;
-    
     if (trackIndex >= trackData.size())
         trackData.resize(trackIndex + 1);
     
@@ -301,7 +298,7 @@ bool DIApple525DiskStorage::readTrack(DIInt headIndex, DIInt trackIndex, DIData&
         else
         {
             track.format = DI_BITSTREAM_250000BPS;
-            if (!diskStorage->readTrack(headIndex, trackIndex / trackRatio, track))
+            if (!diskStorage->readTrack(0, trackIndex / trackRatio, track))
                 return false;
         }
         
@@ -348,11 +345,8 @@ bool DIApple525DiskStorage::readTrack(DIInt headIndex, DIInt trackIndex, DIData&
     return true;
 }
 
-bool DIApple525DiskStorage::writeTrack(DIInt headIndex, DIInt trackIndex, DIData& data)
+bool DIApple525DiskStorage::writeTrack(DIInt trackIndex, DIData& data)
 {
-    if (headIndex)
-        return false;
-    
     trackData[trackIndex] = data;
     trackDataModified = true;
     
@@ -451,6 +445,7 @@ bool DIApple525DiskStorage::encodeGCR53Track(DIInt trackIndex, DITrack& track)
 	for (DIInt i = 0; i < GCR53_SECTORNUM; i++)
     {
 		DIInt sectorIndex = dos32SectorOrder[i];
+        
         writeSync(!i ? 0x80 : 0x28, 36, 32);
 		writeGCR53AddressField(trackIndex, sectorIndex);
         
@@ -474,6 +469,7 @@ bool DIApple525DiskStorage::encodeGCR62Track(DIInt trackIndex, DITrack& track)
 	for (DIInt i = 0; i < GCR62_SECTORNUM; i++)
     {
 		DIInt sectorIndex = sectorOrder[i];
+        
         writeSync(!i ? 0x80 : 0x14, 40, 32);
 		writeGCR62AddressField(trackIndex, sectorIndex);
         
@@ -816,7 +812,7 @@ bool DIApple525DiskStorage::readGCR62AddressField(DIInt trackIndex, DIInt sector
 
 bool DIApple525DiskStorage::readGCR62DataField(DIChar *data)
 {
-	DIChar swapBit01[] = { 0x00, 0x02, 0x01, 0x03 };
+	DIChar swapTable[] = { 0x00, 0x02, 0x01, 0x03 };
 	
 	for (DIInt i = 0; i < 12; i++)
     {
@@ -833,16 +829,16 @@ bool DIApple525DiskStorage::readGCR62DataField(DIChar *data)
         {
 			DIChar value = readGCR62Value();
             
-			data[0x00 + i] = swapBit01[(value >> 0) & 0x3];
-			data[0x56 + i] = swapBit01[(value >> 2) & 0x3];
-            data[0xac + i] = swapBit01[(value >> 4) & 0x3];
+			data[0x00 + i] = swapTable[(value >> 0) & 0x3];
+			data[0x56 + i] = swapTable[(value >> 2) & 0x3];
+            data[0xac + i] = swapTable[(value >> 4) & 0x3];
 		}
 		for (DIInt i = 0x54; i < 0x56; i++)
         {
 			DIChar value = readGCR62Value();
             
-			data[0x00 + i] = swapBit01[(value >> 0) & 0x3];
-			data[0x56 + i] = swapBit01[(value >> 2) & 0x3];
+			data[0x00 + i] = swapTable[(value >> 0) & 0x3];
+			data[0x56 + i] = swapTable[(value >> 2) & 0x3];
 		}
 		
 		for (DIInt i = 0; i < SECTOR_SIZE; i++)
@@ -980,11 +976,11 @@ void DIApple525DiskStorage::writeNibble(DIChar value)
 
 void DIApple525DiskStorage::writeNibble(DIChar value, DIInt q3Clocks)
 {
-    value = 0;
+    DIChar codeTable[] = {0x00, 0xff};
     
 	while (q3Clocks)
     {
-        streamData[streamOffset++] = ((value & 80) >> 7);
+        streamData[streamOffset++] = codeTable[value >> 7];
         streamOffset %= streamSize;
         
         value <<= 1;
