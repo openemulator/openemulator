@@ -19,6 +19,7 @@ public:
     bool getValue(string name, string& value);
 	bool setRef(string name, OEComponent *ref);
 	bool init();
+    void dispose();
     
     void notify(OEComponent *sender, int notification, void *data);
     
@@ -26,11 +27,11 @@ public:
 	void write(OEAddress address, OEChar value);
 	
 private:
-    OEComponent *mmu;
-    OEComponent *slotMemory;
-	OEComponent *slotExpansionMemory;
+    OEComponent *memoryBus;
+    OEComponent *memory;
 	
-	OEInt en;
-
-    void mapMemory(int message);
+	bool en;
+    
+    void enableSlotExpansion(bool value);
+    void updateSlotExpansion(bool value);
 };

@@ -35,13 +35,13 @@ bool AppleGraphicsTablet::setRef(string name, OEComponent *ref)
 	{
 		if (device)
 			device->postMessage(this,
-								   DEVICE_DESTROY_CANVAS,
-								   &canvas);
+                                DEVICE_DESTROY_CANVAS,
+                                &canvas);
 		device = ref;
 		if (device)
 			device->postMessage(this,
-								   DEVICE_CONSTRUCT_CANVAS,
-								   &canvas);
+                                DEVICE_CONSTRUCT_CANVAS,
+                                &canvas);
 	}
 	else
 		return false;

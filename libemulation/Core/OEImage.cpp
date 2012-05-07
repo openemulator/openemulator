@@ -51,7 +51,7 @@ OEImage::OEImage(OEImage& image, OERect rect)
     
     OEInt srcBytesPerRow = image.getBytesPerRow();
     OEInt srcOffset = ((OEInt)rect.origin.y * srcBytesPerRow +
-                          (OEInt)rect.origin.x * image.getBytesPerPixel());
+                       (OEInt)rect.origin.x * image.getBytesPerPixel());
     OEChar *src = image.getPixels() + srcOffset;
     
     OEInt dstBytesPerRow = getBytesPerRow();

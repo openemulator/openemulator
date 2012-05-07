@@ -428,15 +428,15 @@ void AppleDiskIIInterfaceCard::updateSequencer(OELong q3Cycles, OEChar value)
     {
 		case SEQUENCER_READSHIFT:
         {
-/*            if (q3Cycles > SEQUENCER_SKIP)
-            {
-                q3Cycles -= SEQUENCER_SKIP;
-                
-                OEUInt64 skippedBitNum = (q3Cycles >> 3);
-                currentDrive->postMessage(this, APPLEII_SKIP_DATA, &skippedBitNum);
-                
-                q3Cycles = SEQUENCER_SKIP;
-            }*/
+            /*            if (q3Cycles > SEQUENCER_SKIP)
+             {
+             q3Cycles -= SEQUENCER_SKIP;
+             
+             OEUInt64 skippedBitNum = (q3Cycles >> 3);
+             currentDrive->postMessage(this, APPLEII_SKIP_DATA, &skippedBitNum);
+             
+             q3Cycles = SEQUENCER_SKIP;
+             }*/
             
             OELong bitNum = (q3Cycles + (sequencerState & 0x7)) >> 3;
             

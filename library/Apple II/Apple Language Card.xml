@@ -1,18 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
-<edl version="1.0" label="Apple Language Card" image="images/Apple/Apple Language Card.png" description="The Apple Language Card is a 16 kiB memory expansion for the Apple II and Apple II+ computers. It is required for running Apple Pascal and ProDOS. It must be installed in slot 0.">
+<edl version="1.0" label="Apple Language Card" image="images/Apple/Apple Language Card.png" description="The Apple Language Card is a 16 kiB memory expansion for the Apple II and Apple II+ computers that also provides the autostart F8 ROM on the Apple II. It is usually connected to slot 0.">
     
     <device id="appleLanguageCard" label="Apple Language Card" image="images/Apple/Apple Language Card.png">
     </device>
     <connector id="appleLanguageCard.connector" type="Apple II Slot">
-        <inlet ref="appleLanguageCard.io" property="mmu" outletRef="mmu"/>
+        <inlet ref="appleLanguageCard.io" property="controlBus" outletRef="controlBus"/>
+        <inlet ref="appleLanguageCard.io" property="memoryBus" outletRef="memoryBus"/>
+        <inlet ref="appleLanguageCard.io" property="floatingBus" outletRef="floatingBus"/>
+        <inlet ref="appleLanguageCard.ram" property="controlBus" outletRef="controlBus"/>
     </connector>
-    <component id="appleLanguageCard.io" class="FloatingBus">
+    <component id="appleLanguageCard.io" class="AppleLanguageCard">
+        <property name="controlBus" ref=""/>
+        <property name="memoryBus" ref=""/>
+        <property name="floatingBus" ref=""/>
+        <property name="ram" ref="appleLanguageCard.ram"/>
+        <property name="romF8" ref="appleLanguageCard.romF8"/>
+        <property name="bank1" value="0"/>
+        <property name="ramRead" value="0"/>
+        <property name="preWrite" value="0"/>
+        <property name="ramWrite" value="0"/>
     </component>
-    <component id="appleLanguageCard.memory" class="RAM">
-        <property name="host" ref="host"/>
-        <property name="size" value="16384"/>
-        <property name="memoryImage" src="${packagePath}/${id}.bin"/>
+    <component id="appleLanguageCard.ram" class="BankSwitchedRAM">
+        <property name="controlBus" ref=""/>
+        <property name="size" value="0x4000"/>
+        <property name="memoryImage" data="${packagePath}/${id}.bin"/>
+    </component>
+    <component id="appleLanguageCard.romF8" class="ROM">
+        <property name="memoryImage" data="${resourcePath}/roms/Apple/341-0020-F8.bin"/>
     </component>
     
 </edl>

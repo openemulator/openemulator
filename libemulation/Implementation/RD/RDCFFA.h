@@ -22,7 +22,6 @@ public:
     bool getValue(string name, string& value);
     bool setRef(string name, OEComponent *ref);
     bool init();
-    void dispose();
     
     bool postMessage(OEComponent *sender, int message, void *data);
     
@@ -34,8 +33,6 @@ private:
     bool forceWriteProtected;
     
     OEComponent *device;
-    
-    OEComponent *memoryBus;
     
     DIAppleBlockStorage blockStorage;
     

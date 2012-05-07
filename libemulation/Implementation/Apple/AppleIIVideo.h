@@ -148,7 +148,7 @@ private:
     
     bool isRevisionUpdated;
     bool isTVSystemUpdated;
-        
+    
     void updateSegments();
     void initPoints();
     void updateCounts();
@@ -167,7 +167,7 @@ private:
     void updateVideo();
     void drawVideoLine(int y, int x0, int x1);
     void setNeedsDisplay();
-        
+    
     void scheduleNextTimer(OESLong cycles);
     AppleIIVideoPoint getCount();
     OEChar readFloatingBus();

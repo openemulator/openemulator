@@ -203,7 +203,6 @@
 		00FC27DB12D1070A0065E986 /* AppleIIAudioOut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881B12A393990052B7A4 /* AppleIIAudioOut.cpp */; };
 		00FC27DF12D1070A0065E986 /* AppleIIFloatingBus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881F12A393990052B7A4 /* AppleIIFloatingBus.cpp */; };
 		00FC27E312D1070A0065E986 /* AppleIIKeyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8882312A393990052B7A4 /* AppleIIKeyboard.cpp */; };
-		00FC27E712D1070A0065E986 /* AppleIISlotExpansionMemory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8882712A393990052B7A4 /* AppleIISlotExpansionMemory.cpp */; };
 		00FC27E912D1070A0065E986 /* AppleIISlotMemory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8882912A393990052B7A4 /* AppleIISlotMemory.cpp */; };
 		00FC27EB12D1070A0065E986 /* AppleIIVideo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8882B12A393990052B7A4 /* AppleIIVideo.cpp */; };
 		00FC27EE12D1070A0065E986 /* AppleDiskDrive525.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00044CA212CE6FD400D26940 /* AppleDiskDrive525.cpp */; };
@@ -479,8 +478,6 @@
 		00B8882012A393990052B7A4 /* AppleIIFloatingBus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppleIIFloatingBus.h; path = libemulation/Implementation/Apple/AppleIIFloatingBus.h; sourceTree = SOURCE_ROOT; };
 		00B8882312A393990052B7A4 /* AppleIIKeyboard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AppleIIKeyboard.cpp; path = libemulation/Implementation/Apple/AppleIIKeyboard.cpp; sourceTree = SOURCE_ROOT; };
 		00B8882412A393990052B7A4 /* AppleIIKeyboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppleIIKeyboard.h; path = libemulation/Implementation/Apple/AppleIIKeyboard.h; sourceTree = SOURCE_ROOT; };
-		00B8882712A393990052B7A4 /* AppleIISlotExpansionMemory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AppleIISlotExpansionMemory.cpp; path = libemulation/Implementation/Apple/AppleIISlotExpansionMemory.cpp; sourceTree = SOURCE_ROOT; };
-		00B8882812A393990052B7A4 /* AppleIISlotExpansionMemory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppleIISlotExpansionMemory.h; path = libemulation/Implementation/Apple/AppleIISlotExpansionMemory.h; sourceTree = SOURCE_ROOT; };
 		00B8882912A393990052B7A4 /* AppleIISlotMemory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AppleIISlotMemory.cpp; path = libemulation/Implementation/Apple/AppleIISlotMemory.cpp; sourceTree = SOURCE_ROOT; };
 		00B8882A12A393990052B7A4 /* AppleIISlotMemory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppleIISlotMemory.h; path = libemulation/Implementation/Apple/AppleIISlotMemory.h; sourceTree = SOURCE_ROOT; };
 		00B8882B12A393990052B7A4 /* AppleIIVideo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AppleIIVideo.cpp; path = libemulation/Implementation/Apple/AppleIIVideo.cpp; sourceTree = SOURCE_ROOT; };
@@ -830,8 +827,6 @@
 		00B8881012A393990052B7A4 /* Apple */ = {
 			isa = PBXGroup;
 			children = (
-				001E09691556339400405DC0 /* AppleLanguageCard.cpp */,
-				001E096A1556339400405DC0 /* AppleLanguageCard.h */,
 				00B8881312A393990052B7A4 /* Apple1ACI.cpp */,
 				00B8881412A393990052B7A4 /* Apple1ACI.h */,
 				00F397E3141655DA00C53A3E /* Apple1IO.cpp */,
@@ -844,6 +839,8 @@
 				00811DFD12D251E9009AD2F0 /* AppleDiskIIInterfaceCard.h */,
 				00811F1112D2738B009AD2F0 /* AppleGraphicsTablet.cpp */,
 				00811F1012D2738B009AD2F0 /* AppleGraphicsTablet.h */,
+				001E09691556339400405DC0 /* AppleLanguageCard.cpp */,
+				001E096A1556339400405DC0 /* AppleLanguageCard.h */,
 				00139F83151195E600B0E108 /* AppleIIAddressDecoder.cpp */,
 				00139F85151195EE00B0E108 /* AppleIIAddressDecoder.h */,
 				00B8881912A393990052B7A4 /* AppleIIAudioIn.cpp */,
@@ -856,8 +853,6 @@
 				00B7C647147B5B2300BB7E6B /* AppleIIGamePort.h */,
 				00B8882312A393990052B7A4 /* AppleIIKeyboard.cpp */,
 				00B8882412A393990052B7A4 /* AppleIIKeyboard.h */,
-				00B8882712A393990052B7A4 /* AppleIISlotExpansionMemory.cpp */,
-				00B8882812A393990052B7A4 /* AppleIISlotExpansionMemory.h */,
 				00B8882912A393990052B7A4 /* AppleIISlotMemory.cpp */,
 				00B8882A12A393990052B7A4 /* AppleIISlotMemory.h */,
 				00B8882B12A393990052B7A4 /* AppleIIVideo.cpp */,
@@ -1501,7 +1496,6 @@
 				00FC27DB12D1070A0065E986 /* AppleIIAudioOut.cpp in Sources */,
 				00FC27DF12D1070A0065E986 /* AppleIIFloatingBus.cpp in Sources */,
 				00FC27E312D1070A0065E986 /* AppleIIKeyboard.cpp in Sources */,
-				00FC27E712D1070A0065E986 /* AppleIISlotExpansionMemory.cpp in Sources */,
 				00FC27E912D1070A0065E986 /* AppleIISlotMemory.cpp in Sources */,
 				00FC27EB12D1070A0065E986 /* AppleIIVideo.cpp in Sources */,
 				00FC27EE12D1070A0065E986 /* AppleDiskDrive525.cpp in Sources */,

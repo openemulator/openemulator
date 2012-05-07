@@ -79,23 +79,23 @@ void Apple1ACI::write(OEAddress address, OEChar value)
 
 void Apple1ACI::mapMemory(int message)
 {
-    MemoryMaps m;
-    MemoryMap theMap;
+    MemoryMaps memoryMaps;
+    MemoryMap memoryMap;
     
-    theMap.component = this;
-    theMap.startAddress = 0xc000;
-    theMap.endAddress = 0xc0ff;
-    theMap.read = true;
-    theMap.write = true;
-    m.push_back(theMap);
+    memoryMap.component = this;
+    memoryMap.startAddress = 0xc000;
+    memoryMap.endAddress = 0xc0ff;
+    memoryMap.read = true;
+    memoryMap.write = true;
+    memoryMaps.push_back(memoryMap);
     
-    theMap.component = rom;
-    theMap.startAddress = 0xc100;
-    theMap.endAddress = 0xc1ff;
-    theMap.read = true;
-    theMap.write = false;
-    m.push_back(theMap);
+    memoryMap.component = rom;
+    memoryMap.startAddress = 0xc100;
+    memoryMap.endAddress = 0xc1ff;
+    memoryMap.read = true;
+    memoryMap.write = false;
+    memoryMaps.push_back(memoryMap);
     
     if (memoryBus)
-        memoryBus->postMessage(this, message, &m);
+        memoryBus->postMessage(this, message, &memoryMaps);
 }

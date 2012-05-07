@@ -344,32 +344,32 @@ void RDCFFA1::write(OEAddress address, OEChar value)
 
 void RDCFFA1::mapMemory(int message)
 {
-    MemoryMaps m;
-    MemoryMap theMap;
+    MemoryMaps memoryMaps;
+    MemoryMap memoryMap;
     
-    theMap.component = ram;
-    theMap.startAddress = 0x1000;
-    theMap.endAddress = 0x8fff;
-    theMap.read = true;
-    theMap.write = true;
-    m.push_back(theMap);
+    memoryMap.component = ram;
+    memoryMap.startAddress = 0x1000;
+    memoryMap.endAddress = 0x8fff;
+    memoryMap.read = true;
+    memoryMap.write = true;
+    memoryMaps.push_back(memoryMap);
     
-    theMap.component = rom;
-    theMap.startAddress = 0x9000;
-    theMap.endAddress = 0xaeff;
-    theMap.read = true;
-    theMap.write = true;
-    m.push_back(theMap);
+    memoryMap.component = rom;
+    memoryMap.startAddress = 0x9000;
+    memoryMap.endAddress = 0xaeff;
+    memoryMap.read = true;
+    memoryMap.write = false;
+    memoryMaps.push_back(memoryMap);
     
-    theMap.component = this;
-    theMap.startAddress = 0xaf00;
-    theMap.endAddress = 0xafff;
-    theMap.read = true;
-    theMap.write = true;
-    m.push_back(theMap);
+    memoryMap.component = this;
+    memoryMap.startAddress = 0xaf00;
+    memoryMap.endAddress = 0xafff;
+    memoryMap.read = true;
+    memoryMap.write = true;
+    memoryMaps.push_back(memoryMap);
     
     if (memoryBus)
-        memoryBus->postMessage(this, message, &m);
+        memoryBus->postMessage(this, message, &memoryMaps);
 }
 
 bool RDCFFA1::openDiskImage(string path)

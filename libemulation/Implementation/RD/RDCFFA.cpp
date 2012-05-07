@@ -32,7 +32,6 @@ RDCFFA::RDCFFA()
     forceWriteProtected = false;
     
     device = NULL;
-    memoryBus = NULL;
     
     ataBufferIndex = 0;
     ataError = false;
@@ -79,8 +78,6 @@ bool RDCFFA::setRef(string name, OEComponent *ref)
         if (device)
             device->postMessage(this, DEVICE_ADD_STORAGE, this);
     }
-    else if (name == "memoryBus")
-        memoryBus = ref;
     else
         return false;
     
@@ -96,21 +93,7 @@ bool RDCFFA::init()
         return false;
     }
     
-    if (!memoryBus)
-    {
-        logMessage("memoryBus not connected");
-        
-        return false;
-    }
-    
-//    mapMemory(ADDRESSDECODER_MAP_MEMORYMAPS);
-    
     return true;
-}
-
-void RDCFFA::dispose()
-{
-//    mapMemory(ADDRESSDECODER_UNMAP_MEMORYMAPS);
 }
 
 bool RDCFFA::postMessage(OEComponent *sender, int message, void *data)
@@ -172,25 +155,34 @@ OEChar RDCFFA::read(OEAddress address)
             
             return ataBuffer[ataBufferIndex++];
             
+            
+        case 0x09:
+            // ATA Error
+            return 0;
+            
+        case 0x0a:
+            // ATA Sector count
+            return 0;
+            
         case 0x0b:
-            // ATA_LBA07_00
+            // ATA LBA 00-07
             return ataLBA.b.l;
             
         case 0x0c:
-            // ATA_LBA15_08
+            // ATA LBA 08-15
             return ataLBA.b.h;
             
         case 0x0d:
-            // ATA_LBA23_16 
+            // ATA LBA 16-23
             return ataLBA.b.h2;
             
         case 0x0e:
-            // ATA_LBA27_24
+            // ATA LBA 24-27
             return ataLBA.b.h3;
             
         case 0x0f:
         {
-            // ATAStatus
+            // ATA Status
             OEChar status = 0;
             
             if (ataError)
@@ -231,32 +223,32 @@ void RDCFFA::write(OEAddress address, OEChar value)
             break;
             
         case 0x0b:
-            // ATA_LBA07_00
+            // ATA LBA 00-07
             ataLBA.b.l = value;
             
             break;
             
         case 0x0c:
-            // ATA_LBA15_08
+            // ATA LBA 08-15
             ataLBA.b.h = value;
             
             break;
             
         case 0x0d:
-            // ATA_LBA23_16 
+            // ATA LBA 16-23
             ataLBA.b.h2 = value;
             
             break;
             
         case 0x0e:
-            // ATA_LBA27_24
+            // ATA LBA 24-27
             ataLBA.b.h3 = value & 0xf;
             
             break;
             
         case 0x0f:
         {
-            // ATACommand
+            // ATA Command
             ataCommand = value;
             
             switch (ataCommand)

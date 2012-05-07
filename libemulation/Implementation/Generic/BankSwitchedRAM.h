@@ -5,7 +5,7 @@
  * (C) 2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls random access memory
+ * Controls bank-switched random access memory
  */
 
 #include "RAM.h"

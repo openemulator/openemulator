@@ -16,10 +16,9 @@
 
 AppleIISlotMemory::AppleIISlotMemory()
 {
+    memoryBus = NULL;
+    memory = NULL;
     en = false;
-    
-    slotMemory = NULL;
-    slotExpansionMemory = NULL;
 }
 
 bool AppleIISlotMemory::setValue(string name, string value)
@@ -44,18 +43,16 @@ bool AppleIISlotMemory::getValue(string name, string& value)
 
 bool AppleIISlotMemory::setRef(string name, OEComponent *ref)
 {
-	if (name == "mmu")
+	if (name == "memoryBus")
     {
-        if (mmu)
-            mmu->removeObserver(this, APPLEII_SLOTEXPANSIONMEMORY_WILL_UNMAP);
-		mmu = ref;
-        if (mmu)
-            mmu->addObserver(this, APPLEII_SLOTEXPANSIONMEMORY_WILL_UNMAP);
+        if (memoryBus)
+            memoryBus->removeObserver(this, APPLEII_SLOTEXPANSIONMEMORY_WILL_UNMAP);
+		memoryBus = ref;
+        if (memoryBus)
+            memoryBus->addObserver(this, APPLEII_SLOTEXPANSIONMEMORY_WILL_UNMAP);
     }
-	else if (name == "slotMemory")
-		slotMemory = ref;
-	else if (name == "slotExpansionMemory")
-		slotExpansionMemory = ref;
+	else if (name == "memory")
+		memory = ref;
 	else
 		return false;
 	
@@ -64,63 +61,80 @@ bool AppleIISlotMemory::setRef(string name, OEComponent *ref)
 
 bool AppleIISlotMemory::init()
 {
-    if (!slotMemory)
+    if (!memoryBus)
     {
-        logMessage("slotMemory not connected");
+        logMessage("memoryBus not connected");
+        
+        return false;
+    }
+    
+    if (!memory)
+    {
+        logMessage("memory not connected");
         
         return false;
     }
     
     if (en)
-    {
-    }
+        updateSlotExpansion(true);
     
     return true;
 }
 
+void AppleIISlotMemory::dispose()
+{
+    if (en)
+        updateSlotExpansion(false);
+}
+
 void AppleIISlotMemory::notify(OEComponent *sender, int notification, void *data)
 {
-    if ((sender == mmu) && en)
-    {
-        en = false;
-        
-        mapMemory(APPLEII_UNMAP_SLOTMEMORYMAPS);
-    }
+    enableSlotExpansion(false);
 }
 
 OEChar AppleIISlotMemory::read(OEAddress address)
 {
-    if (!en)
-    {
-        en = true;
-        
-        mapMemory(APPLEII_MAP_SLOTMEMORYMAPS);
-    }
+    if (!(address & 0x800))
+        enableSlotExpansion(true);
+    else if (!((~address) & 0xfff))
+        memoryBus->postNotification(this, APPLEII_SLOTEXPANSIONMEMORY_WILL_UNMAP, NULL);
     
-    return slotMemory->read(address);
+    return memory->read(address);
 }
 
 void AppleIISlotMemory::write(OEAddress address, OEChar value)
 {
-    if (!en)
-    {
-        en = true;
-        
-        mapMemory(APPLEII_MAP_SLOTMEMORYMAPS);
-    }
+    if (!(address & 0x800))
+        enableSlotExpansion(true);
+    else if (!((~address) & 0xfff))
+        memoryBus->postNotification(this, APPLEII_SLOTEXPANSIONMEMORY_WILL_UNMAP, NULL);
     
-    slotMemory->write(address, value);
+    memory->write(address, value);
 }
 
-void AppleIISlotMemory::mapMemory(int message)
+void AppleIISlotMemory::enableSlotExpansion(bool value)
 {
+    if (en == value)
+        return;
+    
+    updateSlotExpansion(value);
+}
+
+void AppleIISlotMemory::updateSlotExpansion(bool value)
+{
+    en = value;
+    
+    MemoryMaps memoryMaps;
     MemoryMap memoryMap;
     
-    memoryMap.component = slotExpansionMemory;
+    memoryMap.component = this;
     memoryMap.startAddress = 0xc800;
     memoryMap.endAddress = 0xcfff;
     memoryMap.read = true;
     memoryMap.write = true;
+    memoryMaps.push_back(memoryMap);
     
-    mmu->postMessage(this, message, &memoryMap);
+    memoryBus->postMessage(this, (value ?
+                                  APPLEII_MAP_SLOTMEMORYMAPS :
+                                  APPLEII_UNMAP_SLOTMEMORYMAPS), &memoryMaps);
 }

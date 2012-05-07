@@ -1,11 +1,16 @@
 ==1.0.3==
-* Implement Apple Language Card
-* Implement AppleIISlotMemory and AppleIISlotExpansionMemory
+* Fix Apple language card
+* Fix R&D CFFA
+* Fix Disk II controller for writing to disk
+* Fix IAC 45, beautiful boot
+* Fix Disk II drive sounds
+* Fix libdiskimage GCR53
+* Implement libdiskimage write to disk
 * Implement Apple Graphics Tablet
 * Fix [CanvasView update] problem in paper view
 * Implement Apple Silentype
-
-* Improve audio player for sample-accurate playback
+* Implement Videx Videoterm
+* Implement sample-accurate playback in audio player (?)
 * Fix dragging a disk image to a canvas does not mount when canvas is not in focus
 * Fix replace monitor+emulation lock problem (happens when a monitor is replaced and selected)
 * Fix CTRL+ALT mouse capture
@@ -14,7 +19,6 @@
 
 ==1.0.4==
 * Implement Apple III
-* Implement Videx Videoterm
 * Implement Saturn RAMboard
 * Implement Mountain Computer Apple Clock
 * Implement TimeMaster II H.O.

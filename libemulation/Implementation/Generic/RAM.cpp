@@ -115,11 +115,9 @@ bool RAM::postMessage(OEComponent *sender, int message, void *data)
 
 void RAM::notify(OEComponent *sender, int notification, void *data)
 {
-    ControlBusPowerState oldPowerState = powerState;
     powerState = *((ControlBusPowerState *)data);
     
-    if ((oldPowerState == CONTROLBUS_POWERSTATE_OFF) &&
-        (powerState != CONTROLBUS_POWERSTATE_OFF))
+    if (powerState == CONTROLBUS_POWERSTATE_OFF)
         initMemory();
 }
 

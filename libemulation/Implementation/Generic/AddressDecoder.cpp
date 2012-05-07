@@ -158,7 +158,7 @@ void AddressDecoder::updateMemoryMaps(OEAddress startAddress, OEAddress endAddre
     
     updateMemoryMaps(staticMemoryMaps, startAddress, endAddress);
     
-    updateMemoryMaps(dynamicMemoryMaps, startAddress, endAddress);
+//    updateMemoryMaps(dynamicMemoryMaps, startAddress, endAddress);
 }
 
 bool AddressDecoder::updateMemoryMaps()
@@ -232,14 +232,12 @@ bool AddressDecoder::removeMemoryMaps(MemoryMaps *value)
                 (i->read == j->read) &&
                 (i->write == j->write))
             {
-                dynamicMemoryMaps.erase(i);
+                j = dynamicMemoryMaps.erase(j);
                 
-                updateMemoryMaps(j->startAddress, j->endAddress);
-                
-                return true;
+                updateMemoryMaps(i->startAddress, i->endAddress);
             }
         }
     }
     
-    return false;
+    return true;
 }

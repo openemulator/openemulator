@@ -42,6 +42,9 @@ protected:
     
     OEAddress addressMask;
     
+    bool addMemoryMaps(MemoryMaps *value);
+    bool removeMemoryMaps(MemoryMaps *value);
+    
 private:
     OEComponent *floatingBus;
     MemoryMapsRef ref;
@@ -55,9 +58,6 @@ private:
     void updateMemoryMaps(MemoryMaps& value, OEAddress startAddress, OEAddress endAddress);
     void updateMemoryMaps(OEAddress startAddress, OEAddress endAddress);
     bool updateMemoryMaps();
-    
-    bool addMemoryMaps(MemoryMaps *value);
-    bool removeMemoryMaps(MemoryMaps *value);
 };
 
 #endif

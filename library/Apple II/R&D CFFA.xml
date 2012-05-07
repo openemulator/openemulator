@@ -3,19 +3,23 @@
 <edl version="1.0" generator="OpenEmulator" framework="700" label="RD CFFA1" image="images/R&amp;D/R&amp;D CFFA.png" description="The CFFA interface card (www.dreher.net) is used for accessing CompactFlash devices on an Apple II computer. It is usually connected to slot 7.">
     
     <device id="rdCFFA" label="R&amp;D CFFA" image="images/R&amp;D/R&amp;D CFFA.png">
+        <setting ref="rdCFFA.memoryMux" name="sel" label="Controller ROM" type="select" options="ROM6502|6502 ROM,ROM65C02|65C02 ROM"/>
         <setting ref="rdCFFA.io" name="forceWriteProtected" label="Force Write Protected" type="checkbox"/>
-        <setting ref="rdCFFA.memory" name="sel" label="Controller Type" type="select" options="ROM6502|6502 ROM,ROM65C02|65C02 ROM"/>
     </device>
     <connector id="rdCFFA.connector" type="Apple II Slot">
-        <inlet ref="rdCFFA.io" property="memoryBus" outletRef="memoryBus"/>
+        <inlet ref="rdCFFA.memory" property="memoryBus" outletRef="memoryBus"/>
     </connector>
     <component id="rdCFFA.io" class="RDCFFA">
         <property name="device" ref="rdCFFA"/>
-        <property name="memoryBus" ref=""/>
         <property name="diskImage" value=""/>
         <property name="forceWriteProtected" value="0"/>
     </component>
-    <component id="rdCFFA.memory" class="AddressMux">
+    <component id="rdCFFA.memory" class="AppleIISlotMemory">
+        <property name="memoryBus" ref=""/>
+        <property name="memory" ref="rdCFFA.memoryMux"/>
+        <property name="en" value="0"/>
+    </component>
+    <component id="rdCFFA.memoryMux" class="AddressMux">
         <property name="refROM6502" ref="rdCFFA.rom6502"/>
         <property name="refROM65C02" ref="rdCFFA.rom65C02"/>
         <property name="sel" value="ROM6502"/>

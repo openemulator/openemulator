@@ -25,7 +25,7 @@ public:
     
     OEChar read(OEAddress address);
     void write(OEAddress address, OEChar value);
-
+    
 private:
     bool enhancedTerminalSpeed;
     bool fullASCIIKeyboard;

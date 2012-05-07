@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
-<edl version="1.0" label="Videx Videoterm" image="images/Videx/Videx Videoterm.png" description="The Videx Videoterm is an 80-column video card for the Apple II. It is usually installed in slot 3.">
+<edl version="1.0" label="Videx Videoterm" image="images/Videx/Videx Videoterm.png" description="The Videx Videoterm is an 80-column video card for the Apple II. It is usually connected to slot 3.">
     
     <device id="videxVideoterm" label="Videx Videoterm" image="images/Videx/Videx Videoterm.png">
         <setting ref="videxVideoterm.io" name="font1" label="Main Character Set" type="select" options="Normal,Normal Uppercase,French,German,Katakana,Spanish,Symbol,Super and Subscript,APL,Epson"/>
         <setting ref="videxVideoterm.io" name="font2" label="Expanded Character Set" type="select" options="Normal,Normal Uppercase,French,German,Katakana,Spanish,Symbol,Super and Subscript,APL,Epson"/>
     </device>
-    <connector id="videxVideoterm.connector" type="Apple II Slot"/>
+    <connector id="videxVideoterm.connector" type="Apple II Slot">
+        <inlet ref="videxVideoterm.memory" property="memoryBus" outletRef="memoryBus"/>
+    </connector>
     <component id="videxVideoterm.io" class="FloatingBus"/>
-    <component id="videxVideoterm.memory" class="ROM">
+    <component id="videxVideoterm.memory" class="AppleIISlotMemory">
+        <property name="memoryBus" ref=""/>
+        <property name="memory" ref="videxVideoterm.rom"/>
+        <property name="en" value="0"/>
+    </component>
+    <component id="videxVideoterm.rom" class="ROM">
         <property name="memoryImage" data="${resourcePath}/roms/Videx/Videx Videoterm 2.4 ROM.bin"/>
     </component>
     

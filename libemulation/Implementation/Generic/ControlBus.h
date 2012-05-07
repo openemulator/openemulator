@@ -59,7 +59,13 @@ private:
     OELong audioBufferStart;
     float sampleToCycleRatio;
     
+    bool activity;
+    
     void setPowerState(ControlBusPowerState value);
+    void updatePowerState();
+    
+    void setActivity(bool value);
+    void updateActivity();
     
     OESLong getPendingCPUCycles();
     void setPendingCPUCycles(OESLong value);

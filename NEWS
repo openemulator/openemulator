@@ -1,4 +1,6 @@
 ==Latest==
+* Implemented Apple Language Card
+* Implemented AppleIISlotMemory
 * Implemented R&D CFFA card
 * Implemented low-level FDI format decoding
 * Implemented FDI format Huffman compression

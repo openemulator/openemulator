@@ -35,6 +35,8 @@ ControlBus::ControlBus()
     
     audioBufferStart = 0;
     sampleToCycleRatio = 0;
+    
+    activity = false;
 }
 
 bool ControlBus::setValue(string name, string value)
@@ -83,20 +85,10 @@ bool ControlBus::setRef(string name, OEComponent *ref)
     if (name == "device")
     {
         if (device)
-        {
-            if (powerState == CONTROLBUS_POWERSTATE_ON)
-                device->postMessage(this, DEVICE_CLEAR_ACTIVITY, NULL);
-            
             device->removeObserver(this, DEVICE_DID_CHANGE);
-        }
         device = ref;
         if (device)
-        {
-            if (powerState == CONTROLBUS_POWERSTATE_ON)
-                device->postMessage(this, DEVICE_ASSERT_ACTIVITY, NULL);
-            
             device->addObserver(this, DEVICE_DID_CHANGE);
-        }
     }
     else if (name == "audio")
     {
@@ -137,18 +129,14 @@ bool ControlBus::init()
         return false;
     }
     
-    setPowerState(powerState);
-    
-    if (powerState == CONTROLBUS_POWERSTATE_ON)
-        device->postMessage(this, DEVICE_ASSERT_ACTIVITY, NULL);
+    updatePowerState();
     
     return true;
 }
 
 void ControlBus::dispose()
 {
-    if (powerState == CONTROLBUS_POWERSTATE_ON)
-        device->postMessage(this, DEVICE_CLEAR_ACTIVITY, NULL);
+    setActivity(false);
 }
 
 bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
@@ -166,50 +154,50 @@ bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
             return true;
             
         case CONTROLBUS_ASSERT_RESET:
-            resetCount++;
-            
-            if (resetCount == 1)
+            if (!resetCount)
                 postNotification(this, CONTROLBUS_RESET_DID_ASSERT, NULL);
+            
+            resetCount++;
             
             return true;
             
         case CONTROLBUS_CLEAR_RESET:
             resetCount--;
             
-            if (resetCount == 0)
+            if (!resetCount)
                 postNotification(this, CONTROLBUS_RESET_DID_CLEAR, NULL);
             
             return true;
             
         case CONTROLBUS_ASSERT_IRQ:
-            irqCount++;
-            
-            if (irqCount == 1)
+            if (!irqCount)
                 postNotification(this, CONTROLBUS_IRQ_DID_ASSERT, NULL);
+            
+            irqCount++;
             
             return true;
             
         case CONTROLBUS_CLEAR_IRQ:
-            irqCount--;
-            
-            if (irqCount == 0)
+            if (!irqCount)
                 postNotification(this, CONTROLBUS_IRQ_DID_CLEAR, NULL);
+            
+            irqCount--;
             
             return true;
             
         case CONTROLBUS_ASSERT_NMI:
-            nmiCount++;
-            
-            if (nmiCount == 1)
+            if (!nmiCount)
                 postNotification(this, CONTROLBUS_NMI_DID_ASSERT, NULL);
+            
+            nmiCount++;
             
             return true;
             
         case CONTROLBUS_CLEAR_NMI:
-            nmiCount--;
-            
-            if (nmiCount == 0)
+            if (!nmiCount)
                 postNotification(this, CONTROLBUS_NMI_DID_CLEAR, NULL);
+            
+            nmiCount--;
             
             return true;
             
@@ -303,7 +291,7 @@ void ControlBus::notify(OEComponent *sender, int notification, void *data)
     }
     else if (sender == device)
     {
-        switch (*((ControlBusPowerState *)data))
+        switch (*((DeviceEvent *)data))
         {
             case DEVICE_POWERDOWN:
                 setPowerState(CONTROLBUS_POWERSTATE_OFF);
@@ -350,62 +338,86 @@ void ControlBus::notify(OEComponent *sender, int notification, void *data)
 
 void ControlBus::setPowerState(ControlBusPowerState value)
 {
+    if (powerState == value)
+        return;
+    
     ControlBusPowerState lastPowerState = powerState;
     powerState = value;
     
-    string stateLabel;
-    switch (powerState)
-    {
-        case CONTROLBUS_POWERSTATE_OFF:
-            stateLabel = "Powered Off";
-            break;
-            
-        case CONTROLBUS_POWERSTATE_HIBERNATE:
-            stateLabel = "Hibernated";
-            break;
-            
-        case CONTROLBUS_POWERSTATE_SLEEP:
-            stateLabel = "Sleeping";
-            break;
-            
-        case CONTROLBUS_POWERSTATE_STANDBY:
-            stateLabel = "Stand By";
-            break;
-            
-        case CONTROLBUS_POWERSTATE_PAUSE:
-            stateLabel = "Paused";
-            break;
-            
-        case CONTROLBUS_POWERSTATE_ON:
-            stateLabel = "Powered On";
-            break;
-            
-        default:
-            stateLabel = "Unknown";
-            break;
-    }
+    updatePowerState();
     
-    device->postMessage(this, DEVICE_SET_STATELABEL, &stateLabel);
+    postNotification(this, CONTROLBUS_POWERSTATE_DID_CHANGE, &powerState);
     
-    device->postMessage(this, DEVICE_UPDATE, NULL);
-    
-    if ((lastPowerState == CONTROLBUS_POWERSTATE_ON) &&
-        (powerState != CONTROLBUS_POWERSTATE_ON))
-        device->postMessage(this, DEVICE_CLEAR_ACTIVITY, NULL);
-    else if ((lastPowerState != CONTROLBUS_POWERSTATE_ON) &&
-             (powerState == CONTROLBUS_POWERSTATE_ON))
-        device->postMessage(this, DEVICE_ASSERT_ACTIVITY, NULL);
-    
-    if (lastPowerState != powerState)
-        postNotification(this, CONTROLBUS_POWERSTATE_DID_CHANGE, &powerState);
-    
-    if (resetOnPowerOn &&
-        (lastPowerState == CONTROLBUS_POWERSTATE_OFF) &&
-        (powerState == CONTROLBUS_POWERSTATE_ON))
+    if (resetOnPowerOn && (lastPowerState == CONTROLBUS_POWERSTATE_OFF))
     {
         postMessage(this, CONTROLBUS_ASSERT_RESET, NULL);
         postMessage(this, CONTROLBUS_CLEAR_RESET, NULL);
     }
+}
+
+void ControlBus::updatePowerState()
+{
+    string stateLabel;
+    
+    switch (powerState)
+    {
+        case CONTROLBUS_POWERSTATE_OFF:
+            stateLabel = "Powered Off";
+            
+            break;
+            
+        case CONTROLBUS_POWERSTATE_HIBERNATE:
+            stateLabel = "Hibernated";
+            
+            break;
+            
+        case CONTROLBUS_POWERSTATE_SLEEP:
+            stateLabel = "Sleeping";
+            
+            break;
+            
+        case CONTROLBUS_POWERSTATE_STANDBY:
+            stateLabel = "Stand By";
+            
+            break;
+            
+        case CONTROLBUS_POWERSTATE_PAUSE:
+            stateLabel = "Paused";
+            
+            break;
+            
+        case CONTROLBUS_POWERSTATE_ON:
+            stateLabel = "Powered On";
+            
+            break;
+            
+        default:
+            stateLabel = "Unknown";
+            
+            break;
+    }
+    
+    device->postMessage(this, DEVICE_SET_STATELABEL, &stateLabel);
+    device->postMessage(this, DEVICE_UPDATE, NULL);
+    
+    setActivity(powerState == CONTROLBUS_POWERSTATE_ON);
+}
+
+void ControlBus::setActivity(bool value)
+{
+    if (activity == value)
+        return;
+    
+    activity = value;
+    
+    updateActivity();
+}
+
+void ControlBus::updateActivity()
+{
+    device->postMessage(this, (activity ?
+                               DEVICE_ASSERT_ACTIVITY : 
+                               DEVICE_CLEAR_ACTIVITY), NULL);
 }
 
 inline OESLong ControlBus::getPendingCPUCycles()

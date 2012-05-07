@@ -113,6 +113,6 @@ private:
     DIInt getStreamOffset();
     
     void writeNibble(DIChar value);
-    void writeNibble(DIChar value, DIInt q3Clocks);
+    void writeNibble(DIChar value, DISInt q3Clocks);
     DIChar readNibble();
 };

@@ -745,7 +745,7 @@ void AppleIIVideo::drawVideoLine(int y, int x0, int x1)
             {
                 OEChar c = rendererTextMemory[memoryOffset + x];
                 OEChar *m = (rendererTextMap + (y & 0x7) * MAP_WIDTH +
-                              c * MAP_HEIGHT * MAP_WIDTH);
+                             c * MAP_HEIGHT * MAP_WIDTH);
                 
                 copySegment(p, m);
             }
@@ -761,8 +761,8 @@ void AppleIIVideo::drawVideoLine(int y, int x0, int x1)
             {
                 OEChar c = rendererTextMemory[memoryOffset + x];
                 OEChar *m = (rendererLoresMap + (y & 0x7) * MAP_WIDTH +
-                              c * MAP_HEIGHT * MAP_WIDTH +
-                              (x & 1) * MAP_SIZE * MAP_WIDTH * MAP_HEIGHT);
+                             c * MAP_HEIGHT * MAP_WIDTH +
+                             (x & 1) * MAP_SIZE * MAP_WIDTH * MAP_HEIGHT);
                 
                 copySegment(p, m);
             }

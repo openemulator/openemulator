@@ -1,28 +1,50 @@
 
 /**
  * libemulation
- * Apple Graphics Tablet
- * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
+ * Apple Language Card
+ * (C) 2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls an Apple Graphics Tablet
+ * Controls an Apple Language Card
  */
 
 #include "OEComponent.h"
-#include "OEImage.h"
 
-class AppleGraphicsTablet : public OEComponent
+class AppleLanguageCard : public OEComponent
 {
 public:
-	AppleGraphicsTablet();
+	AppleLanguageCard();
 	
 	bool setValue(string name, string value);
+    bool getValue(string name, string& value);
 	bool setRef(string name, OEComponent *ref);
 	bool init();
+    void dispose();
 	
+    void notify(OEComponent *sender, int notification, void *data);
+    
+    OEChar read(OEAddress address);
+    void write(OEAddress address, OEChar value);
+    
+    void enableLanguageCard(bool value);
+    void updateLanguageCard(bool value);
+    
 private:
-	OEComponent *device;
-	OEComponent *canvas;
-	
-	string imagePath;
+    OEComponent *controlBus;
+    OEComponent *memoryBus;
+    OEComponent *floatingBus;
+    OEComponent *ram;
+    OEComponent *romF8;
+    
+    bool bank1;
+    bool ramRead;
+    bool preWrite;
+    bool ramWrite;
+    
+    void setROMF8(bool value);
+    void setBank1(bool value);
+    void setRAMRead(bool value);
+    void updateRAMRead();
+    void setRAMWrite(bool value);
+    void updateRAMWrite();
 };

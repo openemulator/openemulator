@@ -495,6 +495,12 @@ constrainMaxCoordinate:(CGFloat)proposedMax
     return ([[item children] count] > 0);
 }
 
+- (BOOL)outlineView:(NSOutlineView *)outlineView
+ shouldCollapseItem:(id)item
+{
+    return NO;
+}
+
 - (id)outlineView:(NSOutlineView *)outlineView
             child:(NSInteger)index 
            ofItem:(id)item
