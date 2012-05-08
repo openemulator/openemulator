@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
-<edl version="1.0" generator="OpenEmulator" framework="736" label="Apple Silentype Interface Card" image="images/Apple/Apple Synch Printer Interface Card.png" description="The Apple Silentype Printer Interface Card connects an Apple Silentype printer to an Apple II Computer. It is usually connected to slot 1.">
+<edl version="1.0" generator="OpenEmulator" framework="736" label="Apple Silentype Interface Card" image="images/Apple/Apple Synch Printer Interface Card.png" description="The Apple Silentype Printer Interface Card connects an Apple Silentype printer to an Apple II computer. It is usually installed in slot 1.">
     
     <device id="appleSilentypeCard" label="Apple Silentype Interface Card" image="images/Apple/Apple Synch Printer Interface Card.png">
     </device>

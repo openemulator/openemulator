@@ -27,6 +27,9 @@ bool AppleIIAudioOut::setRef(string name, OEComponent *id)
 
 bool AppleIIAudioOut::init()
 {
+    if (!Audio1Bit::init())
+        return false;
+    
     if (!floatingBus)
     {
         logMessage("floatingBus not connected");
@@ -34,7 +37,7 @@ bool AppleIIAudioOut::init()
         return false;
     }
     
-    return Audio1Bit::init();
+    return true;
 }
 
 OEChar AppleIIAudioOut::read(OEAddress address)

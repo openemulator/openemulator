@@ -607,7 +607,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     
     [document unlockEmulation];
     
-    return (value == CANVAS_MODE_DISPLAY);
+    return (value == CANVAS_DISPLAY);
 }
 
 - (BOOL)isPaperCanvas
@@ -625,7 +625,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     
     [document unlockEmulation];
     
-    return (value == CANVAS_MODE_PAPER);
+    return (value == CANVAS_PAPER);
 }
 
 - (NSSize)defaultViewSize

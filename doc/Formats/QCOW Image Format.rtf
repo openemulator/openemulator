@@ -1,0 +1,114 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1138\cocoasubrtf320
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww16380\viewh12560\viewkind0
+\pard\tx273\tx566\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803
+
+\f0\fs48 \cf0 The QCOW Image Format\
+
+\fs24 \
+The QCOW image format is one of the disk image formats supported by the QEMU processor emulator. It is a representation of a fixed size block device in a file. Benefits it offers over using raw dump representation include:\
+\
+	1.	Smaller file size, even on filesystems which don't support holes (i.e. sparse files)\
+	2.	Snapshot support, where the image only represents changes made to an underlying disk image\
+	3.	Optional zlib based compression\
+	4.	Optional AES encryption\
+\
+The qemu-img command is the most common way of manipulating these images e.g.\
+\
+  $> qemu-img create -f qcow test.qcow 4G\
+  Formating 'test.qcow', fmt=qcow, size=4194304 kB\
+  $> qemu-img convert test.qcow -O raw test.img\
+\
+
+\fs36 The Header\
+
+\fs24 \
+Each QCOW file begins with a header, in big endian format, as follows:\
+\
+  typedef struct QCowHeader \{\
+      uint32_t magic;\
+      uint32_t version;\
+\
+      uint64_t backing_file_offset;\
+      uint32_t backing_file_size;\
+      uint32_t mtime;\
+\
+      uint64_t size; /* in bytes */\
+\
+      uint8_t  cluster_bits;\
+      uint8_t  l2_bits;\
+      uint32_t crypt_method;\
+\
+      uint64_t l1_table_offset;\
+  \} QCowHeader;\
+\
+	\'95	The first 4 bytes contain the characters 'Q', 'F', 'I' followed by 0xfb.\
+	\'95	The next 4 bytes contain the format version used by the file. Currently, there has only been a single version of the format, version 1.\
+	\'95	The backing_file_offset field gives the offset from the beginning of the file to a string containing the path to a file; backing_file_size gives the length of this string, which isn't a nul-terminated. If this image is a snapshot image, then this will be the path to the original file. More on snapshots below.\
+	\'95	The mtime field can be ignored.\
+	\'95	The next 8 bytes contain the size, in bytes, of the block device represented by the image.\
+	\'95	The cluster_bits and l2_bits fields, between them, describe how to map an image offset address to a location within the file. The cluster_bits field determines the number of lower bits of the offset address are used as an index within a cluster; the l2_bits field gives the number of bits used as an index withing the L2 table. More on the format's 2-level lookup system below.\
+	\'95	The crypt_method field is 0 if no encryption has been used, and 1 if AES encryption has been used.\
+	\'95	The l1_table_offset gives the offset within the file of the L1 table.\
+\
+
+\fs36 2-Level Lookups\
+
+\fs24 \
+With QCOW, the contents of the device are stored in clusters. Each cluster contains a number of 512 byte sectors.\
+\
+In order to find the cluster for a given address within the device, you must traverse two levels of tables. The L1 table is an array of file offsets to L2 tables, and each L2 table is an array of file offsets to clusters.\
+\
+So, an address is split into three separate offsets according to the cluster_bits and l2_bits fields. For example, if cluster_bits is 12 and l2_bits is 9, then the address is split up as follows:\
+\
+	\'95	the lower 12 is an offset within a 4Kb cluster\
+	\'95	the next 9 bits is offset within a 512 entry array of 64 bit file offsets, the L2 table\
+	\'95	the remaining 43 bits is an offset within another array of 64 bit file offsets, the L1 table\
+\
+Note, the size of the L1 table is a function of the size of the represented disk image:\
+ l1_size = ceiling (disk_size / (cluster_size * l2_size))\
+\
+In other words, in order to map a given disk address to an offset within the image:\
+\
+	1.	Obtain the L1 table address using the l1_table_offset header field\
+	2.	Use the top (64 - l2_bits - cluster_bits) bits of the address to index the L1 table as an array of 64 bit entries\
+	3.	Obtain the L2 table address using the offset in the L1 table\
+	4.	Use the next l2_bits of the address to index the L2 table as an array of 64 bit entries\
+	5.	Obtain the cluster address using the offset in the L2 table. (Assuming the most significant bit of the cluster address is zero. See the details on compression below.)\
+	6.	Use the remaining cluster_bits of the address as an offset within the cluster itself\
+\
+If the offset found in either the L1 or L2 table is zero, that area of the disk is not allocated within the image.\
+\
+
+\fs36 Snapshots\
+
+\fs24 \
+The QCOW format can represent the notion of a snapshot. That is, a QCOW image can be used to store the changes to another disk image, without actually affecting the contents of the original image.\
+\
+The representation is very simple. The snapshot image contains the path to the original disk image, and the snapshot image header gives the location of the path string within the file.\
+\
+When you want to read an area from the snapshot, you first check to see if that area is allocated within the snapshot image. If not, you read the area from the original disk image.\
+\
+
+\fs36 Compression\
+
+\fs24 \
+The QCOW format supports compression by allowing each cluster to be independently compressed with zlib.\
+\
+This is represented in the cluster offset obtained from the L2 table as follows:\
+\
+	\'95	If the most significant bit of the cluster offset is 1, this is a compressed cluster\
+	\'95	The next cluster_bits of the cluster offset is the size of the compressed cluster\
+	\'95	The remaining bits of the cluster offset is the actual address of the compressed cluster within the image\
+\
+
+\fs36 Encryption
+\fs24 \
+\
+The QCOW format also supports the encryption of clusters.\
+\
+If the crypt_method header field is 1, then a 16 character password is used as the 128 bit AES key.\
+\
+Each sector within each cluster is independently encrypted using AES Cipher Block Chaining mode, using the sector's offset (relative to the start of the device) in little-endian format as the first 64 bits of the 128 bit initialisation vector.\
+}

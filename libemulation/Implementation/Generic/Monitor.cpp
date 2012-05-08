@@ -29,15 +29,15 @@ bool Monitor::setValue(string name, string value)
     if (name == "videoDecoder")
     {
         if (value == "RGB")
-            configuration.videoDecoder = CANVAS_DECODER_RGB;
+            configuration.videoDecoder = CANVAS_RGB;
         else if (value == "Monochrome")
-            configuration.videoDecoder = CANVAS_DECODER_MONOCHROME;
+            configuration.videoDecoder = CANVAS_MONOCHROME;
         else if (value == "Composite Y'UV")
-            configuration.videoDecoder = CANVAS_DECODER_YUV;
+            configuration.videoDecoder = CANVAS_YUV;
         else if (value == "Composite Y'IQ")
-            configuration.videoDecoder = CANVAS_DECODER_YIQ;
+            configuration.videoDecoder = CANVAS_YIQ;
         else if (value == "Composite CXA2025AS")
-            configuration.videoDecoder = CANVAS_DECODER_CXA2025AS;
+            configuration.videoDecoder = CANVAS_CXA2025AS;
     }
     else if (name == "videoBrightness")
         configuration.videoBrightness = getFloat(value);
@@ -82,15 +82,15 @@ bool Monitor::setValue(string name, string value)
     else if (name == "displayShadowMask")
     {
         if (value == "Triad")
-            configuration.displayShadowMask = CANVAS_SHADOWMASK_TRIAD;
+            configuration.displayShadowMask = CANVAS_TRIAD;
         else if (value == "Inline")
-            configuration.displayShadowMask = CANVAS_SHADOWMASK_INLINE;
+            configuration.displayShadowMask = CANVAS_INLINE;
         else if (value == "Aperture")
-            configuration.displayShadowMask = CANVAS_SHADOWMASK_APERTURE;
+            configuration.displayShadowMask = CANVAS_APERTURE;
         else if (value == "LCD")
-            configuration.displayShadowMask = CANVAS_SHADOWMASK_LCD;
+            configuration.displayShadowMask = CANVAS_LCD;
         else if (value == "Bayer")
-            configuration.displayShadowMask = CANVAS_SHADOWMASK_BAYER;
+            configuration.displayShadowMask = CANVAS_BAYER;
     }
     else if (name == "displayPersistence")
         configuration.displayPersistence = getFloat(value);
@@ -106,15 +106,15 @@ bool Monitor::getValue(string name, string& value)
 {
     if (name == "videoDecoder")
     {
-        if (configuration.videoDecoder == CANVAS_DECODER_RGB)
+        if (configuration.videoDecoder == CANVAS_RGB)
             value = "RGB";
-        else if (configuration.videoDecoder == CANVAS_DECODER_MONOCHROME)
+        else if (configuration.videoDecoder == CANVAS_MONOCHROME)
             value = "Monochrome";
-        else if (configuration.videoDecoder == CANVAS_DECODER_YUV)
+        else if (configuration.videoDecoder == CANVAS_YUV)
             value = "Composite Y'UV";
-        else if (configuration.videoDecoder == CANVAS_DECODER_YIQ)
+        else if (configuration.videoDecoder == CANVAS_YIQ)
             value = "Composite Y'IQ";
-        else if (configuration.videoDecoder == CANVAS_DECODER_CXA2025AS)
+        else if (configuration.videoDecoder == CANVAS_CXA2025AS)
             value = "Composite CXA2025AS";
     }
     else if (name == "videoBrightness")
@@ -159,15 +159,15 @@ bool Monitor::getValue(string name, string& value)
         value = getString(configuration.displayShadowMaskDotPitch);
     else if (name == "displayShadowMask")
     {
-        if (configuration.displayShadowMask == CANVAS_SHADOWMASK_TRIAD)
+        if (configuration.displayShadowMask == CANVAS_TRIAD)
             value = "Triad";
-        else if (configuration.displayShadowMask == CANVAS_SHADOWMASK_INLINE)
+        else if (configuration.displayShadowMask == CANVAS_INLINE)
             value = "Inline";
-        else if (configuration.displayShadowMask == CANVAS_SHADOWMASK_APERTURE)
+        else if (configuration.displayShadowMask == CANVAS_APERTURE)
             value = "Aperture";
-        else if (configuration.displayShadowMask == CANVAS_SHADOWMASK_LCD)
+        else if (configuration.displayShadowMask == CANVAS_LCD)
             value = "LCD";
-        else if (configuration.displayShadowMask == CANVAS_SHADOWMASK_BAYER)
+        else if (configuration.displayShadowMask == CANVAS_BAYER)
             value = "Bayer";
     }
     else if (name == "displayPersistence")

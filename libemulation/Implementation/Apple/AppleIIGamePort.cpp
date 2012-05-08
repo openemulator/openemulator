@@ -115,10 +115,11 @@ bool AppleIIGamePort::postMessage(OEComponent *sender, int message, void *data)
             
             break;
             
+        case APPLEII_SET_PB3:
         case APPLEII_SET_PB0:
         case APPLEII_SET_PB1:
         case APPLEII_SET_PB2:
-            pb[message - APPLEII_SET_PB0 + 1] = *((bool *)data);
+            pb[message - APPLEII_SET_PB3] = *((bool *)data);
             
             break;
             

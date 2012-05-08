@@ -43,6 +43,7 @@ private:
     
     void setROMF8(bool value);
     void setBank1(bool value);
+    void updateBank1();
     void setRAMRead(bool value);
     void updateRAMRead();
     void setRAMWrite(bool value);

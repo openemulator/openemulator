@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
-<edl version="1.0" label="Apple Disk II" image="images/Apple/Apple Disk II.png" description="The Disk II Floppy Disk Subsystem is a 5¼-inch floppy disk drive designed for the Apple II computer.">
+<edl version="1.0" label="Apple Disk II" image="images/Apple/Apple Disk II.png" description="The Disk II Floppy Disk Subsystem is a 5¼-inch floppy disk drive for Apple II computers.">
     
     <device id="appleDiskII" label="Apple Disk II" image="images/Apple/Apple Disk II.png">
         <setting ref="appleDiskII.drive" name="forceWriteProtected" label="Force Write Protected" type="checkbox"/>

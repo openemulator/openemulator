@@ -64,6 +64,8 @@ typedef enum
     CANVAS_POST_IMAGE,
     CANVAS_CLEAR,
     CANVAS_MOVE_PRINTHEAD,
+    
+    CANVAS_END,
 } CanvasMessage;
 
 typedef enum
@@ -87,16 +89,16 @@ typedef enum
 
 typedef enum
 {
-    CANVAS_MODE_DISPLAY,
-    CANVAS_MODE_PAPER,
-    CANVAS_MODE_OPENGL,
+    CANVAS_DISPLAY,
+    CANVAS_PAPER,
+    CANVAS_OPENGL,
 } CanvasMode;
 
 typedef enum
 {
-    CANVAS_CAPTUREMODE_NO_CAPTURE,
-    CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_CLICK,
-    CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_ENTER,
+    CANVAS_NO_CAPTURE,
+    CANVAS_CAPTURE_ON_MOUSE_CLICK,
+    CANVAS_CAPTURE_ON_MOUSE_ENTER,
 } CanvasCaptureMode;
 
 typedef enum
@@ -116,20 +118,20 @@ typedef enum
 
 typedef enum
 {
-    CANVAS_DECODER_RGB,
-    CANVAS_DECODER_MONOCHROME,
-    CANVAS_DECODER_YUV,
-    CANVAS_DECODER_YIQ,
-    CANVAS_DECODER_CXA2025AS,
+    CANVAS_RGB,
+    CANVAS_MONOCHROME,
+    CANVAS_YUV,
+    CANVAS_YIQ,
+    CANVAS_CXA2025AS,
 } CanvasDecoder;
 
 typedef enum
 {
-    CANVAS_SHADOWMASK_TRIAD,
-    CANVAS_SHADOWMASK_INLINE,
-    CANVAS_SHADOWMASK_APERTURE,
-    CANVAS_SHADOWMASK_LCD,
-    CANVAS_SHADOWMASK_BAYER,
+    CANVAS_TRIAD,
+    CANVAS_INLINE,
+    CANVAS_APERTURE,
+    CANVAS_LCD,
+    CANVAS_BAYER,
 } CanvasShadowMask;
 
 class CanvasDisplayConfiguration
@@ -137,7 +139,7 @@ class CanvasDisplayConfiguration
 public:
     CanvasDisplayConfiguration()
     {
-        videoDecoder = CANVAS_DECODER_RGB;
+        videoDecoder = CANVAS_RGB;
         videoBrightness = 0;
         videoContrast = 1;
         videoSaturation = 1;
@@ -155,7 +157,7 @@ public:
         displayScanlineLevel = 0;
         displayShadowMaskLevel = 0;
         displayShadowMaskDotPitch = 1;
-        displayShadowMask = CANVAS_SHADOWMASK_TRIAD;
+        displayShadowMask = CANVAS_TRIAD;
         displayPersistence = 0;
         displayCenterLighting = 1;
         displayLuminanceGain = 1;

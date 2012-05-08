@@ -2,7 +2,7 @@
 /**
  * libemulation
  * Apple Graphics Tablet
- * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2010-2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Controls an Apple Graphics Tablet
@@ -53,13 +53,15 @@ bool AppleGraphicsTablet::init()
 {
 	if (!device)
 	{
-		logMessage("property 'device' undefined");
+		logMessage("device not connected");
+        
 		return false;
 	}
 	
 	if (!canvas)
 	{
 		logMessage("canvas could not be created");
+        
 		return false;
 	}
 	

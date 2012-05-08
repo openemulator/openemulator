@@ -29,6 +29,9 @@ bool AppleIIAddressDecoder::setRef(string name, OEComponent *ref)
 
 bool AppleIIAddressDecoder::init()
 {
+    if (!AddressDecoder::init())
+        return false;
+    
     if (!video)
     {
         logMessage("video not connected");
@@ -36,17 +39,22 @@ bool AppleIIAddressDecoder::init()
         return false;
     }
     
-    videoRefresh.resize(256);
-    
+    videoRefresh.resize((size_t) (size / blockSize));
     videoRefreshp = &videoRefresh.front();
     
-    for (OEInt i = 0x4; i < 0xc; i++)
+    OEInt startBlock, endBlock;
+    
+    startBlock = 0x400 >> blockBits;
+    endBlock = 0x7ff >> blockBits;
+    for (OEInt i = startBlock; i <= endBlock; i++)
         videoRefresh[i] = true;
     
-    for (OEInt i = 0x20; i < 0x4f; i++)
+    startBlock = 0x2000 >> blockBits;
+    endBlock = 0x5fff >> blockBits;
+    for (OEInt i = startBlock; i <= endBlock; i++)
         videoRefresh[i] = true;
     
-    return AddressDecoder::init();
+    return true;
 }
 
 bool AppleIIAddressDecoder::postMessage(OEComponent *sender, int event, void *data)
@@ -95,7 +103,7 @@ bool AppleIIAddressDecoder::postMessage(OEComponent *sender, int event, void *da
 
 void AppleIIAddressDecoder::write(OEAddress address, OEChar value)
 {
-    size_t index = (size_t) (address & addressMask) >> blockSize;
+    size_t index = (size_t) ((address & mask) >> blockBits);
 	writeMapp[index]->write(address, value);
     
     if (videoRefreshp[index])

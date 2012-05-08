@@ -114,6 +114,7 @@ bool AppleLanguageCard::init()
     }
     
     setROMF8(true);
+    updateBank1();
     updateRAMRead();
     updateRAMWrite();
     
@@ -192,6 +193,19 @@ void AppleLanguageCard::setBank1(bool value)
         return;
     
     bank1 = value;
+    
+    updateBank1();
+}
+
+void AppleLanguageCard::updateBank1()
+{
+    BankSwitchedRAMMap ramMap;
+    
+    ramMap.startAddress = 0x1000;
+    ramMap.endAddress = 0x1fff;
+    ramMap.offset = bank1 ? -0x1000 : 0x0000;
+    
+    ram->postMessage(this, BANKSWITCHEDRAM_MAP, &ramMap);
 }
 
 void AppleLanguageCard::setRAMRead(bool value)

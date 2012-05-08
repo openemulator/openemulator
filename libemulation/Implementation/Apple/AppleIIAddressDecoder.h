@@ -26,7 +26,6 @@ private:
     OEComponent *video;
     
     vector<int> videoRefresh;
-    
     int *videoRefreshp;
     
     OEData dummyVRAM;

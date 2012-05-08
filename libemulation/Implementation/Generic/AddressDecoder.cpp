@@ -16,18 +16,18 @@
 
 AddressDecoder::AddressDecoder()
 {
-	addressSize = 16;
-	blockSize = 8;
+	size = 0;
+	blockSize = 0;
     
 	floatingBus = NULL;
 	
-	addressMask = 0;
+	mask = 0;
 }
 
 bool AddressDecoder::setValue(string name, string value)
 {
-	if (name == "addressSize")
-		addressSize = getOEInt(value);
+	if (name == "size")
+		size = getOEInt(value);
 	else if (name == "blockSize")
 		blockSize = getOEInt(value);
 	else if (name.substr(0, 3) == "map")
@@ -59,11 +59,21 @@ bool AddressDecoder::init()
 		return false;
 	}
 	
-	OEAddress addressSpace = (1 << addressSize);
-	addressMask = addressSpace - 1;
+    if ((size != getNextPowerOf2(size)) ||
+        (blockSize != getNextPowerOf2(blockSize)) ||
+        (size < blockSize) ||
+        (!blockSize) ||
+        (!size))
+    {
+		logMessage("invalid value for size/blockSize");
+        
+		return false;
+    }
+    
+	mask = size - 1;
+    blockBits = getBitNum(blockSize);
 	
-	size_t blockNum = (size_t) (1 << (addressSize - blockSize));
-	
+	size_t blockNum = (size_t) (size / blockSize);
     readMap.resize(blockNum);
 	writeMap.resize(blockNum);
     
@@ -94,18 +104,18 @@ bool AddressDecoder::postMessage(OEComponent *sender, int message, void *data)
 
 OEChar AddressDecoder::read(OEAddress address)
 {
-	return readMapp[(size_t) ((address & addressMask) >> blockSize)]->read(address);
+	return readMapp[(size_t) ((address & mask) >> blockBits)]->read(address);
 }
 
 void AddressDecoder::write(OEAddress address, OEChar value)
 {
-	writeMapp[(size_t) ((address & addressMask) >> blockSize)]->write(address, value);
+	writeMapp[(size_t) ((address & mask) >> blockBits)]->write(address, value);
 }
 
 void AddressDecoder::mapMemory(MemoryMap& value)
 {
-	size_t startBlock = (size_t) (value.startAddress >> blockSize);
-	size_t endBlock = (size_t) (value.endAddress >> blockSize);
+	size_t startBlock = (size_t) (value.startAddress >> blockBits);
+	size_t endBlock = (size_t) (value.endAddress >> blockBits);
 	
     OEComponent *component = value.component;
     
@@ -158,7 +168,7 @@ void AddressDecoder::updateMemoryMaps(OEAddress startAddress, OEAddress endAddre
     
     updateMemoryMaps(staticMemoryMaps, startAddress, endAddress);
     
-//    updateMemoryMaps(dynamicMemoryMaps, startAddress, endAddress);
+    updateMemoryMaps(dynamicMemoryMaps, startAddress, endAddress);
 }
 
 bool AddressDecoder::updateMemoryMaps()
@@ -188,7 +198,7 @@ bool AddressDecoder::updateMemoryMaps()
 		appendMemoryMaps(staticMemoryMaps, component, i->second);
 	}
     
-    updateMemoryMaps(0, addressMask);
+    updateMemoryMaps(0, mask);
     
     return success;
 }
@@ -205,11 +215,11 @@ bool AddressDecoder::addMemoryMaps(MemoryMaps *value)
         dynamicMemoryMaps.push_back(*i);
     }
     
-    for (MemoryMaps::iterator i = value->begin();
-         i != value->end();
-         i++)
+    if (readMap.size())
     {
-        if (readMap.size())
+        for (MemoryMaps::iterator i = value->begin();
+             i != value->end();
+             i++)
             mapMemory(*i);
     }
     

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
-<edl version="1.0" generator="OpenEmulator" framework="700" label="RD CFFA1" image="images/R&amp;D/R&amp;D CFFA.png" description="The CFFA interface card (www.dreher.net) is used for accessing CompactFlash devices on an Apple II computer. It is usually connected to slot 7.">
+<edl version="1.0" generator="OpenEmulator" framework="700" label="RD CFFA1" image="images/R&amp;D/R&amp;D CFFA.png" description="The CFFA interface card (www.dreher.net) accesses block disk images on Apple II computers. It is usually installed in slot 7.">
     
     <device id="rdCFFA" label="R&amp;D CFFA" image="images/R&amp;D/R&amp;D CFFA.png">
         <setting ref="rdCFFA.memoryMux" name="sel" label="Controller ROM" type="select" options="ROM6502|6502 ROM,ROM65C02|65C02 ROM"/>

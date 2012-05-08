@@ -1,4 +1,7 @@
 ==Latest==
+* Implemented Apple Silentype interface card
+* Implemented Videx Videoterm card
+* Implemented Apple Graphics Tablet interface card
 * Implemented Apple Language Card
 * Implemented AppleIISlotMemory
 * Implemented R&D CFFA card
@@ -10,7 +13,7 @@
 * Refactorized libdiskimage
 * Implemented libdiskimage
 * Fixed OEEmulation when removing the device
-* Refactorized component lifecycle, update() is now only called on update, not on init
+* Refactorized component lifecycle: update() is now only called on update, not on init
 * Implemented audio player, added OESound
 * Modified Device settings structure
 * Implemented Apple Disk II

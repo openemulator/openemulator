@@ -37,8 +37,8 @@
         <property name="memoryBus" ref="replica1.memoryBus"/>
     </component>
     <component id="replica1.memoryBus" class="AddressDecoder">
-        <property name="addressSize" value="16"/>
-        <property name="blockSize" value="8"/>
+        <property name="size" value="0x10000"/>
+        <property name="blockSize" value="0x100"/>
         <property name="floatingBus" ref="replica1.floatingBus"/>
         <property name="refRAM" ref="replica1.ram"/>
         <property name="mapRAM" value="0x0000-0x7fff"/>
@@ -59,13 +59,13 @@
         <property name="mode" value="ground"/>
     </component>
     <component id="replica1.ram" class="RAM">
-        <property name="controlBus" ref="replica1.controlBus"/>
         <property name="memoryImage" data="${packagePath}/${id}.bin"/>
         <property name="size" value="0x8000"/>
+        <property name="controlBus" ref="replica1.controlBus"/>
     </component>
     <component id="replica1.ioMemory" class="AddressDecoder">
-        <property name="addressSize" value="5"/>
-        <property name="blockSize" value="4"/>
+        <property name="size" value="0x20"/>
+        <property name="blockSize" value="0x10"/>
         <property name="floatingBus" ref="replica1.floatingBus"/>
         <property name="refPIA" ref="replica1.pia"/>
         <property name="mapPIA" value="0x10-0x1f"/>
@@ -94,9 +94,9 @@
         <property name="terminal" ref="replica1.terminal"/>
     </component>
     <component id="replica1.terminalRAM" class="RAM">
-        <property name="controlBus" ref="replica1.controlBus"/>
         <property name="memoryImage" data="${packagePath}/${id}.bin"/>
         <property name="size" value="1024"/>
+        <property name="controlBus" ref="replica1.controlBus"/>
         <property name="powerOnPattern" value="0x20"/>
     </component>
     <component id="replica1.terminal" class="Apple1Terminal">
@@ -190,9 +190,9 @@
         <property name="forceWriteProtected" value="0"/>
     </component>
     <component id="rdCFFA1.ram" class="RAM">
-        <property name="controlBus" ref="replica1.controlBus"/>
         <property name="memoryImage" data="${packagePath}/${id}.bin"/>
         <property name="size" value="0x8000"/>
+        <property name="controlBus" ref="replica1.controlBus"/>
     </component>
     <component id="rdCFFA1.rom" class="ROM">
         <property name="memoryImage" data="${resourcePath}/roms/R&amp;D/CFFA1V1.0.bin"/>

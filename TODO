@@ -1,15 +1,15 @@
 ==1.0.3==
 * Fix Apple language card
+* Implement Videx Videoterm video
+* Fix AppleIIVideo refresh
 * Fix R&D CFFA
+* Fix libdiskimage GCR53
 * Fix Disk II controller for writing to disk
 * Fix IAC 45, beautiful boot
 * Fix Disk II drive sounds
-* Fix libdiskimage GCR53
-* Implement libdiskimage write to disk
 * Implement Apple Graphics Tablet
+* Implement Silentype printer
 * Fix [CanvasView update] problem in paper view
-* Implement Apple Silentype
-* Implement Videx Videoterm
 * Implement sample-accurate playback in audio player (?)
 * Fix dragging a disk image to a canvas does not mount when canvas is not in focus
 * Fix replace monitor+emulation lock problem (happens when a monitor is replaced and selected)

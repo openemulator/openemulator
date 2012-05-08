@@ -39,15 +39,18 @@ public:
     OEChar read(OEAddress address);
     void write(OEAddress address, OEChar value);
     
-private:
+protected:
     OEAddress size;
+    
+    OEChar *datap;
+    OEAddress mask;
+    
+private:
     OEData powerOnPattern;
     
     OEComponent *controlBus;
     
     OEData data;
-    OEChar *datap;
-    OEAddress mask;
     
     ControlBusPowerState powerState;
     

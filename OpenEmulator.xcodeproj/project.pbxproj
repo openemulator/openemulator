@@ -82,6 +82,7 @@
 		003E25E71070796700185260 /* images in Resources */ = {isa = PBXBuildFile; fileRef = 003E2597107075D900185260 /* images */; };
 		004763D2139C94F30016277E /* LibraryTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 004763D1139C94F30016277E /* LibraryTableView.m */; };
 		004BD1C01425AA8500768B80 /* W65C02S.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 004BD1BC1425AA8500768B80 /* W65C02S.cpp */; };
+		00520BDA1558D7120000107C /* OpenEmulator Icons.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 00520BD91558D7120000107C /* OpenEmulator Icons.rtf */; };
 		00536BC6153DD400005A5336 /* DIVMDKBlockStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00536BC5153DD400005A5336 /* DIVMDKBlockStorage.cpp */; };
 		00536BC7153DD40A005A5336 /* DIVMDKBlockStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = 00536BC4153DD3F5005A5336 /* DIVMDKBlockStorage.h */; };
 		005486CA0FDC84E500DBCFA8 /* Sparkle.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 001F56F80FD1E8E500EA246A /* Sparkle.framework */; };
@@ -267,8 +268,6 @@
 		00044CA212CE6FD400D26940 /* AppleDiskDrive525.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleDiskDrive525.cpp; sourceTree = "<group>"; };
 		0006D7CE15523830001DE1F3 /* FDI Format Specification 1.0.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "FDI Format Specification 1.0.txt"; sourceTree = "<group>"; };
 		0006D7CF15523830001DE1F3 /* FDI Format Specification 2.1.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "FDI Format Specification 2.1.txt"; sourceTree = "<group>"; };
-		0006D7D015523830001DE1F3 /* QCOW2 Format.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "QCOW2 Format.txt"; sourceTree = "<group>"; };
-		0006D7D115523830001DE1F3 /* QCOW2 Info.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "QCOW2 Info.txt"; sourceTree = "<group>"; };
 		0006D7D215523830001DE1F3 /* VMDK Virtual Machine Disk Format 5.0.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "VMDK Virtual Machine Disk Format 5.0.pdf"; sourceTree = "<group>"; };
 		0008FCD80FBA5D72005E876E /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = macosx/Info.plist; sourceTree = "<group>"; };
 		0009068D141D2A0300F06D99 /* NSStringAdditions.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NSStringAdditions.mm; sourceTree = "<group>"; };
@@ -371,6 +370,12 @@
 		004BD1BD1425AA8500768B80 /* W65C02S.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = W65C02S.h; sourceTree = "<group>"; };
 		004BD1BE1425AA8500768B80 /* W65C02SOpcodes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = W65C02SOpcodes.h; sourceTree = "<group>"; };
 		004BD1BF1425AA8500768B80 /* W65C02SOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = W65C02SOperations.h; sourceTree = "<group>"; };
+		00520BD71558D70B0000107C /* QCOW Image Format.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = "QCOW Image Format.rtf"; sourceTree = "<group>"; };
+		00520BD81558D70B0000107C /* QCOW2 Image Format.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = "QCOW2 Image Format.rtf"; sourceTree = "<group>"; };
+		00520BD91558D7120000107C /* OpenEmulator Icons.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = "OpenEmulator Icons.rtf"; sourceTree = "<group>"; };
+		00520BDB1558D73D0000107C /* autogen.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = autogen.sh; sourceTree = "<group>"; };
+		00520BDC1558D73D0000107C /* configure.in */ = {isa = PBXFileReference; lastKnownFileType = text; path = configure.in; sourceTree = "<group>"; };
+		00520BDD1558D73D0000107C /* Makefile.am */ = {isa = PBXFileReference; lastKnownFileType = text; path = Makefile.am; sourceTree = "<group>"; };
 		00536BC4153DD3F5005A5336 /* DIVMDKBlockStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DIVMDKBlockStorage.h; sourceTree = "<group>"; };
 		00536BC5153DD400005A5336 /* DIVMDKBlockStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DIVMDKBlockStorage.cpp; sourceTree = "<group>"; };
 		0054868F0FDC817900DBCFA8 /* Emulation.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Emulation.icns; sourceTree = "<group>"; };
@@ -703,18 +708,21 @@
 			path = macosx/Images;
 			sourceTree = "<group>";
 		};
-		001750AF13A50A690043E2ED /* Docs */ = {
+		001750AF13A50A690043E2ED /* Docs and Scripts */ = {
 			isa = PBXGroup;
 			children = (
+				001750B213A50A9C0043E2ED /* doc */,
 				001750B013A50A9C0043E2ED /* AUTHORS */,
 				001750B113A50A9C0043E2ED /* COPYING */,
-				001750B213A50A9C0043E2ED /* doc */,
 				001750C013A50A9C0043E2ED /* INSTALL */,
 				001750C113A50A9C0043E2ED /* NEWS */,
 				001750C213A50A9C0043E2ED /* README */,
 				001750C313A50A9C0043E2ED /* TODO */,
+				00520BDB1558D73D0000107C /* autogen.sh */,
+				00520BDC1558D73D0000107C /* configure.in */,
+				00520BDD1558D73D0000107C /* Makefile.am */,
 			);
-			name = Docs;
+			name = "Docs and Scripts";
 			sourceTree = "<group>";
 		};
 		001750B213A50A9C0043E2ED /* doc */ = {
@@ -722,6 +730,7 @@
 			children = (
 				001750B313A50A9C0043E2ED /* Formats */,
 				001750BF13A50A9C0043E2ED /* The libemulation Book.txt */,
+				00520BD91558D7120000107C /* OpenEmulator Icons.rtf */,
 			);
 			path = doc;
 			sourceTree = "<group>";
@@ -729,6 +738,8 @@
 		001750B313A50A9C0043E2ED /* Formats */ = {
 			isa = PBXGroup;
 			children = (
+				00520BD71558D70B0000107C /* QCOW Image Format.rtf */,
+				00520BD81558D70B0000107C /* QCOW2 Image Format.rtf */,
 				00118EFD1553A30F00004665 /* VDI Tutorial - All about VDIs.txt */,
 				00A06AE11533009A00A494A7 /* V2D Format.txt */,
 				001750B413A50A9C0043E2ED /* 2IMG Format.txt */,
@@ -743,8 +754,6 @@
 				001750BB13A50A9C0043E2ED /* G64 Format.txt */,
 				001750BE13A50A9C0043E2ED /* X64 Format.txt */,
 				001750BD13A50A9C0043E2ED /* UEF Format rev. 0.1.rtf */,
-				0006D7D015523830001DE1F3 /* QCOW2 Format.txt */,
-				0006D7D115523830001DE1F3 /* QCOW2 Info.txt */,
 				0006D7D215523830001DE1F3 /* VMDK Virtual Machine Disk Format 5.0.pdf */,
 			);
 			path = Formats;
@@ -1090,7 +1099,7 @@
 				00039E3C12B03BA90025D374 /* libemulation-hal */,
 				00B8864512A3923D0052B7A4 /* libemulation */,
 				00E473201475689C00F367B7 /* libdiskimage */,
-				001750AF13A50A690043E2ED /* Docs */,
+				001750AF13A50A690043E2ED /* Docs and Scripts */,
 				19C28FB0FE9D524F11CA2CBB /* Products */,
 			);
 			name = OpenEmulator;
@@ -1432,6 +1441,7 @@
 				0073DDBF136FCCC900087303 /* ToolbarBackground.png in Resources */,
 				001C9B02137FDD0500D1355B /* AudioRecord.png in Resources */,
 				007F08CF1459344600C3308D /* sparkle_dsa_pub.pem in Resources */,
+				00520BDA1558D7120000107C /* OpenEmulator Icons.rtf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -67,7 +67,7 @@ typedef enum
     APPLEII_GET_MMUSOFTSWITCHES,
 } AppleIIAddressDecoderMessage;
 
-// Move this to AppleIIControl:
+// Move this to AppleIIControlBus:
 //    APPLEII_ASSERT_DISKMOTORON,
 //    APPLEII_CLEAR_DISKMOTORON,
 
@@ -79,13 +79,16 @@ typedef enum
 
 typedef enum
 {
-    APPLEII_REFRESH_VIDEO,
+    APPLEII_REFRESH_VIDEO = CANVAS_END,
     APPLEII_READ_FLOATINGBUS,
-    APPLEII_SET_TEXT,
-    APPLEII_SET_PAGE2,
-    APPLEII_SET_MIXED,
-    APPLEII_SET_HIRES,
+    APPLEII_ASSERT_VIDEOINHIBIT,
+    APPLEII_CLEAR_VIDEOINHIBIT,
 } AppleIIVideoMessage;
+
+typedef enum
+{
+    APPLEII_COLORCARRIER_DID_CHANGE = CANVAS_NOTIFICATION_END,
+} AppleIIVideoNotification;
 
 typedef enum
 {
@@ -93,6 +96,7 @@ typedef enum
     APPLEII_SET_PDL1,
     APPLEII_SET_PDL2,
     APPLEII_SET_PDL3,
+    APPLEII_SET_PB3,
     APPLEII_SET_PB0,
     APPLEII_SET_PB1,
     APPLEII_SET_PB2,

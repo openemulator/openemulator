@@ -71,8 +71,8 @@
         <property name="memoryBus" ref="appleIIjplus.memoryBus"/>
     </component>
     <component id="appleIIjplus.memoryBus" class="AppleIIAddressDecoder">
-        <property name="addressSize" value="16"/>
-        <property name="blockSize" value="8"/>
+        <property name="size" value="0x10000"/>
+        <property name="blockSize" value="0x100"/>
         <property name="floatingBus" ref="appleIIjplus.floatingBus"/>
         <property name="video" ref="appleIIjplus.video"/>
         <property name="refRAM1" ref="appleIIjplus.ram1"/>
@@ -114,26 +114,26 @@
         <property name="video" ref="appleIIjplus.video"/>
     </component>
     <component id="appleIIjplus.ram1" class="RAM">
-        <property name="controlBus" ref="appleIIjplus.controlBus"/>
         <property name="size" value="0x4000"/>
         <property name="memoryImage" data="${packagePath}/${id}.bin"/>
+        <property name="controlBus" ref="appleIIjplus.controlBus"/>
         <property name="powerOnPattern" value="0xffff0000"/>
     </component>
     <component id="appleIIjplus.ram2" class="RAM">
-        <property name="controlBus" ref="appleIIjplus.controlBus"/>
         <property name="size" value="0x4000"/>
         <property name="memoryImage" data="${packagePath}/${id}.bin"/>
+        <property name="controlBus" ref="appleIIjplus.controlBus"/>
         <property name="powerOnPattern" value="0xffff0000"/>
     </component>
     <component id="appleIIjplus.ram3" class="RAM">
-        <property name="controlBus" ref="appleIIjplus.controlBus"/>
         <property name="size" value="0x4000"/>
         <property name="memoryImage" data="${packagePath}/${id}.bin"/>
+        <property name="controlBus" ref="appleIIjplus.controlBus"/>
         <property name="powerOnPattern" value="0xffff0000"/>
     </component>
     <component id="appleIIjplus.io" class="AddressDecoder">
-        <property name="addressSize" value="8"/>
-        <property name="blockSize" value="0"/>
+        <property name="size" value="0x100"/>
+        <property name="blockSize" value="0x1"/>
         <property name="floatingBus" ref="appleIIjplus.floatingBus"/>
         <property name="refKeyboard" ref="appleIIjplus.keyboard"/>
         <property name="mapKeyboard" value="0x00-0x1f"/>

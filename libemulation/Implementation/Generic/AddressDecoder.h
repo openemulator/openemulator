@@ -31,8 +31,8 @@ public:
     void write(OEAddress address, OEChar value);
     
 protected:
-    OEInt addressSize;
-    OEInt blockSize;
+    OEAddress size;
+    OEAddress blockSize;
     
     MemoryMaps staticMemoryMaps;
     MemoryMaps dynamicMemoryMaps;
@@ -40,7 +40,8 @@ protected:
     OEComponent **readMapp;
     OEComponent **writeMapp;
     
-    OEAddress addressMask;
+    OEAddress mask;
+    OEInt blockBits;
     
     bool addMemoryMaps(MemoryMaps *value);
     bool removeMemoryMaps(MemoryMaps *value);

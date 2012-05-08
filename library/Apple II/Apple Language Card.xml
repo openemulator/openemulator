@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
-<edl version="1.0" label="Apple Language Card" image="images/Apple/Apple Language Card.png" description="The Apple Language Card is a 16 kiB memory expansion for the Apple II and Apple II+ computers that also provides the autostart F8 ROM on the Apple II. It is usually connected to slot 0.">
+<edl version="1.0" label="Apple Language Card" image="images/Apple/Apple Language Card.png" description="The Apple Language Card is a 16 kiB memory expansion for Apple II and II+ computers that also provides an autostart F8 ROM on the Apple II. It is usually installed in slot 0.">
     
     <device id="appleLanguageCard" label="Apple Language Card" image="images/Apple/Apple Language Card.png">
     </device>
@@ -22,9 +22,11 @@
         <property name="ramWrite" value="0"/>
     </component>
     <component id="appleLanguageCard.ram" class="BankSwitchedRAM">
-        <property name="controlBus" ref=""/>
         <property name="size" value="0x4000"/>
+        <property name="blockSize" value="0x1000"/>
         <property name="memoryImage" data="${packagePath}/${id}.bin"/>
+        <property name="controlBus" ref=""/>
+        <property name="floatingBus" ref=""/>
     </component>
     <component id="appleLanguageCard.romF8" class="ROM">
         <property name="memoryImage" data="${resourcePath}/roms/Apple/341-0020-F8.bin"/>

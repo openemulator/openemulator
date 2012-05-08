@@ -1,0 +1,197 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1138\cocoasubrtf320
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww16020\viewh11240\viewkind0
+\pard\tx266\tx553\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803
+
+\f0\fs48 \cf0 The QCOW2 Image Format\
+
+\fs24 \
+The QCOW image format is one of the disk image formats supported by the QEMU processor emulator. It is a representation of a fixed size block device in a file. Benefits it offers over using raw dump representation include:\
+\
+	1.	Smaller file size, even on filesystems which don't support holes (i.e. sparse files)\
+	2.	Copy-on-write support, where the image only represents changes made to an underlying disk image\
+	3.	Snapshot support, where the image can contain multiple snapshots of the images history\
+	4.	Optional zlib based compression\
+	5.	Optional AES encryption\
+\
+The qemu-img command is the most common way of manipulating these images e.g.\
+\
+  $> qemu-img create -f qcow2 test.qcow2 4G\
+  Formating 'test.qcow2', fmt=qcow2, size=4194304 kB\
+  $> qemu-img convert test.qcow2 -O raw test.img\
+\
+
+\fs36 The Header\
+
+\fs24 \
+Each QCOW2 file begins with a header, in big endian format, as follows:\
+\
+  typedef struct QCowHeader \{\
+      uint32_t magic;\
+      uint32_t version;\
+\
+      uint64_t backing_file_offset;\
+      uint32_t backing_file_size;\
+\
+      uint32_t cluster_bits;\
+      uint64_t size; /* in bytes */\
+      uint32_t crypt_method;\
+\
+      uint32_t l1_size;\
+      uint64_t l1_table_offset;\
+\
+      uint64_t refcount_table_offset;\
+      uint32_t refcount_table_clusters;\
+\
+      uint32_t nb_snapshots;\
+      uint64_t snapshots_offset;\
+  \} QCowHeader;\
+\
+	\'95	The first 4 bytes contain the characters 'Q', 'F', 'I' followed by 0xfb.\
+	\'95	The next 4 bytes contain the format version used by the file. Currently, there has been two versions of the format, version 1 and version2. We are discussing the latter here, and the former is discussed at the end.\
+	\'95	The backing_file_offset field gives the offset from the beginning of the file to a string containing the path to a file; backing_file_size gives the length of this string, which isn't a nul-terminated. If this image is a copy-on-write image, then this will be the path to the original file. More on that below.\
+	\'95	The cluster_bits fields them, describe how to map an image offset address to a location within the file; it determines the number of lower bits of the offset address are used as an index within a cluster. Since L2 tables occupy a single cluster and contain 8 byte entires, the next most significant cluster_bits, less three bits, are used as an index into the L2 table. the L2 table. More on the format's 2-level lookup system below.\
+	\'95	The next 8 bytes contain the size, in bytes, of the block device represented by the image.\
+	\'95	The crypt_method field is 0 if no encryption has been used, and 1 if AES encryption has been used.\
+	\'95	The l1_size field gives the number of 8 byte entries available in the L1 table and l1_table_offset gives the offset within the file of the start of the table.\
+	\'95	Similarily, refcount_table_offset gives the offset to the start of the refcount table, but refcount_table_clusters describes the size of the refcount table in units of clusters.\
+	\'95	nb_snapshots gives the number of snapshots contained in the image and snapshots_offset gives the offset of the QCowSnapshotHeader headers, one for each snapshot.\
+\
+Typically the image file will be laid out as follows:\
+\
+	\'95	The header, as described above.\
+	\'95	Starting at the next cluster boundary, the L1 table.\
+	\'95	The refcount table, again boundary aligned.\
+	\'95	One or more refcount blocks.\
+	\'95	Snapshot headers, the first boundary aligned and the following headers aligned on 8 byte boundaries.\
+	\'95	L2 tables, each one occupying a single cluster.\
+	\'95	Data clusters.\
+\
+
+\fs36 2-Level Lookups\
+
+\fs24 \
+With QCOW, the contents of the device are stored in clusters. Each cluster contains a number of 512 byte sectors.\
+\
+In order to find the cluster for a given address within the device, you must traverse two levels of tables. The L1 table is an array of file offsets to L2 tables, and each L2 table is an array of file offsets to clusters.\
+\
+So, an address is split into three separate offsets according to the cluster_bits field. For example, if cluster_bits is 12, then the address is split up as follows:\
+\
+	\'95	the lower 12 is an offset within a 4Kb cluster\
+	\'95	the next 9 bits is an offset within a 512 entry array of 8 byte file offsets, the L2 table. The number of bits needed here is given by l2_bits = cluster_bits - 3 since the L2 table is a single cluster containing 8 byte entries\
+	\'95	the remaining 43 bits is an offset within another array of 8 byte file offsets, the L1 table\
+\
+Note, the minimum size of the L1 table is a function of the size of the represented disk image:\
+ l1_size = round_up(disk_size / (cluster_size * l2_size), cluster_size)\
+\
+In other words, in order to map a given disk address to an offset within the image:\
+\
+	1.	Obtain the L1 table address using the l1_table_offset header field\
+	2.	Use the top (64 - l2_bits - cluster_bits) bits of the address to index the L1 table as an array of 64 bit entries\
+	3.	Obtain the L2 table address using the offset in the L1 table\
+	4.	Use the next l2_bits of the address to index the L2 table as an array of 64 bit entries\
+	5.	Obtain the cluster address using the offset in the L2 table.\
+	6.	Use the remaining cluster_bits of the address as an offset within the cluster itself\
+If the offset found in either the L1 or L2 table is zero, that area of the disk is not allocated within the image.\
+\
+Note also, that the top two bits of each of the offsets found in the L1 and L2 tables are reserved for "copied" and "compressed" flags. More on that below.\
+\
+
+\fs36 Reference Counting\
+
+\fs24 \
+Each cluster is reference counted, allowing clusters to be freed if, and only if, they are no longer used by any snapshots.\
+\
+The 2 byte reference count for each cluster is kept in cluster sized blocks. A table, given by refcount_table_offset and occupying refcount_table_clusters clusters, gives the offset in the image of each of these refcount blocks.\
+\
+In order to obtain the reference count of a given cluster, you split the cluster offset into a refcount table offset and refcount block offset. Since a refcount block is a single cluster of 2 byte entries, the lower cluster_size - 1 bits is used as the block offset and the rest of the bits are used as the table offset.\
+\
+One optimization is that if any cluster pointed to by an L1 or L2 table entry has a refcount exactly equal to one, the most significant bit of the L1/L2 entry is set as a "copied" flag. This indicates that no snapshots are using this cluster and it can be immediately written to without having to make a copy for any snapshots referencing it.\
+\
+
+\fs36 Copy-on-Write Images\
+
+\fs24 \
+A QCOW image can be used to store the changes to another disk image, without actually affecting the contents of the original image. The image, known as a copy-on-write image, looks like a standalone image to the user but most of its data is obtained from the original image. Only the clusters which differ from the original image are stored in the copy-on-write image file itself.\
+\
+The representation is very simple. The copy-on-write image contains the path to the original disk image, and the image header gives the location of the path string within the file.\
+\
+When you want to read an cluster from the copy-on-write image, you first check to see if that area is allocated within the copy-on-write image. If not, you read the area from the original disk image.\
+\
+
+\fs36 Snapshots\
+
+\fs24 \
+Snapshots are a similar notion to the copy-on-write feature, except it is the original image that is writable, not the snapshots.\
+\
+To explain further - a copy-on-write image could confusingly be called a "snapshot", since it does indeed represent a snapshot of the original images state. You can make multiple of these "snapshots" of the original image by creating multiple copy-on-write images, each referring to the same original image. What's noteworthy here, though, is that the original image must be considered read-only and it is the copy-on-write snapshots which are writable.\
+\
+Snapshots - "real snapshots" - are represented in the original image itself. Each snapshot is a read-only record of the image a past instant. The original image remains writable and as modifications are made to it, a copy of the original data is made for any snapshots referring to it.\
+\
+Each snapshot is described by a header:\
+\
+  typedef struct QCowSnapshotHeader \{\
+      /* header is 8 byte aligned */\
+      uint64_t l1_table_offset;\
+\
+      uint32_t l1_size;\
+      uint16_t id_str_size;\
+      uint16_t name_size;\
+\
+      uint32_t date_sec;\
+      uint32_t date_nsec;\
+\
+      uint64_t vm_clock_nsec;\
+\
+      uint32_t vm_state_size;\
+      uint32_t extra_data_size; /* for extension */\
+      /* extra data follows */\
+      /* id_str follows */\
+      /* name follows  */\
+  \} QCowSnapshotHeader;\
+\
+Details are as follows\
+\
+	\'95	A snapshot has both a name and ID, represented by strings (not zero-terminated) which follow the header.\
+	\'95	A snapshot also has a copy, at least, of the original L1 table given by l1_table_offset and l1_size.\
+	\'95	date_sec and date_nsec give the host machine gettimeofday() when the snapshot was created.\
+	\'95	vm_clock_nsec gives the current state of the VM clock.\
+	\'95	vm_state_size gives the size of the virtual machine state which was saved as part of this snapshot. The state is saved to the location of the original L1 table, directly after the image header.\
+	\'95	extra_data_size species the number of bytes of data which follow the header, before the id and name strings. This is provided for future expansion.\
+\
+A snapshot is created by adding one of these headers, making a copy of the L1 table and incrementing the reference counts of all L2 tables and data clusters referenced by the L1 table. Later, if any L2 table or data clusters of the underlying image are to be modified - i.e. if the reference count of the cluster is greater than 1 and/or the "copied" flag is set for that cluster - they will first be copied and then written to. That way, all snapshots remains unmodified.\
+\
+
+\fs36 Compression\
+
+\fs24 \
+The QCOW format supports compression by allowing each cluster to be independently compressed with zlib.\
+\
+This is represented in the cluster offset obtained from the L2 table as follows:\
+\
+	\'95	If the second most significant bit of the cluster offset is 1, this is a compressed cluster\
+	\'95	The next cluster_bits - 8of the cluster offset is the size of the compressed cluster, in 512 byte sectors\
+	\'95	The remaining bits of the cluster offset is the actual address of the compressed cluster within the image\
+\
+
+\fs36 Encryption\
+
+\fs24 \
+The QCOW format also supports the encryption of clusters.\
+\
+If the crypt_method header field is 1, then a 16 character password is used as the 128 bit AES key.\
+\
+Each sector within each cluster is independently encrypted using AES Cipher Block Chaining mode, using the sector's offset (relative to the start of the device) in little-endian format as the first 64 bits of the 128 bit initialisation vector.\
+\
+
+\fs36 The QCOW Format\
+
+\fs24 \
+Version 2 of the QCOW format differs from the original version in the following ways:\
+\
+	1.	It supports the concepts of snapshots; version 1 only had the concept of copy-on-write image\
+	2.	Clusters are reference counted in version 2; reference counting was added to support snapshots\
+	3.	L2 tables always occupy a single cluster in version 2; previously their size was given by a l2_bits header field\
+	4.	The size of compressed clusters is now given in sectors instead of bytes\
+}

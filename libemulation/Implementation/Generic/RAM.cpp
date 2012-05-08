@@ -75,11 +75,12 @@ bool RAM::getData(string name, OEData **data)
 
 bool RAM::init()
 {
-    if (size <= 0)
+    if ((size != getNextPowerOf2(size)) ||
+        (!size))
     {
-        logMessage("invalid RAM size");
+		logMessage("invalid value for size");
         
-        return false;
+		return false;
     }
     
     if (controlBus)
@@ -90,7 +91,6 @@ bool RAM::init()
     else
         powerOnPattern.resize((size_t) getNextPowerOf2((int) powerOnPattern.size()));
     
-    size = getNextPowerOf2(size);
     size_t oldSize = data.size();
     data.resize((size_t) size);
     if (oldSize == 0)

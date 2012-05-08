@@ -92,6 +92,7 @@ string strtolower(string value);
 string strtoupper(string value);
 
 OELong getNextPowerOf2(OELong value);
+OEInt getBitNum(OELong value);
 
 bool readFile(string path, OEData *data);
 bool writeFile(string path, OEData *data);

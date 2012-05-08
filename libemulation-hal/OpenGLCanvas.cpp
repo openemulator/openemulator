@@ -155,8 +155,8 @@ OpenGLCanvas::OpenGLCanvas(string resourcePath)
     
     pthread_mutex_init(&mutex, NULL);
     
-    mode = CANVAS_MODE_DISPLAY;
-    captureMode = CANVAS_CAPTUREMODE_NO_CAPTURE;
+    mode = CANVAS_DISPLAY;
+    captureMode = CANVAS_NO_CAPTURE;
     
     viewportSize = OEMakeSize(640, 480);
     isViewportUpdated = true;
@@ -237,11 +237,11 @@ OESize OpenGLCanvas::getDefaultViewportSize()
     
     lock();
     
-    if (mode == CANVAS_MODE_DISPLAY)
+    if (mode == CANVAS_DISPLAY)
         size = displayConfiguration.displayResolution;
-    else if (mode == CANVAS_MODE_PAPER)
+    else if (mode == CANVAS_PAPER)
         size = OEMakeSize(512, 384);
-    else if (mode == CANVAS_MODE_OPENGL)
+    else if (mode == CANVAS_OPENGL)
         size = openGLConfiguration.viewportDefaultSize;
     
     unlock();
@@ -265,11 +265,11 @@ OESize OpenGLCanvas::getSize()
     
     lock();
     
-    if (mode == CANVAS_MODE_DISPLAY)
+    if (mode == CANVAS_DISPLAY)
         size = displayConfiguration.displayResolution;
-    else if (mode == CANVAS_MODE_PAPER)
+    else if (mode == CANVAS_PAPER)
         size = image.getSize();
-    else if (mode == CANVAS_MODE_OPENGL)
+    else if (mode == CANVAS_OPENGL)
         size = viewportSize;
     
     unlock();
@@ -283,12 +283,12 @@ OERect OpenGLCanvas::getClipRect()
     
     lock();
     
-    if (mode == CANVAS_MODE_DISPLAY)
+    if (mode == CANVAS_DISPLAY)
     {
         rect.origin = OEMakePoint(0, 0);
         rect.size = displayConfiguration.displayResolution;
     }
-    else if (mode == CANVAS_MODE_PAPER)
+    else if (mode == CANVAS_PAPER)
     {
         float pixelDensityRatio = (paperConfiguration.pagePixelDensity.width /
                                    paperConfiguration.pagePixelDensity.height);
@@ -299,7 +299,7 @@ OERect OpenGLCanvas::getClipRect()
         rect.size = OEMakeSize(image.getSize().width,
                                clipHeight);
     }
-    else if (mode == CANVAS_MODE_OPENGL)
+    else if (mode == CANVAS_OPENGL)
     {
         rect.origin = OEMakePoint(0, 0);
         rect.size = viewportSize;
@@ -325,12 +325,12 @@ OESize OpenGLCanvas::getPixelDensity()
     
     lock();
     
-    if (mode == CANVAS_MODE_DISPLAY)
+    if (mode == CANVAS_DISPLAY)
         pixelDensity = OEMakeSize(displayConfiguration.displayPixelDensity,
                                   displayConfiguration.displayPixelDensity);
-    else if (mode == CANVAS_MODE_PAPER)
+    else if (mode == CANVAS_PAPER)
         pixelDensity = paperConfiguration.pagePixelDensity;
-    else if (mode == CANVAS_MODE_OPENGL)
+    else if (mode == CANVAS_OPENGL)
         pixelDensity = OEMakeSize(openGLConfiguration.viewportPixelDensity,
                                   openGLConfiguration.viewportPixelDensity);
     
@@ -345,11 +345,11 @@ OESize OpenGLCanvas::getPageSize()
     
     lock();
     
-    if (mode == CANVAS_MODE_DISPLAY)
+    if (mode == CANVAS_DISPLAY)
         size = displayConfiguration.displayResolution;
-    else if (mode == CANVAS_MODE_PAPER)
+    else if (mode == CANVAS_PAPER)
         size = paperConfiguration.pageResolution;
-    else if (mode == CANVAS_MODE_OPENGL)
+    else if (mode == CANVAS_OPENGL)
         size = viewportSize;
     
     unlock();
@@ -359,7 +359,7 @@ OESize OpenGLCanvas::getPageSize()
 
 OEImage OpenGLCanvas::getImage(OERect rect)
 {
-    if (mode == CANVAS_MODE_PAPER)
+    if (mode == CANVAS_PAPER)
         return OEImage(image, rect);
     else 
     {
@@ -393,7 +393,7 @@ bool OpenGLCanvas::vsync()
         vSync.shouldDraw = true;
     }
     
-    if (mode == CANVAS_MODE_DISPLAY)
+    if (mode == CANVAS_DISPLAY)
     {
         if (isImageUpdated)
             uploadImage();
@@ -414,7 +414,7 @@ bool OpenGLCanvas::vsync()
         if (displayConfiguration.displayPersistence != 0.0)
             vSync.shouldDraw = true;
     }
-    else if (mode == CANVAS_MODE_PAPER)
+    else if (mode == CANVAS_PAPER)
     {
         vSync.shouldDraw = isImageUpdated || isConfigurationUpdated;
     
@@ -448,7 +448,7 @@ void OpenGLCanvas::draw()
         unlock();
     }
     
-    if (mode == CANVAS_MODE_DISPLAY)
+    if (mode == CANVAS_DISPLAY)
     {
         lock();
         
@@ -458,7 +458,7 @@ void OpenGLCanvas::draw()
         
         unlock();
     }
-    else if (mode == CANVAS_MODE_PAPER)
+    else if (mode == CANVAS_PAPER)
     {
         lock();
         
@@ -766,13 +766,13 @@ GLuint OpenGLCanvas::getRenderShader()
 {
     switch (displayConfiguration.videoDecoder)
     {
-        case CANVAS_DECODER_RGB:
-        case CANVAS_DECODER_MONOCHROME:
+        case CANVAS_RGB:
+        case CANVAS_MONOCHROME:
             return shader[OPENGLCANVAS_RGB];
             
-        case CANVAS_DECODER_YUV:
-        case CANVAS_DECODER_YIQ:
-        case CANVAS_DECODER_CXA2025AS:
+        case CANVAS_YUV:
+        case CANVAS_YIQ:
+        case CANVAS_CXA2025AS:
             return shader[OPENGLCANVAS_COMPOSITE];
     }
 }
@@ -810,7 +810,7 @@ void OpenGLCanvas::configureShaders()
         float uBandwidth = displayConfiguration.videoChromaBandwidth / imageSampleRate;
         float vBandwidth = uBandwidth;
         
-        if (displayConfiguration.videoDecoder == CANVAS_DECODER_YIQ)
+        if (displayConfiguration.videoDecoder == CANVAS_YIQ)
             uBandwidth = uBandwidth + NTSC_IQ_DELTA / imageSampleRate;
         
         // Switch to video bandwidth when no subcarrier
@@ -871,7 +871,7 @@ void OpenGLCanvas::configureShaders()
     }
     
     // Set hue
-    if (displayConfiguration.videoDecoder == CANVAS_DECODER_MONOCHROME)
+    if (displayConfiguration.videoDecoder == CANVAS_MONOCHROME)
         decoderMatrix = OEMatrix3(1, 0.5, 0,
                                   0, 0, 0,
                                   0, 0, 0) * decoderMatrix;
@@ -903,23 +903,23 @@ void OpenGLCanvas::configureShaders()
     // Decode
     switch (displayConfiguration.videoDecoder)
     {
-        case CANVAS_DECODER_RGB:
-        case CANVAS_DECODER_MONOCHROME:
+        case CANVAS_RGB:
+        case CANVAS_MONOCHROME:
             // Y'PbPr decoder matrix
             decoderMatrix = OEMatrix3(1, 1, 1,
                                       0, -0.344136, 1.772,
                                       1.402, -0.714136, 0) * decoderMatrix;
             break;
             
-        case CANVAS_DECODER_YUV:
-        case CANVAS_DECODER_YIQ:
+        case CANVAS_YUV:
+        case CANVAS_YIQ:
             // Y'UV decoder matrix
             decoderMatrix = OEMatrix3(1, 1, 1,
                                       0, -0.394642, 2.032062,
                                       1.139883, -0.580622, 0) * decoderMatrix;
             break;
             
-        case CANVAS_DECODER_CXA2025AS:
+        case CANVAS_CXA2025AS:
             // Exchange I and Q
             decoderMatrix = OEMatrix3(1, 0, 0,
                                       0, 0, 1,
@@ -1226,23 +1226,23 @@ void OpenGLCanvas::drawDisplayCanvas()
         float shadowMaskAspectRatio;
         switch (displayConfiguration.displayShadowMask)
         {
-            case CANVAS_SHADOWMASK_TRIAD:
+            case CANVAS_TRIAD:
                 shadowMaskTexture = OPENGLCANVAS_SHADOWMASK_TRIAD;
                 shadowMaskAspectRatio = 2 / (274.0 / 240.0);
                 break;
-            case CANVAS_SHADOWMASK_INLINE:
+            case CANVAS_INLINE:
                 shadowMaskTexture = OPENGLCANVAS_SHADOWMASK_INLINE;
                 shadowMaskAspectRatio = 2;
                 break;
-            case CANVAS_SHADOWMASK_APERTURE:
+            case CANVAS_APERTURE:
                 shadowMaskTexture = OPENGLCANVAS_SHADOWMASK_APERTURE;
                 shadowMaskAspectRatio = 2;
                 break;
-            case CANVAS_SHADOWMASK_LCD:
+            case CANVAS_LCD:
                 shadowMaskTexture = OPENGLCANVAS_SHADOWMASK_LCD;
                 shadowMaskAspectRatio = 2;
                 break;
-            case CANVAS_SHADOWMASK_BAYER:
+            case CANVAS_BAYER:
                 shadowMaskTexture = OPENGLCANVAS_SHADOWMASK_BAYER;
                 shadowMaskAspectRatio = 2;
                 break;
@@ -1669,7 +1669,7 @@ void OpenGLCanvas::enterMouse()
 {
     mouseEntered = true;
     
-    if (captureMode == CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_ENTER)
+    if (captureMode == CANVAS_CAPTURE_ON_MOUSE_ENTER)
         updateCapture(OPENGLCANVAS_CAPTURE_KEYBOARD_AND_HIDE_MOUSE_CURSOR);
     
     postHIDEvent(CANVAS_POINTER_DID_CHANGE, CANVAS_P_PROXIMITY, 1);
@@ -1679,7 +1679,7 @@ void OpenGLCanvas::exitMouse()
 {
     mouseEntered = false;
     
-    if (captureMode == CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_ENTER)
+    if (captureMode == CANVAS_CAPTURE_ON_MOUSE_ENTER)
         updateCapture(OPENGLCANVAS_CAPTURE_NONE);
     
     postHIDEvent(CANVAS_POINTER_DID_CHANGE, CANVAS_P_PROXIMITY, 0);
@@ -1721,7 +1721,7 @@ void OpenGLCanvas::setMouseButton(OEInt index, bool value)
     
     if (capture == OPENGLCANVAS_CAPTURE_KEYBOARD_AND_DISCONNECT_MOUSE_CURSOR)
         postHIDEvent(CANVAS_MOUSE_DID_CHANGE, CANVAS_M_BUTTON1 + index, value);
-    else if ((captureMode == CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_CLICK) &&
+    else if ((captureMode == CANVAS_CAPTURE_ON_MOUSE_CLICK) &&
              (capture == OPENGLCANVAS_CAPTURE_NONE) &&
              (bezel == CANVAS_BEZEL_NONE) &&
              (index == 0) &&
@@ -1785,15 +1785,15 @@ bool OpenGLCanvas::setCaptureMode(CanvasCaptureMode *value)
     
     switch (*value)
     {
-        case CANVAS_CAPTUREMODE_NO_CAPTURE:
+        case CANVAS_NO_CAPTURE:
             updateCapture(OPENGLCANVAS_CAPTURE_NONE);
             break;
             
-        case CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_CLICK:
+        case CANVAS_CAPTURE_ON_MOUSE_CLICK:
             updateCapture(OPENGLCANVAS_CAPTURE_NONE);
             break;
             
-        case CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_ENTER:
+        case CANVAS_CAPTURE_ON_MOUSE_ENTER:
             updateCapture(mouseEntered ? 
                           OPENGLCANVAS_CAPTURE_KEYBOARD_AND_HIDE_MOUSE_CURSOR : 
                           OPENGLCANVAS_CAPTURE_NONE);
@@ -1879,14 +1879,14 @@ bool OpenGLCanvas::postImage(OEImage *value)
     
     switch (mode)
     {
-        case CANVAS_MODE_DISPLAY:
+        case CANVAS_DISPLAY:
             image = *value;
             
             isImageUpdated = true;
             
             break;
             
-        case CANVAS_MODE_PAPER:
+        case CANVAS_PAPER:
         {
             OESize newImageSize = value->getSize();
             OESize imageSize = image.getSize();
@@ -1922,14 +1922,14 @@ bool OpenGLCanvas::clear()
     
     switch (mode)
     {
-        case CANVAS_MODE_DISPLAY:
+        case CANVAS_DISPLAY:
             image = OEImage();
             
             isImageUpdated = true;
             
             break;
             
-        case CANVAS_MODE_PAPER:
+        case CANVAS_PAPER:
             // To-Do
             break;
             

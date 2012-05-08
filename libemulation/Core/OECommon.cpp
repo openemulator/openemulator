@@ -266,6 +266,15 @@ OELong getNextPowerOf2(OELong value)
     return (OELong) pow(2, ceil(log2(value)));
 }
 
+OEInt getBitNum(OELong value)
+{
+    OEInt bitNum = 0;
+    for (OELong i = value; i > 1; i >>= 1)
+        bitNum++;
+    
+    return bitNum;
+}
+
 bool readFile(string path, OEData *data)
 {
     bool success = false;

@@ -425,7 +425,7 @@ DIInt *DIApple525DiskStorage::getSectorOrder(DITrackFormat trackFormat)
             return dos33SectorOrder;
             
         case DI_APPLE_PRODOS:
-            return dos32SectorOrder;
+            return prodosSectorOrder;
             
         case DI_APPLE_CPM:
             return cpmSectorOrder;

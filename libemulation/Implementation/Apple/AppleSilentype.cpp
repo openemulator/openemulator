@@ -63,7 +63,7 @@ bool AppleSilentype::init()
 		return false;
 	}
 	
-	CanvasMode mode = CANVAS_MODE_PAPER;
+	CanvasMode mode = CANVAS_PAPER;
 	CanvasPaperConfiguration configuration;
 	configuration.pageResolution = OEMakeSize(612 * 2, 792 * 2);
 	configuration.pagePixelDensity = OEMakeSize(144, 144);

@@ -1,22 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
-<edl version="1.0" label="Videx Videoterm" image="images/Videx/Videx Videoterm.png" description="The Videx Videoterm is an 80-column video card for the Apple II. It is usually connected to slot 3.">
+<edl version="1.0" label="Videx Videoterm" image="images/Videx/Videx Videoterm.png" description="The Videx Videoterm is an 80-column video card for Apple II computers. It must be installed in slot 3.">
     
     <device id="videxVideoterm" label="Videx Videoterm" image="images/Videx/Videx Videoterm.png">
-        <setting ref="videxVideoterm.io" name="font1" label="Main Character Set" type="select" options="Normal,Normal Uppercase,French,German,Katakana,Spanish,Symbol,Super and Subscript,APL,Epson"/>
-        <setting ref="videxVideoterm.io" name="font2" label="Expanded Character Set" type="select" options="Normal,Normal Uppercase,French,German,Katakana,Spanish,Symbol,Super and Subscript,APL,Epson"/>
+        <setting ref="videxVideoterm.io" name="characterSet1" label="Character Set" type="select" options="Normal,Normal Uppercase,French,German,Katakana,Spanish,Symbol,Super and Subscript,APL,Epson"/>
+        <setting ref="videxVideoterm.io" name="characterSet2" label="Exp. Character Set" type="select" options="Normal,NormalUppercase|Normal Uppercase,French,German,Katakana,Spanish,Symbol,SuperSub|Super and Subscript,APL,Epson"/>
     </device>
     <connector id="videxVideoterm.connector" type="Apple II Slot">
+        <inlet ref="videxVideoterm.io" property="video" outletRef="video"/>
         <inlet ref="videxVideoterm.memory" property="memoryBus" outletRef="memoryBus"/>
+        <inlet ref="videxVideoterm.addressDecoder" property="floatingBus" outletRef="floatingBus"/>
+        <inlet ref="videxVideoterm.ram" property="controlBus" outletRef="controlBus"/>
     </connector>
-    <component id="videxVideoterm.io" class="FloatingBus"/>
+    <component id="videxVideoterm.io" class="VidexVideoterm">
+        <property name="video" ref=""/>
+        <property name="characterSet1" value="Normal"/>
+        <property name="characterSet2" value="Symbol"/>
+        <property name="registerSelect" value="0"/>
+        <property name="ramBank" value="0"/>
+        <property name="fontAPL" data="${resourcePath}/roms/Videx/Videx Videoterm Character ROM APL.bin"/>
+        <property name="fontEpson" data="${resourcePath}/roms/Videx/Videx Videoterm Character ROM Epson.bin"/>
+        <property name="fontFrench" data="${resourcePath}/roms/Videx/Videx Videoterm Character ROM French.bin"/>
+        <property name="fontGerman" data="${resourcePath}/roms/Videx/Videx Videoterm Character ROM German.bin"/>
+        <property name="fontKatakana" data="${resourcePath}/roms/Videx/Videx Videoterm Character ROM Katakana.bin"/>
+        <property name="fontNormalUppercase" data="${resourcePath}/roms/Videx/Videx Videoterm Character ROM Normal Uppercase.bin"/>
+        <property name="fontNormal" data="${resourcePath}/roms/Videx/Videx Videoterm Character ROM Normal.bin"/>
+        <property name="fontSpanish" data="${resourcePath}/roms/Videx/Videx Videoterm Character ROM Spanish.bin"/>
+        <property name="fontSuperSub" data="${resourcePath}/roms/Videx/Videx Videoterm Character ROM Super and Subscript.bin"/>
+        <property name="fontSymbol" data="${resourcePath}/roms/Videx/Videx Videoterm Character ROM Symbol.bin"/>
+    </component>
     <component id="videxVideoterm.memory" class="AppleIISlotMemory">
         <property name="memoryBus" ref=""/>
-        <property name="memory" ref="videxVideoterm.rom"/>
+        <property name="memory" ref="videxVideoterm.addressDecoder"/>
         <property name="en" value="0"/>
+    </component>
+    <component id="videxVideoterm.addressDecoder" class="AddressDecoder">
+        <property name="size" value="0x1000"/>
+        <property name="blockSize" value="0x200"/>
+        <property name="floatingBus" ref=""/>
+        <property name="refROM" ref="videxVideoterm.rom"/>
+        <property name="mapROM" value="0x000-0xbff"/>
+        <property name="refRAM" ref="videxVideoterm.ram"/>
+        <property name="mapRAM" value="0xc00-0xdff"/>
     </component>
     <component id="videxVideoterm.rom" class="ROM">
         <property name="memoryImage" data="${resourcePath}/roms/Videx/Videx Videoterm 2.4 ROM.bin"/>
+    </component>
+    <component id="videxVideoterm.ram" class="BankSwitchedRAM">
+        <property name="size" value="0x800"/>
+        <property name="blockSize" value="0x200"/>
+        <property name="memoryImage" data="${packagePath}/${id}.bin"/>
+        <property name="controlBus" ref=""/>
     </component>
     
 </edl>

@@ -26,6 +26,7 @@ typedef enum
 typedef enum
 {
     RAM_GET_DATA,
+    RAM_END,
 } RAMMessage;
 
 typedef struct
@@ -50,5 +51,20 @@ bool appendMemoryMaps(MemoryMaps& theMaps,
 bool validateMemoryMapsConf(MemoryMaps& theMaps,
                             OEAddress blockSize,
                             OEAddress addressMask);
+
+typedef enum
+{
+    BANKSWITCHEDRAM_MAP = RAM_END,
+} BankSwitchedRAMMessage;
+
+typedef struct
+{
+    OEAddress startAddress;
+    OEAddress endAddress;
+    
+	OESLong offset;
+} BankSwitchedRAMMap;
+
+typedef list<BankSwitchedRAMMap> BankSwitchedRAMMaps;
 
 #endif

@@ -328,7 +328,7 @@ void AppleIIVideo::update()
     
     if (monitor)
     {
-        CanvasCaptureMode captureMode = CANVAS_CAPTUREMODE_CAPTURE_ON_MOUSE_CLICK;
+        CanvasCaptureMode captureMode = CANVAS_CAPTURE_ON_MOUSE_CLICK;
         
         monitor->postMessage(this, CANVAS_SET_CAPTUREMODE, &captureMode);
     }
