@@ -4,19 +4,21 @@
     
     <device id="videxVideoterm" label="Videx Videoterm" image="images/Videx/Videx Videoterm.png">
         <setting ref="videxVideoterm.io" name="characterSet1" label="Character Set" type="select" options="Normal,Normal Uppercase,French,German,Katakana,Spanish,Symbol,Super and Subscript,APL,Epson"/>
-        <setting ref="videxVideoterm.io" name="characterSet2" label="Exp. Character Set" type="select" options="Normal,NormalUppercase|Normal Uppercase,French,German,Katakana,Spanish,Symbol,SuperSub|Super and Subscript,APL,Epson"/>
+        <setting ref="videxVideoterm.io" name="characterSet2" label="Alt. Character Set" type="select" options="Normal,NormalUppercase|Normal Uppercase,French,German,Katakana,Spanish,Symbol,SuperSub|Super and Subscript,APL,Epson"/>
     </device>
     <connector id="videxVideoterm.connector" type="Apple II Slot">
+        <inlet ref="videxVideoterm.io" property="floatingBus" outletRef="floatingBus"/>
         <inlet ref="videxVideoterm.io" property="video" outletRef="video"/>
         <inlet ref="videxVideoterm.memory" property="memoryBus" outletRef="memoryBus"/>
         <inlet ref="videxVideoterm.addressDecoder" property="floatingBus" outletRef="floatingBus"/>
         <inlet ref="videxVideoterm.ram" property="controlBus" outletRef="controlBus"/>
     </connector>
     <component id="videxVideoterm.io" class="VidexVideoterm">
+        <property name="floatingBus" ref=""/>
         <property name="video" ref=""/>
+        <property name="ram" ref="videxVideoterm.ram"/>
         <property name="characterSet1" value="Normal"/>
         <property name="characterSet2" value="Symbol"/>
-        <property name="registerSelect" value="0"/>
         <property name="ramBank" value="0"/>
         <property name="fontAPL" data="${resourcePath}/roms/Videx/Videx Videoterm Character ROM APL.bin"/>
         <property name="fontEpson" data="${resourcePath}/roms/Videx/Videx Videoterm Character ROM Epson.bin"/>
@@ -28,6 +30,21 @@
         <property name="fontSpanish" data="${resourcePath}/roms/Videx/Videx Videoterm Character ROM Spanish.bin"/>
         <property name="fontSuperSub" data="${resourcePath}/roms/Videx/Videx Videoterm Character ROM Super and Subscript.bin"/>
         <property name="fontSymbol" data="${resourcePath}/roms/Videx/Videx Videoterm Character ROM Symbol.bin"/>
+        <property name="horizTotal" value="0x0"/>
+        <property name="horizDisplayed" value="0x0"/>
+        <property name="horizSyncPosition" value="0x0"/>
+        <property name="horizSyncWidth" value="0x0"/>
+        <property name="vertTotal" value="0x0"/>
+        <property name="vertTotalAdjust" value="0x0"/>
+        <property name="vertDisplayed" value="0x0"/>
+        <property name="vertSyncPosition" value="0x0"/>
+        <property name="modeControl" value="0x0"/>
+        <property name="scanline" value="0x0"/>
+        <property name="cursorStart" value="0x0"/>
+        <property name="cursorEnd" value="0x0"/>
+        <property name="startAddress" value="0x0"/>
+        <property name="cursorAddress" value="0x0"/>
+        <property name="addressRegister" value="0"/>
     </component>
     <component id="videxVideoterm.memory" class="AppleIISlotMemory">
         <property name="memoryBus" ref=""/>

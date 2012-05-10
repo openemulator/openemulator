@@ -1,21 +1,22 @@
 ==1.0.3==
-* Fix Apple language card
 * Implement Videx Videoterm video
-* Fix AppleIIVideo refresh
-* Fix R&D CFFA
+* Fix joystick when an emulation is started with joystick plugged in
+* Fix IAC 45, beautiful boot
+* Fix Disk II not booting when emulation was loaded from disk
+* Fix Disk II drive sounds
+* Implement sample-accurate playback in audio player (?)
 * Fix libdiskimage GCR53
 * Fix Disk II controller for writing to disk
-* Fix IAC 45, beautiful boot
-* Fix Disk II drive sounds
+* Fix dragging a disk image to a canvas does not mount when canvas is not in focus
+* Fix R&D CFFA
+* Fix AppleIIVideo refresh
 * Implement Apple Graphics Tablet
+* Implement Apple Silentype Interface Card
 * Implement Silentype printer
 * Fix [CanvasView update] problem in paper view
-* Implement sample-accurate playback in audio player (?)
-* Fix dragging a disk image to a canvas does not mount when canvas is not in focus
 * Fix replace monitor+emulation lock problem (happens when a monitor is replaced and selected)
 * Fix CTRL+ALT mouse capture
-* Refactorize PAAudio, so an emulation is stopped while it is being configured. Also increase thread priority
-* Remove AppleIIFloatingBus, remove second AddressDecoder, add AppleIIIO ($C050-$C057) and integrate with AppleIIGamePort (?)
+* Refactorize PAAudio so an emulation is stopped while it is being configured. Increase thread priority
 
 ==1.0.4==
 * Implement Apple III
@@ -31,9 +32,6 @@
 * Implement ZIP Chip
 * Implement AE TransWarp
 * Implement Microsoft Softcard
-* Implement Apple Silentype Interface Card
-* Implement Apple Silentype
-* Implement Apple Graphics Tablet
 * Implement Apple II Super Serial Card
 * Implement Digisector DS-65
 

@@ -53,8 +53,10 @@ bool AppleDiskIIInterfaceCard::setValue(string name, string value)
 		driveOn = getOEInt(value);
 	else if (name == "driveSel")
 		driveSel = getOEInt(value);
-	else if (name == "sequencerMode")
-		sequencerMode = getOEInt(value);
+	else if (name == "load")
+        OESetBit(sequencerMode, SEQUENCER_LOAD, getOEInt(value));
+	else if (name == "write")
+        OESetBit(sequencerMode, SEQUENCER_WRITE, getOEInt(value));
 	else if (name == "sequencerState")
 		sequencerState = getOEInt(value);
 	else if (name == "dataRegister")
@@ -73,8 +75,10 @@ bool AppleDiskIIInterfaceCard::getValue(string name, string& value)
 		value = getString(driveOn);
 	else if (name == "driveSel")
 		value = getString(driveSel);
-	else if (name == "sequencerMode")
-		value = getString(sequencerMode);
+	else if (name == "load")
+        value = getString(OEGetBit(sequencerMode, SEQUENCER_LOAD));
+	else if (name == "write")
+        value = getString(OEGetBit(sequencerMode, SEQUENCER_WRITE));
 	else if (name == "sequencerState")
 		value = getString(sequencerState);
 	else if (name == "dataRegister")

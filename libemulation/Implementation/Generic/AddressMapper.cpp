@@ -71,7 +71,7 @@ void AddressMapper::update()
         if (!appendMemoryMaps(m, ref[lastSel], conf[lastSel]))
             logMessage("could not remove memory map " + conf[lastSel] + " for " + lastSel);
         
-        addressDecoder->postMessage(this, ADDRESSDECODER_UNMAP_MEMORYMAPS, &m);
+        addressDecoder->postMessage(this, ADDRESSDECODER_UNMAP, &m);
     }
     
     m.clear();
@@ -81,7 +81,7 @@ void AddressMapper::update()
         if (!appendMemoryMaps(m, ref[sel], conf[sel]))
             logMessage("could not add memory map '" + conf[sel] + "' for '" + sel + "'");
         
-        addressDecoder->postMessage(this, ADDRESSDECODER_MAP_MEMORYMAPS, &m);
+        addressDecoder->postMessage(this, ADDRESSDECODER_MAP, &m);
     }
     
     lastSel = sel;

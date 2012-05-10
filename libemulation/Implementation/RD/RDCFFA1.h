@@ -48,7 +48,7 @@ private:
     OEUnion ataLBA;
     OEChar ataCommand;
     
-    void mapMemory(int message);
+    void updateMemory(bool value);
     bool openDiskImage(string path);
     void closeDiskImage();
 };

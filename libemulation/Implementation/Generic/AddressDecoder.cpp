@@ -92,11 +92,11 @@ bool AddressDecoder::postMessage(OEComponent *sender, int message, void *data)
 {
 	switch(message)
 	{
-		case ADDRESSDECODER_MAP_MEMORYMAPS:
-            return addMemoryMaps((MemoryMaps *) data);
+		case ADDRESSDECODER_MAP:
+            return addMemoryMap((MemoryMap *) data);
             
-        case ADDRESSDECODER_UNMAP_MEMORYMAPS:
-            return removeMemoryMaps((MemoryMaps *) data);
+        case ADDRESSDECODER_UNMAP:
+            return removeMemoryMap((MemoryMap *) data);
 	}
 	
 	return false;
@@ -203,49 +203,34 @@ bool AddressDecoder::updateMemoryMaps()
     return success;
 }
 
-bool AddressDecoder::addMemoryMaps(MemoryMaps *value)
+bool AddressDecoder::addMemoryMap(MemoryMap *value)
 {
-    for (MemoryMaps::iterator i = value->begin();
-         i != value->end();
-         i++)
-    {
-        if (!i->component)
-            continue;
-        
-        dynamicMemoryMaps.push_back(*i);
-    }
+    if (!value->component)
+        return false;
+    
+    dynamicMemoryMaps.push_back(*value);
     
     if (readMap.size())
-    {
-        for (MemoryMaps::iterator i = value->begin();
-             i != value->end();
-             i++)
-            mapMemory(*i);
-    }
+        mapMemory(*value);
     
     return true;
 }
 
-bool AddressDecoder::removeMemoryMaps(MemoryMaps *value)
+bool AddressDecoder::removeMemoryMap(MemoryMap *value)
 {
-    for (MemoryMaps::iterator i = value->begin();
-         i != value->end();
+    for (MemoryMaps::iterator i = dynamicMemoryMaps.begin();
+         i != dynamicMemoryMaps.end();
          i++)
     {
-        for (MemoryMaps::iterator j = dynamicMemoryMaps.begin();
-             j != dynamicMemoryMaps.end();
-             j++)
+        if ((i->component == value->component) &&
+            (i->startAddress == value->startAddress) &&
+            (i->endAddress == value->endAddress) &&
+            (i->read == value->read) &&
+            (i->write == value->write))
         {
-            if ((i->component == j->component) &&
-                (i->startAddress == j->startAddress) &&
-                (i->endAddress == j->endAddress) &&
-                (i->read == j->read) &&
-                (i->write == j->write))
-            {
-                j = dynamicMemoryMaps.erase(j);
-                
-                updateMemoryMaps(i->startAddress, i->endAddress);
-            }
+            i = dynamicMemoryMaps.erase(i);
+            
+            updateMemoryMaps(value->startAddress, value->endAddress);
         }
     }
     

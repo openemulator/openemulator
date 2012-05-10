@@ -60,9 +60,9 @@ bool appendMemoryMaps(MemoryMaps& theMaps,
 	return true;
 }
 
-bool validateMemoryMapsConf(MemoryMaps& theMaps,
-                            OEAddress blockSize,
-                            OEAddress addressMask)
+bool validateMemoryMaps(MemoryMaps& theMaps,
+                        OEAddress blockSize,
+                        OEAddress addressMask)
 {
     OEAddress blockMask = (1 << blockSize) - 1;
     

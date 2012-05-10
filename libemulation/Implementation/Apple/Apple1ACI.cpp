@@ -49,14 +49,14 @@ bool Apple1ACI::init()
         return false;
     }
     
-    mapMemory(ADDRESSDECODER_MAP_MEMORYMAPS);
+    mapMemory(ADDRESSDECODER_MAP);
     
     return true;
 }
 
 void Apple1ACI::dispose()
 {
-    mapMemory(ADDRESSDECODER_UNMAP_MEMORYMAPS);
+    mapMemory(ADDRESSDECODER_UNMAP);
 }
 
 OEChar Apple1ACI::read(OEAddress address)

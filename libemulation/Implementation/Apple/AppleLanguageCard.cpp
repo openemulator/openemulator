@@ -114,9 +114,13 @@ bool AppleLanguageCard::init()
     }
     
     setROMF8(true);
+    
     updateBank1();
-    updateRAMRead();
-    updateRAMWrite();
+    
+    if (ramRead)
+        updateRAMRead();
+    if (ramWrite)
+        updateRAMWrite();
     
     return true;
 }
@@ -124,6 +128,7 @@ bool AppleLanguageCard::init()
 void AppleLanguageCard::dispose()
 {
     setROMF8(false);
+    
     setRAMRead(false);
     setRAMWrite(false);
 }
@@ -154,7 +159,7 @@ OEChar AppleLanguageCard::read(OEAddress address)
         setRAMWrite(false);
 	preWrite = address & 0x1;
 	
-    setRAMRead(!(((address & 2) >> 1) ^ (address & 1)));
+    setRAMRead(!(((address >> 1) ^ address) & 1));
     
     return floatingBus->read(address);
 }
@@ -167,24 +172,19 @@ void AppleLanguageCard::write(OEAddress address, OEChar value)
         setRAMWrite(false);
 	preWrite = false;
 	
-    ramRead = !(((address & 2) >> 1) ^ (address & 1));
+    setRAMRead(!(((address >> 1) ^ address) & 1));
 }
 
 void AppleLanguageCard::setROMF8(bool value)
 {
-    MemoryMaps memoryMaps;
     MemoryMap memoryMap;
-    
     memoryMap.component = romF8;
     memoryMap.startAddress = 0xf800;
     memoryMap.endAddress = 0xffff;
     memoryMap.read = true;
     memoryMap.write = false;
-    memoryMaps.push_back(memoryMap);
     
-    memoryBus->postMessage(this, (value ?
-                                  APPLEII_MAP_MEMORYMAPS :
-                                  APPLEII_UNMAP_MEMORYMAPS), &memoryMaps);
+    memoryBus->postMessage(this, (value ? APPLEII_MAP : APPLEII_UNMAP), &memoryMap);
 }
 
 void AppleLanguageCard::setBank1(bool value)
@@ -220,7 +220,6 @@ void AppleLanguageCard::setRAMRead(bool value)
 
 void AppleLanguageCard::updateRAMRead()
 {
-    MemoryMaps memoryMaps;
     MemoryMap memoryMap;
     
     memoryMap.component = ram;
@@ -228,11 +227,8 @@ void AppleLanguageCard::updateRAMRead()
     memoryMap.endAddress = 0xffff;
     memoryMap.read = true;
     memoryMap.write = false;
-    memoryMaps.push_back(memoryMap);
     
-    memoryBus->postMessage(this, (ramRead ?
-                                  APPLEII_MAP_MEMORYMAPS :
-                                  APPLEII_UNMAP_MEMORYMAPS), &memoryMaps);
+    memoryBus->postMessage(this, (ramRead ? APPLEII_MAP : APPLEII_UNMAP), &memoryMap);
 }
 
 void AppleLanguageCard::setRAMWrite(bool value)
@@ -247,7 +243,6 @@ void AppleLanguageCard::setRAMWrite(bool value)
 
 void AppleLanguageCard::updateRAMWrite()
 {
-    MemoryMaps memoryMaps;
     MemoryMap memoryMap;
     
     memoryMap.component = ram;
@@ -255,9 +250,6 @@ void AppleLanguageCard::updateRAMWrite()
     memoryMap.endAddress = 0xffff;
     memoryMap.read = false;
     memoryMap.write = true;
-    memoryMaps.push_back(memoryMap);
     
-    memoryBus->postMessage(this, (ramWrite ?
-                                  APPLEII_MAP_MEMORYMAPS :
-                                  APPLEII_UNMAP_MEMORYMAPS), &memoryMaps);
+    memoryBus->postMessage(this, (ramWrite ? APPLEII_MAP : APPLEII_UNMAP), &memoryMap);
 }

@@ -102,10 +102,7 @@ bool AppleIIVideo::setValue(string name, string value)
     }
 	else if (name == "revision")
     {
-        if (value == "Revision 0")
-            revision = APPLEII_REVISION0;
-        else if (value == "Revision 1+")
-            revision = APPLEII_REVISION1;
+        revision = getOEInt(value);
         
         isRevisionUpdated = true;
     }
@@ -139,20 +136,7 @@ bool AppleIIVideo::setValue(string name, string value)
 bool AppleIIVideo::getValue(string name, string& value)
 {
     if (name == "revision")
-    {
-        switch (revision)
-        {
-            case APPLEII_REVISION0:
-                value = "Revision 0";
-                
-                break;
-                
-            case APPLEII_REVISION1:
-                value = "Revision 1+";
-                
-                break;
-        }
-    }
+        value = getString(revision);
 	else if (name == "tvSystem")
     {
         switch (tvSystem)
@@ -582,7 +566,7 @@ void AppleIIVideo::updateHiresMap()
     for (OEInt c = 0; c < 2 * MAP_SIZE; c++)
     {
         OEChar byte = (c & 0x7f) << 1 | (c >> 8);
-        bool delay = (revision != APPLEII_REVISION0) && (c & 0x80);
+        bool delay = (revision != 0) && (c & 0x80);
         
         for (OEInt x = 0; x < MAP_WIDTH; x++)
         {
@@ -630,7 +614,7 @@ void AppleIIVideo::updateRendererMap()
 
 void AppleIIVideo::updateRenderer()
 {
-    if ((revision == APPLEII_REVISION0) || !OEGetBit(mode, MODE_TEXT))
+    if ((revision == 0) || !OEGetBit(mode, MODE_TEXT))
         image.setSubcarrier(3579545);
     else
         image.setSubcarrier(0);

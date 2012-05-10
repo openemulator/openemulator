@@ -123,14 +123,14 @@ bool RDCFFA1::init()
         return false;
     }
     
-    mapMemory(ADDRESSDECODER_MAP_MEMORYMAPS);
+    updateMemory(true);
     
     return true;
 }
 
 void RDCFFA1::dispose()
 {
-    mapMemory(ADDRESSDECODER_UNMAP_MEMORYMAPS);
+    updateMemory(false);
 }
 
 bool RDCFFA1::postMessage(OEComponent *sender, int message, void *data)
@@ -342,9 +342,10 @@ void RDCFFA1::write(OEAddress address, OEChar value)
     }
 }
 
-void RDCFFA1::mapMemory(int message)
+void RDCFFA1::updateMemory(bool value)
 {
-    MemoryMaps memoryMaps;
+    DIInt message = value ? ADDRESSDECODER_MAP : ADDRESSDECODER_UNMAP;
+    
     MemoryMap memoryMap;
     
     memoryMap.component = ram;
@@ -352,24 +353,24 @@ void RDCFFA1::mapMemory(int message)
     memoryMap.endAddress = 0x8fff;
     memoryMap.read = true;
     memoryMap.write = true;
-    memoryMaps.push_back(memoryMap);
+    if (memoryBus)
+        memoryBus->postMessage(this, message, &memoryMap);
     
     memoryMap.component = rom;
     memoryMap.startAddress = 0x9000;
     memoryMap.endAddress = 0xaeff;
     memoryMap.read = true;
     memoryMap.write = false;
-    memoryMaps.push_back(memoryMap);
+    if (memoryBus)
+        memoryBus->postMessage(this, message, &memoryMap);
     
     memoryMap.component = this;
     memoryMap.startAddress = 0xaf00;
     memoryMap.endAddress = 0xafff;
     memoryMap.read = true;
     memoryMap.write = true;
-    memoryMaps.push_back(memoryMap);
-    
     if (memoryBus)
-        memoryBus->postMessage(this, message, &memoryMaps);
+        memoryBus->postMessage(this, message, &memoryMap);
 }
 
 bool RDCFFA1::openDiskImage(string path)

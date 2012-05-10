@@ -17,23 +17,16 @@
 		00039F0112B04EAA0025D374 /* libemulation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00039EFE12B04E910025D374 /* libemulation.a */; };
 		00039FD112B04F6C0025D374 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 00039FD012B04F6C0025D374 /* libxml2.dylib */; };
 		0009068E141D2A0300F06D99 /* NSStringAdditions.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0009068D141D2A0300F06D99 /* NSStringAdditions.mm */; };
-		000E8D1913515C6E00DBFB2C /* StorageInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 000E8D1813515C6E00DBFB2C /* StorageInterface.h */; };
 		00139F801511863B00B0E108 /* BankSwitchedRAM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00139F7F1511863B00B0E108 /* BankSwitchedRAM.cpp */; };
-		00139F821511864800B0E108 /* BankSwitchedRAM.h in Headers */ = {isa = PBXBuildFile; fileRef = 00139F811511864800B0E108 /* BankSwitchedRAM.h */; };
 		00139F84151195E600B0E108 /* AppleIIAddressDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00139F83151195E600B0E108 /* AppleIIAddressDecoder.cpp */; };
 		00140DF0152D282400D4795D /* DIApple525DiskStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00140DEF152D282400D4795D /* DIApple525DiskStorage.cpp */; };
 		00140DF6152D36F900D4795D /* DIFileBackingStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00140DF5152D36F900D4795D /* DIFileBackingStore.cpp */; };
-		00140DF8152D370300D4795D /* DIFileBackingStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 00140DF7152D370300D4795D /* DIFileBackingStore.h */; };
 		00140DFC152D371C00D4795D /* DI2IMGBackingStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00140DFB152D371C00D4795D /* DI2IMGBackingStore.cpp */; };
-		00140E02152D375E00D4795D /* DIFDIDiskStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = 00140E01152D375D00D4795D /* DIFDIDiskStorage.h */; };
 		00140E04152D376400D4795D /* DIFDIDiskStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00140E03152D376400D4795D /* DIFDIDiskStorage.cpp */; };
 		00140E0C152D37F500D4795D /* DIDC42BackingStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00140E0B152D37F400D4795D /* DIDC42BackingStore.cpp */; };
 		00140E12152D395900D4795D /* DIV2DDiskStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00140E11152D395900D4795D /* DIV2DDiskStorage.cpp */; };
-		00140E14152D396500D4795D /* DIV2DDiskStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = 00140E13152D396500D4795D /* DIV2DDiskStorage.h */; };
 		0014DF14148286A5006A7660 /* Application.m in Sources */ = {isa = PBXBuildFile; fileRef = 0014DF13148286A5006A7660 /* Application.m */; };
-		0019177C1543D31A009A301E /* DIDiskStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = 0019177B1543D319009A301E /* DIDiskStorage.h */; };
 		0019177E1543D321009A301E /* DIDiskStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0019177D1543D320009A301E /* DIDiskStorage.cpp */; };
-		001917801543D338009A301E /* DILogicalDiskStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = 0019177F1543D337009A301E /* DILogicalDiskStorage.h */; };
 		001917821543D347009A301E /* DILogicalDiskStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 001917811543D346009A301E /* DILogicalDiskStorage.cpp */; };
 		001C9B02137FDD0500D1355B /* AudioRecord.png in Resources */ = {isa = PBXBuildFile; fileRef = 00ED379A12779AD000BEF6BD /* AudioRecord.png */; };
 		001E096C1556339800405DC0 /* AppleLanguageCard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 001E09691556339400405DC0 /* AppleLanguageCard.cpp */; };
@@ -43,19 +36,11 @@
 		001E0971155633E700405DC0 /* Apple1Terminal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00722D3B1470E31400FE7007 /* Apple1Terminal.cpp */; };
 		001F56F90FD1E8E500EA246A /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 001F56F80FD1E8E500EA246A /* Sparkle.framework */; };
 		0020AE731530A22700E3DF80 /* DICommon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0020AE721530A22700E3DF80 /* DICommon.cpp */; };
-		0020AE741530AE2500E3DF80 /* diskimage.h in Headers */ = {isa = PBXBuildFile; fileRef = 00E473411475695500F367B7 /* diskimage.h */; };
-		0020AE751530AE2500E3DF80 /* DICommon.h in Headers */ = {isa = PBXBuildFile; fileRef = 0020AE701530A21F00E3DF80 /* DICommon.h */; };
-		0020AE761530AE2500E3DF80 /* DI2IMGBackingStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 00140DF9152D371000D4795D /* DI2IMGBackingStore.h */; };
-		0020AE771530AE2500E3DF80 /* DIDC42BackingStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 00140E09152D37ED00D4795D /* DIDC42BackingStore.h */; };
-		0022236C142C557100B7451D /* ControlBusInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 0022236B142C557100B7451D /* ControlBusInterface.h */; };
 		00247F38139D8F4C00B165D1 /* OECommon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00247F35139D85A900B165D1 /* OECommon.cpp */; };
 		002740B813A08A4F00E13D65 /* VidexVideoterm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 002740B613A08A4F00E13D65 /* VidexVideoterm.cpp */; };
-		002740B913A08A4F00E13D65 /* VidexVideoterm.h in Headers */ = {isa = PBXBuildFile; fileRef = 002740B713A08A4F00E13D65 /* VidexVideoterm.h */; };
 		0027E67E153738CC0066A9BE /* DIVDIBlockStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0027E67D153738CC0066A9BE /* DIVDIBlockStorage.cpp */; };
-		0027E680153738D30066A9BE /* DIVDIBlockStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = 0027E67F153738D30066A9BE /* DIVDIBlockStorage.h */; };
 		0029EEE214266B8900AD900E /* AddressMapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0029EEDF14266B7700AD900E /* AddressMapper.cpp */; };
 		00365CEB1516955C00978DF6 /* AddressMux.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00365CEA1516955C00978DF6 /* AddressMux.cpp */; };
-		00365CED1516956600978DF6 /* AddressMux.h in Headers */ = {isa = PBXBuildFile; fileRef = 00365CEC1516956600978DF6 /* AddressMux.h */; };
 		00365CFA1516F4E700978DF6 /* libdiskimage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00365CF51516F3D800978DF6 /* libdiskimage.a */; };
 		00391CB312D3A320002C5ABD /* LibraryWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00391CB212D3A320002C5ABD /* LibraryWindowController.m */; };
 		00391D6112D3B570002C5ABD /* IconLibrary.png in Resources */ = {isa = PBXBuildFile; fileRef = 00391D6012D3B570002C5ABD /* IconLibrary.png */; };
@@ -82,60 +67,47 @@
 		003E25E71070796700185260 /* images in Resources */ = {isa = PBXBuildFile; fileRef = 003E2597107075D900185260 /* images */; };
 		004763D2139C94F30016277E /* LibraryTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 004763D1139C94F30016277E /* LibraryTableView.m */; };
 		004BD1C01425AA8500768B80 /* W65C02S.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 004BD1BC1425AA8500768B80 /* W65C02S.cpp */; };
-		00520BDA1558D7120000107C /* OpenEmulator Icons.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 00520BD91558D7120000107C /* OpenEmulator Icons.rtf */; };
 		00536BC6153DD400005A5336 /* DIVMDKBlockStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00536BC5153DD400005A5336 /* DIVMDKBlockStorage.cpp */; };
-		00536BC7153DD40A005A5336 /* DIVMDKBlockStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = 00536BC4153DD3F5005A5336 /* DIVMDKBlockStorage.h */; };
 		005486CA0FDC84E500DBCFA8 /* Sparkle.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 001F56F80FD1E8E500EA246A /* Sparkle.framework */; };
 		0054E4A11131BE7A006D32D9 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0054E4A01131BE7A006D32D9 /* Cocoa.framework */; };
 		0054E4A71131BE8A006D32D9 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0054E4A61131BE8A006D32D9 /* OpenGL.framework */; };
 		0054E6311131BEE7006D32D9 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0054E6301131BEE7006D32D9 /* Carbon.framework */; };
 		0054E66C1131BF58006D32D9 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0054E66B1131BF58006D32D9 /* Quartz.framework */; };
+		00651A55155AE23500221A44 /* HIDJoystick.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A12994147A8E7500DF323F /* HIDJoystick.cpp */; };
+		00651A56155AE23C00221A44 /* OEMatrix3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00D226551350FF8B00FC69B9 /* OEMatrix3.cpp */; };
+		00651A57155AE3DF00221A44 /* MemoryInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A90FB2150D3A0000BB2999 /* MemoryInterface.cpp */; };
 		00679D09100817F700B38748 /* TemplateChooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00679D06100817F700B38748 /* TemplateChooser.xib */; };
-		006A4C5C134ED2F30033BE4D /* IEEE488Interface.h in Headers */ = {isa = PBXBuildFile; fileRef = 006A4C5B134ED2F30033BE4D /* IEEE488Interface.h */; };
 		006B5CD013826D0700EEB5BC /* CanvasWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 00A72B7212879F800083C6A7 /* CanvasWindow.m */; };
 		0071E3BA10803F7300F2D54F /* TemplateChooserItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0071E3B910803F7300F2D54F /* TemplateChooserItem.mm */; };
 		0073DD9F136FCC1100087303 /* CanvasToolbarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0073DD8E136FCA1C00087303 /* CanvasToolbarView.m */; };
 		0073DDBF136FCCC900087303 /* ToolbarBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 0073DDBE136FCCC900087303 /* ToolbarBackground.png */; };
 		0076FD6512A1ED8C00A3FEC7 /* AudioPause.png in Resources */ = {isa = PBXBuildFile; fileRef = 0076FD6412A1ED8C00A3FEC7 /* AudioPause.png */; };
 		0078F655127348ED0042577E /* AudioControls.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0078F653127348ED0042577E /* AudioControls.xib */; };
-		007DEFAB153FB0CB00A9CC01 /* DIBackingStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 007DEFAA153FB0CB00A9CC01 /* DIBackingStore.h */; };
-		007DEFAD153FB15C00A9CC01 /* DIRAMBackingStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 007DEFAC153FB15C00A9CC01 /* DIRAMBackingStore.h */; };
 		007DEFAF153FB16800A9CC01 /* DIRAMBackingStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 007DEFAE153FB16800A9CC01 /* DIRAMBackingStore.cpp */; };
 		007DEFB1153FB17500A9CC01 /* DIBackingStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 007DEFB0153FB17500A9CC01 /* DIBackingStore.cpp */; };
 		007DEFB3153FB5E800A9CC01 /* DIBlockStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 007DEFB2153FB5E800A9CC01 /* DIBlockStorage.cpp */; };
-		007DEFB5153FB5F000A9CC01 /* DIBlockStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = 007DEFB4153FB5EF00A9CC01 /* DIBlockStorage.h */; };
-		007DEFB91540607C00A9CC01 /* DIRAWBlockStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = 007DEFB81540607C00A9CC01 /* DIRAWBlockStorage.h */; };
 		007DEFBB1540608300A9CC01 /* DIRAWBlockStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 007DEFBA1540608200A9CC01 /* DIRAWBlockStorage.cpp */; };
 		007F08CF1459344600C3308D /* sparkle_dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 007F08CE1459344600C3308D /* sparkle_dsa_pub.pem */; };
 		008107DE1120C57600D744FB /* TemplateChooserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00FE0C051095353B00B92AB7 /* TemplateChooserViewController.m */; };
 		00811E0012D251E9009AD2F0 /* AppleDiskIIInterfaceCard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00811DFE12D251E9009AD2F0 /* AppleDiskIIInterfaceCard.cpp */; };
 		00811F1312D2738B009AD2F0 /* AppleGraphicsTablet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00811F1112D2738B009AD2F0 /* AppleGraphicsTablet.cpp */; };
 		0083630D1326C15300CB9A21 /* OpenGLCanvas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 008363051326C15300CB9A21 /* OpenGLCanvas.cpp */; };
-		0083630E1326C15300CB9A21 /* OpenGLCanvas.h in Headers */ = {isa = PBXBuildFile; fileRef = 008363061326C15300CB9A21 /* OpenGLCanvas.h */; };
 		0083630F1326C15300CB9A21 /* OEVector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 008363071326C15300CB9A21 /* OEVector.cpp */; };
-		008363101326C15300CB9A21 /* OEVector.h in Headers */ = {isa = PBXBuildFile; fileRef = 008363081326C15300CB9A21 /* OEVector.h */; };
 		008363111326C15300CB9A21 /* PAAudio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 008363091326C15300CB9A21 /* PAAudio.cpp */; };
-		008363121326C15300CB9A21 /* PAAudio.h in Headers */ = {isa = PBXBuildFile; fileRef = 0083630A1326C15300CB9A21 /* PAAudio.h */; };
 		0084D43614FC4FF80031A8A5 /* Audio1Bit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0084D43514FC4FF80031A8A5 /* Audio1Bit.cpp */; };
 		008CA97E147803E500B9F5D0 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 008CA97D147803E500B9F5D0 /* IOKit.framework */; };
 		008F2FE7138E0AD600409723 /* DocumentController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00AD746811A2F10E00BAC29C /* DocumentController.mm */; };
 		009085401395D23D00B7D75F /* LibraryItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0090853F1395D23D00B7D75F /* LibraryItem.mm */; };
-		00936E8615170428006B0EAC /* AudioPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 00936E8515170428006B0EAC /* AudioPlayer.h */; };
 		00936E8815170435006B0EAC /* AudioPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00936E8715170435006B0EAC /* AudioPlayer.cpp */; };
-		00936E8A15177B60006B0EAC /* AudioPlayerInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 00936E8915177B60006B0EAC /* AudioPlayerInterface.h */; };
 		00954E781277B79E00C17203 /* EmulationOutlineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00954E771277B79E00C17203 /* EmulationOutlineCell.m */; };
 		00954E991277BB8E00C17203 /* EmulationWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00954E981277BB8E00C17203 /* EmulationWindowController.m */; };
 		00954EA71277BC1200C17203 /* AudioControlsWindowController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00954EA61277BC1200C17203 /* AudioControlsWindowController.mm */; };
 		00A06AE31533055600A494A7 /* DIAppleBlockStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A06AE21533055600A494A7 /* DIAppleBlockStorage.cpp */; };
-		00A06AE51533055D00A494A7 /* DIAppleBlockStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = 00A06AE41533055D00A494A7 /* DIAppleBlockStorage.h */; };
 		00A06AE91533EE3100A494A7 /* DIApple35DiskStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A06AE81533EE3100A494A7 /* DIApple35DiskStorage.cpp */; };
 		00A0B8041069761A007930A5 /* Document.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00A0B8031069761A007930A5 /* Document.mm */; };
-		00A12995147A8E7500DF323F /* HIDJoystick.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A12994147A8E7500DF323F /* HIDJoystick.cpp */; };
-		00A12997147A8E7E00DF323F /* HIDJoystick.h in Headers */ = {isa = PBXBuildFile; fileRef = 00A12996147A8E7E00DF323F /* HIDJoystick.h */; };
 		00A72B6F12879F650083C6A7 /* CanvasView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00A72B6E12879F650083C6A7 /* CanvasView.mm */; };
 		00A72B7012879F690083C6A7 /* CanvasWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00A72B6A12879F530083C6A7 /* CanvasWindowController.m */; };
 		00A72B951287A0F10083C6A7 /* Canvas.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00A72B931287A0F10083C6A7 /* Canvas.xib */; };
-		00A90FB3150D3A0000BB2999 /* MemoryInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A90FB2150D3A0000BB2999 /* MemoryInterface.cpp */; };
 		00A90FB5150D3A0E00BB2999 /* AudioInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A90FB4150D3A0E00BB2999 /* AudioInterface.cpp */; };
 		00A973AB12E512F80084724F /* OEEmulation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A9739E12E512F80084724F /* OEEmulation.cpp */; };
 		00A973AD12E512F80084724F /* OEComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A973A012E512F80084724F /* OEComponent.cpp */; };
@@ -143,9 +115,7 @@
 		00A973B112E512F80084724F /* OEDocument.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A973A412E512F80084724F /* OEDocument.cpp */; };
 		00A973B312E512F80084724F /* OEImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A973A612E512F80084724F /* OEImage.cpp */; };
 		00A973B512E512F80084724F /* OEPackage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A973A812E512F80084724F /* OEPackage.cpp */; };
-		00AD7026151AC19100424637 /* OESound.h in Headers */ = {isa = PBXBuildFile; fileRef = 00AD7025151AC19100424637 /* OESound.h */; };
 		00AD7028151AC41E00424637 /* OESound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00AD7027151AC41E00424637 /* OESound.cpp */; };
-		00B019B413501507001E01BB /* OEDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B019B213501507001E01BB /* OEDevice.h */; };
 		00B019B513501507001E01BB /* OEDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B019B313501507001E01BB /* OEDevice.cpp */; };
 		00B5709E10863C2A00CDE4A7 /* TemplateChooserWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B5709D10863C2A00CDE4A7 /* TemplateChooserWindowController.m */; };
 		00B5CB94136F0B6C007A7BED /* AppleSilentype.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B5CB92136F0B6C007A7BED /* AppleSilentype.cpp */; };
@@ -156,17 +126,7 @@
 		00BDB1F713863188004DF2AF /* CanvasPrintView.m in Sources */ = {isa = PBXBuildFile; fileRef = 00BDB1F613863188004DF2AF /* CanvasPrintView.m */; };
 		00C6C0C110602151004D084B /* roms in Resources */ = {isa = PBXBuildFile; fileRef = 00C6C08810602151004D084B /* roms */; };
 		00CAD7D912A04C22002B92E5 /* Emulation.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00CAD7D712A04C22002B92E5 /* Emulation.xib */; };
-		00D226051350F9A100FC69B9 /* AudioInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D225FA1350F9A100FC69B9 /* AudioInterface.h */; };
-		00D226061350F9A100FC69B9 /* CanvasInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D225FB1350F9A100FC69B9 /* CanvasInterface.h */; };
-		00D226081350F9A100FC69B9 /* DeviceInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D225FD1350F9A100FC69B9 /* DeviceInterface.h */; };
-		00D2260A1350F9A100FC69B9 /* EthernetInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D225FF1350F9A100FC69B9 /* EthernetInterface.h */; };
-		00D2260B1350F9A100FC69B9 /* MIDIInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D226001350F9A100FC69B9 /* MIDIInterface.h */; };
-		00D2260E1350F9A100FC69B9 /* USBInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D226031350F9A100FC69B9 /* USBInterface.h */; };
-		00D2260F1350F9A100FC69B9 /* VideoCaptureInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D226041350F9A100FC69B9 /* VideoCaptureInterface.h */; };
-		00D226561350FF8B00FC69B9 /* OEMatrix3.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D226541350FF8B00FC69B9 /* OEMatrix3.h */; };
-		00D226571350FF8B00FC69B9 /* OEMatrix3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00D226551350FF8B00FC69B9 /* OEMatrix3.cpp */; };
 		00D6729D12C9A256009F0D9E /* EmulationShow.png in Resources */ = {isa = PBXBuildFile; fileRef = 00E442931278727600713A05 /* EmulationShow.png */; };
-		00D73D9D136CC9B300BD5465 /* IEEE1394Interface.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D73D9C136CC9B300BD5465 /* IEEE1394Interface.h */; };
 		00D75C691399FFDB004AA153 /* LibraryTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D75C681399FFD9004AA153 /* LibraryTableCell.m */; };
 		00D8448B0FFF04C0005802F0 /* DiskImage.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000F66370FF8368F00C8AF23 /* DiskImage.icns */; };
 		00D8448F0FFF04C0005802F0 /* Emulation.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000F663A0FF8368F00C8AF23 /* Emulation.icns */; };
@@ -176,7 +136,6 @@
 		00D844CC0FFF0505005802F0 /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00D844C30FFF0505005802F0 /* Preferences.xib */; };
 		00D845830FFF0FD2005802F0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D845730FFF0FD2005802F0 /* main.m */; };
 		00D845860FFF0FD2005802F0 /* PreferencesWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D8457A0FFF0FD2005802F0 /* PreferencesWindowController.m */; };
-		00DC0E79145DFECD00FF51BD /* MemoryInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 00DC0E78145DFECD00FF51BD /* MemoryInterface.h */; };
 		00E442921278726B00713A05 /* IconDevices.png in Resources */ = {isa = PBXBuildFile; fileRef = 00E442911278726B00713A05 /* IconDevices.png */; };
 		00ED379C12779AD100BEF6BD /* AudioMax.png in Resources */ = {isa = PBXBuildFile; fileRef = 00ED379712779AD000BEF6BD /* AudioMax.png */; };
 		00ED379D12779AD100BEF6BD /* AudioMin.png in Resources */ = {isa = PBXBuildFile; fileRef = 00ED379812779AD000BEF6BD /* AudioMin.png */; };
@@ -193,13 +152,10 @@
 		00ED37C112779DD900BEF6BD /* IconWakeUp.png in Resources */ = {isa = PBXBuildFile; fileRef = 00ED37B012779DD800BEF6BD /* IconWakeUp.png */; };
 		00ED37C212779DD900BEF6BD /* IconWarmRestart.png in Resources */ = {isa = PBXBuildFile; fileRef = 00ED37B112779DD800BEF6BD /* IconWarmRestart.png */; };
 		00F01B4712A0D6EC000527CA /* EmulationUnmount.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F01B4612A0D6EC000527CA /* EmulationUnmount.png */; };
-		00F17297153B381E00AAC9C2 /* DIApple525DiskStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = 00140DED152D281F00D4795D /* DIApple525DiskStorage.h */; };
-		00F17298153B382200AAC9C2 /* DIApple35DiskStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = 00A06AE61533EE2700A494A7 /* DIApple35DiskStorage.h */; };
 		00F21CE712C7C7EE00A809EF /* VerticallyCenteredTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00F21CE612C7C7EE00A809EF /* VerticallyCenteredTextFieldCell.m */; };
 		00F35D7312EF049B0027B9E4 /* EmulationOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 00FE381A12CA6790002B47B1 /* EmulationOutlineView.m */; };
 		00F397E4141655DA00C53A3E /* Apple1IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00F397E3141655DA00C53A3E /* Apple1IO.cpp */; };
 		00F4D0BF12E2E42F00B7F5E6 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00F4D0BE12E2E42F00B7F5E6 /* ApplicationServices.framework */; };
-		00FBD2DE1419A03B00BA8CEE /* AudioCodec.h in Headers */ = {isa = PBXBuildFile; fileRef = 00FBD2DD1419A03A00BA8CEE /* AudioCodec.h */; };
 		00FC27D312D1070A0065E986 /* Apple1ACI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881312A393990052B7A4 /* Apple1ACI.cpp */; };
 		00FC27DB12D1070A0065E986 /* AppleIIAudioOut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881B12A393990052B7A4 /* AppleIIAudioOut.cpp */; };
 		00FC27DF12D1070A0065E986 /* AppleIIFloatingBus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881F12A393990052B7A4 /* AppleIIFloatingBus.cpp */; };
@@ -1002,9 +958,9 @@
 		00B8887E12A393990052B7A4 /* IEEE */ = {
 			isa = PBXGroup;
 			children = (
+				006A4C5B134ED2F30033BE4D /* IEEE488Interface.h */,
 				00B8887F12A393990052B7A4 /* IEEE1284Interface.h */,
 				00D73D9C136CC9B300BD5465 /* IEEE1394Interface.h */,
-				006A4C5B134ED2F30033BE4D /* IEEE488Interface.h */,
 			);
 			name = IEEE;
 			path = libemulation/Interface/IEEE;
@@ -1225,9 +1181,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0083630E1326C15300CB9A21 /* OpenGLCanvas.h in Headers */,
-				008363101326C15300CB9A21 /* OEVector.h in Headers */,
-				008363121326C15300CB9A21 /* PAAudio.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1235,24 +1188,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00140DF8152D370300D4795D /* DIFileBackingStore.h in Headers */,
-				00140E02152D375E00D4795D /* DIFDIDiskStorage.h in Headers */,
-				00140E14152D396500D4795D /* DIV2DDiskStorage.h in Headers */,
-				0020AE741530AE2500E3DF80 /* diskimage.h in Headers */,
-				0020AE751530AE2500E3DF80 /* DICommon.h in Headers */,
-				0020AE761530AE2500E3DF80 /* DI2IMGBackingStore.h in Headers */,
-				0020AE771530AE2500E3DF80 /* DIDC42BackingStore.h in Headers */,
-				00A06AE51533055D00A494A7 /* DIAppleBlockStorage.h in Headers */,
-				0027E680153738D30066A9BE /* DIVDIBlockStorage.h in Headers */,
-				00F17297153B381E00AAC9C2 /* DIApple525DiskStorage.h in Headers */,
-				00F17298153B382200AAC9C2 /* DIApple35DiskStorage.h in Headers */,
-				00536BC7153DD40A005A5336 /* DIVMDKBlockStorage.h in Headers */,
-				007DEFAB153FB0CB00A9CC01 /* DIBackingStore.h in Headers */,
-				007DEFAD153FB15C00A9CC01 /* DIRAMBackingStore.h in Headers */,
-				007DEFB5153FB5F000A9CC01 /* DIBlockStorage.h in Headers */,
-				007DEFB91540607C00A9CC01 /* DIRAWBlockStorage.h in Headers */,
-				0019177C1543D31A009A301E /* DIDiskStorage.h in Headers */,
-				001917801543D338009A301E /* DILogicalDiskStorage.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1260,28 +1195,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				006A4C5C134ED2F30033BE4D /* IEEE488Interface.h in Headers */,
-				00B019B413501507001E01BB /* OEDevice.h in Headers */,
-				00D226051350F9A100FC69B9 /* AudioInterface.h in Headers */,
-				00D226061350F9A100FC69B9 /* CanvasInterface.h in Headers */,
-				00D226081350F9A100FC69B9 /* DeviceInterface.h in Headers */,
-				00D2260A1350F9A100FC69B9 /* EthernetInterface.h in Headers */,
-				00D2260B1350F9A100FC69B9 /* MIDIInterface.h in Headers */,
-				00D2260E1350F9A100FC69B9 /* USBInterface.h in Headers */,
-				00D2260F1350F9A100FC69B9 /* VideoCaptureInterface.h in Headers */,
-				00D226561350FF8B00FC69B9 /* OEMatrix3.h in Headers */,
-				000E8D1913515C6E00DBFB2C /* StorageInterface.h in Headers */,
-				00D73D9D136CC9B300BD5465 /* IEEE1394Interface.h in Headers */,
-				002740B913A08A4F00E13D65 /* VidexVideoterm.h in Headers */,
-				00FBD2DE1419A03B00BA8CEE /* AudioCodec.h in Headers */,
-				0022236C142C557100B7451D /* ControlBusInterface.h in Headers */,
-				00DC0E79145DFECD00FF51BD /* MemoryInterface.h in Headers */,
-				00A12997147A8E7E00DF323F /* HIDJoystick.h in Headers */,
-				00139F821511864800B0E108 /* BankSwitchedRAM.h in Headers */,
-				00365CED1516956600978DF6 /* AddressMux.h in Headers */,
-				00936E8615170428006B0EAC /* AudioPlayer.h in Headers */,
-				00936E8A15177B60006B0EAC /* AudioPlayerInterface.h in Headers */,
-				00AD7026151AC19100424637 /* OESound.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1441,7 +1354,6 @@
 				0073DDBF136FCCC900087303 /* ToolbarBackground.png in Resources */,
 				001C9B02137FDD0500D1355B /* AudioRecord.png in Resources */,
 				007F08CF1459344600C3308D /* sparkle_dsa_pub.pem in Resources */,
-				00520BDA1558D7120000107C /* OpenEmulator Icons.rtf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1471,6 +1383,8 @@
 				0083630D1326C15300CB9A21 /* OpenGLCanvas.cpp in Sources */,
 				0083630F1326C15300CB9A21 /* OEVector.cpp in Sources */,
 				008363111326C15300CB9A21 /* PAAudio.cpp in Sources */,
+				00651A55155AE23500221A44 /* HIDJoystick.cpp in Sources */,
+				00651A56155AE23C00221A44 /* OEMatrix3.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1532,18 +1446,15 @@
 				00A973B312E512F80084724F /* OEImage.cpp in Sources */,
 				00A973B512E512F80084724F /* OEPackage.cpp in Sources */,
 				00B019B513501507001E01BB /* OEDevice.cpp in Sources */,
-				00D226571350FF8B00FC69B9 /* OEMatrix3.cpp in Sources */,
 				00B5CB94136F0B6C007A7BED /* AppleSilentype.cpp in Sources */,
 				00247F38139D8F4C00B165D1 /* OECommon.cpp in Sources */,
 				002740B813A08A4F00E13D65 /* VidexVideoterm.cpp in Sources */,
 				00F397E4141655DA00C53A3E /* Apple1IO.cpp in Sources */,
 				004BD1C01425AA8500768B80 /* W65C02S.cpp in Sources */,
 				0029EEE214266B8900AD900E /* AddressMapper.cpp in Sources */,
-				00A12995147A8E7500DF323F /* HIDJoystick.cpp in Sources */,
 				00B7C646147B4B4100BB7E6B /* JoystickMapper.cpp in Sources */,
 				00B7C64A147B5B2B00BB7E6B /* AppleIIGamePort.cpp in Sources */,
 				0084D43614FC4FF80031A8A5 /* Audio1Bit.cpp in Sources */,
-				00A90FB3150D3A0000BB2999 /* MemoryInterface.cpp in Sources */,
 				00A90FB5150D3A0E00BB2999 /* AudioInterface.cpp in Sources */,
 				00139F801511863B00B0E108 /* BankSwitchedRAM.cpp in Sources */,
 				00139F84151195E600B0E108 /* AppleIIAddressDecoder.cpp in Sources */,
@@ -1555,6 +1466,7 @@
 				001E096F155633AC00405DC0 /* RDCFFA1.cpp in Sources */,
 				001E0970155633D000405DC0 /* AppleIIAudioIn.cpp in Sources */,
 				001E0971155633E700405DC0 /* Apple1Terminal.cpp in Sources */,
+				00651A57155AE3DF00221A44 /* MemoryInterface.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -46,10 +46,10 @@ bool AppleIISlotMemory::setRef(string name, OEComponent *ref)
 	if (name == "memoryBus")
     {
         if (memoryBus)
-            memoryBus->removeObserver(this, APPLEII_SLOTEXPANSIONMEMORY_WILL_UNMAP);
+            memoryBus->removeObserver(this, APPLEII_SLOT_WILL_UNMAP);
 		memoryBus = ref;
         if (memoryBus)
-            memoryBus->addObserver(this, APPLEII_SLOTEXPANSIONMEMORY_WILL_UNMAP);
+            memoryBus->addObserver(this, APPLEII_SLOT_WILL_UNMAP);
     }
 	else if (name == "memory")
 		memory = ref;
@@ -97,7 +97,7 @@ OEChar AppleIISlotMemory::read(OEAddress address)
     if (!(address & 0x800))
         enableSlotExpansion(true);
     else if (!((~address) & 0xfff))
-        memoryBus->postNotification(this, APPLEII_SLOTEXPANSIONMEMORY_WILL_UNMAP, NULL);
+        memoryBus->postNotification(this, APPLEII_SLOT_WILL_UNMAP, NULL);
     
     return memory->read(address);
 }
@@ -107,7 +107,7 @@ void AppleIISlotMemory::write(OEAddress address, OEChar value)
     if (!(address & 0x800))
         enableSlotExpansion(true);
     else if (!((~address) & 0xfff))
-        memoryBus->postNotification(this, APPLEII_SLOTEXPANSIONMEMORY_WILL_UNMAP, NULL);
+        memoryBus->postNotification(this, APPLEII_SLOT_WILL_UNMAP, NULL);
     
     memory->write(address, value);
 }
@@ -124,17 +124,12 @@ void AppleIISlotMemory::updateSlotExpansion(bool value)
 {
     en = value;
     
-    MemoryMaps memoryMaps;
     MemoryMap memoryMap;
-    
     memoryMap.component = this;
     memoryMap.startAddress = 0xc800;
     memoryMap.endAddress = 0xcfff;
     memoryMap.read = true;
     memoryMap.write = true;
-    memoryMaps.push_back(memoryMap);
     
-    memoryBus->postMessage(this, (value ?
-                                  APPLEII_MAP_SLOTMEMORYMAPS :
-                                  APPLEII_UNMAP_SLOTMEMORYMAPS), &memoryMaps);
+    memoryBus->postMessage(this, (value ? APPLEII_MAP_SLOT : APPLEII_UNMAP_SLOT), &memoryMap);
 }

@@ -43,8 +43,8 @@ protected:
     OEAddress mask;
     OEInt blockBits;
     
-    bool addMemoryMaps(MemoryMaps *value);
-    bool removeMemoryMaps(MemoryMaps *value);
+    bool addMemoryMap(MemoryMap *value);
+    bool removeMemoryMap(MemoryMap *value);
     
 private:
     OEComponent *floatingBus;

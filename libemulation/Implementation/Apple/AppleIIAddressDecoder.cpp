@@ -85,17 +85,17 @@ bool AppleIIAddressDecoder::postMessage(OEComponent *sender, int event, void *da
             break;
         }
             
-        case APPLEII_MAP_SLOTMEMORYMAPS:
-            return addMemoryMaps((MemoryMaps *) data);
+        case APPLEII_MAP_SLOT:
+            return addMemoryMap((MemoryMap *) data);
             
-        case APPLEII_UNMAP_SLOTMEMORYMAPS:
-            return removeMemoryMaps((MemoryMaps *) data);
+        case APPLEII_UNMAP_SLOT:
+            return removeMemoryMap((MemoryMap *) data);
             
-        case APPLEII_MAP_MEMORYMAPS:
-            return addMemoryMaps((MemoryMaps *) data);
+        case APPLEII_MAP:
+            return addMemoryMap((MemoryMap *) data);
 
-        case APPLEII_UNMAP_MEMORYMAPS:
-            return removeMemoryMaps((MemoryMaps *) data);
+        case APPLEII_UNMAP:
+            return removeMemoryMap((MemoryMap *) data);
     }
     
     return false;

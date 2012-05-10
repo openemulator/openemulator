@@ -478,8 +478,6 @@ bool DIApple525DiskStorage::encodeGCR62Track(DIInt trackIndex, DITrack& track)
 		writeGCR62DataField(&track.data[sectorIndex * SECTOR_SIZE]);
 	}
     
-    printf("\n\n");
-    
     return true;
 }
 

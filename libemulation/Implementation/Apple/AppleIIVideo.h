@@ -43,12 +43,6 @@ typedef enum
 
 typedef enum
 {
-    APPLEII_REVISION0,
-    APPLEII_REVISION1,
-} AppleIIRevision;
-
-typedef enum
-{
     APPLEII_NTSC,
     APPLEII_PAL,
 } AppleIITVSystem;
@@ -98,7 +92,7 @@ private:
 	
     // Settings
     AppleIIModel model;
-    AppleIIRevision revision;
+    OEInt revision;
     AppleIITVSystem tvSystem;
 	string characterSet;
     OEInt flashFrameNum;

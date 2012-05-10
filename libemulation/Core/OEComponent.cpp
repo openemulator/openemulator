@@ -94,7 +94,6 @@ void OEComponent::postNotification(OEComponent *sender, int notification, void *
 
 void OEComponent::notify(OEComponent *sender, int notification, void *data)
 {
-    
 }
 
 

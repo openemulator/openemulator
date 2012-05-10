@@ -6,7 +6,7 @@
     </device>
     <connector id="appleGraphicsTablet.connector" type="Apple Graphics Tablet Port">
     </connector>
-    <component id="appleGraphicsTablet.canvas" class="AppleGraphicsTablet">
+    <component id="appleGraphicsTablet.graphicsTablet" class="AppleGraphicsTablet">
         <property name="device" ref="appleGraphicsTablet"/>
         <property name="imagePath" value="${resourcePath}/images/Apple/Apple Graphics Tablet View.png"/>
     </component>

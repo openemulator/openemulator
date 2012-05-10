@@ -17,8 +17,8 @@
 
 typedef enum
 {
-    ADDRESSDECODER_MAP_MEMORYMAPS,
-    ADDRESSDECODER_UNMAP_MEMORYMAPS,
+    ADDRESSDECODER_MAP,
+    ADDRESSDECODER_UNMAP,
     
     ADDRESSDECODER_END,
 } AddressDecoderMessage;
@@ -48,9 +48,9 @@ typedef map<string, OEComponent *> MemoryMapsRef;
 bool appendMemoryMaps(MemoryMaps& theMaps,
                       OEComponent *component,
                       string value);
-bool validateMemoryMapsConf(MemoryMaps& theMaps,
-                            OEAddress blockSize,
-                            OEAddress addressMask);
+bool validateMemoryMaps(MemoryMaps& theMaps,
+                        OEAddress blockSize,
+                        OEAddress addressMask);
 
 typedef enum
 {
@@ -64,7 +64,5 @@ typedef struct
     
 	OESLong offset;
 } BankSwitchedRAMMap;
-
-typedef list<BankSwitchedRAMMap> BankSwitchedRAMMaps;
 
 #endif

@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
-<edl version="1.0" generator="OpenEmulator" framework="739" label="Apple II" image="images/Apple/Apple II.png" description="The Apple II plus is the second model of the Apple II series of computers. It has a MOS 6502 microprocessor running at 1 MHz, 48 kiB of RAM, an audio cassette interface for loading programs and storing data, and Applesoft BASIC built into ROM.">
+<edl version="1.0" generator="OpenEmulator" framework="739" label="Apple II plus" image="images/Apple/Apple II.png" description="The Apple II plus is the second model of the Apple II series of computers. It has a MOS 6502 microprocessor running at 1 MHz, 48 kiB of RAM, an audio cassette interface for loading programs and storing data, and Applesoft BASIC built into ROM.">
     
-    <device id="appleIIplus" label="Apple II" image="images/Apple/Apple II.png">
+    <device id="appleIIplus" label="Apple II plus" image="images/Apple/Apple II.png">
         <setting ref="appleIIplus.video" name="tvSystem" label="TV System" type="select" options="NTSC,PAL"/>
         <setting ref="appleIIplus.audioOut" name="volume" label="Volume" type="slider" options="0,1"/>
         <setting ref="appleIIplus.video" name="characterSet" label="Character Set" type="select" options="Standard,Videx|Videx Lowercase Chip,Pigfont"/>
         <setting ref="appleIIplus.keyboard" name="type" label="Keyboard" type="select" options="Standard,Shift-Key Mod,Full ASCII"/>
     </device>
-    <port id="appleIIplus.videoPort" ref="appleMonitorII" type="Composite Video Port" group="peripherals" label="Video Port" image="images/Connectors/RCA Female.png">
+    <port id="appleIIplus.videoPort" ref="" type="Composite Video Port" group="peripherals" label="Video Port" image="images/Connectors/RCA Female.png">
         <inlet ref="appleIIplus.keyboard" property="monitor" outletRef="monitor"/>
         <inlet ref="appleIIplus.video" property="monitorDevice" outletRef=""/>
         <inlet ref="appleIIplus.video" property="monitor" outletRef="monitor"/>
     </port>
-    <port id="appleIIplus.gamePort" ref="appleHandControllers" type="Apple II Game Port" group="peripherals" label="Game Port" image="images/Connectors/DIP16.png">
+    <port id="appleIIplus.gamePort" ref="" type="Apple II Game Port" group="peripherals" label="Game Port" image="images/Connectors/DIP16.png">
         <inlet ref="appleIIplus.gamePort" property="gamePort" outletRef="io"/>
     </port>
     <port id="appleIIplus.slot0" ref="" type="Apple II Slot" group="expansions" label="Slot 0" image="images/Connectors/Edge50.png">
@@ -169,7 +169,7 @@
         <property name="controlBus" ref="appleIIplus.controlBus"/>
         <property name="floatingBus" ref="appleIIplus.floatingBus"/>
         <property name="gamePort" ref="appleIIplus.gamePort"/>
-        <property name="monitor" ref="appleMonitorII.monitor"/>
+        <property name="monitor" ref=""/>
     </component>
     <component id="appleIIplus.video" class="AppleIIVideo">
         <property name="model" value="II"/>
@@ -184,8 +184,8 @@
         <property name="device" ref="appleIIplus"/>
         <property name="controlBus" ref="appleIIplus.controlBus"/>
         <property name="memoryBus" ref="appleIIplus.memoryBus"/>
-        <property name="monitorDevice" ref="appleMonitorII"/>
-        <property name="monitor" ref="appleMonitorII.monitor"/>
+        <property name="monitorDevice" ref=""/>
+        <property name="monitor" ref=""/>
         <property name="fontStandard" data="${resourcePath}/roms/Apple/341-0036.bin"/>
         <property name="fontVidex" data="${resourcePath}/roms/Videx/Videx Lower Case Chip ROM.bin"/>
         <property name="fontPigfont" data="${resourcePath}/roms/Apple/Pigfont Video ROM.bin"/>
@@ -215,7 +215,7 @@
         <property name="an3" value="1"/>
         <property name="controlBus" ref="appleIIplus.controlBus"/>
         <property name="floatingBus" ref="appleIIplus.floatingBus"/>
-        <property name="gamePort" ref="appleHandControllers.io"/>
+        <property name="gamePort" ref=""/>
     </component>
     <component id="appleIIplus.romD0" class="ROM">
         <property name="memoryImage" data="${resourcePath}/roms/Apple/341-0011-D0.bin"/>
@@ -236,79 +236,4 @@
         <property name="memoryImage" data="${resourcePath}/roms/Apple/341-0020-F8.bin"/>
     </component>
     
-    <device id="appleMonitorII" label="Apple Monitor II" image="images/Apple/Apple Monitor II.png">
-        <setting ref="appleMonitorII.monitor" name="videoBrightness" label="Brightness" type="slider" options="-1.0,1.0"/>
-        <setting ref="appleMonitorII.monitor" name="videoContrast" label="Contrast" type="slider" options="0.0,1.0"/>
-        <setting ref="appleMonitorII.monitor" name="videoVerticalCenter" label="Vertical Center" type="slider" options="-0.1,0.1"/>
-        <setting ref="appleMonitorII.monitor" name="videoVerticalSize" label="Vertical Size" type="slider" options="0.85,1.25"/>
-    </device>
-    <connector id="appleMonitorII.connector" type="Composite Video Port">
-        <inlet ref="appleMonitorII.monitor" property="controlBus" outletRef="controlBus"/>
-    </connector>
-    <component id="appleMonitorII.monitor" class="Monitor">
-        <property name="device" ref="appleMonitorII"/>
-        <property name="controlBus" ref="appleIIplus.controlBus"/>
-        <property name="videoDecoder" value="Monochrome"/>
-        <property name="videoBrightness" value="0.150000006"/>
-        <property name="videoContrast" value="0.8000000119"/>
-        <property name="videoSaturation" value="1.450000048"/>
-        <property name="videoHue" value="0.2700000107"/>
-        <property name="videoHorizontalCenter" value="0"/>
-        <property name="videoHorizontalSize" value="1.049999952"/>
-        <property name="videoVerticalCenter" value="0"/>
-        <property name="videoVerticalSize" value="1.049999952"/>
-        <property name="videoBandwidth" value="6000000"/>
-        <property name="displayBarrel" value="0.1000000015"/>
-        <property name="displayScanlineLevel" value="0.5"/>
-        <property name="displayCenterLighting" value="0.5"/>
-        <property name="displayLuminanceGain" value="1.5"/>
-    </component>
-    
-    <device id="appleHandControllers" label="Apple Hand Controllers" image="images/Apple/Apple Hand Controllers.png">
-        <setting ref="appleHandControllers.io" name="inputDevice" label="Input Device" type="select" options="Mouse,Joystick,None"/>
-        <setting ref="appleHandControllers.io" name="axis0" label="PDL0" type="select" options=""/>
-        <setting ref="appleHandControllers.io" name="axis1" label="PDL1" type="select" options=""/>
-        <setting ref="appleHandControllers.io" name="axis2" label="PDL2" type="select" options=""/>
-        <setting ref="appleHandControllers.io" name="axis3" label="PDL3" type="select" options=""/>
-        <setting ref="appleHandControllers.io" name="button0" label="PB0" type="select" options=""/>
-        <setting ref="appleHandControllers.io" name="button1" label="PB1" type="select" options=""/>
-        <setting ref="appleHandControllers.io" name="button2" label="PB2" type="select" options=""/>
-        <setting ref="appleHandControllers.io" name="sensitivityAxis0" label="PDL0 Sensitivity" type="slider" options="-10,10"/>
-        <setting ref="appleHandControllers.io" name="sensitivityAxis1" label="PDL1 Sensitivity" type="slider" options="-10,10"/>
-        <setting ref="appleHandControllers.io" name="sensitivityAxis2" label="PDL2 Sensitivity" type="slider" options="-10,10"/>
-        <setting ref="appleHandControllers.io" name="sensitivityAxis3" label="PDL3 Sensitivity" type="slider" options="-10,10"/>
-        <setting ref="appleHandControllers.io" name="reverseAxis0" label="PDL0 Reverse" type="checkbox"/>
-        <setting ref="appleHandControllers.io" name="reverseAxis1" label="PDL1 Reverse" type="checkbox"/>
-        <setting ref="appleHandControllers.io" name="reverseAxis2" label="PDL2 Reverse" type="checkbox"/>
-        <setting ref="appleHandControllers.io" name="reverseAxis3" label="PDL3 Reverse" type="checkbox"/>
-    </device>
-    <connector id="appleHandControllers.connector" type="Apple II Game Port">
-        <inlet ref="appleHandControllers.io" property="canvas" outletRef="video"/>
-    </connector>
-    <component id="appleHandControllers.io" class="JoystickMapper">
-        <property name="inputDevice" value="Mouse"/>
-        <property name="deviceId" value="0"/>
-        <property name="axis0" value="Mouse X"/>
-        <property name="axis1" value="Mouse Y"/>
-        <property name="axis2" value="Unmapped"/>
-        <property name="axis3" value="Unmapped"/>
-        <property name="button0" value="Mouse Button 1"/>
-        <property name="button1" value="Mouse Button 2"/>
-        <property name="button2" value="Mouse Button 3"/>
-        <property name="sensitivityAxis0" value="0"/>
-        <property name="sensitivityAxis1" value="0"/>
-        <property name="sensitivityAxis2" value="0"/>
-        <property name="sensitivityAxis3" value="0"/>
-        <property name="reverseAxis0" value="0"/>
-        <property name="reverseAxis1" value="0"/>
-        <property name="reverseAxis2" value="0"/>
-        <property name="reverseAxis3" value="0"/>
-        <property name="mapMouse" value="axis0,Mouse X,0,0,axis1,Mouse Y,0,0,axis2,Unmapped,0,0,axis3,Unmapped,0,0,button0,Mouse Button 1,0,0,button1,Mouse Button 2,0,0,button2,Mouse Button 3,0,0"/>
-        <property name="mapJoystick" value="axis0,Joystick 1 X-Axis,0,0,axis1,Joystick 1 Y-Axis,0,0,axis2,Joystick 1 Z-Rotation,0,0,axis3,Joystick 1 Slider,0,0,button0,Joystick 1 Button 1,0,0,button1,Joystick 1 Button 2,0,0,button2,Joystick 1 Button 3,0,0"/>
-        <property name="mapNone" value="axis0,Unmapped,0,0,axis1,Unmapped,0,0,axis2,Unmapped,0,0,axis3,Unmapped,0,0,button0,Unmapped,0,0,button1,Unmapped,0,0,button2,Unmapped,0,0"/>
-        <property name="device" ref="appleHandControllers"/>
-        <property name="canvas" ref="appleIIplus.video"/>
-        <property name="joystick" ref="joystick"/>
-    </component>
-
 </edl>

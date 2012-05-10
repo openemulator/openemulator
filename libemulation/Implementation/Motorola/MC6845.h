@@ -2,14 +2,53 @@
 /**
  * libemulation
  * MC6845
- * (C) 2009-2010 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements a MC6845
+ * Implements a MC6845 CRT controller
  */
+
+#ifndef _MC6845_H
+#define _MC6845_H
 
 #include "OEComponent.h"
 
 class MC6845 : public OEComponent
 {
+public:
+    MC6845();
+    
+    bool setValue(string name, string value);
+    bool getValue(string name, string& value);
+    bool setRef(string name, OEComponent *ref);
+    bool init();
+    
+    OEChar read(OEAddress address);
+    void write(OEAddress address, OEChar value);
+    
+protected:
+    OEChar horizTotal;
+    OEChar horizDisplayed;
+    OEChar horizSyncPosition;
+    OEChar horizSyncWidth;
+    OEChar vertTotal;
+    OEChar vertTotalAdjust;
+    OEChar vertDisplayed;
+    OEChar vertSyncPosition;
+    OEChar modeControl;
+    OEChar scanline;
+    OEChar cursorStart;
+    OEChar cursorEnd;
+    OEShort startAddress;
+    OEShort cursorAddress;
+    OEShort lightpenAddress;
+    
+private:
+    OEComponent *floatingBus;
+    
+    OEChar addressRegister;
+    
+    void reset();
 };
+
+#endif

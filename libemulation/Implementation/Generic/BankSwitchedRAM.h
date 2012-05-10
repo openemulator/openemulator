@@ -12,6 +12,8 @@
 
 #include "MemoryInterface.h"
 
+typedef list<BankSwitchedRAMMap> BankSwitchedRAMMaps;
+
 class BankSwitchedRAM : public RAM
 {
 public:
