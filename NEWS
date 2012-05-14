@@ -1,4 +1,5 @@
 ==Latest==
+* Refactorized AppleIIVideo
 * Fixed Apple language card
 * Implemented Apple Silentype interface card
 * Implemented Videx Videoterm card

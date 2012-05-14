@@ -344,7 +344,7 @@ void RDCFFA1::write(OEAddress address, OEChar value)
 
 void RDCFFA1::updateMemory(bool value)
 {
-    DIInt message = value ? ADDRESSDECODER_MAP : ADDRESSDECODER_UNMAP;
+    OEInt message = value ? ADDRESSDECODER_MAP : ADDRESSDECODER_UNMAP;
     
     MemoryMap memoryMap;
     

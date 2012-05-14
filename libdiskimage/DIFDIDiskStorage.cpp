@@ -85,7 +85,7 @@ bool DIFDIDiskStorage::openForReading(DIBackingStore *backingStore)
     DIData header;
     header.resize(0x200);
     
-    if (!backingStore->read(0, &header.front(), header.size()))
+    if (!backingStore->read(0, &header.front(), (DIInt) header.size()))
         return false;
     
     // Check signature
@@ -119,7 +119,7 @@ bool DIFDIDiskStorage::openForReading(DIBackingStore *backingStore)
     else
         header.resize(((0x1ff + 152 + 2 * indexNum) / 0x200) * 0x200);
     
-    if (!backingStore->read(0, &header.front(), header.size()))
+    if (!backingStore->read(0, &header.front(), (DIInt) header.size()))
         return false;
     
     // Analyze tracks
@@ -127,7 +127,7 @@ bool DIFDIDiskStorage::openForReading(DIBackingStore *backingStore)
     trackOffset.resize(indexNum);
     trackSize.resize(indexNum);
     
-    DIInt offset = header.size();
+    DIInt offset = (DIInt) header.size();
     for (DIInt index = 0; index < indexNum; index++)
     {
         DIInt format = header[152 + 2 * index];
@@ -176,7 +176,7 @@ bool DIFDIDiskStorage::close()
     if (writing)
     {
         // Fix index number
-        DIInt indexNum = trackData.size();
+        DIInt indexNum = (DIInt) trackData.size();
         indexNum = ((indexNum + headNum - 1) / headNum) * headNum;
         
         trackFormat.resize(indexNum);
@@ -217,7 +217,7 @@ bool DIFDIDiskStorage::close()
         for (DIInt i = 0; i < indexNum; i++)
         {
             DIInt format = trackFormat[i];
-            DIInt size = trackData[i].size() / 0x100;
+            DIInt size = (DIInt) trackData[i].size() / 0x100;
             
             if (format == DI_FDI_PULSES)
                 format |= (size >> 8) & 0x3f;
@@ -229,10 +229,10 @@ bool DIFDIDiskStorage::close()
         // Write tracks
         DIInt dataCRC32 = 0;
         
-        DIInt offset = header.size();
+        DIInt offset = (DIInt) header.size();
         for (DIInt i = 0; i < indexNum; i++)
         {
-            DIInt size = ((0xff + trackData[i].size()) / 0x100) * 0x100;
+            DIInt size = ((0xff + (DIInt) trackData[i].size()) / 0x100) * 0x100;
             trackData[i].resize(size);
             
             if (!backingStore->write(offset, &trackData[i].front(), size))
@@ -244,11 +244,11 @@ bool DIFDIDiskStorage::close()
         // Write CRCs
         setDIIntBE(&header[header.size() - 0x08], dataCRC32);
         
-        DIInt headerCRC = getDICRC32(&header[0x0], header.size() - 0x04);
+        DIInt headerCRC = getDICRC32(&header[0x0], (DIInt) header.size() - 0x04);
         setDIIntBE(&header[header.size() - 0x04], headerCRC);
         
         // Write header
-        if (!backingStore->write(0, &header.front(), header.size()))
+        if (!backingStore->write(0, &header.front(), (DIInt) header.size()))
             return false;
     }
     
@@ -469,7 +469,7 @@ bool DIFDIDiskStorage::decodeBitstreamTrack(DIData& decodedData, DIData& data)
 
 bool DIFDIDiskStorage::encodeBitstreamTrack(DIData& encodedData, DIData& data)
 {
-    DIInt bitNum = data.size();
+    DIInt bitNum = (DIInt) data.size();
     DIInt byteNum = (bitNum + 7) >> 3;
     
     encodedData.clear();
@@ -554,7 +554,7 @@ bool DIFDIDiskStorage::decodePulsesTrack(DIData& decodedData, DIData& data, DIIn
     
     // Calculate total pulses time
     DIInt totalPulseTime = 0;
-    DIInt maxIndexHoleCount = 0;
+    DIInt maxIndexHoleCount = 1;
     for (DIInt i = 0; i < pulseNum; i++)
     {
         totalPulseTime += averageStream[i];

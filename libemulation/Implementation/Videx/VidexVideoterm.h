@@ -33,6 +33,10 @@ private:
     string characterSet1;
     string characterSet2;
     
+    float videoClockFrequency;
+    
+    map<string, OEData> font;
+    
     bool loadFont(string name, OEData *data);
     
     void setRAMBank(OEInt value);

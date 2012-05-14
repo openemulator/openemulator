@@ -11,28 +11,11 @@
 #include "OEComponent.h"
 #include "OEImage.h"
 
+#include "VideoGenerator.h"
+
 #include "ControlBusInterface.h"
 
 #include "AppleIIInterface.h"
-
-class AppleIIVideoPoint
-{
-public:
-    AppleIIVideoPoint()
-    {
-        x = 0;
-        y = 0;
-    }
-    
-    AppleIIVideoPoint(int x, int y)
-    {
-        this->x = x;
-        this->y = y;
-    }
-    
-    int x;
-    int y;
-};
 
 typedef enum
 {
@@ -49,17 +32,9 @@ typedef enum
 
 typedef enum
 {
-    APPLEII_RENDERER_TEXT,
-    APPLEII_RENDERER_LORES,
-    APPLEII_RENDERER_HIRES,
-} AppleIIRenderer;
-
-typedef enum
-{
-    APPLEII_TIMER_ACTIVESTART,
-    APPLEII_TIMER_MIXED,
-    APPLEII_TIMER_ACTIVEEND,
     APPLEII_TIMER_VSYNC,
+    APPLEII_TIMER_DISPLAYMIXED,
+    APPLEII_TIMER_DISPLAYEND,
 } AppleIITimerType;
 
 class AppleIIVideo : public OEComponent
@@ -99,39 +74,39 @@ private:
     OEInt mode;
     
     // Tables
-    vector<int> segment;
-    vector<AppleIIVideoPoint> point;
-    vector<AppleIIVideoPoint> count;
+    vector<OEIPoint> segment;
+    vector<OEIPoint> count;
+    OESInt limit[66];
     
     vector<OEInt> textOffset;
     vector<OEInt> hiresOffset;
     
-    map<string, OEData> textMap;
-    OEData loresMap;
-    OEData hiresMap;
+    map<string, OEData> textFont;
+    OEData loresFont;
+    OEData hiresFont;
     
     AppleIIVRAM vram;
     
     // State variables
+    bool inhibitVideo;
+    
     OEImage image;
-    bool imageDidChange;
+    OEChar *imagep;
+    bool imageModified;
     
-    AppleIIRenderer renderer;
-    OEChar *rendererImage;
-    OEChar *rendererTextMemory;
-    OEChar *rendererHiresMemory;
-    OEChar *rendererTextMap;
-    OEChar *rendererLoresMap;
-    OEChar *rendererHiresMap;
+    void (AppleIIVideo::*draw)(OESInt y, OESInt x0, OESInt x1);
+    OEChar *drawMemory;
+    OEChar *drawFont;
     
-    OERect videoRect;
-    OERect pictureRect;
-    OERect activeRect;
+    OERect totalRect;
+    OERect visibleRect;
+    OERect displayRect;
     
     OELong frameStart;
     AppleIITimerType currentTimer;
-    int lastSegment;
-    int pendingSegments;
+    
+    OELong lastCycles;
+    OEInt pendingCycles;
     
     bool flashActive;
     OEInt flashCount;
@@ -143,27 +118,29 @@ private:
     bool isRevisionUpdated;
     bool isTVSystemUpdated;
     
-    void updateSegments();
-    void initPoints();
-    void updateCounts();
+    void buildTables();
     void initOffsets();
-    void loadTextMap(string name, OEData *data);
-    void initLoresMap();
-    void updateHiresMap();
+    
+    bool loadTextFont(string name, OEData *data);
+    void buildLoresFont();
+    void buildHiresFont();
+    
     void initVideoRAM(OEComponent *ram, OEAddress &start);
     void updateImage();
     void updateClockFrequency();
-    void updateRendererMap();
-    void updateRenderer();
     
     void setMode(OEInt mask, bool value);
     
-    void updateVideo();
-    void drawVideoLine(int y, int x0, int x1);
     void setNeedsDisplay();
+    void updateVideo();
+    
+    void configureDraw();
+    void drawTextLine(OESInt y, OESInt x0, OESInt x1);
+    void drawLoresLine(OESInt y, OESInt x0, OESInt x1);
+    void drawHiresLine(OESInt y, OESInt x0, OESInt x1);
     
     void scheduleNextTimer(OESLong cycles);
-    AppleIIVideoPoint getCount();
+    OEIPoint getCount();
     OEChar readFloatingBus();
     
     void vsync();

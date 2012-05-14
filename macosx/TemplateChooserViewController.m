@@ -145,7 +145,7 @@
             continue;
         
         TemplateChooserItem *item;
-        item = [[TemplateChooserItem alloc] initWithOEDocumentPath:path];
+        item = [[[TemplateChooserItem alloc] initWithOEDocumentPath:path] autorelease];
         
         if (item)
             [[items objectForKey:theGroup] addObject:item];

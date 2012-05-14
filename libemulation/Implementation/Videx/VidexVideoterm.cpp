@@ -14,6 +14,11 @@
 
 #define CLOCK_FREQUENCY 17430000
 
+#define FONT_CHARNUM    0x80
+#define FONT_CHARWIDTH  8
+#define FONT_CHARHEIGHT 16
+#define FONT_SIZE       (FONT_CHARNUM * FONT_CHARWIDTH * FONT_CHARHEIGHT)
+
 VidexVideoterm::VidexVideoterm() : MC6845()
 {
     video = NULL;
@@ -30,6 +35,8 @@ bool VidexVideoterm::setValue(string name, string value)
         characterSet1 = value;
     else if (name == "characterSet2")
         characterSet2 = value;
+    else if (name == "videoClockFrequency")
+        videoClockFrequency = getFloat(value);
     else
         return MC6845::setValue(name, value);
     
@@ -112,6 +119,29 @@ void VidexVideoterm::write(OEAddress address, OEChar value)
 
 bool VidexVideoterm::loadFont(string name, OEData *data)
 {
+    if (data->size() < (FONT_SIZE * FONT_CHARWIDTH * FONT_CHARHEIGHT))
+        return false;
+    
+    OEData theFont;
+    theFont.resize(FONT_SIZE);
+    
+    for (OEInt i = 0; i < FONT_CHARNUM; i++)
+    {
+        for (OEInt y = 0; y < FONT_CHARHEIGHT; y++)
+        {
+            OEChar value = (*data)[i * FONT_CHARHEIGHT + y];
+            
+            for (OEInt x = 0; x < FONT_CHARWIDTH; x++)
+            {
+                theFont[(i * FONT_CHARHEIGHT + y) * FONT_CHARWIDTH + x] = (value & 0x80) ? 0xff : 0x00;
+                
+                value >>= 1;
+            }
+        }
+    }
+    
+    font[name] = theFont;
+    
     return true;
 }
 
@@ -138,13 +168,9 @@ void VidexVideoterm::updateRAMBank()
 
 void VidexVideoterm::updateTimer()
 {
-    OEInt frameTime = horizTotal + vertTotal * scanline + vertTotalAdjust;
+//    OEInt frameTime = horizTotal + vertTotal * scanline + vertTotalAdjust;
 }
 
-void VidexVideoterm::updateScreen()
-{
-    
-}
 // To-Do:
 // * Determine display rate
 // * Request timer notification

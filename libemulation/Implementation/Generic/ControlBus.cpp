@@ -219,6 +219,8 @@ bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
         case CONTROLBUS_SET_CLOCKFREQUENCY:
             clockFrequency = *((float *)data);
             
+            postNotification(this, CONTROLBUS_CLOCKFREQUENCY_DID_CHANGE, &clockFrequency);
+            
             return true;
             
         case CONTROLBUS_GET_CLOCKFREQUENCY:

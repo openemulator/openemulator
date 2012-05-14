@@ -1178,13 +1178,13 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     
     [document unlockEmulation];
     
-    return [NSString stringWithCPPWString:clipboard];
+    return [[NSString stringWithCPPWString:clipboard] retain];
 }
 
 - (void)copy:(id)sender
 {
     NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
-    NSString *theString = [self copyString];
+    NSString *theString = [[self copyString] autorelease];
     
     if ([theString length])
     {
@@ -1243,6 +1243,8 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
         NSTextView *dummy = [[[NSTextView alloc] init] autorelease];
         [dummy insertText:theString];
         [dummy startSpeaking:self];
+        
+        [theString release];
     }
 }
 

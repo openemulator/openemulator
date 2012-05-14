@@ -779,10 +779,10 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
 {
     if ([item isLocked])
     {
-        NSDictionary *dict = [[NSDictionary dictionaryWithObjectsAndKeys:
-                               item, @"item",
-                               path, @"path",
-                               nil] retain];
+        NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                              item, @"item",
+                              path, @"path",
+                              nil];
         
         NSBeginAlertSheet([NSString localizedStringWithFormat:
                            @"Replace the document in \u201C%@\u201D with \u201C%@\u201D?",
@@ -964,11 +964,11 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
         return [self doConnect:path toItem:theItem];
     else
     {
-        NSDictionary *dict = [[NSDictionary dictionaryWithObjectsAndKeys:
-                               path, @"path",
-                               theLabel, @"label",
-                               [NSValue valueWithPointer:theItem], @"item",
-                               nil] retain];
+        NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                              path, @"path",
+                              theLabel, @"label",
+                              [NSValue valueWithPointer:theItem], @"item",
+                              nil];
         
         NSBeginAlertSheet([NSString localizedStringWithFormat:
                            @"Are you sure you want to replace the device \u201C%@\u201D?",

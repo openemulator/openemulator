@@ -61,13 +61,13 @@ DIApple525DiskStorage::DIApple525DiskStorage()
     // Calculate GCR53 decode map
     memset(gcr53DecodeMap, 0xff, sizeof(gcr53DecodeMap));
     
-    for (DIInt i; i < sizeof(gcr53EncodeMap); i++)
+    for (DIInt i = 0; i < sizeof(gcr53EncodeMap); i++)
         gcr53DecodeMap[gcr53EncodeMap[i]] = i;
     
     // Calculate GCR62 decode map
     memset(gcr62DecodeMap, 0xff, sizeof(gcr62DecodeMap));
     
-    for (DIInt i; i < sizeof(gcr62EncodeMap); i++)
+    for (DIInt i = 0; i < sizeof(gcr62EncodeMap); i++)
         gcr62DecodeMap[gcr62EncodeMap[i]] = i;
     
     close();
@@ -484,7 +484,7 @@ bool DIApple525DiskStorage::encodeGCR62Track(DIInt trackIndex, DITrack& track)
 bool DIApple525DiskStorage::encodeNIBTrack(DIInt trackIndex, DITrack& track)
 {
     DIChar *data = &track.data.front();
-    DIInt size = track.data.size();
+    DIInt size = (DIInt) track.data.size();
     
 	bool isSync = false;
 	
@@ -961,7 +961,7 @@ bool DIApple525DiskStorage::validateGCR62Checksum()
 void DIApple525DiskStorage::setStreamData(DIData& data)
 {
     streamData = &data.front();
-    streamSize = data.size();
+    streamSize = (DIInt) data.size();
     streamOffset = 0;
 }
 

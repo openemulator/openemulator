@@ -17,7 +17,7 @@
 #import "DeviceInterface.h"
 #import "StorageInterface.h"
 
- @implementation EmulationItem
+@implementation EmulationItem
 
 - (EmulationItem *)getGroup:(NSString *)group
 {
@@ -161,8 +161,8 @@
         label = [[NSString stringWithCPPString:value] retain];
         NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
         ((OEComponent *)device)->postMessage(NULL, DEVICE_GET_IMAGEPATH, &value);
-        NSString *imagePath = [[resourcePath stringByAppendingPathComponent:
-                                [NSString stringWithCPPString:value]] retain];
+        NSString *imagePath = [resourcePath stringByAppendingPathComponent:
+                               [NSString stringWithCPPString:value]];
         image = [[NSImage alloc] initByReferencingFile:imagePath];
         
         ((OEComponent *)device)->postMessage(NULL, DEVICE_GET_LOCATIONLABEL, &value);
@@ -438,7 +438,7 @@
     
     if (settingComponent &&
         settingComponent->setValue([settingName cppString], [value cppString]))
-            settingComponent->update();
+        settingComponent->update();
     
     [document unlockEmulation];
 }
@@ -565,7 +565,7 @@
     {
         OEComponent *component = (OEComponent *)[[storages objectAtIndex:i]
                                                  pointerValue];
-                
+        
         success = component->postMessage(NULL, STORAGE_CAN_MOUNT, &value);
         
         if (success)

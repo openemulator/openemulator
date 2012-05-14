@@ -436,6 +436,7 @@ bool PAAudio::openAudio()
         if (status == paNoError)
         {
             status = Pa_StartStream(audioStream);
+            
             if (status == paNoError)
             {
                 audioOpen = true;

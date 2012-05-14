@@ -57,9 +57,9 @@ bool AppleIIAddressDecoder::init()
     return true;
 }
 
-bool AppleIIAddressDecoder::postMessage(OEComponent *sender, int event, void *data)
+bool AppleIIAddressDecoder::postMessage(OEComponent *sender, int message, void *data)
 {
-    switch (event)
+    switch (message)
     {
         case APPLEII_SET_VRAMMODE:
             // To-Do: Dependiendo del modo, cambiamos el mapa

@@ -495,9 +495,10 @@ void hidDeviceEventOcurred(void *inContext, IOReturn inResult, void *inSender, I
         
         if (!path)
         {
-            *outError = [NSError errorWithDomain:@"libemulator"
-                                            code:0
-                                        userInfo:nil];
+            if (outError)
+                *outError = [NSError errorWithDomain:@"libemulator"
+                                                code:0
+                                            userInfo:nil];
             return nil;
         }
         
@@ -516,9 +517,10 @@ void hidDeviceEventOcurred(void *inContext, IOReturn inResult, void *inSender, I
     
     [self newDocumentFromTemplateChooser:self];
     
-    *outError = [NSError errorWithDomain:NSCocoaErrorDomain
-                                    code:NSUserCancelledError
-                                userInfo:nil];
+    if (outError)
+        *outError = [NSError errorWithDomain:NSCocoaErrorDomain
+                                        code:NSUserCancelledError
+                                    userInfo:nil];
     return nil;
 }
 

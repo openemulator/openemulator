@@ -113,7 +113,7 @@ OEInt OESound::getChannelNum()
 
 OEInt OESound::getFrameNum()
 {
-    return (samples.size() / channelNum);
+    return ((OEInt) samples.size() / channelNum);
 }
 
 float *OESound::getSamples()

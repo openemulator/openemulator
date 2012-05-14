@@ -5,7 +5,7 @@
  * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls random access memory
+ * Controls random access memory.
  */
 
 #include "RAM.h"
@@ -133,7 +133,7 @@ void RAM::write(OEAddress address, OEChar value)
 
 void RAM::initMemory()
 {
-    int mask = (int) powerOnPattern.size() - 1;
+    OEAddress mask = (int) powerOnPattern.size() - 1;
     
     for (int i = 0; i < this->data.size(); i++)
         data[i] = powerOnPattern[i & mask];

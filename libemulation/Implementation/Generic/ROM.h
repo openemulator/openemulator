@@ -5,7 +5,7 @@
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls read only memory
+ * Controls read only memory.
  */
 
 #include "OEComponent.h"

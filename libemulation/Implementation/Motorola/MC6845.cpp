@@ -10,7 +10,7 @@
 
 #include "MC6845.h"
 
-#include "ControlBusInterface.h"
+#include "DeviceInterface.h"
 
 typedef enum
 {
@@ -36,7 +36,10 @@ typedef enum
 
 MC6845::MC6845()
 {
+    device = NULL;
+    controlBus = NULL;
     floatingBus = NULL;
+    monitorDevice = NULL;
     
     horizTotal = 0x65;
     horizDisplayed = 0x50;
@@ -54,6 +57,8 @@ MC6845::MC6845()
     cursorAddress = 0x0080;
     
     addressRegister = 0x00;
+    
+    draw = &MC6845::dummyDraw;
 }
 
 bool MC6845::setValue(string name, string value)
@@ -134,8 +139,32 @@ bool MC6845::getValue(string name, string& value)
 
 bool MC6845::setRef(string name, OEComponent *ref)
 {
-    if (name == "floatingBus")
+    if (name == "device")
+        device = ref;
+    else if (name == "controlBus")
+    {
+        if (controlBus)
+        {
+            controlBus->removeObserver(this, CONTROLBUS_SCHEDULE_TIMER);
+            controlBus->removeObserver(this, CONTROLBUS_POWERSTATE_DID_CHANGE);
+        }
+        controlBus = ref;
+        if (controlBus)
+        {
+            controlBus->addObserver(this, CONTROLBUS_SCHEDULE_TIMER);
+            controlBus->addObserver(this, CONTROLBUS_POWERSTATE_DID_CHANGE);
+        }
+    }
+    else if (name == "floatingBus")
         floatingBus = ref;
+    else if (name == "monitorDevice")
+    {
+        if (monitorDevice)
+            monitorDevice->removeObserver(this, DEVICE_DID_CHANGE);
+        monitorDevice = ref;
+        if (monitorDevice)
+            monitorDevice->addObserver(this, DEVICE_DID_CHANGE);
+    }
     else
         return false;
     
@@ -151,7 +180,43 @@ bool MC6845::init()
         return false;
     }
     
+    float controlBusClockFrequency;
+    controlBus->postMessage(this, CONTROLBUS_GET_CLOCKFREQUENCY, &controlBusClockFrequency);
+    
+    float videoClockFrequency = 17430000 / 9; // from Videx Videoterm 
+    videoClockMultiplier = videoClockFrequency / controlBusClockFrequency;
+    
+    update();
+    
+    scheduleTimer(0);
+    
     return true;
+}
+
+void MC6845::update()
+{
+    updateTiming();
+}
+
+void MC6845::notify(OEComponent *sender, int notification, void *data)
+{
+    if (sender == controlBus)
+    {
+        switch (notification)
+        {
+            case CONTROLBUS_POWERSTATE_DID_CHANGE:
+                powerState = *((ControlBusPowerState *)data);
+                
+                break;
+                
+            case CONTROLBUS_TIMER_DID_FIRE:
+                scheduleTimer(*((OESLong *)data));
+                
+                break;
+        }
+    }
+    else if (sender == monitorDevice)
+        device->postNotification(sender, notification, data);
 }
 
 OEChar MC6845::read(OEAddress address)
@@ -191,16 +256,19 @@ void MC6845::write(OEAddress address, OEChar value)
     {
         case MC6845_HORIZTOTAL:
             horizTotal = value;
+            updateTiming();
             
             return;
             
         case MC6845_HORIZDISPLAYED:
             horizDisplayed = value;
+            updateTiming();
             
             return;
             
         case MC6845_HORIZSYNCPOSITION:
             horizSyncPosition = value;
+            updateTiming();
             
             return;
             
@@ -211,31 +279,37 @@ void MC6845::write(OEAddress address, OEChar value)
             
         case MC6845_VERTTOTAL:
             vertTotal = value & 0x7f;
+            updateTiming();
             
             return;
             
         case MC6845_VERTTOTALADJUST:
             vertTotalAdjust = value & 0x1f;
+            updateTiming();
             
             return;
             
         case MC6845_VERTDISPLAYED:
             vertDisplayed = value & 0x7f;
+            updateTiming();
             
             return;
             
         case MC6845_VERTSYNCPOSITION:
             vertSyncPosition = value & 0x7f;
+            updateTiming();
             
             return;
             
         case MC6845_MODECONTROL:
             modeControl = value & 0x03;
+            updateTiming();
             
             return;
             
         case MC6845_SCANLINE:
             scanline = value & 0x1f;
+            updateTiming();
             
             return;
             
@@ -276,4 +350,75 @@ void MC6845::write(OEAddress address, OEChar value)
         default:
             return;
     }
+}
+
+void MC6845::updateTiming()
+{
+    // This comes from VidexVideoterm:
+    totalRect = OEMakeRect(0, 0,
+                           (horizTotal + 1), (vertTotal + 1) * scanline + vertTotalAdjust);
+    displayRect = OEMakeRect(horizSyncPosition, vertSyncPosition,
+                             (horizDisplayed + 1), vertDisplayed + 1);
+    
+    controlBus->postMessage(this, CONTROLBUS_INVALIDATE_TIMERS, this);
+    
+    scheduleTimer(0);
+}
+
+void MC6845::scheduleTimer(OESLong cycles)
+{
+    controlBus->postMessage(this, CONTROLBUS_GET_CYCLES, &frameStart);
+    frameStart += cycles;
+    
+    cycles += OEWidth(totalRect) * OEHeight(totalRect) * videoClockMultiplier;
+    
+    controlBus->postMessage(this, CONTROLBUS_SCHEDULE_TIMER, &cycles);
+}
+
+void MC6845::setNeedsDisplay()
+{
+    pendingCycles = OEWidth(totalRect) * OEHeight(totalRect);
+}
+
+void MC6845::updateVideo()
+{
+    OELong cycles;
+    
+    controlBus->postMessage(this, CONTROLBUS_GET_CYCLES, &cycles);
+    
+    cycles /= videoClockMultiplier;
+    
+    OEInt deltaCycles = (OEInt) (cycles - lastCycles);
+    
+    OEInt cycleNum = min(pendingCycles, deltaCycles);
+    
+    if (cycleNum)
+    {
+        pendingCycles -= cycleNum;
+        
+        OEInt segmentStart = (OEInt) (lastCycles - frameStart);
+        
+        OEIPoint p0 = segment[segmentStart];
+        OEIPoint p1 = segment[segmentStart + cycleNum];
+        
+        if (p0.y == p1.y)
+            (this->*draw)(0, 0, p0.y, p0.x, p1.x, 0);
+        else
+        {
+            (this->*draw)(0, 0, p0.y, p0.x, 65 - 1, 0);
+            
+            for (OEInt i = (p0.y + 1); i < p1.y; i++)
+                (this->*draw)(0, 0, i, 0, 65 - 1, 0);
+            
+            (this->*draw)(0, 0, p1.y, 0, p1.x, 0);
+        }
+        
+        imageModified = true;
+    }
+    
+    lastCycles = cycles;
+}
+
+void MC6845::dummyDraw(OEInt memoryAddress, OEInt rasterAddress, OESInt y, OESInt x0, OESInt x1, OESInt cursor)
+{
 }

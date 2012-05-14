@@ -281,7 +281,7 @@ void AppleDiskDrive525::setPhaseControl(OEInt value)
             
 			break;
             
-		case 0x0: case 0x5: case 0xa: case 0xf:
+		default:
 			nextPhase = currentPhase;
             
 			break;
@@ -348,6 +348,6 @@ void AppleDiskDrive525::updateTrack()
     }
     
     trackData = &track.front();
-    trackDataSize = track.size();
+    trackDataSize = (OEInt) track.size();
     trackDataIndex %= trackDataSize;
 }
