@@ -11,8 +11,6 @@
 #include "OEComponent.h"
 #include "OEImage.h"
 
-#include "VideoGenerator.h"
-
 #include "ControlBusInterface.h"
 
 #include "AppleIIInterface.h"
