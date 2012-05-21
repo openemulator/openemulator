@@ -3,8 +3,8 @@
 <edl version="1.0" label="Videx Videoterm" image="images/Videx/Videx Videoterm.png" description="The Videx Videoterm is an 80-column video card for Apple II computers. It must be installed in slot 3.">
     
     <device id="videxVideoterm" label="Videx Videoterm" image="images/Videx/Videx Videoterm.png">
-        <setting ref="videxVideoterm.io" name="characterSet1" label="Character Set" type="select" options="Normal,Normal Uppercase,French,German,Katakana,Spanish,Symbol,Super and Subscript,APL,Epson"/>
-        <setting ref="videxVideoterm.io" name="characterSet2" label="Alt. Character Set" type="select" options="Normal,NormalUppercase|Normal Uppercase,French,German,Katakana,Spanish,Symbol,SuperSub|Super and Subscript,APL,Epson"/>
+        <setting ref="videxVideoterm.io" name="characterSet1" label="Character Set" type="select" options="Normal,NormalUppercase|Normal Uppercase,Inverse,French,German,Katakana,Spanish,Symbol,SuperSub|Super and Subscript,APL,Epson"/>
+        <setting ref="videxVideoterm.io" name="characterSet2" label="Alt. Character Set" type="select" options="Normal,NormalUppercase|Normal Uppercase,Inverse,French,German,Katakana,Spanish,Symbol,SuperSub|Super and Subscript,APL,Epson"/>
     </device>
     <connector id="videxVideoterm.connector" type="Apple II Slot">
         <inlet ref="videxVideoterm.io" property="controlBus" outletRef="controlBus"/>
@@ -38,13 +38,14 @@
         <property name="gamePort" ref=""/>
         <property name="cellWidth" value="9"/>
         <property name="characterSet1" value="Normal"/>
-        <property name="characterSet2" value="Symbol"/>
+        <property name="characterSet2" value="Inverse"/>
         <property name="ramBank" value="0"/>
         <property name="clockFrequency" value="17430000.0"/>
         <property name="fontAPL" data="${resourcePath}/roms/Videx/Videx Videoterm Character ROM APL.bin"/>
         <property name="fontEpson" data="${resourcePath}/roms/Videx/Videx Videoterm Character ROM Epson.bin"/>
         <property name="fontFrench" data="${resourcePath}/roms/Videx/Videx Videoterm Character ROM French.bin"/>
         <property name="fontGerman" data="${resourcePath}/roms/Videx/Videx Videoterm Character ROM German.bin"/>
+        <property name="fontInverse" data="${resourcePath}/roms/Videx/Videx Videoterm Character ROM Inverse.bin"/>
         <property name="fontKatakana" data="${resourcePath}/roms/Videx/Videx Videoterm Character ROM Katakana.bin"/>
         <property name="fontNormalUppercase" data="${resourcePath}/roms/Videx/Videx Videoterm Character ROM Normal Uppercase.bin"/>
         <property name="fontNormal" data="${resourcePath}/roms/Videx/Videx Videoterm Character ROM Normal.bin"/>

@@ -60,7 +60,7 @@ bool VidexVideoterm::setValue(string name, string value)
 bool VidexVideoterm::getValue(string name, string &value)
 {
     if (name == "cellWidth")
-        value = cellWidth;
+        value = getString(cellWidth);
     else if (name == "ramBank")
         value = getString(ramBank);
     else if (name == "characterSet1")
@@ -233,7 +233,8 @@ bool VidexVideoterm::loadFont(string name, OEData *data)
             
             for (OEInt x = 0; x < FONT_CHARWIDTH; x++)
             {
-                theFont[(i * FONT_CHARHEIGHT + y) * FONT_CHARWIDTH + x] = (value & 0x80) ? 0xff : 0x00;
+                theFont[(i * FONT_CHARHEIGHT + y) * FONT_CHARWIDTH + x] = ((value & 0x80) ?
+                                                                           0xff : 0x00);
                 
                 value <<= 1;
             }
@@ -367,7 +368,8 @@ void VidexVideoterm::updateTiming()
 
 // Copy an 8-pixel segment
 #define copySegment(d,s) \
-*((OELong *)(d + 0)) = *((OELong *)(s + 0));
+*((OELong *)(d + 0)) = *((OELong *)(s + 0));\
+*((OEChar *)(d + 8)) = *((OEChar *)(s + 7))
 
 void VidexVideoterm::drawLine(OESInt y, OESInt x0, OESInt x1)
 {
