@@ -33,12 +33,6 @@ typedef struct
     OESize size;
 } OERect;
 
-typedef struct
-{
-    OESInt x;
-    OESInt y;
-} OEIPoint;
-
 typedef enum
 {
     OEIMAGE_LUMINANCE,

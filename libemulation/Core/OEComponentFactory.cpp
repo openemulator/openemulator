@@ -48,7 +48,6 @@
 #include "MOSKIM1PLL.h"
 
 #include "MC6821.h"
-#include "MC6845.h"
 
 #include "RDCFFA.h"
 #include "RDCFFA1.h"
@@ -101,7 +100,6 @@ OEComponent *OEComponentFactory::construct(const string& className)
     matchComponent(MOSKIM1PLL);
     
     matchComponent(MC6821);
-    matchComponent(MC6845);
     
     matchComponent(RDCFFA);
     matchComponent(RDCFFA1);

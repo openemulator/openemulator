@@ -58,7 +58,6 @@ private:
     OEComponent *device;
     OEComponent *controlBus;
     OEComponent *memoryBus;
-    OEComponent *floatingBus;
     OEComponent *gamePort;
     OEComponent *monitorDevice;
 	OEComponent *monitor;
@@ -71,13 +70,19 @@ private:
     OEInt flashFrameNum;
     OEInt mode;
     
+    bool revisionUpdated;
+    bool tvSystemUpdated;
+    
     // Tables
-    vector<OEIPoint> segment;
-    vector<OEIPoint> count;
-    OESInt limit[66];
+    vector<OECount> pos;
+    vector<OECount> count;
     
     vector<OEInt> textOffset;
     vector<OEInt> hiresOffset;
+    
+    // Drawing
+    bool videoInhibited;
+    bool colorKiller;
     
     map<string, OEData> textFont;
     OEData loresFont;
@@ -85,38 +90,33 @@ private:
     
     AppleIIVRAM vram;
     
-    // State variables
-    bool inhibitVideo;
-    
     OEImage image;
     OEChar *imagep;
+    OEInt imageWidth;
     bool imageModified;
     
     void (AppleIIVideo::*draw)(OESInt y, OESInt x0, OESInt x1);
     OEChar *drawMemory;
     OEChar *drawFont;
     
-    OERect totalRect;
-    OERect visibleRect;
-    OERect displayRect;
+    // Timing
+    OEInt vertTotal;
+    OEInt vertDisplayStart;
     
     OELong frameStart;
-    AppleIITimerType currentTimer;
+    OEInt frameCycleNum;
     
+    AppleIITimerType currentTimer;
     OELong lastCycles;
     OEInt pendingCycles;
     
-    bool flashActive;
+    bool flash;
     OEInt flashCount;
     
     ControlBusPowerState powerState;
-    
     bool an2;
+    bool monitorCaptured;
     
-    bool isRevisionUpdated;
-    bool isTVSystemUpdated;
-    
-    void buildTables();
     void initOffsets();
     
     bool loadTextFont(string name, OEData *data);
@@ -129,19 +129,19 @@ private:
     
     void setMode(OEInt mask, bool value);
     
-    void setNeedsDisplay();
-    void updateVideo();
-    
     void configureDraw();
     void drawTextLine(OESInt y, OESInt x0, OESInt x1);
     void drawLoresLine(OESInt y, OESInt x0, OESInt x1);
     void drawHiresLine(OESInt y, OESInt x0, OESInt x1);
     
-    void scheduleNextTimer(OESLong cycles);
-    OEIPoint getCount();
-    OEChar readFloatingBus();
+    void updateVideoInhibited();
+    void refreshVideo();
+    void updateVideo();
     
-    void vsync();
+    void updateTiming();
+    void scheduleNextTimer(OESLong cycles);
+    OECount getCount();
+    OEChar readFloatingBus();
     
     void copy(wstring *s);
 };

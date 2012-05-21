@@ -273,7 +273,7 @@
         return [item hasStorages];
     else if (action == @selector(unmount:))
         return [item isMount];
-    else if (action == @selector(revealInFinder:))
+    else if (action == @selector(showInFinder:))
         return [item isMount];
     else if (action == @selector(delete:))
         return [item isRemovable];
@@ -905,11 +905,11 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
     [item showCanvases];
 }
 
-- (IBAction)revealInFinder:(id)sender
+- (IBAction)showInFinder:(id)sender
 {
     EmulationItem *item = [self itemForSender:sender];
     
-    [item revealInFinder];
+    [item showInFinder];
 }
 
 - (IBAction)delete:(id)sender

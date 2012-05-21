@@ -108,7 +108,7 @@ typedef enum
 - (BOOL)mount:(NSString *)path;
 - (BOOL)canMount:(NSString *)path;
 - (BOOL)isMount;
-- (void)revealInFinder;
+- (void)showInFinder;
 - (BOOL)isLocked;
 - (BOOL)unmount;
 

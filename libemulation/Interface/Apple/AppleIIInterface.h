@@ -36,11 +36,7 @@ typedef struct
     OEChar *hbl[2];
 } AppleIIVRAM;
 
-#define APPLEIIVIDEO_TEXT     (1 << 0)
-#define APPLEIIVIDEO_PAGE2    (1 << 1)
-#define APPLEIIVIDEO_MIXED    (1 << 2)
-#define APPLEIIVIDEO_HIRES    (1 << 3)
-
+// MMU State
 #define APPLEIIMMU_ALTZP      (1 << 0)
 #define APPLEIIMMU_RAMRD      (1 << 1)
 #define APPLEIIMMU_RAMWRT     (1 << 2)
@@ -63,8 +59,8 @@ typedef enum
     APPLEII_UNMAP,
     
     APPLEII_SET_AUXMEMORY,
-    APPLEII_SET_MMUSOFTSWITCHES,
-    APPLEII_GET_MMUSOFTSWITCHES,
+    APPLEII_SET_MMUSTATE,
+    APPLEII_GET_MMUSTATE,
 } AppleIIAddressDecoderMessage;
 
 // Move this to AppleIIControlBus:
@@ -81,13 +77,14 @@ typedef enum
 {
     APPLEII_REFRESH_VIDEO = CANVAS_END,
     APPLEII_READ_FLOATINGBUS,
-    APPLEII_ASSERT_INHIBITVIDEO,
-    APPLEII_CLEAR_INHIBITVIDEO,
+    APPLEII_GET_COLORKILLER,
+    APPLEII_REQUEST_MONITOR,
+    APPLEII_RELEASE_MONITOR,
 } AppleIIVideoMessage;
 
 typedef enum
 {
-    APPLEII_COLORCARRIER_DID_CHANGE = CANVAS_NOTIFICATION_END,
+    APPLEII_COLORKILLER_DID_CHANGE = CANVAS_NOTIFICATION_END,
 } AppleIIVideoNotification;
 
 typedef enum
@@ -105,16 +102,16 @@ typedef enum
     APPLEII_GET_AN2,
     APPLEII_GET_AN3,
     
-    APPLEII_SET_BANKSELECT_COMPONENT,
+    APPLEII_SET_C073_HANDLER,
 } AppleIIGamePortMessage;
 
 typedef enum
 {
-    APPLEII_DID_STROBE,
     APPLEII_AN0_DID_CHANGE,
     APPLEII_AN1_DID_CHANGE,
     APPLEII_AN2_DID_CHANGE,
     APPLEII_AN3_DID_CHANGE,
+    APPLEII_DID_STROBE,
 } AppleIIGamePortNotification;
 
 typedef enum

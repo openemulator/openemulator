@@ -8,9 +8,11 @@
  * Implements a MC6845 CRT controller
  */
 
+#include <math.h>
+
 #include "MC6845.h"
 
-#include "DeviceInterface.h"
+#include "CanvasInterface.h"
 
 typedef enum
 {
@@ -34,37 +36,48 @@ typedef enum
     MC6845_LIGHTPENLOW,
 } MC6845Register;
 
+#define BLINK_PERIOD    (1 << 5)
+#define BLINK_ENABLED   (1 << 6)
+
 MC6845::MC6845()
 {
-    device = NULL;
     controlBus = NULL;
     floatingBus = NULL;
-    monitorDevice = NULL;
     
-    horizTotal = 0x65;
-    horizDisplayed = 0x50;
-    horizSyncPosition = 0x56;
-    horizSyncWidth = 0x09;
-    vertTotal = 0x18;
-    vertTotalAdjust = 0x0a;
-    vertDisplayed = 0x18;
-    vertSyncPosition = 0x18;
-    modeControl = 0x00;
-    scanline = 0x0b;
-    cursorStart = 0x00;
-    cursorEnd = 0x0b;
-    startAddress = 0x0080;
-    cursorAddress = 0x0080;
+    horizTotal = 1;
+    horizDisplayed = 0;
+    horizSyncPosition = 0;
+    horizSyncWidth = 0;
+    vertTotalCell = 1;
+    vertTotalAdjust = 0;
+    vertDisplayedCell = 0;
+    vertSyncPositionCell = 0;
+    modeControl = 0;
+    scanline = 1;
+    cursorStart = 0;
+    cursorEnd = 0;
+    startAddress.q = 0;
+    cursorAddress.q = 0;
     
-    addressRegister = 0x00;
+    addressRegister = 0;
     
-    draw = &MC6845::dummyDraw;
+    imageModified = false;
+    
+    frameStart = 0;
+    pendingCycles = 0;
+    
+    blinkEnabled = false;
+    blink = false;
+    blinkFrameNum = 16;
+    blinkCount = blinkFrameNum;
+    
+    powerState = CONTROLBUS_POWERSTATE_ON;
 }
 
 bool MC6845::setValue(string name, string value)
 {
     if (name == "horizTotal")
-        horizTotal = getOEInt(value);
+        horizTotal = getOEInt(value) + 1;
     else if (name == "horizDisplayed")
         horizDisplayed = getOEInt(value);
     else if (name == "horizSyncPosition")
@@ -72,25 +85,25 @@ bool MC6845::setValue(string name, string value)
     else if (name == "horizSyncWidth")
         horizSyncWidth = getOEInt(value);
     else if (name == "vertTotal")
-        vertTotal = getOEInt(value);
+        vertTotalCell = getOEInt(value) + 1;
     else if (name == "vertTotalAdjust")
         vertTotalAdjust = getOEInt(value);
     else if (name == "vertDisplayed")
-        vertDisplayed = getOEInt(value);
+        vertDisplayedCell = getOEInt(value);
     else if (name == "vertSyncPosition")
-        vertSyncPosition = getOEInt(value);
+        vertSyncPositionCell = getOEInt(value);
     else if (name == "modeControl")
         modeControl = getOEInt(value);
     else if (name == "scanline")
-        scanline = getOEInt(value);
+        scanline = getOEInt(value) + 1;
     else if (name == "cursorStart")
         cursorStart = getOEInt(value);
     else if (name == "cursorEnd")
         cursorEnd = getOEInt(value);
     else if (name == "startAddress")
-        startAddress = getOEInt(value);
+        startAddress.q = getOEInt(value);
     else if (name == "cursorAddress")
-        cursorAddress = getOEInt(value);
+        cursorAddress.q = getOEInt(value);
     else if (name == "addressRegister")
         addressRegister = getOEInt(value);
     else
@@ -102,7 +115,7 @@ bool MC6845::setValue(string name, string value)
 bool MC6845::getValue(string name, string& value)
 {
     if (name == "horizTotal")
-        value = getHexString(horizTotal);
+        value = getHexString(horizTotal - 1);
     else if (name == "horizDisplayed")
         value = getHexString(horizDisplayed);
     else if (name == "horizSyncPosition")
@@ -110,25 +123,25 @@ bool MC6845::getValue(string name, string& value)
     else if (name == "horizSyncWidth")
         value = getHexString(horizSyncWidth);
     else if (name == "vertTotal")
-        value = getHexString(vertTotal);
+        value = getHexString(vertTotalCell - 1);
     else if (name == "vertTotalAdjust")
         value = getHexString(vertTotalAdjust);
     else if (name == "vertDisplayed")
-        value = getHexString(vertDisplayed);
+        value = getHexString(vertDisplayedCell);
     else if (name == "vertSyncPosition")
-        value = getHexString(vertSyncPosition);
+        value = getHexString(vertSyncPositionCell);
     else if (name == "modeControl")
         value = getHexString(modeControl);
     else if (name == "scanline")
-        value = getHexString(scanline);
+        value = getHexString(scanline - 1);
     else if (name == "cursorStart")
         value = getHexString(cursorStart);
     else if (name == "cursorEnd")
         value = getHexString(cursorEnd);
     else if (name == "startAddress")
-        value = getHexString(startAddress);
+        value = getHexString(startAddress.q);
     else if (name == "cursorAddress")
-        value = getHexString(cursorAddress);
+        value = getHexString(cursorAddress.q);
     else if (name == "addressRegister")
         value = getString(addressRegister);
     else
@@ -139,9 +152,7 @@ bool MC6845::getValue(string name, string& value)
 
 bool MC6845::setRef(string name, OEComponent *ref)
 {
-    if (name == "device")
-        device = ref;
-    else if (name == "controlBus")
+    if (name == "controlBus")
     {
         if (controlBus)
         {
@@ -157,14 +168,6 @@ bool MC6845::setRef(string name, OEComponent *ref)
     }
     else if (name == "floatingBus")
         floatingBus = ref;
-    else if (name == "monitorDevice")
-    {
-        if (monitorDevice)
-            monitorDevice->removeObserver(this, DEVICE_DID_CHANGE);
-        monitorDevice = ref;
-        if (monitorDevice)
-            monitorDevice->addObserver(this, DEVICE_DID_CHANGE);
-    }
     else
         return false;
     
@@ -173,6 +176,13 @@ bool MC6845::setRef(string name, OEComponent *ref)
 
 bool MC6845::init()
 {
+    if (!controlBus)
+    {
+        logMessage("controlBus not connected");
+        
+        return false;
+    }
+    
     if (!floatingBus)
     {
         logMessage("floatingBus not connected");
@@ -180,22 +190,11 @@ bool MC6845::init()
         return false;
     }
     
-    float controlBusClockFrequency;
-    controlBus->postMessage(this, CONTROLBUS_GET_CLOCKFREQUENCY, &controlBusClockFrequency);
+    controlBus->postMessage(this, CONTROLBUS_GET_POWERSTATE, &powerState);
     
-    float videoClockFrequency = 17430000 / 9; // from Videx Videoterm 
-    videoClockMultiplier = videoClockFrequency / controlBusClockFrequency;
-    
-    update();
-    
-    scheduleTimer(0);
+    updateTiming();
     
     return true;
-}
-
-void MC6845::update()
-{
-    updateTiming();
 }
 
 void MC6845::notify(OEComponent *sender, int notification, void *data)
@@ -215,8 +214,6 @@ void MC6845::notify(OEComponent *sender, int notification, void *data)
                 break;
         }
     }
-    else if (sender == monitorDevice)
-        device->postNotification(sender, notification, data);
 }
 
 OEChar MC6845::read(OEAddress address)
@@ -227,16 +224,16 @@ OEChar MC6845::read(OEAddress address)
     switch (addressRegister)
     {
         case MC6845_CURSORADDRESSHIGH:
-            return ((cursorAddress >> 8) & 0xff);
+            return cursorAddress.b.h;
             
         case MC6845_CURSORADDRESSLOW:
-            return ((cursorAddress >> 0) & 0xff);
-        
+            return cursorAddress.b.l;
+            
         case MC6845_LIGHTPENHIGH:
-            return ((lightpenAddress >> 8) & 0xff);
+            return lightpenAddress.b.h;
             
         case MC6845_LIGHTPENLOW:
-            return ((lightpenAddress >> 0) & 0xff);
+            return lightpenAddress.b.l;
             
         default:
             return floatingBus->read(address);
@@ -255,110 +252,122 @@ void MC6845::write(OEAddress address, OEChar value)
     switch (addressRegister)
     {
         case MC6845_HORIZTOTAL:
-            horizTotal = value;
+            horizTotal = value + 1;
             updateTiming();
             
-            return;
+            break;
             
         case MC6845_HORIZDISPLAYED:
             horizDisplayed = value;
             updateTiming();
             
-            return;
+            break;
             
         case MC6845_HORIZSYNCPOSITION:
             horizSyncPosition = value;
             updateTiming();
             
-            return;
+            break;
             
         case MC6845_HORIZSYNCWIDTH:
             horizSyncWidth = value & 0x0f;
             
-            return;
+            break;
             
         case MC6845_VERTTOTAL:
-            vertTotal = value & 0x7f;
+            vertTotalCell = (value & 0x7f) + 1;
             updateTiming();
             
-            return;
+            break;
             
         case MC6845_VERTTOTALADJUST:
             vertTotalAdjust = value & 0x1f;
             updateTiming();
             
-            return;
+            break;
             
         case MC6845_VERTDISPLAYED:
-            vertDisplayed = value & 0x7f;
+            vertDisplayedCell = value & 0x7f;
             updateTiming();
             
-            return;
+            break;
             
         case MC6845_VERTSYNCPOSITION:
-            vertSyncPosition = value & 0x7f;
+            vertSyncPositionCell = value & 0x7f;
             updateTiming();
             
-            return;
+            break;
             
         case MC6845_MODECONTROL:
             modeControl = value & 0x03;
             updateTiming();
             
-            return;
+            break;
             
         case MC6845_SCANLINE:
-            scanline = value & 0x1f;
+            scanline = (value & 0x1f) + 1;
             updateTiming();
             
-            return;
+            break;
             
         case MC6845_CURSORSTART:
+        {
             cursorStart = value & 0x7f;
             
-            return;
+            bool newBlinkEnabled = OEGetBit(value, BLINK_ENABLED);
+            
+            if (blinkEnabled != newBlinkEnabled)
+            {
+                blinkEnabled = true;
+                
+                refreshVideo();
+            }
+            
+            blinkFrameNum = OEGetBit(value, BLINK_PERIOD) ? 32 : 16;
+            
+            break;
+        }
             
         case MC6845_CURSOREND:
             cursorEnd = value & 0x1f;
             
-            return;
+            break;
             
         case MC6845_STARTADDRESSHIGH:
-            startAddress &= 0x00ff;
-            startAddress |= (value << 8);
+            startAddress.b.h = value & 0x3f;
             
-            return;
+            break;
             
         case MC6845_STARTADDRESSLOW:
-            startAddress &= 0xff00;
-            startAddress |= (value << 0);
+            startAddress.b.l = value & 0xff;
             
-            return;
+            break;
             
         case MC6845_CURSORADDRESSHIGH:
-            cursorAddress &= 0x00ff;
-            cursorAddress |= (value << 8);
+            cursorAddress.b.h = value & 0x3f;
             
-            return;
+            break;
             
         case MC6845_CURSORADDRESSLOW:
-            cursorAddress &= 0xff00;
-            cursorAddress |= (value << 0);
+            cursorAddress.b.l = value & 0xff;
             
-            return;
-            
-        default:
-            return;
+            break;
     }
 }
 
 void MC6845::updateTiming()
 {
-    // This comes from VidexVideoterm:
-    totalRect = OEMakeRect(0, 0,
-                           (horizTotal + 1), (vertTotal + 1) * scanline + vertTotalAdjust);
-    displayRect = OEMakeRect(horizSyncPosition, vertSyncPosition,
-                             (horizDisplayed + 1), vertDisplayed + 1);
+    float controlBusClockFrequency;
+    controlBus->postMessage(this, CONTROLBUS_GET_CLOCKFREQUENCY, &controlBusClockFrequency);
+    clockMultiplier = clockFrequency / controlBusClockFrequency;
+    
+    vertTotal = vertTotalCell * scanline + vertTotalAdjust;
+    vertDisplayed = vertDisplayedCell * scanline;
+    vertSyncPosition = vertSyncPositionCell * scanline;
+    
+    frameCycleNum = horizTotal * vertTotal;
+    
+    controlBus->postMessage(this, CONTROLBUS_GET_CYCLES, &lastCycles);
     
     controlBus->postMessage(this, CONTROLBUS_INVALIDATE_TIMERS, this);
     
@@ -367,17 +376,42 @@ void MC6845::updateTiming()
 
 void MC6845::scheduleTimer(OESLong cycles)
 {
+    updateVideo();
+    
+    if (imageModified)
+    {
+        imageModified = false;
+        
+        if (powerState != CONTROLBUS_POWERSTATE_OFF)
+            postImage();
+    }
+    
+    if ((powerState == CONTROLBUS_POWERSTATE_ON) && blinkEnabled)
+    {
+        blinkCount++;
+        
+        if (blinkCount >= blinkFrameNum)
+        {
+            blink = !blink;
+            blinkCount = 0;
+            
+            refreshVideo();
+        }
+    }
+    
     controlBus->postMessage(this, CONTROLBUS_GET_CYCLES, &frameStart);
     frameStart += cycles;
     
-    cycles += OEWidth(totalRect) * OEHeight(totalRect) * videoClockMultiplier;
+    cycles += ceil(frameCycleNum / clockMultiplier);
     
     controlBus->postMessage(this, CONTROLBUS_SCHEDULE_TIMER, &cycles);
 }
 
-void MC6845::setNeedsDisplay()
+void MC6845::refreshVideo()
 {
-    pendingCycles = OEWidth(totalRect) * OEHeight(totalRect);
+    updateVideo();
+    
+    pendingCycles = frameCycleNum;
 }
 
 void MC6845::updateVideo()
@@ -386,9 +420,7 @@ void MC6845::updateVideo()
     
     controlBus->postMessage(this, CONTROLBUS_GET_CYCLES, &cycles);
     
-    cycles /= videoClockMultiplier;
-    
-    OEInt deltaCycles = (OEInt) (cycles - lastCycles);
+    OEInt deltaCycles = (OEInt) ((cycles - lastCycles) * clockMultiplier);
     
     OEInt cycleNum = min(pendingCycles, deltaCycles);
     
@@ -396,29 +428,25 @@ void MC6845::updateVideo()
     {
         pendingCycles -= cycleNum;
         
-        OEInt segmentStart = (OEInt) (lastCycles - frameStart);
+        OEInt segmentStart = (OEInt) ((lastCycles - frameStart) * clockMultiplier);
         
-        OEIPoint p0 = segment[segmentStart];
-        OEIPoint p1 = segment[segmentStart + cycleNum];
+        OECount p0 = pos[segmentStart];
+        OECount p1 = pos[segmentStart + cycleNum];
         
         if (p0.y == p1.y)
-            (this->*draw)(0, 0, p0.y, p0.x, p1.x, 0);
+            (this->*draw)(p0.y, p0.x, p1.x);
         else
         {
-            (this->*draw)(0, 0, p0.y, p0.x, 65 - 1, 0);
+            (this->*draw)(p0.y, p0.x, posEnd);
             
             for (OEInt i = (p0.y + 1); i < p1.y; i++)
-                (this->*draw)(0, 0, i, 0, 65 - 1, 0);
+                (this->*draw)(i, posBegin, posEnd);
             
-            (this->*draw)(0, 0, p1.y, 0, p1.x, 0);
+            (this->*draw)(p1.y, posBegin, p1.x);
         }
         
         imageModified = true;
     }
     
     lastCycles = cycles;
-}
-
-void MC6845::dummyDraw(OEInt memoryAddress, OEInt rasterAddress, OESInt y, OESInt x0, OESInt x1, OESInt cursor)
-{
 }

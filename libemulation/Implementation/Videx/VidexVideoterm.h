@@ -20,6 +20,10 @@ public:
     bool setRef(string name, OEComponent *ref);
     bool setData(string name, OEData *data);
     bool init();
+    void update();
+    void dispose();
+    
+    void notify(OEComponent *sender, int notification, void *data);
     
     OEChar read(OEAddress address);
     void write(OEAddress address, OEChar value);
@@ -27,21 +31,45 @@ public:
 private:
     OEComponent *video;
     OEComponent *ram;
+    OEComponent *gamePort;
     
     OEInt ramBank;
-    
     string characterSet1;
     string characterSet2;
     
-    float videoClockFrequency;
+    bool an0;
+    bool colorKiller;
+    
+    bool monitorRequest;
+    
+    OEInt cellWidth;
     
     map<string, OEData> font;
+    OEData currentFont;
+    
+    OEChar *drawFont;
+    
+    OEData *vram;
+    
+    OEImage image;
+    OEChar *imagep;
+    OEInt imageWidth;
+    
+    OEChar *drawMemory;
     
     bool loadFont(string name, OEData *data);
     
     void setRAMBank(OEInt value);
     void updateRAMBank();
     
-    void updateTimer();
-    void updateScreen();
+    void setCellWidth(OEInt value);
+    
+    void updateMonitorRequest();
+    
+    void updateTiming();
+    
+    void drawLine(OESInt y, OESInt x0, OESInt x1);
+    
+    void postImage();
+    void copy(wstring *s);
 };

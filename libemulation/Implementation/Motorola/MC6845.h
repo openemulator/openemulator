@@ -16,6 +16,10 @@
 
 #include "ControlBusInterface.h"
 
+class MC6845;
+
+typedef void (MC6845::*MC6845Draw)(OESInt y, OESInt x0, OESInt x1);
+
 class MC6845 : public OEComponent
 {
 public:
@@ -25,7 +29,6 @@ public:
     bool getValue(string name, string& value);
     bool setRef(string name, OEComponent *ref);
     bool init();
-    void update();
     
     void notify(OEComponent *sender, int notification, void *data);
     
@@ -33,54 +36,67 @@ public:
     void write(OEAddress address, OEChar value);
     
 protected:
-    void (MC6845::*draw)(OEInt memoryAddress, OEInt rasterAddress, OESInt y, OESInt x0, OESInt x1, OESInt cursor);
-    
-private:
-    OEComponent *device;
-    OEComponent *controlBus;
-    OEComponent *floatingBus;
-    OEComponent *monitorDevice;
-    
     OEChar horizTotal;
     OEChar horizDisplayed;
     OEChar horizSyncPosition;
     OEChar horizSyncWidth;
-    OEChar vertTotal;
+    OEChar vertTotalCell;
     OEChar vertTotalAdjust;
-    OEChar vertDisplayed;
-    OEChar vertSyncPosition;
+    OEChar vertDisplayedCell;
+    OEChar vertSyncPositionCell;
     OEChar modeControl;
     OEChar scanline;
     OEChar cursorStart;
     OEChar cursorEnd;
-    OEShort startAddress;
-    OEShort cursorAddress;
-    OEShort lightpenAddress;
+    OEUnion startAddress;
+    OEUnion lightpenAddress;
+    OEUnion cursorAddress;
+    
+    OEInt vertTotal;
+    OEInt vertDisplayed;
+    OEInt vertSyncPosition;
+    
+    vector<OECount> pos;
+    OESInt posBegin;
+    OESInt posEnd;
+    
+    float clockFrequency;
+    
+    OEInt frameCycleNum;
+    
+    MC6845Draw draw;
+    
+    virtual void updateTiming();
+    virtual void postImage() = 0;
+    
+private:
+    OEComponent *controlBus;
+    OEComponent *floatingBus;
     
     OEChar addressRegister;
     
-    ControlBusPowerState powerState;
+    // State
+    bool imageModified;
     
-    OERect totalRect;
-    OERect visibleRect;
-    OERect displayRect;
+    // Timing
+    float clockMultiplier;
     
-    float videoClockMultiplier;
     OELong frameStart;
     
     OELong lastCycles;
     OEInt pendingCycles;
     
-    vector<OEIPoint> segment;
-    bool imageModified;
+    bool blink;
+    OEInt blinkFrameNum;
+    OEInt blinkCount;
+    bool blinkEnabled;
     
-    void updateTiming();
+    ControlBusPowerState powerState;
     
     void scheduleTimer(OESLong cycles);
     
-    void setNeedsDisplay();
+    void refreshVideo();
     void updateVideo();
-    void dummyDraw(OEInt memoryAddress, OEInt rasterAddress, OESInt y, OESInt x0, OESInt x1, OESInt cursor);
 };
 
 #endif

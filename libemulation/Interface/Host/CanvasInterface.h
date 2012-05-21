@@ -47,6 +47,30 @@
 
 #include "OEImage.h"
 
+#define NTSC_FSC        (315.0 / 88.0 * 1E6)
+#define NTSC_4FSC       (4 * NTSC_FSC)
+#define NTSC_HTOTAL     ((63.0 + 5.0 / 9.0) * 1E-6)
+#define NTSC_HLENGTH    ((52.0 + 8.0 / 9.0) * 1E-6)
+#define NTSC_HHALF      ((35.0 + 2.0 / 3.0) * 1E-6)
+#define NTSC_HSTART     (NTSC_HHALF - NTSC_HLENGTH / 2.0)
+#define NTSC_HEND       (NTSC_HHALF + NTSC_HLENGTH / 2.0)
+#define NTSC_VTOTAL     262
+#define NTSC_VLENGTH    240
+#define NTSC_VSTART     19
+#define NTSC_VEND       (NTSC_VSTART + NTSC_VLENGTH)
+
+#define PAL_FSC         4433618.75
+#define PAL_4FSC        (4 * PAL_FSC)
+#define PAL_HTOTAL      64.0E-6
+#define PAL_HLENGTH     52.0E-6
+#define PAL_HHALF       ((37.0 + 10.0 / 27.0) * 1E-6)
+#define PAL_HSTART      (PAL_HHALF - PAL_HLENGTH / 2.0)
+#define PAL_HEND        (PAL_HHALF + PAL_HLENGTH / 2.0)
+#define PAL_VTOTAL      312
+#define PAL_VLENGTH     288
+#define PAL_VSTART      21
+#define PAL_VEND        (PAL_VSTART + PAL_VLENGTH)
+
 typedef enum
 {
     CANVAS_SET_MODE,

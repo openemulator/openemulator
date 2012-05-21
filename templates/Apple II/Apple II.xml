@@ -53,8 +53,8 @@
     <component id="appleII.controlBus" class="ControlBus">
         <property name="device" ref="appleII"/>
         <property name="audio" ref="audio"/>
-        <!-- Clock frequency: (14318180 crystal cycles/s) * (65 CPU cycles/scanline) / (912 crystal cycles/scanline) -->
-        <property name="clockFrequency" value="1020484.3202"/>
+        <!-- Clock frequency: (14318181.8 crystal cycles/s) * (65 CPU cycles/scanline) / (912 crystal cycles/scanline) -->
+        <property name="clockFrequency" value="1020484.4497"/>
         <property name="cpuClockMultiplier" value="1"/>
         <property name="cpu" ref="appleII.cpu"/>
         <property name="powerState" value="S0"/>

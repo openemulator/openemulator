@@ -18,14 +18,18 @@
 #define SCREEN_ORIGIN_Y     25
 #define SCREEN_WIDTH        768
 #define SCREEN_HEIGHT       242
-#define TERM_WIDTH          40
-#define TERM_HEIGHT         24
+
 #define CHAR_WIDTH          14
 #define CHAR_HEIGHT         8
+
+#define BLOCK_WIDTH         40
+#define BLOCK_HEIGHT        24
+
 #define FONT_SIZE           0x80
 #define FONT_SIZE_MASK      0x7f
 #define FONT_WIDTH          16
 #define FONT_HEIGHT         8
+
 #define BLINK_ON            20
 #define BLINK_OFF           10
 
@@ -180,7 +184,7 @@ bool Apple1Terminal::init()
     
     vram->postMessage(this, RAM_GET_DATA, &vramData);
     
-    if (vramData->size() < (TERM_WIDTH * TERM_HEIGHT))
+    if (vramData->size() < (BLOCK_WIDTH * BLOCK_HEIGHT))
     {
         logMessage("not enough vram");
         
@@ -372,8 +376,8 @@ void Apple1Terminal::loadFont(OEData *data)
     }
 }
 
-// Copy a 14-pixel char scanline
-#define copyBlock(x) \
+// Copy a 14-pixel segment
+#define copySegment(x) \
 *((OELong *)(p + x * SCREEN_WIDTH + 0)) = *((OELong *)(f + x * FONT_WIDTH + 0));\
 *((OEInt *)(p + x * SCREEN_WIDTH + 8)) = *((OEInt *)(f + x * FONT_WIDTH + 8));\
 *((OEShort *)(p + x * SCREEN_WIDTH + 12)) = *((OEShort *)(f + x * FONT_WIDTH + 12));
@@ -408,29 +412,29 @@ void Apple1Terminal::vsync()
     OEChar *ip = (OEChar *)image.getPixels();
     
     // Place cursor
-    OEChar cursorChar = vramp[cursorY * TERM_WIDTH + cursorX];
+    OEChar cursorChar = vramp[cursorY * BLOCK_WIDTH + cursorX];
     if (cursorActive)
-        vramp[cursorY * TERM_WIDTH + cursorX] = '@';
+        vramp[cursorY * BLOCK_WIDTH + cursorX] = '@';
     
-    for (int y = 0; y < TERM_HEIGHT; y++)
+    for (int y = 0; y < BLOCK_HEIGHT; y++)
     {
         OEChar *p = (ip + y * SCREEN_WIDTH * CHAR_HEIGHT +
                      SCREEN_ORIGIN_Y * SCREEN_WIDTH +
                      SCREEN_ORIGIN_X);
         
-        for (int x = 0; x < TERM_WIDTH; x++)
+        for (int x = 0; x < BLOCK_WIDTH; x++)
         {
-            OEChar c = vramp[y * TERM_WIDTH + x] & FONT_SIZE_MASK;
-            OEChar *f = fp + c * FONT_HEIGHT * FONT_WIDTH;
+            OEChar i = vramp[y * BLOCK_WIDTH + x] & FONT_SIZE_MASK;
+            OEChar *f = fp + i * FONT_HEIGHT * FONT_WIDTH;
             
-            copyBlock(0);
-            copyBlock(1);
-            copyBlock(2);
-            copyBlock(3);
-            copyBlock(4);
-            copyBlock(5);
-            copyBlock(6);
-            copyBlock(7);
+            copySegment(0);
+            copySegment(1);
+            copySegment(2);
+            copySegment(3);
+            copySegment(4);
+            copySegment(5);
+            copySegment(6);
+            copySegment(7);
             
             p += CHAR_WIDTH;
         }
@@ -440,7 +444,7 @@ void Apple1Terminal::vsync()
         monitor->postMessage(this, CANVAS_POST_IMAGE, &image);
     
     // Remove cursor
-    vramp[cursorY * TERM_WIDTH + cursorX] = cursorChar;
+    vramp[cursorY * BLOCK_WIDTH + cursorX] = cursorChar;
     
     canvasShouldUpdate = false;
 }
@@ -450,7 +454,7 @@ void Apple1Terminal::clearScreen()
     if (!vramp)
         return;
     
-    memset(vramp, ' ', TERM_HEIGHT * TERM_WIDTH);
+    memset(vramp, ' ', BLOCK_HEIGHT * BLOCK_WIDTH);
     
     cursorX = 0;
     cursorY = 0;
@@ -472,10 +476,10 @@ void Apple1Terminal::putChar(OEChar c)
     }
     else if ((c >= 0x20) && (c <= 0x7f))
     {
-        vramp[cursorY * TERM_WIDTH + cursorX] = c;
+        vramp[cursorY * BLOCK_WIDTH + cursorX] = c;
         
         cursorX++;
-        if (cursorX >= TERM_WIDTH)
+        if (cursorX >= BLOCK_WIDTH)
         {
             cursorX = 0;
             cursorY++;
@@ -484,12 +488,12 @@ void Apple1Terminal::putChar(OEChar c)
         canvasShouldUpdate = true;
     }
     
-    if (cursorY >= TERM_HEIGHT)
+    if (cursorY >= BLOCK_HEIGHT)
     {
-        cursorY = TERM_HEIGHT - 1;
+        cursorY = BLOCK_HEIGHT - 1;
         
-        memmove(vramp, vramp + TERM_WIDTH, (TERM_HEIGHT - 1) * TERM_WIDTH);
-        memset(vramp + (TERM_HEIGHT - 1) * TERM_WIDTH, ' ', TERM_WIDTH);
+        memmove(vramp, vramp + BLOCK_WIDTH, (BLOCK_HEIGHT - 1) * BLOCK_WIDTH);
+        memset(vramp + (BLOCK_HEIGHT - 1) * BLOCK_WIDTH, ' ', BLOCK_WIDTH);
         
         canvasShouldUpdate = true;
     }
@@ -516,12 +520,12 @@ void Apple1Terminal::copy(wstring *s)
     if (!vramp)
         return;
     
-    for (int y = 0; y < TERM_HEIGHT; y++)
+    for (int y = 0; y < BLOCK_HEIGHT; y++)
     {
         wstring line;
         
-        for (int x = 0; x < TERM_WIDTH; x++)
-            line += vramp[y * TERM_WIDTH + x] & 0x7f;
+        for (int x = 0; x < BLOCK_WIDTH; x++)
+            line += vramp[y * BLOCK_WIDTH + x] & 0x7f;
         
         line = rtrim(line);
         line += '\n';

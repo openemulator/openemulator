@@ -582,7 +582,7 @@
     return (type == EMULATIONITEM_MOUNT);
 }
 
-- (void)revealInFinder
+- (void)showInFinder
 {
     if (!storages)
         return;
