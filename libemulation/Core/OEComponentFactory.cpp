@@ -24,6 +24,7 @@
 #include "Monitor.h"
 #include "RAM.h"
 #include "ROM.h"
+#include "VideoRAM.h"
 
 #include "Apple1ACI.h"
 #include "Apple1IO.h"
@@ -75,6 +76,7 @@ OEComponent *OEComponentFactory::construct(const string& className)
     matchComponent(Monitor);
     matchComponent(RAM);
     matchComponent(ROM);
+    matchComponent(VideoRAM);
     
     matchComponent(Apple1ACI);
     matchComponent(Apple1IO);

@@ -1,8 +1,9 @@
 ==1.0.3==
-* Fix joystick when an emulation is started with joystick plugged in
+* Fix MC6845 special register value cases
 * Fix R&D CFFA
+* Fix joystick when an emulation is started with joystick plugged in
 * Fix IAC 45, beautiful boot
-* Fix Disk II not booting when emulation was loaded from disk
+* Fix Disk II not booting sometimes when emulation was loaded from disk
 * Fix Disk II drive sounds
 * Implement sample-accurate playback in audio player (?)
 * Fix libdiskimage GCR53

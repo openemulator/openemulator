@@ -17,6 +17,9 @@
 
 #define CLOCK_FREQUENCY 17430000
 
+#define RAM_SIZE        0x800
+#define RAM_MASK        0x7ff
+
 #define FONT_CHARNUM    0x80
 #define FONT_CHARWIDTH  8
 #define FONT_CHARHEIGHT 16
@@ -35,22 +38,21 @@ VidexVideoterm::VidexVideoterm() : MC6845()
     colorKiller = false;
     
     monitorRequest = false;
-    cellWidth = 0;
-    
+    cellWidth = 9;
     
     image.setFormat(OEIMAGE_LUMINANCE);
 }
 
 bool VidexVideoterm::setValue(string name, string value)
 {
-    if (name == "cellWidth")
-        cellWidth = getOEInt(value);
-    else if (name == "ramBank")
-        ramBank = getOEInt(value);
-    else if (name == "characterSet1")
+    if (name == "characterSet1")
         characterSet1 = value;
     else if (name == "characterSet2")
         characterSet2 = value;
+    else if (name == "ramBank")
+        ramBank = getOEInt(value);
+    else if (name == "cellWidth")
+        cellWidth = getOEInt(value);
     else
         return MC6845::setValue(name, value);
     
@@ -59,14 +61,14 @@ bool VidexVideoterm::setValue(string name, string value)
 
 bool VidexVideoterm::getValue(string name, string &value)
 {
-    if (name == "cellWidth")
-        value = getString(cellWidth);
-    else if (name == "ramBank")
-        value = getString(ramBank);
-    else if (name == "characterSet1")
+    if (name == "characterSet1")
         value = characterSet1;
     else if (name == "characterSet2")
         value = characterSet2;
+    else if (name == "ramBank")
+        value = getString(ramBank);
+    else if (name == "cellWidth")
+        value = getString(cellWidth);
     else
         return MC6845::getValue(name, value);
     
@@ -75,7 +77,11 @@ bool VidexVideoterm::getValue(string name, string &value)
 
 bool VidexVideoterm::setRef(string name, OEComponent *ref)
 {
-    if (name == "video")
+    if (name == "ram")
+        ram = ref;
+    else if (name == "ramOffset")
+        ramOffset = ref;
+    else if (name == "video")
     {
         if (video)
         {
@@ -89,8 +95,6 @@ bool VidexVideoterm::setRef(string name, OEComponent *ref)
             video->addObserver(this, APPLEII_COLORKILLER_DID_CHANGE);
         }
     }
-    else if (name == "ram")
-        ram = ref;
     else if (name == "gamePort")
     {
         if (gamePort)
@@ -120,9 +124,9 @@ bool VidexVideoterm::init()
     if (!MC6845::init())
         return false;
     
-    if (!video)
+    if (!ramOffset)
     {
-        logMessage("video not connected");
+        logMessage("ramOffset not connected");
         
         return false;
     }
@@ -134,6 +138,24 @@ bool VidexVideoterm::init()
         return false;
     }
     
+    if (!video)
+    {
+        logMessage("video not connected");
+        
+        return false;
+    }
+    
+    ram->postMessage(this, RAM_GET_DATA, &vram);
+    
+    if (vram->size() < RAM_SIZE)
+    {
+        logMessage("ram not large enough");
+        
+        return false;
+    }
+    
+    drawMemory = &vram->front();
+    
     updateRAMBank();
     
     if (video)
@@ -141,14 +163,12 @@ bool VidexVideoterm::init()
     if (gamePort)
         gamePort->postMessage(this, APPLEII_GET_AN0, &an0);
     
-    ram->postMessage(this, RAM_GET_DATA, &vram);
-    drawMemory = &vram->front();
+    currentFont.resize(4 * FONT_SIZE);
     
-    currentFont.resize(2 * FONT_SIZE);
-    drawFont = &currentFont.front();
     draw = (MC6845Draw) &VidexVideoterm::drawLine;
+    drawFont = &currentFont.front();
     
-    updateMonitorRequest();
+    updateVideoEnabled();
     
     update();
     
@@ -168,6 +188,11 @@ void VidexVideoterm::update()
                &font[characterSet2].front(), FONT_SIZE);
     else
         memset(&currentFont.front() + FONT_SIZE, 0, FONT_SIZE);
+    
+    for (OEInt i = 0; i < FONT_SIZE; i++)
+        currentFont[i + 2 * FONT_SIZE] = ~currentFont[i];
+    
+    refreshVideo();
 }
 
 void VidexVideoterm::dispose()
@@ -175,7 +200,7 @@ void VidexVideoterm::dispose()
     an0 = false;
     colorKiller = false;
     
-    updateMonitorRequest();
+    updateVideoEnabled();
 }
 
 void VidexVideoterm::notify(OEComponent *sender, int notification, void *data)
@@ -192,13 +217,19 @@ void VidexVideoterm::notify(OEComponent *sender, int notification, void *data)
             case APPLEII_COLORKILLER_DID_CHANGE:
                 colorKiller = *((bool *)data);
                 
+                updateVideoEnabled();
+                
                 break;
         }
     }
     else if (sender == gamePort)
+    {
         an0 = *((bool *)data);
-    
-    updateMonitorRequest();
+        
+        updateVideoEnabled();
+    }
+    else if (sender == ram)
+        refreshVideo();
 }
 
 OEChar VidexVideoterm::read(OEAddress address)
@@ -233,8 +264,9 @@ bool VidexVideoterm::loadFont(string name, OEData *data)
             
             for (OEInt x = 0; x < FONT_CHARWIDTH; x++)
             {
-                theFont[(i * FONT_CHARHEIGHT + y) * FONT_CHARWIDTH + x] = ((value & 0x80) ?
-                                                                           0xff : 0x00);
+                OEChar pixel = ((value & 0x80) ? 0xff : 0x00);
+                
+                theFont[(i * FONT_CHARHEIGHT + y) * FONT_CHARWIDTH + x] = pixel;
                 
                 value <<= 1;
             }
@@ -248,45 +280,44 @@ bool VidexVideoterm::loadFont(string name, OEData *data)
 
 void VidexVideoterm::setRAMBank(OEInt value)
 {
-    if (ramBank == value)
-        return;
-    
-    ramBank = value;
-    
-    updateRAMBank();
+    if (ramBank != value)
+    {
+        ramBank = value;
+        
+        updateRAMBank();
+    }
 }
 
 void VidexVideoterm::updateRAMBank()
 {
-    BankSwitchedRAMMap ramMap;
+    OEAddress offset = 0x200 * ramBank - 0x400;
     
-    ramMap.startAddress = 0x400;
-    ramMap.endAddress = 0x5ff;
-    ramMap.offset = 0x200 * ramBank - 0x400;
-    
-    ram->postMessage(this, BANKSWITCHEDRAM_MAP, &ramMap);
+    ramOffset->postMessage(this, ADDRESSOFFSET_SETOFFSET, &offset);
 }
 
 void VidexVideoterm::setCellWidth(OEInt value)
 {
-    if (cellWidth == value)
-        return;
-    
-    cellWidth = value;
-    
-    updateTiming();
+    if (cellWidth != value)
+    {
+        cellWidth = value;
+        
+        updateTiming();
+    }
 }
 
-void VidexVideoterm::updateMonitorRequest()
+void VidexVideoterm::updateVideoEnabled()
 {
-    bool newMonitorRequest = an0 && colorKiller;
+    bool newVideoEnabled = (an0 && colorKiller);
     
-    if (monitorRequest != newMonitorRequest)
+    if (videoEnabled != newVideoEnabled)
     {
-        monitorRequest = newMonitorRequest;
+        videoEnabled = newVideoEnabled;
         
-        video->postMessage(this, (monitorRequest ? APPLEII_REQUEST_MONITOR :
+        video->postMessage(this, (videoEnabled ? APPLEII_REQUEST_MONITOR :
                                   APPLEII_RELEASE_MONITOR), NULL);
+        
+        if (videoEnabled)
+            refreshVideo();
     }
 }
 
@@ -299,8 +330,6 @@ void VidexVideoterm::updateTiming()
     // Update parameters
     OERect visibleRect;
     OERect displayRect;
-    
-    vertTotal = NTSC_VTOTAL;
     
     OESInt horizStart = horizTotal - horizSyncPosition;
     OESInt vertStart = vertTotal - vertSyncPosition;
@@ -315,28 +344,42 @@ void VidexVideoterm::updateTiming()
     imageWidth = image.getSize().width;
     
     imagep = image.getPixels();
-//    imagep += (OEInt) ((OEMinY(displayRect) - OEMinY(visibleRect)) * imageWidth);
+    imagep += (OEInt) ((OEMinY(displayRect) - OEMinY(visibleRect)) * imageWidth);
     imagep += (OEInt) (OEMinX(displayRect) - OEMinX(visibleRect));
     image.setSampleRate(CLOCK_FREQUENCY);
     
     // Build pos data
     OEInt cycleNum = frameCycleNum + 16;
     
-    OESInt visibleStart = ceil((OEMinX(visibleRect) - OEMinX(displayRect)) / cellWidth);
-    OESInt visibleEnd = ceil((OEMaxX(visibleRect) - OEMinX(displayRect)) / cellWidth);
+    OESInt visibleXStart = ceil((OEMinX(visibleRect) - OEMinX(displayRect)) / cellWidth);
+    OESInt visibleXEnd = ceil((OEMaxX(visibleRect) - OEMinX(displayRect)) / cellWidth);
+    OESInt visibleYStart = OEMinY(visibleRect) - OEMinY(displayRect);
+    OESInt visibleYEnd = OEMaxY(visibleRect) - OEMinY(displayRect);
     
-    posBegin = 0;
-    posEnd = horizDisplayed;
+    posXBegin = 0;
+    posXEnd = horizDisplayed;
+    OESInt posYBegin = 0;
+    OESInt posYEnd = vertDisplayed - 1;
     
-    if (posBegin < visibleStart)
-        posBegin = visibleStart;
-    else if (posBegin > visibleEnd)
-        posBegin = visibleEnd;
+    if (posXBegin < visibleXStart)
+        posXBegin = visibleXStart;
+    else if (posXBegin > visibleXEnd)
+        posXBegin = visibleXEnd;
     
-    if (posEnd < visibleStart)
-        posEnd = visibleStart;
-    else if (posEnd > visibleEnd)
-        posEnd = visibleEnd;
+    if (posXEnd < visibleXStart)
+        posXEnd = visibleXStart;
+    else if (posXEnd > visibleXEnd)
+        posXEnd = visibleXEnd;
+    
+    if (posYBegin < visibleYStart)
+        posYBegin = visibleYStart;
+    else if (posYBegin > visibleYEnd)
+        posYBegin = visibleYEnd;
+    
+    if (posYEnd < visibleYStart)
+        posYEnd = visibleYStart;
+    else if (posYEnd > visibleYEnd)
+        posYEnd = visibleYEnd;
     
     pos.resize(cycleNum);
     
@@ -348,20 +391,20 @@ void VidexVideoterm::updateTiming()
         pos[i].x = sx - horizStart;
         pos[i].y = sy - vertStart;
         
-        if (pos[i].x < posBegin)
-            pos[i].x = posBegin;
-        if (pos[i].x > posEnd)
-            pos[i].x = posEnd;
+        if (pos[i].x < posXBegin)
+            pos[i].x = posXBegin;
+        if (pos[i].x > posXEnd)
+            pos[i].x = posXEnd;
         
-        if (pos[i].y < 0)
+        if (pos[i].y < posYBegin)
         {
-            pos[i].x = 0;
-            pos[i].y = 0;
+            pos[i].x = posXBegin;
+            pos[i].y = posYBegin;
         }
-        if (pos[i].y >= vertDisplayed)
+        if (pos[i].y > posYEnd)
         {
-            pos[i].x = posEnd;
-            pos[i].y = vertDisplayed - 1;
+            pos[i].x = posXEnd;
+            pos[i].y = posYEnd;
         }
     }
 }
@@ -373,13 +416,26 @@ void VidexVideoterm::updateTiming()
 
 void VidexVideoterm::drawLine(OESInt y, OESInt x0, OESInt x1)
 {
-    OEInt memoryOffset = (startAddress.d.l + (y / scanline) * horizDisplayed) & 0x7ff;
+    OEInt memoryOffset = (startAddress.d.l + (y / scanline) * horizDisplayed);
     OEChar *p = imagep + y * imageWidth + x0 * cellWidth;
     
     for (OEInt x = x0; x < x1; x++, p += cellWidth)
     {
-        OEChar i = drawMemory[memoryOffset + x];
-        OEChar *m = drawFont + (y % scanline) * FONT_CHARWIDTH + i * FONT_CHARSIZE;
+        OEInt address = (memoryOffset + x);
+        OEInt i = drawMemory[address & RAM_MASK];
+        OEChar *m;
+        
+        if ((address == cursorAddress.w.l) &&
+            blink)
+        {
+            OEInt rasterY = y % scanline;
+            
+            if ((rasterY >= (cursorStart & 0x1f)) &&
+                (rasterY <= cursorEnd))
+                i += 2 * FONT_CHARNUM;
+        }
+        
+        m = drawFont + ((y % scanline) & 0xf) * FONT_CHARWIDTH + i * FONT_CHARSIZE;
         
         copySegment(p, m);
     }
@@ -387,14 +443,12 @@ void VidexVideoterm::drawLine(OESInt y, OESInt x0, OESInt x1)
 
 void VidexVideoterm::postImage()
 {
-    video->postMessage(this, CANVAS_POST_IMAGE, &image);
+    if (videoEnabled)
+        video->postMessage(this, CANVAS_POST_IMAGE, &image);
 }
 
 void VidexVideoterm::copy(wstring *s)
 {
-    if (vram->size() < (vertDisplayedCell * horizDisplayed))
-        return;
-    
     OEChar *vp = &vram->front();
     
     for (OEInt y = 0; y < vertDisplayedCell; y++)
@@ -402,7 +456,7 @@ void VidexVideoterm::copy(wstring *s)
         wstring line;
         
         for (OEInt x = 0; x < horizDisplayed; x++)
-            line += vp[y * horizDisplayed + x];
+            line += vp[(startAddress.w.l + y * horizDisplayed + x) & RAM_MASK];
         
         line = rtrim(line);
         line += '\n';

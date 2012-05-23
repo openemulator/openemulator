@@ -81,7 +81,7 @@ private:
     vector<OEInt> hiresOffset;
     
     // Drawing
-    bool videoInhibited;
+    bool videoEnabled;
     bool colorKiller;
     
     map<string, OEData> textFont;
@@ -134,7 +134,7 @@ private:
     void drawLoresLine(OESInt y, OESInt x0, OESInt x1);
     void drawHiresLine(OESInt y, OESInt x0, OESInt x1);
     
-    void updateVideoInhibited();
+    void updateVideoEnabled();
     void refreshVideo();
     void updateVideo();
     

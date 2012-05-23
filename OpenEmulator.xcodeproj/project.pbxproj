@@ -17,6 +17,8 @@
 		00039F0112B04EAA0025D374 /* libemulation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00039EFE12B04E910025D374 /* libemulation.a */; };
 		00039FD112B04F6C0025D374 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 00039FD012B04F6C0025D374 /* libxml2.dylib */; };
 		0009068E141D2A0300F06D99 /* NSStringAdditions.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0009068D141D2A0300F06D99 /* NSStringAdditions.mm */; };
+		00092E5C156AA9D4007A9E04 /* VideoRAM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00092E5A156AA9D4007A9E04 /* VideoRAM.cpp */; };
+		00092E5D156AA9D4007A9E04 /* VideoRAM.h in Headers */ = {isa = PBXBuildFile; fileRef = 00092E5B156AA9D4007A9E04 /* VideoRAM.h */; };
 		00139F801511863B00B0E108 /* BankSwitchedRAM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00139F7F1511863B00B0E108 /* BankSwitchedRAM.cpp */; };
 		00139F84151195E600B0E108 /* AppleIIAddressDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00139F83151195E600B0E108 /* AppleIIAddressDecoder.cpp */; };
 		00140DF0152D282400D4795D /* DIApple525DiskStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00140DEF152D282400D4795D /* DIApple525DiskStorage.cpp */; };
@@ -227,6 +229,8 @@
 		0006D7D215523830001DE1F3 /* VMDK Virtual Machine Disk Format 5.0.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "VMDK Virtual Machine Disk Format 5.0.pdf"; sourceTree = "<group>"; };
 		0008FCD80FBA5D72005E876E /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = macosx/Info.plist; sourceTree = "<group>"; };
 		0009068D141D2A0300F06D99 /* NSStringAdditions.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NSStringAdditions.mm; sourceTree = "<group>"; };
+		00092E5A156AA9D4007A9E04 /* VideoRAM.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VideoRAM.cpp; sourceTree = "<group>"; };
+		00092E5B156AA9D4007A9E04 /* VideoRAM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoRAM.h; sourceTree = "<group>"; };
 		000A79190FBA49C500A0F12E /* OpenEmulator.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = OpenEmulator.icns; sourceTree = "<group>"; };
 		000E8D1813515C6E00DBFB2C /* StorageInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StorageInterface.h; sourceTree = "<group>"; };
 		000F66370FF8368F00C8AF23 /* DiskImage.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = DiskImage.icns; sourceTree = "<group>"; };
@@ -860,6 +864,8 @@
 				00B8883D12A393990052B7A4 /* RAM.h */,
 				00B8883E12A393990052B7A4 /* ROM.cpp */,
 				00B8883F12A393990052B7A4 /* ROM.h */,
+				00092E5A156AA9D4007A9E04 /* VideoRAM.cpp */,
+				00092E5B156AA9D4007A9E04 /* VideoRAM.h */,
 			);
 			name = Generic;
 			path = libemulation/Implementation/Generic;
@@ -1195,6 +1201,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00092E5D156AA9D4007A9E04 /* VideoRAM.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1467,6 +1474,7 @@
 				001E0970155633D000405DC0 /* AppleIIAudioIn.cpp in Sources */,
 				001E0971155633E700405DC0 /* Apple1Terminal.cpp in Sources */,
 				00651A57155AE3DF00221A44 /* MemoryInterface.cpp in Sources */,
+				00092E5C156AA9D4007A9E04 /* VideoRAM.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

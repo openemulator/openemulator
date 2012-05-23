@@ -50,6 +50,16 @@ bool AddressOffset::init()
     return true;
 }
 
+bool AddressOffset::postMessage(OEComponent *sender, int message, void *data)
+{
+    if (message == ADDRESSOFFSET_SETOFFSET)
+        offset = *((OEAddress *)data);
+    else
+        return false;
+    
+    return true;
+}
+
 OEChar AddressOffset::read(OEAddress address)
 {
     return component->read(address + offset);

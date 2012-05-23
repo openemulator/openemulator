@@ -57,14 +57,18 @@ protected:
     OEInt vertSyncPosition;
     
     vector<OECount> pos;
-    OESInt posBegin;
-    OESInt posEnd;
+    OESInt posXBegin;
+    OESInt posXEnd;
     
     float clockFrequency;
     
     OEInt frameCycleNum;
     
+    bool blink;
+    
     MC6845Draw draw;
+    
+    void refreshVideo();
     
     virtual void updateTiming();
     virtual void postImage() = 0;
@@ -86,16 +90,15 @@ private:
     OELong lastCycles;
     OEInt pendingCycles;
     
-    bool blink;
     OEInt blinkFrameNum;
     OEInt blinkCount;
     bool blinkEnabled;
     
     ControlBusPowerState powerState;
     
+    void setCursorStart(OEChar value);
     void scheduleTimer(OESLong cycles);
     
-    void refreshVideo();
     void updateVideo();
 };
 

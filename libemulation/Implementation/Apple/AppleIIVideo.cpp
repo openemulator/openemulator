@@ -66,7 +66,7 @@ AppleIIVideo::AppleIIVideo()
     image.setFormat(OEIMAGE_LUMINANCE);
     imageModified = false;
     
-    videoInhibited = false;
+    videoEnabled = false;
     colorKiller = true;
     
     frameStart = 0;
@@ -286,13 +286,6 @@ void AppleIIVideo::update()
         updateTiming();
         
         tvSystemUpdated = false;
-        
-        currentTimer = APPLEII_TIMER_VSYNC;
-        controlBus->postMessage(this, CONTROLBUS_GET_CYCLES, &lastCycles);
-        
-        controlBus->postMessage(this, CONTROLBUS_INVALIDATE_TIMERS, this);
-        
-        scheduleNextTimer(0);
     }
     
     if (monitor)
@@ -302,9 +295,7 @@ void AppleIIVideo::update()
         monitor->postMessage(this, CANVAS_SET_CAPTUREMODE, &captureMode);
     }
     
-    updateVideoInhibited();
-    
-    refreshVideo();
+    updateVideoEnabled();
     
     configureDraw();
 }
@@ -334,14 +325,14 @@ bool AppleIIVideo::postMessage(OEComponent *sender, int message, void *data)
             
             monitorCaptured = true;
             
-            updateVideoInhibited();
+            updateVideoEnabled();
             
             return true;
             
         case APPLEII_RELEASE_MONITOR:
             monitorCaptured = false;
             
-            updateVideoInhibited();
+            updateVideoEnabled();
             
             return true;
             
@@ -394,6 +385,8 @@ void AppleIIVideo::notify(OEComponent *sender, int notification, void *data)
                 break;
                 
             case CANVAS_DID_COPY:
+                postNotification(sender, notification, data);
+                
                 copy((wstring *)data);
                 
                 break;
@@ -635,27 +628,28 @@ void AppleIIVideo::drawHiresLine(OESInt y, OESInt x0, OESInt x1)
 
 // To-Do: Implement Apple IIe delay
 
-void AppleIIVideo::updateVideoInhibited()
+void AppleIIVideo::updateVideoEnabled()
 {
-    bool newVideoInhibited = !monitor || monitorCaptured;
+    bool newVideoEnabled = (monitor &&
+                            !monitorCaptured &&
+                            powerState != CONTROLBUS_POWERSTATE_OFF);
     
-    if (videoInhibited != newVideoInhibited)
+    if (videoEnabled != newVideoEnabled)
     {
-        videoInhibited = newVideoInhibited;
+        videoEnabled = newVideoEnabled;
         
-        imageModified = false;
-        pendingCycles = videoInhibited ? 0 : frameCycleNum;
-        
-        if (videoInhibited && monitor)
-            monitor->postMessage(this, CANVAS_CLEAR, NULL);
+        if (monitor)
+        {
+            if (!videoEnabled)
+                monitor->postMessage(this, CANVAS_CLEAR, NULL);
+            else
+                refreshVideo();
+        }
     }
 }
 
 void AppleIIVideo::refreshVideo()
 {
-    if (videoInhibited)
-        return;
-    
     updateVideo();
     
     pendingCycles = frameCycleNum;
@@ -704,7 +698,6 @@ void AppleIIVideo::updateTiming()
     float clockFrequency = 0;
     
     OERect visibleRect;
-    OERect displayRect;
     
     if (tvSystem == APPLEII_NTSC)
     {
@@ -715,8 +708,6 @@ void AppleIIVideo::updateTiming()
         
         visibleRect = OEMakeRect((OEInt) (clockFrequency * CELL_WIDTH * NTSC_HSTART), NTSC_VSTART,
                                  (OEInt) (clockFrequency * CELL_WIDTH * NTSC_HLENGTH), NTSC_VLENGTH);
-        displayRect = OEMakeRect(CELL_WIDTH * VIDEO_HSTART, vertDisplayStart,
-                                 DISPLAY_WIDTH, DISPLAY_HEIGHT);
     }
     else if (tvSystem == APPLEII_PAL)
     {
@@ -727,9 +718,10 @@ void AppleIIVideo::updateTiming()
         
         visibleRect = OEMakeRect((OEInt) (clockFrequency * CELL_WIDTH * PAL_HSTART), PAL_VSTART,
                                  (OEInt) (clockFrequency * CELL_WIDTH * PAL_HLENGTH), PAL_VLENGTH);
-        displayRect = OEMakeRect(CELL_WIDTH * VIDEO_HSTART, vertDisplayStart,
-                                 DISPLAY_WIDTH, DISPLAY_HEIGHT);
     }
+    
+    OERect displayRect = OEMakeRect(CELL_WIDTH * VIDEO_HSTART, vertDisplayStart,
+                                    DISPLAY_WIDTH, DISPLAY_HEIGHT);
     
     frameCycleNum = VIDEO_HTOTAL * vertTotal;
     controlBus->postMessage(this, CONTROLBUS_SET_CLOCKFREQUENCY, &clockFrequency);
@@ -789,6 +781,13 @@ void AppleIIVideo::updateTiming()
         else if (count[i].y > 0x200)
             count[i].y -= vertTotal;
     }
+    
+    currentTimer = APPLEII_TIMER_VSYNC;
+    controlBus->postMessage(this, CONTROLBUS_GET_CYCLES, &lastCycles);
+    
+    controlBus->postMessage(this, CONTROLBUS_INVALIDATE_TIMERS, this);
+    
+    scheduleNextTimer(0);
 }
 
 void AppleIIVideo::scheduleNextTimer(OESLong cycles)
@@ -806,8 +805,7 @@ void AppleIIVideo::scheduleNextTimer(OESLong cycles)
             {
                 imageModified = false;
                 
-                if (monitor &&
-                    (powerState != CONTROLBUS_POWERSTATE_OFF))
+                if (videoEnabled)
                     monitor->postMessage(this, CANVAS_POST_IMAGE, &image);
             }
             
@@ -894,7 +892,7 @@ OEChar AppleIIVideo::readFloatingBus()
 
 void AppleIIVideo::copy(wstring *s)
 {
-    if (videoInhibited || !OEGetBit(mode, MODE_TEXT))
+    if (!videoEnabled || !OEGetBit(mode, MODE_TEXT))
         return;
     
     OEChar charMap[] = {0x40, 0x20, 0x40, 0x20, 0x40, 0x20, 0x40, 0x60};

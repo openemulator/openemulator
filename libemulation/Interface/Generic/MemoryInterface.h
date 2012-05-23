@@ -25,6 +25,11 @@ typedef enum
 
 typedef enum
 {
+    ADDRESSOFFSET_SETOFFSET,
+} AddressOffsetMessage;
+
+typedef enum
+{
     RAM_GET_DATA,
     RAM_END,
 } RAMMessage;
@@ -64,5 +69,10 @@ typedef struct
     
 	OESLong offset;
 } BankSwitchedRAMMap;
+
+typedef enum
+{
+    VIDEORAM_DID_CHANGE,
+} VideoRAMNotification;
 
 #endif

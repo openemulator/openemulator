@@ -275,6 +275,15 @@ void MOS6502::execute()
         }
         else
         {
+/*            static bool cap = false;
+            
+            if (pc.q == 0xc300)
+                cap = true;
+            
+            if (cap)
+                printf("pc=%04x a=%02x x=%02x y=%02x s=%02x p=%02x\n",
+                       pc.w.l, a, x, y, sp.b.l, p);*/
+            
             OEChar opcode = RDOP();
             switch (opcode)
             {

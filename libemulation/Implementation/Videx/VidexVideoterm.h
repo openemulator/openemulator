@@ -29,8 +29,9 @@ public:
     void write(OEAddress address, OEChar value);
     
 private:
-    OEComponent *video;
     OEComponent *ram;
+    OEComponent *ramOffset;
+    OEComponent *video;
     OEComponent *gamePort;
     
     OEInt ramBank;
@@ -41,6 +42,7 @@ private:
     bool colorKiller;
     
     bool monitorRequest;
+    bool videoEnabled;
     
     OEInt cellWidth;
     
@@ -64,7 +66,7 @@ private:
     
     void setCellWidth(OEInt value);
     
-    void updateMonitorRequest();
+    void updateVideoEnabled();
     
     void updateTiming();
     

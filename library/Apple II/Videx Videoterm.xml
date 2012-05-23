@@ -7,14 +7,20 @@
         <setting ref="videxVideoterm.io" name="characterSet2" label="Alt. Character Set" type="select" options="Normal,NormalUppercase|Normal Uppercase,Inverse,French,German,Katakana,Spanish,Symbol,SuperSub|Super and Subscript,APL,Epson"/>
     </device>
     <connector id="videxVideoterm.connector" type="Apple II Slot">
+        <inlet ref="videxVideoterm.ram" property="controlBus" outletRef="controlBus"/>
         <inlet ref="videxVideoterm.io" property="controlBus" outletRef="controlBus"/>
         <inlet ref="videxVideoterm.io" property="floatingBus" outletRef="floatingBus"/>
         <inlet ref="videxVideoterm.io" property="video" outletRef="video"/>
         <inlet ref="videxVideoterm.io" property="gamePort" outletRef="gamePort"/>
         <inlet ref="videxVideoterm.memory" property="memoryBus" outletRef="memoryBus"/>
         <inlet ref="videxVideoterm.addressDecoder" property="floatingBus" outletRef="floatingBus"/>
-        <inlet ref="videxVideoterm.ram" property="controlBus" outletRef="controlBus"/>
     </connector>
+    <component id="videxVideoterm.ram" class="VideoRAM">
+        <property name="memoryImage" data="${packagePath}/${id}.bin"/>
+        <property name="controlBus" ref=""/>
+        <property name="size" value="0x800"/>
+        <property name="observer" ref="videxVideoterm.io"/>
+    </component>
     <component id="videxVideoterm.io" class="VidexVideoterm">
         <property name="controlBus" ref=""/>
         <property name="floatingBus" ref=""/>
@@ -33,14 +39,14 @@
         <property name="startAddress" value="0x0"/>
         <property name="cursorAddress" value="0x0"/>
         <property name="addressRegister" value="0"/>
-        <property name="video" ref=""/>
         <property name="ram" ref="videxVideoterm.ram"/>
+        <property name="ramOffset" ref="videxVideoterm.ramOffset"/>
+        <property name="video" ref=""/>
         <property name="gamePort" ref=""/>
-        <property name="cellWidth" value="9"/>
         <property name="characterSet1" value="Normal"/>
         <property name="characterSet2" value="Inverse"/>
+        <property name="cellWidth" value="9"/>
         <property name="ramBank" value="0"/>
-        <property name="clockFrequency" value="17430000.0"/>
         <property name="fontAPL" data="${resourcePath}/roms/Videx/Videx Videoterm Character ROM APL.bin"/>
         <property name="fontEpson" data="${resourcePath}/roms/Videx/Videx Videoterm Character ROM Epson.bin"/>
         <property name="fontFrench" data="${resourcePath}/roms/Videx/Videx Videoterm Character ROM French.bin"/>
@@ -64,17 +70,14 @@
         <property name="floatingBus" ref=""/>
         <property name="refROM" ref="videxVideoterm.rom"/>
         <property name="mapROM" value="0x000-0xbff"/>
-        <property name="refRAM" ref="videxVideoterm.ram"/>
+        <property name="refRAM" ref="videxVideoterm.ramOffset"/>
         <property name="mapRAM" value="0xc00-0xdff"/>
     </component>
-    <component id="videxVideoterm.rom" class="ROM">
-        <property name="memoryImage" data="${resourcePath}/roms/Videx/Videx Videoterm 2.4 ROM.bin"/>
+    <component id="videxVideoterm.ramOffset" class="AddressOffset">
+        <property name="component" ref="videxVideoterm.ram"/>
     </component>
-    <component id="videxVideoterm.ram" class="BankSwitchedRAM">
-        <property name="size" value="0x800"/>
-        <property name="blockSize" value="0x200"/>
-        <property name="memoryImage" data="${packagePath}/${id}.bin"/>
-        <property name="controlBus" ref=""/>
+    <component id="videxVideoterm.rom" class="ROM">
+        <property name="memoryImage" data="${resourcePath}/roms/Videx/Videx Videoterm ROM 2.4.bin"/>
     </component>
     
 </edl>
