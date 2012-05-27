@@ -19,11 +19,15 @@
 #define ATA_IDENTIFY        0xec
 #define ATA_SET_FEATURE     0xef
 
+#define ATA_DRIVE           (1 << 4)
+
 #define ATA_ERR             (1 << 0)
 #define ATA_DRQ             (1 << 3)
 #define ATA_DSC             (1 << 4)
 #define ATA_RDY             (1 << 6)
 #define ATA_BSY             (1 << 7)
+
+#define ATA_SRST            (1 << 2)
 
 #define ATA_IDENTIFY_SIZE   114
 
@@ -33,10 +37,15 @@ RDCFFA::RDCFFA()
     
     device = NULL;
     
-    ataBufferIndex = 0;
-    ataError = false;
-    ataLBA.q = 0;
+    setCSMask = 0;
+    clearCSMask = 0;
+    
+    ataDrive = 0;
     ataCommand = 0;
+    ataStatus = ATA_DSC | ATA_RDY;
+    ataLBA.q = 0;
+    ataBufferIndex = 0;
+    ataDataHigh = 0;
 }
 
 RDCFFA::~RDCFFA()
@@ -136,7 +145,7 @@ bool RDCFFA::postMessage(OEComponent *sender, int message, void *data)
             return false;
             
         case STORAGE_GET_FORMATLABEL:
-            *((string *)data) = blockStorage.getFormatLabel();
+            *((string *)data) = blockStorage[ataDrive].getFormatLabel();
             
             return true;
     }
@@ -148,13 +157,39 @@ OEChar RDCFFA::read(OEAddress address)
 {
     switch (address & 0xf)
     {
+        case 0x00:
+            return ataDataHigh;
+            
+        case 0x01:
+            return clearCSMask;
+            
+        case 0x02:
+            return setCSMask;
+            
+        case 0x03:
+            // To-Do: enable writing EEPROM
+            
+            return 0;
+            
+        case 0x04:
+            // To-Do: disable writing EEPROM
+            
+            return 0;
+            
         case 0x08:
+        {
             // ATA Data
             if (ataBufferIndex >= 0x200)
                 return 0;
             
-            return ataBuffer[ataBufferIndex++];
+            OEChar value = ataBuffer[ataBufferIndex++];
+            ataDataHigh = ataBuffer[ataBufferIndex++];
             
+            if (ataBufferIndex == 0x200)
+                OEClearBit(ataStatus, ATA_DRQ);
+            
+            return value;
+        }
             
         case 0x09:
             // ATA Error
@@ -178,22 +213,12 @@ OEChar RDCFFA::read(OEAddress address)
             
         case 0x0e:
             // ATA LBA 24-27
-            return ataLBA.b.h3;
+            return ataLBA.b.h3 | (ataDrive ? ATA_DRIVE : 0);
             
+        case 0x06:
         case 0x0f:
-        {
             // ATA Status
-            OEChar status = 0;
-            
-            if (ataError)
-                OEAssertBit(status, ATA_ERR);
-            else
-                OESetBit(status, ATA_DRQ, ataBufferIndex < 0x200);
-            OEAssertBit(status, ATA_DSC);
-            OEAssertBit(status, ATA_RDY);
-            
-            return status;
-        }
+            return ataStatus;
             
         default:
             return 0;
@@ -204,20 +229,59 @@ void RDCFFA::write(OEAddress address, OEChar value)
 {
     switch (address & 0xf)
     {
+        case 0x00:
+            ataDataHigh = value;
+            
+            return;
+            
+        case 0x01:
+            clearCSMask = value;
+            
+            return;
+            
+        case 0x02:
+            setCSMask = value;
+            
+            return;
+            
+        case 0x06:
+            // ATA Device Control
+            
+            // Check software reset
+            if (OEGetBit(value, ATA_SRST))
+            {
+                OEClearBit(ataStatus, ATA_DRQ);
+                OEClearBit(ataStatus, ATA_ERR);
+                
+                ataCommand = 0;
+                
+                ataBufferIndex = 0;
+            }
+            
+            return;
+            
         case 0x08:
             // ATA Data
-            if (ataBufferIndex >= 0x200)
-                break;
-            
-            ataBuffer[ataBufferIndex++] = value;
-            
-            if ((ataBufferIndex == 0x200) &&
-                (ataCommand == ATA_WRITE))
+            if ((ataCommand != ATA_WRITE) ||
+                (ataBufferIndex >= 0x200))
+                OEAssertBit(ataStatus, ATA_ERR);
+            else
             {
-                if (blockStorage.isWriteEnabled() && !forceWriteProtected)
-                    ataError = !blockStorage.writeBlocks(ataLBA.d.l, ataBuffer, 1);
-                else
-                    ataError = true;
+                ataBuffer[ataBufferIndex++] = value;
+                ataBuffer[ataBufferIndex++] = ataDataHigh;
+                
+                if (ataBufferIndex == 0x200)
+                {
+                    OEClearBit(ataStatus, ATA_DRQ);
+                    
+                    if (blockStorage[ataDrive].isWriteEnabled() && !forceWriteProtected)
+                    {
+                        if (!blockStorage[ataDrive].writeBlocks(ataLBA.d.l, ataBuffer, 1))
+                            OEAssertBit(ataStatus, ATA_ERR);
+                    }
+                    else
+                        OEAssertBit(ataStatus, ATA_ERR);
+                }
             }
             
             break;
@@ -243,6 +307,7 @@ void RDCFFA::write(OEAddress address, OEChar value)
         case 0x0e:
             // ATA LBA 24-27
             ataLBA.b.h3 = value & 0xf;
+            ataDrive = OEGetBit(value, ATA_DRIVE);
             
             break;
             
@@ -251,19 +316,28 @@ void RDCFFA::write(OEAddress address, OEChar value)
             // ATA Command
             ataCommand = value;
             
+            OEClearBit(ataStatus, ATA_ERR);
+            OEClearBit(ataStatus, ATA_DRQ);
+            
             switch (ataCommand)
             {
                 case ATA_READ:
                     ataBufferIndex = 0;
                     
-                    ataError = !blockStorage.readBlocks(ataLBA.d.l, ataBuffer, 1);
+                    if (!blockStorage[ataDrive].readBlocks(ataLBA.d.l, ataBuffer, 1))
+                        OEAssertBit(ataStatus, ATA_ERR);
+                    else
+                        OEAssertBit(ataStatus, ATA_DRQ);
                     
                     break;
                     
                 case ATA_WRITE:
                     ataBufferIndex = 0;
                     
-                    ataError = !blockStorage.isWriteEnabled() || forceWriteProtected;
+                    if (!blockStorage[ataDrive].isWriteEnabled() || forceWriteProtected)
+                        OEAssertBit(ataStatus, ATA_ERR);
+                    else
+                        OEAssertBit(ataStatus, ATA_DRQ);
                     
                     break;
                     
@@ -272,10 +346,10 @@ void RDCFFA::write(OEAddress address, OEChar value)
                     // Identify
                     ataBufferIndex = 0;
                     
-                    if (blockStorage.isOpen())
+                    if (blockStorage[ataDrive].isOpen())
                     {
                         OEUnion lbaSize;
-                        lbaSize.q = blockStorage.getBlockNum();
+                        lbaSize.q = blockStorage[ataDrive].getBlockNum();
                         
                         memset(ataBuffer, 0, 0x200);
                         
@@ -284,21 +358,21 @@ void RDCFFA::write(OEAddress address, OEChar value)
                         ataBuffer[ATA_IDENTIFY_SIZE + 2] = lbaSize.b.h2;
                         ataBuffer[ATA_IDENTIFY_SIZE + 3] = lbaSize.b.h3;
                         
-                        ataError = false;
+                        OEAssertBit(ataStatus, ATA_DRQ);
                     }
                     else
-                        ataError = true;
+                        OEAssertBit(ataStatus, ATA_ERR);
                     
                     break;
                 }
                     
                 case ATA_SET_FEATURE:
-                    ataError = false;
+                    OEAssertBit(ataStatus, ATA_ERR);
                     
                     break;
                     
                 default:
-                    ataError = true;
+                    OEAssertBit(ataStatus, ATA_ERR);
                     
                     break;
             }
@@ -312,7 +386,7 @@ bool RDCFFA::openDiskImage(string path)
 {
     closeDiskImage();
     
-    if (!blockStorage.open(path))
+    if (!blockStorage[0].open(path))
         return false;
     
     diskImagePath = path;
@@ -322,7 +396,7 @@ bool RDCFFA::openDiskImage(string path)
 
 void RDCFFA::closeDiskImage()
 {
-    blockStorage.close();
+    blockStorage[0].close();
     
     diskImagePath = "";
 }

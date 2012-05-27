@@ -35,8 +35,10 @@ OEImage::OEImage(OEData& data)
 
 OEImage::OEImage(OEImage& image, OERect rect)
 {
-    OERect imageRect = OEMakeRect(0, 0, image.size.width, image.size.height);
-    rect = OEIntersectionRect(rect, imageRect);
+    rect = OEIntegralRect(rect);
+    
+    OERect oldRect = OEMakeRect(0, 0, image.size.width, image.size.height);
+    rect = OEIntersectionRect(rect, oldRect);
     
     format = image.format;
     setSize(rect.size);
@@ -50,8 +52,8 @@ OEImage::OEImage(OEImage& image, OERect rect)
     phaseAlternation = image.phaseAlternation;
     
     OEInt srcBytesPerRow = image.getBytesPerRow();
-    OEInt srcOffset = ((OEInt)rect.origin.y * srcBytesPerRow +
-                       (OEInt)rect.origin.x * image.getBytesPerPixel());
+    OEInt srcOffset = (rect.origin.y * srcBytesPerRow +
+                       rect.origin.x * image.getBytesPerPixel());
     OEChar *src = image.getPixels() + srcOffset;
     
     OEInt dstBytesPerRow = getBytesPerRow();
@@ -98,9 +100,9 @@ OEImageFormat OEImage::getFormat()
     return format;
 }
 
-void OEImage::setSize(OESize value)
+void OEImage::setSize(OESize s)
 {
-    size = value;
+    size = OEIntegralSize(s);
     
     pixels.resize(getBytesPerRow() * size.height);
     
@@ -305,13 +307,12 @@ void OEImage::print(OEImage& image, OEPoint origin)
     return;
 }
 
-void OEImage::setSize(OESize value, OEChar fillByte)
+void OEImage::setSize(OESize s, OEChar fillByte)
 {
     OEInt srcBytesPerRow = getBytesPerRow();
     
     OESize oldSize = size;
-    size = OEMakeSize((OEInt) value.width,
-                      (OEInt) value.height);
+    size = OEIntegralSize(s);
     
     OEInt dstBytesPerRow = getBytesPerRow();
     

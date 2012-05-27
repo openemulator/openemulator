@@ -11,6 +11,8 @@
 #ifndef _OEIMAGE_H
 #define _OEIMAGE_H
 
+#include <math.h>
+
 #include "OECommon.h"
 
 using namespace std;
@@ -32,6 +34,12 @@ typedef struct
     OEPoint origin;
     OESize size;
 } OERect;
+
+typedef struct
+{
+    OESInt x;
+    OESInt y;
+} OEIntPoint;
 
 typedef enum
 {
@@ -101,6 +109,11 @@ inline OESize OEMakeSize(float w, float h)
     s.height = h;
     
     return s;
+}
+
+inline OESize OEIntegralSize(OESize aSize)
+{
+    return OEMakeSize(floor(aSize.width), floor(aSize.height));
 }
 
 inline OERect OEMakeRect(float x, float y, float w, float h)
@@ -216,7 +229,34 @@ inline OERect OEUnionRect(OERect aRect, OERect bRect)
                    MAX(OEMaxY(aRect), OEMaxY(bRect)) - OEMinY(r));
     
     return r;
+}
+
+inline OERect OEIntegralRect(OERect aRect)
+{
+    float x0 = ceil(OEMinX(aRect));
+    float x1 = floor(OEMaxX(aRect));
+    float y0 = ceil(OEMinY(aRect));
+    float y1 = floor(OEMaxY(aRect));
     
+    return OEMakeRect(x0, y0, x1 - x0, y1 - y0);
+}
+
+inline OEPoint OEGetPosInRect(OEPoint aPoint, OERect aRect)
+{
+    if ((aPoint.y < OEMinY(aRect)) ||
+        ((aPoint.y == OEMinY(aRect)) && (aPoint.x < OEMinX(aRect))))
+        return OEMakePoint(OEMinX(aRect), OEMinY(aRect));
+    else if (aPoint.y < OEMaxY(aRect))
+    {
+        if (aPoint.x < OEMinX(aRect))
+            return OEMakePoint(OEMaxX(aRect), aPoint.y - 1);
+        else if (aPoint.x < OEMaxX(aRect))
+            return aPoint;
+        else
+            return OEMakePoint(OEMaxX(aRect), aPoint.y);
+    }
+    else
+        return OEMakePoint(OEMaxX(aRect), OEMaxY(aRect) - 1);
 }
 
 class OEImage
@@ -229,7 +269,7 @@ public:
     
     void setFormat(OEImageFormat value);
     OEImageFormat getFormat();
-    void setSize(OESize value);
+    void setSize(OESize s);
     OESize getSize();
     OEInt getBytesPerPixel();
     OEInt getBytesPerRow();
@@ -268,7 +308,7 @@ private:
     vector<bool> phaseAlternation;
     
     void init();
-    void setSize(OESize value, OEChar fillByte);
+    void setSize(OESize s, OEChar fillByte);
     OEImagePixel getPixel(OEInt x, OEInt y);
     void setPixel(OEInt x, OEInt y, OEImagePixel value);
     OEImagePixel darken(OEImagePixel p1, OEImagePixel p2);

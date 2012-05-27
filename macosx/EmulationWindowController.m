@@ -367,6 +367,17 @@
         [item setImage:[NSImage imageNamed:@"IconDebuggerBreak.png"]];
         [item setAction:@selector(sendDebuggerBreak:)];
     }
+    else if ([ident isEqualToString:@"Revert to Saved"])
+    {
+        [item setLabel:NSLocalizedString(@"Revert to Saved",
+                                         @"Emulation Toolbar Label.")];
+        [item setPaletteLabel:NSLocalizedString(@"Revert to Saved",
+                                                @"Emulation Toolbar Palette Label.")];
+        [item setToolTip:NSLocalizedString(@"Revert document to saved state.",
+                                           @"Emulation Toolbar Tool Tip.")];
+        [item setImage:[NSImage imageNamed:@"IconRevert.png"]];
+        [item setAction:@selector(revertDocumentToSaved:)];
+    }
     else if ([ident isEqualToString:@"AudioControls"])
     {
         [item setLabel:NSLocalizedString(@"Audio Controls",
@@ -414,6 +425,7 @@
             @"Cold Restart",
             @"Warm Restart",
             @"Debugger Break",
+            @"Revert to Saved",
             @"AudioControls",
             @"Library",
             NSToolbarSeparatorItemIdentifier,

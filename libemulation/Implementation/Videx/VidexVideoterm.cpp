@@ -323,90 +323,51 @@ void VidexVideoterm::updateVideoEnabled()
 
 void VidexVideoterm::updateTiming()
 {
+    // Update MC6845
     clockFrequency = CLOCK_FREQUENCY / cellWidth;
     
     MC6845::updateTiming();
     
     // Update parameters
-    OERect visibleRect;
-    OERect displayRect;
-    
     OESInt horizStart = horizTotal - horizSyncPosition;
     OESInt vertStart = vertTotal - vertSyncPosition;
     
-    visibleRect = OEMakeRect((OEInt) (clockFrequency * cellWidth * NTSC_HSTART), NTSC_VSTART,
-                             (OEInt) (clockFrequency * cellWidth * NTSC_HLENGTH), NTSC_VLENGTH);
-    displayRect = OEMakeRect(cellWidth * horizStart, vertStart,
-                             cellWidth * horizDisplayed, vertDisplayed);
+    OERect displayRect = OEMakeRect(horizStart, vertStart,
+                                    horizDisplayed, vertDisplayed);
+    displayRect = OEIntersectionRect(displayRect,
+                                     OEMakeRect(0, 0, horizTotal, vertTotal));
     
-    // Resize image
-    image.setSize(visibleRect.size);
+    OERect visibleRect = OEMakeRect(clockFrequency * NTSC_HSTART, NTSC_VSTART,
+                                    clockFrequency * NTSC_HLENGTH, NTSC_VLENGTH);
+    
+    displayRect = OEIntersectionRect(displayRect, visibleRect);
+    displayRect = OEIntegralRect(displayRect);
+    
+    // Update image
+    image.setSize(OEIntegralSize(OEMakeSize(cellWidth * visibleRect.size.width,
+                                            visibleRect.size.height)));
     imageWidth = image.getSize().width;
     
     imagep = image.getPixels();
-    imagep += (OEInt) ((OEMinY(displayRect) - OEMinY(visibleRect)) * imageWidth);
-    imagep += (OEInt) (OEMinX(displayRect) - OEMinX(visibleRect));
+    imagep += ((OEInt) ((vertStart - OEMinY(visibleRect)) * imageWidth) +
+               (OEInt) ((horizStart - OEMinX(visibleRect)) * cellWidth));
     image.setSampleRate(CLOCK_FREQUENCY);
     
-    // Build pos data
+    // Update pos data
     OEInt cycleNum = frameCycleNum + 16;
-    
-    OESInt visibleXStart = ceil((OEMinX(visibleRect) - OEMinX(displayRect)) / cellWidth);
-    OESInt visibleXEnd = ceil((OEMaxX(visibleRect) - OEMinX(displayRect)) / cellWidth);
-    OESInt visibleYStart = OEMinY(visibleRect) - OEMinY(displayRect);
-    OESInt visibleYEnd = OEMaxY(visibleRect) - OEMinY(displayRect);
-    
-    posXBegin = 0;
-    posXEnd = horizDisplayed;
-    OESInt posYBegin = 0;
-    OESInt posYEnd = vertDisplayed - 1;
-    
-    if (posXBegin < visibleXStart)
-        posXBegin = visibleXStart;
-    else if (posXBegin > visibleXEnd)
-        posXBegin = visibleXEnd;
-    
-    if (posXEnd < visibleXStart)
-        posXEnd = visibleXStart;
-    else if (posXEnd > visibleXEnd)
-        posXEnd = visibleXEnd;
-    
-    if (posYBegin < visibleYStart)
-        posYBegin = visibleYStart;
-    else if (posYBegin > visibleYEnd)
-        posYBegin = visibleYEnd;
-    
-    if (posYEnd < visibleYStart)
-        posYEnd = visibleYStart;
-    else if (posYEnd > visibleYEnd)
-        posYEnd = visibleYEnd;
     
     pos.resize(cycleNum);
     
     for (OEInt i = 0; i < cycleNum; i++)
     {
-        OESInt sx = i % 65;
-        OESInt sy = i / 65;
+        OEPoint p = OEGetPosInRect(OEMakePoint(i % horizTotal, i / horizTotal), displayRect);
         
-        pos[i].x = sx - horizStart;
-        pos[i].y = sy - vertStart;
-        
-        if (pos[i].x < posXBegin)
-            pos[i].x = posXBegin;
-        if (pos[i].x > posXEnd)
-            pos[i].x = posXEnd;
-        
-        if (pos[i].y < posYBegin)
-        {
-            pos[i].x = posXBegin;
-            pos[i].y = posYBegin;
-        }
-        if (pos[i].y > posYEnd)
-        {
-            pos[i].x = posXEnd;
-            pos[i].y = posYEnd;
-        }
+        pos[i].x = p.x - horizStart;
+        pos[i].y = p.y - vertStart;
     }
+    
+    posXBegin = OEMinX(displayRect) - horizStart;
+    posXEnd = OEMaxX(displayRect) - horizStart;
 }
 
 // Copy an 8-pixel segment

@@ -74,8 +74,8 @@ private:
     bool tvSystemUpdated;
     
     // Tables
-    vector<OECount> pos;
-    vector<OECount> count;
+    vector<OEIntPoint> pos;
+    vector<OEIntPoint> count;
     
     vector<OEInt> textOffset;
     vector<OEInt> hiresOffset;
@@ -101,7 +101,7 @@ private:
     
     // Timing
     OEInt vertTotal;
-    OEInt vertDisplayStart;
+    OEInt vertStart;
     
     OELong frameStart;
     OEInt frameCycleNum;
@@ -140,7 +140,7 @@ private:
     
     void updateTiming();
     void scheduleNextTimer(OESLong cycles);
-    OECount getCount();
+    OEIntPoint getCount();
     OEChar readFloatingBus();
     
     void copy(wstring *s);

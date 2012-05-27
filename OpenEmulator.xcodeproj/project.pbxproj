@@ -89,6 +89,7 @@
 		007DEFB1153FB17500A9CC01 /* DIBackingStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 007DEFB0153FB17500A9CC01 /* DIBackingStore.cpp */; };
 		007DEFB3153FB5E800A9CC01 /* DIBlockStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 007DEFB2153FB5E800A9CC01 /* DIBlockStorage.cpp */; };
 		007DEFBB1540608300A9CC01 /* DIRAWBlockStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 007DEFBA1540608200A9CC01 /* DIRAWBlockStorage.cpp */; };
+		007EF9C71570329D0073061E /* IconRevert.png in Resources */ = {isa = PBXBuildFile; fileRef = 007EF9C61570329D0073061E /* IconRevert.png */; };
 		007F08CF1459344600C3308D /* sparkle_dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 007F08CE1459344600C3308D /* sparkle_dsa_pub.pem */; };
 		008107DE1120C57600D744FB /* TemplateChooserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00FE0C051095353B00B92AB7 /* TemplateChooserViewController.m */; };
 		00811E0012D251E9009AD2F0 /* AppleDiskIIInterfaceCard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00811DFE12D251E9009AD2F0 /* AppleDiskIIInterfaceCard.cpp */; };
@@ -363,6 +364,7 @@
 		007DEFB4153FB5EF00A9CC01 /* DIBlockStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DIBlockStorage.h; sourceTree = "<group>"; };
 		007DEFB81540607C00A9CC01 /* DIRAWBlockStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DIRAWBlockStorage.h; sourceTree = "<group>"; };
 		007DEFBA1540608200A9CC01 /* DIRAWBlockStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DIRAWBlockStorage.cpp; sourceTree = "<group>"; };
+		007EF9C61570329D0073061E /* IconRevert.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IconRevert.png; sourceTree = "<group>"; };
 		007F08CE1459344600C3308D /* sparkle_dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = sparkle_dsa_pub.pem; path = macosx/sparkle_dsa_pub.pem; sourceTree = "<group>"; };
 		00811DFD12D251E9009AD2F0 /* AppleDiskIIInterfaceCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleDiskIIInterfaceCard.h; sourceTree = "<group>"; };
 		00811DFE12D251E9009AD2F0 /* AppleDiskIIInterfaceCard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleDiskIIInterfaceCard.cpp; sourceTree = "<group>"; };
@@ -630,6 +632,7 @@
 		000A79070FBA49C500A0F12E /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				007EF9C61570329D0073061E /* IconRevert.png */,
 				00391D6012D3B570002C5ABD /* IconLibrary.png */,
 				00ED379712779AD000BEF6BD /* AudioMax.png */,
 				00ED379812779AD000BEF6BD /* AudioMin.png */,
@@ -1361,6 +1364,7 @@
 				0073DDBF136FCCC900087303 /* ToolbarBackground.png in Resources */,
 				001C9B02137FDD0500D1355B /* AudioRecord.png in Resources */,
 				007F08CF1459344600C3308D /* sparkle_dsa_pub.pem in Resources */,
+				007EF9C71570329D0073061E /* IconRevert.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

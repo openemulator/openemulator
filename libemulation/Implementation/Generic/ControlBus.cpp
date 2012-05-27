@@ -271,9 +271,11 @@ void ControlBus::notify(OEComponent *sender, int notification, void *data)
         while (true)
         {
             inEvent = true;
+            
             cpuCycles += ceil(events.front().cycles * cpuClockMultiplier - cpuCycles);
             setPendingCPUCycles(floor(cpuCycles + getPendingCPUCycles()));
             runCPU();
+            
             inEvent = false;
             
             OEComponent *component = events.front().component;
@@ -507,7 +509,7 @@ void ControlBus::invalidateTimers(OEComponent *component)
                 cpuCycles -= floor(cpuCycles);
                 
                 cpuCycles += ceil(events.front().cycles * cpuClockMultiplier - cpuCycles);
-                setPendingCPUCycles(cpuCycles + doneCPUCycles);
+                setPendingCPUCycles(cpuCycles - doneCPUCycles);
             }
         }
     }

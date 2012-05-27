@@ -15,20 +15,20 @@
 #include "DeviceInterface.h"
 #include "MemoryInterface.h"
 
-#define VIDEO_HDISPLAY  40
-#define VIDEO_HEND      9
-#define VIDEO_HSTART    16
-#define VIDEO_HBLANK    (VIDEO_HEND + VIDEO_HSTART)
-#define VIDEO_HTOTAL    (VIDEO_HDISPLAY + VIDEO_HBLANK)
+#define HORIZ_START     16
+#define HORIZ_BLANK     (9 + HORIZ_START)
+#define HORIZ_DISPLAY   40
+#define HORIZ_TOTAL     (HORIZ_BLANK + HORIZ_DISPLAY)
+
+#define VERT_NTSC_START 38
+#define VERT_PAL_START  48
+#define VERT_DISPLAY    192
 
 #define CELL_WIDTH      14
 #define CELL_HEIGHT     8
 
-#define BLOCK_WIDTH     VIDEO_HDISPLAY
-#define BLOCK_HEIGHT    24
-
-#define DISPLAY_WIDTH   (BLOCK_WIDTH * CELL_WIDTH)
-#define DISPLAY_HEIGHT  (BLOCK_HEIGHT * CELL_HEIGHT)
+#define BLOCK_WIDTH     HORIZ_DISPLAY
+#define BLOCK_HEIGHT    (VERT_DISPLAY / CELL_HEIGHT)
 
 #define FONT_CHARNUM    0x100
 #define FONT_CHARWIDTH  16
@@ -671,17 +671,17 @@ void AppleIIVideo::updateVideo()
         
         OEInt segmentStart = (OEInt) (lastCycles - frameStart);
         
-        OECount p0 = pos[segmentStart];
-        OECount p1 = pos[segmentStart + cycleNum];
+        OEIntPoint p0 = pos[segmentStart];
+        OEIntPoint p1 = pos[segmentStart + cycleNum];
         
         if (p0.y == p1.y)
             (this->*draw)(p0.y, p0.x, p1.x);
         else
         {
-            (this->*draw)(p0.y, p0.x, VIDEO_HDISPLAY);
+            (this->*draw)(p0.y, p0.x, HORIZ_DISPLAY);
             
             for (OESInt i = (p0.y + 1); i < p1.y; i++)
-                (this->*draw)(i, 0, VIDEO_HDISPLAY);
+                (this->*draw)(i, 0, HORIZ_DISPLAY);
             
             (this->*draw)(p1.y, 0, p1.x);
         }
@@ -695,51 +695,51 @@ void AppleIIVideo::updateVideo()
 void AppleIIVideo::updateTiming()
 {
     // Update parameters
-    float clockFrequency = 0;
-    
-    OERect visibleRect;
+    float clockFrequency;
+    OERect visibleRect, displayRect;
     
     if (tvSystem == APPLEII_NTSC)
     {
-        clockFrequency = NTSC_4FSC * VIDEO_HTOTAL / 912;
+        clockFrequency = NTSC_4FSC * HORIZ_TOTAL / 912;
+        
+        visibleRect = OEMakeRect(clockFrequency * NTSC_HSTART, NTSC_VSTART,
+                                 clockFrequency * NTSC_HLENGTH, NTSC_VLENGTH);
+        displayRect = OEMakeRect(HORIZ_START, VERT_NTSC_START, HORIZ_DISPLAY, VERT_DISPLAY);
         
         vertTotal = NTSC_VTOTAL;
-        vertDisplayStart = 38;
-        
-        visibleRect = OEMakeRect((OEInt) (clockFrequency * CELL_WIDTH * NTSC_HSTART), NTSC_VSTART,
-                                 (OEInt) (clockFrequency * CELL_WIDTH * NTSC_HLENGTH), NTSC_VLENGTH);
     }
     else if (tvSystem == APPLEII_PAL)
     {
-        clockFrequency = 14250450.0 * VIDEO_HTOTAL / 912;
+        clockFrequency = 14250450.0 * HORIZ_TOTAL / 912;
+        
+        visibleRect = OEMakeRect(clockFrequency * PAL_HSTART, PAL_VSTART,
+                                 clockFrequency * PAL_HLENGTH, PAL_VLENGTH);
+        displayRect = OEMakeRect(HORIZ_START, VERT_PAL_START, HORIZ_DISPLAY, VERT_DISPLAY);
         
         vertTotal = PAL_VTOTAL;
-        vertDisplayStart = 48;
-        
-        visibleRect = OEMakeRect((OEInt) (clockFrequency * CELL_WIDTH * PAL_HSTART), PAL_VSTART,
-                                 (OEInt) (clockFrequency * CELL_WIDTH * PAL_HLENGTH), PAL_VLENGTH);
     }
     
-    OERect displayRect = OEMakeRect(CELL_WIDTH * VIDEO_HSTART, vertDisplayStart,
-                                    DISPLAY_WIDTH, DISPLAY_HEIGHT);
-    
-    frameCycleNum = VIDEO_HTOTAL * vertTotal;
     controlBus->postMessage(this, CONTROLBUS_SET_CLOCKFREQUENCY, &clockFrequency);
     
-    // Resize image
-    image.setSize(visibleRect.size);
+    OESInt horizStart = OEMinX(displayRect);
+    vertStart = OEMinY(displayRect);
+    
+    frameCycleNum = HORIZ_TOTAL * vertTotal;
+    
+    // Update image
+    image.setSize(OEIntegralSize(OEMakeSize(CELL_WIDTH * visibleRect.size.width,
+                                            visibleRect.size.height)));
     imageWidth = image.getSize().width;
     
     imagep = image.getPixels();
-    imagep += (OEInt) ((OEMinY(displayRect) - OEMinY(visibleRect)) * imageWidth);
-    imagep += (OEInt) (OEMinX(displayRect) - OEMinX(visibleRect));
+    imagep += ((OEInt) ((vertStart - OEMinY(visibleRect)) * imageWidth) +
+               (OEInt) ((horizStart - OEMinX(visibleRect)) * CELL_WIDTH));
     
     vector<float> colorBurst;
     colorBurst.push_back(2.0 * M_PI * (-33.0 / 360.0 + ((OEInt) OEMinX(visibleRect) % 4) / 4.0));
-    
     image.setColorBurst(colorBurst);
     
-    // Build pos and count data
+    // Update pos and count
     OEInt cycleNum = frameCycleNum + 16;
     
     pos.resize(cycleNum);
@@ -747,39 +747,25 @@ void AppleIIVideo::updateTiming()
     
     for (OEInt i = 0; i < cycleNum; i++)
     {
-        OESInt sx = i % 65;
-        OESInt sy = i / 65;
+        OEPoint p = OEGetPosInRect(OEMakePoint(i % HORIZ_TOTAL, i / HORIZ_TOTAL),
+                                   displayRect);
         
-        pos[i].x = sx - VIDEO_HSTART;
-        pos[i].y = sy - vertDisplayStart;
+        pos[i].x = p.x - HORIZ_START;
+        pos[i].y = p.y - vertStart;
         
-        if (pos[i].x < 0)
-            pos[i].x = 0;
-        if (pos[i].x > BLOCK_WIDTH)
-            pos[i].x = BLOCK_WIDTH;
+        OESInt ci = i + HORIZ_BLANK;
+        OEPoint c = OEMakePoint(ci % HORIZ_TOTAL, ci / HORIZ_TOTAL);
         
-        if (pos[i].y < 0)
-        {
-            pos[i].x = 0;
-            pos[i].y = 0;
-        }
-        if (pos[i].y >= DISPLAY_HEIGHT)
-        {
-            pos[i].x = BLOCK_WIDTH;
-            pos[i].y = DISPLAY_HEIGHT - 1;
-        }
+        c.x = c.x ? (c.x + 0x40 - 1) : 0;
+        c.y = c.y + 0x100 - vertStart;
         
-        OESInt ci = i + VIDEO_HBLANK;
-        OESInt cx = ci % 65;
-        OESInt cy = ci / 65;
+        if (c.y < (0x200 - vertTotal))
+            c.y += vertTotal;
+        else if (c.y > 0x200)
+            c.y -= vertTotal;
         
-        count[i].x = cx ? (cx + 0x40 - 1) : 0;
-        count[i].y = cy + 0x100 - vertDisplayStart;
-        
-        if (count[i].y < (0x200 - vertTotal))
-            count[i].y += vertTotal;
-        else if (count[i].y > 0x200)
-            count[i].y -= vertTotal;
+        count[i].x = c.x;
+        count[i].y = c.y;
     }
     
     currentTimer = APPLEII_TIMER_VSYNC;
@@ -827,19 +813,19 @@ void AppleIIVideo::scheduleNextTimer(OESLong cycles)
             controlBus->postMessage(this, CONTROLBUS_GET_CYCLES, &frameStart);
             frameStart += cycles;
             
-            cycles += (vertDisplayStart + DISPLAY_HEIGHT - 32) * VIDEO_HTOTAL;
+            cycles += (vertStart + VERT_DISPLAY - 32) * HORIZ_TOTAL;
             
             break;
             
         case APPLEII_TIMER_DISPLAYEND:
             configureDraw();
             
-            cycles += 32 * VIDEO_HTOTAL;
+            cycles += 32 * HORIZ_TOTAL;
             
             break;
             
         case APPLEII_TIMER_VSYNC:
-            cycles += (vertTotal - (vertDisplayStart + DISPLAY_HEIGHT)) * VIDEO_HTOTAL;
+            cycles += (vertTotal - (vertStart + VERT_DISPLAY)) * HORIZ_TOTAL;
             
             break;
     }
@@ -847,7 +833,7 @@ void AppleIIVideo::scheduleNextTimer(OESLong cycles)
     controlBus->postMessage(this, CONTROLBUS_SCHEDULE_TIMER, &cycles);
 }
 
-OECount AppleIIVideo::getCount()
+OEIntPoint AppleIIVideo::getCount()
 {
     OELong cycles;
     
@@ -858,7 +844,7 @@ OECount AppleIIVideo::getCount()
 
 OEChar AppleIIVideo::readFloatingBus()
 {
-    OECount count = getCount();
+    OEIntPoint count = getCount();
     
 	bool mixed = OEGetBit(mode, MODE_MIXED) && ((count.y & 0xa0) == 0xa0);
 	bool hires = OEGetBit(mode, MODE_HIRES) && !(OEGetBit(mode, MODE_TEXT) || mixed);
@@ -904,7 +890,7 @@ void AppleIIVideo::copy(wstring *s)
     if (!vp)
         return;
     
-    for (OEInt y = 0; y < DISPLAY_HEIGHT; y += CELL_HEIGHT)
+    for (OEInt y = 0; y < VERT_DISPLAY; y += CELL_HEIGHT)
     {
         wstring line;
         

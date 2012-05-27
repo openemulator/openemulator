@@ -85,6 +85,7 @@ typedef enum
 typedef enum
 {
     APPLEII_COLORKILLER_DID_CHANGE = CANVAS_NOTIFICATION_END,
+    APPLEII_MONITOR_DID_CHANGE,
 } AppleIIVideoNotification;
 
 typedef enum

@@ -105,7 +105,7 @@ bool AppleIIKeyboard::setRef(string name, OEComponent *ref)
 
 bool AppleIIKeyboard::init()
 {
-    updateShiftKeyMod();
+    update();
     
     return true;
 }

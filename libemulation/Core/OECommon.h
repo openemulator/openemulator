@@ -59,12 +59,6 @@ typedef union
 
 typedef vector<OEChar> OEData;
 
-typedef struct
-{
-    OESInt x;
-    OESInt y;
-} OECount;
-
 #ifdef _WIN32
 #define OE_PATH_SEPARATOR "\\"
 #else

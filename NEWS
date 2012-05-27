@@ -1,4 +1,6 @@
 ==Latest==
+* Fixed R&D CFFA
+* Fixed MC6845 special register value cases
 * Implemented Videx Videoterm video
 * Refactorized AppleIIVideo
 * Fixed Apple language card

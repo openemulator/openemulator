@@ -36,18 +36,18 @@ public:
     void write(OEAddress address, OEChar value);
     
 protected:
-    OEChar horizTotal;
-    OEChar horizDisplayed;
-    OEChar horizSyncPosition;
-    OEChar horizSyncWidth;
-    OEChar vertTotalCell;
-    OEChar vertTotalAdjust;
-    OEChar vertDisplayedCell;
-    OEChar vertSyncPositionCell;
-    OEChar modeControl;
-    OEChar scanline;
-    OEChar cursorStart;
-    OEChar cursorEnd;
+    OEInt horizTotal;
+    OEInt horizDisplayed;
+    OEInt horizSyncPosition;
+    OEInt horizSyncWidth;
+    OEInt vertTotalCell;
+    OEInt vertTotalAdjust;
+    OEInt vertDisplayedCell;
+    OEInt vertSyncPositionCell;
+    OEInt modeControl;
+    OEInt scanline;
+    OEInt cursorStart;
+    OEInt cursorEnd;
     OEUnion startAddress;
     OEUnion lightpenAddress;
     OEUnion cursorAddress;
@@ -56,7 +56,7 @@ protected:
     OEInt vertDisplayed;
     OEInt vertSyncPosition;
     
-    vector<OECount> pos;
+    vector<OEIntPoint> pos;
     OESInt posXBegin;
     OESInt posXEnd;
     

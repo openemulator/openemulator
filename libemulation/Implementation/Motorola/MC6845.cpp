@@ -446,8 +446,8 @@ void MC6845::updateVideo()
         
         OEInt segmentStart = (OEInt) ((lastCycles - frameStart) * clockMultiplier);
         
-        OECount p0 = pos[segmentStart];
-        OECount p1 = pos[segmentStart + cycleNum];
+        OEIntPoint p0 = pos[segmentStart];
+        OEIntPoint p1 = pos[segmentStart + cycleNum];
         
         if (p0.y == p1.y)
             (this->*draw)(p0.y, p0.x, p1.x);

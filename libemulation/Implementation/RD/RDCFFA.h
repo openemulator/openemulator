@@ -34,13 +34,18 @@ private:
     
     OEComponent *device;
     
-    DIAppleBlockStorage blockStorage;
+    DIChar setCSMask;
+    DIChar clearCSMask;
     
+    DIAppleBlockStorage blockStorage[2];
+    
+    bool ataDrive;
+    OEChar ataCommand;
+    OEChar ataStatus;
+    OEUnion ataLBA;
     OEChar ataBuffer[0x200];
     OEInt ataBufferIndex;
-    bool ataError;
-    OEUnion ataLBA;
-    OEChar ataCommand;
+    OEChar ataDataHigh;
     
     bool openDiskImage(string path);
     void closeDiskImage();

@@ -44,7 +44,7 @@ private:
     bool monitorRequest;
     bool videoEnabled;
     
-    OEInt cellWidth;
+    OESInt cellWidth;
     
     map<string, OEData> font;
     OEData currentFont;
