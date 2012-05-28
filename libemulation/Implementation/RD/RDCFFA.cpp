@@ -8,28 +8,34 @@
  * Implements an R&D CFFA interface card
  */
 
+#include <string.h>
+
 #include "RDCFFA.h"
 
 #include "DeviceInterface.h"
 #include "StorageInterface.h"
 #include "MemoryInterface.h"
 
-#define ATA_READ            0x20
-#define ATA_WRITE           0x30
-#define ATA_IDENTIFY        0xec
-#define ATA_SET_FEATURE     0xef
+#define ATA_READ                0x20
+#define ATA_WRITE               0x30
+#define ATA_IDENTIFY            0xec
+#define ATA_SET_FEATURE         0xef
 
-#define ATA_DRIVE           (1 << 4)
+#define ATA_DRIVE               (1 << 4)
 
-#define ATA_ERR             (1 << 0)
-#define ATA_DRQ             (1 << 3)
-#define ATA_DSC             (1 << 4)
-#define ATA_RDY             (1 << 6)
-#define ATA_BSY             (1 << 7)
+#define ATA_ERR                 (1 << 0)
+#define ATA_DRQ                 (1 << 3)
+#define ATA_DSC                 (1 << 4)
+#define ATA_RDY                 (1 << 6)
+#define ATA_BSY                 (1 << 7)
 
-#define ATA_SRST            (1 << 2)
+#define ATA_SRST                (1 << 2)
 
-#define ATA_IDENTIFY_SIZE   114
+#define ATA_IDENTIFY_SERIAL     (10 * 2)
+#define ATA_IDENTIFY_SERIALSIZE (10 * 2)
+#define ATA_IDENTIFY_NAME       (23 * 2)
+#define ATA_IDENTIFY_NAMESIZE   (24 * 2)
+#define ATA_IDENTIFY_SIZE       (57 * 2)
 
 RDCFFA::RDCFFA()
 {
@@ -42,7 +48,7 @@ RDCFFA::RDCFFA()
     
     ataDrive = 0;
     ataCommand = 0;
-    ataStatus = ATA_DSC | ATA_RDY;
+    ataStatus = ATA_RDY | ATA_DSC;
     ataLBA.q = 0;
     ataBufferIndex = 0;
     ataDataHigh = 0;
@@ -179,13 +185,13 @@ OEChar RDCFFA::read(OEAddress address)
         case 0x08:
         {
             // ATA Data
-            if (ataBufferIndex >= 0x200)
+            if (ataBufferIndex >= ATA_BUFFER_SIZE)
                 return 0;
             
             OEChar value = ataBuffer[ataBufferIndex++];
             ataDataHigh = ataBuffer[ataBufferIndex++];
             
-            if (ataBufferIndex == 0x200)
+            if (ataBufferIndex == ATA_BUFFER_SIZE)
                 OEClearBit(ataStatus, ATA_DRQ);
             
             return value;
@@ -247,9 +253,9 @@ void RDCFFA::write(OEAddress address, OEChar value)
         case 0x06:
             // ATA Device Control
             
-            // Check software reset
             if (OEGetBit(value, ATA_SRST))
             {
+                // Software reset
                 OEClearBit(ataStatus, ATA_DRQ);
                 OEClearBit(ataStatus, ATA_ERR);
                 
@@ -263,14 +269,14 @@ void RDCFFA::write(OEAddress address, OEChar value)
         case 0x08:
             // ATA Data
             if ((ataCommand != ATA_WRITE) ||
-                (ataBufferIndex >= 0x200))
+                (ataBufferIndex >= ATA_BUFFER_SIZE))
                 OEAssertBit(ataStatus, ATA_ERR);
             else
             {
                 ataBuffer[ataBufferIndex++] = value;
                 ataBuffer[ataBufferIndex++] = ataDataHigh;
                 
-                if (ataBufferIndex == 0x200)
+                if (ataBufferIndex == ATA_BUFFER_SIZE)
                 {
                     OEClearBit(ataStatus, ATA_DRQ);
                     
@@ -351,7 +357,11 @@ void RDCFFA::write(OEAddress address, OEChar value)
                         OEUnion lbaSize;
                         lbaSize.q = blockStorage[ataDrive].getBlockNum();
                         
-                        memset(ataBuffer, 0, 0x200);
+                        memset(ataBuffer, 0, ATA_BUFFER_SIZE);
+                        
+                        strncpy((char *) &ataBuffer[ATA_IDENTIFY_NAME],
+                                diskImagePath.c_str(),
+                                ATA_IDENTIFY_NAMESIZE);
                         
                         ataBuffer[ATA_IDENTIFY_SIZE + 0] = lbaSize.b.l;
                         ataBuffer[ATA_IDENTIFY_SIZE + 1] = lbaSize.b.h;

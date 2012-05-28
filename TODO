@@ -1,6 +1,6 @@
 ==1.0.3==
-* Implement backspace to eject a drive
 * Fix joystick when an emulation is started with joystick plugged in
+* Fix Videx Videoterm so display is updated when monitor is plugged in
 * Improve video inhibition so video is only rendered when displayed
 
 * Fix IAC 45, beautiful boot
@@ -11,20 +11,19 @@
 * Fix Disk II controller for writing to disk
 * Fix dragging a disk image to a canvas does not mount when canvas is not in focus
 
-* Fix AppleIIVideo refresh
 * Implement Apple Graphics Tablet
 * Implement Apple Silentype Interface Card
 * Implement Silentype printer
 * Fix [CanvasView update] problem in paper view
 * Fix replace monitor+emulation lock problem (happens when a monitor is replaced and selected)
-* Fix CTRL+ALT mouse capture
-* Refactorize PAAudio so an emulation is stopped while it is being configured. Increase thread priority
 
 ==1.0.4==
 * Implement Apple III
 * Implement Saturn RAMboard
 * Implement Mountain Computer Apple Clock
 * Implement TimeMaster II H.O.
+* Fix CTRL+ALT mouse capture
+* Refactorize PAAudio so an emulation is stopped while it is being configured. Increase thread priority
 
 ==1.0.5==
 * Implement Apple IIe

@@ -1,4 +1,8 @@
 ==Latest==
+* Fixed rainbow Apple II video test
+* Implemented R&D CFFA EEPROM in $C800-$C81F
+* Implemented backspace to eject a disk image
+* Fixed AppleIIVideo color carrier
 * Fixed R&D CFFA
 * Fixed MC6845 special register value cases
 * Implemented Videx Videoterm video

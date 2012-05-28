@@ -19,8 +19,8 @@ typedef enum
 typedef enum
 {
     JOYSTICK_DID_CHANGE,
-    JOYSTICK_WAS_ADDED,
-    JOYSTICK_WAS_REMOVED,
+    JOYSTICK_WAS_CONNECTED,
+    JOYSTICK_WAS_DISCONNECTED,
 } JoystickNotification;
 
 #define JOYSTICK_AXIS_NUM       16

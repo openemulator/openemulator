@@ -12,6 +12,8 @@
 
 #include "diskimage.h"
 
+#define ATA_BUFFER_SIZE 0x200
+
 class RDCFFA : public OEComponent
 {
 public:
@@ -43,7 +45,7 @@ private:
     OEChar ataCommand;
     OEChar ataStatus;
     OEUnion ataLBA;
-    OEChar ataBuffer[0x200];
+    OEChar ataBuffer[ATA_BUFFER_SIZE];
     OEInt ataBufferIndex;
     OEChar ataDataHigh;
     

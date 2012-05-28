@@ -3,11 +3,12 @@
 <edl version="1.0" generator="OpenEmulator" framework="700" label="RD CFFA1" image="images/R&amp;D/R&amp;D CFFA.png" description="The CFFA interface card (www.dreher.net) accesses block disk images on Apple II computers. It is usually installed in slot 7.">
     
     <device id="rdCFFA" label="R&amp;D CFFA" image="images/R&amp;D/R&amp;D CFFA.png">
-        <setting ref="rdCFFA.memoryMux" name="sel" label="Controller ROM" type="select" options="ROM6502|6502 ROM,ROM65C02|65C02 ROM"/>
+        <setting ref="rdCFFA.romMux" name="sel" label="Controller ROM" type="select" options="ROM6502|6502 ROM,ROM65C02|65C02 ROM"/>
         <setting ref="rdCFFA.io" name="forceWriteProtected" label="Force Write Protected" type="checkbox"/>
     </device>
     <connector id="rdCFFA.connector" type="Apple II Slot">
         <inlet ref="rdCFFA.memory" property="memoryBus" outletRef="memoryBus"/>
+        <inlet ref="rdCFFA.addressDecoder" property="floatingBus" outletRef="floatingBus"/>
     </connector>
     <component id="rdCFFA.io" class="RDCFFA">
         <property name="device" ref="rdCFFA"/>
@@ -16,10 +17,24 @@
     </component>
     <component id="rdCFFA.memory" class="AppleIISlotMemory">
         <property name="memoryBus" ref=""/>
-        <property name="memory" ref="rdCFFA.memoryMux"/>
+        <property name="memory" ref="rdCFFA.addressDecoder"/>
         <property name="en" value="0"/>
     </component>
-    <component id="rdCFFA.memoryMux" class="AddressMux">
+    <component id="rdCFFA.addressDecoder" class="AddressDecoder">
+        <property name="size" value="0x1000"/>
+        <property name="blockSize" value="0x20"/>
+        <property name="floatingBus" ref=""/>
+        <property name="refROM" ref="rdCFFA.romMux"/>
+        <property name="mapROM" value="0x000-0x7ff,0x820-0xfff"/>
+        <property name="refRAM" ref="rdCFFA.ram"/>
+        <property name="mapRAM" value="0x800-0x81f"/>
+    </component>
+    <component id="rdCFFA.ram" class="RAM">
+        <property name="memoryImage" data="${packagePath}/${id}.bin"/>
+        <property name="size" value="0x20"/>
+        <property name="powerOnPattern" value="0x040000010000000000DFCD051F64000000000000000000000000000000000001"/>
+    </component>
+    <component id="rdCFFA.romMux" class="AddressMux">
         <property name="refROM6502" ref="rdCFFA.rom6502"/>
         <property name="refROM65C02" ref="rdCFFA.rom65C02"/>
         <property name="sel" value="ROM6502"/>

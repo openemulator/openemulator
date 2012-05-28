@@ -928,6 +928,13 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
 {
     EmulationItem *item = [self itemForSender:sender];
     
+    if ([item isMount])
+    {
+        [item unmount];
+        
+        return;
+    }
+    
     if (![item isRemovable])
         return;
     

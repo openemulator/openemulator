@@ -726,17 +726,18 @@ void AppleIIVideo::updateTiming()
     
     frameCycleNum = HORIZ_TOTAL * vertTotal;
     
+    OESInt imageLeft = (OEInt) ((horizStart - OEMinX(visibleRect)) * CELL_WIDTH);
+    
     // Update image
     image.setSize(OEIntegralSize(OEMakeSize(CELL_WIDTH * visibleRect.size.width,
                                             visibleRect.size.height)));
     imageWidth = image.getSize().width;
     
     imagep = image.getPixels();
-    imagep += ((OEInt) ((vertStart - OEMinY(visibleRect)) * imageWidth) +
-               (OEInt) ((horizStart - OEMinX(visibleRect)) * CELL_WIDTH));
+    imagep += (OEInt) (vertStart - OEMinY(visibleRect)) * imageWidth + imageLeft;
     
     vector<float> colorBurst;
-    colorBurst.push_back(2.0 * M_PI * (-33.0 / 360.0 + ((OEInt) OEMinX(visibleRect) % 4) / 4.0));
+    colorBurst.push_back(2.0 * M_PI * (-33.0 / 360.0 + (imageLeft % 4) / 4.0));
     image.setColorBurst(colorBurst);
     
     // Update pos and count
@@ -753,7 +754,7 @@ void AppleIIVideo::updateTiming()
         pos[i].x = p.x - HORIZ_START;
         pos[i].y = p.y - vertStart;
         
-        OESInt ci = i + HORIZ_BLANK;
+        OESInt ci = i + (HORIZ_BLANK - HORIZ_START);
         OEPoint c = OEMakePoint(ci % HORIZ_TOTAL, ci / HORIZ_TOTAL);
         
         c.x = c.x ? (c.x + 0x40 - 1) : 0;
