@@ -213,12 +213,16 @@ bool AppleIIVideo::setRef(string name, OEComponent *ref)
         {
             monitor->removeObserver(this, CANVAS_MOUSE_DID_CHANGE);
             monitor->removeObserver(this, CANVAS_DID_COPY);
+            
+            postNotification(this, APPLEII_MONITOR_WAS_DISCONNECTED, NULL);
         }
         monitor = ref;
         if (monitor)
         {
             monitor->addObserver(this, CANVAS_MOUSE_DID_CHANGE);
             monitor->addObserver(this, CANVAS_DID_COPY);
+            
+            postNotification(this, APPLEII_MONITOR_WAS_CONNECTED, NULL);
         }
     }
     else

@@ -1,6 +1,6 @@
 ==1.0.3==
-* Fix joystick when an emulation is started with joystick plugged in
 * Fix Videx Videoterm so display is updated when monitor is plugged in
+* Fix joystick when an emulation is started with joystick plugged in
 * Improve video inhibition so video is only rendered when displayed
 
 * Fix IAC 45, beautiful boot

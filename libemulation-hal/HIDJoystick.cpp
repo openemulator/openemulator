@@ -34,7 +34,7 @@ void HIDJoystick::addDevice()
 {
     joystickNum++;
     
-    postNotification(this, JOYSTICK_WAS_ADDED, &joystickNum);
+    postNotification(this, JOYSTICK_WAS_CONNECTED, &joystickNum);
 }
 
 void HIDJoystick::removeDevice()
@@ -44,7 +44,7 @@ void HIDJoystick::removeDevice()
     
     joystickNum--;
     
-    postNotification(this, JOYSTICK_WAS_REMOVED, &joystickNum);
+    postNotification(this, JOYSTICK_WAS_DISCONNECTED, &joystickNum);
 }
 
 void HIDJoystick::setAxis(OEInt deviceIndex, OEInt index, float value)

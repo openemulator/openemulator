@@ -129,15 +129,15 @@ bool JoystickMapper::setRef(string name, OEComponent *ref)
         if (joystick)
         {
             joystick->removeObserver(this, JOYSTICK_DID_CHANGE);
-            joystick->removeObserver(this, JOYSTICK_WAS_ADDED);
-            joystick->removeObserver(this, JOYSTICK_WAS_REMOVED);
+            joystick->removeObserver(this, JOYSTICK_WAS_CONNECTED);
+            joystick->removeObserver(this, JOYSTICK_WAS_DISCONNECTED);
         }
         joystick = ref;
         if (joystick)
         {
             joystick->addObserver(this, JOYSTICK_DID_CHANGE);
-            joystick->addObserver(this, JOYSTICK_WAS_ADDED);
-            joystick->addObserver(this, JOYSTICK_WAS_REMOVED);
+            joystick->addObserver(this, JOYSTICK_WAS_CONNECTED);
+            joystick->addObserver(this, JOYSTICK_WAS_DISCONNECTED);
         }
     }
     else
