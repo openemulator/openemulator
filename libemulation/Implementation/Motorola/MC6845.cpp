@@ -317,44 +317,44 @@ void MC6845::write(OEAddress address, OEChar value)
             break;
             
         case MC6845_CURSORSTART:
-            setCursorStart(value);
-            
             refreshVideo();
+            
+            setCursorStart(value);
             
             break;
             
         case MC6845_CURSOREND:
-            cursorEnd = value & 0x1f;
-            
             refreshVideo();
+            
+            cursorEnd = value & 0x1f;
             
             break;
             
         case MC6845_STARTADDRESSHIGH:
-            startAddress.b.h = value & 0x3f;
-            
             refreshVideo();
+            
+            startAddress.b.h = value & 0x3f;
             
             break;
             
         case MC6845_STARTADDRESSLOW:
-            startAddress.b.l = value & 0xff;
-            
             refreshVideo();
+            
+            startAddress.b.l = value & 0xff;
             
             break;
             
         case MC6845_CURSORADDRESSHIGH:
-            cursorAddress.b.h = value & 0x3f;
-            
             refreshVideo();
+            
+            cursorAddress.b.h = value & 0x3f;
             
             break;
             
         case MC6845_CURSORADDRESSLOW:
-            cursorAddress.b.l = value & 0xff;
-            
             refreshVideo();
+            
+            cursorAddress.b.l = value & 0xff;
             
             break;
     }

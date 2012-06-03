@@ -1,7 +1,7 @@
 ==1.0.3==
-* Fix Videx Videoterm so display is updated when monitor is plugged in
-* Fix joystick when an emulation is started with joystick plugged in
 * Improve video inhibition so video is only rendered when displayed
+* Fix video not disabled when powered off (CTRL+CMD+BACKSPACE)
+* Fix dragging a disk image to a canvas does not mount when canvas is not in focus
 
 * Fix IAC 45, beautiful boot
 * Fix Disk II not booting sometimes when emulation was loaded from disk
@@ -9,7 +9,6 @@
 * Implement sample-accurate playback in audio player (?)
 * Fix libdiskimage GCR53
 * Fix Disk II controller for writing to disk
-* Fix dragging a disk image to a canvas does not mount when canvas is not in focus
 
 * Implement Apple Graphics Tablet
 * Implement Apple Silentype Interface Card

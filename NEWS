@@ -1,4 +1,7 @@
 ==Latest==
+* Fixed Videx Videoterm video refresh
+* Fixed Videx Videoterm so display is updated when monitor is plugged in
+* Fixed problem in JoystickMapper when an input device was switched
 * Fixed rainbow Apple II video test
 * Implemented R&D CFFA EEPROM in $C800-$C81F
 * Implemented backspace to eject a disk image

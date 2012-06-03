@@ -86,12 +86,16 @@ bool VidexVideoterm::setRef(string name, OEComponent *ref)
         if (video)
         {
             video->removeObserver(this, CANVAS_DID_COPY);
+            video->removeObserver(this, APPLEII_MONITOR_WAS_CONNECTED);
+            video->removeObserver(this, APPLEII_MONITOR_WAS_DISCONNECTED);
             video->removeObserver(this, APPLEII_COLORKILLER_DID_CHANGE);
         }
         video = ref;
         if (video)
         {
             video->addObserver(this, CANVAS_DID_COPY);
+            video->addObserver(this, APPLEII_MONITOR_WAS_CONNECTED);
+            video->addObserver(this, APPLEII_MONITOR_WAS_DISCONNECTED);
             video->addObserver(this, APPLEII_COLORKILLER_DID_CHANGE);
         }
     }
@@ -212,7 +216,17 @@ void VidexVideoterm::notify(OEComponent *sender, int notification, void *data)
         switch (notification)
         {
             case CANVAS_DID_COPY:
-                return copy((wstring *)data);
+                copy((wstring *)data);
+                
+                break;
+                
+            case APPLEII_MONITOR_WAS_CONNECTED:
+                refreshVideo();
+                
+                break;
+                
+            case APPLEII_MONITOR_WAS_DISCONNECTED:
+                break;
                 
             case APPLEII_COLORKILLER_DID_CHANGE:
                 colorKiller = *((bool *)data);
