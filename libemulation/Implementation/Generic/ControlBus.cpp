@@ -261,6 +261,9 @@ void ControlBus::notify(OEComponent *sender, int notification, void *data)
 {
     if (sender == audio)
     {
+        if (powerState != CONTROLBUS_POWERSTATE_ON)
+            return;
+        
         AudioBuffer *buffer = (AudioBuffer *)data;
         
         audioBufferStart = cycles;

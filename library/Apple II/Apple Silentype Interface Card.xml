@@ -2,21 +2,38 @@
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
 <edl version="1.0" generator="OpenEmulator" framework="736" label="Apple Silentype Interface Card" image="images/Apple/Apple Synch Printer Interface Card.png" description="The Apple Silentype Printer Interface Card connects an Apple Silentype printer to an Apple II computer. It is usually installed in slot 1.">
     
-    <device id="appleSilentypeCard" label="Apple Silentype Interface Card" image="images/Apple/Apple Synch Printer Interface Card.png">
+    <device id="appleSilentypeInterfaceCard" label="Apple Silentype Interface Card" image="images/Apple/Apple Synch Printer Interface Card.png">
     </device>
-    <connector id="appleSilentypeCard.connector" type="Apple II Slot">
-        <inlet ref="appleSilentypeCard.memory" property="memoryBus" outletRef="memoryBus"/>
+    <connector id="appleSilentypeInterfaceCard.connector" type="Apple II Slot">
+        <inlet ref="appleSilentypeInterfaceCard.memory" property="memoryBus" outletRef="memoryBus"/>
+        <inlet ref="appleSilentypeInterfaceCard.memoryCF00" property="floatingBus" outletRef="floatingBus"/>
+        <inlet ref="appleSilentypeInterfaceCard.disableC800" property="memoryBus" outletRef="memoryBus"/>
     </connector>
-    <port id="appleSilentypeCard.port" ref="" type="Apple Silentype Port" group="peripherals" label="Silentype Port" image="images/Connectors/DE9 Female.png"/>
-    <component id="appleSilentypeCard.io" class="FloatingBus">
+    <port id="appleSilentypeInterfaceCard.port" ref="" type="Apple Silentype Port" group="peripherals" label="Silentype Port" image="images/Connectors/DE9 Female.png"/>
+    <component id="appleSilentypeInterfaceCard.io" class="FloatingBus">
     </component>
-    <component id="appleSilentypeCard.memory" class="AppleIISlotMemory">
-        <property name="memoryBus" ref=""/>
-        <property name="memory" ref="appleSilentypeCard.rom"/>
+    <component id="appleSilentypeInterfaceCard.memory" class="AppleIISlotController">
+        <property name="memory" ref="appleSilentypeInterfaceCard.rom"/>
         <property name="en" value="0"/>
+        <property name="memoryBus" ref=""/>
+        <property name="refROM" ref="appleSilentypeInterfaceCard.rom"/>
+        <property name="mapROM" value="0xc800-0xceff"/>
+        <property name="refCF00" ref="appleSilentypeInterfaceCard.memoryCF00"/>
+        <property name="mapCF00" value="0xcf00-0xcfff"/>
     </component>
-    <component id="appleSilentypeCard.rom" class="ROM">
+    <component id="appleSilentypeInterfaceCard.memoryCF00" class="AddressDecoder">
+        <property name="size" value="0x100"/>
+        <property name="blockSize" value="0x1"/>
+        <property name="floatingBus" ref=""/>
+        <property name="refDisableC800" ref="appleSilentypeInterfaceCard.disableC800"/>
+        <property name="mapDisableC800" value="0xff"/>
+    </component>
+    <component id="appleSilentypeInterfaceCard.rom" class="ROM">
         <property name="memoryImage" data="${resourcePath}/roms/Apple/341-0039-00.bin"/>
+    </component>
+    <component id="appleSilentypeInterfaceCard.disableC800" class="AppleIIDisableC800">
+        <property name="memory" ref="appleSilentypeInterfaceCard.memory"/>
+        <property name="memoryBus" ref=""/>
     </component>
     
 </edl>

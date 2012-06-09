@@ -3,38 +3,43 @@
 <edl version="1.0" generator="OpenEmulator" framework="700" label="RD CFFA1" image="images/R&amp;D/R&amp;D CFFA.png" description="The CFFA interface card (www.dreher.net) accesses block disk images on Apple II computers. It is usually installed in slot 7.">
     
     <device id="rdCFFA" label="R&amp;D CFFA" image="images/R&amp;D/R&amp;D CFFA.png">
-        <setting ref="rdCFFA.romMux" name="sel" label="Firmware" type="select" options="ROM6502|Apple II,ROM65C02|Apple IIe (or newer)"/>
+        <setting ref="rdCFFA.rom" name="sel" label="Firmware" type="select" options="ROM6502|Apple II,ROM65C02|Apple IIe (or newer)"/>
         <setting ref="rdCFFA.io" name="forceWriteProtected" label="Force Write Protected" type="checkbox"/>
     </device>
     <connector id="rdCFFA.connector" type="Apple II Slot">
         <inlet ref="rdCFFA.memory" property="memoryBus" outletRef="memoryBus"/>
-        <inlet ref="rdCFFA.addressDecoder" property="floatingBus" outletRef="floatingBus"/>
+        <inlet ref="rdCFFA.memoryC800" property="floatingBus" outletRef="floatingBus"/>
+        <inlet ref="rdCFFA.disableC800" property="memoryBus" outletRef="memoryBus"/>
     </connector>
     <component id="rdCFFA.io" class="RDCFFA">
         <property name="device" ref="rdCFFA"/>
         <property name="diskImage" value=""/>
         <property name="forceWriteProtected" value="0"/>
     </component>
-    <component id="rdCFFA.memory" class="AppleIISlotMemory">
-        <property name="memoryBus" ref=""/>
-        <property name="memory" ref="rdCFFA.addressDecoder"/>
+    <component id="rdCFFA.memory" class="AppleIISlotController">
+        <property name="memory" ref="rdCFFA.rom"/>
         <property name="en" value="0"/>
+        <property name="memoryBus" ref=""/>
+        <property name="refC800" ref="rdCFFA.memoryC800"/>
+        <property name="mapC800" value="0xc800-0xcfff"/>
     </component>
-    <component id="rdCFFA.addressDecoder" class="AddressDecoder">
-        <property name="size" value="0x1000"/>
-        <property name="blockSize" value="0x20"/>
+    <component id="rdCFFA.memoryC800" class="AddressDecoder">
+        <property name="size" value="0x800"/>
+        <property name="blockSize" value="0x1"/>
         <property name="floatingBus" ref=""/>
-        <property name="refROM" ref="rdCFFA.romMux"/>
-        <property name="mapROM" value="0x000-0x7ff,0x820-0xfff"/>
         <property name="refRAM" ref="rdCFFA.ram"/>
-        <property name="mapRAM" value="0x800-0x81f"/>
+        <property name="mapRAM" value="0x000-0x01f"/>
+        <property name="refROM" ref="rdCFFA.rom"/>
+        <property name="mapROM" value="0x020-0x7fe"/>
+        <property name="refDisableC800" ref="rdCFFA.disableC800"/>
+        <property name="mapDisableC800" value="0x7ff"/>
     </component>
     <component id="rdCFFA.ram" class="RAM">
         <property name="memoryImage" data="${packagePath}/${id}.bin"/>
         <property name="size" value="0x20"/>
         <property name="powerOnPattern" value="0x040000010000000000DFCD051F64000000000000000000000000000000000001"/>
     </component>
-    <component id="rdCFFA.romMux" class="AddressMux">
+    <component id="rdCFFA.rom" class="AddressMux">
         <property name="refROM6502" ref="rdCFFA.rom6502"/>
         <property name="refROM65C02" ref="rdCFFA.rom65C02"/>
         <property name="sel" value="ROM6502"/>
@@ -44,6 +49,10 @@
     </component>
     <component id="rdCFFA.rom65C02" class="ROM">
         <property name="memoryImage" data="${resourcePath}/roms/R&amp;D/CFFA20EEC02.bin"/>
+    </component>
+    <component id="rdCFFA.disableC800" class="AppleIIDisableC800">
+        <property name="memory" ref="rdCFFA.memory"/>
+        <property name="memoryBus" ref=""/>
     </component>
     
 </edl>

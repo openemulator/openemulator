@@ -213,8 +213,6 @@ bool AppleIIVideo::setRef(string name, OEComponent *ref)
         {
             monitor->removeObserver(this, CANVAS_MOUSE_DID_CHANGE);
             monitor->removeObserver(this, CANVAS_DID_COPY);
-            
-            postNotification(this, APPLEII_MONITOR_WAS_DISCONNECTED, NULL);
         }
         monitor = ref;
         if (monitor)
@@ -222,8 +220,14 @@ bool AppleIIVideo::setRef(string name, OEComponent *ref)
             monitor->addObserver(this, CANVAS_MOUSE_DID_CHANGE);
             monitor->addObserver(this, CANVAS_DID_COPY);
             
-            postNotification(this, APPLEII_MONITOR_WAS_CONNECTED, NULL);
+            CanvasCaptureMode captureMode = CANVAS_CAPTURE_ON_MOUSE_CLICK;
+            
+            monitor->postMessage(this, CANVAS_SET_CAPTUREMODE, &captureMode);
         }
+        
+        bool monitorConnected = (monitor != NULL);
+        
+        postNotification(this, APPLEII_MONITOR_DID_CHANGE, &monitorConnected);
     }
     else
 		return false;
@@ -281,6 +285,7 @@ void AppleIIVideo::update()
     if (revisionUpdated)
     {
         buildHiresFont();
+        configureDraw();
         
         revisionUpdated = false;
     }
@@ -292,16 +297,7 @@ void AppleIIVideo::update()
         tvSystemUpdated = false;
     }
     
-    if (monitor)
-    {
-        CanvasCaptureMode captureMode = CANVAS_CAPTURE_ON_MOUSE_CLICK;
-        
-        monitor->postMessage(this, CANVAS_SET_CAPTUREMODE, &captureMode);
-    }
-    
     updateVideoEnabled();
-    
-    configureDraw();
 }
 
 bool AppleIIVideo::postMessage(OEComponent *sender, int message, void *data)
@@ -317,11 +313,6 @@ bool AppleIIVideo::postMessage(OEComponent *sender, int message, void *data)
             *((OEChar *)data) = readFloatingBus();
             
             return true;
-            
-        case APPLEII_GET_COLORKILLER:
-            *((bool *) data) = colorKiller;
-            
-            break;
             
         case APPLEII_REQUEST_MONITOR:
             if (monitorCaptured)
@@ -340,6 +331,16 @@ bool AppleIIVideo::postMessage(OEComponent *sender, int message, void *data)
             
             return true;
             
+        case APPLEII_IS_MONITOR_CONNECTED:
+            *((bool *) data) = (monitor != NULL);
+            
+            break;
+            
+        case APPLEII_IS_COLORKILLER_ENABLED:
+            *((bool *) data) = colorKiller;
+            
+            break;
+            
         default:
             if (monitor)
                 return monitor->postMessage(sender, message, data);
@@ -357,9 +358,13 @@ void AppleIIVideo::notify(OEComponent *sender, int notification, void *data)
         switch (notification)
         {
             case CONTROLBUS_POWERSTATE_DID_CHANGE:
+            {
                 powerState = *((ControlBusPowerState *)data);
                 
+                updateVideoEnabled();
+                
                 break;
+            }
                 
             case CONTROLBUS_TIMER_DID_FIRE:
                 scheduleNextTimer(*((OESLong *)data));
@@ -547,8 +552,9 @@ void AppleIIVideo::configureDraw()
     {
         colorKiller = newColorKiller;
         
-        postNotification(this, APPLEII_COLORKILLER_DID_CHANGE, &colorKiller);
         image.setSubcarrier(colorKiller ? 0 : NTSC_FSC);
+        
+        postNotification(this, APPLEII_COLORKILLER_DID_CHANGE, &colorKiller);
     }
     
     bool page = OEGetBit(mode, MODE_PAGE2);
@@ -636,7 +642,7 @@ void AppleIIVideo::updateVideoEnabled()
 {
     bool newVideoEnabled = (monitor &&
                             !monitorCaptured &&
-                            powerState != CONTROLBUS_POWERSTATE_OFF);
+                            (powerState != CONTROLBUS_POWERSTATE_OFF));
     
     if (videoEnabled != newVideoEnabled)
     {
@@ -645,7 +651,11 @@ void AppleIIVideo::updateVideoEnabled()
         if (monitor)
         {
             if (!videoEnabled)
+            {
+                image.fill(OEColor());
+                
                 monitor->postMessage(this, CANVAS_CLEAR, NULL);
+            }
             else
                 refreshVideo();
         }
@@ -669,7 +679,7 @@ void AppleIIVideo::updateVideo()
     
     OEInt cycleNum = min(pendingCycles, deltaCycles);
     
-    if (cycleNum)
+    if (cycleNum && videoEnabled)
     {
         pendingCycles -= cycleNum;
         

@@ -29,14 +29,14 @@
 
 // Notifications:
 // * HID notifications use the CanvasHIDNotification structure
-// * Pointer coordinates are in image coordinates
+// * Pointer coordinates are in (0..1) coordinates
 // * didCopy, didPaste is sent when the user requests copy/paste (wstring)
 // * didDelete is sent when the user requests delete
 // * didVSync is called from the video thread after vertical sync (CanvasVSync)
 //   It should be used for posting images or for requesting redraw
 // * willDraw is called from the video thread when an OpenGL canvas will be
 //   drawn (OESize)
-// * HID axes are in [0:1] coordinates
+// * HID axes are in (0..1) coordinates
 
 // Multithreading, beware!
 // * didVSync and willDraw are sent from the drawing thread! Keep this in mind

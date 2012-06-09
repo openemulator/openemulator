@@ -25,7 +25,7 @@ public:
     void write(OEAddress address, OEChar value);
     
 private:
-    OEAddress offset;
+    OEComponent *memory;
     
-    OEComponent *component;
+    OEAddress offset;
 };

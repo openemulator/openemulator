@@ -105,6 +105,20 @@ bool AppleIIKeyboard::setRef(string name, OEComponent *ref)
 
 bool AppleIIKeyboard::init()
 {
+    if (!controlBus)
+    {
+        logMessage("controlBus not connected");
+        
+        return false;
+    }
+    
+    if (!floatingBus)
+    {
+        logMessage("floatingBus not connected");
+        
+        return false;
+    }
+    
     update();
     
     return true;
@@ -250,6 +264,9 @@ void AppleIIKeyboard::updateShiftKeyMod()
 {
     if (type == APPLEIIKEYBOARD_TYPE_SHIFTKEYMOD)
     {
+        if (!monitor || !gamePort)
+            return;
+        
         CanvasKeyboardFlags flags;
         
         monitor->postMessage(this, CANVAS_GET_KEYBOARD_FLAGS, &flags);

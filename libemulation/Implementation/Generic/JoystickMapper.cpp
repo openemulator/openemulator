@@ -26,26 +26,26 @@ JoystickMapper::JoystickMapper()
     canvas = NULL;
     joystick = NULL;
     
-    for (int i = 0; i < JOYSTICK_AXIS_NUM; i++)
+    for (OEInt i = 0; i < JOYSTICK_AXIS_NUM; i++)
         addItem("", "axis" + getString(i), JOYSTICKMAPPER_AXIS, JOYSTICK_AXIS1 + i);
-    for (int i = 0; i < JOYSTICK_BUTTON_NUM; i++)
+    for (OEInt i = 0; i < JOYSTICK_BUTTON_NUM; i++)
         addItem("", "button" + getString(i), JOYSTICKMAPPER_BUTTON, JOYSTICK_BUTTON1 + i);
     
     addItem("Mouse", "Mouse X", JOYSTICKMAPPER_RELATIVEAXIS, MOUSE_START + CANVAS_M_RX);
     addItem("Mouse", "Mouse Y", JOYSTICKMAPPER_RELATIVEAXIS, MOUSE_START + CANVAS_M_RY);
     addItem("Mouse", "Mouse Wheel X", JOYSTICKMAPPER_RELATIVEAXIS, MOUSE_START + CANVAS_M_WHEELX);
     addItem("Mouse", "Mouse Wheel Y", JOYSTICKMAPPER_RELATIVEAXIS, MOUSE_START + CANVAS_M_WHEELY);
-    for (int i = 0; i < CANVAS_MOUSE_BUTTON_NUM; i++)
+    for (OEInt i = 0; i < CANVAS_MOUSE_BUTTON_NUM; i++)
         addItem("Mouse", "Mouse Button " + getString(i + 1), JOYSTICKMAPPER_BUTTON,
                 MOUSE_START + CANVAS_M_BUTTON1 + i);
     addItem("Mouse", "Unmapped", JOYSTICKMAPPER_UNMAPPED, -1);
     
-    for (int deviceId = 0; deviceId < 4; deviceId++)
+    for (OEInt deviceId = 0; deviceId < 4; deviceId++)
     {
         string deviceLabel = "Joystick " + getString(deviceId + 1);
         OEInt deviceOffset = JOYSTICK_START + JOYSTICK_OFFSET * deviceId;
         
-        for (int i = 0; i < JOYSTICK_AXIS_NUM; i++)
+        for (OEInt i = 0; i < JOYSTICK_AXIS_NUM; i++)
         {
             addItem("Joystick", deviceLabel + " X-Axis", JOYSTICKMAPPER_AXIS, deviceOffset + JOYSTICK_AXIS1);
             addItem("Joystick", deviceLabel + " Y-Axis", JOYSTICKMAPPER_AXIS, deviceOffset + JOYSTICK_AXIS2);
@@ -57,7 +57,7 @@ JoystickMapper::JoystickMapper()
             addItem("Joystick", deviceLabel + " Dial", JOYSTICKMAPPER_AXIS, deviceOffset + JOYSTICK_AXIS8);
             addItem("Joystick", deviceLabel + " Wheel", JOYSTICKMAPPER_AXIS, deviceOffset + JOYSTICK_AXIS9);
         }
-        for (int i = 0; i < JOYSTICK_BUTTON_NUM; i++)
+        for (OEInt i = 0; i < JOYSTICK_BUTTON_NUM; i++)
             addItem("Joystick", deviceLabel + " Button " + getString(i + 1), JOYSTICKMAPPER_BUTTON,
                     deviceOffset + JOYSTICK_BUTTON1 + i);
     }
@@ -343,11 +343,6 @@ void JoystickMapper::mapNotification(OEInt usageId, float value)
             hidEvent.deviceId = deviceId;
             hidEvent.usageId = i->first;
             hidEvent.value = value;
-            
-            logMessage(getString(i->first) + "/" + 
-                       getString(i->second.usageId) + "/" +
-                       getString(i->second.type) + "/" +
-                       getString(i->second.value) + "/");
             
             switch (i->second.type)
             {

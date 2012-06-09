@@ -51,12 +51,14 @@ typedef struct
 
 typedef enum
 {
-    APPLEII_SET_VRAMMODE,
-    APPLEII_GET_VRAM,
-    APPLEII_MAP_SLOT,
-    APPLEII_UNMAP_SLOT,
     APPLEII_MAP,
     APPLEII_UNMAP,
+    
+    APPLEII_MAP_SLOT,
+    APPLEII_UNMAP_SLOT,
+    
+    APPLEII_SET_VRAMMODE,
+    APPLEII_GET_VRAM,
     
     APPLEII_SET_AUXMEMORY,
     APPLEII_SET_MMUSTATE,
@@ -70,23 +72,22 @@ typedef enum
 typedef enum
 {
     APPLEII_VRAM_DID_CHANGE,
-    APPLEII_SLOT_WILL_UNMAP,
 } AppleIIAddressDecoderNotification;
 
 typedef enum
 {
     APPLEII_REFRESH_VIDEO = CANVAS_END,
     APPLEII_READ_FLOATINGBUS,
-    APPLEII_GET_COLORKILLER,
     APPLEII_REQUEST_MONITOR,
     APPLEII_RELEASE_MONITOR,
+    APPLEII_IS_MONITOR_CONNECTED,
+    APPLEII_IS_COLORKILLER_ENABLED,
 } AppleIIVideoMessage;
 
 typedef enum
 {
     APPLEII_COLORKILLER_DID_CHANGE = CANVAS_NOTIFICATION_END,
-    APPLEII_MONITOR_WAS_CONNECTED,
-    APPLEII_MONITOR_WAS_DISCONNECTED,
+    APPLEII_MONITOR_DID_CHANGE,
 } AppleIIVideoNotification;
 
 typedef enum
@@ -115,6 +116,17 @@ typedef enum
     APPLEII_AN3_DID_CHANGE,
     APPLEII_DID_STROBE,
 } AppleIIGamePortNotification;
+
+typedef enum
+{
+    APPLEII_DISABLE_C800,
+    APPLEII_IS_C800_ENABLED,
+} AppleIISlotControllerMessage;
+
+typedef enum
+{
+    APPLEII_C800_DID_CHANGE,
+} AppleIISlotControllerNotification;
 
 typedef enum
 {

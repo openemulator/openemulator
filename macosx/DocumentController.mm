@@ -298,9 +298,37 @@ void hidDeviceEventOcurred(void *inContext, IOReturn inResult, void *inSender, I
 {
     NSString *pathExtension = [[path pathExtension] lowercaseString];
     
-    // Open emulation with the Cocoa interface
+    // Open emulations through the Cocoa interface
     if ([pathExtension compare:@OE_PACKAGE_PATH_EXTENSION] == NSOrderedSame)
         return NO;
+    
+    NSWindow *window = [NSApp mainWindow];
+    Document *document = nil;
+    
+    if (window)
+        document = [[window windowController] document];
+        
+    if (!document)
+    {
+        // Open new untitled document if no document is open
+        NSError *error;
+        if (![self openUntitledDocumentAndDisplay:YES
+                                            error:&error])
+        {
+            if (([[error domain] compare:NSCocoaErrorDomain] != NSOrderedSame) ||
+                ([error code] != NSUserCancelledError))
+                [[NSAlert alertWithError:error] runModal];
+        }
+        
+        return YES;
+    }
+    
+    return [self openFile:path inWindow:window];
+}
+
+- (BOOL)openFile:(NSString *)path inWindow:(NSWindow *)window
+{
+    NSString *pathExtension = [[path pathExtension] lowercaseString];
     
     // Open audio
     if ([audioPathExtensions containsObject:pathExtension])
@@ -311,13 +339,14 @@ void hidDeviceEventOcurred(void *inContext, IOReturn inResult, void *inSender, I
     }
     
     // Paste text
+    NSWindowController *windowController = [window windowController];
+    
     if ([textPathExtensions containsObject:pathExtension])
     {
         NSString *clipboard = [NSString stringWithContentsOfFile:path
                                                     usedEncoding:nil
                                                            error:nil];
         
-        NSWindowController *windowController = [[NSApp mainWindow] windowController];
         if ([windowController respondsToSelector:@selector(pasteString:)])
             [windowController performSelector:@selector(pasteString:)
                                    withObject:clipboard];
@@ -325,35 +354,15 @@ void hidDeviceEventOcurred(void *inContext, IOReturn inResult, void *inSender, I
         return YES;
     }
     
-    // Open new untitled document if no document is open
-    NSWindow *mainWindow = nil;
-    Document *currentDocument = nil;
-    
-    mainWindow = [NSApp mainWindow];
-    if (mainWindow)
-        currentDocument = [[mainWindow windowController] document];
-    
-    if (!currentDocument)
-    {
-        NSError *error;
-        if (![self openUntitledDocumentAndDisplay:YES
-                                            error:&error])
-        {
-            if (([[error domain] compare:NSCocoaErrorDomain] != NSOrderedSame) ||
-                ([error code] != NSUserCancelledError))
-                [[NSAlert alertWithError:error] runModal];
-            
-            return YES;
-        }
-    }
-    
     // Mount disk image
+    Document *document = [windowController document];
+    
     if ([diskImagePathExtensions containsObject:pathExtension])
     {
-        if ([currentDocument mount:path])
+        if ([document mount:path])
             return YES;
         
-        if ([currentDocument canMount:path])
+        if ([document canMount:path])
         {
             NSAlert *alert = [[NSAlert alloc] init];
             [alert setMessageText:[NSString localizedStringWithFormat:
@@ -385,7 +394,7 @@ void hidDeviceEventOcurred(void *inContext, IOReturn inResult, void *inSender, I
         return YES;
     }
     
-    return YES;
+    return NO;
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath

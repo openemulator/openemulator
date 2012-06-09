@@ -2,22 +2,37 @@
 <!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
 <edl version="1.0" label="Apple Grahpics Tablet Interface Card" image="images/Apple/Apple Graphics Tablet Interface Card.png" description="The Apple Graphics Tablet Interface Card connects an Apple Graphics Tablet to an Apple II computer. It is usually installed in slot 5.">
     
-    <device id="appleGraphicsTabletCard" label="Apple Graphics Tablet Interface Card" image="images/Apple/Apple Graphics Tablet Interface Card.png">
+    <device id="appleGraphicsTabletInterfaceCard" label="Apple Graphics Tablet Interface Card" image="images/Apple/Apple Graphics Tablet Interface Card.png">
     </device>
-    <connector id="appleGraphicsTabletCard.connector" type="Apple II Slot">
-        <inlet ref="appleGraphicsTabletCard.memory" property="memoryBus" outletRef="memoryBus"/>
+    <connector id="appleGraphicsTabletInterfaceCard.connector" type="Apple II Slot">
+        <inlet ref="appleGraphicsTabletInterfaceCard.io" property="controlBus" outletRef="controlBus"/>
+        <inlet ref="appleGraphicsTabletInterfaceCard.io" property="floatingBus" outletRef="floatingBus"/>
+        <inlet ref="appleGraphicsTabletInterfaceCard.memory" property="memoryBus" outletRef="memoryBus"/>
+        <inlet ref="appleGraphicsTabletInterfaceCard.disableC800" property="memoryBus" outletRef="memoryBus"/>
     </connector>
-    <port id="appleGraphicsTabletCard.port" ref="" type="Apple Graphics Tablet Port" group="peripherals" label="Graphics Tablet Port" image="images/Connectors/Header1x6.png">
+    <port id="appleGraphicsTabletInterfaceCard.port" ref="" type="Apple Graphics Tablet Port" group="peripherals" label="Graphics Tablet Port" image="images/Connectors/Header1x6.png">
+        <inlet ref="appleGraphicsTabletInterfaceCard.io" property="graphicsTablet" outletRef="graphicsTablet"/>
     </port>
-    <component id="appleGraphicsTabletCard.io" class="FloatingBus">
+    <component id="appleGraphicsTabletInterfaceCard.io" class="AppleGraphicsTabletInterfaceCard">
+        <property name="controlBus" ref=""/>
+        <property name="floatingBus" ref=""/>
+        <property name="graphicsTablet" ref=""/>
     </component>
-    <component id="appleGraphicsTabletCard.memory" class="AppleIISlotMemory">
-        <property name="memoryBus" ref=""/>
-        <property name="memory" ref="appleGraphicsTabletCard.rom"/>
+    <component id="appleGraphicsTabletInterfaceCard.memory" class="AppleIISlotController">
+        <property name="memory" ref="appleGraphicsTabletInterfaceCard.rom"/>
         <property name="en" value="0"/>
+        <property name="memoryBus" ref=""/>
+        <property name="refROM" ref="appleGraphicsTabletInterfaceCard.rom"/>
+        <property name="mapROM" value="0xc800-0xceff"/>
+        <property name="refDisableC800" ref="appleGraphicsTabletInterfaceCard.disableC800"/>
+        <property name="mapDisableC800" value="0xcf00-0xcfff"/>
     </component>
-    <component id="appleGraphicsTabletCard.rom" class="ROM">
+    <component id="appleGraphicsTabletInterfaceCard.rom" class="ROM">
         <property name="memoryImage" data="${resourcePath}/roms/Apple/341-0026-00.bin"/>
+    </component>
+    <component id="appleGraphicsTabletInterfaceCard.disableC800" class="AppleIIDisableC800">
+        <property name="memory" ref="appleGraphicsTabletInterfaceCard.memory"/>
+        <property name="memoryBus" ref=""/>
     </component>
     
 </edl>

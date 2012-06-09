@@ -1,4 +1,7 @@
 ==Latest==
+* Improved Apple II slot C800-CFFF memory management
+* Improved video inhibition so video is only rendered when displayed
+* Fixed dragging a disk image to a canvas does not mount when canvas is not in focus
 * Fixed Videx Videoterm video refresh
 * Fixed Videx Videoterm so display is updated when monitor is plugged in
 * Fixed problem in JoystickMapper when an input device was switched
@@ -120,6 +123,7 @@
 * Improved OEImage interface
 
 ==2011-09==
+* Fixed video not disabled when powered off (CTRL+CMD+BACKSPACE)
 * Refactored OEImage and Canvas, so composite video properties are moved to OEImage
 * Implemented AudioCodec
 * Implemented string manipulation helper functions for AddressDecoder

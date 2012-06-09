@@ -61,6 +61,18 @@ bool AppleIIAddressDecoder::postMessage(OEComponent *sender, int message, void *
 {
     switch (message)
     {
+        case ADDRESSDECODER_MAP:
+            return addMemoryMap((MemoryMap *) data);
+            
+        case ADDRESSDECODER_UNMAP:
+            return removeMemoryMap((MemoryMap *) data);
+            
+        case APPLEII_MAP_SLOT:
+            return addMemoryMap((MemoryMap *) data);
+            
+        case APPLEII_UNMAP_SLOT:
+            return removeMemoryMap((MemoryMap *) data);
+            
         case APPLEII_SET_VRAMMODE:
             // To-Do: Dependiendo del modo, cambiamos el mapa
             
@@ -84,18 +96,6 @@ bool AppleIIAddressDecoder::postMessage(OEComponent *sender, int message, void *
             
             break;
         }
-            
-        case APPLEII_MAP_SLOT:
-            return addMemoryMap((MemoryMap *) data);
-            
-        case APPLEII_UNMAP_SLOT:
-            return removeMemoryMap((MemoryMap *) data);
-            
-        case APPLEII_MAP:
-            return addMemoryMap((MemoryMap *) data);
-
-        case APPLEII_UNMAP:
-            return removeMemoryMap((MemoryMap *) data);
     }
     
     return false;
@@ -104,10 +104,11 @@ bool AppleIIAddressDecoder::postMessage(OEComponent *sender, int message, void *
 void AppleIIAddressDecoder::write(OEAddress address, OEChar value)
 {
     size_t index = (size_t) ((address & mask) >> blockBits);
-	writeMapp[index]->write(address, value);
     
     if (videoRefreshp[index])
         video->postMessage(this, APPLEII_REFRESH_VIDEO, NULL);
+    
+	writeMapp[index]->write(address, value);
 }
 
 OEChar *AppleIIAddressDecoder::getMemory(OEAddress startAddress, OEAddress endAddress)

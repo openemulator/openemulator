@@ -344,6 +344,9 @@ void RDCFFA1::write(OEAddress address, OEChar value)
 
 void RDCFFA1::updateMemory(bool value)
 {
+    if (!memoryBus)
+        return;
+    
     OEInt message = value ? ADDRESSDECODER_MAP : ADDRESSDECODER_UNMAP;
     
     MemoryMap memoryMap;
@@ -353,24 +356,21 @@ void RDCFFA1::updateMemory(bool value)
     memoryMap.endAddress = 0x8fff;
     memoryMap.read = true;
     memoryMap.write = true;
-    if (memoryBus)
-        memoryBus->postMessage(this, message, &memoryMap);
+    memoryBus->postMessage(this, message, &memoryMap);
     
     memoryMap.component = rom;
     memoryMap.startAddress = 0x9000;
     memoryMap.endAddress = 0xaeff;
     memoryMap.read = true;
     memoryMap.write = false;
-    if (memoryBus)
-        memoryBus->postMessage(this, message, &memoryMap);
+    memoryBus->postMessage(this, message, &memoryMap);
     
     memoryMap.component = this;
     memoryMap.startAddress = 0xaf00;
     memoryMap.endAddress = 0xafff;
     memoryMap.read = true;
     memoryMap.write = true;
-    if (memoryBus)
-        memoryBus->postMessage(this, message, &memoryMap);
+    memoryBus->postMessage(this, message, &memoryMap);
 }
 
 bool RDCFFA1::openDiskImage(string path)

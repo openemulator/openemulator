@@ -289,8 +289,6 @@ void Monitor::updateBezel()
     switch(powerState)
     {
         case CONTROLBUS_POWERSTATE_OFF:
-            canvas->postMessage(this, CANVAS_CLEAR, NULL);
-            
             bezel = CANVAS_BEZEL_POWER;
             
             break;

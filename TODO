@@ -1,7 +1,7 @@
 ==1.0.3==
-* Improve video inhibition so video is only rendered when displayed
-* Fix video not disabled when powered off (CTRL+CMD+BACKSPACE)
-* Fix dragging a disk image to a canvas does not mount when canvas is not in focus
+* Implement Apple Graphics Tablet
+* Fix replace monitor+emulation lock problem (happens when a monitor is replaced and selected)
+* Fix CFFA multi-partition operation
 
 * Fix IAC 45, beautiful boot
 * Fix Disk II not booting sometimes when emulation was loaded from disk
@@ -10,11 +10,9 @@
 * Fix libdiskimage GCR53
 * Fix Disk II controller for writing to disk
 
-* Implement Apple Graphics Tablet
 * Implement Apple Silentype Interface Card
 * Implement Silentype printer
 * Fix [CanvasView update] problem in paper view
-* Fix replace monitor+emulation lock problem (happens when a monitor is replaced and selected)
 
 ==1.0.4==
 * Implement Apple III

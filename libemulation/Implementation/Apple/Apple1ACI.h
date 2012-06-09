@@ -26,5 +26,5 @@ private:
     OEComponent *memoryBus;
     OEComponent *rom;
     
-    void mapMemory(int message);
+    void updateMemory(bool value);
 };

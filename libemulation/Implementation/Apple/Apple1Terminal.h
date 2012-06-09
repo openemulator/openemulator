@@ -2,7 +2,7 @@
 /**
  * libemulation
  * Apple-1 Terminal
- * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2010-2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Implements an Apple-1 terminal
@@ -49,7 +49,7 @@ private:
     // State
     OEChar *vramp;
     OEData font;
-    bool canvasShouldUpdate;
+    bool updateCanvas;
     
     OEImage image;
     
@@ -61,12 +61,15 @@ private:
     bool isRTS;
     queue<OEChar> pasteBuffer;
     
-    void scheduleNextTimer(OESLong cycles);
     void loadFont(OEData *data);
-    void vsync();
+    
+    void scheduleNextTimer(OESLong cycles);
+    void drawFrame();
+    
     void clearScreen();
     void putChar(OEChar c);
     void sendKey(CanvasUnicodeChar key);
+    
     void copy(wstring *s);
     void paste(wstring *s);
     void emptyPasteBuffer();

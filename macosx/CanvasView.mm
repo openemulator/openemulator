@@ -461,7 +461,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
         
         DocumentController *documentController;
         documentController = [NSDocumentController sharedDocumentController];
-        return [documentController application:NSApp openFile:path];
+        return [documentController openFile:path inWindow:[self window]];
     }
     else if ([[pasteboard types] containsObject:NSStringPboardType])
     {

@@ -18,7 +18,7 @@
 #define CLOCK_FREQUENCY 17430000
 
 #define RAM_SIZE        0x800
-#define RAM_MASK        0x7ff
+#define RAM_MASK        (RAM_SIZE - 1)
 
 #define FONT_CHARNUM    0x80
 #define FONT_CHARWIDTH  8
@@ -28,8 +28,9 @@
 
 VidexVideoterm::VidexVideoterm() : MC6845()
 {
-    video = NULL;
     ram = NULL;
+    bankedRAM = NULL;
+    video = NULL;
     gamePort = NULL;
     
     ramBank = 0;
@@ -37,7 +38,8 @@ VidexVideoterm::VidexVideoterm() : MC6845()
     an0 = false;
     colorKiller = false;
     
-    monitorRequest = false;
+    monitorConnected = false;
+    monitorCaptured = false;
     cellWidth = 9;
     
     image.setFormat(OEIMAGE_LUMINANCE);
@@ -79,23 +81,21 @@ bool VidexVideoterm::setRef(string name, OEComponent *ref)
 {
     if (name == "ram")
         ram = ref;
-    else if (name == "ramOffset")
-        ramOffset = ref;
+    else if (name == "bankedRAM")
+        bankedRAM = ref;
     else if (name == "video")
     {
         if (video)
         {
             video->removeObserver(this, CANVAS_DID_COPY);
-            video->removeObserver(this, APPLEII_MONITOR_WAS_CONNECTED);
-            video->removeObserver(this, APPLEII_MONITOR_WAS_DISCONNECTED);
+            video->removeObserver(this, APPLEII_MONITOR_DID_CHANGE);
             video->removeObserver(this, APPLEII_COLORKILLER_DID_CHANGE);
         }
         video = ref;
         if (video)
         {
             video->addObserver(this, CANVAS_DID_COPY);
-            video->addObserver(this, APPLEII_MONITOR_WAS_CONNECTED);
-            video->addObserver(this, APPLEII_MONITOR_WAS_DISCONNECTED);
+            video->addObserver(this, APPLEII_MONITOR_DID_CHANGE);
             video->addObserver(this, APPLEII_COLORKILLER_DID_CHANGE);
         }
     }
@@ -128,9 +128,9 @@ bool VidexVideoterm::init()
     if (!MC6845::init())
         return false;
     
-    if (!ramOffset)
+    if (!bankedRAM)
     {
-        logMessage("ramOffset not connected");
+        logMessage("bankedRAM not connected");
         
         return false;
     }
@@ -163,7 +163,10 @@ bool VidexVideoterm::init()
     updateRAMBank();
     
     if (video)
-        video->postMessage(this, APPLEII_GET_COLORKILLER, &colorKiller);
+    {
+        video->postMessage(this, APPLEII_IS_MONITOR_CONNECTED, &monitorConnected);
+        video->postMessage(this, APPLEII_IS_COLORKILLER_ENABLED, &colorKiller);
+    }
     if (gamePort)
         gamePort->postMessage(this, APPLEII_GET_AN0, &an0);
     
@@ -201,17 +204,20 @@ void VidexVideoterm::update()
 
 void VidexVideoterm::dispose()
 {
-    an0 = false;
-    colorKiller = false;
+    monitorConnected = false;
     
     updateVideoEnabled();
+    
+    MC6845::dispose();
 }
 
 void VidexVideoterm::notify(OEComponent *sender, int notification, void *data)
 {
     MC6845::notify(sender, notification, data);
     
-    if (sender == video)
+    if (sender == ram)
+        refreshVideo();
+    else if (sender == video)
     {
         switch (notification)
         {
@@ -220,12 +226,11 @@ void VidexVideoterm::notify(OEComponent *sender, int notification, void *data)
                 
                 break;
                 
-            case APPLEII_MONITOR_WAS_CONNECTED:
-                refreshVideo();
+            case APPLEII_MONITOR_DID_CHANGE:
+                monitorConnected = *((bool *) data);
                 
-                break;
+                updateVideoEnabled();
                 
-            case APPLEII_MONITOR_WAS_DISCONNECTED:
                 break;
                 
             case APPLEII_COLORKILLER_DID_CHANGE:
@@ -242,8 +247,6 @@ void VidexVideoterm::notify(OEComponent *sender, int notification, void *data)
         
         updateVideoEnabled();
     }
-    else if (sender == ram)
-        refreshVideo();
 }
 
 OEChar VidexVideoterm::read(OEAddress address)
@@ -306,7 +309,7 @@ void VidexVideoterm::updateRAMBank()
 {
     OEAddress offset = 0x200 * ramBank - 0x400;
     
-    ramOffset->postMessage(this, ADDRESSOFFSET_SETOFFSET, &offset);
+    bankedRAM->postMessage(this, ADDRESSOFFSET_SETOFFSET, &offset);
 }
 
 void VidexVideoterm::setCellWidth(OEInt value)
@@ -321,17 +324,34 @@ void VidexVideoterm::setCellWidth(OEInt value)
 
 void VidexVideoterm::updateVideoEnabled()
 {
-    bool newVideoEnabled = (an0 && colorKiller);
+    bool newMonitorCaptured = (monitorConnected && 
+                               an0 &&
+                               colorKiller &&
+                               (powerState != CONTROLBUS_POWERSTATE_OFF));
+    
+    bool newVideoEnabled = (newMonitorCaptured &&
+                            !inReset);
     
     if (videoEnabled != newVideoEnabled)
     {
         videoEnabled = newVideoEnabled;
         
-        video->postMessage(this, (videoEnabled ? APPLEII_REQUEST_MONITOR :
-                                  APPLEII_RELEASE_MONITOR), NULL);
-        
-        if (videoEnabled)
+        if (!videoEnabled)
+        {
+            image.fill(OEColor());
+            
+            video->postMessage(this, CANVAS_CLEAR, NULL);
+        }
+        else
             refreshVideo();
+    }
+    
+    if (monitorCaptured != newMonitorCaptured)
+    {
+        monitorCaptured = newMonitorCaptured;
+        
+        video->postMessage(this, (monitorCaptured ? APPLEII_REQUEST_MONITOR :
+                                  APPLEII_RELEASE_MONITOR), NULL);
     }
 }
 
@@ -400,8 +420,7 @@ void VidexVideoterm::drawLine(OESInt y, OESInt x0, OESInt x1)
         OEInt i = drawMemory[address & RAM_MASK];
         OEChar *m;
         
-        if ((address == cursorAddress.w.l) &&
-            blink)
+        if ((address == cursorAddress.w.l) && blink)
         {
             OEInt rasterY = y % scanline;
             
@@ -418,8 +437,7 @@ void VidexVideoterm::drawLine(OESInt y, OESInt x0, OESInt x1)
 
 void VidexVideoterm::postImage()
 {
-    if (videoEnabled)
-        video->postMessage(this, CANVAS_POST_IMAGE, &image);
+    video->postMessage(this, CANVAS_POST_IMAGE, &image);
 }
 
 void VidexVideoterm::copy(wstring *s)

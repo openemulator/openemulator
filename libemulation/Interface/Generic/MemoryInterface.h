@@ -19,8 +19,6 @@ typedef enum
 {
     ADDRESSDECODER_MAP,
     ADDRESSDECODER_UNMAP,
-    
-    ADDRESSDECODER_END,
 } AddressDecoderMessage;
 
 typedef enum
@@ -72,7 +70,7 @@ typedef struct
 
 typedef enum
 {
-    VIDEORAM_DID_CHANGE,
+    VIDEORAM_WILL_CHANGE,
 } VideoRAMNotification;
 
 #endif

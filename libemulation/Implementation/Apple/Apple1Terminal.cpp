@@ -2,7 +2,7 @@
 /**
  * libemulation
  * Apple-1 Terminal
- * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2010-2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Implements an Apple-1 terminal
@@ -48,7 +48,7 @@ Apple1Terminal::Apple1Terminal()
     splashScreen = false;
     splashScreenActive = false;
     
-    canvasShouldUpdate = true;
+    updateCanvas = true;
     image.setFormat(OEIMAGE_LUMINANCE);
     image.setSize(OEMakeSize(SCREEN_WIDTH, SCREEN_HEIGHT));
     cursorActive = false;
@@ -204,14 +204,14 @@ bool Apple1Terminal::init()
     
     scheduleNextTimer(0);
     
-    canvasShouldUpdate = true;
+    update();
     
     return true;
 }
 
 void Apple1Terminal::update()
 {
-    canvasShouldUpdate = true;
+    updateCanvas = true;
 }
 
 void Apple1Terminal::dispose()
@@ -281,13 +281,18 @@ void Apple1Terminal::notify(OEComponent *sender, int notification, void *data)
                         controlBus->postMessage(this, CONTROLBUS_ASSERT_RESET, NULL);
                     }
                     
-                    canvasShouldUpdate = true;
+                    updateCanvas = true;
                 }
                 
                 powerState = *((ControlBusPowerState *)data);
                 
                 if (powerState == CONTROLBUS_POWERSTATE_OFF)
+                {
+                    if (monitor)
+                        monitor->postMessage(this, CANVAS_CLEAR, NULL);
+                    
                     clearScreen();
+                }
                 
                 break;
                 
@@ -299,12 +304,7 @@ void Apple1Terminal::notify(OEComponent *sender, int notification, void *data)
                 break;
                 
             case CONTROLBUS_TIMER_DID_FIRE:
-                vsync();
-                
                 scheduleNextTimer(*((OESLong *) data));
-                
-                postNotification(this, RS232_CTS_DID_ASSERT, NULL);
-                postNotification(this, RS232_CTS_DID_CLEAR, NULL);
                 
                 break;
         }
@@ -346,27 +346,20 @@ void Apple1Terminal::notify(OEComponent *sender, int notification, void *data)
     }
 }
 
-void Apple1Terminal::scheduleNextTimer(OESLong cycles)
-{
-    cycles += 262 * 61;
-    
-    controlBus->postMessage(this, CONTROLBUS_SCHEDULE_TIMER, &cycles);
-}
-
 void Apple1Terminal::loadFont(OEData *data)
 {
     if (data->size() < FONT_HEIGHT)
         return;
     
-    int cMask = (int) getNextPowerOf2(data->size() / FONT_HEIGHT) - 1;
+    OEInt cMask = (OEInt) getNextPowerOf2(data->size() / FONT_HEIGHT) - 1;
     
     font.resize(FONT_SIZE * FONT_HEIGHT * FONT_WIDTH);
     
-    for (int c = 0; c < FONT_SIZE; c++)
+    for (OEInt c = 0; c < FONT_SIZE; c++)
     {
-        for (int y = 0; y < FONT_HEIGHT; y++)
+        for (OEInt y = 0; y < FONT_HEIGHT; y++)
         {
-            for (int x = 0; x < FONT_WIDTH; x++)
+            for (OEInt x = 0; x < FONT_WIDTH; x++)
             {
                 bool b = (data->at((c & cMask) * FONT_HEIGHT + y) << (x >> 1)) & 0x40;
                 
@@ -376,17 +369,8 @@ void Apple1Terminal::loadFont(OEData *data)
     }
 }
 
-// Copy a 14-pixel segment
-#define copySegment(x) \
-*((OELong *)(p + x * SCREEN_WIDTH + 0)) = *((OELong *)(f + x * FONT_WIDTH + 0));\
-*((OEInt *)(p + x * SCREEN_WIDTH + 8)) = *((OEInt *)(f + x * FONT_WIDTH + 8));\
-*((OEShort *)(p + x * SCREEN_WIDTH + 12)) = *((OEShort *)(f + x * FONT_WIDTH + 12));
-
-void Apple1Terminal::vsync()
+void Apple1Terminal::scheduleNextTimer(OESLong cycles)
 {
-    if (powerState == CONTROLBUS_POWERSTATE_OFF)
-        return;
-    
     if (splashScreenActive)
         cursorActive = false;
     else if (powerState == CONTROLBUS_POWERSTATE_ON)
@@ -398,11 +382,33 @@ void Apple1Terminal::vsync()
             cursorActive = !cursorActive;
             cursorCount = cursorActive ? BLINK_ON : BLINK_OFF;
             
-            canvasShouldUpdate = true;
+            updateCanvas = true;
         }
     }
     
-    if (!canvasShouldUpdate)
+    postNotification(this, RS232_CTS_DID_ASSERT, NULL);
+    postNotification(this, RS232_CTS_DID_CLEAR, NULL);
+    
+    drawFrame();
+    
+    cycles += 262 * 61;
+    controlBus->postMessage(this, CONTROLBUS_SCHEDULE_TIMER, &cycles);
+}
+
+// Copy a 14-pixel segment
+#define copySegment(x) \
+*((OELong *)(p + x * SCREEN_WIDTH + 0)) = *((OELong *)(f + x * FONT_WIDTH + 0));\
+*((OEInt *)(p + x * SCREEN_WIDTH + 8)) = *((OEInt *)(f + x * FONT_WIDTH + 8));\
+*((OEShort *)(p + x * SCREEN_WIDTH + 12)) = *((OEShort *)(f + x * FONT_WIDTH + 12));
+
+void Apple1Terminal::drawFrame()
+{
+    if (!updateCanvas)
+        return;
+    
+    updateCanvas = false;
+    
+    if (!monitor)
         return;
     
     if (!vramp)
@@ -416,13 +422,13 @@ void Apple1Terminal::vsync()
     if (cursorActive)
         vramp[cursorY * BLOCK_WIDTH + cursorX] = '@';
     
-    for (int y = 0; y < BLOCK_HEIGHT; y++)
+    for (OEInt y = 0; y < BLOCK_HEIGHT; y++)
     {
         OEChar *p = (ip + y * SCREEN_WIDTH * CHAR_HEIGHT +
                      SCREEN_ORIGIN_Y * SCREEN_WIDTH +
                      SCREEN_ORIGIN_X);
         
-        for (int x = 0; x < BLOCK_WIDTH; x++)
+        for (OEInt x = 0; x < BLOCK_WIDTH; x++)
         {
             OEChar i = vramp[y * BLOCK_WIDTH + x] & FONT_SIZE_MASK;
             OEChar *f = fp + i * FONT_HEIGHT * FONT_WIDTH;
@@ -440,13 +446,10 @@ void Apple1Terminal::vsync()
         }
     }
     
-    if (monitor)
-        monitor->postMessage(this, CANVAS_POST_IMAGE, &image);
+    monitor->postMessage(this, CANVAS_POST_IMAGE, &image);
     
     // Remove cursor
     vramp[cursorY * BLOCK_WIDTH + cursorX] = cursorChar;
-    
-    canvasShouldUpdate = false;
 }
 
 void Apple1Terminal::clearScreen()
@@ -459,7 +462,7 @@ void Apple1Terminal::clearScreen()
     cursorX = 0;
     cursorY = 0;
     
-    canvasShouldUpdate = true;
+    updateCanvas = true;
 }
 
 void Apple1Terminal::putChar(OEChar c)
@@ -472,7 +475,7 @@ void Apple1Terminal::putChar(OEChar c)
         cursorX = 0;
         cursorY++;
         
-        canvasShouldUpdate = true;
+        updateCanvas = true;
     }
     else if ((c >= 0x20) && (c <= 0x7f))
     {
@@ -485,7 +488,7 @@ void Apple1Terminal::putChar(OEChar c)
             cursorY++;
         }
         
-        canvasShouldUpdate = true;
+        updateCanvas = true;
     }
     
     if (cursorY >= BLOCK_HEIGHT)
@@ -495,7 +498,7 @@ void Apple1Terminal::putChar(OEChar c)
         memmove(vramp, vramp + BLOCK_WIDTH, (BLOCK_HEIGHT - 1) * BLOCK_WIDTH);
         memset(vramp + (BLOCK_HEIGHT - 1) * BLOCK_WIDTH, ' ', BLOCK_WIDTH);
         
-        canvasShouldUpdate = true;
+        updateCanvas = true;
     }
 }
 
@@ -520,11 +523,11 @@ void Apple1Terminal::copy(wstring *s)
     if (!vramp)
         return;
     
-    for (int y = 0; y < BLOCK_HEIGHT; y++)
+    for (OEInt y = 0; y < BLOCK_HEIGHT; y++)
     {
         wstring line;
         
-        for (int x = 0; x < BLOCK_WIDTH; x++)
+        for (OEInt x = 0; x < BLOCK_WIDTH; x++)
             line += vramp[y * BLOCK_WIDTH + x] & 0x7f;
         
         line = rtrim(line);
@@ -536,7 +539,7 @@ void Apple1Terminal::copy(wstring *s)
 
 void Apple1Terminal::paste(wstring *s)
 {
-    for (int i = 0; i < s->size(); i++)
+    for (OEInt i = 0; i < s->size(); i++)
     {
         if (s->at(i) <= 0x80)
             pasteBuffer.push(s->at(i));

@@ -20,9 +20,12 @@ public:
 	bool setRef(string name, OEComponent *ref);
 	bool init();
 	
+    void notify(OEComponent *sender, int notification, void *data);
+    
 private:
 	OEComponent *device;
 	OEComponent *canvas;
+    OEComponent *io;
 	
 	string imagePath;
 };

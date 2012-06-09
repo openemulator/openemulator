@@ -30,7 +30,7 @@ public:
     
 private:
     OEComponent *ram;
-    OEComponent *ramOffset;
+    OEComponent *bankedRAM;
     OEComponent *video;
     OEComponent *gamePort;
     
@@ -41,8 +41,8 @@ private:
     bool an0;
     bool colorKiller;
     
-    bool monitorRequest;
-    bool videoEnabled;
+    bool monitorConnected;
+    bool monitorCaptured;
     
     OESInt cellWidth;
     

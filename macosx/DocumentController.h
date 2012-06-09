@@ -54,6 +54,7 @@
                                     error:(NSError **)outError;
 - (id)makeUntitledDocumentWithTemplateURL:(NSURL *)absoluteURL
                                     error:(NSError **)outError;
+- (BOOL)openFile:(NSString *)path inWindow:(NSWindow *)window;
 
 - (void)lockEmulation;
 - (void)unlockEmulation;

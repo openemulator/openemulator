@@ -17,7 +17,7 @@ RAM::RAM()
     size = 0;
     
     controlBus = NULL;
-    powerState = CONTROLBUS_POWERSTATE_ON;
+    powerState = CONTROLBUS_POWERSTATE_OFF;
 }
 
 bool RAM::setValue(string name, string value)
@@ -115,10 +115,10 @@ bool RAM::postMessage(OEComponent *sender, int message, void *data)
 
 void RAM::notify(OEComponent *sender, int notification, void *data)
 {
-    powerState = *((ControlBusPowerState *)data);
-    
     if (powerState == CONTROLBUS_POWERSTATE_OFF)
         initMemory();
+    
+    powerState = *((ControlBusPowerState *)data);
 }
 
 OEChar RAM::read(OEAddress address)
@@ -135,6 +135,6 @@ void RAM::initMemory()
 {
     OEAddress mask = (int) powerOnPattern.size() - 1;
     
-    for (int i = 0; i < this->data.size(); i++)
+    for (OEInt i = 0; i < this->data.size(); i++)
         data[i] = powerOnPattern[i & mask];
 }

@@ -1,7 +1,7 @@
 
 /**
  * libemulator
- * Apple II Slot Memory
+ * Apple II Slot Controller
  * (C) 2010-2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
@@ -10,10 +10,12 @@
 
 #include "OEComponent.h"
 
-class AppleIISlotMemory : public OEComponent
+#include "MemoryInterface.h"
+
+class AppleIISlotController : public OEComponent
 {
 public:
-    AppleIISlotMemory();
+    AppleIISlotController();
     
 	bool setValue(string name, string value);
     bool getValue(string name, string& value);
@@ -21,16 +23,23 @@ public:
 	bool init();
     void dispose();
     
+    bool postMessage(OEComponent *sender, int message, void *data);
+    
     void notify(OEComponent *sender, int notification, void *data);
     
 	OEChar read(OEAddress address);
 	void write(OEAddress address, OEChar value);
 	
 private:
-    OEComponent *memoryBus;
     OEComponent *memory;
+    OEComponent *memoryBus;
 	
 	bool en;
+    
+    MemoryMapsConf conf;
+    MemoryMapsRef ref;
+    
+    MemoryMaps memoryMaps;
     
     void enableSlotExpansion(bool value);
     void updateSlotExpansion(bool value);

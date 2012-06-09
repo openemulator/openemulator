@@ -1,19 +1,14 @@
-==Shadows==
-The shadow for OpenEmulator images is done as follows.
-
-* Horizontal size is set to 120 pixels
-* A 3px offset shadow is drawn with 3px blur, at 20% (check if it is really 20%), 90 degrees
-* Canvas is then resized to 128x128
-
-
 =Emulation Description Language 1.0=
-EDL (Emulation Description Language) is a language for describing software emulations of generic computer systems.
+EDL (Emulation Description Language) is an description language written in XML that is useful for describing software emulations of generic computer systems.
 
-An emulation is described in terms of devices. Each device represents a distinct physical entity, for example a floppy disk drive, a memory expansion, or a printer.
+An emulation consists of a collection of devices. Each device represents a distinct physical entity, for example a floppy disk drive, a memory expansion, or a printer.
 
-At a lower level, each device is described as a collection of reusable software components, for example RAM, DMA controllers or CPUs. EDL provides a way for interconnecting these software components, as well as for storing their states.
+At a lower level, each device consists of a collection of components. A component is a reusable software component, for example RAM, a DMA controller or a CPU.
 
-This document describes the version 1.0 of this specification.
+EDL stores the following information:
+
+* It describes the wiring of components
+* It describes the state of the components
 
 ==Definitions==
 * This document uses quotes for indicating the start and end of a string.
@@ -26,13 +21,15 @@ This document describes the version 1.0 of this specification.
 * Labels should be expressed in the native language of the device. If unclear, english should be used
 
 ==EDL Format==
-EDL files can be stored stand-alone (for storing device descriptions only), or packaged (for storing both device descriptions and state).
+EDL files can be stored stand-alone (for storing device descriptions), or packaged (for storing both device descriptions and state).
 
 The standalone format consists of a file of extension ".xml". This file should store the EDL description.
 
-The packaged format consists of a folder of extension ".emulation". This folder should contain an "info.xml" file for storing the EDL description. The folder can also contain component state files (e.g. for storing RAM content).
+The packaged format consists of a folder of extension ".emulation". This folder should contain an "info.xml" file for storing the EDL description. The folder 
 
-The packaged format can also be compressed using ZIP compression. All files in the archive (info.xml and component state files) should be stored at the ZIP root level, and the resulting file must be of extension ".emulation". 
+might also contain component state files (e.g. for storing RAM content).
+
+The packaged format can also be compressed using ZIP compression. All files in the archive (info.xml and component state files) should be stored at the ZIP root level, and the compressed ZIP file must have extension ".emulation". 
 
 ==EDL Tags==
 
@@ -113,7 +110,7 @@ I has the following tags:
 ==="resource"===
 A "resource" element defines an array of binary resource data which is set (through the OEComponent.setResource call) when the emulation is instantiated.
 
-I has the following tags:
+It has the following tags:
 * name: The name of the resource
 * src: A filename in the resource folder.
 
@@ -125,22 +122,22 @@ The "ref" tags in the EDL description describes references to other components o
 ==Architecture==
 * EDL is inlet-centric. This means that it is the inlet component that is notified about a connected device. 
 * EDL supports devices with more than one outlet.
-* When deleting a device, a recursive deletion for all connected inlets should be performed first. Only then should the device's outlets be disconnected. A circularity check should be performed to avoid loop conditions.
+* When deleting a device, a recursive deletion for all connected inlets should be performed first. Only then should the device's outlets be disconnected. A circularity check is performed to avoid loops.
 
 ==Event order==
-The order of events during instantiation and initialization of an EDL is:
+The order of events for the lifetime of an EDL is:
 
-* All components are instantiated
-* Device-centric setter notifications (properties, data and resources) are sent to all components
-* Connection notifications are sent to all components.
+* Components are created.
+* Components's properties are configured (using the setter functions for values, refs and data).
+* Components are initialized (through the init() call).
 
 The order of events when saving an EDL file is:
-* Properties and data getter notifications are sent to all components to update the EDL
+* Component's properties are retrieved (using the getter functions for values and data).
 * The EDL file is saved
 
 The order of events when adding an EDL to an EDL file is:
-* The new components are instantiated
-* Device-centric setter notifications (properties, data and resources) are sent to new components
+* New components are created.
+* New components's properties are configured (using the setter functions for values, refs and data).
 * The EDL files are merged. New device names are chosen uniquely.
 * Connection notifications are sent to the inlets that are connected to the new device.
 

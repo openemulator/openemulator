@@ -298,13 +298,20 @@ void OEImage::print(OEImage& image, OEPoint origin)
     for (OEInt y = 0; y < image.size.height; y++)
         for (OEInt x = 0; x < image.size.width; x++)
         {
-            OEImagePixel p1 = getPixel(x + origin.x, y + origin.y);
-            OEImagePixel p2 = image.getPixel(x, y);
+            OEColor p1 = getPixel(x + origin.x, y + origin.y);
+            OEColor p2 = image.getPixel(x, y);
             
             setPixel(x + origin.x, y + origin.y, darken(p1, p2));
         }
     
     return;
+}
+
+void OEImage::fill(OEColor color)
+{
+    for (OEInt y = 0; y < size.height; y++)
+        for (OEInt x = 0; x < size.width; x++)
+            setPixel(x, y, color);
 }
 
 void OEImage::setSize(OESize s, OEChar fillByte)
@@ -360,27 +367,27 @@ void OEImage::setSize(OESize s, OEChar fillByte)
         pixels.resize(getBytesPerRow() * size.height);
 }
 
-OEImagePixel OEImage::getPixel(OEInt x, OEInt y)
+OEColor OEImage::getPixel(OEInt x, OEInt y)
 {
     OEChar *p = &pixels[y * getBytesPerRow() + x * getBytesPerPixel()];
     
     switch (format)
     {
         case OEIMAGE_LUMINANCE:
-            return OEImagePixel(p[0], p[0], p[0]);
+            return OEColor(p[0], p[0], p[0]);
             
         case OEIMAGE_RGB:
-            return OEImagePixel(p[0], p[1], p[2]);
+            return OEColor(p[0], p[1], p[2]);
             
         case OEIMAGE_RGBA:
-            return OEImagePixel(p[0], p[1], p[2], p[3]);
+            return OEColor(p[0], p[1], p[2], p[3]);
             
         default:
-            return OEImagePixel();
+            return OEColor();
     }
 }
 
-void OEImage::setPixel(OEInt x, OEInt y, OEImagePixel value)
+void OEImage::setPixel(OEInt x, OEInt y, OEColor value)
 {
     OEChar *p = &pixels[y * getBytesPerRow() + x * getBytesPerPixel()];
     
@@ -410,7 +417,7 @@ void OEImage::setPixel(OEInt x, OEInt y, OEImagePixel value)
     }
 }
 
-OEImagePixel OEImage::darken(OEImagePixel p1, OEImagePixel p2)
+OEColor OEImage::darken(OEColor p1, OEColor p2)
 {
     OESInt r = (OESInt) p1.r + (OESInt) p2.r - 255;
     OESInt g = (OESInt) p1.g + (OESInt) p2.g - 255;
@@ -423,7 +430,7 @@ OEImagePixel OEImage::darken(OEImagePixel p1, OEImagePixel p2)
     if (b < 0)
         b = 0;
     
-    return OEImagePixel(r, g, b);
+    return OEColor(r, g, b);
 }
 
 bool OEImage::validatePNGHeader(FILE *fp)

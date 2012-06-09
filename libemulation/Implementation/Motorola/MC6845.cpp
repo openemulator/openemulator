@@ -61,6 +61,8 @@ MC6845::MC6845()
     
     addressRegister = 0;
     
+    videoEnabled = false;
+    
     imageModified = false;
     
     frameStart = 0;
@@ -155,12 +157,16 @@ bool MC6845::setRef(string name, OEComponent *ref)
         {
             controlBus->removeObserver(this, CONTROLBUS_SCHEDULE_TIMER);
             controlBus->removeObserver(this, CONTROLBUS_POWERSTATE_DID_CHANGE);
+            controlBus->removeObserver(this, CONTROLBUS_RESET_DID_ASSERT);
+            controlBus->removeObserver(this, CONTROLBUS_RESET_DID_CLEAR);
         }
         controlBus = ref;
         if (controlBus)
         {
             controlBus->addObserver(this, CONTROLBUS_SCHEDULE_TIMER);
             controlBus->addObserver(this, CONTROLBUS_POWERSTATE_DID_CHANGE);
+            controlBus->addObserver(this, CONTROLBUS_RESET_DID_ASSERT);
+            controlBus->addObserver(this, CONTROLBUS_RESET_DID_CLEAR);
         }
     }
     else if (name == "floatingBus")
@@ -194,6 +200,11 @@ bool MC6845::init()
     return true;
 }
 
+void MC6845::dispose()
+{
+    controlBus->postMessage(this, CONTROLBUS_INVALIDATE_TIMERS, NULL);
+}
+
 void MC6845::notify(OEComponent *sender, int notification, void *data)
 {
     if (sender == controlBus)
@@ -203,10 +214,26 @@ void MC6845::notify(OEComponent *sender, int notification, void *data)
             case CONTROLBUS_POWERSTATE_DID_CHANGE:
                 powerState = *((ControlBusPowerState *)data);
                 
+                updateVideoEnabled();
+                
                 break;
                 
             case CONTROLBUS_TIMER_DID_FIRE:
                 scheduleTimer(*((OESLong *)data));
+                
+                break;
+                
+            case CONTROLBUS_RESET_DID_ASSERT:
+                inReset = true;
+                
+                updateVideoEnabled();
+                
+                break;
+                
+            case CONTROLBUS_RESET_DID_CLEAR:
+                inReset = false;
+                
+                updateVideoEnabled();
                 
                 break;
         }
@@ -398,7 +425,7 @@ void MC6845::scheduleTimer(OESLong cycles)
     {
         imageModified = false;
         
-        if (powerState != CONTROLBUS_POWERSTATE_OFF)
+        if (videoEnabled)
             postImage();
     }
     
@@ -419,7 +446,6 @@ void MC6845::scheduleTimer(OESLong cycles)
     frameStart += cycles;
     
     cycles += ceil(frameCycleNum / clockMultiplier);
-    
     controlBus->postMessage(this, CONTROLBUS_SCHEDULE_TIMER, &cycles);
 }
 
@@ -440,7 +466,7 @@ void MC6845::updateVideo()
     
     OEInt cycleNum = min(pendingCycles, deltaCycles);
     
-    if (cycleNum)
+    if (cycleNum && videoEnabled)
     {
         pendingCycles -= cycleNum;
         

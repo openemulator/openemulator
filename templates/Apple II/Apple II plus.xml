@@ -165,7 +165,7 @@
         <property name="mapSlot7" value="0xf0-0xff"/>
     </component>
     <component id="appleIIplus.keyboard" class="AppleIIKeyboard">
-        <property name="type" value="Standard"/>
+        <property name="type" value="Shift-Key Mod"/>
         <property name="controlBus" ref="appleIIplus.controlBus"/>
         <property name="floatingBus" ref="appleIIplus.floatingBus"/>
         <property name="gamePort" ref="appleIIplus.gamePort"/>

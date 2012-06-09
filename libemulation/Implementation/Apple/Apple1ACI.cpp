@@ -49,14 +49,14 @@ bool Apple1ACI::init()
         return false;
     }
     
-    mapMemory(ADDRESSDECODER_MAP);
+    updateMemory(true);
     
     return true;
 }
 
 void Apple1ACI::dispose()
 {
-    mapMemory(ADDRESSDECODER_UNMAP);
+    updateMemory(false);
 }
 
 OEChar Apple1ACI::read(OEAddress address)
@@ -77,9 +77,13 @@ void Apple1ACI::write(OEAddress address, OEChar value)
     toggleAudioOutput();
 }
 
-void Apple1ACI::mapMemory(int message)
+void Apple1ACI::updateMemory(bool value)
 {
-    MemoryMaps memoryMaps;
+    if (!memoryBus)
+        return;
+    
+    OEInt message = value ? ADDRESSDECODER_MAP : ADDRESSDECODER_UNMAP;
+    
     MemoryMap memoryMap;
     
     memoryMap.component = this;
@@ -87,15 +91,12 @@ void Apple1ACI::mapMemory(int message)
     memoryMap.endAddress = 0xc0ff;
     memoryMap.read = true;
     memoryMap.write = true;
-    memoryMaps.push_back(memoryMap);
+    memoryBus->postMessage(this, message, &memoryMap);
     
     memoryMap.component = rom;
     memoryMap.startAddress = 0xc100;
     memoryMap.endAddress = 0xc1ff;
     memoryMap.read = true;
     memoryMap.write = false;
-    memoryMaps.push_back(memoryMap);
-    
-    if (memoryBus)
-        memoryBus->postMessage(this, message, &memoryMaps);
+    memoryBus->postMessage(this, message, &memoryMap);
 }

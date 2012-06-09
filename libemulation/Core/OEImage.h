@@ -48,10 +48,10 @@ typedef enum
     OEIMAGE_RGBA,
 } OEImageFormat;
 
-class OEImagePixel
+class OEColor
 {
 public:
-    OEImagePixel()
+    OEColor()
     {
         r = 0;
         g = 0;
@@ -59,7 +59,7 @@ public:
         a = 0xff;
     }
     
-    OEImagePixel(OEChar l)
+    OEColor(OEChar l)
     {
         r = l;
         g = l;
@@ -67,7 +67,7 @@ public:
         a = 0xff;
     }
     
-    OEImagePixel(OEChar r, OEChar g, OEChar b)
+    OEColor(OEChar r, OEChar g, OEChar b)
     {
         this->r = r;
         this->g = g;
@@ -75,7 +75,7 @@ public:
         a = 0xff;
     }
     
-    OEImagePixel(OEChar r, OEChar g, OEChar b, OEChar a)
+    OEColor(OEChar r, OEChar g, OEChar b, OEChar a)
     {
         this->r = r;
         this->g = g;
@@ -293,6 +293,7 @@ public:
     bool load(string path);
     bool load(OEData& data);
     void print(OEImage& image, OEPoint origin);
+    void fill(OEColor color);
     
 private:
     OEImageFormat format;
@@ -309,9 +310,9 @@ private:
     
     void init();
     void setSize(OESize s, OEChar fillByte);
-    OEImagePixel getPixel(OEInt x, OEInt y);
-    void setPixel(OEInt x, OEInt y, OEImagePixel value);
-    OEImagePixel darken(OEImagePixel p1, OEImagePixel p2);
+    OEColor getPixel(OEInt x, OEInt y);
+    void setPixel(OEInt x, OEInt y, OEColor value);
+    OEColor darken(OEColor p1, OEColor p2);
     bool validatePNGHeader(FILE *fp);
 };
 

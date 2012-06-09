@@ -32,14 +32,16 @@
 #include "AppleDiskDrive525.h"
 #include "AppleDiskIIInterfaceCard.h"
 #include "AppleGraphicsTablet.h"
+#include "AppleGraphicsTabletInterfaceCard.h"
 #include "AppleLanguageCard.h"
 #include "AppleIIAddressDecoder.h"
 #include "AppleIIAudioIn.h"
 #include "AppleIIAudioOut.h"
+#include "AppleIIDisableC800.h"
 #include "AppleIIFloatingBus.h"
 #include "AppleIIGamePort.h"
 #include "AppleIIKeyboard.h"
-#include "AppleIISlotMemory.h"
+#include "AppleIISlotController.h"
 #include "AppleIIVideo.h"
 #include "AppleSilentype.h"
 
@@ -85,14 +87,16 @@ OEComponent *OEComponentFactory::construct(const string& className)
     matchComponent(AppleDiskDrive525);
     matchComponent(AppleDiskIIInterfaceCard);
     matchComponent(AppleGraphicsTablet);
+    matchComponent(AppleGraphicsTabletInterfaceCard);
     matchComponent(AppleLanguageCard);
     matchComponent(AppleIIAddressDecoder);
     matchComponent(AppleIIAudioIn);
     matchComponent(AppleIIAudioOut);
+    matchComponent(AppleIIDisableC800);
     matchComponent(AppleIIFloatingBus);
     matchComponent(AppleIIGamePort);
     matchComponent(AppleIIKeyboard);
-    matchComponent(AppleIISlotMemory);
+    matchComponent(AppleIISlotController);
     matchComponent(AppleIIVideo);
     matchComponent(AppleSilentype);
     

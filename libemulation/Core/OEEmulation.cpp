@@ -603,11 +603,6 @@ void OEEmulation::deconfigureDevice(string deviceId)
             }
         }
     }
-    
-    for (set<OEComponent *>::iterator i = components.begin();
-         i != components.end();
-         i++)
-        (*i)->update();
 }
 
 void OEEmulation::deconfigureComponent(string id, xmlNodePtr children)

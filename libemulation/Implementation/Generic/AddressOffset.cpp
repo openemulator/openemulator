@@ -13,9 +13,9 @@
 
 AddressOffset::AddressOffset()
 {
-    offset = 0;
+    memory = NULL;
     
-    component = NULL;
+    offset = 0;
 }
 
 bool AddressOffset::setValue(string name, string value)
@@ -30,8 +30,8 @@ bool AddressOffset::setValue(string name, string value)
 
 bool AddressOffset::setRef(string name, OEComponent *ref)
 {
-    if (name == "component")
-        component = ref;
+    if (name == "memory")
+        memory = ref;
     else
         return false;
     
@@ -40,9 +40,9 @@ bool AddressOffset::setRef(string name, OEComponent *ref)
 
 bool AddressOffset::init()
 {
-    if (!component)
+    if (!memory)
     {
-        logMessage("component not connected");
+        logMessage("memory not connected");
         
         return false;
     }
@@ -62,10 +62,10 @@ bool AddressOffset::postMessage(OEComponent *sender, int message, void *data)
 
 OEChar AddressOffset::read(OEAddress address)
 {
-    return component->read(address + offset);
+    return memory->read(address + offset);
 }
 
 void AddressOffset::write(OEAddress address, OEChar value)
 {
-    component->write(address + offset, value);
+    memory->write(address + offset, value);
 }

@@ -13,10 +13,13 @@
 #include "DeviceInterface.h"
 #include "CanvasInterface.h"
 
+#include "AppleIIInterface.h"
+
 AppleGraphicsTablet::AppleGraphicsTablet()
 {
 	device = NULL;
 	canvas = NULL;
+    io = NULL;
 }
 
 bool AppleGraphicsTablet::setValue(string name, string value)
@@ -34,16 +37,29 @@ bool AppleGraphicsTablet::setRef(string name, OEComponent *ref)
 	if (name == "device")
 	{
 		if (device)
+        {
+            if (canvas)
+                canvas->removeObserver(this, CANVAS_POINTER_DID_CHANGE);
+            
 			device->postMessage(this,
                                 DEVICE_DESTROY_CANVAS,
                                 &canvas);
+        }
+        
 		device = ref;
 		if (device)
+        {
 			device->postMessage(this,
                                 DEVICE_CONSTRUCT_CANVAS,
                                 &canvas);
+            
+            if (canvas)
+                canvas->addObserver(this, CANVAS_POINTER_DID_CHANGE);
+        }
 	}
-	else
+	else if (name == "io")
+        io = ref;
+    else
 		return false;
 	
 	return true;
@@ -64,6 +80,13 @@ bool AppleGraphicsTablet::init()
         
 		return false;
 	}
+    
+    if (!io)
+    {
+		logMessage("io not connected");
+        
+		return false;
+    }
 	
 	CanvasDisplayConfiguration configuration;
 	OEImage image;
@@ -76,4 +99,9 @@ bool AppleGraphicsTablet::init()
 	canvas->postMessage(this, CANVAS_POST_IMAGE, &image);
 	
 	return true;
+}
+
+void AppleGraphicsTablet::notify(OEComponent *sender, int notification, void *data)
+{
+    postNotification(sender, notification, data);
 }

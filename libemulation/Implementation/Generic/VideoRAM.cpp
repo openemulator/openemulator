@@ -44,7 +44,7 @@ bool VideoRAM::init()
 
 void VideoRAM::write(OEAddress address, OEChar value)
 {
-    datap[address & mask] = value;
+    observer->notify(this, VIDEORAM_WILL_CHANGE, NULL);
     
-    observer->notify(this, VIDEORAM_DID_CHANGE, NULL);
+    datap[address & mask] = value;
 }

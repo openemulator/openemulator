@@ -29,6 +29,7 @@ public:
     bool getValue(string name, string& value);
     bool setRef(string name, OEComponent *ref);
     bool init();
+    void dispose();
     
     void notify(OEComponent *sender, int notification, void *data);
     
@@ -60,6 +61,9 @@ protected:
     OESInt posXBegin;
     OESInt posXEnd;
     
+    bool videoEnabled;
+    bool inReset;
+    
     float clockFrequency;
     
     OEInt frameCycleNum;
@@ -68,8 +72,11 @@ protected:
     
     MC6845Draw draw;
     
+    ControlBusPowerState powerState;
+    
     void refreshVideo();
     
+    virtual void updateVideoEnabled() = 0;
     virtual void updateTiming();
     virtual void postImage() = 0;
     
@@ -93,8 +100,6 @@ private:
     OEInt blinkFrameNum;
     OEInt blinkCount;
     bool blinkEnabled;
-    
-    ControlBusPowerState powerState;
     
     void setCursorStart(OEChar value);
     void scheduleTimer(OESLong cycles);
