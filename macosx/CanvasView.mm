@@ -1016,11 +1016,13 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     if (!canvas)
         return;
     
-    NSPoint position = [NSEvent mouseLocation];
+    NSPoint position = [self convertPoint:[theEvent locationInWindow]
+                                 fromView:nil];
     
     [document lockEmulation];
     
-    canvas->setMousePosition(position.x, position.y);
+    canvas->setMousePosition(position.x / NSWidth([self bounds]),
+                             position.y / NSHeight([self bounds]));
     canvas->moveMouse([theEvent deltaX], [theEvent deltaY]);
     
     [document unlockEmulation];

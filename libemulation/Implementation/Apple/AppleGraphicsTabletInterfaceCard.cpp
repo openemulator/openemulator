@@ -18,16 +18,18 @@ AppleGraphicsTabletInterfaceCard::AppleGraphicsTabletInterfaceCard()
     graphicsTablet = NULL;
     controlBus = NULL;
     floatingBus = NULL;
-    
-    lastCycles = 0;
-    
-    countEnabled = false;
-    count = 0;
+    memory = NULL;
     
     proximity = false;
     x = 0.5;
     y = 0.5;
     button = false;
+    
+    count = 0;
+    
+    timerEnabled = false;
+    timerCount = 0;
+    timerCycles = 0;
 }
 
 bool AppleGraphicsTabletInterfaceCard::setRef(string name, OEComponent *ref)
@@ -44,6 +46,16 @@ bool AppleGraphicsTabletInterfaceCard::setRef(string name, OEComponent *ref)
         controlBus = ref;
     else if (name == "floatingBus")
         floatingBus = ref;
+    else if (name == "memory")
+    {
+        if (memory)
+            memory->removeObserver(this, APPLEII_C800_DID_CHANGE);
+        memory = ref;
+        if (memory)
+            memory->addObserver(this, APPLEII_C800_DID_CHANGE);
+    }
+    else if (name == "audioCodec")
+        audioCodec = ref;
     else
         return false;
     
@@ -66,6 +78,15 @@ bool AppleGraphicsTabletInterfaceCard::init()
         return false;
     }
     
+    if (!memory)
+    {
+        logMessage("memory not connected");
+        
+        return false;
+    }
+    
+    memory->postMessage(this, APPLEII_IS_C800_ENABLED, &timerEnabled);
+    
     return true;
 }
 
@@ -73,50 +94,52 @@ void AppleGraphicsTabletInterfaceCard::notify(OEComponent *sender, int notificat
 {
     if (sender == graphicsTablet)
     {
-        switch (notification)
+        CanvasHIDEvent *event = (CanvasHIDEvent *) data;
+        
+        switch (event->usageId)
         {
             case CANVAS_P_PROXIMITY:
-                proximity = *((bool *)data);
+                proximity = event->value;
                 
                 break;
                 
             case CANVAS_P_X:
-                x = *((bool *)data);
+                x = event->value;
                 
                 break;
                 
             case CANVAS_P_Y:
-                y = *((bool *)data);
+                y = event->value;
                 
                 break;
                 
             case CANVAS_P_BUTTON1:
-                button = *((bool *)data);
+                button = event->value;
                 
                 break;
         }
     }
-    else
+    else if (sender == memory)
     {
         updateCount();
         
-        countEnabled = *((bool *)data);
-        count &= 0xf00;
+        // C800 did change
+        timerEnabled = *((bool *) data);
+        
+        if (!timerEnabled)
+            count &= 0xf00;
     }
 }
 
 OEChar AppleGraphicsTabletInterfaceCard::read(OEAddress address)
 {
+    updateCount();
+    
     switch (address & 0x3)
     {
         case 0:
         {
             // X Drive enabled
-            updateCount();
-            
-            bool proximity = false;
-            float x = 0;
-            
             if (proximity)
                 setTimer(x);
             
@@ -127,11 +150,6 @@ OEChar AppleGraphicsTabletInterfaceCard::read(OEAddress address)
         case 1:
         {
             // Y Drive enabled
-            updateCount();
-            
-            bool proximity = false;
-            float y = 0;
-            
             if (proximity)
                 setTimer(y);
             
@@ -140,17 +158,11 @@ OEChar AppleGraphicsTabletInterfaceCard::read(OEAddress address)
             return floatingBus->read(address);
         }
         case 2:
-            // Read 4-bit low counter
-            updateCount();
-            
-            return (floatingBus->read(address) & 0xf0) | (~count & 0xf);
+            // Read counter (lowest 4 bits)
+            return (floatingBus->read(address) & 0xf0) | (count & 0xf);
             
         case 3:
-            // Read 8-bit high counter
-            updateCount();
-            
-            bool button = false;
-            
+            // Read counter (highest 8 bits)
             count = (count & 0xff0) | button;
             
             return (count >> 4);
@@ -170,24 +182,28 @@ void AppleGraphicsTabletInterfaceCard::setTimer(float value)
     
     controlBus->postMessage(this, CONTROLBUS_GET_CYCLES, &cycles);
     
-    lastCycles = cycles + 4096 * value;
+    timerCycles = cycles;
+    timerCount = 4096 * value;
 }
 
 void AppleGraphicsTabletInterfaceCard::updateCount()
 {
-/*    OELong cycles;
+    OELong cycles;
     
     controlBus->postMessage(this, CONTROLBUS_GET_CYCLES, &cycles);
     
     // 7 MHz count clock
-    OELong countDelta = 7 * (cycles - lastCycles);
+    OELong delta = 7 * 7 * (cycles - timerCycles);
     
-    lastCycles = cycles;
+    if (delta > timerCount)
+        delta = timerCount;
     
-    if (countDelta > 2000)
-        countDelta = 2000;
+    timerCount -= (OEInt) delta;
+    timerCycles = cycles;
     
-    count += countDelta;*/
-    
-    count = 0x400;
+    if (timerEnabled)
+    {
+        count += (OEInt) delta;
+        count &= 0xfff;
+    }
 }

@@ -19,7 +19,6 @@ AppleGraphicsTablet::AppleGraphicsTablet()
 {
 	device = NULL;
 	canvas = NULL;
-    io = NULL;
 }
 
 bool AppleGraphicsTablet::setValue(string name, string value)
@@ -57,8 +56,6 @@ bool AppleGraphicsTablet::setRef(string name, OEComponent *ref)
                 canvas->addObserver(this, CANVAS_POINTER_DID_CHANGE);
         }
 	}
-	else if (name == "io")
-        io = ref;
     else
 		return false;
 	
@@ -81,13 +78,6 @@ bool AppleGraphicsTablet::init()
 		return false;
 	}
     
-    if (!io)
-    {
-		logMessage("io not connected");
-        
-		return false;
-    }
-	
 	CanvasDisplayConfiguration configuration;
 	OEImage image;
 	image.load(imagePath);

@@ -25,7 +25,6 @@ public:
 private:
 	OEComponent *device;
 	OEComponent *canvas;
-    OEComponent *io;
 	
 	string imagePath;
 };

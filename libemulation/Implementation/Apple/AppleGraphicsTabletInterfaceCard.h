@@ -27,16 +27,19 @@ private:
     OEComponent *graphicsTablet;
     OEComponent *controlBus;
     OEComponent *floatingBus;
-    
-    OELong lastCycles;
-    
-    bool countEnabled;
-    OEInt count;
+    OEComponent *memory;
+    OEComponent *audioCodec;
     
     bool proximity;
     float x;
     float y;
     bool button;
+    
+    OEInt count;
+    
+    bool timerEnabled;
+    OEInt timerCount;
+    OELong timerCycles;
     
     void setTimer(float value);
     void updateCount();

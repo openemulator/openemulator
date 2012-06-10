@@ -9,15 +9,6 @@
     <component id="appleGraphicsTablet.graphicsTablet" class="AppleGraphicsTablet">
         <property name="device" ref="appleGraphicsTablet"/>
         <property name="imagePath" value="${resourcePath}/images/Apple/Apple Graphics Tablet View.png"/>
-        <property name="audioCodec" ref="appleGraphicsTablet.audioCodec"/>
-    </component>
-    <component id="appleGraphicsTablet.audioCodec" class="AudioCodec">
-        <property name="audio" ref="audio"/>
-        <property name="controlBus" ref=""/>
-        <property name="timeAccuracy" value="0.000001"/>
-        <property name="filterSize" value="17"/>
-        <property name="lowFrequency" value="20"/>
-        <property name="highFrequency" value="10000"/>
     </component>
     
 </edl>

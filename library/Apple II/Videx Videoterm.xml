@@ -13,7 +13,6 @@
         <inlet ref="videxVideoterm.io" property="video" outletRef="video"/>
         <inlet ref="videxVideoterm.io" property="gamePort" outletRef="gamePort"/>
         <inlet ref="videxVideoterm.memory" property="memoryBus" outletRef="memoryBus"/>
-        <inlet ref="videxVideoterm.addressDecoder" property="floatingBus" outletRef="floatingBus"/>
         <inlet ref="videxVideoterm.disableC800" property="memoryBus" outletRef="memoryBus"/>
     </connector>
     <component id="videxVideoterm.ram" class="VideoRAM">

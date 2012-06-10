@@ -9,6 +9,7 @@
         <inlet ref="appleGraphicsTabletInterfaceCard.io" property="floatingBus" outletRef="floatingBus"/>
         <inlet ref="appleGraphicsTabletInterfaceCard.memory" property="memoryBus" outletRef="memoryBus"/>
         <inlet ref="appleGraphicsTabletInterfaceCard.disableC800" property="memoryBus" outletRef="memoryBus"/>
+        <inlet ref="appleGraphicsTabletInterfaceCard.audioCodec" property="controlBus" outletRef="controlBus"/>
     </connector>
     <port id="appleGraphicsTabletInterfaceCard.port" ref="" type="Apple Graphics Tablet Port" group="peripherals" label="Graphics Tablet Port" image="images/Connectors/Header1x6.png">
         <inlet ref="appleGraphicsTabletInterfaceCard.io" property="graphicsTablet" outletRef="graphicsTablet"/>
@@ -17,6 +18,8 @@
         <property name="controlBus" ref=""/>
         <property name="floatingBus" ref=""/>
         <property name="graphicsTablet" ref=""/>
+        <property name="memory" ref="appleGraphicsTabletInterfaceCard.memory"/>
+        <property name="audioCodec" ref="appleGraphicsTabletInterfaceCard.audioCodec"/>
     </component>
     <component id="appleGraphicsTabletInterfaceCard.memory" class="AppleIISlotController">
         <property name="memory" ref="appleGraphicsTabletInterfaceCard.rom"/>
@@ -33,6 +36,14 @@
     <component id="appleGraphicsTabletInterfaceCard.disableC800" class="AppleIIDisableC800">
         <property name="memory" ref="appleGraphicsTabletInterfaceCard.memory"/>
         <property name="memoryBus" ref=""/>
+    </component>
+    <component id="appleGraphicsTabletInterfaceCard.audioCodec" class="AudioCodec">
+        <property name="audio" ref="audio"/>
+        <property name="controlBus" ref=""/>
+        <property name="timeAccuracy" value="0.000001"/>
+        <property name="filterSize" value="17"/>
+        <property name="lowFrequency" value="20"/>
+        <property name="highFrequency" value="10000"/>
     </component>
     
 </edl>

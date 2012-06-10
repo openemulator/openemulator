@@ -2,7 +2,7 @@
 /**
  * libemulation
  * Canvas interface
- * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2010-2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Defines the canvas interface
@@ -29,14 +29,14 @@
 
 // Notifications:
 // * HID notifications use the CanvasHIDNotification structure
-// * Pointer coordinates are in (0..1) coordinates
+// * Pointer coordinates are in [0..1, 0..1] range (origin is top left)
 // * didCopy, didPaste is sent when the user requests copy/paste (wstring)
 // * didDelete is sent when the user requests delete
 // * didVSync is called from the video thread after vertical sync (CanvasVSync)
 //   It should be used for posting images or for requesting redraw
 // * willDraw is called from the video thread when an OpenGL canvas will be
 //   drawn (OESize)
-// * HID axes are in (0..1) coordinates
+// * HID values are in the [0..1] range
 
 // Multithreading, beware!
 // * didVSync and willDraw are sent from the drawing thread! Keep this in mind

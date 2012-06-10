@@ -1,5 +1,4 @@
 ==1.0.3==
-* Implement Apple Graphics Tablet
 * Fix replace monitor+emulation lock problem (happens when a monitor is replaced and selected)
 * Fix CFFA multi-partition operation
 
@@ -21,6 +20,7 @@
 * Implement TimeMaster II H.O.
 * Fix CTRL+ALT mouse capture
 * Refactorize PAAudio so an emulation is stopped while it is being configured. Increase thread priority
+* Mac OS X: fix window resizing when loading from disk (confusing emulation window size with canvas window size)
 
 ==1.0.5==
 * Implement Apple IIe
