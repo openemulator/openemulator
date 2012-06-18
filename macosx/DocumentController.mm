@@ -55,7 +55,7 @@ void hidDeviceEventOcurred(void *inContext, IOReturn inResult, void *inSender, I
         
         diskImagePathExtensions = [[NSArray alloc] initWithObjects:
                                    @"bin",
-                                   @"img", @"image", @"dmg", @"hdv", @"hfv", @"qcow", @"qcow2",
+                                   @"img", @"image", @"dmg", @"hdv", @"hfv", @"vdi", @"vmdk",
                                    @"iso", @"cdr",
                                    @"fdi",
                                    @"dsk", @"do", @"d13", @"po", @"cpm", @"nib", @"v2d", @"vdsk",

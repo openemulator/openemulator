@@ -105,11 +105,19 @@ void AppleGraphicsTabletInterfaceCard::notify(OEComponent *sender, int notificat
                 
             case CANVAS_P_X:
                 x = event->value;
+                if (x < 0)
+                    x = 0;
+                else if (x > 1)
+                    x = 1;
                 
                 break;
                 
             case CANVAS_P_Y:
                 y = event->value;
+                if (y < 0)
+                    y = 0;
+                else if (y > 1)
+                    y = 1;
                 
                 break;
                 
@@ -141,7 +149,7 @@ OEChar AppleGraphicsTabletInterfaceCard::read(OEAddress address)
         {
             // X Drive enabled
             if (proximity)
-                setTimer(x);
+                setTimer(2150 * x + 300);
             
             count |= 0xf00;
             
@@ -151,7 +159,7 @@ OEChar AppleGraphicsTabletInterfaceCard::read(OEAddress address)
         {
             // Y Drive enabled
             if (proximity)
-                setTimer(y);
+                setTimer(2150 * y + 300);
             
             count |= 0xf00;
             
@@ -159,11 +167,11 @@ OEChar AppleGraphicsTabletInterfaceCard::read(OEAddress address)
         }
         case 2:
             // Read counter (lowest 4 bits)
-            return (floatingBus->read(address) & 0xf0) | (count & 0xf);
+            return (floatingBus->read(address) & 0xf0) | ((count & 0xf) ^ 0x7);
             
         case 3:
             // Read counter (highest 8 bits)
-            count = (count & 0xff0) | button;
+            count = (count & 0xff0) | !button;
             
             return (count >> 4);
     }
@@ -176,14 +184,14 @@ void AppleGraphicsTabletInterfaceCard::write(OEAddress address, OEChar value)
     read(address);
 }
 
-void AppleGraphicsTabletInterfaceCard::setTimer(float value)
+void AppleGraphicsTabletInterfaceCard::setTimer(OEInt value)
 {
     OELong cycles;
     
     controlBus->postMessage(this, CONTROLBUS_GET_CYCLES, &cycles);
     
     timerCycles = cycles;
-    timerCount = 4096 * value;
+    timerCount = value;
 }
 
 void AppleGraphicsTabletInterfaceCard::updateCount()
@@ -192,7 +200,7 @@ void AppleGraphicsTabletInterfaceCard::updateCount()
     
     controlBus->postMessage(this, CONTROLBUS_GET_CYCLES, &cycles);
     
-    // 7 MHz count clock
+    // 7 MHz count clock with 7x LC-tuned frequency multiplier
     OELong delta = 7 * 7 * (cycles - timerCycles);
     
     if (delta > timerCount)

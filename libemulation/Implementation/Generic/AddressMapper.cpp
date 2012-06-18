@@ -1,7 +1,7 @@
 
 /**
  * libemulation
- * Address Mapper
+ * Address mapper
  * (C) 2011-2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
@@ -64,6 +64,9 @@ bool AddressMapper::init()
 
 void AddressMapper::update()
 {
+    if (lastSel == sel)
+        return;
+    
     MemoryMaps m;
     
     if (ref.count(lastSel))
@@ -91,4 +94,19 @@ void AddressMapper::update()
     }
     
     lastSel = sel;
+}
+
+bool AddressMapper::postMessage(OEComponent *sender, int message, void *data)
+{
+    switch (message)
+    {
+        case ADDRESSMAPPER_MAP:
+            sel = *((string *)data);
+            
+            update();
+            
+            return true;
+    }
+    
+    return false;
 }

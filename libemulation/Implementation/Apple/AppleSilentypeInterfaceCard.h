@@ -16,9 +16,13 @@ public:
 	AppleSilentypeInterfaceCard();
 	
     bool setRef(string name, OEComponent *ref);
+    bool setValue(string name, string value);
+    bool getValue(string name, string &value);
     bool init();
     
     bool postMessage(OEComponent *sender, int message, void *data);
+    
+    void notify(OEComponent *sender, int notification, void *data);
     
     OEChar read(OEAddress address);
 	void write(OEAddress address, OEChar value);
@@ -26,7 +30,12 @@ public:
 private:
     OEComponent *controlBus;
     OEComponent *floatingBus;
+    OEComponent *slotController;
+    OEComponent *memoryCF00;
+    OEComponent *memoryMapper;
     OEComponent *printer;
     
-    OELong lastCycles;
+    bool shiftClockDisabled;
+    
+    void setROMEnabled(bool value);
 };

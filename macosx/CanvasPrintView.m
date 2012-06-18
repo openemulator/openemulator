@@ -26,9 +26,7 @@
     self = [super initWithFrame:frame];
     
     if (self)
-    {
         canvasView = theCanvasView;
-    }
     
     return self;
 }

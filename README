@@ -1,12 +1,12 @@
 OpenEmulator
 ============
 
-  This is OpenEmulator, a cross-platform emulator of many legacy computer
+This is OpenEmulator, a cross-platform emulator of many legacy computer
 systems.
 
-  For more information, take a look at the included man pages.
+For more information, take a look at the included man pages.
   
-  For generic installation instructions, see file 'INSTALL'. OpenEmulator
+For generic installation instructions, see file 'INSTALL'. OpenEmulator
 requires these external libraries:
  
 * libxml2 (http://www.xmlsoft.org/)
@@ -16,7 +16,7 @@ requires these external libraries:
 * libsndfile (http://www.mega-nerd.com/libsndfile/)
 * libsamplerate (http://www.mega-nerd.com/SRC/)
 
-  If you make a binary distribution, include a pointer to the official
+If you make a binary distribution, include a pointer to the official
 distribution site:
 
 	http://www.openemulator.org/
@@ -25,48 +25,63 @@ The latest version can always be found there.
 
 Mail suggestions and bug reports to <mressl@umich.edu>.
 
+
 Linux
 =====
 
-  Important: the user-interface has not yet been implemented. These are
-  only instructions for building the libemulation library.
+Important: the user-interface has not yet been implemented. For now
+you can only build the libemulation library.
 
-  Installation of libraries depends on the Linux distribution.
+Installation of libraries depends on the Linux distribution.
 
-  If you have a Debian-compatible distribution, try the following
+If you have a Debian-compatible distribution, try the following
 commands:
 
-  sudo apt-get install libxml2-dev
-  sudo apt-get install libzip-dev
-  sudo apt-get install libpng12-dev
-  sudo apt-get install portaudio19-dev
-  sudo apt-get install libsndfile1-dev
-  sudo apt-get install libsamplerate1-dev
+sudo apt-get install libxml2-dev
+sudo apt-get install libzip-dev
+sudo apt-get install libpng12-dev
+sudo apt-get install portaudio19-dev
+sudo apt-get install libsndfile1-dev
+sudo apt-get install libsamplerate1-dev
+
 
 Mac OS X
 ========
 
-  To compile OpenEmulator for Mac OS X you need XCode, and several
+To compile OpenEmulator for Mac OS X you need Xcode, and several
 external libraries not available by default. The easiest way to install
 them is through MacPorts:
 
-  http://www.macports.org/
+	http://www.macports.org/
 
-  Download and install MacPorts, then try the following commands:
+Download and install MacPorts.
 
-  sudo port install libzip +universal
-  sudo port install libpng +universal
-  sudo port install portaudio +universal
-  sudo port install libsndfile +universal
-  sudo port install libsamplerate +universal
+To produce binaries that work with both Mac OS X 10.6 and 10.7, enter
+the following command at the terminal:
 
-  To produce binaries that work with Mac OS X 10.6, edit macports.conf
-and add:
+sudo nano /opt/local/etc/macports/macports.conf
 
-  universal_target        10.6
-  universal_sysroot       /Developer/SDKs/MacOSX10.6.sdk
+Add at the end of this file (if you installed Xcode from the App Store,
+change the path of MacOSX10.6.sdk accordingly):
+
+universal_target        10.6
+universal_sysroot       /Developer/SDKs/MacOSX10.6.sdk
+
+Then try the following commands:
+
+sudo port install libzip +universal
+sudo port install libpng +universal
+sudo port install portaudio +universal
+sudo port install libsndfile +universal
+sudo port install libsamplerate +universal
+
+If you can't compile because of the error "'zipconf.h' file not found",
+try this:
+
+sudo ln -s /opt/local/lib/libzip/include/zipconf.h /opt/local/include/zipconf.h 
+
 
 Windows
 =======
 
-  Not yet available.
+Not yet available.

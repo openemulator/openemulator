@@ -49,7 +49,7 @@ bool AppleGraphicsTablet::setRef(string name, OEComponent *ref)
 		if (device)
         {
 			device->postMessage(this,
-                                DEVICE_CONSTRUCT_CANVAS,
+                                DEVICE_CONSTRUCT_DISPLAYCANVAS,
                                 &canvas);
             
             if (canvas)

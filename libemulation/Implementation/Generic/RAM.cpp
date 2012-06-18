@@ -17,7 +17,7 @@ RAM::RAM()
     size = 0;
     
     controlBus = NULL;
-    powerState = CONTROLBUS_POWERSTATE_OFF;
+    powerState = CONTROLBUS_POWERSTATE_ON;
 }
 
 bool RAM::setValue(string name, string value)

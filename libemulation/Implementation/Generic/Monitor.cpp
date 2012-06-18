@@ -202,7 +202,7 @@ bool Monitor::setRef(string name, OEComponent *ref)
         device = ref;
         if (device)
         {
-            device->postMessage(this, DEVICE_CONSTRUCT_CANVAS, &canvas);
+            device->postMessage(this, DEVICE_CONSTRUCT_DISPLAYCANVAS, &canvas);
             
             if (canvas)
             {

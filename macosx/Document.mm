@@ -46,11 +46,12 @@ void didUpdate(void *userData)
     [pool drain];
 }
 
-OEComponent *constructCanvas(void *userData, OEComponent *device)
+OEComponent *constructCanvas(void *userData, OEComponent *device, OECanvasType canvasType)
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     
-    OpenGLCanvas *canvas = new OpenGLCanvas([[[NSBundle mainBundle] resourcePath] cppString]);
+    OpenGLCanvas *canvas = new OpenGLCanvas([[[NSBundle mainBundle] resourcePath] cppString],
+                                            canvasType);
     string label;
     device->postMessage(NULL, DEVICE_GET_LABEL, &label);
     
@@ -70,7 +71,7 @@ OEComponent *constructCanvas(void *userData, OEComponent *device)
     
     [pool drain];
     
-    return canvas;
+    return (OEComponent *)canvas;
 }
 
 void destroyCanvas(void *userData, OEComponent *canvas)
@@ -375,6 +376,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
     void *device = [[dict objectForKey:@"device"] pointerValue];
     NSString *label = [dict objectForKey:@"label"];
     NSValue *canvasValue = [dict objectForKey:@"canvas"];
+    
     OpenGLCanvas *canvas = (OpenGLCanvas *)[canvasValue pointerValue];
     
     CanvasWindowController *canvasWindowController;

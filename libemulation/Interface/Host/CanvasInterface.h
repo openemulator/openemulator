@@ -9,10 +9,6 @@
  */
 
 // Notes:
-// * setMode sets the canvas mode (CanvasMode):
-//   - display (fixed aspect ratio)
-//   - paper (large scrolling areas)
-//   - OpenGL (custom graphics)
 // * setCaptureMode describes how mouse and keyboard are captured (CanvasCaptureMode)
 // * setKeyboardFlags sets the keyboard LEDs (CanvasKeyboardFlags)
 // * setBezel sets the canvas' bezel (CanvasBezel)
@@ -25,7 +21,7 @@
 // Drawing:
 // * postImage post an image to the canvas (OEImage)
 // * clear clears the canvas
-// * movePrintHead sets the print head position in paper mode (OEPoint)
+// * movePrintHead sets the print head position in a paper canvas (OEPoint)
 
 // Notifications:
 // * HID notifications use the CanvasHIDNotification structure
@@ -73,7 +69,6 @@
 
 typedef enum
 {
-    CANVAS_SET_MODE,
     CANVAS_SET_CAPTUREMODE,
     CANVAS_SET_BEZEL,
     
@@ -110,13 +105,6 @@ typedef enum
 } CanvasNotification;
 
 // Definitions
-
-typedef enum
-{
-    CANVAS_DISPLAY,
-    CANVAS_PAPER,
-    CANVAS_OPENGL,
-} CanvasMode;
 
 typedef enum
 {

@@ -41,6 +41,6 @@ private:
     OEInt timerCount;
     OELong timerCycles;
     
-    void setTimer(float value);
+    void setTimer(OEInt value);
     void updateCount();
 };

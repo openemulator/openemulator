@@ -13,9 +13,9 @@
 
 #include "OEComponent.h"
 
-#include "DeviceInterface.h"
+#include "OEEmulation.h"
 
-class OEEmulation;
+#include "DeviceInterface.h"
 
 class OEDevice : public OEComponent
 {
@@ -36,6 +36,8 @@ private:
     
     OEComponents canvases;
     OEComponents storages;
+    
+    bool constructCanvas(OECanvasType canvasType, OEComponent **ref);
 };
 
 #endif

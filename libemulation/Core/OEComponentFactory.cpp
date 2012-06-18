@@ -13,6 +13,7 @@
 // FACTORY_INCLUDE_START - Do not modify this section
 #include "AddressDecoder.h"
 #include "AddressMapper.h"
+#include "AddressMasker.h"
 #include "AddressMux.h"
 #include "AddressOffset.h"
 #include "AudioCodec.h"
@@ -44,6 +45,7 @@
 #include "AppleIISlotController.h"
 #include "AppleIIVideo.h"
 #include "AppleSilentype.h"
+#include "AppleSilentypeInterfaceCard.h"
 
 #include "MOS6502.h"
 #include "MOS6530.h"
@@ -67,6 +69,7 @@ OEComponent *OEComponentFactory::construct(const string& className)
     // FACTORY_CODE_START - Do not modify this section
     matchComponent(AddressDecoder);
     matchComponent(AddressMapper);
+    matchComponent(AddressMasker);
     matchComponent(AddressMux);
     matchComponent(AddressOffset);
     matchComponent(AudioCodec);
@@ -99,6 +102,7 @@ OEComponent *OEComponentFactory::construct(const string& className)
     matchComponent(AppleIISlotController);
     matchComponent(AppleIIVideo);
     matchComponent(AppleSilentype);
+    matchComponent(AppleSilentypeInterfaceCard);
     
     matchComponent(MOS6502);
     matchComponent(MOS6530);

@@ -1,4 +1,7 @@
 ==Latest==
+* Implemented Apple Silentype Interface Card
+* Fixed Apple Graphics Tablet count bits 0-2
+* Implemented Apple Graphics Tablet
 * Improved Apple II slot C800-CFFF memory management
 * Improved video inhibition so video is only rendered when displayed
 * Fixed dragging a disk image to a canvas does not mount when canvas is not in focus

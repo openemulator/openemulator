@@ -160,8 +160,7 @@
 				<string>hfv</string>
 				<string>image</string>
 				<string>img</string>
-				<string>qcow</string>
-				<string>qcow2</string>
+				<string>vdi</string>
 				<string>vmdk</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>

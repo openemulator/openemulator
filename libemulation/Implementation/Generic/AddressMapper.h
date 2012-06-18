@@ -1,7 +1,7 @@
 
 /**
  * libemulation
- * Address Mapper
+ * Address mapper
  * (C) 2011-2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
@@ -22,6 +22,8 @@ public:
     bool setRef(string name, OEComponent *ref);
     bool init();
     void update();
+    
+    bool postMessage(OEComponent *sender, int message, void *data);
     
 private:
     OEComponent *addressDecoder;

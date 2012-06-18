@@ -142,9 +142,10 @@ c = max(c, texture2D(persistence, qp).rgb * persistenceLevel - 0.5 / 256.0);\n\
 gl_FragColor = vec4(c, 1.0);\n\
 }";
 
-OpenGLCanvas::OpenGLCanvas(string resourcePath)
+OpenGLCanvas::OpenGLCanvas(string resourcePath, OECanvasType canvasType)
 {
     this->resourcePath = resourcePath;
+    this->canvasType = canvasType;
     
     setCapture = NULL;
     setKeyboardLEDs = NULL;
@@ -155,7 +156,6 @@ OpenGLCanvas::OpenGLCanvas(string resourcePath)
     
     pthread_mutex_init(&mutex, NULL);
     
-    mode = CANVAS_DISPLAY;
     captureMode = CANVAS_NO_CAPTURE;
     
     viewportSize = OEMakeSize(640, 480);
@@ -218,17 +218,9 @@ void OpenGLCanvas::setEnableShader(bool value)
     unlock();
 }
 
-CanvasMode OpenGLCanvas::getMode()
+OECanvasType OpenGLCanvas::getCanvasType()
 {
-    CanvasMode theMode;
-    
-    lock();
-    
-    theMode = mode;
-    
-    unlock();
-    
-    return theMode;
+    return canvasType;
 }
 
 OESize OpenGLCanvas::getDefaultViewportSize()
@@ -237,11 +229,11 @@ OESize OpenGLCanvas::getDefaultViewportSize()
     
     lock();
     
-    if (mode == CANVAS_DISPLAY)
+    if (canvasType == OECANVAS_DISPLAY)
         size = displayConfiguration.displayResolution;
-    else if (mode == CANVAS_PAPER)
+    else if (canvasType == OECANVAS_PAPER)
         size = OEMakeSize(512, 384);
-    else if (mode == CANVAS_OPENGL)
+    else if (canvasType == OECANVAS_OPENGL)
         size = openGLConfiguration.viewportDefaultSize;
     
     unlock();
@@ -265,12 +257,23 @@ OESize OpenGLCanvas::getSize()
     
     lock();
     
-    if (mode == CANVAS_DISPLAY)
-        size = displayConfiguration.displayResolution;
-    else if (mode == CANVAS_PAPER)
-        size = image.getSize();
-    else if (mode == CANVAS_OPENGL)
-        size = viewportSize;
+    switch (canvasType)
+    {
+        case OECANVAS_DISPLAY:
+            size = displayConfiguration.displayResolution;
+            
+            break;
+            
+        case OECANVAS_PAPER:
+            size = image.getSize();
+            
+            break;
+            
+        case OECANVAS_OPENGL:
+            size = viewportSize;
+            
+            break;
+    }
     
     unlock();
     
@@ -283,26 +286,33 @@ OERect OpenGLCanvas::getClipRect()
     
     lock();
     
-    if (mode == CANVAS_DISPLAY)
+    switch (canvasType)
     {
-        rect.origin = OEMakePoint(0, 0);
-        rect.size = displayConfiguration.displayResolution;
-    }
-    else if (mode == CANVAS_PAPER)
-    {
-        float pixelDensityRatio = (paperConfiguration.pagePixelDensity.width /
-                                   paperConfiguration.pagePixelDensity.height);
-        float clipHeight = (viewportSize.height * image.getSize().width /
-                            viewportSize.width / pixelDensityRatio);
-        
-        rect.origin = clipOrigin;
-        rect.size = OEMakeSize(image.getSize().width,
-                               clipHeight);
-    }
-    else if (mode == CANVAS_OPENGL)
-    {
-        rect.origin = OEMakePoint(0, 0);
-        rect.size = viewportSize;
+        case OECANVAS_DISPLAY:
+            rect.origin = OEMakePoint(0, 0);
+            rect.size = displayConfiguration.displayResolution;
+            
+            break;
+            
+            
+        case OECANVAS_PAPER:
+        {
+            float pixelDensityRatio = (paperConfiguration.pagePixelDensity.width /
+                                       paperConfiguration.pagePixelDensity.height);
+            float clipHeight = (viewportSize.height * image.getSize().width /
+                                viewportSize.width / pixelDensityRatio);
+            
+            rect.origin = clipOrigin;
+            rect.size = OEMakeSize(image.getSize().width,
+                                   clipHeight);
+            
+            break;
+        }
+        case OECANVAS_OPENGL:
+            rect.origin = OEMakePoint(0, 0);
+            rect.size = viewportSize;
+            
+            break;
     }
     
     unlock();
@@ -325,14 +335,25 @@ OESize OpenGLCanvas::getPixelDensity()
     
     lock();
     
-    if (mode == CANVAS_DISPLAY)
-        pixelDensity = OEMakeSize(displayConfiguration.displayPixelDensity,
-                                  displayConfiguration.displayPixelDensity);
-    else if (mode == CANVAS_PAPER)
-        pixelDensity = paperConfiguration.pagePixelDensity;
-    else if (mode == CANVAS_OPENGL)
-        pixelDensity = OEMakeSize(openGLConfiguration.viewportPixelDensity,
-                                  openGLConfiguration.viewportPixelDensity);
+    switch (canvasType)
+    {
+        case OECANVAS_DISPLAY:
+            pixelDensity = OEMakeSize(displayConfiguration.displayPixelDensity,
+                                      displayConfiguration.displayPixelDensity);
+            
+            break;
+            
+        case OECANVAS_PAPER:
+            pixelDensity = paperConfiguration.pagePixelDensity;
+            
+            break;
+            
+        case OECANVAS_OPENGL:
+            pixelDensity = OEMakeSize(openGLConfiguration.viewportPixelDensity,
+                                      openGLConfiguration.viewportPixelDensity);
+            
+            break;
+    }
     
     unlock();
     
@@ -345,12 +366,23 @@ OESize OpenGLCanvas::getPageSize()
     
     lock();
     
-    if (mode == CANVAS_DISPLAY)
-        size = displayConfiguration.displayResolution;
-    else if (mode == CANVAS_PAPER)
-        size = paperConfiguration.pageResolution;
-    else if (mode == CANVAS_OPENGL)
-        size = viewportSize;
+    switch (canvasType)
+    {
+        case OECANVAS_DISPLAY:
+            size = displayConfiguration.displayResolution;
+            
+            break;
+            
+        case OECANVAS_PAPER:
+            size = paperConfiguration.pageResolution;
+            
+            break;
+            
+        case OECANVAS_OPENGL:
+            size = viewportSize;
+            
+            break;
+    }
     
     unlock();
     
@@ -359,21 +391,19 @@ OESize OpenGLCanvas::getPageSize()
 
 OEImage OpenGLCanvas::getImage(OERect rect)
 {
-    if (mode == CANVAS_PAPER)
+    if (canvasType == OECANVAS_PAPER)
         return OEImage(image, rect);
-    else 
-    {
-        OEImage image = readFramebuffer();
-        
-        OESize scale = OEMakeSize(image.getSize().height / getSize().height,
-                                  image.getSize().height / getSize().height);
-        rect.origin.x *= scale.width;
-        rect.origin.y *= scale.height;
-        rect.size.width *= scale.width;
-        rect.size.height *= scale.height;
-        
-        return OEImage(image, rect);
-    }
+    
+    OEImage image = readFramebuffer();
+    
+    OESize scale = OEMakeSize(image.getSize().height / getSize().height,
+                              image.getSize().height / getSize().height);
+    rect.origin.x *= scale.width;
+    rect.origin.y *= scale.height;
+    rect.size.width *= scale.width;
+    rect.size.height *= scale.height;
+    
+    return OEImage(image, rect);
 }
 
 bool OpenGLCanvas::vsync()
@@ -393,7 +423,7 @@ bool OpenGLCanvas::vsync()
         vSync.shouldDraw = true;
     }
     
-    if (mode == CANVAS_DISPLAY)
+    if (canvasType == OECANVAS_DISPLAY)
     {
         if (isImageUpdated)
             uploadImage();
@@ -414,7 +444,7 @@ bool OpenGLCanvas::vsync()
         if (displayConfiguration.displayPersistence != 0.0)
             vSync.shouldDraw = true;
     }
-    else if (mode == CANVAS_PAPER)
+    else if (canvasType == OECANVAS_PAPER)
     {
         vSync.shouldDraw = isImageUpdated || isConfigurationUpdated;
     
@@ -448,7 +478,7 @@ void OpenGLCanvas::draw()
         unlock();
     }
     
-    if (mode == CANVAS_DISPLAY)
+    if (canvasType == OECANVAS_DISPLAY)
     {
         lock();
         
@@ -458,7 +488,7 @@ void OpenGLCanvas::draw()
         
         unlock();
     }
-    else if (mode == CANVAS_PAPER)
+    else if (canvasType == OECANVAS_PAPER)
     {
         lock();
         
@@ -1761,20 +1791,6 @@ void OpenGLCanvas::doDelete()
     postNotification(this, CANVAS_DID_DELETE, NULL);
 }
 
-bool OpenGLCanvas::setMode(CanvasMode *value)
-{
-    if (!value)
-        return false;
-    
-    lock();
-    
-    mode = *value;
-    
-    unlock();
-    
-    return true;
-}
-
 bool OpenGLCanvas::setCaptureMode(CanvasCaptureMode *value)
 {
     if (!value)
@@ -1877,16 +1893,16 @@ bool OpenGLCanvas::postImage(OEImage *value)
     
     lock();
     
-    switch (mode)
+    switch (canvasType)
     {
-        case CANVAS_DISPLAY:
+        case OECANVAS_DISPLAY:
             image = *value;
             
             isImageUpdated = true;
             
             break;
             
-        case CANVAS_PAPER:
+        case OECANVAS_PAPER:
         {
             OESize newImageSize = value->getSize();
             OESize imageSize = image.getSize();
@@ -1920,16 +1936,16 @@ bool OpenGLCanvas::clear()
 {
     lock();
     
-    switch (mode)
+    switch (canvasType)
     {
-        case CANVAS_DISPLAY:
+        case OECANVAS_DISPLAY:
             image = OEImage();
             
             isImageUpdated = true;
             
             break;
             
-        case CANVAS_PAPER:
+        case OECANVAS_PAPER:
             // To-Do
             break;
             
@@ -1976,9 +1992,6 @@ bool OpenGLCanvas::postMessage(OEComponent *sender, int message, void *data)
 {
     switch (message)
     {
-        case CANVAS_SET_MODE:
-            return setMode((CanvasMode *)data);
-            
         case CANVAS_SET_CAPTUREMODE:
             return setCaptureMode((CanvasCaptureMode *)data);
             

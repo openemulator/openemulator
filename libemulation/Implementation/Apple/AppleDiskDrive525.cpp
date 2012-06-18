@@ -240,7 +240,8 @@ void AppleDiskDrive525::setPhaseControl(OEInt value)
 	OEInt currentPhase = trackIndex & 0x7;
 	OEInt nextPhase;
 	
-	switch (phaseControl) {
+	switch (phaseControl)
+    {
 		case 0x1: case 0xb:
 			nextPhase = 0;
             

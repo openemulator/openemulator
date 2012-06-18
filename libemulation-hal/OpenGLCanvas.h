@@ -16,7 +16,7 @@
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
 
-#include "OEComponent.h"
+#include "OEEmulation.h"
 #include "CanvasInterface.h"
 
 typedef enum
@@ -57,7 +57,7 @@ typedef void (*CanvasSetKeyboardLEDs)(void *userData, CanvasKeyboardLEDs value);
 class OpenGLCanvas : public OEComponent
 {
 public:
-    OpenGLCanvas(string resourcePath);
+    OpenGLCanvas(string resourcePath, OECanvasType canvasType);
     ~OpenGLCanvas();
     
     void open(CanvasSetCapture setCapture,
@@ -67,7 +67,7 @@ public:
     
     void setEnableShader(bool value);
     
-    CanvasMode getMode();
+    OECanvasType getCanvasType();
     
     OESize getDefaultViewportSize();
     void setViewportSize(OESize size);
@@ -107,6 +107,7 @@ public:
     
 private:
     string resourcePath;
+    OECanvasType canvasType;
     
     CanvasSetCapture setCapture;
     CanvasSetKeyboardLEDs setKeyboardLEDs;
@@ -117,7 +118,6 @@ private:
     
     pthread_mutex_t mutex;
     
-    CanvasMode mode;
     CanvasCaptureMode captureMode;
     
     OESize viewportSize;
@@ -192,7 +192,6 @@ private:
     void updateCapture(OpenGLCanvasCapture value);
     void resetKeysAndButtons();
     
-    bool setMode(CanvasMode *value);
     bool setCaptureMode(CanvasCaptureMode *value);
     bool setBezel(CanvasBezel *value);
     bool setDisplayConfiguration(CanvasDisplayConfiguration *value);

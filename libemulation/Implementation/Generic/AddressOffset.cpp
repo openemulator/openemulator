@@ -52,7 +52,7 @@ bool AddressOffset::init()
 
 bool AddressOffset::postMessage(OEComponent *sender, int message, void *data)
 {
-    if (message == ADDRESSOFFSET_SETOFFSET)
+    if (message == ADDRESSOFFSET_SET_OFFSET)
         offset = *((OEAddress *)data);
     else
         return false;

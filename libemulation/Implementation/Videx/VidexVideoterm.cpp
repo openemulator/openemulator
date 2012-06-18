@@ -309,7 +309,7 @@ void VidexVideoterm::updateRAMBank()
 {
     OEAddress offset = 0x200 * ramBank - 0x400;
     
-    bankedRAM->postMessage(this, ADDRESSOFFSET_SETOFFSET, &offset);
+    bankedRAM->postMessage(this, ADDRESSOFFSET_SET_OFFSET, &offset);
 }
 
 void VidexVideoterm::setCellWidth(OEInt value)

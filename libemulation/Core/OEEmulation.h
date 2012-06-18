@@ -15,12 +15,20 @@
 
 #include "OEDocument.h"
 #include "OEComponent.h"
-#include "OEDevice.h"
 
 using namespace std;
 
+typedef enum
+{
+    OECANVAS_DISPLAY,
+    OECANVAS_PAPER,
+    OECANVAS_OPENGL,
+} OECanvasType;
+
 typedef void (*EmulationDidUpdate)(void *userData);
-typedef OEComponent *(*EmulationConstructCanvas)(void *userData, OEComponent *device);
+typedef OEComponent *(*EmulationConstructCanvas)(void *userData,
+                                                 OEComponent *device,
+                                                 OECanvasType type);
 typedef void (*EmulationDestroyCanvas)(void *userData, OEComponent *canvas);
 
 typedef map<string, OEComponent *> OEComponentsMap;

@@ -595,37 +595,27 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 - (BOOL)isDisplayCanvas
 {
     CanvasWindowController *canvasWindowController = [[self window] windowController];
-    Document *document = [canvasWindowController document];
     OpenGLCanvas *canvas = (OpenGLCanvas *)[canvasWindowController canvas];
     
     if (!canvas)
         return NO;
     
-    [document lockEmulation];
+    OECanvasType value = canvas->getCanvasType();
     
-    CanvasMode value = canvas->getMode();
-    
-    [document unlockEmulation];
-    
-    return (value == CANVAS_DISPLAY);
+    return (value == OECANVAS_DISPLAY);
 }
 
 - (BOOL)isPaperCanvas
 {
     CanvasWindowController *canvasWindowController = [[self window] windowController];
-    Document *document = [canvasWindowController document];
     OpenGLCanvas *canvas = (OpenGLCanvas *)[canvasWindowController canvas];
     
     if (!canvas)
         return NO;
     
-    [document lockEmulation];
+    OECanvasType value = canvas->getCanvasType();
     
-    CanvasMode value = canvas->getMode();
-    
-    [document unlockEmulation];
-    
-    return (value == CANVAS_PAPER);
+    return (value == OECANVAS_PAPER);
 }
 
 - (NSSize)defaultViewSize

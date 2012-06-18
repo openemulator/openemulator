@@ -5,15 +5,27 @@
     <device id="appleSilentypeInterfaceCard" label="Apple Silentype Interface Card" image="images/Apple/Apple Synch Printer Interface Card.png">
     </device>
     <connector id="appleSilentypeInterfaceCard.connector" type="Apple II Slot">
+        <inlet ref="appleSilentypeInterfaceCard.io" property="controlBus" outletRef="controlBus"/>
+        <inlet ref="appleSilentypeInterfaceCard.io" property="floatingBus" outletRef="floatingBus"/>
         <inlet ref="appleSilentypeInterfaceCard.memory" property="memoryBus" outletRef="memoryBus"/>
         <inlet ref="appleSilentypeInterfaceCard.memoryCF00" property="floatingBus" outletRef="floatingBus"/>
+        <inlet ref="appleSilentypeInterfaceCard.ram" property="controlBus" outletRef="controlBus"/>
         <inlet ref="appleSilentypeInterfaceCard.disableC800" property="memoryBus" outletRef="memoryBus"/>
     </connector>
-    <port id="appleSilentypeInterfaceCard.port" ref="" type="Apple Silentype Port" group="peripherals" label="Silentype Port" image="images/Connectors/DE9 Female.png"/>
-    <component id="appleSilentypeInterfaceCard.io" class="FloatingBus">
+    <port id="appleSilentypeInterfaceCard.port" ref="" type="Apple Silentype Port" group="peripherals" label="Silentype Port" image="images/Connectors/DE9 Female.png">
+        <inlet ref="appleSilentypeInterfaceCard.io" property="printer" outletRef="printer"/>
+    </port>
+    <component id="appleSilentypeInterfaceCard.io" class="AppleSilentypeInterfaceCard">
+        <property name="controlBus" ref=""/>
+        <property name="floatingBus" ref=""/>
+        <property name="slotController" ref="appleSilentypeInterfaceCard.memory"/>
+        <property name="memoryCF00" ref="appleSilentypeInterfaceCard.memoryCF00"/>
+        <property name="memoryMapper" ref="appleSilentypeInterfaceCard.memoryMapper"/>
+        <property name="shiftClockDisabled" value="0"/>
+        <property name="printer" ref=""/>
     </component>
     <component id="appleSilentypeInterfaceCard.memory" class="AppleIISlotController">
-        <property name="memory" ref="appleSilentypeInterfaceCard.rom"/>
+        <property name="memory" ref="appleSilentypeInterfaceCard.memoryMasker"/>
         <property name="en" value="0"/>
         <property name="memoryBus" ref=""/>
         <property name="refROM" ref="appleSilentypeInterfaceCard.rom"/>
@@ -21,12 +33,29 @@
         <property name="refCF00" ref="appleSilentypeInterfaceCard.memoryCF00"/>
         <property name="mapCF00" value="0xcf00-0xcfff"/>
     </component>
+    <component id="appleSilentypeInterfaceCard.memoryMasker" class="AddressMasker">
+        <property name="mask" value="0xff"/>
+        <property name="memory" ref="appleSilentypeInterfaceCard.rom"/>
+    </component>
     <component id="appleSilentypeInterfaceCard.memoryCF00" class="AddressDecoder">
         <property name="size" value="0x100"/>
         <property name="blockSize" value="0x1"/>
         <property name="floatingBus" ref=""/>
         <property name="refDisableC800" ref="appleSilentypeInterfaceCard.disableC800"/>
         <property name="mapDisableC800" value="0xff"/>
+    </component>
+    <component id="appleSilentypeInterfaceCard.memoryMapper" class="AddressMapper">
+        <property name="addressDecoder" ref="appleSilentypeInterfaceCard.memoryCF00"/>
+        <property name="refRAM" ref="appleSilentypeInterfaceCard.ram"/> 
+        <property name="mapRAM" value="0x00-0xfe"/>
+        <property name="refROM" ref="appleSilentypeInterfaceCard.rom"/>
+        <property name="mapROM" value="0x00-0xfe"/>
+        <property name="sel" value="RAM"/>
+    </component>
+    <component id="appleSilentypeInterfaceCard.ram" class="RAM">
+        <property name="size" value="0x100"/>
+        <property name="memoryImage" data="${packagePath}/${id}.bin"/>
+        <property name="controlBus" ref=""/>
     </component>
     <component id="appleSilentypeInterfaceCard.rom" class="ROM">
         <property name="memoryImage" data="${resourcePath}/roms/Apple/341-0039-00.bin"/>

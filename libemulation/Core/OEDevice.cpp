@@ -81,23 +81,17 @@ bool OEDevice::postMessage(OEComponent *sender, int message, void *data)
             
             return true;
             
-        case DEVICE_CONSTRUCT_CANVAS:
-            if (emulation->constructCanvas && data)
-            {
-                OEComponent **ref = (OEComponent **)data;
-                
-                if (emulation->constructCanvas)
-                    *ref = emulation->constructCanvas(emulation->userData, this);
-                
-                canvases.push_back(*ref);
-                
-                return true;
-            }
+        case DEVICE_CONSTRUCT_DISPLAYCANVAS:
+            return constructCanvas(OECANVAS_DISPLAY, (OEComponent **)data);
             
-            break;
+        case DEVICE_CONSTRUCT_PAPERCANVAS:
+            return constructCanvas(OECANVAS_PAPER, (OEComponent **)data);
+            
+        case DEVICE_CONSTRUCT_OPENGLCANVAS:
+            return constructCanvas(OECANVAS_OPENGL, (OEComponent **)data);
             
         case DEVICE_DESTROY_CANVAS:
-            if (emulation->destroyCanvas && data)
+            if (emulation->destroyCanvas)
             {
                 OEComponent **ref = (OEComponent **)data;
                 
@@ -118,33 +112,28 @@ bool OEDevice::postMessage(OEComponent *sender, int message, void *data)
             break;
             
         case DEVICE_GET_CANVASES:
-            if (data)
-                *((OEComponents *)data) = canvases;
+            *((OEComponents *)data) = canvases;
             
             return true;
             
         case DEVICE_ADD_STORAGE:
-            if (data)
-                storages.push_back((OEComponent *)data);
+            storages.push_back((OEComponent *)data);
             
             return true;
             
         case DEVICE_REMOVE_STORAGE:
-            if (data)
-            {
-                OEComponents::iterator first = storages.begin();
-                OEComponents::iterator last = storages.end();
-                OEComponents::iterator i = remove(first, last, (OEComponent *)data);
-                
-                if (i != last)
-                    storages.erase(i, last);
-            }
+        {
+            OEComponents::iterator first = storages.begin();
+            OEComponents::iterator last = storages.end();
+            OEComponents::iterator i = remove(first, last, (OEComponent *)data);
+            
+            if (i != last)
+                storages.erase(i, last);
             
             return true;
-            
+        }            
         case DEVICE_GET_STORAGES:
-            if (data)
-                *((OEComponents *)data) = storages;
+            *((OEComponents *)data) = storages;
             
             return true;
             
@@ -168,11 +157,25 @@ bool OEDevice::postMessage(OEComponent *sender, int message, void *data)
             return true;
             
         case DEVICE_IS_OBSERVED:
-            if (data)
-                *((bool *)data) = (observers[DEVICE_DID_CHANGE].size() != 0);
+            *((bool *)data) = (observers[DEVICE_DID_CHANGE].size() != 0);
             
             return true;
     }
     
     return false;
+}
+
+bool OEDevice::constructCanvas(OECanvasType canvasType, OEComponent **ref)
+{
+    if (!emulation->constructCanvas)
+        return false;
+    
+    *ref = emulation->constructCanvas(emulation->userData, this, canvasType);
+    
+    if (!*ref)
+        return false;
+    
+    canvases.push_back(*ref);
+    
+    return true;
 }

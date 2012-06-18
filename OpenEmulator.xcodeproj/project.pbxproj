@@ -232,6 +232,7 @@
 		00CAD7D912A04C22002B92E5 /* Emulation.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00CAD7D712A04C22002B92E5 /* Emulation.xib */; };
 		00D6729D12C9A256009F0D9E /* EmulationShow.png in Resources */ = {isa = PBXBuildFile; fileRef = 00E442931278727600713A05 /* EmulationShow.png */; };
 		00D75C691399FFDB004AA153 /* LibraryTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D75C681399FFD9004AA153 /* LibraryTableCell.m */; };
+		00D7E410158D1E4B00EBF8FA /* AddressMasker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00D7E40E158D1E4B00EBF8FA /* AddressMasker.cpp */; };
 		00D8448B0FFF04C0005802F0 /* DiskImage.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000F66370FF8368F00C8AF23 /* DiskImage.icns */; };
 		00D8448F0FFF04C0005802F0 /* Emulation.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000F663A0FF8368F00C8AF23 /* Emulation.icns */; };
 		00D844A90FFF04C0005802F0 /* OpenEmulator.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000F66520FF8368F00C8AF23 /* OpenEmulator.icns */; };
@@ -608,6 +609,8 @@
 		00D73D9C136CC9B300BD5465 /* IEEE1394Interface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IEEE1394Interface.h; sourceTree = "<group>"; };
 		00D75C671399FFD7004AA153 /* LibraryTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryTableCell.h; sourceTree = "<group>"; };
 		00D75C681399FFD9004AA153 /* LibraryTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryTableCell.m; sourceTree = "<group>"; };
+		00D7E40E158D1E4B00EBF8FA /* AddressMasker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AddressMasker.cpp; sourceTree = "<group>"; };
+		00D7E40F158D1E4B00EBF8FA /* AddressMasker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddressMasker.h; sourceTree = "<group>"; };
 		00D844BE0FFF0505005802F0 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		00D844C40FFF0505005802F0 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Preferences.xib; sourceTree = "<group>"; };
 		00D845670FFF0FD2005802F0 /* DocumentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DocumentController.h; sourceTree = "<group>"; };
@@ -956,6 +959,8 @@
 				00B8882F12A393990052B7A4 /* AddressDecoder.h */,
 				0029EEDF14266B7700AD900E /* AddressMapper.cpp */,
 				0029EEE114266B8000AD900E /* AddressMapper.h */,
+				00D7E40E158D1E4B00EBF8FA /* AddressMasker.cpp */,
+				00D7E40F158D1E4B00EBF8FA /* AddressMasker.h */,
 				00365CEA1516955C00978DF6 /* AddressMux.cpp */,
 				00365CEC1516956600978DF6 /* AddressMux.h */,
 				00B8883012A393990052B7A4 /* AddressOffset.cpp */,
@@ -1725,6 +1730,7 @@
 				004763D2139C94F30016277E /* LibraryTableView.m in Sources */,
 				0009068E141D2A0300F06D99 /* NSStringAdditions.mm in Sources */,
 				0014DF14148286A5006A7660 /* Application.m in Sources */,
+				00D7E410158D1E4B00EBF8FA /* AddressMasker.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

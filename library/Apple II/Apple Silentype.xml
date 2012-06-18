@@ -8,7 +8,8 @@
     </connector>
     <component id="appleSilentype.printer" class="AppleSilentype">
         <property name="device" ref="appleSilentype"/>
-        <property name="imagePath" value="${resourcePath}/images/print.png"/>
+        <property name="shiftRegister" value="0x0"/>
+        <property name="parallelRegister" value="0x0"/>
     </component>
     
 </edl>

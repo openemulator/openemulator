@@ -23,7 +23,17 @@ typedef enum
 
 typedef enum
 {
-    ADDRESSOFFSET_SETOFFSET,
+    ADDRESSMAPPER_MAP,
+} AddressMapperMessage;
+
+typedef enum
+{
+    ADDRESSMASKER_SET_MASK,
+} AddressMaskerMessage;
+
+typedef enum
+{
+    ADDRESSOFFSET_SET_OFFSET,
 } AddressOffsetMessage;
 
 typedef enum
