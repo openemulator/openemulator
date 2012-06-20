@@ -1,15 +1,13 @@
 ==1.0.3==
-* Implement Silentype printer
-* Fix [CanvasView update] problem in paper view
-
 * Implement sample-accurate playback in audio player
- 
 * Add Apple Graphics Tablet sounds
-
+* Add Apple Silentype sounds
 * Fix CFFA multi-partition operation
-
 * Fix replace monitor+emulation lock problem (happens when a monitor is replaced and selected)
-
+* Fix mouse capture on Silentype.emulation
+* Fix removing Videx Videoterm
+* Verify Videx Videoterm blinkrate
+* Fix [CanvasView update] problem in paper view
 * Fix libdiskimage GCR53
 * Fix Disk II not booting sometimes when emulation was loaded from disk
 * Fix Disk II sounds
@@ -21,11 +19,14 @@
 * Implement Saturn RAMboard
 * Implement Mountain Computer Apple Clock
 * Implement TimeMaster II H.O.
+* Implement wxWidgets user interface
 * Fix CTRL+ALT mouse capture
 * Implement open disk image with template chooser.
-* Implement an virtual RS-232 SSH client. In client mode, it displays "host: ", "login as: " and "mressl@host's password: " to connect remotely to SSH.
+* Implement a virtual RS-232 SSH client. In client mode, it displays "host: ", "login as: " and "mressl@host's password: " to connect remotely to SSH. The other mode accepts ATD commands.
+* Implement a virtual RS-232 SSH server that listents on a port. A user and password can be configured.
+* Implement a virtual RS-232 file device. When reading, it reads from file. When writing, it writes to a file.
+* Implement a virtual RS-232 speech synthesizer and recognizer device. It uses the host speech synthesis and recognition.
 * Think of a way to implement a server that can be separated into the UNIX command line, like responding to calls using netcat (it should separate command and data mode, be able to dial with ATD, and respond with ATA, hang up with ATH. Send messages like OK, RING, CONNECT and NO CARRIER). It might also have set DCD when connected. Respond to "+++" and 1 second wait.
-* Implement a virtual RS-232 file device. When reading, it reads from file. When writing, it writes to a file. You can choose 
 * Refactorize PAAudio so an emulation is stopped while it is being configured. Increase thread priority
 * Fix Apple speaker tension/relax audio driver
 * Mac OS X: fix window resizing when loading from disk (confusing emulation window size with canvas window size)

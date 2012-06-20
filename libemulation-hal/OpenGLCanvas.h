@@ -140,7 +140,7 @@ private:
     GLuint shader[OPENGLCANVAS_SHADEREND];
     
     CanvasPaperConfiguration paperConfiguration;
-    OEPoint printHead;
+    OEPoint printPosition;
     
     CanvasOpenGLConfiguration openGLConfiguration;
     
@@ -199,7 +199,7 @@ private:
     bool setOpenGLConfiguration(CanvasOpenGLConfiguration *value);
     bool postImage(OEImage *value);
     bool clear();
-    bool setPrintHead(OEPoint *value);
+    bool setPrintPosition(OEPoint *value);
     
     CanvasKeyboardFlags getKeyboardFlags();
 };

@@ -56,8 +56,6 @@ AppleSilentypeInterfaceCard::AppleSilentypeInterfaceCard()
     memoryCF00 = NULL;
     memoryMapper = NULL;
     printer = NULL;
-    
-    shiftClockDisabled = false;
 }
 
 bool AppleSilentypeInterfaceCard::setRef(string name, OEComponent *ref)
@@ -86,26 +84,6 @@ bool AppleSilentypeInterfaceCard::setRef(string name, OEComponent *ref)
         memoryMapper = ref;
     else if (name == "printer")
         printer = ref;
-    else
-        return false;
-    
-    return true;
-}
-
-bool AppleSilentypeInterfaceCard::setValue(string name, string value)
-{
-    if (name == "shiftClockDisabled")
-        shiftClockDisabled = getOEInt(value);
-    else
-        return false;
-    
-    return true;
-}
-
-bool AppleSilentypeInterfaceCard::getValue(string name, string &value)
-{
-    if (name == "shiftClockDisabled")
-        value = getString(shiftClockDisabled);
     else
         return false;
     
@@ -176,40 +154,40 @@ OEChar AppleSilentypeInterfaceCard::read(OEAddress address)
         return value;
     }
     
-    shiftClockDisabled = false;
-    
     return floatingBus->read(address);
 }
 
 void AppleSilentypeInterfaceCard::write(OEAddress address, OEChar value)
 {
-//    logMessage("w" + getHexString(value));
+//    logMessage("w " + getHexString(value));
     
     if (OEGetBit(address, SILENTYPE_WRITE))
     {
-        bool data;
-        bool shiftClock;
-        bool storeClock;
+        setROMEnabled(OEGetBit(value, SILENTYPE_ROMENABLED));
+        
+        bool data = (OEGetBit(value, SILENTYPE_DATA) &&
+                     OEGetBit(value, SILENTYPE_DATAWRITEENABLED));
+        bool storeClock = !OEGetBit(value, SILENTYPE_STORECLOCK);
+        
+        bool shiftClock = (!OEGetBit(value, SILENTYPE_SHIFTCLOCKA) &&
+                           !OEGetBit(value, SILENTYPE_SHIFTCLOCKDISABLED));
+        
         OEChar state = 0;
-        
-        data = (OEGetBit(value, SILENTYPE_DATA) &&
-                OEGetBit(value, SILENTYPE_DATAWRITEENABLED));
-        storeClock = !OEGetBit(value, SILENTYPE_STORECLOCK);
-        
-        shiftClock = (!(shiftClockDisabled || OEGetBit(value, SILENTYPE_SHIFTCLOCKA)) &&
-                      !OEGetBit(value, SILENTYPE_SHIFTCLOCKDISABLED));
-        
         OESetBit(state, SERIAL_DATA, data);
         OESetBit(state, SERIAL_SHIFTCLOCK, shiftClock);
         OESetBit(state, SERIAL_STORECLOCK, storeClock);
         if (printer)
             printer->write(0, state);
         
-        shiftClockDisabled = OEGetBit(value, SILENTYPE_SHIFTCLOCKB);
-        
-        shiftClock = (!(shiftClockDisabled || OEGetBit(value, SILENTYPE_SHIFTCLOCKA)) &&
+        shiftClock = (!(OEGetBit(value, SILENTYPE_SHIFTCLOCKA) ||
+                        OEGetBit(value, SILENTYPE_SHIFTCLOCKB)) &&
                       !OEGetBit(value, SILENTYPE_SHIFTCLOCKDISABLED));
         
+        OESetBit(state, SERIAL_SHIFTCLOCK, shiftClock);
+        if (printer)
+            printer->write(0, state);
+        
+        shiftClock = false;
         OESetBit(state, SERIAL_SHIFTCLOCK, shiftClock);
         if (printer)
             printer->write(0, state);

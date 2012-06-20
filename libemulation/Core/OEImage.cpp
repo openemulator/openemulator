@@ -212,6 +212,199 @@ vector<bool> OEImage::getPhaseAlternation()
     return phaseAlternation;
 }
 
+void OEImage::clear()
+{
+    setSize(OEMakeSize(0, 0));
+}
+
+void OEImage::resize(OESize s, OEColor color)
+{
+    OEInt srcBytesPerRow = getBytesPerRow();
+    
+    OESize oldSize = size;
+    size = OEIntegralSize(s);
+    
+    OEInt destBytesPerRow = getBytesPerRow();
+    
+    OEInt height = min(oldSize.height, size.height);
+    
+    if (size.width < oldSize.width)
+    {
+        OEChar *src = getPixels();
+        OEChar *dest = getPixels();
+        
+        for (OEInt y = 0; y < height; y++)
+        {
+            memmove(dest, src, destBytesPerRow);
+            
+            src += srcBytesPerRow;
+            dest += destBytesPerRow;
+        }
+        
+        pixels.resize(getBytesPerRow() * size.height);
+    }
+    else if (size.width > oldSize.width)
+    {
+        pixels.resize(getBytesPerRow() * size.height);
+        
+        OEChar *src = getPixels() + (height - 1) * srcBytesPerRow;
+        OEChar *dest = getPixels() + (height - 1) * destBytesPerRow;
+        
+        for (OESInt y = (height - 1); y >= 0; y--)
+        {
+            memmove(dest, src, srcBytesPerRow);
+            
+            for (OEInt x = oldSize.width; x < size.width; x++)
+                setPixel(x, y, color);
+            
+            src -= srcBytesPerRow;
+            dest -= destBytesPerRow;
+        }
+    }
+    else
+        pixels.resize(getBytesPerRow() * size.height);
+    
+    for (OEInt y = oldSize.height; y < size.height; y++)
+        for (OEInt x = 0; x < size.width; x++)
+            setPixel(x, y, color);
+}
+
+OEColor OEImage::getPixel(OEInt x, OEInt y)
+{
+    OEChar *p = &pixels[y * getBytesPerRow() + x * getBytesPerPixel()];
+    
+    switch (format)
+    {
+        case OEIMAGE_LUMINANCE:
+            return OEColor(p[0], p[0], p[0]);
+            
+        case OEIMAGE_RGB:
+            return OEColor(p[0], p[1], p[2]);
+            
+        case OEIMAGE_RGBA:
+            return OEColor(p[0], p[1], p[2], p[3]);
+            
+        default:
+            return OEColor();
+    }
+}
+
+void OEImage::setPixel(OEInt x, OEInt y, OEColor color)
+{
+    OEChar *p = &pixels[y * getBytesPerRow() + x * getBytesPerPixel()];
+    
+    switch (format)
+    {
+        case OEIMAGE_LUMINANCE:
+            p[0] = ((OEInt) color.r +
+                    (OEInt) color.g +
+                    (OEInt) color.b) / 3;
+            
+            break;
+            
+        case OEIMAGE_RGB:
+            p[0] = color.r;
+            p[1] = color.g;
+            p[2] = color.b;
+            
+            break;
+            
+        case OEIMAGE_RGBA:
+            p[0] = color.r;
+            p[1] = color.g;
+            p[2] = color.b;
+            p[3] = color.a;
+            
+            break;
+    }
+}
+
+void OEImage::fill(OEColor color)
+{
+    for (OEInt y = 0; y < size.height; y++)
+        for (OEInt x = 0; x < size.width; x++)
+            setPixel(x, y, color);
+}
+
+void OEImage::blend(OEImage& image, OEPoint origin, OEBlendMode mode)
+{
+    switch (mode)
+    {
+        case OEBLEND_NORMAL:
+            for (OEInt y = 0; y < image.size.height; y++)
+                for (OEInt x = 0; x < image.size.width; x++)
+                {
+                    OEColor pSrc = image.getPixel(x, y);
+                    OEColor pDest = getPixel(x + origin.x, y + origin.y);
+                    
+                    OEColor p(((OEInt) pSrc.r * pSrc.a +
+                               (OEInt) pDest.r * (255 - pSrc.a)) / 255,
+                              ((OEInt) pSrc.g * pSrc.a +
+                               (OEInt) pDest.g * (255 - pSrc.a)) / 255,
+                              ((OEInt) pSrc.b * pSrc.a +
+                               (OEInt) pDest.b * (255 - pSrc.a)) / 255,
+                              255);
+                    
+                    setPixel(x + origin.x, y + origin.y, p);
+                }
+            
+            break;
+            
+        case OEBLEND_DARKEN:
+            for (OEInt y = 0; y < image.size.height; y++)
+                for (OEInt x = 0; x < image.size.width; x++)
+                {
+                    OEColor pSrc = image.getPixel(x, y);
+                    OEColor pDest = getPixel(x + origin.x, y + origin.y);
+                    
+                    OEColor p(MIN(pSrc.r, pDest.r),
+                              MIN(pSrc.g, pDest.g),
+                              MIN(pSrc.b, pDest.b),
+                              255);
+                    
+                    setPixel(x + origin.x, y + origin.y, p);
+                }
+            
+            break;
+
+        case OEBLEND_MULTIPLY:
+            for (OEInt y = 0; y < image.size.height; y++)
+                for (OEInt x = 0; x < image.size.width; x++)
+                {
+                    OEColor pSrc = image.getPixel(x, y);
+                    OEColor pDest = getPixel(x + origin.x, y + origin.y);
+                    
+                    OEColor p((OEInt) pSrc.r * pDest.r / 255,
+                              (OEInt) pSrc.g * pDest.g / 255,
+                              (OEInt) pSrc.b * pDest.b / 255,
+                              255);
+                    
+                    setPixel(x + origin.x, y + origin.y, p);
+                }
+            
+            break;
+            
+        case OEBLEND_SCREEN:
+            for (OEInt y = 0; y < image.size.height; y++)
+                for (OEInt x = 0; x < image.size.width; x++)
+                {
+                    OEColor pSrc = image.getPixel(x, y);
+                    OEColor pDest = getPixel(x + origin.x, y + origin.y);
+                    
+                    OEColor p(255 - (OEInt) (255 - pSrc.r) * (255 - pDest.r) / 255,
+                              255 - (OEInt) (255 - pSrc.g) * (255 - pDest.g) / 255,
+                              255 - (OEInt) (255 - pSrc.b) * (255 - pDest.b) / 255,
+                              255);
+                    
+                    setPixel(x + origin.x, y + origin.y, p);
+                }
+            
+            break;
+    }
+    
+    return;
+}
+
 bool OEImage::load(string path)
 {
     bool success = false;
@@ -286,151 +479,6 @@ bool OEImage::load(string path)
 bool OEImage::load(OEData& data)
 {
     return false;
-}
-
-void OEImage::print(OEImage& image, OEPoint origin)
-{
-    OERect rect = OEMakeRect(0, 0, size.width, size.height);
-    OERect imageRect = OEMakeRect(origin.x, origin.y, image.size.width, image.size.height);
-    
-    setSize(OEUnionRect(rect, imageRect).size, 0xff);
-    
-    for (OEInt y = 0; y < image.size.height; y++)
-        for (OEInt x = 0; x < image.size.width; x++)
-        {
-            OEColor p1 = getPixel(x + origin.x, y + origin.y);
-            OEColor p2 = image.getPixel(x, y);
-            
-            setPixel(x + origin.x, y + origin.y, darken(p1, p2));
-        }
-    
-    return;
-}
-
-void OEImage::fill(OEColor color)
-{
-    for (OEInt y = 0; y < size.height; y++)
-        for (OEInt x = 0; x < size.width; x++)
-            setPixel(x, y, color);
-}
-
-void OEImage::setSize(OESize s, OEChar fillByte)
-{
-    OEInt srcBytesPerRow = getBytesPerRow();
-    
-    OESize oldSize = size;
-    size = OEIntegralSize(s);
-    
-    OEInt dstBytesPerRow = getBytesPerRow();
-    
-    OEInt height = min(oldSize.height, size.height);
-    
-    if (size.width < oldSize.width)
-    {
-        OEChar *src = getPixels();
-        OEChar *dst = getPixels();
-        
-        for (OEInt y = 0; y < height; y++)
-        {
-            memmove(dst, src, dstBytesPerRow);
-            
-            src += srcBytesPerRow;
-            dst += dstBytesPerRow;
-        }
-        
-        pixels.resize(getBytesPerRow() * size.height);
-        
-        if (size.height > oldSize.height)
-            memset(getPixels(), fillByte, getBytesPerRow() * (size.height - oldSize.height));
-    }
-    else if (size.width > oldSize.width)
-    {
-        pixels.resize(getBytesPerRow() * size.height);
-        
-        if (size.height > oldSize.height)
-            memset(getPixels() + height * getBytesPerRow(), fillByte,
-                   (size.height - oldSize.height) * dstBytesPerRow);
-        
-        OEChar *src = getPixels() + (height - 1) * srcBytesPerRow;
-        OEChar *dst = getPixels() + (height - 1) * dstBytesPerRow;
-        
-        for (OESInt y = (height - 1); y >= 0; y--)
-        {
-            memmove(dst, src, srcBytesPerRow);
-            memset(dst + srcBytesPerRow, fillByte, dstBytesPerRow - srcBytesPerRow);
-            
-            src -= srcBytesPerRow;
-            dst -= dstBytesPerRow;
-        }
-    }
-    else
-        pixels.resize(getBytesPerRow() * size.height);
-}
-
-OEColor OEImage::getPixel(OEInt x, OEInt y)
-{
-    OEChar *p = &pixels[y * getBytesPerRow() + x * getBytesPerPixel()];
-    
-    switch (format)
-    {
-        case OEIMAGE_LUMINANCE:
-            return OEColor(p[0], p[0], p[0]);
-            
-        case OEIMAGE_RGB:
-            return OEColor(p[0], p[1], p[2]);
-            
-        case OEIMAGE_RGBA:
-            return OEColor(p[0], p[1], p[2], p[3]);
-            
-        default:
-            return OEColor();
-    }
-}
-
-void OEImage::setPixel(OEInt x, OEInt y, OEColor value)
-{
-    OEChar *p = &pixels[y * getBytesPerRow() + x * getBytesPerPixel()];
-    
-    switch (format)
-    {
-        case OEIMAGE_LUMINANCE:
-            p[0] = ((OEInt) value.r +
-                    (OEInt) value.g +
-                    (OEInt) value.b) / 3;
-            
-            break;
-            
-        case OEIMAGE_RGB:
-            p[0] = value.r;
-            p[1] = value.g;
-            p[2] = value.b;
-            
-            break;
-            
-        case OEIMAGE_RGBA:
-            p[0] = value.r;
-            p[1] = value.g;
-            p[2] = value.b;
-            p[3] = value.a;
-            
-            break;
-    }
-}
-
-OEColor OEImage::darken(OEColor p1, OEColor p2)
-{
-    OESInt r = (OESInt) p1.r + (OESInt) p2.r - 255;
-    OESInt g = (OESInt) p1.g + (OESInt) p2.g - 255;
-    OESInt b = (OESInt) p1.b + (OESInt) p2.b - 255;
-    
-    if (r < 0)
-        r = 0;
-    if (g < 0)
-        g = 0;
-    if (b < 0)
-        b = 0;
-    
-    return OEColor(r, g, b);
 }
 
 bool OEImage::validatePNGHeader(FILE *fp)

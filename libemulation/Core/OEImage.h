@@ -89,6 +89,14 @@ public:
     OEChar a;
 };
 
+typedef enum
+{
+    OEBLEND_NORMAL,
+    OEBLEND_DARKEN,
+    OEBLEND_MULTIPLY,
+    OEBLEND_SCREEN,
+} OEBlendMode;
+
 // Macros
 
 inline OEPoint OEMakePoint(float x, float y)
@@ -222,9 +230,12 @@ inline OERect OEUnionRect(OERect aRect, OERect bRect)
         return aRect;
     
     r = OEMakeRect(MIN(OEMinX(aRect), OEMinX(bRect)),
-                   MIN(OEMinY(aRect), OEMinY(bRect)), 0, 0);
+                   MIN(OEMinY(aRect), OEMinY(bRect)),
+                   0,
+                   0);
     
-    r = OEMakeRect(OEMinX(r), OEMinY(r),
+    r = OEMakeRect(OEMinX(r),
+                   OEMinY(r),
                    MAX(OEMaxX(aRect), OEMaxX(bRect)) - OEMinX(r),
                    MAX(OEMaxY(aRect), OEMaxY(bRect)) - OEMinY(r));
     
@@ -290,10 +301,16 @@ public:
     void setPhaseAlternation(vector<bool> value);
     vector<bool> getPhaseAlternation();
     
+    void clear();
+    void resize(OESize s, OEColor color);
+    
+    OEColor getPixel(OEInt x, OEInt y);
+    void setPixel(OEInt x, OEInt y, OEColor color);
+    void fill(OEColor color);
+    void blend(OEImage& image, OEPoint origin, OEBlendMode mode);
+    
     bool load(string path);
     bool load(OEData& data);
-    void print(OEImage& image, OEPoint origin);
-    void fill(OEColor color);
     
 private:
     OEImageFormat format;
@@ -309,10 +326,6 @@ private:
     vector<bool> phaseAlternation;
     
     void init();
-    void setSize(OESize s, OEChar fillByte);
-    OEColor getPixel(OEInt x, OEInt y);
-    void setPixel(OEInt x, OEInt y, OEColor value);
-    OEColor darken(OEColor p1, OEColor p2);
     bool validatePNGHeader(FILE *fp);
 };
 

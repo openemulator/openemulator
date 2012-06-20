@@ -196,7 +196,7 @@ void VidexVideoterm::update()
     else
         memset(&currentFont.front() + FONT_SIZE, 0, FONT_SIZE);
     
-    for (OEInt i = 0; i < FONT_SIZE; i++)
+    for (OEInt i = 0; i < 2 * FONT_SIZE; i++)
         currentFont[i + 2 * FONT_SIZE] = ~currentFont[i];
     
     refreshVideo();

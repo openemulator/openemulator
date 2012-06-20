@@ -43,7 +43,7 @@ private:
     map<string, OESound>sound;
     
     OEInt phaseControl;
-    OEInt trackIndex;
+    OESInt trackIndex;
     
     DIApple525DiskStorage diskStorage;
     
@@ -54,6 +54,7 @@ private:
     
     void updateSound();
     void setPhaseControl(OEInt value);
+    void updateStepper(OESInt& position, OEInt phaseControl);
     
     bool openDiskImage(string path);
     bool closeDiskImage();

@@ -21,7 +21,7 @@
 // Drawing:
 // * postImage post an image to the canvas (OEImage)
 // * clear clears the canvas
-// * movePrintHead sets the print head position in a paper canvas (OEPoint)
+// * setPrintPosition sets the print position in a paper canvas (OEPoint)
 
 // Notifications:
 // * HID notifications use the CanvasHIDNotification structure
@@ -82,7 +82,7 @@ typedef enum
     
     CANVAS_POST_IMAGE,
     CANVAS_CLEAR,
-    CANVAS_MOVE_PRINTHEAD,
+    CANVAS_SET_PRINTPOSITION,
     
     CANVAS_END,
 } CanvasMessage;
@@ -210,11 +210,11 @@ public:
     CanvasPaperConfiguration()
     {
         pageResolution = OEMakeSize(612, 792);
-        pagePixelDensity = OEMakeSize(72, 72);
+        pixelDensity = OEMakeSize(72, 72);
     }
     
     OESize pageResolution;
-    OESize pagePixelDensity;
+    OESize pixelDensity;
 };
 
 // OpenGL canvas configuration:
@@ -227,11 +227,11 @@ public:
     CanvasOpenGLConfiguration()
     {
         viewportDefaultSize = OEMakeSize(640, 480);
-        viewportPixelDensity = 72;
+        pixelDensity = 72;
     }
     
     OESize viewportDefaultSize;
-    float viewportPixelDensity;
+    float pixelDensity;
 };
 
 // Canvas HID notification events

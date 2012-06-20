@@ -21,6 +21,8 @@ public:
 	bool setRef(string name, OEComponent *ref);
 	bool init();
 	
+    void notify(OEComponent *sender, int notification, void *data);
+    
     OEChar read(OEAddress address);
     void write(OEAddress address, OEChar value);
     
@@ -39,12 +41,11 @@ private:
     OEInt paperDrivePhaseControl;
     OEInt headDotControl;
     
-    OEPoint headPosition;
-    
-	string imagePath;
+    OEPoint printPosition;
+    OEImage image;
     
     void updateData();
-    void updateMechanics();
+    void updateParallel();
 
     void updateStepper(float& position, OEInt phaseControl);
 };

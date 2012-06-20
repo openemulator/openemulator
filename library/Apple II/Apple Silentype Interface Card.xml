@@ -21,7 +21,6 @@
         <property name="slotController" ref="appleSilentypeInterfaceCard.memory"/>
         <property name="memoryCF00" ref="appleSilentypeInterfaceCard.memoryCF00"/>
         <property name="memoryMapper" ref="appleSilentypeInterfaceCard.memoryMapper"/>
-        <property name="shiftClockDisabled" value="0"/>
         <property name="printer" ref=""/>
     </component>
     <component id="appleSilentypeInterfaceCard.memory" class="AppleIISlotController">

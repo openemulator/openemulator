@@ -16,6 +16,10 @@
 #define PARALLEL_READ   (1 << 8)
 #define PARALLEL_Q15    (1 << 15)
 
+#define PAPER_STARTHEIGHT   32
+#define PAPER_WIDTH         800
+#define DOT_NUM             7
+
 AppleSilentype::AppleSilentype()
 {
 	device = NULL;
@@ -32,7 +36,8 @@ AppleSilentype::AppleSilentype()
     paperDrivePhaseControl = 0;
     headDotControl = 0;
     
-    headPosition = OEMakePoint(0, 0);
+    printPosition = OEMakePoint(0, PAPER_STARTHEIGHT);
+    image.setSize(OEMakeSize(1, DOT_NUM));
 }
 
 bool AppleSilentype::setValue(string name, string value)
@@ -64,14 +69,22 @@ bool AppleSilentype::setRef(string name, OEComponent *ref)
 	if (name == "device")
 	{
 		if (device)
+        {
+            if (canvas)
+                canvas->removeObserver(this, CANVAS_DID_DELETE);
 			device->postMessage(this,
                                 DEVICE_DESTROY_CANVAS,
                                 &canvas);
+        }
 		device = ref;
 		if (device)
+        {
 			device->postMessage(this,
                                 DEVICE_CONSTRUCT_PAPERCANVAS,
                                 &canvas);
+            if (canvas)
+                canvas->addObserver(this, CANVAS_DID_DELETE);
+        }
 	}
 	else
 		return false;
@@ -94,18 +107,26 @@ bool AppleSilentype::init()
 	}
 	
 	CanvasPaperConfiguration configuration;
-	configuration.pageResolution = OEMakeSize(612 * 2, 792 * 2);
-	configuration.pagePixelDensity = OEMakeSize(144, 144);
+	configuration.pageResolution = OEMakeSize(612 * 2, 792);
+	configuration.pixelDensity = OEMakeSize(144, 72);
 	canvas->postMessage(this, CANVAS_CONFIGURE_PAPER, &configuration);
 	
     updateData();
+    updateParallel();
     
 	return true;
 }
 
+void AppleSilentype::notify(OEComponent *sender, int notification, void *data)
+{
+    canvas->postMessage(this, CANVAS_CLEAR, NULL);
+    
+    printPosition.y = PAPER_STARTHEIGHT;
+}
+
 OEChar AppleSilentype::read(OEAddress address)
 {
-    bool machineStatus = (headPosition.x < 0);
+    bool machineStatus = (printPosition.x < 0);
     
     OEChar value = 0;
     
@@ -152,7 +173,7 @@ void AppleSilentype::write(OEAddress address, OEChar value)
             parallelRegister = shiftRegister;
             
             updateData();
-            updateMechanics();
+            updateParallel();
         }
     }
     
@@ -166,7 +187,12 @@ void AppleSilentype::write(OEAddress address, OEChar value)
     
     // Store clear
     if (shiftClock && storeClock)
+    {
         parallelRegister = 0;
+        
+        updateData();
+        updateParallel();
+    }
 }
 
 void AppleSilentype::updateData()
@@ -175,22 +201,50 @@ void AppleSilentype::updateData()
         data = OEGetBit(shiftRegister, PARALLEL_Q15);
 }
 
-void AppleSilentype::updateMechanics()
+void AppleSilentype::updateParallel()
 {
     headDrivePhaseControl = (parallelRegister >> 0) & 0xf;
     paperDrivePhaseControl = (parallelRegister >> 4) & 0xf;
-    headDotControl = (parallelRegister >> 8) & 0x7f;
+    headDotControl = (parallelRegister >> 9) & 0x7f;
     
-    updateStepper(headPosition.x, headDrivePhaseControl);
-    updateStepper(headPosition.y, paperDrivePhaseControl);
+    updateStepper(printPosition.x, headDrivePhaseControl);
+    updateStepper(printPosition.y, paperDrivePhaseControl);
     
-    logMessage("headPosition: (" + getString(headPosition.x) + ", " +
-               getString(headPosition.y) + ")");
+    if (printPosition.y < 0)
+        return;
+    
+    if ((printPosition.x < 0) || (printPosition.x >= PAPER_WIDTH))
+        return;
+    
+    for (OEInt y = 0; y < DOT_NUM; y++)
+    {
+        bool value = OEGetBit(headDotControl, (0x40 >> y));
+        
+        image.setPixel(0, y, OEColor(value ? 0x80 : 0xff));
+    }
+    
+    for (OEInt y = 0; y < 16; y++)
+    {
+        bool value = OEGetBit(parallelRegister, (1 << y));
+        
+        printf(value ? "." : " ");
+    }
+    
+    printf("\n");
+    
+    canvas->postMessage(this, CANVAS_SET_PRINTPOSITION, &printPosition);
+    canvas->postMessage(this, CANVAS_POST_IMAGE, &image);
+    
+/*    logMessage("headPosition: (" +
+               getString(printPosition.x) + ", " +
+               getString(printPosition.y) + ")");*/
 }
 
 void AppleSilentype::updateStepper(float& position, OEInt phaseControl)
 {
-	OESInt currentPhase = ((OESInt) position) & 0x7;
+    float invPosition = -position;
+    
+	OESInt currentPhase = ((OESInt) invPosition) & 0x7;
 	OESInt nextPhase;
 	
 	switch (phaseControl)
@@ -241,5 +295,7 @@ void AppleSilentype::updateStepper(float& position, OEInt phaseControl)
 			break;
 	}
     
-    position += ((nextPhase - currentPhase + 4) & 0x7) - 4;
+    invPosition += ((nextPhase - currentPhase + 4) & 0x7) - 4;
+    
+    position = -invPosition;
 }

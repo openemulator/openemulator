@@ -166,7 +166,7 @@ OpenGLCanvas::OpenGLCanvas(string resourcePath, OECanvasType canvasType)
     imageBlackLevel = 0;
     imageWhiteLevel = 0;
     
-    printHead = OEMakePoint(0, 0);
+    printPosition = OEMakePoint(0, 0);
     
     bezel = CANVAS_BEZEL_NONE;
     isBezelDrawRequired = false;
@@ -297,8 +297,8 @@ OERect OpenGLCanvas::getClipRect()
             
         case OECANVAS_PAPER:
         {
-            float pixelDensityRatio = (paperConfiguration.pagePixelDensity.width /
-                                       paperConfiguration.pagePixelDensity.height);
+            float pixelDensityRatio = (paperConfiguration.pixelDensity.width /
+                                       paperConfiguration.pixelDensity.height);
             float clipHeight = (viewportSize.height * image.getSize().width /
                                 viewportSize.width / pixelDensityRatio);
             
@@ -344,13 +344,13 @@ OESize OpenGLCanvas::getPixelDensity()
             break;
             
         case OECANVAS_PAPER:
-            pixelDensity = paperConfiguration.pagePixelDensity;
+            pixelDensity = paperConfiguration.pixelDensity;
             
             break;
             
         case OECANVAS_OPENGL:
-            pixelDensity = OEMakeSize(openGLConfiguration.viewportPixelDensity,
-                                      openGLConfiguration.viewportPixelDensity);
+            pixelDensity = OEMakeSize(openGLConfiguration.pixelDensity,
+                                      openGLConfiguration.pixelDensity);
             
             break;
     }
@@ -1398,17 +1398,17 @@ void OpenGLCanvas::drawPaperCanvas()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     OESize imageSize = image.getSize();
-    if ((imageSize.width == 0) || (imageSize.height == 0))
+    if (!imageSize.width || !imageSize.height)
         return;
     
     // Render
-    float pixelDensityRatio = (paperConfiguration.pagePixelDensity.width /
-                               paperConfiguration.pagePixelDensity.height);
+    float pixelDensityRatio = (paperConfiguration.pixelDensity.width /
+                               paperConfiguration.pixelDensity.height);
     float canvasViewportHeight = (viewportSize.height * imageSize.width /
                                   viewportSize.width / pixelDensityRatio);
     OERect viewportCanvas = OEMakeRect(0,
                                        clipOrigin.y,
-                                       imageSize.width,
+                                       paperConfiguration.pageResolution.width,
                                        canvasViewportHeight);
     
     OESize texSize = OEMakeSize(getNextPowerOf2(imageSize.width),
@@ -1793,9 +1793,6 @@ void OpenGLCanvas::doDelete()
 
 bool OpenGLCanvas::setCaptureMode(CanvasCaptureMode *value)
 {
-    if (!value)
-        return false;
-    
     if (captureMode == *value)
         return true;
     
@@ -1825,9 +1822,6 @@ bool OpenGLCanvas::setCaptureMode(CanvasCaptureMode *value)
 
 bool OpenGLCanvas::setBezel(CanvasBezel *value)
 {
-    if (!value)
-        return false;
-    
     if (bezel == *value)
         return true;
     
@@ -1843,9 +1837,6 @@ bool OpenGLCanvas::setBezel(CanvasBezel *value)
 
 bool OpenGLCanvas::setDisplayConfiguration(CanvasDisplayConfiguration *value)
 {
-    if (!value)
-        return false;
-    
     lock();
     
     isConfigurationUpdated = true;
@@ -1858,9 +1849,6 @@ bool OpenGLCanvas::setDisplayConfiguration(CanvasDisplayConfiguration *value)
 
 bool OpenGLCanvas::setPaperConfiguration(CanvasPaperConfiguration *value)
 {
-    if (!value)
-        return false;
-    
     lock();
     
     isConfigurationUpdated = true;
@@ -1873,9 +1861,6 @@ bool OpenGLCanvas::setPaperConfiguration(CanvasPaperConfiguration *value)
 
 bool OpenGLCanvas::setOpenGLConfiguration(CanvasOpenGLConfiguration *value)
 {
-    if (!value)
-        return false;
-    
     lock();
     
     isConfigurationUpdated = true;
@@ -1888,9 +1873,6 @@ bool OpenGLCanvas::setOpenGLConfiguration(CanvasOpenGLConfiguration *value)
 
 bool OpenGLCanvas::postImage(OEImage *value)
 {
-    if (!value)
-        return false;
-    
     lock();
     
     switch (canvasType)
@@ -1904,25 +1886,30 @@ bool OpenGLCanvas::postImage(OEImage *value)
             
         case OECANVAS_PAPER:
         {
-            OESize newImageSize = value->getSize();
-            OESize imageSize = image.getSize();
+            OESize srcSize = value->getSize();
+            OESize destSize = image.getSize();
             
-            OERect aRect = OEMakeRect(0, 0,
-                                      newImageSize.width, newImageSize.height);
-            OERect bRect = OEMakeRect(printHead.x, printHead.y,
-                                      imageSize.width, imageSize.height);
-            OERect unionRect = OEUnionRect(aRect, bRect);
-            
-            if (OEIsEmptyRect(bRect))
+            if ((destSize.width == 0) || (destSize.height == 0))
+            {
                 image.setFormat(value->getFormat());
-            image.setSize(unionRect.size);
-            image.print(*value, printHead);
+                
+                destSize.width = destSize.height = 1;
+            }
+            
+            OERect srcRect = OEMakeRect(printPosition.x, printPosition.y,
+                                        srcSize.width, srcSize.height);
+            OERect destRect = OEMakeRect(0, 0,
+                                         destSize.width, destSize.height);
+            OERect unionRect = OEUnionRect(srcRect, destRect);
+            
+            image.resize(unionRect.size, OEColor(255));
+            
+            image.blend(*value, printPosition, OEBLEND_MULTIPLY);
             
             isImageUpdated = true;
             
             break;
         }
-            
         default:
             break;
     }
@@ -1946,7 +1933,11 @@ bool OpenGLCanvas::clear()
             break;
             
         case OECANVAS_PAPER:
-            // To-Do
+            image = OEImage();
+            
+            isImageUpdated = true;
+            
+            // To-Do: other stuff...
             break;
             
         default:
@@ -1958,14 +1949,11 @@ bool OpenGLCanvas::clear()
     return true;
 }
 
-bool OpenGLCanvas::setPrintHead(OEPoint *value)
+bool OpenGLCanvas::setPrintPosition(OEPoint *value)
 {
-    if (!value)
-        return false;
-    
     lock();
     
-    printHead = *value;
+    printPosition = *value;
     
     unlock();
     
@@ -2029,8 +2017,8 @@ bool OpenGLCanvas::postMessage(OEComponent *sender, int message, void *data)
         case CANVAS_CLEAR:
             return clear();
             
-        case CANVAS_MOVE_PRINTHEAD:
-            return setPrintHead((OEPoint *)data);
+        case CANVAS_SET_PRINTPOSITION:
+            return setPrintPosition((OEPoint *)data);
     }
     
     return false;

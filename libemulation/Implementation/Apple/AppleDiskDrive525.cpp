@@ -235,10 +235,38 @@ void AppleDiskDrive525::updateSound()
 
 void AppleDiskDrive525::setPhaseControl(OEInt value)
 {
+    OESInt oldTrackIndex = trackIndex;
+    
     phaseControl = value;
     
-	OEInt currentPhase = trackIndex & 0x7;
-	OEInt nextPhase;
+    updateStepper(trackIndex, phaseControl);
+	
+	if (trackIndex < 0)
+    {
+		trackIndex = 0;
+        
+        headPlayer->postMessage(this, AUDIOPLAYER_STOP, NULL);
+        headPlayer->postMessage(this, AUDIOPLAYER_PLAY, NULL);
+	}
+    else if (trackIndex >= DRIVE_TRACKNUM)
+    {
+		trackIndex = DRIVE_TRACKNUM - 1;
+        
+        headPlayer->postMessage(this, AUDIOPLAYER_STOP, NULL);
+        headPlayer->postMessage(this, AUDIOPLAYER_PLAY, NULL);
+	}
+    
+    headPlayer->postMessage(this, AUDIOPLAYER_STOP, NULL);
+    headPlayer->postMessage(this, AUDIOPLAYER_PLAY, NULL);
+    
+    if (trackIndex != oldTrackIndex)
+        updateTrack();
+}
+
+void AppleDiskDrive525::updateStepper(OESInt& position, OEInt phaseControl)
+{
+	OESInt currentPhase = position & 0x7;
+	OESInt nextPhase;
 	
 	switch (phaseControl)
     {
@@ -287,34 +315,8 @@ void AppleDiskDrive525::setPhaseControl(OEInt value)
             
 			break;
 	}
-	
-	OESInt trackDelta = ((nextPhase - currentPhase + 4) & 0x7) - 4;
     
-    OEInt oldTrackIndex = trackIndex;
-    OESInt newTrackIndex = trackIndex + trackDelta;
-	
-	if (newTrackIndex < 0)
-    {
-		trackIndex = 0;
-        
-        headPlayer->postMessage(this, AUDIOPLAYER_STOP, NULL);
-        headPlayer->postMessage(this, AUDIOPLAYER_PLAY, NULL);
-	}
-    else if (newTrackIndex >= DRIVE_TRACKNUM)
-    {
-		trackIndex = DRIVE_TRACKNUM - 1;
-        
-        headPlayer->postMessage(this, AUDIOPLAYER_STOP, NULL);
-        headPlayer->postMessage(this, AUDIOPLAYER_PLAY, NULL);
-	}
-    else
-        trackIndex = newTrackIndex;
-    
-    headPlayer->postMessage(this, AUDIOPLAYER_STOP, NULL);
-    headPlayer->postMessage(this, AUDIOPLAYER_PLAY, NULL);
-    
-    if (trackIndex != oldTrackIndex)
-        updateTrack();
+    position += ((nextPhase - currentPhase + 4) & 0x7) - 4;
 }
 
 bool AppleDiskDrive525::openDiskImage(string path)

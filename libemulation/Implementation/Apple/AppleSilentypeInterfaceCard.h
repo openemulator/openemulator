@@ -16,8 +16,6 @@ public:
 	AppleSilentypeInterfaceCard();
 	
     bool setRef(string name, OEComponent *ref);
-    bool setValue(string name, string value);
-    bool getValue(string name, string &value);
     bool init();
     
     bool postMessage(OEComponent *sender, int message, void *data);
@@ -34,8 +32,6 @@ private:
     OEComponent *memoryCF00;
     OEComponent *memoryMapper;
     OEComponent *printer;
-    
-    bool shiftClockDisabled;
     
     void setROMEnabled(bool value);
 };
