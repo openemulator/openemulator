@@ -7,14 +7,17 @@
         <setting ref="rdCFFA.io" name="forceWriteProtected" label="Force Write Protected" type="checkbox"/>
     </device>
     <connector id="rdCFFA.connector" type="Apple II Slot">
+        <inlet ref="rdCFFA.io" property="floatingBus" outletRef="floatingBus"/>
         <inlet ref="rdCFFA.memory" property="memoryBus" outletRef="memoryBus"/>
         <inlet ref="rdCFFA.memoryC800" property="floatingBus" outletRef="floatingBus"/>
         <inlet ref="rdCFFA.disableC800" property="memoryBus" outletRef="memoryBus"/>
     </connector>
-    <component id="rdCFFA.io" class="RDCFFA">
-        <property name="device" ref="rdCFFA"/>
-        <property name="diskImage" value=""/>
-        <property name="forceWriteProtected" value="0"/>
+    <component id="rdCFFA.io" class="AddressDecoder">
+        <property name="size" value="0x10"/>
+        <property name="blockSize" value="0x1"/>
+        <property name="floatingBus" ref=""/>
+        <property name="refRAM" ref="rdCFFA.ataController"/>
+        <property name="mapRAM" value="0x0,0x8-0xf"/>
     </component>
     <component id="rdCFFA.memory" class="AppleIISlotController">
         <property name="memory" ref="rdCFFA.rom"/>
@@ -22,6 +25,11 @@
         <property name="memoryBus" ref=""/>
         <property name="refC800" ref="rdCFFA.memoryC800"/>
         <property name="mapC800" value="0xc800-0xcfff"/>
+    </component>
+    <component id="rdCFFA.ataController" class="ATAController">
+        <property name="device" ref="rdCFFA"/>
+        <property name="diskImage" value=""/>
+        <property name="forceWriteProtected" value="0"/>
     </component>
     <component id="rdCFFA.memoryC800" class="AddressDecoder">
         <property name="size" value="0x800"/>

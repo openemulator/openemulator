@@ -116,11 +116,6 @@ bool AppleSilentypeInterfaceCard::init()
     return true;
 }
 
-bool AppleSilentypeInterfaceCard::postMessage(OEComponent *sender, int message, void *data)
-{
-    return false;
-}
-
 void AppleSilentypeInterfaceCard::notify(OEComponent *sender, int notification, void *data)
 {
     if (printer)
@@ -159,7 +154,7 @@ OEChar AppleSilentypeInterfaceCard::read(OEAddress address)
 
 void AppleSilentypeInterfaceCard::write(OEAddress address, OEChar value)
 {
-//    logMessage("w " + getHexString(value));
+    //    logMessage("w " + getHexString(value));
     
     if (OEGetBit(address, SILENTYPE_WRITE))
     {

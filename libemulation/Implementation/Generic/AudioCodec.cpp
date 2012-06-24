@@ -149,11 +149,11 @@ void AudioCodec::notify(OEComponent *sender, int notification, void *data)
 
 OEChar AudioCodec::read(OEAddress address)
 {
-    float audioBufferIndex;
+    float audioBufferFrame;
     
-    controlBus->postMessage(this, CONTROLBUS_GET_AUDIOBUFFERINDEX, &audioBufferIndex);
+    controlBus->postMessage(this, CONTROLBUS_GET_AUDIOBUFFERFRAME, &audioBufferFrame);
     
-    OEInt index = audioBuffer->channelNum * ((OEInt) audioBufferIndex);
+    OEInt index = audioBuffer->channelNum * ((OEInt) audioBufferFrame);
     index += address % audioBuffer->channelNum;
     
     return 128 + (OEChar)(audioBuffer->input[index] * 127.0F);
@@ -161,21 +161,21 @@ OEChar AudioCodec::read(OEAddress address)
 
 void AudioCodec::write(OEAddress address, OEChar value)
 {
-    float audioBufferIndex;
+    float audioBufferFrame;
     
-    controlBus->postMessage(this, CONTROLBUS_GET_AUDIOBUFFERINDEX, &audioBufferIndex);
+    controlBus->postMessage(this, CONTROLBUS_GET_AUDIOBUFFERFRAME, &audioBufferFrame);
     
     if (address < audioBuffer->channelNum)
-        setSynth(audioBufferIndex, (OEInt) address, (value - 128) / 128.0F);
+        setSynth(audioBufferFrame, (OEInt) address, (value - 128) / 128.0F);
 }
 
 OEShort AudioCodec::read16(OEAddress address)
 {
-    float audioBufferIndex;
+    float audioBufferFrame;
     
-    controlBus->postMessage(this, CONTROLBUS_GET_AUDIOBUFFERINDEX, &audioBufferIndex);
+    controlBus->postMessage(this, CONTROLBUS_GET_AUDIOBUFFERFRAME, &audioBufferFrame);
     
-    OEInt index = audioBuffer->channelNum * ((OEInt) audioBufferIndex);
+    OEInt index = audioBuffer->channelNum * ((OEInt) audioBufferFrame);
     index += address % audioBuffer->channelNum;
     
     return (OESShort)(audioBuffer->input[index] * 32767.0F);
@@ -183,12 +183,12 @@ OEShort AudioCodec::read16(OEAddress address)
 
 void AudioCodec::write16(OEAddress address, OEShort value)
 {
-    float audioBufferIndex;
+    float audioBufferFrame;
     
-    controlBus->postMessage(this, CONTROLBUS_GET_AUDIOBUFFERINDEX, &audioBufferIndex);
+    controlBus->postMessage(this, CONTROLBUS_GET_AUDIOBUFFERFRAME, &audioBufferFrame);
     
     if (address < audioBuffer->channelNum)
-        setSynth(audioBufferIndex, (OEInt) address, ((OESShort) value) / 32768.0F);
+        setSynth(audioBufferFrame, (OEInt) address, ((OESShort) value) / 32768.0F);
 }
 
 void AudioCodec::updateSynth()

@@ -19,7 +19,6 @@ AppleLanguageCard::AppleLanguageCard()
     controlBus = NULL;
     memoryBus = NULL;
     ram = NULL;
-    romF8 = NULL;
     
     bank1 = false;
     ramRead = false;
@@ -75,8 +74,6 @@ bool AppleLanguageCard::setRef(string name, OEComponent *ref)
         floatingBus = ref;
     else if (name == "ram")
         ram = ref;
-    else if (name == "romF8")
-        romF8 = ref;
     else
         return false;
     
@@ -113,8 +110,6 @@ bool AppleLanguageCard::init()
         return false;
     }
     
-    setROMF8(true);
-    
     updateBank1();
     
     if (ramRead)
@@ -127,8 +122,6 @@ bool AppleLanguageCard::init()
 
 void AppleLanguageCard::dispose()
 {
-    setROMF8(false);
-    
     setRAMRead(false);
     setRAMWrite(false);
 }
@@ -175,18 +168,6 @@ void AppleLanguageCard::write(OEAddress address, OEChar value)
     setRAMRead(!(((address >> 1) ^ address) & 1));
 }
 
-void AppleLanguageCard::setROMF8(bool value)
-{
-    MemoryMap memoryMap;
-    memoryMap.component = romF8;
-    memoryMap.startAddress = 0xf800;
-    memoryMap.endAddress = 0xffff;
-    memoryMap.read = true;
-    memoryMap.write = false;
-    
-    memoryBus->postMessage(this, (value ? APPLEII_MAP : APPLEII_UNMAP), &memoryMap);
-}
-
 void AppleLanguageCard::setBank1(bool value)
 {
     if (bank1 == value)
@@ -228,7 +209,9 @@ void AppleLanguageCard::updateRAMRead()
     memoryMap.read = true;
     memoryMap.write = false;
     
-    memoryBus->postMessage(this, (ramRead ? APPLEII_MAP : APPLEII_UNMAP), &memoryMap);
+    memoryBus->postMessage(this,
+                           (ramRead ? ADDRESSDECODER_MAP : ADDRESSDECODER_UNMAP),
+                           &memoryMap);
 }
 
 void AppleLanguageCard::setRAMWrite(bool value)
@@ -251,5 +234,7 @@ void AppleLanguageCard::updateRAMWrite()
     memoryMap.read = false;
     memoryMap.write = true;
     
-    memoryBus->postMessage(this, (ramWrite ? APPLEII_MAP : APPLEII_UNMAP), &memoryMap);
+    memoryBus->postMessage(this,
+                           (ramWrite ? ADDRESSDECODER_MAP : ADDRESSDECODER_UNMAP),
+                           &memoryMap);
 }

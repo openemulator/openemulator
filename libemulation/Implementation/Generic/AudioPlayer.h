@@ -9,8 +9,9 @@
  */
 
 #include "OEComponent.h"
-
 #include "OESound.h"
+
+#include "AudioInterface.h"
 
 #include "samplerate.h"
 
@@ -31,6 +32,7 @@ public:
     
 private:
     OEComponent *audio;
+    OEComponent *controlBus;
     
     bool playing;
     bool loop;
@@ -43,4 +45,9 @@ private:
     int srcChannelNum;
     SRC_STATE *srcState;
     bool srcEndOfInput;
+    
+    AudioBuffer *audioBuffer;
+    OEInt audioBufferFrame;
+    
+    void updateAudio(bool bufferDidRender);
 };

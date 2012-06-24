@@ -14,15 +14,12 @@
 
 Apple1ACI::Apple1ACI() : Audio1Bit()
 {
-    memoryBus = NULL;
     rom = NULL;
 }
 
 bool Apple1ACI::setRef(string name, OEComponent *ref)
 {
-    if (name == "memoryBus")
-        memoryBus = ref;
-    else if (name == "rom")
+    if (name == "rom")
         rom = ref;
     else
         return Audio1Bit::setRef(name, ref);
@@ -35,13 +32,6 @@ bool Apple1ACI::init()
     if (!Audio1Bit::init())
         return false;
     
-    if (!memoryBus)
-    {
-        logMessage("memoryBus not connected");
-        
-        return false;
-    }
-    
     if (!rom)
     {
         logMessage("rom not connected");
@@ -49,14 +39,7 @@ bool Apple1ACI::init()
         return false;
     }
     
-    updateMemory(true);
-    
     return true;
-}
-
-void Apple1ACI::dispose()
-{
-    updateMemory(false);
 }
 
 OEChar Apple1ACI::read(OEAddress address)
@@ -75,28 +58,4 @@ OEChar Apple1ACI::read(OEAddress address)
 void Apple1ACI::write(OEAddress address, OEChar value)
 {
     toggleAudioOutput();
-}
-
-void Apple1ACI::updateMemory(bool value)
-{
-    if (!memoryBus)
-        return;
-    
-    OEInt message = value ? ADDRESSDECODER_MAP : ADDRESSDECODER_UNMAP;
-    
-    MemoryMap memoryMap;
-    
-    memoryMap.component = this;
-    memoryMap.startAddress = 0xc000;
-    memoryMap.endAddress = 0xc0ff;
-    memoryMap.read = true;
-    memoryMap.write = true;
-    memoryBus->postMessage(this, message, &memoryMap);
-    
-    memoryMap.component = rom;
-    memoryMap.startAddress = 0xc100;
-    memoryMap.endAddress = 0xc1ff;
-    memoryMap.read = true;
-    memoryMap.write = false;
-    memoryBus->postMessage(this, message, &memoryMap);
 }

@@ -34,14 +34,12 @@ private:
     OEComponent *memoryBus;
     OEComponent *floatingBus;
     OEComponent *ram;
-    OEComponent *romF8;
     
     bool bank1;
     bool ramRead;
     bool preWrite;
     bool ramWrite;
     
-    void setROMF8(bool value);
     void setBank1(bool value);
     void updateBank1();
     void setRAMRead(bool value);

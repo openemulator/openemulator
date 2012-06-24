@@ -69,31 +69,28 @@ void AddressMapper::update()
     
     MemoryMaps m;
     
-    if (ref.count(lastSel))
-    {
-        if (!appendMemoryMaps(m, ref[lastSel], conf[lastSel]))
-            logMessage("could not remove memory map " + conf[lastSel] + " for " + lastSel);
-        
-        for (MemoryMaps::iterator i = m.begin();
-             i != m.end();
-             i++)
-            addressDecoder->postMessage(this, ADDRESSDECODER_UNMAP, &*i);
-    }
+    m = buildMemoryMaps(lastSel);
     
-    m.clear();
+    for (MemoryMaps::iterator i = m.begin();
+         i != m.end();
+         i++)
+        addressDecoder->postMessage(this, ADDRESSDECODER_UNMAP, &*i);
     
-    if (ref.count(sel))
-    {
-        if (!appendMemoryMaps(m, ref[sel], conf[sel]))
-            logMessage("could not add memory map '" + conf[sel] + "' for '" + sel + "'");
-        
-        for (MemoryMaps::iterator i = m.begin();
-             i != m.end();
-             i++)
-            addressDecoder->postMessage(this, ADDRESSDECODER_MAP, &*i);
-    }
+    m = buildMemoryMaps(sel);
+    
+    for (MemoryMaps::iterator i = m.begin();
+         i != m.end();
+         i++)
+        addressDecoder->postMessage(this, ADDRESSDECODER_MAP, &*i);
     
     lastSel = sel;
+}
+
+void AddressMapper::dispose()
+{
+    sel = "";
+    
+    update();
 }
 
 bool AddressMapper::postMessage(OEComponent *sender, int message, void *data)
@@ -109,4 +106,26 @@ bool AddressMapper::postMessage(OEComponent *sender, int message, void *data)
     }
     
     return false;
+}
+
+MemoryMaps AddressMapper::buildMemoryMaps(string value)
+{
+    MemoryMaps m;
+    
+    vector<string> values = strsplit(value, ',');
+    
+    for (vector<string>::iterator i = values.begin();
+         i != values.end();
+         i++)
+    {
+        string sel = *i;
+        
+        if (!ref.count(sel))
+            continue;
+        
+        if (!appendMemoryMaps(m, ref[sel], conf[sel]))
+            logMessage("could not remove memory map " + conf[lastSel] + " for " + lastSel);
+    }
+    
+    return m;
 }

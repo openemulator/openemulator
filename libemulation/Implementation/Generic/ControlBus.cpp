@@ -233,7 +233,7 @@ bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
             
             return true;
             
-        case CONTROLBUS_GET_AUDIOBUFFERINDEX:
+        case CONTROLBUS_GET_AUDIOBUFFERFRAME:
             *((float *)data) = (cycles + getCycles() - audioBufferStart) * sampleToCycleRatio;
             
             return true;

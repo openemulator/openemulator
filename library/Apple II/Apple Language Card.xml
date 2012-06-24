@@ -5,17 +5,23 @@
     <device id="appleLanguageCard" label="Apple Language Card" image="images/Apple/Apple Language Card.png">
     </device>
     <connector id="appleLanguageCard.connector" type="Apple II Slot">
+        <inlet ref="appleLanguageCard.addressMapper" property="addressDecoder" outletRef="memoryBus"/>
         <inlet ref="appleLanguageCard.io" property="controlBus" outletRef="controlBus"/>
         <inlet ref="appleLanguageCard.io" property="memoryBus" outletRef="memoryBus"/>
         <inlet ref="appleLanguageCard.io" property="floatingBus" outletRef="floatingBus"/>
         <inlet ref="appleLanguageCard.ram" property="controlBus" outletRef="controlBus"/>
     </connector>
+    <component id="appleLanguageCard.addressMapper" class="AddressMapper">
+        <property name="addressDecoder" ref=""/>
+        <property name="mapROM" value="0xf800-0xffff"/>
+        <property name="refROM" ref="appleLanguageCard.romF8"/>
+        <property name="sel" value="ROM"/>
+    </component>
     <component id="appleLanguageCard.io" class="AppleLanguageCard">
         <property name="controlBus" ref=""/>
         <property name="memoryBus" ref=""/>
         <property name="floatingBus" ref=""/>
         <property name="ram" ref="appleLanguageCard.ram"/>
-        <property name="romF8" ref="appleLanguageCard.romF8"/>
         <property name="bank1" value="0"/>
         <property name="ramRead" value="0"/>
         <property name="preWrite" value="0"/>

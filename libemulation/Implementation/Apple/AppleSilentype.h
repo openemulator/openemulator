@@ -42,7 +42,6 @@ private:
     OEInt headDotControl;
     
     OEPoint printPosition;
-    OEImage image;
     
     void updateData();
     void updateParallel();

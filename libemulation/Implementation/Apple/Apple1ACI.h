@@ -17,14 +17,10 @@ public:
     
     bool setRef(string name, OEComponent *ref);
     bool init();
-    void dispose();
     
     OEChar read(OEAddress address);
     void write(OEAddress address, OEChar value);
     
 private:
-    OEComponent *memoryBus;
     OEComponent *rom;
-    
-    void updateMemory(bool value);
 };

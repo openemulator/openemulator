@@ -219,10 +219,6 @@ bool AppleIIVideo::setRef(string name, OEComponent *ref)
         {
             monitor->addObserver(this, CANVAS_MOUSE_DID_CHANGE);
             monitor->addObserver(this, CANVAS_DID_COPY);
-            
-            CanvasCaptureMode captureMode = CANVAS_CAPTURE_ON_MOUSE_CLICK;
-            
-            monitor->postMessage(this, CANVAS_SET_CAPTUREMODE, &captureMode);
         }
         
         bool monitorConnected = (monitor != NULL);
@@ -295,6 +291,13 @@ void AppleIIVideo::update()
         updateTiming();
         
         tvSystemUpdated = false;
+    }
+    
+    if (monitor)
+    {
+        CanvasCaptureMode captureMode = CANVAS_CAPTURE_ON_MOUSE_CLICK;
+        
+        monitor->postMessage(this, CANVAS_SET_CAPTUREMODE, &captureMode);
     }
     
     updateVideoEnabled();

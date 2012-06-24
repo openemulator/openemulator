@@ -19,6 +19,7 @@ typedef enum
 {
     ADDRESSDECODER_MAP,
     ADDRESSDECODER_UNMAP,
+    ADDRESSDECODER_END,
 } AddressDecoderMessage;
 
 typedef enum

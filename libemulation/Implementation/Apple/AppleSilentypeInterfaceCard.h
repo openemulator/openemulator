@@ -18,8 +18,6 @@ public:
     bool setRef(string name, OEComponent *ref);
     bool init();
     
-    bool postMessage(OEComponent *sender, int message, void *data);
-    
     void notify(OEComponent *sender, int notification, void *data);
     
     OEChar read(OEAddress address);

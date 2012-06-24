@@ -16,7 +16,6 @@
 #define PARALLEL_READ   (1 << 8)
 #define PARALLEL_Q15    (1 << 15)
 
-#define PAPER_STARTHEIGHT   32
 #define PAPER_WIDTH         800
 #define DOT_NUM             7
 
@@ -36,8 +35,7 @@ AppleSilentype::AppleSilentype()
     paperDrivePhaseControl = 0;
     headDotControl = 0;
     
-    printPosition = OEMakePoint(0, PAPER_STARTHEIGHT);
-    image.setSize(OEMakeSize(1, DOT_NUM));
+    printPosition = OEMakePoint(0, 0);
 }
 
 bool AppleSilentype::setValue(string name, string value)
@@ -121,11 +119,13 @@ void AppleSilentype::notify(OEComponent *sender, int notification, void *data)
 {
     canvas->postMessage(this, CANVAS_CLEAR, NULL);
     
-    printPosition.y = PAPER_STARTHEIGHT;
+    printPosition.y = 0;
 }
 
 OEChar AppleSilentype::read(OEAddress address)
 {
+//    logMessage("r: " + getHexString(address));
+    
     bool machineStatus = (printPosition.x < 0);
     
     OEChar value = 0;
@@ -215,6 +215,9 @@ void AppleSilentype::updateParallel()
     
     if ((printPosition.x < 0) || (printPosition.x >= PAPER_WIDTH))
         return;
+    
+    OEImage image;
+    image.setSize(OEMakeSize(1, DOT_NUM));
     
     for (OEInt y = 0; y < DOT_NUM; y++)
     {

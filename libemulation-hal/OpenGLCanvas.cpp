@@ -1427,10 +1427,10 @@ void OpenGLCanvas::drawPaperCanvas()
                                   imageSize.width,
                                   PAPER_SLICE);
         
-        if (OEMaxY(slice) >= imageSize.height)
+        if (OEMinY(slice) >= imageSize.height)
             break;
         
-        if (OEMinY(slice) >= imageSize.height)
+        if (OEMaxY(slice) >= imageSize.height)
             slice.size.height = imageSize.height - slice.origin.y;
         
         glBindTexture(GL_TEXTURE_2D, texture[OPENGLCANVAS_IMAGE_IN]);
@@ -1893,7 +1893,8 @@ bool OpenGLCanvas::postImage(OEImage *value)
             {
                 image.setFormat(value->getFormat());
                 
-                destSize.width = destSize.height = 1;
+                destSize.width = 1;//paperConfiguration.pageResolution.width;
+                destSize.height = 1;
             }
             
             OERect srcRect = OEMakeRect(printPosition.x, printPosition.y,

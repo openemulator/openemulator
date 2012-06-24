@@ -6,7 +6,9 @@
         <setting ref="appleDiskII.drive" name="forceWriteProtected" label="Force Write Protected" type="checkbox"/>
         <setting ref="appleDiskII.drive" name="mechanism" label="Drive Sounds" type="select" options="Shugart,Alps,None"/>
     </device>
-    <connector id="appleDiskII.connector" type="Apple Disk Drive Port"/>
+    <connector id="appleDiskII.connector" type="Apple Disk Drive Port">
+        <inlet ref="appleDiskII.headPlayer" property="controlBus" outletRef="controlBus"/>
+    </connector>
     <component id="appleDiskII.drive" class="AppleDiskDrive525">
         <property name="device" ref="appleDiskII"/>
         <property name="diskImage" value=""/>
@@ -30,6 +32,7 @@
     </component>
     <component id="appleDiskII.headPlayer" class="AudioPlayer">
         <property name="audio" ref="audio"/>
+        <property name="controlBus" ref=""/>
     </component>
     
 </edl>

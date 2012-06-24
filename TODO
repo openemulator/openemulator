@@ -1,18 +1,16 @@
 ==1.0.3==
-* Implement sample-accurate playback in audio player
-* Add Apple Graphics Tablet sounds
-* Add Apple Silentype sounds
 * Fix CFFA multi-partition operation
 * Fix replace monitor+emulation lock problem (happens when a monitor is replaced and selected)
-* Fix mouse capture on Silentype.emulation
-* Fix removing Videx Videoterm
-* Verify Videx Videoterm blinkrate
 * Fix [CanvasView update] problem in paper view
+* Add Apple Graphics Tablet sounds
+* Add Apple Silentype sounds
+* Fix Disk II sounds
 * Fix libdiskimage GCR53
 * Fix Disk II not booting sometimes when emulation was loaded from disk
-* Fix Disk II sounds
 * Fix Disk II disk writes
 * Fix IAC 45, beautiful boot
+* Verify Videx Videoterm blinkrate
+* Fix Videoterm not showing video after installing and PR#3
 
 ==1.0.4==
 * Implement Apple III

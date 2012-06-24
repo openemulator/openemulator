@@ -22,6 +22,7 @@ public:
     bool setRef(string name, OEComponent *ref);
     bool init();
     void update();
+    void dispose();
     
     bool postMessage(OEComponent *sender, int message, void *data);
     
@@ -33,4 +34,6 @@ private:
     
     string lastSel;
     string sel;
+    
+    MemoryMaps buildMemoryMaps(string value);
 };

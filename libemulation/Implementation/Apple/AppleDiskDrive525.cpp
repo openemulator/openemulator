@@ -127,7 +127,6 @@ bool AppleDiskDrive525::postMessage(OEComponent *sender, int message, void *data
             
             return diskStorage.open(*((string *)data));
         }
-			
 		case STORAGE_MOUNT:
             if (openDiskImage(*((string *)data)))
             {
@@ -172,7 +171,6 @@ bool AppleDiskDrive525::postMessage(OEComponent *sender, int message, void *data
             
             return true;
         }
-            
         case APPLEII_ASSERT_DRIVEENABLE:
         {
             if (drivePlayer)
@@ -184,7 +182,6 @@ bool AppleDiskDrive525::postMessage(OEComponent *sender, int message, void *data
             
             return true;
         }
-            
         case APPLEII_SET_PHASECONTROL:
             setPhaseControl(*((OEInt *)data));
             

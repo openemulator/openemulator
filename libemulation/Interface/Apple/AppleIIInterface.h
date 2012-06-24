@@ -14,6 +14,8 @@
 #include "CanvasInterface.h"
 #include "StorageInterface.h"
 
+#include "MemoryInterface.h"
+
 #define APPLEII_CLOCKFREQUENCY   (14318180.0 * 65 / 912)
 
 typedef enum
@@ -51,10 +53,7 @@ typedef struct
 
 typedef enum
 {
-    APPLEII_MAP,
-    APPLEII_UNMAP,
-    
-    APPLEII_MAP_SLOT,
+    APPLEII_MAP_SLOT = ADDRESSDECODER_END,
     APPLEII_UNMAP_SLOT,
     
     APPLEII_SET_VRAMMODE,

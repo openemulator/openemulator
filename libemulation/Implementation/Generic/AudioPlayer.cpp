@@ -12,12 +12,13 @@
 
 #include "AudioPlayer.h"
 
-#include "AudioInterface.h"
 #include "AudioPlayerInterface.h"
+#include "ControlBusInterface.h"
 
 AudioPlayer::AudioPlayer()
 {
     audio = NULL;
+    controlBus = NULL;
     
     playing = false;
     loop = false;
@@ -29,6 +30,9 @@ AudioPlayer::AudioPlayer()
     srcChannelNum = 0;
     srcState = NULL;
     srcEndOfInput = false;
+    
+    audioBuffer = NULL;
+    audioBufferFrame = 0;
 }
 
 bool AudioPlayer::setValue(string name, string value)
@@ -64,11 +68,19 @@ bool AudioPlayer::setRef(string name, OEComponent *ref)
     if (name == "audio")
     {
         if (audio)
+        {
+            audio->removeObserver(this, AUDIO_BUFFER_WILL_RENDER);
             audio->removeObserver(this, AUDIO_BUFFER_DID_RENDER);
+        }
         audio = ref;
         if (audio)
+        {
+            audio->addObserver(this, AUDIO_BUFFER_WILL_RENDER);
             audio->addObserver(this, AUDIO_BUFFER_DID_RENDER);
+        }
     }
+    else if (name == "controlBus")
+        controlBus = ref;
     else
         return false;
     
@@ -102,6 +114,8 @@ bool AudioPlayer::init()
 
 bool AudioPlayer::postMessage(OEComponent *sender, int message, void *data)
 {
+    updateAudio(false);
+    
     switch (message)
     {
         case AUDIOPLAYER_PLAY:
@@ -148,85 +162,108 @@ bool AudioPlayer::postMessage(OEComponent *sender, int message, void *data)
 
 void AudioPlayer::notify(OEComponent *sender, int notification, void *data)
 {
-    if (!sound)
-        return;
-    
-    if (!playing)
-        return;
-    
-    AudioBuffer *buffer = (AudioBuffer *)data;
-    
-    if (srcChannelNum != sound->getChannelNum())
+    if (notification == AUDIO_BUFFER_WILL_RENDER)
     {
-        int error;
+        audioBuffer = (AudioBuffer *) data;
+        audioBufferFrame = 0;
+    }
+    else
+        updateAudio(true);
+}
+
+void AudioPlayer::updateAudio(bool bufferDidRender)
+{
+    OEInt nextAudioBufferFrame;
+    
+    if (bufferDidRender)
+        nextAudioBufferFrame = audioBuffer->frameNum;
+    else
+    {
+        if (!controlBus)
+            return;
+        
+        float value;
+        
+        controlBus->postMessage(this, CONTROLBUS_GET_AUDIOBUFFERFRAME, &value);
+        
+        nextAudioBufferFrame = value;
+    }
+    
+    if (playing && sound)
+    {
+        if (srcChannelNum != sound->getChannelNum())
+        {
+            int error;
+            
+            if (srcState)
+                src_delete(srcState);
+            
+            srcState = src_new(SRC_SINC_FASTEST, sound->getChannelNum(), &error);
+            srcChannelNum = sound->getChannelNum();
+        }
         
         if (srcState)
-            src_delete(srcState);
-        
-        srcState = src_new(SRC_SINC_FASTEST, sound->getChannelNum(), &error);
-        srcChannelNum = sound->getChannelNum();
-    }
-    
-    if (!srcState)
-        return;
-    
-    if (frameIndex > sound->getFrameNum())
-        frameIndex = sound->getFrameNum();
-    
-    vector<float> output;
-    output.resize(buffer->frameNum * srcChannelNum);
-    OEInt outputFrameIndex = 0;
-    
-    do
-    {
-        SRC_DATA srcData =
         {
-            sound->getSamples() + frameIndex * srcChannelNum,
-            &output.front() + outputFrameIndex * srcChannelNum,
-            (long) (sound->getFrameNum() - frameIndex),
-            output.size() - outputFrameIndex,
-            0, 0,
-            0,
-            buffer->sampleRate / sound->getSampleRate(),
-        };
-        
-        if (srcData.src_ratio != 1.0)
-            src_process(srcState, &srcData);
-        else
-        {
-            srcData.input_frames_used = ((srcData.input_frames < srcData.output_frames) ?
-                                         srcData.input_frames : srcData.output_frames);
-            srcData.output_frames_gen = srcData.input_frames_used;
+            if (frameIndex > sound->getFrameNum())
+                frameIndex = sound->getFrameNum();
             
-            memcpy(srcData.data_out, srcData.data_in,
-                   srcData.input_frames_used * srcChannelNum * sizeof(float));
-        }
-        
-        frameIndex += srcData.input_frames_used;
-        outputFrameIndex += srcData.output_frames_gen;
-        
-        if (loop && (frameIndex == sound->getFrameNum()))
-            frameIndex = 0;
-        else if (!srcData.input_frames_used &&
-                 !srcData.output_frames_gen)
-        {
-            playing = false;
-
-            break;
-        }
-    } while (outputFrameIndex != output.size());
-    
-    OEInt sampleNum = buffer->frameNum * buffer->channelNum;
-    
-    for (OEInt ch = 0; ch < buffer->channelNum; ch++)
-    {
-        float *x = &output.front() + (ch % srcChannelNum);
-        float *y = buffer->output + ch;
-        
-        for (OEInt i = 0; i < sampleNum; i += buffer->channelNum)
-        {
-            y[i] += *x * volume;
-            x += srcChannelNum;
+            vector<float> output;
+            output.resize(audioBuffer->frameNum * srcChannelNum);
+            
+            do
+            {
+                SRC_DATA srcData =
+                {
+                    sound->getSamples() + frameIndex * srcChannelNum,
+                    &output.front() + audioBufferFrame * srcChannelNum,
+                    (long) (sound->getFrameNum() - frameIndex),
+                    nextAudioBufferFrame - audioBufferFrame,
+                    0, 0,
+                    0,
+                    audioBuffer->sampleRate / sound->getSampleRate(),
+                };
+                
+                if (srcData.src_ratio != 1.0)
+                    src_process(srcState, &srcData);
+                else
+                {
+                    srcData.input_frames_used = ((srcData.input_frames < srcData.output_frames) ?
+                                                 srcData.input_frames : srcData.output_frames);
+                    srcData.output_frames_gen = srcData.input_frames_used;
+                    
+                    memcpy(srcData.data_out, srcData.data_in,
+                           srcData.input_frames_used * srcChannelNum * sizeof(float));
+                }
+                
+                frameIndex += srcData.input_frames_used;
+                audioBufferFrame += srcData.output_frames_gen;
+                
+                if (loop && (frameIndex == sound->getFrameNum()))
+                    frameIndex = 0;
+                else if (!srcData.input_frames_used &&
+                         !srcData.output_frames_gen)
+                {
+                    playing = false;
+                    
+                    break;
+                }
+            } while (audioBufferFrame != nextAudioBufferFrame);
+            
+            OEInt sampleNum = audioBuffer->frameNum * audioBuffer->channelNum;
+            
+            for (OEInt ch = 0; ch < audioBuffer->channelNum; ch++)
+            {
+                float *x = &output.front() + (ch % srcChannelNum);
+                float *y = audioBuffer->output + ch;
+                
+                for (OEInt i = 0; i < sampleNum; i += audioBuffer->channelNum)
+                {
+                    y[i] += *x * volume;
+                    x += srcChannelNum;
+                }
+            }
         }
     }
+    
+    audioBufferFrame = nextAudioBufferFrame;
 }

@@ -1,11 +1,11 @@
 
 /**
  * libemulation
- * R&D CFFA
- * (C) 2012 by Marc S. Ressl (mressl@umich.edu)
+ * ATA Controller
+ * (C) 2011-2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements an R&D CFFA interface card
+ * Implements a generic ATA Controller
  */
 
 #include "OEComponent.h"
@@ -14,11 +14,11 @@
 
 #define ATA_BUFFER_SIZE 0x200
 
-class RDCFFA : public OEComponent
+class ATAController : public OEComponent
 {
 public:
-    RDCFFA();
-    ~RDCFFA();
+    ATAController();
+    ~ATAController();
     
     bool setValue(string name, string value);
     bool getValue(string name, string& value);
@@ -36,18 +36,18 @@ private:
     
     OEComponent *device;
     
-    DIChar setCSMask;
-    DIChar clearCSMask;
-    
     DIAppleBlockStorage blockStorage[2];
     
-    bool ataDrive;
-    OEChar ataCommand;
-    OEChar ataStatus;
-    OEUnion ataLBA;
-    OEChar ataBuffer[ATA_BUFFER_SIZE];
-    OEInt ataBufferIndex;
-    OEChar ataDataHigh;
+    bool drive;
+    OEUnion lba;
+    OEChar sectorCount;
+    OEChar feature;
+    OEChar status;
+    OEChar command;
+    OEChar buffer[ATA_BUFFER_SIZE];
+    OEInt bufferIndex;
+    
+    bool byteMode;
     
     bool openDiskImage(string path);
     void closeDiskImage();
