@@ -891,14 +891,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     {
         int c = [characters characterAtIndex:i];
         
-        if (c == 0x0d)
-            [self sendUnicodeKeyEvent:0x0a];
-        else if (c == 0x0a)
-            [self sendUnicodeKeyEvent:0x0d];
-        else if (c == 0x7f)
-            [self sendUnicodeKeyEvent:0x08];
-        else
-            [self sendUnicodeKeyEvent:c];
+        [self sendUnicodeKeyEvent:c];
     }
     
     if (![theEvent isARepeat])

@@ -27,7 +27,6 @@ private:
     OEComponent *controlBus;
     OEComponent *floatingBus;
     OEComponent *slotController;
-    OEComponent *memoryCF00;
     OEComponent *memoryMapper;
     OEComponent *printer;
     

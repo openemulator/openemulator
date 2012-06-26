@@ -29,7 +29,7 @@
 VidexVideoterm::VidexVideoterm() : MC6845()
 {
     ram = NULL;
-    bankedRAM = NULL;
+    addressOffset = NULL;
     video = NULL;
     gamePort = NULL;
     
@@ -81,8 +81,8 @@ bool VidexVideoterm::setRef(string name, OEComponent *ref)
 {
     if (name == "ram")
         ram = ref;
-    else if (name == "bankedRAM")
-        bankedRAM = ref;
+    else if (name == "addressOffset")
+        addressOffset = ref;
     else if (name == "video")
     {
         if (video)
@@ -128,16 +128,16 @@ bool VidexVideoterm::init()
     if (!MC6845::init())
         return false;
     
-    if (!bankedRAM)
+    if (!ram)
     {
-        logMessage("bankedRAM not connected");
+        logMessage("ram not connected");
         
         return false;
     }
     
-    if (!ram)
+    if (!addressOffset)
     {
-        logMessage("ram not connected");
+        logMessage("addressOffset not connected");
         
         return false;
     }
@@ -307,9 +307,13 @@ void VidexVideoterm::setRAMBank(OEInt value)
 
 void VidexVideoterm::updateRAMBank()
 {
-    OEAddress offset = 0x200 * ramBank - 0x400;
+    AddressOffsetMap offsetMap;
     
-    bankedRAM->postMessage(this, ADDRESSOFFSET_SET_OFFSET, &offset);
+    offsetMap.startAddress = 0x000;
+    offsetMap.endAddress = 0x1ff;
+    offsetMap.offset = 0x200 * ramBank - 0x400;
+    
+    addressOffset->postMessage(this, ADDRESSOFFSET_MAP, &offsetMap);
 }
 
 void VidexVideoterm::setCellWidth(OEInt value)

@@ -2,13 +2,15 @@
 /**
  * libemulation
  * Address offset
- * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2010-2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls an address offset
+ * Controls an address offseter
  */
 
 #include "OEComponent.h"
+
+#include "MemoryInterface.h"
 
 class AddressOffset : public OEComponent
 {
@@ -27,5 +29,17 @@ public:
 private:
     OEComponent *memory;
     
-    OEAddress offset;
+    OEAddress size;
+    OEAddress blockSize;
+    
+    OEInt blockBits;
+    
+    vector<OESLong> offset;
+    OESLong *offsetp;
+    
+    OEAddress mask;
+    
+    AddressOffsetMaps offsetMaps;
+    
+    bool mapOffset(AddressOffsetMap& value);
 };

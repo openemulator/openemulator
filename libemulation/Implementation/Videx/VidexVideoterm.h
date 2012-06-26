@@ -30,7 +30,7 @@ public:
     
 private:
     OEComponent *ram;
-    OEComponent *bankedRAM;
+    OEComponent *addressOffset;
     OEComponent *video;
     OEComponent *gamePort;
     

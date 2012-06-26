@@ -165,22 +165,38 @@ void setDILongBE(DIChar *p, DILong value)
     p[7] = (value >> 0);
 }
 
+string getDIFilename(string path)
+{
+    size_t index;
+    
+    // Remove tailing path separator
+    index = (path.length() - 1);
+    if (path.find_last_of(DI_PATH_SEPARATOR) == index)
+        path = path.substr(0, index);
+    
+    // Isolate filename
+    index = path.find_last_of(DI_PATH_SEPARATOR);
+    if (index != string::npos)
+        path = path.substr(index + 1);
+    
+    return path;
+}
+
 string getDIPathExtension(string path)
 {
-    // Remove tailing path separator
-    if (path.rfind(DI_PATH_SEPARATOR) == (path.length() - 1))
-        path = path.substr(0, path.length() - 1);
+    path = getDIFilename(path);
     
-    // Find extension
-    size_t extensionIndex = path.rfind('.');
-    if (extensionIndex == string::npos)
+    // Find extension separator
+    size_t index = path.find_last_of('.');
+    if (index == string::npos)
         return "";
+    path = path.substr(index + 1);
     
     // Convert to lower case
     for (size_t i = 0; i < path.size(); i++)
         path[i] = tolower(path[i]);
     
-    return path.substr(extensionIndex + 1);
+    return path;
 }
 
 static DIInt crcTable16[256];

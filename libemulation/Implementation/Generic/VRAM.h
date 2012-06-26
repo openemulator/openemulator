@@ -10,10 +10,10 @@
 
 #include "RAM.h"
 
-class VideoRAM : public RAM
+class VRAM : public RAM
 {
 public:
-    VideoRAM();
+    VRAM();
     
     bool setRef(string name, OEComponent *ref);
     bool init();

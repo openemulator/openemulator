@@ -322,12 +322,9 @@ void Apple1Terminal::notify(OEComponent *sender, int notification, void *data)
                 
                 CanvasUnicodeChar key = *((CanvasUnicodeChar *)data);
                 
-                if (((key == 0x0c) && clearScreenOnCtrlL) ||
-                    (key == 0x7f))
+                if (((key == 0x0c) && clearScreenOnCtrlL))
                     clearScreen();
-                else if (key == 0x08)
-                    sendKey('_');
-                else if (key <= 0x80)
+                else
                     sendKey(key);
                 
                 break;
@@ -504,12 +501,9 @@ void Apple1Terminal::putChar(OEChar c)
 
 void Apple1Terminal::sendKey(CanvasUnicodeChar key)
 {
-    if (key >= 0x80)
-        return;
-    
-    if (key == '\n')
-        key = '\r';
-    else if (key == '\r')
+    if (key == 0x08)
+        key = '_';
+    else if (key >= 0x80)
         return;
     
     OEData data;

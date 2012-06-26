@@ -313,20 +313,36 @@ bool writeFile(string path, OEData *data)
     return success;
 }
 
+string getFilename(string path)
+{
+    size_t index;
+    
+    // Remove tailing path separator
+    index = (path.length() - 1);
+    if (path.find_last_of(OE_PATH_SEPARATOR) == index)
+        path = path.substr(0, index);
+    
+    // Isolate filename
+    index = path.find_last_of(OE_PATH_SEPARATOR);
+    if (index != string::npos)
+        path = path.substr(index + 1);
+    
+    return path;
+}
+
 string getPathExtension(string path)
 {
-    // Remove tailing path separator
-    if (path.rfind(OE_PATH_SEPARATOR) == (path.length() - 1))
-        path = path.substr(0, path.length() - 1);
+    path = getFilename(path);
     
-    // Find extension
-    size_t extensionIndex = path.rfind('.');
-    if (extensionIndex == string::npos)
+    // Find extension separator
+    size_t index = path.find_last_of('.');
+    if (index == string::npos)
         return "";
+    path = path.substr(index + 1);
     
     // Convert to lower case
     for (size_t i = 0; i < path.size(); i++)
         path[i] = tolower(path[i]);
     
-    return path.substr(extensionIndex + 1);
+    return path;
 }

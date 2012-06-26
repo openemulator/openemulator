@@ -96,6 +96,8 @@ OEInt getBitNum(OELong value);
 
 bool readFile(string path, OEData *data);
 bool writeFile(string path, OEData *data);
+
+string getFilename(string path);
 string getPathExtension(string path);
 
 #endif

@@ -56,6 +56,7 @@ void setDIIntBE(DIChar *p, DIInt value);
 void setDILongLE(DIChar *p, DILong value);
 void setDILongBE(DIChar *p, DILong value);
 
+string getDIFilename(string path);
 string getDIPathExtension(string path);
 
 DIInt getDICRC16(DIChar *p, DIInt size);

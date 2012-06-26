@@ -33,7 +33,7 @@ private:
     OEComponent *controlBus;
     OEComponent *memoryBus;
     OEComponent *floatingBus;
-    OEComponent *ram;
+    OEComponent *memory;
     
     bool bank1;
     bool ramRead;

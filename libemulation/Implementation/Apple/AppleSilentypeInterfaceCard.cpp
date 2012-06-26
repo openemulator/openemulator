@@ -53,7 +53,6 @@ AppleSilentypeInterfaceCard::AppleSilentypeInterfaceCard()
     controlBus = NULL;
     floatingBus = NULL;
     slotController = NULL;
-    memoryCF00 = NULL;
     memoryMapper = NULL;
     printer = NULL;
 }
@@ -78,8 +77,6 @@ bool AppleSilentypeInterfaceCard::setRef(string name, OEComponent *ref)
         if (slotController)
             slotController->addObserver(this, APPLEII_C800_DID_CHANGE);
     }
-    else if (name == "memoryCF00")
-        memoryCF00 = ref;
     else if (name == "memoryMapper")
         memoryMapper = ref;
     else if (name == "printer")
@@ -106,9 +103,9 @@ bool AppleSilentypeInterfaceCard::init()
         return false;
     }
     
-    if (!memoryCF00)
+    if (!memoryMapper)
     {
-        logMessage("memoryCF00 not connected");
+        logMessage("memoryMapper not connected");
         
         return false;
     }

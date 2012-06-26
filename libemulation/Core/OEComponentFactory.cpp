@@ -17,9 +17,9 @@
 #include "AddressMux.h"
 #include "AddressOffset.h"
 #include "ATAController.h"
+#include "ATADevice.h"
 #include "AudioCodec.h"
 #include "AudioPlayer.h"
-#include "BankSwitchedRAM.h"
 #include "ControlBus.h"
 #include "FloatingBus.h"
 #include "JoystickMapper.h"
@@ -27,7 +27,7 @@
 #include "Proxy.h"
 #include "RAM.h"
 #include "ROM.h"
-#include "VideoRAM.h"
+#include "VRAM.h"
 
 #include "Apple1ACI.h"
 #include "Apple1IO.h"
@@ -56,6 +56,8 @@
 
 #include "MC6821.h"
 
+#include "RDCFFA.h"
+
 #include "VidexVideoterm.h"
 
 #include "W65C02S.h"
@@ -72,9 +74,9 @@ OEComponent *OEComponentFactory::construct(const string& className)
     matchComponent(AddressMux);
     matchComponent(AddressOffset);
     matchComponent(ATAController);
+    matchComponent(ATADevice);
     matchComponent(AudioCodec);
     matchComponent(AudioPlayer);
-    matchComponent(BankSwitchedRAM);
     matchComponent(ControlBus);
     matchComponent(FloatingBus);
     matchComponent(JoystickMapper);
@@ -82,7 +84,7 @@ OEComponent *OEComponentFactory::construct(const string& className)
     matchComponent(Proxy);
     matchComponent(RAM);
     matchComponent(ROM);
-    matchComponent(VideoRAM);
+    matchComponent(VRAM);
     
     matchComponent(Apple1ACI);
     matchComponent(Apple1IO);
@@ -111,6 +113,8 @@ OEComponent *OEComponentFactory::construct(const string& className)
     matchComponent(MOSKIM1PLL);
     
     matchComponent(MC6821);
+    
+    matchComponent(RDCFFA);
     
     matchComponent(VidexVideoterm);
     

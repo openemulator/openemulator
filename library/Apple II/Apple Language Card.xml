@@ -17,24 +17,28 @@
         <property name="refROM" ref="appleLanguageCard.romF8"/>
         <property name="sel" value="ROM"/>
     </component>
+    <component id="appleLanguageCard.romF8" class="ROM">
+        <property name="memoryImage" data="${resourcePath}/roms/Apple/341-0020-F8.bin"/>
+    </component>
     <component id="appleLanguageCard.io" class="AppleLanguageCard">
         <property name="controlBus" ref=""/>
         <property name="memoryBus" ref=""/>
         <property name="floatingBus" ref=""/>
-        <property name="ram" ref="appleLanguageCard.ram"/>
+        <property name="memory" ref="appleLanguageCard.addressOffset"/>
         <property name="bank1" value="0"/>
         <property name="ramRead" value="0"/>
         <property name="preWrite" value="0"/>
         <property name="ramWrite" value="0"/>
     </component>
-    <component id="appleLanguageCard.ram" class="BankSwitchedRAM">
-        <property name="size" value="0x4000"/>
+    <component id="appleLanguageCard.addressOffset" class="AddressOffset">
+        <property name="memory" ref="appleLanguageCard.ram"/>
+        <property name="size" value="0x1000"/>
         <property name="blockSize" value="0x1000"/>
+    </component>
+    <component id="appleLanguageCard.ram" class="RAM">
+        <property name="size" value="0x4000"/>
         <property name="memoryImage" data="${packagePath}/${id}.bin"/>
         <property name="controlBus" ref=""/>
-    </component>
-    <component id="appleLanguageCard.romF8" class="ROM">
-        <property name="memoryImage" data="${resourcePath}/roms/Apple/341-0020-F8.bin"/>
     </component>
     
 </edl>

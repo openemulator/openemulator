@@ -2,7 +2,7 @@
 /**
  * libemulation
  * Storage Interface
- * (C) 2011 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2011-2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Defines the storage interface.
@@ -19,6 +19,8 @@
 // * isLocked() indicates if the disk is physically locked in the emulated device.
 // * getFormatLabel() returns a format label describing the mount.
 //   E.g.: "16 sectors, 35 track, read-only".
+// * getObject() returns an object related to the storage device.
+//   (usually the object containing the data)
 
 #ifndef _STORAGEINTERFACE_H
 #define _STORAGEINTERFACE_H
@@ -35,6 +37,8 @@ typedef enum
     STORAGE_GET_FORMATLABEL,
     
     STORAGE_GET_SETTINGS,
+    
+    STORAGE_GET_OBJECT,
     
     STORAGE_END,
 } StorageMessage;

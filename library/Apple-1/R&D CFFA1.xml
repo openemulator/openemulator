@@ -3,26 +3,12 @@
 <edl version="1.0" generator="OpenEmulator" framework="700" label="RD CFFA1" image="images/R&amp;D/R&amp;D CFFA1.png" description="The CFFA1 interface card (www.dreher.net) accesses block disk images on Apple-1 computers. It also provides 32kiB of RAM at $1000-$8FFF. To start the file manager, enter 9000R in the monitor.">
     
     <device id="rdCFFA1" label="R&amp;D CFFA1" image="images/R&amp;D/R&amp;D CFFA1.png">
-        <setting ref="rdCFFA1.io" name="forceWriteProtected" label="Force Write Protected" type="checkbox"/>
+        <setting ref="rdCFFA1.ataDevice" name="forceWriteProtected" label="Force Write Protected" type="checkbox"/>
     </device>
     <connector id="rdCFFA1.connector" type="Apple-1 Expansion Port">
-        <inlet ref="rdCFFA1.ram" property="controlBus" outletRef="controlBus"/>
         <inlet ref="rdCFFA1.addressMapper" property="addressDecoder" outletRef="memoryBus"/>
+        <inlet ref="rdCFFA1.ram" property="controlBus" outletRef="controlBus"/>
     </connector>
-    <component id="rdCFFA1.io" class="ATAController">
-        <property name="device" ref="rdCFFA1"/>
-        <property name="wordMode" value="0"/>
-        <property name="diskImage" value=""/>
-        <property name="forceWriteProtected" value="0"/>
-    </component>
-    <component id="rdCFFA1.ram" class="RAM">
-        <property name="memoryImage" data="${packagePath}/${id}.bin"/>
-        <property name="size" value="0x8000"/>
-        <property name="controlBus" ref=""/>
-    </component>
-    <component id="rdCFFA1.rom" class="ROM">
-        <property name="memoryImage" data="${resourcePath}/roms/R&amp;D/CFFA1V1.0.bin"/>
-    </component>
     <component id="rdCFFA1.addressMapper" class="AddressMapper">
         <property name="addressDecoder" ref=""/>
         <property name="mapRAM" value="0x1000-0x8fff"/>
@@ -33,12 +19,31 @@
         <property name="refIO" ref="rdCFFA1.memoryAF00"/>
         <property name="sel" value="RAM,ROM,IO"/>
     </component>
+    <component id="rdCFFA1.ram" class="RAM">
+        <property name="memoryImage" data="${packagePath}/${id}.bin"/>
+        <property name="size" value="0x8000"/>
+        <property name="controlBus" ref=""/>
+    </component>
+    <component id="rdCFFA1.rom" class="ROM">
+        <property name="memoryImage" data="${resourcePath}/roms/R&amp;D/CFFA1V1.0.bin"/>
+    </component>
     <component id="rdCFFA1.memoryAF00" class="AddressDecoder">
         <property name="size" value="0x100"/>
         <property name="blockSize" value="0x20"/>
         <property name="floatingBus" ref="rdCFFA1.rom"/>
         <property name="mapIO" value="0xe0-0xff"/>
         <property name="refIO" ref="rdCFFA1.io"/>
+    </component>
+    <component id="rdCFFA1.io" class="RDCFFA">
+        <property name="ataController" ref="rdCFFA1.ataController"/>
+    </component>
+    <component id="rdCFFA1.ataController" class="ATAController">
+        <property name="drive1" ref="rdCFFA1.ataDevice"/>
+    </component>
+    <component id="rdCFFA1.ataDevice" class="ATADevice">
+        <property name="device" ref="rdCFFA1"/>
+        <property name="diskImage" value=""/>
+        <property name="forceWriteProtected" value="0"/>
     </component>
     
 </edl>

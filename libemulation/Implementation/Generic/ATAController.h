@@ -18,37 +18,36 @@ class ATAController : public OEComponent
 {
 public:
     ATAController();
-    ~ATAController();
     
-    bool setValue(string name, string value);
-    bool getValue(string name, string& value);
     bool setRef(string name, OEComponent *ref);
     bool init();
-    
-    bool postMessage(OEComponent *sender, int message, void *data);
+    void update();
     
     OEChar read(OEAddress address);
     void write(OEAddress address, OEChar value);
+    OEShort read16(OEAddress address);
+    void write16(OEAddress address, OEShort value);
     
 private:
-    string diskImagePath;
-    bool forceWriteProtected;
+    OEComponent *drive[2];
     
-    OEComponent *device;
+    DIATABlockStorage *blockStorage;
+    DIATABlockStorage dummyBlockStorage;
     
-    DIAppleBlockStorage blockStorage[2];
-    
-    bool drive;
-    OEUnion lba;
-    OEChar sectorCount;
     OEChar feature;
     OEChar status;
     OEChar command;
+    
+    OEUnion lba;
+    OEChar sectorCount;
+    
     OEChar buffer[ATA_BUFFER_SIZE];
     OEInt bufferIndex;
     
-    bool byteMode;
+    bool driveSel;
+    OEInt addressMode;
+    bool pioByteMode;
     
-    bool openDiskImage(string path);
-    void closeDiskImage();
+    void selectDrive(OEInt value);
+    void setATAString(char *dest, const char *src, OEInt size);
 };

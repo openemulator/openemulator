@@ -15,6 +15,39 @@
 
 #include "OEComponent.h"
 
+typedef struct
+{	
+    OEComponent *component;
+    
+    OEAddress startAddress;
+    OEAddress endAddress;
+    
+    bool read;
+    bool write;
+} MemoryMap;
+
+typedef list<MemoryMap> MemoryMaps;
+
+typedef map<string, string> MemoryMapsConf;
+typedef map<string, OEComponent *> MemoryMapsRef;
+
+typedef struct
+{
+    OEAddress startAddress;
+    OEAddress endAddress;
+    
+	OESLong offset;
+} AddressOffsetMap;
+
+typedef list<AddressOffsetMap> AddressOffsetMaps;
+
+bool appendMemoryMaps(MemoryMaps& theMaps,
+                      OEComponent *component,
+                      string value);
+bool validateMemoryMaps(MemoryMaps& theMaps,
+                        OEAddress blockSize,
+                        OEAddress addressMask);
+
 typedef enum
 {
     ADDRESSDECODER_MAP,
@@ -34,50 +67,13 @@ typedef enum
 
 typedef enum
 {
-    ADDRESSOFFSET_SET_OFFSET,
+    ADDRESSOFFSET_MAP,
 } AddressOffsetMessage;
 
 typedef enum
 {
     RAM_GET_DATA,
-    RAM_END,
 } RAMMessage;
-
-typedef struct
-{	
-    OEComponent *component;
-    
-    OEAddress startAddress;
-    OEAddress endAddress;
-    
-    bool read;
-    bool write;
-} MemoryMap;
-
-typedef list<MemoryMap> MemoryMaps;
-
-typedef map<string, string> MemoryMapsConf;
-typedef map<string, OEComponent *> MemoryMapsRef;
-
-bool appendMemoryMaps(MemoryMaps& theMaps,
-                      OEComponent *component,
-                      string value);
-bool validateMemoryMaps(MemoryMaps& theMaps,
-                        OEAddress blockSize,
-                        OEAddress addressMask);
-
-typedef enum
-{
-    BANKSWITCHEDRAM_MAP = RAM_END,
-} BankSwitchedRAMMessage;
-
-typedef struct
-{
-    OEAddress startAddress;
-    OEAddress endAddress;
-    
-	OESLong offset;
-} BankSwitchedRAMMap;
 
 typedef enum
 {

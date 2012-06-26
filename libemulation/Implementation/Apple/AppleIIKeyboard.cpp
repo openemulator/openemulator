@@ -283,12 +283,9 @@ void AppleIIKeyboard::sendKey(CanvasUnicodeChar key)
         key = 0x08;
     else if (key == CANVAS_U_RIGHT)
         key = 0x15;
+    else if (key == 127)
+        key = 8;
     else if (key >= 0x80)
-        return;
-    
-    if (key == '\n')
-        key = '\r';
-    else if (key == '\r')
         return;
     
     if (type != APPLEIIKEYBOARD_TYPE_FULLASCII)

@@ -1,15 +1,15 @@
 
 /**
  * libdiskimage
- * Apple Block Storage
+ * ATA Block Storage
  * (C) 2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Accesses an Apple block storage
+ * Accesses an ATA block storage
  */
 
-#ifndef _DIAPPLEBLOCKSTORAGE_H
-#define _DIAPPLEBLOCKSTORAGE_H
+#ifndef _DIATABLOCKSTORAGE_H
+#define _DIATABLOCKSTORAGE_H
 
 #include "DIFileBackingStore.h"
 #include "DIRAMBackingStore.h"
@@ -21,10 +21,10 @@
 #include "DIVDIBlockStorage.h"
 #include "DIVMDKBlockStorage.h"
 
-class DIAppleBlockStorage
+class DIATABlockStorage
 {
 public:
-    DIAppleBlockStorage();
+    DIATABlockStorage();
     
     bool open(string path);
     bool open(DIData& data);
@@ -34,6 +34,9 @@ public:
     bool isWriteEnabled();
     DIInt getBlockNum();
     string getFormatLabel();
+    string getATASerial();
+    string getATAFirmware();
+    string getATAModel();
     
     bool readBlocks(DIInt index, DIChar *buf, DIInt num);
     bool writeBlocks(DIInt index, const DIChar *buf, DIInt num);
@@ -50,6 +53,10 @@ private:
     DIVMDKBlockStorage vmdkBlockStorage;
     
     DIBlockStorage *blockStorage;
+    
+    string ataSerial;
+    string ataFirmware;
+    string ataModel;
     
     bool open(DIBackingStore *backingStore, string pathExtension);
 };

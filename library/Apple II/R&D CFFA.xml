@@ -4,7 +4,7 @@
     
     <device id="rdCFFA" label="R&amp;D CFFA" image="images/R&amp;D/R&amp;D CFFA.png">
         <setting ref="rdCFFA.rom" name="sel" label="Firmware" type="select" options="ROM6502|Apple II,ROM65C02|Apple IIe (or newer)"/>
-        <setting ref="rdCFFA.io" name="forceWriteProtected" label="Force Write Protected" type="checkbox"/>
+        <setting ref="rdCFFA.ataDevice" name="forceWriteProtected" label="Force Write Protected" type="checkbox"/>
     </device>
     <connector id="rdCFFA.connector" type="Apple II Slot">
         <inlet ref="rdCFFA.io" property="floatingBus" outletRef="floatingBus"/>
@@ -12,12 +12,16 @@
         <inlet ref="rdCFFA.memoryC800" property="floatingBus" outletRef="floatingBus"/>
         <inlet ref="rdCFFA.disableC800" property="memoryBus" outletRef="memoryBus"/>
     </connector>
-    <component id="rdCFFA.io" class="AddressDecoder">
-        <property name="size" value="0x10"/>
-        <property name="blockSize" value="0x1"/>
-        <property name="floatingBus" ref=""/>
-        <property name="refRAM" ref="rdCFFA.ataController"/>
-        <property name="mapRAM" value="0x0,0x8-0xf"/>
+    <component id="rdCFFA.io" class="RDCFFA">
+        <property name="ataController" ref="rdCFFA.ataController"/>
+    </component>
+    <component id="rdCFFA.ataController" class="ATAController">
+        <property name="drive1" ref="rdCFFA.ataDevice"/>
+    </component>
+    <component id="rdCFFA.ataDevice" class="ATADevice">
+        <property name="device" ref="rdCFFA"/>
+        <property name="diskImage" value=""/>
+        <property name="forceWriteProtected" value="0"/>
     </component>
     <component id="rdCFFA.memory" class="AppleIISlotController">
         <property name="memory" ref="rdCFFA.rom"/>
@@ -25,11 +29,6 @@
         <property name="memoryBus" ref=""/>
         <property name="refC800" ref="rdCFFA.memoryC800"/>
         <property name="mapC800" value="0xc800-0xcfff"/>
-    </component>
-    <component id="rdCFFA.ataController" class="ATAController">
-        <property name="device" ref="rdCFFA"/>
-        <property name="diskImage" value=""/>
-        <property name="forceWriteProtected" value="0"/>
     </component>
     <component id="rdCFFA.memoryC800" class="AddressDecoder">
         <property name="size" value="0x800"/>

@@ -1,39 +1,53 @@
 
 /**
  * libdiskimage
- * Apple Block Storage
+ * ATA Block Storage
  * (C) 2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Accesses an Apple block storage
+ * Accesses an ATA block storage
  */
 
 #include "DIFileBackingStore.h"
 #include "DIRAMBackingStore.h"
-#include "DIAppleBlockStorage.h"
+#include "DIATABlockStorage.h"
 
-DIAppleBlockStorage::DIAppleBlockStorage()
+DIATABlockStorage::DIATABlockStorage()
 {
     close();
 }
 
-bool DIAppleBlockStorage::open(string path)
-{
-    close();
-    
-    return (fileBackingStore.open(path) &&
-            open(&fileBackingStore, getDIPathExtension(path)));
-}
-
-bool DIAppleBlockStorage::open(DIData& data)
+bool DIATABlockStorage::open(string path)
 {
     close();
     
-    return (ramBackingStore.open(data) &&
-            open(&ramBackingStore, ""));
+    if (fileBackingStore.open(path) &&
+            open(&fileBackingStore, getDIPathExtension(path)))
+    {
+        ataModel = getDIFilename(path);
+        
+        return true;
+    }
+    
+    return false;
 }
 
-bool DIAppleBlockStorage::open(DIBackingStore *backingStore, string pathExtension)
+bool DIATABlockStorage::open(DIData& data)
+{
+    close();
+    
+    if (ramBackingStore.open(data) &&
+        open(&ramBackingStore, ""))
+    {
+        ataModel = "Memory Disk Image";
+        
+        return true;
+    }
+    
+    return false;
+}
+
+bool DIATABlockStorage::open(DIBackingStore *backingStore, string pathExtension)
 {
     if (twoImgBackingStore.open(backingStore))
     {
@@ -60,6 +74,7 @@ bool DIAppleBlockStorage::open(DIBackingStore *backingStore, string pathExtensio
     {
         if ((pathExtension != "image") &&
             (pathExtension != "img") &&
+            (pathExtension != "dmg") &&
             (pathExtension != "hdf") &&
             (pathExtension != "hdv") &&
             (pathExtension != "po") &&
@@ -75,12 +90,12 @@ bool DIAppleBlockStorage::open(DIBackingStore *backingStore, string pathExtensio
     return true;
 }
 
-bool DIAppleBlockStorage::isOpen()
+bool DIATABlockStorage::isOpen()
 {
     return blockStorage != &dummyBlockStorage;
 }
 
-void DIAppleBlockStorage::close()
+void DIATABlockStorage::close()
 {
     fileBackingStore.close();
     ramBackingStore.close();
@@ -96,27 +111,42 @@ void DIAppleBlockStorage::close()
     return;
 }
 
-bool DIAppleBlockStorage::isWriteEnabled()
+bool DIATABlockStorage::isWriteEnabled()
 {
     return blockStorage->isWriteEnabled();
 }
 
-DIInt DIAppleBlockStorage::getBlockNum()
+DIInt DIATABlockStorage::getBlockNum()
 {
     return blockStorage->getBlockNum();
 }
 
-string DIAppleBlockStorage::getFormatLabel()
+string DIATABlockStorage::getFormatLabel()
 {
     return blockStorage->getFormatLabel();
 }
 
-bool DIAppleBlockStorage::readBlocks(DIInt index, DIChar *buf, DIInt num)
+string DIATABlockStorage::getATASerial()
+{
+    return ataSerial;
+}
+
+string DIATABlockStorage::getATAFirmware()
+{
+    return ataFirmware;
+}
+
+string DIATABlockStorage::getATAModel()
+{
+    return ataModel;
+}
+
+bool DIATABlockStorage::readBlocks(DIInt index, DIChar *buf, DIInt num)
 {
     return blockStorage->readBlocks(index, buf, num);
 }
 
-bool DIAppleBlockStorage::writeBlocks(DIInt index, const DIChar *buf, DIInt num)
+bool DIATABlockStorage::writeBlocks(DIInt index, const DIChar *buf, DIInt num)
 {
     return blockStorage->writeBlocks(index, buf, num);
 }

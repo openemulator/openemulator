@@ -8,16 +8,16 @@
  * Controls video random access memory
  */
 
-#include "VideoRAM.h"
+#include "VRAM.h"
 
 #include "MemoryInterface.h"
 
-VideoRAM::VideoRAM() : RAM()
+VRAM::VRAM() : RAM()
 {
     observer = NULL;
 }
 
-bool VideoRAM::setRef(string name, OEComponent *ref)
+bool VRAM::setRef(string name, OEComponent *ref)
 {
     if (name == "observer")
         observer = ref;
@@ -27,7 +27,7 @@ bool VideoRAM::setRef(string name, OEComponent *ref)
     return true;
 }
 
-bool VideoRAM::init()
+bool VRAM::init()
 {
     if (!RAM::init())
         return false;
@@ -42,7 +42,7 @@ bool VideoRAM::init()
     return true;
 }
 
-void VideoRAM::write(OEAddress address, OEChar value)
+void VRAM::write(OEAddress address, OEChar value)
 {
     observer->notify(this, VIDEORAM_WILL_CHANGE, NULL);
     

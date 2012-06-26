@@ -17,9 +17,8 @@
 		00039F0112B04EAA0025D374 /* libemulation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00039EFE12B04E910025D374 /* libemulation.a */; };
 		00039FD112B04F6C0025D374 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 00039FD012B04F6C0025D374 /* libxml2.dylib */; };
 		0009068E141D2A0300F06D99 /* NSStringAdditions.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0009068D141D2A0300F06D99 /* NSStringAdditions.mm */; };
-		00092E5C156AA9D4007A9E04 /* VideoRAM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00092E5A156AA9D4007A9E04 /* VideoRAM.cpp */; };
-		00092E5D156AA9D4007A9E04 /* VideoRAM.h in Headers */ = {isa = PBXBuildFile; fileRef = 00092E5B156AA9D4007A9E04 /* VideoRAM.h */; };
-		00139F801511863B00B0E108 /* BankSwitchedRAM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00139F7F1511863B00B0E108 /* BankSwitchedRAM.cpp */; };
+		00092E5C156AA9D4007A9E04 /* VRAM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00092E5A156AA9D4007A9E04 /* VRAM.cpp */; };
+		00092E5D156AA9D4007A9E04 /* VRAM.h in Headers */ = {isa = PBXBuildFile; fileRef = 00092E5B156AA9D4007A9E04 /* VRAM.h */; };
 		00139F84151195E600B0E108 /* AppleIIAddressDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00139F83151195E600B0E108 /* AppleIIAddressDecoder.cpp */; };
 		00140DF0152D282400D4795D /* DIApple525DiskStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00140DEF152D282400D4795D /* DIApple525DiskStorage.cpp */; };
 		00140DF6152D36F900D4795D /* DIFileBackingStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00140DF5152D36F900D4795D /* DIFileBackingStore.cpp */; };
@@ -110,7 +109,7 @@
 		00954E781277B79E00C17203 /* EmulationOutlineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00954E771277B79E00C17203 /* EmulationOutlineCell.m */; };
 		00954E991277BB8E00C17203 /* EmulationWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00954E981277BB8E00C17203 /* EmulationWindowController.m */; };
 		00954EA71277BC1200C17203 /* AudioControlsWindowController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00954EA61277BC1200C17203 /* AudioControlsWindowController.mm */; };
-		00A06AE31533055600A494A7 /* DIAppleBlockStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A06AE21533055600A494A7 /* DIAppleBlockStorage.cpp */; };
+		00A06AE31533055600A494A7 /* DIATABlockStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A06AE21533055600A494A7 /* DIATABlockStorage.cpp */; };
 		00A06AE91533EE3100A494A7 /* DIApple35DiskStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A06AE81533EE3100A494A7 /* DIApple35DiskStorage.cpp */; };
 		00A0B8041069761A007930A5 /* Document.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00A0B8031069761A007930A5 /* Document.mm */; };
 		00A72B6F12879F650083C6A7 /* CanvasView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00A72B6E12879F650083C6A7 /* CanvasView.mm */; };
@@ -147,7 +146,6 @@
 		00AB9654157F9EC700EDACD5 /* Audio1Bit.h in Headers */ = {isa = PBXBuildFile; fileRef = 0084D43714FC50060031A8A5 /* Audio1Bit.h */; };
 		00AB9655157F9EC700EDACD5 /* AudioCodec.h in Headers */ = {isa = PBXBuildFile; fileRef = 00FBD2DD1419A03A00BA8CEE /* AudioCodec.h */; };
 		00AB9656157F9EC700EDACD5 /* AudioPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 00936E8515170428006B0EAC /* AudioPlayer.h */; };
-		00AB9657157F9EC700EDACD5 /* BankSwitchedRAM.h in Headers */ = {isa = PBXBuildFile; fileRef = 00139F811511864800B0E108 /* BankSwitchedRAM.h */; };
 		00AB9658157F9EC700EDACD5 /* ControlBus.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B8883912A393990052B7A4 /* ControlBus.h */; };
 		00AB9659157F9EC700EDACD5 /* FloatingBus.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B8883B12A393990052B7A4 /* FloatingBus.h */; };
 		00AB965A157F9EC700EDACD5 /* JoystickMapper.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B7C644147B4B2B00BB7E6B /* JoystickMapper.h */; };
@@ -200,7 +198,7 @@
 		00AB968B157F9F1800EDACD5 /* DILogicalDiskStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = 0019177F1543D337009A301E /* DILogicalDiskStorage.h */; };
 		00AB968C157F9F1800EDACD5 /* DIFDIDiskStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = 00140E01152D375D00D4795D /* DIFDIDiskStorage.h */; };
 		00AB968D157F9F1800EDACD5 /* DIV2DDiskStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = 00140E13152D396500D4795D /* DIV2DDiskStorage.h */; };
-		00AB968E157F9F1800EDACD5 /* DIAppleBlockStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = 00A06AE41533055D00A494A7 /* DIAppleBlockStorage.h */; };
+		00AB968E157F9F1800EDACD5 /* DIATABlockStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = 00A06AE41533055D00A494A7 /* DIATABlockStorage.h */; };
 		00AB968F157F9F1800EDACD5 /* DIApple525DiskStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = 00140DED152D281F00D4795D /* DIApple525DiskStorage.h */; };
 		00AB9690157F9F1800EDACD5 /* DIApple35DiskStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = 00A06AE61533EE2700A494A7 /* DIApple35DiskStorage.h */; };
 		00AB9691157F9F2600EDACD5 /* OECommon.h in Headers */ = {isa = PBXBuildFile; fileRef = 00247F36139D85AA00B165D1 /* OECommon.h */; };
@@ -242,6 +240,10 @@
 		00D845830FFF0FD2005802F0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D845730FFF0FD2005802F0 /* main.m */; };
 		00D845860FFF0FD2005802F0 /* PreferencesWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D8457A0FFF0FD2005802F0 /* PreferencesWindowController.m */; };
 		00E442921278726B00713A05 /* IconDevices.png in Resources */ = {isa = PBXBuildFile; fileRef = 00E442911278726B00713A05 /* IconDevices.png */; };
+		00EA1F0515976F0200079A54 /* ATADevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00EA1F0315976F0200079A54 /* ATADevice.cpp */; };
+		00EA1F0615976F0200079A54 /* ATADevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 00EA1F0415976F0200079A54 /* ATADevice.h */; };
+		00EA1F0A159799C400079A54 /* RDCFFA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00EA1F08159799C400079A54 /* RDCFFA.cpp */; };
+		00EA1F0B159799C400079A54 /* RDCFFA.h in Headers */ = {isa = PBXBuildFile; fileRef = 00EA1F09159799C400079A54 /* RDCFFA.h */; };
 		00ED379C12779AD100BEF6BD /* AudioMax.png in Resources */ = {isa = PBXBuildFile; fileRef = 00ED379712779AD000BEF6BD /* AudioMax.png */; };
 		00ED379D12779AD100BEF6BD /* AudioMin.png in Resources */ = {isa = PBXBuildFile; fileRef = 00ED379812779AD000BEF6BD /* AudioMin.png */; };
 		00ED379E12779AD100BEF6BD /* AudioPlay.png in Resources */ = {isa = PBXBuildFile; fileRef = 00ED379912779AD000BEF6BD /* AudioPlay.png */; };
@@ -332,16 +334,14 @@
 		0006D7D215523830001DE1F3 /* VMDK Virtual Machine Disk Format 5.0.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "VMDK Virtual Machine Disk Format 5.0.pdf"; sourceTree = "<group>"; };
 		0008FCD80FBA5D72005E876E /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = macosx/Info.plist; sourceTree = "<group>"; };
 		0009068D141D2A0300F06D99 /* NSStringAdditions.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NSStringAdditions.mm; sourceTree = "<group>"; };
-		00092E5A156AA9D4007A9E04 /* VideoRAM.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VideoRAM.cpp; sourceTree = "<group>"; };
-		00092E5B156AA9D4007A9E04 /* VideoRAM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoRAM.h; sourceTree = "<group>"; };
+		00092E5A156AA9D4007A9E04 /* VRAM.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VRAM.cpp; sourceTree = "<group>"; };
+		00092E5B156AA9D4007A9E04 /* VRAM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VRAM.h; sourceTree = "<group>"; };
 		000A79190FBA49C500A0F12E /* OpenEmulator.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = OpenEmulator.icns; sourceTree = "<group>"; };
 		000E8D1813515C6E00DBFB2C /* StorageInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StorageInterface.h; sourceTree = "<group>"; };
 		000F66370FF8368F00C8AF23 /* DiskImage.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = DiskImage.icns; sourceTree = "<group>"; };
 		000F663A0FF8368F00C8AF23 /* Emulation.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Emulation.icns; sourceTree = "<group>"; };
 		000F66520FF8368F00C8AF23 /* OpenEmulator.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = OpenEmulator.icns; sourceTree = "<group>"; };
 		00118EFD1553A30F00004665 /* VDI Tutorial - All about VDIs.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "VDI Tutorial - All about VDIs.txt"; sourceTree = "<group>"; };
-		00139F7F1511863B00B0E108 /* BankSwitchedRAM.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BankSwitchedRAM.cpp; sourceTree = "<group>"; };
-		00139F811511864800B0E108 /* BankSwitchedRAM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BankSwitchedRAM.h; sourceTree = "<group>"; };
 		00139F83151195E600B0E108 /* AppleIIAddressDecoder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleIIAddressDecoder.cpp; sourceTree = "<group>"; };
 		00139F85151195EE00B0E108 /* AppleIIAddressDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleIIAddressDecoder.h; sourceTree = "<group>"; };
 		00140DED152D281F00D4795D /* DIApple525DiskStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DIApple525DiskStorage.h; sourceTree = "<group>"; };
@@ -498,8 +498,8 @@
 		00954EA51277BC1200C17203 /* AudioControlsWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioControlsWindowController.h; sourceTree = "<group>"; };
 		00954EA61277BC1200C17203 /* AudioControlsWindowController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AudioControlsWindowController.mm; sourceTree = "<group>"; };
 		00A06AE11533009A00A494A7 /* V2D Format.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "V2D Format.txt"; sourceTree = "<group>"; };
-		00A06AE21533055600A494A7 /* DIAppleBlockStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DIAppleBlockStorage.cpp; sourceTree = "<group>"; };
-		00A06AE41533055D00A494A7 /* DIAppleBlockStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DIAppleBlockStorage.h; sourceTree = "<group>"; };
+		00A06AE21533055600A494A7 /* DIATABlockStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DIATABlockStorage.cpp; sourceTree = "<group>"; };
+		00A06AE41533055D00A494A7 /* DIATABlockStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DIATABlockStorage.h; sourceTree = "<group>"; };
 		00A06AE61533EE2700A494A7 /* DIApple35DiskStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DIApple35DiskStorage.h; sourceTree = "<group>"; };
 		00A06AE81533EE3100A494A7 /* DIApple35DiskStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DIApple35DiskStorage.cpp; sourceTree = "<group>"; };
 		00A0B7B81068949D007930A5 /* Document.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Document.h; sourceTree = "<group>"; };
@@ -624,6 +624,10 @@
 		00E442911278726B00713A05 /* IconDevices.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IconDevices.png; sourceTree = "<group>"; };
 		00E442931278727600713A05 /* EmulationShow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EmulationShow.png; sourceTree = "<group>"; };
 		00E473411475695500F367B7 /* diskimage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = diskimage.h; sourceTree = "<group>"; };
+		00EA1F0315976F0200079A54 /* ATADevice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ATADevice.cpp; sourceTree = "<group>"; };
+		00EA1F0415976F0200079A54 /* ATADevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATADevice.h; sourceTree = "<group>"; };
+		00EA1F08159799C400079A54 /* RDCFFA.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RDCFFA.cpp; sourceTree = "<group>"; };
+		00EA1F09159799C400079A54 /* RDCFFA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDCFFA.h; sourceTree = "<group>"; };
 		00ED379712779AD000BEF6BD /* AudioMax.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AudioMax.png; sourceTree = "<group>"; };
 		00ED379812779AD000BEF6BD /* AudioMin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AudioMin.png; sourceTree = "<group>"; };
 		00ED379912779AD000BEF6BD /* AudioPlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AudioPlay.png; sourceTree = "<group>"; };
@@ -896,6 +900,7 @@
 				00B8882D12A393990052B7A4 /* Generic */,
 				00B8884212A393990052B7A4 /* MOS */,
 				00B8885212A393990052B7A4 /* Motorola */,
+				00EA1F07159799A100079A54 /* RD */,
 				00B8885712A393990052B7A4 /* Ricoh */,
 				002740B513A08A1E00E13D65 /* Videx */,
 				00B8885D12A393990052B7A4 /* WDC */,
@@ -966,14 +971,14 @@
 				00B8883112A393990052B7A4 /* AddressOffset.h */,
 				00839E44159705FC00BD4538 /* ATAController.cpp */,
 				00839E45159705FC00BD4538 /* ATAController.h */,
+				00EA1F0315976F0200079A54 /* ATADevice.cpp */,
+				00EA1F0415976F0200079A54 /* ATADevice.h */,
 				0084D43514FC4FF80031A8A5 /* Audio1Bit.cpp */,
 				0084D43714FC50060031A8A5 /* Audio1Bit.h */,
 				00B8883212A393990052B7A4 /* AudioCodec.cpp */,
 				00FBD2DD1419A03A00BA8CEE /* AudioCodec.h */,
 				00936E8715170435006B0EAC /* AudioPlayer.cpp */,
 				00936E8515170428006B0EAC /* AudioPlayer.h */,
-				00139F7F1511863B00B0E108 /* BankSwitchedRAM.cpp */,
-				00139F811511864800B0E108 /* BankSwitchedRAM.h */,
 				00B8883812A393990052B7A4 /* ControlBus.cpp */,
 				00B8883912A393990052B7A4 /* ControlBus.h */,
 				00B8883A12A393990052B7A4 /* FloatingBus.cpp */,
@@ -988,8 +993,8 @@
 				00B8883D12A393990052B7A4 /* RAM.h */,
 				00B8883E12A393990052B7A4 /* ROM.cpp */,
 				00B8883F12A393990052B7A4 /* ROM.h */,
-				00092E5A156AA9D4007A9E04 /* VideoRAM.cpp */,
-				00092E5B156AA9D4007A9E04 /* VideoRAM.h */,
+				00092E5A156AA9D4007A9E04 /* VRAM.cpp */,
+				00092E5B156AA9D4007A9E04 /* VRAM.h */,
 			);
 			name = Generic;
 			path = libemulation/Implementation/Generic;
@@ -1145,8 +1150,8 @@
 				00140E01152D375D00D4795D /* DIFDIDiskStorage.h */,
 				00140E11152D395900D4795D /* DIV2DDiskStorage.cpp */,
 				00140E13152D396500D4795D /* DIV2DDiskStorage.h */,
-				00A06AE21533055600A494A7 /* DIAppleBlockStorage.cpp */,
-				00A06AE41533055D00A494A7 /* DIAppleBlockStorage.h */,
+				00A06AE21533055600A494A7 /* DIATABlockStorage.cpp */,
+				00A06AE41533055D00A494A7 /* DIATABlockStorage.h */,
 				00140DEF152D282400D4795D /* DIApple525DiskStorage.cpp */,
 				00140DED152D281F00D4795D /* DIApple525DiskStorage.h */,
 				00A06AE81533EE3100A494A7 /* DIApple35DiskStorage.cpp */,
@@ -1154,6 +1159,16 @@
 			);
 			path = libdiskimage;
 			sourceTree = "<group>";
+		};
+		00EA1F07159799A100079A54 /* RD */ = {
+			isa = PBXGroup;
+			children = (
+				00EA1F08159799C400079A54 /* RDCFFA.cpp */,
+				00EA1F09159799C400079A54 /* RDCFFA.h */,
+			);
+			name = RD;
+			path = libemulation/Implementation/RD;
+			sourceTree = SOURCE_ROOT;
 		};
 		19C28FB0FE9D524F11CA2CBB /* Products */ = {
 			isa = PBXGroup;
@@ -1326,7 +1341,7 @@
 				00AB968B157F9F1800EDACD5 /* DILogicalDiskStorage.h in Headers */,
 				00AB968C157F9F1800EDACD5 /* DIFDIDiskStorage.h in Headers */,
 				00AB968D157F9F1800EDACD5 /* DIV2DDiskStorage.h in Headers */,
-				00AB968E157F9F1800EDACD5 /* DIAppleBlockStorage.h in Headers */,
+				00AB968E157F9F1800EDACD5 /* DIATABlockStorage.h in Headers */,
 				00AB968F157F9F1800EDACD5 /* DIApple525DiskStorage.h in Headers */,
 				00AB9690157F9F1800EDACD5 /* DIApple35DiskStorage.h in Headers */,
 			);
@@ -1336,7 +1351,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00092E5D156AA9D4007A9E04 /* VideoRAM.h in Headers */,
+				00092E5D156AA9D4007A9E04 /* VRAM.h in Headers */,
 				00379133157B285F0020138F /* AppleGraphicsTabletInterfaceCard.h in Headers */,
 				00AB963F157F9EBE00EDACD5 /* Apple1ACI.h in Headers */,
 				00AB9640157F9EBE00EDACD5 /* Apple1IO.h in Headers */,
@@ -1362,7 +1377,6 @@
 				00AB9654157F9EC700EDACD5 /* Audio1Bit.h in Headers */,
 				00AB9655157F9EC700EDACD5 /* AudioCodec.h in Headers */,
 				00AB9656157F9EC700EDACD5 /* AudioPlayer.h in Headers */,
-				00AB9657157F9EC700EDACD5 /* BankSwitchedRAM.h in Headers */,
 				00AB9658157F9EC700EDACD5 /* ControlBus.h in Headers */,
 				00AB9659157F9EC700EDACD5 /* FloatingBus.h in Headers */,
 				00AB965A157F9EC700EDACD5 /* JoystickMapper.h in Headers */,
@@ -1412,6 +1426,8 @@
 				00AB96A8158053C400EDACD5 /* AppleIIDisableC800.h in Headers */,
 				005316C51596D2BF007F3C86 /* Proxy.h in Headers */,
 				00839E481597060200BD4538 /* ATAController.h in Headers */,
+				00EA1F0615976F0200079A54 /* ATADevice.h in Headers */,
+				00EA1F0B159799C400079A54 /* RDCFFA.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1617,7 +1633,7 @@
 				00140E0C152D37F500D4795D /* DIDC42BackingStore.cpp in Sources */,
 				00140E12152D395900D4795D /* DIV2DDiskStorage.cpp in Sources */,
 				0020AE731530A22700E3DF80 /* DICommon.cpp in Sources */,
-				00A06AE31533055600A494A7 /* DIAppleBlockStorage.cpp in Sources */,
+				00A06AE31533055600A494A7 /* DIATABlockStorage.cpp in Sources */,
 				00A06AE91533EE3100A494A7 /* DIApple35DiskStorage.cpp in Sources */,
 				0027E67E153738CC0066A9BE /* DIVDIBlockStorage.cpp in Sources */,
 				00536BC6153DD400005A5336 /* DIVMDKBlockStorage.cpp in Sources */,
@@ -1674,7 +1690,6 @@
 				00B7C64A147B5B2B00BB7E6B /* AppleIIGamePort.cpp in Sources */,
 				0084D43614FC4FF80031A8A5 /* Audio1Bit.cpp in Sources */,
 				00A90FB5150D3A0E00BB2999 /* AudioInterface.cpp in Sources */,
-				00139F801511863B00B0E108 /* BankSwitchedRAM.cpp in Sources */,
 				00139F84151195E600B0E108 /* AppleIIAddressDecoder.cpp in Sources */,
 				00365CEB1516955C00978DF6 /* AddressMux.cpp in Sources */,
 				00936E8815170435006B0EAC /* AudioPlayer.cpp in Sources */,
@@ -1683,12 +1698,14 @@
 				001E0970155633D000405DC0 /* AppleIIAudioIn.cpp in Sources */,
 				001E0971155633E700405DC0 /* Apple1Terminal.cpp in Sources */,
 				00651A57155AE3DF00221A44 /* MemoryInterface.cpp in Sources */,
-				00092E5C156AA9D4007A9E04 /* VideoRAM.cpp in Sources */,
+				00092E5C156AA9D4007A9E04 /* VRAM.cpp in Sources */,
 				00379132157B285F0020138F /* AppleGraphicsTabletInterfaceCard.cpp in Sources */,
 				00AB96A7158053C400EDACD5 /* AppleIIDisableC800.cpp in Sources */,
 				005316C31596D268007F3C86 /* AppleSilentypeInterfaceCard.cpp in Sources */,
 				005316C71596D2C8007F3C86 /* Proxy.cpp in Sources */,
 				00839E491597060700BD4538 /* ATAController.cpp in Sources */,
+				00EA1F0515976F0200079A54 /* ATADevice.cpp in Sources */,
+				00EA1F0A159799C400079A54 /* RDCFFA.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -6,9 +6,17 @@
         <setting ref="appleACI.io" name="volume" label="Volume" type="slider" options="0,1"/>
     </device>
     <connector id="appleACI.connector" type="Apple-1 Expansion Port">
-        <inlet ref="appleACI.audioCodec" property="controlBus" outletRef="controlBus"/>
         <inlet ref="appleACI.addressMapper" property="addressDecoder" outletRef="memoryBus"/>
+        <inlet ref="appleACI.audioCodec" property="controlBus" outletRef="controlBus"/>
     </connector>
+    <component id="appleACI.addressMapper" class="AddressMapper">
+        <property name="addressDecoder" ref=""/>
+        <property name="mapIO" value="0xc000-0xc0ff"/>
+        <property name="refIO" ref="appleACI.io"/>
+        <property name="mapROM" value="0xc100-0xc1ff"/>
+        <property name="refROM" ref="appleACI.rom"/>
+        <property name="sel" value="IO,ROM"/>
+    </component>
     <component id="appleACI.io" class="Apple1ACI">
         <property name="volume" value="1"/>
         <property name="noiseRejection" value="0.04"/>
@@ -25,14 +33,6 @@
     </component>
     <component id="appleACI.rom" class="ROM">
         <property name="memoryImage" data="${resourcePath}/roms/Apple/Apple-1 ACI ROM.bin"/>
-    </component>
-    <component id="appleACI.addressMapper" class="AddressMapper">
-        <property name="addressDecoder" ref=""/>
-        <property name="mapIO" value="0xc000-0xc0ff"/>
-        <property name="refIO" ref="appleACI.io"/>
-        <property name="mapROM" value="0xc100-0xc1ff"/>
-        <property name="refROM" ref="appleACI.rom"/>
-        <property name="sel" value="IO,ROM"/>
     </component>
     
 </edl>

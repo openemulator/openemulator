@@ -18,7 +18,8 @@ AppleLanguageCard::AppleLanguageCard()
 {
     controlBus = NULL;
     memoryBus = NULL;
-    ram = NULL;
+    floatingBus = NULL;
+    memory = NULL;
     
     bank1 = false;
     ramRead = false;
@@ -72,8 +73,8 @@ bool AppleLanguageCard::setRef(string name, OEComponent *ref)
         memoryBus = ref;
     else if (name == "floatingBus")
         floatingBus = ref;
-    else if (name == "ram")
-        ram = ref;
+    else if (name == "memory")
+        memory = ref;
     else
         return false;
     
@@ -103,9 +104,9 @@ bool AppleLanguageCard::init()
         return false;
     }
     
-    if (!ram)
+    if (!memory)
     {
-        logMessage("ram not connected");
+        logMessage("memory not connected");
         
         return false;
     }
@@ -180,13 +181,13 @@ void AppleLanguageCard::setBank1(bool value)
 
 void AppleLanguageCard::updateBank1()
 {
-    BankSwitchedRAMMap ramMap;
+    AddressOffsetMap offsetMap;
     
-    ramMap.startAddress = 0x1000;
-    ramMap.endAddress = 0x1fff;
-    ramMap.offset = bank1 ? -0x1000 : 0x0000;
+    offsetMap.startAddress = 0x1000;
+    offsetMap.endAddress = 0x1fff;
+    offsetMap.offset = bank1 ? -0x1000 : 0x0000;
     
-    ram->postMessage(this, BANKSWITCHEDRAM_MAP, &ramMap);
+    memory->postMessage(this, ADDRESSOFFSET_MAP, &offsetMap);
 }
 
 void AppleLanguageCard::setRAMRead(bool value)
@@ -203,7 +204,7 @@ void AppleLanguageCard::updateRAMRead()
 {
     MemoryMap memoryMap;
     
-    memoryMap.component = ram;
+    memoryMap.component = memory;
     memoryMap.startAddress = 0xd000;
     memoryMap.endAddress = 0xffff;
     memoryMap.read = true;
@@ -228,7 +229,7 @@ void AppleLanguageCard::updateRAMWrite()
 {
     MemoryMap memoryMap;
     
-    memoryMap.component = ram;
+    memoryMap.component = memory;
     memoryMap.startAddress = 0xd000;
     memoryMap.endAddress = 0xffff;
     memoryMap.read = false;

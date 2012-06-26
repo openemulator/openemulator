@@ -19,7 +19,6 @@
         <property name="controlBus" ref=""/>
         <property name="floatingBus" ref=""/>
         <property name="slotController" ref="appleSilentypeInterfaceCard.memory"/>
-        <property name="memoryCF00" ref="appleSilentypeInterfaceCard.memoryCF00"/>
         <property name="memoryMapper" ref="appleSilentypeInterfaceCard.memoryMapper"/>
         <property name="printer" ref=""/>
     </component>
