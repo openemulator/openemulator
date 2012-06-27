@@ -105,8 +105,6 @@ void ATAController::write(OEAddress address, OEChar value)
 
 OEShort ATAController::read16(OEAddress address)
 {
-//    logMessage("r " + getHexString(address));
-    
     if (address & 0x200)
         // ATA alt status
         return status;
@@ -128,8 +126,6 @@ OEShort ATAController::read16(OEAddress address)
                     bufferIndex = 0;
                     lba.d.l++;
                 }
-                
-//                logMessage("s " + getHexString(bufferIndex));
                 
                 return value;
             }
@@ -168,8 +164,6 @@ OEShort ATAController::read16(OEAddress address)
 
 void ATAController::write16(OEAddress address, OEShort value)
 {
-//    logMessage("w " + getHexString(address) + ": " + getHexString(value));
-    
     if (address & 0x200)
     {
         // ATA device control
@@ -272,8 +266,6 @@ void ATAController::write16(OEAddress address, OEShort value)
                         else
                             OEAssertBit(status, ATA_ERR);
                         
-                        logMessage("r " + getString(lba.d.l));
-                        
                         break;
                         
                     case ATA_WRITE:
@@ -283,8 +275,6 @@ void ATAController::write16(OEAddress address, OEShort value)
                             OEAssertBit(status, ATA_DRQ);
                         else
                             OEAssertBit(status, ATA_ERR);
-                        
-                        logMessage("w " + getString(lba.d.l));
                         
                         break;
                         
@@ -310,22 +300,20 @@ void ATAController::write16(OEAddress address, OEShort value)
                                          blockStorage->getATAModel().c_str(),
                                          ATA_MODEL_SIZE);
                             
-                            buffer[ATA_SIZE + 0] = lbaSize.b.h;
-                            buffer[ATA_SIZE + 1] = lbaSize.b.l;
-                            buffer[ATA_SIZE + 2] = lbaSize.b.h3;
-                            buffer[ATA_SIZE + 3] = lbaSize.b.h2;
+                            buffer[ATA_SIZE + 0] = lbaSize.b.l;
+                            buffer[ATA_SIZE + 1] = lbaSize.b.h;
+                            buffer[ATA_SIZE + 2] = lbaSize.b.h2;
+                            buffer[ATA_SIZE + 3] = lbaSize.b.h3;
                             
-                            buffer[ATA_SIZE2 + 0] = lbaSize.b.h;
-                            buffer[ATA_SIZE2 + 1] = lbaSize.b.l;
-                            buffer[ATA_SIZE2 + 2] = lbaSize.b.h3;
-                            buffer[ATA_SIZE2 + 3] = lbaSize.b.h2;
+                            buffer[ATA_SIZE2 + 0] = lbaSize.b.l;
+                            buffer[ATA_SIZE2 + 1] = lbaSize.b.h;
+                            buffer[ATA_SIZE2 + 2] = lbaSize.b.h2;
+                            buffer[ATA_SIZE2 + 3] = lbaSize.b.h3;
                             
                             OEAssertBit(status, ATA_DRQ);
                         }
                         else
                             OEAssertBit(status, ATA_ERR);
-                        
-                        logMessage("i");
                         
                         break;
                     }

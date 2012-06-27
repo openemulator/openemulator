@@ -1,10 +1,12 @@
 ==Latest==
+* Implemented force write protected in ATADevice
+* Fixed libdiskimage GCR53
 * Renamed VideoRAM to VRAM
-* Fixed CFFA multi-partition operation
+* Fixed CFFA ATA identify
 * Fixed keyboard UNICODE + Apple II madness
 * Removed BankSwitchedRAM, added bank switching to AddressOffset
 * Implemented ATADevice
-* Refactorized CFFA+CFFA1 into ATAController
+* Refactorized RDCFFA+RDCFFA1 into ATAController and RDCFFA
 * Fixed minor bug in component lifecycle
 * Fixed Apple II mouse capture
 * Used AddressMapper in self-mapping peripheral cards

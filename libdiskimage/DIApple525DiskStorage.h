@@ -82,13 +82,12 @@ private:
     bool decodeGCR62Track(DITrack& track, DIInt trackIndex, DITrackFormat trackFormat);
     
     void writeGCR53AddressField(DIInt trackIndex, DIInt sectorIndex);
-    void writeGCR53DataField(DIChar *data);
-    bool readGCR53AddressField(DIInt trackIndex, DIInt sectorIndex);
-    bool readGCR53DataField(DIChar *data);
-    
     void writeGCR62AddressField(DIInt trackIndex, DIInt sectorIndex);
+    void writeGCR53DataField(DIChar *data);
     void writeGCR62DataField(DIChar *data);
+    bool readGCR53AddressField(DIInt trackIndex, DIInt sectorIndex);
     bool readGCR62AddressField(DIInt trackIndex, DIInt sectorIndex);
+    bool readGCR53DataField(DIChar *data);
     bool readGCR62DataField(DIChar *data);
     
     void writeSync(DIInt num, DIInt q3Clocks, DIInt lastQ3Clocks);
@@ -100,13 +99,13 @@ private:
     bool isGCRError();
     
     void writeGCR53Value(DIChar value);
-    void writeGCR53Checksum();
-    DIChar readGCR53Value();
-    bool validateGCR53Checksum();
-    
     void writeGCR62Value(DIChar value);
+    void writeGCR53Checksum();
     void writeGCR62Checksum();
+    
+    DIChar readGCR53Value();
     DIChar readGCR62Value();
+    bool validateGCR53Checksum();
     bool validateGCR62Checksum();
     
     void setStreamData(DIData& data);

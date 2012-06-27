@@ -82,6 +82,7 @@ void W65C02S::execute()
         else
         {
             OEChar opcode = RDOP();
+            
             switch (opcode)
             {
                 W65C02S_OP(00);

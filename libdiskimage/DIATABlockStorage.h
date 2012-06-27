@@ -34,6 +34,10 @@ public:
     bool isWriteEnabled();
     DIInt getBlockNum();
     string getFormatLabel();
+    
+    void setForceWriteProtected(bool value);
+    bool getForceWriteProtected();
+    
     string getATASerial();
     string getATAFirmware();
     string getATAModel();
@@ -54,6 +58,7 @@ private:
     
     DIBlockStorage *blockStorage;
     
+    bool forceWriteProtected;
     string ataSerial;
     string ataFirmware;
     string ataModel;

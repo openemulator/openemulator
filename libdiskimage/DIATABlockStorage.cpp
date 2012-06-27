@@ -14,6 +14,8 @@
 
 DIATABlockStorage::DIATABlockStorage()
 {
+    forceWriteProtected = false;
+    
     close();
 }
 
@@ -113,7 +115,7 @@ void DIATABlockStorage::close()
 
 bool DIATABlockStorage::isWriteEnabled()
 {
-    return blockStorage->isWriteEnabled();
+    return !forceWriteProtected && blockStorage->isWriteEnabled();
 }
 
 DIInt DIATABlockStorage::getBlockNum()
@@ -124,6 +126,16 @@ DIInt DIATABlockStorage::getBlockNum()
 string DIATABlockStorage::getFormatLabel()
 {
     return blockStorage->getFormatLabel();
+}
+
+void DIATABlockStorage::setForceWriteProtected(bool value)
+{
+    forceWriteProtected = value;
+}
+
+bool DIATABlockStorage::getForceWriteProtected()
+{
+    return forceWriteProtected;
 }
 
 string DIATABlockStorage::getATASerial()

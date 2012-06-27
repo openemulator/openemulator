@@ -285,6 +285,7 @@ void MOS6502::execute()
                        pc.w.l, a, x, y, sp.b.l, p);*/
             
             OEChar opcode = RDOP();
+            
             switch (opcode)
             {
                 MOS6502_OP(00);

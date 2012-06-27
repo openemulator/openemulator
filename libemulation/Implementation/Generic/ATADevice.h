@@ -29,7 +29,6 @@ private:
     OEComponent *device;
     
     string diskImagePath;
-    bool forceWriteProtected;
     
     DIATABlockStorage blockStorage;
     

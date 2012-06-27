@@ -28,7 +28,7 @@ bool ATADevice::setValue(string name, string value)
     if (name == "diskImage")
         openDiskImage(value);
     else if (name == "forceWriteProtected")
-        forceWriteProtected = getOEInt(value);
+        blockStorage.setForceWriteProtected(getOEInt(value));
     else
         return false;
     
@@ -40,7 +40,7 @@ bool ATADevice::getValue(string name, string& value)
     if (name == "diskImage")
         value = diskImagePath;
     else if (name == "forceWriteProtected")
-        value = getString(forceWriteProtected);
+        value = getString(blockStorage.getForceWriteProtected());
     else
         return false;
     

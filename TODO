@@ -1,9 +1,12 @@
 ==1.0.3==
-* Fix libdiskimage GCR53
-* Fix Videoterm not showing video after installing and PR#3
-* Fix Disk II not booting sometimes when emulation was loaded from disk
+* Fix Disk II sometimes not booting when emulation was loaded from disk
 * Fix Disk II disk writes
 * Fix IAC 45, beautiful boot
+
+* Implement Apple Silentype print intensity
+* Fix Apple Silentype Interface Card spurious data problems
+
+* Fix Videoterm not showing video after installing and PR#3
 * Fix replace monitor+emulation lock problem (happens when a monitor is replaced and selected)
 * Fix [CanvasView update] problem in paper view
 
@@ -19,7 +22,7 @@
 * Implement Mountain Computer Apple Clock
 * Implement TimeMaster II H.O.
 * Implement Apple Super Serial Card
-* Fix CTRL+ALT mouse capture
+* Fix CTRL+ALT mouse capture problems (bug report, unverified)
 * Implement open disk image with template chooser.
 * Implement a virtual RS-232 SSH client. In client mode, displays "host: ", "login as: " and "user@host's password: " to connect remotely to SSH. In modem mode, ATD commands are accepted.
 * Implement a virtual RS-232 SSH server that listens on a port. A user and password can be configured.

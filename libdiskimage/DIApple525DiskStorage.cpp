@@ -596,6 +596,22 @@ void DIApple525DiskStorage::writeGCR53AddressField(DIInt trackIndex, DIInt secto
 	writeNibble(0xeb);
 }
 
+void DIApple525DiskStorage::writeGCR62AddressField(DIInt trackIndex, DIInt sectorIndex)
+{
+	writeNibble(0xd5);
+	writeNibble(0xaa);
+	writeNibble(0x96);
+	
+	writeFMValue(gcrVolume);
+	writeFMValue(trackIndex);
+	writeFMValue(sectorIndex);
+	writeFMValue(gcrVolume ^ trackIndex ^ sectorIndex);
+	
+	writeNibble(0xde);
+	writeNibble(0xaa);
+	writeNibble(0xeb, 16);
+}
+
 void DIApple525DiskStorage::writeGCR53DataField(DIChar *data)
 {
 	writeNibble(0xd5);
@@ -607,20 +623,20 @@ void DIApple525DiskStorage::writeGCR53DataField(DIChar *data)
 	writeGCR53Value(data[0xff] & 0x7);
 	
     for (DIInt i = 0; i < 0x33; i++)
-        writeGCR53Value(((data[i * 5 + 2] & 0x7) << 2) |
-                        ((data[i * 5 + 3] & 0x1) << 1) |
-                        ((data[i * 5 + 4] & 0x1) << 0));
+        writeGCR53Value((((data[i * 5 + 2] >> 0) & 0x7) << 2) |
+                        (((data[i * 5 + 3] >> 0) & 0x1) << 1) |
+                        (((data[i * 5 + 4] >> 0) & 0x1) << 0));
     for (DIInt i = 0; i < 0x33; i++)
-        writeGCR53Value(((data[i * 5 + 1] & 0x7) << 2) |
-                        ((data[i * 5 + 3] & 0x2) >> 0) |
-                        ((data[i * 5 + 4] & 0x2) >> 1));
+        writeGCR53Value((((data[i * 5 + 1] >> 0) & 0x7) << 2) |
+                        (((data[i * 5 + 3] >> 1) & 0x1) << 1) |
+                        (((data[i * 5 + 4] >> 1) & 0x1) << 0));
     for (DIInt i = 0; i < 0x33; i++)
-        writeGCR53Value(((data[i * 5 + 0] & 0x7) << 2) |
-                        ((data[i * 5 + 3] & 0x4) >> 1) |
-                        ((data[i * 5 + 4] & 0x4) >> 2));
+        writeGCR53Value((((data[i * 5 + 0] >> 0) & 0x7) << 2) |
+                        (((data[i * 5 + 3] >> 2) & 0x1) << 1) |
+                        (((data[i * 5 + 4] >> 2) & 0x1) << 0));
 	
 	for (DIInt block = 0; block < 5; block++)
-		for (int i = 0x32; i >= 0; i--)
+		for (DISInt i = 0x32; i >= 0; i--)
 			writeGCR53Value(data[i * 5 + block] >> 3);
 	
 	writeGCR53Value(data[0xff] >> 3);
@@ -632,6 +648,36 @@ void DIApple525DiskStorage::writeGCR53DataField(DIChar *data)
 	writeNibble(0xeb, 12);
 }
 
+void DIApple525DiskStorage::writeGCR62DataField(DIChar *data)
+{
+	DIInt swapBit01[] = {0x00, 0x02, 0x01, 0x03};
+	DIInt swapBit23[] = {0x00, 0x08, 0x04, 0x0c};
+	DIInt swapBit45[] = {0x00, 0x20, 0x10, 0x30};
+	
+	writeNibble(0xd5);
+	writeNibble(0xaa);
+	writeNibble(0xad);
+	
+	resetGCR();
+	
+	for (DIInt index = 0; index < 0x54; index++)
+		writeGCR62Value(swapBit01[data[0x00 + index] & 0x3] |
+                        swapBit23[data[0x56 + index] & 0x3] |
+					    swapBit45[data[0xac + index] & 0x3]);
+	for (DIInt index = 0x54; index < 0x56; index++)
+		writeGCR62Value(swapBit01[data[0x00 + index] & 0x3] |
+                        swapBit23[data[0x56 + index] & 0x3]);
+	
+	for (DIInt index = 0; index < SECTOR_SIZE; index++)
+		writeGCR62Value(data[index] >> 2);
+	
+	writeGCR62Checksum();
+	
+	writeNibble(0xde);
+	writeNibble(0xaa);
+	writeNibble(0xeb);
+}
+
 bool DIApple525DiskStorage::readGCR53AddressField(DIInt trackIndex, DIInt sectorIndex)
 {
 	for (DIInt i = 0; i < 2 * (DEFAULT_TRACKSIZE / 8); i++)
@@ -641,6 +687,40 @@ bool DIApple525DiskStorage::readGCR53AddressField(DIInt trackIndex, DIInt sector
 		if (readNibble() != 0xaa)
 			continue;
 		if (readNibble() != 0xb5)
+			continue;
+		
+		DIChar readVolume = readFMValue();
+		DIChar readTrackIndex = readFMValue();
+		DIChar readSectorIndex = readFMValue();
+		DIChar readChecksum = readFMValue();
+        
+		if (readChecksum != (readVolume ^ readTrackIndex ^ readSectorIndex))
+			continue;
+		if (readTrackIndex != trackIndex)
+			continue;
+		if (readSectorIndex != sectorIndex)
+			continue;
+		
+		if (readNibble() != 0xde)
+			continue;
+		if (readNibble() != 0xaa)
+			continue;
+		
+		return true;
+	}
+	
+	return false;
+}
+
+bool DIApple525DiskStorage::readGCR62AddressField(DIInt trackIndex, DIInt sectorIndex)
+{
+	for (DIInt i = 0; i < 2 * (DEFAULT_TRACKSIZE / 8); i++)
+    {
+		if (readNibble() != 0xd5)
+			continue;
+		if (readNibble() != 0xaa)
+			continue;
+		if (readNibble() != 0x96)
 			continue;
 		
 		DIChar readVolume = readFMValue();
@@ -731,86 +811,6 @@ bool DIApple525DiskStorage::readGCR53DataField(DIChar *data)
 	return true;
 }
 
-void DIApple525DiskStorage::writeGCR62AddressField(DIInt trackIndex, DIInt sectorIndex)
-{
-	writeNibble(0xd5);
-	writeNibble(0xaa);
-	writeNibble(0x96);
-	
-	writeFMValue(gcrVolume);
-	writeFMValue(trackIndex);
-	writeFMValue(sectorIndex);
-	writeFMValue(gcrVolume ^ trackIndex ^ sectorIndex);
-	
-	writeNibble(0xde);
-	writeNibble(0xaa);
-	writeNibble(0xeb, 16);
-}
-
-void DIApple525DiskStorage::writeGCR62DataField(DIChar *data)
-{
-	DIInt swapBit01[] = {0x00, 0x02, 0x01, 0x03};
-	DIInt swapBit23[] = {0x00, 0x08, 0x04, 0x0c};
-	DIInt swapBit45[] = {0x00, 0x20, 0x10, 0x30};
-	
-	writeNibble(0xd5);
-	writeNibble(0xaa);
-	writeNibble(0xad);
-	
-	resetGCR();
-	
-	for (DIInt index = 0; index < 0x54; index++)
-		writeGCR62Value(swapBit01[data[0x00 + index] & 0x3] |
-                        swapBit23[data[0x56 + index] & 0x3] |
-					    swapBit45[data[0xac + index] & 0x3]);
-	for (DIInt index = 0x54; index < 0x56; index++)
-		writeGCR62Value(swapBit01[data[0x00 + index] & 0x3] |
-                        swapBit23[data[0x56 + index] & 0x3]);
-	
-	for (DIInt index = 0; index < SECTOR_SIZE; index++)
-		writeGCR62Value(data[index] >> 2);
-	
-	writeGCR62Checksum();
-	
-	writeNibble(0xde);
-	writeNibble(0xaa);
-	writeNibble(0xeb);
-}
-
-bool DIApple525DiskStorage::readGCR62AddressField(DIInt trackIndex, DIInt sectorIndex)
-{
-	for (DIInt i = 0; i < 2 * (DEFAULT_TRACKSIZE / 8); i++)
-    {
-		if (readNibble() != 0xd5)
-			continue;
-		if (readNibble() != 0xaa)
-			continue;
-		if (readNibble() != 0x96)
-			continue;
-		
-		DIChar readVolume = readFMValue();
-		DIChar readTrackIndex = readFMValue();
-		DIChar readSectorIndex = readFMValue();
-		DIChar readChecksum = readFMValue();
-        
-		if (readChecksum != (readVolume ^ readTrackIndex ^ readSectorIndex))
-			continue;
-		if (readTrackIndex != trackIndex)
-			continue;
-		if (readSectorIndex != sectorIndex)
-			continue;
-		
-		if (readNibble() != 0xde)
-			continue;
-		if (readNibble() != 0xaa)
-			continue;
-		
-		return true;
-	}
-	
-	return false;
-}
-
 bool DIApple525DiskStorage::readGCR62DataField(DIChar *data)
 {
 	DIChar swapBit01[] = { 0x00, 0x02, 0x01, 0x03 };
@@ -899,7 +899,19 @@ void DIApple525DiskStorage::writeGCR53Value(DIChar value)
 	gcrChecksum = value;
 }
 
+void DIApple525DiskStorage::writeGCR62Value(DIChar value)
+{
+	writeNibble(gcr62EncodeMap[value ^ gcrChecksum]);
+    
+	gcrChecksum = value;
+}
+
 void DIApple525DiskStorage::writeGCR53Checksum()
+{
+	writeGCR53Value(0);
+}
+
+void DIApple525DiskStorage::writeGCR62Checksum()
 {
 	writeGCR62Value(0);
 }
@@ -920,23 +932,6 @@ DIChar DIApple525DiskStorage::readGCR53Value()
     return value;
 }
 
-bool DIApple525DiskStorage::validateGCR53Checksum()
-{
-	return !gcrError && (readGCR53Value() == 0);
-}
-
-void DIApple525DiskStorage::writeGCR62Value(DIChar value)
-{
-	writeNibble(gcr62EncodeMap[value ^ gcrChecksum]);
-    
-	gcrChecksum = value;
-}
-
-void DIApple525DiskStorage::writeGCR62Checksum()
-{
-	writeGCR62Value(0);
-}
-
 DIChar DIApple525DiskStorage::readGCR62Value()
 {
     DIChar value = gcr62DecodeMap[readNibble()];
@@ -951,6 +946,11 @@ DIChar DIApple525DiskStorage::readGCR62Value()
     gcrChecksum = value;
     
     return value;
+}
+
+bool DIApple525DiskStorage::validateGCR53Checksum()
+{
+	return !gcrError && (readGCR53Value() == 0);
 }
 
 bool DIApple525DiskStorage::validateGCR62Checksum()
