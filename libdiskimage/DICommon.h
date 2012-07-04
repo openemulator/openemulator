@@ -62,4 +62,12 @@ string getDIPathExtension(string path);
 DIInt getDICRC16(DIChar *p, DIInt size);
 DIInt getDICRC32(DIChar *p, DIInt size);
 
+string rtrimDI(string value);
+string ltrimDI(string value);
+string trimDI(string value);
+vector<string> strDISplit(string value, char c);
+string strDIJoin(vector<string>& value, char c);
+string strDIIncludeFilter(string value, string filter);
+string strDIExcludeFilter(string value, string filter);
+
 #endif

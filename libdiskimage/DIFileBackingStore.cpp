@@ -46,7 +46,7 @@ bool DIFileBackingStore::create(string path)
 {
     close();
     
-    fp = fopen(path.c_str(), "wb");
+    fp = fopen(path.c_str(), "w+b");
     
     if (!fp)
         return false;
@@ -65,6 +65,8 @@ void DIFileBackingStore::close()
     
     fp = NULL;
     writeEnabled = false;
+    
+    path = "";
 }
 
 bool DIFileBackingStore::isWriteEnabled()

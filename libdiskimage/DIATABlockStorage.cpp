@@ -15,6 +15,7 @@
 DIATABlockStorage::DIATABlockStorage()
 {
     forceWriteProtected = false;
+    maxSize = 0;
     
     close();
 }
@@ -26,7 +27,7 @@ bool DIATABlockStorage::open(string path)
     if (fileBackingStore.open(path) &&
             open(&fileBackingStore, getDIPathExtension(path)))
     {
-        ataModel = getDIFilename(path);
+        model = getDIFilename(path);
         
         return true;
     }
@@ -41,7 +42,7 @@ bool DIATABlockStorage::open(DIData& data)
     if (ramBackingStore.open(data) &&
         open(&ramBackingStore, ""))
     {
-        ataModel = "Memory Disk Image";
+        model = "Memory Disk Image";
         
         return true;
     }
@@ -120,7 +121,12 @@ bool DIATABlockStorage::isWriteEnabled()
 
 DIInt DIATABlockStorage::getBlockNum()
 {
-    return blockStorage->getBlockNum();
+    DIInt blockNum = blockStorage->getBlockNum();
+    
+    if (!maxSize)
+        return blockNum;
+    
+    return blockNum > maxSize ? maxSize : blockNum;
 }
 
 string DIATABlockStorage::getFormatLabel()
@@ -138,19 +144,39 @@ bool DIATABlockStorage::getForceWriteProtected()
     return forceWriteProtected;
 }
 
-string DIATABlockStorage::getATASerial()
+DIInt DIATABlockStorage::getCylinders()
 {
-    return ataSerial;
+    return blockStorage->getCylinders();
 }
 
-string DIATABlockStorage::getATAFirmware()
+DIInt DIATABlockStorage::getHeads()
 {
-    return ataFirmware;
+    return blockStorage->getHeads();
 }
 
-string DIATABlockStorage::getATAModel()
+DIInt DIATABlockStorage::getSectors()
 {
-    return ataModel;
+    return blockStorage->getSectors();
+}
+
+string DIATABlockStorage::getSerial()
+{
+    return "";
+}
+
+string DIATABlockStorage::getFirmware()
+{
+    return "ldi" DI_VERSION;
+}
+
+string DIATABlockStorage::getModel()
+{
+    return model;
+}
+
+void DIATABlockStorage::setMaxSize(DIInt value)
+{
+    maxSize = value;
 }
 
 bool DIATABlockStorage::readBlocks(DIInt index, DIChar *buf, DIInt num)

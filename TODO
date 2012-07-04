@@ -1,23 +1,26 @@
 ==1.0.3==
+* Fix Videoterm last line
+* Fix Videoterm not showing video after installing and PR#3
+
+* Check FDI disk images
+* Fix IAC 45, beautiful boot, Sherlock Forest, Cider Spider
 * Fix Disk II sometimes not booting when emulation was loaded from disk
 * Fix Disk II disk writes
-* Fix IAC 45, beautiful boot
 
 * Implement Apple Silentype print intensity
 * Fix Apple Silentype Interface Card spurious data problems
 
-* Fix Videoterm not showing video after installing and PR#3
 * Fix replace monitor+emulation lock problem (happens when a monitor is replaced and selected)
 * Fix [CanvasView update] problem in paper view
 
-* Add Apple Graphics Tablet sounds
-* Add Apple Silentype sounds
 * Improve Disk II sounds
-* Verify Videx Videoterm blinkrate
+* Add Apple Silentype sounds
+* Add Apple Graphics Tablet sounds
 
 ==1.0.4==
-* Implement wxWidgets user interface
+* Use the Boost library for platform independence
 * Implement Apple III
+* Implement wxWidgets user interface
 * Implement Saturn RAMboard
 * Implement Mountain Computer Apple Clock
 * Implement TimeMaster II H.O.
@@ -53,7 +56,7 @@
 * Implement Mountain Computer SuperTalker
 * Implement Mockingboard
 
-==1.0.7==
+==1.1==
 * Implement Apple IIGS ROM00, ROM01, ROM03
 
 ==Framework==

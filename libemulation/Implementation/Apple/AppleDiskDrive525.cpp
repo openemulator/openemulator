@@ -256,6 +256,8 @@ void AppleDiskDrive525::setPhaseControl(OEInt value)
     headPlayer->postMessage(this, AUDIOPLAYER_STOP, NULL);
     headPlayer->postMessage(this, AUDIOPLAYER_PLAY, NULL);
     
+    logMessage(getString(trackIndex));
+    
     if (trackIndex != oldTrackIndex)
         updateTrack();
 }

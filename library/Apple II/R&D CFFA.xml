@@ -22,6 +22,7 @@
         <property name="device" ref="rdCFFA"/>
         <property name="diskImage" value=""/>
         <property name="forceWriteProtected" value="0"/>
+        <property name="maxSize" value="65535"/>
     </component>
     <component id="rdCFFA.memory" class="AppleIISlotController">
         <property name="memory" ref="rdCFFA.rom"/>

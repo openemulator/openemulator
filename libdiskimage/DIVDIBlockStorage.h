@@ -15,6 +15,12 @@
 #include "DIBackingStore.h"
 #include "DIBlockStorage.h"
 
+typedef enum
+{
+    DI_VDI_DYNAMIC = 1,
+    DI_VDI_STATIC,
+} DIVDIFormat;
+
 class DIVDIBlockStorage : public DIBlockStorage
 {
 public:
@@ -27,11 +33,31 @@ public:
     DIInt getBlockNum();
     string getFormatLabel();
     
+    DIInt getCylinders();
+    DIInt getHeads();
+    DIInt getSectors();
+    
     bool readBlocks(DIInt index, DIChar *buf, DIInt num);
     bool writeBlocks(DIInt index, const DIChar *buf, DIInt num);
     
 private:
     DIBackingStore *backingStore;
+    
+    DIInt blockNum;
+    
+    DIInt cylinders;
+    DIInt heads;
+    DIInt sectors;
+    
+    DIInt vdiDataOffset;
+    DIInt vdiBlockMapOffset;
+    DIInt vdiBlockSize;
+    DIInt vdiAllocatedBlockNum;
+    
+    vector<DIInt> vdiBlockMap;
+    
+    bool isBlockEmpty(const DIChar *buf);
+    DIInt allocateVDIBlock(DIInt vdiBlockMapIndex);
 };
 
 #endif

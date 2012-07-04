@@ -10,8 +10,6 @@
 
 #include "DIRAWBlockStorage.h"
 
-#define BLOCK_SIZE 512
-
 DIRAWBlockStorage::DIRAWBlockStorage()
 {
     close();
@@ -21,11 +19,13 @@ bool DIRAWBlockStorage::open(DIBackingStore *backingStore)
 {
     close();
     
-    // Check size for multiple of BLOCK_SIZE
-    if (backingStore->getSize() % BLOCK_SIZE)
+    // Check size for multiple of DI_BLOCKSIZE
+    if (backingStore->getSize() % DI_BLOCKSIZE)
         return false;
     
     this->backingStore = backingStore;
+    
+    blockNum = (DIInt) (backingStore->getSize() / DI_BLOCKSIZE);
     
     return true;
 }
@@ -42,7 +42,7 @@ bool DIRAWBlockStorage::isWriteEnabled()
 
 DIInt DIRAWBlockStorage::getBlockNum()
 {
-    return (DIInt) (backingStore->getSize() / BLOCK_SIZE);
+    return blockNum;
 }
 
 string DIRAWBlockStorage::getFormatLabel()
@@ -52,10 +52,13 @@ string DIRAWBlockStorage::getFormatLabel()
 
 bool DIRAWBlockStorage::readBlocks(DIInt index, DIChar *buf, DIInt num)
 {
-    return backingStore->read(index * BLOCK_SIZE, buf, num * BLOCK_SIZE);
+    return backingStore->read(index * DI_BLOCKSIZE, buf, num * DI_BLOCKSIZE);
 }
 
 bool DIRAWBlockStorage::writeBlocks(DIInt index, const DIChar *buf, DIInt num)
 {
-    return backingStore->write(index * BLOCK_SIZE, buf, num * BLOCK_SIZE);
+    if ((index + num) > blockNum)
+        return false;
+    
+    return backingStore->write(index * DI_BLOCKSIZE, buf, num * DI_BLOCKSIZE);
 }

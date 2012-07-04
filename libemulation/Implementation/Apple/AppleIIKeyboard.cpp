@@ -311,7 +311,14 @@ void AppleIIKeyboard::emptyPasteBuffer()
 {
     while (!(keyLatch & 0x80) && !pasteBuffer.empty())
     {
-        sendKey(pasteBuffer.front());
+        OEInt c = pasteBuffer.front();
+        
+        if (c == '\n')
+            c = '\r';
+        else if (c == '\r')
+            continue;
+        
+        sendKey(c);
         
         pasteBuffer.pop();
     }

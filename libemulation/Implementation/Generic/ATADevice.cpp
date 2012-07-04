@@ -29,6 +29,8 @@ bool ATADevice::setValue(string name, string value)
         openDiskImage(value);
     else if (name == "forceWriteProtected")
         blockStorage.setForceWriteProtected(getOEInt(value));
+    else if (name == "maxSize")
+        blockStorage.setMaxSize(getOEInt(value));
     else
         return false;
     

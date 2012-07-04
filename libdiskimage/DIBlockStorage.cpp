@@ -29,6 +29,21 @@ string DIBlockStorage::getFormatLabel()
     return "";
 }
 
+DIInt DIBlockStorage::getCylinders()
+{
+    return 0;
+}
+
+DIInt DIBlockStorage::getHeads()
+{
+    return 0;
+}
+
+DIInt DIBlockStorage::getSectors()
+{
+    return 0;
+}
+
 bool DIBlockStorage::readBlocks(DIInt index, DIChar *buf, DIInt num)
 {
     return false;

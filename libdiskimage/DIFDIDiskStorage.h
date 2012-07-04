@@ -42,10 +42,10 @@ class DIFDIDiskStorage : public DIDiskStorage
 public:
     DIFDIDiskStorage();
     
-    bool openForReading(DIBackingStore *backingStore);
-    bool openForWriting(DIBackingStore *backingStore, bool writeEnabled,
-                        DIDiskType diskType, DIInt headNum, float rotationSpeed,
-                        DIInt tracksPerInch);
+    bool open(DIBackingStore *backingStore);
+    bool create(DIBackingStore *backingStore, bool writeEnabled,
+                DIDiskType diskType, DIInt headNum, float rotationSpeed,
+                DIInt tracksPerInch);
     bool close();
     
     bool isWriteEnabled();

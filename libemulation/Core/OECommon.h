@@ -85,6 +85,8 @@ string getHexString(OELong value);
 
 string rtrim(string value);
 wstring rtrim(wstring value);
+string ltrim(string value);
+string trim(string value);
 vector<string> strsplit(string value, char c);
 string strjoin(vector<string>& value, char c);
 string strfilter(string value, string filter);

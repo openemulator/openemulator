@@ -32,6 +32,8 @@ public:
     
 private:
     DIBackingStore *backingStore;
+    
+    DIInt blockNum;
 };
 
 #endif

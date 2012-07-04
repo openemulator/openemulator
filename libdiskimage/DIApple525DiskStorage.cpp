@@ -142,7 +142,7 @@ bool DIApple525DiskStorage::open(DIBackingStore *backingStore, string pathExtens
         
         trackFormat = DI_APPLE_PRODOS;
     }
-    else if (fdiDiskStorage.openForReading(backingStore))
+    else if (fdiDiskStorage.open(backingStore))
     {
         if (fdiDiskStorage.getDiskType() != DI_525_INCH)
             return false;

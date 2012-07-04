@@ -249,3 +249,95 @@ DIInt getDICRC32(DIChar *p, DIInt size)
     
     return crc ^ 0xffffffff;
 }
+
+vector<string> strDISplit(string value, char c)
+{
+    vector<string> splitString;
+    
+    size_t startPos = 0;
+    size_t endPos = value.find(c, startPos);
+    
+    while (endPos != string::npos)
+    {
+        splitString.push_back(value.substr(startPos, endPos - startPos));
+        
+        startPos = endPos + 1;
+        endPos = value.find(c, startPos);
+    }
+    
+    splitString.push_back(value.substr(startPos));
+    
+    return splitString;
+}
+
+string strDIJoin(vector<string>& value, char c)
+{
+    string joinedString;
+    
+    for (vector<string>::iterator i = value.begin();
+         i != value.end();
+         i++)
+    {
+        if (joinedString != "")
+            joinedString += c;
+        
+        joinedString += *i;
+    }
+    
+    return joinedString;
+}
+
+string rtrimDI(string value)
+{
+    size_t found = value.find_last_not_of(" \n\r\t\f\v");
+    
+    if (found != string::npos)
+        return value.substr(0, found + 1);
+    
+    return "";
+}
+
+string ltrimDI(string value)
+{
+    size_t found = value.find_first_not_of(" \n\r\t\f\v");
+    
+    if (found != string::npos)
+        return value.substr(found);
+    
+    return "";
+}
+
+string trimDI(string value)
+{
+    return ltrimDI(rtrimDI(value));
+}
+
+string strDIIncludeFilter(string value, string filter)
+{
+    string filteredString;
+    
+    for (string::iterator i = value.begin();
+         i != value.end();
+         i++)
+    {
+        if (filter.find(*i) != string::npos)
+            filteredString += *i;
+    }
+    
+    return filteredString;
+}
+
+string strDIExcludeFilter(string value, string filter)
+{
+    string filteredString;
+    
+    for (string::iterator i = value.begin();
+         i != value.end();
+         i++)
+    {
+        if (filter.find(*i) == string::npos)
+            filteredString += *i;
+    }
+    
+    return filteredString;
+}

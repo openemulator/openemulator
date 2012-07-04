@@ -13,6 +13,8 @@
 
 #include "DICommon.h"
 
+#define DI_BLOCKSIZE 512
+
 class DIBlockStorage
 {
 public:
@@ -21,6 +23,10 @@ public:
     virtual bool isWriteEnabled();
     virtual DIInt getBlockNum();
     virtual string getFormatLabel();
+    
+    virtual DIInt getCylinders();
+    virtual DIInt getHeads();
+    virtual DIInt getSectors();
     
     virtual bool readBlocks(DIInt index, DIChar *buf, DIInt num);
     virtual bool writeBlocks(DIInt index, const DIChar *buf, DIInt num);

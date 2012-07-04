@@ -44,6 +44,7 @@
         <property name="device" ref="rdCFFA1"/>
         <property name="diskImage" value=""/>
         <property name="forceWriteProtected" value="0"/>
+        <property name="maxSize" value="65535"/>
     </component>
     
 </edl>

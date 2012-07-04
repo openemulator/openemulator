@@ -31,7 +31,6 @@ void DIRAMBackingStore::clear()
 
 void DIRAMBackingStore::close()
 {
-    data.resize(0);
 }
 
 bool DIRAMBackingStore::isWriteEnabled()

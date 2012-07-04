@@ -77,7 +77,7 @@ DIFDIDiskStorage::DIFDIDiskStorage()
     close();
 }
 
-bool DIFDIDiskStorage::openForReading(DIBackingStore *backingStore)
+bool DIFDIDiskStorage::open(DIBackingStore *backingStore)
 {
     close();
     
@@ -152,9 +152,9 @@ bool DIFDIDiskStorage::openForReading(DIBackingStore *backingStore)
     return true;
 }
 
-bool DIFDIDiskStorage::openForWriting(DIBackingStore *backingStore, bool writeEnabled,
-                                      DIDiskType diskType, DIInt headNum,
-                                      float rotationSpeed, DIInt tracksPerInch)
+bool DIFDIDiskStorage::create(DIBackingStore *backingStore, bool writeEnabled,
+                              DIDiskType diskType, DIInt headNum,
+                              float rotationSpeed, DIInt tracksPerInch)
 {
     close();
     

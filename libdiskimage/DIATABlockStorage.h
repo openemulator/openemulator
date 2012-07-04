@@ -38,9 +38,15 @@ public:
     void setForceWriteProtected(bool value);
     bool getForceWriteProtected();
     
-    string getATASerial();
-    string getATAFirmware();
-    string getATAModel();
+    DIInt getCylinders();
+    DIInt getHeads();
+    DIInt getSectors();
+    
+    string getSerial();
+    string getFirmware();
+    string getModel();
+    
+    void setMaxSize(DIInt value);
     
     bool readBlocks(DIInt index, DIChar *buf, DIInt num);
     bool writeBlocks(DIInt index, const DIChar *buf, DIInt num);
@@ -59,9 +65,9 @@ private:
     DIBlockStorage *blockStorage;
     
     bool forceWriteProtected;
-    string ataSerial;
-    string ataFirmware;
-    string ataModel;
+    string model;
+    
+    DIInt maxSize;
     
     bool open(DIBackingStore *backingStore, string pathExtension);
 };

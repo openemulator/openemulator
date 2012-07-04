@@ -144,9 +144,7 @@ string getHexString(OELong value)
 
 string rtrim(string value)
 {
-    size_t found;
-    
-    found = value.find_last_not_of(" \n\r\t\f\v");
+    size_t found = value.find_last_not_of(" \n\r\t\f\v");
     
     if (found != string::npos)
         return value.substr(0, found + 1);
@@ -156,14 +154,27 @@ string rtrim(string value)
 
 wstring rtrim(wstring value)
 {
-    size_t found;
-    
-    found = value.find_last_not_of(L" \n\r\t\f\v");
+    size_t found = value.find_last_not_of(L" \n\r\t\f\v");
     
     if (found != string::npos)
         return value.substr(0, found + 1);
     
     return L"";
+}
+
+string ltrim(string value)
+{
+    size_t found = value.find_first_not_of(" \n\r\t\f\v");
+    
+    if (found != string::npos)
+        return value.substr(found);
+    
+    return "";
+}
+
+string trim(string value)
+{
+    return ltrim(rtrim(value));
 }
 
 vector<string> strsplit(string value, char c)

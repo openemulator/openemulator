@@ -393,7 +393,7 @@ void MC6845::setCursorStart(OEChar value)
     
     blinkEnabled = OEGetBit(value, BLINK_ENABLED);
     blink = OEGetBit(value, BLINK_PERIOD);
-    blinkFrameNum = OEGetBit(value, BLINK_PERIOD) ? 32 : 16;
+    blinkFrameNum = OEGetBit(value, BLINK_PERIOD) ? 16 : 8;
 }
 
 void MC6845::updateTiming()

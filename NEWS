@@ -1,4 +1,7 @@
 ==Latest==
+* Implemented ATA Device size limit for the CFFA card
+* Fixed OE framework update problem
+* Implemented libdiskimage VDI and VMDK support
 * Implemented force write protected in ATADevice
 * Fixed libdiskimage GCR53
 * Renamed VideoRAM to VRAM

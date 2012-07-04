@@ -291,13 +291,13 @@ void ATAController::write16(OEAddress address, OEShort value)
                             memset(buffer, 0, ATA_BUFFER_SIZE);
                             
                             setATAString((char *) buffer + ATA_SERIAL,
-                                         blockStorage->getATASerial().c_str(),
+                                         blockStorage->getSerial().c_str(),
                                          ATA_SERIAL_SIZE);
                             setATAString((char *) buffer + ATA_FIRMWARE_VER,
-                                         blockStorage->getATAFirmware().c_str(),
+                                         blockStorage->getFirmware().c_str(),
                                          ATA_FIRMWARE_VER_SIZE);
                             setATAString((char *) buffer + ATA_MODEL,
-                                         blockStorage->getATAModel().c_str(),
+                                         blockStorage->getModel().c_str(),
                                          ATA_MODEL_SIZE);
                             
                             buffer[ATA_SIZE + 0] = lbaSize.b.l;
