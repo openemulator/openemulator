@@ -415,7 +415,7 @@ void VidexVideoterm::updateTiming()
 
 void VidexVideoterm::drawLine(OESInt y, OESInt x0, OESInt x1)
 {
-    OEInt memoryOffset = (startAddress.d.l + (y / scanline) * horizDisplayed);
+    OEInt memoryOffset = (frameStartAddress.d.l + (y / scanline) * horizDisplayed);
     OEChar *p = imagep + y * imageWidth + x0 * cellWidth;
     
     for (OEInt x = x0; x < x1; x++, p += cellWidth)
@@ -453,7 +453,7 @@ void VidexVideoterm::copy(wstring *s)
         wstring line;
         
         for (OEInt x = 0; x < horizDisplayed; x++)
-            line += vp[(startAddress.w.l + y * horizDisplayed + x) & RAM_MASK];
+            line += vp[(frameStartAddress.w.l + y * horizDisplayed + x) & RAM_MASK];
         
         line = rtrim(line);
         line += '\n';

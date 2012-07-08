@@ -53,6 +53,8 @@ protected:
     OEUnion lightpenAddress;
     OEUnion cursorAddress;
     
+    OEUnion frameStartAddress;
+    
     OEInt vertTotal;
     OEInt vertDisplayed;
     OEInt vertSyncPosition;

@@ -153,6 +153,43 @@ bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
             
             return true;
             
+        case CONTROLBUS_SET_CLOCKFREQUENCY:
+            clockFrequency = *((float *)data);
+            
+            postNotification(this, CONTROLBUS_CLOCKFREQUENCY_DID_CHANGE, &clockFrequency);
+            
+            return true;
+            
+        case CONTROLBUS_GET_CLOCKFREQUENCY:
+            *((float *)data) = clockFrequency;
+            
+            return true;
+            
+        case CONTROLBUS_GET_CYCLES:
+            *((OELong *)data) = cycles + getCycles();
+            
+            return true;
+            
+        case CONTROLBUS_GET_AUDIOBUFFERFRAME:
+            *((float *)data) = (cycles + getCycles() - audioBufferStart) * sampleToCycleRatio;
+            
+            return true;
+            
+        case CONTROLBUS_SCHEDULE_TIMER:
+            scheduleTimer(sender, *((OELong *)data));
+            
+            return true;
+            
+        case CONTROLBUS_INVALIDATE_TIMERS:
+            invalidateTimers(sender);
+            
+            return true;
+            
+        case CONTROLBUS_SET_CPUCLOCKMULTIPLIER:
+            setCPUClockMultiplier(*((float *)data));
+            
+            break;
+            
         case CONTROLBUS_ASSERT_RESET:
             if (!resetCount)
                 postNotification(this, CONTROLBUS_RESET_DID_ASSERT, NULL);
@@ -215,43 +252,6 @@ bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
             *((bool *)data) = (nmiCount != 0);
             
             return true;
-            
-        case CONTROLBUS_SET_CLOCKFREQUENCY:
-            clockFrequency = *((float *)data);
-            
-            postNotification(this, CONTROLBUS_CLOCKFREQUENCY_DID_CHANGE, &clockFrequency);
-            
-            return true;
-            
-        case CONTROLBUS_GET_CLOCKFREQUENCY:
-            *((float *)data) = clockFrequency;
-            
-            return true;
-            
-        case CONTROLBUS_GET_CYCLES:
-            *((OELong *)data) = cycles + getCycles();
-            
-            return true;
-            
-        case CONTROLBUS_GET_AUDIOBUFFERFRAME:
-            *((float *)data) = (cycles + getCycles() - audioBufferStart) * sampleToCycleRatio;
-            
-            return true;
-            
-        case CONTROLBUS_SCHEDULE_TIMER:
-            scheduleTimer(sender, *((OELong *)data));
-            
-            return true;
-            
-        case CONTROLBUS_INVALIDATE_TIMERS:
-            invalidateTimers(sender);
-            
-            return true;
-            
-        case CONTROLBUS_SET_CPUCLOCKMULTIPLIER:
-            setCPUClockMultiplier(*((float *)data));
-            
-            break;
     }
     
     return false;

@@ -61,11 +61,15 @@ MC6845::MC6845()
     
     addressRegister = 0;
     
+    frameStartAddress = startAddress;
+    
     videoEnabled = false;
+    inReset = false;
     
     imageModified = false;
     
     frameStart = 0;
+    
     pendingCycles = 0;
     
     blinkCount = 0;
@@ -155,16 +159,16 @@ bool MC6845::setRef(string name, OEComponent *ref)
     {
         if (controlBus)
         {
-            controlBus->removeObserver(this, CONTROLBUS_SCHEDULE_TIMER);
             controlBus->removeObserver(this, CONTROLBUS_POWERSTATE_DID_CHANGE);
+            controlBus->removeObserver(this, CONTROLBUS_TIMER_DID_FIRE);
             controlBus->removeObserver(this, CONTROLBUS_RESET_DID_ASSERT);
             controlBus->removeObserver(this, CONTROLBUS_RESET_DID_CLEAR);
         }
         controlBus = ref;
         if (controlBus)
         {
-            controlBus->addObserver(this, CONTROLBUS_SCHEDULE_TIMER);
             controlBus->addObserver(this, CONTROLBUS_POWERSTATE_DID_CHANGE);
+            controlBus->addObserver(this, CONTROLBUS_TIMER_DID_FIRE);
             controlBus->addObserver(this, CONTROLBUS_RESET_DID_ASSERT);
             controlBus->addObserver(this, CONTROLBUS_RESET_DID_CLEAR);
         }
@@ -410,7 +414,7 @@ void MC6845::updateTiming()
     
     controlBus->postMessage(this, CONTROLBUS_GET_CYCLES, &lastCycles);
     
-    controlBus->postMessage(this, CONTROLBUS_INVALIDATE_TIMERS, this);
+    controlBus->postMessage(this, CONTROLBUS_INVALIDATE_TIMERS, NULL);
     
     scheduleTimer(0);
     
@@ -447,6 +451,11 @@ void MC6845::scheduleTimer(OESLong cycles)
     
     cycles += ceil(frameCycleNum / clockMultiplier);
     controlBus->postMessage(this, CONTROLBUS_SCHEDULE_TIMER, &cycles);
+    
+    if (frameStartAddress.w.l != startAddress.w.l)
+        refreshVideo();
+    
+    frameStartAddress.w = startAddress.w;
 }
 
 void MC6845::refreshVideo()

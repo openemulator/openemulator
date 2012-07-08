@@ -9,8 +9,9 @@
  */
 
 // Notes:
-// * scheduleTimer schedules a timer in a given number of cycles (OEUInt64)
-// * timerDidFire passes the number of remaining cycles for this timer (OEInt64)
+// * scheduleTimer schedules a timer in OELong cycles
+// * timerDidFire passes the timer using ControlBusTimer
+//   (cycles is the number of remaining cycles for this timer)
 
 #ifndef _CONTROLBUSINTERFACE_H
 #define _CONTROLBUSINTERFACE_H
@@ -19,16 +20,6 @@ typedef enum
 {
     CONTROLBUS_SET_POWERSTATE,
     CONTROLBUS_GET_POWERSTATE,
-    
-    CONTROLBUS_ASSERT_RESET,
-    CONTROLBUS_CLEAR_RESET,
-    CONTROLBUS_ASSERT_IRQ,
-    CONTROLBUS_CLEAR_IRQ,
-    CONTROLBUS_ASSERT_NMI,
-    CONTROLBUS_CLEAR_NMI,
-    CONTROLBUS_IS_RESET_ASSERTED,
-    CONTROLBUS_IS_IRQ_ASSERTED,
-    CONTROLBUS_IS_NMI_ASSERTED,
     
     CONTROLBUS_SET_CLOCKFREQUENCY,
     CONTROLBUS_GET_CLOCKFREQUENCY,
@@ -41,6 +32,16 @@ typedef enum
     
     CONTROLBUS_SET_CPUCLOCKMULTIPLIER,
     
+    CONTROLBUS_ASSERT_RESET,
+    CONTROLBUS_CLEAR_RESET,
+    CONTROLBUS_ASSERT_IRQ,
+    CONTROLBUS_CLEAR_IRQ,
+    CONTROLBUS_ASSERT_NMI,
+    CONTROLBUS_CLEAR_NMI,
+    CONTROLBUS_IS_RESET_ASSERTED,
+    CONTROLBUS_IS_IRQ_ASSERTED,
+    CONTROLBUS_IS_NMI_ASSERTED,
+    
     CONTROLBUS_END,
 } ControlBusMessage;
 
@@ -48,16 +49,16 @@ typedef enum
 {
     CONTROLBUS_POWERSTATE_DID_CHANGE,
     
+    CONTROLBUS_CLOCKFREQUENCY_DID_CHANGE,
+    
+    CONTROLBUS_TIMER_DID_FIRE,
+    
     CONTROLBUS_RESET_DID_ASSERT,
     CONTROLBUS_RESET_DID_CLEAR,
     CONTROLBUS_IRQ_DID_ASSERT,
     CONTROLBUS_IRQ_DID_CLEAR,
     CONTROLBUS_NMI_DID_ASSERT,
     CONTROLBUS_NMI_DID_CLEAR,
-    
-    CONTROLBUS_CLOCKFREQUENCY_DID_CHANGE,
-    
-    CONTROLBUS_TIMER_DID_FIRE,
 } ControlBusNotification;
 
 typedef enum

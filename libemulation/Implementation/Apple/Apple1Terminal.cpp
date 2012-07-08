@@ -104,15 +104,15 @@ bool Apple1Terminal::setRef(string name, OEComponent *ref)
         if (controlBus)
         {
             controlBus->removeObserver(this, CONTROLBUS_POWERSTATE_DID_CHANGE);
-            controlBus->removeObserver(this, CONTROLBUS_RESET_DID_ASSERT);
             controlBus->removeObserver(this, CONTROLBUS_TIMER_DID_FIRE);
+            controlBus->removeObserver(this, CONTROLBUS_RESET_DID_ASSERT);
         }
         controlBus = ref;
         if (controlBus)
         {
             controlBus->addObserver(this, CONTROLBUS_POWERSTATE_DID_CHANGE);
-            controlBus->addObserver(this, CONTROLBUS_RESET_DID_ASSERT);
             controlBus->addObserver(this, CONTROLBUS_TIMER_DID_FIRE);
+            controlBus->addObserver(this, CONTROLBUS_RESET_DID_ASSERT);
         }
     }
     else if (name == "vram")

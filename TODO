@@ -1,17 +1,14 @@
 ==1.0.3==
-* Fix Videoterm last line
-* Fix Videoterm not showing video after installing and PR#3
-
-* Check FDI disk images
 * Fix IAC 45, beautiful boot, Sherlock Forest, Cider Spider
+* Check FDI disk images
 * Fix Disk II sometimes not booting when emulation was loaded from disk
 * Fix Disk II disk writes
 
-* Implement Apple Silentype print intensity
-* Fix Apple Silentype Interface Card spurious data problems
-
 * Fix replace monitor+emulation lock problem (happens when a monitor is replaced and selected)
+
 * Fix [CanvasView update] problem in paper view
+* Fix Apple Silentype Interface Card spurious data problems
+* Implement Apple Silentype print intensity
 
 * Improve Disk II sounds
 * Add Apple Silentype sounds
