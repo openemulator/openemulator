@@ -26,23 +26,27 @@ public:
 	bool setRef(string name, OEComponent *ref);
 	bool init();
 	void update();
+    void dispose();
     
 	bool postMessage(OEComponent *sender, int message, void *data);
 	
+    void notify(OEComponent *sender, int notification, void *data);
+    
     OEChar read(OEAddress address);
     void write(OEAddress address, OEChar value);
     
 private:
 	OEComponent *device;
+    OEComponent *controlBus;
     OEComponent *drivePlayer;
     OEComponent *headPlayer;
     
 	string diskImagePath;
-	bool forceWriteProtected;
     string mechanism;
     map<string, OESound>sound;
     
     OEInt phaseControl;
+    
     OESInt trackIndex;
     
     DIApple525DiskStorage diskStorage;
@@ -52,12 +56,15 @@ private:
     OEInt trackDataSize;
     OEInt trackDataIndex;
     
-    void updateSound();
-    void setPhaseControl(OEInt value);
+    OEInt zeroCount;
+    
+    bool isModified;
+    
     void updateStepper(OESInt& position, OEInt phaseControl);
+    void updateTrack(OEInt value);
+    
+    void updateSoundSet();
     
     bool openDiskImage(string path);
     bool closeDiskImage();
-    
-    void updateTrack();
 };

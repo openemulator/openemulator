@@ -74,7 +74,7 @@ bool DIVMDKBlockStorage::open(DIBackingStore *backingStore)
     
     data.resize(dataBlock * DI_BLOCKSIZE);
     
-    if (!backingStore->read(0, &data.front(), data.size()))
+    if (!backingStore->read(0, &data.front(), (DIInt) data.size()))
         return false;
     
     metadata.resize(data.size() / sizeof(DIInt));
@@ -300,7 +300,7 @@ DIInt DIVMDKBlockStorage::allocateGrain(DIInt directoryIndex, DIInt grainTableIn
     dummy.resize(grainSize * DI_BLOCKSIZE);
     
     if (!backingStore->write(newGrainTableEntry * DI_BLOCKSIZE,
-                             &dummy.front(), dummy.size()))
+                             &dummy.front(), (DIInt) dummy.size()))
         return 0;
     
     // Update grain table

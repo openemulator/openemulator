@@ -38,6 +38,9 @@ public:
     bool isWriteEnabled();
     string getFormatLabel();
     
+    void setForceWriteProtected(bool value);
+    bool getForceWriteProtected();
+    
     bool readTrack(DIInt trackIndex, DIData& data);
     bool writeTrack(DIInt trackIndex, DIData& data);
     
@@ -56,6 +59,8 @@ private:
     DIV2DDiskStorage v2dDiskStorage;
     
     DIDiskStorage *diskStorage;
+    
+    bool forceWriteProtected;
     
     vector<DIData> trackData;
     bool trackDataModified;

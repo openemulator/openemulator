@@ -38,7 +38,7 @@ bool Proxy::init()
 
 bool Proxy::postMessage(OEComponent *sender, int message, void *data)
 {
-    return component->postMessage(this, message, data);
+    return component->postMessage(sender, message, data);
 }
 
 bool Proxy::addObserver(OEComponent *observer, int notification)

@@ -1,4 +1,9 @@
 ==Latest==
+* Added Disk II mechanical phase emulation
+* Implemented Disk II disk writes
+* Fixed Disk II read sequencer
+* Implemented MC3470 spurious bit reads in Disk II Drive
+* Fixed Disk II sometimes not booting
 * Fixed Videoterm not showing video after installing, adding monitor and doing PR#3
 * Fixed Videoterm last line
 * Implemented ATA Device size limit for the CFFA card

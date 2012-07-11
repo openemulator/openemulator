@@ -655,6 +655,11 @@ bool DIFDIDiskStorage::getStream(DIFDIStream& stream, DIChar *data, DIInt size, 
                     }
                     
                     stream[streamIndex++] |= currentNode->value << substreamShift;
+/*                    stream[streamIndex] |= currentNode->value << substreamShift;
+                    
+                    printf("%d %d\n", streamIndex, stream[streamIndex]);
+                    
+                    streamIndex++;*/
                 }
                 
                 delete root;

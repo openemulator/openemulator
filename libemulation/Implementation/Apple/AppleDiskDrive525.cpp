@@ -13,13 +13,14 @@
  *
  * A floppy disk drive has a head stepper motor with 4 discretely controlled
  * magnetic phases. Of the 16 possible head phase states, 12 map to 8 net
- * phase vectors, 3 to undefined behaviour, and one to the off state.
+ * phase vectors, 3 give undefined behaviour, and one to the off state.
  * The stepper motor has an inertial time constant of approx. 2 ms.
  */
 
 #include "AppleDiskDrive525.h"
 
 #include "DeviceInterface.h"
+#include "ControlBusInterface.h"
 #include "AudioPlayerInterface.h"
 
 #include "AppleIIInterface.h"
@@ -29,16 +30,18 @@
 AppleDiskDrive525::AppleDiskDrive525()
 {
 	device = NULL;
+    controlBus = NULL;
     drivePlayer = NULL;
     headPlayer = NULL;
     
-	forceWriteProtected = false;
-    
-    phaseControl = 0;
     trackIndex = 0;
-    
     trackDataIndex = 0;
-    updateTrack();
+    
+    zeroCount = 0;
+    
+    isModified = false;
+    
+    updateTrack(trackIndex);
 }
 
 bool AppleDiskDrive525::setValue(string name, string value)
@@ -48,7 +51,7 @@ bool AppleDiskDrive525::setValue(string name, string value)
     else if (name == "track")
         trackIndex = getOEInt(value);
 	else if (name == "forceWriteProtected")
-		forceWriteProtected = getOEInt(value);
+		diskStorage.setForceWriteProtected(getOEInt(value));
 	else if (name == "mechanism")
 		mechanism = value;
     else if (name.substr(0, 5) == "sound")
@@ -66,7 +69,7 @@ bool AppleDiskDrive525::getValue(string name, string& value)
 	else if (name == "track")
 		value = getString(trackIndex);
 	else if (name == "forceWriteProtected")
-		value = getString(forceWriteProtected);
+		value = getString(diskStorage.getForceWriteProtected());
 	else if (name == "mechanism")
 		value = mechanism;
 	else
@@ -85,6 +88,8 @@ bool AppleDiskDrive525::setRef(string name, OEComponent *ref)
 		if (device)
 			device->postMessage(this, DEVICE_ADD_STORAGE, this);
 	}
+    else if (name == "controlBus")
+        controlBus = ref;
 	else if (name == "drivePlayer")
         drivePlayer = ref;
     else if (name == "headPlayer")
@@ -104,14 +109,27 @@ bool AppleDiskDrive525::init()
 		return false;
 	}
     
-    updateSound();
+    if (!controlBus)
+    {
+		logMessage("controlBus not connected");
+        
+		return false;
+    }
+    
+    updateSoundSet();
     
 	return true;
 }
 
 void AppleDiskDrive525::update()
 {
-    updateSound();
+    updateSoundSet();
+}
+
+void AppleDiskDrive525::dispose()
+{
+    if (controlBus)
+        controlBus->postMessage(this, CONTROLBUS_INVALIDATE_TIMERS, NULL);
 }
 
 bool AppleDiskDrive525::postMessage(OEComponent *sender, int message, void *data)
@@ -183,17 +201,65 @@ bool AppleDiskDrive525::postMessage(OEComponent *sender, int message, void *data
             return true;
         }
         case APPLEII_SET_PHASECONTROL:
-            setPhaseControl(*((OEInt *)data));
+        {
+            if (controlBus)
+            {
+                phaseControl = *((OEInt *)data);
+                
+                controlBus->postMessage(this, CONTROLBUS_INVALIDATE_TIMERS, NULL);
+                
+                OELong cycles = 1000;
+                
+                controlBus->postMessage(this, CONTROLBUS_SCHEDULE_TIMER, &cycles);
+            }
+            
+            return true;
+        }
+        case APPLEII_SENSE_INPUT:
+            *((bool *)data) = !diskStorage.isWriteEnabled();
             
             return true;
             
-        case APPLEII_IS_WRITE_PROTECTED:
-            *((bool *)data) = !diskStorage.isWriteEnabled() || forceWriteProtected;
+        case APPLEII_SKIP_DATA:
+            trackDataIndex += *((OELong *)data);
+            trackDataIndex %= trackDataSize;
             
             return true;
 	}
 	
 	return false;
+}
+
+void AppleDiskDrive525::notify(OEComponent *sender, int notification, void *data)
+{
+    OESInt newTrackIndex = trackIndex;
+    
+    updateStepper(newTrackIndex, phaseControl);
+	
+    if (trackIndex == newTrackIndex)
+        return;
+    
+	if (newTrackIndex < 0)
+    {
+		newTrackIndex = 0;
+        
+        headPlayer->postMessage(this, AUDIOPLAYER_STOP, NULL);
+        headPlayer->postMessage(this, AUDIOPLAYER_PLAY, NULL);
+	}
+    else if (newTrackIndex >= DRIVE_TRACKNUM)
+    {
+		newTrackIndex = DRIVE_TRACKNUM - 1;
+        
+        headPlayer->postMessage(this, AUDIOPLAYER_STOP, NULL);
+        headPlayer->postMessage(this, AUDIOPLAYER_PLAY, NULL);
+	}
+    
+    headPlayer->postMessage(this, AUDIOPLAYER_STOP, NULL);
+    headPlayer->postMessage(this, AUDIOPLAYER_PLAY, NULL);
+    
+    logMessage(getString((float) (newTrackIndex / 4.0)));
+    
+    updateTrack(newTrackIndex);
 }
 
 OEChar AppleDiskDrive525::read(OEAddress address)
@@ -202,6 +268,26 @@ OEChar AppleDiskDrive525::read(OEAddress address)
     
     trackDataIndex++;
     trackDataIndex %= trackDataSize;
+    
+    if (value == 0xff)
+    {
+        zeroCount = 0;
+        value = 1;
+    }
+    else if (value)
+    {
+        zeroCount = 0;
+        
+        // Weak bit support
+        value = ((random() & 0xff) > value);
+    }
+    else
+    {
+        // MC3470 spurious bit behavior
+        zeroCount++;
+        if (zeroCount > 3)
+			value = !(random() & 0x1f);
+    }
     
     return value;
 }
@@ -212,54 +298,8 @@ void AppleDiskDrive525::write(OEAddress address, OEChar value)
     
     trackDataIndex++;
     trackDataIndex %= trackDataSize;
-}
-
-void AppleDiskDrive525::updateSound()
-{
-    OESound *drivePlayerSound = NULL;
-    OESound *headPlayerSound = NULL;
     
-    if (sound.count(mechanism + "Drive"))
-        drivePlayerSound = &sound[mechanism + "Drive"];
-    if (sound.count(mechanism + "Head"))
-        headPlayerSound = &sound[mechanism + "Head"];
-    
-    if (drivePlayer)
-        drivePlayer->postMessage(this, AUDIOPLAYER_SET_SOUND, drivePlayerSound);
-    if (headPlayer)
-        headPlayer->postMessage(this, AUDIOPLAYER_SET_SOUND, headPlayerSound);
-}
-
-void AppleDiskDrive525::setPhaseControl(OEInt value)
-{
-    OESInt oldTrackIndex = trackIndex;
-    
-    phaseControl = value;
-    
-    updateStepper(trackIndex, phaseControl);
-	
-	if (trackIndex < 0)
-    {
-		trackIndex = 0;
-        
-        headPlayer->postMessage(this, AUDIOPLAYER_STOP, NULL);
-        headPlayer->postMessage(this, AUDIOPLAYER_PLAY, NULL);
-	}
-    else if (trackIndex >= DRIVE_TRACKNUM)
-    {
-		trackIndex = DRIVE_TRACKNUM - 1;
-        
-        headPlayer->postMessage(this, AUDIOPLAYER_STOP, NULL);
-        headPlayer->postMessage(this, AUDIOPLAYER_PLAY, NULL);
-	}
-    
-    headPlayer->postMessage(this, AUDIOPLAYER_STOP, NULL);
-    headPlayer->postMessage(this, AUDIOPLAYER_PLAY, NULL);
-    
-    logMessage(getString(trackIndex));
-    
-    if (trackIndex != oldTrackIndex)
-        updateTrack();
+    isModified = true;
 }
 
 void AppleDiskDrive525::updateStepper(OESInt& position, OEInt phaseControl)
@@ -318,6 +358,44 @@ void AppleDiskDrive525::updateStepper(OESInt& position, OEInt phaseControl)
     position += ((nextPhase - currentPhase + 4) & 0x7) - 4;
 }
 
+void AppleDiskDrive525::updateTrack(OEInt value)
+{
+    if (isModified)
+    {
+        diskStorage.writeTrack(trackIndex, track);
+        
+        isModified = false;
+    }
+    
+    trackIndex = value;
+    
+    if (!diskStorage.readTrack(trackIndex, track))
+    {
+        track.clear();
+        track.resize(1);
+    }
+    
+    trackData = &track.front();
+    trackDataSize = (OEInt) track.size();
+    trackDataIndex %= trackDataSize;
+}
+
+void AppleDiskDrive525::updateSoundSet()
+{
+    OESound *drivePlayerSound = NULL;
+    OESound *headPlayerSound = NULL;
+    
+    if (sound.count(mechanism + "Drive"))
+        drivePlayerSound = &sound[mechanism + "Drive"];
+    if (sound.count(mechanism + "Head"))
+        headPlayerSound = &sound[mechanism + "Head"];
+    
+    if (drivePlayer)
+        drivePlayer->postMessage(this, AUDIOPLAYER_SET_SOUND, drivePlayerSound);
+    if (headPlayer)
+        headPlayer->postMessage(this, AUDIOPLAYER_SET_SOUND, headPlayerSound);
+}
+
 bool AppleDiskDrive525::openDiskImage(string path)
 {
     if (!diskStorage.open(path))
@@ -325,7 +403,7 @@ bool AppleDiskDrive525::openDiskImage(string path)
     
     diskImagePath = path;
     
-    updateTrack();
+    updateTrack(trackIndex);
     
     return true;
 }
@@ -336,20 +414,7 @@ bool AppleDiskDrive525::closeDiskImage()
     
     diskImagePath = "";
     
-    updateTrack();
+    updateTrack(trackIndex);
     
     return success;
-}
-
-void AppleDiskDrive525::updateTrack()
-{
-    if (!diskStorage.readTrack(trackIndex, track))
-    {
-        track.clear();
-        track.resize(1);
-    }
-    
-    trackData = &track.front();
-    trackDataSize = (OEInt) track.size();
-    trackDataIndex %= trackDataSize;
 }

@@ -45,7 +45,6 @@ private:
     bool reset;
     
     bool driveEnableControl;
-    bool writeRequest;
     
     OELong lastCycles;
     
@@ -58,7 +57,5 @@ private:
     void updateDriveSel(OEInt value);
     void setSequencerWrite(bool value);
     void setSequencerLoad(bool value);
-    void updateWriteRequest();
-    OELong getQ3CyclesSinceLastUpdate();
-    void updateSequencer(OELong q3Cycles, OEChar value);
+    void updateSequencer();
 };

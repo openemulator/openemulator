@@ -277,7 +277,7 @@ void MOS6502::execute()
         {
 /*            static bool cap = false;
             
-            if ((pc.q & 0xff00) == 0xc100)
+            if ((pc.q & 0xffff) == 0xc683)
                 cap = true;
             
             if (cap)

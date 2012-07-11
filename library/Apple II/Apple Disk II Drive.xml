@@ -7,10 +7,12 @@
         <setting ref="appleDiskII.drive" name="mechanism" label="Drive Sounds" type="select" options="Shugart,Alps,None"/>
     </device>
     <connector id="appleDiskII.connector" type="Apple Disk Drive Port">
+        <inlet ref="appleDiskII.drive" property="controlBus" outletRef="controlBus"/>
         <inlet ref="appleDiskII.headPlayer" property="controlBus" outletRef="controlBus"/>
     </connector>
     <component id="appleDiskII.drive" class="AppleDiskDrive525">
         <property name="device" ref="appleDiskII"/>
+        <property name="controlBus" ref=""/>
         <property name="diskImage" value=""/>
         <property name="track" value="0"/>
         <property name="forceWriteProtected" value="0"/>

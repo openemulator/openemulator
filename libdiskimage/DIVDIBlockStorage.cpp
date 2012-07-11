@@ -80,7 +80,7 @@ bool DIVDIBlockStorage::open(DIBackingStore *backingStore)
     DIData blockMap;
     
     blockMap.resize(sizeof(DIInt) * vdiBlockNum);
-    if (!backingStore->read(vdiBlockMapOffset, &blockMap.front(), blockMap.size()))
+    if (!backingStore->read(vdiBlockMapOffset, &blockMap.front(), (DIInt) blockMap.size()))
         return false;
     
     vdiBlockMap.resize(blockNum / vdiBlockSize);
@@ -224,7 +224,7 @@ DIInt DIVDIBlockStorage::allocateVDIBlock(DIInt vdiBlockMapIndex)
     
     if (!backingStore->write(vdiDataOffset +
                              (vdiAllocatedBlockNum - 1) * vdiBlockSize * DI_BLOCKSIZE,
-                             &dummy.front(), dummy.size()))
+                             &dummy.front(), (DIInt) dummy.size()))
         return VDI_EMPTY;
     
     // Update block map

@@ -70,6 +70,8 @@ DIApple525DiskStorage::DIApple525DiskStorage()
     for (DIInt i = 0; i < sizeof(gcr62EncodeMap); i++)
         gcr62DecodeMap[gcr62EncodeMap[i]] = i;
     
+    forceWriteProtected = false;
+    
     close();
 }
 
@@ -272,12 +274,22 @@ bool DIApple525DiskStorage::close()
 
 bool DIApple525DiskStorage::isWriteEnabled()
 {
-    return diskStorage->isWriteEnabled();
+    return !forceWriteProtected && diskStorage->isWriteEnabled();
 }
 
 string DIApple525DiskStorage::getFormatLabel()
 {
     return diskStorage->getFormatLabel();
+}
+
+void DIApple525DiskStorage::setForceWriteProtected(bool value)
+{
+    forceWriteProtected = value;
+}
+
+bool DIApple525DiskStorage::getForceWriteProtected()
+{
+    return forceWriteProtected;
 }
 
 bool DIApple525DiskStorage::readTrack(DIInt trackIndex, DIData& data)
@@ -813,7 +825,7 @@ bool DIApple525DiskStorage::readGCR53DataField(DIChar *data)
 
 bool DIApple525DiskStorage::readGCR62DataField(DIChar *data)
 {
-	DIChar swapBit01[] = { 0x00, 0x02, 0x01, 0x03 };
+	const DIChar swapBit01[] = { 0x00, 0x02, 0x01, 0x03 };
 	
 	for (DIInt i = 0; i < 12; i++)
     {
@@ -977,7 +989,7 @@ void DIApple525DiskStorage::writeNibble(DIChar value)
 
 void DIApple525DiskStorage::writeNibble(DIChar value, DISInt q3Clocks)
 {
-    DIChar codeTable[] = {0x00, 0xff};
+    const DIChar codeTable[] = {0x00, 0xff};
     
 	while (q3Clocks > 0)
     {
