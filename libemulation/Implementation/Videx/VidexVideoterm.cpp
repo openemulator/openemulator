@@ -446,6 +446,9 @@ void VidexVideoterm::postImage()
 
 void VidexVideoterm::copy(wstring *s)
 {
+    if (!videoEnabled)
+        return;
+    
     OEChar *vp = &vram->front();
     
     for (OEInt y = 0; y < vertDisplayedCell; y++)

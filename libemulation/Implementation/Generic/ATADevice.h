@@ -28,8 +28,6 @@ public:
 private:
     OEComponent *device;
     
-    string diskImagePath;
-    
     DIATABlockStorage blockStorage;
     
     bool openDiskImage(string path);

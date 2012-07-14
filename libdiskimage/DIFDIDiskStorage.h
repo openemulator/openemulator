@@ -41,8 +41,9 @@ class DIFDIDiskStorage : public DIDiskStorage
 {
 public:
     DIFDIDiskStorage();
+    ~DIFDIDiskStorage();
     
-    bool open(DIBackingStore *backingStore);
+    bool open(DIBackingStore *backingStore, float rotationSpeed);
     bool create(DIBackingStore *backingStore, bool writeEnabled,
                 DIDiskType diskType, DIInt headNum, float rotationSpeed,
                 DIInt tracksPerInch);
@@ -50,8 +51,6 @@ public:
     
     bool isWriteEnabled();
     DIDiskType getDiskType();
-    DIInt getHeadNum();
-    float getRotationSpeed();
     DIInt getTracksPerInch();
     string getFormatLabel();
     

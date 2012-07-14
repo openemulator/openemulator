@@ -277,12 +277,24 @@ void MOS6502::execute()
         {
 /*            static bool cap = false;
             
-            if ((pc.q & 0xffff) == 0xc683)
+            if ((pc.q & 0xffff) == 0x0801)
                 cap = true;
             
             if (cap)
-                printf("pc=%04x a=%02x x=%02x y=%02x s=%02x p=%02x\n",
-                       pc.w.l, a, x, y, sp.b.l, p);*/
+            {
+                static FILE *fp = NULL;
+                
+                if (!fp)
+                    fp = fopen("/Users/mressl/cap.txt", "at");
+                if (fp)
+                {
+                    fprintf(fp, "pc=%04x a=%02x x=%02x y=%02x s=%02x p=%02x [%02x %02x %02x]\n",
+                            pc.w.l, a, x, y, sp.b.l, p,
+                            memoryBus->read(pc.q),
+                            memoryBus->read(pc.q + 1),
+                            memoryBus->read(pc.q + 2));
+                }
+            }*/
             
             OEChar opcode = RDOP();
             

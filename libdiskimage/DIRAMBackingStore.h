@@ -20,7 +20,7 @@ public:
     DIRAMBackingStore();
     
     bool open(DIData& data);
-    void clear();
+    void create();
     void close();
     
     bool isWriteEnabled();

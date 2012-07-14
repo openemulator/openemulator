@@ -77,7 +77,12 @@ DIFDIDiskStorage::DIFDIDiskStorage()
     close();
 }
 
-bool DIFDIDiskStorage::open(DIBackingStore *backingStore)
+DIFDIDiskStorage::~DIFDIDiskStorage()
+{
+    close();
+}
+
+bool DIFDIDiskStorage::open(DIBackingStore *backingStore, float rotationSpeed)
 {
     close();
     
@@ -103,7 +108,6 @@ bool DIFDIDiskStorage::open(DIBackingStore *backingStore)
     // Read header
     DIInt trackNum = getDIShortBE(&header[142]) + 1;
     headNum = header[144] + 1;
-    rotationSpeed = header[146] + 128;
     writeEnabled = !(header[147] & 0x1);
     
     if (version != 0x0100)
@@ -147,6 +151,8 @@ bool DIFDIDiskStorage::open(DIBackingStore *backingStore)
         offset += trackSize[index];
     }
     
+    this->rotationSpeed = rotationSpeed;
+    
     this->backingStore = backingStore;
     
     return true;
@@ -182,16 +188,16 @@ bool DIFDIDiskStorage::close()
         trackFormat.resize(indexNum);
         trackData.resize(indexNum);
         
-        // Build header (152 header bytes, tracks, and 8 CRC bytes)
+        // Build header (152 header bytes, tracks)
         DIData header;
-        header.resize(((0x1ff + 152 + 2 * indexNum + 8) / 0x200) * 0x200);
+        header.resize((((0x200 - 1) + 152 + 2 * indexNum) / 0x200) * 0x200);
         
         // Set signature
         memcpy((char *) &header[0], FDI_SIGNATURE, sizeof(FDI_SIGNATURE) - 1);
         
         // Set creator
-        memset(&header[0], ' ', 30);
-        memcpy(&header[0], FDI_CREATOR, sizeof(FDI_CREATOR) - 1);
+        memset(&header[27], ' ', 30);
+        memcpy(&header[27], FDI_CREATOR, sizeof(FDI_CREATOR) - 1);
         header[57] = '\n';
         header[58] = '\r';
         
@@ -204,7 +210,7 @@ bool DIFDIDiskStorage::close()
         setDIShortBE(&header[142], indexNum  / headNum - 1);
         header[144] = headNum - 1;
         header[145] = diskType;
-        signed char rotSpeed = rotationSpeed - 128;
+        DISInt rotSpeed = rotationSpeed - 128;
         if (rotSpeed < 0)
             rotSpeed = 0;
         else if (rotSpeed > 255)
@@ -217,7 +223,7 @@ bool DIFDIDiskStorage::close()
         for (DIInt i = 0; i < indexNum; i++)
         {
             DIInt format = trackFormat[i];
-            DIInt size = (DIInt) trackData[i].size() / 0x100;
+            DIInt size = (DIInt) (trackData[i].size() + 0xff) / 0x100;
             
             if (format == DI_FDI_PULSES)
                 format |= (size >> 8) & 0x3f;
@@ -226,9 +232,11 @@ bool DIFDIDiskStorage::close()
             header[152 + 2 * i + 1] = size;
         }
         
-        // Write tracks
-        DIInt dataCRC32 = 0;
+        // Write header
+        if (!backingStore->write(0, &header.front(), (DIInt) header.size()))
+            return false;
         
+        // Write tracks
         DIInt offset = (DIInt) header.size();
         for (DIInt i = 0; i < indexNum; i++)
         {
@@ -240,16 +248,6 @@ bool DIFDIDiskStorage::close()
             
             offset += size;
         }
-        
-        // Write CRCs
-        setDIIntBE(&header[header.size() - 0x08], dataCRC32);
-        
-        DIInt headerCRC = getDICRC32(&header[0x0], (DIInt) header.size() - 0x04);
-        setDIIntBE(&header[header.size() - 0x04], headerCRC);
-        
-        // Write header
-        if (!backingStore->write(0, &header.front(), (DIInt) header.size()))
-            return false;
     }
     
     writing = false;
@@ -279,16 +277,6 @@ bool DIFDIDiskStorage::isWriteEnabled()
 DIDiskType DIFDIDiskStorage::getDiskType()
 {
     return diskType;
-}
-
-DIInt DIFDIDiskStorage::getHeadNum()
-{
-    return headNum;
-}
-
-float DIFDIDiskStorage::getRotationSpeed()
-{
-    return rotationSpeed;
 }
 
 DIInt DIFDIDiskStorage::getTracksPerInch()
@@ -332,24 +320,29 @@ bool DIFDIDiskStorage::readTrack(DIInt headIndex, DIInt trackIndex, DITrack& tra
         case DI_FDI_APPLE_DOS32:
             track.format = DI_APPLE_DOS32;
             track.data = data;
+            
             return true;
             
         case DI_FDI_APPLE_DOS33:
             track.format = DI_APPLE_DOS33;
             track.data = data;
+            
             return true;
             
         case DI_FDI_APPLE_35:
             track.format = DI_APPLE_PRODOS;
             track.data = data;
+            
             return true;
             
         case DI_FDI_GCRFM_250000BPS:
             track.format = DI_BITSTREAM_250000BPS;
+            
             return decodeBitstreamTrack(track.data, data);
             
         case DI_FDI_GCRFM_500000BPS:
             track.format = DI_BITSTREAM_500000BPS;
+            
             return decodeBitstreamTrack(track.data, data);
             
         case DI_FDI_PULSES:
@@ -405,6 +398,7 @@ bool DIFDIDiskStorage::writeTrack(DIInt headIndex, DIInt trackIndex, DITrack& tr
             
         case DI_BITSTREAM_250000BPS:
             trackFormat[index] = DI_FDI_GCRFM_250000BPS;
+            
             if (!encodeBitstreamTrack(trackData[index], track.data))
                 return false;
             
@@ -412,6 +406,7 @@ bool DIFDIDiskStorage::writeTrack(DIInt headIndex, DIInt trackIndex, DITrack& tr
             
         case DI_BITSTREAM_500000BPS:
             trackFormat[index] = DI_FDI_GCRFM_250000BPS;
+            
             if (!encodeBitstreamTrack(trackData[index], track.data))
                 return false;
             
@@ -449,6 +444,9 @@ bool DIFDIDiskStorage::decodeBitstreamTrack(DIData& decodedData, DIData& data)
     // * 4 bytes big-endian index offset (not used)
     DIInt bitNum = getDIIntBE(&data[0x00]);
     
+    if ((bitNum == 0) || (bitNum >= (1 << 24)))
+        return false;
+    
     decodedData.resize(bitNum);
     
     DIInt minSize = (8 + ((bitNum + 7) / 8));
@@ -461,7 +459,7 @@ bool DIFDIDiskStorage::decodeBitstreamTrack(DIData& decodedData, DIData& data)
         DIInt byteIndex = i >> 3;
         DIInt bitIndex = 7 - (i & 0x07);
         
-        decodedData[i] = codeTable[(data[byteIndex] >> bitIndex) & 0x1];
+        decodedData[i] = codeTable[(data[8 + byteIndex] >> bitIndex) & 0x1];
     }
     
     return true;
@@ -484,7 +482,7 @@ bool DIFDIDiskStorage::encodeBitstreamTrack(DIData& encodedData, DIData& data)
         DIInt byteIndex = i >> 3;
         DIInt bitIndex = 7 - (i & 0x07);
         
-        encodedData[byteIndex] |= ((data[i] != 0) << bitIndex);
+        encodedData[8 + byteIndex] |= ((data[i] != 0) << bitIndex);
     }
     
     return true;
@@ -655,11 +653,6 @@ bool DIFDIDiskStorage::getStream(DIFDIStream& stream, DIChar *data, DIInt size, 
                     }
                     
                     stream[streamIndex++] |= currentNode->value << substreamShift;
-/*                    stream[streamIndex] |= currentNode->value << substreamShift;
-                    
-                    printf("%d %d\n", streamIndex, stream[streamIndex]);
-                    
-                    streamIndex++;*/
                 }
                 
                 delete root;

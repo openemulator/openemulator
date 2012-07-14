@@ -51,7 +51,7 @@ bool OEDocument::open(string path)
     close();
     
     OEData data;
-    string pathExtension = getPathExtension(path);
+    string pathExtension = strtolower(getPathExtension(path));
     if (pathExtension == OE_FILE_PATH_EXTENSION)
     {
         is_open = readFile(path, &data);
@@ -64,7 +64,7 @@ bool OEDocument::open(string path)
         package = new OEPackage();
         if (package && package->open(path))
         {
-            is_open = package->readFile(OE_PACKAGE_EDL_PATH, &data);
+            is_open = package->read(OE_PACKAGE_EDL_PATH, &data);
             
             if (!is_open)
                 logMessage("could not read '" OE_PACKAGE_EDL_PATH
@@ -134,7 +134,7 @@ bool OEDocument::save(string path)
     close();
     
     OEData data;
-    string pathExtension = getPathExtension(path);
+    string pathExtension = strtolower(getPathExtension(path));
     if (pathExtension == OE_FILE_PATH_EXTENSION)
     {
         if (reconfigureDocument(doc))
@@ -161,7 +161,7 @@ bool OEDocument::save(string path)
             {
                 if (dumpDocument(data))
                 {
-                    is_open = package->writeFile(OE_PACKAGE_EDL_PATH, &data);
+                    is_open = package->write(OE_PACKAGE_EDL_PATH, &data);
                     if (!is_open)
                         logMessage("could not write '" OE_PACKAGE_EDL_PATH
                                    "' in '" + path + "'");

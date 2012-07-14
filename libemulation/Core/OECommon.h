@@ -13,8 +13,8 @@
 
 #include <string>
 #include <vector>
-#include <map>
-#include <iostream>
+
+#include "util.h"
 
 using namespace std;
 
@@ -59,12 +59,6 @@ typedef union
 
 typedef vector<OEChar> OEData;
 
-#ifdef _WIN32
-#define OE_PATH_SEPARATOR "\\"
-#else
-#define OE_PATH_SEPARATOR "/"
-#endif
-
 void logMessage(string message);
 
 OEInt getOEInt(const string& value);
@@ -79,27 +73,5 @@ string getString(OEInt value);
 string getString(OESInt value);
 string getString(OELong value);
 string getString(OESLong value);
-
-string getString(float value);
-string getHexString(OELong value);
-
-string rtrim(string value);
-wstring rtrim(wstring value);
-string ltrim(string value);
-string trim(string value);
-vector<string> strsplit(string value, char c);
-string strjoin(vector<string>& value, char c);
-string strfilter(string value, string filter);
-string strtolower(string value);
-string strtoupper(string value);
-
-OELong getNextPowerOf2(OELong value);
-OEInt getBitNum(OELong value);
-
-bool readFile(string path, OEData *data);
-bool writeFile(string path, OEData *data);
-
-string getFilename(string path);
-string getPathExtension(string path);
 
 #endif

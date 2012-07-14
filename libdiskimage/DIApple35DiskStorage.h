@@ -14,13 +14,4 @@ class DIApple35
 {
 public:
     DIApple35();
-    
-    bool open(string path);
-    bool open(DIData& data);
-    void close();
-    
-    bool isReadOnly();
-    
-    bool readTrack(DIInt trackIndex, DIInt headIndex, DIData& data);
-    bool writeTrack(DIInt trackIndex, DIInt headIndex, DIData& data);
 };

@@ -5,10 +5,10 @@ This is OpenEmulator, a cross-platform emulator of many legacy computer
 systems.
 
 For more information, take a look at the included man pages.
-  
+
 For generic installation instructions, see file 'INSTALL'. OpenEmulator
 requires these external libraries:
- 
+
 * libxml2 (http://www.xmlsoft.org/)
 * libzip (http://www.nih.at/libzip/)
 * libpng (http://www.libpng.org/)
@@ -75,8 +75,7 @@ sudo port install portaudio +universal
 sudo port install libsndfile +universal
 sudo port install libsamplerate +universal
 
-If you can't compile because of the error "'zipconf.h' file not found",
-try this:
+If you can't compile because of this error: "'zipconf.h' file not found", try:
 
 sudo ln -s /opt/local/lib/libzip/include/zipconf.h /opt/local/include/zipconf.h 
 

@@ -40,7 +40,7 @@ bool ATADevice::setValue(string name, string value)
 bool ATADevice::getValue(string name, string& value)
 {
     if (name == "diskImage")
-        value = diskImagePath;
+        value = blockStorage.getPath();
     else if (name == "forceWriteProtected")
         value = getString(blockStorage.getForceWriteProtected());
     else
@@ -109,7 +109,7 @@ bool ATADevice::postMessage(OEComponent *sender, int message, void *data)
             return true;
             
         case STORAGE_GET_MOUNTPATH:
-            *(string *)data = diskImagePath;
+            *(string *)data = blockStorage.getPath();
             
             return true;
             
@@ -137,14 +137,10 @@ bool ATADevice::openDiskImage(string path)
     if (!blockStorage.open(path))
         return false;
     
-    diskImagePath = path;
-    
     return true;
 }
 
 void ATADevice::closeDiskImage()
 {
     blockStorage.close();
-    
-    diskImagePath = "";
 }

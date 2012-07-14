@@ -25,12 +25,14 @@ class DIATABlockStorage
 {
 public:
     DIATABlockStorage();
+    ~DIATABlockStorage();
     
     bool open(string path);
     bool open(DIData& data);
     bool isOpen();
     void close();
     
+    string getPath();
     bool isWriteEnabled();
     DIInt getBlockNum();
     string getFormatLabel();
@@ -69,7 +71,7 @@ private:
     
     DIInt maxSize;
     
-    bool open(DIBackingStore *backingStore, string pathExtension);
+    bool open(DIBackingStore *backingStore);
 };
 
 #endif

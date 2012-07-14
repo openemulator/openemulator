@@ -20,14 +20,18 @@ DIATABlockStorage::DIATABlockStorage()
     close();
 }
 
+DIATABlockStorage::~DIATABlockStorage()
+{
+    close();
+}
+
 bool DIATABlockStorage::open(string path)
 {
     close();
     
-    if (fileBackingStore.open(path) &&
-            open(&fileBackingStore, getDIPathExtension(path)))
+    if (fileBackingStore.open(path) && open(&fileBackingStore))
     {
-        model = getDIFilename(path);
+        model = getLastPathComponent(path);
         
         return true;
     }
@@ -39,8 +43,7 @@ bool DIATABlockStorage::open(DIData& data)
 {
     close();
     
-    if (ramBackingStore.open(data) &&
-        open(&ramBackingStore, ""))
+    if (ramBackingStore.open(data) && open(&ramBackingStore))
     {
         model = "Memory Disk Image";
         
@@ -50,7 +53,7 @@ bool DIATABlockStorage::open(DIData& data)
     return false;
 }
 
-bool DIATABlockStorage::open(DIBackingStore *backingStore, string pathExtension)
+bool DIATABlockStorage::open(DIBackingStore *backingStore)
 {
     if (twoImgBackingStore.open(backingStore))
     {
@@ -75,6 +78,8 @@ bool DIATABlockStorage::open(DIBackingStore *backingStore, string pathExtension)
     }
     else
     {
+        string pathExtension = getPathExtension(fileBackingStore.getPath());
+        
         if ((pathExtension != "image") &&
             (pathExtension != "img") &&
             (pathExtension != "dmg") &&
@@ -112,6 +117,11 @@ void DIATABlockStorage::close()
     blockStorage = &dummyBlockStorage;
     
     return;
+}
+
+string DIATABlockStorage::getPath()
+{
+    return fileBackingStore.getPath();
 }
 
 bool DIATABlockStorage::isWriteEnabled()

@@ -13,6 +13,7 @@
 DIFileBackingStore::DIFileBackingStore()
 {
     fp = NULL;
+    
     writeEnabled = false;
 }
 
@@ -69,6 +70,11 @@ void DIFileBackingStore::close()
     path = "";
 }
 
+string DIFileBackingStore::getPath()
+{
+    return path;
+}
+
 bool DIFileBackingStore::isWriteEnabled()
 {
     return writeEnabled;
@@ -102,6 +108,9 @@ bool DIFileBackingStore::read(DILong pos, DIChar *buf, DIInt num)
     if (!fp)
         return false;
     
+    if (!num)
+        return true;
+    
     if (fseek(fp, (long) pos, SEEK_SET))
         return false;
     
@@ -115,6 +124,9 @@ bool DIFileBackingStore::write(DILong pos, const DIChar *buf, DIInt num)
     
     if (!fp)
         return false;
+    
+    if (!num)
+        return true;
     
     if (fseek(fp, (long) pos, SEEK_SET))
         return false;

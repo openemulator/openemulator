@@ -32,7 +32,7 @@ bool appendMemoryMaps(MemoryMaps& theMaps,
         if (!m.read && !m.write)
             m.read = m.write = true;
         
-        entry = strfilter(entry, "0123456789abcdef-x");
+        entry = strsanitize(entry, "0123456789abcdef-x");
         
         vector<string> address = strsplit(entry, '-');
         

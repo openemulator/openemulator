@@ -20,16 +20,16 @@
 #define NIB_TRACKSIZE           6656
 #define NIB2_TRACKSIZE          6384
 
-#define MIN_TRACKNUM            35
-#define MAX_TRACKNUM            40
+#define MIN_LOGICALTRACKNUM     35
+#define MAX_LOGICALTRACKNUM     40
+
+#define MAX_TRACKNUM            (4 * MAX_LOGICALTRACKNUM)
 
 #define DEFAULT_ROTATIONSPEED   300
 #define DEFAULT_TRACKSPERINCH   192
 #define DEFAULT_BITRATE         (APPLEII_CLOCKFREQUENCY / 4)
 
 #define DEFAULT_TRACKSIZE       (DEFAULT_BITRATE * 60 / DEFAULT_ROTATIONSPEED)
-
-#define NIB_FF40_THRESHOLD		5
 
 static const DIChar gcr53EncodeMap[] =
 {
@@ -51,20 +51,34 @@ static const DIChar gcr62EncodeMap[] =
 	0xf7, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff,
 };
 
-DIInt dos32SectorOrder[] = { 0, 10, 7, 4, 1, 11, 8, 5, 2, 12, 9, 6, 3 };
-DIInt dos33SectorOrder[] = { 0, 7, 14, 6, 13, 5, 12, 4, 11, 3, 10, 2, 9, 1, 8, 15 };
-DIInt prodosSectorOrder[] = { 0, 8, 1, 9, 2, 10, 3, 11, 4, 12, 5, 13, 6, 14, 7, 15 };
-DIInt cpmSectorOrder[] = { 0, 11, 6, 1, 12, 7, 2, 13, 8, 3, 14, 9, 4, 15, 10, 5 };
+static const DIInt dos32SectorOrder[] =
+{ 
+    0, 10, 7, 4, 1, 11, 8, 5, 2, 12, 9, 6, 3
+};
+
+static const DIInt dos33SectorOrder[] =
+{
+    0, 7, 14, 6, 13, 5, 12, 4, 11, 3, 10, 2, 9, 1, 8, 15
+};
+
+static const DIInt prodosSectorOrder[] =
+{
+    0, 8, 1, 9, 2, 10, 3, 11, 4, 12, 5, 13, 6, 14, 7, 15
+};
+
+static const DIInt cpmSectorOrder[] = {
+    0, 11, 6, 1, 12, 7, 2, 13, 8, 3, 14, 9, 4, 15, 10, 5
+};
 
 DIApple525DiskStorage::DIApple525DiskStorage()
 {   
-    // Calculate GCR53 decode map
+    // Build GCR53 decode map
     memset(gcr53DecodeMap, 0xff, sizeof(gcr53DecodeMap));
     
     for (DIInt i = 0; i < sizeof(gcr53EncodeMap); i++)
         gcr53DecodeMap[gcr53EncodeMap[i]] = i;
     
-    // Calculate GCR62 decode map
+    // Build GCR62 decode map
     memset(gcr62DecodeMap, 0xff, sizeof(gcr62DecodeMap));
     
     for (DIInt i = 0; i < sizeof(gcr62EncodeMap); i++)
@@ -75,23 +89,26 @@ DIApple525DiskStorage::DIApple525DiskStorage()
     close();
 }
 
+DIApple525DiskStorage::~DIApple525DiskStorage()
+{
+    close();
+}
+
 bool DIApple525DiskStorage::open(string path)
 {
     close();
     
-    return (fileBackingStore.open(path) &&
-            open(&fileBackingStore, getDIPathExtension(path)));
+    return fileBackingStore.open(path) && open(&fileBackingStore);
 }
 
 bool DIApple525DiskStorage::open(DIData& data)
 {
     close();
     
-    return (ramBackingStore.open(data) &&
-            open(&ramBackingStore, ""));
+    return ramBackingStore.open(data) && open(&ramBackingStore);
 }
 
-bool DIApple525DiskStorage::open(DIBackingStore *backingStore, string pathExtension)
+bool DIApple525DiskStorage::open(DIBackingStore *backingStore)
 {
     DITrackFormat trackFormat;
     DIInt trackSize = 0;
@@ -100,7 +117,7 @@ bool DIApple525DiskStorage::open(DIBackingStore *backingStore, string pathExtens
     {
         backingStore = &twoIMGBackingStore;
         
-        if (!checkLogicalDisk(backingStore, trackFormat, trackSize))
+        if (!validateImageSize(backingStore, trackFormat, trackSize))
             return false;
         
         switch (twoIMGBackingStore.getFormat())
@@ -136,7 +153,7 @@ bool DIApple525DiskStorage::open(DIBackingStore *backingStore, string pathExtens
     {
         backingStore = &dc42BackingStore;
         
-        if (!checkLogicalDisk(backingStore, trackFormat, trackSize))
+        if (!validateImageSize(backingStore, trackFormat, trackSize))
             return false;
         
         if (trackFormat != DI_APPLE_DOS33)
@@ -144,7 +161,7 @@ bool DIApple525DiskStorage::open(DIBackingStore *backingStore, string pathExtens
         
         trackFormat = DI_APPLE_PRODOS;
     }
-    else if (fdiDiskStorage.open(backingStore))
+    else if (fdiDiskStorage.open(backingStore, DEFAULT_ROTATIONSPEED))
     {
         if (fdiDiskStorage.getDiskType() != DI_525_INCH)
             return false;
@@ -161,8 +178,10 @@ bool DIApple525DiskStorage::open(DIBackingStore *backingStore, string pathExtens
     }
     else
     {
-        if (!checkLogicalDisk(backingStore, trackFormat, trackSize))
+        if (!validateImageSize(backingStore, trackFormat, trackSize))
             return false;
+        
+        string pathExtension = getPathExtension(fileBackingStore.getPath());
         
         switch (trackFormat)
         {
@@ -194,8 +213,7 @@ bool DIApple525DiskStorage::open(DIBackingStore *backingStore, string pathExtens
     
     if (!logicalDiskStorage.open(backingStore,
                                  DI_525_INCH, 1,
-                                 DEFAULT_ROTATIONSPEED, DEFAULT_TRACKSPERINCH / 4,
-                                 trackFormat, trackSize))
+                                 DEFAULT_TRACKSPERINCH / 4, trackFormat, trackSize))
         return false;
     
     diskStorage = &logicalDiskStorage;
@@ -207,50 +225,118 @@ bool DIApple525DiskStorage::close()
 {
     if (trackDataModified)
     {
-        // Pasos
+        bool saveAsFDI = true;
         
-        // 1. Nos fijamos si usabamos logicalDiskStorage
-        //    Si era asi, tratamos de recodificar usando el mismo formato
-        //       La recodificacion la hacemos en memoria
-        //       Si tiene exito, la escribimos en el logicalDiskStorage y nos vamos
-        //    Si no tuvo exito
-        //       Leemos todo en memoria con readTrack
-        //       Abrimos un archivo FDI, y escribimos lo que teníamos
-        // 2. Si usabamos V2D o FDI
-        //    Leemos todo en memoria con readTrack
-        //    Abrimos un archivo FDI, y escribimos lo que teníamos
+        if ((diskStorage == &logicalDiskStorage) &&
+            (logicalDiskStorage.getTrackFormat() != DI_APPLE_NIB))
+        {
+            DITrackFormat trackFormat = logicalDiskStorage.getTrackFormat();
+            
+            bool error = false;
+            
+            for (DIInt i = 0; !error && i < MAX_TRACKNUM; i++)
+            {
+                if (!trackData[i].size())
+                    continue;
+                
+                if (i % 4)
+                    error = true;
+                else
+                {
+                    DITrack track;
+                    track.format = trackFormat;
+                    
+                    if (trackFormat == DI_APPLE_DOS32)
+                    {
+                        if (!decodeGCR53Track(track, i) && (i < MIN_LOGICALTRACKNUM))
+                            error = true;
+                    }
+                    else
+                    {
+                        if (!decodeGCR62Track(track, i) && (i < MIN_LOGICALTRACKNUM))
+                            error = true;
+                    }
+                }
+            }
+            
+            if (!error)
+            {
+                // Save
+                for (DIInt i = 0; i < MAX_TRACKNUM; i += 4)
+                {
+                    if (!trackData[i].size())
+                        continue;
+                    
+                    DITrack track;
+                    track.format = trackFormat;
+                    
+                    if (trackFormat == DI_APPLE_DOS32)
+                    {
+                        if (!decodeGCR53Track(track, i))
+                            continue;
+                        
+                        logicalDiskStorage.writeTrack(0, i / 4, track);
+                    }
+                    else
+                    {
+                        if (!decodeGCR62Track(track, i))
+                            continue;
+                        
+                        logicalDiskStorage.writeTrack(0, i / 4, track);
+                    }
+                }
+                
+                saveAsFDI = false;
+            }
+        }
         
-        // Find active disk storage
-        /*        if (diskStorage == &logicalDiskStorage)
-         {
-         vector<DIData> logicalDisk;
-         
-         if (getLogicalDisk(logicalDisk))
-         {
-         
-         }
-         
-         }
-         
-         DITrack track;
-         
-         for (int index = 0; index < MAX_TRACKNUM; index++)
-         {
-         DITrack diskStorageTrack;
-         
-         if (!diskStorage->readTrack(0, index, diskStorageTrack))
-         return false;
-         
-         switch (diskStorageTrack.format)
-         {
-         case DI_APPLE_DOS32:
-         decodeGCR53Track(diskStorageTrack, diskStorageTrack);
-         
-         }
-         
-         if (track.format == DI_APPLE_DOS32)
-         decodeGCR53Track(track, diskStorageTrack);
-         }*/
+        if (saveAsFDI)
+        {
+            DIFileBackingStore outputBackingStore;
+            
+            string path = fileBackingStore.getPath();
+            
+            if (path != "")
+            {
+                // Read in all data
+                for (DIInt i = 0; i < MAX_TRACKNUM; i++)
+                {
+                    DIData data;
+                    
+                    readTrack(i, data);
+                }
+                
+                if (diskStorage == &fdiDiskStorage)
+                {
+                    fdiDiskStorage.close();
+                    fileBackingStore.close();
+                }
+                else
+                    path += ".fdi";
+                
+                DIFileBackingStore outputBackingStore;
+                DIFDIDiskStorage outputDiskStorage;
+                
+                if (outputBackingStore.create(path) &&
+                    outputDiskStorage.create(&outputBackingStore,
+                                             true, DI_525_INCH, 1,
+                                             DEFAULT_ROTATIONSPEED, DEFAULT_TRACKSPERINCH))
+                {
+                    for (DIInt i = 0; i < MAX_TRACKNUM; i++)
+                    {
+                        DITrack track;
+                        
+                        track.data.swap(trackData[i]);
+                        track.format = track.data.size() ? DI_BITSTREAM_250000BPS : DI_BLANK;
+                        
+                        outputDiskStorage.writeTrack(0, i, track);
+                    }
+                }
+                
+                outputDiskStorage.close();
+                outputBackingStore.close();
+            }
+        }
     }
     
     fileBackingStore.close();
@@ -265,11 +351,17 @@ bool DIApple525DiskStorage::close()
     diskStorage = &dummyDiskStorage;
     
     trackData.clear();
+    trackData.resize(MAX_TRACKNUM);
     trackDataModified = false;
     
     gcrVolume = 254;
     
     return true;
+}
+
+string DIApple525DiskStorage::getPath()
+{
+    return fileBackingStore.getPath();
 }
 
 bool DIApple525DiskStorage::isWriteEnabled()
@@ -301,18 +393,18 @@ bool DIApple525DiskStorage::readTrack(DIInt trackIndex, DIData& data)
     {
         DITrack track;
         
-        DIInt trackRatio = 1;
+        DIInt tracksPerInch = diskStorage->getTracksPerInch();
+        DIInt trackDivisor = (tracksPerInch ?
+                              DEFAULT_TRACKSPERINCH / diskStorage->getTracksPerInch() : 1);
         
-        if (diskStorage->getTracksPerInch())
-            trackRatio = DEFAULT_TRACKSPERINCH / diskStorage->getTracksPerInch();
-        
-        if (trackIndex % trackRatio)
+        if (trackIndex % trackDivisor)
             track.format = DI_BLANK;
         else
         {
             track.format = DI_BITSTREAM_250000BPS;
-            if (!diskStorage->readTrack(0, trackIndex / trackRatio, track))
-                return false;
+            
+            if (!diskStorage->readTrack(0, trackIndex / trackDivisor, track))
+                track.format = DI_BLANK;
         }
         
         switch (track.format)
@@ -366,13 +458,13 @@ bool DIApple525DiskStorage::writeTrack(DIInt trackIndex, DIData& data)
     return true;
 }
 
-bool DIApple525DiskStorage::checkLogicalDisk(DIBackingStore *backingStore,
-                                             DITrackFormat& trackFormat, DIInt& trackSize)
+bool DIApple525DiskStorage::validateImageSize(DIBackingStore *backingStore,
+                                              DITrackFormat& trackFormat, DIInt& trackSize)
 {
     DILong size = backingStore->getSize();
     
     DIInt trackNum;
-    for (trackNum = MIN_TRACKNUM; trackNum <= MAX_TRACKNUM; trackNum++)
+    for (trackNum = MIN_LOGICALTRACKNUM; trackNum <= MAX_LOGICALTRACKNUM; trackNum++)
     {
         if (size == (trackNum * GCR53_TRACKSIZE))
         {
@@ -407,29 +499,7 @@ bool DIApple525DiskStorage::checkLogicalDisk(DIBackingStore *backingStore,
     return false;
 }
 
-bool DIApple525DiskStorage::getLogicalDisk(vector<DIData>& disk)
-{
-    // Check tracks
-    for (DIInt i = 0; i < MAX_TRACKNUM; i++)
-    {
-        if (!(i & 0x3))
-        {
-            /*            DITrack track;
-             
-             if (!readTrack(0, i, track))
-             return false;
-             
-             if (!decodeGCR53Track(track, decodedTracks[index]))
-             break;
-             
-             diskStorage->writeTrack(0, index, track);*/
-        }
-    }
-    
-    return true;
-}
-
-DIInt *DIApple525DiskStorage::getSectorOrder(DITrackFormat trackFormat)
+const DIInt *DIApple525DiskStorage::getSectorOrder(DITrackFormat trackFormat)
 {
     switch (trackFormat)
     {
@@ -453,17 +523,16 @@ bool DIApple525DiskStorage::encodeGCR53Track(DIInt trackIndex, DITrack& track)
         return false;
     
     trackData[trackIndex].resize(DEFAULT_TRACKSIZE);
+    
     setStreamData(trackData[trackIndex]);
     
 	for (DIInt i = 0; i < GCR53_SECTORNUM; i++)
     {
-		DIInt sectorIndex = dos32SectorOrder[i];
-        
         writeSync(!i ? 0x80 : 0x28, 36, 32);
-		writeGCR53AddressField(trackIndex / 4, sectorIndex);
+		writeGCR53AddressField(trackIndex / 4, dos32SectorOrder[i]);
         
 		writeSync(0x0e, 36, 36);
-		writeGCR53DataField(&track.data[sectorIndex * SECTOR_SIZE]);
+		writeGCR53DataField(&track.data[dos32SectorOrder[i] * SECTOR_SIZE]);
 	}
     
     return true;
@@ -471,23 +540,22 @@ bool DIApple525DiskStorage::encodeGCR53Track(DIInt trackIndex, DITrack& track)
 
 bool DIApple525DiskStorage::encodeGCR62Track(DIInt trackIndex, DITrack& track)
 {
-    DIInt *sectorOrder = getSectorOrder(track.format);
-    
     if (track.data.size() != GCR62_TRACKSIZE)
         return false;
     
+    const DIInt *sectorOrder = getSectorOrder(track.format);
+    
     trackData[trackIndex].resize(DEFAULT_TRACKSIZE);
+    
     setStreamData(trackData[trackIndex]);
     
 	for (DIInt i = 0; i < GCR62_SECTORNUM; i++)
     {
-		DIInt sectorIndex = sectorOrder[i];
-        
         writeSync(!i ? 0x80 : 0x14, 40, 32);
 		writeGCR62AddressField(trackIndex / 4, i);
         
 		writeSync(0x08, 40, 36);
-		writeGCR62DataField(&track.data[sectorIndex * SECTOR_SIZE]);
+		writeGCR62DataField(&track.data[sectorOrder[i] * SECTOR_SIZE]);
 	}
     
     return true;
@@ -495,48 +563,13 @@ bool DIApple525DiskStorage::encodeGCR62Track(DIInt trackIndex, DITrack& track)
 
 bool DIApple525DiskStorage::encodeNIBTrack(DIInt trackIndex, DITrack& track)
 {
-    DIChar *data = &track.data.front();
-    DIInt size = (DIInt) track.data.size();
-    
-	bool isSync = false;
-	
     trackData[trackIndex].resize(2 * DEFAULT_TRACKSIZE);
     
     setStreamData(trackData[trackIndex]);
     
-	for (DIInt i = 0; i < size; i++)
-    {
-        DIChar trackByte;
-		DIInt syncCount = 0;
-        
-		for (DIInt syncIndex = 0; syncIndex < size; syncIndex++)
-        {
-			trackByte = data[(i + syncIndex) % size];
-            
-			if (!(trackByte & 0x80))
-				continue;
-            
-			if (trackByte != 0xff)
-				break;
-			
-            syncCount++;
-			if (syncCount >= NIB_FF40_THRESHOLD)
-            {
-				isSync = true;
-                
-				break;
-			}
-		}
-		
-		trackByte = data[i];
-		if (!(trackByte & 0x80))
-			continue;
-        
-		if (trackByte != 0xff)
-			isSync = false;
-		
-        writeNibble(trackByte, isSync ? 40 : 32);
-	}
+	for (DIInt i = 0; i < track.data.size(); i++)
+        if (track.data[i] >= 0x80)
+            writeNibble(track.data[i], 32);
 	
     trackData[trackIndex].resize(getStreamOffset());
     
@@ -556,7 +589,7 @@ bool DIApple525DiskStorage::decodeGCR53Track(DITrack &track, DIInt trackIndex)
     {
 		DIInt sectorIndex = dos32SectorOrder[i];
         
-		if (!readGCR53AddressField(trackIndex, sectorIndex))
+		if (!readGCR53AddressField(trackIndex / 4, sectorIndex))
 			return false;
         
 		if (!readGCR53DataField(&track.data[sectorIndex * SECTOR_SIZE]))
@@ -566,15 +599,14 @@ bool DIApple525DiskStorage::decodeGCR53Track(DITrack &track, DIInt trackIndex)
 	return true;
 }
 
-bool DIApple525DiskStorage::decodeGCR62Track(DITrack &track, DIInt trackIndex,
-                                             DITrackFormat trackFormat)
+bool DIApple525DiskStorage::decodeGCR62Track(DITrack &track, DIInt trackIndex)
 {
     setStreamData(trackData[trackIndex]);
     
     if (!readNibble())
         return false;
     
-    DIInt *sectorOrder = getSectorOrder(trackFormat);
+    const DIInt *sectorOrder = getSectorOrder(track.format);
     
     track.data.resize(GCR62_TRACKSIZE);
     
@@ -582,10 +614,10 @@ bool DIApple525DiskStorage::decodeGCR62Track(DITrack &track, DIInt trackIndex,
     {
 		DIInt sectorIndex = sectorOrder[i];
         
-		if (!readGCR53AddressField(trackIndex, sectorIndex))
+		if (!readGCR62AddressField(trackIndex / 4, i))
 			return false;
         
-		if (!readGCR53DataField(&track.data[sectorIndex * SECTOR_SIZE]))
+		if (!readGCR62DataField(&track.data[sectorIndex * SECTOR_SIZE]))
 			return false;
 	}
 	
@@ -692,15 +724,21 @@ void DIApple525DiskStorage::writeGCR62DataField(DIChar *data)
 
 bool DIApple525DiskStorage::readGCR53AddressField(DIInt trackIndex, DIInt sectorIndex)
 {
-	for (DIInt i = 0; i < 2 * (DEFAULT_TRACKSIZE / 8); i++)
+    DIInt n = 0;
+    
+    while (n < 2 * (DEFAULT_TRACKSIZE / 8))
     {
+        n++;
 		if (readNibble() != 0xd5)
 			continue;
+        n++;
 		if (readNibble() != 0xaa)
 			continue;
+        n++;
 		if (readNibble() != 0xb5)
 			continue;
 		
+        n += 8;
 		DIChar readVolume = readFMValue();
 		DIChar readTrackIndex = readFMValue();
 		DIChar readSectorIndex = readFMValue();
@@ -713,8 +751,10 @@ bool DIApple525DiskStorage::readGCR53AddressField(DIInt trackIndex, DIInt sector
 		if (readSectorIndex != sectorIndex)
 			continue;
 		
+        n++;
 		if (readNibble() != 0xde)
 			continue;
+        n++;
 		if (readNibble() != 0xaa)
 			continue;
 		
@@ -726,15 +766,21 @@ bool DIApple525DiskStorage::readGCR53AddressField(DIInt trackIndex, DIInt sector
 
 bool DIApple525DiskStorage::readGCR62AddressField(DIInt trackIndex, DIInt sectorIndex)
 {
-	for (DIInt i = 0; i < 2 * (DEFAULT_TRACKSIZE / 8); i++)
+    DIInt n = 0;
+    
+    while (n < 2 * (DEFAULT_TRACKSIZE / 8))
     {
+        n++;
 		if (readNibble() != 0xd5)
 			continue;
+        n++;
 		if (readNibble() != 0xaa)
 			continue;
+        n++;
 		if (readNibble() != 0x96)
 			continue;
 		
+        n += 8;
 		DIChar readVolume = readFMValue();
 		DIChar readTrackIndex = readFMValue();
 		DIChar readSectorIndex = readFMValue();
@@ -747,8 +793,10 @@ bool DIApple525DiskStorage::readGCR62AddressField(DIInt trackIndex, DIInt sector
 		if (readSectorIndex != sectorIndex)
 			continue;
 		
+        n++;
 		if (readNibble() != 0xde)
 			continue;
+        n++;
 		if (readNibble() != 0xaa)
 			continue;
 		
@@ -762,7 +810,7 @@ bool DIApple525DiskStorage::readGCR53DataField(DIChar *data)
 {
 	memset(data, 0, SECTOR_SIZE);
 	
-	for (DIInt i = 0; i < 30; i++)
+	for (DIInt j = 0; j < 30; j++)
     {
 		if (readNibble() != 0xd5)
 			continue;
@@ -827,7 +875,7 @@ bool DIApple525DiskStorage::readGCR62DataField(DIChar *data)
 {
 	const DIChar swapBit01[] = { 0x00, 0x02, 0x01, 0x03 };
 	
-	for (DIInt i = 0; i < 12; i++)
+	for (DIInt j = 0; j < 12; j++)
     {
 		if (readNibble() != 0xd5)
 			continue;
@@ -1005,10 +1053,11 @@ DIChar DIApple525DiskStorage::readNibble()
 {
     DIChar value = 0;
     
-    for (DIInt bitNum = 0; bitNum < streamSize; bitNum++)
+    for (DIInt i = 0; i < streamSize; i++)
     {
         value <<= 1;
-        value |= streamData[(streamOffset + bitNum) % streamSize] & 0x1;
+        value |= streamData[streamOffset++] & 0x1;
+        streamOffset %= streamSize;
         
         if (value & 0x80)
             return value;

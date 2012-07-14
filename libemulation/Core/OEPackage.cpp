@@ -10,13 +10,6 @@
 
 #include <fstream>
 
-#ifdef _WIN32
-#include <windows.h>
-#else
-#include <sys/stat.h>
-#include <dirent.h>
-#endif
-
 #include "OEPackage.h"
 
 OEPackage::OEPackage()
@@ -37,19 +30,21 @@ bool OEPackage::open(const string& path)
     this->path = path;
     
     bool isPackage;
-    if (pathExists(path))
-        isPackage = isDirectory(path);
+    if (isPathValid(path))
+        isPackage = isPathADirectory(path);
     else
-        isPackage = (path.substr(path.size() - 1, 1) == OE_PATH_SEPARATOR);
+        isPackage = (path.substr(path.size() - 1, 1) == PATH_SEPARATOR);
     
     if (isPackage)
     {
         createDirectory(path);
-        is_open = pathExists(path);
+        
+        is_open = isPathValid(path);
     }
     else
     {
         zip = zip_open(path.c_str(), ZIP_CREATE, NULL);
+        
         is_open = (zip != NULL);
     }
     
@@ -67,10 +62,11 @@ void OEPackage::close()
     
     if (zip)
         zip_close(zip);
+    
     zip = NULL;
 }
 
-bool OEPackage::readFile(const string& packagePath, OEData *data)
+bool OEPackage::read(const string& packagePath, OEData *data)
 {
     bool error = true;
     
@@ -96,27 +92,15 @@ bool OEPackage::readFile(const string& packagePath, OEData *data)
     }
     else
     {
-        ifstream file((path + OE_PATH_SEPARATOR + packagePath).c_str());
+        string filePath = path + PATH_SEPARATOR + packagePath;
         
-        if (file.is_open())
-        {
-            file.seekg(0, ios::end);
-            streampos size = file.tellg();
-            file.seekg(0, ios::beg);
-            
-            data->resize((size_t) size);
-            file.read((char *) &data->front(), data->size());
-            
-            error = !file.good();
-            
-            file.close();
-        }
+        error = !readFile(filePath, data);
     }
     
     return !error;
 }
 
-bool OEPackage::writeFile(const string& packagePath, OEData *data)
+bool OEPackage::write(const string& packagePath, OEData *data)
 {
     bool error = true;
     
@@ -143,14 +127,9 @@ bool OEPackage::writeFile(const string& packagePath, OEData *data)
     }
     else
     {
-        ofstream file((path + OE_PATH_SEPARATOR + packagePath).c_str());
+        string filePath = path + PATH_SEPARATOR + packagePath;
         
-        if (file.is_open())
-        {
-            file.write((char *) &data->front(), data->size());
-            error = !file.good();
-            file.close();
-        }
+        error = !writeFile(filePath, data);
     }
     
     return !error;
@@ -160,85 +139,5 @@ bool OEPackage::remove()
 {
     close();
     
-    return removeItemAtPath(path);
-}
-
-bool OEPackage::pathExists(const string& path)
-{
-#ifdef _WIN32
-    return (GetFileAttributes(path.c_str()) != INVALID_FILE_ATTRIBUTES);
-#else
-    struct stat statbuf;
-    return (stat(path.c_str(), &statbuf) == 0);
-#endif
-}
-
-bool OEPackage::isDirectory(const string& path)
-{
-#ifdef _WIN32
-    return (GetFileAttributes(path.c_str()) & FILE_ATTRIBUTE_DIRECTORY);
-#else
-    struct stat statbuf;
-    if (stat(path.c_str(), &statbuf) != 0)
-        return false;
-    
-    return (statbuf.st_mode & S_IFDIR);
-#endif
-}
-
-bool OEPackage::createDirectory(const string& path)
-{
-#ifdef _WIN32
-    return CreateDirectory(path.c_str())
-#else
-    return (mkdir(path.c_str(), 0777) == 0);
-#endif
-}
-
-bool OEPackage::removeItemAtPath(const string& path)
-{
-#ifdef _WIN32
-    if (!isDirectory(path))
-        return DeleteFile(path.c_str());
-    
-    string dirPath = path + OE_PATH_SEPARATOR + "*";
-    WIN32_FIND_DATA findFileData;
-    HANDLE hFind = FindFirstFile(dirPath.c_str(), &findFileData);
-    if (hFind == INVALID_HANDLE_VALUE)
-        return false;
-    
-    while (FindNextFile(hFind, &findFileData))
-    {
-        string fileName = findFileData.cFileName;
-        if ((fileName == ".") || (fileName == ".."))
-            continue;
-        
-        removeItemAtPath(path + OE_PATH_SEPARATOR + fileName);
-    }
-    
-    FindClose(hFind);
-    
-    return RemoveDirectory(path);
-#else
-    if (!isDirectory(path))
-        return (unlink(path.c_str()) == 0);
-    
-    DIR *dir;
-    if (!(dir = opendir(path.c_str())))
-        return false;
-    
-    struct dirent *dp;
-    while ((dp = readdir(dir)) != NULL)
-    {
-        string fileName = string(dp->d_name);
-        if ((fileName == ".") || (fileName == ".."))
-            continue;
-        
-        removeItemAtPath(path + OE_PATH_SEPARATOR + fileName);
-    }
-    
-    closedir(dir);
-    
-    return rmdir(path.c_str());
-#endif
+    return removePath(path);
 }

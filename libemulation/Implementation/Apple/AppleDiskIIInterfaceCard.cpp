@@ -38,6 +38,9 @@ AppleDiskIIInterfaceCard::AppleDiskIIInterfaceCard()
     driveOn = false;
     sequencerMode = 0;
     
+    sequencerState = false;
+    dataRegister = 0;
+    
     currentDrive = &dummyDrive;
     reset = false;
     timerOn = false;
@@ -54,14 +57,6 @@ bool AppleDiskIIInterfaceCard::setValue(string name, string value)
 		driveOn = getOEInt(value);
 	else if (name == "driveSel")
 		driveSel = getOEInt(value);
-	else if (name == "load")
-        OESetBit(sequencerMode, SEQUENCER_LOAD, getOEInt(value));
-	else if (name == "write")
-        OESetBit(sequencerMode, SEQUENCER_WRITE, getOEInt(value));
-	else if (name == "sequencerState")
-		sequencerState = getOEInt(value);
-	else if (name == "dataRegister")
-		dataRegister = getOEInt(value);
 	else
 		return false;
     
@@ -76,14 +71,6 @@ bool AppleDiskIIInterfaceCard::getValue(string name, string& value)
 		value = getString(driveOn);
 	else if (name == "driveSel")
 		value = getString(driveSel);
-	else if (name == "load")
-        value = getString(OEGetBit(sequencerMode, SEQUENCER_LOAD));
-	else if (name == "write")
-        value = getString(OEGetBit(sequencerMode, SEQUENCER_WRITE));
-	else if (name == "sequencerState")
-		value = getString(sequencerState);
-	else if (name == "dataRegister")
-		value = getString(dataRegister);
 	else
 		return false;
 	
@@ -459,16 +446,13 @@ void AppleDiskIIInterfaceCard::updateSequencer()
                 dataRegister |= senseInput;                
             }
             
-            sequencerState = 0;
+            sequencerState = false;
             
 			break;
 		}
         case SEQUENCER_WRITESHIFT:
 		case SEQUENCER_WRITELOAD:
         {
-            sequencerState += (cycles - lastCycles);
-            sequencerState &= 0x3;
-            
 //logMessage("W: " + getString(bitNum) + " " + getString(cycles - lastCycles) + " " + getString(sequencerState));
             
             if (bitNum > SEQUENCER_WRITE_SKIP)

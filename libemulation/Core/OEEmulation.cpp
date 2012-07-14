@@ -322,7 +322,7 @@ bool OEEmulation::configureComponent(string id, xmlNodePtr children)
                 if (hasValueProperty(dataSrc, "packagePath"))
                 {
                     if (package)
-                        dataRead = package->readFile(parsedSrc, &data);
+                        dataRead = package->read(parsedSrc, &data);
                 }
                 else
                     dataRead = readFile(parsedSrc, &data);
@@ -488,7 +488,7 @@ bool OEEmulation::reconfigureComponent(string id, xmlNodePtr children)
                 
                 if (component->getData(name, &data) && data)
                 {
-                    if (!package->writeFile(parsedSrc, data))
+                    if (!package->write(parsedSrc, data))
                         logMessage("could not store data property '" + dataSrc + "'");
                 }
             }

@@ -30,11 +30,13 @@ class DIApple525DiskStorage
 {
 public:
     DIApple525DiskStorage();
+    ~DIApple525DiskStorage();
     
     bool open(string path);
     bool open(DIData& data);
     bool close();
     
+    string getPath();
     bool isWriteEnabled();
     string getFormatLabel();
     
@@ -72,24 +74,23 @@ private:
     DIChar gcrChecksum;  
     bool gcrError;
     
-    bool open(DIBackingStore *backingStore, string pathExtension);
+    bool open(DIBackingStore *backingStore);
     
-    bool checkLogicalDisk(DIBackingStore *backingStore,
-                          DITrackFormat& trackFormat, DIInt& trackSize);
-    
-    DIInt *getSectorOrder(DITrackFormat trackFormat);
-    bool getLogicalDisk(vector<DIData>& disk);
+    bool validateImageSize(DIBackingStore *backingStore,
+                           DITrackFormat& trackFormat, DIInt& trackSize);
+    const DIInt *getSectorOrder(DITrackFormat trackFormat);
     
     bool encodeGCR53Track(DIInt trackIndex, DITrack& track);
     bool encodeGCR62Track(DIInt trackIndex, DITrack& track);
     bool encodeNIBTrack(DIInt trackIndex, DITrack& track);
     bool decodeGCR53Track(DITrack& track, DIInt trackIndex);
-    bool decodeGCR62Track(DITrack& track, DIInt trackIndex, DITrackFormat trackFormat);
+    bool decodeGCR62Track(DITrack& track, DIInt trackIndex);
     
     void writeGCR53AddressField(DIInt trackIndex, DIInt sectorIndex);
     void writeGCR62AddressField(DIInt trackIndex, DIInt sectorIndex);
     void writeGCR53DataField(DIChar *data);
     void writeGCR62DataField(DIChar *data);
+    
     bool readGCR53AddressField(DIInt trackIndex, DIInt sectorIndex);
     bool readGCR62AddressField(DIInt trackIndex, DIInt sectorIndex);
     bool readGCR53DataField(DIChar *data);

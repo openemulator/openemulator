@@ -65,7 +65,7 @@ bool AppleDiskDrive525::setValue(string name, string value)
 bool AppleDiskDrive525::getValue(string name, string& value)
 {
 	if (name == "diskImage")
-		value = diskImagePath;
+		value = diskStorage.getPath();
 	else if (name == "track")
 		value = getString(trackIndex);
 	else if (name == "forceWriteProtected")
@@ -166,7 +166,7 @@ bool AppleDiskDrive525::postMessage(OEComponent *sender, int message, void *data
             return false;
 			
 		case STORAGE_GET_MOUNTPATH:
-            *((string *)data) = diskImagePath;
+            *((string *)data) = diskStorage.getPath();
             
             return true;
 			
@@ -235,9 +235,6 @@ void AppleDiskDrive525::notify(OEComponent *sender, int notification, void *data
     OESInt newTrackIndex = trackIndex;
     
     updateStepper(newTrackIndex, phaseControl);
-	
-    if (trackIndex == newTrackIndex)
-        return;
     
 	if (newTrackIndex < 0)
     {
@@ -254,10 +251,13 @@ void AppleDiskDrive525::notify(OEComponent *sender, int notification, void *data
         headPlayer->postMessage(this, AUDIOPLAYER_PLAY, NULL);
 	}
     
+    if (trackIndex == newTrackIndex)
+        return;
+    
     headPlayer->postMessage(this, AUDIOPLAYER_STOP, NULL);
     headPlayer->postMessage(this, AUDIOPLAYER_PLAY, NULL);
-    
-    logMessage(getString((float) (newTrackIndex / 4.0)));
+	
+//    logMessage(getString((float) (newTrackIndex / 4.0)));
     
     updateTrack(newTrackIndex);
 }
@@ -286,7 +286,7 @@ OEChar AppleDiskDrive525::read(OEAddress address)
         // MC3470 spurious bit behavior
         zeroCount++;
         if (zeroCount > 3)
-			value = !(random() & 0x1f);
+			value = ((random() & 0x1f) == 0x1f);
     }
     
     return value;
@@ -401,8 +401,6 @@ bool AppleDiskDrive525::openDiskImage(string path)
     if (!diskStorage.open(path))
         return false;
     
-    diskImagePath = path;
-    
     updateTrack(trackIndex);
     
     return true;
@@ -411,8 +409,6 @@ bool AppleDiskDrive525::openDiskImage(string path)
 bool AppleDiskDrive525::closeDiskImage()
 {
     bool success = diskStorage.close();
-    
-    diskImagePath = "";
     
     updateTrack(trackIndex);
     

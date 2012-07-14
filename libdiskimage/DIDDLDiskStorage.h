@@ -1,20 +1,20 @@
 
 /**
  * libdiskimage
- * Disk Image V2D
+ * Disk Image DDL
  * (C) 2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Accesses D5MI storage
+ * Accesses Disk Description Language storage
  */
 
 #include "DIBackingStore.h"
 #include "DIDiskStorage.h"
 
-class DIV2DDiskStorage : public DIDiskStorage
+class DIDDLDiskStorage : public DIDiskStorage
 {
 public:
-    DIV2DDiskStorage();
+    DIDDLDiskStorage();
     
     bool open(DIBackingStore *file);
     void close();
@@ -28,7 +28,4 @@ public:
     
 private:
     DIBackingStore *backingStore;
-    
-    vector<DIInt> trackOffset;
-    vector<DIInt> trackSize;
 };

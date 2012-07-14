@@ -17,8 +17,7 @@ DILogicalDiskStorage::DILogicalDiskStorage()
 
 bool DILogicalDiskStorage::open(DIBackingStore *backingStore,
                                 DIDiskType diskType, DIInt headNum,
-                                float rotationSpeed, DIInt tracksPerInch,
-                                DITrackFormat trackFormat, DIInt trackSize)
+                                DIInt tracksPerInch, DITrackFormat trackFormat, DIInt trackSize)
 {
     close();
     
@@ -26,7 +25,6 @@ bool DILogicalDiskStorage::open(DIBackingStore *backingStore,
     
     this->diskType = diskType;
     this->headNum = headNum;
-    this->rotationSpeed = rotationSpeed;
     this->tracksPerInch = tracksPerInch;
     
     this->trackFormat = trackFormat;
@@ -53,16 +51,6 @@ DIDiskType DILogicalDiskStorage::getDiskType()
     return diskType;
 }
 
-DIInt DILogicalDiskStorage::getHeadNum()
-{
-    return headNum;
-}
-
-float DILogicalDiskStorage::getRotationSpeed()
-{
-    return rotationSpeed;
-}
-
 DIInt DILogicalDiskStorage::getTracksPerInch()
 {
     return tracksPerInch;
@@ -84,6 +72,7 @@ bool DILogicalDiskStorage::readTrack(DIInt headIndex, DIInt trackIndex, DITrack&
     track.format = trackFormat;
     
     DIInt index = trackIndex * headNum + headIndex;
+    
     return backingStore->read(trackSize * index, &track.data.front(), trackSize);
 }
 
@@ -92,5 +81,9 @@ bool DILogicalDiskStorage::writeTrack(DIInt headIndex, DIInt trackIndex, DITrack
     track.data.resize(trackSize);
     
     DIInt index = trackIndex * headNum + headIndex;
+    
+    if ((trackSize * index + track.data.size()) > backingStore->getSize())
+        return false;
+    
     return backingStore->write(trackSize * index, &track.data.front(), trackSize);
 }

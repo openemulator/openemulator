@@ -19,6 +19,7 @@ class DIVMDKBlockStorage : public DIBlockStorage
 {
 public:
     DIVMDKBlockStorage();
+    ~DIVMDKBlockStorage();
     
     bool open(DIBackingStore *backingStore);
     void close();

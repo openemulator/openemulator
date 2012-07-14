@@ -210,6 +210,8 @@
 		00B019B513501507001E01BB /* OEDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B019B313501507001E01BB /* OEDevice.cpp */; };
 		00B5709E10863C2A00CDE4A7 /* TemplateChooserWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B5709D10863C2A00CDE4A7 /* TemplateChooserWindowController.m */; };
 		00B5CB94136F0B6C007A7BED /* AppleSilentype.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B5CB92136F0B6C007A7BED /* AppleSilentype.cpp */; };
+		00B6A2DF15B1FC97005E7A5C /* DIDDLDiskStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B6A2DD15B1FC97005E7A5C /* DIDDLDiskStorage.cpp */; };
+		00B6A2E015B1FC97005E7A5C /* DIDDLDiskStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B6A2DE15B1FC97005E7A5C /* DIDDLDiskStorage.h */; };
 		00B7C646147B4B4100BB7E6B /* JoystickMapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B7C645147B4B4100BB7E6B /* JoystickMapper.cpp */; };
 		00B7C64A147B5B2B00BB7E6B /* AppleIIGamePort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B7C649147B5B2B00BB7E6B /* AppleIIGamePort.cpp */; };
 		00B974B410701DDA00BD1402 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = 00B974AD10701DCD00BD1402 /* sounds */; };
@@ -217,6 +219,9 @@
 		00BDB1F713863188004DF2AF /* CanvasPrintView.m in Sources */ = {isa = PBXBuildFile; fileRef = 00BDB1F613863188004DF2AF /* CanvasPrintView.m */; };
 		00C6C0C110602151004D084B /* roms in Resources */ = {isa = PBXBuildFile; fileRef = 00C6C08810602151004D084B /* roms */; };
 		00CAD7D912A04C22002B92E5 /* Emulation.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00CAD7D712A04C22002B92E5 /* Emulation.xib */; };
+		00CF208015B0D92200DA8E08 /* util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00CF206F15B0D8C600DA8E08 /* util.cpp */; };
+		00CF208115B0D92600DA8E08 /* util.h in Headers */ = {isa = PBXBuildFile; fileRef = 00CF207015B0D8C600DA8E08 /* util.h */; };
+		00CF208215B0DB5700DA8E08 /* libutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00CF207615B0D8D300DA8E08 /* libutil.a */; };
 		00D6729D12C9A256009F0D9E /* EmulationShow.png in Resources */ = {isa = PBXBuildFile; fileRef = 00E442931278727600713A05 /* EmulationShow.png */; };
 		00D75C691399FFDB004AA153 /* LibraryTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D75C681399FFD9004AA153 /* LibraryTableCell.m */; };
 		00D7E410158D1E4B00EBF8FA /* AddressMasker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00D7E40E158D1E4B00EBF8FA /* AddressMasker.cpp */; };
@@ -301,6 +306,27 @@
 			proxyType = 1;
 			remoteGlobalIDString = 006EECA30FCA5C31003D2C8D;
 			remoteInfo = emulator;
+		};
+		00CF207A15B0D91600DA8E08 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 00365CF41516F3D800978DF6;
+			remoteInfo = diskimage;
+		};
+		00CF207C15B0D91B00DA8E08 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 00CF207515B0D8D300DA8E08;
+			remoteInfo = util;
+		};
+		00CF207E15B0D91C00DA8E08 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 00CF207515B0D8D300DA8E08;
+			remoteInfo = util;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -537,6 +563,8 @@
 		00B5709D10863C2A00CDE4A7 /* TemplateChooserWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TemplateChooserWindowController.m; sourceTree = "<group>"; };
 		00B5CB92136F0B6C007A7BED /* AppleSilentype.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleSilentype.cpp; sourceTree = "<group>"; };
 		00B5CB93136F0B6C007A7BED /* AppleSilentype.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleSilentype.h; sourceTree = "<group>"; };
+		00B6A2DD15B1FC97005E7A5C /* DIDDLDiskStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DIDDLDiskStorage.cpp; sourceTree = "<group>"; };
+		00B6A2DE15B1FC97005E7A5C /* DIDDLDiskStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DIDDLDiskStorage.h; sourceTree = "<group>"; };
 		00B7C644147B4B2B00BB7E6B /* JoystickMapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JoystickMapper.h; sourceTree = "<group>"; };
 		00B7C645147B4B4100BB7E6B /* JoystickMapper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JoystickMapper.cpp; sourceTree = "<group>"; };
 		00B7C647147B5B2300BB7E6B /* AppleIIGamePort.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleIIGamePort.h; sourceTree = "<group>"; };
@@ -597,6 +625,9 @@
 		00BDB1F613863188004DF2AF /* CanvasPrintView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CanvasPrintView.m; sourceTree = "<group>"; };
 		00C6C08810602151004D084B /* roms */ = {isa = PBXFileReference; lastKnownFileType = folder; path = roms; sourceTree = "<group>"; };
 		00CAD7D812A04C22002B92E5 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Emulation.xib; sourceTree = "<group>"; };
+		00CF206F15B0D8C600DA8E08 /* util.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = util.cpp; path = libutil/util.cpp; sourceTree = "<group>"; };
+		00CF207015B0D8C600DA8E08 /* util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = util.h; path = libutil/util.h; sourceTree = "<group>"; };
+		00CF207615B0D8D300DA8E08 /* libutil.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libutil.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		00D225FA1350F9A100FC69B9 /* AudioInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioInterface.h; sourceTree = "<group>"; };
 		00D225FB1350F9A100FC69B9 /* CanvasInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanvasInterface.h; sourceTree = "<group>"; };
 		00D225FD1350F9A100FC69B9 /* DeviceInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceInterface.h; sourceTree = "<group>"; };
@@ -689,26 +720,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		00CF207315B0D8D300DA8E08 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8D15AC330486D014006FF6A4 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				00039F0112B04EAA0025D374 /* libemulation.a in Frameworks */,
 				00039E9B12B042210025D374 /* libemulation-hal.a in Frameworks */,
-				001F56F90FD1E8E500EA246A /* Sparkle.framework in Frameworks */,
-				0054E4A11131BE7A006D32D9 /* Cocoa.framework in Frameworks */,
-				0054E4A71131BE8A006D32D9 /* OpenGL.framework in Frameworks */,
-				0054E6311131BEE7006D32D9 /* Carbon.framework in Frameworks */,
-				0054E66C1131BF58006D32D9 /* Quartz.framework in Frameworks */,
-				00039FD112B04F6C0025D374 /* libxml2.dylib in Frameworks */,
-				00F4D0BF12E2E42F00B7F5E6 /* ApplicationServices.framework in Frameworks */,
-				003B167C12EE27ED003FB8F6 /* CoreAudioKit.framework in Frameworks */,
-				003B16B212EE2A05003FB8F6 /* AudioToolbox.framework in Frameworks */,
-				003B16B712EE2A0D003FB8F6 /* AudioUnit.framework in Frameworks */,
-				003B16C312EE2A18003FB8F6 /* CoreAudio.framework in Frameworks */,
-				003B16C812EE2A61003FB8F6 /* CoreServices.framework in Frameworks */,
-				008CA97E147803E500B9F5D0 /* IOKit.framework in Frameworks */,
 				00365CFA1516F4E700978DF6 /* libdiskimage.a in Frameworks */,
+				00CF208215B0DB5700DA8E08 /* libutil.a in Frameworks */,
+				00039FD112B04F6C0025D374 /* libxml2.dylib in Frameworks */,
 				00F5EC2515ABBFCE004D056E /* libogg.a in Frameworks */,
 				00F5EC2715ABBFCE004D056E /* libportaudio.a in Frameworks */,
 				00F5EC2815ABBFCE004D056E /* libsamplerate.a in Frameworks */,
@@ -721,6 +748,18 @@
 				00F5EC3315ABE855004D056E /* libz.a in Frameworks */,
 				00F5EC3515ABE868004D056E /* libFLAC.a in Frameworks */,
 				00F5EC3715ABE87A004D056E /* libvorbisenc.a in Frameworks */,
+				001F56F90FD1E8E500EA246A /* Sparkle.framework in Frameworks */,
+				0054E4A11131BE7A006D32D9 /* Cocoa.framework in Frameworks */,
+				0054E4A71131BE8A006D32D9 /* OpenGL.framework in Frameworks */,
+				0054E6311131BEE7006D32D9 /* Carbon.framework in Frameworks */,
+				0054E66C1131BF58006D32D9 /* Quartz.framework in Frameworks */,
+				00F4D0BF12E2E42F00B7F5E6 /* ApplicationServices.framework in Frameworks */,
+				003B167C12EE27ED003FB8F6 /* CoreAudioKit.framework in Frameworks */,
+				003B16B212EE2A05003FB8F6 /* AudioToolbox.framework in Frameworks */,
+				003B16B712EE2A0D003FB8F6 /* AudioUnit.framework in Frameworks */,
+				003B16C312EE2A18003FB8F6 /* CoreAudio.framework in Frameworks */,
+				003B16C812EE2A61003FB8F6 /* CoreServices.framework in Frameworks */,
+				008CA97E147803E500B9F5D0 /* IOKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1112,6 +1151,15 @@
 			path = libemulation/Interface/IEEE;
 			sourceTree = SOURCE_ROOT;
 		};
+		00CF206D15B0D8B400DA8E08 /* libutil */ = {
+			isa = PBXGroup;
+			children = (
+				00CF206F15B0D8C600DA8E08 /* util.cpp */,
+				00CF207015B0D8C600DA8E08 /* util.h */,
+			);
+			name = libutil;
+			sourceTree = "<group>";
+		};
 		00D225F91350F9A100FC69B9 /* Host */ = {
 			isa = PBXGroup;
 			children = (
@@ -1157,6 +1205,8 @@
 				0019177B1543D319009A301E /* DIDiskStorage.h */,
 				001917811543D346009A301E /* DILogicalDiskStorage.cpp */,
 				0019177F1543D337009A301E /* DILogicalDiskStorage.h */,
+				00B6A2DD15B1FC97005E7A5C /* DIDDLDiskStorage.cpp */,
+				00B6A2DE15B1FC97005E7A5C /* DIDDLDiskStorage.h */,
 				00140E03152D376400D4795D /* DIFDIDiskStorage.cpp */,
 				00140E01152D375D00D4795D /* DIFDIDiskStorage.h */,
 				00140E11152D395900D4795D /* DIV2DDiskStorage.cpp */,
@@ -1188,6 +1238,7 @@
 				00039E7C12B03F660025D374 /* libemulation-hal.a */,
 				00039EFE12B04E910025D374 /* libemulation.a */,
 				00365CF51516F3D800978DF6 /* libdiskimage.a */,
+				00CF207615B0D8D300DA8E08 /* libutil.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1199,6 +1250,7 @@
 				00039E3C12B03BA90025D374 /* libemulation-hal */,
 				00B8864512A3923D0052B7A4 /* libemulation */,
 				00E473201475689C00F367B7 /* libdiskimage */,
+				00CF206D15B0D8B400DA8E08 /* libutil */,
 				001750AF13A50A690043E2ED /* Docs and Scripts */,
 				19C28FB0FE9D524F11CA2CBB /* Products */,
 			);
@@ -1355,6 +1407,7 @@
 				00AB968E157F9F1800EDACD5 /* DIATABlockStorage.h in Headers */,
 				00AB968F157F9F1800EDACD5 /* DIApple525DiskStorage.h in Headers */,
 				00AB9690157F9F1800EDACD5 /* DIApple35DiskStorage.h in Headers */,
+				00B6A2E015B1FC97005E7A5C /* DIDDLDiskStorage.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1442,6 +1495,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		00CF207415B0D8D300DA8E08 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				00CF208115B0D92600DA8E08 /* util.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
@@ -1473,6 +1534,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				00CF207F15B0D91C00DA8E08 /* PBXTargetDependency */,
 			);
 			name = diskimage;
 			productName = diskimage;
@@ -1490,10 +1552,29 @@
 			buildRules = (
 			);
 			dependencies = (
+				00CF207B15B0D91600DA8E08 /* PBXTargetDependency */,
+				00CF207D15B0D91B00DA8E08 /* PBXTargetDependency */,
 			);
 			name = emulation;
 			productName = emulator;
 			productReference = 00039EFE12B04E910025D374 /* libemulation.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		00CF207515B0D8D300DA8E08 /* util */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 00CF207715B0D8D300DA8E08 /* Build configuration list for PBXNativeTarget "util" */;
+			buildPhases = (
+				00CF207215B0D8D300DA8E08 /* Sources */,
+				00CF207315B0D8D300DA8E08 /* Frameworks */,
+				00CF207415B0D8D300DA8E08 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = util;
+			productName = util;
+			productReference = 00CF207615B0D8D300DA8E08 /* libutil.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 		8D15AC270486D014006FF6A4 /* OpenEmulator */ = {
@@ -1546,6 +1627,7 @@
 				00039E7B12B03F650025D374 /* emulation-hal */,
 				006EECA30FCA5C31003D2C8D /* emulation */,
 				00365CF41516F3D800978DF6 /* diskimage */,
+				00CF207515B0D8D300DA8E08 /* util */,
 			);
 		};
 /* End PBXProject section */
@@ -1655,6 +1737,7 @@
 				007DEFBB1540608300A9CC01 /* DIRAWBlockStorage.cpp in Sources */,
 				0019177E1543D321009A301E /* DIDiskStorage.cpp in Sources */,
 				001917821543D347009A301E /* DILogicalDiskStorage.cpp in Sources */,
+				00B6A2DF15B1FC97005E7A5C /* DIDDLDiskStorage.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1721,6 +1804,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		00CF207215B0D8D300DA8E08 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				00CF208015B0D92200DA8E08 /* util.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8D15AC300486D014006FF6A4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1766,6 +1857,21 @@
 			isa = PBXTargetDependency;
 			target = 006EECA30FCA5C31003D2C8D /* emulation */;
 			targetProxy = 006EECE50FCA6097003D2C8D /* PBXContainerItemProxy */;
+		};
+		00CF207B15B0D91600DA8E08 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 00365CF41516F3D800978DF6 /* diskimage */;
+			targetProxy = 00CF207A15B0D91600DA8E08 /* PBXContainerItemProxy */;
+		};
+		00CF207D15B0D91B00DA8E08 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 00CF207515B0D8D300DA8E08 /* util */;
+			targetProxy = 00CF207C15B0D91B00DA8E08 /* PBXContainerItemProxy */;
+		};
+		00CF207F15B0D91C00DA8E08 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 00CF207515B0D8D300DA8E08 /* util */;
+			targetProxy = 00CF207E15B0D91C00DA8E08 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1893,11 +1999,42 @@
 			};
 			name = Release;
 		};
+		00CF207815B0D8D300DA8E08 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		00CF207915B0D8D300DA8E08 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		C05733C808A9546B00998B17 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_SEARCH_PATHS = macosx;
+				FRAMEWORK_SEARCH_PATHS = (
+					macosx,
+					"\"$(SRCROOT)/macosx\"",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/opt/local/lib,
@@ -1908,7 +2045,10 @@
 		C05733C908A9546B00998B17 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = macosx;
+				FRAMEWORK_SEARCH_PATHS = (
+					macosx,
+					"\"$(SRCROOT)/macosx\"",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/opt/local/lib,
@@ -1993,6 +2133,15 @@
 			buildConfigurations = (
 				006EECA50FCA5C32003D2C8D /* Debug */,
 				006EECA60FCA5C32003D2C8D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		00CF207715B0D8D300DA8E08 /* Build configuration list for PBXNativeTarget "util" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				00CF207815B0D8D300DA8E08 /* Debug */,
+				00CF207915B0D8D300DA8E08 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

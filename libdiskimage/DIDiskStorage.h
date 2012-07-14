@@ -47,8 +47,6 @@ public:
     
     virtual bool isWriteEnabled();
     virtual DIDiskType getDiskType();
-    virtual DIInt getHeadNum();
-    virtual float getRotationSpeed();
     virtual DIInt getTracksPerInch();
     virtual string getFormatLabel();
     

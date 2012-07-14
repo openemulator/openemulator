@@ -24,7 +24,7 @@ bool DIRAMBackingStore::open(DIData& data)
     return true;
 }
 
-void DIRAMBackingStore::clear()
+void DIRAMBackingStore::create()
 {
     data.clear();
 }

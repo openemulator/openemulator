@@ -22,14 +22,11 @@ public:
     
     bool open(DIBackingStore *backingStore,
               DIDiskType diskType, DIInt headNum,
-              float rotationSpeed, DIInt tracksPerInch,
-              DITrackFormat trackFormat, DIInt trackSize);
+              DIInt tracksPerInch, DITrackFormat trackFormat, DIInt trackSize);
     void close();
     
     bool isWriteEnabled();
     DIDiskType getDiskType();
-    DIInt getHeadNum();
-    float getRotationSpeed();
     DIInt getTracksPerInch();
     string getFormatLabel();
     
@@ -43,7 +40,6 @@ private:
     
     DIDiskType diskType;
     DIInt headNum;
-    float rotationSpeed;
     DIInt tracksPerInch;
     
     DITrackFormat trackFormat;

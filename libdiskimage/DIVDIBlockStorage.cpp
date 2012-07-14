@@ -117,6 +117,8 @@ void DIVDIBlockStorage::close()
     vdiDataOffset = 0;
     vdiBlockSize = 0;
     vdiAllocatedBlockNum = 0;
+    
+    vdiBlockMap.clear();
 }
 
 bool DIVDIBlockStorage::isWriteEnabled()
@@ -158,6 +160,9 @@ bool DIVDIBlockStorage::readBlocks(DIInt index, DIChar *buf, DIInt num)
 {
     for (; num; index++, buf += DI_BLOCKSIZE, num--)
     {
+        if (index >= blockNum)
+            return false;
+        
         DIInt vdiBlockMapIndex = index / vdiBlockSize;
         DIInt vdiBlockIndex = vdiBlockMap[vdiBlockMapIndex];
         
@@ -180,6 +185,9 @@ bool DIVDIBlockStorage::writeBlocks(DIInt index, const DIChar *buf, DIInt num)
 {
     for (; num; index++, buf += DI_BLOCKSIZE, num--)
     {
+        if (index >= blockNum)
+            return false;
+        
         DIInt vdiBlockMapIndex = index / vdiBlockSize;
         DIInt vdiBlockIndex = vdiBlockMap[vdiBlockMapIndex];
         

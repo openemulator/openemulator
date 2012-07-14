@@ -1,21 +1,16 @@
 ==1.0.3==
-* Fix Disk II in Sherwood Forest
-* Add libdiskimage disk image write support
-* Check FDI disk images
-
 * Fix Apple Silentype Interface Card spurious data problems
 * Implement Apple Silentype print intensity
-
-* Fix remove Videx Videoterm
-* Fix replace monitor+emulation lock problem (happens when a monitor is replaced and selected)
-* Fix [CanvasView update] problem in paper view
-
 * Improve Disk II sounds
 * Add Apple Silentype sounds
 * Add Apple Graphics Tablet sounds
 
+* Fix Apple II Video problem when powering off and restarting in hires
+* Fix remove Videx Videoterm
+* Fix replace monitor+emulation lock problem (happens when a monitor is replaced and selected)
+* Fix [CanvasView update] problem in paper view
+
 ==1.0.4==
-* Use the Boost library for platform independence
 * Implement Apple III
 * Implement wxWidgets user interface
 * Implement Saturn RAMboard
@@ -31,6 +26,7 @@
 * Think of a way to implement a server that can be separated into the UNIX command line, like responding to calls using netcat (it should separate command and data mode, be able to dial with ATD, and respond with ATA, hang up with ATH. Send messages like OK, RING, CONNECT and NO CARRIER). It might also have set DCD when connected. Respond to "+++" and 1 second wait.
 * Refactorize PAAudio so an emulation is stopped while it is being configured. Increase thread priority
 * Implement Apple speaker tension/relax audio driver
+* Fix Disk II for: Sherwood Forest, Alkemstone, EOS, Last Gladiator, IAC#45, Wasteland
 * Mac OS X: fix window resizing when loading from disk (confusing emulation window size with canvas window size)
 
 ==1.0.5==
@@ -51,9 +47,11 @@
 * Implement Apple IIc 03
 * Implement Apple IIc plus
 * Implement Mountain Computer SuperTalker
+* Implement Mountain Computer Music System
+* Implement MIDI Card
 * Implement Mockingboard
 
-==1.1==
+==1.0.7==
 * Implement Apple IIGS ROM00, ROM01, ROM03
 
 ==Framework==

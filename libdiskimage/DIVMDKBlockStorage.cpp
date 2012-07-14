@@ -21,6 +21,11 @@ DIVMDKBlockStorage::DIVMDKBlockStorage()
     close();
 }
 
+DIVMDKBlockStorage::~DIVMDKBlockStorage()
+{
+    close();
+}
+
 bool DIVMDKBlockStorage::open(DIBackingStore *backingStore)
 {
     close();
@@ -110,6 +115,8 @@ void DIVMDKBlockStorage::close()
     directory2Block = 0;
     redundantDirectory = false;
     allocatedBlockNum = 0;
+    
+    metadata.clear();
 }
 
 bool DIVMDKBlockStorage::isWriteEnabled()
@@ -151,6 +158,9 @@ bool DIVMDKBlockStorage::readBlocks(DIInt index, DIChar *buf, DIInt num)
 {
     for (; num; index++, buf += DI_BLOCKSIZE, num--)
     {
+        if (index >= blockNum)
+            return false;
+        
         DIInt directoryIndex = index / directoryEntrySize;
         DIInt directoryEntry = metadata[directory1Block * DI_BLOCKSIZE / sizeof(DIInt) +
                                         directoryIndex];
@@ -177,6 +187,9 @@ bool DIVMDKBlockStorage::writeBlocks(DIInt index, const DIChar *buf, DIInt num)
 {
     for (; num; index++, buf += DI_BLOCKSIZE, num--)
     {
+        if (index >= blockNum)
+            return false;
+        
         DIInt directoryIndex = index / directoryEntrySize;
         DIInt directoryEntry = metadata[directory1Block * DI_BLOCKSIZE / sizeof(DIInt) +
                                         directoryIndex];
@@ -239,13 +252,13 @@ bool DIVMDKBlockStorage::parseDescriptor(DIBackingStore *backingStore,
             continue;
         
         // Process line
-        vector<string> tokens = strDISplit(line, '=');
+        vector<string> tokens = strsplit(line, '=');
         
         if (tokens.size() < 2)
             continue;
         
-        string key = trimDI(tokens[0]);
-        string value = strDIExcludeFilter(trimDI(tokens[1]), " ");
+        string key = trim(tokens[0]);
+        string value = strclean(trim(tokens[1]), " ");
         
         // Process dictionary
         if (key == "version")

@@ -26,6 +26,7 @@ public:
     bool create(string path);
     void close();
     
+    string getPath();
     bool isWriteEnabled();
     DILong getSize();
     string getFormatLabel();

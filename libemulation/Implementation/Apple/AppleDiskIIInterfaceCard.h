@@ -36,7 +36,7 @@ private:
     OEInt driveSel;
     OEInt sequencerMode;
     
-    OEInt sequencerState;
+    bool sequencerState;
     OEChar dataRegister;
     
     OEComponent dummyDrive;

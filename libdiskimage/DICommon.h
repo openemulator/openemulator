@@ -16,6 +16,8 @@
 #include <vector>
 #include <string>
 
+#include "util.h"
+
 using namespace std;
 
 typedef unsigned char DIChar;
@@ -29,12 +31,6 @@ typedef signed int DISInt;
 typedef signed long long DISLong;
 
 typedef vector<DIChar> DIData;
-
-#ifdef _WIN32
-#define DI_PATH_SEPARATOR "\\"
-#else
-#define DI_PATH_SEPARATOR "/"
-#endif
 
 DIInt getDIInt(const string& value);
 DILong getDILong(const string& value);
@@ -55,19 +51,5 @@ void setDIIntLE(DIChar *p, DIInt value);
 void setDIIntBE(DIChar *p, DIInt value);
 void setDILongLE(DIChar *p, DILong value);
 void setDILongBE(DIChar *p, DILong value);
-
-string getDIFilename(string path);
-string getDIPathExtension(string path);
-
-DIInt getDICRC16(DIChar *p, DIInt size);
-DIInt getDICRC32(DIChar *p, DIInt size);
-
-string rtrimDI(string value);
-string ltrimDI(string value);
-string trimDI(string value);
-vector<string> strDISplit(string value, char c);
-string strDIJoin(vector<string>& value, char c);
-string strDIIncludeFilter(string value, string filter);
-string strDIExcludeFilter(string value, string filter);
 
 #endif

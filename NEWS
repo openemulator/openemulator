@@ -1,4 +1,7 @@
 ==Latest==
+* Added libdiskimage disk image write support
+* Added commun utility library
+* Improved libdiskimage NIB decoding support
 * Added Disk II mechanical phase emulation
 * Implemented Disk II disk writes
 * Fixed Disk II read sequencer
@@ -14,13 +17,13 @@
 * Renamed VideoRAM to VRAM
 * Fixed CFFA ATA identify
 * Fixed keyboard UNICODE + Apple II madness
-* Removed BankSwitchedRAM, added bank switching to AddressOffset
+* Removed BankSwitchedRAM, moved bank switching to AddressOffset
 * Implemented ATADevice
 * Refactorized RDCFFA+RDCFFA1 into ATAController and RDCFFA
 * Fixed minor bug in component lifecycle
 * Fixed Apple II mouse capture
-* Used AddressMapper in self-mapping peripheral cards
-* Implemented sample-accurate playback in audio player
+* Simplified peripherals to self-map memory using AddressMapper
+* Implemented sample-accurate AudioPlayer playback
 * Implemented Apple Silentype printer
 * Implemented Apple Silentype Interface Card
 * Fixed Apple Graphics Tablet count bits 0-2

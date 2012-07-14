@@ -24,16 +24,6 @@ DIDiskType DIDiskStorage::getDiskType()
     return DI_8_INCH;
 }
 
-DIInt DIDiskStorage::getHeadNum()
-{
-    return 0;
-}
-
-float DIDiskStorage::getRotationSpeed()
-{
-    return 0;
-}
-
 DIInt DIDiskStorage::getTracksPerInch()
 {
     return 0;
