@@ -223,6 +223,7 @@
 		00CF208115B0D92600DA8E08 /* util.h in Headers */ = {isa = PBXBuildFile; fileRef = 00CF207015B0D8C600DA8E08 /* util.h */; };
 		00CF208215B0DB5700DA8E08 /* libutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00CF207615B0D8D300DA8E08 /* libutil.a */; };
 		00D6729D12C9A256009F0D9E /* EmulationShow.png in Resources */ = {isa = PBXBuildFile; fileRef = 00E442931278727600713A05 /* EmulationShow.png */; };
+		00D6FB7C15B3CCD00063312F /* ddl-1.0.dtd in Resources */ = {isa = PBXBuildFile; fileRef = 00D6FB7B15B3CCD00063312F /* ddl-1.0.dtd */; };
 		00D75C691399FFDB004AA153 /* LibraryTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D75C681399FFD9004AA153 /* LibraryTableCell.m */; };
 		00D7E410158D1E4B00EBF8FA /* AddressMasker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00D7E40E158D1E4B00EBF8FA /* AddressMasker.cpp */; };
 		00D8448B0FFF04C0005802F0 /* DiskImage.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000F66370FF8368F00C8AF23 /* DiskImage.icns */; };
@@ -637,6 +638,7 @@
 		00D226041350F9A100FC69B9 /* VideoCaptureInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoCaptureInterface.h; sourceTree = "<group>"; };
 		00D226541350FF8B00FC69B9 /* OEMatrix3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEMatrix3.h; sourceTree = "<group>"; };
 		00D226551350FF8B00FC69B9 /* OEMatrix3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEMatrix3.cpp; sourceTree = "<group>"; };
+		00D6FB7B15B3CCD00063312F /* ddl-1.0.dtd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "ddl-1.0.dtd"; path = "libemulation/ddl-1.0.dtd"; sourceTree = SOURCE_ROOT; };
 		00D73D9C136CC9B300BD5465 /* IEEE1394Interface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IEEE1394Interface.h; sourceTree = "<group>"; };
 		00D75C671399FFD7004AA153 /* LibraryTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryTableCell.h; sourceTree = "<group>"; };
 		00D75C681399FFD9004AA153 /* LibraryTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryTableCell.m; sourceTree = "<group>"; };
@@ -938,6 +940,7 @@
 				00A9739D12E512F80084724F /* Core */,
 				00B8880F12A393990052B7A4 /* Implementation */,
 				00B8886912A393990052B7A4 /* Interface */,
+				00D6FB7B15B3CCD00063312F /* ddl-1.0.dtd */,
 				00B8864612A3923D0052B7A4 /* edl-1.0.dtd */,
 			);
 			path = libemulation;
@@ -1682,6 +1685,7 @@
 				001C9B02137FDD0500D1355B /* AudioRecord.png in Resources */,
 				007F08CF1459344600C3308D /* sparkle_dsa_pub.pem in Resources */,
 				007EF9C71570329D0073061E /* IconRevert.png in Resources */,
+				00D6FB7C15B3CCD00063312F /* ddl-1.0.dtd in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

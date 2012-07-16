@@ -206,7 +206,9 @@ bool MC6845::init()
 
 void MC6845::dispose()
 {
-    controlBus->postMessage(this, CONTROLBUS_INVALIDATE_TIMERS, NULL);
+    OEInt id = 0;
+    
+    controlBus->postMessage(this, CONTROLBUS_INVALIDATE_TIMERS, &id);
 }
 
 void MC6845::notify(OEComponent *sender, int notification, void *data)
@@ -223,7 +225,7 @@ void MC6845::notify(OEComponent *sender, int notification, void *data)
                 break;
                 
             case CONTROLBUS_TIMER_DID_FIRE:
-                scheduleTimer(*((OESLong *)data));
+                scheduleTimer(((ControlBusTimer *)data)->cycles);
                 
                 break;
                 
@@ -414,7 +416,8 @@ void MC6845::updateTiming()
     
     controlBus->postMessage(this, CONTROLBUS_GET_CYCLES, &lastCycles);
     
-    controlBus->postMessage(this, CONTROLBUS_INVALIDATE_TIMERS, NULL);
+    OEInt id = 0;
+    controlBus->postMessage(this, CONTROLBUS_INVALIDATE_TIMERS, &id);
     
     scheduleTimer(0);
     
@@ -449,8 +452,8 @@ void MC6845::scheduleTimer(OESLong cycles)
     controlBus->postMessage(this, CONTROLBUS_GET_CYCLES, &frameStart);
     frameStart += cycles;
     
-    cycles += ceil(frameCycleNum / clockMultiplier);
-    controlBus->postMessage(this, CONTROLBUS_SCHEDULE_TIMER, &cycles);
+    ControlBusTimer timer = { cycles + ceil(frameCycleNum / clockMultiplier), 0 };
+    controlBus->postMessage(this, CONTROLBUS_SCHEDULE_TIMER, &timer);
     
     if (frameStartAddress.w.l != startAddress.w.l)
         refreshVideo();

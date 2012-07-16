@@ -186,6 +186,18 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
+				<string>ddl</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>DiskImage.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>DDL Disk Image</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
 				<string>fdi</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>

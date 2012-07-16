@@ -304,7 +304,7 @@ void Apple1Terminal::notify(OEComponent *sender, int notification, void *data)
                 break;
                 
             case CONTROLBUS_TIMER_DID_FIRE:
-                scheduleNextTimer(*((OESLong *) data));
+                scheduleNextTimer(((ControlBusTimer *) data)->cycles);
                 
                 break;
         }
@@ -388,8 +388,8 @@ void Apple1Terminal::scheduleNextTimer(OESLong cycles)
     
     drawFrame();
     
-    cycles += 262 * 61;
-    controlBus->postMessage(this, CONTROLBUS_SCHEDULE_TIMER, &cycles);
+    ControlBusTimer timer = { cycles + 262 * 61, 0 };
+    controlBus->postMessage(this, CONTROLBUS_SCHEDULE_TIMER, &timer);
 }
 
 // Copy a 14-pixel segment

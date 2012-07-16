@@ -176,12 +176,14 @@ bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
             return true;
             
         case CONTROLBUS_SCHEDULE_TIMER:
-            scheduleTimer(sender, *((OELong *)data));
+            scheduleTimer(sender,
+                          ((ControlBusTimer *)data)->cycles,
+                          ((ControlBusTimer *)data)->id);
             
             return true;
             
         case CONTROLBUS_INVALIDATE_TIMERS:
-            invalidateTimers(sender);
+            invalidateTimers(sender, *((OEInt *)data));
             
             return true;
             
@@ -269,7 +271,7 @@ void ControlBus::notify(OEComponent *sender, int notification, void *data)
         audioBufferStart = cycles;
         sampleToCycleRatio = buffer->sampleRate / clockFrequency;
         
-        scheduleTimer(NULL, ceil(buffer->frameNum / sampleToCycleRatio) - getCycles());
+        scheduleTimer(NULL, ceil(buffer->frameNum / sampleToCycleRatio) - getCycles(), 0);
         
         while (true)
         {
@@ -282,6 +284,7 @@ void ControlBus::notify(OEComponent *sender, int notification, void *data)
             inEvent = false;
             
             OEComponent *component = events.front().component;
+            OEInt id = events.front().id;
             cycles += events.front().cycles;
             cpuCycles -= events.front().cycles * cpuClockMultiplier;
             events.front().cycles = 0;
@@ -289,8 +292,9 @@ void ControlBus::notify(OEComponent *sender, int notification, void *data)
             
             if (component)
             {
-                OELong pendingCycles = -getCycles();
-                component->notify(this, CONTROLBUS_TIMER_DID_FIRE, &pendingCycles);
+                ControlBusTimer timer = { -getCycles(), id };
+                
+                component->notify(this, CONTROLBUS_TIMER_DID_FIRE, &timer);
             }
             else
                 break;
@@ -451,7 +455,7 @@ OELong ControlBus::getCycles()
     return floor((cpuCycles - getPendingCPUCycles()) / cpuClockMultiplier);
 }
 
-void ControlBus::scheduleTimer(OEComponent *component, OELong cycles)
+void ControlBus::scheduleTimer(OEComponent *component, OELong cycles, OEInt id)
 {
     cycles += getCycles();
     
@@ -483,11 +487,12 @@ void ControlBus::scheduleTimer(OEComponent *component, OELong cycles)
     
     event.cycles = cycles;
     event.component = component;
+    event.id = id;
     
     events.insert(i, event);
 }
 
-void ControlBus::invalidateTimers(OEComponent *component)
+void ControlBus::invalidateTimers(OEComponent *component, OEInt id)
 {
     OELong cycles = 0;
     
@@ -496,7 +501,8 @@ void ControlBus::invalidateTimers(OEComponent *component)
          i != events.end();
          i++)
     {
-        if (i->component == component)
+        if ((i->component == component) &&
+            (i->id == id))
         {
             cycles = i->cycles;
             events.erase(i);

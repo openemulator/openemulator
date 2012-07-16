@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTDs/edl-1.0.dtd">
-<edl version="1.0" generator="OpenEmulator" framework="739" label="A-ONE" image="images/Achatz/A-ONE.png" description="The Achatz A-ONE (www.achatz.nl) is a fully functional replica of the Apple 1 computer. It has a WDC 65C02 microprocessor, 32 kiB RAM (at $0000-$7FFF), and 32 kiB bytes ROM (SBASM at $9000-$9FFF, BASIC at $E000-$EFFF, Krusader at $F000-$FEFF, monitor at $FF00-$FFFF).">
+<!DOCTYPE EDL PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTDs/edl-1.0.dtd">
+<edl version="1.0" creator="OpenEmulator" framework="787" label="A-ONE" image="images/Achatz/A-ONE.png" description="The Achatz A-ONE (www.achatz.nl) is a fully functional replica of the Apple 1 computer. It has a WDC 65C02 microprocessor, 32 kiB RAM (at $0000-$7FFF), and 32 kiB bytes ROM (SBASM at $9000-$9FFF, BASIC at $E000-$EFFF, Krusader at $F000-$FEFF, monitor at $FF00-$FFFF).">
     
     <device id="aONE" label="A-ONE" image="images/Achatz/A-ONE.png">
         <setting ref="aONE.io" name="terminalSpeed" label="Terminal Speed" type="select" options="Standard,Enhanced"/>

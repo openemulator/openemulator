@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
-<edl version="1.0" generator="OpenEmulator" framework="736" label="Apple Hand Controllers" image="images/Apple/Apple Hand Controllers.png" description="The Apple Hand Controllers are a pair of game controllers for Apple II computers.">
+<!DOCTYPE EDL PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
+<edl version="1.0" creator="OpenEmulator" framework="787" label="Apple Hand Controllers" image="images/Apple/Apple Hand Controllers.png" description="The Apple Hand Controllers are a pair of game controllers for Apple II computers.">
     
     <device id="appleHandControllers" label="Apple Hand Controllers" image="images/Apple/Apple Hand Controllers.png">
         <setting ref="appleHandControllers.io" name="inputDevice" label="Input Device" type="select" options="Mouse,Joystick,None"/>

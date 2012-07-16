@@ -21,6 +21,7 @@ typedef struct
 {
     OELong cycles;
     OEComponent *component;
+    OEInt id;
 } ControlBusEvent;
 
 class ControlBus : public OEComponent
@@ -71,8 +72,8 @@ private:
     void setPendingCPUCycles(OESLong value);
     void runCPU();
     OELong getCycles();
-    void scheduleTimer(OEComponent *component, OELong cycles);
-    void invalidateTimers(OEComponent *component);
+    void scheduleTimer(OEComponent *component, OELong cycles, OEInt id);
+    void invalidateTimers(OEComponent *component, OEInt id);
     
     void setCPUClockMultiplier(float value);
 };

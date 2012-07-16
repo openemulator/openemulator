@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTDs/edl-1.0.dtd">
-<edl version="1.0" generator="OpenEmulator" framework="739" label="Replica-1" image="images/Briel/Replica-1.png" description="The Replica-1 (www.brielcomputers.com) is a functional clone of the Apple-1 computer. It has a WDC 65C02 microprocessor, 32 kiB RAM (at $0000-$7FFF), and 8 kiB bytes ROM (BASIC at $E000-$EFFF, Krusader at $F000-$FEFF, monitor at $FF00-$FFFF).">
+<!DOCTYPE EDL PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTDs/edl-1.0.dtd">
+<edl version="1.0" creator="OpenEmulator" framework="787" label="Replica-1" image="images/Briel/Replica-1.png" description="The Replica-1 (www.brielcomputers.com) is a functional clone of the Apple-1 computer. It has a WDC 65C02 microprocessor, 32 kiB RAM (at $0000-$7FFF), and 8 kiB bytes ROM (BASIC at $E000-$EFFF, Krusader at $F000-$FEFF, monitor at $FF00-$FFFF).">
     
     <device id="replica1" label="Replica-1" image="images/Briel/Replica-1.png">
         <setting ref="replica1.io" name="terminalSpeed" label="Terminal Speed" type="select" options="Standard,Enhanced"/>

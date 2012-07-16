@@ -306,7 +306,8 @@ void AppleDiskIIInterfaceCard::setDriveOn(bool value)
     
     if (timerOn)
     {
-        controlBus->postMessage(this, CONTROLBUS_INVALIDATE_TIMERS, NULL);
+        OEInt id = 0;
+        controlBus->postMessage(this, CONTROLBUS_INVALIDATE_TIMERS, &id);
         
         timerOn = false;
     }
@@ -315,9 +316,9 @@ void AppleDiskIIInterfaceCard::setDriveOn(bool value)
         controlBus->postMessage(this, CONTROLBUS_GET_CYCLES, &lastCycles);
     else
     {
-        OELong cycles = 1.0 * APPLEII_CLOCKFREQUENCY;
+        ControlBusTimer timer = { 1.0 * APPLEII_CLOCKFREQUENCY, 0};
         
-        controlBus->postMessage(this, CONTROLBUS_SCHEDULE_TIMER, &cycles);
+        controlBus->postMessage(this, CONTROLBUS_SCHEDULE_TIMER, &timer);
         
         timerOn = true;
     }

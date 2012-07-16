@@ -3,21 +3,21 @@
 
    For further information, see: http://www.openemulator.org
 
-   Copyright (c) 2010-2011 Marc S. Ressl,
+   Copyright (c) 2010-2012 Marc S. Ressl,
    All Rights Reserved. 
 
    This DTD module is identified by the PUBLIC and SYSTEM identifiers:
 
-   PUBLIC "-//W3C//DTD EDL 1.0//EN"
-   SYSTEM "http://www.openemulator.org/DTD/edl-1.dtd"
+   PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN"
+   SYSTEM "http://www.openemulator.org/DTD/edl-1.0.dtd"
 
-   $Revision: 0.8 $
-   $Date: 2011/09/10 17:00:00-0300 $
+   $Revision: 9 $
+   $Date: 2012/07/16 01:00:00-0300 $
 -->
 
 <!ELEMENT edl (device*|port*|connector*|component*)>
 <!ATTLIST edl version CDATA "1.0">
-<!ATTLIST edl generator CDATA #REQUIRED>
+<!ATTLIST edl creator CDATA #REQUIRED>
 <!ATTLIST edl framework CDATA #REQUIRED>
 <!ATTLIST edl label CDATA #IMPLIED>
 <!ATTLIST edl image CDATA #IMPLIED>

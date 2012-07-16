@@ -11,12 +11,16 @@
 #include "DIBackingStore.h"
 #include "DIDiskStorage.h"
 
+typedef vector<DIData> DIDDLTrack;
+
 class DIDDLDiskStorage : public DIDiskStorage
 {
 public:
     DIDDLDiskStorage();
+    ~DIDDLDiskStorage();
     
     bool open(DIBackingStore *file);
+    bool create(DIBackingStore *backingStore, DIDiskType diskType, DIInt tracksPerInch);
     void close();
     
     bool isWriteEnabled();
@@ -25,7 +29,17 @@ public:
     string getFormatLabel();
     
     bool readTrack(DIInt headIndex, DIInt trackIndex, DITrack& track);
+    bool writeTrack(DIInt headIndex, DIInt trackIndex, DITrack& track);
     
 private:
     DIBackingStore *backingStore;
+    
+    bool writing;
+    
+    DIDiskType diskType;
+    DIInt tracksPerInch;
+    
+    vector<DIDDLTrack> trackData;
+    
+    bool writeString(string& s);
 };

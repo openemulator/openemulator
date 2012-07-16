@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
-<edl version="1.0" label="Apple Graphics Tablet" image="images/Apple/Apple Graphics Tablet.png" description="The Apple Graphics Tablet is an digitizing input device for Apple II computers. It must be connected to an Apple Graphics Tablet Interface Card.">
+<!DOCTYPE EDL PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
+<edl version="1.0" creator="OpenEmulator" framework="787" label="Apple Graphics Tablet" image="images/Apple/Apple Graphics Tablet.png" description="The Apple Graphics Tablet is an digitizing input device for Apple II computers. It must be connected to an Apple Graphics Tablet Interface Card.">
     
     <device id="appleGraphicsTablet" label="Apple Graphics Tablet" image="images/Apple/Apple Graphics Tablet.png">
     </device>

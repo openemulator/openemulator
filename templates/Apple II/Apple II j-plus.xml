@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
-<edl version="1.0" generator="OpenEmulator" framework="739" label="Apple II j-plus" image="images/Apple/Apple II.png" description="The Apple II j-plus is the japanese version of the Apple II plus computer. It has a MOS 6502 microprocessor running at 1 MHz, 48 kiB of RAM, an audio cassette interface for loading programs and storing data, and Applesoft BASIC built into ROM.">
+<!DOCTYPE EDL PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
+<edl version="1.0" creator="OpenEmulator" framework="787" label="Apple II j-plus" image="images/Apple/Apple II.png" description="The Apple II j-plus is the japanese version of the Apple II plus computer. It has a MOS 6502 microprocessor running at 1 MHz, 48 kiB of RAM, an audio cassette interface for loading programs and storing data, and Applesoft BASIC built into ROM.">
     
     <device id="appleIIjplus" label="Apple II j-plus" image="images/Apple/Apple II.png">
         <setting ref="appleIIjplus.audioOut" name="volume" label="Volume" type="slider" options="0,1"/>

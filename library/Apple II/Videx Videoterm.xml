@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
-<edl version="1.0" label="Videx Videoterm" image="images/Videx/Videx Videoterm.png" description="The Videx Videoterm is an 80-column video card for Apple II computers. It must be installed in slot 3.">
+<!DOCTYPE EDL PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
+<edl version="1.0" creator="OpenEmulator" framework="787" label="Videx Videoterm" image="images/Videx/Videx Videoterm.png" description="The Videx Videoterm is an 80-column video card for Apple II computers. It must be installed in slot 3.">
     
     <device id="videxVideoterm" label="Videx Videoterm" image="images/Videx/Videx Videoterm.png">
         <setting ref="videxVideoterm.io" name="characterSet1" label="Character Set" type="select" options="Normal,NormalUppercase|Normal Uppercase,Inverse,French,German,Katakana,Spanish,Symbol,SuperSub|Super and Subscript,APL,Epson"/>

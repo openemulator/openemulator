@@ -158,8 +158,8 @@ bool DIFDIDiskStorage::open(DIBackingStore *backingStore, float rotationSpeed)
     return true;
 }
 
-bool DIFDIDiskStorage::create(DIBackingStore *backingStore, bool writeEnabled,
-                              DIDiskType diskType, DIInt headNum,
+bool DIFDIDiskStorage::create(DIBackingStore *backingStore,
+                              bool writeEnabled, DIDiskType diskType, DIInt headNum,
                               float rotationSpeed, DIInt tracksPerInch)
 {
     close();
@@ -250,9 +250,9 @@ bool DIFDIDiskStorage::close()
         }
     }
     
-    writing = false;
-    
     backingStore = NULL;
+    
+    writing = false;
     
     writeEnabled = false;
     diskType = DI_525_INCH;
@@ -372,12 +372,6 @@ bool DIFDIDiskStorage::writeTrack(DIInt headIndex, DIInt trackIndex, DITrack& tr
     
     switch (track.format)
     {
-        case DI_BLANK:
-            trackFormat[index] = DI_FDI_BLANK;
-            trackData[index].clear();
-            
-            return true;
-            
         case DI_APPLE_DOS32:
             trackFormat[index] = DI_FDI_APPLE_DOS32;
             trackData[index] = track.data;

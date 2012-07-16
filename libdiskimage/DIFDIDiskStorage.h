@@ -44,9 +44,9 @@ public:
     ~DIFDIDiskStorage();
     
     bool open(DIBackingStore *backingStore, float rotationSpeed);
-    bool create(DIBackingStore *backingStore, bool writeEnabled,
-                DIDiskType diskType, DIInt headNum, float rotationSpeed,
-                DIInt tracksPerInch);
+    bool create(DIBackingStore *backingStore,
+                bool writeEnabled, DIDiskType diskType, DIInt headNum,
+                float rotationSpeed, DIInt tracksPerInch);
     bool close();
     
     bool isWriteEnabled();
@@ -58,6 +58,8 @@ public:
     bool writeTrack(DIInt headIndex, DIInt trackIndex, DITrack& track);
     
 private:
+    DIBackingStore *backingStore;
+    
     bool writing;
     
     bool writeEnabled;
@@ -65,8 +67,6 @@ private:
     DIInt headNum;
     float rotationSpeed;
     DIInt tracksPerInch;
-    
-    DIBackingStore *backingStore;
     
     vector<DIInt> trackFormat;
     vector<DIInt> trackOffset;

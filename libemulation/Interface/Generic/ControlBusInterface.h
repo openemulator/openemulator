@@ -9,12 +9,19 @@
  */
 
 // Notes:
-// * scheduleTimer schedules a timer in OELong cycles
+// * scheduleTimer schedules a timer using the ControlBusTimer structure
+// * invalidateTimers receives the id of the timers to be removed
 // * timerDidFire passes the timer using ControlBusTimer
 //   (cycles is the number of remaining cycles for this timer)
 
 #ifndef _CONTROLBUSINTERFACE_H
 #define _CONTROLBUSINTERFACE_H
+
+typedef struct
+{
+    OESLong cycles;
+    OEInt id;
+} ControlBusTimer;
 
 typedef enum
 {

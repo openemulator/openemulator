@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
-<edl version="1.0" label="Apple Disk II Interface Card" image="images/Apple/Apple Disk II Interface Card.png" description="The Disk II Interface Card connects two Disk II drives to an Apple II computer. It is usually installed in Slot 6.">
+<!DOCTYPE EDL PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
+<edl version="1.0" creator="OpenEmulator" framework="787" label="Apple Disk II Interface Card" image="images/Apple/Apple Disk II Interface Card.png" description="The Disk II Interface Card connects two Disk II drives to an Apple II computer. It is usually installed in Slot 6.">
     
     <device id="appleDiskIICard" label="Apple Disk II Interface Card" image="images/Apple/Apple Disk II Interface Card.png">
         <setting ref="appleDiskIICard.memory" name="sel" label="Controller ROM" type="select" options="ROM13|13 Sector Controller,ROM16|16 Sector Controller"/>

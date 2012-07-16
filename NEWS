@@ -1,4 +1,5 @@
 ==Latest==
+* Improved Disk II sounds
 * Added libdiskimage disk image write support
 * Added commun utility library
 * Improved libdiskimage NIB decoding support

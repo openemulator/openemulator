@@ -57,7 +57,7 @@ void hidDeviceEventOcurred(void *inContext, IOReturn inResult, void *inSender, I
                                    @"bin",
                                    @"img", @"image", @"dmg", @"hdv", @"hfv", @"vdi", @"vmdk",
                                    @"iso", @"cdr",
-                                   @"fdi",
+                                   @"ddl", @"fdi",
                                    @"dsk", @"do", @"d13", @"po", @"cpm", @"nib", @"v2d", @"vdsk",
                                    @"2mg", @"2img",
                                    @"t64", @"tap", @"prg", @"p00",

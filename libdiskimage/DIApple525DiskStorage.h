@@ -17,6 +17,7 @@
 
 #include "DIDiskStorage.h"
 #include "DILogicalDiskStorage.h"
+#include "DIDDLDiskStorage.h"
 #include "DIFDIDiskStorage.h"
 #include "DIV2DDiskStorage.h"
 
@@ -57,6 +58,7 @@ private:
     
     DIDiskStorage dummyDiskStorage;
     DILogicalDiskStorage logicalDiskStorage;
+    DIDDLDiskStorage ddlDiskStorage;
     DIFDIDiskStorage fdiDiskStorage;
     DIV2DDiskStorage v2dDiskStorage;
     

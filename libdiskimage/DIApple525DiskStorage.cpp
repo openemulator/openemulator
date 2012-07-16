@@ -23,6 +23,7 @@
 #define MIN_LOGICALTRACKNUM     35
 #define MAX_LOGICALTRACKNUM     40
 
+#define MIN_TRACKNUM            (4 * MIN_LOGICALTRACKNUM)
 #define MAX_TRACKNUM            (4 * MAX_LOGICALTRACKNUM)
 
 #define DEFAULT_ROTATIONSPEED   300
@@ -225,7 +226,7 @@ bool DIApple525DiskStorage::close()
 {
     if (trackDataModified)
     {
-        bool saveAsFDI = true;
+        bool save = true;
         
         if ((diskStorage == &logicalDiskStorage) &&
             (logicalDiskStorage.getTrackFormat() != DI_APPLE_NIB))
@@ -236,7 +237,7 @@ bool DIApple525DiskStorage::close()
             
             for (DIInt i = 0; !error && i < MAX_TRACKNUM; i++)
             {
-                if (!trackData[i].size())
+                if ((i >= trackData.size()) || !trackData[i].size())
                     continue;
                 
                 if (i % 4)
@@ -248,12 +249,12 @@ bool DIApple525DiskStorage::close()
                     
                     if (trackFormat == DI_APPLE_DOS32)
                     {
-                        if (!decodeGCR53Track(track, i) && (i < MIN_LOGICALTRACKNUM))
+                        if (!decodeGCR53Track(track, i) && (i < MIN_TRACKNUM))
                             error = true;
                     }
                     else
                     {
-                        if (!decodeGCR62Track(track, i) && (i < MIN_LOGICALTRACKNUM))
+                        if (!decodeGCR62Track(track, i) && (i < MIN_TRACKNUM))
                             error = true;
                     }
                 }
@@ -286,26 +287,23 @@ bool DIApple525DiskStorage::close()
                     }
                 }
                 
-                saveAsFDI = false;
+                save = false;
             }
         }
         
-        if (saveAsFDI)
+        string path = fileBackingStore.getPath();
+        
+        if (save && (path != ""))
         {
-            DIFileBackingStore outputBackingStore;
-            
-            string path = fileBackingStore.getPath();
-            
-            if (path != "")
+            // Read in all data
+            for (DIInt i = 0; i < MAX_TRACKNUM; i++)
             {
-                // Read in all data
-                for (DIInt i = 0; i < MAX_TRACKNUM; i++)
-                {
-                    DIData data;
-                    
-                    readTrack(i, data);
-                }
+                DIData data;
                 
+                readTrack(i, data);
+            }
+            
+            {
                 if (diskStorage == &fdiDiskStorage)
                 {
                     fdiDiskStorage.close();
@@ -314,13 +312,41 @@ bool DIApple525DiskStorage::close()
                 else
                     path += ".fdi";
                 
+//                fdiDiskStorage.close();
+//                fileBackingStore.close();
+                
+                if (fileBackingStore.create(path) &&
+                    fdiDiskStorage.create(&fileBackingStore,
+                                          true, DI_525_INCH, 1,
+                                          DEFAULT_ROTATIONSPEED, DEFAULT_TRACKSPERINCH))
+                {
+                    for (DIInt i = 0; i < MAX_TRACKNUM; i++)
+                    {
+                        DITrack track;
+                        
+                        track.data.swap(trackData[i]);
+                        track.format = track.data.size() ? DI_BITSTREAM_250000BPS : DI_BLANK;
+                        
+                        fdiDiskStorage.writeTrack(0, i, track);
+                    }
+                }
+            }
+/*            else
+            {
+                if (diskStorage == &ddlDiskStorage)
+                {
+                    ddlDiskStorage.close();
+                    fileBackingStore.close();
+                }
+                else
+                    path += ".ddl";
+                
                 DIFileBackingStore outputBackingStore;
-                DIFDIDiskStorage outputDiskStorage;
+                DIDDLDiskStorage outputDiskStorage;
                 
                 if (outputBackingStore.create(path) &&
                     outputDiskStorage.create(&outputBackingStore,
-                                             true, DI_525_INCH, 1,
-                                             DEFAULT_ROTATIONSPEED, DEFAULT_TRACKSPERINCH))
+                                             DI_525_INCH, DEFAULT_TRACKSPERINCH))
                 {
                     for (DIInt i = 0; i < MAX_TRACKNUM; i++)
                     {
@@ -332,26 +358,23 @@ bool DIApple525DiskStorage::close()
                         outputDiskStorage.writeTrack(0, i, track);
                     }
                 }
-                
-                outputDiskStorage.close();
-                outputBackingStore.close();
-            }
+            }*/
         }
     }
     
-    fileBackingStore.close();
-    ramBackingStore.close();
-    twoIMGBackingStore.close();
-    dc42BackingStore.close();
-    
     logicalDiskStorage.close();
+    ddlDiskStorage.close();
     fdiDiskStorage.close();
     v2dDiskStorage.close();
+    
+    twoIMGBackingStore.close();
+    dc42BackingStore.close();
+    fileBackingStore.close();
+    ramBackingStore.close();
     
     diskStorage = &dummyDiskStorage;
     
     trackData.clear();
-    trackData.resize(MAX_TRACKNUM);
     trackDataModified = false;
     
     gcrVolume = 254;
@@ -452,6 +475,9 @@ bool DIApple525DiskStorage::readTrack(DIInt trackIndex, DIData& data)
 
 bool DIApple525DiskStorage::writeTrack(DIInt trackIndex, DIData& data)
 {
+    if (trackIndex >= trackData.size())
+        trackData.resize(trackIndex + 1);
+    
     trackData[trackIndex] = data;
     trackDataModified = true;
     
@@ -463,31 +489,30 @@ bool DIApple525DiskStorage::validateImageSize(DIBackingStore *backingStore,
 {
     DILong size = backingStore->getSize();
     
-    DIInt trackNum;
-    for (trackNum = MIN_LOGICALTRACKNUM; trackNum <= MAX_LOGICALTRACKNUM; trackNum++)
+    for (DIInt t = MIN_LOGICALTRACKNUM; t <= MAX_LOGICALTRACKNUM; t++)
     {
-        if (size == (trackNum * GCR53_TRACKSIZE))
+        if (size == (t * GCR53_TRACKSIZE))
         {
             trackFormat = DI_APPLE_DOS32;
             trackSize = GCR53_TRACKSIZE;
             
             return true;
         }
-        else if (size == (trackNum * GCR62_TRACKSIZE))
+        else if (size == (t * GCR62_TRACKSIZE))
         {
             trackFormat = DI_APPLE_DOS33;
             trackSize = GCR62_TRACKSIZE;
             
             return true;
         }
-        else if (size == (trackNum * NIB_TRACKSIZE))
+        else if (size == (t * NIB_TRACKSIZE))
         {
             trackFormat = DI_APPLE_NIB;
             trackSize = NIB_TRACKSIZE;
             
             return true;
         }
-        else if (size == (trackNum * NIB2_TRACKSIZE))
+        else if (size == (t * NIB2_TRACKSIZE))
         {
             trackFormat = DI_APPLE_NIB;
             trackSize = NIB2_TRACKSIZE;
@@ -572,6 +597,9 @@ bool DIApple525DiskStorage::encodeNIBTrack(DIInt trackIndex, DITrack& track)
             writeNibble(track.data[i], 32);
 	
     trackData[trackIndex].resize(getStreamOffset());
+    
+    if (!trackData[trackIndex].size())
+        trackData[trackIndex].resize(DEFAULT_TRACKSIZE);
     
 	return true;
 }

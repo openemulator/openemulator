@@ -31,10 +31,20 @@ AppleDiskDrive525::AppleDiskDrive525()
 {
 	device = NULL;
     controlBus = NULL;
+    doorPlayer = NULL;
     drivePlayer = NULL;
     headPlayer = NULL;
     
+    phaseControl = 0;
+    phaseCycles = 0;
+    phaseDirection = 0;
+    phaseLastBump = false;
+    phaseStop = false;
+    phaseAlign = false;
+    
     trackIndex = 0;
+    trackPhase = 0;
+    
     trackDataIndex = 0;
     
     zeroCount = 0;
@@ -49,7 +59,7 @@ bool AppleDiskDrive525::setValue(string name, string value)
 	if (name == "diskImage")
 		openDiskImage(value);
     else if (name == "track")
-        trackIndex = getOEInt(value);
+        trackPhase = (trackIndex = getOEInt(value)) & 0x7;
 	else if (name == "forceWriteProtected")
 		diskStorage.setForceWriteProtected(getOEInt(value));
 	else if (name == "mechanism")
@@ -90,6 +100,8 @@ bool AppleDiskDrive525::setRef(string name, OEComponent *ref)
 	}
     else if (name == "controlBus")
         controlBus = ref;
+	else if (name == "doorPlayer")
+        doorPlayer = ref;
 	else if (name == "drivePlayer")
         drivePlayer = ref;
     else if (name == "headPlayer")
@@ -116,20 +128,23 @@ bool AppleDiskDrive525::init()
 		return false;
     }
     
-    updateSoundSet();
+    updatePlayerSounds();
     
 	return true;
 }
 
 void AppleDiskDrive525::update()
 {
-    updateSoundSet();
+    updatePlayerSounds();
 }
 
 void AppleDiskDrive525::dispose()
 {
     if (controlBus)
-        controlBus->postMessage(this, CONTROLBUS_INVALIDATE_TIMERS, NULL);
+    {
+        OEInt id = 0;
+        controlBus->postMessage(this, CONTROLBUS_INVALIDATE_TIMERS, &id);
+    }
 }
 
 bool AppleDiskDrive525::postMessage(OEComponent *sender, int message, void *data)
@@ -206,11 +221,11 @@ bool AppleDiskDrive525::postMessage(OEComponent *sender, int message, void *data
             {
                 phaseControl = *((OEInt *)data);
                 
-                controlBus->postMessage(this, CONTROLBUS_INVALIDATE_TIMERS, NULL);
+                OEInt id = 0;
+                controlBus->postMessage(this, CONTROLBUS_INVALIDATE_TIMERS, &id);
                 
-                OELong cycles = 1000;
-                
-                controlBus->postMessage(this, CONTROLBUS_SCHEDULE_TIMER, &cycles);
+                ControlBusTimer timer = { 0.0005 * APPLEII_CLOCKFREQUENCY, 0 };
+                controlBus->postMessage(this, CONTROLBUS_SCHEDULE_TIMER, &timer);
             }
             
             return true;
@@ -232,34 +247,100 @@ bool AppleDiskDrive525::postMessage(OEComponent *sender, int message, void *data
 
 void AppleDiskDrive525::notify(OEComponent *sender, int notification, void *data)
 {
-    OESInt newTrackIndex = trackIndex;
-    
-    updateStepper(newTrackIndex, phaseControl);
-    
-	if (newTrackIndex < 0)
+    switch (((ControlBusTimer *)data)->id)
     {
-		newTrackIndex = 0;
-        
-        headPlayer->postMessage(this, AUDIOPLAYER_STOP, NULL);
-        headPlayer->postMessage(this, AUDIOPLAYER_PLAY, NULL);
-	}
-    else if (newTrackIndex >= DRIVE_TRACKNUM)
-    {
-		newTrackIndex = DRIVE_TRACKNUM - 1;
-        
-        headPlayer->postMessage(this, AUDIOPLAYER_STOP, NULL);
-        headPlayer->postMessage(this, AUDIOPLAYER_PLAY, NULL);
-	}
-    
-    if (trackIndex == newTrackIndex)
-        return;
-    
-    headPlayer->postMessage(this, AUDIOPLAYER_STOP, NULL);
-    headPlayer->postMessage(this, AUDIOPLAYER_PLAY, NULL);
-	
-//    logMessage(getString((float) (newTrackIndex / 4.0)));
-    
-    updateTrack(newTrackIndex);
+        case 0:
+        {
+            OESInt newTrackIndex = trackIndex + getStepperDelta(trackIndex & 0x7, phaseControl);
+            OESInt newPhaseDirection = getStepperDelta(trackPhase, phaseControl);
+            
+            trackPhase += newPhaseDirection;
+            trackPhase &= 0x7;
+            
+            bool bump;
+            
+            // Sense bump
+            if (newTrackIndex < 0)
+            {
+                newTrackIndex = 0;
+                bump = true;
+            }
+            else if (newTrackIndex >= DRIVE_TRACKNUM)
+            {
+                newTrackIndex = DRIVE_TRACKNUM - 1;
+                bump = true;
+            }
+            else
+                bump = false;
+             
+            if (bump && !phaseLastBump)
+            {
+                phaseStop = true;
+                
+                headPlayer->postMessage(this, AUDIOPLAYER_STOP, NULL);
+            }
+            
+            phaseLastBump = bump;
+            
+            // Sense alignment
+            OELong cycles;
+            controlBus->postMessage(this, CONTROLBUS_GET_CYCLES, &cycles);
+            
+            phaseAlign = ((cycles - phaseCycles) < 0.016 * APPLEII_CLOCKFREQUENCY);
+            phaseCycles = cycles;
+            
+            // Sense change of direction
+            if (phaseDirection != newPhaseDirection)
+            {
+                phaseDirection = newPhaseDirection;
+                headPlayer->postMessage(this, AUDIOPLAYER_STOP, NULL);
+                
+                phaseStop = false;
+            }
+            
+            // Update sounds
+            updatePlayerSounds();
+            
+            headPlayer->postMessage(this, AUDIOPLAYER_PLAY, NULL);
+            
+/*            {
+                static OELong lastCycles = 0;
+                logMessage(getString(phaseStop) + " / " + 
+                           getString(phaseAlign) + " / " +
+                           getString(phaseDirection) + " / " +
+                           getString((float) (newTrackIndex / 4.0)) + " / " +
+                           getString(cycles - lastCycles));
+                lastCycles = cycles;
+            }*/
+            
+            if (trackIndex != newTrackIndex)
+                updateTrack(newTrackIndex);
+            
+            OEInt id = 1;
+            controlBus->postMessage(this, CONTROLBUS_INVALIDATE_TIMERS, &id);
+            
+            ControlBusTimer timer = { 0.025 * APPLEII_CLOCKFREQUENCY, 1 };
+            controlBus->postMessage(this, CONTROLBUS_SCHEDULE_TIMER, &timer);
+            
+            break;
+        }
+        case 1:
+            headPlayer->postMessage(this, AUDIOPLAYER_STOP, NULL);
+            phaseStop = 0;
+            phaseDirection = 0;
+            
+            break;
+            
+        case 2:
+        {
+            isOpenSound = false;
+            
+            updatePlayerSounds();
+            
+            doorPlayer->postMessage(this, AUDIOPLAYER_STOP, NULL);
+            doorPlayer->postMessage(this, AUDIOPLAYER_PLAY, NULL);
+        }
+    }
 }
 
 OEChar AppleDiskDrive525::read(OEAddress address)
@@ -302,9 +383,8 @@ void AppleDiskDrive525::write(OEAddress address, OEChar value)
     isModified = true;
 }
 
-void AppleDiskDrive525::updateStepper(OESInt& position, OEInt phaseControl)
+OESInt AppleDiskDrive525::getStepperDelta(OESInt phase, OEInt phaseControl)
 {
-	OESInt currentPhase = position & 0x7;
 	OESInt nextPhase;
 	
 	switch (phaseControl)
@@ -350,12 +430,12 @@ void AppleDiskDrive525::updateStepper(OESInt& position, OEInt phaseControl)
 			break;
             
 		default:
-			nextPhase = currentPhase;
+			nextPhase = phase;
             
 			break;
 	}
     
-    position += ((nextPhase - currentPhase + 4) & 0x7) - 4;
+    return ((nextPhase - phase + 4) & 0x7) - 4;
 }
 
 void AppleDiskDrive525::updateTrack(OEInt value)
@@ -380,37 +460,72 @@ void AppleDiskDrive525::updateTrack(OEInt value)
     trackDataIndex %= trackDataSize;
 }
 
-void AppleDiskDrive525::updateSoundSet()
+void AppleDiskDrive525::updatePlayerSounds()
 {
-    OESound *drivePlayerSound = NULL;
-    OESound *headPlayerSound = NULL;
+    updatePlayerSound(doorPlayer, isOpenSound ? "Open" : "Close");
+    updatePlayerSound(drivePlayer, "Drive");
+    updatePlayerSound(headPlayer, (phaseStop ? (phaseAlign ? "Align" : "Stop") : "Head"));
+}
+
+void AppleDiskDrive525::updatePlayerSound(OEComponent *component, string value)
+{
+    OESound *playerSound = NULL;
     
-    if (sound.count(mechanism + "Drive"))
-        drivePlayerSound = &sound[mechanism + "Drive"];
-    if (sound.count(mechanism + "Head"))
-        headPlayerSound = &sound[mechanism + "Head"];
+    if (sound.count(mechanism + value))
+        playerSound = &sound[mechanism + value];
     
-    if (drivePlayer)
-        drivePlayer->postMessage(this, AUDIOPLAYER_SET_SOUND, drivePlayerSound);
-    if (headPlayer)
-        headPlayer->postMessage(this, AUDIOPLAYER_SET_SOUND, headPlayerSound);
+    if (component)
+        component->postMessage(this, AUDIOPLAYER_SET_SOUND, playerSound);
 }
 
 bool AppleDiskDrive525::openDiskImage(string path)
 {
+    bool wasMounted = (diskStorage.getPath() != "");
+    
     if (!diskStorage.open(path))
         return false;
     
     updateTrack(trackIndex);
+    
+    if (doorPlayer)
+    {
+        if (wasMounted)
+        {
+            isOpenSound = true;
+            
+            ControlBusTimer timer = { 1.0 * APPLEII_CLOCKFREQUENCY, 2 };
+            controlBus->postMessage(this, CONTROLBUS_SCHEDULE_TIMER, &timer);
+        }
+        else
+            isOpenSound = false;
+        
+        updatePlayerSounds();
+        
+        doorPlayer->postMessage(this, AUDIOPLAYER_STOP, NULL);
+        doorPlayer->postMessage(this, AUDIOPLAYER_PLAY, NULL);
+    }
     
     return true;
 }
 
 bool AppleDiskDrive525::closeDiskImage()
 {
+    if (isModified)
+        updateTrack(trackIndex);
+    
     bool success = diskStorage.close();
     
     updateTrack(trackIndex);
+    
+    if (doorPlayer)
+    {
+        isOpenSound = true;
+        
+        updatePlayerSounds();
+        
+        doorPlayer->postMessage(this, AUDIOPLAYER_STOP, NULL);
+        doorPlayer->postMessage(this, AUDIOPLAYER_PLAY, NULL);
+    }
     
     return success;
 }

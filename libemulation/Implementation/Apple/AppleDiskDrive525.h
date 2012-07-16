@@ -38,6 +38,7 @@ public:
 private:
 	OEComponent *device;
     OEComponent *controlBus;
+    OEComponent *doorPlayer;
     OEComponent *drivePlayer;
     OEComponent *headPlayer;
     
@@ -45,8 +46,14 @@ private:
     map<string, OESound>sound;
     
     OEInt phaseControl;
+    OELong phaseCycles;
+    OESInt phaseDirection;
+    bool phaseLastBump;
+    bool phaseStop;
+    bool phaseAlign;
     
     OESInt trackIndex;
+    OEInt trackPhase;
     
     DIApple525DiskStorage diskStorage;
     
@@ -59,10 +66,13 @@ private:
     
     bool isModified;
     
-    void updateStepper(OESInt& position, OEInt phaseControl);
+    bool isOpenSound;
+    
+    OESInt getStepperDelta(OESInt position, OEInt phaseControl);
     void updateTrack(OEInt value);
     
-    void updateSoundSet();
+    void updatePlayerSounds();
+    void updatePlayerSound(OEComponent *component, string value);
     
     bool openDiskImage(string path);
     bool closeDiskImage();

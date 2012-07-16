@@ -691,6 +691,12 @@ void AppleIIVideo::updateVideo()
         OEIntPoint p0 = pos[segmentStart];
         OEIntPoint p1 = pos[segmentStart + cycleNum];
         
+// To-Do: remove this test code
+if ((segmentStart + cycleNum) > 17040)
+{
+    logMessage("Hires bug: p0.y=" + getString(p0.y) + " p1.y=" + getString(p1.y));
+}
+        
         if (p0.y == p1.y)
             (this->*draw)(p0.y, p0.x, p1.x);
         else
@@ -789,7 +795,8 @@ void AppleIIVideo::updateTiming()
     currentTimer = APPLEII_TIMER_VSYNC;
     controlBus->postMessage(this, CONTROLBUS_GET_CYCLES, &lastCycles);
     
-    controlBus->postMessage(this, CONTROLBUS_INVALIDATE_TIMERS, this);
+    OEInt id = 0;
+    controlBus->postMessage(this, CONTROLBUS_INVALIDATE_TIMERS, &id);
     
     scheduleNextTimer(0);
 }
@@ -848,7 +855,8 @@ void AppleIIVideo::scheduleNextTimer(OESLong cycles)
             break;
     }
     
-    controlBus->postMessage(this, CONTROLBUS_SCHEDULE_TIMER, &cycles);
+    ControlBusTimer timer = { cycles, 0 };
+    controlBus->postMessage(this, CONTROLBUS_SCHEDULE_TIMER, &timer);
 }
 
 OEIntPoint AppleIIVideo::getCount()

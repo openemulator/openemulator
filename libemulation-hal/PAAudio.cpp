@@ -543,12 +543,13 @@ void PAAudio::runAudio(const float *input,
     
     // Render noise when no data is available
     // Note: this should be removed when the framework is stable
-    if (isAudioBufferEmpty() || (frameCount != framesPerBuffer))
+    if (isAudioBufferEmpty() ||
+        (frameCount != framesPerBuffer))
     {
-        float k = 0.1 / RAND_MAX;
+/*        float k = 0.1 / RAND_MAX;
         
         for (OEInt i = 0; i < samplesPerBuffer; i++)
-            *output++ = k * rand();
+            *output++ = k * rand();*/
         
         return;
     }

@@ -105,14 +105,14 @@ bool DIATABlockStorage::isOpen()
 
 void DIATABlockStorage::close()
 {
-    fileBackingStore.close();
-    ramBackingStore.close();
-    twoImgBackingStore.close();
-    dc42BackingStore.close();
-    
     rawBlockStorage.close();
     vdiBlockStorage.close();
     vmdkBlockStorage.close();
+    
+    twoImgBackingStore.close();
+    dc42BackingStore.close();
+    fileBackingStore.close();
+    ramBackingStore.close();
     
     blockStorage = &dummyBlockStorage;
     

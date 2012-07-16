@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE edl PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
-<edl version="1.0" generator="OpenEmulator" framework="739" label="Apple II" image="images/Apple/Apple II.png" description="The Apple II is an 8-bit home computer, one of the first highly successful mass-produced microcomputers. It has a MOS 6502 microprocessor running at 1 MHz, up to 48 kiB of RAM, an audio cassette interface for loading and storing programs and data, and Integer BASIC built into ROM.">
+<!DOCTYPE EDL PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
+<edl version="1.0" creator="OpenEmulator" framework="787" label="Apple II" image="images/Apple/Apple II.png" description="The Apple II is an 8-bit home computer, one of the first highly successful mass-produced microcomputers. It has a MOS 6502 microprocessor running at 1 MHz, up to 48 kiB of RAM, an audio cassette interface for loading and storing programs and data, and Integer BASIC built into ROM.">
     
     <device id="appleII" label="Apple II" image="images/Apple/Apple II.png">
         <setting ref="appleII.video" name="revision" label="Revision" type="select" options="0|Revision 0,1|Revision 1+"/>

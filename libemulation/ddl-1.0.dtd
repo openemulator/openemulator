@@ -1,0 +1,36 @@
+<!--
+   Disk Description Language version 1.0 DTD
+
+   For further information, see: http://www.openemulator.org
+
+   Copyright (c) 2012 Marc S. Ressl,
+   All Rights Reserved. 
+
+   This DTD module is identified by the PUBLIC and SYSTEM identifiers:
+
+   PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN"
+   SYSTEM "http://www.openemulator.org/DTD/ddl-1.0.dtd"
+
+   $Revision: 1 $
+   $Date: 2012/07/16 01:00:00-0300 $
+-->
+
+<!ELEMENT ddl (cylinder*)>
+<!ATTLIST ddl version CDATA "1.0">
+<!ATTLIST edl creator CDATA #REQUIRED>
+<!ATTLIST edl label CDATA #IMPLIED>
+<!ATTLIST edl description CDATA #IMPLIED>
+<!ATTLIST edl medium CDATA #REQUIRED>
+<!ATTLIST edl tracksPerInch CDATA #REQUIRED>
+
+<!ELEMENT cylinder (head*)>
+<!ATTLIST cylinder index CDATA #REQUIRED>
+
+<!ELEMENT head (track*)>
+<!ATTLIST head index CDATA #REQUIRED>
+
+<!ELEMENT track (data*)>
+<!ATTLIST track index CDATA #REQUIRED>
+
+<!ELEMENT data EMPTY>
+<!ATTLIST data type CDATA #REQUIRED>
