@@ -1,6 +1,3 @@
-==1.0.3==
-* Fix replace monitor+emulation lock problem (happens when a monitor is replaced and selected)
-
 ==1.0.4==
 * Fix Apple Silentype Interface Card spurious data problems
 * Implement Apple Silentype print intensity
