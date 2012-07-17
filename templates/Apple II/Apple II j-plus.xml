@@ -6,12 +6,12 @@
         <setting ref="appleIIjplus.audioOut" name="volume" label="Volume" type="slider" options="0,1"/>
         <setting ref="appleIIjplus.keyboard" name="type" label="Keyboard" type="select" options="Standard,Shift-Key Mod,Full ASCII"/>
     </device>
-    <port id="appleIIjplus.videoPort" ref="" type="Composite Video Port" group="peripherals" label="Video Port" image="images/Connectors/RCA Female.png">
+    <port id="appleIIjplus.videoPort" ref="appleMonitorII.connector" type="Composite Video Port" group="peripherals" label="Video Port" image="images/Connectors/RCA Female.png">
         <inlet ref="appleIIjplus.keyboard" property="monitor" outletRef="monitor"/>
         <inlet ref="appleIIjplus.video" property="monitorDevice" outletRef=""/>
         <inlet ref="appleIIjplus.video" property="monitor" outletRef="monitor"/>
     </port>
-    <port id="appleIIjplus.gamePort" ref="" type="Apple II Game Port" group="peripherals" label="Game Port" image="images/Connectors/DIP16.png">
+    <port id="appleIIjplus.gamePort" ref="appleHandControllers.connector" type="Apple II Game Port" group="peripherals" label="Game Port" image="images/Connectors/DIP16.png">
         <inlet ref="appleIIjplus.gamePort" property="gamePort" outletRef="io"/>
     </port>
     <port id="appleIIjplus.slot0" ref="" type="Apple II Slot" group="expansions" label="Slot 0" image="images/Connectors/Edge50.png">
@@ -25,7 +25,7 @@
         <inlet ref="appleIIjplus.io" property="refSlot2" outletRef="io"/>
         <inlet ref="appleIIjplus.memoryBus" property="refSlot2" outletRef="memory"/>
     </port>
-    <port id="appleIIjplus.slot3" ref="" type="Apple II Slot" group="expansions" label="Slot 3" image="images/Connectors/Edge50.png">
+    <port id="appleIIjplus.slot3" ref="videxVideoterm.connector" type="Apple II Slot" group="expansions" label="Slot 3" image="images/Connectors/Edge50.png">
         <inlet ref="appleIIjplus.io" property="refSlot3" outletRef="io"/>
         <inlet ref="appleIIjplus.memoryBus" property="refSlot3" outletRef="memory"/>
     </port>
@@ -37,11 +37,11 @@
         <inlet ref="appleIIjplus.io" property="refSlot5" outletRef="io"/>
         <inlet ref="appleIIjplus.memoryBus" property="refSlot5" outletRef="memory"/>
     </port>
-    <port id="appleIIjplus.slot6" ref="" type="Apple II Slot" group="expansions" label="Slot 6" image="images/Connectors/Edge50.png">
+    <port id="appleIIjplus.slot6" ref="appleDiskIICard.connector" type="Apple II Slot" group="expansions" label="Slot 6" image="images/Connectors/Edge50.png">
         <inlet ref="appleIIjplus.io" property="refSlot6" outletRef="io"/>
         <inlet ref="appleIIjplus.memoryBus" property="refSlot6" outletRef="memory"/>
     </port>
-    <port id="appleIIjplus.slot7" ref="" type="Apple II Slot" group="expansions" label="Slot 7" image="images/Connectors/Edge50.png">
+    <port id="appleIIjplus.slot7" ref="rdCFFA.connector" type="Apple II Slot" group="expansions" label="Slot 7" image="images/Connectors/Edge50.png">
         <inlet ref="appleIIjplus.io" property="refSlot7" outletRef="io"/>
         <inlet ref="appleIIjplus.memoryBus" property="refSlot7" outletRef="memory"/>
     </port>
@@ -61,11 +61,11 @@
         <property name="nmiCount" value="0"/>
     </component>
     <component id="appleIIjplus.cpu" class="MOS6502">
-        <property name="a" value="0"/>
-        <property name="x" value="0"/>
-        <property name="y" value="0"/>
-        <property name="s" value="0"/>
-        <property name="p" value="0"/>
+        <property name="a" value="0x0"/>
+        <property name="x" value="0x0"/>
+        <property name="y" value="0x0"/>
+        <property name="s" value="0x0"/>
+        <property name="p" value="0x0"/>
         <property name="pc" value="0xfa62"/>
         <property name="controlBus" ref="appleIIjplus.controlBus"/>
         <property name="memoryBus" ref="appleIIjplus.memoryBus"/>
@@ -87,15 +87,15 @@
         <property name="mapSlot1" value="0xc100-0xc1ff"/>
         <property name="refSlot2" ref=""/>
         <property name="mapSlot2" value="0xc200-0xc2ff"/>
-        <property name="refSlot3" ref=""/>
+        <property name="refSlot3" ref="videxVideoterm.memory"/>
         <property name="mapSlot3" value="0xc300-0xc3ff"/>
         <property name="refSlot4" ref=""/>
         <property name="mapSlot4" value="0xc400-0xc4ff"/>
         <property name="refSlot5" ref=""/>
         <property name="mapSlot5" value="0xc500-0xc5ff"/>
-        <property name="refSlot6" ref=""/>
+        <property name="refSlot6" ref="appleDiskIICard.memory"/>
         <property name="mapSlot6" value="0xc600-0xc6ff"/>
-        <property name="refSlot7" ref=""/>
+        <property name="refSlot7" ref="rdCFFA.memory"/>
         <property name="mapSlot7" value="0xc700-0xc7ff"/>
         <property name="refROMD0" ref="appleIIjplus.romD0"/>
         <property name="mapROMD0" value="0xd000-0xd7ff"/>
@@ -151,15 +151,15 @@
         <property name="mapSlot1" value="0x90-0x9f"/>
         <property name="refSlot2" ref=""/>
         <property name="mapSlot2" value="0xa0-0xaf"/>
-        <property name="refSlot3" ref=""/>
+        <property name="refSlot3" ref="videxVideoterm.io"/>
         <property name="mapSlot3" value="0xb0-0xbf"/>
         <property name="refSlot4" ref=""/>
         <property name="mapSlot4" value="0xc0-0xcf"/>
         <property name="refSlot5" ref=""/>
         <property name="mapSlot5" value="0xd0-0xdf"/>
-        <property name="refSlot6" ref=""/>
+        <property name="refSlot6" ref="appleDiskIICard.io"/>
         <property name="mapSlot6" value="0xe0-0xef"/>
-        <property name="refSlot7" ref=""/>
+        <property name="refSlot7" ref="rdCFFA.io"/>
         <property name="mapSlot7" value="0xf0-0xff"/>
     </component>
     <component id="appleIIjplus.keyboard" class="AppleIIKeyboard">
@@ -167,11 +167,11 @@
         <property name="controlBus" ref="appleIIjplus.controlBus"/>
         <property name="floatingBus" ref="appleIIjplus.floatingBus"/>
         <property name="gamePort" ref="appleIIjplus.gamePort"/>
-        <property name="monitor" ref=""/>
+        <property name="monitor" ref="appleMonitorII.monitor"/>
     </component>
     <component id="appleIIjplus.video" class="AppleIIVideo">
         <property name="model" value="II j-plus"/>
-        <property name="revision" value="Revision 1+"/>
+        <property name="revision" value="1"/>
         <property name="tvSystem" value="NTSC"/>
         <property name="characterSet" value="Standard"/>
         <property name="flashFrameNum" value="14"/>
@@ -183,8 +183,8 @@
         <property name="controlBus" ref="appleIIjplus.controlBus"/>
         <property name="memoryBus" ref="appleIIjplus.memoryBus"/>
         <property name="gamePort" ref="appleIIjplus.gamePort"/>
-        <property name="monitorDevice" ref=""/>
-        <property name="monitor" ref=""/>
+        <property name="monitorDevice" ref="appleMonitorII"/>
+        <property name="monitor" ref="appleMonitorII.monitor"/>
         <property name="fontStandard" data="${resourcePath}/roms/Apple/Apple II j-plus Video ROM.bin"/>
     </component>
     <component id="appleIIjplus.audioOut" class="AppleIIAudioOut">
@@ -193,7 +193,7 @@
         <property name="audioCodec" ref="appleIIjplus.audioCodec"/>
     </component>
     <component id="appleIIjplus.audioIn" class="AppleIIAudioIn">
-        <property name="noiseRejection" value="0.04"/>
+        <property name="noiseRejection" value="0.03999999911"/>
         <property name="floatingBus" ref="appleIIjplus.floatingBus"/>
         <property name="audioCodec" ref="appleIIjplus.audioCodec"/>
     </component>
@@ -206,13 +206,13 @@
         <property name="highFrequency" value="10000"/>
     </component>
     <component id="appleIIjplus.gamePort" class="AppleIIGamePort">
-        <property name="an0" value="0"/>
-        <property name="an1" value="0"/>
+        <property name="an0" value="1"/>
+        <property name="an1" value="1"/>
         <property name="an2" value="1"/>
         <property name="an3" value="1"/>
         <property name="controlBus" ref="appleIIjplus.controlBus"/>
         <property name="floatingBus" ref="appleIIjplus.floatingBus"/>
-        <property name="gamePort" ref=""/>
+        <property name="gamePort" ref="appleHandControllers.io"/>
     </component>
     <component id="appleIIjplus.romD0" class="ROM">
         <property name="memoryImage" data="${resourcePath}/roms/Apple/341-0011-D0.bin"/>
@@ -231,6 +231,347 @@
     </component>
     <component id="appleIIjplus.romF8" class="ROM">
         <property name="memoryImage" data="${resourcePath}/roms/Apple/341-0047-00.bin"/>
+    </component>
+    
+    <device id="appleMonitorII" label="Apple Monitor II" image="images/Apple/Apple Monitor II.png">
+        <setting ref="appleMonitorII.monitor" name="videoBrightness" label="Brightness" type="slider" options="-1.0,1.0"/>
+        <setting ref="appleMonitorII.monitor" name="videoContrast" label="Contrast" type="slider" options="0.0,1.0"/>
+        <setting ref="appleMonitorII.monitor" name="videoVerticalCenter" label="Vertical Center" type="slider" options="-0.1,0.1"/>
+        <setting ref="appleMonitorII.monitor" name="videoVerticalSize" label="Vertical Size" type="slider" options="0.85,1.25"/>
+    </device>
+    <connector id="appleMonitorII.connector" type="Composite Video Port">
+        <inlet ref="appleMonitorII.monitor" property="controlBus" outletRef="controlBus"/>
+    </connector>
+    <component id="appleMonitorII.monitor" class="Monitor">
+        <property name="device" ref="appleMonitorII"/>
+        <property name="controlBus" ref="appleIIjplus.controlBus"/>
+        <property name="videoDecoder" value="Monochrome"/>
+        <property name="videoBrightness" value="0.150000006"/>
+        <property name="videoContrast" value="0.8000000119"/>
+        <property name="videoSaturation" value="1.450000048"/>
+        <property name="videoHue" value="0.2700000107"/>
+        <property name="videoHorizontalCenter" value="0"/>
+        <property name="videoHorizontalSize" value="1.049999952"/>
+        <property name="videoVerticalCenter" value="0"/>
+        <property name="videoVerticalSize" value="1.049999952"/>
+        <property name="videoBandwidth" value="6000000"/>
+        <property name="displayBarrel" value="0.1000000015"/>
+        <property name="displayScanlineLevel" value="0.5"/>
+        <property name="displayCenterLighting" value="0.5"/>
+        <property name="displayLuminanceGain" value="1.5"/>
+    </component>
+    
+    <device id="appleHandControllers" label="Apple Hand Controllers" image="images/Apple/Apple Hand Controllers.png">
+        <setting ref="appleHandControllers.io" name="inputDevice" label="Input Device" type="select" options="Mouse,Joystick,None"/>
+        <setting ref="appleHandControllers.io" name="axis0" label="PDL0" type="select" options=""/>
+        <setting ref="appleHandControllers.io" name="axis1" label="PDL1" type="select" options=""/>
+        <setting ref="appleHandControllers.io" name="axis2" label="PDL2" type="select" options=""/>
+        <setting ref="appleHandControllers.io" name="axis3" label="PDL3" type="select" options=""/>
+        <setting ref="appleHandControllers.io" name="button0" label="PB0" type="select" options=""/>
+        <setting ref="appleHandControllers.io" name="button1" label="PB1" type="select" options=""/>
+        <setting ref="appleHandControllers.io" name="button2" label="PB2" type="select" options=""/>
+        <setting ref="appleHandControllers.io" name="sensitivityAxis0" label="PDL0 Sensitivity" type="slider" options="-10,10"/>
+        <setting ref="appleHandControllers.io" name="sensitivityAxis1" label="PDL1 Sensitivity" type="slider" options="-10,10"/>
+        <setting ref="appleHandControllers.io" name="sensitivityAxis2" label="PDL2 Sensitivity" type="slider" options="-10,10"/>
+        <setting ref="appleHandControllers.io" name="sensitivityAxis3" label="PDL3 Sensitivity" type="slider" options="-10,10"/>
+        <setting ref="appleHandControllers.io" name="reverseAxis0" label="PDL0 Reverse" type="checkbox"/>
+        <setting ref="appleHandControllers.io" name="reverseAxis1" label="PDL1 Reverse" type="checkbox"/>
+        <setting ref="appleHandControllers.io" name="reverseAxis2" label="PDL2 Reverse" type="checkbox"/>
+        <setting ref="appleHandControllers.io" name="reverseAxis3" label="PDL3 Reverse" type="checkbox"/>
+    </device>
+    <connector id="appleHandControllers.connector" type="Apple II Game Port">
+        <inlet ref="appleHandControllers.io" property="canvas" outletRef="video"/>
+    </connector>
+    <component id="appleHandControllers.io" class="JoystickMapper">
+        <property name="inputDevice" value="Mouse"/>
+        <property name="deviceId" value="0"/>
+        <property name="axis0" value="Mouse X"/>
+        <property name="axis1" value="Mouse Y"/>
+        <property name="axis2" value="Unmapped"/>
+        <property name="axis3" value="Unmapped"/>
+        <property name="button0" value="Mouse Button 1"/>
+        <property name="button1" value="Mouse Button 2"/>
+        <property name="button2" value="Mouse Button 3"/>
+        <property name="sensitivityAxis0" value="0"/>
+        <property name="sensitivityAxis1" value="0"/>
+        <property name="sensitivityAxis2" value="0"/>
+        <property name="sensitivityAxis3" value="0"/>
+        <property name="reverseAxis0" value="0"/>
+        <property name="reverseAxis1" value="0"/>
+        <property name="reverseAxis2" value="0"/>
+        <property name="reverseAxis3" value="0"/>
+        <property name="mapMouse" value="axis0,Mouse X,0,0,axis1,Mouse Y,0,0,axis2,Unmapped,0,0,axis3,Unmapped,0,0,button0,Mouse Button 1,0,0,button1,Mouse Button 2,0,0,button2,Mouse Button 3,0,0"/>
+        <property name="mapJoystick" value="axis0,Joystick 1 X-Axis,0,0,axis1,Joystick 1 Y-Axis,0,0,axis2,Joystick 1 Z-Rotation,0,0,axis3,Joystick 1 Slider,0,0,button0,Joystick 1 Button 1,0,0,button1,Joystick 1 Button 2,0,0,button2,Joystick 1 Button 3,0,0"/>
+        <property name="mapNone" value="axis0,Unmapped,0,0,axis1,Unmapped,0,0,axis2,Unmapped,0,0,axis3,Unmapped,0,0,button0,Unmapped,0,0,button1,Unmapped,0,0,button2,Unmapped,0,0"/>
+        <property name="device" ref="appleHandControllers"/>
+        <property name="canvas" ref="appleIIjplus.video"/>
+        <property name="joystick" ref="joystick"/>
+    </component>
+    
+    <device id="videxVideoterm" label="Videx Videoterm" image="images/Videx/Videx Videoterm.png">
+        <setting ref="videxVideoterm.io" name="characterSet1" label="Character Set" type="select" options="Normal,NormalUppercase|Normal Uppercase,Inverse,French,German,Katakana,Spanish,Symbol,SuperSub|Super and Subscript,APL,Epson"/>
+        <setting ref="videxVideoterm.io" name="characterSet2" label="Alt. Character Set" type="select" options="Normal,NormalUppercase|Normal Uppercase,Inverse,French,German,Katakana,Spanish,Symbol,SuperSub|Super and Subscript,APL,Epson"/>
+    </device>
+    <connector id="videxVideoterm.connector" type="Apple II Slot">
+        <inlet ref="videxVideoterm.ram" property="controlBus" outletRef="controlBus"/>
+        <inlet ref="videxVideoterm.io" property="controlBus" outletRef="controlBus"/>
+        <inlet ref="videxVideoterm.io" property="floatingBus" outletRef="floatingBus"/>
+        <inlet ref="videxVideoterm.io" property="video" outletRef="video"/>
+        <inlet ref="videxVideoterm.io" property="gamePort" outletRef="gamePort"/>
+        <inlet ref="videxVideoterm.memory" property="memoryBus" outletRef="memoryBus"/>
+        <inlet ref="videxVideoterm.disableC800" property="memoryBus" outletRef="memoryBus"/>
+    </connector>
+    <component id="videxVideoterm.ram" class="VRAM">
+        <property name="memoryImage" data="${packagePath}/${id}.bin"/>
+        <property name="controlBus" ref="appleIIjplus.controlBus"/>
+        <property name="size" value="0x800"/>
+        <property name="observer" ref="videxVideoterm.io"/>
+    </component>
+    <component id="videxVideoterm.io" class="VidexVideoterm">
+        <property name="controlBus" ref="appleIIjplus.controlBus"/>
+        <property name="floatingBus" ref="appleIIjplus.floatingBus"/>
+        <property name="horizTotal" value="0x7b"/>
+        <property name="horizDisplayed" value="0x50"/>
+        <property name="horizSyncPosition" value="0x5e"/>
+        <property name="horizSyncWidth" value="0x29"/>
+        <property name="vertTotal" value="0x1b"/>
+        <property name="vertTotalAdjust" value="0x8"/>
+        <property name="vertDisplayed" value="0x18"/>
+        <property name="vertSyncPosition" value="0x19"/>
+        <property name="modeControl" value="0x0"/>
+        <property name="scanline" value="0x8"/>
+        <property name="cursorStart" value="0x60"/>
+        <property name="cursorEnd" value="0x8"/>
+        <property name="startAddress" value="0x0"/>
+        <property name="cursorAddress" value="0x0"/>
+        <property name="addressRegister" value="0"/>
+        <property name="ram" ref="videxVideoterm.ram"/>
+        <property name="addressOffset" ref="videxVideoterm.addressOffset"/>
+        <property name="video" ref="appleIIjplus.video"/>
+        <property name="gamePort" ref="appleIIjplus.gamePort"/>
+        <property name="characterSet1" value="Normal"/>
+        <property name="characterSet2" value="Inverse"/>
+        <property name="cellWidth" value="9"/>
+        <property name="ramBank" value="0"/>
+        <property name="fontAPL" data="${resourcePath}/roms/Videx/Videx Videoterm Character ROM APL.bin"/>
+        <property name="fontEpson" data="${resourcePath}/roms/Videx/Videx Videoterm Character ROM Epson.bin"/>
+        <property name="fontFrench" data="${resourcePath}/roms/Videx/Videx Videoterm Character ROM French.bin"/>
+        <property name="fontGerman" data="${resourcePath}/roms/Videx/Videx Videoterm Character ROM German.bin"/>
+        <property name="fontInverse" data="${resourcePath}/roms/Videx/Videx Videoterm Character ROM Inverse.bin"/>
+        <property name="fontKatakana" data="${resourcePath}/roms/Videx/Videx Videoterm Character ROM Katakana.bin"/>
+        <property name="fontNormalUppercase" data="${resourcePath}/roms/Videx/Videx Videoterm Character ROM Normal Uppercase.bin"/>
+        <property name="fontNormal" data="${resourcePath}/roms/Videx/Videx Videoterm Character ROM Normal.bin"/>
+        <property name="fontSpanish" data="${resourcePath}/roms/Videx/Videx Videoterm Character ROM Spanish.bin"/>
+        <property name="fontSuperSub" data="${resourcePath}/roms/Videx/Videx Videoterm Character ROM Super and Subscript.bin"/>
+        <property name="fontSymbol" data="${resourcePath}/roms/Videx/Videx Videoterm Character ROM Symbol.bin"/>
+    </component>
+    <component id="videxVideoterm.memory" class="AppleIISlotController">
+        <property name="memory" ref="videxVideoterm.rom"/>
+        <property name="en" value="0"/>
+        <property name="memoryBus" ref="appleIIjplus.memoryBus"/>
+        <property name="refROM" ref="videxVideoterm.rom"/>
+        <property name="mapROM" value="0xc800-0xcbff"/>
+        <property name="refRAM" ref="videxVideoterm.addressOffset"/>
+        <property name="mapRAM" value="0xcc00-0xcdff"/>
+        <property name="refDisableC800" ref="videxVideoterm.disableC800"/>
+        <property name="mapDisableC800" value="0xce00-0xcfff"/>
+    </component>
+    <component id="videxVideoterm.rom" class="ROM">
+        <property name="memoryImage" data="${resourcePath}/roms/Videx/Videx Videoterm ROM 2.4.bin"/>
+    </component>
+    <component id="videxVideoterm.addressOffset" class="AddressOffset">
+        <property name="memory" ref="videxVideoterm.ram"/>
+        <property name="size" value="0x200"/>
+        <property name="blockSize" value="0x200"/>
+    </component>
+    <component id="videxVideoterm.disableC800" class="AppleIIDisableC800">
+        <property name="memory" ref="videxVideoterm.memory"/>
+        <property name="memoryBus" ref="appleIIjplus.memoryBus"/>
+    </component>
+    
+    <device id="appleDiskIICard" label="Apple Disk II Interface Card" image="images/Apple/Apple Disk II Interface Card.png">
+        <setting ref="appleDiskIICard.memory" name="sel" label="Controller ROM" type="select" options="ROM13|13 Sector Controller,ROM16|16 Sector Controller"/>
+    </device>
+    <connector id="appleDiskIICard.connector" type="Apple II Slot">
+        <inlet ref="appleDiskIICard.io" property="controlBus" outletRef="controlBus"/>
+        <inlet ref="appleDiskIICard.io" property="floatingBus" outletRef="floatingBus"/>
+        <inlet ref="appleDiskIICard.controlBus" property="component" outletRef="controlBus"/>
+    </connector>
+    <port id="appleDiskIICard.drive1" ref="appleDiskII.connector" type="Apple Disk Drive Port" group="peripherals" label="Drive 1" image="images/Connectors/Header2x10.png">
+        <inlet ref="appleDiskIICard.io" property="drive1" outletRef="drive"/>
+    </port>
+    <port id="appleDiskIICard.drive2" ref="appleDiskII2.connector" type="Apple Disk Drive Port" group="peripherals" label="Drive 2" image="images/Connectors/Header2x10.png">
+        <inlet ref="appleDiskIICard.io" property="drive2" outletRef="drive"/>
+    </port>
+    <component id="appleDiskIICard.io" class="AppleDiskIIInterfaceCard">
+        <property name="controlBus" ref="appleIIjplus.controlBus"/>
+        <property name="floatingBus" ref="appleIIjplus.floatingBus"/>
+        <property name="phaseControl" value="0"/>
+        <property name="driveOn" value="0"/>
+        <property name="driveSel" value="0"/>
+        <property name="drive1" ref="appleDiskII.drive"/>
+        <property name="drive2" ref="appleDiskII2.drive"/>
+    </component>
+    <component id="appleDiskIICard.memory" class="AddressMux">
+        <property name="refROM13" ref="appleDiskIICard.rom13"/>
+        <property name="refROM16" ref="appleDiskIICard.rom16"/>
+        <property name="sel" value="ROM16"/>
+    </component>
+    <component id="appleDiskIICard.rom13" class="ROM">
+        <property name="memoryImage" data="${resourcePath}/roms/Apple/341-0009.bin"/>
+    </component>
+    <component id="appleDiskIICard.rom16" class="ROM">
+        <property name="memoryImage" data="${resourcePath}/roms/Apple/341-0027.bin"/>
+    </component>
+    <component id="appleDiskIICard.controlBus" class="Proxy">
+        <property name="component" ref="appleIIjplus.controlBus"/>
+    </component>
+    
+    <device id="appleDiskII" label="Apple Disk II" image="images/Apple/Apple Disk II.png">
+        <setting ref="appleDiskII.drive" name="forceWriteProtected" label="Force Write Protected" type="checkbox"/>
+        <setting ref="appleDiskII.drive" name="mechanism" label="Drive Sounds" type="select" options="Shugart,Alps,None"/>
+    </device>
+    <connector id="appleDiskII.connector" type="Apple Disk Drive Port">
+        <inlet ref="appleDiskII.drive" property="controlBus" outletRef="controlBus"/>
+        <inlet ref="appleDiskII.headPlayer" property="controlBus" outletRef="controlBus"/>
+    </connector>
+    <component id="appleDiskII.drive" class="AppleDiskDrive525">
+        <property name="device" ref="appleDiskII"/>
+        <property name="controlBus" ref="appleDiskIICard.controlBus"/>
+        <property name="diskImage" value=""/>
+        <property name="track" value="0"/>
+        <property name="forceWriteProtected" value="0"/>
+        <property name="doorPlayer" ref="appleDiskII.doorPlayer"/>
+        <property name="drivePlayer" ref="appleDiskII.drivePlayer"/>
+        <property name="headPlayer" ref="appleDiskII.headPlayer"/>
+        <property name="mechanism" value="Shugart"/>
+        <property name="soundShugartOpen" value="${resourcePath}/sounds/Shugart/Shugart SA400 Open.ogg"/>
+        <property name="soundShugartClose" value="${resourcePath}/sounds/Shugart/Shugart SA400 Close.ogg"/>
+        <property name="soundShugartDrive" value="${resourcePath}/sounds/Shugart/Shugart SA400 Drive.ogg"/>
+        <property name="soundShugartHead" value="${resourcePath}/sounds/Shugart/Shugart SA400 Head.ogg"/>
+        <property name="soundShugartStop" value="${resourcePath}/sounds/Shugart/Shugart SA400 Stop.ogg"/>
+        <property name="soundShugartAlign" value="${resourcePath}/sounds/Shugart/Shugart SA400 Align.ogg"/>
+        <property name="soundAlpsOpen" value="${resourcePath}/sounds/Shugart/Shugart SA400 Open.ogg"/>
+        <property name="soundAlpsClose" value="${resourcePath}/sounds/Shugart/Shugart SA400 Close.ogg"/>
+        <property name="soundAlpsDrive" value="${resourcePath}/sounds/Alps/Alps 2124A Drive.ogg"/>
+        <property name="soundAlpsHead" value="${resourcePath}/sounds/Alps/Alps 2124A Head.ogg"/>
+        <property name="soundAlpsStop" value="${resourcePath}/sounds/Alps/Alps 2124A Stop.ogg"/>
+        <property name="soundAlpsAlign" value="${resourcePath}/sounds/Shugart/Shugart SA400 Align.ogg"/>
+    </component>
+    <component id="appleDiskII.doorPlayer" class="AudioPlayer">
+        <property name="audio" ref="audio"/>
+    </component>
+    <component id="appleDiskII.drivePlayer" class="AudioPlayer">
+        <property name="audio" ref="audio"/>
+        <property name="loop" value="1"/>
+    </component>
+    <component id="appleDiskII.headPlayer" class="AudioPlayer">
+        <property name="audio" ref="audio"/>
+        <property name="controlBus" ref="appleDiskIICard.controlBus"/>
+    </component>
+    
+    <device id="appleDiskII2" label="Apple Disk II" image="images/Apple/Apple Disk II.png">
+        <setting ref="appleDiskII2.drive" name="forceWriteProtected" label="Force Write Protected" type="checkbox"/>
+        <setting ref="appleDiskII2.drive" name="mechanism" label="Drive Sounds" type="select" options="Shugart,Alps,None"/>
+    </device>
+    <connector id="appleDiskII2.connector" type="Apple Disk Drive Port">
+        <inlet ref="appleDiskII2.drive" property="controlBus" outletRef="controlBus"/>
+        <inlet ref="appleDiskII2.headPlayer" property="controlBus" outletRef="controlBus"/>
+    </connector>
+    <component id="appleDiskII2.drive" class="AppleDiskDrive525">
+        <property name="device" ref="appleDiskII2"/>
+        <property name="controlBus" ref="appleDiskIICard.controlBus"/>
+        <property name="diskImage" value=""/>
+        <property name="track" value="0"/>
+        <property name="forceWriteProtected" value="0"/>
+        <property name="doorPlayer" ref="appleDiskII2.doorPlayer"/>
+        <property name="drivePlayer" ref="appleDiskII2.drivePlayer"/>
+        <property name="headPlayer" ref="appleDiskII2.headPlayer"/>
+        <property name="mechanism" value="Alps"/>
+        <property name="soundShugartOpen" value="${resourcePath}/sounds/Shugart/Shugart SA400 Open.ogg"/>
+        <property name="soundShugartClose" value="${resourcePath}/sounds/Shugart/Shugart SA400 Close.ogg"/>
+        <property name="soundShugartDrive" value="${resourcePath}/sounds/Shugart/Shugart SA400 Drive.ogg"/>
+        <property name="soundShugartHead" value="${resourcePath}/sounds/Shugart/Shugart SA400 Head.ogg"/>
+        <property name="soundShugartStop" value="${resourcePath}/sounds/Shugart/Shugart SA400 Stop.ogg"/>
+        <property name="soundShugartAlign" value="${resourcePath}/sounds/Shugart/Shugart SA400 Align.ogg"/>
+        <property name="soundAlpsOpen" value="${resourcePath}/sounds/Shugart/Shugart SA400 Open.ogg"/>
+        <property name="soundAlpsClose" value="${resourcePath}/sounds/Shugart/Shugart SA400 Close.ogg"/>
+        <property name="soundAlpsDrive" value="${resourcePath}/sounds/Alps/Alps 2124A Drive.ogg"/>
+        <property name="soundAlpsHead" value="${resourcePath}/sounds/Alps/Alps 2124A Head.ogg"/>
+        <property name="soundAlpsStop" value="${resourcePath}/sounds/Alps/Alps 2124A Stop.ogg"/>
+        <property name="soundAlpsAlign" value="${resourcePath}/sounds/Shugart/Shugart SA400 Align.ogg"/>
+    </component>
+    <component id="appleDiskII2.doorPlayer" class="AudioPlayer">
+        <property name="audio" ref="audio"/>
+    </component>
+    <component id="appleDiskII2.drivePlayer" class="AudioPlayer">
+        <property name="audio" ref="audio"/>
+        <property name="loop" value="1"/>
+    </component>
+    <component id="appleDiskII2.headPlayer" class="AudioPlayer">
+        <property name="audio" ref="audio"/>
+        <property name="controlBus" ref="appleDiskIICard.controlBus"/>
+    </component>
+    
+    <device id="rdCFFA" label="R&amp;D CFFA" image="images/R&amp;D/R&amp;D CFFA.png">
+        <setting ref="rdCFFA.rom" name="sel" label="Firmware" type="select" options="ROM6502|Apple II,ROM65C02|Apple IIe (or newer)"/>
+        <setting ref="rdCFFA.ataDevice" name="forceWriteProtected" label="Force Write Protected" type="checkbox"/>
+    </device>
+    <connector id="rdCFFA.connector" type="Apple II Slot">
+        <inlet ref="rdCFFA.io" property="floatingBus" outletRef="floatingBus"/>
+        <inlet ref="rdCFFA.memory" property="memoryBus" outletRef="memoryBus"/>
+        <inlet ref="rdCFFA.memoryC800" property="floatingBus" outletRef="floatingBus"/>
+        <inlet ref="rdCFFA.disableC800" property="memoryBus" outletRef="memoryBus"/>
+    </connector>
+    <component id="rdCFFA.io" class="RDCFFA">
+        <property name="ataController" ref="rdCFFA.ataController"/>
+    </component>
+    <component id="rdCFFA.ataController" class="ATAController">
+        <property name="drive1" ref="rdCFFA.ataDevice"/>
+    </component>
+    <component id="rdCFFA.ataDevice" class="ATADevice">
+        <property name="device" ref="rdCFFA"/>
+        <property name="diskImage" value=""/>
+        <property name="forceWriteProtected" value="0"/>
+        <property name="maxSize" value="65535"/>
+    </component>
+    <component id="rdCFFA.memory" class="AppleIISlotController">
+        <property name="memory" ref="rdCFFA.rom"/>
+        <property name="en" value="0"/>
+        <property name="memoryBus" ref="appleIIjplus.memoryBus"/>
+        <property name="refC800" ref="rdCFFA.memoryC800"/>
+        <property name="mapC800" value="0xc800-0xcfff"/>
+    </component>
+    <component id="rdCFFA.memoryC800" class="AddressDecoder">
+        <property name="size" value="0x800"/>
+        <property name="blockSize" value="0x1"/>
+        <property name="floatingBus" ref="appleIIjplus.floatingBus"/>
+        <property name="refRAM" ref="rdCFFA.ram"/>
+        <property name="mapRAM" value="0x000-0x01f"/>
+        <property name="refROM" ref="rdCFFA.rom"/>
+        <property name="mapROM" value="0x020-0x7fe"/>
+        <property name="refDisableC800" ref="rdCFFA.disableC800"/>
+        <property name="mapDisableC800" value="0x7ff"/>
+    </component>
+    <component id="rdCFFA.ram" class="RAM">
+        <property name="memoryImage" data="${packagePath}/${id}.bin"/>
+        <property name="size" value="0x20"/>
+        <property name="powerOnPattern" value="0x040000010000000000DFCD051F64000000000000000000000000000000000001"/>
+    </component>
+    <component id="rdCFFA.rom" class="AddressMux">
+        <property name="refROM6502" ref="rdCFFA.rom6502"/>
+        <property name="refROM65C02" ref="rdCFFA.rom65C02"/>
+        <property name="sel" value="ROM6502"/>
+    </component>
+    <component id="rdCFFA.rom6502" class="ROM">
+        <property name="memoryImage" data="${resourcePath}/roms/R&amp;D/CFFA20EE02.bin"/>
+    </component>
+    <component id="rdCFFA.rom65C02" class="ROM">
+        <property name="memoryImage" data="${resourcePath}/roms/R&amp;D/CFFA20EEC02.bin"/>
+    </component>
+    <component id="rdCFFA.disableC800" class="AppleIIDisableC800">
+        <property name="memory" ref="rdCFFA.memory"/>
+        <property name="memoryBus" ref="appleIIjplus.memoryBus"/>
     </component>
     
 </edl>

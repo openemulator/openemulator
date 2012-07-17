@@ -11,8 +11,8 @@
         <inlet ref="aONE.terminal" property="monitorDevice" outletRef=""/>
         <inlet ref="aONE.terminal" property="monitor" outletRef="monitor"/>
     </port>
-    <port id="aONE.slot1" ref="" type="Apple-1 Expansion Port" group="expansions" label="Expansion Port" image="images/Connectors/Edge44.png"/>
-    <port id="aONE.slot2" ref="" type="Apple-1 Expansion Port" group="expansions" label="Expansion Port" image="images/Connectors/Edge44.png"/>
+    <port id="aONE.slot1" ref="appleACI.connector" type="Apple-1 Expansion Port" group="expansions" label="Expansion Port" image="images/Connectors/Edge44.png"/>
+    <port id="aONE.slot2" ref="rdCFFA1.connector" type="Apple-1 Expansion Port" group="expansions" label="Expansion Port" image="images/Connectors/Edge44.png"/>
     <component id="aONE.controlBus" class="ControlBus">
         <property name="device" ref="aONE"/>
         <property name="audio" ref="audio"/>
@@ -129,19 +129,97 @@
         <property name="device" ref="appleMonitorII"/>
         <property name="controlBus" ref="aONE.controlBus"/>
         <property name="videoDecoder" value="Monochrome"/>
-        <property name="videoBrightness" value="0.15"/>
-        <property name="videoContrast" value="0.8"/>
-        <property name="videoSaturation" value="1.45"/>
-        <property name="videoHue" value="0.27"/>
+        <property name="videoBrightness" value="0.150000006"/>
+        <property name="videoContrast" value="0.8000000119"/>
+        <property name="videoSaturation" value="1.450000048"/>
+        <property name="videoHue" value="0.2700000107"/>
         <property name="videoHorizontalCenter" value="0"/>
-        <property name="videoHorizontalSize" value="1.05"/>
+        <property name="videoHorizontalSize" value="1.049999952"/>
         <property name="videoVerticalCenter" value="0"/>
-        <property name="videoVerticalSize" value="1.05"/>
+        <property name="videoVerticalSize" value="1.049999952"/>
         <property name="videoBandwidth" value="4500000"/>
-        <property name="displayBarrel" value="0.1"/>
+        <property name="displayBarrel" value="0.1000000015"/>
         <property name="displayScanlineLevel" value="0.5"/>
         <property name="displayCenterLighting" value="0.5"/>
         <property name="displayLuminanceGain" value="1.5"/>
+    </component>
+    
+    <device id="appleACI" label="Apple-1 Cassette Interface Card" image="images/Apple/Apple-1 Cassette Interface Card.png">
+        <setting ref="appleACI.io" name="volume" label="Volume" type="slider" options="0,1"/>
+    </device>
+    <connector id="appleACI.connector" type="Apple-1 Expansion Port">
+        <inlet ref="appleACI.addressMapper" property="addressDecoder" outletRef="memoryBus"/>
+        <inlet ref="appleACI.audioCodec" property="controlBus" outletRef="controlBus"/>
+    </connector>
+    <component id="appleACI.addressMapper" class="AddressMapper">
+        <property name="addressDecoder" ref="aONE.memoryBus"/>
+        <property name="mapIO" value="0xc000-0xc0ff"/>
+        <property name="refIO" ref="appleACI.io"/>
+        <property name="mapROM" value="0xc100-0xc1ff"/>
+        <property name="refROM" ref="appleACI.rom"/>
+        <property name="sel" value="IO,ROM"/>
+    </component>
+    <component id="appleACI.io" class="Apple1ACI">
+        <property name="volume" value="1"/>
+        <property name="noiseRejection" value="0.03999999911"/>
+        <property name="audioCodec" ref="appleACI.audioCodec"/>
+        <property name="rom" ref="appleACI.rom"/>
+    </component>
+    <component id="appleACI.audioCodec" class="AudioCodec">
+        <property name="audio" ref="audio"/>
+        <property name="controlBus" ref="aONE.controlBus"/>
+        <property name="timeAccuracy" value="0.000001"/>
+        <property name="filterSize" value="17"/>
+        <property name="lowFrequency" value="20"/>
+        <property name="highFrequency" value="10000"/>
+    </component>
+    <component id="appleACI.rom" class="ROM">
+        <property name="memoryImage" data="${resourcePath}/roms/Apple/Apple-1 ACI ROM.bin"/>
+    </component>
+    
+    <device id="rdCFFA1" label="R&amp;D CFFA1" image="images/R&amp;D/R&amp;D CFFA1.png">
+        <setting ref="rdCFFA1.ataDevice" name="forceWriteProtected" label="Force Write Protected" type="checkbox"/>
+    </device>
+    <connector id="rdCFFA1.connector" type="Apple-1 Expansion Port">
+        <inlet ref="rdCFFA1.addressMapper" property="addressDecoder" outletRef="memoryBus"/>
+        <inlet ref="rdCFFA1.ram" property="controlBus" outletRef="controlBus"/>
+    </connector>
+    <component id="rdCFFA1.addressMapper" class="AddressMapper">
+        <property name="addressDecoder" ref="aONE.memoryBus"/>
+        <property name="mapRAM" value="0x1000-0x8fff"/>
+        <property name="refRAM" ref="rdCFFA1.ram"/>
+        <property name="mapROM" value="0x9000-0xaeff"/>
+        <property name="refROM" ref="rdCFFA1.rom"/>
+        <property name="mapIO" value="0xaf00-0xafff"/>
+        <property name="refIO" ref="rdCFFA1.memoryAF00"/>
+        <property name="sel" value="RAM,ROM,IO"/>
+    </component>
+    <component id="rdCFFA1.ram" class="RAM">
+        <property name="memoryImage" data="${packagePath}/${id}.bin"/>
+        <property name="size" value="0x8000"/>
+        <property name="controlBus" ref="aONE.controlBus"/>
+    </component>
+    <component id="rdCFFA1.rom" class="ROM">
+        <property name="memoryImage" data="${resourcePath}/roms/R&amp;D/CFFA1V1.0.bin"/>
+    </component>
+    <component id="rdCFFA1.memoryAF00" class="AddressDecoder">
+        <property name="size" value="0x100"/>
+        <property name="blockSize" value="0x20"/>
+        <property name="floatingBus" ref="rdCFFA1.rom"/>
+        <property name="mapIO" value="0xe0-0xff"/>
+        <property name="refIO" ref="rdCFFA1.io"/>
+    </component>
+    <component id="rdCFFA1.io" class="RDCFFA">
+        <property name="ataController" ref="rdCFFA1.ataController"/>
+    </component>
+    <component id="rdCFFA1.ataController" class="ATAController">
+        <property name="drive1" ref="rdCFFA1.ataDevice"/>
+    </component>
+    <component id="rdCFFA1.ataDevice" class="ATADevice">
+        <property name="device" ref="rdCFFA1"/>
+        <property name="diskImage" value=""/>
+        <property name="forceWriteProtected" value="0"/>
+        <property name="maxSize" value="65535"/>
     </component>
     
 </edl>

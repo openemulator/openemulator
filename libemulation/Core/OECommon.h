@@ -23,7 +23,7 @@ using namespace std;
 #define OEToggleBit(x,m) ((x)^=(m))
 
 #define OESetBit(x,m,v) if (v) OEAssertBit(x,m); else OEClearBit(x,m)
-#define OEGetBit(x,m) ((x)&(m))
+#define OEGetBit(x,m) (((x)&(m)) != 0)
 
 typedef unsigned char OEChar;
 typedef signed char OESChar;
