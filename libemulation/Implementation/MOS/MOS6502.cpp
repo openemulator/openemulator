@@ -147,9 +147,6 @@ void MOS6502::notify(OEComponent *sender, int notification, void *data)
         case CONTROLBUS_POWERSTATE_DID_CHANGE:
             powerState = *((ControlBusPowerState *)data);
             
-            if (powerState != CONTROLBUS_POWERSTATE_ON)
-                icount = 0;
-            
             if (powerState == CONTROLBUS_POWERSTATE_OFF)
                 initCPU();
             
@@ -157,7 +154,8 @@ void MOS6502::notify(OEComponent *sender, int notification, void *data)
             
         case CONTROLBUS_RESET_DID_ASSERT:
             isReset = true;
-            icount = 0;
+            if (icount > 0)
+                icount = 0;
             
             return;
             

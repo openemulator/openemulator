@@ -99,14 +99,24 @@ bool DIApple525DiskStorage::open(string path)
 {
     close();
     
-    return fileBackingStore.open(path) && open(&fileBackingStore);
+    if (fileBackingStore.open(path) && open(&fileBackingStore))
+        return true;
+    else
+        fileBackingStore.close();
+    
+    return false;
 }
 
 bool DIApple525DiskStorage::open(DIData& data)
 {
     close();
     
-    return ramBackingStore.open(data) && open(&ramBackingStore);
+    if (ramBackingStore.open(data) && open(&ramBackingStore))
+        return true;
+    else
+        ramBackingStore.close();
+    
+    return false;
 }
 
 bool DIApple525DiskStorage::open(DIBackingStore *backingStore)

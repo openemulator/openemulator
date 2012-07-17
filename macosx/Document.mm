@@ -98,17 +98,10 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 {
     self = [super init];
     
-    if (self)
-    {
-        if ([self readFromURL:absoluteURL
-                       ofType:nil
-                        error:outError])
-        {
-            newCanvases = [[NSMutableArray alloc] init];
-            
+    if (self && [self readFromURL:absoluteURL
+                           ofType:nil
+                            error:outError])
             return self;
-        }
-    }
     
     if (outError)
         *outError = [NSError errorWithDomain:NSCocoaErrorDomain
@@ -434,6 +427,9 @@ void destroyCanvas(void *userData, OEComponent *canvas)
 
 - (void)captureNewCanvases:(BOOL)value
 {
+    if (!newCanvases)
+        newCanvases = [[NSMutableArray alloc] init];
+    
     newCanvasesCapture = value;
     
     if (!value)

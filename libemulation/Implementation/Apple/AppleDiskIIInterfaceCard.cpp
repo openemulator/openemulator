@@ -294,7 +294,8 @@ void AppleDiskIIInterfaceCard::setPhaseControl(OEInt index, bool value)
 
 void AppleDiskIIInterfaceCard::updatePhaseControl()
 {
-    currentDrive->postMessage(this, APPLEII_SET_PHASECONTROL, &phaseControl);
+    if (driveEnableControl)
+        currentDrive->postMessage(this, APPLEII_SET_PHASECONTROL, &phaseControl);
 }
 
 void AppleDiskIIInterfaceCard::setDriveOn(bool value)
@@ -333,7 +334,10 @@ void AppleDiskIIInterfaceCard::updateDriveEnableControl()
     driveEnableControl = (driveOn || timerOn) && !reset;
     
     if (driveEnableControl != wasDriveEnableControl)
+    {
         updateDriveEnabled();
+        updatePhaseControl();
+    }
 }
 
 void AppleDiskIIInterfaceCard::updateDriveEnabled()

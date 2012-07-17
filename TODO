@@ -1,6 +1,4 @@
 ==1.0.3==
-* Fix ControlBus problem in AppleIIVideo: when powering off, cycles is sometimes lower than lastCycles
-* Fix remove Videx Videoterm
 * Fix replace monitor+emulation lock problem (happens when a monitor is replaced and selected)
 
 ==1.0.4==

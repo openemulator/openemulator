@@ -595,7 +595,7 @@ void OEEmulation::deconfigureDevice(string deviceId)
                             
                             component->setRef(name, NULL);
                             
-                            if ((OEGetDeviceId(componentId) != deviceId) ||
+                            if ((OEGetDeviceId(componentId) != deviceId) &&
                                 (OEGetDeviceId(ref) == deviceId))
                                 components.insert(component);
                         }

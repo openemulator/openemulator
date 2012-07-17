@@ -35,6 +35,8 @@ bool DIATABlockStorage::open(string path)
         
         return true;
     }
+    else
+        fileBackingStore.close();
     
     return false;
 }
@@ -49,6 +51,8 @@ bool DIATABlockStorage::open(DIData& data)
         
         return true;
     }
+    else
+        ramBackingStore.close();
     
     return false;
 }

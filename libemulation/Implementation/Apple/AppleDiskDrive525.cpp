@@ -257,6 +257,8 @@ void AppleDiskDrive525::notify(OEComponent *sender, int notification, void *data
             trackPhase += newPhaseDirection;
             trackPhase &= 0x7;
             
+            newPhaseDirection = (newPhaseDirection < 0) ? -1 : (newPhaseDirection > 0) ? 1 : 0;
+            
             bool bump;
             
             // Sense bump
@@ -278,6 +280,8 @@ void AppleDiskDrive525::notify(OEComponent *sender, int notification, void *data
                 phaseStop = true;
                 
                 headPlayer->postMessage(this, AUDIOPLAYER_STOP, NULL);
+                
+//                logMessage("bump start");
             }
             
             phaseLastBump = bump;
@@ -296,6 +300,8 @@ void AppleDiskDrive525::notify(OEComponent *sender, int notification, void *data
                 headPlayer->postMessage(this, AUDIOPLAYER_STOP, NULL);
                 
                 phaseStop = false;
+                
+//                logMessage("direction start");
             }
             
             // Update sounds
@@ -319,7 +325,7 @@ void AppleDiskDrive525::notify(OEComponent *sender, int notification, void *data
             OEInt id = 1;
             controlBus->postMessage(this, CONTROLBUS_INVALIDATE_TIMERS, &id);
             
-            ControlBusTimer timer = { 0.025 * APPLEII_CLOCKFREQUENCY, 1 };
+            ControlBusTimer timer = { 0.05 * APPLEII_CLOCKFREQUENCY, 1 };
             controlBus->postMessage(this, CONTROLBUS_SCHEDULE_TIMER, &timer);
             
             break;
