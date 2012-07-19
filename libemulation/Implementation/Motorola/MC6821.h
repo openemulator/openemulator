@@ -80,13 +80,13 @@ public:
 	
 private:
 	OEChar controlA;
-	OEChar directionA;
+	OEChar ddrA;
 	OEChar dataA;
 	bool ca1;
 	bool ca2;
     
 	OEChar controlB;
-	OEChar directionB;
+	OEChar ddrB;
 	OEChar dataB;
 	bool cb1;
 	bool cb2;

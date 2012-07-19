@@ -19,6 +19,7 @@ typedef enum
     APPLEIIKEYBOARD_TYPE_STANDARD,
     APPLEIIKEYBOARD_TYPE_SHIFTKEYMOD,
     APPLEIIKEYBOARD_TYPE_FULLASCII,
+    APPLEIIKEYBOARD_TYPE_APPLEIII,
 } AppleIIKeyboardType;
 
 typedef enum
@@ -55,9 +56,11 @@ private:
     OEChar keyLatch;
     AppleIIKeyboardState state;
     
+    OEChar appleIIIKeyFlags;
+    
     queue<OEChar> pasteBuffer;
     
-    void updateShiftKeyMod();
+    void updateKeyFlags();
     void sendKey(CanvasUnicodeChar key);
     void paste(wstring *s);
     void emptyPasteBuffer();

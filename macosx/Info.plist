@@ -217,7 +217,6 @@
 				<string>cpm</string>
 				<string>nib</string>
 				<string>v2d</string>
-				<string>vdsk</string>
 				<string>2img</string>
 				<string>2mg</string>
 			</array>
@@ -303,7 +302,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0.3</string>
+	<string>1.0.4</string>
 	<key>CFBundleSignature</key>
 	<string>opem</string>
 	<key>CFBundleVersion</key>

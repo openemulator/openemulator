@@ -5,7 +5,7 @@
  * (C) 2010 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements WDC 65C02S operations.
+ * Implements WDC 65C02S operations
  */
 
 /*****************************************************************************

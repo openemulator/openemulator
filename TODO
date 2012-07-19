@@ -1,40 +1,46 @@
 ==1.0.4==
+* Add F12 reset key
+* Fix crash when replacing monitors
+* Fix crash when writing to a DSK file
+* Fix writing to DOS 3.1 or DOS 3.2 NIB files
+* Modify CTRL+ALT -> Mouse message to "Press CTRL+OPTION to release mouse."
+* Modify power/reset toolbar into a global emulation property
+* Fix Disk II sounds
 * Fix Apple Silentype Interface Card spurious data problems
 * Implement Apple Silentype print intensity
 * Fix [CanvasView update] problem in paper view
 * Add Apple Silentype sounds
 * Add Apple Graphics Tablet sounds
-* Implement wxWidgets user interface
-* Implement Apple III
 * Implement DDL file format
-* Refactorize PAAudio so an emulation is stopped while it is being configured. Increase thread priority
+* Implement Apple III
+* Implement wxWidgets user interface
+* Implement open disk image with template chooser
 * Implement Apple speaker tension/relax audio driver
 * Fix Disk II for: Sherwood Forest, IAC 45, Alkemstone, EOS, Last Gladiator, Wasteland
+* Refactorize PAAudio so an emulation is stopped while it is being configured. Increase thread priority
 * Mac OS X: fix window resizing when loading from disk (confusing emulation window size with canvas window size)
 
 ==1.0.5==
-* Implement Microsoft Softcard
 * Implement Saturn RAMboard
-* Implement ZIP Chip
-* Implement Mountain Computer Apple Clock
-* Implement TimeMaster II H.O.
-* Implement Apple Super Serial Card
-* Think of a way to implement a server that can be separated into the UNIX command line, like responding to calls using netcat (it should separate command and data mode, be able to dial with ATD, and respond with ATA, hang up with ATH. Send messages like OK, RING, CONNECT and NO CARRIER). It might also have set DCD when connected. Respond to "+++" and 1 second wait.
-* Implement a virtual RS-232 SSH client. In client mode, displays "host: ", "login as: " and "user@host's password: " to connect remotely to SSH. In modem mode, ATD commands are accepted.
-* Implement a virtual RS-232 SSH server that listens on a port. A user and password can be configured.
-* Implement a virtual RS-232 file device. When reading, it reads from file. When writing, it writes to a file.
-* Implement a virtual RS-232 speech synthesizer and recognizer device. It uses the host speech synthesis and speech recognition.
 * Implement Apple IIe
 * Implement Apple II Memory Expansion Card
 * Implement AE RamWorks
 * Implement Thunderclock Plus
 * Implement AE TransWarp
+* Implement Microsoft Softcard
+* Implement ZIP Chip
+* Implement Mountain Computer Apple Clock
+* Implement TimeMaster II H.O.
 * Implement Apple II Super Serial Card
-* Implement Digisector DS-65
-* Implement open disk image with template chooser.
+* Think of a way to implement a server that can be separated into the UNIX command line, like responding to calls using netcat (it should separate command and data mode, be able to dial with ATD, and respond with ATA, hang up with ATH. Send messages like OK, RING, CONNECT and NO CARRIER). It might also have set DCD when connected. Respond to "+++" and 1 second wait.
+* Implement a virtual RS-232 SSH client. In client mode, displays "host: ", "login as: " and "user@host's password: " to connect remotely to SSH. In modem mode, ATD commands are accepted.
+* Implement a virtual RS-232 SSH server that listens on a port. A user and password can be configured.
+* Implement a virtual RS-232 file device. When reading, it reads from file. When writing, it writes to a file.
+* Implement a virtual RS-232 speech synthesizer and recognizer device. It uses the host speech synthesis and speech recognition.
 * Fix CTRL+ALT mouse capture problems (bug report, unverified)
 
 ==1.0.6==
+* Implement Digisector DS-65
 * Implement Apple IIc FF
 * Implement Apple IIc 00
 * Implement Apple IIc 01

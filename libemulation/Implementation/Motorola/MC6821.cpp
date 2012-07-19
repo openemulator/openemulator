@@ -22,13 +22,13 @@ MC6821::MC6821()
     controlBusB = NULL;
     
     controlA = 0;
-    directionA = 0;
+    ddrA = 0;
     dataA = 0;
     ca1 = false;
     ca2 = false;
     
     controlB = 0;
-    directionB = 0;
+    ddrB = 0;
     dataB = 0;
     cb1 = false;
     cb2 = false;
@@ -38,8 +38,8 @@ bool MC6821::setValue(string name, string value)
 {
     if (name == "controlA")
         setControlA(getOEInt(value));
-    else if (name == "directionA")
-        directionA = getOEInt(value);
+    else if (name == "ddrA")
+        ddrA = getOEInt(value);
     else if (name == "dataA")
         dataA = getOEInt(value);
     else if (name == "ca1")
@@ -48,8 +48,8 @@ bool MC6821::setValue(string name, string value)
         ca2 = getOEInt(value);
     else if (name == "controlB")
         setControlB(getOEInt(value));
-    else if (name == "directionB")
-        directionB = getOEInt(value);
+    else if (name == "ddrB")
+        ddrB = getOEInt(value);
     else if (name == "dataB")
         dataB = getOEInt(value);
     else if (name == "cb1")
@@ -66,8 +66,8 @@ bool MC6821::getValue(string name, string& value)
 {
     if (name == "controlA")
         value = getHexString(controlA);
-    else if (name == "directionA")
-        value = getHexString(directionA);
+    else if (name == "ddrA")
+        value = getHexString(ddrA);
     else if (name == "dataA")
         value = getHexString(dataA);
     else if (name == "ca1")
@@ -76,8 +76,8 @@ bool MC6821::getValue(string name, string& value)
         value = getString(ca2);
     else if (name == "controlB")
         value = getHexString(controlB);
-    else if (name == "directionB")
-        value = getHexString(directionB);
+    else if (name == "ddrB")
+        value = getHexString(ddrB);
     else if (name == "dataB")
         value = getHexString(dataB);
     else if (name == "cb1")
@@ -240,13 +240,13 @@ void MC6821::notify(OEComponent *component, int notification, void *data)
     {
         case CONTROLBUS_RESET_DID_ASSERT:
             setControlA(0);
-            directionA = 0;
+            ddrA = 0;
             dataA = 0;
             ca1 = false;
             ca2 = false;
             
             setControlB(0);
-            directionB = 0;
+            ddrB = 0;
             dataB = 0;
             cb1 = false;
             cb2 = false;
@@ -262,8 +262,8 @@ OEChar MC6821::read(OEAddress address)
             if (controlA & MC6821_CR_DATAREGISTER)
             {
                 setControlA(controlA & ~MC6821_CR_IRQFLAGS);
-                dataA &= directionA;
-                dataA |= portA->read(MC6821_PORTA) & ~directionA;
+                dataA &= ddrA;
+                dataA |= portA->read(MC6821_PORTA) & ~ddrA;
                 
                 if ((controlA & (MC6821_CR_C2OUTPUT | MC6821_CR_C2DIRECT)) ==
                     MC6821_CR_C2OUTPUT)
@@ -277,7 +277,7 @@ OEChar MC6821::read(OEAddress address)
                 return dataA;
             }
             else
-                return directionA;
+                return ddrA;
             
         case MC6821_RS_CONTROLREGISTERA:
             return controlA;
@@ -286,13 +286,13 @@ OEChar MC6821::read(OEAddress address)
             if (controlB & MC6821_CR_DATAREGISTER)
             {
                 setControlB(controlB & ~MC6821_CR_IRQFLAGS);
-                dataB &= directionB;
-                dataB |= portB->read(MC6821_PORTB) & ~directionB;
+                dataB &= ddrB;
+                dataB |= portB->read(MC6821_PORTB) & ~ddrB;
                 
                 return dataB;
             }
             else
-                return directionB;
+                return ddrB;
             
         case MC6821_RS_CONTROLREGISTERB:
             return controlB;
@@ -308,11 +308,11 @@ void MC6821::write(OEAddress address, OEChar value)
         case MC6821_RS_DATAREGISTERA:
             if (controlA & MC6821_CR_DATAREGISTER)
             {
-                dataA = value & directionA;
+                dataA = value & ddrA;
                 portA->write(MC6821_PORTA, dataA);
             }
             else
-                directionA = value;
+                ddrA = value;
             
             break;
             
@@ -328,7 +328,7 @@ void MC6821::write(OEAddress address, OEChar value)
         case MC6821_RS_DATAREGISTERB:
             if (controlB & MC6821_CR_DATAREGISTER)
             {
-                dataB = value & directionB;
+                dataB = value & ddrB;
                 portB->write(MC6821_PORTB, dataB);
                 
                 if ((controlB & (MC6821_CR_C2OUTPUT | MC6821_CR_C2DIRECT)) ==
@@ -341,7 +341,7 @@ void MC6821::write(OEAddress address, OEChar value)
                 }
             }
             else
-                directionB = value;
+                ddrB = value;
             
             break;
             

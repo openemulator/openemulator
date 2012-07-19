@@ -444,6 +444,8 @@
         <property name="doorPlayer" ref="appleDiskII.doorPlayer"/>
         <property name="drivePlayer" ref="appleDiskII.drivePlayer"/>
         <property name="headPlayer" ref="appleDiskII.headPlayer"/>
+        <property name="imageDriveOff" value="images/Apple/Apple Disk II.png"/>
+        <property name="imageDriveInUse" value="images/Apple/Apple Disk II In Use.png"/>
         <property name="mechanism" value="Shugart"/>
         <property name="soundShugartOpen" value="${resourcePath}/sounds/Shugart/Shugart SA400 Open.ogg"/>
         <property name="soundShugartClose" value="${resourcePath}/sounds/Shugart/Shugart SA400 Close.ogg"/>
@@ -487,6 +489,8 @@
         <property name="doorPlayer" ref="appleDiskII2.doorPlayer"/>
         <property name="drivePlayer" ref="appleDiskII2.drivePlayer"/>
         <property name="headPlayer" ref="appleDiskII2.headPlayer"/>
+        <property name="imageDriveOff" value="images/Apple/Apple Disk II.png"/>
+        <property name="imageDriveInUse" value="images/Apple/Apple Disk II In Use.png"/>
         <property name="mechanism" value="Alps"/>
         <property name="soundShugartOpen" value="${resourcePath}/sounds/Shugart/Shugart SA400 Open.ogg"/>
         <property name="soundShugartClose" value="${resourcePath}/sounds/Shugart/Shugart SA400 Close.ogg"/>

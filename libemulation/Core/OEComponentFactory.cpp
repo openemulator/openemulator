@@ -46,10 +46,12 @@
 #include "AppleIIKeyboard.h"
 #include "AppleIISlotController.h"
 #include "AppleIIVideo.h"
+#include "AppleIIIMOS6502.h"
 #include "AppleSilentype.h"
 #include "AppleSilentypeInterfaceCard.h"
 
 #include "MOS6502.h"
+#include "MOS6522.h"
 #include "MOS6530.h"
 #include "MOSKIM1IO.h"
 #include "MOSKIM1PLL.h"
@@ -104,10 +106,12 @@ OEComponent *OEComponentFactory::construct(const string& className)
     matchComponent(AppleIIKeyboard);
     matchComponent(AppleIISlotController);
     matchComponent(AppleIIVideo);
+    matchComponent(AppleIIIMOS6502);
     matchComponent(AppleSilentype);
     matchComponent(AppleSilentypeInterfaceCard);
     
     matchComponent(MOS6502);
+    matchComponent(MOS6522);
     matchComponent(MOS6530);
     matchComponent(MOSKIM1IO);
     matchComponent(MOSKIM1PLL);

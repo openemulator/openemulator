@@ -25,6 +25,9 @@ AppleIIKeyboard::AppleIIKeyboard()
     
     keyLatch = 0;
     state = APPLEIIKEYBOARD_STATE_NORMAL;
+    
+    // Default value for Apple III key flags
+    appleIIIKeyFlags = 0x7e;
 }
 
 bool AppleIIKeyboard::setValue(string name, string value)
@@ -37,6 +40,8 @@ bool AppleIIKeyboard::setValue(string name, string value)
             type = APPLEIIKEYBOARD_TYPE_SHIFTKEYMOD;
         else if (value == "Full ASCII")
             type = APPLEIIKEYBOARD_TYPE_FULLASCII;
+        else if (value == "Apple III")
+            type = APPLEIIKEYBOARD_TYPE_APPLEIII;
     }
 	else
 		return false;
@@ -54,6 +59,8 @@ bool AppleIIKeyboard::getValue(string name, string& value)
             value = "Shift-Key Mod";
         else if (type == APPLEIIKEYBOARD_TYPE_FULLASCII)
             value = "Full ASCII";
+        else if (type == APPLEIIKEYBOARD_TYPE_APPLEIII)
+            value = "Apple III";
     }
 	else
 		return false;
@@ -126,7 +133,7 @@ bool AppleIIKeyboard::init()
 
 void AppleIIKeyboard::update()
 {
-    updateShiftKeyMod();
+    updateKeyFlags();
 }
 
 void AppleIIKeyboard::notify(OEComponent *sender, int notification, void *data)
@@ -162,7 +169,6 @@ void AppleIIKeyboard::notify(OEComponent *sender, int notification, void *data)
                 
                 break;
             }
-                
             case CANVAS_KEYBOARD_DID_CHANGE:
             {
                 CanvasHIDEvent *hidEvent = (CanvasHIDEvent *)data;
@@ -170,8 +176,8 @@ void AppleIIKeyboard::notify(OEComponent *sender, int notification, void *data)
                 switch (state)
                 {
                     case APPLEIIKEYBOARD_STATE_NORMAL:
-                        // Shift-key mod
-                        updateShiftKeyMod();
+                        // Key flags
+                        updateKeyFlags();
                         
                         // React on key down
                         if (!hidEvent->value)
@@ -227,7 +233,6 @@ void AppleIIKeyboard::notify(OEComponent *sender, int notification, void *data)
                 
                 break;
             }
-                
             case CANVAS_DID_PASTE:
                 paste((wstring *)data);
                 
@@ -245,7 +250,13 @@ OEChar AppleIIKeyboard::read(OEAddress address)
         emptyPasteBuffer();
     }
     else
+    {
+        if ((type == APPLEIIKEYBOARD_TYPE_APPLEIII) &&
+            (address & 0x08))
+            return appleIIIKeyFlags;
+            
         return keyLatch;
+    }
     
 	return floatingBus->read(address);
 }
@@ -260,20 +271,47 @@ void AppleIIKeyboard::write(OEAddress address, OEChar value)
     }
 }
 
-void AppleIIKeyboard::updateShiftKeyMod()
+void AppleIIKeyboard::updateKeyFlags()
 {
-    if (type == APPLEIIKEYBOARD_TYPE_SHIFTKEYMOD)
+    switch (type)
     {
-        if (!monitor || !gamePort)
-            return;
-        
-        CanvasKeyboardFlags flags;
-        
-        monitor->postMessage(this, CANVAS_GET_KEYBOARD_FLAGS, &flags);
-        
-        bool shiftKeyUp = !OEGetBit(flags, CANVAS_KF_SHIFT);
-        
-        gamePort->postMessage(this, APPLEII_SET_PB2, &shiftKeyUp);
+        case APPLEIIKEYBOARD_TYPE_SHIFTKEYMOD:
+        {
+            if (!monitor || !gamePort)
+                return;
+            
+            CanvasKeyboardFlags flags;
+            
+            monitor->postMessage(this, CANVAS_GET_KEYBOARD_FLAGS, &flags);
+            
+            bool shiftKeyUp = !OEGetBit(flags, CANVAS_KF_SHIFT);
+            
+            gamePort->postMessage(this, APPLEII_SET_PB2, &shiftKeyUp);
+            
+            break;
+        }
+        case APPLEIIKEYBOARD_TYPE_APPLEIII:
+        {
+            if (monitor)
+            {
+                bool anyKeyDown;
+                CanvasKeyboardFlags flags;
+                
+                monitor->postMessage(this, CANVAS_GET_KEYBOARD_ANYKEYDOWN, &anyKeyDown);
+                monitor->postMessage(this, CANVAS_GET_KEYBOARD_FLAGS, &flags);
+                
+                OESetBit(appleIIIKeyFlags, (1 << 0), anyKeyDown);
+                OESetBit(appleIIIKeyFlags, (1 << 1), !OEGetBit(flags, CANVAS_KF_SHIFT));
+                OESetBit(appleIIIKeyFlags, (1 << 2), !OEGetBit(flags, CANVAS_KF_CONTROL));
+                OESetBit(appleIIIKeyFlags, (1 << 3), 1);   // Caps Lock
+                OESetBit(appleIIIKeyFlags, (1 << 4), !OEGetBit(flags, CANVAS_KF_LEFTGUI));
+                OESetBit(appleIIIKeyFlags, (1 << 5), !OEGetBit(flags, CANVAS_KF_RIGHTGUI));
+                OESetBit(appleIIIKeyFlags, (1 << 6), 1);   // Keyboard connected
+                OESetBit(appleIIIKeyFlags, (1 << 7), 0);   // ASCII Bit 7
+            }
+        }
+        default:
+            break;
     }
 }
 
@@ -288,7 +326,8 @@ void AppleIIKeyboard::sendKey(CanvasUnicodeChar key)
     else if (key >= 0x80)
         return;
     
-    if (type != APPLEIIKEYBOARD_TYPE_FULLASCII)
+    if ((type != APPLEIIKEYBOARD_TYPE_FULLASCII)
+        && (type != APPLEIIKEYBOARD_TYPE_APPLEIII))
     {
         if (key >= 'a' && key <= 'z')
             key -= 0x20;

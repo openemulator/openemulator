@@ -1,4 +1,7 @@
 ==Latest==
+* Fixed disk image extension detection in libdiskimage
+* Implemented Apple III MOS6502
+* Implemented Apple III keyboard
 
 ==1.0.3 17/07/2012==
 * Fixed OEDocument retain/release madness
@@ -6,7 +9,7 @@
 * Fixed ControlBus cycles problem when powering off/on (time was running backwards)
 * Improved Disk II sounds
 * Added libdiskimage disk image write support
-* Added commun utility library
+* Added common utility library
 * Improved libdiskimage NIB decoding support
 * Added Disk II mechanical phase emulation
 * Implemented Disk II disk writes

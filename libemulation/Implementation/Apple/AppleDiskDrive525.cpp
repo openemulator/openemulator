@@ -62,6 +62,10 @@ bool AppleDiskDrive525::setValue(string name, string value)
         trackPhase = (trackIndex = getOEInt(value)) & 0x7;
 	else if (name == "forceWriteProtected")
 		diskStorage.setForceWriteProtected(getOEInt(value));
+    else if (name == "imageDriveOff")
+        imageDriveOff = value;
+    else if (name == "imageDriveInUse")
+        imageDriveInUse = value;
 	else if (name == "mechanism")
 		mechanism = value;
     else if (name.substr(0, 5) == "sound")
@@ -198,9 +202,11 @@ bool AppleDiskDrive525::postMessage(OEComponent *sender, int message, void *data
             if (drivePlayer)
                 drivePlayer->postMessage(this, AUDIOPLAYER_PAUSE, NULL);
             
-            string image = "images/Apple/Apple Disk II.png";
-            device->postMessage(this, DEVICE_SET_IMAGEPATH, &image);
-            device->postMessage(this, DEVICE_UPDATE, NULL);
+            if (device && (imageDriveOff != ""))
+            {
+                device->postMessage(this, DEVICE_SET_IMAGEPATH, &imageDriveOff);
+                device->postMessage(this, DEVICE_UPDATE, NULL);
+            }
             
             return true;
         }
@@ -209,9 +215,11 @@ bool AppleDiskDrive525::postMessage(OEComponent *sender, int message, void *data
             if (drivePlayer)
                 drivePlayer->postMessage(this, AUDIOPLAYER_PLAY, NULL);
             
-            string image = "images/Apple/Apple Disk II In Use.png";
-            device->postMessage(this, DEVICE_SET_IMAGEPATH, &image);
-            device->postMessage(this, DEVICE_UPDATE, NULL);
+            if (device && (imageDriveInUse != ""))
+            {
+                device->postMessage(this, DEVICE_SET_IMAGEPATH, &imageDriveInUse);
+                device->postMessage(this, DEVICE_UPDATE, NULL);
+            }
             
             return true;
         }

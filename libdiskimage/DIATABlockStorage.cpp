@@ -82,15 +82,14 @@ bool DIATABlockStorage::open(DIBackingStore *backingStore)
     }
     else
     {
-        string pathExtension = getPathExtension(fileBackingStore.getPath());
+        string pathExtension = strtolower(getPathExtension(fileBackingStore.getPath()));
         
         if ((pathExtension != "image") &&
             (pathExtension != "img") &&
             (pathExtension != "dmg") &&
             (pathExtension != "hdf") &&
             (pathExtension != "hdv") &&
-            (pathExtension != "po") &&
-            (pathExtension != "vdsk"))
+            (pathExtension != "po"))
             return false;
     }
     

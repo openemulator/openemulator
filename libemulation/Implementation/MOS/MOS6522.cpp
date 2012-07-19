@@ -1,19 +1,19 @@
 
 /**
  * libemulation
- * MOS6530
- * (C) 2009-2012 by Marc S. Ressl (mressl@umich.edu)
+ * MOS6522
+ * (C) 2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Implements a MOS 6530 (ROM, RAM, I/O, Timer)
  */
 
-#include "MOS6530.h"
+#include "MOS6522.h"
 
 #include "ControlBusInterface.h"
 #include "AddressDecoder.h"
 
-MOS6530::MOS6530()
+MOS6522::MOS6522()
 {
     controlBus = NULL;
     portA = NULL;
@@ -21,7 +21,7 @@ MOS6530::MOS6530()
     controlBusB = NULL;
 }
 
-bool MOS6530::setValue(string name, string value)
+bool MOS6522::setValue(string name, string value)
 {
     if (name == "ddrA")
         ddrA = getOEInt(value);
@@ -37,7 +37,7 @@ bool MOS6530::setValue(string name, string value)
     return true;
 }
 
-bool MOS6530::getValue(string name, string& value)
+bool MOS6522::getValue(string name, string& value)
 {
     if (name == "ddrA")
         value = getHexString(ddrA);
@@ -53,7 +53,7 @@ bool MOS6530::getValue(string name, string& value)
     return true;
 }
 
-bool MOS6530::setRef(string name, OEComponent *ref)
+bool MOS6522::setRef(string name, OEComponent *ref)
 {
     if (name == "controlBus")
     {
@@ -73,7 +73,7 @@ bool MOS6530::setRef(string name, OEComponent *ref)
     return true;
 }
 
-OEChar MOS6530::read(OEAddress address)
+OEChar MOS6522::read(OEAddress address)
 {
     switch (address & 0xf)
     {
@@ -109,7 +109,7 @@ OEChar MOS6530::read(OEAddress address)
     return 0;
 }
 
-void MOS6530::write(OEAddress address, OEChar value)
+void MOS6522::write(OEAddress address, OEChar value)
 {
     switch (address & 0xf)
     {

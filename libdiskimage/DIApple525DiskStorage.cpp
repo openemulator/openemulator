@@ -192,7 +192,7 @@ bool DIApple525DiskStorage::open(DIBackingStore *backingStore)
         if (!validateImageSize(backingStore, trackFormat, trackSize))
             return false;
         
-        string pathExtension = getPathExtension(fileBackingStore.getPath());
+        string pathExtension = strtolower(getPathExtension(fileBackingStore.getPath()));
         
         switch (trackFormat)
         {

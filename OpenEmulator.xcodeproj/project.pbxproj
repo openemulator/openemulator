@@ -55,6 +55,10 @@
 		003B16C312EE2A18003FB8F6 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 003B158312EE26BA003FB8F6 /* CoreAudio.framework */; };
 		003B16C812EE2A61003FB8F6 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 003B16C712EE2A61003FB8F6 /* CoreServices.framework */; };
 		003E25E71070796700185260 /* images in Resources */ = {isa = PBXBuildFile; fileRef = 003E2597107075D900185260 /* images */; };
+		0042499015B693DE0091ECAB /* AppleIIIMOS6502.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0042498E15B693DE0091ECAB /* AppleIIIMOS6502.cpp */; };
+		0042499115B693DE0091ECAB /* AppleIIIMOS6502.h in Headers */ = {isa = PBXBuildFile; fileRef = 0042498F15B693DE0091ECAB /* AppleIIIMOS6502.h */; };
+		0042499315B694A60091ECAB /* AppleIIIMOS6502Opcodes.h in Headers */ = {isa = PBXBuildFile; fileRef = 0042499215B694A60091ECAB /* AppleIIIMOS6502Opcodes.h */; };
+		0042499515B696EA0091ECAB /* AppleIIIMOS6502Operations.h in Headers */ = {isa = PBXBuildFile; fileRef = 0042499415B696EA0091ECAB /* AppleIIIMOS6502Operations.h */; };
 		004763D2139C94F30016277E /* LibraryTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 004763D1139C94F30016277E /* LibraryTableView.m */; };
 		004BD1C01425AA8500768B80 /* W65C02S.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 004BD1BC1425AA8500768B80 /* W65C02S.cpp */; };
 		005316C31596D268007F3C86 /* AppleSilentypeInterfaceCard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 005316C21596D268007F3C86 /* AppleSilentypeInterfaceCard.cpp */; };
@@ -255,6 +259,8 @@
 		00ED37C212779DD900BEF6BD /* IconWarmRestart.png in Resources */ = {isa = PBXBuildFile; fileRef = 00ED37B112779DD800BEF6BD /* IconWarmRestart.png */; };
 		00F01B4712A0D6EC000527CA /* EmulationUnmount.png in Resources */ = {isa = PBXBuildFile; fileRef = 00F01B4612A0D6EC000527CA /* EmulationUnmount.png */; };
 		00F21CE712C7C7EE00A809EF /* VerticallyCenteredTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00F21CE612C7C7EE00A809EF /* VerticallyCenteredTextFieldCell.m */; };
+		00F2796F15B671E600E58F4F /* MOS6522.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00F2796E15B671E600E58F4F /* MOS6522.cpp */; };
+		00F2797215B671EE00E58F4F /* MOS6522.h in Headers */ = {isa = PBXBuildFile; fileRef = 00F2797115B671EE00E58F4F /* MOS6522.h */; };
 		00F35D7312EF049B0027B9E4 /* EmulationOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 00FE381A12CA6790002B47B1 /* EmulationOutlineView.m */; };
 		00F397E4141655DA00C53A3E /* Apple1IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00F397E3141655DA00C53A3E /* Apple1IO.cpp */; };
 		00F4D0BF12E2E42F00B7F5E6 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00F4D0BE12E2E42F00B7F5E6 /* ApplicationServices.framework */; };
@@ -452,6 +458,10 @@
 		003E2597107075D900185260 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
 		0040284012B44878001C2F73 /* BackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BackgroundView.h; sourceTree = "<group>"; };
 		0040284112B44878001C2F73 /* BackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BackgroundView.m; sourceTree = "<group>"; };
+		0042498E15B693DE0091ECAB /* AppleIIIMOS6502.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleIIIMOS6502.cpp; sourceTree = "<group>"; };
+		0042498F15B693DE0091ECAB /* AppleIIIMOS6502.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleIIIMOS6502.h; sourceTree = "<group>"; };
+		0042499215B694A60091ECAB /* AppleIIIMOS6502Opcodes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleIIIMOS6502Opcodes.h; sourceTree = "<group>"; };
+		0042499415B696EA0091ECAB /* AppleIIIMOS6502Operations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleIIIMOS6502Operations.h; sourceTree = "<group>"; };
 		004763D0139C94F30016277E /* LibraryTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryTableView.h; sourceTree = "<group>"; };
 		004763D1139C94F30016277E /* LibraryTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryTableView.m; sourceTree = "<group>"; };
 		004BD1BC1425AA8500768B80 /* W65C02S.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = W65C02S.cpp; sourceTree = "<group>"; };
@@ -677,6 +687,8 @@
 		00F01B4612A0D6EC000527CA /* EmulationUnmount.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EmulationUnmount.png; sourceTree = "<group>"; };
 		00F21CE512C7C7EE00A809EF /* VerticallyCenteredTextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VerticallyCenteredTextFieldCell.h; sourceTree = "<group>"; };
 		00F21CE612C7C7EE00A809EF /* VerticallyCenteredTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VerticallyCenteredTextFieldCell.m; sourceTree = "<group>"; };
+		00F2796E15B671E600E58F4F /* MOS6522.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MOS6522.cpp; sourceTree = "<group>"; };
+		00F2797115B671EE00E58F4F /* MOS6522.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOS6522.h; sourceTree = "<group>"; };
 		00F397E3141655DA00C53A3E /* Apple1IO.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Apple1IO.cpp; sourceTree = "<group>"; };
 		00F397E5141655EB00C53A3E /* Apple1IO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Apple1IO.h; sourceTree = "<group>"; };
 		00F4D0BE12E2E42F00B7F5E6 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
@@ -1000,6 +1012,10 @@
 				00B8882A12A393990052B7A4 /* AppleIISlotController.h */,
 				00B8882B12A393990052B7A4 /* AppleIIVideo.cpp */,
 				00B8882C12A393990052B7A4 /* AppleIIVideo.h */,
+				0042498E15B693DE0091ECAB /* AppleIIIMOS6502.cpp */,
+				0042498F15B693DE0091ECAB /* AppleIIIMOS6502.h */,
+				0042499215B694A60091ECAB /* AppleIIIMOS6502Opcodes.h */,
+				0042499415B696EA0091ECAB /* AppleIIIMOS6502Operations.h */,
 				00B5CB92136F0B6C007A7BED /* AppleSilentype.cpp */,
 				00B5CB93136F0B6C007A7BED /* AppleSilentype.h */,
 				00AB963B157F9E8200EDACD5 /* AppleSilentypeInterfaceCard.h */,
@@ -1061,6 +1077,8 @@
 				00B8884512A393990052B7A4 /* MOS6502IllegalOperations.h */,
 				00B8884612A393990052B7A4 /* MOS6502Opcodes.h */,
 				00B8884712A393990052B7A4 /* MOS6502Operations.h */,
+				00F2796E15B671E600E58F4F /* MOS6522.cpp */,
+				00F2797115B671EE00E58F4F /* MOS6522.h */,
 				00B8884C12A393990052B7A4 /* MOS6530.cpp */,
 				00B8884D12A393990052B7A4 /* MOS6530.h */,
 				00B8884E12A393990052B7A4 /* MOSKIM1IO.cpp */,
@@ -1495,6 +1513,10 @@
 				00839E481597060200BD4538 /* ATAController.h in Headers */,
 				00EA1F0615976F0200079A54 /* ATADevice.h in Headers */,
 				00EA1F0B159799C400079A54 /* RDCFFA.h in Headers */,
+				00F2797215B671EE00E58F4F /* MOS6522.h in Headers */,
+				0042499115B693DE0091ECAB /* AppleIIIMOS6502.h in Headers */,
+				0042499315B694A60091ECAB /* AppleIIIMOS6502Opcodes.h in Headers */,
+				0042499515B696EA0091ECAB /* AppleIIIMOS6502Operations.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1805,6 +1827,8 @@
 				00839E491597060700BD4538 /* ATAController.cpp in Sources */,
 				00EA1F0515976F0200079A54 /* ATADevice.cpp in Sources */,
 				00EA1F0A159799C400079A54 /* RDCFFA.cpp in Sources */,
+				00F2796F15B671E600E58F4F /* MOS6522.cpp in Sources */,
+				0042499015B693DE0091ECAB /* AppleIIIMOS6502.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

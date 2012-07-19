@@ -27,10 +27,12 @@ public:
     RAM();
     
     bool setValue(string name, string value);
+    bool getValue(string name, string &value);
     bool setRef(string name, OEComponent *ref);
     bool setData(string name, OEData *data);
     bool getData(string name, OEData **data);
     bool init();
+    void update();
     
     bool postMessage(OEComponent *sender, int message, void *data);
     

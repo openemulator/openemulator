@@ -1,211 +1,46 @@
 
 /**
  * libemulation
- * MOS6502
- * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
+ * Apple III MOS6502
+ * (C) 2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Emulates a MOS6502 microprocessor
+ * Emulates an Apple III MOS6502 microprocessor
  */
 
-#include "MOS6502.h"
-#include "MOS6502Opcodes.h"
+#include "AppleIIIMOS6502.h"
+#include "AppleIIIMOS6502Opcodes.h"
 
 #include "CPUInterface.h"
 
-MOS6502::MOS6502()
+AppleIIIMOS6502::AppleIIIMOS6502() : MOS6502()
 {
-    initCPU();
-    
-    controlBus = NULL;
-    memoryBus = NULL;
-    
-    icount = 0;
-    
-    isReset = false;
-    isResetTransition = false;
-    isIRQ = false;
-    isIRQEnabled = false;
-    isNMITransition = false;
-    
-    updateSpecialCondition();
+    extendedMemoryBus = NULL;
 }
 
-bool MOS6502::setValue(string name, string value)
+bool AppleIIIMOS6502::setRef(string name, OEComponent *ref)
 {
-    if (name == "a")
-        a = getOEInt(value);
-    else if (name == "x")
-        x = getOEInt(value);
-    else if (name == "y")
-        y = getOEInt(value);
-    else if (name == "s")
-        sp.b.l = getOEInt(value);
-    else if (name == "p")
-        p = getOEInt(value);
-    else if (name == "pc")
-        pc.w.l = getOEInt(value);
+    if (name == "extendedMemoryBus")
+        extendedMemoryBus = ref;
     else
+        return MOS6502::setRef(name, ref);
+    
+    return true;
+}
+
+bool AppleIIIMOS6502::init()
+{
+    if (!extendedMemoryBus)
+    {
+        logMessage("extendedMemoryBus not connected");
+        
         return false;
-    
-    return true;
-}
-
-bool MOS6502::getValue(string name, string& value)
-{
-    if (name == "a")
-        value = getHexString(a);
-    else if (name == "x")
-        value = getHexString(x);
-    else if (name == "y")
-        value = getHexString(y);
-    else if (name == "s")
-        value = getHexString(sp.b.l);
-    else if (name == "p")
-        value = getHexString(p);
-    else if (name == "pc")
-        value = getHexString(pc.w.l);
-    else
-        return false;
-    
-    return true;
-}
-
-bool MOS6502::setRef(string name, OEComponent *ref)
-{
-    if (name == "controlBus")
-    {
-        if (controlBus)
-        {
-            controlBus->removeObserver(this, CONTROLBUS_POWERSTATE_DID_CHANGE);
-            controlBus->removeObserver(this, CONTROLBUS_RESET_DID_ASSERT);
-            controlBus->removeObserver(this, CONTROLBUS_RESET_DID_CLEAR);
-            controlBus->removeObserver(this, CONTROLBUS_IRQ_DID_ASSERT);
-            controlBus->removeObserver(this, CONTROLBUS_IRQ_DID_CLEAR);
-            controlBus->removeObserver(this, CONTROLBUS_NMI_DID_ASSERT);
-        }
-        controlBus = ref;
-        if (controlBus)
-        {
-            controlBus->addObserver(this, CONTROLBUS_POWERSTATE_DID_CHANGE);
-            controlBus->addObserver(this, CONTROLBUS_RESET_DID_ASSERT);
-            controlBus->addObserver(this, CONTROLBUS_RESET_DID_CLEAR);
-            controlBus->addObserver(this, CONTROLBUS_IRQ_DID_ASSERT);
-            controlBus->addObserver(this, CONTROLBUS_IRQ_DID_CLEAR);
-            controlBus->addObserver(this, CONTROLBUS_NMI_DID_ASSERT);
-        }
-    }
-    else if (name == "memoryBus")
-        memoryBus = ref;
-    else
-        return false;
-    
-    return true;
-}
-
-bool MOS6502::init()
-{
-    if (controlBus)
-    {
-        controlBus->postMessage(this, CONTROLBUS_GET_POWERSTATE, &powerState);
-        controlBus->postMessage(this, CONTROLBUS_IS_RESET_ASSERTED, &isReset);
-        controlBus->postMessage(this, CONTROLBUS_IS_IRQ_ASSERTED, &isIRQ);
     }
     
-    updateSpecialCondition();
-    
-    return true;
+    return MOS6502::init();
 }
 
-bool MOS6502::postMessage(OEComponent *sender, int message, void *data)
-{
-    switch (message)
-    {
-        case CPU_SET_PENDINGCYCLES:
-            icount = *((OESLong *)data);
-            
-            return true;
-            
-        case CPU_GET_PENDINGCYCLES:
-            *((OESLong *)data) = icount;
-            
-            return true;
-            
-        case CPU_RUN:
-            execute();
-            
-            return true;
-    }
-    
-    return false;
-}
-
-void MOS6502::notify(OEComponent *sender, int notification, void *data)
-{
-    switch (notification)
-    {
-        case CONTROLBUS_POWERSTATE_DID_CHANGE:
-            powerState = *((ControlBusPowerState *)data);
-            
-            if (powerState == CONTROLBUS_POWERSTATE_OFF)
-                initCPU();
-            
-            return;
-            
-        case CONTROLBUS_RESET_DID_ASSERT:
-            isReset = true;
-            if (icount > 0)
-                icount = 0;
-            
-            return;
-            
-        case CONTROLBUS_RESET_DID_CLEAR:
-            isReset = false;
-            isResetTransition = true;
-            
-            updateSpecialCondition();
-            
-            return;
-            
-        case CONTROLBUS_IRQ_DID_ASSERT:
-            isIRQ = true;
-            
-            updateSpecialCondition();
-            
-            return;
-            
-        case CONTROLBUS_IRQ_DID_CLEAR:
-            isIRQ = false;
-            
-            updateSpecialCondition();
-            
-            return;
-            
-        case CONTROLBUS_NMI_DID_ASSERT:
-            isNMITransition = true;
-            
-            updateSpecialCondition();
-            
-            return;
-    }
-}
-
-void MOS6502::initCPU()
-{
-    a = 0x00;
-    x = 0x00;
-    y = 0x00;
-    p = 0x00;
-    pc.q = 0x0000;
-    sp.q = 0x01ff;
-}
-
-void MOS6502::updateSpecialCondition()
-{
-    isSpecialCondition = isIRQ || isResetTransition || isNMITransition;
-}
-
-void MOS6502::execute()
+void AppleIIIMOS6502::execute()
 {
     if (powerState != CONTROLBUS_POWERSTATE_ON)
         icount = 0;
@@ -273,27 +108,6 @@ void MOS6502::execute()
         }
         else
         {
-/*            static bool cap = true;
-            
-            if ((pc.q & 0xffff) == 0x0801)
-                cap = true;
-            
-            if (cap)
-            {
-                static FILE *fp = NULL;
-                
-                if (!fp)
-                    fp = fopen("/Users/mressl/cap.txt", "at");
-                if (fp)
-                {
-                    fprintf(fp, "pc=%04x a=%02x x=%02x y=%02x s=%02x p=%02x [%02x %02x %02x]\n",
-                            pc.w.l, a, x, y, sp.b.l, p,
-                            memoryBus->read(pc.q),
-                            memoryBus->read(pc.q + 1),
-                            memoryBus->read(pc.q + 2));
-                }
-            }*/
-            
             OEChar opcode = RDOP();
             
             switch (opcode)
@@ -325,14 +139,14 @@ void MOS6502::execute()
                 MOS6502_OP(c1);
                 MOS6502_OP(e1);
                 
-                MOS6502_OP(11);
-                MOS6502_OP(31);
-                MOS6502_OP(51);
-                MOS6502_OP(71);
-                MOS6502_OP(91);
-                MOS6502_OP(b1);
-                MOS6502_OP(d1);
-                MOS6502_OP(f1);
+                APPLEIIIMOS6502_OP(11);
+                APPLEIIIMOS6502_OP(31);
+                APPLEIIIMOS6502_OP(51);
+                APPLEIIIMOS6502_OP(71);
+                APPLEIIIMOS6502_OP(91);
+                APPLEIIIMOS6502_OP(b1);
+                APPLEIIIMOS6502_OP(d1);
+                APPLEIIIMOS6502_OP(f1);
                 
                 MOS6502_OP(02);
                 MOS6502_OP(22);

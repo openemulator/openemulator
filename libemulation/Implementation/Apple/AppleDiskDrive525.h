@@ -42,6 +42,9 @@ private:
     OEComponent *drivePlayer;
     OEComponent *headPlayer;
     
+    string imageDriveOff;
+    string imageDriveInUse;
+    
     string mechanism;
     map<string, OESound>sound;
     

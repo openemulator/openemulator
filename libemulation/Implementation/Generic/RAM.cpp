@@ -32,6 +32,16 @@ bool RAM::setValue(string name, string value)
     return true;
 }
 
+bool RAM::getValue(string name, string &value)
+{
+    if (name == "size")
+        value = getHexString(size);
+    else
+        return false;
+    
+    return true;
+}
+
 bool RAM::setRef(string name, OEComponent *ref)
 {
     if (name == "controlBus")
@@ -99,6 +109,11 @@ bool RAM::init()
     mask = size - 1;
     
     return true;
+}
+
+void RAM::update()
+{
+    init();
 }
 
 bool RAM::postMessage(OEComponent *sender, int message, void *data)
