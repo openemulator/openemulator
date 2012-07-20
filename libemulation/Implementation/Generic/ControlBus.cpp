@@ -11,12 +11,19 @@
 #include <math.h>
 
 #include "ControlBus.h"
+
+#include "EmulationInterface.h"
 #include "DeviceInterface.h"
 #include "AudioInterface.h"
 #include "CPUInterface.h"
 
 ControlBus::ControlBus()
 {
+    emulation = NULL;
+    device = NULL;
+    audio = NULL;
+    cpu = NULL;
+    
     clockFrequency = 1E6;
     cpuClockMultiplier = 1;
     powerState = CONTROLBUS_POWERSTATE_OFF;
@@ -24,10 +31,6 @@ ControlBus::ControlBus()
     resetCount = 0;
     irqCount = 0;
     nmiCount = 0;
-    
-    device = NULL;
-    audio = NULL;
-    cpu = NULL;
     
     cycles = 0;
     cpuCycles = 0;
@@ -82,14 +85,16 @@ bool ControlBus::getValue(string name, string& value)
 
 bool ControlBus::setRef(string name, OEComponent *ref)
 {
-    if (name == "device")
+    if (name == "emulation")
     {
-        if (device)
-            device->removeObserver(this, DEVICE_DID_CHANGE);
-        device = ref;
-        if (device)
-            device->addObserver(this, DEVICE_DID_CHANGE);
+        if (emulation)
+            emulation->removeObserver(this, EMULATION_WAS_SIGNALED);
+        emulation = ref;
+        if (emulation)
+            emulation->addObserver(this, EMULATION_WAS_SIGNALED);
     }
+    else if (name == "device")
+        device = ref;
     else if (name == "audio")
     {
         if (audio)
@@ -300,33 +305,33 @@ void ControlBus::notify(OEComponent *sender, int notification, void *data)
                 break;
         };
     }
-    else if (sender == device)
+    else if (sender == emulation)
     {
-        switch (*((DeviceEvent *)data))
+        switch (*((EmulationEvent *)data))
         {
-            case DEVICE_POWERDOWN:
+            case EMULATION_POWERDOWN:
                 setPowerState(CONTROLBUS_POWERSTATE_OFF);
                 
                 break;
                 
-            case DEVICE_SLEEP:
+            case EMULATION_SLEEP:
                 if (powerState != CONTROLBUS_POWERSTATE_OFF)
                     setPowerState(CONTROLBUS_POWERSTATE_PAUSE);
                 
                 break;
                 
-            case DEVICE_WAKEUP:
+            case EMULATION_WAKEUP:
                 setPowerState(CONTROLBUS_POWERSTATE_ON);
                 
                 break;
                 
-            case DEVICE_COLDRESTART:
+            case EMULATION_COLDRESTART:
                 setPowerState(CONTROLBUS_POWERSTATE_OFF);
                 setPowerState(CONTROLBUS_POWERSTATE_ON);
                 
                 break;
                 
-            case DEVICE_WARMRESTART:
+            case EMULATION_WARMRESTART:
                 if (resetOnPowerOn)
                 {
                     postMessage(this, CONTROLBUS_ASSERT_RESET, NULL);
@@ -335,7 +340,7 @@ void ControlBus::notify(OEComponent *sender, int notification, void *data)
                 
                 break;
                 
-            case DEVICE_DEBUGGERBREAK:
+            case EMULATION_DEBUGGERBREAK:
                 postMessage(this, CONTROLBUS_ASSERT_NMI, NULL);
                 postMessage(this, CONTROLBUS_CLEAR_NMI, NULL);
                 
@@ -426,9 +431,10 @@ void ControlBus::setActivity(bool value)
 
 void ControlBus::updateActivity()
 {
-    device->postMessage(this, (activity ?
-                               DEVICE_ASSERT_ACTIVITY : 
-                               DEVICE_CLEAR_ACTIVITY), NULL);
+    if (emulation)
+        emulation->postMessage(this, (activity ?
+                                      EMULATION_ASSERT_ACTIVITY : 
+                                      EMULATION_CLEAR_ACTIVITY), NULL);
 }
 
 inline OESLong ControlBus::getPendingCPUCycles()

@@ -8,12 +8,12 @@
         <setting ref="aONE.memoryE000" name="sel" label="Memory at $E000" type="select" options="BASIC,RAM"/>
     </device>
     <port id="aONE.videoPort" ref="appleMonitorII.connector" type="Composite Video Port" group="peripherals" label="Video Port" image="images/Connectors/RCA Female.png">
-        <inlet ref="aONE.terminal" property="monitorDevice" outletRef=""/>
         <inlet ref="aONE.terminal" property="monitor" outletRef="monitor"/>
     </port>
     <port id="aONE.slot1" ref="appleACI.connector" type="Apple-1 Expansion Port" group="expansions" label="Expansion Port" image="images/Connectors/Edge44.png"/>
     <port id="aONE.slot2" ref="rdCFFA1.connector" type="Apple-1 Expansion Port" group="expansions" label="Expansion Port" image="images/Connectors/Edge44.png"/>
     <component id="aONE.controlBus" class="ControlBus">
+        <property name="emulation" ref="emulation"/>
         <property name="device" ref="aONE"/>
         <property name="audio" ref="audio"/>
         <!-- Clock frequency: (14318180 crystal cycles/s) * (61 effective CPU cycles/scanline) / (910 crystal cycles/scanline) -->
@@ -74,14 +74,14 @@
         <property name="controlBus" ref="aONE.controlBus"/>
         <property name="portA" ref="aONE.io"/>
         <property name="controlA" value="0x0"/>
-        <property name="directionA" value="0x0"/>
+        <property name="ddrA" value="0x0"/>
         <property name="dataA" value="0x0"/>
         <property name="ca1" value="0"/>
         <property name="ca2" value="0"/>
         <property name="controlBusA" ref=""/>
         <property name="portB" ref="aONE.io"/>
         <property name="controlB" value="0x0"/>
-        <property name="directionB" value="0x0"/>
+        <property name="ddrB" value="0x0"/>
         <property name="dataB" value="0x0"/>
         <property name="cb1" value="0"/>
         <property name="cb2" value="0"/>
@@ -105,10 +105,9 @@
         <property name="clearScreenOnCtrlL" value="1"/>
         <property name="splashScreen" value="1"/>
         <property name="splashScreenActive" value="1"/>
-        <property name="device" ref="aONE"/>
+        <property name="emulation" ref="emulation"/>
         <property name="controlBus" ref="aONE.controlBus"/>
         <property name="vram" ref="aONE.terminalRAM"/>
-        <property name="monitorDevice" ref="appleMonitorII"/>
         <property name="monitor" ref="appleMonitorII.monitor"/>
         <property name="font" data="${resourcePath}/roms/Achatz/A-ONE Video ROM.bin"/>
     </component>

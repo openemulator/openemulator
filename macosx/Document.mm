@@ -8,6 +8,8 @@
  * Controls an emulation
  */
 
+#import <sstream>
+
 #import "Document.h"
 
 #import "NSStringAdditions.h"
@@ -26,8 +28,6 @@
 
 #import "DeviceInterface.h"
 #import "StorageInterface.h"
-
-#import <sstream>
 
 @implementation Document
 
@@ -287,6 +287,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
     theEmulation->setDestroyCanvas(destroyCanvas);
     theEmulation->setUserData(self);
     
+    theEmulation->addComponent("emulation", theEmulation);
     theEmulation->addComponent("audio", paAudio);
     theEmulation->addComponent("joystick", hidJoystick);
     
@@ -620,6 +621,50 @@ void destroyCanvas(void *userData, OEComponent *canvas)
                           delegate:self
                     didRunSelector:NULL
                        contextInfo:NULL];
+}
+
+// Signals
+
+- (void)sendPowerDown:(id)sender
+{
+    EmulationEvent event = EMULATION_POWERDOWN;
+    
+    ((OEComponent *)emulation)->postNotification(NULL, EMULATION_WAS_SIGNALED, &event);
+}
+
+- (void)sendSleep:(id)sender
+{
+    EmulationEvent event = EMULATION_SLEEP;
+    
+    ((OEComponent *)emulation)->postNotification(NULL, EMULATION_WAS_SIGNALED, &event);
+}
+
+- (void)sendWakeUp:(id)sender
+{
+    EmulationEvent event = EMULATION_WAKEUP;
+    
+    ((OEComponent *)emulation)->postNotification(NULL, EMULATION_WAS_SIGNALED, &event);
+}
+
+- (void)sendColdRestart:(id)sender
+{
+    EmulationEvent event = EMULATION_COLDRESTART;
+    
+    ((OEComponent *)emulation)->postNotification(NULL, EMULATION_WAS_SIGNALED, &event);
+}
+
+- (void)sendWarmRestart:(id)sender
+{
+    EmulationEvent event = EMULATION_WARMRESTART;
+    
+    ((OEComponent *)emulation)->postNotification(NULL, EMULATION_WAS_SIGNALED, &event);
+}
+
+- (void)sendDebuggerBreak:(id)sender
+{
+    EmulationEvent event = EMULATION_DEBUGGERBREAK;
+    
+    ((OEComponent *)emulation)->postNotification(NULL, EMULATION_WAS_SIGNALED, &event);
 }
 
 @end

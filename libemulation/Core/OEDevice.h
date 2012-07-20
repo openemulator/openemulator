@@ -36,8 +36,6 @@ private:
     
     OEComponents canvases;
     OEComponents storages;
-    
-    bool constructCanvas(OECanvasType canvasType, OEComponent **ref);
 };
 
 #endif

@@ -59,6 +59,7 @@
 		0042499115B693DE0091ECAB /* AppleIIIMOS6502.h in Headers */ = {isa = PBXBuildFile; fileRef = 0042498F15B693DE0091ECAB /* AppleIIIMOS6502.h */; };
 		0042499315B694A60091ECAB /* AppleIIIMOS6502Opcodes.h in Headers */ = {isa = PBXBuildFile; fileRef = 0042499215B694A60091ECAB /* AppleIIIMOS6502Opcodes.h */; };
 		0042499515B696EA0091ECAB /* AppleIIIMOS6502Operations.h in Headers */ = {isa = PBXBuildFile; fileRef = 0042499415B696EA0091ECAB /* AppleIIIMOS6502Operations.h */; };
+		0042499715B8EA1C0091ECAB /* EmulationInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 0042499615B8EA1C0091ECAB /* EmulationInterface.h */; };
 		004763D2139C94F30016277E /* LibraryTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 004763D1139C94F30016277E /* LibraryTableView.m */; };
 		004BD1C01425AA8500768B80 /* W65C02S.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 004BD1BC1425AA8500768B80 /* W65C02S.cpp */; };
 		005316C31596D268007F3C86 /* AppleSilentypeInterfaceCard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 005316C21596D268007F3C86 /* AppleSilentypeInterfaceCard.cpp */; };
@@ -462,6 +463,7 @@
 		0042498F15B693DE0091ECAB /* AppleIIIMOS6502.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleIIIMOS6502.h; sourceTree = "<group>"; };
 		0042499215B694A60091ECAB /* AppleIIIMOS6502Opcodes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleIIIMOS6502Opcodes.h; sourceTree = "<group>"; };
 		0042499415B696EA0091ECAB /* AppleIIIMOS6502Operations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleIIIMOS6502Operations.h; sourceTree = "<group>"; };
+		0042499615B8EA1C0091ECAB /* EmulationInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmulationInterface.h; sourceTree = "<group>"; };
 		004763D0139C94F30016277E /* LibraryTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryTableView.h; sourceTree = "<group>"; };
 		004763D1139C94F30016277E /* LibraryTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryTableView.m; sourceTree = "<group>"; };
 		004BD1BC1425AA8500768B80 /* W65C02S.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = W65C02S.cpp; sourceTree = "<group>"; };
@@ -1184,14 +1186,15 @@
 		00D225F91350F9A100FC69B9 /* Host */ = {
 			isa = PBXGroup;
 			children = (
-				00D225FD1350F9A100FC69B9 /* DeviceInterface.h */,
 				00A90FB4150D3A0E00BB2999 /* AudioInterface.cpp */,
 				00D225FA1350F9A100FC69B9 /* AudioInterface.h */,
 				00D225FB1350F9A100FC69B9 /* CanvasInterface.h */,
-				000E8D1813515C6E00DBFB2C /* StorageInterface.h */,
-				001D1F7A1479E7BD0014D496 /* JoystickInterface.h */,
+				00D225FD1350F9A100FC69B9 /* DeviceInterface.h */,
+				0042499615B8EA1C0091ECAB /* EmulationInterface.h */,
 				00D225FF1350F9A100FC69B9 /* EthernetInterface.h */,
+				001D1F7A1479E7BD0014D496 /* JoystickInterface.h */,
 				00D226001350F9A100FC69B9 /* MIDIInterface.h */,
+				000E8D1813515C6E00DBFB2C /* StorageInterface.h */,
 				00D226031350F9A100FC69B9 /* USBInterface.h */,
 				00D226041350F9A100FC69B9 /* VideoCaptureInterface.h */,
 			);
@@ -1517,6 +1520,7 @@
 				0042499115B693DE0091ECAB /* AppleIIIMOS6502.h in Headers */,
 				0042499315B694A60091ECAB /* AppleIIIMOS6502Opcodes.h in Headers */,
 				0042499515B696EA0091ECAB /* AppleIIIMOS6502Operations.h in Headers */,
+				0042499715B8EA1C0091ECAB /* EmulationInterface.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

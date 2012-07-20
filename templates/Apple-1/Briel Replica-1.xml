@@ -8,12 +8,12 @@
         <setting ref="replica1.memoryE000" name="sel" label="Memory at $E000" type="select" options="ROM6502|Replica-1 6502 ROM,ROM65C02|Replica-1 65C02 ROM,ROMApplesoftLite|Applesoft Lite ROM"/>
     </device>
     <port id="replica1.videoPort" ref="appleMonitorII.connector" type="Composite Video Port" group="peripherals" label="Video Port" image="images/Connectors/RCA Female.png">
-        <inlet ref="replica1.terminal" property="monitorDevice" outletRef=""/>
         <inlet ref="replica1.terminal" property="monitor" outletRef="monitor"/>
     </port>
     <port id="replica1.slot1" ref="appleACI.connector" type="Apple-1 Expansion Port" group="expansions" label="Expansion Port" image="images/Connectors/Edge44.png"/>
     <port id="replica1.slot2" ref="rdCFFA1.connector" type="Apple-1 Expansion Port" group="expansions" label="Expansion Port" image="images/Connectors/Edge44.png"/>
     <component id="replica1.controlBus" class="ControlBus">
+        <property name="emulation" ref="emulation"/>
         <property name="device" ref="replica1"/>
         <property name="audio" ref="audio"/>
         <!-- Clock frequency: (14318180 crystal cycles/s) * (61 effective CPU cycles/scanline) / (910 crystal cycles/scanline) -->
@@ -74,14 +74,14 @@
         <property name="controlBus" ref="replica1.controlBus"/>
         <property name="portA" ref="replica1.io"/>
         <property name="controlA" value="0x0"/>
-        <property name="directionA" value="0x0"/>
+        <property name="ddrA" value="0x0"/>
         <property name="dataA" value="0x0"/>
         <property name="ca1" value="0"/>
         <property name="ca2" value="0"/>
         <property name="controlBusA" ref=""/>
         <property name="portB" ref="replica1.io"/>
         <property name="controlB" value="0x0"/>
-        <property name="directionB" value="0x0"/>
+        <property name="ddrB" value="0x0"/>
         <property name="dataB" value="0x0"/>
         <property name="cb1" value="0"/>
         <property name="cb2" value="0"/>
@@ -106,7 +106,6 @@
         <property name="device" ref="replica1"/>
         <property name="vram" ref="replica1.terminalRAM"/>
         <property name="controlBus" ref="replica1.controlBus"/>
-        <property name="monitorDevice" ref="appleMonitorII"/>
         <property name="monitor" ref="appleMonitorII.monitor"/>
         <property name="font" data="${resourcePath}/roms/Signetics/Signetics 2513 Video ROM.bin"/>
     </component>

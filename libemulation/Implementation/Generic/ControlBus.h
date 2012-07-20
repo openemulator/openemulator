@@ -40,6 +40,11 @@ public:
     void notify(OEComponent *sender, int notification, void *data);
     
 private:
+    OEComponent *emulation;
+    OEComponent *device;
+    OEComponent *audio;
+    OEComponent *cpu;
+    
     float clockFrequency;
     float cpuClockMultiplier;
     ControlBusPowerState powerState;
@@ -47,10 +52,6 @@ private:
     OEInt resetCount;
     OEInt irqCount;
     OEInt nmiCount;
-    
-    OEComponent *device;
-    OEComponent *audio;
-    OEComponent *cpu;
     
     OELong cycles;
     float cpuCycles;

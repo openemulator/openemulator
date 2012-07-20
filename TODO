@@ -1,10 +1,7 @@
 ==1.0.4==
-* Add F12 reset key
-* Fix crash when replacing monitors
 * Fix crash when writing to a DSK file
 * Fix writing to DOS 3.1 or DOS 3.2 NIB files
 * Modify CTRL+ALT -> Mouse message to "Press CTRL+OPTION to release mouse."
-* Modify power/reset toolbar into a global emulation property
 * Fix Disk II sounds
 * Fix Apple Silentype Interface Card spurious data problems
 * Implement Apple Silentype print intensity

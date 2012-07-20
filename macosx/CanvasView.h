@@ -58,11 +58,4 @@
 
 - (void)pasteString:(NSString *)text;
 
-- (IBAction)sendPowerDown:(id)sender;
-- (IBAction)sendSleep:(id)sender;
-- (IBAction)sendWakeUp:(id)sender;
-- (IBAction)sendColdRestart:(id)sender;
-- (IBAction)sendWarmRestart:(id)sender;
-- (IBAction)sendDebuggerBreak:(id)sender;
-
 @end

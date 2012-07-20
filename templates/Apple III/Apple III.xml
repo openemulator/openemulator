@@ -8,7 +8,6 @@
     </device>
     <port id="appleIII.videoBW" ref="appleMonitorIII.connector" type="Composite Video Port" group="peripherals" label="B/W Video Port" image="images/Connectors/RCA Female.png">
         <inlet ref="appleIII.keyboard" property="monitor" outletRef="monitor"/>
-        <inlet ref="appleIII.video" property="monitorDevice" outletRef=""/>
         <inlet ref="appleIII.video" property="monitor" outletRef="monitor"/>
     </port>
     <port id="appleIII.videoColor" ref="" type="Composite Video Port" group="peripherals" label="Color Video Port" image="images/Connectors/DA15 Female.png">
@@ -41,6 +40,7 @@
         <inlet ref="appleIII.memoryBus" property="refSlot4" outletRef="memory"/>
     </port>
     <component id="appleIII.controlBus" class="ControlBus">
+        <property name="emulation" ref="emulation"/>
         <property name="device" ref="appleIII"/>
         <property name="audio" ref="audio"/>
         <!-- Clock frequency: (14318181.8 crystal cycles/s) * (65 CPU cycles/scanline) / (912 crystal cycles/scanline) -->
@@ -144,7 +144,6 @@
         <property name="device" ref="appleIII"/>
         <property name="controlBus" ref="appleIII.controlBus"/>
         <property name="memoryBus" ref="appleIII.memoryBus"/>
-        <property name="monitorDevice" ref="appleMonitorIII"/>
         <property name="monitor" ref="appleMonitorIII.monitor"/>
         <property name="fontStandard" data="${resourcePath}/roms/Apple/341-0036.bin"/>
         <property name="fontVidex" data="${resourcePath}/roms/Videx/Videx Lower Case Chip ROM.bin"/>

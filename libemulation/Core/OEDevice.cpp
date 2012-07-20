@@ -12,6 +12,8 @@
 
 #include "OEEmulation.h"
 
+#include "EmulationInterface.h"
+
 OEDevice::OEDevice(OEEmulation *emulation)
 {
     this->emulation = emulation;
@@ -82,34 +84,44 @@ bool OEDevice::postMessage(OEComponent *sender, int message, void *data)
             return true;
             
         case DEVICE_CONSTRUCT_DISPLAYCANVAS:
-            return constructCanvas(OECANVAS_DISPLAY, (OEComponent **)data);
+            if (!emulation->postMessage(this, EMULATION_CONSTRUCT_DISPLAYCANVAS, data))
+                return false;
+            
+            canvases.push_back(*((OEComponent **)data));
+            
+            return true;
             
         case DEVICE_CONSTRUCT_PAPERCANVAS:
-            return constructCanvas(OECANVAS_PAPER, (OEComponent **)data);
+            if (!emulation->postMessage(this, EMULATION_CONSTRUCT_PAPERCANVAS, data))
+                return false;
+            
+            canvases.push_back(*((OEComponent **)data));
+            
+            return true;
             
         case DEVICE_CONSTRUCT_OPENGLCANVAS:
-            return constructCanvas(OECANVAS_OPENGL, (OEComponent **)data);
+            if (!emulation->postMessage(this, EMULATION_CONSTRUCT_PAPERCANVAS, data))
+                return false;
+            
+            canvases.push_back(*((OEComponent **)data));
+            
+            return true;
             
         case DEVICE_DESTROY_CANVAS:
-            if (emulation->destroyCanvas)
+            
+            if (!emulation->postMessage(this, EMULATION_DESTROY_CANVAS, data))
+                return false;
+            else
             {
-                OEComponent **ref = (OEComponent **)data;
-                
                 OEComponents::iterator first = canvases.begin();
                 OEComponents::iterator last = canvases.end();
-                OEComponents::iterator i = remove(first, last, *ref);
+                OEComponents::iterator i = remove(first, last, *((OEComponent **)data));
                 
                 if (i != last)
                     canvases.erase(i, last);
                 
-                if (emulation->destroyCanvas)
-                    emulation->destroyCanvas(emulation->userData, *ref);
-                *ref = NULL;
-                
                 return true;
             }
-            
-            break;
             
         case DEVICE_GET_CANVASES:
             *((OEComponents *)data) = canvases;
@@ -138,44 +150,8 @@ bool OEDevice::postMessage(OEComponent *sender, int message, void *data)
             return true;
             
         case DEVICE_UPDATE:
-            if (emulation->didUpdate)
-                emulation->didUpdate(emulation->userData);
-            
-            return true;
-            
-        case DEVICE_ASSERT_ACTIVITY:
-            emulation->activityCount++;
-            
-            return true;
-            
-        case DEVICE_CLEAR_ACTIVITY:
-            if (emulation->activityCount <= 0)
-                return false;
-            
-            emulation->activityCount--;
-            
-            return true;
-            
-        case DEVICE_IS_OBSERVED:
-            *((bool *)data) = (observers[DEVICE_DID_CHANGE].size() != 0);
-            
-            return true;
+            return emulation->postMessage(sender, EMULATION_UPDATE, data);
     }
     
     return false;
-}
-
-bool OEDevice::constructCanvas(OECanvasType canvasType, OEComponent **ref)
-{
-    if (!emulation->constructCanvas)
-        return false;
-    
-    *ref = emulation->constructCanvas(emulation->userData, this, canvasType);
-    
-    if (!*ref)
-        return false;
-    
-    canvases.push_back(*ref);
-    
-    return true;
 }

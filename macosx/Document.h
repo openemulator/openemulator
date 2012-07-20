@@ -45,4 +45,11 @@
 - (BOOL)mount:(NSString *)path;
 - (BOOL)canMount:(NSString *)path;
 
+- (void)sendPowerDown:(id)sender;
+- (void)sendSleep:(id)sender;
+- (void)sendWakeUp:(id)sender;
+- (void)sendColdRestart:(id)sender;
+- (void)sendWarmRestart:(id)sender;
+- (void)sendDebuggerBreak:(id)sender;
+
 @end

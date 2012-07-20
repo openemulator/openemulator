@@ -116,7 +116,4 @@ typedef enum
 - (BOOL)addOEDocument:(NSString *)path;
 - (NSString *)portType;
 
-- (BOOL)isDeviceObserved;
-- (void)sendDeviceEvent:(EmulationDeviceEvent)event;
-
 @end

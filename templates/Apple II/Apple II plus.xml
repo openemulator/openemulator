@@ -10,7 +10,6 @@
     </device>
     <port id="appleIIplus.videoPort" ref="appleMonitorII.connector" type="Composite Video Port" group="peripherals" label="Video Port" image="images/Connectors/RCA Female.png">
         <inlet ref="appleIIplus.keyboard" property="monitor" outletRef="monitor"/>
-        <inlet ref="appleIIplus.video" property="monitorDevice" outletRef=""/>
         <inlet ref="appleIIplus.video" property="monitor" outletRef="monitor"/>
     </port>
     <port id="appleIIplus.gamePort" ref="appleHandControllers.connector" type="Apple II Game Port" group="peripherals" label="Game Port" image="images/Connectors/DIP16.png">
@@ -50,6 +49,7 @@
     <port id="appleIIplus.cpuSocket" ref="" type="Apple II CPU Socket" group="expansions" label="CPU Socket" image="images/Connectors/DIP40.png">
     </port>
     <component id="appleIIplus.controlBus" class="ControlBus">
+        <property name="emulation" ref="emulation"/>
         <property name="device" ref="appleIIplus"/>
         <property name="audio" ref="audio"/>
         <!-- Clock frequency: (14318181.8 crystal cycles/s) * (65 CPU cycles/scanline) / (912 crystal cycles/scanline) -->
@@ -184,7 +184,6 @@
         <property name="device" ref="appleIIplus"/>
         <property name="controlBus" ref="appleIIplus.controlBus"/>
         <property name="memoryBus" ref="appleIIplus.memoryBus"/>
-        <property name="monitorDevice" ref="appleMonitorII"/>
         <property name="monitor" ref="appleMonitorII.monitor"/>
         <property name="fontStandard" data="${resourcePath}/roms/Apple/341-0036.bin"/>
         <property name="fontVidex" data="${resourcePath}/roms/Videx/Videx Lower Case Chip ROM.bin"/>

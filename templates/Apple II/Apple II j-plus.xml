@@ -8,7 +8,6 @@
     </device>
     <port id="appleIIjplus.videoPort" ref="appleMonitorII.connector" type="Composite Video Port" group="peripherals" label="Video Port" image="images/Connectors/RCA Female.png">
         <inlet ref="appleIIjplus.keyboard" property="monitor" outletRef="monitor"/>
-        <inlet ref="appleIIjplus.video" property="monitorDevice" outletRef=""/>
         <inlet ref="appleIIjplus.video" property="monitor" outletRef="monitor"/>
     </port>
     <port id="appleIIjplus.gamePort" ref="appleHandControllers.connector" type="Apple II Game Port" group="peripherals" label="Game Port" image="images/Connectors/DIP16.png">
@@ -48,6 +47,7 @@
     <port id="appleIIjplus.cpuSocket" ref="" type="Apple II CPU Socket" group="expansions" label="CPU Socket" image="images/Connectors/DIP40.png">
     </port>
     <component id="appleIIjplus.controlBus" class="ControlBus">
+        <property name="emulation" ref="emulation"/>
         <property name="device" ref="appleIIjplus"/>
         <property name="audio" ref="audio"/>
         <!-- Clock frequency: (14318181.8 crystal cycles/s) * (65 CPU cycles/scanline) / (912 crystal cycles/scanline) -->
@@ -183,7 +183,6 @@
         <property name="controlBus" ref="appleIIjplus.controlBus"/>
         <property name="memoryBus" ref="appleIIjplus.memoryBus"/>
         <property name="gamePort" ref="appleIIjplus.gamePort"/>
-        <property name="monitorDevice" ref="appleMonitorII"/>
         <property name="monitor" ref="appleMonitorII.monitor"/>
         <property name="fontStandard" data="${resourcePath}/roms/Apple/Apple II j-plus Video ROM.bin"/>
     </component>

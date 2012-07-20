@@ -274,25 +274,6 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     }
     else if (action == @selector(delete:))
         return [self isPaperCanvas];
-    else if ((action == @selector(sendPowerDown:)) ||
-             (action == @selector(sendSleep:)) ||
-             (action == @selector(sendWakeUp:)) ||
-             (action == @selector(sendColdRestart:)) ||
-             (action == @selector(sendWarmRestart:)) ||
-             (action == @selector(sendDebuggerBreak:)))
-    {
-        CanvasWindowController *canvasWindowController = [[self window] windowController];
-        OEComponent *device = (OEComponent *)[canvasWindowController device];
-        
-        if (device)
-        {
-            bool isEventObservers = false;
-            
-            device->postMessage(NULL, DEVICE_IS_OBSERVED, &isEventObservers);
-            
-            return isEventObservers;
-        }
-    }
     
     return YES;
 }
@@ -1247,50 +1228,6 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     canvas->doDelete();
     
     [document unlockEmulation];
-}
-
-// System events
-
-- (void)sendEvent:(int)value
-{
-    CanvasWindowController *canvasWindowController = [[self window] windowController];
-    OEComponent *device = (OpenGLCanvas *)[canvasWindowController device];
-    
-    if (!device)
-        return;
-    
-    DeviceEvent event = (DeviceEvent)value;
-    device->postNotification(device, DEVICE_DID_CHANGE, &event);
-}
-
-- (void)sendPowerDown:(id)sender
-{
-    [self sendEvent:DEVICE_POWERDOWN];
-}
-
-- (void)sendSleep:(id)sender
-{
-    [self sendEvent:DEVICE_SLEEP];
-}
-
-- (void)sendWakeUp:(id)sender
-{
-    [self sendEvent:DEVICE_WAKEUP];
-}
-
-- (void)sendColdRestart:(id)sender
-{
-    [self sendEvent:DEVICE_COLDRESTART];
-}
-
-- (void)sendWarmRestart:(id)sender
-{
-    [self sendEvent:DEVICE_WARMRESTART];
-}
-
-- (void)sendDebuggerBreak:(id)sender
-{
-    [self sendEvent:DEVICE_DEBUGGERBREAK];
 }
 
 // Support for the text input system

@@ -1,4 +1,8 @@
 ==Latest==
+* Fixed crash when replacing monitors
+* Implemented power/reset signals as global emulation properties
+* Added F12 reset key for Apple II
+* Added CFFA ROM 1.2 and ROM 1.0 firmware
 * Fixed disk image extension detection in libdiskimage
 * Implemented Apple III MOS6502
 * Implemented Apple III keyboard

@@ -40,10 +40,9 @@ private:
     bool splashScreen;
     bool splashScreenActive;
     
-    OEComponent *device;
+    OEComponent *emulation;
     OEComponent *controlBus;
     OEComponent *vram;
-    OEComponent *monitorDevice;
     OEComponent *monitor;
     
     // State

@@ -59,7 +59,6 @@ private:
     OEComponent *controlBus;
     OEComponent *memoryBus;
     OEComponent *gamePort;
-    OEComponent *monitorDevice;
 	OEComponent *monitor;
 	
     // Settings

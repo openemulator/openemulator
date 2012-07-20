@@ -19,6 +19,9 @@
 
 #include "OEComponentFactory.h"
 
+#include "EmulationInterface.h"
+#include "CanvasInterface.h"
+
 OEEmulation::OEEmulation() : OEDocument()
 {
     constructCanvas = NULL;
@@ -717,4 +720,67 @@ string OEEmulation::parseValueProperties(string value, map<string, string>& prop
     }
     
     return value;
+}
+
+bool OEEmulation::postMessage(OEComponent *sender, int message, void *data)
+{
+    switch (message)
+    {
+        case EMULATION_CONSTRUCT_DISPLAYCANVAS:
+            if (!constructCanvas)
+                return false;
+            
+            return (*((OEComponent **)data) = constructCanvas(userData,
+                                                              sender,
+                                                              OECANVAS_DISPLAY)) != NULL;
+            
+        case EMULATION_CONSTRUCT_PAPERCANVAS:
+            if (!constructCanvas)
+                return false;
+            
+            return (*((OEComponent **)data) = constructCanvas(userData,
+                                                              sender,
+                                                              OECANVAS_PAPER)) != NULL;
+            
+        case EMULATION_CONSTRUCT_OPENGLCANVAS:
+            if (!constructCanvas)
+                return false;
+            
+            return (*((OEComponent **)data) = constructCanvas(userData,
+                                                              sender,
+                                                              OECANVAS_OPENGL)) != NULL;
+            
+        case EMULATION_DESTROY_CANVAS:
+            if (!destroyCanvas)
+                return false;
+            
+            destroyCanvas(userData, *((OEComponent **)data));
+            
+            *((OEComponent **)data) = NULL;
+            
+            return true;
+            
+        case EMULATION_UPDATE:
+            if (!didUpdate)
+                return false;
+            
+            didUpdate(userData);
+            
+            return true;
+            
+        case EMULATION_ASSERT_ACTIVITY:
+            activityCount++;
+            
+            return true;
+            
+        case EMULATION_CLEAR_ACTIVITY:
+            if (activityCount <= 0)
+                return false;
+            
+            activityCount--;
+            
+            return true;
+    }
+    
+    return false;
 }

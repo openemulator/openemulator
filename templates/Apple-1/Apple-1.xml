@@ -7,12 +7,12 @@
         <setting ref="apple1.io" name="keyboardType" label="Keyboard" type="select" options="Standard,Full ASCII"/>
     </device>
     <port id="apple1.videoPort" ref="appleMonitorIII.connector" type="Composite Video Port" group="peripherals" label="Video Port" image="images/Connectors/RCA Female.png">
-        <inlet ref="apple1.terminal" property="monitorDevice" outletRef=""/>
         <inlet ref="apple1.terminal" property="monitor" outletRef="monitor"/>
     </port>
     <port id="apple1.slot1" ref="appleACI.connector" type="Apple-1 Expansion Port" group="expansions" label="Expansion Port" image="images/Connectors/Edge44.png"/>
     <port id="apple1.slot2" ref="rdCFFA1.connector" type="Apple-1 Expansion Port" group="expansions" label="Expansion Port" image="images/Connectors/Edge44.png"/>
     <component id="apple1.controlBus" class="ControlBus">
+        <property name="emulation" ref="emulation"/>
         <property name="device" ref="apple1"/>
         <property name="audio" ref="audio"/>
         <!-- Clock frequency: (14318180 crystal cycles/s) * (61 effective CPU cycles/scanline) / (910 crystal cycles/scanline) -->
@@ -67,14 +67,14 @@
         <property name="controlBus" ref="apple1.controlBus"/>
         <property name="portA" ref="apple1.io"/>
         <property name="controlA" value="0x0"/>
-        <property name="directionA" value="0x0"/>
+        <property name="ddrA" value="0x0"/>
         <property name="dataA" value="0x0"/>
         <property name="ca1" value="0"/>
         <property name="ca2" value="0"/>
         <property name="controlBusA" ref=""/>
         <property name="portB" ref="apple1.io"/>
         <property name="controlB" value="0x0"/>
-        <property name="directionB" value="0x0"/>
+        <property name="ddrB" value="0x0"/>
         <property name="dataB" value="0x0"/>
         <property name="cb1" value="0"/>
         <property name="cb2" value="0"/>
@@ -98,7 +98,6 @@
         <property name="device" ref="apple1"/>
         <property name="vram" ref="apple1.terminalRAM"/>
         <property name="controlBus" ref="apple1.controlBus"/>
-        <property name="monitorDevice" ref="appleMonitorIII"/>
         <property name="monitor" ref="appleMonitorIII.monitor"/>
         <property name="font" data="${resourcePath}/roms/Signetics/Signetics 2513 Video ROM.bin"/>
     </component>

@@ -13,8 +13,10 @@
 
 #include <vector>
 
-#include "OEDocument.h"
 #include "OEComponent.h"
+#include "OEDocument.h"
+
+#include "EmulationInterface.h"
 
 using namespace std;
 
@@ -52,6 +54,8 @@ public:
     
     bool isActive();
     
+    bool postMessage(OEComponent *sender, int message, void *data);
+    
 private:
     string resourcePath;
     OEComponentsMap componentsMap;
@@ -88,8 +92,6 @@ private:
     
     bool hasValueProperty(string value, string propertyName);
     string parseValueProperties(string value, map<string, string>& propertiesMap);
-    
-    friend class OEDevice;
 };
 
 #endif

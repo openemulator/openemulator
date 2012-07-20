@@ -47,7 +47,6 @@ AppleIIVideo::AppleIIVideo()
     controlBus = NULL;
     memoryBus = NULL;
     gamePort = NULL;
-    monitorDevice = NULL;
     monitor = NULL;
     
     model = APPLEII_MODELIIE;
@@ -198,14 +197,6 @@ bool AppleIIVideo::setRef(string name, OEComponent *ref)
         gamePort = ref;
         if (gamePort)
             gamePort->addObserver(this, APPLEII_AN2_DID_CHANGE);
-    }
-    else if (name == "monitorDevice")
-    {
-        if (monitorDevice)
-            monitorDevice->removeObserver(this, DEVICE_DID_CHANGE);
-        monitorDevice = ref;
-        if (monitorDevice)
-            monitorDevice->addObserver(this, DEVICE_DID_CHANGE);
     }
 	else if (name == "monitor")
     {
@@ -385,8 +376,6 @@ void AppleIIVideo::notify(OEComponent *sender, int notification, void *data)
         
         configureDraw();
     }
-    else if (sender == monitorDevice)
-        device->postNotification(sender, notification, data);
     else if (sender == monitor)
     {
         switch (notification)

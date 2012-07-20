@@ -277,13 +277,6 @@
         return [item isMount];
     else if (action == @selector(delete:))
         return [item isRemovable];
-    else if ((action == @selector(sendPowerDown:)) ||
-             (action == @selector(sendSleep:)) ||
-             (action == @selector(sendWakeUp:)) ||
-             (action == @selector(sendColdRestart:)) ||
-             (action == @selector(sendWarmRestart:)) ||
-             (action == @selector(sendDebuggerBreak:)))
-        return [item isDeviceObserved];
     
     return YES;
 }
@@ -1046,42 +1039,6 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
                            @"Check the console for additional information."]);
     
     return NO;
-}
-
-- (void)sendPowerDown:(id)sender
-{
-    if (selectedItem)
-        [selectedItem sendDeviceEvent:EMULATIONDEVICEEVENT_POWERDOWN];
-}
-
-- (void)sendSleep:(id)sender
-{
-    if (selectedItem)
-        [selectedItem sendDeviceEvent:EMULATIONDEVICEEVENT_SLEEP];
-}
-
-- (void)sendWakeUp:(id)sender
-{
-    if (selectedItem)
-        [selectedItem sendDeviceEvent:EMULATIONDEVICEEVENT_WAKEUP];
-}
-
-- (void)sendColdRestart:(id)sender
-{
-    if (selectedItem)
-        [selectedItem sendDeviceEvent:EMULATIONDEVICEEVENT_COLDRESTART];
-}
-
-- (void)sendWarmRestart:(id)sender
-{
-    if (selectedItem)
-        [selectedItem sendDeviceEvent:EMULATIONDEVICEEVENT_WARMRESTART];
-}
-
-- (void)sendDebuggerBreak:(id)sender
-{
-    if (selectedItem)
-        [selectedItem sendDeviceEvent:EMULATIONDEVICEEVENT_DEBUGGERBREAK];
 }
 
 @end

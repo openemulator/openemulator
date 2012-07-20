@@ -10,7 +10,7 @@
 
 #include "Apple1Terminal.h"
 
-#include "DeviceInterface.h"
+#include "EmulationInterface.h"
 #include "RS232Interface.h"
 #include "MemoryInterface.h"
 
@@ -35,10 +35,9 @@
 
 Apple1Terminal::Apple1Terminal()
 {
-    device = NULL;
+    emulation = NULL;
     controlBus = NULL;
     vram = NULL;
-    monitorDevice = NULL;
     monitor = NULL;
     
     vramp = NULL;
@@ -91,13 +90,13 @@ bool Apple1Terminal::getValue(string name, string& value)
 
 bool Apple1Terminal::setRef(string name, OEComponent *ref)
 {
-    if (name == "device")
+    if (name == "emulation")
     {
-        if (device)
-            device->removeObserver(this, DEVICE_DID_CHANGE);
-        device = ref;
-        if (device)
-            device->addObserver(this, DEVICE_DID_CHANGE);
+        if (emulation)
+            emulation->removeObserver(this, EMULATION_WAS_SIGNALED);
+        emulation = ref;
+        if (emulation)
+            emulation->addObserver(this, EMULATION_WAS_SIGNALED);
     }
     else if (name == "controlBus")
     {
@@ -117,14 +116,6 @@ bool Apple1Terminal::setRef(string name, OEComponent *ref)
     }
     else if (name == "vram")
         vram = ref;
-    else if (name == "monitorDevice")
-    {
-        if (monitorDevice)
-            monitorDevice->removeObserver(this, DEVICE_DID_CHANGE);
-        monitorDevice = ref;
-        if (monitorDevice)
-            monitorDevice->addObserver(this, DEVICE_DID_CHANGE);
-    }
     else if (name == "monitor")
     {
         if (monitor)
@@ -159,13 +150,6 @@ bool Apple1Terminal::setData(string name, OEData *data)
 
 bool Apple1Terminal::init()
 {
-    if (!device)
-    {
-        logMessage("device not connected");
-        
-        return false;
-    }
-    
     if (!controlBus)
     {
         logMessage("controlBus not connected");
@@ -253,9 +237,9 @@ bool Apple1Terminal::postMessage(OEComponent *sender, int message, void *data)
 
 void Apple1Terminal::notify(OEComponent *sender, int notification, void *data)
 {
-    if (sender == device)
+    if (sender == emulation)
     {
-        if (*((DeviceEvent *)data) == DEVICE_WARMRESTART)
+        if (*((EmulationEvent *)data) == EMULATION_WARMRESTART)
         {
             if (splashScreenActive)
             {
@@ -309,8 +293,6 @@ void Apple1Terminal::notify(OEComponent *sender, int notification, void *data)
                 break;
         }
     }
-    else if (sender == monitorDevice)
-        device->postNotification(sender, notification, data);
     else if (sender == monitor)
     {
         switch (notification)
