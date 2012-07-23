@@ -9,10 +9,9 @@
  */
 
 // Notes:
-// * runCycles executes a number of CPU cycles, returning the number of
-//   remaining cycles (OEInt64)
-// * setCycles sets the number of cycles to be executed (OEInt64)
-// * getCycles returns the number of remaining cycles (OEInt64)
+// * setPendingCycles sets the number of cycles to be executed (OESLong)
+// * getPendingCycles returns the number of remaining cycles (OESLong)
+// * run executes a number of CPU cycles
 
 #ifndef _CPUINTERFACE_H
 #define _CPUINTERFACE_H

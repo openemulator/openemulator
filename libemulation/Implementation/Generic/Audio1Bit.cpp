@@ -16,7 +16,7 @@ Audio1Bit::Audio1Bit()
 {
     audioCodec = NULL;
     
-    noiseRejection = 0.04;
+    noiseRejection = 0.04F;
     volume = 1;
     
     inputThreshold = 0;

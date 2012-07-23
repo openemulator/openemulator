@@ -275,7 +275,7 @@ bool DIApple525DiskStorage::close()
                 // Save
                 for (DIInt i = 0; i < MAX_TRACKNUM; i += 4)
                 {
-                    if (!trackData[i].size())
+                    if ((i >= trackData.size()) || !trackData[i].size())
                         continue;
                     
                     DITrack track;

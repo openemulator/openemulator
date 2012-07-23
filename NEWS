@@ -1,4 +1,11 @@
 ==Latest==
+* Fixed Disk II sound problem when pausing/waking up
+* Implemented Apple II cassette out option
+* Implemented Apple II speaker tension/relaxation
+* Restored support for Mac OS X 10.5 (Intel)
+* Fixed crash when writing to a DSK file
+* Added PH1 inhibiting writing in Disk II
+* Modified mouse release message to "Press CTRL+OPTION to release mouse."
 * Fixed crash when replacing monitors
 * Implemented power/reset signals as global emulation properties
 * Added F12 reset key for Apple II
@@ -6,6 +13,7 @@
 * Fixed disk image extension detection in libdiskimage
 * Implemented Apple III MOS6502
 * Implemented Apple III keyboard
+* Implemented Apple III framework
 
 ==1.0.3 17/07/2012==
 * Fixed OEDocument retain/release madness

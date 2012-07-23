@@ -8,6 +8,7 @@
         <setting ref="appleII.audioOut" name="volume" label="Volume" type="slider" options="0,1"/>
         <setting ref="appleII.video" name="characterSet" label="Character Set" type="select" options="Standard,Videx|Videx Lowercase Chip,Pigfont"/>
         <setting ref="appleII.keyboard" name="type" label="Keyboard" type="select" options="Standard,Shift-Key Mod,Full ASCII"/>
+        <setting ref="appleII.audioOut" name="cassetteOut" label="Cassette Output" type="checkbox"/>
     </device>
     <port id="appleII.videoPort" ref="appleMonitorII.connector" type="Composite Video Port" group="peripherals" label="Video Port" image="images/Connectors/RCA Female.png">
         <inlet ref="appleII.keyboard" property="monitor" outletRef="monitor"/>
@@ -194,9 +195,11 @@
         <property name="floatingBus" ref="appleII.floatingBus"/>
     </component>
     <component id="appleII.audioOut" class="AppleIIAudioOut">
-        <property name="volume" value="1"/>
-        <property name="audioCodec" ref="appleII.audioCodec"/>
+        <property name="controlBus" ref="appleII.controlBus"/>
         <property name="floatingBus" ref="appleII.floatingBus"/>
+        <property name="audioCodec" ref="appleII.audioCodec"/>
+        <property name="volume" value="1"/>
+        <property name="cassetteOut" value="0"/>
     </component>
     <component id="appleII.audioCodec" class="AudioCodec">
         <property name="audio" ref="audio"/>

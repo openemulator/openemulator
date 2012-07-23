@@ -541,7 +541,7 @@ bool DIFDIDiskStorage::decodePulsesTrack(DIData& decodedData, DIData& data, DIIn
                    pulseNum))
         return false;
     
-    float averageBitNum = 60.0 * bitRate / rotationSpeed;
+    float averageBitNum = 60 * bitRate / rotationSpeed;
     decodedData.resize(2 * averageBitNum);
     
     // Calculate total pulses time

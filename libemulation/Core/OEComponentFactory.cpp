@@ -47,6 +47,7 @@
 #include "AppleIISlotController.h"
 #include "AppleIIVideo.h"
 #include "AppleIIIMOS6502.h"
+#include "AppleIIIVIAControl.h"
 #include "AppleSilentype.h"
 #include "AppleSilentypeInterfaceCard.h"
 
@@ -107,6 +108,7 @@ OEComponent *OEComponentFactory::construct(const string& className)
     matchComponent(AppleIISlotController);
     matchComponent(AppleIIVideo);
     matchComponent(AppleIIIMOS6502);
+    matchComponent(AppleIIIVIAControl);
     matchComponent(AppleSilentype);
     matchComponent(AppleSilentypeInterfaceCard);
     

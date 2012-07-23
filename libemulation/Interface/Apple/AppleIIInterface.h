@@ -16,7 +16,7 @@
 
 #include "MemoryInterface.h"
 
-#define APPLEII_CLOCKFREQUENCY   (14318180.0 * 65 / 912)
+#define APPLEII_CLOCKFREQUENCY   (14318180.0F * 65 / 912)
 
 typedef enum
 {
@@ -56,7 +56,6 @@ typedef enum
     APPLEII_MAP_SLOT = ADDRESSDECODER_END,
     APPLEII_UNMAP_SLOT,
     
-    APPLEII_SET_VRAMMODE,
     APPLEII_GET_VRAM,
     
     APPLEII_SET_AUXMEMORY,
@@ -67,11 +66,6 @@ typedef enum
 // Move this to AppleIIControlBus:
 //    APPLEII_ASSERT_DISKMOTORON,
 //    APPLEII_CLEAR_DISKMOTORON,
-
-typedef enum
-{
-    APPLEII_VRAM_DID_CHANGE,
-} AppleIIAddressDecoderNotification;
 
 typedef enum
 {

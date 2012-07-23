@@ -43,25 +43,25 @@
 
 #include "OEImage.h"
 
-#define NTSC_FSC        (315.0 / 88.0 * 1E6)
+#define NTSC_FSC        (315.0F / 88.0F * 1E6F)
 #define NTSC_4FSC       (4 * NTSC_FSC)
-#define NTSC_HTOTAL     ((63.0 + 5.0 / 9.0) * 1E-6)
-#define NTSC_HLENGTH    ((52.0 + 8.0 / 9.0) * 1E-6)
-#define NTSC_HHALF      ((35.0 + 2.0 / 3.0) * 1E-6)
-#define NTSC_HSTART     (NTSC_HHALF - NTSC_HLENGTH / 2.0)
-#define NTSC_HEND       (NTSC_HHALF + NTSC_HLENGTH / 2.0)
+#define NTSC_HTOTAL     ((63.0F + 5.0F / 9.0F) * 1E-6F)
+#define NTSC_HLENGTH    ((52.0F + 8.0F / 9.0F) * 1E-6F)
+#define NTSC_HHALF      ((35.0F + 2.0F / 3.0F) * 1E-6F)
+#define NTSC_HSTART     (NTSC_HHALF - NTSC_HLENGTH / 2)
+#define NTSC_HEND       (NTSC_HHALF + NTSC_HLENGTH / 2)
 #define NTSC_VTOTAL     262
 #define NTSC_VLENGTH    240
 #define NTSC_VSTART     19
 #define NTSC_VEND       (NTSC_VSTART + NTSC_VLENGTH)
 
-#define PAL_FSC         4433618.75
+#define PAL_FSC         4433618.75F
 #define PAL_4FSC        (4 * PAL_FSC)
-#define PAL_HTOTAL      64.0E-6
-#define PAL_HLENGTH     52.0E-6
-#define PAL_HHALF       ((37.0 + 10.0 / 27.0) * 1E-6)
-#define PAL_HSTART      (PAL_HHALF - PAL_HLENGTH / 2.0)
-#define PAL_HEND        (PAL_HHALF + PAL_HLENGTH / 2.0)
+#define PAL_HTOTAL      64.0E-6F
+#define PAL_HLENGTH     52.0E-6F
+#define PAL_HHALF       ((37.0F + 10.0F / 27.0F) * 1E-6F)
+#define PAL_HSTART      (PAL_HHALF - PAL_HLENGTH / 2)
+#define PAL_HEND        (PAL_HHALF + PAL_HLENGTH / 2)
 #define PAL_VTOTAL      312
 #define PAL_VLENGTH     288
 #define PAL_VSTART      21
@@ -158,9 +158,9 @@ public:
         videoHue = 0;
         videoCenter = OEMakePoint(0, 0);
         videoSize = OEMakeSize(1, 1);
-        videoBandwidth = 14318180.0;
-        videoLumaBandwidth = 600000.0;
-        videoChromaBandwidth = 2000000.0;
+        videoBandwidth = 14318180;
+        videoLumaBandwidth = 600000;
+        videoChromaBandwidth = 2000000;
         videoWhiteOnly = false;
         
         displayResolution = OEMakeSize(640, 480);

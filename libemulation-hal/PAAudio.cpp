@@ -94,7 +94,7 @@ void PAAudio::setFullDuplex(bool value)
     enableAudio(state);
 }
 
-void PAAudio::setSampleRate(double value)
+void PAAudio::setSampleRate(float value)
 {
     closePlayer();
     closeRecorder();
@@ -328,7 +328,7 @@ void PAAudio::runEmulations()
             pthread_cond_wait(&emulationsCond, &emulationsMutex);
         
         OEInt samplesPerBuffer = framesPerBuffer * channelNum;
-        OEInt bytesPerBuffer = samplesPerBuffer * sizeof(float);
+        OEInt bytesPerBuffer = samplesPerBuffer * (OEInt) sizeof(float);
         
         // Resize local buffers
         if (localBufferSize != bytesPerBuffer)
@@ -539,7 +539,7 @@ void PAAudio::runAudio(const float *input,
                        OEInt frameCount)
 {
     OEInt samplesPerBuffer = frameCount * channelNum;
-    OEInt bytesPerBuffer = samplesPerBuffer * sizeof(float);
+    OEInt bytesPerBuffer = samplesPerBuffer * (OEInt) sizeof(float);
     
     // Render noise when no data is available
     // Note: this should be removed when the framework is stable
@@ -575,9 +575,9 @@ void PAAudio::runTimer()
     while (timerThreadShouldRun)
     {
         OEInt samplesPerBuffer = framesPerBuffer * channelNum;
-        OEInt bytesPerBuffer = samplesPerBuffer * sizeof(float);
+        OEInt bytesPerBuffer = samplesPerBuffer * (OEInt) sizeof(float);
         
-        usleep(1E6 * framesPerBuffer / sampleRate);
+        usleep(1E6F * framesPerBuffer / sampleRate);
         
         if (isAudioBufferEmpty())
             continue;
@@ -758,11 +758,11 @@ void PAAudio::playAudio(float *inputBuffer,
             break;
         }
         
-        playerInputFrameIndex += srcData.input_frames_used;
-        playerInputFrameNum -= srcData.input_frames_used;
+        playerInputFrameIndex += (OEInt) srcData.input_frames_used;
+        playerInputFrameNum -= (OEInt) srcData.input_frames_used;
         
-        srcOutputFrameIndex += srcData.output_frames_gen;
-        srcOutputFrameNum -= srcData.output_frames_gen;
+        srcOutputFrameIndex += (OEInt) srcData.output_frames_gen;
+        srcOutputFrameNum -= (OEInt) srcData.output_frames_gen;
         
         playerFrameIndex += srcData.output_frames_gen;
     } while (srcOutputFrameNum > 0);

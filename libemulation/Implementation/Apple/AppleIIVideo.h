@@ -105,7 +105,7 @@ private:
     OELong frameStart;
     OEInt frameCycleNum;
     
-    AppleIITimerType currentTimer;
+    OEInt currentTimer;
     OELong lastCycles;
     OEInt pendingCycles;
     

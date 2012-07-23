@@ -56,13 +56,13 @@ OEVector OEVector::operator *(const OEVector& v)
 
 OEVector OEVector::normalize()
 {
-    float sum = 0.0;
+    float sum = 0;
     
     for (OEInt i = 0; i < data.size(); i++)
         sum += data[i];
     
     OEVector w(data);
-    float gain = 1.0 / sum;
+    float gain = 1.0F / sum;
     
     for (OEInt i = 0; i < data.size(); i++)
         w.data[i] *= gain;
@@ -77,22 +77,22 @@ OEVector OEVector::realIDFT()
     
     for (OEInt i = 0; i < data.size(); i++)
     {
-        float omega = 2.0 * M_PI * i / data.size();
+        float omega = (float) (2.0F * M_PI * i / data.size());
         
         for (OEInt j = 0; j < data.size(); j++)
             w.data[i] += data[j] * cosf(j * omega);
     }
     
     for (OEInt i = 0; i < data.size(); i++)
-        w.data[i] /= data.size();
+        w.data[i] /= (OEInt) data.size();
     
     return w;
 }
 
 OEVector OEVector::lanczosWindow(OEInt n, float fc)
 {
-    if (fc > 0.5)
-        fc = 0.5;
+    if (fc > 0.5F)
+        fc = 0.5F;
     
     OEVector v;
     v.data.resize(n);
@@ -101,7 +101,7 @@ OEVector OEVector::lanczosWindow(OEInt n, float fc)
     
     for (OESInt i = 0; i < n; i++)
     {
-        float x = 2 * M_PI * fc * (i - halfN);
+        float x = 2 * (float) M_PI * fc * (i - halfN);
         
         v.data[i] = (x == 0.0F) ? 1.0F : x = sinf(x) / x;
     }
@@ -120,28 +120,28 @@ OEVector OEVector::chebyshevWindow(OEInt n, float sidelobeDb)
     OEVector w;
     w.data.resize(m);
     
-    float alpha = coshf(acoshf(powf(10, sidelobeDb / 20.0)) / m);
+    float alpha = coshf(acoshf(powf(10, sidelobeDb / 20)) / m);
     
     for (OEInt i = 0; i < m; i++)
     {
-        float a = fabsf(alpha * cosf(M_PI * i / m));
+        float a = fabsf(alpha * cosf((float) M_PI * i / m));
         if (a > 1)
-            w.data[i] = powf(-1, i) * coshf(m * acosh(a));
+            w.data[i] = powf(-1, i) * coshf(m * acoshf(a));
         else
-            w.data[i] = powf(-1, i) * cosf(m * acos(a));
+            w.data[i] = powf(-1, i) * cosf(m * acosf(a));
     }
     
     w = w.realIDFT();
     
     w.data.resize(n);
-    w.data[0] /= 2.0;
+    w.data[0] /= 2;
     w.data[n - 1] = w.data[0];
     
-    float max = 0.0;
+    float max = 0;
     
     for (OEInt i = 0; i < n; i++)
         if (fabs(w.data[i]) > max)
-            max = fabs(w.data[i]);
+            max = fabsf(w.data[i]);
     
     for (OEInt i = 0; i < n; i++)
         w.data[i] /= max;

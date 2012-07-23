@@ -130,7 +130,7 @@
     if (!playPath)
     {
         [fPlayNameLabel setStringValue:@""];
-        [fPlayPosition setFloatValue:0.0];
+        [fPlayPosition setFloatValue:0];
         [fPlayPositionLabel setStringValue:@"--:--:--"];
         [fPlayTimeLabel setStringValue:@"--:--:--"];
     }

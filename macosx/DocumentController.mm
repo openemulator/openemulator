@@ -173,7 +173,7 @@ void hidDeviceEventOcurred(void *inContext, IOReturn inResult, void *inSender, I
     NSDictionary *defaults = [NSDictionary dictionaryWithObjectsAndKeys:
                               [NSNumber numberWithBool:NO], @"OEAudioControlsVisible",
                               [NSNumber numberWithBool:NO], @"OEAudioFullDuplex",
-                              [NSNumber numberWithFloat:1.0], @"OEAudioPlayVolume",
+                              [NSNumber numberWithFloat:1], @"OEAudioPlayVolume",
                               [NSNumber numberWithBool:YES], @"OEAudioPlayThrough",
                               [NSNumber numberWithBool:shaderDefault], @"OEVideoEnableShader",
                               nil
@@ -613,7 +613,7 @@ void hidDeviceEventOcurred(void *inContext, IOReturn inResult, void *inSender, I
     {
         if ((usageId >= 0x30) && (usageId <= 0x38))
         {
-            float normalizedValue = ((float) intValue - min) / (max - min);
+            float normalizedValue = (float) (intValue - min) / (float) (max - min);
             
             ((HIDJoystick *)hidJoystick)->setAxis(deviceIndex, usageId - 0x30, normalizedValue);
         }

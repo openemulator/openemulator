@@ -62,6 +62,8 @@
 		0042499715B8EA1C0091ECAB /* EmulationInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 0042499615B8EA1C0091ECAB /* EmulationInterface.h */; };
 		004763D2139C94F30016277E /* LibraryTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 004763D1139C94F30016277E /* LibraryTableView.m */; };
 		004BD1C01425AA8500768B80 /* W65C02S.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 004BD1BC1425AA8500768B80 /* W65C02S.cpp */; };
+		004E152A15B9041A00FD22AB /* AppleIIIVIAControl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 004E152915B9041A00FD22AB /* AppleIIIVIAControl.cpp */; };
+		004E152D15B9042100FD22AB /* AppleIIIVIAControl.h in Headers */ = {isa = PBXBuildFile; fileRef = 004E152C15B9042100FD22AB /* AppleIIIVIAControl.h */; };
 		005316C31596D268007F3C86 /* AppleSilentypeInterfaceCard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 005316C21596D268007F3C86 /* AppleSilentypeInterfaceCard.cpp */; };
 		005316C51596D2BF007F3C86 /* Proxy.h in Headers */ = {isa = PBXBuildFile; fileRef = 005316C41596D2BF007F3C86 /* Proxy.h */; };
 		005316C71596D2C8007F3C86 /* Proxy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 005316C61596D2C8007F3C86 /* Proxy.cpp */; };
@@ -470,6 +472,8 @@
 		004BD1BD1425AA8500768B80 /* W65C02S.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = W65C02S.h; sourceTree = "<group>"; };
 		004BD1BE1425AA8500768B80 /* W65C02SOpcodes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = W65C02SOpcodes.h; sourceTree = "<group>"; };
 		004BD1BF1425AA8500768B80 /* W65C02SOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = W65C02SOperations.h; sourceTree = "<group>"; };
+		004E152915B9041A00FD22AB /* AppleIIIVIAControl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleIIIVIAControl.cpp; sourceTree = "<group>"; };
+		004E152C15B9042100FD22AB /* AppleIIIVIAControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleIIIVIAControl.h; sourceTree = "<group>"; };
 		00520BD71558D70B0000107C /* QCOW Image Format.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = "QCOW Image Format.rtf"; sourceTree = "<group>"; };
 		00520BD81558D70B0000107C /* QCOW2 Image Format.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = "QCOW2 Image Format.rtf"; sourceTree = "<group>"; };
 		00520BD91558D7120000107C /* OpenEmulator Icons.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = "OpenEmulator Icons.rtf"; sourceTree = "<group>"; };
@@ -1014,6 +1018,8 @@
 				00B8882A12A393990052B7A4 /* AppleIISlotController.h */,
 				00B8882B12A393990052B7A4 /* AppleIIVideo.cpp */,
 				00B8882C12A393990052B7A4 /* AppleIIVideo.h */,
+				004E152915B9041A00FD22AB /* AppleIIIVIAControl.cpp */,
+				004E152C15B9042100FD22AB /* AppleIIIVIAControl.h */,
 				0042498E15B693DE0091ECAB /* AppleIIIMOS6502.cpp */,
 				0042498F15B693DE0091ECAB /* AppleIIIMOS6502.h */,
 				0042499215B694A60091ECAB /* AppleIIIMOS6502Opcodes.h */,
@@ -1521,6 +1527,7 @@
 				0042499315B694A60091ECAB /* AppleIIIMOS6502Opcodes.h in Headers */,
 				0042499515B696EA0091ECAB /* AppleIIIMOS6502Operations.h in Headers */,
 				0042499715B8EA1C0091ECAB /* EmulationInterface.h in Headers */,
+				004E152D15B9042100FD22AB /* AppleIIIVIAControl.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1635,7 +1642,7 @@
 		2A37F4A9FDCFA73011CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0430;
 				ORGANIZATIONNAME = OpenEmulator;
 			};
 			buildConfigurationList = C05733CB08A9546B00998B17 /* Build configuration list for PBXProject "OpenEmulator" */;
@@ -1833,6 +1840,7 @@
 				00EA1F0A159799C400079A54 /* RDCFFA.cpp in Sources */,
 				00F2796F15B671E600E58F4F /* MOS6522.cpp in Sources */,
 				0042499015B693DE0091ECAB /* AppleIIIMOS6502.cpp in Sources */,
+				004E152A15B9041A00FD22AB /* AppleIIIVIAControl.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1978,7 +1986,6 @@
 		00039E7D12B03F660025D374 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
 				PRODUCT_NAME = "emulation-hal";
 			};
 			name = Debug;
@@ -1993,15 +2000,6 @@
 		00365CF71516F3D800978DF6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -2009,9 +2007,6 @@
 		00365CF81516F3D800978DF6 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -2019,7 +2014,6 @@
 		006EECA50FCA5C32003D2C8D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
 				PRODUCT_NAME = emulation;
 			};
 			name = Debug;
@@ -2034,16 +2028,6 @@
 		00CF207815B0D8D300DA8E08 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -2051,10 +2035,6 @@
 		00CF207915B0D8D300DA8E08 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -2062,15 +2042,12 @@
 		C05733C808A9546B00998B17 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					macosx,
 					"\"$(SRCROOT)/macosx\"",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					/opt/local/lib,
-				);
+				INFOPLIST_FILE = macosx/Info.plist;
+				PRODUCT_NAME = OpenEmulator;
 			};
 			name = Debug;
 		};
@@ -2081,10 +2058,8 @@
 					macosx,
 					"\"$(SRCROOT)/macosx\"",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					/opt/local/lib,
-				);
+				INFOPLIST_FILE = macosx/Info.plist;
+				PRODUCT_NAME = OpenEmulator;
 			};
 			name = Release;
 		};
@@ -2095,6 +2070,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -2103,14 +2079,12 @@
 					/usr/local/include,
 					/opt/local/include,
 				);
-				INFOPLIST_FILE = macosx/Info.plist;
 				LIBRARY_SEARCH_PATHS = (
 					/usr/local/lib,
 					/opt/local/lib,
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_NAME = OpenEmulator;
-				SDKROOT = macosx10.7;
 			};
 			name = Debug;
 		};
@@ -2120,6 +2094,7 @@
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -2128,14 +2103,12 @@
 					/usr/local/include,
 					/opt/local/include,
 				);
-				INFOPLIST_FILE = macosx/Info.plist;
 				LIBRARY_SEARCH_PATHS = (
 					/usr/local/lib,
 					/opt/local/lib,
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				ONLY_ACTIVE_ARCH = NO;
-				PRODUCT_NAME = OpenEmulator;
-				SDKROOT = macosx10.7;
 			};
 			name = Release;
 		};

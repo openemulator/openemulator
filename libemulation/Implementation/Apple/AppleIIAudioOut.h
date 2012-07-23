@@ -15,6 +15,8 @@ class AppleIIAudioOut : public Audio1Bit
 public:
     AppleIIAudioOut();
     
+    bool setValue(string name, string value);
+    bool getValue(string name, string &value);
 	bool setRef(string name, OEComponent *ref);
 	bool init();
     
@@ -22,5 +24,10 @@ public:
 	void write(OEAddress address, OEChar value);
 	
 private:
+    OEComponent *controlBus;
 	OEComponent *floatingBus;
+    
+    OELong lastCycles;
+    bool relaxationState;
+    bool cassetteOut;
 };

@@ -95,7 +95,7 @@
     <component id="apple1.terminal" class="Apple1Terminal">
         <property name="cursorX" value="0"/>
         <property name="cursorY" value="0"/>
-        <property name="device" ref="apple1"/>
+        <property name="emulation" ref="emulation"/>
         <property name="vram" ref="apple1.terminalRAM"/>
         <property name="controlBus" ref="apple1.controlBus"/>
         <property name="monitor" ref="appleMonitorIII.monitor"/>

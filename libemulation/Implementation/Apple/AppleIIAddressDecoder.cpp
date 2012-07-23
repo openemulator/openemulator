@@ -45,7 +45,7 @@ bool AppleIIAddressDecoder::init()
     OEInt startBlock, endBlock;
     
     startBlock = 0x400 >> blockBits;
-    endBlock = 0x7ff >> blockBits;
+    endBlock = 0xbff >> blockBits;
     for (OEInt i = startBlock; i <= endBlock; i++)
         videoRefresh[i] = true;
     
@@ -72,12 +72,6 @@ bool AppleIIAddressDecoder::postMessage(OEComponent *sender, int message, void *
             
         case APPLEII_UNMAP_SLOT:
             return removeMemoryMap((MemoryMap *) data);
-            
-        case APPLEII_SET_VRAMMODE:
-            // To-Do: Dependiendo del modo, cambiamos el mapa
-            
-            // Nota: si cambia el mapa, enviamos APPLEII_VRAM_DID_CHANGE
-            break;
             
         case APPLEII_GET_VRAM:
         {

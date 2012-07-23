@@ -101,7 +101,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
     if (self && [self readFromURL:absoluteURL
                            ofType:nil
                             error:outError])
-            return self;
+        return self;
     
     if (outError)
         *outError = [NSError errorWithDomain:NSCocoaErrorDomain
@@ -231,19 +231,13 @@ void destroyCanvas(void *userData, OEComponent *canvas)
     
     NSSavePanel *panel = [NSSavePanel savePanel];
     [panel setAllowedFileTypes:[NSArray arrayWithObject:@"emulation"]];
-    [panel setDirectoryURL:[NSURL fileURLWithPath:path]];
-    [panel beginSheetModalForWindow:[NSApp mainWindow]
-                  completionHandler:^(NSInteger returnCode)
-     {
-         if (returnCode != NSOKButton)
-             return;
-         
-         NSError *error;
-         if (![self writeToURL:[panel URL]
-                        ofType:nil
-                         error:&error])
-             [[NSAlert alertWithError:error] runModal];
-     }];
+    [panel beginSheetForDirectory:path
+                             file:nil
+                   modalForWindow:[self windowForSheet]
+                    modalDelegate:self
+                   didEndSelector:@selector(saveDocumentAsTemplateDidEnd:
+                                            returnCode:contextInfo:)
+                      contextInfo:nil];
 }
 
 - (void)saveDocumentAsTemplateDidEnd:(NSSavePanel *)panel
@@ -582,7 +576,7 @@ void destroyCanvas(void *userData, OEComponent *canvas)
     CanvasWindow *canvasWindow = (CanvasWindow *)[NSApp mainWindow];
     
     if (![canvasWindow isMemberOfClass:[CanvasWindow class]])
-         return;
+        return;
     
     CanvasView *canvasView = [[canvasWindow windowController] canvasView];
     
@@ -597,19 +591,19 @@ void destroyCanvas(void *userData, OEComponent *canvas)
         [printInfo setHorizontalPagination:NSFitPagination];
         [printInfo setHorizontallyCentered:NO];
         [printInfo setVerticallyCentered:NO];
-        [printInfo setTopMargin:0.0 * 72.0];
-        [printInfo setRightMargin:0.0 * 72.0];
-        [printInfo setBottomMargin:0.0 * 72.0];
-        [printInfo setLeftMargin:0.0 * 72.0];
+        [printInfo setTopMargin:0 * 72];
+        [printInfo setRightMargin:0 * 72];
+        [printInfo setBottomMargin:0 * 72];
+        [printInfo setLeftMargin:0 * 72];
     }
     else
     {
         [printInfo setHorizontalPagination:NSFitPagination];
         [printInfo setVerticalPagination:NSFitPagination];
-        [printInfo setTopMargin:0.5 * 72.0];
-        [printInfo setRightMargin:0.5 * 72.0];
-        [printInfo setBottomMargin:0.5 * 72.0];
-        [printInfo setLeftMargin:0.5 * 72.0];
+        [printInfo setTopMargin:0.5F * 72];
+        [printInfo setRightMargin:0.5F * 72];
+        [printInfo setBottomMargin:0.5F * 72];
+        [printInfo setLeftMargin:0.5F * 72];
     }
     
     NSPrintPanel *panel = [op printPanel];

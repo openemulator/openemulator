@@ -13,7 +13,7 @@
 float getLevelFromVolume(float value)
 {
     if (value != 0)
-        return pow(10.0, (value - 1.0) * 40.0 / 20.0);
+        return powf(10, (value - 1) * 40 / 20);
     
     return 0;
 }

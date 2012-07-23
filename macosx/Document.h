@@ -34,7 +34,7 @@
 - (void)unlockEmulation;
 - (void *)emulation;
 
-- (void)showEmulation:(id)sender;
+- (IBAction)showEmulation:(id)sender;
 - (void)constructCanvas:(NSDictionary *)dict;
 - (void)destroyCanvas:(NSValue *)canvasValue;
 - (void)showCanvas:(NSValue *)canvasValue;

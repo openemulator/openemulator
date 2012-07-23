@@ -40,9 +40,6 @@ typedef enum
 	MC6821_CB2_DID_CHANGE,
 } MC6821Notification;
 
-#define MC6821_PORTA                0x00
-#define MC6821_PORTB                0x01
-
 #define MC6821_RS_DATAREGISTERA		0x00
 #define MC6821_RS_CONTROLREGISTERA	0x01
 #define MC6821_RS_DATAREGISTERB		0x02
@@ -79,12 +76,14 @@ public:
 	void write(OEAddress address, OEChar value);
 	
 private:
+    OEAddress addressA;
 	OEChar controlA;
 	OEChar ddrA;
 	OEChar dataA;
 	bool ca1;
 	bool ca2;
     
+    OEAddress addressB;
 	OEChar controlB;
 	OEChar ddrB;
 	OEChar dataB;

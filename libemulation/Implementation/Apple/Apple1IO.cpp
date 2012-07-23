@@ -179,7 +179,7 @@ OEChar Apple1IO::read(OEAddress address)
 {
     switch (address & 1)
     {
-        case MC6821_PORTA:
+        case 0:
         {
             OEChar value = terminalKey | APPLE1KEYBOARD_MASK;
             
@@ -190,7 +190,7 @@ OEChar Apple1IO::read(OEAddress address)
             return value;
         }
             
-        case MC6821_PORTB:
+        case 1:
         {
             bool ready;
             
@@ -211,10 +211,10 @@ void Apple1IO::write(OEAddress address, OEChar value)
 {
     switch (address & 1)
     {
-        case MC6821_PORTA:
+        case 0:
             break;
             
-        case MC6821_PORTB:
+        case 1:
             terminalChar = value & 0x7f;
             
             if (enhancedTerminalSpeed)

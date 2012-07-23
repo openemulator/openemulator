@@ -22,7 +22,7 @@ AudioPlayer::AudioPlayer()
     
     playing = false;
     loop = false;
-    volume = 1.0;
+    volume = 1;
     frameIndex = 0;
     
     sound = NULL;
@@ -235,8 +235,8 @@ void AudioPlayer::updateAudio(bool bufferDidRender)
                            srcData.input_frames_used * srcChannelNum * sizeof(float));
                 }
                 
-                frameIndex += srcData.input_frames_used;
-                audioBufferFrame += srcData.output_frames_gen;
+                frameIndex += (OEInt) srcData.input_frames_used;
+                audioBufferFrame += (OEInt) srcData.output_frames_gen;
                 
                 if (loop && (frameIndex == sound->getFrameNum()))
                     frameIndex = 0;

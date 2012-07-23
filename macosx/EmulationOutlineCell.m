@@ -12,11 +12,11 @@
 #import "EmulationOutlineView.h"
 #import "EmulationItem.h"
 
-#define CELL_RIGHT_PADDING      10.0
-#define IMAGE_SIZE				16.0
-#define IMAGE_RIGHT_PADDING		3.0
-#define BUTTON_LEFT_PADDING		2.0
-#define BUTTON_SIZE				18.0
+#define CELL_RIGHT_PADDING      10
+#define IMAGE_SIZE				16
+#define IMAGE_RIGHT_PADDING		3
+#define BUTTON_LEFT_PADDING		2
+#define BUTTON_SIZE				18
 
 @implementation EmulationOutlineCell
 
@@ -34,7 +34,7 @@
     NSRect rect = bounds;
     NSRect paddingRect;
     NSDivideRect(rect, &rect, &paddingRect, IMAGE_SIZE, NSMinXEdge);
-    return NSInsetRect(rect, 0, (NSHeight(bounds) - IMAGE_SIZE) / 2.0);
+    return NSInsetRect(rect, 0, (NSHeight(bounds) - IMAGE_SIZE) / 2);
 }
 
 - (NSRect)textRectForBounds:(NSRect)bounds
@@ -51,7 +51,7 @@
     if ([item hasCanvases] || [item isMount])
         NSDivideRect(rect, &paddingRect, &rect, BUTTON_LEFT_PADDING + BUTTON_SIZE, NSMaxXEdge);
     
-    return NSInsetRect(rect, 0, (NSHeight(bounds) - [self cellSize].height) / 2.0);
+    return NSInsetRect(rect, 0, (NSHeight(bounds) - [self cellSize].height) / 2);
 }
 
 - (NSRect)buttonRectForBounds:(NSRect)bounds
@@ -67,7 +67,7 @@
     NSDivideRect(rect, &paddingRect, &rect, CELL_RIGHT_PADDING, NSMaxXEdge);
     NSDivideRect(rect, &rect, &paddingRect, BUTTON_SIZE, NSMaxXEdge);
     
-    return NSInsetRect(rect, 0, (NSHeight(bounds) - BUTTON_SIZE) / 2.0);
+    return NSInsetRect(rect, 0, (NSHeight(bounds) - BUTTON_SIZE) / 2);
 }
 
 - (void)drawImage:(NSImage *)theImage inRect:(NSRect)rect isFlipped:(BOOL)flipped
@@ -78,7 +78,7 @@
     [theImage drawInRect:rect
                 fromRect:NSZeroRect
                operation:NSCompositeSourceOver
-                fraction:1.0];
+                fraction:1];
     
     [theImage setFlipped:wasFlipped];
 }

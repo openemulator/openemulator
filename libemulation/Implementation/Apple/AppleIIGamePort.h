@@ -37,9 +37,9 @@ private:
     
     OELong timerStart;
     
-    void setAN(OEInt index, bool value);
-    void setPDL(OEInt index, float value);
-    void setPB(OEInt index, bool value);
-    bool isTimerPending(OEInt index);
+    void setAN(OELong index, bool value);
+    void setPDL(OELong index, float value);
+    void setPB(OELong index, bool value);
+    bool isTimerPending(OELong index);
     void resetTimer();
 };

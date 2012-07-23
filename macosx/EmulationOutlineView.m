@@ -146,11 +146,11 @@
     EmulationItem *item = [self itemAtRow:rowIndex];
     float indentation;
     if ([item isGroup])
-        indentation = 6.0;
+        indentation = 6;
     else if ([item isMount])
-        indentation = 32.0;
+        indentation = 32;
     else
-        indentation = 16.0;
+        indentation = 16;
     
     NSRect frame = [super frameOfCellAtColumn:columnIndex row:rowIndex];
     frame.origin.x = indentation;

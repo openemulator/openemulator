@@ -103,7 +103,7 @@
         <property name="cursorX" value="0"/>
         <property name="cursorY" value="0"/>
         <property name="clearScreenOnCtrlL" value="1"/>
-        <property name="device" ref="replica1"/>
+        <property name="emulation" ref="emulation"/>
         <property name="vram" ref="replica1.terminalRAM"/>
         <property name="controlBus" ref="replica1.controlBus"/>
         <property name="monitor" ref="appleMonitorII.monitor"/>

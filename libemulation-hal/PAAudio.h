@@ -26,7 +26,7 @@ public:
     ~PAAudio();
     
     void setFullDuplex(bool value);
-    void setSampleRate(double value);
+    void setSampleRate(float value);
     void setChannelNum(OEInt value);
     void setFramesPerBuffer(OEInt value);
     void setBufferNum(OEInt value);
@@ -65,7 +65,7 @@ public:
     
 private:
     bool fullDuplex;
-    double sampleRate;
+    float sampleRate;
     OEInt channelNum;
     OEInt framesPerBuffer;
     OEInt bufferNum;

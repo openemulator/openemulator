@@ -252,7 +252,7 @@ void VidexVideoterm::notify(OEComponent *sender, int notification, void *data)
 OEChar VidexVideoterm::read(OEAddress address)
 {
     setCellWidth(((address >> 1) & 0x1) ? 8 : 9);
-    setRAMBank((address >> 2) & 0x3);
+    setRAMBank((OEInt) (address >> 2) & 0x3);
     
     return MC6845::read(address);
 }
@@ -260,7 +260,7 @@ OEChar VidexVideoterm::read(OEAddress address)
 void VidexVideoterm::write(OEAddress address, OEChar value)
 {
     setCellWidth(((address >> 1) & 0x1) ? 8 : 9);
-    setRAMBank((address >> 2) & 0x3);
+    setRAMBank((OEInt) (address >> 2) & 0x3);
     
     MC6845::write(address, value);
 }

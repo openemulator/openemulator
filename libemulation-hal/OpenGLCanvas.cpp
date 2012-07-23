@@ -627,8 +627,8 @@ void OpenGLCanvas::updateTextureSize(int textureIndex, OESize size)
     if (size.height < 1)
         size.height = 1;
     
-    OESize texSize = OEMakeSize(getNextPowerOf2(size.width),
-                                getNextPowerOf2(size.height));
+    OESize texSize = OEMakeSize((float) getNextPowerOf2(size.width),
+                                (float) getNextPowerOf2(size.height));
     
     if ((textureSize[textureIndex].width == texSize.width) &&
         (textureSize[textureIndex].height == texSize.height))
@@ -776,9 +776,9 @@ bool OpenGLCanvas::uploadImage()
     
     for (OEInt x = 0; x < image.getSize().height; x++)
     {
-        float c = colorBurst[x % colorBurst.size()] / 2.0 / M_PI;
+        float c = colorBurst[x % colorBurst.size()] / 2 / (float) M_PI;
         
-        phaseInfo[3 * x + 0] = c - floor(c);
+        phaseInfo[3 * x + 0] = c - floorf(c);
         phaseInfo[3 * x + 1] = phaseAlternation[x % phaseAlternation.size()];
     }
     
@@ -805,6 +805,8 @@ GLuint OpenGLCanvas::getRenderShader()
         case CANVAS_CXA2025AS:
             return shader[OPENGLCANVAS_COMPOSITE];
     }
+    
+    return 0;
 }
 
 void OpenGLCanvas::configureShaders()
@@ -895,14 +897,14 @@ void OpenGLCanvas::configureShaders()
     if (!isCompositeDecoder)
     {
         // Y'PbPr encoding matrix
-        decoderMatrix = OEMatrix3(0.299, -0.168736, 0.5,
-                                  0.587, -0.331264, -0.418688,
-                                  0.114, 0.5, -0.081312) * decoderMatrix;
+        decoderMatrix = OEMatrix3(0.299F, -0.168736F, 0.5F,
+                                  0.587F, -0.331264F, -0.418688F,
+                                  0.114F, 0.5F, -0.081312F) * decoderMatrix;
     }
     
     // Set hue
     if (displayConfiguration.videoDecoder == CANVAS_MONOCHROME)
-        decoderMatrix = OEMatrix3(1, 0.5, 0,
+        decoderMatrix = OEMatrix3(1, 0.5F, 0,
                                   0, 0, 0,
                                   0, 0, 0) * decoderMatrix;
     
@@ -924,7 +926,7 @@ void OpenGLCanvas::configureShaders()
                               0, 0, displayConfiguration.videoSaturation) * decoderMatrix;
     
     // Hue
-    float hue = 2 * M_PI * displayConfiguration.videoHue;
+    float hue = 2 * (float) M_PI * displayConfiguration.videoHue;
     
     decoderMatrix = OEMatrix3(1, 0, 0,
                               0, cosf(hue), -sinf(hue),
@@ -937,16 +939,16 @@ void OpenGLCanvas::configureShaders()
         case CANVAS_MONOCHROME:
             // Y'PbPr decoder matrix
             decoderMatrix = OEMatrix3(1, 1, 1,
-                                      0, -0.344136, 1.772,
-                                      1.402, -0.714136, 0) * decoderMatrix;
+                                      0, -0.344136F, 1.772F,
+                                      1.402F, -0.714136F, 0) * decoderMatrix;
             break;
             
         case CANVAS_YUV:
         case CANVAS_YIQ:
             // Y'UV decoder matrix
             decoderMatrix = OEMatrix3(1, 1, 1,
-                                      0, -0.394642, 2.032062,
-                                      1.139883, -0.580622, 0) * decoderMatrix;
+                                      0, -0.394642F, 2.032062F,
+                                      1.139883F, -0.580622F, 0) * decoderMatrix;
             break;
             
         case CANVAS_CXA2025AS:
@@ -956,15 +958,15 @@ void OpenGLCanvas::configureShaders()
                                       0, 1, 0) * decoderMatrix;
             
             // Rotate 33 degrees
-            hue = -M_PI * 33 / 180;
+            hue = -(float) M_PI * 33 / 180;
             decoderMatrix = OEMatrix3(1, 0, 0,
                                       0, cosf(hue), -sinf(hue),
                                       0, sinf(hue), cosf(hue)) * decoderMatrix;
             
             // CXA2025AS decoder matrix
             decoderMatrix = OEMatrix3(1, 1, 1,
-                                      1.630, -0.378, -1.089,
-                                      0.317, -0.466, 1.677) * decoderMatrix;
+                                      1.630F, -0.378F, -1.089F,
+                                      0.317F, -0.466F, 1.677F) * decoderMatrix;
             break;
     }
     
@@ -1016,11 +1018,11 @@ void OpenGLCanvas::configureShaders()
                 displayConfiguration.displayShadowMaskLevel);
     
     // Persistence
-    float frameRate = 60.0;
+    float frameRate = 60;
     
     glUniform1f(glGetUniformLocation(displayShader, "persistenceLevel"),
                 displayConfiguration.displayPersistence /
-                (1.0 / frameRate + displayConfiguration.displayPersistence));
+                (1.0F / frameRate + displayConfiguration.displayPersistence));
     
     if (displayConfiguration.displayPersistence == 0.0)
         updateTextureSize(OPENGLCANVAS_IMAGE_PERSISTENCE, OEMakeSize(0, 0));
@@ -1028,9 +1030,9 @@ void OpenGLCanvas::configureShaders()
     // Center lighting
     float centerLighting = displayConfiguration.displayCenterLighting;
     if (fabs(centerLighting) < 0.001)
-        centerLighting = 0.001;
+        centerLighting = 0.001F;
     glUniform1f(glGetUniformLocation(displayShader, "centerLighting"),
-                1.0 / centerLighting - 1.0);
+                1.0F / centerLighting - 1);
     
     // Luminance gain
     glUniform1f(glGetUniformLocation(displayShader, "luminanceGain"),
@@ -1142,8 +1144,8 @@ OEPoint OpenGLCanvas::getDisplayCanvasTexPoint(OEPoint p)
     OESize imageSize = image.getSize();
     OESize texSize = textureSize[OPENGLCANVAS_IMAGE_IN];
     
-    p.x = (p.x + 1) * 0.5 * imageSize.width / texSize.width;
-    p.y = (p.y + 1) * 0.5 * imageSize.height / texSize.height;
+    p.x = (p.x + 1) * 0.5F * imageSize.width / texSize.width;
+    p.y = (p.y + 1) * 0.5F * imageSize.height / texSize.height;
     
     return p;
 }
@@ -1203,9 +1205,9 @@ void OpenGLCanvas::drawDisplayCanvas()
                                       canvasTexUpperRight.x - canvasTexLowerLeft.x,
                                       canvasTexUpperRight.y - canvasTexLowerLeft.y);
     
-    OESize canvasSize = OEMakeSize(0.5 * viewportSize.width *
+    OESize canvasSize = OEMakeSize(0.5F * viewportSize.width *
                                    vertexRect.size.width,
-                                   0.5 * viewportSize.height *
+                                   0.5F * viewportSize.height *
                                    vertexRect.size.height);
     
     OESize canvasVideoSize = OEMakeSize(canvasSize.width *
@@ -1236,18 +1238,18 @@ void OpenGLCanvas::drawDisplayCanvas()
                     texSize.width, texSize.height);
         
         // Barrel
-        barrelTexRect = OEMakeRect(-0.5, -0.5 / displayAspectRatio,
-                                   1.0, 1.0 / displayAspectRatio);
+        barrelTexRect = OEMakeRect(-0.5F, -0.5F / displayAspectRatio,
+                                   1.0F, 1.0F / displayAspectRatio);
         glUniform2f(glGetUniformLocation(displayShader, "barrelSize"),
-                    1, 1 / displayAspectRatio);
+                    1, 1.0F / displayAspectRatio);
         
         // Scanlines
         float scanlineHeight = canvasVideoSize.height / image.getSize().height;
         float scanlineLevel = displayConfiguration.displayScanlineLevel;
         
-        scanlineLevel = ((scanlineHeight > 2.5) ? scanlineLevel :
+        scanlineLevel = ((scanlineHeight > 2.5F) ? scanlineLevel :
                          (scanlineHeight < 2) ? 0 :
-                         (scanlineHeight - 2) / (2.5 - 2) * scanlineLevel);
+                         (scanlineHeight - 2) / (2.5F - 2) * scanlineLevel);
         
         glUniform1f(glGetUniformLocation(displayShader, "scanlineLevel"), scanlineLevel);
         
@@ -1258,7 +1260,7 @@ void OpenGLCanvas::drawDisplayCanvas()
         {
             case CANVAS_TRIAD:
                 shadowMaskTexture = OPENGLCANVAS_SHADOWMASK_TRIAD;
-                shadowMaskAspectRatio = 2 / (274.0 / 240.0);
+                shadowMaskAspectRatio = 2 / (274.0F / 240.0F);
                 break;
             case CANVAS_INLINE:
                 shadowMaskTexture = OPENGLCANVAS_SHADOWMASK_INLINE;
@@ -1280,12 +1282,12 @@ void OpenGLCanvas::drawDisplayCanvas()
         
         float shadowMaskDotPitch = displayConfiguration.displayShadowMaskDotPitch;
         
-        if (shadowMaskDotPitch <= 0.001)
-            shadowMaskDotPitch = 0.001;
+        if (shadowMaskDotPitch <= 0.001F)
+            shadowMaskDotPitch = 0.001F;
         
         float shadowMaskElemX = (displayResolution.width /
                                  displayConfiguration.displayPixelDensity *
-                                 25.4 * 0.5 / shadowMaskDotPitch);
+                                 25.4F * 0.5F / shadowMaskDotPitch);
         OESize shadowMaskSize = OEMakeSize(shadowMaskElemX,
                                            shadowMaskElemX * shadowMaskAspectRatio /
                                            displayAspectRatio);
@@ -1374,10 +1376,10 @@ void OpenGLCanvas::drawDisplayCanvas()
                                                textureSize[OPENGLCANVAS_IMAGE_PERSISTENCE].width,
                                                viewportSize.height /
                                                textureSize[OPENGLCANVAS_IMAGE_PERSISTENCE].height);
-        persistenceTexRect = OEMakeRect((vertexRect.origin.x + 1) * 0.5 * persistenceTexSize.width,
-                                        (vertexRect.origin.y + 1) * 0.5 * persistenceTexSize.height,
-                                        vertexRect.size.width * 0.5 * persistenceTexSize.width,
-                                        vertexRect.size.height * 0.5 * persistenceTexSize.height);
+        persistenceTexRect = OEMakeRect((vertexRect.origin.x + 1) * 0.5F * persistenceTexSize.width,
+                                        (vertexRect.origin.y + 1) * 0.5F * persistenceTexSize.height,
+                                        vertexRect.size.width * 0.5F * persistenceTexSize.width,
+                                        vertexRect.size.height * 0.5F * persistenceTexSize.height);
         
         persistenceTexRect.origin.y += persistenceTexRect.size.height;
         persistenceTexRect.size.height = -persistenceTexRect.size.height;
@@ -1411,8 +1413,8 @@ void OpenGLCanvas::drawPaperCanvas()
                                        paperConfiguration.pageResolution.width,
                                        canvasViewportHeight);
     
-    OESize texSize = OEMakeSize(getNextPowerOf2(imageSize.width),
-                                getNextPowerOf2(PAPER_SLICE));
+    OESize texSize = OEMakeSize((float) getNextPowerOf2(imageSize.width),
+                                (float) getNextPowerOf2(PAPER_SLICE));
     updateTextureSize(OPENGLCANVAS_IMAGE_IN, texSize);
     
     glLoadIdentity();
@@ -1463,9 +1465,9 @@ void OpenGLCanvas::drawPaperCanvas()
     }
     
     // Render page separators
-    glColor4f(0.8, 0.8, 0.8, 1);
+    glColor4f(0.8F, 0.8F, 0.8F, 1);
     
-    OEInt pageNum = ceil(imageSize.height / paperConfiguration.pageResolution.height);
+    OEInt pageNum = (OEInt) ceil(imageSize.height / paperConfiguration.pageResolution.height);
     for (OEInt i = 0; i < pageNum; i++)
     {
         OERect line = OEMakeRect(-1, 2 * (paperConfiguration.pageResolution.height *
@@ -1517,19 +1519,19 @@ void OpenGLCanvas::drawBezel()
             textureAlpha = 0;
         }
         else if (diff > BEZELCAPTURE_DISPLAY_TIME)
-            textureAlpha = 0.5 + 0.5 * cos((diff - BEZELCAPTURE_DISPLAY_TIME) *
-                                           M_PI / BEZELCAPTURE_FADEOUT_TIME);
+            textureAlpha = 0.5F + 0.5F * (float) cos((diff - BEZELCAPTURE_DISPLAY_TIME) *
+                                                     M_PI / BEZELCAPTURE_FADEOUT_TIME);
     }
     else if (bezel == CANVAS_BEZEL_POWER)
     {
         textureIndex = OPENGLCANVAS_BEZEL_POWER;
-        blackAlpha = 0.3;
+        blackAlpha = 0.3F;
         isBezelDrawRequired = false;
     }
     else if (bezel == CANVAS_BEZEL_PAUSE)
     {
         textureIndex = OPENGLCANVAS_BEZEL_PAUSE;
-        blackAlpha = 0.3;
+        blackAlpha = 0.3F;
         isBezelDrawRequired = false;
     }
     else
@@ -1541,8 +1543,8 @@ void OpenGLCanvas::drawBezel()
     // Calculate rects
     OESize size = textureSize[textureIndex];
     
-    OERect renderFrame = OEMakeRect(-(size.width + 0.5) / viewportSize.width,
-                                    -(size.height + 0.5) / viewportSize.height,
+    OERect renderFrame = OEMakeRect(-(size.width + 0.5F) / viewportSize.width,
+                                    -(size.height + 0.5F) / viewportSize.height,
                                     2 * size.width / viewportSize.width,
                                     2 * size.height / viewportSize.height);
     
@@ -1595,12 +1597,12 @@ OEImage OpenGLCanvas::readFramebuffer()
     float ratio = viewportAspectRatio / displayAspectRatio;
     if (ratio > 1)
     {
-        canvasRect.origin.x = canvasRect.size.width * ((1.0 - 1.0 / ratio) * 0.5);
+        canvasRect.origin.x = canvasRect.size.width * ((1 - 1.0F / ratio) * 0.5F);
         canvasRect.size.width /= ratio;
     }
     else
     {
-        canvasRect.origin.y = canvasRect.size.width * ((1.0 - ratio) * 0.5);
+        canvasRect.origin.y = canvasRect.size.width * ((1 - ratio) * 0.5F);
         canvasRect.size.height *= ratio;
     }
     

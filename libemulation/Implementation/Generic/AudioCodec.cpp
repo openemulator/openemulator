@@ -34,7 +34,7 @@
 
 AudioCodec::AudioCodec()
 {
-    timeAccuracy = 0.000001;
+    timeAccuracy = 1E-6F;
     filterSize = 17;
     lowFrequency = 20;
     highFrequency = 20000;
@@ -154,7 +154,7 @@ OEChar AudioCodec::read(OEAddress address)
     controlBus->postMessage(this, CONTROLBUS_GET_AUDIOBUFFERFRAME, &audioBufferFrame);
     
     OEInt index = audioBuffer->channelNum * ((OEInt) audioBufferFrame);
-    index += address % audioBuffer->channelNum;
+    index += (OEInt) address % audioBuffer->channelNum;
     
     return 128 + (OEChar)(audioBuffer->input[index] * 127.0F);
 }
@@ -176,7 +176,7 @@ OEShort AudioCodec::read16(OEAddress address)
     controlBus->postMessage(this, CONTROLBUS_GET_AUDIOBUFFERFRAME, &audioBufferFrame);
     
     OEInt index = audioBuffer->channelNum * ((OEInt) audioBufferFrame);
-    index += address % audioBuffer->channelNum;
+    index += (OEInt) address % audioBuffer->channelNum;
     
     return (OESShort)(audioBuffer->input[index] * 32767.0F);
 }
@@ -196,11 +196,11 @@ void AudioCodec::updateSynth()
     if (!audioBuffer)
         return;
     
-    integrationAlpha = 1.0 / (1.0 + lowFrequency / audioBuffer->sampleRate);
+    integrationAlpha = 1.0F / (1.0F + lowFrequency / audioBuffer->sampleRate);
     
-    float sincCutoff = 2.0 * highFrequency / audioBuffer->sampleRate;
-    if (sincCutoff >= 0.9)
-        sincCutoff = 0.9;
+    float sincCutoff = 2.0F * highFrequency / audioBuffer->sampleRate;
+    if (sincCutoff >= 0.9F)
+        sincCutoff = 0.9F;
     
     // Produce an odd-sized filter
     impulseFilterHalfSize = (filterSize / 2);
@@ -224,10 +224,10 @@ void AudioCodec::updateSynth()
             
             // Sinc
             x *= sincCutoff;
-            x = (x == 0.0F) ? 1.0F : x = sinf(M_PI * x) / (M_PI * x);
+            x = (x == 0.0F) ? 1.0F : x = (float) (sin(M_PI * x) / (M_PI * x));
             
             // Apply hamming window
-            x *= 0.54 + 0.46 * cosf(M_PI * i / impulseFilterHalfSize);
+            x *= 0.54F + 0.46F * float(cos(M_PI * i / impulseFilterHalfSize));
             
             // Calculate gain
             energy += x;
@@ -235,7 +235,7 @@ void AudioCodec::updateSynth()
             impulseEntry[n] = x;
         }
         
-        float gain = 1.0 / energy;
+        float gain = 1.0F / energy;
         
         // Normalize
         for (OEInt n = 0; n < impulseFilterSize; n++)

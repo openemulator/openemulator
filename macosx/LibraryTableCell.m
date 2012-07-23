@@ -39,7 +39,7 @@
     NSRect paddingRect;
     NSDivideRect(rect, &paddingRect, &rect, IMAGE_PADDING, NSMinXEdge);
     NSDivideRect(rect, &rect, &paddingRect, IMAGE_SIZE, NSMinXEdge);
-    return NSInsetRect(rect, 0, (NSHeight(bounds) - IMAGE_SIZE) / 2.0);
+    return NSInsetRect(rect, 0, (NSHeight(bounds) - IMAGE_SIZE) / 2);
 }
 
 - (NSRect)textRectForBounds:(NSRect)bounds
@@ -52,7 +52,7 @@
     NSDivideRect(rect, &paddingRect, &rect,
                  IMAGE_PADDING, NSMaxXEdge);
     
-    return NSInsetRect(rect, 0, (NSHeight(bounds) - [self cellSize].height) / 2.0);
+    return NSInsetRect(rect, 0, (NSHeight(bounds) - [self cellSize].height) / 2);
 }
 
 - (void)drawImage:(NSImage *)theImage inRect:(NSRect)rect isFlipped:(BOOL)flipped
@@ -63,7 +63,7 @@
     [theImage drawInRect:rect
                 fromRect:NSZeroRect
                operation:NSCompositeSourceOver
-                fraction:1.0];
+                fraction:1];
     
     [theImage setFlipped:wasFlipped];
 }
@@ -72,24 +72,24 @@
 {
     LibraryItem *item = [self representedObject];
     
-    cellFrame = NSInsetRect(cellFrame, 1.5, 0.5);
+    cellFrame = NSInsetRect(cellFrame, 1.5F, 0.5F);
     
     NSBezierPath* thePath = [NSBezierPath bezierPath];
     [thePath setLineWidth:1];
     if (![self isHighlighted])
     {
-        [[NSColor colorWithCalibratedWhite:0.94 alpha:1.0] setFill];
-        [[NSColor colorWithCalibratedWhite:0.94 alpha:1.0] setStroke];
+        [[NSColor colorWithCalibratedWhite:0.94F alpha:1] setFill];
+        [[NSColor colorWithCalibratedWhite:0.94F alpha:1] setStroke];
     }
     else if ([self backgroundStyle] == NSBackgroundStyleDark)
     {
-        [[NSColor colorWithCalibratedRed:0.8 green:0.866 blue:0.941 alpha:1] setFill];
-        [[NSColor colorWithCalibratedRed:0.157 green:0.306 blue:0.758 alpha:1] setStroke];
+        [[NSColor colorWithCalibratedRed:0.8F green:0.866F blue:0.941F alpha:1] setFill];
+        [[NSColor colorWithCalibratedRed:0.157F green:0.306F blue:0.758F alpha:1] setStroke];
     }
     else
     {
-        [[NSColor colorWithCalibratedWhite:0.83 alpha:1.0] setFill];
-        [[NSColor colorWithCalibratedWhite:0.30 alpha:1.0] setStroke];
+        [[NSColor colorWithCalibratedWhite:0.83F alpha:1] setFill];
+        [[NSColor colorWithCalibratedWhite:0.30F alpha:1] setStroke];
     }
     
     [thePath appendBezierPathWithRoundedRect:cellFrame xRadius:8 yRadius:8];

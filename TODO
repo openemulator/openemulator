@@ -1,23 +1,24 @@
 ==1.0.4==
-* Fix crash when writing to a DSK file
-* Fix writing to DOS 3.1 or DOS 3.2 NIB files
-* Modify CTRL+ALT -> Mouse message to "Press CTRL+OPTION to release mouse."
-* Fix Disk II sounds
+* Implement Apple III X-Byte addressing
+* Implement MOS6522
+* Fix AppleIIVideo not displaying video when loading emulation in paused state
+* Check Mac OS X 10.5 (Intel) compatibility
 * Fix Apple Silentype Interface Card spurious data problems
 * Implement Apple Silentype print intensity
 * Fix [CanvasView update] problem in paper view
 * Add Apple Silentype sounds
 * Add Apple Graphics Tablet sounds
 * Implement DDL file format
-* Implement Apple III
+* Implement open disk image when starting with template chooser
+
 * Implement wxWidgets user interface
-* Implement open disk image with template chooser
-* Implement Apple speaker tension/relax audio driver
+
+==1.0.5==
+* Fix writing to DOS 3.1 or DOS 3.2 NIB files
+* Fix Disk II sounds
 * Fix Disk II for: Sherwood Forest, IAC 45, Alkemstone, EOS, Last Gladiator, Wasteland
 * Refactorize PAAudio so an emulation is stopped while it is being configured. Increase thread priority
 * Mac OS X: fix window resizing when loading from disk (confusing emulation window size with canvas window size)
-
-==1.0.5==
 * Implement Saturn RAMboard
 * Implement Apple IIe
 * Implement Apple II Memory Expansion Card

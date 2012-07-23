@@ -244,7 +244,7 @@ bool AppleDiskDrive525::postMessage(OEComponent *sender, int message, void *data
             return true;
             
         case APPLEII_SKIP_DATA:
-            trackDataIndex += *((OELong *)data);
+            trackDataIndex += (OEInt) *((OELong *)data);
             trackDataIndex %= trackDataSize;
             
             return true;

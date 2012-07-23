@@ -10,14 +10,44 @@
 
 #include "AppleIIAudioOut.h"
 
+#include "ControlBusInterface.h"
+#include "AppleIIInterface.h"
+
 AppleIIAudioOut::AppleIIAudioOut() : Audio1Bit()
 {
+    controlBus = NULL;
     floatingBus = NULL;
+    
+    lastCycles = 0;
+    relaxationState = false;
+    cassetteOut = false;
+}
+
+bool AppleIIAudioOut::setValue(string name, string value)
+{
+    if (name == "cassetteOut")
+        cassetteOut = getOEInt(value);
+    else
+        return Audio1Bit::setValue(name, value);
+    
+    return true;
+}
+
+bool AppleIIAudioOut::getValue(string name, string &value)
+{
+    if (name == "cassetteOut")
+        value = getString(cassetteOut);
+    else
+        return Audio1Bit::getValue(name, value);
+    
+    return true;
 }
 
 bool AppleIIAudioOut::setRef(string name, OEComponent *id)
 {
-	if (name == "floatingBus")
+	if (name == "controlBus")
+		controlBus = id;
+	else if (name == "floatingBus")
 		floatingBus = id;
 	else
 		return Audio1Bit::setRef(name, id);
@@ -42,12 +72,32 @@ bool AppleIIAudioOut::init()
 
 OEChar AppleIIAudioOut::read(OEAddress address)
 {
-    toggleAudioOutput();
+    write(address, 0);
     
 	return floatingBus->read(address);
 }
 
 void AppleIIAudioOut::write(OEAddress address, OEChar value)
 {
+    if ((address & 0x0010) && controlBus)
+    {
+        OELong cycles;
+        
+        controlBus->postMessage(this, CONTROLBUS_GET_CYCLES, &cycles);
+        
+        OELong deltaCycles = cycles - lastCycles;
+        lastCycles = cycles;
+        
+        if (deltaCycles > 0.05 * APPLEII_CLOCKFREQUENCY)
+        {
+            relaxationState = !relaxationState;
+            
+            if (relaxationState)
+                return;
+        }
+    }
+    else if (!cassetteOut)
+        return;
+    
     toggleAudioOutput();
 }

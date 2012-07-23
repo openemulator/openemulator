@@ -24,7 +24,7 @@
     NSRect titleRect = [super titleRectForBounds:theRect];
     NSSize titleSize = [[self attributedStringValue] size];
     
-    float diff = (theRect.size.height - titleSize.height) / 2.0;
+    CGFloat diff = (theRect.size.height - titleSize.height) / 2;
     titleRect = NSInsetRect(titleRect, horizontalInset, diff);
     
     return titleRect;

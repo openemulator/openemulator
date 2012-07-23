@@ -148,7 +148,7 @@ void RAM::write(OEAddress address, OEChar value)
 
 void RAM::initMemory()
 {
-    OEAddress mask = (int) powerOnPattern.size() - 1;
+    OEInt mask = (OEInt) powerOnPattern.size() - 1;
     
     for (OEInt i = 0; i < this->data.size(); i++)
         data[i] = powerOnPattern[i & mask];

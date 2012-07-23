@@ -24,7 +24,7 @@ ControlBus::ControlBus()
     audio = NULL;
     cpu = NULL;
     
-    clockFrequency = 1E6;
+    clockFrequency = 1E6F;
     cpuClockMultiplier = 1;
     powerState = CONTROLBUS_POWERSTATE_OFF;
     resetOnPowerOn = true;
@@ -176,7 +176,7 @@ bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
             return true;
             
         case CONTROLBUS_GET_AUDIOBUFFERFRAME:
-            *((float *)data) = (cycles + getCycles() - audioBufferStart) * sampleToCycleRatio;
+            *((float *)data) = ((OEInt) (cycles + getCycles() - audioBufferStart)) * sampleToCycleRatio;
             
             return true;
             
@@ -456,7 +456,7 @@ inline void ControlBus::runCPU()
     cpu->postMessage(this, CPU_RUN, &cpuCycles);
 }
 
-OELong ControlBus::getCycles()
+OESLong ControlBus::getCycles()
 {
     return floor((cpuCycles - getPendingCPUCycles()) / cpuClockMultiplier);
 }
@@ -532,11 +532,9 @@ void ControlBus::invalidateTimers(OEComponent *component, OEInt id)
 
 void ControlBus::setCPUClockMultiplier(float value)
 {
-    float ratio = value / cpuClockMultiplier;
+    double ratio = value / cpuClockMultiplier;
     
-    OESLong pendingCPUCycles;
-    
-    pendingCPUCycles = getPendingCPUCycles();
+    OESLong pendingCPUCycles = getPendingCPUCycles();
     
     double doneCPUCycles = cpuCycles - pendingCPUCycles;
     

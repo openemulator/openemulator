@@ -46,7 +46,7 @@ private:
     OEComponent *cpu;
     
     float clockFrequency;
-    float cpuClockMultiplier;
+    double cpuClockMultiplier;
     ControlBusPowerState powerState;
     bool resetOnPowerOn;
     OEInt resetCount;
@@ -54,7 +54,7 @@ private:
     OEInt nmiCount;
     
     OELong cycles;
-    float cpuCycles;
+    double cpuCycles;
     list<ControlBusEvent> events;
     bool inEvent;
     
@@ -72,7 +72,7 @@ private:
     OESLong getPendingCPUCycles();
     void setPendingCPUCycles(OESLong value);
     void runCPU();
-    OELong getCycles();
+    OESLong getCycles();
     void scheduleTimer(OEComponent *component, OELong cycles, OEInt id);
     void invalidateTimers(OEComponent *component, OEInt id);
     

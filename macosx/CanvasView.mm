@@ -316,8 +316,8 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     
     [[self openGLContext] makeCurrentContext];
     
-    canvas->setViewportSize(OEMakeSize(contentSize.width,
-                                       contentSize.height));
+    canvas->setViewportSize(OEMakeSize((float) contentSize.width,
+                                       (float) contentSize.height));
     
     [NSOpenGLContext clearCurrentContext];
     
@@ -644,9 +644,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     
     float canvasHeight = canvas->getSize().height;
     canvas->scrollPoint(OEMakePoint(0,
-                                    canvasHeight *
-                                    NSMinY([self visibleRect]) /
-                                    NSHeight([self frame])));
+                                    (float) (canvasHeight *
+                                             NSMinY([self visibleRect]) /
+                                             NSHeight([self frame]))));
     
     if (![self displayLinkRunning])
     {
@@ -735,10 +735,10 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     
     [self enterContext];
     
-    OEImage image = canvas->getImage(OEMakeRect(rect.origin.x,
-                                                rect.origin.y,
-                                                rect.size.width,
-                                                rect.size.height));
+    OEImage image = canvas->getImage(OEMakeRect((float) rect.origin.x,
+                                                (float) rect.origin.y,
+                                                (float) rect.size.width,
+                                                (float) rect.size.height));
     
     [self leaveContext];
     
@@ -985,9 +985,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     
     [document lockEmulation];
     
-    canvas->setMousePosition(position.x / NSWidth([self bounds]),
-                             position.y / NSHeight([self bounds]));
-    canvas->moveMouse([theEvent deltaX], [theEvent deltaY]);
+    canvas->setMousePosition((float) (position.x / NSWidth([self bounds])),
+                             (float) (position.y / NSHeight([self bounds])));
+    canvas->moveMouse((float) [theEvent deltaX], (float) [theEvent deltaY]);
     
     [document unlockEmulation];
 }
@@ -1118,9 +1118,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     [document lockEmulation];
     
     if ([theEvent deltaX])
-        canvas->sendMouseWheelEvent(0, [theEvent deltaX]);
+        canvas->sendMouseWheelEvent(0, (float) [theEvent deltaX]);
     if ([theEvent deltaY])
-        canvas->sendMouseWheelEvent(1, [theEvent deltaY]);
+        canvas->sendMouseWheelEvent(1, (float) [theEvent deltaY]);
     
     [document unlockEmulation];
 }

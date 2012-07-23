@@ -21,7 +21,7 @@ AppleIIGamePort::AppleIIGamePort()
     gamePort = NULL;
     
     for (OEInt i = 0; i < 4; i++)
-        setPDL(i, 0.5);
+        setPDL(i, 0.5F);
     
     for (OEInt i = 0; i < 4; i++)
         pb[i] = 0;
@@ -233,17 +233,17 @@ void AppleIIGamePort::write(OEAddress address, OEChar value)
     }
 }
 
-void AppleIIGamePort::setAN(OEInt index, bool value)
+void AppleIIGamePort::setAN(OELong index, bool value)
 {
     bool oldValue = an[index];
     
     an[index] = value;
     
     if (value != oldValue)
-        postNotification(this, APPLEII_AN0_DID_CHANGE + index, &value);
+        postNotification(this, (int) (APPLEII_AN0_DID_CHANGE + index), &value);
 }
 
-void AppleIIGamePort::setPDL(OEInt index, float value)
+void AppleIIGamePort::setPDL(OELong index, float value)
 {
     if (value < 0)
         value = 0;
@@ -256,12 +256,12 @@ void AppleIIGamePort::setPDL(OEInt index, float value)
     pdl[index] = value * 11 + 8;
 }
 
-void AppleIIGamePort::setPB(OEInt index, bool value)
+void AppleIIGamePort::setPB(OELong index, bool value)
 {
     pb[index] = value;
 }
 
-bool AppleIIGamePort::isTimerPending(OEInt index)
+bool AppleIIGamePort::isTimerPending(OELong index)
 {
     OELong timerCount;
     

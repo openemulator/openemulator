@@ -310,7 +310,7 @@
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.education</string>
 	<key>LSMinimumSystemVersion</key>
-	<string>10.6</string>
+	<string>10.5</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2009-2012, Marc S. Reßl</string>
 	<key>NSMainNibFile</key>

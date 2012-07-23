@@ -72,16 +72,16 @@
     tableCell = [[VerticallyCenteredTextFieldCell alloc] init];
     [tableCell setControlSize:NSSmallControlSize];
     [tableCell setFont:[NSFont labelFontOfSize:[NSFont smallSystemFontSize]]];
-    [tableCell setHorizontalInset:5.0];
+    [tableCell setHorizontalInset:5];
     
     NSDictionary *titleAttributes;
     titleAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
-                       [NSFont messageFontOfSize:11.0f], NSFontAttributeName,
+                       [NSFont messageFontOfSize:11], NSFontAttributeName,
                        [NSColor blackColor], NSForegroundColorAttributeName,
                        nil];
     NSDictionary *subtitleAttributes;
     subtitleAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
-                          [NSFont messageFontOfSize:11.0f], NSFontAttributeName,
+                          [NSFont messageFontOfSize:11], NSFontAttributeName,
                           [NSColor whiteColor], NSForegroundColorAttributeName,
                           nil];
     [fImageBrowserView setAllowsEmptySelection:NO];
@@ -209,8 +209,8 @@ resizeSubviewsWithOldSize:(NSSize)oldSize
     NSArray *subviews = [sender subviews];
     
     NSSize newSize = [sender frame].size;
-    float deltaWidth = newSize.width - oldSize.width;
-    float deltaHeight = newSize.height - oldSize.height;
+    CGFloat deltaWidth = newSize.width - oldSize.width;
+    CGFloat deltaHeight = newSize.height - oldSize.height;
     
     for (int i = 0; i < [subviews count]; i++)
     {
@@ -235,8 +235,8 @@ resizeSubviewsWithOldSize:(NSSize)oldSize
             else
             {
                 frame.origin.y += deltaHeight;
-                float maxHeight = (newSize.height - [sender dividerThickness] -
-                                   SPLIT_HORIZ_MIN);
+                CGFloat maxHeight = (newSize.height - [sender dividerThickness] -
+                                     SPLIT_HORIZ_MIN);
                 if (frame.size.height >= maxHeight)
                 {
                     frame.origin.y += frame.size.height - maxHeight;

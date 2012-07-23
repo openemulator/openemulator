@@ -77,7 +77,18 @@ OESLong getOESLong(const string& value)
     return i;
 }
 
-double getFloat(const string& value)
+float getFloat(const string& value)
+{
+    float f;
+    stringstream ss;
+    
+    ss << value;
+    ss >> f;
+    
+    return f;
+}
+
+double getDouble(const string& value)
 {
     double f;
     stringstream ss;
@@ -88,6 +99,25 @@ double getFloat(const string& value)
     return f;
 }
 
+OEData getCharVector(const string& value)
+{
+    OEData result;
+    size_t start = (value.substr(0, 2) == "0x") ? 2 : 0;
+    size_t size = (value.size() - start) / 2;
+    
+    result.resize(size);
+    
+    for (size_t i = 0; i < size; i++)
+    {
+        stringstream ss;
+        OEInt n;
+        ss << hex << value.substr(start + i * 2, 2);
+        ss >> n;
+        result[i] = n;
+    }
+    
+    return result;
+}
 string getString(OEInt value)
 {
     stringstream ss;
@@ -122,24 +152,4 @@ string getString(OESLong value)
     ss << value;
     
     return ss.str();
-}
-
-OEData getCharVector(const string& value)
-{
-    OEData result;
-    size_t start = (value.substr(0, 2) == "0x") ? 2 : 0;
-    size_t size = (value.size() - start) / 2;
-    
-    result.resize(size);
-    
-    for (size_t i = 0; i < size; i++)
-    {
-        stringstream ss;
-        OEInt n;
-        ss << hex << value.substr(start + i * 2, 2);
-        ss >> n;
-        result[i] = n;
-    }
-    
-    return result;
 }

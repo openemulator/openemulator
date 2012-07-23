@@ -133,8 +133,8 @@ resizeSubviewsWithOldSize:(NSSize)oldSize
     NSArray *subviews = [sender subviews];
     
     NSSize newSize = [sender frame].size;
-    float deltaWidth = newSize.width - oldSize.width;
-    float deltaHeight = newSize.height - oldSize.height;
+    CGFloat deltaWidth = newSize.width - oldSize.width;
+    CGFloat deltaHeight = newSize.height - oldSize.height;
     
     for (int i = 0; i < [subviews count]; i++)
     {
@@ -151,8 +151,7 @@ resizeSubviewsWithOldSize:(NSSize)oldSize
         else
         {
             frame.origin.y += deltaHeight;
-            float maxHeight = (newSize.height - [sender dividerThickness] -
-                               SPLIT_MIN);
+            CGFloat maxHeight = (newSize.height - [sender dividerThickness] - SPLIT_MIN);
             if (frame.size.height >= maxHeight)
             {
                 frame.origin.y += frame.size.height - maxHeight;

@@ -2,7 +2,7 @@
 /**
  * OpenEmulator
  * Mac OS X Canvas Window
- * (C) 2009-2011 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2009-2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
  * Handles canvas window messages
@@ -16,7 +16,7 @@
 
 - (BOOL)isOnLionOrBetter
 {
-    return floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_6;
+    return [self respondsToSelector:@selector(toggleFullScreen:)];
 }
 
 - (id)initWithContentRect:(NSRect)contentRect
@@ -35,7 +35,7 @@
         
         if ([self isOnLionOrBetter])
             [self setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
-   }
+    }
     
     return self;
 }
@@ -81,9 +81,9 @@
             
             windowRect = [self frame];
             NSRect contentRect = [[self contentView] frame];
-            float titlebarHeight = (NSHeight(windowRect) -
-                                    ([self userSpaceScaleFactor] * 
-                                     NSHeight(contentRect)));
+            float titlebarHeight = (float) (NSHeight(windowRect) -
+                                            ([self userSpaceScaleFactor] * 
+                                             NSHeight(contentRect)));
             
             NSRect screenRect = [[self screen] frame];
             screenRect.size.height += titlebarHeight;

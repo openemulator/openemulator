@@ -474,7 +474,7 @@ void MC6845::updateVideo()
     
     controlBus->postMessage(this, CONTROLBUS_GET_CYCLES, &cycles);
     
-    OEInt deltaCycles = (OEInt) ((cycles - lastCycles) * clockMultiplier);
+    OEInt deltaCycles = ((OEInt) (cycles - lastCycles) * clockMultiplier);
     
     OEInt cycleNum = min(pendingCycles, deltaCycles);
     
@@ -482,7 +482,7 @@ void MC6845::updateVideo()
     {
         pendingCycles -= cycleNum;
         
-        OEInt segmentStart = (OEInt) ((lastCycles - frameStart) * clockMultiplier);
+        OEInt segmentStart = ((OEInt) (lastCycles - frameStart) * clockMultiplier);
         
         OEIntPoint p0 = pos[segmentStart];
         OEIntPoint p1 = pos[segmentStart + cycleNum];

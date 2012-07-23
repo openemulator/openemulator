@@ -66,7 +66,8 @@ OESInt getOESInt(const string& value);
 OELong getOELong(const string& value);
 OESLong getOESLong(const string& value);
 
-double getFloat(const string& value);
+float getFloat(const string& value);
+double getDouble(const string& value);
 OEData getCharVector(const string& value);
 
 string getString(OEInt value);

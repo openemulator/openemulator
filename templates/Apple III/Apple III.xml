@@ -14,8 +14,14 @@
     </port>
     <port id="appleIII.videoRGB" ref="" type="RGB Video" group="peripherals" label="Color Video Port" image="images/Connectors/DA15 Female.png">
     </port>
-    <port id="appleIII.drives" ref="" type="Apple Disk Drive Port" group="peripherals" label="Disk Drive Port" image="images/Connectors/Header2x10.png">
+    <port id="appleIII.drive1" ref="" type="Apple Disk Drive Port" group="peripherals" label="Disk Drive Port 1" image="images/Connectors/Header2x10.png">
         <inlet ref="appleIII.diskIO" property="drive2" outletRef="drive"/>
+    </port>
+    <port id="appleIII.drive2" ref="" type="Apple Disk Drive Port" group="peripherals" label="Disk Drive Port 2" image="images/Connectors/Header2x10.png">
+        <inlet ref="appleIII.diskIO" property="drive3" outletRef="drive"/>
+    </port>
+    <port id="appleIII.drive3" ref="" type="Apple Disk Drive Port" group="peripherals" label="Disk Drive Port 3" image="images/Connectors/Header2x10.png">
+        <inlet ref="appleIII.diskIO" property="drive4" outletRef="drive"/>
     </port>
     <port id="appleIII.portA" ref="" type="Apple Silentype Port" group="peripherals" label="Port A" image="images/Connectors/DE9 Female.png">
     </port>
@@ -54,50 +60,45 @@
         <property name="nmiCount" value="0"/>
     </component>
     <component id="appleIII.cpu" class="AppleIIIMOS6502">
-        <property name="a" value="0xa0"/>
+        <property name="a" value="0x0"/>
         <property name="x" value="0x0"/>
-        <property name="y" value="0x1"/>
-        <property name="s" value="0xf9"/>
-        <property name="p" value="0x30"/>
+        <property name="y" value="0x0"/>
+        <property name="s" value="0x0"/>
+        <property name="p" value="0x0"/>
         <property name="pc" value="0xf4ee"/>
         <property name="controlBus" ref="appleIII.controlBus"/>
         <property name="memoryBus" ref="appleIII.memoryBus"/>
         <property name="extendedMemoryBus" ref="appleIII.extendedMemoryBus"/>
     </component>
-    <component id="appleIII.memoryBus" class="AppleIIAddressDecoder">
+    <component id="appleIII.memoryBus" class="AddressOffset">
+        <property name="size" value="0x10000"/>
+        <property name="blockSize" value="0x100"/>
+        <property name="memory" ref="appleIII.mainAddressDecoder"/>
+    </component>
+    <component id="appleIII.mainAddressDecoder" class="AppleIIAddressDecoder">
         <property name="size" value="0x10000"/>
         <property name="blockSize" value="0x100"/>
         <property name="floatingBus" ref="appleIII.floatingBus"/>
         <property name="video" ref="appleIII.video"/>
-        <property name="refRAM" ref="appleIII.ram"/>
-        <property name="mapRAM" value="0x0000-0xefff"/>
-        <property name="refIO" ref="appleIII.io"/>
-        <property name="mapIO" value="0xc000-0xc0ff"/>
-        <property name="refSlot1" ref=""/>
-        <property name="mapSlot1" value="0xc100-0xc1ff"/>
-        <property name="refSlot2" ref=""/>
-        <property name="mapSlot2" value="0xc200-0xc2ff"/>
-        <property name="refSlot3" ref=""/>
-        <property name="mapSlot3" value="0xc300-0xc3ff"/>
-        <property name="refSlot4" ref=""/>
-        <property name="mapSlot4" value="0xc400-0xc4ff"/>
-        <property name="refROM" ref="appleIII.rom"/>
-        <property name="mapROM" value="0xf000-0xfeff"/>
-        <property name="refMemoryFF00" ref="appleIII.memoryFF00"/>
-        <property name="mapMemoryFF00" value="0xff00-0xffff"/>
     </component>
     <component id="appleIII.extendedMemoryBus" class="AddressOffset">
         <property name="size" value="0x10000"/>
-        <property name="blockSize" value="0x2000"/>
+        <property name="blockSize" value="0x100"/>
         <property name="memory" ref="appleIII.ram"/>
     </component>
     <component id="appleIII.floatingBus" class="AppleIIFloatingBus">
         <property name="video" ref="appleIII.video"/>
     </component>
-    <component id="appleIII.ram" class="RAM">
+    <component id="appleIII.bankSwitchedRAM" class="AddressOffset">
+        <property name="size" value="0x10000"/>
+        <property name="blockSize" value="0x100"/>
+        <property name="memory" ref="appleIII.ram"/>
+    </component>
+    <component id="appleIII.ram" class="VRAM">
         <property name="size" value="0x40000"/>
         <property name="memoryImage" data="${packagePath}/${id}.bin"/>
         <property name="controlBus" ref="appleIII.controlBus"/>
+        <property name="observer" ref="appleIII.video"/>
     </component>
     <component id="appleIII.io" class="AddressDecoder">
         <property name="size" value="0x100"/>
@@ -106,13 +107,9 @@
         <property name="refKeyboard" ref="appleIII.keyboard"/>
         <property name="mapKeyboard" value="0x00-0x1f"/>
         <property name="refSpeaker" ref="appleIII.audioOut"/>
-        <property name="mapSpeaker" value="0x20-0x3f"/>
+        <property name="mapSpeaker" value="0x30-0x3f"/>
         <property name="refVideo" ref="appleIII.video"/>
         <property name="mapVideo" value="0x50-0x57"/>
-        <property name="refAudioIn" ref="appleIII.audioIn"/>
-        <property name="mapAudioIn" value="0x60,0x68"/>
-        <property name="refGame" ref="appleIII.gamePort"/>
-        <property name="mapGame" value="0x40-0x4f,0x58-0x5f,0x61-0x67,0x69-0x6f,0x70-0x7f"/>
         <property name="refSlot1" ref=""/>
         <property name="mapSlot1" value="0x90-0x9f"/>
         <property name="refSlot2" ref=""/>
@@ -128,7 +125,6 @@
         <property name="type" value="Apple III"/>
         <property name="controlBus" ref="appleIII.controlBus"/>
         <property name="floatingBus" ref="appleIII.floatingBus"/>
-        <property name="gamePort" ref="appleIII.gamePort"/>
         <property name="monitor" ref="appleMonitorIII.monitor"/>
     </component>
     <component id="appleIII.video" class="AppleIIVideo">
@@ -143,20 +139,15 @@
         <property name="hires" value="0"/>
         <property name="device" ref="appleIII"/>
         <property name="controlBus" ref="appleIII.controlBus"/>
-        <property name="memoryBus" ref="appleIII.memoryBus"/>
+        <property name="memoryBus" ref="appleIII.mainAddressDecoder"/>
         <property name="monitor" ref="appleMonitorIII.monitor"/>
         <property name="fontStandard" data="${resourcePath}/roms/Apple/341-0036.bin"/>
         <property name="fontVidex" data="${resourcePath}/roms/Videx/Videx Lower Case Chip ROM.bin"/>
         <property name="fontPigfont" data="${resourcePath}/roms/Apple/Pigfont Video ROM.bin"/>
     </component>
     <component id="appleIII.audioOut" class="AppleIIAudioOut">
+        <property name="floatingBus" ref="appleIII.floatingBus"/>
         <property name="volume" value="1"/>
-        <property name="floatingBus" ref="appleIII.floatingBus"/>
-        <property name="audioCodec" ref="appleIII.audioCodec"/>
-    </component>
-    <component id="appleIII.audioIn" class="AppleIIAudioIn">
-        <property name="noiseRejection" value="0.03999999911"/>
-        <property name="floatingBus" ref="appleIII.floatingBus"/>
         <property name="audioCodec" ref="appleIII.audioCodec"/>
     </component>
     <component id="appleIII.audioCodec" class="AudioCodec">
@@ -166,15 +157,6 @@
         <property name="filterSize" value="17"/>
         <property name="lowFrequency" value="20"/>
         <property name="highFrequency" value="10000"/>
-    </component>
-    <component id="appleIII.gamePort" class="AppleIIGamePort">
-        <property name="an0" value="1"/>
-        <property name="an1" value="1"/>
-        <property name="an2" value="1"/>
-        <property name="an3" value="1"/>
-        <property name="controlBus" ref="appleIII.controlBus"/>
-        <property name="floatingBus" ref="appleIII.floatingBus"/>
-        <property name="gamePort" ref=""/>
     </component>
     <component id="appleIII.diskIO" class="AppleDiskIIInterfaceCard">
         <property name="controlBus" ref="appleIII.controlBus"/>
@@ -219,19 +201,55 @@
     <component id="appleIII.memoryFF00" class="AddressDecoder">
         <property name="size" value="0x100"/>
         <property name="blockSize" value="0x10"/>
-        <property name="floatingBus" ref="appleIII.floatingBus"/>
-        <property name="refROM" ref="appleIII.rom"/>
-        <property name="mapROM" value="0x00-0xff"/>
+        <property name="floatingBus" ref="appleIII.rom"/>
         <property name="refRAM" ref="appleIII.ram"/>
         <property name="mapRAM" value="0xc0-0xcf"/>
-        <property name="refDVIA" ref="appleIII.dVIA"/>
+        <property name="refDVIA" ref="appleIII.D-VIA"/>
         <property name="mapDVIA" value="0xd0-0xdf"/>
-        <property name="refEVIA" ref="appleIII.eVIA"/>
+        <property name="refEVIA" ref="appleIII.E-VIA"/>
         <property name="mapEVIA" value="0xe0-0xef"/>
     </component>
-    <component id="appleIII.dVIA" class="MOS6522">
+    <component id="appleIII.D-VIA" class="MOS6522">
+        <property name="controlBus" ref="appleIII.controlBus"/>
+        <property name="portA" ref="appleIII.VIAControl"/>
+        <property name="addressA" value="0x0"/>
+        <property name="ddrA" value="0x0"/>
+        <property name="dataA" value="0x0"/>
+        <property name="ca1" value="0"/>
+        <property name="ca2" value="0"/>
+        <property name="portB" ref="appleIII.VIAControl"/>
+        <property name="addressB" value="0x1"/>
+        <property name="ddrB" value="0x0"/>
+        <property name="dataB" value="0x0"/>
+        <property name="cb1" value="0"/>
+        <property name="cb2" value="0"/>
     </component>
-    <component id="appleIII.eVIA" class="MOS6522">
+    <component id="appleIII.E-VIA" class="MOS6522">
+        <property name="controlBus" ref="appleIII.controlBus"/>
+        <property name="portA" ref="appleIII.VIAControl"/>
+        <property name="addressA" value="0x2"/>
+        <property name="ddrA" value="0x0"/>
+        <property name="dataA" value="0x0"/>
+        <property name="ca1" value="0"/>
+        <property name="ca2" value="0"/>
+        <property name="portB" ref="appleIII.VIAControl"/>
+        <property name="addressB" value="0x3"/>
+        <property name="ddrB" value="0x0"/>
+        <property name="dataB" value="0x0"/>
+        <property name="cb1" value="0"/>
+        <property name="cb2" value="0"/>
+    </component>
+    <component id="appleIII.VIAControl" class="AppleIIIVIAControl">
+        <property name="ramBanking" ref="appleIII.ram"/>
+        <property name="dacAudioCodec" ref="appleIII.dacAudioCodec"/>
+    </component>
+    <component id="appleIII.dacAudioCodec" class="AudioCodec">
+        <property name="audio" ref="audio"/>
+        <property name="controlBus" ref="appleIII.controlBus"/>
+        <property name="timeAccuracy" value="0.000001"/>
+        <property name="filterSize" value="17"/>
+        <property name="lowFrequency" value="20"/>
+        <property name="highFrequency" value="10000"/>
     </component>
     
     <device id="appleMonitorIII" label="Apple Monitor III" image="images/Apple/Apple Monitor III.png">

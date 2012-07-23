@@ -40,10 +40,10 @@ JoystickMapper::JoystickMapper()
                 MOUSE_START + CANVAS_M_BUTTON1 + i);
     addItem("Mouse", "Unmapped", JOYSTICKMAPPER_UNMAPPED, -1);
     
-    for (OEInt deviceId = 0; deviceId < 4; deviceId++)
+    for (OEInt i = 0; i < 4; i++)
     {
-        string deviceLabel = "Joystick " + getString(deviceId + 1);
-        OEInt deviceOffset = JOYSTICK_START + JOYSTICK_OFFSET * deviceId;
+        string deviceLabel = "Joystick " + getString(i + 1);
+        OEInt deviceOffset = JOYSTICK_START + JOYSTICK_OFFSET * i;
         
         for (OEInt i = 0; i < JOYSTICK_AXIS_NUM; i++)
         {
@@ -347,18 +347,18 @@ void JoystickMapper::mapNotification(OEInt usageId, float value)
             switch (i->second.type)
             {
                 case JOYSTICKMAPPER_AXIS:
-                    hidEvent.value -= 0.5;
+                    hidEvent.value -= 0.5F;
                     if (i->second.reverse)
                         hidEvent.value = -hidEvent.value;
-                    hidEvent.value *= pow(10, i->second.sensitivity / 20);
-                    hidEvent.value += 0.5;
+                    hidEvent.value *= powf(10, i->second.sensitivity / 20);
+                    hidEvent.value += 0.5F;
                     
                     break;
                     
                 case JOYSTICKMAPPER_RELATIVEAXIS:
                     if (i->second.reverse)
                         hidEvent.value = -hidEvent.value;
-                    hidEvent.value = i->second.value + hidEvent.value * pow(10, (i->second.sensitivity - 50) / 20);
+                    hidEvent.value = i->second.value + hidEvent.value * powf(10, (i->second.sensitivity - 50) / 20);
                     
                     break;
                     
@@ -385,7 +385,7 @@ void JoystickMapper::setMap(OEInt usageId, string value)
 {
     usageIdMap[usageId].type = getItemType(value);
     usageIdMap[usageId].usageId = getItemUsageId(value);
-    usageIdMap[usageId].value = 0.5;
+    usageIdMap[usageId].value = 0.5F;
 }
 
 string JoystickMapper::getMap(OEInt usageId)
@@ -453,6 +453,6 @@ void JoystickMapper::unserializeMap(string serialConf)
         usageIdMap[usageId].type = getItemType(usageName);
         usageIdMap[usageId].sensitivity = sensitivity;
         usageIdMap[usageId].reverse = reverse;
-        usageIdMap[usageId].value = 0.5;
+        usageIdMap[usageId].value = 0.5F;
     }
 }

@@ -21,8 +21,8 @@ AppleGraphicsTabletInterfaceCard::AppleGraphicsTabletInterfaceCard()
     memory = NULL;
     
     proximity = false;
-    x = 0.5;
-    y = 0.5;
+    x = 0.5F;
+    y = 0.5F;
     button = false;
     
     count = 0;

@@ -121,7 +121,7 @@ inline OESize OEMakeSize(float w, float h)
 
 inline OESize OEIntegralSize(OESize aSize)
 {
-    return OEMakeSize(floor(aSize.width), floor(aSize.height));
+    return OEMakeSize(floorf(aSize.width), floorf(aSize.height));
 }
 
 inline OERect OEMakeRect(float x, float y, float w, float h)
@@ -244,10 +244,10 @@ inline OERect OEUnionRect(OERect aRect, OERect bRect)
 
 inline OERect OEIntegralRect(OERect aRect)
 {
-    float x0 = ceil(OEMinX(aRect));
-    float x1 = floor(OEMaxX(aRect));
-    float y0 = ceil(OEMinY(aRect));
-    float y1 = floor(OEMaxY(aRect));
+    float x0 = ceilf(OEMinX(aRect));
+    float x1 = floorf(OEMaxX(aRect));
+    float y0 = ceilf(OEMinY(aRect));
+    float y1 = floorf(OEMaxY(aRect));
     
     return OEMakeRect(x0, y0, x1 - x0, y1 - y0);
 }

@@ -5,6 +5,7 @@
     <device id="appleIIjplus" label="Apple II j-plus" image="images/Apple/Apple II.png">
         <setting ref="appleIIjplus.audioOut" name="volume" label="Volume" type="slider" options="0,1"/>
         <setting ref="appleIIjplus.keyboard" name="type" label="Keyboard" type="select" options="Standard,Shift-Key Mod,Full ASCII"/>
+        <setting ref="appleIIjplus.audioOut" name="cassetteOut" label="Cassette Output" type="checkbox"/>
     </device>
     <port id="appleIIjplus.videoPort" ref="appleMonitorII.connector" type="Composite Video Port" group="peripherals" label="Video Port" image="images/Connectors/RCA Female.png">
         <inlet ref="appleIIjplus.keyboard" property="monitor" outletRef="monitor"/>
@@ -187,9 +188,11 @@
         <property name="fontStandard" data="${resourcePath}/roms/Apple/Apple II j-plus Video ROM.bin"/>
     </component>
     <component id="appleIIjplus.audioOut" class="AppleIIAudioOut">
-        <property name="volume" value="1"/>
+        <property name="controlBus" ref="appleIIjplus.controlBus"/>
         <property name="floatingBus" ref="appleIIjplus.floatingBus"/>
         <property name="audioCodec" ref="appleIIjplus.audioCodec"/>
+        <property name="volume" value="1"/>
+        <property name="cassetteOut" value="0"/>
     </component>
     <component id="appleIIjplus.audioIn" class="AppleIIAudioIn">
         <property name="noiseRejection" value="0.03999999911"/>
@@ -517,7 +520,7 @@
     </component>
     
     <device id="rdCFFA" label="R&amp;D CFFA" image="images/R&amp;D/R&amp;D CFFA.png">
-        <setting ref="rdCFFA.rom" name="sel" label="Firmware" type="select" options="ROM6502|Apple II,ROM65C02|Apple IIe (or newer)"/>
+        <setting ref="rdCFFA.rom" name="sel" label="Firmware" type="select" options="ROM10EE02|ROM 1.0 (Apple II),ROM12EEC02|ROM 1.2 (Apple IIe or newer),ROM20EE02|ROM 2.0 (Apple II),ROM20EEC02|ROM 2.0 (Apple IIe or newer)"/>
         <setting ref="rdCFFA.ataDevice" name="forceWriteProtected" label="Force Write Protected" type="checkbox"/>
     </device>
     <connector id="rdCFFA.connector" type="Apple II Slot">
@@ -562,15 +565,23 @@
         <property name="powerOnPattern" value="0x040000010000000000DFCD051F64000000000000000000000000000000000001"/>
     </component>
     <component id="rdCFFA.rom" class="AddressMux">
-        <property name="refROM6502" ref="rdCFFA.rom6502"/>
-        <property name="refROM65C02" ref="rdCFFA.rom65C02"/>
-        <property name="sel" value="ROM6502"/>
+        <property name="refROM20EEC02" ref="rdCFFA.rom20EEC02"/>
+        <property name="refROM20EE02" ref="rdCFFA.rom20EE02"/>
+        <property name="refROM12EEC02" ref="rdCFFA.rom12EEC02"/>
+        <property name="refROM10EE02" ref="rdCFFA.rom10EE02"/>
+        <property name="sel" value="ROM20EE02"/>
     </component>
-    <component id="rdCFFA.rom6502" class="ROM">
+    <component id="rdCFFA.rom20EEC02" class="ROM">
+        <property name="memoryImage" data="${resourcePath}/roms/R&amp;D/CFFA20EEC02.bin"/>
+    </component>
+    <component id="rdCFFA.rom20EE02" class="ROM">
         <property name="memoryImage" data="${resourcePath}/roms/R&amp;D/CFFA20EE02.bin"/>
     </component>
-    <component id="rdCFFA.rom65C02" class="ROM">
-        <property name="memoryImage" data="${resourcePath}/roms/R&amp;D/CFFA20EEC02.bin"/>
+    <component id="rdCFFA.rom12EEC02" class="ROM">
+        <property name="memoryImage" data="${resourcePath}/roms/R&amp;D/FC02V12D4.bin"/>
+    </component>
+    <component id="rdCFFA.rom10EE02" class="ROM">
+        <property name="memoryImage" data="${resourcePath}/roms/R&amp;D/F02V10.bin"/>
     </component>
     <component id="rdCFFA.disableC800" class="AppleIIDisableC800">
         <property name="memory" ref="rdCFFA.memory"/>

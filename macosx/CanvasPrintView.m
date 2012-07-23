@@ -15,8 +15,8 @@
 - (id)initWithCanvasView:(CanvasView *)theCanvasView
 {
     NSSize pixelDensity = [theCanvasView canvasPixelDensity];
-    NSSize scale = NSMakeSize(72.0 / pixelDensity.width,
-                              72.0 / pixelDensity.height);
+    NSSize scale = NSMakeSize(72.0F / pixelDensity.width,
+                              72.0F / pixelDensity.height);
     
     NSSize frameSize = [theCanvasView canvasSize];
     NSRect frame = NSMakeRect(0, 0,
@@ -44,8 +44,8 @@
 - (void)drawRect:(NSRect)theRect
 {
     NSSize pixelDensity = [canvasView canvasPixelDensity];
-    NSSize scale = NSMakeSize(pixelDensity.width / 72.0,
-                              pixelDensity.height / 72.0);
+    NSSize scale = NSMakeSize(pixelDensity.width / 72,
+                              pixelDensity.height / 72);
     
     NSRect ourRect = NSMakeRect(theRect.origin.x * scale.width,
                                 theRect.origin.y * scale.height,
@@ -57,7 +57,7 @@
     [image drawInRect:theRect
              fromRect:NSZeroRect
             operation:NSCompositeSourceOver
-             fraction:1.0];
+             fraction:1];
 }
 
 @end

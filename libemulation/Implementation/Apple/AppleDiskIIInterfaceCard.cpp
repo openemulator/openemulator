@@ -166,7 +166,7 @@ void AppleDiskIIInterfaceCard::notify(OEComponent *sender, int notification, voi
             break;
             
         case CONTROLBUS_POWERSTATE_DID_CHANGE:
-            if (*((ControlBusPowerState *)data) != CONTROLBUS_POWERSTATE_ON)
+            if (*((ControlBusPowerState *)data) == CONTROLBUS_POWERSTATE_OFF)
             {
                 driveOn = false;
                 timerOn = false;
@@ -210,7 +210,7 @@ OEChar AppleDiskIIInterfaceCard::read(OEAddress address)
             break;
             
         case 0xa: case 0xb:
-            setDriveSel(address & 0x1);
+            setDriveSel((OEInt) address & 0x1);
             
             break;
             
@@ -263,7 +263,7 @@ void AppleDiskIIInterfaceCard::write(OEAddress address, OEChar value)
             break;
             
         case 0xa: case 0xb:
-            setDriveSel(address & 0x1);
+            setDriveSel((OEInt) address & 0x1);
             
             break;
             
@@ -430,8 +430,6 @@ void AppleDiskIIInterfaceCard::updateSequencer()
         }
 		case SEQUENCER_READLOAD:
         {
-//            logMessage("RL: " + getString(bitNum) + " " + getString(cycles - lastCycles) + " 0");
-            
             currentDrive->postMessage(this, APPLEII_SKIP_DATA, &bitNum);
             
             OELong deltaCycles = cycles - lastCycles;
@@ -457,26 +455,27 @@ void AppleDiskIIInterfaceCard::updateSequencer()
 		}
         case SEQUENCER_WRITESHIFT:
 		case SEQUENCER_WRITELOAD:
-        {
-//logMessage("W: " + getString(bitNum) + " " + getString(cycles - lastCycles) + " " + getString(sequencerState));
-            
-            if (bitNum > SEQUENCER_WRITE_SKIP)
-            {
-                bitNum -= SEQUENCER_WRITE_SKIP;
+            if (OEGetBit(phaseControl, (1 << 1)))
                 currentDrive->postMessage(this, APPLEII_SKIP_DATA, &bitNum);
-                
-                bitNum = SEQUENCER_WRITE_SKIP;
-            }
-            
-			while (bitNum--)
+            else
             {
-                currentDrive->write(0, (dataRegister & 0x80) ? 0xff : 0x00);
+                if (bitNum > SEQUENCER_WRITE_SKIP)
+                {
+                    bitNum -= SEQUENCER_WRITE_SKIP;
+                    currentDrive->postMessage(this, APPLEII_SKIP_DATA, &bitNum);
+                    
+                    bitNum = SEQUENCER_WRITE_SKIP;
+                }
                 
-                dataRegister <<= 1;
+                while (bitNum--)
+                {
+                    currentDrive->write(0, (dataRegister & 0x80) ? 0xff : 0x00);
+                    
+                    dataRegister <<= 1;
+                }
             }
             
             break;
-        }
 	}
     
     lastCycles = cycles;

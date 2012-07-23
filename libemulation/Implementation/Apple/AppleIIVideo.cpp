@@ -183,13 +183,7 @@ bool AppleIIVideo::setRef(string name, OEComponent *ref)
         }
     }
     else if (name == "memoryBus")
-    {
-        if (memoryBus)
-            memoryBus->removeObserver(this, APPLEII_VRAM_DID_CHANGE);
         memoryBus = ref;
-        if (memoryBus)
-            controlBus->addObserver(this, APPLEII_VRAM_DID_CHANGE);
-    }
     else if (name == "gamePort")
     {
         if (gamePort)
@@ -680,12 +674,6 @@ void AppleIIVideo::updateVideo()
         OEIntPoint p0 = pos[segmentStart];
         OEIntPoint p1 = pos[segmentStart + cycleNum];
         
-// To-Do: remove this test code
-if ((segmentStart + cycleNum) > 17040)
-{
-    logMessage("Hires bug: p0.y=" + getString(p0.y) + " p1.y=" + getString(p1.y));
-}
-        
         if (p0.y == p1.y)
             (this->*draw)(p0.y, p0.x, p1.x);
         else
@@ -715,14 +703,14 @@ void AppleIIVideo::updateTiming()
         clockFrequency = NTSC_4FSC * HORIZ_TOTAL / 912;
         
         visibleRect = OEMakeRect(clockFrequency * NTSC_HSTART, NTSC_VSTART,
-                                 clockFrequency * NTSC_HLENGTH, NTSC_VLENGTH);
+                                 clockFrequency *  NTSC_HLENGTH, NTSC_VLENGTH);
         displayRect = OEMakeRect(HORIZ_START, VERT_NTSC_START, HORIZ_DISPLAY, VERT_DISPLAY);
         
         vertTotal = NTSC_VTOTAL;
     }
     else if (tvSystem == APPLEII_PAL)
     {
-        clockFrequency = 14250450.0 * HORIZ_TOTAL / 912;
+        clockFrequency = 14250450.0F * HORIZ_TOTAL / 912;
         
         visibleRect = OEMakeRect(clockFrequency * PAL_HSTART, PAL_VSTART,
                                  clockFrequency * PAL_HLENGTH, PAL_VLENGTH);

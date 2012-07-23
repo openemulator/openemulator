@@ -28,8 +28,15 @@ private:
     OEComponent *portB;
     OEComponent *controlBusB;
     
+    OEAddress addressA;
     OEChar ddrA;
     OEChar dataA;
+	bool ca1;
+	bool ca2;
+    
+    OEAddress addressB;
     OEChar ddrB;
     OEChar dataB;
+	bool cb1;
+	bool cb2;
 };

@@ -84,8 +84,8 @@
         [window setContentAspectRatio:NSMakeSize(defaultViewSize.width,
                                                  defaultViewSize.height)];
     
-    NSSize minSize = NSMakeSize(0.5 * defaultViewSize.width,
-                                0.5 * defaultViewSize.height);
+    NSSize minSize = NSMakeSize(defaultViewSize.width / 2,
+                                defaultViewSize.height / 2);
     [window setContentMinSize:minSize];
     
     [self setActualSize:self];
@@ -350,24 +350,28 @@
 - (NSApplicationPresentationOptions)window:(NSWindow *)window
       willUseFullScreenPresentationOptions:(NSApplicationPresentationOptions)proposedOptions
 {
+#ifdef NSApplicationPresentationAutoHideToolbar
     return (proposedOptions | NSApplicationPresentationAutoHideToolbar);
+#else
+    return proposedOptions;
+#endif
 }
 
-- (void)scaleFrame:(float)scale
+- (void)scaleFrame:(CGFloat)scale
 {
     NSSize defaultViewSize = [fCanvasView defaultViewSize];
-    float defaultViewRatio = defaultViewSize.width / defaultViewSize.height;
+    CGFloat defaultViewRatio = defaultViewSize.width / defaultViewSize.height;
     
     NSWindow *window = [self window];
     NSSize frameSize = [window frame].size;
     NSSize viewSize = [[window contentView] frame].size;
-    float userScale = [window userSpaceScaleFactor];
+    CGFloat userScale = [window userSpaceScaleFactor];
     NSSize titleSize = NSMakeSize(frameSize.width - viewSize.width * userScale,
                                   frameSize.height - viewSize.height * userScale);
     
     NSSize proposedSize = NSMakeSize(scale * userScale * defaultViewSize.width,
                                      scale * userScale * defaultViewSize.height);
-    float proposedRatio = proposedSize.width / proposedSize.height;
+    CGFloat proposedRatio = proposedSize.width / proposedSize.height;
     
     NSRect screenRect = [[window screen] visibleFrame];
     NSSize maxSize = NSMakeSize(screenRect.size.width - titleSize.width,
@@ -390,8 +394,8 @@
     proposedSize.height += titleSize.height;
     
     NSRect frameRect = [window frame];
-    frameRect.origin.x = round(NSMidX(frameRect) - proposedSize.width / 2);
-    frameRect.origin.y = round(NSMaxY(frameRect) - proposedSize.height);
+    frameRect.origin.x = roundf((float) (NSMidX(frameRect) - proposedSize.width / 2));
+    frameRect.origin.y = roundf((float) (NSMaxY(frameRect) - proposedSize.height));
     frameRect.size = proposedSize;
     
     if (NSMaxX(frameRect) > NSMaxX(screenRect))
@@ -415,22 +419,22 @@
 
 - (void)setHalfSize:(id)sender
 {
-    [self scaleFrame:0.5];
+    [self scaleFrame:0.5F];
 }
 
 - (void)setActualSize:(id)sender
 {
-    [self scaleFrame:1.0];
+    [self scaleFrame:1];
 }
 
 - (void)setDoubleSize:(id)sender
 {
-    [self scaleFrame:2.0];
+    [self scaleFrame:2];
 }
 
 - (void)fitToScreen:(id)sender
 {
-    [self scaleFrame:10000.0];
+    [self scaleFrame:1E6F];
 }
 
 @end

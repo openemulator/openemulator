@@ -21,12 +21,14 @@ MC6821::MC6821()
     portB = NULL;
     controlBusB = NULL;
     
+    addressA = 0;
     controlA = 0;
     ddrA = 0;
     dataA = 0;
     ca1 = false;
     ca2 = false;
     
+    addressB = 1;
     controlB = 0;
     ddrB = 0;
     dataB = 0;
@@ -36,7 +38,9 @@ MC6821::MC6821()
 
 bool MC6821::setValue(string name, string value)
 {
-    if (name == "controlA")
+    if (name == "addressA")
+        addressA = getOELong(value);
+    else if (name == "controlA")
         setControlA(getOEInt(value));
     else if (name == "ddrA")
         ddrA = getOEInt(value);
@@ -46,6 +50,8 @@ bool MC6821::setValue(string name, string value)
         ca1 = getOEInt(value);
     else if (name == "ca2")
         ca2 = getOEInt(value);
+    else if (name == "addressB")
+        addressB = getOELong(value);
     else if (name == "controlB")
         setControlB(getOEInt(value));
     else if (name == "ddrB")
@@ -263,7 +269,7 @@ OEChar MC6821::read(OEAddress address)
             {
                 setControlA(controlA & ~MC6821_CR_IRQFLAGS);
                 dataA &= ddrA;
-                dataA |= portA->read(MC6821_PORTA) & ~ddrA;
+                dataA |= portA->read(addressA) & ~ddrA;
                 
                 if ((controlA & (MC6821_CR_C2OUTPUT | MC6821_CR_C2DIRECT)) ==
                     MC6821_CR_C2OUTPUT)
@@ -287,7 +293,7 @@ OEChar MC6821::read(OEAddress address)
             {
                 setControlB(controlB & ~MC6821_CR_IRQFLAGS);
                 dataB &= ddrB;
-                dataB |= portB->read(MC6821_PORTB) & ~ddrB;
+                dataB |= portB->read(addressB) & ~ddrB;
                 
                 return dataB;
             }
@@ -309,7 +315,7 @@ void MC6821::write(OEAddress address, OEChar value)
             if (controlA & MC6821_CR_DATAREGISTER)
             {
                 dataA = value & ddrA;
-                portA->write(MC6821_PORTA, dataA);
+                portA->write(addressA, dataA);
             }
             else
                 ddrA = value;
@@ -329,7 +335,7 @@ void MC6821::write(OEAddress address, OEChar value)
             if (controlB & MC6821_CR_DATAREGISTER)
             {
                 dataB = value & ddrB;
-                portB->write(MC6821_PORTB, dataB);
+                portB->write(addressB, dataB);
                 
                 if ((controlB & (MC6821_CR_C2OUTPUT | MC6821_CR_C2DIRECT)) ==
                     MC6821_CR_C2OUTPUT)

@@ -62,7 +62,7 @@
     
     [self setWindowFrameAutosaveName:@"Emulation"];
     
-    float thickness = NSMinY([fSplitView frame]);
+    CGFloat thickness = NSMinY([fSplitView frame]);
     [[self window] setContentBorderThickness:thickness forEdge:NSMinYEdge];
     
     NSToolbar *toolbar;
@@ -435,8 +435,8 @@ resizeSubviewsWithOldSize:(NSSize)oldSize
     NSArray *subviews = [sender subviews];
     
     NSSize newSize = [sender frame].size;
-    float deltaWidth = newSize.width - oldSize.width;
-    float deltaHeight = newSize.height - oldSize.height;
+    CGFloat deltaWidth = newSize.width - oldSize.width;
+    CGFloat deltaHeight = newSize.height - oldSize.height;
     
     for (int i = 0; i < [subviews count]; i++)
     {
@@ -446,8 +446,8 @@ resizeSubviewsWithOldSize:(NSSize)oldSize
         frame.size.height += deltaHeight;
         if (i == 0)
         {
-            float rightWidth = (newSize.width - [sender dividerThickness] -
-                                frame.size.width);
+            CGFloat rightWidth = (newSize.width - [sender dividerThickness] -
+                                  frame.size.width);
             if (rightWidth < SPLIT_VERT_RIGHT_MIN)
                 frame.size.width += rightWidth - SPLIT_VERT_RIGHT_MIN;
         }
@@ -765,19 +765,30 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
     documentController = [NSDocumentController sharedDocumentController];
     
     [panel setAllowedFileTypes:[documentController diskImagePathExtensions]];
-    [panel beginSheetModalForWindow:[self window]
-                  completionHandler:^(NSInteger returnCode)
-     {
-         if (returnCode == NSOKButton)
-         {
-             [panel close];
-             
-             NSString *path = [[panel URL] path];
-             EmulationItem *item = [self itemForSender:sender];
-             
-             [self mount:path inItem:item];
-         }
-     }];
+    NSArray *fileTypes = [documentController diskImagePathExtensions];
+    [panel beginSheetForDirectory:nil
+                             file:nil
+                            types:fileTypes
+                   modalForWindow:[self window]
+                    modalDelegate:self
+                   didEndSelector:@selector(openDiskImageDidEnd:
+                                            returnCode:contextInfo:)
+                      contextInfo:[self itemForSender:sender]];
+}
+
+- (void)openDiskImageDidEnd:(NSOpenPanel *)panel
+                 returnCode:(int)returnCode
+                contextInfo:(void *)contextInfo
+{
+    if (returnCode == NSOKButton)
+    {
+        [panel close];
+        
+        NSString *path = [[panel URL] path];
+        EmulationItem *item = contextInfo;
+        
+        [self mount:path inItem:item];
+    }
 }
 
 - (BOOL)mount:(NSString *)path inItem:(EmulationItem *)item
