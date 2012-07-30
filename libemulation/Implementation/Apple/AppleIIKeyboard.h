@@ -55,6 +55,7 @@ private:
     
     OEChar keyLatch;
     AppleIIKeyboardState state;
+    OEInt stateUsageId;
     
     OEChar appleIIIKeyFlags;
     

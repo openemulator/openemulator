@@ -1,10 +1,17 @@
 ==Latest==
+* Improved AppleIIKeyboard F12/CTRL+BACKSPACE behavior
+* Changed Apple II plus drive 2 to Alps mechanism
+* Added volume control to Disk II
+* Fixed Disk II not updating last track when closing OE
+* Fixed OEEmulation not being destroyed when closing OE
+* Fixed crash when changing device and device was selected
+* Remade ctrl+option screen in Helvetica
 * Fixed Disk II sound problem when pausing/waking up
 * Implemented Apple II cassette out option
 * Implemented Apple II speaker tension/relaxation
 * Restored support for Mac OS X 10.5 (Intel)
 * Fixed crash when writing to a DSK file
-* Added PH1 inhibiting writing in Disk II
+* Added PH1 write inhibition in Disk II
 * Modified mouse release message to "Press CTRL+OPTION to release mouse."
 * Fixed crash when replacing monitors
 * Implemented power/reset signals as global emulation properties

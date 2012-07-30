@@ -254,6 +254,13 @@ void destroyCanvas(void *userData, OEComponent *canvas)
         [[NSAlert alertWithError:error] runModal];
 }
 
+- (void)close
+{
+    [self destroyEmulation];
+    
+    [super close];
+}
+
 // Emulation
 
 - (void)didUpdate:(id)sender
@@ -307,8 +314,10 @@ void destroyCanvas(void *userData, OEComponent *canvas)
     
     [self lockEmulation];
     
-    delete (OEEmulation *)emulation;
+    OEEmulation *theEmulation = (OEEmulation *) emulation;
     emulation = NULL;
+    
+    delete theEmulation;
     
     [self unlockEmulation];
 }

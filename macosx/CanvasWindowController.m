@@ -350,11 +350,7 @@
 - (NSApplicationPresentationOptions)window:(NSWindow *)window
       willUseFullScreenPresentationOptions:(NSApplicationPresentationOptions)proposedOptions
 {
-#ifdef NSApplicationPresentationAutoHideToolbar
     return (proposedOptions | NSApplicationPresentationAutoHideToolbar);
-#else
-    return proposedOptions;
-#endif
 }
 
 - (void)scaleFrame:(CGFloat)scale

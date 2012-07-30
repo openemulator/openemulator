@@ -4,7 +4,7 @@ OpenEmulator
 This is OpenEmulator, a cross-platform emulator of many legacy computer
 systems.
 
-For more information, take a look at the included man pages.
+For more information, take a look at the included documentation.
 
 For generic installation instructions, see file 'INSTALL'. OpenEmulator
 requires these external libraries:

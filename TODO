@@ -1,4 +1,5 @@
 ==1.0.4==
+* Fix Disk II crash in invalidateTimers
 * Implement Apple III X-Byte addressing
 * Implement MOS6522
 * Fix AppleIIVideo not displaying video when loading emulation in paused state

@@ -1032,6 +1032,9 @@ dataCellForTableColumn:(NSTableColumn *)tableColumn
 - (BOOL)doConnect:(NSString *)thePath
            toItem:(EmulationItem *)theItem
 {
+    selectedItem = NULL;
+    [self updateDetails];
+    
     if ([theItem addOEDocument:thePath])
     {
         [self updateWindow:self];

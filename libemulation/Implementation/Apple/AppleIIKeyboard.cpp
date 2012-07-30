@@ -184,6 +184,8 @@ void AppleIIKeyboard::notify(OEComponent *sender, int notification, void *data)
                         
                         if (hidEvent->usageId == CANVAS_K_BACKSPACE)
                         {
+                            stateUsageId = hidEvent->usageId;
+                            
                             CanvasKeyboardFlags flags;
                             
                             monitor->postMessage(this, CANVAS_GET_KEYBOARD_FLAGS, &flags);
@@ -205,6 +207,8 @@ void AppleIIKeyboard::notify(OEComponent *sender, int notification, void *data)
                         }
                         else if (hidEvent->usageId == CANVAS_K_F12)
                         {
+                            stateUsageId = hidEvent->usageId;
+                            
                             CanvasKeyboardFlags flags;
                             
                             monitor->postMessage(this, CANVAS_GET_KEYBOARD_FLAGS, &flags);
@@ -226,30 +230,19 @@ void AppleIIKeyboard::notify(OEComponent *sender, int notification, void *data)
                         break;
                         
                     case APPLEIIKEYBOARD_STATE_RESET:
-                    {
-                        // React on key up
-                        if (hidEvent->value)
-                            break;
-                        
-                        if ((hidEvent->usageId == CANVAS_K_BACKSPACE) ||
-                            (hidEvent->usageId == CANVAS_K_F12))
+                        if (hidEvent->usageId == stateUsageId)
                         {
                             controlBus->postMessage(this, CONTROLBUS_CLEAR_RESET, NULL);
                             
-                            keyLatch = 0;
                             state = APPLEIIKEYBOARD_STATE_NORMAL;
+                            
+                            keyLatch = 0;
                         }
                         
                         break;
-                    }
-                    case APPLEIIKEYBOARD_STATE_RESTART:
-                    {
-                        // React on key up
-                        if (hidEvent->value)
-                            break;
                         
-                        if ((hidEvent->usageId == CANVAS_K_BACKSPACE) ||
-                            (hidEvent->usageId == CANVAS_K_F12))
+                    case APPLEIIKEYBOARD_STATE_RESTART:
+                        if (hidEvent->usageId == stateUsageId)
                         {
                             ControlBusPowerState powerState = CONTROLBUS_POWERSTATE_ON;
                             controlBus->postMessage(this, CONTROLBUS_SET_POWERSTATE, &powerState);
@@ -258,7 +251,6 @@ void AppleIIKeyboard::notify(OEComponent *sender, int notification, void *data)
                         }
                         
                         break;
-                    }
                 }
                 
                 break;

@@ -528,6 +528,7 @@
     <device id="appleDiskII" label="Apple Disk II" image="images/Apple/Apple Disk II.png">
         <setting ref="appleDiskII.drive" name="forceWriteProtected" label="Force Write Protected" type="checkbox"/>
         <setting ref="appleDiskII.drive" name="mechanism" label="Drive Sounds" type="select" options="Shugart,Alps,None"/>
+        <setting ref="appleDiskII.drive" name="volume" label="Volume" type="slider" options="0,2"/>
     </device>
     <connector id="appleDiskII.connector" type="Apple Disk Drive Port">
         <inlet ref="appleDiskII.drive" property="controlBus" outletRef="controlBus"/>
@@ -545,6 +546,7 @@
         <property name="imageDriveOff" value="images/Apple/Apple Disk II.png"/>
         <property name="imageDriveInUse" value="images/Apple/Apple Disk II In Use.png"/>
         <property name="mechanism" value="Shugart"/>
+        <property name="volume" value="1.0"/>
         <property name="soundShugartOpen" value="${resourcePath}/sounds/Shugart/Shugart SA400 Open.ogg"/>
         <property name="soundShugartClose" value="${resourcePath}/sounds/Shugart/Shugart SA400 Close.ogg"/>
         <property name="soundShugartDrive" value="${resourcePath}/sounds/Shugart/Shugart SA400 Drive.ogg"/>
@@ -573,6 +575,7 @@
     <device id="appleDiskII2" label="Apple Disk II" image="images/Apple/Apple Disk II.png">
         <setting ref="appleDiskII2.drive" name="forceWriteProtected" label="Force Write Protected" type="checkbox"/>
         <setting ref="appleDiskII2.drive" name="mechanism" label="Drive Sounds" type="select" options="Shugart,Alps,None"/>
+        <setting ref="appleDiskII2.drive" name="volume" label="Volume" type="slider" options="0,2"/>
     </device>
     <connector id="appleDiskII2.connector" type="Apple Disk Drive Port">
         <inlet ref="appleDiskII2.drive" property="controlBus" outletRef="controlBus"/>
@@ -589,7 +592,8 @@
         <property name="headPlayer" ref="appleDiskII2.headPlayer"/>
         <property name="imageDriveOff" value="images/Apple/Apple Disk II.png"/>
         <property name="imageDriveInUse" value="images/Apple/Apple Disk II In Use.png"/>
-        <property name="mechanism" value="Shugart"/>
+        <property name="mechanism" value="Alps"/>
+        <property name="volume" value="1.0"/>
         <property name="soundShugartOpen" value="${resourcePath}/sounds/Shugart/Shugart SA400 Open.ogg"/>
         <property name="soundShugartClose" value="${resourcePath}/sounds/Shugart/Shugart SA400 Close.ogg"/>
         <property name="soundShugartDrive" value="${resourcePath}/sounds/Shugart/Shugart SA400 Drive.ogg"/>

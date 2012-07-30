@@ -81,9 +81,9 @@
             
             windowRect = [self frame];
             NSRect contentRect = [[self contentView] frame];
-            float titlebarHeight = (float) (NSHeight(windowRect) -
-                                            ([self userSpaceScaleFactor] * 
-                                             NSHeight(contentRect)));
+            CGFloat titlebarHeight = (NSHeight(windowRect) -
+                                      ([self userSpaceScaleFactor] * 
+                                       NSHeight(contentRect)));
             
             NSRect screenRect = [[self screen] frame];
             screenRect.size.height += titlebarHeight;

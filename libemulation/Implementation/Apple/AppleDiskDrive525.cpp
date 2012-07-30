@@ -35,6 +35,8 @@ AppleDiskDrive525::AppleDiskDrive525()
     drivePlayer = NULL;
     headPlayer = NULL;
     
+    volume = 1.0;
+    
     phaseControl = 0;
     phaseCycles = 0;
     phaseDirection = 0;
@@ -68,6 +70,8 @@ bool AppleDiskDrive525::setValue(string name, string value)
         imageDriveInUse = value;
 	else if (name == "mechanism")
 		mechanism = value;
+	else if (name == "volume")
+		volume = getFloat(value);
     else if (name.substr(0, 5) == "sound")
         sound[name.substr(5)] = OESound(value);
 	else
@@ -86,6 +90,8 @@ bool AppleDiskDrive525::getValue(string name, string& value)
 		value = getString(diskStorage.getForceWriteProtected());
 	else if (name == "mechanism")
 		value = mechanism;
+	else if (name == "volume")
+		value = getString(volume);
 	else
 		return false;
 	
@@ -140,6 +146,10 @@ bool AppleDiskDrive525::init()
 void AppleDiskDrive525::update()
 {
     updatePlayerSounds();
+    
+    doorPlayer->postMessage(this, AUDIOPLAYER_SET_VOLUME, &volume);
+    drivePlayer->postMessage(this, AUDIOPLAYER_SET_VOLUME, &volume);
+    headPlayer->postMessage(this, AUDIOPLAYER_SET_VOLUME, &volume);
 }
 
 void AppleDiskDrive525::dispose()
@@ -149,6 +159,8 @@ void AppleDiskDrive525::dispose()
         OEInt id = 0;
         controlBus->postMessage(this, CONTROLBUS_INVALIDATE_TIMERS, &id);
     }
+    
+    closeDiskImage();
 }
 
 bool AppleDiskDrive525::postMessage(OEComponent *sender, int message, void *data)

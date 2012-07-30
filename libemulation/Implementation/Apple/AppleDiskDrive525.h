@@ -46,6 +46,7 @@ private:
     string imageDriveInUse;
     
     string mechanism;
+    float volume;
     map<string, OESound>sound;
     
     OEInt phaseControl;
