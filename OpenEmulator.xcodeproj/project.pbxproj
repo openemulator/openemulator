@@ -81,6 +81,7 @@
 		0071E3BA10803F7300F2D54F /* TemplateChooserItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0071E3B910803F7300F2D54F /* TemplateChooserItem.mm */; };
 		0073DD9F136FCC1100087303 /* CanvasToolbarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0073DD8E136FCA1C00087303 /* CanvasToolbarView.m */; };
 		0073DDBF136FCCC900087303 /* ToolbarBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 0073DDBE136FCCC900087303 /* ToolbarBackground.png */; };
+		0076918915C6EB1000B950A5 /* AppleIIIVideo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0076918815C6EB0F00B950A5 /* AppleIIIVideo.cpp */; };
 		0076FD6512A1ED8C00A3FEC7 /* AudioPause.png in Resources */ = {isa = PBXBuildFile; fileRef = 0076FD6412A1ED8C00A3FEC7 /* AudioPause.png */; };
 		0078F655127348ED0042577E /* AudioControls.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0078F653127348ED0042577E /* AudioControls.xib */; };
 		007DEFAF153FB16800A9CC01 /* DIRAMBackingStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 007DEFAE153FB16800A9CC01 /* DIRAMBackingStore.cpp */; };
@@ -500,6 +501,8 @@
 		0073DD8D136FCA1C00087303 /* CanvasToolbarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanvasToolbarView.h; sourceTree = "<group>"; };
 		0073DD8E136FCA1C00087303 /* CanvasToolbarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CanvasToolbarView.m; sourceTree = "<group>"; };
 		0073DDBE136FCCC900087303 /* ToolbarBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ToolbarBackground.png; sourceTree = "<group>"; };
+		0076918715C6EB0300B950A5 /* AppleIIIVideo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppleIIIVideo.h; sourceTree = "<group>"; };
+		0076918815C6EB0F00B950A5 /* AppleIIIVideo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleIIIVideo.cpp; sourceTree = "<group>"; };
 		0076FD6412A1ED8C00A3FEC7 /* AudioPause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AudioPause.png; sourceTree = "<group>"; };
 		0078F654127348ED0042577E /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/AudioControls.xib; sourceTree = "<group>"; };
 		007DEFAA153FB0CB00A9CC01 /* DIBackingStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DIBackingStore.h; sourceTree = "<group>"; };
@@ -1020,6 +1023,8 @@
 				00B8882C12A393990052B7A4 /* AppleIIVideo.h */,
 				004E152915B9041A00FD22AB /* AppleIIIVIAControl.cpp */,
 				004E152C15B9042100FD22AB /* AppleIIIVIAControl.h */,
+				0076918815C6EB0F00B950A5 /* AppleIIIVideo.cpp */,
+				0076918715C6EB0300B950A5 /* AppleIIIVideo.h */,
 				0042498E15B693DE0091ECAB /* AppleIIIMOS6502.cpp */,
 				0042498F15B693DE0091ECAB /* AppleIIIMOS6502.h */,
 				0042499215B694A60091ECAB /* AppleIIIMOS6502Opcodes.h */,
@@ -1841,6 +1846,7 @@
 				00F2796F15B671E600E58F4F /* MOS6522.cpp in Sources */,
 				0042499015B693DE0091ECAB /* AppleIIIMOS6502.cpp in Sources */,
 				004E152A15B9041A00FD22AB /* AppleIIIVIAControl.cpp in Sources */,
+				0076918915C6EB1000B950A5 /* AppleIIIVideo.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

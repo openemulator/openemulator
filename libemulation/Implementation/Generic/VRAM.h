@@ -15,11 +15,20 @@ class VRAM : public RAM
 public:
     VRAM();
     
+    bool setValue(string name, string value);
     bool setRef(string name, OEComponent *ref);
     bool init();
     
     void write(OEAddress address, OEChar value);
     
 private:
-    OEComponent *observer;
+    OEAddress videoBlockSize;
+    string videoMap;
+    OEComponent *videoObserver;
+    
+    OEInt videoBlockBits;
+    
+    vector<OEChar> notifyMap;
+    
+    OEChar *notifyMapp;
 };

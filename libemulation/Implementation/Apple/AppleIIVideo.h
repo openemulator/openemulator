@@ -19,6 +19,7 @@ typedef enum
 {
     APPLEII_MODELII,
     APPLEII_MODELIIJPLUS,
+    APPLEII_MODELIII,
     APPLEII_MODELIIE,
 } AppleIIModel;
 
@@ -55,9 +56,7 @@ public:
 	void write(OEAddress address, OEChar value);
 	
 private:
-    OEComponent *device;
     OEComponent *controlBus;
-    OEComponent *memoryBus;
     OEComponent *gamePort;
 	OEComponent *monitor;
 	
@@ -79,6 +78,22 @@ private:
     vector<OEInt> textOffset;
     vector<OEInt> hiresOffset;
     
+    // Memory
+    OEComponent *vram0000;
+    OEAddress vram0000Offset;
+    OEComponent *vram1000;
+    OEAddress vram1000Offset;
+    OEComponent *vram2000;
+    OEAddress vram2000Offset;
+    OEComponent *vram4000;
+    OEAddress vram4000Offset;
+    
+    OEData dummyMemory;
+    
+    OEChar *textMemory[2];
+    OEChar *hblMemory[2];
+    OEChar *hiresMemory[2];
+    
     // Drawing
     bool videoEnabled;
     bool colorKiller;
@@ -86,8 +101,6 @@ private:
     map<string, OEData> textFont;
     OEData loresFont;
     OEData hiresFont;
-    
-    AppleIIVRAM vram;
     
     OEImage image;
     OEChar *imagep;
@@ -112,6 +125,7 @@ private:
     bool flash;
     OEInt flashCount;
     
+    // State
     ControlBusPowerState powerState;
     bool an2;
     bool monitorCaptured;

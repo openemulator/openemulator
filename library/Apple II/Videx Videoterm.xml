@@ -19,7 +19,9 @@
         <property name="memoryImage" data="${packagePath}/${id}.bin"/>
         <property name="controlBus" ref=""/>
         <property name="size" value="0x800"/>
-        <property name="observer" ref="videxVideoterm.io"/>
+        <property name="videoBlockSize" value="0x800"/>
+        <property name="videoMap" value="0x000-0x7ff"/>
+        <property name="videoObserver" ref="videxVideoterm.io"/>
     </component>
     <component id="videxVideoterm.io" class="VidexVideoterm">
         <property name="controlBus" ref=""/>

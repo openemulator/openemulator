@@ -56,7 +56,7 @@
         <property name="sel" value="ROM6502"/>
     </component>
     <component id="replica1.floatingBus" class="FloatingBus">
-        <property name="mode" value="ground"/>
+        <property name="type" value="ground"/>
     </component>
     <component id="replica1.ram" class="RAM">
         <property name="memoryImage" data="${packagePath}/${id}.bin"/>

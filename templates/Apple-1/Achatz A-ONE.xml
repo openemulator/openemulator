@@ -56,7 +56,7 @@
         <property name="sel" value="BASIC"/>
     </component>
     <component id="aONE.floatingBus" class="FloatingBus">
-        <property name="mode" value="ground"/>
+        <property name="type" value="ground"/>
     </component>
     <component id="aONE.ram" class="RAM">
         <property name="memoryImage" data="${packagePath}/${id}.bin"/>

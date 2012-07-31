@@ -75,7 +75,6 @@
         <property name="size" value="0x10000"/>
         <property name="blockSize" value="0x100"/>
         <property name="floatingBus" ref="appleIIjplus.floatingBus"/>
-        <property name="video" ref="appleIIjplus.video"/>
         <property name="refRAM1" ref="appleIIjplus.ram1"/>
         <property name="mapRAM1" value="0x0000-0x3fff"/>
         <property name="refRAM2" ref="appleIIjplus.ram2"/>
@@ -114,17 +113,23 @@
     <component id="appleIIjplus.floatingBus" class="AppleIIFloatingBus">
         <property name="video" ref="appleIIjplus.video"/>
     </component>
-    <component id="appleIIjplus.ram1" class="RAM">
+    <component id="appleIIjplus.ram1" class="VRAM">
         <property name="size" value="0x4000"/>
         <property name="memoryImage" data="${packagePath}/${id}.bin"/>
         <property name="controlBus" ref="appleIIjplus.controlBus"/>
         <property name="powerOnPattern" value="0xffff0000"/>
+        <property name="videoBlockSize" value="0x400"/>
+        <property name="videoMap" value="0x400-0xbff,0x2000-0x3fff"/>
+        <property name="videoObserver" ref="appleIIjplus.video"/>
     </component>
-    <component id="appleIIjplus.ram2" class="RAM">
+    <component id="appleIIjplus.ram2" class="VRAM">
         <property name="size" value="0x4000"/>
         <property name="memoryImage" data="${packagePath}/${id}.bin"/>
         <property name="controlBus" ref="appleIIjplus.controlBus"/>
         <property name="powerOnPattern" value="0xffff0000"/>
+        <property name="videoBlockSize" value="0x400"/>
+        <property name="videoMap" value="0x0000-0x1fff"/>
+        <property name="videoObserver" ref="appleIIjplus.video"/>
     </component>
     <component id="appleIIjplus.ram3" class="RAM">
         <property name="size" value="0x4000"/>
@@ -180,11 +185,17 @@
         <property name="mixed" value="1"/>
         <property name="page2" value="1"/>
         <property name="hires" value="1"/>
-        <property name="device" ref="appleIIjplus"/>
         <property name="controlBus" ref="appleIIjplus.controlBus"/>
-        <property name="memoryBus" ref="appleIIjplus.memoryBus"/>
         <property name="gamePort" ref="appleIIjplus.gamePort"/>
         <property name="monitor" ref="appleMonitorII.monitor"/>
+        <property name="vram0000" ref="appleIIjplus.ram1"/>
+        <property name="vram0000Offset" value="0x0000"/>
+        <property name="vram1000" ref="appleIIjplus.ram1"/>
+        <property name="vram1000Offset" value="0x1000"/>
+        <property name="vram2000" ref="appleIIjplus.ram1"/>
+        <property name="vram2000Offset" value="0x2000"/>
+        <property name="vram4000" ref="appleIIjplus.ram2"/>
+        <property name="vram4000Offset" value="0x0000"/>
         <property name="fontStandard" data="${resourcePath}/roms/Apple/Apple II j-plus Video ROM.bin"/>
     </component>
     <component id="appleIIjplus.audioOut" class="AppleIIAudioOut">
@@ -327,7 +338,9 @@
         <property name="memoryImage" data="${packagePath}/${id}.bin"/>
         <property name="controlBus" ref="appleIIjplus.controlBus"/>
         <property name="size" value="0x800"/>
-        <property name="observer" ref="videxVideoterm.io"/>
+        <property name="videoBlockSize" value="0x800"/>
+        <property name="videoMap" value="0x000-0x7ff"/>
+        <property name="videoObserver" ref="videxVideoterm.io"/>
     </component>
     <component id="videxVideoterm.io" class="VidexVideoterm">
         <property name="controlBus" ref="appleIIjplus.controlBus"/>
@@ -432,7 +445,7 @@
     <device id="appleDiskII" label="Apple Disk II" image="images/Apple/Apple Disk II.png">
         <setting ref="appleDiskII.drive" name="forceWriteProtected" label="Force Write Protected" type="checkbox"/>
         <setting ref="appleDiskII.drive" name="mechanism" label="Drive Sounds" type="select" options="Shugart,Alps,None"/>
-        <setting ref="appleDiskII.drive" name="volume" label="Volume" type="slider" options="0,2"/>
+        <setting ref="appleDiskII.drive" name="volume" label="Volume" type="slider" options="0,1"/>
     </device>
     <connector id="appleDiskII.connector" type="Apple Disk Drive Port">
         <inlet ref="appleDiskII.drive" property="controlBus" outletRef="controlBus"/>
@@ -450,7 +463,7 @@
         <property name="imageDriveOff" value="images/Apple/Apple Disk II.png"/>
         <property name="imageDriveInUse" value="images/Apple/Apple Disk II In Use.png"/>
         <property name="mechanism" value="Shugart"/>
-        <property name="volume" value="1.0"/>
+        <property name="volume" value="0.5"/>
         <property name="soundShugartOpen" value="${resourcePath}/sounds/Shugart/Shugart SA400 Open.ogg"/>
         <property name="soundShugartClose" value="${resourcePath}/sounds/Shugart/Shugart SA400 Close.ogg"/>
         <property name="soundShugartDrive" value="${resourcePath}/sounds/Shugart/Shugart SA400 Drive.ogg"/>
@@ -479,7 +492,7 @@
     <device id="appleDiskII2" label="Apple Disk II" image="images/Apple/Apple Disk II.png">
         <setting ref="appleDiskII2.drive" name="forceWriteProtected" label="Force Write Protected" type="checkbox"/>
         <setting ref="appleDiskII2.drive" name="mechanism" label="Drive Sounds" type="select" options="Shugart,Alps,None"/>
-        <setting ref="appleDiskII2.drive" name="volume" label="Volume" type="slider" options="0,2"/>
+        <setting ref="appleDiskII2.drive" name="volume" label="Volume" type="slider" options="0,1"/>
     </device>
     <connector id="appleDiskII2.connector" type="Apple Disk Drive Port">
         <inlet ref="appleDiskII2.drive" property="controlBus" outletRef="controlBus"/>
@@ -497,7 +510,7 @@
         <property name="imageDriveOff" value="images/Apple/Apple Disk II.png"/>
         <property name="imageDriveInUse" value="images/Apple/Apple Disk II In Use.png"/>
         <property name="mechanism" value="Alps"/>
-        <property name="volume" value="1.0"/>
+        <property name="volume" value="0.5"/>
         <property name="soundShugartOpen" value="${resourcePath}/sounds/Shugart/Shugart SA400 Open.ogg"/>
         <property name="soundShugartClose" value="${resourcePath}/sounds/Shugart/Shugart SA400 Close.ogg"/>
         <property name="soundShugartDrive" value="${resourcePath}/sounds/Shugart/Shugart SA400 Drive.ogg"/>

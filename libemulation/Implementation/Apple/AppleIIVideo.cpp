@@ -43,9 +43,7 @@
 
 AppleIIVideo::AppleIIVideo()
 {
-    device = NULL;
     controlBus = NULL;
-    memoryBus = NULL;
     gamePort = NULL;
     monitor = NULL;
     
@@ -59,14 +57,33 @@ AppleIIVideo::AppleIIVideo()
     tvSystemUpdated = true;
     
     initOffsets();
+    
+    vram0000 = NULL;
+    vram0000Offset = 0;
+    vram1000 = NULL;
+    vram1000Offset = 0;
+    vram2000 = NULL;
+    vram2000Offset = 0;
+    vram4000 = NULL;
+    vram4000Offset = 0;
+    
+    dummyMemory.resize(0x2000);
+    
+    for (OEInt page = 0; page < 2; page++)
+    {
+        textMemory[page] = &dummyMemory.front();
+        hblMemory[page] = &dummyMemory.front();
+        hiresMemory[page] = &dummyMemory.front();
+    }
+    
+    videoEnabled = false;
+    colorKiller = true;
+    
     buildLoresFont();
     
     image.setSampleRate(NTSC_4FSC);
     image.setFormat(OEIMAGE_LUMINANCE);
     imageModified = false;
-    
-    videoEnabled = false;
-    colorKiller = true;
     
     frameStart = 0;
     frameCycleNum = 0;
@@ -91,6 +108,8 @@ bool AppleIIVideo::setValue(string name, string value)
             model = APPLEII_MODELII;
         else if (value == "II j-plus")
             model = APPLEII_MODELIIJPLUS;
+        else if (value == "III")
+            model = APPLEII_MODELIII;
         else if (value == "IIe")
             model = APPLEII_MODELIIE;
     }
@@ -121,8 +140,16 @@ bool AppleIIVideo::setValue(string name, string value)
         OESetBit(mode, MODE_PAGE2, getOEInt(value));
 	else if (name == "hires")
         OESetBit(mode, MODE_HIRES, getOEInt(value));
-	else
-		return false;
+	else if (name == "vram0000Offset")
+        vram0000Offset = getOEInt(value);
+	else if (name == "vram1000Offset")
+        vram1000Offset = getOEInt(value);
+	else if (name == "vram2000Offset")
+        vram2000Offset = getOEInt(value);
+	else if (name == "vram4000Offset")
+        vram4000Offset = getOEInt(value);
+    else
+        return false;
 	
 	return true;
 }
@@ -166,9 +193,7 @@ bool AppleIIVideo::getValue(string name, string& value)
 
 bool AppleIIVideo::setRef(string name, OEComponent *ref)
 {
-    if (name == "device")
-        device = ref;
-    else if (name == "controlBus")
+    if (name == "controlBus")
     {
         if (controlBus)
         {
@@ -182,8 +207,6 @@ bool AppleIIVideo::setRef(string name, OEComponent *ref)
             controlBus->addObserver(this, CONTROLBUS_TIMER_DID_FIRE);
         }
     }
-    else if (name == "memoryBus")
-        memoryBus = ref;
     else if (name == "gamePort")
     {
         if (gamePort)
@@ -210,6 +233,14 @@ bool AppleIIVideo::setRef(string name, OEComponent *ref)
         
         postNotification(this, APPLEII_MONITOR_DID_CHANGE, &monitorConnected);
     }
+	else if (name == "vram0000")
+        vram0000 = ref;
+	else if (name == "vram1000")
+        vram1000 = ref;
+	else if (name == "vram2000")
+        vram2000 = ref;
+	else if (name == "vram4000")
+        vram4000 = ref;
     else
 		return false;
 	
@@ -228,13 +259,6 @@ bool AppleIIVideo::setData(string name, OEData *data)
 
 bool AppleIIVideo::init()
 {
-    if (!device)
-    {
-        logMessage("device not connected");
-        
-        return false;
-    }
-    
     if (!controlBus)
     {
         logMessage("controlBus not connected");
@@ -242,16 +266,39 @@ bool AppleIIVideo::init()
         return false;
     }
     
-    if (!memoryBus)
+    OEData *data;
+    
+    if (vram0000)
     {
-        logMessage("memoryBus not connected");
+        vram0000->postMessage(this, RAM_GET_DATA, &data);
         
-        return false;
+        textMemory[0] = &data->front() + vram0000Offset + 0x400;
+        textMemory[1] = &data->front() + vram0000Offset + 0x800;
+    }
+    
+    if (vram1000)
+    {
+        vram1000->postMessage(this, RAM_GET_DATA, &data);
+        
+        hblMemory[0] = &data->front() + vram1000Offset + 0x400;
+        hblMemory[1] = &data->front() + vram1000Offset + 0x800;
+    }
+
+    if (vram2000)
+    {
+        vram2000->postMessage(this, RAM_GET_DATA, &data);
+        
+        hiresMemory[0] = &data->front() + vram2000Offset;
+    }
+
+    if (vram4000)
+    {
+        vram4000->postMessage(this, RAM_GET_DATA, &data);
+        
+        hiresMemory[1] = &data->front() + vram4000Offset;
     }
     
     controlBus->postMessage(this, CONTROLBUS_GET_POWERSTATE, &powerState);
-    
-    memoryBus->postMessage(this, APPLEII_GET_VRAM, &vram);
     
     if (gamePort)
         gamePort->postMessage(this, APPLEII_GET_AN2, &an2);
@@ -346,13 +393,11 @@ void AppleIIVideo::notify(OEComponent *sender, int notification, void *data)
         switch (notification)
         {
             case CONTROLBUS_POWERSTATE_DID_CHANGE:
-            {
                 powerState = *((ControlBusPowerState *)data);
                 
                 updateVideoEnabled();
                 
                 break;
-            }
                 
             case CONTROLBUS_TIMER_DID_FIRE:
                 scheduleNextTimer(*((OESLong *)data));
@@ -360,8 +405,6 @@ void AppleIIVideo::notify(OEComponent *sender, int notification, void *data)
                 break;
         }
     }
-    else if (sender == memoryBus)
-        memoryBus->postMessage(this, APPLEII_GET_VRAM, &vram);
     else if (sender == gamePort)
     {
         an2 = *((bool *)data);
@@ -387,6 +430,9 @@ void AppleIIVideo::notify(OEComponent *sender, int notification, void *data)
                 break;
         }
     }
+    else
+        // Refresh notification from VRAM
+        refreshVideo();
 }
 
 OEChar AppleIIVideo::read(OEAddress address)
@@ -549,7 +595,7 @@ void AppleIIVideo::configureDraw()
         ((currentTimer == APPLEII_TIMER_DISPLAYEND) && OEGetBit(mode, MODE_MIXED)))
     {
         draw = &AppleIIVideo::drawTextLine;
-        drawMemory = vram.textMain[page];
+        drawMemory = textMemory[page];
         drawFont = (OEChar *)&textFont[characterSet].front();
         
         drawFont += ((an2 << 1) | flash) * FONT_SIZE;
@@ -557,13 +603,13 @@ void AppleIIVideo::configureDraw()
     else if (!OEGetBit(mode, MODE_HIRES))
     {
         draw = &AppleIIVideo::drawLoresLine;
-        drawMemory = vram.textMain[page];
+        drawMemory = textMemory[page];
         drawFont = (OEChar *)&loresFont.front();
     }
     else
     {
         draw = &AppleIIVideo::drawHiresLine;
-        drawMemory = vram.hiresMain[page];
+        drawMemory = hiresMemory[page];
         drawFont = (OEChar *)&hiresFont.front();
     }
 }
@@ -867,15 +913,15 @@ OEChar AppleIIVideo::readFloatingBus()
     {
 		address |= (count.y & 0x7) << 10;
         
-        return vram.hiresMain[page][address];
+        return hiresMemory[page][address];
 	}
     else
     {
         // Apple II: set A12 on horizontal blanking
         if ((model != APPLEII_MODELIIE) && (count.x < 0x58))
-            return vram.hbl[page][address];
+            return hblMemory[page][address];
         
-        return vram.textMain[page][address];
+        return textMemory[page][address];
     }
 }
 
@@ -888,7 +934,7 @@ void AppleIIVideo::copy(wstring *s)
     
     bool page = OEGetBit(mode, MODE_PAGE2);
     
-    OEChar *vp = vram.textMain[page];
+    OEChar *vp = textMemory[page];
     
     if (!vp)
         return;

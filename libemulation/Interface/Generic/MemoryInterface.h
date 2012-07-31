@@ -77,7 +77,7 @@ typedef enum
 
 typedef enum
 {
-    VIDEORAM_WILL_CHANGE,
-} VideoRAMNotification;
+    VRAM_WILL_CHANGE,
+} VRAMNotification;
 
 #endif

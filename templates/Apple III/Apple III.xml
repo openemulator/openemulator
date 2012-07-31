@@ -14,18 +14,21 @@
     </port>
     <port id="appleIII.videoRGB" ref="" type="RGB Video" group="peripherals" label="Color Video Port" image="images/Connectors/DA15 Female.png">
     </port>
-    <port id="appleIII.drive1" ref="" type="Apple Disk Drive Port" group="peripherals" label="Disk Drive Port 1" image="images/Connectors/Header2x10.png">
+    <port id="appleIII.drive1" ref="" type="Apple Disk Drive Port" group="peripherals" label="Internal Disk Drive Port" image="images/Connectors/Header2x10.png">
+        <inlet ref="appleIII.diskIO" property="drive1" outletRef="drive"/>
+    </port>
+    <port id="appleIII.drive2" ref="" type="Apple Disk Drive Port" group="peripherals" label="Disk Drive Port 1" image="images/Connectors/Header2x10.png">
         <inlet ref="appleIII.diskIO" property="drive2" outletRef="drive"/>
     </port>
-    <port id="appleIII.drive2" ref="" type="Apple Disk Drive Port" group="peripherals" label="Disk Drive Port 2" image="images/Connectors/Header2x10.png">
+    <port id="appleIII.drive3" ref="" type="Apple Disk Drive Port" group="peripherals" label="Disk Drive Port 2" image="images/Connectors/Header2x10.png">
         <inlet ref="appleIII.diskIO" property="drive3" outletRef="drive"/>
     </port>
-    <port id="appleIII.drive3" ref="" type="Apple Disk Drive Port" group="peripherals" label="Disk Drive Port 3" image="images/Connectors/Header2x10.png">
+    <port id="appleIII.drive4" ref="" type="Apple Disk Drive Port" group="peripherals" label="Disk Drive Port 3" image="images/Connectors/Header2x10.png">
         <inlet ref="appleIII.diskIO" property="drive4" outletRef="drive"/>
     </port>
     <port id="appleIII.portA" ref="" type="Apple Silentype Port" group="peripherals" label="Port A" image="images/Connectors/DE9 Female.png">
     </port>
-    <port id="appleIII.portB" ref="" type="Apple II Game Port" group="peripherals" label="Port B" image="images/Connectors/DE9 Female.png">
+    <port id="appleIII.portB" ref="" type="Apple Silentype Port" group="peripherals" label="Port B" image="images/Connectors/DE9 Female.png">
     </port>
     <port id="appleIII.portC" ref="" type="RS-232 Port" group="peripherals" label="Port C" image="images/Connectors/DB25 Female.png">
     </port>
@@ -68,37 +71,41 @@
         <property name="pc" value="0xf4ee"/>
         <property name="controlBus" ref="appleIII.controlBus"/>
         <property name="memoryBus" ref="appleIII.memoryBus"/>
-        <property name="extendedMemoryBus" ref="appleIII.extendedMemoryBus"/>
+        <property name="mainMemory" ref="appleIII.mainMemory"/>
+        <property name="extendedMemory" ref="appleIII.extendedMemory"/>
     </component>
     <component id="appleIII.memoryBus" class="AddressOffset">
         <property name="size" value="0x10000"/>
         <property name="blockSize" value="0x100"/>
         <property name="memory" ref="appleIII.mainAddressDecoder"/>
     </component>
-    <component id="appleIII.mainAddressDecoder" class="AppleIIAddressDecoder">
+    <component id="appleIII.mainMemory" class="AppleIIAddressDecoder">
         <property name="size" value="0x10000"/>
         <property name="blockSize" value="0x100"/>
         <property name="floatingBus" ref="appleIII.floatingBus"/>
         <property name="video" ref="appleIII.video"/>
     </component>
-    <component id="appleIII.extendedMemoryBus" class="AddressOffset">
-        <property name="size" value="0x10000"/>
-        <property name="blockSize" value="0x100"/>
-        <property name="memory" ref="appleIII.ram"/>
-    </component>
-    <component id="appleIII.floatingBus" class="AppleIIFloatingBus">
-        <property name="video" ref="appleIII.video"/>
-    </component>
     <component id="appleIII.bankSwitchedRAM" class="AddressOffset">
         <property name="size" value="0x10000"/>
-        <property name="blockSize" value="0x100"/>
+        <property name="blockSize" value="0x2000"/>
         <property name="memory" ref="appleIII.ram"/>
+    </component>
+    <component id="appleIII.extendedMemory" class="AddressOffset">
+        <property name="size" value="0x10000"/>
+        <property name="blockSize" value="0x2000"/>
+        <property name="memory" ref="appleIII.ram"/>
+    </component>
+    <component id="appleIII.floatingBus" class="FloatingBus">
+        <property name="type" value="vcc"/>
     </component>
     <component id="appleIII.ram" class="VRAM">
         <property name="size" value="0x40000"/>
         <property name="memoryImage" data="${packagePath}/${id}.bin"/>
         <property name="controlBus" ref="appleIII.controlBus"/>
         <property name="observer" ref="appleIII.video"/>
+        <property name="videoBlockSize" value="0x400"/>
+        <property name="videoRange" ref="0x0000-0x7fff,0x20400-0x20bff"/>
+        <property name="videoObserver" ref="appleIII.video"/>
     </component>
     <component id="appleIII.io" class="AddressDecoder">
         <property name="size" value="0x100"/>
@@ -164,36 +171,10 @@
         <property name="phaseControl" value="0"/>
         <property name="driveOn" value="0"/>
         <property name="driveSel" value="0"/>
-        <property name="drive1" ref="appleIII.drive"/>
+        <property name="drive1" ref=""/>
         <property name="drive2" ref=""/>
-    </component>
-    <component id="appleIII.drive" class="AppleDiskDrive525">
-        <property name="device" ref="appleIII"/>
-        <property name="controlBus" ref="appleIII.controlBus"/>
-        <property name="diskImage" value=""/>
-        <property name="track" value="0"/>
-        <property name="forceWriteProtected" value="0"/>
-        <property name="doorPlayer" ref="appleIII.driveDoorPlayer"/>
-        <property name="drivePlayer" ref="appleIII.driveDrivePlayer"/>
-        <property name="headPlayer" ref="appleIII.driveHeadPlayer"/>
-        <property name="mechanism" value="Shugart"/>
-        <property name="soundShugartOpen" value="${resourcePath}/sounds/Shugart/Shugart SA400 Open.ogg"/>
-        <property name="soundShugartClose" value="${resourcePath}/sounds/Shugart/Shugart SA400 Close.ogg"/>
-        <property name="soundShugartDrive" value="${resourcePath}/sounds/Shugart/Shugart SA400 Drive.ogg"/>
-        <property name="soundShugartHead" value="${resourcePath}/sounds/Shugart/Shugart SA400 Head.ogg"/>
-        <property name="soundShugartStop" value="${resourcePath}/sounds/Shugart/Shugart SA400 Stop.ogg"/>
-        <property name="soundShugartAlign" value="${resourcePath}/sounds/Shugart/Shugart SA400 Align.ogg"/>
-    </component>
-    <component id="appleIII.driveDoorPlayer" class="AudioPlayer">
-        <property name="audio" ref="audio"/>
-    </component>
-    <component id="appleIII.driveDrivePlayer" class="AudioPlayer">
-        <property name="audio" ref="audio"/>
-        <property name="loop" value="1"/>
-    </component>
-    <component id="appleIII.driveHeadPlayer" class="AudioPlayer">
-        <property name="audio" ref="audio"/>
-        <property name="controlBus" ref="appleIII.controlBus"/>
+        <property name="drive3" ref=""/>
+        <property name="drive4" ref=""/>
     </component>
     <component id="appleIII.rom" class="ROM">
         <property name="memoryImage" data="${resourcePath}/roms/Apple/341-0031.bin"/>

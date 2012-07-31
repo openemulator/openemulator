@@ -138,7 +138,7 @@ bool AppleDiskDrive525::init()
 		return false;
     }
     
-    updatePlayerSounds();
+    update();
     
 	return true;
 }
@@ -147,7 +147,6 @@ void AppleDiskDrive525::update()
 {
     updatePlayerSounds();
     
-    doorPlayer->postMessage(this, AUDIOPLAYER_SET_VOLUME, &volume);
     drivePlayer->postMessage(this, AUDIOPLAYER_SET_VOLUME, &volume);
     headPlayer->postMessage(this, AUDIOPLAYER_SET_VOLUME, &volume);
 }

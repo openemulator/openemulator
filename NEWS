@@ -1,4 +1,6 @@
 ==Latest==
+* Refactorized Disk II volume control
+* Refactorized video interface (VRAM, AppleIIAddressDecoder, AppleIIVideo)
 * Improved AppleIIKeyboard F12/CTRL+BACKSPACE behavior
 * Changed Apple II plus drive 2 to Alps mechanism
 * Added volume control to Disk II

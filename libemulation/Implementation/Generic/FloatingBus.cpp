@@ -21,7 +21,7 @@ FloatingBus::FloatingBus()
 
 bool FloatingBus::setValue(string name, string value)
 {
-    if (name == "mode")
+    if (name == "type")
     {
         if (value == "vcc")
             busValue = 0xff;

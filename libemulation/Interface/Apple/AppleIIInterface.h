@@ -18,26 +18,6 @@
 
 #define APPLEII_CLOCKFREQUENCY   (14318180.0F * 65 / 912)
 
-typedef enum
-{
-    APPLEII_VRAMMODE_TEXT1,
-    APPLEII_VRAMMODE_TEXT2,
-    APPLEII_VRAMMODE_HIRES1,
-    APPLEII_VRAMMODE_HIRES2,
-    APPLEII_VRAMMODE_MIXED1,
-    APPLEII_VRAMMODE_MIXED2,
-    APPLEII_VRAMMODE_SHIRES,
-} AppleIIVRAMMode;
-
-typedef struct
-{
-    OEChar *textMain[2];
-    OEChar *hiresMain[2];
-    OEChar *textAux[2];
-    OEChar *hiresAux[2];
-    OEChar *hbl[2];
-} AppleIIVRAM;
-
 // MMU State
 #define APPLEIIMMU_ALTZP      (1 << 0)
 #define APPLEIIMMU_RAMRD      (1 << 1)
@@ -55,8 +35,6 @@ typedef enum
 {
     APPLEII_MAP_SLOT = ADDRESSDECODER_END,
     APPLEII_UNMAP_SLOT,
-    
-    APPLEII_GET_VRAM,
     
     APPLEII_SET_AUXMEMORY,
     APPLEII_SET_MMUSTATE,

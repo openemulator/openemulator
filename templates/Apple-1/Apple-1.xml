@@ -49,7 +49,7 @@
         <property name="mapROM" value="0xf000-0xffff"/>
     </component>
     <component id="apple1.floatingBus" class="FloatingBus">
-        <property name="mode" value="ground"/>
+        <property name="type" value="ground"/>
     </component>
     <component id="apple1.ram1" class="RAM">
         <property name="memoryImage" data="${packagePath}/${id}.bin"/>
