@@ -45,6 +45,7 @@ NSOutlineViewDataSource, NSComboBoxDataSource>
 }
 
 - (void)updateWindow:(id)sender;
+- (void)selectNone:(id)sender;
 
 - (EmulationItem *)itemForSender:(id)sender;
 - (BOOL)selectItem:(EmulationItem *)item withUid:(NSString *)uid;

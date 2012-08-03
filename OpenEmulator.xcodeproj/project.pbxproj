@@ -99,6 +99,8 @@
 		00839E481597060200BD4538 /* ATAController.h in Headers */ = {isa = PBXBuildFile; fileRef = 00839E45159705FC00BD4538 /* ATAController.h */; };
 		00839E491597060700BD4538 /* ATAController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00839E44159705FC00BD4538 /* ATAController.cpp */; };
 		0084D43614FC4FF80031A8A5 /* Audio1Bit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0084D43514FC4FF80031A8A5 /* Audio1Bit.cpp */; };
+		008696AD15C8FC94000737EE /* AppleIIIDiskIO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 008696AC15C8FC93000737EE /* AppleIIIDiskIO.cpp */; };
+		008696B015CB9048000737EE /* AppleIISystemControl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 008696AF15CB9047000737EE /* AppleIISystemControl.cpp */; };
 		008CA97E147803E500B9F5D0 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 008CA97D147803E500B9F5D0 /* IOKit.framework */; };
 		008F2FE7138E0AD600409723 /* DocumentController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00AD746811A2F10E00BAC29C /* DocumentController.mm */; };
 		009085401395D23D00B7D75F /* LibraryItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0090853F1395D23D00B7D75F /* LibraryItem.mm */; };
@@ -529,6 +531,11 @@
 		00839E45159705FC00BD4538 /* ATAController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATAController.h; sourceTree = "<group>"; };
 		0084D43514FC4FF80031A8A5 /* Audio1Bit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Audio1Bit.cpp; sourceTree = "<group>"; };
 		0084D43714FC50060031A8A5 /* Audio1Bit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Audio1Bit.h; sourceTree = "<group>"; };
+		008696A915C8FB7B000737EE /* AppleIIIInterface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppleIIIInterface.h; sourceTree = "<group>"; };
+		008696AB15C8FC89000737EE /* AppleIIIDiskIO.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppleIIIDiskIO.h; sourceTree = "<group>"; };
+		008696AC15C8FC93000737EE /* AppleIIIDiskIO.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleIIIDiskIO.cpp; sourceTree = "<group>"; };
+		008696AE15CB903E000737EE /* AppleIISystemControl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppleIISystemControl.h; sourceTree = "<group>"; };
+		008696AF15CB9047000737EE /* AppleIISystemControl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleIISystemControl.cpp; sourceTree = "<group>"; };
 		008CA97D147803E500B9F5D0 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		0090853E1395D23D00B7D75F /* LibraryItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryItem.h; sourceTree = "<group>"; };
 		0090853F1395D23D00B7D75F /* LibraryItem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LibraryItem.mm; sourceTree = "<group>"; };
@@ -1019,16 +1026,20 @@
 				00B8882412A393990052B7A4 /* AppleIIKeyboard.h */,
 				00B8882912A393990052B7A4 /* AppleIISlotController.cpp */,
 				00B8882A12A393990052B7A4 /* AppleIISlotController.h */,
+				008696AF15CB9047000737EE /* AppleIISystemControl.cpp */,
+				008696AE15CB903E000737EE /* AppleIISystemControl.h */,
 				00B8882B12A393990052B7A4 /* AppleIIVideo.cpp */,
 				00B8882C12A393990052B7A4 /* AppleIIVideo.h */,
-				004E152915B9041A00FD22AB /* AppleIIIVIAControl.cpp */,
-				004E152C15B9042100FD22AB /* AppleIIIVIAControl.h */,
-				0076918815C6EB0F00B950A5 /* AppleIIIVideo.cpp */,
-				0076918715C6EB0300B950A5 /* AppleIIIVideo.h */,
 				0042498E15B693DE0091ECAB /* AppleIIIMOS6502.cpp */,
 				0042498F15B693DE0091ECAB /* AppleIIIMOS6502.h */,
 				0042499215B694A60091ECAB /* AppleIIIMOS6502Opcodes.h */,
 				0042499415B696EA0091ECAB /* AppleIIIMOS6502Operations.h */,
+				008696AC15C8FC93000737EE /* AppleIIIDiskIO.cpp */,
+				008696AB15C8FC89000737EE /* AppleIIIDiskIO.h */,
+				004E152915B9041A00FD22AB /* AppleIIIVIAControl.cpp */,
+				004E152C15B9042100FD22AB /* AppleIIIVIAControl.h */,
+				0076918815C6EB0F00B950A5 /* AppleIIIVideo.cpp */,
+				0076918715C6EB0300B950A5 /* AppleIIIVideo.h */,
 				00B5CB92136F0B6C007A7BED /* AppleSilentype.cpp */,
 				00B5CB93136F0B6C007A7BED /* AppleSilentype.h */,
 				00AB963B157F9E8200EDACD5 /* AppleSilentypeInterfaceCard.h */,
@@ -1160,6 +1171,7 @@
 			isa = PBXGroup;
 			children = (
 				00B8886B12A393990052B7A4 /* AppleIIInterface.h */,
+				008696A915C8FB7B000737EE /* AppleIIIInterface.h */,
 			);
 			name = Apple;
 			path = libemulation/Interface/Apple;
@@ -1847,6 +1859,8 @@
 				0042499015B693DE0091ECAB /* AppleIIIMOS6502.cpp in Sources */,
 				004E152A15B9041A00FD22AB /* AppleIIIVIAControl.cpp in Sources */,
 				0076918915C6EB1000B950A5 /* AppleIIIVideo.cpp in Sources */,
+				008696AD15C8FC94000737EE /* AppleIIIDiskIO.cpp in Sources */,
+				008696B015CB9048000737EE /* AppleIISystemControl.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

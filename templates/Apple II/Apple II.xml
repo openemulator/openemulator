@@ -4,7 +4,6 @@
     
     <device id="appleII" label="Apple II" image="images/Apple/Apple II.png">
         <setting ref="appleII.video" name="revision" label="Revision" type="select" options="0|Revision 0,1|Revision 1+"/>
-        <setting ref="appleII.video" name="tvSystem" label="TV System" type="select" options="NTSC,PAL"/>
         <setting ref="appleII.audioOut" name="volume" label="Volume" type="slider" options="0,1"/>
         <setting ref="appleII.video" name="characterSet" label="Character Set" type="select" options="Standard,Videx|Videx Lowercase Chip,Pigfont"/>
         <setting ref="appleII.keyboard" name="type" label="Keyboard" type="select" options="Standard,Shift-Key Mod,Full ASCII"/>
@@ -74,10 +73,14 @@
         <property name="controlBus" ref="appleII.controlBus"/>
         <property name="memoryBus" ref="appleII.memoryBus"/>
     </component>
+    <component id="appleII.floatingBus" class="AppleIIFloatingBus">
+        <property name="video" ref="appleII.video"/>
+    </component>
     <component id="appleII.memoryBus" class="AppleIIAddressDecoder">
         <property name="size" value="0x10000"/>
         <property name="blockSize" value="0x100"/>
         <property name="floatingBus" ref="appleII.floatingBus"/>
+        <property name="type" value="II"/>
         <property name="refRAM1" ref="appleII.ram1"/>
         <property name="mapRAM1" value="0x0000-0x3fff"/>
         <property name="refRAM2" ref="appleII.ram2"/>
@@ -111,9 +114,6 @@
         <property name="refROMF8" ref="appleII.romF8"/>
         <property name="mapROMF8" value="0xf800-0xffff"/>
     </component>
-    <component id="appleII.floatingBus" class="AppleIIFloatingBus">
-        <property name="video" ref="appleII.video"/>
-    </component>
     <component id="appleII.ram1" class="VRAM">
         <property name="size" value="0x4000"/>
         <property name="memoryImage" data="${packagePath}/${id}.bin"/>
@@ -130,7 +130,7 @@
         <property name="powerOnPattern" value="0xffff0000"/>
         <property name="videoBlockSize" value="0x400"/>
         <property name="videoMap" value="0x0000-0x1fff"/>
-        <property name="videoObserver" ref="video"/>
+        <property name="videoObserver" ref="appleII.video"/>
     </component>
     <component id="appleII.ram3" class="RAM">
         <property name="size" value="0x4000"/>
@@ -146,12 +146,12 @@
         <property name="mapKeyboard" value="0x00-0x1f"/>
         <property name="refSpeaker" ref="appleII.audioOut"/>
         <property name="mapSpeaker" value="0x20-0x3f"/>
+        <property name="refGame" ref="appleII.gamePort"/>
+        <property name="mapGame" value="0x40-0x4f,0x58-0x5f,0x61-0x67,0x69-0x6f,0x70-0x7f"/>
         <property name="refVideo" ref="appleII.video"/>
         <property name="mapVideo" value="0x50-0x57"/>
         <property name="refAudioIn" ref="appleII.audioIn"/>
         <property name="mapAudioIn" value="0x60,0x68"/>
-        <property name="refGame" ref="appleII.gamePort"/>
-        <property name="mapGame" value="0x40-0x4f,0x58-0x5f,0x61-0x67,0x69-0x6f,0x70-0x7f"/>
         <property name="refSlot0" ref=""/>
         <property name="mapSlot0" value="0x80-0x8f"/>
         <property name="refSlot1" ref=""/>
@@ -176,30 +176,6 @@
         <property name="gamePort" ref="appleII.gamePort"/>
         <property name="monitor" ref="appleMonitorII.monitor"/>
     </component>
-    <component id="appleII.video" class="AppleIIVideo">
-        <property name="model" value="II"/>
-        <property name="revision" value="0"/>
-        <property name="tvSystem" value="NTSC"/>
-        <property name="characterSet" value="Standard"/>
-        <property name="flashFrameNum" value="14"/>
-        <property name="text" value="1"/>
-        <property name="mixed" value="1"/>
-        <property name="page2" value="1"/>
-        <property name="hires" value="1"/>
-        <property name="controlBus" ref="appleII.controlBus"/>
-        <property name="monitor" ref="appleMonitorII.monitor"/>
-        <property name="vram0000" ref="appleII.ram1"/>
-        <property name="vram0000Offset" value="0x0000"/>
-        <property name="vram1000" ref="appleII.ram1"/>
-        <property name="vram1000Offset" value="0x1000"/>
-        <property name="vram2000" ref="appleII.ram1"/>
-        <property name="vram2000Offset" value="0x2000"/>
-        <property name="vram4000" ref="appleII.ram2"/>
-        <property name="vram4000Offset" value="0x0000"/>
-        <property name="fontStandard" data="${resourcePath}/roms/Apple/341-0036.bin"/>
-        <property name="fontVidex" data="${resourcePath}/roms/Videx/Videx Lower Case Chip ROM.bin"/>
-        <property name="fontPigfont" data="${resourcePath}/roms/Apple/Pigfont Video ROM.bin"/>
-    </component>
     <component id="appleII.audioIn" class="AppleIIAudioIn">
         <property name="noiseRejection" value="0.03999999911"/>
         <property name="audioCodec" ref="appleII.audioCodec"/>
@@ -221,13 +197,37 @@
         <property name="highFrequency" value="10000"/>
     </component>
     <component id="appleII.gamePort" class="AppleIIGamePort">
-        <property name="an0" value="1"/>
-        <property name="an1" value="1"/>
-        <property name="an2" value="1"/>
-        <property name="an3" value="1"/>
+        <property name="an0" value="0"/>
+        <property name="an1" value="0"/>
+        <property name="an2" value="0"/>
+        <property name="an3" value="0"/>
         <property name="controlBus" ref="appleII.controlBus"/>
         <property name="floatingBus" ref="appleII.floatingBus"/>
         <property name="gamePort" ref="appleHandControllers.io"/>
+    </component>
+    <component id="appleII.video" class="AppleIIVideo">
+        <property name="model" value="II"/>
+        <property name="revision" value="0"/>
+        <property name="tvSystem" value="NTSC"/>
+        <property name="characterSet" value="Standard"/>
+        <property name="flashFrameNum" value="14"/>
+        <property name="text" value="0"/>
+        <property name="mixed" value="0"/>
+        <property name="page2" value="0"/>
+        <property name="hires" value="0"/>
+        <property name="controlBus" ref="appleII.controlBus"/>
+        <property name="monitor" ref="appleMonitorII.monitor"/>
+        <property name="vram0000" ref="appleII.ram1"/>
+        <property name="vram0000Offset" value="0x0000"/>
+        <property name="vram1000" ref="appleII.ram1"/>
+        <property name="vram1000Offset" value="0x1000"/>
+        <property name="vram2000" ref="appleII.ram1"/>
+        <property name="vram2000Offset" value="0x2000"/>
+        <property name="vram4000" ref="appleII.ram2"/>
+        <property name="vram4000Offset" value="0x0000"/>
+        <property name="fontStandard" data="${resourcePath}/roms/Apple/341-0036.bin"/>
+        <property name="fontVidex" data="${resourcePath}/roms/Videx/Videx Lower Case Chip ROM.bin"/>
+        <property name="fontPigfont" data="${resourcePath}/roms/Apple/Pigfont Video ROM.bin"/>
     </component>
     <component id="appleII.romD0" class="ROM">
         <property name="memoryImage" data="${resourcePath}/roms/Apple/341-0016-00.bin"/>
@@ -360,7 +360,7 @@
     
     <device id="appleDiskII" label="Apple Disk II" image="images/Apple/Apple Disk II.png">
         <setting ref="appleDiskII.drive" name="forceWriteProtected" label="Force Write Protected" type="checkbox"/>
-        <setting ref="appleDiskII.drive" name="mechanism" label="Drive Sounds" type="select" options="Shugart,Alps,None"/>
+        <setting ref="appleDiskII.drive" name="mechanism" label="Mechanism" type="select" options="Shugart,Alps"/>
         <setting ref="appleDiskII.drive" name="volume" label="Volume" type="slider" options="0,1"/>
     </device>
     <connector id="appleDiskII.connector" type="Apple Disk Drive Port">
@@ -407,7 +407,7 @@
     
     <device id="appleDiskII2" label="Apple Disk II" image="images/Apple/Apple Disk II.png">
         <setting ref="appleDiskII2.drive" name="forceWriteProtected" label="Force Write Protected" type="checkbox"/>
-        <setting ref="appleDiskII2.drive" name="mechanism" label="Drive Sounds" type="select" options="Shugart,Alps,None"/>
+        <setting ref="appleDiskII2.drive" name="mechanism" label="Mechanism" type="select" options="Shugart,Alps"/>
         <setting ref="appleDiskII2.drive" name="volume" label="Volume" type="slider" options="0,1"/>
     </device>
     <connector id="appleDiskII2.connector" type="Apple Disk Drive Port">

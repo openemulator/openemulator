@@ -67,7 +67,13 @@ bool AppleIIGamePort::getValue(string name, string& value)
 bool AppleIIGamePort::setRef(string name, OEComponent *ref)
 {
 	if (name == "controlBus")
+    {
+        if (controlBus)
+            controlBus->removeObserver(this, CONTROLBUS_POWERSTATE_DID_CHANGE);
 		controlBus = ref;
+        if (controlBus)
+            controlBus->addObserver(this, CONTROLBUS_POWERSTATE_DID_CHANGE);
+    }
 	else if (name == "floatingBus")
 		floatingBus = ref;
     else if (name == "gamePort")
@@ -137,26 +143,41 @@ bool AppleIIGamePort::postMessage(OEComponent *sender, int message, void *data)
 
 void AppleIIGamePort::notify(OEComponent *sender, int notification, void *data)
 {
-    if (notification == JOYSTICK_DID_CHANGE)
+    if (sender == gamePort)
     {
-        JoystickHIDEvent *hidEvent = (JoystickHIDEvent *)data;
-        
-        switch (hidEvent->usageId)
+        if (notification == JOYSTICK_DID_CHANGE)
         {
-            case JOYSTICK_AXIS1:
-            case JOYSTICK_AXIS2:
-            case JOYSTICK_AXIS3:
-            case JOYSTICK_AXIS4:
-                setPDL(hidEvent->usageId - JOYSTICK_AXIS1, hidEvent->value);
-                
-                break;
-                
-            case JOYSTICK_BUTTON1:
-            case JOYSTICK_BUTTON2:
-            case JOYSTICK_BUTTON3:
-                setPB(hidEvent->usageId - JOYSTICK_BUTTON1 + 1, hidEvent->value ? true : false);
-                
-                break;
+            JoystickHIDEvent *hidEvent = (JoystickHIDEvent *)data;
+            
+            switch (hidEvent->usageId)
+            {
+                case JOYSTICK_AXIS1:
+                case JOYSTICK_AXIS2:
+                case JOYSTICK_AXIS3:
+                case JOYSTICK_AXIS4:
+                    setPDL(hidEvent->usageId - JOYSTICK_AXIS1, hidEvent->value);
+                    
+                    break;
+                    
+                case JOYSTICK_BUTTON1:
+                case JOYSTICK_BUTTON2:
+                case JOYSTICK_BUTTON3:
+                    setPB(hidEvent->usageId - JOYSTICK_BUTTON1 + 1, hidEvent->value ? true : false);
+                    
+                    break;
+            }
+        }
+    }
+    else if (sender == controlBus)
+    {
+        ControlBusPowerState powerState = *((ControlBusPowerState *)data);
+        
+        if (powerState == CONTROLBUS_POWERSTATE_OFF)
+        {
+            setAN(0, false);
+            setAN(1, false);
+            setAN(2, false);
+            setAN(3, false);
         }
     }
 }

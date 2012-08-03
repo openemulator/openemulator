@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE EDL PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
-<edl version="1.0" creator="OpenEmulator" framework="787" label="Apple III" image="images/Apple/Apple III.png" description="">
+<edl version="1.0" creator="OpenEmulator" framework="787" label="Apple III" image="images/Apple/Apple III.png" description="The Apple III is a business-oriented 8-bit home computer. It has a MOS 6502 microprocessor running at 1 or 2 MHz, up to 512 kiB of RAM, 80-column text and 16 color high-resolution graphics, 6-bit (DAC) audio and a built-in 5.25&quot; floppy disk drive.">
     
     <device id="appleIII" label="Apple III" image="images/Apple/Apple III.png">
         <setting ref="appleIII.audioOut" name="volume" label="Volume" type="slider" options="0,1"/>
@@ -71,40 +71,50 @@
         <property name="pc" value="0xf4ee"/>
         <property name="controlBus" ref="appleIII.controlBus"/>
         <property name="memoryBus" ref="appleIII.memoryBus"/>
-        <property name="mainMemory" ref="appleIII.mainMemory"/>
-        <property name="extendedMemory" ref="appleIII.extendedMemory"/>
+        <property name="extendedMemoryBus" ref="appleIII.extendedMemoryBus"/>
+    </component>
+    <component id="appleIII.floatingBus" class="FloatingBus">
+        <property name="type" value="vcc"/>
     </component>
     <component id="appleIII.memoryBus" class="AddressOffset">
         <property name="size" value="0x10000"/>
         <property name="blockSize" value="0x100"/>
-        <property name="memory" ref="appleIII.mainAddressDecoder"/>
+        <property name="memory" ref="appleIII.memoryAddressDecoder"/>
     </component>
-    <component id="appleIII.mainMemory" class="AppleIIAddressDecoder">
+    <component id="appleIII.memoryAddressDecoder" class="AppleIIAddressDecoder">
         <property name="size" value="0x10000"/>
         <property name="blockSize" value="0x100"/>
         <property name="floatingBus" ref="appleIII.floatingBus"/>
-        <property name="video" ref="appleIII.video"/>
+        <property name="type" value="III"/>
+        <property name="ram" ref="appleIII.ram"/>
+        <property name="io" value="appleIII.io"/>
+        <property name="slot1" ref=""/>
+        <property name="slot2" ref=""/>
+        <property name="slot3" ref=""/>
+        <property name="slot4" ref=""/>
+        <property name="rom" ref="appleIII.rom"/>
     </component>
-    <component id="appleIII.bankSwitchedRAM" class="AddressOffset">
+    <component id="appleIII.memory" class="AddressOffset">
         <property name="size" value="0x10000"/>
         <property name="blockSize" value="0x2000"/>
         <property name="memory" ref="appleIII.ram"/>
+    </component>
+    <component id="appleIII.extendedMemoryBus" class="AddressOffset">
+        <property name="size" value="0x10000"/>
+        <property name="blockSize" value="0x2000"/>
+        <property name="memory" ref="appleIII.extendedMemory"/>
     </component>
     <component id="appleIII.extendedMemory" class="AddressOffset">
         <property name="size" value="0x10000"/>
         <property name="blockSize" value="0x2000"/>
         <property name="memory" ref="appleIII.ram"/>
     </component>
-    <component id="appleIII.floatingBus" class="FloatingBus">
-        <property name="type" value="vcc"/>
-    </component>
     <component id="appleIII.ram" class="VRAM">
         <property name="size" value="0x40000"/>
         <property name="memoryImage" data="${packagePath}/${id}.bin"/>
         <property name="controlBus" ref="appleIII.controlBus"/>
-        <property name="observer" ref="appleIII.video"/>
         <property name="videoBlockSize" value="0x400"/>
-        <property name="videoRange" ref="0x0000-0x7fff,0x20400-0x20bff"/>
+        <property name="videoMap" value="0x0000-0x7fff,0x20400-0x20bff"/>
         <property name="videoObserver" ref="appleIII.video"/>
     </component>
     <component id="appleIII.io" class="AddressDecoder">
@@ -140,17 +150,21 @@
         <property name="tvSystem" value="NTSC"/>
         <property name="characterSet" value="Standard"/>
         <property name="flashFrameNum" value="14"/>
-        <property name="text" value="1"/>
-        <property name="mixed" value="1"/>
+        <property name="text" value="0"/>
+        <property name="mixed" value="0"/>
         <property name="page2" value="0"/>
         <property name="hires" value="0"/>
-        <property name="device" ref="appleIII"/>
         <property name="controlBus" ref="appleIII.controlBus"/>
-        <property name="memoryBus" ref="appleIII.mainAddressDecoder"/>
         <property name="monitor" ref="appleMonitorIII.monitor"/>
+        <property name="vram0000" ref="appleIII.ram"/>
+        <property name="vram0000Offset" value="0x0000"/>
+        <property name="vram1000" ref="appleIII.ram"/>
+        <property name="vram1000Offset" value="0x1000"/>
+        <property name="vram2000" ref="appleIII.ram"/>
+        <property name="vram2000Offset" value="0x2000"/>
+        <property name="vram4000" ref="appleIII.ram"/>
+        <property name="vram4000Offset" value="0x4000"/>
         <property name="fontStandard" data="${resourcePath}/roms/Apple/341-0036.bin"/>
-        <property name="fontVidex" data="${resourcePath}/roms/Videx/Videx Lower Case Chip ROM.bin"/>
-        <property name="fontPigfont" data="${resourcePath}/roms/Apple/Pigfont Video ROM.bin"/>
     </component>
     <component id="appleIII.audioOut" class="AppleIIAudioOut">
         <property name="floatingBus" ref="appleIII.floatingBus"/>
@@ -165,7 +179,7 @@
         <property name="lowFrequency" value="20"/>
         <property name="highFrequency" value="10000"/>
     </component>
-    <component id="appleIII.diskIO" class="AppleDiskIIInterfaceCard">
+    <component id="appleIII.diskIO" class="AppleIIIDiskIO">
         <property name="controlBus" ref="appleIII.controlBus"/>
         <property name="floatingBus" ref="appleIII.floatingBus"/>
         <property name="phaseControl" value="0"/>

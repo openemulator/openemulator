@@ -8,6 +8,9 @@
  * Implements an Apple Disk II interface card
  */
 
+#ifndef _APPLEDISKIIINTERFACECARD_H
+#define _APPLEDISKIIINTERFACECARD_H
+
 #include "OEComponent.h"
 
 class AppleDiskIIInterfaceCard : public OEComponent
@@ -26,10 +29,23 @@ public:
     OEChar read(OEAddress address);
 	void write(OEAddress address, OEChar value);
     
+protected:
+    OEComponent *floatingBus;
+    
+    OEChar dataRegister;
+    
+    bool driveEnableControl;
+    
+    void setPhaseControl(OEInt index, bool value);
+    void setDriveOn(bool value);
+    void setDriveSel(OEInt value);
+    void setSequencerWrite(bool value);
+    void setSequencerLoad(bool value);
+    void updateSequencer();
+    
 private:
 	OEComponent *controlBus;
-    OEComponent *floatingBus;
-	OEComponent *drive[2];
+	OEComponent *drive[4];
     
     OEInt phaseControl;
     bool driveOn;
@@ -37,25 +53,18 @@ private:
     OEInt sequencerMode;
     
     bool sequencerState;
-    OEChar dataRegister;
     
     OEComponent dummyDrive;
     OEComponent *currentDrive;
     bool timerOn;
     bool reset;
     
-    bool driveEnableControl;
-    
     OELong lastCycles;
     
-    void setPhaseControl(OEInt index, bool value);
     void updatePhaseControl();
-    void setDriveOn(bool value);
     void updateDriveEnableControl();
     void updateDriveEnabled();
-    void setDriveSel(OEInt value);
     void updateDriveSel(OEInt value);
-    void setSequencerWrite(bool value);
-    void setSequencerLoad(bool value);
-    void updateSequencer();
 };
+
+#endif

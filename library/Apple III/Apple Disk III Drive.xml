@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE EDL PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
-<edl version="1.0" creator="OpenEmulator" framework="787" label="Apple Disk II" image="images/Apple/Apple Disk II.png" description="The Disk II Floppy Disk Subsystem is a 5¼-inch floppy disk drive for Apple II computers.">
+<edl version="1.0" creator="OpenEmulator" framework="787" label="Apple Disk III" image="images/Apple/Apple Disk III.png" description="The Disk III Floppy Disk Subsystem is a 5¼-inch floppy disk drive for Apple III computers.">
     
-    <device id="appleDiskII" label="Apple Disk II" image="images/Apple/Apple Disk II.png">
-        <setting ref="appleDiskII.drive" name="forceWriteProtected" label="Force Write Protected" type="checkbox"/>
-        <setting ref="appleDiskII.drive" name="mechanism" label="Mechanism" type="select" options="Shugart,Alps"/>
-        <setting ref="appleDiskII.drive" name="volume" label="Volume" type="slider" options="0,1"/>
+    <device id="appleDiskIII" label="Apple Disk III" image="images/Apple/Apple Disk III.png">
+        <setting ref="appleDiskIII.drive" name="forceWriteProtected" label="Force Write Protected" type="checkbox"/>
+        <setting ref="appleDiskIII.drive" name="mechanism" label="Mechanism" type="select" options="Shugart,Alps"/>
+        <setting ref="appleDiskIII.drive" name="volume" label="Volume" type="slider" options="0,1"/>
     </device>
-    <connector id="appleDiskII.connector" type="Apple Disk Drive Port">
-        <inlet ref="appleDiskII.drive" property="controlBus" outletRef="controlBus"/>
-        <inlet ref="appleDiskII.headPlayer" property="controlBus" outletRef="controlBus"/>
+    <connector id="appleDiskIII.connector" type="Apple Disk Drive Port">
+        <inlet ref="appleDiskIII.drive" property="controlBus" outletRef="controlBus"/>
+        <inlet ref="appleDiskIII.headPlayer" property="controlBus" outletRef="controlBus"/>
     </connector>
-    <component id="appleDiskII.drive" class="AppleDiskDrive525">
-        <property name="device" ref="appleDiskII"/>
+    <component id="appleDiskIII.drive" class="AppleDiskDrive525">
+        <property name="device" ref="appleDiskIII"/>
         <property name="controlBus" ref=""/>
         <property name="diskImage" value=""/>
         <property name="track" value="0"/>
         <property name="forceWriteProtected" value="0"/>
-        <property name="doorPlayer" ref="appleDiskII.doorPlayer"/>
-        <property name="drivePlayer" ref="appleDiskII.drivePlayer"/>
-        <property name="headPlayer" ref="appleDiskII.headPlayer"/>
-        <property name="imageDriveOff" value="images/Apple/Apple Disk II.png"/>
-        <property name="imageDriveInUse" value="images/Apple/Apple Disk II In Use.png"/>
+        <property name="doorPlayer" ref="appleDiskIII.doorPlayer"/>
+        <property name="drivePlayer" ref="appleDiskIII.drivePlayer"/>
+        <property name="headPlayer" ref="appleDiskIII.headPlayer"/>
+        <property name="imageDriveOff" value="images/Apple/Apple Disk III.png"/>
+        <property name="imageDriveInUse" value="images/Apple/Apple Disk III In Use.png"/>
         <property name="mechanism" value="Shugart"/>
         <property name="volume" value="0.5"/>
         <property name="soundShugartOpen" value="${resourcePath}/sounds/Shugart/Shugart SA400 Open.ogg"/>
@@ -37,14 +37,14 @@
         <property name="soundAlpsStop" value="${resourcePath}/sounds/Alps/Alps 2124A Stop.ogg"/>
         <property name="soundAlpsAlign" value="${resourcePath}/sounds/Shugart/Shugart SA400 Align.ogg"/>
     </component>
-    <component id="appleDiskII.doorPlayer" class="AudioPlayer">
+    <component id="appleDiskIII.doorPlayer" class="AudioPlayer">
         <property name="audio" ref="audio"/>
     </component>
-    <component id="appleDiskII.drivePlayer" class="AudioPlayer">
+    <component id="appleDiskIII.drivePlayer" class="AudioPlayer">
         <property name="audio" ref="audio"/>
         <property name="loop" value="1"/>
     </component>
-    <component id="appleDiskII.headPlayer" class="AudioPlayer">
+    <component id="appleDiskIII.headPlayer" class="AudioPlayer">
         <property name="audio" ref="audio"/>
         <property name="controlBus" ref=""/>
     </component>

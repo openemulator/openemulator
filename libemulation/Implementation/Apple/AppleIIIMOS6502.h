@@ -21,10 +21,15 @@ public:
     bool setRef(string name, OEComponent *ref);
     bool init();
     
+    bool postMessage(OEComponent *sender, int message, void *data);
+    
 private:
     OEComponent *extendedMemoryBus;
+    bool extendedMemoryEnabled;
+    OEInt extendedMemoryBank;
     
     void execute();
+    void setExtendedMemoryBank(OEInt value);
 };
 
 #endif

@@ -46,6 +46,8 @@
 #include "AppleIIKeyboard.h"
 #include "AppleIISlotController.h"
 #include "AppleIIVideo.h"
+#include "AppleIISystemControl.h"
+#include "AppleIIIDiskIO.h"
 #include "AppleIIIMOS6502.h"
 #include "AppleIIIVIAControl.h"
 #include "AppleSilentype.h"
@@ -107,6 +109,8 @@ OEComponent *OEComponentFactory::construct(const string& className)
     matchComponent(AppleIIKeyboard);
     matchComponent(AppleIISlotController);
     matchComponent(AppleIIVideo);
+    matchComponent(AppleIISystemControl);
+    matchComponent(AppleIIIDiskIO);
     matchComponent(AppleIIIMOS6502);
     matchComponent(AppleIIIVIAControl);
     matchComponent(AppleSilentype);

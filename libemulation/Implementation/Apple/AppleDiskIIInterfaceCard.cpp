@@ -32,6 +32,8 @@ AppleDiskIIInterfaceCard::AppleDiskIIInterfaceCard()
 	controlBus = NULL;
     drive[0] = &dummyDrive;
     drive[1] = &dummyDrive;
+    drive[2] = &dummyDrive;
+    drive[3] = &dummyDrive;
     
     phaseControl = 0;
     driveSel = 0;
@@ -101,6 +103,10 @@ bool AppleDiskIIInterfaceCard::setRef(string name, OEComponent *ref)
 		drive[0] = ref ? ref : &dummyDrive;
 	else if (name == "drive2")
 		drive[1] = ref ? ref : &dummyDrive;
+	else if (name == "drive3")
+		drive[2] = ref ? ref : &dummyDrive;
+	else if (name == "drive4")
+		drive[3] = ref ? ref : &dummyDrive;
 	else
 		return false;
 	

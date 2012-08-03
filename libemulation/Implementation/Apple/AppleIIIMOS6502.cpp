@@ -12,10 +12,14 @@
 #include "AppleIIIMOS6502Opcodes.h"
 
 #include "CPUInterface.h"
+#include "MemoryInterface.h"
+#include "AppleIIIInterface.h"
 
 AppleIIIMOS6502::AppleIIIMOS6502() : MOS6502()
 {
     extendedMemoryBus = NULL;
+    extendedMemoryEnabled = false;
+    extendedMemoryBank = -1;
 }
 
 bool AppleIIIMOS6502::setRef(string name, OEComponent *ref)
@@ -38,6 +42,16 @@ bool AppleIIIMOS6502::init()
     }
     
     return MOS6502::init();
+}
+
+bool AppleIIIMOS6502::postMessage(OEComponent *sender, int message, void *data)
+{
+    if (message == APPLEIII_SET_EXTENDEDMEMORYENABLE)
+        extendedMemoryEnabled = *((bool *)data);
+    else
+        return MOS6502::postMessage(sender, message, data);
+    
+    return true;
 }
 
 void AppleIIIMOS6502::execute()
@@ -423,4 +437,52 @@ void AppleIIIMOS6502::execute()
             }
         }
     };
+}
+
+inline void AppleIIIMOS6502::setExtendedMemoryBank(OEInt value)
+{
+    if (value == extendedMemoryBank)
+        return;
+    
+    AddressOffsetMap offsetMap;
+    
+    if (value == 0xf)
+    {
+        offsetMap.startAddress = 0x0000;
+        offsetMap.endAddress = 0x1fff;
+        offsetMap.offset = APPLEIII_SYSTEMBANK * 0x8000;
+
+        extendedMemoryBus->postMessage(this, ADDRESSOFFSET_MAP, &offsetMap);
+        
+        offsetMap.startAddress = 0x2000;
+        offsetMap.endAddress = 0x9fff;
+        offsetMap.offset = -0x2000;
+        
+        extendedMemoryBus->postMessage(this, ADDRESSOFFSET_MAP, &offsetMap);
+        
+        offsetMap.startAddress = 0xa000;
+        offsetMap.endAddress = 0xffff;
+        offsetMap.offset = APPLEIII_SYSTEMBANK * 0x8000 - 0x8000;
+        
+        extendedMemoryBus->postMessage(this, ADDRESSOFFSET_MAP, &offsetMap);
+    }
+    else
+    {
+        if (value == APPLEIII_SYSTEMBANK)
+            value = 0xf;
+        
+        offsetMap.startAddress = 0x0000;
+        offsetMap.endAddress = 0x7fff;
+        offsetMap.offset = value * 0x8000;
+        
+        extendedMemoryBus->postMessage(this, ADDRESSOFFSET_MAP, &offsetMap);
+        
+        offsetMap.startAddress = 0x8000;
+        offsetMap.endAddress = 0xffff;
+        offsetMap.offset = (value + 1) * 0x8000 - 0x8000;
+        
+        extendedMemoryBus->postMessage(this, ADDRESSOFFSET_MAP, &offsetMap);
+    }
+    
+    extendedMemoryBank = value;
 }

@@ -15,27 +15,6 @@
 
 #include "AppleIIInterface.h"
 
-typedef enum
-{
-    APPLEII_MODELII,
-    APPLEII_MODELIIJPLUS,
-    APPLEII_MODELIII,
-    APPLEII_MODELIIE,
-} AppleIIModel;
-
-typedef enum
-{
-    APPLEII_NTSC,
-    APPLEII_PAL,
-} AppleIITVSystem;
-
-typedef enum
-{
-    APPLEII_TIMER_VSYNC,
-    APPLEII_TIMER_DISPLAYMIXED,
-    APPLEII_TIMER_DISPLAYEND,
-} AppleIITimerType;
-
 class AppleIIVideo : public OEComponent
 {
 public:
@@ -61,15 +40,15 @@ private:
 	OEComponent *monitor;
 	
     // Settings
-    AppleIIModel model;
+    OEInt model;
     OEInt revision;
-    AppleIITVSystem tvSystem;
+    OEInt videoSystem;
 	string characterSet;
     OEInt flashFrameNum;
     OEInt mode;
     
     bool revisionUpdated;
-    bool tvSystemUpdated;
+    bool videoSystemUpdated;
     
     // Tables
     vector<OEIntPoint> pos;

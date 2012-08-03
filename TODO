@@ -1,9 +1,9 @@
 ==1.0.4==
-* Fix Disk II crash in invalidateTimers
-* Disk II head player should not play when turning on a drive or changing drives
 * Implement Apple III X-Byte addressing
 * Implement MOS6522
 * Fix AppleIIVideo not displaying video when loading emulation in paused state
+* Disk II head player should not play when turning on a drive or changing drives
+* Fix Disk II crash in invalidateTimers
 * Check Mac OS X 10.5 (Intel) compatibility
 * Fix Apple Silentype Interface Card spurious data problems
 * Implement Apple Silentype print intensity

@@ -41,20 +41,40 @@
 #define MODE_PAGE2      (1 << 2)
 #define MODE_HIRES      (1 << 3)
 
+enum
+{
+    TIMER_VSYNC,
+    TIMER_DISPLAYMIXED,
+    TIMER_DISPLAYEND,
+};
+
+enum
+{
+    MODEL_II,
+    MODEL_IIJPLUS,
+    MODEL_IIE,
+};
+
+enum
+{
+    VIDEO_NTSC,
+    VIDEO_PAL,
+};
+
 AppleIIVideo::AppleIIVideo()
 {
     controlBus = NULL;
     gamePort = NULL;
     monitor = NULL;
     
-    model = APPLEII_MODELIIE;
-    tvSystem = APPLEII_NTSC;
+    model = MODEL_IIE;
+    videoSystem = VIDEO_NTSC;
     characterSet = "Standard";
     flashFrameNum = 16;
     mode = 0;
     
     revisionUpdated = true;
-    tvSystemUpdated = true;
+    videoSystemUpdated = true;
     
     initOffsets();
     
@@ -88,7 +108,7 @@ AppleIIVideo::AppleIIVideo()
     frameStart = 0;
     frameCycleNum = 0;
     
-    currentTimer = APPLEII_TIMER_VSYNC;
+    currentTimer = TIMER_VSYNC;
     lastCycles = 0;
     pendingCycles = 0;
     
@@ -105,13 +125,11 @@ bool AppleIIVideo::setValue(string name, string value)
 	if (name == "model")
     {
         if (value == "II")
-            model = APPLEII_MODELII;
+            model = MODEL_II;
         else if (value == "II j-plus")
-            model = APPLEII_MODELIIJPLUS;
-        else if (value == "III")
-            model = APPLEII_MODELIII;
+            model = MODEL_IIJPLUS;
         else if (value == "IIe")
-            model = APPLEII_MODELIIE;
+            model = MODEL_IIE;
     }
 	else if (name == "revision")
     {
@@ -122,11 +140,11 @@ bool AppleIIVideo::setValue(string name, string value)
 	else if (name == "tvSystem")
     {
         if (value == "NTSC")
-            tvSystem = APPLEII_NTSC;
+            videoSystem = VIDEO_NTSC;
         else if (value == "PAL")
-            tvSystem = APPLEII_PAL;
+            videoSystem = VIDEO_PAL;
         
-        tvSystemUpdated = true;
+        videoSystemUpdated = true;
     }
 	else if (name == "characterSet")
 		characterSet = value;
@@ -160,14 +178,14 @@ bool AppleIIVideo::getValue(string name, string& value)
         value = getString(revision);
 	else if (name == "tvSystem")
     {
-        switch (tvSystem)
+        switch (videoSystem)
         {
-            case APPLEII_NTSC:
+            case VIDEO_NTSC:
                 value = "NTSC";
                 
                 break;
                 
-            case APPLEII_PAL:
+            case VIDEO_PAL:
                 value = "PAL";
                 
                 break;
@@ -318,11 +336,11 @@ void AppleIIVideo::update()
         revisionUpdated = false;
     }
     
-    if (tvSystemUpdated)
+    if (videoSystemUpdated)
     {
         updateTiming();
         
-        tvSystemUpdated = false;
+        videoSystemUpdated = false;
     }
     
     if (monitor)
@@ -394,6 +412,14 @@ void AppleIIVideo::notify(OEComponent *sender, int notification, void *data)
         {
             case CONTROLBUS_POWERSTATE_DID_CHANGE:
                 powerState = *((ControlBusPowerState *)data);
+                
+                if (powerState == CONTROLBUS_POWERSTATE_OFF)
+                {
+                    setMode(MODE_TEXT, false);
+                    setMode(MODE_MIXED, false);
+                    setMode(MODE_PAGE2, false);
+                    setMode(MODE_HIRES, false);
+                }
                 
                 updateVideoEnabled();
                 
@@ -496,7 +522,7 @@ bool AppleIIVideo::loadTextFont(string name, OEData *data)
         {
             OEInt ir = i;
             
-            if (model == APPLEII_MODELIIJPLUS)
+            if (model == MODEL_IIJPLUS)
             {
                 OESetBit(ir, 0x40, OEGetBit(i, 0x80));
                 OESetBit(ir, 0x80, OEGetBit(i, 0x200));
@@ -592,7 +618,7 @@ void AppleIIVideo::configureDraw()
     bool page = OEGetBit(mode, MODE_PAGE2);
     
     if (OEGetBit(mode, MODE_TEXT) ||
-        ((currentTimer == APPLEII_TIMER_DISPLAYEND) && OEGetBit(mode, MODE_MIXED)))
+        ((currentTimer == TIMER_DISPLAYEND) && OEGetBit(mode, MODE_MIXED)))
     {
         draw = &AppleIIVideo::drawTextLine;
         drawMemory = textMemory[page];
@@ -744,7 +770,7 @@ void AppleIIVideo::updateTiming()
     float clockFrequency;
     OERect visibleRect, displayRect;
     
-    if (tvSystem == APPLEII_NTSC)
+    if (videoSystem == VIDEO_NTSC)
     {
         clockFrequency = NTSC_4FSC * HORIZ_TOTAL / 912;
         
@@ -754,7 +780,7 @@ void AppleIIVideo::updateTiming()
         
         vertTotal = NTSC_VTOTAL;
     }
-    else if (tvSystem == APPLEII_PAL)
+    else if (videoSystem == VIDEO_PAL)
     {
         clockFrequency = 14250450.0F * HORIZ_TOTAL / 912;
         
@@ -815,7 +841,7 @@ void AppleIIVideo::updateTiming()
         count[i].y = c.y;
     }
     
-    currentTimer = APPLEII_TIMER_VSYNC;
+    currentTimer = TIMER_VSYNC;
     controlBus->postMessage(this, CONTROLBUS_GET_CYCLES, &lastCycles);
     
     OEInt id = 0;
@@ -829,12 +855,12 @@ void AppleIIVideo::scheduleNextTimer(OESLong cycles)
     updateVideo();
     
     currentTimer++;
-    if (currentTimer > APPLEII_TIMER_DISPLAYEND)
-        currentTimer = APPLEII_TIMER_VSYNC;
+    if (currentTimer > TIMER_DISPLAYEND)
+        currentTimer = TIMER_VSYNC;
     
     switch (currentTimer)
     {
-        case APPLEII_TIMER_DISPLAYMIXED:
+        case TIMER_DISPLAYMIXED:
             if (imageModified)
             {
                 imageModified = false;
@@ -865,14 +891,14 @@ void AppleIIVideo::scheduleNextTimer(OESLong cycles)
             
             break;
             
-        case APPLEII_TIMER_DISPLAYEND:
+        case TIMER_DISPLAYEND:
             configureDraw();
             
             cycles += 32 * HORIZ_TOTAL;
             
             break;
             
-        case APPLEII_TIMER_VSYNC:
+        case TIMER_VSYNC:
             cycles += (vertTotal - (vertStart + VERT_DISPLAY)) * HORIZ_TOTAL;
             
             break;
@@ -918,7 +944,7 @@ OEChar AppleIIVideo::readFloatingBus()
     else
     {
         // Apple II: set A12 on horizontal blanking
-        if ((model != APPLEII_MODELIIE) && (count.x < 0x58))
+        if ((model != MODEL_IIE) && (count.x < 0x58))
             return hblMemory[page][address];
         
         return textMemory[page][address];

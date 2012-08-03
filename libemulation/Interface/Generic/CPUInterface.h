@@ -21,6 +21,7 @@ typedef enum
 	CPU_SET_PENDINGCYCLES,
 	CPU_GET_PENDINGCYCLES,
 	CPU_RUN,
+    CPU_END,
 } CPUMessage;
 
 #endif
