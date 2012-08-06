@@ -48,7 +48,7 @@ sudo apt-get install libsamplerate1-dev
 Mac OS X
 ========
 
-To compile OpenEmulator for Mac OS X you need Xcode, and several
+To compile OpenEmulator for Mac OS X you need Xcode and several
 external libraries not available by default. The easiest way to install
 them is through MacPorts:
 
@@ -56,16 +56,16 @@ them is through MacPorts:
 
 Download and install MacPorts.
 
-To produce binaries that work with both Mac OS X 10.6 and 10.7, enter
-the following command at the terminal:
+To produce binaries that work with older versions of Mac OS X, enter the
+following command at the terminal:
 
 sudo nano /opt/local/etc/macports/macports.conf
 
-Add at the end of this file (if you installed Xcode from the App Store,
+Add at the end of this file (if you installed an older Xcode,
 change the path of MacOSX10.6.sdk accordingly):
 
 universal_target        10.6
-universal_sysroot       /Developer/SDKs/MacOSX10.6.sdk
+universal_sysroot       /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.6.sdk
 
 Then try the following commands:
 

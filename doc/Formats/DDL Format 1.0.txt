@@ -1,0 +1,146 @@
+==DDL Disk Description Language Specification 1.0 [DRAFT]==
+
+This is the specification of DDL 1.0, an XML language that describes data stored on physical floppy disks.
+
+DDL does not describe data from the point of view of the storage medium (i.e. floppy disk), but rather from the perspective of the storage access device (i.e. disk drive). It stores the necessary instructions for producing a (hopefully accurate) copy of a floppy disk.
+
+This allows DDL to archive copy-protected floppy disks and serve as a standard for preserving digital content.
+
+The XML DTD is available here:
+
+  http://www.openemulator.org/DTD/ddl-1.0.dtd
+
+Notes:
+
+* The present version of DDL defines constant-rate bitstream tracks (magnetic inversions are sampled at a constant bitrate). If a new kind of description is needed, request-for-comments shall be initiated.
+
+* For comments or suggestions, please contact: Marc S. Ressl (mressl at umich . edu)
+
+==Nomenclature==
+
+This specification uses square brackets to denote information that should be replaced.
+
+==DDL files==
+
+DDL filenames should always end with the extension .ddl.
+
+==DDL header==
+
+DDL files should begin with the following XML header:
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE edl PUBLIC "-//DDL//DTD DDL 1.0//EN" "http://www.openemulator.org/DTD/ddl-1.0.dtd">
+
+==DDL tag==
+
+The DDL tag is the top-level of the floppy disk description:
+
+<ddl version="1.0" creator="[CREATOR]" label="[LABEL]" description="[DESCRIPTION]" medium="[MEDIUM]" tracksPerInch="[TRACKSPERINCH]" writeEnabled="[WRITEENABLED]">
+
+* [CREATOR] is a string that describes the name and version of the software that created the DDL file.
+* [LABEL] is a short description of the content stored in the DDL file.
+* [DESCRIPTION] is a longer description of the content stored in the DDL file.
+* [MEDIUM] describes the kind of storage medium. The following storage mediums are defined: "8 inch disk", "5.25 inch disk" and "3.5 inch disk"
+* [TRACKSPERINCH] describes the magnetic resolution of the storage medium (this value is usually stated in a label on the storage medium). Usual values are "48", "96" and "100".
+* [WRITEENABLED] may take the values "1" or "0", and determines if the storage medium may be modified (is not write protected).
+
+==DDL track tag==
+
+Within the DDL tag a series of track tags may exist, each describing the data for every track:
+
+<track index="[TRACKINDEX]">
+
+* [TRACKINDEX] describes the track number. It may be a real number, in case a disk drive allows more accurate head positioning than the storage medium specifies. The decimal part is separated with a dot (i.e. "11.25").
+
+Notes:
+
+* On 5.25" floppy disks formatted for Apple II it is recommended to set tracksPerInch to 48 and use the native Apple II track numbering from 0 to 34. Half- and quarter-track indices are suffixed with .5 and .25 respectively.
+
+==DDL side tag==
+
+Every track tag contains one or more side tags. Each side describes the data of a track/side combination:
+
+<side index="[SIDEINDEX]">
+
+* [SIDEINDEX] describes the side number. It may be "0" or "1".
+
+==DDL data tag==
+
+Every side tag must contain a data tag containing the actual data:
+
+<data type="[TYPE]"/>
+
+* [TYPE] is the type of data stored within the tag. In DDL 1.0 the only valid type is "bitstream".
+
+==DDL bitsream data==
+
+The only type of data available in DDL 1.0 is "bitstream" (see DDL data tag).
+
+"bitstream" data is stored as standard ASCII text, and allows the following objects:
+
+* A '+' character encodes a 1 sample (a magnetic inversion)
+* A '-' character encodes a 0 sample (no magnetic inversion)
+* A '?' character encodes a weak sample (a 50% chance of magnetic inversion)
+* A sequence of two ASCII characters describing an 8-bit value in hexadecimal (characters '0'..'9' and 'a'..'f' or 'A'..'F') encodes a sequence of 8 samples. The most significant bit is the first sample, the least significant bit is the last sample.
+* Data may be formatted with space, tab, newline or linefeed.
+
+Notes:
+
+* The first sample of the data of all tracks and sides must be synchronized to the index hole of the storage medium. In case no index hole is present, synchronization should be relative to some arbitrary position.
+* The DDL data model uses constant bit-rate and assumes disk drives access the storage medium at the speed of their specification. Nevertheless, provisions exist for data streams to be of different length (as the stream might have been written by drives of different speed).
+* Data should be human-readable. Provisions should exist so that data fields are easy to read and modify (i.e. sectors may be detected and appropriately formatted).
+
+==Compression==
+
+DDL data may be optionally compressed with the ZIP format. The XML data should be stored within the zip file as a "content.xml" file.
+
+Both compressed and uncompressed DDL files should be suffixed with the extension .ddl.
+
+==Example==
+
+An example of a very short DDL file:
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE edl PUBLIC "-//DDL//DTD DDL 1.0//EN" "http://www.openemulator.org/DTD/ddl-1.0.dtd">
+<ddl version="1.0" creator="libdiskimage 1.0" label="Apple DOS 3.3" description="Apple DOS 3.3 is an operating system by Apple Computer for Apple II computers. This is the 1983 version." medium="5.25 inch disk" tracksPerInch="48" writeEnabled="1">
+
+<track index="0">
+<side index="0">
+<data type="bitstream">
+ff-- ff-- ff-- ff-- ff-- ff-- ff-- ff--
+ff-- ff-- ff-- ff-- ff-- ff-- ff-- ff--
+ff-- ff-- ff-- ff-- ff-- ff-- ff-- ff--
+ff-- ff-- ff-- ff-- ff-- ff-- ff-- ff--
+ff-- ff-- ff-- ff-- ff-- ff-- ff-- ff--
+ff-- ff-- ff-- ff-- ff-- ff-- ff-- ff--
+
+d5 aa 96 ff fe aa aa aa aa ff fe de aa eb
+
+?+++++++-- ff-- ff-- ff-- ff-- ff--
+
+d5 aa ad b6 db dc f4 f3 bb bd cf 97 9a ae ae 96
+ad ac 9a ab 97 b2 b2 ad ab 9a 9b ab 9f 97 b3 9a
+b3 9e 97 9f b3 96 ac ae a7 9a b2 96 ad ac 9b b2
+a6 97 9f af ac a7 ab 97 9f a6 9e 97 9e a7 af 9e
+ae 9e ae 9f 9b 97 9b b2 af b3 ae ac 9a b3 b2 ac
+a7 ac 97 ab ab ba f4 ea ad 9e e5 d6 fb ed f5 ef
+ec da bd 96 96 96 b4 ef b5 eb dc fd f5 eb ab ea
+b9 fd be db fd d7 cd fd e5 b9 fd b2 ab e6 fc b5
+da eb fc ae fd e5 b9 fd da df fa ae fd e7 da b5
+b9 b3 fb 9d fd f9 9d fd ac e6 ce f6 e9 cb f6 9b
+f4 bc da b5 db fd 9a 9b 97 96 9b 96 97 96 9b 96
+97 96 9b 96 97 9b 9b a7 b5 b4 dc eb df e6 e6 ab
+f3 bf e5 f3 fb bf fc cf de fd d9 fc bf ee fe f9
+b9 d9 f9 f3 fb b9 d9 de e6 da f3 bf cf ef ec ea
+ae d9 9e d9 da 97 ef ef cb ae bc d6 e9 df fc db
+ee f6 9a f4 ee ab ba eb e6 fc f5 b3 db ff 9a f6
+f2 ab eb fd de d7 bc cd f3 bf f9 ab fd 96 96 96
+96 96 96 96 96 96 96 96 96 96 96 96 96 96 96 96
+96 96 96 96 96 96 96 96 96 96 96 96 96 96 96 96
+96 96 96 96 96 96 96 96 96 96 96 96 96 96 96 96
+96 96 96 96 96 96 96 96 96 96 96 96 96 96 96 96
+96 96 96 96 96 96 96 af b3 9a de aa eb
+</data>
+</side>
+</track>
+</ddl>

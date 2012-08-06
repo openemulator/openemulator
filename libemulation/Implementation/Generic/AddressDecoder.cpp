@@ -80,12 +80,10 @@ bool AddressDecoder::init()
     readMapp = &readMap.front();
     writeMapp = &writeMap.front();
     
-    return updateMemoryMaps();
-}
-
-void AddressDecoder::update()
-{
-    updateMemoryMaps();
+    if (!addInternalMemoryMaps())
+        return false;
+    
+    return true;
 }
 
 bool AddressDecoder::postMessage(OEComponent *sender, int message, void *data)
@@ -93,10 +91,10 @@ bool AddressDecoder::postMessage(OEComponent *sender, int message, void *data)
 	switch(message)
 	{
 		case ADDRESSDECODER_MAP:
-            return addMemoryMap((MemoryMap *) data);
-            
+            return addMemoryMap(externalMemoryMaps, (MemoryMap *) data);
+        
         case ADDRESSDECODER_UNMAP:
-            return removeMemoryMap((MemoryMap *) data);
+            return removeMemoryMap(externalMemoryMaps, (MemoryMap *) data);
 	}
 	
 	return false;
@@ -156,26 +154,25 @@ void AddressDecoder::updateMemoryMaps(MemoryMaps& value,
 
 void AddressDecoder::updateMemoryMaps(OEAddress startAddress, OEAddress endAddress)
 {
-    MemoryMap m;
-    
-    m.component = floatingBus;
-    m.startAddress = startAddress;
-    m.endAddress = endAddress;
-    m.read = true;
-    m.write = true;
-    
-    mapMemory(m);
-    
-    updateMemoryMaps(staticMemoryMaps, startAddress, endAddress);
-    
-    updateMemoryMaps(dynamicMemoryMaps, startAddress, endAddress);
+    updateMemoryMaps(internalMemoryMaps, startAddress, endAddress);
+    updateMemoryMaps(externalMemoryMaps, startAddress, endAddress);
 }
 
-bool AddressDecoder::updateMemoryMaps()
+bool AddressDecoder::addInternalMemoryMaps()
 {
     bool success = true;
     
-    staticMemoryMaps.clear();
+    internalMemoryMaps.clear();
+    
+    MemoryMap m;
+    
+    m.component = floatingBus;
+    m.startAddress = 0;
+    m.endAddress = size;
+    m.read = true;
+    m.write = true;
+    
+    internalMemoryMaps.push_back(m);
     
 	for (MemoryMapsConf::iterator i = conf.begin();
 		 i != conf.end();
@@ -195,7 +192,7 @@ bool AddressDecoder::updateMemoryMaps()
         if (!component)
             continue;
         
-		appendMemoryMaps(staticMemoryMaps, component, i->second);
+		appendMemoryMaps(internalMemoryMaps, component, i->second);
 	}
     
     updateMemoryMaps(0, mask);
@@ -203,23 +200,20 @@ bool AddressDecoder::updateMemoryMaps()
     return success;
 }
 
-bool AddressDecoder::addMemoryMap(MemoryMap *value)
+bool AddressDecoder::addMemoryMap(MemoryMaps& maps, MemoryMap *value)
 {
-    if (!value->component)
-        return false;
-    
-    dynamicMemoryMaps.push_back(*value);
+    maps.push_back(*value);
     
     if (readMap.size())
-        mapMemory(*value);
+        updateMemoryMaps(value->startAddress, value->endAddress);
     
     return true;
 }
 
-bool AddressDecoder::removeMemoryMap(MemoryMap *value)
+bool AddressDecoder::removeMemoryMap(MemoryMaps& maps, MemoryMap *value)
 {
-    for (MemoryMaps::iterator i = dynamicMemoryMaps.begin();
-         i != dynamicMemoryMaps.end();
+    for (MemoryMaps::iterator i = maps.begin();
+         i != maps.end();
          i++)
     {
         if ((i->component == value->component) &&
@@ -228,7 +222,7 @@ bool AddressDecoder::removeMemoryMap(MemoryMap *value)
             (i->read == value->read) &&
             (i->write == value->write))
         {
-            i = dynamicMemoryMaps.erase(i);
+            i = maps.erase(i);
             
             updateMemoryMaps(value->startAddress, value->endAddress);
         }

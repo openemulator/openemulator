@@ -105,6 +105,35 @@ bool MOS6522::setRef(string name, OEComponent *ref)
     return true;
 }
 
+bool MOS6522::init()
+{
+    if (portA)
+        portA->write(addressA, dataA);
+    
+    if (portB)
+        portB->write(addressB, dataB);
+    
+    return true;
+}
+
+bool MOS6522::postMessage(OEComponent *sender, int message, void *data)
+{
+    switch (message)
+    {
+        case MOS6522_GET_PA:
+            *((OEChar *)data) = dataA;
+            
+            return true;
+            
+        case MOS6522_GET_PB:
+            *((OEChar *)data) = dataB;
+            
+            return true;
+    }
+    
+    return false;
+}
+
 OEChar MOS6522::read(OEAddress address)
 {
     switch (address & 0xf)

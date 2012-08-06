@@ -505,13 +505,13 @@ void ControlBus::invalidateTimers(OEComponent *component, OEInt id)
     list<ControlBusEvent>::iterator i;
     for (i = events.begin();
          i != events.end();
-         i++)
+         )
     {
         if ((i->component == component) &&
             (i->id == id))
         {
             cycles = i->cycles;
-            events.erase(i);
+            i = events.erase(i);
         }
         else if (cycles)
         {
@@ -526,7 +526,11 @@ void ControlBus::invalidateTimers(OEComponent *component, OEInt id)
                 cpuCycles += ceil(events.front().cycles * cpuClockMultiplier - cpuCycles);
                 setPendingCPUCycles(cpuCycles - doneCPUCycles);
             }
+            
+            i++;
         }
+        else
+            i++;
     }
 }
 

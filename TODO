@@ -1,9 +1,8 @@
 ==1.0.4==
-* Implement Apple III X-Byte addressing
+* Fix IAC 42 > rapid drive change
 * Implement MOS6522
 * Fix AppleIIVideo not displaying video when loading emulation in paused state
 * Disk II head player should not play when turning on a drive or changing drives
-* Fix Disk II crash in invalidateTimers
 * Check Mac OS X 10.5 (Intel) compatibility
 * Fix Apple Silentype Interface Card spurious data problems
 * Implement Apple Silentype print intensity

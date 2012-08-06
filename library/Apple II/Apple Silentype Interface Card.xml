@@ -12,7 +12,7 @@
         <inlet ref="appleSilentypeInterfaceCard.ram" property="controlBus" outletRef="controlBus"/>
         <inlet ref="appleSilentypeInterfaceCard.disableC800" property="memoryBus" outletRef="memoryBus"/>
     </connector>
-    <port id="appleSilentypeInterfaceCard.port" ref="" type="Apple Silentype Port" group="peripherals" label="Silentype Port" image="images/Connectors/DE9 Female.png">
+    <port id="appleSilentypeInterfaceCard.port" ref="" type="Apple III Port" group="peripherals" label="Silentype Port" image="images/Connectors/DE9 Female.png">
         <inlet ref="appleSilentypeInterfaceCard.io" property="printer" outletRef="printer"/>
     </port>
     <component id="appleSilentypeInterfaceCard.io" class="AppleSilentypeInterfaceCard">

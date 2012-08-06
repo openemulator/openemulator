@@ -190,5 +190,5 @@ void AppleSilentypeInterfaceCard::setROMEnabled(bool value)
 {
     string m = value ? "ROM" : "RAM";
     
-    memoryMapper->postMessage(this, ADDRESSMAPPER_MAP, &m);
+    memoryMapper->postMessage(this, ADDRESSMAPPER_SELECT, &m);
 }

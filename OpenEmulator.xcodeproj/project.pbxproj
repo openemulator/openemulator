@@ -39,6 +39,16 @@
 		002740B813A08A4F00E13D65 /* VidexVideoterm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 002740B613A08A4F00E13D65 /* VidexVideoterm.cpp */; };
 		0027E67E153738CC0066A9BE /* DIVDIBlockStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0027E67D153738CC0066A9BE /* DIVDIBlockStorage.cpp */; };
 		0029EEE214266B8900AD900E /* AddressMapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0029EEDF14266B7700AD900E /* AddressMapper.cpp */; };
+		002F57E615CDF4AC00C19659 /* libz.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 002F57E515CDF4AC00C19659 /* libz.a */; };
+		002F57E815CDF4B400C19659 /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 002F57E715CDF4B400C19659 /* libvorbis.a */; };
+		002F57EA15CDF4B900C19659 /* libzip.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 002F57E915CDF4B900C19659 /* libzip.a */; };
+		002F57EC15CDF4C000C19659 /* libsndfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 002F57EB15CDF4C000C19659 /* libsndfile.a */; };
+		002F57EE15CDF4C600C19659 /* libsamplerate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 002F57ED15CDF4C600C19659 /* libsamplerate.a */; };
+		002F57F015CDF4CB00C19659 /* libportaudio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 002F57EF15CDF4CB00C19659 /* libportaudio.a */; };
+		002F57F215CDF4D100C19659 /* libpng14.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 002F57F115CDF4D100C19659 /* libpng14.a */; };
+		002F57F415CDF66B00C19659 /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 002F57F315CDF66B00C19659 /* libogg.a */; };
+		002F57F615CDF6DF00C19659 /* libFLAC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 002F57F515CDF6DF00C19659 /* libFLAC.a */; };
+		002F57F815CDF6F800C19659 /* libvorbisenc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 002F57F715CDF6F800C19659 /* libvorbisenc.a */; };
 		00365CEB1516955C00978DF6 /* AddressMux.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00365CEA1516955C00978DF6 /* AddressMux.cpp */; };
 		00365CFA1516F4E700978DF6 /* libdiskimage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00365CF51516F3D800978DF6 /* libdiskimage.a */; };
 		00379132157B285F0020138F /* AppleGraphicsTabletInterfaceCard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00379130157B285E0020138F /* AppleGraphicsTabletInterfaceCard.cpp */; };
@@ -62,8 +72,8 @@
 		0042499715B8EA1C0091ECAB /* EmulationInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 0042499615B8EA1C0091ECAB /* EmulationInterface.h */; };
 		004763D2139C94F30016277E /* LibraryTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 004763D1139C94F30016277E /* LibraryTableView.m */; };
 		004BD1C01425AA8500768B80 /* W65C02S.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 004BD1BC1425AA8500768B80 /* W65C02S.cpp */; };
-		004E152A15B9041A00FD22AB /* AppleIIIVIAControl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 004E152915B9041A00FD22AB /* AppleIIIVIAControl.cpp */; };
-		004E152D15B9042100FD22AB /* AppleIIIVIAControl.h in Headers */ = {isa = PBXBuildFile; fileRef = 004E152C15B9042100FD22AB /* AppleIIIVIAControl.h */; };
+		004E152A15B9041A00FD22AB /* AppleIIISystemControl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 004E152915B9041A00FD22AB /* AppleIIISystemControl.cpp */; };
+		004E152D15B9042100FD22AB /* AppleIIISystemControl.h in Headers */ = {isa = PBXBuildFile; fileRef = 004E152C15B9042100FD22AB /* AppleIIISystemControl.h */; };
 		005316C31596D268007F3C86 /* AppleSilentypeInterfaceCard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 005316C21596D268007F3C86 /* AppleSilentypeInterfaceCard.cpp */; };
 		005316C51596D2BF007F3C86 /* Proxy.h in Headers */ = {isa = PBXBuildFile; fileRef = 005316C41596D2BF007F3C86 /* Proxy.h */; };
 		005316C71596D2C8007F3C86 /* Proxy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 005316C61596D2C8007F3C86 /* Proxy.cpp */; };
@@ -90,6 +100,9 @@
 		007DEFBB1540608300A9CC01 /* DIRAWBlockStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 007DEFBA1540608200A9CC01 /* DIRAWBlockStorage.cpp */; };
 		007EF9C71570329D0073061E /* IconRevert.png in Resources */ = {isa = PBXBuildFile; fileRef = 007EF9C61570329D0073061E /* IconRevert.png */; };
 		007F08CF1459344600C3308D /* sparkle_dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 007F08CE1459344600C3308D /* sparkle_dsa_pub.pem */; };
+		007F6C3715CD05370004D4C4 /* AppleIIIAddressDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 007F6C3615CD05370004D4C4 /* AppleIIIAddressDecoder.cpp */; };
+		007F6C3A15CD06520004D4C4 /* MOS6551.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 007F6C3915CD06520004D4C4 /* MOS6551.cpp */; };
+		007F6C3D15CD06930004D4C4 /* AppleIIIGamePort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 007F6C3C15CD06930004D4C4 /* AppleIIIGamePort.cpp */; };
 		008107DE1120C57600D744FB /* TemplateChooserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00FE0C051095353B00B92AB7 /* TemplateChooserViewController.m */; };
 		00811E0012D251E9009AD2F0 /* AppleDiskIIInterfaceCard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00811DFE12D251E9009AD2F0 /* AppleDiskIIInterfaceCard.cpp */; };
 		00811F1312D2738B009AD2F0 /* AppleGraphicsTablet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00811F1112D2738B009AD2F0 /* AppleGraphicsTablet.cpp */; };
@@ -270,18 +283,6 @@
 		00F35D7312EF049B0027B9E4 /* EmulationOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 00FE381A12CA6790002B47B1 /* EmulationOutlineView.m */; };
 		00F397E4141655DA00C53A3E /* Apple1IO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00F397E3141655DA00C53A3E /* Apple1IO.cpp */; };
 		00F4D0BF12E2E42F00B7F5E6 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00F4D0BE12E2E42F00B7F5E6 /* ApplicationServices.framework */; };
-		00F5EC2515ABBFCE004D056E /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00F5EC1E15ABBFCE004D056E /* libogg.a */; };
-		00F5EC2715ABBFCE004D056E /* libportaudio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00F5EC2015ABBFCE004D056E /* libportaudio.a */; };
-		00F5EC2815ABBFCE004D056E /* libsamplerate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00F5EC2115ABBFCE004D056E /* libsamplerate.a */; };
-		00F5EC2915ABBFCE004D056E /* libsndfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00F5EC2215ABBFCE004D056E /* libsndfile.a */; };
-		00F5EC2A15ABBFCE004D056E /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00F5EC2315ABBFCE004D056E /* libvorbis.a */; };
-		00F5EC2B15ABBFCE004D056E /* libzip.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00F5EC2415ABBFCE004D056E /* libzip.a */; };
-		00F5EC2D15ABE7AE004D056E /* libfftw3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00F5EC2C15ABE7AE004D056E /* libfftw3.a */; };
-		00F5EC2F15ABE7C9004D056E /* libpng14.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00F5EC2E15ABE7C9004D056E /* libpng14.a */; };
-		00F5EC3115ABE844004D056E /* libiconv.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00F5EC3015ABE844004D056E /* libiconv.a */; };
-		00F5EC3315ABE855004D056E /* libz.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00F5EC3215ABE855004D056E /* libz.a */; };
-		00F5EC3515ABE868004D056E /* libFLAC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00F5EC3415ABE868004D056E /* libFLAC.a */; };
-		00F5EC3715ABE87A004D056E /* libvorbisenc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00F5EC3615ABE87A004D056E /* libvorbisenc.a */; };
 		00FC27D312D1070A0065E986 /* Apple1ACI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881312A393990052B7A4 /* Apple1ACI.cpp */; };
 		00FC27DB12D1070A0065E986 /* AppleIIAudioOut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881B12A393990052B7A4 /* AppleIIAudioOut.cpp */; };
 		00FC27DF12D1070A0065E986 /* AppleIIFloatingBus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B8881F12A393990052B7A4 /* AppleIIFloatingBus.cpp */; };
@@ -375,7 +376,7 @@
 		00039E0B12B0365A0025D374 /* EmulationShowRollover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EmulationShowRollover.png; sourceTree = "<group>"; };
 		00039E7C12B03F660025D374 /* libemulation-hal.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libemulation-hal.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		00039EFE12B04E910025D374 /* libemulation.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libemulation.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		00039FD012B04F6C0025D374 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = /usr/lib/libxml2.dylib; sourceTree = "<absolute>"; };
+		00039FD012B04F6C0025D374 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		00044CA112CE6FD400D26940 /* AppleDiskDrive525.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleDiskDrive525.h; sourceTree = "<group>"; };
 		00044CA212CE6FD400D26940 /* AppleDiskDrive525.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleDiskDrive525.cpp; sourceTree = "<group>"; };
 		0006D7CE15523830001DE1F3 /* FDI Format Specification 1.0.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "FDI Format Specification 1.0.txt"; sourceTree = "<group>"; };
@@ -445,6 +446,16 @@
 		0027E67F153738D30066A9BE /* DIVDIBlockStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DIVDIBlockStorage.h; sourceTree = "<group>"; };
 		0029EEDF14266B7700AD900E /* AddressMapper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AddressMapper.cpp; sourceTree = "<group>"; };
 		0029EEE114266B8000AD900E /* AddressMapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddressMapper.h; sourceTree = "<group>"; };
+		002F57E515CDF4AC00C19659 /* libz.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libz.a; path = /opt/local/lib/libz.a; sourceTree = "<absolute>"; };
+		002F57E715CDF4B400C19659 /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = /opt/local/lib/libvorbis.a; sourceTree = "<absolute>"; };
+		002F57E915CDF4B900C19659 /* libzip.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libzip.a; path = /opt/local/lib/libzip.a; sourceTree = "<absolute>"; };
+		002F57EB15CDF4C000C19659 /* libsndfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsndfile.a; path = /opt/local/lib/libsndfile.a; sourceTree = "<absolute>"; };
+		002F57ED15CDF4C600C19659 /* libsamplerate.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsamplerate.a; path = /opt/local/lib/libsamplerate.a; sourceTree = "<absolute>"; };
+		002F57EF15CDF4CB00C19659 /* libportaudio.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libportaudio.a; path = /opt/local/lib/libportaudio.a; sourceTree = "<absolute>"; };
+		002F57F115CDF4D100C19659 /* libpng14.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng14.a; path = /opt/local/lib/libpng14.a; sourceTree = "<absolute>"; };
+		002F57F315CDF66B00C19659 /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libogg.a; path = /opt/local/lib/libogg.a; sourceTree = "<absolute>"; };
+		002F57F515CDF6DF00C19659 /* libFLAC.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libFLAC.a; path = /opt/local/lib/libFLAC.a; sourceTree = "<absolute>"; };
+		002F57F715CDF6F800C19659 /* libvorbisenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisenc.a; path = /opt/local/lib/libvorbisenc.a; sourceTree = "<absolute>"; };
 		00365CEA1516955C00978DF6 /* AddressMux.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AddressMux.cpp; sourceTree = "<group>"; };
 		00365CEC1516956600978DF6 /* AddressMux.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddressMux.h; sourceTree = "<group>"; };
 		00365CF51516F3D800978DF6 /* libdiskimage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libdiskimage.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -475,8 +486,8 @@
 		004BD1BD1425AA8500768B80 /* W65C02S.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = W65C02S.h; sourceTree = "<group>"; };
 		004BD1BE1425AA8500768B80 /* W65C02SOpcodes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = W65C02SOpcodes.h; sourceTree = "<group>"; };
 		004BD1BF1425AA8500768B80 /* W65C02SOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = W65C02SOperations.h; sourceTree = "<group>"; };
-		004E152915B9041A00FD22AB /* AppleIIIVIAControl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleIIIVIAControl.cpp; sourceTree = "<group>"; };
-		004E152C15B9042100FD22AB /* AppleIIIVIAControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleIIIVIAControl.h; sourceTree = "<group>"; };
+		004E152915B9041A00FD22AB /* AppleIIISystemControl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleIIISystemControl.cpp; sourceTree = "<group>"; };
+		004E152C15B9042100FD22AB /* AppleIIISystemControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleIIISystemControl.h; sourceTree = "<group>"; };
 		00520BD71558D70B0000107C /* QCOW Image Format.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = "QCOW Image Format.rtf"; sourceTree = "<group>"; };
 		00520BD81558D70B0000107C /* QCOW2 Image Format.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = "QCOW2 Image Format.rtf"; sourceTree = "<group>"; };
 		00520BD91558D7120000107C /* OpenEmulator Icons.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = "OpenEmulator Icons.rtf"; sourceTree = "<group>"; };
@@ -517,6 +528,12 @@
 		007DEFBA1540608200A9CC01 /* DIRAWBlockStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DIRAWBlockStorage.cpp; sourceTree = "<group>"; };
 		007EF9C61570329D0073061E /* IconRevert.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IconRevert.png; sourceTree = "<group>"; };
 		007F08CE1459344600C3308D /* sparkle_dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = sparkle_dsa_pub.pem; path = macosx/sparkle_dsa_pub.pem; sourceTree = "<group>"; };
+		007F6C3415CD052D0004D4C4 /* AppleIIIAddressDecoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppleIIIAddressDecoder.h; sourceTree = "<group>"; };
+		007F6C3615CD05370004D4C4 /* AppleIIIAddressDecoder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleIIIAddressDecoder.cpp; sourceTree = "<group>"; };
+		007F6C3815CD064C0004D4C4 /* MOS6551.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MOS6551.h; sourceTree = "<group>"; };
+		007F6C3915CD06520004D4C4 /* MOS6551.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MOS6551.cpp; sourceTree = "<group>"; };
+		007F6C3B15CD068C0004D4C4 /* AppleIIIGamePort.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppleIIIGamePort.h; sourceTree = "<group>"; };
+		007F6C3C15CD06930004D4C4 /* AppleIIIGamePort.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleIIIGamePort.cpp; sourceTree = "<group>"; };
 		00811DFD12D251E9009AD2F0 /* AppleDiskIIInterfaceCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleDiskIIInterfaceCard.h; sourceTree = "<group>"; };
 		00811DFE12D251E9009AD2F0 /* AppleDiskIIInterfaceCard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleDiskIIInterfaceCard.cpp; sourceTree = "<group>"; };
 		00811F1012D2738B009AD2F0 /* AppleGraphicsTablet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleGraphicsTablet.h; sourceTree = "<group>"; };
@@ -681,6 +698,7 @@
 		00E442911278726B00713A05 /* IconDevices.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IconDevices.png; sourceTree = "<group>"; };
 		00E442931278727600713A05 /* EmulationShow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EmulationShow.png; sourceTree = "<group>"; };
 		00E473411475695500F367B7 /* diskimage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = diskimage.h; sourceTree = "<group>"; };
+		00E873F815CDB7C3001FEE29 /* DDL Format 1.0.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "DDL Format 1.0.txt"; sourceTree = "<group>"; };
 		00EA1F0315976F0200079A54 /* ATADevice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ATADevice.cpp; sourceTree = "<group>"; };
 		00EA1F0415976F0200079A54 /* ATADevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATADevice.h; sourceTree = "<group>"; };
 		00EA1F08159799C400079A54 /* RDCFFA.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RDCFFA.cpp; sourceTree = "<group>"; };
@@ -708,18 +726,6 @@
 		00F397E3141655DA00C53A3E /* Apple1IO.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Apple1IO.cpp; sourceTree = "<group>"; };
 		00F397E5141655EB00C53A3E /* Apple1IO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Apple1IO.h; sourceTree = "<group>"; };
 		00F4D0BE12E2E42F00B7F5E6 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
-		00F5EC1E15ABBFCE004D056E /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libogg.a; path = ../../../opt/local/lib/libogg.a; sourceTree = "<group>"; };
-		00F5EC2015ABBFCE004D056E /* libportaudio.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libportaudio.a; path = ../../../opt/local/lib/libportaudio.a; sourceTree = "<group>"; };
-		00F5EC2115ABBFCE004D056E /* libsamplerate.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsamplerate.a; path = ../../../opt/local/lib/libsamplerate.a; sourceTree = "<group>"; };
-		00F5EC2215ABBFCE004D056E /* libsndfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsndfile.a; path = ../../../opt/local/lib/libsndfile.a; sourceTree = "<group>"; };
-		00F5EC2315ABBFCE004D056E /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = ../../../opt/local/lib/libvorbis.a; sourceTree = "<group>"; };
-		00F5EC2415ABBFCE004D056E /* libzip.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libzip.a; path = ../../../opt/local/lib/libzip.a; sourceTree = "<group>"; };
-		00F5EC2C15ABE7AE004D056E /* libfftw3.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfftw3.a; path = ../../../opt/local/lib/libfftw3.a; sourceTree = "<group>"; };
-		00F5EC2E15ABE7C9004D056E /* libpng14.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng14.a; path = ../../../opt/local/lib/libpng14.a; sourceTree = "<group>"; };
-		00F5EC3015ABE844004D056E /* libiconv.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libiconv.a; path = ../../../opt/local/lib/libiconv.a; sourceTree = "<group>"; };
-		00F5EC3215ABE855004D056E /* libz.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libz.a; path = ../../../opt/local/lib/libz.a; sourceTree = "<group>"; };
-		00F5EC3415ABE868004D056E /* libFLAC.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libFLAC.a; path = ../../../opt/local/lib/libFLAC.a; sourceTree = "<group>"; };
-		00F5EC3615ABE87A004D056E /* libvorbisenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisenc.a; path = ../../../opt/local/lib/libvorbisenc.a; sourceTree = "<group>"; };
 		00FBD2DD1419A03A00BA8CEE /* AudioCodec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioCodec.h; sourceTree = "<group>"; };
 		00FE0C041095353B00B92AB7 /* TemplateChooserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TemplateChooserViewController.h; sourceTree = "<group>"; };
 		00FE0C051095353B00B92AB7 /* TemplateChooserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TemplateChooserViewController.m; sourceTree = "<group>"; };
@@ -765,19 +771,6 @@
 				00039E9B12B042210025D374 /* libemulation-hal.a in Frameworks */,
 				00365CFA1516F4E700978DF6 /* libdiskimage.a in Frameworks */,
 				00CF208215B0DB5700DA8E08 /* libutil.a in Frameworks */,
-				00039FD112B04F6C0025D374 /* libxml2.dylib in Frameworks */,
-				00F5EC2515ABBFCE004D056E /* libogg.a in Frameworks */,
-				00F5EC2715ABBFCE004D056E /* libportaudio.a in Frameworks */,
-				00F5EC2815ABBFCE004D056E /* libsamplerate.a in Frameworks */,
-				00F5EC2915ABBFCE004D056E /* libsndfile.a in Frameworks */,
-				00F5EC2A15ABBFCE004D056E /* libvorbis.a in Frameworks */,
-				00F5EC2B15ABBFCE004D056E /* libzip.a in Frameworks */,
-				00F5EC2D15ABE7AE004D056E /* libfftw3.a in Frameworks */,
-				00F5EC2F15ABE7C9004D056E /* libpng14.a in Frameworks */,
-				00F5EC3115ABE844004D056E /* libiconv.a in Frameworks */,
-				00F5EC3315ABE855004D056E /* libz.a in Frameworks */,
-				00F5EC3515ABE868004D056E /* libFLAC.a in Frameworks */,
-				00F5EC3715ABE87A004D056E /* libvorbisenc.a in Frameworks */,
 				001F56F90FD1E8E500EA246A /* Sparkle.framework in Frameworks */,
 				0054E4A11131BE7A006D32D9 /* Cocoa.framework in Frameworks */,
 				0054E4A71131BE8A006D32D9 /* OpenGL.framework in Frameworks */,
@@ -790,6 +783,17 @@
 				003B16C312EE2A18003FB8F6 /* CoreAudio.framework in Frameworks */,
 				003B16C812EE2A61003FB8F6 /* CoreServices.framework in Frameworks */,
 				008CA97E147803E500B9F5D0 /* IOKit.framework in Frameworks */,
+				00039FD112B04F6C0025D374 /* libxml2.dylib in Frameworks */,
+				002F57E615CDF4AC00C19659 /* libz.a in Frameworks */,
+				002F57E815CDF4B400C19659 /* libvorbis.a in Frameworks */,
+				002F57EA15CDF4B900C19659 /* libzip.a in Frameworks */,
+				002F57EC15CDF4C000C19659 /* libsndfile.a in Frameworks */,
+				002F57EE15CDF4C600C19659 /* libsamplerate.a in Frameworks */,
+				002F57F015CDF4CB00C19659 /* libportaudio.a in Frameworks */,
+				002F57F215CDF4D100C19659 /* libpng14.a in Frameworks */,
+				002F57F415CDF66B00C19659 /* libogg.a in Frameworks */,
+				002F57F615CDF6DF00C19659 /* libFLAC.a in Frameworks */,
+				002F57F815CDF6F800C19659 /* libvorbisenc.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -895,6 +899,7 @@
 		001750B313A50A9C0043E2ED /* Formats */ = {
 			isa = PBXGroup;
 			children = (
+				00E873F815CDB7C3001FEE29 /* DDL Format 1.0.txt */,
 				00520BD71558D70B0000107C /* QCOW Image Format.rtf */,
 				00520BD81558D70B0000107C /* QCOW2 Image Format.rtf */,
 				00118EFD1553A30F00004665 /* VDI Tutorial - All about VDIs.txt */,
@@ -937,6 +942,13 @@
 			name = Videx;
 			sourceTree = "<group>";
 		};
+		00430DF215CF7F9100EE4584 /* MOS */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = MOS;
+			sourceTree = "<group>";
+		};
 		00A9739D12E512F80084724F /* Core */ = {
 			isa = PBXGroup;
 			children = (
@@ -977,8 +989,8 @@
 		00B8880F12A393990052B7A4 /* Implementation */ = {
 			isa = PBXGroup;
 			children = (
-				00B8881012A393990052B7A4 /* Apple */,
 				00B8882D12A393990052B7A4 /* Generic */,
+				00B8881012A393990052B7A4 /* Apple */,
 				00B8884212A393990052B7A4 /* MOS */,
 				00B8885212A393990052B7A4 /* Motorola */,
 				00EA1F07159799A100079A54 /* RD */,
@@ -1010,6 +1022,10 @@
 				00379131157B285E0020138F /* AppleGraphicsTabletInterfaceCard.h */,
 				001E09691556339400405DC0 /* AppleLanguageCard.cpp */,
 				001E096A1556339400405DC0 /* AppleLanguageCard.h */,
+				00B5CB92136F0B6C007A7BED /* AppleSilentype.cpp */,
+				00B5CB93136F0B6C007A7BED /* AppleSilentype.h */,
+				005316C21596D268007F3C86 /* AppleSilentypeInterfaceCard.cpp */,
+				00AB963B157F9E8200EDACD5 /* AppleSilentypeInterfaceCard.h */,
 				00139F83151195E600B0E108 /* AppleIIAddressDecoder.cpp */,
 				00139F85151195EE00B0E108 /* AppleIIAddressDecoder.h */,
 				00B8881912A393990052B7A4 /* AppleIIAudioIn.cpp */,
@@ -1030,20 +1046,20 @@
 				008696AE15CB903E000737EE /* AppleIISystemControl.h */,
 				00B8882B12A393990052B7A4 /* AppleIIVideo.cpp */,
 				00B8882C12A393990052B7A4 /* AppleIIVideo.h */,
+				007F6C3615CD05370004D4C4 /* AppleIIIAddressDecoder.cpp */,
+				007F6C3415CD052D0004D4C4 /* AppleIIIAddressDecoder.h */,
 				0042498E15B693DE0091ECAB /* AppleIIIMOS6502.cpp */,
 				0042498F15B693DE0091ECAB /* AppleIIIMOS6502.h */,
 				0042499215B694A60091ECAB /* AppleIIIMOS6502Opcodes.h */,
 				0042499415B696EA0091ECAB /* AppleIIIMOS6502Operations.h */,
 				008696AC15C8FC93000737EE /* AppleIIIDiskIO.cpp */,
 				008696AB15C8FC89000737EE /* AppleIIIDiskIO.h */,
-				004E152915B9041A00FD22AB /* AppleIIIVIAControl.cpp */,
-				004E152C15B9042100FD22AB /* AppleIIIVIAControl.h */,
+				007F6C3C15CD06930004D4C4 /* AppleIIIGamePort.cpp */,
+				007F6C3B15CD068C0004D4C4 /* AppleIIIGamePort.h */,
+				004E152915B9041A00FD22AB /* AppleIIISystemControl.cpp */,
+				004E152C15B9042100FD22AB /* AppleIIISystemControl.h */,
 				0076918815C6EB0F00B950A5 /* AppleIIIVideo.cpp */,
 				0076918715C6EB0300B950A5 /* AppleIIIVideo.h */,
-				00B5CB92136F0B6C007A7BED /* AppleSilentype.cpp */,
-				00B5CB93136F0B6C007A7BED /* AppleSilentype.h */,
-				00AB963B157F9E8200EDACD5 /* AppleSilentypeInterfaceCard.h */,
-				005316C21596D268007F3C86 /* AppleSilentypeInterfaceCard.cpp */,
 			);
 			name = Apple;
 			path = libemulation/Implementation/Apple;
@@ -1105,6 +1121,8 @@
 				00F2797115B671EE00E58F4F /* MOS6522.h */,
 				00B8884C12A393990052B7A4 /* MOS6530.cpp */,
 				00B8884D12A393990052B7A4 /* MOS6530.h */,
+				007F6C3915CD06520004D4C4 /* MOS6551.cpp */,
+				007F6C3815CD064C0004D4C4 /* MOS6551.h */,
 				00B8884E12A393990052B7A4 /* MOSKIM1IO.cpp */,
 				00B8884F12A393990052B7A4 /* MOSKIM1IO.h */,
 				00B8885012A393990052B7A4 /* MOSKIM1PLL.cpp */,
@@ -1157,10 +1175,11 @@
 		00B8886912A393990052B7A4 /* Interface */ = {
 			isa = PBXGroup;
 			children = (
+				00D225F91350F9A100FC69B9 /* Host */,
+				001CC97D13D11E9900B0DDA7 /* Generic */,
 				00B8886A12A393990052B7A4 /* Apple */,
 				00B8886C12A393990052B7A4 /* EIA */,
-				001CC97D13D11E9900B0DDA7 /* Generic */,
-				00D225F91350F9A100FC69B9 /* Host */,
+				00430DF215CF7F9100EE4584 /* MOS */,
 				00B8887E12A393990052B7A4 /* IEEE */,
 			);
 			name = Interface;
@@ -1388,30 +1407,28 @@
 		2A37F4C3FDCFA73011CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				00F5EC2E15ABE7C9004D056E /* libpng14.a */,
-				00F5EC2015ABBFCE004D056E /* libportaudio.a */,
-				00F5EC2115ABBFCE004D056E /* libsamplerate.a */,
-				00F5EC2C15ABE7AE004D056E /* libfftw3.a */,
-				00F5EC2215ABBFCE004D056E /* libsndfile.a */,
-				00F5EC3415ABE868004D056E /* libFLAC.a */,
-				00F5EC1E15ABBFCE004D056E /* libogg.a */,
-				00F5EC2315ABBFCE004D056E /* libvorbis.a */,
-				00F5EC3615ABE87A004D056E /* libvorbisenc.a */,
-				00F5EC3215ABE855004D056E /* libz.a */,
-				00F5EC2415ABBFCE004D056E /* libzip.a */,
-				00F5EC3015ABE844004D056E /* libiconv.a */,
+				002F57F515CDF6DF00C19659 /* libFLAC.a */,
+				002F57F315CDF66B00C19659 /* libogg.a */,
+				002F57F115CDF4D100C19659 /* libpng14.a */,
+				002F57EF15CDF4CB00C19659 /* libportaudio.a */,
+				002F57ED15CDF4C600C19659 /* libsamplerate.a */,
+				002F57EB15CDF4C000C19659 /* libsndfile.a */,
+				002F57E715CDF4B400C19659 /* libvorbis.a */,
+				002F57F715CDF6F800C19659 /* libvorbisenc.a */,
+				002F57E515CDF4AC00C19659 /* libz.a */,
+				002F57E915CDF4B900C19659 /* libzip.a */,
 				00039FD012B04F6C0025D374 /* libxml2.dylib */,
+				00F4D0BE12E2E42F00B7F5E6 /* ApplicationServices.framework */,
+				003B165712EE276E003FB8F6 /* AudioToolbox.framework */,
+				003B165112EE275C003FB8F6 /* AudioUnit.framework */,
 				0054E6301131BEE7006D32D9 /* Carbon.framework */,
 				0054E4A01131BE7A006D32D9 /* Cocoa.framework */,
-				003B167B12EE27ED003FB8F6 /* CoreAudioKit.framework */,
-				0054E4A61131BE8A006D32D9 /* OpenGL.framework */,
-				0054E66B1131BF58006D32D9 /* Quartz.framework */,
-				00F4D0BE12E2E42F00B7F5E6 /* ApplicationServices.framework */,
 				003B158312EE26BA003FB8F6 /* CoreAudio.framework */,
-				003B165112EE275C003FB8F6 /* AudioUnit.framework */,
-				003B165712EE276E003FB8F6 /* AudioToolbox.framework */,
+				003B167B12EE27ED003FB8F6 /* CoreAudioKit.framework */,
 				003B16C712EE2A61003FB8F6 /* CoreServices.framework */,
 				008CA97D147803E500B9F5D0 /* IOKit.framework */,
+				0054E4A61131BE8A006D32D9 /* OpenGL.framework */,
+				0054E66B1131BF58006D32D9 /* Quartz.framework */,
 				001F56F80FD1E8E500EA246A /* Sparkle.framework */,
 			);
 			name = Frameworks;
@@ -1544,7 +1561,7 @@
 				0042499315B694A60091ECAB /* AppleIIIMOS6502Opcodes.h in Headers */,
 				0042499515B696EA0091ECAB /* AppleIIIMOS6502Operations.h in Headers */,
 				0042499715B8EA1C0091ECAB /* EmulationInterface.h in Headers */,
-				004E152D15B9042100FD22AB /* AppleIIIVIAControl.h in Headers */,
+				004E152D15B9042100FD22AB /* AppleIIISystemControl.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1659,7 +1676,7 @@
 		2A37F4A9FDCFA73011CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0430;
+				LastUpgradeCheck = 0440;
 				ORGANIZATIONNAME = OpenEmulator;
 			};
 			buildConfigurationList = C05733CB08A9546B00998B17 /* Build configuration list for PBXProject "OpenEmulator" */;
@@ -1857,10 +1874,13 @@
 				00EA1F0A159799C400079A54 /* RDCFFA.cpp in Sources */,
 				00F2796F15B671E600E58F4F /* MOS6522.cpp in Sources */,
 				0042499015B693DE0091ECAB /* AppleIIIMOS6502.cpp in Sources */,
-				004E152A15B9041A00FD22AB /* AppleIIIVIAControl.cpp in Sources */,
+				004E152A15B9041A00FD22AB /* AppleIIISystemControl.cpp in Sources */,
 				0076918915C6EB1000B950A5 /* AppleIIIVideo.cpp in Sources */,
 				008696AD15C8FC94000737EE /* AppleIIIDiskIO.cpp in Sources */,
 				008696B015CB9048000737EE /* AppleIISystemControl.cpp in Sources */,
+				007F6C3715CD05370004D4C4 /* AppleIIIAddressDecoder.cpp in Sources */,
+				007F6C3A15CD06520004D4C4 /* MOS6551.cpp in Sources */,
+				007F6C3D15CD06930004D4C4 /* AppleIIIGamePort.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2006,6 +2026,7 @@
 		00039E7D12B03F660025D374 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				PRODUCT_NAME = "emulation-hal";
 			};
 			name = Debug;
@@ -2013,6 +2034,7 @@
 		00039E7E12B03F660025D374 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				PRODUCT_NAME = "emulation-hal";
 			};
 			name = Release;
@@ -2020,6 +2042,7 @@
 		00365CF71516F3D800978DF6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -2027,6 +2050,7 @@
 		00365CF81516F3D800978DF6 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -2034,6 +2058,7 @@
 		006EECA50FCA5C32003D2C8D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				PRODUCT_NAME = emulation;
 			};
 			name = Debug;
@@ -2041,6 +2066,7 @@
 		006EECA60FCA5C32003D2C8D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				PRODUCT_NAME = emulation;
 			};
 			name = Release;
@@ -2048,6 +2074,7 @@
 		00CF207815B0D8D300DA8E08 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -2055,6 +2082,7 @@
 		00CF207915B0D8D300DA8E08 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -2062,11 +2090,16 @@
 		C05733C808A9546B00998B17 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					macosx,
 					"\"$(SRCROOT)/macosx\"",
 				);
 				INFOPLIST_FILE = macosx/Info.plist;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/local/lib,
+				);
 				PRODUCT_NAME = OpenEmulator;
 			};
 			name = Debug;
@@ -2074,11 +2107,16 @@
 		C05733C908A9546B00998B17 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					macosx,
 					"\"$(SRCROOT)/macosx\"",
 				);
 				INFOPLIST_FILE = macosx/Info.plist;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/local/lib,
+				);
 				PRODUCT_NAME = OpenEmulator;
 			};
 			name = Release;

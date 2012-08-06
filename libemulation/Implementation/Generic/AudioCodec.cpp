@@ -149,6 +149,9 @@ void AudioCodec::notify(OEComponent *sender, int notification, void *data)
 
 OEChar AudioCodec::read(OEAddress address)
 {
+    if (!audioBuffer)
+        return 0;
+    
     float audioBufferFrame;
     
     controlBus->postMessage(this, CONTROLBUS_GET_AUDIOBUFFERFRAME, &audioBufferFrame);
@@ -161,6 +164,9 @@ OEChar AudioCodec::read(OEAddress address)
 
 void AudioCodec::write(OEAddress address, OEChar value)
 {
+    if (!audioBuffer)
+        return;
+    
     float audioBufferFrame;
     
     controlBus->postMessage(this, CONTROLBUS_GET_AUDIOBUFFERFRAME, &audioBufferFrame);
@@ -171,6 +177,9 @@ void AudioCodec::write(OEAddress address, OEChar value)
 
 OEShort AudioCodec::read16(OEAddress address)
 {
+    if (!audioBuffer)
+        return 0;
+    
     float audioBufferFrame;
     
     controlBus->postMessage(this, CONTROLBUS_GET_AUDIOBUFFERFRAME, &audioBufferFrame);
@@ -183,6 +192,9 @@ OEShort AudioCodec::read16(OEAddress address)
 
 void AudioCodec::write16(OEAddress address, OEShort value)
 {
+    if (!audioBuffer)
+        return;
+    
     float audioBufferFrame;
     
     controlBus->postMessage(this, CONTROLBUS_GET_AUDIOBUFFERFRAME, &audioBufferFrame);

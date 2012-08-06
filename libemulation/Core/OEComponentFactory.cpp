@@ -37,6 +37,9 @@
 #include "AppleGraphicsTablet.h"
 #include "AppleGraphicsTabletInterfaceCard.h"
 #include "AppleLanguageCard.h"
+#include "AppleSilentype.h"
+#include "AppleSilentypeInterfaceCard.h"
+
 #include "AppleIIAddressDecoder.h"
 #include "AppleIIAudioIn.h"
 #include "AppleIIAudioOut.h"
@@ -47,11 +50,11 @@
 #include "AppleIISlotController.h"
 #include "AppleIIVideo.h"
 #include "AppleIISystemControl.h"
+
+#include "AppleIIIAddressDecoder.h"
 #include "AppleIIIDiskIO.h"
 #include "AppleIIIMOS6502.h"
-#include "AppleIIIVIAControl.h"
-#include "AppleSilentype.h"
-#include "AppleSilentypeInterfaceCard.h"
+#include "AppleIIISystemControl.h"
 
 #include "MOS6502.h"
 #include "MOS6522.h"
@@ -100,6 +103,9 @@ OEComponent *OEComponentFactory::construct(const string& className)
     matchComponent(AppleGraphicsTablet);
     matchComponent(AppleGraphicsTabletInterfaceCard);
     matchComponent(AppleLanguageCard);
+    matchComponent(AppleSilentype);
+    matchComponent(AppleSilentypeInterfaceCard);
+    
     matchComponent(AppleIIAddressDecoder);
     matchComponent(AppleIIAudioIn);
     matchComponent(AppleIIAudioOut);
@@ -110,11 +116,11 @@ OEComponent *OEComponentFactory::construct(const string& className)
     matchComponent(AppleIISlotController);
     matchComponent(AppleIIVideo);
     matchComponent(AppleIISystemControl);
+    
+    matchComponent(AppleIIIAddressDecoder);
     matchComponent(AppleIIIDiskIO);
     matchComponent(AppleIIIMOS6502);
-    matchComponent(AppleIIIVIAControl);
-    matchComponent(AppleSilentype);
-    matchComponent(AppleSilentypeInterfaceCard);
+    matchComponent(AppleIIISystemControl);
     
     matchComponent(MOS6502);
     matchComponent(MOS6522);

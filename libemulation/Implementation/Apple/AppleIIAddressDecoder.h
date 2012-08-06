@@ -15,19 +15,5 @@ class AppleIIAddressDecoder : public AddressDecoder
 public:
 	AppleIIAddressDecoder();
     
-    bool setValue(string name, string value);
-    bool setRef(string name, OEComponent *ref);
-    
     bool postMessage(OEComponent *sender, int message, void *data);
-    
-private:
-    OEComponent *ram;
-    OEComponent *auxMemory;
-    OEComponent *io;
-    OEComponent *slot[8];
-    OEComponent *romCD;
-    OEComponent *romEF;
-    OEComponent *rom;
-    
-    OEInt type;
 };

@@ -1,4 +1,6 @@
 ==Latest==
+* Implemented Apple III X-Byte addressing
+* Fixed erase bug in invalidateTimers
 * Added Apple Disk III
 * Fixed crash when removing canvas
 * Refactorized Disk II volume control

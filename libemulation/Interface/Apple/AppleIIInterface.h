@@ -22,10 +22,12 @@ typedef enum
 {
     APPLEII_MAP_SLOT = ADDRESSDECODER_END,
     APPLEII_UNMAP_SLOT,
-    
-    APPLEII_SET_IOENABLED,
-    
-    APPLEII_SET_ALTZP,
+    APPLEII_ADDRESSDECODER_END,
+} AppleIIAddressDecoderMessage;
+
+typedef enum
+{
+    APPLEII_SET_ALTZP = APPLEII_ADDRESSDECODER_END,
     APPLEII_SET_RAMRD,
     APPLEII_SET_RAMWRT,
     APPLEII_SET_80STORE,
@@ -36,7 +38,7 @@ typedef enum
     APPLEII_SET_LCBANK1,
     APPLEII_SET_LCRAMRD,
     APPLEII_SET_LCRAMWR,
-} AppleIIAddressDecoderMessage;
+} AppleIIeAddressDecoderMessage;
 
 // Move this to AppleIIControlBus:
 //    APPLEII_ASSERT_DISKMOTORON,

@@ -31,6 +31,13 @@ typedef list<MemoryMap> MemoryMaps;
 typedef map<string, string> MemoryMapsConf;
 typedef map<string, OEComponent *> MemoryMapsRef;
 
+bool appendMemoryMaps(MemoryMaps& theMaps,
+                      OEComponent *component,
+                      string value);
+bool validateMemoryMaps(MemoryMaps& theMaps,
+                        OEAddress blockSize,
+                        OEAddress addressMask);
+
 typedef struct
 {
     OEAddress startAddress;
@@ -41,13 +48,6 @@ typedef struct
 
 typedef list<AddressOffsetMap> AddressOffsetMaps;
 
-bool appendMemoryMaps(MemoryMaps& theMaps,
-                      OEComponent *component,
-                      string value);
-bool validateMemoryMaps(MemoryMaps& theMaps,
-                        OEAddress blockSize,
-                        OEAddress addressMask);
-
 typedef enum
 {
     ADDRESSDECODER_MAP,
@@ -57,7 +57,7 @@ typedef enum
 
 typedef enum
 {
-    ADDRESSMAPPER_MAP,
+    ADDRESSMAPPER_SELECT,
 } AddressMapperMessage;
 
 typedef enum

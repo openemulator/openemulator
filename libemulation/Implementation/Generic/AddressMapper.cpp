@@ -97,7 +97,7 @@ bool AddressMapper::postMessage(OEComponent *sender, int message, void *data)
 {
     switch (message)
     {
-        case ADDRESSMAPPER_MAP:
+        case ADDRESSMAPPER_SELECT:
             sel = *((string *)data);
             
             update();

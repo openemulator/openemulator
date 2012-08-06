@@ -282,6 +282,7 @@ OEConnectorInfos OEDocument::getFreeConnectorInfos()
             if (*i == j->id)
             {
                 freeConnectorInfos.erase(j);
+                
                 break;
             }
         }

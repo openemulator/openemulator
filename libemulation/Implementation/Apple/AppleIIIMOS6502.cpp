@@ -451,7 +451,7 @@ inline void AppleIIIMOS6502::setExtendedMemoryBank(OEInt value)
         offsetMap.startAddress = 0x0000;
         offsetMap.endAddress = 0x1fff;
         offsetMap.offset = APPLEIII_SYSTEMBANK * 0x8000;
-
+        
         extendedMemoryBus->postMessage(this, ADDRESSOFFSET_MAP, &offsetMap);
         
         offsetMap.startAddress = 0x2000;
