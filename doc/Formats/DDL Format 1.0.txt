@@ -2,9 +2,9 @@
 
 This is the specification of DDL 1.0, an XML language that describes data stored on physical floppy disks.
 
-DDL does not describe data from the point of view of the storage medium (i.e. floppy disk), but rather from the perspective of the storage access device (i.e. disk drive). It stores the necessary instructions for producing a (hopefully accurate) copy of a floppy disk. This includes the data to be stored on the floppy disk and properties like storage medium type, tracks-per-inch reference and modifiability.
+The purpose of DDL is archiving copy-protected floppy disks and serving as a standard for preserving digital content. The advantages of DDL are its expandability, modifiabilty and ease of implementation.
 
-DDL is capable of archiving copy-protected floppy disks and serves as a standard for preserving digital content. The advantages of DDL are its expandability, modifiabilty and ease of implementation.
+DDL does not describe data from the point of view of the storage medium (i.e. floppy disk), but rather from the perspective of the storage access device (i.e. disk drive). It stores the necessary instructions for producing a (hopefully accurate) copy of a floppy disk. This includes the data to be stored on the floppy disk and properties like storage medium type, tracks-per-inch reference and modifiability.
 
 The XML DTD is available here:
 
@@ -48,7 +48,7 @@ The DDL tag is the top-level of the floppy disk description:
 
 ==DDL track tag==
 
-Within the DDL tag a series of track tags may exist, each describing the data for every track:
+Within the DDL tag a series of track tags may exist, each describing every track's content:
 
 <track index="[TRACKINDEX]">
 
@@ -60,7 +60,7 @@ Notes:
 
 ==DDL side tag==
 
-Every track tag contains one or more side tags. Each side describes the data of a track/side combination:
+Every track tag contains one or more side tags, each describing the content of a track/side combination:
 
 <side index="[SIDEINDEX]">
 
@@ -68,13 +68,13 @@ Every track tag contains one or more side tags. Each side describes the data of 
 
 ==DDL data tag==
 
-Every side tag must contain a data tag containing the actual data:
+Every side tag must contain a data tag. This contains the actual data:
 
 <data type="[TYPE]"/>
 
-* [TYPE] is the type of data stored within the tag. In DDL 1.0 the only valid type is "bitstream".
+* [TYPE] is the type of data stored within the tag. In DDL 1.0 the only valid type of data is "bitstream".
 
-==DDL bitsream data==
+==DDL bitstream data==
 
 The only type of data available in DDL 1.0 is "bitstream" (see DDL data tag).
 
@@ -88,7 +88,7 @@ The only type of data available in DDL 1.0 is "bitstream" (see DDL data tag).
 
 Notes:
 
-* Tracks/sides with undefined data should always be considered as a stream of 0 samples (no magnetic inversions).
+* Tracks/sides with undefined data should always be considered a stream of 0 samples (no magnetic inversions).
 * The first sample of the data of all tracks and sides must be synchronized to the index hole of the storage medium. In case no index hole is present, synchronization should be relative to some arbitrary position.
 * The DDL data model uses constant bit-rate and assumes disk drives access the storage medium at the speed of their specification. Nevertheless, provisions exist for data streams to be of different length (as the stream might have been written by drives of different speed).
 * Data should be human-readable. Provisions should exist so that data fields are easy to read, understand and modify (i.e. sectors may be detected and appropriately formatted).
