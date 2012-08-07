@@ -31,7 +31,7 @@ The information stored in a .ddl file is always compressed using the ZIP format.
 DDL files should begin with the following XML header:
 
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE edl PUBLIC "-//DDL//DTD DDL 1.0//EN" "http://www.openemulator.org/DTD/ddl-1.0.dtd">
+<!DOCTYPE ddl PUBLIC "-//DDL//DTD DDL 1.0//EN" "http://www.openemulator.org/DTD/ddl-1.0.dtd">
 
 ==DDL tag==
 
@@ -98,7 +98,7 @@ Notes:
 An short example of DDL XML:
 
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE edl PUBLIC "-//DDL//DTD DDL 1.0//EN" "http://www.openemulator.org/DTD/ddl-1.0.dtd">
+<!DOCTYPE ddl PUBLIC "-//DDL//DTD DDL 1.0//EN" "http://www.openemulator.org/DTD/ddl-1.0.dtd">
 <ddl version="1.0" creator="libdiskimage 1.0" label="Apple DOS 3.3" description="Apple DOS 3.3 is an operating system by Apple Computer for Apple II computers. This is the 1983 version." medium="5.25 inch disk" tracksPerInch="48" writeEnabled="1">
 
 <track index="0">
