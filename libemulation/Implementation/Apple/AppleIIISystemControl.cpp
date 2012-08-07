@@ -10,13 +10,16 @@
 
 #include "AppleIIISystemControl.h"
 
-#include "MOS6522.h"
+#include "ControlBusInterface.h"
 #include "MemoryInterface.h"
 #include "AppleIIIInterface.h"
+
+#include "MOS6522.h"
 
 AppleIIISystemControl::AppleIIISystemControl()
 {
     cpu = NULL;
+    controlBus = NULL;
     memoryBus = NULL;
     extendedMemoryBus = NULL;
     memoryAddressDecoder = NULL;
@@ -30,7 +33,9 @@ bool AppleIIISystemControl::setRef(string name, OEComponent *ref)
 {
     if (name == "cpu")
         cpu = ref;
-    if (name == "memoryBus")
+    else if (name == "controlBus")
+        controlBus = ref;
+    else if (name == "memoryBus")
         memoryBus = ref;
     else if (name == "extendedMemoryBus")
         extendedMemoryBus = ref;
@@ -51,6 +56,13 @@ bool AppleIIISystemControl::init()
     if (!cpu)
     {
         logMessage("cpu not connected");
+        
+        return false;
+    }
+    
+    if (!controlBus)
+    {
+        logMessage("controlBus not connected");
         
         return false;
     }
@@ -90,6 +102,20 @@ bool AppleIIISystemControl::init()
         return false;
     }
     
+    AddressOffsetMap offsetMap;
+    
+    offsetMap.startAddress = 0x0000;
+    offsetMap.endAddress = 0x1fff;
+    offsetMap.offset = 0x8000 * APPLEIII_SYSTEMBANK - 0x0000;
+    
+    memory->postMessage(this, ADDRESSOFFSET_MAP, &offsetMap);
+    
+    offsetMap.startAddress = 0xa000;
+    offsetMap.endAddress = 0xffff;
+    offsetMap.offset = 0x8000 * APPLEIII_SYSTEMBANK - 0x8000;
+    
+    memory->postMessage(this, ADDRESSOFFSET_MAP, &offsetMap);
+    
     return true;
 }
 
@@ -120,79 +146,103 @@ void AppleIIISystemControl::write(OEAddress address, OEChar value)
     switch (address)
     {
         case 0x0:
-        {
-            environment = value;
-            
-            bool romSel1 = OEGetBit(environment, (1 << 0));
-            bool ramWP = OEGetBit(environment, (1 << 3));
-            bool resetEnabled = OEGetBit(environment, (1 << 4));
-            bool videoEnabled = OEGetBit(environment, (1 << 5));
-            bool ioEnabled = OEGetBit(environment, (1 << 6));
-            bool slowSpeed = OEGetBit(environment, (1 << 7));
-            
-            OEInt memoryControl = 0;
-            
-            OESetBit(memoryControl, APPLEIII_RAMWP, ramWP);
-            OESetBit(memoryControl, APPLEIII_IO, ioEnabled);
-            OESetBit(memoryControl, APPLEIII_ROM, romSel1);
-            
-            memoryAddressDecoder->postMessage(this, APPLEIII_SET_MEMORYCONTROL, &memoryControl);
-            
-            updateNormalStack();
+            setEnvironment(value);
             
             break;
-        }
+            
         case 0x1:
-        {
-            zeroPage = value;
-            
-            AddressOffsetMap offsetMap;
-            
-            offsetMap.startAddress = 0x0000;
-            offsetMap.endAddress = 0x00ff;
-            offsetMap.offset = 0x100 * zeroPage;
-            
-            memoryBus->postMessage(this, ADDRESSOFFSET_MAP, &offsetMap);
-            extendedMemoryBus->postMessage(this, ADDRESSOFFSET_MAP, &offsetMap);
-            
-            updateNormalStack();
-            
-            bool extendedMemoryEnabled = ((zeroPage & 0xf8) == 0x18);
-            
-            cpu->postMessage(this, APPLEIII_SET_EXTENDEDMEMORYENABLE, &extendedMemoryEnabled);
+            setZeroPage(value);
             
             break;
-        }
+            
         case 0x2:
-        {
-            OEChar bank = value & 0xf;
-            
-            AddressOffsetMap offsetMap;
-            
-            offsetMap.startAddress = 0x2000;
-            offsetMap.endAddress = 0x9fff;
-            offsetMap.offset = 0x8000 * bank + 0x6000;
-            
-            memory->postMessage(this, ADDRESSOFFSET_MAP, &offsetMap);
-            
-            bool appleIIMode = OEGetBit(value, (1 << 6));
-            
-            memoryAddressDecoder->postMessage(this, APPLEIII_SET_APPLEIIMODE, &appleIIMode);
+            setRAMBank(value);
             
             break;
-        }
-        case 0x3:
-        {
-            OEChar audioSample = value << 2;
-            // bool BL = OEGetBit(value, (1 << 6));
-            // bool ioNoNMI = OEGetBit(value, (1 << 7));
             
-            dac->write(0, audioSample);
-            dac->write(1, audioSample);
-        }
+        case 0x3:
+            setDACOutput(value);
+            
+            break;
     }
     
     logMessage("W " + getString(address) + ":" + getHexString(value));
+}
+
+inline void AppleIIISystemControl::setEnvironment(OEChar value)
+{
+    environment = value;
+    
+    bool romSel1 = OEGetBit(environment, (1 << 0));
+    bool ramWP = OEGetBit(environment, (1 << 3));
+    bool resetEnabled = OEGetBit(environment, (1 << 4));
+    bool videoEnabled = OEGetBit(environment, (1 << 5));
+    bool ioEnabled = OEGetBit(environment, (1 << 6));
+    bool slowSpeed = OEGetBit(environment, (1 << 7));
+    
+    OEInt memoryControl = 0;
+    
+    OESetBit(memoryControl, APPLEIII_RAMWP, ramWP);
+    OESetBit(memoryControl, APPLEIII_IO, ioEnabled);
+    OESetBit(memoryControl, APPLEIII_ROM, romSel1);
+    
+    memoryAddressDecoder->postMessage(this, APPLEIII_SET_MEMORYCONTROL, &memoryControl);
+    
+    updateNormalStack();
+    
+    float clockCPUMultiplier = slowSpeed ? 1 : 2;
+    
+    controlBus->postMessage(this, CONTROLBUS_SET_CPUCLOCKMULTIPLIER, &clockCPUMultiplier);
+}
+
+inline void AppleIIISystemControl::setZeroPage(OEChar value)
+{
+    zeroPage = value;
+    
+    AddressOffsetMap offsetMap;
+    
+    offsetMap.startAddress = 0x0000;
+    offsetMap.endAddress = 0x00ff;
+    offsetMap.offset = 0x100 * zeroPage;
+    
+    memoryBus->postMessage(this, ADDRESSOFFSET_MAP, &offsetMap);
+    extendedMemoryBus->postMessage(this, ADDRESSOFFSET_MAP, &offsetMap);
+    
+    updateNormalStack();
+    
+    bool extendedMemoryEnabled = ((zeroPage & 0xf8) == 0x18);
+    
+    cpu->postMessage(this, APPLEIII_SET_EXTENDEDMEMORYENABLE, &extendedMemoryEnabled);
+}
+
+inline void AppleIIISystemControl::setRAMBank(OEChar value)
+{
+    OEChar bank = value & 0xf;
+    
+    if (bank == APPLEIII_SYSTEMBANK)
+        bank = 0xf;
+    
+    AddressOffsetMap offsetMap;
+    
+    offsetMap.startAddress = 0x2000;
+    offsetMap.endAddress = 0x9fff;
+    offsetMap.offset = 0x8000 * bank - 0x2000;
+    
+    memory->postMessage(this, ADDRESSOFFSET_MAP, &offsetMap);
+    
+    bool appleIIMode = OEGetBit(value, (1 << 6));
+    
+    memoryAddressDecoder->postMessage(this, APPLEIII_SET_APPLEIIMODE, &appleIIMode);
+}
+
+inline void AppleIIISystemControl::setDACOutput(OEChar value)
+{
+    OEChar audioSample = value << 2;
+    // bool BL = OEGetBit(value, (1 << 6));
+    // bool ioNoNMI = OEGetBit(value, (1 << 7));
+    
+    dac->write(0, audioSample);
+    dac->write(1, audioSample);
 }
 
 void AppleIIISystemControl::updateNormalStack()

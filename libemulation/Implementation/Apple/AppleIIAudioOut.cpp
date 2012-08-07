@@ -18,9 +18,10 @@ AppleIIAudioOut::AppleIIAudioOut() : Audio1Bit()
     controlBus = NULL;
     floatingBus = NULL;
     
+    cassetteOut = false;
+    
     lastCycles = 0;
     relaxationState = false;
-    cassetteOut = false;
 }
 
 bool AppleIIAudioOut::setValue(string name, string value)
@@ -79,7 +80,10 @@ OEChar AppleIIAudioOut::read(OEAddress address)
 
 void AppleIIAudioOut::write(OEAddress address, OEChar value)
 {
-    if ((address & 0x0010) && controlBus)
+    if (!(address & 0x0010) && !cassetteOut)
+        return;
+    
+    if (controlBus)
     {
         OELong cycles;
         
@@ -96,8 +100,6 @@ void AppleIIAudioOut::write(OEAddress address, OEChar value)
                 return;
         }
     }
-    else if (!cassetteOut)
-        return;
     
     toggleAudioOutput();
 }

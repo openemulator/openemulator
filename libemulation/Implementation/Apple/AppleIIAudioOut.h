@@ -27,7 +27,8 @@ private:
     OEComponent *controlBus;
 	OEComponent *floatingBus;
     
+    bool cassetteOut;
+    
     OELong lastCycles;
     bool relaxationState;
-    bool cassetteOut;
 };

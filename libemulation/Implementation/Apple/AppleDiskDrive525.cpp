@@ -214,8 +214,8 @@ bool AppleDiskDrive525::postMessage(OEComponent *sender, int message, void *data
             
             if (device && (imageDriveOff != ""))
             {
-//                device->postMessage(this, DEVICE_SET_IMAGEPATH, &imageDriveOff);
-//                device->postMessage(this, DEVICE_UPDATE, NULL);
+                device->postMessage(this, DEVICE_SET_IMAGEPATH, &imageDriveOff);
+                device->postMessage(this, DEVICE_UPDATE, NULL);
             }
             
             return true;
@@ -226,8 +226,8 @@ bool AppleDiskDrive525::postMessage(OEComponent *sender, int message, void *data
             
             if (device && (imageDriveInUse != ""))
             {
-//                device->postMessage(this, DEVICE_SET_IMAGEPATH, &imageDriveInUse);
-//                device->postMessage(this, DEVICE_UPDATE, NULL);
+                device->postMessage(this, DEVICE_SET_IMAGEPATH, &imageDriveInUse);
+                device->postMessage(this, DEVICE_UPDATE, NULL);
             }
             
             return true;

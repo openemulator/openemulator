@@ -26,6 +26,7 @@ public:
     
 private:
     OEComponent *cpu;
+    OEComponent *controlBus;
     OEComponent *memoryBus;
     OEComponent *extendedMemoryBus;
     OEComponent *memoryAddressDecoder;

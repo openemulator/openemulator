@@ -415,7 +415,7 @@ void AppleIIVideo::notify(OEComponent *sender, int notification, void *data)
                 
                 if (powerState == CONTROLBUS_POWERSTATE_OFF)
                 {
-                    setMode(MODE_TEXT, false);
+//                    setMode(MODE_TEXT, false);
                     setMode(MODE_MIXED, false);
                     setMode(MODE_PAGE2, false);
                     setMode(MODE_HIRES, false);

@@ -8,7 +8,7 @@
 
    This DTD module is identified by the PUBLIC and SYSTEM identifiers:
 
-   PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN"
+   PUBLIC "-//OPENEMULATOR//DTD DDL 1.0//EN"
    SYSTEM "http://www.openemulator.org/DTD/ddl-1.0.dtd"
 
    $Revision: 1 $
@@ -17,12 +17,12 @@
 
 <!ELEMENT ddl (track*)>
 <!ATTLIST ddl version CDATA "1.0">
-<!ATTLIST edl creator CDATA #REQUIRED>
-<!ATTLIST edl label CDATA #IMPLIED>
-<!ATTLIST edl description CDATA #IMPLIED>
-<!ATTLIST edl medium CDATA #REQUIRED>
-<!ATTLIST edl tracksPerInch CDATA #REQUIRED>
-<!ATTLIST edl writeEnabled CDATA #IMPLIED>
+<!ATTLIST ddl creator CDATA #REQUIRED>
+<!ATTLIST ddl label CDATA #IMPLIED>
+<!ATTLIST ddl description CDATA #IMPLIED>
+<!ATTLIST ddl medium CDATA #REQUIRED>
+<!ATTLIST ddl tracksPerInch CDATA #REQUIRED>
+<!ATTLIST ddl writeEnabled CDATA #IMPLIED>
 
 <!ELEMENT track (side+)>
 <!ATTLIST track index CDATA #REQUIRED>

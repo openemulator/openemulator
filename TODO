@@ -1,4 +1,5 @@
 ==1.0.4==
+* Add LCD Composite Color Monitor
 * Fix IAC 42 > rapid drive change
 * Implement MOS6522
 * Fix AppleIIVideo not displaying video when loading emulation in paused state

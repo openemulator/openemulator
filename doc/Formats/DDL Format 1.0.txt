@@ -2,9 +2,9 @@
 
 This is the specification of DDL 1.0, an XML language that describes data stored on physical floppy disks.
 
-DDL does not describe data from the point of view of the storage medium (i.e. floppy disk), but rather from the perspective of the storage access device (i.e. disk drive). It stores the necessary instructions for producing a (hopefully accurate) copy of a floppy disk.
+DDL does not describe data from the point of view of the storage medium (i.e. floppy disk), but rather from the perspective of the storage access device (i.e. disk drive). It stores the necessary instructions for producing a (hopefully accurate) copy of a floppy disk. This includes the data to be stored on the floppy disk and properties like storage medium type, tracks-per-inch reference and modifiability.
 
-This allows DDL to archive copy-protected floppy disks and serve as a standard for preserving digital content.
+DDL is capable of archiving copy-protected floppy disks and serves as a standard for preserving digital content. The advantages of DDL are its expandability, modifiabilty and ease of implementation.
 
 The XML DTD is available here:
 
@@ -23,6 +23,8 @@ This specification uses square brackets to denote information that should be rep
 ==DDL files==
 
 DDL filenames should always end with the extension .ddl.
+
+The information stored in a .ddl file is always compressed using the ZIP format. The XML description is stored in a file named "content.xml" within the ZIP file structure.
 
 ==DDL header==
 
@@ -86,19 +88,14 @@ The only type of data available in DDL 1.0 is "bitstream" (see DDL data tag).
 
 Notes:
 
+* Tracks/sides with undefined data should always be considered as a stream of 0 samples (no magnetic inversions).
 * The first sample of the data of all tracks and sides must be synchronized to the index hole of the storage medium. In case no index hole is present, synchronization should be relative to some arbitrary position.
 * The DDL data model uses constant bit-rate and assumes disk drives access the storage medium at the speed of their specification. Nevertheless, provisions exist for data streams to be of different length (as the stream might have been written by drives of different speed).
-* Data should be human-readable. Provisions should exist so that data fields are easy to read and modify (i.e. sectors may be detected and appropriately formatted).
-
-==Compression==
-
-DDL data may be optionally compressed with the ZIP format. The XML data should be stored within the zip file as a "content.xml" file.
-
-Both compressed and uncompressed DDL files should be suffixed with the extension .ddl.
+* Data should be human-readable. Provisions should exist so that data fields are easy to read, understand and modify (i.e. sectors may be detected and appropriately formatted).
 
 ==Example==
 
-An example of a very short DDL file:
+An short example of DDL XML:
 
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE edl PUBLIC "-//DDL//DTD DDL 1.0//EN" "http://www.openemulator.org/DTD/ddl-1.0.dtd">

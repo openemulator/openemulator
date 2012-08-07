@@ -127,12 +127,12 @@
         <property name="mapKeyboard" value="0x00-0x1f"/>
         <property name="refDisableC800" ref=""/>
         <property name="mapDisableC800" value="0x20-0x2f"/>
-        <property name="refSpeaker" ref="appleIII.audioOut"/>
-        <property name="mapSpeaker" value="0x30-0x3f"/>
+        <property name="refAudioOut" ref="appleIII.audioOut"/>
+        <property name="mapAudioOut" value="0x30-0x3f"/>
         <property name="refBeeper" ref=""/>
         <property name="mapBeeper" value="0x40-0x4f"/>
-        <property name="refVideo" ref="appleIII.video"/>
-        <property name="mapVideo" value="0x50-0x57"/>
+<!--        <property name="refVideo" ref="appleIII.video"/>
+        <property name="mapVideo" value="0x50-0x57"/>-->
         <property name="refGamePort" ref=""/>
         <property name="mapGamePort" value="0x58-0x6f"/>
         <property name="refRTC" ref=""/>
@@ -162,10 +162,10 @@
         <property name="tvSystem" value="NTSC"/>
         <property name="characterSet" value="Standard"/>
         <property name="flashFrameNum" value="14"/>
-        <property name="text" value="0"/>
-        <property name="mixed" value="0"/>
-        <property name="page2" value="0"/>
-        <property name="hires" value="0"/>
+        <property name="text" value="1"/>
+        <property name="mixed" value="1"/>
+        <property name="page2" value="1"/>
+        <property name="hires" value="1"/>
         <property name="controlBus" ref="appleIII.controlBus"/>
         <property name="monitor" ref="appleMonitorIII.monitor"/>
         <property name="vram0000" ref="appleIII.ram"/>
@@ -179,9 +179,10 @@
         <property name="fontStandard" data="${resourcePath}/roms/Apple/341-0036.bin"/>
     </component>
     <component id="appleIII.audioOut" class="AppleIIAudioOut">
+        <property name="controlBus" ref="appleIII.controlBus"/>
         <property name="floatingBus" ref="appleIII.floatingBus"/>
-        <property name="volume" value="1"/>
         <property name="audioCodec" ref="appleIII.audioCodec"/>
+        <property name="volume" value="1"/>
     </component>
     <component id="appleIII.audioCodec" class="AudioCodec">
         <property name="audio" ref="audio"/>
@@ -216,6 +217,7 @@
     </component>
     <component id="appleIII.systemControl" class="AppleIIISystemControl">
         <property name="cpu" ref="appleIII.cpu"/>
+        <property name="controlBus" ref="appleIII.controlBus"/>
         <property name="memoryBus" ref="appleIII.memoryBus"/>
         <property name="extendedMemoryBus" ref="appleIII.extendedMemoryBus"/>
         <property name="memoryAddressDecoder" ref="appleIII.memoryAddressDecoder"/>
