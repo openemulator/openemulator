@@ -25,7 +25,9 @@ public:
     
 private:
     OEComponent *extendedMemoryBus;
+    
     bool extendedMemoryEnabled;
+    OEAddress extendedPageAddress;
     OEInt extendedMemoryBank;
     
     void execute();

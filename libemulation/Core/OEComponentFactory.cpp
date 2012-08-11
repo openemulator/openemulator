@@ -59,10 +59,13 @@
 #include "MOS6502.h"
 #include "MOS6522.h"
 #include "MOS6530.h"
+#include "MOS6551.h"
 #include "MOSKIM1IO.h"
 #include "MOSKIM1PLL.h"
 
 #include "MC6821.h"
+
+#include "MM58167.h"
 
 #include "RDCFFA.h"
 
@@ -125,10 +128,13 @@ OEComponent *OEComponentFactory::construct(const string& className)
     matchComponent(MOS6502);
     matchComponent(MOS6522);
     matchComponent(MOS6530);
+    matchComponent(MOS6551);
     matchComponent(MOSKIM1IO);
     matchComponent(MOSKIM1PLL);
     
     matchComponent(MC6821);
+    
+    matchComponent(MM58167);
     
     matchComponent(RDCFFA);
     

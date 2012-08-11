@@ -24,6 +24,7 @@ AppleIIKeyboard::AppleIIKeyboard()
     monitor = NULL;
     
     keyLatch = 0;
+    keyStrobe = false;
     state = APPLEIIKEYBOARD_STATE_NORMAL;
     
     // Default value for Apple III key flags
@@ -144,7 +145,10 @@ void AppleIIKeyboard::notify(OEComponent *sender, int notification, void *data)
         {
             case CONTROLBUS_POWERSTATE_DID_CHANGE:
                 if (*((ControlBusPowerState *)data) == CONTROLBUS_POWERSTATE_ON)
+                {
                     keyLatch = 0;
+                    keyStrobe = 0;
+                }
                 
                 break;
                 
@@ -235,8 +239,6 @@ void AppleIIKeyboard::notify(OEComponent *sender, int notification, void *data)
                             controlBus->postMessage(this, CONTROLBUS_CLEAR_RESET, NULL);
                             
                             state = APPLEIIKEYBOARD_STATE_NORMAL;
-                            
-                            keyLatch = 0;
                         }
                         
                         break;
@@ -267,7 +269,7 @@ OEChar AppleIIKeyboard::read(OEAddress address)
 {
     if (address & 0x10)
     {
-        keyLatch &= 0x7f;
+        keyStrobe = false;
         
         emptyPasteBuffer();
     }
@@ -275,9 +277,9 @@ OEChar AppleIIKeyboard::read(OEAddress address)
     {
         if ((type == APPLEIIKEYBOARD_TYPE_APPLEIII) &&
             (address & 0x08))
-            return appleIIIKeyFlags;
-            
-        return keyLatch;
+            return (keyLatch & 0x80) | appleIIIKeyFlags;
+        
+        return (keyStrobe << 7) | (keyLatch & 0x7f);
     }
     
 	return floatingBus->read(address);
@@ -287,7 +289,7 @@ void AppleIIKeyboard::write(OEAddress address, OEChar value)
 {
     if (address & 0x10)
     {
-        keyLatch &= 0x7f;
+        keyStrobe = false;
         
         emptyPasteBuffer();
     }
@@ -329,7 +331,6 @@ void AppleIIKeyboard::updateKeyFlags()
                 OESetBit(appleIIIKeyFlags, (1 << 4), !OEGetBit(flags, CANVAS_KF_LEFTGUI));
                 OESetBit(appleIIIKeyFlags, (1 << 5), !OEGetBit(flags, CANVAS_KF_RIGHTGUI));
                 OESetBit(appleIIIKeyFlags, (1 << 6), 1);   // Keyboard connected
-                OESetBit(appleIIIKeyFlags, (1 << 7), 0);   // ASCII Bit 7
             }
         }
         default:
@@ -339,25 +340,43 @@ void AppleIIKeyboard::updateKeyFlags()
 
 void AppleIIKeyboard::sendKey(CanvasUnicodeChar key)
 {
-    if (key == CANVAS_U_LEFT)
-        key = 0x08;
-    else if (key == CANVAS_U_RIGHT)
-        key = 0x15;
-    else if (key == 127)
-        key = 8;
+    if (type == APPLEIIKEYBOARD_TYPE_APPLEIII)
+    {
+        if (key == CANVAS_U_LEFT)
+            key = 0x8b;
+        else if (key == CANVAS_U_RIGHT)
+            key = 0x95;
+        else if (key == CANVAS_U_UP)
+            key = 0x8b;
+        else if (key == CANVAS_U_DOWN)
+            key = 0x8a;
+        
+        if (key >= 'a' && key <= 'z')
+            key -= 0x20;
+    }
+    else
+    {
+        if (key == CANVAS_U_LEFT)
+            key = 0x8;
+        else if (key == CANVAS_U_RIGHT)
+            key = 0x15;
+        
+        if (type != APPLEIIKEYBOARD_TYPE_FULLASCII)
+        {
+            if (key >= 'a' && key <= 'z')
+                key -= 0x20;
+            else if (key >= 0x60 && key <= 0x7e)
+                return;
+        }
+    }
+    
+    if (key == 0x7f)
+        key = 0x8;
     else if (key >= 0x80)
         return;
     
-    if ((type != APPLEIIKEYBOARD_TYPE_FULLASCII)
-        && (type != APPLEIIKEYBOARD_TYPE_APPLEIII))
-    {
-        if (key >= 'a' && key <= 'z')
-            key -= 0x20;
-        else if (key >= 0x60 && key <= 0x7f)
-            return;
-    }
-    
-    keyLatch = key | 0x80;
+    keyLatch = key;
+    keyStrobe = true;
 }
 
 void AppleIIKeyboard::paste(wstring *s)
@@ -370,7 +389,7 @@ void AppleIIKeyboard::paste(wstring *s)
 
 void AppleIIKeyboard::emptyPasteBuffer()
 {
-    while (!(keyLatch & 0x80) && !pasteBuffer.empty())
+    while (!keyStrobe && !pasteBuffer.empty())
     {
         OEInt c = pasteBuffer.front();
         

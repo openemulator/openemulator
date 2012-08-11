@@ -8,10 +8,6 @@
  * Implements AppleIIIMOS6502 operations
  */
 
-
-#ifndef OpenEmulator_AppleIIIMOS6502Operations_h
-#define OpenEmulator_AppleIIIMOS6502Operations_h
-
 #define APPLEIIIRDMEM_ID(a) extendedMemoryBus->read(a); icount--
 #define APPLEIIIWRMEM_ID(a,d) extendedMemoryBus->write(a, d); icount--
 
@@ -19,7 +15,7 @@
 EA_IDY_P;                                                   \
 if (extendedMemoryEnabled)                                  \
 {                                                           \
-    int xbyte = memoryBus->read(0xc00 ^ ZPA);               \
+    int xbyte = memoryBus->read(extendedPageAddress | ZPA); \
     if (xbyte & 0x80)                                       \
     {                                                       \
         setExtendedMemoryBank(xbyte & 0xf);                 \
@@ -35,7 +31,7 @@ else                                                        \
 EA_IDY_NP;                                                  \
 if (extendedMemoryEnabled)                                  \
 {                                                           \
-    int xbyte = memoryBus->read(0xc00 ^ ZPA);               \
+    int xbyte = memoryBus->read(extendedPageAddress | ZPA); \
     if (xbyte & 0x80)                                       \
     {                                                       \
         setExtendedMemoryBank(xbyte & 0xf);                 \
@@ -46,5 +42,3 @@ if (extendedMemoryEnabled)                                  \
 }                                                           \
 else                                                        \
     WRMEM_ID(EAA, tmp)
-
-#endif

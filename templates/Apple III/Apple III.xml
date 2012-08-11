@@ -14,16 +14,16 @@
     </port>
     <port id="appleIII.videoRGB" ref="" type="RGB Video" group="peripherals" label="Color Video Port" image="images/Connectors/DA15 Female.png">
     </port>
-    <port id="appleIII.drive1" ref="" type="Apple Disk Drive Port" group="peripherals" label="Internal Disk Drive Port" image="images/Connectors/Header2x10.png">
+    <port id="appleIII.drive1" ref="appleDiskIII.connector" type="Apple Disk Drive Port" group="peripherals" label="Internal Disk Drive Port" image="images/Connectors/Header2x10.png">
         <inlet ref="appleIII.diskIO" property="drive1" outletRef="drive"/>
     </port>
-    <port id="appleIII.drive2" ref="" type="Apple Disk Drive Port" group="peripherals" label="Disk Drive Port 1" image="images/Connectors/Header2x10.png">
+    <port id="appleIII.drive2" ref="appleDiskIII2.connector" type="Apple Disk Drive Port" group="peripherals" label="Disk Drive Port 1" image="images/Connectors/Header2x10.png">
         <inlet ref="appleIII.diskIO" property="drive2" outletRef="drive"/>
     </port>
-    <port id="appleIII.drive3" ref="" type="Apple Disk Drive Port" group="peripherals" label="Disk Drive Port 2" image="images/Connectors/Header2x10.png">
+    <port id="appleIII.drive3" ref="appleDiskIII3.connector" type="Apple Disk Drive Port" group="peripherals" label="Disk Drive Port 2" image="images/Connectors/Header2x10.png">
         <inlet ref="appleIII.diskIO" property="drive3" outletRef="drive"/>
     </port>
-    <port id="appleIII.drive4" ref="" type="Apple Disk Drive Port" group="peripherals" label="Disk Drive Port 3" image="images/Connectors/Header2x10.png">
+    <port id="appleIII.drive4" ref="appleDiskIII4.connector" type="Apple Disk Drive Port" group="peripherals" label="Disk Drive Port 3" image="images/Connectors/Header2x10.png">
         <inlet ref="appleIII.diskIO" property="drive4" outletRef="drive"/>
     </port>
     <port id="appleIII.portA" ref="" type="Apple III Port" group="peripherals" label="Port A" image="images/Connectors/DE9 Female.png">
@@ -135,7 +135,7 @@
         <property name="mapVideo" value="0x50-0x57"/>-->
         <property name="refGamePort" ref=""/>
         <property name="mapGamePort" value="0x58-0x6f"/>
-        <property name="refRTC" ref=""/>
+        <property name="refRTC" ref="rtc"/>
         <property name="mapRTC" value="0x70-0x7f"/>
         <property name="refSlot1" ref=""/>
         <property name="mapSlot1" value="0x90-0x9f"/>
@@ -147,7 +147,7 @@
         <property name="mapSlot4" value="0xc0-0xcf"/>
         <property name="refDiskIO" ref="appleIII.diskIO"/>
         <property name="mapDiskIO" value="0xd0-0xef"/>
-        <property name="refACIA" ref=""/>
+        <property name="refACIA" ref="appleIII.acia"/>
         <property name="mapACIA" value="0xf0-0xff"/>
     </component>
     <component id="appleIII.keyboard" class="AppleIIKeyboard">
@@ -198,10 +198,14 @@
         <property name="phaseControl" value="0"/>
         <property name="driveOn" value="0"/>
         <property name="driveSel" value="0"/>
-        <property name="drive1" ref=""/>
-        <property name="drive2" ref=""/>
-        <property name="drive3" ref=""/>
-        <property name="drive4" ref=""/>
+        <property name="drive1" ref="appleDiskIII.drive"/>
+        <property name="drive2" ref="appleDiskIII2.drive"/>
+        <property name="drive3" ref="appleDiskIII3.drive"/>
+        <property name="drive4" ref="appleDiskIII4.drive"/>
+    </component>
+    <component id="appleIII.rtc" class="MM55167">
+    </component>
+    <component id="appleIII.acia" class="MOS6551">
     </component>
     <component id="appleIII.rom" class="ROM">
         <property name="memoryImage" data="${resourcePath}/roms/Apple/341-0031.bin"/>
@@ -290,6 +294,194 @@
         <property name="displayCenterLighting" value="0.5"/>
         <property name="displayPersistence" value="0.4"/>
         <property name="displayLuminanceGain" value="1.5"/>
+    </component>
+    
+    <device id="appleDiskIII" label="Apple Disk III" image="images/Apple/Apple Disk III.png">
+        <setting ref="appleDiskIII.drive" name="forceWriteProtected" label="Force Write Protected" type="checkbox"/>
+        <setting ref="appleDiskIII.drive" name="mechanism" label="Mechanism" type="select" options="Shugart,Alps"/>
+        <setting ref="appleDiskIII.drive" name="volume" label="Volume" type="slider" options="0,1"/>
+    </device>
+    <connector id="appleDiskIII.connector" type="Apple Disk Drive Port">
+        <inlet ref="appleDiskIII.drive" property="controlBus" outletRef="controlBus"/>
+        <inlet ref="appleDiskIII.headPlayer" property="controlBus" outletRef="controlBus"/>
+    </connector>
+    <component id="appleDiskIII.drive" class="AppleDiskDrive525">
+        <property name="device" ref="appleDiskIII"/>
+        <property name="controlBus" ref="appleIII.controlBus"/>
+        <property name="diskImage" value=""/>
+        <property name="track" value="0"/>
+        <property name="forceWriteProtected" value="0"/>
+        <property name="doorPlayer" ref="appleDiskIII.doorPlayer"/>
+        <property name="drivePlayer" ref="appleDiskIII.drivePlayer"/>
+        <property name="headPlayer" ref="appleDiskIII.headPlayer"/>
+        <property name="imageDriveOff" value="images/Apple/Apple Disk III.png"/>
+        <property name="imageDriveInUse" value="images/Apple/Apple Disk III In Use.png"/>
+        <property name="mechanism" value="Shugart"/>
+        <property name="volume" value="0.5"/>
+        <property name="soundShugartOpen" value="${resourcePath}/sounds/Shugart/Shugart SA400 Open.ogg"/>
+        <property name="soundShugartClose" value="${resourcePath}/sounds/Shugart/Shugart SA400 Close.ogg"/>
+        <property name="soundShugartDrive" value="${resourcePath}/sounds/Shugart/Shugart SA400 Drive.ogg"/>
+        <property name="soundShugartHead" value="${resourcePath}/sounds/Shugart/Shugart SA400 Head.ogg"/>
+        <property name="soundShugartStop" value="${resourcePath}/sounds/Shugart/Shugart SA400 Stop.ogg"/>
+        <property name="soundShugartAlign" value="${resourcePath}/sounds/Shugart/Shugart SA400 Align.ogg"/>
+        <property name="soundAlpsOpen" value="${resourcePath}/sounds/Shugart/Shugart SA400 Open.ogg"/>
+        <property name="soundAlpsClose" value="${resourcePath}/sounds/Shugart/Shugart SA400 Close.ogg"/>
+        <property name="soundAlpsDrive" value="${resourcePath}/sounds/Alps/Alps 2124A Drive.ogg"/>
+        <property name="soundAlpsHead" value="${resourcePath}/sounds/Alps/Alps 2124A Head.ogg"/>
+        <property name="soundAlpsStop" value="${resourcePath}/sounds/Alps/Alps 2124A Stop.ogg"/>
+        <property name="soundAlpsAlign" value="${resourcePath}/sounds/Shugart/Shugart SA400 Align.ogg"/>
+    </component>
+    <component id="appleDiskIII.doorPlayer" class="AudioPlayer">
+        <property name="audio" ref="audio"/>
+    </component>
+    <component id="appleDiskIII.drivePlayer" class="AudioPlayer">
+        <property name="audio" ref="audio"/>
+        <property name="loop" value="1"/>
+    </component>
+    <component id="appleDiskIII.headPlayer" class="AudioPlayer">
+        <property name="audio" ref="audio"/>
+        <property name="controlBus" ref="appleIII.controlBus"/>
+    </component>
+    
+    <device id="appleDiskIII2" label="Apple Disk III" image="images/Apple/Apple Disk III.png">
+        <setting ref="appleDiskIII2.drive" name="forceWriteProtected" label="Force Write Protected" type="checkbox"/>
+        <setting ref="appleDiskIII2.drive" name="mechanism" label="Mechanism" type="select" options="Shugart,Alps"/>
+        <setting ref="appleDiskIII2.drive" name="volume" label="Volume" type="slider" options="0,1"/>
+    </device>
+    <connector id="appleDiskIII2.connector" type="Apple Disk Drive Port">
+        <inlet ref="appleDiskIII2.drive" property="controlBus" outletRef="controlBus"/>
+        <inlet ref="appleDiskIII2.headPlayer" property="controlBus" outletRef="controlBus"/>
+    </connector>
+    <component id="appleDiskIII2.drive" class="AppleDiskDrive525">
+        <property name="device" ref="appleDiskIII2"/>
+        <property name="controlBus" ref="appleIII.controlBus"/>
+        <property name="diskImage" value=""/>
+        <property name="track" value="0"/>
+        <property name="forceWriteProtected" value="0"/>
+        <property name="doorPlayer" ref="appleDiskIII2.doorPlayer"/>
+        <property name="drivePlayer" ref="appleDiskIII2.drivePlayer"/>
+        <property name="headPlayer" ref="appleDiskIII2.headPlayer"/>
+        <property name="imageDriveOff" value="images/Apple/Apple Disk III.png"/>
+        <property name="imageDriveInUse" value="images/Apple/Apple Disk III In Use.png"/>
+        <property name="mechanism" value="Alps"/>
+        <property name="volume" value="0.5"/>
+        <property name="soundShugartOpen" value="${resourcePath}/sounds/Shugart/Shugart SA400 Open.ogg"/>
+        <property name="soundShugartClose" value="${resourcePath}/sounds/Shugart/Shugart SA400 Close.ogg"/>
+        <property name="soundShugartDrive" value="${resourcePath}/sounds/Shugart/Shugart SA400 Drive.ogg"/>
+        <property name="soundShugartHead" value="${resourcePath}/sounds/Shugart/Shugart SA400 Head.ogg"/>
+        <property name="soundShugartStop" value="${resourcePath}/sounds/Shugart/Shugart SA400 Stop.ogg"/>
+        <property name="soundShugartAlign" value="${resourcePath}/sounds/Shugart/Shugart SA400 Align.ogg"/>
+        <property name="soundAlpsOpen" value="${resourcePath}/sounds/Shugart/Shugart SA400 Open.ogg"/>
+        <property name="soundAlpsClose" value="${resourcePath}/sounds/Shugart/Shugart SA400 Close.ogg"/>
+        <property name="soundAlpsDrive" value="${resourcePath}/sounds/Alps/Alps 2124A Drive.ogg"/>
+        <property name="soundAlpsHead" value="${resourcePath}/sounds/Alps/Alps 2124A Head.ogg"/>
+        <property name="soundAlpsStop" value="${resourcePath}/sounds/Alps/Alps 2124A Stop.ogg"/>
+        <property name="soundAlpsAlign" value="${resourcePath}/sounds/Shugart/Shugart SA400 Align.ogg"/>
+    </component>
+    <component id="appleDiskIII2.doorPlayer" class="AudioPlayer">
+        <property name="audio" ref="audio"/>
+    </component>
+    <component id="appleDiskIII2.drivePlayer" class="AudioPlayer">
+        <property name="audio" ref="audio"/>
+        <property name="loop" value="1"/>
+    </component>
+    <component id="appleDiskIII2.headPlayer" class="AudioPlayer">
+        <property name="audio" ref="audio"/>
+        <property name="controlBus" ref="appleIII.controlBus"/>
+    </component>
+    
+    <device id="appleDiskIII3" label="Apple Disk III" image="images/Apple/Apple Disk III.png">
+        <setting ref="appleDiskIII3.drive" name="forceWriteProtected" label="Force Write Protected" type="checkbox"/>
+        <setting ref="appleDiskIII3.drive" name="mechanism" label="Mechanism" type="select" options="Shugart,Alps"/>
+        <setting ref="appleDiskIII3.drive" name="volume" label="Volume" type="slider" options="0,1"/>
+    </device>
+    <connector id="appleDiskIII3.connector" type="Apple Disk Drive Port">
+        <inlet ref="appleDiskIII3.drive" property="controlBus" outletRef="controlBus"/>
+        <inlet ref="appleDiskIII3.headPlayer" property="controlBus" outletRef="controlBus"/>
+    </connector>
+    <component id="appleDiskIII3.drive" class="AppleDiskDrive525">
+        <property name="device" ref="appleDiskIII3"/>
+        <property name="controlBus" ref="appleIII.controlBus"/>
+        <property name="diskImage" value=""/>
+        <property name="track" value="0"/>
+        <property name="forceWriteProtected" value="0"/>
+        <property name="doorPlayer" ref="appleDiskIII3.doorPlayer"/>
+        <property name="drivePlayer" ref="appleDiskIII3.drivePlayer"/>
+        <property name="headPlayer" ref="appleDiskIII3.headPlayer"/>
+        <property name="imageDriveOff" value="images/Apple/Apple Disk III.png"/>
+        <property name="imageDriveInUse" value="images/Apple/Apple Disk III In Use.png"/>
+        <property name="mechanism" value="Shugart"/>
+        <property name="volume" value="0.5"/>
+        <property name="soundShugartOpen" value="${resourcePath}/sounds/Shugart/Shugart SA400 Open.ogg"/>
+        <property name="soundShugartClose" value="${resourcePath}/sounds/Shugart/Shugart SA400 Close.ogg"/>
+        <property name="soundShugartDrive" value="${resourcePath}/sounds/Shugart/Shugart SA400 Drive.ogg"/>
+        <property name="soundShugartHead" value="${resourcePath}/sounds/Shugart/Shugart SA400 Head.ogg"/>
+        <property name="soundShugartStop" value="${resourcePath}/sounds/Shugart/Shugart SA400 Stop.ogg"/>
+        <property name="soundShugartAlign" value="${resourcePath}/sounds/Shugart/Shugart SA400 Align.ogg"/>
+        <property name="soundAlpsOpen" value="${resourcePath}/sounds/Shugart/Shugart SA400 Open.ogg"/>
+        <property name="soundAlpsClose" value="${resourcePath}/sounds/Shugart/Shugart SA400 Close.ogg"/>
+        <property name="soundAlpsDrive" value="${resourcePath}/sounds/Alps/Alps 2124A Drive.ogg"/>
+        <property name="soundAlpsHead" value="${resourcePath}/sounds/Alps/Alps 2124A Head.ogg"/>
+        <property name="soundAlpsStop" value="${resourcePath}/sounds/Alps/Alps 2124A Stop.ogg"/>
+        <property name="soundAlpsAlign" value="${resourcePath}/sounds/Shugart/Shugart SA400 Align.ogg"/>
+    </component>
+    <component id="appleDiskIII3.doorPlayer" class="AudioPlayer">
+        <property name="audio" ref="audio"/>
+    </component>
+    <component id="appleDiskIII3.drivePlayer" class="AudioPlayer">
+        <property name="audio" ref="audio"/>
+        <property name="loop" value="1"/>
+    </component>
+    <component id="appleDiskIII3.headPlayer" class="AudioPlayer">
+        <property name="audio" ref="audio"/>
+        <property name="controlBus" ref="appleIII.controlBus"/>
+    </component>
+    
+    <device id="appleDiskIII4" label="Apple Disk III" image="images/Apple/Apple Disk III.png">
+        <setting ref="appleDiskIII4.drive" name="forceWriteProtected" label="Force Write Protected" type="checkbox"/>
+        <setting ref="appleDiskIII4.drive" name="mechanism" label="Mechanism" type="select" options="Shugart,Alps"/>
+        <setting ref="appleDiskIII4.drive" name="volume" label="Volume" type="slider" options="0,1"/>
+    </device>
+    <connector id="appleDiskIII4.connector" type="Apple Disk Drive Port">
+        <inlet ref="appleDiskIII4.drive" property="controlBus" outletRef="controlBus"/>
+        <inlet ref="appleDiskIII4.headPlayer" property="controlBus" outletRef="controlBus"/>
+    </connector>
+    <component id="appleDiskIII4.drive" class="AppleDiskDrive525">
+        <property name="device" ref="appleDiskIII4"/>
+        <property name="controlBus" ref="appleIII.controlBus"/>
+        <property name="diskImage" value=""/>
+        <property name="track" value="0"/>
+        <property name="forceWriteProtected" value="0"/>
+        <property name="doorPlayer" ref="appleDiskIII4.doorPlayer"/>
+        <property name="drivePlayer" ref="appleDiskIII4.drivePlayer"/>
+        <property name="headPlayer" ref="appleDiskIII4.headPlayer"/>
+        <property name="imageDriveOff" value="images/Apple/Apple Disk III.png"/>
+        <property name="imageDriveInUse" value="images/Apple/Apple Disk III In Use.png"/>
+        <property name="mechanism" value="Alps"/>
+        <property name="volume" value="0.5"/>
+        <property name="soundShugartOpen" value="${resourcePath}/sounds/Shugart/Shugart SA400 Open.ogg"/>
+        <property name="soundShugartClose" value="${resourcePath}/sounds/Shugart/Shugart SA400 Close.ogg"/>
+        <property name="soundShugartDrive" value="${resourcePath}/sounds/Shugart/Shugart SA400 Drive.ogg"/>
+        <property name="soundShugartHead" value="${resourcePath}/sounds/Shugart/Shugart SA400 Head.ogg"/>
+        <property name="soundShugartStop" value="${resourcePath}/sounds/Shugart/Shugart SA400 Stop.ogg"/>
+        <property name="soundShugartAlign" value="${resourcePath}/sounds/Shugart/Shugart SA400 Align.ogg"/>
+        <property name="soundAlpsOpen" value="${resourcePath}/sounds/Shugart/Shugart SA400 Open.ogg"/>
+        <property name="soundAlpsClose" value="${resourcePath}/sounds/Shugart/Shugart SA400 Close.ogg"/>
+        <property name="soundAlpsDrive" value="${resourcePath}/sounds/Alps/Alps 2124A Drive.ogg"/>
+        <property name="soundAlpsHead" value="${resourcePath}/sounds/Alps/Alps 2124A Head.ogg"/>
+        <property name="soundAlpsStop" value="${resourcePath}/sounds/Alps/Alps 2124A Stop.ogg"/>
+        <property name="soundAlpsAlign" value="${resourcePath}/sounds/Shugart/Shugart SA400 Align.ogg"/>
+    </component>
+    <component id="appleDiskIII4.doorPlayer" class="AudioPlayer">
+        <property name="audio" ref="audio"/>
+    </component>
+    <component id="appleDiskIII4.drivePlayer" class="AudioPlayer">
+        <property name="audio" ref="audio"/>
+        <property name="loop" value="1"/>
+    </component>
+    <component id="appleDiskIII4.headPlayer" class="AudioPlayer">
+        <property name="audio" ref="audio"/>
+        <property name="controlBus" ref="appleIII.controlBus"/>
     </component>
     
 </edl>

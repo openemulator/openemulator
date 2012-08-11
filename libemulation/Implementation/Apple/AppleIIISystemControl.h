@@ -21,6 +21,8 @@ public:
     bool setRef(string name, OEComponent *ref);
     bool init();
     
+    void notify(OEComponent *sender, int notification, void *data);
+    
     OEChar read(OEAddress address);
     void write(OEAddress address, OEChar value);
     

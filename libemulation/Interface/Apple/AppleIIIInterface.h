@@ -18,7 +18,7 @@
 
 typedef enum
 {
-    APPLEIII_SET_EXTENDEDMEMORYENABLE = CPU_END,
+    APPLEIII_SET_ZEROPAGE = CPU_END,
 } AppleIIIMOS6502Message;
 
 // Memory control

@@ -34,7 +34,13 @@ bool AppleIIISystemControl::setRef(string name, OEComponent *ref)
     if (name == "cpu")
         cpu = ref;
     else if (name == "controlBus")
+    {
+        if (controlBus)
+            controlBus->removeObserver(this, CONTROLBUS_RESET_DID_ASSERT);
         controlBus = ref;
+        if (controlBus)
+            controlBus->addObserver(this, CONTROLBUS_RESET_DID_ASSERT);
+    }
     else if (name == "memoryBus")
         memoryBus = ref;
     else if (name == "extendedMemoryBus")
@@ -119,9 +125,17 @@ bool AppleIIISystemControl::init()
     return true;
 }
 
+void AppleIIISystemControl::notify(OEComponent *sender, int notification, void *data)
+{
+    setEnvironment(0xff);
+    setZeroPage(0);
+    setRAMBank(0);
+    setDACOutput(0);
+}
+
 OEChar AppleIIISystemControl::read(OEAddress address)
 {
-    logMessage("R " + getString(address));
+//    logMessage("R " + getString(address));
     
     switch (address)
     {
@@ -166,7 +180,7 @@ void AppleIIISystemControl::write(OEAddress address, OEChar value)
             break;
     }
     
-    logMessage("W " + getString(address) + ":" + getHexString(value));
+//    logMessage("W " + getString(address) + ":" + getHexString(value));
 }
 
 inline void AppleIIISystemControl::setEnvironment(OEChar value)
@@ -210,9 +224,7 @@ inline void AppleIIISystemControl::setZeroPage(OEChar value)
     
     updateNormalStack();
     
-    bool extendedMemoryEnabled = ((zeroPage & 0xf8) == 0x18);
-    
-    cpu->postMessage(this, APPLEIII_SET_EXTENDEDMEMORYENABLE, &extendedMemoryEnabled);
+    cpu->postMessage(this, APPLEIII_SET_ZEROPAGE, &zeroPage);
 }
 
 inline void AppleIIISystemControl::setRAMBank(OEChar value)
@@ -253,7 +265,7 @@ void AppleIIISystemControl::updateNormalStack()
     
     offsetMap.startAddress = 0x0100;
     offsetMap.endAddress = 0x01ff;
-    offsetMap.offset = normalStack ? 0 : 0x100 * (zeroPage ^ 0x01);
+    offsetMap.offset = normalStack ? 0 : (0x100 * (zeroPage ^ 0x01) - 0x100);
     
     memoryBus->postMessage(this, ADDRESSOFFSET_MAP, &offsetMap);
     extendedMemoryBus->postMessage(this, ADDRESSOFFSET_MAP, &offsetMap);

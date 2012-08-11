@@ -867,14 +867,6 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
     if (!canvas)
         return;
     
-    NSString *characters = [theEvent characters];
-    for (NSInteger i = 0; i < [characters length]; i++)
-    {
-        int c = [characters characterAtIndex:i];
-        
-        [self sendUnicodeKeyEvent:c];
-    }
-    
     if (![theEvent isARepeat])
     {
         int usageId = [self getUsageId:[theEvent keyCode]];
@@ -884,6 +876,14 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
         canvas->setKey(usageId, true);
         
         [document unlockEmulation];
+    }
+    
+    NSString *characters = [theEvent characters];
+    for (NSInteger i = 0; i < [characters length]; i++)
+    {
+        int c = [characters characterAtIndex:i];
+        
+        [self sendUnicodeKeyEvent:c];
     }
 }
 

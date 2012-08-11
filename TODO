@@ -1,17 +1,22 @@
 ==1.0.4==
-* Add LCD Composite Color Monitor
-* Fix IAC 42 > rapid drive change
+* Implement AppleIIIVideo+font upload
 * Implement MOS6522
-* Fix AppleIIVideo not displaying video when loading emulation in paused state
-* Disk II head player should not play when turning on a drive or changing drives
-* Check Mac OS X 10.5 (Intel) compatibility
+* Implement AppleIIIGamePort
+* Fix AppleIIIDiskIO
+* Fix AppleIIIBeeper
 * Fix Apple Silentype Interface Card spurious data problems
 * Implement Apple Silentype print intensity
 * Fix [CanvasView update] problem in paper view
 * Add Apple Silentype sounds
-* Add Apple Graphics Tablet sounds
-* Implement DDL file format
+
 * Implement open disk image when starting with template chooser
+* Add LCD Composite Color Monitor
+* Fix IAC 42 > rapid drive change
+* Fix AppleIIVideo not displaying video when loading emulation in paused state
+* Disk II head player should not play when turning on a drive or changing drives
+* Implement DDL file format
+* Check Mac OS X 10.5 (Intel) compatibility
+* Add Apple Graphics Tablet sounds
 
 * Implement wxWidgets user interface
 

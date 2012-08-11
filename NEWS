@@ -1,4 +1,6 @@
 ==Latest==
+* Implemented MOS6551
+* Fixed Apple III memory problems
 * Implemented Apple III X-Byte addressing
 * Fixed erase bug in invalidateTimers
 * Added Apple Disk III

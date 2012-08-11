@@ -18,7 +18,9 @@
 AppleIIIMOS6502::AppleIIIMOS6502() : MOS6502()
 {
     extendedMemoryBus = NULL;
+    
     extendedMemoryEnabled = false;
+    extendedPageAddress = 0;
     extendedMemoryBank = -1;
 }
 
@@ -46,8 +48,13 @@ bool AppleIIIMOS6502::init()
 
 bool AppleIIIMOS6502::postMessage(OEComponent *sender, int message, void *data)
 {
-    if (message == APPLEIII_SET_EXTENDEDMEMORYENABLE)
-        extendedMemoryEnabled = *((bool *)data);
+    if (message == APPLEIII_SET_ZEROPAGE)
+    {
+        OEChar zeroPage = *((OEChar *)data);
+        
+        extendedMemoryEnabled = ((zeroPage & 0xf8) == 0x18);
+        extendedPageAddress = 0x100 * (0x0c ^ zeroPage);
+    }
     else
         return MOS6502::postMessage(sender, message, data);
     

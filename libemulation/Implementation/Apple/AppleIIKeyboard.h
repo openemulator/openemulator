@@ -54,6 +54,7 @@ private:
 	OEComponent *monitor;
     
     OEChar keyLatch;
+    bool keyStrobe;
     AppleIIKeyboardState state;
     OEInt stateUsageId;
     

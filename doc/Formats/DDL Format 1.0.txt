@@ -2,9 +2,9 @@
 
 This is the specification of DDL 1.0, an XML language that describes data stored on physical floppy disks.
 
-The purpose of DDL is archiving copy-protected floppy disks and serving as a standard for preserving digital content. The advantages of DDL are its expandability, modifiabilty and ease of implementation.
+The purpose of DDL is to archive copy-protected floppy disks and serve as a standard for preserving the digital content stored therein. The advantages of DDL are its expandability, modifiability and ease of implementation.
 
-DDL does not describe data from the point of view of the storage medium (i.e. floppy disk), but rather from the perspective of the storage access device (i.e. disk drive). It stores the necessary instructions for producing a (hopefully accurate) copy of a floppy disk. This includes the data to be stored on the floppy disk and properties like storage medium type, tracks-per-inch reference and modifiability.
+DDL does not describe data from the point of view of the storage medium (i.e. floppy disk), but rather from the perspective of the storage access device (i.e. disk drive). It stores the necessary instructions for authoring a (hopefully accurate) copy of a floppy disk. This includes the data stored on the floppy disk and properties like storage medium type, tracks-per-inch reference and the state of the write protection tab.
 
 The XML DTD is available here:
 
@@ -12,9 +12,15 @@ The XML DTD is available here:
 
 Notes:
 
-* The present version of DDL defines constant-rate bitstream tracks (magnetic inversions are sampled at a constant bitrate). If a new kind of description is needed, request-for-comments shall be initiated.
+* DDL attempts to describe all known means of copy protection for floppy disk drives. This includes variable-rate bitstreams, weak bits and isolated zero or one bits. If a new kind of description is needed, request-for-comments shall be initiated.
 
 * For comments or suggestions, please contact: Marc S. Ressl (mressl at umich . edu)
+
+==Legal==
+
+The DDL format is licensed under the Creative Commons "attribution CC BY" license 3.0. For more information please refer to:
+
+  http://creativecommons.org/licenses/by/3.0/
 
 ==Nomenclature==
 
@@ -24,7 +30,9 @@ This specification uses square brackets to denote information that should be rep
 
 DDL filenames should always end with the extension .ddl.
 
-The information stored in a .ddl file is always compressed using the ZIP format. The XML description is stored in a file named "content.xml" within the ZIP file structure.
+The information stored in a DDL file follows the XML specification. For more information please refer to:
+
+  http://www.w3.org/TR/REC-xml/
 
 ==DDL header==
 
@@ -42,56 +50,58 @@ The DDL tag is the top-level of the floppy disk description:
 * [CREATOR] is a string that describes the name and version of the software that created the DDL file.
 * [LABEL] is a short description of the content stored in the DDL file.
 * [DESCRIPTION] is a longer description of the content stored in the DDL file.
-* [MEDIUM] describes the kind of storage medium. The following storage mediums are defined: "8 inch disk", "5.25 inch disk" and "3.5 inch disk"
+* [MEDIUM] describes the kind of storage medium. The following storage mediums are available: "8 inch disk", "5.25 inch disk" and "3.5 inch disk"
 * [TRACKSPERINCH] describes the magnetic resolution of the storage medium (this value is usually stated in a label on the storage medium). Usual values are "48", "96" and "100".
 * [WRITEENABLED] may take the values "1" or "0", and determines if the storage medium may be modified (is not write protected).
 
 ==DDL track tag==
 
-Within the DDL tag a series of track tags may exist, each describing every track's content:
+Within the DDL tag a series of track tags may exist, each describing a track's content:
 
 <track index="[TRACKINDEX]">
 
 * [TRACKINDEX] describes the track number. It may be a real number, in case a disk drive allows more accurate head positioning than the storage medium specifies. The decimal part is separated with a dot (i.e. "11.25").
 
-Notes:
+An example:
 
-* On 5.25" floppy disks formatted for Apple II it is recommended to set tracksPerInch to 48 and use the native Apple II track numbering from 0 to 34. Half- and quarter-track indices are suffixed with .5 and .25 respectively.
+Apple II standard-formatted 5.25" floppy disks should set tracksPerInch to 48 and use the Apple II track numbering from 0 to 34. Non-standard half- and quarter-track indices should be suffixed with .5 and .25 respectively.
 
 ==DDL side tag==
 
-Every track tag contains one or more side tags, each describing the content of a track/side combination:
+Every track tag contains one or more side tags, each describing the content of a track/side:
 
 <side index="[SIDEINDEX]">
 
 * [SIDEINDEX] describes the side number. It may be "0" or "1".
 
-==DDL data tag==
+==DDL bitstream tag==
 
-Every side tag must contain a data tag. This contains the actual data:
+Every side tag contains one or more bitstream tags. These contain the actual data:
 
-<data type="[TYPE]"/>
+<bitstream cellWidth="[CELLWIDTH]">
 
-* [TYPE] is the type of data stored within the tag. In DDL 1.0 the only valid type of data is "bitstream".
+* [CELLWIDTH] is optional, and specifies the relative duration of each sample of the data contained in this tag. This is a real number, the decimal part is separated with a dot. The default duration of each sample is "1.0".
+
+It is possible to use several bitstream tags in sequence to describe a track with different cell widths.
 
 ==DDL bitstream data==
 
-The only type of data available in DDL 1.0 is "bitstream" (see DDL data tag).
-
-"bitstream" data is stored as standard ASCII text, and allows the following objects:
+"bitstream" data is stored as standard ASCII text, and may be composed of the following symbols:
 
 * A '+' character encodes a 1 sample (a magnetic inversion)
 * A '-' character encodes a 0 sample (no magnetic inversion)
 * A '?' character encodes a weak sample (a 50% chance of magnetic inversion)
-* A sequence of two ASCII characters describing an 8-bit value in hexadecimal (characters '0'..'9' and 'a'..'f' or 'A'..'F') encodes a sequence of 8 samples. The most significant bit is the first sample, the least significant bit is the last sample.
+* A sequence of two ASCII characters describing an 8-bit value in hexadecimal (characters '0'..'9' and 'a'..'f' or 'A'..'F') encodes a sequence of 8 samples. The most significant bit (bit 7) is the first sample, the least significant bit (bit 0) is the last sample.
 * Data may be formatted with space, tab, newline or linefeed.
 
 Notes:
 
-* Tracks/sides with undefined data should always be considered a stream of 0 samples (no magnetic inversions).
-* The first sample of the data of all tracks and sides must be synchronized to the index hole of the storage medium. In case no index hole is present, synchronization should be relative to some arbitrary position.
-* The DDL data model uses constant bit-rate and assumes disk drives access the storage medium at the speed of their specification. Nevertheless, provisions exist for data streams to be of different length (as the stream might have been written by drives of different speed).
-* Data should be human-readable. Provisions should exist so that data fields are easy to read, understand and modify (i.e. sectors may be detected and appropriately formatted).
+* A disk is a circular medium. Thus the data of each track/side must be treated circularly as well.
+* The first sample of data of each track/side must be synchronized to the index hole of the storage medium. In case no index hole is present, synchronization should be relative to some arbitrary position.
+* Every track/side may contain an arbitrary amount of data.
+* The duration of each sample of data is calculated from the disk drive's rotation speed, the sample's cell width and from the total cell width sum. Example: a disk is spinning at 300 RPM with 50000 bits per track/side; each sample of data takes 60 / 300 / 50000 = 4 microseconds.
+* A track/side with no data should be treated as a stream of 0 samples (no magnetic inversions).
+* Data should be human-readable. Provisions should exist so that data fields are easy to read, understand and modify (i.e. sectors may be detected and appropriately formatted). Authors of DDL files are encouraged to add comments to the DDL file, so the protection is described within the DDL file.
 
 ==Example==
 
@@ -99,11 +109,11 @@ An short example of DDL XML:
 
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE ddl PUBLIC "-//DDL//DTD DDL 1.0//EN" "http://www.openemulator.org/DTD/ddl-1.0.dtd">
-<ddl version="1.0" creator="libdiskimage 1.0" label="Apple DOS 3.3" description="Apple DOS 3.3 is an operating system by Apple Computer for Apple II computers. This is the 1983 version." medium="5.25 inch disk" tracksPerInch="48" writeEnabled="1">
+<ddl version="1.0" creator="libdiskimage 1.0" label="Apple DOS 3.3" description="Apple DOS 3.3 is an operating system for the Apple II series of microcomputers." medium="5.25 inch disk" tracksPerInch="48" writeEnabled="1">
 
 <track index="0">
 <side index="0">
-<data type="bitstream">
+<bitstream>
 ff-- ff-- ff-- ff-- ff-- ff-- ff-- ff--
 ff-- ff-- ff-- ff-- ff-- ff-- ff-- ff--
 ff-- ff-- ff-- ff-- ff-- ff-- ff-- ff--
@@ -113,6 +123,7 @@ ff-- ff-- ff-- ff-- ff-- ff-- ff-- ff--
 
 d5 aa 96 ff fe aa aa aa aa ff fe de aa eb
 
+<!-- XML comments may also be used -->
 ?+++++++-- ff-- ff-- ff-- ff-- ff--
 
 d5 aa ad b6 db dc f4 f3 bb bd cf 97 9a ae ae 96
@@ -137,7 +148,7 @@ f2 ab eb fd de d7 bc cd f3 bf f9 ab fd 96 96 96
 96 96 96 96 96 96 96 96 96 96 96 96 96 96 96 96
 96 96 96 96 96 96 96 96 96 96 96 96 96 96 96 96
 96 96 96 96 96 96 96 af b3 9a de aa eb
-</data>
+</bitstream>
 </side>
 </track>
 </ddl>
