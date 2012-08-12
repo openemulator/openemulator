@@ -92,17 +92,8 @@ bool AppleSilentype::setRef(string name, OEComponent *ref)
 
 bool AppleSilentype::init()
 {
-	if (!device)
-	{
-		logMessage("property 'device' undefined");
-		return false;
-	}
-	
-	if (!canvas)
-	{
-		logMessage("canvas could not be created");
-		return false;
-	}
+    OECheckComponent(device);
+    OECheckComponent(canvas);
 	
 	CanvasPaperConfiguration configuration;
 	configuration.pageResolution = OEMakeSize(612 * 2, 792);

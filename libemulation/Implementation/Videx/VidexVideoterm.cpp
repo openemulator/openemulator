@@ -125,29 +125,12 @@ bool VidexVideoterm::setData(string name, OEData *data)
 
 bool VidexVideoterm::init()
 {
+    OECheckComponent(ram);
+    OECheckComponent(addressOffset);
+    OECheckComponent(video);
+    
     if (!MC6845::init())
         return false;
-    
-    if (!ram)
-    {
-        logMessage("ram not connected");
-        
-        return false;
-    }
-    
-    if (!addressOffset)
-    {
-        logMessage("addressOffset not connected");
-        
-        return false;
-    }
-    
-    if (!video)
-    {
-        logMessage("video not connected");
-        
-        return false;
-    }
     
     ram->postMessage(this, RAM_GET_DATA, &vram);
     

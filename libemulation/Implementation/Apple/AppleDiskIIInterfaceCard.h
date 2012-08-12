@@ -38,7 +38,7 @@ protected:
     
     void setPhaseControl(OEInt index, bool value);
     void setDriveOn(bool value);
-    void setDriveSel(OEInt value);
+    void selectDrive(OEInt value);
     void setSequencerWrite(bool value);
     void setSequencerLoad(bool value);
     void updateSequencer();
@@ -61,10 +61,11 @@ private:
     
     OELong lastCycles;
     
+    void updateSwitches(OEAddress address);
     void updatePhaseControl();
     void updateDriveEnableControl();
     void updateDriveEnabled();
-    void updateDriveSel(OEInt value);
+    void updateDriveSelection(OEInt value);
 };
 
 #endif

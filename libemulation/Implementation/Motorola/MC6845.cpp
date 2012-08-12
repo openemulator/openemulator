@@ -183,19 +183,8 @@ bool MC6845::setRef(string name, OEComponent *ref)
 
 bool MC6845::init()
 {
-    if (!controlBus)
-    {
-        logMessage("controlBus not connected");
-        
-        return false;
-    }
-    
-    if (!floatingBus)
-    {
-        logMessage("floatingBus not connected");
-        
-        return false;
-    }
+    OECheckComponent(controlBus);
+    OECheckComponent(floatingBus);
     
     controlBus->postMessage(this, CONTROLBUS_GET_POWERSTATE, &powerState);
     

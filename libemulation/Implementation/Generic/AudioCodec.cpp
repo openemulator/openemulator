@@ -91,19 +91,8 @@ bool AudioCodec::setRef(string name, OEComponent *ref)
 
 bool AudioCodec::init()
 {
-    if (!audio)
-    {
-		logMessage("audio not connected");
-        
-        return false;
-    }
-    
-    if (!controlBus)
-    {
-		logMessage("controlBus not connected");
-        
-        return false;
-    }
+    OECheckComponent(audio);
+    OECheckComponent(controlBus);
     
     updateSynth();
     

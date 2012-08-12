@@ -115,19 +115,8 @@ bool AppleDiskIIInterfaceCard::setRef(string name, OEComponent *ref)
 
 bool AppleDiskIIInterfaceCard::init()
 {
-    if (!controlBus)
-    {
-        logMessage("controlBus not connected");
-        
-        return false;
-    }
-    
-    if (!floatingBus)
-    {
-        logMessage("floatingBus not connected");
-        
-        return false;
-    }
+    OECheckComponent(controlBus);
+    OECheckComponent(floatingBus);
     
     update();
     
@@ -140,7 +129,7 @@ void AppleDiskIIInterfaceCard::update()
     
     currentDrive = &dummyDrive;
     
-    updateDriveSel(driveSel);
+    updateDriveSelection(driveSel);
 }
 
 void AppleDiskIIInterfaceCard::notify(OEComponent *sender, int notification, void *data)
@@ -160,7 +149,7 @@ void AppleDiskIIInterfaceCard::notify(OEComponent *sender, int notification, voi
             setPhaseControl(2, false);
             setPhaseControl(3, false);
             setDriveOn(false);
-            setDriveSel(0);
+            selectDrive(0);
             setSequencerLoad(false);
             setSequencerWrite(false);
             
@@ -186,50 +175,7 @@ void AppleDiskIIInterfaceCard::notify(OEComponent *sender, int notification, voi
 
 OEChar AppleDiskIIInterfaceCard::read(OEAddress address)
 {
-    updateSequencer();
-    
-    switch (address & 0xf)
-    {
-        case 0x0: case 0x1:
-            setPhaseControl(0, address & 0x1);
-            
-            break;
-            
-        case 0x2: case 0x3:
-            setPhaseControl(1, address & 0x1);
-            
-            break;
-            
-        case 0x4: case 0x5:
-            setPhaseControl(2, address & 0x1);
-            
-            break;
-            
-        case 0x6: case 0x7:
-            setPhaseControl(3, address & 0x1);
-            
-            break;
-            
-        case 0x8: case 0x9:
-            setDriveOn(address & 0x1);
-            
-            break;
-            
-        case 0xa: case 0xb:
-            setDriveSel((OEInt) address & 0x1);
-            
-            break;
-            
-        case 0xc: case 0xd:
-            setSequencerLoad(address & 0x1);
-            
-            break;
-            
-        case 0xe: case 0xf:
-            setSequencerWrite(address & 0x1);
-            
-            break;
-    }
+    updateSwitches(address);
     
     if (driveEnableControl && !(address & 0x1))
         return dataRegister;
@@ -238,6 +184,14 @@ OEChar AppleDiskIIInterfaceCard::read(OEAddress address)
 }
 
 void AppleDiskIIInterfaceCard::write(OEAddress address, OEChar value)
+{
+    updateSwitches(address);
+    
+    if (driveEnableControl && (address & 0x1))
+        dataRegister = value;
+}
+
+inline void AppleDiskIIInterfaceCard::updateSwitches(OEAddress address)
 {
     updateSequencer();
     
@@ -269,7 +223,7 @@ void AppleDiskIIInterfaceCard::write(OEAddress address, OEChar value)
             break;
             
         case 0xa: case 0xb:
-            setDriveSel((OEInt) address & 0x1);
+            selectDrive((OEInt) address & 0x1);
             
             break;
             
@@ -283,9 +237,6 @@ void AppleDiskIIInterfaceCard::write(OEAddress address, OEChar value)
             
             break;
     }
-    
-    if (driveEnableControl && (address & 0x1))
-        dataRegister = value;
 }
 
 void AppleDiskIIInterfaceCard::setPhaseControl(OEInt index, bool value)
@@ -353,15 +304,15 @@ void AppleDiskIIInterfaceCard::updateDriveEnabled()
                               APPLEII_CLEAR_DRIVEENABLE, NULL);
 }
 
-void AppleDiskIIInterfaceCard::setDriveSel(OEInt value)
+void AppleDiskIIInterfaceCard::selectDrive(OEInt value)
 {
     if (driveSel == value)
         return;
     
-    updateDriveSel(value);
+    updateDriveSelection(value);
 }
 
-void AppleDiskIIInterfaceCard::updateDriveSel(OEInt value)
+void AppleDiskIIInterfaceCard::updateDriveSelection(OEInt value)
 {
     driveSel = value;
     

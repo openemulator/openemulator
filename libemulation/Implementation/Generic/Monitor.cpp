@@ -232,12 +232,7 @@ bool Monitor::setRef(string name, OEComponent *ref)
 
 bool Monitor::init()
 {
-    if (!device)
-    {
-        logMessage("device not connected");
-        
-        return false;
-    }
+    OECheckComponent(device);
     
     if (!canvas)
     {

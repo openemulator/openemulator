@@ -29,12 +29,7 @@ bool AppleIIFloatingBus::setRef(string name, OEComponent *ref)
 
 bool AppleIIFloatingBus::init()
 {
-    if (!video)
-    {
-        logMessage("video not connected");
-        
-        return false;
-    }
+    OECheckComponent(video);
     
     return true;
 }

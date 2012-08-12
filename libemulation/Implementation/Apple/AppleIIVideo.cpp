@@ -53,6 +53,7 @@ enum
     MODEL_II,
     MODEL_IIJPLUS,
     MODEL_IIE,
+    MODEL_III,
 };
 
 enum
@@ -66,6 +67,7 @@ AppleIIVideo::AppleIIVideo()
     controlBus = NULL;
     gamePort = NULL;
     monitor = NULL;
+    systemControl = NULL;
     
     model = MODEL_IIE;
     videoSystem = VIDEO_NTSC;
@@ -100,6 +102,7 @@ AppleIIVideo::AppleIIVideo()
     colorKiller = true;
     
     buildLoresFont();
+    buildHires80Font();
     
     image.setSampleRate(NTSC_4FSC);
     image.setFormat(OEIMAGE_LUMINANCE);
@@ -130,6 +133,8 @@ bool AppleIIVideo::setValue(string name, string value)
             model = MODEL_IIJPLUS;
         else if (value == "IIe")
             model = MODEL_IIE;
+        else if (value == "III")
+            model = MODEL_III;
     }
 	else if (name == "revision")
     {
@@ -259,6 +264,8 @@ bool AppleIIVideo::setRef(string name, OEComponent *ref)
         vram2000 = ref;
 	else if (name == "vram4000")
         vram4000 = ref;
+    else if (name == "sytemControl")
+        systemControl = ref;
     else
 		return false;
 	
@@ -277,12 +284,7 @@ bool AppleIIVideo::setData(string name, OEData *data)
 
 bool AppleIIVideo::init()
 {
-    if (!controlBus)
-    {
-        logMessage("controlBus not connected");
-        
-        return false;
-    }
+    OECheckComponent(controlBus);
     
     OEData *data;
     
@@ -321,6 +323,9 @@ bool AppleIIVideo::init()
     if (gamePort)
         gamePort->postMessage(this, APPLEII_GET_AN2, &an2);
     
+    if (systemControl)
+        systemControl->postMessage(this, APPLEIII_GET_APPLEIIMODE, &appleIIMode);
+    
     update();
     
     return true;
@@ -330,7 +335,7 @@ void AppleIIVideo::update()
 {
     if (revisionUpdated)
     {
-        buildHiresFont();
+        buildHires40Font();
         configureDraw();
         
         revisionUpdated = false;
@@ -415,7 +420,7 @@ void AppleIIVideo::notify(OEComponent *sender, int notification, void *data)
                 
                 if (powerState == CONTROLBUS_POWERSTATE_OFF)
                 {
-//                    setMode(MODE_TEXT, false);
+                    setMode(MODE_TEXT, false);
                     setMode(MODE_MIXED, false);
                     setMode(MODE_PAGE2, false);
                     setMode(MODE_HIRES, false);
@@ -455,6 +460,14 @@ void AppleIIVideo::notify(OEComponent *sender, int notification, void *data)
                 
                 break;
         }
+    }
+    else if (sender == systemControl)
+    {
+        appleIIMode = *((bool *)data);
+        
+        refreshVideo();
+        
+        configureDraw();
     }
     else
         // Refresh notification from VRAM
@@ -512,8 +525,10 @@ bool AppleIIVideo::loadTextFont(string name, OEData *data)
     if (data->size() < (FONT_CHARNUM * FONT_CHARHEIGHT))
         return false;
     
-    OEData theFont;
-    theFont.resize(4 * FONT_SIZE);
+    OEData font40;
+    OEData font80;
+    font40.resize(4 * FONT_SIZE);
+    font80.resize(4 * FONT_SIZE);
     
     OEInt mask = (OEInt) getNextPowerOf2(data->size() / FONT_CHARHEIGHT) - 1;
     for (OEInt i = 0; i < 4 * FONT_CHARNUM; i++)
@@ -537,12 +552,20 @@ bool AppleIIVideo::loadTextFont(string name, OEData *data)
             {
                 bool bit = (value << (x >> 1)) & 0x40;
                 
-                theFont[(i * FONT_CHARHEIGHT + y) * FONT_CHARWIDTH + x] = (bit ^ inv) ? 0xff : 0x00;
+                font40[(i * FONT_CHARHEIGHT + y) * FONT_CHARWIDTH + x] = (bit ^ inv) ? 0xff : 0x00;
+            }
+            
+            for (OEInt x = 0; x < FONT_CHARWIDTH / 2; x++)
+            {
+                bool bit = (value << x) & 0x40;
+                
+                font80[(i * FONT_CHARHEIGHT + y) * FONT_CHARWIDTH + x] = (bit ^ inv) ? 0xff : 0x00;
             }
         }
     }
     
-    textFont[name] = theFont;
+    text40Font[name] = font40;
+    text80Font[name] = font80;
     
     return true;
 }
@@ -569,20 +592,41 @@ void AppleIIVideo::buildLoresFont()
     }
 }
 
-void AppleIIVideo::buildHiresFont()
+void AppleIIVideo::buildHires40Font()
 {
-    hiresFont.resize(2 * FONT_CHARNUM * FONT_CHARWIDTH);
+    bool delayEnabled = (((model == MODEL_II) && (revision != 0)) ||
+                         (model == MODEL_IIJPLUS) ||
+                         (model == MODEL_IIE));
+    
+    hires40Font.resize(2 * FONT_CHARNUM * FONT_CHARWIDTH);
     
     for (OEInt i = 0; i < 2 * FONT_CHARNUM; i++)
     {
         OEChar value = (i & 0x7f) << 1 | (i >> 8);
-        bool delay = (revision != 0) && (i & 0x80);
+        bool delay = delayEnabled && (i & 0x80);
         
         for (OEInt x = 0; x < FONT_CHARWIDTH; x++)
         {
             bool bit = (value >> ((x + 2 - delay) >> 1)) & 0x1;
             
-            hiresFont[i * FONT_CHARWIDTH + x] = bit ? 0xff : 0x00;
+            hires40Font[i * FONT_CHARWIDTH + x] = bit ? 0xff : 0x00;
+        }
+    }
+}
+
+void AppleIIVideo::buildHires80Font()
+{
+    hires80Font.resize(FONT_CHARNUM * FONT_CHARWIDTH);
+    
+    for (OEInt i = 0; i < FONT_CHARNUM; i++)
+    {
+        OEChar value = i & 0x7f;
+        
+        for (OEInt x = 0; x < FONT_CHARWIDTH; x++)
+        {
+            bool bit = (value >> x) & 0x1;
+            
+            hires80Font[i * FONT_CHARWIDTH + x] = bit ? 0xff : 0x00;
         }
     }
 }
@@ -604,7 +648,152 @@ void AppleIIVideo::setMode(OEInt mask, bool value)
 
 void AppleIIVideo::configureDraw()
 {
-    bool newColorKiller = (revision != 0) && OEGetBit(mode, MODE_TEXT);
+    bool newColorKiller;
+    
+    bool page = OEGetBit(mode, MODE_PAGE2);
+    
+    if (model != MODEL_III)
+    {
+        newColorKiller = (revision != 0) && OEGetBit(mode, MODE_TEXT);
+        
+        if (OEGetBit(mode, MODE_TEXT) ||
+            ((currentTimer == TIMER_DISPLAYEND) && OEGetBit(mode, MODE_MIXED)))
+        {
+            draw = &AppleIIVideo::drawText40Line;
+            drawMemory1 = textMemory[page];
+            drawFont = (OEChar *)&text40Font[characterSet].front();
+            
+            drawFont += ((an2 << 1) | flash) * FONT_SIZE;
+        }
+        else if (!OEGetBit(mode, MODE_HIRES))
+        {
+            draw = &AppleIIVideo::drawLoresLine;
+            drawMemory1 = textMemory[page];
+            drawFont = (OEChar *)&loresFont.front();
+        }
+        else
+        {
+            draw = &AppleIIVideo::drawHires40Line;
+            drawMemory1 = hiresMemory[page];
+            drawFont = (OEChar *)&hires40Font.front();
+        }
+    }
+    else
+    {
+        if (appleIIMode)
+        {
+            newColorKiller = OEGetBit(mode, MODE_TEXT) || OEGetBit(mode, MODE_HIRES);
+            
+            if (OEGetBit(mode, MODE_TEXT) ||
+                ((currentTimer == TIMER_DISPLAYEND) && OEGetBit(mode, MODE_MIXED)))
+            {
+                draw = &AppleIIVideo::drawText40Line;
+                drawMemory1 = textMemory[page];
+                drawFont = (OEChar *)&text40Font[characterSet].front();
+                
+                drawFont += ((an2 << 1) | flash) * FONT_SIZE;
+            }
+            else if (!OEGetBit(mode, MODE_HIRES))
+            {
+                draw = &AppleIIVideo::drawLoresLine;
+                drawMemory1 = textMemory[page];
+                drawFont = (OEChar *)&loresFont.front();
+            }
+            else
+            {
+                draw = &AppleIIVideo::drawHires40Line;
+                drawMemory1 = hiresMemory[page];
+                drawFont = (OEChar *)&hires40Font.front();
+            }
+        }
+        else
+        {
+            switch (mode & (MODE_HIRES | MODE_MIXED | MODE_TEXT))
+            {
+                case 0:
+                    // Text 40 B/W
+                    newColorKiller = true;
+                    
+                    draw = &AppleIIVideo::drawText40Line;
+                    drawMemory1 = textMemory[page];
+                    drawFont = (OEChar *)&text40Font[characterSet].front();
+                    
+                    drawFont += ((an2 << 1) | flash) * FONT_SIZE;
+                    
+                    break;
+                    
+                case MODE_TEXT:
+                    // Text 40 color
+                    newColorKiller = false;
+                    
+                    draw = &AppleIIVideo::drawText40Line;
+                    drawMemory1 = textMemory[page];
+                    drawMemory2 = textMemory[!page];
+                    drawFont = (OEChar *)&text40Font[characterSet].front();
+                    
+                    drawFont += ((an2 << 1) | flash) * FONT_SIZE;
+                    
+                    break;
+                    
+                case MODE_MIXED:
+                case MODE_MIXED | MODE_TEXT:
+                    // Text 80 B/W
+                    newColorKiller = true;
+                    
+                    draw = &AppleIIVideo::drawText80Line;
+                    drawMemory1 = textMemory[page];
+                    drawMemory2 = textMemory[!page];
+                    drawFont = (OEChar *)&text80Font[characterSet].front();
+                    
+                    drawFont += ((an2 << 1) | flash) * FONT_SIZE;
+                    
+                    break;
+                    
+                case MODE_HIRES:
+                    // Apple II hires
+                    newColorKiller = true;
+                    
+                    draw = &AppleIIVideo::drawHires40Line;
+                    drawMemory1 = hiresMemory[page];
+                    drawFont = (OEChar *)&hires40Font.front();
+                    
+                    break;
+                    
+                case MODE_HIRES | MODE_TEXT:
+                    // Apple III hires color
+                    newColorKiller = false;
+                    
+                    draw = &AppleIIVideo::drawHires40Line;
+                    drawMemory1 = hiresMemory[0] + 0x4000 * page;
+                    drawMemory2 = hiresMemory[1] + 0x4000 * page;
+                    drawFont = (OEChar *)&hires40Font.front();
+                    
+                    break;
+                    
+                case MODE_HIRES | MODE_MIXED:
+                    // Apple III super hires color
+                    newColorKiller = true;
+                    
+                    draw = &AppleIIVideo::drawHires80Line;
+                    drawMemory1 = hiresMemory[0] + 0x4000 * page;
+                    drawMemory2 = hiresMemory[1] + 0x4000 * page;
+                    drawFont = (OEChar *)&hires80Font.front();
+                    
+                    break;
+                    
+                case MODE_HIRES | MODE_MIXED | MODE_TEXT:
+                    // Apple III 140x192 color
+                    newColorKiller = false;
+                    
+                    draw = &AppleIIVideo::drawHires80Line;
+                    drawMemory1 = hiresMemory[0] + 0x4000 * page;
+                    drawMemory2 = hiresMemory[1] + 0x4000 * page;
+                    drawFont = (OEChar *)&hires80Font.front();
+                    
+                    break;
+            }
+        }
+    }
     
     if (colorKiller != newColorKiller)
     {
@@ -614,50 +803,52 @@ void AppleIIVideo::configureDraw()
         
         postNotification(this, APPLEII_COLORKILLER_DID_CHANGE, &colorKiller);
     }
-    
-    bool page = OEGetBit(mode, MODE_PAGE2);
-    
-    if (OEGetBit(mode, MODE_TEXT) ||
-        ((currentTimer == TIMER_DISPLAYEND) && OEGetBit(mode, MODE_MIXED)))
-    {
-        draw = &AppleIIVideo::drawTextLine;
-        drawMemory = textMemory[page];
-        drawFont = (OEChar *)&textFont[characterSet].front();
-        
-        drawFont += ((an2 << 1) | flash) * FONT_SIZE;
-    }
-    else if (!OEGetBit(mode, MODE_HIRES))
-    {
-        draw = &AppleIIVideo::drawLoresLine;
-        drawMemory = textMemory[page];
-        drawFont = (OEChar *)&loresFont.front();
-    }
-    else
-    {
-        draw = &AppleIIVideo::drawHiresLine;
-        drawMemory = hiresMemory[page];
-        drawFont = (OEChar *)&hiresFont.front();
-    }
 }
 
 // Copy a 14-pixel segment
-#define copySegment(d,s) \
+#define copy40Segment(d,s) \
 *((OELong *)(d + 0)) = *((OELong *)(s + 0));\
 *((OEInt *)(d + 8)) = *((OEInt *)(s + 8));\
 *((OEShort *)(d + 12)) = *((OEShort *)(s + 12));
 
-void AppleIIVideo::drawTextLine(OESInt y, OESInt x0, OESInt x1)
+// Copy a 8-pixel segment
+#define copy80Segment(d,s) \
+*((OELong *)(d + 0)) = *((OELong *)(s + 0));\
+*((OEInt *)(d + 8)) = *((OEInt *)(s + 8));\
+*((OEShort *)(d + 12)) = *((OEShort *)(s + 12));
+
+void AppleIIVideo::drawText40Line(OESInt y, OESInt x0, OESInt x1)
 {
     OEInt memoryOffset = textOffset[y];
     OEChar *p = imagep + y * imageWidth + x0 * CELL_WIDTH;
     
     for (OEInt x = x0; x < x1; x++, p += CELL_WIDTH)
     {
-        OEChar i = drawMemory[memoryOffset + x];
         OEChar *m = (drawFont + (y & 0x7) * FONT_CHARWIDTH +
-                     i * FONT_CHARSIZE);
+                     drawMemory1[memoryOffset + x] * FONT_CHARSIZE);
         
-        copySegment(p, m);
+        copy40Segment(p, m);
+    }
+}
+
+void AppleIIVideo::drawText80Line(OESInt y, OESInt x0, OESInt x1)
+{
+    OEInt memoryOffset = textOffset[y];
+    OEChar *p = imagep + y * imageWidth + x0 * CELL_WIDTH;
+    
+    for (OEInt x = x0; x < x1; x++, p += CELL_WIDTH / 2)
+    {
+        OEChar *m = (drawFont + (y & 0x7) * FONT_CHARWIDTH +
+                     drawMemory1[memoryOffset + x] * FONT_CHARSIZE);
+        
+        copy80Segment(p, m);
+        
+        p += CELL_WIDTH / 2;
+        
+        m = (drawFont + (y & 0x7) * FONT_CHARWIDTH +
+             drawMemory2[memoryOffset + x] * FONT_CHARSIZE);
+        
+        copy80Segment(p, m);
     }
 }
 
@@ -668,16 +859,15 @@ void AppleIIVideo::drawLoresLine(OESInt y, OESInt x0, OESInt x1)
     
     for (OEInt x = x0; x < x1; x++, p += CELL_WIDTH)
     {
-        OEChar i = drawMemory[memoryOffset + x];
         OEChar *m = (drawFont + (y & 0x7) * FONT_CHARWIDTH +
-                     i * FONT_CHARSIZE +
+                     drawMemory1[memoryOffset + x] * FONT_CHARSIZE +
                      (x & 1) * FONT_SIZE);
         
-        copySegment(p, m);
+        copy40Segment(p, m);
     }
 }
 
-void AppleIIVideo::drawHiresLine(OESInt y, OESInt x0, OESInt x1)
+void AppleIIVideo::drawHires40Line(OESInt y, OESInt x0, OESInt x1)
 {
     OEInt memoryOffset = hiresOffset[y];
     OEChar *p = imagep + y * imageWidth + x0 * CELL_WIDTH;
@@ -687,10 +877,29 @@ void AppleIIVideo::drawHiresLine(OESInt y, OESInt x0, OESInt x1)
         OEInt offset = memoryOffset + x;
         OELong lastOffset = (offset & ~0x7f) | ((offset - 1) & 0x7f);
         
-        OEInt i = drawMemory[offset] | ((drawMemory[lastOffset] & 0x40) << 2);
+        OEInt i = drawMemory1[offset] | ((drawMemory1[lastOffset] & 0x40) << 2);
         OEChar *m = drawFont + i * FONT_CHARWIDTH;
         
-        copySegment(p, m);
+        copy40Segment(p, m);
+    }
+}
+
+void AppleIIVideo::drawHires80Line(OESInt y, OESInt x0, OESInt x1)
+{
+    OEInt memoryOffset = hiresOffset[y];
+    OEChar *p = imagep + y * imageWidth + x0 * CELL_WIDTH;
+    
+    for (OEInt x = x0; x < x1; x++, p += CELL_WIDTH / 2)
+    {
+        OEChar *m = drawFont + drawMemory1[memoryOffset + x] * FONT_CHARWIDTH;
+        
+        copy80Segment(p, m);
+        
+        p += CELL_WIDTH / 2;
+        
+        m = drawFont + drawMemory2[memoryOffset + x] * FONT_CHARWIDTH;
+        
+        copy80Segment(p, m);
     }
 }
 

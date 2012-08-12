@@ -44,12 +44,7 @@ bool AddressOffset::setRef(string name, OEComponent *ref)
 
 bool AddressOffset::init()
 {
-    if (!memory)
-    {
-        logMessage("memory not connected");
-        
-        return false;
-    }
+    OECheckComponent(memory);
     
     if ((blockSize != getNextPowerOf2(blockSize)) ||
         (size < blockSize) ||

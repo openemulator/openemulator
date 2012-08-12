@@ -83,33 +83,10 @@ bool AppleLanguageCard::setRef(string name, OEComponent *ref)
 
 bool AppleLanguageCard::init()
 {
-    if (!controlBus)
-    {
-        logMessage("controlBus not connected");
-        
-        return false;
-    }
-    
-    if (!memoryBus)
-    {
-        logMessage("memoryBus not connected");
-        
-        return false;
-    }
-    
-    if (!floatingBus)
-    {
-        logMessage("floatingBus not connected");
-        
-        return false;
-    }
-    
-    if (!memory)
-    {
-        logMessage("memory not connected");
-        
-        return false;
-    }
+    OECheckComponent(controlBus);
+    OECheckComponent(memoryBus);
+    OECheckComponent(floatingBus);
+    OECheckComponent(memory);
     
     updateBank1();
     

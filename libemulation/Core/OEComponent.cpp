@@ -57,14 +57,10 @@ void OEComponent::dispose()
     return;
 }
 
-
-
 bool OEComponent::postMessage(OEComponent *sender, int message, void *data)
 {
     return false;
 }
-
-
 
 bool OEComponent::addObserver(OEComponent *observer, int notification)
 {
@@ -95,8 +91,6 @@ void OEComponent::postNotification(OEComponent *sender, int notification, void *
 void OEComponent::notify(OEComponent *sender, int notification, void *data)
 {
 }
-
-
 
 OEChar OEComponent::read(OEAddress address)
 {

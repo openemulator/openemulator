@@ -64,19 +64,8 @@ bool AppleGraphicsTablet::setRef(string name, OEComponent *ref)
 
 bool AppleGraphicsTablet::init()
 {
-	if (!device)
-	{
-		logMessage("device not connected");
-        
-		return false;
-	}
-	
-	if (!canvas)
-	{
-		logMessage("canvas could not be created");
-        
-		return false;
-	}
+    OECheckComponent(device);
+    OECheckComponent(canvas);
     
 	CanvasDisplayConfiguration configuration;
 	OEImage image;

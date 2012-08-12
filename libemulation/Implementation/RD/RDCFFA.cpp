@@ -30,12 +30,7 @@ bool RDCFFA::setRef(string name, OEComponent *ref)
 
 bool RDCFFA::init()
 {
-    if (!ataController)
-    {
-        logMessage("ataController not connected");
-        
-        return false;
-    }
+    OECheckComponent(ataController);
     
     return true;
 }

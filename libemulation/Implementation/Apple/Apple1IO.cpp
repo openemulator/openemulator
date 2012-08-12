@@ -86,19 +86,8 @@ bool Apple1IO::setRef(string name, OEComponent *ref)
 
 bool Apple1IO::init()
 {
-    if (!pia)
-    {
-        logMessage("pia not connected");
-        
-        return false;
-    }
-    
-    if (!terminal)
-    {
-        logMessage("terminal not connected");
-        
-        return false;
-    }
+    OECheckComponent(pia);
+    OECheckComponent(terminal);
     
     pia->postMessage(this, MC6821_GET_PB, &terminalChar);
     

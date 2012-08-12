@@ -13,7 +13,7 @@
 
 #include "CPUInterface.h"
 #include "MemoryInterface.h"
-#include "AppleIIIInterface.h"
+#include "AppleIIInterface.h"
 
 AppleIIIMOS6502::AppleIIIMOS6502() : MOS6502()
 {
@@ -36,12 +36,7 @@ bool AppleIIIMOS6502::setRef(string name, OEComponent *ref)
 
 bool AppleIIIMOS6502::init()
 {
-    if (!extendedMemoryBus)
-    {
-        logMessage("extendedMemoryBus not connected");
-        
-        return false;
-    }
+    OECheckComponent(extendedMemoryBus);
     
     return MOS6502::init();
 }

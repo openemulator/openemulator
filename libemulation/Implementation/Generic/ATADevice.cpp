@@ -67,12 +67,7 @@ bool ATADevice::setRef(string name, OEComponent *ref)
 
 bool ATADevice::init()
 {
-    if (!device)
-    {
-        logMessage("device not connected");
-        
-        return false;
-    }
+    OECheckComponent(device);
     
     return true;
 }

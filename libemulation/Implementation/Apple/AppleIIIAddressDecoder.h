@@ -21,12 +21,16 @@ public:
     
     bool postMessage(OEComponent *sender, int message, void *data);
     
+    void notify(OEComponent *sender, int notification, void *data);
+    
 private:
     OEComponent *memory;
     OEComponent *io;
-    OEComponent *slot[8];
     OEComponent *rom;
     OEComponent *memoryFF00;
+    OEComponent *systemControl;
+    
+    OEComponent *slot[8];
     
     MemoryMaps ioMemoryMaps;
     MemoryMaps ramMemoryMaps;
@@ -36,16 +40,19 @@ private:
     MemoryMap *ramF000Map;
     MemoryMap *ramFF00Map;
     
-    bool ioEnabled;
-    
     MemoryMap ff00MemoryMap;
     MemoryMap ffc0MemoryMap;
     MemoryMap fff0MemoryMap;
+    
+    OEChar environment;
+    bool appleIIMode;
     
     void updateMemoryMaps(OEAddress startAddress, OEAddress endAddress);
     
     void setSlot(OEInt index, OEComponent *ref);
     
-    bool setMemoryControl(OEInt value);
+    void updateAppleIIIMemoryMaps();
+    
+    bool setEnvironment(OEChar value);
     bool setAppleIIMode(bool value);
 };

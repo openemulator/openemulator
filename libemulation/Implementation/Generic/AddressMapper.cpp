@@ -50,12 +50,7 @@ bool AddressMapper::setRef(string name, OEComponent *ref)
 
 bool AddressMapper::init()
 {
-    if (!addressDecoder)
-    {
-        logMessage("addressDecoder not connected");
-        
-        return false;
-    }
+    OECheckComponent(addressDecoder);
     
     update();
     

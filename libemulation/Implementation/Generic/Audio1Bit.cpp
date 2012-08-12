@@ -60,12 +60,7 @@ bool Audio1Bit::setRef(string name, OEComponent *ref)
 
 bool Audio1Bit::init()
 {
-    if (!audioCodec)
-    {
-        logMessage("audioCodec not connected");
-        
-        return false;
-    }
+    OECheckComponent(audioCodec);
     
     update();
     

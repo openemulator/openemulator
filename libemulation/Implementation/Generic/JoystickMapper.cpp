@@ -148,12 +148,7 @@ bool JoystickMapper::setRef(string name, OEComponent *ref)
 
 bool JoystickMapper::init()
 {
-    if (!device)
-    {
-        logMessage("device not connected");
-        
-        return false;
-    }
+    OECheckComponent(device);
     
     update();
     

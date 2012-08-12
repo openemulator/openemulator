@@ -124,19 +124,8 @@ bool AppleDiskDrive525::setRef(string name, OEComponent *ref)
 
 bool AppleDiskDrive525::init()
 {
-	if (!device)
-	{
-		logMessage("device not connected");
-        
-		return false;
-	}
-    
-    if (!controlBus)
-    {
-		logMessage("controlBus not connected");
-        
-		return false;
-    }
+    OECheckComponent(device);
+    OECheckComponent(controlBus);
     
     update();
     

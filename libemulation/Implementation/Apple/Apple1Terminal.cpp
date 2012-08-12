@@ -150,19 +150,8 @@ bool Apple1Terminal::setData(string name, OEData *data)
 
 bool Apple1Terminal::init()
 {
-    if (!controlBus)
-    {
-        logMessage("controlBus not connected");
-        
-        return false;
-    }
-    
-    if (!vram)
-    {
-        logMessage("vram not connected");
-        
-        return false;
-    }
+    OECheckComponent(controlBus);
+    OECheckComponent(vram);
     
     OEData *vramData;
     

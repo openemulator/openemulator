@@ -38,6 +38,7 @@ private:
     OEComponent *controlBus;
     OEComponent *gamePort;
 	OEComponent *monitor;
+    OEComponent *systemControl;
 	
     // Settings
     OEInt model;
@@ -77,9 +78,11 @@ private:
     bool videoEnabled;
     bool colorKiller;
     
-    map<string, OEData> textFont;
+    map<string, OEData> text40Font;
+    map<string, OEData> text80Font;
     OEData loresFont;
-    OEData hiresFont;
+    OEData hires40Font;
+    OEData hires80Font;
     
     OEImage image;
     OEChar *imagep;
@@ -87,7 +90,8 @@ private:
     bool imageModified;
     
     void (AppleIIVideo::*draw)(OESInt y, OESInt x0, OESInt x1);
-    OEChar *drawMemory;
+    OEChar *drawMemory1;
+    OEChar *drawMemory2;
     OEChar *drawFont;
     
     // Timing
@@ -108,12 +112,14 @@ private:
     ControlBusPowerState powerState;
     bool an2;
     bool monitorCaptured;
+    bool appleIIMode;
     
     void initOffsets();
     
     bool loadTextFont(string name, OEData *data);
     void buildLoresFont();
-    void buildHiresFont();
+    void buildHires40Font();
+    void buildHires80Font();
     
     void initVideoRAM(OEComponent *ram, OEAddress &start);
     void updateImage();
@@ -122,9 +128,11 @@ private:
     void setMode(OEInt mask, bool value);
     
     void configureDraw();
-    void drawTextLine(OESInt y, OESInt x0, OESInt x1);
+    void drawText40Line(OESInt y, OESInt x0, OESInt x1);
+    void drawText80Line(OESInt y, OESInt x0, OESInt x1);
     void drawLoresLine(OESInt y, OESInt x0, OESInt x1);
-    void drawHiresLine(OESInt y, OESInt x0, OESInt x1);
+    void drawHires40Line(OESInt y, OESInt x0, OESInt x1);
+    void drawHires80Line(OESInt y, OESInt x0, OESInt x1);
     
     void updateVideoEnabled();
     void refreshVideo();

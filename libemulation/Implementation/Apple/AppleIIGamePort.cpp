@@ -92,19 +92,8 @@ bool AppleIIGamePort::setRef(string name, OEComponent *ref)
 
 bool AppleIIGamePort::init()
 {
-    if (!controlBus)
-    {
-        logMessage("controlBus not connected");
-        
-        return false;
-    }
-    
-    if (!floatingBus)
-    {
-        logMessage("floatingBus not connected");
-        
-        return false;
-    }
+    OECheckComponent(controlBus);
+    OECheckComponent(floatingBus);
     
     return true;
 }

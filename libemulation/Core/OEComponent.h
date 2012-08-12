@@ -13,6 +13,8 @@
 
 #include "OECommon.h"
 
+#define OECheckComponent(c) if (!c) { logMessage(#c " not defined"); return false; }
+
 class OEComponent;
 
 typedef vector<OEComponent *> OEComponents;

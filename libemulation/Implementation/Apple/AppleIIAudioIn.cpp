@@ -27,15 +27,10 @@ bool AppleIIAudioIn::setRef(string name, OEComponent *ref)
 
 bool AppleIIAudioIn::init()
 {
+    OECheckComponent(floatingBus);
+    
     if (!Audio1Bit::init())
         return false;
-    
-    if (!floatingBus)
-    {
-        logMessage("floatingBus not connected");
-        
-        return false;
-    }
     
     return true;
 }

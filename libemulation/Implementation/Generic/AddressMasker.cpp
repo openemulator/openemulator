@@ -41,12 +41,7 @@ bool AddressMasker::setRef(string name, OEComponent *ref)
 
 bool AddressMasker::init()
 {
-    if (!memory)
-    {
-        logMessage("memory not connected");
-        
-        return false;
-    }
+    OECheckComponent(memory);
     
     return true;
 }

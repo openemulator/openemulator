@@ -60,19 +60,8 @@ bool AppleIISlotController::setRef(string name, OEComponent *ref)
 
 bool AppleIISlotController::init()
 {
-    if (!memoryBus)
-    {
-        logMessage("memoryBus not connected");
-        
-        return false;
-    }
-    
-    if (!memory)
-    {
-        logMessage("memory not connected");
-        
-        return false;
-    }
+    OECheckComponent(memoryBus);
+    OECheckComponent(memory);
     
     bool success = true;
     

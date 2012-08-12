@@ -32,19 +32,8 @@ bool AppleIIDisableC800::setRef(string name, OEComponent *ref)
 
 bool AppleIIDisableC800::init()
 {
-    if (!memory)
-    {
-        logMessage("memory not connected");
-        
-        return false;
-    }
-    
-    if (!memoryBus)
-    {
-        logMessage("memoryBus not connected");
-        
-        return false;
-    }
+    OECheckComponent(memory);
+    OECheckComponent(memoryBus);
     
     return true;
 }

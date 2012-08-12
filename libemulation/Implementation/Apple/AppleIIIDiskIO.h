@@ -9,6 +9,7 @@
  */
 
 #include "OEComponent.h"
+
 #include "AppleDiskIIInterfaceCard.h"
 
 class AppleIIIDiskIO : public AppleDiskIIInterfaceCard
@@ -16,12 +17,30 @@ class AppleIIIDiskIO : public AppleDiskIIInterfaceCard
 public:
     AppleIIIDiskIO();
     
+    bool setRef(string name, OEComponent *ref);
+    
+    bool init();
+    
+    void notify(OEComponent *sender, int notification, void *data);
+    
     OEChar read(OEAddress address);
     void write(OEAddress address, OEChar value);
     
 private:
+    OEComponent *systemControl;
+    
+    bool appleIIMode;
+    
     OEInt driveSelect;
     
+    void updateSwitches(OEAddress address);
+    
     void setDriveSelect(OEInt index, bool value);
+    void updateDriveSelect();
     void setDriveSide2(bool value);
+
+    void setENSIO(bool value);
+    void setENSEL(bool value);
+    void setVideoCharacterWrite(bool value);
+    void setVideoScroll(bool value);
 };

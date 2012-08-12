@@ -113,26 +113,9 @@ bool ControlBus::setRef(string name, OEComponent *ref)
 
 bool ControlBus::init()
 {
-    if (!device)
-    {
-        logMessage("device not connected");
-        
-        return false;
-    }
-    
-    if (!audio)
-    {
-        logMessage("audio not connected");
-        
-        return false;
-    }
-    
-    if (!cpu)
-    {
-        logMessage("cpu not connected");
-        
-        return false;
-    }
+    OECheckComponent(device);
+    OECheckComponent(audio);
+    OECheckComponent(cpu);
     
     updatePowerState();
     

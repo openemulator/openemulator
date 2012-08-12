@@ -52,12 +52,7 @@ bool AddressDecoder::setRef(string name, OEComponent *ref)
 
 bool AddressDecoder::init()
 {
-	if (!floatingBus)
-	{
-		logMessage("floatingBus not connected");
-        
-		return false;
-	}
+    OECheckComponent(floatingBus);
 	
     if ((size != getNextPowerOf2(size)) ||
         (blockSize != getNextPowerOf2(blockSize)) ||

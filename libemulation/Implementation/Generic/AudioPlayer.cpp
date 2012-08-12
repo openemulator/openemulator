@@ -102,12 +102,7 @@ bool AudioPlayer::setData(string name, OEData *data)
 
 bool AudioPlayer::init()
 {
-    if (!audio)
-    {
-        logMessage("audio not connected");
-        
-        return false;
-    }
+    OECheckComponent(audio);
     
     return true;
 }

@@ -41,15 +41,10 @@ bool VRAM::setRef(string name, OEComponent *ref)
 
 bool VRAM::init()
 {
+    OECheckComponent(videoObserver);
+    
     if (!RAM::init())
         return false;
-    
-    if (!videoObserver)
-    {
-		logMessage("videoObserver not connected");
-        
-		return false;
-    }
     
     if ((videoBlockSize != getNextPowerOf2(videoBlockSize)) ||
         (size < videoBlockSize) ||

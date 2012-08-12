@@ -33,10 +33,17 @@ private:
     OEComponent *extendedMemoryBus;
     OEComponent *memoryAddressDecoder;
     OEComponent *memory;
+    OEComponent *video;
+    OEComponent *dVIA;
+    OEComponent *eVIA;
     OEComponent *dac;
     
     OEChar environment;
     OEChar zeroPage;
+    OEChar ramBank;
+    OEChar dacOutput;
+    
+    bool monitorRequested;
     
     void setEnvironment(OEChar value);
     void setZeroPage(OEChar value);

@@ -52,6 +52,7 @@
 #include "AppleIISystemControl.h"
 
 #include "AppleIIIAddressDecoder.h"
+#include "AppleIIIBeeper.h"
 #include "AppleIIIDiskIO.h"
 #include "AppleIIIMOS6502.h"
 #include "AppleIIISystemControl.h"
@@ -121,6 +122,7 @@ OEComponent *OEComponentFactory::construct(const string& className)
     matchComponent(AppleIISystemControl);
     
     matchComponent(AppleIIIAddressDecoder);
+    matchComponent(AppleIIIBeeper);
     matchComponent(AppleIIIDiskIO);
     matchComponent(AppleIIIMOS6502);
     matchComponent(AppleIIISystemControl);

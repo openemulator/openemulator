@@ -1,9 +1,13 @@
 ==1.0.4==
+* Disable C0D0 when /AIISW
 * Implement AppleIIIVideo+font upload
 * Implement MOS6522
+* Implement AppleIIIVideo VBL
 * Implement AppleIIIGamePort
-* Fix AppleIIIDiskIO
-* Fix AppleIIIBeeper
+* Implement MOS6551 ACIA
+* Fix AppleIIIKeyboard
+* Implement AppleIIKeyboard key stealing
+* Implement JoystickMapper keyboard joystick
 * Fix Apple Silentype Interface Card spurious data problems
 * Implement Apple Silentype print intensity
 * Fix [CanvasView update] problem in paper view

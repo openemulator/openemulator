@@ -32,12 +32,7 @@ bool Apple1ACI::init()
     if (!Audio1Bit::init())
         return false;
     
-    if (!rom)
-    {
-        logMessage("rom not connected");
-        
-        return false;
-    }
+    OECheckComponent(rom);
     
     return true;
 }

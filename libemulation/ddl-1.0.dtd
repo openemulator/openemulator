@@ -27,8 +27,8 @@
 <!ELEMENT track (side+)>
 <!ATTLIST track index CDATA #REQUIRED>
 
-<!ELEMENT side (data)>
+<!ELEMENT side (bitstream+)>
 <!ATTLIST side index CDATA #REQUIRED>
 
-<!ELEMENT data EMPTY>
-<!ATTLIST data type CDATA #REQUIRED>
+<!ELEMENT bitstream EMPTY>
+<!ATTLIST bitstream cellWidth CDATA #IMPLIED>

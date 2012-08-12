@@ -26,12 +26,7 @@ bool Proxy::setRef(string name, OEComponent *ref)
 
 bool Proxy::init()
 {
-    if (!component)
-    {
-        logMessage("component not connected");
-        
-        return false;
-    }
+    OECheckComponent(component);
     
     return true;
 }

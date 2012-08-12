@@ -10,20 +10,21 @@
 
 #include "AppleIIIAddressDecoder.h"
 
-#include "AppleIIIInterface.h"
+#include "AppleIIInterface.h"
 
 AppleIIIAddressDecoder::AppleIIIAddressDecoder() : AddressDecoder()
 {
     memory = NULL;
     io = NULL;
+    rom = NULL;
+    memoryFF00 = NULL;
+    systemControl = NULL;
     
     for (OEInt i = 0; i < 8; i++)
         slot[i] = NULL;
     
-    rom = NULL;
-    memoryFF00 = NULL;
-    
-    ioEnabled = true;
+    environment = 0xff;
+    appleIIMode = false;
 }
 
 bool AppleIIIAddressDecoder::setRef(string name, OEComponent *ref)
@@ -44,6 +45,14 @@ bool AppleIIIAddressDecoder::setRef(string name, OEComponent *ref)
         rom = ref;
     else if (name == "memoryFF00")
         memoryFF00 = ref;
+    else if (name == "systemControl")
+    {
+        if (systemControl)
+            systemControl->removeObserver(this, APPLEIII_APPLEIIMODE_DID_CHANGE);
+        systemControl = ref;
+        if (systemControl)
+            systemControl->addObserver(this, APPLEIII_APPLEIIMODE_DID_CHANGE);
+    }
     else
         return AddressDecoder::setRef(name, ref);
     
@@ -52,26 +61,11 @@ bool AppleIIIAddressDecoder::setRef(string name, OEComponent *ref)
 
 bool AppleIIIAddressDecoder::init()
 {
-    if (!memory)
-    {
-        logMessage("memory not connected");
-        
-        return false;
-    }
-    
-    if (!io)
-    {
-        logMessage("io not connected");
-        
-        return false;
-    }
-    
-    if (!rom)
-    {
-        logMessage("rom not connected");
-        
-        return false;
-    }
+    OECheckComponent(memory);
+    OECheckComponent(io);
+    OECheckComponent(rom);
+    OECheckComponent(memoryFF00);
+    OECheckComponent(systemControl);
     
     if (!AddressDecoder::init())
         return false;
@@ -143,6 +137,12 @@ bool AppleIIIAddressDecoder::init()
     fff0MemoryMap.write = true;
     fff0MemoryMap.component = NULL;
     
+    systemControl->postMessage(this, APPLEIII_GET_ENVIRONMENT, &environment);
+    
+    systemControl->postMessage(this, APPLEIII_GET_APPLEIIMODE, &appleIIMode);
+    
+    updateAppleIIIMemoryMaps();
+    
     return true;
 }
 
@@ -166,21 +166,21 @@ bool AppleIIIAddressDecoder::postMessage(OEComponent *sender, int message, void 
             
         case APPLEII_UNMAP_SLOT:
             return removeMemoryMap(ioMemoryMaps, (MemoryMap *) data);
-            
-        case APPLEIII_SET_MEMORYCONTROL:
-            return setMemoryControl(*((OEInt *)data));
-            
-        case APPLEIII_SET_APPLEIIMODE:
-            return setAppleIIMode(*((bool *)data));
     }
     
     return false;
 }
 
+void AppleIIIAddressDecoder::notify(OEComponent *sender, int notification, void *data)
+{
+    setAppleIIMode(*((bool *)data));
+}
+
 void AppleIIIAddressDecoder::updateMemoryMaps(OEAddress startAddress, OEAddress endAddress)
 {
     AddressDecoder::updateMemoryMaps(internalMemoryMaps, startAddress, endAddress);
-    AddressDecoder::updateMemoryMaps(ioEnabled ? ioMemoryMaps : ramMemoryMaps,
+    AddressDecoder::updateMemoryMaps(OEGetBit(environment, APPLEIII_IOENABLE) ?
+                                     ioMemoryMaps : ramMemoryMaps,
                                      startAddress, endAddress);
     AddressDecoder::updateMemoryMaps(externalMemoryMaps, startAddress, endAddress);
 }
@@ -201,19 +201,42 @@ void AppleIIIAddressDecoder::setSlot(OEInt index, OEComponent *ref)
         removeMemoryMap(ioMemoryMaps, &m);
 }
 
-bool AppleIIIAddressDecoder::setMemoryControl(OEInt value)
+bool AppleIIIAddressDecoder::setEnvironment(OEChar value)
 {
-    bool ramWP = OEGetBit(value, APPLEIII_RAMWP);
-    ioEnabled = OEGetBit(value, APPLEIII_IO);
-    bool romEnabled = OEGetBit(value, APPLEIII_ROM);
+    if (environment != value)
+    {
+        environment = value;
+        
+        updateAppleIIIMemoryMaps();
+    }
+    
+    return true;
+}
+
+bool AppleIIIAddressDecoder::setAppleIIMode(bool value)
+{
+    if (appleIIMode != value)
+    {
+        appleIIMode = value;
+        
+        updateAppleIIIMemoryMaps();
+    }
+    
+    return true;
+}
+
+void AppleIIIAddressDecoder::updateAppleIIIMemoryMaps()
+{
+    bool ramWP = OEGetBit(environment, APPLEIII_RAMWP);
+    bool romEnabled = OEGetBit(environment, APPLEIII_ROMSEL1);
     
     ioC500Map->write = !ramWP;
     ramC000Map->write = !ramWP;
     ramD000Map->write = !ramWP;
     ramF000Map->write = !ramWP;
     ramF000Map->component = romEnabled ? rom : memory;
-    
-    updateMemoryMaps(0xc000, 0xffff);
+    ramFF00Map->component = appleIIMode ? (romEnabled ? rom : memory) : memoryFF00;
+    ramFF00Map->write = appleIIMode ? !ramWP : true;
     
     // Map FF00 memory
     memoryFF00->postMessage(this, ADDRESSDECODER_UNMAP, &ff00MemoryMap);
@@ -227,10 +250,5 @@ bool AppleIIIAddressDecoder::setMemoryControl(OEInt value)
     memoryFF00->postMessage(this, ADDRESSDECODER_MAP, &ffc0MemoryMap);
     memoryFF00->postMessage(this, ADDRESSDECODER_MAP, &fff0MemoryMap);
     
-    return true;
-}
-
-bool AppleIIIAddressDecoder::setAppleIIMode(bool value)
-{
-    return true;
+    updateMemoryMaps(0xc000, 0xffff);
 }
