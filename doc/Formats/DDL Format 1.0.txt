@@ -4,9 +4,9 @@ This is the specification of DDL 1.0, an XML language that describes data stored
 
 The purpose of DDL is to provide an open standard for preserving the digital content of copy-protected floppy disks. The advantages of DDL are accuracy, readability, modifiability, expandability and ease of implementation.
 
-DDL does not describe data from the point of view of the storage medium (floppy disk), but rather from the perspective of the storage access device (disk drive). It stores the necessary instructions for authoring a (hopefully accurate) copy of a floppy disk. This includes the data stored on the floppy disk and properties like storage medium type, tracks-per-inch reference and the state of the write protection tab.
+DDL does not describe data from the point of view of the storage medium (floppy disk), but from the perspective of the storage access device (disk drive). It stores necessary instructions for authoring a (hopefully accurate) copy of a floppy disk. This includes the data stored on the floppy disk and properties like storage medium type, tracks-per-inch reference and state of the write protection tab.
 
-DDL uses as the fundamental unit the bit cell, the area of disk surface in which a single bit is recorded.
+DDL uses as fundamental unit the bit cell, the area of disk surface in which a single bit is recorded.
 
 The XML DTD is available here:
 
@@ -14,7 +14,7 @@ The XML DTD is available here:
 
 Notes:
 
-* DDL attempts to describe all known means of copy protection for floppy disk drives. This includes isolated bit cells, variable-speed bi cells and weak bit cells. If a new kind of description is needed, request-for-comments shall be initiated.
+* DDL attempts to describe all known means of copy protection for floppy disk drives. This includes isolated bit cells, variable-width bit cells and weak bit cells. If a new kind of description is needed, request-for-comments shall be initiated.
 
 * For comments or suggestions, please contact: Marc S. Ressl (mressl at umich . edu)
 
@@ -38,7 +38,7 @@ The information stored in a DDL file follows the XML specification. For more inf
 
 ==DDL header==
 
-DDL files should begin with the following XML header:
+DDL 1.0 files should begin with the following XML header:
 
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE ddl PUBLIC "-//DDL//DTD DDL 1.0//EN" "http://www.openemulator.org/DTD/ddl-1.0.dtd">
@@ -49,10 +49,10 @@ The DDL tag is the top-level of the floppy disk description:
 
 <ddl version="1.0" creator="[CREATOR]" label="[LABEL]" description="[DESCRIPTION]" medium="[MEDIUM]" tracksPerInch="[TRACKSPERINCH]" writeEnabled="[WRITEENABLED]">
 
-* [CREATOR] is a string that describes the name of the author, or the name and version of the software that creates this DDL file.
+* [CREATOR] is a string that describes the name of the author, or the name and version of the software that created this DDL file.
 * [LABEL] is a short description of the content stored in this DDL file.
 * [DESCRIPTION] is a longer description of the content stored in this DDL file.
-* [MEDIUM] describes the kind of storage medium. The following storage mediums are accepted: "8 inch disk", "5.25 inch disk" and "3.5 inch disk".
+* [MEDIUM] describes the kind of storage medium. The following storage mediums are valid in DDL 1.0: "8 inch disk", "5.25 inch disk" and "3.5 inch disk".
 * [TRACKSPERINCH] describes the magnetic resolution of the storage medium (this value is usually stated as a label on the storage medium). Usual values are "48", "96" and "100".
 * [WRITEENABLED] may take the value "1" or "0", and determines if the storage medium may be modified (is not write protected).
 
@@ -62,11 +62,11 @@ Within the DDL tag a series of track tags may exist, each describing a track's c
 
 <track index="[TRACKINDEX]">
 
-* [TRACKINDEX] describes the track number. It may be a real number, in case the disk drive allows more accurate head positioning than the storage medium specifies. The decimal part is separated with a dot (i.e. "11.25").
+* [TRACKINDEX] describes the track number. It may be a real number, in case the disk drive allows more accurate head positioning than the storage medium was designed for. The decimal part is separated with a dot (i.e. "11.25").
 
 An example:
 
-Apple II standard-formatted 5.25" floppy disks should set tracksPerInch to 48 and use the Apple II track numbering from 0 to 34. Half- and quarter-track indices should be suffixed with .5 and .25 respectively.
+Apple II standard-formatted 5.25" floppy disks should set tracksPerInch to 48 and use the Apple II track numbering from 0 to 34 (for 35 track disks) or 0 to 39 (for 40 track disks). Half- and quarter-track indices should be suffixed with .5 and .25 respectively.
 
 ==DDL side tag==
 
@@ -93,7 +93,7 @@ It is possible to use several bitstream tags in sequence to describe parts of a 
 * A '+' character encodes a 1 bit cell (a magnetic inversion).
 * A '-' character encodes a 0 bit cell (no magnetic inversion).
 * A '?' character encodes a weak bit cell (a 50% chance of magnetic inversion).
-* A sequence of two ASCII characters describing an 8-bit value in hexadecimal (characters '0'..'9' and 'a'..'f' or 'A'..'F') encodes a sequence of 8 bit cells. The most significant bit of this value (bit 7) is the first bit cell, the least significant bit of this value (bit 0) is the last bit cell.
+* A sequence of two ASCII characters describing an 8-bit value in hexadecimal (characters '0'..'9' and 'a'..'f' or 'A'..'F') encodes a sequence of 8 bit cells. The most significant bit of this value (bit 7) encodes the first bit cell, the least significant bit of this value (bit 0) encodes the last bit cell.
 * Data may be formatted with space, tab, newline or linefeed.
 
 Notes:
@@ -107,7 +107,7 @@ Notes:
 
 ==Example==
 
-A short example of DDL XML:
+A short example of the contents of a DDL file:
 
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE ddl PUBLIC "-//DDL//DTD DDL 1.0//EN" "http://www.openemulator.org/DTD/ddl-1.0.dtd">
